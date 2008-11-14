@@ -1,0 +1,85 @@
+\section{Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-animations.h}
+\label{cairo-dock-animations_8h}\index{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-animations.h@{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-animations.h}}
+\subsection*{Macros}
+\begin{CompactItemize}
+\item 
+\#define {\bf cairo\_\-dock\_\-animation\_\-will\_\-be\_\-visible}(pDock)~((pDock) $\rightarrow$ bInside $|$$|$ (! {\bf g\_\-bAutoHide} \&\& (pDock) $\rightarrow$ iRefCount == 0) $|$$|$ ! (pDock) $\rightarrow$ bAtBottom)
+\end{CompactItemize}
+\subsection*{Fonctions}
+\begin{CompactItemize}
+\item 
+gboolean {\bf cairo\_\-dock\_\-move\_\-up} ({\bf CairoDock} $\ast$pDock)
+\item 
+gboolean {\bf cairo\_\-dock\_\-move\_\-down} ({\bf CairoDock} $\ast$pDock)
+\item 
+gfloat {\bf cairo\_\-dock\_\-calculate\_\-magnitude} (gint iMagnitudeIndex)
+\item 
+gboolean {\bf cairo\_\-dock\_\-grow\_\-up} ({\bf CairoDock} $\ast$pDock)
+\item 
+gboolean {\bf cairo\_\-dock\_\-shrink\_\-down} ({\bf CairoDock} $\ast$pDock)
+\item 
+void {\bf cairo\_\-dock\_\-arm\_\-animation} ({\bf Icon} $\ast$icon, {\bf CairoDockAnimationType} iAnimationType, int iNbRounds)
+\item 
+void {\bf cairo\_\-dock\_\-start\_\-animation} ({\bf Icon} $\ast$icon, {\bf CairoDock} $\ast$pDock)
+\end{CompactItemize}
+
+
+\subsection{Documentation des macros}
+\index{cairo-dock-animations.h@{cairo-dock-animations.h}!cairo_dock_animation_will_be_visible@{cairo\_\-dock\_\-animation\_\-will\_\-be\_\-visible}}
+\index{cairo_dock_animation_will_be_visible@{cairo\_\-dock\_\-animation\_\-will\_\-be\_\-visible}!cairo-dock-animations.h@{cairo-dock-animations.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cairo\_\-dock\_\-animation\_\-will\_\-be\_\-visible(pDock)~((pDock) $\rightarrow$ bInside $|$$|$ (! {\bf g\_\-bAutoHide} \&\& (pDock) $\rightarrow$ iRefCount == 0) $|$$|$ ! (pDock) $\rightarrow$ bAtBottom)}\label{cairo-dock-animations_8h_c23808bba4ecd5ddb4ef803a4e2e39c5}
+
+
+Definit s'il est utile de lancer l'animation d'un dock (il est inutile de la lancer s'il est manifestement invisible). \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pDock}]le dock a animer. \end{description}
+\end{Desc}
+
+
+\subsection{Documentation des fonctions}
+\index{cairo-dock-animations.h@{cairo-dock-animations.h}!cairo_dock_move_up@{cairo\_\-dock\_\-move\_\-up}}
+\index{cairo_dock_move_up@{cairo\_\-dock\_\-move\_\-up}!cairo-dock-animations.h@{cairo-dock-animations.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-move\_\-up ({\bf CairoDock} $\ast$ {\em pDock})}\label{cairo-dock-animations_8h_dbdf2df4bca3c8693babeda5fba8b110}
+
+
+\index{cairo-dock-animations.h@{cairo-dock-animations.h}!cairo_dock_move_down@{cairo\_\-dock\_\-move\_\-down}}
+\index{cairo_dock_move_down@{cairo\_\-dock\_\-move\_\-down}!cairo-dock-animations.h@{cairo-dock-animations.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-move\_\-down ({\bf CairoDock} $\ast$ {\em pDock})}\label{cairo-dock-animations_8h_0ceefbf48eaf88fbcde2fc204f91c82d}
+
+
+\index{cairo-dock-animations.h@{cairo-dock-animations.h}!cairo_dock_calculate_magnitude@{cairo\_\-dock\_\-calculate\_\-magnitude}}
+\index{cairo_dock_calculate_magnitude@{cairo\_\-dock\_\-calculate\_\-magnitude}!cairo-dock-animations.h@{cairo-dock-animations.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gfloat cairo\_\-dock\_\-calculate\_\-magnitude (gint {\em iMagnitudeIndex})}\label{cairo-dock-animations_8h_9e998350ee650b466b278b892f8e6d98}
+
+
+\index{cairo-dock-animations.h@{cairo-dock-animations.h}!cairo_dock_grow_up@{cairo\_\-dock\_\-grow\_\-up}}
+\index{cairo_dock_grow_up@{cairo\_\-dock\_\-grow\_\-up}!cairo-dock-animations.h@{cairo-dock-animations.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-grow\_\-up ({\bf CairoDock} $\ast$ {\em pDock})}\label{cairo-dock-animations_8h_5f6835106b72e260624d5f09db86a6bf}
+
+
+\index{cairo-dock-animations.h@{cairo-dock-animations.h}!cairo_dock_shrink_down@{cairo\_\-dock\_\-shrink\_\-down}}
+\index{cairo_dock_shrink_down@{cairo\_\-dock\_\-shrink\_\-down}!cairo-dock-animations.h@{cairo-dock-animations.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-shrink\_\-down ({\bf CairoDock} $\ast$ {\em pDock})}\label{cairo-dock-animations_8h_9c19b3db8ce61a2e377cbd66aff22ee3}
+
+
+\index{cairo-dock-animations.h@{cairo-dock-animations.h}!cairo_dock_arm_animation@{cairo\_\-dock\_\-arm\_\-animation}}
+\index{cairo_dock_arm_animation@{cairo\_\-dock\_\-arm\_\-animation}!cairo-dock-animations.h@{cairo-dock-animations.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-arm\_\-animation ({\bf Icon} $\ast$ {\em icon}, {\bf CairoDockAnimationType} {\em iAnimationType}, int {\em iNbRounds})}\label{cairo-dock-animations_8h_2341802d978d04a570615adb01e1046f}
+
+
+Arme l'animation d'une icone \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em icon}]l'icone dont on veut preparer l'animation. \item[{\em iAnimationType}]le type d'animation voulu, ou -1 pour utiliser l'animtion correspondante au type de l'icone. \item[{\em iNbRounds}]le nombre de fois ou l'animation sera jouee, ou -1 pour utiliser la valeur correspondante au type de l'icone. \end{description}
+\end{Desc}
+\index{cairo-dock-animations.h@{cairo-dock-animations.h}!cairo_dock_start_animation@{cairo\_\-dock\_\-start\_\-animation}}
+\index{cairo_dock_start_animation@{cairo\_\-dock\_\-start\_\-animation}!cairo-dock-animations.h@{cairo-dock-animations.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-start\_\-animation ({\bf Icon} $\ast$ {\em icon}, {\bf CairoDock} $\ast$ {\em pDock})}\label{cairo-dock-animations_8h_551472639c25a63d7d996c7efea4960c}
+
+
+Lance l'animation de l'icone. Ne fait rien si l'icone ne sera pas animee. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em icon}]l'icone a animer. \item[{\em pDock}]le dock contenant l'icone. \end{description}
+\end{Desc}

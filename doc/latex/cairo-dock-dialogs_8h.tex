@@ -1,0 +1,405 @@
+\section{Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dialogs.h}
+\label{cairo-dock-dialogs_8h}\index{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dialogs.h@{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dialogs.h}}
+\subsection*{Macros}
+\begin{CompactItemize}
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-IS\_\-DIALOG}(pContainer)~(pContainer != NULL \&\& pContainer $\rightarrow$ iType == CAIRO\_\-DOCK\_\-TYPE\_\-DIALOG)
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-DIALOG}(pContainer)~(({\bf CairoDockDialog} $\ast$)pContainer)
+\end{CompactItemize}
+\subsection*{Fonctions}
+\begin{CompactItemize}
+\item 
+void {\bf cairo\_\-dock\_\-load\_\-dialog\_\-buttons} ({\bf CairoDockContainer} $\ast$pContainer, gchar $\ast$cButtonOkImage, gchar $\ast$cButtonCancelImage)
+\item 
+gboolean {\bf cairo\_\-dock\_\-dialog\_\-reference} ({\bf CairoDockDialog} $\ast$pDialog)
+\item 
+gboolean {\bf cairo\_\-dock\_\-dialog\_\-unreference} ({\bf CairoDockDialog} $\ast$pDialog)
+\item 
+void {\bf cairo\_\-dock\_\-isolate\_\-dialog} ({\bf CairoDockDialog} $\ast$pDialog)
+\item 
+void {\bf cairo\_\-dock\_\-free\_\-dialog} ({\bf CairoDockDialog} $\ast$pDialog)
+\item 
+gboolean {\bf cairo\_\-dock\_\-remove\_\-dialog\_\-if\_\-any} ({\bf Icon} $\ast$icon)
+\item 
+void {\bf cairo\_\-dock\_\-remove\_\-orphelans} (void)
+\item 
+GtkWidget $\ast$ {\bf cairo\_\-dock\_\-build\_\-common\_\-interactive\_\-widget\_\-for\_\-dialog} (const gchar $\ast$cInitialAnswer, double fValueForHScale, double fMaxValueForHScale)
+\item 
+{\bf CairoDockDialog} $\ast$ {\bf cairo\_\-dock\_\-build\_\-dialog} (const gchar $\ast$cText, {\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer, gchar $\ast$cImageFilePath, GtkWidget $\ast$pInteractiveWidget, GtkButtonsType iButtonsType, {\bf CairoDockActionOnAnswerFunc} pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
+\item 
+void {\bf cairo\_\-dock\_\-dialog\_\-calculate\_\-aimed\_\-point} ({\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer, int $\ast$iX, int $\ast$iY, gboolean $\ast$bRight, {\bf CairoDockTypeHorizontality} $\ast$bIsHorizontal, gboolean $\ast$bDirectionUp)
+\item 
+void {\bf cairo\_\-dock\_\-dialog\_\-find\_\-optimal\_\-placement} ({\bf CairoDockDialog} $\ast$pDialog)
+\item 
+void {\bf cairo\_\-dock\_\-place\_\-dialog} ({\bf CairoDockDialog} $\ast$pDialog, {\bf CairoDockContainer} $\ast$pContainer)
+\item 
+void {\bf cairo\_\-dock\_\-replace\_\-all\_\-dialogs} (void)
+\item 
+{\bf CairoDockDialog} $\ast$ {\bf cairo\_\-dock\_\-show\_\-dialog\_\-full} (const gchar $\ast$cText, {\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer, double fTimeLength, gchar $\ast$cIconPath, GtkButtonsType iButtonsType, GtkWidget $\ast$pInteractiveWidget, {\bf CairoDockActionOnAnswerFunc} pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
+\item 
+{\bf CairoDockDialog} $\ast$ {\bf cairo\_\-dock\_\-show\_\-temporary\_\-dialog\_\-with\_\-icon} (const gchar $\ast$cText, {\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer, double fTimeLength, gchar $\ast$cIconPath,...)
+\item 
+{\bf CairoDockDialog} $\ast$ {\bf cairo\_\-dock\_\-show\_\-temporary\_\-dialog} (const gchar $\ast$cText, {\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer, double fTimeLength,...)
+\item 
+{\bf CairoDockDialog} $\ast$ {\bf cairo\_\-dock\_\-show\_\-temporary\_\-dialog\_\-with\_\-default\_\-icon} (const gchar $\ast$cText, {\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer, double fTimeLength,...)
+\item 
+{\bf CairoDockDialog} $\ast$ {\bf cairo\_\-dock\_\-show\_\-dialog\_\-with\_\-question} (const gchar $\ast$cText, {\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer, gchar $\ast$cIconPath, {\bf CairoDockActionOnAnswerFunc} pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
+\item 
+{\bf CairoDockDialog} $\ast$ {\bf cairo\_\-dock\_\-show\_\-dialog\_\-with\_\-entry} (const gchar $\ast$cText, {\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer, gchar $\ast$cIconPath, const gchar $\ast$cTextForEntry, {\bf CairoDockActionOnAnswerFunc} pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
+\item 
+{\bf CairoDockDialog} $\ast$ {\bf cairo\_\-dock\_\-show\_\-dialog\_\-with\_\-value} (const gchar $\ast$cText, {\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer, gchar $\ast$cIconPath, double fValue, {\bf CairoDockActionOnAnswerFunc} pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
+\item 
+int {\bf cairo\_\-dock\_\-show\_\-dialog\_\-and\_\-wait} (const gchar $\ast$cText, {\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer, double fTimeLength, gchar $\ast$cIconPath, GtkButtonsType iButtonsType, GtkWidget $\ast$pInteractiveWidget)
+\item 
+gchar $\ast$ {\bf cairo\_\-dock\_\-show\_\-demand\_\-and\_\-wait} (const gchar $\ast$cMessage, {\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer, const gchar $\ast$cInitialAnswer)
+\item 
+double {\bf cairo\_\-dock\_\-show\_\-value\_\-and\_\-wait} (const gchar $\ast$cMessage, {\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer, double fInitialValue, double fMaxValue)
+\item 
+int {\bf cairo\_\-dock\_\-ask\_\-question\_\-and\_\-wait} (const gchar $\ast$cQuestion, {\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer)
+\item 
+gboolean {\bf cairo\_\-dock\_\-icon\_\-has\_\-dialog} ({\bf Icon} $\ast$pIcon)
+\item 
+{\bf Icon} $\ast$ {\bf cairo\_\-dock\_\-get\_\-dialogless\_\-icon} (void)
+\item 
+{\bf CairoDockDialog} $\ast$ {\bf cairo\_\-dock\_\-show\_\-general\_\-message} (const gchar $\ast$cMessage, double fTimeLength)
+\item 
+int {\bf cairo\_\-dock\_\-ask\_\-general\_\-question\_\-and\_\-wait} (const gchar $\ast$cQuestion)
+\item 
+void {\bf cairo\_\-dock\_\-hide\_\-dialog} ({\bf CairoDockDialog} $\ast$pDialog)
+\item 
+void {\bf cairo\_\-dock\_\-unhide\_\-dialog} ({\bf CairoDockDialog} $\ast$pDialog)
+\item 
+GtkWidget $\ast$ {\bf cairo\_\-dock\_\-steal\_\-widget\_\-from\_\-its\_\-container} (GtkWidget $\ast$pWidget)
+\end{CompactItemize}
+
+
+\subsection{Documentation des macros}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!CAIRO_DOCK_IS_DIALOG@{CAIRO\_\-DOCK\_\-IS\_\-DIALOG}}
+\index{CAIRO_DOCK_IS_DIALOG@{CAIRO\_\-DOCK\_\-IS\_\-DIALOG}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-IS\_\-DIALOG(pContainer)~(pContainer != NULL \&\& pContainer $\rightarrow$ iType == CAIRO\_\-DOCK\_\-TYPE\_\-DIALOG)}\label{cairo-dock-dialogs_8h_e1786822a5e484aa4665ae7a5d50d9dd}
+
+
+Teste si le container est un dialogue. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pContainer}]le container. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]TRUE ssi le container a ete declare comme un dialogue. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!CAIRO_DOCK_DIALOG@{CAIRO\_\-DOCK\_\-DIALOG}}
+\index{CAIRO_DOCK_DIALOG@{CAIRO\_\-DOCK\_\-DIALOG}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-DIALOG(pContainer)~(({\bf CairoDockDialog} $\ast$)pContainer)}\label{cairo-dock-dialogs_8h_ea265de97cc7064c8b5c4d6a6eba4cb4}
+
+
+Caste un container en dialogue. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pContainer}]le container. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]le dialogue. \end{Desc}
+
+
+\subsection{Documentation des fonctions}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_load_dialog_buttons@{cairo\_\-dock\_\-load\_\-dialog\_\-buttons}}
+\index{cairo_dock_load_dialog_buttons@{cairo\_\-dock\_\-load\_\-dialog\_\-buttons}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-load\_\-dialog\_\-buttons ({\bf CairoDockContainer} $\ast$ {\em pContainer}, gchar $\ast$ {\em cButtonOkImage}, gchar $\ast$ {\em cButtonCancelImage})}\label{cairo-dock-dialogs_8h_26e6a29f939bd4d33e78eb9dcdfbbd9d}
+
+
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_dialog_reference@{cairo\_\-dock\_\-dialog\_\-reference}}
+\index{cairo_dock_dialog_reference@{cairo\_\-dock\_\-dialog\_\-reference}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-dialog\_\-reference ({\bf CairoDockDialog} $\ast$ {\em pDialog})}\label{cairo-dock-dialogs_8h_6dc04f02666290c652d8bf770332d3ec}
+
+
+Incremente le compteur de reference de 1 de maniere atomique, de maniere a empecher toute destruction du dialogue pendant son utilisation. Utiliser \doxyref{cairo\_\-dock\_\-dialog\_\-unreference}{p.}{cairo-dock-dialogs_8h_ffdb58e55a26660b2e45c69313bb26d8} apres en avoir termine. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pDialog}]le dialogue. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]TRUE ssi la reference sur le dialogue n'etait pas deja nulle et a pu etre incrementee, FALSE sinon, auquel cas il ne faut pas l'utiliser. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_dialog_unreference@{cairo\_\-dock\_\-dialog\_\-unreference}}
+\index{cairo_dock_dialog_unreference@{cairo\_\-dock\_\-dialog\_\-unreference}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-dialog\_\-unreference ({\bf CairoDockDialog} $\ast$ {\em pDialog})}\label{cairo-dock-dialogs_8h_ffdb58e55a26660b2e45c69313bb26d8}
+
+
+Decremente le compteur de reference de 1 de maniere atomique. Si la reference est tombee a 0, tente de detruire le dialogue si la liste des dialogues n'est pas verouillee, et sinon l'isole (il sera alors detruit plus tard). \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pDialog}]le dialogue. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]TRUE ssi la reference sur le dialogue est tombee a zero, auquel cas il ne faut plus l'utiliser. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_isolate_dialog@{cairo\_\-dock\_\-isolate\_\-dialog}}
+\index{cairo_dock_isolate_dialog@{cairo\_\-dock\_\-isolate\_\-dialog}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-isolate\_\-dialog ({\bf CairoDockDialog} $\ast$ {\em pDialog})}\label{cairo-dock-dialogs_8h_7ec78ebc183ab4ebe55c7bc1073297a7}
+
+
+Isole un dialogue, de maniere a ce qu'il ne soit pas utilise par une nouvelle personne. Les utilisations courantes ne sont pas affectees. N'a aucun effet sur un dialogue deja isole. Ne devrait pas etre utilise tel quel. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pDialog}]le dialogue. \end{description}
+\end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_free_dialog@{cairo\_\-dock\_\-free\_\-dialog}}
+\index{cairo_dock_free_dialog@{cairo\_\-dock\_\-free\_\-dialog}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-free\_\-dialog ({\bf CairoDockDialog} $\ast$ {\em pDialog})}\label{cairo-dock-dialogs_8h_b5822c21c603892d7cc5253a31040598}
+
+
+Detruit un dialogue, libere les ressources allouees, et l'enleve de la liste des dialogues. Ne devrait pas etre utilise tel quel, utiliser \doxyref{cairo\_\-dock\_\-dialog\_\-unreference}{p.}{cairo-dock-dialogs_8h_ffdb58e55a26660b2e45c69313bb26d8}. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pDialog}]le dialogue. \end{description}
+\end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_remove_dialog_if_any@{cairo\_\-dock\_\-remove\_\-dialog\_\-if\_\-any}}
+\index{cairo_dock_remove_dialog_if_any@{cairo\_\-dock\_\-remove\_\-dialog\_\-if\_\-any}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-remove\_\-dialog\_\-if\_\-any ({\bf Icon} $\ast$ {\em icon})}\label{cairo-dock-dialogs_8h_704d0673d79e3fdda3428749e56087a2}
+
+
+Dereference tous les dialogues pointant sur une icone; si les dialogues sont utilises par quelqu'un d'autre, il seront detruits plus tard, mais seront au moins isoles, et ne pourront donc plus etre utilises par une nouvelle personne. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em icon}]l'icone dont on veut supprimer les dialogues. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]TRUE ssi au moins un dialogue a ete detruit. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_remove_orphelans@{cairo\_\-dock\_\-remove\_\-orphelans}}
+\index{cairo_dock_remove_orphelans@{cairo\_\-dock\_\-remove\_\-orphelans}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-remove\_\-orphelans (void)}\label{cairo-dock-dialogs_8h_d01c86db0a68977e4bf5e2d1077085a7}
+
+
+Detruit et enleve de la liste tous les dialogues dont la reference est a 0, et qui n'ont pas ete enleves de la liste. \index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_build_common_interactive_widget_for_dialog@{cairo\_\-dock\_\-build\_\-common\_\-interactive\_\-widget\_\-for\_\-dialog}}
+\index{cairo_dock_build_common_interactive_widget_for_dialog@{cairo\_\-dock\_\-build\_\-common\_\-interactive\_\-widget\_\-for\_\-dialog}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}GtkWidget$\ast$ cairo\_\-dock\_\-build\_\-common\_\-interactive\_\-widget\_\-for\_\-dialog (const gchar $\ast$ {\em cInitialAnswer}, double {\em fValueForHScale}, double {\em fMaxValueForHScale})}\label{cairo-dock-dialogs_8h_d73a22b3ffbe4e254e2de80ac43bb635}
+
+
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_build_dialog@{cairo\_\-dock\_\-build\_\-dialog}}
+\index{cairo_dock_build_dialog@{cairo\_\-dock\_\-build\_\-dialog}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockDialog}$\ast$ cairo\_\-dock\_\-build\_\-dialog (const gchar $\ast$ {\em cText}, {\bf Icon} $\ast$ {\em pIcon}, {\bf CairoDockContainer} $\ast$ {\em pContainer}, gchar $\ast$ {\em cImageFilePath}, GtkWidget $\ast$ {\em pInteractiveWidget}, GtkButtonsType {\em iButtonsType}, {\bf CairoDockActionOnAnswerFunc} {\em pActionFunc}, gpointer {\em data}, GFreeFunc {\em pFreeDataFunc})}\label{cairo-dock-dialogs_8h_aa4d47dce96b6dc66690ba2ea07afacd}
+
+
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_dialog_calculate_aimed_point@{cairo\_\-dock\_\-dialog\_\-calculate\_\-aimed\_\-point}}
+\index{cairo_dock_dialog_calculate_aimed_point@{cairo\_\-dock\_\-dialog\_\-calculate\_\-aimed\_\-point}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-dialog\_\-calculate\_\-aimed\_\-point ({\bf Icon} $\ast$ {\em pIcon}, {\bf CairoDockContainer} $\ast$ {\em pContainer}, int $\ast$ {\em iX}, int $\ast$ {\em iY}, gboolean $\ast$ {\em bRight}, {\bf CairoDockTypeHorizontality} $\ast$ {\em bIsHorizontal}, gboolean $\ast$ {\em bDirectionUp})}\label{cairo-dock-dialogs_8h_500310b40af3f12e2807761f4ec5d002}
+
+
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_dialog_find_optimal_placement@{cairo\_\-dock\_\-dialog\_\-find\_\-optimal\_\-placement}}
+\index{cairo_dock_dialog_find_optimal_placement@{cairo\_\-dock\_\-dialog\_\-find\_\-optimal\_\-placement}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-dialog\_\-find\_\-optimal\_\-placement ({\bf CairoDockDialog} $\ast$ {\em pDialog})}\label{cairo-dock-dialogs_8h_f58d2bf272c1d1b47e206794eb23a144}
+
+
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_place_dialog@{cairo\_\-dock\_\-place\_\-dialog}}
+\index{cairo_dock_place_dialog@{cairo\_\-dock\_\-place\_\-dialog}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-place\_\-dialog ({\bf CairoDockDialog} $\ast$ {\em pDialog}, {\bf CairoDockContainer} $\ast$ {\em pContainer})}\label{cairo-dock-dialogs_8h_9aadd5121c502deca4e50e20ff8e863d}
+
+
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_replace_all_dialogs@{cairo\_\-dock\_\-replace\_\-all\_\-dialogs}}
+\index{cairo_dock_replace_all_dialogs@{cairo\_\-dock\_\-replace\_\-all\_\-dialogs}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-replace\_\-all\_\-dialogs (void)}\label{cairo-dock-dialogs_8h_b7e2efc6b1cf310c8085f90cd74e3697}
+
+
+Recalcule la positions de tous les dialogues et les y deplace. \index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_show_dialog_full@{cairo\_\-dock\_\-show\_\-dialog\_\-full}}
+\index{cairo_dock_show_dialog_full@{cairo\_\-dock\_\-show\_\-dialog\_\-full}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockDialog}$\ast$ cairo\_\-dock\_\-show\_\-dialog\_\-full (const gchar $\ast$ {\em cText}, {\bf Icon} $\ast$ {\em pIcon}, {\bf CairoDockContainer} $\ast$ {\em pContainer}, double {\em fTimeLength}, gchar $\ast$ {\em cIconPath}, GtkButtonsType {\em iButtonsType}, GtkWidget $\ast$ {\em pInteractiveWidget}, {\bf CairoDockActionOnAnswerFunc} {\em pActionFunc}, gpointer {\em data}, GFreeFunc {\em pFreeDataFunc})}\label{cairo-dock-dialogs_8h_e83f9f49d2445ecfa5b6682d6cc6a9da}
+
+
+Fait apparaitre un dialogue avec un message, un widget et 2 boutons, tous optionnels. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cText}]le message du dialogue. \item[{\em pIcon}]l'icone sur laquelle pointe le dialogue. \item[{\em pContainer}]le container contenant l'icone. \item[{\em fTimeLength}]duree de vie du dialogue, ou 0 pour une duree de vie illimitee. \item[{\em cIconPath}]le chemin vers une icone a afficher dans la marge. \item[{\em iButtonsType}]type des boutons (GTK\_\-BUTTONS\_\-OK\_\-CANCEL, GTK\_\-BUTTONS\_\-YES\_\-NO, ou GTK\_\-BUTTONS\_\-NONE). \item[{\em pInteractiveWidget}]un widget d'interaction avec l'utilisateur; il est rattache au dialogue, donc sera detruit avec lui. Faire un 'gtk\_\-widget\_\-reparent()' avant de detruire le dialogue pour eviter cela, ou bien utilisez \doxyref{cairo\_\-dock\_\-show\_\-dialog\_\-and\_\-wait}{p.}{cairo-dock-dialogs_8h_d2f065837ba1a70a3f74d1473c8cd83e}. \item[{\em pActionFunc}]la fonction d'action appelee lorsque l'utilisateur valide son choix. NULL revient a avoir des boutons du type GTK\_\-BUTTONS\_\-NONE. \item[{\em data}]donnees transmises a la fonction ci-dessus. \item[{\em pFreeDataFunc}]fonction de liberation des donnees ci-dessus, appelee lors de la destruction du dialogue, ou NULL si non necessaire. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]Le dialogue nouvellement cree et visible, avec une reference a 1. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_show_temporary_dialog_with_icon@{cairo\_\-dock\_\-show\_\-temporary\_\-dialog\_\-with\_\-icon}}
+\index{cairo_dock_show_temporary_dialog_with_icon@{cairo\_\-dock\_\-show\_\-temporary\_\-dialog\_\-with\_\-icon}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockDialog}$\ast$ cairo\_\-dock\_\-show\_\-temporary\_\-dialog\_\-with\_\-icon (const gchar $\ast$ {\em cText}, {\bf Icon} $\ast$ {\em pIcon}, {\bf CairoDockContainer} $\ast$ {\em pContainer}, double {\em fTimeLength}, gchar $\ast$ {\em cIconPath},  {\em ...})}\label{cairo-dock-dialogs_8h_a9e10600f826f134628c146426ae1f92}
+
+
+Fait apparaitre un dialogue a duree de vie limitee avec une icone dans la marge a cote du texte. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cText}]le message du dialogue. \item[{\em pIcon}]l'icone sur laquelle pointe le dialogue. \item[{\em pContainer}]le container de l'icone. \item[{\em fTimeLength}]la duree de vie du dialogue (ou 0 pour une duree de vie illimitee). \item[{\em cIconPath}]le chemin vers une icone. \item[{\em ...}]les arguments a inserer dans la chaine de texte, facon printf. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]Le dialogue nouvellement cree et visible, avec une reference a 1. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_show_temporary_dialog@{cairo\_\-dock\_\-show\_\-temporary\_\-dialog}}
+\index{cairo_dock_show_temporary_dialog@{cairo\_\-dock\_\-show\_\-temporary\_\-dialog}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockDialog}$\ast$ cairo\_\-dock\_\-show\_\-temporary\_\-dialog (const gchar $\ast$ {\em cText}, {\bf Icon} $\ast$ {\em pIcon}, {\bf CairoDockContainer} $\ast$ {\em pContainer}, double {\em fTimeLength},  {\em ...})}\label{cairo-dock-dialogs_8h_3787f51b99a6112508d396a61a9dc8e3}
+
+
+Fait apparaitre un dialogue a duree de vie limitee sans icone. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cText}]le message du dialogue. \item[{\em pIcon}]l'icone sur laquelle pointe le dialogue. \item[{\em pContainer}]le container de l'icone. \item[{\em fTimeLength}]la duree de vie du dialogue (ou 0 pour une duree de vie illimitee). \item[{\em ...}]les arguments a inserer dans la chaine de texte. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]Le dialogue nouvellement cree et visible, avec une reference a 1. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_show_temporary_dialog_with_default_icon@{cairo\_\-dock\_\-show\_\-temporary\_\-dialog\_\-with\_\-default\_\-icon}}
+\index{cairo_dock_show_temporary_dialog_with_default_icon@{cairo\_\-dock\_\-show\_\-temporary\_\-dialog\_\-with\_\-default\_\-icon}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockDialog}$\ast$ cairo\_\-dock\_\-show\_\-temporary\_\-dialog\_\-with\_\-default\_\-icon (const gchar $\ast$ {\em cText}, {\bf Icon} $\ast$ {\em pIcon}, {\bf CairoDockContainer} $\ast$ {\em pContainer}, double {\em fTimeLength},  {\em ...})}\label{cairo-dock-dialogs_8h_4a3bc9c903e7940c48e7d7c32cf28500}
+
+
+Fait apparaitre un dialogue a duree de vie limitee et avec l'icone par defaut. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cText}]le message du dialogue. \item[{\em pIcon}]l'icone sur laquelle pointe le dialogue. \item[{\em pContainer}]le container de l'icone. \item[{\em fTimeLength}]la duree de vie du dialogue (ou 0 pour une duree de vie illimitee). \item[{\em ...}]les arguments a inserer dans la chaine de texte, facon printf. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]Le dialogue nouvellement cree et visible, avec une reference a 1. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_show_dialog_with_question@{cairo\_\-dock\_\-show\_\-dialog\_\-with\_\-question}}
+\index{cairo_dock_show_dialog_with_question@{cairo\_\-dock\_\-show\_\-dialog\_\-with\_\-question}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockDialog}$\ast$ cairo\_\-dock\_\-show\_\-dialog\_\-with\_\-question (const gchar $\ast$ {\em cText}, {\bf Icon} $\ast$ {\em pIcon}, {\bf CairoDockContainer} $\ast$ {\em pContainer}, gchar $\ast$ {\em cIconPath}, {\bf CairoDockActionOnAnswerFunc} {\em pActionFunc}, gpointer {\em data}, GFreeFunc {\em pFreeDataFunc})}\label{cairo-dock-dialogs_8h_434157c88ef1255ff7258407459630d6}
+
+
+Fait apparaitre un dialogue a duree de vie illimitee avec une question et 2 boutons oui/non. Lorsque l'utilisateur clique sur \char`\"{}oui\char`\"{}, la fonction d'action est appelee avec \char`\"{}yes\char`\"{}, et avec \char`\"{}no\char`\"{} s'il a clique sur \char`\"{}non\char`\"{}. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cText}]le message du dialogue. \item[{\em pIcon}]l'icone sur laquelle pointe le dialogue. \item[{\em pContainer}]le container de l'icone. \item[{\em cIconPath}]le chemin vers une icone a afficher dans la marge. \item[{\em pActionFunc}]la fonction d'action, appelee lors du clique utilisateur. \item[{\em data}]pointeur qui sera passe en argument de la fonction d'action. \item[{\em pFreeDataFunc}]fonction qui liberera le pointeur. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]Le dialogue nouvellement cree et visible, avec une reference a 1. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_show_dialog_with_entry@{cairo\_\-dock\_\-show\_\-dialog\_\-with\_\-entry}}
+\index{cairo_dock_show_dialog_with_entry@{cairo\_\-dock\_\-show\_\-dialog\_\-with\_\-entry}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockDialog}$\ast$ cairo\_\-dock\_\-show\_\-dialog\_\-with\_\-entry (const gchar $\ast$ {\em cText}, {\bf Icon} $\ast$ {\em pIcon}, {\bf CairoDockContainer} $\ast$ {\em pContainer}, gchar $\ast$ {\em cIconPath}, const gchar $\ast$ {\em cTextForEntry}, {\bf CairoDockActionOnAnswerFunc} {\em pActionFunc}, gpointer {\em data}, GFreeFunc {\em pFreeDataFunc})}\label{cairo-dock-dialogs_8h_7c7a4d00ee27a10ca085971b33c1e7dc}
+
+
+Fait apparaitre un dialogue a duree de vie illimitee avec une entree texte et 2 boutons ok/annuler. Lorsque l'utilisateur clique sur \char`\"{}ok\char`\"{}, la fonction d'action est appelee avec le texte de l'entree, et avec \char`\"{}\char`\"{} s'il a clique sur \char`\"{}annuler\char`\"{}. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cText}]le message du dialogue. \item[{\em pIcon}]l'icone sur laquelle pointe le dialogue. \item[{\em pContainer}]le container de l'icone. \item[{\em cIconPath}]le chemin vers une icone a afficher dans la marge. \item[{\em cTextForEntry}]le texte a afficher initialement dans l'entree. \item[{\em pActionFunc}]la fonction d'action, appelee lors du clique utilisateur. \item[{\em data}]pointeur qui sera passe en argument de la fonction d'action. \item[{\em pFreeDataFunc}]fonction qui liberera le pointeur. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]le dialogue nouvellement cree. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_show_dialog_with_value@{cairo\_\-dock\_\-show\_\-dialog\_\-with\_\-value}}
+\index{cairo_dock_show_dialog_with_value@{cairo\_\-dock\_\-show\_\-dialog\_\-with\_\-value}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockDialog}$\ast$ cairo\_\-dock\_\-show\_\-dialog\_\-with\_\-value (const gchar $\ast$ {\em cText}, {\bf Icon} $\ast$ {\em pIcon}, {\bf CairoDockContainer} $\ast$ {\em pContainer}, gchar $\ast$ {\em cIconPath}, double {\em fValue}, {\bf CairoDockActionOnAnswerFunc} {\em pActionFunc}, gpointer {\em data}, GFreeFunc {\em pFreeDataFunc})}\label{cairo-dock-dialogs_8h_9c19f60620ad0f9ad08360ffb5947e8f}
+
+
+Fait apparaitre un dialogue a duree de vie illimitee avec une echelle horizontale et 2 boutons ok/annuler. Lorsque l'utilisateur clique sur \char`\"{}ok\char`\"{}, la fonction d'action est appelee avec la valeur de l'echelle sous forme de texte, et avec \char`\"{}-1\char`\"{} s'il a clique sur \char`\"{}annuler\char`\"{}. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cText}]le message du dialogue. \item[{\em pIcon}]l'icone sur laquelle pointe le dialogue. \item[{\em pContainer}]le container de l'icone. \item[{\em cIconPath}]le chemin vers une icone a afficher dans la marge. \item[{\em fValue}]la valeur initiale de l'echelle. \item[{\em pActionFunc}]la fonction d'action, appelee lors du clique utilisateur. \item[{\em data}]pointeur qui sera passe en argument de la fonction d'action. \item[{\em pFreeDataFunc}]fonction qui liberera le pointeur. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]le dialogue nouvellement cree. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_show_dialog_and_wait@{cairo\_\-dock\_\-show\_\-dialog\_\-and\_\-wait}}
+\index{cairo_dock_show_dialog_and_wait@{cairo\_\-dock\_\-show\_\-dialog\_\-and\_\-wait}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int cairo\_\-dock\_\-show\_\-dialog\_\-and\_\-wait (const gchar $\ast$ {\em cText}, {\bf Icon} $\ast$ {\em pIcon}, {\bf CairoDockContainer} $\ast$ {\em pContainer}, double {\em fTimeLength}, gchar $\ast$ {\em cIconPath}, GtkButtonsType {\em iButtonsType}, GtkWidget $\ast$ {\em pInteractiveWidget})}\label{cairo-dock-dialogs_8h_d2f065837ba1a70a3f74d1473c8cd83e}
+
+
+Fait apparaitre un dialogue avec un widget et 2 boutons, et met en pause le programme jusqu'a ce que l'utilisateur ait fait son choix. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cText}]le message du dialogue. \item[{\em pIcon}]l'icone sur laquelle pointe le dialogue. \item[{\em pContainer}]le container de l'icone. \item[{\em fTimeLength}]duree de vie du dialogue, ou 0 pour une duree de vie illimitee. \item[{\em cIconPath}]le chemin vers une icone a afficher dans la marge. \item[{\em iButtonsType}]type des boutons (GTK\_\-BUTTONS\_\-OK\_\-CANCEL ou GTK\_\-BUTTONS\_\-YES\_\-NO). \item[{\em pInteractiveWidget}]un widget d'interaction avec l'utilisateur. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]GTK\_\-RESPONSE\_\-OK si l'utilisateur a valide, GTK\_\-RESPONSE\_\-CANCEL s'il a annule, GTK\_\-RESPONSE\_\-NONE si le dialogue s'est fait detruire avant que l'utilisateur ait pu repondre. Le widget interactif n'est pas detruit avec le dialogue, ce qui permet de recuperer les modifications effectuees par l'utilisateur. Il vous appartient de le detruire avec gtk\_\-widget\_\-destroy() quand vous en avez fini avec lui. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_show_demand_and_wait@{cairo\_\-dock\_\-show\_\-demand\_\-and\_\-wait}}
+\index{cairo_dock_show_demand_and_wait@{cairo\_\-dock\_\-show\_\-demand\_\-and\_\-wait}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gchar$\ast$ cairo\_\-dock\_\-show\_\-demand\_\-and\_\-wait (const gchar $\ast$ {\em cMessage}, {\bf Icon} $\ast$ {\em pIcon}, {\bf CairoDockContainer} $\ast$ {\em pContainer}, const gchar $\ast$ {\em cInitialAnswer})}\label{cairo-dock-dialogs_8h_79cef627d9112419159bcd75643d927c}
+
+
+Fait apparaitre un dialogue avec une entree de texte et 2 boutons ok/annuler, et met en pause le programme jusqu'a ce que l'utilisateur ait fait son choix. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cMessage}]le message du dialogue. \item[{\em pIcon}]l'icone qui fait la demande. \item[{\em pContainer}]le container de l'icone. \item[{\em cInitialAnswer}]la valeur initiale de l'entree de texte, ou NULL si aucune n'est fournie. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]le texte entre par l'utilisateur, ou NULL s'il a annule ou si le dialogue s'est fait detruire avant. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_show_value_and_wait@{cairo\_\-dock\_\-show\_\-value\_\-and\_\-wait}}
+\index{cairo_dock_show_value_and_wait@{cairo\_\-dock\_\-show\_\-value\_\-and\_\-wait}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double cairo\_\-dock\_\-show\_\-value\_\-and\_\-wait (const gchar $\ast$ {\em cMessage}, {\bf Icon} $\ast$ {\em pIcon}, {\bf CairoDockContainer} $\ast$ {\em pContainer}, double {\em fInitialValue}, double {\em fMaxValue})}\label{cairo-dock-dialogs_8h_4d0154650d2e9f8a4ac59e2233ff3251}
+
+
+Fait apparaitre un dialogue avec une echelle horizontale entre 0 et fMaxValue, et 2 boutons ok/annuler, et met en pause le programme jusqu'a ce que l'utilisateur ait fait son choix. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cMessage}]le message du dialogue. \item[{\em pIcon}]l'icone qui fait la demande. \item[{\em pContainer}]le container de l'icone. \item[{\em fInitialValue}]la valeur initiale de l'echelle, entre 0 et 1. \item[{\em fMaxValue}]la borne superieure de l'intervalle [0 , max]. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]la valeur choisie par l'utilisateur, ou -1 s'il a annule ou si le dialogue s'est fait detruire avant. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_ask_question_and_wait@{cairo\_\-dock\_\-ask\_\-question\_\-and\_\-wait}}
+\index{cairo_dock_ask_question_and_wait@{cairo\_\-dock\_\-ask\_\-question\_\-and\_\-wait}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int cairo\_\-dock\_\-ask\_\-question\_\-and\_\-wait (const gchar $\ast$ {\em cQuestion}, {\bf Icon} $\ast$ {\em pIcon}, {\bf CairoDockContainer} $\ast$ {\em pContainer})}\label{cairo-dock-dialogs_8h_bf8d5468edb62d8b4f0978302cde1af5}
+
+
+Fait apparaitre un dialogue de question pointant sur l'icone pointee (ou la 1ere si aucune n'est pointee) avec une question et 2 boutons oui/non, et met en pause le programme jusqu'a ce que l'utilisateur ait fait son choix. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cQuestion}]la question a poser. \item[{\em pIcon}]l'icone qui fait la demande. \item[{\em pContainer}]le container de l'icone. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]GTK\_\-RESPONSE\_\-YES ou GTK\_\-RESPONSE\_\-NO suivant le choix de l'utilisateur, ou GTK\_\-RESPONSE\_\-NONE si le dialogue s'est fait detruire avant. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_icon_has_dialog@{cairo\_\-dock\_\-icon\_\-has\_\-dialog}}
+\index{cairo_dock_icon_has_dialog@{cairo\_\-dock\_\-icon\_\-has\_\-dialog}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-icon\_\-has\_\-dialog ({\bf Icon} $\ast$ {\em pIcon})}\label{cairo-dock-dialogs_8h_155378dd7008931b53632e681c826fd2}
+
+
+Cherche si une icone donnee possede au moins un dialogue. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pIcon}]l'icone. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]TRUE ssi l'icone possede au moins un dialogue. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_get_dialogless_icon@{cairo\_\-dock\_\-get\_\-dialogless\_\-icon}}
+\index{cairo_dock_get_dialogless_icon@{cairo\_\-dock\_\-get\_\-dialogless\_\-icon}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Icon}$\ast$ cairo\_\-dock\_\-get\_\-dialogless\_\-icon (void)}\label{cairo-dock-dialogs_8h_6e4e1b619976f6889b3bed3a9d45c710}
+
+
+Cherche une icone propice pour montrer un dialogue d'ordre general, dans le dock principal. \begin{Desc}
+\item[Renvoie:]une icone, ou NULL si le dock est vide. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_show_general_message@{cairo\_\-dock\_\-show\_\-general\_\-message}}
+\index{cairo_dock_show_general_message@{cairo\_\-dock\_\-show\_\-general\_\-message}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockDialog}$\ast$ cairo\_\-dock\_\-show\_\-general\_\-message (const gchar $\ast$ {\em cMessage}, double {\em fTimeLength})}\label{cairo-dock-dialogs_8h_68be54d95151113264ca36abad463900}
+
+
+Fait apparaitre un dialogue de message non bloquant, et pointant sur une icone de separateur si possible, ou sinon sur l'icone pointee du dock principal (ou la 1ere icone sans dialogue si aucune n'est pointee). Cela permet a cairo-dock de poser une question d'ordre general. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cMessage}]le message. \item[{\em fTimeLength}]la duree de vie du dialogue. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]Le dialogue nouvellement cree et visible, avec une reference a 1. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_ask_general_question_and_wait@{cairo\_\-dock\_\-ask\_\-general\_\-question\_\-and\_\-wait}}
+\index{cairo_dock_ask_general_question_and_wait@{cairo\_\-dock\_\-ask\_\-general\_\-question\_\-and\_\-wait}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int cairo\_\-dock\_\-ask\_\-general\_\-question\_\-and\_\-wait (const gchar $\ast$ {\em cQuestion})}\label{cairo-dock-dialogs_8h_d11e25360e626bff842a69d84d58037b}
+
+
+Fait apparaitre un dialogue de question bloquant, et pointant sur une icone de separateur si possible, ou sinon sur l'icone pointee du dock principal (ou la 1ere icone sans dialogue si aucune n'est pointee). Cela permet a cairo-dock de poser une question d'ordre general. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cQuestion}]la question a poser. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]idem que pour \doxyref{cairo\_\-dock\_\-ask\_\-question\_\-and\_\-wait}{p.}{cairo-dock-dialogs_8h_bf8d5468edb62d8b4f0978302cde1af5}. \end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_hide_dialog@{cairo\_\-dock\_\-hide\_\-dialog}}
+\index{cairo_dock_hide_dialog@{cairo\_\-dock\_\-hide\_\-dialog}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-hide\_\-dialog ({\bf CairoDockDialog} $\ast$ {\em pDialog})}\label{cairo-dock-dialogs_8h_1e7aa5fae3a6ba6f3a07985815850c08}
+
+
+Cache un dialogue, sans le detruire. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pDialog}]le dialogue. \end{description}
+\end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_unhide_dialog@{cairo\_\-dock\_\-unhide\_\-dialog}}
+\index{cairo_dock_unhide_dialog@{cairo\_\-dock\_\-unhide\_\-dialog}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-unhide\_\-dialog ({\bf CairoDockDialog} $\ast$ {\em pDialog})}\label{cairo-dock-dialogs_8h_d968f6969bf68add045329015ec7c15e}
+
+
+Montre et fait prendre le focus a un dialogue. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pDialog}]le dialogue. \end{description}
+\end{Desc}
+\index{cairo-dock-dialogs.h@{cairo-dock-dialogs.h}!cairo_dock_steal_widget_from_its_container@{cairo\_\-dock\_\-steal\_\-widget\_\-from\_\-its\_\-container}}
+\index{cairo_dock_steal_widget_from_its_container@{cairo\_\-dock\_\-steal\_\-widget\_\-from\_\-its\_\-container}!cairo-dock-dialogs.h@{cairo-dock-dialogs.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}GtkWidget$\ast$ cairo\_\-dock\_\-steal\_\-widget\_\-from\_\-its\_\-container (GtkWidget $\ast$ {\em pWidget})}\label{cairo-dock-dialogs_8h_35328719329bb71b2e4aae69a99586d9}
+
+
+Retire un widget de son container GTK sans le detruire Le widget peut alors etre replace ailleurs ulterieurement. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pWidget}]le widget. \end{description}
+\end{Desc}

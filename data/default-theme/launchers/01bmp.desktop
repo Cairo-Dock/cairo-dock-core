@@ -1,0 +1,25 @@
+#!fr
+
+[Desktop Entry]
+#s Nom de ce lanceur :
+Name=Musique
+#s Commande à exécuter lors du clique :
+Exec=beep-media-player
+#S Nom ou chemin de l'image :
+Icon=bmp
+#f Ordre que vous souhaitez affecter à ce lanceur parmis les autres :
+Order=6
+#E[_MainDock_]  Nom du container auquel il appartient :
+Container=_MainDock_
+#b Cette icône est-elle un container ?
+Is container=false
+
+Base URI=
+Is mounting point=false
+Comment=Play music
+MimeType=audio/x-scpls;audio/x-mpegurl;audio/mpegurl;audio/mp3;audio/x-mp3;audio/mpeg;audio/x-mpeg;audio/x-wav;application/x-ogg;application/ogg
+Categories=Application;GTK;AudioVideo;Player;
+Terminal=false
+Type=Application
+Encoding=UTF-8
+Is URI=false

@@ -1,0 +1,316 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-themes-manager.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-themes-manager.h</h1>
+<p>
+<a href="cairo-dock-themes-manager_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Macros</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-themes-manager_8h.html#7710e8b1d53a9d41c3ce911a528f503d">cairo_dock_update_conf_file_with_themes</a>(pOpenedKeyFile, cAppletConfFilePath, pThemeTable, cGroupName, cKeyName)&nbsp;&nbsp;&nbsp;cairo_dock_update_conf_file_with_hash_table (pOpenedKeyFile, cAppletConfFilePath, pThemeTable, cGroupName, cKeyName, NULL, (GHFunc) cairo_dock_write_one_theme_name, TRUE, FALSE)</td></tr>
+
+<tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GHashTable *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-themes-manager_8h.html#f2b87f4aad180d5e5368088bdb05240b">cairo_dock_list_themes</a> (gchar *cThemesDir, GHashTable *hProvidedTable, GError **erreur)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-themes-manager_8h.html#cef49939d0085c52a06d372b168f6ae0">cairo_dock_edit_themes</a> (GHashTable **hThemeTable, gboolean bSafeMode)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-themes-manager_8h.html#45bfce739852d43b48219926540d6769">cairo_dock_get_chosen_theme</a> (gchar *cConfFile, gboolean *bUseThemeBehaviour, gboolean *bUseThemeLaunchers)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-themes-manager_8h.html#b67f20b861818424f1f54346c75e9e39">cairo_dock_get_theme_path</a> (gchar *cThemeName, GHashTable *hThemeTable)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-themes-manager_8h.html#addcb28e2da1100a291c744cb56fe47f">cairo_dock_load_theme</a> (gchar *cThemePath)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-themes-manager_8h.html#973b61d0f4c31abe529402ec059f5750">cairo_dock_mark_theme_as_modified</a> (gboolean bModified)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-themes-manager_8h.html#0432fda9c86ccd9027768c7e7b5d53a4">cairo_dock_theme_need_save</a> (void)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-themes-manager_8h.html#665a38cee72eb60c7cc0af494e617b9f">cairo_dock_manage_themes</a> (GtkWidget *pWidget, gboolean bSafeMode)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">int cairo_dock_ask_initial_theme (void);  <a href="#665a38cee72eb60c7cc0af494e617b9f"></a><br></td></tr>
+</table>
+<hr><h2>Documentation des macros</h2>
+<a class="anchor" name="7710e8b1d53a9d41c3ce911a528f503d"></a><!-- doxytag: member="cairo-dock-themes-manager.h::cairo_dock_update_conf_file_with_themes" ref="7710e8b1d53a9d41c3ce911a528f503d" args="(pOpenedKeyFile, cAppletConfFilePath, pThemeTable, cGroupName, cKeyName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_update_conf_file_with_themes          </td>
+          <td>(</td>
+          <td class="paramtype">pOpenedKeyFile,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cAppletConfFilePath,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">pThemeTable,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cGroupName,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cKeyName&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%">&nbsp;&nbsp;&nbsp;cairo_dock_update_conf_file_with_hash_table (pOpenedKeyFile, cAppletConfFilePath, pThemeTable, cGroupName, cKeyName, NULL, (GHFunc) cairo_dock_write_one_theme_name, TRUE, FALSE)</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<hr><h2>Documentation des fonctions</h2>
+<a class="anchor" name="f2b87f4aad180d5e5368088bdb05240b"></a><!-- doxytag: member="cairo-dock-themes-manager.h::cairo_dock_list_themes" ref="f2b87f4aad180d5e5368088bdb05240b" args="(gchar *cThemesDir, GHashTable *hProvidedTable, GError **erreur)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GHashTable* cairo_dock_list_themes           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cThemesDir</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GHashTable *&nbsp;</td>
+          <td class="paramname"> <em>hProvidedTable</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GError **&nbsp;</td>
+          <td class="paramname"> <em>erreur</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Liste les themes disponibles. Un theme est un repertoire, et tous doivent etre places dans un meme repertoire. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cThemesDir</em>&nbsp;</td><td>le repertoire contenant les themes. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>hProvidedTable</em>&nbsp;</td><td>une table de hashage (string , string) qui sera remplie, ou NULL pour que la fonction vous la cree. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>erreur</em>&nbsp;</td><td>: erreur positionnee au cas ou le repertoire serait illisible. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>la table de hashage contenant les doublets (nom_du_theme , chemin_du_theme). Si une table avait ete fournie en entree, c'est elle qui est retournee, sinon c'est une nouvelle table, a detruire avec 'g_hash_table_destroy' apres utilisation (tous les elements seront liberes). </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="cef49939d0085c52a06d372b168f6ae0"></a><!-- doxytag: member="cairo-dock-themes-manager.h::cairo_dock_edit_themes" ref="cef49939d0085c52a06d372b168f6ae0" args="(GHashTable **hThemeTable, gboolean bSafeMode)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gchar* cairo_dock_edit_themes           </td>
+          <td>(</td>
+          <td class="paramtype">GHashTable **&nbsp;</td>
+          <td class="paramname"> <em>hThemeTable</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bSafeMode</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="45bfce739852d43b48219926540d6769"></a><!-- doxytag: member="cairo-dock-themes-manager.h::cairo_dock_get_chosen_theme" ref="45bfce739852d43b48219926540d6769" args="(gchar *cConfFile, gboolean *bUseThemeBehaviour, gboolean *bUseThemeLaunchers)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gchar* cairo_dock_get_chosen_theme           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cConfFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean *&nbsp;</td>
+          <td class="paramname"> <em>bUseThemeBehaviour</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean *&nbsp;</td>
+          <td class="paramname"> <em>bUseThemeLaunchers</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="b67f20b861818424f1f54346c75e9e39"></a><!-- doxytag: member="cairo-dock-themes-manager.h::cairo_dock_get_theme_path" ref="b67f20b861818424f1f54346c75e9e39" args="(gchar *cThemeName, GHashTable *hThemeTable)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gchar* cairo_dock_get_theme_path           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cThemeName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GHashTable *&nbsp;</td>
+          <td class="paramname"> <em>hThemeTable</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="addcb28e2da1100a291c744cb56fe47f"></a><!-- doxytag: member="cairo-dock-themes-manager.h::cairo_dock_load_theme" ref="addcb28e2da1100a291c744cb56fe47f" args="(gchar *cThemePath)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_load_theme           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cThemePath</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="973b61d0f4c31abe529402ec059f5750"></a><!-- doxytag: member="cairo-dock-themes-manager.h::cairo_dock_mark_theme_as_modified" ref="973b61d0f4c31abe529402ec059f5750" args="(gboolean bModified)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_mark_theme_as_modified           </td>
+          <td>(</td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bModified</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="0432fda9c86ccd9027768c7e7b5d53a4"></a><!-- doxytag: member="cairo-dock-themes-manager.h::cairo_dock_theme_need_save" ref="0432fda9c86ccd9027768c7e7b5d53a4" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_theme_need_save           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="665a38cee72eb60c7cc0af494e617b9f"></a><!-- doxytag: member="cairo-dock-themes-manager.h::cairo_dock_manage_themes" ref="665a38cee72eb60c7cc0af494e617b9f" args="(GtkWidget *pWidget, gboolean bSafeMode)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_manage_themes           </td>
+          <td>(</td>
+          <td class="paramtype">GtkWidget *&nbsp;</td>
+          <td class="paramname"> <em>pWidget</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bSafeMode</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+int cairo_dock_ask_initial_theme (void); 
+<p>
+
+</div>
+</div><p>
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

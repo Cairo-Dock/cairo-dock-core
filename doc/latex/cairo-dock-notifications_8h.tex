@@ -1,0 +1,184 @@
+\section{Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-notifications.h}
+\label{cairo-dock-notifications_8h}\index{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-notifications.h@{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-notifications.h}}
+\subsection*{Macros}
+\begin{CompactItemize}
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-RUN\_\-FIRST}~TRUE
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-RUN\_\-AFTER}~FALSE
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-INTERCEPT\_\-NOTIFICATION}~TRUE
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-LET\_\-PASS\_\-NOTIFICATION}~FALSE
+\end{CompactItemize}
+\subsection*{Définition de type}
+\begin{CompactItemize}
+\item 
+typedef gboolean($\ast$ {\bf CairoDockNotificationFunc} )(gpointer $\ast$data)
+\end{CompactItemize}
+\subsection*{Énumérations}
+\begin{CompactItemize}
+\item 
+enum {\bf CairoDockNotificationType} \{ \par
+{\bf CAIRO\_\-DOCK\_\-REMOVE\_\-ICON} = 0, 
+{\bf CAIRO\_\-DOCK\_\-CLICK\_\-ICON}, 
+{\bf CAIRO\_\-DOCK\_\-DOUBLE\_\-CLICK\_\-ICON}, 
+{\bf CAIRO\_\-DOCK\_\-MIDDLE\_\-CLICK\_\-ICON}, 
+\par
+{\bf CAIRO\_\-DOCK\_\-BUILD\_\-MENU}, 
+{\bf CAIRO\_\-DOCK\_\-DROP\_\-DATA}, 
+{\bf CAIRO\_\-DOCK\_\-DESKTOP\_\-CHANGED}, 
+{\bf CAIRO\_\-DOCK\_\-WINDOW\_\-CONFIGURED}, 
+\par
+{\bf CAIRO\_\-DOCK\_\-SCREEN\_\-GEOMETRY\_\-ALTERED}, 
+{\bf CAIRO\_\-DOCK\_\-WINDOW\_\-ACTIVATED}, 
+{\bf CAIRO\_\-DOCK\_\-NB\_\-NOTIFICATIONS}
+ \}
+\end{CompactItemize}
+\subsection*{Fonctions}
+\begin{CompactItemize}
+\item 
+void {\bf cairo\_\-dock\_\-register\_\-notification} ({\bf CairoDockNotificationType} iNotifType, {\bf CairoDockNotificationFunc} pFunction, gboolean bRunFirst)
+\item 
+void {\bf cairo\_\-dock\_\-remove\_\-notification\_\-func} ({\bf CairoDockNotificationType} iNotifType, {\bf CairoDockNotificationFunc} pFunction)
+\item 
+gboolean {\bf cairo\_\-dock\_\-notify} ({\bf CairoDockNotificationType} iNotifType, gpointer data)
+\item 
+void {\bf cairo\_\-dock\_\-register\_\-first\_\-notifications} (int iFirstNotifType,...)
+\item 
+void {\bf cairo\_\-dock\_\-register\_\-last\_\-notifications} (int iFirstNotifType,...)
+\item 
+void {\bf cairo\_\-dock\_\-remove\_\-notification\_\-funcs} (int iFirstNotifType,...)
+\end{CompactItemize}
+
+
+\subsection{Documentation des macros}
+\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CAIRO_DOCK_RUN_FIRST@{CAIRO\_\-DOCK\_\-RUN\_\-FIRST}}
+\index{CAIRO_DOCK_RUN_FIRST@{CAIRO\_\-DOCK\_\-RUN\_\-FIRST}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-RUN\_\-FIRST~TRUE}\label{cairo-dock-notifications_8h_0f0d24de89673000b20e76a086789184}
+
+
+\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CAIRO_DOCK_RUN_AFTER@{CAIRO\_\-DOCK\_\-RUN\_\-AFTER}}
+\index{CAIRO_DOCK_RUN_AFTER@{CAIRO\_\-DOCK\_\-RUN\_\-AFTER}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-RUN\_\-AFTER~FALSE}\label{cairo-dock-notifications_8h_3c01943fe3794ca048f867b3dfaefbe0}
+
+
+\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CAIRO_DOCK_INTERCEPT_NOTIFICATION@{CAIRO\_\-DOCK\_\-INTERCEPT\_\-NOTIFICATION}}
+\index{CAIRO_DOCK_INTERCEPT_NOTIFICATION@{CAIRO\_\-DOCK\_\-INTERCEPT\_\-NOTIFICATION}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-INTERCEPT\_\-NOTIFICATION~TRUE}\label{cairo-dock-notifications_8h_01a9bea57eba0313d85509da951b46ec}
+
+
+\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CAIRO_DOCK_LET_PASS_NOTIFICATION@{CAIRO\_\-DOCK\_\-LET\_\-PASS\_\-NOTIFICATION}}
+\index{CAIRO_DOCK_LET_PASS_NOTIFICATION@{CAIRO\_\-DOCK\_\-LET\_\-PASS\_\-NOTIFICATION}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-LET\_\-PASS\_\-NOTIFICATION~FALSE}\label{cairo-dock-notifications_8h_e1cd652024442c3ef5419afaf350f5bc}
+
+
+
+
+\subsection{Documentation des définition de type}
+\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CairoDockNotificationFunc@{CairoDockNotificationFunc}}
+\index{CairoDockNotificationFunc@{CairoDockNotificationFunc}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef gboolean($\ast$  {\bf CairoDockNotificationFunc})(gpointer $\ast$data)}\label{cairo-dock-notifications_8h_3ac8de5342dcae0a5a3a20f0bcaf9a6a}
+
+
+
+
+\subsection{Documentation du type de l'énumération}
+\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CairoDockNotificationType@{CairoDockNotificationType}}
+\index{CairoDockNotificationType@{CairoDockNotificationType}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}enum {\bf CairoDockNotificationType}}\label{cairo-dock-notifications_8h_183d2bfd296ecf77f1b2d4f96bf20a0e}
+
+
+\begin{Desc}
+\item[Valeurs énumérées: ]\par
+\begin{description}
+\index{CAIRO_DOCK_REMOVE_ICON@{CAIRO\_\-DOCK\_\-REMOVE\_\-ICON}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CAIRO_DOCK_REMOVE_ICON@{CAIRO\_\-DOCK\_\-REMOVE\_\-ICON}}\item[{\em 
+CAIRO\_\-DOCK\_\-REMOVE\_\-ICON\label{cairo-dock-notifications_8h_183d2bfd296ecf77f1b2d4f96bf20a0ed27863046004a842c37fa2a46fa9152d}
+}]notification appellee lorsque l'utilisateur supprime un lanceur via le menu. data : \{Icon, CairoDock\} \index{CAIRO_DOCK_CLICK_ICON@{CAIRO\_\-DOCK\_\-CLICK\_\-ICON}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CAIRO_DOCK_CLICK_ICON@{CAIRO\_\-DOCK\_\-CLICK\_\-ICON}}\item[{\em 
+CAIRO\_\-DOCK\_\-CLICK\_\-ICON\label{cairo-dock-notifications_8h_183d2bfd296ecf77f1b2d4f96bf20a0e8c26e95eb1b7977881990291e2d41fa1}
+}]notification appellee lorsque l'utilisateur clique sur une icone; l'animation est preparee juste avant, et lancee juste apres. data : \{Icon, CairoDock, iState\} \index{CAIRO_DOCK_DOUBLE_CLICK_ICON@{CAIRO\_\-DOCK\_\-DOUBLE\_\-CLICK\_\-ICON}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CAIRO_DOCK_DOUBLE_CLICK_ICON@{CAIRO\_\-DOCK\_\-DOUBLE\_\-CLICK\_\-ICON}}\item[{\em 
+CAIRO\_\-DOCK\_\-DOUBLE\_\-CLICK\_\-ICON\label{cairo-dock-notifications_8h_183d2bfd296ecf77f1b2d4f96bf20a0edab2d0ab4aecdbefca37047ec68c73e3}
+}]notification appellee lorsque l'utilisateur double clique sur une icone. data : Icon \index{CAIRO_DOCK_MIDDLE_CLICK_ICON@{CAIRO\_\-DOCK\_\-MIDDLE\_\-CLICK\_\-ICON}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CAIRO_DOCK_MIDDLE_CLICK_ICON@{CAIRO\_\-DOCK\_\-MIDDLE\_\-CLICK\_\-ICON}}\item[{\em 
+CAIRO\_\-DOCK\_\-MIDDLE\_\-CLICK\_\-ICON\label{cairo-dock-notifications_8h_183d2bfd296ecf77f1b2d4f96bf20a0ebbe60d66af778094b1bd7f2e54c99861}
+}]data : Icon \index{CAIRO_DOCK_BUILD_MENU@{CAIRO\_\-DOCK\_\-BUILD\_\-MENU}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CAIRO_DOCK_BUILD_MENU@{CAIRO\_\-DOCK\_\-BUILD\_\-MENU}}\item[{\em 
+CAIRO\_\-DOCK\_\-BUILD\_\-MENU\label{cairo-dock-notifications_8h_183d2bfd296ecf77f1b2d4f96bf20a0e87e4cd6fbee390472d4199ed5e077396}
+}]data : \{Icon, CairoDock, GtkMenu\} \index{CAIRO_DOCK_DROP_DATA@{CAIRO\_\-DOCK\_\-DROP\_\-DATA}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CAIRO_DOCK_DROP_DATA@{CAIRO\_\-DOCK\_\-DROP\_\-DATA}}\item[{\em 
+CAIRO\_\-DOCK\_\-DROP\_\-DATA\label{cairo-dock-notifications_8h_183d2bfd296ecf77f1b2d4f96bf20a0ebd606f16f651e9257a0b332f41b88a71}
+}]data : \{gchar, Icon, double, CairoDock\} \index{CAIRO_DOCK_DESKTOP_CHANGED@{CAIRO\_\-DOCK\_\-DESKTOP\_\-CHANGED}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CAIRO_DOCK_DESKTOP_CHANGED@{CAIRO\_\-DOCK\_\-DESKTOP\_\-CHANGED}}\item[{\em 
+CAIRO\_\-DOCK\_\-DESKTOP\_\-CHANGED\label{cairo-dock-notifications_8h_183d2bfd296ecf77f1b2d4f96bf20a0e2800d4fdde40ffdc2a4b525a65c0100d}
+}]notification appellee lors d'un changement de bureau ou de viewport. data : NULL \index{CAIRO_DOCK_WINDOW_CONFIGURED@{CAIRO\_\-DOCK\_\-WINDOW\_\-CONFIGURED}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CAIRO_DOCK_WINDOW_CONFIGURED@{CAIRO\_\-DOCK\_\-WINDOW\_\-CONFIGURED}}\item[{\em 
+CAIRO\_\-DOCK\_\-WINDOW\_\-CONFIGURED\label{cairo-dock-notifications_8h_183d2bfd296ecf77f1b2d4f96bf20a0ef8b5524e496f41ea118037b9f92d8ae7}
+}]notification appellee lorsqu'une fenetre est redimensionnee ou deplacee, ou lorsque l'ordre des fenetres change. data : XConfigureEvent ou NULL. \index{CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED@{CAIRO\_\-DOCK\_\-SCREEN\_\-GEOMETRY\_\-ALTERED}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED@{CAIRO\_\-DOCK\_\-SCREEN\_\-GEOMETRY\_\-ALTERED}}\item[{\em 
+CAIRO\_\-DOCK\_\-SCREEN\_\-GEOMETRY\_\-ALTERED\label{cairo-dock-notifications_8h_183d2bfd296ecf77f1b2d4f96bf20a0e5f7b8ab2e6173c2653407778a7945cf6}
+}]notification appellee lorsque la geometrie du bureau a change (nombre de viewports/bureaux, dimensions). data : NULL \index{CAIRO_DOCK_WINDOW_ACTIVATED@{CAIRO\_\-DOCK\_\-WINDOW\_\-ACTIVATED}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CAIRO_DOCK_WINDOW_ACTIVATED@{CAIRO\_\-DOCK\_\-WINDOW\_\-ACTIVATED}}\item[{\em 
+CAIRO\_\-DOCK\_\-WINDOW\_\-ACTIVATED\label{cairo-dock-notifications_8h_183d2bfd296ecf77f1b2d4f96bf20a0e414019822c568115e4c4e832455b92f2}
+}]notification appellee lorsque la fenetre active a change. data : Xid \index{CAIRO_DOCK_NB_NOTIFICATIONS@{CAIRO\_\-DOCK\_\-NB\_\-NOTIFICATIONS}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!CAIRO_DOCK_NB_NOTIFICATIONS@{CAIRO\_\-DOCK\_\-NB\_\-NOTIFICATIONS}}\item[{\em 
+CAIRO\_\-DOCK\_\-NB\_\-NOTIFICATIONS\label{cairo-dock-notifications_8h_183d2bfd296ecf77f1b2d4f96bf20a0ee191d3469739d849e67b83d6d6433d07}
+}]\end{description}
+\end{Desc}
+
+
+
+\subsection{Documentation des fonctions}
+\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!cairo_dock_register_notification@{cairo\_\-dock\_\-register\_\-notification}}
+\index{cairo_dock_register_notification@{cairo\_\-dock\_\-register\_\-notification}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-register\_\-notification ({\bf CairoDockNotificationType} {\em iNotifType}, {\bf CairoDockNotificationFunc} {\em pFunction}, gboolean {\em bRunFirst})}\label{cairo-dock-notifications_8h_845e5c4be6a3a3d1be2de99f9c6a93a6}
+
+
+Enregistre une action a appeler lors d'une notification. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em iNotifType}]type de la notification. \item[{\em pFunction}]fonction notifiee. \item[{\em bRunFirst}]CAIRO\_\-DOCK\_\-RUN\_\-FIRST pour etre enregistre en 1er, CAIRO\_\-DOCK\_\-RUN\_\-AFTER pour etre enregistreé en dernier. \end{description}
+\end{Desc}
+\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!cairo_dock_remove_notification_func@{cairo\_\-dock\_\-remove\_\-notification\_\-func}}
+\index{cairo_dock_remove_notification_func@{cairo\_\-dock\_\-remove\_\-notification\_\-func}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-remove\_\-notification\_\-func ({\bf CairoDockNotificationType} {\em iNotifType}, {\bf CairoDockNotificationFunc} {\em pFunction})}\label{cairo-dock-notifications_8h_f91590fc1a8f0f395f4d39c8f6942dc6}
+
+
+Enleve une fonction de la liste des fonctions appelees par une notification donnee. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em iNotifType}]type de la notification. \item[{\em pFunction}]fonction notifiee. \end{description}
+\end{Desc}
+\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!cairo_dock_notify@{cairo\_\-dock\_\-notify}}
+\index{cairo_dock_notify@{cairo\_\-dock\_\-notify}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-notify ({\bf CairoDockNotificationType} {\em iNotifType}, gpointer {\em data})}\label{cairo-dock-notifications_8h_b384dab889291442b54ea600bb411ea3}
+
+
+Enleve une fonction de la liste des fonctions appelees par une notification donnee. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em iNotifType}]type de la notification. \item[{\em data}]donnees passees a la fonction notifiee. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]TRUE si la notification a ete utilisee par quelqu'un, FALSE si aucune fonction n'est enregistree pour elle. \end{Desc}
+\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!cairo_dock_register_first_notifications@{cairo\_\-dock\_\-register\_\-first\_\-notifications}}
+\index{cairo_dock_register_first_notifications@{cairo\_\-dock\_\-register\_\-first\_\-notifications}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-register\_\-first\_\-notifications (int {\em iFirstNotifType},  {\em ...})}\label{cairo-dock-notifications_8h_2f070bd652229d8ffef801ec27d64777}
+
+
+Enregistre une liste de fonctions devant etre notifiees en premier. La liste est une liste de couples (CairoDockNotificationType, CairoDockNotificationFunc), et doit etre clot par -1. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em iFirstNotifType}]type de la 1ere notification. \item[{\em ...}]1ere fonction notifiee, puis couple de (notification, fonction), termine par -1. \end{description}
+\end{Desc}
+\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!cairo_dock_register_last_notifications@{cairo\_\-dock\_\-register\_\-last\_\-notifications}}
+\index{cairo_dock_register_last_notifications@{cairo\_\-dock\_\-register\_\-last\_\-notifications}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-register\_\-last\_\-notifications (int {\em iFirstNotifType},  {\em ...})}\label{cairo-dock-notifications_8h_43af2cd20c3f208f40c025efae51cda6}
+
+
+Enregistre une liste de fonctions devant etre notifiees en dernier. La liste est une liste de couples (CairoDockNotificationType, CairoDockNotificationFunc), et doit etre clot par -1. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em iFirstNotifType}]type de la 1ere notification. \item[{\em ...}]1ere fonction notifiee, puis couple de (notification, fonction), termine par -1. \end{description}
+\end{Desc}
+\index{cairo-dock-notifications.h@{cairo-dock-notifications.h}!cairo_dock_remove_notification_funcs@{cairo\_\-dock\_\-remove\_\-notification\_\-funcs}}
+\index{cairo_dock_remove_notification_funcs@{cairo\_\-dock\_\-remove\_\-notification\_\-funcs}!cairo-dock-notifications.h@{cairo-dock-notifications.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-remove\_\-notification\_\-funcs (int {\em iFirstNotifType},  {\em ...})}\label{cairo-dock-notifications_8h_4ef98c22645a91ab4ddba1a1df695d3e}
+
+
+Enleve une liste de fonctions notifiees. La liste est une liste de couples (CairoDockNotificationType, CairoDockNotificationFunc), et doit etre clot par -1. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em iFirstNotifType}]type de la 1ere notification. \item[{\em ...}]1ere fonction notifiee, puis couple de (notification, fonction), termine par -1. \end{description}
+\end{Desc}

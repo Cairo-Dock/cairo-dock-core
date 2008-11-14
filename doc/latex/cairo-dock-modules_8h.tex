@@ -1,0 +1,189 @@
+\section{Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-modules.h}
+\label{cairo-dock-modules_8h}\index{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-modules.h@{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-modules.h}}
+\subsection*{Macros}
+\begin{CompactItemize}
+\item 
+\#define {\bf cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-available\_\-modules2}(pOpenedKeyFile, cConfFile)~cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-modules\_\-full (pOpenedKeyFile, cConfFile, \char`\"{}Applets\char`\"{}, \char`\"{}modules\char`\"{}, FALSE)
+\item 
+\#define {\bf cairo\_\-dock\_\-update\_\-easy\_\-conf\_\-file\_\-with\_\-available\_\-modules2}(pOpenedKeyFile, cConfFile)~cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-modules\_\-full (pOpenedKeyFile, cConfFile, \char`\"{}System\char`\"{}, \char`\"{}modules\char`\"{}, FALSE)
+\item 
+\#define {\bf cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-active\_\-modules2}(pOpenedKeyFile, cConfFile)~cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-modules\_\-full (pOpenedKeyFile, cConfFile, \char`\"{}Applets\char`\"{}, \char`\"{}modules\char`\"{}, TRUE)
+\end{CompactItemize}
+\subsection*{Fonctions}
+\begin{CompactItemize}
+\item 
+void {\bf cairo\_\-dock\_\-initialize\_\-module\_\-manager} (gchar $\ast$cModuleDirPath)
+\item 
+void {\bf cairo\_\-dock\_\-free\_\-visit\_\-card} ({\bf CairoDockVisitCard} $\ast$pVisitCard)
+\item 
+{\bf CairoDockModule} $\ast$ {\bf cairo\_\-dock\_\-load\_\-module} (gchar $\ast$cSoFilePath, GHashTable $\ast$pModuleTable, GError $\ast$$\ast$erreur)
+\item 
+void {\bf cairo\_\-dock\_\-preload\_\-module\_\-from\_\-directory} (gchar $\ast$cModuleDirPath, GHashTable $\ast$pModuleTable, GError $\ast$$\ast$erreur)
+\item 
+void {\bf cairo\_\-dock\_\-activate\_\-modules\_\-from\_\-list} (gchar $\ast$$\ast$cActiveModuleList, {\bf CairoDock} $\ast$pDock, double fTime)
+\item 
+void {\bf cairo\_\-dock\_\-deactivate\_\-old\_\-modules} (double fTime)
+\item 
+void {\bf cairo\_\-dock\_\-free\_\-module} ({\bf CairoDockModule} $\ast$module)
+\item 
+GKeyFile $\ast$ {\bf cairo\_\-dock\_\-pre\_\-read\_\-module\_\-config} ({\bf CairoDockModule} $\ast$pModule, {\bf CairoDockMinimalAppletConfig} $\ast$pMinimalConfig)
+\item 
+{\bf Icon} $\ast$ {\bf cairo\_\-dock\_\-activate\_\-module} ({\bf CairoDockModule} $\ast$module, {\bf CairoDock} $\ast$pDock, GError $\ast$$\ast$erreur)
+\item 
+void {\bf cairo\_\-dock\_\-deactivate\_\-module} ({\bf CairoDockModule} $\ast$module)
+\item 
+void {\bf cairo\_\-dock\_\-reload\_\-module} ({\bf CairoDockModule} $\ast$module, gboolean bReloadAppletConf)
+\item 
+void {\bf cairo\_\-dock\_\-deactivate\_\-all\_\-modules} (void)
+\item 
+void {\bf cairo\_\-dock\_\-activate\_\-module\_\-and\_\-load} (gchar $\ast$cModuleName)
+\item 
+void {\bf cairo\_\-dock\_\-deactivate\_\-module\_\-and\_\-unload} (gchar $\ast$cModuleName)
+\item 
+void {\bf cairo\_\-dock\_\-configure\_\-module} (GtkWindow $\ast$pParentWindow, {\bf CairoDockModule} $\ast$module, GError $\ast$$\ast$erreur)
+\item 
+{\bf Icon} $\ast$ {\bf cairo\_\-dock\_\-find\_\-icon\_\-from\_\-module} ({\bf CairoDockModule} $\ast$module, {\bf CairoDockContainer} $\ast$pContainer)
+\item 
+{\bf CairoDockModule} $\ast$ {\bf cairo\_\-dock\_\-find\_\-module\_\-from\_\-name} (gchar $\ast$cModuleName)
+\item 
+{\bf CairoDockModule} $\ast$ {\bf cairo\_\-dock\_\-foreach\_\-desklet} ({\bf CairoDockForeachDeskletFunc} pCallback, gpointer user\_\-data)
+\item 
+GString $\ast$$\ast$ {\bf cairo\_\-dock\_\-list\_\-modules\_\-by\_\-category} (gboolean bActiveOnly)
+\item 
+void {\bf cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-modules\_\-full} (GKeyFile $\ast$pOpenedKeyFile, gchar $\ast$cConfFile, gchar $\ast$cGroupName, gchar $\ast$cKeyNameBase, gboolean bActiveOnly)
+\item 
+int {\bf cairo\_\-dock\_\-get\_\-nb\_\-modules} (void)
+\item 
+void {\bf cairo\_\-dock\_\-update\_\-module\_\-order} ({\bf CairoDockModule} $\ast$pModule, double fOrder)
+\end{CompactItemize}
+
+
+\subsection{Documentation des macros}
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_update_conf_file_with_available_modules2@{cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-available\_\-modules2}}
+\index{cairo_dock_update_conf_file_with_available_modules2@{cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-available\_\-modules2}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-available\_\-modules2(pOpenedKeyFile, cConfFile)~cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-modules\_\-full (pOpenedKeyFile, cConfFile, \char`\"{}Applets\char`\"{}, \char`\"{}modules\char`\"{}, FALSE)}\label{cairo-dock-modules_8h_be4307dd60e090e1f5740dfb1d1e0b75}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_update_easy_conf_file_with_available_modules2@{cairo\_\-dock\_\-update\_\-easy\_\-conf\_\-file\_\-with\_\-available\_\-modules2}}
+\index{cairo_dock_update_easy_conf_file_with_available_modules2@{cairo\_\-dock\_\-update\_\-easy\_\-conf\_\-file\_\-with\_\-available\_\-modules2}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cairo\_\-dock\_\-update\_\-easy\_\-conf\_\-file\_\-with\_\-available\_\-modules2(pOpenedKeyFile, cConfFile)~cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-modules\_\-full (pOpenedKeyFile, cConfFile, \char`\"{}System\char`\"{}, \char`\"{}modules\char`\"{}, FALSE)}\label{cairo-dock-modules_8h_f1df945a912eb09548c937ba9bee4b27}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_update_conf_file_with_active_modules2@{cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-active\_\-modules2}}
+\index{cairo_dock_update_conf_file_with_active_modules2@{cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-active\_\-modules2}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-active\_\-modules2(pOpenedKeyFile, cConfFile)~cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-modules\_\-full (pOpenedKeyFile, cConfFile, \char`\"{}Applets\char`\"{}, \char`\"{}modules\char`\"{}, TRUE)}\label{cairo-dock-modules_8h_85a1fb943d29e9110d1e7481564b2576}
+
+
+
+
+\subsection{Documentation des fonctions}
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_initialize_module_manager@{cairo\_\-dock\_\-initialize\_\-module\_\-manager}}
+\index{cairo_dock_initialize_module_manager@{cairo\_\-dock\_\-initialize\_\-module\_\-manager}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-initialize\_\-module\_\-manager (gchar $\ast$ {\em cModuleDirPath})}\label{cairo-dock-modules_8h_1340f2d554ab9a7eb635385fc3cd1b3b}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_free_visit_card@{cairo\_\-dock\_\-free\_\-visit\_\-card}}
+\index{cairo_dock_free_visit_card@{cairo\_\-dock\_\-free\_\-visit\_\-card}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-free\_\-visit\_\-card ({\bf CairoDockVisitCard} $\ast$ {\em pVisitCard})}\label{cairo-dock-modules_8h_dce0dd50bfcd266f4bfe19442aa5866b}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_load_module@{cairo\_\-dock\_\-load\_\-module}}
+\index{cairo_dock_load_module@{cairo\_\-dock\_\-load\_\-module}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockModule}$\ast$ cairo\_\-dock\_\-load\_\-module (gchar $\ast$ {\em cSoFilePath}, GHashTable $\ast$ {\em pModuleTable}, GError $\ast$$\ast$ {\em erreur})}\label{cairo-dock-modules_8h_b813976c4ae825f539b5b1aa9dc5a242}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_preload_module_from_directory@{cairo\_\-dock\_\-preload\_\-module\_\-from\_\-directory}}
+\index{cairo_dock_preload_module_from_directory@{cairo\_\-dock\_\-preload\_\-module\_\-from\_\-directory}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-preload\_\-module\_\-from\_\-directory (gchar $\ast$ {\em cModuleDirPath}, GHashTable $\ast$ {\em pModuleTable}, GError $\ast$$\ast$ {\em erreur})}\label{cairo-dock-modules_8h_ff31d986bb19e13dd2a0fdd8d9d4ca87}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_activate_modules_from_list@{cairo\_\-dock\_\-activate\_\-modules\_\-from\_\-list}}
+\index{cairo_dock_activate_modules_from_list@{cairo\_\-dock\_\-activate\_\-modules\_\-from\_\-list}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-activate\_\-modules\_\-from\_\-list (gchar $\ast$$\ast$ {\em cActiveModuleList}, {\bf CairoDock} $\ast$ {\em pDock}, double {\em fTime})}\label{cairo-dock-modules_8h_5da43c5ad9dad4ce51b367cfbe8bf923}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_deactivate_old_modules@{cairo\_\-dock\_\-deactivate\_\-old\_\-modules}}
+\index{cairo_dock_deactivate_old_modules@{cairo\_\-dock\_\-deactivate\_\-old\_\-modules}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-deactivate\_\-old\_\-modules (double {\em fTime})}\label{cairo-dock-modules_8h_8a392b787b653188feef4cac78aba01a}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_free_module@{cairo\_\-dock\_\-free\_\-module}}
+\index{cairo_dock_free_module@{cairo\_\-dock\_\-free\_\-module}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-free\_\-module ({\bf CairoDockModule} $\ast$ {\em module})}\label{cairo-dock-modules_8h_a30d8f12c4b2960f885f65214f500e8f}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_pre_read_module_config@{cairo\_\-dock\_\-pre\_\-read\_\-module\_\-config}}
+\index{cairo_dock_pre_read_module_config@{cairo\_\-dock\_\-pre\_\-read\_\-module\_\-config}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}GKeyFile$\ast$ cairo\_\-dock\_\-pre\_\-read\_\-module\_\-config ({\bf CairoDockModule} $\ast$ {\em pModule}, {\bf CairoDockMinimalAppletConfig} $\ast$ {\em pMinimalConfig})}\label{cairo-dock-modules_8h_f97235b1eb73607ef92ff206d50a911a}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_activate_module@{cairo\_\-dock\_\-activate\_\-module}}
+\index{cairo_dock_activate_module@{cairo\_\-dock\_\-activate\_\-module}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Icon}$\ast$ cairo\_\-dock\_\-activate\_\-module ({\bf CairoDockModule} $\ast$ {\em module}, {\bf CairoDock} $\ast$ {\em pDock}, GError $\ast$$\ast$ {\em erreur})}\label{cairo-dock-modules_8h_acfcaabda81a50f7711e0247dcd892a4}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_deactivate_module@{cairo\_\-dock\_\-deactivate\_\-module}}
+\index{cairo_dock_deactivate_module@{cairo\_\-dock\_\-deactivate\_\-module}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-deactivate\_\-module ({\bf CairoDockModule} $\ast$ {\em module})}\label{cairo-dock-modules_8h_b3bc5aeab21bc70a81b0120ceeb60ac5}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_reload_module@{cairo\_\-dock\_\-reload\_\-module}}
+\index{cairo_dock_reload_module@{cairo\_\-dock\_\-reload\_\-module}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-reload\_\-module ({\bf CairoDockModule} $\ast$ {\em module}, gboolean {\em bReloadAppletConf})}\label{cairo-dock-modules_8h_637c1b0decc3c6609f9f5ede2d7e1c6e}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_deactivate_all_modules@{cairo\_\-dock\_\-deactivate\_\-all\_\-modules}}
+\index{cairo_dock_deactivate_all_modules@{cairo\_\-dock\_\-deactivate\_\-all\_\-modules}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-deactivate\_\-all\_\-modules (void)}\label{cairo-dock-modules_8h_7df996221421da2bcb8085f57bb595af}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_activate_module_and_load@{cairo\_\-dock\_\-activate\_\-module\_\-and\_\-load}}
+\index{cairo_dock_activate_module_and_load@{cairo\_\-dock\_\-activate\_\-module\_\-and\_\-load}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-activate\_\-module\_\-and\_\-load (gchar $\ast$ {\em cModuleName})}\label{cairo-dock-modules_8h_d7489d59b75c971aed8e0b27b3bccb10}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_deactivate_module_and_unload@{cairo\_\-dock\_\-deactivate\_\-module\_\-and\_\-unload}}
+\index{cairo_dock_deactivate_module_and_unload@{cairo\_\-dock\_\-deactivate\_\-module\_\-and\_\-unload}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-deactivate\_\-module\_\-and\_\-unload (gchar $\ast$ {\em cModuleName})}\label{cairo-dock-modules_8h_5e77bb535cc42faefcd1ddf0e049c810}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_configure_module@{cairo\_\-dock\_\-configure\_\-module}}
+\index{cairo_dock_configure_module@{cairo\_\-dock\_\-configure\_\-module}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-configure\_\-module (GtkWindow $\ast$ {\em pParentWindow}, {\bf CairoDockModule} $\ast$ {\em module}, GError $\ast$$\ast$ {\em erreur})}\label{cairo-dock-modules_8h_dab1719fad9b22dabea83235fa399808}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_find_icon_from_module@{cairo\_\-dock\_\-find\_\-icon\_\-from\_\-module}}
+\index{cairo_dock_find_icon_from_module@{cairo\_\-dock\_\-find\_\-icon\_\-from\_\-module}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Icon}$\ast$ cairo\_\-dock\_\-find\_\-icon\_\-from\_\-module ({\bf CairoDockModule} $\ast$ {\em module}, {\bf CairoDockContainer} $\ast$ {\em pContainer})}\label{cairo-dock-modules_8h_1989857c48825263c239e81628aceff4}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_find_module_from_name@{cairo\_\-dock\_\-find\_\-module\_\-from\_\-name}}
+\index{cairo_dock_find_module_from_name@{cairo\_\-dock\_\-find\_\-module\_\-from\_\-name}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockModule}$\ast$ cairo\_\-dock\_\-find\_\-module\_\-from\_\-name (gchar $\ast$ {\em cModuleName})}\label{cairo-dock-modules_8h_4b8a7e9daa3f83e0f4d05f79797fac70}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_foreach_desklet@{cairo\_\-dock\_\-foreach\_\-desklet}}
+\index{cairo_dock_foreach_desklet@{cairo\_\-dock\_\-foreach\_\-desklet}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockModule}$\ast$ cairo\_\-dock\_\-foreach\_\-desklet ({\bf CairoDockForeachDeskletFunc} {\em pCallback}, gpointer {\em user\_\-data})}\label{cairo-dock-modules_8h_b89f4a0db5a318f3d592553763358a0e}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_list_modules_by_category@{cairo\_\-dock\_\-list\_\-modules\_\-by\_\-category}}
+\index{cairo_dock_list_modules_by_category@{cairo\_\-dock\_\-list\_\-modules\_\-by\_\-category}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}GString$\ast$$\ast$ cairo\_\-dock\_\-list\_\-modules\_\-by\_\-category (gboolean {\em bActiveOnly})}\label{cairo-dock-modules_8h_237cd0ae63bee6ab9d47a84a4b096ee8}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_update_conf_file_with_modules_full@{cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-modules\_\-full}}
+\index{cairo_dock_update_conf_file_with_modules_full@{cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-modules\_\-full}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-modules\_\-full (GKeyFile $\ast$ {\em pOpenedKeyFile}, gchar $\ast$ {\em cConfFile}, gchar $\ast$ {\em cGroupName}, gchar $\ast$ {\em cKeyNameBase}, gboolean {\em bActiveOnly})}\label{cairo-dock-modules_8h_2ebe928796b48391ebd0d2e1f45d7b57}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_get_nb_modules@{cairo\_\-dock\_\-get\_\-nb\_\-modules}}
+\index{cairo_dock_get_nb_modules@{cairo\_\-dock\_\-get\_\-nb\_\-modules}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int cairo\_\-dock\_\-get\_\-nb\_\-modules (void)}\label{cairo-dock-modules_8h_321bc77df4a3d1261fe5a682658934b9}
+
+
+\index{cairo-dock-modules.h@{cairo-dock-modules.h}!cairo_dock_update_module_order@{cairo\_\-dock\_\-update\_\-module\_\-order}}
+\index{cairo_dock_update_module_order@{cairo\_\-dock\_\-update\_\-module\_\-order}!cairo-dock-modules.h@{cairo-dock-modules.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-update\_\-module\_\-order ({\bf CairoDockModule} $\ast$ {\em pModule}, double {\em fOrder})}\label{cairo-dock-modules_8h_a2c388505253420887e4f53219cfbea8}
+
+

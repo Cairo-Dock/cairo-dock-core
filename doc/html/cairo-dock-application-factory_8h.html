@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-application-factory.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-application-factory.h</h1>
+<p>
+<a href="cairo-dock-application-factory_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-application-factory_8h.html#678ef395cc28e3a8fa07ba22577f6bf7">cairo_dock_initialize_application_factory</a> (Display *pXDisplay)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-application-factory_8h.html#42e39f7b5ad59fb32467a1e6c033c3f7">cairo_dock_unregister_pid</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-application-factory_8h.html#6c118c96f01f32634ecdb3c4e2f2a826">cairo_dock_create_surface_from_xwindow</a> (Window Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-application-factory_8h.html#78ff33e505ecd43bc1182c40110ba290">cairo_dock_manage_appli_class</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pMainDock)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-application-factory_8h.html#e28b5fa69e1fb9cf38fccc6ba95e0efc">cairo_dock_create_icon_from_xwindow</a> (cairo_t *pSourceContext, Window Xid, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-application-factory_8h.html#ad3e753de8bc7fc717a7f81f87d7b8fa">cairo_dock_Xproperty_changed</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, Atom aProperty, int iState, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+
+</table>
+<hr><h2>Documentation des fonctions</h2>
+<a class="anchor" name="678ef395cc28e3a8fa07ba22577f6bf7"></a><!-- doxytag: member="cairo-dock-application-factory.h::cairo_dock_initialize_application_factory" ref="678ef395cc28e3a8fa07ba22577f6bf7" args="(Display *pXDisplay)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_initialize_application_factory           </td>
+          <td>(</td>
+          <td class="paramtype">Display *&nbsp;</td>
+          <td class="paramname"> <em>pXDisplay</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="42e39f7b5ad59fb32467a1e6c033c3f7"></a><!-- doxytag: member="cairo-dock-application-factory.h::cairo_dock_unregister_pid" ref="42e39f7b5ad59fb32467a1e6c033c3f7" args="(Icon *icon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_unregister_pid           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>icon</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="6c118c96f01f32634ecdb3c4e2f2a826"></a><!-- doxytag: member="cairo-dock-application-factory.h::cairo_dock_create_surface_from_xwindow" ref="6c118c96f01f32634ecdb3c4e2f2a826" args="(Window Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cairo_surface_t* cairo_dock_create_surface_from_xwindow           </td>
+          <td>(</td>
+          <td class="paramtype">Window&nbsp;</td>
+          <td class="paramname"> <em>Xid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fMaxScale</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&nbsp;</td>
+          <td class="paramname"> <em>fWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&nbsp;</td>
+          <td class="paramname"> <em>fHeight</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="78ff33e505ecd43bc1182c40110ba290"></a><!-- doxytag: member="cairo-dock-application-factory.h::cairo_dock_manage_appli_class" ref="78ff33e505ecd43bc1182c40110ba290" args="(Icon *icon, CairoDock *pMainDock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDock.html">CairoDock</a>* cairo_dock_manage_appli_class           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>icon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pMainDock</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="e28b5fa69e1fb9cf38fccc6ba95e0efc"></a><!-- doxytag: member="cairo-dock-application-factory.h::cairo_dock_create_icon_from_xwindow" ref="e28b5fa69e1fb9cf38fccc6ba95e0efc" args="(cairo_t *pSourceContext, Window Xid, CairoDock *pDock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__Icon.html">Icon</a>* cairo_dock_create_icon_from_xwindow           </td>
+          <td>(</td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Window&nbsp;</td>
+          <td class="paramname"> <em>Xid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ad3e753de8bc7fc717a7f81f87d7b8fa"></a><!-- doxytag: member="cairo-dock-application-factory.h::cairo_dock_Xproperty_changed" ref="ad3e753de8bc7fc717a7f81f87d7b8fa" args="(Icon *icon, Atom aProperty, int iState, CairoDock *pDock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_Xproperty_changed           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>icon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Atom&nbsp;</td>
+          <td class="paramname"> <em>aProperty</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>iState</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

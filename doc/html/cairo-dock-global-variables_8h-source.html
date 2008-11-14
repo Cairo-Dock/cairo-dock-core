@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock:  Fichier source de /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-global-variables.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-global-variables.h</h1><a href="cairo-dock-global-variables_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef __CAIRO_DOCK_GLOBAL_VARIABLES_H__</span>
+<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define __CAIRO_DOCK_GLOBAL_VARIABLES_H__</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span>
+<a name="l00004"></a>00004 <span class="preprocessor">#include &lt;glib.h&gt;</span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;gtk/gtk.h&gt;</span>
+<a name="l00006"></a>00006 <span class="preprocessor">#include &lt;cairo.h&gt;</span>
+<a name="l00007"></a>00007 
+<a name="l00009"></a>00009 <span class="keyword">extern</span> <a class="code" href="struct__CairoDock.html">CairoDock</a> *<a class="code" href="cairo-dock-global-variables_8h.html#a24af9062f9cc975eb0b9422eb6587e6" title="Pointeur sur le dock principal.">g_pMainDock</a>;
+<a name="l00011"></a>00011 <span class="keyword">extern</span> gint <a class="code" href="cairo-dock-global-variables_8h.html#d832291d167ff78b5ae1b76dfb288ac8" title="Largeur de l&amp;#39;ecran en mode horizontal/vertical.">g_iScreenWidth</a>[2];
+<a name="l00013"></a>00013 <span class="keyword">extern</span> gint <a class="code" href="cairo-dock-global-variables_8h.html#70dbb6c14cb143c826e85759b205f201" title="Hauteur de l&amp;#39;ecran en mode horizontal/vertical.">g_iScreenHeight</a>[2];
+<a name="l00015"></a>00015 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="cairo-dock-global-variables_8h.html#1dabea24295426792573b63646020a7a" title="Nombre de bureaux virtuels.">g_iNbDesktops</a>;
+<a name="l00017"></a>00017 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="cairo-dock-global-variables_8h.html#c26a1427f71dd864d4382c518cadaae1" title="Nombre de &amp;quot;faces&amp;quot; du cube en largeur et en hauteur.">g_iNbFacesForViewportX</a>,<a class="code" href="cairo-dock-global-variables_8h.html#72da7886ec45493994f12862ed0519b8">g_iNbFacesForViewportY</a> ;
+<a name="l00019"></a>00019 <span class="keyword">extern</span> gchar *<a class="code" href="cairo-dock-global-variables_8h.html#2173efce4550991bad33a89cf25b6243" title="Chemin du fichier de conf de l&amp;#39;appli.">g_cConfFile</a>;
+<a name="l00020"></a>00020 
+<a name="l00022"></a>00022 <span class="keyword">extern</span> gint <a class="code" href="cairo-dock-global-variables_8h.html#e5d97f4f9a4f7e546af6ebe7b7d5399b" title="Epaisseur du cadre (en pixels).">g_iDockLineWidth</a>;
+<a name="l00024"></a>00024 <span class="keyword">extern</span> gint <a class="code" href="cairo-dock-global-variables_8h.html#c5768ebc340b36dd210f7b4dea884697" title="rayon des coins du cadre.">g_iDockRadius</a>;
+<a name="l00026"></a><a class="code" href="cairo-dock-global-variables_8h.html#a16b32df9350a49829c9d153db02cabd">00026</a> gint <a class="code" href="cairo-dock-global-variables_8h.html#a16b32df9350a49829c9d153db02cabd" title="Marge entre le cadre et les icones.">g_iFrameMargin</a>;
+<a name="l00028"></a>00028 <span class="keyword">extern</span> <span class="keywordtype">double</span> <a class="code" href="cairo-dock-global-variables_8h.html#692342aa8466267ea13fc290bdbecd96" title="La couleur du cadre.">g_fLineColor</a>[4];
+<a name="l00030"></a>00030 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="cairo-dock-global-variables_8h.html#32a45bc8bdc1899cbe8bbc034a3815fe" title="Ecart en pixels entre les icones.">g_iIconGap</a>;
+<a name="l00032"></a>00032 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="cairo-dock-global-variables_8h.html#386538e26258de4d50feb84fecc45dd6" title="Taille de la police des etiquettes.">g_iLabelSize</a>;
+<a name="l00034"></a>00034 <span class="keyword">extern</span> gchar *<a class="code" href="cairo-dock-global-variables_8h.html#1dd252a8514e5074187d0c12a311f158" title="Police de caracteres des etiquettes.">g_cLabelPolice</a>;
+<a name="l00036"></a>00036 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="cairo-dock-global-variables_8h.html#709f8c9af486980298862ded5b3edfa5" title="Epaisseur des traits.">g_iLabelWeight</a>;
+<a name="l00038"></a>00038 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="cairo-dock-global-variables_8h.html#673e7ae2a36a56170ff492d17b46030b" title="Italique ou droit.">g_iLabelStyle</a>;
+<a name="l00040"></a>00040 <span class="keyword">extern</span> <span class="keywordtype">double</span> <a class="code" href="cairo-dock-global-variables_8h.html#edfb545352a3033876f0cdfb4e7f0893" title="facteur de visibilite des etiquettes adjacentes a l&amp;#39;icone pointee.">g_fLabelAlphaThreshold</a>;
+<a name="l00042"></a>00042 <span class="keyword">extern</span> gboolean <a class="code" href="cairo-dock-global-variables_8h.html#9656ee040199018fa599316b38e2f231" title="le texte est-il toujours horizontal ?">g_bTextAlwaysHorizontal</a>;
+<a name="l00044"></a>00044 <span class="keyword">extern</span> gboolean <a class="code" href="cairo-dock-global-variables_8h.html#57a991233be710d18740f1ce21647c58" title="seule l&amp;#39;etiquette de l&amp;#39;icone pointee doit-elle etre dessinee ?">g_bLabelForPointedIconOnly</a>;
+<a name="l00045"></a>00045 
+<a name="l00047"></a>00047 <span class="keyword">extern</span> gboolean <a class="code" href="cairo-dock-global-variables_8h.html#eff7098546eeea81c9c29a272527cbdb" title="TRUE ssi les coins du bas sont arrondis.">g_bRoundedBottomCorner</a>;
+<a name="l00049"></a>00049 <span class="keyword">extern</span> gboolean <a class="code" href="cairo-dock-global-variables_8h.html#263de39492b5e16c81c98792f183edcf" title="TRUE si l&amp;#39;auto-hide est active.">g_bAutoHide</a>;
+<a name="l00050"></a>00050 
+<a name="l00052"></a>00052 <span class="keyword">extern</span> <span class="keywordtype">double</span> <a class="code" href="cairo-dock-global-variables_8h.html#815cf11f5b3bd8f701b0e1083921ebbd" title="Taille des reflets, en pixels, calcules par rapport a la hauteur max des icones.">g_fReflectSize</a>;
+<a name="l00054"></a>00054 <span class="keyword">extern</span> <span class="keywordtype">double</span> <a class="code" href="cairo-dock-global-variables_8h.html#1301d24e576a57001c9ddf296d170655" title="pouvoir reflechissant du plan.">g_fAlbedo</a>;
+<a name="l00055"></a>00055 
+<a name="l00057"></a>00057 <span class="keyword">extern</span> <span class="keywordtype">double</span> <a class="code" href="cairo-dock-global-variables_8h.html#4be8b55ef7fe012b34b5fa867c2740de" title="Couleur claire du fond ou des rayures.">g_fStripesColorBright</a>[4];
+<a name="l00059"></a>00059 <span class="keyword">extern</span> <span class="keywordtype">double</span> <a class="code" href="cairo-dock-global-variables_8h.html#37f48317d776c16c80ae657ef5951fed" title="couleur foncee du fond ou des rayures.">g_fStripesColorDark</a>[4];
+<a name="l00060"></a>00060 
+<a name="l00062"></a>00062 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="cairo-dock-global-variables_8h.html#e5fa6397c672cb778cb4637dfa5983d0" title="Largeur de la zone de rappel.">g_iVisibleZoneWidth</a>;
+<a name="l00064"></a>00064 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="cairo-dock-global-variables_8h.html#b032d5fe2acfb6b93dcbc85ad1962730" title="hauteur de la zone de rappel.">g_iVisibleZoneHeight</a>;
+<a name="l00065"></a>00065 
+<a name="l00067"></a>00067 <span class="keyword">extern</span> GtkIconTheme *<a class="code" href="cairo-dock-global-variables_8h.html#ecfdd070a6e5e7dd7ef53cb73b68add8" title="Le theme d&amp;#39;icone choisi.">g_pIconTheme</a>;
+<a name="l00069"></a>00069 <span class="keyword">extern</span> gchar *<a class="code" href="cairo-dock-global-variables_8h.html#e8ab56da998f5b0784d5e09cdddd929b" title="Le chemin vers le repertoire racine.">g_cCairoDockDataDir</a>;
+<a name="l00071"></a>00071 <span class="keyword">extern</span> gchar *<a class="code" href="cairo-dock-global-variables_8h.html#c9102142a8dd6330299f9340c9d2b704" title="Le chemin vers le repertoire du theme courant.">g_cCurrentThemePath</a>;
+<a name="l00073"></a>00073 <span class="keyword">extern</span> gchar *<a class="code" href="cairo-dock-global-variables_8h.html#540e05d87e90a39620d6d15e03dc808b" title="Le chemin vers le repertoire des lanceurs/icones du theme courant.">g_cCurrentLaunchersPath</a>;
+<a name="l00074"></a>00074 
+<a name="l00075"></a>00075 
+<a name="l00077"></a>00077 <span class="keyword">extern</span> cairo_surface_t *<a class="code" href="cairo-dock-global-variables_8h.html#dd5e4b71a08cefb33405fc437cf81437" title="Surface de la zone de rappel.">g_pVisibleZoneSurface</a>;
+<a name="l00078"></a>00078 <span class="keyword">extern</span> <span class="keywordtype">double</span> <a class="code" href="cairo-dock-global-variables_8h.html#b6d7f07dcfafc6878657505cdec81da4">g_fVisibleZoneImageWidth</a>, <a class="code" href="cairo-dock-global-variables_8h.html#89a3c60f345bc78360f705571e2b8adc">g_fVisibleZoneImageHeight</a>;
+<a name="l00080"></a>00080 <span class="keyword">extern</span> <span class="keywordtype">double</span> <a class="code" href="cairo-dock-global-variables_8h.html#5ba5413d17795f22f4d5aa4cbe9a364e" title="Transparence de la zone de rappel.">g_fVisibleZoneAlpha</a>;
+<a name="l00081"></a>00081 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="cairo-dock-global-variables_8h.html#47bab2fd035032c04b67f7f9a4629cd2">g_iNbStripes</a>;
+<a name="l00083"></a>00083 <span class="keyword">extern</span> <span class="keywordtype">double</span> <a class="code" href="cairo-dock-global-variables_8h.html#71125a40fdc7b421002f176b9b82ac79" title="Amplitude de la siunsoide.">g_fAmplitude</a>;
+<a name="l00085"></a>00085 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="cairo-dock-global-variables_8h.html#7ed10b4674d07794421af544ea9f2ad8" title="Largeur de la sinusoide en pixels. On va de 0 a pi en la parcourant, en etant a pi/2...">g_iSinusoidWidth</a>;
+<a name="l00086"></a>00086 
+<a name="l00088"></a>00088 <span class="keyword">extern</span> gboolean <a class="code" href="cairo-dock-global-variables_8h.html#b62e2d2aaa62d3ad88aca906c8b1620a" title="Utiliser les separateurs ou pas.">g_bUseSeparator</a>;
+<a name="l00090"></a>00090 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="cairo-dock-global-variables_8h.html#92a992add0770c0af1108b58f8a02154" title="Ordre des groupe d&amp;#39;icones.">g_tIconTypeOrder</a>[<a class="code" href="cairo-dock-struct_8h.html#bab3fe5b912f0abef3f1e2b0b4b44e4efdadfcb6ba9830be9ce0eeaf47eb739b">CAIRO_DOCK_NB_TYPES</a>];
+<a name="l00091"></a>00091 
+<a name="l00092"></a>00092 
+<a name="l00094"></a>00094 <span class="keyword">extern</span> gboolean <a class="code" href="cairo-dock-global-variables_8h.html#080e0cb494374269a17c7ebd078e855d" title="La direction dans laquelle les icones grossissent. Vers le haut ou vers le bas.">g_bDirectionUp</a>;
+<a name="l00095"></a>00095 
+<a name="l00097"></a>00097 <span class="keyword">extern</span> <span class="keywordtype">double</span> <a class="code" href="cairo-dock-global-variables_8h.html#e6ee377f5c409b71e3f7e87694f60556" title="Ratio de la taille des icones des sous-docks par rapport a celles du dock principal...">g_fSubDockSizeRatio</a>;
+<a name="l00098"></a>00098 
+<a name="l00100"></a>00100 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="cairo-dock-global-variables_8h.html#b2b192d1fce327e8310003a1742c1d47" title="Epaisseur de la ficelle.">g_iStringLineWidth</a>;
+<a name="l00101"></a>00101 
+<a name="l00103"></a>00103 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="cairo-dock-global-variables_8h.html#43a8f6facdf04f7534a1792a4004a7fc" title="Taille max autorisee pour les docks.">g_iMaxAuthorizedWidth</a>;
+<a name="l00104"></a>00104 
+<a name="l00106"></a>00106 <span class="keyword">extern</span> <a class="code" href="cairo-dock-struct_8h.html#8324649699485e21a6b820e9f8ff77c6">CairoDockDesktopEnv</a> <a class="code" href="cairo-dock-global-variables_8h.html#73a86a5475bd8661e2174798d6539d58" title="Environnement de bureau detecte.">g_iDesktopEnv</a>;
+<a name="l00107"></a>00107 
+<a name="l00109"></a>00109 <span class="keyword">extern</span> <a class="code" href="cairo-dock-struct_8h.html#44bc0366369fedba4ea97ed4c5dbc5ee">CairoDockFMSortType</a> <a class="code" href="cairo-dock-global-variables_8h.html#7f10c0fd775c63381b9ce74d8546732c" title="Type de tri des fichiers (par nom, taille, date, ...).">g_iFileSortType</a>;
+<a name="l00111"></a>00111 <span class="keyword">extern</span> gboolean <a class="code" href="cairo-dock-global-variables_8h.html#061aaf501ff3dc0689e1d1417a4f094b" title="Montrer les fichiers caches ou non.">g_bShowHiddenFiles</a>;
+<a name="l00112"></a>00112 
+<a name="l00114"></a>00114 <span class="keyword">extern</span> <span class="keywordtype">double</span> <a class="code" href="cairo-dock-global-variables_8h.html#850c80474690114a116b7f60a01566fe" title="Couleur du fond des desklets.">g_fDeskletColor</a>[4];
+<a name="l00116"></a>00116 <span class="keyword">extern</span> <span class="keywordtype">double</span> <a class="code" href="cairo-dock-global-variables_8h.html#5108dcad9ca9a2a57b2c2839cfe309d3" title="Couleur du fond des desklets lorsque la souris est dedans..">g_fDeskletColorInside</a>[4];
+<a name="l00117"></a>00117 
+<a name="l00118"></a>00118 <span class="preprocessor">#endif</span>
+</pre></div><hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:15 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

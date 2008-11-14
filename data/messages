@@ -1,0 +1,936 @@
+_("Position")
+
+_("Position on the screen")
+
+_("The icons will scroll according to the chosen placement type. Of course the dock can be placed anywhere on the screen, here we specify regarding to what.")
+
+_("Choose the screen border regarding to which the dock will place itself :")
+
+_("bottom")
+
+_("top")
+
+_("right")
+
+_("left")
+
+_("At 0, the dock will place itself regarding the left corner if horizontal and the top corner if vertical, at 1 regarding the right corner if horizontal and the bottom corner if vertical, and at 0.5, regarding the middle of the screen's edge.")
+
+_("Relative alignment :")
+
+_("Position regarding the chosen screen's edge")
+
+_("Gap from the absolute position on the screen's edge, in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.")
+
+_("Lateral gap :")
+
+_("in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.")
+
+_("Distance to the screen's edge :")
+
+_("The dock will automatically resize itself to fit this size. Set it to 0 to make the dock fit the screen's size.")
+
+_("Size allowed for the dock :")
+
+_("This will prevent other windows from overlapping the dock. It has no effect if you defined the 'show/hide' shortcut below, cause then the dock behaves like a menu.")
+
+_("Reserve space at the edge of the screen for the dock ?")
+
+_("The dock will automatically hide itself outside of the scren when the mouse leaves it and will show a callback zone instead. Place the mouse into this zone will make the dock re-appear.")
+
+_("Activate auto-hide ?")
+
+_("The dock will pop-up on the foreground when you place the mouse on its screen border. This option is only useful if you don't want to reserve space for the dock, nor to activate auto-hide.")
+
+_("Keep the dock below other windows ?")
+
+_("Pop-up only if the mouse hits a screen corner ?")
+
+_("When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.")
+
+_("Keyboard shortcut to show/hide the dock :")
+
+_("TaskBar")
+
+_("Behaviour")
+
+_("Cairo-Dock will then replace your taskbar. It is recommanded to remove any other taskbar, and to not force the dock's type to normal.")
+
+_("Show the current applications in the dock ?")
+
+_("Should the applications with same PID be displayed only once ?")
+
+_("This allows to group windows in some soft like Gimp, and to have only 1 icon in the main dock.The 1st window will appear in the main dock, and the others will be placed in a container associated with this 1st icon.")
+
+_("Should the applications with same class be grouped in a sub-dock ?")
+
+_("Only show icons whose window is minimized ?")
+
+_("Only show applis on current desktop ?")
+
+_("Allows launchers to act as applis when their program is running, and displays an indicator on their icon to signal it. You can launch other occurences of the program with SHIFT+click.")
+
+_("Mix launchers and applis ?")
+
+_("If not set, will use the icon provided by X for each appli. If set, the same icon as the corresponding launcher will be used for each appli.")
+
+_("Overwrite X icons with launchers' one ?")
+
+_("You need a composite manager for it.")
+
+_("Show a window thumbnail when it's minimized ?")
+
+_("Interaction")
+
+_("It is the default behaviour of most of taskbars.")
+
+_("Minimize the window when its icon is clicked, if it was already the active window ?")
+
+_("In a Firefox's tabs manner.")
+
+_("Middle click on an icon closes its relative application ?")
+
+_("This is only usefull if you don't already use the auto-hide, and if your WM let the dock in front of fullscreen windows (which is rare).")
+
+_("Automatically quick-hide the dock when a window becomes fullscreen ?")
+
+_("This is only usefull if don't already use the auto-hide, and if you don't want to reserve the space for your dock nor let it below the other windows.")
+
+_("Automatically quick-hide the dock when a window becomes maximized ?")
+
+_("Signal the applications demanding your attention with a dialog tip ?")
+
+_("Signal the applications demanding your attention with an animation ?")
+
+_("Play a short animation of the icon when its window becomes active ?")
+
+_("Representation")
+
+_("\"...\" will be added at the end if the name is too long.")
+
+_("Maximum number of caracters in application's name :")
+
+_("To the right, you can control the transparency of minimized windows, to the left the transparency of visible windows. The more you go aside, the more the concerned icons will be transparent; on the middle, icons are always plain.")
+
+_("Transparency of icons whose window is or isn't minimized :")
+
+_("System")
+
+_("Movement parameters")
+
+_("The icons will appear folded on themselves, regarding the alignement point, then will unfold untill they fill the whole dock. Use 0 to not use unfolding, the more it's close to 0, the faster it will be")
+
+_("Icons' lateral unfolding acceleration :")
+
+_("The more there are, the slower it will be")
+
+_("Number of steps for icons' resizing (grow up/shrink down) :")
+
+_("in percentage of the distance it can move at each step . After n steps, the remaining distance will be reduced by (1-s)^n.")
+
+_("Window's move acceleration (move up/move down) :")
+
+_("The dock will unfold when it hides/shows itself. No effect if auto-hide is not activated or unfold acceleration is nul.")
+
+_("Animate the dock when auto-hiding ?")
+
+_("Mouse")
+
+_("The smaller, the lower the decorations will move along with the cursor. At 0 they will be static.")
+
+_("Scroll speed factor for background decorations :")
+
+_("Otherwise the amount of movement of the decorations will only depend on the direction of the cursor's movement, as if the decorations were \"gliding\".")
+
+_("Should the decorations be enslaved to the cursor ?")
+
+_("If you put 0, this will make them scroll of exactly one icon each time. If you put -1, the scroll wil be de-activated")
+
+_("Amount of pixels the icons will scroll at each wheel scroll :")
+
+_("Re-center the dock on leaving if it has been scrolled ?")
+
+_("The more it's close to 0, the faster the scroll will be.")
+
+_("If so, you can specify the scrolling acceleration :")
+
+_("Sub-docks")
+
+_("in ms.")
+
+_("Delay before you effectively leave from a sub-dock or to a sub-dock :")
+
+_("in ms. Unused if you set up to click to show sub-docks.")
+
+_("Delay before displaying a sub-dock :")
+
+_("Otherwise they will appear when you linger over the icon pointing on it.")
+
+_("Click to show sub-docks ?")
+
+_("Always true if sub-docks appear with mouse click.")
+
+_("Animate sub-docks when they appear ?")
+
+_("CPU")
+
+_("in Hz. This is to adjust regarding your CPU power.")
+
+_("Refresh frequency when mouving cursor into the dock :")
+
+_("The transparency gradation pattern will then be re-calculated in real time. May needs more CPU power.")
+
+_("Reflections should be calculated in real-time ?")
+
+_("Labels")
+
+_("Show label of the currently pointed icon only ?")
+
+_("Should the labels be always horizontal, even when dock is vertical ?")
+
+_("the bigger, the more the labels next to the pointed icon will be transparent.")
+
+_("label's visibility threshold :")
+
+_("Files")
+
+_("Sort files by :")
+
+_("Name")
+
+_("Size")
+
+_("Date")
+
+_("Show hidden files ?")
+
+_("Composition")
+
+_("Only use this if you don't run a composite manager like Compiz, xcompmgr, etc and have a black background around your dock. For esthetic reason, the dock will be kept under other windows.")
+
+_("Emulates composition with fake transparency ?")
+
+_("Applets")
+
+_("Choose some useful accessories for your dock !")
+
+_("Just check the box to activate a plug-in, or uncheck to deactivate it. Once activated, you can use it and configure it.")
+
+_("List of available accessories :")
+
+_("Add fonctionnalities to your dock !")
+
+_("Just check the box to activate a plug-in, or uncheck to deactivate it. Once activated, you can use it and configure it.")
+
+_("List of available desktop enhancements :")
+
+_("Control your PC from your dock !")
+
+_("Just check the box to activate a plug-in, or uncheck to deactivate it. Once activated, you can use it and configure it.")
+
+_("List of available controlers :")
+
+_("Background")
+
+_("Callback zone")
+
+_("Place the mouse into this zone will make the dock re-appear.")
+
+_("Size of the callback zone (width x height, in pixels) :")
+
+_("Any format allowed; let this field empty to have an invisible callback zone. The callback zone is what you see when the dock hides itselfs.")
+
+_("Filename of an image to put on the callback zone :")
+
+_("Transparency of the callback zone :")
+
+_("Use it when the image is an arrow pointing to the center of the screen for exemple.")
+
+_("Rotate the callback zone's image when the dock is on top/left/right ?")
+
+_("Extern Frame")
+
+_("in pixels.")
+
+_("Corner radius :")
+
+_("in pixels.")
+
+_("Linewidth of the extern line :")
+
+_("in pixels.")
+
+_("Margin between the frame and the icons or their reflects :")
+
+_("Color of the extern line (r,v,b,a) :")
+
+_("Are the bottom left and right corners rounded ?")
+
+_("Background image...")
+
+_("Any format allowed; let this field empty if you don't want to use an image as background.")
+
+_("Image's filename to use as a background :")
+
+_("Image's transparency :")
+
+_("Repeat image as a pattern to fill background ?")
+
+_("...or Gradation")
+
+_("Bright color (red, green, blue, alpha) :")
+
+_("Dark color (red, green, blue, alpha) :")
+
+_("Angle of the stripes / gradation, in relation to the vertical (in degree) :")
+
+_("The bigger, the more the stripes are close to each other; with 0 stripes, the background will be filled with a single gradation.")
+
+_("Number of stripes, in each pattern, to draw in the background :")
+
+_("1 pattern contains N stripes, so the width can be less or equal than 1/N.")
+
+_("Width of the stripes, in percentage of the pattern size :")
+
+_("Icons")
+
+_("Wave's shape")
+
+_("the maximum zoom will be 1+C.")
+
+_("Crest of the wave :")
+
+_("in pixels. Outside of this interval (centered on the mouse), the wave is flat.")
+
+_("Width of the interval in which the wave will be effective :")
+
+_("in pixels.")
+
+_("Space between icons :")
+
+_("It is their transparency when the wave is flat; they will \"materialize\" progressively as the dock grows up. The closer to 0, the more transparent they will be.")
+
+_("Icons' transparency at rest :")
+
+_("Reflections")
+
+_("It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are not used.")
+
+_("Reflecting power of the plane :")
+
+_(/* xgettext:no-c-format */ "More precisely, it is the fraction of the max icon height that will be used to draw reflect. So setting it to 0.33 will mean that 33% of the icons will reflect on the ground, and the icons will be placed at the right distance from the front border of the frame so that the reflect is fully visible.")
+
+_("Field depth of the view:")
+
+_("Style of the icons' labels")
+
+_("approximately size in pixels, put 0 to not display labels")
+
+_("Size of the font :")
+
+_("for exemple Monospace, Purisa, ... Just write the font name wihtout any number or so.")
+
+_("Family of the font used for labels :")
+
+_("Should be italic ?")
+
+_("Weight (between 1 and 9, the bigger, the heavier):")
+
+_("It's the first color of the gradation.")
+
+_("Start color :")
+
+_("It's the second color of the gradation. Set it to the same value as the first if you just don't want to have a gradation.")
+
+_("Stop color :")
+
+_("If checked, the pattern will go from top to bottom, otherwise from left to right.")
+
+_("Pattern should be vertical ?")
+
+_("If you set it to fully transparent, there will be no background for the text, but the letters' outline will be thicker.")
+
+_("Color of the label's background :")
+
+_("If false, only the quick-info will have this background color.")
+
+_("Use background color for labels ?")
+
+_("Link the icons with a string")
+
+_("Linewidth of the string, in pixels (0 to not use string) :")
+
+_("Color of the string (red, blue, green, alpha) :")
+
+_("Icons' themes")
+
+_("Directories or themes where to search icons. Put some directories where you have icons you wish to see in the dock, or put some theme's name you've installed on your system. (the order is taken into account during the research). The key word _LocalTheme_ represents the directory ~/.config/cairo-dock/current_theme/icons")
+
+_("List of icons themes or directories :")
+
+_("Launchers")
+
+_("Put 0 if you don't want to restrain them")
+
+_("Icon size at rest (width x height) :")
+
+_("Animation type when clicked :")
+
+_("bounce")
+
+_("rotate")
+
+_("blink")
+
+_("pulse")
+
+_("upside-down")
+
+_("wobbly")
+
+_("random")
+
+_("Number of times the icon will bounce/rotate/blink/etc when clicked :")
+
+_("Applications")
+
+_("Put 0 if you don't want to restrain them")
+
+_("Icon size at rest (width x height) :")
+
+_("Animation type when clicked :")
+
+_("bounce")
+
+_("rotate")
+
+_("blink")
+
+_("pulse")
+
+_("upside-down")
+
+_("wobbly")
+
+_("random")
+
+_("Number of times the icon will bounce/rotate/blink/etc when clicked :")
+
+_("Applets")
+
+_("Put 0 if you don't want to restrain them")
+
+_("Icon size at rest (width x height) :")
+
+_("Animation type when clicked :")
+
+_("bounce")
+
+_("rotate")
+
+_("blink")
+
+_("pulse")
+
+_("upside-down")
+
+_("wobbly")
+
+_("random")
+
+_("Number of times the icon will bounce/rotate/blink/etc when clicked :")
+
+_("Separators")
+
+_("Put 0 if you don't want to restrain them")
+
+_("Icon size at rest (width x height) :")
+
+_("Separators are icons used to make a separation between different types of icons. Cairo-dock can automatically add them between launchers, applis, and applets.")
+
+_("Automatically add separators ?")
+
+_("If you don't provide one, blanks will be used.")
+
+_("Filename of an image to use for separators :")
+
+_("Make the separator's image revolve when dock is on top/on the left/on the right ?")
+
+_("Force separator's image size to stay constant ?")
+
+_("Order of the different types of icons :")
+
+_("This parameter will overwrite the previously defined order, to allow you to mix applets and launchers into the dock.")
+
+_("Allow applets to be placed amongst launchers ?")
+
+_("Views")
+
+_("Main Dock")
+
+_("Choose the default view for root docks :")
+
+_("Sub-Docks")
+
+_("You can overwrite this parameter for each sub-dock.")
+
+_("Choose the default view for sub-docks :")
+
+_("otherwise they will be perpendicular")
+
+_("Are the sub-docks parallel to main docks ?")
+
+_("You can specify a ratio for the size of the sub-docks' icons, regarding the main docks' icons size")
+
+_("Ratio for the size of the sub-docks' icons :")
+
+_("Dialogs")
+
+_("Buttons")
+
+_("in pixels.")
+
+_("Size of buttons in the info-bubbles (width x height) :")
+
+_("If you don't provide any, a default image will be used.")
+
+_("Name of an image to use for the yes/ok button :")
+
+_("If you don't provide any, a default image will be used.")
+
+_("Name of an image to use for the no/cancel button :")
+
+_("Bubble")
+
+_("Background color of the bubble (r,v,b,a) :")
+
+_("Put 0 to let the size adapt itself to the text.")
+
+_("Size of the icon displayed next to the text :")
+
+_("Text")
+
+_("Text color (r,g,b) :")
+
+_("The messages will have the same style as the icons' labels. The beneath parameters are then unused.")
+
+_("Homogeneous with icons' label ?")
+
+_("approximately size in pixels, put 0 to not display labels")
+
+_("Size of the font :")
+
+_("for exemple Monospace, Purisa, ... Just write the font name wihtout any number or so.")
+
+_("Family of the font used for labels :")
+
+_("Weight (between 1 and 9, the bigger, the heavier):")
+
+_("Should be italic ?")
+
+_("Desklets")
+
+_("Choose a default decoration for all desklets :")
+
+_("It's an image that will be displayed below the drawings, like a frame for exemple. Let empty to not use any.")
+
+_("Background image :")
+
+_("Background tansparency :")
+
+_("in pixels. Use this to adjust the left position of the drawings.")
+
+_("Left offset :")
+
+_("in pixels. Use this to adjust the top position of the drawings.")
+
+_("Top offset :")
+
+_("in pixels. Use this to adjust the right position of the drawings.")
+
+_("Right offset :")
+
+_("in pixels. Use this to adjust the bottom position of the drawings.")
+
+_("Bottom offset :")
+
+_("It's an image that will be displayed above the drawings, like a reflect for exemple. Let empty to not use any.")
+
+_("Foreground image :")
+
+_("Foreground tansparency :")
+
+_("Indicators")
+
+_("Indicator of drag'n'drop on the dock")
+
+_("Typically an arrow, that will be displayed when you try to drop a new launcher into the dock. Let empty to use the default one.")
+
+_("Image for the drag'n'drop animation :")
+
+_("Indicator of drag'n'drop on icons")
+
+_("Display a drop indicator on icon while dragging over them ?")
+
+_("It's an image that will be displayed on the icon to indicate you can drop on it. Let empty to use the default one.")
+
+_("Image for the indicator :")
+
+_("Indicator of the active window")
+
+_("Set transparency to 0 if you don't want to use an indicator.")
+
+_("Color of the frame (r,v,b,a) :")
+
+_("Set 0 to fill the frame.")
+
+_("Linewidth of the frame around the active window :")
+
+_("Corner radius of the frame around the active window :")
+
+_("Let it empty to draw a simple frame.")
+
+_("Alternatively you can set an image for the indicator :")
+
+_("Draw indicator above the icon ?")
+
+_("Indicator of active launcher")
+
+_("Indicators are drawn on launchers icons to show that they have already been launched. Let blank to use the default one.")
+
+_("Filename of an image to use for indicators :")
+
+_("Display the indicator above the icon ?")
+
+_("You can choose to make the indicator smaller or bigger than the icons. The bigger the value is, the bigger the indicator is. 1 means the indicator will have the same size as the icons.")
+
+_("Indicator size ratio :")
+
+_("It will then be resized like the icon, move like the icon, etc. Otherwise it will be drawn directly on the dock.")
+
+_("Link the indicator with its icon ?")
+
+_("in pixels. You can use this parameter to adjust the indicator's vertical position.")
+
+_("Vertical offset :")
+
+_("Misc. Emblems")
+
+_("If you don't provide any, a default image will be used.")
+
+_("Name of an image to use for the charge emblem :")
+
+_("If you don't provide any, a default image will be used.")
+
+_("Name of an image to use for the play emblem :")
+
+_("If you don't provide any, a default image will be used.")
+
+_("Name of an image to use for the pause emblem :")
+
+_("If you don't provide any, a default image will be used.")
+
+_("Name of an image to use for the stop emblem :")
+
+_("If you don't provide any, a default image will be used.")
+
+_("Name of an image to use for the broken emblem :")
+
+_("If you don't provide any, a default image will be used.")
+
+_("Name of an image to use for the error emblem :")
+
+_("If you don't provide any, a default image will be used.")
+
+_("Name of an image to use for the warning emblem :")
+
+_("If you don't provide any, a default image will be used.")
+
+_("Name of an image to use for the locked emblem :")
+
+_("System")
+
+_("Position on the screen")
+
+_("The icons will scroll according to the chosen placement type. Of course the dock can be placed anywhere on the screen, here we specify regarding to what.")
+
+_("Choose the screen border regarding to which the dock will place itself :")
+
+_("bottom")
+
+_("top")
+
+_("right")
+
+_("left")
+
+_("Auto-Hide")
+
+_("The dock will automatically hide itself outside of the scren when the mouse leaves it and will show a callback zone instead. Place the mouse into this zone will make the dock re-appear.")
+
+_("Activate auto-hide ?")
+
+_("TaskBar")
+
+_("Cairo-Dock will then replace your taskbar. It is recommanded to remove any other taskbar, and to not force the dock's type to normal.")
+
+_("Show the current applications in the dock ?")
+
+_("Choose some useful accessories for your dock !")
+
+_("Just check the box to activate a plug-in, or uncheck to deactivate it. Once activated, you can use it and configure it.")
+
+_("List of available accessories :")
+
+_("Add fonctionnalities to your dock !")
+
+_("Just check the box to activate a plug-in, or uncheck to deactivate it. Once activated, you can use it and configure it.")
+
+_("List of available desktop enhancements :")
+
+_("Control your PC from your dock !")
+
+_("Just check the box to activate a plug-in, or uncheck to deactivate it. Once activated, you can use it and configure it.")
+
+_("List of available controlers :")
+
+_("Personnalisation")
+
+_("Views")
+
+_("Choose the default view for root docks :")
+
+_("Choose the default view for sub-docks :")
+
+_("Images")
+
+_("Any format allowed; let this field empty if you don't want to use an image as background.")
+
+_("Image's filename to use as a background :")
+
+_("Any format allowed; let this field empty to have an invisible callback zone. The callback zone is what you see when the dock hides itselfs.")
+
+_("Filename of an image to put on the callback zone :")
+
+_("If you don't provide one, blanks will be used.")
+
+_("Filename of an image to use for separators :")
+
+_("Icons' size")
+
+_("or 0 if you don't want to constraint them.")
+
+_("Size of the icons at rest :")
+
+_("Maximum zoom :")
+
+_("Space between icons (in pixels) :")
+
+_("Icons' themes")
+
+_("Directories or themes where to search icons. Put some directories where you have icons you wish to see in the dock, or put some theme's name you've installed on your system. (the order is taken into account during the research). The key word _LocalTheme_ represents the directory ~/.config/cairo-dock/current_theme/icons")
+
+_("List of icons themes or directories :")
+
+_("Animations")
+
+_("Animation type for launchers :")
+
+_("bounce")
+
+_("rotate")
+
+_("blink")
+
+_("pulse")
+
+_("upside-down")
+
+_("wobbly")
+
+_("random")
+
+_("Animation type for applis :")
+
+_("bounce")
+
+_("rotate")
+
+_("blink")
+
+_("pulse")
+
+_("upside-down")
+
+_("wobbly")
+
+_("random")
+
+_("Extern frame")
+
+_("Corner radius, in pixels:")
+
+_("Color of the extern line (red, blue, green, alpha):")
+
+_("Labels")
+
+_("for exemple Monospace, Purisa, ... Just write the font name wihtout any number or so.")
+
+_("Family of the font used for labels :")
+
+_("approximately size in pixels, put 0 to not display labels")
+
+_("Size of the font :")
+
+_("Desklets")
+
+_("Desklet's decorations :")
+
+_("Desktop Entry")
+
+_("Sub-dock's name :")
+
+_("Image's name or path :")
+
+_("Extra parameters")
+
+_("Order you want for this launcher among the others:")
+
+_("Name of the container it belongs to:")
+
+_("Name of the view used for the sub-dock :")
+
+_("Desktop Entry")
+
+_("Launcher's name :")
+
+_("Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1 for the Applications Menu, <Ctrl>c or <Ctrl>v to copy or paste, etc")
+
+_("Command to launch on click :")
+
+_("Image's name or path :")
+
+_("If you write here a container's name that doesn't exist yet, a new one will be created, with this icon inside.")
+
+_("Name of the container it belongs to:")
+
+_("Extra parameters")
+
+_("Order you want for this launcher among the others:")
+
+_("Use this option for exemple if the launcher launches a script in a terminal but you don't want it to steal normal terminal's icons from the TaskBar, or if you explicitely want to use the original icon of the TaskBar because it provides some info, for exemple Pidgin's icons represent the avatar of the contact.")
+
+_("Prevent this launcher from stealing appli from taskbar ?")
+
+_("The only reason you may want to modify this parameter is if you made this launcher by hands. If you dropped it into the dock from the menu, it is nearly sure that you shouldn't touch it. It defines the class of the program, which is useful to link the appli with its launcher.")
+
+_("Class of the program :")
+
+_("Position")
+
+_("Position on the screen")
+
+_("The icons will scroll according to the chosen placement type. Of course the dock can be placed anywhere on the screen, here we specify regarding to what.")
+
+_("Choose the screen border regarding to which the dock will place itself :")
+
+_("bottom")
+
+_("top")
+
+_("right")
+
+_("left")
+
+_("At 0, the dock will place itself regarding the left corner if horizontal and the top corner if vertical, at 1 regarding the right corner if horizontal and the bottom corner if vertical, and at 0.5, regarding the middle of the screen's edge.")
+
+_("Relative alignment :")
+
+_("Position regarding the chosen screen's edge")
+
+_("Gap from the absolute position on the screen's edge, in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.")
+
+_("Lateral gap :")
+
+_("in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.")
+
+_("Distance to the screen's edge :")
+
+_("The dock will automatically hide itself outside of the scren when the mouse leaves it and will show a callback zone instead. Place the mouse into this zone will make the dock re-appear.")
+
+_("Activate auto-hide ?")
+
+_("Desktop Entry")
+
+_("Image's name or path :")
+
+_("Extra parameters")
+
+_("Order you want for this launcher among the others:")
+
+_("Name of the container it belongs to:")
+
+_("Themes")
+
+_("Choose a theme")
+
+_("List of themes :")
+
+_("Otherwise the current behaviour will be kept. It's all about the dock's position, behaviour parameters such as auto-hide, using taskbar or not, etc.")
+
+_("Use the new theme's behaviour ?")
+
+_("So if you check this box, your launchers will be deleted and replaced by the ones provided in the new theme. Otherwise the current launchers will be kept, only icons will be replaced.")
+
+_("Use the new theme's launchers ?")
+
+_("Save")
+
+_("Save current theme")
+
+_("You will then be able to re-open it at any time.")
+
+_("Save as :")
+
+_("Save current behaviour too ?")
+
+_("Save current launchers too ?")
+
+_("Delete")
+
+_("List of your personnal themes")
+
+_("Uncheck from the list themes you don't want anymore :")
+
+_("pouet")
+
+_("v1.4.6.3 :\nJust to say :\n*** Happy new Year 2008 ! ***\n  the Cairo-Dock's team.")
+
+_("v1.4.6.3 :\nJust to say :\n*** Happy new Year 2008 ! ***\n  the Cairo-Dock's team.")
+
+_("v1.4.6.3 :\nJust to say :\n*** Happy new Year 2008 ! ***\n  the Cairo-Dock's team.")
+
+_("v1.4.6.3 :\nJust to say :\n*** Happy new Year 2008 ! ***\n  the Cairo-Dock's team.")
+
+_("v1.5.0 : it's been 1 month since previous release, and we worked hardly to bring you :\n - A parabolic view : perfect for sub-docks with a dozen of icons.\n - A big pack of new applets :\n   Cairo-Dock has now its own terminal.\n   It can handle your systray instead of your panel,\n   monitor your laptop's battery,\n   and change your screen's luminosity through the dock\n   The integration into the GNOME desktop is provided by the 'gnome-integration' plug-in.\n    Wanted : a KDE user who could do the same for KDE !\n - Dustbin v2 can now handle drag'n'drops and display nice info.\n - Manual separators, better sub-dock accessibility, 64bits works smoothly, etc\n - And cherry on the cake, a new theme (I, Cairo) !\n  Now, why not try to make an applet for Cairo-Dock ? ;-)")
+
+_("v1.5.1 :\n - The 1.5 branch is still young, so this version brings a lot of bug fixes\n - Cairo-Dock is now translated in Japanese, thanks to Jiro Kawada for his work !\n - A new view has appeared : Rainbow\n - Cairo-Dock has become a desklet manager !\n  most of applets can now detached themselves from the dock\n and behave as real desklets.")
+
+_("v1.5.2.1 :\n - a lot of bug fixes, especially on desklets.\n - New applet : weather !\n - Cairo-Dock is now fully translated in Japanese, thanks to Jiro Kawada !")
+
+_("v1.5.3.2 :\n - Themes have been deeply reviewed\n to switch from one to another completely.\n - New applet : alsaMixer !\n - Desklets improvment with the 'showDesklets' applet.\n - The 'Shortcuts' applet can now detached itself from the dock.\n - The dock can now behave like a menu 'on-the-mouse'\n - Updates in translations and the usual bug fixes. ^_^\n  By the way, we are still searching someone\n  who could help cairo-dock to be well-integrated into KDE ;-)")
+
+_("v1.5.4.2 : a huge release !\n - add a cute pinguin in your dock with the new applet Cairo-Penguin\n - monitor your wifi connection with the Wifi applet\n - control xmms, audacious, banshee and exaile with the Xmms applet\n - Cairo-Dock is now fully integrated into XFCE environment !\n - better detection of battery in the Powermanager applet\n - lot of improvments in the Terminal applet.\n - the dock can auto-resize when it grows too large\n - refresh your dock with the new theme : Wood\n - 3 more themes in Weather")
+
+_("v1.5.5.4 :\n - Huge enhancements in the TaskBar :\n  launchers and applets can now behave as applications.\n  windows can show up during drag and drop if mouse stay on them\n - hiqh quality launchers' icons can be used instead of X ones\n - Quickly manage Compiz with the 'Compiz-Icon' applet\n - Control Cairo-Dock from an external program thanks to the Dbus plug-in.\n - Added a 'ShowDesktop' applet for convenience.\n - Some fix in PowerManager (now ok !)\n - The ability to have many docks for a single instance of Cairo-Dock.\n - Cairo-Dock is not yet well integrated into Gnome 2.22, but it will come soon ;-)")
+
+_("v1.5.6 :\n - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still experimental\n - You can now have many docks in 1 instance of Cairo-Dock.\n Just place a launcher or an applet in a dock, giving this dock a name that doesn't exist yet\n a new one will be created.\n - SHIFT+mouse wheel on AlsaMixer, Xmms, Rhythmbox, etc.\n - Launchers can now launch keyboard shortcuts.\n - The dock can now auto-hide itself when a window is maximized.\n - Improvment in drag and drop with animated indicator.\n - Physical separator in 3D-plane view.\n - Bug fixes in XGamma/Weather.\n - Any help would be welcome to integrate the dock into KDE !")
+
+_("v1.6.0 :\n - A new view has appeared : Diapositive !\n - A huge stock of new applets :\n   cpusage\n   ram-meter\n   netspeed\n   tomboy\n   nVidia\n - 2 new themes : Neon & Clear\n - A new cute character for Cairo-Penguin : Wanda the Cairo-Fish ^_^\n - Cairo-Dock can now run without composite manager, with fake transparency.\n - The dock can now stay below windows and be popped up on demand.\n - Auto-reload on crash.\n - Real window thumbnail when minimized.")
+
+_("v1.6.1 :\nCairo-Dock has one year ! To celebrate this event, we are happy to offer you :\n - Once again a new view : Curve !\n - A long time waited applet : the desktop Switcher.\n - A very complete theme : Brit\n - Translation in italian and chinese.\n - And we are still hoping someone would help us writing a kde-integration plug-in ^_^")
+
+_("v1.6.2 : the first version integrated in the Ubuntu repositories !\n - 2 new applets have been released :\n  Slider and Stack. Enjoy !\n - Applets can now be launched many times\n (Clock, Cairo-Penguin, Slider, Stack), each with a different config.\n - Cairo-Dock is now able to load themes on its own server,\n so feel free to send us all your themes, we can distribute them ! :-)\n - And we are still searching someone motivated to write a kde-integration plug-in ^_^")
+
+_("v1.6.3 : \n - first the bad news :\n user datas have been moved into ~/.config to respect the FreeDesktop standards.\n and local icons are now in a dedicated 'icons' sub-folder.\n So in advance, sorry for the possible inconvenience ^_^\n - And now the very good news !\n - 2 new applets have just been born : Clipper and GMenu. \n - Lot of improvements for Desklets : decorations, rotation, dragging, etc\n - Cpusage and other applets can now display nice graphics.\n - You can now remove launchers by dragging them out of the dock\n  and detach applet in the same way.\n - Smooth icons movement when dragging them inside the dock\n - The dock is now translated in Sweden and partially in Greek.")
+

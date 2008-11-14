@@ -1,0 +1,91 @@
+\section{Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-surface-factory.h}
+\label{cairo-dock-surface-factory_8h}\index{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-surface-factory.h@{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-surface-factory.h}}
+\subsection*{Macros}
+\begin{CompactItemize}
+\item 
+\#define {\bf cairo\_\-dock\_\-create\_\-surface\_\-for\_\-square\_\-icon}(cImagePath, pSourceContext, fImageSize)~cairo\_\-dock\_\-create\_\-surface\_\-for\_\-icon (cImagePath, pSourceContext, fImageSize, fImageSize)
+\end{CompactItemize}
+\subsection*{Fonctions}
+\begin{CompactItemize}
+\item 
+void {\bf cairo\_\-dock\_\-calculate\_\-contrainted\_\-icon\_\-size} (double $\ast$fImageWidth, double $\ast$fImageHeight, int iMinIconAuthorizedWidth, int iMinIconAuthorizedHeight, int iMaxIconAuthorizedWidth, int iMaxIconAuthorizedHeight, double $\ast$fIconWidthSaturationFactor, double $\ast$fIconHeightSaturationFactor)
+\item 
+cairo\_\-surface\_\-t $\ast$ {\bf cairo\_\-dock\_\-create\_\-surface\_\-from\_\-xicon\_\-buffer} (gulong $\ast$pXIconBuffer, int iBufferNbElements, cairo\_\-t $\ast$pSourceContext, double fMaxScale, double $\ast$fWidth, double $\ast$fHeight)
+\item 
+cairo\_\-surface\_\-t $\ast$ {\bf cairo\_\-dock\_\-create\_\-surface\_\-from\_\-pixbuf} (GdkPixbuf $\ast$pixbuf, cairo\_\-t $\ast$pSourceContext, double fMaxScale, gboolean bConstraintSize, int iMinIconAuthorizedWidth, int iMinIconAuthorizedHeight, int iMaxIconAuthorizedWidth, int iMaxIconAuthorizedHeight, double $\ast$fImageWidth, double $\ast$fImageHeight)
+\item 
+cairo\_\-surface\_\-t $\ast$ {\bf cairo\_\-dock\_\-create\_\-surface\_\-from\_\-image} (gchar $\ast$cImagePath, cairo\_\-t $\ast$pSourceContext, double fMaxScale, int iMinIconAuthorizedWidth, int iMinIconAuthorizedHeight, int iMaxIconAuthorizedWidth, int iMaxIconAuthorizedHeight, double $\ast$fImageWidth, double $\ast$fImageHeight, double fRotationAngle, double fAlpha, gboolean bReapeatAsPattern)
+\item 
+cairo\_\-surface\_\-t $\ast$ {\bf cairo\_\-dock\_\-create\_\-surface\_\-for\_\-icon} (gchar $\ast$cImagePath, cairo\_\-t $\ast$pSourceContext, double fImageWidth, double fImageHeight)
+\item 
+cairo\_\-surface\_\-t $\ast$ {\bf cairo\_\-dock\_\-rotate\_\-surface} (cairo\_\-surface\_\-t $\ast$pSurface, cairo\_\-t $\ast$pSourceContext, double fImageWidth, double fImageHeight, double fRotationAngle)
+\item 
+cairo\_\-surface\_\-t $\ast$ {\bf cairo\_\-dock\_\-create\_\-reflection\_\-surface} (cairo\_\-surface\_\-t $\ast$pSurface, cairo\_\-t $\ast$pSourceContext, double fImageWidth, double fImageHeight, gboolean b\_\-HorizontalDock, double fMaxScale)
+\item 
+cairo\_\-surface\_\-t $\ast$ {\bf cairo\_\-dock\_\-create\_\-icon\_\-surface\_\-with\_\-reflection} (cairo\_\-surface\_\-t $\ast$pIconSurface, cairo\_\-surface\_\-t $\ast$pReflectionSurface, cairo\_\-t $\ast$pSourceContext, double fImageWidth, double fImageHeight, gboolean bHorizontalDock, double fMaxScale)
+\item 
+cairo\_\-surface\_\-t $\ast$ {\bf cairo\_\-dock\_\-create\_\-surface\_\-from\_\-text} (gchar $\ast$cText, cairo\_\-t $\ast$pSourceContext, int iLabelSize, gchar $\ast$cLabelPolice, int iLabelWeight, double $\ast$fBackgroundColor, double fMaxScale, int $\ast$iTextWidth, int $\ast$iTextHeight, double $\ast$fTextXOffset, double $\ast$fTextYOffset)
+\item 
+cairo\_\-surface\_\-t $\ast$ {\bf cairo\_\-dock\_\-duplicate\_\-surface} (cairo\_\-surface\_\-t $\ast$pSurface, cairo\_\-t $\ast$pSourceContext, double fWidth, double fHeight, double fDesiredWidth, double fDesiredHeight)
+\end{CompactItemize}
+
+
+\subsection{Documentation des macros}
+\index{cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}!cairo_dock_create_surface_for_square_icon@{cairo\_\-dock\_\-create\_\-surface\_\-for\_\-square\_\-icon}}
+\index{cairo_dock_create_surface_for_square_icon@{cairo\_\-dock\_\-create\_\-surface\_\-for\_\-square\_\-icon}!cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cairo\_\-dock\_\-create\_\-surface\_\-for\_\-square\_\-icon(cImagePath, pSourceContext, fImageSize)~cairo\_\-dock\_\-create\_\-surface\_\-for\_\-icon (cImagePath, pSourceContext, fImageSize, fImageSize)}\label{cairo-dock-surface-factory_8h_5a46860771e8a7ec70e00ac7f894efbf}
+
+
+
+
+\subsection{Documentation des fonctions}
+\index{cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}!cairo_dock_calculate_contrainted_icon_size@{cairo\_\-dock\_\-calculate\_\-contrainted\_\-icon\_\-size}}
+\index{cairo_dock_calculate_contrainted_icon_size@{cairo\_\-dock\_\-calculate\_\-contrainted\_\-icon\_\-size}!cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-calculate\_\-contrainted\_\-icon\_\-size (double $\ast$ {\em fImageWidth}, double $\ast$ {\em fImageHeight}, int {\em iMinIconAuthorizedWidth}, int {\em iMinIconAuthorizedHeight}, int {\em iMaxIconAuthorizedWidth}, int {\em iMaxIconAuthorizedHeight}, double $\ast$ {\em fIconWidthSaturationFactor}, double $\ast$ {\em fIconHeightSaturationFactor})}\label{cairo-dock-surface-factory_8h_4c7687cc4b5a7ff06680a60d493193d9}
+
+
+\index{cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}!cairo_dock_create_surface_from_xicon_buffer@{cairo\_\-dock\_\-create\_\-surface\_\-from\_\-xicon\_\-buffer}}
+\index{cairo_dock_create_surface_from_xicon_buffer@{cairo\_\-dock\_\-create\_\-surface\_\-from\_\-xicon\_\-buffer}!cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}cairo\_\-surface\_\-t$\ast$ cairo\_\-dock\_\-create\_\-surface\_\-from\_\-xicon\_\-buffer (gulong $\ast$ {\em pXIconBuffer}, int {\em iBufferNbElements}, cairo\_\-t $\ast$ {\em pSourceContext}, double {\em fMaxScale}, double $\ast$ {\em fWidth}, double $\ast$ {\em fHeight})}\label{cairo-dock-surface-factory_8h_8b6a3e0b8a54450c1a667e558bfd7943}
+
+
+\index{cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}!cairo_dock_create_surface_from_pixbuf@{cairo\_\-dock\_\-create\_\-surface\_\-from\_\-pixbuf}}
+\index{cairo_dock_create_surface_from_pixbuf@{cairo\_\-dock\_\-create\_\-surface\_\-from\_\-pixbuf}!cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}cairo\_\-surface\_\-t$\ast$ cairo\_\-dock\_\-create\_\-surface\_\-from\_\-pixbuf (GdkPixbuf $\ast$ {\em pixbuf}, cairo\_\-t $\ast$ {\em pSourceContext}, double {\em fMaxScale}, gboolean {\em bConstraintSize}, int {\em iMinIconAuthorizedWidth}, int {\em iMinIconAuthorizedHeight}, int {\em iMaxIconAuthorizedWidth}, int {\em iMaxIconAuthorizedHeight}, double $\ast$ {\em fImageWidth}, double $\ast$ {\em fImageHeight})}\label{cairo-dock-surface-factory_8h_407975a48fc32a8ce923f215083b16f7}
+
+
+\index{cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}!cairo_dock_create_surface_from_image@{cairo\_\-dock\_\-create\_\-surface\_\-from\_\-image}}
+\index{cairo_dock_create_surface_from_image@{cairo\_\-dock\_\-create\_\-surface\_\-from\_\-image}!cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}cairo\_\-surface\_\-t$\ast$ cairo\_\-dock\_\-create\_\-surface\_\-from\_\-image (gchar $\ast$ {\em cImagePath}, cairo\_\-t $\ast$ {\em pSourceContext}, double {\em fMaxScale}, int {\em iMinIconAuthorizedWidth}, int {\em iMinIconAuthorizedHeight}, int {\em iMaxIconAuthorizedWidth}, int {\em iMaxIconAuthorizedHeight}, double $\ast$ {\em fImageWidth}, double $\ast$ {\em fImageHeight}, double {\em fRotationAngle}, double {\em fAlpha}, gboolean {\em bReapeatAsPattern})}\label{cairo-dock-surface-factory_8h_61e4d4ae332553013a6cd11f93540d90}
+
+
+\index{cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}!cairo_dock_create_surface_for_icon@{cairo\_\-dock\_\-create\_\-surface\_\-for\_\-icon}}
+\index{cairo_dock_create_surface_for_icon@{cairo\_\-dock\_\-create\_\-surface\_\-for\_\-icon}!cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}cairo\_\-surface\_\-t$\ast$ cairo\_\-dock\_\-create\_\-surface\_\-for\_\-icon (gchar $\ast$ {\em cImagePath}, cairo\_\-t $\ast$ {\em pSourceContext}, double {\em fImageWidth}, double {\em fImageHeight})}\label{cairo-dock-surface-factory_8h_a9a2ef8f9a86b8fe1de100679fcd13f6}
+
+
+\index{cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}!cairo_dock_rotate_surface@{cairo\_\-dock\_\-rotate\_\-surface}}
+\index{cairo_dock_rotate_surface@{cairo\_\-dock\_\-rotate\_\-surface}!cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}cairo\_\-surface\_\-t$\ast$ cairo\_\-dock\_\-rotate\_\-surface (cairo\_\-surface\_\-t $\ast$ {\em pSurface}, cairo\_\-t $\ast$ {\em pSourceContext}, double {\em fImageWidth}, double {\em fImageHeight}, double {\em fRotationAngle})}\label{cairo-dock-surface-factory_8h_bb4e67760f9d84c7867bd7598a55406a}
+
+
+\index{cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}!cairo_dock_create_reflection_surface@{cairo\_\-dock\_\-create\_\-reflection\_\-surface}}
+\index{cairo_dock_create_reflection_surface@{cairo\_\-dock\_\-create\_\-reflection\_\-surface}!cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}cairo\_\-surface\_\-t$\ast$ cairo\_\-dock\_\-create\_\-reflection\_\-surface (cairo\_\-surface\_\-t $\ast$ {\em pSurface}, cairo\_\-t $\ast$ {\em pSourceContext}, double {\em fImageWidth}, double {\em fImageHeight}, gboolean {\em b\_\-HorizontalDock}, double {\em fMaxScale})}\label{cairo-dock-surface-factory_8h_3f82013275ca984d687aad35bc2526aa}
+
+
+\index{cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}!cairo_dock_create_icon_surface_with_reflection@{cairo\_\-dock\_\-create\_\-icon\_\-surface\_\-with\_\-reflection}}
+\index{cairo_dock_create_icon_surface_with_reflection@{cairo\_\-dock\_\-create\_\-icon\_\-surface\_\-with\_\-reflection}!cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}cairo\_\-surface\_\-t$\ast$ cairo\_\-dock\_\-create\_\-icon\_\-surface\_\-with\_\-reflection (cairo\_\-surface\_\-t $\ast$ {\em pIconSurface}, cairo\_\-surface\_\-t $\ast$ {\em pReflectionSurface}, cairo\_\-t $\ast$ {\em pSourceContext}, double {\em fImageWidth}, double {\em fImageHeight}, gboolean {\em bHorizontalDock}, double {\em fMaxScale})}\label{cairo-dock-surface-factory_8h_0609de809472a71aae558f653c3afd22}
+
+
+\index{cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}!cairo_dock_create_surface_from_text@{cairo\_\-dock\_\-create\_\-surface\_\-from\_\-text}}
+\index{cairo_dock_create_surface_from_text@{cairo\_\-dock\_\-create\_\-surface\_\-from\_\-text}!cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}cairo\_\-surface\_\-t$\ast$ cairo\_\-dock\_\-create\_\-surface\_\-from\_\-text (gchar $\ast$ {\em cText}, cairo\_\-t $\ast$ {\em pSourceContext}, int {\em iLabelSize}, gchar $\ast$ {\em cLabelPolice}, int {\em iLabelWeight}, double $\ast$ {\em fBackgroundColor}, double {\em fMaxScale}, int $\ast$ {\em iTextWidth}, int $\ast$ {\em iTextHeight}, double $\ast$ {\em fTextXOffset}, double $\ast$ {\em fTextYOffset})}\label{cairo-dock-surface-factory_8h_e93904934a3b8e204e1dbc0adbd0e792}
+
+
+\index{cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}!cairo_dock_duplicate_surface@{cairo\_\-dock\_\-duplicate\_\-surface}}
+\index{cairo_dock_duplicate_surface@{cairo\_\-dock\_\-duplicate\_\-surface}!cairo-dock-surface-factory.h@{cairo-dock-surface-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}cairo\_\-surface\_\-t$\ast$ cairo\_\-dock\_\-duplicate\_\-surface (cairo\_\-surface\_\-t $\ast$ {\em pSurface}, cairo\_\-t $\ast$ {\em pSourceContext}, double {\em fWidth}, double {\em fHeight}, double {\em fDesiredWidth}, double {\em fDesiredHeight})}\label{cairo-dock-surface-factory_8h_157233143037e32dc1b3866b31387380}
+
+

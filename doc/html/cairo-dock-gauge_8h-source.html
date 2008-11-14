@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock:  Fichier source de /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-gauge.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-gauge.h</h1><a href="cairo-dock-gauge_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#include "<a class="code" href="cairo-dock-struct_8h.html">cairo-dock-struct.h</a>"</span>
+<a name="l00002"></a>00002 <span class="preprocessor">#include &lt;libxml/tree.h&gt;</span>
+<a name="l00003"></a>00003 <span class="preprocessor">#include &lt;libxml/parser.h&gt;</span>
+<a name="l00004"></a>00004 
+<a name="l00005"></a><a class="code" href="structGaugeImage.html">00005</a> <span class="keyword">typedef</span> <span class="keyword">struct</span>
+<a name="l00006"></a>00006 {
+<a name="l00007"></a><a class="code" href="structGaugeImage.html#e21f9c78997698e8d5a7c563a19d0667">00007</a>         RsvgHandle *svgNeedle;
+<a name="l00008"></a><a class="code" href="structGaugeImage.html#59e6e21003945bcae1cdf7c20cb20c7e">00008</a>         cairo_surface_t *cairoSurface;
+<a name="l00009"></a><a class="code" href="structGaugeImage.html#a7263dffc6e8097bed37ccea562645bf">00009</a>         <span class="keywordtype">int</span> sizeX;
+<a name="l00010"></a><a class="code" href="structGaugeImage.html#b1b3457ef14dc3a7faee6fa5c76d5acc">00010</a>         <span class="keywordtype">int</span> sizeY;
+<a name="l00011"></a>00011 } <a class="code" href="structGaugeImage.html">GaugeImage</a>;
+<a name="l00012"></a>00012 
+<a name="l00013"></a><a class="code" href="structGaugeIndicator.html">00013</a> <span class="keyword">typedef</span> <span class="keyword">struct</span>
+<a name="l00014"></a>00014 {
+<a name="l00015"></a><a class="code" href="structGaugeIndicator.html#80bf2f33426c955a04760d1727b297ec">00015</a>         <span class="keywordtype">double</span> posX;
+<a name="l00016"></a><a class="code" href="structGaugeIndicator.html#e899602837be602af82cb8a0dd8a0dd3">00016</a>         <span class="keywordtype">double</span> posY;
+<a name="l00017"></a><a class="code" href="structGaugeIndicator.html#e5c04dfbce162124810cb79486a2b521">00017</a>         <span class="keywordtype">double</span> posStart;
+<a name="l00018"></a><a class="code" href="structGaugeIndicator.html#3926fe28b1ad1b8824a0d9416c658457">00018</a>         <span class="keywordtype">double</span> posStop;
+<a name="l00019"></a><a class="code" href="structGaugeIndicator.html#cec21642e0c4e6a17b396015017adc05">00019</a>         <span class="keywordtype">double</span> direction;
+<a name="l00020"></a><a class="code" href="structGaugeIndicator.html#58ae7782a5223a6ece14931fc21b69d5">00020</a>         <span class="keywordtype">int</span> nbImage;
+<a name="l00021"></a><a class="code" href="structGaugeIndicator.html#df6d586a923d1cd78433b3e29a2a3cf3">00021</a>         GList *imageList;
+<a name="l00022"></a><a class="code" href="structGaugeIndicator.html#2d2d6acfe62902762d4c1a3ca4db518f">00022</a>         GList *imageNeedle;
+<a name="l00023"></a>00023 } <a class="code" href="structGaugeIndicator.html">GaugeIndicator</a>;
+<a name="l00024"></a>00024 
+<a name="l00025"></a><a class="code" href="structGauge.html">00025</a> <span class="keyword">typedef</span> <span class="keyword">struct</span>
+<a name="l00026"></a>00026 {
+<a name="l00027"></a><a class="code" href="structGauge.html#bcfa5cc670fb5a43c6d6cc0affdb0245">00027</a>         gchar *themeName;
+<a name="l00028"></a><a class="code" href="structGauge.html#89aac91489003c0feba4f00a7c6eb301">00028</a>         <span class="keywordtype">int</span> sizeX;
+<a name="l00029"></a><a class="code" href="structGauge.html#139c8d5b4d31af4c8e0757799d2e4d67">00029</a>         <span class="keywordtype">int</span> sizeY;
+<a name="l00030"></a><a class="code" href="structGauge.html#dea652e42dea8c8b0f079d2878975a47">00030</a>         <a class="code" href="structGaugeImage.html">GaugeImage</a> *imageBackground;
+<a name="l00031"></a><a class="code" href="structGauge.html#40b0e0466403b09a3b10b397ad9ede7b">00031</a>         <a class="code" href="structGaugeImage.html">GaugeImage</a> *imageForeground;
+<a name="l00032"></a><a class="code" href="structGauge.html#95776223387e2f27f854507046692096">00032</a>         GList *indicatorList;
+<a name="l00033"></a>00033 } <a class="code" href="structGauge.html">Gauge</a>;
+<a name="l00034"></a>00034 
+<a name="l00035"></a>00035 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-gauge_8h.html#f1d50bee7439f7ace641e976f2cc747f">cd_xml_open_file</a>(gchar *filePath,gchar *mainNodeName,xmlDocPtr *xmlDoc,xmlNodePtr *node);
+<a name="l00036"></a>00036 
+<a name="l00037"></a>00037 <a class="code" href="structGauge.html">Gauge</a> *<a class="code" href="cairo-dock-gauge_8h.html#7195e5051e1688effb561dee2e6b0171">init_cd_Gauge</a>(cairo_t *pSourceContext, gchar *themeName, <span class="keywordtype">int</span> iWidth, <span class="keywordtype">int</span> iHeight);
+<a name="l00038"></a>00038 <a class="code" href="structGaugeImage.html">GaugeImage</a> *<a class="code" href="cairo-dock-gauge_8h.html#b3fc186eed5a1e27bdbac4e00ace0cea">init_cd_GaugeImage</a>(gchar *sImagePath);
+<a name="l00039"></a>00039 
+<a name="l00040"></a>00040 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-gauge_8h.html#c482c6078596008460b89d5974c61ee5">make_cd_Gauge</a>(cairo_t *pSourceContext, <a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="code" href="struct__Icon.html">Icon</a> *pIcon, <a class="code" href="structGauge.html">Gauge</a> *pGauge, <span class="keywordtype">double</span> dValue);
+<a name="l00041"></a>00041 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-gauge_8h.html#74976e18a5b17103f4eb55918f2a0629">make_cd_Gauge_multiValue</a>(cairo_t *pSourceContext, <a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="code" href="struct__Icon.html">Icon</a> *pIcon, <a class="code" href="structGauge.html">Gauge</a> *pGauge, GList *valueList);
+<a name="l00042"></a>00042 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-gauge_8h.html#65fa59d77c21c4737c2c06e179654bd2">draw_cd_Gauge_needle</a>(cairo_t *pSourceContext, <a class="code" href="structGauge.html">Gauge</a> *pGauge, <a class="code" href="structGaugeIndicator.html">GaugeIndicator</a> *pGaugeIndicator, <span class="keywordtype">double</span> dValue);
+<a name="l00043"></a>00043 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-gauge_8h.html#71d18b9da9766cdc46f04b8aa6211e53">draw_cd_Gauge_image</a>(cairo_t *pSourceContext, <a class="code" href="structGauge.html">Gauge</a> *pGauge, <a class="code" href="structGaugeIndicator.html">GaugeIndicator</a> *pGaugeIndicator, <span class="keywordtype">double</span> dValue);
+<a name="l00044"></a>00044 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-gauge_8h.html#24ad250473a72a1a2eb2f351cd68f67c">draw_cd_GaugeImage</a>(cairo_t *pSourceContext, <a class="code" href="structGaugeImage.html">GaugeImage</a> *pGaugeImage, <span class="keywordtype">int</span> iWidth, <span class="keywordtype">int</span> iHeight);
+<a name="l00045"></a>00045 
+<a name="l00046"></a>00046 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-gauge_8h.html#971dba9a825940d090ad096b0630d1d4">free_cd_GaugeImage</a>(<a class="code" href="structGaugeImage.html">GaugeImage</a> *pGaugeImage);
+<a name="l00047"></a>00047 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-gauge_8h.html#f9e015874c6c2f5a9b9b76af3c56c6b1">free_cd_GaugeIndicator</a>(<a class="code" href="structGaugeIndicator.html">GaugeIndicator</a> *pGaugeIndicator);
+<a name="l00048"></a>00048 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-gauge_8h.html#48c40c3ae7afd29d088b8de6de30cfc7">free_cd_Gauge</a>(<a class="code" href="structGauge.html">Gauge</a> *pGauge);
+<a name="l00049"></a>00049 
+<a name="l00050"></a>00050 gchar *<a class="code" href="cairo-dock-gauge_8h.html#fda472bf9f6297aad6d09f819945350b">cairo_dock_get_gauge_key_value</a>(gchar *cAppletConfFilePath, GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName);
+</pre></div><hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:15 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

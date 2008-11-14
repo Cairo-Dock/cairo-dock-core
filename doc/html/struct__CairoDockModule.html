@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock: Référence de la structure _CairoDockModule</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li class="current"><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<div class="tabs">
+  <ul>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li><a href="functions.html"><span>Champs&nbsp;de&nbsp;donnée</span></a></li>
+  </ul>
+</div>
+<h1>Référence de la structure _CairoDockModule</h1><!-- doxytag: class="_CairoDockModule" --><table border="0" cellpadding="0" cellspacing="0">
+<tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Champs de données</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockModule.html#c1411c49bcf48d457ee8620b3c46c01f">cSoFilePath</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">chemin du .so  <a href="#c1411c49bcf48d457ee8620b3c46c01f"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GModule *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockModule.html#89ce3586eab755e1dcf57f8595254212">pModule</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">structure du module, contenant les pointeurs vers les fonctions du module.  <a href="#89ce3586eab755e1dcf57f8595254212"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#fd356c986337e9fef7e9b1518dbf50f9">CairoDockModuleInit</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockModule.html#bc30bc4b56f135a8da00ca18053e9cfe">initModule</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">fonction d'initialisation du module.  <a href="#bc30bc4b56f135a8da00ca18053e9cfe"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#6cfae536a4e0554c4b9863a357814b1e">CairoDockModuleStop</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockModule.html#a099303d9404d1760cd7ae79ba775cb1">stopModule</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">fonction d'arret du module.  <a href="#a099303d9404d1760cd7ae79ba775cb1"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#fa15de2bc423750257e3e0d2afbcb6df">CairoDockModuleReload</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockModule.html#19b9485fcc66509b5cf45a7332d2b15d">reloadModule</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">fonction de configuration du module. Appelee a chaque reconfiguration du module.  <a href="#19b9485fcc66509b5cf45a7332d2b15d"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockVisitCard.html">CairoDockVisitCard</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockModule.html#ce0364d980c16d785ff585ec57e160a3">pVisitCard</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">carte de visite du module.  <a href="#ce0364d980c16d785ff585ec57e160a3"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockModule.html#0991157ad110d3572642d5564186e62e">cConfFilePath</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">chemin du fichier de conf du module.  <a href="#0991157ad110d3572642d5564186e62e"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockModule.html#a9c10078fd18f333ce8bd53f3e8a890a">bActive</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">TRUE si le module est actif (c'est-a-dire utilise).  <a href="#a9c10078fd18f333ce8bd53f3e8a890a"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockModule.html#acfe3ef8df3a388576a9819fcf0bfb4e">bCanDetach</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">VRAI ssi l'appet est prevue pour pouvoir se detacher.  <a href="#acfe3ef8df3a388576a9819fcf0bfb4e"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockModule.html#f0673c695691c10654245d0ce044142b">pContainer</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">le container dans lequel va se charger le module, ou NULL.  <a href="#f0673c695691c10654245d0ce044142b"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockModule.html#63f924f4ee8c5918d408b53fe94c0b35">fLastLoadingTime</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Heure de derniere (re)activation du module.  <a href="#63f924f4ee8c5918d408b53fe94c0b35"></a><br></td></tr>
+</table>
+<hr><h2>Documentation des champs</h2>
+<a class="anchor" name="c1411c49bcf48d457ee8620b3c46c01f"></a><!-- doxytag: member="_CairoDockModule::cSoFilePath" ref="c1411c49bcf48d457ee8620b3c46c01f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gchar* <a class="el" href="struct__CairoDockModule.html#c1411c49bcf48d457ee8620b3c46c01f">_CairoDockModule::cSoFilePath</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+chemin du .so 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="89ce3586eab755e1dcf57f8595254212"></a><!-- doxytag: member="_CairoDockModule::pModule" ref="89ce3586eab755e1dcf57f8595254212" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GModule* <a class="el" href="struct__CairoDockModule.html#89ce3586eab755e1dcf57f8595254212">_CairoDockModule::pModule</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+structure du module, contenant les pointeurs vers les fonctions du module. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="bc30bc4b56f135a8da00ca18053e9cfe"></a><!-- doxytag: member="_CairoDockModule::initModule" ref="bc30bc4b56f135a8da00ca18053e9cfe" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="cairo-dock-struct_8h.html#fd356c986337e9fef7e9b1518dbf50f9">CairoDockModuleInit</a> <a class="el" href="struct__CairoDockModule.html#bc30bc4b56f135a8da00ca18053e9cfe">_CairoDockModule::initModule</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+fonction d'initialisation du module. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="a099303d9404d1760cd7ae79ba775cb1"></a><!-- doxytag: member="_CairoDockModule::stopModule" ref="a099303d9404d1760cd7ae79ba775cb1" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="cairo-dock-struct_8h.html#6cfae536a4e0554c4b9863a357814b1e">CairoDockModuleStop</a> <a class="el" href="struct__CairoDockModule.html#a099303d9404d1760cd7ae79ba775cb1">_CairoDockModule::stopModule</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+fonction d'arret du module. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="19b9485fcc66509b5cf45a7332d2b15d"></a><!-- doxytag: member="_CairoDockModule::reloadModule" ref="19b9485fcc66509b5cf45a7332d2b15d" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="cairo-dock-struct_8h.html#fa15de2bc423750257e3e0d2afbcb6df">CairoDockModuleReload</a> <a class="el" href="struct__CairoDockModule.html#19b9485fcc66509b5cf45a7332d2b15d">_CairoDockModule::reloadModule</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+fonction de configuration du module. Appelee a chaque reconfiguration du module. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ce0364d980c16d785ff585ec57e160a3"></a><!-- doxytag: member="_CairoDockModule::pVisitCard" ref="ce0364d980c16d785ff585ec57e160a3" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockVisitCard.html">CairoDockVisitCard</a>* <a class="el" href="struct__CairoDockModule.html#ce0364d980c16d785ff585ec57e160a3">_CairoDockModule::pVisitCard</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+carte de visite du module. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="0991157ad110d3572642d5564186e62e"></a><!-- doxytag: member="_CairoDockModule::cConfFilePath" ref="0991157ad110d3572642d5564186e62e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gchar* <a class="el" href="struct__CairoDockModule.html#0991157ad110d3572642d5564186e62e">_CairoDockModule::cConfFilePath</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+chemin du fichier de conf du module. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="a9c10078fd18f333ce8bd53f3e8a890a"></a><!-- doxytag: member="_CairoDockModule::bActive" ref="a9c10078fd18f333ce8bd53f3e8a890a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__CairoDockModule.html#a9c10078fd18f333ce8bd53f3e8a890a">_CairoDockModule::bActive</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+TRUE si le module est actif (c'est-a-dire utilise). 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="acfe3ef8df3a388576a9819fcf0bfb4e"></a><!-- doxytag: member="_CairoDockModule::bCanDetach" ref="acfe3ef8df3a388576a9819fcf0bfb4e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__CairoDockModule.html#acfe3ef8df3a388576a9819fcf0bfb4e">_CairoDockModule::bCanDetach</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+VRAI ssi l'appet est prevue pour pouvoir se detacher. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="f0673c695691c10654245d0ce044142b"></a><!-- doxytag: member="_CairoDockModule::pContainer" ref="f0673c695691c10654245d0ce044142b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a>* <a class="el" href="struct__CairoDockModule.html#f0673c695691c10654245d0ce044142b">_CairoDockModule::pContainer</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+le container dans lequel va se charger le module, ou NULL. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="63f924f4ee8c5918d408b53fe94c0b35"></a><!-- doxytag: member="_CairoDockModule::fLastLoadingTime" ref="63f924f4ee8c5918d408b53fe94c0b35" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double <a class="el" href="struct__CairoDockModule.html#63f924f4ee8c5918d408b53fe94c0b35">_CairoDockModule::fLastLoadingTime</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Heure de derniere (re)activation du module. 
+<p>
+
+</div>
+</div><p>
+<hr>La documentation de cette structure a été générée à partir du fichier suivant :<ul>
+<li>/opt/cairo-dock/trunk/cairo-dock/src/<a class="el" href="cairo-dock-struct_8h-source.html">cairo-dock-struct.h</a></ul>
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

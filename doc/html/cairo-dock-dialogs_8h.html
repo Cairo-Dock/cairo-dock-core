@@ -1,0 +1,1475 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dialogs.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dialogs.h</h1>
+<p>
+<a href="cairo-dock-dialogs_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Macros</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#e1786822a5e484aa4665ae7a5d50d9dd">CAIRO_DOCK_IS_DIALOG</a>(pContainer)&nbsp;&nbsp;&nbsp;(pContainer != NULL &amp;&amp; pContainer-&gt;iType == CAIRO_DOCK_TYPE_DIALOG)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#ea265de97cc7064c8b5c4d6a6eba4cb4">CAIRO_DOCK_DIALOG</a>(pContainer)&nbsp;&nbsp;&nbsp;((<a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *)pContainer)</td></tr>
+
+<tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#26e6a29f939bd4d33e78eb9dcdfbbd9d">cairo_dock_load_dialog_buttons</a> (<a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, gchar *cButtonOkImage, gchar *cButtonCancelImage)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#6dc04f02666290c652d8bf770332d3ec">cairo_dock_dialog_reference</a> (<a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *pDialog)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#ffdb58e55a26660b2e45c69313bb26d8">cairo_dock_dialog_unreference</a> (<a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *pDialog)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#7ec78ebc183ab4ebe55c7bc1073297a7">cairo_dock_isolate_dialog</a> (<a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *pDialog)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#b5822c21c603892d7cc5253a31040598">cairo_dock_free_dialog</a> (<a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *pDialog)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#704d0673d79e3fdda3428749e56087a2">cairo_dock_remove_dialog_if_any</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#d01c86db0a68977e4bf5e2d1077085a7">cairo_dock_remove_orphelans</a> (void)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GtkWidget *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#d73a22b3ffbe4e254e2de80ac43bb635">cairo_dock_build_common_interactive_widget_for_dialog</a> (const gchar *cInitialAnswer, double fValueForHScale, double fMaxValueForHScale)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#aa4d47dce96b6dc66690ba2ea07afacd">cairo_dock_build_dialog</a> (const gchar *cText, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, gchar *cImageFilePath, GtkWidget *pInteractiveWidget, GtkButtonsType iButtonsType, <a class="el" href="cairo-dock-struct_8h.html#b6ad4f75675a2a32a1f910952c86b346">CairoDockActionOnAnswerFunc</a> pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#500310b40af3f12e2807761f4ec5d002">cairo_dock_dialog_calculate_aimed_point</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, int *iX, int *iY, gboolean *bRight, <a class="el" href="cairo-dock-struct_8h.html#35a7692ad6c6de1d8606b26d6f8ca57f">CairoDockTypeHorizontality</a> *bIsHorizontal, gboolean *bDirectionUp)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#f58d2bf272c1d1b47e206794eb23a144">cairo_dock_dialog_find_optimal_placement</a> (<a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *pDialog)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#9aadd5121c502deca4e50e20ff8e863d">cairo_dock_place_dialog</a> (<a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *pDialog, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#b7e2efc6b1cf310c8085f90cd74e3697">cairo_dock_replace_all_dialogs</a> (void)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#e83f9f49d2445ecfa5b6682d6cc6a9da">cairo_dock_show_dialog_full</a> (const gchar *cText, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, double fTimeLength, gchar *cIconPath, GtkButtonsType iButtonsType, GtkWidget *pInteractiveWidget, <a class="el" href="cairo-dock-struct_8h.html#b6ad4f75675a2a32a1f910952c86b346">CairoDockActionOnAnswerFunc</a> pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#a9e10600f826f134628c146426ae1f92">cairo_dock_show_temporary_dialog_with_icon</a> (const gchar *cText, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, double fTimeLength, gchar *cIconPath,...)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#3787f51b99a6112508d396a61a9dc8e3">cairo_dock_show_temporary_dialog</a> (const gchar *cText, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, double fTimeLength,...)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#4a3bc9c903e7940c48e7d7c32cf28500">cairo_dock_show_temporary_dialog_with_default_icon</a> (const gchar *cText, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, double fTimeLength,...)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#434157c88ef1255ff7258407459630d6">cairo_dock_show_dialog_with_question</a> (const gchar *cText, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, gchar *cIconPath, <a class="el" href="cairo-dock-struct_8h.html#b6ad4f75675a2a32a1f910952c86b346">CairoDockActionOnAnswerFunc</a> pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#7c7a4d00ee27a10ca085971b33c1e7dc">cairo_dock_show_dialog_with_entry</a> (const gchar *cText, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, gchar *cIconPath, const gchar *cTextForEntry, <a class="el" href="cairo-dock-struct_8h.html#b6ad4f75675a2a32a1f910952c86b346">CairoDockActionOnAnswerFunc</a> pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#9c19f60620ad0f9ad08360ffb5947e8f">cairo_dock_show_dialog_with_value</a> (const gchar *cText, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, gchar *cIconPath, double fValue, <a class="el" href="cairo-dock-struct_8h.html#b6ad4f75675a2a32a1f910952c86b346">CairoDockActionOnAnswerFunc</a> pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#d2f065837ba1a70a3f74d1473c8cd83e">cairo_dock_show_dialog_and_wait</a> (const gchar *cText, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, double fTimeLength, gchar *cIconPath, GtkButtonsType iButtonsType, GtkWidget *pInteractiveWidget)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#79cef627d9112419159bcd75643d927c">cairo_dock_show_demand_and_wait</a> (const gchar *cMessage, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, const gchar *cInitialAnswer)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#4d0154650d2e9f8a4ac59e2233ff3251">cairo_dock_show_value_and_wait</a> (const gchar *cMessage, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, double fInitialValue, double fMaxValue)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#bf8d5468edb62d8b4f0978302cde1af5">cairo_dock_ask_question_and_wait</a> (const gchar *cQuestion, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#155378dd7008931b53632e681c826fd2">cairo_dock_icon_has_dialog</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#6e4e1b619976f6889b3bed3a9d45c710">cairo_dock_get_dialogless_icon</a> (void)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#68be54d95151113264ca36abad463900">cairo_dock_show_general_message</a> (const gchar *cMessage, double fTimeLength)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#d11e25360e626bff842a69d84d58037b">cairo_dock_ask_general_question_and_wait</a> (const gchar *cQuestion)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#1e7aa5fae3a6ba6f3a07985815850c08">cairo_dock_hide_dialog</a> (<a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *pDialog)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#d968f6969bf68add045329015ec7c15e">cairo_dock_unhide_dialog</a> (<a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *pDialog)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GtkWidget *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dialogs_8h.html#35328719329bb71b2e4aae69a99586d9">cairo_dock_steal_widget_from_its_container</a> (GtkWidget *pWidget)</td></tr>
+
+</table>
+<hr><h2>Documentation des macros</h2>
+<a class="anchor" name="e1786822a5e484aa4665ae7a5d50d9dd"></a><!-- doxytag: member="cairo-dock-dialogs.h::CAIRO_DOCK_IS_DIALOG" ref="e1786822a5e484aa4665ae7a5d50d9dd" args="(pContainer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CAIRO_DOCK_IS_DIALOG          </td>
+          <td>(</td>
+          <td class="paramtype">pContainer&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%">&nbsp;&nbsp;&nbsp;(pContainer != NULL &amp;&amp; pContainer-&gt;iType == CAIRO_DOCK_TYPE_DIALOG)</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Teste si le container est un dialogue. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>TRUE ssi le container a ete declare comme un dialogue. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="ea265de97cc7064c8b5c4d6a6eba4cb4"></a><!-- doxytag: member="cairo-dock-dialogs.h::CAIRO_DOCK_DIALOG" ref="ea265de97cc7064c8b5c4d6a6eba4cb4" args="(pContainer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CAIRO_DOCK_DIALOG          </td>
+          <td>(</td>
+          <td class="paramtype">pContainer&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%">&nbsp;&nbsp;&nbsp;((<a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *)pContainer)</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Caste un container en dialogue. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>le dialogue. </dd></dl>
+
+</div>
+</div><p>
+<hr><h2>Documentation des fonctions</h2>
+<a class="anchor" name="26e6a29f939bd4d33e78eb9dcdfbbd9d"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_load_dialog_buttons" ref="26e6a29f939bd4d33e78eb9dcdfbbd9d" args="(CairoDockContainer *pContainer, gchar *cButtonOkImage, gchar *cButtonCancelImage)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_load_dialog_buttons           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cButtonOkImage</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cButtonCancelImage</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="6dc04f02666290c652d8bf770332d3ec"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_dialog_reference" ref="6dc04f02666290c652d8bf770332d3ec" args="(CairoDockDialog *pDialog)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_dialog_reference           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDialog</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Incremente le compteur de reference de 1 de maniere atomique, de maniere a empecher toute destruction du dialogue pendant son utilisation. Utiliser <a class="el" href="cairo-dock-dialogs_8h.html#ffdb58e55a26660b2e45c69313bb26d8">cairo_dock_dialog_unreference</a> apres en avoir termine. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDialog</em>&nbsp;</td><td>le dialogue. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>TRUE ssi la reference sur le dialogue n'etait pas deja nulle et a pu etre incrementee, FALSE sinon, auquel cas il ne faut pas l'utiliser. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="ffdb58e55a26660b2e45c69313bb26d8"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_dialog_unreference" ref="ffdb58e55a26660b2e45c69313bb26d8" args="(CairoDockDialog *pDialog)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_dialog_unreference           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDialog</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Decremente le compteur de reference de 1 de maniere atomique. Si la reference est tombee a 0, tente de detruire le dialogue si la liste des dialogues n'est pas verouillee, et sinon l'isole (il sera alors detruit plus tard). <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDialog</em>&nbsp;</td><td>le dialogue. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>TRUE ssi la reference sur le dialogue est tombee a zero, auquel cas il ne faut plus l'utiliser. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="7ec78ebc183ab4ebe55c7bc1073297a7"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_isolate_dialog" ref="7ec78ebc183ab4ebe55c7bc1073297a7" args="(CairoDockDialog *pDialog)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_isolate_dialog           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDialog</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Isole un dialogue, de maniere a ce qu'il ne soit pas utilise par une nouvelle personne. Les utilisations courantes ne sont pas affectees. N'a aucun effet sur un dialogue deja isole. Ne devrait pas etre utilise tel quel. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDialog</em>&nbsp;</td><td>le dialogue. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="b5822c21c603892d7cc5253a31040598"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_free_dialog" ref="b5822c21c603892d7cc5253a31040598" args="(CairoDockDialog *pDialog)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_free_dialog           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDialog</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Detruit un dialogue, libere les ressources allouees, et l'enleve de la liste des dialogues. Ne devrait pas etre utilise tel quel, utiliser <a class="el" href="cairo-dock-dialogs_8h.html#ffdb58e55a26660b2e45c69313bb26d8">cairo_dock_dialog_unreference</a>. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDialog</em>&nbsp;</td><td>le dialogue. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="704d0673d79e3fdda3428749e56087a2"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_remove_dialog_if_any" ref="704d0673d79e3fdda3428749e56087a2" args="(Icon *icon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_remove_dialog_if_any           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>icon</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Dereference tous les dialogues pointant sur une icone; si les dialogues sont utilises par quelqu'un d'autre, il seront detruits plus tard, mais seront au moins isoles, et ne pourront donc plus etre utilises par une nouvelle personne. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>icon</em>&nbsp;</td><td>l'icone dont on veut supprimer les dialogues. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>TRUE ssi au moins un dialogue a ete detruit. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="d01c86db0a68977e4bf5e2d1077085a7"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_remove_orphelans" ref="d01c86db0a68977e4bf5e2d1077085a7" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_remove_orphelans           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Detruit et enleve de la liste tous les dialogues dont la reference est a 0, et qui n'ont pas ete enleves de la liste. 
+</div>
+</div><p>
+<a class="anchor" name="d73a22b3ffbe4e254e2de80ac43bb635"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_build_common_interactive_widget_for_dialog" ref="d73a22b3ffbe4e254e2de80ac43bb635" args="(const gchar *cInitialAnswer, double fValueForHScale, double fMaxValueForHScale)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GtkWidget* cairo_dock_build_common_interactive_widget_for_dialog           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cInitialAnswer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fValueForHScale</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fMaxValueForHScale</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="aa4d47dce96b6dc66690ba2ea07afacd"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_build_dialog" ref="aa4d47dce96b6dc66690ba2ea07afacd" args="(const gchar *cText, Icon *pIcon, CairoDockContainer *pContainer, gchar *cImageFilePath, GtkWidget *pInteractiveWidget, GtkButtonsType iButtonsType, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a>* cairo_dock_build_dialog           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cText</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cImageFilePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GtkWidget *&nbsp;</td>
+          <td class="paramname"> <em>pInteractiveWidget</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GtkButtonsType&nbsp;</td>
+          <td class="paramname"> <em>iButtonsType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#b6ad4f75675a2a32a1f910952c86b346">CairoDockActionOnAnswerFunc</a>&nbsp;</td>
+          <td class="paramname"> <em>pActionFunc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gpointer&nbsp;</td>
+          <td class="paramname"> <em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GFreeFunc&nbsp;</td>
+          <td class="paramname"> <em>pFreeDataFunc</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="500310b40af3f12e2807761f4ec5d002"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_dialog_calculate_aimed_point" ref="500310b40af3f12e2807761f4ec5d002" args="(Icon *pIcon, CairoDockContainer *pContainer, int *iX, int *iY, gboolean *bRight, CairoDockTypeHorizontality *bIsHorizontal, gboolean *bDirectionUp)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_dialog_calculate_aimed_point           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&nbsp;</td>
+          <td class="paramname"> <em>iX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&nbsp;</td>
+          <td class="paramname"> <em>iY</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean *&nbsp;</td>
+          <td class="paramname"> <em>bRight</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#35a7692ad6c6de1d8606b26d6f8ca57f">CairoDockTypeHorizontality</a> *&nbsp;</td>
+          <td class="paramname"> <em>bIsHorizontal</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean *&nbsp;</td>
+          <td class="paramname"> <em>bDirectionUp</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="f58d2bf272c1d1b47e206794eb23a144"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_dialog_find_optimal_placement" ref="f58d2bf272c1d1b47e206794eb23a144" args="(CairoDockDialog *pDialog)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_dialog_find_optimal_placement           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDialog</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="9aadd5121c502deca4e50e20ff8e863d"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_place_dialog" ref="9aadd5121c502deca4e50e20ff8e863d" args="(CairoDockDialog *pDialog, CairoDockContainer *pContainer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_place_dialog           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDialog</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="b7e2efc6b1cf310c8085f90cd74e3697"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_replace_all_dialogs" ref="b7e2efc6b1cf310c8085f90cd74e3697" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_replace_all_dialogs           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Recalcule la positions de tous les dialogues et les y deplace. 
+</div>
+</div><p>
+<a class="anchor" name="e83f9f49d2445ecfa5b6682d6cc6a9da"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_show_dialog_full" ref="e83f9f49d2445ecfa5b6682d6cc6a9da" args="(const gchar *cText, Icon *pIcon, CairoDockContainer *pContainer, double fTimeLength, gchar *cIconPath, GtkButtonsType iButtonsType, GtkWidget *pInteractiveWidget, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a>* cairo_dock_show_dialog_full           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cText</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fTimeLength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cIconPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GtkButtonsType&nbsp;</td>
+          <td class="paramname"> <em>iButtonsType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GtkWidget *&nbsp;</td>
+          <td class="paramname"> <em>pInteractiveWidget</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#b6ad4f75675a2a32a1f910952c86b346">CairoDockActionOnAnswerFunc</a>&nbsp;</td>
+          <td class="paramname"> <em>pActionFunc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gpointer&nbsp;</td>
+          <td class="paramname"> <em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GFreeFunc&nbsp;</td>
+          <td class="paramname"> <em>pFreeDataFunc</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Fait apparaitre un dialogue avec un message, un widget et 2 boutons, tous optionnels. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cText</em>&nbsp;</td><td>le message du dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone sur laquelle pointe le dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container contenant l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fTimeLength</em>&nbsp;</td><td>duree de vie du dialogue, ou 0 pour une duree de vie illimitee. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cIconPath</em>&nbsp;</td><td>le chemin vers une icone a afficher dans la marge. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iButtonsType</em>&nbsp;</td><td>type des boutons (GTK_BUTTONS_OK_CANCEL, GTK_BUTTONS_YES_NO, ou GTK_BUTTONS_NONE). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pInteractiveWidget</em>&nbsp;</td><td>un widget d'interaction avec l'utilisateur; il est rattache au dialogue, donc sera detruit avec lui. Faire un 'gtk_widget_reparent()' avant de detruire le dialogue pour eviter cela, ou bien utilisez <a class="el" href="cairo-dock-dialogs_8h.html#d2f065837ba1a70a3f74d1473c8cd83e">cairo_dock_show_dialog_and_wait</a>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pActionFunc</em>&nbsp;</td><td>la fonction d'action appelee lorsque l'utilisateur valide son choix. NULL revient a avoir des boutons du type GTK_BUTTONS_NONE. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>data</em>&nbsp;</td><td>donnees transmises a la fonction ci-dessus. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pFreeDataFunc</em>&nbsp;</td><td>fonction de liberation des donnees ci-dessus, appelee lors de la destruction du dialogue, ou NULL si non necessaire. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>Le dialogue nouvellement cree et visible, avec une reference a 1. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="a9e10600f826f134628c146426ae1f92"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_show_temporary_dialog_with_icon" ref="a9e10600f826f134628c146426ae1f92" args="(const gchar *cText, Icon *pIcon, CairoDockContainer *pContainer, double fTimeLength, gchar *cIconPath,...)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a>* cairo_dock_show_temporary_dialog_with_icon           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cText</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fTimeLength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cIconPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>...</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Fait apparaitre un dialogue a duree de vie limitee avec une icone dans la marge a cote du texte. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cText</em>&nbsp;</td><td>le message du dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone sur laquelle pointe le dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container de l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fTimeLength</em>&nbsp;</td><td>la duree de vie du dialogue (ou 0 pour une duree de vie illimitee). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cIconPath</em>&nbsp;</td><td>le chemin vers une icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>...</em>&nbsp;</td><td>les arguments a inserer dans la chaine de texte, facon printf. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>Le dialogue nouvellement cree et visible, avec une reference a 1. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="3787f51b99a6112508d396a61a9dc8e3"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_show_temporary_dialog" ref="3787f51b99a6112508d396a61a9dc8e3" args="(const gchar *cText, Icon *pIcon, CairoDockContainer *pContainer, double fTimeLength,...)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a>* cairo_dock_show_temporary_dialog           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cText</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fTimeLength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>...</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Fait apparaitre un dialogue a duree de vie limitee sans icone. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cText</em>&nbsp;</td><td>le message du dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone sur laquelle pointe le dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container de l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fTimeLength</em>&nbsp;</td><td>la duree de vie du dialogue (ou 0 pour une duree de vie illimitee). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>...</em>&nbsp;</td><td>les arguments a inserer dans la chaine de texte. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>Le dialogue nouvellement cree et visible, avec une reference a 1. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="4a3bc9c903e7940c48e7d7c32cf28500"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_show_temporary_dialog_with_default_icon" ref="4a3bc9c903e7940c48e7d7c32cf28500" args="(const gchar *cText, Icon *pIcon, CairoDockContainer *pContainer, double fTimeLength,...)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a>* cairo_dock_show_temporary_dialog_with_default_icon           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cText</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fTimeLength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>...</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Fait apparaitre un dialogue a duree de vie limitee et avec l'icone par defaut. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cText</em>&nbsp;</td><td>le message du dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone sur laquelle pointe le dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container de l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fTimeLength</em>&nbsp;</td><td>la duree de vie du dialogue (ou 0 pour une duree de vie illimitee). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>...</em>&nbsp;</td><td>les arguments a inserer dans la chaine de texte, facon printf. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>Le dialogue nouvellement cree et visible, avec une reference a 1. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="434157c88ef1255ff7258407459630d6"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_show_dialog_with_question" ref="434157c88ef1255ff7258407459630d6" args="(const gchar *cText, Icon *pIcon, CairoDockContainer *pContainer, gchar *cIconPath, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a>* cairo_dock_show_dialog_with_question           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cText</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cIconPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#b6ad4f75675a2a32a1f910952c86b346">CairoDockActionOnAnswerFunc</a>&nbsp;</td>
+          <td class="paramname"> <em>pActionFunc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gpointer&nbsp;</td>
+          <td class="paramname"> <em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GFreeFunc&nbsp;</td>
+          <td class="paramname"> <em>pFreeDataFunc</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Fait apparaitre un dialogue a duree de vie illimitee avec une question et 2 boutons oui/non. Lorsque l'utilisateur clique sur "oui", la fonction d'action est appelee avec "yes", et avec "no" s'il a clique sur "non". <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cText</em>&nbsp;</td><td>le message du dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone sur laquelle pointe le dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container de l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cIconPath</em>&nbsp;</td><td>le chemin vers une icone a afficher dans la marge. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pActionFunc</em>&nbsp;</td><td>la fonction d'action, appelee lors du clique utilisateur. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>data</em>&nbsp;</td><td>pointeur qui sera passe en argument de la fonction d'action. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pFreeDataFunc</em>&nbsp;</td><td>fonction qui liberera le pointeur. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>Le dialogue nouvellement cree et visible, avec une reference a 1. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="7c7a4d00ee27a10ca085971b33c1e7dc"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_show_dialog_with_entry" ref="7c7a4d00ee27a10ca085971b33c1e7dc" args="(const gchar *cText, Icon *pIcon, CairoDockContainer *pContainer, gchar *cIconPath, const gchar *cTextForEntry, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a>* cairo_dock_show_dialog_with_entry           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cText</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cIconPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cTextForEntry</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#b6ad4f75675a2a32a1f910952c86b346">CairoDockActionOnAnswerFunc</a>&nbsp;</td>
+          <td class="paramname"> <em>pActionFunc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gpointer&nbsp;</td>
+          <td class="paramname"> <em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GFreeFunc&nbsp;</td>
+          <td class="paramname"> <em>pFreeDataFunc</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Fait apparaitre un dialogue a duree de vie illimitee avec une entree texte et 2 boutons ok/annuler. Lorsque l'utilisateur clique sur "ok", la fonction d'action est appelee avec le texte de l'entree, et avec "" s'il a clique sur "annuler". <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cText</em>&nbsp;</td><td>le message du dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone sur laquelle pointe le dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container de l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cIconPath</em>&nbsp;</td><td>le chemin vers une icone a afficher dans la marge. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cTextForEntry</em>&nbsp;</td><td>le texte a afficher initialement dans l'entree. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pActionFunc</em>&nbsp;</td><td>la fonction d'action, appelee lors du clique utilisateur. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>data</em>&nbsp;</td><td>pointeur qui sera passe en argument de la fonction d'action. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pFreeDataFunc</em>&nbsp;</td><td>fonction qui liberera le pointeur. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>le dialogue nouvellement cree. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="9c19f60620ad0f9ad08360ffb5947e8f"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_show_dialog_with_value" ref="9c19f60620ad0f9ad08360ffb5947e8f" args="(const gchar *cText, Icon *pIcon, CairoDockContainer *pContainer, gchar *cIconPath, double fValue, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a>* cairo_dock_show_dialog_with_value           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cText</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cIconPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#b6ad4f75675a2a32a1f910952c86b346">CairoDockActionOnAnswerFunc</a>&nbsp;</td>
+          <td class="paramname"> <em>pActionFunc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gpointer&nbsp;</td>
+          <td class="paramname"> <em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GFreeFunc&nbsp;</td>
+          <td class="paramname"> <em>pFreeDataFunc</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Fait apparaitre un dialogue a duree de vie illimitee avec une echelle horizontale et 2 boutons ok/annuler. Lorsque l'utilisateur clique sur "ok", la fonction d'action est appelee avec la valeur de l'echelle sous forme de texte, et avec "-1" s'il a clique sur "annuler". <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cText</em>&nbsp;</td><td>le message du dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone sur laquelle pointe le dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container de l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cIconPath</em>&nbsp;</td><td>le chemin vers une icone a afficher dans la marge. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fValue</em>&nbsp;</td><td>la valeur initiale de l'echelle. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pActionFunc</em>&nbsp;</td><td>la fonction d'action, appelee lors du clique utilisateur. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>data</em>&nbsp;</td><td>pointeur qui sera passe en argument de la fonction d'action. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pFreeDataFunc</em>&nbsp;</td><td>fonction qui liberera le pointeur. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>le dialogue nouvellement cree. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="d2f065837ba1a70a3f74d1473c8cd83e"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_show_dialog_and_wait" ref="d2f065837ba1a70a3f74d1473c8cd83e" args="(const gchar *cText, Icon *pIcon, CairoDockContainer *pContainer, double fTimeLength, gchar *cIconPath, GtkButtonsType iButtonsType, GtkWidget *pInteractiveWidget)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cairo_dock_show_dialog_and_wait           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cText</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fTimeLength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cIconPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GtkButtonsType&nbsp;</td>
+          <td class="paramname"> <em>iButtonsType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GtkWidget *&nbsp;</td>
+          <td class="paramname"> <em>pInteractiveWidget</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Fait apparaitre un dialogue avec un widget et 2 boutons, et met en pause le programme jusqu'a ce que l'utilisateur ait fait son choix. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cText</em>&nbsp;</td><td>le message du dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone sur laquelle pointe le dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container de l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fTimeLength</em>&nbsp;</td><td>duree de vie du dialogue, ou 0 pour une duree de vie illimitee. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cIconPath</em>&nbsp;</td><td>le chemin vers une icone a afficher dans la marge. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iButtonsType</em>&nbsp;</td><td>type des boutons (GTK_BUTTONS_OK_CANCEL ou GTK_BUTTONS_YES_NO). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pInteractiveWidget</em>&nbsp;</td><td>un widget d'interaction avec l'utilisateur. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>GTK_RESPONSE_OK si l'utilisateur a valide, GTK_RESPONSE_CANCEL s'il a annule, GTK_RESPONSE_NONE si le dialogue s'est fait detruire avant que l'utilisateur ait pu repondre. Le widget interactif n'est pas detruit avec le dialogue, ce qui permet de recuperer les modifications effectuees par l'utilisateur. Il vous appartient de le detruire avec gtk_widget_destroy() quand vous en avez fini avec lui. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="79cef627d9112419159bcd75643d927c"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_show_demand_and_wait" ref="79cef627d9112419159bcd75643d927c" args="(const gchar *cMessage, Icon *pIcon, CairoDockContainer *pContainer, const gchar *cInitialAnswer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gchar* cairo_dock_show_demand_and_wait           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cMessage</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cInitialAnswer</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Fait apparaitre un dialogue avec une entree de texte et 2 boutons ok/annuler, et met en pause le programme jusqu'a ce que l'utilisateur ait fait son choix. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cMessage</em>&nbsp;</td><td>le message du dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone qui fait la demande. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container de l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cInitialAnswer</em>&nbsp;</td><td>la valeur initiale de l'entree de texte, ou NULL si aucune n'est fournie. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>le texte entre par l'utilisateur, ou NULL s'il a annule ou si le dialogue s'est fait detruire avant. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="4d0154650d2e9f8a4ac59e2233ff3251"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_show_value_and_wait" ref="4d0154650d2e9f8a4ac59e2233ff3251" args="(const gchar *cMessage, Icon *pIcon, CairoDockContainer *pContainer, double fInitialValue, double fMaxValue)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double cairo_dock_show_value_and_wait           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cMessage</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fInitialValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fMaxValue</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Fait apparaitre un dialogue avec une echelle horizontale entre 0 et fMaxValue, et 2 boutons ok/annuler, et met en pause le programme jusqu'a ce que l'utilisateur ait fait son choix. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cMessage</em>&nbsp;</td><td>le message du dialogue. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone qui fait la demande. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container de l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fInitialValue</em>&nbsp;</td><td>la valeur initiale de l'echelle, entre 0 et 1. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fMaxValue</em>&nbsp;</td><td>la borne superieure de l'intervalle [0 , max]. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>la valeur choisie par l'utilisateur, ou -1 s'il a annule ou si le dialogue s'est fait detruire avant. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="bf8d5468edb62d8b4f0978302cde1af5"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_ask_question_and_wait" ref="bf8d5468edb62d8b4f0978302cde1af5" args="(const gchar *cQuestion, Icon *pIcon, CairoDockContainer *pContainer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cairo_dock_ask_question_and_wait           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cQuestion</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Fait apparaitre un dialogue de question pointant sur l'icone pointee (ou la 1ere si aucune n'est pointee) avec une question et 2 boutons oui/non, et met en pause le programme jusqu'a ce que l'utilisateur ait fait son choix. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cQuestion</em>&nbsp;</td><td>la question a poser. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone qui fait la demande. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container de l'icone. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>GTK_RESPONSE_YES ou GTK_RESPONSE_NO suivant le choix de l'utilisateur, ou GTK_RESPONSE_NONE si le dialogue s'est fait detruire avant. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="155378dd7008931b53632e681c826fd2"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_icon_has_dialog" ref="155378dd7008931b53632e681c826fd2" args="(Icon *pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_icon_has_dialog           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Cherche si une icone donnee possede au moins un dialogue. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>TRUE ssi l'icone possede au moins un dialogue. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="6e4e1b619976f6889b3bed3a9d45c710"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_get_dialogless_icon" ref="6e4e1b619976f6889b3bed3a9d45c710" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__Icon.html">Icon</a>* cairo_dock_get_dialogless_icon           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Cherche une icone propice pour montrer un dialogue d'ordre general, dans le dock principal. <dl class="return" compact><dt><b>Renvoie:</b></dt><dd>une icone, ou NULL si le dock est vide. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="68be54d95151113264ca36abad463900"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_show_general_message" ref="68be54d95151113264ca36abad463900" args="(const gchar *cMessage, double fTimeLength)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a>* cairo_dock_show_general_message           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cMessage</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fTimeLength</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Fait apparaitre un dialogue de message non bloquant, et pointant sur une icone de separateur si possible, ou sinon sur l'icone pointee du dock principal (ou la 1ere icone sans dialogue si aucune n'est pointee). Cela permet a cairo-dock de poser une question d'ordre general. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cMessage</em>&nbsp;</td><td>le message. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fTimeLength</em>&nbsp;</td><td>la duree de vie du dialogue. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>Le dialogue nouvellement cree et visible, avec une reference a 1. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="d11e25360e626bff842a69d84d58037b"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_ask_general_question_and_wait" ref="d11e25360e626bff842a69d84d58037b" args="(const gchar *cQuestion)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cairo_dock_ask_general_question_and_wait           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cQuestion</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Fait apparaitre un dialogue de question bloquant, et pointant sur une icone de separateur si possible, ou sinon sur l'icone pointee du dock principal (ou la 1ere icone sans dialogue si aucune n'est pointee). Cela permet a cairo-dock de poser une question d'ordre general. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cQuestion</em>&nbsp;</td><td>la question a poser. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>idem que pour <a class="el" href="cairo-dock-dialogs_8h.html#bf8d5468edb62d8b4f0978302cde1af5">cairo_dock_ask_question_and_wait</a>. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="1e7aa5fae3a6ba6f3a07985815850c08"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_hide_dialog" ref="1e7aa5fae3a6ba6f3a07985815850c08" args="(CairoDockDialog *pDialog)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_hide_dialog           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDialog</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Cache un dialogue, sans le detruire. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDialog</em>&nbsp;</td><td>le dialogue. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="d968f6969bf68add045329015ec7c15e"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_unhide_dialog" ref="d968f6969bf68add045329015ec7c15e" args="(CairoDockDialog *pDialog)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_unhide_dialog           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockDialog.html">CairoDockDialog</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDialog</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Montre et fait prendre le focus a un dialogue. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDialog</em>&nbsp;</td><td>le dialogue. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="35328719329bb71b2e4aae69a99586d9"></a><!-- doxytag: member="cairo-dock-dialogs.h::cairo_dock_steal_widget_from_its_container" ref="35328719329bb71b2e4aae69a99586d9" args="(GtkWidget *pWidget)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GtkWidget* cairo_dock_steal_widget_from_its_container           </td>
+          <td>(</td>
+          <td class="paramtype">GtkWidget *&nbsp;</td>
+          <td class="paramname"> <em>pWidget</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Retire un widget de son container GTK sans le detruire Le widget peut alors etre replace ailleurs ulterieurement. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pWidget</em>&nbsp;</td><td>le widget. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

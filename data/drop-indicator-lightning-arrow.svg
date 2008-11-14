@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Sodipodi ("http://www.sodipodi.com/") -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="64"
+   id="svg548"
+   inkscape:version="0.46"
+   sodipodi:docbase="/var/www/html/svg_gallery/svg/arrows"
+   sodipodi:docname="default-drop-indicator2.svg"
+   sodipodi:version="0.32"
+   width="32"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   version="1.0">
+  <metadata
+     id="metadata2748">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>Clipart by Nicu Buculei - arrow08_4</dc:title>
+        <dc:description />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li />
+            <rdf:li>shape</rdf:li>
+            <rdf:li>arrow</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://www.openclipart.org">
+            <dc:title>Nicu Buculei</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Nicu Buculei</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>Nicu Buculei</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:date />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://web.resource.org/cc/PublicDomain" />
+        <dc:language>en</dc:language>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://web.resource.org/cc/PublicDomain">
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Reproduction" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Distribution" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs550">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 250 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="500 : 250 : 1"
+       inkscape:persp3d-origin="250 : 166.66667 : 1"
+       id="perspective2758" />
+    <linearGradient
+       id="linearGradient650">
+      <stop
+         id="stop651"
+         offset="0"
+         style="stop-color:#000;stop-opacity:1;" />
+      <stop
+         id="stop652"
+         offset="1"
+         style="stop-color:#fff;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       gradientUnits="objectBoundingBox"
+       id="linearGradient653"
+       spreadMethod="repeat"
+       x1="1.0000055"
+       x2="1.166669"
+       xlink:href="#linearGradient650"
+       y1="0.53125"
+       y2="0.5390625" />
+    <linearGradient
+       gradientUnits="objectBoundingBox"
+       id="linearGradient654"
+       spreadMethod="repeat"
+       x1="1.2222271"
+       x2="1.1666682"
+       xlink:href="#linearGradient650"
+       y1="0.4609375"
+       y2="0.4609375" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     inkscape:cx="41.873278"
+     inkscape:cy="30.30303"
+     inkscape:window-height="722"
+     inkscape:window-width="850"
+     inkscape:window-x="5"
+     inkscape:window-y="29"
+     inkscape:zoom="1.815"
+     showgrid="true"
+     inkscape:current-layer="svg548" />
+  <path
+     d="M 13.533528,6.2972732 L 8.0906824,37.308934 L 16.318233,34.650786 L 13.660085,51.738673 C 13.660085,51.738673 5.1794204,54.396814 5.1794204,54.523371 C 5.1794204,54.650089 16.191676,60.725713 16.191676,60.725713 C 16.191676,60.725713 27.710314,46.422539 27.710314,46.295982 C 27.963421,46.422539 19.609159,48.954129 19.482602,48.954129 L 22.267461,29.20778 L 13.786642,31.866089 L 19.102938,3.5125683 L 13.533528,6.2972732 z"
+     id="path699"
+     sodipodi:nodetypes="cccccccccccc"
+     style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.599944;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" />
+</svg>

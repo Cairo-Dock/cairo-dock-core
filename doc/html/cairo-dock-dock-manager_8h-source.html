@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock:  Fichier source de /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dock-manager.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dock-manager.h</h1><a href="cairo-dock-dock-manager_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
+<a name="l00002"></a>00002 <span class="preprocessor">#ifndef __CAIRO_DOCK_DOCK_MANAGER__</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span><span class="preprocessor">#define  __CAIRO_DOCK_DOCK_MANAGER__</span>
+<a name="l00004"></a>00004 <span class="preprocessor"></span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;glib.h&gt;</span>
+<a name="l00006"></a>00006 
+<a name="l00007"></a>00007 <span class="preprocessor">#include "<a class="code" href="cairo-dock-struct_8h.html">cairo-dock-struct.h</a>"</span>
+<a name="l00008"></a>00008 
+<a name="l00009"></a>00009 
+<a name="l00013"></a>00013 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-manager_8h.html#2b5fdbe43f5c55b54c69906a4ac314be">cairo_dock_initialize_dock_manager</a> (<span class="keywordtype">void</span>);
+<a name="l00014"></a>00014 
+<a name="l00021"></a>00021 <a class="code" href="struct__CairoDock.html">CairoDock</a> *<a class="code" href="cairo-dock-dock-manager_8h.html#31a579503c8f440c0130a4c3e82d9e1f">cairo_dock_register_dock</a> (<span class="keyword">const</span> gchar *cDockName, <a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00026"></a>00026 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-manager_8h.html#3d33656011e57eb7c7215b84ae6792de">cairo_dock_unregister_dock</a> (<span class="keyword">const</span> gchar *cDockName);
+<a name="l00030"></a>00030 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-manager_8h.html#a4541ce085111c634c9c947df0aa0098">cairo_dock_reset_docks_table</a> (<span class="keywordtype">void</span>);
+<a name="l00031"></a>00031 
+<a name="l00032"></a>00032 
+<a name="l00038"></a>00038 <span class="keyword">const</span> gchar *<a class="code" href="cairo-dock-dock-manager_8h.html#9989be0544735933310a229cae3c1f9a">cairo_dock_search_dock_name</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00044"></a>00044 <a class="code" href="struct__CairoDock.html">CairoDock</a> *<a class="code" href="cairo-dock-dock-manager_8h.html#fb5a5ccee0196d5332226f4c548594bc">cairo_dock_search_dock_from_name</a> (<span class="keyword">const</span> gchar *cDockName);
+<a name="l00051"></a>00051 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-dock-manager_8h.html#0e45ba62e4c156427a36c43d01001797">cairo_dock_search_icon_pointing_on_dock</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="code" href="struct__CairoDock.html">CairoDock</a> **pParentDock);
+<a name="l00057"></a>00057 <a class="code" href="struct__CairoDockContainer.html">CairoDockContainer</a> *<a class="code" href="cairo-dock-dock-manager_8h.html#511c8944b1d87a6b40d4d675e2826ce9">cairo_dock_search_container_from_icon</a> (<a class="code" href="struct__Icon.html">Icon</a> *icon);
+<a name="l00058"></a>00058 
+<a name="l00059"></a>00059 
+<a name="l00060"></a>00060 
+<a name="l00066"></a>00066 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-manager_8h.html#235901a0980eedfdcc03f2ec54963310">cairo_dock_update_conf_file_with_containers</a> (GKeyFile *pKeyFile, gchar *cDesktopFilePath);
+<a name="l00067"></a>00067 
+<a name="l00068"></a>00068 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-manager_8h.html#6979dac261c0c7c8178fc9c654651254">cairo_dock_search_max_decorations_size</a> (<span class="keywordtype">int</span> *iWidth, <span class="keywordtype">int</span> *iHeight);
+<a name="l00069"></a>00069 
+<a name="l00074"></a>00074 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-manager_8h.html#883300022a42568b3565b9135e063ba3">cairo_dock_hide_parent_dock</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00079"></a>00079 gboolean <a class="code" href="cairo-dock-dock-manager_8h.html#5f3268886844cf7c952d229c6d9b3782">cairo_dock_hide_child_docks</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00083"></a>00083 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-manager_8h.html#aba395a26fa90f18d3264e879b3cc141">cairo_dock_reload_buffers_in_all_docks</a> (<span class="keywordtype">void</span>);
+<a name="l00090"></a>00090 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-manager_8h.html#2c0b1b0ae6feee6e9c2527f4efded7ec">cairo_dock_rename_dock</a> (<span class="keyword">const</span> gchar *cDockName, <a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, <span class="keyword">const</span> gchar *cNewName);
+<a name="l00091"></a>00091 
+<a name="l00092"></a>00092 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-manager_8h.html#1d16b5cb3e1c382cfe573b541da5ad85">cairo_dock_reset_all_views</a> (<span class="keywordtype">void</span>);
+<a name="l00093"></a>00093 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-manager_8h.html#734dac3576b37663ec1519bf1f4fae14">cairo_dock_set_all_views_to_default</a> (<span class="keywordtype">void</span>);
+<a name="l00094"></a>00094 
+<a name="l00095"></a>00095 
+<a name="l00096"></a>00096 <span class="preprocessor">#endif</span>
+</pre></div><hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:15 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

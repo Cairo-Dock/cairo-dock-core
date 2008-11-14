@@ -1,0 +1,119 @@
+\section{Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-desklet.h}
+\label{cairo-dock-desklet_8h}\index{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-desklet.h@{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-desklet.h}}
+\subsection*{Macros}
+\begin{CompactItemize}
+\item 
+\#define {\bf CD\_\-NB\_\-ITER\_\-FOR\_\-GRADUATION}~10
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-IS\_\-DESKLET}(pContainer)~(pContainer != NULL \&\& pContainer $\rightarrow$ iType == CAIRO\_\-DOCK\_\-TYPE\_\-DESKLET)
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-DESKLET}(pContainer)~(({\bf CairoDockDesklet} $\ast$)pContainer)
+\end{CompactItemize}
+\subsection*{Fonctions}
+\begin{CompactItemize}
+\item 
+{\bf CairoDockDesklet} $\ast$ {\bf cairo\_\-dock\_\-create\_\-desklet} ({\bf Icon} $\ast$pIcon, GtkWidget $\ast$pInteractiveWidget, gboolean bOnWidgetLayer)
+\item 
+void {\bf cairo\_\-dock\_\-place\_\-desklet} ({\bf CairoDockDesklet} $\ast$pDesklet, {\bf CairoDockMinimalAppletConfig} $\ast$pMinimalConfig)
+\item 
+void {\bf cairo\_\-dock\_\-steal\_\-interactive\_\-widget\_\-from\_\-desklet} ({\bf CairoDockDesklet} $\ast$pDesklet)
+\item 
+void {\bf cairo\_\-dock\_\-free\_\-desklet} ({\bf CairoDockDesklet} $\ast$pDesklet)
+\item 
+void {\bf cairo\_\-dock\_\-hide\_\-desklet} ({\bf CairoDockDesklet} $\ast$pDesklet)
+\item 
+void {\bf cairo\_\-dock\_\-show\_\-desklet} ({\bf CairoDockDesklet} $\ast$pDesklet)
+\item 
+void {\bf cairo\_\-dock\_\-add\_\-interactive\_\-widget\_\-to\_\-desklet} (GtkWidget $\ast$pInteractiveWidget, {\bf CairoDockDesklet} $\ast$pDesklet)
+\item 
+void {\bf cairo\_\-dock\_\-set\_\-all\_\-desklets\_\-visible} (gboolean bOnWidgetLayerToo)
+\item 
+void {\bf cairo\_\-dock\_\-set\_\-desklets\_\-visibility\_\-to\_\-default} (void)
+\item 
+{\bf CairoDockDesklet} $\ast$ {\bf cairo\_\-dock\_\-get\_\-desklet\_\-by\_\-Xid} (Window Xid)
+\end{CompactItemize}
+
+
+\subsection{Documentation des macros}
+\index{cairo-dock-desklet.h@{cairo-dock-desklet.h}!CD_NB_ITER_FOR_GRADUATION@{CD\_\-NB\_\-ITER\_\-FOR\_\-GRADUATION}}
+\index{CD_NB_ITER_FOR_GRADUATION@{CD\_\-NB\_\-ITER\_\-FOR\_\-GRADUATION}!cairo-dock-desklet.h@{cairo-dock-desklet.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CD\_\-NB\_\-ITER\_\-FOR\_\-GRADUATION~10}\label{cairo-dock-desklet_8h_eed859d634690122c790c64427c9e2a5}
+
+
+\index{cairo-dock-desklet.h@{cairo-dock-desklet.h}!CAIRO_DOCK_IS_DESKLET@{CAIRO\_\-DOCK\_\-IS\_\-DESKLET}}
+\index{CAIRO_DOCK_IS_DESKLET@{CAIRO\_\-DOCK\_\-IS\_\-DESKLET}!cairo-dock-desklet.h@{cairo-dock-desklet.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-IS\_\-DESKLET(pContainer)~(pContainer != NULL \&\& pContainer $\rightarrow$ iType == CAIRO\_\-DOCK\_\-TYPE\_\-DESKLET)}\label{cairo-dock-desklet_8h_7d23b2629d7a93bc61bd65366d78fd9e}
+
+
+Teste si le container est un desklet. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pContainer}]le container. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]TRUE ssi le container a ete declare comme un desklet. \end{Desc}
+\index{cairo-dock-desklet.h@{cairo-dock-desklet.h}!CAIRO_DOCK_DESKLET@{CAIRO\_\-DOCK\_\-DESKLET}}
+\index{CAIRO_DOCK_DESKLET@{CAIRO\_\-DOCK\_\-DESKLET}!cairo-dock-desklet.h@{cairo-dock-desklet.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-DESKLET(pContainer)~(({\bf CairoDockDesklet} $\ast$)pContainer)}\label{cairo-dock-desklet_8h_2565e6cfafd6e1cfe34a9591766a888a}
+
+
+Caste un container en desklet. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pContainer}]le container. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]le desklet. \end{Desc}
+
+
+\subsection{Documentation des fonctions}
+\index{cairo-dock-desklet.h@{cairo-dock-desklet.h}!cairo_dock_create_desklet@{cairo\_\-dock\_\-create\_\-desklet}}
+\index{cairo_dock_create_desklet@{cairo\_\-dock\_\-create\_\-desklet}!cairo-dock-desklet.h@{cairo-dock-desklet.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockDesklet}$\ast$ cairo\_\-dock\_\-create\_\-desklet ({\bf Icon} $\ast$ {\em pIcon}, GtkWidget $\ast$ {\em pInteractiveWidget}, gboolean {\em bOnWidgetLayer})}\label{cairo-dock-desklet_8h_6c25fd7cef4032062715b53334142f7e}
+
+
+\index{cairo-dock-desklet.h@{cairo-dock-desklet.h}!cairo_dock_place_desklet@{cairo\_\-dock\_\-place\_\-desklet}}
+\index{cairo_dock_place_desklet@{cairo\_\-dock\_\-place\_\-desklet}!cairo-dock-desklet.h@{cairo-dock-desklet.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-place\_\-desklet ({\bf CairoDockDesklet} $\ast$ {\em pDesklet}, {\bf CairoDockMinimalAppletConfig} $\ast$ {\em pMinimalConfig})}\label{cairo-dock-desklet_8h_422a9f4892c4d57a1cb75ce19e4c7d46}
+
+
+\index{cairo-dock-desklet.h@{cairo-dock-desklet.h}!cairo_dock_steal_interactive_widget_from_desklet@{cairo\_\-dock\_\-steal\_\-interactive\_\-widget\_\-from\_\-desklet}}
+\index{cairo_dock_steal_interactive_widget_from_desklet@{cairo\_\-dock\_\-steal\_\-interactive\_\-widget\_\-from\_\-desklet}!cairo-dock-desklet.h@{cairo-dock-desklet.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-steal\_\-interactive\_\-widget\_\-from\_\-desklet ({\bf CairoDockDesklet} $\ast$ {\em pDesklet})}\label{cairo-dock-desklet_8h_18bb01cb41b985b38e3975c1d1d55ef1}
+
+
+\index{cairo-dock-desklet.h@{cairo-dock-desklet.h}!cairo_dock_free_desklet@{cairo\_\-dock\_\-free\_\-desklet}}
+\index{cairo_dock_free_desklet@{cairo\_\-dock\_\-free\_\-desklet}!cairo-dock-desklet.h@{cairo-dock-desklet.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-free\_\-desklet ({\bf CairoDockDesklet} $\ast$ {\em pDesklet})}\label{cairo-dock-desklet_8h_d716e2a115eaf77e3a180081962fe7d1}
+
+
+\index{cairo-dock-desklet.h@{cairo-dock-desklet.h}!cairo_dock_hide_desklet@{cairo\_\-dock\_\-hide\_\-desklet}}
+\index{cairo_dock_hide_desklet@{cairo\_\-dock\_\-hide\_\-desklet}!cairo-dock-desklet.h@{cairo-dock-desklet.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-hide\_\-desklet ({\bf CairoDockDesklet} $\ast$ {\em pDesklet})}\label{cairo-dock-desklet_8h_e070aa2f7ec1fbdd85757602310c11eb}
+
+
+\index{cairo-dock-desklet.h@{cairo-dock-desklet.h}!cairo_dock_show_desklet@{cairo\_\-dock\_\-show\_\-desklet}}
+\index{cairo_dock_show_desklet@{cairo\_\-dock\_\-show\_\-desklet}!cairo-dock-desklet.h@{cairo-dock-desklet.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-show\_\-desklet ({\bf CairoDockDesklet} $\ast$ {\em pDesklet})}\label{cairo-dock-desklet_8h_6ab81c30cf521da8ea2692d41c1d8e66}
+
+
+\index{cairo-dock-desklet.h@{cairo-dock-desklet.h}!cairo_dock_add_interactive_widget_to_desklet@{cairo\_\-dock\_\-add\_\-interactive\_\-widget\_\-to\_\-desklet}}
+\index{cairo_dock_add_interactive_widget_to_desklet@{cairo\_\-dock\_\-add\_\-interactive\_\-widget\_\-to\_\-desklet}!cairo-dock-desklet.h@{cairo-dock-desklet.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-add\_\-interactive\_\-widget\_\-to\_\-desklet (GtkWidget $\ast$ {\em pInteractiveWidget}, {\bf CairoDockDesklet} $\ast$ {\em pDesklet})}\label{cairo-dock-desklet_8h_b952f14665b804fe118ff2a6c18a3bbf}
+
+
+\index{cairo-dock-desklet.h@{cairo-dock-desklet.h}!cairo_dock_set_all_desklets_visible@{cairo\_\-dock\_\-set\_\-all\_\-desklets\_\-visible}}
+\index{cairo_dock_set_all_desklets_visible@{cairo\_\-dock\_\-set\_\-all\_\-desklets\_\-visible}!cairo-dock-desklet.h@{cairo-dock-desklet.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-set\_\-all\_\-desklets\_\-visible (gboolean {\em bOnWidgetLayerToo})}\label{cairo-dock-desklet_8h_7fd97c910ab88fd77b015e781632a56c}
+
+
+\index{cairo-dock-desklet.h@{cairo-dock-desklet.h}!cairo_dock_set_desklets_visibility_to_default@{cairo\_\-dock\_\-set\_\-desklets\_\-visibility\_\-to\_\-default}}
+\index{cairo_dock_set_desklets_visibility_to_default@{cairo\_\-dock\_\-set\_\-desklets\_\-visibility\_\-to\_\-default}!cairo-dock-desklet.h@{cairo-dock-desklet.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-set\_\-desklets\_\-visibility\_\-to\_\-default (void)}\label{cairo-dock-desklet_8h_f63efd8dc88d025be5dc1e771318b8bd}
+
+
+\index{cairo-dock-desklet.h@{cairo-dock-desklet.h}!cairo_dock_get_desklet_by_Xid@{cairo\_\-dock\_\-get\_\-desklet\_\-by\_\-Xid}}
+\index{cairo_dock_get_desklet_by_Xid@{cairo\_\-dock\_\-get\_\-desklet\_\-by\_\-Xid}!cairo-dock-desklet.h@{cairo-dock-desklet.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockDesklet}$\ast$ cairo\_\-dock\_\-get\_\-desklet\_\-by\_\-Xid (Window {\em Xid})}\label{cairo-dock-desklet_8h_a59f1f01fb9e80e56114743f5c0d9d1e}
+
+

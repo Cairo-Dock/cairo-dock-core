@@ -1,0 +1,101 @@
+\section{Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-gauge.h}
+\label{cairo-dock-gauge_8h}\index{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-gauge.h@{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-gauge.h}}
+\subsection*{Structures de données}
+\begin{CompactItemize}
+\item 
+struct {\bf GaugeImage}
+\item 
+struct {\bf GaugeIndicator}
+\item 
+struct {\bf Gauge}
+\end{CompactItemize}
+\subsection*{Fonctions}
+\begin{CompactItemize}
+\item 
+void {\bf cd\_\-xml\_\-open\_\-file} (gchar $\ast$filePath, gchar $\ast$mainNodeName, xmlDocPtr $\ast$xmlDoc, xmlNodePtr $\ast$node)
+\item 
+{\bf Gauge} $\ast$ {\bf init\_\-cd\_\-Gauge} (cairo\_\-t $\ast$pSourceContext, gchar $\ast$themeName, int iWidth, int iHeight)
+\item 
+{\bf GaugeImage} $\ast$ {\bf init\_\-cd\_\-GaugeImage} (gchar $\ast$sImagePath)
+\item 
+void {\bf make\_\-cd\_\-Gauge} (cairo\_\-t $\ast$pSourceContext, {\bf CairoDock} $\ast$pDock, {\bf Icon} $\ast$pIcon, {\bf Gauge} $\ast$pGauge, double dValue)
+\item 
+void {\bf make\_\-cd\_\-Gauge\_\-multiValue} (cairo\_\-t $\ast$pSourceContext, {\bf CairoDock} $\ast$pDock, {\bf Icon} $\ast$pIcon, {\bf Gauge} $\ast$pGauge, GList $\ast$valueList)
+\item 
+void {\bf draw\_\-cd\_\-Gauge\_\-needle} (cairo\_\-t $\ast$pSourceContext, {\bf Gauge} $\ast$pGauge, {\bf GaugeIndicator} $\ast$pGaugeIndicator, double dValue)
+\item 
+void {\bf draw\_\-cd\_\-Gauge\_\-image} (cairo\_\-t $\ast$pSourceContext, {\bf Gauge} $\ast$pGauge, {\bf GaugeIndicator} $\ast$pGaugeIndicator, double dValue)
+\item 
+void {\bf draw\_\-cd\_\-GaugeImage} (cairo\_\-t $\ast$pSourceContext, {\bf GaugeImage} $\ast$pGaugeImage, int iWidth, int iHeight)
+\item 
+void {\bf free\_\-cd\_\-GaugeImage} ({\bf GaugeImage} $\ast$pGaugeImage)
+\item 
+void {\bf free\_\-cd\_\-GaugeIndicator} ({\bf GaugeIndicator} $\ast$pGaugeIndicator)
+\item 
+void {\bf free\_\-cd\_\-Gauge} ({\bf Gauge} $\ast$pGauge)
+\item 
+gchar $\ast$ {\bf cairo\_\-dock\_\-get\_\-gauge\_\-key\_\-value} (gchar $\ast$cAppletConfFilePath, GKeyFile $\ast$pKeyFile, gchar $\ast$cGroupName, gchar $\ast$cKeyName, gboolean $\ast$bFlushConfFileNeeded, gchar $\ast$cDefaultThemeName)
+\end{CompactItemize}
+
+
+\subsection{Documentation des fonctions}
+\index{cairo-dock-gauge.h@{cairo-dock-gauge.h}!cd_xml_open_file@{cd\_\-xml\_\-open\_\-file}}
+\index{cd_xml_open_file@{cd\_\-xml\_\-open\_\-file}!cairo-dock-gauge.h@{cairo-dock-gauge.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cd\_\-xml\_\-open\_\-file (gchar $\ast$ {\em filePath}, gchar $\ast$ {\em mainNodeName}, xmlDocPtr $\ast$ {\em xmlDoc}, xmlNodePtr $\ast$ {\em node})}\label{cairo-dock-gauge_8h_f1d50bee7439f7ace641e976f2cc747f}
+
+
+\index{cairo-dock-gauge.h@{cairo-dock-gauge.h}!init_cd_Gauge@{init\_\-cd\_\-Gauge}}
+\index{init_cd_Gauge@{init\_\-cd\_\-Gauge}!cairo-dock-gauge.h@{cairo-dock-gauge.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Gauge}$\ast$ init\_\-cd\_\-Gauge (cairo\_\-t $\ast$ {\em pSourceContext}, gchar $\ast$ {\em themeName}, int {\em iWidth}, int {\em iHeight})}\label{cairo-dock-gauge_8h_7195e5051e1688effb561dee2e6b0171}
+
+
+\index{cairo-dock-gauge.h@{cairo-dock-gauge.h}!init_cd_GaugeImage@{init\_\-cd\_\-GaugeImage}}
+\index{init_cd_GaugeImage@{init\_\-cd\_\-GaugeImage}!cairo-dock-gauge.h@{cairo-dock-gauge.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf GaugeImage}$\ast$ init\_\-cd\_\-GaugeImage (gchar $\ast$ {\em sImagePath})}\label{cairo-dock-gauge_8h_b3fc186eed5a1e27bdbac4e00ace0cea}
+
+
+\index{cairo-dock-gauge.h@{cairo-dock-gauge.h}!make_cd_Gauge@{make\_\-cd\_\-Gauge}}
+\index{make_cd_Gauge@{make\_\-cd\_\-Gauge}!cairo-dock-gauge.h@{cairo-dock-gauge.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void make\_\-cd\_\-Gauge (cairo\_\-t $\ast$ {\em pSourceContext}, {\bf CairoDock} $\ast$ {\em pDock}, {\bf Icon} $\ast$ {\em pIcon}, {\bf Gauge} $\ast$ {\em pGauge}, double {\em dValue})}\label{cairo-dock-gauge_8h_c482c6078596008460b89d5974c61ee5}
+
+
+\index{cairo-dock-gauge.h@{cairo-dock-gauge.h}!make_cd_Gauge_multiValue@{make\_\-cd\_\-Gauge\_\-multiValue}}
+\index{make_cd_Gauge_multiValue@{make\_\-cd\_\-Gauge\_\-multiValue}!cairo-dock-gauge.h@{cairo-dock-gauge.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void make\_\-cd\_\-Gauge\_\-multiValue (cairo\_\-t $\ast$ {\em pSourceContext}, {\bf CairoDock} $\ast$ {\em pDock}, {\bf Icon} $\ast$ {\em pIcon}, {\bf Gauge} $\ast$ {\em pGauge}, GList $\ast$ {\em valueList})}\label{cairo-dock-gauge_8h_74976e18a5b17103f4eb55918f2a0629}
+
+
+\index{cairo-dock-gauge.h@{cairo-dock-gauge.h}!draw_cd_Gauge_needle@{draw\_\-cd\_\-Gauge\_\-needle}}
+\index{draw_cd_Gauge_needle@{draw\_\-cd\_\-Gauge\_\-needle}!cairo-dock-gauge.h@{cairo-dock-gauge.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void draw\_\-cd\_\-Gauge\_\-needle (cairo\_\-t $\ast$ {\em pSourceContext}, {\bf Gauge} $\ast$ {\em pGauge}, {\bf GaugeIndicator} $\ast$ {\em pGaugeIndicator}, double {\em dValue})}\label{cairo-dock-gauge_8h_65fa59d77c21c4737c2c06e179654bd2}
+
+
+\index{cairo-dock-gauge.h@{cairo-dock-gauge.h}!draw_cd_Gauge_image@{draw\_\-cd\_\-Gauge\_\-image}}
+\index{draw_cd_Gauge_image@{draw\_\-cd\_\-Gauge\_\-image}!cairo-dock-gauge.h@{cairo-dock-gauge.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void draw\_\-cd\_\-Gauge\_\-image (cairo\_\-t $\ast$ {\em pSourceContext}, {\bf Gauge} $\ast$ {\em pGauge}, {\bf GaugeIndicator} $\ast$ {\em pGaugeIndicator}, double {\em dValue})}\label{cairo-dock-gauge_8h_71d18b9da9766cdc46f04b8aa6211e53}
+
+
+\index{cairo-dock-gauge.h@{cairo-dock-gauge.h}!draw_cd_GaugeImage@{draw\_\-cd\_\-GaugeImage}}
+\index{draw_cd_GaugeImage@{draw\_\-cd\_\-GaugeImage}!cairo-dock-gauge.h@{cairo-dock-gauge.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void draw\_\-cd\_\-GaugeImage (cairo\_\-t $\ast$ {\em pSourceContext}, {\bf GaugeImage} $\ast$ {\em pGaugeImage}, int {\em iWidth}, int {\em iHeight})}\label{cairo-dock-gauge_8h_24ad250473a72a1a2eb2f351cd68f67c}
+
+
+\index{cairo-dock-gauge.h@{cairo-dock-gauge.h}!free_cd_GaugeImage@{free\_\-cd\_\-GaugeImage}}
+\index{free_cd_GaugeImage@{free\_\-cd\_\-GaugeImage}!cairo-dock-gauge.h@{cairo-dock-gauge.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void free\_\-cd\_\-GaugeImage ({\bf GaugeImage} $\ast$ {\em pGaugeImage})}\label{cairo-dock-gauge_8h_971dba9a825940d090ad096b0630d1d4}
+
+
+\index{cairo-dock-gauge.h@{cairo-dock-gauge.h}!free_cd_GaugeIndicator@{free\_\-cd\_\-GaugeIndicator}}
+\index{free_cd_GaugeIndicator@{free\_\-cd\_\-GaugeIndicator}!cairo-dock-gauge.h@{cairo-dock-gauge.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void free\_\-cd\_\-GaugeIndicator ({\bf GaugeIndicator} $\ast$ {\em pGaugeIndicator})}\label{cairo-dock-gauge_8h_f9e015874c6c2f5a9b9b76af3c56c6b1}
+
+
+\index{cairo-dock-gauge.h@{cairo-dock-gauge.h}!free_cd_Gauge@{free\_\-cd\_\-Gauge}}
+\index{free_cd_Gauge@{free\_\-cd\_\-Gauge}!cairo-dock-gauge.h@{cairo-dock-gauge.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void free\_\-cd\_\-Gauge ({\bf Gauge} $\ast$ {\em pGauge})}\label{cairo-dock-gauge_8h_48c40c3ae7afd29d088b8de6de30cfc7}
+
+
+\index{cairo-dock-gauge.h@{cairo-dock-gauge.h}!cairo_dock_get_gauge_key_value@{cairo\_\-dock\_\-get\_\-gauge\_\-key\_\-value}}
+\index{cairo_dock_get_gauge_key_value@{cairo\_\-dock\_\-get\_\-gauge\_\-key\_\-value}!cairo-dock-gauge.h@{cairo-dock-gauge.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gchar$\ast$ cairo\_\-dock\_\-get\_\-gauge\_\-key\_\-value (gchar $\ast$ {\em cAppletConfFilePath}, GKeyFile $\ast$ {\em pKeyFile}, gchar $\ast$ {\em cGroupName}, gchar $\ast$ {\em cKeyName}, gboolean $\ast$ {\em bFlushConfFileNeeded}, gchar $\ast$ {\em cDefaultThemeName})}\label{cairo-dock-gauge_8h_fda472bf9f6297aad6d09f819945350b}
+
+

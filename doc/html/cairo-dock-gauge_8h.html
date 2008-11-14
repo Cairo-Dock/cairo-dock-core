@@ -1,0 +1,499 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-gauge.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-gauge.h</h1>
+<p>
+<a href="cairo-dock-gauge_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Structures de données</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGaugeImage.html">GaugeImage</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGaugeIndicator.html">GaugeIndicator</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGauge.html">Gauge</a></td></tr>
+
+<tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gauge_8h.html#f1d50bee7439f7ace641e976f2cc747f">cd_xml_open_file</a> (gchar *filePath, gchar *mainNodeName, xmlDocPtr *xmlDoc, xmlNodePtr *node)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="structGauge.html">Gauge</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gauge_8h.html#7195e5051e1688effb561dee2e6b0171">init_cd_Gauge</a> (cairo_t *pSourceContext, gchar *themeName, int iWidth, int iHeight)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="structGaugeImage.html">GaugeImage</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gauge_8h.html#b3fc186eed5a1e27bdbac4e00ace0cea">init_cd_GaugeImage</a> (gchar *sImagePath)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gauge_8h.html#c482c6078596008460b89d5974c61ee5">make_cd_Gauge</a> (cairo_t *pSourceContext, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="structGauge.html">Gauge</a> *pGauge, double dValue)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gauge_8h.html#74976e18a5b17103f4eb55918f2a0629">make_cd_Gauge_multiValue</a> (cairo_t *pSourceContext, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="structGauge.html">Gauge</a> *pGauge, GList *valueList)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gauge_8h.html#65fa59d77c21c4737c2c06e179654bd2">draw_cd_Gauge_needle</a> (cairo_t *pSourceContext, <a class="el" href="structGauge.html">Gauge</a> *pGauge, <a class="el" href="structGaugeIndicator.html">GaugeIndicator</a> *pGaugeIndicator, double dValue)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gauge_8h.html#71d18b9da9766cdc46f04b8aa6211e53">draw_cd_Gauge_image</a> (cairo_t *pSourceContext, <a class="el" href="structGauge.html">Gauge</a> *pGauge, <a class="el" href="structGaugeIndicator.html">GaugeIndicator</a> *pGaugeIndicator, double dValue)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gauge_8h.html#24ad250473a72a1a2eb2f351cd68f67c">draw_cd_GaugeImage</a> (cairo_t *pSourceContext, <a class="el" href="structGaugeImage.html">GaugeImage</a> *pGaugeImage, int iWidth, int iHeight)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gauge_8h.html#971dba9a825940d090ad096b0630d1d4">free_cd_GaugeImage</a> (<a class="el" href="structGaugeImage.html">GaugeImage</a> *pGaugeImage)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gauge_8h.html#f9e015874c6c2f5a9b9b76af3c56c6b1">free_cd_GaugeIndicator</a> (<a class="el" href="structGaugeIndicator.html">GaugeIndicator</a> *pGaugeIndicator)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gauge_8h.html#48c40c3ae7afd29d088b8de6de30cfc7">free_cd_Gauge</a> (<a class="el" href="structGauge.html">Gauge</a> *pGauge)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gauge_8h.html#fda472bf9f6297aad6d09f819945350b">cairo_dock_get_gauge_key_value</a> (gchar *cAppletConfFilePath, GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName)</td></tr>
+
+</table>
+<hr><h2>Documentation des fonctions</h2>
+<a class="anchor" name="f1d50bee7439f7ace641e976f2cc747f"></a><!-- doxytag: member="cairo-dock-gauge.h::cd_xml_open_file" ref="f1d50bee7439f7ace641e976f2cc747f" args="(gchar *filePath, gchar *mainNodeName, xmlDocPtr *xmlDoc, xmlNodePtr *node)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cd_xml_open_file           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>filePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>mainNodeName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">xmlDocPtr *&nbsp;</td>
+          <td class="paramname"> <em>xmlDoc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">xmlNodePtr *&nbsp;</td>
+          <td class="paramname"> <em>node</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="7195e5051e1688effb561dee2e6b0171"></a><!-- doxytag: member="cairo-dock-gauge.h::init_cd_Gauge" ref="7195e5051e1688effb561dee2e6b0171" args="(cairo_t *pSourceContext, gchar *themeName, int iWidth, int iHeight)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structGauge.html">Gauge</a>* init_cd_Gauge           </td>
+          <td>(</td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>themeName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>iWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>iHeight</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="b3fc186eed5a1e27bdbac4e00ace0cea"></a><!-- doxytag: member="cairo-dock-gauge.h::init_cd_GaugeImage" ref="b3fc186eed5a1e27bdbac4e00ace0cea" args="(gchar *sImagePath)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structGaugeImage.html">GaugeImage</a>* init_cd_GaugeImage           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>sImagePath</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="c482c6078596008460b89d5974c61ee5"></a><!-- doxytag: member="cairo-dock-gauge.h::make_cd_Gauge" ref="c482c6078596008460b89d5974c61ee5" args="(cairo_t *pSourceContext, CairoDock *pDock, Icon *pIcon, Gauge *pGauge, double dValue)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void make_cd_Gauge           </td>
+          <td>(</td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structGauge.html">Gauge</a> *&nbsp;</td>
+          <td class="paramname"> <em>pGauge</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>dValue</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="74976e18a5b17103f4eb55918f2a0629"></a><!-- doxytag: member="cairo-dock-gauge.h::make_cd_Gauge_multiValue" ref="74976e18a5b17103f4eb55918f2a0629" args="(cairo_t *pSourceContext, CairoDock *pDock, Icon *pIcon, Gauge *pGauge, GList *valueList)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void make_cd_Gauge_multiValue           </td>
+          <td>(</td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structGauge.html">Gauge</a> *&nbsp;</td>
+          <td class="paramname"> <em>pGauge</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GList *&nbsp;</td>
+          <td class="paramname"> <em>valueList</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="65fa59d77c21c4737c2c06e179654bd2"></a><!-- doxytag: member="cairo-dock-gauge.h::draw_cd_Gauge_needle" ref="65fa59d77c21c4737c2c06e179654bd2" args="(cairo_t *pSourceContext, Gauge *pGauge, GaugeIndicator *pGaugeIndicator, double dValue)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void draw_cd_Gauge_needle           </td>
+          <td>(</td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structGauge.html">Gauge</a> *&nbsp;</td>
+          <td class="paramname"> <em>pGauge</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structGaugeIndicator.html">GaugeIndicator</a> *&nbsp;</td>
+          <td class="paramname"> <em>pGaugeIndicator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>dValue</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="71d18b9da9766cdc46f04b8aa6211e53"></a><!-- doxytag: member="cairo-dock-gauge.h::draw_cd_Gauge_image" ref="71d18b9da9766cdc46f04b8aa6211e53" args="(cairo_t *pSourceContext, Gauge *pGauge, GaugeIndicator *pGaugeIndicator, double dValue)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void draw_cd_Gauge_image           </td>
+          <td>(</td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structGauge.html">Gauge</a> *&nbsp;</td>
+          <td class="paramname"> <em>pGauge</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structGaugeIndicator.html">GaugeIndicator</a> *&nbsp;</td>
+          <td class="paramname"> <em>pGaugeIndicator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>dValue</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="24ad250473a72a1a2eb2f351cd68f67c"></a><!-- doxytag: member="cairo-dock-gauge.h::draw_cd_GaugeImage" ref="24ad250473a72a1a2eb2f351cd68f67c" args="(cairo_t *pSourceContext, GaugeImage *pGaugeImage, int iWidth, int iHeight)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void draw_cd_GaugeImage           </td>
+          <td>(</td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structGaugeImage.html">GaugeImage</a> *&nbsp;</td>
+          <td class="paramname"> <em>pGaugeImage</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>iWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>iHeight</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="971dba9a825940d090ad096b0630d1d4"></a><!-- doxytag: member="cairo-dock-gauge.h::free_cd_GaugeImage" ref="971dba9a825940d090ad096b0630d1d4" args="(GaugeImage *pGaugeImage)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void free_cd_GaugeImage           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structGaugeImage.html">GaugeImage</a> *&nbsp;</td>
+          <td class="paramname"> <em>pGaugeImage</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="f9e015874c6c2f5a9b9b76af3c56c6b1"></a><!-- doxytag: member="cairo-dock-gauge.h::free_cd_GaugeIndicator" ref="f9e015874c6c2f5a9b9b76af3c56c6b1" args="(GaugeIndicator *pGaugeIndicator)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void free_cd_GaugeIndicator           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structGaugeIndicator.html">GaugeIndicator</a> *&nbsp;</td>
+          <td class="paramname"> <em>pGaugeIndicator</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="48c40c3ae7afd29d088b8de6de30cfc7"></a><!-- doxytag: member="cairo-dock-gauge.h::free_cd_Gauge" ref="48c40c3ae7afd29d088b8de6de30cfc7" args="(Gauge *pGauge)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void free_cd_Gauge           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structGauge.html">Gauge</a> *&nbsp;</td>
+          <td class="paramname"> <em>pGauge</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="fda472bf9f6297aad6d09f819945350b"></a><!-- doxytag: member="cairo-dock-gauge.h::cairo_dock_get_gauge_key_value" ref="fda472bf9f6297aad6d09f819945350b" args="(gchar *cAppletConfFilePath, GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gchar* cairo_dock_get_gauge_key_value           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cAppletConfFilePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GKeyFile *&nbsp;</td>
+          <td class="paramname"> <em>pKeyFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cGroupName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cKeyName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean *&nbsp;</td>
+          <td class="paramname"> <em>bFlushConfFileNeeded</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cDefaultThemeName</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

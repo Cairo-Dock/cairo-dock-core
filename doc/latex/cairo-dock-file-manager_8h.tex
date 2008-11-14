@@ -1,0 +1,203 @@
+\section{Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-file-manager.h}
+\label{cairo-dock-file-manager_8h}\index{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-file-manager.h@{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-file-manager.h}}
+\subsection*{Macros}
+\begin{CompactItemize}
+\item 
+\#define {\bf cairo\_\-dock\_\-fm\_\-add\_\-monitor}(pIcon)~cairo\_\-dock\_\-fm\_\-add\_\-monitor\_\-full (pIcon $\rightarrow$ cBaseURI, (pIcon $\rightarrow$ pSubDock != NULL), (pIcon $\rightarrow$ iVolumeID != 0 ? pIcon $\rightarrow$ acCommand : NULL), ({\bf CairoDockFMMonitorCallback}) cairo\_\-dock\_\-fm\_\-action\_\-on\_\-file\_\-event, (gpointer) pIcon)
+\item 
+\#define {\bf cairo\_\-dock\_\-fm\_\-remove\_\-monitor}(pIcon)~cairo\_\-dock\_\-fm\_\-remove\_\-monitor\_\-full (pIcon $\rightarrow$ cBaseURI, (pIcon $\rightarrow$ pSubDock != NULL), (pIcon $\rightarrow$ iVolumeID != 0 ? pIcon $\rightarrow$ acCommand : NULL))
+\item 
+\#define {\bf cairo\_\-dock\_\-fm\_\-mount}(icon, pDock)~cairo\_\-dock\_\-fm\_\-mount\_\-full (icon $\rightarrow$ acCommand, icon $\rightarrow$ iVolumeID, cairo\_\-dock\_\-fm\_\-action\_\-after\_\-mounting, icon, pDock)
+\item 
+\#define {\bf cairo\_\-dock\_\-fm\_\-unmount}(icon, pDock)~cairo\_\-dock\_\-fm\_\-unmount\_\-full (icon $\rightarrow$ acCommand, icon $\rightarrow$ iVolumeID, cairo\_\-dock\_\-fm\_\-action\_\-after\_\-mounting, icon, pDock)
+\end{CompactItemize}
+\subsection*{Fonctions}
+\begin{CompactItemize}
+\item 
+void {\bf cairo\_\-dock\_\-fm\_\-register\_\-vfs\_\-backend} ({\bf CairoDockVFSBackend} $\ast$pVFSBackend)
+\item 
+GList $\ast$ {\bf cairo\_\-dock\_\-fm\_\-list\_\-directory} (const gchar $\ast$cURI, {\bf CairoDockFMSortType} g\_\-fm\_\-iSortType, int iNewIconsType, gboolean bListHiddenFiles, gchar $\ast$$\ast$cFullURI)
+\item 
+gboolean {\bf cairo\_\-dock\_\-fm\_\-get\_\-file\_\-info} (const gchar $\ast$cBaseURI, gchar $\ast$$\ast$cName, gchar $\ast$$\ast$cURI, gchar $\ast$$\ast$cIconName, gboolean $\ast$bIsDirectory, int $\ast$iVolumeID, double $\ast$fOrder, {\bf CairoDockFMSortType} iSortType)
+\item 
+gboolean {\bf cairo\_\-dock\_\-fm\_\-get\_\-file\_\-properties} (const gchar $\ast$cURI, guint64 $\ast$iSize, time\_\-t $\ast$iLastModificationTime, gchar $\ast$$\ast$cMimeType, int $\ast$iUID, int $\ast$iGID, int $\ast$iPermissionsMask)
+\item 
+gboolean {\bf cairo\_\-dock\_\-fm\_\-launch\_\-uri} (const gchar $\ast$cURI)
+\item 
+gboolean {\bf cairo\_\-dock\_\-fm\_\-add\_\-monitor\_\-full} (const gchar $\ast$cURI, gboolean bDirectory, const gchar $\ast$cMountedURI, {\bf CairoDockFMMonitorCallback} pCallback, gpointer data)
+\item 
+gboolean {\bf cairo\_\-dock\_\-fm\_\-remove\_\-monitor\_\-full} (const gchar $\ast$cURI, gboolean bDirectory, const gchar $\ast$cMountedURI)
+\item 
+gboolean {\bf cairo\_\-dock\_\-fm\_\-move\_\-file} (const gchar $\ast$cURI, const gchar $\ast$cDirectoryURI)
+\item 
+gboolean {\bf cairo\_\-dock\_\-fm\_\-mount\_\-full} (const gchar $\ast$cURI, int iVolumeID, {\bf CairoDockFMMountCallback} pCallback, {\bf Icon} $\ast$icon, {\bf CairoDock} $\ast$pDock)
+\item 
+gboolean {\bf cairo\_\-dock\_\-fm\_\-unmount\_\-full} (const gchar $\ast$cURI, int iVolumeID, {\bf CairoDockFMMountCallback} pCallback, {\bf Icon} $\ast$icon, {\bf CairoDock} $\ast$pDock)
+\item 
+gchar $\ast$ {\bf cairo\_\-dock\_\-fm\_\-is\_\-mounted} (const gchar $\ast$cURI, gboolean $\ast$bIsMounted)
+\item 
+gboolean {\bf cairo\_\-dock\_\-fm\_\-delete\_\-file} (const gchar $\ast$cURI)
+\item 
+gboolean {\bf cairo\_\-dock\_\-fm\_\-rename\_\-file} (const gchar $\ast$cOldURI, const gchar $\ast$cNewName)
+\item 
+gchar $\ast$ {\bf cairo\_\-dock\_\-fm\_\-get\_\-trash\_\-path} (const gchar $\ast$cNearURI, gboolean bCreateIfNecessary)
+\item 
+gchar $\ast$ {\bf cairo\_\-dock\_\-fm\_\-get\_\-desktop\_\-path} (void)
+\item 
+gboolean {\bf cairo\_\-dock\_\-fm\_\-logout} (void)
+\item 
+gboolean {\bf cairo\_\-dock\_\-fm\_\-setup\_\-time} (void)
+\item 
+{\bf Icon} $\ast$ {\bf cairo\_\-dock\_\-fm\_\-create\_\-icon\_\-from\_\-URI} (const gchar $\ast$cURI, {\bf CairoDock} $\ast$pDock)
+\item 
+void {\bf cairo\_\-dock\_\-fm\_\-create\_\-dock\_\-from\_\-directory} ({\bf Icon} $\ast$pIcon)
+\item 
+void {\bf cairo\_\-dock\_\-fm\_\-manage\_\-event\_\-on\_\-file} ({\bf CairoDockFMEventType} iEventType, const gchar $\ast$cURI, {\bf Icon} $\ast$pIcon, {\bf CairoDockIconType} iTypeOnCreation)
+\item 
+void {\bf cairo\_\-dock\_\-fm\_\-action\_\-on\_\-file\_\-event} ({\bf CairoDockFMEventType} iEventType, const gchar $\ast$cURI, {\bf Icon} $\ast$pIcon)
+\item 
+void {\bf cairo\_\-dock\_\-fm\_\-action\_\-after\_\-mounting} (gboolean bMounting, gboolean bSuccess, const gchar $\ast$cName, {\bf Icon} $\ast$icon, {\bf CairoDock} $\ast$pDock)
+\item 
+gboolean {\bf cairo\_\-dock\_\-fm\_\-move\_\-into\_\-directory} (const gchar $\ast$cURI, {\bf Icon} $\ast$icon, {\bf CairoDock} $\ast$pDock)
+\end{CompactItemize}
+
+
+\subsection{Documentation des macros}
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_add_monitor@{cairo\_\-dock\_\-fm\_\-add\_\-monitor}}
+\index{cairo_dock_fm_add_monitor@{cairo\_\-dock\_\-fm\_\-add\_\-monitor}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cairo\_\-dock\_\-fm\_\-add\_\-monitor(pIcon)~cairo\_\-dock\_\-fm\_\-add\_\-monitor\_\-full (pIcon $\rightarrow$ cBaseURI, (pIcon $\rightarrow$ pSubDock != NULL), (pIcon $\rightarrow$ iVolumeID != 0 ? pIcon $\rightarrow$ acCommand : NULL), ({\bf CairoDockFMMonitorCallback}) cairo\_\-dock\_\-fm\_\-action\_\-on\_\-file\_\-event, (gpointer) pIcon)}\label{cairo-dock-file-manager_8h_efc75e98230531c171d33d40cc3f2abb}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_remove_monitor@{cairo\_\-dock\_\-fm\_\-remove\_\-monitor}}
+\index{cairo_dock_fm_remove_monitor@{cairo\_\-dock\_\-fm\_\-remove\_\-monitor}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cairo\_\-dock\_\-fm\_\-remove\_\-monitor(pIcon)~cairo\_\-dock\_\-fm\_\-remove\_\-monitor\_\-full (pIcon $\rightarrow$ cBaseURI, (pIcon $\rightarrow$ pSubDock != NULL), (pIcon $\rightarrow$ iVolumeID != 0 ? pIcon $\rightarrow$ acCommand : NULL))}\label{cairo-dock-file-manager_8h_29d9e02536a078301b54a109e0afeca8}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_mount@{cairo\_\-dock\_\-fm\_\-mount}}
+\index{cairo_dock_fm_mount@{cairo\_\-dock\_\-fm\_\-mount}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cairo\_\-dock\_\-fm\_\-mount(icon, pDock)~cairo\_\-dock\_\-fm\_\-mount\_\-full (icon $\rightarrow$ acCommand, icon $\rightarrow$ iVolumeID, cairo\_\-dock\_\-fm\_\-action\_\-after\_\-mounting, icon, pDock)}\label{cairo-dock-file-manager_8h_744d73bc4ec2a0ad9587526998d0ae40}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_unmount@{cairo\_\-dock\_\-fm\_\-unmount}}
+\index{cairo_dock_fm_unmount@{cairo\_\-dock\_\-fm\_\-unmount}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cairo\_\-dock\_\-fm\_\-unmount(icon, pDock)~cairo\_\-dock\_\-fm\_\-unmount\_\-full (icon $\rightarrow$ acCommand, icon $\rightarrow$ iVolumeID, cairo\_\-dock\_\-fm\_\-action\_\-after\_\-mounting, icon, pDock)}\label{cairo-dock-file-manager_8h_b3d8f4db30fd8bdbd1c78f33dc8190d8}
+
+
+
+
+\subsection{Documentation des fonctions}
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_register_vfs_backend@{cairo\_\-dock\_\-fm\_\-register\_\-vfs\_\-backend}}
+\index{cairo_dock_fm_register_vfs_backend@{cairo\_\-dock\_\-fm\_\-register\_\-vfs\_\-backend}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-fm\_\-register\_\-vfs\_\-backend ({\bf CairoDockVFSBackend} $\ast$ {\em pVFSBackend})}\label{cairo-dock-file-manager_8h_550e7883243efc448cf21a3a45d3351f}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_list_directory@{cairo\_\-dock\_\-fm\_\-list\_\-directory}}
+\index{cairo_dock_fm_list_directory@{cairo\_\-dock\_\-fm\_\-list\_\-directory}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}GList$\ast$ cairo\_\-dock\_\-fm\_\-list\_\-directory (const gchar $\ast$ {\em cURI}, {\bf CairoDockFMSortType} {\em g\_\-fm\_\-iSortType}, int {\em iNewIconsType}, gboolean {\em bListHiddenFiles}, gchar $\ast$$\ast$ {\em cFullURI})}\label{cairo-dock-file-manager_8h_83f7ed2d2f2bca5b47469a3966404c8c}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_get_file_info@{cairo\_\-dock\_\-fm\_\-get\_\-file\_\-info}}
+\index{cairo_dock_fm_get_file_info@{cairo\_\-dock\_\-fm\_\-get\_\-file\_\-info}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-fm\_\-get\_\-file\_\-info (const gchar $\ast$ {\em cBaseURI}, gchar $\ast$$\ast$ {\em cName}, gchar $\ast$$\ast$ {\em cURI}, gchar $\ast$$\ast$ {\em cIconName}, gboolean $\ast$ {\em bIsDirectory}, int $\ast$ {\em iVolumeID}, double $\ast$ {\em fOrder}, {\bf CairoDockFMSortType} {\em iSortType})}\label{cairo-dock-file-manager_8h_97ca80266ac95bba9728c4ced4c791e0}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_get_file_properties@{cairo\_\-dock\_\-fm\_\-get\_\-file\_\-properties}}
+\index{cairo_dock_fm_get_file_properties@{cairo\_\-dock\_\-fm\_\-get\_\-file\_\-properties}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-fm\_\-get\_\-file\_\-properties (const gchar $\ast$ {\em cURI}, guint64 $\ast$ {\em iSize}, time\_\-t $\ast$ {\em iLastModificationTime}, gchar $\ast$$\ast$ {\em cMimeType}, int $\ast$ {\em iUID}, int $\ast$ {\em iGID}, int $\ast$ {\em iPermissionsMask})}\label{cairo-dock-file-manager_8h_a7131c9e457f3a02346f578bb4ee590d}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_launch_uri@{cairo\_\-dock\_\-fm\_\-launch\_\-uri}}
+\index{cairo_dock_fm_launch_uri@{cairo\_\-dock\_\-fm\_\-launch\_\-uri}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-fm\_\-launch\_\-uri (const gchar $\ast$ {\em cURI})}\label{cairo-dock-file-manager_8h_722aa7d3c745853a7cc23bb132bfed3a}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_add_monitor_full@{cairo\_\-dock\_\-fm\_\-add\_\-monitor\_\-full}}
+\index{cairo_dock_fm_add_monitor_full@{cairo\_\-dock\_\-fm\_\-add\_\-monitor\_\-full}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-fm\_\-add\_\-monitor\_\-full (const gchar $\ast$ {\em cURI}, gboolean {\em bDirectory}, const gchar $\ast$ {\em cMountedURI}, {\bf CairoDockFMMonitorCallback} {\em pCallback}, gpointer {\em data})}\label{cairo-dock-file-manager_8h_5c4d521b603189f9cf3fa15d6409f60b}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_remove_monitor_full@{cairo\_\-dock\_\-fm\_\-remove\_\-monitor\_\-full}}
+\index{cairo_dock_fm_remove_monitor_full@{cairo\_\-dock\_\-fm\_\-remove\_\-monitor\_\-full}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-fm\_\-remove\_\-monitor\_\-full (const gchar $\ast$ {\em cURI}, gboolean {\em bDirectory}, const gchar $\ast$ {\em cMountedURI})}\label{cairo-dock-file-manager_8h_b512e2cdf5b8c1c85574e455cef65294}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_move_file@{cairo\_\-dock\_\-fm\_\-move\_\-file}}
+\index{cairo_dock_fm_move_file@{cairo\_\-dock\_\-fm\_\-move\_\-file}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-fm\_\-move\_\-file (const gchar $\ast$ {\em cURI}, const gchar $\ast$ {\em cDirectoryURI})}\label{cairo-dock-file-manager_8h_f52bb3e5e98e84f6da3fc6a010202945}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_mount_full@{cairo\_\-dock\_\-fm\_\-mount\_\-full}}
+\index{cairo_dock_fm_mount_full@{cairo\_\-dock\_\-fm\_\-mount\_\-full}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-fm\_\-mount\_\-full (const gchar $\ast$ {\em cURI}, int {\em iVolumeID}, {\bf CairoDockFMMountCallback} {\em pCallback}, {\bf Icon} $\ast$ {\em icon}, {\bf CairoDock} $\ast$ {\em pDock})}\label{cairo-dock-file-manager_8h_dc4e798eb03a83cbaca4c4960d4eca32}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_unmount_full@{cairo\_\-dock\_\-fm\_\-unmount\_\-full}}
+\index{cairo_dock_fm_unmount_full@{cairo\_\-dock\_\-fm\_\-unmount\_\-full}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-fm\_\-unmount\_\-full (const gchar $\ast$ {\em cURI}, int {\em iVolumeID}, {\bf CairoDockFMMountCallback} {\em pCallback}, {\bf Icon} $\ast$ {\em icon}, {\bf CairoDock} $\ast$ {\em pDock})}\label{cairo-dock-file-manager_8h_e7c503e762b954abdf62411f6f88f6be}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_is_mounted@{cairo\_\-dock\_\-fm\_\-is\_\-mounted}}
+\index{cairo_dock_fm_is_mounted@{cairo\_\-dock\_\-fm\_\-is\_\-mounted}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gchar$\ast$ cairo\_\-dock\_\-fm\_\-is\_\-mounted (const gchar $\ast$ {\em cURI}, gboolean $\ast$ {\em bIsMounted})}\label{cairo-dock-file-manager_8h_0f65c98d8d234088da5d0ff568db1c7f}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_delete_file@{cairo\_\-dock\_\-fm\_\-delete\_\-file}}
+\index{cairo_dock_fm_delete_file@{cairo\_\-dock\_\-fm\_\-delete\_\-file}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-fm\_\-delete\_\-file (const gchar $\ast$ {\em cURI})}\label{cairo-dock-file-manager_8h_1f8810698077af882edca1eb6fe6109a}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_rename_file@{cairo\_\-dock\_\-fm\_\-rename\_\-file}}
+\index{cairo_dock_fm_rename_file@{cairo\_\-dock\_\-fm\_\-rename\_\-file}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-fm\_\-rename\_\-file (const gchar $\ast$ {\em cOldURI}, const gchar $\ast$ {\em cNewName})}\label{cairo-dock-file-manager_8h_2c9c840832b082dfa13339423eb9afaa}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_get_trash_path@{cairo\_\-dock\_\-fm\_\-get\_\-trash\_\-path}}
+\index{cairo_dock_fm_get_trash_path@{cairo\_\-dock\_\-fm\_\-get\_\-trash\_\-path}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gchar$\ast$ cairo\_\-dock\_\-fm\_\-get\_\-trash\_\-path (const gchar $\ast$ {\em cNearURI}, gboolean {\em bCreateIfNecessary})}\label{cairo-dock-file-manager_8h_f457dcbad326420e2bc756f5fceb4ef0}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_get_desktop_path@{cairo\_\-dock\_\-fm\_\-get\_\-desktop\_\-path}}
+\index{cairo_dock_fm_get_desktop_path@{cairo\_\-dock\_\-fm\_\-get\_\-desktop\_\-path}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gchar$\ast$ cairo\_\-dock\_\-fm\_\-get\_\-desktop\_\-path (void)}\label{cairo-dock-file-manager_8h_2dd3626fd9850c3a4bdab4d1a7237367}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_logout@{cairo\_\-dock\_\-fm\_\-logout}}
+\index{cairo_dock_fm_logout@{cairo\_\-dock\_\-fm\_\-logout}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-fm\_\-logout (void)}\label{cairo-dock-file-manager_8h_fdd23479680976ed59792cc1f3b7fcd5}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_setup_time@{cairo\_\-dock\_\-fm\_\-setup\_\-time}}
+\index{cairo_dock_fm_setup_time@{cairo\_\-dock\_\-fm\_\-setup\_\-time}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-fm\_\-setup\_\-time (void)}\label{cairo-dock-file-manager_8h_75a5c45877a66431607c14acf5dad4c1}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_create_icon_from_URI@{cairo\_\-dock\_\-fm\_\-create\_\-icon\_\-from\_\-URI}}
+\index{cairo_dock_fm_create_icon_from_URI@{cairo\_\-dock\_\-fm\_\-create\_\-icon\_\-from\_\-URI}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Icon}$\ast$ cairo\_\-dock\_\-fm\_\-create\_\-icon\_\-from\_\-URI (const gchar $\ast$ {\em cURI}, {\bf CairoDock} $\ast$ {\em pDock})}\label{cairo-dock-file-manager_8h_53c54369805cfe6db42602737059d5cd}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_create_dock_from_directory@{cairo\_\-dock\_\-fm\_\-create\_\-dock\_\-from\_\-directory}}
+\index{cairo_dock_fm_create_dock_from_directory@{cairo\_\-dock\_\-fm\_\-create\_\-dock\_\-from\_\-directory}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-fm\_\-create\_\-dock\_\-from\_\-directory ({\bf Icon} $\ast$ {\em pIcon})}\label{cairo-dock-file-manager_8h_f7cf475653106cfbf90c05332e2a2bc4}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_manage_event_on_file@{cairo\_\-dock\_\-fm\_\-manage\_\-event\_\-on\_\-file}}
+\index{cairo_dock_fm_manage_event_on_file@{cairo\_\-dock\_\-fm\_\-manage\_\-event\_\-on\_\-file}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-fm\_\-manage\_\-event\_\-on\_\-file ({\bf CairoDockFMEventType} {\em iEventType}, const gchar $\ast$ {\em cURI}, {\bf Icon} $\ast$ {\em pIcon}, {\bf CairoDockIconType} {\em iTypeOnCreation})}\label{cairo-dock-file-manager_8h_b9933ff88de6b73c351dc8590fce7815}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_action_on_file_event@{cairo\_\-dock\_\-fm\_\-action\_\-on\_\-file\_\-event}}
+\index{cairo_dock_fm_action_on_file_event@{cairo\_\-dock\_\-fm\_\-action\_\-on\_\-file\_\-event}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-fm\_\-action\_\-on\_\-file\_\-event ({\bf CairoDockFMEventType} {\em iEventType}, const gchar $\ast$ {\em cURI}, {\bf Icon} $\ast$ {\em pIcon})}\label{cairo-dock-file-manager_8h_d461573c3b84a6dd7a86c3b854d863fe}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_action_after_mounting@{cairo\_\-dock\_\-fm\_\-action\_\-after\_\-mounting}}
+\index{cairo_dock_fm_action_after_mounting@{cairo\_\-dock\_\-fm\_\-action\_\-after\_\-mounting}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-fm\_\-action\_\-after\_\-mounting (gboolean {\em bMounting}, gboolean {\em bSuccess}, const gchar $\ast$ {\em cName}, {\bf Icon} $\ast$ {\em icon}, {\bf CairoDock} $\ast$ {\em pDock})}\label{cairo-dock-file-manager_8h_5b4345525a21a7d99d8703c42777897b}
+
+
+\index{cairo-dock-file-manager.h@{cairo-dock-file-manager.h}!cairo_dock_fm_move_into_directory@{cairo\_\-dock\_\-fm\_\-move\_\-into\_\-directory}}
+\index{cairo_dock_fm_move_into_directory@{cairo\_\-dock\_\-fm\_\-move\_\-into\_\-directory}!cairo-dock-file-manager.h@{cairo-dock-file-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-fm\_\-move\_\-into\_\-directory (const gchar $\ast$ {\em cURI}, {\bf Icon} $\ast$ {\em icon}, {\bf CairoDock} $\ast$ {\em pDock})}\label{cairo-dock-file-manager_8h_403d40617edf70d57f51c42cee8b5835}
+
+

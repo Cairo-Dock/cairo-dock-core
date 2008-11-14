@@ -1,0 +1,133 @@
+\section{Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-load.h}
+\label{cairo-dock-load_8h}\index{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-load.h@{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-load.h}}
+\subsection*{Macros}
+\begin{CompactItemize}
+\item 
+\#define {\bf cairo\_\-dock\_\-load\_\-image\_\-for\_\-square\_\-icon}(pSourceContext, cImageFile, fImageSize)~cairo\_\-dock\_\-load\_\-image\_\-for\_\-icon (pSourceContext, cImageFile, fImageSize, fImageSize)
+\item 
+\#define {\bf cairo\_\-dock\_\-fill\_\-icon\_\-buffers\_\-for\_\-desklet}(pIcon, pSourceContext)~cairo\_\-dock\_\-fill\_\-icon\_\-buffers (pIcon, pSourceContext, 1, CAIRO\_\-DOCK\_\-HORIZONTAL, (pIcon $\rightarrow$ fWidth == 0 $|$$|$ pIcon $\rightarrow$ fHeight == 0));
+\item 
+\#define {\bf cairo\_\-dock\_\-fill\_\-icon\_\-buffers\_\-for\_\-dock}(pIcon, pSourceContext, pDock)~cairo\_\-dock\_\-fill\_\-icon\_\-buffers (pIcon, pSourceContext, 1 + {\bf g\_\-fAmplitude}, pDock $\rightarrow$ bHorizontalDock, TRUE);
+\item 
+\#define {\bf cairo\_\-dock\_\-load\_\-buffers\_\-in\_\-one\_\-dock}(pDock)~cairo\_\-dock\_\-reload\_\-buffers\_\-in\_\-dock (NULL, pDock, NULL)
+\end{CompactItemize}
+\subsection*{Fonctions}
+\begin{CompactItemize}
+\item 
+gchar $\ast$ {\bf cairo\_\-dock\_\-generate\_\-file\_\-path} (gchar $\ast$cImageFile)
+\item 
+cairo\_\-surface\_\-t $\ast$ {\bf cairo\_\-dock\_\-load\_\-image} (cairo\_\-t $\ast$pSourceContext, gchar $\ast$cImageFile, double $\ast$fImageWidth, double $\ast$fImageHeight, double fRotationAngle, double fAlpha, gboolean bReapeatAsPattern)
+\item 
+cairo\_\-surface\_\-t $\ast$ {\bf cairo\_\-dock\_\-load\_\-image\_\-for\_\-icon} (cairo\_\-t $\ast$pSourceContext, gchar $\ast$cImageFile, double fImageWidth, double fImageHeight)
+\item 
+void {\bf cairo\_\-dock\_\-fill\_\-one\_\-icon\_\-buffer} ({\bf Icon} $\ast$icon, cairo\_\-t $\ast$pSourceContext, gdouble fMaxScale, gboolean bHorizontalDock, gboolean bApplySizeRestriction)
+\item 
+void {\bf cairo\_\-dock\_\-fill\_\-one\_\-text\_\-buffer} ({\bf Icon} $\ast$icon, cairo\_\-t $\ast$pSourceContext, int iLabelSize, gchar $\ast$cLabelPolice, gboolean bHorizontalDock)
+\item 
+void {\bf cairo\_\-dock\_\-fill\_\-one\_\-quick\_\-info\_\-buffer} ({\bf Icon} $\ast$icon, cairo\_\-t $\ast$pSourceContext, int iLabelSize, gchar $\ast$cLabelPolice, int iLabelWeight, double fMaxScale)
+\item 
+void {\bf cairo\_\-dock\_\-fill\_\-icon\_\-buffers} ({\bf Icon} $\ast$icon, cairo\_\-t $\ast$pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bApplySizeRestriction)
+\item 
+void {\bf cairo\_\-dock\_\-load\_\-one\_\-icon\_\-from\_\-scratch} ({\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer)
+\item 
+void {\bf cairo\_\-dock\_\-reload\_\-buffers\_\-in\_\-dock} (gchar $\ast$cDockName, {\bf CairoDock} $\ast$pDock, gpointer data)
+\item 
+void {\bf cairo\_\-dock\_\-load\_\-visible\_\-zone} ({\bf CairoDock} $\ast$pDock, gchar $\ast$cVisibleZoneImageFile, int iVisibleZoneWidth, int iVisibleZoneHeight, double fVisibleZoneAlpha)
+\item 
+cairo\_\-surface\_\-t $\ast$ {\bf cairo\_\-dock\_\-load\_\-stripes} (cairo\_\-t $\ast$pSourceContext, int iStripesWidth, int iStripesHeight, double fRotationAngle)
+\item 
+void {\bf cairo\_\-dock\_\-update\_\-background\_\-decorations\_\-if\_\-necessary} ({\bf CairoDock} $\ast$pDock, int iNewDecorationsWidth, int iNewDecorationsHeight)
+\item 
+void {\bf cairo\_\-dock\_\-load\_\-background\_\-decorations} ({\bf CairoDock} $\ast$pDock)
+\end{CompactItemize}
+
+
+\subsection{Documentation des macros}
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_load_image_for_square_icon@{cairo\_\-dock\_\-load\_\-image\_\-for\_\-square\_\-icon}}
+\index{cairo_dock_load_image_for_square_icon@{cairo\_\-dock\_\-load\_\-image\_\-for\_\-square\_\-icon}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cairo\_\-dock\_\-load\_\-image\_\-for\_\-square\_\-icon(pSourceContext, cImageFile, fImageSize)~cairo\_\-dock\_\-load\_\-image\_\-for\_\-icon (pSourceContext, cImageFile, fImageSize, fImageSize)}\label{cairo-dock-load_8h_909a189c250a899f1f358da27af3b4e3}
+
+
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_fill_icon_buffers_for_desklet@{cairo\_\-dock\_\-fill\_\-icon\_\-buffers\_\-for\_\-desklet}}
+\index{cairo_dock_fill_icon_buffers_for_desklet@{cairo\_\-dock\_\-fill\_\-icon\_\-buffers\_\-for\_\-desklet}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cairo\_\-dock\_\-fill\_\-icon\_\-buffers\_\-for\_\-desklet(pIcon, pSourceContext)~cairo\_\-dock\_\-fill\_\-icon\_\-buffers (pIcon, pSourceContext, 1, CAIRO\_\-DOCK\_\-HORIZONTAL, (pIcon $\rightarrow$ fWidth == 0 $|$$|$ pIcon $\rightarrow$ fHeight == 0));}\label{cairo-dock-load_8h_3a3f741090564804aa10bd696d4dafd4}
+
+
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_fill_icon_buffers_for_dock@{cairo\_\-dock\_\-fill\_\-icon\_\-buffers\_\-for\_\-dock}}
+\index{cairo_dock_fill_icon_buffers_for_dock@{cairo\_\-dock\_\-fill\_\-icon\_\-buffers\_\-for\_\-dock}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cairo\_\-dock\_\-fill\_\-icon\_\-buffers\_\-for\_\-dock(pIcon, pSourceContext, pDock)~cairo\_\-dock\_\-fill\_\-icon\_\-buffers (pIcon, pSourceContext, 1 + {\bf g\_\-fAmplitude}, pDock $\rightarrow$ bHorizontalDock, TRUE);}\label{cairo-dock-load_8h_833c01f83f46a6371522bc610d53b748}
+
+
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_load_buffers_in_one_dock@{cairo\_\-dock\_\-load\_\-buffers\_\-in\_\-one\_\-dock}}
+\index{cairo_dock_load_buffers_in_one_dock@{cairo\_\-dock\_\-load\_\-buffers\_\-in\_\-one\_\-dock}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cairo\_\-dock\_\-load\_\-buffers\_\-in\_\-one\_\-dock(pDock)~cairo\_\-dock\_\-reload\_\-buffers\_\-in\_\-dock (NULL, pDock, NULL)}\label{cairo-dock-load_8h_9cab631b347ee9c8b29271ac3acffc71}
+
+
+
+
+\subsection{Documentation des fonctions}
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_generate_file_path@{cairo\_\-dock\_\-generate\_\-file\_\-path}}
+\index{cairo_dock_generate_file_path@{cairo\_\-dock\_\-generate\_\-file\_\-path}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gchar$\ast$ cairo\_\-dock\_\-generate\_\-file\_\-path (gchar $\ast$ {\em cImageFile})}\label{cairo-dock-load_8h_7c32138319b7720c1dc03948223ad14b}
+
+
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_load_image@{cairo\_\-dock\_\-load\_\-image}}
+\index{cairo_dock_load_image@{cairo\_\-dock\_\-load\_\-image}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}cairo\_\-surface\_\-t$\ast$ cairo\_\-dock\_\-load\_\-image (cairo\_\-t $\ast$ {\em pSourceContext}, gchar $\ast$ {\em cImageFile}, double $\ast$ {\em fImageWidth}, double $\ast$ {\em fImageHeight}, double {\em fRotationAngle}, double {\em fAlpha}, gboolean {\em bReapeatAsPattern})}\label{cairo-dock-load_8h_9f99a2ad5d78bae91031bdad24116375}
+
+
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_load_image_for_icon@{cairo\_\-dock\_\-load\_\-image\_\-for\_\-icon}}
+\index{cairo_dock_load_image_for_icon@{cairo\_\-dock\_\-load\_\-image\_\-for\_\-icon}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}cairo\_\-surface\_\-t$\ast$ cairo\_\-dock\_\-load\_\-image\_\-for\_\-icon (cairo\_\-t $\ast$ {\em pSourceContext}, gchar $\ast$ {\em cImageFile}, double {\em fImageWidth}, double {\em fImageHeight})}\label{cairo-dock-load_8h_2773d15f186da24a5ce837a12f9c9339}
+
+
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_fill_one_icon_buffer@{cairo\_\-dock\_\-fill\_\-one\_\-icon\_\-buffer}}
+\index{cairo_dock_fill_one_icon_buffer@{cairo\_\-dock\_\-fill\_\-one\_\-icon\_\-buffer}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-fill\_\-one\_\-icon\_\-buffer ({\bf Icon} $\ast$ {\em icon}, cairo\_\-t $\ast$ {\em pSourceContext}, gdouble {\em fMaxScale}, gboolean {\em bHorizontalDock}, gboolean {\em bApplySizeRestriction})}\label{cairo-dock-load_8h_bc6ef046a83f95e29d3e50112ad1a06e}
+
+
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_fill_one_text_buffer@{cairo\_\-dock\_\-fill\_\-one\_\-text\_\-buffer}}
+\index{cairo_dock_fill_one_text_buffer@{cairo\_\-dock\_\-fill\_\-one\_\-text\_\-buffer}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-fill\_\-one\_\-text\_\-buffer ({\bf Icon} $\ast$ {\em icon}, cairo\_\-t $\ast$ {\em pSourceContext}, int {\em iLabelSize}, gchar $\ast$ {\em cLabelPolice}, gboolean {\em bHorizontalDock})}\label{cairo-dock-load_8h_c1c4f6235fed0fe3c1e929d9e3b28a1d}
+
+
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_fill_one_quick_info_buffer@{cairo\_\-dock\_\-fill\_\-one\_\-quick\_\-info\_\-buffer}}
+\index{cairo_dock_fill_one_quick_info_buffer@{cairo\_\-dock\_\-fill\_\-one\_\-quick\_\-info\_\-buffer}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-fill\_\-one\_\-quick\_\-info\_\-buffer ({\bf Icon} $\ast$ {\em icon}, cairo\_\-t $\ast$ {\em pSourceContext}, int {\em iLabelSize}, gchar $\ast$ {\em cLabelPolice}, int {\em iLabelWeight}, double {\em fMaxScale})}\label{cairo-dock-load_8h_db3794cb1c5c277ebbfabbf7f9cf0353}
+
+
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_fill_icon_buffers@{cairo\_\-dock\_\-fill\_\-icon\_\-buffers}}
+\index{cairo_dock_fill_icon_buffers@{cairo\_\-dock\_\-fill\_\-icon\_\-buffers}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-fill\_\-icon\_\-buffers ({\bf Icon} $\ast$ {\em icon}, cairo\_\-t $\ast$ {\em pSourceContext}, double {\em fMaxScale}, gboolean {\em bHorizontalDock}, gboolean {\em bApplySizeRestriction})}\label{cairo-dock-load_8h_82082132f1b2114fc29bade81a05435f}
+
+
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_load_one_icon_from_scratch@{cairo\_\-dock\_\-load\_\-one\_\-icon\_\-from\_\-scratch}}
+\index{cairo_dock_load_one_icon_from_scratch@{cairo\_\-dock\_\-load\_\-one\_\-icon\_\-from\_\-scratch}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-load\_\-one\_\-icon\_\-from\_\-scratch ({\bf Icon} $\ast$ {\em pIcon}, {\bf CairoDockContainer} $\ast$ {\em pContainer})}\label{cairo-dock-load_8h_eb97abc40aeadf4a672cd3c12b4dc018}
+
+
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_reload_buffers_in_dock@{cairo\_\-dock\_\-reload\_\-buffers\_\-in\_\-dock}}
+\index{cairo_dock_reload_buffers_in_dock@{cairo\_\-dock\_\-reload\_\-buffers\_\-in\_\-dock}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-reload\_\-buffers\_\-in\_\-dock (gchar $\ast$ {\em cDockName}, {\bf CairoDock} $\ast$ {\em pDock}, gpointer {\em data})}\label{cairo-dock-load_8h_30995214491a8ba09aa8183d0556f4e1}
+
+
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_load_visible_zone@{cairo\_\-dock\_\-load\_\-visible\_\-zone}}
+\index{cairo_dock_load_visible_zone@{cairo\_\-dock\_\-load\_\-visible\_\-zone}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-load\_\-visible\_\-zone ({\bf CairoDock} $\ast$ {\em pDock}, gchar $\ast$ {\em cVisibleZoneImageFile}, int {\em iVisibleZoneWidth}, int {\em iVisibleZoneHeight}, double {\em fVisibleZoneAlpha})}\label{cairo-dock-load_8h_97a693b04a4feb682aca3c611ea41c4f}
+
+
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_load_stripes@{cairo\_\-dock\_\-load\_\-stripes}}
+\index{cairo_dock_load_stripes@{cairo\_\-dock\_\-load\_\-stripes}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}cairo\_\-surface\_\-t$\ast$ cairo\_\-dock\_\-load\_\-stripes (cairo\_\-t $\ast$ {\em pSourceContext}, int {\em iStripesWidth}, int {\em iStripesHeight}, double {\em fRotationAngle})}\label{cairo-dock-load_8h_7be2b6db47a7998a7fe65fd584a525af}
+
+
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_update_background_decorations_if_necessary@{cairo\_\-dock\_\-update\_\-background\_\-decorations\_\-if\_\-necessary}}
+\index{cairo_dock_update_background_decorations_if_necessary@{cairo\_\-dock\_\-update\_\-background\_\-decorations\_\-if\_\-necessary}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-update\_\-background\_\-decorations\_\-if\_\-necessary ({\bf CairoDock} $\ast$ {\em pDock}, int {\em iNewDecorationsWidth}, int {\em iNewDecorationsHeight})}\label{cairo-dock-load_8h_15fc9b5fbf11e2a25f0cce7144cd848c}
+
+
+\index{cairo-dock-load.h@{cairo-dock-load.h}!cairo_dock_load_background_decorations@{cairo\_\-dock\_\-load\_\-background\_\-decorations}}
+\index{cairo_dock_load_background_decorations@{cairo\_\-dock\_\-load\_\-background\_\-decorations}!cairo-dock-load.h@{cairo-dock-load.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-load\_\-background\_\-decorations ({\bf CairoDock} $\ast$ {\em pDock})}\label{cairo-dock-load_8h_268069f58c9e5be378711e0fda8c4de9}
+
+

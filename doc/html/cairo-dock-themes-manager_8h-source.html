@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock:  Fichier source de /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-themes-manager.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-themes-manager.h</h1><a href="cairo-dock-themes-manager_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
+<a name="l00002"></a>00002 <span class="preprocessor">#ifndef __CAIRO_DOCK_THEMES_MANAGER__</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span><span class="preprocessor">#define  __CAIRO_DOCK_THEMES_MANAGER__</span>
+<a name="l00004"></a>00004 <span class="preprocessor"></span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;glib.h&gt;</span>
+<a name="l00006"></a>00006 <span class="preprocessor">#include &lt;gtk/gtk.h&gt;</span>
+<a name="l00007"></a>00007 
+<a name="l00008"></a>00008 
+<a name="l00016"></a>00016 GHashTable *<a class="code" href="cairo-dock-themes-manager_8h.html#f2b87f4aad180d5e5368088bdb05240b">cairo_dock_list_themes</a> (gchar *cThemesDir, GHashTable *hProvidedTable, GError **erreur);
+<a name="l00017"></a>00017 
+<a name="l00018"></a>00018 
+<a name="l00019"></a>00019 gchar *<a class="code" href="cairo-dock-themes-manager_8h.html#cef49939d0085c52a06d372b168f6ae0">cairo_dock_edit_themes</a> (GHashTable **hThemeTable, gboolean bSafeMode);
+<a name="l00020"></a>00020 
+<a name="l00021"></a>00021 
+<a name="l00022"></a>00022 gchar *<a class="code" href="cairo-dock-themes-manager_8h.html#45bfce739852d43b48219926540d6769">cairo_dock_get_chosen_theme</a> (gchar *cConfFile, gboolean *bUseThemeBehaviour, gboolean *bUseThemeLaunchers);
+<a name="l00023"></a>00023 
+<a name="l00024"></a>00024 
+<a name="l00025"></a>00025 gchar *<a class="code" href="cairo-dock-themes-manager_8h.html#b67f20b861818424f1f54346c75e9e39">cairo_dock_get_theme_path</a> (gchar *cThemeName, GHashTable *hThemeTable);
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027 
+<a name="l00028"></a>00028 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-themes-manager_8h.html#addcb28e2da1100a291c744cb56fe47f">cairo_dock_load_theme</a> (gchar *cThemePath);
+<a name="l00029"></a>00029 
+<a name="l00030"></a>00030 
+<a name="l00031"></a>00031 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-themes-manager_8h.html#973b61d0f4c31abe529402ec059f5750">cairo_dock_mark_theme_as_modified</a> (gboolean bModified);
+<a name="l00032"></a>00032 gboolean <a class="code" href="cairo-dock-themes-manager_8h.html#0432fda9c86ccd9027768c7e7b5d53a4">cairo_dock_theme_need_save</a> (<span class="keywordtype">void</span>);
+<a name="l00033"></a>00033 
+<a name="l00034"></a>00034 
+<a name="l00036"></a>00036 
+<a name="l00037"></a>00037 gboolean <a class="code" href="cairo-dock-themes-manager_8h.html#665a38cee72eb60c7cc0af494e617b9f" title="int cairo_dock_ask_initial_theme (void);">cairo_dock_manage_themes</a> (GtkWidget *pWidget, gboolean bSafeMode);
+<a name="l00038"></a>00038 
+<a name="l00039"></a><a class="code" href="cairo-dock-themes-manager_8h.html#7710e8b1d53a9d41c3ce911a528f503d">00039</a> <span class="preprocessor">#define cairo_dock_update_conf_file_with_themes(pOpenedKeyFile, cAppletConfFilePath, pThemeTable, cGroupName, cKeyName) cairo_dock_update_conf_file_with_hash_table (pOpenedKeyFile, cAppletConfFilePath, pThemeTable, cGroupName, cKeyName, NULL, (GHFunc) cairo_dock_write_one_theme_name, TRUE, FALSE)</span>
+<a name="l00040"></a>00040 <span class="preprocessor"></span>
+<a name="l00041"></a>00041 
+<a name="l00042"></a>00042 <span class="preprocessor">#endif</span>
+</pre></div><hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:15 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

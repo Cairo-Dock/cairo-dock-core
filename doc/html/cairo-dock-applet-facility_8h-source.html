@@ -1,0 +1,602 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock:  Fichier source de /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-applet-facility.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-applet-facility.h</h1><a href="cairo-dock-applet-facility_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 2; tab-width: 2 -*- */</span>
+<a name="l00002"></a>00002 
+<a name="l00003"></a>00003 <span class="preprocessor">#ifndef __CAIRO_DOCK_APPLET_FACILITY__</span>
+<a name="l00004"></a>00004 <span class="preprocessor"></span><span class="preprocessor">#define  __CAIRO_DOCK_APPLET_FACILITY__</span>
+<a name="l00005"></a>00005 <span class="preprocessor"></span>
+<a name="l00006"></a>00006 <span class="preprocessor">#include "<a class="code" href="cairo-dock-struct_8h.html">cairo-dock-struct.h</a>"</span>
+<a name="l00007"></a>00007 
+<a name="l00021"></a>00021 gchar *<a class="code" href="cairo-dock-applet-facility_8h.html#55073690cc61234d715457132a54026e">cairo_dock_check_conf_file_exists</a> (gchar *cUserDataDirName, gchar *cShareDataDir, gchar *cConfFileName);
+<a name="l00022"></a>00022 
+<a name="l00023"></a>00023 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#d7df139e2d1d82b366914c7a87157ab0">cairo_dock_free_minimal_config</a> (<a class="code" href="struct__CairoDockMinimalAppletConfig.html">CairoDockMinimalAppletConfig</a> *pMinimalConfig);
+<a name="l00024"></a>00024 
+<a name="l00034"></a>00034 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#9eecab3c66393214ee252a90e587a9fa">cairo_dock_set_icon_surface_full</a> (cairo_t *pIconContext, cairo_surface_t *pSurface, <span class="keywordtype">double</span> fScale, <span class="keywordtype">double</span> fAlpha, <a class="code" href="struct__Icon.html">Icon</a> *pIcon, <a class="code" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer);
+<a name="l00040"></a><a class="code" href="cairo-dock-applet-facility_8h.html#7107df0fa6d5fed99c0793d370685ffc">00040</a> <span class="preprocessor">#define cairo_dock_set_icon_surface(pIconContext, pSurface) cairo_dock_set_icon_surface_full (pIconContext, pSurface, 1, 1, NULL, NULL)</span>
+<a name="l00041"></a>00041 <span class="preprocessor"></span>
+<a name="l00048"></a>00048 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#ca2d9ad5e1656d3f8a7b888de524cc3e">cairo_dock_draw_bar_on_icon</a> (cairo_t *pIconContext, <span class="keywordtype">double</span> fValue, <a class="code" href="struct__Icon.html">Icon</a> *pIcon, <a class="code" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer);
+<a name="l00049"></a>00049 
+<a name="l00056"></a>00056 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#4638bd20276121edcbc5cbd323526fc4">cairo_dock_add_reflection_to_icon</a> (cairo_t *pIconContext, <a class="code" href="struct__Icon.html">Icon</a> *pIcon, <a class="code" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer);
+<a name="l00064"></a>00064 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#eacd9592627d644c1f72cdcc0cbe4217">cairo_dock_set_icon_surface_with_reflect</a> (cairo_t *pIconContext, cairo_surface_t *pSurface, <a class="code" href="struct__Icon.html">Icon</a> *pIcon, <a class="code" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer);
+<a name="l00072"></a>00072 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#36f95c375f8903924d780f0a23b87098">cairo_dock_set_image_on_icon</a> (cairo_t *pIconContext, gchar *cImagePath, <a class="code" href="struct__Icon.html">Icon</a> *pIcon, <a class="code" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer);
+<a name="l00073"></a>00073 
+<a name="l00081"></a>00081 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#b3d4dd297b6db50c2447f6fc454985de">cairo_dock_set_icon_name</a> (cairo_t *pSourceContext, <span class="keyword">const</span> gchar *cIconName, <a class="code" href="struct__Icon.html">Icon</a> *pIcon, <a class="code" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer);
+<a name="l00082"></a>00082 
+<a name="l00090"></a>00090 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#9eadac41611d2abedcf59023161ae458">cairo_dock_set_quick_info</a> (cairo_t *pSourceContext, <span class="keyword">const</span> gchar *cQuickInfo, <a class="code" href="struct__Icon.html">Icon</a> *pIcon, <span class="keywordtype">double</span> fMaxScale);
+<a name="l00099"></a>00099 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#4df817fe91cdaa2c3ba65d0fc260446f">cairo_dock_set_quick_info_full</a> (cairo_t *pSourceContext, <a class="code" href="struct__Icon.html">Icon</a> *pIcon, <a class="code" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, <span class="keyword">const</span> gchar *cQuickInfoFormat, ...);
+<a name="l00104"></a><a class="code" href="cairo-dock-applet-facility_8h.html#a018ebb8327854b22c4cd42dbfbe9d9b">00104</a> <span class="preprocessor">#define cairo_dock_remove_quick_info(pIcon) cairo_dock_set_quick_info (NULL, NULL, pIcon, 1)</span>
+<a name="l00105"></a>00105 <span class="preprocessor"></span>
+<a name="l00106"></a>00106 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#adb2d342e017e36ac077b7a0c97c0391">cairo_dock_set_hours_minutes_as_quick_info</a> (cairo_t *pSourceContext, <a class="code" href="struct__Icon.html">Icon</a> *pIcon, <a class="code" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, <span class="keywordtype">int</span> iTimeInSeconds);
+<a name="l00107"></a>00107 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#8c630299d538256712815df9eed0526f">cairo_dock_set_minutes_secondes_as_quick_info</a> (cairo_t *pSourceContext, <a class="code" href="struct__Icon.html">Icon</a> *pIcon, <a class="code" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, <span class="keywordtype">int</span> iTimeInSeconds);
+<a name="l00108"></a>00108 
+<a name="l00109"></a>00109 
+<a name="l00110"></a>00110 
+<a name="l00118"></a>00118 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#bdb9b030d1be18daf86caa31464fb955">cairo_dock_animate_icon</a> (<a class="code" href="struct__Icon.html">Icon</a> *pIcon, <a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="code" href="cairo-dock-struct_8h.html#72c6f286d96c028feb8d4516820b74d9">CairoDockAnimationType</a> iAnimationType, <span class="keywordtype">int</span> iNbRounds);
+<a name="l00119"></a>00119 
+<a name="l00132"></a>00132 gchar* <a class="code" href="cairo-dock-applet-facility_8h.html#76d8cf8894ee2260ef0b0af7fe7fcd16">cairo_dock_manage_themes_for_applet</a> (gchar *cAppletShareDataDir, gchar *cThemeDirName, gchar *cAppletConfFilePath, GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName);
+<a name="l00133"></a>00133 
+<a name="l00140"></a>00140 GtkWidget *<a class="code" href="cairo-dock-applet-facility_8h.html#769f0ed2faa57c75c3c264771647b64d">cairo_dock_create_sub_menu</a> (gchar *cLabel, GtkWidget *pMenu);
+<a name="l00141"></a>00141 
+<a name="l00142"></a>00142 
+<a name="l00143"></a><a class="code" href="structCairoDockMeasure.html">00143</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>{
+<a name="l00144"></a><a class="code" href="structCairoDockMeasure.html#08d82d09bb8e1c1ad4675f352711bf6d">00144</a>         gint iSidTimer;
+<a name="l00145"></a><a class="code" href="structCairoDockMeasure.html#685311d3dcec16ff5967508ad93827a5">00145</a>         gint iSidTimerRedraw;
+<a name="l00146"></a><a class="code" href="structCairoDockMeasure.html#4edd5a2ef9cf4c9e5190e7b075e8208c">00146</a>         gint iThreadIsRunning;
+<a name="l00147"></a><a class="code" href="structCairoDockMeasure.html#90e5c1a98fd894e117a8b208afbf95db">00147</a>         GMutex *pMutexData;
+<a name="l00148"></a><a class="code" href="structCairoDockMeasure.html#6f2c9df47e005e2cb71742451ecd1e68">00148</a>         GVoidFunc acquisition;
+<a name="l00149"></a><a class="code" href="structCairoDockMeasure.html#aa32a18d3004cbe56395b9f31b8de317">00149</a>         GVoidFunc read;
+<a name="l00150"></a><a class="code" href="structCairoDockMeasure.html#6bfd9761bf2263a4659bef76ed3bec43">00150</a>         GVoidFunc update;
+<a name="l00151"></a><a class="code" href="structCairoDockMeasure.html#671738bdcda10637faa3e194035d2c26">00151</a>         gint iCheckInterval;
+<a name="l00152"></a>00152 } <a class="code" href="structCairoDockMeasure.html">CairoDockMeasure</a>;
+<a name="l00153"></a>00153 
+<a name="l00158"></a>00158 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#0f4109d113571a1a1b29ca86fc129ef4">cairo_dock_launch_measure</a> (<a class="code" href="structCairoDockMeasure.html">CairoDockMeasure</a> *pMeasureTimer);
+<a name="l00167"></a>00167 <a class="code" href="structCairoDockMeasure.html">CairoDockMeasure</a> *<a class="code" href="cairo-dock-applet-facility_8h.html#2494ec4abadfa66605510bfc4966da43">cairo_dock_new_measure_timer</a> (<span class="keywordtype">int</span> iCheckInterval, GVoidFunc acquisition, GVoidFunc read, GVoidFunc update);
+<a name="l00172"></a>00172 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#760630c1ca83e3b763f17a1804e62b05">cairo_dock_stop_measure_timer</a> (<a class="code" href="structCairoDockMeasure.html">CairoDockMeasure</a> *pMeasureTimer);
+<a name="l00177"></a>00177 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#3b0379d63eed2a3b103a3e2e1ec974d3">cairo_dock_free_measure_timer</a> (<a class="code" href="structCairoDockMeasure.html">CairoDockMeasure</a> *pMeasureTimer);
+<a name="l00183"></a>00183 gboolean <a class="code" href="cairo-dock-applet-facility_8h.html#efc7cacec32e8d3cfee53b818db657d7">cairo_dock_measure_is_active</a> (<a class="code" href="structCairoDockMeasure.html">CairoDockMeasure</a> *pMeasureTimer);
+<a name="l00189"></a>00189 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-applet-facility_8h.html#cf6a90dacd4ea299e4590b36ab1c03f1">cairo_dock_change_measure_frequency</a> (<a class="code" href="structCairoDockMeasure.html">CairoDockMeasure</a> *pMeasureTimer, <span class="keywordtype">int</span> iNewCheckInterval);
+<a name="l00190"></a>00190 
+<a name="l00191"></a>00191 
+<a name="l00192"></a>00192 <span class="comment">//\_________________________________ INIT</span>
+<a name="l00196"></a><a class="code" href="cairo-dock-applet-facility_8h.html#a0982c52cc4acbf02d0d37a64bba21c5">00196</a> <span class="comment"></span><span class="preprocessor">#define CD_APPLET_H \</span>
+<a name="l00197"></a>00197 <span class="preprocessor">CairoDockVisitCard *pre_init (void); \</span>
+<a name="l00198"></a>00198 <span class="preprocessor">void init (GKeyFile *pKeyFile, Icon *pIcon, CairoDockContainer *pContainer, gchar *cConfFilePath, GError **erreur); \</span>
+<a name="l00199"></a>00199 <span class="preprocessor">void stop (void); \</span>
+<a name="l00200"></a>00200 <span class="preprocessor">gboolean reload (GKeyFile *pKeyFile, gchar *cConfFilePath, CairoDockContainer *pNewContainer);</span>
+<a name="l00201"></a>00201 <span class="preprocessor"></span>
+<a name="l00202"></a>00202 <span class="comment">//\______________________ pre_init.</span>
+<a name="l00212"></a><a class="code" href="cairo-dock-applet-facility_8h.html#f62c9d3ce165c3355b2b948b0c77cf8b">00212</a> <span class="comment"></span><span class="preprocessor">#define CD_APPLET_PRE_INIT_BEGIN(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory) \</span>
+<a name="l00213"></a>00213 <span class="preprocessor">Icon *myIcon = NULL; \</span>
+<a name="l00214"></a>00214 <span class="preprocessor">CairoDock *myDock = NULL; \</span>
+<a name="l00215"></a>00215 <span class="preprocessor">CairoDockDesklet *myDesklet = NULL; \</span>
+<a name="l00216"></a>00216 <span class="preprocessor">CairoDockContainer *myContainer = NULL; \</span>
+<a name="l00217"></a>00217 <span class="preprocessor">cairo_t *myDrawContext = NULL; \</span>
+<a name="l00218"></a>00218 <span class="preprocessor">AppletConfig myConfig; \</span>
+<a name="l00219"></a>00219 <span class="preprocessor">AppletData myData; \</span>
+<a name="l00220"></a>00220 <span class="preprocessor">CairoDockVisitCard *pre_init (void) \</span>
+<a name="l00221"></a>00221 <span class="preprocessor">{ \</span>
+<a name="l00222"></a>00222 <span class="preprocessor">        CairoDockVisitCard *pVisitCard = g_new0 (CairoDockVisitCard, 1); \</span>
+<a name="l00223"></a>00223 <span class="preprocessor">        pVisitCard-&gt;cModuleName = g_strdup (cName); \</span>
+<a name="l00224"></a>00224 <span class="preprocessor">        pVisitCard-&gt;cReadmeFilePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, MY_APPLET_README_FILE); \</span>
+<a name="l00225"></a>00225 <span class="preprocessor">        pVisitCard-&gt;iMajorVersionNeeded = iMajorVersion; \</span>
+<a name="l00226"></a>00226 <span class="preprocessor">        pVisitCard-&gt;iMinorVersionNeeded = iMinorVersion; \</span>
+<a name="l00227"></a>00227 <span class="preprocessor">        pVisitCard-&gt;iMicroVersionNeeded = iMicroVersion; \</span>
+<a name="l00228"></a>00228 <span class="preprocessor">        pVisitCard-&gt;cPreviewFilePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, MY_APPLET_PREVIEW_FILE); \</span>
+<a name="l00229"></a>00229 <span class="preprocessor">        pVisitCard-&gt;cGettextDomain = g_strdup (MY_APPLET_GETTEXT_DOMAIN); \</span>
+<a name="l00230"></a>00230 <span class="preprocessor">        pVisitCard-&gt;cDockVersionOnCompilation = g_strdup (MY_APPLET_DOCK_VERSION); \</span>
+<a name="l00231"></a>00231 <span class="preprocessor">        pVisitCard-&gt;cUserDataDir = g_strdup (MY_APPLET_USER_DATA_DIR); \</span>
+<a name="l00232"></a>00232 <span class="preprocessor">        pVisitCard-&gt;cShareDataDir = g_strdup (MY_APPLET_SHARE_DATA_DIR); \</span>
+<a name="l00233"></a>00233 <span class="preprocessor">        pVisitCard-&gt;cConfFileName = (MY_APPLET_CONF_FILE != NULL &amp;&amp; strcmp (MY_APPLET_CONF_FILE, "none") != 0 ? g_strdup (MY_APPLET_CONF_FILE) : NULL); \</span>
+<a name="l00234"></a>00234 <span class="preprocessor">        pVisitCard-&gt;cModuleVersion = g_strdup (MY_APPLET_VERSION);\</span>
+<a name="l00235"></a>00235 <span class="preprocessor">        pVisitCard-&gt;iCategory =iAppletCategory ;\</span>
+<a name="l00236"></a>00236 <span class="preprocessor">        pVisitCard-&gt;cIconFilePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, MY_APPLET_ICON_FILE);</span>
+<a name="l00237"></a>00237 <span class="preprocessor"></span>
+<a name="l00240"></a><a class="code" href="cairo-dock-applet-facility_8h.html#902888776403f24d855b5074f836e76a">00240</a> <span class="preprocessor">#define CD_APPLET_PRE_INIT_END \</span>
+<a name="l00241"></a>00241 <span class="preprocessor">        return pVisitCard; \</span>
+<a name="l00242"></a>00242 <span class="preprocessor">}</span>
+<a name="l00243"></a>00243 <span class="preprocessor"></span>
+<a name="l00246"></a><a class="code" href="cairo-dock-applet-facility_8h.html#af9267cccf0e147a109ed90ece6b1651">00246</a> <span class="preprocessor">#define CD_APPLET_DEFINITION(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory) \</span>
+<a name="l00247"></a>00247 <span class="preprocessor">CD_APPLET_PRE_INIT_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory) \</span>
+<a name="l00248"></a>00248 <span class="preprocessor">CD_APPLET_PRE_INIT_END</span>
+<a name="l00249"></a>00249 <span class="preprocessor"></span>
+<a name="l00250"></a>00250 
+<a name="l00251"></a>00251 
+<a name="l00252"></a>00252 <span class="comment">//\______________________ init.</span>
+<a name="l00258"></a><a class="code" href="cairo-dock-applet-facility_8h.html#d9e04e23f2e7d2a77e37583fb5f39685">00258</a> <span class="comment"></span><span class="preprocessor">#define CD_APPLET_INIT_BEGIN(erreur) \</span>
+<a name="l00259"></a>00259 <span class="preprocessor">void init (GKeyFile *pKeyFile, Icon *pIcon, CairoDockContainer *pContainer, gchar *cConfFilePath, GError **erreur) \</span>
+<a name="l00260"></a>00260 <span class="preprocessor">{ \</span>
+<a name="l00261"></a>00261 <span class="preprocessor">        g_return_if_fail (pContainer != NULL &amp;&amp; pIcon != NULL); \</span>
+<a name="l00262"></a>00262 <span class="preprocessor">        myIcon = pIcon; \</span>
+<a name="l00263"></a>00263 <span class="preprocessor">        myContainer = pContainer; \</span>
+<a name="l00264"></a>00264 <span class="preprocessor">        myDock = (CAIRO_DOCK_IS_DOCK (pContainer) ? CAIRO_DOCK_DOCK (pContainer) : NULL); \</span>
+<a name="l00265"></a>00265 <span class="preprocessor">        myDesklet = (CAIRO_DOCK_IS_DESKLET (pContainer) ? CAIRO_DOCK_DESKLET (pContainer) : NULL); \</span>
+<a name="l00266"></a>00266 <span class="preprocessor">        read_conf_file (pKeyFile, cConfFilePath); \</span>
+<a name="l00267"></a>00267 <span class="preprocessor">        if (CAIRO_DOCK_IS_DOCK (myContainer)) \</span>
+<a name="l00268"></a>00268 <span class="preprocessor">        { \</span>
+<a name="l00269"></a>00269 <span class="preprocessor">                if (myIcon != NULL) \</span>
+<a name="l00270"></a>00270 <span class="preprocessor">                { \</span>
+<a name="l00271"></a>00271 <span class="preprocessor">                        myDrawContext = cairo_create (myIcon-&gt;pIconBuffer); \</span>
+<a name="l00272"></a>00272 <span class="preprocessor">                        g_return_if_fail (cairo_status (myDrawContext) == CAIRO_STATUS_SUCCESS); \</span>
+<a name="l00273"></a>00273 <span class="preprocessor">                } \</span>
+<a name="l00274"></a>00274 <span class="preprocessor">        } \</span>
+<a name="l00275"></a>00275 <span class="preprocessor">        else \</span>
+<a name="l00276"></a>00276 <span class="preprocessor">                myDrawContext = NULL;</span>
+<a name="l00277"></a>00277 <span class="preprocessor"></span>
+<a name="l00281"></a><a class="code" href="cairo-dock-applet-facility_8h.html#cd56d5f4dc1ffae3f9930c9bb0260aad">00281</a> <span class="preprocessor">#define CD_APPLET_INIT_END \</span>
+<a name="l00282"></a>00282 <span class="preprocessor">        return; \</span>
+<a name="l00283"></a>00283 <span class="preprocessor">}</span>
+<a name="l00284"></a>00284 <span class="preprocessor"></span>
+<a name="l00285"></a>00285 <span class="comment">//\______________________ stop.</span>
+<a name="l00289"></a><a class="code" href="cairo-dock-applet-facility_8h.html#3bb602a8fee1cd45f5a7dc77b039579b">00289</a> <span class="comment"></span><span class="preprocessor">#define CD_APPLET_STOP_BEGIN \</span>
+<a name="l00290"></a>00290 <span class="preprocessor">void stop (void) \</span>
+<a name="l00291"></a>00291 <span class="preprocessor">{</span>
+<a name="l00292"></a>00292 <span class="preprocessor"></span>
+<a name="l00296"></a><a class="code" href="cairo-dock-applet-facility_8h.html#29752d1b78577068d344e6f01252bb57">00296</a> <span class="preprocessor">#define CD_APPLET_STOP_END \</span>
+<a name="l00297"></a>00297 <span class="preprocessor">        reset_data (); \</span>
+<a name="l00298"></a>00298 <span class="preprocessor">        reset_config (); \</span>
+<a name="l00299"></a>00299 <span class="preprocessor">        myDock = NULL; \</span>
+<a name="l00300"></a>00300 <span class="preprocessor">        myDesklet = NULL; \</span>
+<a name="l00301"></a>00301 <span class="preprocessor">        myContainer = NULL; \</span>
+<a name="l00302"></a>00302 <span class="preprocessor">        myIcon = NULL; \</span>
+<a name="l00303"></a>00303 <span class="preprocessor">        if (myDrawContext != NULL) \</span>
+<a name="l00304"></a>00304 <span class="preprocessor">                cairo_destroy (myDrawContext); \</span>
+<a name="l00305"></a>00305 <span class="preprocessor">        myDrawContext = NULL; \</span>
+<a name="l00306"></a>00306 <span class="preprocessor">}</span>
+<a name="l00307"></a>00307 <span class="preprocessor"></span>
+<a name="l00308"></a>00308 <span class="comment">//\______________________ reload.</span>
+<a name="l00312"></a><a class="code" href="cairo-dock-applet-facility_8h.html#8095167d673bd9cdb776e7bddba5b4a5">00312</a> <span class="comment"></span><span class="preprocessor">#define CD_APPLET_RELOAD_BEGIN \</span>
+<a name="l00313"></a>00313 <span class="preprocessor">gboolean reload (GKeyFile *pKeyFile, gchar *cConfFilePath, CairoDockContainer *pNewContainer) \</span>
+<a name="l00314"></a>00314 <span class="preprocessor">{ \</span>
+<a name="l00315"></a>00315 <span class="preprocessor">        cd_message ("%s (%s)\n", __func__, cConfFilePath); \</span>
+<a name="l00316"></a>00316 <span class="preprocessor">        g_return_val_if_fail (pNewContainer != NULL, FALSE); \</span>
+<a name="l00317"></a>00317 <span class="preprocessor">        CairoDockContainer *pOldContainer = myContainer; \</span>
+<a name="l00318"></a>00318 <span class="preprocessor">        gboolean bContainerTypeChanged = (myContainer == NULL || myContainer-&gt;iType != pNewContainer-&gt;iType); \</span>
+<a name="l00319"></a>00319 <span class="preprocessor">        myContainer = pNewContainer; \</span>
+<a name="l00320"></a>00320 <span class="preprocessor">        myDock = (CAIRO_DOCK_IS_DOCK (pNewContainer) ? CAIRO_DOCK_DOCK (pNewContainer) : NULL); \</span>
+<a name="l00321"></a>00321 <span class="preprocessor">        myDesklet = (CAIRO_DOCK_IS_DESKLET (pNewContainer) ? CAIRO_DOCK_DESKLET (pNewContainer) : NULL); \</span>
+<a name="l00322"></a>00322 <span class="preprocessor">        if (pKeyFile != NULL) \</span>
+<a name="l00323"></a>00323 <span class="preprocessor">                read_conf_file (pKeyFile, cConfFilePath); \</span>
+<a name="l00324"></a>00324 <span class="preprocessor">        if (myDrawContext != NULL) \</span>
+<a name="l00325"></a>00325 <span class="preprocessor">                cairo_destroy (myDrawContext); \</span>
+<a name="l00326"></a>00326 <span class="preprocessor">        if (CAIRO_DOCK_IS_DOCK (myContainer)) \</span>
+<a name="l00327"></a>00327 <span class="preprocessor">        { \</span>
+<a name="l00328"></a>00328 <span class="preprocessor">                myDrawContext = cairo_create (myIcon-&gt;pIconBuffer); \</span>
+<a name="l00329"></a>00329 <span class="preprocessor">                g_return_val_if_fail (cairo_status (myDrawContext) == CAIRO_STATUS_SUCCESS, FALSE); \</span>
+<a name="l00330"></a>00330 <span class="preprocessor">        } \</span>
+<a name="l00331"></a>00331 <span class="preprocessor">        else \</span>
+<a name="l00332"></a>00332 <span class="preprocessor">                myDrawContext = NULL;</span>
+<a name="l00333"></a>00333 <span class="preprocessor"></span>
+<a name="l00337"></a><a class="code" href="cairo-dock-applet-facility_8h.html#5596229fe60c5e4e45ec3bcd36cbbabf">00337</a> <span class="preprocessor">#define CD_APPLET_RELOAD_END \</span>
+<a name="l00338"></a>00338 <span class="preprocessor">        return TRUE; \</span>
+<a name="l00339"></a>00339 <span class="preprocessor">}</span>
+<a name="l00340"></a>00340 <span class="preprocessor"></span>
+<a name="l00344"></a><a class="code" href="cairo-dock-applet-facility_8h.html#2c0788294b34917b7f45e4b3b2b05043">00344</a> <span class="preprocessor">#define CD_APPLET_MY_CONFIG_CHANGED (pKeyFile != NULL)</span>
+<a name="l00345"></a>00345 <span class="preprocessor"></span>
+<a name="l00349"></a><a class="code" href="cairo-dock-applet-facility_8h.html#30a2f5605a7287eb570b4331ca1b5f2a">00349</a> <span class="preprocessor">#define CD_APPLET_MY_CONTAINER_TYPE_CHANGED bContainerTypeChanged</span>
+<a name="l00350"></a>00350 <span class="preprocessor"></span>
+<a name="l00354"></a><a class="code" href="cairo-dock-applet-facility_8h.html#d53fde0096597a2780d970c7ab6b3f02">00354</a> <span class="preprocessor">#define CD_APPLET_MY_OLD_CONTAINER pOldContainer;</span>
+<a name="l00355"></a>00355 <span class="preprocessor"></span>
+<a name="l00356"></a>00356 
+<a name="l00360"></a><a class="code" href="cairo-dock-applet-facility_8h.html#43deb68912fbcf2ee76baacbf64c44a7">00360</a> <span class="preprocessor">#define CD_APPLET_MY_CONF_FILE cConfFilePath</span>
+<a name="l00361"></a>00361 <span class="preprocessor"></span>
+<a name="l00364"></a><a class="code" href="cairo-dock-applet-facility_8h.html#417952ee53f63c930803d20ba1e722c1">00364</a> <span class="preprocessor">#define CD_APPLET_MY_KEY_FILE pKeyFile</span>
+<a name="l00365"></a>00365 <span class="preprocessor"></span>
+<a name="l00366"></a>00366 
+<a name="l00367"></a>00367 <span class="comment">//\_________________________________ CONFIG</span>
+<a name="l00368"></a>00368 <span class="comment">//\______________________ read_conf_file.</span>
+<a name="l00372"></a><a class="code" href="cairo-dock-applet-facility_8h.html#cad77647ec9c41fd903cb6dbb71c1276">00372</a> <span class="comment"></span><span class="preprocessor">#define CD_APPLET_GET_CONFIG_BEGIN \</span>
+<a name="l00373"></a>00373 <span class="preprocessor">void read_conf_file (GKeyFile *pKeyFile, gchar *cConfFilePath) \</span>
+<a name="l00374"></a>00374 <span class="preprocessor">{ \</span>
+<a name="l00375"></a>00375 <span class="preprocessor">        gboolean bFlushConfFileNeeded = FALSE, bNewKeysPresent = FALSE; \</span>
+<a name="l00376"></a>00376 <span class="preprocessor">        reset_config ();</span>
+<a name="l00377"></a>00377 <span class="preprocessor"></span>
+<a name="l00381"></a><a class="code" href="cairo-dock-applet-facility_8h.html#be1ddb13f306132e4f35e56aa93fb1b6">00381</a> <span class="preprocessor">#define CD_APPLET_GET_CONFIG_END \</span>
+<a name="l00382"></a>00382 <span class="preprocessor">        if (bNewKeysPresent) \</span>
+<a name="l00383"></a>00383 <span class="preprocessor">                cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath); \</span>
+<a name="l00384"></a>00384 <span class="preprocessor">        if (! bFlushConfFileNeeded) \</span>
+<a name="l00385"></a>00385 <span class="preprocessor">                bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, MY_APPLET_VERSION); \</span>
+<a name="l00386"></a>00386 <span class="preprocessor">        if (bFlushConfFileNeeded) \</span>
+<a name="l00387"></a>00387 <span class="preprocessor">                cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, MY_APPLET_SHARE_DATA_DIR);\</span>
+<a name="l00388"></a>00388 <span class="preprocessor">}</span>
+<a name="l00389"></a>00389 <span class="preprocessor"></span>
+<a name="l00390"></a>00390 
+<a name="l00394"></a><a class="code" href="cairo-dock-applet-facility_8h.html#574b5f070d39b7b69297a9d7ad4afe1d">00394</a> <span class="preprocessor">#define CD_APPLET_CONFIG_H \</span>
+<a name="l00395"></a>00395 <span class="preprocessor">void read_conf_file (GKeyFile *pKeyFile, gchar *cConfFilePath); \</span>
+<a name="l00396"></a>00396 <span class="preprocessor">void reset_config (void); \</span>
+<a name="l00397"></a>00397 <span class="preprocessor">void reset_data (void);</span>
+<a name="l00398"></a>00398 <span class="preprocessor"></span>
+<a name="l00399"></a>00399 
+<a name="l00407"></a><a class="code" href="cairo-dock-applet-facility_8h.html#95c375ab4085afa56c98f76e1a2177cd">00407</a> <span class="preprocessor">#define CD_CONFIG_GET_BOOLEAN_WITH_DEFAULT(cGroupName, cKeyName, bDefaultValue) cairo_dock_get_boolean_key_value (pKeyFile, cGroupName, cKeyName, &amp;bFlushConfFileNeeded, bDefaultValue, NULL, NULL)</span>
+<a name="l00408"></a>00408 <span class="preprocessor"></span>
+<a name="l00415"></a><a class="code" href="cairo-dock-applet-facility_8h.html#6b8a301a18e1732b94738e3a2d6f34e5">00415</a> <span class="preprocessor">#define CD_CONFIG_GET_BOOLEAN(cGroupName, cKeyName) \</span>
+<a name="l00416"></a>00416 <span class="preprocessor">CD_CONFIG_GET_BOOLEAN_WITH_DEFAULT (cGroupName, cKeyName, TRUE)</span>
+<a name="l00417"></a>00417 <span class="preprocessor"></span>
+<a name="l00425"></a><a class="code" href="cairo-dock-applet-facility_8h.html#bb390d5fc6bfa9c4cf01ae3f689b2d9b">00425</a> <span class="preprocessor">#define CD_CONFIG_GET_INTEGER_WITH_DEFAULT(cGroupName, cKeyName, iDefaultValue) cairo_dock_get_integer_key_value (pKeyFile, cGroupName, cKeyName, &amp;bFlushConfFileNeeded, iDefaultValue, NULL, NULL)</span>
+<a name="l00426"></a>00426 <span class="preprocessor"></span>
+<a name="l00432"></a><a class="code" href="cairo-dock-applet-facility_8h.html#2e965a54c8fb32344f983b8ee6fb8762">00432</a> <span class="preprocessor">#define CD_CONFIG_GET_INTEGER(cGroupName, cKeyName)CD_CONFIG_GET_INTEGER_WITH_DEFAULT (cGroupName, cKeyName, 0)</span>
+<a name="l00433"></a>00433 <span class="preprocessor"></span>
+<a name="l00441"></a><a class="code" href="cairo-dock-applet-facility_8h.html#4695f5ea7a22882b73b5205cdfdf2e29">00441</a> <span class="preprocessor">#define CD_CONFIG_GET_DOUBLE_WITH_DEFAULT(cGroupName, cKeyName, fDefaultValue) cairo_dock_get_double_key_value (pKeyFile, cGroupName, cKeyName, &amp;bFlushConfFileNeeded, 0., NULL, NULL)</span>
+<a name="l00442"></a>00442 <span class="preprocessor"></span>
+<a name="l00448"></a><a class="code" href="cairo-dock-applet-facility_8h.html#243a6fc7b950aafaf578049db5dc4e65">00448</a> <span class="preprocessor">#define CD_CONFIG_GET_DOUBLE(cGroupName, cKeyName) CD_CONFIG_GET_DOUBLE_WITH_DEFAULT (cGroupName, cKeyName, 0.)</span>
+<a name="l00449"></a>00449 <span class="preprocessor"></span>
+<a name="l00457"></a><a class="code" href="cairo-dock-applet-facility_8h.html#7857724f089eefd0ab85a5a676417a35">00457</a> <span class="preprocessor">#define CD_CONFIG_GET_STRING_WITH_DEFAULT(cGroupName, cKeyName, cDefaultValue) cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, &amp;bFlushConfFileNeeded, cDefaultValue, NULL, NULL)</span>
+<a name="l00458"></a>00458 <span class="preprocessor"></span>
+<a name="l00464"></a><a class="code" href="cairo-dock-applet-facility_8h.html#31acb378f798104e855a44797fdfbea8">00464</a> <span class="preprocessor">#define CD_CONFIG_GET_STRING(cGroupName, cKeyName) CD_CONFIG_GET_STRING_WITH_DEFAULT (cGroupName, cKeyName, NULL)</span>
+<a name="l00465"></a>00465 <span class="preprocessor"></span>
+<a name="l00474"></a><a class="code" href="cairo-dock-applet-facility_8h.html#42fc7314fe53430bdf0e766f634a185e">00474</a> <span class="preprocessor">#define CD_CONFIG_GET_STRING_LIST_WITH_DEFAULT(cGroupName, cKeyName, length, cDefaultValues) cairo_dock_get_string_list_key_value (pKeyFile, cGroupName, cKeyName, &amp;bFlushConfFileNeeded, length, cDefaultValues, NULL, NULL)</span>
+<a name="l00475"></a>00475 <span class="preprocessor"></span>
+<a name="l00482"></a><a class="code" href="cairo-dock-applet-facility_8h.html#75d95869a2430ba771874f7950f7770d">00482</a> <span class="preprocessor">#define CD_CONFIG_GET_STRING_LIST(cGroupName, cKeyName, length) CD_CONFIG_GET_STRING_LIST_WITH_DEFAULT(cGroupName, cKeyName, length, NULL)</span>
+<a name="l00483"></a>00483 <span class="preprocessor"></span>
+<a name="l00491"></a><a class="code" href="cairo-dock-applet-facility_8h.html#0d7676c29cbefba6155a2198b19d94a6">00491</a> <span class="preprocessor">#define CD_CONFIG_GET_ANIMATION_WITH_DEFAULT(cGroupName, cKeyName, iDefaultAnimation) cairo_dock_get_animation_type_key_value (pKeyFile, cGroupName, cKeyName, &amp;bFlushConfFileNeeded, iDefaultAnimation, NULL, NULL);</span>
+<a name="l00492"></a>00492 <span class="preprocessor"></span>
+<a name="l00498"></a><a class="code" href="cairo-dock-applet-facility_8h.html#47051bfe4ada4041bc5967bad2265050">00498</a> <span class="preprocessor">#define CD_CONFIG_GET_ANIMATION(cGroupName, cKeyName) CD_CONFIG_GET_ANIMATION_WITH_DEFAULT(cGroupName, cKeyName, CAIRO_DOCK_BOUNCE)</span>
+<a name="l00499"></a>00499 <span class="preprocessor"></span>
+<a name="l00507"></a><a class="code" href="cairo-dock-applet-facility_8h.html#36db893eed656ef167f47ab43a2285d1">00507</a> <span class="preprocessor">#define CD_CONFIG_GET_COLOR_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, pDefaultColor) cairo_dock_get_double_list_key_value (pKeyFile, cGroupName, cKeyName, &amp;bFlushConfFileNeeded, pColorBuffer, 4, pDefaultColor, NULL, NULL);</span>
+<a name="l00508"></a>00508 <span class="preprocessor"></span>
+<a name="l00514"></a><a class="code" href="cairo-dock-applet-facility_8h.html#483d0330c1c8768ba433780b81fca204">00514</a> <span class="preprocessor">#define CD_CONFIG_GET_COLOR(cGroupName, cKeyName, pColorBuffer) CD_CONFIG_GET_COLOR_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, NULL)</span>
+<a name="l00515"></a>00515 <span class="preprocessor"></span>
+<a name="l00522"></a><a class="code" href="cairo-dock-applet-facility_8h.html#0d4db45fbbf1ba5a1736c44b26e99add">00522</a> <span class="preprocessor">#define CD_CONFIG_GET_COLOR_RVB_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, pDefaultColor) cairo_dock_get_double_list_key_value (pKeyFile, cGroupName, cKeyName, &amp;bFlushConfFileNeeded, pColorBuffer, 3, pDefaultColor, NULL, NULL);</span>
+<a name="l00523"></a>00523 <span class="preprocessor"></span>
+<a name="l00529"></a><a class="code" href="cairo-dock-applet-facility_8h.html#fe65c86e6f6864b9c43d777d52a911e7">00529</a> <span class="preprocessor">#define CD_CONFIG_GET_COLOR_RVB(cGroupName, cKeyName, pColorBuffer) CD_CONFIG_GET_COLOR_RVB_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, NULL)</span>
+<a name="l00530"></a>00530 <span class="preprocessor"></span>
+<a name="l00539"></a><a class="code" href="cairo-dock-applet-facility_8h.html#0a4da143164434e0da5f414b4f32e820">00539</a> <span class="preprocessor">#define CD_CONFIG_GET_THEME_PATH(cGroupName, cKeyName, cThemesDirName, cDefaultThemeName) \</span>
+<a name="l00540"></a>00540 <span class="preprocessor">cairo_dock_manage_themes_for_applet (MY_APPLET_SHARE_DATA_DIR, cThemesDirName, CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKeyName, &amp;bFlushConfFileNeeded, cDefaultThemeName)</span>
+<a name="l00541"></a>00541 <span class="preprocessor"></span>
+<a name="l00545"></a><a class="code" href="cairo-dock-applet-facility_8h.html#785be573e6659303fe3913cb20f300e6">00545</a> <span class="preprocessor">#define CD_APPLET_RESET_CONFIG_BEGIN \</span>
+<a name="l00546"></a>00546 <span class="preprocessor">void reset_config (void) \</span>
+<a name="l00547"></a>00547 <span class="preprocessor">{</span>
+<a name="l00548"></a>00548 <span class="preprocessor"></span>
+<a name="l00551"></a><a class="code" href="cairo-dock-applet-facility_8h.html#3fe25ac1d0a245679cfd028b47307b5d">00551</a> <span class="preprocessor">#define CD_APPLET_RESET_CONFIG_END \</span>
+<a name="l00552"></a>00552 <span class="preprocessor">        memset (&amp;myConfig, 0, sizeof (AppletConfig)); \</span>
+<a name="l00553"></a>00553 <span class="preprocessor">}</span>
+<a name="l00554"></a>00554 <span class="preprocessor"></span>
+<a name="l00558"></a><a class="code" href="cairo-dock-applet-facility_8h.html#b96f9674229da0bd53c89775ef50ba60">00558</a> <span class="preprocessor">#define CD_APPLET_RESET_DATA_BEGIN \</span>
+<a name="l00559"></a>00559 <span class="preprocessor">void reset_data(void) \</span>
+<a name="l00560"></a>00560 <span class="preprocessor">{</span>
+<a name="l00561"></a>00561 <span class="preprocessor"></span>
+<a name="l00564"></a><a class="code" href="cairo-dock-applet-facility_8h.html#b18541573359a947528848a7f9c63ad1">00564</a> <span class="preprocessor">#define CD_APPLET_RESET_DATA_END \</span>
+<a name="l00565"></a>00565 <span class="preprocessor">        memset (&amp;myData, 0, sizeof (AppletData)); \</span>
+<a name="l00566"></a>00566 <span class="preprocessor">}</span>
+<a name="l00567"></a>00567 <span class="preprocessor"></span>
+<a name="l00568"></a>00568 <span class="comment">//\_________________________________ NOTIFICATIONS</span>
+<a name="l00569"></a>00569 <span class="comment">//\______________________ fonction about.</span>
+<a name="l00574"></a><a class="code" href="cairo-dock-applet-facility_8h.html#91dc25bf8fcc3ea429f93bf16a734bbf">00574</a> <span class="comment"></span><span class="preprocessor">#define CD_APPLET_ABOUT(cMessage) \</span>
+<a name="l00575"></a>00575 <span class="preprocessor">void about (GtkMenuItem *menu_item, gpointer *data) \</span>
+<a name="l00576"></a>00576 <span class="preprocessor">{ \</span>
+<a name="l00577"></a>00577 <span class="preprocessor">        cairo_dock_show_temporary_dialog (cMessage, myIcon, myContainer, 0); \</span>
+<a name="l00578"></a>00578 <span class="preprocessor">}</span>
+<a name="l00579"></a>00579 <span class="preprocessor"></span>
+<a name="l00582"></a><a class="code" href="cairo-dock-applet-facility_8h.html#9ecdbd793978883dbc2cc90954a6c15c">00582</a> <span class="preprocessor">#define CD_APPLET_ABOUT_H \</span>
+<a name="l00583"></a>00583 <span class="preprocessor">void about (GtkMenuItem *menu_item, gpointer *data);</span>
+<a name="l00584"></a>00584 <span class="preprocessor"></span>
+<a name="l00585"></a>00585 <span class="comment">//\______________________ notification clique gauche.</span>
+<a name="l00586"></a><a class="code" href="cairo-dock-applet-facility_8h.html#9c7eb1af8133468449966a63fd0d3beb">00586</a> <span class="preprocessor">#define CD_APPLET_ON_CLICK action_on_click</span>
+<a name="l00587"></a>00587 <span class="preprocessor"></span>
+<a name="l00590"></a><a class="code" href="cairo-dock-applet-facility_8h.html#9af4f412c90f432476994e97b7a6869c">00590</a> <span class="preprocessor">#define CD_APPLET_REGISTER_FOR_CLICK_EVENT cairo_dock_register_notification (CAIRO_DOCK_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_CLICK, CAIRO_DOCK_RUN_FIRST);</span>
+<a name="l00591"></a>00591 <span class="preprocessor"></span>
+<a name="l00594"></a><a class="code" href="cairo-dock-applet-facility_8h.html#36334807d26aedafc981900a6fa02e92">00594</a> <span class="preprocessor">#define CD_APPLET_UNREGISTER_FOR_CLICK_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_CLICK);</span>
+<a name="l00595"></a>00595 <span class="preprocessor"></span>
+<a name="l00599"></a><a class="code" href="cairo-dock-applet-facility_8h.html#2eb08b1e3af8ab407081b9e49bb03773">00599</a> <span class="preprocessor">#define CD_APPLET_ON_CLICK_BEGIN \</span>
+<a name="l00600"></a>00600 <span class="preprocessor">gboolean CD_APPLET_ON_CLICK (gpointer *data) \</span>
+<a name="l00601"></a>00601 <span class="preprocessor">{ \</span>
+<a name="l00602"></a>00602 <span class="preprocessor">        Icon *pClickedIcon = data[0]; \</span>
+<a name="l00603"></a>00603 <span class="preprocessor">        CairoDockContainer *pClickedContainer = data[1]; \</span>
+<a name="l00604"></a>00604 <span class="preprocessor">        guint iButtonState = GPOINTER_TO_INT (data[2]); \</span>
+<a name="l00605"></a>00605 <span class="preprocessor">        if (pClickedIcon == myIcon || (myIcon != NULL &amp;&amp; pClickedContainer == CAIRO_DOCK_CONTAINER (myIcon-&gt;pSubDock)) || pClickedContainer == CAIRO_DOCK_CONTAINER (myDesklet)) \</span>
+<a name="l00606"></a>00606 <span class="preprocessor">        {</span>
+<a name="l00607"></a>00607 <span class="preprocessor"></span>
+<a name="l00611"></a><a class="code" href="cairo-dock-applet-facility_8h.html#c2663e8afce516ba24298335fd8d9e9f">00611</a> <span class="preprocessor">#define CD_APPLET_ON_CLICK_END \</span>
+<a name="l00612"></a>00612 <span class="preprocessor">                return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \</span>
+<a name="l00613"></a>00613 <span class="preprocessor">        } \</span>
+<a name="l00614"></a>00614 <span class="preprocessor">        return CAIRO_DOCK_LET_PASS_NOTIFICATION; \</span>
+<a name="l00615"></a>00615 <span class="preprocessor">}</span>
+<a name="l00616"></a>00616 <span class="preprocessor"></span>
+<a name="l00619"></a><a class="code" href="cairo-dock-applet-facility_8h.html#19996a83c4fcc1d371cacca30a920adb">00619</a> <span class="preprocessor">#define CD_APPLET_ON_CLICK_H \</span>
+<a name="l00620"></a>00620 <span class="preprocessor">gboolean CD_APPLET_ON_CLICK (gpointer *data);</span>
+<a name="l00621"></a>00621 <span class="preprocessor"></span>
+<a name="l00622"></a>00622 <span class="comment">//\______________________ notification construction menu.</span>
+<a name="l00623"></a><a class="code" href="cairo-dock-applet-facility_8h.html#30942d93b6a087bdf61d47ebcb6da382">00623</a> <span class="preprocessor">#define CD_APPLET_ON_BUILD_MENU applet_on_build_menu</span>
+<a name="l00624"></a>00624 <span class="preprocessor"></span>
+<a name="l00627"></a><a class="code" href="cairo-dock-applet-facility_8h.html#f1834e58d8a9ba1d50ae3417bcd51d5e">00627</a> <span class="preprocessor">#define CD_APPLET_REGISTER_FOR_BUILD_MENU_EVENT cairo_dock_register_notification (CAIRO_DOCK_BUILD_MENU, (CairoDockNotificationFunc) CD_APPLET_ON_BUILD_MENU, CAIRO_DOCK_RUN_FIRST);</span>
+<a name="l00628"></a>00628 <span class="preprocessor"></span>
+<a name="l00631"></a><a class="code" href="cairo-dock-applet-facility_8h.html#94ab7b0c147a901a15965dec8afb1271">00631</a> <span class="preprocessor">#define CD_APPLET_UNREGISTER_FOR_BUILD_MENU_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_BUILD_MENU, (CairoDockNotificationFunc) CD_APPLET_ON_BUILD_MENU);</span>
+<a name="l00632"></a>00632 <span class="preprocessor"></span>
+<a name="l00636"></a><a class="code" href="cairo-dock-applet-facility_8h.html#8e443df867d9bd2f31fa2c7d6e838366">00636</a> <span class="preprocessor">#define CD_APPLET_ON_BUILD_MENU_BEGIN \</span>
+<a name="l00637"></a>00637 <span class="preprocessor">gboolean CD_APPLET_ON_BUILD_MENU (gpointer *data) \</span>
+<a name="l00638"></a>00638 <span class="preprocessor">{ \</span>
+<a name="l00639"></a>00639 <span class="preprocessor">        Icon *pClickedIcon = data[0]; \</span>
+<a name="l00640"></a>00640 <span class="preprocessor">        CairoDockContainer *pClickedContainer = data[1]; \</span>
+<a name="l00641"></a>00641 <span class="preprocessor">        if (pClickedIcon == myIcon || (myIcon != NULL &amp;&amp; pClickedContainer == CAIRO_DOCK_CONTAINER (myIcon-&gt;pSubDock)) || pClickedContainer == CAIRO_DOCK_CONTAINER (myDesklet)) \</span>
+<a name="l00642"></a>00642 <span class="preprocessor">        { \</span>
+<a name="l00643"></a>00643 <span class="preprocessor">                GtkWidget *pAppletMenu = data[2]; \</span>
+<a name="l00644"></a>00644 <span class="preprocessor">                GtkWidget *pMenuItem, image; \</span>
+<a name="l00645"></a>00645 <span class="preprocessor">                pMenuItem = gtk_separator_menu_item_new (); \</span>
+<a name="l00646"></a>00646 <span class="preprocessor">                gtk_menu_shell_append(GTK_MENU_SHELL (pAppletMenu), pMenuItem);</span>
+<a name="l00647"></a>00647 <span class="preprocessor"></span>
+<a name="l00651"></a><a class="code" href="cairo-dock-applet-facility_8h.html#63c9821be62eb58904c2fd836a3570d1">00651</a> <span class="preprocessor">#define CD_APPLET_ON_BUILD_MENU_END \</span>
+<a name="l00652"></a>00652 <span class="preprocessor">        } \</span>
+<a name="l00653"></a>00653 <span class="preprocessor">        return CAIRO_DOCK_LET_PASS_NOTIFICATION; \</span>
+<a name="l00654"></a>00654 <span class="preprocessor">}</span>
+<a name="l00655"></a>00655 <span class="preprocessor"></span>
+<a name="l00658"></a><a class="code" href="cairo-dock-applet-facility_8h.html#4a3a795531ece3caa4afc0479e3fced2">00658</a> <span class="preprocessor">#define CD_APPLET_ON_BUILD_MENU_H \</span>
+<a name="l00659"></a>00659 <span class="preprocessor">gboolean CD_APPLET_ON_BUILD_MENU (gpointer *data);</span>
+<a name="l00660"></a>00660 <span class="preprocessor"></span>
+<a name="l00664"></a><a class="code" href="cairo-dock-applet-facility_8h.html#4f2ba1855e4b676071edc59d620745e9">00664</a> <span class="preprocessor">#define CD_APPLET_MY_MENU pAppletMenu</span>
+<a name="l00665"></a>00665 <span class="preprocessor"></span>
+<a name="l00669"></a><a class="code" href="cairo-dock-applet-facility_8h.html#f6319e564875e4e5564fc7ccb5308b7d">00669</a> <span class="preprocessor">#define CD_APPLET_CLICKED_ICON pClickedIcon</span>
+<a name="l00670"></a>00670 <span class="preprocessor"></span>
+<a name="l00673"></a><a class="code" href="cairo-dock-applet-facility_8h.html#4b83783334881e6f6796d277fcaa6d9b">00673</a> <span class="preprocessor">#define CD_APPLET_CLICKED_CONTAINER pClickedContainer</span>
+<a name="l00674"></a>00674 <span class="preprocessor"></span>
+<a name="l00678"></a><a class="code" href="cairo-dock-applet-facility_8h.html#19f1f7016fc66e18dd2631d4fe932986">00678</a> <span class="preprocessor">#define CD_APPLET_SHIFT_CLICK (iButtonState &amp; GDK_SHIFT_MASK)</span>
+<a name="l00679"></a>00679 <span class="preprocessor"></span>
+<a name="l00682"></a><a class="code" href="cairo-dock-applet-facility_8h.html#9373b72f4d0405f4ecfeac26ca265d99">00682</a> <span class="preprocessor">#define CD_APPLET_CTRL_CLICK (iButtonState &amp; GDK_CONTROL_MASK)</span>
+<a name="l00683"></a>00683 <span class="preprocessor"></span>
+<a name="l00686"></a><a class="code" href="cairo-dock-applet-facility_8h.html#a729c989c0b3dffc99d5bffa8f257b22">00686</a> <span class="preprocessor">#define CD_APPLET_ALT_CLICK (iButtonState &amp; GDK_MOD1_MASK)</span>
+<a name="l00687"></a>00687 <span class="preprocessor"></span>
+<a name="l00688"></a>00688 
+<a name="l00695"></a><a class="code" href="cairo-dock-applet-facility_8h.html#e91a84a943cabe89554980dad37ecec6">00695</a> <span class="preprocessor">#define CD_APPLET_ADD_SUB_MENU(cLabel, pSubMenu, pMenu) \</span>
+<a name="l00696"></a>00696 <span class="preprocessor">        GtkWidget *pSubMenu = gtk_menu_new (); \</span>
+<a name="l00697"></a>00697 <span class="preprocessor">        pMenuItem = gtk_menu_item_new_with_label (cLabel); \</span>
+<a name="l00698"></a>00698 <span class="preprocessor">        gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem); \</span>
+<a name="l00699"></a>00699 <span class="preprocessor">        gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);</span>
+<a name="l00700"></a>00700 <span class="preprocessor"></span>
+<a name="l00707"></a><a class="code" href="cairo-dock-applet-facility_8h.html#1ffb7b201e9530cd055ce60c5fb1240c">00707</a> <span class="preprocessor">#define CD_APPLET_CREATE_AND_ADD_SUB_MENU(cLabel, pMenu) \</span>
+<a name="l00708"></a>00708 <span class="preprocessor">        cairo_dock_create_sub_menu (cLabel, pMenu);</span>
+<a name="l00709"></a>00709 <span class="preprocessor"></span>
+<a name="l00717"></a><a class="code" href="cairo-dock-applet-facility_8h.html#cd7a761ad1f57c8462bdd44a6d25cc0f">00717</a> <span class="preprocessor">#define CD_APPLET_ADD_IN_MENU_WITH_DATA(cLabel, pFunction, pMenu, pData) \</span>
+<a name="l00718"></a>00718 <span class="preprocessor">        pMenuItem = gtk_menu_item_new_with_label (cLabel); \</span>
+<a name="l00719"></a>00719 <span class="preprocessor">        gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem); \</span>
+<a name="l00720"></a>00720 <span class="preprocessor">        g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK (pFunction), pData);</span>
+<a name="l00721"></a>00721 <span class="preprocessor"></span>
+<a name="l00728"></a><a class="code" href="cairo-dock-applet-facility_8h.html#94e4e5dcb6b22218816bf0591be6ecf7">00728</a> <span class="preprocessor">#define CD_APPLET_ADD_IN_MENU(cLabel, pFunction, pMenu) CD_APPLET_ADD_IN_MENU_WITH_DATA(cLabel, pFunction, pMenu, NULL)</span>
+<a name="l00729"></a>00729 <span class="preprocessor"></span>
+<a name="l00738"></a><a class="code" href="cairo-dock-applet-facility_8h.html#488d40e7aabe8f7ec0006e8a62c59c5f">00738</a> <span class="preprocessor">#define CD_APPLET_ADD_IN_MENU_WITH_STOCK(cLabel, gtkStock, pFunction, pMenu, pData) \</span>
+<a name="l00739"></a>00739 <span class="preprocessor">        menu_item = gtk_image_menu_item_new_with_label (_(cLabel)); \</span>
+<a name="l00740"></a>00740 <span class="preprocessor">        image = gtk_image_new_from_stock (gtkStock, GTK_ICON_SIZE_MENU); \</span>
+<a name="l00741"></a>00741 <span class="preprocessor">        gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), image); \</span>
+<a name="l00742"></a>00742 <span class="preprocessor">        gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), menu_item); \</span>
+<a name="l00743"></a>00743 <span class="preprocessor">        g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK(pFunction), pData);</span>
+<a name="l00744"></a>00744 <span class="preprocessor"></span>
+<a name="l00745"></a>00745 
+<a name="l00746"></a>00746 
+<a name="l00750"></a><a class="code" href="cairo-dock-applet-facility_8h.html#597be7d582bbb017c90c3cb6abbcf356">00750</a> <span class="preprocessor">#define CD_APPLET_ADD_SEPARATOR() \</span>
+<a name="l00751"></a>00751 <span class="preprocessor">        pMenuItem = gtk_separator_menu_item_new (); \</span>
+<a name="l00752"></a>00752 <span class="preprocessor">        gtk_menu_shell_append(GTK_MENU_SHELL (pSubMenu), pMenuItem);</span>
+<a name="l00753"></a>00753 <span class="preprocessor"></span>
+<a name="l00758"></a><a class="code" href="cairo-dock-applet-facility_8h.html#fa27706cd0b1a11837c7ea0b5118b546">00758</a> <span class="preprocessor">#define CD_APPLET_ADD_ABOUT_IN_MENU(pMenu) CD_APPLET_ADD_IN_MENU (_("About"), about, pMenu)</span>
+<a name="l00759"></a>00759 <span class="preprocessor"></span>
+<a name="l00764"></a><a class="code" href="cairo-dock-applet-facility_8h.html#06ac357be5e2d95a15f417c185383ec2">00764</a> <span class="preprocessor">#define CD_APPLET_LAST_ITEM_IN_MENU pMenuItem</span>
+<a name="l00765"></a>00765 <span class="preprocessor"></span>
+<a name="l00766"></a>00766 <span class="comment">//\______________________ notification clique milieu.</span>
+<a name="l00767"></a><a class="code" href="cairo-dock-applet-facility_8h.html#efd535bf7b831118204cd656d6877e6b">00767</a> <span class="preprocessor">#define CD_APPLET_ON_MIDDLE_CLICK action_on_middle_click</span>
+<a name="l00768"></a>00768 <span class="preprocessor"></span>
+<a name="l00771"></a><a class="code" href="cairo-dock-applet-facility_8h.html#ba2fd37338b6b37e1f216fccc81d8a3a">00771</a> <span class="preprocessor">#define CD_APPLET_REGISTER_FOR_MIDDLE_CLICK_EVENT cairo_dock_register_notification (CAIRO_DOCK_MIDDLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK, CAIRO_DOCK_RUN_FIRST);</span>
+<a name="l00772"></a>00772 <span class="preprocessor"></span>
+<a name="l00775"></a><a class="code" href="cairo-dock-applet-facility_8h.html#1ff10307b589b0d35818e7968453ed86">00775</a> <span class="preprocessor">#define CD_APPLET_UNREGISTER_FOR_MIDDLE_CLICK_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_MIDDLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK);</span>
+<a name="l00776"></a>00776 <span class="preprocessor"></span>
+<a name="l00780"></a><a class="code" href="cairo-dock-applet-facility_8h.html#7a07d8ba50630038278f0ce0c59c3e98">00780</a> <span class="preprocessor">#define CD_APPLET_ON_MIDDLE_CLICK_BEGIN \</span>
+<a name="l00781"></a>00781 <span class="preprocessor">gboolean CD_APPLET_ON_MIDDLE_CLICK (gpointer *data) \</span>
+<a name="l00782"></a>00782 <span class="preprocessor">{ \</span>
+<a name="l00783"></a>00783 <span class="preprocessor">        Icon *pClickedIcon = data[0]; \</span>
+<a name="l00784"></a>00784 <span class="preprocessor">        CairoDockContainer *pClickedContainer = data[1]; \</span>
+<a name="l00785"></a>00785 <span class="preprocessor">        if (pClickedIcon == myIcon || (myIcon != NULL &amp;&amp; pClickedContainer == CAIRO_DOCK_CONTAINER (myIcon-&gt;pSubDock)) || pClickedContainer == CAIRO_DOCK_CONTAINER (myDesklet)) \</span>
+<a name="l00786"></a>00786 <span class="preprocessor">        {</span>
+<a name="l00787"></a>00787 <span class="preprocessor"></span>
+<a name="l00790"></a><a class="code" href="cairo-dock-applet-facility_8h.html#d0d650fcb60c1ed1454013d2de00469b">00790</a> <span class="preprocessor">#define CD_APPLET_ON_MIDDLE_CLICK_END \</span>
+<a name="l00791"></a>00791 <span class="preprocessor">                return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \</span>
+<a name="l00792"></a>00792 <span class="preprocessor">        } \</span>
+<a name="l00793"></a>00793 <span class="preprocessor">        return CAIRO_DOCK_LET_PASS_NOTIFICATION; \</span>
+<a name="l00794"></a>00794 <span class="preprocessor">}</span>
+<a name="l00795"></a>00795 <span class="preprocessor"></span>
+<a name="l00798"></a><a class="code" href="cairo-dock-applet-facility_8h.html#a1542215d48f4c5e1bf38db968b20b28">00798</a> <span class="preprocessor">#define CD_APPLET_ON_MIDDLE_CLICK_H \</span>
+<a name="l00799"></a>00799 <span class="preprocessor">gboolean CD_APPLET_ON_MIDDLE_CLICK (gpointer *data);</span>
+<a name="l00800"></a>00800 <span class="preprocessor"></span>
+<a name="l00801"></a>00801 <span class="comment">//\______________________ notification drag'n'drop.</span>
+<a name="l00802"></a><a class="code" href="cairo-dock-applet-facility_8h.html#6ccf4ad030646c4632c9de4094fb004f">00802</a> <span class="preprocessor">#define CD_APPLET_ON_DROP_DATA action_on_drop_data</span>
+<a name="l00803"></a>00803 <span class="preprocessor"></span>
+<a name="l00806"></a><a class="code" href="cairo-dock-applet-facility_8h.html#bb881762948bd4f4eecc9b9f71a93f89">00806</a> <span class="preprocessor">#define CD_APPLET_REGISTER_FOR_DROP_DATA_EVENT cairo_dock_register_notification (CAIRO_DOCK_DROP_DATA, (CairoDockNotificationFunc) CD_APPLET_ON_DROP_DATA, CAIRO_DOCK_RUN_FIRST);</span>
+<a name="l00807"></a>00807 <span class="preprocessor"></span>
+<a name="l00810"></a><a class="code" href="cairo-dock-applet-facility_8h.html#3ab173ed5d188248ffb23628a3af2407">00810</a> <span class="preprocessor">#define CD_APPLET_UNREGISTER_FOR_DROP_DATA_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_DROP_DATA, (CairoDockNotificationFunc) CD_APPLET_ON_DROP_DATA);</span>
+<a name="l00811"></a>00811 <span class="preprocessor"></span>
+<a name="l00815"></a><a class="code" href="cairo-dock-applet-facility_8h.html#93624d4984bd2a2c41ca2e9dacd2b058">00815</a> <span class="preprocessor">#define CD_APPLET_ON_DROP_DATA_BEGIN \</span>
+<a name="l00816"></a>00816 <span class="preprocessor">gboolean CD_APPLET_ON_DROP_DATA (gpointer *data) \</span>
+<a name="l00817"></a>00817 <span class="preprocessor">{ \</span>
+<a name="l00818"></a>00818 <span class="preprocessor">        Icon *pClickedIcon = data[1]; \</span>
+<a name="l00819"></a>00819 <span class="preprocessor">        CairoDockContainer *pClickedContainer = data[3]; \</span>
+<a name="l00820"></a>00820 <span class="preprocessor">        if (pClickedIcon == myIcon || (myIcon != NULL &amp;&amp; pClickedContainer == CAIRO_DOCK_CONTAINER (myIcon-&gt;pSubDock)) || pClickedContainer == CAIRO_DOCK_CONTAINER (myDesklet)) \</span>
+<a name="l00821"></a>00821 <span class="preprocessor">        { \</span>
+<a name="l00822"></a>00822 <span class="preprocessor">                const gchar *cReceivedData = data[0]; \</span>
+<a name="l00823"></a>00823 <span class="preprocessor">                g_return_val_if_fail (cReceivedData != NULL, CAIRO_DOCK_LET_PASS_NOTIFICATION);</span>
+<a name="l00824"></a>00824 <span class="preprocessor"></span>
+<a name="l00828"></a><a class="code" href="cairo-dock-applet-facility_8h.html#4d15ce3e2a888d21bb5653b49586b1e5">00828</a> <span class="preprocessor">#define CD_APPLET_RECEIVED_DATA cReceivedData</span>
+<a name="l00829"></a>00829 <span class="preprocessor"></span>
+<a name="l00833"></a><a class="code" href="cairo-dock-applet-facility_8h.html#8e0639cb4ab09fcda24e3c4cb604d5f1">00833</a> <span class="preprocessor">#define CD_APPLET_ON_DROP_DATA_END \</span>
+<a name="l00834"></a>00834 <span class="preprocessor">                return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \</span>
+<a name="l00835"></a>00835 <span class="preprocessor">        } \</span>
+<a name="l00836"></a>00836 <span class="preprocessor">        return CAIRO_DOCK_LET_PASS_NOTIFICATION; \</span>
+<a name="l00837"></a>00837 <span class="preprocessor">}</span>
+<a name="l00838"></a>00838 <span class="preprocessor"></span>
+<a name="l00841"></a><a class="code" href="cairo-dock-applet-facility_8h.html#5d16c10821f5acfca09a1473775ffcd6">00841</a> <span class="preprocessor">#define CD_APPLET_ON_DROP_DATA_H \</span>
+<a name="l00842"></a>00842 <span class="preprocessor">gboolean CD_APPLET_ON_DROP_DATA (gpointer *data);</span>
+<a name="l00843"></a>00843 <span class="preprocessor"></span>
+<a name="l00844"></a>00844 
+<a name="l00845"></a>00845 <span class="comment">//\_________________________________ DESSIN</span>
+<a name="l00846"></a>00846 
+<a name="l00850"></a><a class="code" href="cairo-dock-applet-facility_8h.html#60574e63fcc38538041b13fc7e439dc6">00850</a> <span class="preprocessor">#define CD_APPLET_REDRAW_MY_ICON \</span>
+<a name="l00851"></a>00851 <span class="preprocessor">        cairo_dock_redraw_my_icon (myIcon, myContainer);</span>
+<a name="l00852"></a>00852 <span class="preprocessor"></span>
+<a name="l00857"></a><a class="code" href="cairo-dock-applet-facility_8h.html#10a311556476929ac354cc45923fc9b2">00857</a> <span class="preprocessor">#define CD_APPLET_SET_SURFACE_ON_MY_ICON(pSurface) \</span>
+<a name="l00858"></a>00858 <span class="preprocessor">        cairo_dock_set_icon_surface_with_reflect (myDrawContext, pSurface, myIcon, myContainer); \</span>
+<a name="l00859"></a>00859 <span class="preprocessor">        cairo_dock_redraw_my_icon (myIcon, myContainer);</span>
+<a name="l00860"></a>00860 <span class="preprocessor"></span>
+<a name="l00865"></a><a class="code" href="cairo-dock-applet-facility_8h.html#05233d3f98043e2736db027f46bf43b3">00865</a> <span class="preprocessor">#define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_ZOOM(pSurface, fScale) \</span>
+<a name="l00866"></a>00866 <span class="preprocessor">        cairo_dock_set_icon_surface_full (myDrawContext, pSurface, fScale, 1., myIcon, myContainer); \</span>
+<a name="l00867"></a>00867 <span class="preprocessor">        cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer); \</span>
+<a name="l00868"></a>00868 <span class="preprocessor">        cairo_dock_redraw_my_icon (myIcon, myContainer);</span>
+<a name="l00869"></a>00869 <span class="preprocessor"></span>
+<a name="l00874"></a><a class="code" href="cairo-dock-applet-facility_8h.html#35ace88ec8533ddf6d8f5f97e76e2bfa">00874</a> <span class="preprocessor">#define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_ALPHA(pSurface, fAlpha) \</span>
+<a name="l00875"></a>00875 <span class="preprocessor">        cairo_dock_set_icon_surface_full (myDrawContext, pSurface, 1., fAlpha, myIcon, myContainer); \</span>
+<a name="l00876"></a>00876 <span class="preprocessor">        cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer); \</span>
+<a name="l00877"></a>00877 <span class="preprocessor">        cairo_dock_redraw_my_icon (myIcon, myContainer);</span>
+<a name="l00878"></a>00878 <span class="preprocessor"></span>
+<a name="l00883"></a><a class="code" href="cairo-dock-applet-facility_8h.html#83100c634b81539aa37a4e2b1682fb71">00883</a> <span class="preprocessor">#define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_BAR(pSurface, fValue) \</span>
+<a name="l00884"></a>00884 <span class="preprocessor">        cairo_dock_set_icon_surface_full (myDrawContext, pSurface, 1., 1., myIcon, myContainer); \</span>
+<a name="l00885"></a>00885 <span class="preprocessor">        cairo_dock_draw_bar_on_icon (myDrawContext, fValue, myIcon, myContainer); \</span>
+<a name="l00886"></a>00886 <span class="preprocessor">        cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer); \</span>
+<a name="l00887"></a>00887 <span class="preprocessor">        cairo_dock_redraw_my_icon (myIcon, myContainer);</span>
+<a name="l00888"></a>00888 <span class="preprocessor"></span>
+<a name="l00893"></a><a class="code" href="cairo-dock-applet-facility_8h.html#057c6cc5e55a0f84a8117492237f7a20">00893</a> <span class="preprocessor">#define CD_APPLET_SET_IMAGE_ON_MY_ICON(cImagePath) \</span>
+<a name="l00894"></a>00894 <span class="preprocessor">        if (cImagePath != myIcon-&gt;acFileName) \</span>
+<a name="l00895"></a>00895 <span class="preprocessor">        { \</span>
+<a name="l00896"></a>00896 <span class="preprocessor">                g_free (myIcon-&gt;acFileName); \</span>
+<a name="l00897"></a>00897 <span class="preprocessor">                myIcon-&gt;acFileName = g_strdup (cImagePath); \</span>
+<a name="l00898"></a>00898 <span class="preprocessor">        } \</span>
+<a name="l00899"></a>00899 <span class="preprocessor">        cairo_dock_set_image_on_icon (myDrawContext, cImagePath, myIcon, myContainer);</span>
+<a name="l00900"></a>00900 <span class="preprocessor"></span>
+<a name="l00905"></a><a class="code" href="cairo-dock-applet-facility_8h.html#ccfba579f88f83a13f0776c5bf3a87f1">00905</a> <span class="preprocessor">#define CD_APPLET_SET_LOCAL_IMAGE_ON_MY_ICON(cImageName) \</span>
+<a name="l00906"></a>00906 <span class="preprocessor">        { \</span>
+<a name="l00907"></a>00907 <span class="preprocessor">                gchar *cImageFilePath = g_strconcat (MY_APPLET_SHARE_DATA_DIR, "/", cImageName, NULL); \</span>
+<a name="l00908"></a>00908 <span class="preprocessor">                CD_APPLET_SET_IMAGE_ON_MY_ICON (cImageFilePath); \</span>
+<a name="l00909"></a>00909 <span class="preprocessor">                g_free (cImageFilePath); \</span>
+<a name="l00910"></a>00910 <span class="preprocessor">        }</span>
+<a name="l00911"></a>00911 <span class="preprocessor"></span>
+<a name="l00917"></a><a class="code" href="cairo-dock-applet-facility_8h.html#23b57c5a879f6dcd9841ff52c5135051">00917</a> <span class="preprocessor">#define CD_APPLET_SET_USER_IMAGE_ON_MY_ICON(cUserImageName, cDefaultLocalImageName) \</span>
+<a name="l00918"></a>00918 <span class="preprocessor">        { \</span>
+<a name="l00919"></a>00919 <span class="preprocessor">                gchar *cImagePath; \</span>
+<a name="l00920"></a>00920 <span class="preprocessor">                if (cUserImageName != NULL) \</span>
+<a name="l00921"></a>00921 <span class="preprocessor">                        cImagePath = cairo_dock_generate_file_path (cUserImageName); \</span>
+<a name="l00922"></a>00922 <span class="preprocessor">                else \</span>
+<a name="l00923"></a>00923 <span class="preprocessor">                        cImagePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, cDefaultLocalImageName); \</span>
+<a name="l00924"></a>00924 <span class="preprocessor">                CD_APPLET_SET_IMAGE_ON_MY_ICON (cImagePath); \</span>
+<a name="l00925"></a>00925 <span class="preprocessor">                g_free (cImagePath); \</span>
+<a name="l00926"></a>00926 <span class="preprocessor">        }</span>
+<a name="l00927"></a>00927 <span class="preprocessor"></span>
+<a name="l00933"></a><a class="code" href="cairo-dock-applet-facility_8h.html#138f52c31dc699bf5ce55be2246d50eb">00933</a> <span class="preprocessor">#define CD_APPLET_SET_ZOOMED_SURFACE_ON_MY_ICON(pSurface, fScale) \</span>
+<a name="l00934"></a>00934 <span class="preprocessor">        cairo_dock_set_icon_surface_with_zoom (myDrawContext, pSurface, fScale, myIcon, myContainer); \</span>
+<a name="l00935"></a>00935 <span class="preprocessor">        cairo_dock_redraw_my_icon (myIcon, myContainer);</span>
+<a name="l00936"></a>00936 <span class="preprocessor"></span>
+<a name="l00937"></a>00937 
+<a name="l00942"></a><a class="code" href="cairo-dock-applet-facility_8h.html#fef845209619728708968e3ca885c320">00942</a> <span class="preprocessor">#define CD_APPLET_SET_NAME_FOR_MY_ICON(cIconName) \</span>
+<a name="l00943"></a>00943 <span class="preprocessor">        cairo_dock_set_icon_name (myDrawContext, cIconName, myIcon, myContainer);</span>
+<a name="l00944"></a>00944 <span class="preprocessor"></span>
+<a name="l00949"></a><a class="code" href="cairo-dock-applet-facility_8h.html#c7a30c37c6d471eb5299169e704c71d1">00949</a> <span class="preprocessor">#define CD_APPLET_SET_QUICK_INFO_ON_MY_ICON(cQuickInfoFormat, ...) \</span>
+<a name="l00950"></a>00950 <span class="preprocessor">        cairo_dock_set_quick_info_full (myDrawContext, myIcon, myContainer, cQuickInfoFormat, ##__VA_ARGS__);</span>
+<a name="l00951"></a>00951 <span class="preprocessor"></span>
+<a name="l00955"></a><a class="code" href="cairo-dock-applet-facility_8h.html#6196228ffeab5a4df933b6fc1eed2670">00955</a> <span class="preprocessor">#define CD_APPLET_SET_QUICK_INFO_ON_MY_ICON_AND_REDRAW(cQuickInfoFormat, ...) \</span>
+<a name="l00956"></a>00956 <span class="preprocessor">        cairo_dock_set_quick_info_full (myDrawContext, myIcon, myContainer, cQuickInfoFormat, ##__VA_ARGS__); \</span>
+<a name="l00957"></a>00957 <span class="preprocessor">        cairo_dock_redraw_my_icon (myIcon, myContainer);</span>
+<a name="l00958"></a>00958 <span class="preprocessor"></span>
+<a name="l00962"></a><a class="code" href="cairo-dock-applet-facility_8h.html#e133cc6fa79438d83c6faaa8532feee3">00962</a> <span class="preprocessor">#define CD_APPLET_SET_HOURS_MINUTES_AS_QUICK_INFO(iTimeInSeconds) \</span>
+<a name="l00963"></a>00963 <span class="preprocessor">        cairo_dock_set_hours_minutes_as_quick_info (myDrawContext, myIcon, myContainer, iTimeInSeconds);</span>
+<a name="l00964"></a>00964 <span class="preprocessor"></span>
+<a name="l00968"></a><a class="code" href="cairo-dock-applet-facility_8h.html#81f165376782cf0813aed1636bcdf9a8">00968</a> <span class="preprocessor">#define CD_APPLET_SET_MINUTES_SECONDES_AS_QUICK_INFO(iTimeInSeconds) \</span>
+<a name="l00969"></a>00969 <span class="preprocessor">        cairo_dock_set_minutes_secondes_as_quick_info (myDrawContext, myIcon, myContainer, iTimeInSeconds);</span>
+<a name="l00970"></a>00970 <span class="preprocessor"></span>
+<a name="l00971"></a>00971 
+<a name="l00972"></a>00972 
+<a name="l00978"></a><a class="code" href="cairo-dock-applet-facility_8h.html#77297cbfe3802d03468009730d41baab">00978</a> <span class="preprocessor">#define CD_APPLET_ANIMATE_MY_ICON(iAnimationType, iAnimationLength) \</span>
+<a name="l00979"></a>00979 <span class="preprocessor">        cairo_dock_animate_icon (myIcon, myContainer, iAnimationType, iAnimationLength);</span>
+<a name="l00980"></a>00980 <span class="preprocessor"></span>
+<a name="l00986"></a><a class="code" href="cairo-dock-applet-facility_8h.html#dd457f2634017f0dc47ca9552658315d">00986</a> <span class="preprocessor">#define CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET(cImagePath) \</span>
+<a name="l00987"></a>00987 <span class="preprocessor">        cairo_dock_create_surface_for_icon (cImagePath, myDrawContext, myIcon-&gt;fWidth * (myDock ? (1 + g_fAmplitude) / myDock-&gt;fRatio : 1), myIcon-&gt;fHeight* (myDock ? (1 + g_fAmplitude) / myDock-&gt;fRatio : 1));</span>
+<a name="l00988"></a>00988 <span class="preprocessor"></span>
+<a name="l00989"></a>00989 
+<a name="l00995"></a><a class="code" href="cairo-dock-applet-facility_8h.html#0f7919b1ba8d265ca73e2a21167408dc">00995</a> <span class="preprocessor">#define CD_APPLET_SET_DESKLET_RENDERER_WITH_DATA(cRendererName, pConfig) \</span>
+<a name="l00996"></a>00996 <span class="preprocessor">        cairo_dock_set_desklet_renderer_by_name (myDesklet, cRendererName, NULL, CAIRO_DOCK_LOAD_ICONS_FOR_DESKLET, pConfig); \</span>
+<a name="l00997"></a>00997 <span class="preprocessor">        myDrawContext = cairo_create (myIcon-&gt;pIconBuffer);</span>
+<a name="l00998"></a>00998 <span class="preprocessor"></span>
+<a name="l01002"></a><a class="code" href="cairo-dock-applet-facility_8h.html#97a5db2bf952feae6f9f78dae953b9dc">01002</a> <span class="preprocessor">#define CD_APPLET_SET_DESKLET_RENDERER(cRendererName) CD_APPLET_SET_DESKLET_RENDERER_WITH_DATA (cRendererName, NULL)</span>
+<a name="l01003"></a>01003 <span class="preprocessor"></span>
+<a name="l01004"></a>01004 <span class="comment">//\_________________________________ INCLUDE</span>
+<a name="l01008"></a><a class="code" href="cairo-dock-applet-facility_8h.html#54bf4c3900274a7d9bc31c0bddec0e82">01008</a> <span class="comment"></span><span class="preprocessor">#define CD_APPLET_INCLUDE_MY_VARS \</span>
+<a name="l01009"></a>01009 <span class="preprocessor">extern Icon *myIcon; \</span>
+<a name="l01010"></a>01010 <span class="preprocessor">extern cairo_t *myDrawContext; \</span>
+<a name="l01011"></a>01011 <span class="preprocessor">extern CairoDock *myDock; \</span>
+<a name="l01012"></a>01012 <span class="preprocessor">extern CairoDockDesklet *myDesklet; \</span>
+<a name="l01013"></a>01013 <span class="preprocessor">extern CairoDockContainer *myContainer; \</span>
+<a name="l01014"></a>01014 <span class="preprocessor">extern AppletConfig myConfig; \</span>
+<a name="l01015"></a>01015 <span class="preprocessor">extern AppletData myData;</span>
+<a name="l01016"></a>01016 <span class="preprocessor"></span>
+<a name="l01017"></a>01017 
+<a name="l01018"></a>01018 <span class="comment">//\_________________________________ INTERNATIONNALISATION</span>
+<a name="l01022"></a><a class="code" href="cairo-dock-applet-facility_8h.html#836eaea1acfba562f8e7d48baf354391">01022</a> <span class="comment"></span><span class="preprocessor">#define D_(message) dgettext (MY_APPLET_GETTEXT_DOMAIN, message)</span>
+<a name="l01023"></a><a class="code" href="cairo-dock-applet-facility_8h.html#d272e6f4ec47357ad4d5150ccebd3122">01023</a> <span class="preprocessor"></span><span class="preprocessor">#define _D D_</span>
+<a name="l01024"></a>01024 <span class="preprocessor"></span>
+<a name="l01025"></a>01025 <span class="preprocessor">#endif</span>
+<a name="l01026"></a>01026 <span class="preprocessor"></span>
+<a name="l01027"></a>01027 
+<a name="l01028"></a>01028 
+<a name="l01029"></a>01029 
+<a name="l01030"></a><a class="code" href="cairo-dock-applet-facility_8h.html#e0cf0fe1262b69c275a777f34fb1dd65">01030</a> <span class="preprocessor">#define CD_APPLET_DEFINE_TIMER(_get_data, _read_data, _load_data) \</span>
+<a name="l01031"></a>01031 <span class="preprocessor">static int s_iThreadIsRunning = 0, s_iSidTimerRedraw = 0; \</span>
+<a name="l01032"></a>01032 <span class="preprocessor">static GStaticMutex mutexData = G_STATIC_MUTEX_INIT; \</span>
+<a name="l01033"></a>01033 <span class="preprocessor">static gboolean _cairo_dock_timer (gpointer data) { \</span>
+<a name="l01034"></a>01034 <span class="preprocessor">        _cairo_dock_launch_measure (); \</span>
+<a name="l01035"></a>01035 <span class="preprocessor">        return TRUE; } \</span>
+<a name="l01036"></a>01036 <span class="preprocessor">static gpointer _cairo_dock_threaded_calculation (gpointer data) { \</span>
+<a name="l01037"></a>01037 <span class="preprocessor">        _get_data (); \</span>
+<a name="l01038"></a>01038 <span class="preprocessor">        g_static_mutex_lock (&amp;mutexData); \</span>
+<a name="l01039"></a>01039 <span class="preprocessor">        _read_data ();  \</span>
+<a name="l01040"></a>01040 <span class="preprocessor">        g_static_mutex_unlock (&amp;mutexData); \</span>
+<a name="l01041"></a>01041 <span class="preprocessor">        g_atomic_int_set (&amp;s_iThreadIsRunning, 0); \</span>
+<a name="l01042"></a>01042 <span class="preprocessor">        return NULL; } \</span>
+<a name="l01043"></a>01043 <span class="preprocessor">static gboolean _cairo_dock_check_for_redraw (gpointer data) { \</span>
+<a name="l01044"></a>01044 <span class="preprocessor">        int iThreadIsRunning = g_atomic_int_get (&amp;s_iThreadIsRunning); \</span>
+<a name="l01045"></a>01045 <span class="preprocessor">        if (! iThreadIsRunning) { \</span>
+<a name="l01046"></a>01046 <span class="preprocessor">                s_iSidTimerRedraw = 0; \</span>
+<a name="l01047"></a>01047 <span class="preprocessor">                if (myIcon == NULL) { \</span>
+<a name="l01048"></a>01048 <span class="preprocessor">                        cd_warning ("annulation du chargement de l'applet"); \</span>
+<a name="l01049"></a>01049 <span class="preprocessor">                        return FALSE; } \</span>
+<a name="l01050"></a>01050 <span class="preprocessor">                g_static_mutex_lock (&amp;mutexData); \</span>
+<a name="l01051"></a>01051 <span class="preprocessor">                _load_data (); \</span>
+<a name="l01052"></a>01052 <span class="preprocessor">                g_static_mutex_unlock (&amp;mutexData); \</span>
+<a name="l01053"></a>01053 <span class="preprocessor">                if (myData.iSidTimer == 0) \</span>
+<a name="l01054"></a>01054 <span class="preprocessor">                        myData.iSidTimer = g_timeout_add (myConfig.iCheckInterval, (GSourceFunc) _cairo_dock_timer, NULL); \</span>
+<a name="l01055"></a>01055 <span class="preprocessor">                return FALSE; } \</span>
+<a name="l01056"></a>01056 <span class="preprocessor">        return TRUE; } \</span>
+<a name="l01057"></a>01057 <span class="preprocessor">void cairo_dock_launch_measure (void) { \</span>
+<a name="l01058"></a>01058 <span class="preprocessor">        if (g_atomic_int_compare_and_exchange (&amp;s_iThreadIsRunning, 0, 1)) { \</span>
+<a name="l01059"></a>01059 <span class="preprocessor">                if (s_iSidTimerRedraw == 0) \</span>
+<a name="l01060"></a>01060 <span class="preprocessor">                        s_iSidTimerRedraw = g_timeout_add (250, (GSourceFunc) _cairo_dock_check_for_redraw, (gpointer) NULL); \</span>
+<a name="l01061"></a>01061 <span class="preprocessor">                GError *erreur = NULL; \</span>
+<a name="l01062"></a>01062 <span class="preprocessor">                GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_threaded_calculation, NULL, FALSE, &amp;erreur); \</span>
+<a name="l01063"></a>01063 <span class="preprocessor">                if (erreur != NULL) { \</span>
+<a name="l01064"></a>01064 <span class="preprocessor">                        cd_warning ("Attention : %s", erreur-&gt;message); \</span>
+<a name="l01065"></a>01065 <span class="preprocessor">                        g_error_free (erreur); } } }</span>
+<a name="l01066"></a>01066 <span class="preprocessor"></span>
+<a name="l01067"></a><a class="code" href="cairo-dock-applet-facility_8h.html#d4cfc406038ba9f9082e2fb210cd8c7d">01067</a> <span class="preprocessor">#define CD_APPLET_START_TIMER \</span>
+<a name="l01068"></a>01068 <span class="preprocessor">        cairo_dock_launch_measure ();</span>
+<a name="l01069"></a>01069 <span class="preprocessor"></span>
+<a name="l01070"></a><a class="code" href="cairo-dock-applet-facility_8h.html#618c4a307a1c363fa8345f07b21dc655">01070</a> <span class="preprocessor">#define CD_APPLET_STOP_TIMER \</span>
+<a name="l01071"></a>01071 <span class="preprocessor">        if (myData.iSidTimer != 0) { \</span>
+<a name="l01072"></a>01072 <span class="preprocessor">                g_source_remove (myData.iSidTimer); \</span>
+<a name="l01073"></a>01073 <span class="preprocessor">                myData.iSidTimer = 0; }</span>
+<a name="l01074"></a>01074 <span class="preprocessor"></span>
+<a name="l01075"></a><a class="code" href="cairo-dock-applet-facility_8h.html#181728f960ec59e006bdd8da279d9234">01075</a> <span class="preprocessor">#define CD_APPLET_TIMER_IS_RUNNING (myData.iSidTimer != 0)</span>
+</pre></div><hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:15 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

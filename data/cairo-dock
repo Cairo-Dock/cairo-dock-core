@@ -1,0 +1,1 @@
+?package(cairo-dock): needs="x11" section="Apps/System" title="Cairo-Dock" command="/usr/bin/cairo-dock" icon="/usr/share/pixmaps/cairo-dock.svg"

@@ -1,0 +1,14 @@
+<gauge>
+	<name>Circle [Brit]</name>
+	<author>Benoit2600</author>
+	<file key="background">background.svg</file>
+	<indicator>
+		<file key="image">0.svg</file>
+		<file key="image">1.svg</file>
+		<file key="image">2.svg</file>
+		<file key="image">3.svg</file>
+		<file key="image">4.svg</file>
+		<file key="image">5.svg</file>
+		<file key="image">6.svg</file>
+	</indicator>
+</gauge>

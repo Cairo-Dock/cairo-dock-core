@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock:  Fichier source de /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-notifications.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-notifications.h</h1><a href="cairo-dock-notifications_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
+<a name="l00002"></a>00002 <span class="preprocessor">#ifndef __CAIRO_DOCK_NOTIFICATIONS__</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span><span class="preprocessor">#define  __CAIRO_DOCK_NOTIFICATIONS__</span>
+<a name="l00004"></a>00004 <span class="preprocessor"></span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;glib.h&gt;</span>
+<a name="l00006"></a>00006 
+<a name="l00007"></a>00007 
+<a name="l00008"></a><a class="code" href="cairo-dock-notifications_8h.html#3ac8de5342dcae0a5a3a20f0bcaf9a6a">00008</a> <span class="keyword">typedef</span> gboolean (* <a class="code" href="cairo-dock-notifications_8h.html#3ac8de5342dcae0a5a3a20f0bcaf9a6a">CairoDockNotificationFunc</a>) (gpointer *data);
+<a name="l00009"></a>00009 
+<a name="l00010"></a><a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e">00010</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> {
+<a name="l00012"></a><a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0ed27863046004a842c37fa2a46fa9152d">00012</a>         <a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0ed27863046004a842c37fa2a46fa9152d" title="notification appellee lorsque l&amp;#39;utilisateur supprime un lanceur via le menu....">CAIRO_DOCK_REMOVE_ICON</a>=0,
+<a name="l00014"></a><a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e8c26e95eb1b7977881990291e2d41fa1">00014</a>         <a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e8c26e95eb1b7977881990291e2d41fa1" title="notification appellee lorsque l&amp;#39;utilisateur clique sur une icone; l&amp;#39;animation...">CAIRO_DOCK_CLICK_ICON</a>,
+<a name="l00016"></a><a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0edab2d0ab4aecdbefca37047ec68c73e3">00016</a>         <a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0edab2d0ab4aecdbefca37047ec68c73e3" title="notification appellee lorsque l&amp;#39;utilisateur double clique sur une icone. data...">CAIRO_DOCK_DOUBLE_CLICK_ICON</a>,
+<a name="l00018"></a><a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0ebbe60d66af778094b1bd7f2e54c99861">00018</a>         <a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0ebbe60d66af778094b1bd7f2e54c99861" title="data : Icon">CAIRO_DOCK_MIDDLE_CLICK_ICON</a>,
+<a name="l00020"></a><a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e87e4cd6fbee390472d4199ed5e077396">00020</a>         <a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e87e4cd6fbee390472d4199ed5e077396" title="data : {Icon, CairoDock, GtkMenu}">CAIRO_DOCK_BUILD_MENU</a>,
+<a name="l00022"></a><a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0ebd606f16f651e9257a0b332f41b88a71">00022</a>         <a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0ebd606f16f651e9257a0b332f41b88a71" title="data : {gchar, Icon, double, CairoDock}">CAIRO_DOCK_DROP_DATA</a>,
+<a name="l00024"></a><a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e2800d4fdde40ffdc2a4b525a65c0100d">00024</a>         <a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e2800d4fdde40ffdc2a4b525a65c0100d" title="notification appellee lors d&amp;#39;un changement de bureau ou de viewport. data : NULL...">CAIRO_DOCK_DESKTOP_CHANGED</a>,
+<a name="l00026"></a><a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0ef8b5524e496f41ea118037b9f92d8ae7">00026</a>         <a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0ef8b5524e496f41ea118037b9f92d8ae7" title="notification appellee lorsqu&amp;#39;une fenetre est redimensionnee ou deplacee, ou lorsque...">CAIRO_DOCK_WINDOW_CONFIGURED</a>,
+<a name="l00028"></a><a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e5f7b8ab2e6173c2653407778a7945cf6">00028</a>         <a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e5f7b8ab2e6173c2653407778a7945cf6" title="notification appellee lorsque la geometrie du bureau a change (nombre de viewports/bureaux...">CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED</a>,
+<a name="l00030"></a><a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e414019822c568115e4c4e832455b92f2">00030</a>         <a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e414019822c568115e4c4e832455b92f2" title="notification appellee lorsque la fenetre active a change. data : Xid">CAIRO_DOCK_WINDOW_ACTIVATED</a>,
+<a name="l00031"></a><a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0ee191d3469739d849e67b83d6d6433d07">00031</a>         <a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0ee191d3469739d849e67b83d6d6433d07">CAIRO_DOCK_NB_NOTIFICATIONS</a>
+<a name="l00032"></a>00032         } <a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e">CairoDockNotificationType</a>;
+<a name="l00033"></a>00033 
+<a name="l00034"></a><a class="code" href="cairo-dock-notifications_8h.html#0f0d24de89673000b20e76a086789184">00034</a> <span class="preprocessor">#define CAIRO_DOCK_RUN_FIRST TRUE</span>
+<a name="l00035"></a><a class="code" href="cairo-dock-notifications_8h.html#3c01943fe3794ca048f867b3dfaefbe0">00035</a> <span class="preprocessor"></span><span class="preprocessor">#define CAIRO_DOCK_RUN_AFTER FALSE</span>
+<a name="l00036"></a>00036 <span class="preprocessor"></span>
+<a name="l00037"></a><a class="code" href="cairo-dock-notifications_8h.html#01a9bea57eba0313d85509da951b46ec">00037</a> <span class="preprocessor">#define CAIRO_DOCK_INTERCEPT_NOTIFICATION TRUE</span>
+<a name="l00038"></a><a class="code" href="cairo-dock-notifications_8h.html#e1cd652024442c3ef5419afaf350f5bc">00038</a> <span class="preprocessor"></span><span class="preprocessor">#define CAIRO_DOCK_LET_PASS_NOTIFICATION FALSE</span>
+<a name="l00039"></a>00039 <span class="preprocessor"></span>
+<a name="l00046"></a>00046 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-notifications_8h.html#845e5c4be6a3a3d1be2de99f9c6a93a6">cairo_dock_register_notification</a> (<a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e">CairoDockNotificationType</a> iNotifType, <a class="code" href="cairo-dock-notifications_8h.html#3ac8de5342dcae0a5a3a20f0bcaf9a6a">CairoDockNotificationFunc</a> pFunction, gboolean bRunFirst);
+<a name="l00047"></a>00047 
+<a name="l00053"></a>00053 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-notifications_8h.html#f91590fc1a8f0f395f4d39c8f6942dc6">cairo_dock_remove_notification_func</a> (<a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e">CairoDockNotificationType</a> iNotifType, <a class="code" href="cairo-dock-notifications_8h.html#3ac8de5342dcae0a5a3a20f0bcaf9a6a">CairoDockNotificationFunc</a> pFunction);
+<a name="l00060"></a>00060 gboolean <a class="code" href="cairo-dock-notifications_8h.html#b384dab889291442b54ea600bb411ea3">cairo_dock_notify</a> (<a class="code" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e">CairoDockNotificationType</a> iNotifType, gpointer data);
+<a name="l00061"></a>00061 
+<a name="l00062"></a>00062 
+<a name="l00068"></a>00068 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-notifications_8h.html#2f070bd652229d8ffef801ec27d64777">cairo_dock_register_first_notifications</a> (<span class="keywordtype">int</span> iFirstNotifType, ...);
+<a name="l00074"></a>00074 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-notifications_8h.html#43af2cd20c3f208f40c025efae51cda6">cairo_dock_register_last_notifications</a> (<span class="keywordtype">int</span> iFirstNotifType, ...);
+<a name="l00080"></a>00080 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-notifications_8h.html#4ef98c22645a91ab4ddba1a1df695d3e">cairo_dock_remove_notification_funcs</a> (<span class="keywordtype">int</span> iFirstNotifType, ...);
+<a name="l00081"></a>00081 
+<a name="l00082"></a>00082 
+<a name="l00083"></a>00083 <span class="preprocessor">#endif</span>
+</pre></div><hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:15 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

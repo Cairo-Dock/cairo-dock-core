@@ -1,0 +1,93 @@
+
+Cairo-Dock met à votre disposition un canevas dédié à une écriture rapide et normalisée de ses applets.
+Mettons qu'on veuille écrire une applet (appelons-la 'truc'); utilisez le script generate-new-applet.sh pour la creer. Voila vous avez une applet fonctionnelle ! :-)
+Pour aller plus loin, regardons les 3 points importants :
+
+1) La structure de votre applet :
+	a) L'arborescence des sources est basique et peut être repompée de n'importe quelle applet déjà existante :
+		
+			truc  ---> configure.ac, Makefile.am
+			+--> src  -> applet-init.c/h, applet-config.c/h, applet-notifications.c/h, *.c/h
+			+--> data -> truc.conf.in, preview.png, readme, *
+			+--> po   -> Makefile.in.in, LINGUAS, POTFILES.in, *.po
+		
+		Les noms des fichiers ne sont pas imposés; simplement, respecter ces conventions permet de s'y retrouver tout de suite en lisant une applet qu'on ne connaît pas.
+		
+		Dans src (répertoire des sources) nous avons :
+		- applet-init.c contient la fonction d'initialisation de l'applet, et la fonction d'arrêt de celle-ci.
+		- applet-config.c contient la fonction qui lit le fichier de conf.
+		- applet-notifications.c contient les fonctions qui sont appelées lorsque l'applet est notifiée par Cairo-Dock qu'il se passe quelques chose d'intéressant pour elle.
+		- *.c les autres peuvent contenir ce que bon vous semble (connexion à un serveur, fonctions de dessins, calculs, etc)
+		
+		Dans data (répertoire des données) on trouve :
+		- preview.png : une image donnant une pré-visualisation de l'applet (affichée dans le panneau de conf de Cairo-Dock à côté de la liste des applets)
+		- icon.png : une icône représentative de l'applet, et qui sera affichée dans la liste des plug-ins disponibles du panneau de config du dock.
+		- readme.in : un fichier donnant l'auteur de l'applet (vous ;-) ), et un bref résumé de celle-ci (le texte sera aussi affiché dans le panneau de conf de Cairo-Dock à côté de la liste des applets)
+		- truc.conf.in : le fichier de conf de l'applet, qui contient tous les paramètres sur lesquels peut jouer l'utilisateur.
+		
+		Dans po (répertoire des traductions) on trouve :
+		- Makefile.in.in : reprendre à l'identique un déjà existant.
+		- Makevars : idem.
+		- LINGUAS : la liste des langues disponibles.
+		- POTFILES.in : la liste des fichiers où on trouve des messages à traduire.
+		- *.po : des fichiers contenant les traductions de chaque message.
+	
+	b) L'arborescence de l'installation est encore plus simple :
+		- le contenu du répertoire data est recopié dans /usr/share/cairo-dock/plug-ins/truc
+		- le plug-in en lui-même se retrouve en /usr/share/cairo-dock/plug-ins/libcd-truc.so
+		- les fichiers de traduction vont dans /usr/share/locale/$lang/LC_MESSAGES/cd-truc.mo, où $lang = fr, jp, ...
+	
+2) Les fichiers de compil (comme plus haut, prenez ceux existants et remplacez par le nom de votre applet partout où cela est nécessaire) :
+	a) le configure.ac est composé de plusieurs macros propres à autoconf/automake et de définition de variables :
+		- AC_INIT : définissez-y concensieusement le numéro de version de votre applet, ainsi que l'auteur de l'applet (vous !), et le nom du pug-in (pour éviter toute collision avec une librairie déjà existante sur votre système, préfixez-le par 'cd-' : cd-truc)
+		- GETTEXT_PACKAGE : usuellement on mettra le nom de l'applet ('cd-truc'), ce qui fera un fichier de traduction 'cd-truc.mo'
+		- pkgdatadir : on ecrase la valeur par defaut avec celle donnee par Cairo-Dock pour s'installer dans son répertoire des plug-ins.
+		- PKG_CHECK_MODULES : listez ici toutes les dépendance de votre module.
+		- AC_CONFIG_FILES : listez ici tous les fichiers qui seront générés par le configure (Makefile et autres)
+	b) le src/Makefile.am definit les macros liées aux fichiers de l'applets :
+		- MY_APPLET_SHARE_DATA_DIR : le répertoire où sont installées les données de l'applet (typiquement "/usr/share/cairo-dock/plug-ins/truc").
+		- MY_APPLET_README_FILE : nom du ficher contenant un bref descriptif de l'applet (typiquement "readme").
+		- MY_APPLET_PREVIEW_FILE : nom de l'image donnant un aperçu de l'applet (typiquement "preview.png").
+		- MY_APPLET_ICON_FILE : nom de l'image donnant l'icône de l'applet (typiquement "icon.png").
+		- MY_APPLET_CONF_FILE : nom du fichier de conf de l'applet (typiquement "truc.conf").
+		- MY_APPLET_USER_DATA_DIR : nom du répertoire de l'applet côté utilisateur, dans ~/.cairo-dock/current_theme/plug-ins (typiquement "truc").
+		- MY_APPLET_VERSION : version de l'applet (par exemple "1.2.3").
+		- MY_APPLET_GETTEXT_DOMAIN : nom du domaine de traduction de l'applet (typiquement "cd-truc").
+		- MY_APPLET_DOCK_VERSION : version du dock pour laquelle a été compilée l'applet (par exemple "1.4.7").
+	
+3) Le code de base :
+	a) init :
+		CD_APPLET_DEFINITION ("nom de l'applet", version minimale nécessaire du dock, catégorie)
+		
+		CD_APPLET_INIT_BEGIN (erreur) ---> lecture du fichier de conf.
+			- abonnement aux notifications utiles
+			- définition de variables et structures utiles
+		CD_APPLET_INIT_END
+		
+		CD_APPLET_STOP_BEGIN
+			- désabonnement des notifications.
+			- mises à zéro des variables, libération de toutes les ressources utilisées.
+		CD_APPLET_STOP_END
+	
+	b) config :
+		CD_APPLET_GET_CONFIG_BEGIN
+			parametres = CD_CONFIG_GET_xxx ("nom de groupe", "nom de clé");
+		CD_APPLET_GET_CONFIG_END
+	
+	c) notifications :
+		CD_APPLET_ABOUT (D_("Brève description de l'applet et de l'auteur"))
+		
+		CD_APPLET_ON_CLICK_BEGIN
+			action au clic gauche.
+		CD_APPLET_ON_CLICK_END
+		
+		CD_APPLET_ON_BUILD_MENU_BEGIN
+			CD_APPLET_ADD_SUB_MENU ("étiquette", pSubMenu, CD_APPLET_MY_MENU)
+				CD_APPLET_ADD_IN_MENU_WITH_DATA ("étiquette", fonction callback, pSubMenu, données)
+				...
+				CD_APPLET_ADD_ABOUT_IN_MENU (pSubMenu)
+		CD_APPLET_ON_BUILD_MENU_END
+		
+		CD_APPLET_ON_MIDDLE_CLICK_BEGIN
+			action au clic milieu.
+		CD_APPLET_ON_MIDDLE_CLICK_END

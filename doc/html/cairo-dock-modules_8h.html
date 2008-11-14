@@ -1,0 +1,744 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-modules.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-modules.h</h1>
+<p>
+<a href="cairo-dock-modules_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Macros</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#be4307dd60e090e1f5740dfb1d1e0b75">cairo_dock_update_conf_file_with_available_modules2</a>(pOpenedKeyFile, cConfFile)&nbsp;&nbsp;&nbsp;cairo_dock_update_conf_file_with_modules_full (pOpenedKeyFile, cConfFile, &quot;Applets&quot;, &quot;modules&quot;, FALSE)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#f1df945a912eb09548c937ba9bee4b27">cairo_dock_update_easy_conf_file_with_available_modules2</a>(pOpenedKeyFile, cConfFile)&nbsp;&nbsp;&nbsp;cairo_dock_update_conf_file_with_modules_full (pOpenedKeyFile, cConfFile, &quot;System&quot;, &quot;modules&quot;, FALSE)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#85a1fb943d29e9110d1e7481564b2576">cairo_dock_update_conf_file_with_active_modules2</a>(pOpenedKeyFile, cConfFile)&nbsp;&nbsp;&nbsp;cairo_dock_update_conf_file_with_modules_full (pOpenedKeyFile, cConfFile, &quot;Applets&quot;, &quot;modules&quot;, TRUE)</td></tr>
+
+<tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#1340f2d554ab9a7eb635385fc3cd1b3b">cairo_dock_initialize_module_manager</a> (gchar *cModuleDirPath)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#dce0dd50bfcd266f4bfe19442aa5866b">cairo_dock_free_visit_card</a> (<a class="el" href="struct__CairoDockVisitCard.html">CairoDockVisitCard</a> *pVisitCard)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#b813976c4ae825f539b5b1aa9dc5a242">cairo_dock_load_module</a> (gchar *cSoFilePath, GHashTable *pModuleTable, GError **erreur)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#ff31d986bb19e13dd2a0fdd8d9d4ca87">cairo_dock_preload_module_from_directory</a> (gchar *cModuleDirPath, GHashTable *pModuleTable, GError **erreur)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#5da43c5ad9dad4ce51b367cfbe8bf923">cairo_dock_activate_modules_from_list</a> (gchar **cActiveModuleList, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, double fTime)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#8a392b787b653188feef4cac78aba01a">cairo_dock_deactivate_old_modules</a> (double fTime)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#a30d8f12c4b2960f885f65214f500e8f">cairo_dock_free_module</a> (<a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *module)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GKeyFile *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#f97235b1eb73607ef92ff206d50a911a">cairo_dock_pre_read_module_config</a> (<a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *pModule, <a class="el" href="struct__CairoDockMinimalAppletConfig.html">CairoDockMinimalAppletConfig</a> *pMinimalConfig)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#acfcaabda81a50f7711e0247dcd892a4">cairo_dock_activate_module</a> (<a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *module, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, GError **erreur)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#b3bc5aeab21bc70a81b0120ceeb60ac5">cairo_dock_deactivate_module</a> (<a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *module)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#637c1b0decc3c6609f9f5ede2d7e1c6e">cairo_dock_reload_module</a> (<a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *module, gboolean bReloadAppletConf)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#7df996221421da2bcb8085f57bb595af">cairo_dock_deactivate_all_modules</a> (void)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#d7489d59b75c971aed8e0b27b3bccb10">cairo_dock_activate_module_and_load</a> (gchar *cModuleName)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#5e77bb535cc42faefcd1ddf0e049c810">cairo_dock_deactivate_module_and_unload</a> (gchar *cModuleName)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#dab1719fad9b22dabea83235fa399808">cairo_dock_configure_module</a> (GtkWindow *pParentWindow, <a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *module, GError **erreur)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#1989857c48825263c239e81628aceff4">cairo_dock_find_icon_from_module</a> (<a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *module, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#4b8a7e9daa3f83e0f4d05f79797fac70">cairo_dock_find_module_from_name</a> (gchar *cModuleName)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#b89f4a0db5a318f3d592553763358a0e">cairo_dock_foreach_desklet</a> (<a class="el" href="cairo-dock-struct_8h.html#2dd29bf13bf56727c286bb1be57854ec">CairoDockForeachDeskletFunc</a> pCallback, gpointer user_data)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GString **&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#237cd0ae63bee6ab9d47a84a4b096ee8">cairo_dock_list_modules_by_category</a> (gboolean bActiveOnly)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#2ebe928796b48391ebd0d2e1f45d7b57">cairo_dock_update_conf_file_with_modules_full</a> (GKeyFile *pOpenedKeyFile, gchar *cConfFile, gchar *cGroupName, gchar *cKeyNameBase, gboolean bActiveOnly)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#321bc77df4a3d1261fe5a682658934b9">cairo_dock_get_nb_modules</a> (void)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#a2c388505253420887e4f53219cfbea8">cairo_dock_update_module_order</a> (<a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *pModule, double fOrder)</td></tr>
+
+</table>
+<hr><h2>Documentation des macros</h2>
+<a class="anchor" name="be4307dd60e090e1f5740dfb1d1e0b75"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_update_conf_file_with_available_modules2" ref="be4307dd60e090e1f5740dfb1d1e0b75" args="(pOpenedKeyFile, cConfFile)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_update_conf_file_with_available_modules2          </td>
+          <td>(</td>
+          <td class="paramtype">pOpenedKeyFile,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cConfFile&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%">&nbsp;&nbsp;&nbsp;cairo_dock_update_conf_file_with_modules_full (pOpenedKeyFile, cConfFile, &quot;Applets&quot;, &quot;modules&quot;, FALSE)</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="f1df945a912eb09548c937ba9bee4b27"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_update_easy_conf_file_with_available_modules2" ref="f1df945a912eb09548c937ba9bee4b27" args="(pOpenedKeyFile, cConfFile)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_update_easy_conf_file_with_available_modules2          </td>
+          <td>(</td>
+          <td class="paramtype">pOpenedKeyFile,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cConfFile&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%">&nbsp;&nbsp;&nbsp;cairo_dock_update_conf_file_with_modules_full (pOpenedKeyFile, cConfFile, &quot;System&quot;, &quot;modules&quot;, FALSE)</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="85a1fb943d29e9110d1e7481564b2576"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_update_conf_file_with_active_modules2" ref="85a1fb943d29e9110d1e7481564b2576" args="(pOpenedKeyFile, cConfFile)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_update_conf_file_with_active_modules2          </td>
+          <td>(</td>
+          <td class="paramtype">pOpenedKeyFile,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cConfFile&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%">&nbsp;&nbsp;&nbsp;cairo_dock_update_conf_file_with_modules_full (pOpenedKeyFile, cConfFile, &quot;Applets&quot;, &quot;modules&quot;, TRUE)</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<hr><h2>Documentation des fonctions</h2>
+<a class="anchor" name="1340f2d554ab9a7eb635385fc3cd1b3b"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_initialize_module_manager" ref="1340f2d554ab9a7eb635385fc3cd1b3b" args="(gchar *cModuleDirPath)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_initialize_module_manager           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cModuleDirPath</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="dce0dd50bfcd266f4bfe19442aa5866b"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_free_visit_card" ref="dce0dd50bfcd266f4bfe19442aa5866b" args="(CairoDockVisitCard *pVisitCard)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_free_visit_card           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockVisitCard.html">CairoDockVisitCard</a> *&nbsp;</td>
+          <td class="paramname"> <em>pVisitCard</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="b813976c4ae825f539b5b1aa9dc5a242"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_load_module" ref="b813976c4ae825f539b5b1aa9dc5a242" args="(gchar *cSoFilePath, GHashTable *pModuleTable, GError **erreur)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a>* cairo_dock_load_module           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cSoFilePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GHashTable *&nbsp;</td>
+          <td class="paramname"> <em>pModuleTable</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GError **&nbsp;</td>
+          <td class="paramname"> <em>erreur</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ff31d986bb19e13dd2a0fdd8d9d4ca87"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_preload_module_from_directory" ref="ff31d986bb19e13dd2a0fdd8d9d4ca87" args="(gchar *cModuleDirPath, GHashTable *pModuleTable, GError **erreur)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_preload_module_from_directory           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cModuleDirPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GHashTable *&nbsp;</td>
+          <td class="paramname"> <em>pModuleTable</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GError **&nbsp;</td>
+          <td class="paramname"> <em>erreur</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="5da43c5ad9dad4ce51b367cfbe8bf923"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_activate_modules_from_list" ref="5da43c5ad9dad4ce51b367cfbe8bf923" args="(gchar **cActiveModuleList, CairoDock *pDock, double fTime)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_activate_modules_from_list           </td>
+          <td>(</td>
+          <td class="paramtype">gchar **&nbsp;</td>
+          <td class="paramname"> <em>cActiveModuleList</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fTime</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="8a392b787b653188feef4cac78aba01a"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_deactivate_old_modules" ref="8a392b787b653188feef4cac78aba01a" args="(double fTime)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_deactivate_old_modules           </td>
+          <td>(</td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fTime</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="a30d8f12c4b2960f885f65214f500e8f"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_free_module" ref="a30d8f12c4b2960f885f65214f500e8f" args="(CairoDockModule *module)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_free_module           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td>
+          <td class="paramname"> <em>module</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="f97235b1eb73607ef92ff206d50a911a"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_pre_read_module_config" ref="f97235b1eb73607ef92ff206d50a911a" args="(CairoDockModule *pModule, CairoDockMinimalAppletConfig *pMinimalConfig)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GKeyFile* cairo_dock_pre_read_module_config           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td>
+          <td class="paramname"> <em>pModule</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockMinimalAppletConfig.html">CairoDockMinimalAppletConfig</a> *&nbsp;</td>
+          <td class="paramname"> <em>pMinimalConfig</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="acfcaabda81a50f7711e0247dcd892a4"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_activate_module" ref="acfcaabda81a50f7711e0247dcd892a4" args="(CairoDockModule *module, CairoDock *pDock, GError **erreur)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__Icon.html">Icon</a>* cairo_dock_activate_module           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td>
+          <td class="paramname"> <em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GError **&nbsp;</td>
+          <td class="paramname"> <em>erreur</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="b3bc5aeab21bc70a81b0120ceeb60ac5"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_deactivate_module" ref="b3bc5aeab21bc70a81b0120ceeb60ac5" args="(CairoDockModule *module)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_deactivate_module           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td>
+          <td class="paramname"> <em>module</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="637c1b0decc3c6609f9f5ede2d7e1c6e"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_reload_module" ref="637c1b0decc3c6609f9f5ede2d7e1c6e" args="(CairoDockModule *module, gboolean bReloadAppletConf)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_reload_module           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td>
+          <td class="paramname"> <em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bReloadAppletConf</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="7df996221421da2bcb8085f57bb595af"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_deactivate_all_modules" ref="7df996221421da2bcb8085f57bb595af" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_deactivate_all_modules           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="d7489d59b75c971aed8e0b27b3bccb10"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_activate_module_and_load" ref="d7489d59b75c971aed8e0b27b3bccb10" args="(gchar *cModuleName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_activate_module_and_load           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cModuleName</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="5e77bb535cc42faefcd1ddf0e049c810"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_deactivate_module_and_unload" ref="5e77bb535cc42faefcd1ddf0e049c810" args="(gchar *cModuleName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_deactivate_module_and_unload           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cModuleName</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="dab1719fad9b22dabea83235fa399808"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_configure_module" ref="dab1719fad9b22dabea83235fa399808" args="(GtkWindow *pParentWindow, CairoDockModule *module, GError **erreur)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_configure_module           </td>
+          <td>(</td>
+          <td class="paramtype">GtkWindow *&nbsp;</td>
+          <td class="paramname"> <em>pParentWindow</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td>
+          <td class="paramname"> <em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GError **&nbsp;</td>
+          <td class="paramname"> <em>erreur</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="1989857c48825263c239e81628aceff4"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_find_icon_from_module" ref="1989857c48825263c239e81628aceff4" args="(CairoDockModule *module, CairoDockContainer *pContainer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__Icon.html">Icon</a>* cairo_dock_find_icon_from_module           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td>
+          <td class="paramname"> <em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="4b8a7e9daa3f83e0f4d05f79797fac70"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_find_module_from_name" ref="4b8a7e9daa3f83e0f4d05f79797fac70" args="(gchar *cModuleName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a>* cairo_dock_find_module_from_name           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cModuleName</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="b89f4a0db5a318f3d592553763358a0e"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_foreach_desklet" ref="b89f4a0db5a318f3d592553763358a0e" args="(CairoDockForeachDeskletFunc pCallback, gpointer user_data)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a>* cairo_dock_foreach_desklet           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#2dd29bf13bf56727c286bb1be57854ec">CairoDockForeachDeskletFunc</a>&nbsp;</td>
+          <td class="paramname"> <em>pCallback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gpointer&nbsp;</td>
+          <td class="paramname"> <em>user_data</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="237cd0ae63bee6ab9d47a84a4b096ee8"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_list_modules_by_category" ref="237cd0ae63bee6ab9d47a84a4b096ee8" args="(gboolean bActiveOnly)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GString** cairo_dock_list_modules_by_category           </td>
+          <td>(</td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bActiveOnly</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="2ebe928796b48391ebd0d2e1f45d7b57"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_update_conf_file_with_modules_full" ref="2ebe928796b48391ebd0d2e1f45d7b57" args="(GKeyFile *pOpenedKeyFile, gchar *cConfFile, gchar *cGroupName, gchar *cKeyNameBase, gboolean bActiveOnly)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_update_conf_file_with_modules_full           </td>
+          <td>(</td>
+          <td class="paramtype">GKeyFile *&nbsp;</td>
+          <td class="paramname"> <em>pOpenedKeyFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cConfFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cGroupName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cKeyNameBase</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bActiveOnly</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="321bc77df4a3d1261fe5a682658934b9"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_get_nb_modules" ref="321bc77df4a3d1261fe5a682658934b9" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cairo_dock_get_nb_modules           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="a2c388505253420887e4f53219cfbea8"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_update_module_order" ref="a2c388505253420887e4f53219cfbea8" args="(CairoDockModule *pModule, double fOrder)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_update_module_order           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td>
+          <td class="paramname"> <em>pModule</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fOrder</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

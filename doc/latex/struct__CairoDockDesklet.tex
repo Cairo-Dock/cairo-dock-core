@@ -1,0 +1,183 @@
+\section{Référence de la structure \_\-CairoDockDesklet}
+\label{struct__CairoDockDesklet}\index{_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsection*{Champs de données}
+\begin{CompactItemize}
+\item 
+{\bf CairoDockTypeContainer} {\bf iType}
+\begin{CompactList}\small\item\em type \char`\"{}desklet\char`\"{}. \item\end{CompactList}\item 
+GtkWidget $\ast$ {\bf pWidget}
+\begin{CompactList}\small\item\em La fenetre du widget. \item\end{CompactList}\item 
+gint {\bf iWidth}
+\begin{CompactList}\small\item\em Taille de la fenetre. La surface allouee a l'applet s'en deduit. \item\end{CompactList}\item 
+gint {\bf iHeight}
+\item 
+int {\bf iWindowPositionX}
+\begin{CompactList}\small\item\em Position de la fenetre. \item\end{CompactList}\item 
+int {\bf iWindowPositionY}
+\item 
+gboolean {\bf bInside}
+\begin{CompactList}\small\item\em Vrai ssi le pointeur est dans le desklet (widgets fils inclus). \item\end{CompactList}\item 
+{\bf CairoDockTypeHorizontality} {\bf bIsHorizontal}
+\begin{CompactList}\small\item\em Toujours vrai pour un desklet. \item\end{CompactList}\item 
+gpointer {\bf padding} [3]
+\item 
+{\bf CairoDockDeskletRenderer} $\ast$ {\bf pRenderer}
+\begin{CompactList}\small\item\em le moteur de rendu utilise pour dessiner le desklet. \item\end{CompactList}\item 
+gpointer {\bf pRendererData}
+\begin{CompactList}\small\item\em donnees pouvant etre utilisees par le moteur de rendu. \item\end{CompactList}\item 
+GList $\ast$ {\bf icons}
+\begin{CompactList}\small\item\em Liste eventuelle d'icones placees sur le desklet, et susceptibles de recevoir des clics. \item\end{CompactList}\item 
+gint {\bf diff\_\-x}
+\begin{CompactList}\small\item\em pour le deplacement manuel de la fenetre. \item\end{CompactList}\item 
+gint {\bf diff\_\-y}
+\item 
+gboolean {\bf moving}
+\item 
+{\bf Icon} $\ast$ {\bf pIcon}
+\begin{CompactList}\small\item\em L'icone de l'applet. \item\end{CompactList}\item 
+gint {\bf iSidWritePosition}
+\begin{CompactList}\small\item\em un timer pour retarder l'ecriture dans le fichier lors des deplacements. \item\end{CompactList}\item 
+gint {\bf iSidWriteSize}
+\begin{CompactList}\small\item\em un timer pour retarder l'ecriture dans le fichier lors des redimensionnements. \item\end{CompactList}\item 
+gint {\bf iGradationCount}
+\begin{CompactList}\small\item\em compteur pour le fondu lors de l'entree dans le desklet. \item\end{CompactList}\item 
+gint {\bf iSidGradationOnEnter}
+\begin{CompactList}\small\item\em timer associe. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Documentation des champs}
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!iType@{iType}}
+\index{iType@{iType}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockTypeContainer} {\bf \_\-CairoDockDesklet::iType}}\label{struct__CairoDockDesklet_692e2911a1cde18118b7536925f1cb15}
+
+
+type \char`\"{}desklet\char`\"{}. 
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!pWidget@{pWidget}}
+\index{pWidget@{pWidget}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}GtkWidget$\ast$ {\bf \_\-CairoDockDesklet::pWidget}}\label{struct__CairoDockDesklet_c3d0c33b6f8133aa63a6adf916c5e49a}
+
+
+La fenetre du widget. 
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!iWidth@{iWidth}}
+\index{iWidth@{iWidth}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDockDesklet::iWidth}}\label{struct__CairoDockDesklet_8f497ad22b091d6b00e60fae46563929}
+
+
+Taille de la fenetre. La surface allouee a l'applet s'en deduit. 
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!iHeight@{iHeight}}
+\index{iHeight@{iHeight}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDockDesklet::iHeight}}\label{struct__CairoDockDesklet_f909a49cddc6a973a8ee973fa891fed5}
+
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!iWindowPositionX@{iWindowPositionX}}
+\index{iWindowPositionX@{iWindowPositionX}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int {\bf \_\-CairoDockDesklet::iWindowPositionX}}\label{struct__CairoDockDesklet_e45335e974eb597686dd70fc4b77d09d}
+
+
+Position de la fenetre. 
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!iWindowPositionY@{iWindowPositionY}}
+\index{iWindowPositionY@{iWindowPositionY}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int {\bf \_\-CairoDockDesklet::iWindowPositionY}}\label{struct__CairoDockDesklet_53821087729328bef927a9bd3f971cfd}
+
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!bInside@{bInside}}
+\index{bInside@{bInside}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean {\bf \_\-CairoDockDesklet::bInside}}\label{struct__CairoDockDesklet_34dddd79fabd3b8aa05ddd75dc9f0c14}
+
+
+Vrai ssi le pointeur est dans le desklet (widgets fils inclus). 
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!bIsHorizontal@{bIsHorizontal}}
+\index{bIsHorizontal@{bIsHorizontal}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockTypeHorizontality} {\bf \_\-CairoDockDesklet::bIsHorizontal}}\label{struct__CairoDockDesklet_6e5e2d072f68f1a9d5144c993aa06b7d}
+
+
+Toujours vrai pour un desklet. 
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!padding@{padding}}
+\index{padding@{padding}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gpointer {\bf \_\-CairoDockDesklet::padding}[3]}\label{struct__CairoDockDesklet_34404848c82c0aeb651556d795f5a7b4}
+
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!pRenderer@{pRenderer}}
+\index{pRenderer@{pRenderer}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockDeskletRenderer}$\ast$ {\bf \_\-CairoDockDesklet::pRenderer}}\label{struct__CairoDockDesklet_3c64b2a30de6c803d0a6471a9b6bdabd}
+
+
+le moteur de rendu utilise pour dessiner le desklet. 
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!pRendererData@{pRendererData}}
+\index{pRendererData@{pRendererData}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gpointer {\bf \_\-CairoDockDesklet::pRendererData}}\label{struct__CairoDockDesklet_a145f3f671017ff4ce624f4c3fbb65c4}
+
+
+donnees pouvant etre utilisees par le moteur de rendu. 
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!icons@{icons}}
+\index{icons@{icons}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}GList$\ast$ {\bf \_\-CairoDockDesklet::icons}}\label{struct__CairoDockDesklet_dac2d8199300450e9f36514dc1d67442}
+
+
+Liste eventuelle d'icones placees sur le desklet, et susceptibles de recevoir des clics. 
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!diff_x@{diff\_\-x}}
+\index{diff_x@{diff\_\-x}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDockDesklet::diff\_\-x}}\label{struct__CairoDockDesklet_4eb3967a97819957d519187f044e9a4c}
+
+
+pour le deplacement manuel de la fenetre. 
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!diff_y@{diff\_\-y}}
+\index{diff_y@{diff\_\-y}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDockDesklet::diff\_\-y}}\label{struct__CairoDockDesklet_c124f5e800497a92de7cb50584784e26}
+
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!moving@{moving}}
+\index{moving@{moving}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean {\bf \_\-CairoDockDesklet::moving}}\label{struct__CairoDockDesklet_81bbeb226df9475e6dcccc74225c4d85}
+
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!pIcon@{pIcon}}
+\index{pIcon@{pIcon}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Icon}$\ast$ {\bf \_\-CairoDockDesklet::pIcon}}\label{struct__CairoDockDesklet_9178f46711f95246658876afab16a739}
+
+
+L'icone de l'applet. 
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!iSidWritePosition@{iSidWritePosition}}
+\index{iSidWritePosition@{iSidWritePosition}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDockDesklet::iSidWritePosition}}\label{struct__CairoDockDesklet_3d990d77efee75060ef284f7f0c0551c}
+
+
+un timer pour retarder l'ecriture dans le fichier lors des deplacements. 
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!iSidWriteSize@{iSidWriteSize}}
+\index{iSidWriteSize@{iSidWriteSize}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDockDesklet::iSidWriteSize}}\label{struct__CairoDockDesklet_1dfe0973c7e70d9b6bbf437cbd82842c}
+
+
+un timer pour retarder l'ecriture dans le fichier lors des redimensionnements. 
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!iGradationCount@{iGradationCount}}
+\index{iGradationCount@{iGradationCount}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDockDesklet::iGradationCount}}\label{struct__CairoDockDesklet_c40bff8a72e0791ae473bf405322f004}
+
+
+compteur pour le fondu lors de l'entree dans le desklet. 
+
+\index{_CairoDockDesklet@{\_\-CairoDockDesklet}!iSidGradationOnEnter@{iSidGradationOnEnter}}
+\index{iSidGradationOnEnter@{iSidGradationOnEnter}!_CairoDockDesklet@{\_\-CairoDockDesklet}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDockDesklet::iSidGradationOnEnter}}\label{struct__CairoDockDesklet_04e832c832d8da7b479d250b08a4cbba}
+
+
+timer associe. 
+
+
+
+La documentation de cette structure a été générée à partir du fichier suivant :\begin{CompactItemize}
+\item 
+/opt/cairo-dock/trunk/cairo-dock/src/{\bf cairo-dock-struct.h}\end{CompactItemize}

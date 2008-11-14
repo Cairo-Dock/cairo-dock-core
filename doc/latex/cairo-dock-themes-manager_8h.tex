@@ -1,0 +1,86 @@
+\section{Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-themes-manager.h}
+\label{cairo-dock-themes-manager_8h}\index{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-themes-manager.h@{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-themes-manager.h}}
+\subsection*{Macros}
+\begin{CompactItemize}
+\item 
+\#define {\bf cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-themes}(pOpenedKeyFile, cAppletConfFilePath, pThemeTable, cGroupName, cKeyName)~cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-hash\_\-table (pOpenedKeyFile, cAppletConfFilePath, pThemeTable, cGroupName, cKeyName, NULL, (GHFunc) cairo\_\-dock\_\-write\_\-one\_\-theme\_\-name, TRUE, FALSE)
+\end{CompactItemize}
+\subsection*{Fonctions}
+\begin{CompactItemize}
+\item 
+GHashTable $\ast$ {\bf cairo\_\-dock\_\-list\_\-themes} (gchar $\ast$cThemesDir, GHashTable $\ast$hProvidedTable, GError $\ast$$\ast$erreur)
+\item 
+gchar $\ast$ {\bf cairo\_\-dock\_\-edit\_\-themes} (GHashTable $\ast$$\ast$hThemeTable, gboolean bSafeMode)
+\item 
+gchar $\ast$ {\bf cairo\_\-dock\_\-get\_\-chosen\_\-theme} (gchar $\ast$cConfFile, gboolean $\ast$bUseThemeBehaviour, gboolean $\ast$bUseThemeLaunchers)
+\item 
+gchar $\ast$ {\bf cairo\_\-dock\_\-get\_\-theme\_\-path} (gchar $\ast$cThemeName, GHashTable $\ast$hThemeTable)
+\item 
+void {\bf cairo\_\-dock\_\-load\_\-theme} (gchar $\ast$cThemePath)
+\item 
+void {\bf cairo\_\-dock\_\-mark\_\-theme\_\-as\_\-modified} (gboolean bModified)
+\item 
+gboolean {\bf cairo\_\-dock\_\-theme\_\-need\_\-save} (void)
+\item 
+gboolean {\bf cairo\_\-dock\_\-manage\_\-themes} (GtkWidget $\ast$pWidget, gboolean bSafeMode)
+\begin{CompactList}\small\item\em int cairo\_\-dock\_\-ask\_\-initial\_\-theme (void); \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Documentation des macros}
+\index{cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}!cairo_dock_update_conf_file_with_themes@{cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-themes}}
+\index{cairo_dock_update_conf_file_with_themes@{cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-themes}!cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-themes(pOpenedKeyFile, cAppletConfFilePath, pThemeTable, cGroupName, cKeyName)~cairo\_\-dock\_\-update\_\-conf\_\-file\_\-with\_\-hash\_\-table (pOpenedKeyFile, cAppletConfFilePath, pThemeTable, cGroupName, cKeyName, NULL, (GHFunc) cairo\_\-dock\_\-write\_\-one\_\-theme\_\-name, TRUE, FALSE)}\label{cairo-dock-themes-manager_8h_7710e8b1d53a9d41c3ce911a528f503d}
+
+
+
+
+\subsection{Documentation des fonctions}
+\index{cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}!cairo_dock_list_themes@{cairo\_\-dock\_\-list\_\-themes}}
+\index{cairo_dock_list_themes@{cairo\_\-dock\_\-list\_\-themes}!cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}GHashTable$\ast$ cairo\_\-dock\_\-list\_\-themes (gchar $\ast$ {\em cThemesDir}, GHashTable $\ast$ {\em hProvidedTable}, GError $\ast$$\ast$ {\em erreur})}\label{cairo-dock-themes-manager_8h_f2b87f4aad180d5e5368088bdb05240b}
+
+
+Liste les themes disponibles. Un theme est un repertoire, et tous doivent etre places dans un meme repertoire. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cThemesDir}]le repertoire contenant les themes. \item[{\em hProvidedTable}]une table de hashage (string , string) qui sera remplie, ou NULL pour que la fonction vous la cree. \item[{\em erreur}]: erreur positionnee au cas ou le repertoire serait illisible. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]la table de hashage contenant les doublets (nom\_\-du\_\-theme , chemin\_\-du\_\-theme). Si une table avait ete fournie en entree, c'est elle qui est retournee, sinon c'est une nouvelle table, a detruire avec 'g\_\-hash\_\-table\_\-destroy' apres utilisation (tous les elements seront liberes). \end{Desc}
+\index{cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}!cairo_dock_edit_themes@{cairo\_\-dock\_\-edit\_\-themes}}
+\index{cairo_dock_edit_themes@{cairo\_\-dock\_\-edit\_\-themes}!cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gchar$\ast$ cairo\_\-dock\_\-edit\_\-themes (GHashTable $\ast$$\ast$ {\em hThemeTable}, gboolean {\em bSafeMode})}\label{cairo-dock-themes-manager_8h_cef49939d0085c52a06d372b168f6ae0}
+
+
+\index{cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}!cairo_dock_get_chosen_theme@{cairo\_\-dock\_\-get\_\-chosen\_\-theme}}
+\index{cairo_dock_get_chosen_theme@{cairo\_\-dock\_\-get\_\-chosen\_\-theme}!cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gchar$\ast$ cairo\_\-dock\_\-get\_\-chosen\_\-theme (gchar $\ast$ {\em cConfFile}, gboolean $\ast$ {\em bUseThemeBehaviour}, gboolean $\ast$ {\em bUseThemeLaunchers})}\label{cairo-dock-themes-manager_8h_45bfce739852d43b48219926540d6769}
+
+
+\index{cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}!cairo_dock_get_theme_path@{cairo\_\-dock\_\-get\_\-theme\_\-path}}
+\index{cairo_dock_get_theme_path@{cairo\_\-dock\_\-get\_\-theme\_\-path}!cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gchar$\ast$ cairo\_\-dock\_\-get\_\-theme\_\-path (gchar $\ast$ {\em cThemeName}, GHashTable $\ast$ {\em hThemeTable})}\label{cairo-dock-themes-manager_8h_b67f20b861818424f1f54346c75e9e39}
+
+
+\index{cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}!cairo_dock_load_theme@{cairo\_\-dock\_\-load\_\-theme}}
+\index{cairo_dock_load_theme@{cairo\_\-dock\_\-load\_\-theme}!cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-load\_\-theme (gchar $\ast$ {\em cThemePath})}\label{cairo-dock-themes-manager_8h_addcb28e2da1100a291c744cb56fe47f}
+
+
+\index{cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}!cairo_dock_mark_theme_as_modified@{cairo\_\-dock\_\-mark\_\-theme\_\-as\_\-modified}}
+\index{cairo_dock_mark_theme_as_modified@{cairo\_\-dock\_\-mark\_\-theme\_\-as\_\-modified}!cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-mark\_\-theme\_\-as\_\-modified (gboolean {\em bModified})}\label{cairo-dock-themes-manager_8h_973b61d0f4c31abe529402ec059f5750}
+
+
+\index{cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}!cairo_dock_theme_need_save@{cairo\_\-dock\_\-theme\_\-need\_\-save}}
+\index{cairo_dock_theme_need_save@{cairo\_\-dock\_\-theme\_\-need\_\-save}!cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-theme\_\-need\_\-save (void)}\label{cairo-dock-themes-manager_8h_0432fda9c86ccd9027768c7e7b5d53a4}
+
+
+\index{cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}!cairo_dock_manage_themes@{cairo\_\-dock\_\-manage\_\-themes}}
+\index{cairo_dock_manage_themes@{cairo\_\-dock\_\-manage\_\-themes}!cairo-dock-themes-manager.h@{cairo-dock-themes-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-manage\_\-themes (GtkWidget $\ast$ {\em pWidget}, gboolean {\em bSafeMode})}\label{cairo-dock-themes-manager_8h_665a38cee72eb60c7cc0af494e617b9f}
+
+
+int cairo\_\-dock\_\-ask\_\-initial\_\-theme (void); 
+

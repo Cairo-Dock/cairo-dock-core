@@ -1,0 +1,694 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-keyfile-manager.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-keyfile-manager.h</h1>
+<p>
+<a href="cairo-dock-keyfile-manager_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#aaa94db45ddc28158e057ed71ae0b6d4">cairo_dock_write_keys_to_file</a> (GKeyFile *key_file, gchar *conf_file)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#ffa76b0ccbb587026cb43fd587a809bb">cairo_dock_flush_conf_file_full</a> (GKeyFile *pKeyFile, gchar *cConfFilePath, gchar *cShareDataDirPath, gboolean bUseFileKeys, gchar *cTemplateFileName)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#2b4bf01e0aa439539becbc63a71ae0e5">cairo_dock_flush_conf_file</a> (GKeyFile *pKeyFile, gchar *cConfFilePath, gchar *cShareDataDirPath)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#d91342448d377a7b039a85573a6ffce8">cairo_dock_replace_key_values</a> (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gboolean bUseOriginalKeys, gchar iIdentifier)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#f70648e61010e9cfe47fa530c0e52961">cairo_dock_write_table_content</a> (GHashTable *pHashTable, GHFunc pWritingFunc, gboolean bSortByKey, gboolean bAddEmptyEntry)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#4594b3bc992ce27ed2e95593c2e5837f">cairo_dock_write_one_name</a> (gchar *cName, gpointer value, GString *pString)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#8da302d2aa819d75bb817c25804e9f7a">cairo_dock_write_one_name_description</a> (gchar *cName, gchar *cDescriptionFilePath, GString *pString)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#0a0ae08c70a78b550e377af04f9402d5">cairo_dock_write_one_module_name</a> (gchar *cName, <a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *pModule, GString *pString)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#23bc2da6dbfb046637cfa31b25b8bf3c">cairo_dock_write_one_theme_name</a> (gchar *cName, gchar *cThemePath, GString *pString)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#abd6d4a4aacf5dbfb030ac514128da85">cairo_dock_write_one_renderer_name</a> (gchar *cName, <a class="el" href="struct__CairoDockRenderer.html">CairoDockRenderer</a> *pRenderer, GString *pString)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#362bfef62b4549bc32f705203188ee24">cairo_dock_update_conf_file_with_hash_table</a> (GKeyFile *pOpenedKeyFile, gchar *cConfFile, GHashTable *pModuleTable, gchar *cGroupName, gchar *cKeyName, gchar *cNewUsefullComment, GHFunc pWritingFunc, gboolean bSortByKey, gboolean bAddEmptyEntry)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#7c64383ffcdf1c6b6c075ce13145d2b7">cairo_dock_update_conf_file_with_list</a> (GKeyFile *pOpenedKeyFile, gchar *cConfFile, gchar *cList, gchar *cGroupName, gchar *cKeyName, gchar *cNewUsefullComment)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#15466ad398ea4a7bf501a1a9a3eb7c6a">cairo_dock_replace_values_in_conf_file</a> (gchar *cConfFilePath, GKeyFile *pValidKeyFile, gboolean bUseFileKeys, gchar iIdentifier)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#16d41c2c5bd8da1ae090b3a23ef46ff7">cairo_dock_replace_keys_by_identifier</a> (gchar *cConfFilePath, gchar *cReplacementConfFilePath, gchar iIdentifier)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#6636700e1b0e133fe2a1f7c6c2716d90">cairo_dock_get_conf_file_version</a> (GKeyFile *pKeyFile, gchar **cConfFileVersion)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-keyfile-manager_8h.html#81d446a0a505e8eaca429ba7f03d6174">cairo_dock_conf_file_needs_update</a> (GKeyFile *pKeyFile, gchar *cVersion)</td></tr>
+
+</table>
+<hr><h2>Documentation des fonctions</h2>
+<a class="anchor" name="aaa94db45ddc28158e057ed71ae0b6d4"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_write_keys_to_file" ref="aaa94db45ddc28158e057ed71ae0b6d4" args="(GKeyFile *key_file, gchar *conf_file)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_write_keys_to_file           </td>
+          <td>(</td>
+          <td class="paramtype">GKeyFile *&nbsp;</td>
+          <td class="paramname"> <em>key_file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>conf_file</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ffa76b0ccbb587026cb43fd587a809bb"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_flush_conf_file_full" ref="ffa76b0ccbb587026cb43fd587a809bb" args="(GKeyFile *pKeyFile, gchar *cConfFilePath, gchar *cShareDataDirPath, gboolean bUseFileKeys, gchar *cTemplateFileName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_flush_conf_file_full           </td>
+          <td>(</td>
+          <td class="paramtype">GKeyFile *&nbsp;</td>
+          <td class="paramname"> <em>pKeyFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cConfFilePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cShareDataDirPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bUseFileKeys</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cTemplateFileName</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="2b4bf01e0aa439539becbc63a71ae0e5"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_flush_conf_file" ref="2b4bf01e0aa439539becbc63a71ae0e5" args="(GKeyFile *pKeyFile, gchar *cConfFilePath, gchar *cShareDataDirPath)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_flush_conf_file           </td>
+          <td>(</td>
+          <td class="paramtype">GKeyFile *&nbsp;</td>
+          <td class="paramname"> <em>pKeyFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cConfFilePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cShareDataDirPath</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="d91342448d377a7b039a85573a6ffce8"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_replace_key_values" ref="d91342448d377a7b039a85573a6ffce8" args="(GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gboolean bUseOriginalKeys, gchar iIdentifier)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_replace_key_values           </td>
+          <td>(</td>
+          <td class="paramtype">GKeyFile *&nbsp;</td>
+          <td class="paramname"> <em>pOriginalKeyFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GKeyFile *&nbsp;</td>
+          <td class="paramname"> <em>pReplacementKeyFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bUseOriginalKeys</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar&nbsp;</td>
+          <td class="paramname"> <em>iIdentifier</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="f70648e61010e9cfe47fa530c0e52961"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_write_table_content" ref="f70648e61010e9cfe47fa530c0e52961" args="(GHashTable *pHashTable, GHFunc pWritingFunc, gboolean bSortByKey, gboolean bAddEmptyEntry)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gchar* cairo_dock_write_table_content           </td>
+          <td>(</td>
+          <td class="paramtype">GHashTable *&nbsp;</td>
+          <td class="paramname"> <em>pHashTable</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GHFunc&nbsp;</td>
+          <td class="paramname"> <em>pWritingFunc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bSortByKey</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bAddEmptyEntry</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="4594b3bc992ce27ed2e95593c2e5837f"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_write_one_name" ref="4594b3bc992ce27ed2e95593c2e5837f" args="(gchar *cName, gpointer value, GString *pString)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_write_one_name           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gpointer&nbsp;</td>
+          <td class="paramname"> <em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GString *&nbsp;</td>
+          <td class="paramname"> <em>pString</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="8da302d2aa819d75bb817c25804e9f7a"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_write_one_name_description" ref="8da302d2aa819d75bb817c25804e9f7a" args="(gchar *cName, gchar *cDescriptionFilePath, GString *pString)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_write_one_name_description           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cDescriptionFilePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GString *&nbsp;</td>
+          <td class="paramname"> <em>pString</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="0a0ae08c70a78b550e377af04f9402d5"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_write_one_module_name" ref="0a0ae08c70a78b550e377af04f9402d5" args="(gchar *cName, CairoDockModule *pModule, GString *pString)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_write_one_module_name           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td>
+          <td class="paramname"> <em>pModule</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GString *&nbsp;</td>
+          <td class="paramname"> <em>pString</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="23bc2da6dbfb046637cfa31b25b8bf3c"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_write_one_theme_name" ref="23bc2da6dbfb046637cfa31b25b8bf3c" args="(gchar *cName, gchar *cThemePath, GString *pString)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_write_one_theme_name           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cThemePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GString *&nbsp;</td>
+          <td class="paramname"> <em>pString</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="abd6d4a4aacf5dbfb030ac514128da85"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_write_one_renderer_name" ref="abd6d4a4aacf5dbfb030ac514128da85" args="(gchar *cName, CairoDockRenderer *pRenderer, GString *pString)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_write_one_renderer_name           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockRenderer.html">CairoDockRenderer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pRenderer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GString *&nbsp;</td>
+          <td class="paramname"> <em>pString</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="362bfef62b4549bc32f705203188ee24"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_update_conf_file_with_hash_table" ref="362bfef62b4549bc32f705203188ee24" args="(GKeyFile *pOpenedKeyFile, gchar *cConfFile, GHashTable *pModuleTable, gchar *cGroupName, gchar *cKeyName, gchar *cNewUsefullComment, GHFunc pWritingFunc, gboolean bSortByKey, gboolean bAddEmptyEntry)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_update_conf_file_with_hash_table           </td>
+          <td>(</td>
+          <td class="paramtype">GKeyFile *&nbsp;</td>
+          <td class="paramname"> <em>pOpenedKeyFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cConfFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GHashTable *&nbsp;</td>
+          <td class="paramname"> <em>pModuleTable</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cGroupName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cKeyName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cNewUsefullComment</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GHFunc&nbsp;</td>
+          <td class="paramname"> <em>pWritingFunc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bSortByKey</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bAddEmptyEntry</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="7c64383ffcdf1c6b6c075ce13145d2b7"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_update_conf_file_with_list" ref="7c64383ffcdf1c6b6c075ce13145d2b7" args="(GKeyFile *pOpenedKeyFile, gchar *cConfFile, gchar *cList, gchar *cGroupName, gchar *cKeyName, gchar *cNewUsefullComment)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_update_conf_file_with_list           </td>
+          <td>(</td>
+          <td class="paramtype">GKeyFile *&nbsp;</td>
+          <td class="paramname"> <em>pOpenedKeyFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cConfFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cList</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cGroupName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cKeyName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cNewUsefullComment</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="15466ad398ea4a7bf501a1a9a3eb7c6a"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_replace_values_in_conf_file" ref="15466ad398ea4a7bf501a1a9a3eb7c6a" args="(gchar *cConfFilePath, GKeyFile *pValidKeyFile, gboolean bUseFileKeys, gchar iIdentifier)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_replace_values_in_conf_file           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cConfFilePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GKeyFile *&nbsp;</td>
+          <td class="paramname"> <em>pValidKeyFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bUseFileKeys</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar&nbsp;</td>
+          <td class="paramname"> <em>iIdentifier</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="16d41c2c5bd8da1ae090b3a23ef46ff7"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_replace_keys_by_identifier" ref="16d41c2c5bd8da1ae090b3a23ef46ff7" args="(gchar *cConfFilePath, gchar *cReplacementConfFilePath, gchar iIdentifier)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_replace_keys_by_identifier           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cConfFilePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cReplacementConfFilePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar&nbsp;</td>
+          <td class="paramname"> <em>iIdentifier</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="6636700e1b0e133fe2a1f7c6c2716d90"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_get_conf_file_version" ref="6636700e1b0e133fe2a1f7c6c2716d90" args="(GKeyFile *pKeyFile, gchar **cConfFileVersion)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_get_conf_file_version           </td>
+          <td>(</td>
+          <td class="paramtype">GKeyFile *&nbsp;</td>
+          <td class="paramname"> <em>pKeyFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar **&nbsp;</td>
+          <td class="paramname"> <em>cConfFileVersion</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="81d446a0a505e8eaca429ba7f03d6174"></a><!-- doxytag: member="cairo-dock-keyfile-manager.h::cairo_dock_conf_file_needs_update" ref="81d446a0a505e8eaca429ba7f03d6174" args="(GKeyFile *pKeyFile, gchar *cVersion)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_conf_file_needs_update           </td>
+          <td>(</td>
+          <td class="paramtype">GKeyFile *&nbsp;</td>
+          <td class="paramname"> <em>pKeyFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cVersion</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

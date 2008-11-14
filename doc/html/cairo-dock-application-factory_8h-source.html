@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock:  Fichier source de /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-application-factory.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-application-factory.h</h1><a href="cairo-dock-application-factory_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
+<a name="l00002"></a>00002 <span class="preprocessor">#ifndef __CAIRO_DOCK_APPLICATION_FACTORY__</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span><span class="preprocessor">#define  __CAIRO_DOCK_APPLICATION_FACTORY__</span>
+<a name="l00004"></a>00004 <span class="preprocessor"></span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;glib.h&gt;</span>
+<a name="l00006"></a>00006 <span class="preprocessor">#include &lt;X11/Xlib.h&gt;</span>
+<a name="l00007"></a>00007 
+<a name="l00008"></a>00008 <span class="preprocessor">#include "<a class="code" href="cairo-dock-struct_8h.html">cairo-dock-struct.h</a>"</span>
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 
+<a name="l00011"></a>00011 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-application-factory_8h.html#678ef395cc28e3a8fa07ba22577f6bf7">cairo_dock_initialize_application_factory</a> (Display *pXDisplay);
+<a name="l00012"></a>00012 
+<a name="l00013"></a>00013 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-application-factory_8h.html#42e39f7b5ad59fb32467a1e6c033c3f7">cairo_dock_unregister_pid</a> (<a class="code" href="struct__Icon.html">Icon</a> *icon);
+<a name="l00014"></a>00014 
+<a name="l00015"></a>00015 
+<a name="l00016"></a>00016 cairo_surface_t *<a class="code" href="cairo-dock-application-factory_8h.html#6c118c96f01f32634ecdb3c4e2f2a826">cairo_dock_create_surface_from_xwindow</a> (Window Xid, cairo_t *pSourceContext, <span class="keywordtype">double</span> fMaxScale, <span class="keywordtype">double</span> *fWidth, <span class="keywordtype">double</span> *fHeight);
+<a name="l00017"></a>00017 
+<a name="l00018"></a>00018 <a class="code" href="struct__CairoDock.html">CairoDock</a> *<a class="code" href="cairo-dock-application-factory_8h.html#78ff33e505ecd43bc1182c40110ba290">cairo_dock_manage_appli_class</a> (<a class="code" href="struct__Icon.html">Icon</a> *icon, <a class="code" href="struct__CairoDock.html">CairoDock</a> *pMainDock);
+<a name="l00019"></a>00019 
+<a name="l00020"></a>00020 <a class="code" href="struct__Icon.html">Icon</a> * <a class="code" href="cairo-dock-application-factory_8h.html#e28b5fa69e1fb9cf38fccc6ba95e0efc">cairo_dock_create_icon_from_xwindow</a> (cairo_t *pSourceContext, Window Xid, <a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00021"></a>00021 
+<a name="l00022"></a>00022 
+<a name="l00023"></a>00023 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-application-factory_8h.html#ad3e753de8bc7fc717a7f81f87d7b8fa">cairo_dock_Xproperty_changed</a> (<a class="code" href="struct__Icon.html">Icon</a> *icon, Atom aProperty, <span class="keywordtype">int</span> iState, <a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00024"></a>00024 
+<a name="l00025"></a>00025 
+<a name="l00026"></a>00026 <span class="preprocessor">#endif</span>
+</pre></div><hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:15 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

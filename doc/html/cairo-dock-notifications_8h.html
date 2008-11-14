@@ -1,0 +1,415 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-notifications.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-notifications.h</h1>
+<p>
+<a href="cairo-dock-notifications_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Macros</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-notifications_8h.html#0f0d24de89673000b20e76a086789184">CAIRO_DOCK_RUN_FIRST</a>&nbsp;&nbsp;&nbsp;TRUE</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-notifications_8h.html#3c01943fe3794ca048f867b3dfaefbe0">CAIRO_DOCK_RUN_AFTER</a>&nbsp;&nbsp;&nbsp;FALSE</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-notifications_8h.html#01a9bea57eba0313d85509da951b46ec">CAIRO_DOCK_INTERCEPT_NOTIFICATION</a>&nbsp;&nbsp;&nbsp;TRUE</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-notifications_8h.html#e1cd652024442c3ef5419afaf350f5bc">CAIRO_DOCK_LET_PASS_NOTIFICATION</a>&nbsp;&nbsp;&nbsp;FALSE</td></tr>
+
+<tr><td colspan="2"><br><h2>Définition de type</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef gboolean(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-notifications_8h.html#3ac8de5342dcae0a5a3a20f0bcaf9a6a">CairoDockNotificationFunc</a> )(gpointer *data)</td></tr>
+
+<tr><td colspan="2"><br><h2>Énumérations</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e">CairoDockNotificationType</a> { <br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0ed27863046004a842c37fa2a46fa9152d">CAIRO_DOCK_REMOVE_ICON</a> = 0, 
+<a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e8c26e95eb1b7977881990291e2d41fa1">CAIRO_DOCK_CLICK_ICON</a>, 
+<a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0edab2d0ab4aecdbefca37047ec68c73e3">CAIRO_DOCK_DOUBLE_CLICK_ICON</a>, 
+<a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0ebbe60d66af778094b1bd7f2e54c99861">CAIRO_DOCK_MIDDLE_CLICK_ICON</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e87e4cd6fbee390472d4199ed5e077396">CAIRO_DOCK_BUILD_MENU</a>, 
+<a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0ebd606f16f651e9257a0b332f41b88a71">CAIRO_DOCK_DROP_DATA</a>, 
+<a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e2800d4fdde40ffdc2a4b525a65c0100d">CAIRO_DOCK_DESKTOP_CHANGED</a>, 
+<a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0ef8b5524e496f41ea118037b9f92d8ae7">CAIRO_DOCK_WINDOW_CONFIGURED</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e5f7b8ab2e6173c2653407778a7945cf6">CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED</a>, 
+<a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e414019822c568115e4c4e832455b92f2">CAIRO_DOCK_WINDOW_ACTIVATED</a>, 
+<a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0ee191d3469739d849e67b83d6d6433d07">CAIRO_DOCK_NB_NOTIFICATIONS</a>
+<br>
+ }</td></tr>
+
+<tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-notifications_8h.html#845e5c4be6a3a3d1be2de99f9c6a93a6">cairo_dock_register_notification</a> (<a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e">CairoDockNotificationType</a> iNotifType, <a class="el" href="cairo-dock-notifications_8h.html#3ac8de5342dcae0a5a3a20f0bcaf9a6a">CairoDockNotificationFunc</a> pFunction, gboolean bRunFirst)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-notifications_8h.html#f91590fc1a8f0f395f4d39c8f6942dc6">cairo_dock_remove_notification_func</a> (<a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e">CairoDockNotificationType</a> iNotifType, <a class="el" href="cairo-dock-notifications_8h.html#3ac8de5342dcae0a5a3a20f0bcaf9a6a">CairoDockNotificationFunc</a> pFunction)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-notifications_8h.html#b384dab889291442b54ea600bb411ea3">cairo_dock_notify</a> (<a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e">CairoDockNotificationType</a> iNotifType, gpointer data)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-notifications_8h.html#2f070bd652229d8ffef801ec27d64777">cairo_dock_register_first_notifications</a> (int iFirstNotifType,...)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-notifications_8h.html#43af2cd20c3f208f40c025efae51cda6">cairo_dock_register_last_notifications</a> (int iFirstNotifType,...)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-notifications_8h.html#4ef98c22645a91ab4ddba1a1df695d3e">cairo_dock_remove_notification_funcs</a> (int iFirstNotifType,...)</td></tr>
+
+</table>
+<hr><h2>Documentation des macros</h2>
+<a class="anchor" name="0f0d24de89673000b20e76a086789184"></a><!-- doxytag: member="cairo-dock-notifications.h::CAIRO_DOCK_RUN_FIRST" ref="0f0d24de89673000b20e76a086789184" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CAIRO_DOCK_RUN_FIRST&nbsp;&nbsp;&nbsp;TRUE          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="3c01943fe3794ca048f867b3dfaefbe0"></a><!-- doxytag: member="cairo-dock-notifications.h::CAIRO_DOCK_RUN_AFTER" ref="3c01943fe3794ca048f867b3dfaefbe0" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CAIRO_DOCK_RUN_AFTER&nbsp;&nbsp;&nbsp;FALSE          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="01a9bea57eba0313d85509da951b46ec"></a><!-- doxytag: member="cairo-dock-notifications.h::CAIRO_DOCK_INTERCEPT_NOTIFICATION" ref="01a9bea57eba0313d85509da951b46ec" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CAIRO_DOCK_INTERCEPT_NOTIFICATION&nbsp;&nbsp;&nbsp;TRUE          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="e1cd652024442c3ef5419afaf350f5bc"></a><!-- doxytag: member="cairo-dock-notifications.h::CAIRO_DOCK_LET_PASS_NOTIFICATION" ref="e1cd652024442c3ef5419afaf350f5bc" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CAIRO_DOCK_LET_PASS_NOTIFICATION&nbsp;&nbsp;&nbsp;FALSE          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<hr><h2>Documentation des définition de type</h2>
+<a class="anchor" name="3ac8de5342dcae0a5a3a20f0bcaf9a6a"></a><!-- doxytag: member="cairo-dock-notifications.h::CairoDockNotificationFunc" ref="3ac8de5342dcae0a5a3a20f0bcaf9a6a" args=")(gpointer *data)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef gboolean(*  <a class="el" href="cairo-dock-notifications_8h.html#3ac8de5342dcae0a5a3a20f0bcaf9a6a">CairoDockNotificationFunc</a>)(gpointer *data)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<hr><h2>Documentation du type de l'énumération</h2>
+<a class="anchor" name="183d2bfd296ecf77f1b2d4f96bf20a0e"></a><!-- doxytag: member="cairo-dock-notifications.h::CairoDockNotificationType" ref="183d2bfd296ecf77f1b2d4f96bf20a0e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e">CairoDockNotificationType</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+<dl compact><dt><b>Valeurs énumérées: </b></dt><dd>
+<table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" name="183d2bfd296ecf77f1b2d4f96bf20a0ed27863046004a842c37fa2a46fa9152d"></a><!-- doxytag: member="CAIRO_DOCK_REMOVE_ICON" ref="183d2bfd296ecf77f1b2d4f96bf20a0ed27863046004a842c37fa2a46fa9152d" args="" -->CAIRO_DOCK_REMOVE_ICON</em>&nbsp;</td><td>
+notification appellee lorsque l'utilisateur supprime un lanceur via le menu. data : {Icon, CairoDock} </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="183d2bfd296ecf77f1b2d4f96bf20a0e8c26e95eb1b7977881990291e2d41fa1"></a><!-- doxytag: member="CAIRO_DOCK_CLICK_ICON" ref="183d2bfd296ecf77f1b2d4f96bf20a0e8c26e95eb1b7977881990291e2d41fa1" args="" -->CAIRO_DOCK_CLICK_ICON</em>&nbsp;</td><td>
+notification appellee lorsque l'utilisateur clique sur une icone; l'animation est preparee juste avant, et lancee juste apres. data : {Icon, CairoDock, iState} </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="183d2bfd296ecf77f1b2d4f96bf20a0edab2d0ab4aecdbefca37047ec68c73e3"></a><!-- doxytag: member="CAIRO_DOCK_DOUBLE_CLICK_ICON" ref="183d2bfd296ecf77f1b2d4f96bf20a0edab2d0ab4aecdbefca37047ec68c73e3" args="" -->CAIRO_DOCK_DOUBLE_CLICK_ICON</em>&nbsp;</td><td>
+notification appellee lorsque l'utilisateur double clique sur une icone. data : Icon </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="183d2bfd296ecf77f1b2d4f96bf20a0ebbe60d66af778094b1bd7f2e54c99861"></a><!-- doxytag: member="CAIRO_DOCK_MIDDLE_CLICK_ICON" ref="183d2bfd296ecf77f1b2d4f96bf20a0ebbe60d66af778094b1bd7f2e54c99861" args="" -->CAIRO_DOCK_MIDDLE_CLICK_ICON</em>&nbsp;</td><td>
+data : Icon </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="183d2bfd296ecf77f1b2d4f96bf20a0e87e4cd6fbee390472d4199ed5e077396"></a><!-- doxytag: member="CAIRO_DOCK_BUILD_MENU" ref="183d2bfd296ecf77f1b2d4f96bf20a0e87e4cd6fbee390472d4199ed5e077396" args="" -->CAIRO_DOCK_BUILD_MENU</em>&nbsp;</td><td>
+data : {Icon, CairoDock, GtkMenu} </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="183d2bfd296ecf77f1b2d4f96bf20a0ebd606f16f651e9257a0b332f41b88a71"></a><!-- doxytag: member="CAIRO_DOCK_DROP_DATA" ref="183d2bfd296ecf77f1b2d4f96bf20a0ebd606f16f651e9257a0b332f41b88a71" args="" -->CAIRO_DOCK_DROP_DATA</em>&nbsp;</td><td>
+data : {gchar, Icon, double, CairoDock} </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="183d2bfd296ecf77f1b2d4f96bf20a0e2800d4fdde40ffdc2a4b525a65c0100d"></a><!-- doxytag: member="CAIRO_DOCK_DESKTOP_CHANGED" ref="183d2bfd296ecf77f1b2d4f96bf20a0e2800d4fdde40ffdc2a4b525a65c0100d" args="" -->CAIRO_DOCK_DESKTOP_CHANGED</em>&nbsp;</td><td>
+notification appellee lors d'un changement de bureau ou de viewport. data : NULL </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="183d2bfd296ecf77f1b2d4f96bf20a0ef8b5524e496f41ea118037b9f92d8ae7"></a><!-- doxytag: member="CAIRO_DOCK_WINDOW_CONFIGURED" ref="183d2bfd296ecf77f1b2d4f96bf20a0ef8b5524e496f41ea118037b9f92d8ae7" args="" -->CAIRO_DOCK_WINDOW_CONFIGURED</em>&nbsp;</td><td>
+notification appellee lorsqu'une fenetre est redimensionnee ou deplacee, ou lorsque l'ordre des fenetres change. data : XConfigureEvent ou NULL. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="183d2bfd296ecf77f1b2d4f96bf20a0e5f7b8ab2e6173c2653407778a7945cf6"></a><!-- doxytag: member="CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED" ref="183d2bfd296ecf77f1b2d4f96bf20a0e5f7b8ab2e6173c2653407778a7945cf6" args="" -->CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED</em>&nbsp;</td><td>
+notification appellee lorsque la geometrie du bureau a change (nombre de viewports/bureaux, dimensions). data : NULL </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="183d2bfd296ecf77f1b2d4f96bf20a0e414019822c568115e4c4e832455b92f2"></a><!-- doxytag: member="CAIRO_DOCK_WINDOW_ACTIVATED" ref="183d2bfd296ecf77f1b2d4f96bf20a0e414019822c568115e4c4e832455b92f2" args="" -->CAIRO_DOCK_WINDOW_ACTIVATED</em>&nbsp;</td><td>
+notification appellee lorsque la fenetre active a change. data : Xid </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="183d2bfd296ecf77f1b2d4f96bf20a0ee191d3469739d849e67b83d6d6433d07"></a><!-- doxytag: member="CAIRO_DOCK_NB_NOTIFICATIONS" ref="183d2bfd296ecf77f1b2d4f96bf20a0ee191d3469739d849e67b83d6d6433d07" args="" -->CAIRO_DOCK_NB_NOTIFICATIONS</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dl>
+
+</div>
+</div><p>
+<hr><h2>Documentation des fonctions</h2>
+<a class="anchor" name="845e5c4be6a3a3d1be2de99f9c6a93a6"></a><!-- doxytag: member="cairo-dock-notifications.h::cairo_dock_register_notification" ref="845e5c4be6a3a3d1be2de99f9c6a93a6" args="(CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_register_notification           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e">CairoDockNotificationType</a>&nbsp;</td>
+          <td class="paramname"> <em>iNotifType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-notifications_8h.html#3ac8de5342dcae0a5a3a20f0bcaf9a6a">CairoDockNotificationFunc</a>&nbsp;</td>
+          <td class="paramname"> <em>pFunction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bRunFirst</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Enregistre une action a appeler lors d'une notification. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>iNotifType</em>&nbsp;</td><td>type de la notification. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pFunction</em>&nbsp;</td><td>fonction notifiee. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>bRunFirst</em>&nbsp;</td><td>CAIRO_DOCK_RUN_FIRST pour etre enregistre en 1er, CAIRO_DOCK_RUN_AFTER pour etre enregistreé en dernier. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="f91590fc1a8f0f395f4d39c8f6942dc6"></a><!-- doxytag: member="cairo-dock-notifications.h::cairo_dock_remove_notification_func" ref="f91590fc1a8f0f395f4d39c8f6942dc6" args="(CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_remove_notification_func           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e">CairoDockNotificationType</a>&nbsp;</td>
+          <td class="paramname"> <em>iNotifType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-notifications_8h.html#3ac8de5342dcae0a5a3a20f0bcaf9a6a">CairoDockNotificationFunc</a>&nbsp;</td>
+          <td class="paramname"> <em>pFunction</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Enleve une fonction de la liste des fonctions appelees par une notification donnee. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>iNotifType</em>&nbsp;</td><td>type de la notification. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pFunction</em>&nbsp;</td><td>fonction notifiee. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="b384dab889291442b54ea600bb411ea3"></a><!-- doxytag: member="cairo-dock-notifications.h::cairo_dock_notify" ref="b384dab889291442b54ea600bb411ea3" args="(CairoDockNotificationType iNotifType, gpointer data)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_notify           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-notifications_8h.html#183d2bfd296ecf77f1b2d4f96bf20a0e">CairoDockNotificationType</a>&nbsp;</td>
+          <td class="paramname"> <em>iNotifType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gpointer&nbsp;</td>
+          <td class="paramname"> <em>data</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Enleve une fonction de la liste des fonctions appelees par une notification donnee. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>iNotifType</em>&nbsp;</td><td>type de la notification. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>data</em>&nbsp;</td><td>donnees passees a la fonction notifiee. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>TRUE si la notification a ete utilisee par quelqu'un, FALSE si aucune fonction n'est enregistree pour elle. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="2f070bd652229d8ffef801ec27d64777"></a><!-- doxytag: member="cairo-dock-notifications.h::cairo_dock_register_first_notifications" ref="2f070bd652229d8ffef801ec27d64777" args="(int iFirstNotifType,...)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_register_first_notifications           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>iFirstNotifType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>...</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Enregistre une liste de fonctions devant etre notifiees en premier. La liste est une liste de couples (CairoDockNotificationType, CairoDockNotificationFunc), et doit etre clot par -1. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>iFirstNotifType</em>&nbsp;</td><td>type de la 1ere notification. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>...</em>&nbsp;</td><td>1ere fonction notifiee, puis couple de (notification, fonction), termine par -1. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="43af2cd20c3f208f40c025efae51cda6"></a><!-- doxytag: member="cairo-dock-notifications.h::cairo_dock_register_last_notifications" ref="43af2cd20c3f208f40c025efae51cda6" args="(int iFirstNotifType,...)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_register_last_notifications           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>iFirstNotifType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>...</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Enregistre une liste de fonctions devant etre notifiees en dernier. La liste est une liste de couples (CairoDockNotificationType, CairoDockNotificationFunc), et doit etre clot par -1. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>iFirstNotifType</em>&nbsp;</td><td>type de la 1ere notification. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>...</em>&nbsp;</td><td>1ere fonction notifiee, puis couple de (notification, fonction), termine par -1. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="4ef98c22645a91ab4ddba1a1df695d3e"></a><!-- doxytag: member="cairo-dock-notifications.h::cairo_dock_remove_notification_funcs" ref="4ef98c22645a91ab4ddba1a1df695d3e" args="(int iFirstNotifType,...)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_remove_notification_funcs           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>iFirstNotifType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>...</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Enleve une liste de fonctions notifiees. La liste est une liste de couples (CairoDockNotificationType, CairoDockNotificationFunc), et doit etre clot par -1. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>iFirstNotifType</em>&nbsp;</td><td>type de la 1ere notification. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>...</em>&nbsp;</td><td>1ere fonction notifiee, puis couple de (notification, fonction), termine par -1. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

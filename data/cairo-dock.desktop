@@ -1,0 +1,17 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Exec=cairo-dock
+Icon=cairo-dock
+#DocPath=
+Terminal=false
+#X-KDE-StartupNotify=true
+
+Name=Cairo-Dock
+Name[fr]=Cairo-Dock
+
+GenericName=Multi-purpose Dock
+GenericName[fr]=Dock multi-usage
+#X-DCOP-ServiceType=Multi
+#X-KDE-AuthorizeAction=shell_access
+Categories=System;

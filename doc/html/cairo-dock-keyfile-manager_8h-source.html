@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock:  Fichier source de /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-keyfile-manager.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-keyfile-manager.h</h1><a href="cairo-dock-keyfile-manager_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
+<a name="l00002"></a>00002 <span class="preprocessor">#ifndef __CAIRO_DOCK_KEYFILE_MANAGER__</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span><span class="preprocessor">#define  __CAIRO_DOCK_KEYFILE_MANAGER__</span>
+<a name="l00004"></a>00004 <span class="preprocessor"></span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;glib.h&gt;</span>
+<a name="l00006"></a>00006 <span class="preprocessor">#include &lt;<a class="code" href="cairo-dock-struct_8h.html">cairo-dock-struct.h</a>&gt;</span>
+<a name="l00007"></a>00007 
+<a name="l00008"></a>00008 
+<a name="l00009"></a>00009 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-keyfile-manager_8h.html#aaa94db45ddc28158e057ed71ae0b6d4">cairo_dock_write_keys_to_file</a> (GKeyFile *key_file, gchar *conf_file);
+<a name="l00010"></a>00010 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-keyfile-manager_8h.html#ffa76b0ccbb587026cb43fd587a809bb">cairo_dock_flush_conf_file_full</a> (GKeyFile *pKeyFile, gchar *cConfFilePath, gchar *cShareDataDirPath, gboolean bUseFileKeys, gchar *cTemplateFileName);
+<a name="l00011"></a>00011 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-keyfile-manager_8h.html#2b4bf01e0aa439539becbc63a71ae0e5">cairo_dock_flush_conf_file</a> (GKeyFile *pKeyFile, gchar *cConfFilePath, gchar *cShareDataDirPath);
+<a name="l00012"></a>00012 
+<a name="l00013"></a>00013 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-keyfile-manager_8h.html#d91342448d377a7b039a85573a6ffce8">cairo_dock_replace_key_values</a> (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gboolean bUseOriginalKeys, gchar iIdentifier);
+<a name="l00014"></a>00014 
+<a name="l00015"></a>00015 gchar *<a class="code" href="cairo-dock-keyfile-manager_8h.html#f70648e61010e9cfe47fa530c0e52961">cairo_dock_write_table_content</a> (GHashTable *pHashTable, GHFunc pWritingFunc, gboolean bSortByKey, gboolean bAddEmptyEntry);
+<a name="l00016"></a>00016 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-keyfile-manager_8h.html#4594b3bc992ce27ed2e95593c2e5837f">cairo_dock_write_one_name</a> (gchar *cName, gpointer value, GString *pString);
+<a name="l00017"></a>00017 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-keyfile-manager_8h.html#8da302d2aa819d75bb817c25804e9f7a">cairo_dock_write_one_name_description</a> (gchar *cName, gchar *cDescriptionFilePath, GString *pString);
+<a name="l00018"></a>00018 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-keyfile-manager_8h.html#0a0ae08c70a78b550e377af04f9402d5">cairo_dock_write_one_module_name</a> (gchar *cName, <a class="code" href="struct__CairoDockModule.html">CairoDockModule</a> *pModule, GString *pString);
+<a name="l00019"></a>00019 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-keyfile-manager_8h.html#23bc2da6dbfb046637cfa31b25b8bf3c">cairo_dock_write_one_theme_name</a> (gchar *cName, gchar *cThemePath, GString *pString);
+<a name="l00020"></a>00020 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-keyfile-manager_8h.html#abd6d4a4aacf5dbfb030ac514128da85">cairo_dock_write_one_renderer_name</a> (gchar *cName, <a class="code" href="struct__CairoDockRenderer.html">CairoDockRenderer</a> *pRenderer, GString *pString);
+<a name="l00021"></a>00021 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-keyfile-manager_8h.html#362bfef62b4549bc32f705203188ee24">cairo_dock_update_conf_file_with_hash_table</a> (GKeyFile *pOpenedKeyFile, gchar *cConfFile, GHashTable *pModuleTable, gchar *cGroupName, gchar *cKeyName, gchar *cNewUsefullComment, GHFunc pWritingFunc, gboolean bSortByKey, gboolean bAddEmptyEntry);
+<a name="l00022"></a>00022 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-keyfile-manager_8h.html#7c64383ffcdf1c6b6c075ce13145d2b7">cairo_dock_update_conf_file_with_list</a> (GKeyFile *pOpenedKeyFile, gchar *cConfFile, gchar *cList, gchar *cGroupName, gchar *cKeyName, gchar *cNewUsefullComment);
+<a name="l00023"></a>00023 
+<a name="l00024"></a>00024 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-keyfile-manager_8h.html#15466ad398ea4a7bf501a1a9a3eb7c6a">cairo_dock_replace_values_in_conf_file</a> (gchar *cConfFilePath, GKeyFile *pValidKeyFile, gboolean bUseFileKeys, gchar iIdentifier);
+<a name="l00025"></a>00025 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-keyfile-manager_8h.html#16d41c2c5bd8da1ae090b3a23ef46ff7">cairo_dock_replace_keys_by_identifier</a> (gchar *cConfFilePath, gchar *cReplacementConfFilePath, gchar iIdentifier);
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-keyfile-manager_8h.html#6636700e1b0e133fe2a1f7c6c2716d90">cairo_dock_get_conf_file_version</a> (GKeyFile *pKeyFile, gchar **cConfFileVersion);
+<a name="l00028"></a>00028 gboolean <a class="code" href="cairo-dock-keyfile-manager_8h.html#81d446a0a505e8eaca429ba7f03d6174">cairo_dock_conf_file_needs_update</a> (GKeyFile *pKeyFile, gchar *cVersion);
+<a name="l00029"></a>00029 
+<a name="l00030"></a>00030 
+<a name="l00031"></a>00031 <span class="preprocessor">#endif</span>
+</pre></div><hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:15 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

@@ -1,0 +1,73 @@
+\section{Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dbus.h}
+\label{cairo-dock-dbus_8h}\index{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dbus.h@{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dbus.h}}
+\subsection*{Fonctions}
+\begin{CompactItemize}
+\item 
+void {\bf cairo\_\-dock\_\-initialize\_\-dbus\_\-manager} (void)
+\item 
+DBusGConnection $\ast$ {\bf cairo\_\-dock\_\-get\_\-dbus\_\-connection} (void)
+\item 
+void {\bf cairo\_\-dock\_\-register\_\-service\_\-name} (const gchar $\ast$cServiceName)
+\item 
+gboolean {\bf cairo\_\-dock\_\-bdus\_\-is\_\-enabled} (void)
+\item 
+DBusGProxy $\ast$ {\bf cairo\_\-dock\_\-create\_\-new\_\-dbus\_\-proxy} (const char $\ast$name, const char $\ast$path, const char $\ast$interface)
+\item 
+gboolean {\bf cairo\_\-dock\_\-dbus\_\-detect\_\-application} (const gchar $\ast$cName)
+\end{CompactItemize}
+
+
+\subsection{Documentation des fonctions}
+\index{cairo-dock-dbus.h@{cairo-dock-dbus.h}!cairo_dock_initialize_dbus_manager@{cairo\_\-dock\_\-initialize\_\-dbus\_\-manager}}
+\index{cairo_dock_initialize_dbus_manager@{cairo\_\-dock\_\-initialize\_\-dbus\_\-manager}!cairo-dock-dbus.h@{cairo-dock-dbus.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-initialize\_\-dbus\_\-manager (void)}\label{cairo-dock-dbus_8h_649db601a61296129cd1612a2abe7368}
+
+
+Initialise le gestionnaire de bus dans le dock. Il recupere la connexion 'session' de DBus, y etablit un proxy, et les met a disposition de tout le monde. \index{cairo-dock-dbus.h@{cairo-dock-dbus.h}!cairo_dock_get_dbus_connection@{cairo\_\-dock\_\-get\_\-dbus\_\-connection}}
+\index{cairo_dock_get_dbus_connection@{cairo\_\-dock\_\-get\_\-dbus\_\-connection}!cairo-dock-dbus.h@{cairo-dock-dbus.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}DBusGConnection$\ast$ cairo\_\-dock\_\-get\_\-dbus\_\-connection (void)}\label{cairo-dock-dbus_8h_1813624dabbef2d5b9f247106372c5a6}
+
+
+Retourne la connexion 'session' de DBus. \begin{Desc}
+\item[Renvoie:]la connexion au bus. \end{Desc}
+\index{cairo-dock-dbus.h@{cairo-dock-dbus.h}!cairo_dock_register_service_name@{cairo\_\-dock\_\-register\_\-service\_\-name}}
+\index{cairo_dock_register_service_name@{cairo\_\-dock\_\-register\_\-service\_\-name}!cairo-dock-dbus.h@{cairo-dock-dbus.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-register\_\-service\_\-name (const gchar $\ast$ {\em cServiceName})}\label{cairo-dock-dbus_8h_0a1d26dfa93988a16756512e467b9ed0}
+
+
+Enregistre un nouveau service sur le bus. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cServiceName}]le nom du service. \end{description}
+\end{Desc}
+\index{cairo-dock-dbus.h@{cairo-dock-dbus.h}!cairo_dock_bdus_is_enabled@{cairo\_\-dock\_\-bdus\_\-is\_\-enabled}}
+\index{cairo_dock_bdus_is_enabled@{cairo\_\-dock\_\-bdus\_\-is\_\-enabled}!cairo-dock-dbus.h@{cairo-dock-dbus.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-bdus\_\-is\_\-enabled (void)}\label{cairo-dock-dbus_8h_8e64b42f79ff518bc8512529423756b5}
+
+
+Dis si le bus est disponible dans le dock. \begin{Desc}
+\item[Renvoie:]TRUE ssi le bus a pu etre recupere precedemment. \end{Desc}
+\index{cairo-dock-dbus.h@{cairo-dock-dbus.h}!cairo_dock_create_new_dbus_proxy@{cairo\_\-dock\_\-create\_\-new\_\-dbus\_\-proxy}}
+\index{cairo_dock_create_new_dbus_proxy@{cairo\_\-dock\_\-create\_\-new\_\-dbus\_\-proxy}!cairo-dock-dbus.h@{cairo-dock-dbus.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}DBusGProxy$\ast$ cairo\_\-dock\_\-create\_\-new\_\-dbus\_\-proxy (const char $\ast$ {\em name}, const char $\ast$ {\em path}, const char $\ast$ {\em interface})}\label{cairo-dock-dbus_8h_1177d4b7d39129b56d5b7e1c657b1f83}
+
+
+Cree un nouveau proxy pour la connexion 'session'. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em name}]un nom sur le bus. \item[{\em path}]le chemin associe. \item[{\em interface}]nom de l'interface associee. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]le proxy nouvellement cree. \end{Desc}
+\index{cairo-dock-dbus.h@{cairo-dock-dbus.h}!cairo_dock_dbus_detect_application@{cairo\_\-dock\_\-dbus\_\-detect\_\-application}}
+\index{cairo_dock_dbus_detect_application@{cairo\_\-dock\_\-dbus\_\-detect\_\-application}!cairo-dock-dbus.h@{cairo-dock-dbus.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-dbus\_\-detect\_\-application (const gchar $\ast$ {\em cName})}\label{cairo-dock-dbus_8h_afb96e15a8c3382b18c94897fda490f7}
+
+
+Detecte si une application est couramment lancee. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cName}]nom de l'application. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]TRUE ssi l'application est lancee et possede un service sur le bus. \end{Desc}

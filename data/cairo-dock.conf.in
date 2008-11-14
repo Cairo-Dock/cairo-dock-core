@@ -1,0 +1,720 @@
+#!en;@VERSION@
+######## This is the conf file of cairo-dock, released under the GPL.##########
+######## It is parsed by cairo-dock to automatically generate an appropriate GUI,##########
+######## so don't mess into it, except if you know what you're doing ! ;-)##########
+
+#gtk-fullscreen;0;Set the position of the main dock.
+[Position]
+
+#F-[Position on the screen;gtk-fullscreen]
+frame_pos =
+
+#r-[bottom;top;right;left] Choose the screen border regarding to which the dock will place itself :
+#{The icons will scroll according to the chosen placement type. Of course the dock can be placed anywhere on the screen, here we specify regarding to what.}
+screen border = 0
+
+#e-[0.;1.] Relative alignment :
+#{At 0, the dock will place itself regarding the left corner if horizontal and the top corner if vertical, at 1 regarding the right corner if horizontal and the bottom corner if vertical, and at 0.5, regarding the middle of the screen's edge.}
+alignment = .5
+
+#F-[Position regarding the chosen screen's edge;gtk-leave-fullscreen]
+frame_scr =
+
+#I-[-1000;1000] Lateral gap :
+#{Gap from the absolute position on the screen's edge, in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.}
+x gap = 0
+#i-[-30;1000] Distance to the screen's edge :
+#{in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.}
+y gap = 25
+
+#gtk-help;0;How do you access to your dock ?
+[Accessibility]
+
+#F-[Space;gtk-fullscreen]
+frame_size =
+
+#i-[0;9999] Size allowed for the dock :
+#{The dock will automatically resize itself to fit this size. Set it to 0 to make the dock fit the screen's size.}
+max autorized width = 0
+
+#b- Reserve space at the edge of the screen for the dock ?
+#{This will prevent other windows from overlapping the dock. It has no effect if you defined the 'show/hide' shortcut below, cause then the dock behaves like a menu.}
+reserve space = false
+
+#F-[Auto-hide;gtk-down]
+frame_auto=
+
+#b- Activate auto-hide ?
+#{The dock will automatically hide itself outside of the scren when the mouse leaves it and will show a callback zone instead. Place the mouse into this zone will make the dock re-appear.}
+auto-hide = false
+
+#F-[Pop-up;gtk-up]
+frame_pop =
+
+#b- Keep the dock below other windows ?
+#{The dock will pop-up on the foreground when you place the mouse on its screen border. This option is only useful if you don't want to reserve space for the dock, nor to activate auto-hide.}
+pop-up = false
+
+#b- Pop-up only if the mouse hits a screen corner ?
+pop in corner only = false;
+
+#F-[Shortcut;gtk-select-font]
+frame_sho =
+
+#k- Keyboard shortcut to show/hide the dock :
+#{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
+raise shortcut = 
+
+#F-[Sub-docks' accessibility;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-subdock.png]
+frame_sub =
+
+#i- Delay before you effectively leave from a sub-dock or to a sub-dock :
+#{in ms.}
+leaving delay = 250
+
+#i- Delay before displaying a sub-dock :
+#{in ms. Unused if you set up to click to show sub-docks.}
+show delay = 300
+
+#b- Click to show sub-docks ?
+#{Otherwise they will appear when you linger over the icon pointing on it.}
+show on click = false
+
+
+#gtk-dnd-multiple;0;Access your applications easily.
+[TaskBar]
+
+#F-[Behaviour;gtk-properties]
+frame1 =
+
+#b- Show the current applications in the dock ?
+#{Cairo-Dock will then replace your taskbar. It is recommanded to remove any other taskbar, and to not force the dock's type to normal.}
+show applications = true
+
+#b- Should the applications with same PID be displayed only once ?
+unique PID = false
+
+#b- Should the applications with same class be grouped in a sub-dock ?
+#{This allows to group windows in some soft like Gimp, and to have only 1 icon in the main dock.The 1st window will appear in the main dock, and the others will be placed in a container associated with this 1st icon.}
+group by class = false
+
+#b- Only show icons whose window is minimized ?
+hide visible = false
+
+#b- Only show applis on current desktop ?
+current desktop only = false
+
+#v- 
+sep_app =
+
+#b- Mix launchers and applis ?
+#{Allows launchers to act as applis when their program is running, and displays an indicator on their icon to signal it. You can launch other occurences of the program with SHIFT+click.}
+mix launcher appli = true
+
+#b- Overwrite X icons with launchers' one ?
+#{If not set, will use the icon provided by X for each appli. If set, the same icon as the corresponding launcher will be used for each appli.}
+overwrite xicon = true
+
+#b- Show a window thumbnail when it's minimized ?
+#{You need a composite manager for it.}
+window thumbnail = true
+
+#F-[Interaction;gtk-refresh]
+frame2 =
+
+#b- Minimize the window when its icon is clicked, if it was already the active window ?
+#{It is the default behaviour of most of taskbars.}
+minimize on click = true
+
+#b- Middle click on an icon closes its relative application ?
+#{In a Firefox's tabs manner.}
+close on middle click = true
+
+#b- Automatically quick-hide the dock when a window becomes fullscreen ?
+#{This is only usefull if you don't already use the auto-hide, and if your WM let the dock in front of fullscreen windows (which is rare).}
+auto quick hide = false
+
+#b- Automatically quick-hide the dock when a window becomes maximized ?
+#{This is only usefull if don't already use the auto-hide, and if you don't want to reserve the space for your dock nor let it below the other windows.}
+auto quick hide on max = false
+
+#b- Signal the applications demanding your attention with a dialog tip ?
+demands attention with dialog = true
+
+#b- Signal the applications demanding your attention with an animation ?
+demands attention with animation = true
+
+#b- Play a short animation of the icon when its window becomes active ?
+animate on active window = true
+
+#F-[Representation;gtk-find]
+frame3 =
+
+#i- Maximum number of caracters in application's name :
+#{"..." will be added at the end if the name is too long.}
+max name length = 15
+
+#e-[-1;1] Transparency of icons whose window is or isn't minimized :
+#{To the right, you can control the transparency of minimized windows, to the left the transparency of visible windows. The more you go aside, the more the concerned icons will be transparent; on the middle, icons are always plain.}
+visibility alpha = 0.25
+
+
+#gtk-preferences;0;All the parameters you will never want to tweak.
+[System]
+
+#F-[Movement parameters;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-movment.png]
+frame_mov =
+
+#b- Animate the dock when auto-hiding ?
+#{The dock will unfold when it hides/shows itself. No effect if auto-hide is not activated or unfold acceleration is nul.}
+animate on auto-hide = true
+
+#b- Animate sub-docks when they appear ?
+#{Always true if sub-docks appear with mouse click.}
+animate subdocks = true
+
+#e-[0.;12.] Icons' lateral unfolding acceleration :
+#{The icons will appear folded on themselves, regarding the alignement point, then will unfold untill they fill the whole dock. Use 0 to not use unfolding, the more it's close to 0, the faster it will be}
+unfold factor = 8
+
+#i-[5;50] Number of steps for icons' resizing (grow up/shrink down) :
+#{The more there are, the slower it will be}
+grow up steps = 10
+#i-[5;50] ...
+shrink down steps = 12
+
+#f-[0.1;0.9] Window's move acceleration (move up/move down) :
+#{in percentage of the distance it can move at each step . After n steps, the remaining distance will be reduced by (1-s)^n.}
+move up speed = 0.35
+#f-[0.1;0.9] ...
+move down speed = 0.25
+
+#F-[Mouse;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-mouse.png]
+frame_mouse = 
+
+#e-[0;1] Scroll speed factor for background decorations :
+#{The smaller, the lower the decorations will move along with the cursor. At 0 they will be static.}
+scroll speed factor = 0.5
+
+#b- Should the decorations be enslaved to the cursor ?
+#{Otherwise the amount of movement of the decorations will only depend on the direction of the cursor's movement, as if the decorations were "gliding".}
+decorations enslaved = true
+
+#i-[-1;99] Amount of pixels the icons will scroll at each wheel scroll :
+#{If you put 0, this will make them scroll of exactly one icon each time. If you put -1, the scroll wil be de-activated}
+scroll amount = 0
+
+#b- Re-center the dock on leaving if it has been scrolled ?
+reset scroll = true
+
+#e-[0.;0.99] If so, you can specify the scrolling acceleration :
+#{The more it's close to 0, the faster the scroll will be.}
+reset scroll acceleration = .9
+
+#F-[CPU;gtk-execute]
+frame_cpu =
+
+#i-[5;40] Refresh frequency when mouving cursor into the dock :
+#{in Hz. This is to adjust regarding your CPU power.}
+refresh frequency = 35
+
+#b- Reflections should be calculated in real-time ?
+#{The transparency gradation pattern will then be re-calculated in real time. May needs more CPU power.}
+dynamic reflection = false
+
+#F-[Label readability;gtk-underline]
+frame_label =
+
+#b- Show label of the currently pointed icon only ?
+pointed icon only = false
+
+#b- Should the labels be always horizontal, even when dock is vertical ?
+always horizontal = FALSE
+
+#f-[0.;50.] label's visibility threshold :
+#{the bigger, the more the labels next to the pointed icon will be transparent.}
+alpha threshold = 10.
+
+#F-[Files;gtk-file]
+frame_file =
+
+#r-[Name;Size;Date] Sort files by :
+sort files = 0
+
+#b- Show hidden files ?
+show hidden files = false
+
+#F-[Composition;gtk-clear]
+frame_fake =
+#b- Emulates composition with fake transparency ?
+#{Only use this if you don't run a composite manager like Compiz, xcompmgr, etc and have a black background around your dock. For esthetic reason, the dock will be kept under other windows.}
+fake transparency = false
+
+modules=
+
+
+#gtk-goto-bottom;1;Define the appearance of the dock when it's hidden.
+[Hidden dock]
+
+#i+[1;1024] Size of the dock (width x height, in pixels) :
+#{Place the mouse into it will make the dock re-appear.}
+zone width = 200
+#i+ ...
+zone height = 20
+
+#S+ Filename of an image to put on :
+#{This is what you see when the dock hides itselfs. Any format is allowed. Let this field empty to have an invisible zone.}
+callback image = background-cairo-dock.svg
+
+#e+[0;1] Transparency of the image :
+alpha = 0.5
+
+#b+ Rotate the image when the dock is on top/left/right ?
+#{Use it when the image is an arrow pointing to the center of the screen for exemple.}
+reverse visible image = true
+
+
+#gtk-orientation-portrait;1;Set a background to your dock.
+[Background]
+
+#F+[Extern Frame;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-frame.png]
+frame4 =
+#i+[0;30] Corner radius :
+#{in pixels.}
+corner radius = 10
+
+#i+[0;20] Linewidth of the extern line :
+#{in pixels.}
+line width = 2
+
+#i+[0;20] Margin between the frame and the icons or their reflects :
+#{in pixels.}
+frame margin = 2
+
+#c+4[0;1] Color of the extern line (r,v,b,a) :
+line color = 0.0; 0.0; 0.8; 0.4
+
+#b+ Are the bottom left and right corners rounded ?
+rounded bottom corner = true
+
+
+#F+[Background image...;gtk-orientation-portrait]
+frame2 = 
+
+#S+ Image's filename to use as a background :
+#{Any format allowed; let this field empty if you don't want to use an image as background.}
+background image = 
+
+#e+[0;1] Image's transparency :
+image alpha = 0.5
+
+#b+ Repeat image as a pattern to fill background ?
+repeat image = true
+
+#F+[...or Gradation;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-gradation.png]
+frame3 = 
+
+#c+4[0;1] Bright color (red, green, blue, alpha) :
+stripes color bright = 0.933; 0.933; 0.925; 0.4
+
+#c+4[0;1] Dark color (red, green, blue, alpha) :
+stripes color dark = 0.827; 0.843; 0.811; 0.6
+
+#f+[-90;90] Angle of the stripes / gradation, in relation to the vertical (in degree) :
+stripes angle = 30.
+
+#i+ Number of stripes, in each pattern, to draw in the background :
+#{The bigger, the more the stripes are close to each other; with 0 stripes, the background will be filled with a single gradation.}
+number of stripes = 15
+
+#f+[0;1] Width of the stripes, in percentage of the pattern size :
+#{1 pattern contains N stripes, so the width can be less or equal than 1/N.}
+stripes width = 0.03
+
+
+#gtk-select-font;1;Define the style of the icons' labels and quick-info.
+[Labels]
+
+#i+[0;40] Size of the font :
+#{approximately size in pixels, put 0 to not display labels}
+size = 14
+
+#P+ Family of the font used for labels :
+#{for exemple Monospace, Purisa, ... Just write the font name wihtout any number or so.}
+police = Sans
+
+#b+ Should be italic ?
+italic = false
+
+#i+[1;9] Weight (between 1 and 9, the bigger, the heavier):
+weight = 5
+
+#c+3[0;1] Start color :
+#{It's the first color of the gradation.}
+text color start = 1;1;1
+
+#c+3[0;1] Stop color :
+#{It's the second color of the gradation. Set it to the same value as the first if you just don't want to have a gradation.}
+text color stop = 1;1;1
+
+#b+ Pattern should be vertical ?
+#{If checked, the pattern will go from top to bottom, otherwise from left to right.}
+vertical label pattern = false
+
+#c+4[0;1] Color of the label's background :
+#{If you set it to fully transparent, there will be no background for the text, but the letters' outline will be thicker.}
+text background color =0;0;0;.5
+
+#b+ Use background color for labels ?
+#{If false, only the quick-info will have this background color.}
+background for label = false
+
+
+#gtk-about;1;All about the icons.
+[Icons]
+
+#F+[Wave's shape;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-wave.png]
+frame_shape =
+#f+[0;5] Crest of the wave :
+#{the maximum zoom will be 1+C.}
+amplitude = 1.0
+
+#i+[1;999] Width of the interval in which the wave will be effective :
+#{in pixels. Outside of this interval (centered on the mouse), the wave is flat.}
+sinusoid width = 300
+
+#i+[0;50] Space between icons :
+#{in pixels.}
+icon gap = 0
+
+#e+[0;1] Icons' transparency at rest :
+#{It is their transparency when the wave is flat; they will "materialize" progressively as the dock grows up. The closer to 0, the more transparent they will be.}
+alpha at rest = 1
+
+#F+[Reflections]
+frame_refl =
+
+#e+[0;1] Reflecting power of the plane :
+#{It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are not used.}
+albedo = 1
+
+#e+[0;1] Field depth of the view:
+#{More precisely, it is the fraction of the max icon height that will be used to draw reflect. So setting it to 0.33 will mean that 33% of the icons will reflect on the ground, and the icons will be placed at the right distance from the front border of the frame so that the reflect is fully visible.}
+field depth = 0.5
+
+#F+[Link the icons with a string]
+frame_string =
+
+#i+[0;20] Linewidth of the string, in pixels (0 to not use string) :
+string width = 0
+
+#c+4[0;1] Color of the string (red, blue, green, alpha) :
+string color = 0.0; 0.0; 0.8; 0.4
+
+#F+[Icons' themes]
+frame_theme=
+
+#D+99 List of icons themes or directories :
+#{Directories or themes where to search icons. Put some directories where you have icons you wish to see in the dock, or put some theme's name you've installed on your system. (the order is taken into account during the research). The key word _LocalTheme_ represents the directory ~/.config/cairo-dock/current_theme/icons}/
+default icon directory = _LocalTheme_
+
+
+#X+[Launchers]
+frame_launcher =
+
+#i+[0;128] Icon size at rest (width x height) :
+#{Put 0 if you don't want to restrain them}
+launcher width = 0
+#i+[0;128] ...
+launcher height = 0
+
+#r+[bounce;rotate;blink;pulse;upside-down;wobbly;random] Animation type when clicked :
+launcher animation = bounce
+
+#i+ Number of times the icon will bounce/rotate/blink/etc when clicked :
+launcher number of rounds = 4
+
+
+#X+[Applications]
+frame_appli =
+
+#i+[0;128] Icon size at rest (width x height) :
+#{Put 0 if you don't want to restrain them}
+appli width = 0
+#i+[0;128] ...
+appli height = 0
+
+#r+[bounce;rotate;blink;pulse;upside-down;wobbly;random] Animation type when clicked :
+appli animation = bounce
+
+#i+ Number of times the icon will bounce/rotate/blink/etc when clicked :
+appli number of rounds = 4
+
+#X+[Applets]
+frame_applet =
+
+#i+[0;128] Icon size at rest (width x height) :
+#{Put 0 if you don't want to restrain them}
+applet width = 0
+#i+[0;128] ...
+applet height = 0
+
+#r+[bounce;rotate;blink;pulse;upside-down;wobbly;random] Animation type when clicked :
+applet animation = bounce
+
+#i+ Number of times the icon will bounce/rotate/blink/etc when clicked :
+applet number of rounds = 4
+
+#X+[Separators]
+frame_sep =
+
+#i+[0;128] Icon size at rest (width x height) :
+#{Put 0 if you don't want to restrain them}
+separator width = 0
+#i+[0;128] ...
+separator height = 0
+
+#b+ Automatically add separators ?
+#{Separators are icons used to make a separation between different types of icons. Cairo-dock can automatically add them between launchers, applis, and applets.}
+use separator = true
+
+#S+ Filename of an image to use for separators :
+#{If you don't provide one, blanks will be used.}
+separator image = separateur.svg
+
+#b+ Make the separator's image revolve when dock is on top/on the left/on the right ?
+revolve separator image = true
+
+#b+ Force separator's image size to stay constant ?
+force size = false
+
+#X+
+frame_sep_ =
+
+#T+3[launchers;applications;applets] Order of the different types of icons :
+icon's type order = launchers;applications;applets
+
+#b Allow applets to be placed amongst launchers ?
+#{This parameter will overwrite the previously defined order, to allow you to mix applets and launchers into the dock.}
+mix applets with launchers = false
+
+
+#gtk-zoom-fit;1;Today it's Friday, the day of the 'Curve' view !
+[Views]
+
+#F+[Main Dock]
+frame_main =
+
+#n+ Choose the default view for root docks :/
+main dock view = default
+
+#F+[Sub-Docks]
+frame_sub =
+
+#n+ Choose the default view for sub-docks :
+#{You can overwrite this parameter for each sub-dock.}/
+sub-dock view = default
+
+#b+ Are the sub-docks parallel to main docks ?
+#{otherwise they will be perpendicular}
+same horizontality = true
+
+#e+[0.1;1.] Ratio for the size of the sub-docks' icons :
+#{You can specify a ratio for the size of the sub-docks' icons, regarding the main docks' icons size}
+relative icon size = 1.
+
+
+#gtk-dialog-question;1;Let the dock talk to you.
+[Dialogs]
+
+#F+[Buttons;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-buttons.png]
+frame_button =
+
+#i+[10;99] Size of buttons in the info-bubbles (width x height) :
+#{in pixels.}
+button width = 64
+#i+[10;99]  ...
+button height = 48
+
+#S+ Name of an image to use for the yes/ok button :
+#{If you don't provide any, a default image will be used.}
+button_ok image = 
+
+#S+ Name of an image to use for the no/cancel button :
+#{If you don't provide any, a default image will be used.}
+button_cancel image = 
+
+#F+[Bubble;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-bubble.png]
+frame_bubble =
+
+#c+4[0;1] Background color of the bubble (r,v,b,a) :
+background color = 1.0; 1.0; 1.0; 0.7
+
+#i+[0;99] Size of the icon displayed next to the text :
+#{Put 0 to let the size adapt itself to the text.}
+icon size = 48
+
+#F+[Text;gtk-select-font]
+frame_text =
+
+#c+3[0;1] Text color (r,g,b) :
+text color = 0.0; 0.0; 0.0
+
+#b+ Homogeneous with icons' label ?
+#{The messages will have the same style as the icons' labels. The beneath parameters are then unused.}
+homogeneous text = true
+
+#i+[0;40] Size of the font :
+#{approximately size in pixels, put 0 to not display labels}
+message size = 14
+
+#P+ Family of the font used for labels :
+#{for exemple Monospace, Purisa, ... Just write the font name wihtout any number or so.}
+message police = Sans
+
+#i+[1;9] Weight (between 1 and 9, the bigger, the heavier):
+message weight = 5
+
+#b+ Should be italic ?
+message italic = false
+
+
+#gtk-convert;1;The applets can be set on your desktop as widgets.
+[Desklets]
+
+#d+ Choose a default decoration for all desklets :
+decorations = dark
+
+#F+[Personnal decorations;gtk-paste]
+frame_perso =
+
+#S+ Background image :
+#{It's an image that will be displayed below the drawings, like a frame for exemple. Let empty to not use any.}
+bg desklet =
+#e+[0;1] Background tansparency :
+bg alpha = 1
+#i+[0;256] Left offset :
+#{in pixels. Use this to adjust the left position of the drawings.}
+left offset = 0
+#i+[0;256] Top offset :
+#{in pixels. Use this to adjust the top position of the drawings.}
+top offset = 0
+#i+[0;256] Right offset :
+#{in pixels. Use this to adjust the right position of the drawings.}
+right offset = 0
+#i+[0;256] Bottom offset :
+#{in pixels. Use this to adjust the bottom position of the drawings.}
+bottom offset = 0
+#S+ Foreground image :
+#{It's an image that will be displayed above the drawings, like a reflect for exemple. Let empty to not use any.}
+fg desklet =
+#e+[0;1] Foreground tansparency :
+fg alpha = 1
+
+#F+
+frame_perso_ =
+
+#i+[4;28] Buttons size :
+button size = 16
+
+#S+ Name of an image to use for the 'rotate' button :
+#{If you don't provide any, a default image will be used.}
+rotate image = 
+
+#S+ Name of an image to use for the 'retach' button :
+#{If you don't provide any, a default image will be used.}
+retach image = 
+
+#gtk-select-color;1;Indicators are extra indications on your icons.
+[Indicators]
+
+#F+[Indicator of drag'n'drop on the dock]
+frame_drop1 =
+
+#S+ Image for the drag'n'drop animation :
+#{Typically an arrow, that will be displayed when you try to drop a new launcher into the dock. Let empty to use the default one.}
+drop indicator =
+
+
+#F+[Indicator of drag'n'drop on icons]
+frame_drop2 =
+
+#b+ Display a drop indicator on icon while dragging over them ?
+show drop indicator = true
+
+#S+ Image for the indicator :
+#{It's an image that will be displayed on the icon to indicate you can drop on it. Let empty to use the default one.}
+emblem_2 = 
+
+
+#F+[Indicator of the active window]
+frame_activ =
+
+#c+4[0;1] Color of the frame (r,v,b,a) :
+#{Set transparency to 0 if you don't want to use an indicator.}
+active color = 0.; 0.4; 0.8; 0.25
+
+#i+[0;10] Linewidth of the frame around the active window :
+#{Set 0 to fill the frame.}
+active line width = 3
+
+#i+[0;30] Corner radius of the frame around the active window :
+active corner radius = 6
+
+#S+ Alternatively you can set an image for the indicator :
+#{Let it empty to draw a simple frame.}
+active indicator =
+
+#b Draw indicator above the icon ?
+active frame position = true
+
+
+#F+[Indicator of active launcher]
+frame_launch =
+
+#S+ Filename of an image to use for indicators :
+#{Indicators are drawn on launchers icons to show that they have already been launched. Let blank to use the default one.}
+indicator image = 
+
+#b+ Display the indicator above the icon ?
+indicator above = false
+
+#e+[0.1;1.5] Indicator size ratio :
+#{You can choose to make the indicator smaller or bigger than the icons. The bigger the value is, the bigger the indicator is. 1 means the indicator will have the same size as the icons.}
+indicator ratio = 1.
+
+#b+ Link the indicator with its icon ?
+#{It will then be resized like the icon, move like the icon, etc. Otherwise it will be drawn directly on the dock.}
+link indicator = TRUE
+
+#i+[-10;64] Vertical offset :
+#{in pixels. You can use this parameter to adjust the indicator's vertical position.}
+indicator deltaY = 2
+
+
+#X+[Misc. Emblems]
+frame_img =
+#S+ Name of an image to use for the charge emblem :
+#{If you don't provide any, a default image will be used.}
+emblem_1 = 
+#S+ Name of an image to use for the play emblem :
+#{If you don't provide any, a default image will be used.}
+emblem_3 = 
+#S+ Name of an image to use for the pause emblem :
+#{If you don't provide any, a default image will be used.}
+emblem_4 = 
+#S+ Name of an image to use for the stop emblem :
+#{If you don't provide any, a default image will be used.}
+emblem_5 = 
+#S+ Name of an image to use for the broken emblem :
+#{If you don't provide any, a default image will be used.}
+emblem_6 = 
+#S+ Name of an image to use for the error emblem :
+#{If you don't provide any, a default image will be used.}
+emblem_7 = 
+#S+ Name of an image to use for the warning emblem :
+#{If you don't provide any, a default image will be used.}
+emblem_8 = 
+#S+ Name of an image to use for the locked emblem :
+#{If you don't provide any, a default image will be used.}
+emblem_9 = 

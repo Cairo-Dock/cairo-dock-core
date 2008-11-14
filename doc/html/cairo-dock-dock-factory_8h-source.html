@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock:  Fichier source de /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dock-factory.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dock-factory.h</h1><a href="cairo-dock-dock-factory_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
+<a name="l00002"></a>00002 <span class="preprocessor">#ifndef __CAIRO_DOCK_DOCK_FACTORY__</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span><span class="preprocessor">#define  __CAIRO_DOCK_DOCK_FACTORY__</span>
+<a name="l00004"></a>00004 <span class="preprocessor"></span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;glib.h&gt;</span>
+<a name="l00006"></a>00006 
+<a name="l00007"></a>00007 <span class="preprocessor">#include "<a class="code" href="cairo-dock-struct_8h.html">cairo-dock-struct.h</a>"</span>
+<a name="l00008"></a>00008 
+<a name="l00014"></a><a class="code" href="cairo-dock-dock-factory_8h.html#c4f6c5a5c84de7b6d97de3c10e62f8fd">00014</a> <span class="preprocessor">#define CAIRO_DOCK_IS_DOCK(pContainer) (pContainer != NULL &amp;&amp; pContainer-&gt;iType == CAIRO_DOCK_TYPE_DOCK)</span>
+<a name="l00015"></a>00015 <span class="preprocessor"></span>
+<a name="l00020"></a><a class="code" href="cairo-dock-dock-factory_8h.html#5ca7986fedee6408dbd7d1c9d5d6e423">00020</a> <span class="preprocessor">#define CAIRO_DOCK_DOCK(pContainer) ((CairoDock *)pContainer)</span>
+<a name="l00021"></a>00021 <span class="preprocessor"></span>
+<a name="l00027"></a><a class="code" href="cairo-dock-dock-factory_8h.html#29d59a47afa7735160b0ddbd281163ab">00027</a> <span class="preprocessor">#define cairo_dock_get_max_scale(pContainer) (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + g_fAmplitude) / CAIRO_DOCK_DOCK (pContainer)-&gt;fRatio : 1)</span>
+<a name="l00028"></a>00028 <span class="preprocessor"></span>
+<a name="l00036"></a>00036 <a class="code" href="struct__CairoDock.html">CairoDock</a> *<a class="code" href="cairo-dock-dock-factory_8h.html#78d3f78cb0fc9d32154f2282eefa3023">cairo_dock_create_new_dock</a> (GdkWindowTypeHint iWmHint, gchar *cDockName, gchar *cRendererName);
+<a name="l00041"></a>00041 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-factory_8h.html#1abe6bc9433435ac1f17bac025673f71">cairo_dock_deactivate_one_dock</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00046"></a>00046 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-factory_8h.html#3f52d7df636dcc6ad91ccd775c79050b">cairo_dock_free_dock</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00054"></a>00054 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-factory_8h.html#96c2324a71cd648e8ba0e4421c9e2886">cairo_dock_destroy_dock</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, <span class="keyword">const</span> gchar *cDockName, <a class="code" href="struct__CairoDock.html">CairoDock</a> *ReceivingDock, gchar *cReceivingDockName);
+<a name="l00055"></a>00055 
+<a name="l00060"></a>00060 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-factory_8h.html#3724a68583cf130b44051bec3e22797e">cairo_dock_reference_dock</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00061"></a>00061 
+<a name="l00069"></a>00069 <a class="code" href="struct__CairoDock.html">CairoDock</a> *<a class="code" href="cairo-dock-dock-factory_8h.html#61acf06fa512907b849016e4f66e7f78">cairo_dock_create_subdock_from_scratch_with_type</a> (GList *pIconList, gchar *cDockName, GdkWindowTypeHint iWindowTypeHint);
+<a name="l00070"></a><a class="code" href="cairo-dock-dock-factory_8h.html#baa51f1389568edc833bb7029a1f2374">00070</a> <span class="preprocessor">#define cairo_dock_create_subdock_from_scratch(pIconList, cDockName) cairo_dock_create_subdock_from_scratch_with_type (pIconList, cDockName, GDK_WINDOW_TYPE_HINT_DOCK)</span>
+<a name="l00071"></a><a class="code" href="cairo-dock-dock-factory_8h.html#48f675f813296c74f102ff555bd38e09">00071</a> <span class="preprocessor"></span><span class="preprocessor">#define cairo_dock_create_subdock_for_class_appli(cClassName) cairo_dock_create_subdock_from_scratch_with_type (NULL, cClassName, GDK_WINDOW_TYPE_HINT_DOCK)</span>
+<a name="l00072"></a>00072 <span class="preprocessor"></span>
+<a name="l00081"></a>00081 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-factory_8h.html#93532a96d0bc2b65dabcf442fd706278">cairo_dock_build_docks_tree_with_desktop_files</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pMainDock, gchar *cDirectory);
+<a name="l00082"></a>00082 
+<a name="l00086"></a>00086 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-factory_8h.html#1a8320466d03daf112e6435298ba1a8f">cairo_dock_free_all_docks</a> (<span class="keywordtype">void</span>);
+<a name="l00087"></a>00087 
+<a name="l00088"></a>00088 
+<a name="l00089"></a>00089 
+<a name="l00095"></a>00095 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-factory_8h.html#9dde58fc3ae35123ba5802cdafa0048c">cairo_dock_update_dock_size</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00096"></a>00096 
+<a name="l00107"></a>00107 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-factory_8h.html#6f97adb1d59a0a853f03ad1c2609a19b">cairo_dock_insert_icon_in_dock</a> (<a class="code" href="struct__Icon.html">Icon</a> *icon, <a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bApplyRatio, gboolean bInsertSeparator);
+<a name="l00108"></a>00108 
+<a name="l00109"></a>00109 
+<a name="l00110"></a>00110 
+<a name="l00118"></a>00118 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-factory_8h.html#343e005ccbc53eb36062aa98b35476a7">cairo_dock_reserve_space_for_dock</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, gboolean bReserve);
+<a name="l00119"></a>00119 
+<a name="l00126"></a>00126 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-factory_8h.html#54489dd6575db90cf8d5708162499688">cairo_dock_allow_widget_to_receive_data</a> (GtkWidget *pWidget, GCallback pCallBack, gpointer data);
+<a name="l00127"></a>00127 
+<a name="l00128"></a>00128 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-dock-factory_8h.html#a437625616b8658c1fe9c4752c5fe6a6">cairo_dock_notify_drop_data</a> (gchar *cReceivedData, <a class="code" href="struct__Icon.html">Icon</a> *pPointedIcon, <span class="keywordtype">double</span> fOrder, <a class="code" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer);
+<a name="l00129"></a>00129 
+<a name="l00130"></a>00130 
+<a name="l00131"></a>00131 <span class="preprocessor">#endif</span>
+</pre></div><hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:15 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

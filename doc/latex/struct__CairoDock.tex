@@ -1,0 +1,482 @@
+\section{Référence de la structure \_\-CairoDock}
+\label{struct__CairoDock}\index{_CairoDock@{\_\-CairoDock}}
+\subsection*{Champs de données}
+\begin{CompactItemize}
+\item 
+{\bf CairoDockTypeContainer} {\bf iType}
+\begin{CompactList}\small\item\em type \char`\"{}dock\char`\"{}. \item\end{CompactList}\item 
+GtkWidget $\ast$ {\bf pWidget}
+\begin{CompactList}\small\item\em sa fenetre de dessin. \item\end{CompactList}\item 
+gint {\bf iCurrentWidth}
+\begin{CompactList}\small\item\em largeur de la fenetre, \_\-apres\_\- le redimensionnement par GTK. \item\end{CompactList}\item 
+gint {\bf iCurrentHeight}
+\begin{CompactList}\small\item\em hauteur de la fenetre, \_\-apres\_\- le redimensionnement par GTK. \item\end{CompactList}\item 
+gint {\bf iWindowPositionX}
+\begin{CompactList}\small\item\em position courante en X du coin haut gauche de la fenetre sur l'ecran. \item\end{CompactList}\item 
+gint {\bf iWindowPositionY}
+\begin{CompactList}\small\item\em position courante en Y du coin haut gauche de la fenetre sur l'ecran. \item\end{CompactList}\item 
+gboolean {\bf bInside}
+\begin{CompactList}\small\item\em lorsque la souris est dans le dock. \item\end{CompactList}\item 
+{\bf CairoDockTypeHorizontality} {\bf bHorizontalDock}
+\begin{CompactList}\small\item\em dit si le dock est horizontal ou vertical. \item\end{CompactList}\item 
+gpointer {\bf padding} [3]
+\item 
+GList $\ast$ {\bf icons}
+\begin{CompactList}\small\item\em la liste de ses icones. \item\end{CompactList}\item 
+gboolean {\bf bIsMainDock}
+\begin{CompactList}\small\item\em si le dock est le dock racine. \item\end{CompactList}\item 
+gint {\bf iRefCount}
+\begin{CompactList}\small\item\em le nombre d'icones pointant sur lui. \item\end{CompactList}\item 
+gint {\bf iGapX}
+\begin{CompactList}\small\item\em ecart de la fenetre par rapport au bord de l'ecran. \item\end{CompactList}\item 
+gint {\bf iGapY}
+\begin{CompactList}\small\item\em decalage de la fenetre par rapport au point d'alignement sur le bord de l'ecran. \item\end{CompactList}\item 
+gdouble {\bf fAlign}
+\begin{CompactList}\small\item\em alignement, entre 0 et 1, du dock sur le bord de l'ecran. \item\end{CompactList}\item 
+gdouble {\bf fMagnitudeMax}
+\begin{CompactList}\small\item\em magnitude maximale de la vague. \item\end{CompactList}\item 
+gdouble {\bf iMaxIconHeight}
+\begin{CompactList}\small\item\em max des hauteurs des icones. \item\end{CompactList}\item 
+gdouble {\bf fFlatDockWidth}
+\begin{CompactList}\small\item\em largeur du dock a plat, avec juste les icones. \item\end{CompactList}\item 
+gint {\bf iMinDockWidth}
+\begin{CompactList}\small\item\em largeur du dock au repos. \item\end{CompactList}\item 
+gint {\bf iMinDockHeight}
+\begin{CompactList}\small\item\em hauteur du dock au repos. \item\end{CompactList}\item 
+gint {\bf iMaxDockWidth}
+\begin{CompactList}\small\item\em largeur du dock actif. \item\end{CompactList}\item 
+gint {\bf iMaxDockHeight}
+\begin{CompactList}\small\item\em hauteur du dock actif. \item\end{CompactList}\item 
+gint {\bf iDecorationsWidth}
+\begin{CompactList}\small\item\em largeur des decorations. \item\end{CompactList}\item 
+gint {\bf iDecorationsHeight}
+\begin{CompactList}\small\item\em hauteur des decorations. \item\end{CompactList}\item 
+gdouble {\bf fRatio}
+\begin{CompactList}\small\item\em ratio applique aux icones. \item\end{CompactList}\item 
+gint {\bf iMaxLabelWidth}
+\item 
+gint {\bf iRightMargin}
+\item 
+gint {\bf iTopMargin}
+\item 
+gint {\bf iScrollOffset}
+\begin{CompactList}\small\item\em pour faire defiler les icones avec la molette. \item\end{CompactList}\item 
+gint {\bf iMagnitudeIndex}
+\begin{CompactList}\small\item\em indice de calcul du coef multiplicateur de l'amplitude de la sinusoide (entre 0 et CAIRO\_\-DOCK\_\-NB\_\-MAX\_\-ITERATIONS). \item\end{CompactList}\item 
+gdouble {\bf fFoldingFactor}
+\begin{CompactList}\small\item\em un facteur d'acceleration lateral des icones lors du grossissement initial. \item\end{CompactList}\item 
+gint {\bf iMouseX}
+\begin{CompactList}\small\item\em derniere position en X du curseur dans le referentiel du dock. \item\end{CompactList}\item 
+gint {\bf iMouseY}
+\begin{CompactList}\small\item\em derniere position en Y du curseur dans le referentiel du dock. \item\end{CompactList}\item 
+gint {\bf iAvoidingMouseIconType}
+\begin{CompactList}\small\item\em type d'icone devant eviter la souris, -1 si aucun. \item\end{CompactList}\item 
+gdouble {\bf fAvoidingMouseMargin}
+\begin{CompactList}\small\item\em marge d'evitement de la souris, en fraction de la largeur d'une icone (entre 0 et 0.5) \item\end{CompactList}\item 
+GList $\ast$ {\bf pFirstDrawnElement}
+\begin{CompactList}\small\item\em pointeur sur le 1er element de la liste des icones a etre dessine, en partant de la gauche. \item\end{CompactList}\item 
+gdouble {\bf fDecorationsOffsetX}
+\begin{CompactList}\small\item\em decalage des decorations pour les faire suivre la souris. \item\end{CompactList}\item 
+gboolean {\bf bAtBottom}
+\begin{CompactList}\small\item\em le dock est en bas au repos. \item\end{CompactList}\item 
+gboolean {\bf bAtTop}
+\begin{CompactList}\small\item\em le dock est en haut pret a etre utilise. \item\end{CompactList}\item 
+gboolean {\bf bMenuVisible}
+\begin{CompactList}\small\item\em lorsque le menu du clique droit est visible. \item\end{CompactList}\item 
+gboolean {\bf bIsDragging}
+\begin{CompactList}\small\item\em Est-on en train de survoler le dock avec quelque chose dans la souris ? \item\end{CompactList}\item 
+gint {\bf iSidMoveDown}
+\begin{CompactList}\small\item\em serial ID du thread de descente de la fenetre. \item\end{CompactList}\item 
+gint {\bf iSidMoveUp}
+\begin{CompactList}\small\item\em serial ID du thread de montee de la fenetre. \item\end{CompactList}\item 
+gint {\bf iSidGrowUp}
+\begin{CompactList}\small\item\em serial ID du thread de grossisement des icones. \item\end{CompactList}\item 
+gint {\bf iSidShrinkDown}
+\begin{CompactList}\small\item\em serial ID du thread de diminution des icones. \item\end{CompactList}\item 
+gint {\bf iSidLeaveDemand}
+\begin{CompactList}\small\item\em serial ID du thread qui enverra le signal de sortie retarde. \item\end{CompactList}\item 
+gchar $\ast$ {\bf cRendererName}
+\begin{CompactList}\small\item\em nom de la vue, utile pour charger les fonctions de rendu posterieurement a la creation du dock. \item\end{CompactList}\item 
+{\bf CairoDockCalculateMaxDockSizeFunc} {\bf calculate\_\-max\_\-dock\_\-size}
+\begin{CompactList}\small\item\em recalculer la taille maximale du dock. \item\end{CompactList}\item 
+{\bf CairoDockCalculateIconsFunc} {\bf calculate\_\-icons}
+\begin{CompactList}\small\item\em calculer tous les parametres des icones. \item\end{CompactList}\item 
+{\bf CairoDockRenderFunc} {\bf render}
+\begin{CompactList}\small\item\em dessiner le tout. \item\end{CompactList}\item 
+{\bf CairoDockRenderOptimizedFunc} {\bf render\_\-optimized}
+\begin{CompactList}\small\item\em dessiner une portion du dock de maniere optimisee. \item\end{CompactList}\item 
+{\bf CairoDockSetSubDockPositionFunc} {\bf set\_\-subdock\_\-position}
+\begin{CompactList}\small\item\em calculer la position d'un sous-dock. \item\end{CompactList}\item 
+gboolean {\bf bUseReflect}
+\begin{CompactList}\small\item\em dit si la vue courante utilise les reflets ou pas (utile pour les plug-ins). \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Documentation des champs}
+\index{_CairoDock@{\_\-CairoDock}!iType@{iType}}
+\index{iType@{iType}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockTypeContainer} {\bf \_\-CairoDock::iType}}\label{struct__CairoDock_c1fbd9f7a45c599b9ceeddd4614f0208}
+
+
+type \char`\"{}dock\char`\"{}. 
+
+\index{_CairoDock@{\_\-CairoDock}!pWidget@{pWidget}}
+\index{pWidget@{pWidget}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}GtkWidget$\ast$ {\bf \_\-CairoDock::pWidget}}\label{struct__CairoDock_9e5f79b421109b2ac456ec394cdc3c24}
+
+
+sa fenetre de dessin. 
+
+\index{_CairoDock@{\_\-CairoDock}!iCurrentWidth@{iCurrentWidth}}
+\index{iCurrentWidth@{iCurrentWidth}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iCurrentWidth}}\label{struct__CairoDock_43e54fd882b5e767cc3e6f2b148c6f1e}
+
+
+largeur de la fenetre, \_\-apres\_\- le redimensionnement par GTK. 
+
+\index{_CairoDock@{\_\-CairoDock}!iCurrentHeight@{iCurrentHeight}}
+\index{iCurrentHeight@{iCurrentHeight}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iCurrentHeight}}\label{struct__CairoDock_768cd3d7e7d3755257b3c8f728436aae}
+
+
+hauteur de la fenetre, \_\-apres\_\- le redimensionnement par GTK. 
+
+\index{_CairoDock@{\_\-CairoDock}!iWindowPositionX@{iWindowPositionX}}
+\index{iWindowPositionX@{iWindowPositionX}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iWindowPositionX}}\label{struct__CairoDock_350e80cc165ca7f9fbb38aad56f715eb}
+
+
+position courante en X du coin haut gauche de la fenetre sur l'ecran. 
+
+\index{_CairoDock@{\_\-CairoDock}!iWindowPositionY@{iWindowPositionY}}
+\index{iWindowPositionY@{iWindowPositionY}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iWindowPositionY}}\label{struct__CairoDock_183e9c6c7ac97503b4b31a020e807d1d}
+
+
+position courante en Y du coin haut gauche de la fenetre sur l'ecran. 
+
+\index{_CairoDock@{\_\-CairoDock}!bInside@{bInside}}
+\index{bInside@{bInside}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean {\bf \_\-CairoDock::bInside}}\label{struct__CairoDock_e177aed10f2cd552c075f39865961fd3}
+
+
+lorsque la souris est dans le dock. 
+
+\index{_CairoDock@{\_\-CairoDock}!bHorizontalDock@{bHorizontalDock}}
+\index{bHorizontalDock@{bHorizontalDock}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockTypeHorizontality} {\bf \_\-CairoDock::bHorizontalDock}}\label{struct__CairoDock_290f1d413855290cad575617e02a57bb}
+
+
+dit si le dock est horizontal ou vertical. 
+
+\index{_CairoDock@{\_\-CairoDock}!padding@{padding}}
+\index{padding@{padding}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gpointer {\bf \_\-CairoDock::padding}[3]}\label{struct__CairoDock_ee5c36bf971747e251769ebd7326a730}
+
+
+\index{_CairoDock@{\_\-CairoDock}!icons@{icons}}
+\index{icons@{icons}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}GList$\ast$ {\bf \_\-CairoDock::icons}}\label{struct__CairoDock_70a1f2c47eccc9f9180688dc4a3542ee}
+
+
+la liste de ses icones. 
+
+\index{_CairoDock@{\_\-CairoDock}!bIsMainDock@{bIsMainDock}}
+\index{bIsMainDock@{bIsMainDock}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean {\bf \_\-CairoDock::bIsMainDock}}\label{struct__CairoDock_dac8dc2d21b68aa1ca0d7e9c5b54faab}
+
+
+si le dock est le dock racine. 
+
+\index{_CairoDock@{\_\-CairoDock}!iRefCount@{iRefCount}}
+\index{iRefCount@{iRefCount}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iRefCount}}\label{struct__CairoDock_c72e0961fae689058dbb526e8a334c65}
+
+
+le nombre d'icones pointant sur lui. 
+
+\index{_CairoDock@{\_\-CairoDock}!iGapX@{iGapX}}
+\index{iGapX@{iGapX}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iGapX}}\label{struct__CairoDock_9924de20e5ef76f8cad3011d1c883544}
+
+
+ecart de la fenetre par rapport au bord de l'ecran. 
+
+\index{_CairoDock@{\_\-CairoDock}!iGapY@{iGapY}}
+\index{iGapY@{iGapY}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iGapY}}\label{struct__CairoDock_744083c6364282178069eae84f63f4e2}
+
+
+decalage de la fenetre par rapport au point d'alignement sur le bord de l'ecran. 
+
+\index{_CairoDock@{\_\-CairoDock}!fAlign@{fAlign}}
+\index{fAlign@{fAlign}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gdouble {\bf \_\-CairoDock::fAlign}}\label{struct__CairoDock_b57e22909edfc5389d77da68d687c429}
+
+
+alignement, entre 0 et 1, du dock sur le bord de l'ecran. 
+
+\index{_CairoDock@{\_\-CairoDock}!fMagnitudeMax@{fMagnitudeMax}}
+\index{fMagnitudeMax@{fMagnitudeMax}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gdouble {\bf \_\-CairoDock::fMagnitudeMax}}\label{struct__CairoDock_15a4a04476f5c0cbb7c5592f93b581a3}
+
+
+magnitude maximale de la vague. 
+
+\index{_CairoDock@{\_\-CairoDock}!iMaxIconHeight@{iMaxIconHeight}}
+\index{iMaxIconHeight@{iMaxIconHeight}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gdouble {\bf \_\-CairoDock::iMaxIconHeight}}\label{struct__CairoDock_1156cb6f7527bf096bf3b5d1c0c95247}
+
+
+max des hauteurs des icones. 
+
+\index{_CairoDock@{\_\-CairoDock}!fFlatDockWidth@{fFlatDockWidth}}
+\index{fFlatDockWidth@{fFlatDockWidth}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gdouble {\bf \_\-CairoDock::fFlatDockWidth}}\label{struct__CairoDock_282cfef8327f25289fddf4f51dfa4ed2}
+
+
+largeur du dock a plat, avec juste les icones. 
+
+\index{_CairoDock@{\_\-CairoDock}!iMinDockWidth@{iMinDockWidth}}
+\index{iMinDockWidth@{iMinDockWidth}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iMinDockWidth}}\label{struct__CairoDock_854b4b9c1970f66157c61ae8094a22a7}
+
+
+largeur du dock au repos. 
+
+\index{_CairoDock@{\_\-CairoDock}!iMinDockHeight@{iMinDockHeight}}
+\index{iMinDockHeight@{iMinDockHeight}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iMinDockHeight}}\label{struct__CairoDock_1342958f025d81e5e774a4d07499a202}
+
+
+hauteur du dock au repos. 
+
+\index{_CairoDock@{\_\-CairoDock}!iMaxDockWidth@{iMaxDockWidth}}
+\index{iMaxDockWidth@{iMaxDockWidth}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iMaxDockWidth}}\label{struct__CairoDock_db14369051a4ea2f1821570b50e32868}
+
+
+largeur du dock actif. 
+
+\index{_CairoDock@{\_\-CairoDock}!iMaxDockHeight@{iMaxDockHeight}}
+\index{iMaxDockHeight@{iMaxDockHeight}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iMaxDockHeight}}\label{struct__CairoDock_cfc3f009296e2258ba7ed4da8873d2c0}
+
+
+hauteur du dock actif. 
+
+\index{_CairoDock@{\_\-CairoDock}!iDecorationsWidth@{iDecorationsWidth}}
+\index{iDecorationsWidth@{iDecorationsWidth}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iDecorationsWidth}}\label{struct__CairoDock_3719e4e6506a76ccd93eba1877b3f85d}
+
+
+largeur des decorations. 
+
+\index{_CairoDock@{\_\-CairoDock}!iDecorationsHeight@{iDecorationsHeight}}
+\index{iDecorationsHeight@{iDecorationsHeight}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iDecorationsHeight}}\label{struct__CairoDock_28faa8b5272d11886cebba27f04c9e1d}
+
+
+hauteur des decorations. 
+
+\index{_CairoDock@{\_\-CairoDock}!fRatio@{fRatio}}
+\index{fRatio@{fRatio}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gdouble {\bf \_\-CairoDock::fRatio}}\label{struct__CairoDock_6d1282000361e13ce5156604df1accde}
+
+
+ratio applique aux icones. 
+
+\index{_CairoDock@{\_\-CairoDock}!iMaxLabelWidth@{iMaxLabelWidth}}
+\index{iMaxLabelWidth@{iMaxLabelWidth}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iMaxLabelWidth}}\label{struct__CairoDock_3b94296f4a8c1d16c4c33686f3b7d39a}
+
+
+\index{_CairoDock@{\_\-CairoDock}!iRightMargin@{iRightMargin}}
+\index{iRightMargin@{iRightMargin}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iRightMargin}}\label{struct__CairoDock_bc526dc0aa58554b0ffd1072004b0af1}
+
+
+\index{_CairoDock@{\_\-CairoDock}!iTopMargin@{iTopMargin}}
+\index{iTopMargin@{iTopMargin}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iTopMargin}}\label{struct__CairoDock_9502acd8c1e04f2a06ad2c37562d7bdb}
+
+
+\index{_CairoDock@{\_\-CairoDock}!iScrollOffset@{iScrollOffset}}
+\index{iScrollOffset@{iScrollOffset}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iScrollOffset}}\label{struct__CairoDock_b90ff76504c9f131b1dd325b25edcc33}
+
+
+pour faire defiler les icones avec la molette. 
+
+\index{_CairoDock@{\_\-CairoDock}!iMagnitudeIndex@{iMagnitudeIndex}}
+\index{iMagnitudeIndex@{iMagnitudeIndex}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iMagnitudeIndex}}\label{struct__CairoDock_ceb27171201bb6aad3362db144eb062a}
+
+
+indice de calcul du coef multiplicateur de l'amplitude de la sinusoide (entre 0 et CAIRO\_\-DOCK\_\-NB\_\-MAX\_\-ITERATIONS). 
+
+\index{_CairoDock@{\_\-CairoDock}!fFoldingFactor@{fFoldingFactor}}
+\index{fFoldingFactor@{fFoldingFactor}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gdouble {\bf \_\-CairoDock::fFoldingFactor}}\label{struct__CairoDock_baa79bb3acc6fcf84a01d1f70fe1b829}
+
+
+un facteur d'acceleration lateral des icones lors du grossissement initial. 
+
+\index{_CairoDock@{\_\-CairoDock}!iMouseX@{iMouseX}}
+\index{iMouseX@{iMouseX}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iMouseX}}\label{struct__CairoDock_cdb944e2110e7dc7df9e895663980a73}
+
+
+derniere position en X du curseur dans le referentiel du dock. 
+
+\index{_CairoDock@{\_\-CairoDock}!iMouseY@{iMouseY}}
+\index{iMouseY@{iMouseY}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iMouseY}}\label{struct__CairoDock_a7ce6faa5f3cb3d1ebf8a9954dd1a145}
+
+
+derniere position en Y du curseur dans le referentiel du dock. 
+
+\index{_CairoDock@{\_\-CairoDock}!iAvoidingMouseIconType@{iAvoidingMouseIconType}}
+\index{iAvoidingMouseIconType@{iAvoidingMouseIconType}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iAvoidingMouseIconType}}\label{struct__CairoDock_5438b1a8cd1df4d6f3eaaf50fcd9463f}
+
+
+type d'icone devant eviter la souris, -1 si aucun. 
+
+\index{_CairoDock@{\_\-CairoDock}!fAvoidingMouseMargin@{fAvoidingMouseMargin}}
+\index{fAvoidingMouseMargin@{fAvoidingMouseMargin}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gdouble {\bf \_\-CairoDock::fAvoidingMouseMargin}}\label{struct__CairoDock_90dc53417eda7f4b4fd7eb770e4be693}
+
+
+marge d'evitement de la souris, en fraction de la largeur d'une icone (entre 0 et 0.5) 
+
+\index{_CairoDock@{\_\-CairoDock}!pFirstDrawnElement@{pFirstDrawnElement}}
+\index{pFirstDrawnElement@{pFirstDrawnElement}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}GList$\ast$ {\bf \_\-CairoDock::pFirstDrawnElement}}\label{struct__CairoDock_6765b88fb98c987436d90f64867f67cf}
+
+
+pointeur sur le 1er element de la liste des icones a etre dessine, en partant de la gauche. 
+
+\index{_CairoDock@{\_\-CairoDock}!fDecorationsOffsetX@{fDecorationsOffsetX}}
+\index{fDecorationsOffsetX@{fDecorationsOffsetX}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gdouble {\bf \_\-CairoDock::fDecorationsOffsetX}}\label{struct__CairoDock_9e0bac6ce7af6108cff1bb7dd75115c9}
+
+
+decalage des decorations pour les faire suivre la souris. 
+
+\index{_CairoDock@{\_\-CairoDock}!bAtBottom@{bAtBottom}}
+\index{bAtBottom@{bAtBottom}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean {\bf \_\-CairoDock::bAtBottom}}\label{struct__CairoDock_086f848a4a78d10afb853e7f85441c5f}
+
+
+le dock est en bas au repos. 
+
+\index{_CairoDock@{\_\-CairoDock}!bAtTop@{bAtTop}}
+\index{bAtTop@{bAtTop}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean {\bf \_\-CairoDock::bAtTop}}\label{struct__CairoDock_2451c4ec51ea3b0a422b0897c7524c99}
+
+
+le dock est en haut pret a etre utilise. 
+
+\index{_CairoDock@{\_\-CairoDock}!bMenuVisible@{bMenuVisible}}
+\index{bMenuVisible@{bMenuVisible}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean {\bf \_\-CairoDock::bMenuVisible}}\label{struct__CairoDock_5c0b8267beb8afd377f56d134df50a26}
+
+
+lorsque le menu du clique droit est visible. 
+
+\index{_CairoDock@{\_\-CairoDock}!bIsDragging@{bIsDragging}}
+\index{bIsDragging@{bIsDragging}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean {\bf \_\-CairoDock::bIsDragging}}\label{struct__CairoDock_abc3a64a8ea7b8c84b0b03d16a225b27}
+
+
+Est-on en train de survoler le dock avec quelque chose dans la souris ? 
+
+\index{_CairoDock@{\_\-CairoDock}!iSidMoveDown@{iSidMoveDown}}
+\index{iSidMoveDown@{iSidMoveDown}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iSidMoveDown}}\label{struct__CairoDock_b873dfdfa1a1b7503d6f6a9cd720f5c8}
+
+
+serial ID du thread de descente de la fenetre. 
+
+\index{_CairoDock@{\_\-CairoDock}!iSidMoveUp@{iSidMoveUp}}
+\index{iSidMoveUp@{iSidMoveUp}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iSidMoveUp}}\label{struct__CairoDock_c0126219b7bc08457b720a942a4591bc}
+
+
+serial ID du thread de montee de la fenetre. 
+
+\index{_CairoDock@{\_\-CairoDock}!iSidGrowUp@{iSidGrowUp}}
+\index{iSidGrowUp@{iSidGrowUp}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iSidGrowUp}}\label{struct__CairoDock_8bd5c9c83a354366f9736759634c11f8}
+
+
+serial ID du thread de grossisement des icones. 
+
+\index{_CairoDock@{\_\-CairoDock}!iSidShrinkDown@{iSidShrinkDown}}
+\index{iSidShrinkDown@{iSidShrinkDown}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iSidShrinkDown}}\label{struct__CairoDock_9d697f0abf14e88492e4795317b4b3c3}
+
+
+serial ID du thread de diminution des icones. 
+
+\index{_CairoDock@{\_\-CairoDock}!iSidLeaveDemand@{iSidLeaveDemand}}
+\index{iSidLeaveDemand@{iSidLeaveDemand}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gint {\bf \_\-CairoDock::iSidLeaveDemand}}\label{struct__CairoDock_ce8631cc9f3338f254327cfa8dfe1dda}
+
+
+serial ID du thread qui enverra le signal de sortie retarde. 
+
+\index{_CairoDock@{\_\-CairoDock}!cRendererName@{cRendererName}}
+\index{cRendererName@{cRendererName}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gchar$\ast$ {\bf \_\-CairoDock::cRendererName}}\label{struct__CairoDock_9376e8aa1cdcecb260fa1e838cbe0925}
+
+
+nom de la vue, utile pour charger les fonctions de rendu posterieurement a la creation du dock. 
+
+\index{_CairoDock@{\_\-CairoDock}!calculate_max_dock_size@{calculate\_\-max\_\-dock\_\-size}}
+\index{calculate_max_dock_size@{calculate\_\-max\_\-dock\_\-size}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockCalculateMaxDockSizeFunc} {\bf \_\-CairoDock::calculate\_\-max\_\-dock\_\-size}}\label{struct__CairoDock_e70f98975a9887d1fa45b1dfaa5b58fd}
+
+
+recalculer la taille maximale du dock. 
+
+\index{_CairoDock@{\_\-CairoDock}!calculate_icons@{calculate\_\-icons}}
+\index{calculate_icons@{calculate\_\-icons}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockCalculateIconsFunc} {\bf \_\-CairoDock::calculate\_\-icons}}\label{struct__CairoDock_992cbda2e0f36045bbebfe5b2796fd75}
+
+
+calculer tous les parametres des icones. 
+
+\index{_CairoDock@{\_\-CairoDock}!render@{render}}
+\index{render@{render}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockRenderFunc} {\bf \_\-CairoDock::render}}\label{struct__CairoDock_b80e203ce33cfbccf2c5d42531708782}
+
+
+dessiner le tout. 
+
+\index{_CairoDock@{\_\-CairoDock}!render_optimized@{render\_\-optimized}}
+\index{render_optimized@{render\_\-optimized}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockRenderOptimizedFunc} {\bf \_\-CairoDock::render\_\-optimized}}\label{struct__CairoDock_402e9bbf49b5b74866b90b41743d3e33}
+
+
+dessiner une portion du dock de maniere optimisee. 
+
+\index{_CairoDock@{\_\-CairoDock}!set_subdock_position@{set\_\-subdock\_\-position}}
+\index{set_subdock_position@{set\_\-subdock\_\-position}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf CairoDockSetSubDockPositionFunc} {\bf \_\-CairoDock::set\_\-subdock\_\-position}}\label{struct__CairoDock_98f2d017465563550de31aa4fe1f491d}
+
+
+calculer la position d'un sous-dock. 
+
+\index{_CairoDock@{\_\-CairoDock}!bUseReflect@{bUseReflect}}
+\index{bUseReflect@{bUseReflect}!_CairoDock@{\_\-CairoDock}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean {\bf \_\-CairoDock::bUseReflect}}\label{struct__CairoDock_fef9a496c9a10f1ef83c4a4a4f4c5cc3}
+
+
+dit si la vue courante utilise les reflets ou pas (utile pour les plug-ins). 
+
+
+
+La documentation de cette structure a été générée à partir du fichier suivant :\begin{CompactItemize}
+\item 
+/opt/cairo-dock/trunk/cairo-dock/src/{\bf cairo-dock-struct.h}\end{CompactItemize}

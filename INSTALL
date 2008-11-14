@@ -1,0 +1,17 @@
+To compile the dock, the themes, or any plug-in, you just copy-paste these lines into a terminal (assuming you are in the sources directory of the dock/themes/plug-in) :
+autoreconf -isvf && ./configure && make
+sudo make install
+
+you can provide directory installation by adding --prefix=/path/of/the/directory after the 'configure'.
+
+If your libcairo is compiled with glitz support (that is, with --enable-glitz option), you can benefit from glitz hardware acceleration in cairo-dock too.
+Just add the --enable-glitz option after the 'configure'.
+
+Stable plug-ins can be compile at once, or one by one. Unstable plug-ins have to be compiled one by one.
+See the "Applets.stable" file in the "plug-ins" folder for an exhaustive list of stable applets (that are effectively integrated into the official package).
+
+To build the Cairo-Dock documentation, use the generate-doc.sh script in the 'doc' directory.
+To build the entire project, use the compile-all.sh script, in the 'cairo-dock' folder. Run it with :
+  ./compile-all.sh -acCiut
+
+Thanks for using Cairo-Dock, hope you will enjoy it ! ^_^

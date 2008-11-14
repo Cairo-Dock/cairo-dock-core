@@ -1,0 +1,43 @@
+\section{Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-gui-factory.h}
+\label{cairo-dock-gui-factory_8h}\index{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-gui-factory.h@{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-gui-factory.h}}
+\subsection*{Fonctions}
+\begin{CompactItemize}
+\item 
+GtkWidget $\ast$ {\bf cairo\_\-dock\_\-generate\_\-advanced\_\-ihm\_\-from\_\-keyfile} (GKeyFile $\ast$pKeyFile, gchar $\ast$cTitle, GtkWindow $\ast$pParentWindow, GSList $\ast$$\ast$pWidgetList, gboolean bApplyButtonPresent, gchar iIdentifier, gchar $\ast$cPresentedGroup, gboolean bSwitchButtonPresent, gchar $\ast$cButtonConvert, gchar $\ast$cGettextDomain, GPtrArray $\ast$pDataGarbage)
+\item 
+gboolean {\bf cairo\_\-dock\_\-is\_\-advanced\_\-keyfile} (GKeyFile $\ast$pKeyFile)
+\item 
+GtkWidget $\ast$ {\bf cairo\_\-dock\_\-generate\_\-basic\_\-ihm\_\-from\_\-keyfile} (gchar $\ast$cConfFilePath, gchar $\ast$cTitle, GtkWindow $\ast$pParentWindow, GtkTextBuffer $\ast$$\ast$pTextBuffer, gboolean bApplyButtonPresent, gboolean bSwitchButtonPresent, gchar $\ast$cButtonConvert, gchar $\ast$cGettextDomain)
+\item 
+void {\bf cairo\_\-dock\_\-update\_\-keyfile\_\-from\_\-widget\_\-list} (GKeyFile $\ast$pKeyFile, GSList $\ast$pWidgetList)
+\item 
+void {\bf cairo\_\-dock\_\-free\_\-generated\_\-widget\_\-list} (GSList $\ast$pWidgetList)
+\end{CompactItemize}
+
+
+\subsection{Documentation des fonctions}
+\index{cairo-dock-gui-factory.h@{cairo-dock-gui-factory.h}!cairo_dock_generate_advanced_ihm_from_keyfile@{cairo\_\-dock\_\-generate\_\-advanced\_\-ihm\_\-from\_\-keyfile}}
+\index{cairo_dock_generate_advanced_ihm_from_keyfile@{cairo\_\-dock\_\-generate\_\-advanced\_\-ihm\_\-from\_\-keyfile}!cairo-dock-gui-factory.h@{cairo-dock-gui-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}GtkWidget$\ast$ cairo\_\-dock\_\-generate\_\-advanced\_\-ihm\_\-from\_\-keyfile (GKeyFile $\ast$ {\em pKeyFile}, gchar $\ast$ {\em cTitle}, GtkWindow $\ast$ {\em pParentWindow}, GSList $\ast$$\ast$ {\em pWidgetList}, gboolean {\em bApplyButtonPresent}, gchar {\em iIdentifier}, gchar $\ast$ {\em cPresentedGroup}, gboolean {\em bSwitchButtonPresent}, gchar $\ast$ {\em cButtonConvert}, gchar $\ast$ {\em cGettextDomain}, GPtrArray $\ast$ {\em pDataGarbage})}\label{cairo-dock-gui-factory_8h_b31172d7cfb892c840f50f4f3df03d68}
+
+
+\index{cairo-dock-gui-factory.h@{cairo-dock-gui-factory.h}!cairo_dock_is_advanced_keyfile@{cairo\_\-dock\_\-is\_\-advanced\_\-keyfile}}
+\index{cairo_dock_is_advanced_keyfile@{cairo\_\-dock\_\-is\_\-advanced\_\-keyfile}!cairo-dock-gui-factory.h@{cairo-dock-gui-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-is\_\-advanced\_\-keyfile (GKeyFile $\ast$ {\em pKeyFile})}\label{cairo-dock-gui-factory_8h_b73ac9120d9c0467c1d44f93488c3469}
+
+
+\index{cairo-dock-gui-factory.h@{cairo-dock-gui-factory.h}!cairo_dock_generate_basic_ihm_from_keyfile@{cairo\_\-dock\_\-generate\_\-basic\_\-ihm\_\-from\_\-keyfile}}
+\index{cairo_dock_generate_basic_ihm_from_keyfile@{cairo\_\-dock\_\-generate\_\-basic\_\-ihm\_\-from\_\-keyfile}!cairo-dock-gui-factory.h@{cairo-dock-gui-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}GtkWidget$\ast$ cairo\_\-dock\_\-generate\_\-basic\_\-ihm\_\-from\_\-keyfile (gchar $\ast$ {\em cConfFilePath}, gchar $\ast$ {\em cTitle}, GtkWindow $\ast$ {\em pParentWindow}, GtkTextBuffer $\ast$$\ast$ {\em pTextBuffer}, gboolean {\em bApplyButtonPresent}, gboolean {\em bSwitchButtonPresent}, gchar $\ast$ {\em cButtonConvert}, gchar $\ast$ {\em cGettextDomain})}\label{cairo-dock-gui-factory_8h_df7397ef7033257c3f04c1bd9c4e41ee}
+
+
+\index{cairo-dock-gui-factory.h@{cairo-dock-gui-factory.h}!cairo_dock_update_keyfile_from_widget_list@{cairo\_\-dock\_\-update\_\-keyfile\_\-from\_\-widget\_\-list}}
+\index{cairo_dock_update_keyfile_from_widget_list@{cairo\_\-dock\_\-update\_\-keyfile\_\-from\_\-widget\_\-list}!cairo-dock-gui-factory.h@{cairo-dock-gui-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-update\_\-keyfile\_\-from\_\-widget\_\-list (GKeyFile $\ast$ {\em pKeyFile}, GSList $\ast$ {\em pWidgetList})}\label{cairo-dock-gui-factory_8h_b247cff92f05bad671971a7435ace512}
+
+
+\index{cairo-dock-gui-factory.h@{cairo-dock-gui-factory.h}!cairo_dock_free_generated_widget_list@{cairo\_\-dock\_\-free\_\-generated\_\-widget\_\-list}}
+\index{cairo_dock_free_generated_widget_list@{cairo\_\-dock\_\-free\_\-generated\_\-widget\_\-list}!cairo-dock-gui-factory.h@{cairo-dock-gui-factory.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-free\_\-generated\_\-widget\_\-list (GSList $\ast$ {\em pWidgetList})}\label{cairo-dock-gui-factory_8h_32eda439a65f9d52b3bb2c6c3f886d51}
+
+

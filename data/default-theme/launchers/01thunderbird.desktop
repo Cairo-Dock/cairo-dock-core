@@ -1,0 +1,46 @@
+#!fr
+
+[Desktop Entry]
+#s Nom de ce lanceur :
+Name=Mozilla Thunderbird Mail/News
+#s Commande à exécuter lors du clique :
+Exec=thunderbird 
+#S Nom ou chemin de l'image :
+Icon=mozilla-thunderbird
+#f Ordre que vous souhaitez affecter à ce lanceur parmis les autres :
+Order=4
+#E[_MainDock_]  Nom du container auquel il appartient :
+Container=_MainDock_
+#b Cette icône est-elle un container ?
+Is container=false
+
+Base URI=
+Is mounting point=false
+Encoding=UTF-8
+Comment=Read/Write Mail/News with Mozilla Thunderbird
+GenericName=Mail Client
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+Categories=Application;Network;
+MimeType=text/html;text/xml;application/xhtml+xml;application/xml;application/vnd.mozilla.xul+xml;application/rss+xml;application/rdf+xml;image/gif;image/jpeg;image/png
+StartupWMClass=Thunderbird-bin
+StartupNotify=true
+Name[cs]=Poštovní klient Thunderbird
+Name[ca]=Client de correu Thunderbird
+Name[fi]=Thunderbird-sähköposti
+Name[fr]=Courrier
+Name[pl]=Klient poczty Thunderbird
+Name[pt_BR]=Cliente de E-mail Thunderbird
+Name[sv]=E-postklienten Thunderbird
+Comment[ca]=Llegiu i escriviu correu
+Comment[cs]=Čtení a psaní pošty
+Comment[de]=Emails lesen und verfassen
+Comment[fi]=Lue ja kirjoita sähköposteja
+Comment[fr]=Lire et écrire des courriels
+Comment[it]=Leggere e scrivere email
+Comment[ja]=メールの読み書き
+Comment[pl]=Czytanie i wysyłanie e-maili
+Comment[pt_BR]=Ler e escrever suas mensagens
+Comment[sv]=Läs och skriv e-post
+Is URI=false

@@ -1,0 +1,83 @@
+\section{Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-log.h}
+\label{cairo-dock-log_8h}\index{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-log.h@{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-log.h}}
+\subsection*{Macros}
+\begin{CompactItemize}
+\item 
+\#define {\bf cd\_\-error}(...)~cd\_\-log\_\-location(G\_\-LOG\_\-LEVEL\_\-ERROR, \_\-\_\-FILE\_\-\_\-, \_\-\_\-PRETTY\_\-FUNCTION\_\-\_\-, \_\-\_\-LINE\_\-\_\-,\_\-\_\-VA\_\-ARGS\_\-\_\-)
+\item 
+\#define {\bf cd\_\-critical}(...)~cd\_\-log\_\-location(G\_\-LOG\_\-LEVEL\_\-CRITICAL, \_\-\_\-FILE\_\-\_\-, \_\-\_\-PRETTY\_\-FUNCTION\_\-\_\-, \_\-\_\-LINE\_\-\_\-,\_\-\_\-VA\_\-ARGS\_\-\_\-)
+\item 
+\#define {\bf cd\_\-warning}(...)~cd\_\-log\_\-location(G\_\-LOG\_\-LEVEL\_\-WARNING, \_\-\_\-FILE\_\-\_\-, \_\-\_\-PRETTY\_\-FUNCTION\_\-\_\-, \_\-\_\-LINE\_\-\_\-,\_\-\_\-VA\_\-ARGS\_\-\_\-)
+\item 
+\#define {\bf cd\_\-message}(...)~cd\_\-log\_\-location(G\_\-LOG\_\-LEVEL\_\-MESSAGE, \_\-\_\-FILE\_\-\_\-, \_\-\_\-PRETTY\_\-FUNCTION\_\-\_\-, \_\-\_\-LINE\_\-\_\-,\_\-\_\-VA\_\-ARGS\_\-\_\-)
+\item 
+\#define {\bf cd\_\-debug}(...)~cd\_\-log\_\-location(G\_\-LOG\_\-LEVEL\_\-DEBUG, \_\-\_\-FILE\_\-\_\-, \_\-\_\-PRETTY\_\-FUNCTION\_\-\_\-, \_\-\_\-LINE\_\-\_\-,\_\-\_\-VA\_\-ARGS\_\-\_\-)
+\end{CompactItemize}
+\subsection*{Fonctions}
+\begin{CompactItemize}
+\item 
+void {\bf cd\_\-log\_\-location} (const GLogLevelFlags loglevel, const char $\ast$file, const char $\ast$func, const int line, const char $\ast$format,...)
+\item 
+void {\bf cd\_\-log\_\-init} (gboolean bBlackTerminal)
+\item 
+void {\bf cd\_\-log\_\-set\_\-level} (GLogLevelFlags loglevel)
+\end{CompactItemize}
+\subsection*{Variables}
+\begin{CompactItemize}
+\item 
+GLogLevelFlags {\bf gLogLevel}
+\end{CompactItemize}
+
+
+\subsection{Documentation des macros}
+\index{cairo-dock-log.h@{cairo-dock-log.h}!cd_error@{cd\_\-error}}
+\index{cd_error@{cd\_\-error}!cairo-dock-log.h@{cairo-dock-log.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cd\_\-error( {\em ...})~cd\_\-log\_\-location(G\_\-LOG\_\-LEVEL\_\-ERROR, \_\-\_\-FILE\_\-\_\-, \_\-\_\-PRETTY\_\-FUNCTION\_\-\_\-, \_\-\_\-LINE\_\-\_\-,\_\-\_\-VA\_\-ARGS\_\-\_\-)}\label{cairo-dock-log_8h_5f557f4605fd8716e418ff2d4d731f53}
+
+
+\index{cairo-dock-log.h@{cairo-dock-log.h}!cd_critical@{cd\_\-critical}}
+\index{cd_critical@{cd\_\-critical}!cairo-dock-log.h@{cairo-dock-log.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cd\_\-critical( {\em ...})~cd\_\-log\_\-location(G\_\-LOG\_\-LEVEL\_\-CRITICAL, \_\-\_\-FILE\_\-\_\-, \_\-\_\-PRETTY\_\-FUNCTION\_\-\_\-, \_\-\_\-LINE\_\-\_\-,\_\-\_\-VA\_\-ARGS\_\-\_\-)}\label{cairo-dock-log_8h_71ddcf95439732535257e43bbdb440d1}
+
+
+\index{cairo-dock-log.h@{cairo-dock-log.h}!cd_warning@{cd\_\-warning}}
+\index{cd_warning@{cd\_\-warning}!cairo-dock-log.h@{cairo-dock-log.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cd\_\-warning( {\em ...})~cd\_\-log\_\-location(G\_\-LOG\_\-LEVEL\_\-WARNING, \_\-\_\-FILE\_\-\_\-, \_\-\_\-PRETTY\_\-FUNCTION\_\-\_\-, \_\-\_\-LINE\_\-\_\-,\_\-\_\-VA\_\-ARGS\_\-\_\-)}\label{cairo-dock-log_8h_640b89d8730d6f5afa4a1456c3b6e986}
+
+
+\index{cairo-dock-log.h@{cairo-dock-log.h}!cd_message@{cd\_\-message}}
+\index{cd_message@{cd\_\-message}!cairo-dock-log.h@{cairo-dock-log.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cd\_\-message( {\em ...})~cd\_\-log\_\-location(G\_\-LOG\_\-LEVEL\_\-MESSAGE, \_\-\_\-FILE\_\-\_\-, \_\-\_\-PRETTY\_\-FUNCTION\_\-\_\-, \_\-\_\-LINE\_\-\_\-,\_\-\_\-VA\_\-ARGS\_\-\_\-)}\label{cairo-dock-log_8h_15e65d085780da5656e7c06097959f1c}
+
+
+\index{cairo-dock-log.h@{cairo-dock-log.h}!cd_debug@{cd\_\-debug}}
+\index{cd_debug@{cd\_\-debug}!cairo-dock-log.h@{cairo-dock-log.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define cd\_\-debug( {\em ...})~cd\_\-log\_\-location(G\_\-LOG\_\-LEVEL\_\-DEBUG, \_\-\_\-FILE\_\-\_\-, \_\-\_\-PRETTY\_\-FUNCTION\_\-\_\-, \_\-\_\-LINE\_\-\_\-,\_\-\_\-VA\_\-ARGS\_\-\_\-)}\label{cairo-dock-log_8h_f19c73cd7834d80ffca51238673bdea8}
+
+
+
+
+\subsection{Documentation des fonctions}
+\index{cairo-dock-log.h@{cairo-dock-log.h}!cd_log_location@{cd\_\-log\_\-location}}
+\index{cd_log_location@{cd\_\-log\_\-location}!cairo-dock-log.h@{cairo-dock-log.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cd\_\-log\_\-location (const GLogLevelFlags {\em loglevel}, const char $\ast$ {\em file}, const char $\ast$ {\em func}, const int {\em line}, const char $\ast$ {\em format},  {\em ...})}\label{cairo-dock-log_8h_b9da144048cfffbd5ebb0cad5c24236a}
+
+
+\index{cairo-dock-log.h@{cairo-dock-log.h}!cd_log_init@{cd\_\-log\_\-init}}
+\index{cd_log_init@{cd\_\-log\_\-init}!cairo-dock-log.h@{cairo-dock-log.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cd\_\-log\_\-init (gboolean {\em bBlackTerminal})}\label{cairo-dock-log_8h_5409643f437677a7fd5579cda6b00e55}
+
+
+initialise the log system \index{cairo-dock-log.h@{cairo-dock-log.h}!cd_log_set_level@{cd\_\-log\_\-set\_\-level}}
+\index{cd_log_set_level@{cd\_\-log\_\-set\_\-level}!cairo-dock-log.h@{cairo-dock-log.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cd\_\-log\_\-set\_\-level (GLogLevelFlags {\em loglevel})}\label{cairo-dock-log_8h_56e9f801f53a817966fe1ef4035b10fe}
+
+
+set the verbosity level 
+
+\subsection{Documentation des variables}
+\index{cairo-dock-log.h@{cairo-dock-log.h}!gLogLevel@{gLogLevel}}
+\index{gLogLevel@{gLogLevel}!cairo-dock-log.h@{cairo-dock-log.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}GLogLevelFlags {\bf gLogLevel}}\label{cairo-dock-log_8h_6463fde50bd43d85c381c745334a0c27}
+
+

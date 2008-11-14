@@ -1,0 +1,13 @@
+<gauge>
+	<name>Radium Fuel</name>
+	<author>Adrien Pilleboue</author>
+	<file key="background">background.svg</file>
+	<file key="foreground">foreground.svg</file>
+	<indicator type="needle">
+		<posX>-0,325</posX>
+		<posY>-0,34</posY>
+		<posStart>6</posStart>
+		<posStop>80</posStop>
+		<file key="needle">needle.svg</file>
+	</indicator>
+</gauge>

@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock:  Fichier source de /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-desklet.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-desklet.h</h1><a href="cairo-dock-desklet_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
+<a name="l00002"></a>00002 <span class="comment">** Login : &lt;ctaf42@gmail.com&gt;</span>
+<a name="l00003"></a>00003 <span class="comment">** Started on  Sun Jan 27 18:35:38 2008 Cedric GESTES</span>
+<a name="l00004"></a>00004 <span class="comment">** $Id$</span>
+<a name="l00005"></a>00005 <span class="comment">**</span>
+<a name="l00006"></a>00006 <span class="comment">** Author(s)</span>
+<a name="l00007"></a>00007 <span class="comment">**  - Cedric GESTES &lt;ctaf42@gmail.com&gt;</span>
+<a name="l00008"></a>00008 <span class="comment">**  - Fabrice REY</span>
+<a name="l00009"></a>00009 <span class="comment">**</span>
+<a name="l00010"></a>00010 <span class="comment">** Copyright (C) 2008 Cedric GESTES</span>
+<a name="l00011"></a>00011 <span class="comment">** This program is free software; you can redistribute it and/or modify</span>
+<a name="l00012"></a>00012 <span class="comment">** it under the terms of the GNU General Public License as published by</span>
+<a name="l00013"></a>00013 <span class="comment">** the Free Software Foundation; either version 3 of the License, or</span>
+<a name="l00014"></a>00014 <span class="comment">** (at your option) any later version.</span>
+<a name="l00015"></a>00015 <span class="comment">**</span>
+<a name="l00016"></a>00016 <span class="comment">** This program is distributed in the hope that it will be useful,</span>
+<a name="l00017"></a>00017 <span class="comment">** but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<a name="l00018"></a>00018 <span class="comment">** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<a name="l00019"></a>00019 <span class="comment">** GNU General Public License for more details.</span>
+<a name="l00020"></a>00020 <span class="comment">**</span>
+<a name="l00021"></a>00021 <span class="comment">** You should have received a copy of the GNU General Public License</span>
+<a name="l00022"></a>00022 <span class="comment">** along with this program; if not, write to the Free Software</span>
+<a name="l00023"></a>00023 <span class="comment">** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA</span>
+<a name="l00024"></a>00024 <span class="comment">*/</span>
+<a name="l00025"></a>00025 
+<a name="l00026"></a>00026 <span class="preprocessor">#ifndef __CAIRO_DOCK_DESKLET_H__</span>
+<a name="l00027"></a>00027 <span class="preprocessor"></span><span class="preprocessor">#define  __CAIRO_DOCK_DESKLET_H__</span>
+<a name="l00028"></a>00028 <span class="preprocessor"></span>
+<a name="l00029"></a>00029 <span class="preprocessor">#include &lt;<a class="code" href="cairo-dock-struct_8h.html">cairo-dock-struct.h</a>&gt;</span>
+<a name="l00030"></a>00030 
+<a name="l00031"></a><a class="code" href="cairo-dock-desklet_8h.html#eed859d634690122c790c64427c9e2a5">00031</a> <span class="preprocessor">#define CD_NB_ITER_FOR_GRADUATION 10</span>
+<a name="l00032"></a>00032 <span class="preprocessor"></span>
+<a name="l00038"></a><a class="code" href="cairo-dock-desklet_8h.html#7d23b2629d7a93bc61bd65366d78fd9e">00038</a> <span class="preprocessor">#define CAIRO_DOCK_IS_DESKLET(pContainer) (pContainer != NULL &amp;&amp; pContainer-&gt;iType == CAIRO_DOCK_TYPE_DESKLET)</span>
+<a name="l00039"></a>00039 <span class="preprocessor"></span>
+<a name="l00044"></a><a class="code" href="cairo-dock-desklet_8h.html#2565e6cfafd6e1cfe34a9591766a888a">00044</a> <span class="preprocessor">#define CAIRO_DOCK_DESKLET(pContainer) ((CairoDockDesklet *)pContainer)</span>
+<a name="l00045"></a>00045 <span class="preprocessor"></span>
+<a name="l00046"></a>00046 <a class="code" href="struct__CairoDockDesklet.html">CairoDockDesklet</a> *<a class="code" href="cairo-dock-desklet_8h.html#6c25fd7cef4032062715b53334142f7e">cairo_dock_create_desklet</a> (<a class="code" href="struct__Icon.html">Icon</a> *pIcon, GtkWidget *pInteractiveWidget, gboolean bOnWidgetLayer);
+<a name="l00047"></a>00047 
+<a name="l00048"></a>00048 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-desklet_8h.html#422a9f4892c4d57a1cb75ce19e4c7d46">cairo_dock_place_desklet</a> (<a class="code" href="struct__CairoDockDesklet.html">CairoDockDesklet</a> *pDesklet, <a class="code" href="struct__CairoDockMinimalAppletConfig.html">CairoDockMinimalAppletConfig</a> *pMinimalConfig);
+<a name="l00049"></a>00049 
+<a name="l00050"></a>00050 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-desklet_8h.html#18bb01cb41b985b38e3975c1d1d55ef1">cairo_dock_steal_interactive_widget_from_desklet</a> (<a class="code" href="struct__CairoDockDesklet.html">CairoDockDesklet</a> *pDesklet);
+<a name="l00051"></a>00051 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-desklet_8h.html#d716e2a115eaf77e3a180081962fe7d1">cairo_dock_free_desklet</a> (<a class="code" href="struct__CairoDockDesklet.html">CairoDockDesklet</a> *pDesklet);
+<a name="l00052"></a>00052 
+<a name="l00053"></a>00053 
+<a name="l00054"></a>00054 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-desklet_8h.html#e070aa2f7ec1fbdd85757602310c11eb">cairo_dock_hide_desklet</a> (<a class="code" href="struct__CairoDockDesklet.html">CairoDockDesklet</a> *pDesklet);
+<a name="l00055"></a>00055 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-desklet_8h.html#6ab81c30cf521da8ea2692d41c1d8e66">cairo_dock_show_desklet</a> (<a class="code" href="struct__CairoDockDesklet.html">CairoDockDesklet</a> *pDesklet);
+<a name="l00056"></a>00056 
+<a name="l00057"></a>00057 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-desklet_8h.html#b952f14665b804fe118ff2a6c18a3bbf">cairo_dock_add_interactive_widget_to_desklet</a> (GtkWidget *pInteractiveWidget, <a class="code" href="struct__CairoDockDesklet.html">CairoDockDesklet</a> *pDesklet);
+<a name="l00058"></a>00058 
+<a name="l00059"></a>00059 
+<a name="l00060"></a>00060 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-desklet_8h.html#7fd97c910ab88fd77b015e781632a56c">cairo_dock_set_all_desklets_visible</a> (gboolean bOnWidgetLayerToo);
+<a name="l00061"></a>00061 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-desklet_8h.html#f63efd8dc88d025be5dc1e771318b8bd">cairo_dock_set_desklets_visibility_to_default</a> (<span class="keywordtype">void</span>);
+<a name="l00062"></a>00062 
+<a name="l00063"></a>00063 <a class="code" href="struct__CairoDockDesklet.html">CairoDockDesklet</a> *<a class="code" href="cairo-dock-desklet_8h.html#a59f1f01fb9e80e56114743f5c0d9d1e">cairo_dock_get_desklet_by_Xid</a> (Window Xid);
+<a name="l00064"></a>00064 
+<a name="l00065"></a>00065 
+<a name="l00066"></a>00066 <span class="preprocessor">#endif</span>
+</pre></div><hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:15 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

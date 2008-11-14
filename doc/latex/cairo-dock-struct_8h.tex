@@ -1,0 +1,869 @@
+\section{Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-struct.h}
+\label{cairo-dock-struct_8h}\index{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-struct.h@{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-struct.h}}
+\subsection*{Structures de données}
+\begin{CompactItemize}
+\item 
+struct {\bf \_\-CairoDockRenderer}
+\item 
+struct {\bf \_\-CairoDockContainer}
+\item 
+struct {\bf \_\-CairoDock}
+\item 
+struct {\bf \_\-CairoDockVisitCard}
+\item 
+struct {\bf \_\-CairoDockModule}
+\item 
+struct {\bf \_\-CairoDockMinimalAppletConfig}
+\item 
+struct {\bf \_\-CairoDockDialogRenderer}
+\item 
+struct {\bf \_\-CairoDockDialog}
+\item 
+struct {\bf \_\-Icon}
+\item 
+struct {\bf \_\-CairoDockVFSBackend}
+\item 
+struct {\bf \_\-CairoDockDeskletRenderer}
+\item 
+struct {\bf \_\-CairoDockDesklet}
+\item 
+struct {\bf \_\-CairoDockClassAppli}
+\end{CompactItemize}
+\subsection*{Macros}
+\begin{CompactItemize}
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-CONTAINER}(p)~(({\bf CairoDockContainer} $\ast$) (p))
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-FM\_\-VFS\_\-ROOT}~\char`\"{}\_\-vfsroot\_\-\char`\"{}
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-FM\_\-NETWORK}~\char`\"{}\_\-network\_\-\char`\"{}
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-FM\_\-VFS\_\-ROOT\_\-NETWORK}~\char`\"{}\_\-vfsroot+network\_\-\char`\"{}
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-DATA\_\-DIR}~\char`\"{}.cairo-dock\char`\"{}
+\begin{CompactList}\small\item\em Nom du repertoire de travail de cairo-dock. \item\end{CompactList}\item 
+\#define {\bf CAIRO\_\-DOCK\_\-THEMES\_\-DIR}~\char`\"{}themes\char`\"{}
+\begin{CompactList}\small\item\em Nom du repertoire des themes. \item\end{CompactList}\item 
+\#define {\bf CAIRO\_\-DOCK\_\-CURRENT\_\-THEME\_\-NAME}~\char`\"{}current\_\-theme\char`\"{}
+\begin{CompactList}\small\item\em Nom du repertoire du theme courant. \item\end{CompactList}\item 
+\#define {\bf CAIRO\_\-DOCK\_\-LAUNCHERS\_\-DIR}~\char`\"{}launchers\char`\"{}
+\begin{CompactList}\small\item\em Nom du repertoire des lanceurs et leurs icones. \item\end{CompactList}\item 
+\#define {\bf CAIRO\_\-DOCK\_\-MAIN\_\-DOCK\_\-NAME}~\char`\"{}\_\-MainDock\_\-\char`\"{}
+\begin{CompactList}\small\item\em Nom du dock principal (le 1er cree). \item\end{CompactList}\item 
+\#define {\bf CAIRO\_\-DOCK\_\-DEFAULT\_\-RENDERER\_\-NAME}~\char`\"{}default\char`\"{}
+\begin{CompactList}\small\item\em Nom de la vue par defaut. \item\end{CompactList}\item 
+\#define {\bf CAIRO\_\-DOCK\_\-LAST\_\-ORDER}~-1e9
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-NB\_\-MAX\_\-ITERATIONS}~1000
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-LOAD\_\-ICONS\_\-FOR\_\-DESKLET}~TRUE
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-UPDATE\_\-DOCK\_\-SIZE}~TRUE
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-ANIMATE\_\-ICON}~TRUE
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-APPLY\_\-RATIO}~TRUE
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-INSERT\_\-SEPARATOR}~TRUE
+\item 
+\#define {\bf CAIRO\_\-DOCK\_\-MESSAGE}(s,...)
+\end{CompactItemize}
+\subsection*{Définition de type}
+\begin{CompactItemize}
+\item 
+typedef struct {\bf \_\-CairoDockRenderer} {\bf CairoDockRenderer}
+\item 
+typedef struct {\bf \_\-CairoDockDeskletRenderer} {\bf CairoDockDeskletRenderer}
+\item 
+typedef struct {\bf \_\-CairoDockDialogRenderer} {\bf CairoDockDialogRenderer}
+\item 
+typedef struct {\bf \_\-Icon} {\bf Icon}
+\item 
+typedef struct {\bf \_\-CairoDockContainer} {\bf CairoDockContainer}
+\item 
+typedef struct {\bf \_\-CairoDock} {\bf CairoDock}
+\item 
+typedef struct {\bf \_\-CairoDockDesklet} {\bf CairoDockDesklet}
+\item 
+typedef struct {\bf \_\-CairoDockDialog} {\bf CairoDockDialog}
+\item 
+typedef struct {\bf \_\-CairoDockModule} {\bf CairoDockModule}
+\item 
+typedef struct {\bf \_\-CairoDockVisitCard} {\bf CairoDockVisitCard}
+\item 
+typedef struct {\bf \_\-CairoDockMinimalAppletConfig} {\bf CairoDockMinimalAppletConfig}
+\item 
+typedef struct {\bf \_\-CairoDockVFSBackend} {\bf CairoDockVFSBackend}
+\item 
+typedef struct {\bf \_\-CairoDockClassAppli} {\bf CairoDockClassAppli}
+\item 
+typedef void($\ast$ {\bf CairoDockCalculateMaxDockSizeFunc} )({\bf CairoDock} $\ast$pDock)
+\item 
+typedef {\bf Icon} $\ast$($\ast$ {\bf CairoDockCalculateIconsFunc} )({\bf CairoDock} $\ast$pDock)
+\item 
+typedef void($\ast$ {\bf CairoDockRenderFunc} )({\bf CairoDock} $\ast$pDock)
+\item 
+typedef void($\ast$ {\bf CairoDockRenderOptimizedFunc} )({\bf CairoDock} $\ast$pDock, GdkRectangle $\ast$pArea)
+\item 
+typedef void($\ast$ {\bf CairoDockSetSubDockPositionFunc} )({\bf Icon} $\ast$pPointedIcon, {\bf CairoDock} $\ast$pParentDock)
+\item 
+typedef {\bf CairoDockVisitCard} $\ast$($\ast$ {\bf CairoDockModulePreInit} )(void)
+\begin{CompactList}\small\item\em Construit et renvoie la carte de visite du module. \item\end{CompactList}\item 
+typedef void($\ast$ {\bf CairoDockModuleInit} )(GKeyFile $\ast$pKeyFile, {\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer, gchar $\ast$cConfFilePath, GError $\ast$$\ast$erreur)
+\begin{CompactList}\small\item\em Initialise le module, et renvoie son icone si il en a. \item\end{CompactList}\item 
+typedef void($\ast$ {\bf CairoDockModuleStop} )(void)
+\begin{CompactList}\small\item\em Stoppe le module et libere toutes les ressources allouees par lui. \item\end{CompactList}\item 
+typedef gboolean($\ast$ {\bf CairoDockModuleReload} )(GKeyFile $\ast$pKeyFile, gchar $\ast$cConfFileToReload, {\bf CairoDockContainer} $\ast$pContainer)
+\begin{CompactList}\small\item\em Recharge le module (optionnel). \item\end{CompactList}\item 
+typedef void($\ast$ {\bf CairoDockActionOnAnswerFunc} )(int iAnswer, GtkWidget $\ast$pWidget, gpointer data)
+\item 
+typedef void($\ast$ {\bf CairoDockDialogRenderFunc} )(cairo\_\-t $\ast$pCairoContext, {\bf CairoDockDialog} $\ast$pDialog, gboolean bRenderOptimized)
+\item 
+typedef gpointer($\ast$ {\bf CairoDockDialogLoadRendererFunc} )({\bf CairoDockDialog} $\ast$pDialog, cairo\_\-t $\ast$pSourceContext, gpointer $\ast$pConfig)
+\item 
+typedef void($\ast$ {\bf CairoDockDialogFreeRendererDataFunc} )({\bf CairoDockDialog} $\ast$pDesklet)
+\item 
+typedef void($\ast$ {\bf CairoDockFMGetFileInfoFunc} )(const gchar $\ast$cBaseURI, gchar $\ast$$\ast$cName, gchar $\ast$$\ast$cURI, gchar $\ast$$\ast$cIconName, gboolean $\ast$bIsDirectory, int $\ast$iVolumeID, double $\ast$fOrder, {\bf CairoDockFMSortType} iSortType)
+\item 
+typedef void($\ast$ {\bf CairoDockFMFilePropertiesFunc} )(const gchar $\ast$cURI, guint64 $\ast$iSize, time\_\-t $\ast$iLastModificationTime, gchar $\ast$$\ast$cMimeType, int $\ast$iUID, int $\ast$iGID, int $\ast$iPermissionsMask)
+\item 
+typedef GList $\ast$($\ast$ {\bf CairoDockFMListDirectoryFunc} )(const gchar $\ast$cURI, {\bf CairoDockFMSortType} g\_\-fm\_\-iSortType, int iNewIconsType, gboolean bListHiddenFiles, gchar $\ast$$\ast$cFullURI)
+\item 
+typedef void($\ast$ {\bf CairoDockFMLaunchUriFunc} )(const gchar $\ast$cURI)
+\item 
+typedef gchar $\ast$($\ast$ {\bf CairoDockFMIsMountedFunc} )(const gchar $\ast$cURI, gboolean $\ast$bIsMounted)
+\item 
+typedef void($\ast$ {\bf CairoDockFMMountCallback} )(gboolean bMounting, gboolean bSuccess, const gchar $\ast$cName, {\bf Icon} $\ast$icon, {\bf CairoDock} $\ast$pDock)
+\item 
+typedef void($\ast$ {\bf CairoDockFMMountFunc} )(const gchar $\ast$cURI, int iVolumeID, {\bf CairoDockFMMountCallback} pCallback, {\bf Icon} $\ast$icon, {\bf CairoDock} $\ast$pDock)
+\item 
+typedef void($\ast$ {\bf CairoDockFMUnmountFunc} )(const gchar $\ast$cURI, int iVolumeID, {\bf CairoDockFMMountCallback} pCallback, {\bf Icon} $\ast$icon, {\bf CairoDock} $\ast$pDockCairoDock)
+\item 
+typedef void($\ast$ {\bf CairoDockFMMonitorCallback} )({\bf CairoDockFMEventType} iEventType, const gchar $\ast$cURI, gpointer data)
+\item 
+typedef void($\ast$ {\bf CairoDockFMAddMonitorFunc} )(const gchar $\ast$cURI, gboolean bDirectory, {\bf CairoDockFMMonitorCallback} pCallback, gpointer data)
+\item 
+typedef void($\ast$ {\bf CairoDockFMRemoveMonitorFunc} )(const gchar $\ast$cURI)
+\item 
+typedef gboolean($\ast$ {\bf CairoDockFMDeleteFileFunc} )(const gchar $\ast$cURI)
+\item 
+typedef gboolean($\ast$ {\bf CairoDockFMRenameFileFunc} )(const gchar $\ast$cOldURI, const gchar $\ast$cNewName)
+\item 
+typedef gboolean($\ast$ {\bf CairoDockFMMoveFileFunc} )(const gchar $\ast$cURI, const gchar $\ast$cDirectoryURI)
+\item 
+typedef gchar $\ast$($\ast$ {\bf CairoDockFMGetTrashFunc} )(const gchar $\ast$cNearURI, gboolean bCreateIfNecessary)
+\item 
+typedef gchar $\ast$($\ast$ {\bf CairoDockFMGetDesktopFunc} )(void)
+\item 
+typedef void($\ast$ {\bf CairoDockFMUserActionFunc} )(void)
+\item 
+typedef void($\ast$ {\bf CairoDockDeskletRenderFunc} )(cairo\_\-t $\ast$pCairoContext, {\bf CairoDockDesklet} $\ast$pDesklet, gboolean bRenderOptimized)
+\item 
+typedef gpointer($\ast$ {\bf CairoDockDeskletLoadRendererFunc} )({\bf CairoDockDesklet} $\ast$pDesklet, cairo\_\-t $\ast$pSourceContext, gpointer $\ast$pConfig)
+\item 
+typedef void($\ast$ {\bf CairoDockDeskletFreeRendererDataFunc} )({\bf CairoDockDesklet} $\ast$pDesklet)
+\item 
+typedef void($\ast$ {\bf CairoDockDeskletLoadIconsFunc} )({\bf CairoDockDesklet} $\ast$pDesklet, cairo\_\-t $\ast$pSourceContext)
+\item 
+typedef gboolean($\ast$ {\bf CairoDockForeachDeskletFunc} )({\bf CairoDockDesklet} $\ast$pDesklet, {\bf CairoDockModule} $\ast$pModule, gpointer data)
+\item 
+typedef void($\ast$ {\bf CairoDockForeachIconFunc} )({\bf Icon} $\ast$icon, gpointer data)
+\item 
+typedef void($\ast$ {\bf CairoDockConfigFunc} )(gchar $\ast$cConfFile, gpointer data)
+\end{CompactItemize}
+\subsection*{Énumérations}
+\begin{CompactItemize}
+\item 
+enum {\bf CairoDockTypeHorizontality} \{ {\bf CAIRO\_\-DOCK\_\-VERTICAL} =  0, 
+{\bf CAIRO\_\-DOCK\_\-HORIZONTAL}
+ \}
+\item 
+enum {\bf CairoDockTypeContainer} \{ {\bf CAIRO\_\-DOCK\_\-TYPE\_\-DOCK} =  0, 
+{\bf CAIRO\_\-DOCK\_\-TYPE\_\-DESKLET}, 
+{\bf CAIRO\_\-DOCK\_\-TYPE\_\-DIALOG}
+ \}
+\item 
+enum {\bf CairoDockPluginCategory} \{ {\bf CAIRO\_\-DOCK\_\-CATEGORY\_\-ACCESSORY} = 0, 
+{\bf CAIRO\_\-DOCK\_\-CATEGORY\_\-DESKTOP}, 
+{\bf CAIRO\_\-DOCK\_\-CATEGORY\_\-CONTROLER}, 
+{\bf CAIRO\_\-DOCK\_\-NB\_\-CATEGORY}
+ \}
+\item 
+enum {\bf CairoDockIconType} \{ \par
+{\bf CAIRO\_\-DOCK\_\-LAUNCHER} =  0, 
+{\bf CAIRO\_\-DOCK\_\-SEPARATOR12}, 
+{\bf CAIRO\_\-DOCK\_\-APPLI}, 
+{\bf CAIRO\_\-DOCK\_\-SEPARATOR23}, 
+\par
+{\bf CAIRO\_\-DOCK\_\-APPLET}, 
+{\bf CAIRO\_\-DOCK\_\-NB\_\-TYPES}
+ \}
+\item 
+enum {\bf CairoDockAnimationType} \{ \par
+{\bf CAIRO\_\-DOCK\_\-BOUNCE} =  0, 
+{\bf CAIRO\_\-DOCK\_\-ROTATE}, 
+{\bf CAIRO\_\-DOCK\_\-BLINK}, 
+{\bf CAIRO\_\-DOCK\_\-PULSE}, 
+\par
+{\bf CAIRO\_\-DOCK\_\-UPSIDE\_\-DOWN}, 
+{\bf CAIRO\_\-DOCK\_\-WOBBLY}, 
+{\bf CAIRO\_\-DOCK\_\-RANDOM}, 
+{\bf CAIRO\_\-DOCK\_\-NB\_\-ANIMATIONS}, 
+\par
+{\bf CAIRO\_\-DOCK\_\-FOLLOW\_\-MOUSE}, 
+{\bf CAIRO\_\-DOCK\_\-AVOID\_\-MOUSE}
+ \}
+\item 
+enum {\bf CairoDockFMEventType} \{ {\bf CAIRO\_\-DOCK\_\-FILE\_\-MODIFIED} = 0, 
+{\bf CAIRO\_\-DOCK\_\-FILE\_\-DELETED}, 
+{\bf CAIRO\_\-DOCK\_\-FILE\_\-CREATED}, 
+{\bf CAIRO\_\-DOCK\_\-NB\_\-EVENT\_\-ON\_\-FILES}
+ \}
+\item 
+enum {\bf CairoDockFMSortType} \{ \par
+{\bf CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-NAME} = 0, 
+{\bf CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-DATE}, 
+{\bf CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-SIZE}, 
+{\bf CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-TYPE}, 
+\par
+{\bf CAIRO\_\-DOCK\_\-NB\_\-SORT\_\-ON\_\-FILE}
+ \}
+\item 
+enum {\bf CairoDockSizeType} \{ {\bf CAIRO\_\-DOCK\_\-MAX\_\-SIZE}, 
+{\bf CAIRO\_\-DOCK\_\-NORMAL\_\-SIZE}, 
+{\bf CAIRO\_\-DOCK\_\-MIN\_\-SIZE}
+ \}
+\item 
+enum {\bf CairoDockMousePositionType} \{ {\bf CAIRO\_\-DOCK\_\-MOUSE\_\-INSIDE}, 
+{\bf CAIRO\_\-DOCK\_\-MOUSE\_\-ON\_\-THE\_\-EDGE}, 
+{\bf CAIRO\_\-DOCK\_\-MOUSE\_\-OUTSIDE}
+ \}
+\item 
+enum {\bf CairoDockDesktopEnv} \{ {\bf CAIRO\_\-DOCK\_\-UNKNOWN\_\-ENV} = 0, 
+{\bf CAIRO\_\-DOCK\_\-GNOME}, 
+{\bf CAIRO\_\-DOCK\_\-KDE}, 
+{\bf CAIRO\_\-DOCK\_\-XFCE}
+ \}
+\item 
+enum {\bf CairoDockPositionType} \{ \par
+{\bf CAIRO\_\-DOCK\_\-BOTTOM} =  0, 
+{\bf CAIRO\_\-DOCK\_\-TOP}, 
+{\bf CAIRO\_\-DOCK\_\-LEFT}, 
+{\bf CAIRO\_\-DOCK\_\-RIGHT}, 
+\par
+{\bf CAIRO\_\-DOCK\_\-NB\_\-POSITIONS}
+ \}
+\item 
+enum {\bf CairoDockNewLauncherType} \{ {\bf CAIRO\_\-DOCK\_\-LAUNCHER\_\-FROM\_\-DESKTOP\_\-FILE} =  0, 
+{\bf CAIRO\_\-DOCK\_\-LAUNCHER\_\-FOR\_\-CONTAINER}, 
+{\bf CAIRO\_\-DOCK\_\-LAUNCHER\_\-FOR\_\-SEPARATOR}, 
+{\bf CAIRO\_\-DOCK\_\-NB\_\-NEW\_\-LAUNCHER\_\-TYPE}
+ \}
+\end{CompactItemize}
+
+
+\subsection{Documentation des macros}
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_CONTAINER@{CAIRO\_\-DOCK\_\-CONTAINER}}
+\index{CAIRO_DOCK_CONTAINER@{CAIRO\_\-DOCK\_\-CONTAINER}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-CONTAINER(p)~(({\bf CairoDockContainer} $\ast$) (p))}\label{cairo-dock-struct_8h_7ea2d84407adc403394a1459bc9c5b1d}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_FM_VFS_ROOT@{CAIRO\_\-DOCK\_\-FM\_\-VFS\_\-ROOT}}
+\index{CAIRO_DOCK_FM_VFS_ROOT@{CAIRO\_\-DOCK\_\-FM\_\-VFS\_\-ROOT}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-FM\_\-VFS\_\-ROOT~\char`\"{}\_\-vfsroot\_\-\char`\"{}}\label{cairo-dock-struct_8h_6be33121da500fa2af7d41abba6a88a1}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_FM_NETWORK@{CAIRO\_\-DOCK\_\-FM\_\-NETWORK}}
+\index{CAIRO_DOCK_FM_NETWORK@{CAIRO\_\-DOCK\_\-FM\_\-NETWORK}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-FM\_\-NETWORK~\char`\"{}\_\-network\_\-\char`\"{}}\label{cairo-dock-struct_8h_8b49d19ec28c1278343f64a85a1c3bf2}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_FM_VFS_ROOT_NETWORK@{CAIRO\_\-DOCK\_\-FM\_\-VFS\_\-ROOT\_\-NETWORK}}
+\index{CAIRO_DOCK_FM_VFS_ROOT_NETWORK@{CAIRO\_\-DOCK\_\-FM\_\-VFS\_\-ROOT\_\-NETWORK}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-FM\_\-VFS\_\-ROOT\_\-NETWORK~\char`\"{}\_\-vfsroot+network\_\-\char`\"{}}\label{cairo-dock-struct_8h_02585e5837f941bf3eb2934ed8620fd9}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_DATA_DIR@{CAIRO\_\-DOCK\_\-DATA\_\-DIR}}
+\index{CAIRO_DOCK_DATA_DIR@{CAIRO\_\-DOCK\_\-DATA\_\-DIR}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-DATA\_\-DIR~\char`\"{}.cairo-dock\char`\"{}}\label{cairo-dock-struct_8h_5a58a5559833a27184b96085dd4d2dcf}
+
+
+Nom du repertoire de travail de cairo-dock. 
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_THEMES_DIR@{CAIRO\_\-DOCK\_\-THEMES\_\-DIR}}
+\index{CAIRO_DOCK_THEMES_DIR@{CAIRO\_\-DOCK\_\-THEMES\_\-DIR}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-THEMES\_\-DIR~\char`\"{}themes\char`\"{}}\label{cairo-dock-struct_8h_ca7ae8078eac23dc6cdc8f59e11649f6}
+
+
+Nom du repertoire des themes. 
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_CURRENT_THEME_NAME@{CAIRO\_\-DOCK\_\-CURRENT\_\-THEME\_\-NAME}}
+\index{CAIRO_DOCK_CURRENT_THEME_NAME@{CAIRO\_\-DOCK\_\-CURRENT\_\-THEME\_\-NAME}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-CURRENT\_\-THEME\_\-NAME~\char`\"{}current\_\-theme\char`\"{}}\label{cairo-dock-struct_8h_50e13af9174b6650c41de7531d8ad168}
+
+
+Nom du repertoire du theme courant. 
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_LAUNCHERS_DIR@{CAIRO\_\-DOCK\_\-LAUNCHERS\_\-DIR}}
+\index{CAIRO_DOCK_LAUNCHERS_DIR@{CAIRO\_\-DOCK\_\-LAUNCHERS\_\-DIR}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-LAUNCHERS\_\-DIR~\char`\"{}launchers\char`\"{}}\label{cairo-dock-struct_8h_6b97b73d57f729ddcdd15b4a047e61a0}
+
+
+Nom du repertoire des lanceurs et leurs icones. 
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_MAIN_DOCK_NAME@{CAIRO\_\-DOCK\_\-MAIN\_\-DOCK\_\-NAME}}
+\index{CAIRO_DOCK_MAIN_DOCK_NAME@{CAIRO\_\-DOCK\_\-MAIN\_\-DOCK\_\-NAME}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-MAIN\_\-DOCK\_\-NAME~\char`\"{}\_\-MainDock\_\-\char`\"{}}\label{cairo-dock-struct_8h_8b7871a7d19bd60bfe513318495731fc}
+
+
+Nom du dock principal (le 1er cree). 
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_DEFAULT_RENDERER_NAME@{CAIRO\_\-DOCK\_\-DEFAULT\_\-RENDERER\_\-NAME}}
+\index{CAIRO_DOCK_DEFAULT_RENDERER_NAME@{CAIRO\_\-DOCK\_\-DEFAULT\_\-RENDERER\_\-NAME}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-DEFAULT\_\-RENDERER\_\-NAME~\char`\"{}default\char`\"{}}\label{cairo-dock-struct_8h_f3fbae5133b2a83c1f404a884cb44310}
+
+
+Nom de la vue par defaut. 
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_LAST_ORDER@{CAIRO\_\-DOCK\_\-LAST\_\-ORDER}}
+\index{CAIRO_DOCK_LAST_ORDER@{CAIRO\_\-DOCK\_\-LAST\_\-ORDER}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-LAST\_\-ORDER~-1e9}\label{cairo-dock-struct_8h_020ae011f1cb31cdc7e39ba93f003f52}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_NB_MAX_ITERATIONS@{CAIRO\_\-DOCK\_\-NB\_\-MAX\_\-ITERATIONS}}
+\index{CAIRO_DOCK_NB_MAX_ITERATIONS@{CAIRO\_\-DOCK\_\-NB\_\-MAX\_\-ITERATIONS}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-NB\_\-MAX\_\-ITERATIONS~1000}\label{cairo-dock-struct_8h_8195cb980f861c59a351e91ad1a49b9f}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_LOAD_ICONS_FOR_DESKLET@{CAIRO\_\-DOCK\_\-LOAD\_\-ICONS\_\-FOR\_\-DESKLET}}
+\index{CAIRO_DOCK_LOAD_ICONS_FOR_DESKLET@{CAIRO\_\-DOCK\_\-LOAD\_\-ICONS\_\-FOR\_\-DESKLET}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-LOAD\_\-ICONS\_\-FOR\_\-DESKLET~TRUE}\label{cairo-dock-struct_8h_797e89d1e91f6286d8dfa01669c34b5a}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_UPDATE_DOCK_SIZE@{CAIRO\_\-DOCK\_\-UPDATE\_\-DOCK\_\-SIZE}}
+\index{CAIRO_DOCK_UPDATE_DOCK_SIZE@{CAIRO\_\-DOCK\_\-UPDATE\_\-DOCK\_\-SIZE}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-UPDATE\_\-DOCK\_\-SIZE~TRUE}\label{cairo-dock-struct_8h_fe98597ff3932f0a35408078661a3dd9}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_ANIMATE_ICON@{CAIRO\_\-DOCK\_\-ANIMATE\_\-ICON}}
+\index{CAIRO_DOCK_ANIMATE_ICON@{CAIRO\_\-DOCK\_\-ANIMATE\_\-ICON}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-ANIMATE\_\-ICON~TRUE}\label{cairo-dock-struct_8h_1014d68ee917ade6a5f90b019fd3dd54}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_APPLY_RATIO@{CAIRO\_\-DOCK\_\-APPLY\_\-RATIO}}
+\index{CAIRO_DOCK_APPLY_RATIO@{CAIRO\_\-DOCK\_\-APPLY\_\-RATIO}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-APPLY\_\-RATIO~TRUE}\label{cairo-dock-struct_8h_04753c410274177df5b552c06e0db194}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_INSERT_SEPARATOR@{CAIRO\_\-DOCK\_\-INSERT\_\-SEPARATOR}}
+\index{CAIRO_DOCK_INSERT_SEPARATOR@{CAIRO\_\-DOCK\_\-INSERT\_\-SEPARATOR}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-INSERT\_\-SEPARATOR~TRUE}\label{cairo-dock-struct_8h_cf7f8be806ce86d027c5b15a91eeb3be}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_MESSAGE@{CAIRO\_\-DOCK\_\-MESSAGE}}
+\index{CAIRO_DOCK_MESSAGE@{CAIRO\_\-DOCK\_\-MESSAGE}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}\#define CAIRO\_\-DOCK\_\-MESSAGE(s,  {\em ...})}\label{cairo-dock-struct_8h_fa83e74413bf8114b6ed7223a2131ff7}
+
+
+
+
+\subsection{Documentation des définition de type}
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockRenderer@{CairoDockRenderer}}
+\index{CairoDockRenderer@{CairoDockRenderer}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \_\-CairoDockRenderer} {\bf CairoDockRenderer}}\label{cairo-dock-struct_8h_62c922dca727e6e5189583641c8f89aa}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockDeskletRenderer@{CairoDockDeskletRenderer}}
+\index{CairoDockDeskletRenderer@{CairoDockDeskletRenderer}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \_\-CairoDockDeskletRenderer} {\bf CairoDockDeskletRenderer}}\label{cairo-dock-struct_8h_2abc4c47b2d69a7ef6cb30844678b9a3}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockDialogRenderer@{CairoDockDialogRenderer}}
+\index{CairoDockDialogRenderer@{CairoDockDialogRenderer}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \_\-CairoDockDialogRenderer} {\bf CairoDockDialogRenderer}}\label{cairo-dock-struct_8h_633b1113071e2c4dfd2013368bf822a3}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!Icon@{Icon}}
+\index{Icon@{Icon}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \_\-Icon} {\bf Icon}}\label{cairo-dock-struct_8h_9dbd322bceb9fa1bb1a0e98fd78c2c54}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockContainer@{CairoDockContainer}}
+\index{CairoDockContainer@{CairoDockContainer}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \_\-CairoDockContainer} {\bf CairoDockContainer}}\label{cairo-dock-struct_8h_52bd922b847e8910f8f5d6ca3d2e253d}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDock@{CairoDock}}
+\index{CairoDock@{CairoDock}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \_\-CairoDock} {\bf CairoDock}}\label{cairo-dock-struct_8h_ec3f63fc3ef337770d0f04ed7d8ddcff}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockDesklet@{CairoDockDesklet}}
+\index{CairoDockDesklet@{CairoDockDesklet}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \_\-CairoDockDesklet} {\bf CairoDockDesklet}}\label{cairo-dock-struct_8h_14f2aabcbd26247a5123d72205904907}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockDialog@{CairoDockDialog}}
+\index{CairoDockDialog@{CairoDockDialog}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \_\-CairoDockDialog} {\bf CairoDockDialog}}\label{cairo-dock-struct_8h_335122576c46429110ac542997a9784a}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockModule@{CairoDockModule}}
+\index{CairoDockModule@{CairoDockModule}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \_\-CairoDockModule} {\bf CairoDockModule}}\label{cairo-dock-struct_8h_0d93c59bb41e19782f399379b8b76b9a}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockVisitCard@{CairoDockVisitCard}}
+\index{CairoDockVisitCard@{CairoDockVisitCard}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \_\-CairoDockVisitCard} {\bf CairoDockVisitCard}}\label{cairo-dock-struct_8h_c4bdbfadfbe657f25e0e1e39638cd75e}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockMinimalAppletConfig@{CairoDockMinimalAppletConfig}}
+\index{CairoDockMinimalAppletConfig@{CairoDockMinimalAppletConfig}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \_\-CairoDockMinimalAppletConfig} {\bf CairoDockMinimalAppletConfig}}\label{cairo-dock-struct_8h_eb1acda56cc112994bf134bd8da0004f}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockVFSBackend@{CairoDockVFSBackend}}
+\index{CairoDockVFSBackend@{CairoDockVFSBackend}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \_\-CairoDockVFSBackend} {\bf CairoDockVFSBackend}}\label{cairo-dock-struct_8h_eed9b6c14136e86e1e71213b752f92f8}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockClassAppli@{CairoDockClassAppli}}
+\index{CairoDockClassAppli@{CairoDockClassAppli}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \_\-CairoDockClassAppli} {\bf CairoDockClassAppli}}\label{cairo-dock-struct_8h_6633427a58c4dd1e18cd6bfd2296aff6}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockCalculateMaxDockSizeFunc@{CairoDockCalculateMaxDockSizeFunc}}
+\index{CairoDockCalculateMaxDockSizeFunc@{CairoDockCalculateMaxDockSizeFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockCalculateMaxDockSizeFunc})({\bf CairoDock} $\ast$pDock)}\label{cairo-dock-struct_8h_883859209207209c62a75c3539d6c722}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockCalculateIconsFunc@{CairoDockCalculateIconsFunc}}
+\index{CairoDockCalculateIconsFunc@{CairoDockCalculateIconsFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf Icon}$\ast$($\ast$ {\bf CairoDockCalculateIconsFunc})({\bf CairoDock} $\ast$pDock)}\label{cairo-dock-struct_8h_50877c6b006fcf5a0836335c01a91fa3}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockRenderFunc@{CairoDockRenderFunc}}
+\index{CairoDockRenderFunc@{CairoDockRenderFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockRenderFunc})({\bf CairoDock} $\ast$pDock)}\label{cairo-dock-struct_8h_7ca64e532d1a6d04a5e1b39288638476}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockRenderOptimizedFunc@{CairoDockRenderOptimizedFunc}}
+\index{CairoDockRenderOptimizedFunc@{CairoDockRenderOptimizedFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockRenderOptimizedFunc})({\bf CairoDock} $\ast$pDock, GdkRectangle $\ast$pArea)}\label{cairo-dock-struct_8h_3e84daef3dc6c6267ae35474da900357}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockSetSubDockPositionFunc@{CairoDockSetSubDockPositionFunc}}
+\index{CairoDockSetSubDockPositionFunc@{CairoDockSetSubDockPositionFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockSetSubDockPositionFunc})({\bf Icon} $\ast$pPointedIcon, {\bf CairoDock} $\ast$pParentDock)}\label{cairo-dock-struct_8h_51980608490eb2b5df8a97459d3e36f2}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockModulePreInit@{CairoDockModulePreInit}}
+\index{CairoDockModulePreInit@{CairoDockModulePreInit}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf CairoDockVisitCard}$\ast$($\ast$  {\bf CairoDockModulePreInit})(void)}\label{cairo-dock-struct_8h_6b9b47244dc2520078ee01d49cba9a97}
+
+
+Construit et renvoie la carte de visite du module. 
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockModuleInit@{CairoDockModuleInit}}
+\index{CairoDockModuleInit@{CairoDockModuleInit}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockModuleInit})(GKeyFile $\ast$pKeyFile, {\bf Icon} $\ast$pIcon, {\bf CairoDockContainer} $\ast$pContainer, gchar $\ast$cConfFilePath, GError $\ast$$\ast$erreur)}\label{cairo-dock-struct_8h_fd356c986337e9fef7e9b1518dbf50f9}
+
+
+Initialise le module, et renvoie son icone si il en a. 
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockModuleStop@{CairoDockModuleStop}}
+\index{CairoDockModuleStop@{CairoDockModuleStop}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockModuleStop})(void)}\label{cairo-dock-struct_8h_6cfae536a4e0554c4b9863a357814b1e}
+
+
+Stoppe le module et libere toutes les ressources allouees par lui. 
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockModuleReload@{CairoDockModuleReload}}
+\index{CairoDockModuleReload@{CairoDockModuleReload}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef gboolean($\ast$ {\bf CairoDockModuleReload})(GKeyFile $\ast$pKeyFile, gchar $\ast$cConfFileToReload, {\bf CairoDockContainer} $\ast$pContainer)}\label{cairo-dock-struct_8h_fa15de2bc423750257e3e0d2afbcb6df}
+
+
+Recharge le module (optionnel). 
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockActionOnAnswerFunc@{CairoDockActionOnAnswerFunc}}
+\index{CairoDockActionOnAnswerFunc@{CairoDockActionOnAnswerFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$  {\bf CairoDockActionOnAnswerFunc})(int iAnswer, GtkWidget $\ast$pWidget, gpointer data)}\label{cairo-dock-struct_8h_b6ad4f75675a2a32a1f910952c86b346}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockDialogRenderFunc@{CairoDockDialogRenderFunc}}
+\index{CairoDockDialogRenderFunc@{CairoDockDialogRenderFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$  {\bf CairoDockDialogRenderFunc})(cairo\_\-t $\ast$pCairoContext, {\bf CairoDockDialog} $\ast$pDialog, gboolean bRenderOptimized)}\label{cairo-dock-struct_8h_4dc9c00acc3ea7ec48f097a0871de3ce}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockDialogLoadRendererFunc@{CairoDockDialogLoadRendererFunc}}
+\index{CairoDockDialogLoadRendererFunc@{CairoDockDialogLoadRendererFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef gpointer($\ast$  {\bf CairoDockDialogLoadRendererFunc})({\bf CairoDockDialog} $\ast$pDialog, cairo\_\-t $\ast$pSourceContext, gpointer $\ast$pConfig)}\label{cairo-dock-struct_8h_904399d9ebe08f215d754b2292c806a1}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockDialogFreeRendererDataFunc@{CairoDockDialogFreeRendererDataFunc}}
+\index{CairoDockDialogFreeRendererDataFunc@{CairoDockDialogFreeRendererDataFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$  {\bf CairoDockDialogFreeRendererDataFunc})({\bf CairoDockDialog} $\ast$pDesklet)}\label{cairo-dock-struct_8h_c7909a82c2e0a3a2d1b3246a796202b2}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMGetFileInfoFunc@{CairoDockFMGetFileInfoFunc}}
+\index{CairoDockFMGetFileInfoFunc@{CairoDockFMGetFileInfoFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockFMGetFileInfoFunc})(const gchar $\ast$cBaseURI, gchar $\ast$$\ast$cName, gchar $\ast$$\ast$cURI, gchar $\ast$$\ast$cIconName, gboolean $\ast$bIsDirectory, int $\ast$iVolumeID, double $\ast$fOrder, {\bf CairoDockFMSortType} iSortType)}\label{cairo-dock-struct_8h_6c019d1de44426904865f864a4d9107a}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMFilePropertiesFunc@{CairoDockFMFilePropertiesFunc}}
+\index{CairoDockFMFilePropertiesFunc@{CairoDockFMFilePropertiesFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockFMFilePropertiesFunc})(const gchar $\ast$cURI, guint64 $\ast$iSize, time\_\-t $\ast$iLastModificationTime, gchar $\ast$$\ast$cMimeType, int $\ast$iUID, int $\ast$iGID, int $\ast$iPermissionsMask)}\label{cairo-dock-struct_8h_eaf5c0103dc96e5aefb2187a61da7ca4}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMListDirectoryFunc@{CairoDockFMListDirectoryFunc}}
+\index{CairoDockFMListDirectoryFunc@{CairoDockFMListDirectoryFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef GList$\ast$($\ast$ {\bf CairoDockFMListDirectoryFunc})(const gchar $\ast$cURI, {\bf CairoDockFMSortType} g\_\-fm\_\-iSortType, int iNewIconsType, gboolean bListHiddenFiles, gchar $\ast$$\ast$cFullURI)}\label{cairo-dock-struct_8h_a6cecce41ae50538636caa6afd4a0f30}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMLaunchUriFunc@{CairoDockFMLaunchUriFunc}}
+\index{CairoDockFMLaunchUriFunc@{CairoDockFMLaunchUriFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockFMLaunchUriFunc})(const gchar $\ast$cURI)}\label{cairo-dock-struct_8h_dc679ac0b5cfc12fa7ebc554505579e3}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMIsMountedFunc@{CairoDockFMIsMountedFunc}}
+\index{CairoDockFMIsMountedFunc@{CairoDockFMIsMountedFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef gchar$\ast$($\ast$ {\bf CairoDockFMIsMountedFunc})(const gchar $\ast$cURI, gboolean $\ast$bIsMounted)}\label{cairo-dock-struct_8h_77e0fcd1e88c1c656a15cdfb8874bbd9}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMMountCallback@{CairoDockFMMountCallback}}
+\index{CairoDockFMMountCallback@{CairoDockFMMountCallback}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockFMMountCallback})(gboolean bMounting, gboolean bSuccess, const gchar $\ast$cName, {\bf Icon} $\ast$icon, {\bf CairoDock} $\ast$pDock)}\label{cairo-dock-struct_8h_3133e84bd38ce3f12b5199726c23fcf3}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMMountFunc@{CairoDockFMMountFunc}}
+\index{CairoDockFMMountFunc@{CairoDockFMMountFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockFMMountFunc})(const gchar $\ast$cURI, int iVolumeID, {\bf CairoDockFMMountCallback} pCallback, {\bf Icon} $\ast$icon, {\bf CairoDock} $\ast$pDock)}\label{cairo-dock-struct_8h_a644352660aaf18eca5e96ab83ed3124}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMUnmountFunc@{CairoDockFMUnmountFunc}}
+\index{CairoDockFMUnmountFunc@{CairoDockFMUnmountFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockFMUnmountFunc})(const gchar $\ast$cURI, int iVolumeID, {\bf CairoDockFMMountCallback} pCallback, {\bf Icon} $\ast$icon, {\bf CairoDock} $\ast$pDockCairoDock)}\label{cairo-dock-struct_8h_eb8258df659c23b9f1c51ce337b6bcc6}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMMonitorCallback@{CairoDockFMMonitorCallback}}
+\index{CairoDockFMMonitorCallback@{CairoDockFMMonitorCallback}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockFMMonitorCallback})({\bf CairoDockFMEventType} iEventType, const gchar $\ast$cURI, gpointer data)}\label{cairo-dock-struct_8h_88570158e8e59f35fb892ca2fbf05143}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMAddMonitorFunc@{CairoDockFMAddMonitorFunc}}
+\index{CairoDockFMAddMonitorFunc@{CairoDockFMAddMonitorFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockFMAddMonitorFunc})(const gchar $\ast$cURI, gboolean bDirectory, {\bf CairoDockFMMonitorCallback} pCallback, gpointer data)}\label{cairo-dock-struct_8h_22085081a95eb6104085c39beaa859c3}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMRemoveMonitorFunc@{CairoDockFMRemoveMonitorFunc}}
+\index{CairoDockFMRemoveMonitorFunc@{CairoDockFMRemoveMonitorFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockFMRemoveMonitorFunc})(const gchar $\ast$cURI)}\label{cairo-dock-struct_8h_4bba52c5e986b7cbb740d8c908de3d17}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMDeleteFileFunc@{CairoDockFMDeleteFileFunc}}
+\index{CairoDockFMDeleteFileFunc@{CairoDockFMDeleteFileFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef gboolean($\ast$ {\bf CairoDockFMDeleteFileFunc})(const gchar $\ast$cURI)}\label{cairo-dock-struct_8h_a20e4cd0216d3541d18f72099c2bfa4c}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMRenameFileFunc@{CairoDockFMRenameFileFunc}}
+\index{CairoDockFMRenameFileFunc@{CairoDockFMRenameFileFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef gboolean($\ast$ {\bf CairoDockFMRenameFileFunc})(const gchar $\ast$cOldURI, const gchar $\ast$cNewName)}\label{cairo-dock-struct_8h_49b0b2d394bebe6647a2f7c087005a2d}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMMoveFileFunc@{CairoDockFMMoveFileFunc}}
+\index{CairoDockFMMoveFileFunc@{CairoDockFMMoveFileFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef gboolean($\ast$ {\bf CairoDockFMMoveFileFunc})(const gchar $\ast$cURI, const gchar $\ast$cDirectoryURI)}\label{cairo-dock-struct_8h_e3821a47306f8d3e94455c3d3ac65215}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMGetTrashFunc@{CairoDockFMGetTrashFunc}}
+\index{CairoDockFMGetTrashFunc@{CairoDockFMGetTrashFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef gchar$\ast$($\ast$ {\bf CairoDockFMGetTrashFunc})(const gchar $\ast$cNearURI, gboolean bCreateIfNecessary)}\label{cairo-dock-struct_8h_453092198f036bd4f1dc96e22d89c341}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMGetDesktopFunc@{CairoDockFMGetDesktopFunc}}
+\index{CairoDockFMGetDesktopFunc@{CairoDockFMGetDesktopFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef gchar$\ast$($\ast$ {\bf CairoDockFMGetDesktopFunc})(void)}\label{cairo-dock-struct_8h_6b225ffb3158a09c7a1bd6360c40af4c}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMUserActionFunc@{CairoDockFMUserActionFunc}}
+\index{CairoDockFMUserActionFunc@{CairoDockFMUserActionFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf CairoDockFMUserActionFunc})(void)}\label{cairo-dock-struct_8h_392731e9a7790e137a683a17b0db893f}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockDeskletRenderFunc@{CairoDockDeskletRenderFunc}}
+\index{CairoDockDeskletRenderFunc@{CairoDockDeskletRenderFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$  {\bf CairoDockDeskletRenderFunc})(cairo\_\-t $\ast$pCairoContext, {\bf CairoDockDesklet} $\ast$pDesklet, gboolean bRenderOptimized)}\label{cairo-dock-struct_8h_38f3bfb57061ce645b84f7694aec91c3}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockDeskletLoadRendererFunc@{CairoDockDeskletLoadRendererFunc}}
+\index{CairoDockDeskletLoadRendererFunc@{CairoDockDeskletLoadRendererFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef gpointer($\ast$  {\bf CairoDockDeskletLoadRendererFunc})({\bf CairoDockDesklet} $\ast$pDesklet, cairo\_\-t $\ast$pSourceContext, gpointer $\ast$pConfig)}\label{cairo-dock-struct_8h_97cf22c9a90e90bd7c3acfe9db95137a}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockDeskletFreeRendererDataFunc@{CairoDockDeskletFreeRendererDataFunc}}
+\index{CairoDockDeskletFreeRendererDataFunc@{CairoDockDeskletFreeRendererDataFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$  {\bf CairoDockDeskletFreeRendererDataFunc})({\bf CairoDockDesklet} $\ast$pDesklet)}\label{cairo-dock-struct_8h_829773b647c3d66ec47c9fc7f6c4897a}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockDeskletLoadIconsFunc@{CairoDockDeskletLoadIconsFunc}}
+\index{CairoDockDeskletLoadIconsFunc@{CairoDockDeskletLoadIconsFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$  {\bf CairoDockDeskletLoadIconsFunc})({\bf CairoDockDesklet} $\ast$pDesklet, cairo\_\-t $\ast$pSourceContext)}\label{cairo-dock-struct_8h_4c849f9fb591b42db6c8d4d9db39abed}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockForeachDeskletFunc@{CairoDockForeachDeskletFunc}}
+\index{CairoDockForeachDeskletFunc@{CairoDockForeachDeskletFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef gboolean($\ast$  {\bf CairoDockForeachDeskletFunc})({\bf CairoDockDesklet} $\ast$pDesklet, {\bf CairoDockModule} $\ast$pModule, gpointer data)}\label{cairo-dock-struct_8h_2dd29bf13bf56727c286bb1be57854ec}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockForeachIconFunc@{CairoDockForeachIconFunc}}
+\index{CairoDockForeachIconFunc@{CairoDockForeachIconFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$  {\bf CairoDockForeachIconFunc})({\bf Icon} $\ast$icon, gpointer data)}\label{cairo-dock-struct_8h_f25406ea86cbce694f6a956f979d21ee}
+
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockConfigFunc@{CairoDockConfigFunc}}
+\index{CairoDockConfigFunc@{CairoDockConfigFunc}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$  {\bf CairoDockConfigFunc})(gchar $\ast$cConfFile, gpointer data)}\label{cairo-dock-struct_8h_9418283e8b248f5df23a4f97067b2897}
+
+
+
+
+\subsection{Documentation du type de l'énumération}
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockTypeHorizontality@{CairoDockTypeHorizontality}}
+\index{CairoDockTypeHorizontality@{CairoDockTypeHorizontality}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}enum {\bf CairoDockTypeHorizontality}}\label{cairo-dock-struct_8h_35a7692ad6c6de1d8606b26d6f8ca57f}
+
+
+\begin{Desc}
+\item[Valeurs énumérées: ]\par
+\begin{description}
+\index{CAIRO_DOCK_VERTICAL@{CAIRO\_\-DOCK\_\-VERTICAL}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_VERTICAL@{CAIRO\_\-DOCK\_\-VERTICAL}}\item[{\em 
+CAIRO\_\-DOCK\_\-VERTICAL\label{cairo-dock-struct_8h_35a7692ad6c6de1d8606b26d6f8ca57f9b112e314fb47f2ce6b67d3b86cfb439}
+}]\index{CAIRO_DOCK_HORIZONTAL@{CAIRO\_\-DOCK\_\-HORIZONTAL}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_HORIZONTAL@{CAIRO\_\-DOCK\_\-HORIZONTAL}}\item[{\em 
+CAIRO\_\-DOCK\_\-HORIZONTAL\label{cairo-dock-struct_8h_35a7692ad6c6de1d8606b26d6f8ca57fd92275ef1fb7582789b4e7fc75d620c8}
+}]\end{description}
+\end{Desc}
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockTypeContainer@{CairoDockTypeContainer}}
+\index{CairoDockTypeContainer@{CairoDockTypeContainer}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}enum {\bf CairoDockTypeContainer}}\label{cairo-dock-struct_8h_76413f721602343f8034f9556d579f1a}
+
+
+\begin{Desc}
+\item[Valeurs énumérées: ]\par
+\begin{description}
+\index{CAIRO_DOCK_TYPE_DOCK@{CAIRO\_\-DOCK\_\-TYPE\_\-DOCK}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_TYPE_DOCK@{CAIRO\_\-DOCK\_\-TYPE\_\-DOCK}}\item[{\em 
+CAIRO\_\-DOCK\_\-TYPE\_\-DOCK\label{cairo-dock-struct_8h_76413f721602343f8034f9556d579f1a39ed89f4ff29d604728808a7f19b6b94}
+}]\index{CAIRO_DOCK_TYPE_DESKLET@{CAIRO\_\-DOCK\_\-TYPE\_\-DESKLET}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_TYPE_DESKLET@{CAIRO\_\-DOCK\_\-TYPE\_\-DESKLET}}\item[{\em 
+CAIRO\_\-DOCK\_\-TYPE\_\-DESKLET\label{cairo-dock-struct_8h_76413f721602343f8034f9556d579f1ac018a201e5985c284eb19aa32af0a941}
+}]\index{CAIRO_DOCK_TYPE_DIALOG@{CAIRO\_\-DOCK\_\-TYPE\_\-DIALOG}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_TYPE_DIALOG@{CAIRO\_\-DOCK\_\-TYPE\_\-DIALOG}}\item[{\em 
+CAIRO\_\-DOCK\_\-TYPE\_\-DIALOG\label{cairo-dock-struct_8h_76413f721602343f8034f9556d579f1a55b0d5469c8f7218df70e42f301be027}
+}]\end{description}
+\end{Desc}
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockPluginCategory@{CairoDockPluginCategory}}
+\index{CairoDockPluginCategory@{CairoDockPluginCategory}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}enum {\bf CairoDockPluginCategory}}\label{cairo-dock-struct_8h_caee4c763eea2ba2eeea135f69b7f1bd}
+
+
+\begin{Desc}
+\item[Valeurs énumérées: ]\par
+\begin{description}
+\index{CAIRO_DOCK_CATEGORY_ACCESSORY@{CAIRO\_\-DOCK\_\-CATEGORY\_\-ACCESSORY}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_CATEGORY_ACCESSORY@{CAIRO\_\-DOCK\_\-CATEGORY\_\-ACCESSORY}}\item[{\em 
+CAIRO\_\-DOCK\_\-CATEGORY\_\-ACCESSORY\label{cairo-dock-struct_8h_caee4c763eea2ba2eeea135f69b7f1bd14327b81fbdcda9740f727a8ce0fa6b2}
+}]\index{CAIRO_DOCK_CATEGORY_DESKTOP@{CAIRO\_\-DOCK\_\-CATEGORY\_\-DESKTOP}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_CATEGORY_DESKTOP@{CAIRO\_\-DOCK\_\-CATEGORY\_\-DESKTOP}}\item[{\em 
+CAIRO\_\-DOCK\_\-CATEGORY\_\-DESKTOP\label{cairo-dock-struct_8h_caee4c763eea2ba2eeea135f69b7f1bd15a041c16b108fbcd838b681479e7648}
+}]\index{CAIRO_DOCK_CATEGORY_CONTROLER@{CAIRO\_\-DOCK\_\-CATEGORY\_\-CONTROLER}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_CATEGORY_CONTROLER@{CAIRO\_\-DOCK\_\-CATEGORY\_\-CONTROLER}}\item[{\em 
+CAIRO\_\-DOCK\_\-CATEGORY\_\-CONTROLER\label{cairo-dock-struct_8h_caee4c763eea2ba2eeea135f69b7f1bd9e6ce21d30d9f5028c9c9e5a542c7b2c}
+}]\index{CAIRO_DOCK_NB_CATEGORY@{CAIRO\_\-DOCK\_\-NB\_\-CATEGORY}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_NB_CATEGORY@{CAIRO\_\-DOCK\_\-NB\_\-CATEGORY}}\item[{\em 
+CAIRO\_\-DOCK\_\-NB\_\-CATEGORY\label{cairo-dock-struct_8h_caee4c763eea2ba2eeea135f69b7f1bdea769bded57e8fcf1a0637b31b7376d1}
+}]\end{description}
+\end{Desc}
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockIconType@{CairoDockIconType}}
+\index{CairoDockIconType@{CairoDockIconType}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}enum {\bf CairoDockIconType}}\label{cairo-dock-struct_8h_bab3fe5b912f0abef3f1e2b0b4b44e4e}
+
+
+\begin{Desc}
+\item[Valeurs énumérées: ]\par
+\begin{description}
+\index{CAIRO_DOCK_LAUNCHER@{CAIRO\_\-DOCK\_\-LAUNCHER}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_LAUNCHER@{CAIRO\_\-DOCK\_\-LAUNCHER}}\item[{\em 
+CAIRO\_\-DOCK\_\-LAUNCHER\label{cairo-dock-struct_8h_bab3fe5b912f0abef3f1e2b0b4b44e4e83b57ebf9e4dd5df966521d75ca074fe}
+}]\index{CAIRO_DOCK_SEPARATOR12@{CAIRO\_\-DOCK\_\-SEPARATOR12}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_SEPARATOR12@{CAIRO\_\-DOCK\_\-SEPARATOR12}}\item[{\em 
+CAIRO\_\-DOCK\_\-SEPARATOR12\label{cairo-dock-struct_8h_bab3fe5b912f0abef3f1e2b0b4b44e4eb6c52407ad391e320d2939b588a4a3c4}
+}]\index{CAIRO_DOCK_APPLI@{CAIRO\_\-DOCK\_\-APPLI}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_APPLI@{CAIRO\_\-DOCK\_\-APPLI}}\item[{\em 
+CAIRO\_\-DOCK\_\-APPLI\label{cairo-dock-struct_8h_bab3fe5b912f0abef3f1e2b0b4b44e4e72595d6e15397cbebc0da5de85d4ed0c}
+}]\index{CAIRO_DOCK_SEPARATOR23@{CAIRO\_\-DOCK\_\-SEPARATOR23}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_SEPARATOR23@{CAIRO\_\-DOCK\_\-SEPARATOR23}}\item[{\em 
+CAIRO\_\-DOCK\_\-SEPARATOR23\label{cairo-dock-struct_8h_bab3fe5b912f0abef3f1e2b0b4b44e4ea139af55421f916af71d63b61fc783cc}
+}]\index{CAIRO_DOCK_APPLET@{CAIRO\_\-DOCK\_\-APPLET}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_APPLET@{CAIRO\_\-DOCK\_\-APPLET}}\item[{\em 
+CAIRO\_\-DOCK\_\-APPLET\label{cairo-dock-struct_8h_bab3fe5b912f0abef3f1e2b0b4b44e4e6cf3567d72b42d083b7f46c1f8762c4e}
+}]\index{CAIRO_DOCK_NB_TYPES@{CAIRO\_\-DOCK\_\-NB\_\-TYPES}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_NB_TYPES@{CAIRO\_\-DOCK\_\-NB\_\-TYPES}}\item[{\em 
+CAIRO\_\-DOCK\_\-NB\_\-TYPES\label{cairo-dock-struct_8h_bab3fe5b912f0abef3f1e2b0b4b44e4efdadfcb6ba9830be9ce0eeaf47eb739b}
+}]\end{description}
+\end{Desc}
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockAnimationType@{CairoDockAnimationType}}
+\index{CairoDockAnimationType@{CairoDockAnimationType}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}enum {\bf CairoDockAnimationType}}\label{cairo-dock-struct_8h_72c6f286d96c028feb8d4516820b74d9}
+
+
+\begin{Desc}
+\item[Valeurs énumérées: ]\par
+\begin{description}
+\index{CAIRO_DOCK_BOUNCE@{CAIRO\_\-DOCK\_\-BOUNCE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_BOUNCE@{CAIRO\_\-DOCK\_\-BOUNCE}}\item[{\em 
+CAIRO\_\-DOCK\_\-BOUNCE\label{cairo-dock-struct_8h_72c6f286d96c028feb8d4516820b74d93a1697de8c770147e72ec3749645c360}
+}]\index{CAIRO_DOCK_ROTATE@{CAIRO\_\-DOCK\_\-ROTATE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_ROTATE@{CAIRO\_\-DOCK\_\-ROTATE}}\item[{\em 
+CAIRO\_\-DOCK\_\-ROTATE\label{cairo-dock-struct_8h_72c6f286d96c028feb8d4516820b74d983332b126ea06a637472b3f6f56e270e}
+}]\index{CAIRO_DOCK_BLINK@{CAIRO\_\-DOCK\_\-BLINK}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_BLINK@{CAIRO\_\-DOCK\_\-BLINK}}\item[{\em 
+CAIRO\_\-DOCK\_\-BLINK\label{cairo-dock-struct_8h_72c6f286d96c028feb8d4516820b74d96aea3049d4af64e2262e0dc2c61c95af}
+}]\index{CAIRO_DOCK_PULSE@{CAIRO\_\-DOCK\_\-PULSE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_PULSE@{CAIRO\_\-DOCK\_\-PULSE}}\item[{\em 
+CAIRO\_\-DOCK\_\-PULSE\label{cairo-dock-struct_8h_72c6f286d96c028feb8d4516820b74d9c626dc76b5a4e6bb9e3d64f5f348088f}
+}]\index{CAIRO_DOCK_UPSIDE_DOWN@{CAIRO\_\-DOCK\_\-UPSIDE\_\-DOWN}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_UPSIDE_DOWN@{CAIRO\_\-DOCK\_\-UPSIDE\_\-DOWN}}\item[{\em 
+CAIRO\_\-DOCK\_\-UPSIDE\_\-DOWN\label{cairo-dock-struct_8h_72c6f286d96c028feb8d4516820b74d959dd8f58ecbfeef69f85f009cafededa}
+}]\index{CAIRO_DOCK_WOBBLY@{CAIRO\_\-DOCK\_\-WOBBLY}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_WOBBLY@{CAIRO\_\-DOCK\_\-WOBBLY}}\item[{\em 
+CAIRO\_\-DOCK\_\-WOBBLY\label{cairo-dock-struct_8h_72c6f286d96c028feb8d4516820b74d9ab6edaf44e16284237d354015d5db7ce}
+}]\index{CAIRO_DOCK_RANDOM@{CAIRO\_\-DOCK\_\-RANDOM}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_RANDOM@{CAIRO\_\-DOCK\_\-RANDOM}}\item[{\em 
+CAIRO\_\-DOCK\_\-RANDOM\label{cairo-dock-struct_8h_72c6f286d96c028feb8d4516820b74d9bb7600ec1337ae7ae7640a8a756faff5}
+}]\index{CAIRO_DOCK_NB_ANIMATIONS@{CAIRO\_\-DOCK\_\-NB\_\-ANIMATIONS}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_NB_ANIMATIONS@{CAIRO\_\-DOCK\_\-NB\_\-ANIMATIONS}}\item[{\em 
+CAIRO\_\-DOCK\_\-NB\_\-ANIMATIONS\label{cairo-dock-struct_8h_72c6f286d96c028feb8d4516820b74d98ffd2fad62498050551866fe1fa9ebc1}
+}]\index{CAIRO_DOCK_FOLLOW_MOUSE@{CAIRO\_\-DOCK\_\-FOLLOW\_\-MOUSE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_FOLLOW_MOUSE@{CAIRO\_\-DOCK\_\-FOLLOW\_\-MOUSE}}\item[{\em 
+CAIRO\_\-DOCK\_\-FOLLOW\_\-MOUSE\label{cairo-dock-struct_8h_72c6f286d96c028feb8d4516820b74d9c4de460460575b7af14030798216a533}
+}]\index{CAIRO_DOCK_AVOID_MOUSE@{CAIRO\_\-DOCK\_\-AVOID\_\-MOUSE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_AVOID_MOUSE@{CAIRO\_\-DOCK\_\-AVOID\_\-MOUSE}}\item[{\em 
+CAIRO\_\-DOCK\_\-AVOID\_\-MOUSE\label{cairo-dock-struct_8h_72c6f286d96c028feb8d4516820b74d9daca9344687208a9efcd28784c319270}
+}]\end{description}
+\end{Desc}
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMEventType@{CairoDockFMEventType}}
+\index{CairoDockFMEventType@{CairoDockFMEventType}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}enum {\bf CairoDockFMEventType}}\label{cairo-dock-struct_8h_87d5bf15e6a33b9ac3f56f5c3e568970}
+
+
+\begin{Desc}
+\item[Valeurs énumérées: ]\par
+\begin{description}
+\index{CAIRO_DOCK_FILE_MODIFIED@{CAIRO\_\-DOCK\_\-FILE\_\-MODIFIED}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_FILE_MODIFIED@{CAIRO\_\-DOCK\_\-FILE\_\-MODIFIED}}\item[{\em 
+CAIRO\_\-DOCK\_\-FILE\_\-MODIFIED\label{cairo-dock-struct_8h_87d5bf15e6a33b9ac3f56f5c3e56897017185ee54047c6fa680ebbea85bae133}
+}]\index{CAIRO_DOCK_FILE_DELETED@{CAIRO\_\-DOCK\_\-FILE\_\-DELETED}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_FILE_DELETED@{CAIRO\_\-DOCK\_\-FILE\_\-DELETED}}\item[{\em 
+CAIRO\_\-DOCK\_\-FILE\_\-DELETED\label{cairo-dock-struct_8h_87d5bf15e6a33b9ac3f56f5c3e5689705c1b41c7184a556b2fed5f443066383b}
+}]\index{CAIRO_DOCK_FILE_CREATED@{CAIRO\_\-DOCK\_\-FILE\_\-CREATED}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_FILE_CREATED@{CAIRO\_\-DOCK\_\-FILE\_\-CREATED}}\item[{\em 
+CAIRO\_\-DOCK\_\-FILE\_\-CREATED\label{cairo-dock-struct_8h_87d5bf15e6a33b9ac3f56f5c3e5689701a616fa9706e71fcf7c8d7a83e83ae1d}
+}]\index{CAIRO_DOCK_NB_EVENT_ON_FILES@{CAIRO\_\-DOCK\_\-NB\_\-EVENT\_\-ON\_\-FILES}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_NB_EVENT_ON_FILES@{CAIRO\_\-DOCK\_\-NB\_\-EVENT\_\-ON\_\-FILES}}\item[{\em 
+CAIRO\_\-DOCK\_\-NB\_\-EVENT\_\-ON\_\-FILES\label{cairo-dock-struct_8h_87d5bf15e6a33b9ac3f56f5c3e568970b95201e6db5b40c8f273458c834191dc}
+}]\end{description}
+\end{Desc}
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockFMSortType@{CairoDockFMSortType}}
+\index{CairoDockFMSortType@{CairoDockFMSortType}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}enum {\bf CairoDockFMSortType}}\label{cairo-dock-struct_8h_44bc0366369fedba4ea97ed4c5dbc5ee}
+
+
+\begin{Desc}
+\item[Valeurs énumérées: ]\par
+\begin{description}
+\index{CAIRO_DOCK_FM_SORT_BY_NAME@{CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-NAME}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_FM_SORT_BY_NAME@{CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-NAME}}\item[{\em 
+CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-NAME\label{cairo-dock-struct_8h_44bc0366369fedba4ea97ed4c5dbc5eea2ac2474e14605816890661f8f220f42}
+}]\index{CAIRO_DOCK_FM_SORT_BY_DATE@{CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-DATE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_FM_SORT_BY_DATE@{CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-DATE}}\item[{\em 
+CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-DATE\label{cairo-dock-struct_8h_44bc0366369fedba4ea97ed4c5dbc5ee8cb76c9fe1b89849b92cec105f513816}
+}]\index{CAIRO_DOCK_FM_SORT_BY_SIZE@{CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-SIZE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_FM_SORT_BY_SIZE@{CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-SIZE}}\item[{\em 
+CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-SIZE\label{cairo-dock-struct_8h_44bc0366369fedba4ea97ed4c5dbc5eed3f7e3a10d8979bf9a9d3b5ad2eb355f}
+}]\index{CAIRO_DOCK_FM_SORT_BY_TYPE@{CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-TYPE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_FM_SORT_BY_TYPE@{CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-TYPE}}\item[{\em 
+CAIRO\_\-DOCK\_\-FM\_\-SORT\_\-BY\_\-TYPE\label{cairo-dock-struct_8h_44bc0366369fedba4ea97ed4c5dbc5ee108e6b6306fd10b3e0f4ebfe4cd57d68}
+}]\index{CAIRO_DOCK_NB_SORT_ON_FILE@{CAIRO\_\-DOCK\_\-NB\_\-SORT\_\-ON\_\-FILE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_NB_SORT_ON_FILE@{CAIRO\_\-DOCK\_\-NB\_\-SORT\_\-ON\_\-FILE}}\item[{\em 
+CAIRO\_\-DOCK\_\-NB\_\-SORT\_\-ON\_\-FILE\label{cairo-dock-struct_8h_44bc0366369fedba4ea97ed4c5dbc5ee90186a6793315ca69952942eec3b25b3}
+}]\end{description}
+\end{Desc}
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockSizeType@{CairoDockSizeType}}
+\index{CairoDockSizeType@{CairoDockSizeType}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}enum {\bf CairoDockSizeType}}\label{cairo-dock-struct_8h_76b677ff8cbd287536a3a88e8443f56f}
+
+
+\begin{Desc}
+\item[Valeurs énumérées: ]\par
+\begin{description}
+\index{CAIRO_DOCK_MAX_SIZE@{CAIRO\_\-DOCK\_\-MAX\_\-SIZE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_MAX_SIZE@{CAIRO\_\-DOCK\_\-MAX\_\-SIZE}}\item[{\em 
+CAIRO\_\-DOCK\_\-MAX\_\-SIZE\label{cairo-dock-struct_8h_76b677ff8cbd287536a3a88e8443f56f777ebc6a5dc37d802db42a15d3c8286f}
+}]\index{CAIRO_DOCK_NORMAL_SIZE@{CAIRO\_\-DOCK\_\-NORMAL\_\-SIZE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_NORMAL_SIZE@{CAIRO\_\-DOCK\_\-NORMAL\_\-SIZE}}\item[{\em 
+CAIRO\_\-DOCK\_\-NORMAL\_\-SIZE\label{cairo-dock-struct_8h_76b677ff8cbd287536a3a88e8443f56f0765cc672b3b3ff03f20688c1edf3036}
+}]\index{CAIRO_DOCK_MIN_SIZE@{CAIRO\_\-DOCK\_\-MIN\_\-SIZE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_MIN_SIZE@{CAIRO\_\-DOCK\_\-MIN\_\-SIZE}}\item[{\em 
+CAIRO\_\-DOCK\_\-MIN\_\-SIZE\label{cairo-dock-struct_8h_76b677ff8cbd287536a3a88e8443f56f61fa5590c7fc80370ffc426d19aab7e9}
+}]\end{description}
+\end{Desc}
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockMousePositionType@{CairoDockMousePositionType}}
+\index{CairoDockMousePositionType@{CairoDockMousePositionType}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}enum {\bf CairoDockMousePositionType}}\label{cairo-dock-struct_8h_8381e20c54bf015162ac9a0e38dbbf51}
+
+
+\begin{Desc}
+\item[Valeurs énumérées: ]\par
+\begin{description}
+\index{CAIRO_DOCK_MOUSE_INSIDE@{CAIRO\_\-DOCK\_\-MOUSE\_\-INSIDE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_MOUSE_INSIDE@{CAIRO\_\-DOCK\_\-MOUSE\_\-INSIDE}}\item[{\em 
+CAIRO\_\-DOCK\_\-MOUSE\_\-INSIDE\label{cairo-dock-struct_8h_8381e20c54bf015162ac9a0e38dbbf512cfb313cdaa57768c6cb9a3d32eecc36}
+}]\index{CAIRO_DOCK_MOUSE_ON_THE_EDGE@{CAIRO\_\-DOCK\_\-MOUSE\_\-ON\_\-THE\_\-EDGE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_MOUSE_ON_THE_EDGE@{CAIRO\_\-DOCK\_\-MOUSE\_\-ON\_\-THE\_\-EDGE}}\item[{\em 
+CAIRO\_\-DOCK\_\-MOUSE\_\-ON\_\-THE\_\-EDGE\label{cairo-dock-struct_8h_8381e20c54bf015162ac9a0e38dbbf51beb064df2ab1b4f4b6ac4f457c354c8e}
+}]\index{CAIRO_DOCK_MOUSE_OUTSIDE@{CAIRO\_\-DOCK\_\-MOUSE\_\-OUTSIDE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_MOUSE_OUTSIDE@{CAIRO\_\-DOCK\_\-MOUSE\_\-OUTSIDE}}\item[{\em 
+CAIRO\_\-DOCK\_\-MOUSE\_\-OUTSIDE\label{cairo-dock-struct_8h_8381e20c54bf015162ac9a0e38dbbf5199f5dd0aa1e444ccb78ffeca522cc351}
+}]\end{description}
+\end{Desc}
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockDesktopEnv@{CairoDockDesktopEnv}}
+\index{CairoDockDesktopEnv@{CairoDockDesktopEnv}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}enum {\bf CairoDockDesktopEnv}}\label{cairo-dock-struct_8h_8324649699485e21a6b820e9f8ff77c6}
+
+
+\begin{Desc}
+\item[Valeurs énumérées: ]\par
+\begin{description}
+\index{CAIRO_DOCK_UNKNOWN_ENV@{CAIRO\_\-DOCK\_\-UNKNOWN\_\-ENV}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_UNKNOWN_ENV@{CAIRO\_\-DOCK\_\-UNKNOWN\_\-ENV}}\item[{\em 
+CAIRO\_\-DOCK\_\-UNKNOWN\_\-ENV\label{cairo-dock-struct_8h_8324649699485e21a6b820e9f8ff77c6e076e58115c131407b44d730def1ab9a}
+}]\index{CAIRO_DOCK_GNOME@{CAIRO\_\-DOCK\_\-GNOME}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_GNOME@{CAIRO\_\-DOCK\_\-GNOME}}\item[{\em 
+CAIRO\_\-DOCK\_\-GNOME\label{cairo-dock-struct_8h_8324649699485e21a6b820e9f8ff77c660028f59e68e961e95cd417801b3d00e}
+}]\index{CAIRO_DOCK_KDE@{CAIRO\_\-DOCK\_\-KDE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_KDE@{CAIRO\_\-DOCK\_\-KDE}}\item[{\em 
+CAIRO\_\-DOCK\_\-KDE\label{cairo-dock-struct_8h_8324649699485e21a6b820e9f8ff77c67578c07581e67a486ab9b984d999600b}
+}]\index{CAIRO_DOCK_XFCE@{CAIRO\_\-DOCK\_\-XFCE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_XFCE@{CAIRO\_\-DOCK\_\-XFCE}}\item[{\em 
+CAIRO\_\-DOCK\_\-XFCE\label{cairo-dock-struct_8h_8324649699485e21a6b820e9f8ff77c6960125a6faa4b9456e49d129212c7a9e}
+}]\end{description}
+\end{Desc}
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockPositionType@{CairoDockPositionType}}
+\index{CairoDockPositionType@{CairoDockPositionType}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}enum {\bf CairoDockPositionType}}\label{cairo-dock-struct_8h_94e398e87328844fab776abafdb93f7a}
+
+
+\begin{Desc}
+\item[Valeurs énumérées: ]\par
+\begin{description}
+\index{CAIRO_DOCK_BOTTOM@{CAIRO\_\-DOCK\_\-BOTTOM}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_BOTTOM@{CAIRO\_\-DOCK\_\-BOTTOM}}\item[{\em 
+CAIRO\_\-DOCK\_\-BOTTOM\label{cairo-dock-struct_8h_94e398e87328844fab776abafdb93f7a2b8e63c79f130fab88e7cc9433ca1c4f}
+}]\index{CAIRO_DOCK_TOP@{CAIRO\_\-DOCK\_\-TOP}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_TOP@{CAIRO\_\-DOCK\_\-TOP}}\item[{\em 
+CAIRO\_\-DOCK\_\-TOP\label{cairo-dock-struct_8h_94e398e87328844fab776abafdb93f7a95547f98f236f1565cb770413f1e1aef}
+}]\index{CAIRO_DOCK_LEFT@{CAIRO\_\-DOCK\_\-LEFT}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_LEFT@{CAIRO\_\-DOCK\_\-LEFT}}\item[{\em 
+CAIRO\_\-DOCK\_\-LEFT\label{cairo-dock-struct_8h_94e398e87328844fab776abafdb93f7abb89e7fc53b41caa33bc859ee28542cd}
+}]\index{CAIRO_DOCK_RIGHT@{CAIRO\_\-DOCK\_\-RIGHT}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_RIGHT@{CAIRO\_\-DOCK\_\-RIGHT}}\item[{\em 
+CAIRO\_\-DOCK\_\-RIGHT\label{cairo-dock-struct_8h_94e398e87328844fab776abafdb93f7a41d784814bdb0d2c7b99590b668fdb76}
+}]\index{CAIRO_DOCK_NB_POSITIONS@{CAIRO\_\-DOCK\_\-NB\_\-POSITIONS}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_NB_POSITIONS@{CAIRO\_\-DOCK\_\-NB\_\-POSITIONS}}\item[{\em 
+CAIRO\_\-DOCK\_\-NB\_\-POSITIONS\label{cairo-dock-struct_8h_94e398e87328844fab776abafdb93f7af045ba72ea5fe0503a1e57cf8db6dd8f}
+}]\end{description}
+\end{Desc}
+
+\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CairoDockNewLauncherType@{CairoDockNewLauncherType}}
+\index{CairoDockNewLauncherType@{CairoDockNewLauncherType}!cairo-dock-struct.h@{cairo-dock-struct.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}enum {\bf CairoDockNewLauncherType}}\label{cairo-dock-struct_8h_0ea8cd781fc6011eff7a014859699547}
+
+
+\begin{Desc}
+\item[Valeurs énumérées: ]\par
+\begin{description}
+\index{CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE@{CAIRO\_\-DOCK\_\-LAUNCHER\_\-FROM\_\-DESKTOP\_\-FILE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE@{CAIRO\_\-DOCK\_\-LAUNCHER\_\-FROM\_\-DESKTOP\_\-FILE}}\item[{\em 
+CAIRO\_\-DOCK\_\-LAUNCHER\_\-FROM\_\-DESKTOP\_\-FILE\label{cairo-dock-struct_8h_0ea8cd781fc6011eff7a014859699547c0a0f44c16b3a6d4888c83670f565f36}
+}]\index{CAIRO_DOCK_LAUNCHER_FOR_CONTAINER@{CAIRO\_\-DOCK\_\-LAUNCHER\_\-FOR\_\-CONTAINER}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_LAUNCHER_FOR_CONTAINER@{CAIRO\_\-DOCK\_\-LAUNCHER\_\-FOR\_\-CONTAINER}}\item[{\em 
+CAIRO\_\-DOCK\_\-LAUNCHER\_\-FOR\_\-CONTAINER\label{cairo-dock-struct_8h_0ea8cd781fc6011eff7a014859699547140f3d53d01993695d548b45fd99c29e}
+}]\index{CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR@{CAIRO\_\-DOCK\_\-LAUNCHER\_\-FOR\_\-SEPARATOR}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR@{CAIRO\_\-DOCK\_\-LAUNCHER\_\-FOR\_\-SEPARATOR}}\item[{\em 
+CAIRO\_\-DOCK\_\-LAUNCHER\_\-FOR\_\-SEPARATOR\label{cairo-dock-struct_8h_0ea8cd781fc6011eff7a01485969954744321831d69ed5ec39b8527c2782e1c1}
+}]\index{CAIRO_DOCK_NB_NEW_LAUNCHER_TYPE@{CAIRO\_\-DOCK\_\-NB\_\-NEW\_\-LAUNCHER\_\-TYPE}!cairo-dock-struct.h@{cairo-dock-struct.h}}\index{cairo-dock-struct.h@{cairo-dock-struct.h}!CAIRO_DOCK_NB_NEW_LAUNCHER_TYPE@{CAIRO\_\-DOCK\_\-NB\_\-NEW\_\-LAUNCHER\_\-TYPE}}\item[{\em 
+CAIRO\_\-DOCK\_\-NB\_\-NEW\_\-LAUNCHER\_\-TYPE\label{cairo-dock-struct_8h_0ea8cd781fc6011eff7a014859699547a2e25854dd6ca94338557bd59e947178}
+}]\end{description}
+\end{Desc}
+

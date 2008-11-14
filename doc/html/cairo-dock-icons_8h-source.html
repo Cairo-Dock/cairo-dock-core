@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Cairo-Dock:  Fichier source de /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-icons.h</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="tabs.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Généré par Doxygen 1.5.3 -->
+<div class="tabs">
+  <ul>
+    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
+    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+    <li>
+      <form action="search.php" method="get">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td><label>&nbsp;Rechercher&nbsp;</label></td>
+            <td><input type="text" name="query" value="" size="20" accesskey="s"/></td>
+          </tr>
+        </table>
+      </form>
+    </li>
+  </ul>
+</div>
+<h1>/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-icons.h</h1><a href="cairo-dock-icons_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
+<a name="l00002"></a>00002 <span class="preprocessor">#ifndef __CAIRO_DOCK_ICONS__</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span><span class="preprocessor">#define  __CAIRO_DOCK_ICONS__</span>
+<a name="l00004"></a>00004 <span class="preprocessor"></span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;glib.h&gt;</span>
+<a name="l00006"></a>00006 
+<a name="l00007"></a>00007 <span class="preprocessor">#include "<a class="code" href="cairo-dock-struct_8h.html">cairo-dock-struct.h</a>"</span>
+<a name="l00008"></a>00008 
+<a name="l00013"></a><a class="code" href="cairo-dock-icons_8h.html#168c94ad9d2454c1b5184144ce14619b">00013</a> <span class="preprocessor">#define CAIRO_DOCK_IS_LAUNCHER(icon) (icon != NULL &amp;&amp; (icon-&gt;acCommand != NULL || (icon-&gt;pSubDock != NULL &amp;&amp; icon-&gt;pModule == NULL &amp;&amp; icon-&gt;Xid == 0)))</span>
+<a name="l00014"></a>00014 <span class="preprocessor"></span>
+<a name="l00018"></a><a class="code" href="cairo-dock-icons_8h.html#761b6ff927a501c49e5c26849094a141">00018</a> <span class="preprocessor">#define CAIRO_DOCK_IS_APPLI(icon) (icon != NULL &amp;&amp; icon-&gt;Xid != 0)</span>
+<a name="l00019"></a>00019 <span class="preprocessor"></span>
+<a name="l00023"></a><a class="code" href="cairo-dock-icons_8h.html#71ae24f5e49a27e52e7175f0081e5f44">00023</a> <span class="preprocessor">#define CAIRO_DOCK_IS_APPLET(icon) (icon != NULL &amp;&amp; icon-&gt;pModule != NULL)</span>
+<a name="l00024"></a>00024 <span class="preprocessor"></span>
+<a name="l00028"></a><a class="code" href="cairo-dock-icons_8h.html#9d30c0a85b089a0d98a428015d107f86">00028</a> <span class="preprocessor">#define CAIRO_DOCK_IS_SEPARATOR(icon) (icon != NULL &amp;&amp; ((icon-&gt;iType &amp; 1) || (icon-&gt;pModule == NULL &amp;&amp; icon-&gt;Xid == 0 &amp;&amp; icon-&gt;acName == NULL)))</span>
+<a name="l00029"></a>00029 <span class="preprocessor"></span>
+<a name="l00034"></a><a class="code" href="cairo-dock-icons_8h.html#f44e2138fd7058738ee48e5aaff1f403">00034</a> <span class="preprocessor">#define CAIRO_DOCK_IS_NORMAL_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) &amp;&amp; icon-&gt;acDesktopFileName != NULL)</span>
+<a name="l00035"></a>00035 <span class="preprocessor"></span>
+<a name="l00039"></a><a class="code" href="cairo-dock-icons_8h.html#14acecf1e96723ddcb10ac01f5bb8174">00039</a> <span class="preprocessor">#define CAIRO_DOCK_IS_URI_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) &amp;&amp; icon-&gt;cBaseURI != NULL)</span>
+<a name="l00040"></a>00040 <span class="preprocessor"></span>
+<a name="l00044"></a><a class="code" href="cairo-dock-icons_8h.html#0abf7855cd414ec53bca3154325c5012">00044</a> <span class="preprocessor">#define CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR(icon) (CAIRO_DOCK_IS_SEPARATOR (icon) &amp;&amp; icon-&gt;acDesktopFileName == NULL)</span>
+<a name="l00045"></a>00045 <span class="preprocessor"></span>
+<a name="l00049"></a><a class="code" href="cairo-dock-icons_8h.html#532a67abe9511660a5bfbf736e03d80d">00049</a> <span class="preprocessor">#define CAIRO_DOCK_IS_USER_SEPARATOR(icon) (CAIRO_DOCK_IS_SEPARATOR (icon) &amp;&amp; icon-&gt;acDesktopFileName != NULL)</span>
+<a name="l00050"></a>00050 <span class="preprocessor"></span>
+<a name="l00054"></a><a class="code" href="cairo-dock-icons_8h.html#6f3526bc8678e7cdef8eddcd8eccb80c">00054</a> <span class="preprocessor">#define CAIRO_DOCK_IS_NORMAL_APPLI(icon) (CAIRO_DOCK_IS_APPLI (icon) &amp;&amp; icon-&gt;acDesktopFileName == NULL &amp;&amp; icon-&gt;pModule == NULL)</span>
+<a name="l00055"></a>00055 <span class="preprocessor"></span>
+<a name="l00060"></a>00060 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-icons_8h.html#f54199a4215a71f8b017ceb6512366f9">cairo_dock_free_icon</a> (<a class="code" href="struct__Icon.html">Icon</a> *icon);
+<a name="l00065"></a>00065 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-icons_8h.html#51da2563344e8d90fb9c36185c77e715">cairo_dock_free_icon_buffers</a> (<a class="code" href="struct__Icon.html">Icon</a> *icon);
+<a name="l00066"></a>00066 
+<a name="l00067"></a>00067 
+<a name="l00068"></a><a class="code" href="cairo-dock-icons_8h.html#322be2818009e6937b1047de969c7a94">00068</a> <span class="preprocessor">#define cairo_dock_get_group_order(icon) (icon-&gt;iType &lt; CAIRO_DOCK_NB_TYPES ? g_tIconTypeOrder[icon-&gt;iType] : icon-&gt;iType)</span>
+<a name="l00069"></a>00069 <span class="preprocessor"></span>
+<a name="l00074"></a>00074 <a class="code" href="cairo-dock-struct_8h.html#bab3fe5b912f0abef3f1e2b0b4b44e4e">CairoDockIconType</a> <a class="code" href="cairo-dock-icons_8h.html#efe65917a776a2275bd6aac778c6708b">cairo_dock_get_icon_type</a> (<a class="code" href="struct__Icon.html">Icon</a> *icon);
+<a name="l00081"></a>00081 <span class="keywordtype">int</span> <a class="code" href="cairo-dock-icons_8h.html#a4e008f173bb3255251da119e4173c3b">cairo_dock_compare_icons_order</a> (<a class="code" href="struct__Icon.html">Icon</a> *icon1, <a class="code" href="struct__Icon.html">Icon</a> *icon2);
+<a name="l00087"></a>00087 GList *<a class="code" href="cairo-dock-icons_8h.html#f1bef19a6b85b6a6e27feb40cefd400b">cairo_dock_sort_icons_by_order</a> (GList *pIconList);
+<a name="l00093"></a>00093 GList *<a class="code" href="cairo-dock-icons_8h.html#a78c3612a56f84f0e0765bd26c7510a4">cairo_dock_sort_icons_by_name</a> (GList *pIconList);
+<a name="l00094"></a>00094 
+<a name="l00101"></a>00101 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#a33afd0fe00295cedadd9f7ef73d8b1e">cairo_dock_get_first_icon</a> (GList *pIconList);
+<a name="l00107"></a>00107 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#dbfc665a5e83340a487626894db56333">cairo_dock_get_last_icon</a> (GList *pIconList);
+<a name="l00113"></a>00113 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#6c95bef22b883b260f1ff3537c7fdc44">cairo_dock_get_first_drawn_icon</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00119"></a>00119 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#1b554df6ac772507962a71409d457ea5">cairo_dock_get_last_drawn_icon</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00126"></a>00126 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#9a7036812e508856128697b1c8b39c32">cairo_dock_get_first_icon_of_type</a> (GList *pIconList, <a class="code" href="cairo-dock-struct_8h.html#bab3fe5b912f0abef3f1e2b0b4b44e4e">CairoDockIconType</a> iType);
+<a name="l00133"></a>00133 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#93932d590d2ac32c52a2726f5c497334">cairo_dock_get_last_icon_of_type</a> (GList *pIconList, <a class="code" href="cairo-dock-struct_8h.html#bab3fe5b912f0abef3f1e2b0b4b44e4e">CairoDockIconType</a> iType);
+<a name="l00139"></a>00139 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#4e8cf7b6a3e5f061e6e18010ba9da590">cairo_dock_get_pointed_icon</a> (GList *pIconList);
+<a name="l00145"></a>00145 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#532844978ed82d7672e33e81a3fcf6a4">cairo_dock_get_bouncing_icon</a> (GList *pIconList);
+<a name="l00151"></a>00151 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#189d2744f7e2343c1ad465a3322bbd2e">cairo_dock_get_removing_or_inserting_icon</a> (GList *pIconList);
+<a name="l00157"></a>00157 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#a06250cef09ef759aa1ad5d6cd857ab1">cairo_dock_get_animated_icon</a> (GList *pIconList);
+<a name="l00164"></a>00164 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#9175d5e7c32d59cf31f7f70d6530f815">cairo_dock_get_next_icon</a> (GList *pIconList, <a class="code" href="struct__Icon.html">Icon</a> *pIcon);
+<a name="l00171"></a>00171 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#da24c66ec41597d0fa95a0b6a2ac1c2f">cairo_dock_get_previous_icon</a> (GList *pIconList, <a class="code" href="struct__Icon.html">Icon</a> *pIcon);
+<a name="l00178"></a><a class="code" href="cairo-dock-icons_8h.html#7ccbc1fbff09a250d0c35632113a9aa3">00178</a> <span class="preprocessor">#define cairo_dock_get_next_element(ic, list) (ic-&gt;next == NULL ? list : ic-&gt;next)</span>
+<a name="l00179"></a>00179 <span class="preprocessor"></span>
+<a name="l00185"></a><a class="code" href="cairo-dock-icons_8h.html#0340461148f53589f1caad5d96115336">00185</a> <span class="preprocessor">#define cairo_dock_get_previous_element(ic, list) (ic-&gt;prev == NULL ? g_list_last (list) : ic-&gt;prev)</span>
+<a name="l00186"></a>00186 <span class="preprocessor"></span>
+<a name="l00192"></a>00192 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#f472e108228239776b9074576813cf9e">cairo_dock_get_icon_with_command</a> (GList *pIconList, gchar *cCommand);
+<a name="l00199"></a>00199 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#69a58cbad5053a3565a1af4a3463c8bd">cairo_dock_get_icon_with_base_uri</a> (GList *pIconList, <span class="keyword">const</span> gchar *cBaseURI);
+<a name="l00200"></a>00200 
+<a name="l00201"></a>00201 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#dc3370183c80eae97354fa58f735c567">cairo_dock_get_icon_with_name</a> (GList *pIconList, <span class="keyword">const</span> gchar *cName);
+<a name="l00202"></a>00202 
+<a name="l00209"></a>00209 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#87b911e3bc92d45896c945589290d586">cairo_dock_get_icon_with_subdock</a> (GList *pIconList, <a class="code" href="struct__CairoDock.html">CairoDock</a> *pSubDock);
+<a name="l00216"></a>00216 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#4d6bf4d25995b5e7afb89b5b47180494">cairo_dock_get_icon_with_module</a> (GList *pIconList, <a class="code" href="struct__CairoDockModule.html">CairoDockModule</a> *pModule);
+<a name="l00223"></a>00223 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#03e5049b05266883f78ceea9622e5a98">cairo_dock_get_icon_with_class</a> (GList *pIconList, gchar *cClass);
+<a name="l00224"></a>00224 
+<a name="l00225"></a><a class="code" href="cairo-dock-icons_8h.html#e5282fefc988c2a65045550444344016">00225</a> <span class="preprocessor">#define cairo_dock_none_clicked(pIconList) (cairo_dock_get_bouncing_icon (pIconList) == NULL)</span>
+<a name="l00226"></a><a class="code" href="cairo-dock-icons_8h.html#2ac56d936096e5713e93f970ad3a985e">00226</a> <span class="preprocessor"></span><span class="preprocessor">#define cairo_dock_none_removed_or_inserted(pIconList) (cairo_dock_get_removing_or_inserting_icon (pIconList) == NULL)</span>
+<a name="l00227"></a><a class="code" href="cairo-dock-icons_8h.html#d1767dbbe56e68d1a9dcca1ffbfafc9b">00227</a> <span class="preprocessor"></span><span class="preprocessor">#define cairo_dock_none_animated(pIconList) (cairo_dock_get_animated_icon (pIconList) == NULL)</span>
+<a name="l00228"></a>00228 <span class="preprocessor"></span>
+<a name="l00229"></a><a class="code" href="cairo-dock-icons_8h.html#0f4e8bb095f67bc1694c78f61de81a6b">00229</a> <span class="preprocessor">#define cairo_dock_get_first_launcher(pIconList) cairo_dock_get_first_icon_of_type (pIconList, CAIRO_DOCK_LAUNCHER)</span>
+<a name="l00230"></a><a class="code" href="cairo-dock-icons_8h.html#4605604eb6d4f170545f76885970ff99">00230</a> <span class="preprocessor"></span><span class="preprocessor">#define cairo_dock_get_last_launcher(pIconList) cairo_dock_get_last_icon_of_type (pIconList, CAIRO_DOCK_LAUNCHER)</span>
+<a name="l00231"></a><a class="code" href="cairo-dock-icons_8h.html#4780dafa3eb3444ed23d0bc143bdc02d">00231</a> <span class="preprocessor"></span><span class="preprocessor">#define cairo_dock_get_first_appli(pIconList) cairo_dock_get_first_icon_of_type (pIconList, CAIRO_DOCK_APPLI)</span>
+<a name="l00232"></a><a class="code" href="cairo-dock-icons_8h.html#27200a190c2b4509d88f031a7d6644fd">00232</a> <span class="preprocessor"></span><span class="preprocessor">#define cairo_dock_get_last_appli(pIconList) cairo_dock_get_last_icon_of_type (pIconList, CAIRO_DOCK_APPLI)</span>
+<a name="l00233"></a>00233 <span class="preprocessor"></span>
+<a name="l00234"></a>00234 
+<a name="l00235"></a>00235 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-icons_8h.html#c02977792baa2a21b716d1787ddb3d66">cairo_dock_swap_icons</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="code" href="struct__Icon.html">Icon</a> *icon1, <a class="code" href="struct__Icon.html">Icon</a> *icon2);
+<a name="l00236"></a>00236 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-icons_8h.html#b74f1ffc9f9fa74089e88fc6650632db">cairo_dock_move_icon_after_icon</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="code" href="struct__Icon.html">Icon</a> *icon1, <a class="code" href="struct__Icon.html">Icon</a> *icon2);
+<a name="l00237"></a>00237 
+<a name="l00245"></a>00245 gboolean <a class="code" href="cairo-dock-icons_8h.html#612fb1983b7cee66c5724a57610e5688">cairo_dock_detach_icon_from_dock</a> (<a class="code" href="struct__Icon.html">Icon</a> *icon, <a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, gboolean bCheckUnusedSeparator);
+<a name="l00251"></a>00251 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-icons_8h.html#d66a0e6a2a1922353b51d07c8f07423e">cairo_dock_remove_one_icon_from_dock</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="code" href="struct__Icon.html">Icon</a> *icon);
+<a name="l00257"></a>00257 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-icons_8h.html#7a43c7c13c5d65eca70bb4dd5161520f">cairo_dock_remove_icon_from_dock</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="code" href="struct__Icon.html">Icon</a> *icon);
+<a name="l00263"></a>00263 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-icons_8h.html#b27435756459370bf38b0edb0ac912e8">cairo_dock_remove_icons_of_type</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="code" href="cairo-dock-struct_8h.html#bab3fe5b912f0abef3f1e2b0b4b44e4e">CairoDockIconType</a> iType);
+<a name="l00268"></a><a class="code" href="cairo-dock-icons_8h.html#f175647b17ec66d6a2edeca1103f2615">00268</a> <span class="preprocessor">#define cairo_dock_remove_all_applis(pDock) cairo_dock_remove_icons_of_type (pDock, CAIRO_DOCK_APPLI)</span>
+<a name="l00269"></a>00269 <span class="preprocessor"></span>
+<a name="l00273"></a><a class="code" href="cairo-dock-icons_8h.html#e074743a16695924ea1449fc0d7f42ef">00273</a> <span class="preprocessor">#define cairo_dock_remove_all_applets(pDock) cairo_dock_remove_icons_of_type (pDock, CAIRO_DOCK_APPLET)</span>
+<a name="l00274"></a>00274 <span class="preprocessor"></span>
+<a name="l00282"></a>00282 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#47cf0eb7c65345840ac1e3765427fb5d">cairo_dock_foreach_icons_of_type</a> (GList *pIconList, <a class="code" href="cairo-dock-struct_8h.html#bab3fe5b912f0abef3f1e2b0b4b44e4e">CairoDockIconType</a> iType, <a class="code" href="cairo-dock-struct_8h.html#f25406ea86cbce694f6a956f979d21ee">CairoDockForeachIconFunc</a> pFuntion, gpointer data);
+<a name="l00287"></a>00287 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-icons_8h.html#f2b6ce6d65ba32099af9d5321f751d3f">cairo_dock_remove_all_separators</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00288"></a>00288 
+<a name="l00293"></a>00293 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-icons_8h.html#4682e00c88df4fe4886f140154323a6d">cairo_dock_insert_separators_in_dock</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00294"></a>00294 
+<a name="l00295"></a>00295 
+<a name="l00296"></a>00296 GList * <a class="code" href="cairo-dock-icons_8h.html#f7edef4dbc95f202a6bb26b219486048">cairo_dock_calculate_icons_positions_at_rest_linear</a> (GList *pIconList, <span class="keywordtype">double</span> fFlatDockWidth, <span class="keywordtype">int</span> iXOffset);
+<a name="l00297"></a>00297 
+<a name="l00298"></a>00298 <a class="code" href="struct__Icon.html">Icon</a> * <a class="code" href="cairo-dock-icons_8h.html#fff29e753108af48dc3a99995b313711">cairo_dock_calculate_wave_with_position_linear</a> (GList *pIconList, GList *pFirstDrawnElement, <span class="keywordtype">int</span> x_abs, gdouble fMagnitude, <span class="keywordtype">double</span> fFlatDockWidth, <span class="keywordtype">int</span> iWidth, <span class="keywordtype">int</span> iHeight, <span class="keywordtype">double</span> fAlign, <span class="keywordtype">double</span> fLateralFactor);
+<a name="l00299"></a>00299 
+<a name="l00300"></a>00300 <a class="code" href="struct__Icon.html">Icon</a> *<a class="code" href="cairo-dock-icons_8h.html#3754e21213c6d9c5e9a8e096f0f65cbe">cairo_dock_apply_wave_effect</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00301"></a>00301 
+<a name="l00302"></a>00302 <a class="code" href="cairo-dock-struct_8h.html#8381e20c54bf015162ac9a0e38dbbf51">CairoDockMousePositionType</a> <a class="code" href="cairo-dock-icons_8h.html#2ec7a7123586aa8cb88600e491d300ec">cairo_dock_check_if_mouse_inside_linear</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00303"></a>00303 
+<a name="l00304"></a>00304 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-icons_8h.html#4e6a111da5db5afd996af79e910d2da9">cairo_dock_manage_mouse_position</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="code" href="cairo-dock-struct_8h.html#8381e20c54bf015162ac9a0e38dbbf51">CairoDockMousePositionType</a> iMousePositionType);
+<a name="l00305"></a>00305 
+<a name="l00306"></a>00306 
+<a name="l00307"></a>00307 <span class="keywordtype">double</span> <a class="code" href="cairo-dock-icons_8h.html#ddd4a7421b48c855869a6ba6f0b5fee4">cairo_dock_calculate_max_dock_width</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, GList *pFirstDrawnElement, <span class="keywordtype">double</span> fFlatDockWidth, <span class="keywordtype">double</span> fWidthConstraintFactor, <span class="keywordtype">double</span> fExtraWidth);
+<a name="l00308"></a>00308 
+<a name="l00309"></a>00309 
+<a name="l00310"></a>00310 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-icons_8h.html#d9ad4d443f515bf41830a4fc6a399389">cairo_dock_mark_icons_as_avoiding_mouse</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="code" href="cairo-dock-struct_8h.html#bab3fe5b912f0abef3f1e2b0b4b44e4e">CairoDockIconType</a> iType, <span class="keywordtype">double</span> fMargin);
+<a name="l00311"></a>00311 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-icons_8h.html#5ec554e58fcd78bec57719d61e58f36f">cairo_dock_mark_avoiding_mouse_icons_linear</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00312"></a>00312 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-icons_8h.html#dbc8afc5e49eb94aac6da82ce5b192c0">cairo_dock_stop_marking_icons</a> (<a class="code" href="struct__CairoDock.html">CairoDock</a> *pDock);
+<a name="l00313"></a>00313 
+<a name="l00319"></a>00319 <span class="keywordtype">void</span> <a class="code" href="cairo-dock-icons_8h.html#639e91371f54d7919a62da62a1aa974f">cairo_dock_update_icon_s_container_name</a> (<a class="code" href="struct__Icon.html">Icon</a> *icon, <span class="keyword">const</span> gchar *cNewParentDockName);
+<a name="l00320"></a>00320 
+<a name="l00321"></a>00321 <span class="preprocessor">#endif</span>
+<a name="l00322"></a>00322 <span class="preprocessor"></span>
+</pre></div><hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:15 2008 pour Cairo-Dock par&nbsp;
+<a href="http://www.doxygen.org/index.html">
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+</body>
+</html>

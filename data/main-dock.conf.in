@@ -1,0 +1,32 @@
+#!en;@VERSION@
+######## This is the conf file of main docks.##########
+######## It is parsed by cairo-dock to automatically generate an appropriate GUI,##########
+######## so don't mess into it, except if you know what you're doing ! ;-)##########
+
+#[gtk-fullscreen]
+[Position]
+
+#F-[Position on the screen;gtk-fullscreen]
+frame1 =
+
+#r-[bottom;top;right;left] Choose the screen border regarding to which the dock will place itself :
+#{The icons will scroll according to the chosen placement type. Of course the dock can be placed anywhere on the screen, here we specify regarding to what.}
+screen border = 0
+
+#e-[0.;1.] Relative alignment :
+#{At 0, the dock will place itself regarding the left corner if horizontal and the top corner if vertical, at 1 regarding the right corner if horizontal and the bottom corner if vertical, and at 0.5, regarding the middle of the screen's edge.}
+alignment = .5
+
+#F-[Position regarding the chosen screen's edge;gtk-leave-fullscreen]
+frame2 =
+
+#i-[-1024;1024] Lateral gap :
+#{Gap from the absolute position on the screen's edge, in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.}
+x gap = 0
+#i-[-20;2000] Distance to the screen's edge :
+#{in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.}
+y gap = 25
+
+#b- Activate auto-hide ?
+#{The dock will automatically hide itself outside of the scren when the mouse leaves it and will show a callback zone instead. Place the mouse into this zone will make the dock re-appear.}
+auto-hide = false

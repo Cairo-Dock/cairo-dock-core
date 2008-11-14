@@ -1,0 +1,219 @@
+\section{Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-class-manager.h}
+\label{cairo-dock-class-manager_8h}\index{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-class-manager.h@{/opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-class-manager.h}}
+\subsection*{Fonctions}
+\begin{CompactItemize}
+\item 
+void {\bf cairo\_\-dock\_\-initialize\_\-class\_\-manager} (void)
+\item 
+void {\bf cairo\_\-dock\_\-free\_\-class\_\-appli} ({\bf CairoDockClassAppli} $\ast$pClassAppli)
+\item 
+const GList $\ast$ {\bf cairo\_\-dock\_\-list\_\-existing\_\-appli\_\-with\_\-class} (const gchar $\ast$cClass)
+\item 
+gboolean {\bf cairo\_\-dock\_\-add\_\-appli\_\-to\_\-class} ({\bf Icon} $\ast$pIcon)
+\item 
+gboolean {\bf cairo\_\-dock\_\-remove\_\-appli\_\-from\_\-class} ({\bf Icon} $\ast$pIcon)
+\item 
+gboolean {\bf cairo\_\-dock\_\-set\_\-class\_\-use\_\-xicon} (const gchar $\ast$cClass, gboolean bUseXIcon)
+\item 
+gboolean {\bf cairo\_\-dock\_\-inhibate\_\-class} (const gchar $\ast$cClass, {\bf Icon} $\ast$pInhibatorIcon)
+\item 
+gboolean {\bf cairo\_\-dock\_\-class\_\-is\_\-inhibated} (const gchar $\ast$cClass)
+\item 
+gboolean {\bf cairo\_\-dock\_\-class\_\-is\_\-using\_\-xicon} (const gchar $\ast$cClass)
+\item 
+gboolean {\bf cairo\_\-dock\_\-prevent\_\-inhibated\_\-class} ({\bf Icon} $\ast$pIcon)
+\item 
+gboolean {\bf cairo\_\-dock\_\-remove\_\-icon\_\-from\_\-class} ({\bf Icon} $\ast$pInhibatorIcon)
+\item 
+void {\bf cairo\_\-dock\_\-deinhibate\_\-class} (const gchar $\ast$cClass, {\bf Icon} $\ast$pInhibatorIcon)
+\item 
+void {\bf cairo\_\-dock\_\-update\_\-Xid\_\-on\_\-inhibators} (Window Xid, const gchar $\ast$cClass)
+\item 
+void {\bf cairo\_\-dock\_\-remove\_\-all\_\-applis\_\-from\_\-class\_\-table} (void)
+\item 
+void {\bf cairo\_\-dock\_\-reset\_\-class\_\-table} (void)
+\item 
+cairo\_\-surface\_\-t $\ast$ {\bf cairo\_\-dock\_\-create\_\-surface\_\-from\_\-class} (gchar $\ast$cClass, cairo\_\-t $\ast$pSourceContext, double fMaxScale, double $\ast$fWidth, double $\ast$fHeight)
+\item 
+void {\bf cairo\_\-dock\_\-update\_\-visibility\_\-on\_\-inhibators} (gchar $\ast$cClass, Window Xid, gboolean bIsHidden)
+\item 
+void {\bf cairo\_\-dock\_\-update\_\-activity\_\-on\_\-inhibators} (gchar $\ast$cClass, Window Xid)
+\end{CompactItemize}
+
+
+\subsection{Documentation des fonctions}
+\index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_initialize_class_manager@{cairo\_\-dock\_\-initialize\_\-class\_\-manager}}
+\index{cairo_dock_initialize_class_manager@{cairo\_\-dock\_\-initialize\_\-class\_\-manager}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-initialize\_\-class\_\-manager (void)}\label{cairo-dock-class-manager_8h_379149f84a7b56323ab5be1389470c5c}
+
+
+Initialise le gestionnaire de classes. Ne fait rien la 2eme fois. \index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_free_class_appli@{cairo\_\-dock\_\-free\_\-class\_\-appli}}
+\index{cairo_dock_free_class_appli@{cairo\_\-dock\_\-free\_\-class\_\-appli}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-free\_\-class\_\-appli ({\bf CairoDockClassAppli} $\ast$ {\em pClassAppli})}\label{cairo-dock-class-manager_8h_c480e21484f875cbddefbf973d04ee77}
+
+
+Libere une classe d'appli, en enlevant au passage tous les indicateurs des inhibiteurs de cette classe. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pClassAppli}]la classe d'appli. \end{description}
+\end{Desc}
+\index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_list_existing_appli_with_class@{cairo\_\-dock\_\-list\_\-existing\_\-appli\_\-with\_\-class}}
+\index{cairo_dock_list_existing_appli_with_class@{cairo\_\-dock\_\-list\_\-existing\_\-appli\_\-with\_\-class}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}const GList$\ast$ cairo\_\-dock\_\-list\_\-existing\_\-appli\_\-with\_\-class (const gchar $\ast$ {\em cClass})}\label{cairo-dock-class-manager_8h_faf33ade4aa3c5696507e023886b5367}
+
+
+Fournit la liste de toutes les applis connues du dock appartenant a cette classe. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cClass}]la classe. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]la liste des applis de cettte classe. \end{Desc}
+\index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_add_appli_to_class@{cairo\_\-dock\_\-add\_\-appli\_\-to\_\-class}}
+\index{cairo_dock_add_appli_to_class@{cairo\_\-dock\_\-add\_\-appli\_\-to\_\-class}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-add\_\-appli\_\-to\_\-class ({\bf Icon} $\ast$ {\em pIcon})}\label{cairo-dock-class-manager_8h_252931b6e9b1806cdb5a02eb7daf8bb5}
+
+
+Enregistre une icone d'appli dans sa classe. Ne fais rien aux inhibiteurs. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pIcon}]l'icone de l'appli. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]TRUE si l'enregistrement s'est effectue correctement ou si l'appli etait deja enregistree, FALSE sinon. \end{Desc}
+\index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_remove_appli_from_class@{cairo\_\-dock\_\-remove\_\-appli\_\-from\_\-class}}
+\index{cairo_dock_remove_appli_from_class@{cairo\_\-dock\_\-remove\_\-appli\_\-from\_\-class}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-remove\_\-appli\_\-from\_\-class ({\bf Icon} $\ast$ {\em pIcon})}\label{cairo-dock-class-manager_8h_ce18967c63ea26e22cb17af54b7fb9c0}
+
+
+Desenregistre une icone d'appli de sa classe. Ne fais rien aux inhibiteurs. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pIcon}]l'icone de l'appli. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]TRUE si le desenregistrement s'est effectue correctement ou si elle n'etait pas enregistree, FALSE sinon. \end{Desc}
+\index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_set_class_use_xicon@{cairo\_\-dock\_\-set\_\-class\_\-use\_\-xicon}}
+\index{cairo_dock_set_class_use_xicon@{cairo\_\-dock\_\-set\_\-class\_\-use\_\-xicon}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-set\_\-class\_\-use\_\-xicon (const gchar $\ast$ {\em cClass}, gboolean {\em bUseXIcon})}\label{cairo-dock-class-manager_8h_4dbc6a4e56979df736691b74cf92fa12}
+
+
+Force les applis d'une classe a utiliser ou non les icones fournies par X. Dans le cas ou elles ne les utilisent pas, elle utiliseront les memes icones que leur lanceur correspondant s'il existe. Recharge leur buffer en consequence, mais ne force pas le redessin. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cClass}]la classe. \item[{\em bUseXIcon}]TRUE pour utiliser l'icone fournie par X, FALSE sinon. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]TRUE si l'etat a change, FALSE sinon. \end{Desc}
+\index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_inhibate_class@{cairo\_\-dock\_\-inhibate\_\-class}}
+\index{cairo_dock_inhibate_class@{cairo\_\-dock\_\-inhibate\_\-class}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-inhibate\_\-class (const gchar $\ast$ {\em cClass}, {\bf Icon} $\ast$ {\em pInhibatorIcon})}\label{cairo-dock-class-manager_8h_d0c60072537aa926ce98c16bc3902cd9}
+
+
+Ajoute un inhibiteur a une classe, et lui fait prendre immediatement le controle de la 1ere appli de cette classe trouvee, la detachant du dock. Rajoute l'indicateur si necessaire, et redessine le dock d'ou l'appli a ete enlevee, mais ne redessine pas l'icone inhibitrice. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cClass}]la classe. \item[{\em pInhibatorIcon}]l'inhibiteur. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]TRUE si l'inhibiteur a bien ete rajoute a la classe. \end{Desc}
+\index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_class_is_inhibated@{cairo\_\-dock\_\-class\_\-is\_\-inhibated}}
+\index{cairo_dock_class_is_inhibated@{cairo\_\-dock\_\-class\_\-is\_\-inhibated}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-class\_\-is\_\-inhibated (const gchar $\ast$ {\em cClass})}\label{cairo-dock-class-manager_8h_944f3ac8847780cba5e06f2e0c20955f}
+
+
+Dis si une classe donnee est inhibee par un inhibiteur, libre ou non. \begin{Desc}
+\item[Renvoie:]TRUE ssi les applis de cette classe sont inhibees. \end{Desc}
+\index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_class_is_using_xicon@{cairo\_\-dock\_\-class\_\-is\_\-using\_\-xicon}}
+\index{cairo_dock_class_is_using_xicon@{cairo\_\-dock\_\-class\_\-is\_\-using\_\-xicon}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-class\_\-is\_\-using\_\-xicon (const gchar $\ast$ {\em cClass})}\label{cairo-dock-class-manager_8h_e32327ef4ecea98797f8e9ea633d18a3}
+
+
+Dis si une classe donnee utilise les icones fournies par X. \begin{Desc}
+\item[Renvoie:]TRUE ssi les applis de cette classe utilisent les icones de X. \end{Desc}
+\index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_prevent_inhibated_class@{cairo\_\-dock\_\-prevent\_\-inhibated\_\-class}}
+\index{cairo_dock_prevent_inhibated_class@{cairo\_\-dock\_\-prevent\_\-inhibated\_\-class}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-prevent\_\-inhibated\_\-class ({\bf Icon} $\ast$ {\em pIcon})}\label{cairo-dock-class-manager_8h_d0d6f72a22ef8edecf020060c9a0f6d0}
+
+
+Dis si une appli doit etre inhibee ou pas. Si un inhibiteur libre a ete trouve, il en prendra le controle, et TRUE sera renvoye. Un indicateur lui sera rajoute (ainsi qu'a l'icone du sous-dock si necessaire), et la geometrie de l'icone pour le WM lui est mise, mais il ne sera pas redessine. Dans le cas contraire, FALSE sera renvoye, et l'appli pourra etre inseree dans le dock. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pIcon}]l'icone d'appli. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]TRUE si l'appli a ete inhibee. \end{Desc}
+\index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_remove_icon_from_class@{cairo\_\-dock\_\-remove\_\-icon\_\-from\_\-class}}
+\index{cairo_dock_remove_icon_from_class@{cairo\_\-dock\_\-remove\_\-icon\_\-from\_\-class}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}gboolean cairo\_\-dock\_\-remove\_\-icon\_\-from\_\-class ({\bf Icon} $\ast$ {\em pInhibatorIcon})}\label{cairo-dock-class-manager_8h_ea8b1b10e030ec4f822f064b0e511e50}
+
+
+Enleve un inhibiteur de la classe donnee. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em pInhibatorIcon}]l'icone inhibitrice. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]TRUE ssi la classe est encore inhibee après l'enlèvement, FALSE sinon. \end{Desc}
+\index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_deinhibate_class@{cairo\_\-dock\_\-deinhibate\_\-class}}
+\index{cairo_dock_deinhibate_class@{cairo\_\-dock\_\-deinhibate\_\-class}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-deinhibate\_\-class (const gchar $\ast$ {\em cClass}, {\bf Icon} $\ast$ {\em pInhibatorIcon})}\label{cairo-dock-class-manager_8h_d5897fb508c70f07f0a8e3d487917772}
+
+
+Empeche une icone d'inhiber sa classe; l'icone est enlevee de sa classe, son controle sur une appli est desactive, sa classe remise a 0, et l'appli controlee est inseree dans le dock. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cClass}]la classe. \item[{\em pInhibatorIcon}]l'icone inhibitrice. \end{description}
+\end{Desc}
+\index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_update_Xid_on_inhibators@{cairo\_\-dock\_\-update\_\-Xid\_\-on\_\-inhibators}}
+\index{cairo_dock_update_Xid_on_inhibators@{cairo\_\-dock\_\-update\_\-Xid\_\-on\_\-inhibators}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-update\_\-Xid\_\-on\_\-inhibators (Window {\em Xid}, const gchar $\ast$ {\em cClass})}\label{cairo-dock-class-manager_8h_148cc930e193940a4b359f0752f20d4d}
+
+
+Met a jour les inhibiteurs controlant une appli donnee pour leur en faire controler une autre. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em Xid}]l'ID de l'appli. \item[{\em cClass}]sa classe. \end{description}
+\end{Desc}
+\index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_remove_all_applis_from_class_table@{cairo\_\-dock\_\-remove\_\-all\_\-applis\_\-from\_\-class\_\-table}}
+\index{cairo_dock_remove_all_applis_from_class_table@{cairo\_\-dock\_\-remove\_\-all\_\-applis\_\-from\_\-class\_\-table}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-remove\_\-all\_\-applis\_\-from\_\-class\_\-table (void)}\label{cairo-dock-class-manager_8h_6c8f9b170b47bc20a001cd2868110504}
+
+
+Enleve toutes les applis de toutes les classes, et met a jour les inhibiteurs. \index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_reset_class_table@{cairo\_\-dock\_\-reset\_\-class\_\-table}}
+\index{cairo_dock_reset_class_table@{cairo\_\-dock\_\-reset\_\-class\_\-table}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-reset\_\-class\_\-table (void)}\label{cairo-dock-class-manager_8h_b1078c0867a7e1d4ff1153ca565f8a77}
+
+
+Detruit toutes les classes, enlevant tous les inhibiteurs et toutes les applis de toutes les classes. \index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_create_surface_from_class@{cairo\_\-dock\_\-create\_\-surface\_\-from\_\-class}}
+\index{cairo_dock_create_surface_from_class@{cairo\_\-dock\_\-create\_\-surface\_\-from\_\-class}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}cairo\_\-surface\_\-t$\ast$ cairo\_\-dock\_\-create\_\-surface\_\-from\_\-class (gchar $\ast$ {\em cClass}, cairo\_\-t $\ast$ {\em pSourceContext}, double {\em fMaxScale}, double $\ast$ {\em fWidth}, double $\ast$ {\em fHeight})}\label{cairo-dock-class-manager_8h_b967d2b84e7c7b00619da715e2904147}
+
+
+Cree la surface d'une appli en utilisant le lanceur correspondant, si la classe n'utilise pas les icones X. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cClass}]la classe. \item[{\em pSourceContext}]un contexte de dessin, ne sera pas altere. \item[{\em fMaxScale}]zoom max. \item[{\em fWidth}]largeur de la surface, renseignee. \item[{\em fHeight}]hauteur de la surface, renseignee. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Renvoie:]la surface nouvellement creee, ou NULL si aucun lanceur n'a pu etre trouve ou si l'on veut explicitement les icones X pour cette classe. \end{Desc}
+\index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_update_visibility_on_inhibators@{cairo\_\-dock\_\-update\_\-visibility\_\-on\_\-inhibators}}
+\index{cairo_dock_update_visibility_on_inhibators@{cairo\_\-dock\_\-update\_\-visibility\_\-on\_\-inhibators}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-update\_\-visibility\_\-on\_\-inhibators (gchar $\ast$ {\em cClass}, Window {\em Xid}, gboolean {\em bIsHidden})}\label{cairo-dock-class-manager_8h_c677286b39819406d9e5584afc5190c3}
+
+
+Met a jour les inhibiteurs controlant une appli donnee pour les faire reagir au changement de visibilite de la fenetre, de la meme maniere que si l'icone etait dans la barre des taches. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cClass}]la classe. \item[{\em Xid}]l'ID de l'appli. \item[{\em bIsHidden}]TRUE ssi a fenetre vient de se cacher. \end{description}
+\end{Desc}
+\index{cairo-dock-class-manager.h@{cairo-dock-class-manager.h}!cairo_dock_update_activity_on_inhibators@{cairo\_\-dock\_\-update\_\-activity\_\-on\_\-inhibators}}
+\index{cairo_dock_update_activity_on_inhibators@{cairo\_\-dock\_\-update\_\-activity\_\-on\_\-inhibators}!cairo-dock-class-manager.h@{cairo-dock-class-manager.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cairo\_\-dock\_\-update\_\-activity\_\-on\_\-inhibators (gchar $\ast$ {\em cClass}, Window {\em Xid})}\label{cairo-dock-class-manager_8h_3e1527f25e9105b53aaa5b25d39f7874}
+
+
+Met a jour les inhibiteurs controlant une appli donnee pour les faire reagir a la prise d'activite de la fenetre, de la meme maniere que si l'icone etait dans la barre des taches. \begin{Desc}
+\item[Paramètres:]
+\begin{description}
+\item[{\em cClass}]la classe. \item[{\em Xid}]l'ID de l'appli. \end{description}
+\end{Desc}
