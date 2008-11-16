@@ -36,7 +36,6 @@ extern double g_fSubDockSizeRatio;
 
 extern gint g_iScreenWidth[2];
 extern gint g_iScreenHeight[2];
-extern gint g_iMaxAuthorizedWidth;
 
 extern gint g_iDockLineWidth;
 extern gint g_iDockRadius;
@@ -86,7 +85,6 @@ void cairo_dock_calculate_max_dock_size_linear (CairoDock *pDock)
 	double fRadius = MIN (g_iDockRadius, (pDock->iDecorationsHeight + g_iDockLineWidth) / 2 - 1);
 	double fExtraWidth = g_iDockLineWidth + 2 * (fRadius + g_iFrameMargin);
 	pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->pFirstDrawnElement, pDock->fFlatDockWidth, 1., fExtraWidth));
-	///pDock->iMaxDockWidth = MIN (pDock->iMaxDockWidth, g_iMaxAuthorizedWidth);
 
 	pDock->iMaxDockHeight = (int) ((1 + g_fAmplitude) * pDock->iMaxIconHeight) + g_iconTextDescription.iSize + g_iDockLineWidth + g_iFrameMargin;
 

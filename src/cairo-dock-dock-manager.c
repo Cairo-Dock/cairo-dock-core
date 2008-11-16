@@ -664,7 +664,7 @@ static void _cairo_dock_reserve_space_for_one_dock (gchar *cDockName, CairoDock 
 }
 void cairo_dock_reserve_space_for_all_docks (gboolean bReserve)
 {
-	g_hash_table_foreach (s_hDocksTable, _cairo_dock_reserve_space_for_one_dock, GINT_TO_POINTER (bReserve));
+	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_reserve_space_for_one_dock, GINT_TO_POINTER (bReserve));
 }
 
 

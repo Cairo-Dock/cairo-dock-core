@@ -165,64 +165,9 @@ CairoDockDesktopEnv cairo_dock_guess_environment (void);
 void cairo_dock_get_version_from_string (gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion);
 
 
-
-#define GET_GROUP_CONFIG_BEGIN(cGroupName) \
-gboolean cairo_dock_read_conf_file_##cGroupName (GKeyFile *pKeyFile, CairoDock *pDock) \
-{ \
-	gboolean bFlushConfFileNeeded = FALSE;
-	
-#define GET_GROUP_CONFIG_END \
-	return bFlushConfFileNeeded; \
-}
-
-#define cairo_dock_read_group_conf_file(cGroupName) \
-cairo_dock_read_conf_file_##cGroupName (pKeyFile, pDock)
-
 #define DEFINE_PRE_INIT(cGroupName) \
 void cairo_dock_pre_init_##cGroupName (CairoDockInternalModule *pModule)
 
-
-typedef struct _CairoConfigSystem {
-	gboolean bUseFakeTransparency;
-	gboolean bLabelForPointedIconOnly;
-	gdouble fLabelAlphaThreshold;
-	gboolean bTextAlwaysHorizontal;
-	gdouble fUnfoldAcceleration;
-	gboolean bAnimateOnAutoHide;
-	gint iGrowUpInterval, iShrinkDownInterval;
-	gdouble fMoveUpSpeed, fMoveDownSpeed;
-	gdouble fRefreshInterval;
-	gboolean bDynamicReflection;
-	gboolean bAnimateSubDock;
-	gdouble fStripesSpeedFactor;
-	gboolean bDecorationsFollowMouse;
-	gint iScrollAmount;
-	gboolean bResetScrollOnLeave;
-	gdouble fScrollAcceleration;
-	gchar **cActiveModuleList;
-	gint iFileSortType;
-	gboolean bShowHiddenFiles;
-	} CairoConfigSystem;
-
-typedef struct _CairoConfigTaskBar {
-	gboolean bShowAppli;
-	gboolean bUniquePid;
-	gboolean bGroupAppliByClass;
-	gint iAppliMaxNameLength;
-	gboolean bMinimizeOnClick;
-	gboolean bCloseAppliOnMiddleClick;
-	gboolean bAutoHideOnFullScreen;
-	gboolean bAutoHideOnMaximized;
-	gboolean bHideVisibleApplis;
-	gdouble fVisibleAppliAlpha;
-	gboolean bAppliOnCurrentDesktopOnly;
-	gboolean bDemandsAttentionWithDialog;
-	gboolean bDemandsAttentionWithAnimation;
-	gboolean bAnimateOnActiveWindow;
-	gboolean bOverWriteXIcons;
-	gboolean bShowThumbnail;
-	gboolean bMixLauncherAppli;
-	} CairoConfigTaskBar;
 
 typedef struct _CairoConfigHiddenDock {
 	gchar *cVisibleZoneImageFile;

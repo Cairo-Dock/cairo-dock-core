@@ -7,32 +7,37 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 *********************************************************************************/
 
+#include "cairo-dock-dock-manager.h"
+#include "cairo-dock-dock-factory.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-position.h"
 
 CairoConfigPosition myPosition;
-CairoConfigPosition prevPosition;
+extern CairoDock *g_pMainDock;
 
-
-GET_GROUP_CONFIG_BEGIN (Position)
+static gboolean get_config (GKeyFile *pKeyFile, CairoConfigPosition *pPosition)
+{
 	gboolean bFlushConfFileNeeded = FALSE;
-	myPosition.iGapX = cairo_dock_get_integer_key_value (pKeyFile, "Position", "x gap", &bFlushConfFileNeeded, 0, NULL, NULL);
-	myPosition.iGapY = cairo_dock_get_integer_key_value (pKeyFile, "Position", "y gap", &bFlushConfFileNeeded, 0, NULL, NULL);
+	
+	pPosition->iGapX = cairo_dock_get_integer_key_value (pKeyFile, "Position", "x gap", &bFlushConfFileNeeded, 0, NULL, NULL);
+	pPosition->iGapY = cairo_dock_get_integer_key_value (pKeyFile, "Position", "y gap", &bFlushConfFileNeeded, 0, NULL, NULL);
 
-	myPosition.iScreenBorder = cairo_dock_get_integer_key_value (pKeyFile, "Position", "screen border", &bFlushConfFileNeeded, 0, NULL, NULL);
-	if (myPosition.ScreenBorder < 0 || myPosition.iScreenBorder >= CAIRO_DOCK_NB_POSITIONS)
-		myPosition.iScreenBorder = 0;
+	pPosition->iScreenBorder = cairo_dock_get_integer_key_value (pKeyFile, "Position", "screen border", &bFlushConfFileNeeded, 0, NULL, NULL);
+	if (pPosition->iScreenBorder < 0 || pPosition->iScreenBorder >= CAIRO_DOCK_NB_POSITIONS)
+		pPosition->iScreenBorder = 0;
 
-	myPosition.fAlign = cairo_dock_get_double_key_value (pKeyFile, "Position", "alignment", &bFlushConfFileNeeded, 0.5, NULL, NULL);
-GET_GROUP_CONFIG_END
+	pPosition->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Position", "alignment", &bFlushConfFileNeeded, 0.5, NULL, NULL);
+
+	return bFlushConfFileNeeded;
+}
 
 
-static void reload (CairoConfigPosition *pPosition, CairoConfigPosition *pPrevPosition)
+static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPosition)
 {
 	CairoDock *pDock = g_pMainDock;
 	if (pPosition->iScreenBorder != pPrevPosition->iScreenBorder)
 	{
-		switch (s_iScreenBorder)
+		switch (pPosition->iScreenBorder)
 		{
 			case CAIRO_DOCK_BOTTOM :
 				pDock->bHorizontalDock = CAIRO_DOCK_HORIZONTAL;
@@ -59,19 +64,22 @@ static void reload (CairoConfigPosition *pPosition, CairoConfigPosition *pPrevPo
 	cairo_dock_place_root_dock (pDock);
 }
 
-void cairo_dock_pre_init_position (CairoDockInternalModule *pModule)
+
+DEFINE_PRE_INIT (Position)
 {
 	pModule->cModuleName = "Position";
 	pModule->cTitle = "Position";
 	pModule->cIcon = "gtk-fullscreen";
 	pModule->cDescription = "Set the position of the main dock.";
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
+	pModule->iSizeOfConfig = sizeof (CairoConfigPosition);
+	pModule->iSizeOfData = 0;
 	
-	pModule->reload = reload;
-	pModule->get_config = get_config;
+	pModule->reload = (CairoDockInternalModuleReloadFunc) reload;
+	pModule->get_config = (CairoDockInternalModuleGetConfigFunc) get_config;
+	pModule->reset_config = NULL;
 	pModule->reset_data = NULL;
 	
-	pModule->pConfigPtr = &myPosition;
-	pModule->pPrevConfigPtr = &prevPosition;
-	pModule->pDataPtr = NULL;
+	pModule->pConfig = (CairoInternalModuleConfigPtr) &myPosition;
+	pModule->pData = NULL;
 }

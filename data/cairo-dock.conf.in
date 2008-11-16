@@ -27,7 +27,7 @@ x gap = 0
 #{in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.}
 y gap = 25
 
-#gtk-help;0;How do you access to your dock ?
+#gtk-help;0;How do you access to your docks ?
 [Accessibility]
 
 #F-[Space;gtk-fullscreen]

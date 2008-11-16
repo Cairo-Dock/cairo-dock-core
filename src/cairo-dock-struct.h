@@ -974,7 +974,12 @@ struct _CairoFlyingContainer {
 	gint iAnimationCount;
 };
 
-
+typedef gpointer CairoInternalModuleConfigPtr;
+typedef gpointer CairoInternalModuleDataPtr;
+typedef void (* CairoDockInternalModuleReloadFunc) (CairoInternalModuleConfigPtr *pPrevConfig, CairoInternalModuleConfigPtr *pNewConfig);
+typedef void (* CairoDockInternalModuleGetConfigFunc) (GKeyFile *pKeyFile, CairoInternalModuleConfigPtr *pConfig);
+typedef void (* CairoDockInternalModuleResetConfigFunc) (CairoInternalModuleConfigPtr *pConfig);
+typedef void (* CairoDockInternalModuleResetDataFunc) (CairoInternalModuleDataPtr *pData);
 struct _CairoDockInternalModule {
 	//\_____________ Carte de visite.
 	gchar *cModuleName;
@@ -985,14 +990,13 @@ struct _CairoDockInternalModule {
 	gint iSizeOfConfig;
 	gint iSizeOfData;
 	//\_____________ Interface.
-	void (* reload) (void);
-	gboolean (* get_config) (GKeyFile *pKeyFile);
-	void (* reset_config) (void);
-	void (* reset_data) (void);
+	CairoDockInternalModuleReloadFunc reload;
+	CairoDockInternalModuleGetConfigFunc get_config;
+	CairoDockInternalModuleResetConfigFunc reset_config;
+	CairoDockInternalModuleResetDataFunc reset_data;
 	//\_____________ Instance.
-	gpointer *pConfig;
-	gpointer *pPrevConfig;
-	gpointer *pData;
+	CairoInternalModuleConfigPtr pConfig;
+	CairoInternalModuleDataPtr pData;
 };
 
 

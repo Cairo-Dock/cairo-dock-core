@@ -754,7 +754,7 @@ static void on_theme_apply (gpointer *user_data)
 		g_key_file_free (pKeyFile);
 		g_string_free (sCommand, TRUE);
 }
-gboolean cairo_dock_manage_themes (GtkWidget *pWidget, gboolean bSafeMode)
+gboolean cairo_dock_manage_themes (GtkWidget *pWidget, gint iMode)
 {
 	GHashTable *hThemeTable = NULL;
 	
@@ -762,11 +762,12 @@ gboolean cairo_dock_manage_themes (GtkWidget *pWidget, gboolean bSafeMode)
 	
 	//\___________________ On laisse l'utilisateur l'editer.
 	gchar *cPresentedGroup = (cairo_dock_theme_need_save () ? "Save" : NULL);
-	const gchar *cTitle = (bSafeMode ? _("< Safe Mode >") : _("Manage Themes"));
+	const gchar *cTitle = (iMode == 2 ? _("< Safe Mode >") : _("Manage Themes"));
 	
 	CairoDialog *pDialog = NULL;
-	if (bSafeMode)
+	if (iMode == 2)
 	{
+		g_print ("show dialog\n");
 		pDialog = cairo_dock_show_general_message (_("You are running Cairo-Dock in safe mode.\nWhy ? Probably because a plug-in has messed into your dock,\n or maybe your theme has got corrupted.\nSo, no plug-in will be available, and you can now save your current theme if you want\n before you start using the dock.\nTry with your current theme, if it works, it means a plug-in is wrong.\nOtherwise, try with another theme.\nSave a config that is working, and restart the dock in normal mode.\nThen, activate plug-ins one by one to guess which one is wrong."), 0.);
 	}
 	
@@ -775,6 +776,19 @@ gboolean cairo_dock_manage_themes (GtkWidget *pWidget, gboolean bSafeMode)
 	data[0] = cInitConfFile;
 	data[1] = hThemeTable;
 	data[2] = pDialog;
-	gboolean bChoiceOK = cairo_dock_build_normal_gui (cInitConfFile, NULL, cTitle, CAIRO_DOCK_THEME_PANEL_WIDTH, CAIRO_DOCK_THEME_PANEL_HEIGHT, on_theme_apply, data, on_theme_destroy);
+	if (iMode == 0)
+	{
+		gboolean bChoiceOK = cairo_dock_build_normal_gui (cInitConfFile, NULL, cTitle, CAIRO_DOCK_THEME_PANEL_WIDTH, CAIRO_DOCK_THEME_PANEL_HEIGHT, on_theme_apply, data, on_theme_destroy);
+	}
+	else
+	{
+		gboolean bChoiceOK = cairo_dock_build_normal_gui (cInitConfFile, NULL, cTitle, CAIRO_DOCK_THEME_PANEL_WIDTH, CAIRO_DOCK_THEME_PANEL_HEIGHT, NULL, NULL, NULL);
+		g_print ("on applique le theme\n");
+		on_theme_apply (data);
+		g_print ("on free\n");
+		on_theme_destroy (data);
+	}
+	
+	
 	return FALSE;
 }

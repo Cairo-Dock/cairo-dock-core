@@ -214,17 +214,29 @@ static void _cairo_dock_add_group_button (gchar *cGroupName, gchar *cIcon, int i
 	pCategoryWidget->iNbItemsInCurrentRow ++;
 }
 
-static gboolean _cairo_dock_add_one_module_widget (gchar *cModuleName, CairoDockModule *pModule, gpointer data)
+static gboolean _cairo_dock_add_one_module_widget (gchar *cModuleName, CairoDockModule *pModule, gchar *cActiveModules)
 {
 	g_print ("%s (%s)\n", __func__, pModule->cConfFilePath);
 	if (pModule->cConfFilePath == NULL)
 		pModule->cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
+	int iActive;
+	if (! pModule->pInterface->stopModule)
+		iActive = -1;
+	else if (g_pMainDock == NULL && cActiveModules != NULL)
+	{
+		gchar *str = g_strstr_len (cActiveModules, strlen (cActiveModules), cModuleName);
+		iActive = (str != NULL &&
+			(str[strlen(cModuleName)] == '\0' || str[strlen(cModuleName)] == ';') &&
+			(str == cActiveModules || *(str-1) == ';'));
+	}
+	else
+		iActive = (pModule->pInstancesList != NULL);
 	_cairo_dock_add_group_button (cModuleName,
 		pModule->pVisitCard->cIconFilePath,
 		pModule->pVisitCard->iCategory,
 		pModule->pVisitCard->cReadmeFilePath,
 		pModule->pVisitCard->cPreviewFilePath,
-		(! pModule->pInterface->stopModule ? -1 : (pModule->pInstancesList != NULL)),
+		iActive,
 		pModule->cConfFilePath != NULL);
 	return FALSE;
 }
@@ -417,11 +429,13 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 		i ++;
 	}
 	g_strfreev (pGroupList);
-	g_key_file_free (pKeyFile);
 	
 	
 	//\_____________ On remplit avec les modules.
-	cairo_dock_foreach_module ((GHRFunc) _cairo_dock_add_one_module_widget, NULL);
+	gchar *cActiveModules = (g_pMainDock == NULL ? g_key_file_get_string (pKeyFile, "System", "modules", NULL) : NULL);
+	cairo_dock_foreach_module ((GHRFunc) _cairo_dock_add_one_module_widget, cActiveModules);
+	g_free (cActiveModules);
+	g_key_file_free (pKeyFile);
 	
 	
 	//\_____________ On ajoute les zones d'infos.
@@ -499,16 +513,17 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	{
 		gtk_window_set_title (GTK_WINDOW (s_pMainWindow), _("< Maintenance mode >"));
 		GMainLoop *pBlockingLoop = g_main_loop_new (NULL, FALSE);
+		g_object_set_data (G_OBJECT (s_pMainWindow), "loop", pBlockingLoop);
 		g_signal_connect (s_pMainWindow,
 			"delete-event",
 			G_CALLBACK (on_delete_main_gui),
 			pBlockingLoop);
 		
-		//g_print ("debut de boucle bloquante ...\n");
+		g_print ("debut de boucle bloquante ...\n");
 		GDK_THREADS_LEAVE ();
 		g_main_loop_run (pBlockingLoop);
 		GDK_THREADS_ENTER ();
-		//g_print ("fin de boucle bloquante -> %d\n", iAnswer);
+		g_print ("fin de boucle bloquante\n");
 		
 		g_main_loop_unref (pBlockingLoop);
 	}

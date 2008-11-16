@@ -8,8 +8,13 @@ cairo_dock-cairo-dock-keyfile-utilities.o \
   /usr/include/bits/string.h /usr/include/bits/string2.h \
   /usr/include/endian.h /usr/include/bits/endian.h \
   /usr/include/bits/types.h /usr/include/bits/typesizes.h \
-  /usr/include/stdlib.h cairo-dock-keyfile-utilities.h \
-  /usr/include/glib-2.0/glib.h /usr/include/glib-2.0/glib/galloca.h \
+  /usr/include/stdlib.h cairo-dock-log.h /usr/include/gtk-2.0/gtk/gtk.h \
+  /usr/include/gtk-2.0/gdk/gdk.h /usr/include/gtk-2.0/gdk/gdkcairo.h \
+  /usr/include/gtk-2.0/gdk/gdkcolor.h /usr/local/include/cairo/cairo.h \
+  /usr/local/include/cairo/cairo-features.h \
+  /usr/local/include/cairo/cairo-deprecated.h \
+  /usr/include/gtk-2.0/gdk/gdktypes.h /usr/include/glib-2.0/glib.h \
+  /usr/include/glib-2.0/glib/galloca.h \
   /usr/include/glib-2.0/glib/gtypes.h \
   /usr/lib/glib-2.0/include/glibconfig.h \
   /usr/include/glib-2.0/glib/gmacros.h \
@@ -57,14 +62,7 @@ cairo_dock-cairo-dock-keyfile-utilities.o \
   /usr/include/glib-2.0/glib/gtestutils.h \
   /usr/include/glib-2.0/glib/gthreadpool.h \
   /usr/include/glib-2.0/glib/gtimer.h /usr/include/glib-2.0/glib/gtree.h \
-  /usr/include/glib-2.0/glib/gurifuncs.h cairo-dock-struct.h \
-  /usr/include/X11/Xlib.h /usr/include/sys/types.h /usr/include/X11/X.h \
-  /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h \
-  /usr/include/gtk-2.0/gdk/gdk.h /usr/include/gtk-2.0/gdk/gdkcairo.h \
-  /usr/include/gtk-2.0/gdk/gdkcolor.h /usr/local/include/cairo/cairo.h \
-  /usr/local/include/cairo/cairo-features.h \
-  /usr/local/include/cairo/cairo-deprecated.h \
-  /usr/include/gtk-2.0/gdk/gdktypes.h \
+  /usr/include/glib-2.0/glib/gurifuncs.h \
   /usr/include/pango-1.0/pango/pango.h \
   /usr/include/pango-1.0/pango/pango-attributes.h \
   /usr/include/pango-1.0/pango/pango-font.h \
@@ -136,7 +134,7 @@ cairo_dock-cairo-dock-keyfile-utilities.o \
   /usr/include/gtk-2.0/gdk/gdkselection.h \
   /usr/include/gtk-2.0/gdk/gdkspawn.h \
   /usr/include/gtk-2.0/gdk/gdkvisual.h \
-  /usr/include/gtk-2.0/gdk/gdkwindow.h /usr/include/gtk-2.0/gtk/gtk.h \
+  /usr/include/gtk-2.0/gdk/gdkwindow.h \
   /usr/include/gtk-2.0/gtk/gtkaboutdialog.h \
   /usr/include/gtk-2.0/gtk/gtkdialog.h \
   /usr/include/gtk-2.0/gtk/gtkwindow.h \
@@ -360,13 +358,15 @@ cairo_dock-cairo-dock-keyfile-utilities.o \
   /usr/include/gtk-2.0/gtk/gtkvpaned.h \
   /usr/include/gtk-2.0/gtk/gtkvruler.h \
   /usr/include/gtk-2.0/gtk/gtkvscale.h \
-  /usr/include/gtk-2.0/gtk/gtkvseparator.h \
-  /usr/include/librsvg-2/librsvg/rsvg.h \
+  /usr/include/gtk-2.0/gtk/gtkvseparator.h cairo-dock-keyfile-utilities.h \
+  cairo-dock-struct.h /usr/include/X11/Xlib.h /usr/include/sys/types.h \
+  /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h \
+  /usr/include/X11/Xosdefs.h /usr/include/librsvg-2/librsvg/rsvg.h \
   /usr/include/librsvg-2/librsvg/rsvg-cairo.h \
   /usr/include/glib-2.0/glib/gi18n.h /usr/include/libintl.h \
   /usr/include/locale.h /usr/include/bits/locale.h /usr/include/GL/gl.h \
   /usr/include/GL/glext.h /usr/include/inttypes.h /usr/include/stdint.h \
-  /usr/include/bits/wchar.h cairo-dock-log.h
+  /usr/include/bits/wchar.h
 
 /usr/include/string.h:
 
@@ -396,7 +396,23 @@ cairo_dock-cairo-dock-keyfile-utilities.o \
 
 /usr/include/stdlib.h:
 
-cairo-dock-keyfile-utilities.h:
+cairo-dock-log.h:
+
+/usr/include/gtk-2.0/gtk/gtk.h:
+
+/usr/include/gtk-2.0/gdk/gdk.h:
+
+/usr/include/gtk-2.0/gdk/gdkcairo.h:
+
+/usr/include/gtk-2.0/gdk/gdkcolor.h:
+
+/usr/local/include/cairo/cairo.h:
+
+/usr/local/include/cairo/cairo-features.h:
+
+/usr/local/include/cairo/cairo-deprecated.h:
+
+/usr/include/gtk-2.0/gdk/gdktypes.h:
 
 /usr/include/glib-2.0/glib.h:
 
@@ -523,32 +539,6 @@ cairo-dock-keyfile-utilities.h:
 /usr/include/glib-2.0/glib/gtree.h:
 
 /usr/include/glib-2.0/glib/gurifuncs.h:
-
-cairo-dock-struct.h:
-
-/usr/include/X11/Xlib.h:
-
-/usr/include/sys/types.h:
-
-/usr/include/X11/X.h:
-
-/usr/include/X11/Xfuncproto.h:
-
-/usr/include/X11/Xosdefs.h:
-
-/usr/include/gtk-2.0/gdk/gdk.h:
-
-/usr/include/gtk-2.0/gdk/gdkcairo.h:
-
-/usr/include/gtk-2.0/gdk/gdkcolor.h:
-
-/usr/local/include/cairo/cairo.h:
-
-/usr/local/include/cairo/cairo-features.h:
-
-/usr/local/include/cairo/cairo-deprecated.h:
-
-/usr/include/gtk-2.0/gdk/gdktypes.h:
 
 /usr/include/pango-1.0/pango/pango.h:
 
@@ -711,8 +701,6 @@ cairo-dock-struct.h:
 /usr/include/gtk-2.0/gdk/gdkvisual.h:
 
 /usr/include/gtk-2.0/gdk/gdkwindow.h:
-
-/usr/include/gtk-2.0/gtk/gtk.h:
 
 /usr/include/gtk-2.0/gtk/gtkaboutdialog.h:
 
@@ -1188,6 +1176,20 @@ cairo-dock-struct.h:
 
 /usr/include/gtk-2.0/gtk/gtkvseparator.h:
 
+cairo-dock-keyfile-utilities.h:
+
+cairo-dock-struct.h:
+
+/usr/include/X11/Xlib.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/X11/X.h:
+
+/usr/include/X11/Xfuncproto.h:
+
+/usr/include/X11/Xosdefs.h:
+
 /usr/include/librsvg-2/librsvg/rsvg.h:
 
 /usr/include/librsvg-2/librsvg/rsvg-cairo.h:
@@ -1209,5 +1211,3 @@ cairo-dock-struct.h:
 /usr/include/stdint.h:
 
 /usr/include/bits/wchar.h:
-
-cairo-dock-log.h:

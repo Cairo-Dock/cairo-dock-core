@@ -190,8 +190,9 @@ void on_click_ok (GtkButton *button, GtkWidget *pWindow)
 void on_click_quit (GtkButton *button, GtkWidget *pWindow)
 {
 	g_print ("%s ()\n", __func__);
+	GMainLoop *pBlockingLoop = g_object_get_data (G_OBJECT (pWindow), "loop");
+	on_delete_main_gui (pWindow, NULL, pBlockingLoop);
 	gtk_widget_destroy (pWindow);
-	cairo_dock_free_categories ();
 }
 
 void on_click_activate_given_group (GtkToggleButton *button, CairoDockGroupDescription *pGroupDescription)
@@ -201,7 +202,11 @@ void on_click_activate_given_group (GtkToggleButton *button, CairoDockGroupDescr
 	
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 	g_return_if_fail (pModule != NULL);
-	if (pModule->pInstancesList == NULL)
+	if (g_pMainDock == NULL)
+	{
+		cairo_dock_add_remove_element_to_key (g_cConfFile,  "System", "modules", pGroupDescription->cGroupName, gtk_toggle_button_get_active (button));
+	}
+	else if (pModule->pInstancesList == NULL)
 	{
 		cairo_dock_activate_module_and_load (pGroupDescription->cGroupName);
 	}

@@ -755,7 +755,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			if (g_ascii_isdigit (*cUsefulComment))
 			{
 				iNbElements = atoi (cUsefulComment);
-				g_return_val_if_fail (iNbElements > 0, NULL);
+				if (iNbElements == 0)  // cle statique.
+					iNbElements = 1;
 				while (g_ascii_isdigit (*cUsefulComment))
 					cUsefulComment ++;
 			}

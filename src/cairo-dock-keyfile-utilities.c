@@ -9,8 +9,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <string.h>
 #include <stdlib.h>
 
-#include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-keyfile-utilities.h"
 
 
 void cairo_dock_write_keys_to_file (GKeyFile *pKeyFile, const gchar *cConfFilePath)
@@ -63,12 +63,6 @@ void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, gchar *cConfFilePath, 
 		cairo_dock_replace_values_in_conf_file (cConfFilePath, pKeyFile, bUseFileKeys, 0);
 	}
 	g_free (cTemplateConfFilePath);
-}
-void cairo_dock_flush_conf_file (GKeyFile *pKeyFile, gchar *cConfFilePath, gchar *cShareDataDirPath, gchar *cTemplateFileName)
-{
-	//gchar *cConfFileName = g_path_get_basename (cConfFilePath);
-	cairo_dock_flush_conf_file_full (pKeyFile, cConfFilePath, cShareDataDirPath, TRUE, cTemplateFileName);
-	//g_free (cConfFileName);
 }
 
 
@@ -133,6 +127,76 @@ void cairo_dock_replace_key_values (GKeyFile *pOriginalKeyFile, GKeyFile *pRepla
 		i ++;
 	}
 	g_strfreev (pGroupList);
+	
+	if (bUseOriginalKeys)
+	{
+		pGroupList = g_key_file_get_groups (pReplacementKeyFile, &length);
+		i = 0;
+		while (pGroupList[i] != NULL)
+		{
+			cGroupName = pGroupList[i];
+
+			length = 0;
+			pKeyList = g_key_file_get_keys (pReplacementKeyFile, cGroupName, NULL, NULL);
+
+			j = 0;
+			while (pKeyList[j] != NULL)
+			{
+				cKeyName = pKeyList[j];
+				//g_print ("%s\n  %s", cKeyName, g_key_file_get_comment (pOriginalKeyFile, cGroupName, cKeyName, NULL));
+
+				cComment = g_key_file_get_comment (pReplacementKeyFile, cGroupName, cKeyName, NULL);
+				if (cComment == NULL || strlen (cComment) < 3 || (cComment[1] != '0' && cComment[2] != '0'))
+				{
+					g_free (cComment);
+					j ++;
+					continue ;
+				}
+				if (iIdentifier != 0)
+				{
+					if (cComment == NULL || strlen (cComment) < 2 || cComment[1] != iIdentifier)
+					{
+						//g_print ("  on saute %s;%s (%s)\n", cGroupName, cKeyName, cComment);
+						g_free (cComment);
+						j ++;
+						continue ;
+					}
+				}
+
+				cKeyValue =  g_key_file_get_string (pReplacementKeyFile, cGroupName, cKeyName, &erreur);
+				if (erreur != NULL)
+				{
+					cd_warning (erreur->message);
+					g_error_free (erreur);
+					erreur = NULL;
+				}
+				else
+				{
+					//g_print (" -> %s\n", cKeyValue);
+					if (cKeyValue[strlen(cKeyValue) - 1] == '\n')
+						cKeyValue[strlen(cKeyValue) - 1] = '\0';
+					g_key_file_set_string (pOriginalKeyFile, cGroupName, cKeyName, (cKeyValue != NULL ? cKeyValue : ""));
+					if (cComment != NULL)
+					{
+						g_key_file_set_comment (pOriginalKeyFile, cGroupName, cKeyName, cComment, &erreur);
+						if (erreur != NULL)
+						{
+							cd_warning (erreur->message);
+							g_error_free (erreur);
+							erreur = NULL;
+						}
+					}
+				}
+				g_free (cKeyValue);
+				g_free (cComment);
+				j ++;
+			}
+
+			g_strfreev (pKeyList);
+			i ++;
+		}
+		g_strfreev (pGroupList);
+	}
 }
 
 
@@ -319,6 +383,7 @@ void cairo_dock_replace_values_in_conf_file (gchar *cConfFilePath, GKeyFile *pVa
 	{
 		cd_warning (erreur->message);
 		g_error_free (erreur);
+		g_key_file_free (pConfKeyFile);
 		return ;
 	}
 
@@ -390,23 +455,57 @@ gboolean cairo_dock_conf_file_needs_update (GKeyFile *pKeyFile, gchar *cVersion)
 }
 
 
-/*void cairo_dock_delete_key_by_prefix (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cPrefix)
+void cairo_dock_add_remove_element_to_key (const gchar *cConfFilePath, const gchar *cGroupName, const gchar *cKeyName, gchar *cElementName, gboolean bAdd)
 {
-	g_return_if_fail (cPrefix != NULL);
-	gchar **pKeyList = g_key_file_get_keys (pKeyFile, cGroupName, NULL, NULL);
-	
-	int iPrefixLen = strlen (cPrefix);
-	gchar *cKeyName;
-	int i = 0;
-	while (pKeyList[i] != NULL)
+	GError *erreur = NULL;
+	GKeyFile* pKeyFile = g_key_file_new ();
+	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS, &erreur);
+	if (erreur != NULL)
 	{
-		cKeyName = pKeyList[i];
-		if (strncmp (cKeyName, cPrefix, iPrefixLen) == 0)
+		cd_warning ("while trying to load %s : %s", cConfFilePath, erreur->message);
+		g_error_free (erreur);
+		g_key_file_free (pKeyFile);
+		return ;
+	}
+	gchar *cElementList = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL), *cNewElementList = NULL;
+	if (cElementList != NULL && *cElementList == '\0')
+	{
+		g_free (cElementList);
+		cElementList= NULL;
+	}
+	
+	if (bAdd)
+	{
+		g_print ("on rajoute %s\n", cElementName);
+		if (cElementList != NULL)
+			cNewElementList = g_strdup_printf ("%s;%s", cElementList, cElementName);
+		else
+			cNewElementList = g_strdup (cElementName);
+	}
+	else
+	{
+		g_print ("on enleve %s\n", cElementName);
+		gchar *str = g_strstr_len (cElementList, strlen (cElementList), cElementName);
+		g_return_if_fail (str != NULL);
+		if (str == cElementList)
 		{
-			g_key_file_remove_key (pKeyFile, cGroupName, cKeyName, NULL);
+			if (str[strlen (cElementName)] == '\0')
+				cNewElementList = g_strdup ("");
+			else
+				cNewElementList = g_strdup (str + strlen (cElementName) + 1);
+		}
+		else
+		{
+			*(str-1) = '\0';
+			if (str[strlen (cElementName)] == '\0')
+				cNewElementList = g_strdup (cElementList);
+			else
+				cNewElementList = g_strdup_printf ("%s;%s", cElementList, str + strlen (cElementName) + 1);
 		}
 	}
-	g_strfreev (pKeyList);
-}*/
-
-
+	g_key_file_set_string (pKeyFile, cGroupName, cKeyName, cNewElementList);
+	cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
+	g_free (cElementList);
+	g_free (cNewElementList);
+	g_key_file_free (pKeyFile);
+}

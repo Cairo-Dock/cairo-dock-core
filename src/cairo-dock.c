@@ -109,7 +109,6 @@ double g_fScrollAcceleration;  // acceleration du defilement quand il revient a 
 gchar *g_cCurrentThemePath = NULL;  // le chemin vers le repertoire du theme courant.
 gchar *g_cCurrentLaunchersPath = NULL;  // le chemin vers le repertoire des lanceurs/icones du theme courant.
 gchar *g_cConfFile = NULL;  // le chemin du fichier de conf.
-gchar *g_cEasyConfFile = NULL;  // le chemin du fichier de conf pour les noobs ;-)
 gpointer *g_pDefaultIconDirectory = NULL;  // les repertoires/themes ou on va chercher les icones.
 gchar *g_cCairoDockDataDir = NULL;  // le repertoire ou on va chercher les .desktop.
 
@@ -640,31 +639,27 @@ int main (int argc, char** argv)
 	
 	//\___________________ On charge le dernier theme ou on demande a l'utilisateur d'en choisir un.
 	g_cConfFile = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
-	g_cEasyConfFile = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_EASY_CONF_FILE);
 	
 	gboolean config_ok;
 	if (bMaintenance)
 	{
 		cairo_dock_build_main_ihm (g_cConfFile, TRUE);
-		//config_ok = cairo_dock_edit_conf_file (NULL, g_cConfFile, _("< Maintenance mode >"), 800, 600, 0, NULL, NULL, NULL, NULL, CAIRO_DOCK_GETTEXT_PACKAGE);
 	}
 	
+	g_print ("load theme\n");
 	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS) || bSafeMode)
 	{
 		if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS))
 			cairo_dock_mark_theme_as_modified (FALSE);  // le fichier n'existe pas, on ne proposera pas de sauvegarder ce theme.
 		do
 		{
-			cairo_dock_manage_themes (NULL, bSafeMode);
+			cairo_dock_manage_themes (NULL, bSafeMode ? 2 : 1);
 		}
 		while (g_pMainDock == NULL);
 	}
 	else
 		cairo_dock_load_theme (g_cCurrentThemePath);
 	
-	if (g_bUseFakeTransparency)
-		cairo_dock_load_desktop_background_surface ();
-
 	//\___________________ On affiche le changelog en cas de nouvelle version.
 	gchar *cLastVersionFilePath = g_strdup_printf ("%s/.cairo-dock-last-version", g_cCairoDockDataDir);
 	gboolean bWriteChangeLog;

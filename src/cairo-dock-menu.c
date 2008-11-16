@@ -57,7 +57,6 @@ extern double g_fSubDockSizeRatio;
 
 extern gboolean g_bUseSeparator;
 extern gchar *g_cConfFile;
-extern gchar *g_cEasyConfFile;
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCurrentThemePath;
 
@@ -84,7 +83,7 @@ static void _cairo_dock_initiate_theme_management (GtkMenuItem *pMenuItem, gpoin
 	gboolean bRefreshGUI;
 	do
 	{
-		bRefreshGUI = cairo_dock_manage_themes (pDock->pWidget, FALSE);
+		bRefreshGUI = cairo_dock_manage_themes (pDock->pWidget, 0);
 	} while (bRefreshGUI);
 }
 

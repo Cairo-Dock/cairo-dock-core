@@ -47,7 +47,6 @@ extern gboolean g_bReserveSpace;
 extern gchar *g_cMainDockDefaultRendererName;
 extern gchar *g_cSubDockDefaultRendererName;
 extern gchar *g_cCurrentThemePath;
-extern gchar *g_cEasyConfFile;
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cCurrentLaunchersPath;
 
@@ -554,6 +553,18 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, gchar *cGroupName
 	return cFilePath;
 }
 
+
+#define GET_GROUP_CONFIG_BEGIN(cGroupName) \
+static gboolean cairo_dock_read_conf_file_##cGroupName (GKeyFile *pKeyFile, CairoDock *pDock) \
+{ \
+	gboolean bFlushConfFileNeeded = FALSE;
+	
+#define GET_GROUP_CONFIG_END \
+	return bFlushConfFileNeeded; \
+}
+
+#define cairo_dock_read_group_conf_file(cGroupName) \
+cairo_dock_read_conf_file_##cGroupName (pKeyFile, pDock)
 
 static CairoDockPositionType s_iScreenBorder=0;
 GET_GROUP_CONFIG_BEGIN (Position)
@@ -1305,17 +1316,6 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	}
 	g_free (cDeskletDecorationsNameOld);
 	
-	//\___________________ On ecrit si necessaire.
-	if (! bFlushConfFileNeeded)
-		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, CAIRO_DOCK_VERSION);
-	if (bFlushConfFileNeeded)
-	{
-		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
-		g_key_file_free (pKeyFile);
-		pKeyFile = g_key_file_new ();
-		g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, NULL);
-	}
-
 	cairo_dock_update_renderer_list_for_gui ();
 	cairo_dock_update_desklet_decorations_list_for_gui ();
 	cairo_dock_update_desklet_decorations_list_for_applet_gui ();
@@ -1344,9 +1344,18 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	else if (! g_bUseFakeTransparency && bUseFakeTransparencyOld)
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), FALSE);
 	
-	//\___________________ On applique les modifs au fichier de conf easy.
-	//cairo_dock_copy_to_easy_conf_file (pKeyFile, g_cEasyConfFile);
-
+	
+	//\___________________ On ecrit si necessaire.
+	if (! bFlushConfFileNeeded)
+		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, CAIRO_DOCK_VERSION);
+	if (bFlushConfFileNeeded)
+	{
+		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
+		g_key_file_free (pKeyFile);
+		pKeyFile = g_key_file_new ();
+		g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, NULL);
+	}
+	
 	cairo_destroy (pCairoContext);
 	
 	g_key_file_free (pKeyFile);
@@ -1375,8 +1384,9 @@ void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataTy
 	{
 		cd_warning (erreur->message);
 		g_error_free (erreur);
-		//va_end (args);
-		//return ;
+		g_key_file_free (pKeyFile);
+		va_end (args);
+		return ;
 	}
 
 	GType iType = iFirstDataType;

@@ -175,6 +175,8 @@ static void cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError **
 		gboolean bModuleLoaded = function_pre_init (pCairoDockModule->pVisitCard, pCairoDockModule->pInterface);
 		if (! bModuleLoaded)
 		{
+			cairo_dock_free_visit_card (pCairoDockModule->pVisitCard);
+			pCairoDockModule->pVisitCard = NULL;
 			cd_debug ("module '%s' has not been loaded", pCairoDockModule->cSoFilePath);
 			return ;
 		}
@@ -1310,17 +1312,25 @@ gboolean cairo_dock_reserve_data_slot (CairoDockModuleInstance *pInstance)
 void cairo_dock_preload_internal_modules (GHashTable *pModuleTable)
 {
 	cd_message ("");
+	CairoDockInternalModule *pModule;
 	
+	pModule = g_new0 (CairoDockInternalModule, 1);
+	// init
+	//g_hash_table_insert (pModuleTable, pModule->cModuleName, pModule);
+	
+	// repeter N fois.
 }
 
 void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, GKeyFile *pKeyFile)
 {
-	memcpy (pModule->pPrevConfig, pModule->pConfig, pModule->iSizeOfConfig);
+	gpointer *pPrevConfig = g_memdup (pModule->pConfig, pModule->iSizeOfConfig);
 	memset (pModule->pConfig, 0, pModule->iSizeOfConfig);
 	
-	pModule->get_config (pKeyFile);
+	pModule->get_config (pKeyFile, pModule->pConfig);
 	
-	pModule->reload ();
+	pModule->reload (pPrevConfig, pModule->pConfig);
 	
-	pModule->reset_config ();
+	if (pModule->reset_config)
+		pModule->reset_config (pPrevConfig);
+	g_free (pPrevConfig);
 }

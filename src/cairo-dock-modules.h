@@ -96,5 +96,10 @@ gboolean cairo_dock_reserve_data_slot (CairoDockModuleInstance *pInstance);
 	(pContainer)->pDataSlot[pInstance->iSlotID] = pData
 
 
+void cairo_dock_preload_internal_modules (GHashTable *pModuleTable);
+
+void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, GKeyFile *pKeyFile);
+
+
 G_END_DECLS
 #endif

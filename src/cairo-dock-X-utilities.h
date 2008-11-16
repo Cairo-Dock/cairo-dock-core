@@ -3,6 +3,7 @@
 #define  __CAIRO_DOCK_X_UTILITIES__
 
 #include <X11/Xlib.h>
+#include <glib.h>
 G_BEGIN_DECLS
 
 

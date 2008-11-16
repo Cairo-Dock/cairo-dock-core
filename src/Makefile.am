@@ -23,7 +23,6 @@ cairo_dock_CFLAGS = \
 	-DCAIRO_DOCK_SHARE_THEMES_DIR=\""$(pkgdatadir)/themes"\"\
 	-DCAIRO_DOCK_MODULES_DIR=\""$(libdir)/$(PACKAGE)"\"\
 	-DCAIRO_DOCK_CONF_FILE=\""cairo-dock.conf"\"\
-	-DCAIRO_DOCK_EASY_CONF_FILE=\""cairo-dock_easy.conf"\"\
 	-DCAIRO_DOCK_LAUNCHER_CONF_FILE=\""launcher.conf"\"\
 	-DCAIRO_DOCK_CONTAINER_CONF_FILE=\""container.conf"\"\
 	-DCAIRO_DOCK_SEPARATOR_CONF_FILE=\""separator.conf"\"\
@@ -136,8 +135,15 @@ cairo_dock_SOURCES = \
 	cairo-dock-gui-callbacks.c\
 	cairo-dock-gui-callbacks.h\
 	cairo-dock-gui-manager.c\
-	cairo-dock-gui-manager.h
-
+	cairo-dock-gui-manager.h\
+	cairo-dock-position.c\
+	cairo-dock-position.h\
+	cairo-dock-accessibility.c\
+	cairo-dock-accessibility.h\
+	cairo-dock-system.c\
+	cairo-dock-system.h\
+	cairo-dock-taskbar.c\
+	cairo-dock-taskbar.h
 
 
 cairo_dockincludedir =\
@@ -194,3 +200,7 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-gui-factory.h\
 	cairo-dock-gui-callbacks.h\
 	cairo-dock-gui-manager.h
+	cairo-dock-position.h\
+	cairo-dock-accessibility.h\
+	cairo-dock-system.h\
+	cairo-dock-taskbar.h

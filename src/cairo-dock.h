@@ -43,5 +43,7 @@
 #include <cairo-dock/cairo-dock-particle-system.h>
 #include <cairo-dock/cairo-dock-draw-opengl.h>
 #include <cairo-dock/cairo-dock-gui-manager.h>
+#include <cairo-dock/cairo-dock-gui-factory.h>
+#include <cairo-dock/cairo-dock-gui-callbacks.h>
 
 #endif

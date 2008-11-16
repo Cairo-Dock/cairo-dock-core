@@ -7,83 +7,128 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 *********************************************************************************/
 
+#include <string.h>
 #include "cairo-dock-config.h"
+#include "cairo-dock-dock-manager.h"
+#include "cairo-dock-dock-factory.h"
+#include "cairo-dock-keybinder.h"
+#include "cairo-dock-callbacks.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-accessibility.h"
 
 
 CairoConfigAccessibility myAccessibility;
-CairoConfigAccessibility prevAccessibility;
+extern CairoDock *g_pMainDock;
+extern gint g_iScreenWidth[2];
 
-
-GET_GROUP_CONFIG_BEGIN (Accessibility)
-	g_bReserveSpace = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "reserve space", &bFlushConfFileNeeded, FALSE, "Position", NULL);
-
-	cairo_dock_deactivate_temporary_auto_hide ();
-	pDock->bAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "auto-hide", &bFlushConfFileNeeded, FALSE, "Position", "auto-hide");
-	
-	g_bPopUp = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "pop-up", &bFlushConfFileNeeded, FALSE, "Position", NULL);
-	g_bPopUpOnScreenBorder = ! cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "pop in corner only", &bFlushConfFileNeeded, FALSE, "Position", NULL);
-	
-	g_iMaxAuthorizedWidth = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "max autorized width", &bFlushConfFileNeeded, 0, "Position", NULL);
-	
-	if (g_cRaiseDockShortcut != NULL)
-	{
-		cd_keybinder_unbind (g_cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_keyboard);
-		g_free (g_cRaiseDockShortcut);
-	}
-	g_cRaiseDockShortcut = cairo_dock_get_string_key_value (pKeyFile, "Accessibility", "raise shortcut", &bFlushConfFileNeeded, NULL, "Position", NULL);
-	
-	g_iLeaveSubDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "leaving delay", &bFlushConfFileNeeded, 330, "System", NULL);
-	g_iShowSubDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "show delay", &bFlushConfFileNeeded, 300, "System", NULL);
-	bShowSubDockOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "show on click", &bFlushConfFileNeeded, FALSE, "System", NULL);
-GET_GROUP_CONFIG_END
-
-
-void reset_config_Accessibility (void)
+static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAccessibility)
 {
-	if (myAccessibility.cRaiseDockShortcut != NULL)
+	gboolean bFlushConfFileNeeded = FALSE;
+	
+	pAccessibility->bReserveSpace = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "reserve space", &bFlushConfFileNeeded, FALSE, "Position", NULL);
+
+	pAccessibility->bAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "auto-hide", &bFlushConfFileNeeded, FALSE, "Position", "auto-hide");
+	
+	pAccessibility->bPopUp = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "pop-up", &bFlushConfFileNeeded, FALSE, "Position", NULL);
+	pAccessibility->bPopUpOnScreenBorder = ! cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "pop in corner only", &bFlushConfFileNeeded, FALSE, "Position", NULL);
+	
+	pAccessibility->iMaxAuthorizedWidth = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "max autorized width", &bFlushConfFileNeeded, 0, "Position", NULL);
+	
+	pAccessibility->cRaiseDockShortcut = cairo_dock_get_string_key_value (pKeyFile, "Accessibility", "raise shortcut", &bFlushConfFileNeeded, NULL, "Position", NULL);
+	
+	pAccessibility->iLeaveSubDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "leaving delay", &bFlushConfFileNeeded, 330, "System", NULL);
+	pAccessibility->iShowSubDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "show delay", &bFlushConfFileNeeded, 300, "System", NULL);
+	pAccessibility->bShowSubDockOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "show on click", &bFlushConfFileNeeded, FALSE, "System", NULL);
+
+	return bFlushConfFileNeeded;
+}
+
+
+static void reset_config (CairoConfigAccessibility *pAccessibility)
+{
+	g_free (pAccessibility->cRaiseDockShortcut);
+}
+
+
+#define _bind_key(cShortcut) \
+	do { if (! cd_keybinder_bind (cShortcut, (CDBindkeyHandler) cairo_dock_raise_from_keyboard, NULL)) { \
+		g_free (cShortcut); \
+		cShortcut = NULL; } } while (0)
+
+static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAccessibility *pAccessibility)
+{
+	CairoDock *pDock = g_pMainDock;
+	
+	//\_______________ Shortcut.
+	if (pAccessibility->cRaiseDockShortcut != NULL)
 	{
-		if (! cd_keybinder_bind (myAccessibility.cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_keyboard, NULL))
+		if (pPrevAccessibility->cRaiseDockShortcut == NULL || strcmp (pAccessibility->cRaiseDockShortcut, pPrevAccessibility->cRaiseDockShortcut) != 0)
 		{
-			g_free (myAccessibility.cRaiseDockShortcut);
-			myAccessibility.cRaiseDockShortcut = NULL;
+			if (pPrevAccessibility->cRaiseDockShortcut != NULL)
+				cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_keyboard);
+			_bind_key (pAccessibility->cRaiseDockShortcut);
 		}
 	}
+	else
+	{
+		if (pPrevAccessibility->cRaiseDockShortcut != NULL)
+		{
+			cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_keyboard);
+			cairo_dock_place_root_dock (pDock);
+			gtk_widget_show (pDock->pWidget);
+		}
+	}
+	
+	//\_______________ Max Size.
+	if (pAccessibility->iMaxAuthorizedWidth == 0 || pAccessibility->iMaxAuthorizedWidth > g_iScreenWidth[g_pMainDock->bHorizontalDock])
+		pAccessibility->iMaxAuthorizedWidth = g_iScreenWidth[g_pMainDock->bHorizontalDock];
+	if (pAccessibility->iMaxAuthorizedWidth != pPrevAccessibility->iMaxAuthorizedWidth)
+	{
+		/// le faire pour tous les docks racine...
+		cairo_dock_update_dock_size (g_pMainDock);  // met a jour les icones et le fond aussi.
+	}
+	
+	//\_______________ Reserve Spave.
+	pAccessibility->bReserveSpace = pAccessibility->bReserveSpace && (pAccessibility->cRaiseDockShortcut == NULL);
+	if (pAccessibility->bReserveSpace != pPrevAccessibility->bReserveSpace)
+		cairo_dock_reserve_space_for_all_docks (pAccessibility->bReserveSpace);
+	
+	if (pAccessibility->bPopUp)
+		cairo_dock_start_polling_screen_edge (pDock);
+	else
+		cairo_dock_stop_polling_screen_edge ();
+	if (! pAccessibility->bPopUp && pPrevAccessibility->bPopUp)
+	{
+		cairo_dock_set_root_docks_on_top_layer ();
+	}
+	else if (pAccessibility->bPopUp && ! pPrevAccessibility->bPopUp)
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
+	
+	//\_______________ Auto-Hide
+	pDock->bAutoHide = pAccessibility->bAutoHide;
+	if (! pAccessibility->bAutoHide && pPrevAccessibility->bAutoHide)
+		cairo_dock_deactivate_temporary_auto_hide ();
+	else
+		cairo_dock_place_root_dock (pDock);
 }
 
 
-gboolean pre_init (CairoDockVisitCard *pVisitCard, CairoDockModuleInterface *pInterface) \
+
+DEFINE_PRE_INIT (Accessibility)
 {
-	pVisitCard->cModuleName = g_strdup ("Accessibility");
-	pVisitCard->cReadmeFilePath = NULL;
-	pVisitCard->iMajorVersionNeeded = g_iMajorVersion;
-	pVisitCard->iMinorVersionNeeded = g_iMinorVersion;
-	pVisitCard->iMicroVersionNeeded = g_iMicroVersion;
-	pVisitCard->cPreviewFilePath = NULL;
-	pVisitCard->cGettextDomain = NULL;
-	pVisitCard->cDockVersionOnCompilation = CAIRO_DOCK_VERSION;
-	pVisitCard->cUserDataDir = g_cCurrentThemePath;
-	pVisitCard->cShareDataDir = CAIRO_DOCK_SHARE_DATA_DIR
-	pVisitCard->cConfFileName = g_cConfFile;
-	pVisitCard->cModuleVersion = CAIRO_DOCK_VERSION;
-	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
-	pVisitCard->cIconFilePath = NULL;
-	pVisitCard->iSizeOfConfig = sizeof (CairoConfigAccessibility);
-	pVisitCard->iSizeOfData = 0;
+	pModule->cModuleName = "Accessibility";
+	pModule->cTitle = "Accessibility";
+	pModule->cIcon = "gtk-help";
+	pModule->cDescription = "How do you access to your docks ?";
+	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
+	pModule->iSizeOfConfig = sizeof (CairoConfigAccessibility);
+	pModule->iSizeOfData = 0;
 	
-	pInterface->initModule = NULL;
-	pInterface->stopModule = NULL;
-	pInterface->reloadModule = reload;
-	pInterface->reset_config = reset_config;
-	pInterface->reset_data = NULL;
-	pInterface->read_conf_file = read_conf_file;
+	pModule->reload = (CairoDockInternalModuleReloadFunc) reload;
+	pModule->get_config = (CairoDockInternalModuleGetConfigFunc) get_config;
+	pModule->reset_config = (CairoDockInternalModuleResetConfigFunc) reset_config;
+	pModule->reset_data = NULL;
 	
-	return TRUE ;
+	pModule->pConfig = &myAccessibility;
+	pModule->pData = NULL;
 }
-
-gboolean reload (CairoDockModuleInstance *myApplet, CairoContainer *pOldContainer, GKeyFile *pKeyFile) 
-{
-	
-}
-
