@@ -139,11 +139,7 @@ cairo_dock_SOURCES = \
 	cairo-dock-position.c\
 	cairo-dock-position.h\
 	cairo-dock-accessibility.c\
-	cairo-dock-accessibility.h\
-	cairo-dock-system.c\
-	cairo-dock-system.h\
-	cairo-dock-taskbar.c\
-	cairo-dock-taskbar.h
+	cairo-dock-accessibility.h
 
 
 cairo_dockincludedir =\
