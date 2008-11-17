@@ -387,7 +387,8 @@ cairo_dock-cairo-dock-gauge.o cairo_dock-cairo-dock-gauge.o:  \
   cairo-dock-applet-single-instance.h cairo-dock-draw.h \
   cairo-dock-themes-manager.h cairo-dock-surface-factory.h \
   cairo-dock-dock-factory.h cairo-dock-keyfile-utilities.h \
-  cairo-dock-config.h cairo-dock-gauge.h
+  cairo-dock-config.h cairo-dock-renderer-manager.h cairo-dock-desklet.h \
+  cairo-dock-struct.h cairo-dock-dock-factory.h cairo-dock-gauge.h
 
 /usr/include/string.h:
 
@@ -1292,5 +1293,13 @@ cairo-dock-dock-factory.h:
 cairo-dock-keyfile-utilities.h:
 
 cairo-dock-config.h:
+
+cairo-dock-renderer-manager.h:
+
+cairo-dock-desklet.h:
+
+cairo-dock-struct.h:
+
+cairo-dock-dock-factory.h:
 
 cairo-dock-gauge.h:

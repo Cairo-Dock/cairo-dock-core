@@ -371,7 +371,7 @@ cairo_dock-cairo-dock-gui-manager.o cairo_dock-cairo-dock-gui-manager.o:  \
   /usr/include/bits/wchar.h cairo-dock-modules.h cairo-dock-log.h \
   cairo-dock-gui-factory.h cairo-dock-gui-callbacks.h \
   cairo-dock-gui-manager.h cairo-dock-keyfile-utilities.h \
-  cairo-dock-animations.h
+  cairo-dock-animations.h cairo-dock-draw.h
 
 /usr/include/string.h:
 
@@ -1240,3 +1240,5 @@ cairo-dock-gui-manager.h:
 cairo-dock-keyfile-utilities.h:
 
 cairo-dock-animations.h:
+
+cairo-dock-draw.h:

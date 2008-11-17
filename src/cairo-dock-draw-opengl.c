@@ -717,7 +717,6 @@ void cairo_dock_update_icon_texture (Icon *pIcon)
 			glGenTextures (1, &pIcon->iIconTexture);
 		int w = cairo_image_surface_get_width (pIcon->pIconBuffer);
 		int h = cairo_image_surface_get_height (pIcon->pIconBuffer);
-		g_print ("pIcon->iIconTexture:%d (%d;%d)\n", pIcon->iIconTexture, w, h);
 		glBindTexture (GL_TEXTURE_2D, pIcon->iIconTexture);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

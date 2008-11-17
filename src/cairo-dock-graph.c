@@ -13,12 +13,14 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <cairo-dock-log.h>
 #include <cairo-dock-surface-factory.h>
 #include <cairo-dock-dock-factory.h>
+#include <cairo-dock-renderer-manager.h>
 #include <cairo-dock-draw.h>
 #include <cairo-dock-graph.h>
 
 extern int g_iDockRadius;
 extern double g_fAmplitude;
 extern CairoDockLabelDescription g_quickInfoTextDescription;
+extern gboolean g_bUseOpenGL;
 
 
 void cairo_dock_draw_graph (cairo_t *pCairoContext, CairoDockGraph *pGraph)
@@ -195,6 +197,9 @@ void cairo_dock_render_graph (cairo_t *pSourceContext, CairoContainer *pContaine
 			fMaxScale,
 			pContainer->bDirectionUp);
 	}
+	
+	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer))
+		cairo_dock_update_icon_texture (pIcon);
 	
 	cairo_dock_redraw_my_icon (pIcon, pContainer);
 }

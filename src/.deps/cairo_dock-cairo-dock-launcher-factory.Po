@@ -373,7 +373,8 @@ cairo_dock-cairo-dock-launcher-factory.o \
   /usr/include/GL/glext.h /usr/include/inttypes.h /usr/include/stdint.h \
   /usr/include/bits/wchar.h cairo-dock-icons.h cairo-dock-dock-factory.h \
   cairo-dock-surface-factory.h cairo-dock-renderer-manager.h \
-  cairo-dock-file-manager.h cairo-dock-log.h cairo-dock-dock-manager.h \
+  cairo-dock-desklet.h cairo-dock-struct.h cairo-dock-file-manager.h \
+  cairo-dock-log.h cairo-dock-dock-manager.h \
   cairo-dock-applications-manager.h cairo-dock-class-manager.h \
   cairo-dock-launcher-factory.h
 
@@ -1244,6 +1245,10 @@ cairo-dock-dock-factory.h:
 cairo-dock-surface-factory.h:
 
 cairo-dock-renderer-manager.h:
+
+cairo-dock-desklet.h:
+
+cairo-dock-struct.h:
 
 cairo-dock-file-manager.h:
 

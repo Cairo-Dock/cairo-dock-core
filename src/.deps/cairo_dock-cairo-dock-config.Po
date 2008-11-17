@@ -374,12 +374,11 @@ cairo_dock-cairo-dock-config.o cairo_dock-cairo-dock-config.o:  \
   cairo-dock-applications-manager.h cairo-dock-modules.h \
   cairo-dock-keyfile-utilities.h cairo-dock-gui-factory.h \
   cairo-dock-dock-factory.h cairo-dock-themes-manager.h \
-  cairo-dock-renderer-manager.h cairo-dock-menu.h cairo-dock-callbacks.h \
-  cairo-dock-dialogs.h cairo-dock-X-utilities.h cairo-dock-log.h \
-  cairo-dock-keybinder.h cairo-dock-dock-manager.h \
-  cairo-dock-surface-factory.h cairo-dock-class-manager.h \
-  cairo-dock-emblem.h cairo-dock-desklet.h cairo-dock-struct.h \
-  cairo-dock-config.h
+  cairo-dock-renderer-manager.h cairo-dock-desklet.h cairo-dock-struct.h \
+  cairo-dock-menu.h cairo-dock-callbacks.h cairo-dock-dialogs.h \
+  cairo-dock-X-utilities.h cairo-dock-log.h cairo-dock-keybinder.h \
+  cairo-dock-dock-manager.h cairo-dock-surface-factory.h \
+  cairo-dock-class-manager.h cairo-dock-emblem.h cairo-dock-config.h
 
 /usr/include/math.h:
 
@@ -1259,6 +1258,10 @@ cairo-dock-themes-manager.h:
 
 cairo-dock-renderer-manager.h:
 
+cairo-dock-desklet.h:
+
+cairo-dock-struct.h:
+
 cairo-dock-menu.h:
 
 cairo-dock-callbacks.h:
@@ -1278,9 +1281,5 @@ cairo-dock-surface-factory.h:
 cairo-dock-class-manager.h:
 
 cairo-dock-emblem.h:
-
-cairo-dock-desklet.h:
-
-cairo-dock-struct.h:
 
 cairo-dock-config.h:

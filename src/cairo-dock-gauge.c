@@ -19,10 +19,12 @@ Written by Necropotame (for any bug report, please mail me to fabounet@users.ber
 #include <cairo-dock-dock-factory.h>
 #include <cairo-dock-keyfile-utilities.h>
 #include <cairo-dock-config.h>
+#include <cairo-dock-renderer-manager.h>
 #include <cairo-dock-gauge.h>
 
 extern double g_fAmplitude;
 extern gchar *g_cCairoDockDataDir;
+extern gboolean g_bUseOpenGL;
 
 static GHashTable *s_pGaugeTable = NULL;
 
@@ -336,6 +338,9 @@ void cairo_dock_render_gauge_multi_value(cairo_t *pSourceContext, CairoContainer
 			fMaxScale,
 			pContainer->bDirectionUp);
 	}
+	
+	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer))
+		cairo_dock_update_icon_texture (pIcon);
 	
 	cairo_dock_redraw_my_icon (pIcon, pContainer);
 }

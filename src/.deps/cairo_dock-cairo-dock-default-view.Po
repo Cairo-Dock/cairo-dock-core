@@ -371,7 +371,8 @@ cairo_dock-cairo-dock-default-view.o cairo_dock-cairo-dock-default-view.o:  \
   /usr/include/locale.h /usr/include/bits/locale.h /usr/include/GL/gl.h \
   /usr/include/GL/glext.h /usr/include/inttypes.h /usr/include/stdint.h \
   /usr/include/bits/wchar.h cairo-dock-icons.h cairo-dock-draw.h \
-  cairo-dock-renderer-manager.h cairo-dock-draw-opengl.h cairo-dock-log.h \
+  cairo-dock-renderer-manager.h cairo-dock-desklet.h cairo-dock-struct.h \
+  cairo-dock-dock-factory.h cairo-dock-draw-opengl.h cairo-dock-log.h \
   cairo-dock-default-view.h
 
 /usr/include/math.h:
@@ -1239,6 +1240,12 @@ cairo-dock-icons.h:
 cairo-dock-draw.h:
 
 cairo-dock-renderer-manager.h:
+
+cairo-dock-desklet.h:
+
+cairo-dock-struct.h:
+
+cairo-dock-dock-factory.h:
 
 cairo-dock-draw-opengl.h:
 

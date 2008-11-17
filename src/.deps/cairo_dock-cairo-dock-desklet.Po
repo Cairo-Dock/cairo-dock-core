@@ -403,8 +403,8 @@ cairo_dock-cairo-dock-desklet.o cairo_dock-cairo-dock-desklet.o:  \
   cairo-dock-applications-manager.h cairo-dock-notifications.h \
   cairo-dock-log.h cairo-dock-menu.h cairo-dock-dock-factory.h \
   cairo-dock-X-utilities.h cairo-dock-surface-factory.h \
-  cairo-dock-renderer-manager.h cairo-dock-draw-opengl.h \
-  cairo-dock-load.h cairo-dock-desklet.h cairo-dock-struct.h
+  cairo-dock-renderer-manager.h cairo-dock-desklet.h cairo-dock-struct.h \
+  cairo-dock-draw-opengl.h cairo-dock-load.h
 
 /usr/include/stdlib.h:
 
@@ -1356,10 +1356,10 @@ cairo-dock-surface-factory.h:
 
 cairo-dock-renderer-manager.h:
 
-cairo-dock-draw-opengl.h:
-
-cairo-dock-load.h:
-
 cairo-dock-desklet.h:
 
 cairo-dock-struct.h:
+
+cairo-dock-draw-opengl.h:
+
+cairo-dock-load.h:

@@ -369,8 +369,9 @@ cairo_dock-cairo-dock-graph.o cairo_dock-cairo-dock-graph.o:  \
   /usr/include/glib-2.0/glib/gi18n.h /usr/include/libintl.h \
   /usr/include/locale.h /usr/include/bits/locale.h /usr/include/GL/gl.h \
   /usr/include/GL/glext.h /usr/include/inttypes.h /usr/include/stdint.h \
-  /usr/include/bits/wchar.h cairo-dock-dock-factory.h cairo-dock-draw.h \
-  cairo-dock-graph.h cairo-dock-struct.h
+  /usr/include/bits/wchar.h cairo-dock-dock-factory.h \
+  cairo-dock-renderer-manager.h cairo-dock-desklet.h cairo-dock-struct.h \
+  cairo-dock-dock-factory.h cairo-dock-draw.h cairo-dock-graph.h
 
 /usr/include/string.h:
 
@@ -1236,8 +1237,14 @@ cairo-dock-struct.h:
 
 cairo-dock-dock-factory.h:
 
+cairo-dock-renderer-manager.h:
+
+cairo-dock-desklet.h:
+
+cairo-dock-struct.h:
+
+cairo-dock-dock-factory.h:
+
 cairo-dock-draw.h:
 
 cairo-dock-graph.h:
-
-cairo-dock-struct.h:

@@ -20,6 +20,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-gui-callbacks.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-animations.h"
+#include "cairo-dock-draw.h"
 #include "cairo-dock-gui-manager.h"
 
 #define CAIRO_DOCK_GROUP_ICON_SIZE 48
@@ -241,22 +242,49 @@ static gboolean _cairo_dock_add_one_module_widget (gchar *cModuleName, CairoDock
 	return FALSE;
 }
 
+static gboolean on_expose (GtkWidget *pWidget,
+	GdkEventExpose *pExpose,
+	gpointer data)
+{
+	cairo_t *pCairoContext = gdk_cairo_create (pWidget->window);
+	int w, h;
+	gtk_window_get_size (pWidget, &w, &h);
+	cairo_pattern_t *pPattern = cairo_pattern_create_linear (0,0,
+		w,
+		h);
+	cairo_pattern_set_extend (pPattern, CAIRO_EXTEND_REPEAT);
+	cairo_pattern_add_color_stop_rgba   (pPattern,
+		1.,
+		0,0,0,0.0);
+	cairo_pattern_add_color_stop_rgba   (pPattern,
+		0.,
+		241/255., 234/255., 255/255., 0.75);
+	cairo_set_source (pCairoContext, pPattern);
+	
+	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
+	cairo_paint (pCairoContext);
+	
+	cairo_pattern_destroy (pPattern);
+	cairo_destroy (pCairoContext);
+	return FALSE;
+}
 GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanceMode)
 {
 	//\_____________ On construit la fenetre.
 	if (s_pMainWindow != NULL)
 		return s_pMainWindow;
 	s_pMainWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	//gtk_container_set_border_width (s_pMainWindow, CAIRO_DOCK_GUI_MARGIN);
 	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
 	gtk_window_set_icon_from_file (GTK_WINDOW (s_pMainWindow), cIconPath, NULL);
 	g_free (cIconPath);
 	
 	GtkWidget *pMainHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
 	gtk_container_add (GTK_CONTAINER (s_pMainWindow), pMainHBox);
+	gtk_container_set_border_width (pMainHBox, CAIRO_DOCK_GUI_MARGIN);
 	
 	GtkWidget *pCategoriesVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
-	gtk_widget_set_size_request (pCategoriesVBox, CAIRO_DOCK_PREVIEW_WIDTH, CAIRO_DOCK_PREVIEW_HEIGHT);
-	//gtk_container_add (GTK_CONTAINER (pMainHBox), pCategoriesVBox);
+	gtk_widget_set_size_request (pCategoriesVBox, CAIRO_DOCK_PREVIEW_WIDTH+2*CAIRO_DOCK_GUI_MARGIN, CAIRO_DOCK_PREVIEW_HEIGHT);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pCategoriesVBox,
 		FALSE,
@@ -264,7 +292,6 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 		0);
 	
 	GtkWidget *pVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_TABLE_MARGIN);
-	//gtk_container_add (GTK_CONTAINER (pMainHBox), pVBox);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pVBox,
 		TRUE,
@@ -274,12 +301,23 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), s_pGroupsVBox);
-	//gtk_container_add (GTK_CONTAINER (pVBox), pScrolledWindow);
 	gtk_box_pack_start (GTK_BOX (pVBox),
 		pScrolledWindow,
 		TRUE,
 		TRUE,
 		0);
+	
+	cairo_dock_set_colormap_for_window (s_pMainWindow);
+	gtk_widget_set_app_paintable (s_pMainWindow, TRUE);
+	g_signal_connect (G_OBJECT (s_pMainWindow),
+		"expose-event",
+		G_CALLBACK (on_expose),
+		NULL);
+	
+	/*g_signal_connect (G_OBJECT (s_pGroupsVBox),
+		"expose-event",
+		G_CALLBACK (on_expose),
+		NULL);*/
 	
 	s_pToolTipsGroup = gtk_tooltips_new ();
 	gtk_tooltips_enable (GTK_TOOLTIPS (s_pToolTipsGroup));

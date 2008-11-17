@@ -369,7 +369,7 @@ cairo_dock-cairo-dock-renderer-manager.o \
   /usr/include/bits/wchar.h cairo-dock-icons.h cairo-dock-callbacks.h \
   cairo-dock-keyfile-utilities.h cairo-dock-default-view.h \
   cairo-dock-dock-factory.h cairo-dock-log.h cairo-dock-gui-factory.h \
-  cairo-dock-renderer-manager.h
+  cairo-dock-renderer-manager.h cairo-dock-desklet.h cairo-dock-struct.h
 
 /usr/include/stdlib.h:
 
@@ -1228,3 +1228,7 @@ cairo-dock-log.h:
 cairo-dock-gui-factory.h:
 
 cairo-dock-renderer-manager.h:
+
+cairo-dock-desklet.h:
+
+cairo-dock-struct.h:

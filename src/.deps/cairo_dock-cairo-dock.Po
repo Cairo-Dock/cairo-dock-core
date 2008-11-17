@@ -400,14 +400,14 @@ cairo_dock-cairo-dock.o cairo_dock-cairo-dock.o: cairo-dock.c \
   cairo-dock-menu.h cairo-dock-themes-manager.h cairo-dock-dialogs.h \
   cairo-dock-notifications.h cairo-dock-keyfile-utilities.h \
   cairo-dock-config.h cairo-dock-file-manager.h \
-  cairo-dock-renderer-manager.h cairo-dock-keybinder.h cairo-dock-log.h \
+  cairo-dock-renderer-manager.h cairo-dock-desklet.h cairo-dock-struct.h \
+  cairo-dock-dock-factory.h cairo-dock-keybinder.h cairo-dock-log.h \
   cairo-dock-draw-opengl.h cairo-dock-X-utilities.h \
   cairo-dock-gui-manager.h cairo-dock-dbus.h \
   /usr/include/dbus-1.0/dbus/dbus-glib.h \
   /usr/include/dbus-1.0/dbus/dbus-shared.h \
   /usr/include/dbus-1.0/dbus/dbus-gtype-specialized.h \
-  /usr/include/dbus-1.0/dbus/dbus-glib-bindings.h cairo-dock-load.h \
-  cairo-dock-desklet.h cairo-dock-struct.h
+  /usr/include/dbus-1.0/dbus/dbus-glib-bindings.h cairo-dock-load.h
 
 /usr/include/math.h:
 
@@ -1355,6 +1355,12 @@ cairo-dock-file-manager.h:
 
 cairo-dock-renderer-manager.h:
 
+cairo-dock-desklet.h:
+
+cairo-dock-struct.h:
+
+cairo-dock-dock-factory.h:
+
 cairo-dock-keybinder.h:
 
 cairo-dock-log.h:
@@ -1376,7 +1382,3 @@ cairo-dock-dbus.h:
 /usr/include/dbus-1.0/dbus/dbus-glib-bindings.h:
 
 cairo-dock-load.h:
-
-cairo-dock-desklet.h:
-
-cairo-dock-struct.h:

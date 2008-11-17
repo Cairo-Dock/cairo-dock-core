@@ -406,11 +406,11 @@ cairo_dock-cairo-dock-dock-factory.o cairo_dock-cairo-dock-dock-factory.o:  \
   cairo-dock-applications-manager.h cairo-dock-load.h cairo-dock-config.h \
   cairo-dock-modules.h cairo-dock-callbacks.h cairo-dock-icons.h \
   cairo-dock-separator-factory.h cairo-dock-launcher-factory.h \
-  cairo-dock-renderer-manager.h cairo-dock-file-manager.h \
+  cairo-dock-renderer-manager.h cairo-dock-desklet.h cairo-dock-struct.h \
+  cairo-dock-dock-factory.h cairo-dock-file-manager.h \
   cairo-dock-X-utilities.h cairo-dock-log.h \
   cairo-dock-keyfile-utilities.h cairo-dock-dock-manager.h \
-  cairo-dock-notifications.h cairo-dock-class-manager.h \
-  cairo-dock-dock-factory.h
+  cairo-dock-notifications.h cairo-dock-class-manager.h
 
 /usr/include/math.h:
 
@@ -1368,6 +1368,12 @@ cairo-dock-launcher-factory.h:
 
 cairo-dock-renderer-manager.h:
 
+cairo-dock-desklet.h:
+
+cairo-dock-struct.h:
+
+cairo-dock-dock-factory.h:
+
 cairo-dock-file-manager.h:
 
 cairo-dock-X-utilities.h:
@@ -1381,5 +1387,3 @@ cairo-dock-dock-manager.h:
 cairo-dock-notifications.h:
 
 cairo-dock-class-manager.h:
-
-cairo-dock-dock-factory.h:

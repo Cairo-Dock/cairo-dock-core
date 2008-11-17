@@ -41,14 +41,14 @@ max autorized width = 0
 #{This will prevent other windows from overlapping the dock. It has no effect if you defined the 'show/hide' shortcut below, cause then the dock behaves like a menu.}
 reserve space = false
 
-#F-[Auto-hide;gtk-down]
+#F-[Auto-hide;gtk-go-down]
 frame_auto=
 
 #b- Activate auto-hide ?
 #{The dock will automatically hide itself outside of the scren when the mouse leaves it and will show a callback zone instead. Place the mouse into this zone will make the dock re-appear.}
 auto-hide = false
 
-#F-[Pop-up;gtk-up]
+#F-[Pop-up;gtk-go-up]
 frame_pop =
 
 #b- Keep the dock below other windows ?

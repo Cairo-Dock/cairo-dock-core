@@ -368,9 +368,9 @@ cairo_dock-cairo-dock-desktop-file-factory.o \
   /usr/include/GL/glext.h /usr/include/inttypes.h /usr/include/stdint.h \
   /usr/include/bits/wchar.h cairo-dock-keyfile-utilities.h \
   cairo-dock-dock-factory.h cairo-dock-config.h \
-  cairo-dock-renderer-manager.h cairo-dock-file-manager.h \
-  cairo-dock-dialogs.h cairo-dock-log.h cairo-dock-dock-manager.h \
-  cairo-dock-desktop-file-factory.h
+  cairo-dock-renderer-manager.h cairo-dock-desklet.h cairo-dock-struct.h \
+  cairo-dock-file-manager.h cairo-dock-dialogs.h cairo-dock-log.h \
+  cairo-dock-dock-manager.h cairo-dock-desktop-file-factory.h
 
 /usr/include/stdlib.h:
 
@@ -1221,6 +1221,10 @@ cairo-dock-dock-factory.h:
 cairo-dock-config.h:
 
 cairo-dock-renderer-manager.h:
+
+cairo-dock-desklet.h:
+
+cairo-dock-struct.h:
 
 cairo-dock-file-manager.h:
 
