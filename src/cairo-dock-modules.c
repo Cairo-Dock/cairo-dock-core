@@ -28,6 +28,11 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-applet-factory.h"
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-animations.h"
+#include "cairo-dock-internal-position.h"
+#include "cairo-dock-internal-accessibility.h"
+#include "cairo-dock-internal-system.h"
+#include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-modules.h"
 
 #define CAIRO_DOCK_MODULE_PANEL_WIDTH 700
@@ -819,70 +824,6 @@ void cairo_dock_deactivate_module_and_unload (gchar *cModuleName)
 }
 
 
-/*static void _cairo_dock_configure_module_instance_callback (gchar *cConfFile, gpointer *data)
-{
-	g_return_if_fail (data != NULL);
-	CairoDockModuleInstance *pModuleInstance = data[0];
-	gboolean bReloadAppletConf = GPOINTER_TO_INT (data[1]);
-	cairo_dock_reload_module_instance (pModuleInstance, bReloadAppletConf);
-}
-void cairo_dock_configure_module_instance (GtkWindow *pParentWindow, CairoDockModuleInstance *pModuleInstance, GError **erreur)
-{
-	g_return_if_fail (pModuleInstance != NULL);
-	
-	cd_message ("%s (%s)", __func__, pModuleInstance->cConfFilePath);
-	
-	cairo_dock_update_applet_conf_file_with_containers (NULL, pModuleInstance->cConfFilePath);
-	
-	gchar *cTitle = g_strdup_printf (_("Configuration of %s"), pModuleInstance->pModule->pVisitCard->cModuleName);
-	gpointer *data = g_new (gpointer, 2);
-	data[0]= pModuleInstance;
-	data[1] = GINT_TO_POINTER (TRUE);  // TRUE <=> reload applet conf file.
-	gboolean configuration_ok = cairo_dock_edit_conf_file (pParentWindow, pModuleInstance->cConfFilePath, cTitle, CAIRO_DOCK_MODULE_PANEL_WIDTH, CAIRO_DOCK_MODULE_PANEL_HEIGHT, 0, NULL, (CairoDockConfigFunc) _cairo_dock_configure_module_instance_callback, data, (GFunc) g_free, pModuleInstance->pModule->pVisitCard->cGettextDomain);
-	g_free (cTitle);
-}
-
-void cairo_dock_configure_inactive_module (GtkWindow *pParentWindow, CairoDockModule *pModule)
-{
-	if (pModule->cConfFilePath == NULL)  // on n'est pas encore passe par la dans le cas ou le plug-in n'a pas ete active; mais on veut pouvoir configurer un plug-in meme lorsqu'il est inactif.
-	{
-		pModule->cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
-	}
-	if (pModule->cConfFilePath == NULL)
-	{
-		cd_warning ("couldn't load a conf file for this module => can't configure it.");
-		return;
-	}
-	cd_message ("%s (%s)", __func__, pModule->cConfFilePath);
-	
-	cairo_dock_update_applet_conf_file_with_containers (NULL, pModule->cConfFilePath);
-	
-	gchar *cTitle = g_strdup_printf (_("Configuration of %s"), pModule->pVisitCard->cModuleName);
-	gboolean configuration_ok = cairo_dock_edit_conf_file (pParentWindow, pModule->cConfFilePath, cTitle, CAIRO_DOCK_MODULE_PANEL_WIDTH, CAIRO_DOCK_MODULE_PANEL_HEIGHT, 0, NULL, (CairoDockConfigFunc) NULL, NULL, (GFunc) NULL, pModule->pVisitCard->cGettextDomain);
-	g_free (cTitle);
-}
-
-void cairo_dock_configure_module (GtkWindow *pParentWindow, const gchar *cModuleName)
-{
-	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
-	g_return_if_fail (pModule != NULL);
-	
-	GError *erreur = NULL;
-	if (pModule->pInstancesList == NULL)  // module encore inactif.
-	{
-		cairo_dock_configure_inactive_module (pParentWindow, pModule);
-	}
-	else
-	{
-		cairo_dock_configure_module_instance (pParentWindow, pModule->pInstancesList->data, &erreur);  // on choisit de configurer la 1re instance.
-		if (erreur != NULL)
-		{
-			cd_warning (erreur->message);
-			g_error_free (erreur);
-		}
-	}
-}*/
-
 CairoDockModule *cairo_dock_find_module_from_name (const gchar *cModuleName)
 {
 	//g_print ("%s (%s)\n", __func__, cModuleName);
@@ -1308,17 +1249,20 @@ gboolean cairo_dock_reserve_data_slot (CairoDockModuleInstance *pInstance)
 
 
 
-
+#define REGISTER_INTERNAL_MODULE(cGroupName) \
+	pModule = g_new0 (CairoDockInternalModule, 1);\
+	cairo_dock_pre_init_##cGroupName (pModule);\
+	g_hash_table_insert (pModuleTable, pModule->cModuleName, pModule)
 void cairo_dock_preload_internal_modules (GHashTable *pModuleTable)
 {
 	cd_message ("");
 	CairoDockInternalModule *pModule;
 	
-	pModule = g_new0 (CairoDockInternalModule, 1);
-	// init
-	//g_hash_table_insert (pModuleTable, pModule->cModuleName, pModule);
-	
-	// repeter N fois.
+	REGISTER_INTERNAL_MODULE (Position);
+	REGISTER_INTERNAL_MODULE (Accessibility);
+	REGISTER_INTERNAL_MODULE (System);
+	REGISTER_INTERNAL_MODULE (TaskBar);
+	/// ...
 }
 
 void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, GKeyFile *pKeyFile)
@@ -1333,4 +1277,41 @@ void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, GKeyFi
 	if (pModule->reset_config)
 		pModule->reset_config (pPrevConfig);
 	g_free (pPrevConfig);
+}
+
+CairoDockInternalModule *cairo_dock_find_internal_module_from_name (const gchar *cModuleName)
+{
+	g_print ("%s (%s)\n", __func__, cModuleName);
+	g_return_val_if_fail (cModuleName != NULL, NULL);
+	return g_hash_table_lookup (s_hInternalModuleTable, cModuleName);
+}
+
+static void _cairo_dock_get_one_internal_module_config (gchar *cModuleName, CairoDockInternalModule *pModule, gpointer *data)
+{
+	GKeyFile *pKeyFile = data[0];
+	gboolean *bFlushConfFileNeeded = data[1];
+	
+	if (pModule->reset_config)
+	{
+		pModule->reset_config (pModule->pConfig);
+	}
+	memset (pModule->pConfig, 0, pModule->iSizeOfConfig);
+	*bFlushConfFileNeeded |= pModule->get_config (pKeyFile, pModule->pConfig);
+}
+gboolean cairo_dock_get_global_config (GKeyFile *pKeyFile)
+{
+	gboolean bFlushConfFileNeeded = FALSE;
+	gpointer data[2] = {pKeyFile, &bFlushConfFileNeeded};
+	g_hash_table_foreach (s_hInternalModuleTable, (GHFunc) _cairo_dock_get_one_internal_module_config, data);
+	return bFlushConfFileNeeded;
+}
+
+gboolean cairo_dock_get_internal_module_config (CairoDockInternalModule *pModule, GKeyFile *pKeyFile)
+{
+	if (pModule->reset_config)
+	{
+		pModule->reset_config (pModule->pConfig);
+	}
+	memset (pModule->pConfig, 0, pModule->iSizeOfConfig);
+	return pModule->get_config (pKeyFile, pModule->pConfig);
 }

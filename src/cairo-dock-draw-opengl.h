@@ -37,4 +37,8 @@ void cairo_dock_render_background_opengl (CairoDock *pDock);
 void cairo_dock_draw_texture (GLuint iTexture, int iWidth, int iHeight);
 
 
+const GLfloat *cairo_dock_draw_rectangle (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, int *iNbPoints);
+GLfloat *cairo_dock_draw_trapeze (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, double fInclination, double *fExtraWidth, int *iNbPoints);
+
+
 #endif

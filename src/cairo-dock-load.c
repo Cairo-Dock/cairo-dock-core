@@ -571,7 +571,8 @@ void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpoi
 void cairo_dock_load_visible_zone (CairoDock *pDock, gchar *cVisibleZoneImageFile, int iVisibleZoneWidth, int iVisibleZoneHeight, double fVisibleZoneAlpha)
 {
 	double fVisibleZoneWidth = iVisibleZoneWidth, fVisibleZoneHeight = iVisibleZoneHeight;
-	cairo_surface_destroy (g_pVisibleZoneSurface);
+	if (g_pVisibleZoneSurface != NULL)
+		cairo_surface_destroy (g_pVisibleZoneSurface);
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 	if (! g_bUseOpenGL)
 	{

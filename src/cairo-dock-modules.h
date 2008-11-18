@@ -59,12 +59,6 @@ CairoDockModuleInstance *cairo_dock_foreach_desklet (CairoDockForeachDeskletFunc
 CairoDockModule *cairo_dock_foreach_module (GHRFunc pCallback, gpointer user_data);
 
 
-/*GString **cairo_dock_list_modules_by_category (gboolean bActiveOnly);
-void cairo_dock_update_conf_file_with_modules_full (GKeyFile *pOpenedKeyFile, gchar *cConfFile, gchar *cGroupName, gchar *cKeyNameBase, gboolean bActiveOnly);
-#define cairo_dock_update_conf_file_with_available_modules2(pOpenedKeyFile, cConfFile) cairo_dock_update_conf_file_with_modules_full (pOpenedKeyFile, cConfFile, "Applets", "modules", FALSE)
-#define cairo_dock_update_easy_conf_file_with_available_modules2(pOpenedKeyFile, cConfFile) cairo_dock_update_conf_file_with_modules_full (pOpenedKeyFile, cConfFile, "System", "modules", FALSE)
-
-#define cairo_dock_update_conf_file_with_active_modules2(pOpenedKeyFile, cConfFile) cairo_dock_update_conf_file_with_modules_full (pOpenedKeyFile, cConfFile, "Applets", "modules", TRUE)*/
 gchar *cairo_dock_list_active_modules (void);
 void cairo_dock_update_conf_file_with_active_modules (void);
 
@@ -99,6 +93,12 @@ gboolean cairo_dock_reserve_data_slot (CairoDockModuleInstance *pInstance);
 void cairo_dock_preload_internal_modules (GHashTable *pModuleTable);
 
 void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, GKeyFile *pKeyFile);
+
+CairoDockInternalModule *cairo_dock_find_internal_module_from_name (const gchar *cModuleName);
+
+gboolean cairo_dock_get_internal_module_config (CairoDockInternalModule *pModule, GKeyFile *pKeyFile);
+
+gboolean cairo_dock_get_global_config (GKeyFile *pKeyFile);
 
 
 G_END_DECLS

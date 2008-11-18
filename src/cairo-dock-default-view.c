@@ -43,6 +43,7 @@ extern double g_fLineColor[4];
 extern gint g_iFrameMargin;
 extern gint g_iStringLineWidth;
 extern double g_fStringColor[4];
+extern gboolean g_bRoundedBottomCorner;
 
 extern double g_fAmplitude;
 extern CairoDockLabelDescription g_iconTextDescription;
@@ -346,7 +347,7 @@ void cairo_dock_render_opengl_linear (CairoDock *pDock)
 	double fRatio = pDock->fRatio;
 	
 	//\_____________ On genere les coordonnees du contour.
-	GLfloat pVertexTab[((90/DELTA_ROUND_DEGREE+1)*4+1)*3];
+	/*GLfloat pVertexTab[((90/DELTA_ROUND_DEGREE+1)*4+1)*3];
 	int iNbVertex = (90/DELTA_ROUND_DEGREE+1)*4;
 	memset (pVertexTab, 0, (90/DELTA_ROUND_DEGREE+1)*4*3*sizeof (GLfloat));
 	int i=0, t;
@@ -373,12 +374,12 @@ void cairo_dock_render_opengl_linear (CairoDock *pDock)
 		pVertexTab[3*i+1] = -1./2 + fRadius * sin (t*RADIAN) / fFrameHeight;
 	}
 	pVertexTab[3*i] = 1./2 + fRadius / fDockWidth;  // on boucle.
-	pVertexTab[3*i+1] = 1./2 / fFrameHeight;
+	pVertexTab[3*i+1] = 1./2;*/
+	int iNbVertex;
+	const GLfloat *pVertexTab = cairo_dock_draw_rectangle (fDockWidth, fFrameHeight, fRadius, g_bRoundedBottomCorner, &iNbVertex);
 	
-	//\_____________ On definit l'etat courant.
+	//\_____________ On trace le fond en texturant par des triangles.
 	glEnable(GL_TEXTURE_2D); // Je veux de la texture
-	
-	
 	glBindTexture(GL_TEXTURE_2D, g_iBackgroundTexture); // allez on bind la texture
 	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR ); // ok la on selectionne le type de generation des coordonnees de la texture
 	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR );
@@ -392,24 +393,21 @@ void cairo_dock_render_opengl_linear (CairoDock *pDock)
 	glScalef (fDockWidth, fFrameHeight, 1.);
 	//glRotatef (fInclinaisonCadre, 1.0f, 0.0f, 0.0); // Rotation ou pas selon trapeze ou autre 
 	
-	//\_____________ On trace en texturant par des triangles.
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Couleur a fond
-	
-	glBlendFunc (GL_SRC_ALPHA, 1.); // Transparence avec le canal alpha
 	glEnable(GL_BLEND); // On active le blend
+	glBlendFunc (GL_SRC_ALPHA, 1.); // Transparence avec le canal alpha
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Couleur a fond
 	///glEnable(GL_POLYGON_OFFSET_FILL);
 	///glPolygonOffset (1., 1.);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	
 	glBegin (GL_TRIANGLE_FAN);
 	glVertex3f(0., 0., 0.0f);
+	int i;
 	for (i = 0; i <= iNbVertex; i++) // La on affiche un polygone plein texture
 	{
 		glVertex3fv (&pVertexTab[3*i]);
 	}
 	glEnd();
-	
-	
 	
 	glDisable(GL_TEXTURE_GEN_S);
 	glDisable(GL_TEXTURE_GEN_T);

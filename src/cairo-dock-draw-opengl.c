@@ -708,7 +708,6 @@ GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw)
 
 void cairo_dock_update_icon_texture (Icon *pIcon)
 {
-	g_print ("%s (%x;%x)\n", __func__, pIcon, pIcon ? pIcon->pIconBuffer : 0);
 	if (pIcon != NULL && pIcon->pIconBuffer != NULL)
 	{
 		glEnable (GL_TEXTURE);
@@ -736,12 +735,16 @@ void cairo_dock_update_icon_texture (Icon *pIcon)
 
 void cairo_dock_update_label_texture (Icon *pIcon)
 {
+	if (pIcon->iLabelTexture != 0)
+	{
+		glDeleteTextures (1, &pIcon->iLabelTexture);
+		pIcon->iLabelTexture = 0;
+	}
 	if (pIcon != NULL && pIcon->pTextBuffer != NULL)
 	{
 		glEnable (GL_TEXTURE);
 		glEnable (GL_TEXTURE_2D);
-		if (pIcon->iLabelTexture == 0)
-			glGenTextures (1, &pIcon->iLabelTexture);
+		glGenTextures (1, &pIcon->iLabelTexture);
 		int w = cairo_image_surface_get_width (pIcon->pTextBuffer);
 		int h = cairo_image_surface_get_height (pIcon->pTextBuffer);
 		glBindTexture (GL_TEXTURE_2D, pIcon->iLabelTexture);
@@ -762,12 +765,16 @@ void cairo_dock_update_label_texture (Icon *pIcon)
 
 void cairo_dock_update_quick_info_texture (Icon *pIcon)
 {
-	if (pIcon != NULL && pIcon->pTextBuffer != NULL)
+	if (pIcon->iQuickInfoTexture != 0)
+	{
+		glDeleteTextures (1, &pIcon->iQuickInfoTexture);
+		pIcon->iQuickInfoTexture = 0;
+	}
+	if (pIcon != NULL && pIcon->pQuickInfoBuffer != NULL)
 	{
 		glEnable (GL_TEXTURE);
 		glEnable (GL_TEXTURE_2D);
-		if (pIcon->iQuickInfoTexture == 0)
-			glGenTextures (1, &pIcon->iQuickInfoTexture);
+		glGenTextures (1, &pIcon->iQuickInfoTexture);
 		int w = cairo_image_surface_get_width (pIcon->pQuickInfoBuffer);
 		int h = cairo_image_surface_get_height (pIcon->pQuickInfoBuffer);
 		glBindTexture (GL_TEXTURE_2D, pIcon->iQuickInfoTexture);
@@ -886,4 +893,116 @@ void cairo_dock_draw_texture (GLuint iTexture, int iWidth, int iHeight)
 	
 	glDisable (GL_TEXTURE_2D);
 	glDisable (GL_BLEND);
+}
+
+
+const GLfloat *cairo_dock_draw_rectangle (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, int *iNbPoints)
+{
+	static GLfloat pVertexTab[((90/DELTA_ROUND_DEGREE+1)*4+1)*3];
+	
+	double fTotalWidth = fDockWidth + 2 * fRadius;
+	double w = fDockWidth / fTotalWidth / 2;
+	double h = MAX (0, fFrameHeight - 2 * fRadius) / fFrameHeight / 2;
+	double rw = fRadius / fTotalWidth;
+	double rh = fRadius / fFrameHeight;
+	int i=0, t;
+	int iPrecision = DELTA_ROUND_DEGREE;
+	double fInclinaisonCadre = 0.;
+	for (t = 0;t <= 90;t += iPrecision, i++) // cote haut droit.
+	{ 
+		pVertexTab[3*i] = w + rw * cos (t*RADIAN);
+		pVertexTab[3*i+1] = h + rh * sin (t*RADIAN);
+	}
+	for (t = 90;t <= 180;t += iPrecision, i++) // haut gauche.
+	{ 
+		pVertexTab[3*i] = -w + rw * cos (t*RADIAN);
+		pVertexTab[3*i+1] = h + rh * sin (t*RADIAN);
+	}
+	if (bRoundedBottomCorner)
+	{
+		for (t = 180;t <= 270;t += iPrecision, i++) // bas gauche.
+		{ 
+			pVertexTab[3*i] = -w + rw * cos (t*RADIAN);
+			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN);
+		}
+		for (t = 270;t <= 360;t += iPrecision, i++) // bas droit. 
+		{ 
+			pVertexTab[3*i] = w + rw * cos (t*RADIAN);
+			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN);
+		}
+	}
+	else
+	{
+		pVertexTab[3*i] = -w - rw; // bas gauche.
+		pVertexTab[3*i+1] = -h - rh;
+		i ++;
+		pVertexTab[3*i] = w + rw; // bas droit.
+		pVertexTab[3*i+1] = -h - rh;
+		i ++;
+	}
+	pVertexTab[3*i] = w + rw;  // on boucle.
+	pVertexTab[3*i+1] = h;
+	
+	*iNbPoints = i+1;
+	return pVertexTab;
+}
+
+GLfloat *cairo_dock_draw_trapeze (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, double fInclination, double *fExtraWidth, int *iNbPoints)
+{
+	static GLfloat pVertexTab[((90/DELTA_ROUND_DEGREE+1)*4+1)*3];
+	
+	
+	double a = atan (fInclination);
+	double cosa = 1. / sqrt (1 + fInclination * fInclination);
+	double sina = cosa * fInclination;
+	
+	*fExtraWidth = 2 * (fInclination * (fFrameHeight - (bRoundedBottomCorner ? 2 : 1-cosa) * fRadius) + fRadius * (bRoundedBottomCorner ? 1 : cosa));
+	double fTotalWidth = fDockWidth + (*fExtraWidth);
+	double dw = fInclination * (fFrameHeight - (bRoundedBottomCorner ? 2 : 1 - sina) * fRadius) / fTotalWidth;
+	double w = fDockWidth / fTotalWidth / 2;
+	double h = MAX (0, fFrameHeight - 2 * fRadius) / fFrameHeight / 2;
+	double rw = fRadius / fTotalWidth;
+	double rh = fRadius / fFrameHeight;
+	double w_ = w + dw + (bRoundedBottomCorner ? 0 : rw * cosa);
+	
+	int i=0, t;
+	int iPrecision = DELTA_ROUND_DEGREE;
+	double fInclinaisonCadre = 0.;
+	for (t = a;t <= 90;t += iPrecision, i++) // cote haut droit.
+	{ 
+		pVertexTab[3*i] = w + rw * cos (t*RADIAN);
+		pVertexTab[3*i+1] = h + rh * sin (t*RADIAN);
+	}
+	for (t = 90;t <= 180-a;t += iPrecision, i++) // haut gauche.
+	{ 
+		pVertexTab[3*i] = -w + rw * cos (t*RADIAN);
+		pVertexTab[3*i+1] = h + rh * sin (t*RADIAN);
+	}
+	if (bRoundedBottomCorner)
+	{
+		for (t = 180-a;t <= 270;t += iPrecision, i++) // bas gauche.
+		{ 
+			pVertexTab[3*i] = -w + rw * cos (t*RADIAN);
+			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN);
+		}
+		for (t = 270;t <= 360+a;t += iPrecision, i++) // bas droit. 
+		{ 
+			pVertexTab[3*i] = w + rw * cos (t*RADIAN);
+			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN);
+		}
+		pVertexTab[3*i] = w + rw;  // on boucle.
+		pVertexTab[3*i+1] = h;
+	}
+	else
+	{
+		pVertexTab[3*i] = -w - rw * cosa - dw; // bas gauche.
+		pVertexTab[3*i+1] = -h - rh;
+		i ++;
+		pVertexTab[3*i] = w + rw * cosa + dw; // bas droit.
+		pVertexTab[3*i+1] = -h - rh;
+		i ++;
+	}
+	
+	*iNbPoints = i;
+	return pVertexTab;
 }

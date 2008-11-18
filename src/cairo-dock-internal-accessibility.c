@@ -14,7 +14,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-callbacks.h"
 #define _INTERNAL_MODULE_
-#include "cairo-dock-accessibility.h"
+#include "cairo-dock-internal-accessibility.h"
 
 
 CairoConfigAccessibility myAccessibility;
@@ -91,7 +91,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 	//\_______________ Reserve Spave.
 	pAccessibility->bReserveSpace = pAccessibility->bReserveSpace && (pAccessibility->cRaiseDockShortcut == NULL);
 	if (pAccessibility->bReserveSpace != pPrevAccessibility->bReserveSpace)
-		cairo_dock_reserve_space_for_all_docks (pAccessibility->bReserveSpace);
+		cairo_dock_reserve_space_for_all_root_docks (pAccessibility->bReserveSpace);
 	
 	if (pAccessibility->bPopUp)
 		cairo_dock_start_polling_screen_edge (pDock);
@@ -116,6 +116,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 
 DEFINE_PRE_INIT (Accessibility)
 {
+	g_print ("%s (%s)\n", __func__, "Accessibility");
 	pModule->cModuleName = "Accessibility";
 	pModule->cTitle = "Accessibility";
 	pModule->cIcon = "gtk-help";

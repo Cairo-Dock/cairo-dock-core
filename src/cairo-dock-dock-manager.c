@@ -660,9 +660,10 @@ void cairo_dock_set_root_docks_on_top_layer (void)
 
 static void _cairo_dock_reserve_space_for_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
 {
-	cairo_dock_reserve_space_for_dock (pDock, GPOINTER_TO_INT (data));
+	if (pDock->iRefCount == 0)
+		cairo_dock_reserve_space_for_dock (pDock, GPOINTER_TO_INT (data));
 }
-void cairo_dock_reserve_space_for_all_docks (gboolean bReserve)
+void cairo_dock_reserve_space_for_all_root_docks (gboolean bReserve)
 {
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_reserve_space_for_one_dock, GINT_TO_POINTER (bReserve));
 }

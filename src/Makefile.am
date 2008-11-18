@@ -136,10 +136,16 @@ cairo_dock_SOURCES = \
 	cairo-dock-gui-callbacks.h\
 	cairo-dock-gui-manager.c\
 	cairo-dock-gui-manager.h\
-	cairo-dock-position.c\
-	cairo-dock-position.h\
-	cairo-dock-accessibility.c\
-	cairo-dock-accessibility.h
+	cairo-dock-internal-position.c\
+	cairo-dock-internal-position.h\
+	cairo-dock-internal-accessibility.c\
+	cairo-dock-internal-accessibility.h\
+	cairo-dock-internal-system.c\
+	cairo-dock-internal-system.h\
+	cairo-dock-internal-taskbar.c\
+	cairo-dock-internal-taskbar.h\
+	cairo-dock-internal-hidden-dock.c\
+	cairo-dock-internal-hidden-dock.h
 
 
 cairo_dockincludedir =\
@@ -195,8 +201,9 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-particle-system.h\
 	cairo-dock-gui-factory.h\
 	cairo-dock-gui-callbacks.h\
-	cairo-dock-gui-manager.h
-	cairo-dock-position.h\
-	cairo-dock-accessibility.h\
-	cairo-dock-system.h\
-	cairo-dock-taskbar.h
+	cairo-dock-gui-manager.h\
+	cairo-dock-internal-position.h\
+	cairo-dock-internal-accessibility.h\
+	cairo-dock-internal-system.h\
+	cairo-dock-internal-taskbar.h\
+	cairo-dock-internal-hidden-dock.h

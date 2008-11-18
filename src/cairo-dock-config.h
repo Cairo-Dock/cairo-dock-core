@@ -169,12 +169,6 @@ void cairo_dock_get_version_from_string (gchar *cVersionString, int *iMajorVersi
 void cairo_dock_pre_init_##cGroupName (CairoDockInternalModule *pModule)
 
 
-typedef struct _CairoConfigHiddenDock {
-	gchar *cVisibleZoneImageFile;
-	gint iVisibleZoneWidth, iVisibleZoneHeight;
-	gdouble fVisibleZoneAlpha;
-	gboolean bReverseVisibleImage;
-	} CairoConfigHiddenDock;
 
 typedef struct _CairoConfigBackGround {
 	gint iDockRadius;

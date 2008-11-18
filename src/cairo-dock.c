@@ -622,6 +622,8 @@ int main (int argc, char** argv)
 			cUserDefinedModuleDir = NULL;
 		}
 	}
+	else
+		cairo_dock_initialize_module_manager (NULL);
 	
 	//\___________________ On enregistre nos notifications.
 	cairo_dock_register_notification (CAIRO_DOCK_BUILD_MENU, (CairoDockNotificationFunc) cairo_dock_notification_build_menu, CAIRO_DOCK_RUN_AFTER, NULL);

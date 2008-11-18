@@ -14,6 +14,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <cairo-dock-surface-factory.h>
 #include <cairo-dock-dock-factory.h>
 #include <cairo-dock-renderer-manager.h>
+#include <cairo-dock-draw-opengl.h>
 #include <cairo-dock-draw.h>
 #include <cairo-dock-graph.h>
 

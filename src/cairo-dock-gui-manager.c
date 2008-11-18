@@ -272,7 +272,10 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 {
 	//\_____________ On construit la fenetre.
 	if (s_pMainWindow != NULL)
+	{
+		gtk_window_present (s_pMainWindow);
 		return s_pMainWindow;
+	}
 	s_pMainWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	//gtk_container_set_border_width (s_pMainWindow, CAIRO_DOCK_GUI_MARGIN);
 	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);

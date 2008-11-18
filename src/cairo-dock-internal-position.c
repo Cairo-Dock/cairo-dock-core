@@ -10,7 +10,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-factory.h"
 #define _INTERNAL_MODULE_
-#include "cairo-dock-position.h"
+#include "cairo-dock-internal-position.h"
 
 CairoConfigPosition myPosition;
 extern CairoDock *g_pMainDock;

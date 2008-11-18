@@ -7,12 +7,14 @@
 #include "cairo-dock-struct.h"
 #include "cairo-dock-config.h"
 
+typedef struct _CairoConfigAccessibility CairoConfigAccessibility;
+
 #ifndef _INTERNAL_MODULE_
 extern CairoConfigAccessibility myAccessibility;
 #endif
 G_BEGIN_DECLS
 
-typedef struct _CairoConfigAccessibility {
+struct _CairoConfigAccessibility {
 	gboolean bReserveSpace;
 	gboolean bAutoHide;
 	gboolean bPopUp;
@@ -22,7 +24,7 @@ typedef struct _CairoConfigAccessibility {
 	gint iLeaveSubDockDelay;
 	gint iShowSubDockDelay;
 	gboolean bShowSubDockOnClick;
-	} CairoConfigAccessibility;
+	} ;
 
 DEFINE_PRE_INIT (Accessibility);
 

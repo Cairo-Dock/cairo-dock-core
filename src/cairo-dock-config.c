@@ -35,6 +35,11 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-emblem.h"
 #include "cairo-dock-desklet.h"
+#include "cairo-dock-internal-position.h"
+#include "cairo-dock-internal-accessibility.h"
+#include "cairo-dock-internal-system.h"
+#include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-config.h"
 
 #define CAIRO_DOCK_TYPE_CONF_FILE_FILE ".cairo-dock-conf-file"
@@ -1145,6 +1150,8 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	//\___________________ On recupere les parametres des vues.
 	bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Views);
 	
+	bFlushConfFileNeeded = cairo_dock_get_global_config (pKeyFile);
+	
 	//\___________________ Post-initialisation.
 	g_bAutoHideOnFullScreen = g_bAutoHideOnFullScreen && (!pDock->bAutoHide);
 	g_bAutoHideOnMaximized = g_bAutoHideOnMaximized && (!pDock->bAutoHide);
@@ -1281,7 +1288,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_redraw_root_docks (TRUE);  // TRUE <=> sauf le main dock.
 	
 	g_bReserveSpace = g_bReserveSpace && (g_cRaiseDockShortcut == NULL);
-	cairo_dock_reserve_space_for_all_docks (g_bReserveSpace);
+	cairo_dock_reserve_space_for_all_root_docks (g_bReserveSpace);
 
 	cairo_dock_load_desklet_buttons_texture ();
 	cairo_dock_load_visible_zone (pDock, s_cVisibleZoneImageFile, g_iVisibleZoneWidth, g_iVisibleZoneHeight, g_fVisibleZoneAlpha);
