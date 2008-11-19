@@ -1259,13 +1259,14 @@ void cairo_dock_preload_internal_modules (GHashTable *pModuleTable)
 	CairoDockInternalModule *pModule;
 	
 	REGISTER_INTERNAL_MODULE (Position);
-	REGISTER_INTERNAL_MODULE (Accessibility);
-	REGISTER_INTERNAL_MODULE (System);
-	REGISTER_INTERNAL_MODULE (TaskBar);
+	//REGISTER_INTERNAL_MODULE (Accessibility);
+	//REGISTER_INTERNAL_MODULE (System);
+	//REGISTER_INTERNAL_MODULE (TaskBar);
+	//REGISTER_INTERNAL_MODULE (HiddenDock);
 	/// ...
 }
 
-void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, GKeyFile *pKeyFile)
+static void _cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, GKeyFile *pKeyFile)
 {
 	gpointer *pPrevConfig = g_memdup (pModule->pConfig, pModule->iSizeOfConfig);
 	memset (pModule->pConfig, 0, pModule->iSizeOfConfig);
@@ -1279,31 +1280,29 @@ void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, GKeyFi
 	g_free (pPrevConfig);
 }
 
+void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, const gchar *cConfFilePath)
+{
+	g_return_if_fail (pModule != NULL);
+	GKeyFile *pKeyFile = g_key_file_new ();
+	
+	GError *erreur = NULL;
+	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+		return ;
+	}
+	_cairo_dock_reload_internal_module (pModule, pKeyFile);
+		
+	g_key_file_free (pKeyFile);
+}
+
 CairoDockInternalModule *cairo_dock_find_internal_module_from_name (const gchar *cModuleName)
 {
 	g_print ("%s (%s)\n", __func__, cModuleName);
 	g_return_val_if_fail (cModuleName != NULL, NULL);
 	return g_hash_table_lookup (s_hInternalModuleTable, cModuleName);
-}
-
-static void _cairo_dock_get_one_internal_module_config (gchar *cModuleName, CairoDockInternalModule *pModule, gpointer *data)
-{
-	GKeyFile *pKeyFile = data[0];
-	gboolean *bFlushConfFileNeeded = data[1];
-	
-	if (pModule->reset_config)
-	{
-		pModule->reset_config (pModule->pConfig);
-	}
-	memset (pModule->pConfig, 0, pModule->iSizeOfConfig);
-	*bFlushConfFileNeeded |= pModule->get_config (pKeyFile, pModule->pConfig);
-}
-gboolean cairo_dock_get_global_config (GKeyFile *pKeyFile)
-{
-	gboolean bFlushConfFileNeeded = FALSE;
-	gpointer data[2] = {pKeyFile, &bFlushConfFileNeeded};
-	g_hash_table_foreach (s_hInternalModuleTable, (GHFunc) _cairo_dock_get_one_internal_module_config, data);
-	return bFlushConfFileNeeded;
 }
 
 gboolean cairo_dock_get_internal_module_config (CairoDockInternalModule *pModule, GKeyFile *pKeyFile)
@@ -1314,4 +1313,18 @@ gboolean cairo_dock_get_internal_module_config (CairoDockInternalModule *pModule
 	}
 	memset (pModule->pConfig, 0, pModule->iSizeOfConfig);
 	return pModule->get_config (pKeyFile, pModule->pConfig);
+}
+
+static void _cairo_dock_get_one_internal_module_config (gchar *cModuleName, CairoDockInternalModule *pModule, gpointer *data)
+{
+	GKeyFile *pKeyFile = data[0];
+	gboolean *bFlushConfFileNeeded = data[1];
+	*bFlushConfFileNeeded |= cairo_dock_get_internal_module_config (pModule, pKeyFile);
+}
+gboolean cairo_dock_get_global_config (GKeyFile *pKeyFile)
+{
+	gboolean bFlushConfFileNeeded = FALSE;
+	gpointer data[2] = {pKeyFile, &bFlushConfFileNeeded};
+	g_hash_table_foreach (s_hInternalModuleTable, (GHFunc) _cairo_dock_get_one_internal_module_config, data);
+	return bFlushConfFileNeeded;
 }

@@ -34,6 +34,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigPosition *pPosition)
 
 static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPosition)
 {
+	g_print ("%s (%d;%d)\n", __func__, pPosition->iGapX, pPosition->iGapY);
 	CairoDock *pDock = g_pMainDock;
 	if (pPosition->iScreenBorder != pPrevPosition->iScreenBorder)
 	{
@@ -59,6 +60,9 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 		cairo_dock_synchronize_sub_docks_position (pDock, FALSE);
 		cairo_dock_reload_buffers_in_all_docks (TRUE);
 	}
+	pDock->iGapX = pPosition->iGapX;
+	pDock->iGapY = pPosition->iGapY;
+	pDock->fAlign = pPosition->fAlign;
 	pDock->calculate_icons (pDock);
 	gtk_widget_queue_draw (pDock->pWidget);
 	cairo_dock_place_root_dock (pDock);

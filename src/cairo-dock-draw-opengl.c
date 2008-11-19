@@ -896,7 +896,7 @@ void cairo_dock_draw_texture (GLuint iTexture, int iWidth, int iHeight)
 }
 
 
-const GLfloat *cairo_dock_draw_rectangle (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, int *iNbPoints)
+const GLfloat *cairo_dock_generate_rectangle_path (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, int *iNbPoints)
 {
 	static GLfloat pVertexTab[((90/DELTA_ROUND_DEGREE+1)*4+1)*3];
 	
@@ -909,24 +909,24 @@ const GLfloat *cairo_dock_draw_rectangle (double fDockWidth, double fFrameHeight
 	int iPrecision = DELTA_ROUND_DEGREE;
 	double fInclinaisonCadre = 0.;
 	for (t = 0;t <= 90;t += iPrecision, i++) // cote haut droit.
-	{ 
+	{
 		pVertexTab[3*i] = w + rw * cos (t*RADIAN);
 		pVertexTab[3*i+1] = h + rh * sin (t*RADIAN);
 	}
 	for (t = 90;t <= 180;t += iPrecision, i++) // haut gauche.
-	{ 
+	{
 		pVertexTab[3*i] = -w + rw * cos (t*RADIAN);
 		pVertexTab[3*i+1] = h + rh * sin (t*RADIAN);
 	}
 	if (bRoundedBottomCorner)
 	{
 		for (t = 180;t <= 270;t += iPrecision, i++) // bas gauche.
-		{ 
+		{
 			pVertexTab[3*i] = -w + rw * cos (t*RADIAN);
 			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN);
 		}
 		for (t = 270;t <= 360;t += iPrecision, i++) // bas droit. 
-		{ 
+		{
 			pVertexTab[3*i] = w + rw * cos (t*RADIAN);
 			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN);
 		}
@@ -947,17 +947,16 @@ const GLfloat *cairo_dock_draw_rectangle (double fDockWidth, double fFrameHeight
 	return pVertexTab;
 }
 
-GLfloat *cairo_dock_draw_trapeze (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, double fInclination, double *fExtraWidth, int *iNbPoints)
+GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, double fInclination, double *fExtraWidth, int *iNbPoints)
 {
 	static GLfloat pVertexTab[((90/DELTA_ROUND_DEGREE+1)*4+1)*3];
 	
-	
-	double a = atan (fInclination);
+	double a = atan (fInclination)/G_PI*180.;
 	double cosa = 1. / sqrt (1 + fInclination * fInclination);
 	double sina = cosa * fInclination;
 	
-	*fExtraWidth = 2 * (fInclination * (fFrameHeight - (bRoundedBottomCorner ? 2 : 1-cosa) * fRadius) + fRadius * (bRoundedBottomCorner ? 1 : cosa));
-	double fTotalWidth = fDockWidth + (*fExtraWidth);
+	*fExtraWidth = fInclination * (fFrameHeight - (bRoundedBottomCorner ? 2 : 1-cosa) * fRadius) + fRadius * (bRoundedBottomCorner ? 1 : cosa);
+	double fTotalWidth = fDockWidth + 2*(*fExtraWidth);
 	double dw = fInclination * (fFrameHeight - (bRoundedBottomCorner ? 2 : 1 - sina) * fRadius) / fTotalWidth;
 	double w = fDockWidth / fTotalWidth / 2;
 	double h = MAX (0, fFrameHeight - 2 * fRadius) / fFrameHeight / 2;
@@ -1005,4 +1004,72 @@ GLfloat *cairo_dock_draw_trapeze (double fDockWidth, double fFrameHeight, double
 	
 	*iNbPoints = i;
 	return pVertexTab;
+}
+
+
+void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double fDockWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, const GLfloat *pVertexTab, int iNbVertex)
+{
+	glEnable(GL_TEXTURE_2D); // Je veux de la texture
+	glBindTexture(GL_TEXTURE_2D, iBackgroundTexture); // allez on bind la texture
+	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR ); // ok la on selectionne le type de generation des coordonnees de la texture
+	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR );
+	glEnable(GL_TEXTURE_GEN_S); // oui je veux une generation en S
+	glEnable(GL_TEXTURE_GEN_T); // Et en T aussi
+	
+	glLoadIdentity();
+	glTranslatef ((int) (fDockOffsetX + fDockWidth/2), (int) (fDockOffsetY - fFrameHeight/2), -1);  // (int) -pDock->iMaxIconHeight * (1 + g_fAmplitude) + 1
+	
+	glScalef (fDockWidth, fFrameHeight, 1.);
+	
+	glMatrixMode(GL_TEXTURE); // On selectionne la matrice des textures
+	glPushMatrix ();
+	glLoadIdentity(); // On la reset
+	glTranslatef(0.5f, 0.5f, 0.);
+	glScalef (1., -1., 1.);
+	glMatrixMode(GL_MODELVIEW);
+	
+	glEnable(GL_BLEND); // On active le blend
+	glBlendFunc (GL_SRC_ALPHA, 1.); // Transparence avec le canal alpha
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Couleur a fond
+	///glEnable(GL_POLYGON_OFFSET_FILL);
+	///glPolygonOffset (1., 1.);
+	glPolygonMode(GL_FRONT, GL_FILL);
+	
+	glBegin (GL_TRIANGLE_FAN);
+	int i;
+	for (i = 0; i <= iNbVertex; i++) // La on affiche un polygone plein texture
+	{
+		glVertex3fv (&pVertexTab[3*i]);
+	}
+	glEnd();
+	glDisable(GL_BLEND);
+	glDisable(GL_POLYGON_OFFSET_FILL);
+	glDisable(GL_TEXTURE_GEN_S);
+	glDisable(GL_TEXTURE_GEN_T);
+	glDisable(GL_TEXTURE_2D); // Plus de texture merci 
+	
+	glMatrixMode(GL_TEXTURE); // On selectionne la matrice des textures
+	glPopMatrix ();
+	glMatrixMode(GL_MODELVIEW);
+}
+
+void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor, const GLfloat *pVertexTab, int iNbVertex)
+{
+	///glEnable(GL_POLYGON_OFFSET_FILL);
+	///glPolygonOffset (1., 1.);
+	glPolygonMode(GL_FRONT, GL_LINE);
+	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
+	glHint (GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+	glLineWidth(fLineWidth); // Ici on choisi l'epaisseur du contour du polygone 
+	glColor4f(fLineColor[0], fLineColor[1], fLineColor[2], fLineColor[3]); // Et sa couleur 
+	glBegin(GL_LINE_LOOP);
+	int i;
+	for (i = 0; i < iNbVertex; i++) // Et on affiche le contour 
+	{
+		glVertex3fv (&pVertexTab[3*i]);
+	}
+	glEnd();
+	glDisable(GL_BLEND);
+	glDisable(GL_POLYGON_OFFSET_FILL);
+	glPolygonMode(GL_FRONT, GL_FILL);
 }

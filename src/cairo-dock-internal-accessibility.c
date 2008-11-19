@@ -80,12 +80,12 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 	}
 	
 	//\_______________ Max Size.
-	if (pAccessibility->iMaxAuthorizedWidth == 0 || pAccessibility->iMaxAuthorizedWidth > g_iScreenWidth[g_pMainDock->bHorizontalDock])
-		pAccessibility->iMaxAuthorizedWidth = g_iScreenWidth[g_pMainDock->bHorizontalDock];
+	if (pAccessibility->iMaxAuthorizedWidth == 0 || pAccessibility->iMaxAuthorizedWidth > g_iScreenWidth[pDock->bHorizontalDock])
+		pAccessibility->iMaxAuthorizedWidth = g_iScreenWidth[pDock->bHorizontalDock];
 	if (pAccessibility->iMaxAuthorizedWidth != pPrevAccessibility->iMaxAuthorizedWidth)
 	{
 		/// le faire pour tous les docks racine...
-		cairo_dock_update_dock_size (g_pMainDock);  // met a jour les icones et le fond aussi.
+		cairo_dock_update_dock_size (pDock);  // met a jour les icones et le fond aussi.
 	}
 	
 	//\_______________ Reserve Spave.

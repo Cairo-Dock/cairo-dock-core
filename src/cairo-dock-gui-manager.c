@@ -248,7 +248,7 @@ static gboolean on_expose (GtkWidget *pWidget,
 {
 	cairo_t *pCairoContext = gdk_cairo_create (pWidget->window);
 	int w, h;
-	gtk_window_get_size (pWidget, &w, &h);
+	gtk_window_get_size (GTK_WINDOW (pWidget), &w, &h);
 	cairo_pattern_t *pPattern = cairo_pattern_create_linear (0,0,
 		w,
 		h);
@@ -273,7 +273,7 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	//\_____________ On construit la fenetre.
 	if (s_pMainWindow != NULL)
 	{
-		gtk_window_present (s_pMainWindow);
+		gtk_window_present (GTK_WINDOW (s_pMainWindow));
 		return s_pMainWindow;
 	}
 	s_pMainWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -284,7 +284,7 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	
 	GtkWidget *pMainHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
 	gtk_container_add (GTK_CONTAINER (s_pMainWindow), pMainHBox);
-	gtk_container_set_border_width (pMainHBox, CAIRO_DOCK_GUI_MARGIN);
+	gtk_container_set_border_width (GTK_CONTAINER (pMainHBox), CAIRO_DOCK_GUI_MARGIN);
 	
 	GtkWidget *pCategoriesVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
 	gtk_widget_set_size_request (pCategoriesVBox, CAIRO_DOCK_PREVIEW_WIDTH+2*CAIRO_DOCK_GUI_MARGIN, CAIRO_DOCK_PREVIEW_HEIGHT);

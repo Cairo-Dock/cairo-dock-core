@@ -92,12 +92,13 @@ void cairo_dock_add_reflection_to_icon (cairo_t *pIconContext, Icon *pIcon, Cair
 		bIsHorizontal,
 		fMaxScale,
 		pContainer->bDirectionUp);
-
+	
 	if (pIcon->pFullIconBuffer != NULL)
 	{
 		cairo_surface_destroy (pIcon->pFullIconBuffer);
 		pIcon->pFullIconBuffer = NULL;
 	}
+	
 	pIcon->pFullIconBuffer = cairo_dock_create_icon_surface_with_reflection (pIcon->pIconBuffer,
 		pIcon->pReflectionBuffer,
 		pIconContext,
@@ -110,7 +111,6 @@ void cairo_dock_add_reflection_to_icon (cairo_t *pIconContext, Icon *pIcon, Cair
 
 void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surface_t *pSurface, Icon *pIcon, CairoContainer *pContainer)
 {
-	g_print ("%s (%s ; %x ; %x)\n", __func__, pIcon->acName, pSurface, pIconContext);
 	cairo_dock_set_icon_surface_full (pIconContext, pSurface, 1., 1., pIcon, pContainer);
 	
 	cairo_dock_add_reflection_to_icon (pIconContext, pIcon, pContainer);
@@ -589,7 +589,7 @@ void cairo_dock_get_gnome_version (int *iMajor, int *iMinor, int *iMicro) {
 	g_file_get_contents ("/usr/share/gnome-about/gnome-version.xml", &cContent, &length, &erreur);
 	
 	if (erreur != NULL) {
-		cd_warning ("Attention : %s", erreur->message);
+		cd_warning (erreur->message);
 		g_error_free (erreur);
 		erreur = NULL;
 		*iMajor = 0;

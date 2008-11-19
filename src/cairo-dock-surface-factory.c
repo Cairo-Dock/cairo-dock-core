@@ -453,11 +453,11 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, cairo_t 
 
 static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fMaxScale, gboolean bDirectionUp)
 {
-	g_return_val_if_fail (pSurface != NULL && pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
+	g_return_val_if_fail (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 
 	//\_______________ On cree la surface d'une fraction hauteur de l'image originale.
 	double fReflectHeight = g_fReflectSize * fMaxScale;
-	if (fReflectHeight == 0 || g_fAlbedo == 0)
+	if (pSurface == NULL || fReflectHeight == 0 || g_fAlbedo == 0)
 		return NULL;
 	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
 		fImageWidth,

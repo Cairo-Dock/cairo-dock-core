@@ -175,11 +175,15 @@ void on_click_apply (GtkButton *button, GtkWidget *pWindow)
 	else
 	{
 		cairo_dock_write_current_group_conf_file (g_cConfFile);
-		cairo_dock_read_conf_file (g_cConfFile, g_pMainDock);
-		
 		CairoDockInternalModule *pInternalModule = cairo_dock_find_internal_module_from_name (pGroupDescription->cGroupName);
 		if (pInternalModule != NULL)
+		{
 			g_print ("found module %s\n", pInternalModule->cModuleName);
+			cairo_dock_reload_internal_module (pInternalModule, g_cConfFile);
+
+		}
+		else
+			cairo_dock_read_conf_file (g_cConfFile, g_pMainDock);
 	}
 }
 

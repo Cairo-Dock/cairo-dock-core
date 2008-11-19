@@ -7,12 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.4.5\n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
-"PO-Revision-Date: 2008-10-26 13:46+0900\n"
+"PO-Revision-Date: 2008-11-15 13:02+0900\n"
 "Last-Translator: jiro kawada <jiro.kawada@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: \n"
 
 #: ../src/cairo-dock-callbacks.c:1178
 msgid "Do you want to mount this point ?"
@@ -26,23 +27,26 @@ msgstr "Cairo-Dock 終了？"
 msgid "Do you want to monitor the content of the directory ?"
 msgstr "このディレクトリの内容をモニターしますか？"
 
-#: ../src/cairo-dock-file-manager.c:449 ../src/cairo-dock-file-manager.c:496
-#, fuzzy, c-format
+#: ../src/cairo-dock-file-manager.c:449
+#: ../src/cairo-dock-file-manager.c:496
+#, c-format
 msgid "%s is now %s"
-msgstr "%s is now %s"
+msgstr "%s は現在 %s"
 
-#: ../src/cairo-dock-file-manager.c:449 ../src/cairo-dock-file-manager.c:496
+#: ../src/cairo-dock-file-manager.c:449
+#: ../src/cairo-dock-file-manager.c:496
 msgid "mounted"
 msgstr "マウント済み"
 
-#: ../src/cairo-dock-file-manager.c:449 ../src/cairo-dock-file-manager.c:496
+#: ../src/cairo-dock-file-manager.c:449
+#: ../src/cairo-dock-file-manager.c:496
 msgid "unmounted"
 msgstr "アンマウント済み"
 
 #: ../src/cairo-dock-file-manager.c:517
-#, fuzzy, c-format
+#, c-format
 msgid "failed to %s %s"
-msgstr "failed to %s %s"
+msgstr "%s %s に失敗"
 
 #: ../src/cairo-dock-file-manager.c:517
 msgid "mount"
@@ -56,11 +60,13 @@ msgstr "アンマウント"
 msgid "grab"
 msgstr "取得"
 
-#: ../src/cairo-dock-menu.c:77 ../src/cairo-dock-menu.c:79
+#: ../src/cairo-dock-menu.c:77
+#: ../src/cairo-dock-menu.c:79
 msgid "Easy Mode"
 msgstr "簡易設定モード"
 
-#: ../src/cairo-dock-menu.c:77 ../src/cairo-dock-menu.c:79
+#: ../src/cairo-dock-menu.c:77
+#: ../src/cairo-dock-menu.c:79
 msgid "Advanced mode"
 msgstr "詳細設定モード"
 
@@ -74,12 +80,11 @@ msgstr "サポート"
 
 #: ../src/cairo-dock-menu.c:220
 msgid ""
-"Do you want to re-dispatch the icons contained inside this container into "
-"the dock ?\n"
+"Do you want to re-dispatch the icons contained inside this container into the dock ?\n"
 " (otherwise they will be destroyed)"
 msgstr ""
 "このコンテナ内にあるアイコンをドックに戻しますか？\n"
-"（そうしない場合は、アイコンが削除されます。）"
+"（戻さない場合、アイコンは削除されます。）"
 
 #: ../src/cairo-dock-menu.c:240
 #, c-format
@@ -94,7 +99,8 @@ msgstr "このランチャー設定項目を入力"
 msgid "Undefined"
 msgstr "未定義"
 
-#: ../src/cairo-dock-menu.c:428 ../src/cairo-dock-menu.c:1288
+#: ../src/cairo-dock-menu.c:428
+#: ../src/cairo-dock-menu.c:1288
 msgid "Modify this launcher"
 msgstr "このランチャーを編集"
 
@@ -115,7 +121,7 @@ msgid ""
 "Check that you have writing rights on it."
 msgstr ""
 "注意 : このファイルを削除できませんでした。\n"
-"ファイルに対する書き込み権限の有無をチェックしてください。"
+"ファイルに対する書き込み権限の有るかチェックしてください。"
 
 #: ../src/cairo-dock-menu.c:759
 msgid "Rename to :"
@@ -129,8 +135,8 @@ msgid ""
 " and that the new name does not already exist."
 msgstr ""
 "注意 : %s をリネームできませんでした。\n"
-"書き込み権限の有無や、指定した新しい名前が\n"
-"すでに存在していないかチェックしてください。"
+"書き込み権限が有るか、指定した新しい名前が\n"
+"すでに存在していないかどうかチェックしてください。"
 
 #: ../src/cairo-dock-menu.c:816
 #, c-format
@@ -174,22 +180,23 @@ msgstr "一時的に隠す"
 msgid "Quit"
 msgstr "終了"
 
-#: ../src/cairo-dock-menu.c:1208 ../src/cairo-dock-menu.c:1270
+#: ../src/cairo-dock-menu.c:1208
+#: ../src/cairo-dock-menu.c:1270
 msgid "Add a manual launcher"
 msgstr "手製ランチャーを追加"
 
-#: ../src/cairo-dock-menu.c:1209 ../src/cairo-dock-menu.c:1271
-msgid ""
-"Don't forget you can drag a launcher from the menu and drop it in the dock !"
-msgstr ""
-"メニューから既存のランチャーをドラッグして、ドックにドロップできることもお忘"
-"れなく！"
+#: ../src/cairo-dock-menu.c:1209
+#: ../src/cairo-dock-menu.c:1271
+msgid "Don't forget you can drag a launcher from the menu and drop it in the dock !"
+msgstr "メニューから既存のランチャーをドラッグして、ドックにドロップできることもお忘れなく！"
 
-#: ../src/cairo-dock-menu.c:1211 ../src/cairo-dock-menu.c:1273
+#: ../src/cairo-dock-menu.c:1211
+#: ../src/cairo-dock-menu.c:1273
 msgid "Add a sub-dock"
 msgstr "サブ・ドックを追加"
 
-#: ../src/cairo-dock-menu.c:1215 ../src/cairo-dock-menu.c:1277
+#: ../src/cairo-dock-menu.c:1215
+#: ../src/cairo-dock-menu.c:1277
 msgid "Add a separator"
 msgstr "区切りを追加"
 
@@ -211,7 +218,7 @@ msgstr "このファイルを削除"
 
 #: ../src/cairo-dock-menu.c:1252
 msgid "Rename this file"
-msgstr "このファイルを名前変更"
+msgstr "このファイルをリネーム"
 
 #: ../src/cairo-dock-menu.c:1256
 msgid "Properties"
@@ -332,7 +339,8 @@ msgstr "常に最後面に表示"
 msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "Compiz の動作設定での指定法: (name=cairo-dock & type=utility)"
 
-#: ../src/cairo-dock-modules.c:821 ../src/cairo-dock-modules.c:844
+#: ../src/cairo-dock-modules.c:821
+#: ../src/cairo-dock-modules.c:844
 #, c-format
 msgid "Configuration of %s"
 msgstr "%s の設定"
@@ -350,8 +358,7 @@ msgid ""
 "You are running Cairo-Dock in safe mode.\n"
 "Why ? Probably because a plug-in has messed into your dock,\n"
 " or maybe your theme has got corrupted.\n"
-"So, no plug-in will be available, and you can now save your current theme if "
-"you want\n"
+"So, no plug-in will be available, and you can now save your current theme if you want\n"
 " before you start using the dock.\n"
 "Try with your current theme, if it works, it means a plug-in is wrong.\n"
 "Otherwise, try with another theme.\n"
@@ -362,13 +369,9 @@ msgstr ""
 "ドック内でプラグインが混乱した状態になっているか、\n"
 "テーマ設定が壊れていることが原因と思われます。\n"
 "従って、このままではプラグインを利用することはできません。\n"
-"ドックの使用を開始する前に現在のテーマを直ちに保存することができます。現在の"
-"テーマが機能しているようであればそのテーマを使用してみてください。この場合、"
-"プラグインに問題があることになります。\n"
-"それ以外の場合には、別のテーマを試してください。機能している設定を保存した上"
-"で、ドックを通常モードで再起動させます。\n"
-"その後、問題のあるプラグインを特定するため、プラグインを1つずつ有効化してみて"
-"ください。"
+"ドックの使用を開始する前に現在のテーマを直ちに保存することができます。現在のテーマが機能しているようであればそのテーマを使用してみてください。この場合、プラグインに問題があることになります。\n"
+"それ以外の場合には、別のテーマを試してください。機能している設定を保存した上で、ドックを通常モードで再起動させます。\n"
+"その後、問題のあるプラグインを特定するため、プラグインを1つずつ有効化してみてください。"
 
 #: ../src/cairo-dock-themes-manager.c:348
 #, c-format
@@ -378,12 +381,10 @@ msgstr "本当に %s テーマを削除しますか？"
 #: ../src/cairo-dock-themes-manager.c:407
 msgid ""
 "You made some modifications in the current theme.\n"
-"You will loose them if you don't save before choosing a new theme. Continue "
-"anyway ?"
+"You will loose them if you don't save before choosing a new theme. Continue anyway ?"
 msgstr ""
 "現在のテーマには変更が加えられています。\n"
-"新しいテーマの選択前にあらかじめ保存を行っておかないと、変更が失われてしまい"
-"ます。かまわず続行しますか？"
+"新しいテーマの選択前にあらかじめ保存を行っておかないと、変更が失われてしまいます。かまわず続行しますか？"
 
 #: ../src/cairo-dock-themes-manager.c:672
 #, c-format
@@ -397,134 +398,119 @@ msgstr "< メンテナンスモード >"
 # #################################
 # ########### cairo-dock.conf #############
 # #################################
-#: ../data/messages:1 ../data/messages:829
+#: ../data/messages:1
+#: ../data/messages:829
 msgid "Position"
 msgstr "配置位置"
 
-#: ../data/messages:3 ../data/messages:653 ../data/messages:831
+#: ../data/messages:3
+#: ../data/messages:653
+#: ../data/messages:831
 msgid "Position on the screen"
 msgstr "画面上の配置位置"
 
-#: ../data/messages:5 ../data/messages:655 ../data/messages:833
-msgid ""
-"The icons will scroll according to the chosen placement type. Of course the "
-"dock can be placed anywhere on the screen, here we specify regarding to what."
-msgstr ""
-"アイコンは選択したドック配置位置に応じたスクロールをします。ドックは画面上の"
-"どの位置にも配置可能ですが、ここではその基本となる位置を指定します。"
+#: ../data/messages:5
+#: ../data/messages:655
+#: ../data/messages:833
+msgid "The icons will scroll according to the chosen placement type. Of course the dock can be placed anywhere on the screen, here we specify regarding to what."
+msgstr "アイコンは選択したドック配置位置に応じた方向にスクロールします。ドックは画面上のどの位置にも配置可能ですが、ここではその基本となる位置を指定します。"
 
-#: ../data/messages:7 ../data/messages:657 ../data/messages:835
-msgid ""
-"Choose the screen border regarding to which the dock will place itself :"
+#: ../data/messages:7
+#: ../data/messages:657
+#: ../data/messages:835
+msgid "Choose the screen border regarding to which the dock will place itself :"
 msgstr "ドックを配置する画面端の選択 :"
 
-#: ../data/messages:9 ../data/messages:659 ../data/messages:837
+#: ../data/messages:9
+#: ../data/messages:659
+#: ../data/messages:837
 msgid "bottom"
 msgstr "下"
 
-#: ../data/messages:11 ../data/messages:661 ../data/messages:839
+#: ../data/messages:11
+#: ../data/messages:661
+#: ../data/messages:839
 msgid "top"
 msgstr "上"
 
-#: ../data/messages:13 ../data/messages:663 ../data/messages:841
+#: ../data/messages:13
+#: ../data/messages:663
+#: ../data/messages:841
 msgid "right"
 msgstr "右"
 
-#: ../data/messages:15 ../data/messages:665 ../data/messages:843
+#: ../data/messages:15
+#: ../data/messages:665
+#: ../data/messages:843
 msgid "left"
 msgstr "左"
 
-#: ../data/messages:17 ../data/messages:845
-msgid ""
-"At 0, the dock will place itself regarding the left corner if horizontal and "
-"the top corner if vertical, at 1 regarding the right corner if horizontal "
-"and the bottom corner if vertical, and at 0.5, regarding the middle of the "
-"screen's edge."
-msgstr ""
-"0 に指定すると、ドックが水平の場合は左隅に配置され、垂直の場合は上隅に配置さ"
-"れます。1 に指定すると、水平の場合は右隅に配置され、垂直の場合は下隅に配置さ"
-"れます。0.5 に指定すると、画面端の中央に配置されます。"
+#: ../data/messages:17
+#: ../data/messages:845
+msgid "At 0, the dock will place itself regarding the left corner if horizontal and the top corner if vertical, at 1 regarding the right corner if horizontal and the bottom corner if vertical, and at 0.5, regarding the middle of the screen's edge."
+msgstr "0 に指定すると、ドックが水平の場合は左隅に配置され、垂直の場合は上隅に配置されます。1 に指定すると、水平の場合は右隅に配置され、垂直の場合は下隅に配置されます。0.5 に指定すると、画面端の中央に配置されます。"
 
-#: ../data/messages:19 ../data/messages:847
+#: ../data/messages:19
+#: ../data/messages:847
 msgid "Relative alignment :"
 msgstr "相対的な配置位置 :"
 
-#: ../data/messages:21 ../data/messages:849
+#: ../data/messages:21
+#: ../data/messages:849
 msgid "Position regarding the chosen screen's edge"
 msgstr "選択した画面端における位置"
 
-#: ../data/messages:23 ../data/messages:851
-msgid ""
-"Gap from the absolute position on the screen's edge, in pixels. You can also "
-"move the dock by holding ALT or CTRL key and left mouse button."
-msgstr ""
-"選択した画面端の基本配置位置からのずれの大きさ（ピクセル単位）です。ALT また"
-"は CTRL キーとマウス左ボタンを押し続けることで、ドックを移動させることも可能"
-"です。"
+#: ../data/messages:23
+#: ../data/messages:851
+msgid "Gap from the absolute position on the screen's edge, in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button."
+msgstr "選択した画面端の基本配置位置からのずれの大きさ（ピクセル単位）です。ALT または CTRL キーとマウス左ボタンを押しながらドラッグして、ドックを移動させることも可能です。"
 
-#: ../data/messages:25 ../data/messages:853
+#: ../data/messages:25
+#: ../data/messages:853
 msgid "Lateral gap :"
 msgstr "側面方向へのずれ :"
 
-#: ../data/messages:27 ../data/messages:855
-msgid ""
-"in pixels. You can also move the dock by holding ALT or CTRL key and left "
-"mouse button."
-msgstr ""
-"ピクセル単位。ALT または CTRL キーとマウス左ボタンを押し続けることで、ドック"
-"を移動させることも可能です。"
+#: ../data/messages:27
+#: ../data/messages:855
+msgid "in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button."
+msgstr "ピクセル単位。ALT または CTRL キーとマウス左ボタンを押しながらドラッグして、ドックを移動させることも可能です。"
 
-#: ../data/messages:29 ../data/messages:857
+#: ../data/messages:29
+#: ../data/messages:857
 msgid "Distance to the screen's edge :"
 msgstr "画面の境界までの距離 :"
 
 #: ../data/messages:31
-msgid ""
-"The dock will automatically resize itself to fit this size. Set it to 0 to "
-"make the dock fit the screen's size."
-msgstr ""
-"このサイズに合わせてドックを自動的にサイズ変更します。画面サイズにドックを合"
-"わせるには 0 に指定します。"
+msgid "The dock will automatically resize itself to fit this size. Set it to 0 to make the dock fit the screen's size."
+msgstr "このサイズに合わせてドックを自動的にサイズ変更します。ちょうど画面サイズにドックを合わせるには 0 に指定します。"
 
 #: ../data/messages:33
 msgid "Size allowed for the dock :"
 msgstr "ドックの上限サイズ :"
 
 #: ../data/messages:35
-msgid ""
-"This will prevent other windows from overlapping the dock. It has no effect "
-"if you defined the 'show/hide' shortcut below, cause then the dock behaves "
-"like a menu."
-msgstr ""
-"他ウィンドウがドックに重なるのをこれで防ぎます。下にある'表示/隠す'のショート"
-"カットを設定している場合、ドックがメニューのように振舞うため効果ありません。"
+msgid "This will prevent other windows from overlapping the dock. It has no effect if you defined the 'show/hide' shortcut below, cause then the dock behaves like a menu."
+msgstr "他ウィンドウがドックに重なるのをこれで防ぎます。下で「表示/隠す」のショートカットを設定している場合、ドックがメニューのような振る舞いをするようになるため効果ありません。"
 
 #: ../data/messages:37
 msgid "Reserve space at the edge of the screen for the dock ?"
 msgstr "画面端にドック用の空間を確保？"
 
-#: ../data/messages:39 ../data/messages:669 ../data/messages:859
-msgid ""
-"The dock will automatically hide itself outside of the scren when the mouse "
-"leaves it and will show a callback zone instead. Place the mouse into this "
-"zone will make the dock re-appear."
-msgstr ""
-"マウスがドックから離れた際にドックを自動的に隠し、代わりに呼び戻しゾーンを表"
-"示します。このゾーンにマウスを置くことで再びドックが表示されます。"
+#: ../data/messages:39
+#: ../data/messages:669
+#: ../data/messages:859
+msgid "The dock will automatically hide itself outside of the scren when the mouse leaves it and will show a callback zone instead. Place the mouse into this zone will make the dock re-appear."
+msgstr "マウスがドックから離れた際にドックを自動的に隠し、代わりに呼び戻しゾーンを表示します。このゾーンにマウスを置くことで再びドックが表示されます。"
 
-#: ../data/messages:41 ../data/messages:671 ../data/messages:861
+#: ../data/messages:41
+#: ../data/messages:671
+#: ../data/messages:861
 msgid "Activate auto-hide ?"
 msgstr "自動で隠す？"
 
 #: ../data/messages:43
-msgid ""
-"The dock will pop-up on the foreground when you place the mouse on its "
-"screen border. This option is only useful if you don't want to reserve space "
-"for the dock, nor to activate auto-hide."
-msgstr ""
-"マウスを画面の境界に置くと、ドックが手前にポップアップ表示されます。このオプ"
-"ションは、画面にドック専用の空間を確保する機能や、自動で隠す機能を使用したく"
-"ない場合に有用です。"
+msgid "The dock will pop-up on the foreground when you place the mouse on its screen border. This option is only useful if you don't want to reserve space for the dock, nor to activate auto-hide."
+msgstr "マウスを画面の境界に置くと、ドックが手前にポップアップ表示されます。このオプションは、画面にドック専用の空間を確保する機能やドックを自動で隠す機能を使用したくない場合に有用です。"
 
 #: ../data/messages:45
 msgid "Keep the dock below other windows ?"
@@ -535,19 +521,15 @@ msgid "Pop-up only if the mouse hits a screen corner ?"
 msgstr "画面の角にマウスが当てられたときにのみポップアップ表示？"
 
 #: ../data/messages:49
-msgid ""
-"When you press the shortcut, the dock will show itself at the potition of "
-"your mouse. The rest of the time, it stays invisible, thus acting like a "
-"menu."
-msgstr ""
-"ショートカットを押すと、マウスの位置にドックが表示されます。それ以外の時は画"
-"面に表示されないので、メニューのような動作となります。"
+msgid "When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu."
+msgstr "ショートカットを押すと、マウスの位置にドックが表示されます。それ以外の時は画面に表示されないので、メニューのような動作となります。"
 
 #: ../data/messages:51
 msgid "Keyboard shortcut to show/hide the dock :"
 msgstr "ドックを表示/隠すためのキーボードショートカット :"
 
-#: ../data/messages:53 ../data/messages:673
+#: ../data/messages:53
+#: ../data/messages:673
 msgid "TaskBar"
 msgstr "タスクバー"
 
@@ -555,16 +537,13 @@ msgstr "タスクバー"
 msgid "Behaviour"
 msgstr "動作"
 
-#: ../data/messages:57 ../data/messages:675
-msgid ""
-"Cairo-Dock will then replace your taskbar. It is recommanded to remove any "
-"other taskbar, and to not force the dock's type to normal."
-msgstr ""
-"有効にすると Cairo-Dock はタスクバーに代替する機能を提供するので、他のタスク"
-"バーを取り除くことをお勧めします。その場合、ドックのウィンドウ・タイプを "
-"normal に強制しないこともお勧めします。"
+#: ../data/messages:57
+#: ../data/messages:675
+msgid "Cairo-Dock will then replace your taskbar. It is recommanded to remove any other taskbar, and to not force the dock's type to normal."
+msgstr "有効にすると Cairo-Dock はタスクバーに代替する機能を提供するので、他のタスクバーは取り除くことをお勧めします。その場合、ドックのウィンドウ・タイプを normal に強制設定しないこともお勧めします。"
 
-#: ../data/messages:59 ../data/messages:677
+#: ../data/messages:59
+#: ../data/messages:677
 msgid "Show the current applications in the dock ?"
 msgstr "ドック上に現在のアプリケーションを表示？"
 
@@ -573,14 +552,8 @@ msgid "Should the applications with same PID be displayed only once ?"
 msgstr "同じ PID を持つアプリーションの表示は１つだけに限定？"
 
 #: ../data/messages:63
-msgid ""
-"This allows to group windows in some soft like Gimp, and to have only 1 icon "
-"in the main dock.The 1st window will appear in the main dock, and the others "
-"will be placed in a container associated with this 1st icon."
-msgstr ""
-"これにより Gimp のようなソフトのウィンドウをグループ化し、メイン・ドックにア"
-"イコンを1つだけ持たせることが可能になります。最初のウィンドウはメイン・ドック"
-"に表示され、その他は最初のアイコンに関連付けられたコンテナに置かれます。"
+msgid "This allows to group windows in some soft like Gimp, and to have only 1 icon in the main dock.The 1st window will appear in the main dock, and the others will be placed in a container associated with this 1st icon."
+msgstr "これにより、 Gimp のようなソフトのウィンドウはグループ化され、メイン・ドックにアイコンを1つだけ持たせることが可能になります。最初のウィンドウはメイン・ドックに表示され、その他は最初のアイコンに関連付けられたコンテナに置かれます。"
 
 #: ../data/messages:65
 msgid "Should the applications with same class be grouped in a sub-dock ?"
@@ -595,27 +568,16 @@ msgid "Only show applis on current desktop ?"
 msgstr "現在のデスクトップ上のアプリケーションのみを表示？"
 
 #: ../data/messages:71
-msgid ""
-"Allows launchers to act as applis when their program is running, and "
-"displays an indicator on their icon to signal it. You can launch other "
-"occurences of the program with SHIFT+click."
-msgstr ""
-"ランチャーの対象プログラムが実行中の時、そのランチャーをアプリケーションとし"
-"て動作させ、それを示す標示をアイコン上に表示します。そのプログラムを新たに追"
-"加的に開くには SHIFT+クリック を使用します。"
+msgid "Allows launchers to act as applis when their program is running, and displays an indicator on their icon to signal it. You can launch other occurences of the program with SHIFT+click."
+msgstr "ランチャーの対象プログラムが実行中の時、そのランチャーをアプリケーションとして動作させ、それを示す標示をアイコン上に表示します。そのプログラムを新たに追加的に開くには SHIFT+クリック を使用します。"
 
 #: ../data/messages:73
 msgid "Mix launchers and applis ?"
 msgstr "ランチャーとアプリケーションを一体化？"
 
 #: ../data/messages:75
-msgid ""
-"If not set, will use the icon provided by X for each appli. If set, the same "
-"icon as the corresponding launcher will be used for each appli."
-msgstr ""
-"これが有効でない場合、X により提供されるアイコンが各アプリケーションに使用さ"
-"れます。 有効にした場合、ランチャーに使用しているアイコンがそのランチャーに対"
-"応するアプリケーションにそのまま使用されます。"
+msgid "If not set, will use the icon provided by X for each appli. If set, the same icon as the corresponding launcher will be used for each appli."
+msgstr "これが有効でない場合、X により提供されるアイコンが各アプリケーションに使用されます。 有効にした場合、ランチャーに使用しているアイコンがそのランチャーに対応するアプリケーションにそのまま使用されます。"
 
 #: ../data/messages:77
 msgid "Overwrite X icons with launchers' one ?"
@@ -627,7 +589,7 @@ msgstr "この機能には、合成マネージャが必要です。"
 
 #: ../data/messages:81
 msgid "Show a window thumbnail when it's minimized ?"
-msgstr "ウィンドウが最小化されていないときにそのサムネイルを表示？"
+msgstr "ウィンドウが最小化されているときはそのサムネイルを表示？"
 
 #: ../data/messages:83
 msgid "Interaction"
@@ -638,11 +600,8 @@ msgid "It is the default behaviour of most of taskbars."
 msgstr "これは大抵のタスクバーのデフォルトの動作です。"
 
 #: ../data/messages:87
-msgid ""
-"Minimize the window when its icon is clicked, if it was already the active "
-"window ?"
-msgstr ""
-"アクティブ・ウィンドウのアイコンをクリックしたときはそのウィンドウを最小化？"
+msgid "Minimize the window when its icon is clicked, if it was already the active window ?"
+msgstr "アクティブ・ウィンドウのアイコンをクリックしたときはそのウィンドウを最小化？"
 
 #: ../data/messages:89
 msgid "In a Firefox's tabs manner."
@@ -653,24 +612,16 @@ msgid "Middle click on an icon closes its relative application ?"
 msgstr "アイコンを中クリックしたときはその関係アプリーションを閉じる？"
 
 #: ../data/messages:93
-msgid ""
-"This is only usefull if you don't already use the auto-hide, and if your WM "
-"let the dock in front of fullscreen windows (which is rare)."
-msgstr ""
-"自動で隠す機能を使用していない場合や、ウィンドウ・マネージャがドックを全画面"
-"ウィンドウの手前に表示させてしまう（稀な）場合に有用です。"
+msgid "This is only usefull if you don't already use the auto-hide, and if your WM let the dock in front of fullscreen windows (which is rare)."
+msgstr "自動で隠す機能を使用していない場合や、ウィンドウ・マネージャがドックを全画面ウィンドウの手前に表示させてしまう（稀な）場合に有用です。"
 
 #: ../data/messages:95
 msgid "Automatically quick-hide the dock when a window becomes fullscreen ?"
 msgstr "ウィンドウが全画面表示になったときは自動的にドックを一時的に隠す？"
 
 #: ../data/messages:97
-msgid ""
-"This is only usefull if don't already use the auto-hide, and if you don't "
-"want to reserve the space for your dock nor let it below the other windows."
-msgstr ""
-"このオプションは、自動で隠す機能を使用していない場合や、ドック用の空間を確保"
-"したり、ドックを他のウィンドウの背後に表示させたくない場合に有用です。"
+msgid "This is only usefull if don't already use the auto-hide, and if you don't want to reserve the space for your dock nor let it below the other windows."
+msgstr "このオプションは、自動で隠す機能を使用していない場合や、ドック用の空間を確保したり、ドックを他のウィンドウの背後に表示させたくない場合に有用です。"
 
 #: ../data/messages:99
 msgid "Automatically quick-hide the dock when a window becomes maximized ?"
@@ -678,8 +629,7 @@ msgstr "ウィンドウを最大化させたときは自動的にドックを一
 
 #: ../data/messages:101
 msgid "Signal the applications demanding your attention with a dialog tip ?"
-msgstr ""
-"アプリケーションが注意を求めていることをダイアログ・チップを使用して通知？"
+msgstr "アプリケーションが注意を求めていることをダイアログ・チップを使用して通知？"
 
 #: ../data/messages:103
 msgid "Signal the applications demanding your attention with an animation ?"
@@ -702,21 +652,15 @@ msgid "Maximum number of caracters in application's name :"
 msgstr "アプリケーションの名前の最大文字数 :"
 
 #: ../data/messages:113
-msgid ""
-"To the right, you can control the transparency of minimized windows, to the "
-"left the transparency of visible windows. The more you go aside, the more "
-"the concerned icons will be transparent; on the middle, icons are always "
-"plain."
-msgstr ""
-"右にスライドさせると最小化ウィンドウのアイコンの透明度を調節し、左にスライド"
-"させると表示ウィンドウのアイコンの透明度を調節できます。端の方にスライドさせ"
-"るほどアイコンは透明になり、真ん中にするとアイコンに変化は起きません。"
+msgid "To the right, you can control the transparency of minimized windows, to the left the transparency of visible windows. The more you go aside, the more the concerned icons will be transparent; on the middle, icons are always plain."
+msgstr "右にスライドさせると最小化ウィンドウのアイコンの透明度を調節し、左にスライドさせると表示ウィンドウのアイコンの透明度を調節できます。端の方にスライドさせるほどアイコンは透明になり、真ん中にするとアイコンに変化は起きません。"
 
 #: ../data/messages:115
 msgid "Transparency of icons whose window is or isn't minimized :"
 msgstr "最小化または非最小化ウィンドウのアイコンの透明度 :"
 
-#: ../data/messages:117 ../data/messages:651
+#: ../data/messages:117
+#: ../data/messages:651
 msgid "System"
 msgstr "システム"
 
@@ -725,14 +669,8 @@ msgid "Movement parameters"
 msgstr "表示動作のパラメータ"
 
 #: ../data/messages:121
-msgid ""
-"The icons will appear folded on themselves, regarding the alignement point, "
-"then will unfold untill they fill the whole dock. Use 0 to not use "
-"unfolding, the more it's close to 0, the faster it will be"
-msgstr ""
-"アイコンはドック配置点において折り重なった状態で現れ、その後ドック全体を埋め"
-"るまで展開していきます。0 に指定すると展開は使用されません。0 に近い数字ほ"
-"ど、展開速度は速くなります。"
+msgid "The icons will appear folded on themselves, regarding the alignement point, then will unfold untill they fill the whole dock. Use 0 to not use unfolding, the more it's close to 0, the faster it will be"
+msgstr "アイコンはドック配置点において折り重なった状態で現れ、その後ドック全体を埋めるまで展開していきます。0 に指定すると展開は使用されません。0 に近い数字ほど、展開速度は速くなります。"
 
 #: ../data/messages:123
 msgid "Icons' lateral unfolding acceleration :"
@@ -747,24 +685,16 @@ msgid "Number of steps for icons' resizing (grow up/shrink down) :"
 msgstr "アイコンのサイズ変更の段階数（拡大/縮小） :"
 
 #: ../data/messages:129
-msgid ""
-"in percentage of the distance it can move at each step . After n steps, the "
-"remaining distance will be reduced by (1-s)^n."
-msgstr ""
-"各段階ごとに移動できる距離の割合です。N 段階後、残りの距離は (1-S)^N 分だけ縮"
-"まります。"
+msgid "in percentage of the distance it can move at each step . After n steps, the remaining distance will be reduced by (1-s)^n."
+msgstr "各段階ごとに移動できる距離の割合です。N 段階後、残りの距離は (1-S)^N 分だけ縮まります。"
 
 #: ../data/messages:131
 msgid "Window's move acceleration (move up/move down) :"
 msgstr "ドック・ウィンドウの移動加速度（上/下 動） :"
 
 #: ../data/messages:133
-msgid ""
-"The dock will unfold when it hides/shows itself. No effect if auto-hide is "
-"not activated or unfold acceleration is nul."
-msgstr ""
-"ドックを隠す/再表示する時にドックが展開していきます。自動で隠す設定が有効に"
-"なっていない、または展開加速度をゼロに指定している場合は効果ありません。"
+msgid "The dock will unfold when it hides/shows itself. No effect if auto-hide is not activated or unfold acceleration is nul."
+msgstr "ドックを隠す/再表示する時にドックが展開していきます。自動で隠す設定が有効になっていない、または展開加速度をゼロに指定している場合は効果ありません。"
 
 #: ../data/messages:135
 msgid "Animate the dock when auto-hiding ?"
@@ -775,36 +705,24 @@ msgid "Mouse"
 msgstr "マウス"
 
 #: ../data/messages:139
-msgid ""
-"The smaller, the lower the decorations will move along with the cursor. At 0 "
-"they will be static."
-msgstr ""
-"小さい値ほど、カーソルの動きに合わせた装飾の移動量が少なくなります。0 を指定"
-"した場合は静止状態になります。"
+msgid "The smaller, the lower the decorations will move along with the cursor. At 0 they will be static."
+msgstr "小さい値ほど、カーソルの動きに合わせた装飾の移動量が少なくなります。0 を指定した場合は静止状態になります。"
 
 #: ../data/messages:141
 msgid "Scroll speed factor for background decorations :"
 msgstr "背景装飾のスクロール速度 :"
 
 #: ../data/messages:143
-msgid ""
-"Otherwise the amount of movement of the decorations will only depend on the "
-"direction of the cursor's movement, as if the decorations were \"gliding\"."
-msgstr ""
-"無効の場合、装飾の移動量はカーソルの動く方向のみに依存することになり、装飾が"
-"\"すべる\"ような感じになります。"
+msgid "Otherwise the amount of movement of the decorations will only depend on the direction of the cursor's movement, as if the decorations were \"gliding\"."
+msgstr "無効の場合、装飾の移動量はカーソルの動く方向のみに依存することになり、装飾が\"すべる\"ような感じになります。"
 
 #: ../data/messages:145
 msgid "Should the decorations be enslaved to the cursor ?"
 msgstr "装飾をカーソルに追従させる？"
 
 #: ../data/messages:147
-msgid ""
-"If you put 0, this will make them scroll of exactly one icon each time. If "
-"you put -1, the scroll wil be de-activated"
-msgstr ""
-"0 に指定すると、ちょうど 1 アイコン単位のスクロールになります。-1 に指定する"
-"と、スクロール機能が無効になります。"
+msgid "If you put 0, this will make them scroll of exactly one icon each time. If you put -1, the scroll wil be de-activated"
+msgstr "0 に指定すると、ちょうど 1 アイコン単位のスクロールになります。-1 に指定すると、スクロール機能が無効になります。"
 
 #: ../data/messages:149
 msgid "Amount of pixels the icons will scroll at each wheel scroll :"
@@ -836,19 +754,15 @@ msgstr "有効にサブ・ドックから退出またはサブ・ドックへ退
 
 #: ../data/messages:163
 msgid "in ms. Unused if you set up to click to show sub-docks."
-msgstr ""
-"ミリ秒単位です。クリックでサブ・ドックを表示するようにしている場合は使用され"
-"ません。"
+msgstr "ミリ秒単位です。クリックでサブ・ドックを表示するようにしている場合は使用されません。"
 
 #: ../data/messages:165
 msgid "Delay before displaying a sub-dock :"
 msgstr "サブ・ドック表示の開始遅延時間 :"
 
 #: ../data/messages:167
-msgid ""
-"Otherwise they will appear when you linger over the icon pointing on it."
-msgstr ""
-"無効の場合は、アイコン上をしばらくポイントするとサブ・ドックが現れます。"
+msgid "Otherwise they will appear when you linger over the icon pointing on it."
+msgstr "無効の場合は、アイコン上をしばらくポイントするとサブ・ドックが現れます。"
 
 #: ../data/messages:169
 msgid "Click to show sub-docks ?"
@@ -856,8 +770,7 @@ msgstr "クリックでサブ・ドックを表示？"
 
 #: ../data/messages:171
 msgid "Always true if sub-docks appear with mouse click."
-msgstr ""
-"マウスのクリックでサブ・ドックが表示される場合、常に効果有りになります。"
+msgstr "マウスのクリックでサブ・ドックが表示される場合、常に効果有りになります。"
 
 #: ../data/messages:173
 msgid "Animate sub-docks when they appear ?"
@@ -876,18 +789,15 @@ msgid "Refresh frequency when mouving cursor into the dock :"
 msgstr "ドック内にカーソルを移動させた際の描画更新頻度 :"
 
 #: ../data/messages:181
-msgid ""
-"The transparency gradation pattern will then be re-calculated in real time. "
-"May needs more CPU power."
-msgstr ""
-"有効にすると、半透明なグラデーション・パターンをリアルタイムで再計算します。"
-"より多くの CPU パワーが要求される可能性があります。"
+msgid "The transparency gradation pattern will then be re-calculated in real time. May needs more CPU power."
+msgstr "有効にすると、半透明なグラデーション・パターンをリアルタイムで再計算します。より多くの CPU パワーが要求される可能性があります。"
 
 #: ../data/messages:183
 msgid "Reflections should be calculated in real-time ?"
 msgstr "反射をリアルタイムで計算？"
 
-#: ../data/messages:185 ../data/messages:775
+#: ../data/messages:185
+#: ../data/messages:775
 msgid "Labels"
 msgstr "ラベル"
 
@@ -900,11 +810,8 @@ msgid "Should the labels be always horizontal, even when dock is vertical ?"
 msgstr "ドックが垂直のときでもラベルは常に水平に表示？"
 
 #: ../data/messages:191
-msgid ""
-"the bigger, the more the labels next to the pointed icon will be transparent."
-msgstr ""
-"数値が大きいほど、ポインタが置かれたアイコンの隣のラベルがより透明になりま"
-"す。"
+msgid "the bigger, the more the labels next to the pointed icon will be transparent."
+msgstr "数値が大きいほど、ポインタが置かれたアイコンの隣のラベルがより透明になります。"
 
 #: ../data/messages:193
 msgid "label's visibility threshold :"
@@ -942,53 +849,54 @@ msgid "Composition"
 msgstr "合成処理"
 
 #: ../data/messages:209
-msgid ""
-"Only use this if you don't run a composite manager like Compiz, xcompmgr, "
-"etc and have a black background around your dock. For esthetic reason, the "
-"dock will be kept under other windows."
-msgstr ""
-"Compiz や xcompmgr 等の合成マネージャを実行しないため、ドックの周囲の背景が黒"
-"くなる場合にのみ使用してください。見た目の理由で、ドックは常に他のウィンドウ"
-"の後ろに表示されます。"
+msgid "Only use this if you don't run a composite manager like Compiz, xcompmgr, etc and have a black background around your dock. For esthetic reason, the dock will be kept under other windows."
+msgstr "Compiz や xcompmgr 等の合成マネージャを実行しないため、ドックの周囲の背景が黒くなる場合にのみ使用してください。見た目の理由で、ドックは常に他のウィンドウの後ろに表示されます。"
 
 #: ../data/messages:211
 msgid "Emulates composition with fake transparency ?"
 msgstr "擬似透過によって合成処理をエミュレート？"
 
-#: ../data/messages:213 ../data/messages:419
+#: ../data/messages:213
+#: ../data/messages:419
 msgid "Applets"
 msgstr "アプレット"
 
-#: ../data/messages:215 ../data/messages:679
+#: ../data/messages:215
+#: ../data/messages:679
 msgid "Choose some useful accessories for your dock !"
 msgstr "ドック用の便利なアクセサリを選ぼう！"
 
-#: ../data/messages:217 ../data/messages:223 ../data/messages:229
-#: ../data/messages:681 ../data/messages:687 ../data/messages:693
-msgid ""
-"Just check the box to activate a plug-in, or uncheck to deactivate it. Once "
-"activated, you can use it and configure it."
-msgstr ""
-"プラグインを有効にするにはボックスにチェックを入れ、無効にするにはチェックを"
-"外してください。有効にするとそのプラグインの使用と設定が可能になります。"
+#: ../data/messages:217
+#: ../data/messages:223
+#: ../data/messages:229
+#: ../data/messages:681
+#: ../data/messages:687
+#: ../data/messages:693
+msgid "Just check the box to activate a plug-in, or uncheck to deactivate it. Once activated, you can use it and configure it."
+msgstr "プラグインを有効にするにはボックスにチェックを入れ、無効にするにはチェックを外してください。有効にするとそのプラグインの使用と設定が可能になります。"
 
-#: ../data/messages:219 ../data/messages:683
+#: ../data/messages:219
+#: ../data/messages:683
 msgid "List of available accessories :"
 msgstr "利用可能なアクセサリのリスト :"
 
-#: ../data/messages:221 ../data/messages:685
+#: ../data/messages:221
+#: ../data/messages:685
 msgid "Add fonctionnalities to your dock !"
 msgstr "ドックに機能を追加しよう！"
 
-#: ../data/messages:225 ../data/messages:689
+#: ../data/messages:225
+#: ../data/messages:689
 msgid "List of available desktop enhancements :"
 msgstr "利用可能なデスクトップ追加機能のリスト :"
 
-#: ../data/messages:227 ../data/messages:691
+#: ../data/messages:227
+#: ../data/messages:691
 msgid "Control your PC from your dock !"
 msgstr "ドックから PC を操作しよう！"
 
-#: ../data/messages:231 ../data/messages:695
+#: ../data/messages:231
+#: ../data/messages:695
 msgid "List of available controlers :"
 msgstr "利用可能なコントローラのリスト :"
 
@@ -1008,15 +916,13 @@ msgstr "ドックを再表示させるには、このゾーンにマウスを置
 msgid "Size of the callback zone (width x height, in pixels) :"
 msgstr "呼び戻しゾーンの大きさ（幅×高さ、ピクセル単位） :"
 
-#: ../data/messages:241 ../data/messages:711
-msgid ""
-"Any format allowed; let this field empty to have an invisible callback zone. "
-"The callback zone is what you see when the dock hides itselfs."
-msgstr ""
-"画像形式は問いません。呼び戻しゾーンを見えなくするにはここを空欄にしてくださ"
-"い。ドックが隠れた際に見られるのが、呼び戻しゾーンです。"
+#: ../data/messages:241
+#: ../data/messages:711
+msgid "Any format allowed; let this field empty to have an invisible callback zone. The callback zone is what you see when the dock hides itselfs."
+msgstr "画像形式は問いません。呼び戻しゾーンを見えなくするにはここを空欄にしてください。ドックが隠れた際に見られるのが、呼び戻しゾーンです。"
 
-#: ../data/messages:243 ../data/messages:713
+#: ../data/messages:243
+#: ../data/messages:713
 msgid "Filename of an image to put on the callback zone :"
 msgstr "呼び戻しゾーン上に配置する画像のファイル名 :"
 
@@ -1025,9 +931,7 @@ msgid "Transparency of the callback zone :"
 msgstr "呼び戻しゾーンの透明度 :"
 
 #: ../data/messages:247
-msgid ""
-"Use it when the image is an arrow pointing to the center of the screen for "
-"exemple."
+msgid "Use it when the image is an arrow pointing to the center of the screen for exemple."
 msgstr "例えば、画像が画面の中央を指した矢印などの場合に使用してください。."
 
 #: ../data/messages:249
@@ -1038,8 +942,11 @@ msgstr "ドックが上/左/右に配置されたとき呼び戻しゾーンの�
 msgid "Extern Frame"
 msgstr "外枠"
 
-#: ../data/messages:253 ../data/messages:257 ../data/messages:261
-#: ../data/messages:307 ../data/messages:491
+#: ../data/messages:253
+#: ../data/messages:257
+#: ../data/messages:261
+#: ../data/messages:307
+#: ../data/messages:491
 msgid "in pixels."
 msgstr "ピクセル単位"
 
@@ -1067,15 +974,13 @@ msgstr "左右の下角を丸める？"
 msgid "Background image..."
 msgstr "背景画像..."
 
-#: ../data/messages:271 ../data/messages:707
-msgid ""
-"Any format allowed; let this field empty if you don't want to use an image "
-"as background."
-msgstr ""
-"画像形式は問いません。背景に画像を使用したくない場合、ここを空欄にしてくださ"
-"い。"
+#: ../data/messages:271
+#: ../data/messages:707
+msgid "Any format allowed; let this field empty if you don't want to use an image as background."
+msgstr "画像形式は問いません。背景に画像を使用したくない場合、ここを空欄にしてください。"
 
-#: ../data/messages:273 ../data/messages:709
+#: ../data/messages:273
+#: ../data/messages:709
 msgid "Image's filename to use as a background :"
 msgstr "ドックの背景に使用する画像のファイル名 :"
 
@@ -1100,27 +1005,20 @@ msgid "Dark color (red, green, blue, alpha) :"
 msgstr "暗い色（赤、緑、青、アルファ）:"
 
 #: ../data/messages:285
-msgid ""
-"Angle of the stripes / gradation, in relation to the vertical (in degree) :"
+msgid "Angle of the stripes / gradation, in relation to the vertical (in degree) :"
 msgstr "垂直に対してのストライプ/グラデーションの角度 :"
 
 #: ../data/messages:287
-msgid ""
-"The bigger, the more the stripes are close to each other; with 0 stripes, "
-"the background will be filled with a single gradation."
-msgstr ""
-"数値が大きいほどストライプ同士が接近します。0 に指定すると背景は単一のグラ"
-"デーションで埋められます。"
+msgid "The bigger, the more the stripes are close to each other; with 0 stripes, the background will be filled with a single gradation."
+msgstr "数値が大きいほどストライプ同士が接近します。0 に指定すると背景は単一のグラデーションで埋められます。"
 
 #: ../data/messages:289
 msgid "Number of stripes, in each pattern, to draw in the background :"
 msgstr "背景に描画する各パターンに含まれるストライプの数 :"
 
 #: ../data/messages:291
-msgid ""
-"1 pattern contains N stripes, so the width can be less or equal than 1/N."
-msgstr ""
-"1 パターンは N 個のストライプを含むので、ストライプ幅は 1/N 以下になります。"
+msgid "1 pattern contains N stripes, so the width can be less or equal than 1/N."
+msgstr "1 パターンは N 個のストライプを含むので、ストライプ幅は 1/N 以下になります。"
 
 #: ../data/messages:293
 msgid "Width of the stripes, in percentage of the pattern size :"
@@ -1143,12 +1041,8 @@ msgid "Crest of the wave :"
 msgstr "アイコンの波の高さ :"
 
 #: ../data/messages:303
-msgid ""
-"in pixels. Outside of this interval (centered on the mouse), the wave is "
-"flat."
-msgstr ""
-"ピクセル単位。マウスを中心としたこの指定幅の外側は、アイコンのうねりがない平"
-"坦な状態になります。"
+msgid "in pixels. Outside of this interval (centered on the mouse), the wave is flat."
+msgstr "ピクセル単位。マウスを中心としたこの指定幅の外側は、アイコンのうねりがない平坦な状態になります。"
 
 #: ../data/messages:305
 msgid "Width of the interval in which the wave will be effective :"
@@ -1159,13 +1053,8 @@ msgid "Space between icons :"
 msgstr "アイコン同士の間隔 :"
 
 #: ../data/messages:311
-msgid ""
-"It is their transparency when the wave is flat; they will \"materialize\" "
-"progressively as the dock grows up. The closer to 0, the more transparent "
-"they will be."
-msgstr ""
-"アイコンが波のようにうねっていない平坦な状態ときの透明度です。ドックが伸びる"
-"につれてアイコンが徐々に姿を現します。0 に近い数字ほど透明になります。"
+msgid "It is their transparency when the wave is flat; they will \"materialize\" progressively as the dock grows up. The closer to 0, the more transparent they will be."
+msgstr "アイコンが波のようにうねっていない平坦な状態ときの透明度です。ドックが伸びるにつれてアイコンが徐々に姿を現します。0 に近い数字ほど透明になります。"
 
 #: ../data/messages:313
 msgid "Icons' transparency at rest :"
@@ -1176,12 +1065,8 @@ msgid "Reflections"
 msgstr "反射"
 
 #: ../data/messages:317
-msgid ""
-"It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are "
-"not used."
-msgstr ""
-"地面の光の反射率です。1 に指定するとアイコンの反射は最高になり、0 にすると反"
-"射は使用されません。"
+msgid "It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are not used."
+msgstr "地面の光の反射率です。1 に指定するとアイコンの反射は最高になり、0 にすると反射は使用されません。"
 
 #: ../data/messages:319
 msgid "Reflecting power of the plane :"
@@ -1189,16 +1074,8 @@ msgstr "地面の反射力 :"
 
 #: ../data/messages:321
 #, no-c-format
-msgid ""
-"More precisely, it is the fraction of the max icon height that will be used "
-"to draw reflect. So setting it to 0.33 will mean that 33% of the icons will "
-"reflect on the ground, and the icons will be placed at the right distance "
-"from the front border of the frame so that the reflect is fully visible."
-msgstr ""
-"より正確に言えば、反射の描画に使用されるアイコンの高さの割合の最大値です。例"
-"えば 0.33 に設定するとアイコンの高さの 33% が地面上に反射し、外枠手前の境界線"
-"からその反射全体が表示されるようにする分だけ奥に離れた場所にアイコンが置かれ"
-"ます。"
+msgid "More precisely, it is the fraction of the max icon height that will be used to draw reflect. So setting it to 0.33 will mean that 33% of the icons will reflect on the ground, and the icons will be placed at the right distance from the front border of the frame so that the reflect is fully visible."
+msgstr "より正確に言えば、反射の描画に使用されるアイコンの高さの割合の最大値です。例えば 0.33 に設定するとアイコンの高さの 33% が地面上に反射し、外枠手前の境界線からその反射全体が表示されるようにする分だけ奥に離れた場所にアイコンが置かれます。"
 
 #: ../data/messages:323
 msgid "Field depth of the view:"
@@ -1208,32 +1085,37 @@ msgstr "ドック地面の奥行き :"
 msgid "Style of the icons' labels"
 msgstr "アイコンのラベルのスタイル"
 
-#: ../data/messages:327 ../data/messages:519 ../data/messages:781
+#: ../data/messages:327
+#: ../data/messages:519
+#: ../data/messages:781
 msgid "approximately size in pixels, put 0 to not display labels"
-msgstr ""
-"ピクセル単位のおよその大きさです。ラベルを非表示にする場合は 0 を指定します。"
+msgstr "ピクセル単位のおよその大きさです。ラベルを非表示にする場合は 0 を指定します。"
 
-#: ../data/messages:329 ../data/messages:521 ../data/messages:783
+#: ../data/messages:329
+#: ../data/messages:521
+#: ../data/messages:783
 msgid "Size of the font :"
 msgstr "フォントの大きさ :"
 
-#: ../data/messages:331 ../data/messages:523 ../data/messages:777
-msgid ""
-"for exemple Monospace, Purisa, ... Just write the font name wihtout any "
-"number or so."
-msgstr ""
-"例えば Monospace, Purisa, ... のように、数字等なしのフォント名だけを記入して"
-"ください。"
+#: ../data/messages:331
+#: ../data/messages:523
+#: ../data/messages:777
+msgid "for exemple Monospace, Purisa, ... Just write the font name wihtout any number or so."
+msgstr "例えば Monospace, Purisa, ... のように、数字等なしのフォント名だけを記入してください。"
 
-#: ../data/messages:333 ../data/messages:525 ../data/messages:779
+#: ../data/messages:333
+#: ../data/messages:525
+#: ../data/messages:779
 msgid "Family of the font used for labels :"
 msgstr "ラベルに使用するフォント・ファミリー :"
 
-#: ../data/messages:335 ../data/messages:529
+#: ../data/messages:335
+#: ../data/messages:529
 msgid "Should be italic ?"
 msgstr "イタリック表示？"
 
-#: ../data/messages:337 ../data/messages:527
+#: ../data/messages:337
+#: ../data/messages:527
 msgid "Weight (between 1 and 9, the bigger, the heavier):"
 msgstr "太さ（1 から 9 までの数字、大きな数字ほど太い）:"
 
@@ -1246,36 +1128,24 @@ msgid "Start color :"
 msgstr "開始色 :"
 
 #: ../data/messages:343
-msgid ""
-"It's the second color of the gradation. Set it to the same value as the "
-"first if you just don't want to have a gradation."
-msgstr ""
-"グラデーションの終了色です。グラデーションを使用したくない場合は、開始色と同"
-"じ色に設定してください。"
+msgid "It's the second color of the gradation. Set it to the same value as the first if you just don't want to have a gradation."
+msgstr "グラデーションの終了色です。グラデーションを使用したくない場合は、開始色と同じ色に設定してください。"
 
 #: ../data/messages:345
 msgid "Stop color :"
 msgstr "終了色 :"
 
 #: ../data/messages:347
-msgid ""
-"If checked, the pattern will go from top to bottom, otherwise from left to "
-"right."
-msgstr ""
-"チェックを入れると、上から下へのパターンになります。チェックを入れない場合は"
-"左から右へのパターンになります。"
+msgid "If checked, the pattern will go from top to bottom, otherwise from left to right."
+msgstr "チェックを入れると、上から下へのパターンになります。チェックを入れない場合は左から右へのパターンになります。"
 
 #: ../data/messages:349
 msgid "Pattern should be vertical ?"
 msgstr "縦のパターン？"
 
 #: ../data/messages:351
-msgid ""
-"If you set it to fully transparent, there will be no background for the "
-"text, but the letters' outline will be thicker."
-msgstr ""
-"完全に透明に設定すると、テキストは背景なしになりますが、文字の輪郭は厚くなり"
-"ます。"
+msgid "If you set it to fully transparent, there will be no background for the text, but the letters' outline will be thicker."
+msgstr "完全に透明に設定すると、テキストは背景なしになりますが、文字の輪郭は厚くなります。"
 
 #: ../data/messages:353
 msgid "Color of the label's background :"
@@ -1301,25 +1171,18 @@ msgstr "紐の幅（ピクセル単位）の指定（0 で紐不使用） :"
 msgid "Color of the string (red, blue, green, alpha) :"
 msgstr "紐の色（赤、青、緑、アルファ）:"
 
-#: ../data/messages:365 ../data/messages:729
+#: ../data/messages:365
+#: ../data/messages:729
 msgid "Icons' themes"
 msgstr "アイコンのテーマ"
 
-#: ../data/messages:367 ../data/messages:731
-msgid ""
-"Directories or themes where to search icons. Put some directories where you "
-"have icons you wish to see in the dock, or put some theme's name you've "
-"installed on your system. (the order is taken into account during the "
-"research). The key word _LocalTheme_ represents the directory ~/.config/"
-"cairo-dock/current_theme/icons"
-msgstr ""
-"アイコンの検索先のディレクトリまたはテーマ。ドックに表示させたいアイコンが存"
-"在するディレクトリを入力するか、またはシステムにインストールしているテーマの"
-"名前を入力してください（検索中は順番が考慮されます）。 _LocalTheme_ という"
-"キーワードは、~/.config/cairo-dock/current_theme/icons ディレクトリを表してい"
-"ます。"
+#: ../data/messages:367
+#: ../data/messages:731
+msgid "Directories or themes where to search icons. Put some directories where you have icons you wish to see in the dock, or put some theme's name you've installed on your system. (the order is taken into account during the research). The key word _LocalTheme_ represents the directory ~/.config/cairo-dock/current_theme/icons"
+msgstr "アイコンの検索先のディレクトリまたはテーマ。ドックに表示させたいアイコンが存在するディレクトリを入力するか、またはシステムにインストールしているテーマの名前を入力してください（検索中は順番が考慮されます）。 _LocalTheme_ というキーワードは、~/.config/cairo-dock/current_theme/icons ディレクトリを表しています。"
 
-#: ../data/messages:369 ../data/messages:733
+#: ../data/messages:369
+#: ../data/messages:733
 msgid "List of icons themes or directories :"
 msgstr "アイコン・テーマのリストまたはディレクトリ :"
 
@@ -1327,56 +1190,85 @@ msgstr "アイコン・テーマのリストまたはディレクトリ :"
 msgid "Launchers"
 msgstr "ランチャー"
 
-#: ../data/messages:373 ../data/messages:397 ../data/messages:421
+#: ../data/messages:373
+#: ../data/messages:397
+#: ../data/messages:421
 #: ../data/messages:445
 msgid "Put 0 if you don't want to restrain them"
 msgstr "大きさを制限したくない場合は 0 に指定します。"
 
-#: ../data/messages:375 ../data/messages:399 ../data/messages:423
+#: ../data/messages:375
+#: ../data/messages:399
+#: ../data/messages:423
 #: ../data/messages:447
 msgid "Icon size at rest (width x height) :"
 msgstr "アイコンの待機時の大きさ（幅×高さ） :"
 
-#: ../data/messages:377 ../data/messages:401 ../data/messages:425
+#: ../data/messages:377
+#: ../data/messages:401
+#: ../data/messages:425
 msgid "Animation type when clicked :"
 msgstr "クリック時のアニメーションの種類 :"
 
-#: ../data/messages:379 ../data/messages:403 ../data/messages:427
-#: ../data/messages:739 ../data/messages:755
+#: ../data/messages:379
+#: ../data/messages:403
+#: ../data/messages:427
+#: ../data/messages:739
+#: ../data/messages:755
 msgid "bounce"
 msgstr "バウンド"
 
-#: ../data/messages:381 ../data/messages:405 ../data/messages:429
-#: ../data/messages:741 ../data/messages:757
+#: ../data/messages:381
+#: ../data/messages:405
+#: ../data/messages:429
+#: ../data/messages:741
+#: ../data/messages:757
 msgid "rotate"
 msgstr "回転"
 
-#: ../data/messages:383 ../data/messages:407 ../data/messages:431
-#: ../data/messages:743 ../data/messages:759
+#: ../data/messages:383
+#: ../data/messages:407
+#: ../data/messages:431
+#: ../data/messages:743
+#: ../data/messages:759
 msgid "blink"
 msgstr "点滅"
 
-#: ../data/messages:385 ../data/messages:409 ../data/messages:433
-#: ../data/messages:745 ../data/messages:761
+#: ../data/messages:385
+#: ../data/messages:409
+#: ../data/messages:433
+#: ../data/messages:745
+#: ../data/messages:761
 msgid "pulse"
 msgstr "パルス"
 
-#: ../data/messages:387 ../data/messages:411 ../data/messages:435
-#: ../data/messages:747 ../data/messages:763
+#: ../data/messages:387
+#: ../data/messages:411
+#: ../data/messages:435
+#: ../data/messages:747
+#: ../data/messages:763
 msgid "upside-down"
 msgstr "上下逆さま"
 
-#: ../data/messages:389 ../data/messages:413 ../data/messages:437
-#: ../data/messages:749 ../data/messages:765
+#: ../data/messages:389
+#: ../data/messages:413
+#: ../data/messages:437
+#: ../data/messages:749
+#: ../data/messages:765
 msgid "wobbly"
 msgstr "伸び縮み"
 
-#: ../data/messages:391 ../data/messages:415 ../data/messages:439
-#: ../data/messages:751 ../data/messages:767
+#: ../data/messages:391
+#: ../data/messages:415
+#: ../data/messages:439
+#: ../data/messages:751
+#: ../data/messages:767
 msgid "random"
 msgstr "ランダム"
 
-#: ../data/messages:393 ../data/messages:417 ../data/messages:441
+#: ../data/messages:393
+#: ../data/messages:417
+#: ../data/messages:441
 msgid "Number of times the icon will bounce/rotate/blink/etc when clicked :"
 msgstr "クリック時にアイコンがバウンドや回転、点滅等する回数 :"
 
@@ -1389,31 +1281,25 @@ msgid "Separators"
 msgstr "区切り"
 
 #: ../data/messages:449
-msgid ""
-"Separators are icons used to make a separation between different types of "
-"icons. Cairo-dock can automatically add them between launchers, applis, and "
-"applets."
-msgstr ""
-"区切りとは、異なる種類のアイコンの間を区分するために使用されるアイコンです。"
-"Cairo-dock はランチャーやアプリ、アプレットの間に区切りを自動的に追加すること"
-"が可能です。"
+msgid "Separators are icons used to make a separation between different types of icons. Cairo-dock can automatically add them between launchers, applis, and applets."
+msgstr "区切りとは、異なる種類のアイコンの間を区分するために使用されるアイコンです。Cairo-dock はランチャーやアプリ、アプレットの間に区切りを自動的に追加することが可能です。"
 
 #: ../data/messages:451
 msgid "Automatically add separators ?"
 msgstr "自動的に区切りを追加？"
 
-#: ../data/messages:453 ../data/messages:715
+#: ../data/messages:453
+#: ../data/messages:715
 msgid "If you don't provide one, blanks will be used."
 msgstr "何も指定しない場合、空白が使用されます。"
 
-#: ../data/messages:455 ../data/messages:717
+#: ../data/messages:455
+#: ../data/messages:717
 msgid "Filename of an image to use for separators :"
 msgstr "区切りに使用する画像のファイル名 :"
 
 #: ../data/messages:457
-msgid ""
-"Make the separator's image revolve when dock is on top/on the left/on the "
-"right ?"
+msgid "Make the separator's image revolve when dock is on top/on the left/on the right ?"
 msgstr "ドックを上/左/右に配置したときに区切りの画像を回転？"
 
 #: ../data/messages:459
@@ -1425,18 +1311,15 @@ msgid "Order of the different types of icons :"
 msgstr "アイコンの種類の違いによる並び順 :"
 
 #: ../data/messages:463
-msgid ""
-"This parameter will overwrite the previously defined order, to allow you to "
-"mix applets and launchers into the dock."
-msgstr ""
-"このパラメータによって先に定義された配列順は上書きされ、ドック上にアプレット"
-"とランチャーが混じり合った配置るようにします。"
+msgid "This parameter will overwrite the previously defined order, to allow you to mix applets and launchers into the dock."
+msgstr "このパラメータによって、以前に定義された配列順は上書きされ、アプレットとランチャーが混じり合った配置がドック上で可能になります。"
 
 #: ../data/messages:465
 msgid "Allow applets to be placed amongst launchers ?"
 msgstr "アプレットをランチャーの間に混ぜて配置"
 
-#: ../data/messages:467 ../data/messages:699
+#: ../data/messages:467
+#: ../data/messages:699
 msgid "Views"
 msgstr "外観"
 
@@ -1444,7 +1327,8 @@ msgstr "外観"
 msgid "Main Dock"
 msgstr "メイン・ドック"
 
-#: ../data/messages:471 ../data/messages:701
+#: ../data/messages:471
+#: ../data/messages:701
 msgid "Choose the default view for root docks :"
 msgstr "ルート・ドックのデフォルトの外観の選択 :"
 
@@ -1456,7 +1340,8 @@ msgstr "サブ・ドック"
 msgid "You can overwrite this parameter for each sub-dock."
 msgstr "このパラメータは各サブ・ドックごとに上書きできます。"
 
-#: ../data/messages:477 ../data/messages:703
+#: ../data/messages:477
+#: ../data/messages:703
 msgid "Choose the default view for sub-docks :"
 msgstr "サブ・ドックのデフォルトの外観の選択 :"
 
@@ -1469,12 +1354,8 @@ msgid "Are the sub-docks parallel to main docks ?"
 msgstr "サブ・ドックをメイン・ドックに平行に配置？"
 
 #: ../data/messages:483
-msgid ""
-"You can specify a ratio for the size of the sub-docks' icons, regarding the "
-"main docks' icons size"
-msgstr ""
-"メイン・ドックのアイコンの大きさに対する、サブ・ドックのアイコンの大きさの割"
-"合を指定できます。"
+msgid "You can specify a ratio for the size of the sub-docks' icons, regarding the main docks' icons size"
+msgstr "メイン・ドックのアイコンの大きさに対する、サブ・ドックのアイコンの大きさの割合を指定できます。"
 
 #: ../data/messages:485
 msgid "Ratio for the size of the sub-docks' icons :"
@@ -1492,9 +1373,15 @@ msgstr "ボタン"
 msgid "Size of buttons in the info-bubbles (width x height) :"
 msgstr "情報を通知する吹き出し内のボタンの大きさ（幅×高さ） :"
 
-#: ../data/messages:495 ../data/messages:499 ../data/messages:619
-#: ../data/messages:623 ../data/messages:627 ../data/messages:631
-#: ../data/messages:635 ../data/messages:639 ../data/messages:643
+#: ../data/messages:495
+#: ../data/messages:499
+#: ../data/messages:619
+#: ../data/messages:623
+#: ../data/messages:627
+#: ../data/messages:631
+#: ../data/messages:635
+#: ../data/messages:639
+#: ../data/messages:643
 #: ../data/messages:647
 msgid "If you don't provide any, a default image will be used."
 msgstr "何も指定しない場合は、デフォルトの画像が使用されます。"
@@ -1532,18 +1419,15 @@ msgid "Text color (r,g,b) :"
 msgstr "テキストの色（赤、緑、青） :"
 
 #: ../data/messages:515
-msgid ""
-"The messages will have the same style as the icons' labels. The beneath "
-"parameters are then unused."
-msgstr ""
-"有効の場合、メッセージがアイコンのラベルと同じスタイルになります。この場合、"
-"下の各種パラメータは使用されません。"
+msgid "The messages will have the same style as the icons' labels. The beneath parameters are then unused."
+msgstr "有効の場合、メッセージがアイコンのラベルと同じスタイルになります。この場合、下の各種パラメータは使用されません。"
 
 #: ../data/messages:517
 msgid "Homogeneous with icons' label ?"
 msgstr "アイコンのラベルと同質にする？"
 
-#: ../data/messages:531 ../data/messages:785
+#: ../data/messages:531
+#: ../data/messages:785
 msgid "Desklets"
 msgstr "デスクレット"
 
@@ -1552,12 +1436,8 @@ msgid "Choose a default decoration for all desklets :"
 msgstr "すべてのデスクレットに適用するデフォルトの装飾の選択 :"
 
 #: ../data/messages:535
-msgid ""
-"It's an image that will be displayed below the drawings, like a frame for "
-"exemple. Let empty to not use any."
-msgstr ""
-"例えば外枠のように、描画物の背後に表示する画像です。画像を使用しない場合は空"
-"欄のままにしてください。"
+msgid "It's an image that will be displayed below the drawings, like a frame for exemple. Let empty to not use any."
+msgstr "例えば外枠のように、描画物の背後に表示する画像です。画像を使用しない場合は空欄のままにしてください。"
 
 #: ../data/messages:537
 msgid "Background image :"
@@ -1600,12 +1480,8 @@ msgid "Bottom offset :"
 msgstr "下方向のオフセット :"
 
 #: ../data/messages:557
-msgid ""
-"It's an image that will be displayed above the drawings, like a reflect for "
-"exemple. Let empty to not use any."
-msgstr ""
-"例えばテカリ表現のように、描画物の手前に表示する画像です。画像を使用しない場"
-"合は空欄のままにしてください。"
+msgid "It's an image that will be displayed above the drawings, like a reflect for exemple. Let empty to not use any."
+msgstr "例えばテカリ表現のように、描画物の手前に表示する画像です。画像を使用しない場合は空欄のままにしてください。"
 
 #: ../data/messages:559
 msgid "Foreground image :"
@@ -1624,12 +1500,8 @@ msgid "Indicator of drag'n'drop on the dock"
 msgstr "ドック上のドラッグ＆ドロップの標示"
 
 #: ../data/messages:567
-msgid ""
-"Typically an arrow, that will be displayed when you try to drop a new "
-"launcher into the dock. Let empty to use the default one."
-msgstr ""
-"一般的には矢印です。ドックに新しいランチャーをドロップしようとするときに表示"
-"されます。デフォルトのものを使用するには空欄のままにしてください。"
+msgid "Typically an arrow, that will be displayed when you try to drop a new launcher into the dock. Let empty to use the default one."
+msgstr "一般的には矢印です。ドックに新しいランチャーをドロップしようとするときに表示されます。デフォルトのものを使用するには空欄のままにしてください。"
 
 #: ../data/messages:569
 msgid "Image for the drag'n'drop animation :"
@@ -1644,9 +1516,7 @@ msgid "Display a drop indicator on icon while dragging over them ?"
 msgstr "アイコン上をドラッグ中にドロップ先としての標示をアイコンに表示？"
 
 #: ../data/messages:575
-msgid ""
-"It's an image that will be displayed on the icon to indicate you can drop on "
-"it. Let empty to use the default one."
+msgid "It's an image that will be displayed on the icon to indicate you can drop on it. Let empty to use the default one."
 msgstr "ドロップ可能先の標示としてアイコン上に表示する画像です。"
 
 #: ../data/messages:577
@@ -1694,12 +1564,8 @@ msgid "Indicator of active launcher"
 msgstr "アクティブ・ランチャーの標示"
 
 #: ../data/messages:599
-msgid ""
-"Indicators are drawn on launchers icons to show that they have already been "
-"launched. Let blank to use the default one."
-msgstr ""
-"ランチャーのアイコン上に標示を描画して、それらが起動済みであることを示しま"
-"す。デフォルトの画像を使用するには空欄のままにしてください。"
+msgid "Indicators are drawn on launchers icons to show that they have already been launched. Let blank to use the default one."
+msgstr "ランチャーのアイコン上に標示を描画して、それらが起動済みであることを示します。デフォルトの画像を使用するには空欄のままにしてください。"
 
 #: ../data/messages:601
 msgid "Filename of an image to use for indicators :"
@@ -1710,37 +1576,24 @@ msgid "Display the indicator above the icon ?"
 msgstr "アイコン上に標示を表示？"
 
 #: ../data/messages:605
-msgid ""
-"You can choose to make the indicator smaller or bigger than the icons. The "
-"bigger the value is, the bigger the indicator is. 1 means the indicator will "
-"have the same size as the icons."
-msgstr ""
-"標示をアイコンよりも大きくするか小さくするか選択できます。大きな数値ほど、大"
-"きな標示になります。1 に設定すると、標示はアイコンと同じ大きさになります。"
+msgid "You can choose to make the indicator smaller or bigger than the icons. The bigger the value is, the bigger the indicator is. 1 means the indicator will have the same size as the icons."
+msgstr "標示をアイコンよりも大きくするか小さくするか選択できます。大きな数値ほど、大きな標示になります。1 に設定すると、標示はアイコンと同じ大きさになります。"
 
 #: ../data/messages:607
 msgid "Indicator size ratio :"
 msgstr "標示の大きさの割合 :"
 
 #: ../data/messages:609
-msgid ""
-"It will then be resized like the icon, move like the icon, etc. Otherwise it "
-"will be drawn directly on the dock."
-msgstr ""
-"有効にした場合、アイコンに標示が描画され、一緒に移動したりサイズ変更等されま"
-"すが、無効にした場合はドックに直接描画されます。"
+msgid "It will then be resized like the icon, move like the icon, etc. Otherwise it will be drawn directly on the dock."
+msgstr "有効にした場合、アイコンに標示が描画され、一緒に移動したりサイズ変更等されますが、無効にした場合はドックに直接描画されます。"
 
 #: ../data/messages:611
 msgid "Link the indicator with its icon ?"
 msgstr "標示をアイコンと結合？"
 
 #: ../data/messages:613
-msgid ""
-"in pixels. You can use this parameter to adjust the indicator's vertical "
-"position."
-msgstr ""
-"ピクセル単位。このパラメータを使用して標示の垂直方向の位置を調節することがで"
-"きます。"
+msgid "in pixels. You can use this parameter to adjust the indicator's vertical position."
+msgstr "ピクセル単位。このパラメータを使用して標示の垂直方向の位置を調節することができます。"
 
 #: ../data/messages:615
 msgid "Vertical offset :"
@@ -1845,7 +1698,9 @@ msgstr "外枠の色（赤、青、緑、アルファ）:"
 msgid "Desklet's decorations :"
 msgstr "デスクレットの装飾 :"
 
-#: ../data/messages:789 ../data/messages:803 ../data/messages:863
+#: ../data/messages:789
+#: ../data/messages:803
+#: ../data/messages:863
 msgid "Desktop Entry"
 msgstr "デスクトップエントリ"
 
@@ -1853,19 +1708,27 @@ msgstr "デスクトップエントリ"
 msgid "Sub-dock's name :"
 msgstr "サブ・ドックの名前 :"
 
-#: ../data/messages:793 ../data/messages:811 ../data/messages:865
+#: ../data/messages:793
+#: ../data/messages:811
+#: ../data/messages:865
 msgid "Image's name or path :"
 msgstr "画像の名前またはパス :"
 
-#: ../data/messages:795 ../data/messages:817 ../data/messages:867
+#: ../data/messages:795
+#: ../data/messages:817
+#: ../data/messages:867
 msgid "Extra parameters"
 msgstr "追加的パラメータ"
 
-#: ../data/messages:797 ../data/messages:819 ../data/messages:869
+#: ../data/messages:797
+#: ../data/messages:819
+#: ../data/messages:869
 msgid "Order you want for this launcher among the others:"
 msgstr "このランチャーに割り当てる並び順 :"
 
-#: ../data/messages:799 ../data/messages:815 ../data/messages:871
+#: ../data/messages:799
+#: ../data/messages:815
+#: ../data/messages:871
 msgid "Name of the container it belongs to:"
 msgstr "帰属先コンテナの名前 :"
 
@@ -1881,56 +1744,28 @@ msgid "Launcher's name :"
 msgstr "ランチャーの名前 :"
 
 #: ../data/messages:807
-msgid ""
-"Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard "
-"shortcut, for exemple <Alt>F1 for the Applications Menu, <Ctrl>c or <Ctrl>v "
-"to copy or paste, etc"
-msgstr ""
-"例えば nautilus --no-desktop, gedit などのように指定します。他にもアプリケー"
-"ションメニューを開く <Alt>F1 や、コピーや貼り付けの <Ctrl>c , <Ctrl>v のよう"
-"にキーボードショートカットを指定することもできます。 "
+msgid "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1 for the Applications Menu, <Ctrl>c or <Ctrl>v to copy or paste, etc"
+msgstr "例えば nautilus --no-desktop や gedit などのように指定します。他にもアプリケーションメニューを開く <Alt>F1 や、コピーや貼り付けの <Ctrl>c , <Ctrl>v のようにキーボードショートカットを指定することもできます。 "
 
 #: ../data/messages:809
 msgid "Command to launch on click :"
 msgstr "クリック時に実行するコマンド :"
 
 #: ../data/messages:813
-msgid ""
-"If you write here a container's name that doesn't exist yet, a new one will "
-"be created, with this icon inside."
-msgstr ""
-"ここに既存にないコンテナの名前を入力すると、このアイコンを含んだ新しいコンテ"
-"ナが作成されます。"
+msgid "If you write here a container's name that doesn't exist yet, a new one will be created, with this icon inside."
+msgstr "ここに既存にないコンテナの名前を入力すると、このアイコンを含んだ新しいコンテナが作成されます。"
 
 #: ../data/messages:821
-msgid ""
-"Use this option for exemple if the launcher launches a script in a terminal "
-"but you don't want it to steal normal terminal's icons from the TaskBar, or "
-"if you explicitely want to use the original icon of the TaskBar because it "
-"provides some info, for exemple Pidgin's icons represent the avatar of the "
-"contact."
-msgstr ""
-"例えば、端末内でスクリプトを起動させるランチャーに通常の端末アイコンをタスク"
-"バーから奪取させたくない場合や、Pidgin のアイコンが連絡先のアバターを表示する"
-"など、タスクバーのオリジナルのアイコンに情報提供的な機能があるため使用したい"
-"場合は、このオプションを使用してください。"
+msgid "Use this option for exemple if the launcher launches a script in a terminal but you don't want it to steal normal terminal's icons from the TaskBar, or if you explicitely want to use the original icon of the TaskBar because it provides some info, for exemple Pidgin's icons represent the avatar of the contact."
+msgstr "例えば、端末内でスクリプトを起動させるランチャーに通常の端末アイコンをタスクバーから奪取させたくない場合や、Pidgin のアイコンが連絡先のアバターを表示するなどタスクバーのオリジナルのアイコンに情報提供的な機能があるためそれを使いたい場合は、このオプションを使用してください。"
 
 #: ../data/messages:823
 msgid "Prevent this launcher from stealing appli from taskbar ?"
 msgstr "このランチャーにタスクバーからアプリーションを奪取させない？"
 
 #: ../data/messages:825
-msgid ""
-"The only reason you may want to modify this parameter is if you made this "
-"launcher by hands. If you dropped it into the dock from the menu, it is "
-"nearly sure that you shouldn't touch it. It defines the class of the "
-"program, which is useful to link the appli with its launcher."
-msgstr ""
-"このパラメータを変更したいと思われる可能性があるのは、各入力項目を1つ1つ手動"
-"で埋めてこのランチャーを作成した場合です。既存のランチャーをメニューからドッ"
-"クにドロップして作成した場合、このパラメータを編集する必要はほとんどありませ"
-"ん。このパラメータはプログラムのクラスを定義し、ランチャーとアプリケーション"
-"を結びつけるのに有用です。"
+msgid "The only reason you may want to modify this parameter is if you made this launcher by hands. If you dropped it into the dock from the menu, it is nearly sure that you shouldn't touch it. It defines the class of the program, which is useful to link the appli with its launcher."
+msgstr "このパラメータを変更したいと思われる可能性があるのは、各入力項目を1つ1つ手動で埋めてこのランチャーを作成した場合です。既存のランチャーをメニューからドックにドロップして作成した場合、このパラメータを編集する必要はほとんどありません。このパラメータはプログラムのクラスを定義し、ランチャーとアプリケーションを結びつけるのに有用です。"
 
 #: ../data/messages:827
 msgid "Class of the program :"
@@ -1952,26 +1787,16 @@ msgid "List of themes :"
 msgstr "テーマのリスト :"
 
 #: ../data/messages:879
-msgid ""
-"Otherwise the current behaviour will be kept. It's all about the dock's "
-"position, behaviour parameters such as auto-hide, using taskbar or not, etc."
-msgstr ""
-"使用しない場合は現在の動作、すなわちドックの配置位置や自動で隠すか否かの設"
-"定、タスクバー使用不使用の設定などといった動作パラメータが維持されます。"
+msgid "Otherwise the current behaviour will be kept. It's all about the dock's position, behaviour parameters such as auto-hide, using taskbar or not, etc."
+msgstr "使用しない場合は現在の動作、すなわちドックの配置位置や自動で隠すか否かの設定、タスクバー使用不使用の設定などといった動作パラメータが維持されます。"
 
 #: ../data/messages:881
 msgid "Use the new theme's behaviour ?"
 msgstr "新しいテーマの動作設定を使用？"
 
 #: ../data/messages:883
-msgid ""
-"So if you check this box, your launchers will be deleted and replaced by the "
-"ones provided in the new theme. Otherwise the current launchers will be "
-"kept, only icons will be replaced."
-msgstr ""
-"これにチェックを入れた場合、現在のランチャーは削除され、新しいテーマによって"
-"提供されるものに置き換えられます。チェックを入れない場合は現在のランチャーが"
-"保持され、アイコンのみが置き換えられます。"
+msgid "So if you check this box, your launchers will be deleted and replaced by the ones provided in the new theme. Otherwise the current launchers will be kept, only icons will be replaced."
+msgstr "これにチェックを入れた場合、現在のランチャーは削除され、新しいテーマによって提供されるものに置き換えられます。チェックを入れない場合は現在のランチャーが保持され、アイコンのみが置き換えられます。"
 
 #: ../data/messages:885
 msgid "Use the new theme's launchers ?"
@@ -2017,7 +1842,9 @@ msgstr "不要になったテーマのチェックを外してリストから削
 msgid "pouet"
 msgstr ""
 
-#: ../data/messages:907 ../data/messages:909 ../data/messages:911
+#: ../data/messages:907
+#: ../data/messages:909
+#: ../data/messages:911
 #: ../data/messages:913
 msgid ""
 "v1.4.6.3 :\n"
@@ -2031,20 +1858,17 @@ msgstr ""
 # #################################
 #: ../data/messages:915
 msgid ""
-"v1.5.0 : it's been 1 month since previous release, and we worked hardly to "
-"bring you :\n"
+"v1.5.0 : it's been 1 month since previous release, and we worked hardly to bring you :\n"
 " - A parabolic view : perfect for sub-docks with a dozen of icons.\n"
 " - A big pack of new applets :\n"
 "   Cairo-Dock has now its own terminal.\n"
 "   It can handle your systray instead of your panel,\n"
 "   monitor your laptop's battery,\n"
 "   and change your screen's luminosity through the dock\n"
-"   The integration into the GNOME desktop is provided by the 'gnome-"
-"integration' plug-in.\n"
+"   The integration into the GNOME desktop is provided by the 'gnome-integration' plug-in.\n"
 "    Wanted : a KDE user who could do the same for KDE !\n"
 " - Dustbin v2 can now handle drag'n'drops and display nice info.\n"
-" - Manual separators, better sub-dock accessibility, 64bits works smoothly, "
-"etc\n"
+" - Manual separators, better sub-dock accessibility, 64bits works smoothly, etc\n"
 " - And cherry on the cake, a new theme (I, Cairo) !\n"
 "  Now, why not try to make an applet for Cairo-Dock ? ;-)"
 msgstr ""
@@ -2053,8 +1877,7 @@ msgstr ""
 msgid ""
 "v1.5.1 :\n"
 " - The 1.5 branch is still young, so this version brings a lot of bug fixes\n"
-" - Cairo-Dock is now translated in Japanese, thanks to Jiro Kawada for his "
-"work !\n"
+" - Cairo-Dock is now translated in Japanese, thanks to Jiro Kawada for his work !\n"
 " - A new view has appeared : Rainbow\n"
 " - Cairo-Dock has become a desklet manager !\n"
 "  most of applets can now detached themselves from the dock\n"
@@ -2109,18 +1932,15 @@ msgid ""
 " - Added a 'ShowDesktop' applet for convenience.\n"
 " - Some fix in PowerManager (now ok !)\n"
 " - The ability to have many docks for a single instance of Cairo-Dock.\n"
-" - Cairo-Dock is not yet well integrated into Gnome 2.22, but it will come "
-"soon ;-)"
+" - Cairo-Dock is not yet well integrated into Gnome 2.22, but it will come soon ;-)"
 msgstr ""
 
 #: ../data/messages:927
 msgid ""
 "v1.5.6 :\n"
-" - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still "
-"experimental\n"
+" - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still experimental\n"
 " - You can now have many docks in 1 instance of Cairo-Dock.\n"
-" Just place a launcher or an applet in a dock, giving this dock a name that "
-"doesn't exist yet\n"
+" Just place a launcher or an applet in a dock, giving this dock a name that doesn't exist yet\n"
 " a new one will be created.\n"
 " - SHIFT+mouse wheel on AlsaMixer, Xmms, Rhythmbox, etc.\n"
 " - Launchers can now launch keyboard shortcuts.\n"
@@ -2143,8 +1963,7 @@ msgid ""
 "   nVidia\n"
 " - 2 new themes : Neon & Clear\n"
 " - A new cute character for Cairo-Penguin : Wanda the Cairo-Fish ^_^\n"
-" - Cairo-Dock can now run without composite manager, with fake "
-"transparency.\n"
+" - Cairo-Dock can now run without composite manager, with fake transparency.\n"
 " - The dock can now stay below windows and be popped up on demand.\n"
 " - Auto-reload on crash.\n"
 " - Real window thumbnail when minimized."
@@ -2153,14 +1972,12 @@ msgstr ""
 #: ../data/messages:931
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you :\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
 " - Translation in italian and chinese.\n"
-" - And we are still hoping someone would help us writing a kde-integration "
-"plug-in ^_^"
+" - And we are still hoping someone would help us writing a kde-integration plug-in ^_^"
 msgstr ""
 
 #: ../data/messages:933
@@ -2172,16 +1989,14 @@ msgid ""
 " (Clock, Cairo-Penguin, Slider, Stack), each with a different config.\n"
 " - Cairo-Dock is now able to load themes on its own server,\n"
 " so feel free to send us all your themes, we can distribute them ! :-)\n"
-" - And we are still searching someone motivated to write a kde-integration "
-"plug-in ^_^"
+" - And we are still searching someone motivated to write a kde-integration plug-in ^_^"
 msgstr ""
 
 #: ../data/messages:935
 msgid ""
 "v1.6.3 : \n"
 " - first the bad news :\n"
-" user datas have been moved into ~/.config to respect the FreeDesktop "
-"standards.\n"
+" user datas have been moved into ~/.config to respect the FreeDesktop standards.\n"
 " and local icons are now in a dedicated 'icons' sub-folder.\n"
 " So in advance, sorry for the possible inconvenience ^_^\n"
 " - And now the very good news !\n"
@@ -2196,23 +2011,18 @@ msgstr ""
 
 #~ msgid "Background color (r,v,b,a) :"
 #~ msgstr "背景色（赤、緑、青、アルファ）:"
-
 #~ msgid "Background color when mouse hovers it (r,v,b,a) :"
 #~ msgstr "マウスを置いたときの背景色（赤、緑、青、アルファ）:"
-
 #~ msgid "Desklet's background color when mouse hovers it :"
 #~ msgstr "マウスが置かれたときのデスクレットの背景色 :"
-
 #~ msgid "Add a launcher"
 #~ msgstr "ランチャーを追加"
-
 #~ msgid "Choose or Create a launcher"
 #~ msgstr "ランチャーの選択または作成"
 
 #, fuzzy
 #~ msgid "Color of the indicator (r,v,b,a) :"
 #~ msgstr "外枠線の色（赤、緑、青、アルファ） :"
-
 #~ msgid ""
 #~ "The ratio between indicator's size and icon's size. The bigger, the "
 #~ "bigger the indicators are."
@@ -2227,40 +2037,28 @@ msgstr ""
 #, fuzzy
 #~ msgid "Name of an image to use for the drop indicator emblem :"
 #~ msgstr "標示に使用する画像のファイル名 :"
-
 #~ msgid "All"
 #~ msgstr "すべて"
-
 #~ msgid "Appearance"
 #~ msgstr "外観"
-
 #~ msgid "Modules"
 #~ msgstr "モジュール"
-
 #~ msgid "Check updates"
 #~ msgstr "更新版チェック"
-
 #~ msgid "Help"
 #~ msgstr "ヘルプ"
-
 #~ msgid "Move this icon"
 #~ msgstr "このアイコンを移動"
-
 #~ msgid "To the left"
 #~ msgstr "左へ"
-
 #~ msgid "To the right"
 #~ msgstr "右へ"
-
 #~ msgid "To the beginning"
 #~ msgstr "先頭へ"
-
 #~ msgid "To the end"
 #~ msgstr "最後尾へ"
-
 #~ msgid "Is this icon a container ?"
 #~ msgstr "このアイコンはコンテナ？"
-
 #~ msgid ""
 #~ "So if you check this box, your launchers and their icons will be deleted "
 #~ "and replaced by the ones provided in the new theme. Otherwise the current "
@@ -2269,22 +2067,16 @@ msgstr ""
 #~ "このボックスにチェックを入れた場合、現在のランチャーやアイコンは削除され、"
 #~ "新しいテーマによって提供されるものに入れ替えられます。チェックを入れない場"
 #~ "合は現在のものがそのまま維持されます。"
-
 #~ msgid "Etiquettes"
 #~ msgstr "表示"
-
 #~ msgid "This will prevent other windows from overlapping the dock."
 #~ msgstr "これによって他のウィンドウがドックに重なるのを防ぎます。"
-
 #~ msgid "Activate a plug-in to use it and configure it."
 #~ msgstr "プラグインを使用できるよう有効化して、設定を行います。"
-
 #~ msgid "List of available plug-ins (applets and others) :"
 #~ msgstr "利用可能なプラグインのリスト（アプレット等） :"
-
 #~ msgid "Maximum width that can have the dock :"
 #~ msgstr "ドックの幅の最大値 :"
-
 #~ msgid ""
 #~ "You can scroll with the mouse's wheel to make the icons scroll, like a "
 #~ "carousel. If you put 0, the dock will automatically adapt itself to the "
@@ -2292,22 +2084,16 @@ msgstr ""
 #~ msgstr ""
 #~ "マウスホイールを使用して回転台のようにアイコンをスクロールさせることが可能"
 #~ "です。0 に設定するとドックは自動的にデスクトップの大きさに合わせます。"
-
 #~ msgid "Text color (r,v,b,a) :"
 #~ msgstr "テキストの色（赤、緑、青、透明）:"
-
 #~ msgid "Well, maybe not ..."
 #~ msgstr "知りたくないかも …"
-
 #~ msgid "Do you want to know more ?"
 #~ msgstr "もっと詳細な設定が知りたい？"
-
 #~ msgid "Compiz Fusion Widget"
 #~ msgstr "Compiz Fusion ウィジェット"
-
 #~ msgid "set behaviour in Compiz to: (name=cairo-dock-desklet & type=utility)"
 #~ msgstr "Compiz 設定時の指定記入法: (name=cairo-dock-desklet & type=utility)"
-
 #~ msgid ""
 #~ "Gap from the absolute position on the screen's edge, in pixels.. You can "
 #~ "also move the dock by holding ALT or CTRL key and left mouse button."
@@ -2315,13 +2101,10 @@ msgstr ""
 #~ "選択した画面端の基本配置位置からのずれの大きさ（ピクセル単位）です。ALT ま"
 #~ "たは CTRL キーとマウス左ボタンを押し続けることで、ドックを移動させることも"
 #~ "可能です。"
-
 #~ msgid "default"
 #~ msgstr "デフォルト"
-
 #~ msgid "List of available desktop enhancement :"
 #~ msgstr "利用可能なデスクトップ追加機能のリスト :"
-
 #~ msgid ""
 #~ "The icons will scroll according to the chosen placement type.\n"
 #~ " Of course the dock can be placed anywhere on the screen, here we specify "
@@ -2330,7 +2113,6 @@ msgstr ""
 #~ "アイコンは選択したドック配置位置に応じたスクロールをします。\n"
 #~ "ドックは画面上のどの位置にも配置可能ですが、ここではその基本となる位置を指"
 #~ "定します。"
-
 #~ msgid ""
 #~ "The dock will automatically hide itself outside of the scren when the "
 #~ "mouse leaves it\n"
@@ -2340,7 +2122,6 @@ msgstr ""
 #~ "マウスがドックから離れた際にドックを自動的に隠し、代わりに呼び戻しゾーンを"
 #~ "表示します。\n"
 #~ "このゾーンにマウスを置くことで再びドックが表示されます。"
-
 #~ msgid ""
 #~ "Cairo-Dock will then replace your taskbar.\n"
 #~ " It is recommanded to remove any other taskbar, and to not force the "
@@ -2350,3 +2131,4 @@ msgstr ""
 #~ "クバーを取り除くことをお薦めします。\n"
 #~ "その場合、ドックのウィンドウ・タイプを normal に強制しないこともお薦めしま"
 #~ "す。"
+

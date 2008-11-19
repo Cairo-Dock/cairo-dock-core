@@ -164,51 +164,79 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 			GLX_DEPTH_SIZE,    1, 
 			None}; 
 		
+		
+		XVisualInfo *pVisInfo = NULL; 
 		int i, iNumOfFBConfigs = 0;
+		cd_debug ("cherchons les configs ...");
 		pFBConfigs = glXChooseFBConfig (XDisplay, 
 			DefaultScreen (XDisplay), 
 			doubleBufferAttributes, 
 			&iNumOfFBConfigs); 
 		
 		if (pFBConfigs == NULL)
-			cd_warning ("Argl, we could not get an ARGB-visual!");
-		else
-			cd_message ("got %d FBConfig(s)", iNumOfFBConfigs);
-		
-		gboolean bKeepGoing=FALSE;
-		XVisualInfo*	     pVisInfo = NULL; 
-		for (i = 0; i < iNumOfFBConfigs; i++) 
-		{ 
-			pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]); 
-			if (!pVisInfo) 
-			{
-				cd_warning ("this FBConfig has no visual.");
-				continue; 
-			}
-			
-			pPictFormat = XRenderFindVisualFormat (XDisplay, pVisInfo->visual);
-			if (!pPictFormat)
-			{
-				cd_warning ("this visual has an unknown format.");
-				XFree (pVisInfo);
-				continue; 
-			}
-			
-			if (pPictFormat->direct.alphaMask > 0) 
-			{ 
-				cd_message ("Strike, found a GLX visual with alpha-support!");
-				//pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]); 
-				//renderFBConfig = pFBConfigs[i]; 
-				bKeepGoing = True; 
-				break; 
-			} 
-	
-			XFree (pVisInfo);
-		} 
-		/// free FBConfigs ?
-		
-		if (bKeepGoing)
 		{
+			cd_warning ("Argl, we could not get an ARGB-visual!");
+			
+			doubleBufferAttributes[13] = 0;
+			pVisInfo = glXChooseVisual (XDisplay,
+				DefaultScreen (XDisplay),
+				doubleBufferAttributes);
+			if (pVisInfo == NULL)
+			{
+				cd_warning ("still no visual, this is the last chance");
+				pFBConfigs = glXChooseFBConfig (XDisplay, 
+					DefaultScreen (XDisplay), 
+					doubleBufferAttributes, 
+					&iNumOfFBConfigs);
+				cd_message ("got %d FBConfig(s) this time", iNumOfFBConfigs);
+				for (i = 0; i < iNumOfFBConfigs; i++) 
+				{
+					pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]); 
+					if (!pVisInfo) 
+					{
+						cd_warning ("this FBConfig has no visual.");
+					}
+					else
+						break;
+				}
+			}
+		}
+		else
+		{
+			cd_message ("got %d FBConfig(s)", iNumOfFBConfigs);
+			for (i = 0; i < iNumOfFBConfigs; i++) 
+			{
+				pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]); 
+				if (!pVisInfo) 
+				{
+					cd_warning ("this FBConfig has no visual.");
+					continue; 
+				}
+				
+				pPictFormat = XRenderFindVisualFormat (XDisplay, pVisInfo->visual);
+				if (!pPictFormat)
+				{
+					cd_warning ("this visual has an unknown format.");
+					XFree (pVisInfo);
+					pVisInfo = NULL;
+					continue; 
+				}
+				
+				if (pPictFormat->direct.alphaMask > 0)
+				{
+					cd_message ("Strike, found a GLX visual with alpha-support!");
+					break;
+				}
+		
+				XFree (pVisInfo);
+				pVisInfo = NULL;
+			} 
+			/// free FBConfigs ?
+		}
+		
+		if (pVisInfo != NULL)
+		{
+			cd_message ("ok, got a visual");
 			//GdkVisual *visual = gdkx_visual_get (pVisInfo->visualid);
 			//pColormap = gdk_colormap_new (visual, TRUE);
 			g_pGlConfig = gdk_x11_gl_config_new_from_visualid (pVisInfo->visualid);
@@ -216,7 +244,7 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 		}
 		else
 		{
-			cd_warning ("sorry, OpenGL can't be used with your graphic card.");
+			cd_warning ("sorry, your graphic card does not support GLX Visuals, OpenGL can't be used.");
 			g_bUseOpenGL = FALSE;
 		}
 	}

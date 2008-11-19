@@ -1100,8 +1100,11 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	
 	s_bLoading = TRUE;
 	
+	bFlushConfFileNeeded = cairo_dock_get_global_config (pKeyFile);
+	
+	
 	//\___________________ On recupere la position du dock.
-	bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Position);
+	///bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Position);
 	
 	//\___________________ On recupere les parametres d'accessibilite.
 	gboolean bPopUpOld = g_bPopUp;
@@ -1150,9 +1153,13 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	//\___________________ On recupere les parametres des vues.
 	bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Views);
 	
-	bFlushConfFileNeeded = cairo_dock_get_global_config (pKeyFile);
 	
 	//\___________________ Post-initialisation.
+	pDock->iGapX = myPosition.iGapX;
+	pDock->iGapY = myPosition.iGapY;
+	
+	pDock->fAlign = myPosition.fAlign;
+	
 	g_bAutoHideOnFullScreen = g_bAutoHideOnFullScreen && (!pDock->bAutoHide);
 	g_bAutoHideOnMaximized = g_bAutoHideOnMaximized && (!pDock->bAutoHide);
 	
@@ -1167,7 +1174,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_updated_emblem_conf_file (pKeyFile, &bFlushConfFileNeeded);
 	
 	//\___________________ On (re)charge tout, car n'importe quel parametre peut avoir change.
-	switch (s_iScreenBorder)
+	switch (myPosition.iScreenBorder)
 	{
 		case CAIRO_DOCK_BOTTOM :
 			pDock->bHorizontalDock = CAIRO_DOCK_HORIZONTAL;
@@ -1186,9 +1193,10 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 			pDock->bDirectionUp = FALSE;
 		break;
 	}
-
+	
 	if (g_iMaxAuthorizedWidth == 0 || g_iMaxAuthorizedWidth > g_iScreenWidth[pDock->bHorizontalDock])
 		g_iMaxAuthorizedWidth = g_iScreenWidth[pDock->bHorizontalDock];
+	
 	
 	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
@@ -1340,12 +1348,14 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 		cairo_dock_start_polling_screen_edge (pDock);
 	else
 		cairo_dock_stop_polling_screen_edge ();
+	
 	if (! g_bPopUp && bPopUpOld)
 	{
 		cairo_dock_set_root_docks_on_top_layer ();
 	}
 	else if (g_bPopUp && ! bPopUpOld)
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
+	
 	if (g_bUseFakeTransparency && ! bUseFakeTransparencyOld)
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
 	else if (! g_bUseFakeTransparency && bUseFakeTransparencyOld)

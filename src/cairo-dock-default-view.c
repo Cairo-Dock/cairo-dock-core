@@ -319,7 +319,7 @@ void cairo_dock_render_opengl_linear (CairoDock *pDock)
 	double fMargin = g_iFrameMargin;
 	double fRadius = (pDock->iDecorationsHeight + fLineWidth - 2 * g_iDockRadius > 0 ? g_iDockRadius : (pDock->iDecorationsHeight + fLineWidth) / 2 - 1);
 	double fDockWidth = cairo_dock_get_current_dock_width_linear (pDock);
-	double fFrameHeight = pDock->iDecorationsHeight + fLineWidth - 2 * fRadius;
+	double fFrameHeight = pDock->iDecorationsHeight + fLineWidth/* - 2 * fRadius*/;
 	
 	int sens;
 	double fDockOffsetX, fDockOffsetY;  // Offset du coin haut gauche du cadre.
@@ -340,92 +340,23 @@ void cairo_dock_render_opengl_linear (CairoDock *pDock)
 	else
 	{
 		sens = -1;
-		fDockOffsetY = fLineWidth/2 + fRadius + fFrameHeight;
+		fDockOffsetY = fLineWidth/2 /*+ fRadius */+ fFrameHeight;
 	}
 	
 	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
 	double fRatio = pDock->fRatio;
 	
 	//\_____________ On genere les coordonnees du contour.
-	/*GLfloat pVertexTab[((90/DELTA_ROUND_DEGREE+1)*4+1)*3];
-	int iNbVertex = (90/DELTA_ROUND_DEGREE+1)*4;
-	memset (pVertexTab, 0, (90/DELTA_ROUND_DEGREE+1)*4*3*sizeof (GLfloat));
-	int i=0, t;
-	int iPrecision = DELTA_ROUND_DEGREE;
-	double fInclinaisonCadre = 0.;
-	for (t = 0;t <= 90;t += iPrecision, i++) // Le cote haut droit 
-	{ 
-		pVertexTab[3*i] = 1./2 + fRadius * cos (t*RADIAN) / fDockWidth;
-		pVertexTab[3*i+1] = 1./2 + fRadius * sin (t*RADIAN) / fFrameHeight;
-	} 
-	for (t = 90;t <= 180;t += iPrecision, i++) // Bas droit 
-	{ 
-		pVertexTab[3*i] = -1./2 + fRadius * cos (t*RADIAN) / fDockWidth;
-		pVertexTab[3*i+1] = 1./2 + fRadius * sin (t*RADIAN) / fFrameHeight;
-	} 
-	for (t = 180;t <= 270;t += iPrecision, i++) // Bas gauche 
-	{ 
-		pVertexTab[3*i] = -1./2 + fRadius * cos (t*RADIAN) / fDockWidth;
-		pVertexTab[3*i+1] = -1./2 + fRadius * sin (t*RADIAN) / fFrameHeight;
-	} 
-	for (t = 270;t <= 360;t += iPrecision, i++) // Haut gauche 
-	{ 
-		pVertexTab[3*i] = 1./2 + fRadius * cos (t*RADIAN) / fDockWidth;
-		pVertexTab[3*i+1] = -1./2 + fRadius * sin (t*RADIAN) / fFrameHeight;
-	}
-	pVertexTab[3*i] = 1./2 + fRadius / fDockWidth;  // on boucle.
-	pVertexTab[3*i+1] = 1./2;*/
 	int iNbVertex;
-	const GLfloat *pVertexTab = cairo_dock_draw_rectangle (fDockWidth, fFrameHeight, fRadius, g_bRoundedBottomCorner, &iNbVertex);
+	const GLfloat *pVertexTab = cairo_dock_generate_rectangle_path (fDockWidth, fFrameHeight, fRadius, g_bRoundedBottomCorner, &iNbVertex);
 	
 	//\_____________ On trace le fond en texturant par des triangles.
-	glEnable(GL_TEXTURE_2D); // Je veux de la texture
-	glBindTexture(GL_TEXTURE_2D, g_iBackgroundTexture); // allez on bind la texture
-	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR ); // ok la on selectionne le type de generation des coordonnees de la texture
-	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR );
-	glEnable(GL_TEXTURE_GEN_S); // oui je veux une generation en S
-	glEnable(GL_TEXTURE_GEN_T); // Et en T aussi
-	
 	glPushMatrix ();
-	glLoadIdentity();
-	glTranslatef ((int) (fDockOffsetX + fDockWidth/2), (int) (fDockOffsetY - fFrameHeight/2), (int) (-pDock->iMaxIconHeight * (1 + g_fAmplitude) + 1));
-	
-	glScalef (fDockWidth, fFrameHeight, 1.);
-	//glRotatef (fInclinaisonCadre, 1.0f, 0.0f, 0.0); // Rotation ou pas selon trapeze ou autre 
-	
-	glEnable(GL_BLEND); // On active le blend
-	glBlendFunc (GL_SRC_ALPHA, 1.); // Transparence avec le canal alpha
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Couleur a fond
-	///glEnable(GL_POLYGON_OFFSET_FILL);
-	///glPolygonOffset (1., 1.);
-	glPolygonMode(GL_FRONT, GL_FILL);
-	
-	glBegin (GL_TRIANGLE_FAN);
-	glVertex3f(0., 0., 0.0f);
-	int i;
-	for (i = 0; i <= iNbVertex; i++) // La on affiche un polygone plein texture
-	{
-		glVertex3fv (&pVertexTab[3*i]);
-	}
-	glEnd();
-	
-	glDisable(GL_TEXTURE_GEN_S);
-	glDisable(GL_TEXTURE_GEN_T);
-	glDisable(GL_TEXTURE_2D); // Plus de texture merci 
+	cairo_dock_draw_frame_background_opengl (g_iBackgroundTexture, fDockWidth+2*fRadius, fFrameHeight, fDockOffsetX-fRadius, fDockOffsetY, pVertexTab, iNbVertex);
 	
 	//\_____________ On trace le contour.
-	glPolygonMode(GL_FRONT, GL_LINE);
-	glLineWidth(fLineWidth); // Ici on choisi l'epaisseur du contour du polygone 
-	glColor4f(g_fLineColor[0], g_fLineColor[1], g_fLineColor[2], g_fLineColor[3]); // Et sa couleur 
-	glBegin(GL_LINE_LOOP);
-	for (i = 0; i < iNbVertex; i++) // Et on affiche le contour 
-	{
-		glVertex3fv (&pVertexTab[3*i]);
-	}
-	glEnd();
-	glDisable(GL_BLEND);
-	glDisable(GL_POLYGON_OFFSET_FILL);
-	glPolygonMode(GL_FRONT, GL_FILL);
+	if (fLineWidth != 0)
+		cairo_dock_draw_current_path_opengl (fLineWidth, g_fLineColor, pVertexTab, iNbVertex);
 	glPopMatrix ();
 	
 	//\_____________ On dessine la ficelle.
@@ -458,15 +389,7 @@ void cairo_dock_render_opengl_linear (CairoDock *pDock)
 	
 	
 	//\_____________ On dessine les icones.
-	/**glEnable(GL_TEXTURE_2D);
-	glEnable(GL_DEPTH_TEST);
-	
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glBlendFunc (GL_SRC_ALPHA, 1.); // Transparence avec le canal alpha 
-	glLoadIdentity();
-	glTranslatef (0, 0, -pDock->iMaxIconHeight * (1 + g_fAmplitude) + 1);
-	
-	glEnable (GL_LIGHTING);  // pour indiquer a OpenGL qu'il devra prendre en compte l'eclairage.
+	/**glEnable (GL_LIGHTING);  // pour indiquer a OpenGL qu'il devra prendre en compte l'eclairage.
 	glLightModelf (GL_LIGHT_MODEL_TWO_SIDE, 1.);
 	//glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);  // OpenGL doit considerer pour ses calculs d'eclairage que l'oeil est dans la scene (plus realiste).
 	GLfloat fGlobalAmbientColor[4] = {.0, .0, .0, 0.};
@@ -481,8 +404,6 @@ void cairo_dock_render_opengl_linear (CairoDock *pDock)
 	glLightf (GL_LIGHT0, GL_SPOT_EXPONENT, 10.);
 	GLfloat fDirection[4] = {.3, .0, -.8, 0.};  // le dernier 0 <=> direction.
 	glLightfv(GL_LIGHT0, GL_POSITION, fDirection);*/
-	//glEnable (GL_LIGHTING);
-	//glEnable (GL_LIGHT0);
 	
 	if (pFirstDrawnElement != NULL)
 	{
@@ -543,3 +464,124 @@ void cairo_dock_register_default_renderer (void)
 
 	cairo_dock_register_renderer (CAIRO_DOCK_DEFAULT_RENDERER_NAME, pDefaultRenderer);
 }
+
+
+/*void cd_rendering_render_3D_plane_opengl (CairoDock *pDock)
+{
+	//\____________________ On trace le cadre.
+	double fLineWidth = g_iDockLineWidth;
+	double fMargin = g_iFrameMargin;
+	double fRadius = (pDock->iDecorationsHeight + fLineWidth - 2 * g_iDockRadius > 0 ? g_iDockRadius : (pDock->iDecorationsHeight + fLineWidth) / 2 - 1);
+	double fDockWidth = cairo_dock_get_current_dock_width_linear (pDock);
+	
+	int sens;
+	double fDockOffsetX, fDockOffsetY;  // Offset du coin haut gauche du cadre.
+	Icon *pFirstIcon = cairo_dock_get_first_drawn_icon (pDock);
+	fDockOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX + 0 - fMargin : fRadius + fLineWidth / 2);
+	if (pDock->bDirectionUp)
+	{
+		sens = 1;
+		fDockOffsetY = pDock->iCurrentHeight - pDock->iDecorationsHeight - 1.5 * fLineWidth;
+	}
+	else
+	{
+		sens = -1;
+		fDockOffsetY = pDock->iDecorationsHeight + 1.5 * fLineWidth;
+	}
+	
+	double fInclinationOnHorizon = (fDockWidth / 2) / iVanishingPointY;
+	double fDeltaXTrapeze;
+	int iNbVertex;
+	GLfloat *pVertexTab = cairo_dock_generate_trapeze_path (fDockWidth, fFrameHeight, fRadius, g_bRoundedBottomCorner, fInclinationOnHorizon, &fDeltaXTrapeze, &iNbVertex);
+	
+	//\____________________ On dessine les decorations dedans.
+	fDockOffsetY = (pDock->bDirectionUp ? pDock->iCurrentHeight - pDock->iDecorationsHeight - fLineWidth : fLineWidth);
+	glPushMatrix ();
+	cairo_dock_draw_frame_background_opengl (g_iBackgroundTexture, fDockWidth+2*fDeltaXTrapeze, fFrameHeight, fDockOffsetX-fDeltaXTrapeze, fDockOffsetY, pVertexTab, iNbVertex);
+	
+	//\____________________ On dessine le cadre.
+	if (fLineWidth != 0)
+		cairo_dock_draw_current_path_opengl (fLineWidth, g_fLineColor, pVertexTab, iNbVertex);
+	glPopMatrix ();
+	
+	/// donner un effet d'epaisseur => chaud du slip avec les separateurs physiques !
+	
+	//\____________________ On dessine la ficelle qui les joint.
+	///if (g_iStringLineWidth > 0)
+	///	cairo_dock_draw_string (pCairoContext, pDock, g_iStringLineWidth, FALSE, (my_iDrawSeparator3D == CD_FLAT_SEPARATOR || my_iDrawSeparator3D == CD_PHYSICAL_SEPARATOR));
+	
+	//\____________________ On dessine les icones et les etiquettes, en tenant compte de l'ordre pour dessiner celles en arriere-plan avant celles en avant-plan.
+	double fRatio = (pDock->iRefCount == 0 ? 1 : g_fSubDockSizeRatio);
+	fRatio = pDock->fRatio;
+	GList *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
+	if (pFirstDrawnElement == NULL)
+		return ;
+		
+	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
+	Icon *icon;
+	GList *ic = pFirstDrawnElement;
+	
+// 	if (my_iDrawSeparator3D == CD_FLAT_SEPARATOR || my_iDrawSeparator3D == CD_PHYSICAL_SEPARATOR)
+// 	{
+// 		cairo_set_line_cap (pCairoContext, CAIRO_LINE_CAP_SQUARE);
+// 		do
+// 		{
+// 			icon = ic->data;
+// 			
+// 			if (icon->acFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
+// 			{
+// 				cairo_save (pCairoContext);
+// 				cd_rendering_draw_3D_separator (icon, pCairoContext, pDock, pDock->bHorizontalDock, TRUE);
+// 				cairo_restore (pCairoContext);
+// 			}
+// 			
+// 			ic = cairo_dock_get_next_element (ic, pDock->icons);
+// 		} while (ic != pFirstDrawnElement);
+// 		
+// 		do
+// 		{
+// 			icon = ic->data;
+// 			
+// 			if (icon->acFileName != NULL || ! CAIRO_DOCK_IS_SEPARATOR (icon))
+// 			{
+// 				cairo_save (pCairoContext);
+// 				cairo_dock_render_one_icon (icon, pCairoContext, pDock->bHorizontalDock, fRatio, fDockMagnitude, pDock->bUseReflect, TRUE, pDock->iCurrentWidth, pDock->bDirectionUp);
+// 				cairo_restore (pCairoContext);
+// 			}
+// 			
+// 			ic = cairo_dock_get_next_element (ic, pDock->icons);
+// 		} while (ic != pFirstDrawnElement);
+// 		
+// 		if (my_iDrawSeparator3D == CD_PHYSICAL_SEPARATOR)
+// 		{
+// 			do
+// 			{
+// 				icon = ic->data;
+// 				
+// 				if (icon->acFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
+// 				{
+// 					cairo_save (pCairoContext);
+// 					cd_rendering_draw_3D_separator (icon, pCairoContext, pDock, pDock->bHorizontalDock, FALSE);
+// 					cairo_restore (pCairoContext);
+// 				}
+// 				
+// 				ic = cairo_dock_get_next_element (ic, pDock->icons);
+// 			} while (ic != pFirstDrawnElement);
+// 		}
+// 	}
+// 	else
+	{
+		do
+		{
+			icon = ic->data;
+			
+			glPushMatrix ();
+			
+			cairo_dock_render_one_icon_opengl (icon, pDock, fRatio, fDockMagnitude, TRUE);
+			
+			glPopMatrix ();
+			
+			ic = cairo_dock_get_next_element (ic, pDock->icons);
+		} while (ic != pFirstDrawnElement);
+	}
+}*/

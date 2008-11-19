@@ -92,7 +92,7 @@ gboolean cairo_dock_reserve_data_slot (CairoDockModuleInstance *pInstance);
 
 void cairo_dock_preload_internal_modules (GHashTable *pModuleTable);
 
-void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, GKeyFile *pKeyFile);
+void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, const gchar *cConfFilePath);
 
 CairoDockInternalModule *cairo_dock_find_internal_module_from_name (const gchar *cModuleName);
 
