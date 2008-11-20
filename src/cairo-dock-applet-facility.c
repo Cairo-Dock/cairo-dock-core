@@ -25,6 +25,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-draw-opengl.h"
+#include "cairo-dock-internal-system.h"
 #include "cairo-dock-applet-facility.h"
 
 extern gchar *g_cCurrentThemePath;
@@ -35,7 +36,6 @@ extern double g_fAlbedo;
 
 extern CairoDockLabelDescription g_iconTextDescription;
 extern CairoDockLabelDescription g_quickInfoTextDescription;
-extern gboolean g_bTextAlwaysHorizontal;
 
 
 void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *pSurface, double fScale, double fAlpha, Icon *pIcon, CairoContainer *pContainer)
@@ -192,9 +192,8 @@ void cairo_dock_set_icon_name (cairo_t *pSourceContext, const gchar *cIconName, 
 		pIcon,
 		pSourceContext,
 		&g_iconTextDescription,
-		(g_bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pContainer->bIsHorizontal),
+		(mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pContainer->bIsHorizontal),
 		pContainer->bDirectionUp);
-	cairo_dock_update_label_texture (pIcon);
 }
 void cairo_dock_set_icon_name_full (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconNameFormat, ...)
 {
@@ -220,7 +219,6 @@ void cairo_dock_set_quick_info (cairo_t *pSourceContext, const gchar *cQuickInfo
 		pSourceContext,
 		&g_quickInfoTextDescription,
 		fMaxScale);
-	cairo_dock_update_quick_info_texture (pIcon);
 }
 
 void cairo_dock_set_quick_info_full (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfoFormat, ...)

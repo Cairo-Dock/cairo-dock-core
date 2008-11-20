@@ -38,13 +38,6 @@ extern CairoDockLabelDescription g_quickInfoTextDescription;
 /// Description des titres des dialogues.
 extern CairoDockLabelDescription g_dialogTextDescription;
 
-/// facteur de visibilite des etiquettes adjacentes a l'icone pointee.
-extern double g_fLabelAlphaThreshold;
-/// le texte est-il toujours horizontal ?
-extern gboolean g_bTextAlwaysHorizontal;
-/// seule l'etiquette de l'icone pointee doit-elle etre dessinee ?
-extern gboolean g_bLabelForPointedIconOnly;
-
 /// TRUE ssi les coins du bas sont arrondis.
 extern gboolean g_bRoundedBottomCorner;
 
@@ -94,16 +87,8 @@ extern double g_fSubDockSizeRatio;
 /// Epaisseur de la ficelle.
 extern int g_iStringLineWidth;
 
-/// Taille max autorisee pour les docks.
-extern int g_iMaxAuthorizedWidth;
-
 /// Environnement de bureau detecte.
 extern CairoDockDesktopEnv g_iDesktopEnv;
-
-/// Type de tri des fichiers (par nom, taille, date, ...).
-extern CairoDockFMSortType g_iFileSortType;
-/// Montrer les fichiers caches ou non.
-extern gboolean g_bShowHiddenFiles;
 
 extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
 extern cairo_surface_t *g_pBackgroundSurface[2];

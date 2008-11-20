@@ -23,6 +23,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-launcher-factory.h"
+#include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-class-manager.h"
 
 extern gboolean g_bUseSeparator;
@@ -30,7 +31,6 @@ extern CairoDock *g_pMainDock;
 extern int g_tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
 extern int g_tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
 extern double g_fAmplitude;
-extern double g_fVisibleAppliAlpha;
 extern gboolean g_bEasterEggs;
 
 static GHashTable *s_hClassTable = NULL;
@@ -584,7 +584,7 @@ void cairo_dock_update_visibility_on_inhibators (gchar *cClass, Window Xid, gboo
 			{
 				cd_message (" %s aussi se %s", pInhibatorIcon->acName, (bIsHidden ? "cache" : "montre"));
 				pInhibatorIcon->bIsHidden = bIsHidden;
-				if (! CAIRO_DOCK_IS_APPLET (pInhibatorIcon) && g_fVisibleAppliAlpha != 0)
+				if (! CAIRO_DOCK_IS_APPLET (pInhibatorIcon) && myTaskBar.fVisibleAppliAlpha != 0)
 				{
 					CairoDock *pInhibhatorDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);
 					pInhibatorIcon->fAlpha = 1;  // on triche un peu.

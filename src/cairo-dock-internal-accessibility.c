@@ -66,7 +66,11 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		{
 			if (pPrevAccessibility->cRaiseDockShortcut != NULL)
 				cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_keyboard);
-			_bind_key (pAccessibility->cRaiseDockShortcut);
+			if (! cd_keybinder_bind (pAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_keyboard, NULL))
+			{
+				g_free (pAccessibility->cRaiseDockShortcut);
+				pAccessibility->cRaiseDockShortcut = NULL;
+			}
 		}
 	}
 	else

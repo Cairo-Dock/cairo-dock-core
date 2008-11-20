@@ -49,24 +49,21 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-class-manager.h"
+#include "cairo-dock-internal-accessibility.h"
+#include "cairo-dock-internal-system.h"
 #include "cairo-dock-dock-factory.h"
 
 extern int g_iWmHint;
 extern CairoDock *g_pMainDock;
 extern gboolean g_bSameHorizontality;
 extern double g_fSubDockSizeRatio;
-extern gboolean g_bReserveSpace;
-extern gboolean g_bAnimateOnAutoHide;
-extern double g_fUnfoldAcceleration;
 
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
-extern int g_iMaxAuthorizedWidth;
 extern gint g_iDockLineWidth;
 extern int g_iIconGap;
 extern double g_fAmplitude;
 
 extern CairoDockLabelDescription g_iconTextDescription;
-extern gboolean g_bTextAlwaysHorizontal;
 
 extern gboolean g_bUseSeparator;
 
@@ -77,11 +74,9 @@ extern int g_tIconTypeOrder[CAIRO_DOCK_NB_TYPES];
 extern gchar *g_cConfFile;
 
 extern gboolean g_bKeepAbove;
-extern gboolean g_bPopUp;
 extern gboolean g_bSkipPager;
 extern gboolean g_bSkipTaskbar;
 extern gboolean g_bSticky;
-extern gboolean g_bUseFakeTransparency;
 
 extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
@@ -122,9 +117,9 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 		gtk_window_stick (GTK_WINDOW (pWindow));
 	if (g_bKeepAbove)
 		gtk_window_set_keep_above (GTK_WINDOW (pWindow), g_bKeepAbove);
-	if (g_bPopUp)
+	if (myAccessibility.bPopUp)
 		gtk_window_set_keep_below (GTK_WINDOW (pWindow), TRUE);
-	if (g_bUseFakeTransparency)
+	if (mySystem.bUseFakeTransparency)
 		gtk_window_set_keep_below (GTK_WINDOW (pWindow), TRUE);
 	gtk_window_set_skip_pager_hint (GTK_WINDOW (pWindow), g_bSkipPager);
 	gtk_window_set_skip_taskbar_hint (GTK_WINDOW (pWindow), g_bSkipTaskbar);
@@ -636,7 +631,7 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 		}
 		if (g_bKeepAbove)
 			gtk_window_set_keep_above (GTK_WINDOW (pDock->pWidget), FALSE);
-		if (g_bPopUp)
+		if (myAccessibility.bPopUp)
 			gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), FALSE);
 		
 		pDock->bAutoHide = FALSE;
@@ -656,7 +651,7 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 			if (! g_bSameHorizontality)
 			{
 				cairo_t* pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-				cairo_dock_fill_one_text_buffer (icon, pSourceContext, &g_iconTextDescription, (g_bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pDock->bHorizontalDock), pDock->bDirectionUp);
+				cairo_dock_fill_one_text_buffer (icon, pSourceContext, &g_iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pDock->bHorizontalDock), pDock->bDirectionUp);
 				cairo_destroy (pSourceContext);
 			}
 		}
@@ -766,17 +761,17 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	do
 	{
 		double fPrevRatio = pDock->fRatio;
-		cd_debug ("  %s (%d / %d)", __func__, (int)pDock->iMaxDockWidth, g_iMaxAuthorizedWidth);
-		if (pDock->iMaxDockWidth > g_iMaxAuthorizedWidth)  // g_iScreenWidth[pDock->bHorizontalDock]
+		cd_debug ("  %s (%d / %d)", __func__, (int)pDock->iMaxDockWidth, myAccessibility.iMaxAuthorizedWidth);
+		if (pDock->iMaxDockWidth > myAccessibility.iMaxAuthorizedWidth)  // g_iScreenWidth[pDock->bHorizontalDock]
 		{
-			pDock->fRatio *= 1. * g_iMaxAuthorizedWidth / pDock->iMaxDockWidth;
+			pDock->fRatio *= 1. * myAccessibility.iMaxAuthorizedWidth / pDock->iMaxDockWidth;
 		}
 		else
 		{
 			double fMaxRatio = (pDock->iRefCount == 0 ? 1 : g_fSubDockSizeRatio);
 			if (pDock->fRatio < fMaxRatio)
 			{
-				pDock->fRatio *= 1. * g_iMaxAuthorizedWidth / pDock->iMaxDockWidth;
+				pDock->fRatio *= 1. * myAccessibility.iMaxAuthorizedWidth / pDock->iMaxDockWidth;
 				pDock->fRatio = MIN (pDock->fRatio, fMaxRatio);
 			}
 			else
@@ -807,7 +802,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		}
 		
 		n ++;
-	} while ((pDock->iMaxDockWidth > g_iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_iScreenHeight[pDock->bHorizontalDock]) && n < 3);
+	} while ((pDock->iMaxDockWidth > myAccessibility.iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_iScreenHeight[pDock->bHorizontalDock]) && n < 3);
 	
 	if (! pDock->bInside && (pDock->bAutoHide && pDock->iRefCount == 0))
 		return;
@@ -888,7 +883,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	if (! g_bSameHorizontality)
 	{
 		cairo_t* pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-		cairo_dock_fill_one_text_buffer (icon, pSourceContext, &g_iconTextDescription, (g_bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pDock->bHorizontalDock), pDock->bDirectionUp);
+		cairo_dock_fill_one_text_buffer (icon, pSourceContext, &g_iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pDock->bHorizontalDock), pDock->bDirectionUp);
 		cairo_destroy (pSourceContext);
 	}
 
@@ -952,7 +947,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	if (bUpdateSize)
 		cairo_dock_update_dock_size (pDock);
 
-	if (pDock->iRefCount == 0 && g_bReserveSpace && bUpdateSize && ! pDock->bAutoHide && (pDock->fFlatDockWidth != iPreviousMinWidth || pDock->iMaxIconHeight != iPreviousMaxIconHeight))  // pDock->bIsMainDock
+	if (pDock->iRefCount == 0 && myAccessibility.bReserveSpace && bUpdateSize && ! pDock->bAutoHide && (pDock->fFlatDockWidth != iPreviousMinWidth || pDock->iMaxIconHeight != iPreviousMaxIconHeight))  // pDock->bIsMainDock
 		cairo_dock_reserve_space_for_dock (pDock, TRUE);
 }
 
@@ -1023,7 +1018,7 @@ void cairo_dock_place_root_dock (CairoDock *pDock)
 	if (pDock->bAutoHide && pDock->iRefCount == 0)
 	{
 		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MIN_SIZE, &iNewWidth, &iNewHeight);
-		pDock->fFoldingFactor = (g_bAnimateOnAutoHide ? g_fUnfoldAcceleration : 0);
+		pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? mySystem.fUnfoldAcceleration : 0);
 	}
 	else
 	{

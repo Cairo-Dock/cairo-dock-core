@@ -38,7 +38,7 @@
 **    great deal by sending me additional tweaked and optimized versions. I've
 **    now merged all that with my recent additions.
 **
-*********************** VERSION 0.1.0 and above (2007-20008)*********************
+*********************** VERSION 0.1.0 and above (2007-2008)*********************
 **
 ** author(s) :
 **     Fabrice Rey <fabounet@users.berlios.de>
@@ -94,17 +94,12 @@
 
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
 int g_iWmHint = GDK_WINDOW_TYPE_HINT_DOCK;  // hint pour la fenetre du dock principal.
-gboolean g_bReserveSpace;
 gchar *g_cMainDockDefaultRendererName = NULL;
 gchar *g_cSubDockDefaultRendererName = NULL;
 
 gboolean g_bReverseVisibleImage;  // retrouner l'image de la zone de rappel quand le dock est en haut.
 gint g_iScreenWidth[2];  // dimensions de l'ecran.
 gint g_iScreenHeight[2];
-int g_iMaxAuthorizedWidth;  // largeur maximale autorisee pour la fenetre (0 pour la taille de l'ecran).
-int g_iScrollAmount;  // de combien de pixels fait defiler un coup de molette.
-gboolean g_bResetScrollOnLeave;  // revenir a un defilement nul lorsqu'on quitte la fenetre.
-double g_fScrollAcceleration;  // acceleration du defilement quand il revient a la normale.
 
 gchar *g_cCurrentThemePath = NULL;  // le chemin vers le repertoire du theme courant.
 gchar *g_cCurrentLaunchersPath = NULL;  // le chemin vers le repertoire des lanceurs/icones du theme courant.
@@ -125,12 +120,10 @@ double g_fStringColor[4];  // la couleur de la ficelle.
 
 double g_fReflectSize;  // taille des reflets, en pixels, calcules par rapport a la hauteur max des icones.
 double g_fAlbedo;  // pouvoir reflechissant du plan.
-gboolean g_bDynamicReflection;  // dis s'il faut recalculer en temps reel le degrade en transparence des reflets.
 
 cairo_surface_t *g_pVisibleZoneSurface = NULL;  // surface de la zone de rappel.
 double g_fVisibleZoneAlpha;  // transparence de la zone de rappel.
 int g_iNbStripes;  // le nombre de rayures a dessiner en fond dans chaque motif elementaire.
-double g_fStripesSpeedFactor;  // =1 les rayures suivent le curseur, <1 les rayures vont d'autant moins vite.
 double g_fStripesWidth;  // leur epaisseur relative.
 double g_fStripesColorBright[4];  // couleur claire du fond ou des rayures.
 double g_fStripesColorDark[4];  // couleur foncee du fond ou des rayures.
@@ -141,7 +134,6 @@ gboolean g_bBackgroundImageRepeat; // repeter l'image du fond comme un motif.
 double g_fBackgroundImageAlpha;  // transparence de l'image de fond.
 cairo_surface_t *g_pBackgroundSurface[2] = {NULL, NULL};  // surface associee a l'image du fond, de la taille de l'image du fond.
 cairo_surface_t *g_pBackgroundSurfaceFull[2] = {NULL, NULL};  // surface associee aux decorations, de 2 fois la taille de la fenetre.
-gboolean g_bDecorationsFollowMouse;  // dis si les decorations sont asservies au curseur, ou si le delta de deplacement ne depend que de la direction de celui-ci.
 
 int g_iIconGap;  // ecart en pixels entre les icones.
 int g_tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];  // les tailles min et max pour chaque type d'icone.
@@ -156,41 +148,12 @@ int g_iVisibleZoneHeight = 0;
 
 gboolean g_bSameHorizontality;  // dit si les sous-docks ont la meme horizontalite que les docks racines.
 double g_fSubDockSizeRatio;  // ratio de la taille des icones des sous-docks par rapport a celles du dock principal.
-gboolean g_bAnimateSubDock;
-int g_iLeaveSubDockDelay;
-int g_iShowSubDockDelay;
-gboolean bShowSubDockOnClick;  // TRUE <=> ne montrer les sous-docks qu'au clique, sinon au survol.
 
-gboolean g_bLabelForPointedIconOnly;  // n'afficher les etiquettes que pour l'icone pointee.
-double g_fLabelAlphaThreshold;  // seuil de visibilité de etiquettes.
-gboolean g_bTextAlwaysHorizontal;  // true <=> etiquettes horizontales meme pour les docks verticaux.
 CairoDockLabelDescription g_iconTextDescription;
 CairoDockLabelDescription g_quickInfoTextDescription;
 
 double g_fAlphaAtRest;
 
-gboolean g_bAnimateOnAutoHide;
-double g_fUnfoldAcceleration = 0;
-int g_iGrowUpInterval;
-int g_iShrinkDownInterval;
-double g_fMoveUpSpeed = 0.5;
-double g_fMoveDownSpeed = 0.33;
-double g_fRefreshInterval = .04;
-
-gboolean g_bShowAppli = FALSE;  // au debut on ne montre pas les applis, il faut que cairo-dock le sache.
-gboolean g_bUniquePid = FALSE;  // une seule icone par PID.
-gboolean g_bGroupAppliByClass = FALSE;  // une seule icone par classe, les autres dans un container.
-int g_iAppliMaxNameLength;  // longueur max de la chaine de caractere du nom des applis.
-gboolean g_bMinimizeOnClick;  // minimiser l'appli lorsqu'on clique sur son icone si elle est deja active.
-gboolean g_bCloseAppliOnMiddleClick;  // utiliser le clique du milieu pour fermer une appli.
-gboolean g_bAutoHideOnFullScreen;  // quick-hide automatique lorsqu'une fenetre passe en plein ecran (pour pas gener).
-gboolean g_bAutoHideOnMaximized;  // quick-hide automatique lorsqu'une fenetre passe en plein ecran ou en mode maximise.
-gboolean g_bDemandsAttentionWithDialog;  // attirer l'attention avec une bulle de dialogue.
-gboolean g_bDemandsAttentionWithAnimation;  // attirer l'attention avec une animation.
-gboolean g_bAnimateOnActiveWindow;  // jouer une breve animation de l'icone lorsque la fenetre correspondante devient active.
-double g_fVisibleAppliAlpha;  // transparence des icones des applis dont la fenetre est visible.
-gboolean g_bHideVisibleApplis;  // TRUE <=> cacher les applis dont la fenetre est visible.
-gboolean g_bAppliOnCurrentDesktopOnly;  // TRUE <=> cacher les applis dont la fenetre n'est pas sur le bureau courant.
 int g_iNbDesktops;  // nombre de bureaux.
 int g_iNbViewportX, g_iNbViewportY;  // nombre de "faces du cube".
 gboolean g_bActiveIndicatorAbove;
@@ -208,11 +171,7 @@ double g_fDialogColor[4];
 int g_iDialogIconSize;
 CairoDockLabelDescription g_dialogTextDescription;
 
-gchar *g_cRaiseDockShortcut = NULL;
-
 gboolean g_bKeepAbove = FALSE;
-gboolean g_bPopUp = FALSE;
-gboolean g_bPopUpOnScreenBorder;
 gboolean g_bSkipPager = TRUE;
 gboolean g_bSkipTaskbar = TRUE;
 gboolean g_bSticky = TRUE;
@@ -223,24 +182,16 @@ gboolean g_bVerbose = FALSE;
 int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 
-CairoDockFMSortType g_iFileSortType;
-gboolean g_bShowHiddenFiles;
-
-gboolean g_bOverWriteXIcons = TRUE; // il faut le savoir avant.
-
 cairo_surface_t *g_pIndicatorSurface[2] = {NULL, NULL};
-gboolean g_bMixLauncherAppli = FALSE;
 double g_fIndicatorWidth, g_fIndicatorHeight;
 int g_iIndicatorDeltaY;
 gboolean g_bLinkIndicatorWithIcon;
 gboolean g_bIndicatorAbove;
-gboolean g_bShowThumbnail = FALSE;
 
 cairo_surface_t *g_pDropIndicatorSurface = NULL;
 double g_fDropIndicatorWidth, g_fDropIndicatorHeight;
 
 cairo_surface_t *g_pDesktopBgSurface = NULL;  // image en fond d'ecran.
-gboolean g_bUseFakeTransparency = FALSE;
 //int g_iDamageEvent = 0;
 
 gboolean g_bDisplayDropEmblem = FALSE; // indicateur de drop

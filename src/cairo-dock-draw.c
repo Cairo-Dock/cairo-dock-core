@@ -26,9 +26,10 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-internal-system.h"
+#include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-draw.h"
 
-extern gboolean g_bTextAlwaysHorizontal;
 
 extern gint g_iScreenWidth[2];
 extern gint g_iScreenHeight[2];
@@ -46,7 +47,6 @@ extern int g_iSinusoidWidth;
 
 extern gboolean g_bRoundedBottomCorner;
 extern gboolean bDirectionUp;
-extern double g_fStripesSpeedFactor;
 extern double g_fBackgroundImageWidth, g_fBackgroundImageHeight;
 extern cairo_surface_t *g_pBackgroundSurface[2];
 extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
@@ -59,14 +59,10 @@ extern double g_fAmplitude;
 
 extern CairoDockLabelDescription g_iconTextDescription;
 extern CairoDockLabelDescription g_quickInfoTextDescription;
-extern gboolean g_bLabelForPointedIconOnly;
-extern double g_fLabelAlphaThreshold;
 
 extern double g_fAlphaAtRest;
-extern double g_fVisibleAppliAlpha;
 
 extern int g_tNbIterInOneRound[CAIRO_DOCK_NB_ANIMATIONS];
-extern gboolean g_bDynamicReflection;
 extern double g_fAlbedo;
 extern gboolean g_bConstantSeparatorSize;
 extern cairo_surface_t *g_pIndicatorSurface[2];
@@ -85,7 +81,6 @@ extern int g_bActiveIndicatorAbove;
 extern cairo_surface_t *g_pActiveIndicatorSurface;
 extern double g_fActiveIndicatorWidth, g_fActiveIndicatorHeight;
 
-extern gboolean g_bUseFakeTransparency;
 extern cairo_surface_t *g_pDesktopBgSurface;
 extern gboolean g_bUseGlitz;
 
@@ -332,9 +327,9 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 		cairo_save (pCairoContext);
 
 		if (pDock->bHorizontalDock)
-			cairo_translate (pCairoContext, pDock->fDecorationsOffsetX * g_fStripesSpeedFactor - pDock->iCurrentWidth * 0.5, fOffsetY);
+			cairo_translate (pCairoContext, pDock->fDecorationsOffsetX * mySystem.fStripesSpeedFactor - pDock->iCurrentWidth * 0.5, fOffsetY);
 		else
-			cairo_translate (pCairoContext, fOffsetY, pDock->fDecorationsOffsetX * g_fStripesSpeedFactor - pDock->iCurrentWidth * 0.5);
+			cairo_translate (pCairoContext, fOffsetY, pDock->fDecorationsOffsetX * mySystem.fStripesSpeedFactor - pDock->iCurrentWidth * 0.5);
 		
 		cairo_set_source_surface (pCairoContext, g_pBackgroundSurfaceFull[pDock->bHorizontalDock], 0., 0.);
 		cairo_fill_preserve (pCairoContext);
@@ -346,12 +341,12 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 		
 		if (pDock->bHorizontalDock)
 		{
-			cairo_translate (pCairoContext, pDock->fDecorationsOffsetX * g_fStripesSpeedFactor + fOffsetX, fOffsetY);
+			cairo_translate (pCairoContext, pDock->fDecorationsOffsetX * mySystem.fStripesSpeedFactor + fOffsetX, fOffsetY);
 			cairo_scale (pCairoContext, 1. * fWidth / g_fBackgroundImageWidth, 1. * pDock->iDecorationsHeight / g_fBackgroundImageHeight);  // pDock->iCurrentWidth
 		}
 		else
 		{
-			cairo_translate (pCairoContext, fOffsetY, pDock->fDecorationsOffsetX * g_fStripesSpeedFactor + fOffsetX);
+			cairo_translate (pCairoContext, fOffsetY, pDock->fDecorationsOffsetX * mySystem.fStripesSpeedFactor + fOffsetX);
 			cairo_scale (pCairoContext, 1. * pDock->iDecorationsHeight / g_fBackgroundImageHeight, 1. * fWidth / g_fBackgroundImageWidth);
 		}
 		
@@ -564,16 +559,16 @@ static void _cairo_dock_draw_appli_indicator (Icon *icon, cairo_t *pCairoContext
 void cairo_dock_render_one_icon (Icon *icon, cairo_t *pCairoContext, gboolean bHorizontalDock, double fRatio, double fDockMagnitude, gboolean bUseReflect, gboolean bUseText, int iWidth, gboolean bDirectionUp)
 {
 	//\_____________________ On separe 2 cas : dessin avec le tampon complet, et dessin avec le ou les petits tampons.
-	if (CAIRO_DOCK_IS_APPLI (icon) && g_fVisibleAppliAlpha != 0 && ! CAIRO_DOCK_IS_APPLET (icon))
+	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.fVisibleAppliAlpha != 0 && ! CAIRO_DOCK_IS_APPLET (icon))
 	{
-		double fAlpha = (icon->bIsHidden ? MIN (1 - g_fVisibleAppliAlpha, 1) : MIN (g_fVisibleAppliAlpha + 1, 1));
+		double fAlpha = (icon->bIsHidden ? MIN (1 - myTaskBar.fVisibleAppliAlpha, 1) : MIN (myTaskBar.fVisibleAppliAlpha + 1, 1));
 		if (fAlpha != 1)
 			icon->fAlpha = fAlpha;  // astuce bidon pour pas multiplier 2 fois.
 		/**if (icon->bIsHidden)
-			icon->fAlpha *= MIN (1 - g_fVisibleAppliAlpha, 1);
+			icon->fAlpha *= MIN (1 - myTaskBar.fVisibleAppliAlpha, 1);
 		else
-			icon->fAlpha *= MIN (g_fVisibleAppliAlpha + 1, 1);*/
-		//g_print ("g_fVisibleAppliAlpha : %.2f & %d => %.2f\n", g_fVisibleAppliAlpha, icon->bIsHidden, icon->fAlpha);
+			icon->fAlpha *= MIN (myTaskBar.fVisibleAppliAlpha + 1, 1);*/
+		//g_print ("fVisibleAppliAlpha : %.2f & %d => %.2f\n", myTaskBar.fVisibleAppliAlpha, icon->bIsHidden, icon->fAlpha);
 	}
 	
 	double fGlideScale;
@@ -608,7 +603,7 @@ void cairo_dock_render_one_icon (Icon *icon, cairo_t *pCairoContext, gboolean bH
 		_cairo_dock_draw_appli_indicator (icon, pCairoContext, bHorizontalDock, fRatio, bDirectionUp);
 	}
 	
-	gboolean bDrawFullBuffer  = (bUseReflect && icon->pFullIconBuffer != NULL && (! g_bDynamicReflection || icon->fScale == 1) && (icon->iCount == 0 || icon->iAnimationType == CAIRO_DOCK_ROTATE || icon->iAnimationType == CAIRO_DOCK_BLINK));
+	gboolean bDrawFullBuffer  = (bUseReflect && icon->pFullIconBuffer != NULL && (! mySystem.bDynamicReflection || icon->fScale == 1) && (icon->iCount == 0 || icon->iAnimationType == CAIRO_DOCK_ROTATE || icon->iAnimationType == CAIRO_DOCK_BLINK));
 	int iCurrentWidth= 1;
 	//\_____________________ On dessine l'icone en fonction de son placement, son angle, et sa transparence.
 	cairo_save (pCairoContext);
@@ -730,7 +725,7 @@ void cairo_dock_render_one_icon (Icon *icon, cairo_t *pCairoContext, gboolean bH
 			
 			cairo_set_source_surface (pCairoContext, icon->pReflectionBuffer, 0.0, 0.0);
 			
-			if (g_bDynamicReflection && icon->fScale > 1)
+			if (mySystem.bDynamicReflection && icon->fScale > 1)
 			{
 				cairo_pattern_t *pGradationPattern;
 				if (bHorizontalDock)
@@ -824,7 +819,7 @@ void cairo_dock_render_one_icon (Icon *icon, cairo_t *pCairoContext, gboolean bH
 	}
 	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
-	if (bUseText && icon->pTextBuffer != NULL && icon->fScale > 1.01 && (! g_bLabelForPointedIconOnly || icon->bPointed) && icon->iCount == 0)  // 1.01 car sin(pi) = 1+epsilon :-/
+	if (bUseText && icon->pTextBuffer != NULL && icon->fScale > 1.01 && (! mySystem.bLabelForPointedIconOnly || icon->bPointed) && icon->iCount == 0)  // 1.01 car sin(pi) = 1+epsilon :-/
 	{
 		cairo_save (pCairoContext);
 		double fOffsetX = -icon->fTextXOffset + icon->fWidthFactor * icon->fWidth * icon->fScale / 2;
@@ -832,7 +827,7 @@ void cairo_dock_render_one_icon (Icon *icon, cairo_t *pCairoContext, gboolean bH
 			fOffsetX = - icon->fDrawX;
 		else if (icon->fDrawX + fOffsetX + icon->iTextWidth > iWidth)
 			fOffsetX = iWidth - icon->iTextWidth - icon->fDrawX;
-		if (icon->fOrientation != 0 && ! g_bTextAlwaysHorizontal)
+		if (icon->fOrientation != 0 && ! mySystem.bTextAlwaysHorizontal)
 		{
 			cairo_rotate (pCairoContext, icon->fOrientation);
 		}
@@ -840,7 +835,7 @@ void cairo_dock_render_one_icon (Icon *icon, cairo_t *pCairoContext, gboolean bH
 			cairo_scale (pCairoContext,
 				fRatio,
 				fRatio);*/
-		if (! bHorizontalDock && g_bTextAlwaysHorizontal)
+		if (! bHorizontalDock && mySystem.bTextAlwaysHorizontal)
 		{
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
@@ -859,14 +854,14 @@ void cairo_dock_render_one_icon (Icon *icon, cairo_t *pCairoContext, gboolean bH
 				fOffsetX);
 		
 		double fMagnitude;
-		if (g_bLabelForPointedIconOnly)
+		if (mySystem.bLabelForPointedIconOnly)
 		{
 			fMagnitude = fDockMagnitude;  // (icon->fScale - 1) / g_fAmplitude / sin (icon->fPhase);  // sin (phi ) != 0 puisque fScale > 1.
 		}
 		else
 		{
 			fMagnitude = (icon->fScale - 1) / g_fAmplitude;  /// il faudrait diviser par pDock->fMagnitudeMax ...
-			fMagnitude *= (fMagnitude * g_fLabelAlphaThreshold + 1) / (g_fLabelAlphaThreshold + 1);
+			fMagnitude *= (fMagnitude * mySystem.fLabelAlphaThreshold + 1) / (mySystem.fLabelAlphaThreshold + 1);
 		}
 		if (fMagnitude > .1)
 			cairo_paint_with_alpha (pCairoContext, fMagnitude);
@@ -901,7 +896,7 @@ void cairo_dock_render_one_icon (Icon *icon, cairo_t *pCairoContext, gboolean bH
 void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, gboolean bUseReflect, gboolean bUseText, int iWidth)
 {
 	//\_____________________ On separe 2 cas : dessin avec le tampon complet, et dessin avec le ou les petits tampons.
-	gboolean bDrawFullBuffer  = (bUseReflect && icon->pFullIconBuffer != NULL && (! g_bDynamicReflection || icon->fScale == 1) && (icon->iCount == 0 || icon->iAnimationType == CAIRO_DOCK_ROTATE || icon->iAnimationType == CAIRO_DOCK_BLINK));
+	gboolean bDrawFullBuffer  = (bUseReflect && icon->pFullIconBuffer != NULL && (! mySystem.bDynamicReflection || icon->fScale == 1) && (icon->iCount == 0 || icon->iAnimationType == CAIRO_DOCK_ROTATE || icon->iAnimationType == CAIRO_DOCK_BLINK));
 	int iCurrentWidth= 1;
 	//\_____________________ On dessine l'icone en fonction de son placement, son angle, et sa transparence.
 	//cairo_push_group (pCairoContext);
@@ -983,7 +978,7 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, 
 			
 			cairo_set_source_surface (pCairoContext, icon->pReflectionBuffer, 0.0, 0.0);
 			
-			if (g_bDynamicReflection && icon->fScale != 1)
+			if (mySystem.bDynamicReflection && icon->fScale != 1)
 			{
 				cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0.,
 					0.,
@@ -1430,7 +1425,7 @@ cairo_t *cairo_dock_create_drawing_context (CairoContainer *pContainer)
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (pContainer);
 	g_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, FALSE);
 	
-	if (g_bUseFakeTransparency)
+	if (mySystem.bUseFakeTransparency)
 		if (g_pDesktopBgSurface != NULL)
 			cairo_set_source_surface (pCairoContext, g_pDesktopBgSurface, - pContainer->iWindowPositionX, - pContainer->iWindowPositionY);
 		else
@@ -1459,7 +1454,7 @@ cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, 
 		cairo_clip (pCairoContext);
 	}
 	
-	if (g_bUseFakeTransparency)
+	if (mySystem.bUseFakeTransparency)
 		if (g_pDesktopBgSurface != NULL)
 			cairo_set_source_surface (pCairoContext, g_pDesktopBgSurface, - pContainer->iWindowPositionX, - pContainer->iWindowPositionY);
 		else

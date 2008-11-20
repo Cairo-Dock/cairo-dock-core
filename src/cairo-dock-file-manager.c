@@ -17,14 +17,12 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-desktop-file-factory.h"
+#include "cairo-dock-internal-system.h"
 #include "cairo-dock-file-manager.h"
 
 extern CairoDockDesktopEnv g_iDesktopEnv;
-extern CairoDockFMSortType g_iFileSortType;
-extern gboolean g_bShowHiddenFiles;
 
 static CairoDockVFSBackend *s_pVFSBackend = NULL;
-
 
 void cairo_dock_fm_register_vfs_backend (CairoDockVFSBackend *pVFSBackend)
 {
@@ -269,7 +267,7 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 	pNewIcon->iType = CAIRO_DOCK_LAUNCHER;
 	pNewIcon->cBaseURI = g_strdup (cURI);
 	gboolean bIsDirectory;
-	s_pVFSBackend->get_file_info (cURI, &pNewIcon->acName, &pNewIcon->acCommand, &pNewIcon->acFileName, &bIsDirectory, &pNewIcon->iVolumeID, &pNewIcon->fOrder, g_iFileSortType);
+	s_pVFSBackend->get_file_info (cURI, &pNewIcon->acName, &pNewIcon->acCommand, &pNewIcon->acFileName, &bIsDirectory, &pNewIcon->iVolumeID, &pNewIcon->fOrder, mySystem.iFileSortType);
 	if (pNewIcon->acName == NULL)
 	{
 		cairo_dock_free_icon (pNewIcon);
@@ -281,7 +279,7 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 		cd_message ("  c'est un sous-repertoire");
 	}
 
-	if (g_iFileSortType == CAIRO_DOCK_FM_SORT_BY_NAME)
+	if (mySystem.iFileSortType == CAIRO_DOCK_FM_SORT_BY_NAME)
 	{
 		GList *pList = (CAIRO_DOCK_IS_DOCK (pContainer) ? CAIRO_DOCK (pContainer)->icons : CAIRO_DESKLET (pContainer)->icons);
 		GList *ic;
@@ -317,7 +315,7 @@ void cairo_dock_fm_create_dock_from_directory (Icon *pIcon, CairoDock *pParentDo
 		return;
 	cd_message ("");
 	g_free (pIcon->acCommand);
-	GList *pIconList = cairo_dock_fm_list_directory (pIcon->cBaseURI, g_iFileSortType, CAIRO_DOCK_LAUNCHER, g_bShowHiddenFiles, &pIcon->acCommand);
+	GList *pIconList = cairo_dock_fm_list_directory (pIcon->cBaseURI, mySystem.iFileSortType, CAIRO_DOCK_LAUNCHER, mySystem.bShowHiddenFiles, &pIcon->acCommand);
 	pIcon->pSubDock = cairo_dock_create_subdock_from_scratch (pIconList, pIcon->acName, pParentDock);
 
 	cairo_dock_update_dock_size (pIcon->pSubDock);  // le 'load_buffer' ne le fait pas.

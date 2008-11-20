@@ -349,6 +349,10 @@ void cairo_dock_render_opengl_linear (CairoDock *pDock)
 	//\_____________ On genere les coordonnees du contour.
 	int iNbVertex;
 	const GLfloat *pVertexTab = cairo_dock_generate_rectangle_path (fDockWidth, fFrameHeight, fRadius, g_bRoundedBottomCorner, &iNbVertex);
+	/*double fInclinationOnHorizon = (fDockWidth / 2) / 150;
+	double fDeltaXTrapeze;
+	int iNbVertex;
+	GLfloat *pVertexTab = cairo_dock_generate_trapeze_path (fDockWidth, fFrameHeight, fRadius, g_bRoundedBottomCorner, fInclinationOnHorizon, &fDeltaXTrapeze, &iNbVertex);*/
 	
 	//\_____________ On trace le fond en texturant par des triangles.
 	glPushMatrix ();

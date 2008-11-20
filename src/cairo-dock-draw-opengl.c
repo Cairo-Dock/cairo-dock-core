@@ -40,6 +40,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-internal-system.h"
+#include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-draw-opengl.h"
 #define RADIAN (G_PI / 180.0)  // Conversion Radian/Degres
 #define DELTA_ROUND_DEGREE 1
@@ -51,14 +53,10 @@ extern cairo_surface_t *g_pDesktopBgSurface;
 extern int g_iBackgroundTexture;
 extern CairoDock *g_pMainDock;
 
-extern double g_fVisibleAppliAlpha;
 extern gboolean g_bConstantSeparatorSize;
 extern double g_fAlphaAtRest;
 extern double g_fReflectSize;
 extern gboolean g_bIndicatorAbove;
-extern gboolean g_bLabelForPointedIconOnly;
-extern gboolean g_bTextAlwaysHorizontal;
-extern double g_fLabelAlphaThreshold;
 extern GLuint g_iIndicatorTexture;
 extern int g_iSinusoidWidth;
 extern gboolean g_bReverseVisibleImage;
@@ -242,9 +240,9 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 
 void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRatio, double fDockMagnitude, gboolean bUseText)
 {
-	if (CAIRO_DOCK_IS_APPLI (icon) && g_fVisibleAppliAlpha != 0 && ! CAIRO_DOCK_IS_APPLET (icon))
+	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.fVisibleAppliAlpha != 0 && ! CAIRO_DOCK_IS_APPLET (icon))
 	{
-		double fAlpha = (icon->bIsHidden ? MIN (1 - g_fVisibleAppliAlpha, 1) : MIN (g_fVisibleAppliAlpha + 1, 1));
+		double fAlpha = (icon->bIsHidden ? MIN (1 - myTaskBar.fVisibleAppliAlpha, 1) : MIN (myTaskBar.fVisibleAppliAlpha + 1, 1));
 		if (fAlpha != 1)
 			icon->fAlpha = fAlpha;  // astuce bidon pour pas multiplier 2 fois.
 	}
@@ -460,7 +458,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 		glPopMatrix ();  // retour juste apres la translation (fDrawX, fDrawY).
 		
 		//\_____________________ Cas des reflets dynamiques.
-		/*if (g_bDynamicReflection && icon->fScale > 1)
+		/*if (mySystem.bDynamicReflection && icon->fScale > 1)
 		{
 			cairo_pattern_t *pGradationPattern;
 			if (bHorizontalDock)
@@ -541,7 +539,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 	
 	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
-	if (bUseText && icon->iLabelTexture != 0 && icon->fScale > 1.01 && (! g_bLabelForPointedIconOnly || icon->bPointed) && icon->iCount == 0)  // 1.01 car sin(pi) = 1+epsilon :-/
+	if (bUseText && icon->iLabelTexture != 0 && icon->fScale > 1.01 && (! mySystem.bLabelForPointedIconOnly || icon->bPointed) && icon->iCount == 0)  // 1.01 car sin(pi) = 1+epsilon :-/
 	{
 		glPushMatrix ();
 		
@@ -550,13 +548,13 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 			fOffsetX = icon->iTextWidth/2 - (icon->fDrawX + icon->fWidth * icon->fScale/2);
 		else if (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2 > pDock->iCurrentWidth)
 			fOffsetX = pDock->iCurrentWidth - (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2);
-		if (icon->fOrientation != 0 && ! g_bTextAlwaysHorizontal)
+		if (icon->fOrientation != 0 && ! mySystem.bTextAlwaysHorizontal)
 		{
 			//cairo_rotate (pCairoContext, icon->fOrientation);
 			glRotatef (icon->fOrientation, 0., 0., 1.);
 		}
 		
-		if (! pDock->bHorizontalDock && g_bTextAlwaysHorizontal)
+		if (! pDock->bHorizontalDock && mySystem.bTextAlwaysHorizontal)
 		{
 			/*cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
@@ -583,14 +581,14 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 		}
 		
 		double fMagnitude;
-		if (g_bLabelForPointedIconOnly)
+		if (mySystem.bLabelForPointedIconOnly)
 		{
 			fMagnitude = fDockMagnitude;  // (icon->fScale - 1) / g_fAmplitude / sin (icon->fPhase);  // sin (phi ) != 0 puisque fScale > 1.
 		}
 		else
 		{
 			fMagnitude = (icon->fScale - 1) / g_fAmplitude;  /// il faudrait diviser par pDock->fMagnitudeMax ...
-			fMagnitude *= (fMagnitude * g_fLabelAlphaThreshold + 1) / (g_fLabelAlphaThreshold + 1);
+			fMagnitude *= (fMagnitude * mySystem.fLabelAlphaThreshold + 1) / (mySystem.fLabelAlphaThreshold + 1);
 		}
 		glEnable (GL_BLEND);
 		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -968,36 +966,39 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 	int iPrecision = DELTA_ROUND_DEGREE;
 	double fInclinaisonCadre = 0.;
 	for (t = a;t <= 90;t += iPrecision, i++) // cote haut droit.
-	{ 
+	{
 		pVertexTab[3*i] = w + rw * cos (t*RADIAN);
 		pVertexTab[3*i+1] = h + rh * sin (t*RADIAN);
 	}
 	for (t = 90;t <= 180-a;t += iPrecision, i++) // haut gauche.
-	{ 
+	{
 		pVertexTab[3*i] = -w + rw * cos (t*RADIAN);
 		pVertexTab[3*i+1] = h + rh * sin (t*RADIAN);
 	}
 	if (bRoundedBottomCorner)
 	{
+		double f;
 		for (t = 180-a;t <= 270;t += iPrecision, i++) // bas gauche.
-		{ 
-			pVertexTab[3*i] = -w + rw * cos (t*RADIAN);
-			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN);
+		{
+			f = 1.3 - .3*fabs (t-(180-a+270)/2)/(270-(180-a))*2;
+			pVertexTab[3*i] = -w_ + rw * cos (t*RADIAN) * f;
+			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN) * f;
 		}
 		for (t = 270;t <= 360+a;t += iPrecision, i++) // bas droit. 
-		{ 
-			pVertexTab[3*i] = w + rw * cos (t*RADIAN);
-			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN);
+		{
+			f = 1.3 - .3*fabs (t-(360+a+270)/2)/(360+a-270)*2;
+			pVertexTab[3*i] = w_ + rw * cos (t*RADIAN) * f;
+			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN) * f;
 		}
 		pVertexTab[3*i] = w + rw;  // on boucle.
 		pVertexTab[3*i+1] = h;
 	}
 	else
 	{
-		pVertexTab[3*i] = -w - rw * cosa - dw; // bas gauche.
+		pVertexTab[3*i] = -w_; // bas gauche.
 		pVertexTab[3*i+1] = -h - rh;
 		i ++;
-		pVertexTab[3*i] = w + rw * cosa + dw; // bas droit.
+		pVertexTab[3*i] = w_; // bas droit.
 		pVertexTab[3*i+1] = -h - rh;
 		i ++;
 	}

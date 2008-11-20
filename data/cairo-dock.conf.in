@@ -154,7 +154,7 @@ frame3 =
 #{"..." will be added at the end if the name is too long.}
 max name length = 15
 
-#e-[-1;1] Transparency of icons whose window is or isn't minimized :
+#e-[-.6;.6] Transparency of icons whose window is or isn't minimized :
 #{To the right, you can control the transparency of minimized windows, to the left the transparency of visible windows. The more you go aside, the more the concerned icons will be transparent; on the middle, icons are always plain.}
 visibility alpha = 0.25
 

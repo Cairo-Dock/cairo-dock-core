@@ -36,11 +36,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-class-manager.h"
+#include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-icons.h"
-
-
-extern gboolean g_bReserveSpace;
-extern int g_iLeaveSubDockDelay;
 
 extern gint g_iDockLineWidth;
 extern gint g_iDockRadius;
@@ -760,7 +757,7 @@ static void _cairo_dock_remove_one_icon_from_dock (CairoDock *pDock, Icon *icon,
 		cairo_dock_unregister_appli (icon);
 	}
 	
-	if (pDock->iRefCount == 0 && g_bReserveSpace)  // bIsMainDock
+	if (pDock->iRefCount == 0 && myAccessibility.bReserveSpace)  // bIsMainDock
 		cairo_dock_reserve_space_for_dock (pDock, TRUE);  // l'espace est reserve sur la taille min, qui a deja ete mise a jour.
 }
 
@@ -1226,8 +1223,8 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock, CairoDockMousePositionT
 			if (pDock->iSidGrowUp == 0 && pDock->iSidShrinkDown == 0 && pDock->iSidLeaveDemand == 0 && ! pDock->bAtBottom)  // bAtBottom ajoute pour la 1.5.4
 			{
 				//g_print ("on force a quitter (iRefCount:%d)\n", pDock->iRefCount);
-				if (pDock->iRefCount > 0 && g_iLeaveSubDockDelay > 0)
-					pDock->iSidLeaveDemand = g_timeout_add (g_iLeaveSubDockDelay, (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
+				if (pDock->iRefCount > 0 && myAccessibility.iLeaveSubDockDelay > 0)
+					pDock->iSidLeaveDemand = g_timeout_add (myAccessibility.iLeaveSubDockDelay, (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
 				else
 					cairo_dock_emit_leave_signal (pDock);
 			}

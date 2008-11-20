@@ -15,6 +15,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 CairoConfigSystem mySystem;
 extern CairoDock *g_pMainDock;
+extern gboolean g_bUseOpenGL;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 {
@@ -42,6 +43,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 	pSystem->fMoveDownSpeed = MAX (0.01, MIN (pSystem->fMoveDownSpeed, 1));
 	
 	int iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "refresh frequency", &bFlushConfFileNeeded, 25, "Cairo Dock", NULL);
+	if (g_bUseOpenGL)
+		iRefreshFrequency *= 2;
 	pSystem->fRefreshInterval = 1000. / iRefreshFrequency;
 	pSystem->bDynamicReflection = cairo_dock_get_boolean_key_value (pKeyFile, "System", "dynamic reflection", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	

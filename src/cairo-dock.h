@@ -45,5 +45,10 @@
 #include <cairo-dock/cairo-dock-gui-manager.h>
 #include <cairo-dock/cairo-dock-gui-factory.h>
 #include <cairo-dock/cairo-dock-gui-callbacks.h>
+#include <cairo-dock/cairo-dock-internal-position.h>
+#include <cairo-dock/cairo-dock-internal-accessibility.h>
+#include <cairo-dock/cairo-dock-internal-system.h>
+#include <cairo-dock/cairo-dock-internal-taskbar.h>
+#include <cairo-dock/cairo-dock-internal-hidden-dock.h>
 
 #endif

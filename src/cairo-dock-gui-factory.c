@@ -29,7 +29,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #define CAIRO_DOCK_FRAME_ICON_SIZE 24
 
 extern CairoDock *g_pMainDock;
-extern gboolean g_bPopUp;
 
 typedef enum {
 	CAIRO_DOCK_MODEL_NAME = 0,
@@ -55,27 +54,6 @@ static void _cairo_dock_activate_one_element (GtkCellRendererToggle * cell_rende
 
 	gtk_list_store_set (GTK_LIST_STORE (model), &iter, CAIRO_DOCK_MODEL_ACTIVE, !bState, -1);
 }
-/*static void _cairo_dock_activate_one_module (GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
-{
-	GtkTreeIter iter;
-	gtk_tree_model_get_iter_from_string (model, &iter, path);
-	gboolean bState;
-	gchar *cModuleName = NULL;
-	gtk_tree_model_get (model, &iter,
-		CAIRO_DOCK_MODEL_ACTIVE, &bState,
-		CAIRO_DOCK_MODEL_NAME, &cModuleName, -1);
-	
-	if (! bState)
-	{
-		cairo_dock_activate_module_and_load (cModuleName);
-	}
-	else
-	{
-		cairo_dock_deactivate_module_and_unload (cModuleName);
-	}
-	g_free (cModuleName);
-	gtk_list_store_set (GTK_LIST_STORE (model), &iter, CAIRO_DOCK_MODEL_ACTIVE, !bState, -1);
-}*/
 
 static gboolean _cairo_dock_increase_order (GtkTreeModel * model, GtkTreePath * path, GtkTreeIter * iter, int *pOrder)
 {
@@ -388,6 +366,49 @@ static void _cairo_dock_play_a_sound (GtkButton *button, gpointer *data)
 	cairo_dock_play_sound (cSoundPath);
 }
 
+static void _cairo_dock_set_original_value (GtkButton *button, gpointer *data)
+{
+	g_print ("%s (%s, %s, %s)\n", __func__, data[0], data[1], data[3]);
+	gchar *cGroupName = data[0];
+	gchar *cKeyName = data[1];
+	GSList *pSubWidgetList = data[2];
+	gchar *cOriginalConfFilePath = data[3];
+	
+	GSList *pList;
+	gsize i = 0;
+	GtkWidget *pOneWidget = pSubWidgetList->data;
+	GError *erreur = NULL;
+	gsize length = 0;
+	
+	GKeyFile *pKeyFile = g_key_file_new ();
+	g_key_file_load_from_file (pKeyFile, cOriginalConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+		erreur = NULL;
+		return ;
+	}
+	
+	if (GTK_IS_SPIN_BUTTON (pOneWidget) || GTK_IS_HSCALE (pOneWidget))
+	{
+		gboolean bIsSpin = GTK_IS_SPIN_BUTTON (pOneWidget);
+		double *fValuesList = g_key_file_get_double_list (pKeyFile, cGroupName, cKeyName, &length, &erreur);
+		
+		for (pList = pSubWidgetList; pList != NULL && i < length; pList = pList->next, i++)
+		{
+			pOneWidget = pList->data;
+			if (bIsSpin)
+				gtk_spin_button_set_value (GTK_SPIN_BUTTON (pOneWidget), fValuesList[i]);
+			else
+				gtk_range_set_value (GTK_RANGE (pOneWidget), fValuesList[i]);
+		}
+		
+		g_free (fValuesList);
+	}
+	g_key_file_free (pKeyFile);
+}
+
 static void _cairo_dock_key_grab_cb (GtkWidget *wizard_window, GdkEventKey *event, GtkEntry *pEntry)
 {
 	gchar *key;
@@ -606,7 +627,7 @@ static void _cairo_dock_configure_renderer (GtkButton *button, gpointer *data)
 	modele = gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF);
 
 
-GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGroupName, GtkTooltips *pToolTipsGroup, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage)
+GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGroupName, GtkTooltips *pToolTipsGroup, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)
 {
 	g_return_val_if_fail (pKeyFile != NULL && cGroupName != NULL, NULL);
 	gchar iIdentifier = 0;
@@ -637,6 +658,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	GtkWidget *pButtonConfigRenderer;
 	GtkCellRenderer *rend;
 	GtkTreeIter iter;
+	GtkWidget *pBackButton;
 	gchar *cGroupComment, *cKeyName, *cKeyComment, *cUsefulComment, *cAuthorizedValuesChain, *pTipString, **pAuthorizedValuesList, *cSmallGroupIcon;
 	gpointer *pGroupKeyWidget;
 	int i, j, k, iNbElements;
@@ -649,14 +671,9 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	gchar *cValue, **cValueList, *cSmallIcon;
 	GdkColor gdkColor;
 	GtkListStore *modele;
+	gboolean bAddBackButton;
 	
-	GtkWidget *pGroupWidget/* = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
-	gtk_container_set_border_width (GTK_CONTAINER (pGroupWidget), CAIRO_DOCK_GUI_MARGIN)*/;
-	
-// 	GtkWidget *pNoteBook = gtk_notebook_new ();
-// 	gtk_notebook_set_scrollable (GTK_NOTEBOOK (pNoteBook), TRUE);
-// 	gtk_notebook_popup_enable (GTK_NOTEBOOK (pNoteBook));
-// 	g_object_set (G_OBJECT (pNoteBook), "tab-pos", GTK_POS_LEFT, NULL);
+	GtkWidget *pGroupWidget;
 	
 	pVBox = NULL;
 	pFrame = NULL;
@@ -683,7 +700,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	while (pKeyList[j] != NULL)
 	{
 		cKeyName = pKeyList[j];
-
+		
 		cKeyComment =  g_key_file_get_comment (pKeyFile, cGroupName, cKeyName, NULL);
 		//g_print ("%s -> %s\n", cKeyName, cKeyComment);
 		if (cKeyComment != NULL && strcmp (cKeyComment, "") != 0)
@@ -741,15 +758,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				pVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
 				gtk_container_set_border_width (GTK_CONTAINER (pVBox), CAIRO_DOCK_GUI_MARGIN);
-				
-				/*pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-				gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-				gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pVBox);*/
-				
-				/*gtk_notebook_append_page (GTK_NOTEBOOK (pNoteBook), pScrolledWindow, (pAlign != NULL ? pAlign : pLabel));
-				if (cPresentedGroup != NULL && strcmp (cPresentedGroup, cGroupName) == 0)
-					iPresentedNumPage = iNumPage;
-				iNumPage ++;*/
 			}
 
 			if (g_ascii_isdigit (*cUsefulComment))
@@ -860,7 +868,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			}
 
 			pSubWidgetList = NULL;
-
+			bAddBackButton = FALSE;
+			
 			switch (iElementType)
 			{
 				case 'b' :  // boolean
@@ -930,6 +939,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							FALSE,
 							0);
 					}
+					bAddBackButton = TRUE;
 					g_free (iValueList);
 				break;
 
@@ -1002,6 +1012,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						g_signal_connect (G_OBJECT (pColorButton), "color-set", G_CALLBACK(_cairo_dock_set_color), pSubWidgetList);
 						g_signal_connect (G_OBJECT (pColorButton), "clicked", G_CALLBACK(_cairo_dock_get_current_color), pSubWidgetList);
 					}
+					bAddBackButton = TRUE,
 					g_free (fValueList);
 				break;
 
@@ -1605,11 +1616,24 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 
 			if (pSubWidgetList != NULL)
 			{
-				pGroupKeyWidget = g_new (gpointer, 3);
+				pGroupKeyWidget = g_new (gpointer, 4);
 				pGroupKeyWidget[0] = g_strdup (cGroupName);  // car on ne pourra pas le liberer s'il est partage entre plusieurs 'data'.
 				pGroupKeyWidget[1] = cKeyName;
 				pGroupKeyWidget[2] = pSubWidgetList;
+				pGroupKeyWidget[3] = (gchar *)cOriginalConfFilePath;
 				*pWidgetList = g_slist_prepend (*pWidgetList, pGroupKeyWidget);
+				if (bAddBackButton && cOriginalConfFilePath != NULL)
+				{
+					pBackButton = gtk_button_new ();
+					GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_UNDO, GTK_ICON_SIZE_BUTTON);  // GTK_STOCK_GO_BACK
+					gtk_button_set_image (GTK_BUTTON (pBackButton), pImage);
+					g_signal_connect (G_OBJECT (pBackButton), "clicked", G_CALLBACK(_cairo_dock_set_original_value), pGroupKeyWidget);
+					gtk_box_pack_start(GTK_BOX (pHBox),
+						pBackButton,
+						FALSE,
+						FALSE,
+						0);
+				}
 			}
 
 			g_strfreev (pAuthorizedValuesList);
@@ -1626,7 +1650,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 }
 
 
-GtkWidget *cairo_dock_build_conf_file_widget (const gchar *cConfFilePath, GtkTooltips *pToolTipsGroup, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage)
+GtkWidget *cairo_dock_build_conf_file_widget (const gchar *cConfFilePath, GtkTooltips *pToolTipsGroup, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)
 {
 	//\_____________ On recupere les groupes du fichier.
 	GError *erreur = NULL;
@@ -1728,7 +1752,7 @@ GtkWidget *cairo_dock_build_conf_file_widget (const gchar *cConfFilePath, GtkToo
 		}
 		g_free (cGroupComment);
 		
-		pGroupWidget = cairo_dock_build_group_widget (pKeyFile, cGroupName, pToolTipsGroup, cGettextDomain, pMainWindow, pWidgetList, pDataGarbage);
+		pGroupWidget = cairo_dock_build_group_widget (pKeyFile, cGroupName, pToolTipsGroup, cGettextDomain, pMainWindow, pWidgetList, pDataGarbage, cOriginalConfFilePath);
 		gtk_notebook_append_page (GTK_NOTEBOOK (pNoteBook), pGroupWidget, (pAlign != NULL ? pAlign : pLabel));
 		
 		i ++;
@@ -1766,7 +1790,7 @@ static gboolean _cairo_dock_get_active_elements (GtkTreeModel * model, GtkTreePa
 	return FALSE;
 }
 static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFile)
-	{
+{
 	gchar *cGroupName = data[0];
 	gchar *cKeyName = data[1];
 	GSList *pSubWidgetList = data[2];
@@ -1897,7 +1921,7 @@ void cairo_dock_update_keyfile_from_widget_list (GKeyFile *pKeyFile, GSList *pWi
 
 static void _cairo_dock_free_widget_list (gpointer *data, gpointer user_data)
 {
-        //g_print ("%s - %s\n", (gchar *)data[0], (gchar *)data[1]);
+        cd_message ("");
         g_free (data[0]);
         g_free (data[1]);
         g_slist_free (data[2]);  // les elements de data[2] sont les widgets, et se feront liberer lors de la destruction de la fenetre.

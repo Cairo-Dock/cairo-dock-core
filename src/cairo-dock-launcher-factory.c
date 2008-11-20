@@ -29,6 +29,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-class-manager.h"
+#include "cairo-dock-internal-system.h"
 #include "cairo-dock-launcher-factory.h"
 
 extern CairoDock *g_pMainDock;
@@ -42,8 +43,6 @@ extern gchar *g_cCurrentLaunchersPath;
 extern gpointer *g_pDefaultIconDirectory;
 
 extern gboolean g_bSameHorizontality;
-
-extern CairoDockFMSortType g_iFileSortType;
 
 
 gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
@@ -274,7 +273,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		icon->acFileName = NULL;
 
 		gboolean bIsDirectory;  // on n'ecrase pas le fait que ce soit un container ou pas, car c'est l'utilisateur qui l'a decide.
-		cairo_dock_fm_get_file_info (icon->cBaseURI, &icon->acName, &icon->acCommand, &icon->acFileName, &bIsDirectory, &icon->iVolumeID, &icon->fOrder, g_iFileSortType);
+		cairo_dock_fm_get_file_info (icon->cBaseURI, &icon->acName, &icon->acCommand, &icon->acFileName, &bIsDirectory, &icon->iVolumeID, &icon->fOrder, mySystem.iFileSortType);
 	}
 	
 	

@@ -62,6 +62,7 @@ extern gchar *g_cDeskletDecorationsName;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bIndirectRendering;
 extern GdkGLConfig* g_pGlConfig;
+extern gdouble g_iGLAnimationDeltaT;
 extern int g_iDeskletButtonSize;
 extern gchar *g_cRotateButtonImage;
 extern gchar *g_cRetachButtonImage;
@@ -765,7 +766,7 @@ static gboolean on_motion_notify_desklet(GtkWidget *pWidget,
 		gboolean bStartAnimation = FALSE;
 		cairo_dock_notify (CAIRO_DOCK_MOUSE_MOVED, pDesklet, &bStartAnimation);
 		if (bStartAnimation && pDesklet->iSidGLAnimation == 0)
-			pDesklet->iSidGLAnimation = g_timeout_add (CAIRO_DOCK_GL_ANIMATION_DT, (GSourceFunc) _cairo_dock_gl_animation, pDesklet);
+			pDesklet->iSidGLAnimation = g_timeout_add (g_iGLAnimationDeltaT, (GSourceFunc) _cairo_dock_gl_animation, pDesklet);
 	}
 	
 	if (pDesklet->rotating && ! pDesklet->bPositionLocked)

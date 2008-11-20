@@ -23,6 +23,9 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 
 void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, CairoDock *pDock);
 
+void cairo_dock_appli_demands_attention (Icon *icon);
+void cairo_dock_appli_stops_demanding_attention (Icon *icon);
+
 
 G_END_DECLS
 #endif

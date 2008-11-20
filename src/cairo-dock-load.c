@@ -34,6 +34,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-draw-opengl.h"
+#include "cairo-dock-internal-system.h"
+#include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-load.h"
 
 extern CairoDock *g_pMainDock;
@@ -56,7 +58,6 @@ extern gboolean g_bReverseVisibleImage;
 
 extern CairoDockLabelDescription g_iconTextDescription;
 extern CairoDockLabelDescription g_quickInfoTextDescription;
-extern gboolean g_bTextAlwaysHorizontal;
 
 extern gchar *g_cCurrentThemePath;
 
@@ -75,12 +76,8 @@ extern double g_fStripesWidth;
 extern double g_fStripesColorBright[4];
 extern double g_fStripesColorDark[4];
 
-extern unsigned int g_iAppliMaxNameLength;
-
 extern int g_tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
 extern int g_tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
-extern gboolean g_bOverWriteXIcons;
-extern gboolean g_bShowThumbnail;
 
 extern cairo_surface_t *g_pDropIndicatorSurface;
 extern double g_fDropIndicatorWidth, g_fDropIndicatorHeight;
@@ -255,16 +252,25 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	//g_print ("%s (%d, %.2f, %s)\n", __func__, icon->iType, fMaxScale, icon->acFileName);
 	cairo_surface_destroy (icon->pIconBuffer);
 	icon->pIconBuffer = NULL;
-	glDeleteTextures (1, &icon->iIconTexture);
-	icon->iIconTexture = 0;
+	if (icon->iIconTexture != 0)
+	{
+		glDeleteTextures (1, &icon->iIconTexture);
+		icon->iIconTexture = 0;
+	}
 	cairo_surface_destroy (icon->pReflectionBuffer);
 	icon->pReflectionBuffer = NULL;
-	glDeleteTextures (1, &icon->iReflectionTexture);
-	icon->iReflectionTexture = 0;
+	if (icon->iReflectionTexture != 0)
+	{
+		glDeleteTextures (1, &icon->iReflectionTexture);
+		icon->iReflectionTexture = 0;
+	}
 	cairo_surface_destroy (icon->pFullIconBuffer);
 	icon->pFullIconBuffer = NULL;
-	glDeleteTextures (1, &icon->iFullIconTexture);
-	icon->iFullIconTexture = 0;
+	if (icon->iFullIconTexture != 0)
+	{
+		glDeleteTextures (1, &icon->iFullIconTexture);
+		icon->iFullIconTexture = 0;
+	}
 	
 	if (icon->fWidth < 0 || icon->fHeight < 0)  // on ne veut pas de surface.
 		return;
@@ -298,9 +304,9 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 	else if (CAIRO_DOCK_IS_APPLI (icon))  // c'est l'icône d'une appli valide. Dans cet ordre on n'a pas besoin de verifier que c'est NORMAL_APPLI.
 	{
-		if (g_bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass) && ! (g_bShowThumbnail && icon->bIsHidden))
+		if (myTaskBar.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass) && ! (myTaskBar.bShowThumbnail && icon->bIsHidden))
 			icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
-		if (icon->pIconBuffer == NULL && g_bShowThumbnail && icon->bIsHidden && icon->iBackingPixmap != 0)
+		if (icon->pIconBuffer == NULL && myTaskBar.bShowThumbnail && icon->bIsHidden && icon->iBackingPixmap != 0)
 			icon->pIconBuffer = cairo_dock_create_surface_from_xpixmap (icon->iBackingPixmap, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
 		if (icon->pIconBuffer == NULL)
 			icon->pIconBuffer = cairo_dock_create_surface_from_xwindow (icon->Xid, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
@@ -428,17 +434,20 @@ void cairo_dock_fill_one_text_buffer (Icon *icon, cairo_t* pSourceContext, Cairo
 	//g_print ("%s (%s, %d)\n", __func__, cLabelPolice, iLabelSize);
 	cairo_surface_destroy (icon->pTextBuffer);
 	icon->pTextBuffer = NULL;
-	glDeleteTextures (1, &icon->iLabelTexture);
-	icon->iLabelTexture = 0;
+	if (icon->iLabelTexture != 0)
+	{
+		glDeleteTextures (1, &icon->iLabelTexture);
+		icon->iLabelTexture = 0;
+	}
 	if (icon->acName == NULL || (pTextDescription->iSize == 0))
 		return ;
 
 	gchar *cTruncatedName = NULL;
-	if (CAIRO_DOCK_IS_APPLI (icon) && g_iAppliMaxNameLength > 0)
+	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.iAppliMaxNameLength > 0)
 	{
-		cTruncatedName = cairo_dock_cut_string (icon->acName, g_iAppliMaxNameLength);
+		cTruncatedName = cairo_dock_cut_string (icon->acName, myTaskBar.iAppliMaxNameLength);
 	}
-
+	
 	cairo_surface_t* pNewSurface = cairo_dock_create_surface_from_text ((cTruncatedName != NULL ? cTruncatedName : icon->acName),
 		pSourceContext,
 		pTextDescription,
@@ -459,14 +468,14 @@ void cairo_dock_fill_one_text_buffer (Icon *icon, cairo_t* pSourceContext, Cairo
 	
 	if (g_bUseOpenGL && icon->pTextBuffer != NULL)
 	{
-		GdkGLContext* pGlContext = gtk_widget_get_gl_context (g_pMainDock->pWidget);
+		/*GdkGLContext* pGlContext = gtk_widget_get_gl_context (g_pMainDock->pWidget);
 		GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (g_pMainDock->pWidget);
 		if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
-			return ;
+			return ;*/
 		
 		icon->iLabelTexture = cairo_dock_create_texture_from_surface (icon->pTextBuffer);
 		
-		gdk_gl_drawable_gl_end (pGlDrawable);
+		//gdk_gl_drawable_gl_end (pGlDrawable);
 	}
 }
 
@@ -474,8 +483,11 @@ void cairo_dock_fill_one_quick_info_buffer (Icon *icon, cairo_t* pSourceContext,
 {
 	cairo_surface_destroy (icon->pQuickInfoBuffer);
 	icon->pQuickInfoBuffer = NULL;
-	glDeleteTextures (1, &icon->iQuickInfoTexture);
-	icon->iQuickInfoTexture = 0;
+	if (icon->iQuickInfoTexture != 0)
+	{
+		glDeleteTextures (1, &icon->iQuickInfoTexture);
+		icon->iQuickInfoTexture = 0;
+	}
 	if (icon->cQuickInfo == NULL)
 		return ;
 
@@ -488,15 +500,15 @@ void cairo_dock_fill_one_quick_info_buffer (Icon *icon, cairo_t* pSourceContext,
 	
 	if (g_bUseOpenGL && icon->pQuickInfoBuffer != NULL)
 	{
-		GdkGLContext* pGlContext = gtk_widget_get_gl_context (g_pMainDock->pWidget);
+		/*GdkGLContext* pGlContext = gtk_widget_get_gl_context (g_pMainDock->pWidget);
 		GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (g_pMainDock->pWidget);
 		if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
-			return ;
+			return ;*/
 		
 		icon->iQuickInfoTexture = cairo_dock_create_texture_from_surface (icon->pQuickInfoBuffer);
 		
 		
-		gdk_gl_drawable_gl_end (pGlDrawable);
+		//gdk_gl_drawable_gl_end (pGlDrawable);
 	}
 }
 
@@ -506,7 +518,7 @@ void cairo_dock_fill_icon_buffers (Icon *icon, cairo_t *pSourceContext, double f
 {
 	cairo_dock_fill_one_icon_buffer (icon, pSourceContext, fMaxScale, bHorizontalDock, bApplySizeRestriction, bDirectionUp);
 
-	cairo_dock_fill_one_text_buffer (icon, pSourceContext, &g_iconTextDescription, (g_bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : bHorizontalDock), bDirectionUp);
+	cairo_dock_fill_one_text_buffer (icon, pSourceContext, &g_iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : bHorizontalDock), bDirectionUp);
 
 	cairo_dock_fill_one_quick_info_buffer (icon, pSourceContext, &g_quickInfoTextDescription, fMaxScale);
 }
@@ -816,8 +828,11 @@ void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* 
 	cairo_surface_destroy (g_pIndicatorSurface[1]);
 	g_pIndicatorSurface[0] = NULL;
 	g_pIndicatorSurface[1] = NULL;
-	glDeleteTextures (1, &g_iIndicatorTexture);
-	g_iIndicatorTexture = 0;
+	if (g_iIndicatorTexture != 0)
+	{
+		glDeleteTextures (1, &g_iIndicatorTexture);
+		g_iIndicatorTexture = 0;
+	}
 	if (cIndicatorImagePath != NULL)
 	{
 		double fLauncherWidth = (g_tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != 0 ? g_tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : 48);

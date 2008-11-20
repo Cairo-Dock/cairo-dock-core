@@ -28,7 +28,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #define CAIRO_DOCK_NB_BUTTONS_BY_ROW 3
 #define CAIRO_DOCK_GUI_MARGIN 6
 #define CAIRO_DOCK_TABLE_MARGIN 12
-#define CAIRO_DOCK_CONF_PANEL_WIDTH 900
+#define CAIRO_DOCK_CONF_PANEL_WIDTH 1024
 #define CAIRO_DOCK_CONF_PANEL_HEIGHT 600
 #define CAIRO_DOCK_PREVIEW_WIDTH 240
 #define CAIRO_DOCK_PREVIEW_HEIGHT 200
@@ -51,6 +51,7 @@ static GtkWidget *s_pActivateButton = NULL;
 
 extern gchar *g_cConfFile;
 extern CairoDock *g_pMainDock;
+extern int g_iScreenWidth[2];
 
 gchar *cCategoriesDescription[2*CAIRO_DOCK_NB_CATEGORY] = {
 	N_("Behaviour"), "gtk-preferences",
@@ -75,10 +76,13 @@ void cairo_dock_config_panel_destroyed (void)
 		if (g_pMainDock != NULL)  // peut arriver au 1er lancement.
 			cairo_dock_pop_down (g_pMainDock);
 	}
+	g_print ("iNbConfigDialogs <- %d\n", iNbConfigDialogs);
+	
 }
 void cairo_dock_config_panel_created (void)
 {
 	iNbConfigDialogs ++;
+	g_print ("iNbConfigDialogs <- %d\n", iNbConfigDialogs);
 }
 
 
@@ -151,7 +155,7 @@ static GtkToolItem *_cairo_dock_make_toolbutton (const gchar *cLabel, const gcha
 	return pWidget;
 }
 
-static void _cairo_dock_add_group_button (gchar *cGroupName, gchar *cIcon, int iCategory, gchar *cDescription, gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable)
+static void _cairo_dock_add_group_button (gchar *cGroupName, gchar *cIcon, int iCategory, gchar *cDescription, gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, gchar *cOriginalConfFilePath)
 {
 	//\____________ On garde une trace de ses caracteristiques.
 	CairoDockGroupDescription *pGroupDescription = g_new0 (CairoDockGroupDescription, 1);
@@ -160,6 +164,7 @@ static void _cairo_dock_add_group_button (gchar *cGroupName, gchar *cIcon, int i
 	pGroupDescription->iCategory = iCategory;
 	pGroupDescription->cPreviewFilePath = g_strdup (cPreviewFilePath);
 	s_pGroupDescriptionList = g_list_prepend (s_pGroupDescriptionList, pGroupDescription);
+	pGroupDescription->cOriginalConfFilePath = g_strdup (cOriginalConfFilePath);
 		
 	//\____________ On construit le bouton du groupe.
 	GtkWidget *pGroupButton, *pGroupLabel, *pGroupHBox;
@@ -232,13 +237,15 @@ static gboolean _cairo_dock_add_one_module_widget (gchar *cModuleName, CairoDock
 	}
 	else
 		iActive = (pModule->pInstancesList != NULL);
+	gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);
 	_cairo_dock_add_group_button (cModuleName,
 		pModule->pVisitCard->cIconFilePath,
 		pModule->pVisitCard->iCategory,
 		pModule->pVisitCard->cReadmeFilePath,
 		pModule->pVisitCard->cPreviewFilePath,
 		iActive,
-		pModule->cConfFilePath != NULL);
+		pModule->cConfFilePath != NULL,
+		cOriginalConfFilePath);
 	return FALSE;
 }
 
@@ -418,6 +425,7 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	gchar *cGroupName, *cGroupComment, *cIcon, *cDescription;
 	GtkWidget *pGroupButton, *pGroupLabel, *pGroupHBox;
 	CairoDockGroupDescription *pGroupDescription;
+	gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
 	i = 0;
 	while (pGroupList[i] != NULL)
 	{
@@ -464,11 +472,12 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 				cIcon = ptr;
 		}
 		
-		_cairo_dock_add_group_button (cGroupName, cIcon, iCategory, cDescription, NULL, -1, TRUE);
+		_cairo_dock_add_group_button (cGroupName, cIcon, iCategory, cDescription, NULL, -1, TRUE, cOriginalConfFilePath);
 		
 		g_free (cGroupComment);
 		i ++;
 	}
+	g_free (cOriginalConfFilePath);
 	g_strfreev (pGroupList);
 	
 	
@@ -539,7 +548,7 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 		FALSE,
 		FALSE,
 		0);
-	gtk_window_resize (GTK_WINDOW (s_pMainWindow), CAIRO_DOCK_CONF_PANEL_WIDTH, CAIRO_DOCK_CONF_PANEL_HEIGHT);
+	gtk_window_resize (GTK_WINDOW (s_pMainWindow), MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, g_iScreenWidth[CAIRO_DOCK_HORIZONTAL]), CAIRO_DOCK_CONF_PANEL_HEIGHT);
 	
 	gtk_widget_show_all (s_pMainWindow);
 	gtk_widget_hide (s_pApplyButton);
@@ -705,7 +714,8 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 			NULL,
 			cairo_dock_get_main_window (),
 			&s_pCurrentWidgetList,
-			pDataGarbage);
+			pDataGarbage,
+			pGroupDescription->cOriginalConfFilePath);
 	}
 	else
 	{
@@ -714,7 +724,8 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 			NULL,
 			cairo_dock_get_main_window (),
 			&s_pCurrentWidgetList,
-			pDataGarbage);
+			pDataGarbage,
+			pGroupDescription->cOriginalConfFilePath);
 	}
 	
 	//\_______________ On affiche le widget du groupe.
@@ -868,7 +879,8 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 		cGettextDomain,
 		pMainWindow,
 		&pWidgetList,
-		pDataGarbage);
+		pDataGarbage,
+		NULL);
 	gtk_box_pack_start (GTK_BOX (pMainVBox),
 		pNoteBook,
 		FALSE,

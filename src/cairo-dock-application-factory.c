@@ -33,21 +33,16 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-X-utilities.h"
+#include "cairo-dock-internal-system.h"
+#include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-application-factory.h"
 
 extern double g_fAmplitude;
 extern CairoDockLabelDescription g_iconTextDescription;
-extern gboolean g_bTextAlwaysHorizontal;
 
 extern int g_tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
 extern int g_tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
 
-extern gboolean g_bUniquePid;
-extern gboolean g_bGroupAppliByClass;
-extern gboolean g_bDemandsAttentionWithDialog;
-extern gboolean g_bDemandsAttentionWithAnimation;
-extern gboolean g_bOverWriteXIcons;
-extern gboolean g_bShowThumbnail;
 extern gboolean g_bEasterEggs;
 
 static GHashTable *s_hAppliTable = NULL;  // table des PID connus de cairo-dock (affichees ou non dans le dock).
@@ -110,7 +105,7 @@ void cairo_dock_initialize_application_factory (Display *pXDisplay)
 
 void cairo_dock_unregister_pid (Icon *icon)
 {
-	if (g_bUniquePid && CAIRO_DOCK_IS_APPLI (icon) && icon->iPid != 0)
+	if (myTaskBar.bUniquePid && CAIRO_DOCK_IS_APPLI (icon) && icon->iPid != 0)
 	{
 		g_hash_table_remove (s_hAppliTable, &icon->iPid);
 	}
@@ -239,7 +234,7 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 	cd_message ("%s (%s)", __func__, icon->acName);
 	CairoDock *pParentDock = pMainDock;
 	g_free (icon->cParentDockName);
-	if (CAIRO_DOCK_IS_APPLI (icon) && g_bGroupAppliByClass && icon->cClass != NULL)
+	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.bGroupAppliByClass && icon->cClass != NULL)
 	{
 		Icon *pSameClassIcon = cairo_dock_get_classmate (icon);
 		//if (pSameClassIcon != NULL)
@@ -410,7 +405,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	}
 
 	//\__________________ On recupere son PID si on est en mode "PID unique".
-	if (g_bUniquePid)
+	if (myTaskBar.bUniquePid)
 	{
 		iBufferNbElements = 0;
 		XGetWindowProperty (s_XDisplay, Xid, s_aNetWmPid, 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pPidBuffer);
@@ -449,20 +444,13 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 				if (XMainAppliWindow != 0)
 				{
 					g_print ("dialogue 'transient for' => on ignore\n");
-					if (bDemandsAttention && (g_bDemandsAttentionWithDialog || g_bDemandsAttentionWithAnimation))
+					if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.bDemandsAttentionWithAnimation))
 					{
 						Icon *pParentIcon = cairo_dock_get_icon_with_Xid (XMainAppliWindow);
 						if (pParentIcon != NULL)
 						{
 							g_print ("%s requiert votre attention indirectement !\n", pParentIcon->acName);
-							pParentIcon->bIsDemandingAttention = TRUE;
-							if (g_bDemandsAttentionWithDialog)
-								cairo_dock_show_temporary_dialog_with_icon (pParentIcon->acName, pParentIcon, CAIRO_CONTAINER (pDock), 2000, "same icon");
-							if (g_bDemandsAttentionWithAnimation)
-							{
-								cairo_dock_arm_animation (pParentIcon, -1, 1e6);  // animation sans fin.
-								cairo_dock_start_animation (pParentIcon, pDock);
-							}
+							cairo_dock_appli_demands_attention (pParentIcon);
 						}
 						else
 							g_print ("ce dialogue est bien bruyant ! (%d)\n", XMainAppliWindow);
@@ -472,11 +460,11 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 				}
 				//g_print ("dialogue autorise\n");
 			}
-			else if (*pTypeBuffer != s_aNetWmWindowTypeNormal)
+			else
 			{
 				//g_print ("type indesirable\n");
 				XFree (pTypeBuffer);
-				if (g_bUniquePid)
+				if (myTaskBar.bUniquePid)
 					g_hash_table_insert (s_hAppliTable, pPidBuffer, NULL);  // On rajoute son PID meme si c'est une appli qu'on n'affichera pas.
 				return NULL;
 			}
@@ -490,20 +478,13 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 		if (XMainAppliWindow != 0)
 		{
 			g_print ("fenetre modale => on saute.\n");
-			if (bDemandsAttention && (g_bDemandsAttentionWithDialog || g_bDemandsAttentionWithAnimation))
+			if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.bDemandsAttentionWithAnimation))
 			{
 				Icon *pParentIcon = cairo_dock_get_icon_with_Xid (XMainAppliWindow);
 				if (pParentIcon != NULL)
 				{
 					g_print ("%s requiert votre attention indirectement !\n", pParentIcon->acName);
-					pParentIcon->bIsDemandingAttention = TRUE;
-					if (g_bDemandsAttentionWithDialog)
-						cairo_dock_show_temporary_dialog_with_icon (pParentIcon->acName, pParentIcon, CAIRO_CONTAINER (pDock), 2000, "same icon");
-					if (g_bDemandsAttentionWithAnimation)
-					{
-						cairo_dock_arm_animation (pParentIcon, -1, 1e6);  // animation sans fin.
-						cairo_dock_start_animation (pParentIcon, pDock);
-					}
+					cairo_dock_appli_demands_attention (pParentIcon);
 				}
 				else
 					g_print ("ce dialogue est bien bruyant ! (%d)\n", XMainAppliWindow);
@@ -524,7 +505,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	if (iBufferNbElements == 0)
 	{
 		//g_print ("pas de nom, elle degage\n");
-		if (g_bUniquePid)
+		if (myTaskBar.bUniquePid)
 			g_hash_table_insert (s_hAppliTable, pPidBuffer, NULL);  // On rajoute son PID meme si c'est une appli qu'on n'affichera pas.
 		return NULL;
 	}
@@ -548,7 +529,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	//\__________________ On cree, on remplit l'icone, et on l'enregistre, par contre elle sera inseree plus tard.
 	Icon *icon = g_new0 (Icon, 1);
 	icon->acName = g_strdup ((gchar *)pNameBuffer);
-	if (g_bUniquePid)
+	if (myTaskBar.bUniquePid)
 		icon->iPid = *pPidBuffer;
 	icon->Xid = Xid;
 	icon->cClass = cClass;
@@ -566,7 +547,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 		&icon->windowGeometry.width,
 		&icon->windowGeometry.height);
 	#ifdef HAVE_XEXTEND
-	if (g_bShowThumbnail)
+	if (myTaskBar.bShowThumbnail)
 	{
 		icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
 		/*icon->iDamageHandle = XDamageCreate (s_XDisplay, Xid, XDamageReportNonEmpty);  // XDamageReportRawRectangles
@@ -576,7 +557,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	
 	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pDock);
 	
-	if (g_bUniquePid)
+	if (myTaskBar.bUniquePid)
 		g_hash_table_insert (s_hAppliTable, pPidBuffer, icon);
 	cairo_dock_register_appli (icon);
 	XFree (pNameBuffer);
@@ -594,9 +575,8 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
 	unsigned long iLeftBytes, iBufferNbElements=0;
-
 	cairo_t* pCairoContext;
-
+	
 	if (iState == PropertyNewValue && (aProperty == s_aNetWmName || aProperty == s_aWmName))
 	{
 		//g_print ("chgt de nom (%d)\n", aProperty);
@@ -613,7 +593,7 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 				XFree (pNameBuffer);
 
 				pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-				cairo_dock_fill_one_text_buffer (icon, pCairoContext, &g_iconTextDescription, (g_bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pDock->bHorizontalDock), pDock->bDirectionUp);
+				cairo_dock_fill_one_text_buffer (icon, pCairoContext, &g_iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pDock->bHorizontalDock), pDock->bDirectionUp);
 				cairo_destroy (pCairoContext);
 			}
 		}
@@ -621,7 +601,7 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 	else if (iState == PropertyNewValue && aProperty == s_aNetWmIcon)
 	{
 		//g_print ("%s change son icone\n", icon->acName);
-		if (cairo_dock_class_is_using_xicon (icon->cClass) || ! g_bOverWriteXIcons)
+		if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
 		{
 			pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 			icon->fWidth /= pDock->fRatio;
@@ -638,28 +618,17 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 		XWMHints *pWMHints = XGetWMHints (s_XDisplay, icon->Xid);
 		if (pWMHints != NULL)
 		{
-			if ((pWMHints->flags & XUrgencyHint) && (g_bDemandsAttentionWithDialog || g_bDemandsAttentionWithAnimation))
+			if ((pWMHints->flags & XUrgencyHint) && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.bDemandsAttentionWithAnimation))
 			{
 				if (iState == PropertyNewValue)
 				{
 					g_print ("%s vous interpelle !\n", icon->acName);
-					icon->bIsDemandingAttention = TRUE;
-					if (g_bDemandsAttentionWithDialog)
-						cairo_dock_show_temporary_dialog_with_icon (icon->acName, icon, CAIRO_CONTAINER (pDock), 2000, "same icon");
-					if (g_bDemandsAttentionWithAnimation)
-					{
-						cairo_dock_arm_animation (icon, -1, 1e6);  // animation sans fin.
-						cairo_dock_start_animation (icon, pDock);
-					}
+					cairo_dock_appli_demands_attention (icon);
 				}
 				else if (iState == PropertyDelete)
 				{
 					g_print ("%s arrette de vous interpeler.\n", icon->acName);
-					icon->bIsDemandingAttention = FALSE;
-					if (g_bDemandsAttentionWithDialog)
-						cairo_dock_remove_dialog_if_any (icon);
-					if (g_bDemandsAttentionWithAnimation)
-						cairo_dock_arm_animation (icon, 0, 0);  // arrete son animation quelqu'elle soit.
+					cairo_dock_appli_stops_demanding_attention (icon);
 				}
 				else
 					cd_warning ("  etat du changement d'urgence inconnu sur %s !", icon->acName);
@@ -667,7 +636,7 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 			if (iState == PropertyNewValue && (pWMHints->flags & (IconPixmapHint | IconMaskHint | IconWindowHint)))
 			{
 				//g_print ("%s change son icone\n", icon->acName);
-				if (cairo_dock_class_is_using_xicon (icon->cClass) || ! g_bOverWriteXIcons)
+				if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
 				{
 					pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 					icon->fWidth /= pDock->fRatio;
@@ -682,3 +651,52 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 		}
 	}
 }
+
+
+static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock)
+{
+	icon->bIsDemandingAttention = TRUE;
+	if (myTaskBar.bDemandsAttentionWithDialog)
+		cairo_dock_show_temporary_dialog_with_icon (icon->acName, icon, CAIRO_CONTAINER (pDock), 2000, "same icon");
+	if (myTaskBar.bDemandsAttentionWithAnimation)
+	{
+		cairo_dock_arm_animation (icon, -1, 1e6);  // animation sans fin.
+		cairo_dock_start_animation (icon, pDock);
+	}
+}
+void cairo_dock_appli_demands_attention (Icon *icon)
+{
+	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+	if (pParentDock == NULL)  // appli inhibee.
+	{
+		Icon *pInhibitorIcon = cairo_dock_get_classmate (icon);
+		if (pInhibitorIcon != NULL)
+		{
+			CairoDock *pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->acName);
+			if (pParentDock != NULL)
+				_cairo_dock_appli_demands_attention (pInhibitorIcon, pParentDock);
+		}
+	}
+	else
+		_cairo_dock_appli_demands_attention (icon, pParentDock);
+}
+
+static void _cairo_dock_appli_stops_demanding_attention (Icon *icon)
+{
+	icon->bIsDemandingAttention = FALSE;
+	if (myTaskBar.bDemandsAttentionWithDialog)
+		cairo_dock_remove_dialog_if_any (icon);
+	if (myTaskBar.bDemandsAttentionWithAnimation)
+		cairo_dock_arm_animation (icon, 0, 0);  // arrete son animation quelqu'elle soit.
+}
+void cairo_dock_appli_stops_demanding_attention (Icon *icon)
+{
+	if (icon->cParentDockName == NULL)
+	{
+		Icon *pInhibitorIcon = cairo_dock_get_classmate (icon);
+		if (pInhibitorIcon != NULL)
+			_cairo_dock_appli_stops_demanding_attention (pInhibitorIcon);
+	}
+	_cairo_dock_appli_stops_demanding_attention (icon);
+}
+
