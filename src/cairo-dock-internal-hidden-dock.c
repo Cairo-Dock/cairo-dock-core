@@ -36,6 +36,11 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigHiddenDock *pHiddenDo
 }
 
 
+static void reset_config (CairoConfigHiddenDock *pHiddenDock)
+{
+	g_free (pHiddenDock->cVisibleZoneImageFile);
+}
+
 static void reload (CairoConfigHiddenDock *pPrevHiddenDock, CairoConfigHiddenDock *pHiddenDock)
 {
 	CairoDock *pDock = g_pMainDock;
@@ -63,7 +68,7 @@ DEFINE_PRE_INIT (HiddenDock)
 	
 	pModule->reload = (CairoDockInternalModuleReloadFunc) reload;
 	pModule->get_config = (CairoDockInternalModuleGetConfigFunc) get_config;
-	pModule->reset_config = NULL;
+	pModule->reset_config = reset_config;
 	pModule->reset_data = NULL;
 	
 	pModule->pConfig = (CairoInternalModuleConfigPtr) &myHiddenDock;

@@ -27,6 +27,7 @@ struct _CairoConfigTaskBar {
 	gdouble fVisibleAppliAlpha;
 	gboolean bAppliOnCurrentDesktopOnly;
 	gboolean bDemandsAttentionWithDialog;
+	gint iDialogDuration;
 	gboolean bDemandsAttentionWithAnimation;
 	gboolean bAnimateOnActiveWindow;
 	gboolean bOverWriteXIcons;

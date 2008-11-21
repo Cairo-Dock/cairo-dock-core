@@ -326,6 +326,7 @@ gboolean on_delete_normal_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *p
 	
 	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWidget), "widget-list");
 	cairo_dock_free_generated_widget_list (pWidgetList);
+	cairo_dock_config_panel_destroyed ();
 	
 	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pWidget), "garbage");
 	/// nettoyer.

@@ -50,6 +50,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-callbacks.h"
 
 static Icon *s_pIconClicked = NULL;  // pour savoir quand on deplace une icone a la souris. Dangereux si l'icone se fait effacer en cours ...
@@ -79,8 +80,6 @@ extern int g_iDockLineWidth;
 extern int g_iIconGap;
 
 extern gchar *g_cConfFile;
-
-extern int g_iVisibleZoneHeight, g_iVisibleZoneWidth;
 
 extern int g_tAnimationType[CAIRO_DOCK_NB_TYPES];
 extern int g_tNbAnimationRounds[CAIRO_DOCK_NB_TYPES];
@@ -1013,7 +1012,7 @@ gboolean on_enter_notify2 (GtkWidget* pWidget,
 	int iNewWidth, iNewHeight;
 	cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
 	if ((pDock->bAutoHide && pDock->iRefCount == 0) && pDock->bAtBottom)
-		pDock->iWindowPositionY = (pDock->bDirectionUp ? g_iScreenHeight[pDock->bHorizontalDock] - g_iVisibleZoneHeight - pDock->iGapY : g_iVisibleZoneHeight + pDock->iGapY - pDock->iMaxDockHeight);
+		pDock->iWindowPositionY = (pDock->bDirectionUp ? g_iScreenHeight[pDock->bHorizontalDock] - myHiddenDock.iVisibleZoneHeight - pDock->iGapY : myHiddenDock.iVisibleZoneHeight + pDock->iGapY - pDock->iMaxDockHeight);
 
 	if (pDock->bHorizontalDock)
 		gdk_window_move_resize (pWidget->window,

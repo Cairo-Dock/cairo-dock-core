@@ -1262,7 +1262,7 @@ void cairo_dock_preload_internal_modules (GHashTable *pModuleTable)
 	REGISTER_INTERNAL_MODULE (Accessibility);
 	REGISTER_INTERNAL_MODULE (System);
 	REGISTER_INTERNAL_MODULE (TaskBar);
-	//REGISTER_INTERNAL_MODULE (HiddenDock);
+	REGISTER_INTERNAL_MODULE (HiddenDock);
 	/// ...
 }
 

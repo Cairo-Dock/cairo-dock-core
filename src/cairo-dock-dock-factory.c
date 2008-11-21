@@ -173,27 +173,27 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 			cd_warning ("Argl, we could not get an ARGB-visual!");
 			
 			doubleBufferAttributes[13] = 0;
-			pVisInfo = glXChooseVisual (XDisplay,
-				DefaultScreen (XDisplay),
-				doubleBufferAttributes);
+			pFBConfigs = glXChooseFBConfig (XDisplay, 
+				DefaultScreen (XDisplay), 
+				doubleBufferAttributes, 
+				&iNumOfFBConfigs);
+			cd_message ("got %d FBConfig(s) this time", iNumOfFBConfigs);
+			for (i = 0; i < iNumOfFBConfigs; i++) 
+			{
+				pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]); 
+				if (!pVisInfo) 
+				{
+					cd_warning ("this FBConfig has no visual.");
+				}
+				else
+					break;
+			}
 			if (pVisInfo == NULL)
 			{
 				cd_warning ("still no visual, this is the last chance");
-				pFBConfigs = glXChooseFBConfig (XDisplay, 
-					DefaultScreen (XDisplay), 
-					doubleBufferAttributes, 
-					&iNumOfFBConfigs);
-				cd_message ("got %d FBConfig(s) this time", iNumOfFBConfigs);
-				for (i = 0; i < iNumOfFBConfigs; i++) 
-				{
-					pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]); 
-					if (!pVisInfo) 
-					{
-						cd_warning ("this FBConfig has no visual.");
-					}
-					else
-						break;
-				}
+				pVisInfo = glXChooseVisual (XDisplay,
+					DefaultScreen (XDisplay),
+					doubleBufferAttributes);
 			}
 		}
 		else

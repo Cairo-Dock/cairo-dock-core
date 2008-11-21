@@ -141,6 +141,10 @@ auto quick hide on max = false
 #b- Signal the applications demanding your attention with a dialog tip ?
 demands attention with dialog = true
 
+#i[1;20] Duration of the dialog :
+#{in seconds}
+duration = 2
+
 #b- Signal the applications demanding your attention with an animation ?
 demands attention with animation = true
 

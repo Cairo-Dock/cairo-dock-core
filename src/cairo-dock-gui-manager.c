@@ -678,7 +678,10 @@ void cairo_dock_show_one_category (int iCategory)
 
 void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget)
 {
-	g_return_if_fail (s_pCurrentGroupWidget == NULL);
+	if (s_pCurrentGroupWidget != NULL)
+	{
+		gtk_widget_destroy (s_pCurrentGroupWidget);
+	}
 	s_pCurrentGroupWidget = pWidget;
 	
 	gtk_box_pack_start (GTK_BOX (s_pGroupsVBox),
@@ -758,7 +761,26 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 	g_signal_handlers_unblock_by_func (s_pActivateButton, on_click_activate_current_group, NULL);
 }
 
-void cairo_dock_present_module_gui (CairoDockModuleInstance *pModuleInstance)
+
+void cairo_dock_present_module_gui (CairoDockModule *pModule)
+{
+	g_return_if_fail (pModule != NULL);
+	
+	CairoDockGroupDescription *pGroupDescription = NULL;
+	GList *pElement = NULL;
+	for (pElement = s_pGroupDescriptionList; pElement != NULL; pElement = pElement->next)
+	{
+		pGroupDescription = pElement->data;
+		if (strcmp (pGroupDescription->cGroupName, pModule->pVisitCard->cModuleName) == 0)
+			break ;
+	}
+	if (pElement == NULL)
+		return ;
+	
+	cairo_dock_present_group_widget (pModule->cConfFilePath, pGroupDescription, FALSE);
+}
+
+void cairo_dock_present_module_instance_gui (CairoDockModuleInstance *pModuleInstance)
 {
 	g_return_if_fail (pModuleInstance != NULL);
 	
@@ -808,6 +830,7 @@ void cairo_dock_free_categories (void)
 	cairo_dock_free_generated_widget_list (s_pCurrentWidgetList);
 	s_pCurrentWidgetList = NULL;
 	s_pCurrentGroupWidget = NULL;  // detruit en meme temps que la fenetre.
+	cairo_dock_config_panel_destroyed ();
 }
 
 

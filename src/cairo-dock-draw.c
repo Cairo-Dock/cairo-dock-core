@@ -28,6 +28,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-draw.h"
 
 
@@ -51,10 +52,7 @@ extern double g_fBackgroundImageWidth, g_fBackgroundImageHeight;
 extern cairo_surface_t *g_pBackgroundSurface[2];
 extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
 
-extern int g_iVisibleZoneWidth;
-extern int g_iVisibleZoneHeight;
 extern cairo_surface_t *g_pVisibleZoneSurface;
-extern double g_fVisibleZoneAlpha;
 extern double g_fAmplitude;
 
 extern CairoDockLabelDescription g_iconTextDescription;
@@ -1196,7 +1194,8 @@ void cairo_dock_render_background (cairo_t *pCairoContext, CairoDock *pDock)
 	if (g_pVisibleZoneSurface != NULL)
 	{
 		cairo_set_source_surface (pCairoContext, g_pVisibleZoneSurface, 0.0, 0.0);
-		cairo_paint_with_alpha (pCairoContext, g_fVisibleZoneAlpha);
+		//cairo_paint_with_alpha (pCairoContext, myHiddenDock.fVisibleZoneAlpha);
+		cairo_paint (pCairoContext);
 	}
 }
 
@@ -1292,8 +1291,8 @@ void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, C
 	}
 	else
 	{
-		*iNewWidth = g_iVisibleZoneWidth;
-		*iNewHeight = g_iVisibleZoneHeight;
+		*iNewWidth = myHiddenDock.iVisibleZoneWidth;
+		*iNewHeight = myHiddenDock.iVisibleZoneHeight;
 		pDock->iLeftMargin = 0;
 		pDock->iRightMargin = 0;
 	}

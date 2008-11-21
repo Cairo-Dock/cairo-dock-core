@@ -905,7 +905,6 @@ const GLfloat *cairo_dock_generate_rectangle_path (double fDockWidth, double fFr
 	double rh = fRadius / fFrameHeight;
 	int i=0, t;
 	int iPrecision = DELTA_ROUND_DEGREE;
-	double fInclinaisonCadre = 0.;
 	for (t = 0;t <= 90;t += iPrecision, i++) // cote haut droit.
 	{
 		pVertexTab[3*i] = w + rw * cos (t*RADIAN);
@@ -945,6 +944,7 @@ const GLfloat *cairo_dock_generate_rectangle_path (double fDockWidth, double fFr
 	return pVertexTab;
 }
 
+#define P(t,p,q,s) (1-t) * 2 * p + 2 * t * (1-t) * q + 2 * t * s;
 GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, double fInclination, double *fExtraWidth, int *iNbPoints)
 {
 	static GLfloat pVertexTab[((90/DELTA_ROUND_DEGREE+1)*4+1)*3];
@@ -964,7 +964,6 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 	
 	int i=0, t;
 	int iPrecision = DELTA_ROUND_DEGREE;
-	double fInclinaisonCadre = 0.;
 	for (t = a;t <= 90;t += iPrecision, i++) // cote haut droit.
 	{
 		pVertexTab[3*i] = w + rw * cos (t*RADIAN);
@@ -977,21 +976,51 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 	}
 	if (bRoundedBottomCorner)
 	{
-		double f;
+		// OM(t) = sum ([k=0..n] Bn,k(t)*OAk)
+		// Bn,k(x) = Cn,k*x^k*(1-x)^(n-k)
+		// fRadius * (fInclination + 1. / cosa), 0,
+		// P'(u) = (1-u)2P + 2u(1-u)Q + u2S; 0 ! u ! 1
+		double t = 180-a;
+		double x0 = -w_;
+		double y0 = -h + rh * sin (t*RADIAN);
+		double x1 = -w_ - fInclination * rw * (1+sina);
+		double y1 = -h - rh;
+		double x2 = -w - dw;
+		double y2 = y1;
+		for (t=0; t<=1; t+=.05, i++) // bas gauche.
+		{
+			pVertexTab[3*i] = P(t, x0, x1, x2);
+			pVertexTab[3*i+1] = P(t, y0, y1, y2);
+		}
+		
+		double x3 = x0, y3 = y0;
+		x0 = - x2;
+		y0 = y2;
+		x1 = - x1;
+		x2 = - x3;
+		y2 = y3;
+		for (t=0; t<=1; t+=.05, i++) // bas gauche.
+		{
+			pVertexTab[3*i] = P(t, x0, x1, x2);
+			pVertexTab[3*i+1] = P(t, y0, y1, y2);
+		}
+		
+		
+		/*double dt, f;
 		for (t = 180-a;t <= 270;t += iPrecision, i++) // bas gauche.
 		{
-			f = 1.3 - .3*fabs (t-(180-a+270)/2)/(270-(180-a))*2;
+			dt = fabs (t - (180-a+270)/2) / (270-(180-a))*2;
+			f = 1. + .3 * (1-dt)*(1-dt);
 			pVertexTab[3*i] = -w_ + rw * cos (t*RADIAN) * f;
 			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN) * f;
 		}
 		for (t = 270;t <= 360+a;t += iPrecision, i++) // bas droit. 
 		{
-			f = 1.3 - .3*fabs (t-(360+a+270)/2)/(360+a-270)*2;
+			dt = fabs (t-(360+a+270)/2) / (360+a-270)*2;
+			f = 1. + .3 * (1-dt)*(1-dt);
 			pVertexTab[3*i] = w_ + rw * cos (t*RADIAN) * f;
 			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN) * f;
-		}
-		pVertexTab[3*i] = w + rw;  // on boucle.
-		pVertexTab[3*i+1] = h;
+		}*/
 	}
 	else
 	{
@@ -1002,8 +1031,10 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 		pVertexTab[3*i+1] = -h - rh;
 		i ++;
 	}
+	pVertexTab[3*i] = w + rw * cos (a*RADIAN);  // on boucle.
+	pVertexTab[3*i+1] = h + rh * sin (a*RADIAN);
 	
-	*iNbPoints = i;
+	*iNbPoints = i+1;
 	return pVertexTab;
 }
 

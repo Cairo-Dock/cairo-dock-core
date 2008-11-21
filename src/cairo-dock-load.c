@@ -362,7 +362,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 		
 		icon->iIconTexture = cairo_dock_create_texture_from_surface (icon->pIconBuffer);
 		
-		if (icon->pReflectionBuffer != NULL)
+		/**if (icon->pReflectionBuffer != NULL)
 		{
 			icon->iReflectionTexture = cairo_dock_create_texture_from_surface (icon->pReflectionBuffer);
 		}
@@ -370,7 +370,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 		if (icon->pFullIconBuffer != NULL)
 		{
 			icon->iFullIconTexture = cairo_dock_create_texture_from_surface (icon->pFullIconBuffer);
-		}
+		}*/
 		
 		gdk_gl_drawable_gl_end (pGlDrawable);
 	}

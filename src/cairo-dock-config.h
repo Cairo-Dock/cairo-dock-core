@@ -226,17 +226,6 @@ typedef struct _CairoConfigIndicators {
 	gchar *cDropIndicatorImagePath;
 	} CairoConfigIndicators;
 
-typedef struct _CairoConfigDialogs {
-	gchar *cButtonOkImage;
-	gchar *cButtonCancelImage;
-	gint iDialogButtonWidth;
-	gint iDialogButtonHeight;
-	gdouble fDialogColor;
-	gint iDialogIconSize;
-	CairoDockLabelDescription dialogTextDescription;
-	
-	} CairoConfigDialogs;
-
 typedef struct _CairoConfigViews {
 	gchar *cMainDockDefaultRendererName;
 	gchar *cSubDockDefaultRendererName;

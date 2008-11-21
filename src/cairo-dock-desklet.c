@@ -147,71 +147,73 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 		fColor[3] = 1.*pDesklet->iGradationCount / CD_NB_ITER_FOR_GRADUATION;
 	
 	gboolean bRenderOptimized = (area->x > 0 || area->y > 0);
-	if (bRenderOptimized)
+	/*if (bRenderOptimized)
 	{
-		g_print ("Using optimized render\n");
+		//g_print ("Using optimized render\n");
 		pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDesklet), area, fColor);
 	}
-	else
+	else*/
 	{
 		//cd_debug ("Using normal render");
 		pCairoContext = cairo_dock_create_drawing_context (CAIRO_CONTAINER (pDesklet));
-		
-		if (pDesklet->fZoom != 1)
-		{
-			//g_print (" desklet zoom : %.2f (%dx%d)\n", pDesklet->fZoom, pDesklet->iWidth, pDesklet->iHeight);
-			cairo_translate (pCairoContext,
-				pDesklet->iWidth * (1 - pDesklet->fZoom)/2,
-				pDesklet->iHeight * (1 - pDesklet->fZoom)/2);
-			cairo_scale (pCairoContext, pDesklet->fZoom, pDesklet->fZoom);
-		}
-		
-		if (fColor[3] != 0)
-		{
-			cairo_pattern_t *pPattern = cairo_pattern_create_radial (.5*pDesklet->iWidth,
-				.5*pDesklet->iHeight,
-				0.,
-				.5*pDesklet->iWidth,
-				.5*pDesklet->iHeight,
-				.5*MIN (pDesklet->iWidth, pDesklet->iHeight));
-			cairo_pattern_set_extend (pPattern, CAIRO_EXTEND_NONE);
-			
-			cairo_pattern_add_color_stop_rgba   (pPattern,
-				0.,
-				fColor[0], fColor[1], fColor[2], fColor[3]);
-			cairo_pattern_add_color_stop_rgba   (pPattern,
-				1.,
-				fColor[0], fColor[1], fColor[2], 0.);
-			cairo_set_source (pCairoContext, pPattern);
-			cairo_paint (pCairoContext);
-			cairo_pattern_destroy (pPattern);
-		}
-		
+	}
+	
+	if (pDesklet->fZoom != 1)
+	{
+		//g_print (" desklet zoom : %.2f (%dx%d)\n", pDesklet->fZoom, pDesklet->iWidth, pDesklet->iHeight);
+		cairo_translate (pCairoContext,
+			pDesklet->iWidth * (1 - pDesklet->fZoom)/2,
+			pDesklet->iHeight * (1 - pDesklet->fZoom)/2);
+		cairo_scale (pCairoContext, pDesklet->fZoom, pDesklet->fZoom);
+	}
+	
+	if (fColor[3] != 0)
+	{
 		cairo_save (pCairoContext);
+		cairo_pattern_t *pPattern = cairo_pattern_create_radial (.5*pDesklet->iWidth,
+			.5*pDesklet->iHeight,
+			0.,
+			.5*pDesklet->iWidth,
+			.5*pDesklet->iHeight,
+			.5*MIN (pDesklet->iWidth, pDesklet->iHeight));
+		cairo_pattern_set_extend (pPattern, CAIRO_EXTEND_NONE);
 		
-		if (pDesklet->fRotation != 0)
-		{
-			double alpha = atan2 (pDesklet->iHeight, pDesklet->iWidth);
-			double theta = fabs (pDesklet->fRotation);
-			if (theta > G_PI/2)
-				theta -= G_PI/2;
-			double fZoomX, fZoomY;
-			double d = .5 * sqrt (pDesklet->iWidth * pDesklet->iWidth + pDesklet->iHeight * pDesklet->iHeight);
-			fZoomX = fabs (.5 * pDesklet->iWidth / (d * sin (alpha + theta)));
-			fZoomY = fabs (.5 * pDesklet->iHeight / (d * cos (alpha - theta)));
-			//g_print ("d = %.2f ; alpha = %.2f ; zoom : %.2fx%.2f\n", d, alpha/G_PI*180., fZoomX, fZoomY);
-			
-			cairo_translate (pCairoContext,
-				.5*pDesklet->iWidth,
-				.5*pDesklet->iHeight);
-			
-			cairo_rotate (pCairoContext, pDesklet->fRotation);
-			
-			cairo_translate (pCairoContext,
-				-.5*pDesklet->iWidth * fZoomX,
-				-.5*pDesklet->iHeight * fZoomY);
-			cairo_scale (pCairoContext, fZoomX, fZoomY);
-		}
+		cairo_pattern_add_color_stop_rgba   (pPattern,
+			0.,
+			fColor[0], fColor[1], fColor[2], fColor[3]);
+		cairo_pattern_add_color_stop_rgba   (pPattern,
+			1.,
+			fColor[0], fColor[1], fColor[2], 0.);
+		cairo_set_source (pCairoContext, pPattern);
+		cairo_paint (pCairoContext);
+		cairo_pattern_destroy (pPattern);
+		cairo_restore (pCairoContext);
+	}
+	
+	cairo_save (pCairoContext);
+	
+	if (pDesklet->fRotation != 0)
+	{
+		double alpha = atan2 (pDesklet->iHeight, pDesklet->iWidth);
+		double theta = fabs (pDesklet->fRotation);
+		if (theta > G_PI/2)
+			theta -= G_PI/2;
+		double fZoomX, fZoomY;
+		double d = .5 * sqrt (pDesklet->iWidth * pDesklet->iWidth + pDesklet->iHeight * pDesklet->iHeight);
+		fZoomX = fabs (.5 * pDesklet->iWidth / (d * sin (alpha + theta)));
+		fZoomY = fabs (.5 * pDesklet->iHeight / (d * cos (alpha - theta)));
+		//g_print ("d = %.2f ; alpha = %.2f ; zoom : %.2fx%.2f\n", d, alpha/G_PI*180., fZoomX, fZoomY);
+		
+		cairo_translate (pCairoContext,
+			.5*pDesklet->iWidth,
+			.5*pDesklet->iHeight);
+		
+		cairo_rotate (pCairoContext, pDesklet->fRotation);
+		
+		cairo_translate (pCairoContext,
+			-.5*pDesklet->iWidth * fZoomX,
+			-.5*pDesklet->iHeight * fZoomY);
+		cairo_scale (pCairoContext, fZoomX, fZoomY);
 	}
 	
 	cairo_save (pCairoContext);
@@ -409,7 +411,7 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 	pDesklet->iDesiredWidth = 0;  /// ???
 	pDesklet->iDesiredHeight = 0;
 		
-	if (g_bUseOpenGL/* && pDesklet->pRenderer && pDesklet->pRenderer->render_opengl*/)
+	if (g_bUseOpenGL && pDesklet->pRenderer && pDesklet->pRenderer->render_opengl)
 	{
 		_cairo_dock_render_desklet_opengl (pDesklet);
 	}

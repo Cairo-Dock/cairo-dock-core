@@ -21,6 +21,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-internal-accessibility.h"
+#include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-dialogs.h"
 
 static GSList *s_pDialogList = NULL;
@@ -30,7 +31,6 @@ extern CairoDock *g_pMainDock;
 extern gint g_iScreenWidth[2], g_iScreenHeight[2];
 extern gboolean g_bSticky;
 extern gboolean g_bKeepAbove;
-extern int g_iVisibleZoneWidth, g_iVisibleZoneHeight;
 
 extern int g_iDockLineWidth;
 extern int g_iDockRadius;
@@ -1071,7 +1071,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 	
 			if (pDock->bAutoHide)
 			{
-				*iX = pDock->iWindowPositionX + (pIcon->fXAtRest + pIcon->fWidth * (*bRight ? .7 : .3)) / pDock->fFlatDockWidth * g_iVisibleZoneWidth;
+				*iX = pDock->iWindowPositionX + (pIcon->fXAtRest + pIcon->fWidth * (*bRight ? .7 : .3)) / pDock->fFlatDockWidth * myHiddenDock.iVisibleZoneWidth;
 				cd_debug ("placement sur un dock cache -> %d", *iX);
 			}
 			else

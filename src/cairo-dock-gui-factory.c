@@ -612,10 +612,9 @@ static void _cairo_dock_configure_renderer (GtkButton *button, gpointer *data)
 	GtkTreeView *pCombo = data[0];
 	GtkWindow *pDialog = data[1];
 	
-	CairoDockModule *pModule = cairo_dock_find_module_from_name ("rendering");
-	g_return_if_fail (pModule != NULL && pModule->pInstancesList != NULL);
-	cairo_dock_present_module_gui (pModule->pInstancesList->data);
-	//cairo_dock_configure_module (pDialog, "rendering");
+	CairoDockModule *pModule = cairo_dock_find_module_from_name ("dock rendering");
+	g_return_if_fail (pModule != NULL);
+	cairo_dock_present_module_gui (pModule);
 }
 
 

@@ -122,7 +122,6 @@ double g_fReflectSize;  // taille des reflets, en pixels, calcules par rapport a
 double g_fAlbedo;  // pouvoir reflechissant du plan.
 
 cairo_surface_t *g_pVisibleZoneSurface = NULL;  // surface de la zone de rappel.
-double g_fVisibleZoneAlpha;  // transparence de la zone de rappel.
 int g_iNbStripes;  // le nombre de rayures a dessiner en fond dans chaque motif elementaire.
 double g_fStripesWidth;  // leur epaisseur relative.
 double g_fStripesColorBright[4];  // couleur claire du fond ou des rayures.
@@ -142,9 +141,6 @@ int g_tAnimationType[CAIRO_DOCK_NB_TYPES];  // le type de l'animation pour chaqu
 int g_tNbAnimationRounds[CAIRO_DOCK_NB_TYPES];  // le nombre de rebonds/rotation/etc lors d'un clique gauche.
 int g_tIconTypeOrder[CAIRO_DOCK_NB_TYPES];  // l'ordre de chaque type dans le dock.
 int g_tNbIterInOneRound[CAIRO_DOCK_NB_ANIMATIONS] = {17, 20, 20, 12, 20, 20, 0};  // 2n+3, 4n, 2n, 2n, 4n, 4n.
-
-int g_iVisibleZoneWidth = 0;  // dimensions de la zone ou on place le curseur pour faire apparaitre le dock.
-int g_iVisibleZoneHeight = 0;
 
 gboolean g_bSameHorizontality;  // dit si les sous-docks ont la meme horizontalite que les docks racines.
 double g_fSubDockSizeRatio;  // ratio de la taille des icones des sous-docks par rapport a celles du dock principal.

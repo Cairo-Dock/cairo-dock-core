@@ -47,7 +47,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 static const gchar * s_cIconTypeNames[(CAIRO_DOCK_NB_TYPES+1)/2] = {"launchers", "applications", "applets"};
 
 extern CairoDock *g_pMainDock;
-extern gboolean g_bReverseVisibleImage;
 extern gchar *g_cMainDockDefaultRendererName;
 extern gchar *g_cSubDockDefaultRendererName;
 extern gchar *g_cCurrentThemePath;
@@ -61,7 +60,6 @@ extern double g_fReflectSize;
 extern double g_fAlbedo;
 extern double g_fAlphaAtRest;
 
-extern double g_fVisibleZoneAlpha;
 extern gboolean g_bSameHorizontality;
 extern double g_fSubDockSizeRatio;
 
@@ -70,8 +68,6 @@ static gboolean s_bUserTheme = FALSE;
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cConfFile;
 
-extern int g_iVisibleZoneWidth;
-extern int g_iVisibleZoneHeight;
 extern double g_fBackgroundImageWidth;
 extern double g_fBackgroundImageHeight;
 
@@ -634,7 +630,7 @@ GET_GROUP_CONFIG_END*/
 GET_GROUP_CONFIG_END*/
 
 
-static gchar *s_cVisibleZoneImageFile = NULL;
+/*static gchar *s_cVisibleZoneImageFile = NULL;
 GET_GROUP_CONFIG_BEGIN (HiddenDock)
 	s_cVisibleZoneImageFile = cairo_dock_get_string_key_value (pKeyFile, "Hidden dock", "callback image", &bFlushConfFileNeeded, NULL, "Background", "background image");
 
@@ -645,7 +641,7 @@ GET_GROUP_CONFIG_BEGIN (HiddenDock)
 
 	g_fVisibleZoneAlpha = cairo_dock_get_double_key_value (pKeyFile, "Hidden dock", "alpha", &bFlushConfFileNeeded, 0.5, "Background", NULL);
 	g_bReverseVisibleImage = cairo_dock_get_boolean_key_value (pKeyFile, "Hidden dock", "reverse visible image", &bFlushConfFileNeeded, TRUE, "Background", NULL);
-GET_GROUP_CONFIG_END
+GET_GROUP_CONFIG_END*/
 
 
 GET_GROUP_CONFIG_BEGIN (Background)
@@ -1082,7 +1078,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	//bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (TaskBar);
 	
 	//\___________________ On recupere les parametres de la zone visible.
-	bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (HiddenDock);
+	//bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (HiddenDock);
 	
 	//\___________________ On recupere les parametres de dessin du fond.
 	bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Background);
@@ -1279,8 +1275,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_reserve_space_for_all_root_docks (myAccessibility.bReserveSpace);
 
 	cairo_dock_load_desklet_buttons_texture ();
-	cairo_dock_load_visible_zone (pDock, s_cVisibleZoneImageFile, g_iVisibleZoneWidth, g_iVisibleZoneHeight, g_fVisibleZoneAlpha);
-	g_free (s_cVisibleZoneImageFile);
+	cairo_dock_load_visible_zone (pDock, myHiddenDock.cVisibleZoneImageFile, myHiddenDock.iVisibleZoneWidth, myHiddenDock.iVisibleZoneHeight, myHiddenDock.fVisibleZoneAlpha);
 
 	cairo_dock_load_background_decorations (pDock);
 

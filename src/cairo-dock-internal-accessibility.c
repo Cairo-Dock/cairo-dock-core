@@ -97,6 +97,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 	if (pAccessibility->bReserveSpace != pPrevAccessibility->bReserveSpace)
 		cairo_dock_reserve_space_for_all_root_docks (pAccessibility->bReserveSpace);
 	
+	g_print ("bPopUp : %d\n", pAccessibility->bPopUp);
 	if (pAccessibility->bPopUp)
 		cairo_dock_start_polling_screen_edge (pDock);
 	else

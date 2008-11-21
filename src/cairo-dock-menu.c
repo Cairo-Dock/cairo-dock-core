@@ -726,7 +726,7 @@ static void _cairo_dock_initiate_config_module (GtkMenuItem *pMenuItem, gpointer
 	g_return_if_fail (CAIRO_DOCK_IS_APPLET (icon));
 	
 	cairo_dock_build_main_ihm (g_cConfFile, FALSE);
-	cairo_dock_present_module_gui (icon->pModuleInstance);
+	cairo_dock_present_module_instance_gui (icon->pModuleInstance);
 }
 
 static void _cairo_dock_detach_module (GtkMenuItem *pMenuItem, gpointer *data)
