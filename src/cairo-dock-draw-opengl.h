@@ -20,7 +20,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface);
 void cairo_dock_draw_drop_indicator_opengl (CairoDock *pDock);
 
 
-GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw);
+GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWidth, int iHeight);
 
 
 void cairo_dock_update_icon_texture (Icon *pIcon);

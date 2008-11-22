@@ -212,27 +212,6 @@ typedef struct _CairoConfigIcons {
 	gboolean bConstantSeparatorSize;
 	} CairoConfigIcons;
 
-typedef struct _CairoConfigIndicators {
-	gdouble fActiveColor;
-	gint iActiveLineWidth;
-	gint iActiveCornerRadius;
-	gboolean bActiveIndicatorAbove;
-	gchar *cActiveIndicatorImagePath;
-	gchar *cIndicatorImagePath;
-	gboolean bIndicatorAbove;
-	gdouble fIndicatorRatio;
-	gboolean bLinkIndicatorWithIcon;
-	gint iIndicatorDeltaY;
-	gchar *cDropIndicatorImagePath;
-	} CairoConfigIndicators;
-
-typedef struct _CairoConfigViews {
-	gchar *cMainDockDefaultRendererName;
-	gchar *cSubDockDefaultRendererName;
-	gboolean bSameHorizontality;
-	gdouble fSubDockSizeRatio;
-	} CairoConfigViews;
-
 typedef struct _CairoConfigDesklets {
 	gchar *cDeskletDecorationsName;
 	gint iDeskletButtonSize;

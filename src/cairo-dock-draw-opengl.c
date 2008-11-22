@@ -42,6 +42,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-draw-opengl.h"
 #define RADIAN (G_PI / 180.0)  // Conversion Radian/Degres
 #define DELTA_ROUND_DEGREE 1
@@ -56,7 +57,6 @@ extern CairoDock *g_pMainDock;
 extern gboolean g_bConstantSeparatorSize;
 extern double g_fAlphaAtRest;
 extern double g_fReflectSize;
-extern gboolean g_bIndicatorAbove;
 extern GLuint g_iIndicatorTexture;
 extern int g_iSinusoidWidth;
 extern gboolean g_bReverseVisibleImage;
@@ -64,15 +64,12 @@ extern gboolean g_bReverseVisibleImage;
 extern double g_fDropIndicatorWidth, g_fDropIndicatorHeight;
 extern GLuint g_iDropIndicatorTexture;
 
-extern gboolean g_bLinkIndicatorWithIcon;
 extern double g_fIndicatorWidth, g_fIndicatorHeight;
-extern int g_iIndicatorDeltaY;
 extern GLuint g_iIndicatorTexture;
 extern GLuint g_iActiveIndicatorTexture;
 extern GLuint g_pVisibleZoneTexture;
 extern cairo_surface_t *g_pIndicatorSurface[2];
 extern cairo_surface_t *g_pActiveIndicatorSurface;
-extern int g_bActiveIndicatorAbove;
 extern cairo_surface_t *g_pVisibleZoneSurface;
 
 
@@ -88,10 +85,10 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHoriz
 	if (icon->fOrientation != 0)
 		glRotatef (icon->fOrientation, 0., 0., 1.);
 	double fY;
-	if (g_bLinkIndicatorWithIcon)  // il se deforme et rebondit avec l'icone.
+	if (myIndicators.bLinkIndicatorWithIcon)  // il se deforme et rebondit avec l'icone.
 	{
 		fY = - icon->fHeight * icon->fHeightFactor * icon->fScale/2
-			+ (g_fIndicatorHeight - g_iIndicatorDeltaY*(1 + g_fAmplitude)) * fRatio * icon->fScale/2;
+			+ (g_fIndicatorHeight - myIndicators.iIndicatorDeltaY*(1 + g_fAmplitude)) * fRatio * icon->fScale/2;
 		if (! bDirectionUp)
 			fY = - fY;
 		if (bHorizontalDock)
@@ -109,7 +106,7 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHoriz
 	else  // il est fixe, en bas de l'icone.
 	{
 		fY = - icon->fHeight * icon->fScale/2
-			+ (g_fIndicatorHeight - g_iIndicatorDeltaY*(1 + g_fAmplitude)) * fRatio/2;
+			+ (g_fIndicatorHeight - myIndicators.iIndicatorDeltaY*(1 + g_fAmplitude)) * fRatio/2;
 		if (! bDirectionUp)
 			fY = - fY;
 		if (bHorizontalDock)
@@ -315,14 +312,14 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 		glRotatef (icon->iRotationY, 0., 1., 0.);
 	
 	//\_____________________ On dessine l'indicateur derriere.
-	if (icon->bHasIndicator && ! g_bIndicatorAbove /*&& g_iIndicatorTexture != 0*/)
+	if (icon->bHasIndicator && ! myIndicators.bIndicatorAbove /*&& g_iIndicatorTexture != 0*/)
 	{
 		glPushMatrix ();
 		glTranslatef (0., 0., icon->fHeight * (1+g_fAmplitude) -1);
 		_cairo_dock_draw_appli_indicator_opengl (icon, pDock->bHorizontalDock, fRatio, pDock->bDirectionUp);
 		glPopMatrix ();
 	}
-	if (icon->Xid != 0 && icon->Xid == cairo_dock_get_current_active_window () && ! g_bActiveIndicatorAbove && g_pActiveIndicatorSurface != NULL)
+	if (icon->Xid != 0 && icon->Xid == cairo_dock_get_current_active_window () && ! myIndicators.bActiveIndicatorAbove && g_pActiveIndicatorSurface != NULL)
 	{
 		glPushMatrix ();
 		glTranslatef (0., 0., icon->fHeight * (1+g_fAmplitude) -1);
@@ -516,13 +513,13 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 	}
 	
 	//\_____________________ On dessine l'indicateur de tache active devant.
-	if (icon->bHasIndicator && g_bIndicatorAbove/* && g_iIndicatorTexture != 0*/)
+	if (icon->bHasIndicator && myIndicators.bIndicatorAbove/* && g_iIndicatorTexture != 0*/)
 	{
 		glPushMatrix ();
 		_cairo_dock_draw_appli_indicator_opengl (icon, pDock->bHorizontalDock, fRatio, pDock->bDirectionUp);
 		glPopMatrix ();
 	}
-	if (icon->Xid != 0 && icon->Xid == cairo_dock_get_current_active_window () && g_bActiveIndicatorAbove && g_pActiveIndicatorSurface != NULL)
+	if (icon->Xid != 0 && icon->Xid == cairo_dock_get_current_active_window () && myIndicators.bActiveIndicatorAbove && g_pActiveIndicatorSurface != NULL)
 	{
 		glPushMatrix ();
 		_cairo_dock_draw_active_window_indicator_opengl (icon, pDock, fRatio);
@@ -685,7 +682,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 }
 
 
-GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw)
+GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWidth, int iHeight)
 {
 	GLuint iTexture = 0;
 	
@@ -697,7 +694,7 @@ GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
-	glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, 32, 32, 0, GL_RGBA, GL_UNSIGNED_BYTE, pTextureRaw);
+	glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, iWidth, iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pTextureRaw);
 	glBindTexture (GL_TEXTURE_2D, 0);
 	
 	return iTexture;
@@ -944,7 +941,7 @@ const GLfloat *cairo_dock_generate_rectangle_path (double fDockWidth, double fFr
 	return pVertexTab;
 }
 
-#define P(t,p,q,s) (1-t) * 2 * p + 2 * t * (1-t) * q + 2 * t * s;
+#define P(t,p,q,s) (1-t) * (1-t) * p + 2 * t * (1-t) * q + t * t * s;
 GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, double fInclination, double *fExtraWidth, int *iNbPoints)
 {
 	static GLfloat pVertexTab[((90/DELTA_ROUND_DEGREE+1)*4+1)*3];
@@ -978,8 +975,6 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 	{
 		// OM(t) = sum ([k=0..n] Bn,k(t)*OAk)
 		// Bn,k(x) = Cn,k*x^k*(1-x)^(n-k)
-		// fRadius * (fInclination + 1. / cosa), 0,
-		// P'(u) = (1-u)2P + 2u(1-u)Q + u2S; 0 ! u ! 1
 		double t = 180-a;
 		double x0 = -w_;
 		double y0 = -h + rh * sin (t*RADIAN);
@@ -1010,14 +1005,14 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 		for (t = 180-a;t <= 270;t += iPrecision, i++) // bas gauche.
 		{
 			dt = fabs (t - (180-a+270)/2) / (270-(180-a))*2;
-			f = 1. + .3 * (1-dt)*(1-dt);
+			f = 1. + .4 * (1-dt)*(1-dt);
 			pVertexTab[3*i] = -w_ + rw * cos (t*RADIAN) * f;
 			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN) * f;
 		}
 		for (t = 270;t <= 360+a;t += iPrecision, i++) // bas droit. 
 		{
 			dt = fabs (t-(360+a+270)/2) / (360+a-270)*2;
-			f = 1. + .3 * (1-dt)*(1-dt);
+			f = 1. + .4 * (1-dt)*(1-dt);
 			pVertexTab[3*i] = w_ + rw * cos (t*RADIAN) * f;
 			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN) * f;
 		}*/
@@ -1049,7 +1044,7 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 	glEnable(GL_TEXTURE_GEN_T); // Et en T aussi
 	
 	glLoadIdentity();
-	glTranslatef ((int) (fDockOffsetX + fDockWidth/2), (int) (fDockOffsetY - fFrameHeight/2), -1);  // (int) -pDock->iMaxIconHeight * (1 + g_fAmplitude) + 1
+	glTranslatef ((int) (fDockOffsetX + fDockWidth/2), (int) (fDockOffsetY - fFrameHeight/2), -100);  // (int) -pDock->iMaxIconHeight * (1 + g_fAmplitude) + 1
 	
 	glScalef (fDockWidth, fFrameHeight, 1.);
 	

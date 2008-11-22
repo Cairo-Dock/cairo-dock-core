@@ -17,12 +17,10 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-factory.h"
+#include "cairo-dock-internal-views.h"
 #include "cairo-dock-renderer-manager.h"
 
 extern GHashTable *g_hDocksTable;
-
-extern gchar *g_cMainDockDefaultRendererName;
-extern gchar *g_cSubDockDefaultRendererName;
 
 extern int g_iDockRadius;
 extern gboolean g_bUseOpenGL;
@@ -44,7 +42,7 @@ CairoDockRenderer *cairo_dock_get_renderer (const gchar *cRendererName, gboolean
 	
 	if (pRenderer == NULL)
 	{
-		const gchar *cDefaultRendererName = (bForMainDock ? g_cMainDockDefaultRendererName : g_cSubDockDefaultRendererName);
+		const gchar *cDefaultRendererName = (bForMainDock ? myViews.cMainDockDefaultRendererName : myViews.cSubDockDefaultRendererName);
 		//g_print ("  cDefaultRendererName : %s\n", cDefaultRendererName);
 		if (cDefaultRendererName != NULL)
 			pRenderer = g_hash_table_lookup (s_hRendererTable, cDefaultRendererName);

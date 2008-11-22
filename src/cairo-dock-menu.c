@@ -53,7 +53,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 extern struct tm *localtime_r (time_t *timer, struct tm *tp);
 
 extern CairoDock *g_pMainDock;
-extern double g_fSubDockSizeRatio;
 
 extern gboolean g_bUseSeparator;
 extern gchar *g_cConfFile;

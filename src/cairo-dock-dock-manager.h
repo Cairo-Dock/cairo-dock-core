@@ -113,7 +113,7 @@ CairoDock *cairo_dock_alter_dock_name (const gchar *cDockName, CairoDock *pDock,
 void cairo_dock_rename_dock (const gchar *cDockName, CairoDock *pDock, const gchar *cNewName);
 
 void cairo_dock_reset_all_views (void);
-void cairo_dock_set_all_views_to_default (void);
+void cairo_dock_set_all_views_to_default (int iDockType);
 
 
 /**

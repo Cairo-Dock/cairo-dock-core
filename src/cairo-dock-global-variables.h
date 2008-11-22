@@ -35,8 +35,6 @@ extern int g_iIconGap;
 extern CairoDockLabelDescription g_iconTextDescription;
 /// Description des infos-rapides.
 extern CairoDockLabelDescription g_quickInfoTextDescription;
-/// Description des titres des dialogues.
-extern CairoDockLabelDescription g_dialogTextDescription;
 
 /// TRUE ssi les coins du bas sont arrondis.
 extern gboolean g_bRoundedBottomCorner;

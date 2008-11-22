@@ -18,6 +18,9 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-animations.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-applet-facility.h"
+#include "cairo-dock-dialogs.h"
+#include "cairo-dock-applications-manager.h"
+#include "cairo-dock-dock-manager.h"
 #include "cairo-dock-gui-factory.h"
 
 #define CAIRO_DOCK_GUI_MARGIN 4
@@ -613,8 +616,29 @@ static void _cairo_dock_configure_renderer (GtkButton *button, gpointer *data)
 	GtkWindow *pDialog = data[1];
 	
 	CairoDockModule *pModule = cairo_dock_find_module_from_name ("dock rendering");
-	g_return_if_fail (pModule != NULL);
-	cairo_dock_present_module_gui (pModule);
+	Icon *pIcon = cairo_dock_get_current_active_icon ();
+	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+	if (pModule == NULL)
+	{
+		const gchar *cMessage = _("The 'dock-rendering' plug-in was not found.\nIt provides many views to Cairo-Dock, such as the Curve or 3D-plane views.\nBe sure to install it in the same version as the dock to enjoy these effects.");
+		int iDuration = 10e3;
+		if (pIcon != NULL && pDock != NULL)
+			cairo_dock_show_temporary_dialog_with_icon (cMessage, pIcon, CAIRO_CONTAINER (pDock), iDuration, "same icon");
+		else
+			cairo_dock_show_general_message (cMessage, iDuration);
+	}
+	else if (pModule->pInstancesList == NULL)
+	{
+		const gchar *cMessage = _("The 'dock-rendering' plug-in is not active.\nIt provides many views to Cairo-Dock, such as the Curve or 3D-plane views.\nBe sure to activate it to enjoy these effects.");
+		int iDuration = 8e3;
+		if (pIcon != NULL && pDock != NULL)
+			cairo_dock_show_temporary_dialog_with_icon (cMessage, pIcon, CAIRO_CONTAINER (pDock), iDuration, "same icon");
+		else
+			cairo_dock_show_general_message (cMessage, 8000);
+		cairo_dock_present_module_gui (pModule);
+	}
+	else
+		cairo_dock_present_module_gui (pModule);
 }
 
 

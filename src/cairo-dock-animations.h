@@ -51,5 +51,12 @@ void cairo_dock_start_animation (Icon *icon, CairoDock *pDock);
 #define cairo_dock_animation_will_be_visible(pDock) ((pDock)->bInside || (! (pDock)->bAutoHide && (pDock)->iRefCount == 0) || ! (pDock)->bAtBottom)
 
 
+void cairo_dock_launch_animation (CairoDock *pDock);
+
+void cairo_dock_start_shrinking (CairoDock *pDock);
+
+void cairo_dock_start_growing (CairoDock *pDock);
+
+
 G_END_DECLS
 #endif

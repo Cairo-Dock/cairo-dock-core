@@ -108,6 +108,8 @@ void cairo_dock_load_desklet_buttons (cairo_t *pSourceContext)
 		s_pRetachButtonSurface = cairo_dock_create_surface_for_icon (cRetachButtonPath, pSourceContext, g_iDeskletButtonSize, g_iDeskletButtonSize);
 		g_free (cRetachButtonPath);
 	}
+	
+	cairo_dock_load_desklet_buttons_texture ();
 }
 void cairo_dock_load_desklet_buttons_texture (void)
 {

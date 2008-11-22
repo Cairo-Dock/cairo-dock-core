@@ -94,8 +94,6 @@
 
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
 int g_iWmHint = GDK_WINDOW_TYPE_HINT_DOCK;  // hint pour la fenetre du dock principal.
-gchar *g_cMainDockDefaultRendererName = NULL;
-gchar *g_cSubDockDefaultRendererName = NULL;
 
 gboolean g_bReverseVisibleImage;  // retrouner l'image de la zone de rappel quand le dock est en haut.
 gint g_iScreenWidth[2];  // dimensions de l'ecran.
@@ -142,9 +140,6 @@ int g_tNbAnimationRounds[CAIRO_DOCK_NB_TYPES];  // le nombre de rebonds/rotation
 int g_tIconTypeOrder[CAIRO_DOCK_NB_TYPES];  // l'ordre de chaque type dans le dock.
 int g_tNbIterInOneRound[CAIRO_DOCK_NB_ANIMATIONS] = {17, 20, 20, 12, 20, 20, 0};  // 2n+3, 4n, 2n, 2n, 4n, 4n.
 
-gboolean g_bSameHorizontality;  // dit si les sous-docks ont la meme horizontalite que les docks racines.
-double g_fSubDockSizeRatio;  // ratio de la taille des icones des sous-docks par rapport a celles du dock principal.
-
 CairoDockLabelDescription g_iconTextDescription;
 CairoDockLabelDescription g_quickInfoTextDescription;
 
@@ -152,7 +147,6 @@ double g_fAlphaAtRest;
 
 int g_iNbDesktops;  // nombre de bureaux.
 int g_iNbViewportX, g_iNbViewportY;  // nombre de "faces du cube".
-gboolean g_bActiveIndicatorAbove;
 cairo_surface_t *g_pActiveIndicatorSurface = NULL;
 double g_fActiveIndicatorWidth, g_fActiveIndicatorHeight;
 
@@ -160,12 +154,6 @@ gboolean g_bUseSeparator = TRUE;  // utiliser les separateurs ou pas.
 gchar *g_cSeparatorImage = NULL;
 gboolean g_bRevolveSeparator;  // faire pivoter l'image des separateurs.
 gboolean g_bConstantSeparatorSize;  // garder les separateurs de taille constante.
-
-int g_iDialogButtonWidth = 48;
-int g_iDialogButtonHeight = 48;
-double g_fDialogColor[4];
-int g_iDialogIconSize;
-CairoDockLabelDescription g_dialogTextDescription;
 
 gboolean g_bKeepAbove = FALSE;
 gboolean g_bSkipPager = TRUE;
@@ -180,9 +168,6 @@ CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 
 cairo_surface_t *g_pIndicatorSurface[2] = {NULL, NULL};
 double g_fIndicatorWidth, g_fIndicatorHeight;
-int g_iIndicatorDeltaY;
-gboolean g_bLinkIndicatorWithIcon;
-gboolean g_bIndicatorAbove;
 
 cairo_surface_t *g_pDropIndicatorSurface = NULL;
 double g_fDropIndicatorWidth, g_fDropIndicatorHeight;
@@ -208,6 +193,7 @@ GLuint g_iIndicatorTexture=0;
 GLuint g_iActiveIndicatorTexture=0;
 GLuint g_pVisibleZoneTexture=0;
 gdouble g_iGLAnimationDeltaT = CAIRO_DOCK_GL_ANIMATION_DT;
+gdouble g_iCairoAnimationDeltaT = CAIRO_DOCK_CAIRO_ANIMATION_DT;
 
 static gchar *cLaunchCommand = NULL;
 
@@ -441,7 +427,7 @@ int main (int argc, char** argv)
 		if (! g_file_test (g_cCairoDockDataDir, G_FILE_TEST_IS_DIR))
 		{
 			if (g_mkdir (g_cCairoDockDataDir, 7*8*8+7*8+5) != 0)
-				cd_warning ("Attention : couldn't create directory %s", g_cCairoDockDataDir);
+				cd_warning ("couldn't create directory %s", g_cCairoDockDataDir);
 		}
 	}
 	else
@@ -476,7 +462,7 @@ int main (int argc, char** argv)
 			else
 			{
 				if (g_mkdir (g_cCairoDockDataDir, 7*8*8+7*8+5) != 0)
-					cd_warning ("Attention : couldn't create directory %s", g_cCairoDockDataDir);
+					cd_warning ("couldn't create directory %s", g_cCairoDockDataDir);
 			}
 			g_free (cOldDataDir);
 		}
@@ -485,33 +471,33 @@ int main (int argc, char** argv)
 	if (! g_file_test (cThemesDir, G_FILE_TEST_IS_DIR))
 	{
 		if (g_mkdir (cThemesDir, 7*8*8+7*8+5) != 0)
-			cd_warning ("Attention : couldn't create directory %s", cThemesDir);
+			cd_warning ("couldn't create directory %s", cThemesDir);
 	}
 	g_free (cThemesDir);
 	gchar *cExtrasDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR);
 	if (! g_file_test (cExtrasDir, G_FILE_TEST_IS_DIR))
 	{
 		if (g_mkdir (cExtrasDir, 7*8*8+7*8+5) != 0)
-			cd_warning ("Attention : couldn't create directory %s", cExtrasDir);
+			cd_warning ("couldn't create directory %s", cExtrasDir);
 	}
 	g_free (cExtrasDir);
 	g_cCurrentThemePath = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_CURRENT_THEME_NAME);
 	if (! g_file_test (g_cCurrentThemePath, G_FILE_TEST_IS_DIR))
 	{
 		if (g_mkdir (g_cCurrentThemePath, 7*8*8+7*8+5) != 0)
-			cd_warning ("Attention : couldn't create directory %s", g_cCurrentThemePath);
+			cd_warning ("couldn't create directory %s", g_cCurrentThemePath);
 	}
 	g_cCurrentLaunchersPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
 	if (! g_file_test (g_cCurrentLaunchersPath, G_FILE_TEST_IS_DIR))
 	{
 		if (g_mkdir (g_cCurrentLaunchersPath, 7*8*8+7*8+5) != 0)
-			cd_warning ("Attention : couldn't create directory %s", g_cCurrentLaunchersPath);
+			cd_warning ("couldn't create directory %s", g_cCurrentLaunchersPath);
 	}
 	gchar *cLocalIconsPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 	if (! g_file_test (cLocalIconsPath, G_FILE_TEST_IS_DIR))
 	{
 		if (g_mkdir (cLocalIconsPath, 7*8*8+7*8+5) != 0)
-			cd_warning ("Attention : couldn't create directory %s", cLocalIconsPath);
+			cd_warning ("couldn't create directory %s", cLocalIconsPath);
 		else
 		{
 			cd_warning ("Cairo-Dock's local icons are now located in the 'icons' folder, they will be moved there");

@@ -50,5 +50,8 @@
 #include <cairo-dock/cairo-dock-internal-system.h>
 #include <cairo-dock/cairo-dock-internal-taskbar.h>
 #include <cairo-dock/cairo-dock-internal-hidden-dock.h>
+#include <cairo-dock/cairo-dock-internal-dialogs.h>
+#include <cairo-dock/cairo-dock-internal-indicators.h>
+#include <cairo-dock/cairo-dock-internal-views.h>
 
 #endif

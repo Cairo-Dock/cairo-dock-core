@@ -40,6 +40,9 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-hidden-dock.h"
+#include "cairo-dock-internal-dialogs.h"
+#include "cairo-dock-internal-indicators.h"
+#include "cairo-dock-internal-views.h"
 #include "cairo-dock-config.h"
 
 #define CAIRO_DOCK_TYPE_CONF_FILE_FILE ".cairo-dock-conf-file"
@@ -93,8 +96,6 @@ extern double g_fStripesAngle;
 extern int g_iScreenWidth[2];
 extern int g_iScreenHeight[2];
 
-extern int g_bActiveIndicatorAbove;
-
 extern int g_tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
 extern int g_tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
 extern int g_tAnimationType[CAIRO_DOCK_NB_TYPES];
@@ -109,17 +110,6 @@ extern gboolean g_bConstantSeparatorSize;
 extern CairoDockLabelDescription g_iconTextDescription;
 extern CairoDockLabelDescription g_quickInfoTextDescription;
 extern CairoDockLabelDescription g_dialogTextDescription;
-
-extern int g_iDialogButtonWidth;
-extern int g_iDialogButtonHeight;
-extern double g_fDialogColor[4];
-extern int g_iDialogIconSize;
-
-extern cairo_surface_t *g_pIndicatorSurface[2];
-extern double g_fIndicatorWidth, g_fIndicatorHeight;
-extern int g_iIndicatorDeltaY;
-extern gboolean g_bLinkIndicatorWithIcon;
-extern gboolean g_bIndicatorAbove;
 
 extern cairo_surface_t *g_pDesktopBgSurface;
 
@@ -886,7 +876,7 @@ GET_GROUP_CONFIG_BEGIN (Icons)
 GET_GROUP_CONFIG_END
 
 
-gchar *s_cIndicatorImagePath = NULL, *s_cDropIndicatorImagePath = NULL, *s_cActiveIndicatorImagePath = NULL;
+/*gchar *s_cIndicatorImagePath = NULL, *s_cDropIndicatorImagePath = NULL, *s_cActiveIndicatorImagePath = NULL;
 double s_fIndicatorRatio;
 double s_fActiveColor[4];
 int s_iActiveLineWidth, s_iActiveCornerRadius;
@@ -935,10 +925,10 @@ GET_GROUP_CONFIG_BEGIN (Indicators)
 	{
 		s_cDropIndicatorImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_DEFAULT_DROP_INDICATOR_NAME);
 	}
-GET_GROUP_CONFIG_END
+GET_GROUP_CONFIG_END*/
 
 
-static gchar *s_cButtonCancelImage;
+/*static gchar *s_cButtonCancelImage;
 static gchar *s_cButtonOkImage;
 GET_GROUP_CONFIG_BEGIN (Dialogs)
 	s_cButtonOkImage = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "button_ok image", &bFlushConfFileNeeded, NULL, NULL, NULL);
@@ -977,10 +967,10 @@ GET_GROUP_CONFIG_BEGIN (Dialogs)
 	double couleur_dtext[4] = {0., 0., 0., 1.};
 	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "text color", &bFlushConfFileNeeded, g_dialogTextDescription.fColorStart, 3, couleur_dtext, NULL, NULL);
 	memcpy (&g_dialogTextDescription.fColorStop, &g_dialogTextDescription.fColorStart, 3*sizeof (double));
-GET_GROUP_CONFIG_END
+GET_GROUP_CONFIG_END*/
 
 
-GET_GROUP_CONFIG_BEGIN (Views)
+/*GET_GROUP_CONFIG_BEGIN (Views)
 	g_free (g_cMainDockDefaultRendererName);
 	g_cMainDockDefaultRendererName = cairo_dock_get_string_key_value (pKeyFile, "Views", "main dock view", &bFlushConfFileNeeded, CAIRO_DOCK_DEFAULT_RENDERER_NAME, "Cairo Dock", NULL);
 	if (g_cMainDockDefaultRendererName == NULL)
@@ -995,7 +985,7 @@ GET_GROUP_CONFIG_BEGIN (Views)
 	g_bSameHorizontality = cairo_dock_get_boolean_key_value (pKeyFile, "Views", "same horizontality", &bFlushConfFileNeeded, TRUE, "Sub-Docks", NULL);
 
 	g_fSubDockSizeRatio = cairo_dock_get_double_key_value (pKeyFile, "Views", "relative icon size", &bFlushConfFileNeeded, 0.8, "Sub-Docks", NULL);
-GET_GROUP_CONFIG_END
+GET_GROUP_CONFIG_END*/
 
 
 GET_GROUP_CONFIG_BEGIN (Desklets)
@@ -1060,6 +1050,9 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	gboolean bMixLauncherAppliOld = myTaskBar.bMixLauncherAppli;
 	gboolean bOverWriteXIconsOld = myTaskBar.bOverWriteXIcons;  // TRUE initialement.
 	gboolean bShowThumbnailOld = myTaskBar.bShowThumbnail;
+	gchar *cIndicatorImagePathOld = myIndicators.cIndicatorImagePath;
+	gchar *cDropIndicatorImagePathOld = myIndicators.cDropIndicatorImagePath;
+	gchar *cActiveIndicatorImagePathOld = myIndicators.cActiveIndicatorImagePath;
 	
 	//\___________________ On recupere la conf de tous les modules.
 	bFlushConfFileNeeded = cairo_dock_get_global_config (pKeyFile);
@@ -1094,17 +1087,17 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Icons);
 	
 	//\___________________ On recupere les parametres des indicateurs.
-	bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Indicators);
+	//bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Indicators);
 	
 	//\___________________ On recupere les parametres des dialogues.
-	bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Dialogs);
+	//bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Dialogs);
 	
 	//\___________________ On recupere les parametres des desklets.
 	gchar *cDeskletDecorationsNameOld = g_cDeskletDecorationsName;
 	bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Desklets);
 	
 	//\___________________ On recupere les parametres des vues.
-	bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Views);
+	//bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Views);
 	
 	
 	//\___________________ Post-initialisation.
@@ -1157,20 +1150,17 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	if (mySystem.bUseFakeTransparency && g_pDesktopBgSurface == NULL)
 		cairo_dock_load_desktop_background_surface ();
 	
-	cairo_dock_load_dialog_buttons (CAIRO_CONTAINER (pDock), s_cButtonOkImage, s_cButtonCancelImage);
-	g_free (s_cButtonOkImage);
-	g_free (s_cButtonCancelImage);
+	cairo_dock_load_dialog_buttons (CAIRO_CONTAINER (pDock), myDialogs.cButtonOkImage, myDialogs.cButtonCancelImage);
 	
-	cairo_dock_load_task_indicator (myTaskBar.bShowAppli && myTaskBar.bMixLauncherAppli ? s_cIndicatorImagePath : NULL, pCairoContext, fMaxScale, s_fIndicatorRatio);
-	g_free (s_cIndicatorImagePath);
+	cairo_dock_load_task_indicator (myTaskBar.bShowAppli && myTaskBar.bMixLauncherAppli ? myIndicators.cIndicatorImagePath : NULL, pCairoContext, fMaxScale, myIndicators.fIndicatorRatio);
 	
-	cairo_dock_load_drop_indicator (s_cDropIndicatorImagePath, pCairoContext, fMaxScale);
-	g_free (s_cDropIndicatorImagePath);
+	cairo_dock_load_drop_indicator (myIndicators.cDropIndicatorImagePath, pCairoContext, fMaxScale);
 	
-	cairo_dock_load_active_window_indicator (pCairoContext, s_cActiveIndicatorImagePath, fMaxScale, s_iActiveCornerRadius, s_iActiveLineWidth, s_fActiveColor);
-	g_free (s_cActiveIndicatorImagePath);
+	cairo_dock_load_active_window_indicator (pCairoContext, myIndicators.cActiveIndicatorImagePath, fMaxScale, myIndicators.iActiveCornerRadius, myIndicators.iActiveLineWidth, myIndicators.fActiveColor);
 	
 	cairo_dock_load_desklet_buttons (pCairoContext);
+	
+	cairo_dock_load_visible_zone (pDock, myHiddenDock.cVisibleZoneImageFile, myHiddenDock.iVisibleZoneWidth, myHiddenDock.iVisibleZoneHeight, myHiddenDock.fVisibleZoneAlpha);
 	
 	g_fReflectSize = 0;
 	guint i;
@@ -1244,7 +1234,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_activate_modules_from_list (mySystem.cActiveModuleList, fTime);
 	cairo_dock_deactivate_old_modules (fTime);
 
-	cairo_dock_set_all_views_to_default ();  // met a jour la taille de tous les docks, maintenant qu'ils sont tous remplis.
+	cairo_dock_set_all_views_to_default (0);  // met a jour la taille de tous les docks, maintenant qu'ils sont tous remplis.
 	cairo_dock_redraw_root_docks (TRUE);  // TRUE <=> sauf le main dock.
 	
 	if (myAccessibility.cRaiseDockShortcut != NULL)
@@ -1274,15 +1264,11 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	myAccessibility.bReserveSpace = myAccessibility.bReserveSpace && (myAccessibility.cRaiseDockShortcut == NULL);
 	cairo_dock_reserve_space_for_all_root_docks (myAccessibility.bReserveSpace);
 
-	cairo_dock_load_desklet_buttons_texture ();
-	cairo_dock_load_visible_zone (pDock, myHiddenDock.cVisibleZoneImageFile, myHiddenDock.iVisibleZoneWidth, myHiddenDock.iVisibleZoneHeight, myHiddenDock.fVisibleZoneAlpha);
-
 	cairo_dock_load_background_decorations (pDock);
 
 
 	pDock->iMouseX = 0;  // on se place hors du dock initialement.
 	pDock->iMouseY = 0;
-	///pDock->calculate_max_dock_size (pDock);
 	pDock->calculate_icons (pDock);
 	gtk_widget_queue_draw (pDock->pWidget);  // le 'gdk_window_move_resize' ci-dessous ne provoquera pas le redessin si la taille n'a pas change.
 

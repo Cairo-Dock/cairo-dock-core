@@ -27,12 +27,11 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-internal-views.h"
 #include "cairo-dock-default-view.h"
 
 #define RADIAN (G_PI / 180.0)  // Conversion Radian/Degres
 #define DELTA_ROUND_DEGREE 1
-
-extern double g_fSubDockSizeRatio;
 
 extern gint g_iScreenWidth[2];
 extern gint g_iScreenHeight[2];
@@ -175,7 +174,7 @@ void cairo_dock_render_linear (cairo_t *pCairoContext, CairoDock *pDock)
 		cairo_dock_draw_string (pCairoContext, pDock, g_iStringLineWidth, FALSE, FALSE);
 
 	//\____________________ On dessine les icones et les etiquettes, en tenant compte de l'ordre pour dessiner celles en arriere-plan avant celles en avant-plan.
-	double fRatio = (pDock->iRefCount == 0 ? 1 : g_fSubDockSizeRatio);
+	double fRatio = (pDock->iRefCount == 0 ? 1 : myViews.fSubDockSizeRatio);
 	fRatio = pDock->fRatio;
 	cairo_dock_render_icons_linear (pCairoContext, pDock, fRatio);
 }
@@ -265,7 +264,7 @@ void cairo_dock_render_optimized_linear (cairo_t *pCairoContext, CairoDock *pDoc
 	{
 		double fXMin = (pDock->bHorizontalDock ? pArea->x : pArea->y), fXMax = (pDock->bHorizontalDock ? pArea->x + pArea->width : pArea->y + pArea->height);
 		double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
-		double fRatio = (pDock->iRefCount == 0 ? 1 : g_fSubDockSizeRatio);
+		double fRatio = (pDock->iRefCount == 0 ? 1 : myViews.fSubDockSizeRatio);
 		fRatio = pDock->fRatio;
 		double fXLeft, fXRight;
 		
@@ -515,7 +514,7 @@ void cairo_dock_register_default_renderer (void)
 	///	cairo_dock_draw_string (pCairoContext, pDock, g_iStringLineWidth, FALSE, (my_iDrawSeparator3D == CD_FLAT_SEPARATOR || my_iDrawSeparator3D == CD_PHYSICAL_SEPARATOR));
 	
 	//\____________________ On dessine les icones et les etiquettes, en tenant compte de l'ordre pour dessiner celles en arriere-plan avant celles en avant-plan.
-	double fRatio = (pDock->iRefCount == 0 ? 1 : g_fSubDockSizeRatio);
+	double fRatio = (pDock->iRefCount == 0 ? 1 : myViews.fSubDockSizeRatio);
 	fRatio = pDock->fRatio;
 	GList *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
 	if (pFirstDrawnElement == NULL)

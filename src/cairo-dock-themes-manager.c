@@ -259,7 +259,7 @@ gchar *cairo_dock_get_chosen_theme (gchar *cConfFile, gboolean *bUseThemeBehavio
 
 void cairo_dock_load_theme (gchar *cThemePath)
 {
-	//g_print ("%s (%s)\n", __func__, cThemePath);
+	cd_message ("%s (%s)", __func__, cThemePath);
 	g_return_if_fail (cThemePath != NULL && g_file_test (cThemePath, G_FILE_TEST_IS_DIR));
 
 	//\___________________ On libere toute la memoire allouee pour les docks (stoppe aussi tous les timeout).

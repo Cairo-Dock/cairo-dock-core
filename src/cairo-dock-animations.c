@@ -27,13 +27,12 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-manager.h"
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-animations.h"
 
 extern int g_iScreenHeight[2];
-
-extern int g_iVisibleZoneHeight;
 
 extern int g_tAnimationType[CAIRO_DOCK_NB_TYPES];
 extern int g_tNbAnimationRounds[CAIRO_DOCK_NB_TYPES];
@@ -43,6 +42,9 @@ extern gboolean g_bEasterEggs;
 
 extern CairoDock *g_pMainDock;
 
+extern gboolean g_bUseOpenGL;
+extern gdouble g_iGLAnimationDeltaT;
+extern gdouble g_iCairoAnimationDeltaT;
 
 gboolean cairo_dock_move_up (CairoDock *pDock)
 {
@@ -305,11 +307,7 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 			}
 
 			pDock->iSidShrinkDown = 0;
-			/**if (cairo_dock_hide_dock_like_a_menu () && GTK_WIDGET_VISIBLE (g_pMainDock->pWidget))
-			{
-				gtk_widget_hide (g_pMainDock->pWidget);
-				cairo_dock_has_been_hidden_like_a_menu ();
-			}*/
+			pDock->bIsShrinkingDown = FALSE;
 			cairo_dock_hide_dock_like_a_menu ();
 			return FALSE;
 		}
@@ -439,3 +437,72 @@ void cairo_dock_start_animation (Icon *icon, CairoDock *pDock)
 			pDock->iSidShrinkDown = g_timeout_add (50, (GSourceFunc) cairo_dock_shrink_down, (gpointer) pDock);  // fera diminuer de taille les icones, et rebondir/tourner/clignoter celle qui est animee.
 	}
 }
+
+
+static gboolean _cairo_dock_animation (CairoDock *pDock)
+{
+	{
+		pDock->iSidGLAnimation = 0;
+		return FALSE;
+	}
+}
+
+static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
+{
+	/// TODO : faire en sorte que le grow_up n'interagisse pas ici ...
+	gboolean bContinue = FALSE;
+	Icon *icon;
+	GList *ic;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		///if (icon->bOnMouseOverAnimating)
+			cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDock, &bContinue);
+		///bContinue |= icon->bOnMouseOverAnimating;
+	}
+	
+	cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);
+	
+	gtk_widget_queue_draw (pDock->pWidget);
+	if (! bContinue)
+	{
+		pDock->iSidGLAnimation = 0;
+		return FALSE;
+	}
+	else
+		return TRUE;
+}
+
+void cairo_dock_launch_animation (CairoDock *pDock)
+{
+	if (pDock->iSidGLAnimation == 0)
+	{
+		if (pDock->render_opengl != NULL)
+			pDock->iSidGLAnimation = g_timeout_add (g_iGLAnimationDeltaT, (GSourceFunc)_cairo_dock_gl_animation, pDock);
+		//else
+		//	pDock->iSidGLAnimation = g_timeout_add (g_iCairoAnimationDeltaT, (GSourceFunc)_cairo_dock_animation, pDock);
+	}
+}
+
+void cairo_dock_start_shrinking (CairoDock *pDock)
+{
+	if (! pDock->bIsShrinkingDown)  // on lance l'animation.
+	{
+		pDock->bIsGrowingUp = FALSE;
+		pDock->bIsShrinkingDown = TRUE;
+		
+		cairo_dock_launch_animation (pDock);
+	}
+}
+
+void cairo_dock_start_growing (CairoDock *pDock)
+{
+	if (! pDock->bIsGrowingUp)  // on lance l'animation.
+	{
+		pDock->bIsShrinkingDown = FALSE;
+		pDock->bIsGrowingUp = TRUE;
+		
+		cairo_dock_launch_animation (pDock);
+	}
+}
+

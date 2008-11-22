@@ -285,6 +285,8 @@ struct _CairoDock {
 	gint iDropIndicatorRotation;
 	/// TRUE ssi on peut dropper entre 2 icones.
 	gboolean bCanDrop;
+	gboolean bIsShrinkingDown;
+	gboolean bIsGrowingUp;
 };
 
 
@@ -1039,6 +1041,7 @@ struct _CairoDockInternalModule {
 #endif
 
 #define CAIRO_DOCK_GL_ANIMATION_DT 30.
+#define CAIRO_DOCK_CAIRO_ANIMATION_DT 40.
 
 typedef enum {
 	CAIRO_DOCK_MAX_SIZE,

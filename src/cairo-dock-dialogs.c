@@ -22,6 +22,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-hidden-dock.h"
+#include "cairo-dock-internal-dialogs.h"
 #include "cairo-dock-dialogs.h"
 
 static GSList *s_pDialogList = NULL;
@@ -36,13 +37,6 @@ extern int g_iDockLineWidth;
 extern int g_iDockRadius;
 extern double g_fLineColor[4];
 extern double g_fAmplitude;
-
-extern int g_iDialogButtonWidth;
-extern int g_iDialogButtonHeight;
-extern double g_fDialogColor[4];
-extern int g_iDialogIconSize;
-
-extern CairoDockLabelDescription g_dialogTextDescription;
 
 static cairo_surface_t *s_pButtonOkSurface = NULL;
 static cairo_surface_t *s_pButtonCancelSurface = NULL;
@@ -120,14 +114,14 @@ static int _cairo_dock_find_clicked_button_in_dialog (GdkEventButton* pButton, C
 	if (pDialog->pInteractiveWidget != NULL)
 		gtk_widget_size_request (pDialog->pInteractiveWidget, &requisition);
 
-	int iButtonX = .5*pDialog->iWidth - g_iDialogButtonWidth - .5*CAIRO_DIALOG_BUTTON_GAP;
+	int iButtonX = .5*pDialog->iWidth - myDialogs.iDialogButtonWidth - .5*CAIRO_DIALOG_BUTTON_GAP;
 	///int iButtonY = g_iDockLineWidth + pDialog->iMessageHeight + requisition.height + CAIRO_DIALOG_VGAP;
 	int iButtonY = pDialog->iMargin + pDialog->iMessageHeight + pDialog->iInteractiveHeight + 0*CAIRO_DIALOG_VGAP;
 	if (! pDialog->bDirectionUp)
 		iButtonY +=  pDialog->iHeight - (pDialog->iBubbleHeight + pDialog->iMargin);
 
 	//g_print ("clic (%d;%d) bouton Ok (%d;%d)\n", (int) pButton->x, (int) pButton->y, iButtonX, iButtonY);
-	if (pButton->x >= iButtonX && pButton->x <= iButtonX + g_iDialogButtonWidth && pButton->y >= iButtonY && pButton->y <= iButtonY + g_iDialogButtonHeight)
+	if (pButton->x >= iButtonX && pButton->x <= iButtonX + myDialogs.iDialogButtonWidth && pButton->y >= iButtonY && pButton->y <= iButtonY + myDialogs.iDialogButtonHeight)
 	{
 		return GTK_BUTTONS_OK;
 	}
@@ -135,7 +129,7 @@ static int _cairo_dock_find_clicked_button_in_dialog (GdkEventButton* pButton, C
 	{
 		iButtonX = .5*pDialog->iWidth + .5*CAIRO_DIALOG_BUTTON_GAP;
 		//g_print ("clic (%d;%d) bouton Cancel (%d;%d)\n", (int) pButton->x, (int) pButton->y, iButtonX, iButtonY);
-		if (pButton->x >= iButtonX && pButton->x <= iButtonX + g_iDialogButtonWidth && pButton->y >= iButtonY && pButton->y <= iButtonY + g_iDialogButtonHeight)
+		if (pButton->x >= iButtonX && pButton->x <= iButtonX + myDialogs.iDialogButtonWidth && pButton->y >= iButtonY && pButton->y <= iButtonY + myDialogs.iDialogButtonHeight)
 		{
 			return GTK_BUTTONS_CANCEL;
 		}
@@ -252,7 +246,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 	
 	if (pExpose->area.x >= pDialog->iMargin + CAIRO_DIALOG_TEXT_MARGIN && pExpose->area.y >= pDialog->iMargin + CAIRO_DIALOG_TEXT_MARGIN && pExpose->area.width <= pDialog->iIconSize && pExpose->area.height <= pDialog->iIconSize)  // redessin de l'icone.
 	{
-		pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &pExpose->area, g_fDialogColor);
+		pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &pExpose->area, myDialogs.fDialogColor);
 		
 		cairo_set_source_surface (pCairoContext, pDialog->pIconBuffer,
 			pDialog->iMargin + CAIRO_DIALOG_TEXT_MARGIN,
@@ -261,7 +255,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 	}
 	else if (pExpose->area.x >= pDialog->iMargin + pDialog->iIconSize + CAIRO_DIALOG_TEXT_MARGIN && pExpose->area.y <= pDialog->iMessageHeight && pExpose->area.width <= pDialog->iMessageWidth && pExpose->area.height <= pDialog->iMessageHeight)  // redessin du texte.
 	{
-		pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &pExpose->area, g_fDialogColor);
+		pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &pExpose->area, myDialogs.fDialogColor);
 		
 		cairo_set_source_surface (pCairoContext, pDialog->pTextBuffer,
 			pDialog->iMargin + pDialog->iIconSize + CAIRO_DIALOG_TEXT_MARGIN,
@@ -272,7 +266,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 	{
 		if (pDialog->iMessageHeight != 0 && pExpose->area.y >= pDialog->iMessageHeight)  // redessin du widget interactif.
 		{
-			pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &pExpose->area, g_fDialogColor);
+			pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &pExpose->area, myDialogs.fDialogColor);
 		}
 		else
 		{
@@ -356,7 +350,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 			if (fRadius < 1)
 				cairo_close_path (pCairoContext);
 		
-			cairo_set_source_rgba (pCairoContext, g_fDialogColor[0], g_fDialogColor[1], g_fDialogColor[2], g_fDialogColor[3]);
+			cairo_set_source_rgba (pCairoContext, myDialogs.fDialogColor[0], myDialogs.fDialogColor[1], myDialogs.fDialogColor[2], myDialogs.fDialogColor[3]);
 			cairo_fill_preserve (pCairoContext);
 		
 			cairo_set_line_width (pCairoContext, fLineWidth);
@@ -397,7 +391,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 					iButtonY +=  pDialog->iHeight - (pDialog->iBubbleHeight + pDialog->iMargin);
 				//g_print (" -> iButtonY : %d\n", iButtonY);
 		
-				cairo_set_source_surface (pCairoContext, s_pButtonOkSurface, .5*pDialog->iWidth - g_iDialogButtonWidth - .5*CAIRO_DIALOG_BUTTON_GAP + pDialog->iButtonOkOffset, iButtonY + pDialog->iButtonOkOffset);
+				cairo_set_source_surface (pCairoContext, s_pButtonOkSurface, .5*pDialog->iWidth - myDialogs.iDialogButtonWidth - .5*CAIRO_DIALOG_BUTTON_GAP + pDialog->iButtonOkOffset, iButtonY + pDialog->iButtonOkOffset);
 				cairo_paint (pCairoContext);
 		
 				cairo_set_source_surface (pCairoContext, s_pButtonCancelSurface, .5*pDialog->iWidth + .5*CAIRO_DIALOG_BUTTON_GAP + pDialog->iButtonCancelOffset, iButtonY + pDialog->iButtonCancelOffset);
@@ -466,11 +460,11 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 
 static cairo_surface_t *_cairo_dock_load_button_icon (cairo_t *pCairoContext, gchar *cButtonImage, gchar *cDefaultButtonImage)
 {
-	//g_print ("%s (%d ; %d)\n", __func__, g_iDialogButtonWidth, g_iDialogButtonHeight);
+	//g_print ("%s (%d ; %d)\n", __func__, myDialogs.iDialogButtonWidth, myDialogs.iDialogButtonHeight);
 	cairo_surface_t *pButtonSurface = cairo_dock_load_image_for_icon (pCairoContext,
 		cButtonImage,
-		g_iDialogButtonWidth,
-		g_iDialogButtonHeight);
+		myDialogs.iDialogButtonWidth,
+		myDialogs.iDialogButtonHeight);
 
 	if (pButtonSurface == NULL)
 	{
@@ -478,8 +472,8 @@ static cairo_surface_t *_cairo_dock_load_button_icon (cairo_t *pCairoContext, gc
 		//g_print ("  on charge %s par defaut\n", cIconPath);
 		pButtonSurface = cairo_dock_load_image_for_icon (pCairoContext,
 			cIconPath,
-			g_iDialogButtonWidth,
-			g_iDialogButtonHeight);
+			myDialogs.iDialogButtonWidth,
+			myDialogs.iDialogButtonHeight);
 		g_free (cIconPath);
 	}
 
@@ -763,10 +757,10 @@ CairoDialog *cairo_dock_build_dialog (const gchar *cText, Icon *pIcon, CairoCont
 		PangoLayout *pLayout = pango_cairo_create_layout (pSourceContext);
 
 		PangoFontDescription *pDesc = pango_font_description_new ();
-		pango_font_description_set_absolute_size (pDesc, g_dialogTextDescription.iSize * PANGO_SCALE);
-		pango_font_description_set_family_static (pDesc, g_dialogTextDescription.cFont);
-		pango_font_description_set_weight (pDesc, g_dialogTextDescription.iWeight);
-		pango_font_description_set_style (pDesc, g_dialogTextDescription.iStyle);
+		pango_font_description_set_absolute_size (pDesc, myDialogs.dialogTextDescription.iSize * PANGO_SCALE);
+		pango_font_description_set_family_static (pDesc, myDialogs.dialogTextDescription.cFont);
+		pango_font_description_set_weight (pDesc, myDialogs.dialogTextDescription.iWeight);
+		pango_font_description_set_style (pDesc, myDialogs.dialogTextDescription.iStyle);
 		pango_layout_set_font_description (pLayout, pDesc);
 		pango_font_description_free (pDesc);
 
@@ -788,7 +782,7 @@ CairoDialog *cairo_dock_build_dialog (const gchar *cText, Icon *pIcon, CairoCont
 		cairo_t* pSurfaceContext = cairo_create (pDialog->pTextBuffer);
 		
 		cairo_translate (pSurfaceContext, -ink.x, -ink.y);
-		cairo_set_source_rgba (pSurfaceContext, g_dialogTextDescription.fColorStart[0], g_dialogTextDescription.fColorStart[1], g_dialogTextDescription.fColorStart[2], 1.);
+		cairo_set_source_rgba (pSurfaceContext, myDialogs.dialogTextDescription.fColorStart[0], myDialogs.dialogTextDescription.fColorStart[1], myDialogs.dialogTextDescription.fColorStart[2], 1.);
 		pango_cairo_show_layout (pSurfaceContext, pLayout);
 		
 		cairo_destroy (pSurfaceContext);
@@ -797,10 +791,10 @@ CairoDialog *cairo_dock_build_dialog (const gchar *cText, Icon *pIcon, CairoCont
 	//\________________ On recupere l'icone a afficher sur le cote.
 	if (cImageFilePath != NULL)
 	{
-		if (g_iDialogIconSize == 0 && cText != NULL)
+		if (myDialogs.iDialogIconSize == 0 && cText != NULL)
 			pDialog->iIconSize = pDialog->iTextHeight;
 		else
-			pDialog->iIconSize = MAX (g_iDialogIconSize, 16);
+			pDialog->iIconSize = MAX (myDialogs.iDialogIconSize, 16);
 		if (strcmp (cImageFilePath, "same icon") == 0)
 		{
 			double fMaxScale = cairo_dock_get_max_scale (pContainer);
@@ -871,8 +865,8 @@ CairoDialog *cairo_dock_build_dialog (const gchar *cText, Icon *pIcon, CairoCont
 		if (s_pButtonOkSurface == NULL || s_pButtonCancelSurface == NULL)
 			cairo_dock_load_dialog_buttons (CAIRO_CONTAINER (pDialog), NULL, NULL);
 		
-		pDialog->iButtonsWidth = 2 * g_iDialogButtonWidth + CAIRO_DIALOG_BUTTON_GAP + 2 * CAIRO_DIALOG_TEXT_MARGIN;
-		pDialog->iButtonsHeight = CAIRO_DIALOG_VGAP + g_iDialogButtonHeight;
+		pDialog->iButtonsWidth = 2 * myDialogs.iDialogButtonWidth + CAIRO_DIALOG_BUTTON_GAP + 2 * CAIRO_DIALOG_TEXT_MARGIN;
+		pDialog->iButtonsHeight = CAIRO_DIALOG_VGAP + myDialogs.iDialogButtonHeight;
 
 		pDialog->iBubbleWidth = MAX (pDialog->iBubbleWidth, pDialog->iButtonsWidth);
 		pDialog->iBubbleHeight += pDialog->iButtonsHeight;
@@ -967,10 +961,10 @@ void cairo_dock_set_dialog_message (CairoDialog *pDialog, const gchar *cMessage)
 		PangoLayout *pLayout = pango_cairo_create_layout (pSourceContext);
 
 		PangoFontDescription *pDesc = pango_font_description_new ();
-		pango_font_description_set_absolute_size (pDesc, g_dialogTextDescription.iSize * PANGO_SCALE);
-		pango_font_description_set_family_static (pDesc, g_dialogTextDescription.cFont);
-		pango_font_description_set_weight (pDesc, g_dialogTextDescription.iWeight);
-		pango_font_description_set_style (pDesc, g_dialogTextDescription.iStyle);
+		pango_font_description_set_absolute_size (pDesc, myDialogs.dialogTextDescription.iSize * PANGO_SCALE);
+		pango_font_description_set_family_static (pDesc, myDialogs.dialogTextDescription.cFont);
+		pango_font_description_set_weight (pDesc, myDialogs.dialogTextDescription.iWeight);
+		pango_font_description_set_style (pDesc, myDialogs.dialogTextDescription.iStyle);
 		pango_layout_set_font_description (pLayout, pDesc);
 		pango_font_description_free (pDesc);
 
@@ -989,7 +983,7 @@ void cairo_dock_set_dialog_message (CairoDialog *pDialog, const gchar *cMessage)
 		cairo_t* pSurfaceContext = cairo_create (pDialog->pTextBuffer);
 		
 		cairo_translate (pSurfaceContext, -ink.x, -ink.y);
-		cairo_set_source_rgba (pSurfaceContext, g_dialogTextDescription.fColorStart[0], g_dialogTextDescription.fColorStart[1], g_dialogTextDescription.fColorStart[2], 1.);
+		cairo_set_source_rgba (pSurfaceContext, myDialogs.dialogTextDescription.fColorStart[0], myDialogs.dialogTextDescription.fColorStart[1], myDialogs.dialogTextDescription.fColorStart[2], 1.);
 		pango_cairo_show_layout (pSurfaceContext, pLayout);
 		
 		cairo_destroy (pSurfaceContext);

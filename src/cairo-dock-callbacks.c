@@ -51,6 +51,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-hidden-dock.h"
+#include "cairo-dock-internal-views.h"
 #include "cairo-dock-callbacks.h"
 
 static Icon *s_pIconClicked = NULL;  // pour savoir quand on deplace une icone a la souris. Dangereux si l'icone se fait effacer en cours ...
@@ -62,7 +63,6 @@ static CairoDock *s_pDockShowingSubDock = NULL;  // on n'accede pas a son conten
 static CairoFlyingContainer *s_pFlyingContainer = NULL;
 
 extern CairoDock *g_pMainDock;
-extern double g_fSubDockSizeRatio;
 extern gboolean g_bUseSeparator;
 extern gboolean g_bKeepAbove;
 extern int g_tIconTypeOrder[CAIRO_DOCK_NB_TYPES];
@@ -72,7 +72,6 @@ extern gint g_iScreenWidth[2];
 extern gint g_iScreenHeight[2];
 extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
 
-extern gboolean g_bSameHorizontality;
 extern CairoDockLabelDescription g_iconTextDescription;
 
 extern int g_iDockRadius;
@@ -104,6 +103,7 @@ void on_realize (GtkWidget* pWidget,
 	if (! g_bUseOpenGL)
 		return ;
 	
+	g_print ("%s (%d)\n", __func__, pDock->bIsMainDock);
 	GdkGLContext* pGlContext = gtk_widget_get_gl_context (pWidget);
 	GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pWidget);
 	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
@@ -130,9 +130,8 @@ void on_realize (GtkWidget* pWidget,
 		g_print ("OpenGL vendor: %s\n", glGetString (GL_VENDOR));
 		g_print ("OpenGL renderer: %s\n", glGetString (GL_RENDERER));
 		
-		/// load textures ...
+		/// charger les textures ici ?...
 		
-		//cairo_dock_load_desklet_buttons_texture ();
 	}
 	gdk_gl_drawable_gl_end (pGlDrawable);
 }
@@ -366,31 +365,6 @@ static gboolean _cairo_dock_show_sub_dock_delayed (CairoDock *pDock)
 }
 
 
-static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
-{
-	/// TODO : faire en sorte que le grow_up n'interagisse pas ici ...
-	gboolean bContinue = FALSE;
-	Icon *icon;
-	GList *ic;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		///if (icon->bOnMouseOverAnimating)
-			cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDock, &bContinue);
-		///bContinue |= icon->bOnMouseOverAnimating;
-	}
-	
-	cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);
-	
-	gtk_widget_queue_draw (pDock->pWidget);
-	if (! bContinue)
-	{
-		pDock->iSidGLAnimation = 0;
-		return FALSE;
-	}
-	else
-		return TRUE;
-}
 static gboolean _cairo_dock_show_xwindow_for_drop (Icon *pIcon)
 {
 	cairo_dock_show_xwindow (pIcon->Xid);
@@ -463,8 +437,8 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		gboolean bStartAnimation = FALSE;
 		cairo_dock_notify (CAIRO_DOCK_ENTER_ICON, pPointedIcon, pDock, &bStartAnimation);
 		
-		if (pDock->iSidGLAnimation == 0 && bStartAnimation)
-			pDock->iSidGLAnimation = g_timeout_add (g_iGLAnimationDeltaT, (GSourceFunc) _cairo_dock_gl_animation, pDock);
+		if (bStartAnimation)
+			cairo_dock_launch_animation (pDock);
 	}
 }
 static gboolean _cairo_dock_make_icon_glide (CairoDock *pDock)
@@ -714,8 +688,8 @@ gboolean on_motion_notify2 (GtkWidget* pWidget,
 	
 	gboolean bStartAnimation = FALSE;
 	cairo_dock_notify (CAIRO_DOCK_MOUSE_MOVED, pDock, &bStartAnimation);
-	if (bStartAnimation && pDock->iSidGLAnimation == 0)
-		pDock->iSidGLAnimation = g_timeout_add (g_iGLAnimationDeltaT, (GSourceFunc) _cairo_dock_gl_animation, pDock);
+	if (bStartAnimation)
+		cairo_dock_launch_animation (pDock);
 	
 	//g_print ("%x -> %x\n", pLastPointedIcon, pPointedIcon);
 	if (pPointedIcon != pLastPointedIcon || s_pLastPointedDock == NULL)
@@ -977,10 +951,8 @@ gboolean on_enter_notify2 (GtkWidget* pWidget,
 	{
 		gboolean bStartAnimation = FALSE;
 		cairo_dock_notify (CAIRO_DOCK_ENTER_DOCK, pDock, &bStartAnimation);
-		if (bStartAnimation && pDock->iSidGLAnimation == 0)
-		{
-			pDock->iSidGLAnimation = g_timeout_add (g_iGLAnimationDeltaT, (GSourceFunc)_cairo_dock_gl_animation, pDock);
-		}
+		if (bStartAnimation)
+			cairo_dock_launch_animation (pDock);
 	}
 	
 	pDock->fDecorationsOffsetX = 0;
@@ -1428,10 +1400,10 @@ gboolean on_button_press2 (GtkWidget* pWidget,
 							///cairo_dock_remove_icon_from_dock (pOriginDock, s_pIconClicked);
 							cairo_dock_update_dock_size (pOriginDock);
 
-							///s_pIconClicked->fWidth /= (pOriginDock->iRefCount == 0 ? 1. : g_fSubDockSizeRatio);
-							///s_pIconClicked->fHeight /= (pOriginDock->iRefCount == 0 ? 1. : g_fSubDockSizeRatio);
+							///s_pIconClicked->fWidth /= (pOriginDock->iRefCount == 0 ? 1. : myViews.fSubDockSizeRatio);
+							///s_pIconClicked->fHeight /= (pOriginDock->iRefCount == 0 ? 1. : myViews.fSubDockSizeRatio);
 							cairo_dock_update_icon_s_container_name (s_pIconClicked, icon->cParentDockName);
-							if (pOriginDock->iRefCount > 0 && ! g_bSameHorizontality)
+							if (pOriginDock->iRefCount > 0 && ! myViews.bSameHorizontality)
 							{
 								cairo_t* pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 								cairo_dock_fill_one_text_buffer (s_pIconClicked, pSourceContext, &g_iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : g_pMainDock->bHorizontalDock), g_pMainDock->bDirectionUp);
@@ -1992,10 +1964,8 @@ void on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, gui
 		
 		gboolean bStartAnimation = FALSE;
 		cairo_dock_notify (CAIRO_DOCK_START_DRAG_DATA, pDock, &bStartAnimation);
-		if (bStartAnimation && pDock->iSidGLAnimation == 0 && pDock->render_opengl != NULL)
-		{
-			pDock->iSidGLAnimation = g_timeout_add (g_iGLAnimationDeltaT, (GSourceFunc)_cairo_dock_gl_animation, pDock);
-		}
+		if (bStartAnimation)
+			cairo_dock_launch_animation (pDock);
 		
 		/*pDock->iAvoidingMouseIconType = -1;
 		

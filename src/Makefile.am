@@ -147,7 +147,11 @@ cairo_dock_SOURCES = \
 	cairo-dock-internal-hidden-dock.c\
 	cairo-dock-internal-hidden-dock.h\
 	cairo-dock-internal-dialogs.c\
-	cairo-dock-internal-dialogs.h
+	cairo-dock-internal-dialogs.h\
+	cairo-dock-internal-indicators.c\
+	cairo-dock-internal-indicators.h\
+	cairo-dock-internal-views.c\
+	cairo-dock-internal-views.h
 	
 
 cairo_dockincludedir =\
@@ -209,4 +213,6 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-internal-system.h\
 	cairo-dock-internal-taskbar.h\
 	cairo-dock-internal-hidden-dock.h\
-	cairo-dock-internal-dialogs.h
+	cairo-dock-internal-dialogs.h\
+	cairo-dock-internal-indicators.h\
+	cairo-dock-internal-views.h

@@ -36,6 +36,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-load.h"
 
 extern CairoDock *g_pMainDock;
@@ -82,7 +83,6 @@ extern int g_tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
 extern cairo_surface_t *g_pDropIndicatorSurface;
 extern double g_fDropIndicatorWidth, g_fDropIndicatorHeight;
 extern cairo_surface_t *g_pIndicatorSurface[2];
-extern gboolean g_bLinkIndicatorWithIcon;
 extern double g_fIndicatorWidth, g_fIndicatorHeight;
 
 extern cairo_surface_t *g_pActiveIndicatorSurface;
@@ -838,7 +838,7 @@ void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* 
 		double fLauncherWidth = (g_tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != 0 ? g_tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : 48);
 		double fLauncherHeight = (g_tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != 0 ? g_tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : 48);
 		
-		double fScale = (g_bLinkIndicatorWithIcon ? 1 + g_fAmplitude : 1);
+		double fScale = (myIndicators.bLinkIndicatorWithIcon ? 1 + g_fAmplitude : 1);
 		g_pIndicatorSurface[CAIRO_DOCK_HORIZONTAL] = cairo_dock_create_surface_from_image (
 			cIndicatorImagePath,
 			pSourceContext,

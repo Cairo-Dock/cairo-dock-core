@@ -51,12 +51,11 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
+#include "cairo-dock-internal-views.h"
 #include "cairo-dock-dock-factory.h"
 
 extern int g_iWmHint;
 extern CairoDock *g_pMainDock;
-extern gboolean g_bSameHorizontality;
-extern double g_fSubDockSizeRatio;
 
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
 extern gint g_iDockLineWidth;
@@ -133,11 +132,10 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 	
 		GdkDisplay	   *gdkdisplay;
 		Display	   *XDisplay;
-		Window	   xid;
+		//Window	   xid;
 
 		gdkdisplay = gdk_display_get_default ();
 		XDisplay   = gdk_x11_display_get_xdisplay (gdkdisplay);
-		xid = gdk_x11_drawable_get_xid (GDK_DRAWABLE (pDock->pWidget->window));
 		Window root = XRootWindow(XDisplay, 0);
 		
 		XWindowAttributes attrib;
@@ -563,7 +561,7 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDoc
 
 			///if (pDock->iRefCount > 0)
 			{
-				icon->fWidth /= pDock->fRatio;  /// g_fSubDockSizeRatio
+				icon->fWidth /= pDock->fRatio;  /// myViews.fSubDockSizeRatio
 				icon->fHeight /= pDock->fRatio;
 			}
 			cd_debug (" on re-attribue %s au dock %s", icon->acName, icon->cParentDockName);
@@ -622,7 +620,7 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 			pParentDock = g_pMainDock;
 		CairoDockPositionType iScreenBorder = ((! pDock->bHorizontalDock) << 1) | (! pDock->bDirectionUp);
 		cd_message ("position : %d/%d", pDock->bHorizontalDock, pDock->bDirectionUp);
-		pDock->bHorizontalDock = (g_bSameHorizontality ? pParentDock->bHorizontalDock : ! pParentDock->bHorizontalDock);
+		pDock->bHorizontalDock = (myViews.bSameHorizontality ? pParentDock->bHorizontalDock : ! pParentDock->bHorizontalDock);
 		pDock->bDirectionUp = pParentDock->bDirectionUp;
 		if (iScreenBorder != (((! pDock->bHorizontalDock) << 1) | (! pDock->bDirectionUp)))
 		{
@@ -636,7 +634,7 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 		
 		pDock->bAutoHide = FALSE;
 		double fPrevRatio = pDock->fRatio;
-		pDock->fRatio = MIN (pDock->fRatio, g_fSubDockSizeRatio);
+		pDock->fRatio = MIN (pDock->fRatio, myViews.fSubDockSizeRatio);
 
 		Icon *icon;
 		GList *ic;
@@ -648,7 +646,7 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 			icon->fHeight *= pDock->fRatio / fPrevRatio;
 			pDock->fFlatDockWidth += icon->fWidth + g_iIconGap;
 
-			if (! g_bSameHorizontality)
+			if (! myViews.bSameHorizontality)
 			{
 				cairo_t* pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 				cairo_dock_fill_one_text_buffer (icon, pSourceContext, &g_iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pDock->bHorizontalDock), pDock->bDirectionUp);
@@ -768,7 +766,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		}
 		else
 		{
-			double fMaxRatio = (pDock->iRefCount == 0 ? 1 : g_fSubDockSizeRatio);
+			double fMaxRatio = (pDock->iRefCount == 0 ? 1 : myViews.fSubDockSizeRatio);
 			if (pDock->fRatio < fMaxRatio)
 			{
 				pDock->fRatio *= 1. * myAccessibility.iMaxAuthorizedWidth / pDock->iMaxDockWidth;
@@ -880,7 +878,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	}
 	//g_print (" +size <- %.2fx%.2f\n", icon->fWidth, icon->fHeight);
 
-	if (! g_bSameHorizontality)
+	if (! myViews.bSameHorizontality)
 	{
 		cairo_t* pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 		cairo_dock_fill_one_text_buffer (icon, pSourceContext, &g_iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pDock->bHorizontalDock), pDock->bDirectionUp);

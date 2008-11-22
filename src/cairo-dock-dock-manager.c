@@ -42,12 +42,12 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-internal-views.h"
 #include "cairo-dock-dock-manager.h"
 
 extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
-extern gboolean g_bSameHorizontality;
 
 static GHashTable *s_hDocksTable = NULL;  // table des docks existant.
 static int s_iSidPollScreenEdge = 0;
@@ -327,13 +327,17 @@ void cairo_dock_reset_all_views (void)
 static void _cairo_dock_set_one_dock_view_to_default (gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	//g_print ("%s (%s)\n", __func__, cDockName);
-	cairo_dock_set_default_renderer (pDock);
-	cairo_dock_update_dock_size (pDock);
+	int iDockType = GPOINTER_TO_INT (data);
+	if (iDockType == 0 || (iDockType == 1 && pDock->iRefCount == 0) || (iDockType == 2 && pDock->iRefCount != 0))
+	{
+		cairo_dock_set_default_renderer (pDock);
+		cairo_dock_update_dock_size (pDock);
+	}
 }
-void cairo_dock_set_all_views_to_default (void)
+void cairo_dock_set_all_views_to_default (int iDockType)
 {
 	//g_print ("%s ()\n", __func__);
-	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_set_one_dock_view_to_default, NULL);
+	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_set_one_dock_view_to_default, GINT_TO_POINTER (iDockType));
 }
 
 
@@ -586,10 +590,10 @@ void cairo_dock_synchronize_one_sub_dock_position (Icon *icon, CairoDock *pDock,
 	if (icon->pSubDock != NULL)
 	{
 		cd_message ("%s (%s)", __func__, icon->acName);
-		if (icon->pSubDock->bDirectionUp != pDock->bDirectionUp || (icon->pSubDock->bDirectionUp != ((!g_bSameHorizontality) ^ pDock->bHorizontalDock)))
+		if (icon->pSubDock->bDirectionUp != pDock->bDirectionUp || (icon->pSubDock->bDirectionUp != ((!myViews.bSameHorizontality) ^ pDock->bHorizontalDock)))
 		{
 			icon->pSubDock->bDirectionUp = pDock->bDirectionUp;
-			icon->pSubDock->bHorizontalDock = (!g_bSameHorizontality) ^ pDock->bHorizontalDock;
+			icon->pSubDock->bHorizontalDock = (!myViews.bSameHorizontality) ^ pDock->bHorizontalDock;
 			if (bReloadBuffersIfNecessary)
 				cairo_dock_reload_reflects_in_dock (icon->pSubDock);
 			cairo_dock_synchronize_sub_docks_position (icon->pSubDock, bReloadBuffersIfNecessary);

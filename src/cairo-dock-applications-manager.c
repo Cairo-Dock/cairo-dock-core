@@ -763,7 +763,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				{
 					GTimeVal time_val;
 					g_get_current_time (&time_val);  // on pourrait aussi utiliser un compteur statique a la fonction ...
-					cairo_dock_update_applis_list (pDock, time_val.tv_sec + time_val.tv_usec * 1e-6);
+					cairo_dock_update_applis_list (pDock, (gdouble) time_val.tv_sec + time_val.tv_usec * 1e-6);
 					cairo_dock_notify (CAIRO_DOCK_WINDOW_CONFIGURED, NULL);
 				}
 				else if (event.xproperty.atom == s_aNetActiveWindow)
@@ -1160,7 +1160,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	return pParentDock;
 }
 
-static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, double *fTime)
+static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gdouble *fTime)
 {
 	gboolean bToBeRemoved = FALSE;
 	if (icon != NULL)
@@ -1168,7 +1168,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, double *
 		//g_print ("%s (%s, %f / %f)\n", __func__, icon->acName, icon->fLastCheckTime, *fTime);
 		if (icon->fLastCheckTime > 0 && icon->fLastCheckTime < *fTime && icon->fPersonnalScale <= 0)
 		{
-			cd_message ("cette fenetre (%ld) est trop vieille", *Xid);
+			cd_message ("cette fenetre (%ld, %s) est trop vieille (%f / %f)", *Xid, icon->acName, icon->fLastCheckTime, *fTime);
 			
 			if (cairo_dock_quick_hide_is_activated () && (myTaskBar.bAutoHideOnFullScreen || myTaskBar.bAutoHideOnMaximized))
 			{
@@ -1202,7 +1202,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, double *
 	}
 	return bToBeRemoved;
 }
-void cairo_dock_update_applis_list (CairoDock *pDock, double fTime)
+void cairo_dock_update_applis_list (CairoDock *pDock, gdouble fTime)
 {
 	//g_print ("%s ()\n", __func__);
 	gulong i, iNbWindows = 0;
@@ -1231,7 +1231,7 @@ void cairo_dock_update_applis_list (CairoDock *pDock, double fTime)
 				icon->fLastCheckTime = fTime;
 				if ((icon->bIsHidden || ! myTaskBar.bHideVisibleApplis) && (! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_window_is_on_current_desktop (Xid)))
 				{
-					cd_message (" insertion de %s ...", icon->acName);
+					cd_message (" insertion de %s ... (%f)", icon->acName, icon->fLastCheckTime);
 					pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 					if (pParentDock != NULL)
 					{
