@@ -48,6 +48,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #define DELTA_ROUND_DEGREE 1
 
 extern double g_fAmplitude;
+extern double g_fAlbedo;
 extern CairoDockLabelDescription g_iconTextDescription;
 extern cairo_surface_t *g_pDesktopBgSurface;
 
@@ -202,6 +203,11 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 {
 	if (*bHasBeenRendered)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	if (pIcon->iIconTexture == 0)
+	{
+		*bHasBeenRendered = TRUE;
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	}
 	
 	glEnable(GL_TEXTURE);
 	glEnable(GL_TEXTURE_2D);
@@ -235,8 +241,15 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
+GLuint s_GradationTexture=0;
+
 void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRatio, double fDockMagnitude, gboolean bUseText)
 {
+	if (s_GradationTexture == 0)
+	{
+		s_GradationTexture = cairo_dock_load_local_texture ("texture-gradation.png", CAIRO_DOCK_SHARE_DATA_DIR);
+		g_print ("s_GradationTexture <- %d\n", s_GradationTexture);
+	}
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.fVisibleAppliAlpha != 0 && ! CAIRO_DOCK_IS_APPLET (icon))
 	{
 		double fAlpha = (icon->bIsHidden ? MIN (1 - myTaskBar.fVisibleAppliAlpha, 1) : MIN (myTaskBar.fVisibleAppliAlpha + 1, 1));
@@ -397,8 +410,62 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 	
 	glPopMatrix ();  // retour juste apres la translation au milieu de l'icone.
 	
+	if (pDock->bUseReflect)
+	{
+		glPushMatrix ();
+		glTranslatef (0., -icon->fHeight * icon->fScale/2, 1.);
+		glScalef (1., -1, 1.);
+// 		bIconHasBeenDrawn=FALSE;
+// 		cairo_dock_notify (CAIRO_DOCK_PRE_RENDER_ICON, icon, pDock);
+// 		cairo_dock_notify (CAIRO_DOCK_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn);
+		
+		glEnable(GL_TEXTURE);
+		
+		glEnable(GL_BLEND);
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		
+		glDisable(GL_DEPTH_TEST);
+		glPolygonMode (GL_FRONT, GL_FILL);
+		glColor4f(1.0f, 1.0f, 1.0f, g_fAlbedo);
+		
+		//cairo_dock_set_icon_scale (icon, pDock, 1.);
+		glScalef (icon->fWidth * icon->fWidthFactor * icon->fScale, g_fReflectSize * icon->fScale, g_fReflectSize * icon->fScale);
+		glEnable(GL_TEXTURE);
+	glActiveTextureARB(GL_TEXTURE0_ARB); // Go pour le multitexturing 1ere passe
+	glEnable(GL_TEXTURE_2D); // On active le texturing sur cette passe
+	glBindTexture(GL_TEXTURE_2D, icon->iIconTexture);
+	glActiveTextureARB(GL_TEXTURE1_ARB); // Go pour le texturing 2eme passe
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, s_GradationTexture);
+	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // Le mode de combinaison des textures
+	glTexEnvi (GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_MODULATE);  // multiplier les alpha.
+	//glTexEnvi (GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_EXT, GL_ONE_MINUS_SRC_ALPHA);
+	
+	glBegin(GL_QUADS);
+	glNormal3f(0,0,1);
+	glMultiTexCoord2fARB( GL_TEXTURE0_ARB,0., 1.-g_fReflectSize / icon->fHeight); glMultiTexCoord2fARB( GL_TEXTURE1_ARB,0., 0.); glVertex3f(-0.5, 1., 0.);  // Bottom Left Of The Texture and Quad
+	glMultiTexCoord2fARB( GL_TEXTURE0_ARB,1., 1.-g_fReflectSize / icon->fHeight); glMultiTexCoord2fARB( GL_TEXTURE1_ARB,1., 0.); glVertex3f( 0.5, 1., 0.);  // Bottom Right Of The Texture and Quad
+	glMultiTexCoord2fARB( GL_TEXTURE0_ARB,1., 1.); glMultiTexCoord2fARB( GL_TEXTURE1_ARB,1., 1.); glVertex3f( 0.5, 0., 0.);  // Top Right Of The Texture and Quad
+	glMultiTexCoord2fARB( GL_TEXTURE0_ARB,0., 1.); glMultiTexCoord2fARB( GL_TEXTURE1_ARB,0., 1.); glVertex3f(-0.5, 0., 0.);  // Top Left Of The Texture and Quad
+	glEnd();
+	
+	glActiveTextureARB(GL_TEXTURE1_ARB);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_GEN_S);
+	glDisable(GL_TEXTURE_GEN_T);
+	glActiveTextureARB(GL_TEXTURE0_ARB);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_GEN_S);
+	glDisable(GL_TEXTURE_GEN_T);
+	glDisable (GL_BLEND);
+		
+		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_BLEND);
+		glPopMatrix ();
+	}
 	//\_____________________ On dessine les reflets.
-	if (pDock->bUseReflect && icon->iReflectionTexture != 0)  // on dessine les reflets.
+	if (0 && pDock->bUseReflect && icon->iReflectionTexture != 0)  // on dessine les reflets.
 	{
 		glBindTexture (GL_TEXTURE_2D, icon->iReflectionTexture);
 		glPushMatrix ();
@@ -816,13 +883,13 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImagePath, doubl
 
 GLuint cairo_dock_load_local_texture (const gchar *cImageName, const gchar *cDirPath)
 {
-        g_return_val_if_fail (GTK_WIDGET_REALIZED (g_pMainDock->pWidget), 0);
+	g_return_val_if_fail (GTK_WIDGET_REALIZED (g_pMainDock->pWidget), 0);
 
-        gchar *cTexturePath = g_strdup_printf ("%s/%s", cDirPath, cImageName);
-        g_print (cTexturePath);
-        GLuint iTexture = cairo_dock_create_texture_from_image (cTexturePath);
-        g_free (cTexturePath);
-        return iTexture;
+	gchar *cTexturePath = g_strdup_printf ("%s/%s", cDirPath, cImageName);
+	g_print ("%s\n", cTexturePath);
+	GLuint iTexture = cairo_dock_create_texture_from_image (cTexturePath);
+	g_free (cTexturePath);
+	return iTexture;
 }
 
 
@@ -838,7 +905,6 @@ void cairo_dock_render_background_opengl (CairoDock *pDock)
 	glEnable (GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	glDisable(GL_DEPTH_TEST);
 	glPolygonMode (GL_FRONT, GL_FILL);
 	glEnable (GL_TEXTURE);
 	glEnable (GL_TEXTURE_2D);
@@ -846,6 +912,7 @@ void cairo_dock_render_background_opengl (CairoDock *pDock)
 	glColor4f(1.0f, 1.0f, 1.0f, 1.);
 	glNormal3f (0., 0., 1.);
 	
+	glLoadIdentity ();
 	glTranslatef (pDock->iCurrentWidth/2, pDock->iCurrentHeight/2, 0.);
 	
 	double fRotation = (pDock->bHorizontalDock ? (! pDock->bDirectionUp && g_bReverseVisibleImage ? 180 : 0) : (pDock->bDirectionUp ? -90 : 90));
@@ -999,23 +1066,6 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 			pVertexTab[3*i] = P(t, x0, x1, x2);
 			pVertexTab[3*i+1] = P(t, y0, y1, y2);
 		}
-		
-		
-		/*double dt, f;
-		for (t = 180-a;t <= 270;t += iPrecision, i++) // bas gauche.
-		{
-			dt = fabs (t - (180-a+270)/2) / (270-(180-a))*2;
-			f = 1. + .4 * (1-dt)*(1-dt);
-			pVertexTab[3*i] = -w_ + rw * cos (t*RADIAN) * f;
-			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN) * f;
-		}
-		for (t = 270;t <= 360+a;t += iPrecision, i++) // bas droit. 
-		{
-			dt = fabs (t-(360+a+270)/2) / (360+a-270)*2;
-			f = 1. + .4 * (1-dt)*(1-dt);
-			pVertexTab[3*i] = w_ + rw * cos (t*RADIAN) * f;
-			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN) * f;
-		}*/
 	}
 	else
 	{

@@ -1059,6 +1059,10 @@ gboolean CD_APPLET_ON_SCROLL (CairoDockModuleInstance *myApplet, Icon *pClickedI
 #define CD_APPLET_SET_SIZE_AS_QUICK_INFO(iSizeInBytes) \
 	cairo_dock_set_size_as_quick_info (myDrawContext, myIcon, myContainer, iSizeInBytes)
 
+/**
+*Empeche l'icone d'etre animee au passage de la souris.
+*/
+#define CD_APPLET_SET_STATIC_ICON cairo_dock_set_icon_static (myIcon)
 
 /**
 *Lance l'animation de l'icone de l'applet.

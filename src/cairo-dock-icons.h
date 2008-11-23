@@ -357,6 +357,9 @@ void cairo_dock_stop_marking_icons (CairoDock *pDock);
 */
 void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParentDockName);
 
+#define cairo_dock_set_icon_static(icon) ((icon)->bStatic = TRUE)
+
+
 G_END_DECLS
 #endif
 

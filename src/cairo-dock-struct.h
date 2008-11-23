@@ -704,6 +704,7 @@ struct _Icon {
 	GLuint iQuickInfoTexture;
 	gboolean bOnMouseOverAnimating;
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
+	gboolean bStatic;
 };
 
 

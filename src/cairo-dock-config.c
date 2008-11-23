@@ -1105,6 +1105,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	pDock->iGapY = myPosition.iGapY;
 	
 	pDock->fAlign = myPosition.fAlign;
+	pDock->bAutoHide = myAccessibility.bAutoHide;
 	
 	myTaskBar.bAutoHideOnFullScreen = myTaskBar.bAutoHideOnFullScreen && (!pDock->bAutoHide);
 	myTaskBar.bAutoHideOnMaximized = myTaskBar.bAutoHideOnMaximized && (!pDock->bAutoHide);
