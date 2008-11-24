@@ -697,6 +697,7 @@ struct _Icon {
 	/// echelle d'adaptation au glissement.
 	double fGlideScale;
 	
+	gint iReflectionTexture;
 	GLuint iIconTexture;
 	GLuint iLabelTexture;
 	GLuint iQuickInfoTexture;
