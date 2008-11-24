@@ -259,18 +259,8 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 	cairo_surface_destroy (icon->pReflectionBuffer);
 	icon->pReflectionBuffer = NULL;
-	if (icon->iReflectionTexture != 0)
-	{
-		glDeleteTextures (1, &icon->iReflectionTexture);
-		icon->iReflectionTexture = 0;
-	}
 	cairo_surface_destroy (icon->pFullIconBuffer);
 	icon->pFullIconBuffer = NULL;
-	if (icon->iFullIconTexture != 0)
-	{
-		glDeleteTextures (1, &icon->iFullIconTexture);
-		icon->iFullIconTexture = 0;
-	}
 	
 	if (icon->fWidth < 0 || icon->fHeight < 0)  // on ne veut pas de surface.
 		return;
@@ -361,16 +351,6 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			return ;
 		
 		icon->iIconTexture = cairo_dock_create_texture_from_surface (icon->pIconBuffer);
-		
-		/**if (icon->pReflectionBuffer != NULL)
-		{
-			icon->iReflectionTexture = cairo_dock_create_texture_from_surface (icon->pReflectionBuffer);
-		}
-		
-		if (icon->pFullIconBuffer != NULL)
-		{
-			icon->iFullIconTexture = cairo_dock_create_texture_from_surface (icon->pFullIconBuffer);
-		}*/
 		
 		gdk_gl_drawable_gl_end (pGlDrawable);
 	}

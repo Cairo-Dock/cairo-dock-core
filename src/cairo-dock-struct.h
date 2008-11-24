@@ -698,8 +698,6 @@ struct _Icon {
 	double fGlideScale;
 	
 	GLuint iIconTexture;
-	GLuint iReflectionTexture;
-	GLuint iFullIconTexture;
 	GLuint iLabelTexture;
 	GLuint iQuickInfoTexture;
 	gboolean bOnMouseOverAnimating;

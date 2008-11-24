@@ -36,6 +36,7 @@ extern double g_fAlbedo;
 
 extern CairoDockLabelDescription g_iconTextDescription;
 extern CairoDockLabelDescription g_quickInfoTextDescription;
+extern gboolean g_bUseOpenGL;
 
 
 void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *pSurface, double fScale, double fAlpha, Icon *pIcon, CairoContainer *pContainer)
@@ -71,7 +72,8 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 			cairo_paint (pIconContext);
 		cairo_restore (pIconContext);
 	}
-	cairo_dock_update_icon_texture (pIcon);
+	if (g_bUseOpenGL)
+		cairo_dock_update_icon_texture (pIcon);
 }
 
 void cairo_dock_add_reflection_to_icon (cairo_t *pIconContext, Icon *pIcon, CairoContainer *pContainer)

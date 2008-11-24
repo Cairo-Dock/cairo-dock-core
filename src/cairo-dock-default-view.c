@@ -355,7 +355,7 @@ void cairo_dock_render_opengl_linear (CairoDock *pDock)
 	
 	//\_____________ On trace le fond en texturant par des triangles.
 	glPushMatrix ();
-	cairo_dock_draw_frame_background_opengl (g_iBackgroundTexture, fDockWidth+2*fRadius, fFrameHeight, fDockOffsetX-fRadius, fDockOffsetY, pVertexTab, iNbVertex);
+	cairo_dock_draw_frame_background_opengl (g_iBackgroundTexture, fDockWidth+2*fRadius, fFrameHeight, fDockOffsetX-fRadius, fDockOffsetY, pVertexTab, iNbVertex, pDock->bHorizontalDock, pDock->bDirectionUp);
 	
 	//\_____________ On trace le contour.
 	if (fLineWidth != 0)

@@ -47,6 +47,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #define RADIAN (G_PI / 180.0)  // Conversion Radian/Degres
 #define DELTA_ROUND_DEGREE 1
 
+static GLuint s_GradationTexture=0;
+
 extern double g_fAmplitude;
 extern double g_fAlbedo;
 extern CairoDockLabelDescription g_iconTextDescription;
@@ -233,15 +235,70 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 	glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);  // Top Left Of The Texture and Quad
 	glEnd();
 	
+	glPopMatrix ();
+	
+	if (pDock->bUseReflect)
+	{
+		glPushMatrix ();
+		if (pDock->bDirectionUp)
+		{
+			glTranslatef (0., -pIcon->fHeight * pIcon->fScale/2 - pIcon->fDeltaYReflection, 0.);  // on se fixe en bas.
+			glScalef (pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale, - g_fReflectSize * pIcon->fScale, g_fReflectSize * pIcon->fScale);  // taille du reflet et on se retourne.
+		}
+		else
+		{
+			glTranslatef (0., pIcon->fHeight * pIcon->fScale/2 + pIcon->fDeltaYReflection, 0.);
+			glScalef (pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale, g_fReflectSize * pIcon->fScale, g_fReflectSize * pIcon->fScale);  // taille du reflet et on se retourne.
+		}
+		glColor4f(1.0f, 1.0f, 1.0f, g_fAlbedo * pIcon->fAlpha);  // transparence du reflet.
+		
+		glActiveTextureARB(GL_TEXTURE0_ARB); // Go pour le multitexturing 1ere passe
+		glEnable(GL_TEXTURE_2D); // On active le texturing sur cette passe
+		glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
+		glActiveTextureARB(GL_TEXTURE1_ARB); // Go pour le texturing 2eme passe
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, s_GradationTexture);
+		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // Le mode de combinaison des textures
+		glTexEnvi (GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_MODULATE);  // multiplier les alpha.
+		//glTexEnvi (GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_EXT, GL_ONE_MINUS_SRC_ALPHA);
+		
+		glBegin(GL_QUADS);
+		glNormal3f(0,0,1);
+		glMultiTexCoord2fARB (GL_TEXTURE0_ARB,0., 1.-g_fReflectSize / pIcon->fHeight);
+		glMultiTexCoord2fARB (GL_TEXTURE1_ARB,0., 0.);
+		glVertex3f (-0.5, 1., 0.);  // Bottom Left Of The Texture and Quad
+		
+		glMultiTexCoord2fARB (GL_TEXTURE0_ARB,1., 1.-g_fReflectSize / pIcon->fHeight);
+		glMultiTexCoord2fARB ( GL_TEXTURE1_ARB,1., 0.);
+		glVertex3f ( 0.5, 1., 0.);  // Bottom Right Of The Texture and Quad
+		
+		glMultiTexCoord2fARB (GL_TEXTURE0_ARB,1., 1.);
+		glMultiTexCoord2fARB (GL_TEXTURE1_ARB,1., 1.);
+		glVertex3f ( 0.5, 0., 0.);  // Top Right Of The Texture and Quad
+		
+		glMultiTexCoord2fARB (GL_TEXTURE0_ARB,0., 1.);
+		glMultiTexCoord2fARB (GL_TEXTURE1_ARB,0., 1.);
+		glVertex3f (-0.5, 0., 0.);  // Top Left Of The Texture and Quad
+		glEnd();
+		
+		glActiveTextureARB(GL_TEXTURE1_ARB);
+		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_TEXTURE_GEN_S);
+		glDisable(GL_TEXTURE_GEN_T);
+		glActiveTextureARB(GL_TEXTURE0_ARB);
+		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_TEXTURE_GEN_S);
+		glDisable(GL_TEXTURE_GEN_T);
+		
+		glPopMatrix ();
+	}
+	
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
-	glPopMatrix ();
 	
 	*bHasBeenRendered = TRUE;
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
-
-GLuint s_GradationTexture=0;
 
 void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRatio, double fDockMagnitude, gboolean bUseText)
 {
@@ -410,60 +467,17 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 	
 	glPopMatrix ();  // retour juste apres la translation au milieu de l'icone.
 	
-	if (pDock->bUseReflect)
+	/*if (pDock->bUseReflect)
 	{
 		glPushMatrix ();
 		glTranslatef (0., -icon->fHeight * icon->fScale/2, 1.);
 		glScalef (1., -1, 1.);
-// 		bIconHasBeenDrawn=FALSE;
-// 		cairo_dock_notify (CAIRO_DOCK_PRE_RENDER_ICON, icon, pDock);
-// 		cairo_dock_notify (CAIRO_DOCK_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn);
+ 		bIconHasBeenDrawn=FALSE;
+ 		cairo_dock_notify (CAIRO_DOCK_PRE_RENDER_ICON, icon, pDock);
+ 		cairo_dock_notify (CAIRO_DOCK_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn);
 		
-		glEnable(GL_TEXTURE);
-		
-		glEnable(GL_BLEND);
-		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		
-		glDisable(GL_DEPTH_TEST);
-		glPolygonMode (GL_FRONT, GL_FILL);
-		glColor4f(1.0f, 1.0f, 1.0f, g_fAlbedo);
-		
-		//cairo_dock_set_icon_scale (icon, pDock, 1.);
-		glScalef (icon->fWidth * icon->fWidthFactor * icon->fScale, g_fReflectSize * icon->fScale, g_fReflectSize * icon->fScale);
-		glEnable(GL_TEXTURE);
-	glActiveTextureARB(GL_TEXTURE0_ARB); // Go pour le multitexturing 1ere passe
-	glEnable(GL_TEXTURE_2D); // On active le texturing sur cette passe
-	glBindTexture(GL_TEXTURE_2D, icon->iIconTexture);
-	glActiveTextureARB(GL_TEXTURE1_ARB); // Go pour le texturing 2eme passe
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, s_GradationTexture);
-	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // Le mode de combinaison des textures
-	glTexEnvi (GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_MODULATE);  // multiplier les alpha.
-	//glTexEnvi (GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_EXT, GL_ONE_MINUS_SRC_ALPHA);
-	
-	glBegin(GL_QUADS);
-	glNormal3f(0,0,1);
-	glMultiTexCoord2fARB( GL_TEXTURE0_ARB,0., 1.-g_fReflectSize / icon->fHeight); glMultiTexCoord2fARB( GL_TEXTURE1_ARB,0., 0.); glVertex3f(-0.5, 1., 0.);  // Bottom Left Of The Texture and Quad
-	glMultiTexCoord2fARB( GL_TEXTURE0_ARB,1., 1.-g_fReflectSize / icon->fHeight); glMultiTexCoord2fARB( GL_TEXTURE1_ARB,1., 0.); glVertex3f( 0.5, 1., 0.);  // Bottom Right Of The Texture and Quad
-	glMultiTexCoord2fARB( GL_TEXTURE0_ARB,1., 1.); glMultiTexCoord2fARB( GL_TEXTURE1_ARB,1., 1.); glVertex3f( 0.5, 0., 0.);  // Top Right Of The Texture and Quad
-	glMultiTexCoord2fARB( GL_TEXTURE0_ARB,0., 1.); glMultiTexCoord2fARB( GL_TEXTURE1_ARB,0., 1.); glVertex3f(-0.5, 0., 0.);  // Top Left Of The Texture and Quad
-	glEnd();
-	
-	glActiveTextureARB(GL_TEXTURE1_ARB);
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_TEXTURE_GEN_S);
-	glDisable(GL_TEXTURE_GEN_T);
-	glActiveTextureARB(GL_TEXTURE0_ARB);
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_TEXTURE_GEN_S);
-	glDisable(GL_TEXTURE_GEN_T);
-	glDisable (GL_BLEND);
-		
-		glDisable(GL_TEXTURE_2D);
-		glDisable(GL_BLEND);
 		glPopMatrix ();
-	}
+	}*/
 	//\_____________________ On dessine les reflets.
 	if (0 && pDock->bUseReflect && icon->iReflectionTexture != 0)  // on dessine les reflets.
 	{
@@ -1084,7 +1098,7 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 }
 
 
-void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double fDockWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, const GLfloat *pVertexTab, int iNbVertex)
+void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double fDockWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, const GLfloat *pVertexTab, int iNbVertex, CairoDockTypeHorizontality bHorizontal, gboolean bDirectionUp)
 {
 	glEnable(GL_TEXTURE_2D); // Je veux de la texture
 	glBindTexture(GL_TEXTURE_2D, iBackgroundTexture); // allez on bind la texture
@@ -1112,13 +1126,24 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 	///glPolygonOffset (1., 1.);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	
-	glBegin (GL_TRIANGLE_FAN);
+	
+	if (! bDirectionUp)
+		glScalef (bHorizontal ? 1. : -1., -1., 1.);
+	else if (! bHorizontal)
+		glScalef (-1., 1., 1.);
+	
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, pVertexTab);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, iNbVertex);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	
+	/*glBegin (GL_TRIANGLE_FAN);
 	int i;
 	for (i = 0; i <= iNbVertex; i++) // La on affiche un polygone plein texture
 	{
 		glVertex3fv (&pVertexTab[3*i]);
 	}
-	glEnd();
+	glEnd();*/
 	glDisable(GL_BLEND);
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glDisable(GL_TEXTURE_GEN_S);
@@ -1139,13 +1164,18 @@ void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor,
 	glHint (GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 	glLineWidth(fLineWidth); // Ici on choisi l'epaisseur du contour du polygone 
 	glColor4f(fLineColor[0], fLineColor[1], fLineColor[2], fLineColor[3]); // Et sa couleur 
-	glBegin(GL_LINE_LOOP);
+	
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, pVertexTab);
+	glDrawArrays(GL_LINE_LOOP, 0, iNbVertex);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	/*glBegin(GL_LINE_LOOP);
 	int i;
 	for (i = 0; i < iNbVertex; i++) // Et on affiche le contour 
 	{
 		glVertex3fv (&pVertexTab[3*i]);
 	}
-	glEnd();
+	glEnd();*/
 	glDisable(GL_BLEND);
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glPolygonMode(GL_FRONT, GL_FILL);
