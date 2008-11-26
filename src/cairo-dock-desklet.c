@@ -51,6 +51,7 @@
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-load.h"
+#include "cairo-dock-internal-desklets.h"
 #include "cairo-dock-desklet.h"
 
 extern CairoDock *g_pMainDock;
@@ -58,14 +59,10 @@ extern int g_iScreenWidth[2], g_iScreenHeight[2];
 extern gchar *g_cConfFile;
 extern int g_iDockRadius;
 extern gboolean g_bSticky;
-extern gchar *g_cDeskletDecorationsName;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bIndirectRendering;
 extern GdkGLConfig* g_pGlConfig;
 extern gdouble g_iGLAnimationDeltaT;
-extern int g_iDeskletButtonSize;
-extern gchar *g_cRotateButtonImage;
-extern gchar *g_cRetachButtonImage;
 
 static cairo_surface_t *s_pRotateButtonSurface = NULL;
 static cairo_surface_t *s_pRetachButtonSurface = NULL;
@@ -80,16 +77,16 @@ void cairo_dock_load_desklet_buttons (cairo_t *pSourceContext)
 		s_pRotateButtonSurface = NULL;
 	}
 	s_pRotateButtonSurface = cairo_dock_load_image_for_icon (pSourceContext,
-		g_cRotateButtonImage,
-		g_iDeskletButtonSize,
-		g_iDeskletButtonSize);
+		myDesklets.cRotateButtonImage,
+		myDesklets.iDeskletButtonSize,
+		myDesklets.iDeskletButtonSize);
 	if (s_pRotateButtonSurface == NULL)
 	{
 		gchar *cRotateButtonPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, "rotate-desklet.svg");
 		s_pRotateButtonSurface = cairo_dock_create_surface_for_icon (cRotateButtonPath,
 			pSourceContext,
-			g_iDeskletButtonSize,
-			g_iDeskletButtonSize);
+			myDesklets.iDeskletButtonSize,
+			myDesklets.iDeskletButtonSize);
 		g_free (cRotateButtonPath);
 	}
 	
@@ -99,13 +96,13 @@ void cairo_dock_load_desklet_buttons (cairo_t *pSourceContext)
 		s_pRetachButtonSurface = NULL;
 	}
 	s_pRetachButtonSurface = cairo_dock_load_image_for_icon (pSourceContext,
-		g_cRetachButtonImage,
-		g_iDeskletButtonSize,
-		g_iDeskletButtonSize);
+		myDesklets.cRetachButtonImage,
+		myDesklets.iDeskletButtonSize,
+		myDesklets.iDeskletButtonSize);
 	if (s_pRetachButtonSurface == NULL)
 	{
 		gchar *cRetachButtonPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, "retach-desklet.svg");
-		s_pRetachButtonSurface = cairo_dock_create_surface_for_icon (cRetachButtonPath, pSourceContext, g_iDeskletButtonSize, g_iDeskletButtonSize);
+		s_pRetachButtonSurface = cairo_dock_create_surface_for_icon (cRetachButtonPath, pSourceContext, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
 		g_free (cRetachButtonPath);
 	}
 	
@@ -269,7 +266,7 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 		}
 		if (s_pRetachButtonSurface != NULL)
 		{
-			cairo_set_source_surface (pCairoContext, s_pRetachButtonSurface, pDesklet->iWidth - g_iDeskletButtonSize, 0.);
+			cairo_set_source_surface (pCairoContext, s_pRetachButtonSurface, pDesklet->iWidth - myDesklets.iDeskletButtonSize, 0.);
 			cairo_paint (pCairoContext);
 		}
 	}
@@ -341,21 +338,21 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 		if (iRotateButtonTexture != 0)
 		{
 			glPushMatrix ();
-			glTranslatef (-pDesklet->iWidth/2 + g_iDeskletButtonSize/2,
-				pDesklet->iHeight/2 - g_iDeskletButtonSize/2,
+			glTranslatef (-pDesklet->iWidth/2 + myDesklets.iDeskletButtonSize/2,
+				pDesklet->iHeight/2 - myDesklets.iDeskletButtonSize/2,
 				0.);
 			glColor4f (1., 1., 1., 1.);
-			cairo_dock_draw_texture (iRotateButtonTexture, g_iDeskletButtonSize, g_iDeskletButtonSize);
+			cairo_dock_draw_texture (iRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
 			glPopMatrix ();
 		}
 		if (iRetachButtonTexture != 0)
 		{
 			glPushMatrix ();
-			glTranslatef (pDesklet->iWidth/2 - g_iDeskletButtonSize/2,
-				pDesklet->iHeight/2 - g_iDeskletButtonSize/2,
+			glTranslatef (pDesklet->iWidth/2 - myDesklets.iDeskletButtonSize/2,
+				pDesklet->iHeight/2 - myDesklets.iDeskletButtonSize/2,
 				0.);
 			glColor4f (1., 1., 1., 1.);
-			cairo_dock_draw_texture (iRetachButtonTexture, g_iDeskletButtonSize, g_iDeskletButtonSize);
+			cairo_dock_draw_texture (iRetachButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
 			glPopMatrix ();
 		}
 		if (pDesklet->rotating)
@@ -642,9 +639,9 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 			pDesklet->iMouseX = pButton->x;  // pour le deplacement manuel.
 			pDesklet->iMouseY = pButton->y;
 			
-			if (pButton->x < g_iDeskletButtonSize && pButton->y < g_iDeskletButtonSize)
+			if (pButton->x < myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)
 				pDesklet->rotating = TRUE;
-			else if (pButton->x > pDesklet->iWidth - g_iDeskletButtonSize && pButton->y < g_iDeskletButtonSize)
+			else if (pButton->x > pDesklet->iWidth - myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)
 			{
 				pDesklet->retaching = TRUE;
 			}
@@ -669,7 +666,7 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 			else if (pDesklet->retaching)
 			{
 				pDesklet->retaching = FALSE;
-				if (! pDesklet->bPositionLocked && pButton->x > pDesklet->iWidth - g_iDeskletButtonSize && pButton->y < g_iDeskletButtonSize)
+				if (! pDesklet->bPositionLocked && pButton->x > pDesklet->iWidth - myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)
 				{
 					Icon *icon = pDesklet->pIcon;
 					g_return_val_if_fail (CAIRO_DOCK_IS_APPLET (icon), FALSE);
@@ -688,7 +685,7 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 		}
 		else if (pButton->type == GDK_2BUTTON_PRESS)
 		{
-			if (pButton->x < g_iDeskletButtonSize && pButton->y < g_iDeskletButtonSize)
+			if (pButton->x < myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)
 			{
 				pDesklet->fRotation = 0.;
 				gtk_widget_queue_draw (pDesklet->pWidget);
@@ -721,7 +718,7 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 	}
 	else if (pButton->button == 2 && pButton->type == GDK_BUTTON_PRESS)  // clique milieu.
 	{
-		if (pButton->x < g_iDeskletButtonSize && pButton->y < g_iDeskletButtonSize)
+		if (pButton->x < myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)
 		{
 			pDesklet->fRotation = 0.;
 			gtk_widget_queue_draw (pDesklet->pWidget);
@@ -1207,7 +1204,7 @@ void cairo_dock_load_desklet_decorations (CairoDesklet *pDesklet, cairo_t *pSour
 	if (pDesklet->cDecorationTheme == NULL || strcmp (pDesklet->cDecorationTheme, "personnal") == 0)
 		pDeskletDecorations = pDesklet->pUserDecoration;
 	else if (strcmp (pDesklet->cDecorationTheme, "default") == 0)
-		pDeskletDecorations = cairo_dock_get_desklet_decoration (g_cDeskletDecorationsName);
+		pDeskletDecorations = cairo_dock_get_desklet_decoration (myDesklets.cDeskletDecorationsName);
 	else
 		pDeskletDecorations = cairo_dock_get_desklet_decoration (pDesklet->cDecorationTheme);
 	if (pDeskletDecorations == NULL)  // peut arriver si rendering n'a pas encore charge ses decorations.

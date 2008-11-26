@@ -1,6 +1,6 @@
 
-#ifndef __CAIRO_DOCK_INDICATORS__
-#define  __CAIRO_DOCK_INDICATORS__
+#ifndef __CAIRO_DOCK_INTERNAL_BACKGROUND__
+#define  __CAIRO_DOCK_INTERNAL_BACKGROUND__
 
 #include <glib.h>
 
@@ -8,28 +8,30 @@
 #include "cairo-dock-config.h"
 
 
-typedef struct _CairoConfigIndicators CairoConfigIndicators;
+typedef struct _CairoConfigBackground CairoConfigBackground;
 #ifndef _INTERNAL_MODULE_
-extern CairoConfigIndicators myIndicators;
+extern CairoConfigBackground myBackground;
 #endif
 G_BEGIN_DECLS
 
-struct _CairoConfigIndicators {
-	gdouble fActiveColor[4];
-	gint iActiveLineWidth;
-	gint iActiveCornerRadius;
-	gboolean bActiveIndicatorAbove;
-	gchar *cActiveIndicatorImagePath;
-	gchar *cIndicatorImagePath;
-	gboolean bIndicatorAbove;
-	gdouble fIndicatorRatio;
-	gboolean bLinkIndicatorWithIcon;
-	gint iIndicatorDeltaY;
-	gchar *cDropIndicatorImagePath;
+struct _CairoConfigBackground {
+	gint iDockRadius;
+	gint iDockLineWidth;
+	gint iFrameMargin;
+	gdouble fLineColor[4];
+	gboolean bRoundedBottomCorner;
+	gdouble fStripesColorBright[4];
+	gchar *cBackgroundImageFile;
+	gdouble fBackgroundImageAlpha;
+	gboolean bBackgroundImageRepeat;
+	gint iNbStripes;
+	gdouble fStripesWidth;
+	gdouble fStripesColorDark[4];
+	gdouble fStripesAngle;
 	};
 
 
-DEFINE_PRE_INIT (Indicators);
+DEFINE_PRE_INIT (Background);
 
 G_END_DECLS
 #endif

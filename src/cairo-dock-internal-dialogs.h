@@ -23,6 +23,7 @@ struct _CairoConfigDialogs {
 	gdouble fDialogColor[4];
 	gint iDialogIconSize;
 	CairoDockLabelDescription dialogTextDescription;
+	gboolean bHomogeneous;
 	} ;
 
 

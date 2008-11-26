@@ -97,7 +97,6 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 	if (pAccessibility->bReserveSpace != pPrevAccessibility->bReserveSpace)
 		cairo_dock_reserve_space_for_all_root_docks (pAccessibility->bReserveSpace);
 	
-	g_print ("bPopUp : %d\n", pAccessibility->bPopUp);
 	if (pAccessibility->bPopUp)
 		cairo_dock_start_polling_screen_edge (pDock);
 	else
@@ -121,7 +120,6 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 
 DEFINE_PRE_INIT (Accessibility)
 {
-	g_print ("%s (%s)\n", __func__, "Accessibility");
 	pModule->cModuleName = "Accessibility";
 	pModule->cTitle = "Accessibility";
 	pModule->cIcon = "gtk-help";

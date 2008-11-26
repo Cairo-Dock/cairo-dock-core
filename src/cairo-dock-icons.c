@@ -859,7 +859,7 @@ Icon *cairo_dock_foreach_icons_of_type (GList *pIconList, CairoDockIconType iTyp
 		if (icon->iType == iType)
 		{
 			bOneIconFound = TRUE;
-			pFuntion (icon, data);
+			pFuntion (icon, NULL, data);
 		}
 		else
 		{
@@ -876,7 +876,7 @@ Icon *cairo_dock_foreach_icons_of_type (GList *pIconList, CairoDockIconType iTyp
 	if (icon != NULL && icon->iType == iType)
 	{
 		bOneIconFound = TRUE;
-		pFuntion (icon, data);
+		pFuntion (icon, NULL, data);
 	}
 
 	if (bOneIconFound)

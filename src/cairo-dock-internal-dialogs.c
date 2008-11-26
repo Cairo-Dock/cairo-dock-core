@@ -9,12 +9,11 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #include <string.h>
 #include "cairo-dock-dialogs.h"
+#include "cairo-dock-internal-labels.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-dialogs.h"
 
 extern CairoDock *g_pMainDock;
-extern CairoDockLabelDescription g_iconTextDescription;
-
 CairoConfigDialogs myDialogs;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDialogs *pDialogs)
@@ -32,14 +31,15 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDialogs *pDialogs)
 
 	pDialogs->iDialogIconSize = cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "icon size", &bFlushConfFileNeeded, 48, NULL, NULL);
 
-	if (cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "homogeneous text", &bFlushConfFileNeeded, TRUE, NULL, NULL))
+	pDialogs->bHomogeneous = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "homogeneous text", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	if (pDialogs->bHomogeneous)
 	{
-		pDialogs->dialogTextDescription.iSize = g_iconTextDescription.iSize;
+		pDialogs->dialogTextDescription.iSize = myLabels.iconTextDescription.iSize;
 		if (pDialogs->dialogTextDescription.iSize == 0)
 			pDialogs->dialogTextDescription.iSize = 14;
-		pDialogs->dialogTextDescription.cFont = g_strdup (g_iconTextDescription.cFont);
-		pDialogs->dialogTextDescription.iWeight = g_iconTextDescription.iWeight;
-		pDialogs->dialogTextDescription.iStyle = g_iconTextDescription.iStyle;
+		pDialogs->dialogTextDescription.cFont = g_strdup (myLabels.iconTextDescription.cFont);
+		pDialogs->dialogTextDescription.iWeight = myLabels.iconTextDescription.iWeight;
+		pDialogs->dialogTextDescription.iStyle = myLabels.iconTextDescription.iStyle;
 	}
 	else
 	{
@@ -65,6 +65,7 @@ static void reset_config (CairoConfigDialogs *pDialogs)
 {
 	g_free (pDialogs->cButtonOkImage);
 	g_free (pDialogs->cButtonCancelImage);
+	g_free (pDialogs->dialogTextDescription.cFont);
 }
 
 

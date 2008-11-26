@@ -12,112 +12,106 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-internal-dialogs.h"
 #define _INTERNAL_MODULE_
-#include "cairo-dock-internal-indicators.h"
+#include "cairo-dock-internal-labels.h"
 
-CairoConfigIndicators myIndicators;
+CairoConfigLabels myLabels;
 extern CairoDock *g_pMainDock;
-extern double g_fAmplitude;
 
-static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicators)
+static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
-	double couleur_active[4] = {0., 0.4, 0.8, 0.25};
-	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "active color", &bFlushConfFileNeeded, pIndicators->fActiveColor, 4, couleur_active, "Icons", NULL);
-	
-	pIndicators->iActiveLineWidth = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active line width", &bFlushConfFileNeeded, 3, "Icons", NULL);
-	pIndicators->iActiveCornerRadius = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active corner radius", &bFlushConfFileNeeded, 6, "Icons", NULL);
-	pIndicators->bActiveIndicatorAbove = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "active frame position", &bFlushConfFileNeeded, TRUE, "Icons", NULL);
-	gchar *cActiveIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "active indicator", &bFlushConfFileNeeded, NULL, NULL, NULL);
-	if (cActiveIndicatorImageName != NULL)
-	{
-		pIndicators->cActiveIndicatorImagePath = cairo_dock_generate_file_path (cActiveIndicatorImageName);
-		g_free (cActiveIndicatorImageName);
-	}
-	else
-		pIndicators->cActiveIndicatorImagePath = NULL;
-	
-	gchar *cIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "indicator image", &bFlushConfFileNeeded, NULL, "Icons", NULL);
-	if (cIndicatorImageName != NULL)
-	{
-		pIndicators->cIndicatorImagePath = cairo_dock_generate_file_path (cIndicatorImageName);
-		g_free (cIndicatorImageName);
-	}
-	else
-	{
-		pIndicators->cIndicatorImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_DEFAULT_INDICATOR_NAME);
-	}
-	
-	pIndicators->bIndicatorAbove = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "indicator above", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
-	
-	pIndicators->fIndicatorRatio = cairo_dock_get_double_key_value (pKeyFile, "Indicators", "indicator ratio", &bFlushConfFileNeeded, 1., "Icons", NULL);
-	
-	pIndicators->bLinkIndicatorWithIcon = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "link indicator", &bFlushConfFileNeeded, TRUE, "Icons", NULL);
-	
-	pIndicators->iIndicatorDeltaY = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "indicator deltaY", &bFlushConfFileNeeded, 2, "Icons", NULL);
-	
-	gchar *cDropIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "drop indicator", &bFlushConfFileNeeded, NULL, "Icons", NULL);
-	if (cDropIndicatorImageName != NULL)
-	{
-		pIndicators->cDropIndicatorImagePath = cairo_dock_generate_file_path (cDropIndicatorImageName);
-		g_free (cDropIndicatorImageName);
-	}
-	else
-	{
-		pIndicators->cDropIndicatorImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_DEFAULT_DROP_INDICATOR_NAME);
-	}
+	pLabels->iconTextDescription.cFont = cairo_dock_get_string_key_value (pKeyFile, "Labels", "police", &bFlushConfFileNeeded, "sans", "Icons", NULL);
 
+	pLabels->iconTextDescription.iSize = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "size", &bFlushConfFileNeeded, 14, "Icons", NULL);
+	
+	int iLabelWeight = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "weight", &bFlushConfFileNeeded, 5, "Icons", NULL);
+	pLabels->iconTextDescription.iWeight = ((PANGO_WEIGHT_HEAVY - PANGO_WEIGHT_ULTRALIGHT) * iLabelWeight + 9 * PANGO_WEIGHT_ULTRALIGHT - PANGO_WEIGHT_HEAVY) / 8;  // on se ramene aux intervalles definit par Pango.
+	
+	gboolean bLabelStyleItalic = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "italic", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
+	if (bLabelStyleItalic)
+		pLabels->iconTextDescription.iStyle  = PANGO_STYLE_ITALIC;
+	else
+		pLabels->iconTextDescription.iStyle  = PANGO_STYLE_NORMAL;
+	
+
+	if (pLabels->iconTextDescription.cFont == NULL)
+		pLabels->iconTextDescription.iSize = 0;
+
+	if (pLabels->iconTextDescription.iSize == 0)
+	{
+		g_free (pLabels->iconTextDescription.cFont);
+		pLabels->iconTextDescription.cFont = NULL;
+	}
+	
+	double couleur_label[3] = {1., 1., 1.};
+	cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text color start", &bFlushConfFileNeeded, pLabels->iconTextDescription.fColorStart, 3, couleur_label, "Icons", NULL);
+	
+	cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text color stop", &bFlushConfFileNeeded, pLabels->iconTextDescription.fColorStop, 3, couleur_label, "Icons", NULL);
+	
+	pLabels->iconTextDescription.bVerticalPattern = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "vertical label pattern", &bFlushConfFileNeeded, TRUE, "Icons", NULL);
+
+	double couleur_backlabel[4] = {0., 0., 0., 0.5};
+	cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text background color", &bFlushConfFileNeeded, pLabels->iconTextDescription.fBackgroundColor, 4, couleur_backlabel, "Icons", NULL);
+	
+	memcpy (&pLabels->quickInfoTextDescription, &pLabels->iconTextDescription, sizeof (CairoDockLabelDescription));
+	pLabels->quickInfoTextDescription.cFont = g_strdup (pLabels->iconTextDescription.cFont);
+	pLabels->quickInfoTextDescription.iSize = 12;
+	pLabels->quickInfoTextDescription.iWeight = PANGO_WEIGHT_HEAVY;
+	pLabels->quickInfoTextDescription.iStyle = PANGO_STYLE_NORMAL;
+	
+	gboolean bUseBackgroundForLabel = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "background for label", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
+	if (! bUseBackgroundForLabel)
+		pLabels->iconTextDescription.fBackgroundColor[3] = 0;  // ne sera pas pris en compte.
+	
+	if (myDialogs.bHomogeneous)
+	{
+		myDialogs.dialogTextDescription.iSize = pLabels->iconTextDescription.iSize;
+		if (myDialogs.dialogTextDescription.iSize == 0)
+			myDialogs.dialogTextDescription.iSize = 14;
+		g_free (myDialogs.dialogTextDescription.cFont);
+		myDialogs.dialogTextDescription.cFont = g_strdup (pLabels->iconTextDescription.cFont);
+		myDialogs.dialogTextDescription.iWeight = pLabels->iconTextDescription.iWeight;
+		myDialogs.dialogTextDescription.iStyle = pLabels->iconTextDescription.iStyle;
+	}
+	
 	return bFlushConfFileNeeded;
 }
 
 
-static void reset_config (CairoConfigIndicators *pIndicators)
+static void reset_config (CairoConfigLabels *pLabels)
 {
-	g_free (pIndicators->cActiveIndicatorImagePath);
-	g_free (pIndicators->cIndicatorImagePath);
-	g_free (pIndicators->cDropIndicatorImagePath);
+	g_free (pLabels->iconTextDescription.cFont);
+	g_free (pLabels->quickInfoTextDescription.cFont);
 }
 
 
-static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicators *pIndicators)
+static void _reload_one_label (Icon *pIcon, CairoDock *pDock, gpointer *data)
+{
+	CairoConfigLabels *pLabels = data[0];
+	cairo_t* pSourceContext = data[1];
+	cairo_dock_fill_one_text_buffer (pIcon, pSourceContext, &pLabels->iconTextDescription, pDock->bHorizontalDock, pDock->bDirectionUp);
+}
+static void reload (CairoConfigLabels *pPrevLabels, CairoConfigLabels *pLabels)
 {
 	CairoDock *pDock = g_pMainDock;
-	double fMaxScale = cairo_dock_get_max_scale (pDock);
 	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-	
-	if (cairo_dock_strings_differ (pPrevIndicators->cIndicatorImagePath, pIndicators->cIndicatorImagePath))
-	{
-		cairo_dock_load_task_indicator (myTaskBar.bShowAppli && myTaskBar.bMixLauncherAppli ? pIndicators->cIndicatorImagePath : NULL, pCairoContext, fMaxScale, pIndicators->fIndicatorRatio);
-	}
-	if (cairo_dock_strings_differ (pPrevIndicators->cDropIndicatorImagePath, pIndicators->cDropIndicatorImagePath))
-	{
-		cairo_dock_load_drop_indicator (pIndicators->cDropIndicatorImagePath, pCairoContext, fMaxScale);
-	}
-	
-	if (cairo_dock_strings_differ (pPrevIndicators->cActiveIndicatorImagePath, pIndicators->cActiveIndicatorImagePath))
-	{
-		cairo_dock_load_active_window_indicator (pCairoContext,
-			pPrevIndicators->cActiveIndicatorImagePath,
-			fMaxScale,
-			pPrevIndicators->iActiveCornerRadius,
-			pPrevIndicators->iActiveLineWidth,
-			pPrevIndicators->fActiveColor);
-	}
-	
-	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.
+	gpointer data[2] = {pLabels, pCairoContext};
+	cairo_dock_foreach_icons ((CairoDockForeachIconFunc) _reload_one_label, data);
+	cairo_destroy (pCairoContext);
 }
 
 
-DEFINE_PRE_INIT (Indicators)
+DEFINE_PRE_INIT (Labels)
 {
-	pModule->cModuleName = "Indicators";
-	pModule->cTitle = "Indicators";
-	pModule->cIcon = "gtk-select-color";
-	pModule->cDescription = "Indicators are extra indications on your icons.";
+	pModule->cModuleName = "Labels";
+	pModule->cTitle = "Labels";
+	pModule->cIcon = "gtk-select-font";
+	pModule->cDescription = "Define the style of the icons' labels and quick-info.";
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
-	pModule->iSizeOfConfig = sizeof (CairoConfigIndicators);
+	pModule->iSizeOfConfig = sizeof (CairoConfigLabels);
 	pModule->iSizeOfData = 0;
 	
 	pModule->reload = (CairoDockInternalModuleReloadFunc) reload;
@@ -125,6 +119,6 @@ DEFINE_PRE_INIT (Indicators)
 	pModule->reset_config = (CairoDockInternalModuleResetConfigFunc) reset_config;
 	pModule->reset_data = NULL;
 	
-	pModule->pConfig = (CairoInternalModuleConfigPtr) &myIndicators;
+	pModule->pConfig = (CairoInternalModuleConfigPtr) &myLabels;
 	pModule->pData = NULL;
 }

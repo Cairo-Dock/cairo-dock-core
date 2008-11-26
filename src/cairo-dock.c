@@ -140,9 +140,6 @@ int g_tNbAnimationRounds[CAIRO_DOCK_NB_TYPES];  // le nombre de rebonds/rotation
 int g_tIconTypeOrder[CAIRO_DOCK_NB_TYPES];  // l'ordre de chaque type dans le dock.
 int g_tNbIterInOneRound[CAIRO_DOCK_NB_ANIMATIONS] = {17, 20, 20, 12, 20, 20, 0};  // 2n+3, 4n, 2n, 2n, 4n, 4n.
 
-CairoDockLabelDescription g_iconTextDescription;
-CairoDockLabelDescription g_quickInfoTextDescription;
-
 double g_fAlphaAtRest;
 
 int g_iNbDesktops;  // nombre de bureaux.

@@ -1,6 +1,6 @@
 
-#ifndef __CAIRO_DOCK_INDICATORS__
-#define  __CAIRO_DOCK_INDICATORS__
+#ifndef __CAIRO_DOCK_INTERNAL_LABELS__
+#define  __CAIRO_DOCK_INTERNAL_LABELS__
 
 #include <glib.h>
 
@@ -8,28 +8,19 @@
 #include "cairo-dock-config.h"
 
 
-typedef struct _CairoConfigIndicators CairoConfigIndicators;
+typedef struct _CairoConfigLabels CairoConfigLabels;
 #ifndef _INTERNAL_MODULE_
-extern CairoConfigIndicators myIndicators;
+extern CairoConfigLabels myLabels;
 #endif
 G_BEGIN_DECLS
 
-struct _CairoConfigIndicators {
-	gdouble fActiveColor[4];
-	gint iActiveLineWidth;
-	gint iActiveCornerRadius;
-	gboolean bActiveIndicatorAbove;
-	gchar *cActiveIndicatorImagePath;
-	gchar *cIndicatorImagePath;
-	gboolean bIndicatorAbove;
-	gdouble fIndicatorRatio;
-	gboolean bLinkIndicatorWithIcon;
-	gint iIndicatorDeltaY;
-	gchar *cDropIndicatorImagePath;
+struct _CairoConfigLabels {
+	CairoDockLabelDescription iconTextDescription;
+	CairoDockLabelDescription quickInfoTextDescription;
 	};
 
 
-DEFINE_PRE_INIT (Indicators);
+DEFINE_PRE_INIT (Labels);
 
 G_END_DECLS
 #endif

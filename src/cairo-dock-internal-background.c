@@ -12,112 +12,84 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-log.h"
 #define _INTERNAL_MODULE_
-#include "cairo-dock-internal-indicators.h"
+#include "cairo-dock-internal-background.h"
 
-CairoConfigIndicators myIndicators;
+CairoConfigBackground myBackground;
 extern CairoDock *g_pMainDock;
 extern double g_fAmplitude;
 
-static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicators)
+static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackground)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
-	double couleur_active[4] = {0., 0.4, 0.8, 0.25};
-	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "active color", &bFlushConfFileNeeded, pIndicators->fActiveColor, 4, couleur_active, "Icons", NULL);
-	
-	pIndicators->iActiveLineWidth = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active line width", &bFlushConfFileNeeded, 3, "Icons", NULL);
-	pIndicators->iActiveCornerRadius = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active corner radius", &bFlushConfFileNeeded, 6, "Icons", NULL);
-	pIndicators->bActiveIndicatorAbove = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "active frame position", &bFlushConfFileNeeded, TRUE, "Icons", NULL);
-	gchar *cActiveIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "active indicator", &bFlushConfFileNeeded, NULL, NULL, NULL);
-	if (cActiveIndicatorImageName != NULL)
+	pBackground->iDockRadius = cairo_dock_get_integer_key_value (pKeyFile, "Background", "corner radius", &bFlushConfFileNeeded, 12, NULL, NULL);
+
+	pBackground->iDockLineWidth = cairo_dock_get_integer_key_value (pKeyFile, "Background", "line width", &bFlushConfFileNeeded, 2, NULL, NULL);
+
+	pBackground->iFrameMargin = cairo_dock_get_integer_key_value (pKeyFile, "Background", "frame margin", &bFlushConfFileNeeded, 2, NULL, NULL);
+
+	double couleur[4] = {0., 0., 0.6, 0.4};
+	cairo_dock_get_double_list_key_value (pKeyFile, "Background", "line color", &bFlushConfFileNeeded, pBackground->fLineColor, 4, couleur, NULL, NULL);
+
+	pBackground->bRoundedBottomCorner = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "rounded bottom corner", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+
+	double couleur2[4] = {.7, .9, .7, .4};
+	cairo_dock_get_double_list_key_value (pKeyFile, "Background", "stripes color bright", &bFlushConfFileNeeded, pBackground->fStripesColorBright, 4, couleur2, NULL, NULL);
+
+	pBackground->cBackgroundImageFile = cairo_dock_get_string_key_value (pKeyFile, "Background", "background image", &bFlushConfFileNeeded, NULL, NULL, NULL);
+
+	pBackground->fBackgroundImageAlpha = cairo_dock_get_double_key_value (pKeyFile, "Background", "image alpha", &bFlushConfFileNeeded, 0.5, NULL, NULL);
+
+	pBackground->bBackgroundImageRepeat = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "repeat image", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+
+	pBackground->iNbStripes = cairo_dock_get_integer_key_value (pKeyFile, "Background", "number of stripes", &bFlushConfFileNeeded, 10, NULL, NULL);
+
+	pBackground->fStripesWidth = cairo_dock_get_double_key_value (pKeyFile, "Background", "stripes width", &bFlushConfFileNeeded, 0.02, NULL, NULL);
+	if (pBackground->iNbStripes > 0 && pBackground->fStripesWidth > 1. / pBackground->iNbStripes)
 	{
-		pIndicators->cActiveIndicatorImagePath = cairo_dock_generate_file_path (cActiveIndicatorImageName);
-		g_free (cActiveIndicatorImageName);
+		cd_warning ("the stripes' width is greater than the space between them. Consider reducing it.");
+		pBackground->fStripesWidth = 0.99 / pBackground->iNbStripes;
 	}
-	else
-		pIndicators->cActiveIndicatorImagePath = NULL;
-	
-	gchar *cIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "indicator image", &bFlushConfFileNeeded, NULL, "Icons", NULL);
-	if (cIndicatorImageName != NULL)
-	{
-		pIndicators->cIndicatorImagePath = cairo_dock_generate_file_path (cIndicatorImageName);
-		g_free (cIndicatorImageName);
-	}
-	else
-	{
-		pIndicators->cIndicatorImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_DEFAULT_INDICATOR_NAME);
-	}
-	
-	pIndicators->bIndicatorAbove = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "indicator above", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
-	
-	pIndicators->fIndicatorRatio = cairo_dock_get_double_key_value (pKeyFile, "Indicators", "indicator ratio", &bFlushConfFileNeeded, 1., "Icons", NULL);
-	
-	pIndicators->bLinkIndicatorWithIcon = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "link indicator", &bFlushConfFileNeeded, TRUE, "Icons", NULL);
-	
-	pIndicators->iIndicatorDeltaY = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "indicator deltaY", &bFlushConfFileNeeded, 2, "Icons", NULL);
-	
-	gchar *cDropIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "drop indicator", &bFlushConfFileNeeded, NULL, "Icons", NULL);
-	if (cDropIndicatorImageName != NULL)
-	{
-		pIndicators->cDropIndicatorImagePath = cairo_dock_generate_file_path (cDropIndicatorImageName);
-		g_free (cDropIndicatorImageName);
-	}
-	else
-	{
-		pIndicators->cDropIndicatorImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_DEFAULT_DROP_INDICATOR_NAME);
-	}
+
+	double couleur3[4] = {.7, .7, 1., .7};
+	cairo_dock_get_double_list_key_value (pKeyFile, "Background", "stripes color dark", &bFlushConfFileNeeded, pBackground->fStripesColorDark, 4, couleur3, NULL, NULL);
+
+	pBackground->fStripesAngle = cairo_dock_get_double_key_value (pKeyFile, "Background", "stripes angle", &bFlushConfFileNeeded, 30., NULL, NULL);
 
 	return bFlushConfFileNeeded;
 }
 
 
-static void reset_config (CairoConfigIndicators *pIndicators)
+static void reset_config (CairoConfigBackground *pBackground)
 {
-	g_free (pIndicators->cActiveIndicatorImagePath);
-	g_free (pIndicators->cIndicatorImagePath);
-	g_free (pIndicators->cDropIndicatorImagePath);
+	g_free (pBackground->cBackgroundImageFile);
 }
 
 
-static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicators *pIndicators)
+static void reload (CairoConfigBackground *pPrevBackground, CairoConfigBackground *pBackground)
 {
 	CairoDock *pDock = g_pMainDock;
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
 	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 	
-	if (cairo_dock_strings_differ (pPrevIndicators->cIndicatorImagePath, pIndicators->cIndicatorImagePath))
-	{
-		cairo_dock_load_task_indicator (myTaskBar.bShowAppli && myTaskBar.bMixLauncherAppli ? pIndicators->cIndicatorImagePath : NULL, pCairoContext, fMaxScale, pIndicators->fIndicatorRatio);
-	}
-	if (cairo_dock_strings_differ (pPrevIndicators->cDropIndicatorImagePath, pIndicators->cDropIndicatorImagePath))
-	{
-		cairo_dock_load_drop_indicator (pIndicators->cDropIndicatorImagePath, pCairoContext, fMaxScale);
-	}
 	
-	if (cairo_dock_strings_differ (pPrevIndicators->cActiveIndicatorImagePath, pIndicators->cActiveIndicatorImagePath))
-	{
-		cairo_dock_load_active_window_indicator (pCairoContext,
-			pPrevIndicators->cActiveIndicatorImagePath,
-			fMaxScale,
-			pPrevIndicators->iActiveCornerRadius,
-			pPrevIndicators->iActiveLineWidth,
-			pPrevIndicators->fActiveColor);
-	}
+	
+	cairo_destroy (pCairoContext);
 	
 	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.
 }
 
 
-DEFINE_PRE_INIT (Indicators)
+DEFINE_PRE_INIT (Background)
 {
-	pModule->cModuleName = "Indicators";
-	pModule->cTitle = "Indicators";
-	pModule->cIcon = "";
-	pModule->cDescription = "";
+	pModule->cModuleName = "Background";
+	pModule->cTitle = "Background";
+	pModule->cIcon = "gtk-orientation-portrait";
+	pModule->cDescription = "Set a background to your dock.";
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
-	pModule->iSizeOfConfig = sizeof (CairoConfigIndicators);
+	pModule->iSizeOfConfig = sizeof (CairoConfigBackground);
 	pModule->iSizeOfData = 0;
 	
 	pModule->reload = (CairoDockInternalModuleReloadFunc) reload;
@@ -125,6 +97,6 @@ DEFINE_PRE_INIT (Indicators)
 	pModule->reset_config = (CairoDockInternalModuleResetConfigFunc) reset_config;
 	pModule->reset_data = NULL;
 	
-	pModule->pConfig = (CairoInternalModuleConfigPtr) &myIndicators;
+	pModule->pConfig = (CairoInternalModuleConfigPtr) &myBackground;
 	pModule->pData = NULL;
 }

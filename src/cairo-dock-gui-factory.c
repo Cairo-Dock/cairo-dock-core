@@ -556,7 +556,7 @@ void cairo_dock_build_renderer_list_for_gui (GHashTable *pHashTable)
 }
 static void _cairo_dock_add_one_decoration_item (gchar *cName, CairoDeskletDecoration *pDecoration, GtkListStore *pModele)
 {
-	g_print ("add %s\n", cName);
+	cd_debug ("%s (%s)", __func__, cName);
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);

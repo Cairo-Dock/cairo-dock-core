@@ -28,6 +28,7 @@ typedef struct _CairoParticleSystem {
 	GLfloat *pColors;
 	GLfloat fWidth, fHeight;
 	double dt;
+	gboolean bDirectionUp;
 	} CairoParticleSystem;
 
 typedef void (CairoDockRewindParticleFunc) (CairoParticle *pParticle, double dt);

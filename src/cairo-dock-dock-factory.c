@@ -26,7 +26,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #endif
 
 #include <gtk/gtkgl.h>
-#include <X11/extensions/Xrender.h> 
+#include <X11/extensions/Xrender.h>
+#include <X11/extensions/shape.h>
 #include <GL/gl.h> 
 #include <GL/glu.h> 
 #include <GL/glx.h> 
@@ -52,6 +53,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-views.h"
+#include "cairo-dock-internal-labels.h"
 #include "cairo-dock-dock-factory.h"
 
 extern int g_iWmHint;
@@ -61,8 +63,6 @@ extern int g_iScreenWidth[2], g_iScreenHeight[2];
 extern gint g_iDockLineWidth;
 extern int g_iIconGap;
 extern double g_fAmplitude;
-
-extern CairoDockLabelDescription g_iconTextDescription;
 
 extern gboolean g_bUseSeparator;
 
@@ -494,7 +494,10 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 	{
 		pPointedIcon->pSubDock = NULL;
 	}
-
+	
+	g_object_unref ((gpointer) pDock->pShapeBitmap);
+	pDock->pShapeBitmap = NULL;
+	
 	gtk_widget_destroy (pDock->pWidget);
 	pDock->pWidget = NULL;
 
@@ -649,7 +652,7 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 			if (! myViews.bSameHorizontality)
 			{
 				cairo_t* pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-				cairo_dock_fill_one_text_buffer (icon, pSourceContext, &g_iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pDock->bHorizontalDock), pDock->bDirectionUp);
+				cairo_dock_fill_one_text_buffer (icon, pSourceContext, &myLabels.iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pDock->bHorizontalDock), pDock->bDirectionUp);
 				cairo_destroy (pSourceContext);
 			}
 		}
@@ -881,7 +884,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	if (! myViews.bSameHorizontality)
 	{
 		cairo_t* pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-		cairo_dock_fill_one_text_buffer (icon, pSourceContext, &g_iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pDock->bHorizontalDock), pDock->bDirectionUp);
+		cairo_dock_fill_one_text_buffer (icon, pSourceContext, &myLabels.iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pDock->bHorizontalDock), pDock->bDirectionUp);
 		cairo_destroy (pSourceContext);
 	}
 
@@ -1164,3 +1167,70 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 		cairo_dock_notify (CAIRO_DOCK_DROP_DATA, data);
 	} while (str != NULL);*/
 }
+
+void cairo_dock_set_input_shape (CairoDock *pDock)
+{
+	/*gint   iIgnore;
+	gint   iMajor;
+	gint   iMinor;
+
+	if (!XShapeQueryExtension (GDK_WINDOW_XDISPLAY (pDock->pWidget->window),
+				   &iIgnore,
+				   &iIgnore))
+		g_print ("No ShapeQueryExtension\n");
+
+	if (!XShapeQueryVersion (GDK_WINDOW_XDISPLAY (pDock->pWidget->window),
+				 &iMajor,
+				 &iMinor))
+		g_print ("No ShapeQueryExtension\n");
+
+	/ for shaped input we need at least XShape 1.1
+	if (iMajor != 1 && iMinor < 1)
+		g_print ("ShapeQueryExtension too old\n");*/
+	if (pDock->pShapeBitmap == NULL || pDock->inputArea.width == 0 || pDock->inputArea.height == 0)
+		return ;
+	g_print ("%s (%d;%d ; %dx%d\n", __func__, pDock->inputArea.x, pDock->inputArea.y, pDock->inputArea.width, pDock->inputArea.height);
+	
+	cairo_t *pCairoContext = gdk_cairo_create (pDock->pShapeBitmap);
+	cairo_set_source_rgba (pCairoContext, 1.0f, 1.0f, 1.0f, 0.0f);
+	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
+	cairo_paint (pCairoContext);
+	cairo_set_source_rgba (pCairoContext, 1, 1, 1, 1);
+	if (pDock->bHorizontalDock)
+	{
+		cairo_rectangle (pCairoContext,
+			pDock->inputArea.x,
+			pDock->bDirectionUp ? pDock->inputArea.y : pDock->iCurrentHeight - pDock->inputArea.y - pDock->inputArea.height,
+			pDock->inputArea.width,
+			pDock->inputArea.height);
+	}
+	else
+	{
+		cairo_move_to (pCairoContext,
+			pDock->inputArea.y,
+			pDock->bDirectionUp ? pDock->inputArea.x : pDock->iCurrentHeight - pDock->inputArea.x - pDock->inputArea.width);
+		cairo_rectangle (pCairoContext, 0., 0., pDock->inputArea.height, pDock->inputArea.width);
+	}
+	cairo_fill (pCairoContext);
+	cairo_destroy (pCairoContext);
+	
+	gtk_widget_input_shape_combine_mask (pDock->pWidget,
+		NULL,
+		0,
+		0);
+	gtk_widget_input_shape_combine_mask (pDock->pWidget,
+		pDock->pShapeBitmap,
+		0,
+		0);
+}
+void cairo_dock_unset_input_shape (CairoDock *pDock)
+{
+	g_print ("%s ()\n", __func__);
+	gtk_widget_input_shape_combine_mask (pDock->pWidget,
+		NULL,
+		0,
+		0);
+}
+
+
+

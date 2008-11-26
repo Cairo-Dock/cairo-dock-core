@@ -105,6 +105,7 @@ static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicator
 			pPrevIndicators->iActiveLineWidth,
 			pPrevIndicators->fActiveColor);
 	}
+	cairo_destroy (pCairoContext);
 	
 	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.
 }

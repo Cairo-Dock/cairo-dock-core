@@ -17,6 +17,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 #ifdef HAVE_XEXTEND
+#include <X11/extensions/shape.h>
 #include <X11/extensions/Xcomposite.h>
 //#include <X11/extensions/Xdamage.h>
 #endif

@@ -26,6 +26,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-internal-system.h"
+#include "cairo-dock-internal-labels.h"
 #include "cairo-dock-applet-facility.h"
 
 extern gchar *g_cCurrentThemePath;
@@ -34,8 +35,6 @@ extern gchar *g_cCairoDockDataDir;
 extern double g_fAmplitude;
 extern double g_fAlbedo;
 
-extern CairoDockLabelDescription g_iconTextDescription;
-extern CairoDockLabelDescription g_quickInfoTextDescription;
 extern gboolean g_bUseOpenGL;
 
 
@@ -193,7 +192,7 @@ void cairo_dock_set_icon_name (cairo_t *pSourceContext, const gchar *cIconName, 
 	cairo_dock_fill_one_text_buffer(
 		pIcon,
 		pSourceContext,
-		&g_iconTextDescription,
+		&myLabels.iconTextDescription,
 		(mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pContainer->bIsHorizontal),
 		pContainer->bDirectionUp);
 }
@@ -219,7 +218,7 @@ void cairo_dock_set_quick_info (cairo_t *pSourceContext, const gchar *cQuickInfo
 	
 	cairo_dock_fill_one_quick_info_buffer (pIcon,
 		pSourceContext,
-		&g_quickInfoTextDescription,
+		&myLabels.quickInfoTextDescription,
 		fMaxScale);
 }
 

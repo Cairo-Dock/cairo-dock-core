@@ -88,7 +88,6 @@ void cairo_dock_config_panel_created (void)
 
 static void _cairo_dock_add_image_on_button (GtkWidget *pButton, const gchar *cImage, int iSize)
 {
-	g_print ("%s (%s, %d)\n", __func__, cImage, iSize);
 	if (cImage == NULL)
 		return ;
 	
@@ -117,7 +116,6 @@ static void _cairo_dock_add_image_on_button (GtkWidget *pButton, const gchar *cI
 }
 static GtkToolItem *_cairo_dock_make_toolbutton (const gchar *cLabel, const gchar *cImage, int iSize)
 {
-	g_print ("%s (%s, %d)\n", __func__, cImage, iSize);
 	if (cImage == NULL)
 		return gtk_tool_button_new (NULL, cLabel);
 	
@@ -222,7 +220,6 @@ static void _cairo_dock_add_group_button (gchar *cGroupName, gchar *cIcon, int i
 
 static gboolean _cairo_dock_add_one_module_widget (gchar *cModuleName, CairoDockModule *pModule, gchar *cActiveModules)
 {
-	g_print ("%s (%s)\n", __func__, pModule->cConfFilePath);
 	if (pModule->cConfFilePath == NULL)
 		pModule->cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
 	int iActive;

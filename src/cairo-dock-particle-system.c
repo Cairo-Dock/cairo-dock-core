@@ -36,8 +36,7 @@ void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int
 	
 	GLfloat x,y,z;
 	GLfloat w, h;
-	GLfloat fHalfWidth = pParticleSystem->fWidth / 2;
-	GLfloat fHalfHeight = pParticleSystem->fHeight / 2;
+	GLfloat fHeight = pParticleSystem->fHeight;
 	
 	int numActive = 0;
 	CairoParticle *p;
@@ -56,25 +55,30 @@ void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int
 		z = p->z;
 		
 		vertices[0] = x - w;
-		vertices[1] = y + h;
 		vertices[2] = z;
-
 		vertices[3] = x - w;
-		vertices[4] = y - h;
 		vertices[5] = z;
-
 		vertices[6] = x + w;
-		vertices[7] = y - h;
 		vertices[8] = z;
-
 		vertices[9] = x + w;
-		vertices[10] = y + h;
 		vertices[11] = z;
-		
+		if (pParticleSystem->bDirectionUp)
+		{
+			vertices[1] = y + h;
+			vertices[4] = y - h;
+			vertices[7] = y - h;
+			vertices[10] = y + h;
+		}
+		else
+		{
+			vertices[1] = fHeight - y + h;
+			vertices[4] = fHeight - y - h;
+			vertices[7] = fHeight - y - h;
+			vertices[10] = fHeight - y + h;
+		}
 		vertices += 12;
 		
 		memcpy (coords, s_pCornerCoords, sizeof (s_pCornerCoords));
-
 		coords += 8;
 
 		colors[0] = p->color[0];
@@ -83,9 +87,7 @@ void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int
 		colors[3] = p->color[3];
 		memcpy (colors + 4, colors, 4*sizeof (GLfloat));
 		memcpy (colors + 8, colors, 8*sizeof (GLfloat));
-
 		colors += 16;
-		
 	}
 	
 	glEnableClientState(GL_COLOR_ARRAY);
@@ -118,6 +120,7 @@ CairoParticleSystem *cairo_dock_create_particle_system (int iNbParticles, GLuint
 	
 	pParticleSystem->fWidth = fWidth;
 	pParticleSystem->fHeight = fHeight;
+	pParticleSystem->bDirectionUp = TRUE;
 	
 	pParticleSystem->pVertices = malloc(iNbParticles * 4 * 3 * sizeof(GLfloat));
 	pParticleSystem->pCoords = malloc(iNbParticles * 4 * 2 * sizeof(GLfloat));

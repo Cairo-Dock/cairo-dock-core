@@ -16,11 +16,11 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <cairo-dock-renderer-manager.h>
 #include <cairo-dock-draw-opengl.h>
 #include <cairo-dock-draw.h>
+#include <cairo-dock-internal-labels.h>
 #include <cairo-dock-graph.h>
 
 extern int g_iDockRadius;
 extern double g_fAmplitude;
-extern CairoDockLabelDescription g_quickInfoTextDescription;
 extern gboolean g_bUseOpenGL;
 
 
@@ -235,7 +235,7 @@ static cairo_surface_t *_cairo_dock_create_graph_background (cairo_t *pSourceCon
 	
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 	double fMargin = fRadius * (1. - sqrt(2)/2);
-	cairo_set_source_rgb (pCairoContext, g_quickInfoTextDescription.fBackgroundColor[0], g_quickInfoTextDescription.fBackgroundColor[1], g_quickInfoTextDescription.fBackgroundColor[2]);  // meme couleur que le fond des info-rapides.
+	cairo_set_source_rgb (pCairoContext, myLabels.quickInfoTextDescription.fBackgroundColor[0], myLabels.quickInfoTextDescription.fBackgroundColor[1], myLabels.quickInfoTextDescription.fBackgroundColor[2]);  // meme couleur que le fond des info-rapides.
 	cairo_set_line_width (pCairoContext, 1.);
 	if (iType == CAIRO_DOCK_GRAPH_CIRCLE || iType == CAIRO_DOCK_GRAPH_CIRCLE_PLAIN)
 	{

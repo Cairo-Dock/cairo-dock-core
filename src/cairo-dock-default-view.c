@@ -28,6 +28,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-internal-views.h"
+#include "cairo-dock-internal-labels.h"
 #include "cairo-dock-default-view.h"
 
 #define RADIAN (G_PI / 180.0)  // Conversion Radian/Degres
@@ -45,7 +46,6 @@ extern double g_fStringColor[4];
 extern gboolean g_bRoundedBottomCorner;
 
 extern double g_fAmplitude;
-extern CairoDockLabelDescription g_iconTextDescription;
 
 extern int g_iBackgroundTexture;
 
@@ -86,7 +86,7 @@ void cairo_dock_calculate_max_dock_size_linear (CairoDock *pDock)
 	double fExtraWidth = g_iDockLineWidth + 2 * (fRadius + g_iFrameMargin);
 	pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->pFirstDrawnElement, pDock->fFlatDockWidth, 1., fExtraWidth));
 
-	pDock->iMaxDockHeight = (int) ((1 + g_fAmplitude) * pDock->iMaxIconHeight) + g_iconTextDescription.iSize + g_iDockLineWidth + g_iFrameMargin;
+	pDock->iMaxDockHeight = (int) ((1 + g_fAmplitude) * pDock->iMaxIconHeight) + myLabels.iconTextDescription.iSize + g_iDockLineWidth + g_iFrameMargin;
 
 	pDock->iDecorationsWidth = pDock->iMaxDockWidth;
 
@@ -448,7 +448,21 @@ Icon *cairo_dock_calculate_icons_linear (CairoDock *pDock)
 		cairo_dock_calculate_construction_parameters_generic (icon, pDock->iCurrentWidth, pDock->iCurrentHeight, pDock->iMaxDockWidth);
 		cairo_dock_manage_animations (icon, pDock);
 	}
-
+	
+	
+	icon = cairo_dock_get_first_drawn_icon (pDock);
+	if (icon != NULL)
+	{
+		double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
+		pDock->inputArea.x = 0;
+		pDock->inputArea.width = pDock->iCurrentWidth;
+		pDock->inputArea.height = ceil (pDock->iMaxIconHeight * (1 + g_fAmplitude * fDockMagnitude));
+		pDock->inputArea.y = pDock->iCurrentHeight - pDock->inputArea.height;
+	}
+	else
+	{
+		pDock->inputArea.width = pDock->inputArea.height = 0;
+	}
 	return (iMousePositionType == CAIRO_DOCK_MOUSE_INSIDE ? pPointedIcon : NULL);
 }
 
@@ -467,124 +481,3 @@ void cairo_dock_register_default_renderer (void)
 
 	cairo_dock_register_renderer (CAIRO_DOCK_DEFAULT_RENDERER_NAME, pDefaultRenderer);
 }
-
-
-/*void cd_rendering_render_3D_plane_opengl (CairoDock *pDock)
-{
-	//\____________________ On trace le cadre.
-	double fLineWidth = g_iDockLineWidth;
-	double fMargin = g_iFrameMargin;
-	double fRadius = (pDock->iDecorationsHeight + fLineWidth - 2 * g_iDockRadius > 0 ? g_iDockRadius : (pDock->iDecorationsHeight + fLineWidth) / 2 - 1);
-	double fDockWidth = cairo_dock_get_current_dock_width_linear (pDock);
-	
-	int sens;
-	double fDockOffsetX, fDockOffsetY;  // Offset du coin haut gauche du cadre.
-	Icon *pFirstIcon = cairo_dock_get_first_drawn_icon (pDock);
-	fDockOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX + 0 - fMargin : fRadius + fLineWidth / 2);
-	if (pDock->bDirectionUp)
-	{
-		sens = 1;
-		fDockOffsetY = pDock->iCurrentHeight - pDock->iDecorationsHeight - 1.5 * fLineWidth;
-	}
-	else
-	{
-		sens = -1;
-		fDockOffsetY = pDock->iDecorationsHeight + 1.5 * fLineWidth;
-	}
-	
-	double fInclinationOnHorizon = (fDockWidth / 2) / iVanishingPointY;
-	double fDeltaXTrapeze;
-	int iNbVertex;
-	GLfloat *pVertexTab = cairo_dock_generate_trapeze_path (fDockWidth, fFrameHeight, fRadius, g_bRoundedBottomCorner, fInclinationOnHorizon, &fDeltaXTrapeze, &iNbVertex);
-	
-	//\____________________ On dessine les decorations dedans.
-	fDockOffsetY = (pDock->bDirectionUp ? pDock->iCurrentHeight - pDock->iDecorationsHeight - fLineWidth : fLineWidth);
-	glPushMatrix ();
-	cairo_dock_draw_frame_background_opengl (g_iBackgroundTexture, fDockWidth+2*fDeltaXTrapeze, fFrameHeight, fDockOffsetX-fDeltaXTrapeze, fDockOffsetY, pVertexTab, iNbVertex);
-	
-	//\____________________ On dessine le cadre.
-	if (fLineWidth != 0)
-		cairo_dock_draw_current_path_opengl (fLineWidth, g_fLineColor, pVertexTab, iNbVertex);
-	glPopMatrix ();
-	
-	/// donner un effet d'epaisseur => chaud du slip avec les separateurs physiques !
-	
-	//\____________________ On dessine la ficelle qui les joint.
-	///if (g_iStringLineWidth > 0)
-	///	cairo_dock_draw_string (pCairoContext, pDock, g_iStringLineWidth, FALSE, (my_iDrawSeparator3D == CD_FLAT_SEPARATOR || my_iDrawSeparator3D == CD_PHYSICAL_SEPARATOR));
-	
-	//\____________________ On dessine les icones et les etiquettes, en tenant compte de l'ordre pour dessiner celles en arriere-plan avant celles en avant-plan.
-	double fRatio = (pDock->iRefCount == 0 ? 1 : myViews.fSubDockSizeRatio);
-	fRatio = pDock->fRatio;
-	GList *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
-	if (pFirstDrawnElement == NULL)
-		return ;
-		
-	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
-	Icon *icon;
-	GList *ic = pFirstDrawnElement;
-	
-// 	if (my_iDrawSeparator3D == CD_FLAT_SEPARATOR || my_iDrawSeparator3D == CD_PHYSICAL_SEPARATOR)
-// 	{
-// 		cairo_set_line_cap (pCairoContext, CAIRO_LINE_CAP_SQUARE);
-// 		do
-// 		{
-// 			icon = ic->data;
-// 			
-// 			if (icon->acFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
-// 			{
-// 				cairo_save (pCairoContext);
-// 				cd_rendering_draw_3D_separator (icon, pCairoContext, pDock, pDock->bHorizontalDock, TRUE);
-// 				cairo_restore (pCairoContext);
-// 			}
-// 			
-// 			ic = cairo_dock_get_next_element (ic, pDock->icons);
-// 		} while (ic != pFirstDrawnElement);
-// 		
-// 		do
-// 		{
-// 			icon = ic->data;
-// 			
-// 			if (icon->acFileName != NULL || ! CAIRO_DOCK_IS_SEPARATOR (icon))
-// 			{
-// 				cairo_save (pCairoContext);
-// 				cairo_dock_render_one_icon (icon, pCairoContext, pDock->bHorizontalDock, fRatio, fDockMagnitude, pDock->bUseReflect, TRUE, pDock->iCurrentWidth, pDock->bDirectionUp);
-// 				cairo_restore (pCairoContext);
-// 			}
-// 			
-// 			ic = cairo_dock_get_next_element (ic, pDock->icons);
-// 		} while (ic != pFirstDrawnElement);
-// 		
-// 		if (my_iDrawSeparator3D == CD_PHYSICAL_SEPARATOR)
-// 		{
-// 			do
-// 			{
-// 				icon = ic->data;
-// 				
-// 				if (icon->acFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
-// 				{
-// 					cairo_save (pCairoContext);
-// 					cd_rendering_draw_3D_separator (icon, pCairoContext, pDock, pDock->bHorizontalDock, FALSE);
-// 					cairo_restore (pCairoContext);
-// 				}
-// 				
-// 				ic = cairo_dock_get_next_element (ic, pDock->icons);
-// 			} while (ic != pFirstDrawnElement);
-// 		}
-// 	}
-// 	else
-	{
-		do
-		{
-			icon = ic->data;
-			
-			glPushMatrix ();
-			
-			cairo_dock_render_one_icon_opengl (icon, pDock, fRatio, fDockMagnitude, TRUE);
-			
-			glPopMatrix ();
-			
-			ic = cairo_dock_get_next_element (ic, pDock->icons);
-		} while (ic != pFirstDrawnElement);
-	}
-}*/

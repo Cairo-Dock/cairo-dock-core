@@ -205,6 +205,9 @@ gboolean cairo_dock_grow_up (CairoDock *pDock)
 	
 	Icon *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 	Icon *pPointedIcon = pDock->calculate_icons (pDock);
+	if (pDock->iMagnitudeIndex == CAIRO_DOCK_NB_MAX_ITERATIONS && g_bEasterEggs)
+		cairo_dock_unset_input_shape (pDock);
+	
 	gtk_widget_queue_draw (pDock->pWidget);
 	if (pLastPointedIcon != pPointedIcon)
 		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
@@ -227,6 +230,7 @@ gboolean cairo_dock_grow_up (CairoDock *pDock)
 gboolean cairo_dock_shrink_down (CairoDock *pDock)
 {
 	//g_print ("%s (%d)\n", __func__, pDock->iMagnitudeIndex);
+	int iPrevMagnitudeIndex = pDock->iMagnitudeIndex;
 	pDock->iMagnitudeIndex -= mySystem.iShrinkDownInterval;
 	if (pDock->iMagnitudeIndex < 0)
 		pDock->iMagnitudeIndex = 0;
@@ -266,7 +270,10 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 
 	pDock->calculate_icons (pDock);
 	gtk_widget_queue_draw (pDock->pWidget);
-
+	
+	if (iPrevMagnitudeIndex != 0 && pDock->iMagnitudeIndex == 0 && pDock->bInside)
+		cairo_dock_set_input_shape (pDock);
+	
 	if (! pDock->bInside)
 		cairo_dock_replace_all_dialogs ();
 

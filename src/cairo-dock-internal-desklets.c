@@ -13,111 +13,80 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-desklet.h"
 #define _INTERNAL_MODULE_
-#include "cairo-dock-internal-indicators.h"
+#include "cairo-dock-internal-desklets.h"
 
-CairoConfigIndicators myIndicators;
+CairoConfigDesklets myDesklets;
 extern CairoDock *g_pMainDock;
-extern double g_fAmplitude;
 
-static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicators)
+static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDesklets *pDesklets)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
-	double couleur_active[4] = {0., 0.4, 0.8, 0.25};
-	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "active color", &bFlushConfFileNeeded, pIndicators->fActiveColor, 4, couleur_active, "Icons", NULL);
-	
-	pIndicators->iActiveLineWidth = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active line width", &bFlushConfFileNeeded, 3, "Icons", NULL);
-	pIndicators->iActiveCornerRadius = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active corner radius", &bFlushConfFileNeeded, 6, "Icons", NULL);
-	pIndicators->bActiveIndicatorAbove = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "active frame position", &bFlushConfFileNeeded, TRUE, "Icons", NULL);
-	gchar *cActiveIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "active indicator", &bFlushConfFileNeeded, NULL, NULL, NULL);
-	if (cActiveIndicatorImageName != NULL)
+	pDesklets->cDeskletDecorationsName = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "decorations", &bFlushConfFileNeeded, "dark", NULL, NULL);
+	CairoDeskletDecoration *pUserDeskletDecorations = cairo_dock_get_desklet_decoration ("personnal");
+	if (pUserDeskletDecorations == NULL)
 	{
-		pIndicators->cActiveIndicatorImagePath = cairo_dock_generate_file_path (cActiveIndicatorImageName);
-		g_free (cActiveIndicatorImageName);
+		pUserDeskletDecorations = g_new0 (CairoDeskletDecoration, 1);
+		cairo_dock_register_desklet_decoration ("personnal", pUserDeskletDecorations);
 	}
-	else
-		pIndicators->cActiveIndicatorImagePath = NULL;
-	
-	gchar *cIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "indicator image", &bFlushConfFileNeeded, NULL, "Icons", NULL);
-	if (cIndicatorImageName != NULL)
+	if (pDesklets->cDeskletDecorationsName == NULL || strcmp (pDesklets->cDeskletDecorationsName, "personnal") == 0)
 	{
-		pIndicators->cIndicatorImagePath = cairo_dock_generate_file_path (cIndicatorImageName);
-		g_free (cIndicatorImageName);
+		g_free (pUserDeskletDecorations->cBackGroundImagePath);
+		pUserDeskletDecorations->cBackGroundImagePath = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "bg desklet", &bFlushConfFileNeeded, NULL, NULL, NULL);
+		g_free (pUserDeskletDecorations->cForeGroundImagePath);
+		pUserDeskletDecorations->cForeGroundImagePath = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "fg desklet", &bFlushConfFileNeeded, NULL, NULL, NULL);
+		pUserDeskletDecorations->iLoadingModifier = CAIRO_DOCK_FILL_SPACE;
+		pUserDeskletDecorations->fBackGroundAlpha = cairo_dock_get_double_key_value (pKeyFile, "Desklets", "bg alpha", &bFlushConfFileNeeded, 1.0, NULL, NULL);
+		pUserDeskletDecorations->fForeGroundAlpha = cairo_dock_get_double_key_value (pKeyFile, "Desklets", "fg alpha", &bFlushConfFileNeeded, 1.0, NULL, NULL);
+		pUserDeskletDecorations->iLeftMargin = cairo_dock_get_integer_key_value (pKeyFile, "Desklets", "left offset", &bFlushConfFileNeeded, CAIRO_DOCK_FM_SORT_BY_NAME, NULL, NULL);
+		pUserDeskletDecorations->iTopMargin = cairo_dock_get_integer_key_value (pKeyFile, "Desklets", "top offset", &bFlushConfFileNeeded, CAIRO_DOCK_FM_SORT_BY_NAME, NULL, NULL);
+		pUserDeskletDecorations->iRightMargin = cairo_dock_get_integer_key_value (pKeyFile, "Desklets", "right offset", &bFlushConfFileNeeded, CAIRO_DOCK_FM_SORT_BY_NAME, NULL, NULL);
+		pUserDeskletDecorations->iBottomMargin = cairo_dock_get_integer_key_value (pKeyFile, "Desklets", "bottom offset", &bFlushConfFileNeeded, CAIRO_DOCK_FM_SORT_BY_NAME, NULL, NULL);
 	}
-	else
-	{
-		pIndicators->cIndicatorImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_DEFAULT_INDICATOR_NAME);
-	}
-	
-	pIndicators->bIndicatorAbove = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "indicator above", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
-	
-	pIndicators->fIndicatorRatio = cairo_dock_get_double_key_value (pKeyFile, "Indicators", "indicator ratio", &bFlushConfFileNeeded, 1., "Icons", NULL);
-	
-	pIndicators->bLinkIndicatorWithIcon = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "link indicator", &bFlushConfFileNeeded, TRUE, "Icons", NULL);
-	
-	pIndicators->iIndicatorDeltaY = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "indicator deltaY", &bFlushConfFileNeeded, 2, "Icons", NULL);
-	
-	gchar *cDropIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "drop indicator", &bFlushConfFileNeeded, NULL, "Icons", NULL);
-	if (cDropIndicatorImageName != NULL)
-	{
-		pIndicators->cDropIndicatorImagePath = cairo_dock_generate_file_path (cDropIndicatorImageName);
-		g_free (cDropIndicatorImageName);
-	}
-	else
-	{
-		pIndicators->cDropIndicatorImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_DEFAULT_DROP_INDICATOR_NAME);
-	}
+	pDesklets->iDeskletButtonSize = cairo_dock_get_integer_key_value (pKeyFile, "Desklets", "button size", &bFlushConfFileNeeded, 16, NULL, NULL);
+	pDesklets->cRotateButtonImage = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "rotate image", &bFlushConfFileNeeded, NULL, NULL, NULL);
+	pDesklets->cRetachButtonImage = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "retach image", &bFlushConfFileNeeded, NULL, NULL, NULL);
 
 	return bFlushConfFileNeeded;
 }
 
 
-static void reset_config (CairoConfigIndicators *pIndicators)
+static void reset_config (CairoConfigDesklets *pDesklets)
 {
-	g_free (pIndicators->cActiveIndicatorImagePath);
-	g_free (pIndicators->cIndicatorImagePath);
-	g_free (pIndicators->cDropIndicatorImagePath);
+	g_free (pDesklets->cDeskletDecorationsName);
+	g_free (pDesklets->cRotateButtonImage);
+	g_free (pDesklets->cRetachButtonImage);
 }
 
 
-static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicators *pIndicators)
+static void reload (CairoConfigDesklets *pPrevDesklets, CairoConfigDesklets *pDesklets)
 {
 	CairoDock *pDock = g_pMainDock;
-	double fMaxScale = cairo_dock_get_max_scale (pDock);
 	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-	
-	if (cairo_dock_strings_differ (pPrevIndicators->cIndicatorImagePath, pIndicators->cIndicatorImagePath))
+	if (cairo_dock_strings_differ (pPrevDesklets->cRotateButtonImage, pDesklets->cRotateButtonImage) || cairo_dock_strings_differ (pPrevDesklets->cRetachButtonImage, pDesklets->cRetachButtonImage))
 	{
-		cairo_dock_load_task_indicator (myTaskBar.bShowAppli && myTaskBar.bMixLauncherAppli ? pIndicators->cIndicatorImagePath : NULL, pCairoContext, fMaxScale, pIndicators->fIndicatorRatio);
+		cairo_dock_load_desklet_buttons (pCairoContext);
+		
 	}
-	if (cairo_dock_strings_differ (pPrevIndicators->cDropIndicatorImagePath, pIndicators->cDropIndicatorImagePath))
+	if (cairo_dock_strings_differ (pPrevDesklets->cDeskletDecorationsName, pDesklets->cDeskletDecorationsName))
 	{
-		cairo_dock_load_drop_indicator (pIndicators->cDropIndicatorImagePath, pCairoContext, fMaxScale);
+		cairo_dock_reload_desklets_decorations (TRUE, pCairoContext);  // TRUE <=> bDefaultThemeOnly
 	}
-	
-	if (cairo_dock_strings_differ (pPrevIndicators->cActiveIndicatorImagePath, pIndicators->cActiveIndicatorImagePath))
-	{
-		cairo_dock_load_active_window_indicator (pCairoContext,
-			pPrevIndicators->cActiveIndicatorImagePath,
-			fMaxScale,
-			pPrevIndicators->iActiveCornerRadius,
-			pPrevIndicators->iActiveLineWidth,
-			pPrevIndicators->fActiveColor);
-	}
-	
-	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.
+	cairo_destroy (pCairoContext);
 }
 
 
-DEFINE_PRE_INIT (Indicators)
+DEFINE_PRE_INIT (Desklets)
 {
-	pModule->cModuleName = "Indicators";
-	pModule->cTitle = "Indicators";
-	pModule->cIcon = "";
-	pModule->cDescription = "";
+	pModule->cModuleName = "Desklets";
+	pModule->cTitle = "Desklets";
+	pModule->cIcon = "gtk-convert";
+	pModule->cDescription = "The applets can be set on your desktop as widgets.";
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
-	pModule->iSizeOfConfig = sizeof (CairoConfigIndicators);
+	pModule->iSizeOfConfig = sizeof (CairoConfigDesklets);
 	pModule->iSizeOfData = 0;
 	
 	pModule->reload = (CairoDockInternalModuleReloadFunc) reload;
@@ -125,6 +94,6 @@ DEFINE_PRE_INIT (Indicators)
 	pModule->reset_config = (CairoDockInternalModuleResetConfigFunc) reset_config;
 	pModule->reset_data = NULL;
 	
-	pModule->pConfig = (CairoInternalModuleConfigPtr) &myIndicators;
+	pModule->pConfig = (CairoInternalModuleConfigPtr) &myDesklets;
 	pModule->pData = NULL;
 }

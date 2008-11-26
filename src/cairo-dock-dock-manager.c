@@ -700,16 +700,19 @@ void cairo_dock_show_hide_container (CairoContainer *pContainer)
 }
 
 
-static void _cairo_dock_foreach_icons_in_dock (gchar *cDockName, CairoDock *pDock, GFreeFunc pFunction)
+static void _cairo_dock_foreach_icons_in_dock (gchar *cDockName, CairoDock *pDock, gpointer *data)
 {
+	CairoDockForeachIconFunc pFunction = data[0];
+	gpointer pUserData = data[1];
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
-		pFunction (ic->data);
+		pFunction ((Icon*)ic->data, pDock, pUserData);
 	}
 }
-void cairo_dock_foreach_icons (GFreeFunc pFunction)
+void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUserData)
 {
+	gpointer data[2] = {pFunction, pUserData};
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_foreach_icons_in_dock, pFunction);
 }
 

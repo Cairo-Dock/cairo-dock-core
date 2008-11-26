@@ -36,6 +36,9 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-dialogs.h"
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-indicators.h"
+#include "cairo-dock-internal-labels.h"
+#include "cairo-dock-internal-desklets.h"
+#include "cairo-dock-internal-background.h"
 #include "cairo-dock-modules.h"
 
 #define CAIRO_DOCK_MODULE_PANEL_WIDTH 700
@@ -1269,10 +1272,10 @@ void cairo_dock_preload_internal_modules (GHashTable *pModuleTable)
 	REGISTER_INTERNAL_MODULE (Dialogs);
 	REGISTER_INTERNAL_MODULE (Indicators);
 	REGISTER_INTERNAL_MODULE (Views);
+	REGISTER_INTERNAL_MODULE (Labels);
+	REGISTER_INTERNAL_MODULE (Desklets);
 	//REGISTER_INTERNAL_MODULE (Icons);
 	//REGISTER_INTERNAL_MODULE (Background);
-	//REGISTER_INTERNAL_MODULE (Labels);
-	//REGISTER_INTERNAL_MODULE (Desklets);
 	/// ...
 }
 

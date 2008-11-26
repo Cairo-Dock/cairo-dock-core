@@ -36,7 +36,9 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-internal-indicators.h"
+#include "cairo-dock-internal-labels.h"
 #include "cairo-dock-load.h"
 
 extern CairoDock *g_pMainDock;
@@ -55,10 +57,6 @@ extern int g_iIconGap;
 extern double g_fAlbedo;
 
 extern cairo_surface_t *g_pVisibleZoneSurface;
-extern gboolean g_bReverseVisibleImage;
-
-extern CairoDockLabelDescription g_iconTextDescription;
-extern CairoDockLabelDescription g_quickInfoTextDescription;
 
 extern gchar *g_cCurrentThemePath;
 
@@ -480,15 +478,7 @@ void cairo_dock_fill_one_quick_info_buffer (Icon *icon, cairo_t* pSourceContext,
 	
 	if (g_bUseOpenGL && icon->pQuickInfoBuffer != NULL)
 	{
-		/*GdkGLContext* pGlContext = gtk_widget_get_gl_context (g_pMainDock->pWidget);
-		GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (g_pMainDock->pWidget);
-		if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
-			return ;*/
-		
 		icon->iQuickInfoTexture = cairo_dock_create_texture_from_surface (icon->pQuickInfoBuffer);
-		
-		
-		//gdk_gl_drawable_gl_end (pGlDrawable);
 	}
 }
 
@@ -498,9 +488,9 @@ void cairo_dock_fill_icon_buffers (Icon *icon, cairo_t *pSourceContext, double f
 {
 	cairo_dock_fill_one_icon_buffer (icon, pSourceContext, fMaxScale, bHorizontalDock, bApplySizeRestriction, bDirectionUp);
 
-	cairo_dock_fill_one_text_buffer (icon, pSourceContext, &g_iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : bHorizontalDock), bDirectionUp);
+	cairo_dock_fill_one_text_buffer (icon, pSourceContext, &myLabels.iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : bHorizontalDock), bDirectionUp);
 
-	cairo_dock_fill_one_quick_info_buffer (icon, pSourceContext, &g_quickInfoTextDescription, fMaxScale);
+	cairo_dock_fill_one_quick_info_buffer (icon, pSourceContext, &myLabels.quickInfoTextDescription, fMaxScale);
 }
 
 void cairo_dock_load_one_icon_from_scratch (Icon *pIcon, CairoContainer *pContainer)
@@ -572,7 +562,7 @@ void cairo_dock_load_visible_zone (CairoDock *pDock, gchar *cVisibleZoneImageFil
 			cVisibleZoneImageFile,
 			&fVisibleZoneWidth,
 			&fVisibleZoneHeight,
-			(pDock->bHorizontalDock ? (! pDock->bDirectionUp && g_bReverseVisibleImage ? G_PI : 0) : (pDock->bDirectionUp ? -G_PI/2 : G_PI/2)),
+			0*(pDock->bHorizontalDock ? (! pDock->bDirectionUp && myHiddenDock.bReverseVisibleImage ? G_PI : 0) : (pDock->bDirectionUp ? -G_PI/2 : G_PI/2)),
 			fVisibleZoneAlpha,
 			FALSE);
 	}

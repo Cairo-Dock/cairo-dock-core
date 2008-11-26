@@ -52,6 +52,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-internal-views.h"
+#include "cairo-dock-internal-labels.h"
 #include "cairo-dock-callbacks.h"
 
 static Icon *s_pIconClicked = NULL;  // pour savoir quand on deplace une icone a la souris. Dangereux si l'icone se fait effacer en cours ...
@@ -72,8 +73,6 @@ extern gint g_iScreenWidth[2];
 extern gint g_iScreenHeight[2];
 extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
 
-extern CairoDockLabelDescription g_iconTextDescription;
-
 extern int g_iDockRadius;
 extern int g_iDockLineWidth;
 extern int g_iIconGap;
@@ -85,6 +84,7 @@ extern int g_tNbAnimationRounds[CAIRO_DOCK_NB_TYPES];
 extern int g_tNbIterInOneRound[CAIRO_DOCK_NB_ANIMATIONS];
 
 extern gboolean g_bUseGlitz;
+extern gboolean g_bEasterEggs;
 
 extern gboolean g_bUseOpenGL;
 extern gdouble g_iGLAnimationDeltaT;
@@ -801,7 +801,7 @@ gboolean on_leave_notify2 (GtkWidget* pWidget,
 	GdkEventCrossing* pEvent,
 	CairoDock *pDock)
 {
-	//g_print ("%s (bInside:%d; bAtBottom:%d; iRefCount:%d)\n", __func__, pDock->bInside, pDock->bAtBottom, pDock->iRefCount);
+	g_print ("%s (bInside:%d; bAtBottom:%d; iRefCount:%d)\n", __func__, pDock->bInside, pDock->bAtBottom, pDock->iRefCount);
 	/**if (pDock->bAtBottom)  // || ! pDock->bInside  // mis en commentaire pour la 1.5.4
 	{
 		pDock->iSidLeaveDemand = 0;
@@ -925,7 +925,7 @@ gboolean on_enter_notify2 (GtkWidget* pWidget,
 	GdkEventCrossing* pEvent,
 	CairoDock *pDock)
 {
-	//g_print ("%s (bIsMainDock : %d; bAtTop:%d; bInside:%d; iSidMoveDown:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->bAtTop, pDock->bInside, pDock->iSidMoveDown, pDock->iMagnitudeIndex);
+	g_print ("%s (bIsMainDock : %d; bAtTop:%d; bInside:%d; iSidMoveDown:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->bAtTop, pDock->bInside, pDock->iSidMoveDown, pDock->iMagnitudeIndex);
 	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
 	if (! cairo_dock_entrance_is_allowed (pDock))
 	{
@@ -1406,7 +1406,7 @@ gboolean on_button_press2 (GtkWidget* pWidget,
 							if (pOriginDock->iRefCount > 0 && ! myViews.bSameHorizontality)
 							{
 								cairo_t* pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-								cairo_dock_fill_one_text_buffer (s_pIconClicked, pSourceContext, &g_iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : g_pMainDock->bHorizontalDock), g_pMainDock->bDirectionUp);
+								cairo_dock_fill_one_text_buffer (s_pIconClicked, pSourceContext, &myLabels.iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : g_pMainDock->bHorizontalDock), g_pMainDock->bDirectionUp);
 								cairo_destroy (pSourceContext);
 							}
 
@@ -1689,7 +1689,7 @@ gboolean on_configure (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDock *pDock)
 {
-	//g_print ("%s (main dock : %d) : (%d;%d) (%dx%d)\n", __func__, pDock->bIsMainDock, pEvent->x, pEvent->y, pEvent->width, pEvent->height);
+	g_print ("%s (main dock : %d) : (%d;%d) (%dx%d)\n", __func__, pDock->bIsMainDock, pEvent->x, pEvent->y, pEvent->width, pEvent->height);
 	gint iNewWidth, iNewHeight;
 	if (pDock->bHorizontalDock)
 	{
@@ -1715,9 +1715,16 @@ gboolean on_configure (GtkWidget* pWidget,
 		if (pDock->iMouseX < 0 || pDock->iMouseX > pDock->iCurrentWidth)  // utile ?
 			pDock->iMouseX = 0;
 		
+		if (pDock->pShapeBitmap != NULL)
+			g_object_unref ((gpointer) pDock->pShapeBitmap);
+		if (g_bEasterEggs)
+			pDock->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL, pEvent->width, pEvent->height, 1);
 		
 		pDock->calculate_icons (pDock);
 		gtk_widget_queue_draw (pWidget);  // il semble qu'il soit necessaire d'en rajouter un la pour eviter un "clignotement" a l'entree dans le dock.
+		if (g_bEasterEggs)
+			cairo_dock_unset_input_shape (pDock);
+		
 		//if (pDock->iRefCount > 0 || pDock->bAutoHide)
 			while (gtk_events_pending ())  // on force un redessin immediat sinon on a quand meme un "flash".
 				gtk_main_iteration ();

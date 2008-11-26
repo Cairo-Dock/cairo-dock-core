@@ -287,6 +287,8 @@ struct _CairoDock {
 	gboolean bCanDrop;
 	gboolean bIsShrinkingDown;
 	gboolean bIsGrowingUp;
+	GdkRectangle inputArea;
+	GdkBitmap* pShapeBitmap;
 };
 
 
@@ -904,7 +906,7 @@ struct _CairoDeskletDecoration {
 
 typedef gboolean (* CairoDockForeachDeskletFunc) (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, gpointer data);
 
-typedef void (* CairoDockForeachIconFunc) (Icon *icon, gpointer data);
+typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoDock *pDock, gpointer data);
 
 typedef void (* CairoDockConfigFunc) (gchar *cConfFile, gpointer data);
 

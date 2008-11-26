@@ -53,5 +53,7 @@
 #include <cairo-dock/cairo-dock-internal-dialogs.h>
 #include <cairo-dock/cairo-dock-internal-indicators.h>
 #include <cairo-dock/cairo-dock-internal-views.h>
+#include <cairo-dock/cairo-dock-internal-desklets.h>
+#include <cairo-dock/cairo-dock-internal-labels.h>
 
 #endif

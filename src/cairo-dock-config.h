@@ -169,28 +169,6 @@ void cairo_dock_get_version_from_string (gchar *cVersionString, int *iMajorVersi
 void cairo_dock_pre_init_##cGroupName (CairoDockInternalModule *pModule)
 
 
-
-typedef struct _CairoConfigBackGround {
-	gint iDockRadius;
-	gint iDockLineWidth;
-	gint iFrameMargin;
-	gdouble fLineColor[4];
-	gboolean bRoundedBottomCorner;
-	gdouble fStripesColorBright[4];
-	gchar *cBackgroundImageFile;
-	gdouble fBackgroundImageAlpha;
-	gboolean bBackgroundImageRepeat;
-	gint iNbStripes;
-	gdouble fStripesWidth;
-	gdouble fStripesColorDark;
-	gdouble fStripesAngle;
-	} CairoConfigBackGround;
-
-typedef struct _CairoConfigLabels {
-	CairoDockLabelDescription iconTextDescription;
-	CairoDockLabelDescription quickInfoTextDescription;
-	} CairoConfigLabels;
-
 typedef struct _CairoConfigIcons {
 	gdouble fFieldDepth;
 	gdouble fAlbedo;
@@ -211,13 +189,6 @@ typedef struct _CairoConfigIcons {
 	gboolean bRevolveSeparator;
 	gboolean bConstantSeparatorSize;
 	} CairoConfigIcons;
-
-typedef struct _CairoConfigDesklets {
-	gchar *cDeskletDecorationsName;
-	gint iDeskletButtonSize;
-	gchar *cRotateButtonImage;
-	gchar *cRetachButtonImage;
-	} CairoConfigDesklets;
 
 G_END_DECLS
 #endif

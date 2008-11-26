@@ -43,6 +43,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-dialogs.h"
 #include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-internal-views.h"
+#include "cairo-dock-internal-labels.h"
+#include "cairo-dock-internal-desklets.h"
 #include "cairo-dock-config.h"
 
 #define CAIRO_DOCK_TYPE_CONF_FILE_FILE ".cairo-dock-conf-file"
@@ -106,10 +108,6 @@ extern gboolean g_bUseSeparator;
 extern gchar *g_cSeparatorImage;
 extern gboolean g_bRevolveSeparator;
 extern gboolean g_bConstantSeparatorSize;
-
-extern CairoDockLabelDescription g_iconTextDescription;
-extern CairoDockLabelDescription g_quickInfoTextDescription;
-extern CairoDockLabelDescription g_dialogTextDescription;
 
 extern cairo_surface_t *g_pDesktopBgSurface;
 
@@ -672,7 +670,7 @@ GET_GROUP_CONFIG_BEGIN (Background)
 GET_GROUP_CONFIG_END
 
 
-GET_GROUP_CONFIG_BEGIN (Labels)
+/*GET_GROUP_CONFIG_BEGIN (Labels)
 	g_free (g_iconTextDescription.cFont);
 	g_iconTextDescription.cFont = cairo_dock_get_string_key_value (pKeyFile, "Labels", "police", &bFlushConfFileNeeded, "sans", "Icons", NULL);
 
@@ -717,7 +715,7 @@ GET_GROUP_CONFIG_BEGIN (Labels)
 	gboolean bUseBackgroundForLabel = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "background for label", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
 	if (! bUseBackgroundForLabel)
 		g_iconTextDescription.fBackgroundColor[3] = 0;  // ne sera pas pris en compte.
-GET_GROUP_CONFIG_END
+GET_GROUP_CONFIG_END*/
 
 
 double s_fFieldDepth;
@@ -988,7 +986,7 @@ GET_GROUP_CONFIG_END*/
 GET_GROUP_CONFIG_END*/
 
 
-GET_GROUP_CONFIG_BEGIN (Desklets)
+/*GET_GROUP_CONFIG_BEGIN (Desklets)
 	g_cDeskletDecorationsName = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "decorations", &bFlushConfFileNeeded, "dark", NULL, NULL);
 	CairoDeskletDecoration *pUserDeskletDecorations = cairo_dock_get_desklet_decoration ("personnal");
 	if (pUserDeskletDecorations == NULL)
@@ -1015,7 +1013,7 @@ GET_GROUP_CONFIG_BEGIN (Desklets)
 	g_cRotateButtonImage = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "rotate image", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	g_free (g_cRetachButtonImage);
 	g_cRetachButtonImage = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "retach image", &bFlushConfFileNeeded, NULL, NULL, NULL);
-GET_GROUP_CONFIG_END
+GET_GROUP_CONFIG_END*/
 
 
 void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
@@ -1051,8 +1049,13 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	gboolean bOverWriteXIconsOld = myTaskBar.bOverWriteXIcons;  // TRUE initialement.
 	gboolean bShowThumbnailOld = myTaskBar.bShowThumbnail;
 	gchar *cIndicatorImagePathOld = myIndicators.cIndicatorImagePath;
+	myIndicators.cIndicatorImagePath = NULL;
 	gchar *cDropIndicatorImagePathOld = myIndicators.cDropIndicatorImagePath;
+	myIndicators.cDropIndicatorImagePath = NULL;
 	gchar *cActiveIndicatorImagePathOld = myIndicators.cActiveIndicatorImagePath;
+	myIndicators.cActiveIndicatorImagePath = NULL;
+	gchar *cDeskletDecorationsNameOld = myDesklets.cDeskletDecorationsName;
+	myDesklets.cDeskletDecorationsName = NULL;
 	
 	//\___________________ On recupere la conf de tous les modules.
 	bFlushConfFileNeeded = cairo_dock_get_global_config (pKeyFile);
@@ -1077,7 +1080,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Background);
 	
 	//\___________________ On recupere les parametres des etiquettes.
-	bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Labels);
+	//bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Labels);
 	
 	//\___________________ On recupere les parametres des icones.
 	gboolean bMixAppletsAndLaunchersOld = (g_tIconTypeOrder[CAIRO_DOCK_APPLET] == g_tIconTypeOrder[CAIRO_DOCK_LAUNCHER]);
@@ -1093,8 +1096,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	//bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Dialogs);
 	
 	//\___________________ On recupere les parametres des desklets.
-	gchar *cDeskletDecorationsNameOld = g_cDeskletDecorationsName;
-	bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Desklets);
+	//bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Desklets);
 	
 	//\___________________ On recupere les parametres des vues.
 	//bFlushConfFileNeeded |= cairo_dock_read_group_conf_file (Views);

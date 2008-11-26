@@ -151,7 +151,13 @@ cairo_dock_SOURCES = \
 	cairo-dock-internal-indicators.c\
 	cairo-dock-internal-indicators.h\
 	cairo-dock-internal-views.c\
-	cairo-dock-internal-views.h
+	cairo-dock-internal-views.h\
+	cairo-dock-internal-labels.c\
+	cairo-dock-internal-labels.h\
+	cairo-dock-internal-desklets.c\
+	cairo-dock-internal-desklets.h\
+	cairo-dock-internal-background.c\
+	cairo-dock-internal-background.h
 	
 
 cairo_dockincludedir =\
@@ -215,4 +221,7 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-internal-hidden-dock.h\
 	cairo-dock-internal-dialogs.h\
 	cairo-dock-internal-indicators.h\
-	cairo-dock-internal-views.h
+	cairo-dock-internal-views.h\
+	cairo-dock-internal-labels.h\
+	cairo-dock-internal-desklets.h\
+	cairo-dock-internal-background.h

@@ -153,8 +153,13 @@ void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCal
 */
 gboolean cairo_dock_string_is_adress (const gchar *cString);
 
-G_END_DECLS
+
 void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, double fOrder, CairoContainer *pContainer);
 
 
+void cairo_dock_set_input_shape (CairoDock *pDock);
+void cairo_dock_unset_input_shape (CairoDock *pDock);
+
+
+G_END_DECLS
 #endif

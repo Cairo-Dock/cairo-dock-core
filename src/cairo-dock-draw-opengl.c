@@ -41,8 +41,10 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-internal-system.h"
+#include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-indicators.h"
+#include "cairo-dock-internal-labels.h"
 #include "cairo-dock-draw-opengl.h"
 #define RADIAN (G_PI / 180.0)  // Conversion Radian/Degres
 #define DELTA_ROUND_DEGREE 1
@@ -51,7 +53,6 @@ static GLuint s_GradationTexture=0;
 
 extern double g_fAmplitude;
 extern double g_fAlbedo;
-extern CairoDockLabelDescription g_iconTextDescription;
 extern cairo_surface_t *g_pDesktopBgSurface;
 
 extern int g_iBackgroundTexture;
@@ -62,7 +63,6 @@ extern double g_fAlphaAtRest;
 extern double g_fReflectSize;
 extern GLuint g_iIndicatorTexture;
 extern int g_iSinusoidWidth;
-extern gboolean g_bReverseVisibleImage;
 
 extern double g_fDropIndicatorWidth, g_fDropIndicatorHeight;
 extern GLuint g_iDropIndicatorTexture;
@@ -242,8 +242,16 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		glPushMatrix ();
 		if (pDock->bDirectionUp)
 		{
-			glTranslatef (0., -pIcon->fHeight * pIcon->fScale/2 - pIcon->fDeltaYReflection, 0.);  // on se fixe en bas.
-			glScalef (pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale, - g_fReflectSize * pIcon->fScale, g_fReflectSize * pIcon->fScale);  // taille du reflet et on se retourne.
+			if (pDock->bHorizontalDock)
+			{
+				glTranslatef (0., -pIcon->fHeight * pIcon->fScale/2 - pIcon->fDeltaYReflection, 0.);  // on se fixe en bas.
+				glScalef (pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale, - g_fReflectSize * pIcon->fScale, g_fReflectSize * pIcon->fScale);  // taille du reflet et on se retourne.
+			}
+			else
+			{
+				glTranslatef (-pIcon->fHeight * pIcon->fScale/2 - pIcon->fDeltaYReflection, 0., 0.);  // on se fixe en bas.
+				glScalef (- g_fReflectSize * pIcon->fScale, pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale, g_fReflectSize * pIcon->fScale);  // taille du reflet et on se retourne.
+			}
 		}
 		else
 		{
@@ -479,9 +487,9 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 		glPopMatrix ();
 	}*/
 	//\_____________________ On dessine les reflets.
-	if (0 && pDock->bUseReflect && icon->iReflectionTexture != 0)  // on dessine les reflets.
+	if (0 && pDock->bUseReflect)  // on dessine les reflets.
 	{
-		glBindTexture (GL_TEXTURE_2D, icon->iReflectionTexture);
+		//glBindTexture (GL_TEXTURE_2D, icon->iReflectionTexture);
 		glPushMatrix ();
 		
 		//\_____________________ Cas de l'animation Pulse.
@@ -643,18 +651,18 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 		}
 		else if (pDock->bHorizontalDock)
 		{
-			glTranslatef (fOffsetX, (pDock->bDirectionUp ? 1:-1) * (icon->fHeight * icon->fScale/2 + g_iconTextDescription.iSize - icon->iTextHeight / 2), 0.);
+			glTranslatef (fOffsetX, (pDock->bDirectionUp ? 1:-1) * (icon->fHeight * icon->fScale/2 + myLabels.iconTextDescription.iSize - icon->iTextHeight / 2), 0.);
 			/*cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
 				fOffsetX,
-				bDirectionUp ? -g_iconTextDescription.iSize : icon->fHeight * icon->fScale - icon->fTextYOffset);*/
+				bDirectionUp ? -myLabels.iconTextDescription.iSize : icon->fHeight * icon->fScale - icon->fTextYOffset);*/
 		}
 		else
 		{
 			glTranslatef ((pDock->bDirectionUp ? 1:-1)* (icon->fHeight * icon->fScale/2 + icon->iTextHeight / 2), fOffsetX, 0.);
 			/*cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
-				bDirectionUp ? -g_iconTextDescription.iSize : icon->fHeight * icon->fScale - icon->fTextYOffset,
+				bDirectionUp ? -myLabels.iconTextDescription.iSize : icon->fHeight * icon->fScale - icon->fTextYOffset,
 				fOffsetX);*/
 		}
 		
@@ -929,9 +937,10 @@ void cairo_dock_render_background_opengl (CairoDock *pDock)
 	glLoadIdentity ();
 	glTranslatef (pDock->iCurrentWidth/2, pDock->iCurrentHeight/2, 0.);
 	
-	double fRotation = (pDock->bHorizontalDock ? (! pDock->bDirectionUp && g_bReverseVisibleImage ? 180 : 0) : (pDock->bDirectionUp ? -90 : 90));
-	if (fRotation != 0)
-		glRotatef (fRotation, 0, 0, 1);
+	if (! pDock->bDirectionUp && myHiddenDock.bReverseVisibleImage)
+		glScalef (1., -1., 1.);
+	if (! pDock->bHorizontalDock)
+		glRotatef (-90., 0, 0, 1);
 	
 	glScalef (pDock->iCurrentWidth, pDock->iCurrentHeight, 0.);
 	
@@ -1137,13 +1146,6 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 	glDrawArrays(GL_TRIANGLE_FAN, 0, iNbVertex);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
-	/*glBegin (GL_TRIANGLE_FAN);
-	int i;
-	for (i = 0; i <= iNbVertex; i++) // La on affiche un polygone plein texture
-	{
-		glVertex3fv (&pVertexTab[3*i]);
-	}
-	glEnd();*/
 	glDisable(GL_BLEND);
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glDisable(GL_TEXTURE_GEN_S);
@@ -1169,13 +1171,7 @@ void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor,
 	glVertexPointer(3, GL_FLOAT, 0, pVertexTab);
 	glDrawArrays(GL_LINE_LOOP, 0, iNbVertex);
 	glDisableClientState(GL_VERTEX_ARRAY);
-	/*glBegin(GL_LINE_LOOP);
-	int i;
-	for (i = 0; i < iNbVertex; i++) // Et on affiche le contour 
-	{
-		glVertex3fv (&pVertexTab[3*i]);
-	}
-	glEnd();*/
+	
 	glDisable(GL_BLEND);
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glPolygonMode(GL_FRONT, GL_FILL);

@@ -161,7 +161,7 @@ gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix);
 
 void cairo_dock_show_hide_container (CairoContainer *pContainer);
 
-void cairo_dock_foreach_icons (GFreeFunc pFunction);
+void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer data);
 void cairo_dock_foreach_docks (GHFunc pFunction);
 
 

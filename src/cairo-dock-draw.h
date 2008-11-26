@@ -90,6 +90,8 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, 
 void cairo_dock_draw_string (cairo_t *pCairoContext, CairoDock *pDock, double fStringLineWidth, gboolean bIsLoop, gboolean bForceConstantSeparator);
 
 
+void cairo_dock_draw_surface (cairo_t *pCairoContext, cairo_surface_t *pSurface, int iWidth, int iHeight, gboolean bDirectionUp, gboolean bHorizontal, gdouble fAlpha);
+
 void cairo_dock_render_background (cairo_t *pCairoContext, CairoDock *pDock);
 
 void cairo_dock_render_blank (cairo_t *pCairoContext, CairoDock *pDock);

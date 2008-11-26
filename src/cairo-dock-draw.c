@@ -30,8 +30,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-internal-indicators.h"
+#include "cairo-dock-internal-labels.h"
 #include "cairo-dock-draw.h"
-
 
 extern gint g_iScreenWidth[2];
 extern gint g_iScreenHeight[2];
@@ -55,9 +55,6 @@ extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
 
 extern cairo_surface_t *g_pVisibleZoneSurface;
 extern double g_fAmplitude;
-
-extern CairoDockLabelDescription g_iconTextDescription;
-extern CairoDockLabelDescription g_quickInfoTextDescription;
 
 extern double g_fAlphaAtRest;
 
@@ -88,7 +85,6 @@ void cairo_dock_set_colormap_for_window (GtkWidget *pWidget)
 
 void cairo_dock_set_colormap (CairoContainer *pContainer)
 {
-	//g_print ("%s f%d)\n", __func__, g_bUseGlitz);
 	GdkColormap* pColormap;
 #ifdef HAVE_GLITZ
 	if (g_bUseGlitz)
@@ -132,7 +128,7 @@ void cairo_dock_set_colormap (CairoContainer *pContainer)
 
 		if (! pContainer->pDrawFormat)
 		{
-			cd_warning ("Attention : no double buffered GLX visual");
+			cd_warning ("no double buffered GLX visual");
 		}
 		else
 		{
@@ -317,14 +313,18 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 	if (g_pBackgroundSurfaceFull[pDock->bHorizontalDock] != NULL)
 	{
 		cairo_save (pCairoContext);
-
+		
 		if (pDock->bHorizontalDock)
 			cairo_translate (pCairoContext, pDock->fDecorationsOffsetX * mySystem.fStripesSpeedFactor - pDock->iCurrentWidth * 0.5, fOffsetY);
 		else
 			cairo_translate (pCairoContext, fOffsetY, pDock->fDecorationsOffsetX * mySystem.fStripesSpeedFactor - pDock->iCurrentWidth * 0.5);
 		
-		cairo_set_source_surface (pCairoContext, g_pBackgroundSurfaceFull[pDock->bHorizontalDock], 0., 0.);
-		cairo_fill_preserve (pCairoContext);
+		
+		cairo_surface_t *pSurface = g_pBackgroundSurfaceFull[CAIRO_DOCK_HORIZONTAL];
+		cairo_dock_draw_surface (pCairoContext, pSurface, g_fBackgroundImageWidth, g_fBackgroundImageHeight, pDock->bDirectionUp, pDock->bHorizontalDock, -1.);
+		
+		/*cairo_set_source_surface (pCairoContext, g_pBackgroundSurfaceFull[pDock->bHorizontalDock], 0., 0.);
+		cairo_fill_preserve (pCairoContext);*/
 		cairo_restore (pCairoContext);
 	}
 	else if (g_pBackgroundSurface[pDock->bHorizontalDock] != NULL)
@@ -342,9 +342,11 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 			cairo_scale (pCairoContext, 1. * pDock->iDecorationsHeight / g_fBackgroundImageHeight, 1. * fWidth / g_fBackgroundImageWidth);
 		}
 		
-		//g_print ("(%dx%d) / (%dx%d)\n", pDock->iCurrentWidth, (int) pDock->iMaxIconHeight, (int) g_fBackgroundImageWidth, (int) g_fBackgroundImageHeight);
-		cairo_set_source_surface (pCairoContext, g_pBackgroundSurface[pDock->bHorizontalDock], 0., 0.);
-		cairo_fill_preserve (pCairoContext);
+		cairo_surface_t *pSurface = g_pBackgroundSurface[CAIRO_DOCK_HORIZONTAL];
+		cairo_dock_draw_surface (pCairoContext, pSurface, g_fBackgroundImageWidth, g_fBackgroundImageHeight, pDock->bDirectionUp, pDock->bHorizontalDock, -1.);
+		
+		/*cairo_set_source_surface (pCairoContext, g_pBackgroundSurface[pDock->bHorizontalDock], 0., 0.);
+		cairo_fill_preserve (pCairoContext);*/
 		cairo_restore (pCairoContext);
 	}
 }
@@ -838,11 +840,11 @@ void cairo_dock_render_one_icon (Icon *icon, cairo_t *pCairoContext, gboolean bH
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
 				fOffsetX,
-				bDirectionUp ? -g_iconTextDescription.iSize : icon->fHeight * icon->fScale - icon->fTextYOffset);
+				bDirectionUp ? -myLabels.iconTextDescription.iSize : icon->fHeight * icon->fScale - icon->fTextYOffset);
 		else
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
-				bDirectionUp ? -g_iconTextDescription.iSize : icon->fHeight * icon->fScale - icon->fTextYOffset,
+				bDirectionUp ? -myLabels.iconTextDescription.iSize : icon->fHeight * icon->fScale - icon->fTextYOffset,
 				fOffsetX);
 		
 		double fMagnitude;
@@ -1039,7 +1041,7 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, 
 		cairo_set_source_surface (pCairoContext,
 			icon->pTextBuffer,
 			fOffsetX,
-			-g_iconTextDescription.iSize);
+			-myLabels.iconTextDescription.iSize);
 		cairo_paint (pCairoContext);
 	}
 	
@@ -1182,14 +1184,49 @@ void cairo_dock_render_icons_linear (cairo_t *pCairoContext, CairoDock *pDock, d
 
 
 
+void cairo_dock_draw_surface (cairo_t *pCairoContext, cairo_surface_t *pSurface, int iWidth, int iHeight, gboolean bDirectionUp, gboolean bHorizontal, gdouble fAlpha)
+{
+	if (bDirectionUp)
+	{
+		if (bHorizontal)
+		{
+			cairo_set_source_surface (pCairoContext, pSurface, 0., 0.);
+		}
+		else
+		{
+			cairo_rotate (pCairoContext, - G_PI/2);
+			cairo_set_source_surface (pCairoContext, pSurface, - iWidth, 0.);
+		}
+	}
+	else
+	{
+		if (bHorizontal)
+		{
+			cairo_scale (pCairoContext, 1., -1.);
+			cairo_set_source_surface (pCairoContext, pSurface, 0., - iHeight);
+		}
+		else
+		{
+			cairo_rotate (pCairoContext, G_PI/2);
+			cairo_set_source_surface (pCairoContext, pSurface, 0., - iHeight);
+		}
+	}
+	if (fAlpha == -1)
+		cairo_fill_preserve (pCairoContext);
+	else if (fAlpha != 1)
+		cairo_paint_with_alpha (pCairoContext, fAlpha);
+	else
+		cairo_paint (pCairoContext);
+}
+
 void cairo_dock_render_background (cairo_t *pCairoContext, CairoDock *pDock)
 {
-	//g_print ("%s (%d, %x)\n", __func__, pDock->bIsMainDock, g_pVisibleZoneSurface);
 	if (g_pVisibleZoneSurface != NULL)
 	{
-		cairo_set_source_surface (pCairoContext, g_pVisibleZoneSurface, 0.0, 0.0);
-		//cairo_paint_with_alpha (pCairoContext, myHiddenDock.fVisibleZoneAlpha);
-		cairo_paint (pCairoContext);
+		cairo_dock_draw_surface (pCairoContext, g_pVisibleZoneSurface,
+		pDock->iCurrentWidth, pDock->iCurrentHeight,
+		pDock->bDirectionUp, pDock->bHorizontalDock,
+		1.);
 	}
 }
 
