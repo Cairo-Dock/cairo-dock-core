@@ -18,12 +18,10 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-animations.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-applet-factory.h"
 
-extern double g_fAmplitude;
 
-extern int g_tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
-extern int g_tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
 
 
 cairo_surface_t *cairo_dock_create_applet_surface (gchar *cIconFileName, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight, gboolean bApplySizeRestriction)
@@ -33,8 +31,8 @@ cairo_surface_t *cairo_dock_create_applet_surface (gchar *cIconFileName, cairo_t
 	double fIconWidthSaturationFactor, fIconHeightSaturationFactor;
 	cairo_dock_calculate_size_fill (fWidth,
 		fHeight,
-		(bApplySizeRestriction ? g_tIconAuthorizedWidth[CAIRO_DOCK_APPLET] : 0),
-		(bApplySizeRestriction ? g_tIconAuthorizedHeight[CAIRO_DOCK_APPLET] : 0),
+		(bApplySizeRestriction ? myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLET] : 0),
+		(bApplySizeRestriction ? myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLET] : 0),
 		FALSE,
 		&fIconWidthSaturationFactor, &fIconHeightSaturationFactor);
 	cd_message (" -> %.2fx%.2f x %.2f", *fWidth, *fHeight,fMaxScale);

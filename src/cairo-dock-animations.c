@@ -30,12 +30,12 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
+#include "cairo-dock-internal-icons.h"
+#include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-animations.h"
 
 extern int g_iScreenHeight[2];
 
-extern int g_tAnimationType[CAIRO_DOCK_NB_TYPES];
-extern int g_tNbAnimationRounds[CAIRO_DOCK_NB_TYPES];
 extern int g_tNbIterInOneRound[CAIRO_DOCK_NB_ANIMATIONS];
 
 extern gboolean g_bEasterEggs;
@@ -187,7 +187,7 @@ gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex)  // merci a Robrob 
 gboolean cairo_dock_grow_up (CairoDock *pDock)
 {
 	//g_print ("%s (%d ; %f ; %d)\n", __func__, pDock->iMagnitudeIndex, pDock->fFoldingFactor, pDock->bInside);
-	if (pDock->iSidShrinkDown != 0)
+	if (pDock->bIsShrinkingDown)
 		return TRUE;  // on se met en attente de fin d'animation.
 
 	pDock->iMagnitudeIndex += mySystem.iGrowUpInterval;
@@ -205,22 +205,22 @@ gboolean cairo_dock_grow_up (CairoDock *pDock)
 	
 	Icon *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 	Icon *pPointedIcon = pDock->calculate_icons (pDock);
-	if (pDock->iMagnitudeIndex == CAIRO_DOCK_NB_MAX_ITERATIONS && g_bEasterEggs)
-		cairo_dock_unset_input_shape (pDock);
+	//gtk_widget_queue_draw (pDock->pWidget);
 	
-	gtk_widget_queue_draw (pDock->pWidget);
 	if (pLastPointedIcon != pPointedIcon)
 		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
 
-	if (pDock->iMagnitudeIndex == CAIRO_DOCK_NB_MAX_ITERATIONS && pDock->fFoldingFactor == 0)
+	if (pDock->bIsGrowingUp && pDock->iMagnitudeIndex == CAIRO_DOCK_NB_MAX_ITERATIONS && pDock->fFoldingFactor == 0)  // fin de grossissement.
 	{
 		pDock->iMagnitudeIndex = CAIRO_DOCK_NB_MAX_ITERATIONS;
-		pDock->iSidGrowUp = 0;
+		pDock->bIsGrowingUp = 0;
 		if (pDock->iRefCount == 0 && pDock->bAutoHide)  // on arrive en fin de l'animation qui montre le dock, les icones sont bien placees a partir de maintenant.
 		{
 			cairo_dock_set_icons_geometry_for_window_manager (pDock);
 			cairo_dock_replace_all_dialogs ();
 		}
+		if (g_bEasterEggs)
+			cairo_dock_unset_input_shape (pDock);
 		return FALSE;
 	}
 	else
@@ -269,9 +269,9 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 	}
 
 	pDock->calculate_icons (pDock);
-	gtk_widget_queue_draw (pDock->pWidget);
+	//gtk_widget_queue_draw (pDock->pWidget);
 	
-	if (iPrevMagnitudeIndex != 0 && pDock->iMagnitudeIndex == 0 && pDock->bInside)
+	if (g_bEasterEggs && iPrevMagnitudeIndex != 0 && pDock->iMagnitudeIndex == 0 && pDock->bInside)  // on arrive en fin de retrecissement.
 		cairo_dock_set_input_shape (pDock);
 	
 	if (! pDock->bInside)
@@ -313,7 +313,7 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 				cairo_dock_hide_parent_dock (pDock);
 			}
 
-			pDock->iSidShrinkDown = 0;
+			//pDock->iSidShrinkDown = 0;
 			pDock->bIsShrinkingDown = FALSE;
 			cairo_dock_hide_dock_like_a_menu ();
 			return FALSE;
@@ -407,7 +407,7 @@ void cairo_dock_arm_animation (Icon *icon, CairoDockAnimationType iAnimationType
 	g_return_if_fail (icon != NULL);
 	CairoDockIconType iType = cairo_dock_get_icon_type (icon);
 	if (iAnimationType == -1)
-		icon->iAnimationType = g_tAnimationType[iType];
+		icon->iAnimationType = myIcons.tAnimationType[iType];
 	else
 		icon->iAnimationType = iAnimationType;
 
@@ -415,13 +415,13 @@ void cairo_dock_arm_animation (Icon *icon, CairoDockAnimationType iAnimationType
 		icon->iAnimationType = g_random_int_range (0, CAIRO_DOCK_NB_ANIMATIONS-1);  // [a;b[
 
 	if (iNbRounds == -1)
-		iNbRounds = g_tNbAnimationRounds[iType];
+		iNbRounds = myIcons.tNbAnimationRounds[iType];
 	icon->iCount = MAX (0, g_tNbIterInOneRound[icon->iAnimationType] * iNbRounds - 1);
 }
 
 void cairo_dock_arm_animation_by_type (Icon *icon, CairoDockIconType iType)
 {
-	cairo_dock_arm_animation (icon, g_tAnimationType[iType], g_tNbAnimationRounds[iType]);
+	cairo_dock_arm_animation (icon, myIcons.tAnimationType[iType], myIcons.tNbAnimationRounds[iType]);
 }
 
 void cairo_dock_start_animation (Icon *icon, CairoDock *pDock)
@@ -434,41 +434,49 @@ void cairo_dock_start_animation (Icon *icon, CairoDock *pDock)
 	cd_message ("%s (%s, %d)", __func__, icon->acName, icon->iAnimationType);
 	if ((icon->iCount > 0 && icon->iAnimationType < CAIRO_DOCK_RANDOM) || icon->fPersonnalScale != 0)
 	{
-		if (pDock->iSidGrowUp != 0)
+		if (pDock->bIsGrowingUp)
+		{
+			pDock->fFoldingFactor = 0;  /// il ne revient pas a 0 tout seul ?...
+			pDock->bIsGrowingUp = FALSE;
+		}
+		cairo_dock_start_shrinking (pDock);
+		/*if (pDock->iSidGrowUp != 0)
 		{
 			pDock->fFoldingFactor = 0;
 			g_source_remove (pDock->iSidGrowUp);
 			pDock->iSidGrowUp = 0;
 		}
 		if (pDock->iSidShrinkDown == 0)
-			pDock->iSidShrinkDown = g_timeout_add (50, (GSourceFunc) cairo_dock_shrink_down, (gpointer) pDock);  // fera diminuer de taille les icones, et rebondir/tourner/clignoter celle qui est animee.
+			pDock->iSidShrinkDown = g_timeout_add (50, (GSourceFunc) cairo_dock_shrink_down, (gpointer) pDock);  // fera diminuer de taille les icones, et rebondir/tourner/clignoter celle qui est animee.*/
 	}
 }
 
-
-static gboolean _cairo_dock_animation (CairoDock *pDock)
-{
-	{
-		pDock->iSidGLAnimation = 0;
-		return FALSE;
-	}
-}
 
 static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 {
-	/// TODO : faire en sorte que le grow_up n'interagisse pas ici ...
+	//g_print ("%s (%d)\n", __func__, pDock->iMagnitudeIndex);
 	gboolean bContinue = FALSE;
-	Icon *icon;
-	GList *ic;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (CAIRO_CONTAINER (pDock)))  // a integrer aux plug-ins, au cas par cas, certains pourront marcher sans opengl (drop-indicator notamment).
 	{
-		icon = ic->data;
-		///if (icon->bOnMouseOverAnimating)
+		Icon *icon;
+		GList *ic;
+		for (ic = pDock->icons; ic != NULL; ic = ic->next)
+		{
+			icon = ic->data;
 			cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDock, &bContinue);
-		///bContinue |= icon->bOnMouseOverAnimating;
+		}
+
+		cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);
 	}
 	
-	cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);
+	if (pDock->bIsGrowingUp)
+	{
+		bContinue |= cairo_dock_grow_up (pDock);
+	}
+	else if (pDock->bIsShrinkingDown)
+	{
+		bContinue |= cairo_dock_shrink_down (pDock);
+	}
 	
 	gtk_widget_queue_draw (pDock->pWidget);
 	if (! bContinue)
@@ -486,8 +494,8 @@ void cairo_dock_launch_animation (CairoDock *pDock)
 	{
 		if (pDock->render_opengl != NULL)
 			pDock->iSidGLAnimation = g_timeout_add (g_iGLAnimationDeltaT, (GSourceFunc)_cairo_dock_gl_animation, pDock);
-		//else
-		//	pDock->iSidGLAnimation = g_timeout_add (g_iCairoAnimationDeltaT, (GSourceFunc)_cairo_dock_animation, pDock);
+		else
+			pDock->iSidGLAnimation = g_timeout_add (g_iCairoAnimationDeltaT, (GSourceFunc)_cairo_dock_gl_animation, pDock);
 	}
 }
 

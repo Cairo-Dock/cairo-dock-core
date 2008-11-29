@@ -54,22 +54,18 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-labels.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-dock-factory.h"
 
 extern int g_iWmHint;
 extern CairoDock *g_pMainDock;
 
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
-extern gint g_iDockLineWidth;
-extern int g_iIconGap;
-extern double g_fAmplitude;
 
-extern gboolean g_bUseSeparator;
 
 extern gchar *g_cCurrentLaunchersPath;
 
 
-extern int g_tIconTypeOrder[CAIRO_DOCK_NB_TYPES];
 extern gchar *g_cConfFile;
 
 extern gboolean g_bKeepAbove;
@@ -103,7 +99,7 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 	pDock->iRefCount = 0;  // c'est un dock racine par defaut.
 	pDock->fRatio = 1.;
 	pDock->iAvoidingMouseIconType = -1;
-	pDock->fFlatDockWidth = - g_iIconGap;
+	pDock->fFlatDockWidth = - myIcons.iIconGap;
 	pDock->iMouseX = -1; // utile ?
 	pDock->iMouseY = -1;
 	pDock->fMagnitudeMax = 1.;
@@ -568,7 +564,7 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDoc
 				icon->fHeight /= pDock->fRatio;
 			}
 			cd_debug (" on re-attribue %s au dock %s", icon->acName, icon->cParentDockName);
-			cairo_dock_insert_icon_in_dock (icon, pReceivingDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, g_bUseSeparator);
+			cairo_dock_insert_icon_in_dock (icon, pReceivingDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);
 			
 			if (CAIRO_DOCK_IS_APPLET (icon))
 			{
@@ -641,13 +637,13 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 
 		Icon *icon;
 		GList *ic;
-		pDock->fFlatDockWidth = - g_iIconGap;
+		pDock->fFlatDockWidth = - myIcons.iIconGap;
 		for (ic = pDock->icons; ic != NULL; ic = ic->next)
 		{
 			icon = ic->data;
 			icon->fWidth *= pDock->fRatio / fPrevRatio;
 			icon->fHeight *= pDock->fRatio / fPrevRatio;
-			pDock->fFlatDockWidth += icon->fWidth + g_iIconGap;
+			pDock->fFlatDockWidth += icon->fWidth + myIcons.iIconGap;
 
 			if (! myViews.bSameHorizontality)
 			{
@@ -789,13 +785,13 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 			cd_debug ("  -> changement du ratio : %.3f -> %.3f (%d, %d try)", fPrevRatio, pDock->fRatio, pDock->iRefCount, n);
 			Icon *icon;
 			GList *ic;
-			pDock->fFlatDockWidth = -g_iIconGap;
+			pDock->fFlatDockWidth = -myIcons.iIconGap;
 			for (ic = pDock->icons; ic != NULL; ic = ic->next)
 			{
 				icon = ic->data;
 				icon->fWidth *= pDock->fRatio / fPrevRatio;
 				icon->fHeight *= pDock->fRatio / fPrevRatio;
-				pDock->fFlatDockWidth += icon->fWidth + g_iIconGap;
+				pDock->fFlatDockWidth += icon->fWidth + myIcons.iIconGap;
 			}
 			pDock->iMaxIconHeight *= pDock->fRatio / fPrevRatio;
 			
@@ -888,7 +884,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		cairo_destroy (pSourceContext);
 	}
 
-	pDock->fFlatDockWidth += g_iIconGap + icon->fWidth;
+	pDock->fFlatDockWidth += myIcons.iIconGap + icon->fWidth;
 	pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
 
 	//\______________ On insere un separateur si necessaire.
@@ -911,7 +907,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 					pDock->icons = g_list_insert_sorted (pDock->icons,
 						pSeparatorIcon,
 						(GCompareFunc) cairo_dock_compare_icons_order);
-					pDock->fFlatDockWidth += g_iIconGap + pSeparatorIcon->fWidth;
+					pDock->fFlatDockWidth += myIcons.iIconGap + pSeparatorIcon->fWidth;
 					pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, pSeparatorIcon->fHeight);
 				}
 				cairo_destroy (pSourceContext);
@@ -933,7 +929,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 					pDock->icons = g_list_insert_sorted (pDock->icons,
 						pSeparatorIcon,
 						(GCompareFunc) cairo_dock_compare_icons_order);
-					pDock->fFlatDockWidth += g_iIconGap + pSeparatorIcon->fWidth;
+					pDock->fFlatDockWidth += myIcons.iIconGap + pSeparatorIcon->fWidth;
 					pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, pSeparatorIcon->fHeight);
 				}
 				cairo_destroy (pSourceContext);

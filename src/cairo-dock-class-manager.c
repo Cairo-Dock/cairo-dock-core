@@ -24,13 +24,10 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-load.h"
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-class-manager.h"
 
-extern gboolean g_bUseSeparator;
 extern CairoDock *g_pMainDock;
-extern int g_tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
-extern int g_tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
-extern double g_fAmplitude;
 extern gboolean g_bEasterEggs;
 
 static GHashTable *s_hClassTable = NULL;
@@ -82,7 +79,7 @@ static Window cairo_dock_detach_appli_of_class (const gchar *cClass, gboolean bD
 			{
 				gchar *cParentDockName = pIcon->cParentDockName;
 				pIcon->cParentDockName = NULL;  // astuce.
-				bDetached = cairo_dock_detach_icon_from_dock (pIcon, pParentDock, g_bUseSeparator);  // on la garde, elle pourra servir car elle contient l'Xid.
+				bDetached = cairo_dock_detach_icon_from_dock (pIcon, pParentDock, myIcons.bUseSeparator);  // on la garde, elle pourra servir car elle contient l'Xid.
 				if (! pParentDock->bIsMainDock)
 				{
 					if (pParentDock->icons == NULL)
@@ -100,7 +97,7 @@ static Window cairo_dock_detach_appli_of_class (const gchar *cClass, gboolean bD
 			{
 				/**cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pContainer));
 				cd_messge ("  on recharge l'icone de l'appli detachee %s", pIcon->acName);
-				cairo_dock_fill_one_icon_buffer (pIcon, pCairoContext, 1 + g_fAmplitude, pParentDock->bHorizontalDock, TRUE, pParentDock->bDirectionUp);
+				cairo_dock_fill_one_icon_buffer (pIcon, pCairoContext, 1 + myIcons.fAmplitude, pParentDock->bHorizontalDock, TRUE, pParentDock->bDirectionUp);
 				cairo_destroy (pCairoContext);*/
 				bNeedsRedraw |= pParentDock->bIsMainDock;
 			}
@@ -242,7 +239,7 @@ gboolean cairo_dock_set_class_use_xicon (const gchar *cClass, gboolean bUseXIcon
 		{
 			cd_message ("%s n'utilise plus l'icone de X", pAppliIcon->acName);
 		}
-		cairo_dock_fill_one_icon_buffer (pAppliIcon, pCairoContext, (1 + g_fAmplitude), g_pMainDock->bHorizontalDock, TRUE, g_pMainDock->bDirectionUp);
+		cairo_dock_fill_one_icon_buffer (pAppliIcon, pCairoContext, (1 + myIcons.fAmplitude), g_pMainDock->bHorizontalDock, TRUE, g_pMainDock->bDirectionUp);
 	}
 	cairo_destroy (pCairoContext);
 	
@@ -403,7 +400,7 @@ void cairo_dock_deinhibate_class (const gchar *cClass, Icon *pInhibatorIcon)
 			if (pParentDock != NULL)
 			{
 				cd_message ("on recharge l'icone de l'appli %s", pIcon->acName);
-				cairo_dock_fill_one_icon_buffer (pIcon, pCairoContext, 1 + g_fAmplitude, pParentDock->bHorizontalDock, TRUE, pParentDock->bDirectionUp);
+				cairo_dock_fill_one_icon_buffer (pIcon, pCairoContext, 1 + myIcons.fAmplitude, pParentDock->bHorizontalDock, TRUE, pParentDock->bDirectionUp);
 			}
 		}
 		cairo_destroy (pCairoContext);
@@ -506,14 +503,14 @@ static cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_
 	double fIconWidthSaturationFactor, fIconHeightSaturationFactor;
 	cairo_dock_calculate_size_fill (fWidth,
 		fHeight,
-		g_tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-		g_tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
+		myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
+		myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
 		FALSE,
 		&fIconWidthSaturationFactor,
 		&fIconHeightSaturationFactor);
 	
 	CairoContainer *pInhibhatorContainer= cairo_dock_search_container_from_icon (pInhibatorIcon);
-	double fInhibatorMaxScale = (CAIRO_DOCK_IS_DOCK (pInhibhatorContainer) ? (1 + g_fAmplitude) / CAIRO_DOCK (pInhibhatorContainer)->fRatio : 1);
+	double fInhibatorMaxScale = (CAIRO_DOCK_IS_DOCK (pInhibhatorContainer) ? (1 + myIcons.fAmplitude) / CAIRO_DOCK (pInhibhatorContainer)->fRatio : 1);
 	
 	cairo_surface_t *pSurface = cairo_dock_duplicate_surface (pInhibatorIcon->pIconBuffer,
 		pSourceContext,
@@ -553,9 +550,9 @@ cairo_surface_t *cairo_dock_create_surface_from_class (gchar *cClass, cairo_t *p
 		cd_debug ("on remplace l'icone X par %s", cIconFilePath);
 		cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cIconFilePath,
 			pSourceContext,
-			1 + g_fAmplitude,
-			g_tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-			g_tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
+			1 + myIcons.fAmplitude,
+			myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
+			myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
 			CAIRO_DOCK_FILL_SPACE,
 			fWidth, fHeight,
 			NULL, NULL);

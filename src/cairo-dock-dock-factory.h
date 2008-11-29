@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 * @param pContainer le container.
 * @return le facteur d'echelle max.
 */
-#define cairo_dock_get_max_scale(pContainer) (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + g_fAmplitude) : 1)
+#define cairo_dock_get_max_scale(pContainer) (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) : 1)
 
 /**
 * Cree un nouveau dock principal.

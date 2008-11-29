@@ -32,7 +32,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #define HAND_WIDTH 76
 #define HAND_HEIGHT 50
 
-extern double g_fAmplitude;
 extern gchar *g_cCurrentLaunchersPath;
 
 static gboolean on_expose_flying_icon (GtkWidget *pWidget,
@@ -48,12 +47,12 @@ static gboolean on_expose_flying_icon (GtkWidget *pWidget,
 	
 	if (pFlyingContainer->pIcon != NULL)
 	{
-		//pFlyingContainer->pIcon->fScale = (1 + g_fAmplitude);
+		//pFlyingContainer->pIcon->fScale = (1 + myIcons.fAmplitude);
 		cairo_save (pCairoContext);
 		cairo_translate (pCairoContext, 
 			(pFlyingContainer->iWidth - pFlyingContainer->pIcon->fWidth * pFlyingContainer->pIcon->fScale) / 2,
 			pFlyingContainer->iHeight - pFlyingContainer->pIcon->fHeight * pFlyingContainer->pIcon->fScale);
-		/*cairo_scale (pCairoContext, 1./(1+g_fAmplitude), 1./(1+g_fAmplitude));
+		/*cairo_scale (pCairoContext, 1./(1+myIcons.fAmplitude), 1./(1+myIcons.fAmplitude));
 		cairo_set_source_surface (pCairoContext, pFlyingContainer->pIcon->pIconBuffer, 0., 0.);
 		cairo_paint (pCairoContext);*/
 		cairo_dock_render_one_icon (pFlyingContainer->pIcon, pCairoContext, TRUE, 1., 1., FALSE, FALSE, pFlyingContainer->iWidth, TRUE);

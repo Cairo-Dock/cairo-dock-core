@@ -23,6 +23,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-internal-dialogs.h"
+#include "cairo-dock-internal-icons.h"
+#include "cairo-dock-internal-background.h"
 #include "cairo-dock-dialogs.h"
 
 static GSList *s_pDialogList = NULL;
@@ -33,10 +35,6 @@ extern gint g_iScreenWidth[2], g_iScreenHeight[2];
 extern gboolean g_bSticky;
 extern gboolean g_bKeepAbove;
 
-extern int g_iDockLineWidth;
-extern int g_iDockRadius;
-extern double g_fLineColor[4];
-extern double g_fAmplitude;
 
 static cairo_surface_t *s_pButtonOkSurface = NULL;
 static cairo_surface_t *s_pButtonCancelSurface = NULL;
@@ -115,7 +113,7 @@ static int _cairo_dock_find_clicked_button_in_dialog (GdkEventButton* pButton, C
 		gtk_widget_size_request (pDialog->pInteractiveWidget, &requisition);
 
 	int iButtonX = .5*pDialog->iWidth - myDialogs.iDialogButtonWidth - .5*CAIRO_DIALOG_BUTTON_GAP;
-	///int iButtonY = g_iDockLineWidth + pDialog->iMessageHeight + requisition.height + CAIRO_DIALOG_VGAP;
+	///int iButtonY = myBackground.iDockLineWidth + pDialog->iMessageHeight + requisition.height + CAIRO_DIALOG_VGAP;
 	int iButtonY = pDialog->iMargin + pDialog->iMessageHeight + pDialog->iInteractiveHeight + 0*CAIRO_DIALOG_VGAP;
 	if (! pDialog->bDirectionUp)
 		iButtonY +=  pDialog->iHeight - (pDialog->iBubbleHeight + pDialog->iMargin);
@@ -239,7 +237,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 	if (! cairo_dock_dialog_reference (pDialog))
 		return FALSE;
 
-	double fLineWidth = g_iDockLineWidth;
+	double fLineWidth = myBackground.iDockLineWidth;
 	double fRadius = pDialog->fRadius;
 
 	cairo_t *pCairoContext;
@@ -354,7 +352,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 			cairo_fill_preserve (pCairoContext);
 		
 			cairo_set_line_width (pCairoContext, fLineWidth);
-			cairo_set_source_rgba (pCairoContext, g_fLineColor[0], g_fLineColor[1], g_fLineColor[2], g_fLineColor[3]);
+			cairo_set_source_rgba (pCairoContext, myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
 			cairo_stroke (pCairoContext);
 			cairo_restore (pCairoContext);  // retour au contexte initial.
 		
@@ -881,17 +879,17 @@ CairoDialog *cairo_dock_build_dialog (const gchar *cText, Icon *pIcon, CairoCont
 			0);
 	}
 	if (pDialog->iBubbleWidth == 0)
-		pDialog->iBubbleWidth = 2*g_iDockRadius+g_iDockLineWidth;
+		pDialog->iBubbleWidth = 2*myBackground.iDockRadius+myBackground.iDockLineWidth;
 	if (pDialog->iBubbleHeight == 0)
-		pDialog->iBubbleHeight = 2*g_iDockRadius+g_iDockLineWidth;
-	//pDialog->iBubbleWidth = MAX (pDialog->iBubbleWidth, 2*g_iDockRadius+g_iDockLineWidth);
-	//pDialog->iBubbleHeight = MAX (pDialog->iBubbleHeight, 2*g_iDockRadius+g_iDockLineWidth);
+		pDialog->iBubbleHeight = 2*myBackground.iDockRadius+myBackground.iDockLineWidth;
+	//pDialog->iBubbleWidth = MAX (pDialog->iBubbleWidth, 2*myBackground.iDockRadius+myBackground.iDockLineWidth);
+	//pDialog->iBubbleHeight = MAX (pDialog->iBubbleHeight, 2*myBackground.iDockRadius+myBackground.iDockLineWidth);
 	cd_debug ("=> iBubbleWidth: %d , iBubbleHeight : %d", pDialog->iBubbleWidth, pDialog->iBubbleHeight);
 
 	//\________________ On definit la geometrie et la position de la fenetre globale.
-	double fLineWidth = g_iDockLineWidth;
-	pDialog->iMargin = dx(g_iDockRadius, fLineWidth);
-	pDialog->fRadius = (pDialog->iBubbleHeight + 2*pDialog->iMargin > 2 * g_iDockRadius ? g_iDockRadius : (pDialog->iBubbleHeight + 2*pDialog->iMargin) / 2 - 1);  // on diminue le rayon si ca passera pas.
+	double fLineWidth = myBackground.iDockLineWidth;
+	pDialog->iMargin = dx(myBackground.iDockRadius, fLineWidth);
+	pDialog->fRadius = (pDialog->iBubbleHeight + 2*pDialog->iMargin > 2 * myBackground.iDockRadius ? myBackground.iDockRadius : (pDialog->iBubbleHeight + 2*pDialog->iMargin) / 2 - 1);  // on diminue le rayon si ca passera pas.
 
 	gtk_container_set_border_width (GTK_CONTAINER (pWindow), pDialog->iMargin);
 
@@ -1132,11 +1130,11 @@ void cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 	if (pDialog->bRight)
 	{
 		fXLeft = -1e4;
-		fXRight = MAX (g_iScreenWidth[pDialog->bIsHorizontal], pDialog->iAimedX + 2*CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_BASE + fRadius + .5*g_iDockLineWidth + 1);
+		fXRight = MAX (g_iScreenWidth[pDialog->bIsHorizontal], pDialog->iAimedX + 2*CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_BASE + fRadius + .5*myBackground.iDockLineWidth + 1);
 	}
 	else
 	{
-		fXLeft = MIN (0, pDialog->iAimedX - (2*CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_BASE + fRadius + .5*g_iDockLineWidth + 1));
+		fXLeft = MIN (0, pDialog->iAimedX - (2*CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_BASE + fRadius + .5*myBackground.iDockLineWidth + 1));
 		fXRight = 1e4;
 	}
 	gboolean bCollision = FALSE;
@@ -1153,11 +1151,11 @@ void cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 			{
 				if (GTK_WIDGET_VISIBLE (pDialogOnOurWay->pWidget) && pDialogOnOurWay->pIcon != NULL)
 				{
-					iYInf = (pDialog->bDirectionUp ? pDialogOnOurWay->iPositionY : pDialogOnOurWay->iPositionY + pDialogOnOurWay->iHeight - (pDialogOnOurWay->iBubbleHeight + 2 * g_iDockLineWidth));
-					iYSup = (pDialog->bDirectionUp ? pDialogOnOurWay->iPositionY + pDialogOnOurWay->iBubbleHeight + 2 * g_iDockLineWidth : pDialogOnOurWay->iPositionY + pDialogOnOurWay->iHeight);
-					if (iYInf < pDialog->iPositionY + pDialog->iBubbleHeight + 2 * g_iDockLineWidth && iYSup > pDialog->iPositionY)
+					iYInf = (pDialog->bDirectionUp ? pDialogOnOurWay->iPositionY : pDialogOnOurWay->iPositionY + pDialogOnOurWay->iHeight - (pDialogOnOurWay->iBubbleHeight + 2 * myBackground.iDockLineWidth));
+					iYSup = (pDialog->bDirectionUp ? pDialogOnOurWay->iPositionY + pDialogOnOurWay->iBubbleHeight + 2 * myBackground.iDockLineWidth : pDialogOnOurWay->iPositionY + pDialogOnOurWay->iHeight);
+					if (iYInf < pDialog->iPositionY + pDialog->iBubbleHeight + 2 * myBackground.iDockLineWidth && iYSup > pDialog->iPositionY)
 					{
-						//g_print ("pDialogOnOurWay : %d - %d ; pDialog : %d - %d\n", iYInf, iYSup, pDialog->iPositionY, pDialog->iPositionY + (pDialog->iBubbleHeight + 2 * g_iDockLineWidth));
+						//g_print ("pDialogOnOurWay : %d - %d ; pDialog : %d - %d\n", iYInf, iYSup, pDialog->iPositionY, pDialog->iPositionY + (pDialog->iBubbleHeight + 2 * myBackground.iDockLineWidth));
 						if (pDialogOnOurWay->iAimedX < pDialog->iAimedX)
 							fXLeft = MAX (fXLeft, pDialogOnOurWay->iPositionX + pDialogOnOurWay->iWidth);
 						else
@@ -1175,20 +1173,20 @@ void cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 	//g_print (" -> [%.2f ; %.2f]\n", fXLeft, fXRight);
 
 	if ((fXRight - fXLeft > pDialog->iWidth) && (
-		(pDialog->bRight && fXLeft + fRadius + .5*g_iDockLineWidth < pDialog->iAimedX && fXRight > pDialog->iAimedX + 2*CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_BASE + fRadius + .5*g_iDockLineWidth)
+		(pDialog->bRight && fXLeft + fRadius + .5*myBackground.iDockLineWidth < pDialog->iAimedX && fXRight > pDialog->iAimedX + 2*CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_BASE + fRadius + .5*myBackground.iDockLineWidth)
 		||
-		(! pDialog->bRight && fXLeft < pDialog->iAimedX - 2*CAIRO_DIALOG_TIP_MARGIN - CAIRO_DIALOG_TIP_BASE - fRadius - .5*g_iDockLineWidth && fXRight > pDialog->iAimedX + fRadius + .5*g_iDockLineWidth)
+		(! pDialog->bRight && fXLeft < pDialog->iAimedX - 2*CAIRO_DIALOG_TIP_MARGIN - CAIRO_DIALOG_TIP_BASE - fRadius - .5*myBackground.iDockLineWidth && fXRight > pDialog->iAimedX + fRadius + .5*myBackground.iDockLineWidth)
 		))
 	{
 		if (pDialog->bRight)
-			pDialog->iPositionX = MIN (pDialog->iAimedX - fRadius - .5*g_iDockLineWidth, fXRight - pDialog->iWidth);
+			pDialog->iPositionX = MIN (pDialog->iAimedX - fRadius - .5*myBackground.iDockLineWidth, fXRight - pDialog->iWidth);
 		else
-			pDialog->iPositionX = MAX (pDialog->iAimedX - fRadius - .5*g_iDockLineWidth - pDialog->iWidth, fXLeft);  /// pDialog->iBubbleWidth (?)
+			pDialog->iPositionX = MAX (pDialog->iAimedX - fRadius - .5*myBackground.iDockLineWidth - pDialog->iWidth, fXLeft);  /// pDialog->iBubbleWidth (?)
 	}
 	else
 	{
 		//g_print (" * Aim : (%d ; %d) ; Width : %d\n", pDialog->iAimedX, pDialog->iAimedY, pDialog->iWidth);
-		pDialog->iPositionY = fNextYStep - (pDialog->bDirectionUp ? pDialog->iBubbleHeight + 2*dy(fRadius, g_iDockLineWidth) : 0);
+		pDialog->iPositionY = fNextYStep - (pDialog->bDirectionUp ? pDialog->iBubbleHeight + 2*dy(fRadius, myBackground.iDockLineWidth) : 0);
 		cairo_dock_dialog_find_optimal_placement (pDialog);
 	}
 }
@@ -1197,7 +1195,7 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 {
 	//g_print ("%s ()\n", __func__);
 	//g_return_if_fail (pDock != NULL && pDialog->pIcon != NULL);
-	double fLineWidth = g_iDockLineWidth;
+	double fLineWidth = myBackground.iDockLineWidth;
 	int iPrevPositionX = pDialog->iPositionX, iPrevPositionY = pDialog->iPositionY;
 	if (pContainer != NULL && pDialog->pIcon != NULL)
 	{

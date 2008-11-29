@@ -90,67 +90,31 @@
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-dbus.h"
 #include "cairo-dock-load.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-desklet.h"
 
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
 int g_iWmHint = GDK_WINDOW_TYPE_HINT_DOCK;  // hint pour la fenetre du dock principal.
 
-gboolean g_bReverseVisibleImage;  // retrouner l'image de la zone de rappel quand le dock est en haut.
 gint g_iScreenWidth[2];  // dimensions de l'ecran.
 gint g_iScreenHeight[2];
 
 gchar *g_cCurrentThemePath = NULL;  // le chemin vers le repertoire du theme courant.
 gchar *g_cCurrentLaunchersPath = NULL;  // le chemin vers le repertoire des lanceurs/icones du theme courant.
 gchar *g_cConfFile = NULL;  // le chemin du fichier de conf.
-gpointer *g_pDefaultIconDirectory = NULL;  // les repertoires/themes ou on va chercher les icones.
 gchar *g_cCairoDockDataDir = NULL;  // le repertoire ou on va chercher les .desktop.
 
-double g_fAmplitude;  // amplitude de la siunsoide.
-int g_iSinusoidWidth;  // largeur de la sinusoide en pixels. On va de 0 a pi en la parcourant, en etant a pi/2 au niveau du curseur; en dehors de cet intervalle, la sinusoide est plate.
-int g_iNbAnimationRounds;
-gint g_iDockLineWidth;  // thickness of dock-bg outline.
-gint g_iDockRadius;  // radius of dock-bg corners.
-gint g_iFrameMargin;  // marge entre le cadre et les icones.
-gboolean g_bRoundedBottomCorner;  // vrai ssi les coins du bas sont arrondis.
-double g_fLineColor[4];  // la couleur du cadre.
-gint g_iStringLineWidth;  // epaisseur de la ficelle.
-double g_fStringColor[4];  // la couleur de la ficelle.
-
-double g_fReflectSize;  // taille des reflets, en pixels, calcules par rapport a la hauteur max des icones.
-double g_fAlbedo;  // pouvoir reflechissant du plan.
-
 cairo_surface_t *g_pVisibleZoneSurface = NULL;  // surface de la zone de rappel.
-int g_iNbStripes;  // le nombre de rayures a dessiner en fond dans chaque motif elementaire.
-double g_fStripesWidth;  // leur epaisseur relative.
-double g_fStripesColorBright[4];  // couleur claire du fond ou des rayures.
-double g_fStripesColorDark[4];  // couleur foncee du fond ou des rayures.
-double g_fStripesAngle;  // angle par rapport a la verticale des decorations.
-gchar *g_cBackgroundImageFile = NULL;  // nom du fichier image a mettre en fond.
 double g_fBackgroundImageWidth = 0, g_fBackgroundImageHeight = 0;  // sa taille reelle.
-gboolean g_bBackgroundImageRepeat; // repeter l'image du fond comme un motif.
-double g_fBackgroundImageAlpha;  // transparence de l'image de fond.
-cairo_surface_t *g_pBackgroundSurface[2] = {NULL, NULL};  // surface associee a l'image du fond, de la taille de l'image du fond.
-cairo_surface_t *g_pBackgroundSurfaceFull[2] = {NULL, NULL};  // surface associee aux decorations, de 2 fois la taille de la fenetre.
+cairo_surface_t *g_pBackgroundSurface = NULL;  // surface associee a l'image du fond, de la taille de l'image du fond.
+cairo_surface_t *g_pBackgroundSurfaceFull = NULL;  // surface associee aux decorations, de 2 fois la taille de la fenetre.
 
-int g_iIconGap;  // ecart en pixels entre les icones.
-int g_tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];  // les tailles min et max pour chaque type d'icone.
-int g_tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
-int g_tAnimationType[CAIRO_DOCK_NB_TYPES];  // le type de l'animation pour chaque type d'icone.
-int g_tNbAnimationRounds[CAIRO_DOCK_NB_TYPES];  // le nombre de rebonds/rotation/etc lors d'un clique gauche.
-int g_tIconTypeOrder[CAIRO_DOCK_NB_TYPES];  // l'ordre de chaque type dans le dock.
 int g_tNbIterInOneRound[CAIRO_DOCK_NB_ANIMATIONS] = {17, 20, 20, 12, 20, 20, 0};  // 2n+3, 4n, 2n, 2n, 4n, 4n.
-
-double g_fAlphaAtRest;
 
 int g_iNbDesktops;  // nombre de bureaux.
 int g_iNbViewportX, g_iNbViewportY;  // nombre de "faces du cube".
 cairo_surface_t *g_pActiveIndicatorSurface = NULL;
 double g_fActiveIndicatorWidth, g_fActiveIndicatorHeight;
-
-gboolean g_bUseSeparator = TRUE;  // utiliser les separateurs ou pas.
-gchar *g_cSeparatorImage = NULL;
-gboolean g_bRevolveSeparator;  // faire pivoter l'image des separateurs.
-gboolean g_bConstantSeparatorSize;  // garder les separateurs de taille constante.
 
 gboolean g_bKeepAbove = FALSE;
 gboolean g_bSkipPager = TRUE;
@@ -176,11 +140,6 @@ gboolean g_bDisplayDropEmblem = FALSE; // indicateur de drop
 gchar *g_cThemeServerAdress = NULL;
 gboolean g_bEasterEggs = FALSE;
 gboolean g_bLocked = FALSE;
-
-gchar *g_cDeskletDecorationsName = NULL;
-int g_iDeskletButtonSize;
-gchar *g_cRotateButtonImage = NULL;
-gchar *g_cRetachButtonImage = NULL;
 
 gboolean g_bUseOpenGL = FALSE;
 gboolean g_bIndirectRendering = FALSE;
@@ -246,8 +205,9 @@ int main (int argc, char** argv)
 	cLaunchCommand = sCommandString->str;
 	g_string_free (sCommandString, FALSE);
 	
+	myIcons.bUseSeparator = TRUE;
 	for (i = 0; i < CAIRO_DOCK_NB_TYPES; i ++)
-		g_tIconTypeOrder[i] = i;
+		myIcons.tIconTypeOrder[i] = i;
 	cd_log_init(FALSE);
 	//No log
 	cd_log_set_level(0);

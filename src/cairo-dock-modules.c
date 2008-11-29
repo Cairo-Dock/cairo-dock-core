@@ -39,6 +39,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-desklets.h"
 #include "cairo-dock-internal-background.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-modules.h"
 
 #define CAIRO_DOCK_MODULE_PANEL_WIDTH 700
@@ -47,7 +48,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
-extern gboolean g_bUseSeparator;
 extern short g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 extern int g_iWmHint;
 
@@ -594,7 +594,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 					{
 						cd_message ("le container a change (%s -> desklet)", pIcon->cParentDockName);
 						gchar *cOldDockName = g_strdup (pIcon->cParentDockName);
-						cairo_dock_detach_icon_from_dock (pIcon, CAIRO_DOCK (pActualContainer), g_bUseSeparator);
+						cairo_dock_detach_icon_from_dock (pIcon, CAIRO_DOCK (pActualContainer), myIcons.bUseSeparator);
 						if (CAIRO_DOCK (pActualContainer)->icons == NULL)
 							cairo_dock_destroy_dock (CAIRO_DOCK (pActualContainer), cOldDockName, NULL, NULL);
 						else
@@ -633,7 +633,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 						{
 							cd_message ("le dock a change (%s -> %s)", pIcon->cParentDockName, cDockName);
 							gchar *cOldDockName = g_strdup (pIcon->cParentDockName);
-							cairo_dock_detach_icon_from_dock (pIcon, CAIRO_DOCK (pActualContainer), g_bUseSeparator);
+							cairo_dock_detach_icon_from_dock (pIcon, CAIRO_DOCK (pActualContainer), myIcons.bUseSeparator);
 							if (CAIRO_DOCK (pActualContainer)->icons == NULL)
 							{
 								cairo_dock_destroy_dock (CAIRO_DOCK (pActualContainer), cOldDockName, NULL, NULL);
@@ -676,7 +676,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			{
 				pIcon->iCount = 0;
 				CairoDock *pDock = CAIRO_DOCK (pNewContainer);
-				cairo_dock_insert_icon_in_dock (pIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, g_bUseSeparator);
+				cairo_dock_insert_icon_in_dock (pIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);
 				pIcon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
 				cairo_dock_start_animation (pIcon, pDock);
 			}
@@ -1084,7 +1084,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	{
 		pIcon->fWidth /= pDock->fRatio;
 		pIcon->fHeight /= pDock->fRatio;
-		cairo_dock_insert_icon_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, g_bUseSeparator);
+		cairo_dock_insert_icon_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);
 	}
 	else if (pDesklet && pDesklet->iDesiredWidth == 0 && pDesklet->iDesiredHeight == 0)  // peut arriver si le desklet a fini de se redimensionner avant l'init.
 		gtk_widget_queue_draw (pDesklet->pWidget);
@@ -1274,9 +1274,8 @@ void cairo_dock_preload_internal_modules (GHashTable *pModuleTable)
 	REGISTER_INTERNAL_MODULE (Views);
 	REGISTER_INTERNAL_MODULE (Labels);
 	REGISTER_INTERNAL_MODULE (Desklets);
-	//REGISTER_INTERNAL_MODULE (Icons);
-	//REGISTER_INTERNAL_MODULE (Background);
-	/// ...
+	REGISTER_INTERNAL_MODULE (Icons);
+	REGISTER_INTERNAL_MODULE (Background);
 }
 
 static void _cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, GKeyFile *pKeyFile)

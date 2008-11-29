@@ -18,14 +18,14 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-internal-views.h"
+#include "cairo-dock-internal-background.h"
+#include "cairo-dock-internal-desklets.h"
 #include "cairo-dock-renderer-manager.h"
 
 extern GHashTable *g_hDocksTable;
 
-extern int g_iDockRadius;
 extern gboolean g_bUseOpenGL;
 
-extern gchar *g_cDeskletDecorationsName;
 
 static GHashTable *s_hRendererTable = NULL;  // table des fonctions de rendus de dock.
 static GHashTable *s_hDeskletRendererTable = NULL;  // table des fonctions de rendus des desklets.
@@ -136,8 +136,8 @@ CairoDeskletDecoration *cairo_dock_get_desklet_decoration (const gchar *cDecorat
 	g_print ("%s (%s)\n", __func__, cDecorationName);
 	if (cDecorationName != NULL)
 		return g_hash_table_lookup (s_hDeskletDecorationsTable, cDecorationName);
-	else if (g_cDeskletDecorationsName != NULL)
-		return g_hash_table_lookup (s_hDeskletDecorationsTable, g_cDeskletDecorationsName);
+	else if (myDesklets.cDeskletDecorationsName != NULL)
+		return g_hash_table_lookup (s_hDeskletDecorationsTable, myDesklets.cDeskletDecorationsName);
 	else
 		return NULL;
 }
@@ -297,10 +297,10 @@ void cairo_dock_render_desklet_with_new_data (CairoDesklet *pDesklet, CairoDeskl
 		pDesklet->pRenderer->update (pDesklet, pNewData);
 	
 	gtk_widget_queue_draw_area (pDesklet->pWidget,
-		.5*g_iDockRadius,
-		.5*g_iDockRadius,
-		pDesklet->iWidth - g_iDockRadius,
-		pDesklet->iHeight- g_iDockRadius);  // marche avec glitz ?...
+		.5*myBackground.iDockRadius,
+		.5*myBackground.iDockRadius,
+		pDesklet->iWidth - myBackground.iDockRadius,
+		pDesklet->iHeight- myBackground.iDockRadius);  // marche avec glitz ?...
 }
 
 void cairo_dock_render_dialog_with_new_data (CairoDialog *pDialog, CairoDialogRendererDataPtr pNewData)

@@ -30,19 +30,12 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-internal-system.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-launcher-factory.h"
 
 extern CairoDock *g_pMainDock;
-extern double g_fSubDockSizeRatio;
-
-extern double g_fAmplitude;
-extern int g_iIconGap;
-
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentLaunchersPath;
-extern gpointer *g_pDefaultIconDirectory;
-
-extern gboolean g_bSameHorizontality;
 
 
 gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
@@ -77,17 +70,17 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 		//\_______________________ On parcourt les repertoires disponibles, en testant tous les suffixes connus.
 		i = 0;
 		bFileFound = FALSE;
-		if (g_pDefaultIconDirectory != NULL)
+		if (myIcons.pDefaultIconDirectory != NULL)
 		{
-			while ((g_pDefaultIconDirectory[2*i] != NULL || g_pDefaultIconDirectory[2*i+1] != NULL) && ! bFileFound)
+			while ((myIcons.pDefaultIconDirectory[2*i] != NULL || myIcons.pDefaultIconDirectory[2*i+1] != NULL) && ! bFileFound)
 			{
-				if (g_pDefaultIconDirectory[2*i] != NULL)
+				if (myIcons.pDefaultIconDirectory[2*i] != NULL)
 				{
-					//g_print ("on recherche %s dans le repertoire %s\n", sIconPath->str, g_pDefaultIconDirectory[2*i]);
+					//g_print ("on recherche %s dans le repertoire %s\n", sIconPath->str, myIcons.pDefaultIconDirectory[2*i]);
 					j = 0;
 					while (! bFileFound && (cSuffixTab[j] != NULL || ! bAddSuffix))
 					{
-						g_string_printf (sIconPath, "%s/%s", g_pDefaultIconDirectory[2*i], cFileName);
+						g_string_printf (sIconPath, "%s/%s", myIcons.pDefaultIconDirectory[2*i], cFileName);
 						if (bAddSuffix)
 							g_string_append_printf (sIconPath, "%s", cSuffixTab[j]);
 						//g_print ("  -> %s\n", sIconPath->str);
@@ -99,7 +92,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 							break;
 					}
 				}
-				else if (g_pDefaultIconDirectory[2*i+1] != NULL)
+				else if (myIcons.pDefaultIconDirectory[2*i+1] != NULL)
 				{
 					g_string_printf (sIconPath, cFileName);
 					if (! bAddSuffix)
@@ -109,7 +102,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 							*str = '\0';
 					}
 					//g_print ("on recherche %s dans le theme d'icones\n", sIconPath->str);
-					pIconInfo = gtk_icon_theme_lookup_icon  (GTK_ICON_THEME (g_pDefaultIconDirectory[2*i+1]),
+					pIconInfo = gtk_icon_theme_lookup_icon  (GTK_ICON_THEME (myIcons.pDefaultIconDirectory[2*i+1]),
 						sIconPath->str,
 						64,
 						GTK_ICON_LOOKUP_FORCE_SVG);

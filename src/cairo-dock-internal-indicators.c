@@ -13,12 +13,12 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-internal-icons.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-indicators.h"
 
 CairoConfigIndicators myIndicators;
 extern CairoDock *g_pMainDock;
-extern double g_fAmplitude;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicators)
 {

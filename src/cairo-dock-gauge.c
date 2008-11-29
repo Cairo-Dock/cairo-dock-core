@@ -21,9 +21,9 @@ Written by Necropotame (for any bug report, please mail me to fabounet@users.ber
 #include <cairo-dock-keyfile-utilities.h>
 #include <cairo-dock-config.h>
 #include <cairo-dock-renderer-manager.h>
+#include <cairo-dock-internal-icons.h>
 #include <cairo-dock-gauge.h>
 
-extern double g_fAmplitude;
 extern gchar *g_cCairoDockDataDir;
 extern gboolean g_bUseOpenGL;
 

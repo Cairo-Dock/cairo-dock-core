@@ -39,13 +39,12 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-applications-manager.h"
 
 #define CAIRO_DOCK_TASKBAR_CHECK_INTERVAL 250
 
 extern CairoDock *g_pMainDock;
-extern double g_fAmplitude;
-extern gboolean g_bUseSeparator;
 
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
 
@@ -157,7 +156,7 @@ static gboolean _cairo_dock_delete_one_appli (Window *pXid, Icon *pIcon, gpointe
 	{
 		gchar *cParentDockName = pIcon->cParentDockName;
 		pIcon->cParentDockName = NULL;  // astuce.
-		cairo_dock_detach_icon_from_dock (pIcon, pDock, g_bUseSeparator);
+		cairo_dock_detach_icon_from_dock (pIcon, pDock, myIcons.bUseSeparator);
 		if (pDock->icons == NULL)
 			cairo_dock_destroy_dock (pDock, cParentDockName, NULL, NULL);
 		else if (! pDock->bIsMainDock)
@@ -181,9 +180,9 @@ void  cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock
 {
 	int iX, iY, iWidth, iHeight;
 	iX = pDock->iWindowPositionX + icon->fXAtRest + (pDock->iCurrentWidth - pDock->fFlatDockWidth) / 2;
-	iY = pDock->iWindowPositionY + icon->fDrawY - icon->fHeight * g_fAmplitude;  // il faudrait un fYAtRest ...
+	iY = pDock->iWindowPositionY + icon->fDrawY - icon->fHeight * myIcons.fAmplitude;  // il faudrait un fYAtRest ...
 	iWidth = icon->fWidth;
-	iHeight = icon->fHeight * (1. + 2. * g_fAmplitude);  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
+	iHeight = icon->fHeight * (1. + 2. * myIcons.fAmplitude);  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
 
 	if (pDock->bHorizontalDock)
 		cairo_dock_set_xicon_geometry (icon->Xid, iX, iY, iWidth, iHeight);
@@ -728,7 +727,7 @@ static void _cairo_dock_fill_icon_buffer_with_thumbnail (Icon *icon, CairoDock *
 	}
 	#endif
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pParentDock));
-	cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + g_fAmplitude, pParentDock->bHorizontalDock, TRUE, pParentDock->bDirectionUp);
+	cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pParentDock->bHorizontalDock, TRUE, pParentDock->bDirectionUp);
 	cairo_destroy (pCairoContext);
 	icon->fWidth *= pParentDock->fRatio;
 	icon->fHeight *= pParentDock->fRatio;
@@ -957,7 +956,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 										cd_message ("new backing pixmap (bis) : %d", icon->iBackingPixmap);
 									}
 									cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pParentDock));
-									cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + g_fAmplitude, pDock->bHorizontalDock, TRUE, pDock->bDirectionUp);
+									cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, TRUE, pDock->bDirectionUp);
 									cairo_destroy (pCairoContext);
 									icon->fWidth *= pParentDock->fRatio;
 									icon->fHeight *= pParentDock->fRatio;
@@ -1144,7 +1143,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	g_return_val_if_fail (pParentDock != NULL, NULL);
 
 	//\_________________ On l'insere dans son dock parent en animant ce dernier eventuellement.
-	cairo_dock_insert_icon_in_dock (icon, pParentDock, bUpdateSize, bAnimate, CAIRO_DOCK_APPLY_RATIO, g_bUseSeparator);
+	cairo_dock_insert_icon_in_dock (icon, pParentDock, bUpdateSize, bAnimate, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);
 	cd_message (" insertion de %s complete (%.2f %.2fx%.2f) dans %s", icon->acName, icon->fPersonnalScale, icon->fWidth, icon->fHeight, icon->cParentDockName);
 
 	if (bAnimate && cairo_dock_animation_will_be_visible (pParentDock))

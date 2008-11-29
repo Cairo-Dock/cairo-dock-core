@@ -41,6 +41,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gui-manager.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-menu.h"
 
 #define CAIRO_DOCK_CONF_PANEL_WIDTH 800
@@ -54,7 +55,6 @@ extern struct tm *localtime_r (time_t *timer, struct tm *tp);
 
 extern CairoDock *g_pMainDock;
 
-extern gboolean g_bUseSeparator;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCurrentThemePath;
@@ -243,11 +243,8 @@ static void _cairo_dock_remove_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 		g_print ("ok on la garde\n");
 }
 
-static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, gpointer *data, CairoDockNewLauncherType iLauncherType)
+static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, Icon *icon, CairoDock *pDock, CairoDockNewLauncherType iLauncherType)
 {
-	Icon *icon = data[0];
-	CairoDock *pDock = data[1];
-
 	//\___________________ On determine l'ordre d'insertion suivant l'endroit du clique.
 	GError *erreur = NULL;
 	double fOrder;
@@ -306,10 +303,11 @@ static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, gpointer *data,
 			pNewIcon->acName = g_strdup (_("Undefined"));
 
 		CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-		cairo_dock_insert_icon_in_dock (pNewIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, g_bUseSeparator);
+		cairo_dock_insert_icon_in_dock (pNewIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);
 
-		if (pDock->iSidShrinkDown == 0)
-			pDock->iSidShrinkDown = g_timeout_add (50, (GSourceFunc) cairo_dock_shrink_down, (gpointer) pDock);
+		/*if (pDock->iSidShrinkDown == 0)
+			pDock->iSidShrinkDown = g_timeout_add (50, (GSourceFunc) cairo_dock_shrink_down, (gpointer) pDock);*/
+		cairo_dock_start_shrinking (pDock);
 		cairo_dock_mark_theme_as_modified (TRUE);
 	}
 	else
@@ -325,75 +323,8 @@ static void cairo_dock_add_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-
-	/**GtkWidget *pFileChooserDialog = gtk_file_chooser_dialog_new (_("Choose or Create a launcher"),
-		GTK_WINDOW (pDock->pWidget),
-		GTK_FILE_CHOOSER_ACTION_OPEN,
-		GTK_STOCK_NEW,
-		1,
-		GTK_STOCK_OK,
-		GTK_RESPONSE_OK,
-		GTK_STOCK_CANCEL,
-		GTK_RESPONSE_CANCEL,
-		NULL);
-
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog), "/usr/share/app-install/");
-	gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (pFileChooserDialog), TRUE);
-	gtk_widget_show (pFileChooserDialog);
-
-	int answer = gtk_dialog_run (GTK_DIALOG (pFileChooserDialog));
-	if (answer == GTK_RESPONSE_OK)
-	{
-		GSList* selected_files = gtk_file_chooser_get_filenames (GTK_FILE_CHOOSER (pFileChooserDialog));
-		cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-		gchar *cFilePath;
-		Icon *pNewIcon;
-		gchar *cDesktopFileName;
-		const gchar *cDockName;
-		GError *erreur = NULL;
-		GSList *pSelectedFile;
-		for (pSelectedFile = selected_files; pSelectedFile != NULL; pSelectedFile = pSelectedFile->next)
-		{
-			cFilePath = pSelectedFile->data;
-			cDockName = cairo_dock_search_dock_name (pDock);
-			cDesktopFileName = cairo_dock_add_desktop_file_from_uri (cFilePath, cDockName, CAIRO_DOCK_LAST_ORDER, pDock, &erreur);
-			if (erreur != NULL)
-			{
-				cd_warning ("%s", erreur->message);
-				g_error_free (erreur);
-				erreur = NULL;
-				continue;
-			}
-
-			pNewIcon = cairo_dock_create_icon_from_desktop_file (cDesktopFileName, pCairoContext);
-			g_free (cDesktopFileName);
-
-			cairo_dock_insert_icon_in_dock (pNewIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, g_bUseSeparator);
-
-			cairo_dock_mark_theme_as_modified (TRUE);
-			g_free (cFilePath);
-		}
-		g_slist_free (selected_files);
-		cairo_destroy (pCairoContext);
-
-		cairo_dock_update_dock_size (pDock);
-
-		if (pDock->iSidShrinkDown == 0)
-			pDock->iSidShrinkDown = g_timeout_add (50, (GSourceFunc) cairo_dock_shrink_down, (gpointer) pDock);
-		gtk_widget_queue_draw (pDock->pWidget);
-
-		gtk_widget_destroy (pFileChooserDialog);
-	}
-	else if (answer == 1)
-	{
-		gtk_widget_destroy (pFileChooserDialog);  // dans ce cas on ferme le selecteur avant.
-		_cairo_dock_create_launcher (pMenuItem, data, CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE);
-	}
-	else
-	{
-		gtk_widget_destroy (pFileChooserDialog);
-	}*/
-	_cairo_dock_create_launcher (pMenuItem, data, CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE);
+	
+	_cairo_dock_create_launcher (pMenuItem, icon, pDock, CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE);
 }
 
 static void cairo_dock_add_container (GtkMenuItem *pMenuItem, gpointer *data)
@@ -401,7 +332,7 @@ static void cairo_dock_add_container (GtkMenuItem *pMenuItem, gpointer *data)
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
 
-	_cairo_dock_create_launcher (pMenuItem, data, CAIRO_DOCK_LAUNCHER_FOR_CONTAINER);
+	_cairo_dock_create_launcher (pMenuItem, icon, pDock, CAIRO_DOCK_LAUNCHER_FOR_CONTAINER);
 }
 
 static void cairo_dock_add_separator (GtkMenuItem *pMenuItem, gpointer *data)
@@ -409,7 +340,7 @@ static void cairo_dock_add_separator (GtkMenuItem *pMenuItem, gpointer *data)
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
 	if (icon != NULL)
-		_cairo_dock_create_launcher (pMenuItem, data, CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR);
+		_cairo_dock_create_launcher (pMenuItem, icon, pDock, CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR);
 }
 
 static void _on_modify_launcher (Icon *icon)
@@ -473,7 +404,7 @@ static void _on_modify_launcher (Icon *icon)
 	if (pDock != pNewContainer && icon->fOrder > g_list_length (pNewContainer->icons) + 1)
 		icon->fOrder = CAIRO_DOCK_LAST_ORDER;
 
-	cairo_dock_insert_icon_in_dock (icon, pNewContainer, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, g_bUseSeparator);  // on n'empeche pas les bouclages.
+	cairo_dock_insert_icon_in_dock (icon, pNewContainer, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);  // on n'empeche pas les bouclages.
 
 	if (pDock != pNewContainer)
 		cairo_dock_update_dock_size (pDock);

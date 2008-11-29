@@ -27,13 +27,12 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-labels.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-applet-facility.h"
 
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
 
-extern double g_fAmplitude;
-extern double g_fAlbedo;
 
 extern gboolean g_bUseOpenGL;
 
@@ -84,7 +83,7 @@ void cairo_dock_add_reflection_to_icon (cairo_t *pIconContext, Icon *pIcon, Cair
 		pIcon->pReflectionBuffer = NULL;
 	}
 	
-	double fMaxScale = (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + g_fAmplitude) / CAIRO_DOCK (pContainer)->fRatio : 1);
+	double fMaxScale = (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) / CAIRO_DOCK (pContainer)->fRatio : 1);
 	gboolean bIsHorizontal = pContainer->bIsHorizontal;
 	pIcon->pReflectionBuffer = cairo_dock_create_reflection_surface (pIcon->pIconBuffer,
 		pIconContext,
@@ -119,7 +118,7 @@ void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surf
 
 void cairo_dock_set_image_on_icon (cairo_t *pIconContext, gchar *cImagePath, Icon *pIcon, CairoContainer *pContainer)
 {
-	double fMaxScale = (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + g_fAmplitude) / CAIRO_DOCK (pContainer)->fRatio : 1);
+	double fMaxScale = (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) / CAIRO_DOCK (pContainer)->fRatio : 1);
 	cairo_surface_t *pImageSurface = cairo_dock_create_surface_for_icon (cImagePath,
 		pIconContext,
 		pIcon->fWidth * fMaxScale,
@@ -132,7 +131,7 @@ void cairo_dock_set_image_on_icon (cairo_t *pIconContext, gchar *cImagePath, Ico
 
 void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pIcon, CairoContainer *pContainer)
 {
-	double fMaxScale = (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + g_fAmplitude) / CAIRO_DOCK (pContainer)->fRatio : 1);
+	double fMaxScale = (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) / CAIRO_DOCK (pContainer)->fRatio : 1);
 	cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0.,
 		0.,
 		pIcon->fWidth * fMaxScale,
@@ -227,7 +226,7 @@ void cairo_dock_set_quick_info_full (cairo_t *pSourceContext, Icon *pIcon, Cairo
 	va_list args;
 	va_start (args, cQuickInfoFormat);
 	gchar *cFullText = g_strdup_vprintf (cQuickInfoFormat, args);
-	cairo_dock_set_quick_info (pSourceContext, cFullText, pIcon, (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + g_fAmplitude) / 1 : 1));
+	cairo_dock_set_quick_info (pSourceContext, cFullText, pIcon, (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) / 1 : 1));
 	g_free (cFullText);
 	va_end (args);
 }

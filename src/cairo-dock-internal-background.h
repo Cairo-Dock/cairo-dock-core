@@ -30,6 +30,8 @@ struct _CairoConfigBackground {
 	gdouble fStripesAngle;
 	};
 
+#define g_iDockLineWidth myBackground.iDockLineWidth
+#define g_iDockRadius myBackground.iDockRadius
 
 DEFINE_PRE_INIT (Background);
 

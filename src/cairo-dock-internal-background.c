@@ -13,12 +13,13 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-internal-icons.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-background.h"
 
 CairoConfigBackground myBackground;
 extern CairoDock *g_pMainDock;
-extern double g_fAmplitude;
+extern double g_fBackgroundImageWidth, g_fBackgroundImageHeight;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackground)
 {
@@ -72,13 +73,12 @@ static void reload (CairoConfigBackground *pPrevBackground, CairoConfigBackgroun
 {
 	CairoDock *pDock = g_pMainDock;
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
-	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+	//cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 	
-	
-	
-	cairo_destroy (pCairoContext);
-	
+	g_fBackgroundImageWidth = g_fBackgroundImageHeight = 0.;
+	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks.
 	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.
+	//cairo_destroy (pCairoContext);
 }
 
 

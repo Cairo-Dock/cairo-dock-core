@@ -71,7 +71,7 @@ void cairo_dock_free_icon (Icon *icon);
 void cairo_dock_free_icon_buffers (Icon *icon);
 
 
-#define cairo_dock_get_group_order(iType) (iType < CAIRO_DOCK_NB_TYPES ? g_tIconTypeOrder[iType] : iType)
+#define cairo_dock_get_group_order(iType) (iType < CAIRO_DOCK_NB_TYPES ? myIcons.tIconTypeOrder[iType] : iType)
 #define cairo_dock_get_icon_order(icon) cairo_dock_get_group_order (icon->iType)
 
 /**

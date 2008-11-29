@@ -17,10 +17,10 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <cairo-dock-draw-opengl.h>
 #include <cairo-dock-draw.h>
 #include <cairo-dock-internal-labels.h>
+#include <cairo-dock-internal-icons.h>
+#include <cairo-dock-internal-background.h>
 #include <cairo-dock-graph.h>
 
-extern int g_iDockRadius;
-extern double g_fAmplitude;
 extern gboolean g_bUseOpenGL;
 
 
@@ -327,11 +327,11 @@ CairoDockGraph* cairo_dock_create_graph (cairo_t *pSourceContext, int iNbValues,
 	
 	pGraph->fWidth = fWidth;
 	pGraph->fHeight = fHeight;
-	pGraph->iRadius = g_iDockRadius;  // memes arrondis que le dock et les desklets.
+	pGraph->iRadius = myBackground.iDockRadius;  // memes arrondis que le dock et les desklets.
 	pGraph->fMargin = pGraph->iRadius * (1. - sqrt(2)/2);
 	pGraph->bMixDoubleGraph = (iType & CAIRO_DOCK_MIX_DOUBLE_GRAPH);
 	
-	pGraph->pBackgroundSurface = _cairo_dock_create_graph_background (pSourceContext, fWidth, fHeight, g_iDockRadius, pGraph->fBackGroundColor, iType);
+	pGraph->pBackgroundSurface = _cairo_dock_create_graph_background (pSourceContext, fWidth, fHeight, myBackground.iDockRadius, pGraph->fBackGroundColor, iType);
 	
 	pGraph->pGradationPattern = _cairo_dock_create_graph_pattern (pGraph, pGraph->fLowColor, pGraph->fHighColor, 0.);
 	if (pGraph->pTabValues2 != NULL)
@@ -350,7 +350,7 @@ void cairo_dock_reload_graph (cairo_t *pSourceContext, CairoDockGraph *pGraph, i
                 cairo_pattern_destroy (pGraph->pGradationPattern2);
 	pGraph->fWidth = iWidth;
 	pGraph->fHeight = iHeight;
-	pGraph->iRadius = g_iDockRadius;
+	pGraph->iRadius = myBackground.iDockRadius;
 	pGraph->pBackgroundSurface = _cairo_dock_create_graph_background (pSourceContext, pGraph->fWidth, pGraph->fHeight, pGraph->iRadius, pGraph->fBackGroundColor, pGraph->iType);
 	pGraph->pGradationPattern = _cairo_dock_create_graph_pattern (pGraph, pGraph->fLowColor, pGraph->fHighColor, 0.);
 	if (pGraph->pTabValues2 != NULL)

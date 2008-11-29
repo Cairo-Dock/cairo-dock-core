@@ -36,11 +36,9 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-labels.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-application-factory.h"
 
-extern double g_fAmplitude;
-extern int g_tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
-extern int g_tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
 
 extern gboolean g_bEasterEggs;
 
@@ -123,8 +121,8 @@ cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, cairo_t *pS
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_pixbuf (pPixbuf,
 		pSourceContext,
 		fMaxScale,
-		g_tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-		g_tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
+		myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
+		myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
 		FALSE,
 		fWidth,
 		fHeight,
@@ -213,8 +211,8 @@ cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pS
 			cairo_surface_t *pNewSurface = cairo_dock_create_surface_from_pixbuf (pIconPixbuf,
 				pSourceContext,
 				fMaxScale,
-				g_tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-				g_tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
+				myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
+				myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
 				FALSE,
 				fWidth,
 				fHeight,
@@ -605,7 +603,7 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 			pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 			icon->fWidth /= pDock->fRatio;
 			icon->fHeight /= pDock->fRatio;
-			cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + g_fAmplitude, pDock->bHorizontalDock, TRUE, pDock->bDirectionUp);
+			cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, TRUE, pDock->bDirectionUp);
 			icon->fWidth *= pDock->fRatio;
 			icon->fHeight *= pDock->fRatio;
 			cairo_destroy (pCairoContext);
@@ -640,7 +638,7 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 					pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 					icon->fWidth /= pDock->fRatio;
 					icon->fHeight /= pDock->fRatio;
-					cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + g_fAmplitude, pDock->bHorizontalDock, TRUE, pDock->bDirectionUp);
+					cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, TRUE, pDock->bDirectionUp);
 					icon->fWidth *= pDock->fRatio;
 					icon->fHeight *= pDock->fRatio;
 					cairo_destroy (pCairoContext);

@@ -157,7 +157,9 @@ cairo_dock_SOURCES = \
 	cairo-dock-internal-desklets.c\
 	cairo-dock-internal-desklets.h\
 	cairo-dock-internal-background.c\
-	cairo-dock-internal-background.h
+	cairo-dock-internal-background.h\
+	cairo-dock-internal-icons.c\
+	cairo-dock-internal-icons.h
 	
 
 cairo_dockincludedir =\
@@ -224,4 +226,5 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-internal-views.h\
 	cairo-dock-internal-labels.h\
 	cairo-dock-internal-desklets.h\
-	cairo-dock-internal-background.h
+	cairo-dock-internal-background.h\
+	cairo-dock-internal-icons.h

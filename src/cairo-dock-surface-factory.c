@@ -16,16 +16,10 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-surface-factory.h"
+#include "cairo-dock-internal-background.h"
+#include "cairo-dock-internal-icons.h"
+#include "cairo-dock-internal-labels.h"
 
-extern int g_tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
-extern int g_tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
-extern double g_fAmplitude;
-extern double g_fReflectSize;
-extern double g_fAlbedo;
-
-extern int g_iLabelWeight;
-extern int g_iLabelStyle;
-extern int g_iDockRadius;
 extern gboolean g_bUseOpenGL;
 
 
@@ -152,8 +146,8 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 	double fIconWidthSaturationFactor, fIconHeightSaturationFactor;
 	cairo_dock_calculate_size_fill (fWidth,
 		fHeight,
-		g_tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-		g_tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
+		myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
+		myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
 		FALSE,
 		&fIconWidthSaturationFactor,
 		&fIconHeightSaturationFactor);
@@ -456,8 +450,8 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_
 	g_return_val_if_fail (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 
 	//\_______________ On cree la surface d'une fraction hauteur de l'image originale.
-	double fReflectHeight = g_fReflectSize * fMaxScale;
-	if (pSurface == NULL || fReflectHeight == 0 || g_fAlbedo == 0)
+	double fReflectHeight = myIcons.fReflectSize * fMaxScale;
+	if (pSurface == NULL || fReflectHeight == 0 || myIcons.fAlbedo == 0)
 		return NULL;
 	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
 		fImageWidth,
@@ -489,13 +483,13 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_
 		0.,
 		0.,
 		0.,
-		(bDirectionUp ? g_fAlbedo : 0.));
+		(bDirectionUp ? myIcons.fAlbedo : 0.));
 	cairo_pattern_add_color_stop_rgba (pGradationPattern,
 		1.,
 		0.,
 		0.,
 		0.,
-		(bDirectionUp ? 0 : g_fAlbedo));
+		(bDirectionUp ? 0 : myIcons.fAlbedo));
 
 	cairo_mask (pCairoContext, pGradationPattern);
 
@@ -509,8 +503,8 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_vertical (cairo_su
 	g_return_val_if_fail (pSurface != NULL && pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 
 	//\_______________ On cree la surface d'une fraction hauteur de l'image originale.
-	double fReflectWidth = g_fReflectSize * fMaxScale;
-	if (fReflectWidth == 0 || g_fAlbedo == 0)
+	double fReflectWidth = myIcons.fReflectSize * fMaxScale;
+	if (fReflectWidth == 0 || myIcons.fAlbedo == 0)
 		return NULL;
 	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
 		fReflectWidth,
@@ -538,13 +532,13 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_vertical (cairo_su
 		0.,
 		0.,
 		0.,
-		(bDirectionUp ? g_fAlbedo : 0.));
+		(bDirectionUp ? myIcons.fAlbedo : 0.));
 	cairo_pattern_add_color_stop_rgba (pGradationPattern,
 		1.,
 		0.,
 		0.,
 		0.,
-		(bDirectionUp ? 0. : g_fAlbedo));
+		(bDirectionUp ? 0. : myIcons.fAlbedo));
 
 	cairo_mask (pCairoContext, pGradationPattern);
 
@@ -567,8 +561,8 @@ cairo_surface_t * cairo_dock_create_icon_surface_with_reflection_horizontal (cai
 	g_return_val_if_fail (pIconSurface != NULL && pReflectionSurface!= NULL && pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 
 	//\_______________ On cree la surface de telle facon qu'elle contienne les 2 surfaces.
-	double fReflectHeight = g_fReflectSize * fMaxScale;
-	if (fReflectHeight == 0 || g_fAlbedo == 0)
+	double fReflectHeight = myIcons.fReflectSize * fMaxScale;
+	if (fReflectHeight == 0 || myIcons.fAlbedo == 0)
 		return NULL;
 	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
 		fImageWidth,
@@ -593,8 +587,8 @@ cairo_surface_t * cairo_dock_create_icon_surface_with_reflection_vertical (cairo
 	g_return_val_if_fail (pIconSurface != NULL && pReflectionSurface!= NULL && pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 
 	//\_______________ On cree la surface de telle facon qu'elle contienne les 2 surfaces.
-	double fReflectWidth = g_fReflectSize * fMaxScale;
-	if (fReflectWidth == 0 || g_fAlbedo == 0)
+	double fReflectWidth = myIcons.fReflectSize * fMaxScale;
+	if (fReflectWidth == 0 || myIcons.fAlbedo == 0)
 		return NULL;
 	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
 		fImageWidth + fReflectWidth,
@@ -659,7 +653,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	if (pLabelDescription->fBackgroundColor != NULL && pLabelDescription->fBackgroundColor[3] > 0)  // non transparent.
 	{
 		cairo_save (pCairoContext);
-		double fRadius = fMaxScale * MIN (.5 * g_iDockRadius, 5.);  // bon compromis.
+		double fRadius = fMaxScale * MIN (.5 * myBackground.iDockRadius, 5.);  // bon compromis.
 		double fLineWidth = 1.;
 		double fFrameWidth = *iTextWidth - 2 * fRadius - fLineWidth;
 		double fFrameHeight = *iTextHeight - fLineWidth;

@@ -169,26 +169,5 @@ void cairo_dock_get_version_from_string (gchar *cVersionString, int *iMajorVersi
 void cairo_dock_pre_init_##cGroupName (CairoDockInternalModule *pModule)
 
 
-typedef struct _CairoConfigIcons {
-	gdouble fFieldDepth;
-	gdouble fAlbedo;
-	gdouble fAmplitude;
-	gint iSinusoidWidth;
-	gint iIconGap;
-	gint iStringLineWidth;
-	gdouble fStringColor;
-	gdouble fAlphaAtRest;
-	gpointer *pDefaultIconDirectory;
-	gint tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
-	gint tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
-	gint tAnimationType[CAIRO_DOCK_NB_TYPES];
-	gint tNbAnimationRounds[CAIRO_DOCK_NB_TYPES];
-	gint tIconTypeOrder[CAIRO_DOCK_NB_TYPES];
-	gboolean bUseSeparator;
-	gchar *cSeparatorImage;
-	gboolean bRevolveSeparator;
-	gboolean bConstantSeparatorSize;
-	} CairoConfigIcons;
-
 G_END_DECLS
 #endif

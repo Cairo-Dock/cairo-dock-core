@@ -20,20 +20,14 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-icons.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-separator-factory.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-internal-icons.h"
+#include "cairo-dock-separator-factory.h"
 
-extern double g_fAmplitude;
-extern int g_iDockLineWidth;
 extern double g_fSubDockSizeRatio;
 
 extern gboolean g_bHorizontalDock;
 
-extern int g_tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
-extern int g_tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
-extern gboolean g_bUseSeparator;
-extern gchar *g_cSeparatorImage;
-extern gboolean g_bRevolveSeparator;
 
 
 cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp, double *fWidth, double *fHeight)
@@ -43,11 +37,11 @@ cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, d
 
 	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	cairo_surface_t *pNewSurface = NULL;
-	if (g_cSeparatorImage != NULL)
+	if (myIcons.cSeparatorImage != NULL)
 	{
-		gchar *cImagePath = cairo_dock_generate_file_path (g_cSeparatorImage);
+		gchar *cImagePath = cairo_dock_generate_file_path (myIcons.cSeparatorImage);
 		double fRotationAngle;
-		if (! g_bRevolveSeparator)
+		if (! myIcons.bRevolveSeparator)
 			fRotationAngle = 0;
 		else if (bHorizontalDock)
 			if (bDirectionUp)
@@ -63,8 +57,8 @@ cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, d
 		pNewSurface = cairo_dock_create_surface_from_image (cImagePath,
 			pSourceContext,
 			fMaxScale,
-			g_tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12],
-			g_tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12],
+			myIcons.tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12],
+			myIcons.tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12],
 			CAIRO_DOCK_FILL_SPACE,
 			fWidth,
 			fHeight,
@@ -82,8 +76,8 @@ cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, d
 		double fIconWidthSaturationFactor, fIconHeightSaturationFactor;
 		cairo_dock_calculate_size_fill (fWidth,
 			fHeight,
-			g_tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12],
-			g_tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12],
+			myIcons.tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12],
+			myIcons.tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12],
 			FALSE,
 			&fIconWidthSaturationFactor,
 			&fIconHeightSaturationFactor);
@@ -102,12 +96,12 @@ cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, d
 Icon *cairo_dock_create_separator_icon (cairo_t *pSourceContext, int iSeparatorType, CairoDock *pDock, gboolean bApplyRatio)
 {
 	//g_print ("%s ()\n", __func__);
-	if ((iSeparatorType & 1) && ! g_bUseSeparator)
+	if ((iSeparatorType & 1) && ! myIcons.bUseSeparator)
 		return NULL;
 
 	Icon *icon = g_new0 (Icon, 1);
 	icon->iType = iSeparatorType;
-	cairo_dock_fill_one_icon_buffer (icon, pSourceContext, 1 + g_fAmplitude, pDock->bHorizontalDock, TRUE, pDock->bDirectionUp);
+	cairo_dock_fill_one_icon_buffer (icon, pSourceContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, TRUE, pDock->bDirectionUp);
 
 	if (bApplyRatio)  ///  && pDock->iRefCount > 0
 	{

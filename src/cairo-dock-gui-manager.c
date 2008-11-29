@@ -262,7 +262,7 @@ static gboolean on_expose (GtkWidget *pWidget,
 		0,0,0,0.0);
 	cairo_pattern_add_color_stop_rgba   (pPattern,
 		0.,
-		241/255., 234/255., 255/255., 0.75);
+		241/255., 234/255., 255/255., 0.8);
 	cairo_set_source (pCairoContext, pPattern);
 	
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
@@ -427,7 +427,6 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	while (pGroupList[i] != NULL)
 	{
 		cGroupName = pGroupList[i];
-		g_print ("%s\n", cGroupName);
 		
 		//\____________ On recupere les caracteristiqes du groupe.
 		cGroupComment  = g_key_file_get_comment (pKeyFile, cGroupName, NULL, NULL);

@@ -52,12 +52,12 @@
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-internal-desklets.h"
+#include "cairo-dock-internal-background.h"
 #include "cairo-dock-desklet.h"
 
 extern CairoDock *g_pMainDock;
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
 extern gchar *g_cConfFile;
-extern int g_iDockRadius;
 extern gboolean g_bSticky;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bIndirectRendering;
@@ -913,8 +913,8 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
 	gtk_window_set_title(GTK_WINDOW(pWindow), "cairo-dock-desklet");  /// distinguer titre et classe ?...
 	gtk_widget_add_events(pWindow, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_FOCUS_CHANGE_MASK);
 	//the border is were cairo paint
-	gtk_container_set_border_width(GTK_CONTAINER(pWindow), g_iDockRadius/2);  /// re-utiliser la formule des dialogues...
-	gtk_window_set_default_size(GTK_WINDOW(pWindow), 2*g_iDockRadius+1, 2*g_iDockRadius+1);
+	gtk_container_set_border_width(GTK_CONTAINER(pWindow), myBackground.iDockRadius/2);  /// re-utiliser la formule des dialogues...
+	gtk_window_set_default_size(GTK_WINDOW(pWindow), 2*myBackground.iDockRadius+1, 2*myBackground.iDockRadius+1);
 
 	g_signal_connect (G_OBJECT (pWindow),
 		"expose-event",

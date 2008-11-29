@@ -7,7 +7,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 *********************************************************************************/
 
-
+#include <string.h>
 #include "cairo-dock-load.h"
 #include "cairo-dock-dock-factory.h"
 #define _INTERNAL_MODULE_
@@ -68,7 +68,7 @@ DEFINE_PRE_INIT (HiddenDock)
 	
 	pModule->reload = (CairoDockInternalModuleReloadFunc) reload;
 	pModule->get_config = (CairoDockInternalModuleGetConfigFunc) get_config;
-	pModule->reset_config = reset_config;
+	pModule->reset_config = (CairoDockInternalModuleResetConfigFunc) reset_config;
 	pModule->reset_data = NULL;
 	
 	pModule->pConfig = (CairoInternalModuleConfigPtr) &myHiddenDock;

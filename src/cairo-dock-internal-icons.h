@@ -1,6 +1,6 @@
 
-#ifndef __CAIRO_DOCK_INDICATORS__
-#define  __CAIRO_DOCK_INDICATORS__
+#ifndef __CAIRO_DOCK_INTERNAL_ICONS__
+#define  __CAIRO_DOCK_INTERNAL_ICONS__
 
 #include <glib.h>
 
@@ -8,28 +8,41 @@
 #include "cairo-dock-config.h"
 
 
-typedef struct _CairoConfigIndicators CairoConfigIndicators;
+typedef struct _CairoConfigIcons CairoConfigIcons;
 #ifndef _INTERNAL_MODULE_
-extern CairoConfigIndicators myIndicators;
+extern CairoConfigIcons myIcons;
 #endif
 G_BEGIN_DECLS
 
-struct _CairoConfigIndicators {
-	gdouble fActiveColor[4];
-	gint iActiveLineWidth;
-	gint iActiveCornerRadius;
-	gboolean bActiveIndicatorAbove;
-	gchar *cActiveIndicatorImagePath;
-	gchar *cIndicatorImagePath;
-	gboolean bIndicatorAbove;
-	gdouble fIndicatorRatio;
-	gboolean bLinkIndicatorWithIcon;
-	gint iIndicatorDeltaY;
-	gchar *cDropIndicatorImagePath;
+struct _CairoConfigIcons {
+	gdouble fFieldDepth;
+	gdouble fAlbedo;
+	gdouble fAmplitude;
+	gint iSinusoidWidth;
+	gint iIconGap;
+	gint iStringLineWidth;
+	gdouble fStringColor[4];
+	gdouble fAlphaAtRest;
+	gdouble fReflectSize;
+	gchar **pDirectoryList;
+	gpointer *pDefaultIconDirectory;
+	gint tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
+	gint tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
+	gint tAnimationType[CAIRO_DOCK_NB_TYPES];
+	gint tNbAnimationRounds[CAIRO_DOCK_NB_TYPES];
+	gint tIconTypeOrder[CAIRO_DOCK_NB_TYPES];
+	gboolean bMixAppletsAndLaunchers;
+	gboolean bUseSeparator;
+	gchar *cSeparatorImage;
+	gboolean bRevolveSeparator;
+	gboolean bConstantSeparatorSize;
 	};
 
+#define g_fAmplitude myIcons.fAmplitude
+#define g_fReflectSize myIcons.fReflectSize
+#define g_bUseSeparator myIcons.bUseSeparator
 
-DEFINE_PRE_INIT (Indicators);
+DEFINE_PRE_INIT (Icons);
 
 G_END_DECLS
 #endif

@@ -16,9 +16,9 @@ Written by ChAnGFu (for any bug report, please mail me to changfu@cairo-dock.org
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-emblem.h"
 
-extern double g_fAmplitude;
 extern gboolean g_bDisplayDropEmblem;
 
 static CairoDockFullEmblem s_pFullEmblems[CAIRO_DOCK_EMBLEM_CLASSIC_NB];
