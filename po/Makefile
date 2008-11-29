@@ -28,7 +28,7 @@ top_srcdir = ..
 top_builddir = ..
 
 
-prefix = /usr/local
+prefix = /usr
 exec_prefix = ${prefix}
 datadir = ${datarootdir}
 datarootdir = ${prefix}/share
@@ -36,8 +36,8 @@ libdir = ${exec_prefix}/lib
 DATADIRNAME = share
 itlocaledir = $(prefix)/$(DATADIRNAME)/locale
 subdir = po
-install_sh = $(SHELL) /home/fab/CD/trunk/cairo-dock/install-sh
-# Automake >= 1.8 provides /bin/mkdir -p.
+install_sh = /opt/cairo-dock/cairo-dock/install-sh
+# Automake >= 1.8 provides mkdir -p --.
 # Until it can be supposed, use the safe fallback:
 mkdir_p = $(install_sh) -d
 
@@ -47,8 +47,8 @@ INSTALL_DATA = ${INSTALL} -m 644
 GMSGFMT = /usr/bin/msgfmt
 MSGFMT = /usr/bin/msgfmt
 XGETTEXT = /usr/bin/xgettext
-INTLTOOL_UPDATE = $(top_builddir)/intltool-update
-INTLTOOL_EXTRACT = $(top_builddir)/intltool-extract
+INTLTOOL_UPDATE = /usr/bin/intltool-update
+INTLTOOL_EXTRACT = /usr/bin/intltool-extract
 MSGMERGE = INTLTOOL_EXTRACT=$(INTLTOOL_EXTRACT) srcdir=$(srcdir) $(INTLTOOL_UPDATE) --gettext-package $(GETTEXT_PACKAGE) --dist
 GENPOT   = INTLTOOL_EXTRACT=$(INTLTOOL_EXTRACT) srcdir=$(srcdir) $(INTLTOOL_UPDATE) --gettext-package $(GETTEXT_PACKAGE) --pot
 
@@ -67,7 +67,6 @@ EXTRA_DISTFILES = Makevars LINGUAS cairo-dock.pot
 
 POTFILES = \
 	../src/*.c
-# This comment gets stripped out
 
 CATALOGS=$(shell LINGUAS="$(USE_LINGUAS)"; for lang in $$LINGUAS; do printf "$$lang.gmo "; done)
 
