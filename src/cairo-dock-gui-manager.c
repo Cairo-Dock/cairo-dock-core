@@ -23,7 +23,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw.h"
 #include "cairo-dock-gui-manager.h"
 
-#define CAIRO_DOCK_GROUP_ICON_SIZE 48
+#define CAIRO_DOCK_GROUP_ICON_SIZE 42
 #define CAIRO_DOCK_CATEGORY_ICON_SIZE 32
 #define CAIRO_DOCK_NB_BUTTONS_BY_ROW 3
 #define CAIRO_DOCK_GUI_MARGIN 6

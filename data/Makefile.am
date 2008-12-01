@@ -32,8 +32,6 @@ essentialdata_DATA = \
 	hand.svg\
 	rotate-desklet.svg\
 	retach-desklet.svg\
-	texture-gradation-horiz.png\
-	texture-gradation-vert.png\
 	icon-icons.svg
 	
 EXTRA_DIST = $(essentialdata_DATA)\

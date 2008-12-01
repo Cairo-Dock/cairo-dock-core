@@ -48,6 +48,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-draw-opengl.h"
+#include "texture-gradation.h"
 #define RADIAN (G_PI / 180.0)  // Conversion Radian/Degres
 #define DELTA_ROUND_DEGREE 1
 
@@ -61,7 +62,6 @@ extern CairoDock *g_pMainDock;
 extern GLuint g_iIndicatorTexture;
 
 extern double g_fDropIndicatorWidth, g_fDropIndicatorHeight;
-extern GLuint g_iDropIndicatorTexture;
 
 extern double g_fIndicatorWidth, g_fIndicatorHeight;
 extern GLuint g_iIndicatorTexture;
@@ -335,8 +335,11 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 {
 	if (s_pGradationTexture[pDock->bHorizontalDock] == 0)
 	{
-		s_pGradationTexture[pDock->bHorizontalDock] = cairo_dock_load_local_texture (pDock->bHorizontalDock ? "texture-gradation-vert.png" : "texture-gradation-horiz.png", CAIRO_DOCK_SHARE_DATA_DIR);
-		g_print ("s_pGradationTexture <- %d\n", s_pGradationTexture[pDock->bHorizontalDock]);
+		//s_pGradationTexture[pDock->bHorizontalDock] = cairo_dock_load_local_texture (pDock->bHorizontalDock ? "texture-gradation-vert.png" : "texture-gradation-horiz.png", CAIRO_DOCK_SHARE_DATA_DIR);
+		s_pGradationTexture[pDock->bHorizontalDock] = cairo_dock_load_texture_from_raw_data (gradationTex,
+			pDock->bHorizontalDock ? 1:48,
+			pDock->bHorizontalDock ? 48:1);
+		g_print ("s_pGradationTexture(%d) <- %d\n", pDock->bHorizontalDock, s_pGradationTexture[pDock->bHorizontalDock]);
 	}
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.fVisibleAppliAlpha != 0 && ! CAIRO_DOCK_IS_APPLET (icon))
 	{
@@ -779,7 +782,6 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	GLuint iTexture = 0;
 	int w = cairo_image_surface_get_width (pImageSurface);
 	int h = cairo_image_surface_get_height (pImageSurface);
-	glEnable(GL_TEXTURE);
 	glEnable(GL_TEXTURE_2D);
 	glGenTextures (1, &iTexture);
 	g_print ("texture %d generee (%x, %dx%d)\n", iTexture, cairo_image_surface_get_data (pImageSurface), w, h);
@@ -802,6 +804,28 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 
 GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWidth, int iHeight)
 {
+	/*g_print ("%dx%d\n", iWidth, iHeight);
+	int i;
+	guint pixel, alpha, red, green, blue;
+	float fAlphaFactor;
+	guint *pPixelBuffer = (guint *) pTextureRaw;
+	guint *pPixelBuffer2 = g_new (guint, iHeight * iWidth);
+	for (i = 0; i < iHeight * iWidth; i ++)
+	{
+		pixel = (gint) pPixelBuffer[i];
+		alpha = (pixel & 0xFF000000) >> 24;
+		red = (pixel & 0x00FF0000) >> 16;
+		green = (pixel & 0x0000FF00) >> 8;
+		blue  = (pixel & 0x000000FF);
+		fAlphaFactor = (float) alpha / 255.;
+		red *= fAlphaFactor;
+		green *= fAlphaFactor;
+		blue *= fAlphaFactor;
+		pPixelBuffer2[i] = (pixel & 0xFF000000) + (red << 16) + (green << 8) + (blue << 0);
+		g_print ("\\%o\\%o\\%o\\%o", red, green, blue, alpha);
+	}*/
+	guchar *pPixelBuffer2=pTextureRaw;
+	
 	GLuint iTexture = 0;
 	
 	glEnable (GL_TEXTURE_2D);
@@ -811,7 +835,7 @@ GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWi
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
-	glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, iWidth, iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pTextureRaw);
+	glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, iWidth, iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pPixelBuffer2);
 	glBindTexture (GL_TEXTURE_2D, 0);
 	
 	return iTexture;
