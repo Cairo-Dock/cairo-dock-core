@@ -23,15 +23,15 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw.h"
 #include "cairo-dock-gui-manager.h"
 
-#define CAIRO_DOCK_GROUP_ICON_SIZE 42
+#define CAIRO_DOCK_GROUP_ICON_SIZE 32
 #define CAIRO_DOCK_CATEGORY_ICON_SIZE 32
-#define CAIRO_DOCK_NB_BUTTONS_BY_ROW 3
+#define CAIRO_DOCK_NB_BUTTONS_BY_ROW 4
 #define CAIRO_DOCK_GUI_MARGIN 6
 #define CAIRO_DOCK_TABLE_MARGIN 12
 #define CAIRO_DOCK_CONF_PANEL_WIDTH 1024
-#define CAIRO_DOCK_CONF_PANEL_HEIGHT 600
-#define CAIRO_DOCK_PREVIEW_WIDTH 240
-#define CAIRO_DOCK_PREVIEW_HEIGHT 200
+#define CAIRO_DOCK_CONF_PANEL_HEIGHT 700
+#define CAIRO_DOCK_PREVIEW_WIDTH 250
+#define CAIRO_DOCK_PREVIEW_HEIGHT 250
 
 static CairoDockCategoryWidgetTable s_pCategoryWidgetTables[CAIRO_DOCK_NB_CATEGORY];
 static GList *s_pGroupDescriptionList = NULL;
@@ -39,6 +39,7 @@ static GtkWidget *s_pDescriptionTextView = NULL;
 static GtkWidget *s_pPreviewImage = NULL;
 static GtkWidget *s_pOkButton = NULL;
 static GtkWidget *s_pApplyButton = NULL;
+static GtkWidget *s_pBackButton = NULL;
 static GtkTooltips *s_pToolTipsGroup = NULL;
 static GtkWidget *s_pMainWindow = NULL;
 static GtkWidget *s_pGroupsVBox = NULL;
@@ -148,7 +149,11 @@ static GtkToolItem *_cairo_dock_make_toolbutton (const gchar *cLabel, const gcha
 	gchar *cLabel2 = g_strdup_printf ("<span font_desc=\"Times New Roman italic 20\">%c</span>%s", *cLabel, cLabel+1);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel2);
 	g_free (cLabel2);
-	gtk_tool_button_set_label_widget (GTK_TOOL_BUTTON (pWidget), pLabel);
+	
+	GtkWidget *pAlign = gtk_alignment_new (0., 0.5, 0., 1.);
+	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_GUI_MARGIN*2, 0);
+	gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
+	gtk_tool_button_set_label_widget (GTK_TOOL_BUTTON (pWidget), pAlign);
 	
 	return pWidget;
 }
@@ -163,7 +168,8 @@ static void _cairo_dock_add_group_button (gchar *cGroupName, gchar *cIcon, int i
 	pGroupDescription->cPreviewFilePath = g_strdup (cPreviewFilePath);
 	s_pGroupDescriptionList = g_list_prepend (s_pGroupDescriptionList, pGroupDescription);
 	pGroupDescription->cOriginalConfFilePath = g_strdup (cOriginalConfFilePath);
-		
+	pGroupDescription->cIcon = g_strdup (cIcon);
+	
 	//\____________ On construit le bouton du groupe.
 	GtkWidget *pGroupButton, *pGroupLabel, *pGroupHBox;
 	pGroupButton = gtk_button_new ();
@@ -179,17 +185,17 @@ static void _cairo_dock_add_group_button (gchar *cGroupName, gchar *cIcon, int i
 		CAIRO_DOCK_GROUP_ICON_SIZE);
 	
 	pGroupHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
-	if (iActivation != -1)
-	{
-		pGroupDescription->pActivateButton = gtk_check_button_new ();
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pGroupDescription->pActivateButton), iActivation);
-		g_signal_connect (G_OBJECT (pGroupDescription->pActivateButton), "clicked", G_CALLBACK(on_click_activate_given_group), pGroupDescription);
-		gtk_box_pack_start (GTK_BOX (pGroupHBox),
-			pGroupDescription->pActivateButton,
-			FALSE,
-			FALSE,
-			0);
-	}
+	
+	pGroupDescription->pActivateButton = gtk_check_button_new ();
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pGroupDescription->pActivateButton), iActivation);
+	g_signal_connect (G_OBJECT (pGroupDescription->pActivateButton), "clicked", G_CALLBACK(on_click_activate_given_group), pGroupDescription);
+	if (iActivation == -1)
+		gtk_widget_set_sensitive (pGroupDescription->pActivateButton, FALSE);
+	gtk_box_pack_start (GTK_BOX (pGroupHBox),
+		pGroupDescription->pActivateButton,
+		FALSE,
+		FALSE,
+		0);
 	
 	gtk_box_pack_start (GTK_BOX (pGroupHBox),
 		pGroupButton,
@@ -262,7 +268,7 @@ static gboolean on_expose (GtkWidget *pWidget,
 		0,0,0,0.0);
 	cairo_pattern_add_color_stop_rgba   (pPattern,
 		0.,
-		241/255., 234/255., 255/255., 0.8);
+		241/255., 234/255., 255/255., 0.9);
 	cairo_set_source (pCairoContext, pPattern);
 	
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
@@ -336,7 +342,7 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	gtk_frame_set_shadow_type (GTK_FRAME (pCategoriesFrame), GTK_SHADOW_OUT);
 	
 	GtkWidget *pLabel;
-	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman italic 12\" color=\"blue\"><b><u>%s :</u></b></span>", _("Categories"));
+	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman italic 15\" color=\"#6B2E96\"><b><u>%s :</u></b></span>", _("Categories"));
 	pLabel = gtk_label_new (NULL);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 	g_free (cLabel);
@@ -385,7 +391,7 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 		gtk_frame_set_shadow_type (GTK_FRAME (pCategoryWidget->pFrame), GTK_SHADOW_OUT);
 		
 		pLabel = gtk_label_new (NULL);
-		cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman italic 16\"><b>%s</b></span>", gettext (cCategoriesDescription[2*i]));
+		cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman italic 15\"><b>%s</b></span>", gettext (cCategoriesDescription[2*i]));
 		gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 		g_free (cLabel);
 		gtk_frame_set_label_widget (GTK_FRAME (pCategoryWidget->pFrame), pLabel);
@@ -514,7 +520,7 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	
 	
 	//\_____________ On ajoute les boutons.
-	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN*2);
+	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN*3);
 	gtk_box_pack_end (GTK_BOX (pVBox),
 		pButtonsHBox,
 		FALSE,
@@ -525,6 +531,14 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	g_signal_connect (G_OBJECT (pQuitButton), "clicked", G_CALLBACK(on_click_quit), s_pMainWindow);
 	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
 		pQuitButton,
+		FALSE,
+		FALSE,
+		0);
+	
+	s_pBackButton = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
+	g_signal_connect (G_OBJECT (s_pBackButton), "clicked", G_CALLBACK(on_click_back_button), NULL);
+	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
+		s_pBackButton,
 		FALSE,
 		FALSE,
 		0);
@@ -544,6 +558,8 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 		FALSE,
 		FALSE,
 		0);
+	
+	
 	gtk_window_resize (GTK_WINDOW (s_pMainWindow), MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, g_iScreenWidth[CAIRO_DOCK_HORIZONTAL]), CAIRO_DOCK_CONF_PANEL_HEIGHT);
 	
 	gtk_widget_show_all (s_pMainWindow);
@@ -736,7 +752,7 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 	
 	//\_______________ On met a jour la frame du groupe.
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman italic 12\" color=\"blue\"><u><b>%s</b></u></span>", pGroupDescription->cGroupName);
+	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman italic 12\" color=\"#6B2E96\"><u><b>%s</b></u></span>", pGroupDescription->cGroupName);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 	g_free (cLabel);
 	gtk_frame_set_label_widget (GTK_FRAME (s_pGroupFrame), pLabel);

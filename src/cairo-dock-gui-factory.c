@@ -617,7 +617,7 @@ static void _cairo_dock_configure_renderer (GtkButton *button, gpointer *data)
 	
 	CairoDockModule *pModule = cairo_dock_find_module_from_name ("dock rendering");
 	Icon *pIcon = cairo_dock_get_current_active_icon ();
-	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
 	if (pModule == NULL)
 	{
 		const gchar *cMessage = _("The 'dock-rendering' plug-in was not found.\nIt provides many views to Cairo-Dock, such as the Curve or 3D-plane views.\nBe sure to install it in the same version as the dock to enjoy these effects.");

@@ -437,7 +437,7 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, gchar *cGroupName
 }
 
 
-#define GET_GROUP_CONFIG_BEGIN(cGroupName) \
+/*#define GET_GROUP_CONFIG_BEGIN(cGroupName) \
 static gboolean cairo_dock_read_conf_file_##cGroupName (GKeyFile *pKeyFile, CairoDock *pDock) \
 { \
 	gboolean bFlushConfFileNeeded = FALSE;
@@ -448,7 +448,7 @@ static gboolean cairo_dock_read_conf_file_##cGroupName (GKeyFile *pKeyFile, Cair
 
 #define cairo_dock_read_group_conf_file(cGroupName) \
 cairo_dock_read_conf_file_##cGroupName (pKeyFile, pDock)
-
+*/
 /*static CairoDockPositionType s_iScreenBorder=0;
 GET_GROUP_CONFIG_BEGIN (Position)
 	pDock->iGapX = cairo_dock_get_integer_key_value (pKeyFile, "Position", "x gap", &bFlushConfFileNeeded, 0, NULL, NULL);
@@ -1115,7 +1115,6 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 			cd_warning ("Sorry but your X server does not support the extension.\n You can't have window thumbnails in the dock");
 			myTaskBar.bShowThumbnail = FALSE;
 		}
-		
 	}
 	if (bUniquePidOld != myTaskBar.bUniquePid ||
 		bGroupAppliByClassOld != myTaskBar.bGroupAppliByClass ||
@@ -1197,13 +1196,17 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 
 	cairo_dock_load_background_decorations (pDock);
 
-
+	cairo_dock_place_root_dock (pDock);
+	if (mySystem.bUseFakeTransparency && ! bUseFakeTransparencyOld)
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
+	else if (! mySystem.bUseFakeTransparency && bUseFakeTransparencyOld)
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), FALSE);
+	
 	pDock->iMouseX = 0;  // on se place hors du dock initialement.
 	pDock->iMouseY = 0;
 	pDock->calculate_icons (pDock);
 	gtk_widget_queue_draw (pDock->pWidget);  // le 'gdk_window_move_resize' ci-dessous ne provoquera pas le redessin si la taille n'a pas change.
-
-	cairo_dock_place_root_dock (pDock);
+	
 	
 	if (cDeskletDecorationsNameOld == NULL && myDesklets.cDeskletDecorationsName != NULL)  // chargement initial, on charge juste ceux qui n'ont pas encore leur deco et qui ont atteint leur taille definitive.
 	{
@@ -1241,11 +1244,6 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 			cairo_dock_set_root_docks_on_top_layer ();
 	}
 	
-	if (mySystem.bUseFakeTransparency && ! bUseFakeTransparencyOld)
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
-	else if (! mySystem.bUseFakeTransparency && bUseFakeTransparencyOld)
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), FALSE);
-	
 	
 	//\___________________ On ecrit si necessaire.
 	if (! bFlushConfFileNeeded)
@@ -1262,7 +1260,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	
 	g_key_file_free (pKeyFile);
 
-	cairo_dock_mark_theme_as_modified (TRUE);
+	cairo_dock_mark_theme_as_modified (TRUE);  // force a FALSE apres coup dans le cas d'nu chargemeny de theme.
 	
 	s_bLoading = FALSE;
 }

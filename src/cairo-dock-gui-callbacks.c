@@ -20,33 +20,35 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-gui-factory.h"
+#include "cairo-dock-applications-manager.h"
+#include "cairo-dock-dialogs.h"
 #include "cairo-dock-gui-callbacks.h"
 
-#define CAIRO_DOCK_PREVIEW_WIDTH 420
-#define CAIRO_DOCK_PREVIEW_HEIGHT 240
+#define CAIRO_DOCK_PREVIEW_WIDTH 250
+#define CAIRO_DOCK_PREVIEW_HEIGHT 250
 
 extern gchar *g_cConfFile;
 extern CairoDock *g_pMainDock;
+static GSList *s_path = NULL;
+static CairoDialog *s_pDialog = NULL;
 
 void on_click_category_button (GtkButton *button, gpointer *data)
 {
 	int iCategory = GPOINTER_TO_INT (data);
 	g_print ("%s (%d)\n", __func__, iCategory);
 	cairo_dock_show_one_category (iCategory);
+	s_path = g_slist_prepend (s_path, GINT_TO_POINTER (iCategory+1));
 }
 
 void on_click_all_button (GtkButton *button, gpointer *data)
 {
 	g_print ("%s ()\n", __func__);
 	cairo_dock_show_all_categories ();
+	s_path = g_slist_prepend (s_path, GINT_TO_POINTER (0));
 }
 
-
-void on_click_group_button (GtkButton *button, CairoDockGroupDescription *pGroupDescription)
+static void _show_group (CairoDockGroupDescription *pGroupDescription)
 {
-	g_print ("%s (%s)\n", __func__, pGroupDescription->cGroupName);
-	GtkWidget *pWidget = NULL;
-	
 	gboolean bSingleGroup;
 	gchar *cConfFilePath;
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
@@ -76,18 +78,57 @@ void on_click_group_button (GtkButton *button, CairoDockGroupDescription *pGroup
 	
 	cairo_dock_present_group_widget (cConfFilePath, pGroupDescription, bSingleGroup);
 }
+void on_click_group_button (GtkButton *button, CairoDockGroupDescription *pGroupDescription)
+{
+	g_print ("%s (%s)\n", __func__, pGroupDescription->cGroupName);
+	_show_group (pGroupDescription);
+	s_path = g_slist_prepend (s_path, pGroupDescription);
+}
+
+void on_click_back_button (GtkButton *button, gpointer *data)
+{
+	if (s_path == NULL || s_path->next == NULL)
+	{
+		if (s_path != NULL)
+		{
+			g_slist_free (s_path);
+			s_path = NULL;
+		}
+		cairo_dock_show_all_categories ();
+		return ;
+	}
+	
+	gpointer pPrevPlace = s_path->next->data;
+	if ((int)pPrevPlace < 10)  // categorie.
+	{
+		if (pPrevPlace == 0)
+			cairo_dock_show_all_categories ();
+		else
+		{
+			int iCategory = (int)pPrevPlace - 1;
+			cairo_dock_show_one_category (iCategory);
+		}
+	}
+	else  // groupe.
+	{
+		_show_group (pPrevPlace);
+	}
+	
+	s_path = g_slist_delete_link (s_path, s_path);
+}
 
 void on_enter_group_button (GtkButton *button, CairoDockGroupDescription *pGroupDescription)
 {
-	g_print ("%s (%s)\n", __func__, pGroupDescription->cDescription);
+	//g_print ("%s (%s)\n", __func__, pGroupDescription->cDescription);
+	gchar *cDescription = NULL;
 	
-	GtkWidget *pDescriptionTextView = cairo_dock_get_description_label ();
+	//GtkWidget *pDescriptionTextView = cairo_dock_get_description_label ();
 	if (pGroupDescription->cDescription != NULL)
 	{
 		if (*pGroupDescription->cDescription == '/')
 		{
 			g_print ("on recupere la description de %s\n", pGroupDescription->cDescription);
-			gchar *cDescription = NULL;
+			
 			gsize length = 0;
 			GError *erreur = NULL;
 			g_file_get_contents  (pGroupDescription->cDescription,
@@ -99,22 +140,19 @@ void on_enter_group_button (GtkButton *button, CairoDockGroupDescription *pGroup
 				cd_warning (erreur->message);
 				g_error_free (erreur);
 			}
-			//gtk_label_set_markup (GTK_LABEL (pDescriptionTextView), cDescription);
-			GtkTextBuffer *pTextBuffer = gtk_text_buffer_new (NULL);
+			/*GtkTextBuffer *pTextBuffer = gtk_text_buffer_new (NULL);
 			gtk_text_buffer_set_text (pTextBuffer, cDescription, -1);
 			gtk_text_view_set_buffer (GTK_TEXT_VIEW (pDescriptionTextView), pTextBuffer);
-			g_object_unref (pTextBuffer);
-			g_free (cDescription);
+			g_object_unref (pTextBuffer);*/
 		}
 		else
 		{
-			gtk_label_set_markup (GTK_LABEL (pDescriptionTextView), pGroupDescription->cDescription);
-			GtkTextBuffer *pTextBuffer = gtk_text_buffer_new (NULL);
+			/*GtkTextBuffer *pTextBuffer = gtk_text_buffer_new (NULL);
 			gtk_text_buffer_set_text (pTextBuffer, pGroupDescription->cDescription, -1);
 			gtk_text_view_set_buffer (GTK_TEXT_VIEW (pDescriptionTextView), pTextBuffer);
-			g_object_unref (pTextBuffer);
+			g_object_unref (pTextBuffer);*/
 		}
-		gtk_widget_show (pDescriptionTextView);
+		//gtk_widget_show (pDescriptionTextView);
 	}
 	
 	GtkWidget *pPreviewImage = cairo_dock_get_preview_image ();
@@ -143,15 +181,32 @@ void on_enter_group_button (GtkButton *button, CairoDockGroupDescription *pGroup
 		gtk_widget_show (pPreviewImage);
 	}
 	
+	if (s_pDialog != NULL)
+		if (! cairo_dock_dialog_unreference (s_pDialog))
+			cairo_dock_dialog_unreference (s_pDialog);
+	Icon *pIcon = cairo_dock_get_current_active_icon ();
+	if (pIcon == NULL)
+		pIcon = cairo_dock_get_dialogless_icon ();
+	//if (pIcon != NULL)
+	//	cairo_dock_remove_dialog_if_any (pIcon);
+	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
+	s_pDialog = cairo_dock_show_temporary_dialog_with_icon (cDescription != NULL ? cDescription : pGroupDescription->cDescription, pIcon, CAIRO_CONTAINER (pDock), 0., pGroupDescription->cIcon);
+	cairo_dock_dialog_reference (s_pDialog);
+	
+	g_free (cDescription);
 }
 void on_leave_group_button (GtkButton *button, gpointer *data)
 {
-	g_print ("%s ()\n", __func__);
-	GtkWidget *pDescriptionTextView = cairo_dock_get_description_label ();
-	gtk_widget_hide (pDescriptionTextView);
+	//g_print ("%s ()\n", __func__);
+	//GtkWidget *pDescriptionTextView = cairo_dock_get_description_label ();
+	//gtk_widget_hide (pDescriptionTextView);
 	
 	GtkWidget *pPreviewImage = cairo_dock_get_preview_image ();
 	gtk_widget_hide (pPreviewImage);
+	
+	if (! cairo_dock_dialog_unreference (s_pDialog))
+		cairo_dock_dialog_unreference (s_pDialog);
+	s_pDialog = NULL;
 }
 
 
@@ -307,6 +362,8 @@ gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBl
 			g_main_loop_quit (pBlockingLoop);
 	}
 	cairo_dock_free_categories ();
+	g_slist_free (s_path);
+	s_path = NULL;
 	return FALSE;
 }
 

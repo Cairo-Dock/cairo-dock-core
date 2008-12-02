@@ -1725,15 +1725,6 @@ gboolean on_configure (GtkWidget* pWidget,
 		if (g_bEasterEggs)
 			pDock->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL, pEvent->width, pEvent->height, 1);
 		
-		pDock->calculate_icons (pDock);
-		gtk_widget_queue_draw (pWidget);  // il semble qu'il soit necessaire d'en rajouter un la pour eviter un "clignotement" a l'entree dans le dock.
-		if (g_bEasterEggs)
-			cairo_dock_unset_input_shape (pDock);
-		
-		//if (pDock->iRefCount > 0 || pDock->bAutoHide)
-			while (gtk_events_pending ())  // on force un redessin immediat sinon on a quand meme un "flash".
-				gtk_main_iteration ();
-		
 		if (g_bUseOpenGL)
 		{
 			GdkGLContext* pGlContext = gtk_widget_get_gl_context (pWidget);
@@ -1770,7 +1761,16 @@ gboolean on_configure (GtkWidget* pWidget,
 				pEvent->width,
 				pEvent->height);
 		}
-#endif
+		#endif
+		
+		pDock->calculate_icons (pDock);
+		gtk_widget_queue_draw (pWidget);  // il semble qu'il soit necessaire d'en rajouter un la pour eviter un "clignotement" a l'entree dans le dock.
+		if (g_bEasterEggs)
+			cairo_dock_unset_input_shape (pDock);
+		
+		//if (pDock->iRefCount > 0 || pDock->bAutoHide)
+			while (gtk_events_pending ())  // on force un redessin immediat sinon on a quand meme un "flash".
+				gtk_main_iteration ();
 	}
 
 	if (pDock->iSidMoveDown == 0 && pDock->iSidMoveUp == 0)  // ce n'est pas du a une animation. Donc en cas d'apparition due a l'auto-hide, ceci ne sera pas fait ici, mais a la fin de l'animation.

@@ -246,7 +246,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 				glTranslatef (0., -pIcon->fHeight * pIcon->fScale/2 - pIcon->fDeltaYReflection, 0.);  // on se fixe en bas.
 				glScalef (pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale, - myIcons.fReflectSize * 1., 1.);  // taille du reflet et on se retourne.
 				x0 = 0.;
-				y0 = 1.-myIcons.fReflectSize / pIcon->fHeight;
+				y0 = 1.-myIcons.fReflectSize / pIcon->fHeight / pIcon->fScale;
 				x1 = 1.;
 				y1 = 1.;
 			}
@@ -255,7 +255,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 				glTranslatef (0., pIcon->fHeight * pIcon->fScale/2 + pIcon->fDeltaYReflection, 0.);
 				glScalef (pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale, myIcons.fReflectSize * 1., 1.);  // taille du reflet et on se retourne.
 				x0 = 0.;
-				y0 = myIcons.fReflectSize / pIcon->fHeight;
+				y0 = myIcons.fReflectSize / pIcon->fHeight / pIcon->fScale;
 				x1 = 1.;
 				y1 = 0.;
 			}
@@ -266,7 +266,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			{
 				glTranslatef (pIcon->fHeight * pIcon->fScale/2 + myIcons.fReflectSize * 1./2 + pIcon->fDeltaYReflection, - pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale/2, 0.);
 				glScalef (- myIcons.fReflectSize * 1., pIcon->fHeight * pIcon->fHeightFactor * pIcon->fScale, 1.);  // taille du reflet et on se retourne.
-				x0 = 1.-myIcons.fReflectSize / pIcon->fHeight;
+				x0 = 1.-myIcons.fReflectSize / pIcon->fHeight / pIcon->fScale;
 				y0 = 0.;
 				x1 = 1.;
 				y1 = 1.;
@@ -275,7 +275,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			{
 				glTranslatef (- pIcon->fHeight * pIcon->fScale/2 - myIcons.fReflectSize * 1./2 - pIcon->fDeltaYReflection, - pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale/2, 0.);
 				glScalef (myIcons.fReflectSize * 1., pIcon->fHeight * pIcon->fHeightFactor * pIcon->fScale, 1.);  // taille du reflet et on se retourne.
-				x0 = myIcons.fReflectSize / pIcon->fHeight;
+				x0 = myIcons.fReflectSize / pIcon->fHeight / pIcon->fScale;
 				y0 = 0.;
 				x1 = 0.;
 				y1 = 1.;
@@ -286,12 +286,12 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		glActiveTextureARB(GL_TEXTURE0_ARB); // Go pour le multitexturing 1ere passe
 		glEnable(GL_TEXTURE_2D); // On active le texturing sur cette passe
 		glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
+		
 		glActiveTextureARB(GL_TEXTURE1_ARB); // Go pour le texturing 2eme passe
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, s_pGradationTexture[pDock->bHorizontalDock]);
 		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // Le mode de combinaison des textures
-		glTexEnvi (GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_MODULATE);  // multiplier les alpha.
-		//glTexEnvi (GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_EXT, GL_ONE_MINUS_SRC_ALPHA);
+		//glTexEnvi (GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_MODULATE);  // multiplier les alpha.
 		
 		glBegin(GL_QUADS);
 		glNormal3f(0,0,1);
@@ -804,12 +804,13 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 
 GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWidth, int iHeight)
 {
+	guint *pPixelBuffer2=pTextureRaw;
 	/*g_print ("%dx%d\n", iWidth, iHeight);
 	int i;
 	guint pixel, alpha, red, green, blue;
 	float fAlphaFactor;
 	guint *pPixelBuffer = (guint *) pTextureRaw;
-	guint *pPixelBuffer2 = g_new (guint, iHeight * iWidth);
+	pPixelBuffer2 = g_new (guint, iHeight * iWidth);
 	for (i = 0; i < iHeight * iWidth; i ++)
 	{
 		pixel = (gint) pPixelBuffer[i];
@@ -824,7 +825,6 @@ GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWi
 		pPixelBuffer2[i] = (pixel & 0xFF000000) + (red << 16) + (green << 8) + (blue << 0);
 		g_print ("\\%o\\%o\\%o\\%o", red, green, blue, alpha);
 	}*/
-	guchar *pPixelBuffer2=pTextureRaw;
 	
 	GLuint iTexture = 0;
 	
