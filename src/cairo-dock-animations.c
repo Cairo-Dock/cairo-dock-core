@@ -316,7 +316,7 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 			//pDock->iSidShrinkDown = 0;
 			pDock->bIsShrinkingDown = FALSE;
 			cairo_dock_hide_dock_like_a_menu ();
-			return FALSE;
+			return pDock->bIsGrowingUp;
 		}
 
 		//\______________ Au moins une icone est en cours d'animation suite a un clique, on continue le 'shrink_down'.

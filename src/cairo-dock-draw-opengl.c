@@ -281,15 +281,22 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 				y1 = 1.;
 			}
 		}
-		glColor4f(1.0f, 1.0f, 1.0f, myIcons.fAlbedo * pIcon->fAlpha);  // transparence du reflet.
+		
 		
 		glActiveTextureARB(GL_TEXTURE0_ARB); // Go pour le multitexturing 1ere passe
 		glEnable(GL_TEXTURE_2D); // On active le texturing sur cette passe
 		glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
+		glColor4f(1.0f, 1.0f, 1.0f, 1.);  // transparence du reflet.
+		glEnable(GL_BLEND);
+		glBlendFunc (1, 0);
+		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		
 		glActiveTextureARB(GL_TEXTURE1_ARB); // Go pour le texturing 2eme passe
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, s_pGradationTexture[pDock->bHorizontalDock]);
+		glColor4f(1.0f, 1.0f, 1.0f, myIcons.fAlbedo * pIcon->fAlpha);  // transparence du reflet.
+		glEnable(GL_BLEND);
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // Le mode de combinaison des textures
 		//glTexEnvi (GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_MODULATE);  // multiplier les alpha.
 		
@@ -1163,6 +1170,7 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 	glEnable(GL_TEXTURE_GEN_S); // oui je veux une generation en S
 	glEnable(GL_TEXTURE_GEN_T); // Et en T aussi
 	
+	
 	glLoadIdentity();
 	
 	if (bHorizontal)
@@ -1184,7 +1192,7 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 	glMatrixMode(GL_MODELVIEW);
 	
 	glEnable(GL_BLEND); // On active le blend
-	glBlendFunc (GL_SRC_ALPHA, 1.); // Transparence avec le canal alpha
+	glBlendFunc (1., 0.);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Couleur a fond
 	///glEnable(GL_POLYGON_OFFSET_FILL);
 	///glPolygonOffset (1., 1.);
