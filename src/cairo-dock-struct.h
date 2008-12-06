@@ -601,6 +601,8 @@ struct _Icon {
 	cairo_surface_t* pReflectionBuffer;
 	/// Surface cairo de l'image et de son reflet.
 	cairo_surface_t* pFullIconBuffer;
+	/// TRUE ssi on a un fond d'image special
+	gboolean bHasIconBackgroundImage;
 	/// Largeur de l'etiquette.
 	gint iTextWidth;
 	/// Hauteur de l'etiquette.

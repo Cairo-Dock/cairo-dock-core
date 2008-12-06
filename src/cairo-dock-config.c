@@ -1101,6 +1101,8 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	
 	cairo_dock_load_drop_indicator (myIndicators.cDropIndicatorImagePath, pCairoContext, fMaxScale);
 	
+  cairo_dock_load_image_background_surface (myIcons.cBackgroundImagePath[CAIRO_DOCK_LAUNCHER], myIcons.cBackgroundImagePath[CAIRO_DOCK_APPLI], pCairoContext, fMaxScale);
+
 	cairo_dock_load_active_window_indicator (pCairoContext, myIndicators.cActiveIndicatorImagePath, fMaxScale, myIndicators.iActiveCornerRadius, myIndicators.iActiveLineWidth, myIndicators.fActiveColor);
 	
 	cairo_dock_load_desklet_buttons (pCairoContext);

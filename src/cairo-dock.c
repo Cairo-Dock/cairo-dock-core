@@ -115,6 +115,8 @@ int g_iNbDesktops;  // nombre de bureaux.
 int g_iNbViewportX, g_iNbViewportY;  // nombre de "faces du cube".
 cairo_surface_t *g_pActiveIndicatorSurface = NULL;
 double g_fActiveIndicatorWidth, g_fActiveIndicatorHeight;
+	
+cairo_surface_t *g_pIconBackgroundImageSurface[2] =  {NULL, NULL};  // Surface cairo de l'image de fond pour les icones des launchers [0] et applis [1].
 
 gboolean g_bKeepAbove = FALSE;
 gboolean g_bSkipPager = TRUE;

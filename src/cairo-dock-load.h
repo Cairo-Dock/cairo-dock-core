@@ -49,6 +49,8 @@ void cairo_dock_load_background_decorations (CairoDock *pDock);
 
 void cairo_dock_load_drop_indicator (gchar *cImagePath, cairo_t* pSourceContext, double fMaxScale);
 
+void cairo_dock_load_image_background_surface (gchar *cLauncherImagePath, gchar *cAppliImagePath, cairo_t* pSourceContext, double fMaxScale);
+
 void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* pSourceContext, double fMaxScale, double fIndicatorRatio);
 
 void cairo_dock_load_desktop_background_surface (void);

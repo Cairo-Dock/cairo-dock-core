@@ -135,6 +135,14 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	pIcons->tAnimationType[CAIRO_DOCK_LAUNCHER] = cairo_dock_get_animation_type_key_value (pKeyFile, "Icons", "launcher animation", &bFlushConfFileNeeded, CAIRO_DOCK_BOUNCE, "Launchers", "animation type");
 
 	pIcons->tNbAnimationRounds[CAIRO_DOCK_LAUNCHER] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "launcher number of rounds", &bFlushConfFileNeeded, 3, "Launchers", "number of animation rounds");
+	
+	gchar *cLauncherBackgroundImageName = cairo_dock_get_string_key_value (pKeyFile, "Icons", "launcher icons background", &bFlushConfFileNeeded, NULL, "Launchers", NULL);
+	pIcons->cBackgroundImagePath[CAIRO_DOCK_LAUNCHER] = NULL;
+	if (cLauncherBackgroundImageName != NULL)
+	{
+		pIcons->cBackgroundImagePath[CAIRO_DOCK_LAUNCHER] = cairo_dock_generate_file_path (cLauncherBackgroundImageName);
+		g_free (cLauncherBackgroundImageName);
+	}
 
 	//\___________________ Parametres des applis.
 	pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLI] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "appli width", &bFlushConfFileNeeded, 48, "Applications", "max icon size");
@@ -144,6 +152,14 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	pIcons->tAnimationType[CAIRO_DOCK_APPLI] = cairo_dock_get_animation_type_key_value (pKeyFile, "Icons", "appli animation", &bFlushConfFileNeeded, CAIRO_DOCK_ROTATE, "Applications", "animation type");
 
 	pIcons->tNbAnimationRounds[CAIRO_DOCK_APPLI] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "appli number of rounds", &bFlushConfFileNeeded, 2, "Applications", "number of animation rounds");
+	
+	gchar *cAppliBackgroundImageName = cairo_dock_get_string_key_value (pKeyFile, "Icons", "appli icons background", &bFlushConfFileNeeded, NULL, "Applications", NULL);
+	pIcons->cBackgroundImagePath[CAIRO_DOCK_APPLI]  = NULL;
+	if (cAppliBackgroundImageName != NULL)
+	{
+		pIcons->cBackgroundImagePath[CAIRO_DOCK_APPLI]  = cairo_dock_generate_file_path (cAppliBackgroundImageName);
+		g_free (cAppliBackgroundImageName);
+	}
 	
 	//\___________________ Parametres des applets.
 	pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLET] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "applet width", &bFlushConfFileNeeded, 48, "Applets", "max icon size");
@@ -210,6 +226,16 @@ static void reset_config (CairoConfigIcons *pIcons)
 		}
 	}
 	g_free (pIcons->cSeparatorImage);
+	if( pIcons->cBackgroundImagePath[CAIRO_DOCK_LAUNCHER] )
+	{
+		g_free (pIcons->cBackgroundImagePath[CAIRO_DOCK_LAUNCHER]);
+		pIcons->cBackgroundImagePath[CAIRO_DOCK_LAUNCHER] = NULL;
+	}
+	if( pIcons->cBackgroundImagePath[CAIRO_DOCK_APPLI] )
+	{
+		g_free (pIcons->cBackgroundImagePath[CAIRO_DOCK_APPLI]);
+		pIcons->cBackgroundImagePath[CAIRO_DOCK_APPLI] = NULL;
+	}
 	g_strfreev (pIcons->pDirectoryList);
 }
 
@@ -245,6 +271,17 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 			break ;
 		i ++;
 	}
+
+	gboolean bIconBackgroundImagesChanged = FALSE;
+	// if background images are different, reload them and trigger the reload of all icons
+	if(((pPrevIcons->cBackgroundImagePath[CAIRO_DOCK_LAUNCHER] != NULL && pIcons->cBackgroundImagePath[CAIRO_DOCK_LAUNCHER] != NULL && strcmp (pPrevIcons->cBackgroundImagePath[CAIRO_DOCK_LAUNCHER], pIcons->cBackgroundImagePath[CAIRO_DOCK_LAUNCHER]) != 0)  ||
+	    (pPrevIcons->cBackgroundImagePath[CAIRO_DOCK_APPLI]    != NULL && pIcons->cBackgroundImagePath[CAIRO_DOCK_APPLI]    != NULL && strcmp (pPrevIcons->cBackgroundImagePath[CAIRO_DOCK_APPLI],    pIcons->cBackgroundImagePath[CAIRO_DOCK_APPLI])    != 0)) ||
+	   ( pPrevIcons->cBackgroundImagePath[CAIRO_DOCK_LAUNCHER] != pIcons->cBackgroundImagePath[CAIRO_DOCK_LAUNCHER] ||
+	     pPrevIcons->cBackgroundImagePath[CAIRO_DOCK_APPLI]    != pIcons->cBackgroundImagePath[CAIRO_DOCK_APPLI] ))
+	{
+		bIconBackgroundImagesChanged = TRUE;
+  	cairo_dock_load_image_background_surface (pIcons->cBackgroundImagePath[CAIRO_DOCK_LAUNCHER], pIcons->cBackgroundImagePath[CAIRO_DOCK_APPLI], pCairoContext, fMaxScale);
+	}
 	
 	if (pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] ||
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] ||
@@ -256,7 +293,8 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		(!g_bUseOpenGL && pPrevIcons->fFieldDepth != pIcons->fFieldDepth) ||
 		(!g_bUseOpenGL && pPrevIcons->fAlbedo != pIcons->fAlbedo) ||
 		pIcons->pDirectoryList[i] != NULL ||
-		pPrevIcons->pDirectoryList[i] != NULL)
+		pPrevIcons->pDirectoryList[i] != NULL ||
+		bIconBackgroundImagesChanged)
 	{
 		g_fBackgroundImageWidth = 0.;  // pour mettre a jour les decorations.
 		g_fBackgroundImageHeight = 0.;
