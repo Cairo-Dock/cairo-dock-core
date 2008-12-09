@@ -265,10 +265,13 @@ static gboolean on_expose (GtkWidget *pWidget,
 	cairo_pattern_set_extend (pPattern, CAIRO_EXTEND_REPEAT);
 	cairo_pattern_add_color_stop_rgba   (pPattern,
 		1.,
-		0,0,0,0.0);
+		0.,0.,0.,0.);
+	cairo_pattern_add_color_stop_rgba   (pPattern,
+		.25,
+		241/255., 234/255., 255/255., 0.8);
 	cairo_pattern_add_color_stop_rgba   (pPattern,
 		0.,
-		241/255., 234/255., 255/255., 0.9);
+		255/255., 255/255., 255/255., 0.9);
 	cairo_set_source (pCairoContext, pPattern);
 	
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);

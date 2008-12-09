@@ -32,7 +32,7 @@ AC_CHECK_HEADERS([math.h stdlib.h])
 # Checks for library functions.
 # AC_CHECK_FUNCS([sscanf])
 
-PKG_CHECK_MODULES(PACKAGE, "gtk+-2.0 gthread-2.0 cairo librsvg-2.0 glitz dbus-1 dbus-glib-1 libxml-2.0 gtkglext-1.0")
+PKG_CHECK_MODULES(PACKAGE, "gtk+-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 gtkglext-1.0")
 
 AC_ARG_ENABLE(xextend,
 	[  --enable-xextend  :  Enable X Extensions],
@@ -69,7 +69,7 @@ AC_ARG_ENABLE(glitz,
 	esac],[useglitz=false])
 
 if test "$useglitz" = "true" ; then
-	PKG_CHECK_MODULES(GLITZ, glitz-glx, [glitz_detected=true], [ glitz_detected=false; AC_MSG_WARN(Could not find glitz-glx; Cairo-Dock won't be built with hardware acceleration.) ])
+	PKG_CHECK_MODULES(GLITZ, glitz glitz-glx, [glitz_detected=true], [ glitz_detected=false; AC_MSG_WARN(Could not find glitz-glx; Cairo-Dock won't be built with hardware acceleration.) ])
 	AC_SUBST(GLITZ_CFLAGS)
 	AC_SUBST(GLITZ_LIBS)
 	
@@ -122,7 +122,7 @@ else
 	echo " * Use X Extensions : no"
 fi
 if test "$glitz_detected" = "true"; then
-	echo " * Hardware Acceleration : yes"
+	echo " * Glitz Hardware Acceleration : yes"
 else
-	echo " * Hardware Acceleration : no"
+	echo " * Glitz Hardware Acceleration : no"
 fi

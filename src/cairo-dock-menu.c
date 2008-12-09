@@ -201,10 +201,8 @@ static void _cairo_dock_quit (GtkMenuItem *pMenuItem, gpointer *data)
 }
 
 
-gboolean cairo_dock_notification_remove_icon (gpointer *data)
+gboolean cairo_dock_notification_remove_icon (Icon *icon, CairoDock *pDock)
 {
-	Icon *icon = data[0];
-	CairoDock *pDock = data[1];
 	cd_debug ("%s", icon->acName);
 	
 	if (icon->pSubDock != NULL)

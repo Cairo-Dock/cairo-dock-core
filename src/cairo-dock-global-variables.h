@@ -35,6 +35,8 @@ extern gchar *g_cCurrentLaunchersPath;
 extern cairo_surface_t *g_pVisibleZoneSurface;
 extern double g_fVisibleZoneImageWidth, g_fVisibleZoneImageHeight;
 
+extern GLuint g_pGradationTexture[2];
+
 /// Environnement de bureau detecte.
 extern CairoDockDesktopEnv g_iDesktopEnv;
 

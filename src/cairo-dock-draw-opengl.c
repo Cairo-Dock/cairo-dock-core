@@ -52,7 +52,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #define RADIAN (G_PI / 180.0)  // Conversion Radian/Degres
 #define DELTA_ROUND_DEGREE 1
 
-static GLuint s_pGradationTexture[2]={0, 0};
+GLuint g_pGradationTexture[2];
 
 extern cairo_surface_t *g_pDesktopBgSurface;
 
@@ -239,23 +239,25 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 	{
 		glPushMatrix ();
 		double x0, y0, x1, y1;
+		double fReflectRatio = myIcons.fReflectSize / pIcon->fHeight / pIcon->fScale;
+		double fOffsetY = pIcon->fHeight * pIcon->fScale/2 + myIcons.fReflectSize/2 + pIcon->fDeltaYReflection;
 		if (pDock->bHorizontalDock)
 		{
 			if (pDock->bDirectionUp)
 			{
-				glTranslatef (0., -pIcon->fHeight * pIcon->fScale/2 - pIcon->fDeltaYReflection, 0.);  // on se fixe en bas.
-				glScalef (pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale, - myIcons.fReflectSize * 1., 1.);  // taille du reflet et on se retourne.
+				glTranslatef (0., - fOffsetY, 0.);
+				glScalef (pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale, - myIcons.fReflectSize, 1.);  // taille du reflet et on se retourne.
 				x0 = 0.;
-				y0 = 1.-myIcons.fReflectSize / pIcon->fHeight / pIcon->fScale;
+				y0 = 1. - fReflectRatio;
 				x1 = 1.;
 				y1 = 1.;
 			}
 			else
 			{
-				glTranslatef (0., pIcon->fHeight * pIcon->fScale/2 + pIcon->fDeltaYReflection, 0.);
-				glScalef (pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale, myIcons.fReflectSize * 1., 1.);  // taille du reflet et on se retourne.
+				glTranslatef (0., fOffsetY, 0.);
+				glScalef (pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale, myIcons.fReflectSize, 1.);
 				x0 = 0.;
-				y0 = myIcons.fReflectSize / pIcon->fHeight / pIcon->fScale;
+				y0 = fReflectRatio;
 				x1 = 1.;
 				y1 = 0.;
 			}
@@ -264,24 +266,23 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		{
 			if (pDock->bDirectionUp)
 			{
-				glTranslatef (pIcon->fHeight * pIcon->fScale/2 + myIcons.fReflectSize * 1./2 + pIcon->fDeltaYReflection, - pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale/2, 0.);
-				glScalef (- myIcons.fReflectSize * 1., pIcon->fHeight * pIcon->fHeightFactor * pIcon->fScale, 1.);  // taille du reflet et on se retourne.
-				x0 = 1.-myIcons.fReflectSize / pIcon->fHeight / pIcon->fScale;
+				glTranslatef (fOffsetY, 0., 0.);
+				glScalef (- myIcons.fReflectSize, pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale, 1.);
+				x0 = 1. - fReflectRatio;
 				y0 = 0.;
 				x1 = 1.;
 				y1 = 1.;
 			}
 			else
 			{
-				glTranslatef (- pIcon->fHeight * pIcon->fScale/2 - myIcons.fReflectSize * 1./2 - pIcon->fDeltaYReflection, - pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale/2, 0.);
-				glScalef (myIcons.fReflectSize * 1., pIcon->fHeight * pIcon->fHeightFactor * pIcon->fScale, 1.);  // taille du reflet et on se retourne.
-				x0 = myIcons.fReflectSize / pIcon->fHeight / pIcon->fScale;
+				glTranslatef (- fOffsetY, 0., 0.);
+				glScalef (myIcons.fReflectSize, pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale, 1.);
+				x0 = fReflectRatio;
 				y0 = 0.;
 				x1 = 0.;
 				y1 = 1.;
 			}
 		}
-		
 		
 		glActiveTextureARB(GL_TEXTURE0_ARB); // Go pour le multitexturing 1ere passe
 		glEnable(GL_TEXTURE_2D); // On active le texturing sur cette passe
@@ -293,30 +294,40 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		
 		glActiveTextureARB(GL_TEXTURE1_ARB); // Go pour le texturing 2eme passe
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, s_pGradationTexture[pDock->bHorizontalDock]);
+		glBindTexture(GL_TEXTURE_2D, g_pGradationTexture[pDock->bHorizontalDock]);
 		glColor4f(1.0f, 1.0f, 1.0f, myIcons.fAlbedo * pIcon->fAlpha);  // transparence du reflet.
 		glEnable(GL_BLEND);
 		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // Le mode de combinaison des textures
 		//glTexEnvi (GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_MODULATE);  // multiplier les alpha.
 		
+		///glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		
 		glBegin(GL_QUADS);
 		glNormal3f(0,0,1);
 		glMultiTexCoord2fARB (GL_TEXTURE0_ARB, x0, y0);
 		glMultiTexCoord2fARB (GL_TEXTURE1_ARB, 0., 0.);
-		glVertex3f (-0.5, 1., 0.);  // Bottom Left Of The Texture and Quad
+		///glColor4f(1.0f, 1.0f, 1.0f, 0.);
+		glVertex3f (-0.5, .5, 0.);  // Bottom Left Of The Texture and Quad
+		
 		
 		glMultiTexCoord2fARB (GL_TEXTURE0_ARB, x1, y0);
 		glMultiTexCoord2fARB (GL_TEXTURE1_ARB, 1., 0.);
-		glVertex3f ( 0.5, 1., 0.);  // Bottom Right Of The Texture and Quad
+		///glColor4f(1.0f, 1.0f, 1.0f, 0.);
+		glVertex3f ( 0.5, .5, 0.);  // Bottom Right Of The Texture and Quad
+		
 		
 		glMultiTexCoord2fARB (GL_TEXTURE0_ARB, x1, y1);
 		glMultiTexCoord2fARB (GL_TEXTURE1_ARB, 1., 1.);
-		glVertex3f ( 0.5, 0., 0.);  // Top Right Of The Texture and Quad
+		///glColor4f(1.0f, 1.0f, 1.0f, myIcons.fAlbedo * pIcon->fAlpha);
+		glVertex3f ( 0.5, -.5, 0.);  // Top Right Of The Texture and Quad
+		
 		
 		glMultiTexCoord2fARB (GL_TEXTURE0_ARB, x0, y1);
 		glMultiTexCoord2fARB (GL_TEXTURE1_ARB, 0., 1.);
-		glVertex3f (-0.5, 0., 0.);  // Top Left Of The Texture and Quad
+		///glColor4f(1.0f, 1.0f, 1.0f, myIcons.fAlbedo * pIcon->fAlpha);
+		glVertex3f (-0.5, -.5, 0.);  // Top Left Of The Texture and Quad
+		
 		glEnd();
 		
 		glActiveTextureARB(GL_TEXTURE1_ARB);
@@ -340,13 +351,15 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 
 void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRatio, double fDockMagnitude, gboolean bUseText)
 {
-	if (s_pGradationTexture[pDock->bHorizontalDock] == 0)
+	if (icon->iIconTexture == 0)
+		return ;
+	if (g_pGradationTexture[pDock->bHorizontalDock] == 0)
 	{
-		//s_pGradationTexture[pDock->bHorizontalDock] = cairo_dock_load_local_texture (pDock->bHorizontalDock ? "texture-gradation-vert.png" : "texture-gradation-horiz.png", CAIRO_DOCK_SHARE_DATA_DIR);
-		s_pGradationTexture[pDock->bHorizontalDock] = cairo_dock_load_texture_from_raw_data (gradationTex,
+		//g_pGradationTexture[pDock->bHorizontalDock] = cairo_dock_load_local_texture (pDock->bHorizontalDock ? "texture-gradation-vert.png" : "texture-gradation-horiz.png", CAIRO_DOCK_SHARE_DATA_DIR);
+		g_pGradationTexture[pDock->bHorizontalDock] = cairo_dock_load_texture_from_raw_data (gradationTex,
 			pDock->bHorizontalDock ? 1:48,
 			pDock->bHorizontalDock ? 48:1);
-		g_print ("s_pGradationTexture(%d) <- %d\n", pDock->bHorizontalDock, s_pGradationTexture[pDock->bHorizontalDock]);
+		g_print ("g_pGradationTexture(%d) <- %d\n", pDock->bHorizontalDock, g_pGradationTexture[pDock->bHorizontalDock]);
 	}
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.fVisibleAppliAlpha != 0 && ! CAIRO_DOCK_IS_APPLET (icon))
 	{
@@ -979,6 +992,8 @@ void cairo_dock_render_background_opengl (CairoDock *pDock)
 		g_pVisibleZoneTexture = cairo_dock_create_texture_from_surface (g_pVisibleZoneSurface);
 		g_print ("g_pVisibleZoneTexture <- %d\n", g_pVisibleZoneTexture);
 	}
+	if (g_pVisibleZoneTexture == 0)
+		return ;
 	
 	glEnable (GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -1063,7 +1078,7 @@ const GLfloat *cairo_dock_generate_rectangle_path (double fDockWidth, double fFr
 			pVertexTab[3*i] = -w + rw * cos (t*RADIAN);
 			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN);
 		}
-		for (t = 270;t <= 360;t += iPrecision, i++) // bas droit. 
+		for (t = 270;t <= 360;t += iPrecision, i++) // bas droit.
 		{
 			pVertexTab[3*i] = w + rw * cos (t*RADIAN);
 			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN);
@@ -1169,7 +1184,8 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR );
 	glEnable(GL_TEXTURE_GEN_S); // oui je veux une generation en S
 	glEnable(GL_TEXTURE_GEN_T); // Et en T aussi
-	
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	
 	glLoadIdentity();
 	
@@ -1183,6 +1199,9 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 		glTranslatef ((int) (fDockOffsetY - fFrameHeight/2), (int) (fDockOffsetX - fDockWidth/2), -100);
 		glScalef (fFrameHeight, fDockWidth, 1.);
 	}
+	
+	if (iBackgroundTexture = 0)
+		return ;
 	
 	glMatrixMode(GL_TEXTURE); // On selectionne la matrice des textures
 	glPushMatrix ();

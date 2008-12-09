@@ -70,6 +70,7 @@ extern cairo_surface_t *g_pIconBackgroundImageSurface[2];
 extern cairo_surface_t *g_pDesktopBgSurface;
 
 extern gboolean g_bUseOpenGL;
+extern gboolean g_bEasterEggs;
 extern GLuint g_iBackgroundTexture;
 extern GLuint g_iIndicatorTexture;
 
@@ -293,9 +294,6 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 		g_free (cIconPath);
 	}
 	cd_debug ("%s () -> %.2fx%.2f", __func__, icon->fWidth, icon->fHeight);
-
-	// pas de fond par defaut
-	icon->bHasIconBackgroundImage = FALSE;
 	
   //\_____________ On met le background de l'icone si necessaire
 	if(icon->pIconBuffer != NULL &&
@@ -303,7 +301,6 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	  (g_pIconBackgroundImageSurface[1] != NULL && CAIRO_DOCK_IS_APPLI(icon)))
 	{
 		cd_message (">>> %s prendra un fond d'icone", icon->acName);
-	  icon->bHasIconBackgroundImage = TRUE;
 
 		cairo_t *pCairoIconBGContext = cairo_create (icon->pIconBuffer);
 		CairoDockIconType iType = cairo_dock_get_icon_type  (icon);

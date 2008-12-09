@@ -380,7 +380,7 @@ void cairo_dock_update_graph (CairoDockGraph *pGraph, double fNewValue)
 {
 	g_return_if_fail (pGraph != NULL && pGraph->iNbValues > 0);
 	fNewValue = MIN (MAX (fNewValue, 0.), 1.);
-	pGraph->iCurrentIndex += 1;
+	pGraph->iCurrentIndex ++;
 	if (pGraph->iCurrentIndex >= pGraph->iNbValues)
 		pGraph->iCurrentIndex -= pGraph->iNbValues;
 	
@@ -388,7 +388,10 @@ void cairo_dock_update_graph (CairoDockGraph *pGraph, double fNewValue)
 }
 void cairo_dock_update_double_graph (CairoDockGraph *pGraph, double fNewValue, double fNewValue2)
 {
+	g_return_if_fail (pGraph != NULL && pGraph->iNbValues > 0);
 	cairo_dock_update_graph (pGraph, fNewValue);
+	
+	fNewValue2 = MIN (MAX (fNewValue2, 0.), 1.);
 	if (pGraph->pTabValues2 != NULL)
 		pGraph->pTabValues2[pGraph->iCurrentIndex] = fNewValue2;
 }

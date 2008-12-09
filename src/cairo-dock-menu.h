@@ -8,7 +8,7 @@
 G_BEGIN_DECLS
 
 
-gboolean cairo_dock_notification_remove_icon (gpointer *data);
+gboolean cairo_dock_notification_remove_icon (Icon *icon, CairoDock *pDock);
 
 
 GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer);
