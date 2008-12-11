@@ -32,6 +32,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
+	int i;
+	for (i = 0; i < CAIRO_DOCK_NB_TYPES; i ++)
+		pIcons->tIconTypeOrder[i] = i;
 	gsize length=0;
 	gchar **cIconsTypesList = cairo_dock_get_string_list_key_value (pKeyFile, "Icons", "icon's type order", &bFlushConfFileNeeded, &length, NULL, "Cairo Dock", NULL);
 	if (cIconsTypesList != NULL && length > 0)
@@ -81,7 +84,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	else
 	{
 		pIcons->pDefaultIconDirectory = g_new0 (gpointer, 2 * length + 2);  // +2 pour les NULL final.
-		int i = 0, j = 0;
+		i = 0;
+		int j = 0;
 		while (pIcons->pDirectoryList[i] != NULL)
 		{
 			if (pIcons->pDirectoryList[i][0] == '~')
@@ -187,7 +191,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	
 	
 	pIcons->fReflectSize = 0;
-	guint i;
 	for (i = 0; i < CAIRO_DOCK_NB_TYPES; i ++)
 	{
 		if (pIcons->tIconAuthorizedHeight[i] > 0)

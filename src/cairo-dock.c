@@ -209,9 +209,6 @@ int main (int argc, char** argv)
 	cLaunchCommand = sCommandString->str;
 	g_string_free (sCommandString, FALSE);
 	
-	myIcons.bUseSeparator = TRUE;
-	for (i = 0; i < CAIRO_DOCK_NB_TYPES; i ++)
-		myIcons.tIconTypeOrder[i] = i;
 	cd_log_init(FALSE);
 	//No log
 	cd_log_set_level(0);
@@ -344,7 +341,7 @@ int main (int argc, char** argv)
 		else if (strcmp (cEnvironment, "none") == 0)
 			g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 		else
-			cd_warning ("Attention : unknown environnment '%s'", cEnvironment);
+			cd_warning ("unknown environnment '%s'", cEnvironment);
 		g_free (cEnvironment);
 	}
 #ifdef HAVE_GLITZ
@@ -542,7 +539,7 @@ int main (int argc, char** argv)
 		cairo_dock_build_main_ihm (g_cConfFile, TRUE);
 	}
 	
-	g_print ("load theme\n");
+	cd_message ("loading theme ...");
 	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS) || bSafeMode)
 	{
 		if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS))
@@ -591,7 +588,7 @@ int main (int argc, char** argv)
 		g_key_file_load_from_file (pKeyFile, cChangeLogFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
 		if (erreur != NULL)
 		{
-			cd_warning ("Attention : %s", erreur->message);
+			cd_warning (erreur->message);
 			g_error_free (erreur);
 			erreur = NULL;
 		}
@@ -660,7 +657,7 @@ int main (int argc, char** argv)
 		NULL);
 	g_free (cSillyMessageFilePath);
 
-	if (bWriteSillyMessage && ! bWriteChangeLog && cSillyMessage != NULL)
+	if (0 && bWriteSillyMessage && ! bWriteChangeLog && cSillyMessage != NULL)
 	{
 		cairo_dock_show_general_message (cSillyMessage, 4000);
 		/*double fAnswer = cairo_dock_show_value_and_wait (cSillyMessage, pFirstIcon, g_pMainDock, 1.);

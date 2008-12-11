@@ -965,9 +965,9 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
   //user widget
   if (pInteractiveWidget != NULL)
   {
-    cd_message ("ref = %d", pInteractiveWidget->object.parent_instance.ref_count);
+    cd_debug ("ref = %d", pInteractiveWidget->object.parent_instance.ref_count);
     gtk_container_add (GTK_CONTAINER (pDesklet->pWidget), pInteractiveWidget);
-    cd_message ("pack -> ref = %d", pInteractiveWidget->object.parent_instance.ref_count);
+    cd_debug ("pack -> ref = %d", pInteractiveWidget->object.parent_instance.ref_count);
   }
 
   gtk_widget_show_all(pWindow);
@@ -977,7 +977,7 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
 
 void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDockMinimalAppletConfig *pMinimalConfig)
 {
-	cd_message ("%s (%dx%d ; (%d,%d) ; %d,%d,%d)", __func__, pMinimalConfig->iDeskletWidth, pMinimalConfig->iDeskletHeight, pMinimalConfig->iDeskletPositionX, pMinimalConfig->iDeskletPositionY, pMinimalConfig->bKeepBelow, pMinimalConfig->bKeepAbove, pMinimalConfig->bOnWidgetLayer);
+	cd_debug ("%s (%dx%d ; (%d,%d) ; %d,%d,%d)", __func__, pMinimalConfig->iDeskletWidth, pMinimalConfig->iDeskletHeight, pMinimalConfig->iDeskletPositionX, pMinimalConfig->iDeskletPositionY, pMinimalConfig->bKeepBelow, pMinimalConfig->bKeepAbove, pMinimalConfig->bOnWidgetLayer);
 	if (pMinimalConfig->bDeskletUseSize && (pMinimalConfig->iDeskletWidth != pDesklet->iWidth || pMinimalConfig->iDeskletHeight != pDesklet->iHeight))
 	{
 		pDesklet->iDesiredWidth = pMinimalConfig->iDeskletWidth;
@@ -1016,7 +1016,7 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDockMinimalApple
 	pDesklet->pUserDecoration = pMinimalConfig->pUserDecoration;
 	pMinimalConfig->pUserDecoration = NULL;
 	
-	g_print ("%s (%dx%d ; %d)\n", __func__, pDesklet->iDesiredWidth, pDesklet->iDesiredHeight, pDesklet->iSidWriteSize);
+	cd_debug ("%s (%dx%d ; %d)", __func__, pDesklet->iDesiredWidth, pDesklet->iDesiredHeight, pDesklet->iSidWriteSize);
 	if (pDesklet->iDesiredWidth == 0 && pDesklet->iDesiredHeight == 0 && pDesklet->iSidWriteSize == 0)
 	{
 		cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDesklet));
@@ -1200,7 +1200,7 @@ void cairo_dock_load_desklet_decorations (CairoDesklet *pDesklet, cairo_t *pSour
 	}
 	
 	CairoDeskletDecoration *pDeskletDecorations;
-	g_print ("%s (%s)\n", __func__, pDesklet->cDecorationTheme);
+	cd_debug ("%s (%s)", __func__, pDesklet->cDecorationTheme);
 	if (pDesklet->cDecorationTheme == NULL || strcmp (pDesklet->cDecorationTheme, "personnal") == 0)
 		pDeskletDecorations = pDesklet->pUserDecoration;
 	else if (strcmp (pDesklet->cDecorationTheme, "default") == 0)
@@ -1209,12 +1209,12 @@ void cairo_dock_load_desklet_decorations (CairoDesklet *pDesklet, cairo_t *pSour
 		pDeskletDecorations = cairo_dock_get_desklet_decoration (pDesklet->cDecorationTheme);
 	if (pDeskletDecorations == NULL)  // peut arriver si rendering n'a pas encore charge ses decorations.
 		return ;
-	g_print ("pDeskletDecorations : %s (%x)\n", pDesklet->cDecorationTheme, pDeskletDecorations);
+	cd_debug ("pDeskletDecorations : %s (%x)", pDesklet->cDecorationTheme, pDeskletDecorations);
 	
 	double fZoomX = 0., fZoomY = 0.;
 	if  (pDeskletDecorations->cBackGroundImagePath != NULL && pDeskletDecorations->fBackGroundAlpha > 0)
 	{
-		g_print ("bg : %s\n", pDeskletDecorations->cBackGroundImagePath);
+		cd_debug ("bg : %s", pDeskletDecorations->cBackGroundImagePath);
 		pDesklet->pBackGroundSurface = cairo_dock_create_surface_from_image (pDeskletDecorations->cBackGroundImagePath,
 			pSourceContext,
 			1.,  // cairo_dock_get_max_scale (pDesklet)
@@ -1225,7 +1225,7 @@ void cairo_dock_load_desklet_decorations (CairoDesklet *pDesklet, cairo_t *pSour
 	}
 	if (pDeskletDecorations->cForeGroundImagePath != NULL && pDeskletDecorations->fForeGroundAlpha > 0)
 	{
-		g_print ("fg : %s\n", pDeskletDecorations->cForeGroundImagePath);
+		cd_debug ("fg : %s", pDeskletDecorations->cForeGroundImagePath);
 		pDesklet->pForeGroundSurface = cairo_dock_create_surface_from_image (pDeskletDecorations->cForeGroundImagePath,
 			pSourceContext,
 			1.,  // cairo_dock_get_max_scale (pDesklet)
@@ -1234,14 +1234,14 @@ void cairo_dock_load_desklet_decorations (CairoDesklet *pDesklet, cairo_t *pSour
 			&pDesklet->fImageWidth, &pDesklet->fImageHeight,
 			&fZoomX, &fZoomY);
 	}
-	g_print ("image : %.2fx%.2f ; zoom : %.2fx%.2f\n", pDesklet->fImageWidth, pDesklet->fImageHeight, fZoomX, fZoomY);
+	cd_debug ("image : %.2fx%.2f ; zoom : %.2fx%.2f", pDesklet->fImageWidth, pDesklet->fImageHeight, fZoomX, fZoomY);
 	pDesklet->iLeftSurfaceOffset = pDeskletDecorations->iLeftMargin * fZoomX;
 	pDesklet->iTopSurfaceOffset = pDeskletDecorations->iTopMargin * fZoomY;
 	pDesklet->iRightSurfaceOffset = pDeskletDecorations->iRightMargin * fZoomX;
 	pDesklet->iBottomSurfaceOffset = pDeskletDecorations->iBottomMargin * fZoomY;
 	pDesklet->fBackGroundAlpha = pDeskletDecorations->fBackGroundAlpha;
 	pDesklet->fForeGroundAlpha = pDeskletDecorations->fForeGroundAlpha;
-	g_print ("%d;%d;%d;%d ; %.2f;%.2f\n", pDesklet->iLeftSurfaceOffset, pDesklet->iTopSurfaceOffset, pDesklet->iRightSurfaceOffset, pDesklet->iBottomSurfaceOffset, pDesklet->fBackGroundAlpha, pDesklet->fForeGroundAlpha);
+	cd_debug ("%d;%d;%d;%d ; %.2f;%.2f", pDesklet->iLeftSurfaceOffset, pDesklet->iTopSurfaceOffset, pDesklet->iRightSurfaceOffset, pDesklet->iBottomSurfaceOffset, pDesklet->fBackGroundAlpha, pDesklet->fForeGroundAlpha);
 	if (g_bUseOpenGL)
 	{
 		if (pDesklet->pBackGroundSurface != NULL)
@@ -1274,16 +1274,16 @@ static gboolean _cairo_dock_reload_one_desklet_decorations (CairoDesklet *pDeskl
 	{
 		if (pDesklet->cDecorationTheme == NULL || strcmp (pDesklet->cDecorationTheme, "default") == 0)
 		{
-			g_print ("on recharge les decorations de ce desklet\n");
+			cd_debug ("on recharge les decorations de ce desklet");
 			cairo_dock_load_desklet_decorations (pDesklet, pSourceContext);
 		}
 	}
 	else  // tous ceux qui ne sont pas encore charges et qui ont leur taille definitive.
 	{
-		g_print ("pouet %dx%d ; %d ; %x;%x\n", pDesklet->iDesiredWidth, pDesklet->iDesiredHeight, pDesklet->iSidWriteSize, pDesklet->pBackGroundSurface, pDesklet->pForeGroundSurface);
+		cd_debug ("pouet %dx%d ; %d ; %x;%x", pDesklet->iDesiredWidth, pDesklet->iDesiredHeight, pDesklet->iSidWriteSize, pDesklet->pBackGroundSurface, pDesklet->pForeGroundSurface);
 		if (pDesklet->iDesiredWidth == 0 && pDesklet->iDesiredHeight == 0 && pDesklet->iSidWriteSize == 0 && pDesklet->pBackGroundSurface == NULL && pDesklet->pForeGroundSurface == NULL)
 		{
-			g_print ("ce desklet a saute le chargement de ses deco => on l'aide.\n");
+			cd_debug ("ce desklet a saute le chargement de ses deco => on l'aide.");
 			cairo_dock_load_desklet_decorations (pDesklet, pSourceContext);
 		}
 	}
@@ -1291,7 +1291,7 @@ static gboolean _cairo_dock_reload_one_desklet_decorations (CairoDesklet *pDeskl
 }
 void cairo_dock_reload_desklets_decorations (gboolean bDefaultThemeOnly, cairo_t *pSourceContext)  // tous ou bien seulement ceux avec "default".
 {
-	g_print ("%s (%d)\n", __func__, bDefaultThemeOnly);
+	cd_message ("%s (%d)", __func__, bDefaultThemeOnly);
 	gpointer data[2] = {GINT_TO_POINTER (bDefaultThemeOnly), pSourceContext};
 	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc)_cairo_dock_reload_one_desklet_decorations, data);
 }

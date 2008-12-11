@@ -162,10 +162,39 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 			doubleBufferAttributes, 
 			&iNumOfFBConfigs); 
 		
-		if (pFBConfigs == NULL)
+		cd_message ("got %d FBConfig(s)", iNumOfFBConfigs);
+		for (i = 0; i < iNumOfFBConfigs; i++) 
 		{
-			cd_warning ("Argl, we could not get an ARGB-visual!");
+			pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]); 
+			if (!pVisInfo) 
+			{
+				cd_warning ("this FBConfig has no visual.");
+				continue; 
+			}
 			
+			pPictFormat = XRenderFindVisualFormat (XDisplay, pVisInfo->visual);
+			if (!pPictFormat)
+			{
+				cd_warning ("this visual has an unknown format.");
+				XFree (pVisInfo);
+				pVisInfo = NULL;
+				continue; 
+			}
+			
+			if (pPictFormat->direct.alphaMask > 0)
+			{
+				cd_message ("Strike, found a GLX visual with alpha-support !");
+				break;
+			}
+	
+			XFree (pVisInfo);
+			pVisInfo = NULL;
+		}
+		/// free FBConfigs ?
+		
+		if (pVisInfo == NULL)
+		{
+			cd_warning ("we could not get an ARGB-visual, trying to get an RGB one...");
 			doubleBufferAttributes[13] = 0;
 			pFBConfigs = glXChooseFBConfig (XDisplay, 
 				DefaultScreen (XDisplay), 
@@ -190,39 +219,6 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 					doubleBufferAttributes);
 			}
 		}
-		else
-		{
-			cd_message ("got %d FBConfig(s)", iNumOfFBConfigs);
-			for (i = 0; i < iNumOfFBConfigs; i++) 
-			{
-				pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]); 
-				if (!pVisInfo) 
-				{
-					cd_warning ("this FBConfig has no visual.");
-					continue; 
-				}
-				
-				pPictFormat = XRenderFindVisualFormat (XDisplay, pVisInfo->visual);
-				if (!pPictFormat)
-				{
-					cd_warning ("this visual has an unknown format.");
-					XFree (pVisInfo);
-					pVisInfo = NULL;
-					continue; 
-				}
-				
-				if (pPictFormat->direct.alphaMask > 0)
-				{
-					cd_message ("Strike, found a GLX visual with alpha-support!");
-					break;
-				}
-		
-				XFree (pVisInfo);
-				pVisInfo = NULL;
-			} 
-			/// free FBConfigs ?
-		}
-		
 		if (pVisInfo != NULL)
 		{
 			cd_message ("ok, got a visual");
@@ -850,7 +846,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		if (pSameTypeIcon == NULL && pDock->icons != NULL)
 		{
 			bSeparatorNeeded = TRUE;
-			cd_message ("separateur necessaire");
+			cd_debug ("separateur necessaire");
 		}
 	}
 
@@ -898,7 +894,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 			{
 				int iSeparatorType = iOrder + 1;
 				//int iSeparatorType = icon->iType + 1;
-				g_print (" insertion de %s avant %s -> iSeparatorType : %d\n", icon->acName, pNextIcon->acName, iSeparatorType);
+				//g_print (" insertion de %s avant %s -> iSeparatorType : %d\n", icon->acName, pNextIcon->acName, iSeparatorType);
 
 				cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 				Icon *pSeparatorIcon = cairo_dock_create_separator_icon (pSourceContext, iSeparatorType, pDock, bApplyRatio);
@@ -920,7 +916,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 			{
 				int iSeparatorType = iOrder - 1;
 				//int iSeparatorType = icon->iType - 1;
-				g_print (" insertion de %s apres %s -> iSeparatorType : %d\n", icon->acName, pPrevIcon->acName, iSeparatorType);
+				//g_print (" insertion de %s (%d) apres %s -> iSeparatorType : %d\n", icon->acName, icon->pModuleInstance != NULL, pPrevIcon->acName, iSeparatorType);
 
 				cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 				Icon *pSeparatorIcon = cairo_dock_create_separator_icon (pSourceContext, iSeparatorType, pDock, bApplyRatio);

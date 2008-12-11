@@ -134,7 +134,7 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHoriz
 	glPolygonMode (GL_FRONT, GL_FILL);
 	glEnable (GL_TEXTURE_2D);
 	glBindTexture (GL_TEXTURE_2D, g_iIndicatorTexture);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.);
+	glColor4f(1., 1., 1., 1.);
 	glNormal3f (0., 0., 1.);
 	
 	glBegin(GL_QUADS);
@@ -162,7 +162,7 @@ static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDo
 	glPolygonMode (GL_FRONT, GL_FILL);
 	glEnable (GL_TEXTURE_2D);
 	glBindTexture (GL_TEXTURE_2D, g_iActiveIndicatorTexture);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.);
+	glColor4f(1., 1., 1., 1.);
 	glNormal3f (0., 0., 1.);
 	
 	cairo_dock_set_icon_scale (icon, pDock, 1.);
@@ -222,7 +222,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 	
 	glDisable(GL_DEPTH_TEST);
 	glPolygonMode (GL_FRONT, GL_FILL);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.);
+	glColor4f(1., 1., 1., 1.);
 	
 	glPushMatrix ();
 	cairo_dock_set_icon_scale (pIcon, pDock, 1.);
@@ -284,10 +284,39 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			}
 		}
 		
-		glActiveTextureARB(GL_TEXTURE0_ARB); // Go pour le multitexturing 1ere passe
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
+		//glBlendFunc (GL_SRC_ALPHA, GL_ONE);
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		//glBlendColor(1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);  // utile ?
+		
+		glBegin(GL_QUADS);
+		
+		glTexCoord2f (x0, y0);
+		glColor4f (1., 1., 1., 0.);
+		glVertex3f (-.5, .5, 0.);  // Bottom Left Of The Texture and Quad
+		
+		glTexCoord2f (x1, y0);
+		glColor4f (1., 1., 1., 0.);
+		glVertex3f (.5, .5, 0.);  // Bottom Right Of The Texture and Quad
+		
+		glTexCoord2f (x1, y1);
+		glColor4f (1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);
+		glVertex3f (.5, -.5, 0.);  // Top Right Of The Texture and Quad
+		
+		glTexCoord2f (x0, y1);
+		glColor4f (1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);  // myIcons.fAlbedo * pIcon->fAlpha
+		glVertex3f (-.5, -.5, 0.);  // Top Left Of The Texture and Quad
+		
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+		
+		
+		/**glActiveTextureARB(GL_TEXTURE0_ARB); // Go pour le multitexturing 1ere passe
 		glEnable(GL_TEXTURE_2D); // On active le texturing sur cette passe
 		glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
-		glColor4f(1.0f, 1.0f, 1.0f, 1.);  // transparence du reflet.
+		glColor4f(1., 1., 1., 1.);  // transparence du reflet.
 		glEnable(GL_BLEND);
 		glBlendFunc (1, 0);
 		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -295,39 +324,29 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		glActiveTextureARB(GL_TEXTURE1_ARB); // Go pour le texturing 2eme passe
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, g_pGradationTexture[pDock->bHorizontalDock]);
-		glColor4f(1.0f, 1.0f, 1.0f, myIcons.fAlbedo * pIcon->fAlpha);  // transparence du reflet.
+		glColor4f(1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);  // transparence du reflet.
 		glEnable(GL_BLEND);
 		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // Le mode de combinaison des textures
 		//glTexEnvi (GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_MODULATE);  // multiplier les alpha.
 		
-		///glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		
 		glBegin(GL_QUADS);
 		glNormal3f(0,0,1);
 		glMultiTexCoord2fARB (GL_TEXTURE0_ARB, x0, y0);
 		glMultiTexCoord2fARB (GL_TEXTURE1_ARB, 0., 0.);
-		///glColor4f(1.0f, 1.0f, 1.0f, 0.);
 		glVertex3f (-0.5, .5, 0.);  // Bottom Left Of The Texture and Quad
-		
 		
 		glMultiTexCoord2fARB (GL_TEXTURE0_ARB, x1, y0);
 		glMultiTexCoord2fARB (GL_TEXTURE1_ARB, 1., 0.);
-		///glColor4f(1.0f, 1.0f, 1.0f, 0.);
 		glVertex3f ( 0.5, .5, 0.);  // Bottom Right Of The Texture and Quad
-		
 		
 		glMultiTexCoord2fARB (GL_TEXTURE0_ARB, x1, y1);
 		glMultiTexCoord2fARB (GL_TEXTURE1_ARB, 1., 1.);
-		///glColor4f(1.0f, 1.0f, 1.0f, myIcons.fAlbedo * pIcon->fAlpha);
 		glVertex3f ( 0.5, -.5, 0.);  // Top Right Of The Texture and Quad
-		
 		
 		glMultiTexCoord2fARB (GL_TEXTURE0_ARB, x0, y1);
 		glMultiTexCoord2fARB (GL_TEXTURE1_ARB, 0., 1.);
-		///glColor4f(1.0f, 1.0f, 1.0f, myIcons.fAlbedo * pIcon->fAlpha);
 		glVertex3f (-0.5, -.5, 0.);  // Top Left Of The Texture and Quad
-		
 		glEnd();
 		
 		glActiveTextureARB(GL_TEXTURE1_ARB);
@@ -337,7 +356,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		glActiveTextureARB(GL_TEXTURE0_ARB);
 		glDisable(GL_TEXTURE_2D);
 		glDisable(GL_TEXTURE_GEN_S);
-		glDisable(GL_TEXTURE_GEN_T);
+		glDisable(GL_TEXTURE_GEN_T);*/
 		
 		glPopMatrix ();
 	}
@@ -468,16 +487,16 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 			glPushMatrix ();
 			double fScaleFactor = 1 + (1 - icon->fAlpha);
 			glScalef (icon->fWidth * icon->fScale / 2 * fScaleFactor, icon->fHeight * icon->fScale / 2 * fScaleFactor, 1.);
-			///glColor4f(1.0f, 1.0f, 1.0f, icon->fAlpha);
+			///glColor4f(1., 1., 1., icon->fAlpha);
 			GLfloat fMaterial[4] = {1., 1., 1., icon->fAlpha};
 			glMaterialfv (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, fMaterial);  // on definit Les proprietes materielles de l'objet.
 			
 			glBindTexture (GL_TEXTURE_2D, icon->iIconTexture);
 			glBegin(GL_QUADS);
-			glTexCoord2f(0., 0.); glVertex3f(-1.0f, 1,  0.);  // Bottom Left Of The Texture and Quad
-			glTexCoord2f(1.0f, 0.); glVertex3f( 1.0f, 1,  0.);  // Bottom Right Of The Texture and Quad
-			glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f, -1,  0.);  // Top Right Of The Texture and Quad
-			glTexCoord2f(0., 1.0f); glVertex3f(-1.0f,  -1,  0.);  // Top Left Of The Texture and Quad
+			glTexCoord2f(0., 0.); glVertex3f(-1., 1,  0.);  // Bottom Left Of The Texture and Quad
+			glTexCoord2f(1., 0.); glVertex3f( 1., 1,  0.);  // Bottom Right Of The Texture and Quad
+			glTexCoord2f(1., 1.); glVertex3f( 1., -1,  0.);  // Top Right Of The Texture and Quad
+			glTexCoord2f(0., 1.); glVertex3f(-1.,  -1,  0.);  // Top Left Of The Texture and Quad
 			glEnd();
 			glPopMatrix ();
 			/*cairo_save (pCairoContext);
@@ -546,12 +565,12 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 				glPushMatrix ();
 				double fScaleFactor = 1 + (1 - fPreviousAlpha);
 				glScalef (icon->fWidth * icon->fScale / 2 * fScaleFactor, icon->fHeight * icon->fScale / 2 * fScaleFactor, 1.);
-				glColor4f(1.0f, 1.0f, 1.0f, fPreviousAlpha);
+				glColor4f(1., 1., 1., fPreviousAlpha);
 				glBegin(GL_QUADS);
-				glTexCoord2f(0., 0.); glVertex3f(-1.0f, 1,  0.);  // Bottom Left Of The Texture and Quad
-				glTexCoord2f(1.0f, 0.); glVertex3f( 1.0f, 1,  0.);  // Bottom Right Of The Texture and Quad
-				glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f, -1,  0.);  // Top Right Of The Texture and Quad
-				glTexCoord2f(0., 1.0f); glVertex3f(-1.0f,  -1,  0.);  // Top Left Of The Texture and Quad
+				glTexCoord2f(0., 0.); glVertex3f(-1., 1,  0.);  // Bottom Left Of The Texture and Quad
+				glTexCoord2f(1., 0.); glVertex3f( 1., 1,  0.);  // Bottom Right Of The Texture and Quad
+				glTexCoord2f(1., 1.); glVertex3f( 1., -1,  0.);  // Top Right Of The Texture and Quad
+				glTexCoord2f(0., 1.); glVertex3f(-1.,  -1,  0.);  // Top Left Of The Texture and Quad
 				glEnd ();
 				glPopMatrix ();
 				/*cairo_save (pCairoContext);
@@ -579,13 +598,13 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 		}
 		
 		//\_____________________ On dessine les reflets.
-		glColor4f(1.0f, 1.0f, 1.0f, fAlpha);
+		glColor4f(1., 1., 1., fAlpha);
 		glScalef (icon->fWidth * icon->fScale / 2, myIcons.fReflectSize * 1. / 2, 1.);
 		glBegin(GL_QUADS);
-		glTexCoord2f(0., 0.); glVertex3f(-1.0f, 1,  0.);  // Bottom Left Of The Texture and Quad
-		glTexCoord2f(1.0f, 0.); glVertex3f( 1.0f, 1,  0.);  // Bottom Right Of The Texture and Quad
-		glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f, -1,  0.);  // Top Right Of The Texture and Quad
-		glTexCoord2f(0., 1.0f); glVertex3f(-1.0f,  -1,  0.);  // Top Left Of The Texture and Quad
+		glTexCoord2f(0., 0.); glVertex3f(-1., 1,  0.);  // Bottom Left Of The Texture and Quad
+		glTexCoord2f(1., 0.); glVertex3f( 1., 1,  0.);  // Bottom Right Of The Texture and Quad
+		glTexCoord2f(1., 1.); glVertex3f( 1., -1,  0.);  // Top Right Of The Texture and Quad
+		glTexCoord2f(0., 1.); glVertex3f(-1.,  -1,  0.);  // Top Left Of The Texture and Quad
 		glEnd();
 		glPopMatrix ();  // retour juste apres la translation (fDrawX, fDrawY).
 		
@@ -730,7 +749,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 		glEnable (GL_BLEND);
 		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		glColor4f(1.0f, 1.0f, 1.0f, fMagnitude);
+		glColor4f(1., 1., 1., fMagnitude);
 		glEnable(GL_TEXTURE);
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture (GL_TEXTURE_2D, icon->iLabelTexture);
@@ -757,7 +776,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRa
 		glEnable (GL_BLEND);
 		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		glColor4f(1.0f, 1.0f, 1.0f, fAlpha);
+		glColor4f(1., 1., 1., fAlpha);
 		glEnable(GL_TEXTURE);
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture (GL_TEXTURE_2D, icon->iQuickInfoTexture);
@@ -1001,7 +1020,7 @@ void cairo_dock_render_background_opengl (CairoDock *pDock)
 	glPolygonMode (GL_FRONT, GL_FILL);
 	glEnable (GL_TEXTURE_2D);
 	glBindTexture (GL_TEXTURE_2D, g_pVisibleZoneTexture);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.);
+	glColor4f(1., 1., 1., 1.);
 	glNormal3f (0., 0., 1.);
 	
 	glLoadIdentity ();
@@ -1212,7 +1231,7 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 	
 	glEnable(GL_BLEND); // On active le blend
 	glBlendFunc (1., 0.);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Couleur a fond
+	glColor4f(1., 1., 1., 1.); // Couleur a fond
 	///glEnable(GL_POLYGON_OFFSET_FILL);
 	///glPolygonOffset (1., 1.);
 	glPolygonMode(GL_FRONT, GL_FILL);

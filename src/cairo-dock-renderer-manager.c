@@ -133,7 +133,7 @@ void cairo_dock_remove_dialog_renderer (const gchar *cRendererName)
 
 CairoDeskletDecoration *cairo_dock_get_desklet_decoration (const gchar *cDecorationName)
 {
-	g_print ("%s (%s)\n", __func__, cDecorationName);
+	cd_debug ("%s (%s)", __func__, cDecorationName);
 	if (cDecorationName != NULL)
 		return g_hash_table_lookup (s_hDeskletDecorationsTable, cDecorationName);
 	else if (myDesklets.cDeskletDecorationsName != NULL)
