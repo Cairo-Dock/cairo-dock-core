@@ -225,6 +225,10 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 	glColor4f(1., 1., 1., 1.);
 	
 	glPushMatrix ();
+	/*if (pDock->bHorizontalDock)
+		glTranslatef (0., pIcon->fDeltaYReflection * (pDock->bDirectionUp ? 1 : -1), 0.);
+	else
+		glTranslatef (pIcon->fDeltaYReflection * (pDock->bDirectionUp ? -1 : 1), 0., 0.);*/
 	cairo_dock_set_icon_scale (pIcon, pDock, 1.);
 	glNormal3f(0,0,1);
 	glBegin(GL_QUADS);
@@ -286,10 +290,10 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
-		//glBlendFunc (GL_SRC_ALPHA, GL_ONE);
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE);
 		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		//glBlendColor(1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);  // utile ?
+		glBlendColor(1., 1., 1., 1.);  // utile ?
 		
 		glBegin(GL_QUADS);
 		
@@ -306,7 +310,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		glVertex3f (.5, -.5, 0.);  // Top Right Of The Texture and Quad
 		
 		glTexCoord2f (x0, y1);
-		glColor4f (1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);  // myIcons.fAlbedo * pIcon->fAlpha
+		glColor4f (1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);
 		glVertex3f (-.5, -.5, 0.);  // Top Left Of The Texture and Quad
 		
 		glEnd();
@@ -1283,41 +1287,4 @@ void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor,
 	glDisable(GL_BLEND);
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glPolygonMode(GL_FRONT, GL_FILL);
-}
-
-
-GLfloat ctrlpoints[4][4][3] = {
-        {{-1.5, -1.5,  4.0-4.0}, {-0.5, -1.5,   2.0-4.0},
-         { 0.5, -1.5, -1.0-4.0}, { 1.5, -1.5,   2.0-4.0}},
-        {{-1.5, -0.5,  1.0-4.0}, {-0.5, -0.5,   3.0-4.0},
-         { 0.5, -0.5,  0.0-4.0}, { 1.5, -0.5,  -1.0-4.0}},
-        {{-1.5,  0.5,  4.0-4.0}, {-0.5,   0.5,  0.0-4.0},
-         { 0.5,  0.5,  3.0-4.0}, { 1.5,   0.5,  4.0-4.0}},
-        {{-1.5,  1.5, -2.0-4.0}, {-0.5,   1.5, -2.0-4.0},
-         { 0.5,  1.5,  0.0-4.0}, { 1.5,   1.5, -1.0-4.0}}
-    };
-GLfloat texpts[2][2][2] = {{{0.0, 0.0}, {1.0, 0.0}}, {{0.0, 1.0}, {1.0, 1.0}}};
-void cairo_dock_draw_wobbly_icon (Icon *pIcon, CairoDock *pDock)
-{
-	cairo_dock_set_icon_scale (pIcon, pDock, 1./3);
-	glRotatef(60., 0.0, 1.0, 0.0);
-	//glRotatef(-90., 0.0, 0.0, 1.0);
-	
-	glEnable(GL_TEXTURE_2D); // Je veux de la texture
-	glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
-	
-	glEnable(GL_MAP2_VERTEX_3);  // active l'�valuateur 2D des sommets 3D
-	glEnable(GL_MAP2_TEXTURE_COORD_2);
-	
-	glMap2f(GL_MAP2_VERTEX_3, 0, 1, 3, 4,
-		0, 1, 12, 4, &ctrlpoints[0][0][0]);
-	glMap2f(GL_MAP2_TEXTURE_COORD_2, 0, 1, 2, 2,
-		0, 1, 4, 2, &texpts[0][0][0]);
-	
-	int n=10, m=10;
-	glMapGrid2f(n, 0.0, 1.0, m, 0.0, 1.0);  // Pour d�finir une grille r�guli�re de 0.0 � 1.0 en n �tapes en u et m �tapes en v
-	glEvalMesh2(GL_FILL, 0, n, 0, m);  // Pour appliquer cette grille aux �valuateurs activ�s.
-	glDisable(GL_MAP2_VERTEX_3);
-	glDisable(GL_MAP2_TEXTURE_COORD_2);
-	glDisable(GL_TEXTURE_2D);
 }

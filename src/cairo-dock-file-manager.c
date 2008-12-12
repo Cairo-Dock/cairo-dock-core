@@ -259,6 +259,17 @@ gboolean cairo_dock_fm_setup_time (void)
 		return FALSE;
 }
 
+gboolean cairo_dock_fm_show_system_monitor (void)
+{
+	if (s_pVFSBackend != NULL && s_pVFSBackend->show_system_monitor!= NULL)
+	{
+		s_pVFSBackend->show_system_monitor ();
+		return TRUE;
+	}
+	else
+		return FALSE;
+}
+
 Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pContainer)
 {
 	if (s_pVFSBackend == NULL || s_pVFSBackend->get_file_info == NULL)

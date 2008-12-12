@@ -9,7 +9,7 @@ AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([foreign])
 AC_PROG_LIBTOOL
 
-IT_PROG_INTLTOOL([0.35.0])
+#IT_PROG_INTLTOOL([0.35.0])
 AC_SUBST(ALL_LINGUAS)
 AM_GLIB_GNU_GETTEXT
 GETTEXT_PACKAGE=cairo-dock
@@ -69,7 +69,7 @@ AC_ARG_ENABLE(glitz,
 	esac],[useglitz=false])
 
 if test "$useglitz" = "true" ; then
-	PKG_CHECK_MODULES(GLITZ, glitz glitz-glx, [glitz_detected=true], [ glitz_detected=false; AC_MSG_WARN(Could not find glitz-glx; Cairo-Dock won't be built with hardware acceleration.) ])
+	PKG_CHECK_MODULES(GLITZ, glitz glitz-glx, [glitz_detected=true], [ glitz_detected=false; AC_MSG_WARN(Could not find glitz and/or glitz-glx; Cairo-Dock won't be built with hardware acceleration.) ])
 	AC_SUBST(GLITZ_CFLAGS)
 	AC_SUBST(GLITZ_LIBS)
 	
@@ -79,7 +79,7 @@ if test "$useglitz" = "true" ; then
 fi
 
 if test "$glitz_detected" = "true"; then
-        glitz_required="glitz-glx"
+        glitz_required="glitz glitz-glx"
 else
         glitz_required=""
 fi

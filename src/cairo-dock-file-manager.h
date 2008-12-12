@@ -49,6 +49,7 @@ gchar *cairo_dock_fm_get_desktop_path (void);
 gboolean cairo_dock_fm_logout (void);
 gboolean cairo_dock_fm_shutdown (void);
 gboolean cairo_dock_fm_setup_time (void);
+gboolean cairo_dock_fm_show_system_monitor (void);
 
 
 Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pContainer);

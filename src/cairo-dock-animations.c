@@ -455,11 +455,18 @@ void cairo_dock_start_animation (Icon *icon, CairoDock *pDock)
 static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 {
 	//g_print ("%s (%d)\n", __func__, pDock->iMagnitudeIndex);
+	Icon *icon;
+	GList *ic;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		icon->fDeltaYReflection = 0;
+		cairo_dock_manage_animations (icon, pDock);
+	}
+	
 	gboolean bContinue = FALSE;
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (CAIRO_CONTAINER (pDock)))  // a integrer aux plug-ins, au cas par cas, certains pourront marcher sans opengl (drop-indicator notamment).
 	{
-		Icon *icon;
-		GList *ic;
 		for (ic = pDock->icons; ic != NULL; ic = ic->next)
 		{
 			icon = ic->data;

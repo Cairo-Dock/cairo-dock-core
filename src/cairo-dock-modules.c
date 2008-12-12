@@ -443,12 +443,12 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 		pMinimalConfig->bOnWidgetLayer = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "on widget layer", NULL, FALSE, NULL, NULL);
 		pMinimalConfig->bPositionLocked = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "locked", NULL, FALSE, NULL, NULL);
 		pMinimalConfig->iRotation = cairo_dock_get_double_key_value (pKeyFile, "Desklet", "rotation", NULL, 0, NULL, NULL);
-		g_print ("iRotation:%d°\n", pMinimalConfig->iRotation);
+		//g_print ("iRotation:%d°\n", pMinimalConfig->iRotation);
 		
 		gchar *cDecorationTheme = cairo_dock_get_string_key_value (pKeyFile, "Desklet", "decorations", NULL, NULL, NULL, NULL);
 		if (cDecorationTheme == NULL || strcmp (cDecorationTheme, "personnal") == 0)
 		{
-			g_print ("on recupere les decorations personnelles au desklet\n");
+			//g_print ("on recupere les decorations personnelles au desklet\n");
 			CairoDeskletDecoration *pUserDeskletDecorations = g_new0 (CairoDeskletDecoration, 1);
 			pMinimalConfig->pUserDecoration = pUserDeskletDecorations;
 			
@@ -465,7 +465,7 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 		}
 		else
 		{
-			g_print ("decorations : %s\n", cDecorationTheme);
+			//g_print ("decorations : %s\n", cDecorationTheme);
 			pMinimalConfig->cDecorationTheme = cDecorationTheme;
 		}
 	}

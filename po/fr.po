@@ -264,11 +264,11 @@ msgstr "Ejecter"
 
 #: ../src/cairo-dock-menu.c:1192
 msgid "Delete this file"
-msgstr "Détacher cette applet"
+msgstr "Effacer ce fichier"
 
 #: ../src/cairo-dock-menu.c:1196
 msgid "Rename this file"
-msgstr "Enlever cette applet"
+msgstr "Renommer ce fichier"
 
 #: ../src/cairo-dock-menu.c:1200
 msgid "Properties"

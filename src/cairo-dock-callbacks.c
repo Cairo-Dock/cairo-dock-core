@@ -80,7 +80,6 @@ extern gboolean g_bUseGlitz;
 extern gboolean g_bEasterEggs;
 
 extern gboolean g_bUseOpenGL;
-extern gdouble g_iGLAnimationDeltaT;
 
 extern gboolean g_bDisplayDropEmblem;
 extern gboolean g_bLocked;

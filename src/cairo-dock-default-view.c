@@ -105,7 +105,7 @@ void cairo_dock_calculate_construction_parameters_generic (Icon *icon, int iCurr
 	icon->fDrawY = icon->fY;
 	icon->fWidthFactor = 1.;
 	icon->fHeightFactor = 1.;
-	icon->fDeltaYReflection = 0.;
+	///icon->fDeltaYReflection = 0.;
 	icon->fOrientation = 0.;
 	if (icon->fDrawX >= 0 && icon->fDrawX + icon->fWidth * icon->fScale <= iCurrentWidth)
 	{

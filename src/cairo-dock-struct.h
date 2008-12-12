@@ -769,6 +769,7 @@ struct _CairoDockVFSBackend {
 	CairoDockFMUserActionFunc		logout;
 	CairoDockFMUserActionFunc		shutdown;
 	CairoDockFMUserActionFunc		setup_time;
+	CairoDockFMUserActionFunc		show_system_monitor;
 };
 
 
