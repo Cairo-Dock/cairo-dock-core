@@ -221,10 +221,20 @@ void on_click_apply (GtkButton *button, GtkWidget *pWindow)
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 	if (pModule != NULL)
 	{
-		cairo_dock_write_current_group_conf_file (pModule->cConfFilePath);
 		if (pModule->pInstancesList != NULL)
 		{
-			cairo_dock_reload_module_instance (pModule->pInstancesList->data, TRUE);
+			CairoDockModuleInstance *pModuleInstance;
+			GList *pElement;
+			for (pElement = pModule->pInstancesList; pElement != NULL; pElement= pElement->next)
+			{
+				pModuleInstance = pElement->data;
+				if (strcmp (pModuleInstance->cConfFilePath, pGroupDescription->cConfFilePath) == 0)
+					break ;
+			}
+			g_return_if_fail (pModuleInstance != NULL);
+			
+			cairo_dock_write_current_group_conf_file (pModuleInstance->cConfFilePath);
+			cairo_dock_reload_module_instance (pModuleInstance, TRUE);
 		}
 	}
 	else

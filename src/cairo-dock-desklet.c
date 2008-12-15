@@ -110,7 +110,7 @@ void cairo_dock_load_desklet_buttons (cairo_t *pSourceContext)
 }
 void cairo_dock_load_desklet_buttons_texture (void)
 {
-	g_print ("%s (%x;%x)\n", __func__, s_pRotateButtonSurface, s_pRetachButtonSurface);
+	cd_message ("%s (%x;%x)", __func__, s_pRotateButtonSurface, s_pRetachButtonSurface);
 	if (! g_bUseOpenGL)
 		return ;
 	
@@ -302,8 +302,28 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 	if (pDesklet->iBackGroundTexture != 0 && pDesklet->fBackGroundAlpha != 0)
 	{
 		glPushMatrix ();
+		
+		glEnable (GL_BLEND);
+		glBlendFunc (GL_ONE, GL_ZERO);
 		glColor4f (1., 1., 1., pDesklet->fBackGroundAlpha);
-		cairo_dock_draw_texture (pDesklet->iBackGroundTexture, pDesklet->iWidth, pDesklet->iHeight);
+		
+		glEnable (GL_TEXTURE_2D);
+		glBindTexture (GL_TEXTURE_2D, pDesklet->iBackGroundTexture);
+		//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+		
+		glPolygonMode (GL_FRONT, GL_FILL);
+		glNormal3f (0., 0., 1.);
+		glScalef (pDesklet->iWidth, pDesklet->iHeight, 1.);
+		
+		glBegin(GL_QUADS);
+		glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
+		glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);  // Bottom Right Of The Texture and Quad
+		glTexCoord2f(1., 1.); glVertex3f( .5, -.5, 0.);  // Top Right Of The Texture and Quad
+		glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);  // Top Left Of The Texture and Quad
+		glEnd();
+		
+		glDisable (GL_TEXTURE_2D);
+		glDisable (GL_BLEND);
 		glPopMatrix ();
 	}
 	

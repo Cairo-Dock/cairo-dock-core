@@ -21,6 +21,7 @@ struct _CairoDockGroupDescription {
 	GtkWidget *pActivateButton;
 	gchar *cOriginalConfFilePath;
 	gchar *cIcon;
+	gchar *cConfFilePath;
 	} ;
 
 typedef struct _CairoDockGroupDescription CairoDockGroupDescription;

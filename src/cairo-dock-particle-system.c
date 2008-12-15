@@ -25,7 +25,6 @@ void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int
 	glEnable (GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	glEnable(GL_TEXTURE);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, pParticleSystem->iTexture);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -106,7 +105,6 @@ void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int
 	
 	glDisable (GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 }
 
 CairoParticleSystem *cairo_dock_create_particle_system (int iNbParticles, GLuint iTexture, double fWidth, double fHeight)

@@ -664,6 +664,8 @@ void cairo_dock_show_all_categories (void)
 	gtk_widget_hide (s_pOkButton);
 	gtk_widget_hide (s_pApplyButton);
 	gtk_widget_hide (s_pGroupFrame);
+	
+	gtk_window_set_title (GTK_WINDOW (cairo_dock_get_main_window ()), _("Configuration of Cairo-Dock"));
 }
 
 void cairo_dock_show_one_category (int iCategory)
@@ -689,6 +691,8 @@ void cairo_dock_show_one_category (int iCategory)
 	gtk_widget_hide (s_pOkButton);
 	gtk_widget_hide (s_pApplyButton);
 	gtk_widget_hide (s_pGroupFrame);
+	
+	gtk_window_set_title (GTK_WINDOW (cairo_dock_get_main_window ()), gettext (cCategoriesDescription[2*iCategory]));
 }
 
 void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget)
@@ -710,6 +714,8 @@ void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget)
 void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup)
 {
 	g_print ("%s (%s, %s)\n", __func__, cConfFilePath, pGroupDescription->cGroupName);
+	g_free (pGroupDescription->cConfFilePath);
+	pGroupDescription->cConfFilePath = g_strdup (cConfFilePath);
 	
 	//\_______________ On cree le widget du groupe.
 	GError *erreur = NULL;
@@ -752,6 +758,8 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 	cairo_dock_insert_extern_widget_in_gui (pWidget);
 	
 	s_pCurrentGroup = pGroupDescription;
+	
+	gtk_window_set_title (GTK_WINDOW (cairo_dock_get_main_window ()), gettext (pGroupDescription->cGroupName));
 	
 	//\_______________ On met a jour la frame du groupe.
 	GtkWidget *pLabel = gtk_label_new (NULL);
@@ -841,7 +849,12 @@ void cairo_dock_free_categories (void)
 	s_pMainWindow = NULL;
 	s_pToolBar = NULL;
 	
-	s_pCurrentGroup = NULL;
+	if (s_pCurrentGroup != NULL)
+	{
+		g_free (s_pCurrentGroup->cConfFilePath);
+		s_pCurrentGroup->cConfFilePath = NULL;
+		s_pCurrentGroup = NULL;
+	}
 	cairo_dock_free_generated_widget_list (s_pCurrentWidgetList);
 	s_pCurrentWidgetList = NULL;
 	s_pCurrentGroupWidget = NULL;  // detruit en meme temps que la fenetre.
