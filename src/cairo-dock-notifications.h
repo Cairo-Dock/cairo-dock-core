@@ -56,6 +56,8 @@ typedef enum {
 	CAIRO_DOCK_UPDATE_DESKLET,
 	CAIRO_DOCK_RENDER_DESKLET,
 	CAIRO_DOCK_STOP_DESKLET,
+	/// notification appellee lorsqu'une icone est inseree dans un dock. data : {Icon, CairoDock}
+	CAIRO_DOCK_INSERT_ICON,
 	CAIRO_DOCK_NB_NOTIFICATIONS
 	} CairoDockNotificationType;
 
@@ -83,6 +85,7 @@ typedef gboolean (* CairoDockRenderContainerFunc) (gpointer pUserData, CairoCont
 typedef gboolean (* CairoDockStopContainerFunc) (gpointer pUserData, CairoContainer *pContainer);
 typedef gboolean (* CairoDockStartDragDataFunc) (gpointer pUserData, CairoDock *pDock, gboolean *bStartAnimation);
 typedef gboolean (* CairoDockAnimateIconFunc) (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gchar *cAnimationName);
+typedef gboolean (* CairoDockInsertRemoveIconFunc) (gpointer pUserData, Icon *pIcon, CairoDock *pDock);
 
 
 #define CAIRO_DOCK_RUN_FIRST TRUE

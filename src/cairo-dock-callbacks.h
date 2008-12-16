@@ -5,17 +5,14 @@
 #include <gtk/gtk.h>
 G_BEGIN_DECLS
 
-void on_realize (GtkWidget* pWidget,
-	 CairoDock *pDock);
+void cairo_dock_on_realize (GtkWidget* pWidget, CairoDock *pDock);
 
 gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDock);
-gboolean on_expose (GtkWidget *pWidget,
-			GdkEventExpose *pExpose,
-			CairoDock *pDock);
+gboolean cairo_dock_on_expose (GtkWidget *pWidget, GdkEventExpose *pExpose, CairoDock *pDock);
 
 void cairo_dock_show_subdock (Icon *pPointedIcon, gboolean bUpdate, CairoDock *pDock);
 void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, CairoDock *pDock);
-gboolean on_motion_notify2 (GtkWidget* pWidget,
+gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 					GdkEventMotion* pMotion,
 					CairoDock *pDock);
 
@@ -27,19 +24,19 @@ gboolean cairo_dock_emit_enter_signal (CairoDock *pDock);
 gboolean cairo_dock_poll_screen_edge (CairoDock *pDock);
 
 void cairo_dock_leave_from_main_dock (CairoDock *pDock);
-gboolean on_leave_notify2 (GtkWidget* pWidget,
+gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget,
 					GdkEventCrossing* pEvent,
 					CairoDock *pDock);
 
-gboolean on_enter_notify2 (GtkWidget* pWidget,
+gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget,
 					GdkEventCrossing* pEvent,
 					CairoDock *pDock);
 
 
-gboolean on_key_release (GtkWidget *pWidget,
+gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 				GdkEventKey *pKey,
 				CairoDock *pDock);
-gboolean on_key_press (GtkWidget *pWidget,
+gboolean cairo_dock_on_key_press (GtkWidget *pWidget,
 				GdkEventKey *pKey,
 				CairoDock *pDock);
 
@@ -48,28 +45,28 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingD
 
 gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState);
 gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock);
-gboolean on_button_press2 (GtkWidget* pWidget,
+gboolean cairo_dock_on_button_press (GtkWidget* pWidget,
 					GdkEventButton* pButton,
 					CairoDock *pDock);
 
-gboolean on_scroll (GtkWidget* pWidget,
+gboolean cairo_dock_on_scroll (GtkWidget* pWidget,
 				GdkEventScroll* pScroll,
 				CairoDock *pDock);
 
 
-gboolean on_configure (GtkWidget* pWidget,
+gboolean cairo_dock_on_configure (GtkWidget* pWidget,
 	   			GdkEventConfigure* pEvent,
 	   			CairoDock *pDock);
 
 
-void on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint t, CairoDock *pDock);
+void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint t, CairoDock *pDock);
 gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, CairoContainer *pContainer);
 
-void on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint t, CairoDock *pDock);
-void on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint time, CairoDock *pDock);
+void cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint t, CairoDock *pDock);
+void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint time, CairoDock *pDock);
 
 
-gboolean on_delete (GtkWidget *pWidget, GdkEvent *event, CairoDock *pDock);
+gboolean cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, CairoDock *pDock);
 
 
 /*void on_selection_get (GtkWidget *pWidget, GtkSelectionData *data, guint info, guint time, gpointer user_data);

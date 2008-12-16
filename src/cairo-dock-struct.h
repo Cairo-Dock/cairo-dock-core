@@ -253,9 +253,9 @@ struct _CairoDock {
 	/// serial ID for window popping down to the bottom layer.
 	gint iSidPopDown;
 	/// serial ID du thread de grossisement des icones.
-	gint iSidGrowUp;
+	gint iSidGrowUp_deprecated;
 	/// serial ID du thread de diminution des icones.
-	gint iSidShrinkDown;
+	gint iSidShrinkDown_deprecated;
 	/// serial ID du thread qui enverra le signal de sortie retarde.
 	gint iSidLeaveDemand;
 	/// serial ID du thread qui signale qu'on peut inserer un element dans le dock a cet endroit.
@@ -563,6 +563,14 @@ typedef enum {
 	CAIRO_DOCK_AVOID_MOUSE
 	} CairoDockAnimationType;
 
+typedef enum {
+	CAIRO_DOCK_STATE_REST = 0,
+	CAIRO_DOCK_STATE_MOUSE_HOVERED,
+	CAIRO_DOCK_STATE_CLICKED,
+	CAIRO_DOCK_STATE_REMOVE_INSERT,
+	CAIRO_DOCK_NB_STATES
+	} CairoDockAnimationState;
+
 
 struct _Icon {
 	//\____________ renseignes lors de la creation de l'icone.
@@ -699,13 +707,12 @@ struct _Icon {
 	/// echelle d'adaptation au glissement.
 	double fGlideScale;
 	
-	gint iReflectionTexture;
 	GLuint iIconTexture;
 	GLuint iLabelTexture;
 	GLuint iQuickInfoTexture;
-	gboolean bOnMouseOverAnimating;
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
 	gboolean bStatic;
+	CairoDockAnimationState iAnimationState;
 };
 
 
@@ -1080,5 +1087,12 @@ typedef enum {
 	CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR,
 	CAIRO_DOCK_NB_NEW_LAUNCHER_TYPE
 	} CairoDockNewLauncherType;
+
+typedef enum {
+	CAIRO_DOCK_START_NOMINAL = 0,
+	CAIRO_DOCK_START_MAINTENANCE,
+	CAIRO_DOCK_START_SAFE,
+	CAIRO_DOCK_NB_SART_MODES
+	} CairoDockStartMode;
 
 #endif

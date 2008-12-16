@@ -336,7 +336,7 @@ void on_click_normal_apply (GtkButton *button, GtkWidget *pWindow)
 	g_key_file_free (pKeyFile);
 	
 	CairoDockApplyConfigFunc pAction = g_object_get_data (G_OBJECT (pWindow), "action");
-	gpointer pUserData= g_object_get_data (G_OBJECT (pWindow), "action-data");
+	gpointer pUserData = g_object_get_data (G_OBJECT (pWindow), "action-data");
 	
 	if (pAction != NULL)
 		pAction (pUserData);

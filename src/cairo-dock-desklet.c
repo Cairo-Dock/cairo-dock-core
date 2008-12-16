@@ -396,6 +396,7 @@ static void _cairo_dock_render_desklet_opengl (CairoDesklet *pDesklet)
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity ();
 	
+	g_print ("pouet\n");
 	cairo_dock_notify (CAIRO_DOCK_RENDER_DESKLET, pDesklet);
 	
 	if (gdk_gl_drawable_is_double_buffered (pGlDrawable))

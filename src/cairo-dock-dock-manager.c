@@ -688,6 +688,20 @@ gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix)
 	return cUniqueName;
 }
 
+gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon)
+{
+	g_print ("%s (%s)\n", __func__, pIcon->acName);
+	gchar *cUniqueName = cairo_dock_get_unique_dock_name (pIcon->acName);
+	if (pIcon->acName == NULL || strcmp (pIcon->acName, cUniqueName) != 0)
+	{
+		g_free (pIcon->acName);
+		pIcon->acName = cUniqueName;
+		g_print ("acName <- %s\n", cUniqueName);
+		return TRUE;
+	}
+	return FALSE;
+}
+
 
 void cairo_dock_show_hide_container (CairoContainer *pContainer)
 {

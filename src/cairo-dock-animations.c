@@ -405,6 +405,8 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 void cairo_dock_arm_animation (Icon *icon, CairoDockAnimationType iAnimationType, int iNbRounds)
 {
 	g_return_if_fail (icon != NULL);
+	if (icon->iAnimationState > CAIRO_DOCK_STATE_CLICKED)
+		return ;
 	CairoDockIconType iType = cairo_dock_get_icon_type (icon);
 	if (iAnimationType == -1)
 		icon->iAnimationType = myIcons.tAnimationType[iType];
@@ -434,6 +436,7 @@ void cairo_dock_start_animation (Icon *icon, CairoDock *pDock)
 	cd_message ("%s (%s, %d)", __func__, icon->acName, icon->iAnimationType);
 	if ((icon->iCount > 0 && icon->iAnimationType < CAIRO_DOCK_RANDOM) || icon->fPersonnalScale != 0)
 	{
+		icon->iAnimationState = CAIRO_DOCK_STATE_CLICKED;
 		if (pDock->bIsGrowingUp)
 		{
 			pDock->fFoldingFactor = 0;  /// il ne revient pas a 0 tout seul ?...
@@ -464,17 +467,17 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 		cairo_dock_manage_animations (icon, pDock);
 	}
 	
-	gboolean bContinue = FALSE;
-	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (CAIRO_CONTAINER (pDock)))  // a integrer aux plug-ins, au cas par cas, certains pourront marcher sans opengl (drop-indicator notamment).
+	gboolean bIconIsAnimating, bContinue = FALSE;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
-		for (ic = pDock->icons; ic != NULL; ic = ic->next)
-		{
-			icon = ic->data;
-			cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDock, &bContinue);
-		}
-
-		cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);
+		icon = ic->data;
+		bIconIsAnimating = FALSE;
+		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
+		if (! bIconIsAnimating)
+			icon->iAnimationState = CAIRO_DOCK_STATE_REST;
 	}
+
+	cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);
 	
 	if (pDock->bIsGrowingUp)
 	{
@@ -528,3 +531,38 @@ void cairo_dock_start_growing (CairoDock *pDock)
 	}
 }
 
+
+void cairo_dock_mark_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState)
+{
+	if (pIcon->iAnimationState < iAnimationState)
+	{
+		pIcon->iAnimationState = iAnimationState;
+	}
+}
+void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState)
+{
+	if (pIcon->iAnimationState == iAnimationState)
+	{
+		pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
+	}
+}
+
+
+
+
+gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation)
+{
+	if (pIcon->fPersonnalScale == 0)
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	
+	cairo_dock_update_removing_inserting_icon_size_default (pIcon);
+	if (fabs (pIcon->fPersonnalScale) > 0.05)
+		cairo_dock_mark_icon_as_inserting_removing (pIcon);
+	return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+}
+
+gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
+{
+	cairo_dock_mark_icon_as_inserting_removing (pIcon);  // On prend en charge le dessin de l'icone pendant sa phase d'insertion/suppression.
+	return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+}

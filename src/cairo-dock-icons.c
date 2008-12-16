@@ -39,6 +39,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-background.h"
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-icons.h"
 
 
@@ -60,6 +61,7 @@ void cairo_dock_free_icon (Icon *icon)
 		cairo_dock_deinhibate_class (icon->cClass, icon);
 	if (icon->pModuleInstance != NULL)
 		cairo_dock_deinstanciate_module (icon->pModuleInstance);
+	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);
 	
 	cairo_dock_free_icon_buffers (icon);
 	
@@ -982,7 +984,7 @@ GList *cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, do
 	return pFirstDrawnElement;
 }
 
-void cairo_dock_update_removing_inserting_icon (Icon *icon)
+void cairo_dock_update_removing_inserting_icon_size_default (Icon *icon)
 {
 	if (icon->fPersonnalScale > 0)
 	{

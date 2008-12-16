@@ -631,7 +631,7 @@ void cairo_dock_update_inactivity_on_inhibators (gchar *cClass, Window Xid)
 				cd_message (" %s aussi devient inactive", pInhibatorIcon->acName);
 				///pInhibatorIcon->bIsActive = FALSE;
 				CairoDock *pParentDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);
-				if (pParentDock != NULL && pParentDock->iSidShrinkDown == 0)
+				if (pParentDock != NULL && ! pParentDock->bIsShrinkingDown)
 					cairo_dock_redraw_my_icon (pInhibatorIcon, CAIRO_CONTAINER (pParentDock));
 			}
 		}

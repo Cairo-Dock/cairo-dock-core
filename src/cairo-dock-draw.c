@@ -478,7 +478,7 @@ void cairo_dock_manage_animations (Icon *icon, CairoDock *pDock)
 
 	icon->fDrawY += (1 - icon->fHeightFactor) / 2 * icon->fHeight * icon->fScale;
 	
-	cairo_dock_update_removing_inserting_icon (icon);
+	///cairo_dock_update_removing_inserting_icon_size_default (icon);
 }
 
 static void _cairo_dock_draw_appli_indicator (Icon *icon, cairo_t *pCairoContext, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp)

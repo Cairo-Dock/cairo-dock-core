@@ -1131,6 +1131,8 @@ gboolean CD_APPLET_ON_SCROLL (CairoDockModuleInstance *myApplet, Icon *pClickedI
 #define CD_APPLET_CREATE_MY_SUBDOCK(pIconsList, cRenderer) do { \
 	if (myIcon->acName == NULL) { \
 		CD_APPLET_SET_NAME_FOR_MY_ICON (myIcon->pModuleInstance->pModule->pVisitCard->cModuleName); } \
+	if (cairo_dock_check_unique_subdock_name (myIcon)) { \
+		CD_APPLET_SET_NAME_FOR_MY_ICON (myIcon->acName); } \
 	myIcon->pSubDock = cairo_dock_create_subdock_from_scratch (pIconsList, myIcon->acName, myDock); \
 	cairo_dock_set_renderer (myIcon->pSubDock, cRenderer); \
 	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)

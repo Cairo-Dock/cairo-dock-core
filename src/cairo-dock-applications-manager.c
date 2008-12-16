@@ -784,7 +784,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 							{
 								if (myTaskBar.bAnimateOnActiveWindow)
 									cairo_dock_animate_icon_on_active (icon, pParentDock);
-								else if (pParentDock->iSidShrinkDown == 0)
+								else if (! pParentDock->bIsShrinkingDown)
 									cairo_dock_redraw_my_icon (icon, CAIRO_CONTAINER (pParentDock));
 							}
 							///icon->bIsActive = TRUE;
@@ -797,7 +797,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 							CairoDock *pLastActiveParentDock = cairo_dock_search_dock_from_name (pLastActiveIcon->cParentDockName);
 							if (pLastActiveParentDock != NULL)
 							{
-								if (pLastActiveParentDock->iSidShrinkDown == 0)
+								if (! pLastActiveParentDock->bIsShrinkingDown)
 									cairo_dock_redraw_my_icon (pLastActiveIcon, CAIRO_CONTAINER (pLastActiveParentDock));
 							}
 							else
@@ -989,13 +989,13 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 								else if (myTaskBar.bShowThumbnail && pParentDock != NULL)
 								{
 									_cairo_dock_fill_icon_buffer_with_thumbnail (icon, pParentDock);
-									if (pParentDock->iSidShrinkDown == 0)
+									if (! pParentDock->bIsShrinkingDown)
 										cairo_dock_redraw_my_icon (icon, CAIRO_CONTAINER (pParentDock));
 								}
 								else if (myTaskBar.fVisibleAppliAlpha != 0)
 								{
 									icon->fAlpha = 1;  // on triche un peu.
-									if (pParentDock != NULL && pParentDock->iSidShrinkDown == 0)
+									if (pParentDock != NULL && ! pParentDock->bIsShrinkingDown)
 										cairo_dock_redraw_my_icon (icon, CAIRO_CONTAINER (pParentDock));
 								}
 							}
@@ -1148,6 +1148,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 
 	if (bAnimate && cairo_dock_animation_will_be_visible (pParentDock))
 	{
+		cairo_dock_notify (CAIRO_DOCK_INSERT_ICON, icon, pParentDock);
 		cairo_dock_start_animation (icon, pParentDock);
 	}
 	else

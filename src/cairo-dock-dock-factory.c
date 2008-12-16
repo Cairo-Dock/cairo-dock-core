@@ -247,7 +247,7 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 		
 		g_signal_connect_after (G_OBJECT (pWindow),
 			"realize",
-			G_CALLBACK (on_realize),
+			G_CALLBACK (cairo_dock_on_realize),
 			pDock);
 	}
 
@@ -267,56 +267,58 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 
 	g_signal_connect (G_OBJECT (pWindow),
 		"delete-event",
-		G_CALLBACK (on_delete),
+		G_CALLBACK (cairo_dock_on_delete),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
 		"expose-event",
-		G_CALLBACK (on_expose),
+		G_CALLBACK (cairo_dock_on_expose),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
 		"configure-event",
-		G_CALLBACK (on_configure),
+		G_CALLBACK (cairo_dock_on_configure),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
 		"key-press-event",
-		G_CALLBACK (on_key_press),
+		G_CALLBACK (cairo_dock_on_key_press),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
 		"key-release-event",
-		G_CALLBACK (on_key_release),
+		G_CALLBACK (cairo_dock_on_key_release),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
 		"button-press-event",
-		G_CALLBACK (on_button_press2),
+		G_CALLBACK (cairo_dock_on_button_press),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
 		"button-release-event",
-		G_CALLBACK (on_button_press2),
+		G_CALLBACK (cairo_dock_on_button_press),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
 		"scroll-event",
-		G_CALLBACK (on_scroll),
+		G_CALLBACK (cairo_dock_on_scroll),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
 		"motion-notify-event",
-		G_CALLBACK (on_motion_notify2),
+		G_CALLBACK (cairo_dock_on_motion_notify),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
 		"enter-notify-event",
-		G_CALLBACK (on_enter_notify2),
+		G_CALLBACK (cairo_dock_on_enter_notify),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
 		"leave-notify-event",
-		G_CALLBACK (on_leave_notify2),
+		G_CALLBACK (cairo_dock_on_leave_notify),
 		pDock);
-	cairo_dock_allow_widget_to_receive_data (pWindow, G_CALLBACK (on_drag_data_received), pDock);
+	cairo_dock_allow_widget_to_receive_data (pWindow,
+		G_CALLBACK (cairo_dock_on_drag_data_received),
+		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
 		"drag_motion",
-		G_CALLBACK (on_drag_motion),
+		G_CALLBACK (cairo_dock_on_drag_motion),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
 		"drag_leave",
-		G_CALLBACK (on_drag_leave),
+		G_CALLBACK (cairo_dock_on_drag_leave),
 		pDock);
 	/*g_signal_connect (G_OBJECT (pWindow),
 		"selection_request_event",
@@ -463,10 +465,10 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 		g_source_remove (pDock->iSidPopDown);
 	if (pDock->iSidPopUp != 0)
 		g_source_remove (pDock->iSidPopUp);
-	if (pDock->iSidGrowUp != 0)
+	/*if (pDock->iSidGrowUp != 0)
 		g_source_remove (pDock->iSidGrowUp);
 	if (pDock->iSidShrinkDown != 0)
-		g_source_remove (pDock->iSidShrinkDown);
+		g_source_remove (pDock->iSidShrinkDown);*/
 	if (pDock->iSidLeaveDemand != 0)
 		g_source_remove (pDock->iSidLeaveDemand);
 	if (pDock->iSidIconGlide != 0)
@@ -802,7 +804,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	else if (GTK_WIDGET_VISIBLE (pDock->pWidget))
 	{
 		int iNewWidth, iNewHeight;
-		cairo_dock_get_window_position_and_geometry_at_balance (pDock, (pDock->bInside || pDock->iSidShrinkDown > 0 ? CAIRO_DOCK_MAX_SIZE : CAIRO_DOCK_NORMAL_SIZE), &iNewWidth, &iNewHeight);  // inutile de recalculer Y mais bon...
+		cairo_dock_get_window_position_and_geometry_at_balance (pDock, (pDock->bInside || pDock->bIsShrinkingDown ? CAIRO_DOCK_MAX_SIZE : CAIRO_DOCK_NORMAL_SIZE), &iNewWidth, &iNewHeight);  // inutile de recalculer Y mais bon...
 
 		if (pDock->bHorizontalDock)
 		{
@@ -935,8 +937,11 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	
 	//\______________ On effectue les actions demandees.
 	if (bAnimated)
+	{
 		icon->fPersonnalScale = - 0.95;
-
+		cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);
+		cairo_dock_notify (CAIRO_DOCK_INSERT_ICON, icon, pDock);
+	}
 	if (bUpdateSize)
 		cairo_dock_update_dock_size (pDock);
 

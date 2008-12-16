@@ -92,6 +92,7 @@
 #include "cairo-dock-load.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-desklet.h"
+#include "cairo-dock-animations.h"
 
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
 int g_iWmHint = GDK_WINDOW_TYPE_HINT_DOCK;  // hint pour la fenetre du dock principal.
@@ -517,14 +518,36 @@ int main (int argc, char** argv)
 		cairo_dock_initialize_module_manager (NULL);
 	
 	//\___________________ On enregistre nos notifications.
-	cairo_dock_register_notification (CAIRO_DOCK_BUILD_MENU, (CairoDockNotificationFunc) cairo_dock_notification_build_menu, CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_DROP_DATA, (CairoDockNotificationFunc) cairo_dock_notification_drop_data, CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_CLICK_ICON, (CairoDockNotificationFunc) cairo_dock_notification_click_icon, CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_MIDDLE_CLICK_ICON, (CairoDockNotificationFunc) cairo_dock_notification_middle_click_icon, CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_REMOVE_ICON, (CairoDockNotificationFunc) cairo_dock_notification_remove_icon, CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_RENDER_DOCK, (CairoDockNotificationFunc) cairo_dock_render_dock_notification, CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_RENDER_ICON, (CairoDockNotificationFunc) cairo_dock_render_icon_notification, CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_RENDER_DESKLET, (CairoDockNotificationFunc) cairo_dock_render_desklet_notification, CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_BUILD_MENU,
+		(CairoDockNotificationFunc) cairo_dock_notification_build_menu,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_DROP_DATA,
+		(CairoDockNotificationFunc) cairo_dock_notification_drop_data,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_CLICK_ICON,
+		(CairoDockNotificationFunc) cairo_dock_notification_click_icon,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_MIDDLE_CLICK_ICON,
+		(CairoDockNotificationFunc) cairo_dock_notification_middle_click_icon,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_RENDER_DOCK,
+		(CairoDockNotificationFunc) cairo_dock_render_dock_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_RENDER_ICON,
+		(CairoDockNotificationFunc) cairo_dock_render_icon_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_RENDER_DESKLET,
+		(CairoDockNotificationFunc) cairo_dock_render_desklet_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_INSERT_ICON,
+		(CairoDockNotificationFunc) cairo_dock_on_insert_remove_icon_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_REMOVE_ICON,
+		(CairoDockNotificationFunc) cairo_dock_on_insert_remove_icon_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_UPDATE_ICON,
+		(CairoDockNotificationFunc) cairo_dock_update_inserting_removing_icon_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
 	
 	//\___________________ On initialise la gestion des crash.
 	if (! bTesting)
@@ -546,7 +569,7 @@ int main (int argc, char** argv)
 			cairo_dock_mark_theme_as_modified (FALSE);  // le fichier n'existe pas, on ne proposera pas de sauvegarder ce theme.
 		do
 		{
-			cairo_dock_manage_themes (NULL, bSafeMode ? 2 : 1);
+			cairo_dock_manage_themes (NULL, bSafeMode ? CAIRO_DOCK_START_SAFE : CAIRO_DOCK_START_MAINTENANCE);
 		}
 		while (g_pMainDock == NULL);
 	}

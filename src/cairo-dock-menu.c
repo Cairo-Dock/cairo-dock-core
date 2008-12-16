@@ -197,13 +197,13 @@ static void _cairo_dock_quick_hide (GtkMenuItem *pMenuItem, gpointer *data)
 static void _cairo_dock_quit (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	CairoDock *pDock = data[1];
-	on_delete (pDock->pWidget, NULL, pDock);
+	cairo_dock_on_delete (pDock->pWidget, NULL, pDock);
 }
 
 
-gboolean cairo_dock_notification_remove_icon (Icon *icon, CairoDock *pDock)
+static void _cairo_dock_on_user_remove_icon (Icon *icon, CairoDock *pDock)
 {
-	cd_debug ("%s", icon->acName);
+	cd_debug ("%s (%s)", __func__, icon->acName);
 	
 	if (icon->pSubDock != NULL)
 	{
@@ -211,7 +211,7 @@ gboolean cairo_dock_notification_remove_icon (Icon *icon, CairoDock *pDock)
 		if (! CAIRO_DOCK_IS_URI_LAUNCHER (icon) && ! CAIRO_DOCK_IS_APPLI (icon) && icon->pSubDock->icons != NULL)  // alors on propose de repartir les icones de son sous-dock dans le dock principal.
 		{
 			int answer = cairo_dock_ask_question_and_wait (_("Do you want to re-dispatch the icons contained inside this container into the dock ?\n (otherwise they will be destroyed)"), icon, CAIRO_CONTAINER (pDock));
-			g_return_val_if_fail (answer != GTK_RESPONSE_NONE, CAIRO_DOCK_LET_PASS_NOTIFICATION);
+			g_return_if_fail (answer != GTK_RESPONSE_NONE);
 			if (answer == GTK_RESPONSE_YES)
 				bDestroyIcons = FALSE;
 		}
@@ -219,11 +219,12 @@ gboolean cairo_dock_notification_remove_icon (Icon *icon, CairoDock *pDock)
 		icon->pSubDock = NULL;
 	}
 	
+	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);
 	icon->fPersonnalScale = 1.0;
+	cairo_dock_notify (CAIRO_DOCK_REMOVE_ICON, icon, pDock);
 	cairo_dock_start_animation (icon, pDock);
 	
 	cairo_dock_mark_theme_as_modified (TRUE);
-	return CAIRO_DOCK_INTERCEPT_NOTIFICATION;  // on l'intercepte car on ne peut plus garantir la validite de l'icone apres cela.
 }
 static void _cairo_dock_remove_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 {
@@ -235,7 +236,7 @@ static void _cairo_dock_remove_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 	g_free (question);
 	if (answer == GTK_RESPONSE_YES)
 	{
-		cairo_dock_notify (CAIRO_DOCK_REMOVE_ICON, icon, pDock);
+		_cairo_dock_on_user_remove_icon (icon, pDock);
 	}
 	else
 		g_print ("ok on la garde\n");
@@ -465,7 +466,7 @@ static void _cairo_dock_modify_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 		//g_print ("on force a quitter\n");
 		pDock->bInside = TRUE;
 		pDock->bAtBottom = FALSE;
-		on_leave_notify2 (pDock->pWidget,
+		cairo_dock_on_leave_notify (pDock->pWidget,
 			NULL,
 			pDock);
 	}
@@ -973,7 +974,7 @@ void cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 		pDock->bInside = TRUE;
 		pDock->bAtBottom = FALSE;
 		///cairo_dock_disable_entrance ();  // trop violent, il faudrait trouver un autre truc.
-		on_leave_notify2 (pDock->pWidget,
+		cairo_dock_on_leave_notify (pDock->pWidget,
 			NULL,
 			pDock);
 	}

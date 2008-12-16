@@ -2532,9 +2532,3 @@ msgstr ""
 " et détacher des applets de la même manière.\n"
 " - Déplacement doux des icônes à la souris\n"
 " - Traduction en suédois et partiellement en grec"
-
-#~ msgid "Easy Mode"
-#~ msgstr "Mode simple"
-
-#~ msgid "Advanced mode"
-#~ msgstr "Mode avancé"

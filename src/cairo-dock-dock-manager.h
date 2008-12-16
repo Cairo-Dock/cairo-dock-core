@@ -158,6 +158,7 @@ void cairo_dock_reserve_space_for_all_root_docks (gboolean bReserve);
 
 
 gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix);
+gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon);
 
 void cairo_dock_show_hide_container (CairoContainer *pContainer);
 

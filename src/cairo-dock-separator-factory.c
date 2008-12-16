@@ -82,8 +82,7 @@ cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, d
 			&fIconWidthSaturationFactor,
 			&fIconHeightSaturationFactor);
 
-		pNewSurface = cairo_surface_create_similar (cairo_get_target (pSourceContext),
-			CAIRO_CONTENT_COLOR_ALPHA,
+		pNewSurface = _cairo_dock_create_blank_surface (cairo_get_target (pSourceContext),
 			ceil (*fWidth * fMaxScale),
 			ceil (*fHeight * fMaxScale));
 	}

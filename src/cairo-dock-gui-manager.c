@@ -986,6 +986,7 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 	{
 		g_object_set_data (G_OBJECT (pMainWindow), "action", pAction);
 		g_object_set_data (G_OBJECT (pMainWindow), "action-data", pUserData);
+		g_object_set_data (G_OBJECT (pMainWindow), "free-data", pFreeUserData);
 		g_signal_connect (G_OBJECT (pMainWindow),
 			"delete-event",
 			G_CALLBACK (on_delete_normal_gui),

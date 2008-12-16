@@ -323,6 +323,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
 		glEnable(GL_BLEND);
 		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glBlendFunc (GL_SRC_ALPHA, GL_DST_ALPHA);
 		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		
 		glBlendColor(1., 1., 1., 1.);  // utile ?
