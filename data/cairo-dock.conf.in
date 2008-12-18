@@ -422,6 +422,13 @@ frame_theme=
 #{Directories or themes where to search icons. Put some directories where you have icons you wish to see in the dock, or put some theme's name you've installed on your system. (the order is taken into account during the research). The key word _LocalTheme_ represents the directory ~/.config/cairo-dock/current_theme/icons}/
 default icon directory = _LocalTheme_
 
+#S+ Image's filename to use as a background for icons :
+#{Any format allowed; let this field empty if you don't want to use an image as background.}
+icons bg =
+
+#b+ Use this background for applets too ?
+#{Some applets may not use it, because they redraw periodically themselves.}
+bg for applets = false
 
 #X+[Launchers]
 frame_launcher =
@@ -438,10 +445,6 @@ launcher animation = bounce
 #i+ Number of times the icon will bounce/rotate/blink/etc when clicked :
 launcher number of rounds = 4
 
-#S+ Image's filename to use as a background for launchers:
-#{Any format allowed; let this field empty if you don't want to use an image as background.}
-launcher icons background =
-
 
 #X+[Applications]
 frame_appli =
@@ -457,10 +460,6 @@ appli animation = bounce
 
 #i+ Number of times the icon will bounce/rotate/blink/etc when clicked :
 appli number of rounds = 4
-
-#S+ Image's filename to use as a background for applications:
-#{Any format allowed; let this field empty if you don't want to use an image as background.}
-appli icons background =
 
 #X+[Applets]
 frame_applet =
@@ -639,14 +638,6 @@ retach image =
 
 #gtk-select-color;1;Indicators are extra indications on your icons.
 [Indicators]
-
-#F+[Indicator of drag'n'drop on the dock]
-frame_drop1 =
-
-#S+ Image for the drag'n'drop animation :
-#{Typically an arrow, that will be displayed when you try to drop a new launcher into the dock. Let empty to use the default one.}
-drop indicator =
-
 
 #F+[Indicator of drag'n'drop on icons]
 frame_drop2 =

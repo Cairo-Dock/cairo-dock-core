@@ -50,7 +50,8 @@ void cairo_dock_update_renderer_list_for_gui (void);
 void cairo_dock_update_desklet_decorations_list_for_gui (void);
 void cairo_dock_update_desklet_decorations_list_for_applet_gui (void);
 
-#define CAIRO_DOCK_CONTAINER_IS_OPENGL(pContainer) (g_bUseOpenGL && (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->render_opengl) || (CAIRO_DOCK_IS_DESKLET (pContainer) && CAIRO_DESKLET (pContainer)->pRenderer && CAIRO_DESKLET (pContainer)->pRenderer->render_opengl))
+#define CAIRO_CONTAINER_IS_OPENGL(pContainer) (g_bUseOpenGL && ((CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->render_opengl) || (CAIRO_DOCK_IS_DESKLET (pContainer) && CAIRO_DESKLET (pContainer)->pRenderer && CAIRO_DESKLET (pContainer)->pRenderer->render_opengl)))
+#define CAIRO_DOCK_CONTAINER_IS_OPENGL CAIRO_CONTAINER_IS_OPENGL
 
 G_END_DECLS
 #endif

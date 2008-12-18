@@ -706,6 +706,8 @@ CairoDialog *cairo_dock_build_dialog (const gchar *cText, Icon *pIcon, CairoCont
 	pDialog->iType = CAIRO_DOCK_TYPE_DIALOG;
 	pDialog->iRefCount = 2;  // on l'enleve a la fin.
 	pDialog->pIcon = pIcon;
+	pDialog->fRatio = 1.;
+	
 	g_static_rw_lock_writer_lock (&s_mDialogsMutex);
 	s_pDialogList = g_slist_prepend (s_pDialogList, pDialog);
 	g_static_rw_lock_writer_unlock (&s_mDialogsMutex);

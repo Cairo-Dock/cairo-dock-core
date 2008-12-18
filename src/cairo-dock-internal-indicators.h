@@ -25,7 +25,6 @@ struct _CairoConfigIndicators {
 	gdouble fIndicatorRatio;
 	gboolean bLinkIndicatorWithIcon;
 	gint iIndicatorDeltaY;
-	gchar *cDropIndicatorImagePath;
 	};
 
 

@@ -65,7 +65,8 @@ extern double g_fIndicatorWidth, g_fIndicatorHeight;
 extern cairo_surface_t *g_pActiveIndicatorSurface;
 extern double g_fActiveIndicatorWidth, g_fActiveIndicatorHeight;
 
-extern cairo_surface_t *g_pIconBackgroundImageSurface[2];
+extern cairo_surface_t *g_pIconBackgroundImageSurface;
+extern double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
 
 extern cairo_surface_t *g_pDesktopBgSurface;
 
@@ -295,17 +296,19 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 	cd_debug ("%s () -> %.2fx%.2f", __func__, icon->fWidth, icon->fHeight);
 	
-  //\_____________ On met le background de l'icone si necessaire
-	if(icon->pIconBuffer != NULL &&
-	  (g_pIconBackgroundImageSurface[0] != NULL && CAIRO_DOCK_IS_NORMAL_LAUNCHER(icon)) ||
-	  (g_pIconBackgroundImageSurface[1] != NULL && CAIRO_DOCK_IS_APPLI(icon)))
+	//\_____________ On met le background de l'icone si necessaire
+	if (icon->pIconBuffer != NULL &&
+		g_pIconBackgroundImageSurface != NULL &&
+		(CAIRO_DOCK_IS_NORMAL_LAUNCHER(icon) || CAIRO_DOCK_IS_APPLI(icon) || (myIcons.bBgForApplets && CAIRO_DOCK_IS_APPLET(icon))))
 	{
 		cd_message (">>> %s prendra un fond d'icone", icon->acName);
 
 		cairo_t *pCairoIconBGContext = cairo_create (icon->pIconBuffer);
-		CairoDockIconType iType = cairo_dock_get_icon_type  (icon);
+		cairo_scale(pCairoIconBGContext,
+			icon->fWidth / g_iIconBackgroundImageWidth,
+			icon->fHeight / g_iIconBackgroundImageHeight);
 		cairo_set_source_surface (pCairoIconBGContext,
-			g_pIconBackgroundImageSurface[iType],
+			g_pIconBackgroundImageSurface,
 			0.,
 			0.);
 		cairo_set_operator (pCairoIconBGContext, CAIRO_OPERATOR_DEST_OVER);
@@ -775,60 +778,30 @@ void cairo_dock_load_background_decorations (CairoDock *pDock)
 }
 
 
-void cairo_dock_load_drop_indicator (gchar *cImagePath, cairo_t* pSourceContext, double fMaxScale)
+void cairo_dock_load_icons_background_surface (const gchar *cImagePath, cairo_t* pSourceContext, double fMaxScale)
 {
-	if (g_pDropIndicatorSurface != NULL)
-		cairo_surface_destroy (g_pDropIndicatorSurface);
-	g_pDropIndicatorSurface = cairo_dock_create_surface_from_image (cImagePath,
-		pSourceContext,
-		1.,
-		myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] * fMaxScale,
-		myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] * fMaxScale / 2,
-		CAIRO_DOCK_KEEP_RATIO,
-		&g_fDropIndicatorWidth, &g_fDropIndicatorHeight,
-		NULL, NULL);
-}
-
-void cairo_dock_load_image_background_surface (gchar *cLauncherImagePath, gchar *cAppliImagePath, cairo_t* pSourceContext, double fMaxScale)
-{
-	if (g_pIconBackgroundImageSurface[0] != NULL)
+	if (g_pIconBackgroundImageSurface != NULL)
 	{
-		cairo_surface_destroy (g_pIconBackgroundImageSurface[0]);
-		g_pIconBackgroundImageSurface[0] = NULL;
-	}
-	if (g_pIconBackgroundImageSurface[1] != NULL)
-	{
-		cairo_surface_destroy (g_pIconBackgroundImageSurface[1]);
-		g_pIconBackgroundImageSurface[1] = NULL;
+		cairo_surface_destroy (g_pIconBackgroundImageSurface);
+		g_pIconBackgroundImageSurface = NULL;
 	}
 
-	// On cree deux surfaces: une de la taille des launcher et une de la taille des appli
-	if( cLauncherImagePath != NULL )
+	// On creait deux surfaces: une de la taille des launcher et une de la taille des appli.
+	if( cImagePath != NULL )
 	{
-		double oWidth = 0, oHeight = 0;
+		int iSize = MAX (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI]);
+		if (iSize == 0)
+			iSize = 48;
+		g_iIconBackgroundImageWidth = g_iIconBackgroundImageHeight = 0;
 
-		g_pIconBackgroundImageSurface[0] = cairo_dock_create_surface_from_image (cLauncherImagePath,
-				pSourceContext,
-				fMaxScale,
-				myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER],   /* largeur avant creation [IN] */
-				myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER], /* hauteur avant creation [IN] */
-				CAIRO_DOCK_FILL_SPACE,
-				&oWidth, &oHeight,  /* largeur et hauteur apres creation [OUT] */
-				NULL, NULL); /* zoom applique [OUT] */
-	}
-
-	if( cAppliImagePath != NULL )
-	{
-		double oWidth = 0, oHeight = 0;
-
-		g_pIconBackgroundImageSurface[1] = cairo_dock_create_surface_from_image (cAppliImagePath,
-				pSourceContext,
-				fMaxScale,
-				myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],   /* largeur avant creation [IN] */
-				myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI], /* hauteur avant creation [IN] */
-				CAIRO_DOCK_FILL_SPACE,
-				&oWidth, &oHeight,  /* largeur et hauteur apres creation [OUT] */
-				NULL, NULL); /* zoom applique [OUT] */
+		g_pIconBackgroundImageSurface = cairo_dock_create_surface_from_image (cImagePath,
+			pSourceContext,
+			fMaxScale,
+			iSize,   /* largeur avant creation [IN] */
+			iSize, /* hauteur avant creation [IN] */
+			CAIRO_DOCK_FILL_SPACE,
+			&g_iIconBackgroundImageWidth, &g_iIconBackgroundImageHeight,  /* largeur et hauteur apres creation [OUT] */
+			NULL, NULL); /* zoom applique [OUT] */
 	}
 }
 

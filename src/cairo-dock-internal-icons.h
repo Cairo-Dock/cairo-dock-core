@@ -31,12 +31,13 @@ struct _CairoConfigIcons {
 	gint tAnimationType[CAIRO_DOCK_NB_TYPES];
 	gint tNbAnimationRounds[CAIRO_DOCK_NB_TYPES];
 	gint tIconTypeOrder[CAIRO_DOCK_NB_TYPES];
-	gchar *cBackgroundImagePath[CAIRO_DOCK_NB_TYPES];
+	gchar *cBackgroundImagePath;
 	gboolean bMixAppletsAndLaunchers;
 	gboolean bUseSeparator;
 	gchar *cSeparatorImage;
 	gboolean bRevolveSeparator;
 	gboolean bConstantSeparatorSize;
+	gboolean bBgForApplets;
 	};
 
 #define g_fAmplitude myIcons.fAmplitude

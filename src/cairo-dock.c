@@ -85,6 +85,7 @@
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-gui-manager.h"
@@ -116,8 +117,9 @@ int g_iNbDesktops;  // nombre de bureaux.
 int g_iNbViewportX, g_iNbViewportY;  // nombre de "faces du cube".
 cairo_surface_t *g_pActiveIndicatorSurface = NULL;
 double g_fActiveIndicatorWidth, g_fActiveIndicatorHeight;
-	
-cairo_surface_t *g_pIconBackgroundImageSurface[2] =  {NULL, NULL};  // Surface cairo de l'image de fond pour les icones des launchers [0] et applis [1].
+
+cairo_surface_t *g_pIconBackgroundImageSurface =  NULL;  // Surface cairo de l'image de fond pour les icones des launchers et applis.
+double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
 
 gboolean g_bKeepAbove = FALSE;
 gboolean g_bSkipPager = TRUE;
@@ -535,6 +537,9 @@ int main (int argc, char** argv)
 		CAIRO_DOCK_RUN_FIRST, NULL);
 	cairo_dock_register_notification (CAIRO_DOCK_RENDER_ICON,
 		(CairoDockNotificationFunc) cairo_dock_render_icon_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_RENDER_ICON,
+		(CairoDockNotificationFunc) cairo_dock_render_icon_notification_cairo,
 		CAIRO_DOCK_RUN_FIRST, NULL);
 	cairo_dock_register_notification (CAIRO_DOCK_RENDER_DESKLET,
 		(CairoDockNotificationFunc) cairo_dock_render_desklet_notification,

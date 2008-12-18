@@ -15,7 +15,6 @@ essentialdata_DATA = \
 	cairo-dock.svg\
 	default-icon.svg\
 	default-indicator.png\
-	default-drop-indicator.svg\
 	cairo-dock-ok.svg\
 	cairo-dock-cancel.svg\
 	readme-default-view\

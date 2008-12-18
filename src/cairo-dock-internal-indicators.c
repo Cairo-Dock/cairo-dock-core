@@ -57,17 +57,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 	pIndicators->bLinkIndicatorWithIcon = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "link indicator", &bFlushConfFileNeeded, TRUE, "Icons", NULL);
 	
 	pIndicators->iIndicatorDeltaY = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "indicator deltaY", &bFlushConfFileNeeded, 2, "Icons", NULL);
-	
-	gchar *cDropIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "drop indicator", &bFlushConfFileNeeded, NULL, "Icons", NULL);
-	if (cDropIndicatorImageName != NULL)
-	{
-		pIndicators->cDropIndicatorImagePath = cairo_dock_generate_file_path (cDropIndicatorImageName);
-		g_free (cDropIndicatorImageName);
-	}
-	else
-	{
-		pIndicators->cDropIndicatorImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_DEFAULT_DROP_INDICATOR_NAME);
-	}
 
 	return bFlushConfFileNeeded;
 }
@@ -77,7 +66,6 @@ static void reset_config (CairoConfigIndicators *pIndicators)
 {
 	g_free (pIndicators->cActiveIndicatorImagePath);
 	g_free (pIndicators->cIndicatorImagePath);
-	g_free (pIndicators->cDropIndicatorImagePath);
 }
 
 
@@ -90,10 +78,6 @@ static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicator
 	if (cairo_dock_strings_differ (pPrevIndicators->cIndicatorImagePath, pIndicators->cIndicatorImagePath))
 	{
 		cairo_dock_load_task_indicator (myTaskBar.bShowAppli && myTaskBar.bMixLauncherAppli ? pIndicators->cIndicatorImagePath : NULL, pCairoContext, fMaxScale, pIndicators->fIndicatorRatio);
-	}
-	if (cairo_dock_strings_differ (pPrevIndicators->cDropIndicatorImagePath, pIndicators->cDropIndicatorImagePath))
-	{
-		cairo_dock_load_drop_indicator (pIndicators->cDropIndicatorImagePath, pCairoContext, fMaxScale);
 	}
 	
 	if (cairo_dock_strings_differ (pPrevIndicators->cActiveIndicatorImagePath, pIndicators->cActiveIndicatorImagePath))

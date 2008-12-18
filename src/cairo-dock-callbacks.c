@@ -126,10 +126,13 @@ void cairo_dock_on_realize (GtkWidget* pWidget, CairoDock *pDock)
 	gdk_gl_drawable_gl_end (pGlDrawable);
 }
 
-gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDock)
+gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext)
 {
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	pDock->render_opengl (pDock);
+	if (! pCairoContext)
+	{
+		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		pDock->render_opengl (pDock);
+	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
@@ -162,13 +165,13 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 			else
 			{
 				cairo_dock_notify (CAIRO_DOCK_PRE_RENDER_DOCK, pDock);
-				cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock);
+				cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, NULL);
 			}
 		}
 		else
 		{
 			cairo_dock_notify (CAIRO_DOCK_PRE_RENDER_DOCK, pDock);
-			cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock);
+			cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, NULL);
 		}
 		
 		if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
@@ -185,19 +188,13 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		if (! (pDock->bAutoHide && pDock->iRefCount == 0) || ! pDock->bAtBottom)
 		{
 			cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDock), &pExpose->area, NULL);
-			if (pDock->iSidDropIndicator != 0)
-				cairo_save (pCairoContext);
 			
 			if (pDock->render_optimized != NULL)
 				pDock->render_optimized (pCairoContext, pDock, &pExpose->area);
 			else
 				pDock->render (pCairoContext, pDock);
+			cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
 			
-			if (pDock->iSidDropIndicator != 0)
-			{
-				cairo_restore (pCairoContext);
-				cairo_dock_draw_drop_indicator (pDock, pCairoContext);
-			}
 			cairo_destroy (pCairoContext);
 		}
 		return FALSE;
@@ -213,7 +210,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	else if (!pDock->bAtBottom)
 	{
 		pDock->render (pCairoContext, pDock);
-
+		cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
 	}
 	else
 	{
@@ -225,7 +222,10 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 			//	cairo_dock_render_blank (pDock);
 		}
 		else
+		{
 			pDock->render (pCairoContext, pDock);
+			cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
+		}
 	}
 	
 	//Indicateur de drop, j'ai rajouter le support des surfaces en cache, du coup on ne perd de ressources qu'au dessin.
@@ -1990,11 +1990,6 @@ void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint tim
 	pDock->bCanDrop = FALSE;
 	cairo_dock_stop_marking_icons (pDock);
 	pDock->iAvoidingMouseIconType = -1;
-	if (pDock->iSidDropIndicator != 0)  /// trouver le moyen de le virer ...
-	{
-		g_source_remove (pDock->iSidDropIndicator);
-		pDock->iSidDropIndicator = 0;
-	}
 	cairo_dock_emit_leave_signal (pDock);
 }
 

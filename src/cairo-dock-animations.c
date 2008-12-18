@@ -473,6 +473,7 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 		icon = ic->data;
 		bIconIsAnimating = FALSE;
 		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
+		bContinue |= bIconIsAnimating;
 		if (! bIconIsAnimating)
 			icon->iAnimationState = CAIRO_DOCK_STATE_REST;
 	}
@@ -482,13 +483,20 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 	if (pDock->bIsGrowingUp)
 	{
 		bContinue |= cairo_dock_grow_up (pDock);
+		double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
+		icon->fAlpha *= fDockMagnitude + myIcons.fAlphaAtRest * (1 - fDockMagnitude);
+		gtk_widget_queue_draw (pDock->pWidget);
 	}
 	else if (pDock->bIsShrinkingDown)
 	{
 		bContinue |= cairo_dock_shrink_down (pDock);
+		double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
+		icon->fAlpha *= fDockMagnitude + myIcons.fAlphaAtRest * (1 - fDockMagnitude);
+		gtk_widget_queue_draw (pDock->pWidget);
 	}
+	else if (g_bUseOpenGL && pDock->render_opengl)
+		gtk_widget_queue_draw (pDock->pWidget);
 	
-	gtk_widget_queue_draw (pDock->pWidget);
 	if (! bContinue)
 	{
 		pDock->iSidGLAnimation = 0;

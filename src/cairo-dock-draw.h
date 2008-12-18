@@ -61,6 +61,11 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 */
 void cairo_dock_manage_animations (Icon *icon, CairoDock *pDock);
 
+
+void cairo_dock_set_icon_scale_on_context (cairo_t *pCairoContext, Icon *icon, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp, double fGlideScale);
+
+gboolean cairo_dock_render_icon_notification_cairo (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext);
+
 /**
 *Dessine entierement une icone, dont toutes les caracteristiques ont ete prealablement calculees. Gere sa position, sa transparence (modulee par la transparence du dock au repos), son reflet, son placement de profil, son etiquette, et son info-rapide.
 *@param icon l'icone a dessiner.
@@ -73,8 +78,8 @@ void cairo_dock_manage_animations (Icon *icon, CairoDock *pDock);
 *@param iWidth largeur du container, utilisee pour que les etiquettes n'en debordent pas.
 *@param bDirectionUp TRUE si le dock est oriente vers le haut.
 */
-void cairo_dock_render_one_icon (Icon *icon, cairo_t *pCairoContext, gboolean bHorizontalDock, double fRatio, double fDockMagnitude, gboolean bUseReflect, gboolean bUseText, int iWidth, gboolean bDirectionUp);
-void cairo_dock_render_icons_linear (cairo_t *pCairoContext, CairoDock *pDock, double fRatio);
+void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude, gboolean bUseText);
+void cairo_dock_render_icons_linear (cairo_t *pCairoContext, CairoDock *pDock);
 
 void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, gboolean bUseReflect, gboolean bUseText, int iWidth);
 
@@ -109,9 +114,6 @@ void cairo_dock_set_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, CairoDockSizeType iSizeType, int *iNewWidth, int *iNewHeight);
 
 double cairo_dock_calculate_extra_width_for_trapeze (double fFrameHeight, double fInclination, double fRadius, double fLineWidth);
-
-gboolean cairo_dock_display_drop_indicator (CairoDock *pDock);
-void cairo_dock_draw_drop_indicator (CairoDock *pDock, cairo_t *pCairoContext);
 
 cairo_t *cairo_dock_create_drawing_context (CairoContainer *pContainer);
 cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, GdkRectangle *pArea, double *fBgColor);

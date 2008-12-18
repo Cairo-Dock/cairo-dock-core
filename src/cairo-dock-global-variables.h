@@ -47,7 +47,7 @@ extern gboolean g_bEasterEggs;
 
 extern int g_iBackgroundTexture;
 extern gboolean g_bUseOpenGL;
-extern gdouble g_iGLAnimationDeltaT;
+extern gdouble g_iGLAnimationDeltaT, g_iCairoAnimationDeltaT;
 
 G_END_DECLS
 #endif

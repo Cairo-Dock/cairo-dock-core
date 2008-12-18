@@ -992,8 +992,6 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	gboolean bShowThumbnailOld = myTaskBar.bShowThumbnail;
 	gchar *cIndicatorImagePathOld = myIndicators.cIndicatorImagePath;
 	myIndicators.cIndicatorImagePath = NULL;
-	gchar *cDropIndicatorImagePathOld = myIndicators.cDropIndicatorImagePath;
-	myIndicators.cDropIndicatorImagePath = NULL;
 	gchar *cActiveIndicatorImagePathOld = myIndicators.cActiveIndicatorImagePath;
 	myIndicators.cActiveIndicatorImagePath = NULL;
 	gchar *cDeskletDecorationsNameOld = myDesklets.cDeskletDecorationsName;
@@ -1099,9 +1097,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	
 	cairo_dock_load_task_indicator (myTaskBar.bShowAppli && myTaskBar.bMixLauncherAppli ? myIndicators.cIndicatorImagePath : NULL, pCairoContext, fMaxScale, myIndicators.fIndicatorRatio);
 	
-	cairo_dock_load_drop_indicator (myIndicators.cDropIndicatorImagePath, pCairoContext, fMaxScale);
-	
-  cairo_dock_load_image_background_surface (myIcons.cBackgroundImagePath[CAIRO_DOCK_LAUNCHER], myIcons.cBackgroundImagePath[CAIRO_DOCK_APPLI], pCairoContext, fMaxScale);
+	cairo_dock_load_icons_background_surface (myIcons.cBackgroundImagePath, pCairoContext, fMaxScale);
 
 	cairo_dock_load_active_window_indicator (pCairoContext, myIndicators.cActiveIndicatorImagePath, fMaxScale, myIndicators.iActiveCornerRadius, myIndicators.iActiveLineWidth, myIndicators.fActiveColor);
 	

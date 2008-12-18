@@ -1251,7 +1251,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 
 						pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
 						pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-						gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+						gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 						gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
 						gtk_box_pack_start (GTK_BOX (pHBox),
 							pScrolledWindow,

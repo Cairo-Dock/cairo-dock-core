@@ -168,9 +168,7 @@ void cairo_dock_render_linear (cairo_t *pCairoContext, CairoDock *pDock)
 		cairo_dock_draw_string (pCairoContext, pDock, myIcons.iStringLineWidth, FALSE, FALSE);
 
 	//\____________________ On dessine les icones et les etiquettes, en tenant compte de l'ordre pour dessiner celles en arriere-plan avant celles en avant-plan.
-	double fRatio = (pDock->iRefCount == 0 ? 1 : myViews.fSubDockSizeRatio);
-	fRatio = pDock->fRatio;
-	cairo_dock_render_icons_linear (pCairoContext, pDock, fRatio);
+	cairo_dock_render_icons_linear (pCairoContext, pDock);
 }
 
 
@@ -291,7 +289,7 @@ void cairo_dock_render_optimized_linear (cairo_t *pCairoContext, CairoDock *pDoc
 					icon->fAlpha = 0.4;
 				}
 				
-				cairo_dock_render_one_icon (icon, pCairoContext, pDock->bHorizontalDock, fRatio, fDockMagnitude, pDock->bUseReflect, TRUE, pDock->iCurrentWidth, pDock->bDirectionUp);
+				cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);
 				cairo_restore (pCairoContext);
 			}
 
@@ -415,7 +413,7 @@ void cairo_dock_render_opengl_linear (CairoDock *pDock)
 			
 			glPushMatrix ();
 			
-			cairo_dock_render_one_icon_opengl (icon, pDock, fRatio, fDockMagnitude, TRUE);
+			cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
 			
 			glPopMatrix ();
 			

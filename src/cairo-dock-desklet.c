@@ -255,7 +255,7 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 			cairo_paint_with_alpha (pCairoContext, pDesklet->fForeGroundAlpha);
 	}
 	
-	if (pDesklet->bInside || pDesklet->rotating)
+	if ((pDesklet->bInside || pDesklet->rotating) && ! pDesklet->bPositionLocked)
 	{
 		if (! pDesklet->rotating)
 			cairo_restore (pCairoContext);
@@ -351,7 +351,7 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 		glPopMatrix ();
 	}
 	
-	if (pDesklet->bInside || pDesklet->rotating)
+	if ((pDesklet->bInside || pDesklet->rotating) && ! pDesklet->bPositionLocked)
 	{
 		if (! pDesklet->rotating)
 			glPopMatrix ();
@@ -396,7 +396,6 @@ static void _cairo_dock_render_desklet_opengl (CairoDesklet *pDesklet)
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity ();
 	
-	g_print ("pouet\n");
 	cairo_dock_notify (CAIRO_DOCK_RENDER_DESKLET, pDesklet);
 	
 	if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
@@ -907,6 +906,7 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
 	pDesklet->bIsHorizontal = TRUE;
 	pDesklet->bDirectionUp = TRUE;
 	pDesklet->fZoom = 1;
+	
 	GtkWidget* pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	if (bOnWidgetLayer)
 		gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_UTILITY);

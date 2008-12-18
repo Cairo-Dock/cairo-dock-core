@@ -44,21 +44,26 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackgrou
 	pBackground->fBackgroundImageAlpha = cairo_dock_get_double_key_value (pKeyFile, "Background", "image alpha", &bFlushConfFileNeeded, 0.5, NULL, NULL);
 
 	pBackground->bBackgroundImageRepeat = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "repeat image", &bFlushConfFileNeeded, FALSE, NULL, NULL);
-
-	pBackground->iNbStripes = cairo_dock_get_integer_key_value (pKeyFile, "Background", "number of stripes", &bFlushConfFileNeeded, 10, NULL, NULL);
-
-	pBackground->fStripesWidth = cairo_dock_get_double_key_value (pKeyFile, "Background", "stripes width", &bFlushConfFileNeeded, 0.02, NULL, NULL);
-	if (pBackground->iNbStripes > 0 && pBackground->fStripesWidth > 1. / pBackground->iNbStripes)
+	
+	if (pBackground->cBackgroundImageFile == NULL)
 	{
-		cd_warning ("the stripes' width is greater than the space between them. Consider reducing it.");
-		pBackground->fStripesWidth = 0.99 / pBackground->iNbStripes;
+		pBackground->iNbStripes = cairo_dock_get_integer_key_value (pKeyFile, "Background", "number of stripes", &bFlushConfFileNeeded, 10, NULL, NULL);
+		
+		if (pBackground->iNbStripes != 0)
+		{
+			pBackground->fStripesWidth = cairo_dock_get_double_key_value (pKeyFile, "Background", "stripes width", &bFlushConfFileNeeded, 0.02, NULL, NULL);
+			if (pBackground->fStripesWidth > 1. / pBackground->iNbStripes)
+			{
+				cd_warning ("the stripes' width is greater than the space between them. Consider reducing it.");
+				pBackground->fStripesWidth = 0.99 / pBackground->iNbStripes;
+			}
+		}
+		double couleur3[4] = {.7, .7, 1., .7};
+		cairo_dock_get_double_list_key_value (pKeyFile, "Background", "stripes color dark", &bFlushConfFileNeeded, pBackground->fStripesColorDark, 4, couleur3, NULL, NULL);
+	
+		pBackground->fStripesAngle = cairo_dock_get_double_key_value (pKeyFile, "Background", "stripes angle", &bFlushConfFileNeeded, 30., NULL, NULL);
 	}
-
-	double couleur3[4] = {.7, .7, 1., .7};
-	cairo_dock_get_double_list_key_value (pKeyFile, "Background", "stripes color dark", &bFlushConfFileNeeded, pBackground->fStripesColorDark, 4, couleur3, NULL, NULL);
-
-	pBackground->fStripesAngle = cairo_dock_get_double_key_value (pKeyFile, "Background", "stripes angle", &bFlushConfFileNeeded, 30., NULL, NULL);
-
+	
 	return bFlushConfFileNeeded;
 }
 

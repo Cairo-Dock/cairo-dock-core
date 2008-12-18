@@ -1,5 +1,4 @@
 
-
 #ifndef __CAIRO_DOCK_DARW_OPENGL__
 #define  __CAIRO_DOCK_DARW_OPENGL__
 
@@ -7,12 +6,14 @@
 
 #include "cairo-dock-struct.h"
 
+G_BEGIN_DECLS
+
 
 void cairo_dock_set_icon_scale (Icon *pIcon, CairoDock *pDock, double fZoomFactor);
 
-gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bHasBeenRendered);
+gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext);
 
-void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fRatio, double fDockMagnitude, gboolean bUseText);
+void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDockMagnitude, gboolean bUseText);
 
 GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface);
 
@@ -43,4 +44,6 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double fDockWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, const GLfloat *pVertexTab, int iNbVertex, CairoDockTypeHorizontality bHorizontal, gboolean bDirectionUp);
 void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor, const GLfloat *pVertexTab, int iNbVertex);
 
+
+G_END_DECLS
 #endif

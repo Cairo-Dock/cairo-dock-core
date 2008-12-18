@@ -71,32 +71,35 @@ struct _CairoContainer {
 	CairoDockTypeContainer iType;
 	/// La fenetre du widget.
 	GtkWidget *pWidget;
-	/// Taille de la fenetre. La surface allouee a l'applet s'en deduit.
+	/// Taille de la fenetre.
 	gint iWidth, iHeight;
 	/// Position de la fenetre.
 	gint iWindowPositionX, iWindowPositionY;
-	/// Vrai ssi le pointeur est dans le desklet (widgets fils inclus).
+	/// Vrai ssi le pointeur est dans le container (widgets fils inclus).
 	gboolean bInside;
 	/// TRUE ssi le container est horizontal.
 	CairoDockTypeHorizontality bIsHorizontal;
 	/// TRUE ssi le container est oriente vers le haut.
 	gboolean bDirectionUp;
-	
 #ifdef HAVE_GLITZ
 	glitz_drawable_format_t *pDrawFormat;
 	glitz_drawable_t* pGlitzDrawable;
 	glitz_format_t* pGlitzFormat;
 #else
 	gpointer padding[3];
-#endif // HAVE_GLITZ
+#endif
 	/// Donnees exterieures.
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
-	/// pour l'animation des docks.
+	/// pour l'animation du container.
 	gint iSidGLAnimation;
-	/// derniere position en X du curseur dans le referentiel du dock.
+	/// derniere position en X du curseur dans le referentiel du container.
 	gint iMouseX;
-	/// derniere position en Y du curseur dans le referentiel du dock.
+	/// derniere position en Y du curseur dans le referentiel du container.
 	gint iMouseY;
+	/// zoom applique aux icones du container.
+	gdouble fRatio;
+	/// TRUE ssi le container est reflechissant.
+	gboolean bUseReflect;
 };
 
 #define CAIRO_CONTAINER(p) ((CairoContainer *) (p))
@@ -164,6 +167,10 @@ struct _CairoDock {
 	gint iMouseX;
 	/// derniere position en Y du curseur dans le referentiel du dock.
 	gint iMouseY;
+	/// ratio applique aux icones.
+	gdouble fRatio;
+	/// dit si la vue courante utilise les reflets ou pas (utile pour les plug-ins).
+	gboolean bUseReflect;
 	
 	/// la liste de ses icones.
 	GList* icons;
@@ -200,8 +207,6 @@ struct _CairoDock {
 	gint iDecorationsWidth;
 	/// hauteur des decorations.
 	gint iDecorationsHeight;
-	/// ratio applique aux icones.
-	gdouble fRatio;
 
 	gint iMaxLabelWidth;
 	gint iMinLeftMargin;
@@ -259,7 +264,7 @@ struct _CairoDock {
 	/// serial ID du thread qui enverra le signal de sortie retarde.
 	gint iSidLeaveDemand;
 	/// serial ID du thread qui signale qu'on peut inserer un element dans le dock a cet endroit.
-	gint iSidDropIndicator;
+	gint iSidDropIndicator_deprecated;
 	/// serial ID du thread qui deplace les icones lateralement lors d'un glisse d'icone interne
 	gint iSidIconGlide;
 	
@@ -278,8 +283,6 @@ struct _CairoDock {
 	CairoDockGLRenderFunc render_opengl;
 	/// calculer la position d'un sous-dock.
 	CairoDockSetSubDockPositionFunc set_subdock_position;
-	/// dit si la vue courante utilise les reflets ou pas (utile pour les plug-ins).
-	gboolean bUseReflect;
 	/// decalage du signal d'insertion pour son animation.
 	gint iDropIndicatorOffset;
 	gint iDropIndicatorRotation;
@@ -478,6 +481,8 @@ struct _CairoDialog {
 	gint iMouseX;
 	/// derniere position en Y du curseur dans le referentiel du dock.
 	gint iMouseY;
+	/// ratio des icones (non utilise).
+	gdouble fRatio;
 	/// le moteur de rendu utilise pour dessiner le dialogue.
 	CairoDialogRenderer *pRenderer;
 	/// donnees pouvant etre utilisees par le moteur de rendu.
@@ -836,6 +841,9 @@ struct _CairoDesklet {
 	gint iMouseX;
 	/// derniere position en Y du curseur dans le referentiel du dock.
 	gint iMouseY;
+	/// le facteur de zoom lors du detachage d'une applet.
+	gdouble fZoom;
+	
 	/// le moteur de rendu utilise pour dessiner le desklet.
 	CairoDeskletRenderer *pRenderer;
 	/// donnees pouvant etre utilisees par le moteur de rendu.
@@ -858,8 +866,6 @@ struct _CairoDesklet {
 	gboolean bPositionLocked;
 	/// un timer pour faire apparaitre le desklet avec un effet de zoom lors du detachage d'une applet.
 	gint iSidGrowUp;
-	/// le facteur de zoom correspondant.
-	gdouble fZoom;
 	/// taille a atteindre (fixee par l'utilisateur dans le.conf)
 	gint iDesiredWidth, iDesiredHeight;
 	/// taille connue par l'applet associee.
@@ -978,6 +984,8 @@ struct _CairoFlyingContainer {
 	gint iMouseX;
 	/// derniere position en Y du curseur dans le referentiel du dock.
 	gint iMouseY;
+	gdouble fRatio;
+	gboolean bUseReflect;
 	/// L'icone volante.
 	Icon *pIcon;
 	/// le timer de l'animation.

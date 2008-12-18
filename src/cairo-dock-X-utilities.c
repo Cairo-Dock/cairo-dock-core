@@ -619,12 +619,15 @@ gboolean cairo_dock_support_X_extension (void)
 		XCompositeQueryVersion (s_XDisplay, &major, &minor);  // on regarde si on est au moins dans cette version.
 		if (! (major > 0 || minor >= 2))
 		{
-			cd_warning ("XComposite extension too old");
+			cd_warning ("XComposite extension too old.");
 			return FALSE;
 		}
 	}
 	else
+	{
+		cd_warning ("XComposite extension nto available.");
 		return FALSE;
+	}
 	/*int iDamageError=0;
 	if (! XDamageQueryExtension (s_XDisplay, &g_iDamageEvent, &iDamageError))
 	{
@@ -633,6 +636,7 @@ gboolean cairo_dock_support_X_extension (void)
 	}*/
 	return TRUE;
 #else
+	cd_warning ("The dock was not compiled with the XComposite extension.");
 	return FALSE;
 #endif
 }

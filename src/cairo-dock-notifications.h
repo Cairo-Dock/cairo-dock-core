@@ -76,12 +76,12 @@ typedef gboolean (* CairoDockWindowActivatedFunc) (gpointer pUserData, Window Xi
 typedef gboolean (* CairoDockEnterIconFunc) (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bStartAnimation);
 typedef gboolean (* CairoDockUpdateIconFunc) (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation);
 typedef gboolean (* CairoDockPreRenderIconFunc) (gpointer pUserData, Icon *pIcon, CairoDock *pDock);
-typedef gboolean (* CairoDockRenderIconFunc) (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bHasBeenRendered);
+typedef gboolean (* CairoDockRenderIconFunc) (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext);
 typedef gboolean (* CairoDockStopIconFunc) (gpointer pUserData, Icon *pIcon);
 typedef gboolean (* CairoDockEnterContainerFunc) (gpointer pUserData, CairoContainer *pContainer, gboolean *bStartAnimation);
 typedef gboolean (* CairoDockUpdateContainerFunc) (gpointer pUserData, CairoContainer *pContainer, gboolean *bContinueAnimation);
 typedef gboolean (* CairoDockPreRenderContainerFunc) (gpointer pUserData, CairoContainer *pContainer);
-typedef gboolean (* CairoDockRenderContainerFunc) (gpointer pUserData, CairoContainer *pContainer);
+typedef gboolean (* CairoDockRenderContainerFunc) (gpointer pUserData, CairoContainer *pContainer, cairo_t *pCairoContext);
 typedef gboolean (* CairoDockStopContainerFunc) (gpointer pUserData, CairoContainer *pContainer);
 typedef gboolean (* CairoDockStartDragDataFunc) (gpointer pUserData, CairoDock *pDock, gboolean *bStartAnimation);
 typedef gboolean (* CairoDockAnimateIconFunc) (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gchar *cAnimationName);

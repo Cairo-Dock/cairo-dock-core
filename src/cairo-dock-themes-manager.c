@@ -114,14 +114,15 @@ GHashTable *cairo_dock_list_net_themes (gchar *cServerAdress, GHashTable *hProvi
 		cThemeName = cNetThemesList[i];
 		if (*cThemeName == '#' || *cThemeName == '\0')
 		{
-			g_print ("+ commentaire : %s\n", cThemeName);
+			cd_debug ("+ commentaire : %s", cThemeName);
 			g_free (cThemeName);
 		}
 		else
 		{
-			g_print ("+ theme : %s\n", cThemeName);
+			cd_debug ("+ theme : %s", cThemeName);
 			cThemePath = g_strdup_printf ("%s/%s", cServerAdress, cThemeName);
-			g_hash_table_insert (pThemeTable, cThemeName, cThemePath);
+			g_hash_table_insert (pThemeTable, g_strconcat ("(Net) ", cThemeName, NULL), cThemePath);
+			g_free (cThemeName);
 		}
 	}
 	

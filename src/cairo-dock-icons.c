@@ -42,10 +42,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-icons.h"
 
-
 extern gchar *g_cCurrentLaunchersPath;
-
-
+extern gboolean g_bUseOpenGL;
 
 
 void cairo_dock_free_icon (Icon *icon)
@@ -1360,7 +1358,7 @@ void cairo_dock_mark_icons_as_avoiding_mouse (CairoDock *pDock, CairoDockIconTyp
 	} while (ic != pFirstDrawnElement);
 	
 	pDock->bCanDrop = bCanDrop;
-	if (! pDock->render_opengl)
+	/*if (! pDock->render_opengl || ! g_bUseOpenGL)
 	{
 		if (bCanDrop)
 		{
@@ -1376,7 +1374,7 @@ void cairo_dock_mark_icons_as_avoiding_mouse (CairoDock *pDock, CairoDockIconTyp
 				pDock->iDropIndicatorOffset = 0;
 			}
 		}
-	}
+	}*/
 }
 void cairo_dock_mark_avoiding_mouse_icons_linear (CairoDock *pDock)
 {

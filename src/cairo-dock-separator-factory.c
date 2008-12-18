@@ -24,11 +24,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-separator-factory.h"
 
-extern double g_fSubDockSizeRatio;
-
-extern gboolean g_bHorizontalDock;
-
-
 
 cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp, double *fWidth, double *fHeight)
 {
@@ -82,11 +77,11 @@ cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, d
 			&fIconWidthSaturationFactor,
 			&fIconHeightSaturationFactor);
 
-		pNewSurface = _cairo_dock_create_blank_surface (cairo_get_target (pSourceContext),
+		pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
 			ceil (*fWidth * fMaxScale),
 			ceil (*fHeight * fMaxScale));
 	}
-
+	
 	return pNewSurface;
 }
 
