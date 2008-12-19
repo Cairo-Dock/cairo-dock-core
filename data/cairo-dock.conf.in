@@ -27,7 +27,7 @@ x gap = 0
 #{in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.}
 y gap = 25
 
-#gtk-help;0;How do you access to your docks ?
+#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-accessibility.svg;0;How do you access to your docks ?
 [Accessibility]
 
 #F-[Space;gtk-fullscreen]
@@ -45,7 +45,7 @@ reserve space = false
 frame_auto=
 
 #b- Activate auto-hide ?
-#{The dock will automatically hide itself outside of the scren when the mouse leaves it and will show a callback zone instead. Place the mouse into this zone will make the dock re-appear.}
+#{The dock will automatically hide itself outside of the scren when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.}
 auto-hide = false
 
 #F-[Pop-up;gtk-go-up]
@@ -81,7 +81,7 @@ show delay = 300
 show on click = false
 
 
-#gtk-dnd-multiple;0;Access your applications easily.
+#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-taskbar.png;0;Access your applications easily.
 [TaskBar]
 
 #F-[Behaviour;gtk-properties]
@@ -278,7 +278,7 @@ alpha = 0.5
 reverse visible image = true
 
 
-#gtk-orientation-portrait;1;Set a background to your dock.
+#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-background.svg;1;Set a background to your dock.
 [Background]
 
 #F+[Extern Frame;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-frame.png]
@@ -336,7 +336,7 @@ number of stripes = 15
 stripes width = 0.03
 
 
-#gtk-select-font;1;Define the style of the icons' labels and quick-info.
+#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-labels.png;1;Define the style of the icons' labels and quick-info.
 [Labels]
 
 #i+[0;40] Size of the font :
@@ -374,7 +374,7 @@ text background color =0;0;0;.5
 background for label = false
 
 
-#gtk-about;1;All about the icons.
+#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-icons.svg;1;All about the icons.
 [Icons]
 
 #F+[Wave's shape;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-wave.png]
@@ -510,7 +510,7 @@ icon's type order = launchers;applications;applets
 mix applets with launchers = false
 
 
-#gtk-zoom-fit;1;Today it's Friday, the day of the 'Curve' view !
+#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-views.svg;1;Today it's Friday, the day of the 'Curve' view !
 [Views]
 
 #F+[Main Dock]
@@ -535,7 +535,7 @@ same horizontality = true
 relative icon size = 1.
 
 
-#gtk-dialog-question;1;Let the dock talk to you.
+#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-dialogs.svg;1;Let the dock talk to you.
 [Dialogs]
 
 #F+[Buttons;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-buttons.png]
@@ -590,7 +590,7 @@ message weight = 5
 message italic = false
 
 
-#gtk-convert;1;The applets can be set on your desktop as widgets.
+#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-desklets.png;1;The applets can be set on your desktop as widgets.
 [Desklets]
 
 #d+ Choose a default decoration for all desklets :

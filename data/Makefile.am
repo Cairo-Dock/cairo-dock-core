@@ -5,18 +5,20 @@ essentialdatadir = $(pkgdatadir)
 
 essentialdata_DATA = \
 	cairo-dock.conf\
-	cairo-dock_easy.conf\
 	launcher.conf\
 	container.conf\
 	separator.conf\
 	themes.conf\
 	main-dock.conf\
-	cairo-dock-logo.png\
-	cairo-dock.svg\
 	default-icon.svg\
 	default-indicator.png\
 	cairo-dock-ok.svg\
 	cairo-dock-cancel.svg\
+	hand.svg\
+	rotate-desklet.svg\
+	retach-desklet.svg\
+	cairo-dock-logo.png\
+	cairo-dock.svg\
 	readme-default-view\
 	preview-default.png\
 	ChangeLog.txt\
@@ -28,10 +30,15 @@ essentialdata_DATA = \
 	icon-buttons.png\
 	icon-bubble.png\
 	icon-wave.png\
-	hand.svg\
-	rotate-desklet.svg\
-	retach-desklet.svg\
-	icon-icons.svg
+	icon-icons.svg\
+	icon-dialogs.svg\
+	icon-views.svg\
+	icon-accessibility.svg\
+	icon-labels.png\
+	icon-background.svg\
+	icon-taskbar.png\
+	icon-desklets.png
+	
 	
 EXTRA_DIST = $(essentialdata_DATA)\
 	cairo-dock

@@ -1231,6 +1231,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					else
 					{
 						pOneWidget = gtk_tree_view_new ();
+						//gtk_widget_set (pOneWidget, "height-request", 100, NULL);
 						_allocate_new_model
 						gtk_tree_view_set_model (GTK_TREE_VIEW (pOneWidget), GTK_TREE_MODEL (modele));
 						gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_ORDER, GTK_SORT_ASCENDING);
@@ -1251,6 +1252,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 
 						pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
 						pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
+						gtk_widget_set (pScrolledWindow, "height-request", 100, NULL);
 						gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 						gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
 						gtk_box_pack_start (GTK_BOX (pHBox),
