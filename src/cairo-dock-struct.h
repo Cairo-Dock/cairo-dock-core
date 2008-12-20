@@ -643,7 +643,7 @@ struct _Icon {
 	/// Ordonnee du bord haut de l'image de l'icone.
 	gdouble fDrawY;
 	/// Position de l'icone hors animation.
-	gdouble fDrawXAtRest, fDrawYAtRest;
+	gdouble fDrawXAtRest_deprecated, fDrawYAtRest_deprecated;
 	/// Facteur de zoom sur la largeur de l'icone.
 	gdouble fWidthFactor;
 	/// Facteur de zoom sur la hauteur de l'icone.

@@ -62,7 +62,9 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 void cairo_dock_manage_animations (Icon *icon, CairoDock *pDock);
 
 
-void cairo_dock_set_icon_scale_on_context (cairo_t *pCairoContext, Icon *icon, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp, double fGlideScale);
+void cairo_dock_set_icon_scale_on_context (cairo_t *pCairoContext, Icon *icon, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp);
+
+void cairo_dock_draw_icon_cairo (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext);
 
 gboolean cairo_dock_render_icon_notification_cairo (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext);
 

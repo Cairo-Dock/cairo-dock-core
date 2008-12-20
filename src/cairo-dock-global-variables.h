@@ -40,8 +40,8 @@ extern GLuint g_pGradationTexture[2];
 /// Environnement de bureau detecte.
 extern CairoDockDesktopEnv g_iDesktopEnv;
 
-extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
-extern cairo_surface_t *g_pBackgroundSurface[2];
+extern cairo_surface_t *g_pBackgroundSurfaceFull;
+extern cairo_surface_t *g_pBackgroundSurface;
 
 extern gboolean g_bEasterEggs;
 

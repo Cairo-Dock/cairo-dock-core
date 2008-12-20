@@ -636,7 +636,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 				icon = ic->data;
 				if (icon == s_pIconClicked)
 					continue;
-				if (pDock->iMouseX > s_pIconClicked->fDrawXAtRest + s_pIconClicked->fWidth * s_pIconClicked->fScale /2)  // on a deplace l'icone a droite.
+				if (pDock->iMouseX > s_pIconClicked->fDrawX + s_pIconClicked->fWidth * s_pIconClicked->fScale /2)  // on a deplace l'icone a droite.  // fDrawXAtRest
 				{
 					g_print ("deplacement de %s vers la droite\n", icon->acName);
 					if (icon->fXAtRest > s_pIconClicked->fXAtRest && icon->fDrawX < pDock->iMouseX && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
@@ -1370,12 +1370,12 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 					}
 					if (icon != NULL && ! CAIRO_DOCK_IS_SEPARATOR (icon) && icon == s_pIconClicked)
 					{
-						cairo_dock_arm_animation (icon, -1, -1);
+						///cairo_dock_arm_animation (icon, -1, -1);
 
 						if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick && ! CAIRO_DOCK_IS_APPLI (icon) && ! (pButton->state & GDK_SHIFT_MASK))  // icone de sous-dock.
 						{
 							cairo_dock_show_subdock (icon, FALSE, pDock);
-							cairo_dock_arm_animation (icon, 0, 0);
+							///cairo_dock_arm_animation (icon, 0, 0);
 						}
 						else
 						{
@@ -1384,7 +1384,9 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							if (myAccessibility.cRaiseDockShortcut != NULL)
 								s_bHideAfterShortcut = TRUE;
 							
-							cairo_dock_start_animation (icon, pDock);
+							///cairo_dock_start_animation (icon, pDock);
+							cairo_dock_mark_icon_as_clicked (icon);
+							cairo_dock_launch_animation (pDock);
 						}
 					}
 					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked)  //  && icon->iType == s_pIconClicked->iType

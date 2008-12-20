@@ -88,13 +88,13 @@ void cairo_dock_calculate_max_dock_size_linear (CairoDock *pDock)
 	pDock->iMinDockHeight = pDock->iMaxIconHeight + 2 * myBackground.iFrameMargin + 2 * myBackground.iDockLineWidth;
 	
 	pDock->iMinLeftMargin = fExtraWidth/2;
-        pDock->iMinRightMargin = fExtraWidth/2;
-        Icon *pFirstIcon = cairo_dock_get_first_icon (pDock->icons);
-        if (pFirstIcon != NULL)
-                pDock->iMaxRightMargin = fExtraWidth/2 + pFirstIcon->fWidth;
-        Icon *pLastIcon = cairo_dock_get_last_icon (pDock->icons);
-        if (pLastIcon != NULL)
-                pDock->iMaxRightMargin = fExtraWidth/2 + pLastIcon->fWidth;
+	pDock->iMinRightMargin = fExtraWidth/2;
+	Icon *pFirstIcon = cairo_dock_get_first_icon (pDock->icons);
+	if (pFirstIcon != NULL)
+		pDock->iMaxRightMargin = fExtraWidth/2 + pFirstIcon->fWidth;
+	Icon *pLastIcon = cairo_dock_get_last_icon (pDock->icons);
+	if (pLastIcon != NULL)
+		pDock->iMaxRightMargin = fExtraWidth/2 + pLastIcon->fWidth;
 }
 
 
