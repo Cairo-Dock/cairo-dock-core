@@ -49,6 +49,7 @@ static GSList *s_pCurrentWidgetList = NULL;
 static GtkWidget *s_pToolBar = NULL;
 static GtkWidget *s_pGroupFrame = NULL;
 static GtkWidget *s_pActivateButton = NULL;
+static GSList *s_path = NULL;
 
 extern gchar *g_cConfFile;
 extern CairoDock *g_pMainDock;
@@ -666,6 +667,10 @@ void cairo_dock_show_all_categories (void)
 	gtk_widget_hide (s_pGroupFrame);
 	
 	gtk_window_set_title (GTK_WINDOW (cairo_dock_get_main_window ()), _("Configuration of Cairo-Dock"));
+	if (s_path != NULL && s_path->next != NULL && s_path->next->data == GINT_TO_POINTER (0))
+		s_path = g_slist_delete_link (s_path, s_path);
+	else
+		s_path = g_slist_prepend (s_path, GINT_TO_POINTER (0));
 }
 
 void cairo_dock_show_one_category (int iCategory)
@@ -693,6 +698,10 @@ void cairo_dock_show_one_category (int iCategory)
 	gtk_widget_hide (s_pGroupFrame);
 	
 	gtk_window_set_title (GTK_WINDOW (cairo_dock_get_main_window ()), gettext (cCategoriesDescription[2*iCategory]));
+	if (s_path != NULL && s_path->next != NULL && s_path->next->data == GINT_TO_POINTER (iCategory+1))
+		s_path = g_slist_delete_link (s_path, s_path);
+	else
+		s_path = g_slist_prepend (s_path, GINT_TO_POINTER (iCategory+1));
 }
 
 void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget)
@@ -782,6 +791,10 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 		gtk_widget_set_sensitive (s_pActivateButton, FALSE);
 	}
 	g_signal_handlers_unblock_by_func (s_pActivateButton, on_click_activate_current_group, NULL);
+	if (s_path != NULL && s_path->next != NULL && s_path->next->data == pGroupDescription)
+		s_path = g_slist_delete_link (s_path, s_path);
+	else
+		s_path = g_slist_prepend (s_path, pGroupDescription);
 }
 
 
@@ -858,6 +871,8 @@ void cairo_dock_free_categories (void)
 	cairo_dock_free_generated_widget_list (s_pCurrentWidgetList);
 	s_pCurrentWidgetList = NULL;
 	s_pCurrentGroupWidget = NULL;  // detruit en meme temps que la fenetre.
+	g_slist_free (s_path);
+	s_path = NULL;
 	cairo_dock_config_panel_destroyed ();
 }
 
@@ -1014,4 +1029,20 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 	}
 	
 	return iResult;
+}
+
+
+gpointer cairo_dock_get_previous_widget (void)
+{
+	if (s_path == NULL || s_path->next == NULL)
+	{
+		if (s_path != NULL)  // utile ?...
+		{
+			g_slist_free (s_path);
+			s_path = NULL;
+		}
+		return 0;
+	}
+	
+	return s_path->next->data;
 }

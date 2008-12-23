@@ -348,11 +348,11 @@ void cairo_dock_manage_animations (Icon *icon, CairoDock *pDock)
 		icon->fScale = 1 + myIcons.fAmplitude;
 		icon->fDrawX = pDock->iMouseX  - icon->fWidth * icon->fScale / 2;
 		icon->fDrawY = pDock->iMouseY - icon->fHeight * icon->fScale / 2 ;
-		icon->fAlpha = 0.4;
+		icon->fAlpha = 0.75;
 	}
 	else if (icon->iAnimationType == CAIRO_DOCK_AVOID_MOUSE)
 	{
-		icon->fAlpha = 0.4;
+		icon->fAlpha = 0.75;
 		icon->fDrawX += icon->fWidth / 2 * (icon->fScale - 1) / myIcons.fAmplitude * (icon->fPhase < G_PI/2 ? -1 : 1);
 	}
 	/*if (icon->iCount > 0)
@@ -829,6 +829,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	
 	//\_____________________ On positionne l'icone.
 	gboolean bDrawFullBuffer = (pDock->bUseReflect && icon->pFullIconBuffer != NULL && (! mySystem.bDynamicReflection || icon->fScale == 1) && (icon->iCount == 0 || icon->iAnimationType == CAIRO_DOCK_ROTATE || icon->iAnimationType == CAIRO_DOCK_BLINK));
+	bDrawFullBuffer = FALSE;
 	if (bDrawFullBuffer && ! bDirectionUp)
 	{
 		if (bHorizontalDock)

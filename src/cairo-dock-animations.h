@@ -24,13 +24,6 @@ gboolean cairo_dock_grow_up (CairoDock *pDock);
 gboolean cairo_dock_shrink_down (CairoDock *pDock);
 
 /**
-*Lance l'animation de l'icone. Ne fait rien si l'icone ne sera pas animee.
-*@param icon l'icone a animer.
-*@param pDock le dock contenant l'icone.
-*/
-void cairo_dock_start_animation (Icon *icon, CairoDock *pDock);
-
-/**
 *Definit s'il est utile de lancer l'animation d'un dock (il est inutile de la lancer s'il est manifestement invisible).
 *@param pDock le dock a animer.
 */
@@ -42,6 +35,15 @@ void cairo_dock_launch_animation (CairoDock *pDock);
 void cairo_dock_start_shrinking (CairoDock *pDock);
 
 void cairo_dock_start_growing (CairoDock *pDock);
+
+/**
+*Lance l'animation de l'icone. Ne fait rien si l'icone ne sera pas animee.
+*@param icon l'icone a animer.
+*@param pDock le dock contenant l'icone.
+*/
+void cairo_dock_start_icon_animation (Icon *icon, CairoDock *pDock);
+
+void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds);
 
 
 void cairo_dock_mark_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState);

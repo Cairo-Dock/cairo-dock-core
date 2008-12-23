@@ -685,7 +685,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				CairoDock *pDock = CAIRO_DOCK (pNewContainer);
 				cairo_dock_insert_icon_in_dock (pIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);
 				pIcon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
-				cairo_dock_start_animation (pIcon, pDock);
+				cairo_dock_start_icon_animation (pIcon, pDock);
 			}
 			else
 			{
@@ -1202,10 +1202,8 @@ void cairo_dock_read_module_config (GKeyFile *pKeyFile, CairoDockModuleInstance 
 	
 	gboolean bFlushConfFileNeeded = pInterface->read_conf_file (pInstance, pKeyFile);
 	
-	g_print ("%s : %d\n", pVisitCard->cConfFileName, bFlushConfFileNeeded);
 	if (! bFlushConfFileNeeded)
 		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, pVisitCard->cModuleVersion);
-	g_print ("  %s : %d\n", pVisitCard->cConfFileName, bFlushConfFileNeeded);
 	if (bFlushConfFileNeeded)
 		cairo_dock_flush_conf_file (pKeyFile, pInstance->cConfFilePath, pVisitCard->cShareDataDir, pVisitCard->cConfFileName);
 }

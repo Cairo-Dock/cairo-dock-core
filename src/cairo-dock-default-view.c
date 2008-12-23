@@ -323,16 +323,12 @@ void cairo_dock_render_opengl_linear (CairoDock *pDock)
 		fDockOffsetX = fRadius + fLineWidth / 2;
 	if (fDockOffsetX + fDockWidth + (fRadius + fLineWidth / 2) > pDock->iCurrentWidth)
 		fDockWidth = pDock->iCurrentWidth - fDockOffsetX - (fRadius + fLineWidth / 2);
-	if (! pDock->bDirectionUp)
-	{
-		sens = 1;
-		fDockOffsetY = pDock->iCurrentHeight - (fLineWidth/2 + fRadius);
-	}
+	
+	if ((pDock->bHorizontalDock && ! pDock->bDirectionUp) || (! pDock->bHorizontalDock && pDock->bDirectionUp))
+		fDockOffsetY = pDock->iCurrentHeight - .5 * fLineWidth;
 	else
-	{
-		sens = -1;
-		fDockOffsetY = fLineWidth/2 /*+ fRadius */+ fFrameHeight;
-	}
+		fDockOffsetY = pDock->iDecorationsHeight + 1.5 * fLineWidth;
+	
 	if (! pDock->bHorizontalDock)
 		fDockOffsetX = pDock->iCurrentWidth - fDockOffsetX;
 	

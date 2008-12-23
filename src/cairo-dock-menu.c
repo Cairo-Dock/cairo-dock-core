@@ -222,7 +222,7 @@ static void _cairo_dock_on_user_remove_icon (Icon *icon, CairoDock *pDock)
 	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);
 	icon->fPersonnalScale = 1.0;
 	cairo_dock_notify (CAIRO_DOCK_REMOVE_ICON, icon, pDock);
-	cairo_dock_start_animation (icon, pDock);
+	cairo_dock_start_icon_animation (icon, pDock);
 	
 	cairo_dock_mark_theme_as_modified (TRUE);
 }

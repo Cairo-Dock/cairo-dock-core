@@ -47,6 +47,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-emblem.h" //Drop Indicator
 #include "cairo-dock-flying-container.h"
+#include "cairo-dock-animations.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
@@ -546,7 +547,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 			cairo_dock_drag_flying_container (s_pFlyingContainer, pDock);
 		}
 		
-		if (pDock->bIsShrinkingDown || pMotion->time - fLastTime < mySystem.fRefreshInterval)  // si les icones sont en train de diminuer de taille (suite a un clic) on on laisse l'animation se finir, sinon elle va trop vite.  // || ! pDock->bInside || pDock->bAtBottom
+		if (pMotion->time - fLastTime < mySystem.fRefreshInterval && s_pIconClicked == NULL)  // pDock->bIsShrinkingDown ||
 		{
 			gdk_device_get_state (pMotion->device, pMotion->window, NULL, NULL);
 			return FALSE;
@@ -971,7 +972,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		cairo_dock_free_flying_container (s_pFlyingContainer);
 		pFlyingIcon->iCount = 0;
 		cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);
-		cairo_dock_start_animation (pFlyingIcon, pDock);
+		cairo_dock_start_icon_animation (pFlyingIcon, pDock);
 		s_pFlyingContainer = NULL;
 	}
 
@@ -1294,25 +1295,16 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 				if (! bSuccess)
 					bSuccess = cairo_dock_simulate_key_sequence (icon->acCommand);
 			}
-			/// Trouver un moyen de contourner l'animation...
-			/**if (bSuccess)
+			if (! bSuccess)
 			{
-				if (CAIRO_DOCK_IS_APPLI (icon))  // on remet l'animation du lanceur.
-					cairo_dock_arm_animation_by_type (icon, CAIRO_DOCK_LAUNCHER);
+				cairo_dock_request_icon_animation (icon, pDock, "blink", 1);  // 1 clignotement si echec
 			}
-			else
-				cairo_dock_arm_animation (icon, CAIRO_DOCK_BLINK, 1);  // 1 clignotement si echec.*/
 			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 		}
 		else
 		{
 			icon->iCount = 0;
 		}
-	}
-	else if (icon != NULL)
-	{
-		cd_message ("No known action");
-		icon->iCount = 0;
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -1426,14 +1418,13 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						cairo_dock_move_icon_after_icon (pDock, s_pIconClicked, prev_icon);
 
 						pDock->calculate_icons (pDock);
-						gtk_widget_queue_draw (pWidget);
 
 						if (! CAIRO_DOCK_IS_SEPARATOR (s_pIconClicked))
 						{
-							/// notifier d'un clic avec "bounce:2" ...
-							/**cairo_dock_arm_animation (s_pIconClicked, CAIRO_DOCK_BOUNCE, 2);  // 2 rebonds.
-							cairo_dock_start_animation (s_pIconClicked, pDock);*/
+							cairo_dock_request_icon_animation (s_pIconClicked, pDock, "bounce", 2);
 						}
+						if (pDock->iSidGLAnimation == 0)
+							gtk_widget_queue_draw (pDock->pWidget);
 					}
 					
 					if (s_pFlyingContainer != NULL)
@@ -1446,7 +1437,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							cairo_dock_free_flying_container (s_pFlyingContainer);
 							pFlyingIcon->iCount = 0;
 							cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);
-							cairo_dock_start_animation (pFlyingIcon, pDock);
+							cairo_dock_start_icon_animation (pFlyingIcon, pDock);
 						}
 						else
 						{
@@ -1878,9 +1869,7 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 						gchar *cCommand = g_strdup_printf ("%s '%s'", icon->acCommand, cReceivedData);
 						g_spawn_command_line_async (cCommand, NULL);
 						g_free (cCommand);
-						/// notifier d'un clic avec "blink:2" ...
-						/**cairo_dock_arm_animation (icon, CAIRO_DOCK_BLINK, 2);  // 2 clignotements.
-						cairo_dock_start_animation (icon, pDock);*/
+						cairo_dock_request_icon_animation (icon, pDock, "blink", 2);
 						return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 					}
 				}

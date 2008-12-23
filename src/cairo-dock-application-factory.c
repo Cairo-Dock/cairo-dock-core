@@ -658,8 +658,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock)
 		cairo_dock_show_temporary_dialog_with_icon (icon->acName, icon, CAIRO_CONTAINER (pDock), myTaskBar.iDialogDuration, "same icon");
 	if (myTaskBar.bDemandsAttentionWithAnimation)
 	{
-		/**cairo_dock_arm_animation (icon, -1, 1e6);  // animation sans fin.
-		cairo_dock_start_animation (icon, pDock);*/
+		cairo_dock_request_icon_animation (icon, pDock, "default", 0);
 	}
 }
 void cairo_dock_appli_demands_attention (Icon *icon)

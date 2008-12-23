@@ -59,5 +59,8 @@ void cairo_dock_reload_current_group_widget (void);
 gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData);
 
 
+gpointer cairo_dock_get_previous_widget (void);
+
+
 G_END_DECLS
 #endif

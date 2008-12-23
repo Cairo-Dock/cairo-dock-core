@@ -27,10 +27,11 @@ extern GHashTable *g_hDocksTable;
 extern gboolean g_bUseOpenGL;
 
 
-static GHashTable *s_hRendererTable = NULL;  // table des fonctions de rendus de dock.
-static GHashTable *s_hDeskletRendererTable = NULL;  // table des fonctions de rendus des desklets.
-static GHashTable *s_hDialogRendererTable = NULL;  // table des fonctions de rendus des dialogues.
+static GHashTable *s_hRendererTable = NULL;  // table des rendus de dock.
+static GHashTable *s_hDeskletRendererTable = NULL;  // table des rendus des desklets.
+static GHashTable *s_hDialogRendererTable = NULL;  // table des rendus des dialogues.
 static GHashTable *s_hDeskletDecorationsTable = NULL;  // table des decorations des desklets.
+static GHashTable *s_hAnimationsTable = NULL;  // table des animations disponibles.
 
 
 CairoDockRenderer *cairo_dock_get_renderer (const gchar *cRendererName, gboolean bForMainDock)
@@ -188,6 +189,11 @@ void cairo_dock_initialize_renderer_manager (void)
 		g_free,
 		(GFreeFunc) cairo_dock_free_desklet_decoration);
 	
+	s_hAnimationsTable = g_hash_table_new_full (g_str_hash,
+		g_str_equal,
+		g_free,
+		NULL);
+	
 	cairo_dock_register_default_renderer ();
 }
 
@@ -335,4 +341,25 @@ void cairo_dock_update_desklet_decorations_list_for_gui (void)
 void cairo_dock_update_desklet_decorations_list_for_applet_gui (void)
 {
 	cairo_dock_build_desklet_decorations_list_for_applet_gui (s_hDeskletDecorationsTable);
+}
+
+
+static int iNbAnimation = 0;
+int cairo_dock_register_animation (const gchar *cAnimation)
+{
+	cd_message ("%s (%s)", __func__, cAnimation);
+	g_hash_table_insert (s_hAnimationsTable, g_strdup (cAnimation), GINT_TO_POINTER (iNbAnimation));
+	iNbAnimation ++;
+	return iNbAnimation-1;
+}
+
+int cairo_dock_get_animation_id (const gchar *cAnimation)
+{
+	g_return_val_if_fail (cAnimation != NULL, -1);
+	return GPOINTER_TO_INT (g_hash_table_lookup (s_hAnimationsTable, cAnimation));
+}
+
+void cairo_dock_unregister_animation (const gchar *cAnimation)
+{
+	g_hash_table_remove (s_hAnimationsTable, cAnimation);
 }

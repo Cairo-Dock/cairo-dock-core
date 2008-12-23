@@ -50,6 +50,12 @@ void cairo_dock_update_renderer_list_for_gui (void);
 void cairo_dock_update_desklet_decorations_list_for_gui (void);
 void cairo_dock_update_desklet_decorations_list_for_applet_gui (void);
 
+
+int cairo_dock_register_animation (const gchar *cAnimation);
+int cairo_dock_get_animation_id (const gchar *cAnimation);
+void cairo_dock_unregister_animation (const gchar *cAnimation);
+
+
 #define CAIRO_CONTAINER_IS_OPENGL(pContainer) (g_bUseOpenGL && ((CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->render_opengl) || (CAIRO_DOCK_IS_DESKLET (pContainer) && CAIRO_DESKLET (pContainer)->pRenderer && CAIRO_DESKLET (pContainer)->pRenderer->render_opengl)))
 #define CAIRO_DOCK_CONTAINER_IS_OPENGL CAIRO_CONTAINER_IS_OPENGL
 

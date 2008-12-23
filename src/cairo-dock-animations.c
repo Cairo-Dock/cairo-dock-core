@@ -403,34 +403,26 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 
 
 
-void cairo_dock_start_animation (Icon *icon, CairoDock *pDock)
+void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 {
-	if (pDock == NULL)
+	g_return_if_fail (pIcon != NULL && pDock != NULL);
+	cd_message ("%s (%s, %d)", __func__, pIcon->acName, pIcon->iAnimationState);
+	
+	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST && cairo_dock_animation_will_be_visible (pDock))
 	{
-		icon->iCount = 0;
-		return ;
-	}
-	cd_message ("%s (%s, %d)", __func__, icon->acName, icon->iAnimationType);
-	if ((icon->iCount > 0 && icon->iAnimationType < CAIRO_DOCK_RANDOM) || icon->fPersonnalScale != 0)
-	{
-		icon->iAnimationState = CAIRO_DOCK_STATE_CLICKED;
-		if (pDock->bIsGrowingUp)
-		{
-			pDock->fFoldingFactor = 0;  /// il ne revient pas a 0 tout seul ?...
-			pDock->bIsGrowingUp = FALSE;
-		}
-		cairo_dock_start_shrinking (pDock);
-		/*if (pDock->iSidGrowUp != 0)
-		{
-			pDock->fFoldingFactor = 0;
-			g_source_remove (pDock->iSidGrowUp);
-			pDock->iSidGrowUp = 0;
-		}
-		if (pDock->iSidShrinkDown == 0)
-			pDock->iSidShrinkDown = g_timeout_add (50, (GSourceFunc) cairo_dock_shrink_down, (gpointer) pDock);  // fera diminuer de taille les icones, et rebondir/tourner/clignoter celle qui est animee.*/
+		pDock->fFoldingFactor = 0;  // utile ?...
+		cairo_dock_launch_animation (pDock);
 	}
 }
 
+void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)
+{
+	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon);
+	pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
+	
+	cairo_dock_notify (CAIRO_DOCK_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
+	cairo_dock_start_icon_animation (pIcon, pDock);
+}
 
 static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 {
@@ -482,6 +474,7 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 
 void cairo_dock_launch_animation (CairoDock *pDock)
 {
+	g_print ("%s ()\n", __func__);
 	if (pDock->iSidGLAnimation == 0)
 	{
 		if (g_bUseOpenGL && pDock->render_opengl != NULL)
@@ -546,5 +539,11 @@ gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserD
 gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
 	cairo_dock_mark_icon_as_inserting_removing (pIcon);  // On prend en charge le dessin de l'icone pendant sa phase d'insertion/suppression.
+	
+	if (pIcon->fPersonnalScale == 0.05)
+	{
+		
+	}
+	
 	return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 }

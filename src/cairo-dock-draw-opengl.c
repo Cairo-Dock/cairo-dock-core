@@ -1001,11 +1001,11 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 		// OM(t) = sum ([k=0..n] Bn,k(t)*OAk)
 		// Bn,k(x) = Cn,k*x^k*(1-x)^(n-k)
 		double t = 180-a;
-		double x0 = -w_;
+		double x0 = -w_ + rw * cos (t*RADIAN);
 		double y0 = -h + rh * sin (t*RADIAN);
-		double x1 = -w_ - fInclination * rw * (1+sina);
+		double x1 = x0 - fInclination * rw * (1+sina);
 		double y1 = -h - rh;
-		double x2 = -w - dw;
+		double x2 = -w_;
 		double y2 = y1;
 		for (t=0; t<=1; t+=.05, i++) // bas gauche.
 		{

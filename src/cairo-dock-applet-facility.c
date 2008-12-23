@@ -271,12 +271,6 @@ void cairo_dock_set_size_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, Ca
 	}
 }
 
-void cairo_dock_animate_icon (Icon *pIcon, CairoDock *pDock, CairoDockAnimationType iAnimationType, int iNbRounds)
-{
-	/**cairo_dock_arm_animation (pIcon, iAnimationType, iNbRounds);
-	cairo_dock_start_animation (pIcon, pDock);*/
-}
-
 
 gchar* cairo_dock_manage_themes_for_applet (gchar *cAppletShareDataDir, gchar *cThemeDirName, gchar *cAppletConfFilePath, GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName, const gchar *cExtraDirName)
 {

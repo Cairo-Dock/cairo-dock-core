@@ -940,6 +940,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	{
 		icon->fPersonnalScale = - 0.95;
 		cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);
+		icon->iAnimationState = CAIRO_DOCK_STATE_REST;
 		cairo_dock_notify (CAIRO_DOCK_INSERT_ICON, icon, pDock);
 	}
 	if (bUpdateSize)

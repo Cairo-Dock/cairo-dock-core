@@ -37,6 +37,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-dialogs.h"
+#include "cairo-dock-animations.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-icons.h"
@@ -647,12 +648,11 @@ gboolean cairo_dock_window_is_on_current_desktop (int Xid)
 
 void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 {
-	if ((icon->iCount == 0 || icon->iCount > 1e5) && icon->fPersonnalScale == 0)  // sinon on laisse l'animation actuelle.
+	if (icon->fPersonnalScale == 0)  // sinon on laisse l'animation actuelle.
 	{
-		if (cairo_dock_animation_will_be_visible (pParentDock) && ! pParentDock->bInside && myTaskBar.bAnimateOnActiveWindow)
+		if (cairo_dock_animation_will_be_visible (pParentDock) && myTaskBar.bAnimateOnActiveWindow && ! pParentDock->bInside && icon->iAnimationState == CAIRO_DOCK_STATE_REST)
 		{
-			/**cairo_dock_arm_animation (icon, CAIRO_DOCK_WOBBLY, 1);  // une deformation. il faut choisir une animation qui ne necessite pas que la fenetre du dock soit de taille maximale.
-			cairo_dock_start_animation (icon, pParentDock);*/
+			cairo_dock_request_icon_animation (icon, pParentDock, "wobbly", 1);
 		}
 	}
 }
@@ -1149,7 +1149,8 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	if (bAnimate && cairo_dock_animation_will_be_visible (pParentDock))
 	{
 		cairo_dock_notify (CAIRO_DOCK_INSERT_ICON, icon, pParentDock);
-		cairo_dock_start_animation (icon, pParentDock);
+		//cairo_dock_start_icon_animation (icon, pParentDock);
+		cairo_dock_start_shrinking (pParentDock);
 	}
 	else
 	{
@@ -1188,7 +1189,8 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gdouble 
 					icon->fPersonnalScale = 1.0;
 				//g_print ("icon->fPersonnalScale <- %.2f\n", icon->fPersonnalScale);
 				
-				cairo_dock_start_animation (icon, pParentDock);
+				//cairo_dock_start_icon_animation (icon, pParentDock);
+				cairo_dock_start_shrinking (pParentDock);
 			}
 			else
 			{

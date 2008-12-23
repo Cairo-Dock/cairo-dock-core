@@ -47,6 +47,7 @@ typedef enum {
 static GtkListStore *s_pRendererListStore = NULL;
 static GtkListStore *s_pDecorationsListStore = NULL;
 static GtkListStore *s_pDecorationsListStore2 = NULL;
+static GtkListStore *s_pAnimationsListStore = NULL;
 
 static void _cairo_dock_activate_one_element (GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
 {
@@ -585,6 +586,28 @@ void cairo_dock_build_desklet_decorations_list_for_applet_gui (GHashTable *pHash
 	_cairo_dock_add_one_decoration_item ("default", NULL, s_pDecorationsListStore2);
 	g_hash_table_foreach (pHashTable, (GHFunc) _cairo_dock_add_one_decoration_item, s_pDecorationsListStore2);
 }
+static void _cairo_dock_add_one_animation_item (gchar *cName, gint iAnimationID, GtkListStore *pModele)
+{
+	GtkTreeIter iter;
+	memset (&iter, 0, sizeof (GtkTreeIter));
+	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
+	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
+		CAIRO_DOCK_MODEL_NAME, gettext (cName),
+		CAIRO_DOCK_MODEL_RESULT, cName,
+		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
+		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
+}
+void cairo_dock_build_animations_list_for_gui (GHashTable *pHashTable)
+{
+	if (s_pAnimationsListStore != NULL)
+		g_object_unref (s_pAnimationsListStore);  // gtk_list_store_clear (s_pRendererListStore) fait planter :-(
+	
+	s_pAnimationsListStore = gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF);
+	
+	_cairo_dock_add_one_animation_item ("", NULL, s_pAnimationsListStore);
+	g_hash_table_foreach (pHashTable, (GHFunc) _cairo_dock_add_one_animation_item, s_pAnimationsListStore);
+}
+
 
 static gboolean _cairo_dock_test_one_name (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
 {
@@ -1097,7 +1120,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						FALSE,
 						0);
 				break ;
-
+				
+				case 'a' :
+					
+				break ;
+				
 				case 'd' :
 				case 'o' :
 					cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);

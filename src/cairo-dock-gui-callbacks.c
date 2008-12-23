@@ -29,7 +29,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 extern gchar *g_cConfFile;
 extern CairoDock *g_pMainDock;
-static GSList *s_path = NULL;
 static CairoDialog *s_pDialog = NULL;
 
 void on_click_category_button (GtkButton *button, gpointer *data)
@@ -37,14 +36,12 @@ void on_click_category_button (GtkButton *button, gpointer *data)
 	int iCategory = GPOINTER_TO_INT (data);
 	g_print ("%s (%d)\n", __func__, iCategory);
 	cairo_dock_show_one_category (iCategory);
-	s_path = g_slist_prepend (s_path, GINT_TO_POINTER (iCategory+1));
 }
 
 void on_click_all_button (GtkButton *button, gpointer *data)
 {
 	g_print ("%s ()\n", __func__);
 	cairo_dock_show_all_categories ();
-	s_path = g_slist_prepend (s_path, GINT_TO_POINTER (0));
 }
 
 static void _show_group (CairoDockGroupDescription *pGroupDescription)
@@ -82,24 +79,14 @@ void on_click_group_button (GtkButton *button, CairoDockGroupDescription *pGroup
 {
 	g_print ("%s (%s)\n", __func__, pGroupDescription->cGroupName);
 	_show_group (pGroupDescription);
-	s_path = g_slist_prepend (s_path, pGroupDescription);
 }
 
 void on_click_back_button (GtkButton *button, gpointer *data)
 {
-	if (s_path == NULL || s_path->next == NULL)
-	{
-		if (s_path != NULL)
-		{
-			g_slist_free (s_path);
-			s_path = NULL;
-		}
+	gpointer pPrevPlace = cairo_dock_get_previous_widget ();
+	if (pPrevPlace == NULL)
 		cairo_dock_show_all_categories ();
-		return ;
-	}
-	
-	gpointer pPrevPlace = s_path->next->data;
-	if ((int)pPrevPlace < 10)  // categorie.
+	else if ((int)pPrevPlace < 10)  // categorie.
 	{
 		if (pPrevPlace == 0)
 			cairo_dock_show_all_categories ();
@@ -113,8 +100,6 @@ void on_click_back_button (GtkButton *button, gpointer *data)
 	{
 		_show_group (pPrevPlace);
 	}
-	
-	s_path = g_slist_delete_link (s_path, s_path);
 }
 
 void on_enter_group_button (GtkButton *button, CairoDockGroupDescription *pGroupDescription)
@@ -372,8 +357,6 @@ gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBl
 			g_main_loop_quit (pBlockingLoop);
 	}
 	cairo_dock_free_categories ();
-	g_slist_free (s_path);
-	s_path = NULL;
 	return FALSE;
 }
 

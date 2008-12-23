@@ -115,15 +115,6 @@ typedef enum {
 
 
 /**
-*Prepare l'animation d'une icone, et la lance immediatement.
-*@param pIcon  l'icone a animer.
-*@param pDock le dock contenant l'icone.
-*@param iAnimationType le type d'animation voulu, ou -1 pour utiliser l'animtion correspondante au type de l'icone.
-*@param iNbRounds le nombre de fois ou l'animation sera jouee, ou -1 pour utiliser la valeur correspondante au type de l'icone.
-*/
-void cairo_dock_animate_icon (Icon *pIcon, CairoDock *pDock, CairoDockAnimationType iAnimationType, int iNbRounds);
-
-/**
 *Liste les themes contenu dans un repertoire, met a jour le fichier de conf avec, et renvoie le chemin correspondant au theme choisi.
 *@param cAppletShareDataDir chemin du repertoire contenant les donnees de l'applet.
 *@param cThemeDirName nom du sous-repertoire regroupant tous les themes.
@@ -630,7 +621,7 @@ void about (GtkMenuItem *menu_item, CairoDockModuleInstance *myApplet);
 /**
 *Abonne l'applet aux notifications du clic gauche. A effectuer lors de l'init de l'applet.
 */
-#define CD_APPLET_REGISTER_FOR_CLICK_EVENT cairo_dock_register_notification (CAIRO_DOCK_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_CLICK, CAIRO_DOCK_RUN_FIRST, myApplet);
+#define CD_APPLET_REGISTER_FOR_CLICK_EVENT cairo_dock_register_notification (CAIRO_DOCK_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_CLICK, CAIRO_DOCK_RUN_AFTER, myApplet);
 /**
 *Desabonne l'applet aux notifications du clic gauche. A effectuer lors de l'arret de l'applet.
 */
@@ -810,7 +801,7 @@ gboolean CD_APPLET_ON_BUILD_MENU (CairoDockModuleInstance *myApplet, Icon *pClic
 /**
 *Abonne l'applet aux notifications du clic du milieu. A effectuer lors de l'init de l'applet.
 */
-#define CD_APPLET_REGISTER_FOR_MIDDLE_CLICK_EVENT cairo_dock_register_notification (CAIRO_DOCK_MIDDLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK, CAIRO_DOCK_RUN_FIRST, myApplet)
+#define CD_APPLET_REGISTER_FOR_MIDDLE_CLICK_EVENT cairo_dock_register_notification (CAIRO_DOCK_MIDDLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK, CAIRO_DOCK_RUN_AFTER, myApplet)
 /**
 *Desabonne l'applet aux notifications du clic du milieu. A effectuer lors de l'arret de l'applet.
 */
@@ -1069,8 +1060,8 @@ gboolean CD_APPLET_ON_SCROLL (CairoDockModuleInstance *myApplet, Icon *pClickedI
 *@param iAnimationType type de l'animation (un #CairoDockAnimationType).
 *@param iAnimationLength duree de l'animation, en nombre de tours.
 */
-#define CD_APPLET_ANIMATE_MY_ICON(iAnimationType, iAnimationLength) \
-	cairo_dock_animate_icon (myIcon, myDock, iAnimationType, iAnimationLength)
+#define CD_APPLET_ANIMATE_MY_ICON(cAnimationName, iAnimationLength) \
+	cairo_dock_request_icon_animation (myIcon, myDock, cAnimationName, iAnimationLength)
 
 /**
 *Charge une image dans une surface, aux dimensions de l'icone de l'applet.
