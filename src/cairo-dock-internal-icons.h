@@ -28,8 +28,6 @@ struct _CairoConfigIcons {
 	gpointer *pDefaultIconDirectory;
 	gint tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
 	gint tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
-	gint tAnimationType[CAIRO_DOCK_NB_TYPES];
-	gint tNbAnimationRounds[CAIRO_DOCK_NB_TYPES];
 	gint tIconTypeOrder[CAIRO_DOCK_NB_TYPES];
 	gchar *cBackgroundImagePath;
 	gboolean bMixAppletsAndLaunchers;

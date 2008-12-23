@@ -3,6 +3,9 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glx.h>
 
 #include <cairo-dock/cairo-dock-struct.h>
 #include <cairo-dock/cairo-dock-callbacks.h>

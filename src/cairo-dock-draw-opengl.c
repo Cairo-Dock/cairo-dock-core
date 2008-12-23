@@ -27,9 +27,9 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #include <gtk/gtkgl.h>
 #include <X11/extensions/Xrender.h> 
-#include <GL/gl.h> 
-#include <GL/glu.h> 
-#include <GL/glx.h> 
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glx.h>
 #include <gdk/x11/gdkglx.h>
 
 #include "cairo-dock-load.h"
@@ -281,7 +281,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		glPushMatrix ();
 		double x0, y0, x1, y1;
 		double fScale = ((myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon)) ? 1. : pIcon->fScale);
-		double fReflectRatio = myIcons.fReflectSize / pIcon->fHeight / fScale;
+		double fReflectRatio = myIcons.fReflectSize / pIcon->fHeight / fScale  / pIcon->fHeightFactor;
 		double fOffsetY = pIcon->fHeight * fScale/2 + myIcons.fReflectSize/2 + pIcon->fDeltaYReflection;
 		if (pDock->bHorizontalDock)
 		{

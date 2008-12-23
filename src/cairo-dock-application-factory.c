@@ -37,6 +37,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-application-factory.h"
 
 
@@ -657,8 +658,8 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock)
 		cairo_dock_show_temporary_dialog_with_icon (icon->acName, icon, CAIRO_CONTAINER (pDock), myTaskBar.iDialogDuration, "same icon");
 	if (myTaskBar.bDemandsAttentionWithAnimation)
 	{
-		cairo_dock_arm_animation (icon, -1, 1e6);  // animation sans fin.
-		cairo_dock_start_animation (icon, pDock);
+		/**cairo_dock_arm_animation (icon, -1, 1e6);  // animation sans fin.
+		cairo_dock_start_animation (icon, pDock);*/
 	}
 }
 void cairo_dock_appli_demands_attention (Icon *icon)
@@ -683,8 +684,7 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon)
 	icon->bIsDemandingAttention = FALSE;
 	if (myTaskBar.bDemandsAttentionWithDialog)
 		cairo_dock_remove_dialog_if_any (icon);
-	if (myTaskBar.bDemandsAttentionWithAnimation)
-		cairo_dock_arm_animation (icon, 0, 0);  // arrete son animation quelqu'elle soit.
+	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);  // arrete son animation quelqu'elle soit.
 }
 void cairo_dock_appli_stops_demanding_attention (Icon *icon)
 {

@@ -355,7 +355,7 @@ void cairo_dock_manage_animations (Icon *icon, CairoDock *pDock)
 		icon->fAlpha = 0.4;
 		icon->fDrawX += icon->fWidth / 2 * (icon->fScale - 1) / myIcons.fAmplitude * (icon->fPhase < G_PI/2 ? -1 : 1);
 	}
-	if (icon->iCount > 0)
+	/*if (icon->iCount > 0)
 		icon->iCount --;
 	return ;
 	
@@ -481,7 +481,7 @@ void cairo_dock_manage_animations (Icon *icon, CairoDock *pDock)
 
 	icon->fDrawY += (1 - icon->fHeightFactor) / 2 * icon->fHeight * icon->fScale;
 	
-	///cairo_dock_update_removing_inserting_icon_size_default (icon);
+	///cairo_dock_update_removing_inserting_icon_size_default (icon);*/
 }
 
 static void _cairo_dock_draw_appli_indicator (Icon *icon, cairo_t *pCairoContext, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp)
@@ -1285,7 +1285,7 @@ void cairo_dock_redraw_my_icon (Icon *icon, CairoContainer *pContainer)
 	{
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
 		if (pDock->bUseReflect)
-			fReflectSize = myIcons.fReflectSize * icon->fScale * fabs (icon->fHeightFactor);
+			fReflectSize = myIcons.fReflectSize * icon->fScale * fabs (icon->fHeightFactor) + icon->fDeltaYReflection;
 		if (pDock->bAtBottom && (pDock->iRefCount > 0 || pDock->bAutoHide))  // inutile de redessiner.
 			return ;
 	}
@@ -1307,7 +1307,7 @@ void cairo_dock_redraw_my_icon (Icon *icon, CairoContainer *pContainer)
 		rect.width = (int) ceil (icon->fHeight * icon->fScale * fabs (icon->fHeightFactor) + fReflectSize) + 1;
 		rect.height = (int) ceil (icon->fWidth * icon->fScale * fabs (icon->fWidthFactor));
 	}
-	//g_print ("rect (%d;%d) (%dx%d)\n", rect.x, rect.y, rect.width, rect.height);
+	//g_print ("rect (%d;%d) (%dx%d) (%.2f)\n", rect.x, rect.y, rect.width, rect.height, fReflectSize);
 	if (rect.width > 0 && rect.height > 0)
 	{
 #ifdef HAVE_GLITZ

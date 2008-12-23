@@ -727,7 +727,7 @@ static void _cairo_dock_foreach_icons_in_dock (gchar *cDockName, CairoDock *pDoc
 void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUserData)
 {
 	gpointer data[2] = {pFunction, pUserData};
-	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_foreach_icons_in_dock, pFunction);
+	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_foreach_icons_in_dock, data);
 }
 
 

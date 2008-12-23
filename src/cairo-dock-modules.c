@@ -915,44 +915,6 @@ void cairo_dock_update_conf_file_with_active_modules (void)
 	g_free (cModuleNames);
 }
 
-/*void cairo_dock_update_conf_file_with_modules_full (GKeyFile *pOpenedKeyFile, gchar *cConfFile, gchar *cGroupName, gchar *cKeyNameBase, gboolean bActiveOnly)
-{
-	cd_debug ("%s (%s ; %d)", __func__, cConfFile, bActiveOnly);
-	GKeyFile *pKeyFile = pOpenedKeyFile;
-	if (pKeyFile == NULL)
-	{
-		pKeyFile = g_key_file_new ();
-		GError *erreur = NULL;
-		g_key_file_load_from_file (pKeyFile, cConfFile, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-		if (erreur != NULL)
-		{
-			cd_warning (erreur->message);
-			g_error_free (erreur);
-			return ;
-		}
-	}
-	
-	GString **pStrings = cairo_dock_list_modules_by_category (bActiveOnly);
-	GString *sKeyName = g_string_new (cKeyNameBase);
-	int i;
-	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
-	{
-		g_string_printf (sKeyName, "%s_%d", cKeyNameBase, i);
-		if (bActiveOnly)
-			g_key_file_set_string (pKeyFile, cGroupName, sKeyName->str, pStrings[i]->str);
-		else
-			cairo_dock_update_conf_file_with_list (pKeyFile, NULL, pStrings[i]->str, cGroupName, sKeyName->str, NULL);
-		//g_print ("%s <- %s\n", sKeyName->str, pStrings[i]->str);
-		g_string_free (pStrings[i], TRUE);
-	}
-	cairo_dock_write_keys_to_file (pKeyFile, cConfFile);
-	
-	g_free (pStrings);
-	g_string_free (sKeyName, TRUE);
-	if (pOpenedKeyFile == NULL)
-		g_key_file_free (pKeyFile);
-}*/
-
 
 int cairo_dock_get_nb_modules (void)
 {
@@ -1240,9 +1202,10 @@ void cairo_dock_read_module_config (GKeyFile *pKeyFile, CairoDockModuleInstance 
 	
 	gboolean bFlushConfFileNeeded = pInterface->read_conf_file (pInstance, pKeyFile);
 	
-	
+	g_print ("%s : %d\n", pVisitCard->cConfFileName, bFlushConfFileNeeded);
 	if (! bFlushConfFileNeeded)
 		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, pVisitCard->cModuleVersion);
+	g_print ("  %s : %d\n", pVisitCard->cConfFileName, bFlushConfFileNeeded);
 	if (bFlushConfFileNeeded)
 		cairo_dock_flush_conf_file (pKeyFile, pInstance->cConfFilePath, pVisitCard->cShareDataDir, pVisitCard->cConfFileName);
 }

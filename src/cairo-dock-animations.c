@@ -207,7 +207,7 @@ gboolean cairo_dock_grow_up (CairoDock *pDock)
 	Icon *pPointedIcon = pDock->calculate_icons (pDock);
 	//gtk_widget_queue_draw (pDock->pWidget);
 	
-	if (pLastPointedIcon != pPointedIcon)
+	if (pLastPointedIcon != pPointedIcon && pDock->bInside)
 		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
 
 	if (pDock->bIsGrowingUp && pDock->iMagnitudeIndex == CAIRO_DOCK_NB_MAX_ITERATIONS && pDock->fFoldingFactor == 0)  // fin de grossissement.
@@ -402,29 +402,6 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 }
 
 
-void cairo_dock_arm_animation (Icon *icon, CairoDockAnimationType iAnimationType, int iNbRounds)
-{
-	g_return_if_fail (icon != NULL);
-	if (icon->iAnimationState > CAIRO_DOCK_STATE_CLICKED)
-		return ;
-	CairoDockIconType iType = cairo_dock_get_icon_type (icon);
-	if (iAnimationType == -1)
-		icon->iAnimationType = myIcons.tAnimationType[iType];
-	else
-		icon->iAnimationType = iAnimationType;
-
-	if (icon->iAnimationType == CAIRO_DOCK_RANDOM)
-		icon->iAnimationType = g_random_int_range (0, CAIRO_DOCK_NB_ANIMATIONS-1);  // [a;b[
-
-	if (iNbRounds == -1)
-		iNbRounds = myIcons.tNbAnimationRounds[iType];
-	icon->iCount = MAX (0, g_tNbIterInOneRound[icon->iAnimationType] * iNbRounds - 1);
-}
-
-void cairo_dock_arm_animation_by_type (Icon *icon, CairoDockIconType iType)
-{
-	cairo_dock_arm_animation (icon, myIcons.tAnimationType[iType], myIcons.tNbAnimationRounds[iType]);
-}
 
 void cairo_dock_start_animation (Icon *icon, CairoDock *pDock)
 {
@@ -458,19 +435,16 @@ void cairo_dock_start_animation (Icon *icon, CairoDock *pDock)
 static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 {
 	//g_print ("%s (%d)\n", __func__, pDock->iMagnitudeIndex);
+	gboolean bIconIsAnimating, bContinue = FALSE;
 	Icon *icon;
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
+		
 		icon->fDeltaYReflection = 0;
 		cairo_dock_manage_animations (icon, pDock);
-	}
-	
-	gboolean bIconIsAnimating, bContinue = FALSE;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
+		
 		bIconIsAnimating = FALSE;
 		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
 		bContinue |= bIconIsAnimating;
@@ -510,7 +484,7 @@ void cairo_dock_launch_animation (CairoDock *pDock)
 {
 	if (pDock->iSidGLAnimation == 0)
 	{
-		if (pDock->render_opengl != NULL)
+		if (g_bUseOpenGL && pDock->render_opengl != NULL)
 			pDock->iSidGLAnimation = g_timeout_add (g_iGLAnimationDeltaT, (GSourceFunc)_cairo_dock_gl_animation, pDock);
 		else
 			pDock->iSidGLAnimation = g_timeout_add (g_iCairoAnimationDeltaT, (GSourceFunc)_cairo_dock_gl_animation, pDock);

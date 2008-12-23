@@ -135,11 +135,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "launcher width", &bFlushConfFileNeeded, 48, "Launchers", "max icon size");
 	
 	pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "launcher height", &bFlushConfFileNeeded, 48, "Launchers", "max icon size");
-	
-	pIcons->tAnimationType[CAIRO_DOCK_LAUNCHER] = cairo_dock_get_animation_type_key_value (pKeyFile, "Icons", "launcher animation", &bFlushConfFileNeeded, CAIRO_DOCK_BOUNCE, "Launchers", "animation type");
-
-	pIcons->tNbAnimationRounds[CAIRO_DOCK_LAUNCHER] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "launcher number of rounds", &bFlushConfFileNeeded, 3, "Launchers", "number of animation rounds");
-	
+		
 	gchar *cLauncherBackgroundImageName = cairo_dock_get_string_key_value (pKeyFile, "Icons", "icons bg", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	if (cLauncherBackgroundImageName != NULL)
 	{
@@ -152,19 +148,11 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLI] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "appli width", &bFlushConfFileNeeded, 48, "Applications", "max icon size");
 
 	pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLI] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "appli height", &bFlushConfFileNeeded, 48, "Applications", "max icon size");
-
-	pIcons->tAnimationType[CAIRO_DOCK_APPLI] = cairo_dock_get_animation_type_key_value (pKeyFile, "Icons", "appli animation", &bFlushConfFileNeeded, CAIRO_DOCK_ROTATE, "Applications", "animation type");
-
-	pIcons->tNbAnimationRounds[CAIRO_DOCK_APPLI] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "appli number of rounds", &bFlushConfFileNeeded, 2, "Applications", "number of animation rounds");
 	
 	//\___________________ Parametres des applets.
 	pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLET] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "applet width", &bFlushConfFileNeeded, 48, "Applets", "max icon size");
 
 	pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLET] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "applet height", &bFlushConfFileNeeded, 48, "Applets", "max icon size");
-
-	pIcons->tAnimationType[CAIRO_DOCK_APPLET] = cairo_dock_get_animation_type_key_value (pKeyFile, "Icons", "applet animation", &bFlushConfFileNeeded, CAIRO_DOCK_ROTATE, "Applets", "animation type");
-
-	pIcons->tNbAnimationRounds[CAIRO_DOCK_APPLET] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "applet number of rounds", &bFlushConfFileNeeded, 2, "Applets", "number of animation rounds");
 	
 	//\___________________ Parametres des separateurs.
 	pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "separator width", &bFlushConfFileNeeded, 48, "Separators", "min icon size");

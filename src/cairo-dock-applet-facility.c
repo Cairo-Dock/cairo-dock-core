@@ -273,8 +273,8 @@ void cairo_dock_set_size_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, Ca
 
 void cairo_dock_animate_icon (Icon *pIcon, CairoDock *pDock, CairoDockAnimationType iAnimationType, int iNbRounds)
 {
-	cairo_dock_arm_animation (pIcon, iAnimationType, iNbRounds);
-	cairo_dock_start_animation (pIcon, pDock);
+	/**cairo_dock_arm_animation (pIcon, iAnimationType, iNbRounds);
+	cairo_dock_start_animation (pIcon, pDock);*/
 }
 
 

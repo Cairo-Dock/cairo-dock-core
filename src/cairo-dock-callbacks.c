@@ -385,6 +385,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 	{
 		s_iSidShowAppliForDrop = g_timeout_add (500, (GSourceFunc) _cairo_dock_show_xwindow_for_drop, (gpointer) pPointedIcon);
 	}
+	
 	if ((pDock == s_pLastPointedDock || s_pLastPointedDock == NULL) && pLastPointedIcon != NULL && pLastPointedIcon->pSubDock != NULL)
 	{
 		CairoDock *pSubDock = pLastPointedIcon->pSubDock;
@@ -628,7 +629,6 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		
 		if (pPointedIcon != NULL && s_pIconClicked != NULL && cairo_dock_get_icon_order (s_pIconClicked) == cairo_dock_get_icon_order (pPointedIcon))
 		{
-			/// parcourir les icones et renseigner iGlideDirection.
 			Icon *icon;
 			GList *ic;
 			for (ic = pDock->icons; ic != NULL; ic = ic->next)
@@ -636,7 +636,8 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 				icon = ic->data;
 				if (icon == s_pIconClicked)
 					continue;
-				if (pDock->iMouseX > s_pIconClicked->fDrawX + s_pIconClicked->fWidth * s_pIconClicked->fScale /2)  // on a deplace l'icone a droite.  // fDrawXAtRest
+				//if (pDock->iMouseX > s_pIconClicked->fDrawXAtRest + s_pIconClicked->fWidth * s_pIconClicked->fScale /2)  // on a deplace l'icone a droite.  // fDrawXAtRest
+				if (s_pIconClicked->fXAtRest < pPointedIcon->fXAtRest)  // on a deplace l'icone a droite.
 				{
 					g_print ("deplacement de %s vers la droite\n", icon->acName);
 					if (icon->fXAtRest > s_pIconClicked->fXAtRest && icon->fDrawX < pDock->iMouseX && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
@@ -686,12 +687,6 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	cairo_dock_notify (CAIRO_DOCK_MOUSE_MOVED, pDock, &bStartAnimation);
 	if (bStartAnimation)
 		cairo_dock_launch_animation (pDock);
-	
-	//g_print ("%x -> %x\n", pLastPointedIcon, pPointedIcon);
-	if (pPointedIcon != pLastPointedIcon || s_pLastPointedDock == NULL)
-	{
-		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
-	}
 	
 	return FALSE;
 }
@@ -1299,13 +1294,14 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 				if (! bSuccess)
 					bSuccess = cairo_dock_simulate_key_sequence (icon->acCommand);
 			}
-			if (bSuccess)
+			/// Trouver un moyen de contourner l'animation...
+			/**if (bSuccess)
 			{
 				if (CAIRO_DOCK_IS_APPLI (icon))  // on remet l'animation du lanceur.
 					cairo_dock_arm_animation_by_type (icon, CAIRO_DOCK_LAUNCHER);
 			}
 			else
-				cairo_dock_arm_animation (icon, CAIRO_DOCK_BLINK, 1);  // 1 clignotement si echec.
+				cairo_dock_arm_animation (icon, CAIRO_DOCK_BLINK, 1);  // 1 clignotement si echec.*/
 			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 		}
 		else
@@ -1370,12 +1366,9 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 					}
 					if (icon != NULL && ! CAIRO_DOCK_IS_SEPARATOR (icon) && icon == s_pIconClicked)
 					{
-						///cairo_dock_arm_animation (icon, -1, -1);
-
 						if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick && ! CAIRO_DOCK_IS_APPLI (icon) && ! (pButton->state & GDK_SHIFT_MASK))  // icone de sous-dock.
 						{
 							cairo_dock_show_subdock (icon, FALSE, pDock);
-							///cairo_dock_arm_animation (icon, 0, 0);
 						}
 						else
 						{
@@ -1384,7 +1377,6 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							if (myAccessibility.cRaiseDockShortcut != NULL)
 								s_bHideAfterShortcut = TRUE;
 							
-							///cairo_dock_start_animation (icon, pDock);
 							cairo_dock_mark_icon_as_clicked (icon);
 							cairo_dock_launch_animation (pDock);
 						}
@@ -1438,8 +1430,9 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 
 						if (! CAIRO_DOCK_IS_SEPARATOR (s_pIconClicked))
 						{
-							cairo_dock_arm_animation (s_pIconClicked, CAIRO_DOCK_BOUNCE, 2);  // 2 rebonds.
-							cairo_dock_start_animation (s_pIconClicked, pDock);
+							/// notifier d'un clic avec "bounce:2" ...
+							/**cairo_dock_arm_animation (s_pIconClicked, CAIRO_DOCK_BOUNCE, 2);  // 2 rebonds.
+							cairo_dock_start_animation (s_pIconClicked, pDock);*/
 						}
 					}
 					
@@ -1885,8 +1878,9 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 						gchar *cCommand = g_strdup_printf ("%s '%s'", icon->acCommand, cReceivedData);
 						g_spawn_command_line_async (cCommand, NULL);
 						g_free (cCommand);
-						cairo_dock_arm_animation (icon, CAIRO_DOCK_BLINK, 2);  // 2 clignotements.
-						cairo_dock_start_animation (icon, pDock);
+						/// notifier d'un clic avec "blink:2" ...
+						/**cairo_dock_arm_animation (icon, CAIRO_DOCK_BLINK, 2);  // 2 clignotements.
+						cairo_dock_start_animation (icon, pDock);*/
 						return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 					}
 				}

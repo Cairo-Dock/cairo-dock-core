@@ -651,8 +651,8 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 	{
 		if (cairo_dock_animation_will_be_visible (pParentDock) && ! pParentDock->bInside && myTaskBar.bAnimateOnActiveWindow)
 		{
-			cairo_dock_arm_animation (icon, CAIRO_DOCK_WOBBLY, 1);  // une deformation. il faut choisir une animation qui ne necessite pas que la fenetre du dock soit de taille maximale.
-			cairo_dock_start_animation (icon, pParentDock);
+			/**cairo_dock_arm_animation (icon, CAIRO_DOCK_WOBBLY, 1);  // une deformation. il faut choisir une animation qui ne necessite pas que la fenetre du dock soit de taille maximale.
+			cairo_dock_start_animation (icon, pParentDock);*/
 		}
 	}
 }

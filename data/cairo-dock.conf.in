@@ -439,13 +439,6 @@ launcher width = 0
 #i+[0;128] ...
 launcher height = 0
 
-#r+[bounce;rotate;blink;pulse;upside-down;wobbly;random] Animation type when clicked :
-launcher animation = bounce
-
-#i+ Number of times the icon will bounce/rotate/blink/etc when clicked :
-launcher number of rounds = 4
-
-
 #X+[Applications]
 frame_appli =
 
@@ -455,12 +448,6 @@ appli width = 0
 #i+[0;128] ...
 appli height = 0
 
-#r+[bounce;rotate;blink;pulse;upside-down;wobbly;random] Animation type when clicked :
-appli animation = bounce
-
-#i+ Number of times the icon will bounce/rotate/blink/etc when clicked :
-appli number of rounds = 4
-
 #X+[Applets]
 frame_applet =
 
@@ -469,12 +456,6 @@ frame_applet =
 applet width = 0
 #i+[0;128] ...
 applet height = 0
-
-#r+[bounce;rotate;blink;pulse;upside-down;wobbly;random] Animation type when clicked :
-applet animation = bounce
-
-#i+ Number of times the icon will bounce/rotate/blink/etc when clicked :
-applet number of rounds = 4
 
 #X+[Separators]
 frame_sep =
