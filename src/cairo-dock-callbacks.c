@@ -48,6 +48,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-emblem.h" //Drop Indicator
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-animations.h"
+#include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
@@ -1280,7 +1281,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	}
 	else if (CAIRO_DOCK_IS_LAUNCHER (icon))
 	{
-		if (icon->acCommand != NULL)
+		if (icon->acCommand != NULL && strcmp (icon->acCommand, "none") != 0)
 		{
 			gboolean bSuccess = FALSE;
 			if (*icon->acCommand == '<')
@@ -1300,10 +1301,6 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 				cairo_dock_request_icon_animation (icon, pDock, "blink", 1);  // 1 clignotement si echec
 			}
 			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-		}
-		else
-		{
-			icon->iCount = 0;
 		}
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -1423,7 +1420,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						{
 							cairo_dock_request_icon_animation (s_pIconClicked, pDock, "bounce", 2);
 						}
-						if (pDock->iSidGLAnimation == 0)
+						if (pDock->iSidGLAnimation == 0 || ! CAIRO_DOCK_CONTAINER_IS_OPENGL (CAIRO_CONTAINER (pDock)))
 							gtk_widget_queue_draw (pDock->pWidget);
 					}
 					

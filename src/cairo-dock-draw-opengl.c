@@ -26,7 +26,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #endif
 
 #include <gtk/gtkgl.h>
-#include <X11/extensions/Xrender.h> 
+#include <X11/extensions/Xrender.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glx.h>
@@ -171,7 +171,7 @@ static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDo
 	glColor4f(1., 1., 1., 1.);
 	glNormal3f (0., 0., 1.);
 	
-	cairo_dock_set_icon_scale (icon, pDock, 1.);
+	cairo_dock_set_icon_scale (icon, pDock, fRatio);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
 	glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);  // Bottom Right Of The Texture and Quad
@@ -188,7 +188,7 @@ void cairo_dock_set_icon_scale (Icon *pIcon, CairoDock *pDock, double fZoomFacto
 	{
 		if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon))
 		{
-			glScalef (pIcon->fWidth / 2, pIcon->fHeight / 2, pIcon->fHeight / 2);
+			glScalef (pIcon->fWidth * fZoomFactor, pIcon->fHeight * fZoomFactor, pIcon->fHeight * fZoomFactor);
 		}
 		else
 		{
@@ -201,7 +201,7 @@ void cairo_dock_set_icon_scale (Icon *pIcon, CairoDock *pDock, double fZoomFacto
 	{
 		if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon))
 		{
-			glScalef (pIcon->fHeight / 2, pIcon->fWidth / 2, pIcon->fWidth / 2);
+			glScalef (pIcon->fHeight * fZoomFactor, pIcon->fWidth * fZoomFactor, pIcon->fWidth * fZoomFactor);
 		}
 		else
 		{
@@ -264,7 +264,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 	glColor4f(1., 1., 1., pIcon->fAlpha);
 	
 	glPushMatrix ();
-	cairo_dock_set_icon_scale (pIcon, pDock, 1.);
+	cairo_dock_set_icon_scale (pIcon, pDock, pDock->fRatio);
 	glNormal3f(0,0,1);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
@@ -337,31 +337,52 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		glEnable(GL_BLEND);
 		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//glBlendFunc (GL_SRC_ALPHA, GL_DST_ALPHA);
+		//glBlendFunc (GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
 		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		
-		glBlendColor(1., 1., 1., 1.);  // utile ?
+		//glBlendColor(1., 1., 1., 1.);  // utile ?
 		
 		glPolygonMode (GL_FRONT, GL_FILL);
 		glColor4f(1., 1., 1., 1.);
 		
 		glBegin(GL_QUADS);
 		
-		glTexCoord2f (x0, y0);
-		glColor4f (1., 1., 1., 0.);
-		glVertex3f (-.5, .5, 0.);  // Bottom Left Of The Texture and Quad
-		
-		glTexCoord2f (x1, y0);
-		glColor4f (1., 1., 1., 0.);
-		glVertex3f (.5, .5, 0.);  // Bottom Right Of The Texture and Quad
-		
-		glTexCoord2f (x1, y1);
-		glColor4f (1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);
-		glVertex3f (.5, -.5, 0.);  // Top Right Of The Texture and Quad
-		
-		glTexCoord2f (x0, y1);
-		glColor4f (1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);
-		glVertex3f (-.5, -.5, 0.);  // Top Left Of The Texture and Quad
-		
+		if (pDock->bHorizontalDock)
+		{
+			glTexCoord2f (x0, y0);
+			glColor4f (1., 1., 1., 0.);
+			glVertex3f (-.5, .5, 0.);  // Bottom Left Of The Texture and Quad
+			
+			glTexCoord2f (x1, y0);
+			glColor4f (1., 1., 1., 0.);
+			glVertex3f (.5, .5, 0.);  // Bottom Right Of The Texture and Quad
+			
+			glTexCoord2f (x1, y1);
+			glColor4f (1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);
+			glVertex3f (.5, -.5, 0.);  // Top Right Of The Texture and Quad
+			
+			glTexCoord2f (x0, y1);
+			glColor4f (1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);
+			glVertex3f (-.5, -.5, 0.);  // Top Left Of The Texture and Quad
+		}
+		else
+		{
+			glTexCoord2f (x0, y0);
+			glColor4f (1., 1., 1., 0.);
+			glVertex3f (-.5, .5, 0.);  // Bottom Left Of The Texture and Quad
+			
+			glTexCoord2f (x1, y0);
+			glColor4f (1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);
+			glVertex3f (.5, .5, 0.);  // Bottom Right Of The Texture and Quad
+			
+			glTexCoord2f (x1, y1);
+			glColor4f (1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);
+			glVertex3f (.5, -.5, 0.);  // Top Right Of The Texture and Quad
+			
+			glTexCoord2f (x0, y1);
+			glColor4f (1., 1., 1., 0.);
+			glVertex3f (-.5, -.5, 0.);  // Top Left Of The Texture and Quad
+		}
 		glEnd();
 		
 		/**glActiveTexture(GL_TEXTURE0_ARB); // Go pour le multitexturing 1ere passe
@@ -975,14 +996,14 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 	double cosa = 1. / sqrt (1 + fInclination * fInclination);
 	double sina = cosa * fInclination;
 	
-	*fExtraWidth = fInclination * (fFrameHeight - (bRoundedBottomCorner ? 2 : 1-cosa) * fRadius) + fRadius * (bRoundedBottomCorner ? 1 : cosa);
+	*fExtraWidth = fInclination * (fFrameHeight - (bRoundedBottomCorner ? 2 : 1-cosa) * fRadius) + fRadius * (bRoundedBottomCorner ? 1 : sina);
 	double fTotalWidth = fDockWidth + 2*(*fExtraWidth);
-	double dw = fInclination * (fFrameHeight - (bRoundedBottomCorner ? 2 : 1 - sina) * fRadius) / fTotalWidth;
+	double dw = (bRoundedBottomCorner ? fInclination * (fFrameHeight - 2 * fRadius) : *fExtraWidth) / fTotalWidth;
 	double w = fDockWidth / fTotalWidth / 2;
 	double h = MAX (0, fFrameHeight - 2 * fRadius) / fFrameHeight / 2;
 	double rw = fRadius / fTotalWidth;
 	double rh = fRadius / fFrameHeight;
-	double w_ = w + dw + (bRoundedBottomCorner ? 0 : rw * cosa);
+	double w_ = w + dw + (bRoundedBottomCorner ? 0 : 0*rw * cosa);
 	
 	int i=0, t;
 	int iPrecision = DELTA_ROUND_DEGREE;

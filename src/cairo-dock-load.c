@@ -506,11 +506,9 @@ void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpoi
 	pDock->iMaxIconHeight = 0;
 
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-	///double fMaxScale = 1 + myIcons.fAmplitude;
 
 	Icon* icon;
 	GList* ic;
-	//double fRatio = (pDock->iRefCount == 0 ? 1 : myViews.fSubDockSizeRatio);
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;

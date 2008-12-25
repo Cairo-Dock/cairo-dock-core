@@ -585,22 +585,19 @@ gboolean cairo_dock_window_hovers_dock (GtkAllocation *pWindowGeometry, CairoDoc
 }
 
 
-void cairo_dock_synchronize_one_sub_dock_position (Icon *icon, CairoDock *pDock, gboolean bReloadBuffersIfNecessary)
+void cairo_dock_synchronize_one_sub_dock_position (CairoDock *pSubDock, CairoDock *pDock, gboolean bReloadBuffersIfNecessary)
 {
-	if (icon->pSubDock != NULL)
+	if (pSubDock->bDirectionUp != pDock->bDirectionUp || (pSubDock->bHorizontalDock != ((!myViews.bSameHorizontality) ^ pDock->bHorizontalDock)))
 	{
-		cd_message ("%s (%s)", __func__, icon->acName);
-		if (icon->pSubDock->bDirectionUp != pDock->bDirectionUp || (icon->pSubDock->bDirectionUp != ((!myViews.bSameHorizontality) ^ pDock->bHorizontalDock)))
-		{
-			icon->pSubDock->bDirectionUp = pDock->bDirectionUp;
-			icon->pSubDock->bHorizontalDock = (!myViews.bSameHorizontality) ^ pDock->bHorizontalDock;
-			if (bReloadBuffersIfNecessary)
-				cairo_dock_reload_reflects_in_dock (icon->pSubDock);
-			cairo_dock_synchronize_sub_docks_position (icon->pSubDock, bReloadBuffersIfNecessary);
-		}
+		pSubDock->bDirectionUp = pDock->bDirectionUp;
+		pSubDock->bHorizontalDock = (!myViews.bSameHorizontality) ^ pDock->bHorizontalDock;
+		if (bReloadBuffersIfNecessary)
+			cairo_dock_reload_reflects_in_dock (pSubDock);
+		cairo_dock_update_dock_size (pSubDock);
+		
+		cairo_dock_synchronize_sub_docks_position (pSubDock, bReloadBuffersIfNecessary);
 	}
 }
-
 void cairo_dock_synchronize_sub_docks_position (CairoDock *pDock, gboolean bReloadBuffersIfNecessary)
 {
 	GList* ic;
@@ -608,7 +605,8 @@ void cairo_dock_synchronize_sub_docks_position (CairoDock *pDock, gboolean bRelo
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		cairo_dock_synchronize_one_sub_dock_position (icon, pDock, bReloadBuffersIfNecessary);
+		if (icon->pSubDock != NULL)
+			cairo_dock_synchronize_one_sub_dock_position (icon->pSubDock, pDock, bReloadBuffersIfNecessary);
 	}
 }
 

@@ -732,9 +732,9 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		if (bCanReload)
 			bModuleReloaded = module->pInterface->reloadModule (pInstance, pActualContainer, pKeyFile);
 		
-		if (pNewContainer != pActualContainer && CAIRO_DOCK_IS_DOCK (pNewContainer) && CAIRO_DOCK_IS_DOCK (pActualContainer) && pIcon != NULL)
+		if (pNewContainer != pActualContainer && CAIRO_DOCK_IS_DOCK (pNewContainer) && CAIRO_DOCK_IS_DOCK (pActualContainer) && pIcon != NULL && pIcon->pSubDock != NULL)
 		{
-			cairo_dock_synchronize_one_sub_dock_position (pIcon, CAIRO_DOCK (pNewContainer), TRUE);
+			cairo_dock_synchronize_one_sub_dock_position (pIcon->pSubDock, CAIRO_DOCK (pNewContainer), TRUE);
 		}
 		
 		cairo_dock_free_minimal_config (pMinimalConfig);

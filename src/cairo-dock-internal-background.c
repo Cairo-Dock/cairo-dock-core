@@ -78,12 +78,11 @@ static void reload (CairoConfigBackground *pPrevBackground, CairoConfigBackgroun
 {
 	CairoDock *pDock = g_pMainDock;
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
-	//cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 	
 	g_fBackgroundImageWidth = g_fBackgroundImageHeight = 0.;
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks.
+	pDock->calculate_icons (pDock);
 	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.
-	//cairo_destroy (pCairoContext);
 }
 
 

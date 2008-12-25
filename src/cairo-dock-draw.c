@@ -644,14 +644,19 @@ void cairo_dock_draw_icon_cairo (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 			
 			if (pDock->bHorizontalDock)
 			{
-				cairo_translate (pCairoContext, 0, (pDock->bDirectionUp ? icon->fDeltaYReflection + icon->fHeight * icon->fScale : -icon->fDeltaYReflection - myIcons.fReflectSize * icon->fScale));
-				cairo_scale (pCairoContext, fRatio * icon->fWidthFactor * icon->fScale / (1 + myIcons.fAmplitude), fRatio * icon->fHeightFactor * icon->fScale / (1 + myIcons.fAmplitude));
+				if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (icon))
+					cairo_translate (pCairoContext, 0, (pDock->bDirectionUp ? icon->fDeltaYReflection + icon->fHeight * 1. : -icon->fDeltaYReflection - myIcons.fReflectSize * 1.));
+				else
+					cairo_translate (pCairoContext, 0, (pDock->bDirectionUp ? icon->fDeltaYReflection + icon->fHeight * icon->fScale : -icon->fDeltaYReflection - myIcons.fReflectSize * icon->fScale));
 			}
 			else
 			{
-				cairo_translate (pCairoContext, (pDock->bDirectionUp ? icon->fDeltaYReflection + icon->fHeight * icon->fScale : -icon->fDeltaYReflection - myIcons.fReflectSize * icon->fScale), 0);
-				cairo_scale (pCairoContext, fRatio * icon->fHeightFactor * icon->fScale / (1 + myIcons.fAmplitude), fRatio * icon->fWidthFactor * icon->fScale / (1 + myIcons.fAmplitude));
+				if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (icon))
+					cairo_translate (pCairoContext, (pDock->bDirectionUp ? icon->fDeltaYReflection + icon->fHeight * 1. : -icon->fDeltaYReflection - myIcons.fReflectSize * 1.), 0);
+				else
+					cairo_translate (pCairoContext, (pDock->bDirectionUp ? icon->fDeltaYReflection + icon->fHeight * icon->fScale : -icon->fDeltaYReflection - myIcons.fReflectSize * icon->fScale), 0);
 			}
+			cairo_dock_set_icon_scale_on_context (pCairoContext, icon, pDock->bHorizontalDock, pDock->fRatio, pDock->bDirectionUp);
 			
 			/*if (icon->iCount > 0 && icon->iAnimationType == CAIRO_DOCK_PULSE)
 			{
@@ -1382,10 +1387,12 @@ double cairo_dock_calculate_extra_width_for_trapeze (double fFrameHeight, double
 	double cosa = 1. / sqrt (1 + fInclination * fInclination);
 	double sina = fInclination * cosa;
 	
-	double fDeltaXForLoop = fInclination * (fFrameHeight + fLineWidth - (myBackground.bRoundedBottomCorner ? 2 : 1) * fRadius);
+	double fExtraWidth = fInclination * (fFrameHeight - (FALSE ? 2 : 1-cosa) * fRadius) + fRadius * (FALSE ? 1 : sina);
+	return (2 * fExtraWidth + fLineWidth);
+	/**double fDeltaXForLoop = fInclination * (fFrameHeight + fLineWidth - (myBackground.bRoundedBottomCorner ? 2 : 1) * fRadius);
 	double fDeltaCornerForLoop = fRadius * cosa + (myBackground.bRoundedBottomCorner ? fRadius * (1 + sina) * fInclination : 0);
 	
-	return (2 * (fLineWidth/2 + fDeltaXForLoop + fDeltaCornerForLoop + myBackground.iFrameMargin));
+	return (2 * (fLineWidth/2 + fDeltaXForLoop + fDeltaCornerForLoop + myBackground.iFrameMargin));*/
 }
 
 

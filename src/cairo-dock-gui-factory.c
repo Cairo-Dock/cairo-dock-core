@@ -586,7 +586,7 @@ void cairo_dock_build_desklet_decorations_list_for_applet_gui (GHashTable *pHash
 	_cairo_dock_add_one_decoration_item ("default", NULL, s_pDecorationsListStore2);
 	g_hash_table_foreach (pHashTable, (GHFunc) _cairo_dock_add_one_decoration_item, s_pDecorationsListStore2);
 }
-static void _cairo_dock_add_one_animation_item (gchar *cName, gint iAnimationID, GtkListStore *pModele)
+static void _cairo_dock_add_one_animation_item (gchar *cName, GtkListStore *pModele)
 {
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
@@ -604,7 +604,7 @@ void cairo_dock_build_animations_list_for_gui (GHashTable *pHashTable)
 	
 	s_pAnimationsListStore = gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF);
 	
-	_cairo_dock_add_one_animation_item ("", NULL, s_pAnimationsListStore);
+	_cairo_dock_add_one_animation_item ("", s_pAnimationsListStore);
 	g_hash_table_foreach (pHashTable, (GHFunc) _cairo_dock_add_one_animation_item, s_pAnimationsListStore);
 }
 

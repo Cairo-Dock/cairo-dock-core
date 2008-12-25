@@ -1,6 +1,6 @@
 
-#ifndef __CAIRO_DOCK_DARW_OPENGL__
-#define  __CAIRO_DOCK_DARW_OPENGL__
+#ifndef __CAIRO_DOCK_DRAW_OPENGL__
+#define  __CAIRO_DOCK_DRAW_OPENGL__
 
 #include <glib.h>
 
