@@ -87,7 +87,7 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 	}
 }
 
-inline cairo_surface_t *_cairo_dock_create_blank_surface (cairo_t *pSourceContext, int iWidth, int iHeight)
+cairo_surface_t *_cairo_dock_create_blank_surface (cairo_t *pSourceContext, int iWidth, int iHeight)
 {
 	if (pSourceContext != NULL && ! g_bUseOpenGL)
 		return cairo_surface_create_similar (cairo_get_target (pSourceContext),

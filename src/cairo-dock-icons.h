@@ -174,23 +174,11 @@ Icon* cairo_dock_get_last_icon_of_order (GList *pIconList, CairoDockIconType iTy
 */
 Icon *cairo_dock_get_pointed_icon (GList *pIconList);
 /**
-*Renvoie l'icone actuellement en cours d'animation due a un clique parmi une liste d'icones.
-*@param pIconList la liste d'icones.
-*@return la 1ere icone dont le champ iCount est > 0 ou NULL si aucune icone n'est en cours d'animation.
-*/
-Icon *cairo_dock_get_bouncing_icon (GList *pIconList);
-/**
 *Renvoie l'icone actuellement en cours d'insertion ou de suppression parmi une liste d'icones.
 *@param pIconList la liste d'icones.
 *@return la 1ere icone dont le champ fPersonnalScale est non nul ou NULL si aucune icone n'est en cours d'insertion / suppression.
 */
 Icon *cairo_dock_get_removing_or_inserting_icon (GList *pIconList);
-/**
-*Renvoie l'icone actuellement en cours d'animation (due a un clique ou a une insertion / suppression) parmi une liste d'icones.
-*@param pIconList la liste d'icones.
-*@return la 1ere icone dont le champ iCount est > 0 ou le champ fPersonnalScale est non nul, ou NULL si aucune icone n'est en cours d'animation.
-*/
-Icon *cairo_dock_get_animated_icon (GList *pIconList);
 /**
 *Renvoie l'icone suivante dans la liste d'icones. Cout en O(n).
 *@param pIconList la liste d'icones.
@@ -257,10 +245,6 @@ Icon *cairo_dock_get_icon_with_module (GList *pIconList, CairoDockModule *pModul
 *@return la 1ere icone ayant le champ 'cClass' identique a la classe fournie, ou NULL si aucune icone ne correspond.
 */
 Icon *cairo_dock_get_icon_with_class (GList *pIconList, gchar *cClass);
-
-#define cairo_dock_none_clicked(pIconList) (cairo_dock_get_bouncing_icon (pIconList) == NULL)
-#define cairo_dock_none_removed_or_inserted(pIconList) (cairo_dock_get_removing_or_inserting_icon (pIconList) == NULL)
-#define cairo_dock_none_animated(pIconList) (cairo_dock_get_animated_icon (pIconList) == NULL)
 
 #define cairo_dock_get_first_launcher(pIconList) cairo_dock_get_first_icon_of_type (pIconList, CAIRO_DOCK_LAUNCHER)
 #define cairo_dock_get_last_launcher(pIconList) cairo_dock_get_last_icon_of_type (pIconList, CAIRO_DOCK_LAUNCHER)
@@ -346,8 +330,7 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock, CairoDockMousePositionT
 double cairo_dock_calculate_max_dock_width (CairoDock *pDock, GList *pFirstDrawnElement, double fFlatDockWidth, double fWidthConstraintFactor, double fExtraWidth);
 
 
-void cairo_dock_mark_icons_as_avoiding_mouse (CairoDock *pDock, CairoDockIconType iType, double fMargin);
-void cairo_dock_mark_avoiding_mouse_icons_linear (CairoDock *pDock);
+void cairo_dock_check_can_drop_linear (CairoDock *pDock);
 void cairo_dock_stop_marking_icons (CairoDock *pDock);
 
 /**

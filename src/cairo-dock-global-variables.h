@@ -12,10 +12,8 @@ extern gint g_iScreenWidth[2];
 extern gint g_iScreenHeight[2];
 /// Nombre de bureaux virtuels.
 extern int g_iNbDesktops;
-extern int g_iNbViewportX;
-extern int g_iNbViewportY;
 /// Nombre de "faces" du cube en largeur et en hauteur.
-//extern int g_iNbViewportX, g_iNbViewportY ;
+extern int g_iNbViewportX, g_iNbViewportY ;
 /// Chemin du fichier de conf de l'appli.
 extern gchar *g_cConfFile;
 

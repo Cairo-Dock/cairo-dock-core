@@ -274,19 +274,6 @@ Icon* cairo_dock_get_pointed_icon (GList *pIconList)
 	return NULL;
 }
 
-Icon *cairo_dock_get_bouncing_icon (GList *pIconList)
-{
-	GList* ic;
-	Icon *icon;
-	for (ic = pIconList; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		if (icon->iCount > 0)
-			return icon;
-	}
-	return NULL;
-}
-
 Icon *cairo_dock_get_removing_or_inserting_icon (GList *pIconList)
 {
 	GList* ic;
@@ -295,19 +282,6 @@ Icon *cairo_dock_get_removing_or_inserting_icon (GList *pIconList)
 	{
 		icon = ic->data;
 		if (icon->fPersonnalScale != 0)
-			return icon;
-	}
-	return NULL;
-}
-
-Icon *cairo_dock_get_animated_icon (GList *pIconList)
-{
-	GList* ic;
-	Icon *icon;
-	for (ic = pIconList; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		if (icon->fPersonnalScale != 0 || icon->iCount > 0)
 			return icon;
 	}
 	return NULL;
@@ -613,9 +587,10 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	cd_message ("%s (%s)", __func__, icon->acName);
 	g_free (icon->cParentDockName);
 	icon->cParentDockName = NULL;
-
-	icon->iCount = 0;
-
+	
+	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);
+	icon->iAnimationState = CAIRO_DOCK_STATE_REST;
+	
 	//\___________________ On gere le cas des classes d'applis.
 	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
 	{
@@ -1171,7 +1146,7 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock, CairoDockMousePositionT
 	{
 		case CAIRO_DOCK_MOUSE_INSIDE :
 			//g_print ("INSIDE\n");
-			if (cairo_dock_entrance_is_allowed (pDock) && pDock->iMagnitudeIndex < CAIRO_DOCK_NB_MAX_ITERATIONS && ! pDock->bIsGrowingUp && cairo_dock_none_animated (pDock->icons))  // on est dedans et la taille des icones est non maximale bien qu'aucune icone ne soit animee.  ///  && pDock->iSidMoveDown == 0
+			if (cairo_dock_entrance_is_allowed (pDock) && pDock->iMagnitudeIndex < CAIRO_DOCK_NB_MAX_ITERATIONS && ! pDock->bIsGrowingUp && cairo_dock_get_removing_or_inserting_icon (pDock->icons) == NULL)  // on est dedans et la taille des icones est non maximale bien qu'aucune icone ne soit animee.  ///  && pDock->iSidMoveDown == 0
 			{
 				cd_debug ("on est dedans en x et en y et la taille des icones est non maximale bien qu'aucune icone  ne soit animee");
 				//pDock->bInside = TRUE;
@@ -1303,13 +1278,13 @@ double cairo_dock_calculate_max_dock_width (CairoDock *pDock, GList *pFirstDrawn
 
 
 
+#define make_icon_avoid_mouse(icon) \
+	cairo_dock_mark_icon_as_avoiding_mouse (icon);\
+	icon->fAlpha = 0.75;\
+	icon->fDrawX += icon->fWidth / 2 * (icon->fScale - 1) / myIcons.fAmplitude * (icon->fPhase < G_PI/2 ? -1 : 1);
 
-
-void cairo_dock_mark_icons_as_avoiding_mouse (CairoDock *pDock, CairoDockIconType iType, double fMargin)
+static gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, CairoDockIconType iType, double fMargin)
 {
-	if (pDock->icons == NULL)
-		return;
-	
 	gboolean bCanDrop = FALSE;
 	Icon *icon;
 	GList *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
@@ -1317,17 +1292,15 @@ void cairo_dock_mark_icons_as_avoiding_mouse (CairoDock *pDock, CairoDockIconTyp
 	do
 	{
 		icon = ic->data;
-		if (icon->bPointed && icon->iAnimationType != CAIRO_DOCK_FOLLOW_MOUSE)
+		if (icon->bPointed)  // && icon->iAnimationState != CAIRO_DOCK_FOLLOW_MOUSE
 		{
-			icon->iAnimationType = 0;
-
 			if (pDock->iMouseX < icon->fDrawX + icon->fWidth * icon->fScale * fMargin)  // on est a gauche.  // fDrawXAtRest
 			{
 				Icon *prev_icon = cairo_dock_get_previous_element (ic, pDock->icons) -> data;
-				if ((cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (iType) || cairo_dock_get_icon_order (prev_icon) == cairo_dock_get_group_order (iType)) && prev_icon->iAnimationType != CAIRO_DOCK_FOLLOW_MOUSE)
+				if ((cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (iType) || cairo_dock_get_icon_order (prev_icon) == cairo_dock_get_group_order (iType)))  // && prev_icon->iAnimationType != CAIRO_DOCK_FOLLOW_MOUSE
 				{
-					icon->iAnimationType = CAIRO_DOCK_AVOID_MOUSE;
-					prev_icon->iAnimationType = CAIRO_DOCK_AVOID_MOUSE;
+					make_icon_avoid_mouse (icon);
+					make_icon_avoid_mouse (prev_icon);
 					//g_print ("%s> <%s\n", prev_icon->acName, icon->acName);
 					bCanDrop = TRUE;
 				}
@@ -1335,53 +1308,37 @@ void cairo_dock_mark_icons_as_avoiding_mouse (CairoDock *pDock, CairoDockIconTyp
 			else if (pDock->iMouseX > icon->fDrawX + icon->fWidth * icon->fScale * (1 - fMargin))  // on est a droite.  // fDrawXAtRest
 			{
 				Icon *next_icon = cairo_dock_get_next_element (ic, pDock->icons) -> data;
-				if ((icon->iType == iType || next_icon->iType == iType) && next_icon->iAnimationType != CAIRO_DOCK_FOLLOW_MOUSE)
+				if ((icon->iType == iType || next_icon->iType == iType))  // && next_icon->iAnimationType != CAIRO_DOCK_FOLLOW_MOUSE
 				{
-					icon->iAnimationType = CAIRO_DOCK_AVOID_MOUSE;
-					next_icon->iAnimationType = CAIRO_DOCK_AVOID_MOUSE;
+					make_icon_avoid_mouse (icon);
+					make_icon_avoid_mouse (next_icon);
 					//g_print ("%s> <%s\n", icon->acName, next_icon->acName);
 					bCanDrop = TRUE;
 				}
 				ic = cairo_dock_get_next_element (ic, pDock->icons);  // on la saute.
 				if (ic == pFirstDrawnElement)
 					break ;
-			}
-			else  // on est dessus.
-			{
-				//g_print ("on est sur %s\n", icon->acName);
-			}
+			}  // else on est dessus.
 		}
-		else if (icon->iAnimationType == CAIRO_DOCK_AVOID_MOUSE)
-			icon->iAnimationType = 0;
-
+		else
+			cairo_dock_stop_marking_icon_as_avoiding_mouse (icon);
+		
 		ic = cairo_dock_get_next_element (ic, pDock->icons);
 	} while (ic != pFirstDrawnElement);
 	
-	pDock->bCanDrop = bCanDrop;
-	/*if (! pDock->render_opengl || ! g_bUseOpenGL)
-	{
-		if (bCanDrop)
-		{
-			if (pDock->iSidDropIndicator == 0)
-				pDock->iSidDropIndicator = g_timeout_add (40, (GSourceFunc) cairo_dock_display_drop_indicator, pDock);
-		}
-		else
-		{
-			if (pDock->iSidDropIndicator != 0)
-			{
-				g_source_remove (pDock->iSidDropIndicator);
-				pDock->iSidDropIndicator = 0;
-				pDock->iDropIndicatorOffset = 0;
-			}
-		}
-	}*/
+	return bCanDrop;
 }
-void cairo_dock_mark_avoiding_mouse_icons_linear (CairoDock *pDock)
+
+void cairo_dock_check_can_drop_linear (CairoDock *pDock)
 {
-	if (pDock->bInside && pDock->iAvoidingMouseIconType != -1 && pDock->fAvoidingMouseMargin > 0)
-	{
-		cairo_dock_mark_icons_as_avoiding_mouse (pDock, pDock->iAvoidingMouseIconType, pDock->fAvoidingMouseMargin);
-	}
+	if (pDock->icons == NULL)
+		return;
+	
+	//if (pDock->bInside && pDock->iAvoidingMouseIconType != -1 && pDock->fAvoidingMouseMargin > 0)
+	if (pDock->bIsDragging)
+		pDock->bCanDrop = _cairo_dock_check_can_drop_linear (pDock, pDock->iAvoidingMouseIconType, pDock->fAvoidingMouseMargin);
+	else
+		pDock->bCanDrop = FALSE;
 }
 
 void cairo_dock_stop_marking_icons (CairoDock *pDock)
@@ -1395,10 +1352,11 @@ void cairo_dock_stop_marking_icons (CairoDock *pDock)
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		if (icon->iAnimationType > CAIRO_DOCK_NB_ANIMATIONS)
+		cairo_dock_stop_marking_icon_as_avoiding_mouse (icon);
+		/**if (icon->iAnimationType > CAIRO_DOCK_NB_ANIMATIONS)
 		{
 			icon->iAnimationType = 0;
-		}
+		}*/
 	}
 }
 

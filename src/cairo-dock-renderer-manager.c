@@ -235,6 +235,7 @@ void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRender
 	}
 	
 	pDesklet->pRenderer = pRenderer;
+	gtk_widget_set_double_buffered (pDesklet->pWidget, ! (g_bUseOpenGL && pRenderer->render_opengl != NULL));
 	
 	if (pRenderer != NULL)
 	{
@@ -341,6 +342,11 @@ void cairo_dock_update_desklet_decorations_list_for_gui (void)
 void cairo_dock_update_desklet_decorations_list_for_applet_gui (void)
 {
 	cairo_dock_build_desklet_decorations_list_for_applet_gui (s_hDeskletDecorationsTable);
+}
+
+void cairo_dock_update_animations_list_for_gui (void)
+{
+	cairo_dock_build_animations_list_for_gui (s_hAnimationsTable);
 }
 
 

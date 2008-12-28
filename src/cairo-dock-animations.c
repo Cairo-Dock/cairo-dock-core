@@ -36,8 +36,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 extern int g_iScreenHeight[2];
 
-extern int g_tNbIterInOneRound[CAIRO_DOCK_NB_ANIMATIONS];
-
 extern gboolean g_bEasterEggs;
 
 extern CairoDock *g_pMainDock;
@@ -137,19 +135,24 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 		if (pDock->bAutoHide && pDock->iRefCount == 0)
 		{
 			//g_print ("on arrete les animations\n");
-			Icon *pBouncingIcon = cairo_dock_get_bouncing_icon (pDock->icons);
-			if (pBouncingIcon != NULL)  // s'il y'a une icone en cours d'animation, on l'arrete.
+			Icon *pIcon;
+			GList *ic;
+			for (ic = pDock->icons; ic != NULL; ic = ic->next)
 			{
-				pBouncingIcon->iCount = 0;
-			}
-			Icon *pRemovingIcon = cairo_dock_get_removing_or_inserting_icon (pDock->icons);
-			if (pRemovingIcon != NULL)  // idem.
-			{
-				if (pRemovingIcon->fPersonnalScale > 0)
-					pRemovingIcon->fPersonnalScale = 0.05;
-				else
-					pRemovingIcon->fPersonnalScale = - 0.05;
-				//g_print ("fPersonnalScale <- %f\n", pRemovingIcon->fPersonnalScale);
+				pIcon = ic->data;
+				if (pIcon->fPersonnalScale != 0)
+				{
+					if (pIcon->fPersonnalScale > 0)
+						pIcon->fPersonnalScale = 0.05;
+					else
+						pIcon->fPersonnalScale = - 0.05;
+				}
+				
+				if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)  // s'il y'a une animation en cours, on l'arrete.
+				{
+					cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon);
+					pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
+				}
 			}
 			pDock->iScrollOffset = 0;
 
@@ -282,10 +285,9 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 		if (pDock->bPopped && ! pDock->bInside)
 			cairo_dock_pop_down (pDock);
 		
-		Icon *pBouncingIcon = cairo_dock_get_bouncing_icon (pDock->icons);
 		Icon *pRemovingIcon = cairo_dock_get_removing_or_inserting_icon (pDock->icons);
 
-		if (pBouncingIcon == NULL && pRemovingIcon == NULL && (! mySystem.bResetScrollOnLeave || pDock->iScrollOffset == 0))  // plus aucune animation en cours.
+		if (pRemovingIcon == NULL && (! mySystem.bResetScrollOnLeave || pDock->iScrollOffset == 0))  // plus aucune animation en cours.
 		{
 			if (! (pDock->bAutoHide && pDock->iRefCount == 0) && ! pDock->bInside && ! pDock->bMenuVisible)
 			{
@@ -315,6 +317,8 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 
 			//pDock->iSidShrinkDown = 0;
 			pDock->bIsShrinkingDown = FALSE;
+			if (! pDock->bIsGrowingUp)
+				pDock->bAtBottom = TRUE;  /// deplacé du leave a ici le 28/12/2008
 			cairo_dock_hide_dock_like_a_menu ();
 			return pDock->bIsGrowingUp;
 		}
@@ -410,6 +414,7 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 	
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST && cairo_dock_animation_will_be_visible (pDock))
 	{
+		g_print ("  c'est parti\n");
 		pDock->fFoldingFactor = 0;  // utile ?...
 		cairo_dock_launch_animation (pDock);
 	}
@@ -435,7 +440,6 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 		icon = ic->data;
 		
 		icon->fDeltaYReflection = 0;
-		cairo_dock_manage_animations (icon, pDock);
 		
 		bIconIsAnimating = FALSE;
 		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDock, &bIconIsAnimating);

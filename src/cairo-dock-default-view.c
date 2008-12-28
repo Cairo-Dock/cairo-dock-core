@@ -284,9 +284,9 @@ void cairo_dock_render_optimized_linear (cairo_t *pCairoContext, CairoDock *pDoc
 					icon->fAlpha = .25;
 				}
 				
-				if (icon->iAnimationType == CAIRO_DOCK_AVOID_MOUSE)
+				if (icon->iAnimationState == CAIRO_DOCK_STATE_AVOID_MOUSE)
 				{
-					icon->fAlpha = 0.4;
+					icon->fAlpha = 0.7;
 				}
 				
 				cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);
@@ -429,18 +429,16 @@ Icon *cairo_dock_calculate_icons_linear (CairoDock *pDock)
 	cairo_dock_manage_mouse_position (pDock, iMousePositionType);
 
 	//\____________________ On calcule les position/etirements/alpha des icones.
-	cairo_dock_mark_avoiding_mouse_icons_linear (pDock);
-
 	Icon* icon;
 	GList* ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
 		cairo_dock_calculate_construction_parameters_generic (icon, pDock->iCurrentWidth, pDock->iCurrentHeight, pDock->iMaxDockWidth);
-		cairo_dock_manage_animations (icon, pDock);
 	}
 	
-	
+	cairo_dock_check_can_drop_linear (pDock);
+
 	icon = cairo_dock_get_first_drawn_icon (pDock);
 	if (icon != NULL)
 	{

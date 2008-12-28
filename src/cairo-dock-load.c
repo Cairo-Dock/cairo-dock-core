@@ -209,14 +209,14 @@ void cairo_dock_load_reflect_on_icon (Icon *icon, cairo_t *pSourceContext, gdoub
 			fMaxScale,
 			bDirectionUp);
 
-		icon->pFullIconBuffer = cairo_dock_create_icon_surface_with_reflection (icon->pIconBuffer,
+		/*icon->pFullIconBuffer = cairo_dock_create_icon_surface_with_reflection (icon->pIconBuffer,
 			icon->pReflectionBuffer,
 			pSourceContext,
 			(bHorizontalDock ? icon->fWidth : icon->fHeight) * fMaxScale,
 			(bHorizontalDock ? icon->fHeight : icon->fWidth) * fMaxScale,
 			bHorizontalDock,
 			fMaxScale,
-			bDirectionUp);
+			bDirectionUp);*/
 	}
 }
 
@@ -232,8 +232,11 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 	cairo_surface_destroy (icon->pReflectionBuffer);
 	icon->pReflectionBuffer = NULL;
-	cairo_surface_destroy (icon->pFullIconBuffer);
-	icon->pFullIconBuffer = NULL;
+	if (icon->pFullIconBuffer != NULL)
+	{
+		cairo_surface_destroy (icon->pFullIconBuffer);
+		icon->pFullIconBuffer = NULL;
+	}
 	
 	if (icon->fWidth < 0 || icon->fHeight < 0)  // on ne veut pas de surface.
 		return;
@@ -326,14 +329,14 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			fMaxScale,
 			bDirectionUp);
 
-		icon->pFullIconBuffer = cairo_dock_create_icon_surface_with_reflection (icon->pIconBuffer,
+		/*icon->pFullIconBuffer = cairo_dock_create_icon_surface_with_reflection (icon->pIconBuffer,
 			icon->pReflectionBuffer,
 			pSourceContext,
 			(bHorizontalDock ? icon->fWidth : icon->fHeight) * fMaxScale,
 			(bHorizontalDock ? icon->fHeight : icon->fWidth) * fMaxScale,
 			bHorizontalDock,
 			fMaxScale,
-			bDirectionUp);
+			bDirectionUp);*/
 	}
 	
 	if (g_bUseOpenGL && icon->pIconBuffer != NULL)

@@ -47,8 +47,6 @@ extern cairo_surface_t *g_pBackgroundSurfaceFull;
 
 extern cairo_surface_t *g_pVisibleZoneSurface;
 
-
-extern int g_tNbIterInOneRound[CAIRO_DOCK_NB_ANIMATIONS];
 extern cairo_surface_t *g_pIndicatorSurface[2];
 extern double g_fIndicatorWidth, g_fIndicatorHeight;
 
@@ -338,152 +336,6 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 }
 
 
-void cairo_dock_manage_animations (Icon *icon, CairoDock *pDock)
-{
-	//icon->fDrawXAtRest = icon->fDrawX;
-	//icon->fDrawYAtRest = icon->fDrawY;
-	//\_____________________ On gere l'animation de l'icone qui suit ou evite le curseur.
-	if (icon->iAnimationType == CAIRO_DOCK_FOLLOW_MOUSE)
-	{
-		icon->fScale = 1 + myIcons.fAmplitude;
-		icon->fDrawX = pDock->iMouseX  - icon->fWidth * icon->fScale / 2;
-		icon->fDrawY = pDock->iMouseY - icon->fHeight * icon->fScale / 2 ;
-		icon->fAlpha = 0.75;
-	}
-	else if (icon->iAnimationType == CAIRO_DOCK_AVOID_MOUSE)
-	{
-		icon->fAlpha = 0.75;
-		icon->fDrawX += icon->fWidth / 2 * (icon->fScale - 1) / myIcons.fAmplitude * (icon->fPhase < G_PI/2 ? -1 : 1);
-	}
-	/*if (icon->iCount > 0)
-		icon->iCount --;
-	return ;
-	
-	//\_____________________ On gere l'animation de rebond.
-	if (icon->iAnimationType == CAIRO_DOCK_BOUNCE && icon->iCount > 0)
-	{
-		int n = g_tNbIterInOneRound[CAIRO_DOCK_BOUNCE];  // nbre d'iteration pour 1 aplatissement+montree+descente.
-		int k = n - (icon->iCount % n) - 3;  // 3 iterations pour s'aplatir.
-		n -= 3;   // nbre d'iteration pour 1 montree+descente.
-
-		if (k > 0)
-		{
-			double fPossibleDeltaY = MIN (100, (pDock->bDirectionUp ? icon->fDrawY : pDock->iCurrentHeight - (icon->fDrawY + icon->fHeight * icon->fScale)));  // on borne a 100 pixels pour les rendus qui ont des fenetres grandes..
-
-			icon->fDeltaYReflection = (pDock->bDirectionUp ? -1. : 1.) * k / (n/2) * fPossibleDeltaY * (2 - 1.*k/(n/2));
-			icon->fDrawY += icon->fDeltaYReflection;
-			icon->fDeltaYReflection *= 1.25;  // le reflet "rebondira" de 25% de la hauteur au sol.
-			//g_print ("%d) + %.2f (%d)\n", icon->iCount, (pDock->bDirectionUp ? -1. : 1.) * k / (n/2) * fPossibleDeltaY * (2 - 1.*k/(n/2)), k);
-		}
-		else  // on commence par s'aplatir.
-		{
-			icon->fHeightFactor *= 1.*(2 - 1.5*k) / 10;
-			icon->fDeltaYReflection = (pDock->bDirectionUp ? 1 : -1) * (1 - icon->fHeightFactor) / 2 * icon->fHeight * icon->fScale;
-			icon->fDrawY += icon->fDeltaYReflection;
-			//g_print ("%d) * %.2f (%d)\n", icon->iCount, icon->fHeightFactor, k);
-		}
-		icon->iCount --;  // c'est une loi de type acceleration dans le champ de pesanteur. 'g' et 'v0' n'interviennent pas directement, car s'expriment en fonction de 'fPossibleDeltaY' et 'n'.
-	}
-
-	//\_____________________ On gere l'animation de rotation sur elle-meme.
-	if (icon->iAnimationType == CAIRO_DOCK_ROTATE && icon->iCount > 0)
-	{
-		int c = icon->iCount;
-		int n = g_tNbIterInOneRound[CAIRO_DOCK_ROTATE] / 4;  // nbre d'iteration pour 1/2 tour.
-		if ((c/n) & 1)
-		{
-			icon->fWidthFactor *= ((c/(2*n)) & 1 ? 1. : -1.) * (c%n) / n;
-		}
-		else
-		{
-			icon->fWidthFactor *= ((c/(2*n)) & 1 ? 1. : -1.) * ((c%n) - n) / n;
-		}
-		icon->iRotationY = (c/n) * 180;
-		icon->iCount --;
-	}
-
-	//\_____________________ On gere l'animation de rotation horizontale.
-	if (icon->iAnimationType == CAIRO_DOCK_UPSIDE_DOWN && icon->iCount > 0)
-	{
-		int c = icon->iCount;
-		int n = g_tNbIterInOneRound[CAIRO_DOCK_UPSIDE_DOWN] / 4;  // nbre d'iteration pour 1/2 tour.
-		if ((c/n) & 1)
-		{
-			icon->fHeightFactor *= ((c/(2*n)) & 1 ? 1. : -1.) * (c%n) / n;
-		}
-		else
-		{
-			icon->fHeightFactor *= ((c/(2*n)) & 1 ? 1. : -1.) * ((c%n) - n) / n;
-		}
-		icon->iRotationX = (c/n) * 180;
-		icon->iCount --;
-	}
-
-	//\_____________________ On gere l'animation wobbly.
-	if (icon->iAnimationType == CAIRO_DOCK_WOBBLY && icon->iCount > 0)  // merci a Tshirtman cette animation !
-	{
-		int c = icon->iCount;
-		int n = g_tNbIterInOneRound[CAIRO_DOCK_WOBBLY] / 4;  // nbre d'iteration pour 1 etirement/retrecissement.
-		int k = c%n;
-
-		double fMinSize = .3, fMaxSize = MIN (1.75, pDock->iCurrentHeight / icon->fWidth);  // au plus 1.75, soit 3/8 de l'icone qui deborde de part et d'autre de son emplacement. c'est suffisamment faible pour ne pas trop empieter sur ses voisines.
-
-		double fSizeFactor = ((c/n) & 1 ? 1. / (n - k) : 1. / (1 + k));
-		//double fSizeFactor = ((c/n) & 1 ? 1.*(k+1)/n : 1.*(n-k)/n);
-		fSizeFactor = (fMinSize - fMaxSize) * fSizeFactor + fMaxSize;
-		if ((c/(2*n)) & 1)
-		{
-			icon->fWidthFactor *= fSizeFactor;
-			icon->fHeightFactor *= fMinSize;
-			//g_print ("%d) width <- %.2f ; height <- %.2f (%d)\n", c, icon->fWidthFactor, icon->fHeightFactor, k);
-		}
-		else
-		{
-			icon->fHeightFactor *= fSizeFactor;
-			icon->fWidthFactor *= fMinSize;
-			//g_print ("%d) height <- %.2f ; width <- %.2f (%d)\n", c, icon->fHeightFactor, icon->fWidthFactor, k);
-		}
-		icon->iCount --;
-	}
-
-	//\_____________________ On gere l'animation d'ondelette.
-	if (icon->iCount > 0 && icon->iAnimationType == CAIRO_DOCK_PULSE)
-	{
-		icon->fAlpha = 1. * (icon->iCount % g_tNbIterInOneRound[CAIRO_DOCK_PULSE]) / g_tNbIterInOneRound[CAIRO_DOCK_PULSE];
-		icon->iCount --;
-	}
-
-	//\_____________________ On gere l'animation de clignotement.
-	if (icon->iCount > 0 && icon->iAnimationType == CAIRO_DOCK_BLINK)
-	{
-		int c = icon->iCount;
-		int n = g_tNbIterInOneRound[CAIRO_DOCK_BLINK] / 2;  // nbre d'iteration pour une inversion d'alpha.
-		if ( (c/n) & 1)
-			icon->fAlpha *= 1. * (c%n) / n;
-		else
-			icon->fAlpha *= 1. * (n - 1 - (c%n)) / n;
-		icon->fAlpha *= icon->fAlpha;  // pour accentuer.
-		icon->iCount --;
-	}
-
-
-	if (icon->fWidthFactor >= 0 && icon->fWidthFactor < 0.05)
-		icon->fWidthFactor = 0.05;
-	else if (icon->fWidthFactor < 0 && icon->fWidthFactor > -0.05)
-		icon->fWidthFactor = -0.05;
-
-	icon->fDrawX += (1 - icon->fWidthFactor) / 2 * icon->fWidth * icon->fScale;
-
-	if (icon->fHeightFactor >= 0 && icon->fHeightFactor < 0.05)
-		icon->fHeightFactor = 0.05;
-	else if (icon->fHeightFactor < 0 && icon->fHeightFactor > -0.05)
-		icon->fHeightFactor = -0.05;
-
-	icon->fDrawY += (1 - icon->fHeightFactor) / 2 * icon->fHeight * icon->fScale;
-	
-	///cairo_dock_update_removing_inserting_icon_size_default (icon);*/
-}
-
 static void _cairo_dock_draw_appli_indicator (Icon *icon, cairo_t *pCairoContext, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp)
 {
 	cairo_save (pCairoContext);
@@ -620,8 +472,7 @@ void cairo_dock_draw_icon_cairo (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	
 	if (pDock->bUseReflect && icon->pReflectionBuffer != NULL)  // on dessine les reflets.
 	{
-		gboolean bDrawFullBuffer = (pDock->bUseReflect && icon->pFullIconBuffer != NULL && (! mySystem.bDynamicReflection || icon->fScale == 1) && (icon->iCount == 0 || icon->iAnimationType == CAIRO_DOCK_ROTATE || icon->iAnimationType == CAIRO_DOCK_BLINK));
-		bDrawFullBuffer = FALSE;
+		/*gboolean bDrawFullBuffer = (pDock->bUseReflect && icon->pFullIconBuffer != NULL && (! mySystem.bDynamicReflection || icon->fScale == 1) && (icon->iCount == 0 || icon->iAnimationType == CAIRO_DOCK_ROTATE || icon->iAnimationType == CAIRO_DOCK_BLINK));
 		if (bDrawFullBuffer)  // on les dessine d'un bloc.
 		{
 			cairo_set_source_surface (pCairoContext, icon->pFullIconBuffer, 0.0, 0.0);
@@ -630,7 +481,7 @@ void cairo_dock_draw_icon_cairo (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 			else
 				cairo_paint_with_alpha (pCairoContext, icon->fAlpha);
 		}
-		else  // on les dessine separement, en gerant eventuellement dynamiquement la transparence du reflet.
+		else*/  // on les dessine separement, en gerant eventuellement dynamiquement la transparence du reflet.
 		{
 			if (icon->pIconBuffer != NULL)
 				cairo_set_source_surface (pCairoContext, icon->pIconBuffer, 0.0, 0.0);
@@ -833,15 +684,14 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	}
 	
 	//\_____________________ On positionne l'icone.
-	gboolean bDrawFullBuffer = (pDock->bUseReflect && icon->pFullIconBuffer != NULL && (! mySystem.bDynamicReflection || icon->fScale == 1) && (icon->iCount == 0 || icon->iAnimationType == CAIRO_DOCK_ROTATE || icon->iAnimationType == CAIRO_DOCK_BLINK));
-	bDrawFullBuffer = FALSE;
+	/*gboolean bDrawFullBuffer = (pDock->bUseReflect && icon->pFullIconBuffer != NULL && (! mySystem.bDynamicReflection || icon->fScale == 1) && (icon->iCount == 0 || icon->iAnimationType == CAIRO_DOCK_ROTATE || icon->iAnimationType == CAIRO_DOCK_BLINK));
 	if (bDrawFullBuffer && ! bDirectionUp)
 	{
 		if (bHorizontalDock)
 			cairo_translate (pCairoContext, 0, - myIcons.fReflectSize * icon->fScale);
 		else
 			cairo_translate (pCairoContext, - myIcons.fReflectSize * icon->fScale, 0);
-	}
+	}*/
 	
 	if (icon->fOrientation != 0)
 		cairo_rotate (pCairoContext, icon->fOrientation);
@@ -863,7 +713,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	}
 	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
-	if (bUseText && icon->pTextBuffer != NULL && icon->fScale > 1.01 && (! mySystem.bLabelForPointedIconOnly || icon->bPointed) && icon->iCount == 0)  // 1.01 car sin(pi) = 1+epsilon :-/
+	if (bUseText && icon->pTextBuffer != NULL && icon->fScale > 1.01 && (! mySystem.bLabelForPointedIconOnly || icon->bPointed))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
 	{
 		cairo_save (pCairoContext);
 		double fOffsetX = -icon->fTextXOffset + icon->fWidthFactor * icon->fWidth * icon->fScale / 2;
@@ -934,7 +784,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, gboolean bUseReflect, gboolean bUseText, int iWidth)
 {
 	//\_____________________ On separe 2 cas : dessin avec le tampon complet, et dessin avec le ou les petits tampons.
-	gboolean bDrawFullBuffer  = (bUseReflect && icon->pFullIconBuffer != NULL && (! mySystem.bDynamicReflection || icon->fScale == 1) && (icon->iCount == 0 || icon->iAnimationType == CAIRO_DOCK_ROTATE || icon->iAnimationType == CAIRO_DOCK_BLINK));
+	//gboolean bDrawFullBuffer  = (bUseReflect && icon->pFullIconBuffer != NULL && (! mySystem.bDynamicReflection || icon->fScale == 1) && (icon->iCount == 0 || icon->iAnimationType == CAIRO_DOCK_ROTATE || icon->iAnimationType == CAIRO_DOCK_BLINK));
 	//\_____________________ On dessine l'icone en fonction de son placement, son angle, et sa transparence.
 	//cairo_push_group (pCairoContext);
 	//g_print ("%s (%.2f;%.2f x %.2f)\n", __func__, icon->fDrawX, icon->fDrawY, icon->fScale);
@@ -942,38 +792,15 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, 
 	cairo_save (pCairoContext);
 	/**if (bDrawFullBuffer&& ! pDock->bDirectionUp)
 		cairo_translate (pCairoContext, 0, - myIcons.fReflectSize * icon->fScale);*/
-	if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (icon))
-	{
-		cairo_translate (pCairoContext, icon->fWidthFactor * icon->fWidth * (icon->fScale - 1) / 2, icon->fHeightFactor * icon->fHeight * (icon->fScale - 1));
-		cairo_scale (pCairoContext, icon->fWidthFactor, icon->fHeightFactor);
-	}
-	else
-		cairo_scale (pCairoContext, icon->fWidthFactor * icon->fScale, icon->fHeightFactor * icon->fScale);
+	cairo_scale (pCairoContext, icon->fWidthFactor * icon->fScale, icon->fHeightFactor * icon->fScale);
 	if (icon->fOrientation != 0)
 		cairo_rotate (pCairoContext, icon->fOrientation);
-	
-	double fPreviousAlpha = icon->fAlpha;
-	if (icon->iCount > 0 && icon->iAnimationType == CAIRO_DOCK_PULSE)
-	{
-		if (icon->fAlpha > 0)
-		{
-			cairo_save (pCairoContext);
-			double fScaleFactor = 1 + (1 - icon->fAlpha);
-			cairo_translate (pCairoContext, icon->fWidth * (1 - fScaleFactor) / 2, icon->fHeight * (1 - fScaleFactor) / 2);
-			cairo_scale (pCairoContext, fScaleFactor, fScaleFactor);
-			if (icon->pIconBuffer != NULL)
-				cairo_set_source_surface (pCairoContext, icon->pIconBuffer, 0.0, 0.0);
-			cairo_paint_with_alpha (pCairoContext, icon->fAlpha);
-			cairo_restore (pCairoContext);
-		}
-		icon->fAlpha = .8;
-	}
 	
 	double fAlpha = icon->fAlpha;
 	
 	if (bUseReflect && icon->pReflectionBuffer != NULL)  // on dessine les reflets.
 	{
-		if (bDrawFullBuffer)  // on les dessine d'un bloc.
+		/*if (bDrawFullBuffer)  // on les dessine d'un bloc.
 		{
 			cairo_set_source_surface (pCairoContext, icon->pFullIconBuffer, 0.0, 0.0);
 			if (fAlpha == 1)
@@ -981,7 +808,7 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, 
 			else
 				cairo_paint_with_alpha (pCairoContext, fAlpha);
 		}
-		else  // on les dessine separement, en gerant eventuellement dynamiquement la transparence du reflet.
+		else*/  // on les dessine separement, en gerant eventuellement dynamiquement la transparence du reflet.
 		{
 			if (icon->pIconBuffer != NULL)
 				cairo_set_source_surface (pCairoContext, icon->pIconBuffer, 0.0, 0.0);
@@ -995,21 +822,6 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, 
 			cairo_save (pCairoContext);
 			cairo_translate (pCairoContext, 0, - icon->fDeltaYReflection + icon->fHeight * icon->fScale);
 			cairo_scale (pCairoContext, icon->fWidthFactor * icon->fScale, icon->fHeightFactor * icon->fScale);
-			
-			if (icon->iCount > 0 && icon->iAnimationType == CAIRO_DOCK_PULSE)
-			{
-				if (fPreviousAlpha > 0)
-				{
-					cairo_save (pCairoContext);
-					double fScaleFactor = 1 + (1 - fPreviousAlpha);
-					cairo_translate (pCairoContext, icon->fWidth * (1 - fScaleFactor) / 2, icon->fHeight * (1 - fScaleFactor) / 2);
-					cairo_scale (pCairoContext, fScaleFactor, fScaleFactor);
-					if (icon->pIconBuffer != NULL)
-						cairo_set_source_surface (pCairoContext, icon->pReflectionBuffer, 0.0, 0.0);
-					cairo_paint_with_alpha (pCairoContext, fPreviousAlpha);
-					cairo_restore (pCairoContext);
-				}
-			}
 			
 			cairo_set_source_surface (pCairoContext, icon->pReflectionBuffer, 0.0, 0.0);
 			

@@ -171,7 +171,7 @@ static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDo
 	glColor4f(1., 1., 1., 1.);
 	glNormal3f (0., 0., 1.);
 	
-	cairo_dock_set_icon_scale (icon, pDock, fRatio);
+	cairo_dock_set_icon_scale (icon, pDock, 1.);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
 	glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);  // Bottom Right Of The Texture and Quad
@@ -264,7 +264,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 	glColor4f(1., 1., 1., pIcon->fAlpha);
 	
 	glPushMatrix ();
-	cairo_dock_set_icon_scale (pIcon, pDock, pDock->fRatio);
+	cairo_dock_set_icon_scale (pIcon, pDock, 1.);
 	glNormal3f(0,0,1);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
@@ -617,7 +617,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	}
 	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
-	if (bUseText && icon->iLabelTexture != 0 && icon->fScale > 1.01 && (! mySystem.bLabelForPointedIconOnly || icon->bPointed) && icon->iCount == 0)  // 1.01 car sin(pi) = 1+epsilon :-/
+	if (bUseText && icon->iLabelTexture != 0 && icon->fScale > 1.01 && (! mySystem.bLabelForPointedIconOnly || icon->bPointed))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
 	{
 		glPushMatrix ();
 		
@@ -1140,8 +1140,11 @@ void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor,
 	///glEnable(GL_POLYGON_OFFSET_FILL);
 	///glPolygonOffset (1., 1.);
 	glPolygonMode(GL_FRONT, GL_LINE);
+	glEnable (GL_LINE_SMOOTH);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
-	glHint (GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	
 	glLineWidth(fLineWidth); // Ici on choisi l'epaisseur du contour du polygone 
 	glColor4f(fLineColor[0], fLineColor[1], fLineColor[2], fLineColor[3]); // Et sa couleur 
 	
@@ -1150,7 +1153,7 @@ void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor,
 	glDrawArrays(GL_LINE_LOOP, 0, iNbVertex);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
+	glDisable(GL_LINE_SMOOTH);
 	glDisable(GL_BLEND);
 	glDisable(GL_POLYGON_OFFSET_FILL);
-	glPolygonMode(GL_FRONT, GL_FILL);
 }

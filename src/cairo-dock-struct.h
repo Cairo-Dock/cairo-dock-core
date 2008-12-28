@@ -257,14 +257,8 @@ struct _CairoDock {
 	gint iSidPopUp;
 	/// serial ID for window popping down to the bottom layer.
 	gint iSidPopDown;
-	/// serial ID du thread de grossisement des icones.
-	gint iSidGrowUp_deprecated;
-	/// serial ID du thread de diminution des icones.
-	gint iSidShrinkDown_deprecated;
 	/// serial ID du thread qui enverra le signal de sortie retarde.
 	gint iSidLeaveDemand;
-	/// serial ID du thread qui signale qu'on peut inserer un element dans le dock a cet endroit.
-	gint iSidDropIndicator_deprecated;
 	/// serial ID du thread qui deplace les icones lateralement lors d'un glisse d'icone interne
 	gint iSidIconGlide;
 	
@@ -556,22 +550,11 @@ typedef enum {
 	} CairoDockIconType;
 
 typedef enum {
-	CAIRO_DOCK_BOUNCE = 0,
-	CAIRO_DOCK_ROTATE,
-	CAIRO_DOCK_BLINK,
-	CAIRO_DOCK_PULSE,
-	CAIRO_DOCK_UPSIDE_DOWN,
-	CAIRO_DOCK_WOBBLY,
-	CAIRO_DOCK_RANDOM,
-	CAIRO_DOCK_NB_ANIMATIONS,
-	CAIRO_DOCK_FOLLOW_MOUSE,
-	CAIRO_DOCK_AVOID_MOUSE
-	} CairoDockAnimationType;
-
-typedef enum {
 	CAIRO_DOCK_STATE_REST = 0,
 	CAIRO_DOCK_STATE_MOUSE_HOVERED,
 	CAIRO_DOCK_STATE_CLICKED,
+	CAIRO_DOCK_STATE_AVOID_MOUSE,
+	CAIRO_DOCK_STATE_FOLLOW_MOUSE,
 	CAIRO_DOCK_STATE_REMOVE_INSERT,
 	CAIRO_DOCK_NB_STATES
 	} CairoDockAnimationState;
@@ -642,8 +625,6 @@ struct _Icon {
 	gdouble fDrawX;
 	/// Ordonnee du bord haut de l'image de l'icone.
 	gdouble fDrawY;
-	/// Position de l'icone hors animation.
-	gdouble fDrawXAtRest_deprecated, fDrawYAtRest_deprecated;
 	/// Facteur de zoom sur la largeur de l'icone.
 	gdouble fWidthFactor;
 	/// Facteur de zoom sur la hauteur de l'icone.
@@ -652,10 +633,6 @@ struct _Icon {
 	gdouble fAlpha;
 	/// TRUE ssi l'icone est couramment pointee.
 	gboolean bPointed;
-	/// Compteur de l'animation de l'icone (> 0 si une animation est en cours, 0 sinon).
-	gint iCount;
-	/// Type de l'animation.
-	CairoDockAnimationType iAnimationType;
 	/// Facteur de zoom personnel, utilise pour l'apparition et la suppression des icones.
 	gdouble fPersonnalScale;
 	/// Decalage en ordonnees de reflet (pour le rebond, >= 0).

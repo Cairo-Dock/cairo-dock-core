@@ -49,6 +49,7 @@ void cairo_dock_render_dialog_with_new_data (CairoDialog *pDialog, CairoDialogRe
 void cairo_dock_update_renderer_list_for_gui (void);
 void cairo_dock_update_desklet_decorations_list_for_gui (void);
 void cairo_dock_update_desklet_decorations_list_for_applet_gui (void);
+void cairo_dock_update_animations_list_for_gui (void);
 
 
 int cairo_dock_register_animation (const gchar *cAnimation);

@@ -54,14 +54,6 @@ double cairo_dock_draw_frame (cairo_t *pCairoContext, double fRadius, double fLi
 void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *pDock, double fOffsetY, double fOffsetX, double fWidth);
 
 
-/**
-*Dessine entierement une icone, dont toutes les caracteristiques ont ete prealablement calculees. Gere sa position, sa transparence (modulee par la transparence du dock au repos), son reflet, son placement de profil, son etiquette, et son info-rapide.
-*@param icon l'icone a dessiner.
-*@param pDock le dock auquel elle appartient.
-*/
-void cairo_dock_manage_animations (Icon *icon, CairoDock *pDock);
-
-
 void cairo_dock_set_icon_scale_on_context (cairo_t *pCairoContext, Icon *icon, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp);
 
 void cairo_dock_draw_icon_cairo (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext);

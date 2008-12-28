@@ -681,7 +681,6 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 
 			if (bToBeInserted)
 			{
-				pIcon->iCount = 0;
 				CairoDock *pDock = CAIRO_DOCK (pNewContainer);
 				cairo_dock_insert_icon_in_dock (pIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);
 				pIcon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);

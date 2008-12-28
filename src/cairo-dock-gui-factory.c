@@ -586,7 +586,7 @@ void cairo_dock_build_desklet_decorations_list_for_applet_gui (GHashTable *pHash
 	_cairo_dock_add_one_decoration_item ("default", NULL, s_pDecorationsListStore2);
 	g_hash_table_foreach (pHashTable, (GHFunc) _cairo_dock_add_one_decoration_item, s_pDecorationsListStore2);
 }
-static void _cairo_dock_add_one_animation_item (gchar *cName, GtkListStore *pModele)
+static void _cairo_dock_add_one_animation_item (gchar *cName, gint iAnimationID, GtkListStore *pModele)
 {
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
@@ -604,7 +604,7 @@ void cairo_dock_build_animations_list_for_gui (GHashTable *pHashTable)
 	
 	s_pAnimationsListStore = gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF);
 	
-	_cairo_dock_add_one_animation_item ("", s_pAnimationsListStore);
+	_cairo_dock_add_one_animation_item ("none", 0, s_pAnimationsListStore);
 	g_hash_table_foreach (pHashTable, (GHFunc) _cairo_dock_add_one_animation_item, s_pAnimationsListStore);
 }
 
@@ -1122,7 +1122,23 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				break ;
 				
 				case 'a' :
-					
+					cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
+					modele = s_pAnimationsListStore;
+					pOneWidget = gtk_combo_box_new_with_model (GTK_TREE_MODEL (modele));
+
+					rend = gtk_cell_renderer_text_new ();
+					gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);
+					gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+
+					if (_cairo_dock_find_iter_from_name (modele, cValue, &iter))
+						gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);
+					pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
+					gtk_box_pack_start (GTK_BOX (pHBox),
+						pOneWidget,
+						FALSE,
+						FALSE,
+						0);
+					g_free (cValue);
 				break ;
 				
 				case 'd' :
