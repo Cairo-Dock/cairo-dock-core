@@ -22,5 +22,8 @@ void cairo_dock_update_keyfile_from_widget_list (GKeyFile *pKeyFile, GSList *pWi
 void cairo_dock_free_generated_widget_list (GSList *pWidgetList);
 
 
+GtkWidget *cairo_dock_find_widget_from_name (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName);
+
+
 G_END_DECLS
 #endif

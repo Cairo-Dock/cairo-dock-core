@@ -592,7 +592,7 @@ static void _cairo_dock_add_one_animation_item (gchar *cName, gint iAnimationID,
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
 	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
-		CAIRO_DOCK_MODEL_NAME, gettext (cName),
+		CAIRO_DOCK_MODEL_NAME, cName != NULL && *cName != '\0' ? gettext (cName) : cName,
 		CAIRO_DOCK_MODEL_RESULT, cName,
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
 		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
@@ -604,7 +604,7 @@ void cairo_dock_build_animations_list_for_gui (GHashTable *pHashTable)
 	
 	s_pAnimationsListStore = gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF);
 	
-	_cairo_dock_add_one_animation_item ("none", 0, s_pAnimationsListStore);
+	_cairo_dock_add_one_animation_item ("", 0, s_pAnimationsListStore);
 	g_hash_table_foreach (pHashTable, (GHFunc) _cairo_dock_add_one_animation_item, s_pAnimationsListStore);
 }
 
@@ -1160,6 +1160,16 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						FALSE,
 						0);
 					g_free (cValue);
+				break ;
+				
+				case '_' :  // container pour widget personnalise.
+					pOneWidget = gtk_hbox_new (0, FALSE);
+					pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
+					gtk_box_pack_start(GTK_BOX (pFrameVBox != NULL ? pFrameVBox : pVBox),
+						pOneWidget,
+						FALSE,
+						FALSE,
+						0);
 				break ;
 				
 				case 's' :  // string
@@ -1998,4 +2008,33 @@ void cairo_dock_free_generated_widget_list (GSList *pWidgetList)
 {
         g_slist_foreach (pWidgetList, (GFunc) _cairo_dock_free_widget_list, NULL);
         g_slist_free (pWidgetList);
+}
+
+
+static int _cairo_dock_find_widget_from_name (gpointer *data, gpointer *pUserData)
+{
+	gchar *cWantedGroupName = pUserData[0];
+	gchar *cWantedKeyName = pUserData[1];
+	
+	gchar *cGroupName = data[0];
+	gchar *cKeyName = data[1];
+	
+	if (strcmp (cGroupName, cWantedGroupName) == 0 && strcmp (cKeyName, cWantedKeyName) == 0)
+	{
+		return 0;
+	}
+	else
+		return 1;
+}
+GtkWidget *cairo_dock_find_widget_from_name (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName)
+{
+	const gchar *data[2] = {cGroupName, cKeyName};
+	GSList *pElement = g_slist_find_custom (pWidgetList, data, (GCompareFunc) _cairo_dock_find_widget_from_name);
+	if (pElement == NULL)
+		return NULL;
+	
+	gpointer *pWidgetData = pElement->data;
+	GSList *pSubWidgetList = pWidgetData[2];
+	g_return_val_if_fail (pSubWidgetList != NULL, NULL);
+	return pSubWidgetList->data;
 }

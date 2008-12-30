@@ -47,8 +47,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	
 	pTaskBar->bDemandsAttentionWithDialog = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "demands attention with dialog", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
 	pTaskBar->iDialogDuration = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "duration", &bFlushConfFileNeeded, 2, NULL, NULL);
-	pTaskBar->bDemandsAttentionWithAnimation = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "demands attention with animation", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
-	pTaskBar->bAnimateOnActiveWindow = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "animate on active window", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
+	pTaskBar->cAnimationOnDemandsAttention = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "animation on demands attention", &bFlushConfFileNeeded, "fire", NULL, NULL);
+	pTaskBar->cAnimationOnActiveWindow = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "animation on active window", &bFlushConfFileNeeded, "wobbly", NULL, NULL);
 	
 	pTaskBar->bOverWriteXIcons = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "overwrite xicon", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	pTaskBar->bShowThumbnail = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "window thumbnail", &bFlushConfFileNeeded, TRUE, NULL, NULL);
@@ -57,6 +57,12 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	return bFlushConfFileNeeded;
 }
 
+
+static void reset_config (CairoConfigTaskBar *pTaskBar)
+{
+	g_free (pTaskBar->cAnimationOnActiveWindow);
+	g_free (pTaskBar->cAnimationOnDemandsAttention);
+}
 
 static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskBar)
 {
@@ -122,7 +128,7 @@ DEFINE_PRE_INIT (TaskBar)
 	
 	pModule->reload = (CairoDockInternalModuleReloadFunc) reload;
 	pModule->get_config = (CairoDockInternalModuleGetConfigFunc) get_config;
-	pModule->reset_config = NULL;
+	pModule->reset_config = (CairoDockInternalModuleResetConfigFunc) reset_config;
 	pModule->reset_data = NULL;
 	
 	pModule->pConfig = (CairoInternalModuleConfigPtr) &myTaskBar;

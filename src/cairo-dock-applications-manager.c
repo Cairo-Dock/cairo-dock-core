@@ -650,9 +650,9 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 {
 	if (icon->fPersonnalScale == 0)  // sinon on laisse l'animation actuelle.
 	{
-		if (cairo_dock_animation_will_be_visible (pParentDock) && myTaskBar.bAnimateOnActiveWindow && ! pParentDock->bInside && icon->iAnimationState == CAIRO_DOCK_STATE_REST)
+		if (cairo_dock_animation_will_be_visible (pParentDock) && myTaskBar.cAnimationOnActiveWindow && ! pParentDock->bInside && icon->iAnimationState == CAIRO_DOCK_STATE_REST)
 		{
-			cairo_dock_request_icon_animation (icon, pParentDock, "wobbly", 1);
+			cairo_dock_request_icon_animation (icon, pParentDock, myTaskBar.cAnimationOnActiveWindow, 1);
 		}
 	}
 }
@@ -782,7 +782,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 							}
 							else
 							{
-								if (myTaskBar.bAnimateOnActiveWindow)
+								if (myTaskBar.cAnimationOnActiveWindow)
 									cairo_dock_animate_icon_on_active (icon, pParentDock);
 								else if (! pParentDock->bIsShrinkingDown)
 									cairo_dock_redraw_my_icon (icon, CAIRO_CONTAINER (pParentDock));
@@ -877,7 +877,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					cairo_dock_window_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention);
 					g_print ("changement d'etat de %d => {%d ; %d ; %d ; %d}\n", Xid, bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention);
 					
-					if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.bDemandsAttentionWithAnimation))
+					if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
 					{
 						if (icon != NULL && ! icon->bIsDemandingAttention)
 						{

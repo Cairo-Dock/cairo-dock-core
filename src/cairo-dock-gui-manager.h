@@ -22,6 +22,7 @@ struct _CairoDockGroupDescription {
 	gchar *cOriginalConfFilePath;
 	gchar *cIcon;
 	gchar *cConfFilePath;
+	void (* load_custom_widget) (void);
 	} ;
 
 typedef struct _CairoDockGroupDescription CairoDockGroupDescription;
@@ -54,12 +55,14 @@ void cairo_dock_free_categories (void);
 
 void cairo_dock_write_current_group_conf_file (gchar *cConfFilePath);
 
-void cairo_dock_reload_current_group_widget (void);
 
 gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData);
 
 
 gpointer cairo_dock_get_previous_widget (void);
+
+
+void cairo_dock_reload_current_group_widget (void);
 
 
 G_END_DECLS

@@ -28,8 +28,8 @@ struct _CairoConfigTaskBar {
 	gboolean bAppliOnCurrentDesktopOnly;
 	gboolean bDemandsAttentionWithDialog;
 	gint iDialogDuration;
-	gboolean bDemandsAttentionWithAnimation;
-	gboolean bAnimateOnActiveWindow;
+	gchar *cAnimationOnDemandsAttention;
+	gchar *cAnimationOnActiveWindow;
 	gboolean bOverWriteXIcons;
 	gboolean bShowThumbnail;
 	gboolean bMixLauncherAppli;

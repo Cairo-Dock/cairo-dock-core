@@ -496,16 +496,16 @@ void cairo_dock_draw_icon_cairo (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 			if (pDock->bHorizontalDock)
 			{
 				if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (icon))
-					cairo_translate (pCairoContext, 0, (pDock->bDirectionUp ? icon->fDeltaYReflection + icon->fHeight * 1. : -icon->fDeltaYReflection - myIcons.fReflectSize * 1.));
+					cairo_translate (pCairoContext, 0, (pDock->bDirectionUp ? icon->fDeltaYReflection + icon->fHeight : -icon->fDeltaYReflection - myIcons.fReflectSize * pDock->fRatio));
 				else
-					cairo_translate (pCairoContext, 0, (pDock->bDirectionUp ? icon->fDeltaYReflection + icon->fHeight * icon->fScale : -icon->fDeltaYReflection - myIcons.fReflectSize * icon->fScale));
+					cairo_translate (pCairoContext, 0, (pDock->bDirectionUp ? icon->fDeltaYReflection + icon->fHeight * icon->fScale : -icon->fDeltaYReflection - myIcons.fReflectSize * icon->fScale * pDock->fRatio));
 			}
 			else
 			{
 				if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (icon))
-					cairo_translate (pCairoContext, (pDock->bDirectionUp ? icon->fDeltaYReflection + icon->fHeight * 1. : -icon->fDeltaYReflection - myIcons.fReflectSize * 1.), 0);
+					cairo_translate (pCairoContext, (pDock->bDirectionUp ? icon->fDeltaYReflection + icon->fHeight : -icon->fDeltaYReflection - myIcons.fReflectSize * pDock->fRatio), 0);
 				else
-					cairo_translate (pCairoContext, (pDock->bDirectionUp ? icon->fDeltaYReflection + icon->fHeight * icon->fScale : -icon->fDeltaYReflection - myIcons.fReflectSize * icon->fScale), 0);
+					cairo_translate (pCairoContext, (pDock->bDirectionUp ? icon->fDeltaYReflection + icon->fHeight * icon->fScale : -icon->fDeltaYReflection - myIcons.fReflectSize * icon->fScale * pDock->fRatio), 0);
 			}
 			cairo_dock_set_icon_scale_on_context (pCairoContext, icon, pDock->bHorizontalDock, pDock->fRatio, pDock->bDirectionUp);
 			
@@ -729,7 +729,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		{
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
-				0,
+				(pDock->bDirectionUp ? 0. : - myIcons.fReflectSize),
 				0);
 		}
 		else if (bHorizontalDock)

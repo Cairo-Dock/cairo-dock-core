@@ -281,14 +281,14 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		glPushMatrix ();
 		double x0, y0, x1, y1;
 		double fScale = ((myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon)) ? 1. : pIcon->fScale);
-		double fReflectRatio = myIcons.fReflectSize / pIcon->fHeight / fScale  / pIcon->fHeightFactor;
-		double fOffsetY = pIcon->fHeight * fScale/2 + myIcons.fReflectSize/2 + pIcon->fDeltaYReflection;
+		double fReflectRatio = myIcons.fReflectSize * pDock->fRatio / pIcon->fHeight / fScale  / pIcon->fHeightFactor;
+		double fOffsetY = pIcon->fHeight * fScale/2 + myIcons.fReflectSize * pDock->fRatio/2 + pIcon->fDeltaYReflection;
 		if (pDock->bHorizontalDock)
 		{
 			if (pDock->bDirectionUp)
 			{
 				glTranslatef (0., - fOffsetY, 0.);
-				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, - myIcons.fReflectSize, 1.);  // taille du reflet et on se retourne.
+				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, - myIcons.fReflectSize * pDock->fRatio, 1.);  // taille du reflet et on se retourne.
 				x0 = 0.;
 				y0 = 1. - fReflectRatio;
 				x1 = 1.;
@@ -297,7 +297,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			else
 			{
 				glTranslatef (0., fOffsetY, 0.);
-				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, myIcons.fReflectSize, 1.);
+				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, myIcons.fReflectSize * pDock->fRatio, 1.);
 				x0 = 0.;
 				y0 = fReflectRatio;
 				x1 = 1.;
@@ -309,7 +309,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			if (pDock->bDirectionUp)
 			{
 				glTranslatef (fOffsetY, 0., 0.);
-				glScalef (- myIcons.fReflectSize, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
+				glScalef (- myIcons.fReflectSize * pDock->fRatio, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
 				x0 = 1. - fReflectRatio;
 				y0 = 0.;
 				x1 = 1.;
@@ -318,7 +318,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			else
 			{
 				glTranslatef (- fOffsetY, 0., 0.);
-				glScalef (myIcons.fReflectSize, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
+				glScalef (myIcons.fReflectSize * pDock->fRatio, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
 				x0 = fReflectRatio;
 				y0 = 0.;
 				x1 = 0.;
@@ -634,7 +634,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		
 		if (! pDock->bHorizontalDock && mySystem.bTextAlwaysHorizontal)
 		{
-			glTranslatef (-icon->fHeight * icon->fScale/2 + icon->iTextWidth / 2,
+			glTranslatef (-icon->fHeight * icon->fScale/2 - (pDock->bDirectionUp ? 0. : myIcons.fReflectSize) + icon->iTextWidth / 2,
 				(icon->fWidth * icon->fScale + icon->iTextHeight) / 2,
 				0.);
 		}

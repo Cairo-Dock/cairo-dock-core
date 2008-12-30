@@ -329,9 +329,6 @@ void cairo_dock_render_opengl_linear (CairoDock *pDock)
 	else
 		fDockOffsetY = pDock->iDecorationsHeight + 1.5 * fLineWidth;
 	
-	//if (! pDock->bHorizontalDock)
-	//	fDockOffsetX = pDock->iCurrentWidth - fDockOffsetX;
-	
 	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
 	double fRatio = pDock->fRatio;
 	

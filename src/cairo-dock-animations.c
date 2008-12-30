@@ -478,7 +478,7 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 
 void cairo_dock_launch_animation (CairoDock *pDock)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	if (pDock->iSidGLAnimation == 0)
 	{
 		if (g_bUseOpenGL && pDock->render_opengl != NULL)
@@ -543,11 +543,6 @@ gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserD
 gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
 	cairo_dock_mark_icon_as_inserting_removing (pIcon);  // On prend en charge le dessin de l'icone pendant sa phase d'insertion/suppression.
-	
-	if (pIcon->fPersonnalScale == 0.05)
-	{
-		
-	}
 	
 	return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 }

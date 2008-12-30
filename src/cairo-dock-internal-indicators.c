@@ -80,7 +80,10 @@ static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicator
 		cairo_dock_load_task_indicator (myTaskBar.bShowAppli && myTaskBar.bMixLauncherAppli ? pIndicators->cIndicatorImagePath : NULL, pCairoContext, fMaxScale, pIndicators->fIndicatorRatio);
 	}
 	
-	if (cairo_dock_strings_differ (pPrevIndicators->cActiveIndicatorImagePath, pIndicators->cActiveIndicatorImagePath))
+	if (cairo_dock_strings_differ (pPrevIndicators->cActiveIndicatorImagePath, pIndicators->cActiveIndicatorImagePath) ||
+		pPrevIndicators->iActiveCornerRadius != pIndicators->iActiveCornerRadius ||
+		pPrevIndicators->iActiveLineWidth != pIndicators->iActiveLineWidth ||
+		cairo_dock_colors_differ (pPrevIndicators->fActiveColor, pIndicators->fActiveColor))
 	{
 		cairo_dock_load_active_window_indicator (pCairoContext,
 			pPrevIndicators->cActiveIndicatorImagePath,

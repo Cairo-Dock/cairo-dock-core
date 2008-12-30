@@ -145,11 +145,11 @@ demands attention with dialog = true
 #{in seconds}
 duration = 2
 
-#b- Signal the applications demanding your attention with an animation ?
-demands attention with animation = true
+#a- Signal the applications demanding your attention with an animation ?
+animation on demands attention = fire
 
-#b- Play a short animation of the icon when its window becomes active ?
-animate on active window = true
+#a- Play a short animation of the icon when its window becomes active ?
+animation on active window = wobbly
 
 #F-[Representation;gtk-find]
 frame3 =

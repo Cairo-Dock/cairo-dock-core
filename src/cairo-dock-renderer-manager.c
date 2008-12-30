@@ -354,14 +354,14 @@ static int iNbAnimation = 0;
 int cairo_dock_register_animation (const gchar *cAnimation)
 {
 	cd_message ("%s (%s)", __func__, cAnimation);
-	g_hash_table_insert (s_hAnimationsTable, g_strdup (cAnimation), GINT_TO_POINTER (iNbAnimation));
 	iNbAnimation ++;
-	return iNbAnimation-1;
+	g_hash_table_insert (s_hAnimationsTable, g_strdup (cAnimation), GINT_TO_POINTER (iNbAnimation));
+	return iNbAnimation;
 }
 
 int cairo_dock_get_animation_id (const gchar *cAnimation)
 {
-	g_return_val_if_fail (cAnimation != NULL, -1);
+	g_return_val_if_fail (cAnimation != NULL, 0);
 	return GPOINTER_TO_INT (g_hash_table_lookup (s_hAnimationsTable, cAnimation));
 }
 

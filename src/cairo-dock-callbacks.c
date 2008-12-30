@@ -1211,40 +1211,6 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommandFormat, gchar *cWo
 		return FALSE;
 	}
 	return TRUE;
-	/**GError *erreur = NULL;
-	int argc;
-	gchar **argv = NULL;
-	g_shell_parse_argv (cCommand,
-		&argc,
-		&argv,
-		&erreur);
-	if (erreur != NULL)
-	{
-		cd_warning ("couldn't parse this command (%s), will try to launch it as a script", erreur->message);
-		g_error_free (erreur);
-		return FALSE;
-	}
-	
-	GPid iChildPID;
-	g_spawn_async (cWorkingDirectory,
-		argv,
-		NULL,  // env
-		G_SPAWN_SEARCH_PATH,
-		NULL,
-		NULL,
-		&iChildPID,
-		&erreur);
-	g_strfreev (argv);
-	if (erreur != NULL)
-	{
-		cd_warning ("when trying to execute '%s' : %s", cCommand, erreur->message);
-		g_error_free (erreur);
-		g_free (cCommand);
-		return FALSE;
-	}
-	
-	g_free (cCommand);
-	return TRUE;*/
 }
 
 gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState)
@@ -1270,14 +1236,12 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 			cairo_dock_fm_launch_uri (icon->acCommand);
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	}
-	else if (CAIRO_DOCK_IS_APPLI (icon) && ! ((iButtonState & GDK_SHIFT_MASK) && CAIRO_DOCK_IS_LAUNCHER (icon)))
+	else if (CAIRO_DOCK_IS_APPLI (icon) && ! ((iButtonState & GDK_SHIFT_MASK) && CAIRO_DOCK_IS_LAUNCHER (icon)) && ! CAIRO_DOCK_IS_APPLET (icon))
 	{
-		{
-			if (cairo_dock_get_current_active_window () == icon->Xid && myTaskBar.bMinimizeOnClick)  // ne marche que si le dock est une fenêtre de type 'dock', sinon il prend le focus.
-				cairo_dock_minimize_xwindow (icon->Xid);
-			else
-				cairo_dock_show_xwindow (icon->Xid);
-		}
+		if (cairo_dock_get_current_active_window () == icon->Xid && myTaskBar.bMinimizeOnClick)  // ne marche que si le dock est une fenêtre de type 'dock', sinon il prend le focus.
+			cairo_dock_minimize_xwindow (icon->Xid);
+		else
+			cairo_dock_show_xwindow (icon->Xid);
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	}
 	else if (CAIRO_DOCK_IS_LAUNCHER (icon))
@@ -1310,7 +1274,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 
 gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock)
 {
-	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.bCloseAppliOnMiddleClick)
+	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.bCloseAppliOnMiddleClick && ! CAIRO_DOCK_IS_APPLET (icon))
 	{
 		cairo_dock_close_xwindow (icon->Xid);
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
@@ -1366,8 +1330,9 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							if (myAccessibility.cRaiseDockShortcut != NULL)
 								s_bHideAfterShortcut = TRUE;
 							
-							cairo_dock_mark_icon_as_clicked (icon);
-							cairo_dock_launch_animation (pDock);
+							cairo_dock_start_icon_animation (icon, pDock);
+							//cairo_dock_mark_icon_as_clicked (icon);
+							//cairo_dock_launch_animation (pDock);
 						}
 					}
 					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked)  //  && icon->iType == s_pIconClicked->iType

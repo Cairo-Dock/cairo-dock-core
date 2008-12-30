@@ -38,6 +38,9 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 */
 void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pIcon, CairoContainer *pContainer);
 
+void cairo_dock_set_icon_surface_with_bar (cairo_t *pIconContext, cairo_surface_t *pSurface, double fValue, Icon *pIcon, CairoContainer *pContainer);
+
+
 /**
 *Cree les surfaces de reflection d'une icone.
 *@param pIconContext le contexte de dessin lie a la surface de l'icone; n'est pas altere par la fonction.
@@ -955,8 +958,7 @@ gboolean CD_APPLET_ON_SCROLL (CairoDockModuleInstance *myApplet, Icon *pClickedI
 *@param fValue la valeur en fraction de la valeur max (donc dans [0 , 1]).
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_BAR(pSurface, fValue) do { \
-	cairo_dock_set_icon_surface_full (myDrawContext, pSurface, 1., 1., myIcon, myContainer); \
-	cairo_dock_draw_bar_on_icon (myDrawContext, fValue, myIcon, myContainer); \
+	cairo_dock_set_icon_surface_with_bar (myDrawContext, pSurface, fValue, myIcon, myContainer); \
 	cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer); \
 	cairo_dock_redraw_my_icon (myIcon, myContainer); } while (0)
 

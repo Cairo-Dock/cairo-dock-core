@@ -348,6 +348,7 @@ struct _CairoDockModuleInterface {
 	gboolean (* read_conf_file) (CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile);
 	void (* reset_config) (CairoDockModuleInstance *pInstance);
 	void (* reset_data) (CairoDockModuleInstance *pInstance);
+	void (* load_custom_widget) (void);
 };
 
 struct _CairoDockModuleInstance {

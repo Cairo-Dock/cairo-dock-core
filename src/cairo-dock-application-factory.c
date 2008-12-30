@@ -427,7 +427,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 
 	//\__________________ On regarde son type.
 	gulong *pTypeBuffer = NULL;
-	g_print ("nouvelle icone d'appli (%d)\n", Xid);
+	cd_debug (" + nouvelle icone d'appli (%d)", Xid);
 	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmWindowType, 0, G_MAXULONG, False, XA_ATOM, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pTypeBuffer);
 	if (iBufferNbElements != 0)
 	{
@@ -441,8 +441,8 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 				Window XMainAppliWindow = _cairo_dock_get_parent_window (Xid);
 				if (XMainAppliWindow != 0)
 				{
-					g_print ("dialogue 'transient for' => on ignore\n");
-					if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.bDemandsAttentionWithAnimation))
+					cd_debug ("  dialogue 'transient for' => on ignore");
+					if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
 					{
 						Icon *pParentIcon = cairo_dock_get_icon_with_Xid (XMainAppliWindow);
 						if (pParentIcon != NULL)
@@ -475,8 +475,8 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 		XGetTransientForHint (s_XDisplay, Xid, &XMainAppliWindow);
 		if (XMainAppliWindow != 0)
 		{
-			g_print ("fenetre modale => on saute.\n");
-			if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.bDemandsAttentionWithAnimation))
+			cd_debug ("  fenetre modale => on saute.");
+			if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
 			{
 				Icon *pParentIcon = cairo_dock_get_icon_with_Xid (XMainAppliWindow);
 				if (pParentIcon != NULL)
@@ -507,7 +507,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 			g_hash_table_insert (s_hAppliTable, pPidBuffer, NULL);  // On rajoute son PID meme si c'est une appli qu'on n'affichera pas.
 		return NULL;
 	}
-	cd_message ("recuperation de '%s' (bIsHidden : %d)", pNameBuffer, bIsHidden);
+	cd_debug ("recuperation de '%s' (bIsHidden : %d)", pNameBuffer, bIsHidden);
 	
 	
 	//\__________________ On recupere la classe.
@@ -616,7 +616,7 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 		XWMHints *pWMHints = XGetWMHints (s_XDisplay, icon->Xid);
 		if (pWMHints != NULL)
 		{
-			if ((pWMHints->flags & XUrgencyHint) && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.bDemandsAttentionWithAnimation))
+			if ((pWMHints->flags & XUrgencyHint) && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
 			{
 				if (iState == PropertyNewValue)
 				{
@@ -656,9 +656,9 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock)
 	icon->bIsDemandingAttention = TRUE;
 	if (myTaskBar.bDemandsAttentionWithDialog)
 		cairo_dock_show_temporary_dialog_with_icon (icon->acName, icon, CAIRO_CONTAINER (pDock), myTaskBar.iDialogDuration, "same icon");
-	if (myTaskBar.bDemandsAttentionWithAnimation)
+	if (myTaskBar.cAnimationOnDemandsAttention)
 	{
-		cairo_dock_request_icon_animation (icon, pDock, "default", 0);
+		cairo_dock_request_icon_animation (icon, pDock, myTaskBar.cAnimationOnDemandsAttention, 0);
 	}
 }
 void cairo_dock_appli_demands_attention (Icon *icon)

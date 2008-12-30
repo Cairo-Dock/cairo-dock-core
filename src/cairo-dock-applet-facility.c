@@ -128,6 +128,34 @@ void cairo_dock_set_image_on_icon (cairo_t *pIconContext, gchar *cImagePath, Ico
 	cairo_surface_destroy (pImageSurface);
 }
 
+void cairo_dock_set_icon_surface_with_bar (cairo_t *pIconContext, cairo_surface_t *pSurface, double fValue, Icon *pIcon, CairoContainer *pContainer)
+{
+	g_return_if_fail (cairo_status (pIconContext) == CAIRO_STATUS_SUCCESS);
+	
+	//\________________ On efface l'ancienne image.
+	cairo_set_source_rgba (pIconContext, 0.0, 0.0, 0.0, 0.0);
+	cairo_set_operator (pIconContext, CAIRO_OPERATOR_SOURCE);
+	cairo_paint (pIconContext);
+	cairo_set_operator (pIconContext, CAIRO_OPERATOR_OVER);
+	
+	//\________________ On applique la nouvelle image.
+	if (pSurface != NULL)
+	{
+		cairo_set_source_surface (
+			pIconContext,
+			pSurface,
+			0.,
+			0.);
+		cairo_paint (pIconContext);
+	}
+	
+	//\________________ On dessine la barre.
+	cairo_dock_draw_bar_on_icon (pIconContext, fValue, pIcon, pContainer);
+	
+	if (g_bUseOpenGL)
+		cairo_dock_update_icon_texture (pIcon);
+}
+
 void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pIcon, CairoContainer *pContainer)
 {
 	double fMaxScale = (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) / CAIRO_DOCK (pContainer)->fRatio : 1);
