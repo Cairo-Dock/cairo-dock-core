@@ -286,6 +286,7 @@ struct _CairoDock {
 	gboolean bIsGrowingUp;
 	GdkRectangle inputArea;
 	GdkBitmap* pShapeBitmap;
+	gchar *cToBeDestroyed;
 };
 
 
@@ -696,6 +697,7 @@ struct _Icon {
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
 	gboolean bStatic;
 	CairoDockAnimationState iAnimationState;
+	gchar *cInitialName;
 };
 
 

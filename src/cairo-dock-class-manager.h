@@ -126,6 +126,8 @@ void cairo_dock_update_activity_on_inhibators (gchar *cClass, Window Xid);
 */
 void cairo_dock_update_inactivity_on_inhibators (gchar *cClass, Window Xid);
 
+void cairo_dock_update_name_on_inhibators (gchar *cClass, Window Xid, gchar *cNewName);
+
 Icon *cairo_dock_get_classmate (Icon *pIcon);
 
 G_END_DECLS

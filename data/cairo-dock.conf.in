@@ -162,8 +162,7 @@ max name length = 15
 #{To the right, you can control the transparency of minimized windows, to the left the transparency of visible windows. The more you go aside, the more the concerned icons will be transparent; on the middle, icons are always plain.}
 visibility alpha = 0.25
 
-
-#gtk-preferences;0;All the parameters you will never want to tweak.
+#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-system.png;0;All the parameters you will never want to tweak.
 [System]
 
 #F-[Movement parameters;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-movment.png]
@@ -257,7 +256,7 @@ fake transparency = false
 modules=
 
 
-#gtk-goto-bottom;1;Define the appearance of the dock when it's hidden.
+#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-hidden-dock.png;1;Define the appearance of the dock when it's hidden.
 [Hidden dock]
 
 #i+[1;1024] Size of the dock (width x height, in pixels) :
@@ -617,7 +616,7 @@ rotate image =
 #{If you don't provide any, a default image will be used.}
 retach image = 
 
-#gtk-select-color;1;Indicators are extra indications on your icons.
+#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-indicators.png;1;Indicators are extra indications on your icons.
 [Indicators]
 
 #F+[Indicator of drag'n'drop on icons]

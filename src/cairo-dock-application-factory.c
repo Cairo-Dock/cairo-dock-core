@@ -38,6 +38,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-notifications.h"
+#include "cairo-dock-applet-facility.h"
 #include "cairo-dock-application-factory.h"
 
 
@@ -593,6 +594,8 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 				pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 				cairo_dock_fill_one_text_buffer (icon, pCairoContext, &myLabels.iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pDock->bHorizontalDock), pDock->bDirectionUp);
 				cairo_destroy (pCairoContext);
+				
+				cairo_dock_update_name_on_inhibators (icon->cClass, icon->Xid, icon->acName);
 			}
 		}
 	}

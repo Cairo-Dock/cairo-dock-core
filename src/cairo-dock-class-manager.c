@@ -337,6 +337,17 @@ gboolean cairo_dock_prevent_inhibated_class (Icon *pIcon)
 							cairo_dock_set_one_icon_geometry_for_window_manager (pInhibatorIcon, pInhibhatorDock);
 						bToBeInhibited = TRUE;
 					}
+					if (pInhibhatorDock != NULL && pIcon->acName != NULL)
+					{
+						if (pInhibatorIcon->cInitialName == NULL)
+							pInhibatorIcon->cInitialName = pInhibatorIcon->acName;
+						else
+							g_free (pInhibatorIcon->acName);
+						pInhibatorIcon->acName = NULL;
+						cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pInhibhatorDock));
+						cairo_dock_set_icon_name (pCairoContext, pIcon->acName, pInhibatorIcon, pInhibhatorDock);
+						cairo_destroy (pCairoContext);
+					}
 				}
 			}
 		}
@@ -631,6 +642,43 @@ void cairo_dock_update_inactivity_on_inhibators (gchar *cClass, Window Xid)
 				cd_message (" %s aussi devient inactive", pInhibatorIcon->acName);
 				///pInhibatorIcon->bIsActive = FALSE;
 				CairoDock *pParentDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);
+				if (pParentDock != NULL && ! pParentDock->bIsShrinkingDown)
+					cairo_dock_redraw_my_icon (pInhibatorIcon, CAIRO_CONTAINER (pParentDock));
+			}
+		}
+	}
+}
+
+void cairo_dock_update_name_on_inhibators (gchar *cClass, Window Xid, gchar *cNewName)
+{
+	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	if (pClassAppli != NULL)
+	{
+		GList *pElement;
+		Icon *pInhibatorIcon;
+		for (pElement = pClassAppli->pIconsOfClass; pElement != NULL; pElement = pElement->next)
+		{
+			pInhibatorIcon = pElement->data;
+			
+			if (pInhibatorIcon->Xid == Xid && ! CAIRO_DOCK_IS_APPLET (pInhibatorIcon))
+			{
+				CairoDock *pParentDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);
+				if (pParentDock != NULL)
+				{
+					cd_message (" %s change son nom en %s", pInhibatorIcon->acName, cNewName);
+					if (pInhibatorIcon->cInitialName == NULL)
+					{
+						pInhibatorIcon->cInitialName = pInhibatorIcon->acName;
+						g_print ("pInhibatorIcon->cInitialName <- %s\n", pInhibatorIcon->cInitialName);
+					}
+					else
+						g_free (pInhibatorIcon->acName);
+					pInhibatorIcon->acName = NULL;
+					
+					cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pParentDock));
+					cairo_dock_set_icon_name (pCairoContext, (cNewName != NULL ? cNewName : pInhibatorIcon->cInitialName), pInhibatorIcon, pParentDock);
+					cairo_destroy (pCairoContext);
+				}
 				if (pParentDock != NULL && ! pParentDock->bIsShrinkingDown)
 					cairo_dock_redraw_my_icon (pInhibatorIcon, CAIRO_CONTAINER (pParentDock));
 			}

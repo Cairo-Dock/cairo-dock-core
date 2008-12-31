@@ -37,10 +37,12 @@ essentialdata_DATA = \
 	icon-labels.png\
 	icon-background.svg\
 	icon-taskbar.png\
-	icon-desklets.png
+	icon-desklets.png\
+	icon-hidden-dock.png\
+	icon-indicators.png\
+	icon-system.png
 	
 	
 EXTRA_DIST = $(essentialdata_DATA)\
 	cairo-dock
 	
-

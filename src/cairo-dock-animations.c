@@ -338,7 +338,8 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 					if (bIsAppli && pRemovingIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pRemovingIcon->cClass) && pDock->icons == NULL)  // il n'y a plus aucune icone de cette classe.
 					{
 						cd_message ("le sous-dock de la classe %s n'a plus d'element et va etre detruit", pRemovingIcon->cClass);
-						cairo_dock_destroy_dock (pDock, pRemovingIcon->cClass, NULL, NULL);
+						//cairo_dock_destroy_dock (pDock, pRemovingIcon->cClass, NULL, NULL);
+						pDock->cToBeDestroyed = g_strdup (pRemovingIcon->cClass);
 					}
 					else
 					{
@@ -431,7 +432,8 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gch
 
 static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 {
-	//g_print ("%s (%d)\n", __func__, pDock->iMagnitudeIndex);
+	g_print ("%s (%d)\n", __func__, pDock->iRefCount);
+	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
 	gboolean bIconIsAnimating, bContinue = FALSE;
 	Icon *icon;
 	GList *ic;
@@ -440,6 +442,8 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 		icon = ic->data;
 		
 		icon->fDeltaYReflection = 0;
+		if (pDock->bIsGrowingUp || pDock->bIsShrinkingDown)
+			icon->fAlpha *= fDockMagnitude + myIcons.fAlphaAtRest * (1 - fDockMagnitude);
 		
 		bIconIsAnimating = FALSE;
 		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
@@ -453,15 +457,16 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 	if (pDock->bIsGrowingUp)
 	{
 		bContinue |= cairo_dock_grow_up (pDock);
-		double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
-		icon->fAlpha *= fDockMagnitude + myIcons.fAlphaAtRest * (1 - fDockMagnitude);
 		gtk_widget_queue_draw (pDock->pWidget);
 	}
 	else if (pDock->bIsShrinkingDown)
 	{
 		bContinue |= cairo_dock_shrink_down (pDock);
-		double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
-		icon->fAlpha *= fDockMagnitude + myIcons.fAlphaAtRest * (1 - fDockMagnitude);
+		if (pDock->cToBeDestroyed)
+		{
+			cairo_dock_destroy_dock (pDock, pDock->cToBeDestroyed, NULL, NULL);
+			return FALSE;
+		}
 		gtk_widget_queue_draw (pDock->pWidget);
 	}
 	else if (g_bUseOpenGL && pDock->render_opengl)

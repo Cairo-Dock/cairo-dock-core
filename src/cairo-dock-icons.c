@@ -74,6 +74,7 @@ void cairo_dock_free_icon_buffers (Icon *icon)
 	g_free (icon->acDesktopFileName);
 	g_free (icon->acFileName);
 	g_free (icon->acName);
+	g_free (icon->cInitialName);
 	g_free (icon->acCommand);
 	g_free (icon->cWorkingDirectory);
 	g_free (icon->cBaseURI);

@@ -1102,8 +1102,6 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 	//glBlendFunc (GL_ONE, GL_ZERO);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glColor4f(1., 1., 1., 1.); // Couleur a fond
-	///glEnable(GL_POLYGON_OFFSET_FILL);
-	///glPolygonOffset (1., 1.);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	
 	if (! bHorizontal)
@@ -1137,8 +1135,6 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 
 void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor, const GLfloat *pVertexTab, int iNbVertex)
 {
-	///glEnable(GL_POLYGON_OFFSET_FILL);
-	///glPolygonOffset (1., 1.);
 	glPolygonMode(GL_FRONT, GL_LINE);
 	glEnable (GL_LINE_SMOOTH);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
@@ -1155,5 +1151,4 @@ void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor,
 	
 	glDisable(GL_LINE_SMOOTH);
 	glDisable(GL_BLEND);
-	glDisable(GL_POLYGON_OFFSET_FILL);
 }

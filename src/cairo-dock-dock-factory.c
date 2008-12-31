@@ -489,7 +489,8 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 		pPointedIcon->pSubDock = NULL;
 	}
 	
-	g_object_unref ((gpointer) pDock->pShapeBitmap);
+	if (pDock->pShapeBitmap != NULL)
+		g_object_unref ((gpointer) pDock->pShapeBitmap);
 	pDock->pShapeBitmap = NULL;
 	
 	gtk_widget_destroy (pDock->pWidget);
@@ -511,7 +512,7 @@ void cairo_dock_free_dock (CairoDock *pDock)
 
 void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDock *pReceivingDock, gchar *cpReceivingDockName)
 {
-	cd_message ("%s (%s, %d)", __func__, cDockName, pDock->iRefCount);
+	g_print ("%s (%s, %d)\n", __func__, cDockName, pDock->iRefCount);
 	g_return_if_fail (pDock != NULL);  // && cDockName != NULL
 	if (pDock->bIsMainDock)  // utiliser cairo_dock_free_all_docks ().
 		return;

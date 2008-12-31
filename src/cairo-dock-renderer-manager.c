@@ -235,7 +235,7 @@ void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRender
 	}
 	
 	pDesklet->pRenderer = pRenderer;
-	gtk_widget_set_double_buffered (pDesklet->pWidget, ! (g_bUseOpenGL && pRenderer->render_opengl != NULL));
+	gtk_widget_set_double_buffered (pDesklet->pWidget, ! (g_bUseOpenGL && pRenderer != NULL && pRenderer->render_opengl != NULL));
 	
 	if (pRenderer != NULL)
 	{
