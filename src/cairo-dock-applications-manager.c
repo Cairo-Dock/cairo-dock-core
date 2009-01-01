@@ -40,6 +40,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-animations.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-internal-position.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-applications-manager.h"
 
@@ -48,6 +49,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 extern CairoDock *g_pMainDock;
 
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
+extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
 
 extern int g_iNbDesktops;
 extern int g_iNbViewportX,g_iNbViewportY ;
@@ -600,13 +602,13 @@ void cairo_dock_get_window_position_on_its_viewport (int Xid, int *iRelativePosi
 	cairo_dock_get_window_geometry (Xid, &iGlobalPositionX, &iGlobalPositionY, &iWidthExtent, &iHeightExtent);
 	
 	while (iGlobalPositionX < 0)  // on passe au referentiel du viewport de la fenetre; inutile de connaitre sa position, puisqu'ils ont tous la meme taille.
-		iGlobalPositionX += g_iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-	while (iGlobalPositionX >= g_iScreenWidth[CAIRO_DOCK_HORIZONTAL])
-		iGlobalPositionX -= g_iScreenWidth[CAIRO_DOCK_HORIZONTAL];
+		iGlobalPositionX += g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+	while (iGlobalPositionX >= g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL])
+		iGlobalPositionX -= g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
 	while (iGlobalPositionY < 0)
-		iGlobalPositionY += g_iScreenHeight[CAIRO_DOCK_HORIZONTAL];
-	while (iGlobalPositionY >= g_iScreenHeight[CAIRO_DOCK_HORIZONTAL])
-		iGlobalPositionY -= g_iScreenHeight[CAIRO_DOCK_HORIZONTAL];
+		iGlobalPositionY += g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+	while (iGlobalPositionY >= g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
+		iGlobalPositionY -= g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
 	
 	*iRelativePositionX = iGlobalPositionX;
 	*iRelativePositionY = iGlobalPositionY;
@@ -624,9 +626,9 @@ gboolean cairo_dock_window_is_on_this_desktop (int Xid, int iDesktopNumber)
 	cd_message (" -> %d/%d ; (%d ; %d)", iWindowDesktopNumber, iDesktopNumber, iGlobalPositionX, iGlobalPositionY);
 	return ( (iWindowDesktopNumber == iDesktopNumber || iWindowDesktopNumber == -1) &&
 		iGlobalPositionX + iWidthExtent >= 0 &&
-		iGlobalPositionX < g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
+		iGlobalPositionX < g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
 		iGlobalPositionY + iHeightExtent >= 0 &&
-		iGlobalPositionY < g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] );  // -1 <=> 0xFFFFFFFF en unsigned.
+		iGlobalPositionY < g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] );  // -1 <=> 0xFFFFFFFF en unsigned.
 }
 
 gboolean cairo_dock_window_is_on_current_desktop (int Xid)
@@ -847,6 +849,9 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					if (cairo_dock_update_screen_geometry ())  // modification de la resolution.
 					{
 						cd_message ("resolution alteree");
+						if (myPosition.bUseXinerama)
+							cairo_dock_get_screen_offsets (myPosition.iNumScreen);
+						cairo_dock_update_dock_size (pDock);  /// le faire pour tous les docks racine ...
 						cairo_dock_set_window_position_at_balance (pDock, pDock->iCurrentWidth, pDock->iCurrentHeight);
 						gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionX, pDock->iWindowPositionY);
 					}
@@ -1044,7 +1049,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 			{
 				if (icon != NULL && icon->fPersonnalScale <= 0)  // pour une icone en cours de supression, on ne fait rien.
 				{
-					if (event.xconfigure.x + event.xconfigure.width <= 0 || event.xconfigure.x >= g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] || event.xconfigure.y + event.xconfigure.height <= 0 || event.xconfigure.y >= g_iScreenHeight[CAIRO_DOCK_HORIZONTAL])  // en fait il faudrait faire ca modulo le nombre de viewports * la largeur d'un bureau, car avec une fenetre a droite, elle peut revenir sur le bureau par la gauche si elle est tres large...
+					if (event.xconfigure.x + event.xconfigure.width <= 0 || event.xconfigure.x >= g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || event.xconfigure.y + event.xconfigure.height <= 0 || event.xconfigure.y >= g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // en fait il faudrait faire ca modulo le nombre de viewports * la largeur d'un bureau, car avec une fenetre a droite, elle peut revenir sur le bureau par la gauche si elle est tres large...
 					{
 						CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 						if (pParentDock == NULL)

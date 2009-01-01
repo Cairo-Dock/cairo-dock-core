@@ -36,9 +36,6 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget,
 gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 				GdkEventKey *pKey,
 				CairoDock *pDock);
-gboolean cairo_dock_on_key_press (GtkWidget *pWidget,
-				GdkEventKey *pKey,
-				CairoDock *pDock);
 
 gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingDirectory, ...);
 #define cairo_dock_launch_command(cCommand,...) cairo_dock_launch_command_full (cCommand, NULL, ##__VA_ARGS__)

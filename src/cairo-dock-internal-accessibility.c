@@ -39,7 +39,15 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 	pAccessibility->iLeaveSubDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "leaving delay", &bFlushConfFileNeeded, 330, "System", NULL);
 	pAccessibility->iShowSubDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "show delay", &bFlushConfFileNeeded, 300, "System", NULL);
 	pAccessibility->bShowSubDockOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "show on click", &bFlushConfFileNeeded, FALSE, "System", NULL);
-
+	
+	if (pAccessibility->cRaiseDockShortcut != NULL)
+	
+	if (pAccessibility->bPopUp)
+	{
+		pAccessibility->bReserveSpace = FALSE;
+		pAccessibility->bAutoHide = FALSE;
+	}
+	
 	return bFlushConfFileNeeded;
 }
 
@@ -82,10 +90,14 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 			gtk_widget_show (pDock->pWidget);
 		}
 	}
+	if (pAccessibility->cRaiseDockShortcut != NULL)
+	{
+		pAccessibility->bReserveSpace = FALSE;
+		pAccessibility->bPopUp = FALSE;
+		pAccessibility->bAutoHide = FALSE;
+	}
 	
 	//\_______________ Max Size.
-	if (pAccessibility->iMaxAuthorizedWidth == 0 || pAccessibility->iMaxAuthorizedWidth > g_iScreenWidth[pDock->bHorizontalDock])
-		pAccessibility->iMaxAuthorizedWidth = g_iScreenWidth[pDock->bHorizontalDock];
 	if (pAccessibility->iMaxAuthorizedWidth != pPrevAccessibility->iMaxAuthorizedWidth)
 	{
 		/// le faire pour tous les docks racine...
@@ -93,10 +105,10 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 	}
 	
 	//\_______________ Reserve Spave.
-	pAccessibility->bReserveSpace = pAccessibility->bReserveSpace && (pAccessibility->cRaiseDockShortcut == NULL);
 	if (pAccessibility->bReserveSpace != pPrevAccessibility->bReserveSpace)
 		cairo_dock_reserve_space_for_all_root_docks (pAccessibility->bReserveSpace);
 	
+	//\_______________ Pop-up.
 	if (pAccessibility->bPopUp)
 		cairo_dock_start_polling_screen_edge (pDock);
 	else

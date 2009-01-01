@@ -100,12 +100,21 @@ static gboolean _cairo_dock_animate_flying_icon (CairoFlyingContainer *pFlyingCo
 			cairo_dock_unregister_current_flying_container ();
 			return FALSE;
 		}
+		
 	}
 	else
 	{
 		pFlyingContainer->iAnimationCount ++;
-		
-		//airo_dock_manage_animations (pFlyingContainer->pIcon, CAIRO_DOCK (pFlyingContainer));  // ici c'est un peu hacky, ca passe car en fait on n'utilise pas les champs du dock.
+		pFlyingContainer->pIcon->fDrawX += 2 * g_random_double () - 1;
+		pFlyingContainer->pIcon->fDrawY += 2 * g_random_double () - 1;
+		if (pFlyingContainer->pIcon->fDrawX > 10)
+			pFlyingContainer->pIcon->fDrawX = 10;
+		else if (pFlyingContainer->pIcon->fDrawX < -10)
+			pFlyingContainer->pIcon->fDrawX = -10;
+		if (pFlyingContainer->pIcon->fDrawY > 10)
+			pFlyingContainer->pIcon->fDrawY = 10;
+		else if (pFlyingContainer->pIcon->fDrawY < -10)
+			pFlyingContainer->pIcon->fDrawY = -10;
 	}
 	gtk_widget_queue_draw (pFlyingContainer->pWidget);
 	return TRUE;
@@ -166,8 +175,6 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 		pFlyingContainer->iPositionY);*/
 	gtk_window_present (GTK_WINDOW (pWindow));
 	
-	//pFlyingContainer->pIcon->iAnimationType = CAIRO_DOCK_PULSE;
-	//pFlyingContainer->pIcon->iCount = 1e6;  // attention : cette animation s'arretera au bout de 11.5 ans :o)
 	pFlyingContainer->pIcon->fDrawX = 0;
 	pFlyingContainer->pIcon->fDrawY = 0;
 	pFlyingContainer->iSidAnimationTimer = g_timeout_add (60, (GSourceFunc) _cairo_dock_animate_flying_icon, (gpointer) pFlyingContainer);

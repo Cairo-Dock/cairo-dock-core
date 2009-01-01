@@ -77,48 +77,44 @@ msgstr "Comportement"
 # ########### themes.conf #############
 # #################################
 #: ../src/cairo-dock-gui-manager.c:60
-#, fuzzy
 msgid "Theme"
 msgstr "Thèmes"
 
 #: ../src/cairo-dock-gui-manager.c:61
 msgid "Accessories"
-msgstr ""
+msgstr "Accessoires"
 
 #: ../src/cairo-dock-gui-manager.c:62
-#, fuzzy
 msgid "Desktop"
-msgstr "Icône du menu"
+msgstr "Bureau"
 
 #: ../src/cairo-dock-gui-manager.c:63
 msgid "Controlers"
-msgstr ""
+msgstr "Contrôleurs"
 
 #: ../src/cairo-dock-gui-manager.c:64
 msgid "Plug-ins"
-msgstr ""
+msgstr "Plug-ins"
 
 #: ../src/cairo-dock-gui-manager.c:351
 msgid "Categories"
-msgstr ""
+msgstr "Catégories"
 
 #: ../src/cairo-dock-gui-manager.c:372
 msgid "All"
-msgstr ""
+msgstr "Tout"
 
 #: ../src/cairo-dock-gui-manager.c:508
-#, fuzzy
 msgid "Activate this module"
-msgstr "Activer le masquage automatique"
+msgstr "Activer ce module"
 
 #: ../src/cairo-dock-gui-manager.c:582
 msgid "< Maintenance mode >"
 msgstr "< Mode Maintenance >"
 
 #: ../src/cairo-dock-gui-manager.c:600 ../src/cairo-dock-gui-manager.c:671
-#, fuzzy
 msgid "Configuration of Cairo-Dock"
-msgstr "Configuration de %s"
+msgstr "Configuration de Cairo-Dock"
 
 #: ../src/cairo-dock-menu.c:135
 msgid "Development"
@@ -149,7 +145,7 @@ msgstr "Remplissez ce lanceur"
 
 #: ../src/cairo-dock-menu.c:302
 msgid "Undefined"
-msgstr ""
+msgstr "Indéfini"
 
 #: ../src/cairo-dock-menu.c:456 ../src/cairo-dock-menu.c:1162
 msgid "Modify this launcher"
@@ -528,30 +524,28 @@ msgid "Distance to the screen's edge :"
 msgstr "Distance au bord de l'écran :"
 
 #: ../data/messages:31
-#, fuzzy
 msgid "Multiple screens"
-msgstr "Plein écran"
+msgstr "Multi-écrans"
 
 #: ../data/messages:33
-msgid "e Xinerama ?"
-msgstr ""
+msgid "Use Xinerama ?"
+msgstr "Utiliser Xinerama"
 
 #: ../data/messages:35
 msgid "starting from 0"
-msgstr ""
+msgstr "en commençant à 0"
 
 #: ../data/messages:37
-msgid "Number of the screen where the dock is located :"
-msgstr ""
+msgid "Number of the screen where the dock should be located :"
+msgstr "Numéro de l'écran où le dock doit se situer :"
 
 #: ../data/messages:39
 msgid "Accessibility"
-msgstr ""
+msgstr "Accessibilité"
 
 #: ../data/messages:41
-#, fuzzy
 msgid "Space"
-msgstr "Enregistrer"
+msgstr "Espace"
 
 #: ../data/messages:43 ../data/messages:643
 msgid ""
@@ -580,12 +574,10 @@ msgid "Reserve space at the edge of the screen for the dock ?"
 msgstr "Reserver l'espace au bord de l'écran pour le dock ?"
 
 #: ../data/messages:51
-#, fuzzy
 msgid "Auto-hide"
 msgstr "Masquage automatique"
 
 #: ../data/messages:53
-#, fuzzy
 msgid ""
 "The dock will automatically hide itself outside of the scren when the mouse "
 "leaves it. Instead, it will show a zone where placing the mouse will trigger "
@@ -601,7 +593,7 @@ msgstr "Activer le masquage automatique"
 
 #: ../data/messages:57
 msgid "Pop-up"
-msgstr ""
+msgstr "Montrer"
 
 #: ../data/messages:59 ../data/messages:655
 msgid ""
@@ -619,11 +611,11 @@ msgstr "Garder le dock sous les autres fenêtres ?"
 
 #: ../data/messages:63 ../data/messages:659
 msgid "Pop-up only if the mouse hits a screen corner ?"
-msgstr ""
+msgstr "Montrer seulement si la souris atteint le coin de l'écran ?"
 
 #: ../data/messages:65
 msgid "Shortcut"
-msgstr ""
+msgstr "Raccourci"
 
 #: ../data/messages:67 ../data/messages:661
 msgid ""
@@ -640,7 +632,7 @@ msgstr "Raccourci clavier pour montrer/cacher le dock :"
 
 #: ../data/messages:71
 msgid "Sub-docks' accessibility"
-msgstr ""
+msgstr "Accessibilité des sous-docks"
 
 #: ../data/messages:73 ../data/messages:771
 msgid "in ms."
@@ -809,12 +801,11 @@ msgstr ""
 
 #: ../data/messages:135
 msgid "in seconds"
-msgstr ""
+msgstr "en secondes"
 
 #: ../data/messages:137
-#, fuzzy
 msgid "Duration of the dialog :"
-msgstr "Crête de la vague :"
+msgstr "Durée du dialogue :"
 
 #: ../data/messages:139 ../data/messages:715
 msgid "Signal the applications demanding your attention with an animation ?"
@@ -1068,35 +1059,30 @@ msgid "Emulates composition with fake transparency ?"
 msgstr "Emuler la composition par de la fausse transparence ?"
 
 #: ../data/messages:235
-#, fuzzy
 msgid "Hidden dock"
-msgstr "Dock Principal"
+msgstr "Dock caché"
 
 #: ../data/messages:237
-#, fuzzy
 msgid "Place the mouse into it will make the dock re-appear."
-msgstr "Placer la souris dans cette zone fera ré-apparaître le dock"
+msgstr "Placer la souris dedans fera ré-apparaître le dock"
 
 #: ../data/messages:239
-#, fuzzy
 msgid "Size of the dock (width x height, in pixels) :"
-msgstr "Taille de la zone de rappel (largeur x hauteur) :"
+msgstr "Taille du dock (largeur x hauteur, en pixels) :"
 
 #: ../data/messages:241
 msgid ""
 "This is what you see when the dock hides itselfs. Any format is allowed. Let "
 "this field empty to have an invisible zone."
-msgstr ""
+msgstr "C'est ce que vous voyez quand le dock se cache. Tout format accepté. Laissez ce champ vide pour avoir une zone invisible."
 
 #: ../data/messages:243
-#, fuzzy
 msgid "Filename of an image to put on :"
-msgstr "Fichier image à utiliser pour les indicateurs :"
+msgstr "Fichier image à utiliser :"
 
 #: ../data/messages:245
-#, fuzzy
 msgid "Transparency of the image :"
-msgstr "Transparence de la zone de rappel :"
+msgstr "Transparence de l'image :"
 
 #: ../data/messages:247 ../data/messages:859
 msgid ""
@@ -1107,9 +1093,8 @@ msgstr ""
 "l'écran par exemple."
 
 #: ../data/messages:249
-#, fuzzy
 msgid "Rotate the image when the dock is on top/left/right ?"
-msgstr "faire pivoter l'image de la zone de rappel avec le dock ?"
+msgstr "faire pivoter l'image avec le dock ?"
 
 #: ../data/messages:251 ../data/messages:845
 msgid "Background"
@@ -1417,19 +1402,17 @@ msgid "List of icons themes or directories :"
 msgstr "Liste de thèmes d'icônes et de répertoires :"
 
 #: ../data/messages:375
-#, fuzzy
 msgid "Image's filename to use as a background for icons :"
-msgstr "Nom du fichier d'une image à mettre en fond du dock :"
+msgstr "Nom d'une image à utiliser en fond des icônes :"
 
 #: ../data/messages:377
 msgid ""
 "Some applets may not use it, because they redraw periodically themselves."
-msgstr ""
+msgstr "Certaines applets peuvent ne pas l'utiliser, car elles se redessinent elles-mêmes périodiquement."
 
 #: ../data/messages:379
-#, fuzzy
 msgid "Use this background for applets too ?"
-msgstr "Utiliser une couleur de fond pour les étiquettes ?"
+msgstr "Utiliser ce fond pour les applets aussi ?"
 
 #: ../data/messages:381 ../data/messages:983
 msgid "Launchers"
@@ -1633,9 +1616,8 @@ msgstr "Choisissez une décoration par défaut pour les desklets :"
 # ########### cairo-dock-easy.conf #############
 # #################################
 #: ../data/messages:491
-#, fuzzy
 msgid "Personnal decorations"
-msgstr "Personnalisation"
+msgstr "Décorations personnelles"
 
 #: ../data/messages:493 ../data/messages:1147
 msgid ""
@@ -1709,19 +1691,16 @@ msgid "Foreground tansparency :"
 msgstr "Transparence de l'avant-plan :"
 
 #: ../data/messages:521
-#, fuzzy
 msgid "Buttons size :"
-msgstr "Boutons"
+msgstr "Taille des boutons :"
 
 #: ../data/messages:525
-#, fuzzy
 msgid "Name of an image to use for the 'rotate' button :"
-msgstr "Fichier image à utiliser pour le bouton non/annuler :"
+msgstr "Fichier image à utiliser pour le bouton 'rotation' :"
 
 #: ../data/messages:529
-#, fuzzy
 msgid "Name of an image to use for the 'retach' button :"
-msgstr "Fichier image à utiliser pour le bouton oui/ok :"
+msgstr "Fichier image à utiliser pour le bouton 'rattacher' :"
 
 #: ../data/messages:531 ../data/messages:1175
 msgid "Indicators"
@@ -2496,51 +2475,3 @@ msgid ""
 " - The config panel has been widely rewritten.\n"
 " - Lot of bug fixes and small upgrades in all plug-ins."
 msgstr ""
-
-#~ msgid "Auto-Hide"
-#~ msgstr "Masquage automatique"
-
-# #################################
-# ########### cairo-dock-easy.conf #############
-# #################################
-#~ msgid "Personnalisation"
-#~ msgstr "Personnalisation"
-
-#~ msgid "Images"
-#~ msgstr "Images"
-
-#~ msgid "Icons' size"
-#~ msgstr "Taille des icônes"
-
-#~ msgid "or 0 if you don't want to constraint them."
-#~ msgstr "ou 0 si vous ne voulez pas les contraindre"
-
-#~ msgid "Size of the icons at rest :"
-#~ msgstr "Taille que les icônes ont au repos :"
-
-#~ msgid "Maximum zoom :"
-#~ msgstr "Zoom maximum :"
-
-#~ msgid "Space between icons (in pixels) :"
-#~ msgstr "Espace entre les icônes (en pixels) :"
-
-#~ msgid "Animations"
-#~ msgstr "Animations"
-
-#~ msgid "Animation type for launchers :"
-#~ msgstr "Type d'animation pour les lanceurs :"
-
-#~ msgid "Animation type for applis :"
-#~ msgstr "Type d'animation pour les applis :"
-
-#~ msgid "Extern frame"
-#~ msgstr "Cadre extérieur"
-
-#~ msgid "Corner radius, in pixels:"
-#~ msgstr "Rayon des coins, en pixels :"
-
-#~ msgid "Color of the extern line (red, blue, green, alpha):"
-#~ msgstr "Couleur du cadre (rouge, vert, bleu, alpha):"
-
-#~ msgid "Desklet's decorations :"
-#~ msgstr "Décorations des desklets :"

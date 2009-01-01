@@ -164,10 +164,6 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 		G_CALLBACK (cairo_dock_on_configure),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
-		"key-press-event",
-		G_CALLBACK (cairo_dock_on_key_press),
-		pDock);
-	g_signal_connect (G_OBJECT (pWindow),
 		"key-release-event",
 		G_CALLBACK (cairo_dock_on_key_release),
 		pDock);
@@ -639,21 +635,22 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	g_return_if_fail (pDock != NULL);
 	pDock->calculate_max_dock_size (pDock);
 	
+	int iMaxAuthorizedWidth = cairo_dock_get_max_authorized_dock_width (pDock);
 	int n = 0;
 	do
 	{
 		double fPrevRatio = pDock->fRatio;
-		cd_debug ("  %s (%d / %d)", __func__, (int)pDock->iMaxDockWidth, myAccessibility.iMaxAuthorizedWidth);
-		if (pDock->iMaxDockWidth > myAccessibility.iMaxAuthorizedWidth)  // g_iScreenWidth[pDock->bHorizontalDock]
+		cd_debug ("  %s (%d / %d)", __func__, (int)pDock->iMaxDockWidth, iMaxAuthorizedWidth);
+		if (pDock->iMaxDockWidth > iMaxAuthorizedWidth)
 		{
-			pDock->fRatio *= 1. * myAccessibility.iMaxAuthorizedWidth / pDock->iMaxDockWidth;
+			pDock->fRatio *= 1. * iMaxAuthorizedWidth / pDock->iMaxDockWidth;
 		}
 		else
 		{
 			double fMaxRatio = (pDock->iRefCount == 0 ? 1 : myViews.fSubDockSizeRatio);
 			if (pDock->fRatio < fMaxRatio)
 			{
-				pDock->fRatio *= 1. * myAccessibility.iMaxAuthorizedWidth / pDock->iMaxDockWidth;
+				pDock->fRatio *= 1. * iMaxAuthorizedWidth / pDock->iMaxDockWidth;
 				pDock->fRatio = MIN (pDock->fRatio, fMaxRatio);
 			}
 			else
@@ -684,7 +681,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		}
 		
 		n ++;
-	} while ((pDock->iMaxDockWidth > myAccessibility.iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_iScreenHeight[pDock->bHorizontalDock]) && n < 3);
+	} while ((pDock->iMaxDockWidth > iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_iScreenHeight[pDock->bHorizontalDock]) && n < 3);
 	
 	if (! pDock->bInside && (pDock->bAutoHide && pDock->iRefCount == 0))
 		return;

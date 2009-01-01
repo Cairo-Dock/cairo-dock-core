@@ -32,6 +32,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 extern int g_iNbDesktops;
 extern int g_iNbViewportX,g_iNbViewportY ;
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
+extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
 extern int g_iScreenOffsetX, g_iScreenOffsetY;
 //extern int g_iDamageEvent;
 
@@ -67,6 +68,11 @@ void cairo_dock_initialize_X_support (void)
 	s_aRootMapID = XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
 	
 	Screen *XScreen = XDefaultScreenOfDisplay (s_XDisplay);
+	g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] = WidthOfScreen (XScreen);
+	g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] = HeightOfScreen (XScreen);
+	g_iXScreenWidth[CAIRO_DOCK_VERTICAL] = g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+	g_iXScreenHeight[CAIRO_DOCK_VERTICAL] = g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+	
 	g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] = WidthOfScreen (XScreen);
 	g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] = HeightOfScreen (XScreen);
 	g_iScreenWidth[CAIRO_DOCK_VERTICAL] = g_iScreenHeight[CAIRO_DOCK_HORIZONTAL];
@@ -255,12 +261,12 @@ gboolean cairo_dock_update_screen_geometry (void)
 		&x_return, &y_return,
 		&width_return, &height_return,
 		&border_width_return, &depth_return);
-	if (width_return != g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] || height_return != g_iScreenHeight[CAIRO_DOCK_HORIZONTAL])  // on n'utilise pas WidthOfScreen() et HeightOfScreen() car leurs valeurs ne sont pas mises a jour immediatement apres les changements de resolution.
+	if (width_return != g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || height_return != g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // on n'utilise pas WidthOfScreen() et HeightOfScreen() car leurs valeurs ne sont pas mises a jour immediatement apres les changements de resolution.
 	{
-		g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] = width_return;
-		g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] = height_return;
-		g_iScreenWidth[CAIRO_DOCK_VERTICAL] = g_iScreenHeight[CAIRO_DOCK_HORIZONTAL];
-		g_iScreenHeight[CAIRO_DOCK_VERTICAL] = g_iScreenWidth[CAIRO_DOCK_HORIZONTAL];
+		g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] = width_return;
+		g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] = height_return;
+		g_iXScreenWidth[CAIRO_DOCK_VERTICAL] = g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+		g_iXScreenHeight[CAIRO_DOCK_VERTICAL] = g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
 		return TRUE;
 	}
 	else
@@ -374,9 +380,9 @@ void cairo_dock_get_nb_viewports (int *iNbViewportX, int *iNbViewportY)
 	if (iBufferNbElements > 0)
 	{
 		Screen *scr = XDefaultScreenOfDisplay (s_XDisplay);
-		cd_debug ("pVirtualScreenSizeBuffer : %dx%d ; screen : %dx%d", pVirtualScreenSizeBuffer[0], pVirtualScreenSizeBuffer[1], WidthOfScreen (scr), HeightOfScreen (scr));
-		*iNbViewportX = pVirtualScreenSizeBuffer[0] / WidthOfScreen (scr);  // g_iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-		*iNbViewportY = pVirtualScreenSizeBuffer[1] / HeightOfScreen (scr);  // g_iScreenHeight[CAIRO_DOCK_HORIZONTAL];
+		g_print ("pVirtualScreenSizeBuffer : %dx%d ; screen : %dx%d\n", pVirtualScreenSizeBuffer[0], pVirtualScreenSizeBuffer[1], g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], g_iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+		*iNbViewportX = pVirtualScreenSizeBuffer[0] / g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+		*iNbViewportY = pVirtualScreenSizeBuffer[1] / g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
 		XFree (pVirtualScreenSizeBuffer);
 	}
 }
@@ -449,7 +455,7 @@ static void cairo_dock_move_current_viewport_to (int iDesktopViewportX, int iDes
 }
 void cairo_dock_set_current_viewport (int iViewportNumberX, int iViewportNumberY)
 {
-	cairo_dock_move_current_viewport_to (iViewportNumberX * g_iScreenWidth[CAIRO_DOCK_HORIZONTAL], iViewportNumberY * g_iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	cairo_dock_move_current_viewport_to (iViewportNumberX * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], iViewportNumberY * g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 }
 void cairo_dock_set_current_desktop (int iDesktopNumber)
 {
@@ -573,8 +579,8 @@ void cairo_dock_set_nb_viewports (int iNbViewportX, int iNbViewportY)
 	xClientMessage.xclient.window = root;
 	xClientMessage.xclient.message_type = s_aNetDesktopGeometry;
 	xClientMessage.xclient.format = 32;
-	xClientMessage.xclient.data.l[0] = iNbViewportX * g_iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-	xClientMessage.xclient.data.l[1] = iNbViewportY * g_iScreenHeight[CAIRO_DOCK_HORIZONTAL];
+	xClientMessage.xclient.data.l[0] = iNbViewportX * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+	xClientMessage.xclient.data.l[1] = iNbViewportY * g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
 	xClientMessage.xclient.data.l[2] = 0;
 	xClientMessage.xclient.data.l[3] = 2;
 	xClientMessage.xclient.data.l[4] = 0;
@@ -676,8 +682,19 @@ void cairo_dock_get_screen_offsets (int iNumScreen)
 		g_iScreenOffsetY = pScreens[iNumScreen].y_org;
 		g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] = pScreens[iNumScreen].width;
 		g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] = pScreens[iNumScreen].height;
+		
+		//g_iScreenOffsetX = 640;
+		//g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] = 640;
+		
+		g_iScreenWidth[CAIRO_DOCK_VERTICAL] = g_iScreenHeight[CAIRO_DOCK_HORIZONTAL];
+		g_iScreenHeight[CAIRO_DOCK_VERTICAL] = g_iScreenWidth[CAIRO_DOCK_HORIZONTAL];
 		g_print ("ecran %d => (%d;%d) %dx%d\n", iNumScreen, g_iScreenOffsetX, g_iScreenOffsetY, g_iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		
 		XFree (pScreens);
+	}
+	else
+	{
+		cd_warning ("No screens found from Xinerama");
+		g_iScreenOffsetX = g_iScreenOffsetY = 0;
 	}
 }

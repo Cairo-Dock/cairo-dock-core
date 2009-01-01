@@ -98,8 +98,10 @@
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
 int g_iWmHint = GDK_WINDOW_TYPE_HINT_DOCK;  // hint pour la fenetre du dock principal.
 
-int g_iScreenWidth[2];  // dimensions de l'ecran.
+int g_iScreenWidth[2];  // dimensions de l'ecran physique sur lequel reside le dock
 int g_iScreenHeight[2];
+int g_iXScreenWidth[2];  // dimensions de l'ecran logique X.
+int g_iXScreenHeight[2];
 int g_iScreenOffsetX = 0;
 int g_iScreenOffsetY = 0;
 

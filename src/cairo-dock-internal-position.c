@@ -10,6 +10,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-X-utilities.h"
+#include "cairo-dock-internal-accessibility.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-position.h"
 
@@ -42,13 +43,9 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 	g_print ("%s (%d;%d)\n", __func__, pPosition->iGapX, pPosition->iGapY);
 	
 	if (pPosition->bUseXinerama)
-	{
 		cairo_dock_get_screen_offsets (myPosition.iNumScreen);
-	}
 	else
-	{
 		g_iScreenOffsetX = g_iScreenOffsetY = 0;
-	}
 	
 	CairoDock *pDock = g_pMainDock;
 	if (pPosition->iScreenBorder != pPrevPosition->iScreenBorder)
@@ -75,6 +72,9 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 		cairo_dock_synchronize_sub_docks_position (pDock, FALSE);
 		cairo_dock_reload_buffers_in_all_docks (TRUE);
 	}
+	
+	cairo_dock_update_dock_size (pDock);  // si bHorizonalDock a change, ou si l'ecran a change, la taille max a change aussi.
+	
 	pDock->iGapX = pPosition->iGapX;
 	pDock->iGapY = pPosition->iGapY;
 	pDock->fAlign = pPosition->fAlign;

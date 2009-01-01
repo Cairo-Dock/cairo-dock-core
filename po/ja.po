@@ -532,7 +532,7 @@ msgid "Multiple screens"
 msgstr "全画面表示"
 
 #: ../data/messages:33
-msgid "e Xinerama ?"
+msgid "Use Xinerama ?"
 msgstr ""
 
 #: ../data/messages:35
@@ -540,7 +540,7 @@ msgid "starting from 0"
 msgstr ""
 
 #: ../data/messages:37
-msgid "Number of the screen where the dock is located :"
+msgid "Number of the screen where the dock should be located :"
 msgstr ""
 
 #: ../data/messages:39

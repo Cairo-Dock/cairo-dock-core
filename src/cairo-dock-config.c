@@ -55,8 +55,6 @@ extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cCurrentLaunchersPath;
 extern double g_fBackgroundImageWidth;
 extern double g_fBackgroundImageHeight;
-extern int g_iScreenWidth[2];
-extern int g_iScreenHeight[2];
 extern int g_iScreenOffsetX, g_iScreenOffsetY;
 extern cairo_surface_t *g_pDesktopBgSurface;
 
@@ -488,8 +486,11 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	pDock->fAlign = myPosition.fAlign;
 	pDock->bAutoHide = myAccessibility.bAutoHide;
 	
-	myTaskBar.bAutoHideOnFullScreen = myTaskBar.bAutoHideOnFullScreen && (!pDock->bAutoHide);
-	myTaskBar.bAutoHideOnMaximized = myTaskBar.bAutoHideOnMaximized && (!pDock->bAutoHide);
+	if (myAccessibility.bAutoHide || myAccessibility.bPopUp)
+	{
+		myTaskBar.bAutoHideOnFullScreen = FALSE;
+		myTaskBar.bAutoHideOnMaximized = FALSE;
+	}
 	
 	gboolean bGroupOrderChanged;
 	if (tIconTypeOrderOld[CAIRO_DOCK_LAUNCHER] != myIcons.tIconTypeOrder[CAIRO_DOCK_LAUNCHER] ||
@@ -526,10 +527,6 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 			pDock->bDirectionUp = FALSE;
 		break;
 	}
-	
-	if (myAccessibility.iMaxAuthorizedWidth == 0 || myAccessibility.iMaxAuthorizedWidth > g_iScreenWidth[pDock->bHorizontalDock])
-		myAccessibility.iMaxAuthorizedWidth = g_iScreenWidth[pDock->bHorizontalDock];
-	
 	
 	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 	double fMaxScale = cairo_dock_get_max_scale (pDock);

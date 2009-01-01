@@ -6,22 +6,8 @@ G_BEGIN_DECLS
 
 /// Pointeur sur le dock principal.
 extern CairoDock *g_pMainDock;
-/// Largeur de l'ecran en mode horizontal/vertical.
-extern gint g_iScreenWidth[2];
-/// Hauteur de l'ecran en mode horizontal/vertical.
-extern gint g_iScreenHeight[2];
-/// Nombre de bureaux virtuels.
-extern int g_iNbDesktops;
-/// Nombre de "faces" du cube en largeur et en hauteur.
-extern int g_iNbViewportX, g_iNbViewportY ;
 /// Chemin du fichier de conf de l'appli.
 extern gchar *g_cConfFile;
-
-/// Largeur de la zone de rappel.
-extern int g_iVisibleZoneWidth;
-/// hauteur de la zone de rappel.
-extern int g_iVisibleZoneHeight;
-
 /// Le chemin vers le repertoire racine.
 extern gchar *g_cCairoDockDataDir;
 /// Le chemin vers le repertoire du theme courant.
@@ -29,6 +15,19 @@ extern gchar *g_cCurrentThemePath;
 /// Le chemin vers le repertoire des lanceurs/icones du theme courant.
 extern gchar *g_cCurrentLaunchersPath;
 
+/// Dimensions de l'ecran en mode horizontal/vertical.
+extern gint g_iScreenWidth[2], g_iScreenHeight[2];
+/// Dimensions de l'ecran logique en mode horizontal/vertical.
+extern gint g_iXScreenWidth[2], g_iXScreenHeight[2];
+/// Nombre de bureaux virtuels.
+extern int g_iNbDesktops;
+/// Nombre de "faces" du cube en largeur et en hauteur.
+extern int g_iNbViewportX, g_iNbViewportY ;
+
+/// Largeur de la zone de rappel.
+extern int g_iVisibleZoneWidth;
+/// hauteur de la zone de rappel.
+extern int g_iVisibleZoneHeight;
 /// Surface de la zone de rappel.
 extern cairo_surface_t *g_pVisibleZoneSurface;
 extern double g_fVisibleZoneImageWidth, g_fVisibleZoneImageHeight;

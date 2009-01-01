@@ -53,7 +53,7 @@ static GSList *s_path = NULL;
 
 extern gchar *g_cConfFile;
 extern CairoDock *g_pMainDock;
-extern int g_iScreenWidth[2], g_iScreenHeight[2];
+extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
 
 gchar *cCategoriesDescription[2*CAIRO_DOCK_NB_CATEGORY] = {
 	N_("Behaviour"), "gtk-preferences",
@@ -147,9 +147,7 @@ static GtkToolItem *_cairo_dock_make_toolbutton (const gchar *cLabel, const gcha
 		return pWidget;
 	
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gchar *cLabel2 = g_strdup_printf ("<span font_desc=\"Times New Roman italic 20\">%c</span>%s", *cLabel, cLabel+1);
-	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel2);
-	g_free (cLabel2);
+	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 	
 	GtkWidget *pAlign = gtk_alignment_new (0., 0.5, 0., 1.);
 	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_GUI_MARGIN*2, 0);
@@ -566,7 +564,7 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 		0);
 	
 	
-	gtk_window_resize (GTK_WINDOW (s_pMainWindow), MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, g_iScreenWidth[CAIRO_DOCK_HORIZONTAL]), MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_iScreenHeight[CAIRO_DOCK_HORIZONTAL]-20));
+	gtk_window_resize (GTK_WINDOW (s_pMainWindow), MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL]), MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]-40));
 	
 	gtk_widget_show_all (s_pMainWindow);
 	gtk_widget_hide (s_pApplyButton);

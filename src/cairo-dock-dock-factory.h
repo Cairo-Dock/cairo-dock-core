@@ -27,6 +27,9 @@ G_BEGIN_DECLS
 */
 #define cairo_dock_get_max_scale(pContainer) (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) : 1)
 
+
+#define cairo_dock_get_max_authorized_dock_width(pDock) (myAccessibility.iMaxAuthorizedWidth == 0 ? g_iScreenWidth[pDock->bHorizontalDock] : MIN (myAccessibility.iMaxAuthorizedWidth, g_iScreenWidth[pDock->bHorizontalDock]))
+
 /**
 * Cree un nouveau dock principal.
 * @param iWmHint indicateur du type de fenetre pour le WM.

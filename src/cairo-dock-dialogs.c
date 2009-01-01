@@ -31,7 +31,7 @@ static GSList *s_pDialogList = NULL;
 static GStaticRWLock s_mDialogsMutex = G_STATIC_RW_LOCK_INIT;
 
 extern CairoDock *g_pMainDock;
-extern gint g_iScreenWidth[2], g_iScreenHeight[2];
+extern gint g_iXScreenWidth[2], g_iXScreenHeight[2];
 extern gboolean g_bSticky;
 extern gboolean g_bKeepAbove;
 
@@ -1053,12 +1053,12 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 			if (pDock->bHorizontalDock)
 			{
 				*bRight = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
-				*bDirectionUp = (pDock->iWindowPositionY > g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
+				*bDirectionUp = (pDock->iWindowPositionY > g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
 				*iY = (*bDirectionUp ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iCurrentHeight);
 			}
 			else
 			{
-				*bRight = (pDock->iWindowPositionY < g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
+				*bRight = (pDock->iWindowPositionY < g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
 				*bDirectionUp = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
 				*iY = (! (*bRight) ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iCurrentHeight);
 			}
@@ -1085,12 +1085,12 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 			if (pDock->bHorizontalDock)
 			{
 				*bRight = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
-				*bDirectionUp = (pDock->iWindowPositionY > g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
+				*bDirectionUp = (pDock->iWindowPositionY > g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
 				*iY = (*bDirectionUp ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iCurrentHeight);
 			}
 			else
 			{
-				*bRight = (pDock->iWindowPositionY < g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
+				*bRight = (pDock->iWindowPositionY < g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
 				*bDirectionUp = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
 				*iY = (! (*bRight) ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iCurrentHeight);
 			}
@@ -1100,18 +1100,18 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 	else if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		CairoDesklet *pDesklet = CAIRO_DESKLET (pContainer);
-		*bDirectionUp = (pDesklet->iWindowPositionY > g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
-		*bIsHorizontal = (pDesklet->iWindowPositionX > 50 && pDesklet->iWindowPositionX + pDesklet->iHeight < g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] - 50);
+		*bDirectionUp = (pDesklet->iWindowPositionY > g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
+		*bIsHorizontal = (pDesklet->iWindowPositionX > 50 && pDesklet->iWindowPositionX + pDesklet->iHeight < g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - 50);
 		
 		if (*bIsHorizontal)
 		{
-			*bRight = (pDesklet->iWindowPositionX > g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
+			*bRight = (pDesklet->iWindowPositionX > g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
 			*iX = pDesklet->iWindowPositionX + pDesklet->iWidth * (*bRight ? .7 : .3);
 			*iY = (*bDirectionUp ? pDesklet->iWindowPositionY : pDesklet->iWindowPositionY + pDesklet->iHeight);
 		}
 		else
 		{
-			*bRight = (pDesklet->iWindowPositionX < g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
+			*bRight = (pDesklet->iWindowPositionX < g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
 			*iY = pDesklet->iWindowPositionX + pDesklet->iWidth * (*bRight ? 1 : 0);
 			*iX =pDesklet->iWindowPositionY + pDesklet->iHeight / 2;
 		}
@@ -1128,11 +1128,11 @@ void cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 	Icon *icon;
 	CairoDialog *pDialogOnOurWay;
 
-	double fXLeft = 0, fXRight = g_iScreenWidth[pDialog->bIsHorizontal];
+	double fXLeft = 0, fXRight = g_iXScreenWidth[pDialog->bIsHorizontal];
 	if (pDialog->bRight)
 	{
 		fXLeft = -1e4;
-		fXRight = MAX (g_iScreenWidth[pDialog->bIsHorizontal], pDialog->iAimedX + 2*CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_BASE + fRadius + .5*myBackground.iDockLineWidth + 1);
+		fXRight = MAX (g_iXScreenWidth[pDialog->bIsHorizontal], pDialog->iAimedX + 2*CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_BASE + fRadius + .5*myBackground.iDockLineWidth + 1);
 	}
 	else
 	{
@@ -1282,8 +1282,8 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 	else
 	{
 		pDialog->bDirectionUp = TRUE;
-		pDialog->iPositionX = (g_iScreenWidth [CAIRO_DOCK_HORIZONTAL] - pDialog->iWidth) / 2;
-		pDialog->iPositionY = (g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] - pDialog->iHeight) / 2;
+		pDialog->iPositionX = (g_iXScreenWidth [CAIRO_DOCK_HORIZONTAL] - pDialog->iWidth) / 2;
+		pDialog->iPositionY = (g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pDialog->iHeight) / 2;
 		pDialog->iHeight = pDialog->iBubbleHeight + 2 * pDialog->iMargin;
 	}
 

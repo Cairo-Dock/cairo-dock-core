@@ -70,8 +70,8 @@ static CairoFlyingContainer *s_pFlyingContainer = NULL;
 extern CairoDock *g_pMainDock;
 extern gboolean g_bKeepAbove;
 
-extern gint g_iScreenWidth[2];
-extern gint g_iScreenHeight[2];
+extern gint g_iXScreenWidth[2];
+extern gint g_iXScreenHeight[2];
 extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
 
 extern gchar *g_cConfFile;
@@ -895,7 +895,7 @@ gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey fo
 		{
 			iScreenBorder1 = CAIRO_DOCK_TOP;
 		}
-		else if (iMousePosY + 1 == g_iScreenHeight[CAIRO_DOCK_HORIZONTAL])
+		else if (iMousePosY + 1 == g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
 		{
 			iScreenBorder1 = CAIRO_DOCK_BOTTOM;
 		}
@@ -903,7 +903,7 @@ gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey fo
 		{
 			iScreenBorder2 = CAIRO_DOCK_LEFT;
 		}
-		else if (iMousePosX + 1 == g_iScreenWidth[CAIRO_DOCK_HORIZONTAL])
+		else if (iMousePosX + 1 == g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL])
 		{
 			iScreenBorder2 = CAIRO_DOCK_RIGHT;
 		}
@@ -982,7 +982,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	int iNewWidth, iNewHeight;
 	cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
 	if ((pDock->bAutoHide && pDock->iRefCount == 0) && pDock->bAtBottom)
-		pDock->iWindowPositionY = (pDock->bDirectionUp ? g_iScreenHeight[pDock->bHorizontalDock] - myHiddenDock.iVisibleZoneHeight - pDock->iGapY : myHiddenDock.iVisibleZoneHeight + pDock->iGapY - pDock->iMaxDockHeight);
+		pDock->iWindowPositionY = (pDock->bDirectionUp ? g_iXScreenHeight[pDock->bHorizontalDock] - myHiddenDock.iVisibleZoneHeight - pDock->iGapY : myHiddenDock.iVisibleZoneHeight + pDock->iGapY - pDock->iMaxDockHeight);
 
 	if (pDock->bHorizontalDock)
 		gdk_window_move_resize (pWidget->window,
@@ -1047,132 +1047,15 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 }
 
 
-static int iMoveByArrow = 0;
 gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	GdkEventKey *pKey,
 	CairoDock *pDock)
 {
-	iMoveByArrow = 0;
 	if (pKey->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
 	{
 		if (pDock->iRefCount == 0)
 			cairo_dock_write_root_dock_gaps (pDock);
 	}
-	return FALSE;
-}
-
-
-static int _move_up_by_arrow (int iMoveByArrow, CairoDock *pDock)
-{
-	int iPossibleMove = MAX (0, pDock->iWindowPositionY);
-	int iEffectiveMove = MIN (iMoveByArrow, iPossibleMove);
-	//g_print ("%s () : iPossibleMove=%d->%d\n", __func__, iPossibleMove, iEffectiveMove);
-	if (iEffectiveMove > 0)
-	{
-		pDock->iWindowPositionY -= iEffectiveMove;
-		pDock->iGapY += (pDock->bDirectionUp ? iEffectiveMove : -iEffectiveMove);
-	}
-	return iEffectiveMove;
-}
-static int _move_down_by_arrow (int iMoveByArrow, CairoDock *pDock)
-{
-	int iPossibleMove = MAX (0, g_iScreenHeight[pDock->bHorizontalDock] - (pDock->iWindowPositionY + pDock->iCurrentHeight));
-	int iEffectiveMove = MIN (iMoveByArrow, iPossibleMove);
-	//g_print ("%s () : iPossibleMove=%d->%d\n", __func__, iPossibleMove, iEffectiveMove);
-	if (iEffectiveMove > 0)
-	{
-		pDock->iWindowPositionY += iEffectiveMove;
-		pDock->iGapY += (pDock->bDirectionUp ? -iEffectiveMove : iEffectiveMove);
-	}
-	return iEffectiveMove;
-}
-static int _move_left_by_arrow (int iMoveByArrow, CairoDock *pDock)
-{
-	int iPossibleMove = MAX (0, pDock->iWindowPositionX);
-	int iEffectiveMove = MIN (iMoveByArrow, iPossibleMove);
-	if (iEffectiveMove > 0)
-	{
-		pDock->iWindowPositionX -= iEffectiveMove;
-		pDock->iGapX -= iEffectiveMove;
-	}
-	return iEffectiveMove;
-}
-static int _move_right_by_arrow (int iMoveByArrow, CairoDock *pDock)
-{
-	int iPossibleMove = MAX (0, g_iScreenWidth[pDock->bHorizontalDock] - (pDock->iWindowPositionX + pDock->iCurrentWidth));
-	int iEffectiveMove = MIN (iMoveByArrow, iPossibleMove);
-	if (iEffectiveMove > 0)
-	{
-		pDock->iWindowPositionX += iEffectiveMove;
-		pDock->iGapX += iEffectiveMove;
-	}
-	return iEffectiveMove;
-}
-gboolean cairo_dock_on_key_press (GtkWidget *pWidget, GdkEventKey *pKey, CairoDock *pDock)
-{
-	cd_message ("");
-	if (pKey->type == GDK_KEY_PRESS)
-	{
-		GdkEventScroll dummyScroll;
-		int iX, iY;
-		switch (pKey->keyval)
-		{
-			case GDK_Down :
-				if (pKey->state & GDK_CONTROL_MASK)
-					iMoveByArrow = (pDock->bHorizontalDock ? _move_down_by_arrow (++iMoveByArrow, pDock) : _move_right_by_arrow (++iMoveByArrow, pDock));
-			break;
-
-			case GDK_Up :
-				if (pKey->state & GDK_CONTROL_MASK)
-					iMoveByArrow = (pDock->bHorizontalDock ? _move_up_by_arrow (++iMoveByArrow, pDock) : _move_left_by_arrow (++iMoveByArrow, pDock));
-			break;
-
-			case GDK_Left :
-				if (pKey->state & GDK_CONTROL_MASK)
-					iMoveByArrow = (pDock->bHorizontalDock ? _move_left_by_arrow (++iMoveByArrow, pDock) : _move_up_by_arrow (++iMoveByArrow, pDock));
-			break;
-
-			case GDK_Right :
-				if (pKey->state & GDK_CONTROL_MASK)
-					iMoveByArrow = (pDock->bHorizontalDock ? _move_right_by_arrow (++iMoveByArrow, pDock) : _move_down_by_arrow (++iMoveByArrow, pDock));
-			break;
-
-			case GDK_Page_Up :
-				dummyScroll.direction = GDK_SCROLL_UP;
-				gdk_window_get_pointer (pWidget->window, &iX, &iY, NULL);
-				dummyScroll.x = iX;
-				dummyScroll.y = iY;
-				dummyScroll.time = pKey->time;
-				dummyScroll.state = pKey->state;
-				cairo_dock_on_scroll (pWidget,
-					&dummyScroll,
-					pDock);
-			break;
-
-			case GDK_Page_Down:
-				dummyScroll.direction = GDK_SCROLL_DOWN;
-				gdk_window_get_pointer (pWidget->window, &iX, &iY, NULL);
-				dummyScroll.x = iX;
-				dummyScroll.y = iY;
-				dummyScroll.time = pKey->time;
-				dummyScroll.state = pKey->state;
-				cairo_dock_on_scroll (pWidget,
-					&dummyScroll,
-					pDock);
-			break;
-		}
-	}
-
-	if (iMoveByArrow > 0)
-	{
-		if (pDock->bHorizontalDock)
-			gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionX, pDock->iWindowPositionY);
-		else
-			gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionY, pDock->iWindowPositionX);
-		if (pDock->bIsMainDock)
-			cairo_dock_update_conf_file_with_position (g_cConfFile, pDock->iGapX, pDock->iGapY);
-	}
-
 	return FALSE;
 }
 
@@ -2002,8 +1885,8 @@ void cairo_dock_show_dock_at_mouse (CairoDock *pDock)
 		gdk_window_get_pointer (pDock->pWidget->window, &iMouseY, &iMouseX, NULL);
 	//g_print (" %d;%d\n", iMouseX, iMouseY);
 	
-	pDock->iGapX = pDock->iWindowPositionX + iMouseX - g_iScreenWidth[pDock->bHorizontalDock] * pDock->fAlign;
-	pDock->iGapY = (pDock->bDirectionUp ? g_iScreenHeight[pDock->bHorizontalDock] - (pDock->iWindowPositionY + iMouseY) : pDock->iWindowPositionY + iMouseY);
+	pDock->iGapX = pDock->iWindowPositionX + iMouseX - g_iXScreenWidth[pDock->bHorizontalDock] * pDock->fAlign;
+	pDock->iGapY = (pDock->bDirectionUp ? g_iXScreenHeight[pDock->bHorizontalDock] - (pDock->iWindowPositionY + iMouseY) : pDock->iWindowPositionY + iMouseY);
 	//g_print (" => %d;%d\n", g_pMainDock->iGapX, g_pMainDock->iGapY);
 	
 	cairo_dock_set_window_position_at_balance (pDock, pDock->iCurrentWidth, pDock->iCurrentHeight);
