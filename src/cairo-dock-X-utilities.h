@@ -49,5 +49,8 @@ void cairo_dock_set_nb_desktops (gulong iNbDesktops);
 
 gboolean cairo_dock_support_X_extension (void);
 
+void cairo_dock_get_screen_offsets (int iNumScreen);
+
+
 G_END_DECLS
 #endif

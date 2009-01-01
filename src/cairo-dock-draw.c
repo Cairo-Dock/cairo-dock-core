@@ -39,6 +39,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 extern gint g_iScreenWidth[2];
 extern gint g_iScreenHeight[2];
+extern int g_iScreenOffsetX, g_iScreenOffsetY;
 
 extern gboolean bDirectionUp;
 extern double g_fBackgroundImageWidth, g_fBackgroundImageHeight;
@@ -1163,6 +1164,9 @@ void cairo_dock_set_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 		pDock->iWindowPositionY = 0;
 	else if (pDock->iWindowPositionY > g_iScreenHeight[pDock->bHorizontalDock])
 		pDock->iWindowPositionY = g_iScreenHeight[pDock->bHorizontalDock];
+	
+	pDock->iWindowPositionX += g_iScreenOffsetX;
+	pDock->iWindowPositionY += g_iScreenOffsetY;
 }
 
 void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, CairoDockSizeType iSizeType, int *iNewWidth, int *iNewHeight)

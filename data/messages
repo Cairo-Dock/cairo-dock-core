@@ -28,6 +28,14 @@ _("in pixels. You can also move the dock by holding ALT or CTRL key and left mou
 
 _("Distance to the screen's edge :")
 
+_("Multiple screens")
+
+_("e Xinerama ?")
+
+_("starting from 0")
+
+_("Number of the screen where the dock is located :")
+
 _("Accessibility")
 
 _("Space")
@@ -42,7 +50,7 @@ _("Reserve space at the edge of the screen for the dock ?")
 
 _("Auto-hide")
 
-_("The dock will automatically hide itself outside of the scren when the mouse leaves it and will show a callback zone instead. Place the mouse into this zone will make the dock re-appear.")
+_("The dock will automatically hide itself outside of the scren when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.")
 
 _("Activate auto-hide ?")
 
@@ -362,29 +370,19 @@ _("Directories or themes where to search icons. Put some directories where you h
 
 _("List of icons themes or directories :")
 
+_("Any format allowed; let this field empty if you don't want to use an image as background.")
+
+_("Image's filename to use as a background for icons :")
+
+_("Some applets may not use it, because they redraw periodically themselves.")
+
+_("Use this background for applets too ?")
+
 _("Launchers")
 
 _("Put 0 if you don't want to restrain them")
 
 _("Icon size at rest (width x height) :")
-
-_("Animation type when clicked :")
-
-_("bounce")
-
-_("rotate")
-
-_("blink")
-
-_("pulse")
-
-_("upside-down")
-
-_("wobbly")
-
-_("random")
-
-_("Number of times the icon will bounce/rotate/blink/etc when clicked :")
 
 _("Applications")
 
@@ -392,47 +390,11 @@ _("Put 0 if you don't want to restrain them")
 
 _("Icon size at rest (width x height) :")
 
-_("Animation type when clicked :")
-
-_("bounce")
-
-_("rotate")
-
-_("blink")
-
-_("pulse")
-
-_("upside-down")
-
-_("wobbly")
-
-_("random")
-
-_("Number of times the icon will bounce/rotate/blink/etc when clicked :")
-
 _("Applets")
 
 _("Put 0 if you don't want to restrain them")
 
 _("Icon size at rest (width x height) :")
-
-_("Animation type when clicked :")
-
-_("bounce")
-
-_("rotate")
-
-_("blink")
-
-_("pulse")
-
-_("upside-down")
-
-_("wobbly")
-
-_("random")
-
-_("Number of times the icon will bounce/rotate/blink/etc when clicked :")
 
 _("Separators")
 
@@ -567,12 +529,6 @@ _("If you don't provide any, a default image will be used.")
 _("Name of an image to use for the 'retach' button :")
 
 _("Indicators")
-
-_("Indicator of drag'n'drop on the dock")
-
-_("Typically an arrow, that will be displayed when you try to drop a new launcher into the dock. Let empty to use the default one.")
-
-_("Image for the drag'n'drop animation :")
 
 _("Indicator of drag'n'drop on icons")
 
@@ -1304,144 +1260,6 @@ _("If you don't provide any, a default image will be used.")
 
 _("Name of an image to use for the locked emblem :")
 
-_("System")
-
-_("Position on the screen")
-
-_("The icons will scroll according to the chosen placement type. Of course the dock can be placed anywhere on the screen, here we specify regarding to what.")
-
-_("Choose the screen border regarding to which the dock will place itself :")
-
-_("bottom")
-
-_("top")
-
-_("right")
-
-_("left")
-
-_("Auto-Hide")
-
-_("The dock will automatically hide itself outside of the scren when the mouse leaves it and will show a callback zone instead. Place the mouse into this zone will make the dock re-appear.")
-
-_("Activate auto-hide ?")
-
-_("TaskBar")
-
-_("Cairo-Dock will then replace your taskbar. It is recommanded to remove any other taskbar, and to not force the dock's type to normal.")
-
-_("Show the current applications in the dock ?")
-
-_("Choose some useful accessories for your dock !")
-
-_("Just check the box to activate a plug-in, or uncheck to deactivate it. Once activated, you can use it and configure it.")
-
-_("List of available accessories :")
-
-_("Add fonctionnalities to your dock !")
-
-_("Just check the box to activate a plug-in, or uncheck to deactivate it. Once activated, you can use it and configure it.")
-
-_("List of available desktop enhancements :")
-
-_("Control your PC from your dock !")
-
-_("Just check the box to activate a plug-in, or uncheck to deactivate it. Once activated, you can use it and configure it.")
-
-_("List of available controlers :")
-
-_("Personnalisation")
-
-_("Views")
-
-_("Choose the default view for root docks :")
-
-_("Choose the default view for sub-docks :")
-
-_("Images")
-
-_("Any format allowed; let this field empty if you don't want to use an image as background.")
-
-_("Image's filename to use as a background :")
-
-_("Any format allowed; let this field empty to have an invisible callback zone. The callback zone is what you see when the dock hides itselfs.")
-
-_("Filename of an image to put on the callback zone :")
-
-_("If you don't provide one, blanks will be used.")
-
-_("Filename of an image to use for separators :")
-
-_("Icons' size")
-
-_("or 0 if you don't want to constraint them.")
-
-_("Size of the icons at rest :")
-
-_("Maximum zoom :")
-
-_("Space between icons (in pixels) :")
-
-_("Icons' themes")
-
-_("Directories or themes where to search icons. Put some directories where you have icons you wish to see in the dock, or put some theme's name you've installed on your system. (the order is taken into account during the research). The key word _LocalTheme_ represents the directory ~/.config/cairo-dock/current_theme/icons")
-
-_("List of icons themes or directories :")
-
-_("Animations")
-
-_("Animation type for launchers :")
-
-_("bounce")
-
-_("rotate")
-
-_("blink")
-
-_("pulse")
-
-_("upside-down")
-
-_("wobbly")
-
-_("random")
-
-_("Animation type for applis :")
-
-_("bounce")
-
-_("rotate")
-
-_("blink")
-
-_("pulse")
-
-_("upside-down")
-
-_("wobbly")
-
-_("random")
-
-_("Extern frame")
-
-_("Corner radius, in pixels:")
-
-_("Color of the extern line (red, blue, green, alpha):")
-
-_("Labels")
-
-_("for exemple Monospace, Purisa, ... Just write the font name wihtout any number or so.")
-
-_("Family of the font used for labels :")
-
-_("approximately size in pixels, put 0 to not display labels")
-
-_("Size of the font :")
-
-_("Desklets")
-
-_("Desklet's decorations :")
-
 _("Desktop Entry")
 
 _("Sub-dock's name :")
@@ -1589,4 +1407,6 @@ _("v1.6.1 :\nCairo-Dock has one year ! To celebrate this event, we are happy to 
 _("v1.6.2 : the first version integrated in the Ubuntu repositories !\n - 2 new applets have been released :\n  Slider and Stack. Enjoy !\n - Applets can now be launched many times\n (Clock, Cairo-Penguin, Slider, Stack), each with a different config.\n - Cairo-Dock is now able to load themes on its own server,\n so feel free to send us all your themes, we can distribute them ! :-)\n - And we are still searching someone motivated to write a kde-integration plug-in ^_^")
 
 _("v1.6.3 : \n - first the bad news :\n user datas have been moved into ~/.config to respect the FreeDesktop standards.\n and local icons are now in a dedicated 'icons' sub-folder.\n So in advance, sorry for the possible inconvenience ^_^\n - And now the very good news !\n - 2 new applets have just been born : Clipper and GMenu. \n - Lot of improvements for Desklets : decorations, rotation, dragging, etc\n - Cpusage and other applets can now display nice graphics.\n - You can now remove launchers by dragging them out of the dock\n  and detach applet in the same way.\n - Smooth icons movement when dragging them inside the dock\n - The dock is now translated in Sweden and partially in Greek.")
+
+_("Cairo-Dock II\n - The lucky owners of NVidia cards can now benefit from a full OpenGL dock !\n  Launch the dock with the '-o' option.\n - The config panel has been widely rewritten.\n - Lot of bug fixes and small upgrades in all plug-ins.")
 

@@ -18,6 +18,8 @@ struct _CairoConfigPosition {
 	gint iGapX, iGapY;
 	CairoDockPositionType iScreenBorder;
 	gdouble fAlign;
+	gboolean bUseXinerama;
+	gint iNumScreen;
 	} ;
 
 DEFINE_PRE_INIT (Position);

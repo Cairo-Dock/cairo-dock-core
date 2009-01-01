@@ -98,8 +98,10 @@
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
 int g_iWmHint = GDK_WINDOW_TYPE_HINT_DOCK;  // hint pour la fenetre du dock principal.
 
-gint g_iScreenWidth[2];  // dimensions de l'ecran.
-gint g_iScreenHeight[2];
+int g_iScreenWidth[2];  // dimensions de l'ecran.
+int g_iScreenHeight[2];
+int g_iScreenOffsetX = 0;
+int g_iScreenOffsetY = 0;
 
 gchar *g_cCurrentThemePath = NULL;  // le chemin vers le repertoire du theme courant.
 gchar *g_cCurrentLaunchersPath = NULL;  // le chemin vers le repertoire des lanceurs/icones du theme courant.
@@ -145,6 +147,7 @@ gboolean g_bEasterEggs = FALSE;
 gboolean g_bLocked = FALSE;
 
 gboolean g_bUseOpenGL = FALSE;
+gboolean g_bUseCairo = FALSE;
 gboolean g_bIndirectRendering = FALSE;
 GdkGLConfig* g_pGlConfig = NULL;
 GLuint g_iBackgroundTexture=0;
@@ -217,7 +220,7 @@ int main (int argc, char** argv)
 	GError *erreur = NULL;
 	
 	//\___________________ On recupere quelques options.
-	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSkipPager = FALSE, bNoSkipTaskbar = FALSE, bNoSticky = FALSE, bToolBarHint = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bExpresso = FALSE, bCafeLatte = FALSE, bPrintVersion = FALSE, bTesting = FALSE;
+	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSkipPager = FALSE, bNoSkipTaskbar = FALSE, bNoSticky = FALSE, bToolBarHint = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bExpresso = FALSE, bCafeLatte = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceCairo = FALSE, bForceOpenGL = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL;
 	GOptionEntry TableDesOptions[] =
 	{
@@ -226,13 +229,16 @@ int main (int argc, char** argv)
 			"log verbosity (debug,message,warning,critical,error) default is warning", NULL},
 		{"glitz", 'g', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bUseGlitz,
-			"use hardware acceleration through Glitz (needs a glitz-enabled libcairo)", NULL},
+			"force Glitz backend (hardware acceleration for cairo, needs a glitz-enabled libcairo)", NULL},
+		{"cairo", 'c', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&bForceCairo,
+			"force cairo backend", NULL},
 		{"opengl", 'o', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&g_bUseOpenGL,
-			"use OpenGL (very experimental)", NULL},
-		{"Opengl", 'O', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&bForceOpenGL,
+			"force OpenGL backend", NULL},
+		{"indirect", 'i', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bIndirectRendering,
-			"use OpenGL in Indirect Rendering mode (very experimental)", NULL},
+			"use Indirect Rendering mode for OpenGL", NULL},
 		{"keep-above", 'a', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bKeepAbove,
 			"keep the dock above other windows whatever", NULL},
@@ -354,8 +360,6 @@ int main (int argc, char** argv)
 		g_bUseGlitz = FALSE;
 	}
 #endif
-	if (g_bIndirectRendering)
-		g_bUseOpenGL = TRUE;
 	
 	if (bCappuccino)
 	{
@@ -494,13 +498,19 @@ int main (int argc, char** argv)
 	//\___________________ On initialise le support de X.
 	cairo_dock_initialize_X_support ();
 	
-	//\___________________ initialise the keybinder
+	//\___________________ On initialise le keybinder
 	cd_keybinder_init();
 	
 	//\___________________ On detecte l'environnement de bureau (apres les applis et avant les modules).
 	if (g_iDesktopEnv == CAIRO_DOCK_UNKNOWN_ENV)
 		g_iDesktopEnv = cairo_dock_guess_environment ();
 	cd_message ("environnement de bureau : %d", g_iDesktopEnv);
+	
+	//\___________________ On initialise le support d'OpenGL.
+	if (! bForceCairo && ! g_bUseGlitz)
+		g_pGlConfig = cairo_dock_get_opengl_config (bForceOpenGL);
+	g_bUseOpenGL = (g_pGlConfig != NULL);
+	
 	
 	//\___________________ On initialise le gestionnaire de modules et on pre-charge les modules existant.
 	if (g_module_supported () && ! bSafeMode)
@@ -636,73 +646,76 @@ int main (int argc, char** argv)
 			g_free (cChangeLogMessage);
 		}
 	}
-
-	//\___________________ Message a caractere informatif (ou pas).
-	gchar *cSillyMessageFilePath = g_strdup_printf ("%s/.cairo-dock-silly-question", g_cCairoDockDataDir);
-	//const gchar *cSillyMessage = "Le saviez-vous ?\nUtiliser cairo-dock vous rendra beau et intelligent !";
-	//const gchar *cSillyMessage = "Le saviez-vous ?\nUtiliser cairo-dock augmentera votre popularité auprès de la gente féminine !";
-	//const gchar *cSillyMessage = "Le saviez-vous ?\nCairo-Dock contribue à réduire le trou de la couche d'ozone !";
-	//const gchar *cSillyMessage = "Montrer Cairo-Dock à un utilisateur de Mac est le meilleur moyen de s'en faire un ennemi;\nN'oubliez pas qu'il a payé 129$ pour avoir la même chose !";  // 7500
-	//const gchar *cSillyMessage = "Petite annonce :\n  Projet sérieux recherche secrétaire pour rédiger documentation.\n  Niveau d'étude exigé : 95C.";  // 7500
-	//const gchar *cSillyMessage = "Cairo-Dock fait même le café ! Au choix :\n cairo-dock --capuccino , cairo-dock --expresso , cairo-dock --cafe_latte";  // 8000
-	//const gchar *cSillyMessage = "Veuillez rentrer un compliment élogieux à la gloire Fab pour pouvoir utiliser cairo-dock.";
-	//const gchar *cSillyMessage = "Sondage :\n Combien cairo-dock c'est trop bien :";
-	//const gchar *cSillyMessage = "Cairo-Dock : just launch it !";  // 4000
-	//const gchar *cSillyMessage = "Cairo-Dock lave plus blanc que blanc.";  // 4000
-	//const gchar *cSillyMessage = "Sondage :\nVoulez-vous voir plus de filles nues dans Cairo-Dock ?";
-	//const gchar *cSillyMessage = "C'est les soldes !\n Pour tout sous-dock acheté, un sous-dock offert !";
-	//const gchar *cSillyMessage = "J-2 avant la 1.5, la tension monte !";
-	//const gchar *cSillyMessage = "Cairo-Dock : sans danger si l'on se conforme au mode d'emploi.";
-	//const gchar *cSillyMessage = "Nochka, ton home a disparu !";
-	//const gchar *cSillyMessage = "La nouvelle sauce Cairo-Dock rehaussera le goût de tous vos plats !";
-	const gchar *cSillyMessage = "Avec Cairo-Dock c'est vous qui avez la plus grosse (barre de lancement) !";
-	const gchar *cNumSilllyMessage = "19";
-	gboolean bWriteSillyMessage;
-	if (! g_file_test (cSillyMessageFilePath, G_FILE_TEST_EXISTS))
-	{
-		bWriteSillyMessage = TRUE;
-	}
 	else
 	{
-		gsize length = 0;
-		gchar *cContent = NULL;
-		g_file_get_contents (cSillyMessageFilePath,
-			&cContent,
-			&length,
-			NULL);
-		if (length > 0 && strcmp (cContent, cNumSilllyMessage) == 0)
-			bWriteSillyMessage = FALSE;
-		else
+		//\___________________ Message a caractere informatif (ou pas).
+		gchar *cSillyMessageFilePath = g_strdup_printf ("%s/.cairo-dock-silly-question", g_cCairoDockDataDir);
+		//const gchar *cSillyMessage = "Le saviez-vous ?\nUtiliser cairo-dock vous rendra beau et intelligent !";
+		//const gchar *cSillyMessage = "Le saviez-vous ?\nUtiliser cairo-dock augmentera votre popularité auprès de la gente féminine !";
+		//const gchar *cSillyMessage = "Le saviez-vous ?\nCairo-Dock contribue à réduire le trou de la couche d'ozone !";
+		//const gchar *cSillyMessage = "Montrer Cairo-Dock à un utilisateur de Mac est le meilleur moyen de s'en faire un ennemi;\nN'oubliez pas qu'il a payé 129$ pour avoir la même chose !";  // 7500
+		//const gchar *cSillyMessage = "Petite annonce :\n  Projet sérieux recherche secrétaire pour rédiger documentation.\n  Niveau d'étude exigé : 95C.";  // 7500
+		//const gchar *cSillyMessage = "Cairo-Dock fait même le café ! Au choix :\n cairo-dock --capuccino , cairo-dock --expresso , cairo-dock --cafe_latte";  // 8000
+		//const gchar *cSillyMessage = "Veuillez rentrer un compliment élogieux à la gloire Fab pour pouvoir utiliser cairo-dock.";
+		//const gchar *cSillyMessage = "Sondage :\n Combien cairo-dock c'est trop bien :";
+		//const gchar *cSillyMessage = "Cairo-Dock : just launch it !";  // 4000
+		//const gchar *cSillyMessage = "Cairo-Dock lave plus blanc que blanc.";  // 4000
+		//const gchar *cSillyMessage = "Sondage :\nVoulez-vous voir plus de filles nues dans Cairo-Dock ?";
+		//const gchar *cSillyMessage = "C'est les soldes !\n Pour tout sous-dock acheté, un sous-dock offert !";
+		//const gchar *cSillyMessage = "J-2 avant la 1.5, la tension monte !";
+		//const gchar *cSillyMessage = "Cairo-Dock : sans danger si l'on se conforme au mode d'emploi.";
+		//const gchar *cSillyMessage = "Nochka, ton home a disparu !";
+		//const gchar *cSillyMessage = "La nouvelle sauce Cairo-Dock rehaussera le goût de tous vos plats !";
+		//const gchar *cSillyMessage = "Avec Cairo-Dock c'est vous qui avez la plus grosse (barre de lancement) !";
+		const gchar *cSillyMessage = "\n   Bonne Année 2009 !!!\n";
+		const gchar *cNumSilllyMessage = "20";
+		gboolean bWriteSillyMessage;
+		if (! g_file_test (cSillyMessageFilePath, G_FILE_TEST_EXISTS))
+		{
 			bWriteSillyMessage = TRUE;
-		g_free (cContent);
-	}
-
-	g_file_set_contents (cSillyMessageFilePath,
-		cNumSilllyMessage,
-		-1,
-		NULL);
-	g_free (cSillyMessageFilePath);
-
-	if (0 && bWriteSillyMessage && ! bWriteChangeLog && cSillyMessage != NULL)
-	{
-		cairo_dock_show_general_message (cSillyMessage, 4000);
-		/*double fAnswer = cairo_dock_show_value_and_wait (cSillyMessage, pFirstIcon, g_pMainDock, 1.);
-		cd_message (" ==> %.2f\n", fAnswer);
-		if (fAnswer == 0)
-			cd_message ("Cela sera consigné et utilisé contre vous le moment venu ;-)\n");
-		else if (fAnswer == 1)
-			cd_message ("je suis aussi d'accord ! ;-)\n");*/
-
-		/*int iAnswer = cairo_dock_ask_question_and_wait (cSillyMessage, pFirstIcon, g_pMainDock);
-		if (iAnswer == GTK_RESPONSE_YES)
-			cd_message ("c'est bien ce que je pensais ;-)\n");
+		}
 		else
-			cd_message ("allez on ne me la fais pas ! ;-)\n");*/
-
-		/*gchar *cAnswer = cairo_dock_show_demand_and_wait ("Test :", NULL, g_pMainDock, "pouet");
-		cd_message (" -> %s\n", cAnswer);*/
-		/*double fAnswer = cairo_dock_show_value_and_wait ("Test :", cairo_dock_get_first_appli (g_pMainDock->icons), g_pMainDock, .7);
-		cd_message (" ==> %.2f\n", fAnswer);*/
+		{
+			gsize length = 0;
+			gchar *cContent = NULL;
+			g_file_get_contents (cSillyMessageFilePath,
+				&cContent,
+				&length,
+				NULL);
+			if (length > 0 && strcmp (cContent, cNumSilllyMessage) == 0)
+				bWriteSillyMessage = FALSE;
+			else
+				bWriteSillyMessage = TRUE;
+			g_free (cContent);
+		}
+	
+		g_file_set_contents (cSillyMessageFilePath,
+			cNumSilllyMessage,
+			-1,
+			NULL);
+		g_free (cSillyMessageFilePath);
+	
+		if (bWriteSillyMessage && cSillyMessage != NULL)
+		{
+			cairo_dock_show_general_message (cSillyMessage, 6000);
+			/*double fAnswer = cairo_dock_show_value_and_wait (cSillyMessage, pFirstIcon, g_pMainDock, 1.);
+			cd_message (" ==> %.2f\n", fAnswer);
+			if (fAnswer == 0)
+				cd_message ("Cela sera consigné et utilisé contre vous le moment venu ;-)\n");
+			else if (fAnswer == 1)
+				cd_message ("je suis aussi d'accord ! ;-)\n");*/
+	
+			/*int iAnswer = cairo_dock_ask_question_and_wait (cSillyMessage, pFirstIcon, g_pMainDock);
+			if (iAnswer == GTK_RESPONSE_YES)
+				cd_message ("c'est bien ce que je pensais ;-)\n");
+			else
+				cd_message ("allez on ne me la fais pas ! ;-)\n");*/
+	
+			/*gchar *cAnswer = cairo_dock_show_demand_and_wait ("Test :", NULL, g_pMainDock, "pouet");
+			cd_message (" -> %s\n", cAnswer);*/
+			/*double fAnswer = cairo_dock_show_value_and_wait ("Test :", cairo_dock_get_first_appli (g_pMainDock->icons), g_pMainDock, .7);
+			cd_message (" ==> %.2f\n", fAnswer);*/
+		}
 	}
 	
 	if (! bTesting)

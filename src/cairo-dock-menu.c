@@ -112,7 +112,7 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	gchar *cTitle = g_strdup_printf ("\nCairo-Dock (2007-2008)\n version %s", CAIRO_DOCK_VERSION);
+	gchar *cTitle = g_strdup_printf ("\nCairo-Dock (2007-2009)\n version %s", CAIRO_DOCK_VERSION);
 	GtkWidget *pDialog = gtk_message_dialog_new (GTK_WINDOW (pDock->pWidget),
 		GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_MESSAGE_INFO,

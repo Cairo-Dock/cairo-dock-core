@@ -62,9 +62,7 @@ extern CairoDock *g_pMainDock;
 
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
 
-
 extern gchar *g_cCurrentLaunchersPath;
-
 
 extern gchar *g_cConfFile;
 
@@ -76,12 +74,12 @@ extern gboolean g_bSticky;
 extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bIndirectRendering;
+extern gboolean g_bUseCairo;
 extern GdkGLConfig* g_pGlConfig;
 
 
 CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockName, gchar *cRendererName)
 {
-	//static pouet = 0;
 	cd_message ("%s (%s)", __func__, cDockName);
 	g_return_val_if_fail (cDockName != NULL, NULL);
 	
@@ -122,118 +120,6 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 
 	gtk_window_set_type_hint (GTK_WINDOW (pWindow), iWmHint);
 
-	if (g_bUseOpenGL && g_pGlConfig == NULL)  // taken from a MacSlow's exemple.
-	{
-		VisualID xvisualid;
-	
-		GdkDisplay	   *gdkdisplay;
-		Display	   *XDisplay;
-		//Window	   xid;
-
-		gdkdisplay = gdk_display_get_default ();
-		XDisplay   = gdk_x11_display_get_xdisplay (gdkdisplay);
-		Window root = XRootWindow(XDisplay, 0);
-		
-		XWindowAttributes attrib;
-		XVisualInfo templ;
-		XVisualInfo *visinfo;
-		int nvisinfo, defaultDepth, value;
-		
-		
-		GLXFBConfig*	     pFBConfigs; 
-		XRenderPictFormat*   pPictFormat = NULL; 
-		int doubleBufferAttributes[] = { 
-			GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT, 
-			GLX_RENDER_TYPE,   GLX_RGBA_BIT,
-			GLX_DOUBLEBUFFER,  True, 
-			GLX_RED_SIZE,      1, 
-			GLX_GREEN_SIZE,    1, 
-			GLX_BLUE_SIZE,     1, 
-			GLX_ALPHA_SIZE,    1, 
-			GLX_DEPTH_SIZE,    1, 
-			None}; 
-		
-		
-		XVisualInfo *pVisInfo = NULL; 
-		int i, iNumOfFBConfigs = 0;
-		cd_debug ("cherchons les configs ...");
-		pFBConfigs = glXChooseFBConfig (XDisplay, 
-			DefaultScreen (XDisplay), 
-			doubleBufferAttributes, 
-			&iNumOfFBConfigs); 
-		
-		cd_message ("got %d FBConfig(s)", iNumOfFBConfigs);
-		for (i = 0; i < iNumOfFBConfigs; i++) 
-		{
-			pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]); 
-			if (!pVisInfo) 
-			{
-				cd_warning ("this FBConfig has no visual.");
-				continue; 
-			}
-			
-			pPictFormat = XRenderFindVisualFormat (XDisplay, pVisInfo->visual);
-			if (!pPictFormat)
-			{
-				cd_warning ("this visual has an unknown format.");
-				XFree (pVisInfo);
-				pVisInfo = NULL;
-				continue; 
-			}
-			
-			if (pPictFormat->direct.alphaMask > 0)
-			{
-				cd_message ("Strike, found a GLX visual with alpha-support !");
-				break;
-			}
-	
-			XFree (pVisInfo);
-			pVisInfo = NULL;
-		}
-		/// free FBConfigs ?
-		
-		if (pVisInfo == NULL)
-		{
-			cd_warning ("we could not get an ARGB-visual, trying to get an RGB one...");
-			doubleBufferAttributes[13] = 0;
-			pFBConfigs = glXChooseFBConfig (XDisplay, 
-				DefaultScreen (XDisplay), 
-				doubleBufferAttributes, 
-				&iNumOfFBConfigs);
-			cd_message ("got %d FBConfig(s) this time", iNumOfFBConfigs);
-			for (i = 0; i < iNumOfFBConfigs; i++) 
-			{
-				pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]); 
-				if (!pVisInfo) 
-				{
-					cd_warning ("this FBConfig has no visual.");
-				}
-				else
-					break;
-			}
-			if (pVisInfo == NULL)
-			{
-				cd_warning ("still no visual, this is the last chance");
-				pVisInfo = glXChooseVisual (XDisplay,
-					DefaultScreen (XDisplay),
-					doubleBufferAttributes);
-			}
-		}
-		if (pVisInfo != NULL)
-		{
-			cd_message ("ok, got a visual");
-			//GdkVisual *visual = gdkx_visual_get (pVisInfo->visualid);
-			//pColormap = gdk_colormap_new (visual, TRUE);
-			g_pGlConfig = gdk_x11_gl_config_new_from_visualid (pVisInfo->visualid);
-			XFree (pVisInfo);
-		}
-		else
-		{
-			cd_warning ("sorry, your graphic card does not support GLX Visuals, OpenGL can't be used.");
-			g_bUseOpenGL = FALSE;
-		}
-	}
-	
 	cairo_dock_set_colormap (CAIRO_CONTAINER (pDock));
 	
 	if (g_bUseOpenGL)

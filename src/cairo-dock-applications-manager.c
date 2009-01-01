@@ -520,25 +520,18 @@ void cairo_dock_window_is_fullscreen_or_hidden_or_maximized (Window Xid, gboolea
 			{
 				cd_message (  "s_aNetWmHidden");
 				*bIsHidden = TRUE;
-				//break ;
 			}
 			else if (pXStateBuffer[i] == s_aNetWmMaximizedVert)
 			{
 				iNbMaximizedDimensions ++;
 				if (iNbMaximizedDimensions == 2)
-				{
 					*bIsMaximized = TRUE;
-					//break;
-				}
 			}
 			else if (pXStateBuffer[i] == s_aNetWmMaximizedHoriz)
 			{
 				iNbMaximizedDimensions ++;
 				if (iNbMaximizedDimensions == 2)
-				{
 					*bIsMaximized = TRUE;
-					//break;
-				}
 			}
 			else if (pXStateBuffer[i] == s_aNetWmDemandsAttention && bDemandsAttention != NULL)
 			{
@@ -841,7 +834,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				}
 				else if (event.xproperty.atom == s_aNetNbDesktops)
 				{
-					cd_message ("changementdu nombre de bureaux virtuels");
+					cd_message ("changement du nombre de bureaux virtuels");
 					g_iNbDesktops = cairo_dock_get_nb_desktops ();
 					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED, NULL);
 				}
@@ -853,6 +846,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					
 					if (cairo_dock_update_screen_geometry ())  // modification de la resolution.
 					{
+						cd_message ("resolution alteree");
 						cairo_dock_set_window_position_at_balance (pDock, pDock->iCurrentWidth, pDock->iCurrentHeight);
 						gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionX, pDock->iWindowPositionY);
 					}

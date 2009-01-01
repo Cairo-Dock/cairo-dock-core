@@ -9,11 +9,13 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-X-utilities.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-position.h"
 
 CairoConfigPosition myPosition;
 extern CairoDock *g_pMainDock;
+extern int g_iScreenOffsetX, g_iScreenOffsetY;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigPosition *pPosition)
 {
@@ -27,6 +29,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigPosition *pPosition)
 		pPosition->iScreenBorder = 0;
 
 	pPosition->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Position", "alignment", &bFlushConfFileNeeded, 0.5, NULL, NULL);
+	
+	pPosition->bUseXinerama = cairo_dock_get_boolean_key_value (pKeyFile, "Position", "xinerama", &bFlushConfFileNeeded, 0, NULL, NULL);
+	pPosition->iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Position", "num screen", &bFlushConfFileNeeded, 0, NULL, NULL);
 
 	return bFlushConfFileNeeded;
 }
@@ -35,6 +40,16 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigPosition *pPosition)
 static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPosition)
 {
 	g_print ("%s (%d;%d)\n", __func__, pPosition->iGapX, pPosition->iGapY);
+	
+	if (pPosition->bUseXinerama)
+	{
+		cairo_dock_get_screen_offsets (myPosition.iNumScreen);
+	}
+	else
+	{
+		g_iScreenOffsetX = g_iScreenOffsetY = 0;
+	}
+	
 	CairoDock *pDock = g_pMainDock;
 	if (pPosition->iScreenBorder != pPrevPosition->iScreenBorder)
 	{

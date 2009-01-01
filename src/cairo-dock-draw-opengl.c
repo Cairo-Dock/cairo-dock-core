@@ -25,7 +25,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <cairo-glitz.h>
 #endif
 
-#include <gtk/gtkgl.h>
 #include <X11/extensions/Xrender.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -48,6 +47,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-background.h"
+#include "cairo-dock-log.h"
+#include "cairo-dock-X-utilities.h"
 #include "cairo-dock-draw-opengl.h"
 
 #include "texture-gradation.h"
@@ -73,6 +74,7 @@ extern cairo_surface_t *g_pIndicatorSurface[2];
 extern cairo_surface_t *g_pActiveIndicatorSurface;
 extern cairo_surface_t *g_pVisibleZoneSurface;
 extern gboolean g_bUseOpenGL;
+extern GdkGLConfig* g_pGlConfig;
 
 
 static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp)
@@ -1151,4 +1153,113 @@ void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor,
 	
 	glDisable(GL_LINE_SMOOTH);
 	glDisable(GL_BLEND);
+}
+
+
+
+GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL)  // taken from a MacSlow's exemple.
+{
+	GdkGLConfig *pGlConfig = NULL;
+	
+	Display *XDisplay = cairo_dock_get_Xdisplay ();
+	
+	XWindowAttributes attrib;
+	XVisualInfo templ;
+	XVisualInfo *visinfo;
+	int nvisinfo, defaultDepth, value;
+	
+	GLXFBConfig *pFBConfigs; 
+	XRenderPictFormat *pPictFormat = NULL;
+	int doubleBufferAttributes[] = {
+		GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+		GLX_RENDER_TYPE,   GLX_RGBA_BIT,
+		GLX_DOUBLEBUFFER,  True,
+		GLX_RED_SIZE,      1,
+		GLX_GREEN_SIZE,    1,
+		GLX_BLUE_SIZE,     1,
+		GLX_ALPHA_SIZE,    1,
+		GLX_DEPTH_SIZE,    1,
+		None};
+	
+	
+	XVisualInfo *pVisInfo = NULL;
+	int i, iNumOfFBConfigs = 0;
+	cd_debug ("cherchons les configs ...");
+	pFBConfigs = glXChooseFBConfig (XDisplay,
+		DefaultScreen (XDisplay),
+		doubleBufferAttributes,
+		&iNumOfFBConfigs);
+	
+	cd_message ("got %d FBConfig(s)", iNumOfFBConfigs);
+	for (i = 0; i < iNumOfFBConfigs; i++)
+	{
+		pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]);
+		if (!pVisInfo)
+		{
+			cd_warning ("this FBConfig has no visual.");
+			continue;
+		}
+		
+		pPictFormat = XRenderFindVisualFormat (XDisplay, pVisInfo->visual);
+		if (!pPictFormat)
+		{
+			cd_warning ("this visual has an unknown format.");
+			XFree (pVisInfo);
+			pVisInfo = NULL;
+			continue;
+		}
+		
+		if (pPictFormat->direct.alphaMask > 0)
+		{
+			cd_message ("Strike, found a GLX visual with alpha-support !");
+			break;
+		}
+
+		XFree (pVisInfo);
+		pVisInfo = NULL;
+	}
+	/// free FBConfigs ?
+	
+	if (pVisInfo == NULL && bForceOpenGL)
+	{
+		cd_warning ("we could not get an ARGB-visual, trying to get an RGB one...");
+		doubleBufferAttributes[13] = 0;
+		pFBConfigs = glXChooseFBConfig (XDisplay,
+			DefaultScreen (XDisplay),
+			doubleBufferAttributes,
+			&iNumOfFBConfigs);
+		cd_message ("got %d FBConfig(s) this time", iNumOfFBConfigs);
+		for (i = 0; i < iNumOfFBConfigs; i++)
+		{
+			pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]);
+			if (!pVisInfo)
+			{
+				cd_warning ("this FBConfig has no visual.");
+			}
+			else
+				break;
+		}
+		if (pVisInfo == NULL)
+		{
+			cd_warning ("still no visual, this is the last chance");
+			pVisInfo = glXChooseVisual (XDisplay,
+				DefaultScreen (XDisplay),
+				doubleBufferAttributes);
+		}
+	}
+	if (pVisInfo != NULL)
+	{
+		cd_message ("ok, got a visual");
+		//GdkVisual *visual = gdkx_visual_get (pVisInfo->visualid);
+		//pColormap = gdk_colormap_new (visual, TRUE);
+		pGlConfig = gdk_x11_gl_config_new_from_visualid (pVisInfo->visualid);
+		XFree (pVisInfo);
+	}
+	else
+	{
+		cd_warning ("sorry, your graphic card does not support GLX Visuals, OpenGL can't be used.");
+		g_bUseOpenGL = FALSE;
+	}
+	
+	return pGlConfig;
 }

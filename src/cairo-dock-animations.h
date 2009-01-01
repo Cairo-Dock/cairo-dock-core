@@ -23,6 +23,8 @@ gboolean cairo_dock_grow_up (CairoDock *pDock);
 
 gboolean cairo_dock_shrink_down (CairoDock *pDock);
 
+gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock);
+
 /**
 *Definit s'il est utile de lancer l'animation d'un dock (il est inutile de la lancer s'il est manifestement invisible).
 *@param pDock le dock a animer.

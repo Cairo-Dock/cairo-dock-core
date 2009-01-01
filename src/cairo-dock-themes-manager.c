@@ -427,7 +427,7 @@ static void on_theme_apply (gpointer *user_data)
 				}
 				
 				g_print ("downloading theme from %s ...\n", cNewThemePath);
-				g_string_printf (sCommand, "wget \"%s/%s.tar.gz\" -O '%s' -t 2 -T 2", cNewThemePath, cNewThemeName, cTmpFilePath);
+				g_string_printf (sCommand, "wget \"%s/%s.tar.gz\" -O '%s' -t 3 -T 5", cNewThemePath, cNewThemeName, cTmpFilePath);
 				system (sCommand->str);
 				close(fds);
 				

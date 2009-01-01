@@ -27,6 +27,17 @@ x gap = 0
 #{in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.}
 y gap = 25
 
+#F-[Multiple screens]
+frame_xin =
+
+#b Use Xinerama ?
+xinerama = false
+
+#i[0;12] Number of the screen where the dock should be located :
+#{starting from 0}
+num screen = 0
+
+
 #@prefix@/@DATADIRNAME@/@PACKAGE@/icon-accessibility.svg;0;How do you access to your docks ?
 [Accessibility]
 

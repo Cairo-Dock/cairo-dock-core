@@ -20,6 +20,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <X11/extensions/shape.h>
 #include <X11/extensions/Xcomposite.h>
 //#include <X11/extensions/Xdamage.h>
+#include <X11/extensions/Xinerama.h>
 #endif
 
 #include "cairo-dock-applications-manager.h"
@@ -31,6 +32,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 extern int g_iNbDesktops;
 extern int g_iNbViewportX,g_iNbViewportY ;
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
+extern int g_iScreenOffsetX, g_iScreenOffsetY;
 //extern int g_iDamageEvent;
 
 static Display *s_XDisplay = NULL;
@@ -371,9 +373,10 @@ void cairo_dock_get_nb_viewports (int *iNbViewportX, int *iNbViewportY)
 	XGetWindowProperty (s_XDisplay, root, s_aNetDesktopGeometry, 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pVirtualScreenSizeBuffer);
 	if (iBufferNbElements > 0)
 	{
-		cd_debug ("pVirtualScreenSizeBuffer : %dx%d", pVirtualScreenSizeBuffer[0], pVirtualScreenSizeBuffer[1]);
-		*iNbViewportX = pVirtualScreenSizeBuffer[0] / g_iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-		*iNbViewportY = pVirtualScreenSizeBuffer[1] / g_iScreenHeight[CAIRO_DOCK_HORIZONTAL];
+		Screen *scr = XDefaultScreenOfDisplay (s_XDisplay);
+		cd_debug ("pVirtualScreenSizeBuffer : %dx%d ; screen : %dx%d", pVirtualScreenSizeBuffer[0], pVirtualScreenSizeBuffer[1], WidthOfScreen (scr), HeightOfScreen (scr));
+		*iNbViewportX = pVirtualScreenSizeBuffer[0] / WidthOfScreen (scr);  // g_iScreenWidth[CAIRO_DOCK_HORIZONTAL];
+		*iNbViewportY = pVirtualScreenSizeBuffer[1] / HeightOfScreen (scr);  // g_iScreenHeight[CAIRO_DOCK_HORIZONTAL];
 		XFree (pVirtualScreenSizeBuffer);
 	}
 }
@@ -613,7 +616,12 @@ gboolean cairo_dock_support_X_extension (void)
 {
 #ifdef HAVE_XEXTEND
 	int event_base, error_base;
-	if (XCompositeQueryExtension (s_XDisplay, &event_base, &error_base))  // on regarde si le serveur X supporte l'extension.
+	if (! XCompositeQueryExtension (s_XDisplay, &event_base, &error_base))  // on regarde si le serveur X supporte l'extension.
+	{
+		cd_warning ("XComposite extension not available.");
+		return FALSE;
+	}
+	else
 	{
 		int major = 0, minor = 2;  // La version minimale requise pour avoir XCompositeNameWindowPixmap().
 		XCompositeQueryVersion (s_XDisplay, &major, &minor);  // on regarde si on est au moins dans cette version.
@@ -623,20 +631,53 @@ gboolean cairo_dock_support_X_extension (void)
 			return FALSE;
 		}
 	}
-	else
-	{
-		cd_warning ("XComposite extension nto available.");
-		return FALSE;
-	}
 	/*int iDamageError=0;
 	if (! XDamageQueryExtension (s_XDisplay, &g_iDamageEvent, &iDamageError))
 	{
 		cd_warning ("XDamage extension not supported");
 		return FALSE;
 	}*/
+	
+	if (! XineramaQueryExtension (s_XDisplay, &event_base, &error_base))
+	{
+		cd_warning ("Xinerama extension not supported");
+		return FALSE;
+	}
+	else
+	{
+		int major = 0, minor = 0;
+		if (XineramaQueryVersion (s_XDisplay, &major, &minor) == 0)
+		{
+			cd_warning ("Xinerama extension too old");
+			return FALSE;
+		}
+	}
+	
 	return TRUE;
 #else
 	cd_warning ("The dock was not compiled with the XComposite extension.");
 	return FALSE;
 #endif
+}
+
+
+void cairo_dock_get_screen_offsets (int iNumScreen)
+{
+	int iNbScreens = 0;
+	XineramaScreenInfo *pScreens = XineramaQueryScreens (s_XDisplay, &iNbScreens);
+	if (pScreens != NULL)
+	{
+		if (iNumScreen >= iNbScreens)
+		{
+			cd_warning ("the number of screen for the dock is too big, we'll choose the last one.");
+			iNumScreen = iNbScreens - 1;
+		}
+		g_iScreenOffsetX = pScreens[iNumScreen].x_org;
+		g_iScreenOffsetY = pScreens[iNumScreen].y_org;
+		g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] = pScreens[iNumScreen].width;
+		g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] = pScreens[iNumScreen].height;
+		g_print ("ecran %d => (%d;%d) %dx%d\n", iNumScreen, g_iScreenOffsetX, g_iScreenOffsetY, g_iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+		
+		XFree (pScreens);
+	}
 }

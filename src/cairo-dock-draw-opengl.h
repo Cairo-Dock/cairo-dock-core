@@ -3,6 +3,7 @@
 #define  __CAIRO_DOCK_DRAW_OPENGL__
 
 #include <glib.h>
+#include <gtk/gtkgl.h>
 
 #include "cairo-dock-struct.h"
 
@@ -44,6 +45,7 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double fDockWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, const GLfloat *pVertexTab, int iNbVertex, CairoDockTypeHorizontality bHorizontal, gboolean bDirectionUp);
 void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor, const GLfloat *pVertexTab, int iNbVertex);
 
+GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL);
 
 G_END_DECLS
 #endif

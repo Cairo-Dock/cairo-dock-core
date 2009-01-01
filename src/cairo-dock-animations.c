@@ -282,6 +282,58 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 
 	if (pDock->iMagnitudeIndex == 0)
 	{
+		if (! pDock->bInside)
+		{
+			//\__________________ On repasse derriere si on etait devant.
+			if (pDock->bPopped)
+				cairo_dock_pop_down (pDock);
+			
+			//\__________________ On se redimensionne en taille normale.
+			if (! (pDock->bAutoHide && pDock->iRefCount == 0) && ! pDock->bInside && ! pDock->bMenuVisible)
+			{
+				int iNewWidth, iNewHeight;
+				cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
+				if (pDock->bHorizontalDock)
+					gdk_window_move_resize (pDock->pWidget->window,
+						pDock->iWindowPositionX,
+						pDock->iWindowPositionY,
+						iNewWidth,
+						iNewHeight);
+				else
+					gdk_window_move_resize (pDock->pWidget->window,
+						pDock->iWindowPositionY,
+						pDock->iWindowPositionX,
+						iNewHeight,
+						iNewWidth);
+			}
+			
+			//\__________________ On se cache si sous-dock.
+			if (pDock->iRefCount > 0)
+			{
+				//g_print ("on cache ce sous-dock en sortant par lui\n");
+				gtk_widget_hide (pDock->pWidget);
+				cairo_dock_hide_parent_dock (pDock);
+			}
+
+			pDock->bIsShrinkingDown = FALSE;
+			pDock->bAtBottom = TRUE;
+			if (! pDock->bIsGrowingUp)
+				pDock->bAtBottom = TRUE;  /// deplacé du leave a ici le 28/12/2008
+			cairo_dock_hide_dock_like_a_menu ();
+			return FALSE;
+		}
+		else
+		{
+			pDock->bIsShrinkingDown = FALSE;
+			pDock->calculate_icons (pDock);  // relance le grossissement si on est dedans.
+			if (! pDock->bIsGrowingUp)
+				pDock->bAtBottom = TRUE;
+			return pDock->bIsGrowingUp;
+		}
+	}
+	return TRUE;
+	/*if (pDock->iMagnitudeIndex == 0)
+	{
 		if (pDock->bPopped && ! pDock->bInside)
 			cairo_dock_pop_down (pDock);
 		
@@ -403,9 +455,102 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 		return TRUE;
 	}
 	else
-		return TRUE;
+		return TRUE;*/
 }
 
+
+gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
+{
+	gboolean bRecalculateIcons = FALSE;
+	GList* ic;
+	Icon *pIcon;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	{
+		pIcon = ic->data;
+		if (pIcon->fPersonnalScale == 0.05)
+		{
+			g_print ("  %s va etre supprimee\n", pIcon->acName);
+			gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);  // car apres avoir ete enleve du dock elle n'est plus rien.
+			cairo_dock_remove_icon_from_dock (pDock, pIcon);
+			
+			if (! g_bEasterEggs)
+			{
+				if (pIcon && pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass) && pDock->icons == NULL)  // il n'y a plus aucune icone de cette classe.
+				{
+					cd_message ("le sous-dock de la classe %s n'a plus d'element et va etre detruit", pIcon->cClass);
+					cairo_dock_destroy_dock (pDock, pIcon->cClass, NULL, NULL);
+					return FALSE;
+				}
+				else
+				{
+					cairo_dock_update_dock_size (pDock);
+				}
+			}
+			else
+			{
+				if (pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass))
+				{
+					if (pDock->icons == NULL)  // ne devrait plus arriver.
+					{
+						cd_message ("le sous-dock de la classe %s n'a plus d'element et va etre detruit", pIcon->cClass);
+						
+						CairoDock *pFakeParentDock = NULL;
+						Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
+						
+						cairo_dock_destroy_dock (pDock, pIcon->cClass, NULL, NULL);
+						pFakeClassIcon->pSubDock = NULL;
+						
+						cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
+						cairo_dock_free_icon (pFakeClassIcon);
+						cairo_dock_update_dock_size (pFakeParentDock);
+						return FALSE;
+					}
+					else if (pDock->icons->next == NULL)
+					{
+						cd_message ("le sous-dock de la classe %s n'a plus que 1 element et va etre vide puis detruit", pIcon->cClass);
+						
+						CairoDock *pFakeParentDock = NULL;
+						Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
+						
+						Icon *pLastClassIcon = pDock->icons->data;
+						pLastClassIcon->fOrder = pFakeClassIcon->fOrder;
+						
+						cairo_dock_destroy_dock (pDock, pIcon->cClass, pFakeParentDock, pFakeClassIcon->cParentDockName);
+						pFakeClassIcon->pSubDock = NULL;
+						
+						cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
+						cairo_dock_free_icon (pFakeClassIcon);
+						
+						cairo_dock_redraw_my_icon (pLastClassIcon, CAIRO_CONTAINER (pFakeParentDock));  // on suppose que les tailles des 2 icones sont identiques.
+						return FALSE;
+					}
+					else
+					{
+						cairo_dock_update_dock_size (pDock);
+					}
+				}
+				else
+				{
+					cairo_dock_update_dock_size (pDock);
+				}
+			}
+			cairo_dock_free_icon (pIcon);
+		}
+		else if (pIcon->fPersonnalScale == -0.05)
+		{
+			g_print ("  fin\n");
+			pIcon->fPersonnalScale = 0;
+		}
+		else if (pIcon->fPersonnalScale != 0)
+		{
+			bRecalculateIcons = TRUE;
+		}
+	}
+	
+	if (bRecalculateIcons)
+		pDock->calculate_icons (pDock);
+	return TRUE;
+}
 
 
 void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
@@ -415,7 +560,7 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 	
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST && cairo_dock_animation_will_be_visible (pDock))
 	{
-		g_print ("  c'est parti\n");
+		//g_print ("  c'est parti\n");
 		pDock->fFoldingFactor = 0;  // utile ?...
 		cairo_dock_launch_animation (pDock);
 	}
@@ -432,7 +577,7 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gch
 
 static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 {
-	g_print ("%s (%d)\n", __func__, pDock->iRefCount);
+	//g_print ("%s (%d)\n", __func__, pDock->iRefCount);
 	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
 	gboolean bIconIsAnimating, bContinue = FALSE;
 	Icon *icon;
@@ -451,7 +596,10 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 		if (! bIconIsAnimating)
 			icon->iAnimationState = CAIRO_DOCK_STATE_REST;
 	}
-
+	
+	if (! cairo_dock_handle_inserting_removing_icons (pDock))
+		return FALSE;
+	
 	cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);
 	
 	if (pDock->bIsGrowingUp)
@@ -462,11 +610,6 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 	else if (pDock->bIsShrinkingDown)
 	{
 		bContinue |= cairo_dock_shrink_down (pDock);
-		if (pDock->cToBeDestroyed)
-		{
-			cairo_dock_destroy_dock (pDock, pDock->cToBeDestroyed, NULL, NULL);
-			return FALSE;
-		}
 		gtk_widget_queue_draw (pDock->pWidget);
 	}
 	else if (g_bUseOpenGL && pDock->render_opengl)
@@ -540,8 +683,12 @@ gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserD
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
 	cairo_dock_update_removing_inserting_icon_size_default (pIcon);
+	
 	if (fabs (pIcon->fPersonnalScale) > 0.05)
+	{
 		cairo_dock_mark_icon_as_inserting_removing (pIcon);
+		*bContinueAnimation = TRUE;
+	}
 	return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 }
 
