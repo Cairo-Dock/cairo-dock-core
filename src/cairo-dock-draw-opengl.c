@@ -120,7 +120,7 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHoriz
 			if (! bDirectionUp)
 				fY = - fY;
 			glTranslatef (0., fY, 1.);
-			glScalef (g_fIndicatorWidth * fRatio * icon->fScale, (bDirectionUp ? 1:-1) * g_fIndicatorHeight * fRatio * icon->fScale, 1.);
+			glScalef (g_fIndicatorWidth * fRatio * 1., (bDirectionUp ? 1:-1) * g_fIndicatorHeight * fRatio * 1., 1.);
 		}
 		else
 		{
@@ -128,7 +128,7 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHoriz
 				fY = - fY;
 			glTranslatef (fY, 0., 1.);
 			glRotatef (90, 0., 0., 1.);
-			glScalef (g_fIndicatorWidth * fRatio * icon->fScale, (bDirectionUp ? 1:-1) * g_fIndicatorHeight * fRatio * icon->fScale, 1.);
+			glScalef (g_fIndicatorWidth * fRatio * 1., (bDirectionUp ? 1:-1) * g_fIndicatorHeight * fRatio * 1., 1.);
 		}
 	}
 
@@ -1065,7 +1065,7 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 }
 
 
-void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double fDockWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, const GLfloat *pVertexTab, int iNbVertex, CairoDockTypeHorizontality bHorizontal, gboolean bDirectionUp)
+void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double fDockWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, const GLfloat *pVertexTab, int iNbVertex, CairoDockTypeHorizontality bHorizontal, gboolean bDirectionUp, double fDecorationsOffsetX)
 {
 	glEnable(GL_TEXTURE_2D); // Je veux de la texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -1096,7 +1096,7 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 	glMatrixMode(GL_TEXTURE); // On selectionne la matrice des textures
 	glPushMatrix ();
 	glLoadIdentity(); // On la reset
-	glTranslatef(0.5f, 0.5f, 0.);
+	glTranslatef(0.5f - fDecorationsOffsetX * mySystem.fStripesSpeedFactor / (fDockWidth), 0.5f, 0.);
 	glScalef (1., -1., 1.);
 	glMatrixMode(GL_MODELVIEW);
 	
@@ -1190,7 +1190,7 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL)  // taken from
 		doubleBufferAttributes,
 		&iNumOfFBConfigs);
 	
-	cd_message ("got %d FBConfig(s)", iNumOfFBConfigs);
+	cd_debug (" -> %d FBConfig(s)", iNumOfFBConfigs);
 	for (i = 0; i < iNumOfFBConfigs; i++)
 	{
 		pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]);
@@ -1257,7 +1257,7 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL)  // taken from
 	}
 	else
 	{
-		cd_warning ("sorry, your graphic card does not support GLX Visuals, OpenGL can't be used.");
+		cd_warning ("couldn't find a suitable GLX Visual, OpenGL can't be used.\n (sorry to say that, but your graphic and/or its driver is crappy)");
 		g_bUseOpenGL = FALSE;
 	}
 	

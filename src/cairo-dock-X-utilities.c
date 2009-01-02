@@ -380,7 +380,7 @@ void cairo_dock_get_nb_viewports (int *iNbViewportX, int *iNbViewportY)
 	if (iBufferNbElements > 0)
 	{
 		Screen *scr = XDefaultScreenOfDisplay (s_XDisplay);
-		g_print ("pVirtualScreenSizeBuffer : %dx%d ; screen : %dx%d\n", pVirtualScreenSizeBuffer[0], pVirtualScreenSizeBuffer[1], g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], g_iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+		cd_debug ("pVirtualScreenSizeBuffer : %dx%d ; screen : %dx%d", pVirtualScreenSizeBuffer[0], pVirtualScreenSizeBuffer[1], g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		*iNbViewportX = pVirtualScreenSizeBuffer[0] / g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
 		*iNbViewportY = pVirtualScreenSizeBuffer[1] / g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
 		XFree (pVirtualScreenSizeBuffer);
@@ -647,7 +647,6 @@ gboolean cairo_dock_support_X_extension (void)
 	if (! XineramaQueryExtension (s_XDisplay, &event_base, &error_base))
 	{
 		cd_warning ("Xinerama extension not supported");
-		return FALSE;
 	}
 	else
 	{
@@ -655,13 +654,12 @@ gboolean cairo_dock_support_X_extension (void)
 		if (XineramaQueryVersion (s_XDisplay, &major, &minor) == 0)
 		{
 			cd_warning ("Xinerama extension too old");
-			return FALSE;
 		}
 	}
 	
 	return TRUE;
 #else
-	cd_warning ("The dock was not compiled with the XComposite extension.");
+	cd_warning ("The dock was not compiled with the X extensions (XComposite, Xinerama, XDamage, etc).");
 	return FALSE;
 #endif
 }
@@ -675,7 +673,7 @@ void cairo_dock_get_screen_offsets (int iNumScreen)
 	{
 		if (iNumScreen >= iNbScreens)
 		{
-			cd_warning ("the number of screen for the dock is too big, we'll choose the last one.");
+			cd_warning ("the number of screen where to place the dock is too big, we'll choose the last one.");
 			iNumScreen = iNbScreens - 1;
 		}
 		g_iScreenOffsetX = pScreens[iNumScreen].x_org;
@@ -688,13 +686,13 @@ void cairo_dock_get_screen_offsets (int iNumScreen)
 		
 		g_iScreenWidth[CAIRO_DOCK_VERTICAL] = g_iScreenHeight[CAIRO_DOCK_HORIZONTAL];
 		g_iScreenHeight[CAIRO_DOCK_VERTICAL] = g_iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-		g_print ("ecran %d => (%d;%d) %dx%d\n", iNumScreen, g_iScreenOffsetX, g_iScreenOffsetY, g_iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+		cd_message (" * screen %d => (%d;%d) %dx%d\n", iNumScreen, g_iScreenOffsetX, g_iScreenOffsetY, g_iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		
 		XFree (pScreens);
 	}
 	else
 	{
-		cd_warning ("No screens found from Xinerama");
+		cd_warning ("No screens found from Xinerama, is it really active ?");
 		g_iScreenOffsetX = g_iScreenOffsetY = 0;
 	}
 }

@@ -13,11 +13,11 @@ msgstr ""
 "X-Poedit-Language: French\n"
 "X-Poedit-Country: France\n"
 
-#: ../src/cairo-dock-callbacks.c:1228
+#: ../src/cairo-dock-callbacks.c:1115
 msgid "Do you want to mount this point ?"
 msgstr "Voulez-vous monter ce point ?"
 
-#: ../src/cairo-dock-callbacks.c:1958
+#: ../src/cairo-dock-callbacks.c:1845
 msgid "Quit Cairo-Dock ?"
 msgstr "Quitter Cairo-Dock ?"
 
@@ -78,7 +78,7 @@ msgstr "Comportement"
 # #################################
 #: ../src/cairo-dock-gui-manager.c:60
 msgid "Theme"
-msgstr "Thèmes"
+msgstr "Thème"
 
 #: ../src/cairo-dock-gui-manager.c:61
 msgid "Accessories"
@@ -1074,7 +1074,9 @@ msgstr "Taille du dock (largeur x hauteur, en pixels) :"
 msgid ""
 "This is what you see when the dock hides itselfs. Any format is allowed. Let "
 "this field empty to have an invisible zone."
-msgstr "C'est ce que vous voyez quand le dock se cache. Tout format accepté. Laissez ce champ vide pour avoir une zone invisible."
+msgstr ""
+"C'est ce que vous voyez quand le dock se cache. Tout format accepté. Laissez "
+"ce champ vide pour avoir une zone invisible."
 
 #: ../data/messages:243
 msgid "Filename of an image to put on :"
@@ -1408,7 +1410,9 @@ msgstr "Nom d'une image à utiliser en fond des icônes :"
 #: ../data/messages:377
 msgid ""
 "Some applets may not use it, because they redraw periodically themselves."
-msgstr "Certaines applets peuvent ne pas l'utiliser, car elles se redessinent elles-mêmes périodiquement."
+msgstr ""
+"Certaines applets peuvent ne pas l'utiliser, car elles se redessinent elles-"
+"mêmes périodiquement."
 
 #: ../data/messages:379
 msgid "Use this background for applets too ?"
@@ -2471,7 +2475,7 @@ msgid ""
 "Cairo-Dock II\n"
 " - The lucky owners of NVidia cards can now benefit from a full OpenGL "
 "dock !\n"
-"  Launch the dock with the '-o' option.\n"
+" For the moment, only the default and 3D-plane views are in OpenGL.\n"
 " - The config panel has been widely rewritten.\n"
 " - Lot of bug fixes and small upgrades in all plug-ins."
 msgstr ""

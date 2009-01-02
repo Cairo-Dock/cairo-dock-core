@@ -545,26 +545,13 @@ void cairo_dock_load_visible_zone (CairoDock *pDock, gchar *cVisibleZoneImageFil
 	if (g_pVisibleZoneSurface != NULL)
 		cairo_surface_destroy (g_pVisibleZoneSurface);
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-	/*if (! g_bUseOpenGL)
-	{
-		g_pVisibleZoneSurface = cairo_dock_load_image (pCairoContext,
-			cVisibleZoneImageFile,
-			&fVisibleZoneWidth,
-			&fVisibleZoneHeight,
-			pDock->bHorizontalDock ? (! pDock->bDirectionUp && myHiddenDock.bReverseVisibleImage ? G_PI : 0) : (pDock->bDirectionUp ? -G_PI/2 : G_PI/2),
-			fVisibleZoneAlpha,
-			FALSE);
-	}
-	else*/
-	{
-		g_pVisibleZoneSurface = cairo_dock_load_image (pCairoContext,
-			cVisibleZoneImageFile,
-			&fVisibleZoneWidth,
-			&fVisibleZoneHeight,
-			0.,
-			fVisibleZoneAlpha,
-			FALSE);
-	}
+	g_pVisibleZoneSurface = cairo_dock_load_image (pCairoContext,
+		cVisibleZoneImageFile,
+		&fVisibleZoneWidth,
+		&fVisibleZoneHeight,
+		0.,
+		fVisibleZoneAlpha,
+		FALSE);
 	cairo_destroy (pCairoContext);
 }
 
@@ -676,14 +663,6 @@ void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, in
 	//g_print ("%s (%dx%d) [%.2fx%.2f]\n", __func__, iNewDecorationsWidth, iNewDecorationsHeight, g_fBackgroundImageWidth, g_fBackgroundImageHeight);
 	if (2 * iNewDecorationsWidth > g_fBackgroundImageWidth || iNewDecorationsHeight > g_fBackgroundImageHeight)
 	{
-		/*cairo_surface_destroy (g_pBackgroundSurface[0]);
-		g_pBackgroundSurface[0] = NULL;
-		cairo_surface_destroy (g_pBackgroundSurface[1]);
-		g_pBackgroundSurface[1] = NULL;
-		cairo_surface_destroy (g_pBackgroundSurfaceFull[0]);
-		g_pBackgroundSurfaceFull[0] = NULL;
-		cairo_surface_destroy (g_pBackgroundSurfaceFull[1]);
-		g_pBackgroundSurfaceFull[1] = NULL;*/
 		cairo_surface_destroy (g_pBackgroundSurface);
 		g_pBackgroundSurface =NULL;
 		cairo_surface_destroy (g_pBackgroundSurfaceFull);
@@ -696,14 +675,6 @@ void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, in
 			{
 				g_fBackgroundImageWidth = MAX (g_fBackgroundImageWidth, 2 * iNewDecorationsWidth);
 				g_fBackgroundImageHeight = MAX (g_fBackgroundImageHeight, iNewDecorationsHeight);
-				/*g_pBackgroundSurfaceFull[CAIRO_DOCK_HORIZONTAL] = cairo_dock_load_image (pCairoContext,
-					myBackground.cBackgroundImageFile,
-					&g_fBackgroundImageWidth,
-					&g_fBackgroundImageHeight,
-					0,  // (pDock->bHorizontalDock ? 0 : (pDock->bDirectionUp ? -G_PI/2 : G_PI/2)),
-					myBackground.fBackgroundImageAlpha,
-					myBackground.bBackgroundImageRepeat);
-				g_pBackgroundSurfaceFull[CAIRO_DOCK_VERTICAL] = cairo_dock_rotate_surface (g_pBackgroundSurfaceFull[CAIRO_DOCK_HORIZONTAL], pCairoContext, g_fBackgroundImageWidth, g_fBackgroundImageHeight, (pDock->bDirectionUp ? -G_PI/2 : G_PI/2));*/
 				g_pBackgroundSurfaceFull = cairo_dock_load_image (pCairoContext,
 					myBackground.cBackgroundImageFile,
 					&g_fBackgroundImageWidth,
@@ -716,15 +687,6 @@ void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, in
 			{
 				g_fBackgroundImageWidth = MAX (g_fBackgroundImageWidth, iNewDecorationsWidth);  /// 0
 				g_fBackgroundImageHeight = MAX (g_fBackgroundImageHeight, iNewDecorationsHeight);
-				/*g_pBackgroundSurface[CAIRO_DOCK_HORIZONTAL] = cairo_dock_load_image (pCairoContext,
-					myBackground.cBackgroundImageFile,
-					&g_fBackgroundImageWidth,
-					&g_fBackgroundImageHeight,
-					0,  // (pDock->bHorizontalDock ? 0 : (pDock->bDirectionUp ? -G_PI/2 : G_PI/2)),
-					myBackground.fBackgroundImageAlpha,
-					myBackground.bBackgroundImageRepeat);
-					
-				g_pBackgroundSurface[CAIRO_DOCK_VERTICAL] = cairo_dock_rotate_surface (g_pBackgroundSurface[CAIRO_DOCK_HORIZONTAL], pCairoContext, g_fBackgroundImageWidth, g_fBackgroundImageHeight, (pDock->bDirectionUp ? -G_PI/2 : G_PI/2));*/
 				g_pBackgroundSurface = cairo_dock_load_image (pCairoContext,
 					myBackground.cBackgroundImageFile,
 					&g_fBackgroundImageWidth,
@@ -738,9 +700,6 @@ void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, in
 		{
 			g_fBackgroundImageWidth = MAX (g_fBackgroundImageWidth, 2 * iNewDecorationsWidth);
 			g_fBackgroundImageHeight = MAX (g_fBackgroundImageHeight, iNewDecorationsHeight);
-			/*g_pBackgroundSurfaceFull[CAIRO_DOCK_HORIZONTAL] = cairo_dock_load_stripes (pCairoContext, g_fBackgroundImageWidth, g_fBackgroundImageHeight, 0);  // (pDock->bHorizontalDock ? 0 : (pDock->bDirectionUp ? -G_PI/2 : G_PI/2))
-			
-			g_pBackgroundSurfaceFull[CAIRO_DOCK_VERTICAL] = cairo_dock_rotate_surface (g_pBackgroundSurfaceFull[CAIRO_DOCK_HORIZONTAL], pCairoContext, g_fBackgroundImageWidth, g_fBackgroundImageHeight, (pDock->bDirectionUp ? -G_PI/2 : G_PI/2));*/
 			g_pBackgroundSurfaceFull = cairo_dock_load_stripes (pCairoContext,
 				g_fBackgroundImageWidth,
 				g_fBackgroundImageHeight,
@@ -763,7 +722,7 @@ void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, in
 		
 		
 		cairo_destroy (pCairoContext);
-		g_print ("  MaJ des decorations du fond -> %.2fx%.2f\n", g_fBackgroundImageWidth, g_fBackgroundImageHeight);
+		cd_debug ("  MaJ des decorations du fond -> %.2fx%.2f", g_fBackgroundImageWidth, g_fBackgroundImageHeight);
 	}
 }
 

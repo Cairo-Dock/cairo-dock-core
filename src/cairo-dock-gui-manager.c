@@ -147,7 +147,9 @@ static GtkToolItem *_cairo_dock_make_toolbutton (const gchar *cLabel, const gcha
 		return pWidget;
 	
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
+	gchar *cLabel2 = g_strdup_printf ("<span font_desc=\"Century Schoolbook L 16\">%s</span>", cLabel);
+	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel2);
+	g_free (cLabel2);
 	
 	GtkWidget *pAlign = gtk_alignment_new (0., 0.5, 0., 1.);
 	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_GUI_MARGIN*2, 0);
@@ -774,7 +776,7 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 	
 	//\_______________ On met a jour la frame du groupe.
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman italic 12\" color=\"#6B2E96\"><u><b>%s</b></u></span>", pGroupDescription->cGroupName);
+	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman italic 15\" color=\"#6B2E96\"><u><b>%s</b></u></span>", pGroupDescription->cGroupName);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 	g_free (cLabel);
 	gtk_frame_set_label_widget (GTK_FRAME (s_pGroupFrame), pLabel);

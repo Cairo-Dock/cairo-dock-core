@@ -386,6 +386,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		s_iSidShowAppliForDrop = g_timeout_add (500, (GSourceFunc) _cairo_dock_show_xwindow_for_drop, (gpointer) pPointedIcon);
 	}
 	
+	//g_print ("%x/%x , %x, %x\n", pDock, s_pLastPointedDock, pLastPointedIcon, pLastPointedIcon?pLastPointedIcon->pSubDock:NULL);
 	if ((pDock == s_pLastPointedDock || s_pLastPointedDock == NULL) && pLastPointedIcon != NULL && pLastPointedIcon->pSubDock != NULL)
 	{
 		CairoDock *pSubDock = pLastPointedIcon->pSubDock;
@@ -715,7 +716,7 @@ gboolean cairo_dock_emit_enter_signal (CairoDock *pDock)
 
 void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 {
-	//g_print ("%s (iSidShrinkDown : %d, %d)\n", __func__, pDock->iSidShrinkDown, pDock->bMenuVisible);
+	//g_print ("%s (%d)\n", __func__, pDock->bMenuVisible);
 	pDock->iAvoidingMouseIconType = -1;
 	pDock->fAvoidingMouseMargin = 0;
 	pDock->bInside = FALSE;
@@ -748,14 +749,14 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	
 	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked) || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)) && s_pFlyingContainer == NULL && ! g_bLocked)
 	{
-		g_print ("on a sorti %s du dock (%d;%d) / %dx%d\n", s_pIconClicked->acName, pDock->iMouseX, pDock->iMouseY, pDock->iCurrentWidth, pDock->iCurrentHeight);
+		//g_print ("on a sorti %s du dock (%d;%d) / %dx%d\n", s_pIconClicked->acName, pDock->iMouseX, pDock->iMouseY, pDock->iCurrentWidth, pDock->iCurrentHeight);
 		CairoDock *pOriginDock = cairo_dock_search_dock_from_name (s_pIconClicked->cParentDockName);
 		g_return_if_fail (pOriginDock != NULL);
 		if (pOriginDock == pDock && (pOriginDock->iMouseX <= 0 || pOriginDock->iMouseX >= pOriginDock->iCurrentWidth || pOriginDock->iMouseY <= 0 || pOriginDock->iMouseY >= pOriginDock->iCurrentHeight))
 		{
 			gchar *cParentDockName = s_pIconClicked->cParentDockName;
 			s_pIconClicked->cParentDockName = NULL;
-			cairo_dock_detach_icon_from_dock (s_pIconClicked, pOriginDock, TRUE); 
+			cairo_dock_detach_icon_from_dock (s_pIconClicked, pOriginDock, TRUE);
 			s_pIconClicked->cParentDockName = cParentDockName;
 			cairo_dock_update_dock_size (pOriginDock);
 			cairo_dock_stop_icon_glide (pOriginDock);
@@ -791,7 +792,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	{
 		pDock->fFoldingFactor = 0.03;
 		pDock->bAtBottom = TRUE;  // mis en commentaire le 12/11/07 pour permettre le quick-hide.
-		cd_debug ("on force bAtBottom");
+		//cd_debug ("on force bAtBottom");
 	}
 	
 	///pDock->fDecorationsOffsetX = 0;
@@ -940,7 +941,9 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	if (pDock->bAtTop || pDock->bInside || (pDock->iSidMoveDown != 0))  // le 'iSidMoveDown != 0' est la pour empecher le dock de "vibrer" si l'utilisateur sort par en bas avec l'auto-hide active.
 	{
 		//g_print ("  %d;%d;%d\n", pDock->bAtTop,  pDock->bInside, pDock->iSidMoveDown);
-		pDock->bInside = TRUE;  /// ajouter pour les plug-ins opengl.
+		pDock->bInside = TRUE;  /// ajoute pour les plug-ins opengl.
+		if (! pDock->bIsShrinkingDown)  // on laisse l'animation se finir.
+			cairo_dock_start_growing (pDock);
 		return FALSE;
 	}
 	//g_print ("%s (main dock : %d ; %d)\n", __func__, pDock->bIsMainDock, pDock->bHorizontalDock);
@@ -1040,6 +1043,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	{
 		pDock->iSidGrowUp = g_timeout_add (40, (GSourceFunc) cairo_dock_grow_up, (gpointer) pDock);
 	}*/
+	
 	if (! pDock->bIsShrinkingDown)  // on laisse l'animation se finir.
 		cairo_dock_start_growing (pDock);
 

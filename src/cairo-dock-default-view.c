@@ -33,15 +33,11 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-default-view.h"
 
-#define RADIAN (G_PI / 180.0)  // Conversion Radian/Degres
-#define DELTA_ROUND_DEGREE 1
-
 extern gint g_iScreenWidth[2];
-extern gint g_iScreenHeight[2];
-
-
+extern int g_iScreenOffsetX, g_iScreenOffsetY;
 
 extern int g_iBackgroundTexture;
+
 
 void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pDock)
 {
@@ -54,7 +50,7 @@ void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pDoc
 	if (pSubDock->bHorizontalDock == pDock->bHorizontalDock)
 	{
 		pSubDock->fAlign = 0.5;
-		pSubDock->iGapX = iX + pDock->iWindowPositionX - g_iScreenWidth[pDock->bHorizontalDock] / 2;  // les sous-dock ont un alignement egal a 0.5.  // pPointedIcon->fDrawX + pPointedIcon->fWidth * pPointedIcon->fScale / 2
+		pSubDock->iGapX = iX + pDock->iWindowPositionX - (pDock->bHorizontalDock ? g_iScreenOffsetX : g_iScreenOffsetY) - g_iScreenWidth[pDock->bHorizontalDock] / 2;  // les sous-dock ont un alignement egal a 0.5.  // pPointedIcon->fDrawX + pPointedIcon->fWidth * pPointedIcon->fScale / 2
 		pSubDock->iGapY = pDock->iGapY + pDock->iMaxDockHeight;
 	}
 	else
@@ -62,7 +58,7 @@ void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pDoc
 		pSubDock->fAlign = (pDock->bDirectionUp ? 1 : 0);
 		pSubDock->iGapX = (pDock->iGapY + pDock->iMaxDockHeight) * (pDock->bDirectionUp ? -1 : 1);
 		if (pDock->bDirectionUp)
-			pSubDock->iGapY = g_iScreenWidth[pDock->bHorizontalDock] - (iX + pDock->iWindowPositionX) - pSubDock->iMaxDockHeight / 2;  // les sous-dock ont un alignement egal a 1.
+			pSubDock->iGapY = g_iScreenWidth[pDock->bHorizontalDock] - (iX + pDock->iWindowPositionX - (pDock->bHorizontalDock ? g_iScreenOffsetX : g_iScreenOffsetY)) - pSubDock->iMaxDockHeight / 2;  // les sous-dock ont un alignement egal a 1.
 		else
 			pSubDock->iGapY = iX + pDock->iWindowPositionX - pSubDock->iMaxDockHeight / 2;  // les sous-dock ont un alignement egal a 0.
 	}
@@ -343,7 +339,7 @@ void cairo_dock_render_opengl_linear (CairoDock *pDock)
 	
 	//\_____________ On trace le fond en texturant par des triangles.
 	glPushMatrix ();
-	cairo_dock_draw_frame_background_opengl (g_iBackgroundTexture, fDockWidth+2*fRadius, fFrameHeight, fDockOffsetX, fDockOffsetY, pVertexTab, iNbVertex, pDock->bHorizontalDock, pDock->bDirectionUp);
+	cairo_dock_draw_frame_background_opengl (g_iBackgroundTexture, fDockWidth+2*fRadius, fFrameHeight, fDockOffsetX, fDockOffsetY, pVertexTab, iNbVertex, pDock->bHorizontalDock, pDock->bDirectionUp, pDock->fDecorationsOffsetX);
 	
 	//\_____________ On trace le contour.
 	if (fLineWidth != 0)

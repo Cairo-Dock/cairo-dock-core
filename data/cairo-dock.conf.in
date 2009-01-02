@@ -425,7 +425,7 @@ string width = 0
 #c+4[0;1] Color of the string (red, blue, green, alpha) :
 string color = 0.0; 0.0; 0.8; 0.4
 
-#F+[Icons' themes]
+#F+[Icons' themes;gtk-select-color]
 frame_theme=
 
 #D+99 List of icons themes or directories :
@@ -501,7 +501,7 @@ icon's type order = launchers;applications;applets
 mix applets with launchers = false
 
 
-#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-views.svg;1;Today it's Friday, the day of the 'Curve' view !
+#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-views.svg;1;Select a view for each of your docks.
 [Views]
 
 #F+[Main Dock]
