@@ -52,6 +52,7 @@
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-internal-desklets.h"
+#include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-desklet.h"
 
@@ -62,7 +63,6 @@ extern gboolean g_bSticky;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bIndirectRendering;
 extern GdkGLConfig* g_pGlConfig;
-extern gdouble g_iGLAnimationDeltaT;
 
 static cairo_surface_t *s_pRotateButtonSurface = NULL;
 static cairo_surface_t *s_pRetachButtonSurface = NULL;
@@ -787,7 +787,7 @@ static gboolean on_motion_notify_desklet(GtkWidget *pWidget,
 		gboolean bStartAnimation = FALSE;
 		cairo_dock_notify (CAIRO_DOCK_MOUSE_MOVED, pDesklet, &bStartAnimation);
 		if (bStartAnimation && pDesklet->iSidGLAnimation == 0)
-			pDesklet->iSidGLAnimation = g_timeout_add (g_iGLAnimationDeltaT, (GSourceFunc) _cairo_dock_gl_animation, pDesklet);
+			pDesklet->iSidGLAnimation = g_timeout_add (mySystem.iGLAnimationDeltaT, (GSourceFunc) _cairo_dock_gl_animation, pDesklet);
 	}
 	
 	if (pDesklet->rotating && ! pDesklet->bPositionLocked)
@@ -858,7 +858,7 @@ static gboolean on_enter_desklet (GtkWidget* pWidget,
 			cairo_dock_notify (CAIRO_DOCK_ENTER_DESKLET, pDesklet, &bStartAnimation);
 			if (bStartAnimation && pDesklet->iSidGLAnimation == 0)
 			{
-				pDesklet->iSidGLAnimation = g_timeout_add (CAIRO_DOCK_GL_ANIMATION_DT, (GSourceFunc)_cairo_dock_gl_animation, pDesklet);
+				pDesklet->iSidGLAnimation = g_timeout_add (mySystem.iGLAnimationDeltaT, (GSourceFunc)_cairo_dock_gl_animation, pDesklet);
 			}
 		}
 	}

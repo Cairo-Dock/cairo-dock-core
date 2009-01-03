@@ -35,14 +35,9 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-animations.h"
 
 extern int g_iXScreenHeight[2];
-
 extern gboolean g_bEasterEggs;
-
 extern CairoDock *g_pMainDock;
-
 extern gboolean g_bUseOpenGL;
-extern gdouble g_iGLAnimationDeltaT;
-extern gdouble g_iCairoAnimationDeltaT;
 
 gboolean cairo_dock_move_up (CairoDock *pDock)
 {
@@ -522,9 +517,9 @@ void cairo_dock_launch_animation (CairoDock *pDock)
 	if (pDock->iSidGLAnimation == 0)
 	{
 		if (g_bUseOpenGL && pDock->render_opengl != NULL)
-			pDock->iSidGLAnimation = g_timeout_add (g_iGLAnimationDeltaT, (GSourceFunc)_cairo_dock_gl_animation, pDock);
+			pDock->iSidGLAnimation = g_timeout_add (mySystem.iGLAnimationDeltaT, (GSourceFunc)_cairo_dock_gl_animation, pDock);
 		else
-			pDock->iSidGLAnimation = g_timeout_add (g_iCairoAnimationDeltaT, (GSourceFunc)_cairo_dock_gl_animation, pDock);
+			pDock->iSidGLAnimation = g_timeout_add (mySystem.iCairoAnimationDeltaT, (GSourceFunc)_cairo_dock_gl_animation, pDock);
 	}
 }
 

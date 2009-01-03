@@ -236,6 +236,15 @@ refresh frequency = 35
 #{The transparency gradation pattern will then be re-calculated in real time. May needs more CPU power.}
 dynamic reflection = false
 
+#i-[15;60] Animation frequency for the opengl backend :
+#{in Hz. This is to adjust regarding your CPU power.}
+opengl anim freq = 33
+
+#i-[15;60] Animation frequency for the cairo backend :
+#{in Hz. This is to adjust regarding your CPU power.}
+cairo anim freq = 25
+
+
 #F-[Label readability;gtk-underline]
 frame_label =
 

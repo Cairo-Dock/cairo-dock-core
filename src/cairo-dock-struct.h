@@ -1038,9 +1038,6 @@ struct _CairoDockInternalModule {
 #define CAIRO_DOCK_MESSAGE(s, ...)
 #endif
 
-#define CAIRO_DOCK_GL_ANIMATION_DT 30.
-#define CAIRO_DOCK_CAIRO_ANIMATION_DT 40.
-
 typedef enum {
 	CAIRO_DOCK_MAX_SIZE,
 	CAIRO_DOCK_NORMAL_SIZE,

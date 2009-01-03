@@ -43,10 +43,13 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 	pSystem->fMoveDownSpeed = MAX (0.01, MIN (pSystem->fMoveDownSpeed, 1));
 	
 	int iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "refresh frequency", &bFlushConfFileNeeded, 25, "Cairo Dock", NULL);
-	if (g_bUseOpenGL)
-		iRefreshFrequency *= 2;
 	pSystem->fRefreshInterval = 1000. / iRefreshFrequency;
 	pSystem->bDynamicReflection = cairo_dock_get_boolean_key_value (pKeyFile, "System", "dynamic reflection", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	
+	iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "opengl anim freq", &bFlushConfFileNeeded, 33, NULL, NULL);
+	pSystem->iGLAnimationDeltaT = 1000. / iRefreshFrequency;
+	iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "cairo anim freq", &bFlushConfFileNeeded, 25, NULL, NULL);
+	pSystem->iCairoAnimationDeltaT = 1000. / iRefreshFrequency;
 	
 	pSystem->bAnimateSubDock = cairo_dock_get_boolean_key_value (pKeyFile, "System", "animate subdocks", &bFlushConfFileNeeded, TRUE, "Sub-Docks", NULL);
 	

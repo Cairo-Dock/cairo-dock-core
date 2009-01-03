@@ -34,6 +34,8 @@ struct _CairoConfigSystem {
 	gchar **cActiveModuleList;
 	gint iFileSortType;
 	gboolean bShowHiddenFiles;
+	gint iGLAnimationDeltaT;
+	gint iCairoAnimationDeltaT;
 	} ;
 
 DEFINE_PRE_INIT (System);

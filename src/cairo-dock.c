@@ -158,9 +158,6 @@ GLuint g_iActiveIndicatorTexture=0;
 GLuint g_pVisibleZoneTexture=0;
 GLuint g_pGradationTexture[2]={0, 0};
 
-gdouble g_iGLAnimationDeltaT = CAIRO_DOCK_GL_ANIMATION_DT;
-gdouble g_iCairoAnimationDeltaT = CAIRO_DOCK_CAIRO_ANIMATION_DT;
-
 static gchar *cLaunchCommand = NULL;
 
 static void _cairo_dock_set_verbosity(gchar *cVerbosity)
