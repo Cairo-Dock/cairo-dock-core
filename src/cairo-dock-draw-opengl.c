@@ -1257,7 +1257,7 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL)  // taken from
 	}
 	else
 	{
-		cd_warning ("couldn't find a suitable GLX Visual, OpenGL can't be used.\n (sorry to say that, but your graphic and/or its driver is crappy)");
+		cd_warning ("couldn't find a suitable GLX Visual, OpenGL can't be used.\n (sorry to say that, but your graphic card and/or its driver is crappy)");
 		g_bUseOpenGL = FALSE;
 	}
 	
