@@ -214,7 +214,6 @@ gboolean cairo_dock_grow_up (CairoDock *pDock)
 
 	if (pDock->iMagnitudeIndex == CAIRO_DOCK_NB_MAX_ITERATIONS && pDock->fFoldingFactor == 0)  // fin de grossissement.
 	{
-		pDock->bIsGrowingUp = FALSE;
 		if (pDock->iRefCount == 0 && pDock->bAutoHide)  // on arrive en fin de l'animation qui montre le dock, les icones sont bien placees a partir de maintenant.
 		{
 			cairo_dock_set_icons_geometry_for_window_manager (pDock);
@@ -230,26 +229,26 @@ gboolean cairo_dock_grow_up (CairoDock *pDock)
 
 gboolean cairo_dock_shrink_down (CairoDock *pDock)
 {
-	//g_print ("%s (%d)\n", __func__, pDock->iMagnitudeIndex);
+	//\_________________ On fait decroitre la magnitude du dock.
 	int iPrevMagnitudeIndex = pDock->iMagnitudeIndex;
 	pDock->iMagnitudeIndex -= mySystem.iShrinkDownInterval;
 	if (pDock->iMagnitudeIndex < 0)
 		pDock->iMagnitudeIndex = 0;
-	//g_print ("pDock->fFoldingFactor : %f\n", pDock->fFoldingFactor);
+	
+	//\_________________ On replie le dock.
 	if (pDock->fFoldingFactor != 0 && (! mySystem.bResetScrollOnLeave || pDock->iScrollOffset == 0))
 	{
 		pDock->fFoldingFactor = pow (pDock->fFoldingFactor, 2./3);
 		if (pDock->fFoldingFactor > mySystem.fUnfoldAcceleration)
 			pDock->fFoldingFactor = mySystem.fUnfoldAcceleration;
 	}
+	
+	//\_________________ On remet les decorations a l'equilibre.
 	pDock->fDecorationsOffsetX *= .8;
-	//g_print ("fDecorationsOffsetX <- %.2f\n", pDock->fDecorationsOffsetX);
-
-	if (pDock->bHorizontalDock)  // ce n'est pas le motion_notify qui va nous donner des coordonnees en dehors du dock, et donc le fait d'etre dedans va nous faire interrompre le shrink_down et re-grossir, du coup il faut le faire ici. L'inconvenient, c'est que quand on sort par les cotes, il n'y a soudain plus d'icone pointee, et donc le dock devient tout plat subitement au lieu de le faire doucement. Heureusement j'ai trouve une astuce. ^_^
-		gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseX, &pDock->iMouseY, NULL);
-	else
-		gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseY, &pDock->iMouseX, NULL);
-
+	if (fabs (pDock->fDecorationsOffsetX) < 3)
+		pDock->fDecorationsOffsetX = 0.;
+	
+	//\_________________ On remet les icones a l'equilibre.
 	if (pDock->iScrollOffset != 0 && mySystem.bResetScrollOnLeave)
 	{
 		//g_print ("iScrollOffset : %d\n", pDock->iScrollOffset);
@@ -268,9 +267,15 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 		}
 		pDock->calculate_max_dock_size (pDock);
 	}
-
+	
+	//\_________________ On recupere la position de la souris pour le cas ou on est hors du dock.
+	if (pDock->bHorizontalDock)  // ce n'est pas le motion_notify qui va nous donner des coordonnees en dehors du dock, et donc le fait d'etre dedans va nous faire interrompre le shrink_down et re-grossir, du coup il faut le faire ici. L'inconvenient, c'est que quand on sort par les cotes, il n'y a soudain plus d'icone pointee, et donc le dock devient tout plat subitement au lieu de le faire doucement. Heureusement j'ai trouve une astuce. ^_^
+		gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseX, &pDock->iMouseY, NULL);
+	else
+		gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseY, &pDock->iMouseX, NULL);
+	
+	//\_________________ On recalcule les icones.
 	pDock->calculate_icons (pDock);
-	//gtk_widget_queue_draw (pDock->pWidget);
 	
 	if (g_bEasterEggs && iPrevMagnitudeIndex != 0 && pDock->iMagnitudeIndex == 0 && pDock->bInside)  // on arrive en fin de retrecissement.
 		cairo_dock_set_input_shape (pDock);
@@ -278,17 +283,21 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 	if (! pDock->bInside)
 		cairo_dock_replace_all_dialogs ();
 
-	if (iPrevMagnitudeIndex != 0 && pDock->iMagnitudeIndex == 0)
+	if ((pDock->iScrollOffset == 0 || ! mySystem.bResetScrollOnLeave) &&
+		(pDock->iMagnitudeIndex == 0) &&
+		(pDock->fDecorationsOffsetX == 0) &&
+		(pDock->fFoldingFactor == 0 || pDock->fFoldingFactor == mySystem.fUnfoldAcceleration))
 	{
-		//g_print ("iMagnitudeIndex devient nul (%d)\n", pDock->bInside);
+		//g_print ("equilibre atteint (%d)\n", pDock->bInside);
 		if (! pDock->bInside)
 		{
+			cd_debug ("rideau !");
 			//\__________________ On repasse derriere si on etait devant.
 			if (pDock->bPopped)
 				cairo_dock_pop_down (pDock);
 			
 			//\__________________ On se redimensionne en taille normale.
-			if (! (pDock->bAutoHide && pDock->iRefCount == 0) && ! pDock->bInside && ! pDock->bMenuVisible)
+			if (! (pDock->bAutoHide && pDock->iRefCount == 0) && ! pDock->bMenuVisible)
 			{
 				int iNewWidth, iNewHeight;
 				cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
@@ -314,25 +323,21 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 				cairo_dock_hide_parent_dock (pDock);
 			}
 
-			///pDock->bIsShrinkingDown = FALSE;
 			pDock->bAtBottom = TRUE;
-			if (! pDock->bIsGrowingUp)
-				pDock->bAtBottom = TRUE;  /// deplacé du leave a ici le 28/12/2008
 			cairo_dock_hide_dock_like_a_menu ();
-			///return FALSE;
 		}
 		else
 		{
-			///pDock->bIsShrinkingDown = FALSE;
 			pDock->calculate_icons (pDock);  // relance le grossissement si on est dedans.
 			if (! pDock->bIsGrowingUp)
 				pDock->bAtBottom = TRUE;
-			///return pDock->bIsGrowingUp;
 		}
+		return FALSE;
 	}
-	///pDock->bIsShrinkingDown = ((pDock->iScrollOffset != 0 && mySystem.bResetScrollOnLeave) || (pDock->iMagnitudeIndex != 0) || (pDock->fDecorationsOffsetX != 0));
-	pDock->bIsShrinkingDown = ((pDock->iScrollOffset != 0 && mySystem.bResetScrollOnLeave) || (pDock->iMagnitudeIndex != 0));
-	return pDock->bIsShrinkingDown;
+	else
+	{
+		return TRUE;
+	}
 }
 
 
@@ -459,12 +464,15 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 	gboolean bRedraw = FALSE;
 	if (pDock->bIsShrinkingDown)
 	{
-		bContinue |= cairo_dock_shrink_down (pDock);
+		pDock->bIsShrinkingDown = cairo_dock_shrink_down (pDock);
+		//g_print ("pDock->bIsShrinkingDown <- %d\n", pDock->bIsShrinkingDown);
+		bContinue |= pDock->bIsShrinkingDown;
 		bRedraw = TRUE;
 	}
 	if (pDock->bIsGrowingUp)
 	{
-		bContinue |= cairo_dock_grow_up (pDock);
+		pDock->bIsGrowingUp = cairo_dock_grow_up (pDock);
+		bContinue |= pDock->bIsGrowingUp;
 		bRedraw = TRUE;
 	}
 	

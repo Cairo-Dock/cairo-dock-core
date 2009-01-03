@@ -494,7 +494,7 @@ void cairo_dock_window_is_above_or_below (Window Xid, gboolean *bIsAbove, gboole
 
 void cairo_dock_window_is_fullscreen_or_hidden_or_maximized (Window Xid, gboolean *bIsFullScreen, gboolean *bIsHidden, gboolean *bIsMaximized, gboolean *bDemandsAttention)
 {
-	g_print ("%s ()\n", __func__);
+	cd_message ("%s (%d)", __func__, Xid);
 	g_return_if_fail (Xid > 0);
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
@@ -514,13 +514,13 @@ void cairo_dock_window_is_fullscreen_or_hidden_or_maximized (Window Xid, gboolea
 		{
 			if (pXStateBuffer[i] == s_aNetWmFullScreen)
 			{
-				cd_message (  "s_aNetWmFullScreen");
+				cd_debug (  "s_aNetWmFullScreen");
 				*bIsFullScreen = TRUE;
 				break ;
 			}
 			else if (pXStateBuffer[i] == s_aNetWmHidden)
 			{
-				cd_message (  "s_aNetWmHidden");
+				cd_debug (  "s_aNetWmHidden");
 				*bIsHidden = TRUE;
 			}
 			else if (pXStateBuffer[i] == s_aNetWmMaximizedVert)
@@ -874,7 +874,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
 					gboolean bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention;
 					cairo_dock_window_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention);
-					g_print ("changement d'etat de %d => {%d ; %d ; %d ; %d}\n", Xid, bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention);
+					cd_message ("changement d'etat de %d => {%d ; %d ; %d ; %d}", Xid, bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention);
 					
 					if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
 					{
@@ -895,7 +895,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					{
 						if (icon != NULL && icon->bIsDemandingAttention)
 						{
-							g_print ("%s se tait !\n", icon->acName);
+							g_print ("%s se tait.\n", icon->acName);
 							cairo_dock_appli_stops_demanding_attention (icon);  // ca c'est plus une precaution qu'autre chose.
 							if (icon->cParentDockName == NULL)  // appli inhibee.
 							{
