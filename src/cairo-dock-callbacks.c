@@ -104,7 +104,6 @@ void cairo_dock_on_realize (GtkWidget* pWidget, CairoDock *pDock)
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glHint (GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 	
-	glEnable (GL_TEXTURE);
 	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);  // GL_MODULATE / GL_DECAL /  GL_BLEND
 	
 	glTexParameteri (GL_TEXTURE_2D,

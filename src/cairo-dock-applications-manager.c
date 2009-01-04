@@ -1185,7 +1185,10 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gdouble 
 				if (! pParentDock->bInside && (pParentDock->bAutoHide || pParentDock->iRefCount != 0) && pParentDock->bAtBottom)
 					icon->fPersonnalScale = 0.05;
 				else
+				{
 					icon->fPersonnalScale = 1.0;
+					cairo_dock_notify (CAIRO_DOCK_REMOVE_ICON, icon, pParentDock);
+				}
 				//g_print ("icon->fPersonnalScale <- %.2f\n", icon->fPersonnalScale);
 				
 				//cairo_dock_start_icon_animation (icon, pParentDock);

@@ -43,7 +43,7 @@ AC_ARG_ENABLE(xextend,
 	esac],[usexextend=true])
 
 if test "$usexextend" = "true" ; then
-	PKG_CHECK_MODULES(XEXTEND, "xtst xrender", [XExt_detected=true], [XExt_detected=false; AC_MSG_WARN(Could not find some X Extensions; Cairo-Dock won't be able to launch keyboard shortcuts and display window thumbnails.) ])
+	PKG_CHECK_MODULES(XEXTEND, "xtst xcomposite xinerama", [XExt_detected=true], [XExt_detected=false; AC_MSG_WARN(Could not find some X Extensions; Cairo-Dock won't be able to launch keyboard shortcuts, display window thumbnails, and use multiple screens.) ])
 	AC_SUBST(XEXTEND_CFLAGS)
 	AC_SUBST(XEXTEND_LIBS)
 	
@@ -52,7 +52,7 @@ if test "$usexextend" = "true" ; then
 	fi
 fi
 if test "$XExt_detected" = "true"; then
-	xextend_required="xtst xrender"
+	xextend_required="xtst xcomposite xinerama"
 else
 	xextend_required=""
 fi

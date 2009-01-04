@@ -256,13 +256,11 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 	}
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture (GL_TEXTURE_2D, pIcon->iIconTexture);
+	glPolygonMode (GL_FRONT, GL_FILL);
 	
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	
-	glDisable(GL_DEPTH_TEST);
-	glPolygonMode (GL_FRONT, GL_FILL);
 	glColor4f(1., 1., 1., pIcon->fAlpha);
 	
 	glPushMatrix ();

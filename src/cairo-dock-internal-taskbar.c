@@ -51,9 +51,14 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	pTaskBar->cAnimationOnDemandsAttention = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "animation on demands attention", &bFlushConfFileNeeded, "fire", NULL, NULL);
 	pTaskBar->cAnimationOnActiveWindow = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "animation on active window", &bFlushConfFileNeeded, "wobbly", NULL, NULL);
 	
+	pTaskBar->bMixLauncherAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "mix launcher appli", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	pTaskBar->bOverWriteXIcons = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "overwrite xicon", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	pTaskBar->bShowThumbnail = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "window thumbnail", &bFlushConfFileNeeded, TRUE, NULL, NULL);
-	pTaskBar->bMixLauncherAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "mix launcher appli", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	if (pTaskBar->bShowThumbnail && ! cairo_dock_xcomposite_is_available ())
+	{
+		cd_warning ("Sorry but either your X server does not have the XComposite extension, or your version of Cairo-Dock was not built with the support of XComposite.\n You can't have window thumbnails in the dock");
+		pTaskBar->bShowThumbnail = FALSE;
+	}
 
 	return bFlushConfFileNeeded;
 }
@@ -73,17 +78,6 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 	{
 		pTaskBar->bAutoHideOnFullScreen = FALSE;
 		pTaskBar->bAutoHideOnMaximized = FALSE;
-	}
-	
-	
-	if (pTaskBar->bShowThumbnail && ! pPrevTaskBar->bShowThumbnail)  // on verifie que cette option est acceptable.
-	{
-		if (! cairo_dock_support_X_extension ())
-		{
-			cd_warning ("Sorry but your X server does not support the extension.\n You can't have window thumbnails in the dock");
-			pTaskBar->bShowThumbnail = FALSE;
-		}
-		
 	}
 	
 	gboolean bUpdateSize = FALSE;

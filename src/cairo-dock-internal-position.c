@@ -9,6 +9,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-log.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-internal-accessibility.h"
 #define _INTERNAL_MODULE_
@@ -32,6 +33,11 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigPosition *pPosition)
 	pPosition->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Position", "alignment", &bFlushConfFileNeeded, 0.5, NULL, NULL);
 	
 	pPosition->bUseXinerama = cairo_dock_get_boolean_key_value (pKeyFile, "Position", "xinerama", &bFlushConfFileNeeded, 0, NULL, NULL);
+	if (pPosition->bUseXinerama && ! cairo_dock_xinerama_is_available ())
+	{
+		cd_warning ("Sorry but either your X server does not have the Xinerama extension, or your version of Cairo-Dock was not built with the support of Xinerama.\n You can't place the dock on a particular screen");
+		pPosition->bUseXinerama = FALSE;
+	}
 	pPosition->iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Position", "num screen", &bFlushConfFileNeeded, 0, NULL, NULL);
 
 	return bFlushConfFileNeeded;

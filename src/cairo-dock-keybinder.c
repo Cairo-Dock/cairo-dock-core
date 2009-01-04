@@ -33,7 +33,9 @@
 #include <gdk/gdkwindow.h>
 #include <gdk/gdkx.h>
 #include <X11/Xlib.h>
+#ifdef HAVE_XEXTEND
 #include <X11/extensions/XTest.h>
+#endif
 
 #include "eggaccelerators.h"
 #include "cairo-dock-log.h"
@@ -372,7 +374,8 @@ cd_keybinder_get_current_event_time (void)
 
 gboolean cairo_dock_simulate_key_sequence (gchar *cKeyString)  // the idea was taken from xdo.
 {
-	#ifdef HAVE_XEXTEND
+#ifdef HAVE_XEXTEND
+	g_return_val_if_fail (cairo_dock_xtest_is_available (), FALSE);
 	g_return_val_if_fail (cKeyString != NULL, FALSE);
 	cd_message ("%s (%s)", __func__, cKeyString);
 	
@@ -397,9 +400,10 @@ gboolean cairo_dock_simulate_key_sequence (gchar *cKeyString)  // the idea was t
 	XFlush (dpy);
 	
 	return TRUE;
-	#else
+#else
+	cd_warning ("The dock was not compiled with the support of XTest.");
 	return FALSE;
-	#endif
+#endif
 }
 
 

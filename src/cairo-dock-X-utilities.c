@@ -17,10 +17,11 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 #ifdef HAVE_XEXTEND
-#include <X11/extensions/shape.h>
 #include <X11/extensions/Xcomposite.h>
 //#include <X11/extensions/Xdamage.h>
+#include <X11/extensions/XTest.h>
 #include <X11/extensions/Xinerama.h>
+#include <X11/extensions/shape.h>
 #endif
 
 #include "cairo-dock-applications-manager.h"
@@ -34,6 +35,10 @@ extern int g_iNbViewportX,g_iNbViewportY ;
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
 extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
 extern int g_iScreenOffsetX, g_iScreenOffsetY;
+static gboolean s_bUseXComposite = TRUE;
+static gboolean s_bUseXTest = TRUE;
+static gboolean s_bUseXinerama = TRUE;
+
 //extern int g_iDamageEvent;
 
 static Display *s_XDisplay = NULL;
@@ -57,6 +62,8 @@ void cairo_dock_initialize_X_support (void)
 	g_return_if_fail (s_XDisplay != NULL);
 	
 	XSetErrorHandler (_cairo_dock_xerror_handler);
+	
+	cairo_dock_support_X_extension ();
 	
 	s_aNetWmWindowType = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE", False);
 	s_aNetWmWindowTypeNormal = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_NORMAL", False);
@@ -621,20 +628,20 @@ void cairo_dock_set_nb_desktops (gulong iNbDesktops)
 gboolean cairo_dock_support_X_extension (void)
 {
 #ifdef HAVE_XEXTEND
-	int event_base, error_base;
+	int event_base, error_base, major, minor;
 	if (! XCompositeQueryExtension (s_XDisplay, &event_base, &error_base))  // on regarde si le serveur X supporte l'extension.
 	{
 		cd_warning ("XComposite extension not available.");
-		return FALSE;
+		s_bUseXComposite = FALSE;
 	}
 	else
 	{
-		int major = 0, minor = 2;  // La version minimale requise pour avoir XCompositeNameWindowPixmap().
+		major = 0, minor = 2;  // La version minimale requise pour avoir XCompositeNameWindowPixmap().
 		XCompositeQueryVersion (s_XDisplay, &major, &minor);  // on regarde si on est au moins dans cette version.
 		if (! (major > 0 || minor >= 2))
 		{
 			cd_warning ("XComposite extension too old.");
-			return FALSE;
+			s_bUseXComposite = FALSE;
 		}
 	}
 	/*int iDamageError=0;
@@ -644,29 +651,58 @@ gboolean cairo_dock_support_X_extension (void)
 		return FALSE;
 	}*/
 	
+	major = 0, minor = 0;
+	if (! XTestQueryExtension (s_XDisplay, &event_base, &error_base, &major, &minor))
+	{
+		cd_warning ("XTest extension not available.");
+		s_bUseXTest = FALSE;
+	}
+	
 	if (! XineramaQueryExtension (s_XDisplay, &event_base, &error_base))
 	{
 		cd_warning ("Xinerama extension not supported");
+		s_bUseXinerama = FALSE;
 	}
 	else
 	{
-		int major = 0, minor = 0;
+		major = 0, minor = 0;
 		if (XineramaQueryVersion (s_XDisplay, &major, &minor) == 0)
 		{
 			cd_warning ("Xinerama extension too old");
+			s_bUseXinerama = FALSE;
 		}
 	}
 	
 	return TRUE;
 #else
-	cd_warning ("The dock was not compiled with the X extensions (XComposite, Xinerama, XDamage, etc).");
+	cd_warning ("The dock was not compiled with the X extensions (XComposite, xinerama, xtst, XDamage, etc).");
+	s_bUseXComposite = FALSE;
+	s_bUseXTest = FALSE;
+	s_bUseXinerama = FALSE;
 	return FALSE;
 #endif
+}
+
+gboolean cairo_dock_xcomposite_is_available (void)
+{
+	return s_bUseXComposite;
+}
+
+gboolean cairo_dock_xtest_is_available (void)
+{
+	return s_bUseXTest;
+}
+
+gboolean cairo_dock_xinerama_is_available (void)
+{
+	return s_bUseXinerama;
 }
 
 
 void cairo_dock_get_screen_offsets (int iNumScreen)
 {
+#ifdef HAVE_XEXTEND
+	g_return_if_fail (s_bUseXinerama);
 	int iNbScreens = 0;
 	XineramaScreenInfo *pScreens = XineramaQueryScreens (s_XDisplay, &iNbScreens);
 	if (pScreens != NULL)
@@ -695,4 +731,7 @@ void cairo_dock_get_screen_offsets (int iNumScreen)
 		cd_warning ("No screens found from Xinerama, is it really active ?");
 		g_iScreenOffsetX = g_iScreenOffsetY = 0;
 	}
+#else
+	cd_warning ("The dock was not compiled with the support of Xinerama.");
+#endif
 }

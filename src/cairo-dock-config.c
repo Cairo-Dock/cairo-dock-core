@@ -547,14 +547,6 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_load_visible_zone (pDock, myHiddenDock.cVisibleZoneImageFile, myHiddenDock.iVisibleZoneWidth, myHiddenDock.iVisibleZoneHeight, myHiddenDock.fVisibleZoneAlpha);
 	
 	
-	if (myTaskBar.bShowThumbnail && ! bShowThumbnailOld)  // on verifie que cette option est acceptable.
-	{
-		if (! cairo_dock_support_X_extension ())
-		{
-			cd_warning ("Sorry but your X server does not support the extension.\n You can't have window thumbnails in the dock");
-			myTaskBar.bShowThumbnail = FALSE;
-		}
-	}
 	if (bUniquePidOld != myTaskBar.bUniquePid ||
 		bGroupAppliByClassOld != myTaskBar.bGroupAppliByClass ||
 		bHideVisibleApplisOld != myTaskBar.bHideVisibleApplis ||
