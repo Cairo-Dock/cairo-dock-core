@@ -84,7 +84,7 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 	pDock->iGapX = pPosition->iGapX;
 	pDock->iGapY = pPosition->iGapY;
 	pDock->fAlign = pPosition->fAlign;
-	pDock->calculate_icons (pDock);
+	cairo_dock_calculate_dock_icons (pDock);
 	gtk_widget_queue_draw (pDock->pWidget);
 	cairo_dock_place_root_dock (pDock);
 }

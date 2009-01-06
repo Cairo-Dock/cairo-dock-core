@@ -110,7 +110,7 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 	
 	/**if (bUpdateSize)  // utile ?...
 	{
-		pDock->calculate_icons (pDock);
+		cairo_dock_calculate_dock_icons (pDock);
 		gtk_widget_queue_draw (pDock->pWidget);  // le 'gdk_window_move_resize' ci-dessous ne provoquera pas le redessin si la taille n'a pas change.
 
 		cairo_dock_place_root_dock (pDock);

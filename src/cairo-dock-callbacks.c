@@ -505,7 +505,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	//\_______________ On elague le flux des MotionNotify, sinon X en envoie autant que le permet le CPU !
 	if (pMotion != NULL)
 	{
-		//g_print ("%s (%d,%d) (%d, %.2fms, bAtBottom:%d; iSidShrinkDown:%d)\n", __func__, (int) pMotion->x, (int) pMotion->y, pMotion->is_hint, pMotion->time - fLastTime, pDock->bAtBottom, pDock->iSidShrinkDown);
+		//g_print ("%s (%d,%d) (%d, %.2fms, bAtBottom:%d; bIsShrinkingDown:%d)\n", __func__, (int) pMotion->x, (int) pMotion->y, pMotion->is_hint, pMotion->time - fLastTime, pDock->bAtBottom, pDock->bIsShrinkingDown);
 		if ((pMotion->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && (pMotion->state & GDK_BUTTON1_MASK))
 		{
 			//g_print ("mouse : (%d;%d); pointeur : (%d;%d)\n", pDock->iMouseX, pDock->iMouseY, (int) pMotion->x_root, (int) pMotion->y_root);
@@ -551,9 +551,9 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 			gdk_device_get_state (pMotion->device, pMotion->window, NULL, NULL);
 			return FALSE;
 		}
-
+		
 		//\_______________ On recalcule toutes les icones.
-		pPointedIcon = pDock->calculate_icons (pDock);
+		pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
 		gtk_widget_queue_draw (pWidget);
 		fLastTime = pMotion->time;
 
@@ -585,7 +585,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 			return FALSE;
 		}
 
-		pPointedIcon = pDock->calculate_icons (pDock);
+		pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
 		gtk_widget_queue_draw (pWidget);
 		
 		pDock->iAvoidingMouseIconType = CAIRO_DOCK_LAUNCHER;
@@ -633,7 +633,6 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		
 		if (pPointedIcon != NULL && s_pIconClicked != NULL && cairo_dock_get_icon_order (s_pIconClicked) == cairo_dock_get_icon_order (pPointedIcon))
 		{
-			g_print ("TOTO\n");
 			Icon *icon;
 			GList *ic;
 			for (ic = pDock->icons; ic != NULL; ic = ic->next)
@@ -644,39 +643,39 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 				//if (pDock->iMouseX > s_pIconClicked->fDrawXAtRest + s_pIconClicked->fWidth * s_pIconClicked->fScale /2)  // on a deplace l'icone a droite.  // fDrawXAtRest
 				if (s_pIconClicked->fXAtRest < pPointedIcon->fXAtRest)  // on a deplace l'icone a droite.
 				{
-					g_print ("%s : %.2f / %.2f ; %.2f / %d (%.2f)\n", icon->acName, icon->fXAtRest, s_pIconClicked->fXAtRest, icon->fDrawX, pDock->iMouseX, icon->fGlideOffset);
+					//g_print ("%s : %.2f / %.2f ; %.2f / %d (%.2f)\n", icon->acName, icon->fXAtRest, s_pIconClicked->fXAtRest, icon->fDrawX, pDock->iMouseX, icon->fGlideOffset);
 					if (icon->fXAtRest > s_pIconClicked->fXAtRest && icon->fDrawX < pDock->iMouseX + 1 && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
 					{
-						g_print ("  %s glisse vers la gauche\n", icon->acName);
+						//g_print ("  %s glisse vers la gauche\n", icon->acName);
 						icon->iGlideDirection = -1;
 					}
 					else if (icon->fXAtRest > s_pIconClicked->fXAtRest && icon->fDrawX > pDock->iMouseX && icon->fGlideOffset != 0)
 					{
-						g_print ("  %s glisse vers la droite\n", icon->acName);
+						//g_print ("  %s glisse vers la droite\n", icon->acName);
 						icon->iGlideDirection = 1;
 					}
 					else if (icon->fXAtRest < s_pIconClicked->fXAtRest && icon->fGlideOffset > 0)
 					{
-						g_print ("  %s glisse en sens inverse vers la gauche\n", icon->acName);
+						//g_print ("  %s glisse en sens inverse vers la gauche\n", icon->acName);
 						icon->iGlideDirection = -1;
 					}
 				}
 				else
 				{
-					g_print ("deplacement de %s vers la gauche (%.2f / %d)\n", icon->acName, icon->fDrawX + icon->fWidth * (1+myIcons.fAmplitude) + myIcons.iIconGap, pDock->iMouseX);
+					//g_print ("deplacement de %s vers la gauche (%.2f / %d)\n", icon->acName, icon->fDrawX + icon->fWidth * (1+myIcons.fAmplitude) + myIcons.iIconGap, pDock->iMouseX);
 					if (icon->fXAtRest < s_pIconClicked->fXAtRest && icon->fDrawX + icon->fWidth * (1+myIcons.fAmplitude) + myIcons.iIconGap >= pDock->iMouseX && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
 					{
-						g_print ("  %s glisse vers la droite\n", icon->acName);
+						//g_print ("  %s glisse vers la droite\n", icon->acName);
 						icon->iGlideDirection = 1;
 					}
 					else if (icon->fXAtRest < s_pIconClicked->fXAtRest && icon->fDrawX + icon->fWidth * (1+myIcons.fAmplitude) + myIcons.iIconGap <= pDock->iMouseX && icon->fGlideOffset != 0)
 					{
-						g_print ("  %s glisse vers la gauche\n", icon->acName);
+						//g_print ("  %s glisse vers la gauche\n", icon->acName);
 						icon->iGlideDirection = -1;
 					}
 					else if (icon->fXAtRest > s_pIconClicked->fXAtRest && icon->fGlideOffset < 0)
 					{
-						g_print ("  %s glisse en sens inverse vers la droite\n", icon->acName);
+						//g_print ("  %s glisse en sens inverse vers la droite\n", icon->acName);
 						icon->iGlideDirection = 1;
 					}
 				}
@@ -715,7 +714,7 @@ gboolean cairo_dock_emit_enter_signal (CairoDock *pDock)
 
 void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 {
-	//g_print ("%s (%d)\n", __func__, pDock->bMenuVisible);
+	//g_print ("%s (bMenuVisible:%d)\n", __func__, pDock->bMenuVisible);
 	pDock->iAvoidingMouseIconType = -1;
 	pDock->fAvoidingMouseMargin = 0;
 	pDock->bInside = FALSE;
@@ -941,7 +940,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	{
 		//g_print ("  %d;%d;%d\n", pDock->bAtTop,  pDock->bInside, pDock->iSidMoveDown);
 		pDock->bInside = TRUE;  /// ajoute pour les plug-ins opengl.
-		if (! pDock->bIsShrinkingDown)  // on laisse l'animation se finir.
+		if (cairo_dock_get_removing_or_inserting_icon (pDock->icons) == NULL)  // on laisse l'animation se finir.
 			cairo_dock_start_growing (pDock);
 		return FALSE;
 	}
@@ -980,24 +979,27 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		cairo_dock_start_icon_animation (pFlyingIcon, pDock);
 		s_pFlyingContainer = NULL;
 	}
-
+	
 	int iNewWidth, iNewHeight;
 	cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
 	if ((pDock->bAutoHide && pDock->iRefCount == 0) && pDock->bAtBottom)
 		pDock->iWindowPositionY = (pDock->bDirectionUp ? g_iXScreenHeight[pDock->bHorizontalDock] - myHiddenDock.iVisibleZoneHeight - pDock->iGapY : myHiddenDock.iVisibleZoneHeight + pDock->iGapY - pDock->iMaxDockHeight);
-
-	if (pDock->bHorizontalDock)
-		gdk_window_move_resize (pWidget->window,
-			pDock->iWindowPositionX,
-			pDock->iWindowPositionY,
-			iNewWidth,
-			iNewHeight);
-	else
-		gdk_window_move_resize (pWidget->window,
-			pDock->iWindowPositionY,
-			pDock->iWindowPositionX,
-			iNewHeight,
-			iNewWidth);
+	
+	if (pDock->iCurrentWidth != iNewWidth || pDock->iCurrentHeight != iNewHeight)
+	{
+		if (pDock->bHorizontalDock)
+			gdk_window_move_resize (pWidget->window,
+				pDock->iWindowPositionX,
+				pDock->iWindowPositionY,
+				iNewWidth,
+				iNewHeight);
+		else
+			gdk_window_move_resize (pWidget->window,
+				pDock->iWindowPositionY,
+				pDock->iWindowPositionX,
+				iNewHeight,
+				iNewWidth);
+	}
 	
 	if (pDock->iSidMoveDown > 0)  // si on est en train de descendre, on arrete.
 	{
@@ -1013,12 +1015,9 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	
 	if (myAccessibility.bPopUp && pDock->iRefCount == 0)
 	{
-		//This code will trigger a pop up...
-		/**if (pDock->iSidPopUp == 0)
-			pDock->iSidPopUp = g_timeout_add (500, (GSourceFunc) cairo_dock_pop_up, (gpointer) pDock);*/
+		//This code will trigger a pop up
 		cairo_dock_pop_up (pDock);
-		//If the dock window is entered, and there is a pending
-		//drop below event then it should be cancelled
+		//If the dock window is entered, and there is a pending drop below event then it should be cancelled
 		if (pDock->iSidPopDown != 0)
 		{
 			g_source_remove(pDock->iSidPopDown);
@@ -1038,12 +1037,8 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			pDock->bAtTop = TRUE;
 		pDock->bAtBottom = FALSE;
 	}
-	/*if (pDock->iSidGrowUp == 0 && pDock->iSidShrinkDown == 0)  // on commence a faire grossir les icones, sinon on laisse l'animation se finir.
-	{
-		pDock->iSidGrowUp = g_timeout_add (40, (GSourceFunc) cairo_dock_grow_up, (gpointer) pDock);
-	}*/
 	
-	if (! pDock->bIsShrinkingDown)  // on laisse l'animation se finir.
+	if (cairo_dock_get_removing_or_inserting_icon (pDock->icons) == NULL)  // on laisse l'animation se finir.
 		cairo_dock_start_growing (pDock);
 
 	return FALSE;
@@ -1416,7 +1411,7 @@ static gboolean _cairo_dock_autoscroll (gpointer *data)
 	}
 	pDock->iMouseX = iX;
 	pDock->iMouseY = iY;
-	pPointedIcon = pDock->calculate_icons (pDock);
+	pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
 	gtk_widget_queue_draw (pDock->pWidget);
 
 	//\_______________ On montre les sous-docks.
@@ -1586,7 +1581,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		}
 		#endif
 		
-		pDock->calculate_icons (pDock);
+		cairo_dock_calculate_dock_icons (pDock);
 		gtk_widget_queue_draw (pWidget);  // il semble qu'il soit necessaire d'en rajouter un la pour eviter un "clignotement" a l'entree dans le dock.
 		if (g_bEasterEggs)
 			cairo_dock_unset_input_shape (pDock);
@@ -1595,7 +1590,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 			while (gtk_events_pending ())  // on force un redessin immediat sinon on a quand meme un "flash".
 				gtk_main_iteration ();
 	}
-
+	
 	if (pDock->iSidMoveDown == 0 && pDock->iSidMoveUp == 0)  // ce n'est pas du a une animation. Donc en cas d'apparition due a l'auto-hide, ceci ne sera pas fait ici, mais a la fin de l'animation.
 	{
 		cairo_dock_set_icons_geometry_for_window_manager (pDock);

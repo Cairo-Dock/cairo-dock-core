@@ -635,7 +635,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	
 	pDock->iMouseX = 0;  // on se place hors du dock initialement.
 	pDock->iMouseY = 0;
-	pDock->calculate_icons (pDock);
+	cairo_dock_calculate_dock_icons (pDock);
 	gtk_widget_queue_draw (pDock->pWidget);  // le 'gdk_window_move_resize' ci-dessous ne provoquera pas le redessin si la taille n'a pas change.
 	
 	

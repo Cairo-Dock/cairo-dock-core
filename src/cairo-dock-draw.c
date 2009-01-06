@@ -1171,6 +1171,7 @@ void cairo_dock_set_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 
 void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, CairoDockSizeType iSizeType, int *iNewWidth, int *iNewHeight)
 {
+	//g_print ("%s (%d)\n", __func__, iSizeType);
 	if (iSizeType == CAIRO_DOCK_MAX_SIZE)
 	{
 		*iNewWidth = pDock->iMaxDockWidth;

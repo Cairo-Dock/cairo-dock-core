@@ -184,7 +184,7 @@ gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex)  // merci a Robrob 
 
 gboolean cairo_dock_grow_up (CairoDock *pDock)
 {
-	//g_print ("%s (%d ; %f ; %d)\n", __func__, pDock->iMagnitudeIndex, pDock->fFoldingFactor, pDock->bInside);
+	//g_print ("%s (%d ; %2f ; bInside:%d)\n", __func__, pDock->iMagnitudeIndex, pDock->fFoldingFactor, pDock->bInside);
 	if (pDock->bIsShrinkingDown)
 		return TRUE;  // on se met en attente de fin d'animation.
 	
@@ -202,7 +202,9 @@ gboolean cairo_dock_grow_up (CairoDock *pDock)
 		gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseY, &pDock->iMouseX, NULL);
 	
 	Icon *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
-	Icon *pPointedIcon = pDock->calculate_icons (pDock);
+	Icon *pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
+	if (! pDock->bIsGrowingUp)
+		return FALSE;
 	
 	if (pLastPointedIcon != pPointedIcon && pDock->bInside)
 		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
@@ -224,6 +226,7 @@ gboolean cairo_dock_grow_up (CairoDock *pDock)
 
 gboolean cairo_dock_shrink_down (CairoDock *pDock)
 {
+	//g_print ("%s (%d, %f, %f)\n", __func__, pDock->iMagnitudeIndex, pDock->fFoldingFactor, pDock->fDecorationsOffsetX);
 	//\_________________ On fait decroitre la magnitude du dock.
 	int iPrevMagnitudeIndex = pDock->iMagnitudeIndex;
 	pDock->iMagnitudeIndex -= mySystem.iShrinkDownInterval;
@@ -270,7 +273,9 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 		gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseY, &pDock->iMouseX, NULL);
 	
 	//\_________________ On recalcule les icones.
-	pDock->calculate_icons (pDock);
+	cairo_dock_calculate_dock_icons (pDock);
+	if (! pDock->bIsShrinkingDown)
+		return FALSE;
 	
 	if (g_bEasterEggs && iPrevMagnitudeIndex != 0 && pDock->iMagnitudeIndex == 0 && pDock->bInside)  // on arrive en fin de retrecissement.
 		cairo_dock_set_input_shape (pDock);
@@ -286,7 +291,7 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 		//g_print ("equilibre atteint (%d)\n", pDock->bInside);
 		if (! pDock->bInside)
 		{
-			cd_debug ("rideau !");
+			//g_print ("rideau !\n");
 			//\__________________ On repasse derriere si on etait devant.
 			if (pDock->bPopped)
 				cairo_dock_pop_down (pDock);
@@ -323,7 +328,7 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 		}
 		else
 		{
-			pDock->calculate_icons (pDock);  // relance le grossissement si on est dedans.
+			cairo_dock_calculate_dock_icons (pDock);  // relance le grossissement si on est dedans.
 			if (! pDock->bIsGrowingUp)
 				pDock->bAtBottom = TRUE;
 		}
@@ -331,7 +336,7 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 	}
 	else
 	{
-		return TRUE;
+		return (!pDock->bIsGrowingUp);
 	}
 }
 
@@ -346,7 +351,7 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 		pIcon = ic->data;
 		if (pIcon->fPersonnalScale == 0.05)
 		{
-			g_print ("  %s va etre supprimee\n", pIcon->acName);
+			cd_message (" - %s va etre supprimee", pIcon->acName);
 			gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);  // car apres avoir ete enleve du dock elle n'est plus rien.
 			cairo_dock_remove_icon_from_dock (pDock, pIcon);
 			
@@ -354,7 +359,7 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 			{
 				if (pIcon && pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass) && pDock->icons == NULL)  // il n'y a plus aucune icone de cette classe.
 				{
-					cd_message ("le sous-dock de la classe %s n'a plus d'element et va etre detruit", pIcon->cClass);
+					cd_message ("   le sous-dock de la classe %s n'a plus d'element et va etre detruit", pIcon->cClass);
 					cairo_dock_destroy_dock (pDock, pIcon->cClass, NULL, NULL);
 					return FALSE;
 				}
@@ -369,7 +374,7 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 				{
 					if (pDock->icons == NULL)  // ne devrait plus arriver.
 					{
-						cd_message ("le sous-dock de la classe %s n'a plus d'element et va etre detruit", pIcon->cClass);
+						cd_message ("   le sous-dock de la classe %s n'a plus d'element et va etre detruit", pIcon->cClass);
 						
 						CairoDock *pFakeParentDock = NULL;
 						Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
@@ -384,7 +389,7 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 					}
 					else if (pDock->icons->next == NULL)
 					{
-						cd_message ("le sous-dock de la classe %s n'a plus que 1 element et va etre vide puis detruit", pIcon->cClass);
+						cd_message ("   le sous-dock de la classe %s n'a plus que 1 element et va etre vide puis detruit", pIcon->cClass);
 						
 						CairoDock *pFakeParentDock = NULL;
 						Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
@@ -415,7 +420,6 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 		}
 		else if (pIcon->fPersonnalScale == -0.05)
 		{
-			g_print ("  fin\n");
 			pIcon->fPersonnalScale = 0;
 		}
 		else if (pIcon->fPersonnalScale != 0)
@@ -425,7 +429,7 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 	}
 	
 	if (bRecalculateIcons)
-		pDock->calculate_icons (pDock);
+		cairo_dock_calculate_dock_icons (pDock);
 	return TRUE;
 }
 
@@ -454,23 +458,23 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gch
 
 static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 {
-	//g_print ("%s (%d)\n", __func__, pDock->iRefCount);
-	gboolean bIconIsAnimating, bContinue = FALSE;
+	//g_print ("%s (%d, %d, %d)\n", __func__, pDock->iRefCount, pDock->bIsShrinkingDown, pDock->bIsGrowingUp);
+	gboolean bIconIsAnimating;
 	gboolean bRedraw = FALSE;
 	if (pDock->bIsShrinkingDown)
 	{
 		pDock->bIsShrinkingDown = cairo_dock_shrink_down (pDock);
 		//g_print ("pDock->bIsShrinkingDown <- %d\n", pDock->bIsShrinkingDown);
-		bContinue |= pDock->bIsShrinkingDown;
 		bRedraw = TRUE;
 	}
 	if (pDock->bIsGrowingUp)
 	{
 		pDock->bIsGrowingUp = cairo_dock_grow_up (pDock);
-		bContinue |= pDock->bIsGrowingUp;
 		bRedraw = TRUE;
 	}
+	//g_print (" => %d, %d\n", pDock->bIsShrinkingDown, pDock->bIsGrowingUp);
 	
+	gboolean bContinue = pDock->bIsShrinkingDown || pDock->bIsGrowingUp;
 	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
 	Icon *icon;
 	GList *ic;

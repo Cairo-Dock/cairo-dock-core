@@ -421,11 +421,11 @@ static void _on_modify_launcher (Icon *icon)
 		cairo_dock_inhibate_class (cNowClass, icon);
 
 	//\_____________ On redessine les docks impactes.
-	pDock->calculate_icons (pDock);
+	cairo_dock_calculate_dock_icons (pDock);
 	gtk_widget_queue_draw (pDock->pWidget);
 	if (pNewContainer != pDock)
 	{
-		pNewContainer->calculate_icons (pNewContainer);
+		cairo_dock_calculate_dock_icons (pNewContainer);
 		gtk_widget_queue_draw (pNewContainer->pWidget);
 
 		if (pDock->icons == NULL)
@@ -954,7 +954,7 @@ static void _cairo_dock_configure_root_dock_position (GtkMenuItem *pMenuItem, gp
 		cairo_dock_synchronize_sub_docks_position (pDock, TRUE);
 		
 		cairo_dock_update_dock_size (pDock);
-		pDock->calculate_icons (pDock);
+		cairo_dock_calculate_dock_icons (pDock);
 		
 		cairo_dock_place_root_dock (pDock);
 		gtk_widget_queue_draw (pDock->pWidget);

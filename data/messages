@@ -204,6 +204,14 @@ _("The transparency gradation pattern will then be re-calculated in real time. M
 
 _("Reflections should be calculated in real-time ?")
 
+_("in Hz. This is to adjust regarding your CPU power.")
+
+_("Animation frequency for the opengl backend :")
+
+_("in Hz. This is to adjust regarding your CPU power.")
+
+_("Animation frequency for the cairo backend :")
+
 _("Label readability")
 
 _("Show label of the currently pointed icon only ?")

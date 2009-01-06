@@ -689,7 +689,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	int h = cairo_image_surface_get_height (pImageSurface);
 	glEnable(GL_TEXTURE_2D);
 	glGenTextures (1, &iTexture);
-	g_print ("texture %d generee (%x, %dx%d)\n", iTexture, cairo_image_surface_get_data (pImageSurface), w, h);
+	//g_print ("texture %d generee (%x, %dx%d)\n", iTexture, cairo_image_surface_get_data (pImageSurface), w, h);
 	glBindTexture (GL_TEXTURE_2D, iTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

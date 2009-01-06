@@ -833,6 +833,15 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					}
 					cd_message ("bureau change");
 					cairo_dock_notify (CAIRO_DOCK_DESKTOP_CHANGED, NULL);
+					
+					if (! pDock->bIsShrinkingDown && ! pDock->bIsGrowingUp)
+					{
+						if (pDock->bHorizontalDock)
+							gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseX, &pDock->iMouseY, NULL);
+						else
+							gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseY, &pDock->iMouseX, NULL);
+						cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
+					}
 				}
 				else if (event.xproperty.atom == s_aNetNbDesktops)
 				{

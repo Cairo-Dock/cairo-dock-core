@@ -133,6 +133,12 @@ struct _CairoDockRenderer {
 	gchar *cPreviewFilePath;
 };
 
+typedef enum {
+	CAIRO_DOCK_MOUSE_INSIDE,
+	CAIRO_DOCK_MOUSE_ON_THE_EDGE,
+	CAIRO_DOCK_MOUSE_OUTSIDE
+	} CairoDockMousePositionType;
+
 struct _CairoDock {
 	/// type "dock".
 	CairoDockTypeContainer iType;
@@ -286,7 +292,7 @@ struct _CairoDock {
 	gboolean bIsGrowingUp;
 	GdkRectangle inputArea;
 	GdkBitmap* pShapeBitmap;
-	gchar *cToBeDestroyed;
+	CairoDockMousePositionType iMousePositionType;
 };
 
 
@@ -1043,12 +1049,6 @@ typedef enum {
 	CAIRO_DOCK_NORMAL_SIZE,
 	CAIRO_DOCK_MIN_SIZE
 	} CairoDockSizeType;
-
-typedef enum {
-	CAIRO_DOCK_MOUSE_INSIDE,
-	CAIRO_DOCK_MOUSE_ON_THE_EDGE,
-	CAIRO_DOCK_MOUSE_OUTSIDE
-	} CairoDockMousePositionType;
 
 typedef enum {
 	CAIRO_DOCK_UNKNOWN_ENV=0,

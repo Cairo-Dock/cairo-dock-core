@@ -106,6 +106,8 @@ void cairo_dock_free_all_docks (void);
 */
 void cairo_dock_update_dock_size (CairoDock *pDock);
 
+Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock);
+
 /**
 * Insere une icone dans le dock, a la position indiquee par le champ /a fOrder.
 * Insere un separateur si necessaire, et reserve l'espace correspondant aux nouvelles dimensions du dock si necessaire.

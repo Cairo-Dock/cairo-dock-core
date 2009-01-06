@@ -322,9 +322,9 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 
 Icon *cairo_dock_apply_wave_effect (CairoDock *pDock);
 
-CairoDockMousePositionType cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock);
+void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock);
 
-void cairo_dock_manage_mouse_position (CairoDock *pDock, CairoDockMousePositionType iMousePositionType);
+void cairo_dock_manage_mouse_position (CairoDock *pDock);
 
 
 double cairo_dock_calculate_max_dock_width (CairoDock *pDock, GList *pFirstDrawnElement, double fFlatDockWidth, double fWidthConstraintFactor, double fExtraWidth);

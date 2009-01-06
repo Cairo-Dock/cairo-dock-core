@@ -217,8 +217,7 @@ static gboolean _cairo_dock_hide_dock_if_parent (gchar *cDockName, CairoDock *pD
 				pDock->iScrollOffset = 0;
 				pDock->iMouseX = pDock->iCurrentWidth / 2;  // utile ?
 				pDock->iMouseY = 0;
-				pDock->calculate_icons (pDock);
-				///pDock->render (pDock);  // peut-etre qu'il faudrait faire un redraw...
+				cairo_dock_calculate_dock_icons (pDock);
 			}
 
 			cd_message ("on cache %s par parente", cDockName);

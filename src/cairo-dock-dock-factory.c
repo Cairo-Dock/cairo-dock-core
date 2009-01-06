@@ -568,7 +568,7 @@ CairoDock *cairo_dock_create_subdock_from_scratch_with_type (GList *pIconList, g
 		cairo_dock_update_dock_size (pDock);
 		///pDock->iMouseX = -1; // utile ?
 		///pDock->iMouseY = -1;
-		pDock->calculate_icons (pDock);
+		cairo_dock_calculate_dock_icons (pDock);
 		gtk_window_present (GTK_WINDOW (pDock->pWidget));
 		while (gtk_events_pending ())
 			gtk_main_iteration ();
@@ -687,6 +687,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		return;
 	else if (GTK_WIDGET_VISIBLE (pDock->pWidget))
 	{
+		//g_print ("%s (%d;%d => %s size)\n", __func__, pDock->bInside, pDock->bIsShrinkingDown, pDock->bInside || pDock->bIsShrinkingDown ? "max" : "normal");
 		int iNewWidth, iNewHeight;
 		cairo_dock_get_window_position_and_geometry_at_balance (pDock, (pDock->bInside || pDock->bIsShrinkingDown ? CAIRO_DOCK_MAX_SIZE : CAIRO_DOCK_NORMAL_SIZE), &iNewWidth, &iNewHeight);  // inutile de recalculer Y mais bon...
 
@@ -713,6 +714,13 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	cairo_dock_set_icons_geometry_for_window_manager (pDock);
 
 	cairo_dock_update_background_decorations_if_necessary (pDock, pDock->iDecorationsWidth, pDock->iDecorationsHeight);
+}
+
+Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock)
+{
+	Icon *pPointedIcon = pDock->calculate_icons (pDock);
+	cairo_dock_manage_mouse_position (pDock);
+	return (pDock->iMousePositionType == CAIRO_DOCK_MOUSE_INSIDE ? pPointedIcon : NULL);
 }
 
 void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bApplyRatio, gboolean bInsertSeparator, GCompareFunc pCompareFunc)

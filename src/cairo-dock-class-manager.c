@@ -106,7 +106,8 @@ static Window cairo_dock_detach_appli_of_class (const gchar *cClass, gboolean bD
 	if (! cairo_dock_is_loading () && bNeedsRedraw)
 	{
 		cairo_dock_update_dock_size (g_pMainDock);
-		gtk_widget_queue_draw (g_pMainDock->pWidget);  /// pDock->calculate_icons (pDock); ?...
+		cairo_dock_calculate_dock_icons (g_pMainDock);
+		gtk_widget_queue_draw (g_pMainDock->pWidget);
 	}
 	return XFirstFoundId;
 }

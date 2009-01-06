@@ -900,7 +900,7 @@ void cairo_dock_remove_all_separators (CairoDock *pDock)
 
 void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	Icon *icon, *next_icon;
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
@@ -914,7 +914,7 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 				if (! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (next_icon) && abs (cairo_dock_get_icon_order (icon) - cairo_dock_get_icon_order (next_icon)) > 1)  // icon->iType != next_icon->iType
 				{
 					int iSeparatorType = myIcons.tIconTypeOrder[next_icon->iType] - 1;
-					g_print ("un separateur entre %s et %s, dans le groupe %d (=%d)\n", icon->acName, next_icon->acName, iSeparatorType, myIcons.tIconTypeOrder[iSeparatorType]);
+					//g_print ("un separateur entre %s et %s, dans le groupe %d (=%d)\n", icon->acName, next_icon->acName, iSeparatorType, myIcons.tIconTypeOrder[iSeparatorType]);
 					cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 					Icon *pSeparator = cairo_dock_create_separator_icon (pCairoContext, iSeparatorType, pDock, ! CAIRO_DOCK_APPLY_RATIO);
 					cairo_destroy (pCairoContext);
@@ -1106,7 +1106,7 @@ Icon *cairo_dock_apply_wave_effect (CairoDock *pDock)
 	return pPointedIcon;
 }
 
-CairoDockMousePositionType cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
+void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 {
 	CairoDockMousePositionType iMousePositionType;
 	int iWidth = pDock->iCurrentWidth;
@@ -1130,50 +1130,43 @@ CairoDockMousePositionType cairo_dock_check_if_mouse_inside_linear (CairoDock *p
 	}
 	else if (iMouseY >= 0 && iMouseY <= iHeight)  // et en plus on est dedans en y.  //  && pPointedIcon != NULL
 	{
-		//g_print ("on est dedans en x et en y et la taille des icones est non maximale bien qu'aucune icone ne soit animee (iMouseX=%d => x_abs=%d)\n", iMouseX, x_abs);
+		//g_print ("on est dedans en x et en y (iMouseX=%d => x_abs=%d)\n", iMouseX, x_abs);
 		//pDock->bInside = TRUE;
 		iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
 	}
 	else
 		iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
 
-	return iMousePositionType;
+	pDock->iMousePositionType = iMousePositionType;
 }
 
-void cairo_dock_manage_mouse_position (CairoDock *pDock, CairoDockMousePositionType iMousePositionType)
+void cairo_dock_manage_mouse_position (CairoDock *pDock)
 {
 	static gboolean bReturn = FALSE;
-	switch (iMousePositionType)
+	switch (pDock->iMousePositionType)
 	{
 		case CAIRO_DOCK_MOUSE_INSIDE :
 			//g_print ("INSIDE\n");
-			if (cairo_dock_entrance_is_allowed (pDock) && pDock->iMagnitudeIndex < CAIRO_DOCK_NB_MAX_ITERATIONS && ! pDock->bIsGrowingUp && cairo_dock_get_removing_or_inserting_icon (pDock->icons) == NULL)  // on est dedans et la taille des icones est non maximale bien qu'aucune icone ne soit animee.  ///  && pDock->iSidMoveDown == 0
+			if (cairo_dock_entrance_is_allowed (pDock) && pDock->iMagnitudeIndex < CAIRO_DOCK_NB_MAX_ITERATIONS && ! pDock->bIsGrowingUp && cairo_dock_get_removing_or_inserting_icon (pDock->icons) == NULL)  // on est dedans et la taille des icones est non maximale bien que le dock ne soit pas en train de grossir.  ///  && pDock->iSidMoveDown == 0
 			{
-				cd_debug ("on est dedans en x et en y et la taille des icones est non maximale bien qu'aucune icone  ne soit animee");
+				//g_print ("on est dedans en x et en y et la taille des icones est non maximale bien qu'aucune icone  ne soit animee (%d;%d)\n", pDock->bAtBottom, pDock->bInside);
 				//pDock->bInside = TRUE;
-				if ((pDock->bAtBottom && pDock->iRefCount == 0 && ! pDock->bAutoHide) || (pDock->iCurrentWidth != pDock->iMaxDockWidth || pDock->iCurrentHeight != pDock->iMaxDockHeight))  // on le fait pas avec l'auto-hide, car un signal d'entree est deja emis a cause des mouvements/redimensionnements de la fenetre, et en rajouter un ici fout le boxon.
+				if ((pDock->bAtBottom && pDock->iRefCount == 0 && ! pDock->bAutoHide) || (pDock->iCurrentWidth != pDock->iMaxDockWidth || pDock->iCurrentHeight != pDock->iMaxDockHeight) || (!pDock->bInside))  // on le fait pas avec l'auto-hide, car un signal d'entree est deja emis a cause des mouvements/redimensionnements de la fenetre, et en rajouter un ici fout le boxon.  // !pDock->bInside ajoute pour le bug du chgt de bureau.
 				{
-					cd_debug ("  on emule une re-rentree (pDock->iMagnitudeIndex:%f)", pDock->iMagnitudeIndex);
-					///cairo_dock_render_blank (pDock);  // utile ?
+					//g_print ("  on emule une re-rentree (pDock->iMagnitudeIndex:%d)\n", pDock->iMagnitudeIndex);
 					g_signal_emit_by_name (pDock->pWidget, "enter-notify-event", NULL, &bReturn);
 				}
-				else  // on se contente de faire grossir les icones.
+				else // on se contente de faire grossir les icones.
 				{
-					cd_debug ("  on se contente de faire grossir les icones");
+					//g_print ("  on se contente de faire grossir les icones\n");
 					pDock->bAtBottom = FALSE;
-					/*if (pDock->bIsShrinkingDown)
-					{
-						g_source_remove (pDock->iSidShrinkDown);
-						pDock->iSidShrinkDown = 0;
-					}*/
+					cairo_dock_start_growing (pDock);
+					
 					if (pDock->iSidMoveDown != 0)
 					{
 						g_source_remove (pDock->iSidMoveDown);
 						pDock->iSidMoveDown = 0;
 					}
-					/*if (pDock->iSidGrowUp == 0)
-						pDock->iSidGrowUp = g_timeout_add (40, (GSourceFunc) cairo_dock_grow_up, pDock);*/
-					cairo_dock_start_growing (pDock);
 					if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->iSidMoveUp == 0)
 						pDock->iSidMoveUp = g_timeout_add (40, (GSourceFunc) cairo_dock_move_up, pDock);
 				}
@@ -1191,7 +1184,7 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock, CairoDockMousePositionT
 		break ;
 
 		case CAIRO_DOCK_MOUSE_OUTSIDE :
-			//g_print ("en dehors du dock (%d;%d;%d;%d)\n", pDock->iSidGrowUp, pDock->iSidShrinkDown, pDock->iMagnitudeIndex, pDock->iSidLeaveDemand);
+			//g_print ("en dehors du dock (bIsShrinkingDown:%d;bIsGrowingUp:%d;iMagnitudeIndex:%d;bAtBottom:%d)\n", pDock->bIsShrinkingDown, pDock->bIsGrowingUp, pDock->iMagnitudeIndex, pDock->bAtBottom);
 			///pDock->fDecorationsOffsetX = - pDock->iCurrentWidth / 2;  // on fixe les decorations.
 			if (! pDock->bIsGrowingUp && ! pDock->bIsShrinkingDown && pDock->iSidLeaveDemand == 0 && ! pDock->bAtBottom)  // bAtBottom ajoute pour la 1.5.4
 			{

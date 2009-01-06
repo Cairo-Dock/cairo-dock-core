@@ -417,10 +417,7 @@ Icon *cairo_dock_calculate_icons_linear (CairoDock *pDock)
 {
 	Icon *pPointedIcon = cairo_dock_apply_wave_effect (pDock);
 
-	CairoDockMousePositionType iMousePositionType = cairo_dock_check_if_mouse_inside_linear (pDock);
-
-	cairo_dock_manage_mouse_position (pDock, iMousePositionType);
-
+	
 	//\____________________ On calcule les position/etirements/alpha des icones.
 	Icon* icon;
 	GList* ic;
@@ -430,8 +427,10 @@ Icon *cairo_dock_calculate_icons_linear (CairoDock *pDock)
 		cairo_dock_calculate_construction_parameters_generic (icon, pDock->iCurrentWidth, pDock->iCurrentHeight, pDock->iMaxDockWidth);
 	}
 	
+	cairo_dock_check_if_mouse_inside_linear (pDock);
+	
 	cairo_dock_check_can_drop_linear (pDock);
-
+	
 	icon = cairo_dock_get_first_drawn_icon (pDock);
 	if (icon != NULL)
 	{
@@ -445,7 +444,7 @@ Icon *cairo_dock_calculate_icons_linear (CairoDock *pDock)
 	{
 		pDock->inputArea.width = pDock->inputArea.height = 0;
 	}
-	return (iMousePositionType == CAIRO_DOCK_MOUSE_INSIDE ? pPointedIcon : NULL);
+	return pPointedIcon;
 }
 
 void cairo_dock_register_default_renderer (void)
