@@ -21,13 +21,13 @@ static GLfloat s_pCornerCoords[8] = {0.0, 0.0,
 
 void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int iDepth)
 {
-	//g_print ("%s ()\n", __func__);
 	glEnable (GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, pParticleSystem->iTexture);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glPolygonMode (GL_FRONT, GL_FILL);
 	
 	GLfloat *vertices = pParticleSystem->pVertices;
 	GLfloat *coords = pParticleSystem->pCoords;

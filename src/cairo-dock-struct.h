@@ -704,6 +704,7 @@ struct _Icon {
 	gboolean bStatic;
 	CairoDockAnimationState iAnimationState;
 	gchar *cInitialName;
+	gboolean bBeingRemovedByCairo;
 };
 
 

@@ -61,8 +61,9 @@ void cairo_dock_free_icon (Icon *icon)
 		cairo_dock_deinstanciate_module (icon->pModuleInstance);
 	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);
 	
+	cd_debug ("icon stopped\n");
 	cairo_dock_free_icon_buffers (icon);
-	
+	cd_debug ("icon freeed\n");
 	g_free (icon);
 }
 

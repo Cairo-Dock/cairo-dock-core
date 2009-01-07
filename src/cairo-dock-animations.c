@@ -421,6 +421,9 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 		else if (pIcon->fPersonnalScale == -0.05)
 		{
 			pIcon->fPersonnalScale = 0;
+			cairo_dock_stop_marking_icon_as_inserting_removing (pIcon);
+			cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon);
+			pIcon->bBeingRemovedByCairo = FALSE;
 		}
 		else if (pIcon->fPersonnalScale != 0)
 		{
@@ -571,7 +574,7 @@ void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationS
 
 gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation)
 {
-	if (pIcon->fPersonnalScale == 0)
+	if (pIcon->fPersonnalScale == 0 || ! pIcon->bBeingRemovedByCairo)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
 	cairo_dock_update_removing_inserting_icon_size_default (pIcon);
@@ -581,12 +584,16 @@ gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserD
 		cairo_dock_mark_icon_as_inserting_removing (pIcon);
 		*bContinueAnimation = TRUE;
 	}
-	return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
 gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
+	if (pIcon->iAnimationState == CAIRO_DOCK_STATE_REMOVE_INSERT)
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	
+	pIcon->bBeingRemovedByCairo = TRUE;
 	cairo_dock_mark_icon_as_inserting_removing (pIcon);  // On prend en charge le dessin de l'icone pendant sa phase d'insertion/suppression.
 	
-	return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }

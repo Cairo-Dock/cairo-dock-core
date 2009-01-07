@@ -25,6 +25,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-applet-facility.h"
 #include "cairo-dock-class-manager.h"
 
 extern CairoDock *g_pMainDock;
@@ -346,7 +347,7 @@ gboolean cairo_dock_prevent_inhibated_class (Icon *pIcon)
 							g_free (pInhibatorIcon->acName);
 						pInhibatorIcon->acName = NULL;
 						cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pInhibhatorDock));
-						cairo_dock_set_icon_name (pCairoContext, pIcon->acName, pInhibatorIcon, pInhibhatorDock);
+						cairo_dock_set_icon_name (pCairoContext, pIcon->acName, pInhibatorIcon, CAIRO_CONTAINER (pInhibhatorDock));
 						cairo_destroy (pCairoContext);
 					}
 				}
@@ -426,6 +427,7 @@ void cairo_dock_deinhibate_class (const gchar *cClass, Icon *pInhibatorIcon)
 		pInhibatorIcon->bHasIndicator = FALSE;
 		g_free (pInhibatorIcon->cClass);
 		pInhibatorIcon->cClass = NULL;
+		cd_debug ("  plus de classe\n");
 	}
 }
 
@@ -677,7 +679,7 @@ void cairo_dock_update_name_on_inhibators (gchar *cClass, Window Xid, gchar *cNe
 					pInhibatorIcon->acName = NULL;
 					
 					cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pParentDock));
-					cairo_dock_set_icon_name (pCairoContext, (cNewName != NULL ? cNewName : pInhibatorIcon->cInitialName), pInhibatorIcon, pParentDock);
+					cairo_dock_set_icon_name (pCairoContext, (cNewName != NULL ? cNewName : pInhibatorIcon->cInitialName), pInhibatorIcon, CAIRO_CONTAINER (pParentDock));
 					cairo_destroy (pCairoContext);
 				}
 				if (pParentDock != NULL && ! pParentDock->bIsShrinkingDown)
