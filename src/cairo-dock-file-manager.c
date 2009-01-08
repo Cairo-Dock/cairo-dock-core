@@ -446,6 +446,18 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 			if ((pIcon->cBaseURI == NULL || strcmp (cURI, pIcon->cBaseURI) != 0) && pIcon->pSubDock != NULL)  // dans des cas foirreux, il se peut que le fichier soit cree alors qu'il existait deja dans le dock.
 			{
 				CairoContainer *pParentContainer = cairo_dock_search_container_from_icon (pIcon);
+				
+				if (pIcon->pSubDock != NULL)  // cas d'un signal CREATED sur un fichier deja existant, merci GFVS :-/
+				{
+					Icon *pSameIcon = cairo_dock_get_icon_with_base_uri (pIcon->pSubDock->icons, cURI);
+					if (pSameIcon != NULL)
+					{
+						cd_message ("ce fichier (%s) existait deja !", pSameIcon->acName);
+						return;  // on decide de ne rien faire, c'est surement un signal inutile.
+						//cairo_dock_remove_one_icon_from_dock (pIcon->pSubDock, pSameIcon);
+						//cairo_dock_free_icon (pSameIcon);
+					}
+				}
 				Icon *pNewIcon = cairo_dock_fm_create_icon_from_URI (cURI, (CAIRO_DOCK_IS_DOCK (pParentContainer) ? CAIRO_CONTAINER (pIcon->pSubDock) : pParentContainer));
 				if (pNewIcon == NULL)
 					return ;

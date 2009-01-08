@@ -1201,7 +1201,8 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gdouble 
 				//g_print ("icon->fPersonnalScale <- %.2f\n", icon->fPersonnalScale);
 				
 				//cairo_dock_start_icon_animation (icon, pParentDock);
-				cairo_dock_start_shrinking (pParentDock);
+				//cairo_dock_start_shrinking (pParentDock);
+				cairo_dock_launch_animation (pParentDock);
 			}
 			else
 			{
