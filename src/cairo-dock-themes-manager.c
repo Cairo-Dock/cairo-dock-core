@@ -30,6 +30,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #define CAIRO_DOCK_THEME_PANEL_HEIGHT 400
 #define CAIRO_DOCK_THEME_SERVER "http://themes.cairo-dock.org"
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr/themes"
+#define CAIRO_DOCK_PREFIX_NET_THEME "(Net)"
 
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cConfFile;
@@ -121,7 +122,7 @@ GHashTable *cairo_dock_list_net_themes (gchar *cServerAdress, GHashTable *hProvi
 		{
 			cd_debug ("+ theme : %s", cThemeName);
 			cThemePath = g_strdup_printf ("%s/%s", cServerAdress, cThemeName);
-			g_hash_table_insert (pThemeTable, g_strconcat ("(Net) ", cThemeName, NULL), cThemePath);
+			g_hash_table_insert (pThemeTable, g_strconcat (CAIRO_DOCK_PREFIX_NET_THEME, cThemeName, NULL), cThemePath);
 			g_free (cThemeName);
 		}
 	}
@@ -415,6 +416,7 @@ static void on_theme_apply (gpointer *user_data)
 			gchar *cRepToDelete = NULL;
 			
 			//\___________________ On telecharge le theme s'il est distant.
+			g_print ("cNewThemePath : %s\n", cNewThemePath);
 			if (strncmp (cNewThemePath, "http://", 7) == 0 || strncmp (cNewThemePath, "ftp://", 6) == 0)
 			{
 				gchar *cTmpFilePath = g_strdup ("/tmp/cairo-dock-net-theme.XXXXXX");
@@ -427,7 +429,7 @@ static void on_theme_apply (gpointer *user_data)
 				}
 				
 				g_print ("downloading theme from %s ...\n", cNewThemePath);
-				g_string_printf (sCommand, "wget \"%s/%s.tar.gz\" -O '%s' -t 3 -T 5", cNewThemePath, cNewThemeName, cTmpFilePath);
+				g_string_printf (sCommand, "wget \"%s/%s.tar.gz\" -O '%s' -t 3 -T 5", cNewThemePath, (strncmp (cNewThemeName, CAIRO_DOCK_PREFIX_NET_THEME, strlen (CAIRO_DOCK_PREFIX_NET_THEME)) == 0 ? cNewThemeName + strlen (CAIRO_DOCK_PREFIX_NET_THEME) : cNewThemeName), cTmpFilePath);
 				system (sCommand->str);
 				close(fds);
 				

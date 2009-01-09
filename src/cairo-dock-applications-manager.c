@@ -1158,7 +1158,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	{
 		cairo_dock_notify (CAIRO_DOCK_INSERT_ICON, icon, pParentDock);
 		//cairo_dock_start_icon_animation (icon, pParentDock);
-		cairo_dock_start_shrinking (pParentDock);
+		cairo_dock_launch_animation (pParentDock);
 	}
 	else
 	{
@@ -1201,7 +1201,6 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gdouble 
 				//g_print ("icon->fPersonnalScale <- %.2f\n", icon->fPersonnalScale);
 				
 				//cairo_dock_start_icon_animation (icon, pParentDock);
-				//cairo_dock_start_shrinking (pParentDock);
 				cairo_dock_launch_animation (pParentDock);
 			}
 			else
@@ -1229,7 +1228,8 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gdouble fTime)
 	gboolean bAppliAlreadyRegistered;
 	gboolean bUpdateMainDockSize = FALSE;
 	CairoDock *pParentDock;
-
+	cairo_t *pCairoContext = NULL;
+	
 	for (i = 0; i < iNbWindows; i ++)
 	{
 		Xid = pXWindowsList[i];
@@ -1238,7 +1238,8 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gdouble fTime)
 		if (! bAppliAlreadyRegistered)
 		{
 			cd_message (" cette fenetre (%ld) de la pile n'est pas dans la liste", Xid);
-			cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+			if (pCairoContext == NULL)
+				pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 			if (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS)
 				icon = cairo_dock_create_icon_from_xwindow (pCairoContext, Xid, pDock);
 			if (icon != NULL)
@@ -1277,7 +1278,9 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gdouble fTime)
 			icon->fLastCheckTime = fTime;
 		}
 	}
-
+	if (pCairoContext != NULL)
+		cairo_destroy (pCairoContext);
+	
 	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_remove_old_applis, &fTime);
 	
 	if (bUpdateMainDockSize)
@@ -1342,6 +1345,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 		else
 			cairo_dock_blacklist_appli (Xid);
 	}
+	cairo_destroy (pCairoContext);
 	if (pXWindowsList != NULL)
 		XFree (pXWindowsList);
 	

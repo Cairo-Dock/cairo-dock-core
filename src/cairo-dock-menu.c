@@ -304,9 +304,7 @@ static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, Icon *icon, Cai
 		CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 		cairo_dock_insert_icon_in_dock (pNewIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);
 
-		/*if (pDock->iSidShrinkDown == 0)
-			pDock->iSidShrinkDown = g_timeout_add (50, (GSourceFunc) cairo_dock_shrink_down, (gpointer) pDock);*/
-		cairo_dock_start_shrinking (pDock);
+		cairo_dock_launch_animation (pDock);
 		cairo_dock_mark_theme_as_modified (TRUE);
 	}
 	else

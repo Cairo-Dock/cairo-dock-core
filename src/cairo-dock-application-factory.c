@@ -656,12 +656,13 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 
 static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock)
 {
+	cd_debug ("%s (%s)\n", __func__, icon->acName);
 	icon->bIsDemandingAttention = TRUE;
 	if (myTaskBar.bDemandsAttentionWithDialog)
 		cairo_dock_show_temporary_dialog_with_icon (icon->acName, icon, CAIRO_CONTAINER (pDock), myTaskBar.iDialogDuration, "same icon");
 	if (myTaskBar.cAnimationOnDemandsAttention)
 	{
-		cairo_dock_request_icon_animation (icon, pDock, myTaskBar.cAnimationOnDemandsAttention, 1);
+		cairo_dock_request_icon_animation (icon, pDock, myTaskBar.cAnimationOnDemandsAttention, 10);
 	}
 }
 void cairo_dock_appli_demands_attention (Icon *icon)
@@ -672,7 +673,7 @@ void cairo_dock_appli_demands_attention (Icon *icon)
 		Icon *pInhibitorIcon = cairo_dock_get_classmate (icon);
 		if (pInhibitorIcon != NULL)
 		{
-			CairoDock *pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->acName);
+			pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
 			if (pParentDock != NULL)
 				_cairo_dock_appli_demands_attention (pInhibitorIcon, pParentDock);
 		}

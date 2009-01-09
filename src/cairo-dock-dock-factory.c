@@ -55,6 +55,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-animations.h"
 #include "cairo-dock-dock-factory.h"
 
 extern int g_iWmHint;
@@ -453,6 +454,7 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDoc
 				icon->pModuleInstance->pDock = pReceivingDock;
 				cairo_dock_reload_module_instance (icon->pModuleInstance, FALSE);
 			}
+			cairo_dock_launch_animation (pReceivingDock);
 		}
 	}
 	if (pReceivingDock != NULL)
