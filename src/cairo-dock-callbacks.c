@@ -940,7 +940,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	{
 		//g_print ("  %d;%d;%d\n", pDock->bAtTop,  pDock->bInside, pDock->iSidMoveDown);
 		pDock->bInside = TRUE;  /// ajoute pour les plug-ins opengl.
-		if (cairo_dock_get_removing_or_inserting_icon (pDock->icons) == NULL)  // on laisse l'animation se finir.
+		///if (cairo_dock_get_removing_or_inserting_icon (pDock->icons) == NULL)  // on laisse l'animation se finir.
 			cairo_dock_start_growing (pDock);
 		return FALSE;
 	}
@@ -1038,7 +1038,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		pDock->bAtBottom = FALSE;
 	}
 	
-	if (cairo_dock_get_removing_or_inserting_icon (pDock->icons) == NULL)  // on laisse l'animation se finir.
+	///if (cairo_dock_get_removing_or_inserting_icon (pDock->icons) == NULL)  // on laisse l'animation se finir.
 		cairo_dock_start_growing (pDock);
 
 	return FALSE;

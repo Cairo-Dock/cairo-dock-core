@@ -46,7 +46,9 @@ void cairo_dock_start_growing (CairoDock *pDock);
 void cairo_dock_start_icon_animation (Icon *icon, CairoDock *pDock);
 
 void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds);
-
+#define cairo_dock_stop_icon_animation(pIcon) do { \
+	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon); \
+	pIcon->iAnimationState = CAIRO_DOCK_STATE_REST; } while (0)
 
 void cairo_dock_mark_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState);
 void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState);
@@ -69,6 +71,7 @@ void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationS
 
 gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation);
 gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock);
+gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon);
 
 
 G_END_DECLS

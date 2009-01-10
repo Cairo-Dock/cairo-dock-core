@@ -560,6 +560,9 @@ int main (int argc, char** argv)
 	cairo_dock_register_notification (CAIRO_DOCK_UPDATE_ICON,
 		(CairoDockNotificationFunc) cairo_dock_update_inserting_removing_icon_notification,
 		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_STOP_ICON,
+		(CairoDockNotificationFunc) cairo_dock_stop_inserting_removing_icon_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
 	
 	//\___________________ On initialise la gestion des crash.
 	if (! bTesting)

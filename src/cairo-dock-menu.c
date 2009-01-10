@@ -219,7 +219,7 @@ static void _cairo_dock_on_user_remove_icon (Icon *icon, CairoDock *pDock)
 		icon->pSubDock = NULL;
 	}
 	
-	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);
+	cairo_dock_stop_icon_animation (icon);
 	icon->fPersonnalScale = 1.0;
 	cairo_dock_notify (CAIRO_DOCK_REMOVE_ICON, icon, pDock);
 	cairo_dock_start_icon_animation (icon, pDock);

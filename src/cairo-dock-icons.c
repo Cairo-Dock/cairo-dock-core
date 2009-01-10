@@ -59,7 +59,7 @@ void cairo_dock_free_icon (Icon *icon)
 		cairo_dock_deinhibate_class (icon->cClass, icon);
 	if (icon->pModuleInstance != NULL)
 		cairo_dock_deinstanciate_module (icon->pModuleInstance);
-	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);
+	cairo_dock_stop_icon_animation (icon);
 	
 	cd_debug ("icon stopped\n");
 	cairo_dock_free_icon_buffers (icon);
@@ -590,8 +590,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	g_free (icon->cParentDockName);
 	icon->cParentDockName = NULL;
 	
-	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);
-	icon->iAnimationState = CAIRO_DOCK_STATE_REST;
+	cairo_dock_stop_icon_animation (icon);
 	
 	//\___________________ On gere le cas des classes d'applis.
 	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
@@ -1148,7 +1147,7 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 	{
 		case CAIRO_DOCK_MOUSE_INSIDE :
 			//g_print ("INSIDE\n");
-			if (cairo_dock_entrance_is_allowed (pDock) && pDock->iMagnitudeIndex < CAIRO_DOCK_NB_MAX_ITERATIONS && ! pDock->bIsGrowingUp && cairo_dock_get_removing_or_inserting_icon (pDock->icons) == NULL)  // on est dedans et la taille des icones est non maximale bien que le dock ne soit pas en train de grossir.  ///  && pDock->iSidMoveDown == 0
+			if (cairo_dock_entrance_is_allowed (pDock) && pDock->iMagnitudeIndex < CAIRO_DOCK_NB_MAX_ITERATIONS && ! pDock->bIsGrowingUp/** && cairo_dock_get_removing_or_inserting_icon (pDock->icons) == NULL*/)  // on est dedans et la taille des icones est non maximale bien que le dock ne soit pas en train de grossir.  ///  && pDock->iSidMoveDown == 0
 			{
 				//g_print ("on est dedans en x et en y et la taille des icones est non maximale bien qu'aucune icone  ne soit animee (%d;%d)\n", pDock->bAtBottom, pDock->bInside);
 				//pDock->bInside = TRUE;

@@ -659,7 +659,8 @@ struct _Icon {
 	/// Classe de l'application correspondante (ou NULL si aucune).
 	gchar *cClass;
 	/// Heure de derniere verification de la presence de l'application dans la barre des taches.
-	gdouble fLastCheckTime;
+	gint iLastCheckTime;
+	gint iPadding;
 	/// TRUE ssi la fenetre de l'application correspondante est minimisee.
 	gboolean bIsHidden;
 	/// Position et taille de la fenetre.

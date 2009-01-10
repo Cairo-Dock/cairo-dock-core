@@ -393,7 +393,7 @@ text background color =0;0;0;.5
 background for label = false
 
 
-#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-icons.svg;1;All about the icons.
+#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-icons.svg;1;All about icons :\n size, reflection, icon theme, ...
 [Icons]
 
 #F+[Wave's shape;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-wave.png]

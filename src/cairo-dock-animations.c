@@ -421,8 +421,8 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 		else if (pIcon->fPersonnalScale == -0.05)
 		{
 			pIcon->fPersonnalScale = 0;
-			cairo_dock_stop_marking_icon_as_inserting_removing (pIcon);
 			cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon);
+			pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
 			pIcon->bBeingRemovedByCairo = FALSE;
 		}
 		else if (pIcon->fPersonnalScale != 0)
@@ -442,7 +442,7 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 	g_return_if_fail (pIcon != NULL && pDock != NULL);
 	cd_message ("%s (%s, %d)", __func__, pIcon->acName, pIcon->iAnimationState);
 	
-	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST && cairo_dock_animation_will_be_visible (pDock))
+	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST && (cairo_dock_animation_will_be_visible (pDock) || pIcon->fPersonnalScale != 0))
 	{
 		//g_print ("  c'est parti\n");
 		pDock->fFoldingFactor = 0;  // utile ?...
@@ -452,8 +452,7 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 
 void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)
 {
-	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon);
-	pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
+	cairo_dock_stop_icon_animation (pIcon);
 	
 	cairo_dock_notify (CAIRO_DOCK_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
 	cairo_dock_start_icon_animation (pIcon, pDock);
@@ -596,4 +595,9 @@ gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon
 	cairo_dock_mark_icon_as_inserting_removing (pIcon);  // On prend en charge le dessin de l'icone pendant sa phase d'insertion/suppression.
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
+gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon)
+{
+	pIcon->bBeingRemovedByCairo = FALSE;
 }

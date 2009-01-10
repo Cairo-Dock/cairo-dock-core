@@ -26,11 +26,14 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #define CAIRO_DOCK_GROUP_ICON_SIZE 32
 #define CAIRO_DOCK_CATEGORY_ICON_SIZE 32
 #define CAIRO_DOCK_NB_BUTTONS_BY_ROW 4
+#define CAIRO_DOCK_NB_BUTTONS_BY_ROW_MIN 3
 #define CAIRO_DOCK_GUI_MARGIN 6
 #define CAIRO_DOCK_TABLE_MARGIN 12
 #define CAIRO_DOCK_CONF_PANEL_WIDTH 1096
+#define CAIRO_DOCK_CONF_PANEL_WIDTH_MIN 800
 #define CAIRO_DOCK_CONF_PANEL_HEIGHT 700
 #define CAIRO_DOCK_PREVIEW_WIDTH 250
+#define CAIRO_DOCK_PREVIEW_WIDTH_MIN 100
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
 
 static CairoDockCategoryWidgetTable s_pCategoryWidgetTables[CAIRO_DOCK_NB_CATEGORY];
@@ -50,6 +53,7 @@ static GtkWidget *s_pToolBar = NULL;
 static GtkWidget *s_pGroupFrame = NULL;
 static GtkWidget *s_pActivateButton = NULL;
 static GSList *s_path = NULL;
+static int s_iPreviewWidth, s_iNbButtonsByRow;
 
 extern gchar *g_cConfFile;
 extern CairoDock *g_pMainDock;
@@ -211,7 +215,7 @@ static CairoDockGroupDescription *_cairo_dock_add_group_button (gchar *cGroupNam
 
 	//\____________ On place le bouton dans sa table.
 	CairoDockCategoryWidgetTable *pCategoryWidget = &s_pCategoryWidgetTables[iCategory];
-	if (pCategoryWidget->iNbItemsInCurrentRow == CAIRO_DOCK_NB_BUTTONS_BY_ROW)
+	if (pCategoryWidget->iNbItemsInCurrentRow == s_iNbButtonsByRow)
 	{
 		pCategoryWidget->iNbItemsInCurrentRow = 0;
 		pCategoryWidget->iNbRows ++;
@@ -302,8 +306,25 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	gtk_container_add (GTK_CONTAINER (s_pMainWindow), pMainHBox);
 	gtk_container_set_border_width (GTK_CONTAINER (pMainHBox), CAIRO_DOCK_GUI_MARGIN);
 	
+	if (g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] > CAIRO_DOCK_CONF_PANEL_WIDTH)
+	{
+		s_iPreviewWidth = CAIRO_DOCK_PREVIEW_WIDTH;
+		s_iNbButtonsByRow = CAIRO_DOCK_NB_BUTTONS_BY_ROW;
+	}
+	else if (g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] > CAIRO_DOCK_CONF_PANEL_WIDTH_MIN)
+	{
+		double a = 1.*(CAIRO_DOCK_PREVIEW_WIDTH - CAIRO_DOCK_PREVIEW_WIDTH_MIN) / (CAIRO_DOCK_CONF_PANEL_WIDTH - CAIRO_DOCK_CONF_PANEL_WIDTH_MIN);
+		double b = CAIRO_DOCK_PREVIEW_WIDTH_MIN - CAIRO_DOCK_CONF_PANEL_WIDTH_MIN * a;
+		s_iPreviewWidth = a * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + b;
+		s_iNbButtonsByRow = CAIRO_DOCK_NB_BUTTONS_BY_ROW - 1;
+	}
+	else
+	{
+		s_iPreviewWidth = CAIRO_DOCK_PREVIEW_WIDTH_MIN;
+		s_iNbButtonsByRow = CAIRO_DOCK_NB_BUTTONS_BY_ROW_MIN;
+	}
 	GtkWidget *pCategoriesVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
-	gtk_widget_set_size_request (pCategoriesVBox, CAIRO_DOCK_PREVIEW_WIDTH+2*CAIRO_DOCK_GUI_MARGIN, CAIRO_DOCK_PREVIEW_HEIGHT);
+	gtk_widget_set_size_request (pCategoriesVBox, s_iPreviewWidth+2*CAIRO_DOCK_GUI_MARGIN, CAIRO_DOCK_PREVIEW_HEIGHT);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pCategoriesVBox,
 		FALSE,
@@ -403,7 +424,7 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 		gtk_frame_set_label_widget (GTK_FRAME (pCategoryWidget->pFrame), pLabel);
 		
 		pCategoryWidget->pTable = gtk_table_new (1,
-			CAIRO_DOCK_NB_BUTTONS_BY_ROW,
+			s_iNbButtonsByRow,
 			TRUE);
 		gtk_table_set_row_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_GUI_MARGIN);
 		gtk_table_set_col_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_GUI_MARGIN);

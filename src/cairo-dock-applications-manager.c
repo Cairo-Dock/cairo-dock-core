@@ -58,6 +58,7 @@ extern int g_iNbViewportX,g_iNbViewportY ;
 static GHashTable *s_hXWindowTable = NULL;  // table des fenetres X affichees dans le dock.
 static Display *s_XDisplay = NULL;
 static int s_iSidUpdateAppliList = 0;
+static int s_iTime = 0;  // on peut aller jusqu'a 2^31, soit 17 ans a 4Hz.
 static Window s_iCurrentActiveWindow = 0;
 static Atom s_aNetClientList;
 static Atom s_aNetActiveWindow;
@@ -131,7 +132,7 @@ void cairo_dock_unregister_appli (Icon *icon)
 	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
 		cd_message ("%s (%s)", __func__, icon->acName);
-		if (icon->fLastCheckTime != -1)
+		if (icon->iLastCheckTime != -1)
 			g_hash_table_remove (s_hXWindowTable, &icon->Xid);
 		
 		cairo_dock_unregister_pid (icon);  // on n'efface pas sa classe ici car on peut en avoir besoin encore.
@@ -730,13 +731,9 @@ static void _cairo_dock_fill_icon_buffer_with_thumbnail (Icon *icon, CairoDock *
 gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 {
 	static XEvent event;
-	static gboolean bInProgress = FALSE;
-	
 	g_return_val_if_fail (pDock != NULL, FALSE);
-	if (bInProgress)
-		return TRUE;
-	bInProgress = TRUE;
-
+	
+	s_iTime ++;
 	long event_mask = 0xFFFFFFFF;  // on les recupere tous, ca vide la pile au fur et a mesure plutot que tout a la fin.
 	Window Xid;
 	Window root = DefaultRootWindow (s_XDisplay);
@@ -755,9 +752,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 			{
 				if (event.xproperty.atom == s_aNetClientList)
 				{
-					GTimeVal time_val;
-					g_get_current_time (&time_val);  // on pourrait aussi utiliser un compteur statique a la fonction ...
-					cairo_dock_update_applis_list (pDock, (gdouble) time_val.tv_sec + time_val.tv_usec * 1e-6);
+					cairo_dock_update_applis_list (pDock, s_iTime);
 					cairo_dock_notify (CAIRO_DOCK_WINDOW_CONFIGURED, NULL);
 				}
 				else if (event.xproperty.atom == s_aNetActiveWindow)
@@ -878,7 +873,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 			}
 			else
 			{
-				if (event.xproperty.atom == s_aNetWmState || event.xproperty.atom == XInternAtom (s_XDisplay, "_KDE_WM_WINDOW_OPACITY", False))
+				if (event.xproperty.atom == s_aNetWmState)
 				{
 					icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
 					gboolean bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention;
@@ -1109,7 +1104,6 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 		XSync (s_XDisplay, True);  // True <=> discard.
 	//g_print ("XEventsQueued : %d\n", XEventsQueued (s_XDisplay, QueuedAfterFlush));  // QueuedAlready, QueuedAfterReading, QueuedAfterFlush
 	
-	bInProgress = FALSE;
 	return TRUE;
 }
 
@@ -1169,15 +1163,16 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	return pParentDock;
 }
 
-static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gdouble *fTime)
+static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer iTimePtr)
 {
+	gint iTime = GPOINTER_TO_INT (iTimePtr);
 	gboolean bToBeRemoved = FALSE;
 	if (icon != NULL)
 	{
 		//g_print ("%s (%s, %f / %f)\n", __func__, icon->acName, icon->fLastCheckTime, *fTime);
-		if (icon->fLastCheckTime > 0 && icon->fLastCheckTime < *fTime && icon->fPersonnalScale <= 0)
+		if (icon->iLastCheckTime > 0 && icon->iLastCheckTime < iTime && icon->fPersonnalScale <= 0)
 		{
-			cd_message ("cette fenetre (%ld, %s) est trop vieille (%f / %f)", *Xid, icon->acName, icon->fLastCheckTime, *fTime);
+			cd_message ("cette fenetre (%ld, %s) est trop vieille (%d / %d)", *Xid, icon->acName, icon->iLastCheckTime, iTime);
 			
 			if (cairo_dock_quick_hide_is_activated () && (myTaskBar.bAutoHideOnFullScreen || myTaskBar.bAutoHideOnMaximized))
 			{
@@ -1195,6 +1190,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gdouble 
 					icon->fPersonnalScale = 0.05;
 				else
 				{
+					cairo_dock_stop_icon_animation (icon);
 					icon->fPersonnalScale = 1.0;
 					cairo_dock_notify (CAIRO_DOCK_REMOVE_ICON, icon, pParentDock);
 				}
@@ -1207,7 +1203,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gdouble 
 			{
 				cd_message ("  pas dans un container, on la detruit donc immediatement");
 				cairo_dock_update_name_on_inhibators (icon->cClass, *Xid, NULL);
-				icon->fLastCheckTime = -1;  // pour ne pas la desenregistrer de la HashTable lors du 'free'.
+				icon->iLastCheckTime = -1;  // pour ne pas la desenregistrer de la HashTable lors du 'free'.
 				cairo_dock_free_icon (icon);
 				bToBeRemoved = TRUE;
 				/// redessiner les inhibiteurs...
@@ -1216,7 +1212,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gdouble 
 	}
 	return bToBeRemoved;
 }
-void cairo_dock_update_applis_list (CairoDock *pDock, gdouble fTime)
+void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 {
 	//g_print ("%s ()\n", __func__);
 	gulong i, iNbWindows = 0;
@@ -1244,10 +1240,10 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gdouble fTime)
 				icon = cairo_dock_create_icon_from_xwindow (pCairoContext, Xid, pDock);
 			if (icon != NULL)
 			{
-				icon->fLastCheckTime = fTime;
+				icon->iLastCheckTime = iTime;
 				if ((icon->bIsHidden || ! myTaskBar.bHideVisibleApplis) && (! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_window_is_on_current_desktop (Xid)))
 				{
-					cd_message (" insertion de %s ... (%f)", icon->acName, icon->fLastCheckTime);
+					cd_message (" insertion de %s ... (%d)", icon->acName, icon->iLastCheckTime);
 					pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 					if (pParentDock != NULL)
 					{
@@ -1275,13 +1271,13 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gdouble fTime)
 		}
 		else if (icon != NULL)
 		{
-			icon->fLastCheckTime = fTime;
+			icon->iLastCheckTime = iTime;
 		}
 	}
 	if (pCairoContext != NULL)
 		cairo_destroy (pCairoContext);
 	
-	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_remove_old_applis, &fTime);
+	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_remove_old_applis, GINT_TO_POINTER (iTime));
 	
 	if (bUpdateMainDockSize)
 		cairo_dock_update_dock_size (pDock);
