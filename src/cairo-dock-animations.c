@@ -600,4 +600,5 @@ gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon
 gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon)
 {
 	pIcon->bBeingRemovedByCairo = FALSE;
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
