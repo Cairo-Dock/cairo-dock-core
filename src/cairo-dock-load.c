@@ -74,6 +74,7 @@ extern gboolean g_bUseOpenGL;
 extern gboolean g_bEasterEggs;
 extern GLuint g_iBackgroundTexture;
 extern GLuint g_iIndicatorTexture;
+extern GLuint g_iActiveIndicatorTexture;
 
 void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription)
 {
@@ -916,7 +917,15 @@ cairo_surface_t *cairo_dock_get_desktop_bg_surface (void)
 void cairo_dock_load_active_window_indicator (cairo_t* pSourceContext, const gchar *cImagePath, double fMaxScale, double fCornerRadius, double fLineWidth, double *fActiveColor)
 {
 	if (g_pActiveIndicatorSurface != NULL)
+	{
 		cairo_surface_destroy (g_pActiveIndicatorSurface);
+		g_pActiveIndicatorSurface = NULL;
+	}
+	if (g_iActiveIndicatorTexture != 0)
+	{
+		glDeleteTextures (1, &g_iActiveIndicatorTexture);
+		g_iActiveIndicatorTexture = 0;
+	}
 	g_fActiveIndicatorWidth = MAX (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI]);
 	g_fActiveIndicatorHeight = MAX (myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI], myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI]);
 	if (g_fActiveIndicatorWidth == 0)
@@ -933,10 +942,6 @@ void cairo_dock_load_active_window_indicator (cairo_t* pSourceContext, const gch
 	}
 	else if (fActiveColor[3] > 0)
 	{
-		/*g_pActiveIndicatorSurface = cairo_surface_create_similar (cairo_get_target (pSourceContext),
-			CAIRO_CONTENT_COLOR_ALPHA,
-			g_fActiveIndicatorWidth * fMaxScale,
-			g_fActiveIndicatorHeight * fMaxScale);*/
 		g_pActiveIndicatorSurface = _cairo_dock_create_blank_surface (pSourceContext,
 			g_fActiveIndicatorWidth * fMaxScale,
 			g_fActiveIndicatorHeight * fMaxScale);
@@ -960,10 +965,5 @@ void cairo_dock_load_active_window_indicator (cairo_t* pSourceContext, const gch
 			cairo_fill (pCairoContext);
 		}
 		cairo_destroy (pCairoContext);
-	}
-	else  // invisible.
-	{
-		g_pActiveIndicatorSurface = NULL;
-		return ;
 	}
 }
