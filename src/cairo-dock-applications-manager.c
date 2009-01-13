@@ -882,7 +882,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					
 					if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
 					{
-						if (icon != NULL && ! icon->bIsDemandingAttention)
+						if (icon != NULL)  // elle peut demander l'attention plusieurs fois de suite.
 						{
 							g_print ("%s demande votre attention !\n", icon->acName);
 							if (icon->cParentDockName == NULL)  // appli inhibee.
