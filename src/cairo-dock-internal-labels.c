@@ -13,6 +13,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-internal-dialogs.h"
+#include "cairo-dock-internal-icons.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-labels.h"
 
@@ -56,6 +57,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	double couleur_backlabel[4] = {0., 0., 0., 0.5};
 	cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text background color", &bFlushConfFileNeeded, pLabels->iconTextDescription.fBackgroundColor, 4, couleur_backlabel, "Icons", NULL);
 	
+	pLabels->iconTextDescription.bOutlined = TRUE;
+
 	memcpy (&pLabels->quickInfoTextDescription, &pLabels->iconTextDescription, sizeof (CairoDockLabelDescription));
 	pLabels->quickInfoTextDescription.cFont = g_strdup (pLabels->iconTextDescription.cFont);
 	pLabels->quickInfoTextDescription.iSize = 12;
@@ -93,6 +96,8 @@ static void _reload_one_label (Icon *pIcon, CairoDock *pDock, gpointer *data)
 	CairoConfigLabels *pLabels = data[0];
 	cairo_t* pSourceContext = data[1];
 	cairo_dock_fill_one_text_buffer (pIcon, pSourceContext, &pLabels->iconTextDescription, pDock->bHorizontalDock, pDock->bDirectionUp);
+	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
+	cairo_dock_fill_one_quick_info_buffer (pIcon, pSourceContext, &pLabels->iconTextDescription, fMaxScale);
 }
 static void reload (CairoConfigLabels *pPrevLabels, CairoConfigLabels *pLabels)
 {
@@ -100,6 +105,7 @@ static void reload (CairoConfigLabels *pPrevLabels, CairoConfigLabels *pLabels)
 	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 	gpointer data[2] = {pLabels, pCairoContext};
 	cairo_dock_foreach_icons ((CairoDockForeachIconFunc) _reload_one_label, data);
+	/// le faire pour les info rapides des desklets ...
 	cairo_destroy (pCairoContext);
 }
 

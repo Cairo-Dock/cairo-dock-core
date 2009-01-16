@@ -48,8 +48,10 @@ void cairo_dock_show_all_categories (void);
 void cairo_dock_show_one_category (int iCategory);
 void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget);
 void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup);
+CairoDockGroupDescription *cairo_dock_find_module_description (const gchar *cModuleName);
 void cairo_dock_present_module_gui (CairoDockModule *pModule);
 void cairo_dock_present_module_instance_gui (CairoDockModuleInstance *pModuleInstance);
+void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription);
 
 void cairo_dock_free_categories (void);
 

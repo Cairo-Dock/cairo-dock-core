@@ -92,20 +92,6 @@ void cairo_dock_add_reflection_to_icon (cairo_t *pIconContext, Icon *pIcon, Cair
 		bIsHorizontal,
 		fMaxScale,
 		pContainer->bDirectionUp);
-	
-	if (pIcon->pFullIconBuffer != NULL)
-	{
-		cairo_surface_destroy (pIcon->pFullIconBuffer);
-		pIcon->pFullIconBuffer = NULL;
-	}
-	/*pIcon->pFullIconBuffer = cairo_dock_create_icon_surface_with_reflection (pIcon->pIconBuffer,
-		pIcon->pReflectionBuffer,
-		pIconContext,
-		(bIsHorizontal ? pIcon->fWidth : pIcon->fHeight) * fMaxScale,
-		(bIsHorizontal ? pIcon->fHeight : pIcon->fWidth) * fMaxScale,
-		bIsHorizontal,
-		fMaxScale,
-		pContainer->bDirectionUp);*/
 }
 
 void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surface_t *pSurface, Icon *pIcon, CairoContainer *pContainer)

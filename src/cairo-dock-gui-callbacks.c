@@ -44,41 +44,11 @@ void on_click_all_button (GtkButton *button, gpointer *data)
 	cairo_dock_show_all_categories ();
 }
 
-static void _show_group (CairoDockGroupDescription *pGroupDescription)
-{
-	gboolean bSingleGroup;
-	gchar *cConfFilePath;
-	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
-	if (pModule == NULL)  // c'est un groupe du fichier de conf principal.
-	{
-		cConfFilePath = g_cConfFile;
-		bSingleGroup = TRUE;
-	}
-	else  // c'est un module, on recupere son fichier de conf en entier.
-	{
-		if (pModule->cConfFilePath == NULL)  // on n'est pas encore passe par la dans le cas ou le plug-in n'a pas ete active; mais on veut pouvoir configurer un plug-in meme lorsqu'il est inactif.
-		{
-			pModule->cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
-		}
-		if (pModule->cConfFilePath == NULL)
-		{
-			cd_warning ("couldn't load a conf file for this module => can't configure it.");
-			return;
-		}
-		g_print ("  %s (%s)\n", __func__, pModule->cConfFilePath);
-	
-		cairo_dock_update_applet_conf_file_with_containers (NULL, pModule->cConfFilePath);
-		
-		cConfFilePath = pModule->cConfFilePath;
-		bSingleGroup = FALSE;
-	}
-	
-	cairo_dock_present_group_widget (cConfFilePath, pGroupDescription, bSingleGroup);
-}
+
 void on_click_group_button (GtkButton *button, CairoDockGroupDescription *pGroupDescription)
 {
 	g_print ("%s (%s)\n", __func__, pGroupDescription->cGroupName);
-	_show_group (pGroupDescription);
+	cairo_dock_show_group (pGroupDescription);
 }
 
 void on_click_back_button (GtkButton *button, gpointer *data)
@@ -98,7 +68,7 @@ void on_click_back_button (GtkButton *button, gpointer *data)
 	}
 	else  // groupe.
 	{
-		_show_group (pPrevPlace);
+		cairo_dock_show_group (pPrevPlace);
 	}
 }
 
@@ -107,7 +77,6 @@ void on_enter_group_button (GtkButton *button, CairoDockGroupDescription *pGroup
 	//g_print ("%s (%s)\n", __func__, pGroupDescription->cDescription);
 	gchar *cDescription = NULL;
 	
-	//GtkWidget *pDescriptionTextView = cairo_dock_get_description_label ();
 	if (pGroupDescription->cDescription != NULL)
 	{
 		if (*pGroupDescription->cDescription == '/')
@@ -125,19 +94,7 @@ void on_enter_group_button (GtkButton *button, CairoDockGroupDescription *pGroup
 				cd_warning (erreur->message);
 				g_error_free (erreur);
 			}
-			/*GtkTextBuffer *pTextBuffer = gtk_text_buffer_new (NULL);
-			gtk_text_buffer_set_text (pTextBuffer, cDescription, -1);
-			gtk_text_view_set_buffer (GTK_TEXT_VIEW (pDescriptionTextView), pTextBuffer);
-			g_object_unref (pTextBuffer);*/
 		}
-		else
-		{
-			/*GtkTextBuffer *pTextBuffer = gtk_text_buffer_new (NULL);
-			gtk_text_buffer_set_text (pTextBuffer, pGroupDescription->cDescription, -1);
-			gtk_text_view_set_buffer (GTK_TEXT_VIEW (pDescriptionTextView), pTextBuffer);
-			g_object_unref (pTextBuffer);*/
-		}
-		//gtk_widget_show (pDescriptionTextView);
 	}
 	
 	GtkWidget *pPreviewImage = cairo_dock_get_preview_image ();
@@ -172,8 +129,6 @@ void on_enter_group_button (GtkButton *button, CairoDockGroupDescription *pGroup
 	Icon *pIcon = cairo_dock_get_current_active_icon ();
 	if (pIcon == NULL)
 		pIcon = cairo_dock_get_dialogless_icon ();
-	//if (pIcon != NULL)
-	//	cairo_dock_remove_dialog_if_any (pIcon);
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
 	s_pDialog = cairo_dock_show_temporary_dialog_with_icon (cDescription != NULL ? cDescription : pGroupDescription->cDescription, pIcon, CAIRO_CONTAINER (pDock), 0., pGroupDescription->cIcon);
 	cairo_dock_dialog_reference (s_pDialog);
@@ -183,8 +138,6 @@ void on_enter_group_button (GtkButton *button, CairoDockGroupDescription *pGroup
 void on_leave_group_button (GtkButton *button, gpointer *data)
 {
 	//g_print ("%s ()\n", __func__);
-	//GtkWidget *pDescriptionTextView = cairo_dock_get_description_label ();
-	//gtk_widget_hide (pDescriptionTextView);
 	
 	GtkWidget *pPreviewImage = cairo_dock_get_preview_image ();
 	gtk_widget_hide (pPreviewImage);

@@ -59,10 +59,6 @@ GtkWidget *cairo_dock_build_common_interactive_widget_for_dialog (const gchar *c
 
 CairoDialog *cairo_dock_build_dialog (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, gchar *cImageFilePath, GtkWidget *pInteractiveWidget, GtkButtonsType iButtonsType, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc);
 
-void cairo_dock_set_dialog_message (CairoDialog *pDialog, const gchar *cMessage);
-
-void cairo_dock_set_dialog_icon (CairoDialog *pDialog, const gchar *cImageFilePath);
-
 
 void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pContainer, int *iX, int *iY, gboolean *bRight, CairoDockTypeHorizontality *bIsHorizontal, gboolean *bDirectionUp);
 
@@ -247,6 +243,24 @@ void cairo_dock_unhide_dialog (CairoDialog *pDialog);
 *@param pWidget le widget.
 */
 GtkWidget *cairo_dock_steal_widget_from_its_container (GtkWidget *pWidget);
+
+
+void cairo_dock_compute_dialog_sizes (CairoDialog *pDialog);
+
+void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface_t *pNewTextSurface, int iNewTextWidth, int iNewTextHeight);
+void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface_t *pNewIconSurface, int iNewIconSize);
+
+void cairo_dock_set_dialog_message (CairoDialog *pDialog, const gchar *cMessage);
+void cairo_dock_set_dialog_icon (CairoDialog *pDialog, const gchar *cImageFilePath);
+
+
+
+void cairo_dock_set_frame_size_comics (CairoDialog *pDialog);
+void cairo_dock_draw_decorations_comics (cairo_t *pCairoContext, CairoDialog *pDialog);
+
+void cairo_dock_set_frame_size_modern (CairoDialog *pDialog);
+void cairo_dock_draw_decorations_modern (cairo_t *pCairoContext, CairoDialog *pDialog);
+
 
 G_END_DECLS
 #endif

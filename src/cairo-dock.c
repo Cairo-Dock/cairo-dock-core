@@ -134,11 +134,8 @@ gboolean g_bVerbose = FALSE;
 int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 
-cairo_surface_t *g_pIndicatorSurface[2] = {NULL, NULL};
+cairo_surface_t *g_pIndicatorSurface = NULL;
 double g_fIndicatorWidth, g_fIndicatorHeight;
-
-cairo_surface_t *g_pDropIndicatorSurface = NULL;
-double g_fDropIndicatorWidth, g_fDropIndicatorHeight;
 
 cairo_surface_t *g_pDesktopBgSurface = NULL;  // image en fond d'ecran.
 //int g_iDamageEvent = 0;
@@ -149,6 +146,7 @@ gboolean g_bEasterEggs = FALSE;
 gboolean g_bLocked = FALSE;
 
 gboolean g_bUseOpenGL = FALSE;
+gboolean g_bForcedOpenGL = FALSE;
 gboolean g_bUseCairo = FALSE;
 gboolean g_bIndirectRendering = FALSE;
 GdkGLConfig* g_pGlConfig = NULL;
@@ -157,6 +155,7 @@ GLuint g_iIndicatorTexture=0;
 GLuint g_iActiveIndicatorTexture=0;
 GLuint g_pVisibleZoneTexture=0;
 GLuint g_pGradationTexture[2]={0, 0};
+GLuint g_iDesktopBgTexture = 0;
 
 static gchar *cLaunchCommand = NULL;
 
@@ -507,7 +506,7 @@ int main (int argc, char** argv)
 	
 	//\___________________ On initialise le support d'OpenGL.
 	if (! bForceCairo && ! g_bUseGlitz)
-		g_pGlConfig = cairo_dock_get_opengl_config (bForceOpenGL);
+		g_pGlConfig = cairo_dock_get_opengl_config (bForceOpenGL, &g_bForcedOpenGL);
 	g_bUseOpenGL = (g_pGlConfig != NULL);
 	
 	

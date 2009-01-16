@@ -159,7 +159,8 @@ cairo_dock_SOURCES = \
 	cairo-dock-internal-background.c\
 	cairo-dock-internal-background.h\
 	cairo-dock-internal-icons.c\
-	cairo-dock-internal-icons.h
+	cairo-dock-internal-icons.h\
+	texture-gradation.h
 	
 
 cairo_dockincludedir =\

@@ -48,6 +48,7 @@ static GtkListStore *s_pRendererListStore = NULL;
 static GtkListStore *s_pDecorationsListStore = NULL;
 static GtkListStore *s_pDecorationsListStore2 = NULL;
 static GtkListStore *s_pAnimationsListStore = NULL;
+static GtkListStore *s_pDialogDecoratorListStore = NULL;
 
 static void _cairo_dock_activate_one_element (GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
 {
@@ -209,7 +210,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 			}
 			
 			gchar *cCommand = g_strdup_printf ("wget \"%s\" -O '%s' -t 2 -w 2", cDescriptionFilePath, cTmpFilePath);
-			system (cCommand);
+			int r = system (cCommand);
 			g_free (cCommand);
 			close(fds);
 			
@@ -253,7 +254,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 			}
 			
 			gchar *cCommand = g_strdup_printf ("wget \"%s\" -O '%s' -t 2 -w 2", cPreviewFilePath, cTmpFilePath);
-			system (cCommand);
+			int r = system (cCommand);
 			g_free (cCommand);
 			close(fds);
 			
@@ -372,11 +373,11 @@ static void _cairo_dock_play_a_sound (GtkButton *button, gpointer *data)
 
 static void _cairo_dock_set_original_value (GtkButton *button, gpointer *data)
 {
-	g_print ("%s (%s, %s, %s)\n", __func__, data[0], data[1], data[3]);
 	gchar *cGroupName = data[0];
 	gchar *cKeyName = data[1];
 	GSList *pSubWidgetList = data[2];
 	gchar *cOriginalConfFilePath = data[3];
+	g_print ("%s (%s, %s, %s)\n", __func__, cGroupName, cKeyName, cOriginalConfFilePath);
 	
 	GSList *pList;
 	gsize i = 0;
@@ -608,6 +609,26 @@ void cairo_dock_build_animations_list_for_gui (GHashTable *pHashTable)
 	g_hash_table_foreach (pHashTable, (GHFunc) _cairo_dock_add_one_animation_item, s_pAnimationsListStore);
 }
 
+static void _cairo_dock_add_one_dialog_decorator_item (gchar *cName, CairoDialogDecorator *pDecorator, GtkListStore *pModele)
+{
+	GtkTreeIter iter;
+	memset (&iter, 0, sizeof (GtkTreeIter));
+	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
+	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
+		CAIRO_DOCK_MODEL_NAME, cName != NULL && *cName != '\0' ? gettext (cName) : cName,
+		CAIRO_DOCK_MODEL_RESULT, cName,
+		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
+		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
+}
+void cairo_dock_build_dialog_decorator_list_for_gui (GHashTable *pHashTable)
+{
+	if (s_pDialogDecoratorListStore != NULL)
+		g_object_unref (s_pDialogDecoratorListStore);  // gtk_list_store_clear (s_pRendererListStore) fait planter :-(
+	
+	s_pDialogDecoratorListStore = gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF);
+	
+	g_hash_table_foreach (pHashTable, (GHFunc) _cairo_dock_add_one_dialog_decorator_item, s_pDialogDecoratorListStore);
+}
 
 static gboolean _cairo_dock_test_one_name (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
 {
@@ -664,6 +685,43 @@ static void _cairo_dock_configure_renderer (GtkButton *button, gpointer *data)
 		cairo_dock_present_module_gui (pModule);
 }
 
+static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
+{
+	GtkTreeView *pCombo = data[0];
+	GtkWindow *pDialog = data[1];
+	gchar *cModuleName = data[2];
+	
+	CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (cModuleName);
+	cairo_dock_show_group (pGroupDescription);
+
+	Icon *pIcon = cairo_dock_get_current_active_icon ();
+	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
+	gchar *cMessage = NULL;
+	if (pGroupDescription == NULL)
+	{
+		cMessage = g_strdup_printf (_("The '%s' plug-in was not found.\nBe sure to install it in the same version as the dock to enjoy these features."), cModuleName);
+		int iDuration = 10e3;
+		if (pIcon != NULL && pDock != NULL)
+			cairo_dock_show_temporary_dialog_with_icon (cMessage, pIcon, CAIRO_CONTAINER (pDock), iDuration, "same icon");
+		else
+			cairo_dock_show_general_message (cMessage, iDuration);
+	}
+	else
+	{
+		CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
+		if (pModule != NULL && pModule->pInstancesList == NULL)
+		{
+			cMessage = g_strdup_printf (_("The '%s' plug-in is not active.\nBe sure to activate it to enjoy these features."), cModuleName);
+			int iDuration = 8e3;
+			if (pIcon != NULL && pDock != NULL)
+				cairo_dock_show_temporary_dialog_with_icon (cMessage, pIcon, CAIRO_CONTAINER (pDock), iDuration, "same icon");
+			else
+				cairo_dock_show_general_message (cMessage, 8000);
+		}
+		cairo_dock_show_group (pGroupDescription);
+	}
+	g_free (cMessage);
+}
 
 #define _allocate_new_buffer\
 	data = g_new (gpointer, 3); \
@@ -1121,6 +1179,28 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						0);
 				break ;
 				
+				case 'm' :
+				case 'M' :
+					if (pAuthorizedValuesList == NULL || pAuthorizedValuesList[0] == NULL)
+						break ;
+					if (iElementType == 'M' && cairo_dock_find_module_from_name (pAuthorizedValuesList[0]) == NULL)
+							break ;
+					pOneWidget = gtk_button_new_from_stock (GTK_STOCK_JUMP_TO);
+					_allocate_new_buffer;
+					data[0] = pOneWidget;
+					data[1] = pMainWindow;
+					data[2] = g_strdup (pAuthorizedValuesList[0]);  // fuite memoire ...
+					g_signal_connect (G_OBJECT (pOneWidget),
+						"clicked",
+						G_CALLBACK (_cairo_dock_configure_module),
+						data);
+					gtk_box_pack_start (GTK_BOX (pHBox),
+						pOneWidget,
+						FALSE,
+						FALSE,
+						0);
+				break ;
+				
 				case 'a' :
 					cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
 					modele = s_pAnimationsListStore;
@@ -1140,6 +1220,27 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						0);
 					g_free (cValue);
 				break ;
+				
+				case 't' :
+					cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
+					modele = s_pDialogDecoratorListStore;
+					pOneWidget = gtk_combo_box_new_with_model (GTK_TREE_MODEL (modele));
+
+					rend = gtk_cell_renderer_text_new ();
+					gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);
+					gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+
+					if (_cairo_dock_find_iter_from_name (modele, cValue, &iter))
+						gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);
+					pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
+					gtk_box_pack_start (GTK_BOX (pHBox),
+						pOneWidget,
+						FALSE,
+						FALSE,
+						0);
+					g_free (cValue);
+				break ;
+				
 				
 				case 'd' :
 				case 'o' :

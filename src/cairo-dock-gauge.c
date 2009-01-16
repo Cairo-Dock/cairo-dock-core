@@ -323,14 +323,7 @@ void cairo_dock_render_gauge_multi_value(cairo_t *pSourceContext, CairoContainer
 	{
 		double fMaxScale = cairo_dock_get_max_scale (pContainer);
 		
-		cairo_surface_destroy (pIcon->pReflectionBuffer);  // pour aller plus vite on decide de ne creer que le minimum.
-		pIcon->pReflectionBuffer = NULL;
-		if (pIcon->pFullIconBuffer != NULL)
-		{
-			cairo_surface_destroy (pIcon->pFullIconBuffer);
-			pIcon->pFullIconBuffer = NULL;
-		}
-		
+		cairo_surface_destroy (pIcon->pReflectionBuffer);
 		pIcon->pReflectionBuffer = cairo_dock_create_reflection_surface (pIcon->pIconBuffer,
 			pSourceContext,
 			(pContainer->bIsHorizontal ? pIcon->fWidth : pIcon->fHeight) * fMaxScale,

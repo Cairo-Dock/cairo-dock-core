@@ -500,6 +500,20 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	else
 		bGroupOrderChanged = FALSE;
 	
+	if (myDialogs.bHomogeneous)
+	{
+		myDialogs.dialogTextDescription.iSize = myLabels.iconTextDescription.iSize;
+		if (myDialogs.dialogTextDescription.iSize == 0)
+			myDialogs.dialogTextDescription.iSize = 14;
+		myDialogs.dialogTextDescription.cFont = g_strdup (myLabels.iconTextDescription.cFont);
+		myDialogs.dialogTextDescription.iWeight = myLabels.iconTextDescription.iWeight;
+		myDialogs.dialogTextDescription.iStyle = myLabels.iconTextDescription.iStyle;
+		myDialogs.iCornerRadius = myBackground.iDockRadius;
+		myDialogs.iLineWidth = myBackground.iDockLineWidth;
+		memcpy (&myDialogs.fLineColor, &myBackground.fLineColor, 4*sizeof (double));
+		
+	}
+	
 	cairo_dock_updated_emblem_conf_file (pKeyFile, &bFlushConfFileNeeded);
 	
 	//\___________________ On (re)charge tout, car n'importe quel parametre peut avoir change.

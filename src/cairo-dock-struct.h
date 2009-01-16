@@ -33,6 +33,7 @@ typedef struct _CairoDockRenderer CairoDockRenderer;
 typedef struct _CairoDeskletRenderer CairoDeskletRenderer;
 typedef struct _CairoDeskletDecoration CairoDeskletDecoration;
 typedef struct _CairoDialogRenderer CairoDialogRenderer;
+typedef struct _CairoDialogDecorator CairoDialogDecorator;
 
 typedef struct _Icon Icon;
 typedef struct _CairoContainer CairoContainer;
@@ -449,6 +450,13 @@ struct _CairoDialogRenderer {
 	CairoDialogUpdateRendererDataFunc 	update;
 };
 
+typedef void (* CairoDialogSetDecorationSizeFunc) (CairoDialog *pDialog);
+typedef void (* CairoDialogRenderDecorationFunc) (cairo_t *pCairoContext, CairoDialog *pDialog);
+struct _CairoDialogDecorator {
+	CairoDialogSetDecorationSizeFunc 		set_size;
+	CairoDialogRenderDecorationFunc 		render;
+};
+
 struct _CairoDialog {
 	/// type de container.
 	CairoDockTypeContainer iType;
@@ -498,7 +506,8 @@ struct _CairoDialog {
 	/// rayon des coins.
 	gdouble fRadius;
 	/// hauteur de la pointe, sans la partie "aiguisee".
-	gdouble fTipHeight;
+	gint iTipHeight_deprecated;
+	gint iTextWidth;
 	/// surface representant le message du dialogue.
 	cairo_surface_t* pTextBuffer;
 	/// surface representant l'icone dans la marge a gauche du texte.
@@ -545,6 +554,11 @@ struct _CairoDialog {
 	GFreeFunc pFreeUserDataFunc;
 	/// icone sur laquelle pointe le dialogue.
 	Icon *pIcon;
+	GtkWidget *pLeftPaddingBox, *pRightPaddingBox, *pWidgetLayout;
+	CairoDialogDecorator *pDecorator;
+	gint iLeftMargin, iRightMargin, iTopMargin, iBottomMargin, 	iMinFrameWidth, iMinBottomGap;
+	/// position relative du dialogue par rapport a l'icone, ou ce qui revient au meme, de sa pointe par rapport au bord d'alignement.
+	gdouble fAlign;
 };
 
 
@@ -603,8 +617,7 @@ struct _Icon {
 	cairo_surface_t* pTextBuffer;
 	/// Surface cairo du reflet.
 	cairo_surface_t* pReflectionBuffer;
-	/// Surface cairo de l'image et de son reflet.
-	cairo_surface_t* pFullIconBuffer;
+	gpointer pFullIconBuffer_deprecated;
 	/// Largeur de l'etiquette.
 	gint iTextWidth;
 	/// Hauteur de l'etiquette.
@@ -939,6 +952,8 @@ struct _CairoDockLabelDescription {
 	gboolean bVerticalPattern;
 	/// Couleur du fond.
 	gdouble fBackgroundColor[4];
+	/// TRUE ssi on trace un contour.
+	gboolean bOutlined;
 };
 
 

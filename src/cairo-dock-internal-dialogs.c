@@ -10,6 +10,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <string.h>
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-internal-labels.h"
+#include "cairo-dock-internal-background.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-dialogs.h"
 
@@ -32,16 +33,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDialogs *pDialogs)
 	pDialogs->iDialogIconSize = cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "icon size", &bFlushConfFileNeeded, 48, NULL, NULL);
 
 	pDialogs->bHomogeneous = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "homogeneous text", &bFlushConfFileNeeded, TRUE, NULL, NULL);
-	if (pDialogs->bHomogeneous)
-	{
-		pDialogs->dialogTextDescription.iSize = myLabels.iconTextDescription.iSize;
-		if (pDialogs->dialogTextDescription.iSize == 0)
-			pDialogs->dialogTextDescription.iSize = 14;
-		pDialogs->dialogTextDescription.cFont = g_strdup (myLabels.iconTextDescription.cFont);
-		pDialogs->dialogTextDescription.iWeight = myLabels.iconTextDescription.iWeight;
-		pDialogs->dialogTextDescription.iStyle = myLabels.iconTextDescription.iStyle;
-	}
-	else
+	if (! pDialogs->bHomogeneous)
 	{
 		pDialogs->dialogTextDescription.cFont = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "message police", &bFlushConfFileNeeded, "sans", NULL, NULL);
 		pDialogs->dialogTextDescription.iSize = cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "message size", &bFlushConfFileNeeded, 14, NULL, NULL);
@@ -51,12 +43,20 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDialogs *pDialogs)
 			pDialogs->dialogTextDescription.iStyle = PANGO_STYLE_ITALIC;
 		else
 			pDialogs->dialogTextDescription.iStyle = PANGO_STYLE_NORMAL;
+		pDialogs->dialogTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "outlined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+
+		pDialogs->iCornerRadius = cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "corner", &bFlushConfFileNeeded, 8, NULL, NULL);
+		pDialogs->iLineWidth = cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "border", &bFlushConfFileNeeded, 1, NULL, NULL);
+		couleur_bulle[3] = 1.;
+		cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "line color", &bFlushConfFileNeeded, pDialogs->fLineColor, 4, couleur_bulle, NULL, NULL);
 	}
 	
 	double couleur_dtext[3] = {0., 0., 0.};
 	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "text color", &bFlushConfFileNeeded, pDialogs->dialogTextDescription.fColorStart, 3, couleur_dtext, NULL, NULL);
 	memcpy (&pDialogs->dialogTextDescription.fColorStop, &pDialogs->dialogTextDescription.fColorStart, 3*sizeof (double));
 	
+	pDialogs->cDecoratorName = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "decorator", &bFlushConfFileNeeded, "comics", NULL, NULL);
+
 	return bFlushConfFileNeeded;
 }
 
@@ -66,6 +66,7 @@ static void reset_config (CairoConfigDialogs *pDialogs)
 	g_free (pDialogs->cButtonOkImage);
 	g_free (pDialogs->cButtonCancelImage);
 	g_free (pDialogs->dialogTextDescription.cFont);
+	g_free (pDialogs->cDecoratorName);
 }
 
 
@@ -75,6 +76,18 @@ static void reload (CairoConfigDialogs *pPrevDialogs, CairoConfigDialogs *pDialo
 	
 	if (cairo_dock_strings_differ (pPrevDialogs->cButtonOkImage, pDialogs->cButtonOkImage) || cairo_dock_strings_differ (pPrevDialogs->cButtonCancelImage, pDialogs->cButtonCancelImage))
 		cairo_dock_load_dialog_buttons (CAIRO_CONTAINER (pDock), pDialogs->cButtonOkImage, pDialogs->cButtonCancelImage);
+	if (pDialogs->bHomogeneous)
+	{
+		pDialogs->dialogTextDescription.iSize = myLabels.iconTextDescription.iSize;
+		if (pDialogs->dialogTextDescription.iSize == 0)
+			pDialogs->dialogTextDescription.iSize = 14;
+		pDialogs->dialogTextDescription.cFont = g_strdup (myLabels.iconTextDescription.cFont);
+		pDialogs->dialogTextDescription.iWeight = myLabels.iconTextDescription.iWeight;
+		pDialogs->dialogTextDescription.iStyle = myLabels.iconTextDescription.iStyle;
+		pDialogs->iCornerRadius = myBackground.iDockRadius;
+		pDialogs->iLineWidth = myBackground.iDockLineWidth;
+		memcpy (&pDialogs->fLineColor, &myBackground.fLineColor, 4*sizeof (double));
+	}
 }
 
 

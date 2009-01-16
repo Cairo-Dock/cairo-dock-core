@@ -130,6 +130,8 @@ gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDo
 	if (! pCairoContext)
 	{
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glLoadIdentity ();
+		cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDock));
 		pDock->render_opengl (pDock);
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;

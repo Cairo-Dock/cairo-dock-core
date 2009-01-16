@@ -57,9 +57,7 @@ extern cairo_surface_t *g_pBackgroundSurface;
 extern cairo_surface_t *g_pBackgroundSurfaceFull;
 extern double g_fBackgroundImageWidth, g_fBackgroundImageHeight;
 
-extern cairo_surface_t *g_pDropIndicatorSurface;
-extern double g_fDropIndicatorWidth, g_fDropIndicatorHeight;
-extern cairo_surface_t *g_pIndicatorSurface[2];
+extern cairo_surface_t *g_pIndicatorSurface;
 extern double g_fIndicatorWidth, g_fIndicatorHeight;
 
 extern cairo_surface_t *g_pActiveIndicatorSurface;
@@ -75,6 +73,7 @@ extern gboolean g_bEasterEggs;
 extern GLuint g_iBackgroundTexture;
 extern GLuint g_iIndicatorTexture;
 extern GLuint g_iActiveIndicatorTexture;
+extern GLuint g_iDesktopBgTexture;
 
 void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription)
 {
@@ -209,15 +208,6 @@ void cairo_dock_load_reflect_on_icon (Icon *icon, cairo_t *pSourceContext, gdoub
 			bHorizontalDock,
 			fMaxScale,
 			bDirectionUp);
-
-		/*icon->pFullIconBuffer = cairo_dock_create_icon_surface_with_reflection (icon->pIconBuffer,
-			icon->pReflectionBuffer,
-			pSourceContext,
-			(bHorizontalDock ? icon->fWidth : icon->fHeight) * fMaxScale,
-			(bHorizontalDock ? icon->fHeight : icon->fWidth) * fMaxScale,
-			bHorizontalDock,
-			fMaxScale,
-			bDirectionUp);*/
 	}
 }
 
@@ -231,12 +221,10 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 		glDeleteTextures (1, &icon->iIconTexture);
 		icon->iIconTexture = 0;
 	}
-	cairo_surface_destroy (icon->pReflectionBuffer);
-	icon->pReflectionBuffer = NULL;
-	if (icon->pFullIconBuffer != NULL)
+	if (icon->pReflectionBuffer != NULL)
 	{
-		cairo_surface_destroy (icon->pFullIconBuffer);
-		icon->pFullIconBuffer = NULL;
+		cairo_surface_destroy (icon->pReflectionBuffer);
+		icon->pReflectionBuffer = NULL;
 	}
 	
 	if (icon->fWidth < 0 || icon->fHeight < 0)  // on ne veut pas de surface.
@@ -329,15 +317,6 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			bHorizontalDock,
 			fMaxScale,
 			bDirectionUp);
-
-		/*icon->pFullIconBuffer = cairo_dock_create_icon_surface_with_reflection (icon->pIconBuffer,
-			icon->pReflectionBuffer,
-			pSourceContext,
-			(bHorizontalDock ? icon->fWidth : icon->fHeight) * fMaxScale,
-			(bHorizontalDock ? icon->fHeight : icon->fWidth) * fMaxScale,
-			bHorizontalDock,
-			fMaxScale,
-			bDirectionUp);*/
 	}
 	
 	if (g_bUseOpenGL && icon->pIconBuffer != NULL)
@@ -432,14 +411,6 @@ void cairo_dock_fill_one_text_buffer (Icon *icon, cairo_t* pSourceContext, Cairo
 		&icon->iTextWidth, &icon->iTextHeight, &icon->fTextXOffset, &icon->fTextYOffset);
 	g_free (cTruncatedName);
 	//g_print (" -> %s : (%.2f;%.2f) %dx%d\n", icon->acName, icon->fTextXOffset, icon->fTextYOffset, icon->iTextWidth, icon->iTextHeight);
-
-	/**double fRotationAngle = (bHorizontalDock ? 0 : (bDirectionUp ? -G_PI/2 : G_PI/2));
-	cairo_surface_t *pNewSurfaceRotated = cairo_dock_rotate_surface (pNewSurface, pSourceContext, icon->iTextWidth, icon->iTextHeight, fRotationAngle);
-	if (pNewSurfaceRotated != NULL)
-	{
-		cairo_surface_destroy (pNewSurface);
-		pNewSurface = pNewSurfaceRotated;
-	}*/
 
 	icon->pTextBuffer = pNewSurface;
 	
@@ -769,10 +740,11 @@ void cairo_dock_load_icons_background_surface (const gchar *cImagePath, cairo_t*
 
 void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* pSourceContext, double fMaxScale, double fIndicatorRatio)
 {
-	cairo_surface_destroy (g_pIndicatorSurface[0]);
-	cairo_surface_destroy (g_pIndicatorSurface[1]);
-	g_pIndicatorSurface[0] = NULL;
-	g_pIndicatorSurface[1] = NULL;
+	if (g_pIndicatorSurface != NULL)
+	{
+		cairo_surface_destroy (g_pIndicatorSurface);
+		g_pIndicatorSurface = NULL;
+	}
 	if (g_iIndicatorTexture != 0)
 	{
 		glDeleteTextures (1, &g_iIndicatorTexture);
@@ -784,7 +756,7 @@ void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* 
 		double fLauncherHeight = (myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != 0 ? myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : 48);
 		
 		double fScale = (myIndicators.bLinkIndicatorWithIcon ? 1 + myIcons.fAmplitude : 1);
-		g_pIndicatorSurface[CAIRO_DOCK_HORIZONTAL] = cairo_dock_create_surface_from_image (
+		g_pIndicatorSurface = cairo_dock_create_surface_from_image (
 			cIndicatorImagePath,
 			pSourceContext,
 			fScale,
@@ -795,35 +767,13 @@ void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* 
 			&g_fIndicatorHeight,
 			NULL, NULL);
 		//g_print ("g_pIndicatorSurface : %.2fx%.2f\n", g_fIndicatorWidth, g_fIndicatorHeight);
-		if (g_pIndicatorSurface[CAIRO_DOCK_HORIZONTAL] != NULL)
-			g_pIndicatorSurface[CAIRO_DOCK_VERTICAL] = cairo_dock_rotate_surface (
-				g_pIndicatorSurface[CAIRO_DOCK_HORIZONTAL],
-				pSourceContext,
-				g_fIndicatorWidth * fScale,
-				g_fIndicatorHeight * fScale,
-				- G_PI / 2);
-		else
-			cd_warning ("couldn't load image '%s' for indicators", cIndicatorImagePath);
 	}
-	/*if (g_bUseOpenGL && g_pIndicatorSurface[CAIRO_DOCK_HORIZONTAL] != NULL)
-	{
-		GdkGLContext* pGlContext = gtk_widget_get_gl_context (g_pMainDock->pWidget);
-		GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (g_pMainDock->pWidget);
-		if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
-			return ;
-		
-		g_iIndicatorTexture = cairo_dock_create_texture_from_surface (g_pIndicatorSurface[CAIRO_DOCK_HORIZONTAL]);
-		g_print ("g_iIndicatorTexture <- %d\n", g_iIndicatorTexture);
-		
-		gdk_gl_drawable_gl_end (pGlDrawable);
-	}*/ // a mettre dans le realize.
 }
 
 
 void cairo_dock_load_desktop_background_surface (void)  // attention : fonction lourde.
 {
-	cairo_surface_destroy (g_pDesktopBgSurface);
-	g_pDesktopBgSurface = NULL;
+	cairo_dock_invalidate_desktop_bg_surface ();
 	
 	Pixmap iRootPixmapID = cairo_dock_get_window_background_pixmap (cairo_dock_get_root_id ());
 	g_return_if_fail (iRootPixmapID != 0);
@@ -895,6 +845,10 @@ void cairo_dock_load_desktop_background_surface (void)  // attention : fonction 
 		
 		cairo_destroy (pSourceContext);
 	}
+	if (g_pDesktopBgSurface != NULL)
+	{
+		g_iDesktopBgTexture = cairo_dock_create_texture_from_surface (g_pDesktopBgSurface);
+	}
 }
 
 void cairo_dock_invalidate_desktop_bg_surface (void)
@@ -903,6 +857,11 @@ void cairo_dock_invalidate_desktop_bg_surface (void)
 	{
 		cairo_surface_destroy (g_pDesktopBgSurface);
 		g_pDesktopBgSurface = NULL;
+	}
+	if (g_iDesktopBgTexture != 0)
+	{
+		glDeleteTextures (1, &g_iDesktopBgTexture);
+		g_iDesktopBgTexture = 0;
 	}
 }
 

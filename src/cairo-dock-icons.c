@@ -85,7 +85,6 @@ void cairo_dock_free_icon_buffers (Icon *icon)
 
 	cairo_surface_destroy (icon->pIconBuffer);
 	cairo_surface_destroy (icon->pReflectionBuffer);
-	cairo_surface_destroy (icon->pFullIconBuffer);
 	cairo_surface_destroy (icon->pTextBuffer);
 	cairo_surface_destroy (icon->pQuickInfoBuffer);
 }
@@ -1175,12 +1174,8 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 
 		case CAIRO_DOCK_MOUSE_ON_THE_EDGE :
 			///pDock->fDecorationsOffsetX = - pDock->iCurrentWidth / 2;  // on fixe les decorations.
-			/*if (pDock->iSidGrowUp == 0 && pDock->iSidShrinkDown == 0 && pDock->iMagnitudeIndex > 0)  // pDock->iMagnitudeIndex == CAIRO_DOCK_NB_MAX_ITERATIONS
-			{
-				//g_print ("on dezoome le dock\n");
-				pDock->iSidShrinkDown = g_timeout_add (50, (GSourceFunc) cairo_dock_shrink_down, pDock);
-			}*/
-			cairo_dock_start_shrinking (pDock);
+			if (pDock->iMagnitudeIndex > 0)
+				cairo_dock_start_shrinking (pDock);
 		break ;
 
 		case CAIRO_DOCK_MOUSE_OUTSIDE :
@@ -1347,10 +1342,6 @@ void cairo_dock_stop_marking_icons (CairoDock *pDock)
 	{
 		icon = ic->data;
 		cairo_dock_stop_marking_icon_as_avoiding_mouse (icon);
-		/**if (icon->iAnimationType > CAIRO_DOCK_NB_ANIMATIONS)
-		{
-			icon->iAnimationType = 0;
-		}*/
 	}
 }
 

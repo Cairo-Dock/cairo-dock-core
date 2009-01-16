@@ -639,14 +639,16 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	PangoRectangle ink, log;
 	pango_layout_get_pixel_extents (pLayout, &ink, &log);
 	
-	double fZoom = ((iMaxWidth != 0 && ink.width + 2 > iMaxWidth) ? 1.*iMaxWidth / (ink.width + 2) : 1.);
+	int iOutlineMargin = (pLabelDescription->bOutlined ? 2 : 0);
+	double fZoom = ((iMaxWidth != 0 && ink.width + iOutlineMargin > iMaxWidth) ? 1.*iMaxWidth / (ink.width + iOutlineMargin) : 1.);
 	
-	*iTextWidth = (ink.width + 2) * fZoom;
-	*iTextHeight = ink.height + 2 + 1; // +1 car certaines polices "debordent".
+	*iTextWidth = (ink.width + iOutlineMargin + 4) * fZoom;
+	*iTextHeight = ink.height + iOutlineMargin + 4 + 1; // +1 car certaines polices "debordent".
 	//Test du zoom en W ET H *iTextHeight = (ink.height + 2 + 1) * fZoom; 
 	
 	cairo_surface_t* pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
-		*iTextWidth, *iTextHeight);
+		*iTextWidth,
+		*iTextHeight);
 	cairo_t* pCairoContext = cairo_create (pNewSurface);
 	
 	//\_________________ On dessine le fond.
@@ -654,35 +656,38 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	{
 		cairo_save (pCairoContext);
 		double fRadius = fMaxScale * MIN (.5 * myBackground.iDockRadius, 5.);  // bon compromis.
-		double fLineWidth = 1.;
+		double fLineWidth = 0.;
 		double fFrameWidth = *iTextWidth - 2 * fRadius - fLineWidth;
 		double fFrameHeight = *iTextHeight - fLineWidth;
 		double fDockOffsetX = fRadius + fLineWidth/2;
 		double fDockOffsetY = 0.;
 		cairo_dock_draw_frame (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight, fDockOffsetX, fDockOffsetY, 1, 0., CAIRO_DOCK_HORIZONTAL);
 		cairo_set_source_rgba (pCairoContext, pLabelDescription->fBackgroundColor[0], pLabelDescription->fBackgroundColor[1], pLabelDescription->fBackgroundColor[2], pLabelDescription->fBackgroundColor[3]);
-		cairo_fill_preserve (pCairoContext);
+		cairo_fill (pCairoContext);
 		cairo_restore(pCairoContext);
 	}
 	
-	cairo_translate (pCairoContext, -ink.x, -ink.y+1);  // meme remarque.
+	cairo_translate (pCairoContext, -ink.x + 2, -ink.y + 2 + 1);  // meme remarque.
 	
 	//\_________________ On dessine les contours.
-	cairo_save (pCairoContext);
-	if (fZoom!= 1)
-		cairo_scale (pCairoContext, fZoom, 1.);
-	cairo_push_group (pCairoContext);
-	cairo_set_source_rgb (pCairoContext, 0.2, 0.2, 0.2);
-	int i;
-	for (i = 0; i < 4; i++)
+	if (pLabelDescription->bOutlined)
 	{
-		cairo_move_to (pCairoContext, i&2, 2*(i&1));
-		pango_cairo_show_layout (pCairoContext, pLayout);
+		cairo_save (pCairoContext);
+		if (fZoom!= 1)
+			cairo_scale (pCairoContext, fZoom, 1.);
+		cairo_push_group (pCairoContext);
+		cairo_set_source_rgb (pCairoContext, 0.2, 0.2, 0.2);
+		int i;
+		for (i = 0; i < 4; i++)
+		{
+			cairo_move_to (pCairoContext, i&2, 2*(i&1));
+			pango_cairo_show_layout (pCairoContext, pLayout);
+		}
+		cairo_pop_group_to_source (pCairoContext);
+		cairo_paint_with_alpha (pCairoContext, .75);
+		cairo_restore(pCairoContext);
 	}
-	cairo_pop_group_to_source (pCairoContext);
-	cairo_paint_with_alpha (pCairoContext, .75);
-	cairo_restore(pCairoContext);
-	
+
 	//\_________________ On remplit l'interieur du texte.
 	cairo_pattern_t *pGradationPattern = NULL;
 	if (pLabelDescription->fColorStart != pLabelDescription->fColorStop)

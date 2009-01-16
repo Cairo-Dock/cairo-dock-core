@@ -15,13 +15,15 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 CairoConfigSystem mySystem;
 extern CairoDock *g_pMainDock;
-extern gboolean g_bUseOpenGL;
+extern gboolean g_bForcedOpenGL;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
 	pSystem->bUseFakeTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "fake transparency", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	if (g_bForcedOpenGL)
+			pSystem->bUseFakeTransparency = TRUE;
 	
 	pSystem->bLabelForPointedIconOnly = cairo_dock_get_boolean_key_value (pKeyFile, "System", "pointed icon only", &bFlushConfFileNeeded, FALSE, "Labels", NULL);
 	pSystem->fLabelAlphaThreshold = cairo_dock_get_double_key_value (pKeyFile, "System", "alpha threshold", &bFlushConfFileNeeded, 10., "Labels", NULL);

@@ -395,6 +395,7 @@ static void _cairo_dock_render_desklet_opengl (CairoDesklet *pDesklet)
 	
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity ();
+	cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDesklet));
 	
 	cairo_dock_notify (CAIRO_DOCK_RENDER_DESKLET, pDesklet);
 	

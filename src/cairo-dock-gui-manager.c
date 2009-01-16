@@ -21,6 +21,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-draw.h"
+#include "cairo-dock-dock-manager.h"
 #include "cairo-dock-gui-manager.h"
 
 #define CAIRO_DOCK_GROUP_ICON_SIZE 32
@@ -823,19 +824,26 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 }
 
 
-void cairo_dock_present_module_gui (CairoDockModule *pModule)
+CairoDockGroupDescription *cairo_dock_find_module_description (const gchar *cModuleName)
 {
-	g_return_if_fail (pModule != NULL);
-	
+	g_return_val_if_fail (cModuleName != NULL, NULL);
 	CairoDockGroupDescription *pGroupDescription = NULL;
 	GList *pElement = NULL;
 	for (pElement = s_pGroupDescriptionList; pElement != NULL; pElement = pElement->next)
 	{
 		pGroupDescription = pElement->data;
-		if (strcmp (pGroupDescription->cGroupName, pModule->pVisitCard->cModuleName) == 0)
-			break ;
+		if (strcmp (pGroupDescription->cGroupName, cModuleName) == 0)
+			return pGroupDescription ;
 	}
-	if (pElement == NULL)
+	return NULL;
+}
+
+void cairo_dock_present_module_gui (CairoDockModule *pModule)
+{
+	g_return_if_fail (pModule != NULL);
+	
+	CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (pModule->pVisitCard->cModuleName);
+	if (pGroupDescription == NULL)
 		return ;
 	
 	cairo_dock_present_group_widget (pModule->cConfFilePath, pGroupDescription, FALSE);
@@ -845,21 +853,45 @@ void cairo_dock_present_module_instance_gui (CairoDockModuleInstance *pModuleIns
 {
 	g_return_if_fail (pModuleInstance != NULL);
 	
-	CairoDockGroupDescription *pGroupDescription = NULL;
-	GList *pElement = NULL;
-	for (pElement = s_pGroupDescriptionList; pElement != NULL; pElement = pElement->next)
-	{
-		pGroupDescription = pElement->data;
-		if (strcmp (pGroupDescription->cGroupName, pModuleInstance->pModule->pVisitCard->cModuleName) == 0)
-			break ;
-	}
-	if (pElement == NULL)
+	CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (pModuleInstance->pModule->pVisitCard->cModuleName);
+	if (pGroupDescription == NULL)
 		return ;
 	
 	cairo_dock_present_group_widget (pModuleInstance->cConfFilePath, pGroupDescription, FALSE);
 }
 
-
+void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription)
+{
+	g_return_if_fail (pGroupDescription != NULL);
+	gboolean bSingleGroup;
+	gchar *cConfFilePath;
+	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
+	if (pModule == NULL)  // c'est un groupe du fichier de conf principal.
+	{
+		cConfFilePath = g_cConfFile;
+		bSingleGroup = TRUE;
+	}
+	else  // c'est un module, on recupere son fichier de conf en entier.
+	{
+		if (pModule->cConfFilePath == NULL)  // on n'est pas encore passe par la dans le cas ou le plug-in n'a pas ete active; mais on veut pouvoir configurer un plug-in meme lorsqu'il est inactif.
+		{
+			pModule->cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
+		}
+		if (pModule->cConfFilePath == NULL)
+		{
+			cd_warning ("couldn't load a conf file for this module => can't configure it.");
+			return;
+		}
+		g_print ("  %s (%s)\n", __func__, pModule->cConfFilePath);
+	
+		cairo_dock_update_applet_conf_file_with_containers (NULL, pModule->cConfFilePath);
+		
+		cConfFilePath = pModule->cConfFilePath;
+		bSingleGroup = FALSE;
+	}
+	
+	cairo_dock_present_group_widget (cConfFilePath, pGroupDescription, bSingleGroup);
+}
 
 void cairo_dock_free_categories (void)
 {

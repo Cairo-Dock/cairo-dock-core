@@ -32,7 +32,7 @@ AC_CHECK_HEADERS([math.h stdlib.h])
 # Checks for library functions.
 # AC_CHECK_FUNCS([sscanf])
 
-PKG_CHECK_MODULES(PACKAGE, "gtk+-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 gtkglext-1.0")
+PKG_CHECK_MODULES(PACKAGE, "gtk+-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 gtkglext-1.0 xrender")
 
 AC_ARG_ENABLE(xextend,
 	[  --enable-xextend  :  Enable X Extensions],
@@ -61,7 +61,7 @@ AC_SUBST(xextend_required)
 AM_CONDITIONAL( [WITH_XEXTEND], [test "$XExt_detected" = "true"] )
 
 AC_ARG_ENABLE(glitz,
-	[  --enable-glitz  :  Turn on hardware acceleration],
+	[  --enable-glitz  :  Turn on hardware acceleration through Glitz],
 	[case "${enableval}" in
 		yes) useglitz=true ;;
 		no)  useglitz=false ;;

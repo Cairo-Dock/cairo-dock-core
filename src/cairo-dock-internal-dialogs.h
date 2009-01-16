@@ -20,10 +20,17 @@ struct _CairoConfigDialogs {
 	gchar *cButtonCancelImage;
 	gint iDialogButtonWidth;
 	gint iDialogButtonHeight;
-	gdouble fDialogColor[4];
+	
 	gint iDialogIconSize;
+
 	CairoDockLabelDescription dialogTextDescription;
 	gboolean bHomogeneous;
+	
+	gchar *cDecoratorName;
+	gint iLineWidth;
+	gint iCornerRadius;
+	gdouble fLineColor[4];
+	gdouble fDialogColor[4];
 	} ;
 
 

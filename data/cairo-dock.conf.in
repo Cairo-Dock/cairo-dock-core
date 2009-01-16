@@ -59,6 +59,9 @@ frame_auto=
 #{The dock will automatically hide itself outside of the scren when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.}
 auto-hide = false
 
+#m[Hidden dock] Configure the dock's appearence when hidden.
+config_hidden = 
+
 #F-[Pop-up;gtk-go-up]
 frame_pop =
 
@@ -258,6 +261,9 @@ always horizontal = FALSE
 #{the bigger, the more the labels next to the pointed icon will be transparent.}
 alpha threshold = 10.
 
+#m[Labels] Configure labels appearence.
+config_labels = 
+
 #F-[Files;gtk-file]
 frame_file =
 
@@ -295,6 +301,9 @@ alpha = 0.5
 #b+ Rotate the image when the dock is on top/left/right ?
 #{Use it when the image is an arrow pointing to the center of the screen for exemple.}
 reverse visible image = true
+
+#m[Accessibility] Configure the auto-hide behaviour.
+config_hidden = 
 
 
 #@prefix@/@DATADIRNAME@/@PACKAGE@/icon-background.svg;1;Set a background to your dock.
@@ -392,6 +401,9 @@ text background color =0;0;0;.5
 #{If false, only the quick-info will have this background color.}
 background for label = false
 
+#m[System] Configure the label readability.
+config_labels = 
+
 
 #@prefix@/@DATADIRNAME@/@PACKAGE@/icon-icons.svg;1;All about icons :\n size, reflection, icon theme, ...
 [Icons]
@@ -410,30 +422,6 @@ sinusoid width = 300
 #{in pixels.}
 icon gap = 0
 
-#e+[0;1] Icons' transparency at rest :
-#{It is their transparency when the wave is flat; they will "materialize" progressively as the dock grows up. The closer to 0, the more transparent they will be.}
-alpha at rest = 1
-
-#F+[Reflections]
-frame_refl =
-
-#e+[0;1] Reflecting power of the plane :
-#{It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are not used.}
-albedo = 1
-
-#e+[0;1] Field depth of the view:
-#{More precisely, it is the fraction of the max icon height that will be used to draw reflect. So setting it to 0.33 will mean that 33% of the icons will reflect on the ground, and the icons will be placed at the right distance from the front border of the frame so that the reflect is fully visible.}
-field depth = 0.5
-
-#F+[Link the icons with a string]
-frame_string =
-
-#i+[0;20] Linewidth of the string, in pixels (0 to not use string) :
-string width = 0
-
-#c+4[0;1] Color of the string (red, blue, green, alpha) :
-string color = 0.0; 0.0; 0.8; 0.4
-
 #F+[Icons' themes;gtk-select-color]
 frame_theme=
 
@@ -449,32 +437,58 @@ icons bg =
 #{Some applets may not use it, because they redraw periodically themselves.}
 bg for applets = false
 
-#X+[Launchers]
-frame_launcher =
 
-#i+[0;128] Icon size at rest (width x height) :
+#F+[Reflections]
+frame_refl =
+
+#e+[0;1] Reflecting power of the plane :
+#{It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are not used.}
+albedo = 1
+
+#e+[0;1] Field depth of the view:
+#{More precisely, it is the fraction of the max icon height that will be used to draw reflect. So setting it to 0.33 will mean that 33% of the icons will reflect on the ground, and the icons will be placed at the right distance from the front border of the frame so that the reflect is fully visible.}
+field depth = 0.5
+
+#e+[0;1] Icons' transparency at rest :
+#{It is their transparency when the wave is flat; they will "materialize" progressively as the dock grows up. The closer to 0, the more transparent they will be.}
+alpha at rest = 1
+
+
+#F+[Link the icons with a string]
+frame_string =
+
+#i+[0;20] Linewidth of the string, in pixels (0 to not use string) :
+string width = 0
+
+#c+4[0;1] Color of the string (red, blue, green, alpha) :
+string color = 0.0; 0.0; 0.8; 0.4
+
+#X+[Icons size]
+frame_size =
+
+#i+[0;128] Launcher's size at rest (width x height) :
 #{Put 0 if you don't want to restrain them}
 launcher width = 0
 #i+[0;128] ...
 launcher height = 0
 
-#X+[Applications]
-frame_appli =
-
-#i+[0;128] Icon size at rest (width x height) :
+#i+[0;128] Appli's size at rest (width x height) :
 #{Put 0 if you don't want to restrain them}
 appli width = 0
 #i+[0;128] ...
 appli height = 0
 
-#X+[Applets]
-frame_applet =
-
-#i+[0;128] Icon size at rest (width x height) :
+#i+[0;128] Applet's size at rest (width x height) :
 #{Put 0 if you don't want to restrain them}
 applet width = 0
 #i+[0;128] ...
 applet height = 0
+
+#m[Animated icons] Configure icons animations.
+config_anim = 
+
+#m[illusion] Configure icons special effects (require OpenGL capacity).
+config_effect = 
 
 #X+[Separators]
 frame_sep =
@@ -499,8 +513,9 @@ revolve separator image = true
 #b+ Force separator's image size to stay constant ?
 force size = false
 
-#X+
-frame_sep_ =
+
+#X+[Icons order]
+frame_order =
 
 #T+3[launchers;applications;applets] Order of the different types of icons :
 icon's type order = launchers;applications;applets
@@ -535,7 +550,7 @@ same horizontality = true
 relative icon size = 1.
 
 
-#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-dialogs.svg;1;Let the dock talk to you.
+#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-dialogs.svg;1;Configure the look of the dialog bubbles.
 [Dialogs]
 
 #F+[Buttons;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-buttons.png]
@@ -543,7 +558,7 @@ frame_button =
 
 #i+[10;99] Size of buttons in the info-bubbles (width x height) :
 #{in pixels.}
-button width = 64
+button width = 48
 #i+[10;99]  ...
 button height = 48
 
@@ -558,12 +573,18 @@ button_cancel image =
 #F+[Bubble;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-bubble.png]
 frame_bubble =
 
+#t Choose a decorator :
+decorator = comics
+
+#i+[0;10] Border width :
+border = 1
+#i+[0;30] Corner radius :
+corner = 8
 #c+4[0;1] Background color of the bubble (r,v,b,a) :
 background color = 1.0; 1.0; 1.0; 0.7
 
-#i+[0;99] Size of the icon displayed next to the text :
-#{Put 0 to let the size adapt itself to the text.}
-icon size = 48
+#c+4[0;1] Line color of the bubble (r,v,b,a) :
+line color = 1.0; 1.0; 1.0; 1.0
 
 #F+[Text;gtk-select-font]
 frame_text =
@@ -588,6 +609,16 @@ message weight = 5
 
 #b+ Should be italic ?
 message italic = false
+
+#b+ Should be outlined ?
+outlined = true
+
+#F+
+fin_text =
+
+#i+[0;99] Size of the icon displayed next to the text :
+#{Put 0 to let the size adapt itself to the text.}
+icon size = 48
 
 
 #@prefix@/@DATADIRNAME@/@PACKAGE@/icon-desklets.png;1;The applets can be set on your desktop as widgets.

@@ -482,12 +482,10 @@ void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		if (icon->pReflectionBuffer != NULL || icon->pFullIconBuffer != NULL)
+		if (icon->pReflectionBuffer != NULL)
 		{
 			cairo_surface_destroy (icon->pReflectionBuffer);
 			icon->pReflectionBuffer = NULL;
-			cairo_surface_destroy (icon->pFullIconBuffer);
-			icon->pFullIconBuffer = NULL;
 			cairo_dock_load_reflect_on_icon (icon, pCairoContext, fMaxScale, pDock->bHorizontalDock, pDock->bDirectionUp);
 		}
 	}

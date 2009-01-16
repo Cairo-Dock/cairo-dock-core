@@ -45,7 +45,13 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double fDockWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, const GLfloat *pVertexTab, int iNbVertex, CairoDockTypeHorizontality bHorizontal, gboolean bDirectionUp, double fDecorationsOffsetX);
 void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor, const GLfloat *pVertexTab, int iNbVertex);
 
-GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL);
+GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHasBeenForced);
+
+void cairo_dock_apply_desktop_background (CairoContainer *pContainer);
+
+GdkGLDrawable *cairo_dock_begin_draw_opengl (CairoContainer *pContainer);
+void cairo_dock_end_draw_opengl (GdkGLDrawable *pGlDrawable);
+
 
 G_END_DECLS
 #endif

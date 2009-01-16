@@ -20,19 +20,17 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-internal-desklets.h"
+#include "cairo-dock-dialogs.h"
 #include "cairo-dock-renderer-manager.h"
 
-extern GHashTable *g_hDocksTable;
-
 extern gboolean g_bUseOpenGL;
-
 
 static GHashTable *s_hRendererTable = NULL;  // table des rendus de dock.
 static GHashTable *s_hDeskletRendererTable = NULL;  // table des rendus des desklets.
 static GHashTable *s_hDialogRendererTable = NULL;  // table des rendus des dialogues.
 static GHashTable *s_hDeskletDecorationsTable = NULL;  // table des decorations des desklets.
 static GHashTable *s_hAnimationsTable = NULL;  // table des animations disponibles.
-
+static GHashTable *s_hDialogDecoratorTable = NULL;  // table des decorateurs de dialogues disponibles.
 
 CairoDockRenderer *cairo_dock_get_renderer (const gchar *cRendererName, gboolean bForMainDock)
 {
@@ -194,7 +192,16 @@ void cairo_dock_initialize_renderer_manager (void)
 		g_free,
 		NULL);
 	
+	s_hDialogDecoratorTable = g_hash_table_new_full (g_str_hash,
+		g_str_equal,
+		g_free,
+		NULL);
+	
 	cairo_dock_register_default_renderer ();
+	CairoDialogDecorator *pDecorator = g_new (CairoDialogDecorator, 1);
+	pDecorator->set_size = cairo_dock_set_frame_size_comics;
+	pDecorator->render = cairo_dock_draw_decorations_comics;
+	cairo_dock_register_dialog_decorator ("comics", pDecorator);
 }
 
 
@@ -328,6 +335,38 @@ void cairo_dock_render_dialog_with_new_data (CairoDialog *pDialog, CairoDialogRe
 }
 
 
+CairoDialogDecorator *cairo_dock_get_dialog_decorator (const gchar *cDecoratorName)
+{
+	cd_debug ("%s (%s)", __func__, cDecoratorName);
+	CairoDialogDecorator *pDecorator = NULL;
+	if (cDecoratorName != NULL)
+		pDecorator = g_hash_table_lookup (s_hDialogDecoratorTable, cDecoratorName); 
+	return pDecorator;
+}
+
+void cairo_dock_register_dialog_decorator (const gchar *cDecoratorName, CairoDialogDecorator *pDecorator)
+{
+	cd_message ("%s (%s)", __func__, cDecoratorName);
+	g_hash_table_insert (s_hDialogDecoratorTable, g_strdup (cDecoratorName), pDecorator);
+}
+
+void cairo_dock_remove_dialog_decorator (const gchar *cDecoratorName)
+{
+	g_hash_table_remove (s_hDialogDecoratorTable, cDecoratorName);
+}
+
+void cairo_dock_set_dialog_decorator (CairoDialog *pDialog, CairoDialogDecorator *pDecorator)
+{
+	pDialog->pDecorator = pDecorator;
+}
+void cairo_dock_set_dialog_decorator_by_name (CairoDialog *pDialog, const gchar *cDecoratorName)
+{
+	cd_message ("%s (%s)", __func__, cDecoratorName);
+	CairoDialogDecorator *pDecorator = cairo_dock_get_dialog_decorator (cDecoratorName);
+	
+	cairo_dock_set_dialog_decorator (pDialog, pDecorator);
+}
+
 
 void cairo_dock_update_renderer_list_for_gui (void)
 {
@@ -347,6 +386,11 @@ void cairo_dock_update_desklet_decorations_list_for_applet_gui (void)
 void cairo_dock_update_animations_list_for_gui (void)
 {
 	cairo_dock_build_animations_list_for_gui (s_hAnimationsTable);
+}
+
+void cairo_dock_update_dialog_decorator_list_for_gui (void)
+{
+	cairo_dock_build_dialog_decorator_list_for_gui (s_hDialogDecoratorTable);
 }
 
 

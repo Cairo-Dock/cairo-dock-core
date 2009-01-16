@@ -59,18 +59,16 @@ GLuint g_pGradationTexture[2];
 
 extern cairo_surface_t *g_pDesktopBgSurface;
 
+extern int g_iXScreenHeight[2];
 extern int g_iBackgroundTexture;
 extern CairoDock *g_pMainDock;
-
-extern GLuint g_iIndicatorTexture;
-
-extern double g_fDropIndicatorWidth, g_fDropIndicatorHeight;
 
 extern double g_fIndicatorWidth, g_fIndicatorHeight;
 extern GLuint g_iIndicatorTexture;
 extern GLuint g_iActiveIndicatorTexture;
 extern GLuint g_pVisibleZoneTexture;
-extern cairo_surface_t *g_pIndicatorSurface[2];
+extern GLuint g_iDesktopBgTexture;
+extern cairo_surface_t *g_pIndicatorSurface;
 extern cairo_surface_t *g_pActiveIndicatorSurface;
 extern cairo_surface_t *g_pVisibleZoneSurface;
 extern gboolean g_bUseOpenGL;
@@ -79,9 +77,9 @@ extern GdkGLConfig* g_pGlConfig;
 
 static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp)
 {
-	if (g_iIndicatorTexture == 0 && g_pIndicatorSurface[CAIRO_DOCK_HORIZONTAL] != NULL)
+	if (g_iIndicatorTexture == 0 && g_pIndicatorSurface != NULL)
 	{
-		g_iIndicatorTexture = cairo_dock_create_texture_from_surface (g_pIndicatorSurface[CAIRO_DOCK_HORIZONTAL]);
+		g_iIndicatorTexture = cairo_dock_create_texture_from_surface (g_pIndicatorSurface);
 		g_print ("g_iIndicatorTexture <- %d\n", g_iIndicatorTexture);
 	}
 	
@@ -1155,16 +1153,11 @@ void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor,
 
 
 
-GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL)  // taken from a MacSlow's exemple.
+GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHasBeenForced)  // taken from a MacSlow's exemple.
 {
 	GdkGLConfig *pGlConfig = NULL;
 	
 	Display *XDisplay = cairo_dock_get_Xdisplay ();
-	
-	XWindowAttributes attrib;
-	XVisualInfo templ;
-	XVisualInfo *visinfo;
-	int nvisinfo, defaultDepth, value;
 	
 	GLXFBConfig *pFBConfigs; 
 	XRenderPictFormat *pPictFormat = NULL;
@@ -1210,17 +1203,20 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL)  // taken from
 		if (pPictFormat->direct.alphaMask > 0)
 		{
 			cd_message ("Strike, found a GLX visual with alpha-support !");
+			*bHasBeenForced = FALSE;
 			break;
 		}
 
 		XFree (pVisInfo);
 		pVisInfo = NULL;
 	}
-	/// free FBConfigs ?
+	if (pFBConfigs)
+		XFree (pFBConfigs);
 	
 	if (pVisInfo == NULL && bForceOpenGL)
 	{
 		cd_warning ("we could not get an ARGB-visual, trying to get an RGB one...");
+		*bHasBeenForced = TRUE;
 		doubleBufferAttributes[13] = 0;
 		pFBConfigs = glXChooseFBConfig (XDisplay,
 			DefaultScreen (XDisplay),
@@ -1260,4 +1256,48 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL)  // taken from
 	}
 	
 	return pGlConfig;
+}
+
+
+
+
+void cairo_dock_apply_desktop_background (CairoContainer *pContainer)
+{
+	if (mySystem.bUseFakeTransparency && g_iDesktopBgTexture != 0)
+	{
+		glPolygonMode (GL_FRONT, GL_FILL);
+		glEnable (GL_TEXTURE_2D);
+		glBindTexture (GL_TEXTURE_2D, g_iDesktopBgTexture);
+		glColor4f(1., 1., 1., 1.);
+		
+		glBegin(GL_QUADS);
+		glTexCoord2f (pContainer->iWindowPositionX + 0., g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + 0.);
+		glVertex3f (0.,  pContainer->iHeight, 0.);  // Bottom Left Of The Texture and Quad
+		glTexCoord2f (pContainer->iWindowPositionX + pContainer->iWidth, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + 0.);
+		glVertex3f (pContainer->iWidth,  pContainer->iHeight, 0.);  // Bottom Right Of The Texture and Quad
+		glTexCoord2f (pContainer->iWindowPositionX + pContainer->iWidth, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + pContainer->iHeight);
+		glVertex3f (pContainer->iWidth, 0., 0.);  // Top Right Of The Texture and Quad
+		glTexCoord2f (pContainer->iWindowPositionX + 0., g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + pContainer->iHeight);
+		glVertex3f (0., 0., 0.);  // Top Left Of The Texture and Quad
+		glEnd();
+		glDisable (GL_TEXTURE_2D);
+	}
+}
+GdkGLDrawable *cairo_dock_begin_draw_opengl (CairoContainer *pContainer)
+{
+	GdkGLContext *pGlContext = gtk_widget_get_gl_context (pContainer->pWidget);
+	GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pContainer->pWidget);
+	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+		return NULL;
+	
+	return pGlDrawable;
+}
+
+void cairo_dock_end_draw_opengl (GdkGLDrawable *pGlDrawable)
+{
+	if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
+		gdk_gl_drawable_swap_buffers (pGlDrawable);
+	else
+		glFlush ();
+	gdk_gl_drawable_gl_end (pGlDrawable);
 }
