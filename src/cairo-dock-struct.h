@@ -46,11 +46,12 @@ typedef struct _CairoDockModule CairoDockModule;
 typedef struct _CairoDockModuleInterface CairoDockModuleInterface;
 typedef struct _CairoDockModuleInstance CairoDockModuleInstance;
 typedef struct _CairoDockVisitCard CairoDockVisitCard;
+typedef struct _CairoDockInternalModule CairoDockInternalModule;
 typedef struct _CairoDockMinimalAppletConfig CairoDockMinimalAppletConfig;
 typedef struct _CairoDockVFSBackend CairoDockVFSBackend;
 typedef struct _CairoDockClassAppli CairoDockClassAppli;
 typedef struct _CairoDockLabelDescription CairoDockLabelDescription;
-typedef struct _CairoDockInternalModule CairoDockInternalModule;
+typedef struct _CairoDialogAttribute CairoDialogAttribute;
 
 
 typedef enum {
@@ -457,6 +458,21 @@ struct _CairoDialogDecorator {
 	CairoDialogRenderDecorationFunc 		render;
 };
 
+struct _CairoDialogAttribute {
+	gchar *cImageFilePath;
+	gint iNbFrames;  // 0 <=> 1.
+	gchar *cText;
+	gint iMaxTextWidth;  // 0 => pas de limite.
+	CairoDockLabelDescription *pTextDescription;  // NULL => &myDialogs.dialogTextDescription
+	GtkWidget *pInteractiveWidget;
+	GtkButtonsType iButtonsType;
+	CairoDockActionOnAnswerFunc pActionFunc;
+	gpointer pUserData;
+	GFreeFunc pFreeDataFunc;
+	gint iTimeLength;
+	gchar *cDecoratorName;
+};
+
 struct _CairoDialog {
 	/// type de container.
 	CairoDockTypeContainer iType;
@@ -559,6 +575,10 @@ struct _CairoDialog {
 	gint iLeftMargin, iRightMargin, iTopMargin, iBottomMargin, 	iMinFrameWidth, iMinBottomGap;
 	/// position relative du dialogue par rapport a l'icone, ou ce qui revient au meme, de sa pointe par rapport au bord d'alignement.
 	gdouble fAlign;
+	gint iNbFrames, iCurrentFrame;
+	gint iMaxTextWidth;
+	gint iCurrentTextOffset;
+	gint iSidAnimateIcon, iSidAnimateText;
 };
 
 
@@ -921,7 +941,7 @@ struct _CairoDeskletDecoration {
 
 typedef gboolean (* CairoDockForeachDeskletFunc) (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, gpointer data);
 
-typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoDock *pDock, gpointer data);
+typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContainer, gpointer data);
 
 typedef void (* CairoDockConfigFunc) (gchar *cConfFile, gpointer data);
 

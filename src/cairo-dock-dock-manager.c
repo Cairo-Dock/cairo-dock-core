@@ -357,7 +357,7 @@ void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
 		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 		{
 			gchar *cCommand = g_strdup_printf ("cp %s/%s %s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
-			system (cCommand);
+			int r = system (cCommand);
 			g_free (cCommand);
 		}
 		
@@ -718,13 +718,29 @@ static void _cairo_dock_foreach_icons_in_dock (gchar *cDockName, CairoDock *pDoc
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
-		pFunction ((Icon*)ic->data, pDock, pUserData);
+		pFunction ((Icon*)ic->data, CAIRO_CONTAINER (pDock), pUserData);
 	}
+}
+static gboolean _cairo_dock_foreach_icons_in_desklet (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, gpointer *data)
+{
+	CairoDockForeachIconFunc pFunction = data[0];
+	gpointer pUserData = data[1];
+	if (pDesklet->pIcon != NULL)
+		pFunction (pDesklet->pIcon, CAIRO_CONTAINER (pDesklet), pUserData);
+	Icon *pIcon;
+	GList *ic;
+	for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
+	{
+		pFunction ((Icon*)ic->data, CAIRO_CONTAINER (pDesklet), pUserData);
+	}
+	return FALSE;  /// j'ai un doute la ...
 }
 void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUserData)
 {
 	gpointer data[2] = {pFunction, pUserData};
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_foreach_icons_in_dock, data);
+
+	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _cairo_dock_foreach_icons_in_desklet, data);
 }
 
 

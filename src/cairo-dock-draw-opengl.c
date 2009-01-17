@@ -59,6 +59,7 @@ GLuint g_pGradationTexture[2];
 
 extern cairo_surface_t *g_pDesktopBgSurface;
 
+extern int g_iXScreenWidth[2];
 extern int g_iXScreenHeight[2];
 extern int g_iBackgroundTexture;
 extern CairoDock *g_pMainDock;
@@ -1271,33 +1272,16 @@ void cairo_dock_apply_desktop_background (CairoContainer *pContainer)
 		glColor4f(1., 1., 1., 1.);
 		
 		glBegin(GL_QUADS);
-		glTexCoord2f (pContainer->iWindowPositionX + 0., g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + 0.);
+		glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		glVertex3f (0.,  pContainer->iHeight, 0.);  // Bottom Left Of The Texture and Quad
-		glTexCoord2f (pContainer->iWindowPositionX + pContainer->iWidth, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + 0.);
+		glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		glVertex3f (pContainer->iWidth,  pContainer->iHeight, 0.);  // Bottom Right Of The Texture and Quad
-		glTexCoord2f (pContainer->iWindowPositionX + pContainer->iWidth, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + pContainer->iHeight);
+		glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		glVertex3f (pContainer->iWidth, 0., 0.);  // Top Right Of The Texture and Quad
-		glTexCoord2f (pContainer->iWindowPositionX + 0., g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + pContainer->iHeight);
+		glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		glVertex3f (0., 0., 0.);  // Top Left Of The Texture and Quad
 		glEnd();
 		glDisable (GL_TEXTURE_2D);
 	}
 }
-GdkGLDrawable *cairo_dock_begin_draw_opengl (CairoContainer *pContainer)
-{
-	GdkGLContext *pGlContext = gtk_widget_get_gl_context (pContainer->pWidget);
-	GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pContainer->pWidget);
-	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
-		return NULL;
-	
-	return pGlDrawable;
-}
 
-void cairo_dock_end_draw_opengl (GdkGLDrawable *pGlDrawable)
-{
-	if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
-		gdk_gl_drawable_swap_buffers (pGlDrawable);
-	else
-		glFlush ();
-	gdk_gl_drawable_gl_end (pGlDrawable);
-}

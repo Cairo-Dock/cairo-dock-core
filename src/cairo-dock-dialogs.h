@@ -34,11 +34,6 @@ gboolean cairo_dock_dialog_reference (CairoDialog *pDialog);
 gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog);
 
 /**
-*Isole un dialogue, de maniere a ce qu'il ne soit pas utilise par une nouvelle personne. Les utilisations courantes ne sont pas affectees. N'a aucun effet sur un dialogue deja isole. Ne devrait pas etre utilise tel quel.
-*@param pDialog le dialogue.
-*/
-void cairo_dock_isolate_dialog (CairoDialog *pDialog);
-/**
 *Detruit un dialogue, libere les ressources allouees, et l'enleve de la liste des dialogues. Ne devrait pas etre utilise tel quel, utiliser #cairo_dock_dialog_unreference.
 *@param pDialog le dialogue.
 */
@@ -49,20 +44,16 @@ void cairo_dock_free_dialog (CairoDialog *pDialog);
 *@returns TRUE ssi au moins un dialogue a ete detruit.
 */
 gboolean cairo_dock_remove_dialog_if_any (Icon *icon);
-/**
-*Detruit et enleve de la liste tous les dialogues dont la reference est a 0, et qui n'ont pas ete enleves de la liste.
-*/
-void cairo_dock_remove_orphelans (void);
 
 
-GtkWidget *cairo_dock_build_common_interactive_widget_for_dialog (const gchar *cInitialAnswer, double fValueForHScale, double fMaxValueForHScale);
 
-CairoDialog *cairo_dock_build_dialog (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, gchar *cImageFilePath, GtkWidget *pInteractiveWidget, GtkButtonsType iButtonsType, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc);
+GtkWidget *cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int iWidth, int iHeight, gboolean bCanResize);
+
+
+CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer);
 
 
 void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pContainer, int *iX, int *iY, gboolean *bRight, CairoDockTypeHorizontality *bIsHorizontal, gboolean *bDirectionUp);
-
-void cairo_dock_dialog_find_optimal_placement  (CairoDialog *pDialog);
 
 void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer);
 /**
@@ -70,6 +61,7 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer);
 */
 void cairo_dock_replace_all_dialogs (void);
 
+void cairo_dock_compute_dialog_sizes (CairoDialog *pDialog);
 
 /**
 *Fait apparaitre un dialogue avec un message, un widget et 2 boutons, tous optionnels.
@@ -245,22 +237,23 @@ void cairo_dock_unhide_dialog (CairoDialog *pDialog);
 GtkWidget *cairo_dock_steal_widget_from_its_container (GtkWidget *pWidget);
 
 
-void cairo_dock_compute_dialog_sizes (CairoDialog *pDialog);
-
 void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface_t *pNewTextSurface, int iNewTextWidth, int iNewTextHeight);
 void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface_t *pNewIconSurface, int iNewIconSize);
 
 void cairo_dock_set_dialog_message (CairoDialog *pDialog, const gchar *cMessage);
 void cairo_dock_set_dialog_icon (CairoDialog *pDialog, const gchar *cImageFilePath);
 
+void cairo_dock_damage_icon_dialog (CairoDialog *pDialog);
+void cairo_dock_damage_text_dialog (CairoDialog *pDialog);
+void cairo_dock_damage_interactive_widget_dialog (CairoDialog *pDialog);
 
 
+// Futur applet dialog-rendering
 void cairo_dock_set_frame_size_comics (CairoDialog *pDialog);
 void cairo_dock_draw_decorations_comics (cairo_t *pCairoContext, CairoDialog *pDialog);
 
 void cairo_dock_set_frame_size_modern (CairoDialog *pDialog);
 void cairo_dock_draw_decorations_modern (cairo_t *pCairoContext, CairoDialog *pDialog);
-
 
 G_END_DECLS
 #endif

@@ -62,7 +62,7 @@ extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
 
 gchar *cCategoriesDescription[2*CAIRO_DOCK_NB_CATEGORY] = {
 	N_("Behaviour"), "gtk-preferences",
-	N_("Theme"), "gtk-color-picker",
+	N_("Appearance"), "gtk-color-picker",
 	N_("Accessories"), "gtk-dnd-multiple",
 	N_("Desktop"), "gtk-file",
 	N_("Controlers"), "gtk-zoom-fit",

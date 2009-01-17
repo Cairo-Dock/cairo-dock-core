@@ -30,6 +30,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 extern gchar *g_cConfFile;
 extern CairoDock *g_pMainDock;
 static CairoDialog *s_pDialog = NULL;
+static int s_iSidShowGroupDialog = 0;
 
 void on_click_category_button (GtkButton *button, gpointer *data)
 {
@@ -72,11 +73,9 @@ void on_click_back_button (GtkButton *button, gpointer *data)
 	}
 }
 
-void on_enter_group_button (GtkButton *button, CairoDockGroupDescription *pGroupDescription)
+static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription)
 {
-	//g_print ("%s (%s)\n", __func__, pGroupDescription->cDescription);
 	gchar *cDescription = NULL;
-	
 	if (pGroupDescription->cDescription != NULL)
 	{
 		if (*pGroupDescription->cDescription == '/')
@@ -134,6 +133,17 @@ void on_enter_group_button (GtkButton *button, CairoDockGroupDescription *pGroup
 	cairo_dock_dialog_reference (s_pDialog);
 	
 	g_free (cDescription);
+
+	s_iSidShowGroupDialog = 0;
+	return FALSE;
+}
+void on_enter_group_button (GtkButton *button, CairoDockGroupDescription *pGroupDescription)
+{
+	//g_print ("%s (%s)\n", __func__, pGroupDescription->cDescription);
+	if (s_iSidShowGroupDialog != 0)
+		g_source_remove (s_iSidShowGroupDialog);
+
+	s_iSidShowGroupDialog = g_timeout_add (500, _show_group_dialog, pGroupDescription);
 }
 void on_leave_group_button (GtkButton *button, gpointer *data)
 {

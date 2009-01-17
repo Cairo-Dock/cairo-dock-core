@@ -49,9 +49,6 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 
 void cairo_dock_apply_desktop_background (CairoContainer *pContainer);
 
-GdkGLDrawable *cairo_dock_begin_draw_opengl (CairoContainer *pContainer);
-void cairo_dock_end_draw_opengl (GdkGLDrawable *pGlDrawable);
-
 
 G_END_DECLS
 #endif

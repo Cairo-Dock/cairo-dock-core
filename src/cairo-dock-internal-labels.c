@@ -91,12 +91,12 @@ static void reset_config (CairoConfigLabels *pLabels)
 }
 
 
-static void _reload_one_label (Icon *pIcon, CairoDock *pDock, gpointer *data)
+static void _reload_one_label (Icon *pIcon, CairoContainer *pContainer, gpointer *data)
 {
 	CairoConfigLabels *pLabels = data[0];
 	cairo_t* pSourceContext = data[1];
-	cairo_dock_fill_one_text_buffer (pIcon, pSourceContext, &pLabels->iconTextDescription, pDock->bHorizontalDock, pDock->bDirectionUp);
-	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
+	cairo_dock_fill_one_text_buffer (pIcon, pSourceContext, &pLabels->iconTextDescription, pContainer->bIsHorizontal, pContainer->bDirectionUp);
+	double fMaxScale = cairo_dock_get_max_scale (pContainer);
 	cairo_dock_fill_one_quick_info_buffer (pIcon, pSourceContext, &pLabels->iconTextDescription, fMaxScale);
 }
 static void reload (CairoConfigLabels *pPrevLabels, CairoConfigLabels *pLabels)
@@ -105,7 +105,6 @@ static void reload (CairoConfigLabels *pPrevLabels, CairoConfigLabels *pLabels)
 	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 	gpointer data[2] = {pLabels, pCairoContext};
 	cairo_dock_foreach_icons ((CairoDockForeachIconFunc) _reload_one_label, data);
-	/// le faire pour les info rapides des desklets ...
 	cairo_destroy (pCairoContext);
 }
 
