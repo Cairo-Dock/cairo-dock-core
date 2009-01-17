@@ -277,22 +277,6 @@ void cairo_dock_remove_one_icon_from_dock (CairoDock *pDock, Icon *icon);
 */
 void cairo_dock_remove_icon_from_dock (CairoDock *pDock, Icon *icon);
 /**
-*Enleve et detruit toutes les icones dont le type est celui fourni.
-*@param pDock le dock contenant l'icone.
-*@param iType le type d'icones a supprimer.
-*/
-void cairo_dock_remove_icons_of_type (CairoDock *pDock, CairoDockIconType iType);
-/**
-*Enleve et detruit toutes les icones d'applications.
-*@param pDock le dock duquel supprimer les icones.
-*/
-#define cairo_dock_remove_all_applis(pDock) cairo_dock_remove_icons_of_type (pDock, CAIRO_DOCK_APPLI)
-/**
-*Enleve et detruit toutes les icones d'applets.
-*@param pDock le dock duquel supprimer les icones.
-*/
-#define cairo_dock_remove_all_applets(pDock) cairo_dock_remove_icons_of_type (pDock, CAIRO_DOCK_APPLET)
-/**
 *Effectue une action sur toutes les icones d'un type donne. L'action peut meme detruire et enlever de la liste l'icone courante.
 *@param pIconList la liste d'icones a parcourir.
 *@param iType le type d'icone.

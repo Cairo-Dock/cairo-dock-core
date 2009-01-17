@@ -40,7 +40,8 @@ essentialdata_DATA = \
 	icon-desklets.png\
 	icon-hidden-dock.png\
 	icon-indicators.png\
-	icon-system.png
+	icon-system.png\
+	cairo-dock-animated.xpm
 	
 	
 EXTRA_DIST = $(essentialdata_DATA)\

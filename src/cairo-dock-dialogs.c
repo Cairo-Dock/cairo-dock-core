@@ -226,7 +226,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 				pExpose->area.y >= y &&
 				pExpose->area.y + pExpose->area.height <= y + pDialog->iIconSize)
 			{
-				cd_debug ("icon redraw");
+				//cd_debug ("icon redraw");
 				cairo_set_source_surface (pCairoContext,
 					pDialog->pIconBuffer,
 					x - (pDialog->iCurrentFrame * pDialog->iIconSize),
@@ -239,21 +239,32 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 
 		if (pDialog->pTextBuffer != NULL)
 		{
-			x = pDialog->iLeftMargin + pDialog->iIconSize;
+			x = pDialog->iLeftMargin + pDialog->iIconSize + CAIRO_DIALOG_TEXT_MARGIN;
 			y = (pDialog->bDirectionUp ? pDialog->iTopMargin : pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
 			if (pExpose->area.x >= x &&
 				pExpose->area.x + pExpose->area.width <= x + _drawn_text_width (pDialog) && 
 				pExpose->area.y >=  y&&
 				pExpose->area.y + pExpose->area.height <= y + pDialog->iTextHeight)
 			{
-				cd_debug ("icon redraw");
+				//cd_debug ("text redraw");
 				if (pDialog->iTextHeight < pDialog->iMessageHeight)  // on centre le texte.
 					y += (pDialog->iMessageHeight - pDialog->iTextHeight) / 2;
 				cairo_set_source_surface (pCairoContext,
 					pDialog->pTextBuffer,
-					x,
+					x - pDialog->iCurrentTextOffset,
 					y);
 				cairo_paint (pCairoContext);
+				
+				if (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth)
+				{
+					cairo_set_source_surface (pCairoContext,
+						pDialog->pTextBuffer,
+						x - pDialog->iCurrentTextOffset + pDialog->iTextWidth + 10,
+						y);
+					cairo_paint (pCairoContext);
+					cairo_restore (pCairoContext);
+				}
+				
 				cairo_destroy (pCairoContext);
 				return FALSE;
 			}
@@ -261,6 +272,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 	}
 	else
 		pCairoContext = cairo_dock_create_drawing_context (CAIRO_CONTAINER (pDialog));
+	//cd_debug ("redraw");
 	
 	if (pDialog->pDecorator != NULL)
 	{
@@ -273,16 +285,29 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 	{
 		x = pDialog->iLeftMargin;
 		y = (pDialog->bDirectionUp ? pDialog->iTopMargin : pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
+		if (pDialog->iNbFrames > 1)
+		{
+			cairo_save (pCairoContext);
+			cairo_rectangle (pCairoContext,
+				x,
+				y,
+				pDialog->iIconSize,
+				pDialog->iIconSize);
+			cairo_clip (pCairoContext);
+		}
+		
 		cairo_set_source_surface (pCairoContext,
 			pDialog->pIconBuffer,
 			x,
 			y);
 		cairo_paint (pCairoContext);
+		if (pDialog->iNbFrames > 1)
+			cairo_restore (pCairoContext);
 	}
 	
 	if (pDialog->pTextBuffer != NULL)
 	{
-		x = pDialog->iLeftMargin + pDialog->iIconSize;
+		x = pDialog->iLeftMargin + pDialog->iIconSize + CAIRO_DIALOG_TEXT_MARGIN;
 		y = (pDialog->bDirectionUp ? pDialog->iTopMargin : pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
 		if (pDialog->iTextHeight < pDialog->iMessageHeight)  // on centre le texte.
 			y += (pDialog->iMessageHeight - pDialog->iTextHeight) / 2;
@@ -301,8 +326,16 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 			x - pDialog->iCurrentTextOffset,
 			y);
 		cairo_paint (pCairoContext);
+		
 		if (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth)
+		{
+			cairo_set_source_surface (pCairoContext,
+				pDialog->pTextBuffer,
+				x - pDialog->iCurrentTextOffset + pDialog->iTextWidth + 10,
+				y);
+			cairo_paint (pCairoContext);
 			cairo_restore (pCairoContext);
+		}
 	}
 	
 	if (pDialog->iButtonsType != GTK_BUTTONS_NONE)
@@ -706,11 +739,12 @@ static cairo_surface_t *_cairo_dock_create_dialog_text_surface (const gchar *cTe
 	return pTextBuffer;
 }
 
-static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cImageFilePath, int iNbFrames, cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, int *iIconSize)
+static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cImageFilePath, int iNbFrames, cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, int iDesiredSize, int *iIconSize)
 {
 	if (cImageFilePath == NULL)
 		return NULL;
-	
+	if (iDesiredSize == 0)
+		iDesiredSize = myDialogs.iDialogIconSize;
 	cairo_surface_t *pIconBuffer = NULL;
 	if (strcmp (cImageFilePath, "same icon") == 0 && pIcon != NULL && pContainer != NULL)
 	{
@@ -720,18 +754,18 @@ static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cIm
 		pIconBuffer = cairo_dock_duplicate_surface (pIcon->pIconBuffer,
 			pSourceContext,
 			pIcon->fWidth * fMaxScale, pIcon->fHeight * fMaxScale,
-			myDialogs.iDialogIconSize, myDialogs.iDialogIconSize);
+			iDesiredSize, iDesiredSize);
 	}
 	else
 	{
 		//pIconBuffer = cairo_dock_load_image_for_square_icon (pSourceContext, cImageFilePath, myDialogs.iDialogIconSize);
-		double fImageWidth = iNbFrames * myDialogs.iDialogIconSize, fImageHeight = myDialogs.iDialogIconSize;
+		double fImageWidth = iNbFrames * iDesiredSize, fImageHeight = iDesiredSize;
 		pIconBuffer = cairo_dock_load_image (pSourceContext, cImageFilePath,
 			&fImageWidth, &fImageHeight,
 			0., 1., FALSE);
 	}
 	if (pIconBuffer != NULL)
-		*iIconSize = myDialogs.iDialogIconSize;
+		*iIconSize = iDesiredSize;
 	return pIconBuffer;
 }
 
@@ -747,9 +781,9 @@ static gboolean _cairo_dock_animate_dialog_text (CairoDialog *pDialog)
 {
 	if (pDialog->iTextWidth <= pDialog->iMaxTextWidth)
 		return FALSE;
-	pDialog->iCurrentTextOffset ++;
+	pDialog->iCurrentTextOffset += 3;
 	if (pDialog->iCurrentTextOffset >= pDialog->iTextWidth)
-			pDialog->iCurrentFrame -= pDialog->iTextWidth;
+			pDialog->iCurrentTextOffset -= pDialog->iTextWidth;
 	cairo_dock_damage_text_dialog (pDialog);
 	return TRUE;
 }
@@ -790,7 +824,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	if (pAttribute->cImageFilePath != NULL)
 	{
 		pDialog->iNbFrames = (pAttribute->iNbFrames > 0 ? pAttribute->iNbFrames : 1);
-		pDialog->pIconBuffer = _cairo_dock_create_dialog_icon_surface (pAttribute->cImageFilePath, pDialog->iNbFrames, pSourceContext, pIcon, pContainer, &pDialog->iIconSize);
+		pDialog->pIconBuffer = _cairo_dock_create_dialog_icon_surface (pAttribute->cImageFilePath, pDialog->iNbFrames, pSourceContext, pIcon, pContainer, pAttribute->iIconSize, &pDialog->iIconSize);
 		if (pDialog->pIconBuffer != NULL && pDialog->iNbFrames > 1)
 		{
 			pDialog->iSidAnimateIcon = g_timeout_add (100, (GSourceFunc) _cairo_dock_animate_dialog_icon, (gpointer) pDialog);
@@ -1143,7 +1177,7 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 
 void cairo_dock_compute_dialog_sizes (CairoDialog *pDialog)
 {
-	pDialog->iMessageWidth = pDialog->iIconSize + pDialog->iTextWidth + (pDialog->iTextWidth != 0 ? 2 : 0) * CAIRO_DIALOG_TEXT_MARGIN;  // icone + marge + texte + marge.
+	pDialog->iMessageWidth = pDialog->iIconSize + _drawn_text_width (pDialog) + (pDialog->iTextWidth != 0 ? 2 : 0) * CAIRO_DIALOG_TEXT_MARGIN;  // icone + marge + texte + marge.
 	pDialog->iMessageHeight = MAX (pDialog->iIconSize, pDialog->iTextHeight) + (pDialog->pInteractiveWidget != NULL ? CAIRO_DIALOG_VGAP : 0);  // (icone/texte + marge) + widget + (marge + boutons) + pointe.
 	
 	if (pDialog->iButtonsType != GTK_BUTTONS_NONE)
@@ -1250,7 +1284,16 @@ CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cT
 	va_start (args, fTimeLength);
 	gchar *cFullText = g_strdup_vprintf (cText, args);
 	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
-	CairoDialog *pDialog = cairo_dock_show_dialog_full (cFullText, pIcon, pContainer, fTimeLength, cIconPath, GTK_BUTTONS_NONE, NULL, NULL, NULL, NULL);
+	cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, "cairo-dock-animated.xpm");
+	CairoDialogAttribute attr;
+	memset (&attr, 0, sizeof (CairoDialogAttribute));
+	attr.cText = cFullText;
+	attr.cImageFilePath = cIconPath;
+	attr.iNbFrames = 12;
+	attr.iIconSize = 32;
+	attr.iTimeLength = (int) fTimeLength;
+	//CairoDialog *pDialog = cairo_dock_show_dialog_full (cFullText, pIcon, pContainer, fTimeLength, cIconPath, GTK_BUTTONS_NONE, NULL, NULL, NULL, NULL);
+	CairoDialog *pDialog = cairo_dock_build_dialog (&attr, pIcon, pContainer);
 	g_free (cIconPath);
 	g_free (cFullText);
 	va_end (args);
@@ -1597,7 +1640,7 @@ void cairo_dock_damage_text_dialog (CairoDialog *pDialog)
 		(pDialog->bDirectionUp ? 
 			pDialog->iTopMargin :
 			pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight)),
-		pDialog->iTextWidth,
+		_drawn_text_width (pDialog),
 		pDialog->iTextHeight);
 }
 

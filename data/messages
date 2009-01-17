@@ -54,6 +54,8 @@ _("The dock will automatically hide itself outside of the scren when the mouse l
 
 _("Activate auto-hide ?")
 
+_("Configure the dock's appearence when hidden.")
+
 _("Pop-up")
 
 _("The dock will pop-up on the foreground when you place the mouse on its screen border. This option is only useful if you don't want to reserve space for the dock, nor to activate auto-hide.")
@@ -222,6 +224,8 @@ _("the bigger, the more the labels next to the pointed icon will be transparent.
 
 _("label's visibility threshold :")
 
+_("Configure labels appearence.")
+
 _("Files")
 
 _("Sort files by :")
@@ -255,6 +259,8 @@ _("Transparency of the image :")
 _("Use it when the image is an arrow pointing to the center of the screen for exemple.")
 
 _("Rotate the image when the dock is on top/left/right ?")
+
+_("Configure the auto-hide behaviour.")
 
 _("Background")
 
@@ -336,6 +342,8 @@ _("If false, only the quick-info will have this background color.")
 
 _("Use background color for labels ?")
 
+_("Configure the label readability.")
+
 _("Icons")
 
 _("Wave's shape")
@@ -352,26 +360,6 @@ _("in pixels.")
 
 _("Space between icons :")
 
-_("It is their transparency when the wave is flat; they will \"materialize\" progressively as the dock grows up. The closer to 0, the more transparent they will be.")
-
-_("Icons' transparency at rest :")
-
-_("Reflections")
-
-_("It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are not used.")
-
-_("Reflecting power of the plane :")
-
-_(/* xgettext:no-c-format */ "More precisely, it is the fraction of the max icon height that will be used to draw reflect. So setting it to 0.33 will mean that 33% of the icons will reflect on the ground, and the icons will be placed at the right distance from the front border of the frame so that the reflect is fully visible.")
-
-_("Field depth of the view:")
-
-_("Link the icons with a string")
-
-_("Linewidth of the string, in pixels (0 to not use string) :")
-
-_("Color of the string (red, blue, green, alpha) :")
-
 _("Icons' themes")
 
 _("Directories or themes where to search icons. Put some directories where you have icons you wish to see in the dock, or put some theme's name you've installed on your system. (the order is taken into account during the research). The key word _LocalTheme_ represents the directory ~/.config/cairo-dock/current_theme/icons")
@@ -386,23 +374,43 @@ _("Some applets may not use it, because they redraw periodically themselves.")
 
 _("Use this background for applets too ?")
 
-_("Launchers")
+_("Reflections")
+
+_("It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are not used.")
+
+_("Reflecting power of the plane :")
+
+_(/* xgettext:no-c-format */ "More precisely, it is the fraction of the max icon height that will be used to draw reflect. So setting it to 0.33 will mean that 33% of the icons will reflect on the ground, and the icons will be placed at the right distance from the front border of the frame so that the reflect is fully visible.")
+
+_("Field depth of the view:")
+
+_("It is their transparency when the wave is flat; they will \"materialize\" progressively as the dock grows up. The closer to 0, the more transparent they will be.")
+
+_("Icons' transparency at rest :")
+
+_("Link the icons with a string")
+
+_("Linewidth of the string, in pixels (0 to not use string) :")
+
+_("Color of the string (red, blue, green, alpha) :")
+
+_("Icons size")
 
 _("Put 0 if you don't want to restrain them")
 
-_("Icon size at rest (width x height) :")
-
-_("Applications")
+_("Launcher's size at rest (width x height) :")
 
 _("Put 0 if you don't want to restrain them")
 
-_("Icon size at rest (width x height) :")
-
-_("Applets")
+_("Appli's size at rest (width x height) :")
 
 _("Put 0 if you don't want to restrain them")
 
-_("Icon size at rest (width x height) :")
+_("Applet's size at rest (width x height) :")
+
+_("Configure icons animations.")
+
+_("Configure icons special effects (require OpenGL capacity).")
 
 _("Separators")
 
@@ -421,6 +429,8 @@ _("Filename of an image to use for separators :")
 _("Make the separator's image revolve when dock is on top/on the left/on the right ?")
 
 _("Force separator's image size to stay constant ?")
+
+_("Icons order")
 
 _("Order of the different types of icons :")
 
@@ -466,11 +476,15 @@ _("Name of an image to use for the no/cancel button :")
 
 _("Bubble")
 
+_("Choose a decorator :")
+
+_("Border width :")
+
+_("Corner radius :")
+
 _("Background color of the bubble (r,v,b,a) :")
 
-_("Put 0 to let the size adapt itself to the text.")
-
-_("Size of the icon displayed next to the text :")
+_("Line color of the bubble (r,v,b,a) :")
 
 _("Text")
 
@@ -491,6 +505,12 @@ _("Family of the font used for labels :")
 _("Weight (between 1 and 9, the bigger, the heavier):")
 
 _("Should be italic ?")
+
+_("Should be outlined ?")
+
+_("Put 0 to let the size adapt itself to the text.")
+
+_("Size of the icon displayed next to the text :")
 
 _("Desklets")
 

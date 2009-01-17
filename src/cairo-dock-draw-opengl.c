@@ -1270,18 +1270,25 @@ void cairo_dock_apply_desktop_background (CairoContainer *pContainer)
 		glEnable (GL_TEXTURE_2D);
 		glBindTexture (GL_TEXTURE_2D, g_iDesktopBgTexture);
 		glColor4f(1., 1., 1., 1.);
+		glEnable (GL_BLEND);
+		glBlendFunc (GL_ONE, GL_ZERO);  /// utile ?
 		
 		glBegin(GL_QUADS);
-		glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-		glVertex3f (0.,  pContainer->iHeight, 0.);  // Bottom Left Of The Texture and Quad
-		glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-		glVertex3f (pContainer->iWidth,  pContainer->iHeight, 0.);  // Bottom Right Of The Texture and Quad
-		glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+		glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
+		1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+		glVertex3f (0., pContainer->iHeight, 0.);  // Bottom Left Of The Texture and Quad
+		
+		glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+		glVertex3f (pContainer->iWidth, pContainer->iHeight, 0.);  // Bottom Right Of The Texture and Quad
+		
+		glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		glVertex3f (pContainer->iWidth, 0., 0.);  // Top Right Of The Texture and Quad
-		glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+		
+		glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		glVertex3f (0., 0., 0.);  // Top Left Of The Texture and Quad
 		glEnd();
+		
 		glDisable (GL_TEXTURE_2D);
+		glDisable (GL_BLEND);
 	}
 }
-

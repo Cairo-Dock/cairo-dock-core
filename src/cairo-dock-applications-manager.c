@@ -1403,3 +1403,26 @@ Icon *cairo_dock_get_icon_with_Xid (Window Xid)
 {
 	return g_hash_table_lookup (s_hXWindowTable, &Xid);
 }
+
+
+static void _cairo_dock_for_one_appli (Window *Xid, Icon *icon, gpointer *data)
+{
+	CairoDockForeachIconFunc pFunction = data[0];
+	gpointer pUserData = data[1];
+	gboolean bOutsideDockOnly =  GPOINTER_TO_INT (data[2]);
+	
+	if ((bOutsideDockOnly && icon->cParentDockName == NULL) || ! bOutsideDockOnly)
+	{
+		CairoDock *pParentDock = NULL;
+		if (icon->cParentDockName != NULL)
+			pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+		else
+			pParentDock = g_pMainDock;
+		pFunction (icon, CAIRO_CONTAINER (pParentDock), pUserData);
+	}
+}
+void cairo_dock_foreach_applis (CairoDockForeachIconFunc pFunction, gboolean bOutsideDockOnly, gpointer pUserData)
+{
+	gpointer data[2] = {pFunction, pUserData, GINT_TO_POINTER (bOutsideDockOnly)};
+	g_hash_table_foreach (s_hXWindowTable, (GHFunc) _cairo_dock_for_one_appli, data);
+}

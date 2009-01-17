@@ -692,7 +692,6 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 	gchar *cModuleName = data[2];
 	
 	CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (cModuleName);
-	cairo_dock_show_group (pGroupDescription);
 
 	Icon *pIcon = cairo_dock_get_current_active_icon ();
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);

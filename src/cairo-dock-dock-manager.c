@@ -739,7 +739,16 @@ void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUse
 {
 	gpointer data[2] = {pFunction, pUserData};
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_foreach_icons_in_dock, data);
-
+	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _cairo_dock_foreach_icons_in_desklet, data);
+}
+void cairo_dock_foreach_icons_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData)
+{
+	gpointer data[2] = {pFunction, pUserData};
+	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_foreach_icons_in_dock, data);
+}
+void cairo_dock_foreach_icons_in_desklets (CairoDockForeachIconFunc pFunction, gpointer pUserData)
+{
+	gpointer data[2] = {pFunction, pUserData};
 	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _cairo_dock_foreach_icons_in_desklet, data);
 }
 

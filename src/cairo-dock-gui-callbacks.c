@@ -143,11 +143,16 @@ void on_enter_group_button (GtkButton *button, CairoDockGroupDescription *pGroup
 	if (s_iSidShowGroupDialog != 0)
 		g_source_remove (s_iSidShowGroupDialog);
 
-	s_iSidShowGroupDialog = g_timeout_add (500, _show_group_dialog, pGroupDescription);
+	s_iSidShowGroupDialog = g_timeout_add (500, (GSourceFunc)_show_group_dialog, (gpointer) pGroupDescription);
 }
 void on_leave_group_button (GtkButton *button, gpointer *data)
 {
 	//g_print ("%s ()\n", __func__);
+	if (s_iSidShowGroupDialog != 0)
+	{
+		g_source_remove (s_iSidShowGroupDialog);
+		s_iSidShowGroupDialog = 0;
+	}
 	
 	GtkWidget *pPreviewImage = cairo_dock_get_preview_image ();
 	gtk_widget_hide (pPreviewImage);

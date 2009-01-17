@@ -694,13 +694,13 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	{
 		if (pLabelDescription->bVerticalPattern)
 			pGradationPattern = cairo_pattern_create_linear (0.,
-				ink.y-1.,
+				ink.y-1+2,
 				0.,
-				*iTextHeight+ink.y-1);
+				*iTextHeight+ink.y-1-2);
 		else
-			pGradationPattern = cairo_pattern_create_linear (ink.x,
+			pGradationPattern = cairo_pattern_create_linear (ink.x+2,
 				0.,
-				*iTextWidth + ink.x,
+				*iTextWidth + ink.x-2,
 				0.);
 		g_return_val_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS, NULL);
 		cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);

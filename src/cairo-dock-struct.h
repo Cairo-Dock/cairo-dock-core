@@ -471,6 +471,7 @@ struct _CairoDialogAttribute {
 	GFreeFunc pFreeDataFunc;
 	gint iTimeLength;
 	gchar *cDecoratorName;
+	gint iIconSize;
 };
 
 struct _CairoDialog {

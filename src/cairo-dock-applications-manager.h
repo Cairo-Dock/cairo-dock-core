@@ -62,5 +62,7 @@ Window cairo_dock_get_current_active_window (void);
 Icon *cairo_dock_get_current_active_icon (void);
 Icon *cairo_dock_get_icon_with_Xid (Window Xid);
 
+void cairo_dock_foreach_applis (CairoDockForeachIconFunc pFunction, gboolean bOutsideDockOnly, gpointer pUserData);
+
 G_END_DECLS
 #endif
