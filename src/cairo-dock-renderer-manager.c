@@ -202,6 +202,11 @@ void cairo_dock_initialize_renderer_manager (void)
 	pDecorator->set_size = cairo_dock_set_frame_size_comics;
 	pDecorator->render = cairo_dock_draw_decorations_comics;
 	cairo_dock_register_dialog_decorator ("comics", pDecorator);
+	
+	pDecorator = g_new (CairoDialogDecorator, 1);
+	pDecorator->set_size = cairo_dock_set_frame_size_modern;
+	pDecorator->render = cairo_dock_draw_decorations_modern;
+	cairo_dock_register_dialog_decorator ("modern", pDecorator);
 }
 
 

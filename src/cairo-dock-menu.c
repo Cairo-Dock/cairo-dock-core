@@ -136,10 +136,11 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 		"<b>Main developer :</b>\n  Fabounet (Fabrice Rey)\n\
 <b>Original idea/first development :</b>\n  Mac Slow\n\
 <b>Applets :</b>\n  Fabounet\n  Necropotame\n  Ctaf\n  ChAnGFu\n  Tofe\n  Paradoxxx_Zero\n\
-<b>Patchs :</b>\n  Special thanks to Augur for his great help with OpenGL\n  Ctaf\n  M.Tasaka\n  Necropotame\n  Robrob\n  Smidgey\n  Tshirtman\n\
-<b>Themes :</b>\n  Fabounet\n  Chilperik\n  Djoole\n  Glattering\n  Vilraleur\n  Lord Northam\n  Paradoxxx_Zero\n  Coz\n  Benoit2600\n\
+<b>Patchs :</b>\n  Special thanks to Augur for his great help with OpenGL\n  Ctaf\n  M.Tasaka\n  Necropotame\n  Robrob\n  Smidgey\n  Tshirtman\n");
+	_cairo_dock_add_about_page (pNoteBook,
+		_("Artwork"),
+		"<b>Themes :</b>\n  Fabounet\n  Chilperik\n  Djoole\n  Glattering\n  Vilraleur\n  Lord Northam\n  Paradoxxx_Zero\n  Coz\n  Benoit2600\n  Nochka85\n\
 <b>Translations :</b>\n  Fabounet\n  Ppmt \n  Jiro Kawada (Kawaji)\n  BiAji\n  Mattia Tavernini (Maathias)\n  Peter Thornqvist\n  Yannis Kaskamanidis");
-	
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Support"),
 		"<b>Installation script and web hosting :</b>\n  Mav\n\
@@ -231,7 +232,7 @@ static void _cairo_dock_remove_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
 
-	gchar *question = g_strdup_printf (_("You're about removing this icon (%s) from the dock. Sure ?"), icon->acName);
+	gchar *question = g_strdup_printf (_("You're about removing this icon (%s) from the dock. Sure ?"), (icon->cInitialName != NULL ? icon->cInitialName : icon->acName));
 	int answer = cairo_dock_ask_question_and_wait (question, icon, CAIRO_CONTAINER (pDock));
 	g_free (question);
 	if (answer == GTK_RESPONSE_YES)
