@@ -224,6 +224,7 @@ void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 	gtk_widget_set_double_buffered (pDock->pWidget, ! (g_bUseOpenGL && pDock->render_opengl != NULL));
 	pDock->set_subdock_position = pRenderer->set_subdock_position;
 	pDock->bUseReflect = pRenderer->bUseReflect;
+	pDock->bUseStencil = pRenderer->bUseStencil;
 	if (cRendererName != NULL)  // NULL n'ecrase pas le nom de l'ancienne vue.
 		pDock->cRendererName = g_strdup (cRendererName);
 }
@@ -328,13 +329,7 @@ void cairo_dock_render_dialog_with_new_data (CairoDialog *pDialog, CairoDialogRe
 		pDialog->pRenderer->update (pDialog, pNewData);
 	
 	if (pDialog->pInteractiveWidget != NULL)
-		gtk_widget_queue_draw_area (pDialog->pWidget,
-			pDialog->iMargin,
-			(pDialog->bDirectionUp ?
-				pDialog->iMargin + pDialog->iMessageHeight :
-				pDialog->iHeight - pDialog->iMargin - pDialog->iInteractiveHeight),
-			pDialog->iInteractiveWidth,
-			pDialog->iInteractiveHeight);  // marche avec glitz ?...
+		cairo_dock_damage_interactive_widget_dialog (pDialog);
 	else
 		gtk_widget_queue_draw (pDialog->pWidget);
 }

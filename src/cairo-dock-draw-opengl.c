@@ -277,6 +277,12 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 	
 	if (pDock->bUseReflect)
 	{
+		if (pDock->bUseStencil)
+		{
+			glEnable (GL_STENCIL_TEST);
+			glStencilFunc (GL_EQUAL, 1, 1);
+			glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
+		}
 		glPushMatrix ();
 		double x0, y0, x1, y1;
 		double fScale = ((myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon)) ? 1. : pIcon->fScale);
@@ -432,6 +438,10 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);*/
 		
 		glPopMatrix ();
+		if (pDock->bUseStencil)
+		{
+			glDisable (GL_STENCIL_TEST);
+		}
 	}
 	
 	glDisable(GL_TEXTURE_2D);
@@ -1122,7 +1132,6 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
 	glDisable(GL_BLEND);
-	glDisable(GL_POLYGON_OFFSET_FILL);
 	glDisable(GL_TEXTURE_GEN_S);
 	glDisable(GL_TEXTURE_GEN_T);
 	glDisable(GL_TEXTURE_2D); // Plus de texture merci 
@@ -1163,14 +1172,15 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 	GLXFBConfig *pFBConfigs; 
 	XRenderPictFormat *pPictFormat = NULL;
 	int doubleBufferAttributes[] = {
-		GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
-		GLX_RENDER_TYPE,   GLX_RGBA_BIT,
-		GLX_DOUBLEBUFFER,  True,
-		GLX_RED_SIZE,      1,
-		GLX_GREEN_SIZE,    1,
-		GLX_BLUE_SIZE,     1,
-		GLX_ALPHA_SIZE,    1,
-		GLX_DEPTH_SIZE,    1,
+		GLX_DRAWABLE_TYPE, 	GLX_WINDOW_BIT,
+		GLX_RENDER_TYPE, 		GLX_RGBA_BIT,
+		GLX_DOUBLEBUFFER, 	True,
+		GLX_RED_SIZE, 		1,
+		GLX_GREEN_SIZE, 		1,
+		GLX_BLUE_SIZE, 		1,
+		GLX_ALPHA_SIZE, 		1,
+		GLX_DEPTH_SIZE, 		1,
+		GLX_STENCIL_SIZE, 	1,
 		None};
 	
 	

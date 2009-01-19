@@ -675,6 +675,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_update_desklet_decorations_list_for_gui ();
 	cairo_dock_update_desklet_decorations_list_for_applet_gui ();
 	cairo_dock_update_animations_list_for_gui ();
+	cairo_dock_update_dialog_decorator_list_for_gui ();
 	
 	if (myAccessibility.bPopUp)
 	{

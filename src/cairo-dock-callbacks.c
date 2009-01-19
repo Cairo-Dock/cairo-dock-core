@@ -101,6 +101,7 @@ void cairo_dock_on_realize (GtkWidget* pWidget, CairoDock *pDock)
 	
 	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth (1.0f);
+	glClearStencil (1);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glHint (GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 	
@@ -129,7 +130,7 @@ gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDo
 {
 	if (! pCairoContext)
 	{
-		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
 		glLoadIdentity ();
 		cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDock));
 		pDock->render_opengl (pDock);

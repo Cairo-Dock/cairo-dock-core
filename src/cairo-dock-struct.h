@@ -133,6 +133,8 @@ struct _CairoDockRenderer {
 	gboolean bUseReflect;
 	/// chemin d'une image de previsualisation.
 	gchar *cPreviewFilePath;
+	/// TRUE ssi cette vue utilise le stencil buffer d'OpenGL.
+	gboolean bUseStencil;
 };
 
 typedef enum {
@@ -295,6 +297,8 @@ struct _CairoDock {
 	GdkRectangle inputArea;
 	GdkBitmap* pShapeBitmap;
 	CairoDockMousePositionType iMousePositionType;
+	/// TRUE ssi cette vue utilise le stencil buffer d'OpenGL.
+	gboolean bUseStencil;
 };
 
 

@@ -215,8 +215,6 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 	
 	if (pExpose->area.x != 0 || pExpose->area.y != 0)
 	{
-		pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &pExpose->area, myDialogs.fDialogColor);
-
 		if (pDialog->pIconBuffer != NULL)
 		{
 			x = pDialog->iLeftMargin;
@@ -227,6 +225,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 				pExpose->area.y + pExpose->area.height <= y + pDialog->iIconSize)
 			{
 				//cd_debug ("icon redraw");
+				pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &pExpose->area, myDialogs.fDialogColor);
 				cairo_set_source_surface (pCairoContext,
 					pDialog->pIconBuffer,
 					x - (pDialog->iCurrentFrame * pDialog->iIconSize),
@@ -247,6 +246,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 				pExpose->area.y + pExpose->area.height <= y + pDialog->iTextHeight)
 			{
 				//cd_debug ("text redraw");
+				pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &pExpose->area, myDialogs.fDialogColor);
 				if (pDialog->iTextHeight < pDialog->iMessageHeight)  // on centre le texte.
 					y += (pDialog->iMessageHeight - pDialog->iTextHeight) / 2;
 				cairo_set_source_surface (pCairoContext,
@@ -270,8 +270,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 			}
 		}
 	}
-	else
-		pCairoContext = cairo_dock_create_drawing_context (CAIRO_CONTAINER (pDialog));
+	pCairoContext = cairo_dock_create_drawing_context (CAIRO_CONTAINER (pDialog));
 	//cd_debug ("redraw");
 	
 	if (pDialog->pDecorator != NULL)
@@ -375,8 +374,9 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 {
 	g_print ("%s (%dx%d)\n", __func__, pEvent->width, pEvent->height);
 	if (pEvent->width == CAIRO_DIALOG_MIN_SIZE && pEvent->height == CAIRO_DIALOG_MIN_SIZE)
-			return FALSE;
-
+		return FALSE;
+	
+	int iWidth = pDialog->iWidth, iHeight = pDialog->iHeight;
 	//\____________ On recupere la taille du widget interactif qui a pu avoir change.
 	if (pDialog->pInteractiveWidget != NULL)
 	{
@@ -389,10 +389,19 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 		pDialog->iBubbleWidth = MAX (pDialog->iMessageWidth, MAX (pDialog->iInteractiveWidth, pDialog->iButtonsWidth));
 		pDialog->iBubbleHeight = pDialog->iMessageHeight + pDialog->iInteractiveHeight + pDialog->iButtonsHeight;
 		g_print (" -> iBubbleWidth: %d , iBubbleHeight : %d\n", pDialog->iBubbleWidth, pDialog->iBubbleHeight);
+		cairo_dock_compute_dialog_sizes (pDialog);
 	}
 
-	if ((pDialog->iWidth != pEvent->width || pDialog->iHeight != pEvent->height))
+	if ((iWidth != pEvent->width || iHeight != pEvent->height))
 	{
+		if ((pEvent->width != CAIRO_DIALOG_MIN_SIZE || pEvent->height != CAIRO_DIALOG_MIN_SIZE) && (pEvent->width < iWidth || pEvent->height < iHeight))
+		{
+			g_print ("non, on a dit %dx%d !\n", pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin,
+				pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock);
+			gtk_window_resize (GTK_WINDOW (pDialog->pWidget),
+				pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin,
+				pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock);
+		}
 		pDialog->iWidth = pEvent->width;
 		pDialog->iHeight = pEvent->height;
 
@@ -1772,7 +1781,7 @@ void cairo_dock_set_frame_size_modern (CairoDialog *pDialog)
 	int iMargin = .5 * fLineWidth + .5 * fRadius;
 	pDialog->iRightMargin = iMargin;
 	pDialog->iLeftMargin = iMargin;
-	pDialog->iTopMargin = 0;
+	pDialog->iTopMargin = iMargin;
 	pDialog->iBottomMargin = iMargin;
 	pDialog->iMinBottomGap = 30;
 	pDialog->iMinFrameWidth = CAIRO_DIALOG_TIP_BASE + CAIRO_DIALOG_TIP_MARGIN + 2 * iMargin;
