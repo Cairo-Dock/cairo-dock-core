@@ -444,7 +444,7 @@ typedef CairoDialogRendererDataParameter* CairoDialogRendererDataPtr;
 typedef gpointer CairoDialogRendererConfigParameter;
 typedef CairoDialogRendererConfigParameter* CairoDialogRendererConfigPtr;
 
-typedef void (* CairoDialogRenderFunc) (cairo_t *pCairoContext, CairoDialog *pDialog);
+typedef void (* CairoDialogRenderFunc) (cairo_t *pCairoContext, CairoDialog *pDialog, double fAlpha);
 typedef gpointer (* CairoDialogConfigureRendererFunc) (CairoDialog *pDialog, cairo_t *pSourceContext, CairoDialogRendererConfigPtr pConfig);
 typedef void (* CairoDialogUpdateRendererDataFunc) (CairoDialog *pDialog, CairoDialogRendererDataPtr pNewData);
 typedef void (* CairoDialogFreeRendererDataFunc) (CairoDialog *pDialog);
@@ -584,6 +584,7 @@ struct _CairoDialog {
 	gint iMaxTextWidth;
 	gint iCurrentTextOffset;
 	gint iSidAnimateIcon, iSidAnimateText;
+	gdouble fReflectAlpha;
 };
 
 
@@ -1121,5 +1122,36 @@ typedef enum {
 	CAIRO_DOCK_START_SAFE,
 	CAIRO_DOCK_NB_SART_MODES
 	} CairoDockStartMode;
+
+typedef struct _CairoDataRendererAttribute CairoDataRendererAttribute;
+struct _CairoDataRendererAttribute {
+	gint iNbValues;
+	gchar **cTitles;
+	gboolean bWriteValues;
+	gdouble fTextColor[3];
+};
+
+typedef struct _CairoGaugeAttribute CairoGaugeAttribute;
+struct _CairoGaugeAttribute {
+	CairoDataRendererAttribute renderer;
+};
+
+typedef struct _CairoGraphAttribute CairoGraphAttribute;
+struct _CairoGraphAttribute {
+	CairoDataRendererAttribute dataRenderer;
+	gint iNbPoints;
+	gint iType;
+	gdouble **pHighColor;  // iNbValues * 3
+	gdouble **pLowColor;  // idem
+};
+
+typedef struct _CairoBarAttribute CairoBarAttribute;
+struct _CairoBarAttribute {
+	CairoDataRendererAttribute dataRenderer;
+	gdouble **pHighColor;  // iNbValues * 3
+	gdouble **pLowColor;  // idem
+	gchar **cImageFilePath;  // iNbValues
+};
+
 
 #endif

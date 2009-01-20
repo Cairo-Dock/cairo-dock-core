@@ -1074,18 +1074,36 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 
 void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double fDockWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, const GLfloat *pVertexTab, int iNbVertex, CairoDockTypeHorizontality bHorizontal, gboolean bDirectionUp, double fDecorationsOffsetX)
 {
-	glEnable(GL_TEXTURE_2D); // Je veux de la texture
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glBindTexture(GL_TEXTURE_2D, iBackgroundTexture); // allez on bind la texture
-	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR ); // ok la on selectionne le type de generation des coordonnees de la texture
-	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR );
-	glEnable(GL_TEXTURE_GEN_S); // oui je veux une generation en S
-	glEnable(GL_TEXTURE_GEN_T); // Et en T aussi
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	//\__________________ On mappe la texture dans le cadre.
+	if (iBackgroundTexture != 0)
+	{
+		glEnable(GL_TEXTURE_2D); // Je veux de la texture
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glBindTexture(GL_TEXTURE_2D, iBackgroundTexture); // allez on bind la texture
+		glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR ); // ok la on selectionne le type de generation des coordonnees de la texture
+		glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR );
+		glEnable(GL_TEXTURE_GEN_S); // oui je veux une generation en S
+		glEnable(GL_TEXTURE_GEN_T); // Et en T aussi
+		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		
+		glEnable(GL_BLEND); // On active le blend
+		//glBlendFunc (GL_ONE, GL_ZERO);
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glColor4f(1., 1., 1., 1.); // Couleur a fond
+		glPolygonMode(GL_FRONT, GL_FILL);
+		
+		//\__________________ bidouille de la texture.
+		glMatrixMode(GL_TEXTURE); // On selectionne la matrice des textures
+		glPushMatrix ();
+		glLoadIdentity(); // On la reset
+		glTranslatef(0.5f - fDecorationsOffsetX * mySystem.fStripesSpeedFactor / (fDockWidth), 0.5f, 0.);
+		glScalef (1., -1., 1.);
+		glMatrixMode(GL_MODELVIEW);
+	}
 	
+	//\__________________ On place le cadre.
 	glLoadIdentity();
-	
 	if (bHorizontal)
 	{
 		glTranslatef ((int) (fDockOffsetX + fDockWidth/2), (int) (fDockOffsetY - fFrameHeight/2), -100);  // (int) -pDock->iMaxIconHeight * (1 + myIcons.fAmplitude) + 1
@@ -1096,22 +1114,6 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 		glTranslatef ((int) (fDockOffsetY - fFrameHeight/2), (int) (fDockOffsetX - fDockWidth/2), -100);
 		glScalef (fFrameHeight, fDockWidth, 1.);
 	}
-	
-	if (iBackgroundTexture = 0)
-		return ;
-	
-	glMatrixMode(GL_TEXTURE); // On selectionne la matrice des textures
-	glPushMatrix ();
-	glLoadIdentity(); // On la reset
-	glTranslatef(0.5f - fDecorationsOffsetX * mySystem.fStripesSpeedFactor / (fDockWidth), 0.5f, 0.);
-	glScalef (1., -1., 1.);
-	glMatrixMode(GL_MODELVIEW);
-	
-	glEnable(GL_BLEND); // On active le blend
-	//glBlendFunc (GL_ONE, GL_ZERO);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glColor4f(1., 1., 1., 1.); // Couleur a fond
-	glPolygonMode(GL_FRONT, GL_FILL);
 	
 	if (! bHorizontal)
 		glRotatef (bDirectionUp ? 90 : -90, 0., 0., 1.);
@@ -1126,19 +1128,25 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 		if (bDirectionUp)
 			glScalef (-1., 1., 1.);
 	}
+	
+	//\__________________ On dessine le cadre.
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, pVertexTab);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, iNbVertex);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
-	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_GEN_S);
-	glDisable(GL_TEXTURE_GEN_T);
-	glDisable(GL_TEXTURE_2D); // Plus de texture merci 
-	
-	glMatrixMode(GL_TEXTURE); // On selectionne la matrice des textures
-	glPopMatrix ();
-	glMatrixMode(GL_MODELVIEW);
+	//\__________________ fini la texture.
+	if (iBackgroundTexture != 0)
+	{
+		glDisable(GL_BLEND);
+		glDisable(GL_TEXTURE_GEN_S);
+		glDisable(GL_TEXTURE_GEN_T);
+		glDisable(GL_TEXTURE_2D); // Plus de texture merci 
+		
+		glMatrixMode(GL_TEXTURE); // On selectionne la matrice des textures
+		glPopMatrix ();
+		glMatrixMode(GL_MODELVIEW);
+	}
 }
 
 void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor, const GLfloat *pVertexTab, int iNbVertex)

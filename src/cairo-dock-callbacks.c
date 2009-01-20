@@ -101,7 +101,7 @@ void cairo_dock_on_realize (GtkWidget* pWidget, CairoDock *pDock)
 	
 	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth (1.0f);
-	glClearStencil (1);
+	glClearStencil (0);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glHint (GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 	

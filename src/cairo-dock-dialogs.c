@@ -205,6 +205,91 @@ static gboolean on_key_press_dialog (GtkWidget *pWidget,
 
 
 #define _drawn_text_width(pDialog) (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth ? pDialog->iMaxTextWidth : pDialog->iTextWidth)
+#define _paint_inside_dialog(pCairoContext, fAlpha) do { \
+	if (fAlpha != 0) \
+		cairo_paint_with_alpha (pCairoContext, fAlpha); \
+	else \
+	cairo_paint (pCairoContext); } while (0)
+static void _cairo_dock_draw_inside_dialog (cairo_t *pCairoContext, CairoDialog *pDialog, double fAlpha)
+{
+	double x, y;
+	if (pDialog->pIconBuffer != NULL)
+	{
+		x = pDialog->iLeftMargin;
+		y = (pDialog->bDirectionUp ? pDialog->iTopMargin : pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
+		if (pDialog->iNbFrames > 1)
+		{
+			cairo_save (pCairoContext);
+			cairo_rectangle (pCairoContext,
+				x,
+				y,
+				pDialog->iIconSize,
+				pDialog->iIconSize);
+			cairo_clip (pCairoContext);
+		}
+		
+		cairo_set_source_surface (pCairoContext,
+			pDialog->pIconBuffer,
+			x,
+			y);
+		_paint_inside_dialog(pCairoContext, fAlpha);
+		if (pDialog->iNbFrames > 1)
+			cairo_restore (pCairoContext);
+	}
+	
+	if (pDialog->pTextBuffer != NULL)
+	{
+		x = pDialog->iLeftMargin + pDialog->iIconSize + CAIRO_DIALOG_TEXT_MARGIN;
+		y = (pDialog->bDirectionUp ? pDialog->iTopMargin : pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
+		if (pDialog->iTextHeight < pDialog->iMessageHeight)  // on centre le texte.
+			y += (pDialog->iMessageHeight - pDialog->iTextHeight) / 2;
+		if (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth)
+		{
+			cairo_save (pCairoContext);
+			cairo_rectangle (pCairoContext,
+				x,
+				y,
+				pDialog->iMaxTextWidth,
+				pDialog->iTextHeight);
+			cairo_clip (pCairoContext);
+		}
+		cairo_set_source_surface (pCairoContext,
+			pDialog->pTextBuffer,
+			x - pDialog->iCurrentTextOffset,
+			y);
+		_paint_inside_dialog(pCairoContext, fAlpha);
+		
+		if (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth)
+		{
+			cairo_set_source_surface (pCairoContext,
+				pDialog->pTextBuffer,
+				x - pDialog->iCurrentTextOffset + pDialog->iTextWidth + 10,
+				y);
+			_paint_inside_dialog(pCairoContext, fAlpha);
+			cairo_restore (pCairoContext);
+		}
+	}
+	
+	if (pDialog->iButtonsType != GTK_BUTTONS_NONE)
+	{
+		int iButtonY = (pDialog->bDirectionUp ? pDialog->iTopMargin + pDialog->iMessageHeight + pDialog->iInteractiveHeight + CAIRO_DIALOG_VGAP : pDialog->iHeight - pDialog->iTopMargin - pDialog->iButtonsHeight - CAIRO_DIALOG_VGAP);  // requisition.height
+
+		cairo_set_source_surface (pCairoContext,
+				s_pButtonOkSurface,
+				.5*pDialog->iWidth - myDialogs.iDialogButtonWidth - .5*CAIRO_DIALOG_BUTTON_GAP + pDialog->iButtonOkOffset,
+				iButtonY + pDialog->iButtonOkOffset);
+		_paint_inside_dialog(pCairoContext, fAlpha);
+
+		cairo_set_source_surface (pCairoContext,
+				s_pButtonCancelSurface,
+				.5*pDialog->iWidth + .5*CAIRO_DIALOG_BUTTON_GAP + pDialog->iButtonCancelOffset,
+				iButtonY + pDialog->iButtonCancelOffset);
+		_paint_inside_dialog(pCairoContext, fAlpha);
+	}
+	
+	if (pDialog->pRenderer != NULL)
+		pDialog->pRenderer->render (pCairoContext, pDialog, fAlpha);
+}
 static gboolean on_expose_dialog (GtkWidget *pWidget,
 	GdkEventExpose *pExpose,
 	CairoDialog *pDialog)
@@ -213,7 +298,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 	int x, y;
 	cairo_t *pCairoContext;
 	
-	if (pExpose->area.x != 0 || pExpose->area.y != 0)
+	if ((pExpose->area.x != 0 || pExpose->area.y != 0) && pDialog->fReflectAlpha == 0)
 	{
 		if (pDialog->pIconBuffer != NULL)
 		{
@@ -279,89 +364,26 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 		pDialog->pDecorator->render (pCairoContext, pDialog);
 		cairo_restore (pCairoContext);
 	}
-
-	if (pDialog->pIconBuffer != NULL)
-	{
-		x = pDialog->iLeftMargin;
-		y = (pDialog->bDirectionUp ? pDialog->iTopMargin : pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
-		if (pDialog->iNbFrames > 1)
-		{
-			cairo_save (pCairoContext);
-			cairo_rectangle (pCairoContext,
-				x,
-				y,
-				pDialog->iIconSize,
-				pDialog->iIconSize);
-			cairo_clip (pCairoContext);
-		}
-		
-		cairo_set_source_surface (pCairoContext,
-			pDialog->pIconBuffer,
-			x,
-			y);
-		cairo_paint (pCairoContext);
-		if (pDialog->iNbFrames > 1)
-			cairo_restore (pCairoContext);
-	}
 	
-	if (pDialog->pTextBuffer != NULL)
+	_cairo_dock_draw_inside_dialog (pCairoContext, pDialog, 0.);
+
+	if (pDialog->fReflectAlpha != 0)
 	{
-		x = pDialog->iLeftMargin + pDialog->iIconSize + CAIRO_DIALOG_TEXT_MARGIN;
-		y = (pDialog->bDirectionUp ? pDialog->iTopMargin : pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
-		if (pDialog->iTextHeight < pDialog->iMessageHeight)  // on centre le texte.
-			y += (pDialog->iMessageHeight - pDialog->iTextHeight) / 2;
-		if (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth)
-		{
-			cairo_save (pCairoContext);
-			cairo_rectangle (pCairoContext,
-				x,
-				y,
-				pDialog->iMaxTextWidth,
-				pDialog->iTextHeight);
-			cairo_clip (pCairoContext);
-		}
-		cairo_set_source_surface (pCairoContext,
-			pDialog->pTextBuffer,
-			x - pDialog->iCurrentTextOffset,
-			y);
-		cairo_paint (pCairoContext);
-		
-		if (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth)
-		{
-			cairo_set_source_surface (pCairoContext,
-				pDialog->pTextBuffer,
-				x - pDialog->iCurrentTextOffset + pDialog->iTextWidth + 10,
-				y);
-			cairo_paint (pCairoContext);
-			cairo_restore (pCairoContext);
-		}
+		cairo_save (pCairoContext);
+		cairo_rectangle (pCairoContext,
+			0.,
+			pDialog->iTopMargin + pDialog->iBubbleHeight,
+			pDialog->iBubbleWidth,
+			pDialog->iBottomMargin);
+		g_print( "pDialog->iBottomMargin:%d\n", pDialog->iBottomMargin);
+		cairo_clip (pCairoContext);
+
+		cairo_translate (pCairoContext,
+			0.,
+			2* (pDialog->iTopMargin + pDialog->iBubbleHeight));
+		cairo_scale (pCairoContext, 1., -1.);
+		_cairo_dock_draw_inside_dialog (pCairoContext, pDialog, pDialog->fReflectAlpha);
 	}
-	
-	if (pDialog->iButtonsType != GTK_BUTTONS_NONE)
-	{
-		/*GtkRequisition requisition = {0, 0};
-		if (pDialog->pInteractiveWidget != NULL)
-			gtk_widget_size_request (pDialog->pInteractiveWidget, &requisition);
-		cd_message (" pInteractiveWidget : %dx%d", requisition.width, requisition.height);*/
-
-		int iButtonY = (pDialog->bDirectionUp ? pDialog->iTopMargin + pDialog->iMessageHeight + pDialog->iInteractiveHeight + CAIRO_DIALOG_VGAP : pDialog->iHeight - pDialog->iTopMargin - pDialog->iButtonsHeight - CAIRO_DIALOG_VGAP);  // requisition.height
-		//g_print (" -> iButtonY : %d\n", iButtonY);
-
-		cairo_set_source_surface (pCairoContext,
-				s_pButtonOkSurface,
-				.5*pDialog->iWidth - myDialogs.iDialogButtonWidth - .5*CAIRO_DIALOG_BUTTON_GAP + pDialog->iButtonOkOffset,
-				iButtonY + pDialog->iButtonOkOffset);
-		cairo_paint (pCairoContext);
-
-		cairo_set_source_surface (pCairoContext,
-				s_pButtonCancelSurface,
-				.5*pDialog->iWidth + .5*CAIRO_DIALOG_BUTTON_GAP + pDialog->iButtonCancelOffset,
-				iButtonY + pDialog->iButtonCancelOffset);
-		cairo_paint (pCairoContext);
-	}
-	
-	if (pDialog->pRenderer != NULL)
-		pDialog->pRenderer->render (pCairoContext, pDialog);
 
 	cairo_destroy (pCairoContext);
 	return FALSE;
@@ -782,7 +804,7 @@ static gboolean _cairo_dock_animate_dialog_icon (CairoDialog *pDialog)
 {
 	pDialog->iCurrentFrame ++;
 	if (pDialog->iCurrentFrame == pDialog->iNbFrames)
-			pDialog->iCurrentFrame = 0;
+		pDialog->iCurrentFrame = 0;
 	cairo_dock_damage_icon_dialog (pDialog);
 	return TRUE;
 }
@@ -792,7 +814,7 @@ static gboolean _cairo_dock_animate_dialog_text (CairoDialog *pDialog)
 		return FALSE;
 	pDialog->iCurrentTextOffset += 3;
 	if (pDialog->iCurrentTextOffset >= pDialog->iTextWidth)
-			pDialog->iCurrentTextOffset -= pDialog->iTextWidth;
+		pDialog->iCurrentTextOffset -= pDialog->iTextWidth;
 	cairo_dock_damage_text_dialog (pDialog);
 	return TRUE;
 }
@@ -1633,35 +1655,44 @@ void cairo_dock_set_dialog_icon (CairoDialog *pDialog, const gchar *cImageFilePa
 
 void cairo_dock_damage_icon_dialog (CairoDialog *pDialog)
 {
-	gtk_widget_queue_draw_area (pDialog->pWidget,
-		pDialog->iLeftMargin,
-		(pDialog->bDirectionUp ? 
-			pDialog->iTopMargin :
-			pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight)),
-		pDialog->iIconSize,
-		pDialog->iIconSize);
+	if (pDialog->fReflectAlpha == 0)
+		gtk_widget_queue_draw_area (pDialog->pWidget,
+			pDialog->iLeftMargin,
+			(pDialog->bDirectionUp ? 
+				pDialog->iTopMargin :
+				pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight)),
+			pDialog->iIconSize,
+			pDialog->iIconSize);
+	else
+		gtk_widget_queue_draw (pDialog->pWidget);
 }
 
 void cairo_dock_damage_text_dialog (CairoDialog *pDialog)
 {
-	gtk_widget_queue_draw_area (pDialog->pWidget,
-		pDialog->iLeftMargin + pDialog->iIconSize + CAIRO_DIALOG_TEXT_MARGIN,
-		(pDialog->bDirectionUp ? 
-			pDialog->iTopMargin :
-			pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight)),
-		_drawn_text_width (pDialog),
-		pDialog->iTextHeight);
+	if (pDialog->fReflectAlpha == 0)
+		gtk_widget_queue_draw_area (pDialog->pWidget,
+			pDialog->iLeftMargin + pDialog->iIconSize + CAIRO_DIALOG_TEXT_MARGIN,
+			(pDialog->bDirectionUp ? 
+				pDialog->iTopMargin :
+				pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight)),
+			_drawn_text_width (pDialog),
+			pDialog->iTextHeight);
+	else
+		gtk_widget_queue_draw (pDialog->pWidget);
 }
 
 void cairo_dock_damage_interactive_widget_dialog (CairoDialog *pDialog)
 {
-	gtk_widget_queue_draw_area (pDialog->pWidget,
-		pDialog->iLeftMargin,
-		(pDialog->bDirectionUp ? 
-			pDialog->iTopMargin + pDialog->iMessageHeight :
-			pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight) + pDialog->iMessageHeight),
-		pDialog->iInteractiveWidth,
-		pDialog->iInteractiveHeight);
+	if (pDialog->fReflectAlpha == 0)
+		gtk_widget_queue_draw_area (pDialog->pWidget,
+			pDialog->iLeftMargin,
+			(pDialog->bDirectionUp ? 
+				pDialog->iTopMargin + pDialog->iMessageHeight :
+				pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight) + pDialog->iMessageHeight),
+			pDialog->iInteractiveWidth,
+			pDialog->iInteractiveHeight);
+	else
+		gtk_widget_queue_draw (pDialog->pWidget);
 }
 
 
@@ -1683,8 +1714,9 @@ void cairo_dock_set_frame_size_comics (CairoDialog *pDialog)
 	pDialog->iTopMargin = iMargin;
 	pDialog->iBottomMargin = iMargin;
 	pDialog->iMinBottomGap = CAIRO_DIALOG_MIN_GAP;
-	pDialog->iMinFrameWidth = iMargin + CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_ROUNDING_MARGIN + CAIRO_DIALOG_TIP_BASE + iMargin;  // dans l'ordre.
+	pDialog->iMinFrameWidth = CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_ROUNDING_MARGIN + CAIRO_DIALOG_TIP_BASE;  // dans l'ordre.
 	pDialog->fAlign = 0.;  // la pointe colle au bord du dialogue.
+	pDialog->fReflectAlpha = 0.;
 }
 
 void cairo_dock_draw_decorations_comics (cairo_t *pCairoContext, CairoDialog *pDialog)
@@ -1784,8 +1816,9 @@ void cairo_dock_set_frame_size_modern (CairoDialog *pDialog)
 	pDialog->iTopMargin = iMargin;
 	pDialog->iBottomMargin = iMargin;
 	pDialog->iMinBottomGap = 30;
-	pDialog->iMinFrameWidth = CAIRO_DIALOG_TIP_BASE + CAIRO_DIALOG_TIP_MARGIN + 2 * iMargin;
+	pDialog->iMinFrameWidth = 30;  // valeur au pif.
 	pDialog->fAlign = .33;
+	pDialog->fReflectAlpha = 0.;
 }
 
 void cairo_dock_draw_decorations_modern (cairo_t *pCairoContext, CairoDialog *pDialog)
@@ -1874,3 +1907,44 @@ void cairo_dock_draw_decorations_modern (cairo_t *pCairoContext, CairoDialog *pD
 	}
 }
 
+
+#define _DIALOG_REFLECT_SIZE 70
+void cairo_dock_set_frame_size_3Dplane (CairoDialog *pDialog)
+{
+	double fInclination = tan (60./180.*G_PI);
+	double fFrameHeight = 10 + MIN (MAX (pDialog->iIconSize, pDialog->iTextHeight), _DIALOG_REFLECT_SIZE);
+	double fRadius = MIN (myDialogs.iCornerRadius, fFrameHeight/2);
+	double fLineWidth = myDialogs.iLineWidth;
+	
+	int iMargin = cairo_dock_calculate_extra_width_for_trapeze (fFrameHeight, fInclination, fRadius, fLineWidth)/2;
+	pDialog->iRightMargin = iMargin;
+	pDialog->iLeftMargin = iMargin;
+	pDialog->iTopMargin = 0;
+	pDialog->iBottomMargin = fFrameHeight - 10;
+	pDialog->iMinBottomGap = 10;
+	pDialog->iMinFrameWidth = 30;  // valeur au pif.
+	pDialog->fAlign = .5;
+	pDialog->fReflectAlpha = .4;
+}
+
+void cairo_dock_draw_decorations_3Dplane (cairo_t *pCairoContext, CairoDialog *pDialog)
+{
+	double fInclination = tan (60./180.*G_PI);
+	double fReflectHeight = MIN (MAX (pDialog->iIconSize, pDialog->iTextHeight), _DIALOG_REFLECT_SIZE);
+	double fFrameHeight = 10 + fReflectHeight;
+	double fRadius = MIN (myDialogs.iCornerRadius, fFrameHeight/2);
+	double fLineWidth = myDialogs.iLineWidth;
+	int sens = (pDialog->bDirectionUp ?	1 :	-1);
+	double fFrameWidth = pDialog->iBubbleWidth;
+	double fOffsetX = pDialog->iLeftMargin;
+	double fOffsetY = pDialog->iTopMargin + pDialog->iBubbleHeight - 10;
+	
+	cairo_dock_draw_frame (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight, fOffsetX, fOffsetY, sens, fInclination, pDialog->bIsHorizontal);
+	
+	cairo_set_source_rgba (pCairoContext, myDialogs.fDialogColor[0], myDialogs.fDialogColor[1], myDialogs.fDialogColor[2], myDialogs.fDialogColor[3]);
+	cairo_fill_preserve (pCairoContext);
+
+	cairo_set_line_width (pCairoContext, 1.);
+	cairo_set_source_rgba (pCairoContext, myDialogs.fLineColor[0], myDialogs.fLineColor[1], myDialogs.fLineColor[2], myDialogs.fLineColor[3]);
+	cairo_stroke (pCairoContext);
+}

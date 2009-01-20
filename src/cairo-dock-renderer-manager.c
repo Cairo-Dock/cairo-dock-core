@@ -207,6 +207,11 @@ void cairo_dock_initialize_renderer_manager (void)
 	pDecorator->set_size = cairo_dock_set_frame_size_modern;
 	pDecorator->render = cairo_dock_draw_decorations_modern;
 	cairo_dock_register_dialog_decorator ("modern", pDecorator);
+	
+	pDecorator = g_new (CairoDialogDecorator, 1);
+	pDecorator->set_size = cairo_dock_set_frame_size_3Dplane;
+	pDecorator->render = cairo_dock_draw_decorations_3Dplane;
+	cairo_dock_register_dialog_decorator ("3D", pDecorator);
 }
 
 

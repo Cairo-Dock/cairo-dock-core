@@ -97,7 +97,7 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 	
 	if (cairo_dock_application_manager_is_running () && pPrevTaskBar->iAppliMaxNameLength != pTaskBar->iAppliMaxNameLength)
 	{
-		// recharger les noms ...
+		/// recharger les noms ...
 	}
 	
 	if (! cairo_dock_application_manager_is_running () && pTaskBar->bShowAppli)  // maintenant on veut voir les applis !
@@ -108,6 +108,26 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 	else
 		gtk_widget_queue_draw (pDock->pWidget);  // pour le fVisibleAlpha
 	
+	if (pTaskBar->bAutoHideOnFullScreen != pPrevTaskBar->bAutoHideOnFullScreen || pTaskBar->bAutoHideOnMaximized != pPrevTaskBar->bAutoHideOnMaximized)
+	{
+		if (cairo_dock_search_window_on_our_way (pTaskBar->bAutoHideOnMaximized, pTaskBar->bAutoHideOnFullScreen) == NULL)
+		{
+			if (cairo_dock_quick_hide_is_activated ())
+			{
+				cd_message (" => aucune fenetre n'est desormais genante");
+				cairo_dock_deactivate_temporary_auto_hide ();
+			}
+		}
+		else
+		{
+			if (! cairo_dock_quick_hide_is_activated ())
+			{
+				cd_message (" => une fenetre desormais genante");
+				cairo_dock_activate_temporary_auto_hide ();
+			}
+		}
+	}
+
 	/**if (bUpdateSize)  // utile ?...
 	{
 		cairo_dock_calculate_dock_icons (pDock);
