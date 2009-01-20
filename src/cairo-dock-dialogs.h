@@ -258,5 +258,8 @@ void cairo_dock_draw_decorations_modern (cairo_t *pCairoContext, CairoDialog *pD
 void cairo_dock_set_frame_size_3Dplane (CairoDialog *pDialog);
 void cairo_dock_draw_decorations_3Dplane (cairo_t *pCairoContext, CairoDialog *pDialog);
 
+void cairo_dock_set_frame_size_tooltip (CairoDialog *pDialog);
+void cairo_dock_draw_decorations_tooltip (cairo_t *pCairoContext, CairoDialog *pDialog);
+
 G_END_DECLS
 #endif

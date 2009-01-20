@@ -212,6 +212,11 @@ void cairo_dock_initialize_renderer_manager (void)
 	pDecorator->set_size = cairo_dock_set_frame_size_3Dplane;
 	pDecorator->render = cairo_dock_draw_decorations_3Dplane;
 	cairo_dock_register_dialog_decorator ("3D", pDecorator);
+	
+	pDecorator = g_new (CairoDialogDecorator, 1);
+	pDecorator->set_size = cairo_dock_set_frame_size_tooltip;
+	pDecorator->render = cairo_dock_draw_decorations_tooltip;
+	cairo_dock_register_dialog_decorator ("tooltip", pDecorator);
 }
 
 
