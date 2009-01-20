@@ -1948,8 +1948,12 @@ void cairo_dock_draw_decorations_3Dplane (cairo_t *pCairoContext, CairoDialog *p
 	cairo_set_source_rgba (pCairoContext, myDialogs.fLineColor[0], myDialogs.fLineColor[1], myDialogs.fLineColor[2], myDialogs.fLineColor[3]);
 	cairo_stroke (pCairoContext);
 }
+
 //A bosser
 #define _CAIRO_DIALOG_TOOLTIP_MIN_GAP 10
+#define _CAIRO_DIALOG_TOOLTIP_BORDER_PADDING 15
+#define _CAIRO_DIALOG_TOOLTIP_ARROW_WIDTH 15
+#define _CAIRO_DIALOG_TOOLTIP_ARROW_HEIGHT 10
 void cairo_dock_set_frame_size_tooltip (CairoDialog *pDialog)
 {
 	double fRadius = myDialogs.iCornerRadius;
@@ -1957,11 +1961,11 @@ void cairo_dock_set_frame_size_tooltip (CairoDialog *pDialog)
 	int iMargin = .5 * fLineWidth + (1. - sqrt (2) / 2) * fRadius;
 	pDialog->iRightMargin = iMargin;
 	pDialog->iLeftMargin = iMargin;
-	pDialog->iTopMargin = iMargin;
-	pDialog->iBottomMargin = iMargin;
+	pDialog->iTopMargin = 0;
+	pDialog->iBottomMargin = 0;
 	pDialog->iMinBottomGap = _CAIRO_DIALOG_TOOLTIP_MIN_GAP;
 	pDialog->iMinFrameWidth = CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_ROUNDING_MARGIN + CAIRO_DIALOG_TIP_BASE;  // dans l'ordre.
-	pDialog->fAlign = 0.;  // la pointe colle au bord du dialogue.
+	pDialog->fAlign = 0.; // la pointe colle au bord du dialogue.
 	pDialog->fReflectAlpha = 0.;
 }
 
@@ -1969,72 +1973,57 @@ void cairo_dock_draw_decorations_tooltip (cairo_t *pCairoContext, CairoDialog *p
 {
 	double fLineWidth = myDialogs.iLineWidth;
 	double fRadius = myDialogs.iCornerRadius;
-	
-	double fGapFromDock = pDialog->iDistanceToDock + .5 * fLineWidth;
-	double cos_gamma = 1 / sqrt (1. + 1. * (CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_BASE) / fGapFromDock * (CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_BASE) / fGapFromDock);
-	double cos_theta = 1 / sqrt (1. + 1. * CAIRO_DIALOG_TIP_MARGIN / fGapFromDock * CAIRO_DIALOG_TIP_MARGIN / fGapFromDock);
-	double fTipHeight = fGapFromDock / (1. + fLineWidth / 2. / CAIRO_DIALOG_TIP_BASE * (1./cos_gamma + 1./cos_theta));
-	//g_print ("TipHeight <- %d\n", (int)fTipHeight);
 
 	double fOffsetX	= fRadius +	fLineWidth / 2;
 	double fOffsetY	= (pDialog->bDirectionUp ? fLineWidth / 2 : pDialog->iHeight - fLineWidth / 2);
 	int	sens = (pDialog->bDirectionUp ?	1 :	-1);
-	cairo_move_to (pCairoContext, fOffsetX, fOffsetY);
-	//g_print ("  fOffsetX : %.2f; fOffsetY	: %.2f\n", fOffsetX, fOffsetY);
 	int	iWidth = pDialog->iWidth;
-
+	
+	//On se déplace la ou il le faut
+	cairo_move_to (pCairoContext, fOffsetX, fOffsetY);
+  
+  // Ligne du haut (Haut gauche -> Haut Droite)
 	cairo_rel_line_to (pCairoContext, iWidth - (2 *	fRadius + fLineWidth), 0);
+	
 	// Coin	haut droit.
 	cairo_rel_curve_to (pCairoContext,
 		0, 0,
 		fRadius, 0,
 		fRadius, sens *	fRadius);
+		
+	// Ligne droite. (Haut droit -> Bas droit)
 	cairo_rel_line_to (pCairoContext, 0, sens *	(pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin - (2 * fRadius + fLineWidth)));
+	
 	// Coin	bas	droit.
 	cairo_rel_curve_to (pCairoContext,
 		0, 0,
 		0, sens	* fRadius,
 		-fRadius, sens * fRadius);
+	
 	// La pointe.
-	/*double fDeltaMargin;
-	if (pDialog->bRight)
-	{
-		fDeltaMargin = MAX (0, pDialog->iAimedX	- pDialog->iPositionX -	fRadius	- fLineWidth / 2);
-		//g_print ("fDeltaMargin : %.2f\n",	fDeltaMargin);
-		cairo_rel_line_to (pCairoContext, -iWidth +	fDeltaMargin + fLineWidth +	2 * fRadius + CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_BASE + CAIRO_DIALOG_TIP_ROUNDING_MARGIN ,	0);	
-		cairo_rel_curve_to (pCairoContext,
-			0, 0,
-			- CAIRO_DIALOG_TIP_ROUNDING_MARGIN,	0,
-			- (CAIRO_DIALOG_TIP_ROUNDING_MARGIN	+ CAIRO_DIALOG_TIP_MARGIN +	CAIRO_DIALOG_TIP_BASE),	sens * fTipHeight);
-		cairo_rel_curve_to (pCairoContext,
-			0, 0,
-			CAIRO_DIALOG_TIP_MARGIN, - sens	* fTipHeight,
-			CAIRO_DIALOG_TIP_MARGIN	- CAIRO_DIALOG_TIP_ROUNDING_MARGIN,	- sens * fTipHeight);
-		cairo_rel_line_to (pCairoContext, -	CAIRO_DIALOG_TIP_MARGIN	- fDeltaMargin + CAIRO_DIALOG_TIP_ROUNDING_MARGIN, 0);
+	double fDeltaMargin;
+	if (pDialog->bRight) {
+	  fDeltaMargin = MAX (0, pDialog->iAimedX	- pDialog->iPositionX -	fRadius	- fLineWidth - _CAIRO_DIALOG_TOOLTIP_BORDER_PADDING/ 2);
+    cairo_rel_line_to (pCairoContext, -iWidth + fLineWidth +	2 * fRadius + (3 * _CAIRO_DIALOG_TOOLTIP_BORDER_PADDING) -	fDeltaMargin,	0);	
+  	cairo_rel_line_to (pCairoContext, - _CAIRO_DIALOG_TOOLTIP_ARROW_WIDTH, sens * _CAIRO_DIALOG_TOOLTIP_ARROW_HEIGHT);
+  	cairo_rel_line_to (pCairoContext, - _CAIRO_DIALOG_TOOLTIP_ARROW_WIDTH, -sens * _CAIRO_DIALOG_TOOLTIP_ARROW_HEIGHT);
+  	cairo_rel_line_to (pCairoContext, - _CAIRO_DIALOG_TOOLTIP_BORDER_PADDING + fDeltaMargin, 0);
 	}
-	else
-	{
-		fDeltaMargin = MAX (0, MIN (- CAIRO_DIALOG_TIP_MARGIN -	CAIRO_DIALOG_TIP_ROUNDING_MARGIN - CAIRO_DIALOG_TIP_BASE - fRadius - fLineWidth / 2, pDialog->iPositionX - pDialog->iAimedX	- fRadius -	fLineWidth / 2)	+ pDialog->iWidth);
-		//g_print ("fDeltaMargin : %.2f	/ %d\n", fDeltaMargin, pDialog->iWidth);
-		cairo_rel_line_to (pCairoContext, -	(CAIRO_DIALOG_TIP_MARGIN + fDeltaMargin) + CAIRO_DIALOG_TIP_ROUNDING_MARGIN, 0);
-		cairo_rel_curve_to (pCairoContext,
-			0, 0,
-			-CAIRO_DIALOG_TIP_ROUNDING_MARGIN, 0,
-			CAIRO_DIALOG_TIP_MARGIN	- CAIRO_DIALOG_TIP_ROUNDING_MARGIN,	sens * fTipHeight);
-		cairo_rel_curve_to (pCairoContext,
-			0, 0,
-			- (CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_BASE), - sens	* fTipHeight,
-			- (CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_BASE)	- CAIRO_DIALOG_TIP_ROUNDING_MARGIN,	- sens * fTipHeight);
-		cairo_rel_line_to (pCairoContext, -iWidth +	fDeltaMargin + fLineWidth +	2 *	fRadius	+ CAIRO_DIALOG_TIP_MARGIN +	CAIRO_DIALOG_TIP_BASE +	CAIRO_DIALOG_TIP_ROUNDING_MARGIN, 0);
+	else {
+	  fDeltaMargin = MAX (0, MIN (- (3 * _CAIRO_DIALOG_TOOLTIP_BORDER_PADDING )- fRadius - fLineWidth / 2, pDialog->iPositionX - pDialog->iAimedX	- fRadius -	fLineWidth / 2)	+ pDialog->iWidth);
+    cairo_rel_line_to (pCairoContext, - (_CAIRO_DIALOG_TOOLTIP_BORDER_PADDING + fDeltaMargin), 0);
+    cairo_rel_line_to (pCairoContext, - _CAIRO_DIALOG_TOOLTIP_ARROW_WIDTH, sens * _CAIRO_DIALOG_TOOLTIP_ARROW_HEIGHT);
+    cairo_rel_line_to (pCairoContext, - _CAIRO_DIALOG_TOOLTIP_ARROW_WIDTH, -sens * _CAIRO_DIALOG_TOOLTIP_ARROW_HEIGHT);
+    cairo_rel_line_to (pCairoContext, -iWidth + fLineWidth +	2 * fRadius + (3 * _CAIRO_DIALOG_TOOLTIP_BORDER_PADDING) + fDeltaMargin,	0);
 	}
-  */
-  cairo_rel_line_to (pCairoContext, -iWidth + fLineWidth +	2 * fRadius ,	0);
+  
 	// Coin	bas	gauche.
 	cairo_rel_curve_to (pCairoContext,
 		0, 0,
 		-fRadius, 0,
 		-fRadius, -sens	* fRadius);
 	cairo_rel_line_to (pCairoContext, 0, - sens * (pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin - (2 * fRadius + fLineWidth)));
+	
 	// Coin	haut gauche.
 	cairo_rel_curve_to (pCairoContext,
 		0, 0,
@@ -2048,23 +2037,28 @@ void cairo_dock_draw_decorations_tooltip (cairo_t *pCairoContext, CairoDialog *p
 
 	cairo_set_line_width (pCairoContext, fLineWidth);
 	cairo_set_source_rgba (pCairoContext, myDialogs.fLineColor[0], myDialogs.fLineColor[1], myDialogs.fLineColor[2], myDialogs.fLineColor[3]);
-	//cairo_stroke (pCairoContext);
+	cairo_stroke (pCairoContext);
 	
-	//Ajout d'un cadre pour l'icône
-	cairo_rel_line_to (pCairoContext, (pDialog->iIconSize / 2) - (2 *	fRadius + fLineWidth), 0);
-	// Coin	haut droit.
-	cairo_rel_curve_to (pCairoContext,
-		0, 0,
-		fRadius, 0,
-		fRadius, sens *	fRadius);
-	cairo_rel_line_to (pCairoContext, 0, sens *	(pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin - (2 * fRadius + fLineWidth)));
-	// Coin	bas	droit.
-	cairo_rel_curve_to (pCairoContext,
-		0, 0,
-		0, sens	* fRadius,
-		-fRadius, sens * fRadius);
-	cairo_rel_line_to (pCairoContext, -(pDialog->iIconSize / 2) + fLineWidth +	2 * fRadius ,	0);
+	/*//Ajout d'un cadre pour l'icône
+	//On trace une ligne HautGauche -> HautDroit
+	cairo_rel_line_to (pCairoContext, 0, (pDialog->iIconSize / 2) - (2 *	fRadius + fLineWidth));
+	//On trace une ligne HautDroit -> BasDroit
 	cairo_rel_line_to (pCairoContext, 0, - sens * (pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin - (2 * fRadius + fLineWidth)));
+	//On trace une ligne BasDroit -> BasGauche
+	cairo_rel_line_to (pCairoContext, 0, -(pDialog->iIconSize / 2) - (2 *	fRadius + fLineWidth));
+	// Coin	bas	gauche.
+	cairo_rel_curve_to (pCairoContext,
+		0, 0,
+		-fRadius, 0,
+		-fRadius, -sens	* fRadius);
+	//On trace une ligne BasGauche -> HautGauche
+	cairo_rel_line_to (pCairoContext, 0, - sens * (pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin - (2 * fRadius + fLineWidth)));
+	
+	// Coin	haut gauche.
+	cairo_rel_curve_to (pCairoContext,
+		0, 0,
+		0, -sens * fRadius,
+		fRadius, -sens * fRadius);
 	
 	if (fRadius	< 1)
 		cairo_close_path (pCairoContext);
@@ -2077,5 +2071,5 @@ void cairo_dock_draw_decorations_tooltip (cairo_t *pCairoContext, CairoDialog *p
 
 	cairo_set_line_width (pCairoContext, fLineWidth);
 	cairo_set_source_rgba (pCairoContext, myDialogs.fLineColor[0], myDialogs.fLineColor[1], myDialogs.fLineColor[2], myDialogs.fLineColor[3]);
-	//cairo_stroke (pCairoContext);
+	cairo_stroke (pCairoContext);*/
 }
