@@ -1423,6 +1423,6 @@ static void _cairo_dock_for_one_appli (Window *Xid, Icon *icon, gpointer *data)
 }
 void cairo_dock_foreach_applis (CairoDockForeachIconFunc pFunction, gboolean bOutsideDockOnly, gpointer pUserData)
 {
-	gpointer data[2] = {pFunction, pUserData, GINT_TO_POINTER (bOutsideDockOnly)};
+	gpointer data[3] = {pFunction, pUserData, GINT_TO_POINTER (bOutsideDockOnly)};
 	g_hash_table_foreach (s_hXWindowTable, (GHFunc) _cairo_dock_for_one_appli, data);
 }

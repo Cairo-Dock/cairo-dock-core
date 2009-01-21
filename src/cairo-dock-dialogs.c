@@ -1908,10 +1908,11 @@ void cairo_dock_draw_decorations_modern (cairo_t *pCairoContext, CairoDialog *pD
 }
 
 
-#define _DIALOG_REFLECT_SIZE 70
+#define _DIALOG_REFLECT_SIZE 50
+#define _DIALOG_INCLINATION 60.
 void cairo_dock_set_frame_size_3Dplane (CairoDialog *pDialog)
 {
-	double fInclination = tan (60./180.*G_PI);
+	double fInclination = tan (_DIALOG_INCLINATION/180.*G_PI);
 	double fFrameHeight = 10 + MIN (MAX (pDialog->iIconSize, pDialog->iTextHeight), _DIALOG_REFLECT_SIZE);
 	double fRadius = MIN (myDialogs.iCornerRadius, fFrameHeight/2);
 	double fLineWidth = myDialogs.iLineWidth;
@@ -1929,7 +1930,7 @@ void cairo_dock_set_frame_size_3Dplane (CairoDialog *pDialog)
 
 void cairo_dock_draw_decorations_3Dplane (cairo_t *pCairoContext, CairoDialog *pDialog)
 {
-	double fInclination = tan (60./180.*G_PI);
+	double fInclination = tan (_DIALOG_INCLINATION/180.*G_PI);
 	double fReflectHeight = MIN (MAX (pDialog->iIconSize, pDialog->iTextHeight), _DIALOG_REFLECT_SIZE);
 	double fFrameHeight = 10 + fReflectHeight;
 	double fRadius = MIN (myDialogs.iCornerRadius, fFrameHeight/2);
@@ -1941,12 +1942,20 @@ void cairo_dock_draw_decorations_3Dplane (cairo_t *pCairoContext, CairoDialog *p
 	
 	cairo_dock_draw_frame (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight, fOffsetX, fOffsetY, sens, fInclination, pDialog->bIsHorizontal);
 	
-	cairo_set_source_rgba (pCairoContext, myDialogs.fDialogColor[0], myDialogs.fDialogColor[1], myDialogs.fDialogColor[2], myDialogs.fDialogColor[3]);
+	cairo_set_source_rgba (pCairoContext, myDialogs.fDialogColor[0]+.1, myDialogs.fDialogColor[1]+.1, myDialogs.fDialogColor[2]+.1, 1.);
 	cairo_fill_preserve (pCairoContext);
 
 	cairo_set_line_width (pCairoContext, 1.);
 	cairo_set_source_rgba (pCairoContext, myDialogs.fLineColor[0], myDialogs.fLineColor[1], myDialogs.fLineColor[2], myDialogs.fLineColor[3]);
 	cairo_stroke (pCairoContext);
+	
+	cairo_rectangle (pCairoContext,
+		pDialog->iLeftMargin,
+		pDialog->iTopMargin,
+		pDialog->iBubbleWidth,
+		pDialog->iBubbleHeight);
+	cairo_set_source_rgba (pCairoContext, myDialogs.fDialogColor[0], myDialogs.fDialogColor[1], myDialogs.fDialogColor[2], myDialogs.fDialogColor[3]);
+	cairo_fill (pCairoContext);
 }
 
 //A bosser

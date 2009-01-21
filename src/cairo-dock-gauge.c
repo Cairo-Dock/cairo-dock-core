@@ -22,6 +22,7 @@ Written by Necropotame (for any bug report, please mail me to fabounet@users.ber
 #include <cairo-dock-config.h>
 #include <cairo-dock-renderer-manager.h>
 #include <cairo-dock-internal-icons.h>
+#include <cairo-dock-gui-factory.h>
 #include <cairo-dock-gauge.h>
 
 extern gchar *g_cCairoDockDataDir;
@@ -50,11 +51,11 @@ void cairo_dock_list_available_gauges (void)
 	g_free (cGaugeUserDir);
 }
 
-void cairo_dock_update_conf_file_with_gauges (GKeyFile *pOpenedKeyFile, gchar *cConfFile, gchar *cGroupName, gchar *cKeyName)
+void cairo_dock_update_gauge_list_for_gui (void)
 {
-	//g_print ("%s (%s, %s, %s)\n", __func__, cConfFile, cGroupName, cKeyName);
-	cairo_dock_update_conf_file_with_hash_table (pOpenedKeyFile, cConfFile, s_pGaugeTable, cGroupName, cKeyName, NULL, (GHFunc) cairo_dock_write_one_theme_name, TRUE, FALSE);
+	cairo_dock_build_gauge_list_for_gui (s_pGaugeTable);
 }
+
 
 void cairo_dock_invalidate_gauges_list (void)
 {
@@ -62,6 +63,7 @@ void cairo_dock_invalidate_gauges_list (void)
 		return ;
 	g_hash_table_destroy (s_pGaugeTable);
 	s_pGaugeTable = NULL;
+	cairo_dock_build_gauge_list_for_gui (NULL);
 }
 
 
@@ -100,7 +102,7 @@ Gauge *cairo_dock_load_gauge(cairo_t *pSourceContext, const gchar *cThemePath, i
 	Gauge *pGauge = NULL;
 	
 	GString *sImagePath = g_string_new ("");
-	GaugeImage *pGaugeImage = NULL;
+	GaugeImage *pGaugeImage;
 	
 	xmlInitParser ();
 	xmlDocPtr pGaugeTheme;
@@ -156,12 +158,21 @@ Gauge *cairo_dock_load_gauge(cairo_t *pSourceContext, const gchar *cThemePath, i
 				for (pGaugeSubNode = pGaugeNode->xmlChildrenNode; pGaugeSubNode != NULL; pGaugeSubNode = pGaugeSubNode->next)
 				{
 					cNodeContent = xmlNodeGetContent (pGaugeSubNode);
+					g_print ("cNodeContent : %s (%s)\n", cNodeContent, pGaugeSubNode->name);
 					if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posX") == 0)
 						pGaugeIndicator->posX = atof (cNodeContent);
-					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "direction") == 0)
-						pGaugeIndicator->direction = atof (cNodeContent);
 					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posY") == 0)
 						pGaugeIndicator->posY = atof (cNodeContent);
+					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textX") == 0)
+						pGaugeIndicator->textX = atof (cNodeContent);
+					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textY") == 0)
+						pGaugeIndicator->textY = atof (cNodeContent);
+					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textWidth") == 0)
+						pGaugeIndicator->textWidth = atof (cNodeContent);
+					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textHeight") == 0)
+						pGaugeIndicator->textHeight = atof (cNodeContent);
+					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "direction") == 0)
+						pGaugeIndicator->direction = atof (cNodeContent);
 					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posStart") == 0)
 						pGaugeIndicator->posStart = atof (cNodeContent);
 					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posStop") == 0)
@@ -199,6 +210,7 @@ Gauge *cairo_dock_load_gauge(cairo_t *pSourceContext, const gchar *cThemePath, i
 	}
 	
 	xmlCleanupParser ();
+	g_string_free (sImagePath, TRUE);
 	
 	return pGauge;
 }
@@ -284,29 +296,67 @@ void cairo_dock_render_gauge_multi_value(cairo_t *pSourceContext, CairoContainer
 	GList *pIndicatorElement;
 	GList *pValueList;
 	double *pValue;
+	GaugeIndicator *pIndicator;
 	pIndicatorElement = pGauge->indicatorList;
-	for(pValueList = valueList; pValueList != NULL; pValueList = pValueList->next)
+	for (pValueList = valueList; pValueList != NULL && pIndicatorElement != NULL; pValueList = pValueList->next, pIndicatorElement = pIndicatorElement->next)
 	{
 		pValue = pValueList->data;
+		pIndicator = pIndicatorElement->data;
+		
 		if(*pValue > 1) *pValue = 1;
 		else if(*pValue < 0) *pValue = 0;
 		
-		draw_cd_Gauge_image(pSourceContext, pIndicatorElement->data, *pValue);
+		draw_cd_Gauge_image(pSourceContext, pIndicator, *pValue);
 		
-		if(pIndicatorElement->next != NULL) pIndicatorElement = pIndicatorElement->next;
+		if (pIndicator->textWidth != 0 && pIndicator->textHeight != 0)
+		{
+			gchar *cValueFormat = g_strdup_printf ("%.1f", *pValue);
+			cairo_save (pSourceContext);
+			cairo_set_source_rgb (pSourceContext, 1.0f, 0.5f, 0.0f);
+			cairo_set_line_width (pSourceContext, pIndicator->textHeight * pGauge->imageBackground->sizeY);
+			
+			cairo_text_extents_t textExtents;
+			cairo_text_extents (pSourceContext, cValueFormat, &textExtents);
+			cairo_move_to (pSourceContext,
+				-textExtents.width / 2.0f,
+				pIndicator->textHeight * pGauge->imageBackground->sizeY/2 + textExtents.height);
+			
+			cairo_show_text (pSourceContext, cValueFormat);
+			cairo_restore (pSourceContext);
+			g_free (cValueFormat);
+		}
 	}
 	
+	double fMaxScale = cairo_dock_get_max_scale (pContainer);
 	// On represente chaque valeur par son aiguille.
 	pIndicatorElement = pGauge->indicatorList;
-	for(pValueList = valueList; pValueList != NULL; pValueList = pValueList->next)
+	for (pValueList = valueList; pValueList != NULL && pIndicatorElement != NULL; pValueList = pValueList->next, pIndicatorElement = pIndicatorElement->next)
 	{
 		pValue = pValueList->data;
+		pIndicator = pIndicatorElement->data;
+		
 		if(*pValue > 1) *pValue = 1;
 		else if(*pValue < 0) *pValue = 0;
 		
 		draw_cd_Gauge_needle(pSourceContext, pGauge, pIndicatorElement->data, *pValue);
 		
-		if(pIndicatorElement->next != NULL) pIndicatorElement = pIndicatorElement->next;
+		if (pIndicator->textWidth != 0 && pIndicator->textHeight != 0)
+		{
+			gchar *cValueFormat = g_strdup_printf ("%.1f", *pValue * 100);
+			g_print ("%s\n", cValueFormat);
+			cairo_save (pSourceContext);
+			cairo_set_source_rgb (pSourceContext, 1.0f, 0.5f, 0.0f);
+			cairo_set_line_width (pSourceContext, 20.);
+			
+			cairo_text_extents_t textExtents;
+			cairo_text_extents (pSourceContext, cValueFormat, &textExtents);
+			cairo_move_to (pSourceContext,
+				pIndicator->textX * pGauge->sizeX - textExtents.width / 2,
+				pIndicator->textY * pGauge->sizeY + textExtents.height / 2);
+			cairo_show_text (pSourceContext, cValueFormat);
+			cairo_restore (pSourceContext);
+			g_free (cValueFormat);
+		}
 	}
 	
 	// On affiche le fond
@@ -316,6 +366,7 @@ void cairo_dock_render_gauge_multi_value(cairo_t *pSourceContext, CairoContainer
 		cairo_set_source_surface (pSourceContext, pGaugeImage->cairoSurface, 0.0f, 0.0f);
 		cairo_paint (pSourceContext);
 	}
+	
 	cairo_restore (pSourceContext);
 	
 	// On cree le reflet.
@@ -392,42 +443,6 @@ void draw_cd_Gauge_image(cairo_t *pSourceContext, GaugeIndicator *pGaugeIndicato
 		cairo_paint (pSourceContext);
 	}
 }
-/*void draw_cd_Gauge_image(cairo_t *pSourceContext, Gauge *pGauge, GaugeIndicator *pGaugeIndicator, double fValue)
-{
-	cd_debug("gauge : %s\n",__func__);
-	
-	if(pGaugeIndicator->imageList != NULL)
-	{
-		GaugeImage *pGaugeImage;
-		int trueImage;
-		double imageWidthZone;
-		
-		//Equation donnant la bonne image.
-		imageWidthZone = 1 / ((double) pGaugeIndicator->nbImage - 1);
-		trueImage = imageWidthZone * (pGaugeIndicator->nbImage - 1) * (fValue * (pGaugeIndicator->nbImage - 1) + 0.5);
-		cd_debug("gauge : La bonne image est : %d / %d (%d)",trueImage,pGaugeIndicator->nbImage,imageWidthZone);
-		
-		//On charge l'image correspondante à la valeur
-		int i = 0;
-		GList *pElement;
-		for(pElement = pGaugeIndicator->imageList; pElement != NULL; pElement = pElement->next)
-		{
-			if(i > trueImage) break;
-			else if(i == trueImage)
-			{
-				cd_debug("gauge : On a trouver l'image %d",i);
-				pGaugeImage = pElement->data;
-			}
-			else pGaugeImage = NULL;
-			i++;
-		}
-		
-		if(pGaugeImage != NULL)
-		{
-			cairo_set_source_surface (pSourceContext, pGaugeImage->cairoSurface, 0.0f, 0.0f);
-		}
-	}
-}*/
 
 
 void cairo_dock_reload_gauge (cairo_t *pSourceContext, Gauge *pGauge, int iWidth, int iHeight)
@@ -537,14 +552,8 @@ const gchar *cairo_dock_get_gauge_key_value(gchar *cAppletConfFilePath, GKeyFile
 	g_free (cChosenThemeName);
 	
 	cd_debug("Theme de la jauge : %s",cGaugePath);
-	cairo_dock_update_conf_file_with_gauges (pKeyFile, cAppletConfFilePath, cGroupName, cKeyName);
 	
 	return cGaugePath;
-	/**gchar *cThemePath = cairo_dock_manage_themes_for_applet (CAIRO_DOCK_SHARE_DATA_DIR, "gauges", cAppletConfFilePath, pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, cDefaultThemeName);
-	cd_debug("Clés du theme : [%s] %s",cGroupName,cKeyName);
-	cd_debug("Theme de la jauge : %s",cThemePath);
-	cd_debug("Dossier des jauges : %s/gauges",CAIRO_DOCK_SHARE_DATA_DIR);
-	return cThemePath;*/
 }
 
 void cairo_dock_add_watermark_on_gauge (cairo_t *pSourceContext, Gauge *pGauge, gchar *cImagePath, double fAlpha)

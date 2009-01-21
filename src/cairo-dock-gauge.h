@@ -17,11 +17,11 @@ typedef struct
 
 typedef struct
 {
-	gdouble posX;
-	gdouble posY;
-	gdouble posStart;
-	gdouble posStop;
+	gdouble posX, posY;
+	gdouble posStart, posStop;
 	gdouble direction;
+	gdouble textX, textY;
+	gdouble textWidth, textHeight;
 	gint nbImage;
 	GList *imageList;
 	GList *imageNeedle;
@@ -37,8 +37,9 @@ typedef struct
 	GList *indicatorList;
 } Gauge;
 
+
 void cairo_dock_list_available_gauges (void);
-void cairo_dock_update_conf_file_with_gauges (GKeyFile *pOpenedKeyFile, gchar *cConfFile, gchar *cGroupName, gchar *cKeyName);
+void cairo_dock_update_gauge_list_for_gui (void);
 void cairo_dock_invalidate_gauges_list (void);
 
 void cairo_dock_xml_open_file (gchar *filePath, const gchar *mainNodeName,xmlDocPtr *xmlDoc,xmlNodePtr *node);

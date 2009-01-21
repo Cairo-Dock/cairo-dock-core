@@ -1600,6 +1600,8 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 
 		cairo_dock_replace_all_dialogs ();
 	}
+	else
+		g_print ("on ne replace pas les dialgues\n");
 	
 	return FALSE;
 }

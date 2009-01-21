@@ -238,7 +238,7 @@ static gboolean _cairo_dock_add_one_module_widget (gchar *cModuleName, CairoDock
 	int iActive;
 	if (! pModule->pInterface->stopModule)
 		iActive = -1;
-	else if (g_pMainDock == NULL && cActiveModules != NULL)
+	else if (g_pMainDock == NULL && cActiveModules != NULL)  // avant chargement du theme.
 	{
 		gchar *str = g_strstr_len (cActiveModules, strlen (cActiveModules), cModuleName);
 		iActive = (str != NULL &&
@@ -247,7 +247,7 @@ static gboolean _cairo_dock_add_one_module_widget (gchar *cModuleName, CairoDock
 	}
 	else
 		iActive = (pModule->pInstancesList != NULL);
-	gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);
+	
 	CairoDockGroupDescription *pGroupDescription = _cairo_dock_add_group_button (cModuleName,
 		pModule->pVisitCard->cIconFilePath,
 		pModule->pVisitCard->iCategory,
@@ -255,7 +255,9 @@ static gboolean _cairo_dock_add_one_module_widget (gchar *cModuleName, CairoDock
 		pModule->pVisitCard->cPreviewFilePath,
 		iActive,
 		pModule->cConfFilePath != NULL,
-		cOriginalConfFilePath);
+		NULL);
+	pGroupDescription->cOriginalConfFilePath = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);  // petite optimisation, on le rajoute nous-memes.
+	pGroupDescription->cGettextDomain = pModule->pVisitCard->cGettextDomain;  // inutile de dupliquer ca.
 	pGroupDescription->load_custom_widget = pModule->pInterface->load_custom_widget;
 	return FALSE;
 }
@@ -768,7 +770,7 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 		pWidget = cairo_dock_build_group_widget (pKeyFile,
 			pGroupDescription->cGroupName,
 			cairo_dock_get_main_tooltips (),
-			NULL,
+			pGroupDescription->cGettextDomain,
 			cairo_dock_get_main_window (),
 			&s_pCurrentWidgetList,
 			pDataGarbage,
@@ -776,17 +778,18 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 	}
 	else
 	{
-		pWidget = cairo_dock_build_conf_file_widget (cConfFilePath,
+		pWidget = cairo_dock_build_key_file_widget (pKeyFile,
 			cairo_dock_get_main_tooltips (),
-			NULL,
+			pGroupDescription->cGettextDomain,
 			cairo_dock_get_main_window (),
 			&s_pCurrentWidgetList,
 			pDataGarbage,
 			pGroupDescription->cOriginalConfFilePath);
 	}
 	if (pGroupDescription->load_custom_widget != NULL)
-		pGroupDescription->load_custom_widget ();
-	
+		pGroupDescription->load_custom_widget (pKeyFile);
+	g_key_file_free (pKeyFile);
+
 	//\_______________ On affiche le widget du groupe.
 	cairo_dock_hide_all_categories ();
 	

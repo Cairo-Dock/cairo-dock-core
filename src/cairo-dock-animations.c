@@ -151,7 +151,7 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 			}
 			pDock->iScrollOffset = 0;
 
-			pDock->calculate_max_dock_size (pDock);
+			pDock->calculate_max_dock_size (pDock);  // utilite ?
 			pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? mySystem.fUnfoldAcceleration : 0);
 
 			cairo_dock_allow_entrance (pDock);

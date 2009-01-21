@@ -22,7 +22,8 @@ struct _CairoDockGroupDescription {
 	gchar *cOriginalConfFilePath;
 	gchar *cIcon;
 	gchar *cConfFilePath;
-	void (* load_custom_widget) (void);
+	gchar *cGettextDomain;
+	void (* load_custom_widget) (GKeyFile* pKeyFile);
 	} ;
 
 typedef struct _CairoDockGroupDescription CairoDockGroupDescription;

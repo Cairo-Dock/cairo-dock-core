@@ -361,7 +361,8 @@ struct _CairoDockModuleInterface {
 	gboolean (* read_conf_file) (CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile);
 	void (* reset_config) (CairoDockModuleInstance *pInstance);
 	void (* reset_data) (CairoDockModuleInstance *pInstance);
-	void (* load_custom_widget) (void);
+	void (* load_custom_widget) (GKeyFile *pKeyFile);
+	void (* apply_custom_widget) (GKeyFile *pKeyFile);
 };
 
 struct _CairoDockModuleInstance {
@@ -380,15 +381,6 @@ struct _CairoDockModuleInstance {
 
 /// Construit et renvoie la carte de visite du module.
 typedef gboolean (* CairoDockModulePreInit) (CairoDockVisitCard *pVisitCard, CairoDockModuleInterface *pInterface);
-
-/// Initialise le module, et renvoie son icone si il en a.
-/*typedef void (*CairoDockModuleInit) (GKeyFile *pKeyFile, CairoDockModuleInstance *pInstance);
-
-/// Stoppe le module et libere toutes les ressources allouees par lui.
-typedef void (*CairoDockModuleStop) (CairoDockModuleInstance *pInstance);
-
-/// Recharge le module (optionnel).
-typedef gboolean (*CairoDockModuleReload) (GKeyFile *pKeyFile, CairoDockModuleInstance *pInstance, CairoContainer *pOldContainer);*/
 
 struct _CairoDockModule {
 	/// chemin du .so
@@ -1123,12 +1115,18 @@ typedef enum {
 	CAIRO_DOCK_NB_SART_MODES
 	} CairoDockStartMode;
 
+
+#define CAIRO_DOCK_DATA_FORMAT_MAX_LEN 12
 typedef struct _CairoDataRendererAttribute CairoDataRendererAttribute;
 struct _CairoDataRendererAttribute {
 	gint iNbValues;
 	gchar **cTitles;
 	gboolean bWriteValues;
 	gdouble fTextColor[3];
+	gdouble *fMinValues;
+	gdouble *fMaxValues;
+	gboolean bUpdateMinMax;
+	void (*get_format_from_value) (double fValue, gchar *cFormatBuffer);
 };
 
 typedef struct _CairoGaugeAttribute CairoGaugeAttribute;

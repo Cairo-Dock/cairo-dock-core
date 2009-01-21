@@ -43,7 +43,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDialogs *pDialogs)
 			pDialogs->dialogTextDescription.iStyle = PANGO_STYLE_ITALIC;
 		else
 			pDialogs->dialogTextDescription.iStyle = PANGO_STYLE_NORMAL;
-		pDialogs->dialogTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "outlined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+		pDialogs->dialogTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "outlined", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 
 		pDialogs->iCornerRadius = cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "corner", &bFlushConfFileNeeded, 8, NULL, NULL);
 		pDialogs->iLineWidth = cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "border", &bFlushConfFileNeeded, 1, NULL, NULL);

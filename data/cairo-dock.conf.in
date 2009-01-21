@@ -556,10 +556,10 @@ relative icon size = 1.
 #F+[Buttons;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-buttons.png]
 frame_button =
 
-#i+[10;99] Size of buttons in the info-bubbles (width x height) :
+#i+[10;64] Size of buttons in the info-bubbles (width x height) :
 #{in pixels.}
 button width = 48
-#i+[10;99]  ...
+#i+[10;64]  ...
 button height = 48
 
 #S+ Name of an image to use for the yes/ok button :
@@ -611,13 +611,12 @@ message weight = 5
 message italic = false
 
 #b+ Should be outlined ?
-outlined = true
+outlined = false
 
 #F+
 fin_text =
 
-#i+[0;99] Size of the icon displayed next to the text :
-#{Put 0 to let the size adapt itself to the text.}
+#i+[10;96] Size of the icon displayed next to the text :
 icon size = 48
 
 
