@@ -1209,15 +1209,42 @@ void cairo_dock_read_module_config (GKeyFile *pKeyFile, CairoDockModuleInstance 
 
 
 static int s_iNbUsedSlots = 0;
+static CairoDockModuleInstance *s_pUsedSlots[CAIRO_DOCK_NB_DATA_SLOT+1];
 gboolean cairo_dock_reserve_data_slot (CairoDockModuleInstance *pInstance)
 {
 	g_return_val_if_fail (s_iNbUsedSlots < CAIRO_DOCK_NB_DATA_SLOT, FALSE);
 	if (pInstance->iSlotID == 0)
 	{
-		pInstance->iSlotID = s_iNbUsedSlots;
 		s_iNbUsedSlots ++;
+		if (s_pUsedSlots[s_iNbUsedSlots] == NULL)
+		{
+			pInstance->iSlotID = s_iNbUsedSlots;
+			s_pUsedSlots[s_iNbUsedSlots] = pInstance;
+		}
+		else
+		{
+			int i;
+			for (i = 1; i < s_iNbUsedSlots; i ++)
+			{
+				if (s_pUsedSlots[i] == NULL)
+				{
+					pInstance->iSlotID = i;
+					s_pUsedSlots[i] = pInstance;
+					break ;
+				}
+			}
+		}
 	}
 	return TRUE;
+}
+
+void cairo_dock_release_data_slot (CairoDockModuleInstance *pInstance)
+{
+	if (pInstance->iSlotID == 0)
+		return;
+	s_iNbUsedSlots --;
+	s_pUsedSlots[pInstance->iSlotID] = NULL;
+	pInstance->iSlotID = 0;
 }
 
 

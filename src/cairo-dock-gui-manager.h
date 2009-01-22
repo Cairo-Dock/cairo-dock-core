@@ -23,7 +23,7 @@ struct _CairoDockGroupDescription {
 	gchar *cIcon;
 	gchar *cConfFilePath;
 	gchar *cGettextDomain;
-	void (* load_custom_widget) (GKeyFile* pKeyFile);
+	void (* load_custom_widget) (CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile);
 	} ;
 
 typedef struct _CairoDockGroupDescription CairoDockGroupDescription;
@@ -37,7 +37,7 @@ void cairo_dock_config_panel_created (void);
 GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanceMode);
 
 
-GtkWidget *cairo_dock_get_preview_image (void);
+GtkWidget *cairo_dock_get_preview_image (int *iPreviewWidth);
 GtkWidget *cairo_dock_get_description_label (void);
 GtkTooltips *cairo_dock_get_main_tooltips (void);
 GtkWidget *cairo_dock_get_main_window (void);
@@ -48,7 +48,7 @@ void cairo_dock_hide_all_categories (void);
 void cairo_dock_show_all_categories (void);
 void cairo_dock_show_one_category (int iCategory);
 void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget);
-void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup);
+void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance);
 CairoDockGroupDescription *cairo_dock_find_module_description (const gchar *cModuleName);
 void cairo_dock_present_module_gui (CairoDockModule *pModule);
 void cairo_dock_present_module_instance_gui (CairoDockModuleInstance *pModuleInstance);
@@ -56,7 +56,7 @@ void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription);
 
 void cairo_dock_free_categories (void);
 
-void cairo_dock_write_current_group_conf_file (gchar *cConfFilePath);
+void cairo_dock_write_current_group_conf_file (gchar *cConfFilePath, CairoDockModuleInstance *pInstance);
 
 
 gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData);
@@ -65,7 +65,9 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 gpointer cairo_dock_get_previous_widget (void);
 
 
-void cairo_dock_reload_current_group_widget (void);
+void cairo_dock_reload_current_group_widget (CairoDockModuleInstance *pInstance);
+
+GtkWidget *cairo_dock_get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName);
 
 
 G_END_DECLS

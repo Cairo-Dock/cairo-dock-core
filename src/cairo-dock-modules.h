@@ -80,6 +80,7 @@ void cairo_dock_read_module_config (GKeyFile *pKeyFile, CairoDockModuleInstance 
 
 
 gboolean cairo_dock_reserve_data_slot (CairoDockModuleInstance *pInstance);
+void cairo_dock_release_data_slot (CairoDockModuleInstance *pInstance);
 
 #define cairo_dock_get_icon_data(pIcon, pInstance) ((pIcon)->pDataSlot[pInstance->iSlotID])
 #define cairo_dock_get_container_data(pContainer, pInstance) ((pContainer)->pDataSlot[pInstance->iSlotID])

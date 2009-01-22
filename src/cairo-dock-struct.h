@@ -361,8 +361,8 @@ struct _CairoDockModuleInterface {
 	gboolean (* read_conf_file) (CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile);
 	void (* reset_config) (CairoDockModuleInstance *pInstance);
 	void (* reset_data) (CairoDockModuleInstance *pInstance);
-	void (* load_custom_widget) (GKeyFile *pKeyFile);
-	void (* apply_custom_widget) (GKeyFile *pKeyFile);
+	void (* load_custom_widget) (CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile);
+	void (* save_custom_widget) (CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile);
 };
 
 struct _CairoDockModuleInstance {
@@ -1116,22 +1116,25 @@ typedef enum {
 	} CairoDockStartMode;
 
 
+
 #define CAIRO_DOCK_DATA_FORMAT_MAX_LEN 12
+typedef void (*CairoDockGetValueFormatFunc) (double fValue, gchar *cFormatBuffer, int iBufferLength);
+
 typedef struct _CairoDataRendererAttribute CairoDataRendererAttribute;
 struct _CairoDataRendererAttribute {
 	gint iNbValues;
 	gchar **cTitles;
 	gboolean bWriteValues;
 	gdouble fTextColor[3];
-	gdouble *fMinValues;
-	gdouble *fMaxValues;
+	gdouble *fMinMaxValues;
 	gboolean bUpdateMinMax;
-	void (*get_format_from_value) (double fValue, gchar *cFormatBuffer);
+	CairoDockGetValueFormatFunc get_format_from_value;
 };
 
 typedef struct _CairoGaugeAttribute CairoGaugeAttribute;
 struct _CairoGaugeAttribute {
 	CairoDataRendererAttribute renderer;
+	gchar *cThemePath;
 };
 
 typedef struct _CairoGraphAttribute CairoGraphAttribute;

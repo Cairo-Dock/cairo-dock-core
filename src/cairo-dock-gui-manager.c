@@ -30,7 +30,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #define CAIRO_DOCK_NB_BUTTONS_BY_ROW_MIN 3
 #define CAIRO_DOCK_GUI_MARGIN 6
 #define CAIRO_DOCK_TABLE_MARGIN 12
-#define CAIRO_DOCK_CONF_PANEL_WIDTH 1096
+#define CAIRO_DOCK_CONF_PANEL_WIDTH 1150
 #define CAIRO_DOCK_CONF_PANEL_WIDTH_MIN 800
 #define CAIRO_DOCK_CONF_PANEL_HEIGHT 700
 #define CAIRO_DOCK_PREVIEW_WIDTH 250
@@ -589,8 +589,9 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 		FALSE,
 		0);
 	
-	
-	gtk_window_resize (GTK_WINDOW (s_pMainWindow), MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL]), MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]-40));
+	gtk_window_resize (GTK_WINDOW (s_pMainWindow),
+		MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),
+		MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - g_pMainDock->iMaxDockHeight));
 	
 	gtk_widget_show_all (s_pMainWindow);
 	gtk_widget_hide (s_pApplyButton);
@@ -631,8 +632,9 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 }
 
 
-GtkWidget *cairo_dock_get_preview_image (void)
+GtkWidget *cairo_dock_get_preview_image (int *iPreviewWidth)
 {
+	*iPreviewWidth = s_iPreviewWidth;
 	return s_pPreviewImage;
 }
 
@@ -746,7 +748,7 @@ void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget)
 	gtk_widget_show_all (pWidget);
 }
 
-void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup)
+void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance)
 {
 	g_print ("%s (%s, %s)\n", __func__, cConfFilePath, pGroupDescription->cGroupName);
 	g_free (pGroupDescription->cConfFilePath);
@@ -786,8 +788,9 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 			pDataGarbage,
 			pGroupDescription->cOriginalConfFilePath);
 	}
-	if (pGroupDescription->load_custom_widget != NULL)
-		pGroupDescription->load_custom_widget (pKeyFile);
+	
+	if (pInstance != NULL && pGroupDescription->load_custom_widget != NULL)
+		pGroupDescription->load_custom_widget (pInstance, pKeyFile);
 	g_key_file_free (pKeyFile);
 
 	//\_______________ On affiche le widget du groupe.
@@ -799,7 +802,7 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 	
 	gtk_window_set_title (GTK_WINDOW (cairo_dock_get_main_window ()), gettext (pGroupDescription->cGroupName));
 	
-	//\_______________ On met a jour la frame du groupe.
+	//\_______________ On met a jour la frame du groupe (label + check-button).g
 	GtkWidget *pLabel = gtk_label_new (NULL);
 	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman italic 15\" color=\"#6B2E96\"><u><b>%s</b></u></span>", pGroupDescription->cGroupName);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
@@ -807,8 +810,8 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 	gtk_frame_set_label_widget (GTK_FRAME (s_pGroupFrame), pLabel);
 	gtk_widget_show_all (s_pGroupFrame);
 	
-	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 	g_signal_handlers_block_by_func (s_pActivateButton, on_click_activate_current_group, NULL);
+	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 	if (pModule != NULL && pModule->pInterface->stopModule != NULL)
 	{
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (s_pActivateButton), pModule->pInstancesList != NULL);
@@ -820,9 +823,7 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 		gtk_widget_set_sensitive (s_pActivateButton, FALSE);
 	}
 	g_signal_handlers_unblock_by_func (s_pActivateButton, on_click_activate_current_group, NULL);
-	if (s_path != NULL && s_path->next != NULL && s_path->next->data == pGroupDescription)
-		s_path = g_slist_delete_link (s_path, s_path);
-	else
+	if (s_path == NULL || s_path->data != pGroupDescription)
 		s_path = g_slist_prepend (s_path, pGroupDescription);
 }
 
@@ -849,7 +850,9 @@ void cairo_dock_present_module_gui (CairoDockModule *pModule)
 	if (pGroupDescription == NULL)
 		return ;
 	
-	cairo_dock_present_group_widget (pModule->cConfFilePath, pGroupDescription, FALSE);
+	CairoDockModuleInstance *pModuleInstance = (pModule->pInstancesList != NULL ? pModule->pInstancesList->data : NULL);
+	gchar *cConfFilePath = (pModuleInstance != NULL ? pModuleInstance->cConfFilePath : pModule->cConfFilePath);
+	cairo_dock_present_group_widget (cConfFilePath, pGroupDescription, FALSE, pModuleInstance);
 }
 
 void cairo_dock_present_module_instance_gui (CairoDockModuleInstance *pModuleInstance)
@@ -860,7 +863,7 @@ void cairo_dock_present_module_instance_gui (CairoDockModuleInstance *pModuleIns
 	if (pGroupDescription == NULL)
 		return ;
 	
-	cairo_dock_present_group_widget (pModuleInstance->cConfFilePath, pGroupDescription, FALSE);
+	cairo_dock_present_group_widget (pModuleInstance->cConfFilePath, pGroupDescription, FALSE, pModuleInstance);
 }
 
 void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription)
@@ -868,6 +871,7 @@ void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription)
 	g_return_if_fail (pGroupDescription != NULL);
 	gboolean bSingleGroup;
 	gchar *cConfFilePath;
+	CairoDockModuleInstance *pModuleInstance = NULL;
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 	if (pModule == NULL)  // c'est un groupe du fichier de conf principal.
 	{
@@ -886,14 +890,15 @@ void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription)
 			return;
 		}
 		g_print ("  %s (%s)\n", __func__, pModule->cConfFilePath);
-	
-		cairo_dock_update_applet_conf_file_with_containers (NULL, pModule->cConfFilePath);
 		
-		cConfFilePath = pModule->cConfFilePath;
+		pModuleInstance = (pModule->pInstancesList != NULL ? pModule->pInstancesList->data : NULL);
+		cConfFilePath = (pModuleInstance != NULL ? pModuleInstance->cConfFilePath : pModule->cConfFilePath);
+		cairo_dock_update_applet_conf_file_with_containers (NULL, cConfFilePath);
+		
 		bSingleGroup = FALSE;
 	}
 	
-	cairo_dock_present_group_widget (cConfFilePath, pGroupDescription, bSingleGroup);
+	cairo_dock_present_group_widget (cConfFilePath, pGroupDescription, bSingleGroup, pModuleInstance);
 }
 
 void cairo_dock_free_categories (void)
@@ -938,7 +943,7 @@ void cairo_dock_free_categories (void)
 
 
 
-void cairo_dock_write_current_group_conf_file (gchar *cConfFilePath)
+void cairo_dock_write_current_group_conf_file (gchar *cConfFilePath, CairoDockModuleInstance *pInstance)
 {
 	g_return_if_fail (cConfFilePath != NULL && s_pCurrentWidgetList != NULL);
 	GKeyFile *pKeyFile = g_key_file_new ();
@@ -953,6 +958,8 @@ void cairo_dock_write_current_group_conf_file (gchar *cConfFilePath)
 	}
 
 	cairo_dock_update_keyfile_from_widget_list (pKeyFile, s_pCurrentWidgetList);
+	if (pInstance != NULL && pInstance->pModule->pInterface->save_custom_widget != NULL)
+		pInstance->pModule->pInterface->save_custom_widget (pInstance, pKeyFile);
 	cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
 	g_key_file_free (pKeyFile);
 }
@@ -1087,7 +1094,7 @@ gpointer cairo_dock_get_previous_widget (void)
 
 
 
-void cairo_dock_reload_current_group_widget (void)
+void cairo_dock_reload_current_group_widget (CairoDockModuleInstance *pInstance)
 {
 	g_return_if_fail (s_pCurrentGroupWidget != NULL && s_pCurrentGroup != NULL && s_pCurrentWidgetList != NULL);
 	
@@ -1100,15 +1107,15 @@ void cairo_dock_reload_current_group_widget (void)
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (s_pCurrentGroup->cGroupName);
 	if (pModule != NULL)
 	{
-		cairo_dock_present_group_widget (pModule->cConfFilePath, s_pCurrentGroup, FALSE);
+		cairo_dock_present_group_widget (pModule->cConfFilePath, s_pCurrentGroup, FALSE, pInstance);
 	}
 	else
 	{
-		cairo_dock_present_group_widget (g_cConfFile, s_pCurrentGroup, TRUE);
+		cairo_dock_present_group_widget (g_cConfFile, s_pCurrentGroup, TRUE, NULL);
 	}
 }
 
-GtkWidget *cairo_dock_get_widget_from_name (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName)
+GtkWidget *cairo_dock_get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName)
 {
 	g_return_val_if_fail (s_pCurrentWidgetList != NULL, NULL);
 	return cairo_dock_find_widget_from_name (s_pCurrentWidgetList, cGroupName, cKeyName);

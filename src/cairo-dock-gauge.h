@@ -20,11 +20,12 @@ typedef struct
 	gdouble posX, posY;
 	gdouble posStart, posStop;
 	gdouble direction;
-	gdouble textX, textY;
-	gdouble textWidth, textHeight;
 	gint nbImage;
 	GList *imageList;
-	GList *imageNeedle;
+	GaugeImage *imageNeedle;
+	gdouble textX, textY;
+	gdouble textWidth, textHeight;
+	gdouble textColor[3];
 } GaugeIndicator;
 
 typedef struct
@@ -35,6 +36,9 @@ typedef struct
 	GaugeImage *imageBackground;
 	GaugeImage *imageForeground;
 	GList *indicatorList;
+	gint iRank;
+	gdouble *pCurrentValues;
+	gdouble *pOldValues;
 } Gauge;
 
 
@@ -60,6 +64,8 @@ const gchar *cairo_dock_get_gauge_key_value (gchar *cAppletConfFilePath, GKeyFil
 
 void cairo_dock_add_watermark_on_gauge (cairo_t *pSourceContext, Gauge *pGauge, gchar *cImagePath, double fAlpha);
 
+
+gboolean cairo_dock_gauge_can_draw_text_value (Gauge *pGauge);
 
 G_END_DECLS
 #endif

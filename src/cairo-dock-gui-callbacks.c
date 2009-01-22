@@ -96,7 +96,8 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 		}
 	}
 	
-	GtkWidget *pPreviewImage = cairo_dock_get_preview_image ();
+	int iPreviewWidgetWidth;
+	GtkWidget *pPreviewImage = cairo_dock_get_preview_image (&iPreviewWidgetWidth);
 	if (pGroupDescription->cPreviewFilePath != NULL)
 	{
 		g_print ("on recupere la prevue de %s\n", pGroupDescription->cPreviewFilePath);
@@ -104,8 +105,21 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 		GdkPixbuf *pPreviewPixbuf = NULL;
 		if (gdk_pixbuf_get_file_info (pGroupDescription->cPreviewFilePath, &iPreviewWidth, &iPreviewHeight) != NULL)
 		{
-			iPreviewWidth = MIN (iPreviewWidth, CAIRO_DOCK_PREVIEW_WIDTH);
-			iPreviewHeight = MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT);
+			if (iPreviewWidth > CAIRO_DOCK_PREVIEW_WIDTH)
+			{
+				iPreviewHeight *= 1.*CAIRO_DOCK_PREVIEW_WIDTH/iPreviewWidth;
+				iPreviewWidth = CAIRO_DOCK_PREVIEW_WIDTH;
+			}
+			if (iPreviewHeight > CAIRO_DOCK_PREVIEW_HEIGHT)
+			{
+				iPreviewWidth *= 1.*CAIRO_DOCK_PREVIEW_HEIGHT/iPreviewHeight;
+				iPreviewHeight = CAIRO_DOCK_PREVIEW_HEIGHT;
+			}
+			if (iPreviewWidth > iPreviewWidgetWidth)
+			{
+				iPreviewHeight *= 1.*iPreviewWidgetWidth/iPreviewWidth;
+				iPreviewWidth = iPreviewWidgetWidth;
+			}
 			pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (pGroupDescription->cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
 		}
 		if (pPreviewPixbuf == NULL)
@@ -153,8 +167,9 @@ void on_leave_group_button (GtkButton *button, gpointer *data)
 		g_source_remove (s_iSidShowGroupDialog);
 		s_iSidShowGroupDialog = 0;
 	}
-	
-	GtkWidget *pPreviewImage = cairo_dock_get_preview_image ();
+
+	int iPreviewWidth;
+	GtkWidget *pPreviewImage = cairo_dock_get_preview_image (&iPreviewWidth);
 	gtk_widget_hide (pPreviewImage);
 	
 	if (! cairo_dock_dialog_unreference (s_pDialog))
@@ -186,13 +201,17 @@ void on_click_apply (GtkButton *button, GtkWidget *pWindow)
 			}
 			g_return_if_fail (pModuleInstance != NULL);
 			
-			cairo_dock_write_current_group_conf_file (pModuleInstance->cConfFilePath);
+			cairo_dock_write_current_group_conf_file (pModuleInstance->cConfFilePath, pModuleInstance);
 			cairo_dock_reload_module_instance (pModuleInstance, TRUE);
+		}
+		else
+		{
+			cairo_dock_write_current_group_conf_file (pModule->cConfFilePath, NULL);
 		}
 	}
 	else
 	{
-		cairo_dock_write_current_group_conf_file (g_cConfFile);
+		cairo_dock_write_current_group_conf_file (g_cConfFile, NULL);
 		CairoDockInternalModule *pInternalModule = cairo_dock_find_internal_module_from_name (pGroupDescription->cGroupName);
 		if (pInternalModule != NULL)
 		{
