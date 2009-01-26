@@ -1973,7 +1973,7 @@ void cairo_dock_set_frame_size_tooltip (CairoDialog *pDialog) {
   pDialog->iBottomMargin = 0;
   pDialog->iMinBottomGap = _CAIRO_DIALOG_TOOLTIP_MIN_GAP;
   pDialog->iMinFrameWidth = CAIRO_DIALOG_TIP_MARGIN + CAIRO_DIALOG_TIP_ROUNDING_MARGIN + CAIRO_DIALOG_TIP_BASE;  // dans l'ordre.
-  pDialog->fAlign = 0.; // la pointe colle au bord du dialogue.
+  pDialog->fAlign = .5;
   pDialog->fReflectAlpha = 0.;
 }
 
