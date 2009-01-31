@@ -6,7 +6,7 @@
 #F[Choose a theme]
 frame1=
 
-#h[/usr/share/cairo-dock/themes;../themes;themes] List of themes :/
+#h[@prefix@/@DATADIRNAME@/@PACKAGE@/themes;../@CAIRO_DOCK_THEMES_DIR@;@CAIRO_DOCK_THEMES_DIR@] List of themes :/
 chosen theme = 
 
 #F
@@ -27,7 +27,7 @@ use theme launchers = false
 #F[Save current theme]
 frame1=
 
-#h[;../themes] Save as :
+#H[;../@CAIRO_DOCK_THEMES_DIR@] Save as :
 #{You will then be able to re-open it at any time.}
 theme name = 
 
@@ -47,5 +47,5 @@ save current launchers = true
 #F[List of your personnal themes]
 frame1=
 
-#x[../themes] Delete from the list themes you don't want anymore :
+#x[../@CAIRO_DOCK_THEMES_DIR@] Delete from the list themes you don't want anymore :
 deleted themes = 
