@@ -34,6 +34,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-emblem.h"
+#include "cairo-dock-gauge.h"
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-internal-position.h"
 #include "cairo-dock-internal-accessibility.h"

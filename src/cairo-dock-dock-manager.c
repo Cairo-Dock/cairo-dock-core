@@ -171,10 +171,6 @@ CairoContainer *cairo_dock_search_container_from_icon (Icon *icon)
 }
 
 
-void cairo_dock_update_conf_file_with_containers_full (GKeyFile *pKeyFile, gchar *cDesktopFilePath, gchar *cGroupName, gchar *cKeyName)
-{
-	cairo_dock_update_conf_file_with_hash_table (pKeyFile, cDesktopFilePath, s_hDocksTable, cGroupName, cKeyName, NULL, (GHFunc)cairo_dock_write_one_name, FALSE, FALSE);
-}
 
 static void _cairo_dock_get_one_decoration_size (gchar *cDockName, CairoDock *pDock, int *data)
 {
@@ -264,7 +260,7 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 
 void cairo_dock_reload_buffers_in_all_docks (gboolean bReloadAppletsToo)
 {
-	g_hash_table_foreach (s_hDocksTable, (GHFunc) cairo_dock_reload_buffers_in_dock, GINT_TO_POINTER (FALSE));
+	g_hash_table_foreach (s_hDocksTable, (GHFunc) cairo_dock_reload_buffers_in_dock, GINT_TO_POINTER (bReloadAppletsToo));
 }
 
 
@@ -753,7 +749,7 @@ void cairo_dock_foreach_icons_in_desklets (CairoDockForeachIconFunc pFunction, g
 }
 
 
-void cairo_dock_foreach_docks (GHFunc pFunction)
+void cairo_dock_foreach_docks (GHFunc pFunction, gpointer data)
 {
-	g_hash_table_foreach (s_hDocksTable, pFunction, NULL);
+	g_hash_table_foreach (s_hDocksTable, pFunction, data);
 }

@@ -94,6 +94,8 @@ show delay = 300
 #{Otherwise they will appear when you linger over the icon pointing on it.}
 show on click = false
 
+lock icons = false
+
 
 #@prefix@/@DATADIRNAME@/@PACKAGE@/icon-taskbar.png;0;Access your applications easily.
 [TaskBar]
@@ -623,7 +625,7 @@ icon size = 48
 #@prefix@/@DATADIRNAME@/@PACKAGE@/icon-desklets.png;1;The applets can be set on your desktop as widgets.
 [Desklets]
 
-#d+ Choose a default decoration for all desklets :
+#O+ Choose a default decoration for all desklets :
 decorations = dark
 
 #F+[Personnal decorations;gtk-paste]

@@ -35,19 +35,11 @@ void cairo_dock_list_available_gauges (void)
 	if (s_pGaugeTable != NULL)
 		return ;
 	
-	GError *erreur = NULL;
 	gchar *cGaugeShareDir = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_GAUGES_DIR);
-	s_pGaugeTable = cairo_dock_list_themes (cGaugeShareDir, s_pGaugeTable, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
-		erreur = NULL;
-	}
-	g_free (cGaugeShareDir);
-	
 	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR, CAIRO_DOCK_GAUGES_DIR);
-	s_pGaugeTable = cairo_dock_list_themes (cGaugeUserDir, s_pGaugeTable, NULL);  // le repertoire peut ne pas exister, donc on ignore l'erreur.
+	s_pGaugeTable = cairo_dock_list_themes (cGaugeShareDir, cGaugeUserDir, NULL);  // CAIRO_DOCK_GAUGES_DIR quand ce sera bon.
+	
+	g_free (cGaugeShareDir);
 	g_free (cGaugeUserDir);
 }
 
@@ -112,144 +104,144 @@ Gauge *cairo_dock_load_gauge(cairo_t *pSourceContext, const gchar *cThemePath, i
 	cairo_dock_xml_open_file(cXmlFile, "gauge",&pGaugeTheme,&pGaugeMainNode);
 	g_free (cXmlFile);
 	
-	if(pGaugeTheme != NULL)
+	g_return_val_if_fail (pGaugeTheme != NULL, NULL);
+	
+	pGauge = g_new0 (Gauge, 1);
+	pGauge->sizeX = iWidth;
+	pGauge->sizeY = iHeight;
+	
+	xmlNodePtr pGaugeNode;
+	xmlAttrPtr ap;
+	xmlChar *cAttribute, *cNodeContent, *cTextNodeContent;
+	
+	for (pGaugeNode = pGaugeMainNode->xmlChildrenNode; pGaugeNode != NULL; pGaugeNode = pGaugeNode->next)
 	{
-		pGauge = g_new0 (Gauge, 1);
-		pGauge->sizeX = iWidth;
-		pGauge->sizeY = iHeight;
-		
-		xmlNodePtr pGaugeNode;
-		xmlAttrPtr ap;
-		xmlChar *cAttribute, *cNodeContent, *cTextNodeContent;
-		
-		for (pGaugeNode = pGaugeMainNode->xmlChildrenNode; pGaugeNode != NULL; pGaugeNode = pGaugeNode->next)
+		if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "name") == 0)
 		{
-			if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "name") == 0)
-			{
-				pGauge->themeName = xmlNodeGetContent(pGaugeNode);
-				cd_debug("gauge : Nom du theme(%s)",pGauge->themeName);
-			}
-			else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "rank") == 0)
-			{
-				cNodeContent = xmlNodeGetContent (pGaugeNode);
-				pGauge->iRank = atoi (cNodeContent);
-				xmlFree (cNodeContent);
-			}
-			else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "file") == 0)
-			{
-				cNodeContent = xmlNodeGetContent (pGaugeNode);
-				g_string_printf (sImagePath, "%s/%s", cThemePath, cNodeContent);
-				ap = xmlHasProp (pGaugeNode, "key");
-				cAttribute = xmlNodeGetContent(ap->xmlChildrenNode);
-				if (xmlStrcmp (cAttribute,"background") == 0)
-				{
-					pGauge->imageBackground = cairo_dock_init_gauge_image (sImagePath->str);
-					cairo_dock_load_gauge_image (pSourceContext, pGauge->imageBackground, iWidth, iHeight);
-				}
-				else if (xmlStrcmp (cAttribute, "foreground") == 0)
-				{
-					pGauge->imageForeground = cairo_dock_init_gauge_image (sImagePath->str);
-					cairo_dock_load_gauge_image (pSourceContext, pGauge->imageForeground, iWidth, iHeight);
-				}
-				xmlFree (cNodeContent);
-				xmlFree (cAttribute);
-			}
-			else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "indicator") == 0)
-			{
-				if (pGauge->iRank == 0)
-				{
-					pGauge->iRank = 1;
-					xmlNodePtr node;
-					for (node = pGaugeNode->next; node != NULL; node = node->next)
-					{
-						if (xmlStrcmp (node->name, (const xmlChar *) "indicator") == 0)
-							pGauge->iRank ++;
-					}
-				}
-
-				GaugeIndicator *pGaugeIndicator = g_new0 (GaugeIndicator, 1);
-				pGaugeIndicator->direction = 1;
-				
-				cd_debug ("gauge : On charge un indicateur");
-				xmlNodePtr pGaugeSubNode;
-				for (pGaugeSubNode = pGaugeNode->xmlChildrenNode; pGaugeSubNode != NULL; pGaugeSubNode = pGaugeSubNode->next)
-				{
-					cNodeContent = xmlNodeGetContent (pGaugeSubNode);
-					if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posX") == 0)
-						pGaugeIndicator->posX = atof (cNodeContent);
-					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posY") == 0)
-						pGaugeIndicator->posY = atof (cNodeContent);
-					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "text") == 0)
-					{
-						xmlNodePtr pTextSubNode;
-						for (pTextSubNode = pGaugeSubNode->xmlChildrenNode; pTextSubNode != NULL; pTextSubNode = pTextSubNode->next)
-						{
-							cTextNodeContent = xmlNodeGetContent (pTextSubNode);
-							if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textX") == 0)
-								pGaugeIndicator->textX = atof (cNodeContent);
-							else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textY") == 0)
-								pGaugeIndicator->textY = atof (cNodeContent);
-							else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textWidth") == 0)
-								pGaugeIndicator->textWidth = atof (cNodeContent);
-							else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textHeight") == 0)
-								pGaugeIndicator->textHeight = atof (cNodeContent);
-							else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textColorR") == 0)
-								pGaugeIndicator->textColor[0] = atof (cNodeContent);
-							else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textColorG") == 0)
-								pGaugeIndicator->textColor[1] = atof (cNodeContent);
-							else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textColorB") == 0)
-								pGaugeIndicator->textColor[2] = atof (cNodeContent);
-						}
-					}
-					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "direction") == 0)
-						pGaugeIndicator->direction = atof (cNodeContent);
-					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posStart") == 0)
-						pGaugeIndicator->posStart = atof (cNodeContent);
-					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posStop") == 0)
-						pGaugeIndicator->posStop = atof (cNodeContent);
-					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "nb images") == 0)
-						pGaugeIndicator->nbImage = atoi (cNodeContent);
-					else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "file") == 0)
-					{
-						cd_debug("gauge : On charge un fichier(%s)",cNodeContent);
-						ap = xmlHasProp(pGaugeSubNode, "key");
-						cAttribute = xmlNodeGetContent(ap->xmlChildrenNode);
-						if (strcmp (cAttribute, "needle") == 0 && pGaugeIndicator->imageNeedle == NULL)
-						{
-							g_string_printf (sImagePath, "%s/%s", cThemePath, cNodeContent);
-							pGaugeImage = cairo_dock_init_gauge_image(sImagePath->str);
-							
-							pGaugeIndicator->imageNeedle = pGaugeImage;
-						}
-						else if (strcmp (cAttribute,"image") == 0)
-						{
-							if (pGaugeIndicator->nbImage == 0)
-							{
-								pGaugeIndicator->nbImage = 1;
-								xmlNodePtr node;
-								for (node = pGaugeSubNode->next; node != NULL; node = node->next)
-								{
-									if (xmlStrcmp (node->name, (const xmlChar *) "file") == 0)
-										pGaugeIndicator->nbImage ++;
-								}
-							}
-							g_string_printf (sImagePath, "%s/%s", cThemePath, cNodeContent);
-							pGaugeImage = cairo_dock_init_gauge_image(sImagePath->str);
-							cairo_dock_load_gauge_image(pSourceContext, pGaugeImage, iWidth, iHeight);
-							
-							//pGaugeIndicator->nbImage++;
-							
-							pGaugeIndicator->imageList = g_list_append (pGaugeIndicator->imageList, pGaugeImage);
-						}
-						xmlFree (cAttribute);
-					}
-					xmlFree (cNodeContent);
-				}
-				pGauge->indicatorList = g_list_append(pGauge->indicatorList,pGaugeIndicator);
-			}
+			pGauge->themeName = xmlNodeGetContent(pGaugeNode);
+			cd_debug("gauge : Nom du theme(%s)",pGauge->themeName);
 		}
-		xmlFreeDoc (pGaugeTheme);
+		else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "rank") == 0)
+		{
+			cNodeContent = xmlNodeGetContent (pGaugeNode);
+			pGauge->iRank = atoi (cNodeContent);
+			xmlFree (cNodeContent);
+		}
+		else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "file") == 0)
+		{
+			cNodeContent = xmlNodeGetContent (pGaugeNode);
+			g_string_printf (sImagePath, "%s/%s", cThemePath, cNodeContent);
+			ap = xmlHasProp (pGaugeNode, "key");
+			cAttribute = xmlNodeGetContent(ap->xmlChildrenNode);
+			if (xmlStrcmp (cAttribute,"background") == 0)
+			{
+				pGauge->imageBackground = cairo_dock_init_gauge_image (sImagePath->str);
+				cairo_dock_load_gauge_image (pSourceContext, pGauge->imageBackground, iWidth, iHeight);
+			}
+			else if (xmlStrcmp (cAttribute, "foreground") == 0)
+			{
+				pGauge->imageForeground = cairo_dock_init_gauge_image (sImagePath->str);
+				cairo_dock_load_gauge_image (pSourceContext, pGauge->imageForeground, iWidth, iHeight);
+			}
+			xmlFree (cNodeContent);
+			xmlFree (cAttribute);
+		}
+		else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "indicator") == 0)
+		{
+			if (pGauge->iRank == 0)
+			{
+				pGauge->iRank = 1;
+				xmlNodePtr node;
+				for (node = pGaugeNode->next; node != NULL; node = node->next)
+				{
+					if (xmlStrcmp (node->name, (const xmlChar *) "indicator") == 0)
+						pGauge->iRank ++;
+				}
+			}
+
+			GaugeIndicator *pGaugeIndicator = g_new0 (GaugeIndicator, 1);
+			pGaugeIndicator->direction = 1;
+			
+			cd_debug ("gauge : On charge un indicateur");
+			xmlNodePtr pGaugeSubNode;
+			for (pGaugeSubNode = pGaugeNode->xmlChildrenNode; pGaugeSubNode != NULL; pGaugeSubNode = pGaugeSubNode->next)
+			{
+				cNodeContent = xmlNodeGetContent (pGaugeSubNode);
+				if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posX") == 0)
+					pGaugeIndicator->posX = atof (cNodeContent);
+				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posY") == 0)
+					pGaugeIndicator->posY = atof (cNodeContent);
+				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "text") == 0)
+				{
+					xmlNodePtr pTextSubNode;
+					for (pTextSubNode = pGaugeSubNode->xmlChildrenNode; pTextSubNode != NULL; pTextSubNode = pTextSubNode->next)
+					{
+						cTextNodeContent = xmlNodeGetContent (pTextSubNode);
+						if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textX") == 0)
+							pGaugeIndicator->textX = atof (cNodeContent);
+						else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textY") == 0)
+							pGaugeIndicator->textY = atof (cNodeContent);
+						else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textWidth") == 0)
+							pGaugeIndicator->textWidth = atof (cNodeContent);
+						else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textHeight") == 0)
+							pGaugeIndicator->textHeight = atof (cNodeContent);
+						else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textColorR") == 0)
+							pGaugeIndicator->textColor[0] = atof (cNodeContent);
+						else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textColorG") == 0)
+							pGaugeIndicator->textColor[1] = atof (cNodeContent);
+						else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textColorB") == 0)
+							pGaugeIndicator->textColor[2] = atof (cNodeContent);
+					}
+				}
+				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "direction") == 0)
+					pGaugeIndicator->direction = atof (cNodeContent);
+				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posStart") == 0)
+					pGaugeIndicator->posStart = atof (cNodeContent);
+				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posStop") == 0)
+					pGaugeIndicator->posStop = atof (cNodeContent);
+				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "nb images") == 0)
+					pGaugeIndicator->nbImage = atoi (cNodeContent);
+				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "file") == 0)
+				{
+					cd_debug("gauge : On charge un fichier(%s)",cNodeContent);
+					ap = xmlHasProp(pGaugeSubNode, "key");
+					cAttribute = xmlNodeGetContent(ap->xmlChildrenNode);
+					if (strcmp (cAttribute, "needle") == 0 && pGaugeIndicator->imageNeedle == NULL)
+					{
+						g_string_printf (sImagePath, "%s/%s", cThemePath, cNodeContent);
+						pGaugeImage = cairo_dock_init_gauge_image(sImagePath->str);
+						
+						pGaugeIndicator->imageNeedle = pGaugeImage;
+					}
+					else if (strcmp (cAttribute,"image") == 0)
+					{
+						if (pGaugeIndicator->nbImage == 0)
+						{
+							pGaugeIndicator->nbImage = 1;
+							xmlNodePtr node;
+							for (node = pGaugeSubNode->next; node != NULL; node = node->next)
+							{
+								if (xmlStrcmp (node->name, (const xmlChar *) "file") == 0)
+									pGaugeIndicator->nbImage ++;
+							}
+						}
+						g_string_printf (sImagePath, "%s/%s", cThemePath, cNodeContent);
+						pGaugeImage = cairo_dock_init_gauge_image(sImagePath->str);
+						cairo_dock_load_gauge_image(pSourceContext, pGaugeImage, iWidth, iHeight);
+						
+						//pGaugeIndicator->nbImage++;
+						
+						pGaugeIndicator->imageList = g_list_append (pGaugeIndicator->imageList, pGaugeImage);
+					}
+					xmlFree (cAttribute);
+				}
+				xmlFree (cNodeContent);
+			}
+			pGauge->indicatorList = g_list_append(pGauge->indicatorList,pGaugeIndicator);
+		}
 	}
+	xmlFreeDoc (pGaugeTheme);
+	
 	
 	g_return_val_if_fail (pGauge->iRank != 0, NULL);
 	pGauge->pCurrentValues = g_new0 (double, pGauge->iRank);
@@ -303,6 +295,7 @@ void cairo_dock_load_gauge_image (cairo_t *pSourceContext, GaugeImage *pGaugeIma
 	else
 		pGaugeImage->cairoSurface = NULL;
 }
+
 
 
 void cairo_dock_render_gauge(cairo_t *pSourceContext, CairoContainer *pContainer, Icon *pIcon, Gauge *pGauge, double fValue)
@@ -409,7 +402,6 @@ void cairo_dock_render_gauge_multi_value(cairo_t *pSourceContext, CairoContainer
 	cairo_dock_redraw_my_icon (pIcon, pContainer);
 }
 
-
 void draw_cd_Gauge_needle(cairo_t *pSourceContext, Gauge *pGauge, GaugeIndicator *pGaugeIndicator, double fValue)
 {
 	//cd_debug("gauge : %s\n",__func__);
@@ -464,6 +456,7 @@ void draw_cd_Gauge_image(cairo_t *pSourceContext, GaugeIndicator *pGaugeIndicato
 }
 
 
+
 void cairo_dock_reload_gauge (cairo_t *pSourceContext, Gauge *pGauge, int iWidth, int iHeight)
 {
 	//g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
@@ -495,6 +488,7 @@ void cairo_dock_reload_gauge (cairo_t *pSourceContext, Gauge *pGauge, int iWidth
 		}
 	}
 }
+
 
 
 static void cairo_dock_free_gauge_image(GaugeImage *pGaugeImage)
@@ -563,8 +557,12 @@ const gchar *cairo_dock_get_gauge_key_value(gchar *cAppletConfFilePath, GKeyFile
 	const gchar *cGaugePath = NULL;
 	gchar *cChosenThemeName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, cDefaultThemeName, NULL, NULL);
 	if (cChosenThemeName != NULL)
-		cGaugePath = g_hash_table_lookup (s_pGaugeTable, cChosenThemeName);
-	g_free (cChosenThemeName);
+	{
+		CairoDockTheme *pTheme = g_hash_table_lookup (s_pGaugeTable, cChosenThemeName);
+		if (pTheme != NULL)
+			cGaugePath = pTheme->cThemePath;
+		g_free (cChosenThemeName);
+	}
 	
 	cd_debug("Theme de la jauge : %s",cGaugePath);
 	

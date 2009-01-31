@@ -19,6 +19,7 @@ struct _CairoDockGroupDescription {
 	gchar *cDescription;
 	gchar *cPreviewFilePath;
 	GtkWidget *pActivateButton;
+	GtkWidget *pLabel;
 	gchar *cOriginalConfFilePath;
 	gchar *cIcon;
 	gchar *cConfFilePath;
@@ -38,17 +39,16 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 
 
 GtkWidget *cairo_dock_get_preview_image (int *iPreviewWidth);
-GtkWidget *cairo_dock_get_description_label (void);
-GtkTooltips *cairo_dock_get_main_tooltips (void);
 GtkWidget *cairo_dock_get_main_window (void);
 CairoDockGroupDescription *cairo_dock_get_current_group (void);
+GSList *cairo_dock_get_current_widget_list (void);
 
 
 void cairo_dock_hide_all_categories (void);
 void cairo_dock_show_all_categories (void);
 void cairo_dock_show_one_category (int iCategory);
 void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget);
-void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance);
+GtkWidget *cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance);
 CairoDockGroupDescription *cairo_dock_find_module_description (const gchar *cModuleName);
 void cairo_dock_present_module_gui (CairoDockModule *pModule);
 void cairo_dock_present_module_instance_gui (CairoDockModuleInstance *pModuleInstance);
@@ -68,6 +68,12 @@ gpointer cairo_dock_get_previous_widget (void);
 void cairo_dock_reload_current_group_widget (CairoDockModuleInstance *pInstance);
 
 GtkWidget *cairo_dock_get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName);
+
+
+GList *cairo_dock_search_keywords_in_group_names (gchar **pKeyWords, gboolean bAllWords, gboolean bSearchInToolTip);
+
+void cairo_dock_apply_current_filter (gchar **pKeyWords, gboolean bAllWords, gboolean bSearchInToolTip, gboolean bHighLightText, gboolean bHideOther);
+void cairo_dock_trigger_current_filter (void);
 
 
 G_END_DECLS

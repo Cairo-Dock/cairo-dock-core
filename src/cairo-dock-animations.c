@@ -462,21 +462,31 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %d, %d)\n", __func__, pDock->iRefCount, pDock->bIsShrinkingDown, pDock->bIsGrowingUp);
 	gboolean bIconIsAnimating;
-	gboolean bRedraw = FALSE;
+	pDock->bDamaged = (g_bUseOpenGL && pDock->render_opengl != NULL);  // Mettre a FALSE quand les plug-ins gereront le damage ...
+	
 	if (pDock->bIsShrinkingDown)
 	{
 		pDock->bIsShrinkingDown = cairo_dock_shrink_down (pDock);
 		//g_print ("pDock->bIsShrinkingDown <- %d\n", pDock->bIsShrinkingDown);
-		bRedraw = TRUE;
+		pDock->bDamaged = TRUE;
 	}
 	if (pDock->bIsGrowingUp)
 	{
 		pDock->bIsGrowingUp = cairo_dock_grow_up (pDock);
-		bRedraw = TRUE;
+		pDock->bDamaged = TRUE;
 	}
 	//g_print (" => %d, %d\n", pDock->bIsShrinkingDown, pDock->bIsGrowingUp);
 	
 	gboolean bContinue = pDock->bIsShrinkingDown || pDock->bIsGrowingUp;
+	
+	gboolean bUpdateSlowAnimation = FALSE;
+	pDock->iAnimationStep ++;
+	if (pDock->iAnimationStep * pDock->iAnimationDeltaT >= 90)
+	{
+		bUpdateSlowAnimation = TRUE;
+		pDock->iAnimationStep = 0;
+		pDock->bKeepSlowAnimation = FALSE;
+	}
 	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
 	Icon *icon;
 	GList *ic;
@@ -489,6 +499,12 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 			icon->fAlpha = fDockMagnitude + myIcons.fAlphaAtRest * (1 - fDockMagnitude);
 		
 		bIconIsAnimating = FALSE;
+		if (bUpdateSlowAnimation)
+		{
+			cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON_SLOW, icon, pDock, &bIconIsAnimating);
+			pDock->bKeepSlowAnimation |= bIconIsAnimating;
+			bContinue |= bIconIsAnimating;
+		}
 		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
 		bContinue |= bIconIsAnimating;
 		if (! bIconIsAnimating)
@@ -501,12 +517,17 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 		return FALSE;
 	}
 	
+	if (bUpdateSlowAnimation)
+	{
+		cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);
+		pDock->bKeepSlowAnimation |= bContinue;
+	}
 	cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);
 	
-	if (bRedraw || (g_bUseOpenGL && pDock->render_opengl))
+	if (pDock->bDamaged)
 		gtk_widget_queue_draw (pDock->pWidget);
 	
-	if (! bContinue)
+	if (! bContinue && ! pDock->bKeepSlowAnimation)
 	{
 		pDock->iSidGLAnimation = 0;
 		pDock->bIsGrowingUp = FALSE;

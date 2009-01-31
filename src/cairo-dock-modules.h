@@ -34,6 +34,8 @@ void cairo_dock_free_module (CairoDockModule *module);
 
 GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *pInstance, CairoDockMinimalAppletConfig *pMinimalConfig);
 
+void cairo_dock_free_minimal_config (CairoDockMinimalAppletConfig *pMinimalConfig);
+
 void cairo_dock_activate_module (CairoDockModule *module, GError **erreur);
 
 void cairo_dock_deactivate_module (CairoDockModule *module);

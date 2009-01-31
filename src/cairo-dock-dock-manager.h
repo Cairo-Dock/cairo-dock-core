@@ -58,28 +58,6 @@ Icon *cairo_dock_search_icon_pointing_on_dock (CairoDock *pDock, CairoDock **pPa
 CairoContainer *cairo_dock_search_container_from_icon (Icon *icon);
 
 
-/**
-* Met a jour un fichier .desktop avec la liste des docks.
-* @param pKeyFile fichier de conf ouvert.
-* @param cDesktopFilePath chemin du fichier de conf.
-* @param cGroupName nom du groupe
-* @param cKeyName nom de la cle.
-*/
-void cairo_dock_update_conf_file_with_containers_full (GKeyFile *pKeyFile, gchar *cDesktopFilePath, gchar *cGroupName, gchar *cKeyName);
-/**
-* Met a jour un fichier .desktop avec la liste des docks dans le champ "Container".
-* @param pKeyFile fichier de conf ouvert.
-* @param cDesktopFilePath chemin du fichier de conf.
-*/
-#define cairo_dock_update_conf_file_with_containers(pKeyFile, cDesktopFilePath) cairo_dock_update_conf_file_with_containers_full (pKeyFile, cDesktopFilePath, "Desktop Entry", "Container");
-/**
-* Met a jour un fichier de conf dd'applet avec la liste des docks dans le champ "dock name".
-* @param pKeyFile fichier de conf ouvert.
-* @param cDesktopFilePath chemin du fichier de conf.
-*/
-#define cairo_dock_update_applet_conf_file_with_containers(pKeyFile, cDesktopFilePath) cairo_dock_update_conf_file_with_containers_full (pKeyFile, cDesktopFilePath, "Icon", "dock name");
-
-
 void cairo_dock_search_max_decorations_size (int *iWidth, int *iHeight);
 
 /**
@@ -163,7 +141,9 @@ gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon);
 void cairo_dock_show_hide_container (CairoContainer *pContainer);
 
 void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer data);
-void cairo_dock_foreach_docks (GHFunc pFunction);
+void cairo_dock_foreach_icons_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData);
+void cairo_dock_foreach_icons_in_desklets (CairoDockForeachIconFunc pFunction, gpointer pUserData);
+void cairo_dock_foreach_docks (GHFunc pFunction, gpointer data);
 
 
 G_END_DECLS

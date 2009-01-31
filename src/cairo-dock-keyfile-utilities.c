@@ -69,7 +69,7 @@ void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, gchar *cConfFilePath, 
 
 void cairo_dock_replace_key_values (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gboolean bUseOriginalKeys, gchar iIdentifier)
 {
-	cd_message ("%s (%d)", __func__, iIdentifier);
+	cd_debug ("%s (%d)", __func__, iIdentifier);
 	GError *erreur = NULL;
 	gsize length = 0;
 	gchar **pKeyList;
@@ -265,9 +265,9 @@ void cairo_dock_write_one_module_name (gchar *cName, CairoDockModule *pModule, G
 {
 	g_string_append_printf (pString, "%s;%s;%s;%s;", cName, (pModule != NULL && pModule->pVisitCard->cReadmeFilePath != NULL ? pModule->pVisitCard->cReadmeFilePath : "none"), (pModule != NULL && pModule->pVisitCard->cPreviewFilePath != NULL ? pModule->pVisitCard->cPreviewFilePath : "none"), (pModule != NULL && pModule->pVisitCard->cIconFilePath != NULL ? pModule->pVisitCard->cIconFilePath : "none"));
 }
-void cairo_dock_write_one_theme_name (gchar *cName, gchar *cThemePath, GString *pString)
+void cairo_dock_write_one_theme_name (gchar *cName, CairoDockTheme *pTheme, GString *pString)
 {
-	g_string_append_printf (pString, "%s;%s/readme;%s/preview;", cName, cThemePath, cThemePath);
+	g_string_append_printf (pString, "%s;%s/readme;%s/preview;", cName, pTheme->cThemePath, pTheme->cThemePath);
 }
 void cairo_dock_write_one_renderer_name (gchar *cName, CairoDockRenderer *pRenderer, GString *pString)
 {

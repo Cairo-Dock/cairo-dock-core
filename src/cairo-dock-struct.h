@@ -52,6 +52,7 @@ typedef struct _CairoDockVFSBackend CairoDockVFSBackend;
 typedef struct _CairoDockClassAppli CairoDockClassAppli;
 typedef struct _CairoDockLabelDescription CairoDockLabelDescription;
 typedef struct _CairoDialogAttribute CairoDialogAttribute;
+typedef struct _CairoDeskletAttribute CairoDeskletAttribute;
 
 
 typedef enum {
@@ -66,7 +67,7 @@ typedef enum {
 	CAIRO_DOCK_TYPE_FLYING_CONTAINER
 	} CairoDockTypeContainer;
 
-#define CAIRO_DOCK_NB_DATA_SLOT 10
+#define CAIRO_DOCK_NB_DATA_SLOT 12
 
 struct _CairoContainer {
 	/// type de container.
@@ -287,9 +288,6 @@ struct _CairoDock {
 	CairoDockGLRenderFunc render_opengl;
 	/// calculer la position d'un sous-dock.
 	CairoDockSetSubDockPositionFunc set_subdock_position;
-	/// decalage du signal d'insertion pour son animation.
-	gint iDropIndicatorOffset;
-	gint iDropIndicatorRotation;
 	/// TRUE ssi on peut dropper entre 2 icones.
 	gboolean bCanDrop;
 	gboolean bIsShrinkingDown;
@@ -299,6 +297,10 @@ struct _CairoDock {
 	CairoDockMousePositionType iMousePositionType;
 	/// TRUE ssi cette vue utilise le stencil buffer d'OpenGL.
 	gboolean bUseStencil;
+	gint iAnimationStep;
+	gint iAnimationDeltaT;
+	gboolean bKeepSlowAnimation;
+	gboolean bDamaged;
 };
 
 
@@ -318,7 +320,7 @@ typedef enum {
 struct _CairoDockVisitCard {
 	/// nom du module qui servira a l'identifier.
 	gchar *cModuleName;
-	/// chemin d'un fichier readme destine a presenter de maniere succinte le module.
+	/// presente de maniere succinte le module.
 	gchar *cReadmeFilePath;
 	/// numero de version majeure de cairo-dock necessaire au bon fonctionnement du module.
 	short iMajorVersionNeeded;
@@ -405,13 +407,7 @@ struct _CairoDockModule {
 	GList *pInstancesList;
 };
 
-struct _CairoDockMinimalAppletConfig {
-	gint iDesiredIconWidth;
-	gint iDesiredIconHeight;
-	gchar *cLabel;
-	gchar *cIconFileName;
-	gdouble fOrder;
-	gchar *cDockName;
+struct _CairoDeskletAttribute {
 	gboolean bDeskletUseSize;
 	gint iDeskletWidth;
 	gint iDeskletHeight;
@@ -425,6 +421,17 @@ struct _CairoDockMinimalAppletConfig {
 	gint iRotation;
 	gchar *cDecorationTheme;
 	CairoDeskletDecoration *pUserDecoration;
+	gint iDepthRotation;
+};
+
+struct _CairoDockMinimalAppletConfig {
+	gint iDesiredIconWidth;
+	gint iDesiredIconHeight;
+	gchar *cLabel;
+	gchar *cIconFileName;
+	gdouble fOrder;
+	gchar *cDockName;
+	CairoDeskletAttribute deskletAttribute;
 };
 
 typedef void (* CairoDockApplyConfigFunc) (gpointer data);
@@ -516,19 +523,14 @@ struct _CairoDialog {
 	gint iAimedY;
 	/// TRUE ssi le dialogue est a droite de l'écran; dialogue a droite <=> pointe a gauche.
 	gboolean bRight;
-	/// rayon des coins.
-	gdouble fRadius;
-	/// hauteur de la pointe, sans la partie "aiguisee".
-	gint iTipHeight_deprecated;
-	gint iTextWidth;
+	/// dimension de la surface du texte.
+	gint iTextWidth, iTextHeight;
 	/// surface representant le message du dialogue.
 	cairo_surface_t* pTextBuffer;
 	/// surface representant l'icone dans la marge a gauche du texte.
 	cairo_surface_t* pIconBuffer;
 	/// dimension de l'icone, sans les marges (0 si aucune icone).
 	gint iIconSize;
-	/// hauteur du texte, sans les marges.
-	gint iTextHeight;
 	/// dimensions de la bulle (message + widget utilisateur + boutons).
 	gint iBubbleWidth, iBubbleHeight;
 	/// dimensions du message en comptant la marge du texte + vgap en bas si necessaire.
@@ -539,8 +541,6 @@ struct _CairoDialog {
 	gint iInteractiveWidth, iInteractiveHeight;
 	/// distance de la bulle au dock, donc hauteur totale de la pointe.
 	gint iDistanceToDock;
-	/// Marge due au rayon.
-	gint iMargin;
 	/// decalage pour l'effet de clique sur le bouton Ok.
 	gint iButtonOkOffset;
 	/// decalage pour l'effet de clique sur le bouton Annuler.
@@ -571,11 +571,16 @@ struct _CairoDialog {
 	CairoDialogDecorator *pDecorator;
 	gint iLeftMargin, iRightMargin, iTopMargin, iBottomMargin, 	iMinFrameWidth, iMinBottomGap;
 	/// position relative du dialogue par rapport a l'icone, ou ce qui revient au meme, de sa pointe par rapport au bord d'alignement.
+	/// alignement de la pointe.
 	gdouble fAlign;
+	/// pour l'animation de l'icone.
 	gint iNbFrames, iCurrentFrame;
+	/// pour le defilement du texte.
 	gint iMaxTextWidth;
 	gint iCurrentTextOffset;
+	/// les timer de ces 2 animations.
 	gint iSidAnimateIcon, iSidAnimateText;
+	/// transparence du reflet du dialogue, 0 si le decorateur ne gere pas le reflet.
 	gdouble fReflectAlpha;
 };
 
@@ -625,25 +630,18 @@ struct _Icon {
 	/// Nom du dock contenant l'icone (y compris lorsque l'icone est dans un desklet).
 	gchar *cParentDockName;
 	//\____________ calcules lors du chargement de l'icone.
-	/// Largeur de l'image de l'icone.
-	gdouble fWidth;
-	/// Hauteur de l'image de l'icone.
-	gdouble fHeight;
+	/// Dimensions de la surface de l'icone.
+	gdouble fWidth, fHeight;
 	/// Surface cairo de l'image.
 	cairo_surface_t* pIconBuffer;
 	/// Surface cairo de l'etiquette.
 	cairo_surface_t* pTextBuffer;
 	/// Surface cairo du reflet.
 	cairo_surface_t* pReflectionBuffer;
-	gpointer pFullIconBuffer_deprecated;
-	/// Largeur de l'etiquette.
-	gint iTextWidth;
-	/// Hauteur de l'etiquette.
-	gint iTextHeight;
-	/// Decalage en X de l'etiquette.
-	gdouble fTextXOffset;
-	/// Decalage en Y de l'etiquette.
-	gdouble fTextYOffset;
+	/// dimensions de l'etiquette.
+	gint iTextWidth, iTextHeight;
+	/// Decalage en X et en Y de l'etiquette.
+	gdouble fTextXOffset, fTextYOffset;
 	/// Abscisse maximale (droite) que l'icone atteindra (variable avec la vague).
 	gdouble fXMax;
 	/// Abscisse minimale (gauche) que l'icone atteindra (variable avec la vague).
@@ -689,9 +687,10 @@ struct _Icon {
 	Window Xid;
 	/// Classe de l'application correspondante (ou NULL si aucune).
 	gchar *cClass;
+	/// Etiquette du lanceur a sa creation, ecrasee par le nom courant de l'appli.
+	gchar *cInitialName;
 	/// Heure de derniere verification de la presence de l'application dans la barre des taches.
 	gint iLastCheckTime;
-	gint iPadding;
 	/// TRUE ssi la fenetre de l'application correspondante est minimisee.
 	gboolean bIsHidden;
 	/// Position et taille de la fenetre.
@@ -702,6 +701,11 @@ struct _Icon {
 	gboolean bIsMaximized;
 	/// TRUE ssi la fenetre demande l'attention ou est en mode urgente.
 	gboolean bIsDemandingAttention;
+	/// TRUE ssi l'icone a un indicateur (elle controle une appli).
+	gboolean bHasIndicator;
+	/// ID du pixmap de sauvegarde de la fenetre pour quand elle est cachee.
+	Pixmap iBackingPixmap;
+	//Damage iDamageHandle;
 	//\____________ Pour les modules.
 	/// Instance de module que represente l'icone.
 	CairoDockModuleInstance *pModuleInstance;
@@ -717,17 +721,12 @@ struct _Icon {
 	gdouble fQuickInfoXOffset;
 	/// Decalage en Y de la surface de l'info rapide.
 	gdouble fQuickInfoYOffset;
-	/// TRUE ssi l'icone a un indicateur (elle controle une appli).
-	gboolean bHasIndicator;
-	/// ID du pixmap de sauvegarde de la fenetre pour quand elle est cachee.
-	Pixmap iBackingPixmap;
-	//Damage iDamageHandle;
 	/// decalage pour le glissement des icones.
 	gdouble fGlideOffset;
 	/// direction dans laquelle glisse l'icone.
 	gint iGlideDirection;
 	/// echelle d'adaptation au glissement.
-	double fGlideScale;
+	gdouble fGlideScale;
 	
 	GLuint iIconTexture;
 	GLuint iLabelTexture;
@@ -735,8 +734,11 @@ struct _Icon {
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
 	gboolean bStatic;
 	CairoDockAnimationState iAnimationState;
-	gchar *cInitialName;
 	gboolean bBeingRemovedByCairo;
+	gboolean bDamaged;
+	gpointer pbuffer;
+	GPtrArray *pNotificationsTab;
+	//CairoDataRenderer *pDataRenderer;
 };
 
 
@@ -893,15 +895,15 @@ struct _CairoDesklet {
 	gchar *cDecorationTheme;
 	CairoDeskletDecoration *pUserDecoration;
 	gint iLeftSurfaceOffset;
-        gint iTopSurfaceOffset;
-        gint iRightSurfaceOffset;
-        gint iBottomSurfaceOffset;
-        cairo_surface_t *pBackGroundSurface;
-        cairo_surface_t *pForeGroundSurface;
-        gdouble fImageWidth;
-        gdouble fImageHeight;
+	gint iTopSurfaceOffset;
+	gint iRightSurfaceOffset;
+	gint iBottomSurfaceOffset;
+	cairo_surface_t *pBackGroundSurface;
+	cairo_surface_t *pForeGroundSurface;
+	gdouble fImageWidth;
+	gdouble fImageHeight;
 	gdouble fBackGroundAlpha;
-        gdouble fForeGroundAlpha;
+	gdouble fForeGroundAlpha;
 	/// rotation.
 	gdouble fRotation;
 	gboolean rotating;
@@ -911,6 +913,9 @@ struct _CairoDesklet {
 	guint time;
 	GLuint iBackGroundTexture;
 	GLuint iForeGroundTexture;
+	gdouble fDepthRotation;
+	gboolean depth_rotating;
+	gboolean bDamaged;
 };
 
 typedef enum {
@@ -924,7 +929,7 @@ struct _CairoDeskletDecoration {
 	gchar *cForeGroundImagePath;
 	CairoDockLoadImageModifier iLoadingModifier;
 	gdouble fBackGroundAlpha;
-        gdouble fForeGroundAlpha;
+	gdouble fForeGroundAlpha;
 	gint iLeftMargin;
 	gint iTopMargin;
 	gint iRightMargin;
@@ -1043,8 +1048,6 @@ struct _CairoDockInternalModule {
 
 /// Nom du repertoire de travail de cairo-dock.
 #define CAIRO_DOCK_DATA_DIR "cairo-dock"
-/// Nom du repertoire des themes utilisateur.
-#define CAIRO_DOCK_THEMES_DIR "themes"
 /// Nom du repertoire des extras utilisateur/themes (jauges, clock, etc).
 #define CAIRO_DOCK_EXTRAS_DIR "extras"
 /// Nom du repertoire des jauges utilisateur/themes.
@@ -1116,22 +1119,7 @@ typedef enum {
 	} CairoDockStartMode;
 
 
-
-#define CAIRO_DOCK_DATA_FORMAT_MAX_LEN 12
-typedef void (*CairoDockGetValueFormatFunc) (double fValue, gchar *cFormatBuffer, int iBufferLength);
-
-typedef struct _CairoDataRendererAttribute CairoDataRendererAttribute;
-struct _CairoDataRendererAttribute {
-	gint iNbValues;
-	gchar **cTitles;
-	gboolean bWriteValues;
-	gdouble fTextColor[3];
-	gdouble *fMinMaxValues;
-	gboolean bUpdateMinMax;
-	CairoDockGetValueFormatFunc get_format_from_value;
-};
-
-typedef struct _CairoGaugeAttribute CairoGaugeAttribute;
+/*typedef struct _CairoGaugeAttribute CairoGaugeAttribute;
 struct _CairoGaugeAttribute {
 	CairoDataRendererAttribute renderer;
 	gchar *cThemePath;
@@ -1152,7 +1140,16 @@ struct _CairoBarAttribute {
 	gdouble **pHighColor;  // iNbValues * 3
 	gdouble **pLowColor;  // idem
 	gchar **cImageFilePath;  // iNbValues
-};
+};*/
 
+
+typedef struct _CairoDockTheme CairoDockTheme;
+struct _CairoDockTheme {
+	gchar *cThemePath;
+	gdouble fSize;
+	gchar *cAuthor;
+	gchar *cDisplayedName;
+	gint iType;  // installed, user, distant.
+};
 
 #endif

@@ -39,12 +39,10 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 static CairoDockCategoryWidgetTable s_pCategoryWidgetTables[CAIRO_DOCK_NB_CATEGORY];
 static GList *s_pGroupDescriptionList = NULL;
-static GtkWidget *s_pDescriptionTextView = NULL;
 static GtkWidget *s_pPreviewImage = NULL;
 static GtkWidget *s_pOkButton = NULL;
 static GtkWidget *s_pApplyButton = NULL;
 static GtkWidget *s_pBackButton = NULL;
-static GtkTooltips *s_pToolTipsGroup = NULL;
 static GtkWidget *s_pMainWindow = NULL;
 static GtkWidget *s_pGroupsVBox = NULL;
 static CairoDockGroupDescription *s_pCurrentGroup = NULL;
@@ -52,6 +50,7 @@ static GtkWidget *s_pCurrentGroupWidget = NULL;
 static GSList *s_pCurrentWidgetList = NULL;
 static GtkWidget *s_pToolBar = NULL;
 static GtkWidget *s_pGroupFrame = NULL;
+static GtkWidget *s_pFilterEntry = NULL;
 static GtkWidget *s_pActivateButton = NULL;
 static GSList *s_path = NULL;
 static int s_iPreviewWidth, s_iNbButtonsByRow;
@@ -177,20 +176,7 @@ static CairoDockGroupDescription *_cairo_dock_add_group_button (gchar *cGroupNam
 	pGroupDescription->cIcon = g_strdup (cIcon);
 	
 	//\____________ On construit le bouton du groupe.
-	GtkWidget *pGroupButton, *pGroupLabel, *pGroupHBox;
-	pGroupButton = gtk_button_new ();
-	if (bConfigurable)
-		g_signal_connect (G_OBJECT (pGroupButton), "clicked", G_CALLBACK(on_click_group_button), pGroupDescription);
-	else
-		gtk_widget_set_sensitive (pGroupButton, FALSE);
-	g_signal_connect (G_OBJECT (pGroupButton), "enter", G_CALLBACK(on_enter_group_button), pGroupDescription);
-	g_signal_connect (G_OBJECT (pGroupButton), "leave", G_CALLBACK(on_leave_group_button), NULL);
-	pGroupLabel = gtk_label_new (gettext (cGroupName));
-	_cairo_dock_add_image_on_button (pGroupButton,
-		cIcon,
-		CAIRO_DOCK_GROUP_ICON_SIZE);
-	
-	pGroupHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pGroupHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
 	
 	pGroupDescription->pActivateButton = gtk_check_button_new ();
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pGroupDescription->pActivateButton), iActivation);
@@ -202,14 +188,26 @@ static CairoDockGroupDescription *_cairo_dock_add_group_button (gchar *cGroupNam
 		FALSE,
 		FALSE,
 		0);
-	
+
+	GtkWidget *pGroupButton = gtk_button_new ();
+	if (bConfigurable)
+		g_signal_connect (G_OBJECT (pGroupButton), "clicked", G_CALLBACK(on_click_group_button), pGroupDescription);
+	else
+		gtk_widget_set_sensitive (pGroupButton, FALSE);
+	g_signal_connect (G_OBJECT (pGroupButton), "enter", G_CALLBACK(on_enter_group_button), pGroupDescription);
+	g_signal_connect (G_OBJECT (pGroupButton), "leave", G_CALLBACK(on_leave_group_button), NULL);
+	_cairo_dock_add_image_on_button (pGroupButton,
+		cIcon,
+		CAIRO_DOCK_GROUP_ICON_SIZE);
 	gtk_box_pack_start (GTK_BOX (pGroupHBox),
 		pGroupButton,
 		FALSE,
 		FALSE,
 		0);
+
+	pGroupDescription->pLabel = gtk_label_new (gettext (cGroupName));
 	gtk_box_pack_start (GTK_BOX (pGroupHBox),
-		pGroupLabel,
+		pGroupDescription->pLabel,
 		FALSE,
 		FALSE,
 		0);
@@ -261,6 +259,7 @@ static gboolean _cairo_dock_add_one_module_widget (gchar *cModuleName, CairoDock
 	pGroupDescription->load_custom_widget = pModule->pInterface->load_custom_widget;
 	return FALSE;
 }
+
 
 static gboolean on_expose (GtkWidget *pWidget,
 	GdkEventExpose *pExpose,
@@ -361,11 +360,7 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 		"expose-event",
 		G_CALLBACK (on_expose),
 		NULL);*/
-	
-	s_pToolTipsGroup = gtk_tooltips_new ();
-	gtk_tooltips_enable (GTK_TOOLTIPS (s_pToolTipsGroup));
-	
-	
+		
 	//\_____________ On construit les boutons de chaque categorie.
 	GtkWidget *pCategoriesFrame = gtk_frame_new (NULL);
 	gtk_container_set_border_width (GTK_CONTAINER (pCategoriesFrame), CAIRO_DOCK_GUI_MARGIN);
@@ -456,7 +451,6 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	gchar **pGroupList = g_key_file_get_groups (pKeyFile, &length);
 	int iCategory;
 	gchar *cGroupName, *cGroupComment, *cIcon, *cDescription;
-	GtkWidget *pGroupButton, *pGroupLabel, *pGroupHBox;
 	CairoDockGroupDescription *pGroupDescription;
 	gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
 	i = 0;
@@ -520,7 +514,7 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	g_key_file_free (pKeyFile);
 	
 	
-	//\_____________ On ajoute les zones d'infos.
+	//\_____________ On ajoute le cadre d'activation du module.
 	s_pGroupFrame = gtk_frame_new ("pouet");
 	gtk_container_set_border_width (GTK_CONTAINER (s_pGroupFrame), CAIRO_DOCK_GUI_MARGIN);
 	gtk_frame_set_shadow_type (GTK_FRAME (s_pGroupFrame), GTK_SHADOW_OUT);
@@ -534,6 +528,7 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	gtk_container_add (GTK_CONTAINER (s_pGroupFrame), s_pActivateButton);
 	gtk_widget_show_all (s_pActivateButton);
 	
+	//\_____________ On ajoute la zone de prevue.
 	GtkWidget *pInfoVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
 	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
 		pInfoVBox,
@@ -544,10 +539,60 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	s_pPreviewImage = gtk_image_new_from_pixbuf (NULL);
 	gtk_container_add (GTK_CONTAINER (pInfoVBox), s_pPreviewImage);
 	
-	s_pDescriptionTextView = gtk_text_view_new ();
-	gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (s_pDescriptionTextView), GTK_WRAP_WORD);
-	gtk_container_add (GTK_CONTAINER (pInfoVBox), s_pDescriptionTextView);
-	
+	//\_____________ On ajoute le filtre.
+	GtkWidget *pFilterFrame = gtk_frame_new (NULL);
+	cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman italic 15\" color=\"#6B2E96\"><b><u>%s :</u></b></span>", _("Filter"));
+	pLabel = gtk_label_new (NULL);
+	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
+	g_free (cLabel);
+	gtk_frame_set_label_widget (GTK_FRAME (pFilterFrame), pLabel);
+	gtk_container_set_border_width (GTK_CONTAINER (s_pGroupFrame), CAIRO_DOCK_GUI_MARGIN);
+	gtk_frame_set_shadow_type (GTK_FRAME (s_pGroupFrame), GTK_SHADOW_OUT);
+	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
+		pFilterFrame,
+		FALSE,
+		FALSE,
+		0);
+	GtkWidget *pOptionVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	gtk_container_add (GTK_CONTAINER (pFilterFrame), pOptionVBox);
+	s_pFilterEntry = gtk_entry_new ();
+	g_signal_connect (s_pFilterEntry, "activate", G_CALLBACK (cairo_dock_activate_filter), NULL);
+	gtk_box_pack_start (GTK_BOX (pOptionVBox),
+		s_pFilterEntry,
+		FALSE,
+		FALSE,
+		0);
+	cairo_dock_reset_filter_state ();
+	GtkWidget *pOptionButton = gtk_check_button_new_with_label (_("All words"));
+	g_signal_connect (pOptionButton, "toggled", G_CALLBACK (cairo_dock_toggle_all_words), NULL);
+	gtk_box_pack_start (GTK_BOX (pOptionVBox),
+		pOptionButton,
+		FALSE,
+		FALSE,
+		0);
+	pOptionButton = gtk_check_button_new_with_label (_("Highlight words"));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pOptionButton), TRUE);
+	g_signal_connect (pOptionButton, "toggled", G_CALLBACK (cairo_dock_toggle_highlight_words), NULL);
+	gtk_box_pack_start (GTK_BOX (pOptionVBox),
+		pOptionButton,
+		FALSE,
+		FALSE,
+		0);
+	pOptionButton = gtk_check_button_new_with_label (_("Hide others"));
+	g_signal_connect (pOptionButton, "toggled", G_CALLBACK (cairo_dock_toggle_hide_others), NULL);
+	gtk_box_pack_start (GTK_BOX (pOptionVBox),
+		pOptionButton,
+		FALSE,
+		FALSE,
+		0);
+	pOptionButton = gtk_check_button_new_with_label (_("Search in description"));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pOptionButton), TRUE);
+	g_signal_connect (pOptionButton, "toggled", G_CALLBACK (cairo_dock_toggle_search_in_tooltip), NULL);
+	gtk_box_pack_start (GTK_BOX (pOptionVBox),
+		pOptionButton,
+		FALSE,
+		FALSE,
+		0);
 	
 	//\_____________ On ajoute les boutons.
 	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN*3);
@@ -591,13 +636,12 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	
 	gtk_window_resize (GTK_WINDOW (s_pMainWindow),
 		MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),
-		MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - g_pMainDock->iMaxDockHeight));
+		MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock ? g_pMainDock->iMaxDockHeight : 0)));
 	
 	gtk_widget_show_all (s_pMainWindow);
 	gtk_widget_hide (s_pApplyButton);
 	gtk_widget_hide (s_pOkButton);
 	gtk_widget_hide (s_pGroupFrame);
-	gtk_widget_hide (s_pDescriptionTextView);
 	gtk_widget_hide (s_pPreviewImage);
 	
 	cairo_dock_config_panel_created ();
@@ -638,16 +682,6 @@ GtkWidget *cairo_dock_get_preview_image (int *iPreviewWidth)
 	return s_pPreviewImage;
 }
 
-GtkWidget *cairo_dock_get_description_label (void)
-{
-	return s_pDescriptionTextView;
-}
-
-GtkTooltips *cairo_dock_get_main_tooltips (void)
-{
-	return s_pToolTipsGroup;
-}
-
 GtkWidget *cairo_dock_get_main_window (void)
 {
 	return s_pMainWindow;
@@ -656,6 +690,11 @@ GtkWidget *cairo_dock_get_main_window (void)
 CairoDockGroupDescription *cairo_dock_get_current_group (void)
 {
 	return s_pCurrentGroup;
+}
+
+GSList *cairo_dock_get_current_widget_list (void)
+{
+	return s_pCurrentWidgetList;
 }
 
 
@@ -675,6 +714,7 @@ void cairo_dock_hide_all_categories (void)
 
 void cairo_dock_show_all_categories (void)
 {
+	//\_______________ On detruit le widget du groupe courant.
 	if (s_pCurrentGroupWidget != NULL)
 	{
 		gtk_widget_destroy (s_pCurrentGroupWidget);
@@ -683,6 +723,8 @@ void cairo_dock_show_all_categories (void)
 		s_pCurrentWidgetList = NULL;
 		s_pCurrentGroup = NULL;
 	}
+
+	//\_______________ On montre chaque module.
 	CairoDockCategoryWidgetTable *pCategoryWidget;
 	int i;
 	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
@@ -694,15 +736,20 @@ void cairo_dock_show_all_categories (void)
 	gtk_widget_hide (s_pApplyButton);
 	gtk_widget_hide (s_pGroupFrame);
 	
+	//\_______________ On actualise le titre de la fenetre.
 	gtk_window_set_title (GTK_WINDOW (cairo_dock_get_main_window ()), _("Configuration of Cairo-Dock"));
 	if (s_path != NULL && s_path->next != NULL && s_path->next->data == GINT_TO_POINTER (0))
 		s_path = g_slist_delete_link (s_path, s_path);
 	else
 		s_path = g_slist_prepend (s_path, GINT_TO_POINTER (0));
+
+	//\_______________ On declenche le filtre.
+	cairo_dock_trigger_current_filter ();
 }
 
 void cairo_dock_show_one_category (int iCategory)
 {
+	//\_______________ On detruit le widget du groupe courant.
 	if (s_pCurrentGroupWidget != NULL)
 	{
 		gtk_widget_destroy (s_pCurrentGroupWidget);
@@ -711,6 +758,8 @@ void cairo_dock_show_one_category (int iCategory)
 		s_pCurrentWidgetList = NULL;
 		s_pCurrentGroup = NULL;
 	}
+
+	//\_______________ On montre chaque module de la categorie.
 	CairoDockCategoryWidgetTable *pCategoryWidget;
 	int i;
 	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
@@ -725,11 +774,15 @@ void cairo_dock_show_one_category (int iCategory)
 	gtk_widget_hide (s_pApplyButton);
 	gtk_widget_hide (s_pGroupFrame);
 	
+	//\_______________ On actualise le titre de la fenetre.
 	gtk_window_set_title (GTK_WINDOW (cairo_dock_get_main_window ()), gettext (cCategoriesDescription[2*iCategory]));
 	if (s_path != NULL && s_path->next != NULL && s_path->next->data == GINT_TO_POINTER (iCategory+1))
 		s_path = g_slist_delete_link (s_path, s_path);
 	else
 		s_path = g_slist_prepend (s_path, GINT_TO_POINTER (iCategory+1));
+
+	//\_______________ On declenche le filtre.
+	cairo_dock_trigger_current_filter ();
 }
 
 void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget)
@@ -748,7 +801,7 @@ void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget)
 	gtk_widget_show_all (pWidget);
 }
 
-void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance)
+GtkWidget *cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance)
 {
 	g_print ("%s (%s, %s)\n", __func__, cConfFilePath, pGroupDescription->cGroupName);
 	g_free (pGroupDescription->cConfFilePath);
@@ -762,7 +815,7 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 	{
 		cd_warning ("while trying to load %s : %s", cConfFilePath, erreur->message);
 		g_error_free (erreur);
-		return ;
+		return NULL;
 	}
 
 	GPtrArray *pDataGarbage = g_ptr_array_new ();
@@ -771,7 +824,6 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 	{
 		pWidget = cairo_dock_build_group_widget (pKeyFile,
 			pGroupDescription->cGroupName,
-			cairo_dock_get_main_tooltips (),
 			pGroupDescription->cGettextDomain,
 			cairo_dock_get_main_window (),
 			&s_pCurrentWidgetList,
@@ -781,22 +833,20 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 	else
 	{
 		pWidget = cairo_dock_build_key_file_widget (pKeyFile,
-			cairo_dock_get_main_tooltips (),
 			pGroupDescription->cGettextDomain,
 			cairo_dock_get_main_window (),
 			&s_pCurrentWidgetList,
 			pDataGarbage,
 			pGroupDescription->cOriginalConfFilePath);
 	}
-	
 	if (pInstance != NULL && pGroupDescription->load_custom_widget != NULL)
 		pGroupDescription->load_custom_widget (pInstance, pKeyFile);
 	g_key_file_free (pKeyFile);
 
-	//\_______________ On affiche le widget du groupe.
+	//\_______________ On affiche le widget du groupe dans l'interface.
 	cairo_dock_hide_all_categories ();
 	
-	cairo_dock_insert_extern_widget_in_gui (pWidget);
+	cairo_dock_insert_extern_widget_in_gui (pWidget);  // devient le widget courant.
 	
 	s_pCurrentGroup = pGroupDescription;
 	
@@ -825,6 +875,11 @@ void cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescri
 	g_signal_handlers_unblock_by_func (s_pActivateButton, on_click_activate_current_group, NULL);
 	if (s_path == NULL || s_path->data != pGroupDescription)
 		s_path = g_slist_prepend (s_path, pGroupDescription);
+	
+	//\_______________ On declenche le filtre.
+	cairo_dock_trigger_current_filter ();
+
+	return pWidget;
 }
 
 
@@ -893,7 +948,6 @@ void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription)
 		
 		pModuleInstance = (pModule->pInstancesList != NULL ? pModule->pInstancesList->data : NULL);
 		cConfFilePath = (pModuleInstance != NULL ? pModuleInstance->cConfFilePath : pModule->cConfFilePath);
-		cairo_dock_update_applet_conf_file_with_containers (NULL, cConfFilePath);
 		
 		bSingleGroup = FALSE;
 	}
@@ -917,13 +971,11 @@ void cairo_dock_free_categories (void)
 	g_list_free (s_pGroupDescriptionList);
 	s_pGroupDescriptionList = NULL;
 	
-	s_pDescriptionTextView = NULL;
 	s_pPreviewImage = NULL;
 	
 	s_pOkButton = NULL;
 	s_pApplyButton = NULL;
 	
-	s_pToolTipsGroup = NULL;
 	s_pMainWindow = NULL;
 	s_pToolBar = NULL;
 	
@@ -979,14 +1031,10 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 	GtkWidget *pMainVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
 	gtk_container_add (GTK_CONTAINER (pMainWindow), pMainVBox);
 	
-	GtkTooltips *pToolTipsGroup = gtk_tooltips_new ();
-	gtk_tooltips_enable (GTK_TOOLTIPS (pToolTipsGroup));
-	
 	//\_____________ On construit l'IHM du fichier de conf.
 	GSList *pWidgetList = NULL;
 	GPtrArray *pDataGarbage = g_ptr_array_new ();
 	GtkWidget *pNoteBook = cairo_dock_build_conf_file_widget (cConfFilePath,
-		pToolTipsGroup,
 		cGettextDomain,
 		pMainWindow,
 		&pWidgetList,
@@ -1098,6 +1146,8 @@ void cairo_dock_reload_current_group_widget (CairoDockModuleInstance *pInstance)
 {
 	g_return_if_fail (s_pCurrentGroupWidget != NULL && s_pCurrentGroup != NULL && s_pCurrentWidgetList != NULL);
 	
+	int iNotebookPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (s_pCurrentGroupWidget));
+	
 	gtk_widget_destroy (s_pCurrentGroupWidget);
 	s_pCurrentGroupWidget = NULL;
 	
@@ -1105,13 +1155,18 @@ void cairo_dock_reload_current_group_widget (CairoDockModuleInstance *pInstance)
 	s_pCurrentWidgetList = NULL;
 	
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (s_pCurrentGroup->cGroupName);
+	GtkWidget *pWidget;
 	if (pModule != NULL)
 	{
-		cairo_dock_present_group_widget (pModule->cConfFilePath, s_pCurrentGroup, FALSE, pInstance);
+		pWidget = cairo_dock_present_group_widget (pModule->cConfFilePath, s_pCurrentGroup, FALSE, pInstance);
 	}
 	else
 	{
-		cairo_dock_present_group_widget (g_cConfFile, s_pCurrentGroup, TRUE, NULL);
+		pWidget = cairo_dock_present_group_widget (g_cConfFile, s_pCurrentGroup, TRUE, NULL);
+	}
+	if (iNotebookPage != 0 && GTK_IS_NOTEBOOK (pWidget))
+	{
+		gtk_notebook_set_current_page (GTK_NOTEBOOK (pWidget), iNotebookPage);
 	}
 }
 
@@ -1120,3 +1175,60 @@ GtkWidget *cairo_dock_get_widget_from_name (const gchar *cGroupName, const gchar
 	g_return_val_if_fail (s_pCurrentWidgetList != NULL, NULL);
 	return cairo_dock_find_widget_from_name (s_pCurrentWidgetList, cGroupName, cKeyName);
 }
+
+
+GList *cairo_dock_search_keywords_in_group_names (gchar **pKeyWords, gboolean bAllWords, gboolean bSearchInToolTip)
+{
+	GList *pGroupList = NULL;
+	gboolean bFound;
+	int i;
+	gchar *cKeyWord;
+	CairoDockGroupDescription *pGroupDescription;
+	GList *pElement;
+	for (pElement = s_pGroupDescriptionList; pElement != NULL; pElement = pElement->next)
+	{
+		pGroupDescription = pElement->data;
+		bFound = FALSE;
+		for (i = 0; pKeyWords[i] != NULL; i ++)
+		{
+			cKeyWord = pKeyWords[i];
+			if ((g_strstr_len (pGroupDescription->cGroupName, -1, cKeyWord) != NULL) ||
+				(bSearchInToolTip && g_strstr_len (pGroupDescription->cDescription, -1, cKeyWord) != NULL))
+			{
+				bFound = TRUE;
+				if (! bAllWords)
+					break ;
+			}
+			else if (bAllWords)
+			{
+				bFound = FALSE;
+				break ;
+			}
+		}
+		if (bFound)
+			pGroupList = g_list_prepend (pGroupList, pGroupDescription);
+	}
+	
+	return pGroupList;
+}
+
+
+void cairo_dock_apply_current_filter (gchar **pKeyWords, gboolean bAllWords, gboolean bSearchInToolTip, gboolean bHighLightText, gboolean bHideOther)
+{
+	g_print ("%s ()\n", __func__);
+	if (s_pCurrentGroup != NULL)
+	{
+		cairo_dock_apply_filter_on_group_widget (pKeyWords, bAllWords, bSearchInToolTip, bHighLightText, bHideOther, s_pCurrentWidgetList);
+	}
+	else
+	{
+		cairo_dock_apply_filter_on_group_list (pKeyWords, bAllWords, bSearchInToolTip, bHighLightText, bHideOther, s_pGroupDescriptionList);
+	}
+}
+
+void cairo_dock_trigger_current_filter (void)
+{
+	gboolean bReturn;
+	g_signal_emit_by_name (s_pFilterEntry, "activate", NULL, &bReturn);
+}
+

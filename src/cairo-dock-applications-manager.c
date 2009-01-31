@@ -44,7 +44,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-applications-manager.h"
 
-#define CAIRO_DOCK_TASKBAR_CHECK_INTERVAL 250
+#define CAIRO_DOCK_TASKBAR_CHECK_INTERVAL 200
 
 extern CairoDock *g_pMainDock;
 

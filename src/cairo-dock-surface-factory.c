@@ -642,8 +642,8 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	int iOutlineMargin = (pLabelDescription->bOutlined ? 2 : 0);
 	double fZoom = ((iMaxWidth != 0 && ink.width + iOutlineMargin > iMaxWidth) ? 1.*iMaxWidth / (ink.width + iOutlineMargin) : 1.);
 	
-	*iTextWidth = (ink.width + iOutlineMargin + 4) * fZoom;
-	*iTextHeight = ink.height + iOutlineMargin + 4 + 1; // +1 car certaines polices "debordent".
+	*iTextWidth = (ink.width + iOutlineMargin + 2) * fZoom;
+	*iTextHeight = ink.height + iOutlineMargin + 2 + 1; // +1 car certaines polices "debordent".
 	//Test du zoom en W ET H *iTextHeight = (ink.height + 2 + 1) * fZoom; 
 	
 	cairo_surface_t* pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
@@ -667,9 +667,10 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 		cairo_restore(pCairoContext);
 	}
 	
-	cairo_translate (pCairoContext, -ink.x + 2, -ink.y + 2 + 1);  // meme remarque.
+	//g_print ("ink : %d;%d\n", (int) ink.x, (int) ink.y);
+	cairo_translate (pCairoContext, -ink.x + iOutlineMargin/2, -ink.y + iOutlineMargin/2 + 1);  // meme remarque pour le +1.
 	
-	//\_________________ On dessine les contours.
+	//\_________________ On dessine les contours du texte.
 	if (pLabelDescription->bOutlined)
 	{
 		cairo_save (pCairoContext);
@@ -694,13 +695,13 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	{
 		if (pLabelDescription->bVerticalPattern)
 			pGradationPattern = cairo_pattern_create_linear (0.,
-				ink.y-1+2,
+				-ink.y + iOutlineMargin/2 + 1 + 1,  // meme remarque pour le +1.
 				0.,
-				*iTextHeight+ink.y-1-2);
+				ink.height);
 		else
-			pGradationPattern = cairo_pattern_create_linear (ink.x+2,
+			pGradationPattern = cairo_pattern_create_linear (-ink.x + iOutlineMargin/2 + 1,
 				0.,
-				*iTextWidth + ink.x-2,
+				ink.width,
 				0.);
 		g_return_val_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS, NULL);
 		cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);

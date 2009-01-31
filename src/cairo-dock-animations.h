@@ -73,6 +73,10 @@ gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserD
 gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock);
 gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon);
 
+#define cairo_dock_damage_icon(pIcon) (pIcon)->bDamaged = TRUE
+#define cairo_dock_damage_dock(pDock) (pDock)->bDamaged = TRUE
+#define cairo_dock_damage_desklet(pDesklet) (pDesklet)->bDamaged = TRUE
+
 
 G_END_DECLS
 #endif

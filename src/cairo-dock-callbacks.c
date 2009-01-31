@@ -143,7 +143,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	CairoDock *pDock)
 {
 	//g_print ("%s ((%d;%d) %dx%d) (%d)\n", __func__, pExpose->area.x, pExpose->area.y, pExpose->area.width, pExpose->area.height, pDock->bAtBottom);
-	
+	pDock->bDamaged = FALSE;
 	if (g_bUseOpenGL && pDock->render_opengl != NULL)
 	{
 		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pDock->pWidget);
@@ -634,7 +634,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	{
 		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
 		
-		if (pPointedIcon != NULL && s_pIconClicked != NULL && cairo_dock_get_icon_order (s_pIconClicked) == cairo_dock_get_icon_order (pPointedIcon))
+		if (pPointedIcon != NULL && s_pIconClicked != NULL && cairo_dock_get_icon_order (s_pIconClicked) == cairo_dock_get_icon_order (pPointedIcon) && ! g_bLocked && ! myAccessibility.bLockIcons)
 		{
 			Icon *icon;
 			GList *ic;
@@ -748,7 +748,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	//s_pLastPointedDock = NULL;
 	//g_print ("s_pLastPointedDock <- NULL\n");
 	
-	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked) || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)) && s_pFlyingContainer == NULL && ! g_bLocked)
+	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked) || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)) && s_pFlyingContainer == NULL && ! g_bLocked && ! myAccessibility.bLockIcons)
 	{
 		//g_print ("on a sorti %s du dock (%d;%d) / %dx%d\n", s_pIconClicked->acName, pDock->iMouseX, pDock->iMouseY, pDock->iCurrentWidth, pDock->iCurrentHeight);
 		CairoDock *pOriginDock = cairo_dock_search_dock_from_name (s_pIconClicked->cParentDockName);
@@ -1063,7 +1063,7 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 
 static gpointer _cairo_dock_launch_threaded (gchar *cCommand)
 {
-	system (cCommand);
+	int r = system (cCommand);
 	g_free (cCommand);
 	return NULL;
 }
@@ -1219,7 +1219,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							//cairo_dock_launch_animation (pDock);
 						}
 					}
-					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked)  //  && icon->iType == s_pIconClicked->iType
+					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked && ! g_bLocked && ! myAccessibility.bLockIcons)  //  && icon->iType == s_pIconClicked->iType
 					{
 						cd_message ("deplacement de %s", s_pIconClicked->acName);
 						CairoDock *pOriginDock = CAIRO_DOCK (cairo_dock_search_container_from_icon (s_pIconClicked));
@@ -1474,6 +1474,9 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 		return FALSE;
 	}
 	
+	if (myAccessibility.bLockIcons)
+		return FALSE;
+	
 	//g_print ("%s (%d)\n", __func__, pScroll->direction);
 	if (pScroll->time - fLastTime < mySystem.fRefreshInterval && s_iSidNonStopScrolling == 0)
 		iNbSimultaneousScroll ++;
@@ -1600,8 +1603,6 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 
 		cairo_dock_replace_all_dialogs ();
 	}
-	else
-		g_print ("on ne replace pas les dialgues\n");
 	
 	return FALSE;
 }

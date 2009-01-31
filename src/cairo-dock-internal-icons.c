@@ -269,7 +269,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		(!g_bUseOpenGL && pPrevIcons->fAlbedo != pIcons->fAlbedo) ||
 		pIcons->pDirectoryList[i] != NULL ||
 		pPrevIcons->pDirectoryList[i] != NULL ||
-		bIconBackgroundImagesChanged)
+		bIconBackgroundImagesChanged)  // oui on ne fait pas dans la finesse.
 	{
 		g_fBackgroundImageWidth = 0.;  // pour mettre a jour les decorations.
 		g_fBackgroundImageHeight = 0.;
@@ -277,7 +277,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	}
 	
 	if ((pIcons->bUseSeparator && ! pPrevIcons->bUseSeparator) ||
-		(pPrevIcons->bMixAppletsAndLaunchers != pIcons->bMixAppletsAndLaunchers) || 
+		(pPrevIcons->bMixAppletsAndLaunchers != pIcons->bMixAppletsAndLaunchers) ||
 		pPrevIcons->cSeparatorImage != pIcons->cSeparatorImage ||
 		bGroupOrderChanged)
 	{

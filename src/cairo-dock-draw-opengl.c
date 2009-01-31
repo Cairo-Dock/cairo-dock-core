@@ -138,6 +138,7 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHoriz
 	glPolygonMode (GL_FRONT, GL_FILL);
 	glEnable (GL_TEXTURE_2D);
 	glBindTexture (GL_TEXTURE_2D, g_iIndicatorTexture);
+	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glColor4f(1., 1., 1., 1.);
 	glNormal3f (0., 0., 1.);
 	
@@ -164,11 +165,11 @@ static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDo
 	
 	glEnable (GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glDisable(GL_DEPTH_TEST);
 	glPolygonMode (GL_FRONT, GL_FILL);
 	glEnable (GL_TEXTURE_2D);
 	glBindTexture (GL_TEXTURE_2D, g_iActiveIndicatorTexture);
+	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glColor4f(1., 1., 1., 1.);
 	glNormal3f (0., 0., 1.);
 	
@@ -550,53 +551,11 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glRotatef (icon->iRotationY, 0., 1., 0.);
 	
 	//\_____________________ On dessine l'icone.
-	/*if (icon->iCount > 0 && icon->iAnimationType == CAIRO_DOCK_PULSE)
-	{
-		if (icon->fAlpha > 0)
-		{
-			glPushMatrix ();
-			double fScaleFactor = 1 + (1 - icon->fAlpha);
-			glScalef (icon->fWidth * icon->fScale / 2 * fScaleFactor, icon->fHeight * icon->fScale / 2 * fScaleFactor, 1.);
-			glColor4f(1., 1., 1., icon->fAlpha);
-			glEnable (GL_TEXTURE_2D);
-			glEnable (GL_BLEND);
-			glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glBindTexture (GL_TEXTURE_2D, icon->iIconTexture);
-			glBegin(GL_QUADS);
-			glTexCoord2f(0., 0.); glVertex3f(-1., 1,  0.);  // Bottom Left Of The Texture and Quad
-			glTexCoord2f(1., 0.); glVertex3f( 1., 1,  0.);  // Bottom Right Of The Texture and Quad
-			glTexCoord2f(1., 1.); glVertex3f( 1., -1,  0.);  // Top Right Of The Texture and Quad
-			glTexCoord2f(0., 1.); glVertex3f(-1.,  -1,  0.);  // Top Left Of The Texture and Quad
-			glEnd();
-			glDisable (GL_BLEND);
-			glDisable (GL_TEXTURE_2D);
-			glPopMatrix ();
-		}
-		icon->fAlpha = .8;
-	}*/
-	
-	/**GLfloat fWhite[4] = {1., 1., 1., fAlpha};
-	GLfloat fBlack[4] = {0., 0., 0., 0.5};
-	GLfloat amb[] = {0.5,0.5,0.5,1.0};
-	//glMaterialfv (GL_FRONT_AND_BACK, GL_AMBIENT, amb);
-	glMaterialfv (GL_BACK,GL_AMBIENT,fBlack);
-	glMaterialfv (GL_BACK,GL_DIFFUSE,fBlack);
-	glMaterialfv (GL_BACK,GL_SPECULAR,fBlack);
-	
-	GLfloat dif[] = {0.8,0.8,0.8,1.0};
-	GLfloat spec[] = {1.0,1.0,1.0,1.0};
-	GLfloat shininess[] = {50.0};
-	glMaterialfv(GL_FRONT,GL_DIFFUSE,dif);
-	glMaterialfv(GL_FRONT,GL_SPECULAR,spec);
-	glMaterialfv(GL_FRONT,GL_SHININESS,shininess);*/
-	
-	//\_____________________ On dessine l'icone.
 	gboolean bIconHasBeenDrawn = FALSE;
 	cairo_dock_notify (CAIRO_DOCK_PRE_RENDER_ICON, icon, pDock);
 	cairo_dock_notify (CAIRO_DOCK_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn, NULL);
 	
 	glPopMatrix ();  // retour juste apres la translation au milieu de l'icone.
-	
 	/*if (pDock->bUseReflect)
 	{
 		glPushMatrix ();
@@ -1263,15 +1222,12 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 	if (pVisInfo != NULL)
 	{
 		cd_message ("ok, got a visual");
-		//GdkVisual *visual = gdkx_visual_get (pVisInfo->visualid);
-		//pColormap = gdk_colormap_new (visual, TRUE);
 		pGlConfig = gdk_x11_gl_config_new_from_visualid (pVisInfo->visualid);
 		XFree (pVisInfo);
 	}
 	else
 	{
 		cd_warning ("couldn't find a suitable GLX Visual, OpenGL can't be used.\n (sorry to say that, but your graphic card and/or its driver is crappy)");
-		g_bUseOpenGL = FALSE;
 	}
 	
 	return pGlConfig;
@@ -1294,16 +1250,16 @@ void cairo_dock_apply_desktop_background (CairoContainer *pContainer)
 		glBegin(GL_QUADS);
 		glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
 		1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-		glVertex3f (0., pContainer->iHeight, 0.);  // Bottom Left Of The Texture and Quad
+		glVertex3f (0., pContainer->iHeight, 0.);  // Top Left.
 		
 		glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-		glVertex3f (pContainer->iWidth, pContainer->iHeight, 0.);  // Bottom Right Of The Texture and Quad
+		glVertex3f (pContainer->iWidth, pContainer->iHeight, 0.);  // Top Right
 		
 		glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-		glVertex3f (pContainer->iWidth, 0., 0.);  // Top Right Of The Texture and Quad
+		glVertex3f (pContainer->iWidth, 0., 0.);  // Bottom Right
 		
 		glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-		glVertex3f (0., 0., 0.);  // Top Left Of The Texture and Quad
+		glVertex3f (0., 0., 0.);  // Bottom Left
 		glEnd();
 		
 		glDisable (GL_TEXTURE_2D);

@@ -99,6 +99,10 @@ static void _reload_one_label (Icon *pIcon, CairoContainer *pContainer, gpointer
 	double fMaxScale = cairo_dock_get_max_scale (pContainer);
 	cairo_dock_fill_one_quick_info_buffer (pIcon, pSourceContext, &pLabels->iconTextDescription, fMaxScale);
 }
+static void _cairo_dock_resize_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
+{
+	cairo_dock_update_dock_size (pDock);
+}
 static void reload (CairoConfigLabels *pPrevLabels, CairoConfigLabels *pLabels)
 {
 	CairoDock *pDock = g_pMainDock;
@@ -106,6 +110,11 @@ static void reload (CairoConfigLabels *pPrevLabels, CairoConfigLabels *pLabels)
 	gpointer data[2] = {pLabels, pCairoContext};
 	cairo_dock_foreach_icons ((CairoDockForeachIconFunc) _reload_one_label, data);
 	cairo_destroy (pCairoContext);
+	
+	if (pPrevLabels->iconTextDescription.iSize != pLabels->iconTextDescription.iSize)
+	{
+		cairo_dock_foreach_docks ((GHFunc) _cairo_dock_resize_one_dock, NULL);
+	}
 }
 
 

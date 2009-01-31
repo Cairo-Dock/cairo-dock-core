@@ -290,8 +290,6 @@ void cairo_dock_update_launcher_desktop_file (gchar *cDesktopFilePath, CairoDock
 		g_key_file_load_from_file (pKeyFile, cDesktopFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, NULL);
 	}
 	
-	cairo_dock_update_conf_file_with_containers (pKeyFile, cDesktopFilePath);
-	
 	g_key_file_free (pKeyFile);
 }
 

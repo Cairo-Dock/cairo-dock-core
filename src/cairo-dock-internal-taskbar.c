@@ -12,6 +12,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-dock-manager.h"
 #include "cairo-dock-internal-accessibility.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-taskbar.h"
@@ -74,7 +75,7 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 {
 	CairoDock *pDock = g_pMainDock;
 	
-	if (myAccessibility.bAutoHide || myAccessibility.bPopUp)
+	if (myAccessibility.bAutoHide || myAccessibility.bPopUp || myAccessibility.bReserveSpace)
 	{
 		pTaskBar->bAutoHideOnFullScreen = FALSE;
 		pTaskBar->bAutoHideOnMaximized = FALSE;

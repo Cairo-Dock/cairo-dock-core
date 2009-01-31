@@ -344,6 +344,11 @@ gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBl
 			g_main_loop_quit (pBlockingLoop);
 	}
 	cairo_dock_free_categories ();
+	if (s_iSidShowGroupDialog != 0)
+	{
+		g_source_remove (s_iSidShowGroupDialog);
+		s_iSidShowGroupDialog = 0;
+	}
 	return FALSE;
 }
 
@@ -369,4 +374,59 @@ gboolean on_delete_normal_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *p
 	/// nettoyer.
 	
 	return FALSE;
+}
+
+
+static gboolean bAllWords = FALSE;
+static gboolean bSearchInToolTip = FALSE;
+static gboolean bHighLightText = FALSE;
+static gboolean bHideOther = FALSE;
+
+void cairo_dock_reset_filter_state (void)
+{
+	bAllWords = FALSE;
+	bSearchInToolTip = TRUE;
+	bHighLightText = TRUE;
+	bHideOther = FALSE;
+}
+
+void cairo_dock_activate_filter (GtkEntry *pEntry, gpointer data)
+{
+	const gchar *cFilterText = gtk_entry_get_text (pEntry);
+	if (cFilterText == NULL || *cFilterText == '\0')
+		return;
+	g_print ("%s (%s)\n", __func__, cFilterText);
+	gchar **pKeyWords = g_strsplit (cFilterText, " ", 0);
+	if (pKeyWords == NULL)
+	{
+		pKeyWords = g_new0 (gchar*, 2);
+		pKeyWords[0] = cFilterText;
+	}
+	cairo_dock_apply_current_filter (pKeyWords, bAllWords, bSearchInToolTip, bHighLightText, bHideOther);
+	
+	g_strfreev (pKeyWords);
+}
+void cairo_dock_toggle_all_words (GtkToggleButton *pButton, gpointer data)
+{
+	g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
+	bAllWords = gtk_toggle_button_get_active (pButton);
+	cairo_dock_trigger_current_filter ();
+}
+void cairo_dock_toggle_search_in_tooltip (GtkToggleButton *pButton, gpointer data)
+{
+	g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
+	bSearchInToolTip = gtk_toggle_button_get_active (pButton);
+	cairo_dock_trigger_current_filter ();
+}
+void cairo_dock_toggle_highlight_words (GtkToggleButton *pButton, gpointer data)
+{
+	g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
+	bHighLightText = gtk_toggle_button_get_active (pButton);
+	cairo_dock_trigger_current_filter ();
+}
+void cairo_dock_toggle_hide_others (GtkToggleButton *pButton, gpointer data)
+{
+	g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
+	bHideOther = gtk_toggle_button_get_active (pButton);
+	cairo_dock_trigger_current_filter ();
 }

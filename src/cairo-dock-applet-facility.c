@@ -284,44 +284,18 @@ void cairo_dock_set_size_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, Ca
 	}
 }
 
-
-gchar* cairo_dock_manage_themes_for_applet (gchar *cAppletShareDataDir, gchar *cThemeDirName, gchar *cAppletConfFilePath, GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName, const gchar *cExtraDirName)
+gchar *cairo_dock_get_theme_path_for_module (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName, const gchar *cShareThemesDir, const gchar *cExtraDirName)
 {
-	GError *erreur = NULL;
-	gchar *cThemesDirPath = g_strdup_printf ("%s/%s", cAppletShareDataDir, cThemeDirName);
-	GHashTable *pThemeTable = cairo_dock_list_themes (cThemesDirPath, NULL, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
-		erreur = NULL;
-	}
-	g_free (cThemesDirPath);
+	gchar *cThemeName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, cDefaultThemeName, NULL, NULL);
 	
-	if (cExtraDirName != NULL)
-	{
-		cThemesDirPath = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR, cExtraDirName);
-		pThemeTable = cairo_dock_list_themes (cThemesDirPath, pThemeTable, NULL);  // le repertoire peut ne pas exister, donc on ignore l'erreur.
-		g_free (cThemesDirPath);
-	}
+	gchar *cUserThemesDir = (cExtraDirName != NULL ? g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR, cExtraDirName) : NULL);
+	gchar *cThemePath = cairo_dock_get_theme_path (cThemeName, cShareThemesDir, cUserThemesDir, cExtraDirName);
 	
-	gchar *cThemePath = NULL;
-	if (pThemeTable != NULL)
-	{
-		cairo_dock_update_conf_file_with_themes (pKeyFile, cAppletConfFilePath, pThemeTable, cGroupName, cKeyName);
-		
-		gchar *cChosenThemeName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, cDefaultThemeName, NULL, NULL);
-		if (cChosenThemeName != NULL)
-			cThemePath = g_strdup (g_hash_table_lookup (pThemeTable, cChosenThemeName));
-		g_free (cChosenThemeName);
-		
-		if (cThemePath == NULL && cDefaultThemeName != NULL)
-			cThemePath = g_strdup (g_hash_table_lookup (pThemeTable, cDefaultThemeName));
-
-		g_hash_table_destroy (pThemeTable);
-	}
+	g_free (cThemeName);
+	g_free (cUserThemesDir);
 	return cThemePath;
 }
+
 
 GtkWidget *cairo_dock_create_sub_menu (gchar *cLabel, GtkWidget *pMenu)
 {

@@ -16,6 +16,9 @@ GETTEXT_PACKAGE=cairo-dock
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package.])
 AC_SUBST(GETTEXT_PACKAGE)
 
+CAIRO_DOCK_THEMES_DIR="themes"
+AC_SUBST(CAIRO_DOCK_THEMES_DIR)
+
 # Checks for programs.
 AC_PROG_CC
 
@@ -95,6 +98,7 @@ AC_CONFIG_FILES([Makefile
 		data/Makefile
 		data/cairo-dock.conf
 		data/main-dock.conf
+		data/themes.conf
 		data/default-theme/Makefile
 		data/default-theme/launchers/Makefile
 		data/default-theme/icons/Makefile

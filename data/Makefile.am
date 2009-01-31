@@ -17,6 +17,7 @@ essentialdata_DATA = \
 	hand.svg\
 	rotate-desklet.svg\
 	retach-desklet.svg\
+	depth-rotate-desklet.svg\
 	cairo-dock-logo.png\
 	cairo-dock.svg\
 	readme-default-view\

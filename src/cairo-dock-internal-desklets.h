@@ -19,6 +19,7 @@ struct _CairoConfigDesklets {
 	gint iDeskletButtonSize;
 	gchar *cRotateButtonImage;
 	gchar *cRetachButtonImage;
+	gchar *cDepthRotateButtonImage;
 	};
 
 

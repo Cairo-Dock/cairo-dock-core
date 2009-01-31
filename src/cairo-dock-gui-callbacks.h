@@ -33,5 +33,13 @@ gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBl
 gboolean on_delete_normal_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop);
 
 
+void cairo_dock_reset_filter_state (void);
+void cairo_dock_activate_filter (GtkEntry *pEntry, gpointer data);
+void cairo_dock_toggle_all_words (GtkToggleButton *pButton, gpointer data);
+void cairo_dock_toggle_search_in_tooltip (GtkToggleButton *pButton, gpointer data);
+void cairo_dock_toggle_highlight_words (GtkToggleButton *pButton, gpointer data);
+void cairo_dock_toggle_hide_others (GtkToggleButton *pButton, gpointer data);
+
+
 G_END_DECLS
 #endif

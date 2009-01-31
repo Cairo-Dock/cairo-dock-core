@@ -241,25 +241,12 @@ void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface
 void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface_t *pNewIconSurface, int iNewIconSize);
 
 void cairo_dock_set_dialog_message (CairoDialog *pDialog, const gchar *cMessage);
+void cairo_dock_set_dialog_message_printf (CairoDialog *pDialog, const gchar *cMessageFormat, ...);
 void cairo_dock_set_dialog_icon (CairoDialog *pDialog, const gchar *cImageFilePath);
 
 void cairo_dock_damage_icon_dialog (CairoDialog *pDialog);
 void cairo_dock_damage_text_dialog (CairoDialog *pDialog);
 void cairo_dock_damage_interactive_widget_dialog (CairoDialog *pDialog);
-
-
-// Futur applet dialog-rendering
-void cairo_dock_set_frame_size_comics (CairoDialog *pDialog);
-void cairo_dock_draw_decorations_comics (cairo_t *pCairoContext, CairoDialog *pDialog);
-
-void cairo_dock_set_frame_size_modern (CairoDialog *pDialog);
-void cairo_dock_draw_decorations_modern (cairo_t *pCairoContext, CairoDialog *pDialog);
-
-void cairo_dock_set_frame_size_3Dplane (CairoDialog *pDialog);
-void cairo_dock_draw_decorations_3Dplane (cairo_t *pCairoContext, CairoDialog *pDialog);
-
-void cairo_dock_set_frame_size_tooltip (CairoDialog *pDialog);
-void cairo_dock_draw_decorations_tooltip (cairo_t *pCairoContext, CairoDialog *pDialog);
 
 
 G_END_DECLS

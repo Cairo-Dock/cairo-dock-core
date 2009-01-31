@@ -157,12 +157,12 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 
 void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName, Icon *icon)
 {
-	gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cDesktopFileName);
-	//g_print ("%s (%s)\n", __func__, cDesktopFilePath);
-
 	GError *erreur = NULL;
+	gchar *cDesktopFilePath = (*cDesktopFileName == '/' ? g_strdup (cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cDesktopFileName));
+	//g_print ("%s (%s)\n", __func__, cDesktopFilePath);
 	GKeyFile* keyfile = g_key_file_new();
 	g_key_file_load_from_file (keyfile, cDesktopFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
+	g_free (cDesktopFilePath);
 	if (erreur != NULL)
 	{
 		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);
@@ -374,7 +374,6 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		icon->cClass = NULL;
 	}
 	
-	g_free (cDesktopFilePath);
 	g_key_file_free (keyfile);
 }
 
@@ -406,4 +405,3 @@ void cairo_dock_reload_icon_from_desktop_file (const gchar *cDesktopFileName, ca
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pParentDock)
 }
-

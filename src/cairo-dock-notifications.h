@@ -16,10 +16,8 @@ typedef struct {
 	} CairoDockNotificationRecord;
 
 typedef enum {
-	/// notification appellee lorsque l'utilisateur supprime un lanceur via le menu. data : {Icon, CairoDock}
-	CAIRO_DOCK_REMOVE_ICON=0,
 	/// notification appellee lorsque l'utilisateur clique sur une icone; l'animation est preparee juste avant, et lancee juste apres. data : {Icon, CairoDock, iState}
-	CAIRO_DOCK_CLICK_ICON,
+	CAIRO_DOCK_CLICK_ICON=0,
 	/// notification appellee lorsque l'utilisateur double clique sur une icone. data : {Icon, CairoDock}
 	CAIRO_DOCK_DOUBLE_CLICK_ICON,
 	/// notification appellee lorsque l'utilisateur clique-milieu  sur une icone. data : {Icon, CairoDock}
@@ -41,11 +39,13 @@ typedef enum {
 	
 	CAIRO_DOCK_ENTER_ICON,
 	CAIRO_DOCK_UPDATE_ICON,
+	CAIRO_DOCK_UPDATE_ICON_SLOW,
 	CAIRO_DOCK_PRE_RENDER_ICON,
 	CAIRO_DOCK_RENDER_ICON,
 	CAIRO_DOCK_STOP_ICON,
 	CAIRO_DOCK_ENTER_DOCK,
 	CAIRO_DOCK_UPDATE_DOCK,
+	CAIRO_DOCK_UPDATE_DOCK_SLOW,
 	CAIRO_DOCK_PRE_RENDER_DOCK,
 	CAIRO_DOCK_RENDER_DOCK,
 	CAIRO_DOCK_STOP_DOCK,
@@ -54,10 +54,13 @@ typedef enum {
 	CAIRO_DOCK_MOUSE_MOVED,
 	CAIRO_DOCK_ENTER_DESKLET,
 	CAIRO_DOCK_UPDATE_DESKLET,
+	CAIRO_DOCK_UPDATE_DESKLET_SLOW,
 	CAIRO_DOCK_RENDER_DESKLET,
 	CAIRO_DOCK_STOP_DESKLET,
 	/// notification appellee lorsqu'une icone est inseree dans un dock. data : {Icon, CairoDock}
 	CAIRO_DOCK_INSERT_ICON,
+	/// notification appellee lorsqu'une icone passe en mode suppression d'un dock. data : {Icon, CairoDock}
+	CAIRO_DOCK_REMOVE_ICON,
 	CAIRO_DOCK_NB_NOTIFICATIONS
 	} CairoDockNotificationType;
 
@@ -105,6 +108,8 @@ GSList *cairo_dock_get_notifications_list (CairoDockNotificationType iNotifType)
 */
 void cairo_dock_register_notification (CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData);
 
+void cairo_dock_register_notification_on_icon (Icon *pIcon, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData);
+
 /**
 *Enleve une fonction de la liste des fonctions appelees par une notification donnee.
 *@param iNotifType type de la notification.
@@ -112,25 +117,40 @@ void cairo_dock_register_notification (CairoDockNotificationType iNotifType, Cai
 */
 void cairo_dock_remove_notification_func (CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
 
+void cairo_dock_remove_notification_func_on_icon (Icon *pIcon, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
+
 /**
 *Appelle toutes les fonctions enregistrees pour une notification donnee.
 *@param iNotifType type de la notification.
 *@param ... donnees passees a la fonction notifiee.
 @return TRUE si la notification a ete utilisee par quelqu'un, FALSE si aucune fonction n'est enregistree pour elle.
 */
-#define cairo_dock_notify(iNotifType, ...) {\
+
+#define _cairo_dock_notify(pNotificationRecordList, iNotifType, ...) do {\
+	if (pNotificationRecordList == NULL) {\
+		FALSE; }\
+	else {\
+		gboolean bStop = FALSE;\
+		CairoDockNotificationFunc pFunction;\
+		CairoDockNotificationRecord *pNotificationRecord;\
+		GSList *pElement = pNotificationRecordList;\
+		while (pElement != NULL && ! bStop) {\
+			pNotificationRecord = pElement->data;\
+			bStop = pNotificationRecord->pFunction (pNotificationRecord->pUserData, ##__VA_ARGS__);\
+			pElement = pElement->next; }\
+		TRUE; }\
+	} while (0)
+
+#define cairo_dock_notify(iNotifType, ...) do {\
 	GSList *pNotificationRecordList = cairo_dock_get_notifications_list (iNotifType);\
-	if (pNotificationRecordList == NULL)\
-		FALSE;\
-	gboolean bStop = FALSE;\
-	CairoDockNotificationFunc pFunction;\
-	CairoDockNotificationRecord *pNotificationRecord;\
-	GSList *pElement = pNotificationRecordList;\
-	while (pElement != NULL && ! bStop) {\
-		pNotificationRecord = pElement->data;\
-		bStop = pNotificationRecord->pFunction (pNotificationRecord->pUserData, ##__VA_ARGS__);\
-		pElement = pElement->next; }\
-	TRUE; }
+	_cairo_dock_notify(pNotificationRecordList, iNotifType, ##__VA_ARGS__);\
+	} while (0)
+
+#define cairo_dock_notify_on_icon(pIcon, iNotifType, ...) do {\
+	GSList *pNotificationRecordList = pIcon->pNotificationTab;\
+	_cairo_dock_notify(pNotificationRecordList, iNotifType, ##__VA_ARGS__);\
+	} while (0)
+
 
 /**
 *Enregistre une liste de fonctions devant etre notifiees en premier. La liste est une liste de couples (CairoDockNotificationType, CairoDockNotificationFunc), et doit etre clot par -1.
@@ -150,6 +170,9 @@ void cairo_dock_register_last_notifications (int iFirstNotifType, ...);
 *@param ... 1ere fonction notifiee, puis couple de (notification, fonction), termine par -1.
 */
 void cairo_dock_remove_notification_funcs (int iFirstNotifType, ...);
+
+
+void cairo_dock_free_notification_table (GPtrArray *pNotificationsTab);
 
 
 G_END_DECLS

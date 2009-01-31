@@ -42,6 +42,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-menu.h"
 
 #define CAIRO_DOCK_CONF_PANEL_WIDTH 800
@@ -107,6 +108,13 @@ static void _cairo_dock_add_about_page (GtkWidget *pNoteBook, const gchar *cPage
 		FALSE,
 		0);
 	gtk_label_set_markup (GTK_LABEL (pAboutLabel), cAboutText);
+}
+static void _cairo_dock_lock_icons (GtkMenuItem *pMenuItem, gpointer *data)
+{
+	myAccessibility.bLockIcons = ! myAccessibility.bLockIcons;
+	cairo_dock_update_conf_file (g_cConfFile,
+		G_TYPE_BOOLEAN, "Accessibility", "lock icons", myAccessibility.bLockIcons,
+		G_TYPE_INVALID);
 }
 static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 {
@@ -1037,6 +1045,8 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 		_add_entry_in_menu (_("Manage themes"), GTK_STOCK_EXECUTE, _cairo_dock_initiate_theme_management, pSubMenu);
 	}
 
+	_add_entry_in_menu (myAccessibility.bLockIcons ? _("unlock icons") : _("lock icons"), GTK_STOCK_CANCEL, _cairo_dock_lock_icons, pSubMenu);
+		
 	_add_entry_in_menu (_("About"), GTK_STOCK_ABOUT, _cairo_dock_about, pSubMenu);
 
 	_add_entry_in_menu (_("Development's site"), GTK_STOCK_REFRESH, _cairo_dock_check_for_updates, pSubMenu);

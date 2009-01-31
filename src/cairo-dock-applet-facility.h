@@ -119,17 +119,16 @@ typedef enum {
 
 /**
 *Liste les themes contenu dans un repertoire, met a jour le fichier de conf avec, et renvoie le chemin correspondant au theme choisi.
-*@param cAppletShareDataDir chemin du repertoire contenant les donnees de l'applet.
-*@param cThemeDirName nom du sous-repertoire regroupant tous les themes.
-*@param cAppletConfFilePath chemin du fichier de conf.
 *@param pKeyFile le fichier de conf ouvert.
 *@param cGroupName nom du groupe (dans le fichier de conf) du parametre correspondant au theme.
 *@param cKeyName nom de la cle (dans le fichier de conf) du parametre correspondant au theme.
 *@param bFlushConfFileNeeded pointeur sur un booleen mis a TRUE si la cle n'existe pas.
 *@param cDefaultThemeName nom du theme par defaut au cas ou le precedent n'existerait pas.
+*@param cShareThemesDir chemin vers les themes pre-installes.
+*@param cExtraDirName nom du repertoire des themes extras et distants.
 *@return Le chemin du repertoire du theme choisi, dans une chaine nouvellement allouee.
 */
-gchar* cairo_dock_manage_themes_for_applet (gchar *cAppletShareDataDir, gchar *cThemeDirName, gchar *cAppletConfFilePath, GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName, const gchar *cExtraDirName);
+gchar *cairo_dock_get_theme_path_for_module (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName, const gchar *cShareThemesDir, const gchar *cExtraDirName);
 
 /**
 *Cree un sous-menu, et l'ajoute a un menu deja existant.
@@ -569,8 +568,9 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param cDefaultThemeName valeur par defaut si la cle et/ou le groupe et/ou le theme n'existe(nt) pas.
 *@return Le chemin vers le repertoire du theme, dans une chaine nouvellement allouee.
 */
-#define CD_CONFIG_GET_THEME_PATH(cGroupName, cKeyName, cThemesDirName, cDefaultThemeName) \
-cairo_dock_manage_themes_for_applet (MY_APPLET_SHARE_DATA_DIR, cThemesDirName, CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, cDefaultThemeName, myApplet->pModule->pVisitCard->cModuleName)
+#define CD_CONFIG_GET_THEME_PATH(cGroupName, cKeyName, cThemeDirName, cDefaultThemeName) \
+cairo_dock_get_theme_path_for_module (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, cDefaultThemeName, MY_APPLET_SHARE_DATA_DIR"/"cThemeDirName, MY_APPLET_USER_DATA_DIR)
+
 /**
 *Recupere la valeur d'un theme de gauge, en mettant a jour la liste des jauges disponibles dans le fichier de conf.
 *@param cGroupName nom du groupe (dans le fichier de conf) du parametre correspondant au theme.

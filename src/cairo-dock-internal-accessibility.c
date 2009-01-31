@@ -39,8 +39,14 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 	pAccessibility->iLeaveSubDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "leaving delay", &bFlushConfFileNeeded, 330, "System", NULL);
 	pAccessibility->iShowSubDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "show delay", &bFlushConfFileNeeded, 300, "System", NULL);
 	pAccessibility->bShowSubDockOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "show on click", &bFlushConfFileNeeded, FALSE, "System", NULL);
+	pAccessibility->bLockIcons = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "lock icons", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	
 	if (pAccessibility->cRaiseDockShortcut != NULL)
+	{
+		pAccessibility->bPopUp = FALSE;
+		pAccessibility->bReserveSpace = FALSE;
+		pAccessibility->bAutoHide = FALSE;
+	}
 	
 	if (pAccessibility->bPopUp)
 	{

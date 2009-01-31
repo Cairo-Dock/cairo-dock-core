@@ -36,6 +36,7 @@ cairo_dock_CFLAGS = \
 	-DCAIRO_DOCK_GETTEXT_PACKAGE=\""$(GETTEXT_PACKAGE)"\"\
 	-DCAIRO_DOCK_ICON=\""cairo-dock.svg"\"\
 	-DCAIRO_DOCK_LOGO=\""cairo-dock-logo.png"\"\
+	-DCAIRO_DOCK_THEMES_DIR=\""$(CAIRO_DOCK_THEMES_DIR)"\"\
 	-std=c99\
 	-O3\
 	-g -ggdb\

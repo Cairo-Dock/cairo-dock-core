@@ -99,7 +99,7 @@ static void reload (CairoConfigSystem *pPrevSystem, CairoConfigSystem *pSystem)
 	
 	if (pSystem->iFileSortType != pPrevSystem->iFileSortType || pSystem->bShowHiddenFiles != pPrevSystem->bShowHiddenFiles)
 	{
-		/// recharger les icones ayant un cURI != NULL;
+		/// re-ordonner les icones ayant un cURI != NULL;
 	}
 }
 

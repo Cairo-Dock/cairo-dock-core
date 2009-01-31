@@ -65,6 +65,10 @@ void cairo_dock_set_colormap_for_window (GtkWidget *pWidget)
 	GdkColormap* pColormap = gdk_screen_get_rgba_colormap (pScreen);
 	if (!pColormap)
 		pColormap = gdk_screen_get_rgb_colormap (pScreen);
+	
+	/// est-ce que ca vaut le coup de plutot faire ca avec le visual obtenu pour l'openGL ?...
+	//GdkVisual *visual = gdkx_visual_get (pVisInfo->visualid);
+	//pColormap = gdk_colormap_new (visual, TRUE);
 
 	gtk_widget_set_colormap (pWidget, pColormap);
 }

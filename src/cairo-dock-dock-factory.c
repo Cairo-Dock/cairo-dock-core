@@ -1117,6 +1117,3 @@ void cairo_dock_unset_input_shape (CairoDock *pDock)
 		0,
 		0);
 }
-
-
-

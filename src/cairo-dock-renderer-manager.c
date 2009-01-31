@@ -20,6 +20,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-internal-desklets.h"
+#include "cairo-dock-internal-system.h"
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-renderer-manager.h"
 
@@ -31,6 +32,8 @@ static GHashTable *s_hDialogRendererTable = NULL;  // table des rendus des dialo
 static GHashTable *s_hDeskletDecorationsTable = NULL;  // table des decorations des desklets.
 static GHashTable *s_hAnimationsTable = NULL;  // table des animations disponibles.
 static GHashTable *s_hDialogDecoratorTable = NULL;  // table des decorateurs de dialogues disponibles.
+static GHashTable *s_hDataRendererTable = NULL;  // table des rendus de donnees disponibles.
+
 
 CairoDockRenderer *cairo_dock_get_renderer (const gchar *cRendererName, gboolean bForMainDock)
 {
@@ -152,15 +155,26 @@ void cairo_dock_remove_desklet_decoration (const gchar *cDecorationName)
 	g_hash_table_remove (s_hDeskletDecorationsTable, cDecorationName);
 }
 
-void cairo_dock_free_desklet_decoration (CairoDeskletDecoration *pDecoration)
+
+/**CairoDataRendererInitFunc *cairo_dock_get_data_renderer_entry_point (const gchar *cRendererName)
 {
-	if (pDecoration == NULL)
-		return ;
-	g_free (pDecoration->cBackGroundImagePath);
-	g_free (pDecoration->cForeGroundImagePath);
-	g_free (pDecoration);
+	cd_debug ("%s (%s)", __func__, cRendererName);
+	if (cRendererName != NULL)
+		return g_hash_table_lookup (s_hDataRendererTable, cRendererName);
+	else
+		return NULL;
 }
 
+void cairo_dock_register_data_renderer_entry_point (const gchar *cRendererName, CairoDataRendererInitFunc *pFunc)
+{
+	cd_message ("%s (%s)", __func__, cDecorationName);
+	g_hash_table_insert (s_hDataRendererTable, g_strdup (cRendererName), pFunc);
+}
+
+void cairo_dock_remove_data_renderer_entry_point (const gchar *cRendererName)
+{
+	g_hash_table_remove (s_hDataRendererTable, cRendererName);
+}*/
 
 void cairo_dock_initialize_renderer_manager (void)
 {
@@ -195,28 +209,14 @@ void cairo_dock_initialize_renderer_manager (void)
 	s_hDialogDecoratorTable = g_hash_table_new_full (g_str_hash,
 		g_str_equal,
 		g_free,
+		g_free);
+	
+	s_hDataRendererTable = g_hash_table_new_full (g_str_hash,
+		g_str_equal,
+		g_free,
 		NULL);
 	
 	cairo_dock_register_default_renderer ();
-	CairoDialogDecorator *pDecorator = g_new (CairoDialogDecorator, 1);
-	pDecorator->set_size = cairo_dock_set_frame_size_comics;
-	pDecorator->render = cairo_dock_draw_decorations_comics;
-	cairo_dock_register_dialog_decorator ("comics", pDecorator);
-	
-	pDecorator = g_new (CairoDialogDecorator, 1);
-	pDecorator->set_size = cairo_dock_set_frame_size_modern;
-	pDecorator->render = cairo_dock_draw_decorations_modern;
-	cairo_dock_register_dialog_decorator ("modern", pDecorator);
-	
-	pDecorator = g_new (CairoDialogDecorator, 1);
-	pDecorator->set_size = cairo_dock_set_frame_size_3Dplane;
-	pDecorator->render = cairo_dock_draw_decorations_3Dplane;
-	cairo_dock_register_dialog_decorator ("3D", pDecorator);
-	
-	pDecorator = g_new (CairoDialogDecorator, 1);
-	pDecorator->set_size = cairo_dock_set_frame_size_tooltip;
-	pDecorator->render = cairo_dock_draw_decorations_tooltip;
-	cairo_dock_register_dialog_decorator ("tooltip", pDecorator);
 }
 
 
@@ -235,6 +235,7 @@ void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 	pDock->set_subdock_position = pRenderer->set_subdock_position;
 	pDock->bUseReflect = pRenderer->bUseReflect;
 	pDock->bUseStencil = pRenderer->bUseStencil;
+	pDock->iAnimationDeltaT = (g_bUseOpenGL && pDock->render_opengl != NULL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT);
 	if (cRendererName != NULL)  // NULL n'ecrase pas le nom de l'ancienne vue.
 		pDock->cRendererName = g_strdup (cRendererName);
 }

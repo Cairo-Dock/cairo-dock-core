@@ -17,7 +17,7 @@ gchar *cairo_dock_write_table_content (GHashTable *pHashTable, GHFunc pWritingFu
 void cairo_dock_write_one_name (gchar *cName, gpointer value, GString *pString);
 void cairo_dock_write_one_name_description (gchar *cName, gchar *cDescriptionFilePath, GString *pString);
 void cairo_dock_write_one_module_name (gchar *cName, CairoDockModule *pModule, GString *pString);
-void cairo_dock_write_one_theme_name (gchar *cName, gchar *cThemePath, GString *pString);
+void cairo_dock_write_one_theme_name (gchar *cName, CairoDockTheme *pTheme, GString *pString);
 void cairo_dock_write_one_renderer_name (gchar *cName, CairoDockRenderer *pRenderer, GString *pString);
 void cairo_dock_update_conf_file_with_hash_table (GKeyFile *pOpenedKeyFile, gchar *cConfFile, GHashTable *pModuleTable, gchar *cGroupName, gchar *cKeyName, gchar *cNewUsefullComment, GHFunc pWritingFunc, gboolean bSortByKey, gboolean bAddEmptyEntry);
 void cairo_dock_update_conf_file_with_list (GKeyFile *pOpenedKeyFile, gchar *cConfFile, gchar *cList, gchar *cGroupName, gchar *cKeyName, gchar *cNewUsefullComment);
