@@ -306,6 +306,7 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDesklet *pDesklet)
 {
 	glLoadIdentity ();
+	glPushMatrix ();
 	///glTranslatef (0*pDesklet->iWidth/2, 0*pDesklet->iHeight/2, 0.);  // avec une perspective ortho.
 	///glTranslatef (0*pDesklet->iWidth/2, 0*pDesklet->iHeight/2, -pDesklet->iWidth*(1.87 +.35*fabs (sin(pDesklet->fDepthRotation))));  // avec 30 deg de perspective
 	glTranslatef (0., 0., -pDesklet->iWidth*(sqrt(3)/2 +.4*fabs (sin(pDesklet->fDepthRotation))));  // avec 60 deg de perspective
@@ -315,7 +316,6 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 		glScalef (pDesklet->fZoom, pDesklet->fZoom, 1.);
 	}
 	
-	glPushMatrix ();
 	if (pDesklet->fRotation != 0)
 	{
 		double alpha = atan2 (pDesklet->iHeight, pDesklet->iWidth);
@@ -335,7 +335,7 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 	{
 		glRotatef (- pDesklet->fDepthRotation / G_PI * 180., 0., 1, 0.);
 	}
-
+	
 	if (pDesklet->iBackGroundTexture != 0 && pDesklet->fBackGroundAlpha != 0)
 	{
 		glPushMatrix ();
@@ -388,10 +388,18 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 		glPopMatrix ();
 	}
 	
-	if ((pDesklet->bInside || pDesklet->rotating || pDesklet->depth_rotating) && ! pDesklet->bPositionLocked)
+	if (pDesklet->bInside && ! pDesklet->bPositionLocked)
 	{
 		if (! pDesklet->rotating && ! pDesklet->depth_rotating)
+		{
 			glPopMatrix ();
+			glTranslatef (0., 0., -pDesklet->iWidth*(sqrt(3)/2));
+			glPushMatrix ();
+		}
+	}
+	
+	if ((pDesklet->bInside || pDesklet->rotating || pDesklet->depth_rotating) && ! pDesklet->bPositionLocked)
+	{
 		if (iRotateButtonTexture != 0)
 		{
 			glPushMatrix ();
@@ -422,12 +430,8 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 			cairo_dock_draw_texture (iDepthRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
 			glPopMatrix ();
 		}
-		if (pDesklet->rotating || pDesklet->depth_rotating)
-			glPopMatrix ();
 	}
-	else
-		glPopMatrix ();
-	
+	glPopMatrix ();
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 static void _cairo_dock_render_desklet_opengl (CairoDesklet *pDesklet)

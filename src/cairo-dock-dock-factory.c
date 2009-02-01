@@ -346,10 +346,6 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 		g_source_remove (pDock->iSidPopDown);
 	if (pDock->iSidPopUp != 0)
 		g_source_remove (pDock->iSidPopUp);
-	/*if (pDock->iSidGrowUp != 0)
-		g_source_remove (pDock->iSidGrowUp);
-	if (pDock->iSidShrinkDown != 0)
-		g_source_remove (pDock->iSidShrinkDown);*/
 	if (pDock->iSidLeaveDemand != 0)
 		g_source_remove (pDock->iSidLeaveDemand);
 	if (pDock->iSidIconGlide != 0)
@@ -438,11 +434,9 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDoc
 		{
 			cairo_dock_update_icon_s_container_name (icon, cpReceivingDockName);
 
-			///if (pDock->iRefCount > 0)
-			{
-				icon->fWidth /= pDock->fRatio;  /// myViews.fSubDockSizeRatio
-				icon->fHeight /= pDock->fRatio;
-			}
+			icon->fWidth /= pDock->fRatio;
+			icon->fHeight /= pDock->fRatio;
+			
 			cd_debug (" on re-attribue %s au dock %s", icon->acName, icon->cParentDockName);
 			cairo_dock_insert_icon_in_dock (icon, pReceivingDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);
 			

@@ -695,9 +695,9 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	{
 		if (pLabelDescription->bVerticalPattern)
 			pGradationPattern = cairo_pattern_create_linear (0.,
-				-ink.y + iOutlineMargin/2 + 1 + 1,  // meme remarque pour le +1.
+				ink.y+iOutlineMargin/2,  //-ink.y + iOutlineMargin/2 + 1 + 1,  // meme remarque pour le +1.
 				0.,
-				ink.height);
+				ink.height+ink.y+iOutlineMargin/2);
 		else
 			pGradationPattern = cairo_pattern_create_linear (-ink.x + iOutlineMargin/2 + 1,
 				0.,

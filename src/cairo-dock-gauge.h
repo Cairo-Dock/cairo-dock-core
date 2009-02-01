@@ -42,9 +42,7 @@ typedef struct
 } Gauge;
 
 
-void cairo_dock_list_available_gauges (void);
-void cairo_dock_update_gauge_list_for_gui (void);
-void cairo_dock_invalidate_gauges_list (void);
+GHashTable *cairo_dock_list_available_gauges (void);
 
 void cairo_dock_xml_open_file (gchar *filePath, const gchar *mainNodeName,xmlDocPtr *xmlDoc,xmlNodePtr *node);
 Gauge *cairo_dock_load_gauge(cairo_t *pSourceContext, const gchar *cThemePath, int iWidth, int iHeight);

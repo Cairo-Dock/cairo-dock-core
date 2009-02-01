@@ -55,7 +55,7 @@ void cairo_dock_free_theme (CairoDockTheme *pTheme)
 	g_free (pTheme);
 }
 
-GHashTable *cairo_dock_list_local_themes (gchar *cThemesDir, GHashTable *hProvidedTable, GError **erreur)
+GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *hProvidedTable, GError **erreur)
 {
 	cd_message ("%s (%s)", __func__, cThemesDir);
 	GError *tmp_erreur = NULL;
@@ -95,7 +95,7 @@ GHashTable *cairo_dock_list_local_themes (gchar *cThemesDir, GHashTable *hProvid
 	return pThemeTable;
 }
 
-gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, gint iShowActivity, gchar *cExtractTo, GError **erreur)
+gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, gint iShowActivity, const gchar *cExtractTo, GError **erreur)
 {
 	gchar *cTmpFilePath = g_strdup ("/tmp/cairo-dock-net-file.XXXXXX");
 	int fds = mkstemp (cTmpFilePath);
@@ -303,7 +303,6 @@ void cairo_dock_load_theme (gchar *cThemePath)
 
 	//\___________________ On libere toute la memoire allouee pour les docks (stoppe aussi tous les timeout).
 	cairo_dock_free_all_docks ();
-	cairo_dock_invalidate_gauges_list ();
 
 	//\___________________ On cree le dock principal.
 	g_pMainDock = cairo_dock_create_new_dock (g_iWmHint, CAIRO_DOCK_MAIN_DOCK_NAME, NULL);  // on ne lui assigne pas de vues, puisque la vue par defaut des docks principaux sera definie plus tard.
@@ -690,7 +689,7 @@ gboolean cairo_dock_manage_themes (GtkWidget *pWidget, CairoDockStartMode iMode)
 	data[2] = pDialog;
 	if (iMode == CAIRO_DOCK_START_NOMINAL)
 	{
-		gboolean bChoiceOK = cairo_dock_build_normal_gui (cInitConfFile, NULL, cTitle, CAIRO_DOCK_THEME_PANEL_WIDTH, CAIRO_DOCK_THEME_PANEL_HEIGHT, on_theme_apply, data, on_theme_destroy);
+		gboolean bChoiceOK = cairo_dock_build_normal_gui (cInitConfFile, NULL, cTitle, CAIRO_DOCK_THEME_PANEL_WIDTH, CAIRO_DOCK_THEME_PANEL_HEIGHT, (CairoDockApplyConfigFunc) on_theme_apply, data, (GFreeFunc) on_theme_destroy);
 	}
 	else  // maintenance ou sans echec.
 	{
@@ -705,6 +704,8 @@ gboolean cairo_dock_manage_themes (GtkWidget *pWidget, CairoDockStartMode iMode)
 gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir)
 {
 	cd_message ("%s (%s, %s, %s)", __func__, cShareThemesDir, cUserThemesDir, cDistantThemesDir);
+	if (cThemeName == NULL || *cThemeName == '\0')
+		return NULL;
 	gchar *cThemePath = NULL;
 	
 	if (cUserThemesDir != NULL)

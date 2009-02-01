@@ -519,7 +519,7 @@ static void _cairo_dock_get_current_color (GtkColorButton *pColorButton, GSList 
 #define _build_list_for_gui(pListStore, cEmptyItem, pHashTable, pHFunction) do { \
 	if (pListStore != NULL)\
 		g_object_unref (pListStore);\
-	if (! pHashTable) {\
+	if (pHashTable == NULL) {\
 		pListStore = NULL;\
 		return ; }\
 	pListStore = gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF);\
@@ -606,7 +606,7 @@ static void _cairo_dock_add_one_gauge_item (gchar *cName, CairoDialogDecorator *
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
 		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
 }
-void cairo_dock_build_gauge_list_for_gui (GHashTable *pHashTable)
+static void cairo_dock_build_gauge_list_for_gui (GHashTable *pHashTable)
 {
 	_build_list_for_gui (s_pGaugeListStore, NULL, pHashTable, _cairo_dock_add_one_gauge_item);
 }
@@ -622,7 +622,7 @@ static void _cairo_dock_add_one_dock_item (gchar *cName, CairoDock *pDock, GtkLi
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
 		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
 }
-void cairo_dock_build_dock_list_for_gui (void)
+static void cairo_dock_build_dock_list_for_gui (void)
 {
 	if (s_pDocksListStore != NULL)
 		g_object_unref (s_pDocksListStore);
@@ -647,20 +647,27 @@ static void _cairo_dock_fill_modele_with_themes (gchar *cThemeName, CairoDockThe
 }
 static gboolean _cairo_dock_test_one_name (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
 {
-	gchar *cName = NULL;
-	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_NAME, &cName, -1);
-	if (strcmp (data[0], cName) == 0)
+	gchar *cName = NULL, *cResult = NULL;
+	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_RESULT, &cResult, -1);
+	if (cResult == NULL)
+		gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_NAME, &cName, -1);
+	if ((cResult && strcmp (data[0], cResult) == 0) || (cName && strcmp (data[0], cName) == 0))
 	{
 		GtkTreeIter *iter_to_fill = data[1];
 		memcpy (iter_to_fill, iter, sizeof (GtkTreeIter));
 		gboolean *bFound = data[2];
 		*bFound = TRUE;
+		g_free (cName);
+		g_free (cResult);
 		return TRUE;
 	}
+	g_free (cName);
+	g_free (cResult);
 	return FALSE;
 }
 static gboolean _cairo_dock_find_iter_from_name (GtkListStore *pModele, gchar *cName, GtkTreeIter *iter)
 {
+	g_print ("%s (%s)\n", __func__, cName);
 	if (cName == NULL)
 		return FALSE;
 	gboolean bFound = FALSE;
@@ -1156,8 +1163,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					GHashTable *pThemeTable = cairo_dock_list_themes (cShareThemesDir, cUserThemesDir, cDistantThemesDir);
 					g_free (cUserThemesDir);
 
+					cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
 					cairo_dock_fill_combo_with_themes (pOneWidget, pThemeTable, cValue);
 					g_hash_table_destroy (pThemeTable);
+					g_free (cValue);
 				}
 			break ;
 			
@@ -1213,6 +1222,12 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			break ;
 			
 			case 'g' :
+				if (s_pGaugeListStore == NULL)
+				{
+					GHashTable *pGaugeTable = cairo_dock_list_available_gauges ();
+					cairo_dock_build_gauge_list_for_gui (pGaugeTable);
+					g_hash_table_destroy (pGaugeTable);
+				}
 				_add_combo_from_modele (s_pGaugeListStore, FALSE, FALSE);
 			break ;
 			
@@ -2097,7 +2112,7 @@ void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pThemeTab
 }
 
 
-gchar *cairo_dock_highlight_key_word (gchar *cSentence, gchar *cKeyWord, gboolean bBold)
+gchar *cairo_dock_highlight_key_word (const gchar *cSentence, const gchar *cKeyWord, gboolean bBold)
 {
 	gchar *cModifiedString = NULL;
 	gchar *str = g_strstr_len (cSentence, -1, cKeyWord);
@@ -2214,63 +2229,6 @@ void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWo
 		{
 			if (pCurrentFrame)
 			{
-				/*//\______________ On recupere son titre.
-				GtkWidget *pFrameLabel = NULL;
-				GtkWidget *pLabelContainer = (GTK_IS_FRAME (pCurrentFrame) ?
-					gtk_frame_get_label_widget (GTK_FRAME (pCurrentFrame)) :
-					gtk_expander_get_label_widget (GTK_EXPANDER (pCurrentFrame)));
-				g_print ("pLabelContainer : %x\n", pLabelContainer);
-				if (GTK_IS_LABEL (pLabelContainer))
-				{
-					pFrameLabel = pLabelContainer;
-				}
-				else if (pLabelContainer != NULL)
-				{
-					GList *pChildList = gtk_container_get_children (GTK_CONTAINER (pLabelContainer));
-					if (pChildList != NULL && pChildList->next != NULL)
-						pFrameLabel = pChildList->next->data;
-				}
-				
-				//\______________ On cherche les mots-cles dedans.
-				gboolean bFoundInFrameTitle = FALSE;
-				if (pFrameLabel != NULL)
-				{
-					const gchar *cFrameTitle = gtk_label_get_text (GTK_LABEL (pFrameLabel));
-					for (i = 0; pKeyWords[i] != NULL; i ++)
-					{
-						cKeyWord = pKeyWords[i];
-						if (bHighLightText)
-							cModifiedText = cairo_dock_highlight_key_word (cFrameTitle, cKeyWord, TRUE);
-						else
-							str = g_strstr_len (cFrameTitle, -1, cKeyWord);
-						if (cModifiedText != NULL || str != NULL)  // on a trouve ce mot.
-						{
-							g_print ("  on a trouve %s dans le titre\n", cKeyWord);
-							bFoundInFrameTitle = TRUE;
-							if (cModifiedText != NULL)
-							{
-								gtk_label_set_markup (GTK_LABEL (pFrameLabel), cModifiedText);
-								cFrameTitle = gtk_label_get_label (GTK_LABEL (pFrameLabel));  // Pango inclus.
-								g_free (cModifiedText);
-								cModifiedText = NULL;
-							}
-							if (! bAllWords)
-								break ;
-						}
-						else if (bAllWords)
-						{
-							bFoundInFrameTitle = FALSE;
-							break ;
-						}
-					}
-					if (! bFoundInFrameTitle)  // on remet le texte par defaut.
-					{
-						cModifiedText = g_strdup_printf ("<b>%s</b>", cFrameTitle);
-						gtk_label_set_markup (GTK_LABEL (pFrameLabel), cModifiedText);
-						g_free (cModifiedText);
-						cModifiedText = NULL;
-					}
-				}*/
 				gboolean bFoundInFrameTitle = _cairo_dock_search_words_in_frame_title (pKeyWords, pCurrentFrame, bAllWords, bHighLightText, bHideOther);
 				if (! bFrameVisible && bHideOther)
 				{

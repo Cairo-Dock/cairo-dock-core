@@ -28,35 +28,17 @@ Written by Necropotame (for any bug report, please mail me to fabounet@users.ber
 extern gchar *g_cCairoDockDataDir;
 extern gboolean g_bUseOpenGL;
 
-static GHashTable *s_pGaugeTable = NULL;
-
-void cairo_dock_list_available_gauges (void)
+GHashTable *cairo_dock_list_available_gauges (void)
 {
-	if (s_pGaugeTable != NULL)
-		return ;
-	
 	gchar *cGaugeShareDir = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_GAUGES_DIR);
 	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR, CAIRO_DOCK_GAUGES_DIR);
-	s_pGaugeTable = cairo_dock_list_themes (cGaugeShareDir, cGaugeUserDir, NULL);  // CAIRO_DOCK_GAUGES_DIR quand ce sera bon.
+	GHashTable *pGaugeTable = cairo_dock_list_themes (cGaugeShareDir, cGaugeUserDir, CAIRO_DOCK_GAUGES_DIR);
 	
 	g_free (cGaugeShareDir);
 	g_free (cGaugeUserDir);
+	return pGaugeTable;
 }
 
-void cairo_dock_update_gauge_list_for_gui (void)
-{
-	cairo_dock_build_gauge_list_for_gui (s_pGaugeTable);
-}
-
-
-void cairo_dock_invalidate_gauges_list (void)
-{
-	if (s_pGaugeTable == NULL)
-		return ;
-	g_hash_table_destroy (s_pGaugeTable);
-	s_pGaugeTable = NULL;
-	cairo_dock_build_gauge_list_for_gui (NULL);
-}
 
 
 void cairo_dock_xml_open_file (gchar *filePath, const gchar *mainNodeName,xmlDocPtr *myXmlDoc,xmlNodePtr *myXmlNode)
@@ -551,18 +533,24 @@ void cairo_dock_free_gauge(Gauge *pGauge)
 
 const gchar *cairo_dock_get_gauge_key_value(gchar *cAppletConfFilePath, GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName)
 {
-	if (s_pGaugeTable == NULL)
+	gchar *cChosenThemeName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, cDefaultThemeName, NULL, NULL);
+	gchar *cGaugeShareDir = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_GAUGES_DIR);
+	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR, CAIRO_DOCK_GAUGES_DIR);
+	gchar *cGaugePath = cairo_dock_get_theme_path (cChosenThemeName, cGaugeShareDir, cGaugeUserDir, CAIRO_DOCK_GAUGES_DIR);
+	g_free (cGaugeShareDir);
+	g_free (cGaugeUserDir);
+	
+	/*if (s_pGaugeTable == NULL)
 		cairo_dock_list_available_gauges ();
 	
 	const gchar *cGaugePath = NULL;
-	gchar *cChosenThemeName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, cDefaultThemeName, NULL, NULL);
 	if (cChosenThemeName != NULL)
 	{
 		CairoDockTheme *pTheme = g_hash_table_lookup (s_pGaugeTable, cChosenThemeName);
 		if (pTheme != NULL)
 			cGaugePath = pTheme->cThemePath;
 		g_free (cChosenThemeName);
-	}
+	}*/
 	
 	cd_debug("Theme de la jauge : %s",cGaugePath);
 	

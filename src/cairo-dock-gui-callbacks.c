@@ -400,7 +400,7 @@ void cairo_dock_activate_filter (GtkEntry *pEntry, gpointer data)
 	if (pKeyWords == NULL)
 	{
 		pKeyWords = g_new0 (gchar*, 2);
-		pKeyWords[0] = cFilterText;
+		pKeyWords[0] = (gchar *) cFilterText;
 	}
 	cairo_dock_apply_current_filter (pKeyWords, bAllWords, bSearchInToolTip, bHighLightText, bHideOther);
 	

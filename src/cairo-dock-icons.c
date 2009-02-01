@@ -749,16 +749,13 @@ Icon *cairo_dock_foreach_icons_of_type (GList *pIconList, CairoDockIconType iTyp
 		return NULL;
 
 	Icon *icon;
-	GList *ic;
+	GList *ic = pIconList, *next_ic;
 	gboolean bOneIconFound = FALSE;
 	Icon *pSeparatorIcon = NULL;
-	ic = pIconList;
-	do
+	while (ic != NULL)  // on parcourt tout, inutile de complexifier la chose pour gagner 3ns.
 	{
-		if (ic->next == NULL)
-			break;
-
-		icon = ic->next->data;  // on ne peut pas enlever l'element courant, sinon on perd 'ic'.
+		icon = ic->data;
+		next_ic = ic->next;
 		if (icon->iType == iType)
 		{
 			bOneIconFound = TRUE;
@@ -771,15 +768,8 @@ Icon *cairo_dock_foreach_icons_of_type (GList *pIconList, CairoDockIconType iTyp
 				if ( (bOneIconFound && pSeparatorIcon == NULL) || (! bOneIconFound) )
 					pSeparatorIcon = icon;
 			}
-			ic = ic->next;
 		}
-	} while (TRUE);  // on parcourt tout, inutile de complexifier la chose pour gagner 3ns.
-
-	icon = cairo_dock_get_first_icon_of_type (pIconList, iType);
-	if (icon != NULL && icon->iType == iType)
-	{
-		bOneIconFound = TRUE;
-		pFuntion (icon, NULL, data);
+		ic = next_ic;
 	}
 
 	if (bOneIconFound)
@@ -795,38 +785,18 @@ void cairo_dock_remove_all_separators (CairoDock *pDock)
 {
 	//g_print ("%s ()\n", __func__);
 	Icon *icon;
-	GList *ic;
-	if (pDock->icons == NULL)
-		return ;
-
-	ic = pDock->icons;
-	do
+	GList *ic = pDock->icons, *next_ic;
+	while (ic != NULL)
 	{
-		if (ic->next == NULL)
-			break;
-
-		icon = ic->next->data;  // on ne peut pas enlever l'element courant, sinon on perd 'ic'.
+		icon = ic->data;
+		next_ic = ic->next;  // si l'icone se fait enlever, on perdrait le fil.
 		if (CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon))
 		{
 			//g_print ("un separateur en moins (apres %s)\n", ((Icon*)ic->data)->acName);
 			cairo_dock_remove_one_icon_from_dock (pDock, icon);
 			cairo_dock_free_icon (icon);
 		}
-		else
-		{
-			ic = ic->next;
-		}
-	} while (TRUE);
-	
-	if (pDock->icons != NULL)  // et oui il peut y'avoir un separateur aussi au debut, apres qu'on ait enlever un groupe d'icones entier ! c'est vicieux n'est-ce pas ? ^_^
-	{
-		icon = pDock->icons->data;
-		if (CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon))
-		{
-			//g_print ("un separateur en moins (au debut)\n");
-			cairo_dock_remove_one_icon_from_dock (pDock, icon);
-			cairo_dock_free_icon (icon);
-		}
+		ic = next_ic;
 	}
 }
 

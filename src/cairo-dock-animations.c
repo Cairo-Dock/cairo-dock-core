@@ -344,11 +344,12 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 {
 	gboolean bRecalculateIcons = FALSE;
-	GList* ic;
+	GList* ic = pDock->icons, *next_ic;
 	Icon *pIcon;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	while (ic != NULL)
 	{
 		pIcon = ic->data;
+		next_ic = ic->next;
 		if (pIcon->fPersonnalScale == 0.05)
 		{
 			cd_message (" - %s va etre supprimee", pIcon->acName);
@@ -423,12 +424,12 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 			pIcon->fPersonnalScale = 0;
 			cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon);
 			pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
-			pIcon->bBeingRemovedByCairo = FALSE;
 		}
 		else if (pIcon->fPersonnalScale != 0)
 		{
 			bRecalculateIcons = TRUE;
 		}
+		ic = next_ic;
 	}
 	
 	if (bRecalculateIcons)
