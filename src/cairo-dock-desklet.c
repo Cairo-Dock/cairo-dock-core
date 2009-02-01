@@ -305,7 +305,6 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 }
 gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDesklet *pDesklet)
 {
-	glLoadIdentity ();
 	glPushMatrix ();
 	///glTranslatef (0*pDesklet->iWidth/2, 0*pDesklet->iHeight/2, 0.);  // avec une perspective ortho.
 	///glTranslatef (0*pDesklet->iWidth/2, 0*pDesklet->iHeight/2, -pDesklet->iWidth*(1.87 +.35*fabs (sin(pDesklet->fDepthRotation))));  // avec 30 deg de perspective
@@ -393,8 +392,8 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 		if (! pDesklet->rotating && ! pDesklet->depth_rotating)
 		{
 			glPopMatrix ();
-			glTranslatef (0., 0., -pDesklet->iWidth*(sqrt(3)/2));
 			glPushMatrix ();
+			glTranslatef (0., 0., -pDesklet->iWidth*(sqrt(3)/2));
 		}
 	}
 	
@@ -446,6 +445,7 @@ static void _cairo_dock_render_desklet_opengl (CairoDesklet *pDesklet)
 	
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity ();
+	
 	cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDesklet));
 	
 	cairo_dock_notify (CAIRO_DOCK_RENDER_DESKLET, pDesklet);

@@ -1133,7 +1133,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_allocate_new_buffer;
 				data[0] = pOneWidget;
 				data[1] = pMainWindow;
-				data[2] = "dock-rendering";
+				data[2] = "dock rendering";
 				g_signal_connect (G_OBJECT (pButtonConfigRenderer),
 					"clicked",
 					G_CALLBACK (_cairo_dock_configure_module),
