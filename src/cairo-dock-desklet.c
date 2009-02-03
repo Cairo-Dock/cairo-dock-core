@@ -308,7 +308,7 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 	glPushMatrix ();
 	///glTranslatef (0*pDesklet->iWidth/2, 0*pDesklet->iHeight/2, 0.);  // avec une perspective ortho.
 	///glTranslatef (0*pDesklet->iWidth/2, 0*pDesklet->iHeight/2, -pDesklet->iWidth*(1.87 +.35*fabs (sin(pDesklet->fDepthRotation))));  // avec 30 deg de perspective
-	glTranslatef (0., 0., -pDesklet->iWidth*(sqrt(3)/2 +.4*fabs (sin(pDesklet->fDepthRotation))));  // avec 60 deg de perspective
+	glTranslatef (0., 0., -pDesklet->iHeight*(sqrt(3)/2 +.4*fabs (sin(pDesklet->fDepthRotation))*1.*pDesklet->iWidth/pDesklet->iHeight));  // avec 60 deg de perspective
 	
 	if (pDesklet->fZoom != 1)
 	{
@@ -393,7 +393,7 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 		{
 			glPopMatrix ();
 			glPushMatrix ();
-			glTranslatef (0., 0., -pDesklet->iWidth*(sqrt(3)/2));
+			glTranslatef (0., 0., -pDesklet->iHeight*(sqrt(3)/2));
 		}
 	}
 	

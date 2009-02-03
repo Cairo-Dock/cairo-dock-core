@@ -69,12 +69,11 @@ static gboolean on_expose_flying_icon (GtkWidget *pWidget,
 	}
 	else
 	{
-		g_print ("compte a rebours : %d\n", pFlyingContainer->iAnimationCount);
+		//g_print ("compte a rebours : %d\n", pFlyingContainer->iAnimationCount);
 		if (pFlyingContainer->iAnimationCount > 0)
 		{
 			gchar *cImagePath = g_strdup_printf ("%s/%s/%d.png", CAIRO_DOCK_SHARE_DATA_DIR, "explosion", 10+1 - pFlyingContainer->iAnimationCount);
 			cairo_surface_t *pExplosionSurface = cairo_dock_create_surface_for_icon (cImagePath, pCairoContext, pFlyingContainer->iWidth, pFlyingContainer->iWidth);
-			
 			cairo_translate (pCairoContext, 
 				0.,
 				(pFlyingContainer->iHeight - pFlyingContainer->iWidth) / 2);

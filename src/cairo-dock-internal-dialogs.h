@@ -27,9 +27,6 @@ struct _CairoConfigDialogs {
 	gboolean bHomogeneous;
 	
 	gchar *cDecoratorName;
-	gint iLineWidth;
-	gint iCornerRadius;
-	gdouble fLineColor[4];
 	gdouble fDialogColor[4];
 	} ;
 

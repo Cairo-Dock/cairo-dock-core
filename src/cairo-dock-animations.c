@@ -520,7 +520,7 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 	
 	if (bUpdateSlowAnimation)
 	{
-		cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);
+		cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK_SLOW, pDock, &bContinue);
 		pDock->bKeepSlowAnimation |= bContinue;
 	}
 	cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);

@@ -44,11 +44,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDialogs *pDialogs)
 		else
 			pDialogs->dialogTextDescription.iStyle = PANGO_STYLE_NORMAL;
 		pDialogs->dialogTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "outlined", &bFlushConfFileNeeded, FALSE, NULL, NULL);
-
-		pDialogs->iCornerRadius = cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "corner", &bFlushConfFileNeeded, 8, NULL, NULL);
-		pDialogs->iLineWidth = cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "border", &bFlushConfFileNeeded, 1, NULL, NULL);
-		couleur_bulle[3] = 1.;
-		cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "line color", &bFlushConfFileNeeded, pDialogs->fLineColor, 4, couleur_bulle, NULL, NULL);
 	}
 	
 	double couleur_dtext[3] = {0., 0., 0.};
@@ -84,9 +79,6 @@ static void reload (CairoConfigDialogs *pPrevDialogs, CairoConfigDialogs *pDialo
 		pDialogs->dialogTextDescription.cFont = g_strdup (myLabels.iconTextDescription.cFont);
 		pDialogs->dialogTextDescription.iWeight = myLabels.iconTextDescription.iWeight;
 		pDialogs->dialogTextDescription.iStyle = myLabels.iconTextDescription.iStyle;
-		pDialogs->iCornerRadius = myBackground.iDockRadius;
-		pDialogs->iLineWidth = myBackground.iDockLineWidth;
-		memcpy (&pDialogs->fLineColor, &myBackground.fLineColor, 4*sizeof (double));
 	}
 }
 

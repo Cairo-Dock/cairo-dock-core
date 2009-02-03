@@ -10,11 +10,12 @@ export CAIRO_DOCK_INSTALL="0"
 export CAIRO_DOCK_THEMES="0"
 export CAIRO_DOCK_DOC="0"
 export CAIRO_DOCK_EXCLUDE="template musicplayer stacks gauge-test"
+export CAIRO_DOCK_GLITZ_OPTION=""
 export SUDO=sudo
 export TIME=time
 
 echo "this script will process : "
-while getopts "acCituhd:D" flag
+while getopts "acCituhd:Dg" flag
 do
 	echo " option $flag $OPTIND $OPTARG"
 	case "$flag" in
@@ -49,6 +50,10 @@ do
 	D)
 		echo " => build documentation $OPTARG"
 		export CAIRO_DOCK_DOC="1"
+		;;
+	g)
+		echo " => enable glitz"
+		export CAIRO_DOCK_GLITZ_OPTION="--enable-glitz"
 		;;
 	h)
 		echo "-a : run autoreconf"
@@ -106,7 +111,7 @@ if test "$CAIRO_DOCK_AUTORECONF" = "1"; then
 		cd ..
 	fi
 	echo  "* configuring ..."
-	/usr/bin/time -f "  time elapsed : %Us" autoreconf -isf > /dev/null && ./configure --prefix=$CAIRO_DOCK_PREFIX --enable-glitz > /dev/null
+	/usr/bin/time -f "  time elapsed : %Us" autoreconf -isf > /dev/null && ./configure --prefix=$CAIRO_DOCK_PREFIX $CAIRO_DOCK_GLITZ_OPTION > /dev/null
 	if test ! "$?" = "0"; then
 		echo "  Attention : an error has occured !"
 		echo "Error while configuring cairo-dock" >> $CAIRO_DOCK_DIR/compile.log
@@ -329,7 +334,7 @@ if test "$CAIRO_DOCK_UNSTABLE" = "1" -o "$compil_ok" = "0"; then
 						cd ..
 					fi
 					echo  "* configuring ..."
-					/usr/bin/time -f "  time elapsed : %Us" autoreconf -isf > /dev/null && ./configure --prefix=$CAIRO_DOCK_PREFIX --enable-glitz > /dev/null
+					/usr/bin/time -f "  time elapsed : %Us" autoreconf -isf > /dev/null && ./configure --prefix=$CAIRO_DOCK_PREFIX $CAIRO_DOCK_GLITZ_OPTION > /dev/null
 					if test ! "$?" = "0"; then
 						echo "  Attention : an error has occured !"
 						echo "Error while configuring $plugin" >> $CAIRO_DOCK_DIR/compile.log

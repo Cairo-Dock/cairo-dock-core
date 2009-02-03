@@ -412,6 +412,8 @@ _("Configure icons animations.")
 
 _("Configure icons special effects (require OpenGL capacity).")
 
+_("Configure icons animations on appearing/disappearing (require OpenGL capacity).")
+
 _("Separators")
 
 _("Put 0 if you don't want to restrain them")
@@ -476,15 +478,11 @@ _("Name of an image to use for the no/cancel button :")
 
 _("Bubble")
 
-_("Choose a decorator :")
-
-_("Border width :")
-
-_("Corner radius :")
-
 _("Background color of the bubble (r,v,b,a) :")
 
-_("Line color of the bubble (r,v,b,a) :")
+_("Choose a window decorator :")
+
+_("Configure the decorator :")
 
 _("Text")
 
@@ -507,8 +505,6 @@ _("Weight (between 1 and 9, the bigger, the heavier):")
 _("Should be italic ?")
 
 _("Should be outlined ?")
-
-_("Put 0 to let the size adapt itself to the text.")
 
 _("Size of the icon displayed next to the text :")
 
@@ -1402,7 +1398,7 @@ _("Delete")
 
 _("List of your personnal themes")
 
-_("Uncheck from the list themes you don't want anymore :")
+_("Delete from the list themes you don't want anymore :")
 
 _("pouet")
 

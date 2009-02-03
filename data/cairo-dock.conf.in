@@ -489,8 +489,11 @@ applet height = 0
 #m[Animated icons] Configure icons animations.
 config_anim = 
 
-#m[illusion] Configure icons special effects (require OpenGL capacity).
+#m[icon effects] Configure icons special effects (require OpenGL capacity).
 config_effect = 
+
+#m[illusion] Configure icons animations on appearing/disappearing (require OpenGL capacity).
+config_illusion = 
 
 #X+[Separators]
 frame_sep =
@@ -575,18 +578,14 @@ button_cancel image =
 #F+[Bubble;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-bubble.png]
 frame_bubble =
 
-#t Choose a decorator :
-decorator = comics
-
-#i+[0;10] Border width :
-border = 1
-#i+[0;30] Corner radius :
-corner = 8
 #c+4[0;1] Background color of the bubble (r,v,b,a) :
 background color = 1.0; 1.0; 1.0; 0.7
 
-#c+4[0;1] Line color of the bubble (r,v,b,a) :
-line color = 1.0; 1.0; 1.0; 1.0
+#t Choose a window decorator :
+decorator = comics
+
+#m[dialog rendering] Configure the decorator :
+config_hidden = 
 
 #F+[Text;gtk-select-font]
 frame_text =

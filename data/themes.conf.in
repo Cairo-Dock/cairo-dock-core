@@ -6,7 +6,7 @@
 #F[Choose a theme]
 frame1=
 
-#h[@prefix@/@DATADIRNAME@/@PACKAGE@/themes;../@CAIRO_DOCK_THEMES_DIR@;@CAIRO_DOCK_THEMES_DIR@] List of themes :/
+#h[@prefix@/@DATADIRNAME@/@PACKAGE@/themes;../@CAIRO_DOCK_THEMES_DIR@;] List of themes :/
 chosen theme = 
 
 #F
