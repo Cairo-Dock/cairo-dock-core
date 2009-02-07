@@ -410,14 +410,14 @@ config_labels =
 #@prefix@/@DATADIRNAME@/@PACKAGE@/icon-icons.svg;1;All about icons :\n size, reflection, icon theme, ...
 [Icons]
 
-#F+[Wave's shape;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-wave.png]
+#F+[Zoom effect;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-wave.png]
 frame_shape =
-#f+[0;5] Crest of the wave :
-#{the maximum zoom will be 1+C.}
-amplitude = 1.0
+#f+[1;5] Maximum zoom of the icons :
+#{set to 1 if you don't want the icons to zoom when you hover them.}
+zoom max = 2.0
 
-#i+[1;999] Width of the interval in which the wave will be effective :
-#{in pixels. Outside of this interval (centered on the mouse), the wave is flat.}
+#i+[1;999] Width of the interval in which the zoom will be effective :
+#{in pixels. Outside of this interval (centered on the mouse), there is no zoom.}
 sinusoid width = 300
 
 #i+[0;50] Space between icons :
@@ -447,12 +447,12 @@ frame_refl =
 #{It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are not used.}
 albedo = 1
 
-#e+[0;1] Field depth of the view:
-#{More precisely, it is the fraction of the max icon height that will be used to draw reflect. So setting it to 0.33 will mean that 33% of the icons will reflect on the ground, and the icons will be placed at the right distance from the front border of the frame so that the reflect is fully visible.}
+#e+[0;1] Fraction of the icon height that will reflect :
+#{Setting it to 0.33 will mean that 33% of the icons will reflect on the ground. The icons will be placed at the right distance from the front border of the frame so that the reflect is fully visible.}
 field depth = 0.5
 
 #e+[0;1] Icons' transparency at rest :
-#{It is their transparency when the wave is flat; they will "materialize" progressively as the dock grows up. The closer to 0, the more transparent they will be.}
+#{It is their transparency when the dock is at rest; they will "materialize" progressively as the dock grows up. The closer to 0, the more transparent they will be.}
 alpha at rest = 1
 
 
@@ -561,11 +561,9 @@ relative icon size = 1.
 #F+[Buttons;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-buttons.png]
 frame_button =
 
-#i+[10;64] Size of buttons in the info-bubbles (width x height) :
+#j+[10;64] Size of buttons in the info-bubbles (width x height) :
 #{in pixels.}
-button width = 48
-#i+[10;64]  ...
-button height = 48
+button size = 48;48
 
 #S+ Name of an image to use for the yes/ok button :
 #{If you don't provide any, a default image will be used.}
@@ -667,6 +665,10 @@ rotate image =
 #{If you don't provide any, a default image will be used.}
 retach image = 
 
+#S+ Name of an image to use for the 'depth rotate' button :
+#{If you don't provide any, a default image will be used.}
+depth rotate image = 
+
 #@prefix@/@DATADIRNAME@/@PACKAGE@/icon-indicators.png;1;Indicators are extra indications on your icons.
 [Indicators]
 
@@ -724,6 +726,17 @@ link indicator = TRUE
 #i+[-10;64] Vertical offset :
 #{in pixels. You can use this parameter to adjust the indicator's vertical position.}
 indicator deltaY = 2
+
+#F+[Indicator of class subdock]
+frame_launch =
+
+#S+ Filename of an image to indicate that a class has been grouped in a subdock :
+#{It only makes sense if you choosed to group the applis of the same class togather. Let blank to use the default one.}
+class indicator = 
+
+#b+ Zoom the indicator with its icon ?
+zoom class = false
+
 
 
 #X+[Misc. Emblems]

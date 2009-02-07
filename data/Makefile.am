@@ -12,6 +12,7 @@ essentialdata_DATA = \
 	main-dock.conf\
 	default-icon.svg\
 	default-indicator.png\
+	default-class-indicator.svg\
 	cairo-dock-ok.svg\
 	cairo-dock-cancel.svg\
 	hand.svg\
