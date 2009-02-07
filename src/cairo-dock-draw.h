@@ -20,7 +20,6 @@ void cairo_dock_set_colormap_for_window (GtkWidget *pWidget);
 void cairo_dock_set_colormap (CairoContainer *pContainer);
 
 
-
 double cairo_dock_get_current_dock_width_linear (CairoDock *pDock);
 
 /**
@@ -96,13 +95,42 @@ void cairo_dock_render_background (cairo_t *pCairoContext, CairoDock *pDock);
 void cairo_dock_render_blank (cairo_t *pCairoContext, CairoDock *pDock);
 
 
+void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRectangle *pArea);
 /**
 *Efface et redessine entierement une seule icone. Appelle la fonction de trace optimise de la vue courante; si cette derniere ne fournit pas de trace optimise, retrace tout le dock (ce qui peut etre penalisant).
 *@param icon l'icone a retracer.
 *@param pContainer le container de l'icone.
 */
-void cairo_dock_redraw_my_icon (Icon *icon, CairoContainer *pContainer);
+void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer);
+#define cairo_dock_redraw_my_icon cairo_dock_redraw_icon
+void cairo_dock_redraw_container (CairoContainer *pContainer);
+void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle *pArea);
+/**#define _cairo_dock_extend_area(area, x, y, w, h) do {\
+	int xmin = MIN (area.x, x);
+	int ymin = MIN (area.y, y);
+	area.width = MAX (area.x + area.width, x + w) - xmin;\
+	area.height = MAX (area.y + area.height, y + h) - ymin;\
+	area.x = MIN (area.x, x);\
+	area.y = MIN (area.y, y); } while (0)
+#define _cairo_dock_compute_areas_bounded_box(area, area_) _cairo_dock_extend_area (area, area_.x, area_.y, area_.width, area_.height)
 
+#define cairo_dock_damage_container_area(pContainer, area) _cairo_dock_compute_areas_bounded_box (pContainer->damageArea, area)
+
+#define cairo_dock_damage_icon(pIcon, pContainer) do {\
+	GdkRectangle area;\
+	cairo_dock_compute_icon_area (icon, pContainer, &area);\
+	cairo_dock_damage_container_area(pContainer, area); } while (0)
+	
+#define cairo_dock_damage_container(pContainer) do {\
+	pContainer->damageArea.x = 0;\
+	pContainer->damageArea.y = 0;\
+	if (pContainer->bHorizontal) {\
+		pContainer->damageArea.width = pContainer->iWidth;\
+		pContainer->damageArea.height = pContainer->iHeight; }\
+	else {\
+		pContainer->damageArea.width = pContainer->iHeight;\
+		pContainer->damageArea.height = pContainer->iWidth; }\
+	} while (0)*/
 
 void cairo_dock_set_window_position_at_balance (CairoDock *pDock, int iNewWidth, int iNewHeight);
 void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, CairoDockSizeType iSizeType, int *iNewWidth, int *iNewHeight);

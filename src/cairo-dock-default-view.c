@@ -37,7 +37,7 @@ extern gint g_iScreenWidth[2];
 extern int g_iScreenOffsetX, g_iScreenOffsetY;
 
 extern int g_iBackgroundTexture;
-
+extern gboolean g_bEasterEggs;
 
 void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pDock)
 {
@@ -87,23 +87,26 @@ void cairo_dock_calculate_max_dock_size_linear (CairoDock *pDock)
 	pDock->iMinRightMargin = fExtraWidth/2;
 	Icon *pFirstIcon = cairo_dock_get_first_icon (pDock->icons);
 	if (pFirstIcon != NULL)
-		pDock->iMaxRightMargin = fExtraWidth/2 + pFirstIcon->fWidth;
+		pDock->iMaxLeftMargin = pFirstIcon->fXMax;
 	Icon *pLastIcon = cairo_dock_get_last_icon (pDock->icons);
 	if (pLastIcon != NULL)
-		pDock->iMaxRightMargin = fExtraWidth/2 + pLastIcon->fWidth;
+		pDock->iMaxRightMargin = pDock->iMaxDockWidth - (pLastIcon->fXMin + pLastIcon->fWidth);
+	g_print(" marges min: %d | %d\n marges max: %d | %d\n", pDock->iMinLeftMargin, pDock->iMinRightMargin, pDock->iMaxLeftMargin, pDock->iMaxRightMargin);
 }
 
 
 
-void cairo_dock_calculate_construction_parameters_generic (Icon *icon, int iCurrentWidth, int iCurrentHeight, int iMaxDockWidth)
+void cairo_dock_calculate_construction_parameters_generic (Icon *icon, CairoDock *pDock)
 {
 	icon->fDrawX = icon->fX;
+	if (g_bEasterEggs && pDock->fAlign < .5)
+		icon->fDrawX -= pDock->iLeftMargin * (.5 - pDock->fAlign) * 2;
 	icon->fDrawY = icon->fY;
 	icon->fWidthFactor = 1.;
 	icon->fHeightFactor = 1.;
 	///icon->fDeltaYReflection = 0.;
 	icon->fOrientation = 0.;
-	if (icon->fDrawX >= 0 && icon->fDrawX + icon->fWidth * icon->fScale <= iCurrentWidth)
+	if (icon->fDrawX >= 0 && icon->fDrawX + icon->fWidth * icon->fScale <= pDock->iCurrentWidth)
 	{
 		icon->fAlpha = 1;
 	}
@@ -424,7 +427,7 @@ Icon *cairo_dock_calculate_icons_linear (CairoDock *pDock)
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		cairo_dock_calculate_construction_parameters_generic (icon, pDock->iCurrentWidth, pDock->iCurrentHeight, pDock->iMaxDockWidth);
+		cairo_dock_calculate_construction_parameters_generic (icon, pDock);
 	}
 	
 	cairo_dock_check_if_mouse_inside_linear (pDock);

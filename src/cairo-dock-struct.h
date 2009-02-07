@@ -54,6 +54,11 @@ typedef struct _CairoDockLabelDescription CairoDockLabelDescription;
 typedef struct _CairoDialogAttribute CairoDialogAttribute;
 typedef struct _CairoDeskletAttribute CairoDeskletAttribute;
 
+typedef struct _CairoDataRenderer CairoDataRenderer;
+typedef struct _CairoDataRendererAttribute CairoDataRendererAttribute;
+typedef struct _CairoDataRendererInterface CairoDataRendererInterface;
+typedef struct _CairoDataToRenderer CairoDataToRenderer;
+
 
 typedef enum {
 	CAIRO_DOCK_VERTICAL = 0,
@@ -95,6 +100,8 @@ struct _CairoContainer {
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
 	/// pour l'animation du container.
 	gint iSidGLAnimation;
+	/// intervalle de temps entre 2 etapes de l'animation.
+	gint iAnimationDeltaT;
 	/// derniere position en X du curseur dans le referentiel du container.
 	gint iMouseX;
 	/// derniere position en Y du curseur dans le referentiel du container.
@@ -174,6 +181,8 @@ struct _CairoDock {
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
 	/// pour l'animation des docks.
 	gint iSidGLAnimation;
+	/// intervalle entre 2 etapes de l'animation.
+	gint iAnimationDeltaT;
 	/// derniere position en X du curseur dans le referentiel du dock.
 	gint iMouseX;
 	/// derniere position en Y du curseur dans le referentiel du dock.
@@ -298,9 +307,7 @@ struct _CairoDock {
 	/// TRUE ssi cette vue utilise le stencil buffer d'OpenGL.
 	gboolean bUseStencil;
 	gint iAnimationStep;
-	gint iAnimationDeltaT;
 	gboolean bKeepSlowAnimation;
-	gboolean bDamaged;
 };
 
 
@@ -419,9 +426,10 @@ struct _CairoDeskletAttribute {
 	gboolean bOnWidgetLayer;
 	gboolean bPositionLocked;
 	gint iRotation;
+	gint iDepthRotationY;
+	gint iDepthRotationX;
 	gchar *cDecorationTheme;
 	CairoDeskletDecoration *pUserDecoration;
-	gint iDepthRotation;
 };
 
 struct _CairoDockMinimalAppletConfig {
@@ -505,14 +513,18 @@ struct _CairoDialog {
 #endif // HAVE_GLITZ
 	/// Donnees exterieures.
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
-	/// pour l'animation des desklets.
+	/// pour l'animation des dialogues.
 	gint iSidGLAnimation;
+	/// intervalle de temps entre 2 etapes de l'animation.
+	gint iAnimationDeltaT;
 	/// derniere position en X du curseur dans le referentiel du dock.
 	gint iMouseX;
 	/// derniere position en Y du curseur dans le referentiel du dock.
 	gint iMouseY;
 	/// ratio des icones (non utilise).
 	gdouble fRatio;
+	/// transparence du reflet du dialogue, 0 si le decorateur ne gere pas le reflet.
+	gdouble fReflectAlpha;
 	/// le moteur de rendu utilise pour dessiner le dialogue.
 	CairoDialogRenderer *pRenderer;
 	/// donnees pouvant etre utilisees par le moteur de rendu.
@@ -580,8 +592,6 @@ struct _CairoDialog {
 	gint iCurrentTextOffset;
 	/// les timer de ces 2 animations.
 	gint iSidAnimateIcon, iSidAnimateText;
-	/// transparence du reflet du dialogue, 0 si le decorateur ne gere pas le reflet.
-	gdouble fReflectAlpha;
 };
 
 
@@ -735,10 +745,9 @@ struct _Icon {
 	gboolean bStatic;
 	CairoDockAnimationState iAnimationState;
 	gboolean bBeingRemovedByCairo;
-	gboolean bDamaged;
 	gpointer pbuffer;
 	GPtrArray *pNotificationsTab;
-	//CairoDataRenderer *pDataRenderer;
+	CairoDataRenderer *pDataRenderer;
 };
 
 
@@ -858,13 +867,15 @@ struct _CairoDesklet {
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
 	/// pour l'animation des desklets.
 	gint iSidGLAnimation;
+	/// intervalle de temps entre 2 etapes de l'animation.
+	gint iAnimationDeltaT;
 	/// derniere position en X du curseur dans le referentiel du dock.
 	gint iMouseX;
 	/// derniere position en Y du curseur dans le referentiel du dock.
 	gint iMouseY;
 	/// le facteur de zoom lors du detachage d'une applet.
 	gdouble fZoom;
-	
+	gboolean bUseReflect_unused;
 	/// le moteur de rendu utilise pour dessiner le desklet.
 	CairoDeskletRenderer *pRenderer;
 	/// donnees pouvant etre utilisees par le moteur de rendu.
@@ -906,6 +917,10 @@ struct _CairoDesklet {
 	gdouble fForeGroundAlpha;
 	/// rotation.
 	gdouble fRotation;
+	gdouble fDepthRotationY;
+	gdouble fDepthRotationX;
+	gboolean rotatingY;
+	gboolean rotatingX;
 	gboolean rotating;
 	/// rattachement au dock.
 	gboolean retaching;
@@ -913,9 +928,6 @@ struct _CairoDesklet {
 	guint time;
 	GLuint iBackGroundTexture;
 	GLuint iForeGroundTexture;
-	gdouble fDepthRotation;
-	gboolean depth_rotating;
-	gboolean bDamaged;
 };
 
 typedef enum {
@@ -981,20 +993,20 @@ struct _CairoDockLabelDescription {
 
 
 struct _CairoFlyingContainer {
-        /// type de container.
-        CairoDockTypeContainer iType;
-        /// La fenetre du widget.
-        GtkWidget *pWidget;
-        /// Taille de la fenetre. La surface allouee a l'applet s'en deduit.
-        gint iWidth, iHeight;
-        /// Position de la fenetre.
-        gint iPositionX, iPositionY;
-        /// TRUE ssi le pointeur est dedans.
-        gboolean bInside;
-        /// TRUE ssi le container est horizontal.
-        CairoDockTypeHorizontality bIsHorizontal;
-        /// TRUE ssi le container est oriente vers le haut.
-        gboolean bDirectionUp;
+	/// type de container.
+	CairoDockTypeContainer iType;
+	/// La fenetre du widget.
+	GtkWidget *pWidget;
+	/// Taille de la fenetre. La surface allouee a l'applet s'en deduit.
+	gint iWidth, iHeight;
+	/// Position de la fenetre.
+	gint iPositionX, iPositionY;
+	/// TRUE ssi le pointeur est dedans.
+	gboolean bInside;
+	/// TRUE ssi le container est horizontal.
+	CairoDockTypeHorizontality bIsHorizontal;
+	/// TRUE ssi le container est oriente vers le haut.
+	gboolean bDirectionUp;
 #ifdef HAVE_GLITZ
         glitz_drawable_format_t *pDrawFormat;
         glitz_drawable_t* pGlitzDrawable;
@@ -1004,8 +1016,10 @@ struct _CairoFlyingContainer {
 #endif // HAVE_GLITZ
 	/// Donnees exterieures.
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
-	/// pour l'animation des desklets.
+	/// le timer de l'animation.
 	gint iSidGLAnimation;
+	/// intervalle de temps entre 2 etapes de l'animation.
+	gint iAnimationDeltaT;
 	/// derniere position en X du curseur dans le referentiel du dock.
 	gint iMouseX;
 	/// derniere position en Y du curseur dans le referentiel du dock.
@@ -1014,8 +1028,6 @@ struct _CairoFlyingContainer {
 	gboolean bUseReflect;
 	/// L'icone volante.
 	Icon *pIcon;
-	/// le timer de l'animation.
-	gint iSidAnimationTimer;
 	/// compteur pour l'animation.
 	gint iAnimationCount;
 };
@@ -1035,6 +1047,7 @@ struct _CairoDockInternalModule {
 	CairoDockPluginCategory iCategory;
 	gint iSizeOfConfig;
 	gint iSizeOfData;
+	const gchar **cDependencies;  // NULL terminated.
 	//\_____________ Interface.
 	CairoDockInternalModuleReloadFunc reload;
 	CairoDockInternalModuleGetConfigFunc get_config;
@@ -1119,30 +1132,6 @@ typedef enum {
 	} CairoDockStartMode;
 
 
-/*typedef struct _CairoGaugeAttribute CairoGaugeAttribute;
-struct _CairoGaugeAttribute {
-	CairoDataRendererAttribute renderer;
-	gchar *cThemePath;
-};
-
-typedef struct _CairoGraphAttribute CairoGraphAttribute;
-struct _CairoGraphAttribute {
-	CairoDataRendererAttribute dataRenderer;
-	gint iNbPoints;
-	gint iType;
-	gdouble **pHighColor;  // iNbValues * 3
-	gdouble **pLowColor;  // idem
-};
-
-typedef struct _CairoBarAttribute CairoBarAttribute;
-struct _CairoBarAttribute {
-	CairoDataRendererAttribute dataRenderer;
-	gdouble **pHighColor;  // iNbValues * 3
-	gdouble **pLowColor;  // idem
-	gchar **cImageFilePath;  // iNbValues
-};*/
-
-
 typedef struct _CairoDockTheme CairoDockTheme;
 struct _CairoDockTheme {
 	gchar *cThemePath;
@@ -1152,4 +1141,6 @@ struct _CairoDockTheme {
 	gint iType;  // installed, user, distant.
 };
 
+
 #endif
+

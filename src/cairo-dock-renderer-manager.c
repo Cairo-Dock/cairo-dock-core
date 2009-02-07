@@ -156,7 +156,7 @@ void cairo_dock_remove_desklet_decoration (const gchar *cDecorationName)
 }
 
 
-/**CairoDataRendererInitFunc *cairo_dock_get_data_renderer_entry_point (const gchar *cRendererName)
+CairoDataRendererInitFunc cairo_dock_get_data_renderer_entry_point (const gchar *cRendererName)
 {
 	cd_debug ("%s (%s)", __func__, cRendererName);
 	if (cRendererName != NULL)
@@ -167,14 +167,14 @@ void cairo_dock_remove_desklet_decoration (const gchar *cDecorationName)
 
 void cairo_dock_register_data_renderer_entry_point (const gchar *cRendererName, CairoDataRendererInitFunc *pFunc)
 {
-	cd_message ("%s (%s)", __func__, cDecorationName);
+	cd_message ("%s (%s)", __func__, cRendererName);
 	g_hash_table_insert (s_hDataRendererTable, g_strdup (cRendererName), pFunc);
 }
 
 void cairo_dock_remove_data_renderer_entry_point (const gchar *cRendererName)
 {
 	g_hash_table_remove (s_hDataRendererTable, cRendererName);
-}*/
+}
 
 void cairo_dock_initialize_renderer_manager (void)
 {
@@ -260,6 +260,7 @@ void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRender
 	
 	pDesklet->pRenderer = pRenderer;
 	gtk_widget_set_double_buffered (pDesklet->pWidget, ! (g_bUseOpenGL && pRenderer != NULL && pRenderer->render_opengl != NULL));
+	pDesklet->iAnimationDeltaT = (g_bUseOpenGL && pRenderer != NULL && pRenderer->render_opengl != NULL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT);
 	
 	if (pRenderer != NULL)
 	{

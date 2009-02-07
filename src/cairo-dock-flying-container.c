@@ -99,7 +99,6 @@ static gboolean _cairo_dock_animate_flying_icon (CairoFlyingContainer *pFlyingCo
 			cairo_dock_unregister_current_flying_container ();
 			return FALSE;
 		}
-		
 	}
 	else
 	{
@@ -129,6 +128,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	pFlyingContainer->bDirectionUp = TRUE;
 	pFlyingContainer->fRatio = 1.;
 	pFlyingContainer->bUseReflect = FALSE;
+	pFlyingContainer->iAnimationDeltaT = 60;
 	
 	gtk_window_set_skip_pager_hint(GTK_WINDOW(pWindow), TRUE);
 	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(pWindow), TRUE);
@@ -176,7 +176,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	
 	pFlyingContainer->pIcon->fDrawX = 0;
 	pFlyingContainer->pIcon->fDrawY = 0;
-	pFlyingContainer->iSidAnimationTimer = g_timeout_add (60, (GSourceFunc) _cairo_dock_animate_flying_icon, (gpointer) pFlyingContainer);
+	pFlyingContainer->iSidGLAnimation = g_timeout_add (pFlyingContainer->iAnimationDeltaT, (GSourceFunc) _cairo_dock_animate_flying_icon, (gpointer) pFlyingContainer);
 	return pFlyingContainer;
 }
 
@@ -201,8 +201,8 @@ void cairo_dock_drag_flying_container (CairoFlyingContainer *pFlyingContainer, C
 void cairo_dock_free_flying_container (CairoFlyingContainer *pFlyingContainer)
 {
 	gtk_widget_destroy (pFlyingContainer->pWidget);  // enleve les signaux.
-	if (pFlyingContainer->iSidAnimationTimer != 0)
-		g_source_remove (pFlyingContainer->iSidAnimationTimer);
+	if (pFlyingContainer->iSidGLAnimation != 0)
+		g_source_remove (pFlyingContainer->iSidGLAnimation);
 	g_free (pFlyingContainer);
 }
 
@@ -265,9 +265,5 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 				cairo_dock_zoom_out_desklet (pIcon->pModuleInstance->pDesklet);
 			}
 		}
-	}
-	else  // ne devrait pas arriver.
-	{
-		cairo_dock_free_icon (pIcon);
 	}
 }

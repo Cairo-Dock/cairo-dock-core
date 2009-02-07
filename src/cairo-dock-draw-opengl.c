@@ -67,10 +67,13 @@ extern CairoDock *g_pMainDock;
 extern double g_fIndicatorWidth, g_fIndicatorHeight;
 extern GLuint g_iIndicatorTexture;
 extern GLuint g_iActiveIndicatorTexture;
+extern GLuint g_iClassIndicatorTexture;
 extern GLuint g_pVisibleZoneTexture;
 extern GLuint g_iDesktopBgTexture;
 extern cairo_surface_t *g_pIndicatorSurface;
 extern cairo_surface_t *g_pActiveIndicatorSurface;
+extern cairo_surface_t *g_pClassIndicatorSurface;
+extern double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
 extern cairo_surface_t *g_pVisibleZoneSurface;
 extern gboolean g_bUseOpenGL;
 extern GdkGLConfig* g_pGlConfig;
@@ -132,25 +135,8 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHoriz
 	}
 
 	//\__________________ On dessine l'indicateur.
-	glEnable (GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  /// utile ?
-	glDisable(GL_DEPTH_TEST);
-	glPolygonMode (GL_FRONT, GL_FILL);
-	glEnable (GL_TEXTURE_2D);
-	glBindTexture (GL_TEXTURE_2D, g_iIndicatorTexture);
-	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glColor4f(1., 1., 1., 1.);
-	glNormal3f (0., 0., 1.);
-	
-	glBegin(GL_QUADS);
-	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
-	glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);  // Bottom Right Of The Texture and Quad
-	glTexCoord2f(1., 1.); glVertex3f( .5, -.5, 0.);  // Top Right Of The Texture and Quad
-	glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);  // Top Left Of The Texture and Quad
-	glEnd();
-	
-	glDisable (GL_TEXTURE_2D);
-	glDisable (GL_BLEND);
+	cairo_dock_draw_texture (g_iIndicatorTexture, 0, 0);
 }
 static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDock *pDock, double fRatio)
 {
@@ -163,26 +149,36 @@ static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDo
 	if (icon->fOrientation != 0)
 		glRotatef (icon->fOrientation, 0., 0., 1.);
 	
-	glEnable (GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDisable(GL_DEPTH_TEST);
-	glPolygonMode (GL_FRONT, GL_FILL);
-	glEnable (GL_TEXTURE_2D);
-	glBindTexture (GL_TEXTURE_2D, g_iActiveIndicatorTexture);
-	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glColor4f(1., 1., 1., 1.);
-	glNormal3f (0., 0., 1.);
-	
 	cairo_dock_set_icon_scale (icon, pDock, 1.);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
-	glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);  // Bottom Right Of The Texture and Quad
-	glTexCoord2f(1., 1.); glVertex3f( .5, -.5, 0.);  // Top Right Of The Texture and Quad
-	glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);  // Top Left Of The Texture and Quad
-	glEnd();
+	cairo_dock_draw_texture (g_iActiveIndicatorTexture, 0, 0);
+}
+static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp)
+{
+	if (g_iClassIndicatorTexture == 0 && g_pClassIndicatorSurface != NULL)
+	{
+		g_iClassIndicatorTexture = cairo_dock_create_texture_from_surface (g_pClassIndicatorSurface);
+		g_print ("g_iClassIndicatorTexture <- %d\n", g_iClassIndicatorTexture);
+	}
 	
-	glDisable (GL_TEXTURE_2D);
-	glDisable (GL_BLEND);
+	if (icon->fOrientation != 0)
+		glRotatef (icon->fOrientation, 0., 0., 1.);
+	
+	if (myIndicators.bZoomClassIndicator)
+		fRatio *= icon->fScale;
+	
+	if (! bHorizontalDock)
+		glRotatef (90., 0., 0., 1.);
+	if (! bDirectionUp)
+		glScalef (1., -1., 1.);
+	glTranslatef (icon->fWidth * icon->fScale/2 - g_fClassIndicatorWidth * fRatio/2,
+		icon->fHeight * icon->fScale/2 - g_fClassIndicatorHeight * fRatio/2,
+		0.);
+	
+	glColor4f(1., 1., 1., 1.);
+	cairo_dock_draw_texture (g_iClassIndicatorTexture,
+		g_fClassIndicatorWidth * fRatio,
+		g_fClassIndicatorHeight * fRatio);
 }
 void cairo_dock_set_icon_scale (Icon *pIcon, CairoDock *pDock, double fZoomFactor)
 {
@@ -583,6 +579,13 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		_cairo_dock_draw_active_window_indicator_opengl (icon, pDock, fRatio);
 		glPopMatrix ();
 	}
+	if (icon->pSubDock != NULL && icon->cClass != NULL && g_pClassIndicatorSurface != NULL && icon->Xid == 0)  // le dernier test est de la paranoia.
+	{
+		glPushMatrix ();
+		glTranslatef (0., 0., icon->fHeight * (1+myIcons.fAmplitude) -1);  // avant-plan
+		_cairo_dock_draw_class_indicator_opengl (icon, pDock->bHorizontalDock, fRatio, pDock->bDirectionUp);
+		glPopMatrix ();
+	}
 	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
 	if (bUseText && icon->iLabelTexture != 0 && icon->fScale > 1.01 && (! mySystem.bLabelForPointedIconOnly || icon->bPointed))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
@@ -891,7 +894,8 @@ void cairo_dock_draw_texture (GLuint iTexture, int iWidth, int iHeight)
 	
 	glPolygonMode (GL_FRONT, GL_FILL);
 	glNormal3f (0., 0., 1.);
-	glScalef (iWidth, iHeight, 1.);
+	if (iWidth != 0 && iHeight != 0)
+		glScalef (iWidth, iHeight, 1.);
 	
 	glBegin(GL_QUADS);
 	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad

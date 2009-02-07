@@ -51,6 +51,7 @@
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-load.h"
+#include "cairo-dock-animations.h"
 #include "cairo-dock-internal-desklets.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-background.h"
@@ -239,10 +240,11 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 		
 		cairo_rotate (pCairoContext, pDesklet->fRotation);
 		
-		cairo_translate (pCairoContext,
-			-.5*pDesklet->iWidth * fZoomX,
-			-.5*pDesklet->iHeight * fZoomY);
 		cairo_scale (pCairoContext, fZoomX, fZoomY);
+		
+		cairo_translate (pCairoContext,
+			-.5*pDesklet->iWidth,
+			-.5*pDesklet->iHeight);
 	}
 	
 	cairo_save (pCairoContext);
@@ -307,8 +309,11 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 {
 	glPushMatrix ();
 	///glTranslatef (0*pDesklet->iWidth/2, 0*pDesklet->iHeight/2, 0.);  // avec une perspective ortho.
-	///glTranslatef (0*pDesklet->iWidth/2, 0*pDesklet->iHeight/2, -pDesklet->iWidth*(1.87 +.35*fabs (sin(pDesklet->fDepthRotation))));  // avec 30 deg de perspective
-	glTranslatef (0., 0., -pDesklet->iHeight*(sqrt(3)/2 +.4*fabs (sin(pDesklet->fDepthRotation))*1.*pDesklet->iWidth/pDesklet->iHeight));  // avec 60 deg de perspective
+	///glTranslatef (0*pDesklet->iWidth/2, 0*pDesklet->iHeight/2, -pDesklet->iWidth*(1.87 +.35*fabs (sin(pDesklet->fDepthRotationY))));  // avec 30 deg de perspective
+	glTranslatef (0., 0., -pDesklet->iHeight * sqrt(3)/2 - 
+		.45 * MAX (pDesklet->iWidth * fabs (sin (pDesklet->fDepthRotationY)),
+			pDesklet->iHeight * fabs (sin (pDesklet->fDepthRotationX)))
+		);  // avec 60 deg de perspective
 	
 	if (pDesklet->fZoom != 1)
 	{
@@ -323,16 +328,22 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 			theta -= G_PI/2;
 		double fZoomX, fZoomY;
 		double d = .5 * sqrt (pDesklet->iWidth * pDesklet->iWidth + pDesklet->iHeight * pDesklet->iHeight);
-		fZoomX = fabs (.5 * pDesklet->iWidth / (d * sin (alpha + theta)));
-		fZoomY = fabs (.5 * pDesklet->iHeight / (d * cos (alpha - theta)));
+		fZoomX = fabs (.5 * pDesklet->iHeight / (d * sin (alpha + theta)));
+		fZoomY = fabs (.5 * pDesklet->iWidth / (d * cos (alpha - theta)));
 		//g_print ("d = %.2f ; alpha = %.2f ; zoom : %.2fx%.2f\n", d, alpha/G_PI*180., fZoomX, fZoomY);
-		glRotatef (- pDesklet->fRotation / G_PI * 180., 0., 0., 1.);
+		
 		glScalef (fZoomX, fZoomY, 1.);
+		glRotatef (- pDesklet->fRotation / G_PI * 180., 0., 0., 1.);
 	}
 	
-	if (pDesklet->fDepthRotation != 0)
+	if (pDesklet->fDepthRotationY != 0)
 	{
-		glRotatef (- pDesklet->fDepthRotation / G_PI * 180., 0., 1, 0.);
+		glRotatef (- pDesklet->fDepthRotationY / G_PI * 180., 0., 1., 0.);
+	}
+	
+	if (pDesklet->fDepthRotationX != 0)
+	{
+		glRotatef (- pDesklet->fDepthRotationX / G_PI * 180., 1., 0., 0.);
 	}
 	
 	if (pDesklet->iBackGroundTexture != 0 && pDesklet->fBackGroundAlpha != 0)
@@ -389,7 +400,7 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 	
 	if (pDesklet->bInside && ! pDesklet->bPositionLocked)
 	{
-		if (! pDesklet->rotating && ! pDesklet->depth_rotating)
+		if (! pDesklet->rotating && ! pDesklet->rotatingY && ! pDesklet->rotatingX)
 		{
 			glPopMatrix ();
 			glPushMatrix ();
@@ -397,15 +408,15 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 		}
 	}
 	
-	if ((pDesklet->bInside || pDesklet->rotating || pDesklet->depth_rotating) && ! pDesklet->bPositionLocked)
+	if ((pDesklet->bInside || pDesklet->rotating || pDesklet->rotatingY || pDesklet->rotatingX) && ! pDesklet->bPositionLocked)
 	{
+		glColor4f (1., 1., 1., 1.);
 		if (iRotateButtonTexture != 0)
 		{
 			glPushMatrix ();
 			glTranslatef (-pDesklet->iWidth/2 + myDesklets.iDeskletButtonSize/2,
 				pDesklet->iHeight/2 - myDesklets.iDeskletButtonSize/2,
 				0.);
-			glColor4f (1., 1., 1., 1.);
 			cairo_dock_draw_texture (iRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
 			glPopMatrix ();
 		}
@@ -415,7 +426,6 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 			glTranslatef (pDesklet->iWidth/2 - myDesklets.iDeskletButtonSize/2,
 				pDesklet->iHeight/2 - myDesklets.iDeskletButtonSize/2,
 				0.);
-			glColor4f (1., 1., 1., 1.);
 			cairo_dock_draw_texture (iRetachButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
 			glPopMatrix ();
 		}
@@ -425,7 +435,14 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 			glTranslatef (0.,
 				pDesklet->iHeight/2 - myDesklets.iDeskletButtonSize/2,
 				0.);
-			glColor4f (1., 1., 1., 1.);
+			cairo_dock_draw_texture (iDepthRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
+			glPopMatrix ();
+			
+			glPushMatrix ();
+			glRotatef (90., 0., 0., 1.);
+			glTranslatef (0.,
+				pDesklet->iWidth/2 - myDesklets.iDeskletButtonSize/2,
+				0.);
 			cairo_dock_draw_texture (iDepthRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
 			glPopMatrix ();
 		}
@@ -492,35 +509,6 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 	}
 	
 	return FALSE;
-}
-
-
-static gboolean _cairo_dock_gl_animation (CairoDesklet *pDesklet)
-{
-	gboolean bContinue = FALSE;
-	/*Icon *icon;
-	icon = pDesklet->pIcon;
-	if (icon != NULL)
-		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDesklet, &bContinue);
-	GList *ic;
-	for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		///if (icon->bOnMouseOverAnimating)
-			cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDesklet, &bContinue);
-		///bContinue |= icon->bOnMouseOverAnimating;
-	}*/
-	
-	cairo_dock_notify (CAIRO_DOCK_UPDATE_DESKLET, pDesklet, &bContinue);
-	
-	gtk_widget_queue_draw (pDesklet->pWidget);
-	if (! bContinue)
-	{
-		pDesklet->iSidGLAnimation = 0;
-		return FALSE;
-	}
-	else
-		return TRUE;
 }
 
 
@@ -716,7 +704,9 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 			else if (pButton->x > pDesklet->iWidth - myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)
 				pDesklet->retaching = TRUE;
 			else if (pButton->x > (pDesklet->iWidth - myDesklets.iDeskletButtonSize)/2 && pButton->x < (pDesklet->iWidth + myDesklets.iDeskletButtonSize)/2 && pButton->y < myDesklets.iDeskletButtonSize)
-				pDesklet->depth_rotating = TRUE;
+				pDesklet->rotatingY = TRUE;
+			else if (pButton->y > (pDesklet->iHeight - myDesklets.iDeskletButtonSize)/2 && pButton->y < (pDesklet->iHeight + myDesklets.iDeskletButtonSize)/2 && pButton->x < myDesklets.iDeskletButtonSize)
+				pDesklet->rotatingX = TRUE;
 			else
 				pDesklet->time = pButton->time;
 		}
@@ -749,11 +739,19 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 					return FALSE;
 				}
 			}
-			else if (pDesklet->depth_rotating)
+			else if (pDesklet->rotatingY)
 			{
-				pDesklet->depth_rotating = FALSE;
+				pDesklet->rotatingY = FALSE;
 				cairo_dock_update_conf_file (pDesklet->pIcon->pModuleInstance->cConfFilePath,
-					G_TYPE_INT, "Desklet", "depth rotation", (int) (pDesklet->fDepthRotation / G_PI * 180.),
+					G_TYPE_INT, "Desklet", "depth rotation y", (int) (pDesklet->fDepthRotationY / G_PI * 180.),
+					G_TYPE_INVALID);
+				gtk_widget_queue_draw (pDesklet->pWidget);
+			}
+			else if (pDesklet->rotatingX)
+			{
+				pDesklet->rotatingX = FALSE;
+				cairo_dock_update_conf_file (pDesklet->pIcon->pModuleInstance->cConfFilePath,
+					G_TYPE_INT, "Desklet", "depth rotation x", (int) (pDesklet->fDepthRotationX / G_PI * 180.),
 					G_TYPE_INVALID);
 				gtk_widget_queue_draw (pDesklet->pWidget);
 			}
@@ -800,10 +798,18 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 		}
 		else if (pButton->x > (pDesklet->iWidth - myDesklets.iDeskletButtonSize)/2 && pButton->x < (pDesklet->iWidth + myDesklets.iDeskletButtonSize)/2 && pButton->y < myDesklets.iDeskletButtonSize)
 		{
-			pDesklet->fDepthRotation = 0.;
+			pDesklet->fDepthRotationY = 0.;
 			gtk_widget_queue_draw (pDesklet->pWidget);
 			cairo_dock_update_conf_file (pDesklet->pIcon->pModuleInstance->cConfFilePath,
-				G_TYPE_INT, "Desklet", "depth rotation", 0,
+				G_TYPE_INT, "Desklet", "depth rotation y", 0,
+				G_TYPE_INVALID);
+		}
+		else if (pButton->y > (pDesklet->iHeight - myDesklets.iDeskletButtonSize)/2 && pButton->y < (pDesklet->iHeight + myDesklets.iDeskletButtonSize)/2 && pButton->x < myDesklets.iDeskletButtonSize)
+		{
+			pDesklet->fDepthRotationX = 0.;
+			gtk_widget_queue_draw (pDesklet->pWidget);
+			cairo_dock_update_conf_file (pDesklet->pIcon->pModuleInstance->cConfFilePath,
+				G_TYPE_INT, "Desklet", "depth rotation x", 0,
 				G_TYPE_INVALID);
 		}
 		else
@@ -846,8 +852,8 @@ static gboolean on_motion_notify_desklet(GtkWidget *pWidget,
 		pDesklet->iMouseY = pMotion->y;
 		gboolean bStartAnimation = FALSE;
 		cairo_dock_notify (CAIRO_DOCK_MOUSE_MOVED, pDesklet, &bStartAnimation);
-		if (bStartAnimation && pDesklet->iSidGLAnimation == 0)
-			pDesklet->iSidGLAnimation = g_timeout_add (mySystem.iGLAnimationDeltaT, (GSourceFunc) _cairo_dock_gl_animation, pDesklet);
+		if (bStartAnimation)
+			cairo_dock_launch_animation (pDesklet);
 	}
 	
 	if (pDesklet->rotating && ! pDesklet->bPositionLocked)
@@ -860,9 +866,14 @@ static gboolean on_motion_notify_desklet(GtkWidget *pWidget,
 			pDesklet->fRotation += 2 * G_PI;
 		gtk_widget_queue_draw(pDesklet->pWidget);
 	}
-	else if (pDesklet->depth_rotating && ! pDesklet->bPositionLocked)
+	else if (pDesklet->rotatingY && ! pDesklet->bPositionLocked)
 	{
-		pDesklet->fDepthRotation = G_PI * (pMotion->x - .5*pDesklet->iWidth) / pDesklet->iWidth;
+		pDesklet->fDepthRotationY = G_PI * (pMotion->x - .5*pDesklet->iWidth) / pDesklet->iWidth;
+		gtk_widget_queue_draw(pDesklet->pWidget);
+	}
+	else if (pDesklet->rotatingX && ! pDesklet->bPositionLocked)
+	{
+		pDesklet->fDepthRotationX = G_PI * (pMotion->y - .5*pDesklet->iHeight) / pDesklet->iHeight;
 		gtk_widget_queue_draw(pDesklet->pWidget);
 	}
 	else if (pMotion->state & GDK_BUTTON1_MASK && ! pDesklet->bPositionLocked && ! pDesklet->moving)
@@ -921,10 +932,8 @@ static gboolean on_enter_desklet (GtkWidget* pWidget,
 		{
 			gboolean bStartAnimation = FALSE;
 			cairo_dock_notify (CAIRO_DOCK_ENTER_DESKLET, pDesklet, &bStartAnimation);
-			if (bStartAnimation && pDesklet->iSidGLAnimation == 0)
-			{
-				pDesklet->iSidGLAnimation = g_timeout_add (mySystem.iGLAnimationDeltaT, (GSourceFunc)_cairo_dock_gl_animation, pDesklet);
-			}
+			if (bStartAnimation)
+				cairo_dock_launch_animation (pDesklet);
 		}
 	}
 	return FALSE;
@@ -1094,7 +1103,8 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 	
 	pDesklet->bPositionLocked = pAttribute->bPositionLocked;
 	pDesklet->fRotation = pAttribute->iRotation / 180. * G_PI ;
-	pDesklet->fDepthRotation = pAttribute->iDepthRotation / 180. * G_PI ;
+	pDesklet->fDepthRotationY = pAttribute->iDepthRotationY / 180. * G_PI ;
+	pDesklet->fDepthRotationX = pAttribute->iDepthRotationX / 180. * G_PI ;
 	
 	g_free (pDesklet->cDecorationTheme);
 	pDesklet->cDecorationTheme = pAttribute->cDecorationTheme;
@@ -1137,6 +1147,7 @@ void cairo_dock_free_desklet (CairoDesklet *pDesklet)
 	cairo_dock_notify (CAIRO_DOCK_STOP_DESKLET, pDesklet);
 	if (pDesklet->iSidGLAnimation != 0)
 		g_source_remove (pDesklet->iSidGLAnimation);
+	cairo_dock_notify (CAIRO_DOCK_STOP_DESKLET, pDesklet);
 	
 	cairo_dock_steal_interactive_widget_from_desklet (pDesklet);
 
@@ -1219,16 +1230,16 @@ void cairo_dock_set_all_desklets_visible (gboolean bOnWidgetLayerToo)
 	cairo_dock_foreach_desklet (_cairo_dock_set_one_desklet_visible, GINT_TO_POINTER (bOnWidgetLayerToo));
 }
 
-static gboolean _cairo_dock_set_one_desklet_visibility_to_default (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, CairoDeskletAttribute *pAttribute)
+static gboolean _cairo_dock_set_one_desklet_visibility_to_default (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, CairoDockMinimalAppletConfig *pMinimalConfig)
 {
-	GKeyFile *pKeyFile = cairo_dock_pre_read_module_instance_config (pInstance, pAttribute);
+	GKeyFile *pKeyFile = cairo_dock_pre_read_module_instance_config (pInstance, pMinimalConfig);
 	g_key_file_free (pKeyFile);
 	
-	gtk_window_set_keep_below (GTK_WINDOW (pDesklet->pWidget), pAttribute->bKeepBelow);
-	gtk_window_set_keep_above (GTK_WINDOW (pDesklet->pWidget), pAttribute->bKeepAbove);
+	gtk_window_set_keep_below (GTK_WINDOW (pDesklet->pWidget), pMinimalConfig->deskletAttribute.bKeepBelow);
+	gtk_window_set_keep_above (GTK_WINDOW (pDesklet->pWidget), pMinimalConfig->deskletAttribute.bKeepAbove);
 	
 	Window Xid = GDK_WINDOW_XID (pDesklet->pWidget->window);
-	if (pAttribute->bOnWidgetLayer)
+	if (pMinimalConfig->deskletAttribute.bOnWidgetLayer)
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");
 	else
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
@@ -1236,8 +1247,8 @@ static gboolean _cairo_dock_set_one_desklet_visibility_to_default (CairoDesklet 
 }
 void cairo_dock_set_desklets_visibility_to_default (void)
 {
-	CairoDeskletAttribute attributeBuffer;
-	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _cairo_dock_set_one_desklet_visibility_to_default, &attributeBuffer);
+	CairoDockMinimalAppletConfig minimalConfig;
+	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _cairo_dock_set_one_desklet_visibility_to_default, &minimalConfig);
 }
 
 static gboolean _cairo_dock_test_one_desklet_Xid (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, Window *pXid)

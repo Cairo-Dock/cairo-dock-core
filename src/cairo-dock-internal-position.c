@@ -95,7 +95,7 @@ DEFINE_PRE_INIT (Position)
 	pModule->cModuleName = "Position";
 	pModule->cTitle = "Position";
 	pModule->cIcon = "gtk-fullscreen";
-	pModule->cDescription = "Set the position of the main dock.";
+	pModule->cDescription = N_("Set the position of the main dock.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
 	pModule->iSizeOfConfig = sizeof (CairoConfigPosition);
 	pModule->iSizeOfData = 0;

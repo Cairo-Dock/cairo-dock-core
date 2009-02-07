@@ -417,11 +417,6 @@ gchar **cairo_dock_get_string_list_key_value (GKeyFile *pKeyFile, gchar *cGroupN
 	return cValuesList;
 }
 
-gint cairo_dock_get_animation_type_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gint iDefaultAnimation, gchar *cDefaultGroupName, gchar *cDefaultKeyName)
-{
-	return cairo_dock_get_integer_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, iDefaultAnimation, cDefaultGroupName, cDefaultKeyName);
-}
-
 gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultGroupName, gchar *cDefaultKeyName, gchar *cDefaultDir, gchar *cDefaultFileName)
 {
 	gchar *cFileName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, NULL, cDefaultGroupName, cDefaultKeyName);
@@ -431,6 +426,14 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, gchar *cGroupName
 	else if (cDefaultFileName != NULL && cDefaultDir != NULL)
 		cFilePath = g_strdup_printf ("%s/%s", cDefaultDir, cDefaultFileName);
 	return cFilePath;
+}
+void cairo_dock_get_size_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gint iDefaultSize, gchar *cDefaultGroupName, gchar *cDefaultKeyName, int *iWidth, int *iHeight)
+{
+	int iSize[2];
+	int iDefaultValues[2] = {iDefaultSize, iDefaultSize};
+	cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, iSize, 2, iDefaultValues, cDefaultGroupName, cDefaultKeyName);
+	*iWidth = iSize[0];
+	*iHeight = iSize[1];
 }
 
 
@@ -552,6 +555,8 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_load_icons_background_surface (myIcons.cBackgroundImagePath, pCairoContext, fMaxScale);
 
 	cairo_dock_load_active_window_indicator (pCairoContext, myIndicators.cActiveIndicatorImagePath, fMaxScale, myIndicators.iActiveCornerRadius, myIndicators.iActiveLineWidth, myIndicators.fActiveColor);
+	
+	cairo_dock_load_class_indicator (myTaskBar.bShowAppli && myTaskBar.bGroupAppliByClass ? myIndicators.cClassIndicatorImagePath : NULL, pCairoContext, fMaxScale);
 	
 	cairo_dock_load_desklet_buttons (pCairoContext);
 	

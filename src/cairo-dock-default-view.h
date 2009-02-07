@@ -14,7 +14,7 @@ void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pPar
 void cairo_dock_calculate_max_dock_size_linear (CairoDock *pDock);
 
 
-void cairo_dock_calculate_construction_parameters_generic (Icon *icon, int iCurrentWidth, int iCurrentHeight, int iMaxDockWidth);
+void cairo_dock_calculate_construction_parameters_generic (Icon *icon, CairoDock *pDock);
 
 void cairo_dock_render_linear (cairo_t *pCairoContext, CairoDock *pDock);
 

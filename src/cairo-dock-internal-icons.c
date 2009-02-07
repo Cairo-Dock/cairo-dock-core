@@ -61,7 +61,15 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 
 	pIcons->fAlbedo = cairo_dock_get_double_key_value (pKeyFile, "Icons", "albedo", &bFlushConfFileNeeded, .6, NULL, NULL);
 
-	pIcons->fAmplitude = cairo_dock_get_double_key_value (pKeyFile, "Icons", "amplitude", &bFlushConfFileNeeded, 1.0, NULL, NULL);
+	double fMaxScale = cairo_dock_get_double_key_value (pKeyFile, "Icons", "zoom max", &bFlushConfFileNeeded, 0., NULL, NULL);
+	if (fMaxScale == 0)
+	{
+		pIcons->fAmplitude = g_key_file_get_double (pKeyFile, "Icons", "amplitude", NULL);
+		fMaxScale = 1 + pIcons->fAmplitude;
+		g_key_file_set_double (pKeyFile, "Icons", "zoom max", fMaxScale);
+	}
+	else
+		pIcons->fAmplitude = fMaxScale - 1;
 
 	pIcons->iSinusoidWidth = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "sinusoid width", &bFlushConfFileNeeded, 250, NULL, NULL);
 	pIcons->iSinusoidWidth = MAX (1, pIcons->iSinusoidWidth);
@@ -296,10 +304,11 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 
 DEFINE_PRE_INIT (Icons)
 {
+	static const gchar *cDependencies[3] = {"Animated icons", N_("It provides many animations to your icons."), NULL};
 	pModule->cModuleName = "Icons";
 	pModule->cTitle = "Icons";
 	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-icons.svg";
-	pModule->cDescription = "All about the icons.";
+	pModule->cDescription = "All about icons :\n size, reflection, icon theme, ...";
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigIcons);
 	pModule->iSizeOfData = 0;

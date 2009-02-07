@@ -25,6 +25,8 @@ struct _CairoDockGroupDescription {
 	gchar *cConfFilePath;
 	gchar *cGettextDomain;
 	void (* load_custom_widget) (CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile);
+	const gchar **cDependencies;
+	gboolean bIgnoreDependencies;
 	} ;
 
 typedef struct _CairoDockGroupDescription CairoDockGroupDescription;
@@ -42,6 +44,7 @@ GtkWidget *cairo_dock_get_preview_image (int *iPreviewWidth);
 GtkWidget *cairo_dock_get_main_window (void);
 CairoDockGroupDescription *cairo_dock_get_current_group (void);
 GSList *cairo_dock_get_current_widget_list (void);
+gpointer cairo_dock_get_current_widget (void);
 
 
 void cairo_dock_hide_all_categories (void);

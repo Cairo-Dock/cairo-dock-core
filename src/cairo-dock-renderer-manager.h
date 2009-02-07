@@ -7,6 +7,7 @@
 #include "cairo-dock-struct.h"
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-data-renderer.h"
 G_BEGIN_DECLS
 
 
@@ -28,9 +29,9 @@ CairoDeskletDecoration *cairo_dock_get_desklet_decoration (const gchar *cDecorat
 void cairo_dock_register_desklet_decoration (const gchar *cDecorationName, CairoDeskletDecoration *pDecoration);
 void cairo_dock_remove_desklet_decoration (const gchar *cDecorationName);
 
-/*CairoDataRendererInitFunc *cairo_dock_get_data_renderer_entry_point (const gchar *cRendererName);
+CairoDataRendererInitFunc cairo_dock_get_data_renderer_entry_point (const gchar *cRendererName);
 void cairo_dock_register_data_renderer_entry_point (const gchar *cRendererName, CairoDataRendererInitFunc *pFunc);
-void cairo_dock_remove_data_renderer_entry_point (const gchar *cRendererName);*/
+void cairo_dock_remove_data_renderer_entry_point (const gchar *cRendererName);
 
 
 void cairo_dock_initialize_renderer_manager (void);

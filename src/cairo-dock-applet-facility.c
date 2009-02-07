@@ -204,9 +204,7 @@ void cairo_dock_set_icon_name (cairo_t *pSourceContext, const gchar *cIconName, 
 	cairo_dock_fill_one_text_buffer(
 		pIcon,
 		pSourceContext,
-		&myLabels.iconTextDescription,
-		(mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pContainer->bIsHorizontal),
-		pContainer->bDirectionUp);
+		&myLabels.iconTextDescription);
 }
 void cairo_dock_set_icon_name_full (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconNameFormat, ...)
 {

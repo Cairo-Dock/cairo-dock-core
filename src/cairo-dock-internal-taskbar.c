@@ -143,8 +143,8 @@ DEFINE_PRE_INIT (TaskBar)
 {
 	pModule->cModuleName = "TaskBar";
 	pModule->cTitle = "TaskBar";
-	pModule->cIcon = "gtk-dnd-multiple";
-	pModule->cDescription = "Access your applications easily.";
+	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-taskbar.png";
+	pModule->cDescription = N_("All the parameters you will never want to tweak.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
 	pModule->iSizeOfConfig = sizeof (CairoConfigTaskBar);
 	pModule->iSizeOfData = 0;

@@ -137,6 +137,9 @@ CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 cairo_surface_t *g_pIndicatorSurface = NULL;
 double g_fIndicatorWidth, g_fIndicatorHeight;
 
+cairo_surface_t *g_pClassIndicatorSurface = NULL;
+double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
+
 cairo_surface_t *g_pDesktopBgSurface = NULL;  // image en fond d'ecran.
 //int g_iDamageEvent = 0;
 
@@ -153,6 +156,7 @@ GdkGLConfig* g_pGlConfig = NULL;
 GLuint g_iBackgroundTexture=0;
 GLuint g_iIndicatorTexture=0;
 GLuint g_iActiveIndicatorTexture=0;
+GLuint g_iClassIndicatorTexture=0;
 GLuint g_pVisibleZoneTexture=0;
 GLuint g_pGradationTexture[2]={0, 0};
 GLuint g_iDesktopBgTexture = 0;

@@ -313,7 +313,7 @@ static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, Icon *icon, Cai
 		CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 		cairo_dock_insert_icon_in_dock (pNewIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);
 
-		cairo_dock_launch_animation (pDock);
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 		cairo_dock_mark_theme_as_modified (TRUE);
 	}
 	else
@@ -1183,10 +1183,10 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		GtkWidget *pSubMenuOtherActions = gtk_menu_new ();
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuOtherActions);
 		
+		_add_entry_in_menu (_("Move to this desktop"), GTK_STOCK_JUMP_TO, _cairo_dock_move_appli_to_current_desktop, pSubMenuOtherActions);
+		
 		gboolean bIsFullScreen = cairo_dock_window_is_fullscreen (icon->Xid);
 		_add_entry_in_menu (bIsFullScreen ? _("Not Fullscreen") : _("Fullscreen"), bIsFullScreen ? GTK_STOCK_LEAVE_FULLSCREEN : GTK_STOCK_FULLSCREEN, _cairo_dock_set_appli_fullscreen, pSubMenuOtherActions);
-		
-		_add_entry_in_menu (_("Move to this desktop"), GTK_STOCK_JUMP_TO, _cairo_dock_move_appli_to_current_desktop, pSubMenuOtherActions);
 		
 		gboolean bIsAbove=FALSE, bIsBelow=FALSE;
 		cairo_dock_window_is_above_or_below (icon->Xid, &bIsAbove, &bIsBelow);

@@ -22,8 +22,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-applet-factory.h"
 
 
-
-
 cairo_surface_t *cairo_dock_create_applet_surface (gchar *cIconFileName, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight, gboolean bApplySizeRestriction)
 {
 	cd_message ("%s (%.2fx%.2f x %.2f / %d)", __func__, *fWidth, *fHeight,fMaxScale, bApplySizeRestriction);

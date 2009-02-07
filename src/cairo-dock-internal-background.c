@@ -90,8 +90,8 @@ DEFINE_PRE_INIT (Background)
 {
 	pModule->cModuleName = "Background";
 	pModule->cTitle = "Background";
-	pModule->cIcon = "gtk-orientation-portrait";
-	pModule->cDescription = "Set a background to your dock.";
+	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-background.svg";
+	pModule->cDescription = N_("Set a background to your dock.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigBackground);
 	pModule->iSizeOfData = 0;

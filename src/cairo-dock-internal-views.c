@@ -71,13 +71,15 @@ static void reload (CairoConfigViews *pPrevViews, CairoConfigViews *pViews)
 
 DEFINE_PRE_INIT (Views)
 {
+	static const gchar *cDependencies[3] = {"dock rendering", N_("It provides different views to Cairo-Dock. Activate it first if you want to select a different view for your docks."), NULL};
 	pModule->cModuleName = "Views";
 	pModule->cTitle = "Views";
-	pModule->cIcon = "gtk-zoom-fit";
-	pModule->cDescription = "Today it's Friday, the day of the 'Curve' view !";
+	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-views.svg";
+	pModule->cDescription = N_("Select a view for each of your docks.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigViews);
 	pModule->iSizeOfData = 0;
+	pModule->cDependencies = cDependencies;
 	
 	pModule->reload = (CairoDockInternalModuleReloadFunc) reload;
 	pModule->get_config = (CairoDockInternalModuleGetConfigFunc) get_config;

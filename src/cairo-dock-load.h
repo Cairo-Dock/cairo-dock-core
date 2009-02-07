@@ -26,7 +26,7 @@ void cairo_dock_load_reflect_on_icon (Icon *icon, cairo_t *pSourceContext, gdoub
 void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdouble fMaxScale, gboolean bHorizontalDock, gboolean bApplySizeRestriction, gboolean bDirectionUp);
 
 gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);
-void cairo_dock_fill_one_text_buffer (Icon *icon, cairo_t* pSourceContext, CairoDockLabelDescription *pTextDescription, gboolean bHorizontalDock, gboolean bDirectionUp);
+void cairo_dock_fill_one_text_buffer (Icon *icon, cairo_t* pSourceContext, CairoDockLabelDescription *pTextDescription);
 
 void cairo_dock_fill_one_quick_info_buffer (Icon *icon, cairo_t* pSourceContext, CairoDockLabelDescription *pTextDescription, double fMaxScale);
 
@@ -51,13 +51,16 @@ void cairo_dock_load_background_decorations (CairoDock *pDock);
 
 void cairo_dock_load_icons_background_surface (const gchar *cImagePath, cairo_t* pSourceContext, double fMaxScale);
 
-void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* pSourceContext, double fMaxScale, double fIndicatorRatio);
-
 void cairo_dock_load_desktop_background_surface (void);
 void cairo_dock_invalidate_desktop_bg_surface (void);
 cairo_surface_t *cairo_dock_get_desktop_bg_surface (void);
 
+void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* pSourceContext, double fMaxScale, double fIndicatorRatio);
+
 void cairo_dock_load_active_window_indicator (cairo_t* pSourceContext, const gchar *cImagePath, double fMaxScale, double fCornerRadius, double fLineWidth, double *fActiveColor);
+
+void cairo_dock_load_class_indicator (const gchar *cIndicatorImagePath, cairo_t* pSourceContext, double fMaxScale);
+
 
 G_END_DECLS
 #endif

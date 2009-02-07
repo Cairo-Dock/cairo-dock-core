@@ -325,7 +325,7 @@ static void _cairo_dock_pick_a_file (GtkButton *button, gpointer *data)
 		GTK_STOCK_CANCEL,
 		GTK_RESPONSE_CANCEL,
 		NULL);
-	gchar *cDirectoryPath = g_path_get_basename (gtk_entry_get_text (pEntry));
+	gchar *cDirectoryPath = g_path_get_dirname (gtk_entry_get_text (pEntry));
 	g_print (">>> on se place sur '%s'\n", cDirectoryPath);
 	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog), cDirectoryPath);
 	g_free (cDirectoryPath);
@@ -1766,7 +1766,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			if (bAddBackButton && cOriginalConfFilePath != NULL)
 			{
 				pBackButton = gtk_button_new ();
-				GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_UNDO, GTK_ICON_SIZE_BUTTON);  // GTK_STOCK_GO_BACK
+				GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_UNDO, GTK_ICON_SIZE_BUTTON);  // GTK_STOCK_CLEAR
 				gtk_button_set_image (GTK_BUTTON (pBackButton), pImage);
 				g_signal_connect (G_OBJECT (pBackButton), "clicked", G_CALLBACK(_cairo_dock_set_original_value), pGroupKeyWidget);
 				_pack_in_widget_box (pBackButton);
@@ -2112,14 +2112,30 @@ void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pThemeTab
 }
 
 
-gchar *cairo_dock_highlight_key_word (const gchar *cSentence, const gchar *cKeyWord, gboolean bBold)
+static GString *sBuffer = NULL;
+static void _copy_string_to_buffer (gchar *cSentence)
 {
+	g_string_assign (sBuffer, cSentence);
+	gchar *str;
+	for (str = sBuffer->str; *str != '\0'; str ++)
+	{
+		if (*str >= 'A' && *str <= 'Z')
+		{
+			*str = *str - 'A' + 'a';
+		}
+	}
+}
+#define _search_in_buffer(cKeyWord) g_strstr_len (sBuffer->str, -1, cKeyWord)
+static gchar *cairo_dock_highlight_key_word (const gchar *cSentence, const gchar *cKeyWord, gboolean bBold)
+{
+	//_copy_string_to_buffer (cSentence);
 	gchar *cModifiedString = NULL;
-	gchar *str = g_strstr_len (cSentence, -1, cKeyWord);
+	gchar *str = _search_in_buffer (cKeyWord);
 	if (str != NULL)
 	{
+		g_print ("* trouve %s dans '%s'\n", cKeyWord, sBuffer->str);
 		gchar *cBuffer = g_strdup (cSentence);
-		str = cBuffer + (str - cSentence);
+		str = cBuffer + (str - sBuffer->str);
 		*str = '\0';
 		cModifiedString = g_strdup_printf ("%s<span color=\"red\">%s%s%s</span>%s", cBuffer, (bBold?"<b>":""), cKeyWord, (bBold?"</b>":""), str + strlen (cKeyWord));
 		g_free (cBuffer);
@@ -2127,7 +2143,6 @@ gchar *cairo_dock_highlight_key_word (const gchar *cSentence, const gchar *cKeyW
 	
 	return cModifiedString;
 }
-
 
 static gboolean _cairo_dock_search_words_in_frame_title (gchar **pKeyWords, GtkWidget *pCurrentFrame, gboolean bAllWords, gboolean bHighLightText, gboolean bHideOther)
 {
@@ -2158,10 +2173,11 @@ static gboolean _cairo_dock_search_words_in_frame_title (gchar **pKeyWords, GtkW
 		for (i = 0; pKeyWords[i] != NULL; i ++)
 		{
 			cKeyWord = pKeyWords[i];
+			_copy_string_to_buffer (cFrameTitle);
 			if (bHighLightText)
 				cModifiedText = cairo_dock_highlight_key_word (cFrameTitle, cKeyWord, TRUE);
 			else
-				str = g_strstr_len (cFrameTitle, -1, cKeyWord);
+				str = _search_in_buffer (cKeyWord);
 			if (cModifiedText != NULL || str != NULL)  // on a trouve ce mot.
 			{
 				g_print ("  on a trouve %s dans le titre\n", cKeyWord);
@@ -2173,6 +2189,8 @@ static gboolean _cairo_dock_search_words_in_frame_title (gchar **pKeyWords, GtkW
 					g_free (cModifiedText);
 					cModifiedText = NULL;
 				}
+				else
+					str = NULL;
 				if (! bAllWords)
 					break ;
 			}
@@ -2197,6 +2215,8 @@ static gboolean _cairo_dock_search_words_in_frame_title (gchar **pKeyWords, GtkW
 void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWords, gboolean bSearchInToolTip, gboolean bHighLightText, gboolean bHideOther, GSList *pWidgetList)
 {
 	g_print ("%s ()\n", __func__);
+	if (sBuffer == NULL)
+		sBuffer = g_string_new ("");
 	gpointer *pGroupKeyWidget;
 	GList *pSubWidgetList;
 	GtkWidget *pLabel, *pAlign, *pKeyBox, *pVBox, *pFrame, *pOneWidget, *pCurrentFrame = NULL, *pLabelContainer, *pFrameLabel, *pExpander;
@@ -2211,6 +2231,7 @@ void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWo
 	{
 		bFound = FALSE;
 		pGroupKeyWidget = w->data;
+		g_print ("widget : %s - %s\n", pGroupKeyWidget[0], pGroupKeyWidget[1]);
 		pSubWidgetList = pGroupKeyWidget[2];
 		if (pSubWidgetList == NULL)
 			continue;
@@ -2245,7 +2266,7 @@ void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWo
 			{
 				pExpander = gtk_widget_get_parent (pFrame);
 				if (GTK_IS_EXPANDER (pExpander))
-					pFrame = pExpander;
+					pFrame = pExpander;  // c'est l'expander qui a le texte, c'est donc ca qu'on veut cacher.
 				pCurrentFrame = pFrame;
 				bFrameVisible = FALSE;
 			}
@@ -2253,7 +2274,7 @@ void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWo
 			{
 				pCurrentFrame = NULL;
 			}
-			g_print ("pCurrentFrame <- %x\n", pCurrentFrame);
+			//g_print ("pCurrentFrame <- %x\n", pCurrentFrame);
 		}
 		
 		cDescription = gtk_label_get_text (GTK_LABEL (pLabel));  // sans les markup Pango.
@@ -2265,14 +2286,18 @@ void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWo
 		for (i = 0; pKeyWords[i] != NULL; i ++)
 		{
 			cKeyWord = pKeyWords[i];
+			_copy_string_to_buffer (cDescription);
 			if (bHighLightText)
 				cModifiedText = cairo_dock_highlight_key_word (cDescription, cKeyWord, FALSE);
 			else
-				str = g_strstr_len (cDescription, -1, cKeyWord);
+				str = _search_in_buffer (cKeyWord);
 			if (cModifiedText == NULL && str == NULL)
 			{
 				if (cToolTip != NULL)
-					str = g_strstr_len (cToolTip, -1, cKeyWord);
+				{
+					_copy_string_to_buffer (cToolTip);
+					str = _search_in_buffer (cKeyWord);
+				}
 			}
 			
 			if (cModifiedText != NULL || str != NULL)
@@ -2334,6 +2359,8 @@ void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWo
 void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWords, gboolean bSearchInToolTip, gboolean bHighLightText, gboolean bHideOther, GList *pGroupDescriptionList)
 {
 	g_print ("%s ()\n", __func__);
+	if (sBuffer == NULL)
+		sBuffer = g_string_new ("");
 	CairoDockGroupDescription *pGroupDescription;
 	gchar *cKeyWord, *str = NULL, *cModifiedText = NULL, *cDescription, *cToolTip = NULL;
 	gboolean bFound, bFrameVisible;
@@ -2367,7 +2394,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 		cDescription = dgettext (cGettextDomain, pGroupDescription->cGroupName);
 		if (bSearchInToolTip)
 			cToolTip = dgettext (cGettextDomain, pGroupDescription->cDescription);
-		g_print ("cDescription : %s (%s)\n", cDescription, cToolTip);
+		g_print ("cDescription : %s (%s)(%x,%x)\n", cDescription, cToolTip, cModifiedText, str);
 		
 		//\_______________ On change de frame.
 		if (pCategoryFrame != pCurrentCategoryFrame)  // on a change de frame.
@@ -2383,30 +2410,33 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 					gtk_widget_show (pCurrentCategoryFrame);
 			}
 			pCurrentCategoryFrame = pCategoryFrame;
-			g_print (" pCurrentCategoryFrame <- %x\n", pCurrentCategoryFrame);
+			//g_print (" pCurrentCategoryFrame <- %x\n", pCurrentCategoryFrame);
 		}
 		
 		//\_______________ On cherche chaque mot dans la description du module.
 		for (i = 0; pKeyWords[i] != NULL; i ++)
 		{
 			cKeyWord = pKeyWords[i];
+			_copy_string_to_buffer (cDescription);
 			if (bHighLightText)
 				cModifiedText = cairo_dock_highlight_key_word (cDescription, cKeyWord, TRUE);
 			else
-				str = g_strstr_len (cDescription, -1, cKeyWord);
+				str = _search_in_buffer (cKeyWord);
 			if (cModifiedText == NULL && str == NULL)
 			{
 				if (cToolTip != NULL)
-					str = g_strstr_len (cToolTip, -1, cKeyWord);
+				{
+					_copy_string_to_buffer (cToolTip);
+					str = _search_in_buffer (cKeyWord);
+				}
 			}
 			
 			if (cModifiedText != NULL || str != NULL)
 			{
-				g_print (">>> on a trouve direct %s\n", cKeyWord);
+				//g_print (">>> on a trouve direct %s\n", cKeyWord);
 				bFound = TRUE;
 				if (cModifiedText != NULL)
 				{
-					g_print (" cModifiedText : %s\n", cModifiedText);
 					gtk_label_set_use_markup (GTK_LABEL (pLabel), TRUE);
 					gtk_label_set_markup (GTK_LABEL (pLabel), cModifiedText);
 					g_free (cModifiedText);
@@ -2430,7 +2460,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 		//\_______________ On cherche chaque mot a l'interieur du module.
 		if (! bFound && pGroupDescription->cOriginalConfFilePath != NULL)
 		{
-			g_print ("* on cherche dans le fichier de conf %s ...\n", pGroupDescription->cOriginalConfFilePath);
+			//g_print ("* on cherche dans le fichier de conf %s ...\n", pGroupDescription->cOriginalConfFilePath);
 			gchar **pGroupList = NULL;
 			CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 			if (pModule != NULL)
@@ -2503,15 +2533,22 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 							cKeyWord = pKeyWords[i];
 							str = NULL;
 							if (cUsefulComment)
-								str = g_strstr_len (cUsefulComment, -1, cKeyWord);
+							{
+								_copy_string_to_buffer (cUsefulComment);
+								str = _search_in_buffer (cKeyWord);
+							}
 							if (! str && cTipString)
-								str = g_strstr_len (cTipString, -1, cKeyWord);
+							{
+								_copy_string_to_buffer (cTipString);
+								str = _search_in_buffer (cKeyWord);
+							}
 							if (! str && pAuthorizedValuesList)
 							{
 								int l;
 								for (l = 0; pAuthorizedValuesList[l] != NULL; l ++)
 								{
-									str = g_strstr_len (dgettext (cGettextDomain, pAuthorizedValuesList[l]), -1, cKeyWord);
+									_copy_string_to_buffer (dgettext (cGettextDomain, pAuthorizedValuesList[l]));
+									str = _search_in_buffer (cKeyWord);
 									if (str != NULL)
 										break ;
 								}
@@ -2521,6 +2558,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 							{
 								g_print (">>>on a trouve %s\n", pKeyWords[i]);
 								bFound = TRUE;
+								str = NULL;
 								if (! bAllWords)
 								{
 									break ;
@@ -2567,7 +2605,6 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 			}
 		}  // fin du cas ou on devait chercher dans le groupe.
 		
-		
 		if (bFound)
 		{
 			g_print ("on montre ce groupe\n");
@@ -2587,4 +2624,5 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 			gtk_label_set_markup (GTK_LABEL (pLabel), dgettext (cGettextDomain, cDescription));
 		}
 	}
+	g_key_file_free (pMainKeyFile);
 }

@@ -95,6 +95,8 @@ void cairo_dock_remove_all_applis_from_class_table (void);
 */
 void cairo_dock_reset_class_table (void);
 
+
+cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_t *pSourceContext, Icon *pInhibatorIcon, double fMaxScale, double *fWidth, double *fHeight);
 /**
 * Cree la surface d'une appli en utilisant le lanceur correspondant, si la classe n'utilise pas les icones X.
 * @param cClass la classe.

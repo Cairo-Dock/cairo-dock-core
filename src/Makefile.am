@@ -30,7 +30,7 @@ cairo_dock_CFLAGS = \
 	-DCAIRO_DOCK_MAIN_DOCK_CONF_FILE=\""main-dock.conf"\"\
 	-DCAIRO_DOCK_DEFAULT_ICON_NAME=\""default-icon.svg"\"\
 	-DCAIRO_DOCK_DEFAULT_INDICATOR_NAME=\""default-indicator.png"\"\
-	-DCAIRO_DOCK_DEFAULT_DROP_INDICATOR_NAME=\""default-drop-indicator.svg"\"\
+	-DCAIRO_DOCK_DEFAULT_CLASS_INDICATOR_NAME=\""default-class-indicator.svg"\"\
 	-DCAIRO_DOCK_VERSION=\""$(VERSION)"\"\
 	-DCAIRO_DOCK_LOCALE_DIR=\""$(datadir)/locale"\"\
 	-DCAIRO_DOCK_GETTEXT_PACKAGE=\""$(GETTEXT_PACKAGE)"\"\
@@ -161,6 +161,8 @@ cairo_dock_SOURCES = \
 	cairo-dock-internal-background.h\
 	cairo-dock-internal-icons.c\
 	cairo-dock-internal-icons.h\
+	cairo-dock-data-renderer.c\
+	cairo-dock-data-renderer.h\
 	texture-gradation.h
 	
 
@@ -198,6 +200,7 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-dialogs.h\
 	cairo-dock-surface-factory.h\
 	cairo-dock-renderer-manager.h\
+	cairo-dock-data-renderer.h\
 	cairo-dock-default-view.h\
 	cairo-dock-applet-facility.h\
 	cairo-dock-file-manager.h\

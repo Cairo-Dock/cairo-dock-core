@@ -161,10 +161,25 @@ static gboolean _cairo_dock_delete_one_appli (Window *pXid, Icon *pIcon, gpointe
 		gchar *cParentDockName = pIcon->cParentDockName;
 		pIcon->cParentDockName = NULL;  // astuce.
 		cairo_dock_detach_icon_from_dock (pIcon, pDock, myIcons.bUseSeparator);
-		if (pDock->icons == NULL)
-			cairo_dock_destroy_dock (pDock, cParentDockName, NULL, NULL);
-		else if (! pDock->bIsMainDock)
-			cairo_dock_update_dock_size (pDock);
+		if (! pDock->bIsMainDock)  // la taille du main dock est mis a jour 1 fois a la fin.
+		{
+			if (pDock->icons == NULL)  // le dock degage, le fake aussi.
+			{
+				CairoDock *pFakeClassParentDock = NULL;
+				Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeClassParentDock);
+				if (pFakeClassIcon != NULL && ! CAIRO_DOCK_IS_APPLI (pFakeClassIcon) && ! CAIRO_DOCK_IS_APPLET (pFakeClassIcon) && ! CAIRO_DOCK_IS_NORMAL_LAUNCHER (pFakeClassIcon) && pFakeClassIcon->cClass != NULL && pFakeClassIcon->acName != NULL && strcmp (pFakeClassIcon->cClass, pFakeClassIcon->acName) == 0)
+				{
+					cairo_dock_detach_icon_from_dock (pFakeClassIcon, pFakeClassParentDock, myIcons.bUseSeparator);
+					cairo_dock_free_icon (pFakeClassIcon);
+					if (! pFakeClassParentDock->bIsMainDock)
+						cairo_dock_update_dock_size (pFakeClassParentDock);
+				}
+				
+				cairo_dock_destroy_dock (pDock, cParentDockName, NULL, NULL);
+			}
+			else
+				cairo_dock_update_dock_size (pDock);
+		}
 		g_free (cParentDockName);
 	}
 	
@@ -842,6 +857,13 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				{
 					cd_message ("changement du nombre de bureaux virtuels");
 					g_iNbDesktops = cairo_dock_get_nb_desktops ();
+					if (g_iNbDesktops <= myPosition.iNumScreen && myPosition.bUseXinerama)
+					{
+						cairo_dock_get_screen_offsets (myPosition.iNumScreen);
+						cairo_dock_set_window_position_at_balance (pDock, pDock->iCurrentWidth, pDock->iCurrentHeight);
+						cd_debug (" -> le dock se place en %d;%d", pDock->iWindowPositionX, pDock->iWindowPositionY);
+						gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionX, pDock->iWindowPositionY);
+					}
 					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED, NULL);
 				}
 				else if (event.xproperty.atom == s_aNetDesktopGeometry)
@@ -857,6 +879,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 							cairo_dock_get_screen_offsets (myPosition.iNumScreen);
 						cairo_dock_update_dock_size (pDock);  /// le faire pour tous les docks racine ...
 						cairo_dock_set_window_position_at_balance (pDock, pDock->iCurrentWidth, pDock->iCurrentHeight);
+						cd_debug (" -> le dock se place en %d;%d", pDock->iWindowPositionX, pDock->iWindowPositionY);
 						gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionX, pDock->iWindowPositionY);
 					}
 					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED, NULL);
@@ -1152,7 +1175,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	{
 		cairo_dock_notify (CAIRO_DOCK_INSERT_ICON, icon, pParentDock);
 		//cairo_dock_start_icon_animation (icon, pParentDock);
-		cairo_dock_launch_animation (pParentDock);
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
 	}
 	else
 	{
@@ -1197,7 +1220,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 				//g_print ("icon->fPersonnalScale <- %.2f\n", icon->fPersonnalScale);
 				
 				//cairo_dock_start_icon_animation (icon, pParentDock);
-				cairo_dock_launch_animation (pParentDock);
+				cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
 			}
 			else
 			{

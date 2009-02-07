@@ -54,7 +54,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-labels.h"
-#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-dock-factory.h"
 
@@ -360,11 +359,9 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 
 	g_list_foreach (pDock->icons, (GFunc) _cairo_dock_fm_remove_monitor_on_one_icon, NULL);
 
-	Icon *pPointedIcon;
-	if ((pPointedIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL)) != NULL)
-	{
+	Icon *pPointedIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+	if (pPointedIcon != NULL)
 		pPointedIcon->pSubDock = NULL;
-	}
 	
 	if (pDock->pShapeBitmap != NULL)
 		g_object_unref ((gpointer) pDock->pShapeBitmap);
@@ -446,7 +443,7 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDoc
 				icon->pModuleInstance->pDock = pReceivingDock;
 				cairo_dock_reload_module_instance (icon->pModuleInstance, FALSE);
 			}
-			cairo_dock_launch_animation (pReceivingDock);
+			cairo_dock_launch_animation (CAIRO_CONTAINER (pReceivingDock));
 		}
 	}
 	if (pReceivingDock != NULL)
@@ -518,12 +515,12 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 			icon->fHeight *= pDock->fRatio / fPrevRatio;
 			pDock->fFlatDockWidth += icon->fWidth + myIcons.iIconGap;
 
-			if (! myViews.bSameHorizontality)
+			/**if (! myViews.bSameHorizontality)
 			{
 				cairo_t* pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-				cairo_dock_fill_one_text_buffer (icon, pSourceContext, &myLabels.iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pDock->bHorizontalDock), pDock->bDirectionUp);
+				cairo_dock_fill_one_text_buffer (icon, pSourceContext, &myLabels.iconTextDescription);
 				cairo_destroy (pSourceContext);
-			}
+			}*/
 		}
 		pDock->iMaxIconHeight *= pDock->fRatio / fPrevRatio;
 
@@ -759,12 +756,12 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	}
 	//g_print (" +size <- %.2fx%.2f\n", icon->fWidth, icon->fHeight);
 
-	if (! myViews.bSameHorizontality)
+	/**if (! myViews.bSameHorizontality)
 	{
 		cairo_t* pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 		cairo_dock_fill_one_text_buffer (icon, pSourceContext, &myLabels.iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : pDock->bHorizontalDock), pDock->bDirectionUp);
 		cairo_destroy (pSourceContext);
-	}
+	}*/
 
 	pDock->fFlatDockWidth += myIcons.iIconGap + icon->fWidth;
 	pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);

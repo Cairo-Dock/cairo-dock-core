@@ -63,6 +63,9 @@ extern double g_fIndicatorWidth, g_fIndicatorHeight;
 extern cairo_surface_t *g_pActiveIndicatorSurface;
 extern double g_fActiveIndicatorWidth, g_fActiveIndicatorHeight;
 
+extern cairo_surface_t *g_pClassIndicatorSurface;
+extern double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
+
 extern cairo_surface_t *g_pIconBackgroundImageSurface;
 extern double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
 
@@ -74,6 +77,7 @@ extern GLuint g_iBackgroundTexture;
 extern GLuint g_iIndicatorTexture;
 extern GLuint g_iActiveIndicatorTexture;
 extern GLuint g_iDesktopBgTexture;
+extern GLuint g_iClassIndicatorTexture;
 
 void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription)
 {
@@ -249,7 +253,28 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 				(bHorizontalDock ? &icon->fHeight : &icon->fWidth),
 				NULL, NULL);
 		}
-		
+		else if (icon->pSubDock != NULL && icon->cClass != NULL)  // c'est un epouvantail
+		{
+			g_print ("c'est un epouvantail\n");
+			icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass,
+				pSourceContext,
+				fMaxScale,
+				(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
+				(bHorizontalDock ? &icon->fHeight : &icon->fWidth));
+			if (icon->pIconBuffer == NULL)
+			{
+				GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
+				if (pApplis != NULL)
+				{
+					Icon *pOneIcon = pApplis->data;
+					icon->pIconBuffer = cairo_dock_duplicate_inhibator_surface_for_appli (pSourceContext,
+						pOneIcon,
+						fMaxScale,
+						(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
+						(bHorizontalDock ? &icon->fHeight : &icon->fWidth));
+				}
+			}
+		}
 		g_free (cIconPath);
 	}
 	else if (CAIRO_DOCK_IS_APPLET (icon))  // c'est l'icône d'une applet.
@@ -385,7 +410,7 @@ gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l
 	return cTruncatedName;
 }
 
-void cairo_dock_fill_one_text_buffer (Icon *icon, cairo_t* pSourceContext, CairoDockLabelDescription *pTextDescription, gboolean bHorizontalDock, gboolean bDirectionUp)
+void cairo_dock_fill_one_text_buffer (Icon *icon, cairo_t* pSourceContext, CairoDockLabelDescription *pTextDescription)
 {
 	//g_print ("%s (%s, %d)\n", __func__, cLabelPolice, iLabelSize);
 	cairo_surface_destroy (icon->pTextBuffer);
@@ -451,7 +476,7 @@ void cairo_dock_fill_icon_buffers (Icon *icon, cairo_t *pSourceContext, double f
 {
 	cairo_dock_fill_one_icon_buffer (icon, pSourceContext, fMaxScale, bHorizontalDock, bApplySizeRestriction, bDirectionUp);
 
-	cairo_dock_fill_one_text_buffer (icon, pSourceContext, &myLabels.iconTextDescription, (mySystem.bTextAlwaysHorizontal ? CAIRO_DOCK_HORIZONTAL : bHorizontalDock), bDirectionUp);
+	cairo_dock_fill_one_text_buffer (icon, pSourceContext, &myLabels.iconTextDescription);
 
 	cairo_dock_fill_one_quick_info_buffer (icon, pSourceContext, &myLabels.quickInfoTextDescription, fMaxScale);
 }
@@ -738,38 +763,6 @@ void cairo_dock_load_icons_background_surface (const gchar *cImagePath, cairo_t*
 }
 
 
-void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* pSourceContext, double fMaxScale, double fIndicatorRatio)
-{
-	if (g_pIndicatorSurface != NULL)
-	{
-		cairo_surface_destroy (g_pIndicatorSurface);
-		g_pIndicatorSurface = NULL;
-	}
-	if (g_iIndicatorTexture != 0)
-	{
-		glDeleteTextures (1, &g_iIndicatorTexture);
-		g_iIndicatorTexture = 0;
-	}
-	if (cIndicatorImagePath != NULL)
-	{
-		double fLauncherWidth = (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != 0 ? myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : 48);
-		double fLauncherHeight = (myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != 0 ? myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : 48);
-		
-		double fScale = (myIndicators.bLinkIndicatorWithIcon ? 1 + myIcons.fAmplitude : 1);
-		g_pIndicatorSurface = cairo_dock_create_surface_from_image (
-			cIndicatorImagePath,
-			pSourceContext,
-			fScale,
-			fLauncherWidth * fIndicatorRatio,
-			fLauncherHeight * fIndicatorRatio,
-			CAIRO_DOCK_KEEP_RATIO,
-			&g_fIndicatorWidth,
-			&g_fIndicatorHeight,
-			NULL, NULL);
-		//g_print ("g_pIndicatorSurface : %.2fx%.2f\n", g_fIndicatorWidth, g_fIndicatorHeight);
-	}
-}
-
 
 void cairo_dock_load_desktop_background_surface (void)  // attention : fonction lourde.
 {
@@ -873,6 +866,39 @@ cairo_surface_t *cairo_dock_get_desktop_bg_surface (void)
 }
 
 
+
+void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* pSourceContext, double fMaxScale, double fIndicatorRatio)
+{
+	if (g_pIndicatorSurface != NULL)
+	{
+		cairo_surface_destroy (g_pIndicatorSurface);
+		g_pIndicatorSurface = NULL;
+	}
+	if (g_iIndicatorTexture != 0)
+	{
+		glDeleteTextures (1, &g_iIndicatorTexture);
+		g_iIndicatorTexture = 0;
+	}
+	if (cIndicatorImagePath != NULL)
+	{
+		double fLauncherWidth = (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != 0 ? myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : 48);
+		double fLauncherHeight = (myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != 0 ? myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : 48);
+		
+		double fScale = (myIndicators.bLinkIndicatorWithIcon ? fMaxScale : 1);
+		g_pIndicatorSurface = cairo_dock_create_surface_from_image (
+			cIndicatorImagePath,
+			pSourceContext,
+			fScale,
+			fLauncherWidth * fIndicatorRatio,
+			fLauncherHeight * fIndicatorRatio,
+			CAIRO_DOCK_KEEP_RATIO,
+			&g_fIndicatorWidth,
+			&g_fIndicatorHeight,
+			NULL, NULL);
+		//g_print ("g_pIndicatorSurface : %.2fx%.2f\n", g_fIndicatorWidth, g_fIndicatorHeight);
+	}
+}
+
 void cairo_dock_load_active_window_indicator (cairo_t* pSourceContext, const gchar *cImagePath, double fMaxScale, double fCornerRadius, double fLineWidth, double *fActiveColor)
 {
 	if (g_pActiveIndicatorSurface != NULL)
@@ -924,5 +950,37 @@ void cairo_dock_load_active_window_indicator (cairo_t* pSourceContext, const gch
 			cairo_fill (pCairoContext);
 		}
 		cairo_destroy (pCairoContext);
+	}
+}
+
+void cairo_dock_load_class_indicator (const gchar *cIndicatorImagePath, cairo_t* pSourceContext, double fMaxScale)
+{
+	if (g_pClassIndicatorSurface != NULL)
+	{
+		cairo_surface_destroy (g_pClassIndicatorSurface);
+		g_pClassIndicatorSurface = NULL;
+	}
+	if (g_iClassIndicatorTexture != 0)
+	{
+		glDeleteTextures (1, &g_iClassIndicatorTexture);
+		g_iClassIndicatorTexture = 0;
+	}
+	if (cIndicatorImagePath != NULL)
+	{
+		double fLauncherWidth = (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != 0 ? myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : 48);
+		double fLauncherHeight = (myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != 0 ? myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : 48);
+		
+		double fScale = (myIndicators.bLinkIndicatorWithIcon ? fMaxScale : 1.);
+		fScale = 1;
+		g_pClassIndicatorSurface = cairo_dock_create_surface_from_image (
+			cIndicatorImagePath,
+			pSourceContext,
+			fScale,
+			fLauncherWidth/3,
+			fLauncherHeight/3,
+			CAIRO_DOCK_KEEP_RATIO,
+			&g_fClassIndicatorWidth,
+			&g_fClassIndicatorHeight,
+			NULL, NULL);
 	}
 }

@@ -15,16 +15,21 @@ extern CairoConfigIndicators myIndicators;
 G_BEGIN_DECLS
 
 struct _CairoConfigIndicators {
+	// active indicator.
+	gchar *cActiveIndicatorImagePath;
 	gdouble fActiveColor[4];
 	gint iActiveLineWidth;
 	gint iActiveCornerRadius;
 	gboolean bActiveIndicatorAbove;
-	gchar *cActiveIndicatorImagePath;
+	// launched indicator.
 	gchar *cIndicatorImagePath;
 	gboolean bIndicatorAbove;
 	gdouble fIndicatorRatio;
 	gboolean bLinkIndicatorWithIcon;
 	gint iIndicatorDeltaY;
+	// grouped indicator.
+	gchar *cClassIndicatorImagePath;
+	gboolean bZoomClassIndicator;
 	};
 
 

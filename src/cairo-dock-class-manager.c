@@ -318,7 +318,7 @@ gboolean cairo_dock_prevent_inhibated_class (Icon *pIcon)
 			}
 			else
 			{
-				if (pInhibatorIcon->Xid == 0 && (! g_bEasterEggs || pInhibatorIcon->pSubDock == NULL || pInhibatorIcon->pSubDock != cairo_dock_search_dock_from_name (pIcon->cClass)))  // cette icone inhibe cette classe mais ne controle encore aucune appli, on s'y asservit.
+				if (pInhibatorIcon->Xid == 0 && (! g_bEasterEggs || pInhibatorIcon->pSubDock == NULL))  // cette icone inhibe cette classe mais ne controle encore aucune appli, on s'y asservit.
 				{
 					pInhibatorIcon->Xid = pIcon->Xid;
 					pInhibatorIcon->bIsHidden = pIcon->bIsHidden;
@@ -330,15 +330,17 @@ gboolean cairo_dock_prevent_inhibated_class (Icon *pIcon)
 					}
 				}
 				
-				if (pInhibatorIcon->Xid == pIcon->Xid)  // cette icone nous controle. Sinon c'est qu'elle controle deja une autre appli, auquel cas on n'est pas inhibe.
+				if (pInhibatorIcon->Xid == pIcon->Xid)  // cette icone nous controle.
 				{
 					CairoDock *pInhibhatorDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);
+					//\______________ On place l'icone pour X.
 					if (! bToBeInhibited)  // on ne met le thumbnail que sur la 1ere.
 					{
 						if (pInhibhatorDock != NULL)
 							cairo_dock_set_one_icon_geometry_for_window_manager (pInhibatorIcon, pInhibhatorDock);
 						bToBeInhibited = TRUE;
 					}
+					//\______________ On met a jour l'etiquette de l'inhibiteur.
 					if (pInhibhatorDock != NULL && pIcon->acName != NULL)
 					{
 						if (pInhibatorIcon->cInitialName == NULL)
@@ -512,7 +514,7 @@ void cairo_dock_reset_class_table (void)
 
 
 
-static cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_t *pSourceContext, Icon *pInhibatorIcon, double fMaxScale, double *fWidth, double *fHeight)
+cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_t *pSourceContext, Icon *pInhibatorIcon, double fMaxScale, double *fWidth, double *fHeight)
 {
 	double fIconWidthSaturationFactor, fIconHeightSaturationFactor;
 	cairo_dock_calculate_size_fill (fWidth,
@@ -523,8 +525,8 @@ static cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_
 		&fIconWidthSaturationFactor,
 		&fIconHeightSaturationFactor);
 	
-	CairoContainer *pInhibhatorContainer= cairo_dock_search_container_from_icon (pInhibatorIcon);
-	double fInhibatorMaxScale = (CAIRO_DOCK_IS_DOCK (pInhibhatorContainer) ? (1 + myIcons.fAmplitude) / CAIRO_DOCK (pInhibhatorContainer)->fRatio : 1);
+	CairoContainer *pInhibhatorContainer = cairo_dock_search_container_from_icon (pInhibatorIcon);
+	double fInhibatorMaxScale = (CAIRO_DOCK_IS_DOCK (pInhibhatorContainer) ? fMaxScale : 1);
 	
 	cairo_surface_t *pSurface = cairo_dock_duplicate_surface (pInhibatorIcon->pIconBuffer,
 		pSourceContext,
@@ -573,6 +575,8 @@ cairo_surface_t *cairo_dock_create_surface_from_class (gchar *cClass, cairo_t *p
 		g_free (cIconFilePath);
 		return pSurface;
 	}
+	
+	if (pClassAppli != NULL)
 	
 	cd_debug ("classe %s prend l'icone X", cClass);
 	
@@ -692,26 +696,28 @@ void cairo_dock_update_name_on_inhibators (gchar *cClass, Window Xid, gchar *cNe
 Icon *cairo_dock_get_classmate (Icon *pIcon)
 {
 	cd_debug ("%s (%s)", __func__, pIcon->cClass);
-	Icon *pClassMate = NULL;
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
-	if (pClassAppli != NULL)
+	if (pClassAppli == NULL)
+		return NULL;
+	
+	Icon *pFriendIcon = NULL;
+	GList *pElement;
+	for (pElement = pClassAppli->pIconsOfClass; pElement != NULL; pElement = pElement->next)
 	{
-		GList *pElement;
-		Icon *pFriendIcon;
-		for (pElement = pClassAppli->pIconsOfClass; pElement != NULL; pElement = pElement->next)
-		{
-			pFriendIcon = pElement->data;
-			if (pFriendIcon != NULL) g_print (" friend : %s (%d)\n", pFriendIcon->acName, pFriendIcon->Xid);
-			if (pFriendIcon != NULL && pFriendIcon->Xid != 0)
-				return pFriendIcon;
-		}
-		
-		for (pElement = pClassAppli->pAppliOfClass; pElement != NULL; pElement = pElement->next)
-		{
-			pFriendIcon = pElement->data;
-			if (pFriendIcon != pIcon && pFriendIcon->cParentDockName != NULL && strcmp (pFriendIcon->cParentDockName, CAIRO_DOCK_MAIN_DOCK_NAME) == 0)
-				return pFriendIcon;
-		}
+		pFriendIcon = pElement->data;
+		if (pFriendIcon == NULL)
+			continue ;
+		g_print (" friend : %s (%d)\n", pFriendIcon->acName, pFriendIcon->Xid);
+		if (pFriendIcon->Xid != 0 || (g_bEasterEggs && pFriendIcon->pSubDock != NULL))
+			return pFriendIcon;
 	}
+	
+	for (pElement = pClassAppli->pAppliOfClass; pElement != NULL; pElement = pElement->next)
+	{
+		pFriendIcon = pElement->data;
+		if (pFriendIcon != pIcon && pFriendIcon->cParentDockName != NULL && strcmp (pFriendIcon->cParentDockName, CAIRO_DOCK_MAIN_DOCK_NAME) == 0)
+			return pFriendIcon;
+	}
+	
 	return NULL;
 }

@@ -444,8 +444,8 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 		pDeskletAttribute->bOnWidgetLayer = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "on widget layer", NULL, FALSE, NULL, NULL);
 		pDeskletAttribute->bPositionLocked = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "locked", NULL, FALSE, NULL, NULL);
 		pDeskletAttribute->iRotation = cairo_dock_get_double_key_value (pKeyFile, "Desklet", "rotation", NULL, 0, NULL, NULL);
-		pDeskletAttribute->iDepthRotation = cairo_dock_get_double_key_value (pKeyFile, "Desklet", "depth rotation", NULL, 0, NULL, NULL);
-		//g_print ("iRotation:%d° ; iDepthRotation:%d°\n", pDeskletAttribute->iRotation, pDeskletAttribute->iDepthRotation);
+		pDeskletAttribute->iDepthRotationY = cairo_dock_get_double_key_value (pKeyFile, "Desklet", "depth rotation y", NULL, 0, NULL, NULL);
+		pDeskletAttribute->iDepthRotationX = cairo_dock_get_double_key_value (pKeyFile, "Desklet", "depth rotation x", NULL, 0, NULL, NULL);
 		
 		gchar *cDecorationTheme = cairo_dock_get_string_key_value (pKeyFile, "Desklet", "decorations", NULL, NULL, NULL, NULL);
 		if (cDecorationTheme == NULL || strcmp (cDecorationTheme, "personnal") == 0)
@@ -1322,7 +1322,7 @@ void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, const 
 
 CairoDockInternalModule *cairo_dock_find_internal_module_from_name (const gchar *cModuleName)
 {
-	g_print ("%s (%s)\n", __func__, cModuleName);
+	//g_print ("%s (%s)\n", __func__, cModuleName);
 	g_return_val_if_fail (cModuleName != NULL, NULL);
 	return g_hash_table_lookup (s_hInternalModuleTable, cModuleName);
 }

@@ -32,12 +32,13 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-desklet.h"
 #include "cairo-dock-animations.h"
 
 extern int g_iXScreenHeight[2];
 extern gboolean g_bEasterEggs;
-extern CairoDock *g_pMainDock;
 extern gboolean g_bUseOpenGL;
+extern CairoDock *g_pMainDock;
 
 gboolean cairo_dock_move_up (CairoDock *pDock)
 {
@@ -63,15 +64,14 @@ gboolean cairo_dock_move_up (CairoDock *pDock)
 	}
 }
 
-gboolean cairo_dock_pop_up (CairoDock *pDock)
+void cairo_dock_pop_up (CairoDock *pDock)
 {
 	cd_debug ("%s (%d)", __func__, pDock->bPopped);
 	if (! pDock->bPopped && myAccessibility.bPopUp)
+	{
 		gtk_window_set_keep_above (GTK_WINDOW (pDock->pWidget), TRUE);
-	
-	pDock->iSidPopUp = 0;
-	pDock->bPopped = TRUE;
-	return FALSE;
+		pDock->bPopped = TRUE;
+	}
 }
 
 
@@ -81,10 +81,11 @@ gboolean cairo_dock_pop_down (CairoDock *pDock)
 	if (pDock->bIsMainDock && cairo_dock_get_nb_config_panels () != 0)
 		return FALSE;
 	if (pDock->bPopped && myAccessibility.bPopUp)
+	{
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), TRUE);
-	
+		pDock->bPopped = FALSE;
+	}
 	pDock->iSidPopDown = 0;
-	pDock->bPopped = FALSE;
 	return FALSE;
 }
 
@@ -358,7 +359,7 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 			
 			if (! g_bEasterEggs)
 			{
-				if (pIcon && pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass) && pDock->icons == NULL)  // il n'y a plus aucune icone de cette classe.
+				if (pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass) && pDock->icons == NULL)  // il n'y a plus aucune icone de cette classe.
 				{
 					cd_message ("   le sous-dock de la classe %s n'a plus d'element et va etre detruit", pIcon->cClass);
 					cairo_dock_destroy_dock (pDock, pIcon->cClass, NULL, NULL);
@@ -375,14 +376,11 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 				{
 					if (pDock->icons == NULL)  // ne devrait plus arriver.
 					{
-						cd_message ("   le sous-dock de la classe %s n'a plus d'element et va etre detruit", pIcon->cClass);
-						
+						cd_warning ("   le sous-dock de la classe %s n'a plus d'element !\nil va etre detruit", pIcon->cClass);
 						CairoDock *pFakeParentDock = NULL;
 						Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
-						
 						cairo_dock_destroy_dock (pDock, pIcon->cClass, NULL, NULL);
 						pFakeClassIcon->pSubDock = NULL;
-						
 						cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
 						cairo_dock_free_icon (pFakeClassIcon);
 						cairo_dock_update_dock_size (pFakeParentDock);
@@ -390,21 +388,43 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 					}
 					else if (pDock->icons->next == NULL)
 					{
-						cd_message ("   le sous-dock de la classe %s n'a plus que 1 element et va etre vide puis detruit", pIcon->cClass);
+						g_print ("   le sous-dock de la classe %s n'a plus que 1 element et va etre vide puis detruit\n", pIcon->cClass);
+						Icon *pLastClassIcon = pDock->icons->data;
 						
 						CairoDock *pFakeParentDock = NULL;
 						Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
-						
-						Icon *pLastClassIcon = pDock->icons->data;
-						pLastClassIcon->fOrder = pFakeClassIcon->fOrder;
-						
-						cairo_dock_destroy_dock (pDock, pIcon->cClass, pFakeParentDock, pFakeClassIcon->cParentDockName);
-						pFakeClassIcon->pSubDock = NULL;
-						
-						cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
-						cairo_dock_free_icon (pFakeClassIcon);
-						
-						cairo_dock_redraw_my_icon (pLastClassIcon, CAIRO_CONTAINER (pFakeParentDock));  // on suppose que les tailles des 2 icones sont identiques.
+						g_return_val_if_fail (pFakeClassIcon != NULL, TRUE);
+						if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (pFakeClassIcon) || CAIRO_DOCK_IS_APPLET (pFakeClassIcon))
+						{
+							cairo_dock_detach_icon_from_dock (pLastClassIcon, pDock, FALSE);
+							g_free (pLastClassIcon->cParentDockName);
+							pLastClassIcon->cParentDockName = NULL;
+							
+							cairo_dock_destroy_dock (pDock, pIcon->cClass, NULL, NULL);
+							pFakeClassIcon->pSubDock = NULL;
+							g_print ("sanity check : pFakeClassIcon->Xid : %d\n", pFakeClassIcon->Xid);
+							cairo_dock_insert_appli_in_dock (pLastClassIcon, g_pMainDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+						}
+						else  // le sous-dock est donc pointe par un inhibiteur.
+						{
+							g_print ("trouve l'icone en papier (%x;%x)\n", pFakeClassIcon, pFakeParentDock);
+							cairo_dock_detach_icon_from_dock (pLastClassIcon, pDock, FALSE);
+							g_free (pLastClassIcon->cParentDockName);
+							pLastClassIcon->cParentDockName = g_strdup (pFakeClassIcon->cParentDockName);
+							pLastClassIcon->fOrder = pFakeClassIcon->fOrder;
+							
+							g_print (" on detruit le sous-dock...\n");
+							cairo_dock_destroy_dock (pDock, pIcon->cClass, NULL, NULL);
+							pFakeClassIcon->pSubDock = NULL;
+							
+							g_print (" et l'icone de paille\n");
+							cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
+							cairo_dock_free_icon (pFakeClassIcon);
+							
+							g_print (" puis on re-insere l'appli restante\n");
+							cairo_dock_insert_icon_in_dock (pLastClassIcon, pFakeParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, FALSE);
+							cairo_dock_redraw_icon (pLastClassIcon, CAIRO_CONTAINER (pFakeParentDock));  // on suppose que les tailles des 2 icones sont identiques.
+						}
 						return FALSE;
 					}
 					else
@@ -446,8 +466,7 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST && (cairo_dock_animation_will_be_visible (pDock) || pIcon->fPersonnalScale != 0))
 	{
 		//g_print ("  c'est parti\n");
-		pDock->fFoldingFactor = 0;  // utile ?...
-		cairo_dock_launch_animation (pDock);
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
 }
 
@@ -459,22 +478,25 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gch
 	cairo_dock_start_icon_animation (pIcon, pDock);
 }
 
-static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
+static gboolean _cairo_dock_animation (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %d, %d)\n", __func__, pDock->iRefCount, pDock->bIsShrinkingDown, pDock->bIsGrowingUp);
 	gboolean bIconIsAnimating;
-	pDock->bDamaged = (g_bUseOpenGL && pDock->render_opengl != NULL);  // Mettre a FALSE quand les plug-ins gereront le damage ...
+	if (g_bUseOpenGL && pDock->render_opengl != NULL)  /// a supprimer quand les plug-ins gereront le damage ...
+	{
+		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
+	}
 	
 	if (pDock->bIsShrinkingDown)
 	{
 		pDock->bIsShrinkingDown = cairo_dock_shrink_down (pDock);
 		//g_print ("pDock->bIsShrinkingDown <- %d\n", pDock->bIsShrinkingDown);
-		pDock->bDamaged = TRUE;
+		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 	}
 	if (pDock->bIsGrowingUp)
 	{
 		pDock->bIsGrowingUp = cairo_dock_grow_up (pDock);
-		pDock->bDamaged = TRUE;
+		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 	}
 	//g_print (" => %d, %d\n", pDock->bIsShrinkingDown, pDock->bIsGrowingUp);
 	
@@ -525,9 +547,6 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 	}
 	cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);
 	
-	if (pDock->bDamaged)
-		gtk_widget_queue_draw (pDock->pWidget);
-	
 	if (! bContinue && ! pDock->bKeepSlowAnimation)
 	{
 		pDock->iSidGLAnimation = 0;
@@ -538,16 +557,52 @@ static gboolean _cairo_dock_gl_animation (CairoDock *pDock)
 	else
 		return TRUE;
 }
+static gboolean _cairo_desklet_animation (CairoDesklet *pDesklet)
+{
+	gboolean bContinue = FALSE;
+	/*Icon *icon;
+	icon = pDesklet->pIcon;
+	if (icon != NULL)
+		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDesklet, &bContinue);
+	GList *ic;
+	for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		///if (icon->bOnMouseOverAnimating)
+			cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDesklet, &bContinue);
+		///bContinue |= icon->bOnMouseOverAnimating;
+	}*/
+	
+	cairo_dock_notify (CAIRO_DOCK_UPDATE_DESKLET, pDesklet, &bContinue);
+	
+	gtk_widget_queue_draw (pDesklet->pWidget);
+	if (! bContinue)
+	{
+		pDesklet->iSidGLAnimation = 0;
+		return FALSE;
+	}
+	else
+		return TRUE;
+}
 
-void cairo_dock_launch_animation (CairoDock *pDock)
+void cairo_dock_launch_animation (CairoContainer *pContainer)
 {
 	//g_print ("%s ()\n", __func__);
-	if (pDock->iSidGLAnimation == 0)
+	if (pContainer->iSidGLAnimation == 0)
 	{
-		if (g_bUseOpenGL && pDock->render_opengl != NULL)
-			pDock->iSidGLAnimation = g_timeout_add (mySystem.iGLAnimationDeltaT, (GSourceFunc)_cairo_dock_gl_animation, pDock);
-		else
-			pDock->iSidGLAnimation = g_timeout_add (mySystem.iCairoAnimationDeltaT, (GSourceFunc)_cairo_dock_gl_animation, pDock);
+		switch (pContainer->iType)
+		{
+			case CAIRO_DOCK_TYPE_DOCK :
+				pContainer->iSidGLAnimation = g_timeout_add (pContainer->iAnimationDeltaT, (GSourceFunc)_cairo_dock_animation, pContainer);
+			break ;
+			case CAIRO_DOCK_TYPE_DESKLET :
+				pContainer->iSidGLAnimation = g_timeout_add (pContainer->iAnimationDeltaT, (GSourceFunc) _cairo_desklet_animation, pContainer);
+			break;
+			default :
+				cd_warning ("This type of container has no animation capability yet");
+			break ;
+		}
+		
 	}
 }
 
@@ -559,7 +614,7 @@ void cairo_dock_start_shrinking (CairoDock *pDock)
 		pDock->bIsGrowingUp = FALSE;
 		pDock->bIsShrinkingDown = TRUE;
 		
-		cairo_dock_launch_animation (pDock);
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
 }
 
@@ -570,7 +625,7 @@ void cairo_dock_start_growing (CairoDock *pDock)
 		pDock->bIsShrinkingDown = FALSE;
 		pDock->bIsGrowingUp = TRUE;
 		
-		cairo_dock_launch_animation (pDock);
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
 }
 

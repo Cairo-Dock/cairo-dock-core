@@ -86,8 +86,8 @@ DEFINE_PRE_INIT (Desklets)
 {
 	pModule->cModuleName = "Desklets";
 	pModule->cTitle = "Desklets";
-	pModule->cIcon = "gtk-convert";
-	pModule->cDescription = "The applets can be set on your desktop as widgets.";
+	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-desklets.png";
+	pModule->cDescription = N_("The applets can be set on your desktop as widgets.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigDesklets);
 	pModule->iSizeOfData = 0;

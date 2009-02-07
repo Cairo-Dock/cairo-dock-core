@@ -95,7 +95,7 @@ static void _reload_one_label (Icon *pIcon, CairoContainer *pContainer, gpointer
 {
 	CairoConfigLabels *pLabels = data[0];
 	cairo_t* pSourceContext = data[1];
-	cairo_dock_fill_one_text_buffer (pIcon, pSourceContext, &pLabels->iconTextDescription, pContainer->bIsHorizontal, pContainer->bDirectionUp);
+	cairo_dock_fill_one_text_buffer (pIcon, pSourceContext, &pLabels->iconTextDescription);
 	double fMaxScale = cairo_dock_get_max_scale (pContainer);
 	cairo_dock_fill_one_quick_info_buffer (pIcon, pSourceContext, &pLabels->iconTextDescription, fMaxScale);
 }
@@ -122,8 +122,8 @@ DEFINE_PRE_INIT (Labels)
 {
 	pModule->cModuleName = "Labels";
 	pModule->cTitle = "Labels";
-	pModule->cIcon = "gtk-select-font";
-	pModule->cDescription = "Define the style of the icons' labels and quick-info.";
+	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-labels.png";
+	pModule->cDescription = N_("Define the style of the icons' labels and quick-info.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigLabels);
 	pModule->iSizeOfData = 0;

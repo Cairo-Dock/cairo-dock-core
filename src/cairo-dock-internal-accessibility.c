@@ -140,8 +140,8 @@ DEFINE_PRE_INIT (Accessibility)
 {
 	pModule->cModuleName = "Accessibility";
 	pModule->cTitle = "Accessibility";
-	pModule->cIcon = "gtk-help";
-	pModule->cDescription = "How do you access to your docks ?";
+	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-accessibility.svg";
+	pModule->cDescription = N_("How do you access to your docks ?");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
 	pModule->iSizeOfConfig = sizeof (CairoConfigAccessibility);
 	pModule->iSizeOfData = 0;

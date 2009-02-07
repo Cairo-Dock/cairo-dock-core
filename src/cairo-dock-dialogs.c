@@ -24,6 +24,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-internal-dialogs.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-dialogs.h"
 
@@ -629,40 +630,7 @@ static GtkWidget *_cairo_dock_make_hscale_for_dialog (double fValueForHScale, do
 	gtk_widget_set (pWidget, "width-request", CAIRO_DIALOG_MIN_SCALE_WIDTH, NULL);
 	return pWidget;
 }
-/**GtkWidget *cairo_dock_build_common_interactive_widget_for_dialog (const gchar *cInitialAnswer, double fValueForHScale, double fMaxValueForHScale)
-{
-	int iBoxWidth = 0, iBoxHeight = 0;
-	GtkWidget *pWidget = NULL;
-	if (cInitialAnswer != NULL)  // presence d'une GtkEntry.
-	{
-		pWidget = gtk_entry_new ();
-		gtk_entry_set_has_frame (GTK_ENTRY (pWidget), FALSE);
 
-		gtk_entry_set_text (GTK_ENTRY (pWidget), "|_°");  // ces caracteres donnent presque surement la hauteur max.
-		PangoLayout *pLayout = gtk_entry_get_layout (GTK_ENTRY (pWidget));
-		PangoRectangle ink, log;
-		pango_layout_get_pixel_extents (pLayout, &ink, &log);
-
-		int iEntryWidth = MIN (CAIRO_DIALOG_MAX_ENTRY_WIDTH, MAX (ink.width+2, CAIRO_DIALOG_MIN_ENTRY_WIDTH));
-		gtk_widget_set (pWidget, "width-request", iEntryWidth, NULL);
-		gtk_widget_set (pWidget, "height-request", ink.height+2, NULL);
-
-		iBoxWidth = MAX (iBoxWidth, iEntryWidth);
-		cd_debug ("iEntryWidth : %d", iEntryWidth);
-		iBoxHeight += ink.height;
-
-		gtk_entry_set_text (GTK_ENTRY (pWidget), cInitialAnswer);
-	}
-	else if (fMaxValueForHScale > 0 && fValueForHScale >= 0 && fValueForHScale <= fMaxValueForHScale)
-	{
-		pWidget = gtk_hscale_new_with_range (0, fMaxValueForHScale, fMaxValueForHScale / 100);
-		gtk_scale_set_digits (GTK_SCALE (pWidget), 2);
-		gtk_range_set_value (GTK_RANGE (pWidget), fValueForHScale);
-
-		gtk_widget_set (pWidget, "width-request", 150, NULL);
-	}
-	return pWidget;
-}*/
 GtkWidget *cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int iWidth, int iHeight, gboolean bCanResize)
 {
 	GtkWidget *pBox = gtk_hbox_new (0, FALSE);
@@ -687,6 +655,7 @@ static CairoDialog *_cairo_dock_create_new_dialog (void)
 	pDialog->iType = CAIRO_DOCK_TYPE_DIALOG;
 	pDialog->iRefCount = 1;
 	pDialog->fRatio = 1.;
+	pDialog->iAnimationDeltaT = mySystem.iCairoAnimationDeltaT;
 	s_pDialogList = g_slist_prepend (s_pDialogList, pDialog);
 
 	//\________________ On construit la fenetre du dialogue.

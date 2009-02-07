@@ -39,6 +39,7 @@ void cairo_dock_toggle_all_words (GtkToggleButton *pButton, gpointer data);
 void cairo_dock_toggle_search_in_tooltip (GtkToggleButton *pButton, gpointer data);
 void cairo_dock_toggle_highlight_words (GtkToggleButton *pButton, gpointer data);
 void cairo_dock_toggle_hide_others (GtkToggleButton *pButton, gpointer data);
+void cairo_dock_clear_filter (GtkButton *pButton, GtkEntry *pEntry);
 
 
 G_END_DECLS

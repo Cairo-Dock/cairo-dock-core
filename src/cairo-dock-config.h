@@ -94,18 +94,8 @@ void cairo_dock_get_double_list_key_value (GKeyFile *pKeyFile, gchar *cGroupName
 *@return un tableau de chaines de caracteres; a liberer avec g_strfreev().
 */
 gchar **cairo_dock_get_string_list_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gsize *length, gchar *cDefaultValues, gchar *cDefaultGroupName, gchar *cDefaultKeyName);
-/**
-*Recupere une cle d'un fichier de cles sous la forme d'un type d'animation.
-*@param pKeyFile le fichier de cles.
-*@param cGroupName le com du groupe.
-*@param cKeyName le nom de la cle.
-*@param bFlushConfFileNeeded est mis a TRUE si la cle est manquante.
-*@param iDefaultAnimation valeur par defaut a utiliser et a inserer dans le fichier de cles au cas ou la cle est manquante.
-*@param cDefaultGroupName nom de groupe alternatif, ou NULL si aucun autre.
-*@param cDefaultKeyName nom de cle alternative, ou NULL si aucune autre.
-*@return le type de l'animation correspondante a la cle.
-*/
-gint cairo_dock_get_animation_type_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gint iDefaultAnimation, gchar *cDefaultGroupName, gchar *cDefaultKeyName);
+
+void cairo_dock_get_size_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gint iDefaultSize, gchar *cDefaultGroupName, gchar *cDefaultKeyName, int *iWidth, int *iHeight);
 /**
 *Recupere une cle d'un fichier de cles sous la forme d'un chemin de fichier complet. La clé peut soit être un fichier relatif au thème courant, soit un chemin començant par '~', soit un chemin complet, soit vide auquel cas le chemin d'un fichier par defaut est renvoye s'il est specifie.
 *@param pKeyFile le fichier de cles.
