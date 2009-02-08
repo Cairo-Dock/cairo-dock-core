@@ -1059,6 +1059,8 @@ void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRe
 	
 	double fY = icon->fDrawY;
 	fY += (pContainer->bDirectionUp ? icon->fHeight * icon->fScale * (1 - icon->fHeightFactor)/2 : - fReflectSize);
+	if (fY < 0)
+		fY = 0;
 	
 	if (pContainer->bIsHorizontal)
 	{
@@ -1103,6 +1105,10 @@ void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle 
 		return ;
 	if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->bAtBottom && (CAIRO_DOCK (pContainer)->iRefCount > 0 || CAIRO_DOCK (pContainer)->bAutoHide))  // inutile de redessiner.
 		return ;
+	if (pArea->y < 0)
+		pArea->y = 0;
+	if (pArea->y + pArea->height > pContainer->iHeight)
+		pArea->height = pContainer->iHeight - pArea->y;
 	//g_print ("rect (%d;%d) (%dx%d)\n", pArea->x, pArea->y, pArea->width, pArea->height);
 	if (pArea->width > 0 && pArea->height > 0)
 		gdk_window_invalidate_rect (pContainer->pWidget->window, pArea, FALSE);

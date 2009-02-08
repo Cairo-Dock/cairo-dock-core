@@ -287,11 +287,9 @@ modules=
 #@prefix@/@DATADIRNAME@/@PACKAGE@/icon-hidden-dock.png;1;Define the appearance of the dock when it's hidden.
 [Hidden dock]
 
-#i+[1;1024] Size of the dock (width x height, in pixels) :
+#j+[1;1024] Size of the callback zone (width x height, in pixels) :
 #{Place the mouse into it will make the dock re-appear.}
-zone width = 200
-#i+ ...
-zone height = 20
+zone size = 200;20
 
 #S+ Filename of an image to put on :
 #{This is what you see when the dock hides itselfs. Any format is allowed. Let this field empty to have an invisible zone.}
@@ -468,23 +466,14 @@ string color = 0.0; 0.0; 0.8; 0.4
 #X+[Icons size]
 frame_size =
 
-#i+[0;128] Launcher's size at rest (width x height) :
-#{Put 0 if you don't want to restrain them}
-launcher width = 0
-#i+[0;128] ...
-launcher height = 0
+#j+[10;128] Launcher's size at rest (width x height) :
+launcher size = 48;48
 
-#i+[0;128] Appli's size at rest (width x height) :
-#{Put 0 if you don't want to restrain them}
-appli width = 0
-#i+[0;128] ...
-appli height = 0
+#j+[10;128] Appli's size at rest (width x height) :
+appli size = 48;48
 
 #i+[0;128] Applet's size at rest (width x height) :
-#{Put 0 if you don't want to restrain them}
-applet width = 0
-#i+[0;128] ...
-applet height = 0
+applet size = 48;48
 
 #m[Animated icons] Configure icons animations.
 config_anim = 
@@ -499,10 +488,7 @@ config_illusion =
 frame_sep =
 
 #i+[0;128] Icon size at rest (width x height) :
-#{Put 0 if you don't want to restrain them}
-separator width = 0
-#i+[0;128] ...
-separator height = 0
+separator size = 48;48
 
 #b+ Automatically add separators ?
 #{Separators are icons used to make a separation between different types of icons. Cairo-dock can automatically add them between launchers, applis, and applets.}

@@ -32,6 +32,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
+	//\___________________ Ordre des icones.
 	int i;
 	for (i = 0; i < CAIRO_DOCK_NB_TYPES; i ++)
 		pIcons->tIconTypeOrder[i] = i;
@@ -57,6 +58,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	if (pIcons->bMixAppletsAndLaunchers)
 		pIcons->tIconTypeOrder[CAIRO_DOCK_APPLET] = pIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER];
 	
+	//\___________________ Reflets.
 	pIcons->fFieldDepth = cairo_dock_get_double_key_value (pKeyFile, "Icons", "field depth", &bFlushConfFileNeeded, 0.7, NULL, NULL);
 
 	pIcons->fAlbedo = cairo_dock_get_double_key_value (pKeyFile, "Icons", "albedo", &bFlushConfFileNeeded, .6, NULL, NULL);
@@ -76,6 +78,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 
 	pIcons->iIconGap = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "icon gap", &bFlushConfFileNeeded, 0, NULL, NULL);
 
+	//\___________________ Ficelle.
 	pIcons->iStringLineWidth = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "string width", &bFlushConfFileNeeded, 0, NULL, NULL);
 
 	gdouble couleur[4];
@@ -83,7 +86,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 
 	pIcons->fAlphaAtRest = cairo_dock_get_double_key_value (pKeyFile, "Icons", "alpha at rest", &bFlushConfFileNeeded, 1., NULL, NULL);
 	
-	
+	//\___________________ Themes.
 	pIcons->pDirectoryList = cairo_dock_get_string_list_key_value (pKeyFile, "Icons", "default icon directory", &bFlushConfFileNeeded, &length, NULL, "Launchers", NULL);
 	if (pIcons->pDirectoryList == NULL)
 	{
@@ -138,12 +141,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 			j += 2;
 		}
 	}
-
-	//\___________________ Parametres des lanceurs.
-	pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "launcher width", &bFlushConfFileNeeded, 48, "Launchers", "max icon size");
 	
-	pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "launcher height", &bFlushConfFileNeeded, 48, "Launchers", "max icon size");
-		
 	gchar *cLauncherBackgroundImageName = cairo_dock_get_string_key_value (pKeyFile, "Icons", "icons bg", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	if (cLauncherBackgroundImageName != NULL)
 	{
@@ -152,21 +150,18 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 		pIcons->bBgForApplets = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "bg for applets", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	}
 
+	//\___________________ Parametres des lanceurs.
+	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "launcher", bFlushConfFileNeeded, pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER]);
+	
 	//\___________________ Parametres des applis.
-	pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLI] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "appli width", &bFlushConfFileNeeded, 48, "Applications", "max icon size");
-
-	pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLI] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "appli height", &bFlushConfFileNeeded, 48, "Applications", "max icon size");
+	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "appli", bFlushConfFileNeeded, pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLI], pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLI]);
 	
 	//\___________________ Parametres des applets.
-	pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLET] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "applet width", &bFlushConfFileNeeded, 48, "Applets", "max icon size");
-
-	pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLET] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "applet height", &bFlushConfFileNeeded, 48, "Applets", "max icon size");
+	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "applet", bFlushConfFileNeeded, pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLET], pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLET]);
 	
 	//\___________________ Parametres des separateurs.
-	pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "separator width", &bFlushConfFileNeeded, 48, "Separators", "min icon size");
+	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "separator", bFlushConfFileNeeded, pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12], pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12]);
 	pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR23] = pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12];
-
-	pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "separator height", &bFlushConfFileNeeded, 48, "Separators", "min icon size");
 	pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR23] = pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12];
 
 	pIcons->bUseSeparator = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "use separator", &bFlushConfFileNeeded, TRUE, "Separators", NULL);

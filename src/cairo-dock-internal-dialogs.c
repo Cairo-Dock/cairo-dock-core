@@ -24,14 +24,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDialogs *pDialogs)
 	pDialogs->cButtonOkImage = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "button_ok image", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	pDialogs->cButtonCancelImage = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "button_cancel image", &bFlushConfFileNeeded, NULL, NULL, NULL);
 
-	cairo_dock_get_size_key_value (pKeyFile, "Dialogs", "button size", &bFlushConfFileNeeded, 0, NULL, NULL, &pDialogs->iDialogButtonWidth, &pDialogs->iDialogButtonHeight);
-	if (pDialogs->iDialogButtonWidth == 0)
-	{
-		pDialogs->iDialogButtonWidth = g_key_file_get_integer (pKeyFile, "Dialogs", "button width", NULL);
-		pDialogs->iDialogButtonHeight = g_key_file_get_integer (pKeyFile, "Dialogs", "button height", NULL);
-		int iSize[2] = {pDialogs->iDialogButtonWidth, pDialogs->iDialogButtonHeight};
-		g_key_file_set_integer_list (pKeyFile, "Dialogs", "button size", iSize, 2);
-	}
+	cairo_dock_get_size_key_value_helper (pKeyFile, "Dialogs", "button", bFlushConfFileNeeded, pDialogs->iDialogButtonWidth, pDialogs->iDialogButtonHeight);
 
 	double couleur_bulle[4] = {1.0, 1.0, 1.0, 0.7};
 	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "background color", &bFlushConfFileNeeded, pDialogs->fDialogColor, 4, couleur_bulle, NULL, NULL);

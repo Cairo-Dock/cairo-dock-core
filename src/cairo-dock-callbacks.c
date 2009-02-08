@@ -152,8 +152,8 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		
 		if (pExpose->area.x + pExpose->area.y != 0)
 		{
-			glEnable (GL_SCISSOR_TEST);
-			glScissor (pExpose->area.x, pExpose->area.y, pExpose->area.width, pExpose->area.height);
+			//glEnable (GL_SCISSOR_TEST);
+			glScissor ((int) pExpose->area.x, (int) pExpose->area.y, (int) pExpose->area.width, (int) pExpose->area.height);
 		}
 		if (cairo_dock_is_loading ())
 		{

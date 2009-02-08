@@ -472,6 +472,8 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 
 void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)
 {
+	if (pIcon->iAnimationState == CAIRO_DOCK_STATE_REMOVE_INSERT)
+		return ;
 	cairo_dock_stop_icon_animation (pIcon);
 	
 	cairo_dock_notify (CAIRO_DOCK_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
@@ -484,7 +486,7 @@ static gboolean _cairo_dock_animation (CairoDock *pDock)
 	gboolean bIconIsAnimating;
 	if (g_bUseOpenGL && pDock->render_opengl != NULL)  /// a supprimer quand les plug-ins gereront le damage ...
 	{
-		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
+		//cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 	}
 	
 	if (pDock->bIsShrinkingDown)
@@ -660,6 +662,7 @@ gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserD
 		cairo_dock_mark_icon_as_inserting_removing (pIcon);
 		*bContinueAnimation = TRUE;
 	}
+	cairo_dock_redraw_container (pDock);
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 

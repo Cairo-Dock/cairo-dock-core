@@ -28,7 +28,13 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigHiddenDock *pHiddenDo
 	pHiddenDock->iVisibleZoneHeight = cairo_dock_get_integer_key_value (pKeyFile, "Hidden dock", "zone height", &bFlushConfFileNeeded, 25, "Background", NULL);
 	if (pHiddenDock->iVisibleZoneHeight < 1)
 		pHiddenDock->iVisibleZoneHeight = 1;
-
+	
+	cairo_dock_get_size_key_value_helper (pKeyFile, "Hidden dock", "zone", bFlushConfFileNeeded, pHiddenDock->iVisibleZoneWidth, pHiddenDock->iVisibleZoneHeight);
+	if (pHiddenDock->iVisibleZoneWidth < 10)
+		pHiddenDock->iVisibleZoneWidth = 10;
+	if (pHiddenDock->iVisibleZoneHeight < 1)
+		pHiddenDock->iVisibleZoneHeight = 1;
+	
 	pHiddenDock->fVisibleZoneAlpha = cairo_dock_get_double_key_value (pKeyFile, "Hidden dock", "alpha", &bFlushConfFileNeeded, 0.5, "Background", NULL);
 	pHiddenDock->bReverseVisibleImage = cairo_dock_get_boolean_key_value (pKeyFile, "Hidden dock", "reverse visible image", &bFlushConfFileNeeded, TRUE, "Background", NULL);
 
@@ -58,8 +64,8 @@ static void reload (CairoConfigHiddenDock *pPrevHiddenDock, CairoConfigHiddenDoc
 
 DEFINE_PRE_INIT (HiddenDock)
 {
-	pModule->cModuleName = "HiddenDock";
-	pModule->cTitle = "HiddenDock";
+	pModule->cModuleName = "Hidden dock";
+	pModule->cTitle = "Hidden Dock";
 	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-hidden-dock.png";
 	pModule->cDescription = N_("Define the appearance of the dock when it's hidden.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;

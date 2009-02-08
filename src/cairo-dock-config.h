@@ -110,6 +110,14 @@ void cairo_dock_get_size_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar
 */
 gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultGroupName, gchar *cDefaultKeyName, gchar *cDefaultDir, gchar *cDefaultFileName);
 
+#define cairo_dock_get_size_key_value_helper(pKeyFile, cGroupName, cKeyPrefix, bFlushConfFileNeeded, iWidth, iHeight) \
+	cairo_dock_get_size_key_value (pKeyFile, cGroupName, cKeyPrefix" size", &bFlushConfFileNeeded, 0, NULL, NULL, &iWidth, &iHeight);\
+	if (iWidth == 0) {\
+		iWidth = g_key_file_get_integer (pKeyFile, cGroupName, cKeyPrefix" width", NULL);\
+		iHeight = g_key_file_get_integer (pKeyFile, cGroupName, cKeyPrefix" height", NULL);\
+		int iSize[2] = {iWidth, iHeight};\
+		g_key_file_set_integer_list (pKeyFile, cGroupName, cKeyPrefix" size", iSize, 2); }
+
 
 /**
 *Lis le fichier de conf et recharge l'appli en consequence.
