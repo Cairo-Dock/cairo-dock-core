@@ -714,12 +714,21 @@ static void _cairo_dock_hide_show_windows_on_other_desktops (Window *Xid, Icon *
 		else
 		{
 			cd_message (" => n'est pas sur le bureau actuel.");
-			pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+			pParentDock = cairo_dock_detach_appli (icon);
+			/*pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 			if (pParentDock != NULL)
 			{
 				cairo_dock_detach_icon_from_dock (icon, pParentDock, TRUE);
+				
+				if (icon->cClass != NULL && pParentDock == cairo_dock_search_dock_from_name (icon->cClass))
+				{
+					gboolean bEmptyClassSubDock = cairo_dock_check_class_subdock_is_empty (pParentDock, icon->cClass);
+					g_print ("bEmptyClassSubDock : %d\n", bEmptyClassSubDock);
+					if (bEmptyClassSubDock)
+						return ;
+				}
 				cairo_dock_update_dock_size (pParentDock);
-			}
+			}*/
 		}
 		if (pParentDock != NULL)
 			gtk_widget_queue_draw (pParentDock->pWidget);
@@ -1003,11 +1012,12 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 									else
 									{
 										cd_message (" => re-apparait");
-										if (pParentDock != NULL)
+										/*if (pParentDock != NULL)
 										{
 											cairo_dock_detach_icon_from_dock (icon, pParentDock, TRUE);
 											cairo_dock_update_dock_size (pParentDock);
-										}
+										}*/
+										pParentDock = cairo_dock_detach_appli (icon);
 									}
 									if (pParentDock != NULL)
 										gtk_widget_queue_draw (pParentDock->pWidget);
@@ -1078,12 +1088,15 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				{
 					if (event.xconfigure.x + event.xconfigure.width <= 0 || event.xconfigure.x >= g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || event.xconfigure.y + event.xconfigure.height <= 0 || event.xconfigure.y >= g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // en fait il faudrait faire ca modulo le nombre de viewports * la largeur d'un bureau, car avec une fenetre a droite, elle peut revenir sur le bureau par la gauche si elle est tres large...
 					{
-						CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+						/*CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 						if (pParentDock == NULL)
 							pParentDock = pDock;  /// pertinent ?...
 						cairo_dock_detach_icon_from_dock (icon, pParentDock, TRUE);
 						cairo_dock_update_dock_size (pParentDock);
-						gtk_widget_queue_draw (pParentDock->pWidget);
+						gtk_widget_queue_draw (pParentDock->pWidget);*/
+						CairoDock *pParentDock = cairo_dock_detach_appli (icon);
+						if (pParentDock)
+							gtk_widget_queue_draw (pParentDock->pWidget);
 					}
 					else  // elle est sur le bureau.
 					{
@@ -1448,4 +1461,26 @@ void cairo_dock_foreach_applis (CairoDockForeachIconFunc pFunction, gboolean bOu
 {
 	gpointer data[3] = {pFunction, pUserData, GINT_TO_POINTER (bOutsideDockOnly)};
 	g_hash_table_foreach (s_hXWindowTable, (GHFunc) _cairo_dock_for_one_appli, data);
+}
+
+
+
+
+CairoDock * cairo_dock_detach_appli (Icon *pIcon)
+{
+	g_print ("%s (%s)\n", __func__, pIcon->acName);
+	CairoDock *pParentDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+	if (pParentDock == NULL)
+		return NULL;
+	
+	cairo_dock_detach_icon_from_dock (pIcon, pParentDock, TRUE);
+	
+	if (pIcon->cClass != NULL && pParentDock == cairo_dock_search_dock_from_name (pIcon->cClass))
+	{
+		gboolean bEmptyClassSubDock = cairo_dock_check_class_subdock_is_empty (pParentDock, pIcon->cClass);
+		if (bEmptyClassSubDock)
+			return NULL;
+	}
+	cairo_dock_update_dock_size (pParentDock);
+	return pParentDock;
 }

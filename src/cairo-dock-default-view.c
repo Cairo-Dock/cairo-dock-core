@@ -99,8 +99,6 @@ void cairo_dock_calculate_max_dock_size_linear (CairoDock *pDock)
 void cairo_dock_calculate_construction_parameters_generic (Icon *icon, CairoDock *pDock)
 {
 	icon->fDrawX = icon->fX;
-	if (g_bEasterEggs && pDock->fAlign < .5)
-		icon->fDrawX -= pDock->iLeftMargin * (.5 - pDock->fAlign) * 2;
 	icon->fDrawY = icon->fY;
 	icon->fWidthFactor = 1.;
 	icon->fHeightFactor = 1.;

@@ -593,7 +593,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	cairo_dock_stop_icon_animation (icon);
 	
 	//\___________________ On gere le cas des classes d'applis.
-	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
+	/*if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
 	{
 		CairoDock *pClassSubDock = icon->pSubDock;
 		if (pClassSubDock != NULL)  // cette icone pointe sur le sous-dock de sa classe, il faut enlever la 1ere icone de ce sous-dock, la deplacer au dock parent, et lui affecter le sous-dock si il est non vide, ou sinon le detruire.
@@ -629,11 +629,11 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 		if (pDock == cairo_dock_search_dock_from_name (icon->cClass) && g_list_length (pDock->icons) == 1)  // il n'y aura plus aucune icone de cette classe.
 		{
 			cd_message ("  le sous-dock de la classe %s n'aura plus d'element", icon->cClass);
-			/**Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-			if (pPointingIcon != NULL)
-				pPointingIcon->pSubDock = NULL;*/
+			//Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+			//if (pPointingIcon != NULL)
+			//	pPointingIcon->pSubDock = NULL;
 		}
-	}
+	}*/
 
 	//\___________________ On l'enleve de la liste.
 	if (pDock->pFirstDrawnElement != NULL && pDock->pFirstDrawnElement->data == icon)

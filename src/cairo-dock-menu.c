@@ -1044,8 +1044,18 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 		}
 		_add_entry_in_menu (_("Manage themes"), GTK_STOCK_EXECUTE, _cairo_dock_initiate_theme_management, pSubMenu);
 	}
-
-	_add_entry_in_menu (myAccessibility.bLockIcons ? _("unlock icons") : _("lock icons"), GTK_STOCK_CANCEL, _cairo_dock_lock_icons, pSubMenu);
+	
+	pMenuItem = gtk_image_menu_item_new_with_label (myAccessibility.bLockIcons ? _("unlock icons") : _("lock icons"));
+	cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, "icon-lock-icons.svg");
+	pixbuf = gdk_pixbuf_new_from_file_at_size (cIconPath, 16, 16, NULL);
+	image = gtk_image_new_from_pixbuf (pixbuf);
+	g_free (cIconPath);
+	g_object_unref (pixbuf);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
+	gtk_menu_shell_append  (GTK_MENU_SHELL (pSubMenu), pMenuItem);
+	g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK(_cairo_dock_lock_icons), data);
+	
+	//_add_entry_in_menu (myAccessibility.bLockIcons ? _("unlock icons") : _("lock icons"), GTK_STOCK_CANCEL, _cairo_dock_lock_icons, pSubMenu);
 		
 	_add_entry_in_menu (_("About"), GTK_STOCK_ABOUT, _cairo_dock_about, pSubMenu);
 

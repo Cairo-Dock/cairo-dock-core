@@ -26,6 +26,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-background.h"
+#include "cairo-dock-animations.h"
 #include "cairo-dock-dialogs.h"
 
 extern CairoDock *g_pMainDock;
@@ -90,30 +91,21 @@ static gboolean on_leave_dialog (GtkWidget* pWidget,
 
 static int _cairo_dock_find_clicked_button_in_dialog (GdkEventButton* pButton, CairoDialog *pDialog)
 {
-	GtkRequisition requisition = {0, 0};
-	if (pDialog->pInteractiveWidget != NULL)
-		gtk_widget_size_request (pDialog->pInteractiveWidget, &requisition);
-
-	int iButtonX = .5*pDialog->iWidth - myDialogs.iDialogButtonWidth - .5*CAIRO_DIALOG_BUTTON_GAP;
-	int iButtonY = (pDialog->bDirectionUp ? 
+	int iButtonX, iButtonY;
+	int i, n = pDialog->iNbButtons;
+	iButtonY = (pDialog->bDirectionUp ? 
 		pDialog->iTopMargin + pDialog->iMessageHeight + pDialog->iInteractiveHeight + CAIRO_DIALOG_VGAP :
 		pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight - pDialog->iButtonsHeight - CAIRO_DIALOG_VGAP));
-	
-	//g_print ("clic (%d;%d) bouton Ok (%d;%d)\n", (int) pButton->x, (int) pButton->y, iButtonX, iButtonY);
-	if (pButton->x >= iButtonX && pButton->x <= iButtonX + myDialogs.iDialogButtonWidth && pButton->y >= iButtonY && pButton->y <= iButtonY + myDialogs.iDialogButtonHeight)
+	int iMinButtonX = .5 * (pDialog->iWidth - (n - 1) * CAIRO_DIALOG_BUTTON_GAP - n * myDialogs.iDialogButtonWidth);
+	for (i = 0; i < pDialog->iNbButtons; i++)
 	{
-		return GTK_BUTTONS_OK;
-	}
-	else
-	{
-		iButtonX = .5*pDialog->iWidth + .5*CAIRO_DIALOG_BUTTON_GAP;
-		//g_print ("clic (%d;%d) bouton Cancel (%d;%d)\n", (int) pButton->x, (int) pButton->y, iButtonX, iButtonY);
+		iButtonX = iMinButtonX + i * (CAIRO_DIALOG_BUTTON_GAP + myDialogs.iDialogButtonWidth);
 		if (pButton->x >= iButtonX && pButton->x <= iButtonX + myDialogs.iDialogButtonWidth && pButton->y >= iButtonY && pButton->y <= iButtonY + myDialogs.iDialogButtonHeight)
 		{
-			return GTK_BUTTONS_CANCEL;
+			return i;
 		}
 	}
-	return GTK_BUTTONS_NONE;
+	return -1;
 }
 
 static gboolean on_button_press_dialog (GtkWidget* pWidget,
@@ -124,50 +116,38 @@ static gboolean on_button_press_dialog (GtkWidget* pWidget,
 	{
 		if (pButton->type == GDK_BUTTON_PRESS)
 		{
-			if (pDialog->iButtonsType == GTK_BUTTONS_NONE && pDialog->pInteractiveWidget == NULL)  // ce n'est pas un dialogue interactif.
+			if (pDialog->pButtons == NULL && pDialog->pInteractiveWidget == NULL)  // ce n'est pas un dialogue interactif.
 			{
 				cairo_dock_dialog_unreference (pDialog);
 			}
-			else if (pDialog->iButtonsType != GTK_BUTTONS_NONE)
+			else if (pDialog->pButtons != NULL)
 			{
 				int iButton = _cairo_dock_find_clicked_button_in_dialog (pButton, pDialog);
-				if (iButton == GTK_BUTTONS_OK)
+				if (iButton >= 0 && iButton < pDialog->iNbButtons)
 				{
-					pDialog->iButtonOkOffset = CAIRO_DIALOG_BUTTON_OFFSET;
-					gtk_widget_queue_draw (pDialog->pWidget);
-				}
-				else if (iButton == GTK_BUTTONS_CANCEL)
-				{
-					pDialog->iButtonCancelOffset = CAIRO_DIALOG_BUTTON_OFFSET;
+					pDialog->pButtons[iButton].iOffset = CAIRO_DIALOG_BUTTON_OFFSET;
 					gtk_widget_queue_draw (pDialog->pWidget);
 				}
 			}
 		}
 		else if (pButton->type == GDK_BUTTON_RELEASE)
 		{
-			//g_print ("release\n");
-			if (pDialog->iButtonsType != GTK_BUTTONS_NONE)
+			if (pDialog->pButtons != NULL)
 			{
 				int iButton = _cairo_dock_find_clicked_button_in_dialog (pButton, pDialog);
-				if (pDialog->iButtonOkOffset != 0)
+				if (iButton >= 0 && iButton < pDialog->iNbButtons && pDialog->pButtons[iButton].iOffset != 0)
 				{
-					pDialog->iButtonOkOffset = 0;
-					gtk_widget_queue_draw (pDialog->pWidget);
-					if (iButton == GTK_BUTTONS_OK)
-					{
-						pDialog->action_on_answer (GTK_RESPONSE_OK, pDialog->pInteractiveWidget, pDialog->pUserData);
-						cairo_dock_dialog_unreference (pDialog);
-					}
+					pDialog->pButtons[iButton].iOffset = 0;
+					pDialog->action_on_answer (iButton, pDialog->pInteractiveWidget, pDialog->pUserData, pDialog);
+					gtk_widget_queue_draw (pDialog->pWidget);  // au cas ou le unref ci-dessous ne le detruirait pas.
+					cairo_dock_dialog_unreference (pDialog);
 				}
-				else if (pDialog->iButtonCancelOffset != 0)
+				else
 				{
-					pDialog->iButtonCancelOffset = 0;
+					int i;
+					for (i = 0; i < pDialog->iNbButtons; i++)
+						pDialog->pButtons[i].iOffset = 0;
 					gtk_widget_queue_draw (pDialog->pWidget);
-					if (iButton == GTK_BUTTONS_CANCEL)
-					{
-						pDialog->action_on_answer (GTK_RESPONSE_CANCEL, pDialog->pInteractiveWidget, pDialog->pUserData);
-						cairo_dock_dialog_unreference (pDialog);
-					}
 				}
 			}
 		}
@@ -180,10 +160,9 @@ static gboolean on_key_press_dialog (GtkWidget *pWidget,
 	CairoDialog *pDialog)
 {
 	cd_debug ("key pressed");
-	if (pDialog->iButtonsType == GTK_BUTTONS_NONE)
-	{
+	if (pDialog->pButtons != NULL)
 		return FALSE;
-	}
+	
 	if (pKey->type == GDK_KEY_PRESS)
 	{
 		GdkEventScroll dummyScroll;
@@ -191,11 +170,11 @@ static gboolean on_key_press_dialog (GtkWidget *pWidget,
 		switch (pKey->keyval)
 		{
 			case GDK_Return :
-				pDialog->action_on_answer (GTK_RESPONSE_OK, pDialog->pInteractiveWidget, pDialog->pUserData);
+				pDialog->action_on_answer (-1, pDialog->pInteractiveWidget, pDialog->pUserData, pDialog);
 				cairo_dock_dialog_unreference (pDialog);
 			break ;
 			case GDK_Escape :
-				pDialog->action_on_answer (GTK_RESPONSE_CANCEL, pDialog->pInteractiveWidget, pDialog->pUserData);
+				pDialog->action_on_answer (-2, pDialog->pInteractiveWidget, pDialog->pUserData, pDialog);
 				cairo_dock_dialog_unreference (pDialog);
 			break ;
 		}
@@ -270,21 +249,21 @@ static void _cairo_dock_draw_inside_dialog (cairo_t *pCairoContext, CairoDialog 
 		}
 	}
 	
-	if (pDialog->iButtonsType != GTK_BUTTONS_NONE)
+	if (pDialog->pButtons != NULL)
 	{
-		int iButtonY = (pDialog->bDirectionUp ? pDialog->iTopMargin + pDialog->iMessageHeight + pDialog->iInteractiveHeight + CAIRO_DIALOG_VGAP : pDialog->iHeight - pDialog->iTopMargin - pDialog->iButtonsHeight - CAIRO_DIALOG_VGAP);  // requisition.height
-
-		cairo_set_source_surface (pCairoContext,
-				s_pButtonOkSurface,
-				.5*pDialog->iWidth - myDialogs.iDialogButtonWidth - .5*CAIRO_DIALOG_BUTTON_GAP + pDialog->iButtonOkOffset,
+		int iButtonX, iButtonY;
+		int i, n = pDialog->iNbButtons;
+		iButtonY = (pDialog->bDirectionUp ? pDialog->iTopMargin + pDialog->iMessageHeight + pDialog->iInteractiveHeight + CAIRO_DIALOG_VGAP : pDialog->iHeight - pDialog->iTopMargin - pDialog->iButtonsHeight - CAIRO_DIALOG_VGAP);
+		int iMinButtonX = .5 * (pDialog->iWidth - (n - 1) * CAIRO_DIALOG_BUTTON_GAP - n * myDialogs.iDialogButtonWidth);
+		for (i = 0; i < pDialog->iNbButtons; i++)
+		{
+			iButtonX = iMinButtonX + i * (CAIRO_DIALOG_BUTTON_GAP + myDialogs.iDialogButtonWidth);
+			cairo_set_source_surface (pCairoContext,
+				pDialog->pButtons[i].pSurface,
+				iButtonX + pDialog->iButtonOkOffset,
 				iButtonY + pDialog->iButtonOkOffset);
-		_paint_inside_dialog(pCairoContext, fAlpha);
-
-		cairo_set_source_surface (pCairoContext,
-				s_pButtonCancelSurface,
-				.5*pDialog->iWidth + .5*CAIRO_DIALOG_BUTTON_GAP + pDialog->iButtonCancelOffset,
-				iButtonY + pDialog->iButtonCancelOffset);
-		_paint_inside_dialog(pCairoContext, fAlpha);
+			_paint_inside_dialog(pCairoContext, fAlpha);
+		}
 	}
 	
 	if (pDialog->pRenderer != NULL)
@@ -469,22 +448,28 @@ void cairo_dock_load_dialog_buttons (CairoContainer *pContainer, gchar *cButtonO
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (pContainer);
 
 	if (s_pButtonOkSurface != NULL)
+		cairo_surface_destroy (s_pButtonOkSurface);
+	s_pButtonOkSurface = _cairo_dock_load_button_icon (pCairoContext, cButtonOkImage, "cairo-dock-ok.svg");
+
+	if (s_pButtonCancelSurface != NULL)
+		cairo_surface_destroy (s_pButtonCancelSurface);
+	s_pButtonCancelSurface = _cairo_dock_load_button_icon (pCairoContext, cButtonCancelImage, "cairo-dock-cancel.svg");
+
+	cairo_destroy (pCairoContext);
+}
+void cairo_dock_unload_dialog_buttons (void)
+{
+	if (s_pButtonOkSurface != NULL)
 	{
 		cairo_surface_destroy (s_pButtonOkSurface);
 		s_pButtonOkSurface = NULL;
 	}
-	s_pButtonOkSurface = _cairo_dock_load_button_icon (pCairoContext, cButtonOkImage, "cairo-dock-ok.svg");
-
 	if (s_pButtonCancelSurface != NULL)
 	{
 		cairo_surface_destroy (s_pButtonCancelSurface);
 		s_pButtonCancelSurface = NULL;
 	}
-	s_pButtonCancelSurface = _cairo_dock_load_button_icon (pCairoContext, cButtonCancelImage, "cairo-dock-cancel.svg");
-
-	cairo_destroy (pCairoContext);
 }
-
 
 gboolean cairo_dock_dialog_reference (CairoDialog *pDialog)
 {
@@ -524,7 +509,6 @@ static void _cairo_dock_isolate_dialog (CairoDialog *pDialog)
 	g_signal_handlers_disconnect_by_func (pDialog->pWidget, on_enter_dialog, NULL);
 	g_signal_handlers_disconnect_by_func (pDialog->pWidget, on_leave_dialog, NULL);
 
-	pDialog->iButtonsType = GTK_BUTTONS_NONE;
 	pDialog->action_on_answer = NULL;
 
 	pDialog->pIcon = NULL;
@@ -564,9 +548,21 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 	{
 		cairo_surface_destroy (pDialog->pIconBuffer);
 	}
-
+	
+	if (pDialog->pButtons != NULL)
+	{
+		cairo_surface_t *pSurface;
+		int i;
+		for (i = 0; i < pDialog->iNbButtons; i++)
+		{
+			pSurface = pDialog->pButtons[i].pSurface;
+			if (pSurface != NULL && pSurface != s_pButtonOkSurface && pSurface != s_pButtonCancelSurface)
+				cairo_surface_destroy (pSurface);
+		}
+		g_free (pDialog->pButtons);
+	}
+	
 	gtk_widget_destroy (pDialog->pWidget);  // detruit aussi le widget interactif.
-	pDialog->pWidget = NULL;
 
 	if (pDialog->pUserData != NULL && pDialog->pFreeUserDataFunc != NULL)
 		pDialog->pFreeUserDataFunc (pDialog->pUserData);
@@ -659,7 +655,6 @@ static CairoDialog *_cairo_dock_create_new_dialog (void)
 	s_pDialogList = g_slist_prepend (s_pDialogList, pDialog);
 
 	//\________________ On construit la fenetre du dialogue.
-	//gboolean bInteractiveWindow = (iButtonsType != GTK_BUTTONS_NONE || pInteractiveWidget != NULL);  // il y'aura des boutons ou un widget interactif, donc la fenetre doit pouvoir recevoir les evenements utilisateur.
 	//GtkWidget* pWindow = gtk_window_new (bInteractiveWindow ? GTK_WINDOW_TOPLEVEL : GTK_WINDOW_POPUP);  // les popus ne prennent pas le focus. En fait, ils ne sont meme pas controles par le WM.
 	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	pDialog->pWidget = pWindow;
@@ -704,37 +699,6 @@ static cairo_surface_t *_cairo_dock_create_dialog_text_surface (const gchar *cTe
 		iTextHeight,
 		&fTextXOffset,
 		&fTextYOffset);
-
-	/**PangoRectangle ink, log;
-	PangoLayout *pLayout = pango_cairo_create_layout (pSourceContext);
-
-	PangoFontDescription *pDesc = pango_font_description_new ();
-	pango_font_description_set_absolute_size (pDesc, myDialogs.dialogTextDescription.iSize * PANGO_SCALE);
-	pango_font_description_set_family_static (pDesc, myDialogs.dialogTextDescription.cFont);
-	pango_font_description_set_weight (pDesc, myDialogs.dialogTextDescription.iWeight);
-	pango_font_description_set_style (pDesc, myDialogs.dialogTextDescription.iStyle);
-	pango_layout_set_font_description (pLayout, pDesc);
-	pango_font_description_free (pDesc);
-
-	pango_layout_set_text (pLayout, cText, -1);
-
-	pango_layout_get_pixel_extents (pLayout, &ink, &log);
-
-	*iTextWidth = ink.width;
-	*iTextHeight = ink.height;
-
-	cairo_surface_t *pTextBuffer = cairo_surface_create_similar (cairo_get_target (pSourceContext),
-		CAIRO_CONTENT_COLOR_ALPHA,
-		ink.width,
-		ink.height);
-	cairo_t* pSurfaceContext = cairo_create (pTextBuffer);
-	
-	cairo_translate (pSurfaceContext, -ink.x, -ink.y);
-	cairo_set_source_rgba (pSurfaceContext, myDialogs.dialogTextDescription.fColorStart[0], myDialogs.dialogTextDescription.fColorStart[1], myDialogs.dialogTextDescription.fColorStart[2], 1.);
-	pango_cairo_show_layout (pSurfaceContext, pLayout);
-	g_object_unref (pLayout);
-
-	cairo_destroy (pSurfaceContext);*/
 	return pTextBuffer;
 }
 
@@ -757,7 +721,6 @@ static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cIm
 	}
 	else
 	{
-		//pIconBuffer = cairo_dock_load_image_for_square_icon (pSourceContext, cImageFilePath, myDialogs.iDialogIconSize);
 		double fImageWidth = iNbFrames * iDesiredSize, fImageHeight = iDesiredSize;
 		pIconBuffer = cairo_dock_load_image (pSourceContext, cImageFilePath,
 			&fImageWidth, &fImageHeight,
@@ -795,11 +758,10 @@ static gboolean _cairo_dock_dialog_auto_delete (CairoDialog *pDialog)
 	}
 	return FALSE;
 }
-//CairoDialog *cairo_dock_build_dialog (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, gchar *cImageFilePath, GtkWidget *pInteractiveWidget, GtkButtonsType iButtonsType, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
 CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer)
 {
 	g_return_val_if_fail (pAttribute != NULL, NULL);
-	g_print ("%s (%s, %s, %x, %d, %x)\n", __func__, pAttribute->cText, pAttribute->cImageFilePath, pAttribute->pInteractiveWidget, pAttribute->iButtonsType, pAttribute->pTextDescription);
+	g_print ("%s (%s, %s, %x, %x, %x)\n", __func__, pAttribute->cText, pAttribute->cImageFilePath, pAttribute->pInteractiveWidget, pAttribute->pActionFunc, pAttribute->pTextDescription);
 	
 	//\________________ On cree un nouveau dialogue.
 	CairoDialog *pDialog = _cairo_dock_create_new_dialog ();
@@ -842,11 +804,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	}
 	
 	//\________________ On prend en compte les boutons.
-	pDialog->iButtonsType = pAttribute->iButtonsType;
-	if (pAttribute->pActionFunc == NULL)  // pas d'action, pas de bouton.
-		pDialog->iButtonsType = GTK_BUTTONS_NONE;
-	
-	if (pDialog->iButtonsType != GTK_BUTTONS_NONE)
+	if (pAttribute->cButtonsImage != NULL && pAttribute->pActionFunc != NULL)
 	{
 		pDialog->action_on_answer = pAttribute->pActionFunc;
 		pDialog->pUserData = pAttribute->pUserData;
@@ -854,6 +812,26 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 		
 		if (s_pButtonOkSurface == NULL || s_pButtonCancelSurface == NULL)
 			cairo_dock_load_dialog_buttons (CAIRO_CONTAINER (pDialog), myDialogs.cButtonOkImage, myDialogs.cButtonCancelImage);
+		
+		int i;
+		for (i = 0; pAttribute->cButtonsImage[i] != NULL; i++);
+		pDialog->iNbButtons = i;
+		
+		pDialog->pButtons = g_new0 (CairoDialogButton, pDialog->iNbButtons);
+		gchar *cButtonImage;
+		for (i = 0; i < pDialog->iNbButtons; i++)
+		{
+			cButtonImage = pAttribute->cButtonsImage[i];
+			if (strcmp (cButtonImage, "ok") == 0)
+				pDialog->pButtons[i].pSurface = s_pButtonOkSurface;
+			else if (strcmp (cButtonImage, "cancel") == 0)
+				pDialog->pButtons[i].pSurface = s_pButtonCancelSurface;
+			else
+				pDialog->pButtons[i].pSurface = cairo_dock_load_image_for_icon (pSourceContext,
+					cButtonImage,
+					myDialogs.iDialogButtonWidth,
+					myDialogs.iDialogButtonHeight);
+		}
 	}
 
 	//\________________ On lui affecte un decorateur.
@@ -905,7 +883,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 			0);
 		cd_debug (" pack -> ref = %d", pAttribute->pInteractiveWidget->object.parent_instance.ref_count);
 	}
-	if (pDialog->iButtonsType != GTK_BUTTONS_NONE)
+	if (pDialog->pButtons != NULL)
 	{
 		pDialog->pButtonsWidget = cairo_dock_add_dialog_internal_box (pDialog, pDialog->iButtonsWidth, pDialog->iButtonsHeight, FALSE);
 	}
@@ -1179,9 +1157,9 @@ void cairo_dock_compute_dialog_sizes (CairoDialog *pDialog)
 	pDialog->iMessageWidth = pDialog->iIconSize + _drawn_text_width (pDialog) + (pDialog->iTextWidth != 0 ? 2 : 0) * CAIRO_DIALOG_TEXT_MARGIN;  // icone + marge + texte + marge.
 	pDialog->iMessageHeight = MAX (pDialog->iIconSize, pDialog->iTextHeight) + (pDialog->pInteractiveWidget != NULL ? CAIRO_DIALOG_VGAP : 0);  // (icone/texte + marge) + widget + (marge + boutons) + pointe.
 	
-	if (pDialog->iButtonsType != GTK_BUTTONS_NONE)
+	if (pDialog->pButtons != NULL)
 	{
-		pDialog->iButtonsWidth = 2 * myDialogs.iDialogButtonWidth + CAIRO_DIALOG_BUTTON_GAP + 2 * CAIRO_DIALOG_TEXT_MARGIN;  // marge + bouton1 + ecart + bouton2 + marge.
+		pDialog->iButtonsWidth = pDialog->iNbButtons * myDialogs.iDialogButtonWidth + (pDialog->iNbButtons - 1) * CAIRO_DIALOG_BUTTON_GAP + 2 * CAIRO_DIALOG_TEXT_MARGIN;  // marge + bouton1 + ecart + bouton2 + marge.
 		pDialog->iButtonsHeight = CAIRO_DIALOG_VGAP + myDialogs.iDialogButtonHeight;  // il y'a toujours quelque chose au-dessus (texte et/out widget)
 	}
 	
@@ -1233,7 +1211,7 @@ void cairo_dock_replace_all_dialogs (void)
 }
 
 
-CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, gchar *cIconPath, GtkButtonsType iButtonsType, GtkWidget *pInteractiveWidget, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
+CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, gchar *cIconPath, GtkWidget *pInteractiveWidget, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
 {
 	if (pIcon != NULL && pIcon->fPersonnalScale > 0)  // icone en cours de suppression.
 		return NULL;
@@ -1243,11 +1221,15 @@ CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, Cairo
 	attr.cText = cText;
 	attr.cImageFilePath = cIconPath;
 	attr.pInteractiveWidget = pInteractiveWidget;
-	attr.iButtonsType = iButtonsType;
 	attr.pActionFunc = pActionFunc;
 	attr.pUserData = data;
 	attr.pFreeDataFunc = pFreeDataFunc;
 	attr.iTimeLength = (int) fTimeLength;
+	if (pActionFunc != NULL)
+	{
+		gchar *cButtons[3] = {"ok", "cancel", NULL};
+		attr.cButtonsImage = cButtons;
+	}
 	
 	CairoDialog *pDialog = cairo_dock_build_dialog (&attr, pIcon, pContainer);
 	return pDialog;
@@ -1260,7 +1242,7 @@ CairoDialog *cairo_dock_show_temporary_dialog_with_icon (const gchar *cText, Ico
 	va_list args;
 	va_start (args, cIconPath);
 	gchar *cFullText = g_strdup_vprintf (cText, args);
-	CairoDialog *pDialog = cairo_dock_show_dialog_full (cFullText, pIcon, pContainer, fTimeLength, cIconPath, GTK_BUTTONS_NONE, NULL, NULL, NULL, NULL);
+	CairoDialog *pDialog = cairo_dock_show_dialog_full (cFullText, pIcon, pContainer, fTimeLength, cIconPath, NULL, NULL, NULL, NULL);
 	g_free (cFullText);
 	va_end (args);
 	return pDialog;
@@ -1271,7 +1253,7 @@ CairoDialog *cairo_dock_show_temporary_dialog (const gchar *cText, Icon *pIcon, 
 	va_list args;
 	va_start (args, fTimeLength);
 	gchar *cFullText = g_strdup_vprintf (cText, args);
-	CairoDialog *pDialog = cairo_dock_show_dialog_full (cFullText, pIcon, pContainer, fTimeLength, NULL, GTK_BUTTONS_NONE, NULL, NULL, NULL, NULL);
+	CairoDialog *pDialog = cairo_dock_show_dialog_full (cFullText, pIcon, pContainer, fTimeLength, NULL, NULL, NULL, NULL, NULL);
 	g_free (cFullText);
 	va_end (args);
 	return pDialog;
@@ -1284,6 +1266,7 @@ CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cT
 	gchar *cFullText = g_strdup_vprintf (cText, args);
 	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
 	cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, "cairo-dock-animated.xpm");
+	
 	CairoDialogAttribute attr;
 	memset (&attr, 0, sizeof (CairoDialogAttribute));
 	attr.cText = cFullText;
@@ -1291,8 +1274,8 @@ CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cT
 	attr.iNbFrames = 12;
 	attr.iIconSize = 32;
 	attr.iTimeLength = (int) fTimeLength;
-	//CairoDialog *pDialog = cairo_dock_show_dialog_full (cFullText, pIcon, pContainer, fTimeLength, cIconPath, GTK_BUTTONS_NONE, NULL, NULL, NULL, NULL);
 	CairoDialog *pDialog = cairo_dock_build_dialog (&attr, pIcon, pContainer);
+	
 	g_free (cIconPath);
 	g_free (cFullText);
 	va_end (args);
@@ -1303,7 +1286,7 @@ CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cT
 
 CairoDialog *cairo_dock_show_dialog_with_question (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, gchar *cIconPath, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
 {
-	return cairo_dock_show_dialog_full (cText, pIcon, pContainer, 0, cIconPath, GTK_BUTTONS_YES_NO, NULL, pActionFunc, data, pFreeDataFunc);
+	return cairo_dock_show_dialog_full (cText, pIcon, pContainer, 0, cIconPath, NULL, pActionFunc, data, pFreeDataFunc);
 }
 
 CairoDialog *cairo_dock_show_dialog_with_entry (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, gchar *cIconPath, const gchar *cTextForEntry, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
@@ -1311,7 +1294,7 @@ CairoDialog *cairo_dock_show_dialog_with_entry (const gchar *cText, Icon *pIcon,
 	//GtkWidget *pWidget = cairo_dock_build_common_interactive_widget_for_dialog (cTextForEntry, -1, -1);
 	GtkWidget *pWidget = _cairo_dock_make_entry_for_dialog (cTextForEntry);
 
-	return cairo_dock_show_dialog_full (cText, pIcon, pContainer, 0, cIconPath, GTK_BUTTONS_OK_CANCEL, pWidget, pActionFunc, data, pFreeDataFunc);
+	return cairo_dock_show_dialog_full (cText, pIcon, pContainer, 0, cIconPath, pWidget, pActionFunc, data, pFreeDataFunc);
 }
 
 CairoDialog *cairo_dock_show_dialog_with_value (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, gchar *cIconPath, double fValue, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
@@ -1321,22 +1304,22 @@ CairoDialog *cairo_dock_show_dialog_with_value (const gchar *cText, Icon *pIcon,
 	//GtkWidget *pWidget = cairo_dock_build_common_interactive_widget_for_dialog (NULL, fValue, 1.);
 	GtkWidget *pWidget = _cairo_dock_make_hscale_for_dialog (fValue, 1.);
 
-	return cairo_dock_show_dialog_full (cText, pIcon, pContainer, 0, cIconPath, GTK_BUTTONS_OK_CANCEL, pWidget, pActionFunc, data, pFreeDataFunc);
+	return cairo_dock_show_dialog_full (cText, pIcon, pContainer, 0, cIconPath, pWidget, pActionFunc, data, pFreeDataFunc);
 }
 
 
 
 
-static void _cairo_dock_get_answer_from_dialog (int iAnswer, GtkWidget *pInteractiveWidget, gpointer *data)
+static void _cairo_dock_get_answer_from_dialog (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer *data, CairoDialog *pDialog)
 {
-	cd_message ("%s (%d)", __func__, iAnswer);
+	cd_message ("%s (%d)", __func__, iClickedButton);
 	int *iAnswerBuffer = data[0];
 	GMainLoop *pBlockingLoop = data[1];
 	GtkWidget *pWidgetCatcher = data[2];
 	if (pInteractiveWidget != NULL)
 		gtk_widget_reparent (pInteractiveWidget, pWidgetCatcher);  // j'ai rien trouve de mieux pour empecher que le 'pInteractiveWidget' ne soit pas detruit avec le dialogue apres l'appel de la callback (g_object_ref ne marche pas).
 
-	*iAnswerBuffer = iAnswer;
+	*iAnswerBuffer = iClickedButton;
 
 	if (g_main_loop_is_running (pBlockingLoop))
 		g_main_loop_quit (pBlockingLoop);
@@ -1348,21 +1331,20 @@ static gboolean _cairo_dock_dialog_destroyed (GtkWidget *widget, GdkEvent *event
 		g_main_loop_quit (pBlockingLoop);
 	return FALSE;
 }
-int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, gchar *cIconPath, GtkButtonsType iButtonsType, GtkWidget *pInteractiveWidget)
+int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, gchar *cIconPath, GtkWidget *pInteractiveWidget)
 {
 	static GtkWidget *pWidgetCatcher = NULL;  // voir l'astuce plus haut.
-	int iAnswer = GTK_RESPONSE_NONE;
+	int iClickedButton = -1;
 	GMainLoop *pBlockingLoop = g_main_loop_new (NULL, FALSE);
 	if (pWidgetCatcher == NULL)
 		pWidgetCatcher = gtk_hbox_new (0, FALSE);
-	gpointer data[3] = {&iAnswer, pBlockingLoop, pWidgetCatcher};  // inutile d'allouer 'data' puisqu'on va bloquer.
+	gpointer data[3] = {&iClickedButton, pBlockingLoop, pWidgetCatcher};  // inutile d'allouer 'data' puisqu'on va bloquer.
 
 	CairoDialog *pDialog = cairo_dock_show_dialog_full (cText,
 		pIcon,
 		pContainer,
 		0.,
 		cIconPath,
-		iButtonsType,
 		pInteractiveWidget,
 		(CairoDockActionOnAnswerFunc)_cairo_dock_get_answer_from_dialog,
 		(gpointer) data,
@@ -1375,17 +1357,21 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 			"delete-event",
 			G_CALLBACK (_cairo_dock_dialog_destroyed),
 			pBlockingLoop);
-
+		
+		if (myAccessibility.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
+			cairo_dock_pop_up (CAIRO_DOCK (pContainer));
 		//g_print ("debut de boucle bloquante ...\n");
 		GDK_THREADS_LEAVE ();
 		g_main_loop_run (pBlockingLoop);
 		GDK_THREADS_ENTER ();
 		//g_print ("fin de boucle bloquante -> %d\n", iAnswer);
+		if (myAccessibility.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
+			cairo_dock_pop_down (CAIRO_DOCK (pContainer));
 	}
 
 	g_main_loop_unref (pBlockingLoop);
 
-	return iAnswer;
+	return iClickedButton;
 }
 
 gchar *cairo_dock_show_demand_and_wait (const gchar *cMessage, Icon *pIcon, CairoContainer *pContainer, const gchar *cInitialAnswer)
@@ -1394,10 +1380,10 @@ gchar *cairo_dock_show_demand_and_wait (const gchar *cMessage, Icon *pIcon, Cair
 	GtkWidget *pWidget = _cairo_dock_make_entry_for_dialog (cInitialAnswer);
 	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
 
-	int iAnswer = cairo_dock_show_dialog_and_wait (cMessage, pIcon, pContainer, 0, cIconPath, GTK_BUTTONS_OK_CANCEL, pWidget);
+	int iClickedButton = cairo_dock_show_dialog_and_wait (cMessage, pIcon, pContainer, 0, cIconPath, pWidget);
 	g_free (cIconPath);
 
-	gchar *cAnswer = (iAnswer == GTK_RESPONSE_OK ? g_strdup (gtk_entry_get_text (GTK_ENTRY (pWidget))) : NULL);
+	gchar *cAnswer = (iClickedButton == 0 ? g_strdup (gtk_entry_get_text (GTK_ENTRY (pWidget))) : NULL);
 	cd_message ("cAnswer : %s", cAnswer);
 
 	gtk_widget_destroy (pWidget);
@@ -1412,10 +1398,10 @@ double cairo_dock_show_value_and_wait (const gchar *cMessage, Icon *pIcon, Cairo
 	GtkWidget *pWidget = _cairo_dock_make_hscale_for_dialog (fInitialValue, fMaxValue);
 	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
 
-	int iAnswer = cairo_dock_show_dialog_and_wait (cMessage, pIcon, pContainer, 0, cIconPath, GTK_BUTTONS_OK_CANCEL, pWidget);
+	int iClickedButton = cairo_dock_show_dialog_and_wait (cMessage, pIcon, pContainer, 0, cIconPath, pWidget);
 	g_free (cIconPath);
 
-	double fValue = (iAnswer == GTK_RESPONSE_OK ? gtk_range_get_value (GTK_RANGE (pWidget)) : -1);
+	double fValue = (iClickedButton == 0 ? gtk_range_get_value (GTK_RANGE (pWidget)) : -1);
 	cd_message ("fValue : %.2f", fValue);
 
 	gtk_widget_destroy (pWidget);
@@ -1425,10 +1411,10 @@ double cairo_dock_show_value_and_wait (const gchar *cMessage, Icon *pIcon, Cairo
 int cairo_dock_ask_question_and_wait (const gchar *cQuestion, Icon *pIcon, CairoContainer *pContainer)
 {
 	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);  // trouver une icone de question...
-	int iAnswer = cairo_dock_show_dialog_and_wait (cQuestion, pIcon, pContainer, 0, cIconPath, GTK_BUTTONS_YES_NO, NULL);
+	int iClickedButton = cairo_dock_show_dialog_and_wait (cQuestion, pIcon, pContainer, 0, cIconPath, NULL);
 	g_free (cIconPath);
 
-	return (iAnswer == GTK_RESPONSE_OK ? GTK_RESPONSE_YES : GTK_RESPONSE_NO);
+	return (iClickedButton == 0 ? GTK_RESPONSE_YES : GTK_RESPONSE_NO);
 }
 
 

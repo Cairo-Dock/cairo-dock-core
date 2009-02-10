@@ -1227,7 +1227,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 					}
 					if (icon != NULL && ! CAIRO_DOCK_IS_SEPARATOR (icon) && icon == s_pIconClicked)
 					{
-						if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick && ! CAIRO_DOCK_IS_APPLI (icon) && ! (pButton->state & GDK_SHIFT_MASK))  // icone de sous-dock.
+						if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick && ! (pButton->state & GDK_SHIFT_MASK))  // icone de sous-dock.
 						{
 							cairo_dock_show_subdock (icon, FALSE, pDock);
 						}

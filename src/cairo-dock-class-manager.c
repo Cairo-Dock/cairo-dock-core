@@ -318,7 +318,7 @@ gboolean cairo_dock_prevent_inhibated_class (Icon *pIcon)
 			}
 			else
 			{
-				if (pInhibatorIcon->Xid == 0 && (! g_bEasterEggs || pInhibatorIcon->pSubDock == NULL))  // cette icone inhibe cette classe mais ne controle encore aucune appli, on s'y asservit.
+				if (pInhibatorIcon->Xid == 0 && pInhibatorIcon->pSubDock == NULL)  // cette icone inhibe cette classe mais ne controle encore aucune appli, on s'y asservit.
 				{
 					pInhibatorIcon->Xid = pIcon->Xid;
 					pInhibatorIcon->bIsHidden = pIcon->bIsHidden;
@@ -708,7 +708,7 @@ Icon *cairo_dock_get_classmate (Icon *pIcon)
 		if (pFriendIcon == NULL)
 			continue ;
 		g_print (" friend : %s (%d)\n", pFriendIcon->acName, pFriendIcon->Xid);
-		if (pFriendIcon->Xid != 0 || (g_bEasterEggs && pFriendIcon->pSubDock != NULL))
+		if (pFriendIcon->Xid != 0 || pFriendIcon->pSubDock != NULL)
 			return pFriendIcon;
 	}
 	
@@ -720,4 +720,68 @@ Icon *cairo_dock_get_classmate (Icon *pIcon)
 	}
 	
 	return NULL;
+}
+
+
+
+
+gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar *cClass)
+{
+	g_print ("%s (%s, %d)\n", __func__, cClass, g_list_length (pDock->icons));
+	if (pDock->iRefCount == 0)
+		return FALSE;
+	if (pDock->icons == NULL)  // ne devrait plus arriver.
+	{
+		cd_warning ("   le sous-dock de la classe %s n'a plus d'element !\nil va etre detruit", cClass);
+		CairoDock *pFakeParentDock = NULL;
+		Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
+		cairo_dock_destroy_dock (pDock, cClass, NULL, NULL);
+		pFakeClassIcon->pSubDock = NULL;
+		cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
+		cairo_dock_free_icon (pFakeClassIcon);
+		cairo_dock_update_dock_size (pFakeParentDock);
+		return TRUE;
+	}
+	else if (pDock->icons->next == NULL)
+	{
+		g_print ("   le sous-dock de la classe %s n'a plus que 1 element et va etre vide puis detruit\n", cClass);
+		Icon *pLastClassIcon = pDock->icons->data;
+		
+		CairoDock *pFakeParentDock = NULL;
+		Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
+		g_return_val_if_fail (pFakeClassIcon != NULL, TRUE);
+		if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (pFakeClassIcon) || CAIRO_DOCK_IS_APPLET (pFakeClassIcon))
+		{
+			cairo_dock_detach_icon_from_dock (pLastClassIcon, pDock, FALSE);
+			g_free (pLastClassIcon->cParentDockName);
+			pLastClassIcon->cParentDockName = NULL;
+			
+			cairo_dock_destroy_dock (pDock, cClass, NULL, NULL);
+			pFakeClassIcon->pSubDock = NULL;
+			g_print ("sanity check : pFakeClassIcon->Xid : %d\n", pFakeClassIcon->Xid);
+			cairo_dock_insert_appli_in_dock (pLastClassIcon, g_pMainDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+		}
+		else  // le sous-dock est donc pointe par un inhibiteur.
+		{
+			g_print ("trouve l'icone en papier (%x;%x)\n", pFakeClassIcon, pFakeParentDock);
+			cairo_dock_detach_icon_from_dock (pLastClassIcon, pDock, FALSE);
+			g_free (pLastClassIcon->cParentDockName);
+			pLastClassIcon->cParentDockName = g_strdup (pFakeClassIcon->cParentDockName);
+			pLastClassIcon->fOrder = pFakeClassIcon->fOrder;
+			
+			g_print (" on detruit le sous-dock...\n");
+			cairo_dock_destroy_dock (pDock, cClass, NULL, NULL);
+			pFakeClassIcon->pSubDock = NULL;
+			
+			g_print (" et l'icone de paille\n");
+			cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
+			cairo_dock_free_icon (pFakeClassIcon);
+			
+			g_print (" puis on re-insere l'appli restante\n");
+			cairo_dock_insert_icon_in_dock (pLastClassIcon, pFakeParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, FALSE);
+			cairo_dock_redraw_icon (pLastClassIcon, CAIRO_CONTAINER (pFakeParentDock));  // on suppose que les tailles des 2 icones sont identiques.
+		}
+		return TRUE;
+	}
+	return FALSE;
 }

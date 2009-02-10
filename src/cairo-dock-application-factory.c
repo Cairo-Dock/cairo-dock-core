@@ -265,7 +265,7 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 			else
 				cd_message ("  sous-dock de la classe %s existant", icon->cClass);
 			
-			if (! g_bEasterEggs)
+			/*if (! g_bEasterEggs)
 			{
 				//\____________ On l'associe au classmate.
 				if (pSameClassIcon->pSubDock == NULL)
@@ -278,7 +278,7 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 					pParentDock = pMainDock;
 				}
 			}
-			else  // warning : danger !
+			else*/
 			{
 				if (CAIRO_DOCK_IS_LAUNCHER (pSameClassIcon) || CAIRO_DOCK_IS_APPLET (pSameClassIcon))  // c'est un inhibiteur.
 				{

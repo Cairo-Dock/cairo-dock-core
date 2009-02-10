@@ -53,6 +53,7 @@ typedef struct _CairoDockClassAppli CairoDockClassAppli;
 typedef struct _CairoDockLabelDescription CairoDockLabelDescription;
 typedef struct _CairoDialogAttribute CairoDialogAttribute;
 typedef struct _CairoDeskletAttribute CairoDeskletAttribute;
+typedef struct _CairoDialogButton CairoDialogButton;
 
 typedef struct _CairoDataRenderer CairoDataRenderer;
 typedef struct _CairoDataRendererAttribute CairoDataRendererAttribute;
@@ -444,7 +445,7 @@ struct _CairoDockMinimalAppletConfig {
 
 typedef void (* CairoDockApplyConfigFunc) (gpointer data);
 
-typedef void (* CairoDockActionOnAnswerFunc) (int iAnswer, GtkWidget *pWidget, gpointer data);
+typedef void (* CairoDockActionOnAnswerFunc) (int iClickedButton, GtkWidget *pWidget, gpointer data, CairoDialog *pDialog);
 
 typedef gpointer CairoDialogRendererDataParameter;
 typedef CairoDialogRendererDataParameter* CairoDialogRendererDataPtr;
@@ -476,13 +477,18 @@ struct _CairoDialogAttribute {
 	gint iMaxTextWidth;  // 0 => pas de limite.
 	CairoDockLabelDescription *pTextDescription;  // NULL => &myDialogs.dialogTextDescription
 	GtkWidget *pInteractiveWidget;
-	GtkButtonsType iButtonsType;
+	gchar **cButtonsImage;  // NULL-terminated
 	CairoDockActionOnAnswerFunc pActionFunc;
 	gpointer pUserData;
 	GFreeFunc pFreeDataFunc;
 	gint iTimeLength;
 	gchar *cDecoratorName;
 	gint iIconSize;
+};
+
+struct _CairoDialogButton {
+	cairo_surface_t *pSurface;
+	int iOffset;
 };
 
 struct _CairoDialog {
@@ -592,6 +598,8 @@ struct _CairoDialog {
 	gint iCurrentTextOffset;
 	/// les timer de ces 2 animations.
 	gint iSidAnimateIcon, iSidAnimateText;
+	int iNbButtons;
+	CairoDialogButton *pButtons;
 };
 
 

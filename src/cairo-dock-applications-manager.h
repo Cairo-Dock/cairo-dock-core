@@ -64,5 +64,8 @@ Icon *cairo_dock_get_icon_with_Xid (Window Xid);
 
 void cairo_dock_foreach_applis (CairoDockForeachIconFunc pFunction, gboolean bOutsideDockOnly, gpointer pUserData);
 
+CairoDock *cairo_dock_detach_appli (Icon *pIcon);
+
+
 G_END_DECLS
 #endif

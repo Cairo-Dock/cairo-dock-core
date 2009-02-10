@@ -32,6 +32,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-class-manager.h"
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-animations.h"
 
@@ -357,7 +358,7 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 			gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);  // car apres avoir ete enleve du dock elle n'est plus rien.
 			cairo_dock_remove_icon_from_dock (pDock, pIcon);
 			
-			if (! g_bEasterEggs)
+			/*if (! g_bEasterEggs)
 			{
 				if (pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass) && pDock->icons == NULL)  // il n'y a plus aucune icone de cette classe.
 				{
@@ -370,11 +371,14 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 					cairo_dock_update_dock_size (pDock);
 				}
 			}
-			else
+			else*/
 			{
 				if (pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass))
 				{
-					if (pDock->icons == NULL)  // ne devrait plus arriver.
+					gboolean bEmptyClassSubDock = cairo_dock_check_class_subdock_is_empty (pDock, pIcon->cClass);
+					if (bEmptyClassSubDock)
+						return FALSE;
+					/*if (pDock->icons == NULL)  // ne devrait plus arriver.
 					{
 						cd_warning ("   le sous-dock de la classe %s n'a plus d'element !\nil va etre detruit", pIcon->cClass);
 						CairoDock *pFakeParentDock = NULL;
@@ -430,12 +434,9 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 					else
 					{
 						cairo_dock_update_dock_size (pDock);
-					}
+					}*/
 				}
-				else
-				{
-					cairo_dock_update_dock_size (pDock);
-				}
+				cairo_dock_update_dock_size (pDock);
 			}
 			cairo_dock_free_icon (pIcon);
 		}
@@ -662,7 +663,7 @@ gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserD
 		cairo_dock_mark_icon_as_inserting_removing (pIcon);
 		*bContinueAnimation = TRUE;
 	}
-	cairo_dock_redraw_container (pDock);
+	cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 

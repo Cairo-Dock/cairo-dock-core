@@ -43,7 +43,8 @@ essentialdata_DATA = \
 	icon-hidden-dock.png\
 	icon-indicators.png\
 	icon-system.png\
-	cairo-dock-animated.xpm
+	cairo-dock-animated.xpm\
+	icon-lock-icons.svg
 	
 	
 EXTRA_DIST = $(essentialdata_DATA)\

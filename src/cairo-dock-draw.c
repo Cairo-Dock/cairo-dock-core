@@ -1116,23 +1116,30 @@ void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle 
 
 
 
-
+#define CD_VISIBILITY_MARGIN 20
 void cairo_dock_set_window_position_at_balance (CairoDock *pDock, int iNewWidth, int iNewHeight)
 {
-	if (! g_bEasterEggs && pDock->iRefCount == 0 && pDock->fAlign != .5)
-	{
-		iNewWidth = pDock->iMaxDockWidth;
-	}
 	pDock->iWindowPositionX = (g_iScreenWidth[pDock->bHorizontalDock] - iNewWidth) * pDock->fAlign + pDock->iGapX;
+	if (pDock->iRefCount == 0 && pDock->fAlign != .5)
+		pDock->iWindowPositionX += (.5 - pDock->fAlign) * (pDock->iMaxDockWidth - iNewWidth);
 	pDock->iWindowPositionY = (pDock->bDirectionUp ? g_iScreenHeight[pDock->bHorizontalDock] - iNewHeight - pDock->iGapY : pDock->iGapY);
 	//g_print ("pDock->iGapX : %d => iWindowPositionX <- %d\n", pDock->iGapX, pDock->iWindowPositionX);
 	//g_print ("iNewHeight : %d -> pDock->iWindowPositionY <- %d\n", iNewHeight, pDock->iWindowPositionY);
-
-	if (pDock->iWindowPositionX < 0)
-		pDock->iWindowPositionX = 0;
-	else if (pDock->iWindowPositionX > g_iScreenWidth[pDock->bHorizontalDock] - iNewWidth)
-		pDock->iWindowPositionX = g_iScreenWidth[pDock->bHorizontalDock] - iNewWidth;
-
+	
+	if (pDock->iRefCount == 0)
+	{
+		if (pDock->iWindowPositionX + iNewWidth < CD_VISIBILITY_MARGIN)
+			pDock->iWindowPositionX = CD_VISIBILITY_MARGIN - iNewWidth;
+		else if (pDock->iWindowPositionX > g_iScreenWidth[pDock->bHorizontalDock] - CD_VISIBILITY_MARGIN)
+			pDock->iWindowPositionX = g_iScreenWidth[pDock->bHorizontalDock] - CD_VISIBILITY_MARGIN;
+	}
+	else
+	{
+		if (pDock->iWindowPositionX < - pDock->iLeftMargin)
+			pDock->iWindowPositionX = - pDock->iLeftMargin;
+		else if (pDock->iWindowPositionX > g_iScreenWidth[pDock->bHorizontalDock] - iNewWidth + pDock->iMinRightMargin)
+			pDock->iWindowPositionX = g_iScreenWidth[pDock->bHorizontalDock] - iNewWidth + pDock->iMinRightMargin;
+	}
 	if (pDock->iWindowPositionY < 0)
 		pDock->iWindowPositionY = 0;
 	else if (pDock->iWindowPositionY > g_iScreenHeight[pDock->bHorizontalDock] - iNewHeight)
@@ -1165,18 +1172,6 @@ void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, C
 		*iNewHeight = myHiddenDock.iVisibleZoneHeight;
 		pDock->iLeftMargin = 0;
 		pDock->iRightMargin = 0;
-	}
-	
-	if (g_bEasterEggs)
-	{
-		if (pDock->fAlign < .5)
-		{
-			*iNewWidth -= pDock->iLeftMargin * (.5 - pDock->fAlign) * 2;
-		}
-		else if (pDock->fAlign > .5)
-		{
-			*iNewWidth -= pDock->iRightMargin * (pDock->fAlign - .5) * 2;
-		}
 	}
 	
 	cairo_dock_set_window_position_at_balance (pDock, *iNewWidth, *iNewHeight);

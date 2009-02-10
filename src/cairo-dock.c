@@ -385,6 +385,7 @@ int main (int argc, char** argv)
 	textdomain (CAIRO_DOCK_GETTEXT_PACKAGE);
 
 	//\___________________ On teste l'existence du repertoire des donnees .cairo-dock.
+	int r;
 	if (cUserDefinedDataDir != NULL)
 	{
 		g_cCairoDockDataDir = cUserDefinedDataDir;
@@ -406,22 +407,22 @@ int main (int argc, char** argv)
 				cd_warning ("Cairo-Dock's data dir is now located in ~/.config, it will be moved there");
 				gchar *cCommand = g_strdup_printf ("mkdir '%s/.config' > /dev/null", getenv("HOME"));
 				cd_message ("%s", cCommand);
-				system (cCommand);
+				r = system (cCommand);
 				g_free (cCommand);
 					
 				cCommand = g_strdup_printf ("mv '%s' '%s'", cOldDataDir, g_cCairoDockDataDir);
 				cd_message ("%s", cCommand);
-				system (cCommand);
+				r = system (cCommand);
 				g_free (cCommand);
 				
 				cCommand = g_strdup_printf ("sed -i \"s/~\\/.cairo-dock/~\\/.config\\/%s/g\" '%s/%s/%s'", CAIRO_DOCK_DATA_DIR, g_cCairoDockDataDir, CAIRO_DOCK_CURRENT_THEME_NAME, CAIRO_DOCK_CONF_FILE);
 				cd_message ("%s", cCommand);
-				system (cCommand);
+				r = system (cCommand);
 				g_free (cCommand);
 				
 				cCommand = g_strdup_printf ("sed -i \"/default icon directory/ { s/~\\/.config\\/%s\\/%s\\/icons/%s/g }\" '%s/%s'", CAIRO_DOCK_DATA_DIR, CAIRO_DOCK_CURRENT_THEME_NAME, CAIRO_DOCK_LOCAL_THEME_KEYWORD, g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
 				cd_message ("%s", cCommand);
-				system (cCommand);
+				r = system (cCommand);
 				g_free (cCommand);
 			}
 			else
@@ -468,17 +469,17 @@ int main (int argc, char** argv)
 			cd_warning ("Cairo-Dock's local icons are now located in the 'icons' folder, they will be moved there");
 			gchar *cCommand = g_strdup_printf ("cd '%s' && mv *.svg *.png *.xpm *.jpg *.bmp *.gif '%s' > /dev/null", g_cCurrentLaunchersPath, cLocalIconsPath);
 			cd_message ("%s", cCommand);
-			system (cCommand);
+			r = system (cCommand);
 			g_free (cCommand);
 			
 			cCommand = g_strdup_printf ("sed -i \"s/_ThemeDirectory_/%s/g\" '%s/%s'", CAIRO_DOCK_LOCAL_THEME_KEYWORD, g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
 			cd_message ("%s", cCommand);
-			system (cCommand);
+			r = system (cCommand);
 			g_free (cCommand);
 			
 			cCommand = g_strdup_printf ("sed -i \"/default icon directory/ { s/~\\/.config\\/%s\\/%s\\/icons/%s/g }\" '%s/%s'", CAIRO_DOCK_DATA_DIR, CAIRO_DOCK_CURRENT_THEME_NAME, CAIRO_DOCK_LOCAL_THEME_KEYWORD, g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
 			cd_message ("%s", cCommand);
-			system (cCommand);
+			r = system (cCommand);
 			g_free (cCommand);
 		}
 	}

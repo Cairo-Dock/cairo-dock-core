@@ -36,6 +36,7 @@ struct _CairoDataRendererAttribute {
 	gint iAnimationDeltaT;
 	CairoDockGetValueFormatFunc format_value;
 	gchar **cEmblems;
+	GData *pExtraProperties;
 };
 
 typedef CairoDataRenderer * (*CairoDataRendererInitFunc) (void);
@@ -125,6 +126,9 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 *@param pRenderer a data renderer
 *@return a CairoDataToRenderer*/
 #define cairo_data_renderer_get_data(pRenderer) (&(pRenderer)->data);
+
+/*#define cairo_data_renderer_set_attribute(pRendererAttribute, cAttributeName, ) g_datalist_get_data (pRendererAttribute->pExtraProperties)
+#define cairo_data_renderer_get_attribute(pRendererAttribute, cAttributeName) g_datalist_get_data (pRendererAttribute->pExtraProperties)*/
 
 ///
 /// Data Access

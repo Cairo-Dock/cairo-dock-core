@@ -132,5 +132,8 @@ void cairo_dock_update_name_on_inhibators (gchar *cClass, Window Xid, gchar *cNe
 
 Icon *cairo_dock_get_classmate (Icon *pIcon);
 
+gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar *cClass);
+
+
 G_END_DECLS
 #endif
