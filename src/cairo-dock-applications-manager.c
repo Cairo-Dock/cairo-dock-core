@@ -48,7 +48,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 extern CairoDock *g_pMainDock;
 
-extern int g_iScreenWidth[2], g_iScreenHeight[2];
 extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
 
 extern int g_iNbDesktops;
@@ -86,7 +85,7 @@ void cairo_dock_initialize_application_manager (Display *pDisplay)
 		g_free,
 		NULL);
 	
-	s_aNetClientList = XInternAtom (s_XDisplay, "_NET_CLIENT_LIST", False);
+	s_aNetClientList = XInternAtom (s_XDisplay, "_NET_CLIENT_LIST_STACKING", False);
 	s_aNetActiveWindow = XInternAtom (s_XDisplay, "_NET_ACTIVE_WINDOW", False);
 	s_aNetCurrentDesktop = XInternAtom (s_XDisplay, "_NET_CURRENT_DESKTOP", False);
 	s_aNetDesktopViewport = XInternAtom (s_XDisplay, "_NET_DESKTOP_VIEWPORT", False);
@@ -819,10 +818,8 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 								cairo_dock_update_inactivity_on_inhibators (pLastActiveIcon->cClass, pLastActiveIcon->Xid);
 							}
 						}
-						
-						cairo_dock_notify (CAIRO_DOCK_WINDOW_ACTIVATED, &XActiveWindow);
-						
 						s_iCurrentActiveWindow = XActiveWindow;
+						cairo_dock_notify (CAIRO_DOCK_WINDOW_ACTIVATED, &XActiveWindow);
 					}
 				}
 				else if (event.xproperty.atom == s_aNetCurrentDesktop || event.xproperty.atom == s_aNetDesktopViewport)
@@ -1041,13 +1038,17 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				if (event.xproperty.atom == s_aNetWmDesktop)  // cela ne gere pas les changements de viewports, qui eux se font en changeant les coordonnees. Il faut donc recueillir les ConfigureNotify, qui donnent les redimensionnements et les deplacements.
 				{
 					cd_message ("changement de bureau pour %d", Xid);
-					if (myTaskBar.bAppliOnCurrentDesktopOnly)
+					icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
+					if (icon != NULL)
 					{
-						int iDesktopNumber = cairo_dock_get_current_desktop ();
-
-						int data[2] = {iDesktopNumber, GPOINTER_TO_INT (pDock)};
-						icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
-						_cairo_dock_hide_show_windows_on_other_desktops (&Xid, icon, data);
+						icon->iNumDesktop = cairo_dock_get_window_desktop (Xid);
+						if (myTaskBar.bAppliOnCurrentDesktopOnly)
+						{
+							int iDesktopNumber = cairo_dock_get_current_desktop ();
+	
+							int data[2] = {iDesktopNumber, GPOINTER_TO_INT (pDock)};
+							_cairo_dock_hide_show_windows_on_other_desktops (&Xid, icon, data);
+						}
 					}
 				}
 				else
@@ -1256,6 +1257,7 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 
 	Window Xid;
 	Icon *icon;
+	int iStackOrder = 0;
 	gpointer pOriginalXid;
 	gboolean bAppliAlreadyRegistered;
 	gboolean bUpdateMainDockSize = FALSE;
@@ -1277,6 +1279,7 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 			if (icon != NULL)
 			{
 				icon->iLastCheckTime = iTime;
+				icon->iStackOrder = iStackOrder ++;
 				if ((icon->bIsHidden || ! myTaskBar.bHideVisibleApplis) && (! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_window_is_on_current_desktop (Xid)))
 				{
 					cd_message (" insertion de %s ... (%d)", icon->acName, icon->iLastCheckTime);
@@ -1308,6 +1311,7 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 		else if (icon != NULL)
 		{
 			icon->iLastCheckTime = iTime;
+			icon->iStackOrder = iStackOrder ++;
 		}
 	}
 	if (pCairoContext != NULL)
@@ -1341,15 +1345,17 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 	//\__________________ On cree les icones de toutes ces applis.
 	CairoDock *pParentDock;
 	gboolean bUpdateMainDockSize = FALSE;
+	int iStackOrder = 0;
 	Window Xid;
 	Icon *pIcon;
 	for (i = 0; i < iNbWindows; i ++)
 	{
 		Xid = pXWindowsList[i];
 		pIcon = cairo_dock_create_icon_from_xwindow (pCairoContext, Xid, pDock);
-
+		
 		if (pIcon != NULL)
 		{
+			pIcon->iStackOrder = iStackOrder ++;
 			if ((pIcon->bIsHidden || ! myTaskBar.bHideVisibleApplis) && (! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_window_is_on_current_desktop (Xid)))
 			{
 				pParentDock = cairo_dock_insert_appli_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);

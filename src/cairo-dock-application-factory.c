@@ -546,6 +546,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 		&icon->windowGeometry.y,
 		&icon->windowGeometry.width,
 		&icon->windowGeometry.height);
+	icon->iNumDesktop = cairo_dock_get_window_desktop (Xid);
 	#ifdef HAVE_XEXTEND
 	if (myTaskBar.bShowThumbnail)
 	{

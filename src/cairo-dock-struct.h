@@ -756,6 +756,9 @@ struct _Icon {
 	gpointer pbuffer;
 	GPtrArray *pNotificationsTab;
 	CairoDataRenderer *pDataRenderer;
+	gint iNumDesktop;
+	gint iViewPortX, iViewPortY;
+	gint iStackOrder;
 };
 
 

@@ -1109,8 +1109,10 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommandFormat, gchar *cWo
 
 gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState)
 {
+	cd_debug ("%s (%s)", __func__, icon->acName);
 	if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))
 	{
+		cd_debug (" uri launcher");
 		gboolean bIsMounted = FALSE;
 		if (icon->iVolumeID > 0)
 		{
@@ -1132,6 +1134,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	}
 	else if (CAIRO_DOCK_IS_APPLI (icon) && ! ((iButtonState & GDK_SHIFT_MASK) && CAIRO_DOCK_IS_LAUNCHER (icon)) && ! CAIRO_DOCK_IS_APPLET (icon))
 	{
+		cd_debug (" appli");
 		if (cairo_dock_get_current_active_window () == icon->Xid && myTaskBar.bMinimizeOnClick)  // ne marche que si le dock est une fenêtre de type 'dock', sinon il prend le focus.
 			cairo_dock_minimize_xwindow (icon->Xid);
 		else
@@ -1140,6 +1143,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	}
 	else if (CAIRO_DOCK_IS_LAUNCHER (icon))
 	{
+		cd_debug (" launcher");
 		if (icon->acCommand != NULL && strcmp (icon->acCommand, "none") != 0)
 		{
 			if (icon->pSubDock != NULL)  // on emule un alt+tab sur la liste des applis du sous-dock.

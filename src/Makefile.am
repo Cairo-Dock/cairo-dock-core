@@ -232,4 +232,5 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-internal-labels.h\
 	cairo-dock-internal-desklets.h\
 	cairo-dock-internal-background.h\
-	cairo-dock-internal-icons.h
+	cairo-dock-internal-icons.h\
+	cairo-dock-data-renderer.h
