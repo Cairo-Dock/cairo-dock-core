@@ -90,6 +90,10 @@ AC_SUBST(glitz_required)
 
 AM_CONDITIONAL( [WITH_GLITZ], [test "$glitz_detected" = "true"] )
 
+# We use crypt(3) which may be in libc, or in libcrypt (eg FreeBSD)
+AC_CHECK_LIB(crypt, crypt, LIBCRYPT_LIBS="-lcrypt")
+AM_CONDITIONAL( [HAVE_LIBCRYPT], [test "$LIBCRYPT_LIBS" != ""] )
+AC_SUBST(LIBCRYPT_LIBS)
 
 AC_CONFIG_FILES([Makefile
 		cairo-dock.pc

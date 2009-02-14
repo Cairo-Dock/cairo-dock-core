@@ -14,6 +14,17 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef HAVE_LIBCRYPT
+/* libC crypt */
+#include "crypt.h"
+
+static char DES_crypt_key[64] =
+{
+    1,0,0,1,1,1,0,0, 1,0,1,1,1,0,1,1, 1,1,0,1,0,1,0,1, 1,1,0,0,0,0,0,1,
+    0,0,0,1,0,1,1,0, 1,1,1,0,1,1,1,0, 1,1,1,0,0,1,0,0, 1,0,1,0,1,0,1,1
+}; 
+#endif
+
 #include "cairo-dock-draw.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-icons.h"
@@ -36,7 +47,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-emblem.h"
 #include "cairo-dock-gauge.h"
 #include "cairo-dock-desklet.h"
-#include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-internal-position.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
@@ -607,8 +617,6 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 		cairo_dock_insert_separators_in_dock (pDock);
 	}
 	
-	cairo_dock_create_icon_pbuffer ();
-	
 	GTimeVal time_val;
 	g_get_current_time (&time_val);  // on pourrait aussi utiliser un compteur statique a la fonction ...
 	double fTime = time_val.tv_sec + time_val.tv_usec * 1e-6;
@@ -831,4 +839,129 @@ void cairo_dock_get_version_from_string (gchar *cVersionString, int *iMajorVersi
 		}
 	}
 	g_strfreev (cVersions);
+}
+
+void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecryptedString )
+{
+#ifdef HAVE_LIBCRYPT
+	gchar *input = g_strdup(cEncryptedString);
+	gchar *shifted_input = input;
+	gchar **output = cDecryptedString; 
+
+  char *last_char_in_input = input + strlen(input);
+  char *current_output = NULL;
+  if( output && strlen(input)>0 )
+  {
+    *output = g_malloc( (strlen(input)+1)/3 );
+    current_output = *output;
+  }
+  else
+  {
+  	return;
+	}
+
+//  g_print( "Password (before decrypt): %s\n", input );
+
+  for( ; shifted_input < last_char_in_input; shifted_input += 16+8, current_output += 8 )
+  {
+    unsigned int block[8];
+    char txt[64];
+    int i = 0, j = 0;
+    unsigned char current_letter = 0;
+    
+    memset( txt, 0, 64 );
+
+    shifted_input[16+8-1] = 0; // cut the string
+
+    sscanf( shifted_input, "%X-%X-%X-%X-%X-%X-%X-%X",
+    &block[0], &block[1], &block[2], &block[3], &block[4], &block[5], &block[6], &block[7] );
+
+    // process the eight first characters of "input"
+    for( i = 0; i < 8 ; i++ )
+      for ( j = 0; j < 8; j++ )
+        txt[i*8+j] = block[i] >> j & 1;
+    
+    setkey( DES_crypt_key );
+    encrypt( txt, 1 );  // decrypt
+
+    for ( i = 0; i < 8; i++ )
+    {
+      current_output[i] = 0;
+      for ( j = 0; j < 8; j++ )
+      {
+        current_output[i] |= txt[i*8+j] << j;
+      }
+    }
+  }
+
+  *current_output = 0;
+
+//  g_print( "Password (after decrypt): %s\n", *output );
+
+	g_free( input );
+
+#else
+  if( cEncryptedString )
+  {
+		*cDecryptedString = g_strdup( cEncryptedString );
+	}
+#endif
+}
+
+void cairo_dock_encrypt_string( const gchar *cDecryptedString,  gchar **cEncryptedString )
+{
+#ifdef HAVE_LIBCRYPT
+	const gchar *input = cDecryptedString;
+	gchar **output = cEncryptedString;
+
+  const char *last_char_in_input = input + strlen(input);
+  char *current_output = NULL;
+  if( output )
+  {
+    *output = g_malloc( strlen(input)*3+1 );
+    current_output = *output;
+  }
+  else
+  {
+  	return;
+	}
+
+//  g_print( "Password (before encrypt): %s\n", input );
+
+  for( ; input < last_char_in_input; input += 8, current_output += 16+8 )
+  {
+    char txt[64];
+    unsigned int i = 0, j = 0;
+    unsigned char current_letter = 0;
+    
+    memset( txt, 0, 64 );
+    
+    // process the eight first characters of "input"
+    for( i = 0; i < strlen(input) && i < 8 ; i++ )
+      for ( j = 0; j < 8; j++ )
+        txt[i*8+j] = input[i] >> j & 1;
+    
+    setkey( DES_crypt_key );
+    encrypt( txt, 0 );  // encrypt
+
+    for ( i = 0; i < 8; i++ )
+    {
+      current_letter = 0;
+      for ( j = 0; j < 8; j++ )
+      {
+        current_letter |= txt[i*8+j] << j;
+      }
+      snprintf( current_output + i*3, 4, "%02X-", (unsigned char)current_letter );
+    }
+  }
+
+  *(current_output-1) = 0;
+
+//  g_print( "Password (after encrypt): %s\n", *output );
+#else
+  if( cDecryptedString )
+  {
+		*cEncryptedString = g_strdup( cDecryptedString );
+	}
+#endif
 }

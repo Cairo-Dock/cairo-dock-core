@@ -1283,6 +1283,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case 'P' :  // string avec un selecteur de font a cote du GtkEntry.
 			case 'r' :  // string representee par son numero dans une liste de choix.
 			case 'k' :  // string avec un selecteur de touche clavier (Merci Ctaf !)
+			case 'p' :  // string type "password", crypte dans le .conf et cache dans l'UI
 				pEntry = NULL;
 				pDescriptionLabel = NULL;
 				pPreviewImage = NULL;
@@ -1296,7 +1297,18 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					{
 						pOneWidget = gtk_entry_new ();
 						pEntry = pOneWidget;
-						gtk_entry_set_text (GTK_ENTRY (pOneWidget), cValue);
+						if( iElementType == 'p' ) // password mode
+						{
+							gtk_entry_set_visibility(GTK_ENTRY (pOneWidget), FALSE);
+							gchar *cDecryptedString = NULL;
+							cairo_dock_decrypt_string( cValue,  &cDecryptedString );
+							gtk_entry_set_text (GTK_ENTRY (pOneWidget), cDecryptedString);
+							g_free( cDecryptedString );
+						}
+						else
+						{
+							gtk_entry_set_text (GTK_ENTRY (pOneWidget), cValue);
+						}
 					}
 					else
 					{
@@ -2008,10 +2020,21 @@ static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFil
 	}
 	else if (GTK_IS_ENTRY (pOneWidget))
 	{
-		const gchar *cValue = gtk_entry_get_text (GTK_ENTRY (pOneWidget));
+		gchar *cValue = NULL;
+		const gchar *cWidgetValue = gtk_entry_get_text (GTK_ENTRY (pOneWidget));
+		if( !gtk_entry_get_visibility(GTK_ENTRY (pOneWidget)) )
+		{
+			cairo_dock_encrypt_string( cWidgetValue,  &cValue );
+		}
+		else
+		{
+			cValue = g_strdup( cWidgetValue );
+		}
 		const gchar* const * cPossibleLocales = g_get_language_names ();
 		gchar *cKeyNameFull, *cTranslatedValue;
-		while (cPossibleLocales[i] != NULL)  // g_key_file_set_locale_string ne marche pas avec une locale NULL comme le fait 'g_key_file_get_locale_string', il faut donc le faire a la main !
+		// g_key_file_set_locale_string ne marche pas avec une locale NULL comme le fait 'g_key_file_get_locale_string', il faut donc le faire a la main !
+		
+		for (i = 0; cPossibleLocales[i] != NULL; i++)  
 		{
 			cKeyNameFull = g_strdup_printf ("%s[%s]", cKeyName, cPossibleLocales[i]);
 			cTranslatedValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyNameFull, NULL);
@@ -2022,12 +2045,13 @@ static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFil
 				break;
 				}
 			g_free (cTranslatedValue);
-			i ++;
 		}
 		if (cPossibleLocales[i] != NULL)
 			g_key_file_set_locale_string (pKeyFile, cGroupName, cKeyName, cPossibleLocales[i], cValue);
 		else
 			g_key_file_set_string (pKeyFile, cGroupName, cKeyName, cValue);
+
+		g_free( cValue );
 	}
 	else if (GTK_IS_TREE_VIEW (pOneWidget))
 	{

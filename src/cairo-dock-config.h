@@ -163,6 +163,20 @@ CairoDockDesktopEnv cairo_dock_guess_environment (void);
 void cairo_dock_get_version_from_string (gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion);
 
 
+/**
+* Decrypte une chaine de caracteres (DES-encryption de libcrypt).
+*@param cEncryptedString la version encryptee de la chaine.
+*@param cDecryptedString la version non encryptee de la chaine.
+*/
+void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecryptedString );
+
+/**
+* Crypte une chaine de caracteres (DES-encryption de libcrypt).
+*@param cDecryptedString la version non encryptee de la chaine.
+*@param cEncryptedString la version encryptee de la chaine.
+*/
+void cairo_dock_encrypt_string( const gchar *cDecryptedString,  gchar **cEncryptedString );
+
 #define DEFINE_PRE_INIT(cGroupName) \
 void cairo_dock_pre_init_##cGroupName (CairoDockInternalModule *pModule)
 

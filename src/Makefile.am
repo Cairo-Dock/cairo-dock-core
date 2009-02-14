@@ -13,12 +13,17 @@ if WITH_XEXTEND
 have_xextend=-DHAVE_XEXTEND="1"
 endif
 
+if HAVE_LIBCRYPT
+have_libcrypt=-DHAVE_LIBCRYPT=1
+endif
+
 cairo_dock_CFLAGS = \
 	$(PACKAGE_CFLAGS) \
 	$(GLITZ_CFLAGS) \
 	$(have_glitz)\
 	$(XEXTEND_CFLAGS) \
 	$(have_xextend)\
+	$(have_libcrypt) \
 	-DCAIRO_DOCK_SHARE_DATA_DIR=\""$(pkgdatadir)"\"\
 	-DCAIRO_DOCK_SHARE_THEMES_DIR=\""$(pkgdatadir)/themes"\"\
 	-DCAIRO_DOCK_MODULES_DIR=\""$(libdir)/$(PACKAGE)"\"\
@@ -49,6 +54,7 @@ cairo_dock_LDFLAGS = \
 cairo_dock_LDADD = \
 	$(GLITZ_LIBS) \
 	$(XEXTEND_LIBS) \
+	$(LIBCRYPT_LIBS) \
 	$(PACKAGE_LIBS)
 
 cairo_dock_SOURCES = \
