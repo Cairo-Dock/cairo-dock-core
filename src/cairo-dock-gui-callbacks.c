@@ -32,14 +32,14 @@ extern CairoDock *g_pMainDock;
 static CairoDialog *s_pDialog = NULL;
 static int s_iSidShowGroupDialog = 0;
 
-void on_click_category_button (GtkButton *button, gpointer *data)
+void on_click_category_button (GtkButton *button, gpointer data)
 {
 	int iCategory = GPOINTER_TO_INT (data);
 	g_print ("%s (%d)\n", __func__, iCategory);
 	cairo_dock_show_one_category (iCategory);
 }
 
-void on_click_all_button (GtkButton *button, gpointer *data)
+void on_click_all_button (GtkButton *button, gpointer data)
 {
 	g_print ("%s ()\n", __func__);
 	cairo_dock_show_all_categories ();
@@ -52,7 +52,7 @@ void on_click_group_button (GtkButton *button, CairoDockGroupDescription *pGroup
 	cairo_dock_show_group (pGroupDescription);
 }
 
-static void _show_group_or_category (gpointer *pPlace)
+static void _show_group_or_category (gpointer pPlace)
 {
 	if (pPlace == NULL)
 		cairo_dock_show_all_categories ();
@@ -71,7 +71,7 @@ static void _show_group_or_category (gpointer *pPlace)
 		cairo_dock_show_group (pPlace);
 	}
 }
-void on_click_back_button (GtkButton *button, gpointer *data)
+void on_click_back_button (GtkButton *button, gpointer data)
 {
 	gpointer pPrevPlace = cairo_dock_get_previous_widget ();
 	_show_group_or_category (pPrevPlace);
@@ -453,5 +453,7 @@ void cairo_dock_clear_filter (GtkButton *pButton, GtkEntry *pEntry)
 	gtk_entry_set_text (pEntry, "");
 	gpointer pCurrentPlace = cairo_dock_get_current_widget ();
 	g_print ("pCurrentPlace : %x\n", pCurrentPlace);
-	_show_group_or_category (pCurrentPlace);
+	//_show_group_or_category (pCurrentPlace);
+	gchar *keyword[2] = {"fabounetfabounetfabounet", NULL};
+	cairo_dock_apply_current_filter (keyword, FALSE, FALSE, FALSE, FALSE);
 }

@@ -279,6 +279,8 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		cairo_dock_reload_buffers_in_all_docks (TRUE);  // TRUE <=> y compris les applets.
 	}
 	
+	cairo_dock_create_icon_pbuffer ();
+	
 	if ((pIcons->bUseSeparator && ! pPrevIcons->bUseSeparator) ||
 		(pPrevIcons->bMixAppletsAndLaunchers != pIcons->bMixAppletsAndLaunchers) ||
 		pPrevIcons->cSeparatorImage != pIcons->cSeparatorImage ||

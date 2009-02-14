@@ -31,8 +31,12 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #define CAIRO_DOCK_THEME_PANEL_HEIGHT 400
 #define CAIRO_DOCK_THEME_SERVER "http://themes.cairo-dock.org"
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"
-#define CAIRO_DOCK_PREFIX_NET_THEME "(Net)  "
+#define CAIRO_DOCK_PREFIX_NET_THEME "(Net)   "
+#define CAIRO_DOCK_PREFIX_USER_THEME "(User)  "
+#define CAIRO_DOCK_PREFIX_LOCAL_THEME "(Local) "
 #define CAIRO_DOCK_DEFAULT_THEME_LIST_NAME "liste.txt"
+#define CAIRO_DOCK_DL_NB_RETRY 2
+#define CAIRO_DOCK_DL_TIMEOUT 3
 
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cConfFile;
@@ -71,7 +75,7 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 	gchar *cThemePath;
 	const gchar* cThemeName;
 	int iType = (strncmp (cThemesDir, "/usr", 4) == 0 ? 0 : 1);
-	const gchar *cPrefix = (iType == 0 ? "(local) " : "(user)  ");
+	const gchar *cPrefix = (iType == 0 ? CAIRO_DOCK_PREFIX_LOCAL_THEME : CAIRO_DOCK_PREFIX_USER_THEME);
 	CairoDockTheme *pTheme;
 	do
 	{
@@ -114,7 +118,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 		while (gtk_events_pending ())
 			gtk_main_iteration ();
 	}
-	gchar *cCommand = g_strdup_printf ("%s wget \"%s/%s/%s\" -O \"%s\" -t 2 -T 2%s", (iShowActivity == 2 ? "xterm -e '" : ""), cServerAdress, cDistantFilePath, cDistantFileName, cTmpFilePath, (iShowActivity == 2 ? "'" : ""));
+	gchar *cCommand = g_strdup_printf ("%s wget \"%s/%s/%s\" -O \"%s\" -t %d -T %d%s", (iShowActivity == 2 ? "xterm -e '" : ""), cServerAdress, cDistantFilePath, cDistantFileName, cTmpFilePath, CAIRO_DOCK_DL_NB_RETRY, CAIRO_DOCK_DL_TIMEOUT, (iShowActivity == 2 ? "'" : ""));
 	int r = system (cCommand);
 	if (r != 0)
 	{

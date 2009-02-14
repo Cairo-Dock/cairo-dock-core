@@ -50,5 +50,11 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 void cairo_dock_apply_desktop_background (CairoContainer *pContainer);
 
 
+GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pContext);
+void cairo_dock_create_icon_pbuffer (void);
+gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);
+
+
 G_END_DECLS
 #endif

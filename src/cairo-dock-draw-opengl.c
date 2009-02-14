@@ -1,4 +1,4 @@
- /*********************************************************************************
+/*********************************************************************************
 
 This file is a part of the cairo-dock program,
 released under the terms of the GNU General Public License.
@@ -76,6 +76,7 @@ extern cairo_surface_t *g_pClassIndicatorSurface;
 extern double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
 extern cairo_surface_t *g_pVisibleZoneSurface;
 extern gboolean g_bUseOpenGL;
+extern gboolean g_bIndirectRendering;
 extern GdkGLConfig* g_pGlConfig;
 
 
@@ -89,7 +90,11 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHoriz
 	
 	//\__________________ On place l'indicateur.
 	if (icon->fOrientation != 0)
-		glRotatef (icon->fOrientation, 0., 0., 1.);
+	{
+		glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
+		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
+		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
+	}
 	double fY;
 	if (myIndicators.bLinkIndicatorWithIcon)  // il se deforme et rebondit avec l'icone.
 	{
@@ -147,7 +152,11 @@ static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDo
 	}
 	
 	if (icon->fOrientation != 0)
-		glRotatef (icon->fOrientation, 0., 0., 1.);
+	{
+		glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
+		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
+		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
+	}
 	
 	glColor4f(1., 1., 1., 1.);
 	cairo_dock_set_icon_scale (icon, pDock, 1.);
@@ -162,7 +171,11 @@ static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bHoriz
 	}
 	
 	if (icon->fOrientation != 0)
-		glRotatef (icon->fOrientation, 0., 0., 1.);
+	{
+		glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
+		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
+		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
+	}
 	
 	if (myIndicators.bZoomClassIndicator)
 		fRatio *= icon->fScale;
@@ -540,7 +553,11 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	}
 	glTranslatef (0., 0., - icon->fHeight * (1+myIcons.fAmplitude));
 	if (icon->fOrientation != 0)
-		glRotatef (icon->fOrientation, 0., 0., 1.);
+	{
+		glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
+		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
+		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
+	}
 	if (icon->iRotationX != 0)
 		glRotatef (icon->iRotationX, 1., 0., 0.);
 	if (icon->iRotationY != 0)
@@ -599,8 +616,9 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			fOffsetX = pDock->iCurrentWidth - (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2);
 		if (icon->fOrientation != 0 && ! mySystem.bTextAlwaysHorizontal)
 		{
-			//cairo_rotate (pCairoContext, icon->fOrientation);
-			glRotatef (icon->fOrientation, 0., 0., 1.);
+			glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
+			glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
+			glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
 		}
 		
 		if (! pDock->bHorizontalDock && mySystem.bTextAlwaysHorizontal)
@@ -1125,7 +1143,7 @@ void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor,
 	
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, pVertexTab);
-	glDrawArrays(GL_LINE_LOOP, 0, iNbVertex);
+	glDrawArrays(GL_LINE_STRIP, 0, iNbVertex);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
 	glDisable(GL_LINE_SMOOTH);
@@ -1211,10 +1229,15 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 			if (!pVisInfo)
 			{
 				cd_warning ("this FBConfig has no visual.");
+				XFree (pVisInfo);
+				pVisInfo = NULL;
 			}
 			else
 				break;
 		}
+		if (pFBConfigs)
+			XFree (pFBConfigs);
+		
 		if (pVisInfo == NULL)
 		{
 			cd_warning ("still no visual, this is the last chance");
@@ -1268,5 +1291,163 @@ void cairo_dock_apply_desktop_background (CairoContainer *pContainer)
 		
 		glDisable (GL_TEXTURE_2D);
 		glDisable (GL_BLEND);
+	}
+}
+
+
+
+
+GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pContext)
+{
+	Display *XDisplay = cairo_dock_get_Xdisplay ();
+	
+	GLXFBConfig *pFBConfigs; 
+	XRenderPictFormat *pPictFormat = NULL;
+	int visAttribs[] = {
+		GLX_DRAWABLE_TYPE, 	GLX_PBUFFER_BIT | GLX_WINDOW_BIT,
+		GLX_RENDER_TYPE, 		GLX_RGBA_BIT,
+		GLX_RED_SIZE, 		1,
+		GLX_GREEN_SIZE, 		1,
+		GLX_BLUE_SIZE, 		1,
+		GLX_ALPHA_SIZE, 		1,
+		GLX_DEPTH_SIZE, 		1,
+		None};
+	
+	XVisualInfo *pVisInfo = NULL;
+	int i, iNumOfFBConfigs = 0;
+	pFBConfigs = glXChooseFBConfig (XDisplay,
+		DefaultScreen (XDisplay),
+		visAttribs,
+		&iNumOfFBConfigs);
+	g_return_val_if_fail (iNumOfFBConfigs > 0, 0);
+	cd_debug (" -> %d FBConfig(s) pour le pbuffer", iNumOfFBConfigs);
+	
+	
+	int pbufAttribs [] = {
+		GLX_PBUFFER_WIDTH, iWidth,
+		GLX_PBUFFER_HEIGHT, iHeight,
+		GLX_LARGEST_PBUFFER, True,
+		None};
+	GLXPbuffer pbuffer = glXCreatePbuffer (XDisplay, pFBConfigs[0], pbufAttribs);
+	
+	
+	pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[0]);
+	
+	GdkGLContext *pGlContext = gtk_widget_get_gl_context (g_pMainDock->pWidget);
+	GLXContext mainContext = GDK_GL_CONTEXT_GLXCONTEXT (pGlContext);
+	*pContext = glXCreateContext (XDisplay, pVisInfo, mainContext, ! g_bIndirectRendering);
+	
+	XFree (pVisInfo);
+	XFree (pFBConfigs);
+	
+	return pbuffer;
+}
+
+static GLXPbuffer s_iconPbuffer = 0;
+static GLXContext s_iconContext = 0;
+int s_iIconPbufferWidth = 0, s_iIconPbufferHeight = 0;
+void cairo_dock_create_icon_pbuffer (void)
+{
+	int iWidth = 0, iHeight = 0;
+	int i;
+	for (i = 0; i < CAIRO_DOCK_NB_TYPES; i += 2)
+	{	
+		iWidth = MAX (iWidth, myIcons.tIconAuthorizedWidth[i]);
+		iHeight = MAX (iHeight, myIcons.tIconAuthorizedHeight[i]);
+	}
+	if (iWidth == 0)
+		iWidth = 48;
+	if (iHeight == 0)
+		iHeight = 48;
+	iWidth *= (1 + myIcons.fAmplitude);
+	iHeight *= (1 + myIcons.fAmplitude);
+	
+	if (s_iIconPbufferWidth != iWidth || s_iIconPbufferHeight != iHeight)
+	{
+		Display *XDisplay = cairo_dock_get_Xdisplay ();
+		if (s_iconPbuffer != 0)
+		{
+			glXDestroyPbuffer (XDisplay, s_iconPbuffer);
+			glXDestroyContext (XDisplay, s_iconContext);
+		}
+		s_iconPbuffer = cairo_dock_create_pbuffer (iWidth, iHeight, &s_iconContext);
+		s_iIconPbufferWidth = iWidth;
+		s_iIconPbufferHeight = iHeight;
+		
+		if (glXMakeCurrent (XDisplay, s_iconPbuffer, s_iconContext))
+		{
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glOrtho(0, iWidth, 0, iHeight, 0.0, 500.0);
+			glMatrixMode (GL_MODELVIEW);
+		}
+	}
+}
+
+gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
+{
+	if (CAIRO_DOCK_IS_DESKLET (pContainer))
+	{
+		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pContainer->pWidget);
+		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pContainer->pWidget);
+		if (! gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+			return FALSE;
+		
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0, pContainer->iWidth, 0, pContainer->iHeight, 0.0, 500.0);
+		glMatrixMode (GL_MODELVIEW);
+		
+		glLoadIdentity ();
+		gluLookAt (pContainer->iWidth/2, pContainer->iHeight/2, 3.,
+			pContainer->iWidth/2, pContainer->iHeight/2, 0.,
+			0.0f, 1.0f, 0.0f);
+		glTranslatef (pContainer->iWidth/2, pContainer->iHeight/2, -3.);
+	}
+	else if (s_iconContext != 0)
+	{
+		Display *XDisplay = cairo_dock_get_Xdisplay ();
+		if (! glXMakeCurrent (XDisplay, s_iconPbuffer, s_iconContext))
+			return FALSE;
+		glLoadIdentity ();
+	}
+	else
+		return FALSE;
+	
+	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	return TRUE;
+}
+
+void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
+{
+	// taille de la texture
+	double fMaxScale = cairo_dock_get_max_scale (pContainer);
+	double fRatio = pContainer->fRatio;
+	int iWidth = (int) pIcon->fWidth / fRatio * fMaxScale;
+	int iHeight = (int) pIcon->fHeight / fRatio * fMaxScale;
+	
+	// copie dans notre texture
+	glEnable (GL_TEXTURE_2D);
+	glBindTexture (GL_TEXTURE_2D, pIcon->iIconTexture);
+	glCopyTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, iWidth, iHeight, 0);  // target, num mipmap, format, x,y, w,h, border.
+	glDisable (GL_TEXTURE_2D);
+	
+	//end
+	if (CAIRO_DOCK_IS_DESKLET (pContainer))
+	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluPerspective(60.0, 1.0*(GLfloat)pContainer->iWidth/(GLfloat)pContainer->iHeight, 1., 4*pContainer->iHeight);
+		glMatrixMode (GL_MODELVIEW);
+		
+		glLoadIdentity ();
+		gluLookAt (pContainer->iWidth/2, pContainer->iHeight/2, 3.,
+			pContainer->iWidth/2, pContainer->iHeight/2, 0.,
+			0.0f, 1.0f, 0.0f);
+		glTranslatef (0.0f, 0.0f, -3);
+		
+		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pContainer->pWidget);
+		gdk_gl_drawable_gl_end (pGlDrawable);
 	}
 }

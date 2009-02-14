@@ -9,6 +9,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h> 
 #include <cairo.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
@@ -1071,10 +1072,17 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 }
 
 
-static gpointer _cairo_dock_launch_threaded (gchar *cCommand)
+static gpointer _cairo_dock_launch_threaded (gchar **data)
 {
-	int r = system (cCommand);
-	g_free (cCommand);
+	int r;
+	if (data[1] != NULL)
+	{
+		chdir (data[1]);
+	}
+	r = system (data[0]);
+	g_free (data[0]);
+	g_free (data[1]);
+	g_free (data);
 	return NULL;
 }
 gboolean cairo_dock_launch_command_full (const gchar *cCommandFormat, gchar *cWorkingDirectory, ...)
@@ -1096,7 +1104,10 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommandFormat, gchar *cWo
 	else
 		cBGCommand = cCommand;
 	GError *erreur = NULL;
-	GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_launch_threaded, cBGCommand, FALSE, &erreur);
+	gchar **data = g_new (gchar *, 2);
+	data[0] = cBGCommand;
+	data[1] = g_strdup (cWorkingDirectory);
+	GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_launch_threaded, data, FALSE, &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning ("couldn't launch this command (%s)", erreur->message);
@@ -1109,7 +1120,8 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommandFormat, gchar *cWo
 
 gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState)
 {
-	cd_debug ("%s (%s)", __func__, icon->acName);
+	cd_debug ("%s (%s)", __func__, (icon ? icon->acName : "no icon"));
+	cd_warning ("\n\n\n TESTER LE WORKING DIRECTORY !\n\n");
 	if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))
 	{
 		cd_debug (" uri launcher");

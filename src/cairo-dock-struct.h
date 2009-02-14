@@ -27,6 +27,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <cairo-glitz.h>
 #endif
 #include <GL/gl.h>
+#include <GL/glx.h>
 
 
 typedef struct _CairoDockRenderer CairoDockRenderer;
@@ -111,6 +112,7 @@ struct _CairoContainer {
 	gdouble fRatio;
 	/// TRUE ssi le container est reflechissant.
 	gboolean bUseReflect;
+	GLXContext *pContext;
 };
 
 #define CAIRO_CONTAINER(p) ((CairoContainer *) (p))
@@ -939,6 +941,8 @@ struct _CairoDesklet {
 	guint time;
 	GLuint iBackGroundTexture;
 	GLuint iForeGroundTexture;
+	gint iAnimationStep;
+	gboolean bKeepSlowAnimation;
 };
 
 typedef enum {

@@ -473,10 +473,10 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 
 void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)
 {
-	if (pIcon->iAnimationState == CAIRO_DOCK_STATE_REMOVE_INSERT)
-		return ;
 	cairo_dock_stop_icon_animation (pIcon);
 	
+	if (cAnimation == NULL || iNbRounds == 0 || pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)
+		return ;
 	cairo_dock_notify (CAIRO_DOCK_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
 	cairo_dock_start_icon_animation (pIcon, pDock);
 }
@@ -484,12 +484,6 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gch
 static gboolean _cairo_dock_animation (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %d, %d)\n", __func__, pDock->iRefCount, pDock->bIsShrinkingDown, pDock->bIsGrowingUp);
-	gboolean bIconIsAnimating;
-	if (g_bUseOpenGL && pDock->render_opengl != NULL)  /// a supprimer quand les plug-ins gereront le damage ...
-	{
-		//cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
-	}
-	
 	if (pDock->bIsShrinkingDown)
 	{
 		pDock->bIsShrinkingDown = cairo_dock_shrink_down (pDock);
@@ -514,6 +508,7 @@ static gboolean _cairo_dock_animation (CairoDock *pDock)
 		pDock->bKeepSlowAnimation = FALSE;
 	}
 	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
+	gboolean bIconIsAnimating;
 	Icon *icon;
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
@@ -529,13 +524,13 @@ static gboolean _cairo_dock_animation (CairoDock *pDock)
 		{
 			cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON_SLOW, icon, pDock, &bIconIsAnimating);
 			pDock->bKeepSlowAnimation |= bIconIsAnimating;
-			bContinue |= bIconIsAnimating;
 		}
 		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
 		bContinue |= bIconIsAnimating;
 		if (! bIconIsAnimating)
 			icon->iAnimationState = CAIRO_DOCK_STATE_REST;
 	}
+	bContinue |= pDock->bKeepSlowAnimation;
 	
 	if (! cairo_dock_handle_inserting_removing_icons (pDock))
 	{
@@ -545,8 +540,7 @@ static gboolean _cairo_dock_animation (CairoDock *pDock)
 	
 	if (bUpdateSlowAnimation)
 	{
-		cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK_SLOW, pDock, &bContinue);
-		pDock->bKeepSlowAnimation |= bContinue;
+		cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK_SLOW, pDock, &pDock->bKeepSlowAnimation);
 	}
 	cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);
 	
@@ -576,10 +570,33 @@ static gboolean _cairo_desklet_animation (CairoDesklet *pDesklet)
 		///bContinue |= icon->bOnMouseOverAnimating;
 	}*/
 	
+	gboolean bUpdateSlowAnimation = FALSE;
+	pDesklet->iAnimationStep ++;
+	if (pDesklet->iAnimationStep * pDesklet->iAnimationDeltaT >= 90)
+	{
+		bUpdateSlowAnimation = TRUE;
+		pDesklet->iAnimationStep = 0;
+		pDesklet->bKeepSlowAnimation = FALSE;
+	}
+	
+	if (bUpdateSlowAnimation)
+	{
+		if (pDesklet->pIcon != NULL)
+		{
+			gboolean bIconIsAnimating = FALSE;
+			cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON_SLOW, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
+			pDesklet->bKeepSlowAnimation |= bIconIsAnimating;
+			if (! bIconIsAnimating)
+				pDesklet->pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
+		}
+		
+		cairo_dock_notify (CAIRO_DOCK_UPDATE_DESKLET_SLOW, pDesklet, &pDesklet->bKeepSlowAnimation);
+	}
+	
 	cairo_dock_notify (CAIRO_DOCK_UPDATE_DESKLET, pDesklet, &bContinue);
 	
-	gtk_widget_queue_draw (pDesklet->pWidget);
-	if (! bContinue)
+	///gtk_widget_queue_draw (pDesklet->pWidget);
+	if (! bContinue && ! pDesklet->bKeepSlowAnimation)
 	{
 		pDesklet->iSidGLAnimation = 0;
 		return FALSE;
@@ -587,6 +604,7 @@ static gboolean _cairo_desklet_animation (CairoDesklet *pDesklet)
 	else
 		return TRUE;
 }
+
 
 void cairo_dock_launch_animation (CairoContainer *pContainer)
 {
@@ -596,9 +614,11 @@ void cairo_dock_launch_animation (CairoContainer *pContainer)
 		switch (pContainer->iType)
 		{
 			case CAIRO_DOCK_TYPE_DOCK :
+				CAIRO_DOCK (pContainer)->bKeepSlowAnimation = TRUE;
 				pContainer->iSidGLAnimation = g_timeout_add (pContainer->iAnimationDeltaT, (GSourceFunc)_cairo_dock_animation, pContainer);
 			break ;
 			case CAIRO_DOCK_TYPE_DESKLET :
+				CAIRO_DESKLET (pContainer)->bKeepSlowAnimation = TRUE;
 				pContainer->iSidGLAnimation = g_timeout_add (pContainer->iAnimationDeltaT, (GSourceFunc) _cairo_desklet_animation, pContainer);
 			break;
 			default :

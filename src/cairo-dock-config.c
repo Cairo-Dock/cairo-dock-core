@@ -36,6 +36,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-emblem.h"
 #include "cairo-dock-gauge.h"
 #include "cairo-dock-desklet.h"
+#include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-internal-position.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
@@ -605,6 +606,8 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	{
 		cairo_dock_insert_separators_in_dock (pDock);
 	}
+	
+	cairo_dock_create_icon_pbuffer ();
 	
 	GTimeVal time_val;
 	g_get_current_time (&time_val);  // on pourrait aussi utiliser un compteur statique a la fonction ...

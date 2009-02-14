@@ -47,8 +47,9 @@ void cairo_dock_start_icon_animation (Icon *icon, CairoDock *pDock);
 
 void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds);
 #define cairo_dock_stop_icon_animation(pIcon) do { \
-	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon); \
-	pIcon->iAnimationState = CAIRO_DOCK_STATE_REST; } while (0)
+	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT) {\
+		cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon); \
+		pIcon->iAnimationState = CAIRO_DOCK_STATE_REST; } } while (0)
 
 void cairo_dock_mark_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState);
 void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState);

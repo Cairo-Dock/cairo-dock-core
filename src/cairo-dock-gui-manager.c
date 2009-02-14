@@ -24,6 +24,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-gui-filter.h"
 #include "cairo-dock-gui-manager.h"
 
 #define CAIRO_DOCK_GROUP_ICON_SIZE 32

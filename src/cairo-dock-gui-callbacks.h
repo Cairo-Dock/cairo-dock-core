@@ -8,9 +8,9 @@
 G_BEGIN_DECLS
 
 
-void on_click_category_button (GtkButton *button, gpointer *data);
-void on_click_all_button (GtkButton *button, gpointer *data);
-void on_click_back_button (GtkButton *button, gpointer *data);
+void on_click_category_button (GtkButton *button, gpointer data);
+void on_click_all_button (GtkButton *button, gpointer data);
+void on_click_back_button (GtkButton *button, gpointer data);
 
 void on_click_group_button (GtkButton *button, CairoDockGroupDescription *pGroupDescription);
 void on_enter_group_button (GtkButton *button, CairoDockGroupDescription *pGroupDescription);
