@@ -235,7 +235,14 @@ void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 	pDock->set_subdock_position = pRenderer->set_subdock_position;
 	pDock->bUseReflect = pRenderer->bUseReflect;
 	pDock->bUseStencil = pRenderer->bUseStencil;
+	int iAnimationDeltaT = pDock->iAnimationDeltaT;
 	pDock->iAnimationDeltaT = (g_bUseOpenGL && pDock->render_opengl != NULL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT);
+	if (iAnimationDeltaT != pDock->iAnimationDeltaT && pDock->iSidGLAnimation != 0)
+	{
+		g_source_remove (pDock->iSidGLAnimation);
+		pDock->iSidGLAnimation = 0;
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
+	}
 	if (cRendererName != NULL)  // NULL n'ecrase pas le nom de l'ancienne vue.
 		pDock->cRendererName = g_strdup (cRendererName);
 }

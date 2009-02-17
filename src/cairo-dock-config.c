@@ -617,6 +617,8 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 		cairo_dock_insert_separators_in_dock (pDock);
 	}
 	
+	cairo_dock_create_icon_pbuffer ();
+	
 	GTimeVal time_val;
 	g_get_current_time (&time_val);  // on pourrait aussi utiliser un compteur statique a la fonction ...
 	double fTime = time_val.tv_sec + time_val.tv_usec * 1e-6;

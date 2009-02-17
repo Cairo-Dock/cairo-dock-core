@@ -323,7 +323,6 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 		if (cairo_dock_get_root_dock_position (cDockName, pDock))
 			cairo_dock_place_root_dock (pDock);
 	}
-	//if (! g_bUseGlitz)
 		while (gtk_events_pending ())  // on force le redessin pour eviter les carre gris.
 			gtk_main_iteration ();
 	

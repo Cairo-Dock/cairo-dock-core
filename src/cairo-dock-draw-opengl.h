@@ -10,7 +10,7 @@
 G_BEGIN_DECLS
 
 
-void cairo_dock_set_icon_scale (Icon *pIcon, CairoDock *pDock, double fZoomFactor);
+void cairo_dock_set_icon_scale (Icon *pIcon, CairoContainer *pContainer, double fZoomFactor);
 
 gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext);
 
@@ -37,6 +37,8 @@ GLuint cairo_dock_load_local_texture (const gchar *cImageName, const gchar *cDir
 void cairo_dock_render_background_opengl (CairoDock *pDock);
 
 void cairo_dock_draw_texture (GLuint iTexture, int iWidth, int iHeight);
+void cairo_dock_apply_icon_texture (Icon *pIcon);
+void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer);
 
 
 const GLfloat *cairo_dock_generate_rectangle_path (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, int *iNbPoints);
@@ -54,6 +56,10 @@ GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pCont
 void cairo_dock_create_icon_pbuffer (void);
 gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer);
 void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);
+
+
+#define cairo_dock_set_inverted_texture(icon) (icon)->bInvertedTexture = TRUE
+#define cairo_dock_texture_is_inverted(icon) ((icon)->bInvertedTexture)
 
 
 G_END_DECLS

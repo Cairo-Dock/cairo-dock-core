@@ -34,7 +34,7 @@ CairoDataRenderer *cairo_dock_new_data_renderer (const gchar *cRendererName)
 	return init ();
 }
 
-CairoDataRenderer *cairo_dock_create_data_renderer (cairo_t *pSourceContext, CairoDataRendererAttribute *pAttribute)
+CairoDataRenderer *cairo_dock_create_data_renderer (cairo_t *pSourceContext, CairoContainer *pContainer, CairoDataRendererAttribute *pAttribute)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_new_data_renderer (pAttribute->cModelName);
 	if (pRenderer == NULL)
@@ -58,55 +58,44 @@ CairoDataRenderer *cairo_dock_create_data_renderer (cairo_t *pSourceContext, Cai
 	}
 	else
 	{
-		for (i = 0; i < pRenderer->data.iNbValues; i ++)
+		if (pAttribute->bUpdateMinMax)
 		{
-			pRenderer->data.pMinMaxValues[2*i] = 1e6;
-			pRenderer->data.pMinMaxValues[2*i+1] = -1e6;
+			for (i = 0; i < pRenderer->data.iNbValues; i ++)
+			{
+				pRenderer->data.pMinMaxValues[2*i] = 1e6;
+				pRenderer->data.pMinMaxValues[2*i+1] = -1e6;
+			}
+		}
+		else
+		{
+			for (i = 0; i < pRenderer->data.iNbValues; i ++)
+			{
+				pRenderer->data.pMinMaxValues[2*i] = 0;
+				pRenderer->data.pMinMaxValues[2*i+1] = 1;
+			}
 		}
 	}
 	
 	//\_______________ On charge les parametres generaux.
-	pRenderer->iWidth = pAttribute->iWidth;
-	pRenderer->iHeight = pAttribute->iHeight;
 	pRenderer->bUpdateMinMax = pAttribute->bUpdateMinMax;
 	pRenderer->bWriteValues = pAttribute->bWriteValues;
-	pRenderer->bSmoothMovement = pAttribute->bSmoothMovement;
+	pRenderer->iLatencyTime = pAttribute->iLatencyTime;
 	pRenderer->cTitles = pAttribute->cTitles;
 	memcpy (pRenderer->fTextColor, pAttribute->fTextColor, sizeof (pRenderer->fTextColor));
-	pRenderer->dt = pAttribute->iAnimationDeltaT;
 	pRenderer->iSmoothAnimationStep = 0;
 	pRenderer->format_value = pAttribute->format_value;
-	
-	//\_______________ On charge les parametres specifiques.
-	pRenderer->interface.load (pRenderer, pSourceContext, pAttribute);
 	
 	return pRenderer;
 }
 
 static void _cairo_dock_draw_icon_texture_opengl (CairoDataRenderer *pDataRenderer, Icon *pIcon, CairoContainer *pContainer)
 {
-	/**if (pIcon->vbo)
-	{
-		// ???
-	}
-	else if (pIcon->pbuffer)
-	{
-		//GLXMakeCurrent(pIcon->pbuffer);
-		pDataRenderer->interface.render_opengl (pDataRenderer);
-		// glCopyTexSubImage2D (pIcon->iTexture);
-		// a finir...
-	}
-	else*/
-	{
-		GdkGLContext* pGlContext = gtk_widget_get_gl_context (pContainer->pWidget);
-		GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pContainer->pWidget);
-		if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
-			return ;
-		glClear (GL_COLOR_BUFFER_BIT);
-		pDataRenderer->interface.render_opengl (pDataRenderer);
-		///glTexCopySubImage2D ();
-		gdk_gl_drawable_gl_end (pGlDrawable);
-	}
+	if (! cairo_dock_begin_draw_icon (pIcon, pContainer))
+		return ;
+	
+	pDataRenderer->interface.render_opengl (pDataRenderer);
+	
+	cairo_dock_end_draw_icon (pIcon, pContainer);
 }
 static gboolean cairo_dock_update_icon_data_renderer_notification (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, gboolean *bContinueAnimation)
 {
@@ -116,21 +105,27 @@ static gboolean cairo_dock_update_icon_data_renderer_notification (gpointer pUse
 	
 	pRenderer->iSmoothAnimationStep ++;
 	int iDeltaT = (int) ceil (90. / pContainer->iAnimationDeltaT) * pContainer->iAnimationDeltaT;
-	int iNbIterations = 1000 / iDeltaT;
-	pRenderer->fLatency = 1. * (iNbIterations - pRenderer->iSmoothAnimationStep) / iNbIterations;
+	int iNbIterations = pRenderer->iLatencyTime / iDeltaT;
+	if (pRenderer->iSmoothAnimationStep < iNbIterations)
+	{
+		pRenderer->fLatency = 1. * (iNbIterations - pRenderer->iSmoothAnimationStep) / iNbIterations;
+		_cairo_dock_draw_icon_texture_opengl (pRenderer, pIcon, pContainer);
+	}
 	
-	_cairo_dock_draw_icon_texture_opengl (pRenderer, pIcon, pContainer);
-	
-	*bContinueAnimation = (pRenderer->iSmoothAnimationStep < iNbIterations);
+	*bContinueAnimation = TRUE;
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
 void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pSourceContext, CairoDataRendererAttribute *pAttribute)
 {
-	CairoDataRenderer *pRenderer = cairo_dock_create_data_renderer (pSourceContext, pAttribute);
+	CairoDataRenderer *pRenderer = cairo_dock_create_data_renderer (pSourceContext, pContainer, pAttribute);
 	cairo_dock_set_data_renderer_on_icon (pIcon, pRenderer);
 	if (pRenderer == NULL)
 		return ;
+	
+	cairo_dock_get_icon_extent (pIcon, pContainer, &pRenderer->iWidth, &pRenderer->iHeight);
+	
+	pRenderer->interface.load (pRenderer, pSourceContext, pContainer, pAttribute);
 	
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pRenderer->interface.render_opengl)
 	{
@@ -142,7 +137,7 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 
 
 
-void cairo_dock_render_data_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext, double *pNewValues)
+void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext, double *pNewValues)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
 	if (pRenderer == NULL)
@@ -172,28 +167,26 @@ void cairo_dock_render_data_on_icon (Icon *pIcon, CairoContainer *pContainer, ca
 	//\___________________ On met a jour le dessin de l'icone.
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer)&& pRenderer->interface.render_opengl)
 	{
-		if (pRenderer->bSmoothMovement)
+		pRenderer->fLatency = 0;
+		_cairo_dock_draw_icon_texture_opengl (pRenderer, pIcon, pContainer);
+		
+		if (pRenderer->iLatencyTime > 0)
 		{
 			pRenderer->iSmoothAnimationStep = 0;
 			cairo_dock_launch_animation (pContainer);
-		}
-		else
-		{
-			pRenderer->fLatency = 0;
-			_cairo_dock_draw_icon_texture_opengl (pRenderer, pIcon, pContainer);
 		}
 	}
 	else
 	{
 		cairo_save (pCairoContext);
 		//\________________ On efface tout.
-		cairo_save (pCairoContext);
 		cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 0.0);
 		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
 		cairo_paint (pCairoContext);
 		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 		
 		//\________________ On dessine.
+		cairo_save (pCairoContext);
 		pRenderer->interface.render (pRenderer, pCairoContext);
 		cairo_restore (pCairoContext);
 		
@@ -216,7 +209,7 @@ void cairo_dock_render_data_on_icon (Icon *pIcon, CairoContainer *pContainer, ca
 	}
 	
 	//\___________________ On met a jour l'info rapide si le renderer n'a pu ecrire les valeurs.
-	if (! pRenderer->bCanRenderValue && pRenderer->bWriteValues)  // on prend en charge l'ecriture des valeurs.
+	if (! pRenderer->bCanRenderValueAsText && pRenderer->bWriteValues)  // on prend en charge l'ecriture des valeurs.
 	{
 		double fValue;
 		gchar *cBuffer = g_new0 (gchar, pData->iNbValues * (CAIRO_DOCK_DATA_FORMAT_MAX_LEN+1));
@@ -248,6 +241,7 @@ void cairo_dock_free_data_renderer (CairoDataRenderer *pRenderer)
 {
 	if (pRenderer == NULL)
 		return ;
+	
 	g_free (pRenderer->data.pValuesBuffer);
 	g_free (pRenderer->data.pTabValues);
 	g_free (pRenderer->data.pMinMaxValues);
@@ -267,6 +261,9 @@ void cairo_dock_free_data_renderer (CairoDataRenderer *pRenderer)
 void cairo_dock_remove_data_renderer_on_icon (Icon *pIcon)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
+	
+	cairo_dock_remove_notification_func (CAIRO_DOCK_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification, NULL);
+	
 	cairo_dock_free_data_renderer (pRenderer);
 	cairo_dock_set_data_renderer_on_icon (pIcon, NULL);
 }
@@ -311,5 +308,4 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 	if (pRenderer != NULL && pData != NULL)
 		memcpy (&pRenderer->data, pData, sizeof (CairoDataToRenderer));
 	g_free (pData);
-	
 }

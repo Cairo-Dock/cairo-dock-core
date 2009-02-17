@@ -141,5 +141,9 @@ cairo_t *cairo_dock_create_drawing_context (CairoContainer *pContainer);
 cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, GdkRectangle *pArea, double *fBgColor);
 
 
+void cairo_dock_get_icon_extent (Icon *pIcon, CairoContainer *pContainer, int *iWidth, int *iHeight);
+void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, double *fSizeX, double *fSizeY);
+
+
 G_END_DECLS
 #endif

@@ -608,18 +608,18 @@ static gboolean _cairo_desklet_animation (CairoDesklet *pDesklet)
 
 void cairo_dock_launch_animation (CairoContainer *pContainer)
 {
-	//g_print ("%s ()\n", __func__);
 	if (pContainer->iSidGLAnimation == 0)
 	{
+		int iAnimationDeltaT = (pContainer->iAnimationDeltaT != 0 ? pContainer->iAnimationDeltaT : (g_bUseOpenGL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT));
 		switch (pContainer->iType)
 		{
 			case CAIRO_DOCK_TYPE_DOCK :
 				CAIRO_DOCK (pContainer)->bKeepSlowAnimation = TRUE;
-				pContainer->iSidGLAnimation = g_timeout_add (pContainer->iAnimationDeltaT, (GSourceFunc)_cairo_dock_animation, pContainer);
+				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc)_cairo_dock_animation, pContainer);
 			break ;
 			case CAIRO_DOCK_TYPE_DESKLET :
 				CAIRO_DESKLET (pContainer)->bKeepSlowAnimation = TRUE;
-				pContainer->iSidGLAnimation = g_timeout_add (pContainer->iAnimationDeltaT, (GSourceFunc) _cairo_desklet_animation, pContainer);
+				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc) _cairo_desklet_animation, pContainer);
 			break;
 			default :
 				cd_warning ("This type of container has no animation capability yet");

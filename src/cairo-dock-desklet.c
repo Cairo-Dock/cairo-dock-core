@@ -268,10 +268,9 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 			1. - 1.*(pDesklet->iTopSurfaceOffset + pDesklet->iBottomSurfaceOffset) / pDesklet->iHeight);
 	}
 	
-	if (pDesklet->pRenderer != NULL)  // un moteur de rendu specifique a ete fourni.
+	if (pDesklet->pRenderer != NULL && pDesklet->pRenderer->render != NULL)  // un moteur de rendu specifique a ete fourni.
 	{
-		if (pDesklet->pRenderer->render != NULL)
-			pDesklet->pRenderer->render (pCairoContext, pDesklet, bRenderOptimized);
+		pDesklet->pRenderer->render (pCairoContext, pDesklet, bRenderOptimized);
 	}
 	
 	cairo_restore (pCairoContext);
@@ -383,10 +382,9 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 			1.);
 	}
 	
-	if (pDesklet->pRenderer != NULL)  // un moteur de rendu specifique a ete fourni.
+	if (pDesklet->pRenderer != NULL && pDesklet->pRenderer->render_opengl != NULL)  // un moteur de rendu specifique a ete fourni.
 	{
-		if (pDesklet->pRenderer->render_opengl != NULL)
-			pDesklet->pRenderer->render_opengl (pDesklet);
+		pDesklet->pRenderer->render_opengl (pDesklet);
 	}
 	glPopMatrix ();
 	
@@ -551,26 +549,6 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 			G_TYPE_INT, "Desklet", "x position", iRelativePositionX,
 			G_TYPE_INT, "Desklet", "y position", iRelativePositionY,
 			G_TYPE_INVALID);
-		
-		/*GdkBitmap* pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL, pDesklet->iWidth, pDesklet->iHeight, 1);
-		cairo_t* pCairoContext = gdk_cairo_create (pShapeBitmap);
-		if (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS)
-		{
-			cairo_set_source_rgb (pCairoContext, 1, 1, 1);
-			cairo_paint (pCairoContext);
-			cairo_destroy (pCairoContext);
-		
-		
-			gtk_widget_input_shape_combine_mask (pDesklet->pWidget,
-				NULL,
-				0,
-				0);
-			gtk_widget_input_shape_combine_mask (pDesklet->pWidget,
-				pShapeBitmap,
-				0,
-				0);
-		}
-		g_object_unref ((gpointer) pShapeBitmap);*/
 	}
 	pDesklet->iSidWritePosition = 0;
 	return FALSE;
@@ -605,7 +583,6 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 			
 			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
-			//glOrtho(0, w, 0, h, 0.0, 500.0);
 			gluPerspective(60.0, 1.0*(GLfloat)w/(GLfloat)h, 1., 4*h);
 			
 			glMatrixMode (GL_MODELVIEW);
@@ -614,9 +591,6 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 				w/2, h/2, 0.,
 				0.0f, 1.0f, 0.0f);
 			glTranslatef (0.0f, 0.0f, -3);
-			
-			glClearAccum (0., 0., 0., 0.);
-			glClear (GL_ACCUM_BUFFER_BIT);
 			
 			gdk_gl_drawable_gl_end (pGlDrawable);
 		}
@@ -736,7 +710,7 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 						G_TYPE_BOOLEAN, "Desklet", "initially detached", FALSE,
 						G_TYPE_INVALID);
 					cairo_dock_reload_module_instance (icon->pModuleInstance, TRUE);
-					return FALSE;
+					return TRUE;  // interception du signal.
 				}
 			}
 			else if (pDesklet->rotatingY)
@@ -853,7 +827,7 @@ static gboolean on_motion_notify_desklet(GtkWidget *pWidget,
 		gboolean bStartAnimation = FALSE;
 		cairo_dock_notify (CAIRO_DOCK_MOUSE_MOVED, pDesklet, &bStartAnimation);
 		if (bStartAnimation)
-			cairo_dock_launch_animation (pDesklet);
+			cairo_dock_launch_animation (CAIRO_CONTAINER (pDesklet));
 	}
 	
 	if (pDesklet->rotating && ! pDesklet->bPositionLocked)
@@ -933,7 +907,7 @@ static gboolean on_enter_desklet (GtkWidget* pWidget,
 			gboolean bStartAnimation = FALSE;
 			cairo_dock_notify (CAIRO_DOCK_ENTER_DESKLET, pDesklet, &bStartAnimation);
 			if (bStartAnimation)
-				cairo_dock_launch_animation (pDesklet);
+				cairo_dock_launch_animation (CAIRO_CONTAINER (pDesklet));
 		}
 	}
 	return FALSE;

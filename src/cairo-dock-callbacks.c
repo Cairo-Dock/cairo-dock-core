@@ -1121,7 +1121,6 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommandFormat, gchar *cWo
 gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState)
 {
 	cd_debug ("%s (%s)", __func__, (icon ? icon->acName : "no icon"));
-	cd_warning ("\n\n\n TESTER LE WORKING DIRECTORY !\n\n");
 	if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))
 	{
 		cd_debug (" uri launcher");
@@ -1573,7 +1572,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 
 	if (iNewWidth != pDock->iCurrentWidth || iNewHeight != pDock->iCurrentHeight)
 	{
-		//cd_debug ("-> %dx%d", iNewWidth, iNewHeight);
+		g_print ("-> %dx%d\n", iNewWidth, iNewHeight);
 		pDock->iCurrentWidth = iNewWidth;
 		pDock->iCurrentHeight = iNewHeight;
 
@@ -1632,9 +1631,11 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		if (g_bEasterEggs)
 			cairo_dock_unset_input_shape (pDock);
 		
+		//g_print ("debut du redessin\n");
 		//if (pDock->iRefCount > 0 || pDock->bAutoHide)
 			while (gtk_events_pending ())  // on force un redessin immediat sinon on a quand meme un "flash".
 				gtk_main_iteration ();
+		//g_print ("fin du redessin\n");
 	}
 	
 	if (pDock->iSidMoveDown == 0 && pDock->iSidMoveUp == 0)  // ce n'est pas du a une animation. Donc en cas d'apparition due a l'auto-hide, ceci ne sera pas fait ici, mais a la fin de l'animation.

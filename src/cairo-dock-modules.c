@@ -982,6 +982,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 		{
 			pDesklet = cairo_dock_create_desklet (NULL, NULL, pMinimalConfig->deskletAttribute.bOnWidgetLayer);
 			cairo_dock_configure_desklet (pDesklet, &pMinimalConfig->deskletAttribute);
+			g_print ("transparence du desklet...\n");
 			while (gtk_events_pending ())  // pour la transparence initiale.
 				gtk_main_iteration ();
 			pContainer = CAIRO_CONTAINER (pDesklet);

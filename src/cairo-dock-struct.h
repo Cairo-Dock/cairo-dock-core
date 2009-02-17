@@ -761,6 +761,7 @@ struct _Icon {
 	gint iNumDesktop;
 	gint iViewPortX, iViewPortY;
 	gint iStackOrder;
+	gboolean bInvertedTexture;
 };
 
 

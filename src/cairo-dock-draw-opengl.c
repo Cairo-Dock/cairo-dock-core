@@ -36,7 +36,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-icons.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-draw.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-renderer-manager.h"
@@ -159,7 +158,7 @@ static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDo
 	}
 	
 	glColor4f(1., 1., 1., 1.);
-	cairo_dock_set_icon_scale (icon, pDock, 1.);
+	cairo_dock_set_icon_scale (icon, CAIRO_CONTAINER (pDock), 1.);
 	cairo_dock_draw_texture (g_iActiveIndicatorTexture, 0, 0);
 }
 static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp)
@@ -193,35 +192,14 @@ static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bHoriz
 		g_fClassIndicatorWidth * fRatio,
 		g_fClassIndicatorHeight * fRatio);
 }
-void cairo_dock_set_icon_scale (Icon *pIcon, CairoDock *pDock, double fZoomFactor)
+
+void cairo_dock_set_icon_scale (Icon *pIcon, CairoContainer *pContainer, double fZoomFactor)
 {
-	if (pDock->bHorizontalDock)
-	{
-		if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon))
-		{
-			glScalef (pIcon->fWidth * fZoomFactor, pIcon->fHeight * fZoomFactor, pIcon->fHeight * fZoomFactor);
-		}
-		else
-		{
-			glScalef (pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale * pIcon->fGlideScale * fZoomFactor,
-				pIcon->fHeight * pIcon->fHeightFactor * pIcon->fScale * pIcon->fGlideScale * fZoomFactor,
-				pIcon->fHeight * pIcon->fHeightFactor * pIcon->fScale * pIcon->fGlideScale * fZoomFactor);
-		}
-	}
-	else
-	{
-		if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon))
-		{
-			glScalef (pIcon->fHeight * fZoomFactor, pIcon->fWidth * fZoomFactor, pIcon->fWidth * fZoomFactor);
-		}
-		else
-		{
-			glScalef (pIcon->fHeight * pIcon->fHeightFactor * pIcon->fScale * pIcon->fGlideScale * fZoomFactor,
-				pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale * pIcon->fGlideScale * fZoomFactor,
-				pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale * pIcon->fGlideScale * fZoomFactor);
-		}
-	}
+	double fSizeX, fSizeY;
+	cairo_dock_get_current_icon_size (pIcon, pContainer, &fSizeX, &fSizeY);
+	glScalef (fSizeX * fZoomFactor, fSizeY * fZoomFactor, 1.);
 }
+
 
 void cairo_dock_combine_argb_argb (void)  // taken from glitz 0.5.6
 {
@@ -263,27 +241,11 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		*bHasBeenRendered = TRUE;
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	}
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture (GL_TEXTURE_2D, pIcon->iIconTexture);
-	glPolygonMode (GL_FRONT, GL_FILL);
-	
-	glEnable(GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glColor4f(1., 1., 1., pIcon->fAlpha);
 	
 	glPushMatrix ();
-	cairo_dock_set_icon_scale (pIcon, pDock, 1.);
-	glNormal3f(0,0,1);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
-	glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);  // Bottom Right Of The Texture and Quad
-	glTexCoord2f(1., 1.); glVertex3f( .5, -.5, 0.);  // Top Right Of The Texture and Quad
-	glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);  // Top Left Of The Texture and Quad
-	glEnd();
+	glColor4f(1., 1., 1., pIcon->fAlpha);
+	cairo_dock_draw_icon_texture (pIcon, CAIRO_CONTAINER (pDock));
 	glPopMatrix ();
-	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D);
 	
 	if (pDock->bUseReflect)
 	{
@@ -298,12 +260,13 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		double fScale = ((myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon)) ? 1. : pIcon->fScale);
 		double fReflectRatio = myIcons.fReflectSize * pDock->fRatio / pIcon->fHeight / fScale  / pIcon->fHeightFactor;
 		double fOffsetY = pIcon->fHeight * fScale/2 + myIcons.fReflectSize * pDock->fRatio/2 + pIcon->fDeltaYReflection;
+		int sens = cairo_dock_texture_is_inverted (pIcon) ? -1 : 1;
 		if (pDock->bHorizontalDock)
 		{
 			if (pDock->bDirectionUp)
 			{
 				glTranslatef (0., - fOffsetY, 0.);
-				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, - myIcons.fReflectSize * pDock->fRatio, 1.);  // taille du reflet et on se retourne.
+				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, - sens * myIcons.fReflectSize * pDock->fRatio, 1.);  // taille du reflet et on se retourne.
 				x0 = 0.;
 				y0 = 1. - fReflectRatio;
 				x1 = 1.;
@@ -312,7 +275,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			else
 			{
 				glTranslatef (0., fOffsetY, 0.);
-				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, myIcons.fReflectSize * pDock->fRatio, 1.);
+				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, sens * myIcons.fReflectSize * pDock->fRatio, 1.);
 				x0 = 0.;
 				y0 = fReflectRatio;
 				x1 = 1.;
@@ -324,7 +287,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			if (pDock->bDirectionUp)
 			{
 				glTranslatef (fOffsetY, 0., 0.);
-				glScalef (- myIcons.fReflectSize * pDock->fRatio, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
+				glScalef (- myIcons.fReflectSize * pDock->fRatio, sens * pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
 				x0 = 1. - fReflectRatio;
 				y0 = 0.;
 				x1 = 1.;
@@ -333,7 +296,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			else
 			{
 				glTranslatef (- fOffsetY, 0., 0.);
-				glScalef (myIcons.fReflectSize * pDock->fRatio, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
+				glScalef (myIcons.fReflectSize * pDock->fRatio, sens * pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
 				x0 = fReflectRatio;
 				y0 = 0.;
 				x1 = 0.;
@@ -926,6 +889,41 @@ void cairo_dock_draw_texture (GLuint iTexture, int iWidth, int iHeight)
 	glDisable (GL_BLEND);
 }
 
+void cairo_dock_apply_icon_texture (Icon *pIcon)
+{
+	glBindTexture (GL_TEXTURE_2D, pIcon->iIconTexture);
+	glBegin(GL_QUADS);
+	if (cairo_dock_texture_is_inverted (pIcon))
+	{
+		glTexCoord2f(0., 0.); glVertex3f(-.5, -.5, 0.);  // Bottom Left Of The Texture and Quad
+		glTexCoord2f(1., 0.); glVertex3f( .5, -.5, 0.);  // Bottom Right Of The Texture and Quad
+		glTexCoord2f(1., 1.); glVertex3f( .5,  .5, 0.);  // Top Right Of The Texture and Quad
+		glTexCoord2f(0., 1.); glVertex3f(-.5,  .5, 0.);  // Top Left Of The Texture and Quad
+	}
+	else
+	{
+		glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
+		glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);  // Bottom Right Of The Texture and Quad
+		glTexCoord2f(1., 1.); glVertex3f( .5, -.5, 0.);  // Top Right Of The Texture and Quad
+		glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);  // Top Left Of The Texture and Quad
+	}
+	glEnd();
+}
+
+void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer)
+{
+	double fSizeX, fSizeY;
+	cairo_dock_get_current_icon_size (pIcon, pContainer, &fSizeX, &fSizeY);
+	
+	if (cairo_dock_texture_is_inverted (pIcon))
+		fSizeY = - fSizeY;
+	
+	cairo_dock_draw_texture (pIcon->iIconTexture,
+		fSizeX,
+		fSizeY);
+}
+
+
 
 const GLfloat *cairo_dock_generate_rectangle_path (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, int *iNbPoints)
 {
@@ -1351,7 +1349,7 @@ void cairo_dock_create_icon_pbuffer (void)
 	int iWidth = 0, iHeight = 0;
 	int i;
 	for (i = 0; i < CAIRO_DOCK_NB_TYPES; i += 2)
-	{	
+	{
 		iWidth = MAX (iWidth, myIcons.tIconAuthorizedWidth[i]);
 		iHeight = MAX (iHeight, myIcons.tIconAuthorizedHeight[i]);
 	}
@@ -1362,6 +1360,7 @@ void cairo_dock_create_icon_pbuffer (void)
 	iWidth *= (1 + myIcons.fAmplitude);
 	iHeight *= (1 + myIcons.fAmplitude);
 	
+	cd_debug ("%s (%dx%d)", __func__, iWidth, iHeight);
 	if (s_iIconPbufferWidth != iWidth || s_iIconPbufferHeight != iHeight)
 	{
 		Display *XDisplay = cairo_dock_get_Xdisplay ();
@@ -1414,13 +1413,17 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	else
 		return FALSE;
 	
+	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
+	glClearDepth (1.0f);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glColor4f(1., 1., 1., 1.);
 	
 	return TRUE;
 }
 
 void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 {
+	g_return_if_fail (pIcon->iIconTexture != 0);
 	// taille de la texture
 	double fMaxScale = cairo_dock_get_max_scale (pContainer);
 	double fRatio = pContainer->fRatio;
@@ -1430,8 +1433,13 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	// copie dans notre texture
 	glEnable (GL_TEXTURE_2D);
 	glBindTexture (GL_TEXTURE_2D, pIcon->iIconTexture);
+	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glEnable(GL_BLEND);
+	glBlendFunc (GL_ZERO, GL_ONE);
+	glColor4f(1., 1., 1., 1.);
 	glCopyTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, iWidth, iHeight, 0);  // target, num mipmap, format, x,y, w,h, border.
 	glDisable (GL_TEXTURE_2D);
+	cairo_dock_set_inverted_texture (pIcon);
 	
 	//end
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))

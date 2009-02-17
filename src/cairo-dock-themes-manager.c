@@ -115,6 +115,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	{
 		pDialog = cairo_dock_show_temporary_dialog_with_default_icon ("downloading file %s on %s ...", NULL, NULL, 0, cDistantFileName, cServerAdress);
 		cairo_dock_dialog_reference (pDialog);
+		g_print ("downloading file ...\n");
 		while (gtk_events_pending ())
 			gtk_main_iteration ();
 	}
@@ -134,6 +135,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 		if (pDialog != NULL)
 		{
 			cairo_dock_set_dialog_message_printf (pDialog, "uncompressing %s", cTmpFilePath);
+			g_print ("uncompressing ...\n");
 			while (gtk_events_pending ())
 				gtk_main_iteration ();
 		}
@@ -683,6 +685,7 @@ gboolean cairo_dock_manage_themes (GtkWidget *pWidget, CairoDockStartMode iMode)
 	if (iMode == CAIRO_DOCK_START_SAFE)
 	{
 		pDialog = cairo_dock_show_general_message (_("You are running Cairo-Dock in safe mode.\nWhy ? Probably because a plug-in has messed into your dock,\n or maybe your theme has got corrupted.\nSo, no plug-in will be available, and you can now save your current theme if you want\n before you start using the dock.\nTry with your current theme, if it works, it means a plug-in is wrong.\nOtherwise, try with another theme.\nSave a config that is working, and restart the dock in normal mode.\nThen, activate plug-ins one by one to guess which one is wrong."), 0.);
+		g_print ("safe mode ...\n");
 		while (gtk_events_pending ())
 			gtk_main_iteration ();
 	}

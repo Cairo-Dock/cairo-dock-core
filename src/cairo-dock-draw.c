@@ -1242,3 +1242,43 @@ cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, 
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 	return pCairoContext;
 }
+
+
+
+void cairo_dock_get_icon_extent (Icon *pIcon, CairoContainer *pContainer, int *iWidth, int *iHeight)
+{
+	double fMaxScale = cairo_dock_get_max_scale (pContainer);
+	double fRatio = pContainer->fRatio;
+	*iWidth = (int) (pIcon->fWidth / fRatio * fMaxScale);
+	*iHeight = (int) (pIcon->fHeight / fRatio * fMaxScale);
+}
+
+void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, double *fSizeX, double *fSizeY)
+{
+	if (pContainer->bIsHorizontal)
+	{
+		if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon))
+		{
+			*fSizeX = pIcon->fWidth;
+			*fSizeY = pIcon->fHeight;
+		}
+		else
+		{
+			*fSizeX = pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale * pIcon->fGlideScale;
+			*fSizeY = pIcon->fHeight * pIcon->fHeightFactor * pIcon->fScale * pIcon->fGlideScale;
+		}
+	}
+	else
+	{
+		if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon))
+		{
+			*fSizeX = pIcon->fHeight;
+			*fSizeY = pIcon->fWidth;
+		}
+		else
+		{
+			*fSizeX = pIcon->fHeight * pIcon->fHeightFactor * pIcon->fScale * pIcon->fGlideScale;
+			*fSizeY = pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale * pIcon->fGlideScale;
+		}
+	}
+}

@@ -155,7 +155,8 @@ cairo_surface_t *cairo_dock_load_image (cairo_t *pSourceContext, const gchar *cI
 			cairo_set_source (pCairoContext, pPattern);
 			cairo_paint (pCairoContext);
 			cairo_destroy (pCairoContext);
-	
+			cairo_pattern_destroy (pPattern);
+			
 			cairo_surface_destroy (pNewSurface);
 			pNewSurface = pNewSurfaceFilled;
 			*fImageWidth = iDesiredWidth;
@@ -263,7 +264,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 				(bHorizontalDock ? &icon->fHeight : &icon->fWidth));
 			if (icon->pIconBuffer == NULL)
 			{
-				GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
+				const GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
 				if (pApplis != NULL)
 				{
 					Icon *pOneIcon = pApplis->data;

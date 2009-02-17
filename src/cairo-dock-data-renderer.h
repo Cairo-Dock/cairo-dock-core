@@ -20,11 +20,10 @@ struct _CairoDataToRenderer {
 	gint iCurrentIndex;
 };
 
-#define CAIRO_DOCK_DATA_FORMAT_MAX_LEN 12
+#define CAIRO_DOCK_DATA_FORMAT_MAX_LEN 20
 typedef void (*CairoDockGetValueFormatFunc) (double fValue, gchar *cFormatBuffer, int iBufferLength);
 struct _CairoDataRendererAttribute {
 	gchar *cModelName;
-	int iWidth, iHeight;
 	gint iNbValues;
 	gint iMemorySize;
 	gchar **cTitles;
@@ -32,18 +31,17 @@ struct _CairoDataRendererAttribute {
 	gdouble *pMinMaxValues;
 	gboolean bUpdateMinMax;
 	gboolean bWriteValues;
-	gboolean bSmoothMovement;
-	gint iAnimationDeltaT;
+	gint iLatencyTime;
 	CairoDockGetValueFormatFunc format_value;
 	gchar **cEmblems;
 	GData *pExtraProperties;
 };
 
 typedef CairoDataRenderer * (*CairoDataRendererInitFunc) (void);
-typedef void (*CairoDataRendererLoadFunc) (CairoDataRenderer *pDataRenderer, cairo_t *pSourceContext, CairoDataRendererAttribute *pAttribute);
+typedef void (*CairoDataRendererLoadFunc) (CairoDataRenderer *pDataRenderer, cairo_t *pSourceContext, CairoContainer *pContainer, CairoDataRendererAttribute *pAttribute);
 typedef void (*CairoDataRendererRenderFunc) (CairoDataRenderer *pDataRenderer, cairo_t *pCairoContext);
 typedef void (*CairoDataRendererRenderOpenGLFunc) (CairoDataRenderer *pDataRenderer);
-typedef void (*CairoDataRendererResizeFunc) (CairoDataRenderer *pDataRenderer, int iWidth, int iHeight);
+typedef void (*CairoDataRendererResizeFunc) (CairoDataRenderer *pDataRenderer, int iWidth, int iHeight, CairoContainer *pContainer);
 typedef void (*CairoDataRendererFreeFunc) (CairoDataRenderer *pDataRenderer);
 struct _CairoDataRendererInterface {
 	CairoDataRendererInitFunc init;
@@ -67,14 +65,12 @@ struct _CairoDataRenderer {
 	CairoDockGetValueFormatFunc format_value;
 	/// buffer for the text.
 	gchar cFormatBuffer[CAIRO_DOCK_DATA_FORMAT_MAX_LEN+1];
-	/// time interval between 2 measures.
-	gint dt;  // intervalle de temps entre 2 mesures, dont dt/2/n entre 2 etapes d'un changement de valeur.
 	/// TRUE <=> the Data Renderer should dynamically update the range of the values.
 	gboolean bUpdateMinMax;
 	/// TRUE <=> the Data Renderer should write the values as text itself.
 	gboolean bWriteValues;
-	/// TRUE <=> the update to a new value whould be smooth (require openGL capacity)
-	gboolean bSmoothMovement;
+	/// the time it will take to update to the new value, with a smooth animation (require openGL capacity)
+	gint iLatencyTime;
 	/// an optionnal list of tiltes to be displayed on the Data Renderer next to each value. Same size as the set of values.
 	gchar **cTitles;
 	/// color of the titles.
@@ -85,7 +81,7 @@ struct _CairoDataRenderer {
 	/// the rank of the renderer, eg the number of values it can display at once (for exemple, 1 for a bar, 2 for a dual-gauge)
 	gint iRank;  // nbre de valeurs que peut afficher 1 unite (en general : gauge:1/2, graph:1/2, bar:1)
 	/// set to TRUE <=> the renderer can draw the values as text itself.
-	gboolean bCanRenderValue;
+	gboolean bCanRenderValueAsText;
 	// dynamic.
 	/// the animation counter for the smooth movement.
 	gint iSmoothAnimationStep;
@@ -107,7 +103,7 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 *@param pContainer the icon's container
 *@param pCairoContext a drawing context on the icon
 *@param pNewValues a set a new values (must be of the size defined on the creation of the Renderer)*/
-void cairo_dock_render_data_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext, double *pNewValues);
+void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext, double *pNewValues);
 
 /**Remove a Data Renderer on an icon. All the allocated ressources will be freed.
 *@param pIcon the icon*/
@@ -199,6 +195,8 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 *@param fValue the normalized value
 *@param i the number of the value*/
 #define cairo_data_renderer_format_value(pRenderer, fValue, i) cairo_data_renderer_format_value_full (pRenderer, fValue, i, (pRenderer)->cFormatBuffer)
+
+#define cairo_data_renderer_can_write_value(pRenderer) (pRenderer)->bCanRenderValueAsText
 
 G_END_DECLS
 #endif
