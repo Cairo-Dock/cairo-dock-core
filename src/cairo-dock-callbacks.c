@@ -129,7 +129,7 @@ void cairo_dock_on_realize (GtkWidget* pWidget, CairoDock *pDock)
 
 gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext)
 {
-	if (! pCairoContext)
+	if (! pCairoContext)  // on n'a pas mis le rendu cairo ici a cause du rendu optimise.
 	{
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
 		glLoadIdentity ();
@@ -166,8 +166,11 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 			{
 				if (! pDock->bInside)
 					cairo_dock_render_background_opengl (pDock);
-				//else  // ne devrait pas arriver.
-				//	cairo_dock_render_blank (pDock);
+				else
+				{
+					cairo_dock_notify (CAIRO_DOCK_PRE_RENDER_DOCK, pDock);
+					cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, NULL);
+				}
 			}
 			else
 			{
@@ -211,9 +214,9 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	
 	cairo_t *pCairoContext = cairo_dock_create_drawing_context (CAIRO_CONTAINER (pDock));
 	
-	if (cairo_dock_is_loading ())
+	if (cairo_dock_is_loading ())  // transparent pendant le chargement.
 	{
-		//cairo_dock_render_blank (pDock);
+		
 	}
 	else if (!pDock->bAtBottom)
 	{
@@ -226,8 +229,11 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		{
 			if (! pDock->bInside)
 				cairo_dock_render_background (pCairoContext, pDock);
-			//else  // ne devrait pas arriver.
-			//	cairo_dock_render_blank (pDock);
+			else
+			{
+				pDock->render (pCairoContext, pDock);
+				cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
+			}
 		}
 		else
 		{
@@ -1327,7 +1333,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						}
 						else
 						{
-							cairo_dock_terminate_flying_container (s_pFlyingContainer);
+							cairo_dock_terminate_flying_container (s_pFlyingContainer);  // supprime ou detache l'icone, l'animation se terminera toute seule.
 						}
 						s_pFlyingContainer = NULL;
 						//cairo_dock_stop_marking_icons (pDock);
@@ -1727,7 +1733,7 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 		{
 			if (fOrder == CAIRO_DOCK_LAST_ORDER)  // on a lache dessus.
 			{
-				if (icon->pSubDock != NULL)  // on l'ajoutera au sous-dock.
+				if (icon && icon->pSubDock != NULL)  // on l'ajoutera au sous-dock.
 				{
 					pReceivingDock = icon->pSubDock;
 				}

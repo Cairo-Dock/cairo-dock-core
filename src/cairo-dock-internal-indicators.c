@@ -91,7 +91,7 @@ static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicator
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
 	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 	
-	if (cairo_dock_strings_differ (pPrevIndicators->cIndicatorImagePath, pIndicators->cIndicatorImagePath))
+	if (cairo_dock_strings_differ (pPrevIndicators->cIndicatorImagePath, pIndicators->cIndicatorImagePath) || pPrevIndicators->bLinkIndicatorWithIcon != pIndicators->bLinkIndicatorWithIcon)
 	{
 		cairo_dock_load_task_indicator (myTaskBar.bShowAppli && myTaskBar.bMixLauncherAppli ? pIndicators->cIndicatorImagePath : NULL, pCairoContext, fMaxScale, pIndicators->fIndicatorRatio);
 	}

@@ -464,7 +464,7 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_
 	//\_______________ On dessine l'image originale inversee.
 	cairo_translate (pCairoContext, 0, fImageHeight);
 	cairo_scale (pCairoContext, 1., -1.);
-	cairo_set_source_surface (pCairoContext, pSurface, 0, (bDirectionUp ? 0 : fImageHeight - fReflectHeight));
+	cairo_set_source_surface (pCairoContext, pSurface, 0, 0*(bDirectionUp ? 0 : fImageHeight - fReflectHeight));
 	
 	//\_______________ On applique un degrade en transparence.
 	/**cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0.,

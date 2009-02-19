@@ -96,7 +96,7 @@ static gboolean _cairo_dock_animate_flying_icon (CairoFlyingContainer *pFlyingCo
 		if (pFlyingContainer->iAnimationCount < 0)
 		{
 			cairo_dock_free_flying_container (pFlyingContainer);
-			cairo_dock_unregister_current_flying_container ();
+			//cairo_dock_unregister_current_flying_container ();
 			return FALSE;
 		}
 	}
@@ -222,6 +222,7 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 		{
 			cairo_dock_fm_remove_monitor (pIcon);
 		}
+		cairo_dock_free_icon (pIcon);
 	}
 	else if (CAIRO_DOCK_IS_APPLET(pIcon))
 	{
@@ -267,3 +268,4 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 		}
 	}
 }
+

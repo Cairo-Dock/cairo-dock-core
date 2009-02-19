@@ -513,13 +513,6 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 			icon->fWidth *= pDock->fRatio / fPrevRatio;
 			icon->fHeight *= pDock->fRatio / fPrevRatio;
 			pDock->fFlatDockWidth += icon->fWidth + myIcons.iIconGap;
-
-			/**if (! myViews.bSameHorizontality)
-			{
-				cairo_t* pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-				cairo_dock_fill_one_text_buffer (icon, pSourceContext, &myLabels.iconTextDescription);
-				cairo_destroy (pSourceContext);
-			}*/
 		}
 		pDock->iMaxIconHeight *= pDock->fRatio / fPrevRatio;
 

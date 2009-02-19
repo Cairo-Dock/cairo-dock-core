@@ -839,7 +839,7 @@ void cairo_dock_load_desktop_background_surface (void)  // attention : fonction 
 		
 		cairo_destroy (pSourceContext);
 	}
-	if (g_pDesktopBgSurface != NULL)
+	if (g_pDesktopBgSurface != NULL && g_bUseOpenGL)
 	{
 		g_iDesktopBgTexture = cairo_dock_create_texture_from_surface (g_pDesktopBgSurface);
 	}

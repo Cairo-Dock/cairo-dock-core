@@ -472,7 +472,7 @@ launcher size = 48;48
 #j+[10;128] Appli's size at rest (width x height) :
 appli size = 48;48
 
-#i+[0;128] Applet's size at rest (width x height) :
+#j+[10;128] Applet's size at rest (width x height) :
 applet size = 48;48
 
 #m[Animated icons] Configure icons animations.
@@ -487,7 +487,7 @@ config_illusion =
 #X+[Separators]
 frame_sep =
 
-#i+[0;128] Icon size at rest (width x height) :
+#j+[10;128] Icon size at rest (width x height) :
 separator size = 48;48
 
 #b+ Automatically add separators ?
@@ -670,7 +670,7 @@ emblem_2 =
 
 
 #F+[Indicator of the active window]
-frame_activ =
+frame_window =
 
 #c+4[0;1] Color of the frame (r,v,b,a) :
 #{Set transparency to 0 if you don't want to use an indicator.}
@@ -714,7 +714,7 @@ link indicator = TRUE
 indicator deltaY = 2
 
 #F+[Indicator of class subdock]
-frame_launch =
+frame_class =
 
 #S+ Filename of an image to indicate that a class has been grouped in a subdock :
 #{It only makes sense if you choosed to group the applis of the same class togather. Let blank to use the default one.}
