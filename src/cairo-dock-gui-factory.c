@@ -485,36 +485,25 @@ static void _cairo_dock_set_color (GtkColorButton *pColorButton, GSList *pWidget
 
 static void _cairo_dock_get_current_color (GtkColorButton *pColorButton, GSList *pWidgetList)
 {
-	GdkColor gdkColor;
 	GtkSpinButton *pSpinButton;
-
-	GSList *pList = pWidgetList;
-	if (pList == NULL)
-		return;
-	pSpinButton = pList->data;
-	gdkColor.red = gtk_spin_button_get_value (pSpinButton) * 65535;
-	pList = pList->next;
-
-	if (pList == NULL)
-		return;
-	pSpinButton = pList->data;
-	gdkColor.green = gtk_spin_button_get_value (pSpinButton) * 65535;
-	pList = pList->next;
-
-	if (pList == NULL)
-		return;
-	pSpinButton = pList->data;
-	gdkColor.blue = gtk_spin_button_get_value (pSpinButton) * 65535;
-	pList = pList->next;
-
+	int i, color[4] = {0,0,0,0};
+	GSList *c;
+	for (c = pWidgetList, i = 0; c != NULL && i < 4; c = c->next, i ++)
+	{
+		pSpinButton = c->data;
+		color[i] = gtk_spin_button_get_value (pSpinButton) * 65535;
+	}
+	
+	GdkColor gdkColor;
+	gdkColor.red = color[0];
+	gdkColor.green = color[1];
+	gdkColor.blue = color[2];
 	gtk_color_button_set_color (pColorButton, &gdkColor);
-
-	if (pList == NULL)
-		return;
-	pSpinButton = pList->data;
+	
 	if (gtk_color_button_get_use_alpha (pColorButton))
-		gtk_color_button_set_alpha (pColorButton, gtk_spin_button_get_value (pSpinButton) * 65535);
+		gtk_color_button_set_alpha (pColorButton, color[3]);
 }
+
 
 #define _build_list_for_gui(pListStore, cEmptyItem, pHashTable, pHFunction) do { \
 	if (pListStore != NULL)\
@@ -2128,9 +2117,33 @@ GtkWidget *cairo_dock_find_widget_from_name (GSList *pWidgetList, const gchar *c
 void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pThemeTable, gchar *cActiveTheme)
 {
 	GtkTreeModel *modele = gtk_combo_box_get_model (GTK_COMBO_BOX (pCombo));
+	g_return_if_fail (modele != NULL);
 	g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_modele_with_themes, modele);
 	
 	GtkTreeIter iter;
 	if (_cairo_dock_find_iter_from_name (GTK_LIST_STORE (modele), cActiveTheme, &iter))
+		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pCombo), &iter);
+}
+
+void cairo_dock_fill_combo_with_list (GtkWidget *pCombo, GList *pElementList, const gchar *cActiveElement)
+{
+	GtkTreeModel *pModele = gtk_combo_box_get_model (GTK_COMBO_BOX (pCombo));
+	g_return_if_fail (pModele != NULL);
+	
+	GtkTreeIter iter;
+	GList *l;
+	for (l = pElementList; l != NULL; l = l->next)
+	{
+		gchar *cElement = l->data;
+		memset (&iter, 0, sizeof (GtkTreeIter));
+		gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
+		gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
+			CAIRO_DOCK_MODEL_NAME, cElement,
+			CAIRO_DOCK_MODEL_RESULT, cElement,
+			CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
+			CAIRO_DOCK_MODEL_IMAGE, "none", -1);
+	}
+	
+	if (cActiveElement != NULL && _cairo_dock_find_iter_from_name (GTK_LIST_STORE (pModele), cActiveElement, &iter))
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pCombo), &iter);
 }

@@ -197,7 +197,7 @@ void cairo_dock_set_icon_scale (Icon *pIcon, CairoContainer *pContainer, double 
 {
 	double fSizeX, fSizeY;
 	cairo_dock_get_current_icon_size (pIcon, pContainer, &fSizeX, &fSizeY);
-	glScalef (fSizeX * fZoomFactor, fSizeY * fZoomFactor, 1.);
+	glScalef (fSizeX * fZoomFactor, fSizeY * fZoomFactor, fSizeY * fZoomFactor);
 }
 
 
@@ -850,7 +850,7 @@ void cairo_dock_render_background_opengl (CairoDock *pDock)
 	if (! pDock->bHorizontalDock)
 		glRotatef (-90., 0, 0, 1);
 	
-	glScalef (pDock->iCurrentWidth, pDock->iCurrentHeight, 0.);
+	glScalef (pDock->iCurrentWidth, pDock->iCurrentHeight, 1.);
 	
 	glBegin(GL_QUADS);
 	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
@@ -864,10 +864,21 @@ void cairo_dock_render_background_opengl (CairoDock *pDock)
 }
 
 
+void cairo_dock_apply_texture (GLuint iTexture)
+{
+	glBindTexture (GL_TEXTURE_2D, iTexture);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
+	glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);  // Bottom Right Of The Texture and Quad
+	glTexCoord2f(1., 1.); glVertex3f( .5, -.5, 0.);  // Top Right Of The Texture and Quad
+	glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);  // Top Left Of The Texture and Quad
+	glEnd();
+}
+
 void cairo_dock_draw_texture (GLuint iTexture, int iWidth, int iHeight)
 {
 	glEnable (GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // GL_SRC_ALPHA
 	
 	glEnable (GL_TEXTURE_2D);
 	glBindTexture (GL_TEXTURE_2D, iTexture);

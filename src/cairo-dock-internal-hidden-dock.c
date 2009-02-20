@@ -21,13 +21,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigHiddenDock *pHiddenDo
 	gboolean bFlushConfFileNeeded = FALSE;
 	
 	pHiddenDock->cVisibleZoneImageFile = cairo_dock_get_string_key_value (pKeyFile, "Hidden dock", "callback image", &bFlushConfFileNeeded, NULL, "Background", "background image");
-
-	pHiddenDock->iVisibleZoneWidth = cairo_dock_get_integer_key_value (pKeyFile, "Hidden dock", "zone width", &bFlushConfFileNeeded, 150, "Background", NULL);
-	if (pHiddenDock->iVisibleZoneWidth < 10)
-		pHiddenDock->iVisibleZoneWidth = 10;
-	pHiddenDock->iVisibleZoneHeight = cairo_dock_get_integer_key_value (pKeyFile, "Hidden dock", "zone height", &bFlushConfFileNeeded, 25, "Background", NULL);
-	if (pHiddenDock->iVisibleZoneHeight < 1)
-		pHiddenDock->iVisibleZoneHeight = 1;
 	
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Hidden dock", "zone", bFlushConfFileNeeded, pHiddenDock->iVisibleZoneWidth, pHiddenDock->iVisibleZoneHeight);
 	if (pHiddenDock->iVisibleZoneWidth < 10)

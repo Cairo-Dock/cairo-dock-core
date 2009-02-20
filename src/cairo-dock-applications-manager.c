@@ -1474,7 +1474,7 @@ void cairo_dock_foreach_applis (CairoDockForeachIconFunc pFunction, gboolean bOu
 
 CairoDock * cairo_dock_detach_appli (Icon *pIcon)
 {
-	g_print ("%s (%s)\n", __func__, pIcon->acName);
+	cd_debug ("%s (%s)", __func__, pIcon->acName);
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
 	if (pParentDock == NULL)
 		return NULL;

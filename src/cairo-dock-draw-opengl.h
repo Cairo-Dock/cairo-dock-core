@@ -36,6 +36,8 @@ GLuint cairo_dock_load_local_texture (const gchar *cImageName, const gchar *cDir
 
 void cairo_dock_render_background_opengl (CairoDock *pDock);
 
+
+void cairo_dock_apply_texture (GLuint iTexture);
 void cairo_dock_draw_texture (GLuint iTexture, int iWidth, int iHeight);
 void cairo_dock_apply_icon_texture (Icon *pIcon);
 void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer);

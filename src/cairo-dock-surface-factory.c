@@ -639,11 +639,11 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	PangoRectangle ink, log;
 	pango_layout_get_pixel_extents (pLayout, &ink, &log);
 	
-	int iOutlineMargin = (pLabelDescription->bOutlined ? 2 : 0);
+	int iOutlineMargin = (pLabelDescription->bOutlined ? 2 : 0);  // +1 tout autour des lettres.
 	double fZoom = ((iMaxWidth != 0 && ink.width + iOutlineMargin > iMaxWidth) ? 1.*iMaxWidth / (ink.width + iOutlineMargin) : 1.);
 	
-	*iTextWidth = (ink.width + iOutlineMargin + 2) * fZoom;
-	*iTextHeight = ink.height + iOutlineMargin + 2 + 1; // +1 car certaines polices "debordent".
+	*iTextWidth = (ink.width + iOutlineMargin) * fZoom;
+	*iTextHeight = ink.height + iOutlineMargin + 1; // +1 car certaines polices "debordent".
 	//Test du zoom en W ET H *iTextHeight = (ink.height + 2 + 1) * fZoom; 
 	
 	cairo_surface_t* pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
@@ -668,7 +668,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	}
 	
 	//g_print ("ink : %d;%d\n", (int) ink.x, (int) ink.y);
-	cairo_translate (pCairoContext, -ink.x + iOutlineMargin/2, -ink.y + iOutlineMargin/2 + 1);  // meme remarque pour le +1.
+	cairo_translate (pCairoContext, -ink.x, -ink.y + 1);  // meme remarque pour le +1.
 	
 	//\_________________ On dessine les contours du texte.
 	if (pLabelDescription->bOutlined)
@@ -695,13 +695,13 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	{
 		if (pLabelDescription->bVerticalPattern)
 			pGradationPattern = cairo_pattern_create_linear (0.,
-				ink.y+iOutlineMargin/2,  //-ink.y + iOutlineMargin/2 + 1 + 1,  // meme remarque pour le +1.
+				iOutlineMargin/2,  //-ink.y + iOutlineMargin/2 + 1 + 1,  // meme remarque pour le +1.
 				0.,
-				ink.height+ink.y+iOutlineMargin/2);
+				iOutlineMargin/2 + ink.height);
 		else
-			pGradationPattern = cairo_pattern_create_linear (-ink.x + iOutlineMargin/2 + 1,
+			pGradationPattern = cairo_pattern_create_linear (iOutlineMargin/2,
 				0.,
-				ink.width,
+				iOutlineMargin/2 + ink.width,
 				0.);
 		g_return_val_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS, NULL);
 		cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
@@ -721,7 +721,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	}
 	else
 		cairo_set_source_rgb (pCairoContext, pLabelDescription->fColorStart[0], pLabelDescription->fColorStart[1], pLabelDescription->fColorStart[2]);
-	cairo_move_to (pCairoContext, 1., 1.);
+	cairo_move_to (pCairoContext, iOutlineMargin/2, iOutlineMargin/2);
 	if (fZoom!= 1)
 		cairo_scale (pCairoContext, fZoom, 1.);
 	pango_cairo_show_layout (pCairoContext, pLayout);
