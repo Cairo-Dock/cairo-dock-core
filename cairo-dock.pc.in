@@ -8,7 +8,7 @@ themesdir=@datadir@/@PACKAGE@/themes
 
 Name:cairo-dock
 Description:An eye-candy fully animated and configurable dock.
-Requires: gtk+-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 gtkglext-1.0 @xextend_required@ @glitz_required@
+Requires: gtk+-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gtkglext-1.0 @xextend_required@ @glitz_required@
 Libs:-L${libdir}
 Cflags:-I${includedir}/cairo-dock -I${includedir}/cairo-dock/cairo-dock
 Version: @VERSION@

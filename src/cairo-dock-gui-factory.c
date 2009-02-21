@@ -23,6 +23,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-gauge.h"
+#include "cairo-dock-config.h"
 #include "cairo-dock-gui-factory.h"
 
 #define CAIRO_DOCK_GUI_MARGIN 4
@@ -773,8 +774,11 @@ gchar *cairo_dock_parse_key_comment (gchar *cKeyComment, char *iElementType, int
 		cUsefulComment ++;
 		while (*cUsefulComment == ' ')  // on saute les espaces.
 			cUsefulComment ++;
-
-		*pAuthorizedValuesList = g_strsplit (cAuthorizedValuesChain, ";", 0);
+		
+		if (*cAuthorizedValuesChain == '\0')  // rien, on prefere le savoir plutot que d'avoir une entree vide.
+			*pAuthorizedValuesList = g_new0 (gchar *, 1);
+		else
+			*pAuthorizedValuesList = g_strsplit (cAuthorizedValuesChain, ";", 0);
 	}
 	else
 	{
@@ -1137,7 +1141,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_add_combo_from_modele (modele, TRUE, iElementType == 'H');
 				
 				//\______________ On recupere les themes.
-				if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL)
+				if (pAuthorizedValuesList != NULL)
 				{
 					gchar *cShareThemesDir = NULL, *cUserThemesDir = NULL, *cDistantThemesDir = NULL;
 					if (pAuthorizedValuesList[0] != NULL)
@@ -1186,7 +1190,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_pack_in_widget_box (pScrolledWindow);
 				
 				//\______________ On recupere les themes utilisateurs.
-				if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL)
+				if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL && *pAuthorizedValuesList[0] != '\0')
 				{
 					gchar *cUserThemesDir = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR, pAuthorizedValuesList[0]);
 					GHashTable *pThemeTable = cairo_dock_list_themes (NULL, cUserThemesDir, NULL);
@@ -1236,7 +1240,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			
 			case 'm' :  // bouton raccourci vers un autre module
 			case 'M' :  // idem mais seulement affiche si le module existe.
-				if (pAuthorizedValuesList == NULL || pAuthorizedValuesList[0] == NULL)
+				if (pAuthorizedValuesList == NULL || pAuthorizedValuesList[0] == NULL || *pAuthorizedValuesList[0] == '\0')
 					break ;
 				if (iElementType == 'M' && cairo_dock_find_module_from_name (pAuthorizedValuesList[0]) == NULL)
 					break ;
@@ -1272,7 +1276,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case 'P' :  // string avec un selecteur de font a cote du GtkEntry.
 			case 'r' :  // string representee par son numero dans une liste de choix.
 			case 'k' :  // string avec un selecteur de touche clavier (Merci Ctaf !)
-			case 'p' :  // string type "password", crypte dans le .conf et cache dans l'UI
+			case 'p' :  // string type "password", crypte dans le .conf et cache dans l'UI (Merci Tofe !) :-)
 				pEntry = NULL;
 				pDescriptionLabel = NULL;
 				pPreviewImage = NULL;
@@ -1282,7 +1286,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				if (iNbElements == 1)
 				{
 					cValue =  (0 < length ? cValueList[0] : "");
-					if (pAuthorizedValuesList == NULL || pAuthorizedValuesList[0] == NULL)
+					if (pAuthorizedValuesList == NULL)
 					{
 						pOneWidget = gtk_entry_new ();
 						pEntry = pOneWidget;
@@ -1355,10 +1359,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							}
 						}
 						g_free (cResult);
-						if (k == 0)  // rien dans le gtktree => plantage.
-						{
-							continue;
-						}
+						
 						if (iElementType == 'R')
 						{
 							pDescriptionLabel = gtk_label_new (NULL);
@@ -1372,7 +1373,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 
 						if (iElementType != 'E' && iSelectedItem == -1)
 							iSelectedItem = 0;
-						gtk_combo_box_set_active (GTK_COMBO_BOX (pOneWidget), iSelectedItem);
+						if (k != 0)  // rien dans le gtktree => plantage.
+							gtk_combo_box_set_active (GTK_COMBO_BOX (pOneWidget), iSelectedItem);
 					}
 					_pack_subwidget (pOneWidget);
 				}

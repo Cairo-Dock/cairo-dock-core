@@ -34,17 +34,16 @@ struct _CairoDataRendererAttribute {
 	gint iLatencyTime;
 	CairoDockGetValueFormatFunc format_value;
 	gchar **cEmblems;
-	GData *pExtraProperties;
 };
 
-typedef CairoDataRenderer * (*CairoDataRendererInitFunc) (void);
+typedef CairoDataRenderer * (*CairoDataRendererNewFunc) (void);
 typedef void (*CairoDataRendererLoadFunc) (CairoDataRenderer *pDataRenderer, cairo_t *pSourceContext, CairoContainer *pContainer, CairoDataRendererAttribute *pAttribute);
 typedef void (*CairoDataRendererRenderFunc) (CairoDataRenderer *pDataRenderer, cairo_t *pCairoContext);
 typedef void (*CairoDataRendererRenderOpenGLFunc) (CairoDataRenderer *pDataRenderer);
 typedef void (*CairoDataRendererResizeFunc) (CairoDataRenderer *pDataRenderer, int iWidth, int iHeight, CairoContainer *pContainer);
 typedef void (*CairoDataRendererFreeFunc) (CairoDataRenderer *pDataRenderer);
 struct _CairoDataRendererInterface {
-	CairoDataRendererInitFunc init;
+	CairoDataRendererNewFunc new;
 	CairoDataRendererLoadFunc load;
 	CairoDataRendererRenderFunc render;
 	CairoDataRendererRenderOpenGLFunc render_opengl;

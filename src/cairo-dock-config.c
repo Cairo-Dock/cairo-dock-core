@@ -733,24 +733,15 @@ gboolean cairo_dock_is_loading (void)
 }
 
 
-void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataType, ...)  // type, groupe, nom, valeur, etc. finir par G_TYPE_INVALID.
+void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataType, ...)  // type, groupe, cle, valeur, etc. finir par G_TYPE_INVALID.
 {
 	cd_message ("%s (%s)", __func__, cConfFilePath);
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
+	g_return_if_fail (pKeyFile != NULL);
+	
 	va_list args;
 	va_start (args, iFirstDataType);
-
-	GKeyFile *pKeyFile = g_key_file_new ();
-	GError *erreur = NULL;
-	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
-		g_key_file_free (pKeyFile);
-		va_end (args);
-		return ;
-	}
-
+	
 	GType iType = iFirstDataType;
 	gboolean bValue;
 	gint iValue;
@@ -843,6 +834,7 @@ void cairo_dock_get_version_from_string (gchar *cVersionString, int *iMajorVersi
 	g_strfreev (cVersions);
 }
 
+
 void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecryptedString )
 {
 #ifdef HAVE_LIBCRYPT
@@ -903,10 +895,7 @@ void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecrypt
 	g_free( input );
 
 #else
-  if( cEncryptedString )
-  {
-		*cDecryptedString = g_strdup( cEncryptedString );
-	}
+	*cDecryptedString = g_strdup( cEncryptedString );
 #endif
 }
 
@@ -961,9 +950,6 @@ void cairo_dock_encrypt_string( const gchar *cDecryptedString,  gchar **cEncrypt
 
 //  g_print( "Password (after encrypt): %s\n", *output );
 #else
-  if( cDecryptedString )
-  {
-		*cEncryptedString = g_strdup( cDecryptedString );
-	}
+	*cEncryptedString = g_strdup( cDecryptedString );
 #endif
 }

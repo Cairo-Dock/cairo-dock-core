@@ -296,17 +296,9 @@ void on_click_normal_apply (GtkButton *button, GtkWidget *pWindow)
 	g_print ("%s ()\n", __func__);
 	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWindow), "widget-list");
 	gchar *cConfFilePath = g_object_get_data (G_OBJECT (pWindow), "conf-file");
-	GKeyFile *pKeyFile = g_key_file_new ();
-
-	GError *erreur = NULL;
-	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
-		return ;
-	}
-
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
+	g_return_if_fail (pKeyFile != NULL);
+	
 	cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
 	cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
 	g_key_file_free (pKeyFile);

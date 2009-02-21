@@ -160,16 +160,9 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	GError *erreur = NULL;
 	gchar *cDesktopFilePath = (*cDesktopFileName == '/' ? g_strdup (cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cDesktopFileName));
 	//g_print ("%s (%s)\n", __func__, cDesktopFilePath);
-	GKeyFile* keyfile = g_key_file_new();
-	g_key_file_load_from_file (keyfile, cDesktopFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-	g_free (cDesktopFilePath);
-	if (erreur != NULL)
-	{
-		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);
-		g_error_free (erreur);
-		return ;
-	}
-
+	GKeyFile* keyfile = cairo_dock_open_key_file (cDesktopFilePath);
+	g_return_if_fail (keyfile != NULL);
+	
 	icon->iType = CAIRO_DOCK_LAUNCHER;
 	g_free (icon->acDesktopFileName);
 	icon->acDesktopFileName = g_strdup (cDesktopFileName);

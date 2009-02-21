@@ -14,6 +14,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #include "cairo-dock-modules.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gui-filter.h"
@@ -275,25 +276,18 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 	GtkWidget *pGroupBox, *pLabel, *pCategoryFrame, *pCurrentCategoryFrame = NULL;
 	GError *erreur = NULL;
 	GKeyFile *pKeyFile;
-	GKeyFile *pMainKeyFile = g_key_file_new ();
-	g_key_file_load_from_file (pMainKeyFile, g_cConfFile, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
-		erreur = NULL;
-		g_key_file_free (pMainKeyFile);
-		pMainKeyFile = NULL;
-	}
+	GKeyFile *pMainKeyFile = cairo_dock_open_key_file (g_cConfFile);
+	
 	int i;
 	GList *gd;
 	gchar *cGettextDomain;
 	for (gd = pGroupDescriptionList; gd != NULL; gd = gd->next)
 	{
-		
+		g_print ("pGroupDescription:%x\n", gd->data);
 		//\_______________ On recupere le group description.
 		pGroupDescription = gd->data;
 		pGroupBox = gtk_widget_get_parent (pGroupDescription->pActivateButton);
+		g_print ("  %x\n", pGroupDescription->pActivateButton);
 		pCategoryFrame = gtk_widget_get_parent (pGroupBox);
 		pLabel = pGroupDescription->pLabel;
 		cGettextDomain = pGroupDescription->cGettextDomain;
@@ -368,32 +362,27 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 		//\_______________ On cherche chaque mot a l'interieur du module.
 		if (! bFound && pGroupDescription->cOriginalConfFilePath != NULL)
 		{
+			//\_______________ On recupere les groupes du module.
 			//g_print ("* on cherche dans le fichier de conf %s ...\n", pGroupDescription->cOriginalConfFilePath);
 			gchar **pGroupList = NULL;
 			CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 			if (pModule != NULL)
 			{
-				pKeyFile = g_key_file_new ();
-				g_key_file_load_from_file (pMainKeyFile, g_cConfFile, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-				if (erreur != NULL)
-				{
-					cd_warning (erreur->message);
-					g_error_free (erreur);
-					erreur = NULL;
-				}
-				else
+				pKeyFile = cairo_dock_open_key_file (pModule->cConfFilePath);
+				if (pKeyFile != NULL)
 				{
 					gsize length = 0;
 					pGroupList = g_key_file_get_groups (pKeyFile, &length);
 				}
 			}
-			else
+			else  // groupe interne, le fichier de conf n'est ouvert qu'une seule fois.
 			{
 				pKeyFile = pMainKeyFile;
 				pGroupList = g_new0 (gchar *, 2);
 				pGroupList[0] = g_strdup (pGroupDescription->cGroupName);
 			}
 			
+			//\_______________ Pour chaque groupe on parcourt toutes les cles.
 			if (pGroupList != NULL)
 			{
 				int iNbWords;
@@ -503,7 +492,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 				g_key_file_free (pKeyFile);
 			g_print ("bFound : %d\n", bFound);
 			
-			if (bHighLightText && bFound)  // on passe le label du groupe en bleu.
+			if (bHighLightText && bFound)  // on passe le label du groupe en bleu + gras.
 			{
 				cModifiedText = g_strdup_printf ("<b><span color=\"blue\">%s</span></b>", cDescription);
 				g_print ("cModifiedText : %s\n", cModifiedText);

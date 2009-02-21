@@ -371,16 +371,8 @@ static void on_theme_apply (gpointer *user_data)
 	gboolean bNeedSave = cairo_dock_theme_need_save ();
 
 	//\___________________ On recupere les donnees de l'IHM apres modification par l'utilisateur.
-	GKeyFile *pKeyFile = g_key_file_new ();
-	g_key_file_load_from_file (pKeyFile, cInitConfFile, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-	//g_remove (cInitConfFile);
-	//g_free (cInitConfFile);
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
-		return ;
-	}
+	GKeyFile* pKeyFile = cairo_dock_open_key_file (cInitConfFile);
+	g_return_if_fail (pKeyFile != NULL);
 
 	gchar *cNewThemeName = g_key_file_get_string (pKeyFile, "Themes", "chosen theme", &erreur);
 	if (erreur != NULL)

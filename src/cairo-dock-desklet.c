@@ -976,14 +976,14 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
 			! g_bIndirectRendering,  // TRUE <=> direct connection to the graphics system.
 			GDK_GL_RGBA_TYPE);
 	}
-	gtk_widget_set_app_paintable(pWindow, TRUE);
-	gtk_window_set_decorated(GTK_WINDOW(pWindow), FALSE);
-	gtk_window_set_resizable(GTK_WINDOW(pWindow), TRUE);
-	gtk_window_set_title(GTK_WINDOW(pWindow), "cairo-dock-desklet");  /// distinguer titre et classe ?...
-	gtk_widget_add_events(pWindow, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_FOCUS_CHANGE_MASK);
+	gtk_widget_set_app_paintable (pWindow, TRUE);
+	gtk_window_set_decorated (GTK_WINDOW(pWindow), FALSE);
+	gtk_window_set_resizable (GTK_WINDOW(pWindow), TRUE);
+	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-desklet");  /// distinguer titre et classe ?...
+	gtk_widget_add_events( pWindow, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_FOCUS_CHANGE_MASK);
 	//the border is were cairo paint
-	gtk_container_set_border_width(GTK_CONTAINER(pWindow), myBackground.iDockRadius/2);  /// re-utiliser la formule des dialogues...
-	gtk_window_set_default_size(GTK_WINDOW(pWindow), 2*myBackground.iDockRadius+1, 2*myBackground.iDockRadius+1);
+	gtk_container_set_border_width(GTK_CONTAINER(pWindow), 3);  // comme ca.
+	gtk_window_set_default_size(GTK_WINDOW(pWindow), 10, 10);  // idem.
 
 	g_signal_connect (G_OBJECT (pWindow),
 		"expose-event",
@@ -1071,7 +1071,7 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 
 	Window Xid = GDK_WINDOW_XID (pDesklet->pWidget->window);
 	if (pAttribute->bOnWidgetLayer)
-		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");  // le hide-show le fait deconner completement, il perd son skip_task_bar ! au moins sous KDE.
+		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");  // le hide-show le fait deconner completement, il perd son skip_task_bar ! au moins sous KDE3.
 	else
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
 	

@@ -260,6 +260,7 @@ static gboolean _cairo_dock_add_one_module_widget (gchar *cModuleName, CairoDock
 		pModule->cConfFilePath != NULL,
 		NULL,
 		NULL);
+	g_print ("+ %s : %x;%x\n", cModuleName,pGroupDescription, pGroupDescription->pActivateButton);
 	pGroupDescription->cOriginalConfFilePath = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);  // petite optimisation, pour pas dupliquer la chaine 2 fois.
 	pGroupDescription->cGettextDomain = pModule->pVisitCard->cGettextDomain;  // inutile de dupliquer ca.
 	pGroupDescription->load_custom_widget = pModule->pInterface->load_custom_widget;

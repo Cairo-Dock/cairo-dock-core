@@ -156,7 +156,7 @@ void cairo_dock_remove_desklet_decoration (const gchar *cDecorationName)
 }
 
 
-CairoDataRendererInitFunc cairo_dock_get_data_renderer_entry_point (const gchar *cRendererName)
+CairoDataRendererNewFunc cairo_dock_get_data_renderer_entry_point (const gchar *cRendererName)
 {
 	cd_debug ("%s (%s)", __func__, cRendererName);
 	if (cRendererName != NULL)
@@ -165,7 +165,7 @@ CairoDataRendererInitFunc cairo_dock_get_data_renderer_entry_point (const gchar 
 		return NULL;
 }
 
-void cairo_dock_register_data_renderer_entry_point (const gchar *cRendererName, CairoDataRendererInitFunc *pFunc)
+void cairo_dock_register_data_renderer_entry_point (const gchar *cRendererName, CairoDataRendererNewFunc *pFunc)
 {
 	cd_message ("%s (%s)", __func__, cRendererName);
 	g_hash_table_insert (s_hDataRendererTable, g_strdup (cRendererName), pFunc);

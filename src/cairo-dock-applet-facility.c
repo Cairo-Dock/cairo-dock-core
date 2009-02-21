@@ -451,8 +451,8 @@ void cairo_dock_stop_measure_timer (CairoDockMeasure *pMeasureTimer)
 	
 	cd_message ("***on attend que le thread termine...(%d)", g_atomic_int_get (&pMeasureTimer->iThreadIsRunning));
 	while (g_atomic_int_get (&pMeasureTimer->iThreadIsRunning))
-		///g_usleep (10);
-		gtk_main_iteration ();
+		g_usleep (10);
+		///gtk_main_iteration ();
 	cd_message ("***temine.");
 }
 

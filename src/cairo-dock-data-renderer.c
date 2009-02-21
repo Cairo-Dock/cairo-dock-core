@@ -28,18 +28,14 @@ extern gboolean g_bUseOpenGL;
 
 CairoDataRenderer *cairo_dock_new_data_renderer (const gchar *cRendererName)
 {
-	CairoDataRendererInitFunc init = cairo_dock_get_data_renderer_entry_point (cRendererName);
+	CairoDataRendererNewFunc init = cairo_dock_get_data_renderer_entry_point (cRendererName);
 	g_return_val_if_fail (init != NULL, NULL);
 	
 	return init ();
 }
 
-CairoDataRenderer *cairo_dock_create_data_renderer (cairo_t *pSourceContext, CairoContainer *pContainer, CairoDataRendererAttribute *pAttribute)
+void cairo_dock_init_data_renderer (CairoDataRenderer *pRenderer, cairo_t *pSourceContext, CairoContainer *pContainer, CairoDataRendererAttribute *pAttribute)
 {
-	CairoDataRenderer *pRenderer = cairo_dock_new_data_renderer (pAttribute->cModelName);
-	if (pRenderer == NULL)
-		return NULL;
-	
 	//\_______________ On alloue la structure des donnees.
 	pRenderer->data.iNbValues = pAttribute->iNbValues;
 	pRenderer->data.iMemorySize = MAX (2, pAttribute->iMemorySize);  // au moins la derniere valeur et la nouvelle.
@@ -84,8 +80,6 @@ CairoDataRenderer *cairo_dock_create_data_renderer (cairo_t *pSourceContext, Cai
 	memcpy (pRenderer->fTextColor, pAttribute->fTextColor, sizeof (pRenderer->fTextColor));
 	pRenderer->iSmoothAnimationStep = 0;
 	pRenderer->format_value = pAttribute->format_value;
-	
-	return pRenderer;
 }
 
 static void _cairo_dock_draw_icon_texture_opengl (CairoDataRenderer *pDataRenderer, Icon *pIcon, CairoContainer *pContainer)
@@ -116,12 +110,13 @@ static gboolean cairo_dock_update_icon_data_renderer_notification (gpointer pUse
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pSourceContext, CairoDataRendererAttribute *pAttribute)
+void cairo_dock_add_data_renderer_on_icon (CairoDataRenderer *pRenderer, Icon *pIcon, CairoContainer *pContainer, cairo_t *pSourceContext, CairoDataRendererAttribute *pAttribute)
 {
-	CairoDataRenderer *pRenderer = cairo_dock_create_data_renderer (pSourceContext, pContainer, pAttribute);
 	cairo_dock_set_data_renderer_on_icon (pIcon, pRenderer);
 	if (pRenderer == NULL)
 		return ;
+	
+	cairo_dock_init_data_renderer (pRenderer, pSourceContext, pContainer, pAttribute);
 	
 	cairo_dock_get_icon_extent (pIcon, pContainer, &pRenderer->iWidth, &pRenderer->iHeight);
 	
@@ -133,6 +128,13 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 			(CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification,
 			CAIRO_DOCK_RUN_AFTER, NULL);
 	}
+}
+
+void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pSourceContext, CairoDataRendererAttribute *pAttribute)
+{
+	CairoDataRenderer *pRenderer = cairo_dock_new_data_renderer (pAttribute->cModelName);
+	
+	cairo_dock_add_data_renderer_on_icon (pRenderer, pIcon, pContainer, pSourceContext, pAttribute);
 }
 
 
@@ -274,15 +276,15 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 {
 	CairoDataToRenderer *pData = NULL;
 	//\_____________ On recupere les donnees de l'actuel renderer.
-	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
-	if (pRenderer != NULL)
+	CairoDataRenderer *pOldRenderer = cairo_dock_get_icon_data_renderer (pIcon);
+	if (pOldRenderer != NULL)
 	{
-		if (pRenderer->data.iNbValues == pAttribute->iNbValues)
+		if (pOldRenderer->data.iNbValues == pAttribute->iNbValues)
 		{
-			pData = g_memdup (&pRenderer->data, sizeof (CairoDataToRenderer));
-			memset (&pRenderer->data, 0, sizeof (CairoDataToRenderer));
+			pData = g_memdup (&pOldRenderer->data, sizeof (CairoDataToRenderer));
+			memset (&pOldRenderer->data, 0, sizeof (CairoDataToRenderer));
 			
-			if (pRenderer->data.iMemorySize != pAttribute->iMemorySize)  // on redimensionne le tampon des valeurs.
+			if (pOldRenderer->data.iMemorySize != pAttribute->iMemorySize)  // on redimensionne le tampon des valeurs.
 			{
 				pData->iMemorySize = MAX (2, pAttribute->iMemorySize);
 				gdouble *buf = g_realloc (pData->pValuesBuffer, pData->iMemorySize * pData->iNbValues * sizeof (gdouble));
@@ -297,15 +299,24 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 				}
 			}
 		}
-		cairo_dock_free_data_renderer (pRenderer);
 	}
 	
 	//\_____________ On en cree un nouveau.
-	cairo_dock_add_new_data_renderer_on_icon (pIcon, pContainer, pSourceContext, pAttribute);
+	CairoDataRenderer *pNewRenderer;
+	if (pAttribute->cModelName == NULL && pOldRenderer != NULL)
+	{
+		pNewRenderer = pOldRenderer->interface.new ();
+		cairo_dock_add_data_renderer_on_icon (pNewRenderer, pIcon, pContainer, pSourceContext, pAttribute);
+	}
+	else
+	{
+		cairo_dock_add_new_data_renderer_on_icon (pIcon, pContainer, pSourceContext, pAttribute);
+	}
+	cairo_dock_free_data_renderer (pOldRenderer);
 	
 	//\_____________ On lui remet les valeurs actuelles.
-	pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
-	if (pRenderer != NULL && pData != NULL)
-		memcpy (&pRenderer->data, pData, sizeof (CairoDataToRenderer));
+	pNewRenderer = cairo_dock_get_icon_data_renderer (pIcon);
+	if (pNewRenderer != NULL && pData != NULL)
+		memcpy (&pNewRenderer->data, pData, sizeof (CairoDataToRenderer));
 	g_free (pData);
 }

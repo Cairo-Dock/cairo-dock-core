@@ -595,9 +595,9 @@ static gboolean _cairo_desklet_animation (CairoDesklet *pDesklet)
 	
 	cairo_dock_notify (CAIRO_DOCK_UPDATE_DESKLET, pDesklet, &bContinue);
 	
-	///gtk_widget_queue_draw (pDesklet->pWidget);
 	if (! bContinue && ! pDesklet->bKeepSlowAnimation)
 	{
+		g_print ("||| Arret de l'animation du desklet\n");
 		pDesklet->iSidGLAnimation = 0;
 		return FALSE;
 	}

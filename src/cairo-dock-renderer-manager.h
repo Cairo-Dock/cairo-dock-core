@@ -29,8 +29,8 @@ CairoDeskletDecoration *cairo_dock_get_desklet_decoration (const gchar *cDecorat
 void cairo_dock_register_desklet_decoration (const gchar *cDecorationName, CairoDeskletDecoration *pDecoration);
 void cairo_dock_remove_desklet_decoration (const gchar *cDecorationName);
 
-CairoDataRendererInitFunc cairo_dock_get_data_renderer_entry_point (const gchar *cRendererName);
-void cairo_dock_register_data_renderer_entry_point (const gchar *cRendererName, CairoDataRendererInitFunc *pFunc);
+CairoDataRendererNewFunc cairo_dock_get_data_renderer_entry_point (const gchar *cRendererName);
+void cairo_dock_register_data_renderer_entry_point (const gchar *cRendererName, CairoDataRendererNewFunc *pFunc);
 void cairo_dock_remove_data_renderer_entry_point (const gchar *cRendererName);
 
 
