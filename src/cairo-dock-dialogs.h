@@ -136,7 +136,7 @@ CairoDialog *cairo_dock_show_dialog_with_question (const gchar *cText, Icon *pIc
 *@param pFreeDataFunc fonction qui liberera le pointeur.
 *@return le dialogue nouvellement cree.
 */
-CairoDialog *cairo_dock_show_dialog_with_entry (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, gchar *cIconPath, const gchar  *cTextForEntry, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc);
+CairoDialog *cairo_dock_show_dialog_with_entry (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, gchar *cIconPath, const gchar *cTextForEntry, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc);
 /**
 *Fait apparaitre un dialogue a duree de vie illimitee avec une echelle horizontale et 2 boutons ok/annuler. Lorsque l'utilisateur clique sur "ok", la fonction d'action est appelee avec la valeur de l'echelle sous forme de texte, et avec "-1" s'il a clique sur "annuler".
 *@param cText le message du dialogue.
@@ -230,6 +230,11 @@ void cairo_dock_hide_dialog (CairoDialog *pDialog);
 *@param pDialog le dialogue.
 */
 void cairo_dock_unhide_dialog (CairoDialog *pDialog);
+/**
+*Inverse la visibilite d'un dialogue (appelle simplement les 2 fonctions ci-dessus suivant la visibilité du dialogue).
+*@param pDialog le dialogue.
+*/
+void cairo_dock_toggle_dialog_visibility (CairoDialog *pDialog);
 
 /**
 *Retire un widget de son container GTK sans le detruire Le widget peut alors etre replace ailleurs ulterieurement.

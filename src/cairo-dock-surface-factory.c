@@ -65,6 +65,13 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 {
 	gboolean bKeepRatio = iLoadingModifier & CAIRO_DOCK_KEEP_RATIO;
 	gboolean bNoZoomUp = iLoadingModifier & CAIRO_DOCK_DONT_ZOOM_IN;
+	gint iOrientation = iLoadingModifier & CAIRO_DOCK_ORIENTATION_MASK;
+	if (iOrientation > CAIRO_DOCK_ORIENTATION_VFLIP)  // inversion x/y
+	{
+		double tmp = *fImageWidth;
+		*fImageWidth = *fImageHeight;
+		*fImageHeight = tmp;
+	}
 	if (bKeepRatio)
 	{
 		cairo_dock_calculate_size_constant_ratio (fImageWidth,
@@ -282,7 +289,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 			bIsPNG = TRUE;
 	}
 	
-	bIsPNG = FALSE;  /// libcairo 1.6 est bugguee !!!...
+	///bIsPNG = FALSE;  /// libcairo 1.6 est bugguee !!!...
 	if (bIsSVG)
 	{
 		rsvg_handle = rsvg_handle_new_from_file (cImagePath, &erreur);

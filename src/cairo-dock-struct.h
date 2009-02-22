@@ -447,7 +447,7 @@ struct _CairoDockMinimalAppletConfig {
 
 typedef void (* CairoDockApplyConfigFunc) (gpointer data);
 
-typedef void (* CairoDockActionOnAnswerFunc) (int iClickedButton, GtkWidget *pWidget, gpointer data, CairoDialog *pDialog);
+typedef void (* CairoDockActionOnAnswerFunc) (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog);
 
 typedef gpointer CairoDialogRendererDataParameter;
 typedef CairoDialogRendererDataParameter* CairoDialogRendererDataPtr;
@@ -561,10 +561,6 @@ struct _CairoDialog {
 	gint iInteractiveWidth, iInteractiveHeight;
 	/// distance de la bulle au dock, donc hauteur totale de la pointe.
 	gint iDistanceToDock;
-	/// decalage pour l'effet de clique sur le bouton Ok.
-	gint iButtonOkOffset;
-	/// decalage pour l'effet de clique sur le bouton Annuler.
-	gint iButtonCancelOffset;
 	/// le widget de remplissage ou l'on dessine le message.
 	GtkWidget *pMessageWidget;
 	/// le widget de remplissage ou l'on dessine les boutons.
@@ -947,10 +943,18 @@ struct _CairoDesklet {
 };
 
 typedef enum {
-	CAIRO_DOCK_FILL_SPACE 		= 0,
-	CAIRO_DOCK_KEEP_RATIO 		= 1<<0,
-	CAIRO_DOCK_DONT_ZOOM_IN 	= 1<<1
+	CAIRO_DOCK_FILL_SPACE 			= 1<<0,
+	CAIRO_DOCK_KEEP_RATIO 			= 1<<1,
+	CAIRO_DOCK_DONT_ZOOM_IN 		= 1<<2,
+	CAIRO_DOCK_ORIENTATION_HFLIP 		= 1<<3,
+	CAIRO_DOCK_ORIENTATION_ROT_180 	= 2<<3,
+	CAIRO_DOCK_ORIENTATION_VFLIP 		= 3<<3,
+	CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP = 4<<3,
+	CAIRO_DOCK_ORIENTATION_ROT_90 	= 5<<3,
+	CAIRO_DOCK_ORIENTATION_ROT_90_VFLIP = 6<<3,
+	CAIRO_DOCK_ORIENTATION_ROT_270 	= 7<<3
 	} CairoDockLoadImageModifier;
+#define CAIRO_DOCK_ORIENTATION_MASK (7<<3)
 
 struct _CairoDeskletDecoration {
 	gchar *cBackGroundImagePath;

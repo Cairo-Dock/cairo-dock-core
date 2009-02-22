@@ -1226,7 +1226,6 @@ void cairo_dock_check_can_drop_linear (CairoDock *pDock)
 	if (pDock->icons == NULL)
 		return;
 	
-	//if (pDock->bInside && pDock->iAvoidingMouseIconType != -1 && pDock->fAvoidingMouseMargin > 0)
 	if (pDock->bIsDragging)
 		pDock->bCanDrop = _cairo_dock_check_can_drop_linear (pDock, pDock->iAvoidingMouseIconType, pDock->fAvoidingMouseMargin);
 	else
