@@ -842,9 +842,8 @@ void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecrypt
 	gchar *shifted_input = input;
 	gchar **output = cDecryptedString; 
 
-  char *last_char_in_input = input + strlen(input);
   char *current_output = NULL;
-  if( output && strlen(input)>0 )
+  if( output && input && strlen(input)>0 )
   {
     *output = g_malloc( (strlen(input)+1)/3 );
     current_output = *output;
@@ -854,6 +853,7 @@ void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecrypt
   	return;
 	}
 
+  char *last_char_in_input = input + strlen(input);
 //  g_print( "Password (before decrypt): %s\n", input );
 
   for( ; shifted_input < last_char_in_input; shifted_input += 16+8, current_output += 8 )
@@ -905,9 +905,8 @@ void cairo_dock_encrypt_string( const gchar *cDecryptedString,  gchar **cEncrypt
 	const gchar *input = cDecryptedString;
 	gchar **output = cEncryptedString;
 
-  const char *last_char_in_input = input + strlen(input);
   char *current_output = NULL;
-  if( output )
+  if( output && input )
   {
     *output = g_malloc( strlen(input)*3+1 );
     current_output = *output;
@@ -916,6 +915,8 @@ void cairo_dock_encrypt_string( const gchar *cDecryptedString,  gchar **cEncrypt
   {
   	return;
 	}
+
+  const char *last_char_in_input = input + strlen(input);
 
 //  g_print( "Password (before encrypt): %s\n", input );
 
