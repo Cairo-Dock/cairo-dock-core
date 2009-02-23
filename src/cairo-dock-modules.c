@@ -369,36 +369,25 @@ void cairo_dock_free_module (CairoDockModule *module)
 
 GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *pInstance, CairoDockMinimalAppletConfig *pMinimalConfig)
 {
-	g_return_val_if_fail (pInstance != NULL, NULL);  /// && pInstance->cConfFilePath != NULL
+	g_return_val_if_fail (pInstance != NULL, NULL);
 	if (pInstance->cConfFilePath == NULL)  // peut arriver avec xxx-integration par exemple.
 		return NULL;
 	gchar *cInstanceConfFilePath = pInstance->cConfFilePath;
 	CairoDockModule *pModule = pInstance->pModule;
 	
 	GError *erreur = NULL;
-	GKeyFile *pKeyFile = g_key_file_new ();
-	g_key_file_load_from_file (pKeyFile, cInstanceConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cInstanceConfFilePath);
+	if (pKeyFile == NULL)
 		return NULL;
-	}
 
 	gboolean bNeedsUpgrade = cairo_dock_conf_file_needs_update (pKeyFile, pModule->pVisitCard->cModuleVersion);
 	if (bNeedsUpgrade)
 	{
 		cairo_dock_flush_conf_file (pKeyFile, cInstanceConfFilePath, pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);
 		g_key_file_free (pKeyFile);
-		pKeyFile = g_key_file_new ();
-
-		g_key_file_load_from_file (pKeyFile, cInstanceConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-		if (erreur != NULL)
-		{
-			cd_warning (erreur->message);
-			g_error_free (erreur);
+		pKeyFile = cairo_dock_open_key_file (cInstanceConfFilePath);
+		if (pKeyFile == NULL)
 			return NULL;
-		}
 	}
 
 	if (! g_key_file_has_group (pKeyFile, "Icon"))  // ce module n'a pas d'icone, ce n'est donc pas une applet.
@@ -409,7 +398,11 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 	}
 	
 	pMinimalConfig->iDesiredIconWidth = cairo_dock_get_integer_key_value (pKeyFile, "Icon", "width", NULL, 48, NULL, NULL);
+	if (pMinimalConfig->iDesiredIconWidth == 0)
+		pMinimalConfig->iDesiredIconWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLET];
 	pMinimalConfig->iDesiredIconHeight = cairo_dock_get_integer_key_value (pKeyFile, "Icon", "height", NULL, 48, NULL, NULL);
+	if (pMinimalConfig->iDesiredIconHeight== 0)
+		pMinimalConfig->iDesiredIconHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLET];
 	pMinimalConfig->cLabel = cairo_dock_get_string_key_value (pKeyFile, "Icon", "name", NULL, NULL, NULL, NULL);
 	pMinimalConfig->cIconFileName = cairo_dock_get_string_key_value (pKeyFile, "Icon", "icon", NULL, NULL, NULL, NULL);
 	pMinimalConfig->fOrder = cairo_dock_get_double_key_value (pKeyFile, "Icon", "order", NULL, CAIRO_DOCK_LAST_ORDER, NULL, NULL);
@@ -1306,18 +1299,12 @@ static void _cairo_dock_reload_internal_module (CairoDockInternalModule *pModule
 void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, const gchar *cConfFilePath)
 {
 	g_return_if_fail (pModule != NULL);
-	GKeyFile *pKeyFile = g_key_file_new ();
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
+	if (pKeyFile == NULL)
+		return;
 	
-	GError *erreur = NULL;
-	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
-		return ;
-	}
 	_cairo_dock_reload_internal_module (pModule, pKeyFile);
-		
+	
 	g_key_file_free (pKeyFile);
 }
 

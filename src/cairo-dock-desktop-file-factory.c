@@ -71,11 +71,8 @@ gchar *cairo_dock_generate_desktop_file_for_launcher (const gchar *cDesktopURI, 
 	}
 
 	//\___________________ On renseigne nos champs.
-	///g_key_file_set_string (pKeyFile, "Desktop Entry", "frame_extra", "");
 	g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", fOrder);
 	g_key_file_set_string (pKeyFile, "Desktop Entry", "Container", cDockName);
-	///g_key_file_set_boolean (pKeyFile, "Desktop Entry", "Is container", FALSE);
-	///g_key_file_set_string (pKeyFile, "Desktop Entry", "Base URI", "");
 	
 	//\___________________ On elimine les indesirables.
 	g_key_file_remove_key (pKeyFile, "Desktop Entry", "X-Ubuntu-Gettext-Domain", NULL);
@@ -273,14 +270,9 @@ gchar *cairo_dock_generate_desktop_filename (gchar *cBaseName, gchar *cCairoDock
 void cairo_dock_update_launcher_desktop_file (gchar *cDesktopFilePath, CairoDockNewLauncherType iLauncherType)
 {
 	GError *erreur = NULL;
-	GKeyFile *pKeyFile = g_key_file_new ();
-	g_key_file_load_from_file (pKeyFile, cDesktopFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning ("Attention : %s", erreur->message);
-		g_error_free (erreur);
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
+	if (pKeyFile == NULL)
 		return ;
-	}
 
 	if (cairo_dock_conf_file_needs_update (pKeyFile, CAIRO_DOCK_VERSION))
 	{

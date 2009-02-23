@@ -60,9 +60,5 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer);
 void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);
 
 
-#define cairo_dock_set_inverted_texture(icon) (icon)->bInvertedTexture = TRUE
-#define cairo_dock_texture_is_inverted(icon) ((icon)->bInvertedTexture)
-
-
 G_END_DECLS
 #endif

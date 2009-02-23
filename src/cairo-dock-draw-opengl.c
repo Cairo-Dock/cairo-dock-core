@@ -260,13 +260,12 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		double fScale = ((myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon)) ? 1. : pIcon->fScale);
 		double fReflectRatio = myIcons.fReflectSize * pDock->fRatio / pIcon->fHeight / fScale  / pIcon->fHeightFactor;
 		double fOffsetY = pIcon->fHeight * fScale/2 + myIcons.fReflectSize * pDock->fRatio/2 + pIcon->fDeltaYReflection;
-		int sens = cairo_dock_texture_is_inverted (pIcon) ? -1 : 1;
 		if (pDock->bHorizontalDock)
 		{
 			if (pDock->bDirectionUp)
 			{
 				glTranslatef (0., - fOffsetY, 0.);
-				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, - sens * myIcons.fReflectSize * pDock->fRatio, 1.);  // taille du reflet et on se retourne.
+				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, - myIcons.fReflectSize * pDock->fRatio, 1.);  // taille du reflet et on se retourne.
 				x0 = 0.;
 				y0 = 1. - fReflectRatio;
 				x1 = 1.;
@@ -275,7 +274,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			else
 			{
 				glTranslatef (0., fOffsetY, 0.);
-				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, sens * myIcons.fReflectSize * pDock->fRatio, 1.);
+				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, myIcons.fReflectSize * pDock->fRatio, 1.);
 				x0 = 0.;
 				y0 = fReflectRatio;
 				x1 = 1.;
@@ -287,7 +286,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			if (pDock->bDirectionUp)
 			{
 				glTranslatef (fOffsetY, 0., 0.);
-				glScalef (- myIcons.fReflectSize * pDock->fRatio, sens * pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
+				glScalef (- myIcons.fReflectSize * pDock->fRatio, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
 				x0 = 1. - fReflectRatio;
 				y0 = 0.;
 				x1 = 1.;
@@ -296,15 +295,13 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			else
 			{
 				glTranslatef (- fOffsetY, 0., 0.);
-				glScalef (myIcons.fReflectSize * pDock->fRatio, sens * pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
+				glScalef (myIcons.fReflectSize * pDock->fRatio, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
 				x0 = fReflectRatio;
 				y0 = 0.;
 				x1 = 0.;
 				y1 = 1.;
 			}
 		}
-		
-		
 		/**glActiveTexture (GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, g_pGradationTexture[pDock->bHorizontalDock]);
 		glActiveTexture (GL_TEXTURE1);
@@ -904,20 +901,10 @@ void cairo_dock_apply_icon_texture (Icon *pIcon)
 {
 	glBindTexture (GL_TEXTURE_2D, pIcon->iIconTexture);
 	glBegin(GL_QUADS);
-	if (cairo_dock_texture_is_inverted (pIcon))
-	{
-		glTexCoord2f(0., 0.); glVertex3f(-.5, -.5, 0.);  // Bottom Left Of The Texture and Quad
-		glTexCoord2f(1., 0.); glVertex3f( .5, -.5, 0.);  // Bottom Right Of The Texture and Quad
-		glTexCoord2f(1., 1.); glVertex3f( .5,  .5, 0.);  // Top Right Of The Texture and Quad
-		glTexCoord2f(0., 1.); glVertex3f(-.5,  .5, 0.);  // Top Left Of The Texture and Quad
-	}
-	else
-	{
-		glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
-		glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);  // Bottom Right Of The Texture and Quad
-		glTexCoord2f(1., 1.); glVertex3f( .5, -.5, 0.);  // Top Right Of The Texture and Quad
-		glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);  // Top Left Of The Texture and Quad
-	}
+	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
+	glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);  // Bottom Right Of The Texture and Quad
+	glTexCoord2f(1., 1.); glVertex3f( .5, -.5, 0.);  // Top Right Of The Texture and Quad
+	glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);  // Top Left Of The Texture and Quad
 	glEnd();
 }
 
@@ -925,9 +912,6 @@ void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer)
 {
 	double fSizeX, fSizeY;
 	cairo_dock_get_current_icon_size (pIcon, pContainer, &fSizeX, &fSizeY);
-	
-	if (cairo_dock_texture_is_inverted (pIcon))
-		fSizeY = - fSizeY;
 	
 	cairo_dock_draw_texture (pIcon->iIconTexture,
 		fSizeX,
@@ -1415,6 +1399,8 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 			pContainer->iWidth/2, pContainer->iHeight/2, 0.,
 			0.0f, 1.0f, 0.0f);
 		glTranslatef (pContainer->iWidth/2, pContainer->iHeight/2, -3.);
+		glTranslatef (pIcon->fWidth/2, pIcon->fHeight/2, -pIcon->fHeight/2);
+		//glTranslatef (pContainer->iWidth, pContainer->iHeight, - s_iIconPbufferHeight/2);
 	}
 	else if (s_iconContext != 0)
 	{
@@ -1422,6 +1408,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 		if (! glXMakeCurrent (XDisplay, s_iconPbuffer, s_iconContext))
 			return FALSE;
 		glLoadIdentity ();
+		glTranslatef (s_iIconPbufferWidth/2, s_iIconPbufferHeight/2, - s_iIconPbufferHeight/2);
 	}
 	else
 		return FALSE;
@@ -1429,7 +1416,10 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth (1.0f);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 	glColor4f(1., 1., 1., 1.);
+	
+	glScalef (1., -1., 1.);
 	
 	return TRUE;
 }
@@ -1452,7 +1442,6 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	glColor4f(1., 1., 1., 1.);
 	glCopyTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, iWidth, iHeight, 0);  // target, num mipmap, format, x,y, w,h, border.
 	glDisable (GL_TEXTURE_2D);
-	cairo_dock_set_inverted_texture (pIcon);
 	
 	//end
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))

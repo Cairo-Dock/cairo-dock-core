@@ -463,14 +463,9 @@ void cairo_dock_swap_icons (CairoDock *pDock, Icon *icon1, Icon *icon2)
 		if (icon1->acDesktopFileName != NULL)
 		{
 			cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon1->acDesktopFileName);
-			pKeyFile = g_key_file_new();
-			g_key_file_load_from_file (pKeyFile, cDesktopFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-			if (erreur != NULL)
-			{
-				cd_warning (erreur->message);
-				g_error_free (erreur);
+			pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
+			if (pKeyFile == NULL)
 				return ;
-			}
 
 			g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", icon1->fOrder);
 			cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
@@ -481,14 +476,9 @@ void cairo_dock_swap_icons (CairoDock *pDock, Icon *icon1, Icon *icon2)
 		if (icon2->acDesktopFileName != NULL)
 		{
 			cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon2->acDesktopFileName);
-			pKeyFile = g_key_file_new();
-			g_key_file_load_from_file (pKeyFile, cDesktopFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-			if (erreur != NULL)
-			{
-				cd_warning (erreur->message);
-				g_error_free (erreur);
+			pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
+			if (pKeyFile == NULL)
 				return ;
-			}
 
 			g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", icon2->fOrder);
 			cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
@@ -1258,16 +1248,9 @@ void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParen
 	{
 		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->acDesktopFileName);
 
-		GError *erreur = NULL;
-		GKeyFile *pKeyFile = g_key_file_new ();
-		g_key_file_load_from_file (pKeyFile, cDesktopFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-		if (erreur != NULL)
-		{
-			cd_warning ("%s", erreur->message);
-			g_error_free (erreur);
-			g_free (cDesktopFilePath);
+		GKeyFile *pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
+		if (pKeyFile == NULL)
 			return ;
-		}
 
 		g_key_file_set_string (pKeyFile, "Desktop Entry", "Container", cNewParentDockName);
 		cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
@@ -1277,15 +1260,10 @@ void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParen
 	}
 	else if (CAIRO_DOCK_IS_APPLET (icon))
 	{
-		GError *erreur = NULL;
-		GKeyFile *pKeyFile = g_key_file_new ();
-		g_key_file_load_from_file (pKeyFile, icon->pModuleInstance->cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-		if (erreur != NULL)
-		{
-			cd_warning ("%s", erreur->message);
-			g_error_free (erreur);
+		GKeyFile *pKeyFile = cairo_dock_open_key_file (icon->pModuleInstance->cConfFilePath);
+		if (pKeyFile == NULL)
 			return ;
-		}
+		
 		g_key_file_set_string (pKeyFile, "Icon", "dock name", cNewParentDockName);
 		cairo_dock_write_keys_to_file (pKeyFile, icon->pModuleInstance->cConfFilePath);
 		g_key_file_free (pKeyFile);

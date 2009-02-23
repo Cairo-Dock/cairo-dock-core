@@ -26,6 +26,7 @@ static char DES_crypt_key[64] =
 #endif
 
 #include "cairo-dock-draw.h"
+#include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-applications-manager.h"
@@ -456,15 +457,9 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	gboolean bFlushConfFileNeeded = FALSE, bFlushConfFileNeeded2 = FALSE;  // si un champ n'existe pas, on le rajoute au fichier de conf.
 
 	//\___________________ On ouvre le fichier de conf.
-	GKeyFile *pKeyFile = g_key_file_new ();
-	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
-		erreur = NULL;
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
+	if (pKeyFile == NULL)
 		return ;
-	}
 	
 	s_bLoading = TRUE;
 	
@@ -713,9 +708,6 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	if (bFlushConfFileNeeded)
 	{
 		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
-		g_key_file_free (pKeyFile);
-		pKeyFile = g_key_file_new ();
-		g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, NULL);
 	}
 	
 	cairo_destroy (pCairoContext);
