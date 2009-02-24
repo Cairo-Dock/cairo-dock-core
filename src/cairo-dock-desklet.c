@@ -354,19 +354,13 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 		glColor4f (1., 1., 1., pDesklet->fBackGroundAlpha);
 		
 		glEnable (GL_TEXTURE_2D);
-		glBindTexture (GL_TEXTURE_2D, pDesklet->iBackGroundTexture);
-		//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 		
 		glPolygonMode (GL_FRONT, GL_FILL);
 		glNormal3f (0., 0., 1.);
 		glScalef (pDesklet->iWidth, pDesklet->iHeight, 1.);
 		
-		glBegin(GL_QUADS);
-		glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
-		glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);  // Bottom Right Of The Texture and Quad
-		glTexCoord2f(1., 1.); glVertex3f( .5, -.5, 0.);  // Top Right Of The Texture and Quad
-		glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);  // Top Left Of The Texture and Quad
-		glEnd();
+		cairo_dock_apply_texture (pDesklet->iBackGroundTexture);
 		
 		glDisable (GL_TEXTURE_2D);
 		glDisable (GL_BLEND);
@@ -376,7 +370,7 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 	glPushMatrix ();
 	if (pDesklet->iLeftSurfaceOffset != 0 || pDesklet->iTopSurfaceOffset != 0 || pDesklet->iRightSurfaceOffset != 0 || pDesklet->iBottomSurfaceOffset != 0)
 	{
-		glTranslatef (pDesklet->iLeftSurfaceOffset - pDesklet->iRightSurfaceOffset, pDesklet->iBottomSurfaceOffset - pDesklet->iTopSurfaceOffset, 0.);
+		glTranslatef ((pDesklet->iLeftSurfaceOffset - pDesklet->iRightSurfaceOffset)/2, (pDesklet->iBottomSurfaceOffset - pDesklet->iTopSurfaceOffset)/2, 0.);
 		glScalef (1. - 1.*(pDesklet->iLeftSurfaceOffset + pDesklet->iRightSurfaceOffset) / pDesklet->iWidth,
 			1. - 1.*(pDesklet->iTopSurfaceOffset + pDesklet->iBottomSurfaceOffset) / pDesklet->iHeight,
 			1.);

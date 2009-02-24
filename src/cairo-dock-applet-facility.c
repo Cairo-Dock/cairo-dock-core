@@ -78,10 +78,7 @@ void cairo_dock_add_reflection_to_icon (cairo_t *pIconContext, Icon *pIcon, Cair
 {
 	g_return_if_fail (pIcon != NULL && pContainer!= NULL);
 	if (pIcon->pReflectionBuffer != NULL)
-	{
 		cairo_surface_destroy (pIcon->pReflectionBuffer);
-		pIcon->pReflectionBuffer = NULL;
-	}
 	
 	double fMaxScale = (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) / CAIRO_DOCK (pContainer)->fRatio : 1);
 	gboolean bIsHorizontal = pContainer->bIsHorizontal;

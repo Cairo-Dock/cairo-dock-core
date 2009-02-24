@@ -29,6 +29,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-class-manager.h"
+#include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-launcher-factory.h"

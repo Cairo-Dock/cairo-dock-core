@@ -241,7 +241,7 @@ gboolean cairo_dock_set_class_use_xicon (const gchar *cClass, gboolean bUseXIcon
 		{
 			cd_message ("%s n'utilise plus l'icone de X", pAppliIcon->acName);
 		}
-		cairo_dock_fill_one_icon_buffer (pAppliIcon, pCairoContext, (1 + myIcons.fAmplitude), g_pMainDock->bHorizontalDock, TRUE, g_pMainDock->bDirectionUp);
+		cairo_dock_fill_one_icon_buffer (pAppliIcon, pCairoContext, (1 + myIcons.fAmplitude), g_pMainDock->bHorizontalDock, g_pMainDock->bDirectionUp);
 	}
 	cairo_destroy (pCairoContext);
 	
@@ -415,7 +415,7 @@ void cairo_dock_deinhibate_class (const gchar *cClass, Icon *pInhibatorIcon)
 			if (pParentDock != NULL)
 			{
 				cd_message ("on recharge l'icone de l'appli %s", pIcon->acName);
-				cairo_dock_fill_one_icon_buffer (pIcon, pCairoContext, 1 + myIcons.fAmplitude, pParentDock->bHorizontalDock, TRUE, pParentDock->bDirectionUp);
+				cairo_dock_fill_one_icon_buffer (pIcon, pCairoContext, 1 + myIcons.fAmplitude, pParentDock->bHorizontalDock, pParentDock->bDirectionUp);
 			}
 		}
 		cairo_destroy (pCairoContext);
@@ -516,14 +516,8 @@ void cairo_dock_reset_class_table (void)
 
 cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_t *pSourceContext, Icon *pInhibatorIcon, double fMaxScale, double *fWidth, double *fHeight)
 {
-	double fIconWidthSaturationFactor, fIconHeightSaturationFactor;
-	cairo_dock_calculate_size_fill (fWidth,
-		fHeight,
-		myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-		myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
-		FALSE,
-		&fIconWidthSaturationFactor,
-		&fIconHeightSaturationFactor);
+	*fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI];
+	*fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI];
 	
 	CairoContainer *pInhibhatorContainer = cairo_dock_search_container_from_icon (pInhibatorIcon);
 	double fInhibatorMaxScale = (CAIRO_DOCK_IS_DOCK (pInhibhatorContainer) ? fMaxScale : 1);

@@ -929,6 +929,12 @@ gboolean CD_APPLET_ON_SCROLL (CairoDockModuleInstance *myApplet, Icon *pClickedI
 	cairo_dock_redraw_my_icon (myIcon, myContainer)
 
 /**
+*Recalcule le reflet de l'icone pour son dessin cairo (inutile en OpenGL).
+*/
+#define CD_APPLET_UPDATE_REFLECT_ON_MY_ICON \
+	if (myContainer->bUseReflect) cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer)
+
+/**
 *Applique une surface existante sur le contexte de dessin de l'applet, et la redessine. La surface est redimensionnee aux dimensions de l'icone.
 *@param pSurface la surface cairo a dessiner.
 */

@@ -216,11 +216,14 @@ void cairo_dock_load_reflect_on_icon (Icon *icon, cairo_t *pSourceContext, gdoub
 	}
 }
 
-void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdouble fMaxScale, gboolean bHorizontalDock, gboolean bApplySizeRestriction, gboolean bDirectionUp)
+void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdouble fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp)
 {
 	//g_print ("%s (%d, %.2f, %s)\n", __func__, icon->iType, fMaxScale, icon->acFileName);
-	cairo_surface_destroy (icon->pIconBuffer);
-	icon->pIconBuffer = NULL;
+	if (icon->pIconBuffer != NULL)
+	{
+		cairo_surface_destroy (icon->pIconBuffer);
+		icon->pIconBuffer = NULL;
+	}
 	if (icon->iIconTexture != 0)
 	{
 		glDeleteTextures (1, &icon->iIconTexture);
@@ -247,8 +250,8 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			icon->pIconBuffer = cairo_dock_create_surface_from_image (cIconPath,
 				pSourceContext,
 				fMaxScale,
-				(bApplySizeRestriction ? myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : icon->fWidth),
-				(bApplySizeRestriction ? myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : icon->fHeight),
+				(icon->fWidth == 0 ? myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : icon->fWidth),
+				(icon->fHeight == 0 ? myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : icon->fHeight),
 				CAIRO_DOCK_FILL_SPACE,
 				(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
 				(bHorizontalDock ? &icon->fHeight : &icon->fWidth),
@@ -281,7 +284,11 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	else if (CAIRO_DOCK_IS_APPLET (icon))  // c'est l'icône d'une applet.
 	{
 		//g_print ("  icon->acFileName : %s\n", icon->acFileName);
-		icon->pIconBuffer = cairo_dock_create_applet_surface (icon->acFileName, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight, bApplySizeRestriction);
+		icon->pIconBuffer = cairo_dock_create_applet_surface (icon->acFileName,
+			pSourceContext,
+			fMaxScale,
+			(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
+			(bHorizontalDock ? &icon->fHeight : &icon->fWidth));
 	}
 	else if (CAIRO_DOCK_IS_APPLI (icon))  // c'est l'icône d'une appli valide. Dans cet ordre on n'a pas besoin de verifier que c'est NORMAL_APPLI.
 	{
@@ -304,8 +311,8 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 		icon->pIconBuffer = cairo_dock_create_surface_from_image (cIconPath,
 			pSourceContext,
 			fMaxScale,
-			(bApplySizeRestriction ? myIcons.tIconAuthorizedWidth[iType] : icon->fWidth),
-			(bApplySizeRestriction ? myIcons.tIconAuthorizedHeight[iType] : icon->fHeight),
+			(icon->fWidth == 0 ? myIcons.tIconAuthorizedWidth[iType] : icon->fWidth),
+			(icon->fHeight == 0 ? myIcons.tIconAuthorizedHeight[iType] : icon->fHeight),
 			CAIRO_DOCK_FILL_SPACE,
 			(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
 			(bHorizontalDock ? &icon->fHeight : &icon->fWidth),
@@ -473,9 +480,9 @@ void cairo_dock_fill_one_quick_info_buffer (Icon *icon, cairo_t* pSourceContext,
 
 
 
-void cairo_dock_fill_icon_buffers (Icon *icon, cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bApplySizeRestriction, gboolean bDirectionUp)
+void cairo_dock_fill_icon_buffers (Icon *icon, cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp)
 {
-	cairo_dock_fill_one_icon_buffer (icon, pSourceContext, fMaxScale, bHorizontalDock, bApplySizeRestriction, bDirectionUp);
+	cairo_dock_fill_one_icon_buffer (icon, pSourceContext, fMaxScale, bHorizontalDock, bDirectionUp);
 
 	cairo_dock_fill_one_text_buffer (icon, pSourceContext, &myLabels.iconTextDescription);
 

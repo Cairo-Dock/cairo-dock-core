@@ -21,6 +21,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-internal-desklets.h"
 #include "cairo-dock-internal-system.h"
+#include "cairo-dock-animations.h"
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-renderer-manager.h"
 

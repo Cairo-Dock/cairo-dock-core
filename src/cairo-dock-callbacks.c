@@ -1127,7 +1127,11 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommandFormat, gchar *cWo
 gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState)
 {
 	cd_debug ("%s (%s)", __func__, (icon ? icon->acName : "no icon"));
-	if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))
+	if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick)  // icone de sous-dock.
+	{
+		cairo_dock_show_subdock (icon, FALSE, pDock);
+	}
+	else if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))
 	{
 		cd_debug (" uri launcher");
 		gboolean bIsMounted = FALSE;
@@ -1248,21 +1252,12 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 					}
 					if (icon != NULL && ! CAIRO_DOCK_IS_SEPARATOR (icon) && icon == s_pIconClicked)
 					{
-						if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick && ! (pButton->state & GDK_SHIFT_MASK))  // icone de sous-dock.
-						{
-							cairo_dock_show_subdock (icon, FALSE, pDock);
-						}
-						else
-						{
-							s_pIconClicked = NULL;  // il faut le faire ici au cas ou le clic induirait un dialogue bloquant qui nous ferait sortir du dock par exemple.
-							cairo_dock_notify (CAIRO_DOCK_CLICK_ICON, icon, pDock, pButton->state);
-							if (myAccessibility.cRaiseDockShortcut != NULL)
-								s_bHideAfterShortcut = TRUE;
-							
-							cairo_dock_start_icon_animation (icon, pDock);
-							//cairo_dock_mark_icon_as_clicked (icon);
-							//cairo_dock_launch_animation (pDock);
-						}
+						s_pIconClicked = NULL;  // il faut le faire ici au cas ou le clic induirait un dialogue bloquant qui nous ferait sortir du dock par exemple.
+						cairo_dock_notify (CAIRO_DOCK_CLICK_ICON, icon, pDock, pButton->state);
+						if (myAccessibility.cRaiseDockShortcut != NULL)
+							s_bHideAfterShortcut = TRUE;
+						
+						cairo_dock_start_icon_animation (icon, pDock);
 					}
 					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked && ! g_bLocked && ! myAccessibility.bLockIcons)  //  && icon->iType == s_pIconClicked->iType
 					{

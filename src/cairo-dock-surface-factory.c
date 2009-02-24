@@ -174,6 +174,56 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 	return pNewSurface;
 }
 
+static inline void _apply_orientation (cairo_t *pCairoContext, CairoDockLoadImageModifier iLoadingModifier, double fImageWidth, double fImageHeight, double fZoomX, double fZoomY)
+{
+	int iOrientation = iLoadingModifier & CAIRO_DOCK_ORIENTATION_MASK;
+	if (iOrientation != 0)
+	{
+		cairo_translate (pCairoContext,
+			fImageWidth/2,
+			fImageHeight/2);
+		cairo_scale (pCairoContext,
+			fZoomX,
+			fZoomY);
+		switch (iOrientation)
+		{
+			case CAIRO_DOCK_ORIENTATION_HFLIP :
+				cairo_scale (pCairoContext, -1., 1.);
+			break ;
+			case CAIRO_DOCK_ORIENTATION_ROT_180 :
+				cairo_rotate (pCairoContext, G_PI);
+			break ;
+			case CAIRO_DOCK_ORIENTATION_VFLIP :
+				cairo_scale (pCairoContext, 1., -1.);
+			break ;
+			case CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP :
+				cairo_scale (pCairoContext, -1., 1.);
+				cairo_rotate (pCairoContext, G_PI/2);
+			break ;
+			case CAIRO_DOCK_ORIENTATION_ROT_90 :
+				cairo_rotate (pCairoContext, G_PI/2);
+			break ;
+			case CAIRO_DOCK_ORIENTATION_ROT_90_VFLIP :
+				cairo_scale (pCairoContext, 1., -1.);
+				cairo_rotate (pCairoContext, G_PI/2);
+			break ;
+			case CAIRO_DOCK_ORIENTATION_ROT_270 :
+				cairo_rotate (pCairoContext, -G_PI/2);
+			break ;
+			default :
+			break ;
+		}
+		cairo_translate (pCairoContext,
+			- fImageWidth/2,
+			- fImageHeight/2);
+	}
+	else
+	{
+		cairo_scale (pCairoContext,
+			fZoomX,
+			fZoomY);
+	}
+}
 
 cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, cairo_t *pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)
 {
@@ -230,13 +280,17 @@ cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, cairo
 		ceil ((*fImageWidth) * fMaxScale),
 		ceil ((*fImageHeight) * fMaxScale));
 	cairo_t *pCairoContext = cairo_create (pNewSurface);
-
-	cairo_scale (pCairoContext, fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
+	
+	_apply_orientation (pCairoContext,
+		iLoadingModifier,
+		ceil ((*fImageWidth) * fMaxScale), ceil ((*fImageHeight) * fMaxScale),
+		fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
+	
 	cairo_set_source_surface (pCairoContext, surface_ini, 0, 0);
 	cairo_paint (pCairoContext);
-	cairo_surface_destroy (surface_ini);
-	cairo_destroy (pCairoContext);
 	
+	cairo_destroy (pCairoContext);
+	cairo_surface_destroy (surface_ini);
 	if (pPixbufWithAlpha != pixbuf)
 		g_object_unref (pPixbufWithAlpha);
 	
@@ -289,7 +343,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 			bIsPNG = TRUE;
 	}
 	
-	///bIsPNG = FALSE;  /// libcairo 1.6 est bugguee !!!...
+	bIsPNG = FALSE;  /// libcairo 1.6 - 1.8 est bugguee !!!...
 	if (bIsSVG)
 	{
 		rsvg_handle = rsvg_handle_new_from_file (cImagePath, &erreur);
@@ -319,7 +373,11 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 				ceil ((*fImageHeight) * fMaxScale));
 
 			pCairoContext = cairo_create (pNewSurface);
-			cairo_scale (pCairoContext, fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
+			_apply_orientation (pCairoContext,
+				iLoadingModifier,
+				ceil ((*fImageWidth) * fMaxScale), ceil ((*fImageHeight) * fMaxScale),
+				fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
+			//cairo_scale (pCairoContext, fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
 
 			rsvg_handle_render_cairo (rsvg_handle, pCairoContext);
 			cairo_destroy (pCairoContext);
@@ -328,7 +386,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 	}
 	else if (bIsPNG)
 	{
-		surface_ini = cairo_image_surface_create_from_png (cImagePath);
+		surface_ini = cairo_image_surface_create_from_png (cImagePath);  // cree un fond noir :-(
 		if (cairo_surface_status (surface_ini) == CAIRO_STATUS_SUCCESS)
 		{
 			*fImageWidth = (double) cairo_image_surface_get_width (surface_ini);
@@ -345,8 +403,16 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 				ceil ((*fImageWidth) * fMaxScale),
 				ceil ((*fImageHeight) * fMaxScale));
 			pCairoContext = cairo_create (pNewSurface);
+			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
+			cairo_set_source_rgba (pCairoContext, 0., 0., 0., 0.);
+			cairo_paint (pCairoContext);
+			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 			
-			cairo_scale (pCairoContext, fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
+			_apply_orientation (pCairoContext,
+				iLoadingModifier,
+				ceil ((*fImageWidth) * fMaxScale), ceil ((*fImageHeight) * fMaxScale),
+				fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
+			//cairo_scale (pCairoContext, fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
 			
 			cairo_set_source_surface (pCairoContext, surface_ini, 0, 0);
 			cairo_paint (pCairoContext);

@@ -27,12 +27,18 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp, double *fWidth, double *fHeight)
 {
-	*fWidth = 10;
-	*fHeight = 48;
-
 	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
+	
 	cairo_surface_t *pNewSurface = NULL;
-	if (myIcons.cSeparatorImage != NULL)
+	if (myIcons.cSeparatorImage == NULL)
+	{
+		*fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12];
+		*fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12];
+		pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+			ceil (*fWidth * fMaxScale),
+			ceil (*fHeight * fMaxScale));
+	}
+	else
 	{
 		gchar *cImagePath = cairo_dock_generate_file_path (myIcons.cSeparatorImage);
 		double fRotationAngle;
@@ -58,28 +64,13 @@ cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, d
 			fWidth,
 			fHeight,
 			NULL, NULL);
-		if (fRotationAngle != 0)
+		if (fRotationAngle != 0)  /// le faire pendant le dessin ...
 		{
 			cairo_surface_t *pNewSurfaceRotated = cairo_dock_rotate_surface (pNewSurface, pSourceContext, *fWidth * fMaxScale, *fHeight * fMaxScale, fRotationAngle);
 			cairo_surface_destroy (pNewSurface);
 			pNewSurface = pNewSurfaceRotated;
 		}
 		g_free (cImagePath);
-	}
-	else
-	{
-		double fIconWidthSaturationFactor, fIconHeightSaturationFactor;
-		cairo_dock_calculate_size_fill (fWidth,
-			fHeight,
-			myIcons.tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12],
-			myIcons.tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12],
-			FALSE,
-			&fIconWidthSaturationFactor,
-			&fIconHeightSaturationFactor);
-
-		pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
-			ceil (*fWidth * fMaxScale),
-			ceil (*fHeight * fMaxScale));
 	}
 	
 	return pNewSurface;
@@ -95,7 +86,7 @@ Icon *cairo_dock_create_separator_icon (cairo_t *pSourceContext, int iSeparatorT
 
 	Icon *icon = g_new0 (Icon, 1);
 	icon->iType = iSeparatorType;
-	cairo_dock_fill_one_icon_buffer (icon, pSourceContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, TRUE, pDock->bDirectionUp);
+	cairo_dock_fill_one_icon_buffer (icon, pSourceContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, pDock->bDirectionUp);
 
 	if (bApplyRatio)  ///  && pDock->iRefCount > 0
 	{

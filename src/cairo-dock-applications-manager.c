@@ -746,7 +746,7 @@ static void _cairo_dock_fill_icon_buffer_with_thumbnail (Icon *icon, CairoDock *
 	}
 	#endif
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pParentDock));
-	cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pParentDock->bHorizontalDock, TRUE, pParentDock->bDirectionUp);
+	cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pParentDock->bHorizontalDock, pParentDock->bDirectionUp);
 	cairo_destroy (pCairoContext);
 	icon->fWidth *= pParentDock->fRatio;
 	icon->fHeight *= pParentDock->fRatio;
@@ -988,7 +988,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 										cd_message ("new backing pixmap (bis) : %d", icon->iBackingPixmap);
 									}
 									cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pParentDock));
-									cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, TRUE, pDock->bDirectionUp);
+									cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, pDock->bDirectionUp);
 									cairo_destroy (pCairoContext);
 									icon->fWidth *= pParentDock->fRatio;
 									icon->fHeight *= pParentDock->fRatio;

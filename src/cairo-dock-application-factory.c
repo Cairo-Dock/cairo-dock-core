@@ -609,7 +609,7 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 			pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 			icon->fWidth /= pDock->fRatio;
 			icon->fHeight /= pDock->fRatio;
-			cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, TRUE, pDock->bDirectionUp);
+			cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, pDock->bDirectionUp);
 			icon->fWidth *= pDock->fRatio;
 			icon->fHeight *= pDock->fRatio;
 			cairo_destroy (pCairoContext);
@@ -644,7 +644,7 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 					pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 					icon->fWidth /= pDock->fRatio;
 					icon->fHeight /= pDock->fRatio;
-					cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, TRUE, pDock->bDirectionUp);
+					cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, pDock->bDirectionUp);
 					icon->fWidth *= pDock->fRatio;
 					icon->fHeight *= pDock->fRatio;
 					cairo_destroy (pCairoContext);

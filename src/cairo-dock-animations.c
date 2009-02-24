@@ -579,17 +579,21 @@ static gboolean _cairo_desklet_animation (CairoDesklet *pDesklet)
 		pDesklet->bKeepSlowAnimation = FALSE;
 	}
 	
+	if (pDesklet->pIcon != NULL)
+	{
+		gboolean bIconIsAnimating = FALSE;
+		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
+		
+		if (bUpdateSlowAnimation)
+			cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON_SLOW, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
+		
+		pDesklet->bKeepSlowAnimation |= bIconIsAnimating;
+		if (! bIconIsAnimating)
+			pDesklet->pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
+	}
+	
 	if (bUpdateSlowAnimation)
 	{
-		if (pDesklet->pIcon != NULL)
-		{
-			gboolean bIconIsAnimating = FALSE;
-			cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON_SLOW, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
-			pDesklet->bKeepSlowAnimation |= bIconIsAnimating;
-			if (! bIconIsAnimating)
-				pDesklet->pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
-		}
-		
 		cairo_dock_notify (CAIRO_DOCK_UPDATE_DESKLET_SLOW, pDesklet, &pDesklet->bKeepSlowAnimation);
 	}
 	

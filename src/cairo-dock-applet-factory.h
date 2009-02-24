@@ -19,7 +19,7 @@ G_BEGIN_DECLS
 *@param bApplySizeRestriction restreindre la taille de la surface aux valeurs autorisees dans les docks.
 *@return la surface nouvellement generee.
 */
-cairo_surface_t *cairo_dock_create_applet_surface (gchar *cIconFileName, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight, gboolean bApplySizeRestriction);
+cairo_surface_t *cairo_dock_create_applet_surface (gchar *cIconFileName, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);
 
 
 /**

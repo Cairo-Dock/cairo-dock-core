@@ -630,6 +630,43 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 }
 
 
+void cairo_dock_render_background_opengl (CairoDock *pDock)
+{
+	//g_print ("%s (%d, %x)\n", __func__, pDock->bIsMainDock, g_pVisibleZoneSurface);
+	if (g_pVisibleZoneTexture == 0 && g_pVisibleZoneSurface != NULL)
+	{
+		g_pVisibleZoneTexture = cairo_dock_create_texture_from_surface (g_pVisibleZoneSurface);
+		g_print ("g_pVisibleZoneTexture <- %d\n", g_pVisibleZoneTexture);
+	}
+	if (g_pVisibleZoneTexture == 0)
+		return ;
+	
+	glEnable (GL_BLEND);
+	glBlendFunc (GL_ONE, GL_ZERO);  // GL_SRC_ALPHA
+	
+	glEnable (GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	
+	glPolygonMode (GL_FRONT, GL_FILL);
+	
+	glColor4f(1., 1., 1., 1.);
+	
+	glLoadIdentity ();
+	glTranslatef (pDock->iCurrentWidth/2, pDock->iCurrentHeight/2, 0.);
+	
+	if (! pDock->bDirectionUp && myHiddenDock.bReverseVisibleImage)
+		glScalef (1., -1., 1.);
+	if (! pDock->bHorizontalDock)
+		glRotatef (-90., 0, 0, 1);
+	
+	cairo_dock_apply_texture_at_size (g_pVisibleZoneTexture, pDock->iCurrentWidth, pDock->iCurrentHeight);
+	
+	glDisable (GL_TEXTURE_2D);
+	glDisable (GL_BLEND);
+}
+
+
+
 GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 {
 	g_return_val_if_fail (pImageSurface != NULL && g_bUseOpenGL, 0);
@@ -654,7 +691,6 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 		cairo_image_surface_get_data (pImageSurface));
 	return iTexture;
 }
-
 
 GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWidth, int iHeight)
 {
@@ -693,6 +729,42 @@ GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWi
 	glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, iWidth, iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pTextureRaw);
 	glBindTexture (GL_TEXTURE_2D, 0);
 	
+	return iTexture;
+}
+
+GLuint cairo_dock_create_texture_from_image_full (const gchar *cImagePath, double *fImageWidth, double *fImageHeight)
+{
+	g_return_val_if_fail (GTK_WIDGET_REALIZED (g_pMainDock->pWidget), 0);
+	double fWidth=0, fHeight=0;
+	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (g_pMainDock));
+	cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cImagePath,
+		pCairoContext,
+		1.,
+		0., 0.,
+		CAIRO_DOCK_KEEP_RATIO,
+		&fWidth,
+		&fHeight,
+		NULL, NULL);
+	g_print ("texture genere (%x, %.2fx%.2f)\n", pSurface, fWidth, fHeight);
+	cairo_destroy (pCairoContext);
+	
+	if (fImageWidth != NULL)
+		*fImageWidth = fWidth;
+	if (fImageHeight != NULL)
+		*fImageHeight = fHeight;
+	GLuint iTexture = cairo_dock_create_texture_from_surface (pSurface);
+	cairo_surface_destroy (pSurface);
+	return iTexture;
+}
+
+GLuint cairo_dock_load_local_texture (const gchar *cImageName, const gchar *cDirPath)
+{
+	g_return_val_if_fail (GTK_WIDGET_REALIZED (g_pMainDock->pWidget), 0);
+
+	gchar *cTexturePath = g_strdup_printf ("%s/%s", cDirPath, cImageName);
+	g_print ("%s\n", cTexturePath);
+	GLuint iTexture = cairo_dock_create_texture_from_image (cTexturePath);
+	g_free (cTexturePath);
 	return iTexture;
 }
 
@@ -782,130 +854,54 @@ void cairo_dock_update_quick_info_texture (Icon *pIcon)
 }
 
 
-GLuint cairo_dock_create_texture_from_image_full (const gchar *cImagePath, double *fImageWidth, double *fImageHeight)
-{
-	g_return_val_if_fail (GTK_WIDGET_REALIZED (g_pMainDock->pWidget), 0);
-	double fWidth=0, fHeight=0;
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (g_pMainDock));
-	cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cImagePath,
-		pCairoContext,
-		1.,
-		0., 0.,
-		CAIRO_DOCK_KEEP_RATIO,
-		&fWidth,
-		&fHeight,
-		NULL, NULL);
-	g_print ("texture genere (%x, %.2fx%.2f)\n", pSurface, fWidth, fHeight);
-	cairo_destroy (pCairoContext);
-	
-	if (fImageWidth != NULL)
-		*fImageWidth = fWidth;
-	if (fImageHeight != NULL)
-		*fImageHeight = fHeight;
-	GLuint iTexture = cairo_dock_create_texture_from_surface (pSurface);
-	cairo_surface_destroy (pSurface);
-	return iTexture;
-}
 
-GLuint cairo_dock_load_local_texture (const gchar *cImageName, const gchar *cDirPath)
-{
-	g_return_val_if_fail (GTK_WIDGET_REALIZED (g_pMainDock->pWidget), 0);
+#define _cairo_dock_apply_texture(iTexture) do { \
+	glBindTexture (GL_TEXTURE_2D, iTexture);\
+	glBegin(GL_QUADS);\
+	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);\
+	glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);\
+	glTexCoord2f(1., 1.); glVertex3f( .5, -.5, 0.);\
+	glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);\
+	glEnd(); } while (0)
 
-	gchar *cTexturePath = g_strdup_printf ("%s/%s", cDirPath, cImageName);
-	g_print ("%s\n", cTexturePath);
-	GLuint iTexture = cairo_dock_create_texture_from_image (cTexturePath);
-	g_free (cTexturePath);
-	return iTexture;
-}
+#define _cairo_dock_enable_texture(...) do { \
+	glEnable (GL_BLEND);\
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);\
+	glEnable (GL_TEXTURE_2D);\
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);\
+	glPolygonMode (GL_FRONT, GL_FILL); } while (0)
 
-
-void cairo_dock_render_background_opengl (CairoDock *pDock)
-{
-	//g_print ("%s (%d, %x)\n", __func__, pDock->bIsMainDock, g_pVisibleZoneSurface);
-	if (g_pVisibleZoneTexture == 0 && g_pVisibleZoneSurface != NULL)
-	{
-		g_pVisibleZoneTexture = cairo_dock_create_texture_from_surface (g_pVisibleZoneSurface);
-		g_print ("g_pVisibleZoneTexture <- %d\n", g_pVisibleZoneTexture);
-	}
-	if (g_pVisibleZoneTexture == 0)
-		return ;
-	
-	glEnable (GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	glPolygonMode (GL_FRONT, GL_FILL);
-	glEnable (GL_TEXTURE_2D);
-	glBindTexture (GL_TEXTURE_2D, g_pVisibleZoneTexture);
-	glColor4f(1., 1., 1., 1.);
-	glNormal3f (0., 0., 1.);
-	
-	glLoadIdentity ();
-	glTranslatef (pDock->iCurrentWidth/2, pDock->iCurrentHeight/2, 0.);
-	
-	if (! pDock->bDirectionUp && myHiddenDock.bReverseVisibleImage)
-		glScalef (1., -1., 1.);
-	if (! pDock->bHorizontalDock)
-		glRotatef (-90., 0, 0, 1);
-	
-	glScalef (pDock->iCurrentWidth, pDock->iCurrentHeight, 1.);
-	
-	glBegin(GL_QUADS);
-	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
-	glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);  // Bottom Right Of The Texture and Quad
-	glTexCoord2f(1., 1.); glVertex3f( .5, -.5, 0.);  // Top Right Of The Texture and Quad
-	glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);  // Top Left Of The Texture and Quad
-	glEnd();
-	
-	glDisable (GL_TEXTURE_2D);
-	glDisable (GL_BLEND);
-}
-
+#define _cairo_dock_disable_texture(...) do { \
+	glDisable (GL_TEXTURE_2D);\
+	glDisable (GL_BLEND); } while (0)
 
 void cairo_dock_apply_texture (GLuint iTexture)
 {
-	glBindTexture (GL_TEXTURE_2D, iTexture);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
-	glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);  // Bottom Right Of The Texture and Quad
-	glTexCoord2f(1., 1.); glVertex3f( .5, -.5, 0.);  // Top Right Of The Texture and Quad
-	glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);  // Top Left Of The Texture and Quad
-	glEnd();
+	_cairo_dock_apply_texture (iTexture);
+}
+
+void cairo_dock_apply_texture_at_size (GLuint iTexture, int iWidth, int iHeight)
+{
+	if (iWidth != 0 && iHeight != 0)
+		glScalef (iWidth, iHeight, 1.);
+	_cairo_dock_apply_texture (iTexture);
 }
 
 void cairo_dock_draw_texture (GLuint iTexture, int iWidth, int iHeight)
 {
-	glEnable (GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // GL_SRC_ALPHA
+	_cairo_dock_enable_texture ();
 	
-	glEnable (GL_TEXTURE_2D);
-	glBindTexture (GL_TEXTURE_2D, iTexture);
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	
-	glPolygonMode (GL_FRONT, GL_FILL);
-	glNormal3f (0., 0., 1.);
 	if (iWidth != 0 && iHeight != 0)
 		glScalef (iWidth, iHeight, 1.);
 	
-	glBegin(GL_QUADS);
-	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
-	glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);  // Bottom Right Of The Texture and Quad
-	glTexCoord2f(1., 1.); glVertex3f( .5, -.5, 0.);  // Top Right Of The Texture and Quad
-	glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);  // Top Left Of The Texture and Quad
-	glEnd();
+	_cairo_dock_apply_texture (iTexture);
 	
-	glDisable (GL_TEXTURE_2D);
-	glDisable (GL_BLEND);
+	_cairo_dock_disable_texture ();
 }
 
 void cairo_dock_apply_icon_texture (Icon *pIcon)
 {
-	glBindTexture (GL_TEXTURE_2D, pIcon->iIconTexture);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);  // Bottom Left Of The Texture and Quad
-	glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);  // Bottom Right Of The Texture and Quad
-	glTexCoord2f(1., 1.); glVertex3f( .5, -.5, 0.);  // Top Right Of The Texture and Quad
-	glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);  // Top Left Of The Texture and Quad
-	glEnd();
+	_cairo_dock_apply_texture (pIcon->iIconTexture);
 }
 
 void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer)
@@ -1292,6 +1288,7 @@ void cairo_dock_apply_desktop_background (CairoContainer *pContainer)
 
 GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pContext)
 {
+	return 0;
 	Display *XDisplay = cairo_dock_get_Xdisplay ();
 	
 	GLXFBConfig *pFBConfigs; 
@@ -1398,9 +1395,9 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 		gluLookAt (pContainer->iWidth/2, pContainer->iHeight/2, 3.,
 			pContainer->iWidth/2, pContainer->iHeight/2, 0.,
 			0.0f, 1.0f, 0.0f);
-		glTranslatef (pContainer->iWidth/2, pContainer->iHeight/2, -3.);
-		glTranslatef (pIcon->fWidth/2, pIcon->fHeight/2, -pIcon->fHeight/2);
-		//glTranslatef (pContainer->iWidth, pContainer->iHeight, - s_iIconPbufferHeight/2);
+		/*glTranslatef (pContainer->iWidth/2, pContainer->iHeight/2, -3.);
+		glTranslatef (pIcon->fWidth/2, pIcon->fHeight/2, -pIcon->fHeight/2);*/
+		glTranslatef (pContainer->iWidth, pContainer->iHeight, - s_iIconPbufferHeight/2);
 	}
 	else if (s_iconContext != 0)
 	{
