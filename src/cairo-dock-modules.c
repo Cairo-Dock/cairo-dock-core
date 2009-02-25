@@ -82,6 +82,29 @@ void cairo_dock_initialize_module_manager (gchar *cModuleDirPath)
 			g_error_free (erreur);
 		}
 	}
+	
+	//\________________ ceci est un vilain hack ... mais je trouvais ca lourd de compiler un truc qui n'a aucun code, et puis comme ca on a l'aide meme sans les plug-ins.
+	CairoDockModule *pHelpModule = g_new0 (CairoDockModule, 1);
+	CairoDockVisitCard *pVisitCard = g_new0 (CairoDockVisitCard, 1);
+	pHelpModule->pVisitCard = pVisitCard;
+	pVisitCard->cModuleName = g_strdup ("Help");
+	pVisitCard->cReadmeFilePath = NULL;
+	pVisitCard->iMajorVersionNeeded = 2;
+	pVisitCard->iMinorVersionNeeded = 0;
+	pVisitCard->iMicroVersionNeeded = 0;
+	pVisitCard->cPreviewFilePath = NULL;
+	pVisitCard->cGettextDomain = NULL;
+	pVisitCard->cDockVersionOnCompilation = g_strdup (CAIRO_DOCK_VERSION);
+	pVisitCard->cUserDataDir = g_strdup ("help");
+	pVisitCard->cShareDataDir = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR);
+	pVisitCard->cConfFileName = g_strdup ("help.conf");
+	pVisitCard->cModuleVersion = g_strdup ("0.0.1");
+	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
+	pVisitCard->cIconFilePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, "help.svg");
+	pVisitCard->iSizeOfConfig = 0;
+	pVisitCard->iSizeOfData = 0;
+	pHelpModule->pInterface = g_new0 (CairoDockModuleInterface, 1);
+	g_hash_table_insert (s_hModuleTable, pHelpModule->pVisitCard->cModuleName, pHelpModule);
 }
 
 
@@ -494,17 +517,6 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 		return ;
 	}
 
-	GError *tmp_erreur = NULL;
-	if (module->pModule == NULL)  // normalement impossible.
-	{
-		cairo_dock_open_module (module, &tmp_erreur);
-		if (tmp_erreur != NULL)
-		{
-			g_propagate_error (erreur, tmp_erreur);
-			return ;
-		}
-	}
-	
 	g_free (module->cConfFilePath);
 	module->cConfFilePath = cairo_dock_check_module_conf_file (module->pVisitCard);
 	

@@ -198,24 +198,29 @@ static inline void _apply_orientation (cairo_t *pCairoContext, CairoDockLoadImag
 			break ;
 			case CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP :
 				cairo_scale (pCairoContext, -1., 1.);
-				cairo_rotate (pCairoContext, G_PI/2);
+				cairo_rotate (pCairoContext, - G_PI/2);
 			break ;
 			case CAIRO_DOCK_ORIENTATION_ROT_90 :
-				cairo_rotate (pCairoContext, G_PI/2);
+				cairo_rotate (pCairoContext, - G_PI/2);
 			break ;
 			case CAIRO_DOCK_ORIENTATION_ROT_90_VFLIP :
 				cairo_scale (pCairoContext, 1., -1.);
-				cairo_rotate (pCairoContext, G_PI/2);
+				cairo_rotate (pCairoContext, - G_PI/2);
 			break ;
 			case CAIRO_DOCK_ORIENTATION_ROT_270 :
-				cairo_rotate (pCairoContext, -G_PI/2);
+				cairo_rotate (pCairoContext, G_PI/2);
 			break ;
 			default :
 			break ;
 		}
-		cairo_translate (pCairoContext,
-			- fImageWidth/2,
-			- fImageHeight/2);
+		if (iOrientation < CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP)
+			cairo_translate (pCairoContext,
+				- fImageWidth/2/fZoomX,
+				- fImageHeight/2/fZoomY);
+		else
+			cairo_translate (pCairoContext,
+				- fImageHeight/2/fZoomY,
+				- fImageWidth/2/fZoomX);
 	}
 	else
 	{

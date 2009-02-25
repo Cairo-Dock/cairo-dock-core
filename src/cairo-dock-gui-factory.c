@@ -967,7 +967,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					pLabel = gtk_label_new (NULL);
 					gtk_label_set_use_markup  (GTK_LABEL (pLabel), TRUE);
 					gtk_label_set_markup (GTK_LABEL (pLabel), dgettext (cGettextDomain, cUsefulComment));
-					
 					GtkWidget *pAlign = gtk_alignment_new (0., 0.5, 0., 0.);
 					gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
 					gtk_box_pack_start (GTK_BOX (pKeyBox),
@@ -1264,6 +1263,9 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					FALSE,
 					FALSE,
 					0);
+			break ;
+			
+			case '>' :  // juste le label de texte.
 			break ;
 			
 			case 's' :  // string

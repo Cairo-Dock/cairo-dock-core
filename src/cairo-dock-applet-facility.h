@@ -288,7 +288,7 @@ gboolean pre_init (CairoDockVisitCard *pVisitCard, CairoDockModuleInterface *pIn
 	pVisitCard->cShareDataDir = g_strdup (MY_APPLET_SHARE_DATA_DIR); \
 	pVisitCard->cConfFileName = (MY_APPLET_CONF_FILE != NULL && strcmp (MY_APPLET_CONF_FILE, "none") != 0 ? g_strdup (MY_APPLET_CONF_FILE) : NULL); \
 	pVisitCard->cModuleVersion = g_strdup (MY_APPLET_VERSION);\
-	pVisitCard->iCategory = iAppletCategory ;\
+	pVisitCard->iCategory = iAppletCategory; \
 	pVisitCard->cIconFilePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, MY_APPLET_ICON_FILE); \
 	pVisitCard->iSizeOfConfig = sizeof (AppletConfig);\
 	pVisitCard->iSizeOfData = sizeof (AppletData);
