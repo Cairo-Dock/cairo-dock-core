@@ -174,7 +174,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 	return pNewSurface;
 }
 
-static inline void _apply_orientation (cairo_t *pCairoContext, CairoDockLoadImageModifier iLoadingModifier, double fImageWidth, double fImageHeight, double fZoomX, double fZoomY)
+static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDockLoadImageModifier iLoadingModifier, double fImageWidth, double fImageHeight, double fZoomX, double fZoomY)
 {
 	int iOrientation = iLoadingModifier & CAIRO_DOCK_ORIENTATION_MASK;
 	if (iOrientation != 0)
@@ -286,7 +286,7 @@ cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, cairo
 		ceil ((*fImageHeight) * fMaxScale));
 	cairo_t *pCairoContext = cairo_create (pNewSurface);
 	
-	_apply_orientation (pCairoContext,
+	_apply_orientation_and_scale (pCairoContext,
 		iLoadingModifier,
 		ceil ((*fImageWidth) * fMaxScale), ceil ((*fImageHeight) * fMaxScale),
 		fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
@@ -378,7 +378,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 				ceil ((*fImageHeight) * fMaxScale));
 
 			pCairoContext = cairo_create (pNewSurface);
-			_apply_orientation (pCairoContext,
+			_apply_orientation_and_scale (pCairoContext,
 				iLoadingModifier,
 				ceil ((*fImageWidth) * fMaxScale), ceil ((*fImageHeight) * fMaxScale),
 				fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
@@ -413,7 +413,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 			cairo_paint (pCairoContext);
 			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 			
-			_apply_orientation (pCairoContext,
+			_apply_orientation_and_scale (pCairoContext,
 				iLoadingModifier,
 				ceil ((*fImageWidth) * fMaxScale), ceil ((*fImageHeight) * fMaxScale),
 				fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);

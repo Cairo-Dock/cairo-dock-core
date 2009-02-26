@@ -20,14 +20,31 @@ void cairo_dock_set_colormap_for_window (GtkWidget *pWidget);
 void cairo_dock_set_colormap (CairoContainer *pContainer);
 
 
-double cairo_dock_get_current_dock_width_linear (CairoDock *pDock);
-
 /**
-*Cree un contexte de dessin pour la libcairo. Si glitz est active, le contexte sera lie a une surface glitz (et donc on dessinera directement sur la carte graphique), sinon a une surface X representant la fenetre du dock.
-*@param pContainer le container sur lequel on veut dessiner.
+*Cree un contexte de dessin pour la libcairo. Si glitz est active, le contexte sera lie a une surface glitz (et donc on dessinera directement sur la carte graphique), sinon a une surface X representant la fenetre du container.
+*@param pContainer un container.
 *@return le contexte sur lequel dessiner. N'est jamais nul; tester sa coherence avec cairo_status() avant de l'utiliser, et le detruire avec cairo_destroy() apres en avoir fini avec lui.
 */
-cairo_t * cairo_dock_create_context_from_window (CairoContainer *pContainer);
+cairo_t * cairo_dock_create_context_from_container (CairoContainer *pContainer);
+#define cairo_dock_create_context_from_window cairo_dock_create_context_from_container
+
+/** Cree un contexte de dessin cairo pour dessiner sur un container. Gere la fausse transparence.
+*@param pContainer le container sur lequel on veut dessiner
+*@return le contexte cairo nouvellement alloue.
+*/
+cairo_t *cairo_dock_create_drawing_context (CairoContainer *pContainer);
+
+/** Cree un contexte de dessin cairo pour dessiner sur une partie d'un container seulement. Gere la fausse transparence.
+*@param pContainer le container sur lequel on veut dessiner
+*@param pArea la partie du container a redessiner
+*@param fBgColor la couleur de fond (rvba) avec laquelle remplir l'aire, ou NULL pour la laisser transparente.
+*@return le contexte cairo nouvellement alloue, avec un clip correspondant a l'aire.
+*/
+cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, GdkRectangle *pArea, double *fBgColor);
+
+
+
+double cairo_dock_calculate_extra_width_for_trapeze (double fFrameHeight, double fInclination, double fRadius, double fLineWidth);
 
 /**
 *Trace sur le contexte un contour trapezoidale aux coins arrondis. Le contour n'est pas dessine, mais peut l'etre a posteriori, et peut servir de cadre pour y dessiner des choses dedans.
@@ -131,18 +148,6 @@ void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle 
 		pContainer->damageArea.width = pContainer->iHeight;\
 		pContainer->damageArea.height = pContainer->iWidth; }\
 	} while (0)*/
-
-void cairo_dock_set_window_position_at_balance (CairoDock *pDock, int iNewWidth, int iNewHeight);
-void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, CairoDockSizeType iSizeType, int *iNewWidth, int *iNewHeight);
-
-double cairo_dock_calculate_extra_width_for_trapeze (double fFrameHeight, double fInclination, double fRadius, double fLineWidth);
-
-cairo_t *cairo_dock_create_drawing_context (CairoContainer *pContainer);
-cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, GdkRectangle *pArea, double *fBgColor);
-
-
-void cairo_dock_get_icon_extent (Icon *pIcon, CairoContainer *pContainer, int *iWidth, int *iHeight);
-void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, double *fSizeX, double *fSizeY);
 
 
 G_END_DECLS

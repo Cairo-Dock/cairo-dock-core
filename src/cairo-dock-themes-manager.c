@@ -13,7 +13,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
-#include "cairo-dock-applet-factory.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-factory.h"
@@ -405,7 +404,7 @@ static void on_theme_apply (gpointer *user_data)
 		
 		//\___________________ On obtient le chemin du nouveau theme (telecharge si necessaire).
 		gchar *cUserThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
-		gchar *cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, cUserThemesDir, CAIRO_DOCK_THEMES_DIR);
+		gchar *cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, cUserThemesDir, "");  /// mettre CAIRO_DOCK_THEMES_DIR pour la finale...
 		g_free (cUserThemesDir);
 		g_return_if_fail (cNewThemePath != NULL);
 		g_print ("cNewThemePath : %s\n", cNewThemePath);

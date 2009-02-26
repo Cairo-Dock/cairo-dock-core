@@ -37,6 +37,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dialogs.h"

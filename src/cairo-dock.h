@@ -61,5 +61,7 @@
 #include <cairo-dock/cairo-dock-internal-labels.h>
 #include <cairo-dock/cairo-dock-internal-background.h>
 #include <cairo-dock/cairo-dock-internal-icons.h>
+#include <cairo-dock/cairo-dock-dock-facility.h>
+#include <cairo-dock/cairo-dock-applet-canvas.h>
 
 #endif

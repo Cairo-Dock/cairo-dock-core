@@ -252,30 +252,15 @@ Icon *cairo_dock_get_icon_with_class (GList *pIconList, gchar *cClass);
 #define cairo_dock_get_last_appli(pIconList) cairo_dock_get_last_icon_of_type (pIconList, CAIRO_DOCK_APPLI)
 
 
+void cairo_dock_get_icon_extent (Icon *pIcon, CairoContainer *pContainer, int *iWidth, int *iHeight);
+
+void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, double *fSizeX, double *fSizeY);
+
+
 void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconType iType);
 void cairo_dock_swap_icons (CairoDock *pDock, Icon *icon1, Icon *icon2);
 void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2);
 
-/**
-*Detache une icone de son dock, en enlevant les separateurs superflus si necessaires. L'icone n'est pas detruite, et peut etre re-inseree autre part telle qu'elle; elle garde son sous-dock, mais perd son dialogue.
-*@param icon l'icone a detacher.
-*@param pDock le dock contenant l'icone.
-*@param bCheckUnusedSeparator si TRUE, alors teste si des separateurs sont devenus superflus, et les enleve le cas echeant.
-*@return TRUE ssi l'icone a effectivement ete enlevee, FALSE si elle l'etait deja.
-*/
-gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolean bCheckUnusedSeparator);
-/**
-*Detache une icone de son dock, sans verifier la presence de separateurs superflus. L'icone n'est pas detruite, et garde son sous-dock, mais perd son dialogue et est fermee (son .desktop est detruit, son module est desactive, et son Xid est effacee du registre (la classe est geree aussi)).
-*@param pDock le dock contenant l'icone.
-*@param icon l'icone a detacher.
-*/
-void cairo_dock_remove_one_icon_from_dock (CairoDock *pDock, Icon *icon);
-/**
-*Detache une icone de son dock, en enlevant les separateurs superflus si necessaires. L'icone n'est pas detruite, et garde son sous-dock, mais perd son dialogue et est fermee (son .desktop est detruit, son module est desactive, et son Xid est effacee du registre (la classe est geree aussi)).
-*@param pDock le dock contenant l'icone.
-*@param icon l'icone a detacher.
-*/
-void cairo_dock_remove_icon_from_dock (CairoDock *pDock, Icon *icon);
 /**
 *Effectue une action sur toutes les icones d'un type donne. L'action peut meme detruire et enlever de la liste l'icone courante.
 *@param pIconList la liste d'icones a parcourir.
@@ -285,37 +270,8 @@ void cairo_dock_remove_icon_from_dock (CairoDock *pDock, Icon *icon);
 *@return le separateur avec le type a gauche si il y'en a, NULL sinon.
 */
 Icon *cairo_dock_foreach_icons_of_type (GList *pIconList, CairoDockIconType iType, CairoDockForeachIconFunc pFuntion, gpointer data);
-/**
-*Enleve et detruit toutes les icones de separateurs automatiques.
-*@param pDock le dock duquel supprimer les icones.
-*/
-void cairo_dock_remove_all_separators (CairoDock *pDock);
-
-/**
-*Ajoute des separateurs automatiques entre les differents types d'icones.
-*@param pDock le dock auquel rajouter les separateurs.
-*/
-void cairo_dock_insert_separators_in_dock (CairoDock *pDock);
 
 
-GList * cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, double fFlatDockWidth, int iXOffset);
-
-void cairo_dock_update_removing_inserting_icon_size_default (Icon *icon);
-
-Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *pFirstDrawnElement, int x_abs, gdouble fMagnitude, double fFlatDockWidth, int iWidth, int iHeight, double fAlign, double fLateralFactor, gboolean bDirectionUp);
-
-Icon *cairo_dock_apply_wave_effect (CairoDock *pDock);
-
-void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock);
-
-void cairo_dock_manage_mouse_position (CairoDock *pDock);
-
-
-double cairo_dock_calculate_max_dock_width (CairoDock *pDock, GList *pFirstDrawnElement, double fFlatDockWidth, double fWidthConstraintFactor, double fExtraWidth);
-
-
-void cairo_dock_check_can_drop_linear (CairoDock *pDock);
-void cairo_dock_stop_marking_icons (CairoDock *pDock);
 
 /**
 *Met a jour le fichier .desktop d'un lanceur avec le nom de son nouveau conteneur.
@@ -325,6 +281,47 @@ void cairo_dock_stop_marking_icons (CairoDock *pDock);
 void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParentDockName);
 
 #define cairo_dock_set_icon_static(icon) ((icon)->bStatic = TRUE)
+
+
+/**
+*Modifie l'etiquette d'une icone.
+*@param pSourceContext un contexte de dessin; n'est pas altere par la fonction.
+*@param cIconName la nouvelle etiquette de l'icone.
+*@param pIcon l'icone.
+*@param pContainer le container de l'icone.
+*/
+void cairo_dock_set_icon_name (cairo_t *pSourceContext, const gchar *cIconName, Icon *pIcon, CairoContainer *pContainer);
+/**
+*Modifie l'etiquette d'une icone, en prenant une chaine au format 'printf'.
+*@param pSourceContext un contexte de dessin; n'est pas altere par la fonction.
+*@param pIcon l'icone.
+*@param pContainer le container de l'icone.
+*@param cIconNameFormat la nouvelle etiquette de l'icone.
+*/
+void cairo_dock_set_icon_name_full (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconNameFormat, ...);
+
+/**
+*Ecris une info-rapide sur l'icone. C'est un petit texte (quelques caracteres) qui vient se superposer sur l'icone, avec un fond fonce.
+*@param pSourceContext un contexte de dessin; n'est pas altere par la fonction.
+*@param cQuickInfo le texte de l'info-rapide.
+*@param pIcon l'icone.
+*@param fMaxScale le facteur de zoom max.
+*/
+void cairo_dock_set_quick_info (cairo_t *pSourceContext, const gchar *cQuickInfo, Icon *pIcon, double fMaxScale);
+/**
+*Ecris une info-rapide sur l'icone, en prenant une chaine au format 'printf'.
+*@param pSourceContext un contexte de dessin; n'est pas altere par la fonction.
+*@param pIcon l'icone.
+*@param pContainer le container de l'icone.
+*@param cQuickInfoFormat le texte de l'info-rapide, au format 'printf' (%s, %d, etc)
+*@param ... les donnees a inserer dans la chaine de caracteres.
+*/
+void cairo_dock_set_quick_info_full (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfoFormat, ...);
+/**
+*Efface l'info-rapide d'une icone.
+*@param pIcon l'icone.
+*/
+#define cairo_dock_remove_quick_info(pIcon) cairo_dock_set_quick_info (NULL, NULL, pIcon, 1)
 
 
 G_END_DECLS

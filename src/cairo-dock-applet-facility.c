@@ -28,11 +28,11 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-icons.h"
 #include "cairo-dock-applet-facility.h"
 
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
-
 
 extern gboolean g_bUseOpenGL;
 
@@ -176,67 +176,6 @@ void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pI
 	
 	cairo_pattern_destroy (pGradationPattern);
 	cairo_restore (pIconContext);
-}
-
-void cairo_dock_set_icon_name (cairo_t *pSourceContext, const gchar *cIconName, Icon *pIcon, CairoContainer *pContainer)  // fonction proposee par Necropotame.
-{
-	g_return_if_fail (pIcon != NULL && pContainer != NULL);  // le contexte sera verifie plus loin.
-	gchar *cUniqueName = NULL;
-	
-	if (pIcon->pSubDock != NULL)
-	{
-		cUniqueName = cairo_dock_get_unique_dock_name (cIconName);
-		cIconName = cUniqueName;
-		cairo_dock_rename_dock (pIcon->acName, pIcon->pSubDock, cUniqueName);
-	}
-	
-	if (pIcon->acName != cIconName)
-	{
-		g_free (pIcon->acName);
-		pIcon->acName = g_strdup (cIconName);
-	}
-	
-	g_free (cUniqueName);
-	
-	cairo_dock_fill_one_text_buffer(
-		pIcon,
-		pSourceContext,
-		&myLabels.iconTextDescription);
-}
-void cairo_dock_set_icon_name_full (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconNameFormat, ...)
-{
-	va_list args;
-	va_start (args, cIconNameFormat);
-	gchar *cFullText = g_strdup_vprintf (cIconNameFormat, args);
-	cairo_dock_set_icon_name (pSourceContext, cFullText, pIcon, pContainer);
-	g_free (cFullText);
-	va_end (args);
-}
-
-void cairo_dock_set_quick_info (cairo_t *pSourceContext, const gchar *cQuickInfo, Icon *pIcon, double fMaxScale)
-{
-	g_return_if_fail (pIcon != NULL);  // le contexte sera verifie plus loin.
-
-	if (pIcon->cQuickInfo != cQuickInfo)
-	{
-		g_free (pIcon->cQuickInfo);
-		pIcon->cQuickInfo = g_strdup (cQuickInfo);
-	}
-	
-	cairo_dock_fill_one_quick_info_buffer (pIcon,
-		pSourceContext,
-		&myLabels.quickInfoTextDescription,
-		fMaxScale);
-}
-
-void cairo_dock_set_quick_info_full (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfoFormat, ...)
-{
-	va_list args;
-	va_start (args, cQuickInfoFormat);
-	gchar *cFullText = g_strdup_vprintf (cQuickInfoFormat, args);
-	cairo_dock_set_quick_info (pSourceContext, cFullText, pIcon, (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) / 1 : 1));
-	g_free (cFullText);
-	va_end (args);
 }
 
 void cairo_dock_set_hours_minutes_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds)

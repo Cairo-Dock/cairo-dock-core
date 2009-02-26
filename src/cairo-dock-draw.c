@@ -21,6 +21,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #include "cairo-dock-icons.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-log.h"
@@ -144,36 +145,7 @@ void cairo_dock_set_colormap (CairoContainer *pContainer)
 }
 
 
-double cairo_dock_get_current_dock_width_linear (CairoDock *pDock)
-{
-	if (pDock->icons == NULL)
-		//return 2 * myBackground.iDockRadius + myBackground.iDockLineWidth + 2 * myBackground.iFrameMargin;
-		return 1 + 2 * myBackground.iFrameMargin;
-
-	Icon *pLastIcon = cairo_dock_get_last_drawn_icon (pDock);
-	Icon *pFirstIcon = cairo_dock_get_first_drawn_icon (pDock);
-	double fWidth = pLastIcon->fX - pFirstIcon->fX + pLastIcon->fWidth * pLastIcon->fScale + 2 * myBackground.iFrameMargin;  //  + 2 * myBackground.iDockRadius + myBackground.iDockLineWidth + 2 * myBackground.iFrameMargin
-
-	return fWidth;
-}
-/*void cairo_dock_get_current_dock_width_height (CairoDock *pDock, double *fWidth, double *fHeight)
-{
-	if (pDock->icons == NULL)
-	{
-		*fWidth = 2 * myBackground.iDockRadius + myBackground.iDockLineWidth + 2 * myBackground.iFrameMargin;
-		*fHeight = 2 * myBackground.iDockRadius + myBackground.iDockLineWidth + 2 * myBackground.iFrameMargin;
-	}
-
-	Icon *pLastIcon = cairo_dock_get_last_drawn_icon (pDock);
-	Icon *pFirstIcon = cairo_dock_get_first_drawn_icon (pDock);
-	*fWidth = pLastIcon->fX - pFirstIcon->fX + 2 * myBackground.iDockRadius + myBackground.iDockLineWidth + 2 * myBackground.iFrameMargin + pLastIcon->fWidth * pLastIcon->fScale;
-	if (pLastIcon->fY > pFirstIcon->fY)
-		*fHeight = MAX (pLastIcon->fY + pLastIcon->fHeight * pLastIcon->fScale - pFirstIcon->fY, pFirstIcon->fHeight * pFirstIcon->fScale);
-	else
-		*fHeight = MAX (pFirstIcon->fY + pFirstIcon->fHeight * pFirstIcon->fScale - pLastIcon->fY, pLastIcon->fHeight * pLastIcon->fScale);
-}*/
-
-cairo_t * cairo_dock_create_context_from_window (CairoContainer *pContainer)
+cairo_t * cairo_dock_create_context_from_container (CairoContainer *pContainer)
 {
 #ifdef HAVE_GLITZ
 	if (pContainer->pGlitzDrawable)
@@ -209,6 +181,74 @@ cairo_t * cairo_dock_create_context_from_window (CairoContainer *pContainer)
 	}
 #endif // HAVE_GLITZ
 	return gdk_cairo_create (pContainer->pWidget->window);
+}
+
+cairo_t *cairo_dock_create_drawing_context (CairoContainer *pContainer)
+{
+	cairo_t *pCairoContext = cairo_dock_create_context_from_window (pContainer);
+	g_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, FALSE);
+	
+	if (mySystem.bUseFakeTransparency)
+		if (g_pDesktopBgSurface != NULL)
+			cairo_set_source_surface (pCairoContext, g_pDesktopBgSurface, - pContainer->iWindowPositionX, - pContainer->iWindowPositionY);
+		else
+			cairo_set_source_rgba (pCairoContext, 0.8, 0.8, 0.8, 0.0);
+	else
+		cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 0.0);
+	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
+	cairo_paint (pCairoContext);
+	
+	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
+	return pCairoContext;
+}
+
+cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, GdkRectangle *pArea, double *fBgColor)
+{
+	cairo_t *pCairoContext = cairo_dock_create_context_from_window (pContainer);
+	g_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, pCairoContext);
+	
+	if (pArea != NULL && (pArea->x > 0 || pArea->y > 0))
+	{
+		cairo_rectangle (pCairoContext,
+			pArea->x,
+			pArea->y,
+			pArea->width,
+			pArea->height);
+		cairo_clip (pCairoContext);
+	}
+	
+	if (mySystem.bUseFakeTransparency)
+		if (g_pDesktopBgSurface != NULL)
+			cairo_set_source_surface (pCairoContext, g_pDesktopBgSurface, - pContainer->iWindowPositionX, - pContainer->iWindowPositionY);
+		else
+			cairo_set_source_rgba (pCairoContext, 0.8, 0.8, 0.8, 0.0);
+	else if (fBgColor != NULL)
+		cairo_set_source_rgba (pCairoContext, fBgColor[0], fBgColor[1], fBgColor[2], fBgColor[3]);
+	else
+		cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 0.0);
+	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
+	cairo_paint (pCairoContext);
+	
+	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
+	return pCairoContext;
+}
+
+
+
+
+double cairo_dock_calculate_extra_width_for_trapeze (double fFrameHeight, double fInclination, double fRadius, double fLineWidth)
+{
+	if (2 * fRadius > fFrameHeight + fLineWidth)
+		fRadius = (fFrameHeight + fLineWidth) / 2 - 1;
+	double cosa = 1. / sqrt (1 + fInclination * fInclination);
+	double sina = fInclination * cosa;
+	
+	double fExtraWidth = fInclination * (fFrameHeight - (FALSE ? 2 : 1-cosa) * fRadius) + fRadius * (FALSE ? 1 : sina);
+	return (2 * fExtraWidth + fLineWidth);
+	/**double fDeltaXForLoop = fInclination * (fFrameHeight + fLineWidth - (myBackground.bRoundedBottomCorner ? 2 : 1) * fRadius);
+	double fDeltaCornerForLoop = fRadius * cosa + (myBackground.bRoundedBottomCorner ? fRadius * (1 + sina) * fInclination : 0);
+	
+	return (2 * (fLineWidth/2 + fDeltaXForLoop + fDeltaCornerForLoop + myBackground.iFrameMargin));*/
 }
 
 static double cairo_dock_draw_frame_horizontal (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination)  // la largeur est donnee par rapport "au fond".
@@ -1116,173 +1156,4 @@ void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle 
 	//g_print ("rect (%d;%d) (%dx%d)\n", pArea->x, pArea->y, pArea->width, pArea->height);
 	if (pArea->width > 0 && pArea->height > 0)
 		gdk_window_invalidate_rect (pContainer->pWidget->window, pArea, FALSE);
-}
-
-
-
-#define CD_VISIBILITY_MARGIN 20
-void cairo_dock_set_window_position_at_balance (CairoDock *pDock, int iNewWidth, int iNewHeight)
-{
-	pDock->iWindowPositionX = (g_iScreenWidth[pDock->bHorizontalDock] - iNewWidth) * pDock->fAlign + pDock->iGapX;
-	if (pDock->iRefCount == 0 && pDock->fAlign != .5)
-		pDock->iWindowPositionX += (.5 - pDock->fAlign) * (pDock->iMaxDockWidth - iNewWidth);
-	pDock->iWindowPositionY = (pDock->bDirectionUp ? g_iScreenHeight[pDock->bHorizontalDock] - iNewHeight - pDock->iGapY : pDock->iGapY);
-	//g_print ("pDock->iGapX : %d => iWindowPositionX <- %d\n", pDock->iGapX, pDock->iWindowPositionX);
-	//g_print ("iNewHeight : %d -> pDock->iWindowPositionY <- %d\n", iNewHeight, pDock->iWindowPositionY);
-	
-	if (pDock->iRefCount == 0)
-	{
-		if (pDock->iWindowPositionX + iNewWidth < CD_VISIBILITY_MARGIN)
-			pDock->iWindowPositionX = CD_VISIBILITY_MARGIN - iNewWidth;
-		else if (pDock->iWindowPositionX > g_iScreenWidth[pDock->bHorizontalDock] - CD_VISIBILITY_MARGIN)
-			pDock->iWindowPositionX = g_iScreenWidth[pDock->bHorizontalDock] - CD_VISIBILITY_MARGIN;
-	}
-	else
-	{
-		if (pDock->iWindowPositionX < - pDock->iLeftMargin)
-			pDock->iWindowPositionX = - pDock->iLeftMargin;
-		else if (pDock->iWindowPositionX > g_iScreenWidth[pDock->bHorizontalDock] - iNewWidth + pDock->iMinRightMargin)
-			pDock->iWindowPositionX = g_iScreenWidth[pDock->bHorizontalDock] - iNewWidth + pDock->iMinRightMargin;
-	}
-	if (pDock->iWindowPositionY < 0)
-		pDock->iWindowPositionY = 0;
-	else if (pDock->iWindowPositionY > g_iScreenHeight[pDock->bHorizontalDock] - iNewHeight)
-		pDock->iWindowPositionY = g_iScreenHeight[pDock->bHorizontalDock] - iNewHeight;
-	
-	pDock->iWindowPositionX += g_iScreenOffsetX;
-	pDock->iWindowPositionY += g_iScreenOffsetY;
-}
-
-void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, CairoDockSizeType iSizeType, int *iNewWidth, int *iNewHeight)
-{
-	//g_print ("%s (%d)\n", __func__, iSizeType);
-	if (iSizeType == CAIRO_DOCK_MAX_SIZE)
-	{
-		*iNewWidth = pDock->iMaxDockWidth;
-		*iNewHeight = pDock->iMaxDockHeight;
-		pDock->iLeftMargin = pDock->iMaxLeftMargin;
-		pDock->iRightMargin = pDock->iMaxRightMargin;
-	}
-	else if (iSizeType == CAIRO_DOCK_NORMAL_SIZE)
-	{
-		*iNewWidth = pDock->iMinDockWidth;
-		*iNewHeight = pDock->iMinDockHeight;
-		pDock->iLeftMargin = pDock->iMinLeftMargin;
-		pDock->iRightMargin = pDock->iMinRightMargin;
-	}
-	else
-	{
-		*iNewWidth = myHiddenDock.iVisibleZoneWidth;
-		*iNewHeight = myHiddenDock.iVisibleZoneHeight;
-		pDock->iLeftMargin = 0;
-		pDock->iRightMargin = 0;
-	}
-	
-	cairo_dock_set_window_position_at_balance (pDock, *iNewWidth, *iNewHeight);
-}
-
-double cairo_dock_calculate_extra_width_for_trapeze (double fFrameHeight, double fInclination, double fRadius, double fLineWidth)
-{
-	if (2 * fRadius > fFrameHeight + fLineWidth)
-		fRadius = (fFrameHeight + fLineWidth) / 2 - 1;
-	double cosa = 1. / sqrt (1 + fInclination * fInclination);
-	double sina = fInclination * cosa;
-	
-	double fExtraWidth = fInclination * (fFrameHeight - (FALSE ? 2 : 1-cosa) * fRadius) + fRadius * (FALSE ? 1 : sina);
-	return (2 * fExtraWidth + fLineWidth);
-	/**double fDeltaXForLoop = fInclination * (fFrameHeight + fLineWidth - (myBackground.bRoundedBottomCorner ? 2 : 1) * fRadius);
-	double fDeltaCornerForLoop = fRadius * cosa + (myBackground.bRoundedBottomCorner ? fRadius * (1 + sina) * fInclination : 0);
-	
-	return (2 * (fLineWidth/2 + fDeltaXForLoop + fDeltaCornerForLoop + myBackground.iFrameMargin));*/
-}
-
-
-cairo_t *cairo_dock_create_drawing_context (CairoContainer *pContainer)
-{
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (pContainer);
-	g_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, FALSE);
-	
-	if (mySystem.bUseFakeTransparency)
-		if (g_pDesktopBgSurface != NULL)
-			cairo_set_source_surface (pCairoContext, g_pDesktopBgSurface, - pContainer->iWindowPositionX, - pContainer->iWindowPositionY);
-		else
-			cairo_set_source_rgba (pCairoContext, 0.8, 0.8, 0.8, 0.0);
-	else
-		cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 0.0);
-	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
-	cairo_paint (pCairoContext);
-	
-	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-	return pCairoContext;
-}
-
-cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, GdkRectangle *pArea, double *fBgColor)
-{
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (pContainer);
-	g_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, pCairoContext);
-	
-	if (pArea != NULL && (pArea->x > 0 || pArea->y > 0))
-	{
-		cairo_rectangle (pCairoContext,
-			pArea->x,
-			pArea->y,
-			pArea->width,
-			pArea->height);
-		cairo_clip (pCairoContext);
-	}
-	
-	if (mySystem.bUseFakeTransparency)
-		if (g_pDesktopBgSurface != NULL)
-			cairo_set_source_surface (pCairoContext, g_pDesktopBgSurface, - pContainer->iWindowPositionX, - pContainer->iWindowPositionY);
-		else
-			cairo_set_source_rgba (pCairoContext, 0.8, 0.8, 0.8, 0.0);
-	else if (fBgColor != NULL)
-		cairo_set_source_rgba (pCairoContext, fBgColor[0], fBgColor[1], fBgColor[2], fBgColor[3]);
-	else
-		cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 0.0);
-	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
-	cairo_paint (pCairoContext);
-	
-	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-	return pCairoContext;
-}
-
-
-
-void cairo_dock_get_icon_extent (Icon *pIcon, CairoContainer *pContainer, int *iWidth, int *iHeight)
-{
-	double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	double fRatio = pContainer->fRatio;
-	*iWidth = (int) (pIcon->fWidth / fRatio * fMaxScale);
-	*iHeight = (int) (pIcon->fHeight / fRatio * fMaxScale);
-}
-
-void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, double *fSizeX, double *fSizeY)
-{
-	if (pContainer->bIsHorizontal)
-	{
-		if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon))
-		{
-			*fSizeX = pIcon->fWidth;
-			*fSizeY = pIcon->fHeight;
-		}
-		else
-		{
-			*fSizeX = pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale * pIcon->fGlideScale;
-			*fSizeY = pIcon->fHeight * pIcon->fHeightFactor * pIcon->fScale * pIcon->fGlideScale;
-		}
-	}
-	else
-	{
-		if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon))
-		{
-			*fSizeX = pIcon->fHeight;
-			*fSizeY = pIcon->fWidth;
-		}
-		else
-		{
-			*fSizeX = pIcon->fHeight * pIcon->fHeightFactor * pIcon->fScale * pIcon->fGlideScale;
-			*fSizeY = pIcon->fWidth * pIcon->fWidthFactor * pIcon->fScale * pIcon->fGlideScale;
-		}
-	}
 }

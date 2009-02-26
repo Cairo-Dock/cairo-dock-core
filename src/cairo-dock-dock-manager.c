@@ -90,7 +90,12 @@ void cairo_dock_unregister_dock (const gchar *cDockName)
 
 static gboolean _cairo_dock_free_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
 {
-	cairo_dock_free_dock (pDock);
+	cairo_dock_deactivate_one_dock (pDock);
+
+	g_list_foreach (pDock->icons, (GFunc) cairo_dock_free_icon, NULL);
+	g_list_free (pDock->icons);
+
+	g_free (pDock);
 	return TRUE;
 }
 void cairo_dock_reset_docks_table (void)

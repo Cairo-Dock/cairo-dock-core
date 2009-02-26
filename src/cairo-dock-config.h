@@ -116,7 +116,8 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, gchar *cGroupName
 		iWidth = g_key_file_get_integer (pKeyFile, cGroupName, cKeyPrefix" width", NULL);\
 		iHeight = g_key_file_get_integer (pKeyFile, cGroupName, cKeyPrefix" height", NULL);\
 		int iSize[2] = {iWidth, iHeight};\
-		g_key_file_set_integer_list (pKeyFile, cGroupName, cKeyPrefix" size", iSize, 2); }
+		g_key_file_set_integer_list (pKeyFile, cGroupName, cKeyPrefix" size", iSize, 2); } \
+	if (iHeight == 0) iHeight = iWidth;
 
 
 /**

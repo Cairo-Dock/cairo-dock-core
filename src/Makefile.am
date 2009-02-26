@@ -171,6 +171,8 @@ cairo_dock_SOURCES = \
 	cairo-dock-internal-icons.h\
 	cairo-dock-data-renderer.c\
 	cairo-dock-data-renderer.h\
+	cairo-dock-dock-facility.c\
+	cairo-dock-dock-facility.h\
 	texture-gradation.h
 	
 
@@ -222,6 +224,7 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-emblem.h\
 	cairo-dock-applet-single-instance.h\
 	cairo-dock-applet-multi-instance.h\
+	cairo-dock-applet-canvas.h\
 	cairo-dock-flying-container.h\
 	cairo-dock-graph.h\
 	cairo-dock-draw-opengl.h\
@@ -242,4 +245,5 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-internal-desklets.h\
 	cairo-dock-internal-background.h\
 	cairo-dock-internal-icons.h\
-	cairo-dock-data-renderer.h
+	cairo-dock-data-renderer.h\
+	cairo-dock-dock-facility.h

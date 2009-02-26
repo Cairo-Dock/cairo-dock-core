@@ -9,8 +9,7 @@
 G_BEGIN_DECLS
 
 
-/**
-*Cree une surface cairo qui pourra servir de zone de dessin pour une applet.
+/** Cree une surface cairo qui pourra servir de zone de dessin pour une applet.
 *@param cIconFileName le nom d'un fichier image a appliquer sur la surface, ou NULL pour creer une surface vide.
 *@param pSourceContext un contexte de dessin; n'est pas altere.
 *@param fMaxScale le zoom max auquel sera soumis la surface.
@@ -22,8 +21,7 @@ G_BEGIN_DECLS
 cairo_surface_t *cairo_dock_create_applet_surface (gchar *cIconFileName, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);
 
 
-/**
-*Cree une icone destinee a une applet.
+/** Cree une icone destinee a une applet.
 *@param pContainer le container ou sera inseree ulterieurement cette icone.
 *@param iWidth la largeur desiree de l'icone.
 *@param iHeight la hauteur desiree de l'icone.

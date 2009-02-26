@@ -674,6 +674,21 @@ void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationS
 
 
 
+void cairo_dock_update_removing_inserting_icon_size_default (Icon *icon)
+{
+	if (icon->fPersonnalScale > 0)
+	{
+		icon->fPersonnalScale *= .85;
+		if (icon->fPersonnalScale < 0.05)
+			icon->fPersonnalScale = 0.05;
+	}
+	else if (icon->fPersonnalScale < 0)
+	{
+		icon->fPersonnalScale *= .85;
+		if (icon->fPersonnalScale > -0.05)
+			icon->fPersonnalScale = -0.05;
+	}
+}
 
 gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation)
 {
