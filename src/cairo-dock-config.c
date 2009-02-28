@@ -829,6 +829,11 @@ void cairo_dock_get_version_from_string (gchar *cVersionString, int *iMajorVersi
 
 void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecryptedString )
 {
+	if( !cEncryptedString || strlen(cEncryptedString) == 0 )
+	{
+		*cDecryptedString = g_strdup( "" );
+		return;
+	}
 #ifdef HAVE_LIBCRYPT
 	gchar *input = g_strdup(cEncryptedString);
 	gchar *shifted_input = input;
@@ -842,6 +847,10 @@ void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecrypt
   }
   else
   {
+  	if( input )
+  	{
+  		g_free(input);
+		}
   	return;
 	}
 
@@ -893,14 +902,20 @@ void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecrypt
 
 void cairo_dock_encrypt_string( const gchar *cDecryptedString,  gchar **cEncryptedString )
 {
+	if( !cDecryptedString || strlen(cDecryptedString) == 0 )
+	{
+		*cEncryptedString = g_strdup( "" );
+		return;
+	}
+	
 #ifdef HAVE_LIBCRYPT
 	const gchar *input = cDecryptedString;
 	gchar **output = cEncryptedString;
 
   char *current_output = NULL;
-  if( output && input )
+  if( output && input && strlen(input)>0 )
   {
-    *output = g_malloc( strlen(input)*3+1 );
+    *output = g_malloc( MAX(strlen(input)*3,8*3)+1 );
     current_output = *output;
   }
   else

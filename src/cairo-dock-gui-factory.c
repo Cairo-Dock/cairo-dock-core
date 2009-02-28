@@ -1298,7 +1298,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							gchar *cDecryptedString = NULL;
 							cairo_dock_decrypt_string( cValue,  &cDecryptedString );
 							gtk_entry_set_text (GTK_ENTRY (pOneWidget), cDecryptedString);
-							g_free( cDecryptedString );
+							if( cDecryptedString )
+							{
+								g_free( cDecryptedString );
+							}
 						}
 						else
 						{
