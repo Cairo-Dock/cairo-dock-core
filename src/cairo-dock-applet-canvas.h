@@ -93,7 +93,7 @@ CD_APPLET_ABOUT_PROTO;
 *@param iMajorVersion version majeure du dock necessaire au bon fonctionnement de l'applet.
 *@param iMinorVersion version mineure du dock necessaire au bon fonctionnement de l'applet.
 *@param iMicroVersion version micro du dock necessaire au bon fonctionnement de l'applet.
-*@param iAppletCategory Cat�gorie de l'applet (CAIRO_DOCK_CATEGORY_ACCESSORY, CAIRO_DOCK_CATEGORY_DESKTOP, CAIRO_DOCK_CATEGORY_CONTROLER)
+*@param iAppletCategory Categorie de l'applet (CAIRO_DOCK_CATEGORY_ACCESSORY, CAIRO_DOCK_CATEGORY_DESKTOP, CAIRO_DOCK_CATEGORY_CONTROLER)
 */
 #define CD_APPLET_PRE_INIT_ALL_BEGIN(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory) \
 CD_APPLET_PRE_INIT_PROTO \

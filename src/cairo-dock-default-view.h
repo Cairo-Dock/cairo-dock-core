@@ -8,24 +8,19 @@
 G_BEGIN_DECLS
 
 
-void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pParentDock);
+void cd_calculate_max_dock_size_default (CairoDock *pDock);
 
 
-void cairo_dock_calculate_max_dock_size_linear (CairoDock *pDock);
+void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock);
 
 
-void cairo_dock_calculate_construction_parameters_generic (Icon *icon, CairoDock *pDock);
-
-void cairo_dock_render_linear (cairo_t *pCairoContext, CairoDock *pDock);
+void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkRectangle *pArea);
 
 
-void cairo_dock_render_optimized_linear (cairo_t *pCairoContext, CairoDock *pDock, GdkRectangle *pArea);
+void cd_render_opengl_default (CairoDock *pDock);
 
 
-void cairo_dock_render_opengl_linear (CairoDock *pDock);
-
-
-Icon *cairo_dock_calculate_icons_linear (CairoDock *pDock);
+Icon *cd_calculate_icons_default (CairoDock *pDock);
 
 
 void cairo_dock_register_default_renderer (void);

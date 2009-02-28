@@ -25,6 +25,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <cairo-glitz.h>
 #endif
 
+#define GL_GLEXT_PROTOTYPES
 #include <X11/extensions/Xrender.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -313,8 +314,6 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		///glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glBlendFuncSeparate (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,
 			GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-		//glBlendFunc (GL_SRC_ALPHA, GL_DST_ALPHA);
-		//glBlendFunc (GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
 		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		
 		//glBlendColor(1., 1., 1., 1.);  // utile ?
@@ -1142,6 +1141,36 @@ void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor,
 }
 
 
+void cairo_dock_apply_desktop_background (CairoContainer *pContainer)
+{
+	if (! mySystem.bUseFakeTransparency || g_iDesktopBgTexture == 0)
+		return ;
+	
+	glPolygonMode (GL_FRONT, GL_FILL);
+	glEnable (GL_TEXTURE_2D);
+	glBindTexture (GL_TEXTURE_2D, g_iDesktopBgTexture);
+	glColor4f(1., 1., 1., 1.);
+	glEnable (GL_BLEND);
+	glBlendFunc (GL_ONE, GL_ZERO);  /// utile ?
+	
+	glBegin(GL_QUADS);
+	glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
+	1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	glVertex3f (0., pContainer->iHeight, 0.);  // Top Left.
+	
+	glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	glVertex3f (pContainer->iWidth, pContainer->iHeight, 0.);  // Top Right
+	
+	glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	glVertex3f (pContainer->iWidth, 0., 0.);  // Bottom Right
+	
+	glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	glVertex3f (0., 0., 0.);  // Bottom Left
+	glEnd();
+	
+	glDisable (GL_TEXTURE_2D);
+	glDisable (GL_BLEND);
+}
 
 GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHasBeenForced)  // taken from a MacSlow's exemple.
 {
@@ -1250,41 +1279,6 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 	
 	return pGlConfig;
 }
-
-
-
-
-void cairo_dock_apply_desktop_background (CairoContainer *pContainer)
-{
-	if (mySystem.bUseFakeTransparency && g_iDesktopBgTexture != 0)
-	{
-		glPolygonMode (GL_FRONT, GL_FILL);
-		glEnable (GL_TEXTURE_2D);
-		glBindTexture (GL_TEXTURE_2D, g_iDesktopBgTexture);
-		glColor4f(1., 1., 1., 1.);
-		glEnable (GL_BLEND);
-		glBlendFunc (GL_ONE, GL_ZERO);  /// utile ?
-		
-		glBegin(GL_QUADS);
-		glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
-		1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-		glVertex3f (0., pContainer->iHeight, 0.);  // Top Left.
-		
-		glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-		glVertex3f (pContainer->iWidth, pContainer->iHeight, 0.);  // Top Right
-		
-		glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-		glVertex3f (pContainer->iWidth, 0., 0.);  // Bottom Right
-		
-		glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-		glVertex3f (0., 0., 0.);  // Bottom Left
-		glEnd();
-		
-		glDisable (GL_TEXTURE_2D);
-		glDisable (GL_BLEND);
-	}
-}
-
 
 
 
@@ -1398,7 +1392,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 			0.0f, 1.0f, 0.0f);
 		/*glTranslatef (pContainer->iWidth/2, pContainer->iHeight/2, -3.);
 		glTranslatef (pIcon->fWidth/2, pIcon->fHeight/2, -pIcon->fHeight/2);*/
-		glTranslatef (pContainer->iWidth, pContainer->iHeight, - s_iIconPbufferHeight/2);
+		glTranslatef (pContainer->iWidth, pContainer->iHeight, - pContainer->iHeight/2);
 	}
 	else if (s_iconContext != 0)
 	{

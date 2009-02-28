@@ -234,7 +234,7 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 	cd_message ("%s (%s)", __func__, icon->acName);
 	CairoDock *pParentDock = pMainDock;
 	g_free (icon->cParentDockName);
-	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.bGroupAppliByClass && icon->cClass != NULL)
+	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.bGroupAppliByClass && icon->cClass != NULL && ! cairo_dock_class_is_expanded (icon->cClass))
 	{
 		Icon *pSameClassIcon = cairo_dock_get_classmate (icon);
 		if (pSameClassIcon == NULL)  // aucun classmate => elle va dans le main dock.

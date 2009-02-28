@@ -33,6 +33,8 @@ struct _CairoConfigTaskBar {
 	gboolean bOverWriteXIcons;
 	gboolean bShowThumbnail;
 	gboolean bMixLauncherAppli;
+	gchar *cOverwriteException;
+	gchar *cGroupException;
 	} ;
 
 

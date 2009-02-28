@@ -582,14 +582,18 @@ static gboolean _cairo_desklet_animation (CairoDesklet *pDesklet)
 	if (pDesklet->pIcon != NULL)
 	{
 		gboolean bIconIsAnimating = FALSE;
-		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
 		
 		if (bUpdateSlowAnimation)
+		{
 			cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON_SLOW, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
+			pDesklet->bKeepSlowAnimation |= bIconIsAnimating;
+		}
 		
-		pDesklet->bKeepSlowAnimation |= bIconIsAnimating;
+		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
 		if (! bIconIsAnimating)
 			pDesklet->pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
+		else
+			bContinue = TRUE;
 	}
 	
 	if (bUpdateSlowAnimation)
@@ -601,7 +605,7 @@ static gboolean _cairo_desklet_animation (CairoDesklet *pDesklet)
 	
 	if (! bContinue && ! pDesklet->bKeepSlowAnimation)
 	{
-		g_print ("||| Arret de l'animation du desklet\n");
+		g_print ("||| Arret de l'animation du desklet (%x)\n", pDesklet->pIcon);
 		pDesklet->iSidGLAnimation = 0;
 		return FALSE;
 	}

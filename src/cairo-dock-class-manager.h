@@ -62,6 +62,12 @@ gboolean cairo_dock_class_is_inhibated (const gchar *cClass);
 */
 gboolean cairo_dock_class_is_using_xicon (const gchar *cClass);
 /**
+* Dis si une classe donnee peut etre groupee en sous-dock ou non.
+* @return TRUE ssi les applis de cette classe ne sont pas groupees.
+*/
+gboolean cairo_dock_class_is_expanded (const gchar *cClass);
+
+/**
 * Dis si une appli doit etre inhibee ou pas. Si un inhibiteur libre a ete trouve, il en prendra le controle, et TRUE sera renvoye. Un indicateur lui sera rajoute (ainsi qu'a l'icone du sous-dock si necessaire), et la geometrie de l'icone pour le WM lui est mise, mais il ne sera pas redessine. Dans le cas contraire, FALSE sera renvoye, et l'appli pourra etre inseree dans le dock.
 * @param pIcon l'icone d'appli.
 * @return TRUE si l'appli a ete inhibee.
@@ -133,6 +139,11 @@ void cairo_dock_update_name_on_inhibators (gchar *cClass, Window Xid, gchar *cNe
 Icon *cairo_dock_get_classmate (Icon *pIcon);
 
 gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar *cClass);
+
+
+void cairo_dock_set_overwrite_exceptions (const gchar *cExceptions);
+
+void cairo_dock_set_group_exceptions (const gchar *cExceptions);
 
 
 G_END_DECLS

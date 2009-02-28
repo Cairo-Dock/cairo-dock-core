@@ -348,6 +348,28 @@ void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, C
 }
 
 
+void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pDock)
+{
+	CairoDock *pSubDock = pPointedIcon->pSubDock;
+	int iX = pPointedIcon->fXAtRest - (pDock->fFlatDockWidth - pDock->iMaxDockWidth) / 2 + pPointedIcon->fWidth / 2;
+	if (pSubDock->bHorizontalDock == pDock->bHorizontalDock)
+	{
+		pSubDock->fAlign = 0.5;
+		pSubDock->iGapX = iX + pDock->iWindowPositionX - (pDock->bHorizontalDock ? g_iScreenOffsetX : g_iScreenOffsetY) - g_iScreenWidth[pDock->bHorizontalDock] / 2;  // les sous-dock ont un alignement egal a 0.5
+		pSubDock->iGapY = pDock->iGapY + pDock->iMaxDockHeight;
+	}
+	else
+	{
+		pSubDock->fAlign = (pDock->bDirectionUp ? 1 : 0);
+		pSubDock->iGapX = (pDock->iGapY + pDock->iMaxDockHeight) * (pDock->bDirectionUp ? -1 : 1);
+		if (pDock->bDirectionUp)
+			pSubDock->iGapY = g_iScreenWidth[pDock->bHorizontalDock] - (iX + pDock->iWindowPositionX - (pDock->bHorizontalDock ? g_iScreenOffsetX : g_iScreenOffsetY)) - pSubDock->iMaxDockHeight / 2;  // les sous-dock ont un alignement egal a 1.
+		else
+			pSubDock->iGapY = iX + pDock->iWindowPositionX - pSubDock->iMaxDockHeight / 2;  // les sous-dock ont un alignement egal a 0.
+	}
+}
+
+
 void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCallBack, gpointer data)
 {
 	GtkTargetEntry *pTargetEntry = g_new0 (GtkTargetEntry, 6);

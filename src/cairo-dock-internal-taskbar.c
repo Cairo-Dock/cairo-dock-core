@@ -11,6 +11,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-load.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-internal-accessibility.h"
@@ -29,7 +30,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	pTaskBar->bUniquePid = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "unique PID", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 	
 	pTaskBar->bGroupAppliByClass = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "group by class", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
-
+	pTaskBar->cGroupException = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "group exception", &bFlushConfFileNeeded, NULL, NULL, NULL);
+	
 	pTaskBar->iAppliMaxNameLength = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "max name length", &bFlushConfFileNeeded, 15, "Applications", NULL);
 
 	pTaskBar->bMinimizeOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "minimize on click", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
@@ -54,6 +56,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	
 	pTaskBar->bMixLauncherAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "mix launcher appli", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	pTaskBar->bOverWriteXIcons = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "overwrite xicon", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	pTaskBar->cOverwriteException = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "overwrite exception", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	pTaskBar->bShowThumbnail = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "window thumbnail", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	if (pTaskBar->bShowThumbnail && ! cairo_dock_xcomposite_is_available ())
 	{
@@ -69,6 +72,8 @@ static void reset_config (CairoConfigTaskBar *pTaskBar)
 {
 	g_free (pTaskBar->cAnimationOnActiveWindow);
 	g_free (pTaskBar->cAnimationOnDemandsAttention);
+	g_free (pTaskBar->cOverwriteException);
+	g_free (pTaskBar->cGroupException);
 }
 
 static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskBar)
@@ -90,6 +95,8 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 		pPrevTaskBar->bOverWriteXIcons != pTaskBar->bOverWriteXIcons ||
 		pPrevTaskBar->bShowThumbnail != pTaskBar->bShowThumbnail ||
 		pPrevTaskBar->iAppliMaxNameLength != pTaskBar->iAppliMaxNameLength ||
+		cairo_dock_strings_differ (pPrevTaskBar->cGroupException, pTaskBar->cGroupException) ||
+		cairo_dock_strings_differ (pPrevTaskBar->cOverwriteException, pTaskBar->cOverwriteException) ||
 		(cairo_dock_application_manager_is_running () && ! pTaskBar->bShowAppli))  // on ne veut plus voir les applis, il faut donc les enlever.
 	{
 		cairo_dock_stop_application_manager ();

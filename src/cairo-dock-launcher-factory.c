@@ -363,7 +363,8 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	
 	if (bPreventFromInhibating && icon->cClass != NULL)
 	{
-		cairo_dock_set_class_use_xicon (icon->cClass, TRUE);
+		//cairo_dock_set_class_use_xicon (icon->cClass, TRUE);
+		cairo_dock_deinhibate_class (icon->cClass, icon);
 		g_free (icon->cClass);
 		icon->cClass = NULL;
 	}

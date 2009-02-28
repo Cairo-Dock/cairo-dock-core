@@ -26,6 +26,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <glitz-glx.h>
 #include <cairo-glitz.h>
 #endif
+#define GL_GLEXT_PROTOTYPES
 #include <GL/gl.h>
 #include <GL/glx.h>
 
@@ -112,7 +113,7 @@ struct _CairoContainer {
 	gdouble fRatio;
 	/// TRUE ssi le container est reflechissant.
 	gboolean bUseReflect;
-	GLXContext *pContext;
+	GLXContext glContext;
 };
 
 #define CAIRO_CONTAINER(p) ((CairoContainer *) (p))
@@ -194,6 +195,8 @@ struct _CairoDock {
 	gdouble fRatio;
 	/// dit si la vue courante utilise les reflets ou pas (utile pour les plug-ins).
 	gboolean bUseReflect;
+	/// contexte OpenGL associe a la fenetre.
+	GLXContext glContext;
 	
 	/// la liste de ses icones.
 	GList* icons;
@@ -885,6 +888,7 @@ struct _CairoDesklet {
 	/// le facteur de zoom lors du detachage d'une applet.
 	gdouble fZoom;
 	gboolean bUseReflect_unused;
+	GLXContext glContext;
 	/// le moteur de rendu utilise pour dessiner le desklet.
 	CairoDeskletRenderer *pRenderer;
 	/// donnees pouvant etre utilisees par le moteur de rendu.
@@ -983,6 +987,8 @@ typedef void (* CairoDockConfigFunc) (gchar *cConfFile, gpointer data);
 struct _CairoDockClassAppli {
 	/// TRUE ssi l'appli doit utiliser l'icone fournie par X au lieu de celle du theme.
 	gboolean bUseXIcon;
+	/// TRUE ssi l'appli ne se groupe pas par classe.
+	gboolean bExpand;
 	/// Liste des inhibiteurs de la classe.
 	GList *pIconsOfClass;
 	/// Liste des icones d'appli de cette classe.
@@ -1045,6 +1051,7 @@ struct _CairoFlyingContainer {
 	gint iMouseY;
 	gdouble fRatio;
 	gboolean bUseReflect;
+	GLXContext glContext;
 	/// L'icone volante.
 	Icon *pIcon;
 	/// compteur pour l'animation.

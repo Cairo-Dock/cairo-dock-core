@@ -114,6 +114,10 @@ unique PID = false
 #{This allows to group windows in some soft like Gimp, and to have only 1 icon in the main dock.The 1st window will appear in the main dock, and the others will be placed in a container associated with this 1st icon.}
 group by class = false
 
+#s- Except the following classes :
+#{enter the class of the applications, separated by a semi-colon ';'}
+group exception = pidgin;xchat
+
 #b- Only show icons whose window is minimized ?
 hide visible = false
 
@@ -130,6 +134,10 @@ mix launcher appli = true
 #b- Overwrite X icons with launchers' one ?
 #{If not set, will use the icon provided by X for each appli. If set, the same icon as the corresponding launcher will be used for each appli.}
 overwrite xicon = true
+
+#s- Except the following classes :
+#{enter the class of the applications, separated by a semi-colon ';'}
+overwrite exception = pidgin;xchat
 
 #b- Show a window thumbnail when it's minimized ?
 #{You need a composite manager for it.}

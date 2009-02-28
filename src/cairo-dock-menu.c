@@ -1054,8 +1054,6 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
 	gtk_menu_shell_append  (GTK_MENU_SHELL (pSubMenu), pMenuItem);
 	g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK(_cairo_dock_lock_icons), data);
-	
-	//_add_entry_in_menu (myAccessibility.bLockIcons ? _("unlock icons") : _("lock icons"), GTK_STOCK_CANCEL, _cairo_dock_lock_icons, pSubMenu);
 		
 	_add_entry_in_menu (_("About"), GTK_STOCK_ABOUT, _cairo_dock_about, pSubMenu);
 

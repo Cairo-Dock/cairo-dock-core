@@ -599,6 +599,10 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 		CD_APPLET_SET_IMAGE_ON_MY_ICON (cImagePath); \
 		g_free (cImagePath); } while (0)
 
+#define CD_APPLET_SET_DEFAULT_IMAGE_ON_MY_ICON_IF_NONE do { \
+	if (myIcon->acFileName == NULL) { \
+		CD_APPLET_SET_LOCAL_IMAGE_ON_MY_ICON (MY_APPLET_ICON_FILE);	} } while (0)
+
 /**
 *Applique une surface existante sur le contexte de dessin de l'applet, et la redessine. La surface est redimensionnee aux dimensions de l'icone.
 *@param pSurface

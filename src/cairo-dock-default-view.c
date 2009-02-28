@@ -31,6 +31,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-default-view.h"
 
 extern gint g_iScreenWidth[2];
@@ -39,34 +40,8 @@ extern int g_iScreenOffsetX, g_iScreenOffsetY;
 extern int g_iBackgroundTexture;
 extern gboolean g_bEasterEggs;
 
-void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pDock)
-{
-	CairoDock *pSubDock = pPointedIcon->pSubDock;
-	//pSubDock->bDirectionUp = pDock->bDirectionUp;
-	//g_print ("%s (%s, %d/%d ; %d/%d)\n", __func__, pPointedIcon->acName, pDock->bDirectionUp, pDock->bHorizontalDock, pSubDock->bDirectionUp, pSubDock->bHorizontalDock);
-	///int iX = iMouseX + (-iMouseX + (pPointedIcon->fDrawX + pPointedIcon->fWidth * pPointedIcon->fScale / 2)) / 2;
-	int iX = pPointedIcon->fXAtRest - (pDock->fFlatDockWidth - pDock->iMaxDockWidth) / 2 + pPointedIcon->fWidth / 2;
-	//int iX = iMouseX + (iMouseX < pPointedIcon->fDrawX + pPointedIcon->fWidth * pPointedIcon->fScale / 2 ? (pDock->bDirectionUp ? 1 : 0) : (pDock->bDirectionUp ? 0 : -1)) * pPointedIcon->fWidth * pPointedIcon->fScale / 2;
-	if (pSubDock->bHorizontalDock == pDock->bHorizontalDock)
-	{
-		pSubDock->fAlign = 0.5;
-		pSubDock->iGapX = iX + pDock->iWindowPositionX - (pDock->bHorizontalDock ? g_iScreenOffsetX : g_iScreenOffsetY) - g_iScreenWidth[pDock->bHorizontalDock] / 2;  // les sous-dock ont un alignement egal a 0.5.  // pPointedIcon->fDrawX + pPointedIcon->fWidth * pPointedIcon->fScale / 2
-		pSubDock->iGapY = pDock->iGapY + pDock->iMaxDockHeight;
-	}
-	else
-	{
-		pSubDock->fAlign = (pDock->bDirectionUp ? 1 : 0);
-		pSubDock->iGapX = (pDock->iGapY + pDock->iMaxDockHeight) * (pDock->bDirectionUp ? -1 : 1);
-		if (pDock->bDirectionUp)
-			pSubDock->iGapY = g_iScreenWidth[pDock->bHorizontalDock] - (iX + pDock->iWindowPositionX - (pDock->bHorizontalDock ? g_iScreenOffsetX : g_iScreenOffsetY)) - pSubDock->iMaxDockHeight / 2;  // les sous-dock ont un alignement egal a 1.
-		else
-			pSubDock->iGapY = iX + pDock->iWindowPositionX - pSubDock->iMaxDockHeight / 2;  // les sous-dock ont un alignement egal a 0.
-	}
-}
 
-
-
-void cairo_dock_calculate_max_dock_size_linear (CairoDock *pDock)
+void cd_calculate_max_dock_size_default (CairoDock *pDock)
 {
 	pDock->pFirstDrawnElement = cairo_dock_calculate_icons_positions_at_rest_linear (pDock->icons, pDock->fFlatDockWidth, pDock->iScrollOffset);
 
@@ -95,26 +70,7 @@ void cairo_dock_calculate_max_dock_size_linear (CairoDock *pDock)
 }
 
 
-
-void cairo_dock_calculate_construction_parameters_generic (Icon *icon, CairoDock *pDock)
-{
-	icon->fDrawX = icon->fX;
-	icon->fDrawY = icon->fY;
-	icon->fWidthFactor = 1.;
-	icon->fHeightFactor = 1.;
-	///icon->fDeltaYReflection = 0.;
-	icon->fOrientation = 0.;
-	if (icon->fDrawX >= 0 && icon->fDrawX + icon->fWidth * icon->fScale <= pDock->iCurrentWidth)
-	{
-		icon->fAlpha = 1;
-	}
-	else
-	{
-		icon->fAlpha = .25;
-	}
-}
-
-void cairo_dock_render_linear (cairo_t *pCairoContext, CairoDock *pDock)
+void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 {
 	//\____________________ On trace le cadre.
 	double fChangeAxes = 0.5 * (pDock->iCurrentWidth - pDock->iMaxDockWidth);
@@ -170,7 +126,7 @@ void cairo_dock_render_linear (cairo_t *pCairoContext, CairoDock *pDock)
 
 
 
-void cairo_dock_render_optimized_linear (cairo_t *pCairoContext, CairoDock *pDock, GdkRectangle *pArea)
+void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkRectangle *pArea)
 {
 	//g_print ("%s ((%d;%d) x (%d;%d) / (%dx%d))\n", __func__, pArea->x, pArea->y, pArea->width, pArea->height, pDock->iCurrentWidth, pDock->iCurrentHeight);
 	double fLineWidth = myBackground.iDockLineWidth;
@@ -297,7 +253,7 @@ void cairo_dock_render_optimized_linear (cairo_t *pCairoContext, CairoDock *pDoc
 
 
 
-void cairo_dock_render_opengl_linear (CairoDock *pDock)
+void cd_render_opengl_default (CairoDock *pDock)
 {
 	GLsizei w = pDock->iCurrentWidth;
 	GLsizei h = pDock->iCurrentHeight;
@@ -414,10 +370,27 @@ void cairo_dock_render_opengl_linear (CairoDock *pDock)
 }
 
 
-Icon *cairo_dock_calculate_icons_linear (CairoDock *pDock)
+
+static void _cd_calculate_construction_parameters_generic (Icon *icon, CairoDock *pDock)
+{
+	icon->fDrawX = icon->fX;
+	icon->fDrawY = icon->fY;
+	icon->fWidthFactor = 1.;
+	icon->fHeightFactor = 1.;
+	///icon->fDeltaYReflection = 0.;
+	icon->fOrientation = 0.;
+	if (icon->fDrawX >= 0 && icon->fDrawX + icon->fWidth * icon->fScale <= pDock->iCurrentWidth)
+	{
+		icon->fAlpha = 1;
+	}
+	else
+	{
+		icon->fAlpha = .25;
+	}
+}
+Icon *cd_calculate_icons_default (CairoDock *pDock)
 {
 	Icon *pPointedIcon = cairo_dock_apply_wave_effect (pDock);
-
 	
 	//\____________________ On calcule les position/etirements/alpha des icones.
 	Icon* icon;
@@ -425,7 +398,7 @@ Icon *cairo_dock_calculate_icons_linear (CairoDock *pDock)
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		cairo_dock_calculate_construction_parameters_generic (icon, pDock);
+		_cd_calculate_construction_parameters_generic (icon, pDock);
 	}
 	
 	cairo_dock_check_if_mouse_inside_linear (pDock);
@@ -453,11 +426,11 @@ void cairo_dock_register_default_renderer (void)
 	CairoDockRenderer *pDefaultRenderer = g_new0 (CairoDockRenderer, 1);
 	pDefaultRenderer->cReadmeFilePath = g_strdup_printf ("%s/readme-default-view", CAIRO_DOCK_SHARE_DATA_DIR);
 	pDefaultRenderer->cPreviewFilePath = g_strdup_printf ("%s/preview-default.png", CAIRO_DOCK_SHARE_DATA_DIR);
-	pDefaultRenderer->calculate_max_dock_size = cairo_dock_calculate_max_dock_size_linear;
-	pDefaultRenderer->calculate_icons = cairo_dock_calculate_icons_linear;
-	pDefaultRenderer->render = cairo_dock_render_linear;
-	pDefaultRenderer->render_optimized = cairo_dock_render_optimized_linear;
-	pDefaultRenderer->render_opengl = cairo_dock_render_opengl_linear;
+	pDefaultRenderer->calculate_max_dock_size = cd_calculate_max_dock_size_default;
+	pDefaultRenderer->calculate_icons = cd_calculate_icons_default;
+	pDefaultRenderer->render = cd_render_default;
+	pDefaultRenderer->render_optimized = cd_render_optimized_default;
+	pDefaultRenderer->render_opengl = cd_render_opengl_default;
 	pDefaultRenderer->set_subdock_position = cairo_dock_set_subdock_position_linear;
 	pDefaultRenderer->bUseReflect = FALSE;
 

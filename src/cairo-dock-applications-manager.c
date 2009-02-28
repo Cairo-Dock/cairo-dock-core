@@ -1103,7 +1103,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					{
 						cd_message ("cette fenetre s'est deplacee sur le bureau courant (%d;%d)", event.xconfigure.x, event.xconfigure.y);
 						gboolean bInsideDock;
-						if (g_list_find (pDock->icons, icon) == NULL)
+						/**if (g_list_find (pDock->icons, icon) == NULL)
 						{
 							if (! myTaskBar.bGroupAppliByClass)
 								bInsideDock = FALSE;
@@ -1114,7 +1114,8 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 							}
 						}
 						else
-							bInsideDock = TRUE;
+							bInsideDock = TRUE;*/
+						bInsideDock = (icon->cParentDockName != NULL);  /// a verifier ...
 						if (! bInsideDock)
 							cairo_dock_insert_appli_in_dock (icon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 					}
@@ -1329,7 +1330,10 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 void cairo_dock_start_application_manager (CairoDock *pDock)
 {
 	g_return_if_fail (s_iSidUpdateAppliList == 0);
-
+	
+	cairo_dock_set_overwrite_exceptions (myTaskBar.cOverwriteException);
+	cairo_dock_set_group_exceptions (myTaskBar.cGroupException);
+	
 	//\__________________ On recupere l'ensemble des fenetres presentes.
 	Window root = DefaultRootWindow (s_XDisplay);
 	cairo_dock_set_window_mask (root, PropertyChangeMask /*| StructureNotifyMask | SubstructureNotifyMask | ResizeRedirectMask | SubstructureRedirectMask*/);

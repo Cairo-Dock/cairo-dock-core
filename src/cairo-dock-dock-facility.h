@@ -76,6 +76,8 @@ void cairo_dock_set_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 
 void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, CairoDockSizeType iSizeType, int *iNewWidth, int *iNewHeight);
 
+void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pParentDock);
+
 
 /**
 * Autorise un widget a accepter les glisse-deposes.

@@ -30,7 +30,6 @@
 #include <cairo-dock/cairo-dock-keyfile-utilities.h>
 #include <cairo-dock/cairo-dock-surface-factory.h>
 #include <cairo-dock/cairo-dock-renderer-manager.h>
-#include <cairo-dock/cairo-dock-default-view.h>
 #include <cairo-dock/cairo-dock-applet-facility.h>
 #include <cairo-dock/cairo-dock-file-manager.h>
 #include <cairo-dock/cairo-dock-keybinder.h>

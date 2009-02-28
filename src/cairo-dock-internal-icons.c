@@ -14,6 +14,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-icons.h"
+#include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-internal-taskbar.h"
 #define _INTERNAL_MODULE_

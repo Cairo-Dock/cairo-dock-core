@@ -248,6 +248,7 @@ gboolean cairo_dock_set_class_use_xicon (const gchar *cClass, gboolean bUseXIcon
 	return TRUE;
 }
 
+
 gboolean cairo_dock_inhibate_class (const gchar *cClass, Icon *pInhibatorIcon)
 {
 	g_return_val_if_fail (cClass != NULL, FALSE);
@@ -297,6 +298,12 @@ gboolean cairo_dock_class_is_using_xicon (const gchar *cClass)
 	return (pClassAppli != NULL && pClassAppli->bUseXIcon);  // si pClassAppli == NULL, il n'y a pas de lanceur pouvant lui filer son icone, mais on peut en trouver une dans le theme d'icones systeme.
 }
 
+gboolean cairo_dock_class_is_expanded (const gchar *cClass)
+{
+	CairoDockClassAppli *pClassAppli = cairo_dock_find_class_appli (cClass);
+	return (pClassAppli != NULL && pClassAppli->bExpand);
+}
+
 gboolean cairo_dock_prevent_inhibated_class (Icon *pIcon)
 {
 	g_return_val_if_fail (pIcon != NULL, FALSE);
@@ -311,12 +318,7 @@ gboolean cairo_dock_prevent_inhibated_class (Icon *pIcon)
 		for (pElement = pClassAppli->pIconsOfClass; pElement != NULL; pElement = pElement->next)
 		{
 			pInhibatorIcon = pElement->data;
-			if (pInhibatorIcon == NULL)  // cette appli est inhibee par Dieu.
-			{
-				cd_debug ("cette appli est inhibee par Dieu");
-				bToBeInhibited = TRUE;
-			}
-			else
+			if (pInhibatorIcon != NULL)  // un inhibiteur est present.
 			{
 				if (pInhibatorIcon->Xid == 0 && pInhibatorIcon->pSubDock == NULL)  // cette icone inhibe cette classe mais ne controle encore aucune appli, on s'y asservit.
 				{
@@ -570,8 +572,6 @@ cairo_surface_t *cairo_dock_create_surface_from_class (gchar *cClass, cairo_t *p
 		return pSurface;
 	}
 	
-	if (pClassAppli != NULL)
-	
 	cd_debug ("classe %s prend l'icone X", cClass);
 	
 	return NULL;
@@ -779,3 +779,55 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 	}
 	return FALSE;
 }
+
+
+static void _cairo_dock_reset_overwrite_exceptions (gchar *cClass, CairoDockClassAppli *pClassAppli, gpointer data)
+{
+	pClassAppli->bUseXIcon = FALSE;
+}
+void cairo_dock_set_overwrite_exceptions (const gchar *cExceptions)
+{
+	g_hash_table_foreach (s_hClassTable, (GHFunc) _cairo_dock_reset_overwrite_exceptions, NULL);
+	
+	gchar **cClassList = g_strsplit (cExceptions, ";", -1);
+	if (cClassList == NULL || cClassList[0] == NULL || *cClassList[0] == '\0')
+	{
+		g_strfreev (cClassList);
+		return ;
+	}
+	CairoDockClassAppli *pClassAppli;
+	int i;
+	for (i = 0; cClassList[i] != NULL; i ++)
+	{
+		CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClassList[i]);
+		pClassAppli->bUseXIcon = TRUE;
+	}
+	
+	g_strfreev (cClassList);
+}
+
+static void _cairo_dock_reset_group_exceptions (gchar *cClass, CairoDockClassAppli *pClassAppli, gpointer data)
+{
+	pClassAppli->bExpand = FALSE;
+}
+void cairo_dock_set_group_exceptions (const gchar *cExceptions)
+{
+	g_hash_table_foreach (s_hClassTable, (GHFunc) _cairo_dock_reset_group_exceptions, NULL);
+	
+	gchar **cClassList = g_strsplit (cExceptions, ";", -1);
+	if (cClassList == NULL || cClassList[0] == NULL || *cClassList[0] == '\0')
+	{
+		g_strfreev (cClassList);
+		return ;
+	}
+	CairoDockClassAppli *pClassAppli;
+	int i;
+	for (i = 0; cClassList[i] != NULL; i ++)
+	{
+		CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClassList[i]);
+		pClassAppli->bExpand = TRUE;
+	}
+	
+	g_strfreev (cClassList);
+}
+
