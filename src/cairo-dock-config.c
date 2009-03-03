@@ -842,7 +842,7 @@ void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecrypt
   char *current_output = NULL;
   if( output && input && strlen(input)>0 )
   {
-    *output = g_malloc( (strlen(input)+1)/3 );
+    *output = g_malloc( (strlen(input)+1)/3+1 );
     current_output = *output;
   }
   else
