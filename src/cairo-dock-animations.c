@@ -501,7 +501,7 @@ static gboolean _cairo_dock_animation (CairoDock *pDock)
 	
 	gboolean bUpdateSlowAnimation = FALSE;
 	pDock->iAnimationStep ++;
-	if (pDock->iAnimationStep * pDock->iAnimationDeltaT >= 90)
+	if (pDock->iAnimationStep * pDock->iAnimationDeltaT >= CAIRO_DOCK_MIN_SLOW_DELTA_T)
 	{
 		bUpdateSlowAnimation = TRUE;
 		pDock->iAnimationStep = 0;
@@ -572,7 +572,7 @@ static gboolean _cairo_desklet_animation (CairoDesklet *pDesklet)
 	
 	gboolean bUpdateSlowAnimation = FALSE;
 	pDesklet->iAnimationStep ++;
-	if (pDesklet->iAnimationStep * pDesklet->iAnimationDeltaT >= 90)
+	if (pDesklet->iAnimationStep * pDesklet->iAnimationDeltaT >= CAIRO_DOCK_MIN_SLOW_DELTA_T)
 	{
 		bUpdateSlowAnimation = TRUE;
 		pDesklet->iAnimationStep = 0;

@@ -453,7 +453,6 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 #define CD_APPLET_ADD_ABOUT_IN_MENU(pMenu) CD_APPLET_ADD_IN_MENU_WITH_STOCK (_("About"), GTK_STOCK_ABOUT, CD_APPLET_ABOUT_FUNC, pMenu)
 
 
-
   /////////////////////////////
  /// VARIABLES DISPONIBLES ///
 /////////////////////////////
@@ -612,10 +611,10 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 	cairo_dock_set_icon_surface_with_zoom (myDrawContext, pSurface, fScale, myIcon, myContainer); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
 
+
   /////////////
  /// LABEL ///
 /////////////
-
 /**
 *Remplace l'etiquette de l'icone de l'applet par une nouvelle.
 *@param cIconName la nouvelle etiquette.
@@ -629,10 +628,10 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 #define CD_APPLET_SET_NAME_FOR_MY_ICON_PRINTF(cIconNameFormat, ...) \
 	cairo_dock_set_icon_name_full (myDrawContext, myIcon, myContainer, cIconNameFormat, ##__VA_ARGS__)
 
+
   /////////////////
  /// QUICK-INFO///
 /////////////////
-
 /**
 *Ecris une info-rapide sur l'icone de l'applet.
 *@param cQuickInfo l'info-rapide. Ce doit etre une chaine de caracteres particulièrement petite, representant une info concise, puisque ecrite directement sur l'icone.
@@ -665,22 +664,29 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 #define CD_APPLET_SET_SIZE_AS_QUICK_INFO(iSizeInBytes) \
 	cairo_dock_set_size_as_quick_info (myDrawContext, myIcon, myContainer, iSizeInBytes)
 
+
   /////////////////
  /// ANIMATION ///
 /////////////////
-
-/**
-*Empeche l'icone d'etre animee au passage de la souris (a faire 1 fois au debut).
+/** Empeche l'icone d'etre animee au passage de la souris (a faire 1 fois au debut).
 */
 #define CD_APPLET_SET_STATIC_ICON cairo_dock_set_icon_static (myIcon)
 
-/**
-*Lance l'animation de l'icone de l'applet.
+/** Lance l'animation de l'icone de l'applet.
 *@param iAnimationType type de l'animation (un #CairoDockAnimationType).
 *@param iAnimationLength duree de l'animation, en nombre de tours.
 */
 #define CD_APPLET_ANIMATE_MY_ICON(cAnimationName, iAnimationLength) \
 	cairo_dock_request_icon_animation (myIcon, myDock, cAnimationName, iAnimationLength)
+
+
+#define CD_APPLET_START_DRAWING_MY_ICON cairo_dock_begin_draw_icon (myIcon, myContainer)
+
+#define CD_APPLET_START_DRAWING_MY_ICON_OR_RETURN(...) \
+	if (! cairo_dock_begin_draw_icon (myIcon, myContainer)) \
+		return __VA_ARGS__
+
+#define CD_APPLET_FINISH_DRAWING_MY_ICON cairo_dock_end_draw_icon (myIcon, myContainer)
 
 
 #define CD_APPLET_RENDER_GAUGE(pGauge, fValue) cairo_dock_render_gauge (myDrawContext, myContainer, myIcon, pGauge, fValue)

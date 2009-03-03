@@ -746,7 +746,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	}
 	
 	//g_print ("ink : %d;%d\n", (int) ink.x, (int) ink.y);
-	cairo_translate (pCairoContext, -ink.x, -ink.y + 1);  // meme remarque pour le +1.
+	cairo_translate (pCairoContext, -ink.x, -ink.y + 0);  // meme remarque pour le +1.
 	
 	//\_________________ On dessine les contours du texte.
 	if (pLabelDescription->bOutlined)
@@ -771,15 +771,16 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	cairo_pattern_t *pGradationPattern = NULL;
 	if (pLabelDescription->fColorStart != pLabelDescription->fColorStop)
 	{
+		/// faut-il vraiment ajouter les ink dans le pattern ???
 		if (pLabelDescription->bVerticalPattern)
 			pGradationPattern = cairo_pattern_create_linear (0.,
-				iOutlineMargin/2,  //-ink.y + iOutlineMargin/2 + 1 + 1,  // meme remarque pour le +1.
+				ink.y + 0 + iOutlineMargin/2,  // meme remarque pour le +1.
 				0.,
-				iOutlineMargin/2 + ink.height);
+				ink.y + 0 + iOutlineMargin/2 + ink.height);
 		else
-			pGradationPattern = cairo_pattern_create_linear (iOutlineMargin/2,
+			pGradationPattern = cairo_pattern_create_linear (ink.x + iOutlineMargin/2,
 				0.,
-				iOutlineMargin/2 + ink.width,
+				ink.x + iOutlineMargin/2 + ink.width,
 				0.);
 		g_return_val_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS, NULL);
 		cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);

@@ -25,12 +25,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <cairo-glitz.h>
 #endif
 
-#define GL_GLEXT_PROTOTYPES
 #include <X11/extensions/Xrender.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glx.h>
-#include <gdk/x11/gdkglx.h>
 
 #include "cairo-dock-load.h"
 #include "cairo-dock-surface-factory.h"
@@ -140,8 +135,7 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHoriz
 	}
 
 	//\__________________ On dessine l'indicateur.
-	glColor4f(1., 1., 1., 1.);
-	cairo_dock_draw_texture (g_iIndicatorTexture, 0, 0);
+	cairo_dock_draw_texture_with_alpha (g_iIndicatorTexture, 1., 1., 1.);
 }
 static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDock *pDock, double fRatio)
 {
@@ -158,9 +152,8 @@ static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDo
 		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
 	}
 	
-	glColor4f(1., 1., 1., 1.);
 	cairo_dock_set_icon_scale (icon, CAIRO_CONTAINER (pDock), 1.);
-	cairo_dock_draw_texture (g_iActiveIndicatorTexture, 0, 0);
+	cairo_dock_draw_texture_with_alpha (g_iActiveIndicatorTexture, 1., 1., 1.);
 }
 static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp)
 {
@@ -188,10 +181,10 @@ static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bHoriz
 		icon->fHeight * icon->fScale/2 - g_fClassIndicatorHeight * fRatio/2,
 		0.);
 	
-	glColor4f(1., 1., 1., 1.);
-	cairo_dock_draw_texture (g_iClassIndicatorTexture,
+	cairo_dock_draw_texture_with_alpha (g_iClassIndicatorTexture,
 		g_fClassIndicatorWidth * fRatio,
-		g_fClassIndicatorHeight * fRatio);
+		g_fClassIndicatorHeight * fRatio,
+		1.);
 }
 
 void cairo_dock_set_icon_scale (Icon *pIcon, CairoContainer *pContainer, double fZoomFactor)
@@ -243,10 +236,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	}
 	
-	glPushMatrix ();
-	glColor4f(1., 1., 1., pIcon->fAlpha);
 	cairo_dock_draw_icon_texture (pIcon, CAIRO_CONTAINER (pDock));
-	glPopMatrix ();
 	
 	if (pDock->bUseReflect)
 	{
@@ -312,8 +302,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
 		glEnable(GL_BLEND);
 		///glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBlendFuncSeparate (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,
-			GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		_cairo_dock_set_blend_alpha ();
 		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		
 		//glBlendColor(1., 1., 1., 1.);  // utile ?
@@ -611,8 +600,10 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			fMagnitude *= (fMagnitude * mySystem.fLabelAlphaThreshold + 1) / (mySystem.fLabelAlphaThreshold + 1);
 		}
 		
-		glColor4f(1., 1., 1., fMagnitude);
-		cairo_dock_draw_texture (icon->iLabelTexture, icon->iTextWidth, icon->iTextHeight);
+		cairo_dock_draw_texture_with_alpha (icon->iLabelTexture,
+			icon->iTextWidth,
+			icon->iTextHeight,
+			fMagnitude);
 		
 		glPopMatrix ();
 	}
@@ -623,8 +614,10 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glPushMatrix ();
 		glTranslatef (0., (- icon->fHeight + icon->iQuickInfoHeight * fRatio) * icon->fScale/2, 0.);
 		
-		glColor4f(1., 1., 1., icon->fAlpha);
-		cairo_dock_draw_texture (icon->iQuickInfoTexture, icon->iQuickInfoWidth * fRatio * icon->fScale, icon->iQuickInfoHeight * fRatio * icon->fScale);
+		cairo_dock_draw_texture_with_alpha (icon->iQuickInfoTexture,
+			icon->iQuickInfoWidth * fRatio * icon->fScale,
+			icon->iQuickInfoHeight * fRatio * icon->fScale,
+			icon->fAlpha);
 		
 		glPopMatrix ();
 	}
@@ -643,14 +636,14 @@ void cairo_dock_render_background_opengl (CairoDock *pDock)
 		return ;
 	
 	glEnable (GL_BLEND);
-	glBlendFunc (GL_ONE, GL_ZERO);  // GL_SRC_ALPHA
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	glEnable (GL_TEXTURE_2D);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	
 	glPolygonMode (GL_FRONT, GL_FILL);
 	
-	glColor4f(1., 1., 1., 1.);
+	glColor4f (1., 1., 1., 1.);
 	
 	glLoadIdentity ();
 	glTranslatef (pDock->iCurrentWidth/2, pDock->iCurrentHeight/2, 0.);
@@ -855,27 +848,6 @@ void cairo_dock_update_quick_info_texture (Icon *pIcon)
 }
 
 
-
-#define _cairo_dock_apply_texture(iTexture) do { \
-	glBindTexture (GL_TEXTURE_2D, iTexture);\
-	glBegin(GL_QUADS);\
-	glTexCoord2f(0., 0.); glVertex3f(-.5,  .5, 0.);\
-	glTexCoord2f(1., 0.); glVertex3f( .5,  .5, 0.);\
-	glTexCoord2f(1., 1.); glVertex3f( .5, -.5, 0.);\
-	glTexCoord2f(0., 1.); glVertex3f(-.5, -.5, 0.);\
-	glEnd(); } while (0)
-
-#define _cairo_dock_enable_texture(...) do { \
-	glEnable (GL_BLEND);\
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);\
-	glEnable (GL_TEXTURE_2D);\
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);\
-	glPolygonMode (GL_FRONT, GL_FILL); } while (0)
-
-#define _cairo_dock_disable_texture(...) do { \
-	glDisable (GL_TEXTURE_2D);\
-	glDisable (GL_BLEND); } while (0)
-
 void cairo_dock_apply_texture (GLuint iTexture)
 {
 	_cairo_dock_apply_texture (iTexture);
@@ -883,21 +855,25 @@ void cairo_dock_apply_texture (GLuint iTexture)
 
 void cairo_dock_apply_texture_at_size (GLuint iTexture, int iWidth, int iHeight)
 {
-	if (iWidth != 0 && iHeight != 0)
-		glScalef (iWidth, iHeight, 1.);
-	_cairo_dock_apply_texture (iTexture);
+	_cairo_dock_apply_texture_at_size (iTexture, iWidth, iHeight);
+}
+
+void cairo_dock_draw_texture_with_alpha (GLuint iTexture, int iWidth, int iHeight, double fAlpha)
+{
+	_cairo_dock_enable_texture ();
+	if (fAlpha == 1)
+		_cairo_dock_set_blend_over ();
+	else
+		_cairo_dock_set_blend_alpha ();
+	
+	_cairo_dock_apply_texture_at_size_with_alpha (iTexture, iWidth, iHeight, fAlpha);
+	
+	_cairo_dock_disable_texture ();
 }
 
 void cairo_dock_draw_texture (GLuint iTexture, int iWidth, int iHeight)
 {
-	_cairo_dock_enable_texture ();
-	
-	if (iWidth != 0 && iHeight != 0)
-		glScalef (iWidth, iHeight, 1.);
-	
-	_cairo_dock_apply_texture (iTexture);
-	
-	_cairo_dock_disable_texture ();
+	cairo_dock_draw_texture_with_alpha (iTexture, iWidth, iHeight, 1.);
 }
 
 void cairo_dock_apply_icon_texture (Icon *pIcon)
@@ -905,14 +881,23 @@ void cairo_dock_apply_icon_texture (Icon *pIcon)
 	_cairo_dock_apply_texture (pIcon->iIconTexture);
 }
 
+void cairo_dock_apply_icon_texture_at_current_size (Icon *pIcon, CairoContainer *pContainer)
+{
+	double fSizeX, fSizeY;
+	cairo_dock_get_current_icon_size (pIcon, pContainer, &fSizeX, &fSizeY);
+	
+	_cairo_dock_apply_texture_at_size (pIcon->iIconTexture, fSizeX, fSizeY);
+}
+
 void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer)
 {
 	double fSizeX, fSizeY;
 	cairo_dock_get_current_icon_size (pIcon, pContainer, &fSizeX, &fSizeY);
 	
-	cairo_dock_draw_texture (pIcon->iIconTexture,
+	cairo_dock_draw_texture_with_alpha (pIcon->iIconTexture,
 		fSizeX,
-		fSizeY);
+		fSizeY,
+		pIcon->fAlpha);
 }
 
 
@@ -1368,6 +1353,8 @@ void cairo_dock_create_icon_pbuffer (void)
 			glLoadIdentity();
 			glOrtho(0, iWidth, 0, iHeight, 0.0, 500.0);
 			glMatrixMode (GL_MODELVIEW);
+			glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
+			glClearDepth (1.0f);
 		}
 	}
 }
@@ -1381,7 +1368,8 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 		if (! gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
 			return FALSE;
 		
-		glMatrixMode(GL_PROJECTION);
+		cairo_dock_set_ortho_view (pContainer->iWidth, pContainer->iHeight);
+		/*glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0, pContainer->iWidth, 0, pContainer->iHeight, 0.0, 500.0);
 		glMatrixMode (GL_MODELVIEW);
@@ -1390,9 +1378,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 		gluLookAt (pContainer->iWidth/2, pContainer->iHeight/2, 3.,
 			pContainer->iWidth/2, pContainer->iHeight/2, 0.,
 			0.0f, 1.0f, 0.0f);
-		/*glTranslatef (pContainer->iWidth/2, pContainer->iHeight/2, -3.);
-		glTranslatef (pIcon->fWidth/2, pIcon->fHeight/2, -pIcon->fHeight/2);*/
-		glTranslatef (pContainer->iWidth, pContainer->iHeight, - pContainer->iHeight/2);
+		glTranslatef (pContainer->iWidth, pContainer->iHeight, - pContainer->iHeight/2);*/
 	}
 	else if (s_iconContext != 0)
 	{
@@ -1405,8 +1391,6 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	else
 		return FALSE;
 	
-	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
-	glClearDepth (1.0f);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glColor4f(1., 1., 1., 1.);
@@ -1438,7 +1422,8 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	//end
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
-		glMatrixMode(GL_PROJECTION);
+		cairo_dock_set_perspective_view (pContainer->iWidth, pContainer->iHeight);
+		/*glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		gluPerspective(60.0, 1.0*(GLfloat)pContainer->iWidth/(GLfloat)pContainer->iHeight, 1., 4*pContainer->iHeight);
 		glMatrixMode (GL_MODELVIEW);
@@ -1447,9 +1432,38 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 		gluLookAt (pContainer->iWidth/2, pContainer->iHeight/2, 3.,
 			pContainer->iWidth/2, pContainer->iHeight/2, 0.,
 			0.0f, 1.0f, 0.0f);
-		glTranslatef (0.0f, 0.0f, -3);
+		glTranslatef (0.0f, 0.0f, -3);*/
 		
 		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pContainer->pWidget);
 		gdk_gl_drawable_gl_end (pGlDrawable);
 	}
+}
+
+void cairo_dock_set_perspective_view (int iWidth, int iHeight)
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(60.0, 1.0*(GLfloat)iWidth/(GLfloat)iHeight, 1., 4*iHeight);
+	glMatrixMode (GL_MODELVIEW);
+	
+	glLoadIdentity ();
+	gluLookAt (iWidth/2, iHeight/2, 3.,
+		iWidth/2, iHeight/2, 0.,
+		0.0f, 1.0f, 0.0f);
+	glTranslatef (0.0f, 0.0f, -3);
+	glTranslatef (iWidth/2, iHeight/2, -iHeight*(sqrt(3)/2));
+}
+
+void cairo_dock_set_ortho_view (int iWidth, int iHeight)
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, iWidth, 0, iHeight, 0.0, 500.0);
+	glMatrixMode (GL_MODELVIEW);
+	
+	glLoadIdentity ();
+	gluLookAt (iWidth/2, iHeight/2, 3.,
+		iWidth/2, iHeight/2, 0.,
+		0.0f, 1.0f, 0.0f);
+	glTranslatef (iWidth, iHeight, - iHeight/2);
 }

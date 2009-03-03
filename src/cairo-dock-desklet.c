@@ -345,26 +345,12 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 		glRotatef (- pDesklet->fDepthRotationX / G_PI * 180., 1., 0., 0.);
 	}
 	
+	_cairo_dock_enable_texture ();
+	_cairo_dock_set_blend_alpha ();
+	
 	if (pDesklet->iBackGroundTexture != 0 && pDesklet->fBackGroundAlpha != 0)
 	{
-		glPushMatrix ();
-		
-		glEnable (GL_BLEND);
-		glBlendFunc (GL_ONE, GL_ZERO);
-		glColor4f (1., 1., 1., pDesklet->fBackGroundAlpha);
-		
-		glEnable (GL_TEXTURE_2D);
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-		
-		glPolygonMode (GL_FRONT, GL_FILL);
-		glNormal3f (0., 0., 1.);
-		glScalef (pDesklet->iWidth, pDesklet->iHeight, 1.);
-		
-		cairo_dock_apply_texture (pDesklet->iBackGroundTexture);
-		
-		glDisable (GL_TEXTURE_2D);
-		glDisable (GL_BLEND);
-		glPopMatrix ();
+		_cairo_dock_apply_texture_at_size_with_alpha (pDesklet->iBackGroundTexture, pDesklet->iWidth, pDesklet->iHeight, pDesklet->fBackGroundAlpha);
 	}
 	
 	glPushMatrix ();
@@ -378,16 +364,16 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 	
 	if (pDesklet->pRenderer != NULL && pDesklet->pRenderer->render_opengl != NULL)  // un moteur de rendu specifique a ete fourni.
 	{
+		_cairo_dock_set_alpha (1.);
 		pDesklet->pRenderer->render_opengl (pDesklet);
 	}
 	glPopMatrix ();
 	
+	_cairo_dock_enable_texture ();
+	_cairo_dock_set_blend_pbuffer ();
 	if (pDesklet->iForeGroundTexture != 0 && pDesklet->fForeGroundAlpha != 0)
 	{
-		glPushMatrix ();
-		glColor4f (1., 1., 1., pDesklet->fForeGroundAlpha);
-		cairo_dock_draw_texture (pDesklet->iForeGroundTexture, pDesklet->iWidth, pDesklet->iHeight);
-		glPopMatrix ();
+		_cairo_dock_apply_texture_at_size_with_alpha (pDesklet->iForeGroundTexture, pDesklet->iWidth, pDesklet->iHeight, pDesklet->fForeGroundAlpha);
 	}
 	
 	if (pDesklet->bInside && ! pDesklet->bPositionLocked)
@@ -402,14 +388,14 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 	
 	if ((pDesklet->bInside || pDesklet->rotating || pDesklet->rotatingY || pDesklet->rotatingX) && ! pDesklet->bPositionLocked)
 	{
-		glColor4f (1., 1., 1., 1.);
+		_cairo_dock_set_alpha (1.);
 		if (iRotateButtonTexture != 0)
 		{
 			glPushMatrix ();
 			glTranslatef (-pDesklet->iWidth/2 + myDesklets.iDeskletButtonSize/2,
 				pDesklet->iHeight/2 - myDesklets.iDeskletButtonSize/2,
 				0.);
-			cairo_dock_draw_texture (iRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
+			_cairo_dock_apply_texture_at_size (iRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
 			glPopMatrix ();
 		}
 		if (iRetachButtonTexture != 0)
@@ -418,7 +404,7 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 			glTranslatef (pDesklet->iWidth/2 - myDesklets.iDeskletButtonSize/2,
 				pDesklet->iHeight/2 - myDesklets.iDeskletButtonSize/2,
 				0.);
-			cairo_dock_draw_texture (iRetachButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
+			_cairo_dock_apply_texture_at_size (iRetachButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
 			glPopMatrix ();
 		}
 		if (iDepthRotateButtonTexture != 0)
@@ -427,7 +413,7 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 			glTranslatef (0.,
 				pDesklet->iHeight/2 - myDesklets.iDeskletButtonSize/2,
 				0.);
-			cairo_dock_draw_texture (iDepthRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
+			_cairo_dock_apply_texture_at_size (iDepthRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
 			glPopMatrix ();
 			
 			glPushMatrix ();
@@ -435,10 +421,13 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 			glTranslatef (0.,
 				pDesklet->iWidth/2 - myDesklets.iDeskletButtonSize/2,
 				0.);
-			cairo_dock_draw_texture (iDepthRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
+			_cairo_dock_apply_texture_at_size (iDepthRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
 			glPopMatrix ();
 		}
 	}
+	
+	_cairo_dock_disable_texture ();
+	
 	glPopMatrix ();
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -575,7 +564,8 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 			
 			glViewport(0, 0, w, h);
 			
-			glMatrixMode(GL_PROJECTION);
+			cairo_dock_set_perspective_view (w, h);
+			/*glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
 			gluPerspective(60.0, 1.0*(GLfloat)w/(GLfloat)h, 1., 4*h);
 			
@@ -584,7 +574,7 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 			gluLookAt (w/2, h/2, 3.,
 				w/2, h/2, 0.,
 				0.0f, 1.0f, 0.0f);
-			glTranslatef (0.0f, 0.0f, -3);
+			glTranslatef (0.0f, 0.0f, -3);*/
 			
 			gdk_gl_drawable_gl_end (pGlDrawable);
 		}

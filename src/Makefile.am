@@ -42,6 +42,7 @@ cairo_dock_CFLAGS = \
 	-DCAIRO_DOCK_ICON=\""cairo-dock.svg"\"\
 	-DCAIRO_DOCK_LOGO=\""cairo-dock-logo.png"\"\
 	-DCAIRO_DOCK_THEMES_DIR=\""$(CAIRO_DOCK_THEMES_DIR)"\"\
+	-DGL_GLEXT_PROTOTYPES=\""1"\"\
 	-std=c99\
 	-O3\
 	-g -ggdb\
@@ -123,6 +124,8 @@ cairo_dock_SOURCES = \
 	cairo-dock-X-utilities.h\
 	cairo-dock-gauge.c\
 	cairo-dock-gauge.h\
+	cairo-dock-gauge2.c\
+	cairo-dock-gauge2.h\
 	cairo-dock-dock-manager.c\
 	cairo-dock-dock-manager.h\
 	cairo-dock-class-manager.c\
@@ -219,6 +222,7 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-log.h\
 	cairo-dock-X-utilities.h\
 	cairo-dock-gauge.h\
+	cairo-dock-gauge2.h\
 	cairo-dock-dock-manager.h\
 	cairo-dock-class-manager.h\
 	cairo-dock-emblem.h\

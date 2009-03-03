@@ -12,6 +12,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <cairo.h>
 
 #include "cairo-dock-log.h"
+#include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-particle-system.h"
 
 static GLfloat s_pCornerCoords[8] = {0.0, 0.0,
@@ -21,13 +22,15 @@ static GLfloat s_pCornerCoords[8] = {0.0, 0.0,
 
 void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int iDepth)
 {
-	glEnable (GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	_cairo_dock_enable_texture ();
 	
-	glEnable(GL_TEXTURE_2D);
+	if (pParticleSystem->bAddLuminance)
+		_cairo_dock_set_blend_over ();
+		//glBlendFunc (GL_SRC_ALPHA, GL_ONE);
+	else
+		_cairo_dock_set_blend_alpha ();
+	
 	glBindTexture(GL_TEXTURE_2D, pParticleSystem->iTexture);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glPolygonMode (GL_FRONT, GL_FILL);
 	
 	GLfloat *vertices = pParticleSystem->pVertices;
 	GLfloat *coords = pParticleSystem->pCoords;

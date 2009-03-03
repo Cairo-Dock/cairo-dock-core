@@ -28,6 +28,7 @@ typedef struct _AppletData AppletData;
 #define CD_APPLET_ON_MIDDLE_CLICK_FUNC action_on_middle_click
 #define CD_APPLET_ON_DROP_DATA_FUNC action_on_drop_data
 #define CD_APPLET_ON_SCROLL_FUNC action_on_scroll
+#define CD_APPLET_ON_UPDATE_ICON_FUNC action_on_update_icon
 #define CD_APPLET_ABOUT_FUNC about
 
 //\_________________________________ PROTO
@@ -57,6 +58,8 @@ gboolean CD_APPLET_ON_MIDDLE_CLICK_FUNC (CairoDockModuleInstance *myApplet, Icon
 gboolean CD_APPLET_ON_DROP_DATA_FUNC (CairoDockModuleInstance *myApplet, const gchar *cReceivedData, Icon *pClickedIcon, double fPosition, CairoContainer *pClickedContainer)
 #define CD_APPLET_ON_SCROLL_PROTO \
 gboolean CD_APPLET_ON_SCROLL_FUNC (CairoDockModuleInstance *myApplet, Icon *pClickedIcon, CairoContainer *pClickedContainer, int iDirection)
+#define CD_APPLET_ON_UPDATE_ICON_PROTO \
+gboolean CD_APPLET_ON_UPDATE_ICON_FUNC (CairoDockModuleInstance *myApplet, Icon *pIcon, CairoContainer *pContainer, gboolean *bContinueAnimation)
 #define CD_APPLET_ABOUT_PROTO \
 void about (GtkMenuItem *menu_item, CairoDockModuleInstance *myApplet)
 
@@ -82,6 +85,8 @@ CD_APPLET_ON_MIDDLE_CLICK_PROTO;
 CD_APPLET_ON_DROP_DATA_PROTO;
 #define CD_APPLET_ON_SCROLL_H \
 CD_APPLET_ON_SCROLL_PROTO;
+#define CD_APPLET_ON_UPDATE_ICON_H \
+CD_APPLET_ON_UPDATE_ICON_PROTO;
 #define CD_APPLET_ABOUT_H \
 CD_APPLET_ABOUT_PROTO;
 
@@ -310,7 +315,6 @@ CD_APPLET_ON_SCROLL_PROTO \
 { \
 	if (pClickedIcon == myIcon || (myIcon != NULL && pClickedContainer == CAIRO_CONTAINER (myIcon->pSubDock)) || pClickedContainer == CAIRO_CONTAINER (myDesklet)) \
 	{
-
 /** Fin de la fonction de notification au scroll. Par defaut elle intercepte la notification si elle l'a recue.
 */
 #define CD_APPLET_ON_SCROLL_END \
@@ -318,6 +322,33 @@ CD_APPLET_ON_SCROLL_PROTO \
 	} \
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
 }
+
+//\______________________ on update icon.
+/** Debut de la fonction de notification d'update icon.
+*/
+#define CD_APPLET_ON_UPDATE_ICON_BEGIN \
+CD_APPLET_ON_UPDATE_ICON_PROTO \
+{ \
+	if (pIcon != myIcon) \
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+/** Fin de la fonction de notification d'update icon.
+*/
+#define CD_APPLET_ON_UPDATE_ICON_END \
+	*bContinueAnimation = TRUE;\
+	CD_APPLET_REDRAW_MY_ICON; \
+	return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \
+}
+
+#define CD_APPLET_SKIP_UPDATE_ICON do { \
+	*bContinueAnimation = TRUE; \
+	return CAIRO_DOCK_INTERCEPT_NOTIFICATION; } while (0)
+
+#define CD_APPLET_STOP_UPDATE_ICON \
+	return CAIRO_DOCK_INTERCEPT_NOTIFICATION
+
+#define CD_APPLET_PAUSE_UPDATE_ICON do { \
+	CD_APPLET_REDRAW_MY_ICON; \
+	return CAIRO_DOCK_INTERCEPT_NOTIFICATION; } while (0)
 
 //\______________________ about.
 /** Fonction 'A propos' toute faite, qui affiche un message dans une info-bulle. A inclure dans le .c.
@@ -372,6 +403,13 @@ CD_APPLET_ABOUT_PROTO \
 *Desabonne l'applet aux notifications du clic gauche. A effectuer lors de l'arret de l'applet.
 */
 #define CD_APPLET_UNREGISTER_FOR_SCROLL_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_SCROLL_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_SCROLL_FUNC, myApplet)
+
+//\______________________ notification de update icon.
+#define CD_APPLET_REGISTER_FOR_UPDATE_ICON_SLOW_EVENT cairo_dock_register_notification (CAIRO_DOCK_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet)
+#define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_SLOW_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
+#define CD_APPLET_REGISTER_FOR_UPDATE_ICON_EVENT cairo_dock_register_notification (CAIRO_DOCK_UPDATE_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet)
+#define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_UPDATE_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
+
 
 //\_________________________________ INSTANCE
 #define CD_APPLET_INCLUDE_MY_VARS  // deprecated

@@ -37,26 +37,25 @@ typedef enum {
 	/// notification appellee lorsque l'utilisateur scrolle sur une icone en maintenant la touche SHIFT ou CTRL enfoncee. data : {Icon, CairoDock, iDirection}
 	CAIRO_DOCK_SCROLL_ICON,
 	
-	CAIRO_DOCK_ENTER_ICON,
-	CAIRO_DOCK_UPDATE_ICON,
-	CAIRO_DOCK_UPDATE_ICON_SLOW,
-	CAIRO_DOCK_PRE_RENDER_ICON,
-	CAIRO_DOCK_RENDER_ICON,
-	CAIRO_DOCK_STOP_ICON,
-	CAIRO_DOCK_ENTER_DOCK,
-	CAIRO_DOCK_UPDATE_DOCK,
-	CAIRO_DOCK_UPDATE_DOCK_SLOW,
-	CAIRO_DOCK_PRE_RENDER_DOCK,
-	CAIRO_DOCK_RENDER_DOCK,
-	CAIRO_DOCK_STOP_DOCK,
-	CAIRO_DOCK_START_DRAG_DATA,
-	CAIRO_DOCK_REQUEST_ICON_ANIMATION,
-	CAIRO_DOCK_MOUSE_MOVED,
-	CAIRO_DOCK_ENTER_DESKLET,
-	CAIRO_DOCK_UPDATE_DESKLET,
-	CAIRO_DOCK_UPDATE_DESKLET_SLOW,
-	CAIRO_DOCK_RENDER_DESKLET,
-	CAIRO_DOCK_STOP_DESKLET,
+	CAIRO_DOCK_ENTER_ICON,  // la souris entre sur l'icone
+	CAIRO_DOCK_UPDATE_ICON,  // mettre a jour l'icone (animations liees a l'icone, dessin de la surface, etc)
+	CAIRO_DOCK_UPDATE_ICON_SLOW,  // idem mais a un rythme plus lent.
+	CAIRO_DOCK_PRE_RENDER_ICON,  // rendu de l'arriere-plan de l'icone.
+	CAIRO_DOCK_RENDER_ICON,  // rendu de l'icone.
+	CAIRO_DOCK_STOP_ICON,  // arret de l'icone (pour suppression par exemple => tout liberer)
+	CAIRO_DOCK_ENTER_DOCK,  // la souris entre dans le dock
+	CAIRO_DOCK_UPDATE_DOCK,  // mise a jour du dock (animations liees au dock, etc)
+	CAIRO_DOCK_UPDATE_DOCK_SLOW,  // idem mais a un rythme plus lent.
+	CAIRO_DOCK_RENDER_DOCK,  // rendu du dock.
+	CAIRO_DOCK_STOP_DOCK,  // arret du dock (suppression par exemple => tout liberer).
+	CAIRO_DOCK_START_DRAG_DATA,  // on entre dans le dock avec un truc a deposer.
+	CAIRO_DOCK_REQUEST_ICON_ANIMATION,  // une demande d'animation specifique a ete emise.
+	CAIRO_DOCK_MOUSE_MOVED,  // la souris a bouge.
+	CAIRO_DOCK_ENTER_DESKLET,  // on entre dans le desklet.
+	CAIRO_DOCK_UPDATE_DESKLET,  // le desklet est mis a jour.
+	CAIRO_DOCK_UPDATE_DESKLET_SLOW,  // idem mais a un rythme plus lent.
+	CAIRO_DOCK_RENDER_DESKLET,  // rendu du desklet.
+	CAIRO_DOCK_STOP_DESKLET,  // arret du desklet (suppression par exemple => tout liberer).
 	/// notification appellee lorsqu'une icone est inseree dans un dock. data : {Icon, CairoDock}
 	CAIRO_DOCK_INSERT_ICON,
 	/// notification appellee lorsqu'une icone passe en mode suppression d'un dock. data : {Icon, CairoDock}
@@ -83,7 +82,6 @@ typedef gboolean (* CairoDockRenderIconFunc) (gpointer pUserData, Icon *pIcon, C
 typedef gboolean (* CairoDockStopIconFunc) (gpointer pUserData, Icon *pIcon);
 typedef gboolean (* CairoDockEnterContainerFunc) (gpointer pUserData, CairoContainer *pContainer, gboolean *bStartAnimation);
 typedef gboolean (* CairoDockUpdateContainerFunc) (gpointer pUserData, CairoContainer *pContainer, gboolean *bContinueAnimation);
-typedef gboolean (* CairoDockPreRenderContainerFunc) (gpointer pUserData, CairoContainer *pContainer);
 typedef gboolean (* CairoDockRenderContainerFunc) (gpointer pUserData, CairoContainer *pContainer, cairo_t *pCairoContext);
 typedef gboolean (* CairoDockStopContainerFunc) (gpointer pUserData, CairoContainer *pContainer);
 typedef gboolean (* CairoDockStartDragDataFunc) (gpointer pUserData, CairoDock *pDock, gboolean *bStartAnimation);

@@ -99,7 +99,7 @@ static gboolean cairo_dock_update_icon_data_renderer_notification (gpointer pUse
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
 	pRenderer->iSmoothAnimationStep ++;
-	int iDeltaT = (int) ceil (90. / pContainer->iAnimationDeltaT) * pContainer->iAnimationDeltaT;
+	int iDeltaT = cairo_dock_get_slow_animation_delta_t (pContainer);
 	int iNbIterations = pRenderer->iLatencyTime / iDeltaT;
 	if (pRenderer->iSmoothAnimationStep < iNbIterations)
 	{

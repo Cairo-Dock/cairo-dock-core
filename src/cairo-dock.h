@@ -38,6 +38,7 @@
 #include <cairo-dock/cairo-dock-X-utilities.h>
 #include <cairo-dock/cairo-dock-dbus.h>
 #include <cairo-dock/cairo-dock-gauge.h>
+#include <cairo-dock/cairo-dock-gauge2.h>
 #include <cairo-dock/cairo-dock-dock-manager.h>
 #include <cairo-dock/cairo-dock-class-manager.h>
 #include <cairo-dock/cairo-dock-emblem.h>

@@ -26,7 +26,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <glitz-glx.h>
 #include <cairo-glitz.h>
 #endif
-#define GL_GLEXT_PROTOTYPES
+
 #include <GL/gl.h>
 #include <GL/glx.h>
 

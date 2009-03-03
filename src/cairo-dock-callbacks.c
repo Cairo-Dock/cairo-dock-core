@@ -132,9 +132,10 @@ gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDo
 {
 	if (! pCairoContext)  // on n'a pas mis le rendu cairo ici a cause du rendu optimise.
 	{
-		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
 		glLoadIdentity ();
+		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
 		cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDock));
+		
 		pDock->render_opengl (pDock);
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -154,34 +155,20 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		
 		if (pExpose->area.x + pExpose->area.y != 0)
 		{
-			//glEnable (GL_SCISSOR_TEST);
+			///glEnable (GL_SCISSOR_TEST);  // n'a pas l'air de marcher ...
 			glScissor ((int) pExpose->area.x, (int) pExpose->area.y, (int) pExpose->area.width, (int) pExpose->area.height);
 		}
+		
 		if (cairo_dock_is_loading ())
 		{
 			//cairo_dock_render_blank (pDock);
 		}
-		else if (pDock->bAtBottom)
+		else if (pDock->bAtBottom && pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->bInside)
 		{
-			if (pDock->bAutoHide && pDock->iRefCount == 0)
-			{
-				if (! pDock->bInside)
-					cairo_dock_render_background_opengl (pDock);
-				else
-				{
-					cairo_dock_notify (CAIRO_DOCK_PRE_RENDER_DOCK, pDock);
-					cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, NULL);
-				}
-			}
-			else
-			{
-				cairo_dock_notify (CAIRO_DOCK_PRE_RENDER_DOCK, pDock);
-				cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, NULL);
-			}
+			cairo_dock_render_background_opengl (pDock);
 		}
 		else
 		{
-			cairo_dock_notify (CAIRO_DOCK_PRE_RENDER_DOCK, pDock);
 			cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, NULL);
 		}
 		glDisable (GL_SCISSOR_TEST);
@@ -219,28 +206,14 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	{
 		
 	}
-	else if (!pDock->bAtBottom)
+	else if (pDock->bAtBottom && pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->bInside)
 	{
-		pDock->render (pCairoContext, pDock);
-		cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
+		cairo_dock_render_background (pCairoContext, pDock);
 	}
 	else
 	{
-		if (pDock->bAutoHide && pDock->iRefCount == 0)
-		{
-			if (! pDock->bInside)
-				cairo_dock_render_background (pCairoContext, pDock);
-			else
-			{
-				pDock->render (pCairoContext, pDock);
-				cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
-			}
-		}
-		else
-		{
-			pDock->render (pCairoContext, pDock);
-			cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
-		}
+		pDock->render (pCairoContext, pDock);
+		cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
 	}
 	
 	//Indicateur de drop, j'ai rajouter le support des surfaces en cache, du coup on ne perd de ressources qu'au dessin.
@@ -1127,7 +1100,9 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommandFormat, gchar *cWo
 
 gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState)
 {
-	cd_debug ("%s (%s)", __func__, (icon ? icon->acName : "no icon"));
+	if (icon == NULL)
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	cd_debug ("%s (%s)", __func__, icon->acName);
 	if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick)  // icone de sous-dock.
 	{
 		cairo_dock_show_subdock (icon, FALSE, pDock);
