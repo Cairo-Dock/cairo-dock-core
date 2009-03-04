@@ -93,6 +93,7 @@
 #include "cairo-dock-load.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-desklet.h"
+#include "cairo-dock-flying-container.h"
 #include "cairo-dock-animations.h"
 
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
@@ -566,6 +567,12 @@ int main (int argc, char** argv)
 		CAIRO_DOCK_RUN_AFTER, NULL);
 	cairo_dock_register_notification (CAIRO_DOCK_STOP_ICON,
 		(CairoDockNotificationFunc) cairo_dock_stop_inserting_removing_icon_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_UPDATE_FLYING_CONTAINER,
+		(CairoDockNotificationFunc) cairo_dock_update_flying_container_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_RENDER_FLYING_CONTAINER,
+		(CairoDockNotificationFunc) cairo_dock_render_flying_container_notification,
 		CAIRO_DOCK_RUN_AFTER, NULL);
 	
 	//\___________________ On initialise la gestion des crash.

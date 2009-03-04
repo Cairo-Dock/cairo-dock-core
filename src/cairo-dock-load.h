@@ -22,7 +22,13 @@ cairo_surface_t *cairo_dock_load_image (cairo_t *pSourceContext, const gchar *cI
 cairo_surface_t *cairo_dock_load_image_for_icon (cairo_t *pSourceContext, const gchar *cImageFile, double fImageWidth, double fImageHeight);
 #define cairo_dock_load_image_for_square_icon(pSourceContext, cImageFile, fImageSize) cairo_dock_load_image_for_icon (pSourceContext, cImageFile, fImageSize, fImageSize)
 
-void cairo_dock_load_reflect_on_icon (Icon *icon, cairo_t *pSourceContext, gdouble fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp);
+/**
+*Cree la surface de reflection d'une icone.
+*@param pSourceContext le contexte de dessin lie a la surface de l'icone; n'est pas altere par la fonction.
+*@param pIcon l'icone.
+*@param pContainer le container de l'icone.
+*/
+void cairo_dock_add_reflection_to_icon (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer);
 void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdouble fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp);
 
 gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);

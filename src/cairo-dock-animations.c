@@ -557,18 +557,6 @@ static gboolean _cairo_dock_animation (CairoDock *pDock)
 static gboolean _cairo_desklet_animation (CairoDesklet *pDesklet)
 {
 	gboolean bContinue = FALSE;
-	/*Icon *icon;
-	icon = pDesklet->pIcon;
-	if (icon != NULL)
-		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDesklet, &bContinue);
-	GList *ic;
-	for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		///if (icon->bOnMouseOverAnimating)
-			cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDesklet, &bContinue);
-		///bContinue |= icon->bOnMouseOverAnimating;
-	}*/
 	
 	gboolean bUpdateSlowAnimation = FALSE;
 	pDesklet->iAnimationStep ++;
@@ -613,22 +601,55 @@ static gboolean _cairo_desklet_animation (CairoDesklet *pDesklet)
 		return TRUE;
 }
 
+static gboolean _cairo_flying_container_animation (CairoFlyingContainer *pFlyingContainer)
+{
+	gboolean bContinue = FALSE;
+	
+	if (pFlyingContainer->pIcon != NULL)
+	{
+		gboolean bIconIsAnimating = FALSE;
+		
+		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, pFlyingContainer->pIcon, pFlyingContainer, &bIconIsAnimating);
+		if (! bIconIsAnimating)
+			pFlyingContainer->pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
+		else
+			bContinue = TRUE;
+	}
+	
+	cairo_dock_notify (CAIRO_DOCK_UPDATE_FLYING_CONTAINER, pFlyingContainer, &bContinue);
+	
+	if (! bContinue)
+	{
+		cairo_dock_free_flying_container (pFlyingContainer);
+		return FALSE;
+	}
+	else
+		return TRUE;
+}
+
 
 void cairo_dock_launch_animation (CairoContainer *pContainer)
 {
 	if (pContainer->iSidGLAnimation == 0)
 	{
-		int iAnimationDeltaT = (pContainer->iAnimationDeltaT != 0 ? pContainer->iAnimationDeltaT : (g_bUseOpenGL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT));
+		int iAnimationDeltaT = cairo_dock_get_animation_delta_t (pContainer);
+		if (iAnimationDeltaT == 0)  // precaution.
+		{
+			cairo_dock_set_default_animation_delta_t (pContainer);
+			iAnimationDeltaT = cairo_dock_get_animation_delta_t (pContainer);
+		}
+		pContainer->bKeepSlowAnimation = TRUE;
 		switch (pContainer->iType)
 		{
 			case CAIRO_DOCK_TYPE_DOCK :
-				CAIRO_DOCK (pContainer)->bKeepSlowAnimation = TRUE;
 				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc)_cairo_dock_animation, pContainer);
 			break ;
 			case CAIRO_DOCK_TYPE_DESKLET :
-				CAIRO_DESKLET (pContainer)->bKeepSlowAnimation = TRUE;
 				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc) _cairo_desklet_animation, pContainer);
 			break;
+			case CAIRO_DOCK_TYPE_FLYING_CONTAINER :
+				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc)_cairo_flying_container_animation, pContainer);
+			break ;
 			default :
 				cd_warning ("This type of container has no animation capability yet");
 			break ;

@@ -417,8 +417,16 @@ void cairo_dock_get_icon_extent (Icon *pIcon, CairoContainer *pContainer, int *i
 {
 	double fMaxScale = cairo_dock_get_max_scale (pContainer);
 	double fRatio = pContainer->fRatio;
-	*iWidth = (int) (pIcon->fWidth / fRatio * fMaxScale);
-	*iHeight = (int) (pIcon->fHeight / fRatio * fMaxScale);
+	if (pContainer->bIsHorizontal)
+	{
+		*iWidth = (int) (pIcon->fWidth / fRatio * fMaxScale);
+		*iHeight = (int) (pIcon->fHeight / fRatio * fMaxScale);
+	}
+	else
+	{
+		*iHeight = (int) (pIcon->fWidth / fRatio * fMaxScale);
+		*iWidth = (int) (pIcon->fHeight / fRatio * fMaxScale);
+	}
 }
 
 void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, double *fSizeX, double *fSizeY)

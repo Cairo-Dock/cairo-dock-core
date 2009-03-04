@@ -63,10 +63,11 @@ extern int g_iScreenWidth[2], g_iScreenHeight[2];
 extern int g_iScreenOffsetX, g_iScreenOffsetY;
 extern int g_iWmHint;
 
+
 void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
 {
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-	double fMaxScale = cairo_dock_get_max_scale (CAIRO_CONTAINER (pDock));
+	int iWidth, iHeight;
 	Icon *icon;
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
@@ -74,9 +75,7 @@ void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
 		icon = ic->data;
 		if (icon->pReflectionBuffer != NULL)
 		{
-			cairo_surface_destroy (icon->pReflectionBuffer);
-			icon->pReflectionBuffer = NULL;
-			cairo_dock_load_reflect_on_icon (icon, pCairoContext, fMaxScale, pDock->bHorizontalDock, pDock->bDirectionUp);
+			cairo_dock_add_reflection_to_icon (pCairoContext, icon, CAIRO_CONTAINER (pDock));
 		}
 	}
 	cairo_destroy (pCairoContext);

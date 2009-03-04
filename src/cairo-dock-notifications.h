@@ -60,6 +60,8 @@ typedef enum {
 	CAIRO_DOCK_INSERT_ICON,
 	/// notification appellee lorsqu'une icone passe en mode suppression d'un dock. data : {Icon, CairoDock}
 	CAIRO_DOCK_REMOVE_ICON,
+	CAIRO_DOCK_UPDATE_FLYING_CONTAINER,
+	CAIRO_DOCK_RENDER_FLYING_CONTAINER,
 	CAIRO_DOCK_NB_NOTIFICATIONS
 	} CairoDockNotificationType;
 

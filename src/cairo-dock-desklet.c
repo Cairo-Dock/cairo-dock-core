@@ -438,9 +438,6 @@ static void _cairo_dock_render_desklet_opengl (CairoDesklet *pDesklet)
 	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
 		return ;
 	
-	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
-	glClearDepth (1.0f);
-	
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity ();
 	
@@ -458,10 +455,6 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 	GdkEventExpose *pExpose,
 	CairoDesklet *pDesklet)
 {
-	//cd_debug ("%s ()", __func__);
-	if (!pDesklet)
-		return FALSE;
-	
 	if (pDesklet->iDesiredWidth != 0 && pDesklet->iDesiredHeight != 0 && (pDesklet->iKnownWidth != pDesklet->iDesiredWidth || pDesklet->iKnownHeight != pDesklet->iDesiredHeight))
 	{
 		//g_print ("on saute le dessin\n");
@@ -565,16 +558,6 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 			glViewport(0, 0, w, h);
 			
 			cairo_dock_set_perspective_view (w, h);
-			/*glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
-			gluPerspective(60.0, 1.0*(GLfloat)w/(GLfloat)h, 1., 4*h);
-			
-			glMatrixMode (GL_MODELVIEW);
-			glLoadIdentity ();
-			gluLookAt (w/2, h/2, 3.,
-				w/2, h/2, 0.,
-				0.0f, 1.0f, 0.0f);
-			glTranslatef (0.0f, 0.0f, -3);*/
 			
 			gdk_gl_drawable_gl_end (pGlDrawable);
 		}

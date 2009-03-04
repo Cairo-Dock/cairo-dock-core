@@ -54,7 +54,7 @@ GtkWidget *cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int iWidth,
 CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer);
 
 
-void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pContainer, int *iX, int *iY, gboolean *bRight, CairoDockTypeHorizontality *bIsHorizontal, gboolean *bDirectionUp);
+void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pContainer, int *iX, int *iY, gboolean *bRight, CairoDockTypeHorizontality *bIsHorizontal, gboolean *bDirectionUp, double fAlign);
 
 void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer);
 /**

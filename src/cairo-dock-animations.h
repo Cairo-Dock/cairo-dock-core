@@ -71,6 +71,8 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gch
 */
 #define cairo_dock_get_slow_animation_delta_t(pContainer) (int) ceil (1.*CAIRO_DOCK_MIN_SLOW_DELTA_T / (pContainer)->iAnimationDeltaT) * (pContainer)->iAnimationDeltaT;
 
+#define cairo_dock_set_default_animation_delta_t(pContainer) (pContainer)->iAnimationDeltaT = (g_bUseOpenGL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT)
+
 void cairo_dock_mark_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState);
 void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState);
 

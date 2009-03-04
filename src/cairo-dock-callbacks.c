@@ -753,7 +753,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 			cairo_dock_update_dock_size (pOriginDock);
 			cairo_dock_stop_icon_glide (pOriginDock);
 			
-			s_pFlyingContainer = cairo_dock_create_flying_container (s_pIconClicked, pOriginDock);
+			s_pFlyingContainer = cairo_dock_create_flying_container (s_pIconClicked, pOriginDock, TRUE);
 			s_pIconClicked = NULL;
 			
 			if (pDock->iRefCount > 0 || pDock->bAutoHide)  // pour garder le dock visible.

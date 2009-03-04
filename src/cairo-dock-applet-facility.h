@@ -41,14 +41,6 @@ void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pI
 
 void cairo_dock_set_icon_surface_with_bar (cairo_t *pIconContext, cairo_surface_t *pSurface, double fValue, Icon *pIcon, CairoContainer *pContainer);
 
-
-/**
-*Cree les surfaces de reflection d'une icone.
-*@param pIconContext le contexte de dessin lie a la surface de l'icone; n'est pas altere par la fonction.
-*@param pIcon l'icone.
-*@param pContainer le container de l'icone.
-*/
-void cairo_dock_add_reflection_to_icon (cairo_t *pIconContext, Icon *pIcon, CairoContainer *pContainer);
 /**
 *Applique une surface sur le contexte d'une icone, en effacant tout au prealable et en creant les reflets correspondant.
 *@param pIconContext le contexte de dessin lie a la surface de l'icone; est modifie par la fonction.
@@ -513,7 +505,8 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 */
 #define CD_APPLET_REDRAW_MY_ICON \
 	cairo_dock_redraw_icon (myIcon, myContainer)
-
+#define CAIRO_DOCK_REDRAW_MY_CONTAINER \
+	cairo_dock_redraw_container (myContainer)
 /**
 *Recalcule le reflet de l'icone pour son dessin cairo (inutile en OpenGL).
 */
@@ -734,11 +727,11 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 /**
 *Cree et charge entierement un sous-dock pour notre icone.
 *@param pIconsList la liste (eventuellement NULL) des icones du sous-dock; celles-ci seront chargees en dans la foulee.
-*@param cRenderer nom du rendu.
+*@param cRenderer nom du rendu (optionnel).
 */
 #define CD_APPLET_CREATE_MY_SUBDOCK(pIconsList, cRenderer) do { \
 	if (myIcon->acName == NULL) { \
-		CD_APPLET_SET_NAME_FOR_MY_ICON (myIcon->pModuleInstance->pModule->pVisitCard->cModuleName); } \
+		CD_APPLET_SET_NAME_FOR_MY_ICON (myApplet->pModule->pVisitCard->cModuleName); } \
 	if (cairo_dock_check_unique_subdock_name (myIcon)) { \
 		CD_APPLET_SET_NAME_FOR_MY_ICON (myIcon->acName); } \
 	myIcon->pSubDock = cairo_dock_create_subdock_from_scratch (pIconsList, myIcon->acName, myDock); \
@@ -760,6 +753,37 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 	myIcon->pSubDock->icons = pIconsList; \
 	cairo_dock_load_buffers_in_one_dock (myIcon->pSubDock); \
 	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)
+
+#define CD_APPLET_DELETE_MY_ICONS_LIST do {\
+	if (myDesklet && myDesklet->icons != NULL) {\
+		g_list_foreach (myDesklet->icons, (GFunc) cairo_dock_free_icon, NULL);\
+		g_list_free (myDesklet->icons);\
+		myDesklet->icons = NULL; }\
+	if (myIcon->pSubDock != NULL) {\
+		if (myDesklet) {\
+			CD_APPLET_DESTROY_MY_SUBDOCK; }\
+		else {\
+			g_list_foreach (myIcon->pSubDock->icons, (GFunc) cairo_dock_free_icon, NULL);\
+			g_list_free (myIcon->pSubDock->icons);\
+			myIcon->pSubDock->icons = NULL; } } } while (0)
+
+#define CD_APPLET_LOAD_MY_ICONS_LIST(pIconList, cDockRendererName, cDeskletRendererName, pDeskletRendererConfig) do {\
+	if (myDock) {\
+		if (myIcon->pSubDock == NULL) {\
+			if (pIconList != NULL) {\
+				CD_APPLET_CREATE_MY_SUBDOCK (pIconList, cDockRendererName); } }\
+		else {\
+			if (pIconList == NULL) {\
+				CD_APPLET_DESTROY_MY_SUBDOCK; }\
+			else {\
+				CD_APPLET_LOAD_ICONS_IN_MY_SUBDOCK (pIconList); } } }\
+	else {\
+		if (myIcon->pSubDock != NULL) {\
+			CD_APPLET_DESTROY_MY_SUBDOCK; }\
+		myDesklet->icons = pIconList;\
+		CD_APPLET_SET_DESKLET_RENDERER_WITH_DATA (cDeskletRendererName, pDeskletRendererConfig);\
+		CAIRO_DOCK_REDRAW_MY_CONTAINER;\
+	} } while (0)
 
 
 //\_________________________________ INTERNATIONNALISATION

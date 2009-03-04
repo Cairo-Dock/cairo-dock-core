@@ -113,7 +113,10 @@ struct _CairoContainer {
 	gdouble fRatio;
 	/// TRUE ssi le container est reflechissant.
 	gboolean bUseReflect;
+	/// contexte OpenGL associe a la fenetre.
 	GLXContext glContext;
+	/// TRUE <=> une animation lente est en cours.
+	gboolean bKeepSlowAnimation;
 };
 
 #define CAIRO_CONTAINER(p) ((CairoContainer *) (p))
@@ -197,7 +200,8 @@ struct _CairoDock {
 	gboolean bUseReflect;
 	/// contexte OpenGL associe a la fenetre.
 	GLXContext glContext;
-	
+	/// TRUE <=> une animation lente est en cours.
+	gboolean bKeepSlowAnimation;
 	/// la liste de ses icones.
 	GList* icons;
 	/// si le dock est le dock racine.
@@ -313,7 +317,6 @@ struct _CairoDock {
 	/// TRUE ssi cette vue utilise le stencil buffer d'OpenGL.
 	gboolean bUseStencil;
 	gint iAnimationStep;
-	gboolean bKeepSlowAnimation;
 };
 
 
@@ -366,7 +369,7 @@ struct _CairoDockVisitCard {
 	/// octets reserves pour preserver la compatibilite binaire lors de futurs ajouts sur l'interface entre plug-ins et dock.
 	/// VRAI ssi le plug-in peut etre instancie plusiers fois.
 	gboolean bMultiInstance;
-	char reserved[28];
+	char reserved[8];
 };
 
 struct _CairoDockModuleInterface {
@@ -536,6 +539,12 @@ struct _CairoDialog {
 	gdouble fRatio;
 	/// transparence du reflet du dialogue, 0 si le decorateur ne gere pas le reflet.
 	gdouble fReflectAlpha;
+	/// contexte OpenGL associe a la fenetre.
+	GLXContext glContext;
+	/// TRUE <=> une animation lente est en cours.
+	gboolean bKeepSlowAnimation;
+	/// icone sur laquelle pointe le dialogue.
+	Icon *pIcon;
 	/// le moteur de rendu utilise pour dessiner le dialogue.
 	CairoDialogRenderer *pRenderer;
 	/// donnees pouvant etre utilisees par le moteur de rendu.
@@ -576,18 +585,17 @@ struct _CairoDialog {
 	gint iRefCount;
 	/// le widget d'interaction utilisateur (GtkEntry, GtkHScale, zone de dessin, etc).
 	GtkWidget *pInteractiveWidget;
-	/// le type des boutons (GTK_BUTTONS_NONE, GTK_BUTTONS_OK_CANCEL ou GTK_BUTTONS_YES_NO).
-	gint iButtonsType;
-	/// fonction appelee au clique sur l'un des 2 boutons.
+	/// fonction appelee au clique sur l'un des boutons.
 	CairoDockActionOnAnswerFunc action_on_answer;
 	/// donnees transmises a la fonction.
 	gpointer pUserData;
 	/// fonction appelee pour liberer les donnees.
 	GFreeFunc pFreeUserDataFunc;
-	/// icone sur laquelle pointe le dialogue.
-	Icon *pIcon;
+	/// la structure interne du widget.
 	GtkWidget *pLeftPaddingBox, *pRightPaddingBox, *pWidgetLayout;
+	/// le decorateur de fenetre.
 	CairoDialogDecorator *pDecorator;
+	/// taille que s'est reserve le decorateur.
 	gint iLeftMargin, iRightMargin, iTopMargin, iBottomMargin, 	iMinFrameWidth, iMinBottomGap;
 	/// position relative du dialogue par rapport a l'icone, ou ce qui revient au meme, de sa pointe par rapport au bord d'alignement.
 	/// alignement de la pointe.
@@ -888,13 +896,16 @@ struct _CairoDesklet {
 	/// le facteur de zoom lors du detachage d'une applet.
 	gdouble fZoom;
 	gboolean bUseReflect_unused;
+	/// contexte OpenGL associe a la fenetre.
 	GLXContext glContext;
+	/// TRUE <=> une animation lente est en cours.
+	gboolean bKeepSlowAnimation;
+	/// Liste eventuelle d'icones placees sur le desklet, et susceptibles de recevoir des clics.
+	GList *icons;
 	/// le moteur de rendu utilise pour dessiner le desklet.
 	CairoDeskletRenderer *pRenderer;
 	/// donnees pouvant etre utilisees par le moteur de rendu.
 	gpointer pRendererData;
-	/// Liste eventuelle d'icones placees sur le desklet, et susceptibles de recevoir des clics.
-	GList *icons;
 	/// pour le deplacement manuel de la fenetre.
 	gboolean moving;
 	/// L'icone de l'applet.
@@ -942,7 +953,6 @@ struct _CairoDesklet {
 	GLuint iBackGroundTexture;
 	GLuint iForeGroundTexture;
 	gint iAnimationStep;
-	gboolean bKeepSlowAnimation;
 };
 
 typedef enum {
@@ -1051,11 +1061,15 @@ struct _CairoFlyingContainer {
 	gint iMouseY;
 	gdouble fRatio;
 	gboolean bUseReflect;
+	/// contexte OpenGL associe a la fenetre.
 	GLXContext glContext;
+	/// TRUE <=> une animation lente est en cours.
+	gboolean bKeepSlowAnimation;
 	/// L'icone volante.
 	Icon *pIcon;
 	/// compteur pour l'animation.
 	gint iAnimationCount;
+	gboolean bDrawHand;
 };
 
 typedef gpointer CairoInternalModuleConfigPtr;

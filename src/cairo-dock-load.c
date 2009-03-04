@@ -202,19 +202,25 @@ cairo_surface_t *cairo_dock_load_image_for_icon (cairo_t *pSourceContext, const 
 }
 
 
-void cairo_dock_load_reflect_on_icon (Icon *icon, cairo_t *pSourceContext, gdouble fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp)
+void cairo_dock_add_reflection_to_icon (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer)
 {
-	if (myIcons.fAlbedo > 0 && icon->pIconBuffer != NULL && ! (CAIRO_DOCK_IS_APPLET (icon) && icon->acFileName == NULL))
-	{
-		icon->pReflectionBuffer = cairo_dock_create_reflection_surface (icon->pIconBuffer,
-			pSourceContext,
-			(bHorizontalDock ? icon->fWidth : icon->fHeight) * fMaxScale,
-			(bHorizontalDock ? icon->fHeight : icon->fWidth) * fMaxScale,
-			bHorizontalDock,
-			fMaxScale,
-			bDirectionUp);
-	}
+	if (g_bUseOpenGL)
+		return ;
+	g_return_if_fail (pIcon != NULL && pContainer!= NULL);
+	if (pIcon->pReflectionBuffer != NULL)
+		cairo_surface_destroy (pIcon->pReflectionBuffer);
+	
+	int iWidth, iHeight;
+	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+	pIcon->pReflectionBuffer = cairo_dock_create_reflection_surface (pIcon->pIconBuffer,
+		pSourceContext,
+		iWidth,
+		iHeight,
+		pContainer->bIsHorizontal,
+		cairo_dock_get_max_scale (pContainer),
+		pContainer->bDirectionUp);
 }
+
 
 void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdouble fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp)
 {
@@ -341,7 +347,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 		cairo_destroy (pCairoIconBGContext);
 	}
 
-	if (myIcons.fAlbedo > 0 && icon->pIconBuffer != NULL && ! (CAIRO_DOCK_IS_APPLET (icon) && icon->acFileName == NULL))
+	if (! g_bUseOpenGL && myIcons.fAlbedo > 0 && icon->pIconBuffer != NULL && ! (CAIRO_DOCK_IS_APPLET (icon) && icon->acFileName == NULL))
 	{
 		icon->pReflectionBuffer = cairo_dock_create_reflection_surface (icon->pIconBuffer,
 			pSourceContext,
@@ -354,14 +360,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	
 	if (g_bUseOpenGL && icon->pIconBuffer != NULL)
 	{
-		GdkGLContext* pGlContext = gtk_widget_get_gl_context (g_pMainDock->pWidget);
-		GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (g_pMainDock->pWidget);
-		if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
-			return ;
-		
 		icon->iIconTexture = cairo_dock_create_texture_from_surface (icon->pIconBuffer);
-		
-		gdk_gl_drawable_gl_end (pGlDrawable);
 	}
 }
 
@@ -713,18 +712,10 @@ void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, in
 		
 		if (g_bUseOpenGL)
 		{
-			GdkGLContext* pGlContext = gtk_widget_get_gl_context (g_pMainDock->pWidget);
-			GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (g_pMainDock->pWidget);
-			if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
-				return ;
-			
 			if (g_iBackgroundTexture != 0)
 				glDeleteTextures (1, &g_iBackgroundTexture);
 			g_iBackgroundTexture = cairo_dock_create_texture_from_surface (g_pBackgroundSurfaceFull != NULL ? g_pBackgroundSurfaceFull : g_pBackgroundSurface);
-			
-			gdk_gl_drawable_gl_end (pGlDrawable);
 		}
-		
 		
 		cairo_destroy (pCairoContext);
 		cd_debug ("  MaJ des decorations du fond -> %.2fx%.2f", g_fBackgroundImageWidth, g_fBackgroundImageHeight);

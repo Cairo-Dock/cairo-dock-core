@@ -205,7 +205,7 @@ static void _cairo_dock_draw_inside_dialog (cairo_t *pCairoContext, CairoDialog 
 		
 		cairo_set_source_surface (pCairoContext,
 			pDialog->pIconBuffer,
-			x,
+			x - (pDialog->iCurrentFrame * pDialog->iIconSize),
 			y);
 		_paint_inside_dialog(pCairoContext, fAlpha);
 		if (pDialog->iNbFrames > 1)
@@ -932,7 +932,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 }
 
 
-void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pContainer, int *iX, int *iY, gboolean *bRight, CairoDockTypeHorizontality *bIsHorizontal, gboolean *bDirectionUp)
+void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pContainer, int *iX, int *iY, gboolean *bRight, CairoDockTypeHorizontality *bIsHorizontal, gboolean *bDirectionUp, double fAlign)
 {
 	g_return_if_fail (pIcon != NULL && pContainer != NULL);
 	//g_print ("%s (%.2f, %.2f)\n", __func__, pIcon->fXAtRest, pIcon->fDrawX);
@@ -957,7 +957,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 	
 			if (pDock->bAutoHide)
 			{
-				*iX = pDock->iWindowPositionX + (pIcon->fXAtRest + pIcon->fWidth * (*bRight ? .7 : .3)) / pDock->fFlatDockWidth * myHiddenDock.iVisibleZoneWidth;
+				*iX = pDock->iWindowPositionX + (pIcon->fXAtRest + pIcon->fWidth * (*bRight ? .7 : .3) * 2*(.5-fAlign)) / pDock->fFlatDockWidth * myHiddenDock.iVisibleZoneWidth;
 				cd_debug ("placement sur un dock cache -> %d", *iX);
 			}
 			else
@@ -969,7 +969,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 		{
 			CairoDock *pParentDock = NULL;
 			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
-			cairo_dock_dialog_calculate_aimed_point (pPointingIcon, CAIRO_CONTAINER (pParentDock), iX, iY, bRight, bIsHorizontal, bDirectionUp);
+			cairo_dock_dialog_calculate_aimed_point (pPointingIcon, CAIRO_CONTAINER (pParentDock), iX, iY, bRight, bIsHorizontal, bDirectionUp, fAlign);
 		}
 		else  // dock actif.
 		{
@@ -1085,7 +1085,7 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 	int iPrevPositionX = pDialog->iPositionX, iPrevPositionY = pDialog->iPositionY;
 	if (pContainer != NULL && pDialog->pIcon != NULL)
 	{
-		cairo_dock_dialog_calculate_aimed_point (pDialog->pIcon, pContainer, &pDialog->iAimedX, &pDialog->iAimedY, &pDialog->bRight, &pDialog->bIsHorizontal, &pDialog->bDirectionUp);	
+		cairo_dock_dialog_calculate_aimed_point (pDialog->pIcon, pContainer, &pDialog->iAimedX, &pDialog->iAimedY, &pDialog->bRight, &pDialog->bIsHorizontal, &pDialog->bDirectionUp, pDialog->fAlign);
 		g_print (" Aim (%d;%d) / %d,%d,%d\n", pDialog->iAimedX, pDialog->iAimedY, pDialog->bIsHorizontal, pDialog->bDirectionUp, pDialog->bInside);
 		
 		if (pDialog->bIsHorizontal)
