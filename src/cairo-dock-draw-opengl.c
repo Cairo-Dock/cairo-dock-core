@@ -1088,7 +1088,7 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 	//\__________________ On dessine le cadre.
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, pVertexTab);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, iNbVertex);
+	glDrawArrays(GL_POLYGON, 0, iNbVertex);  // GL_TRIANGLE_FAN
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
 	//\__________________ fini la texture.
@@ -1105,7 +1105,7 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 	}
 }
 
-void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor, const GLfloat *pVertexTab, int iNbVertex)
+void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor, /*const GLfloat *pVertexTab, */int iNbVertex)
 {
 	glPolygonMode(GL_FRONT, GL_LINE);
 	glEnable (GL_LINE_SMOOTH);
@@ -1117,7 +1117,7 @@ void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor,
 	glColor4f(fLineColor[0], fLineColor[1], fLineColor[2], fLineColor[3]); // Et sa couleur 
 	
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, pVertexTab);
+	///glVertexPointer(3, GL_FLOAT, 0, pVertexTab);
 	glDrawArrays(GL_LINE_STRIP, 0, iNbVertex);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
@@ -1467,3 +1467,72 @@ void cairo_dock_set_ortho_view (int iWidth, int iHeight)
 		0.0f, 1.0f, 0.0f);
 	glTranslatef (iWidth, iHeight, - iHeight/2);
 }
+
+// OM(t) = sum ([k=0..n] Bn,k(t)*OAk)
+// Bn,k(x) = Cn,k*x^k*(1-x)^(n-k)
+#define B0(t) (1-t)*(1-t)*(1-t)
+#define B1(t) 3*t*(1-t)*(1-t)
+#define B2(t) 3*t*t*(1-t)
+#define B3(t) t*t*t
+#define Bezier(x0,x1,x2,x3,t) B0(t)*x0 + B1(t)*x1 + B2(t)*x2 + B3(t)*x3
+#define _get_icon_center_x(icon) icon->fDrawX + icon->fWidth * icon->fScale/2
+#define _get_icon_center_y(icon) icon->fDrawY + icon->fHeight * icon->fScale/2
+GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsLoop, gboolean bForceConstantSeparator, int *iNbPoints)
+{
+	static GLfloat pVertexTab[1000*3];
+	bForceConstantSeparator = bForceConstantSeparator || myIcons.bConstantSeparatorSize;
+	GList *ic, *next_ic, *next2_ic, *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
+	Icon *pIcon, *pNextIcon, *pNext2Icon;
+	double dx, dy;  // direction au niveau de l'icone courante.
+	double dx_, dy_;  // direction au niveau de l'icone suivante.
+	if (pFirstDrawnElement == NULL)
+	{
+		*iNbPoints = 0;
+		return pVertexTab;
+	}
+	
+	// direction initiale.
+	ic = pFirstDrawnElement;
+	pIcon = ic->data;
+	if (! bIsLoop)
+	{
+		next_ic = cairo_dock_get_next_element (ic, pDock->icons);
+		pNextIcon = next_ic->data;
+		dx = _get_icon_center_x (pNextIcon) - _get_icon_center_x (pIcon);
+		dy = _get_icon_center_y (pNextIcon) - _get_icon_center_y (pIcon);
+	}
+	else
+	{
+		next_ic = cairo_dock_get_previous_element (ic, pDock->icons);
+		pNextIcon = next_ic->data;
+		dx = _get_icon_center_x (pIcon) - _get_icon_center_x (pNextIcon);
+		dy = _get_icon_center_y (pIcon) - _get_icon_center_y (pNextIcon);
+		next_ic = cairo_dock_get_next_element (ic, pDock->icons);
+		pNextIcon = next_ic->data;
+	}
+	// direction initiale au point suivant.
+	next2_ic = cairo_dock_get_next_element (next_ic, pDock->icons);
+	pNext2Icon = next2_ic->data;
+	dx_ = _get_icon_center_x (pNext2Icon) - _get_icon_center_x (pIcon);
+	dy_ = _get_icon_center_y (pNext2Icon) - _get_icon_center_y (pIcon);
+	
+	// on parcourt les icones.
+	do
+	{
+		// l'ione courante, la suivante, et celle d'apres.
+		pIcon = ic->data;
+		pNextIcon = next_ic->data;
+		pNext2Icon = next2_ic->data;
+		
+		
+		
+		// on decale tout d'un cran.
+		ic = next_ic;
+		next_ic = next2_ic;
+		next2_ic = cairo_dock_get_next_element (next_ic, pDock->icons);
+	}
+	while (ic != pFirstDrawnElement);
+	
+	return pVertexTab;
+}
+

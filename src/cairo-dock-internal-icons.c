@@ -266,7 +266,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] ||
 		pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLI] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLI] ||
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLI] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLI] ||
-		pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLI] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLI] ||
+		pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLET] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLET] ||
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLET] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLET] ||
 		pPrevIcons->fAmplitude != pIcons->fAmplitude ||
 		(!g_bUseOpenGL && pPrevIcons->fFieldDepth != pIcons->fFieldDepth) ||

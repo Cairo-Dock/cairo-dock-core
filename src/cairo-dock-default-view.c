@@ -300,7 +300,7 @@ void cd_render_opengl_default (CairoDock *pDock)
 	
 	//\_____________ On trace le contour.
 	if (fLineWidth != 0)
-		cairo_dock_draw_current_path_opengl (fLineWidth, myBackground.fLineColor, pVertexTab, iNbVertex);
+		cairo_dock_draw_current_path_opengl (fLineWidth, myBackground.fLineColor, iNbVertex);
 	glPopMatrix ();
 	
 	//\_____________ On dessine la ficelle.
@@ -366,7 +366,7 @@ void cd_render_opengl_default (CairoDock *pDock)
 			ic = cairo_dock_get_next_element (ic, pDock->icons);
 		} while (ic != pFirstDrawnElement);
 	}
-	glDisable (GL_LIGHTING);
+	//glDisable (GL_LIGHTING);
 }
 
 

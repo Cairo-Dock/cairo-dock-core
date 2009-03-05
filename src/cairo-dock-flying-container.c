@@ -80,6 +80,8 @@ static void _cairo_dock_load_explosion_image (cairo_t *pCairoContext, int iWidth
 		pCairoContext,
 		iWidth * EXPLOSION_NB_FRAMES,
 		iWidth);
+	s_fExplosionWidth = iWidth;
+	s_fExplosionHeight = iWidth;
 	if (s_pExplosionSurface != NULL && g_bUseOpenGL)
 	{
 		s_iExplosionTexture = cairo_dock_create_texture_from_surface (s_pExplosionSurface);
@@ -332,7 +334,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	
 	pFlyingContainer->bDrawHand = bDrawHand;
 	if (bDrawHand)
-		cairo_dock_request_icon_animation (pFlyingIcon, pFlyingContainer, bDrawHand ? "pulse" : "bounce", 1e6);
+		cairo_dock_request_icon_animation (pFlyingIcon, pFlyingContainer, bDrawHand ? "fire" : "bounce", 1e6);
 	cairo_dock_launch_animation (pFlyingContainer);  // au cas ou pas d'animation.
 	
 	return pFlyingContainer;

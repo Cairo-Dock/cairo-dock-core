@@ -65,14 +65,17 @@ void cairo_dock_update_quick_info_texture (Icon *pIcon);
 
 #define _cairo_dock_set_blend_pbuffer(...) glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA)
 
-#define _cairo_dock_apply_texture_at_size(iTexture, w, h) do { \
-	glBindTexture (GL_TEXTURE_2D, iTexture);\
+#define _cairo_dock_apply_current_texture_at_size(w, h) do { \
 	glBegin(GL_QUADS);\
 	glTexCoord2f(0., 0.); glVertex3f(-.5*w,  .5*h, 0.);\
 	glTexCoord2f(1., 0.); glVertex3f( .5*w,  .5*h, 0.);\
 	glTexCoord2f(1., 1.); glVertex3f( .5*w, -.5*h, 0.);\
 	glTexCoord2f(0., 1.); glVertex3f(-.5*w, -.5*h, 0.);\
 	glEnd(); } while (0)
+
+#define _cairo_dock_apply_texture_at_size(iTexture, w, h) do { \
+	glBindTexture (GL_TEXTURE_2D, iTexture);\
+	_cairo_dock_apply_current_texture_at_size (w, h); } while (0)
 
 #define _cairo_dock_apply_texture(iTexture) _cairo_dock_apply_texture_at_size (iTexture, 1, 1)
 
@@ -96,7 +99,7 @@ const GLfloat *cairo_dock_generate_rectangle_path (double fDockWidth, double fFr
 GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, double fInclination, double *fExtraWidth, int *iNbPoints);
 
 void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double fDockWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, const GLfloat *pVertexTab, int iNbVertex, CairoDockTypeHorizontality bHorizontal, gboolean bDirectionUp, double fDecorationsOffsetX);
-void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor, const GLfloat *pVertexTab, int iNbVertex);
+void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor, int iNbVertex);
 
 GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHasBeenForced);
 
