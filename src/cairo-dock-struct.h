@@ -204,6 +204,8 @@ struct _CairoDock {
 	gboolean bKeepSlowAnimation;
 	/// la liste de ses icones.
 	GList* icons;
+	/// liste des notifications disponibles.
+	GPtrArray *pNotificationsTab;
 	/// si le dock est le dock racine.
 	gboolean bIsMainDock;
 	/// le nombre d'icones pointant sur lui.
@@ -763,6 +765,7 @@ struct _Icon {
 	CairoDockAnimationState iAnimationState;
 	gboolean bBeingRemovedByCairo;
 	gpointer pbuffer;
+	/// liste des notifications disponibles.
 	GPtrArray *pNotificationsTab;
 	CairoDataRenderer *pDataRenderer;
 	gint iNumDesktop;
@@ -902,6 +905,8 @@ struct _CairoDesklet {
 	gboolean bKeepSlowAnimation;
 	/// Liste eventuelle d'icones placees sur le desklet, et susceptibles de recevoir des clics.
 	GList *icons;
+	/// liste des notifications disponibles.
+	GPtrArray *pNotificationsTab;
 	/// le moteur de rendu utilise pour dessiner le desklet.
 	CairoDeskletRenderer *pRenderer;
 	/// donnees pouvant etre utilisees par le moteur de rendu.

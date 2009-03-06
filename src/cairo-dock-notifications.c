@@ -8,7 +8,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 ******************************************************************************/
 #include "cairo-dock-notifications.h"
 
-static GPtrArray *s_pNotificationsTab = NULL;
+static GPtrArray *s_pNotificationsTab = NULL;  // les pre-notifications globales.
+static GPtrArray *s_pNotifications2Tab = NULL;  // les post-notifications globales.
 
 
 #define _check_notification_table(pNotificationsTab) do {\
@@ -80,71 +81,6 @@ GSList *cairo_dock_get_notifications_list (CairoDockNotificationType iNotifType)
 	
 	return g_ptr_array_index (s_pNotificationsTab, iNotifType);
 }
-
-
-
-static void cairo_dock_register_notifications (gboolean bRunFirst, int iFirstNotifType, va_list args)
-{
-	CairoDockNotificationType iNotifType = iFirstNotifType;
-	CairoDockNotificationFunc pFunction;
-	gpointer pUserData;
-	
-	while (iNotifType != -1)
-	{
-		//g_print ("%s () : %d\n", __func__, iNotifType);
-		
-		pFunction = va_arg (args, CairoDockNotificationFunc);
-		if (pFunction == NULL)  // ne devrait pas arriver.
-			break;
-		pUserData = va_arg (args, gpointer);
-		
-		cairo_dock_register_notification (iNotifType, pFunction, bRunFirst, pUserData);
-		
-		iNotifType = va_arg (args, CairoDockNotificationType);
-	}
-}
-
-void cairo_dock_register_first_notifications (int iFirstNotifType, ...)
-{
-	va_list args;
-	va_start (args, iFirstNotifType);
-	cairo_dock_register_notifications (CAIRO_DOCK_RUN_FIRST, iFirstNotifType, args);
-	va_end (args);
-}
-
-void cairo_dock_register_last_notifications (int iFirstNotifType, ...)
-{
-	va_list args;
-	va_start (args, iFirstNotifType);
-	cairo_dock_register_notifications (CAIRO_DOCK_RUN_AFTER, iFirstNotifType, args);
-	va_end (args);
-}
-
-void cairo_dock_remove_notification_funcs (int iFirstNotifType, ...)
-{
-	va_list args;
-	va_start (args, iFirstNotifType);
-	
-	CairoDockNotificationType iNotifType = iFirstNotifType;
-	CairoDockNotificationFunc pFunction;
-	gpointer pUserData;
-	
-	while (iNotifType != -1)
-	{
-		pFunction= va_arg (args, CairoDockNotificationFunc);
-		if (pFunction == NULL)  // ne devrait pas arriver.
-			break;
-		
-		pUserData = va_arg (args, gpointer);
-		
-		cairo_dock_remove_notification_func (iNotifType, pFunction, pUserData);
-		
-		iNotifType = va_arg (args, CairoDockNotificationType);
-	}
-	
-	va_end (args);
-}
-
 
 
 void cairo_dock_free_notification_table (GPtrArray *pNotificationsTab)

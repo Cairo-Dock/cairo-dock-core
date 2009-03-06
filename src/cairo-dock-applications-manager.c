@@ -29,6 +29,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-application-factory.h"
 #include "cairo-dock-separator-factory.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-log.h"
@@ -798,7 +799,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 								if (myTaskBar.cAnimationOnActiveWindow)
 									cairo_dock_animate_icon_on_active (icon, pParentDock);
 								else if (! pParentDock->bIsShrinkingDown)
-									cairo_dock_redraw_my_icon (icon, CAIRO_CONTAINER (pParentDock));
+									cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
 							}
 							///icon->bIsActive = TRUE;
 						}

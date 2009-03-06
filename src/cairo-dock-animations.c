@@ -34,6 +34,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-desklet.h"
+#include "cairo-dock-container.h"
+#include "cairo-dock-flying-container.h"
 #include "cairo-dock-animations.h"
 
 extern int g_iXScreenHeight[2];
@@ -481,7 +483,7 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gch
 	cairo_dock_start_icon_animation (pIcon, pDock);
 }
 
-static gboolean _cairo_dock_animation (CairoDock *pDock)
+static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %d, %d)\n", __func__, pDock->iRefCount, pDock->bIsShrinkingDown, pDock->bIsGrowingUp);
 	if (pDock->bIsShrinkingDown)
@@ -554,7 +556,7 @@ static gboolean _cairo_dock_animation (CairoDock *pDock)
 	else
 		return TRUE;
 }
-static gboolean _cairo_desklet_animation (CairoDesklet *pDesklet)
+static gboolean _cairo_desklet_animation_loop (CairoDesklet *pDesklet)
 {
 	gboolean bContinue = FALSE;
 	
@@ -601,7 +603,7 @@ static gboolean _cairo_desklet_animation (CairoDesklet *pDesklet)
 		return TRUE;
 }
 
-static gboolean _cairo_flying_container_animation (CairoFlyingContainer *pFlyingContainer)
+static gboolean _cairo_flying_container_animation_loop (CairoFlyingContainer *pFlyingContainer)
 {
 	gboolean bContinue = FALSE;
 	
@@ -642,13 +644,13 @@ void cairo_dock_launch_animation (CairoContainer *pContainer)
 		switch (pContainer->iType)
 		{
 			case CAIRO_DOCK_TYPE_DOCK :
-				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc)_cairo_dock_animation, pContainer);
+				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc)_cairo_dock_dock_animation_loop, pContainer);
 			break ;
 			case CAIRO_DOCK_TYPE_DESKLET :
-				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc) _cairo_desklet_animation, pContainer);
+				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc) _cairo_desklet_animation_loop, pContainer);
 			break;
 			case CAIRO_DOCK_TYPE_FLYING_CONTAINER :
-				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc)_cairo_flying_container_animation, pContainer);
+				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc)_cairo_flying_container_animation_loop, pContainer);
 			break ;
 			default :
 				cd_warning ("This type of container has no animation capability yet");

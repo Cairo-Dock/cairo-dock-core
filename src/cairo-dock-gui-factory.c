@@ -505,6 +505,21 @@ static void _cairo_dock_get_current_color (GtkColorButton *pColorButton, GSList 
 		gtk_color_button_set_alpha (pColorButton, color[3]);
 }
 
+static void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data)
+{
+	GtkWidget *pPairSpinButton = data[0];
+	GtkWidget *pToggleButton = data[1];
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pToggleButton)))
+	{
+		int iValue = gtk_spin_button_get_value (pSpinButton);
+		int iPairValue = gtk_spin_button_get_value (GTK_SPIN_BUTTON (pPairSpinButton));
+		if (iValue != iPairValue)
+		{
+			gtk_spin_button_set_value (GTK_SPIN_BUTTON (pPairSpinButton), iValue);
+		}
+	}
+}
+
 
 #define _build_list_for_gui(pListStore, cEmptyItem, pHashTable, pHFunction) do { \
 	if (pListStore != NULL)\
@@ -855,6 +870,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	GtkWidget *pDescriptionLabel;
 	GtkWidget *pPreviewImage;
 	GtkWidget *pButtonConfigRenderer;
+	GtkWidget *pToggleButton;
 	GtkCellRenderer *rend;
 	GtkTreeIter iter;
 	GtkWidget *pBackButton;
@@ -1021,6 +1037,14 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					iNbElements *= 2;
 				length = 0;
 				iValueList = g_key_file_get_integer_list (pKeyFile, cGroupName, cKeyName, &length, NULL);
+				GtkWidget *pPrevOneWidget;
+				int iPrevValue;
+				if (iElementType == 'j')
+				{
+					pToggleButton = gtk_toggle_button_new ();
+					GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_REFRESH, GTK_ICON_SIZE_MENU);  // trouver une image...
+					gtk_button_set_image (GTK_BUTTON (pToggleButton), pImage);
+				}
 				for (k = 0; k < iNbElements; k ++)
 				{
 					iValue =  (k < length ? iValueList[k] : 0);
@@ -1045,11 +1069,30 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					gtk_adjustment_set_value (GTK_ADJUSTMENT (pAdjustment), iValue);
 
 					_pack_subwidget (pOneWidget);
-					if (iElementType == 'j' && k+1 < iNbElements)
+					if (iElementType == 'j' && k+1 < iNbElements)  // on rajoute le separateur.
 					{
 						GtkWidget *pLabelX = gtk_label_new ("x");
 						_pack_in_widget_box (pLabelX);
 					}
+					if (iElementType == 'j' && (k&1))  // on lie les 2 spins entre eux.
+					{
+						if (iPrevValue == iValue)
+							gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pToggleButton), TRUE);
+						_allocate_new_buffer;
+						data[0] = pPrevOneWidget;
+						data[1] = pToggleButton;
+						g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK(_cairo_dock_set_value_in_pair), data);
+						_allocate_new_buffer;
+						data[0] = pOneWidget;
+						data[1] = pToggleButton;
+						g_signal_connect (G_OBJECT (pPrevOneWidget), "changed", G_CALLBACK(_cairo_dock_set_value_in_pair), data);
+					}
+					pPrevOneWidget = pOneWidget;
+					iPrevValue = iValue;
+				}
+				if (iElementType == 'j')
+				{
+					_pack_in_widget_box (pToggleButton);
 				}
 				bAddBackButton = TRUE;
 				g_free (iValueList);

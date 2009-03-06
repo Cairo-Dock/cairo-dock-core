@@ -50,12 +50,6 @@ CairoDock *cairo_dock_search_dock_from_name (const gchar *cDockName);
 * @return l'icone pointant sur le dock.
 */
 Icon *cairo_dock_search_icon_pointing_on_dock (CairoDock *pDock, CairoDock **pParentDock);
-/**
-* Cherche le container contenant l'icone donnee, en parcourant la liste des icones de tous les docks jusqu'a trouver celle passee en entree, ou en renvoyant son desklet dans le cas d'une applet.
-* @param icon l'icone.
-* @return le container contenant cette icone, ou NULL si aucun n'a ete trouve.
-*/
-CairoContainer *cairo_dock_search_container_from_icon (Icon *icon);
 
 
 void cairo_dock_search_max_decorations_size (int *iWidth, int *iHeight);
@@ -138,7 +132,6 @@ void cairo_dock_reserve_space_for_all_root_docks (gboolean bReserve);
 gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix);
 gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon);
 
-void cairo_dock_show_hide_container (CairoContainer *pContainer);
 
 void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer data);
 void cairo_dock_foreach_icons_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData);

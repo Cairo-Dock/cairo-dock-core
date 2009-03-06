@@ -126,11 +126,10 @@ void cairo_dock_remove_notification_func_on_icon (Icon *pIcon, CairoDockNotifica
 @return TRUE si la notification a ete utilisee par quelqu'un, FALSE si aucune fonction n'est enregistree pour elle.
 */
 
-#define _cairo_dock_notify(pNotificationRecordList, iNotifType, ...) do {\
+#define _cairo_dock_notify(pNotificationRecordList, bStop, ...) do {\
 	if (pNotificationRecordList == NULL) {\
 		FALSE; }\
 	else {\
-		gboolean bStop = FALSE;\
 		CairoDockNotificationFunc pFunction;\
 		CairoDockNotificationRecord *pNotificationRecord;\
 		GSList *pElement = pNotificationRecordList;\
@@ -142,34 +141,19 @@ void cairo_dock_remove_notification_func_on_icon (Icon *pIcon, CairoDockNotifica
 	} while (0)
 
 #define cairo_dock_notify(iNotifType, ...) do {\
+	gboolean bStop = FALSE;\
 	GSList *pNotificationRecordList = cairo_dock_get_notifications_list (iNotifType);\
-	_cairo_dock_notify(pNotificationRecordList, iNotifType, ##__VA_ARGS__);\
+	_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);\
 	} while (0)
 
 #define cairo_dock_notify_on_icon(pIcon, iNotifType, ...) do {\
-	GSList *pNotificationRecordList = pIcon->pNotificationTab;\
-	_cairo_dock_notify(pNotificationRecordList, iNotifType, ##__VA_ARGS__);\
+	gboolean bStop = FALSE;\
+	GSList *pNotificationRecordList = cairo_dock_get_notifications_list (iNotifType);\
+	_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);\
+	if (pIcon && pIcon->pNotificationTab) {\
+		GSList *pNotificationRecordList = g_ptr_array_index (pIcon->pNotificationTab, iNotifType);\
+		_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);}\
 	} while (0)
-
-
-/**
-*Enregistre une liste de fonctions devant etre notifiees en premier. La liste est une liste de couples (CairoDockNotificationType, CairoDockNotificationFunc), et doit etre clot par -1.
-*@param iFirstNotifType type de la 1ere notification.
-*@param ... 1ere fonction notifiee, puis triplet de (notification, fonction, user_data), termine par -1.
-*/
-void cairo_dock_register_first_notifications (int iFirstNotifType, ...);
-/**
-*Enregistre une liste de fonctions devant etre notifiees en dernier. La liste est une liste de couples (CairoDockNotificationType, CairoDockNotificationFunc), et doit etre clot par -1.
-*@param iFirstNotifType type de la 1ere notification.
-*@param ... 1ere fonction notifiee, puis triplet de (notification, fonction, user_data), termine par -1.
-*/
-void cairo_dock_register_last_notifications (int iFirstNotifType, ...);
-/**
-*Enleve une liste de fonctions notifiees. La liste est une liste de triplets (CairoDockNotificationType, CairoDockNotificationFunc, gpointer), et doit etre clot par -1.
-*@param iFirstNotifType type de la 1ere notification.
-*@param ... 1ere fonction notifiee, puis couple de (notification, fonction), termine par -1.
-*/
-void cairo_dock_remove_notification_funcs (int iFirstNotifType, ...);
 
 
 void cairo_dock_free_notification_table (GPtrArray *pNotificationsTab);

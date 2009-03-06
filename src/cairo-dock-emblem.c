@@ -17,6 +17,7 @@ Written by ChAnGFu (for any bug report, please mail me to changfu@cairo-dock.org
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-emblem.h"
 
 extern gboolean g_bDisplayDropEmblem;

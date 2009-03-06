@@ -5,7 +5,6 @@
 #include <gtk/gtk.h>
 G_BEGIN_DECLS
 
-void cairo_dock_on_realize (GtkWidget* pWidget, CairoDock *pDock);
 
 gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext);
 gboolean cairo_dock_on_expose (GtkWidget *pWidget, GdkEventExpose *pExpose, CairoDock *pDock);

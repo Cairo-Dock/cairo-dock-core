@@ -304,32 +304,8 @@ void cd_render_opengl_default (CairoDock *pDock)
 	glPopMatrix ();
 	
 	//\_____________ On dessine la ficelle.
-	/*glLoadIdentity();
-	int n = g_list_length (pDock->icons);
-	GLfloat *buffer = g_new (GLfloat, 3*n);
-	GLfloat **pStringCtrlPts = g_new (GLfloat *, n);
-	if (pFirstDrawnElement != NULL)
-	{
-		i=0;
-		Icon *icon;
-		GList *ic = pFirstDrawnElement;
-		do
-		{
-			icon = ic->data;
-			
-			pStringCtrlPts[i] = &buffer[3*i];
-			pStringCtrlPts[i][0] = icon->fDrawX + icon->fWidth * icon->fScale/2;
-			pStringCtrlPts[i][1] = pDock->iCurrentHeight - icon->fDrawY - icon->fHeight * icon->fScale/2;
-			pStringCtrlPts[i][2] = 0.;
-			
-			i ++;
-			ic = cairo_dock_get_next_element (ic, pDock->icons);
-		} while (ic != pFirstDrawnElement);
-	}
-	glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &pStringCtrlPts[0][0]);
-	glEvalMesh1(GL_LINE, 0, 5*n);
-	g_free (pStringCtrlPts);
-	g_free (buffer);*/
+	if (myIcons.iStringLineWidth > 0)
+		cairo_dock_draw_string_opengl (pDock, myIcons.iStringLineWidth, FALSE, FALSE);
 	
 	
 	//\_____________ On dessine les icones.
@@ -349,6 +325,7 @@ void cd_render_opengl_default (CairoDock *pDock)
 	GLfloat fDirection[4] = {.3, .0, -.8, 0.};  // le dernier 0 <=> direction.
 	glLightfv(GL_LIGHT0, GL_POSITION, fDirection);*/
 	
+	glPushMatrix ();
 	if (pFirstDrawnElement != NULL)
 	{
 		Icon *icon;
@@ -357,15 +334,12 @@ void cd_render_opengl_default (CairoDock *pDock)
 		{
 			icon = ic->data;
 			
-			glPushMatrix ();
-			
 			cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
-			
-			glPopMatrix ();
 			
 			ic = cairo_dock_get_next_element (ic, pDock->icons);
 		} while (ic != pFirstDrawnElement);
 	}
+	glPopMatrix ();
 	//glDisable (GL_LIGHTING);
 }
 

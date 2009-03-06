@@ -64,87 +64,6 @@ extern gboolean g_bUseOpenGL;
 extern gboolean g_bEasterEggs;
 
 
-void cairo_dock_set_colormap_for_window (GtkWidget *pWidget)
-{
-	GdkScreen* pScreen = gtk_widget_get_screen (pWidget);
-	GdkColormap* pColormap = gdk_screen_get_rgba_colormap (pScreen);
-	if (!pColormap)
-		pColormap = gdk_screen_get_rgb_colormap (pScreen);
-	
-	/// est-ce que ca vaut le coup de plutot faire ca avec le visual obtenu pour l'openGL ?...
-	//GdkVisual *visual = gdkx_visual_get (pVisInfo->visualid);
-	//pColormap = gdk_colormap_new (visual, TRUE);
-
-	gtk_widget_set_colormap (pWidget, pColormap);
-}
-
-void cairo_dock_set_colormap (CairoContainer *pContainer)
-{
-	GdkColormap* pColormap;
-#ifdef HAVE_GLITZ
-	if (g_bUseGlitz)
-	{
-		glitz_drawable_format_t templ, *format;
-		unsigned long	    mask = GLITZ_FORMAT_DOUBLEBUFFER_MASK;
-		XVisualInfo		    *vinfo = NULL;
-		int			    screen = 0;
-		GdkVisual		    *visual;
-		GdkDisplay		    *gdkdisplay;
-		Display		    *xdisplay;
-
-		templ.doublebuffer = 1;
-		gdkdisplay = gtk_widget_get_display (pContainer->pWidget);
-		xdisplay   = gdk_x11_display_get_xdisplay (gdkdisplay);
-
-		int i = 0;
-		do
-		{
-			format = glitz_glx_find_window_format (xdisplay,
-				screen,
-				mask,
-				&templ,
-				i++);
-			if (format)
-			{
-				vinfo = glitz_glx_get_visual_info_from_format (xdisplay,
-					screen,
-					format);
-				if (vinfo->depth == 32)
-				{
-					pContainer->pDrawFormat = format;
-					break;
-				}
-				else if (!pContainer->pDrawFormat)
-				{
-					pContainer->pDrawFormat = format;
-				}
-			}
-		} while (format);
-
-		if (! pContainer->pDrawFormat)
-		{
-			cd_warning ("no double buffered GLX visual");
-		}
-		else
-		{
-			vinfo = glitz_glx_get_visual_info_from_format (xdisplay,
-				screen,
-				pContainer->pDrawFormat);
-
-			visual = gdkx_visual_get (vinfo->visualid);
-			pColormap = gdk_colormap_new (visual, TRUE);
-
-			gtk_widget_set_colormap (pContainer->pWidget, pColormap);
-			gtk_widget_set_double_buffered (pContainer->pWidget, FALSE);
-			return ;
-		}
-	}
-#endif
-	
-	cairo_dock_set_colormap_for_window (pContainer->pWidget);
-}
-
-
 cairo_t * cairo_dock_create_context_from_container (CairoContainer *pContainer)
 {
 #ifdef HAVE_GLITZ
@@ -1070,7 +989,7 @@ void cairo_dock_draw_surface (cairo_t *pCairoContext, cairo_surface_t *pSurface,
 		cairo_paint (pCairoContext);
 }
 
-void cairo_dock_render_background (cairo_t *pCairoContext, CairoDock *pDock)
+void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 {
 	if (g_pVisibleZoneSurface != NULL)
 	{
@@ -1081,79 +1000,4 @@ void cairo_dock_render_background (cairo_t *pCairoContext, CairoDock *pDock)
 			pDock->bHorizontalDock,
 			1.);
 	}
-}
-
-void cairo_dock_render_blank (cairo_t *pCairoContext, CairoDock *pDock)
-{
-	//g_print ("%s ()\n", __func__);
-}
-
-
-
-void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRectangle *pArea)
-{
-	double fReflectSize = 0;
-	if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->bUseReflect)
-	{
-		fReflectSize = myIcons.fReflectSize * icon->fScale * fabs (icon->fHeightFactor) + icon->fDeltaYReflection;
-	}
-	
-	double fX = icon->fDrawX;
-	fX += icon->fWidth * icon->fScale * (1 - fabs (icon->fWidthFactor))/2;
-	
-	double fY = icon->fDrawY;
-	fY += (pContainer->bDirectionUp ? icon->fHeight * icon->fScale * (1 - icon->fHeightFactor)/2 : - fReflectSize);
-	if (fY < 0)
-		fY = 0;
-	
-	if (pContainer->bIsHorizontal)
-	{
-		pArea->x = (int) floor (fX);
-		pArea->y = (int) floor (fY);
-		pArea->width = (int) ceil (icon->fWidth * icon->fScale * fabs (icon->fWidthFactor)) + 1;
-		pArea->height = (int) ceil (icon->fHeight * icon->fScale * fabs (icon->fHeightFactor) + fReflectSize);
-	}
-	else
-	{
-		pArea->x = (int) floor (fY);
-		pArea->y = (int) floor (fX);
-		pArea->width = ((int) ceil (icon->fHeight * icon->fScale * fabs (icon->fHeightFactor) + fReflectSize)) + 1;
-		pArea->height = (int) ceil (icon->fWidth * icon->fScale * fabs (icon->fWidthFactor));
-	}
-}
-
-void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer)
-{
-	g_return_if_fail (icon != NULL && pContainer != NULL);
-	GdkRectangle rect;
-	cairo_dock_compute_icon_area (icon, pContainer, &rect);
-	cairo_dock_redraw_container_area (pContainer, &rect);
-}
-
-void cairo_dock_redraw_container (CairoContainer *pContainer)
-{
-	g_return_if_fail (pContainer != NULL);
-	GdkRectangle rect = {0, 0, pContainer->iWidth, pContainer->iHeight};
-	if (! pContainer->bIsHorizontal)
-	{
-		rect.width = pContainer->iHeight;
-		rect.height = pContainer->iWidth;
-	}
-	cairo_dock_redraw_container_area (pContainer, &rect);
-}
-
-void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle *pArea)
-{
-	g_return_if_fail (pContainer != NULL);
-	if (! GTK_WIDGET_VISIBLE (pContainer->pWidget))
-		return ;
-	if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->bAtBottom && (CAIRO_DOCK (pContainer)->iRefCount > 0 || CAIRO_DOCK (pContainer)->bAutoHide))  // inutile de redessiner.
-		return ;
-	if (pArea->y < 0)
-		pArea->y = 0;
-	if (pArea->y + pArea->height > pContainer->iHeight)
-		pArea->height = pContainer->iHeight - pArea->y;
-	//g_print ("rect (%d;%d) (%dx%d)\n", pArea->x, pArea->y, pArea->width, pArea->height);
-	if (pArea->width > 0 && pArea->height > 0)
-		gdk_window_invalidate_rect (pContainer->pWidget->window, pArea, FALSE);
 }

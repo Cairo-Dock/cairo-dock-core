@@ -17,6 +17,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-desktop-file-factory.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-file-manager.h"
 

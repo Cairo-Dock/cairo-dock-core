@@ -23,6 +23,7 @@ Written by Necropotame (for any bug report, please mail me to fabounet@users.ber
 #include <cairo-dock-renderer-manager.h>
 #include <cairo-dock-internal-icons.h>
 #include <cairo-dock-gui-factory.h>
+#include "cairo-dock-container.h"
 #include <cairo-dock-gauge.h>
 
 extern gchar *g_cCairoDockDataDir;

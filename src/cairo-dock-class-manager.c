@@ -26,6 +26,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-applet-facility.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-class-manager.h"
 
 extern CairoDock *g_pMainDock;

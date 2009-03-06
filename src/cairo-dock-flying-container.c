@@ -25,7 +25,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-desklet.h"
-#include "cairo-dock-dock-factory.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-animations.h"
@@ -257,7 +257,8 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 {
 	CairoFlyingContainer * pFlyingContainer = g_new0 (CairoFlyingContainer, 1);
 	pFlyingContainer->iType = CAIRO_DOCK_TYPE_FLYING_CONTAINER;
-	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	GtkWidget* pWindow = cairo_dock_create_container_window ();
+	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-flying-icon");
 	pFlyingContainer->pWidget = pWindow;
 	pFlyingContainer->pIcon = pFlyingIcon;
 	pFlyingContainer->bIsHorizontal = TRUE;
@@ -265,23 +266,6 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	pFlyingContainer->fRatio = 1.;
 	pFlyingContainer->bUseReflect = FALSE;
 	cairo_dock_set_default_animation_delta_t (pFlyingContainer);
-	
-	gtk_window_set_skip_pager_hint(GTK_WINDOW(pWindow), TRUE);
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(pWindow), TRUE);
-	cairo_dock_set_colormap_for_window(pWindow);
-	if (g_bUseOpenGL)
-	{
-		GdkGLContext *pMainGlContext = gtk_widget_get_gl_context (g_pMainDock->pWidget);
-		gtk_widget_set_gl_capability (pWindow,
-			g_pGlConfig,
-			pMainGlContext,  // on partage les ressources entre les contextes.
-			! g_bIndirectRendering,  // TRUE <=> direct connection to the graphics system.
-			GDK_GL_RGBA_TYPE);
-	}
-	gtk_widget_set_app_paintable(pWindow, TRUE);
-	gtk_window_set_decorated(GTK_WINDOW(pWindow), FALSE);
-	gtk_window_set_resizable(GTK_WINDOW(pWindow), TRUE);
-	//gtk_widget_add_events(pWindow, GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
 	
 	g_signal_connect (G_OBJECT (pWindow),
 		"expose-event",

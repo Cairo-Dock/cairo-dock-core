@@ -36,7 +36,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-config.h"
-#include "cairo-dock-dock-factory.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-themes-manager.h"
@@ -91,42 +91,6 @@ static gboolean s_bEntranceAllowed = TRUE;
 static gboolean s_bAutoHideInitialValue;
 static gboolean s_bHideAfterShortcut = FALSE;
 
-void cairo_dock_on_realize (GtkWidget* pWidget, CairoDock *pDock)
-{
-	if (! g_bUseOpenGL)
-		return ;
-	
-	GdkGLContext* pGlContext = gtk_widget_get_gl_context (pWidget);
-	GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pWidget);
-	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
-		return ;
-	
-	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
-	glClearDepth (1.0f);
-	glClearStencil (0);
-	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
-	glHint (GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-	
-	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);  // GL_MODULATE / GL_DECAL /  GL_BLEND
-	
-	glTexParameteri (GL_TEXTURE_2D,
-		GL_TEXTURE_MIN_FILTER,
-		GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri (GL_TEXTURE_2D,
-		GL_TEXTURE_MAG_FILTER,
-		GL_LINEAR);
-		
-	if (pDock->bIsMainDock)
-	{
-		g_print ("OpenGL version: %s\n", glGetString (GL_VERSION));
-		g_print ("OpenGL vendor: %s\n", glGetString (GL_VENDOR));
-		g_print ("OpenGL renderer: %s\n", glGetString (GL_RENDERER));
-		
-		/// charger les textures ici ?...
-		
-	}
-	gdk_gl_drawable_gl_end (pGlDrawable);
-}
 
 gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext)
 {
@@ -161,11 +125,11 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		
 		if (cairo_dock_is_loading ())
 		{
-			//cairo_dock_render_blank (pDock);
+			// on laisse transparent
 		}
 		else if (pDock->bAtBottom && pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->bInside)
 		{
-			cairo_dock_render_background_opengl (pDock);
+			cairo_dock_render_hidden_dock_opengl (pDock);
 		}
 		else
 		{
@@ -208,7 +172,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	}
 	else if (pDock->bAtBottom && pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->bInside)
 	{
-		cairo_dock_render_background (pCairoContext, pDock);
+		cairo_dock_render_hidden_dock (pCairoContext, pDock);
 	}
 	else
 	{

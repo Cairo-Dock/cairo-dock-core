@@ -624,7 +624,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 }
 
 
-void cairo_dock_render_background_opengl (CairoDock *pDock)
+void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %x)\n", __func__, pDock->bIsMainDock, g_pVisibleZoneSurface);
 	if (g_pVisibleZoneTexture == 0 && g_pVisibleZoneSurface != NULL)
@@ -1027,6 +1027,110 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 	return pVertexTab;
 }
 
+// OM(t) = sum ([k=0..n] Bn,k(t)*OAk)
+// Bn,k(x) = Cn,k*x^k*(1-x)^(n-k)
+#define B0(t) (1-t)*(1-t)*(1-t)
+#define B1(t) 3*t*(1-t)*(1-t)
+#define B2(t) 3*t*t*(1-t)
+#define B3(t) t*t*t
+#define Bezier(x0,x1,x2,x3,t) (B0(t)*x0 + B1(t)*x1 + B2(t)*x2 + B3(t)*x3)
+#define _get_icon_center_x(icon) (icon->fDrawX + icon->fWidth * icon->fScale/2)
+#define _get_icon_center_y(icon) (icon->fDrawY - icon->fHeight * icon->fScale/2 - (bForceConstantSeparator && CAIRO_DOCK_IS_SEPARATOR (icon) ? icon->fHeight * (icon->fScale - 1) / 2 : 0))
+#define _get_icon_center(icon,x,y) do {\
+	x = _get_icon_center_x (icon);\
+	y = _get_icon_center_y (icon); } while (0)
+#define _calculate_slope(x0,y0,x1,y1,dx,dy) do {\
+	dx = x1 - x0;\
+	dy = y1 - y0;\
+	norme = sqrt (dx*dx + dy*dy);\
+	dx /= norme;\
+	dy /= norme; } while (0)
+#define NB_VERTEX_PER_ICON_PAIR 10
+GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsLoop, gboolean bForceConstantSeparator, int *iNbPoints)
+{
+	static GLfloat pVertexTab[100*NB_VERTEX_PER_ICON_PAIR*3];
+	bForceConstantSeparator = bForceConstantSeparator || myIcons.bConstantSeparatorSize;
+	GList *ic, *next_ic, *next2_ic, *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
+	Icon *pIcon, *pNextIcon, *pNext2Icon;
+	double x0,y0, x1,y1, x2,y2;  // centres des icones P0, P1, P2.
+	double norme;  // pour normaliser les pentes.
+	double dx, dy;  // direction au niveau de l'icone courante P0.
+	double dx_, dy_;  // direction au niveau de l'icone suivante P1.
+	double x0_,y0_, x1_,y1_;  // points de controle entre P0 et P1.
+	if (pFirstDrawnElement == NULL)
+	{
+		*iNbPoints = 0;
+		return pVertexTab;
+	}
+	
+	// direction initiale.
+	ic = pFirstDrawnElement;
+	pIcon = ic->data;
+	_get_icon_center (pIcon,x0,y0);
+	next_ic = cairo_dock_get_next_element (ic, pDock->icons);
+	pNextIcon = next_ic->data;
+	_get_icon_center (pNextIcon,x1,y1);
+	if (! bIsLoop)
+	{
+		_calculate_slope (x0,y0, x1,y1, dx,dy);
+	}
+	else
+	{
+		next2_ic = cairo_dock_get_previous_element (ic, pDock->icons);  // icone precedente dans la boucle.
+		pNext2Icon = next2_ic->data;
+		_get_icon_center (pNext2Icon,x2,y2);
+		_calculate_slope (x2,y2, x1,y1, dx,dy);
+	}
+	// direction initiale au point suivant.
+	next2_ic = cairo_dock_get_next_element (next_ic, pDock->icons);
+	pNext2Icon = next2_ic->data;
+	_get_icon_center (pNext2Icon,x2,y2);
+	
+	// on parcourt les icones.
+	double t;
+	int i, n=0;
+	do
+	{
+		// l'icone courante, la suivante, et celle d'apres.
+		pIcon = ic->data;
+		pNextIcon = next_ic->data;
+		pNext2Icon = next2_ic->data;
+		
+		// on va tracer de (x0,y0) a (x1,y1)
+		_get_icon_center (pIcon,x0,y0);
+		_get_icon_center (pNextIcon,x1,y1);
+		_get_icon_center (pNext2Icon,x2,y2);
+		
+		// la pente au point (x1,y1)
+		_calculate_slope (x0,y0, x2,y2, dx_,dy_);
+		
+		// points de controle.
+		norme = sqrt ((x1-x0) * (x1-x0) + (y1-y0) * (y1-y0))/3;  // distance de prolongation suivant la pente.
+		x0_ = x0 + dx * norme;
+		y0_ = y0 + dy * norme;
+		x1_ = x1 - dx_ * norme;
+		y1_ = y1 - dy_ * norme;
+		
+		for (i = 0; i < NB_VERTEX_PER_ICON_PAIR; i ++, n++)
+		{
+			t = 1.*i/NB_VERTEX_PER_ICON_PAIR;  // [0;1[
+			pVertexTab[3*n] = Bezier (x0,x0_,x1_,x1,t);
+			pVertexTab[3*n+1] = pDock->iCurrentHeight - Bezier (y0,y0_,y1_,y1,t);
+		}
+		
+		// on decale tout d'un cran.
+		ic = next_ic;
+		next_ic = next2_ic;
+		next2_ic = cairo_dock_get_next_element (next_ic, pDock->icons);
+		if (next_ic == pFirstDrawnElement && ! bIsLoop)
+			break ;
+	}
+	while (ic != pFirstDrawnElement && n < 100*NB_VERTEX_PER_ICON_PAIR);
+	
+	*iNbPoints = n;
+	return pVertexTab;
+}
+
 
 void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double fDockWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, const GLfloat *pVertexTab, int iNbVertex, CairoDockTypeHorizontality bHorizontal, gboolean bDirectionUp, double fDecorationsOffsetX)
 {
@@ -1126,143 +1230,14 @@ void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor,
 }
 
 
-void cairo_dock_apply_desktop_background (CairoContainer *pContainer)
+void cairo_dock_draw_string_opengl (CairoDock *pDock, double fStringLineWidth, gboolean bIsLoop, gboolean bForceConstantSeparator)
 {
-	if (! mySystem.bUseFakeTransparency || g_iDesktopBgTexture == 0)
-		return ;
-	
-	glPolygonMode (GL_FRONT, GL_FILL);
-	glEnable (GL_TEXTURE_2D);
-	glBindTexture (GL_TEXTURE_2D, g_iDesktopBgTexture);
-	glColor4f(1., 1., 1., 1.);
-	glEnable (GL_BLEND);
-	glBlendFunc (GL_ONE, GL_ZERO);  /// utile ?
-	
-	glBegin(GL_QUADS);
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
-	1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-	glVertex3f (0., pContainer->iHeight, 0.);  // Top Left.
-	
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-	glVertex3f (pContainer->iWidth, pContainer->iHeight, 0.);  // Top Right
-	
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-	glVertex3f (pContainer->iWidth, 0., 0.);  // Bottom Right
-	
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-	glVertex3f (0., 0., 0.);  // Bottom Left
-	glEnd();
-	
-	glDisable (GL_TEXTURE_2D);
-	glDisable (GL_BLEND);
-}
-
-GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHasBeenForced)  // taken from a MacSlow's exemple.
-{
-	GdkGLConfig *pGlConfig = NULL;
-	
-	Display *XDisplay = cairo_dock_get_Xdisplay ();
-	
-	GLXFBConfig *pFBConfigs; 
-	XRenderPictFormat *pPictFormat = NULL;
-	int doubleBufferAttributes[] = {
-		GLX_DRAWABLE_TYPE, 	GLX_WINDOW_BIT,
-		GLX_RENDER_TYPE, 		GLX_RGBA_BIT,
-		GLX_DOUBLEBUFFER, 	True,
-		GLX_RED_SIZE, 		1,
-		GLX_GREEN_SIZE, 		1,
-		GLX_BLUE_SIZE, 		1,
-		GLX_ALPHA_SIZE, 		1,
-		GLX_DEPTH_SIZE, 		1,
-		GLX_STENCIL_SIZE, 	1,
-		None};
-	
-	
-	XVisualInfo *pVisInfo = NULL;
-	int i, iNumOfFBConfigs = 0;
-	cd_debug ("cherchons les configs ...");
-	pFBConfigs = glXChooseFBConfig (XDisplay,
-		DefaultScreen (XDisplay),
-		doubleBufferAttributes,
-		&iNumOfFBConfigs);
-	
-	cd_debug (" -> %d FBConfig(s)", iNumOfFBConfigs);
-	for (i = 0; i < iNumOfFBConfigs; i++)
-	{
-		pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]);
-		if (!pVisInfo)
-		{
-			cd_warning ("this FBConfig has no visual.");
-			continue;
-		}
-		
-		pPictFormat = XRenderFindVisualFormat (XDisplay, pVisInfo->visual);
-		if (!pPictFormat)
-		{
-			cd_warning ("this visual has an unknown format.");
-			XFree (pVisInfo);
-			pVisInfo = NULL;
-			continue;
-		}
-		
-		if (pPictFormat->direct.alphaMask > 0)
-		{
-			cd_message ("Strike, found a GLX visual with alpha-support !");
-			*bHasBeenForced = FALSE;
-			break;
-		}
-
-		XFree (pVisInfo);
-		pVisInfo = NULL;
-	}
-	if (pFBConfigs)
-		XFree (pFBConfigs);
-	
-	if (pVisInfo == NULL && bForceOpenGL)
-	{
-		cd_warning ("we could not get an ARGB-visual, trying to get an RGB one...");
-		*bHasBeenForced = TRUE;
-		doubleBufferAttributes[13] = 0;
-		pFBConfigs = glXChooseFBConfig (XDisplay,
-			DefaultScreen (XDisplay),
-			doubleBufferAttributes,
-			&iNumOfFBConfigs);
-		cd_message ("got %d FBConfig(s) this time", iNumOfFBConfigs);
-		for (i = 0; i < iNumOfFBConfigs; i++)
-		{
-			pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]);
-			if (!pVisInfo)
-			{
-				cd_warning ("this FBConfig has no visual.");
-				XFree (pVisInfo);
-				pVisInfo = NULL;
-			}
-			else
-				break;
-		}
-		if (pFBConfigs)
-			XFree (pFBConfigs);
-		
-		if (pVisInfo == NULL)
-		{
-			cd_warning ("still no visual, this is the last chance");
-			pVisInfo = glXChooseVisual (XDisplay,
-				DefaultScreen (XDisplay),
-				doubleBufferAttributes);
-		}
-	}
-	if (pVisInfo != NULL)
-	{
-		cd_message ("ok, got a visual");
-		pGlConfig = gdk_x11_gl_config_new_from_visualid (pVisInfo->visualid);
-		XFree (pVisInfo);
-	}
-	else
-	{
-		cd_warning ("couldn't find a suitable GLX Visual, OpenGL can't be used.\n (sorry to say that, but your graphic card and/or its driver is crappy)");
-	}
-	
-	return pGlConfig;
+	int iNbVertex;
+	GLfloat *pVertexTab = cairo_dock_generate_string_path_opengl (pDock, bIsLoop, bForceConstantSeparator, &iNbVertex);
+	if (iNbVertex == 0)
+		return;
+	glVertexPointer(3, GL_FLOAT, 0, pVertexTab);
+	cairo_dock_draw_current_path_opengl (fStringLineWidth, myIcons.fStringColor, iNbVertex);
 }
 
 
@@ -1439,6 +1414,8 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	}
 }
 
+
+
 void cairo_dock_set_perspective_view (int iWidth, int iHeight)
 {
 	glMatrixMode(GL_PROJECTION);
@@ -1468,71 +1445,166 @@ void cairo_dock_set_ortho_view (int iWidth, int iHeight)
 	glTranslatef (iWidth, iHeight, - iHeight/2);
 }
 
-// OM(t) = sum ([k=0..n] Bn,k(t)*OAk)
-// Bn,k(x) = Cn,k*x^k*(1-x)^(n-k)
-#define B0(t) (1-t)*(1-t)*(1-t)
-#define B1(t) 3*t*(1-t)*(1-t)
-#define B2(t) 3*t*t*(1-t)
-#define B3(t) t*t*t
-#define Bezier(x0,x1,x2,x3,t) B0(t)*x0 + B1(t)*x1 + B2(t)*x2 + B3(t)*x3
-#define _get_icon_center_x(icon) icon->fDrawX + icon->fWidth * icon->fScale/2
-#define _get_icon_center_y(icon) icon->fDrawY + icon->fHeight * icon->fScale/2
-GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsLoop, gboolean bForceConstantSeparator, int *iNbPoints)
+GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHasBeenForced)  // taken from a MacSlow's exemple.
 {
-	static GLfloat pVertexTab[1000*3];
-	bForceConstantSeparator = bForceConstantSeparator || myIcons.bConstantSeparatorSize;
-	GList *ic, *next_ic, *next2_ic, *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
-	Icon *pIcon, *pNextIcon, *pNext2Icon;
-	double dx, dy;  // direction au niveau de l'icone courante.
-	double dx_, dy_;  // direction au niveau de l'icone suivante.
-	if (pFirstDrawnElement == NULL)
+	GdkGLConfig *pGlConfig = NULL;
+	
+	g_print ("OpenGL version: %s\nOpenGL vendor: %s\nOpenGL renderer: %s\n",
+		glGetString (GL_VERSION),
+		glGetString (GL_VENDOR),
+		glGetString (GL_RENDERER));
+	
+	Display *XDisplay = cairo_dock_get_Xdisplay ();
+	
+	GLXFBConfig *pFBConfigs; 
+	XRenderPictFormat *pPictFormat = NULL;
+	int doubleBufferAttributes[] = {
+		GLX_DRAWABLE_TYPE, 	GLX_WINDOW_BIT,
+		GLX_RENDER_TYPE, 		GLX_RGBA_BIT,
+		GLX_DOUBLEBUFFER, 	True,
+		GLX_RED_SIZE, 		1,
+		GLX_GREEN_SIZE, 		1,
+		GLX_BLUE_SIZE, 		1,
+		GLX_ALPHA_SIZE, 		1,
+		GLX_DEPTH_SIZE, 		1,
+		GLX_STENCIL_SIZE, 	1,
+		None};
+	
+	
+	XVisualInfo *pVisInfo = NULL;
+	int i, iNumOfFBConfigs = 0;
+	cd_debug ("cherchons les configs ...");
+	pFBConfigs = glXChooseFBConfig (XDisplay,
+		DefaultScreen (XDisplay),
+		doubleBufferAttributes,
+		&iNumOfFBConfigs);
+	
+	cd_debug (" -> %d FBConfig(s)", iNumOfFBConfigs);
+	for (i = 0; i < iNumOfFBConfigs; i++)
 	{
-		*iNbPoints = 0;
-		return pVertexTab;
+		pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]);
+		if (!pVisInfo)
+		{
+			cd_warning ("this FBConfig has no visual.");
+			continue;
+		}
+		
+		pPictFormat = XRenderFindVisualFormat (XDisplay, pVisInfo->visual);
+		if (!pPictFormat)
+		{
+			cd_warning ("this visual has an unknown format.");
+			XFree (pVisInfo);
+			pVisInfo = NULL;
+			continue;
+		}
+		
+		if (pPictFormat->direct.alphaMask > 0)
+		{
+			cd_message ("Strike, found a GLX visual with alpha-support !");
+			*bHasBeenForced = FALSE;
+			break;
+		}
+
+		XFree (pVisInfo);
+		pVisInfo = NULL;
+	}
+	if (pFBConfigs)
+		XFree (pFBConfigs);
+	
+	if (pVisInfo == NULL)
+	{
+		cd_warning ("couldn't find an appropriate visual ourself, trying something else ...");
+		pGlConfig = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGBA |
+			GDK_GL_MODE_ALPHA |
+			GDK_GL_MODE_DEPTH |
+			GDK_GL_MODE_DOUBLE |
+			GDK_GL_MODE_STENCIL);
+		
+		if (pGlConfig == NULL)
+		{
+			cd_warning ("no luck, trying a default one...");
+			pGlConfig = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGBA |
+				GDK_GL_MODE_ALPHA |
+				GDK_GL_MODE_DEPTH);
+		}
+		if (pGlConfig != NULL)
+			return pGlConfig;
 	}
 	
-	// direction initiale.
-	ic = pFirstDrawnElement;
-	pIcon = ic->data;
-	if (! bIsLoop)
+	if (pVisInfo == NULL && bForceOpenGL)
 	{
-		next_ic = cairo_dock_get_next_element (ic, pDock->icons);
-		pNextIcon = next_ic->data;
-		dx = _get_icon_center_x (pNextIcon) - _get_icon_center_x (pIcon);
-		dy = _get_icon_center_y (pNextIcon) - _get_icon_center_y (pIcon);
+		cd_warning ("we could not get an ARGB-visual, trying to get an RGB one...");
+		*bHasBeenForced = TRUE;
+		doubleBufferAttributes[13] = 0;
+		pFBConfigs = glXChooseFBConfig (XDisplay,
+			DefaultScreen (XDisplay),
+			doubleBufferAttributes,
+			&iNumOfFBConfigs);
+		cd_message ("got %d FBConfig(s) this time", iNumOfFBConfigs);
+		for (i = 0; i < iNumOfFBConfigs; i++)
+		{
+			pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]);
+			if (!pVisInfo)
+			{
+				cd_warning ("this FBConfig has no visual.");
+				XFree (pVisInfo);
+				pVisInfo = NULL;
+			}
+			else
+				break;
+		}
+		if (pFBConfigs)
+			XFree (pFBConfigs);
+		
+		if (pVisInfo == NULL)
+		{
+			cd_warning ("still no visual, this is the last chance");
+			pVisInfo = glXChooseVisual (XDisplay,
+				DefaultScreen (XDisplay),
+				doubleBufferAttributes);
+		}
+	}
+	if (pVisInfo != NULL)
+	{
+		cd_message ("ok, got a visual");
+		pGlConfig = gdk_x11_gl_config_new_from_visualid (pVisInfo->visualid);
+		XFree (pVisInfo);
 	}
 	else
 	{
-		next_ic = cairo_dock_get_previous_element (ic, pDock->icons);
-		pNextIcon = next_ic->data;
-		dx = _get_icon_center_x (pIcon) - _get_icon_center_x (pNextIcon);
-		dy = _get_icon_center_y (pIcon) - _get_icon_center_y (pNextIcon);
-		next_ic = cairo_dock_get_next_element (ic, pDock->icons);
-		pNextIcon = next_ic->data;
+		cd_warning ("couldn't find a suitable GLX Visual, OpenGL can't be used.\n (sorry to say that, but your graphic card and/or its driver is crappy)");
 	}
-	// direction initiale au point suivant.
-	next2_ic = cairo_dock_get_next_element (next_ic, pDock->icons);
-	pNext2Icon = next2_ic->data;
-	dx_ = _get_icon_center_x (pNext2Icon) - _get_icon_center_x (pIcon);
-	dy_ = _get_icon_center_y (pNext2Icon) - _get_icon_center_y (pIcon);
 	
-	// on parcourt les icones.
-	do
-	{
-		// l'ione courante, la suivante, et celle d'apres.
-		pIcon = ic->data;
-		pNextIcon = next_ic->data;
-		pNext2Icon = next2_ic->data;
-		
-		
-		
-		// on decale tout d'un cran.
-		ic = next_ic;
-		next_ic = next2_ic;
-		next2_ic = cairo_dock_get_next_element (next_ic, pDock->icons);
-	}
-	while (ic != pFirstDrawnElement);
-	
-	return pVertexTab;
+	return pGlConfig;
 }
 
+void cairo_dock_apply_desktop_background (CairoContainer *pContainer)
+{
+	if (! mySystem.bUseFakeTransparency || g_iDesktopBgTexture == 0)
+		return ;
+	
+	glPolygonMode (GL_FRONT, GL_FILL);
+	glEnable (GL_TEXTURE_2D);
+	glBindTexture (GL_TEXTURE_2D, g_iDesktopBgTexture);
+	glColor4f(1., 1., 1., 1.);
+	glEnable (GL_BLEND);
+	glBlendFunc (GL_ONE, GL_ZERO);  /// utile ?
+	
+	glBegin(GL_QUADS);
+	glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
+	1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	glVertex3f (0., pContainer->iHeight, 0.);  // Top Left.
+	
+	glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	glVertex3f (pContainer->iWidth, pContainer->iHeight, 0.);  // Top Right
+	
+	glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	glVertex3f (pContainer->iWidth, 0., 0.);  // Bottom Right
+	
+	glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	glVertex3f (0., 0., 0.);  // Bottom Left
+	glEnd();
+	
+	glDisable (GL_TEXTURE_2D);
+	glDisable (GL_BLEND);
+}

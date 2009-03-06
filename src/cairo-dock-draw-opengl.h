@@ -19,7 +19,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 
 void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDockMagnitude, gboolean bUseText);
 
-void cairo_dock_render_background_opengl (CairoDock *pDock);
+void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock);
 
 ////////////////////
 /// LOAD TEXTURE ///
@@ -101,9 +101,8 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double fDockWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, const GLfloat *pVertexTab, int iNbVertex, CairoDockTypeHorizontality bHorizontal, gboolean bDirectionUp, double fDecorationsOffsetX);
 void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor, int iNbVertex);
 
-GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHasBeenForced);
-
-void cairo_dock_apply_desktop_background (CairoContainer *pContainer);
+GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsLoop, gboolean bForceConstantSeparator, int *iNbPoints);
+void cairo_dock_draw_string_opengl (CairoDock *pDock, double fStringLineWidth, gboolean bIsLoop, gboolean bForceConstantSeparator);
 
 
   /////////////////////////
@@ -120,6 +119,10 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);
 ///////////////
 void cairo_dock_set_perspective_view (int iWidth, int iHeight);
 void cairo_dock_set_ortho_view (int iWidth, int iHeight);
+
+GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHasBeenForced);
+
+void cairo_dock_apply_desktop_background (CairoContainer *pContainer);
 
 
 G_END_DECLS

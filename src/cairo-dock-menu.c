@@ -35,7 +35,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-desklet.h"
-#include "cairo-dock-applet-facility.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-class-manager.h"
@@ -988,7 +987,7 @@ void cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 }
 
 
-#define _add_entry_in_menu(cLabel, gtkStock, pSubMenu, pCallBack) CD_APPLET_ADD_IN_MENU_WITH_STOCK_AND_DATA (cLabel, gtkStock, pSubMenu, pCallBack, data)
+#define _add_entry_in_menu(cLabel, gtkStock, pSubMenu, pCallBack) CAIRO_DOCK_ADD_IN_MENU_WITH_STOCK_AND_DATA (cLabel, gtkStock, pSubMenu, pCallBack, data)
 
 GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 {
@@ -1234,7 +1233,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 						user_data[2] = GINT_TO_POINTER (j);
 						user_data[3] = GINT_TO_POINTER (k);
 						
-						CD_APPLET_ADD_IN_MENU_WITH_STOCK_AND_DATA (sDesktop->str, NULL, _cairo_dock_move_appli_to_desktop, pSubMenuOtherActions, user_data);
+						CAIRO_DOCK_ADD_IN_MENU_WITH_STOCK_AND_DATA (sDesktop->str, NULL, _cairo_dock_move_appli_to_desktop, pSubMenuOtherActions, user_data);
 					}
 				}
 			}

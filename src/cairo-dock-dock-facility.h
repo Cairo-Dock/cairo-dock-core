@@ -79,26 +79,8 @@ void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, C
 void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pParentDock);
 
 
-/**
-* Autorise un widget a accepter les glisse-deposes.
-* @param pWidget un widget.
-* @param pCallBack la fonction qui sera appelee lors d'une reception de donnee.
-* @param data donnees passees en entree de la callback.
-*/
-void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCallBack, gpointer data);
-/**
-* Dis si une chaine est une addresse (file://xxx, http://xxx, ftp://xxx, etc).
-* @param cString une chaine de caracteres.
-*/
-gboolean cairo_dock_string_is_adress (const gchar *cString);
-
-
-void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, double fOrder, CairoContainer *pContainer);
-
-
 void cairo_dock_set_input_shape (CairoDock *pDock);
 void cairo_dock_unset_input_shape (CairoDock *pDock);
-
 
 
 GList * cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, double fFlatDockWidth, int iXOffset);

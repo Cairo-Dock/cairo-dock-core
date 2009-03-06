@@ -7,21 +7,10 @@
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
-
-/**
-*Applique la colormap de l'ecran a une fenetre GTK, lui ajoutant la transparence.
-*@param pWidget
-*/
-void cairo_dock_set_colormap_for_window (GtkWidget *pWidget);
-/**
-*Applique la colormap de l'ecran a la fenetre d'un container, lui ajoutant la transparence, et active Glitz si possible.
-* @param pContainer le container.
-*/
-void cairo_dock_set_colormap (CairoContainer *pContainer);
-
-
-/**
-*Cree un contexte de dessin pour la libcairo. Si glitz est active, le contexte sera lie a une surface glitz (et donc on dessinera directement sur la carte graphique), sinon a une surface X representant la fenetre du container.
+  ///////////////
+ /// CONTEXT ///
+///////////////
+/** Cree un contexte de dessin pour la libcairo. Si glitz est active, le contexte sera lie a une surface glitz (et donc on dessinera directement sur la carte graphique), sinon a une surface X representant la fenetre du container.
 *@param pContainer un container.
 *@return le contexte sur lequel dessiner. N'est jamais nul; tester sa coherence avec cairo_status() avant de l'utiliser, et le detruire avec cairo_destroy() apres en avoir fini avec lui.
 */
@@ -107,21 +96,9 @@ void cairo_dock_draw_string (cairo_t *pCairoContext, CairoDock *pDock, double fS
 
 void cairo_dock_draw_surface (cairo_t *pCairoContext, cairo_surface_t *pSurface, int iWidth, int iHeight, gboolean bDirectionUp, gboolean bHorizontal, gdouble fAlpha);
 
-void cairo_dock_render_background (cairo_t *pCairoContext, CairoDock *pDock);
-
-void cairo_dock_render_blank (cairo_t *pCairoContext, CairoDock *pDock);
+void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock);
 
 
-void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRectangle *pArea);
-/**
-*Efface et redessine entierement une seule icone. Appelle la fonction de trace optimise de la vue courante; si cette derniere ne fournit pas de trace optimise, retrace tout le dock (ce qui peut etre penalisant).
-*@param icon l'icone a retracer.
-*@param pContainer le container de l'icone.
-*/
-void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer);
-#define cairo_dock_redraw_my_icon cairo_dock_redraw_icon
-void cairo_dock_redraw_container (CairoContainer *pContainer);
-void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle *pArea);
 /**#define _cairo_dock_extend_area(area, x, y, w, h) do {\
 	int xmin = MIN (area.x, x);
 	int ymin = MIN (area.y, y);

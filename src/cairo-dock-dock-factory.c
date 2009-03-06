@@ -55,6 +55,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-animations.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-dock-factory.h"
 
 extern CairoDock *g_pMainDock;
@@ -98,43 +99,18 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 	pDock->fMagnitudeMax = 1.;
 
 	//\__________________ On cree la fenetre GTK.
-	GtkWidget *pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	GtkWidget *pWindow = cairo_dock_create_container_window ();
 	pDock->pWidget = pWindow;
 
-	if (g_bSticky)
-		gtk_window_stick (GTK_WINDOW (pWindow));
 	if (g_bKeepAbove)
 		gtk_window_set_keep_above (GTK_WINDOW (pWindow), g_bKeepAbove);
 	if (myAccessibility.bPopUp)
 		gtk_window_set_keep_below (GTK_WINDOW (pWindow), TRUE);
 	if (mySystem.bUseFakeTransparency)
 		gtk_window_set_keep_below (GTK_WINDOW (pWindow), TRUE);
-	gtk_window_set_skip_pager_hint (GTK_WINDOW (pWindow), g_bSkipPager);
-	gtk_window_set_skip_taskbar_hint (GTK_WINDOW (pWindow), g_bSkipTaskbar);
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
-
 	gtk_window_set_type_hint (GTK_WINDOW (pWindow), iWmHint);
 
-	cairo_dock_set_colormap (CAIRO_CONTAINER (pDock));
-	
-	if (g_bUseOpenGL)
-	{
-		GdkGLContext *pMainGlContext = (pDock->bIsMainDock ? NULL : gtk_widget_get_gl_context (g_pMainDock->pWidget));
-		gtk_widget_set_gl_capability (pWindow,
-			g_pGlConfig,
-			pMainGlContext,  // on partage les ressources entre les contextes.
-			! g_bIndirectRendering,  // TRUE <=> direct connection to the graphics system.
-			GDK_GL_RGBA_TYPE);
-		
-		g_signal_connect_after (G_OBJECT (pWindow),
-			"realize",
-			G_CALLBACK (cairo_dock_on_realize),
-			pDock);
-	}
-
-	gtk_widget_set_app_paintable (pWindow, TRUE);
-	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
-	gtk_window_set_resizable (GTK_WINDOW (pWindow), TRUE);
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock");  // GTK renseigne la classe avec la meme valeur.
 	
 	cairo_dock_set_renderer (pDock, cRendererName);

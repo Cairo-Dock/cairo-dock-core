@@ -159,23 +159,6 @@ Icon *cairo_dock_search_icon_pointing_on_dock (CairoDock *pDock, CairoDock **pPa
 	return pPointingIcon;
 }
 
-static gboolean _cairo_dock_search_icon_in_a_dock (gchar *cDockName, CairoDock *pDock, Icon *icon)
-{
-	return (g_list_find (pDock->icons, icon) != NULL);
-}
-CairoContainer *cairo_dock_search_container_from_icon (Icon *icon)
-{
-	g_return_val_if_fail (icon != NULL, NULL);
-	if (CAIRO_DOCK_IS_APPLET (icon))
-		return icon->pModuleInstance->pContainer;
-	
-	if (icon->cParentDockName != NULL)
-		return g_hash_table_lookup (s_hDocksTable, icon->cParentDockName);
-	else  /// pas tres utile ...
-		return g_hash_table_find (s_hDocksTable, (GHRFunc) _cairo_dock_search_icon_in_a_dock, icon);
-}
-
-
 
 static void _cairo_dock_get_one_decoration_size (gchar *cDockName, CairoDock *pDock, int *data)
 {
@@ -700,17 +683,6 @@ gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon)
 		return TRUE;
 	}
 	return FALSE;
-}
-
-
-void cairo_dock_show_hide_container (CairoContainer *pContainer)
-{
-	if (pContainer == NULL)
-		return;
-	if (! GTK_WIDGET_VISIBLE (pContainer->pWidget))
-		gtk_window_present (GTK_WINDOW (pContainer->pWidget));
-	else
-		gtk_widget_hide (pContainer->pWidget);
 }
 
 

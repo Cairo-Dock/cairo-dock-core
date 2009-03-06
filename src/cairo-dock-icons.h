@@ -251,11 +251,28 @@ Icon *cairo_dock_get_icon_with_class (GList *pIconList, gchar *cClass);
 #define cairo_dock_get_first_appli(pIconList) cairo_dock_get_first_icon_of_type (pIconList, CAIRO_DOCK_APPLI)
 #define cairo_dock_get_last_appli(pIconList) cairo_dock_get_last_icon_of_type (pIconList, CAIRO_DOCK_APPLI)
 
-
+/** Renvoie les dimensions allouee a la surface/texture d'une icone.
+@param pIcon l'icone
+@param pContainer son container
+@param iWidth pointeur sur la largeur
+@param iHeight pointeur sur la hauteur
+*/
 void cairo_dock_get_icon_extent (Icon *pIcon, CairoContainer *pContainer, int *iWidth, int *iHeight);
 #define CD_APPLET_GET_MY_ICON_EXTENT(iWidthPtr, iHeightPtr) cairo_dock_get_icon_extent (myIcon, myContainer, iWidthPtr, iHeightPtr)
-
+/** Renvoie la taille d'une icone a laquelle elle est couramment dessinee sur l'ecran (en tenant compte de son zoom et de celui du container).
+@param pIcon l'icone
+@param pContainer son container
+@param fSizeX pointeur sur la taille en X (horizontal)
+@param fSizeY pointeur sur la taille en Y (vertical)
+*/
 void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, double *fSizeX, double *fSizeY);
+/** Renvoie la zone totale occupee par une icone sur son container (reflet, zoom et etirement compris).
+@param pIcon l'icone
+@param pContainer son container
+@param pArea zone occupee par l'icone sur son container.
+*/
+void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRectangle *pArea);
+
 
 
 void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconType iType);
@@ -272,17 +289,14 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 */
 Icon *cairo_dock_foreach_icons_of_type (GList *pIconList, CairoDockIconType iType, CairoDockForeachIconFunc pFuntion, gpointer data);
 
-
-
 /**
-*Met a jour le fichier .desktop d'un lanceur avec le nom de son nouveau conteneur.
-*@param icon l'icone du lanceur.
-*@param cNewParentDockName le nom de son nouveau conteneur.
+*Met a jour une icone de lanceur ou d'applet avec le nom de son nouveau dock. Met a jour son fichier de conf aussi.
+*@param icon l'icone du lanceur ou de l'applet.
+*@param cNewParentDockName le nom de son nouveau dock.
 */
 void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParentDockName);
 
 #define cairo_dock_set_icon_static(icon) ((icon)->bStatic = TRUE)
-
 
 /**
 *Modifie l'etiquette d'une icone.

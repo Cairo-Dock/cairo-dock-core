@@ -5,6 +5,7 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-modules.h"
+#include "cairo-dock-menu.h"
 #include "cairo-dock-applet-factory.h"
 G_BEGIN_DECLS
 
@@ -415,12 +416,7 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 *@param pMenu GtkWidget du menu auquel on rajoutera l'entree.
 *@param pData donnees passees en parametre de la fonction (doit contenir myApplet).
 */
-#define CD_APPLET_ADD_IN_MENU_WITH_STOCK_AND_DATA(cLabel, gtkStock, pFunction, pMenu, pData) do { \
-	pMenuItem = gtk_image_menu_item_new_with_label (cLabel); \
-	image = gtk_image_new_from_stock (gtkStock, GTK_ICON_SIZE_MENU); \
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image); \
-	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem); \
-	g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK(pFunction), pData); } while (0)
+#define CD_APPLET_ADD_IN_MENU_WITH_STOCK_AND_DATA CAIRO_DOCK_ADD_IN_MENU_WITH_STOCK_AND_DATA
 
 /**
 *Ajoute une entree avec une icone GTK a un menu deja existant.

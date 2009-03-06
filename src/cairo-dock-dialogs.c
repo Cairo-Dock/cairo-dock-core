@@ -12,7 +12,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <gdk/gdkkeysyms.h>
 
 #include "cairo-dock-icons.h"
-#include "cairo-dock-dock-factory.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-log.h"
@@ -61,9 +61,10 @@ static gboolean on_leave_dialog (GtkWidget* pWidget,
 	GdkEventCrossing* pEvent,
 	CairoDialog *pDialog)
 {
+	cd_debug ("debut d'attente...");
 	while (gtk_events_pending ())
 		gtk_main_iteration ();
-	cd_message ("fin d'attente, bInside : %d\n", pDialog->bInside);
+	cd_debug ("fin d'attente, bInside : %d\n", pDialog->bInside);
 	int iMouseX, iMouseY;
 	gdk_window_get_pointer (pDialog->pWidget->window, &iMouseX, &iMouseY, NULL);
 	if (iMouseX > 0 && iMouseX < pDialog->iWidth && iMouseY > 0 && iMouseY < pDialog->iHeight)
@@ -406,10 +407,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 		{
 			//g_print ("configure (%d) => place\n", pDialog->bInside);
 			CairoContainer *pContainer = cairo_dock_search_container_from_icon (pDialog->pIcon);
-			///gboolean bInside = pDialog->bInside;
-			///pDialog->bInside = FALSE;
 			cairo_dock_place_dialog (pDialog, pContainer);
-			///pDialog->bInside = bInside;
 		}
 	}
 	gtk_widget_queue_draw (pDialog->pWidget);  // les widgets internes peuvent avoir changer de taille sans que le dialogue n'en ait change, il faut donc redessiner tout le temps.
@@ -652,25 +650,16 @@ static CairoDialog *_cairo_dock_create_new_dialog (void)
 
 	//\________________ On construit la fenetre du dialogue.
 	//GtkWidget* pWindow = gtk_window_new (bInteractiveWindow ? GTK_WINDOW_TOPLEVEL : GTK_WINDOW_POPUP);  // les popus ne prennent pas le focus. En fait, ils ne sont meme pas controles par le WM.
-	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	GtkWidget* pWindow = cairo_dock_create_container_window ();
 	pDialog->pWidget = pWindow;
 
-	if (g_bSticky)
-		gtk_window_stick (GTK_WINDOW (pWindow));
 	gtk_window_set_keep_above (GTK_WINDOW (pWindow), g_bKeepAbove || myAccessibility.bPopUp);
-	gtk_window_set_skip_pager_hint (GTK_WINDOW (pWindow), TRUE);
-	gtk_window_set_skip_taskbar_hint (GTK_WINDOW (pWindow), TRUE);
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
 	/*if (bInteractiveWindow)
 		GTK_WIDGET_SET_FLAGS (pWindow, GTK_CAN_FOCUS);  // a priori inutile mais bon.
 	else
 		GTK_WIDGET_UNSET_FLAGS (pWindow, GTK_CAN_FOCUS);  // pareil, mais bon on ne sait jamais avec ces WM.*/
 
-	cairo_dock_set_colormap_for_window (pWindow);
-
-	gtk_widget_set_app_paintable (pWindow, TRUE);
-	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
-	gtk_window_set_resizable (GTK_WINDOW (pWindow), TRUE);
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock-dialog");
 
 	gtk_widget_add_events (pWindow, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);

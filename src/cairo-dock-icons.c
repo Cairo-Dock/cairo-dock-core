@@ -459,6 +459,38 @@ void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, 
 	}
 }
 
+void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRectangle *pArea)
+{
+	double fReflectSize = 0;
+	if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->bUseReflect)
+	{
+		fReflectSize = myIcons.fReflectSize * icon->fScale * fabs (icon->fHeightFactor) + icon->fDeltaYReflection;
+	}
+	
+	double fX = icon->fDrawX;
+	fX += icon->fWidth * icon->fScale * (1 - fabs (icon->fWidthFactor))/2;
+	
+	double fY = icon->fDrawY;
+	fY += (pContainer->bDirectionUp ? icon->fHeight * icon->fScale * (1 - icon->fHeightFactor)/2 : - fReflectSize);
+	if (fY < 0)
+		fY = 0;
+	
+	if (pContainer->bIsHorizontal)
+	{
+		pArea->x = (int) floor (fX);
+		pArea->y = (int) floor (fY);
+		pArea->width = (int) ceil (icon->fWidth * icon->fScale * fabs (icon->fWidthFactor)) + 1;
+		pArea->height = (int) ceil (icon->fHeight * icon->fScale * fabs (icon->fHeightFactor) + fReflectSize);
+	}
+	else
+	{
+		pArea->x = (int) floor (fY);
+		pArea->y = (int) floor (fX);
+		pArea->width = ((int) ceil (icon->fHeight * icon->fScale * fabs (icon->fHeightFactor) + fReflectSize)) + 1;
+		pArea->height = (int) ceil (icon->fWidth * icon->fScale * fabs (icon->fWidthFactor));
+	}
+}
+
 
 
 void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconType iType)
