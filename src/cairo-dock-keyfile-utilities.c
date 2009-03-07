@@ -42,7 +42,7 @@ void cairo_dock_write_keys_to_file (GKeyFile *pKeyFile, const gchar *cConfFilePa
 
 
 	gsize length;
-	gchar *cNewConfFilePath = g_key_file_to_data (pKeyFile, &length, &erreur);
+	gchar *cNewConfFileContent = g_key_file_to_data (pKeyFile, &length, &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning ("Error while fetching data : %s", erreur->message);
@@ -50,13 +50,14 @@ void cairo_dock_write_keys_to_file (GKeyFile *pKeyFile, const gchar *cConfFilePa
 		return ;
 	}
 
-	g_file_set_contents (cConfFilePath, cNewConfFilePath, length, &erreur);
+	g_file_set_contents (cConfFilePath, cNewConfFileContent, length, &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning ("Error while writing data : %s", erreur->message);
 		g_error_free (erreur);
 		return ;
 	}
+	g_free (cNewConfFileContent);
 }
 
 
