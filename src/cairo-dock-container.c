@@ -80,6 +80,7 @@ GtkWidget *cairo_dock_create_container_window (void)
 	gtk_window_set_skip_pager_hint (GTK_WINDOW(pWindow), TRUE);
 	gtk_window_set_skip_taskbar_hint (GTK_WINDOW(pWindow), TRUE);
 	
+	cairo_dock_set_colormap_for_window (pWindow);
 	if (g_bUseOpenGL)
 	{
 		GdkGLContext *pMainGlContext = gtk_widget_get_gl_context (g_pMainDock->pWidget);  // NULL si on est en train de creer la fenetre du main dock, ce qui nous convient.
@@ -93,8 +94,6 @@ GtkWidget *cairo_dock_create_container_window (void)
 			G_CALLBACK (_cairo_dock_on_realize),
 			NULL);
 	}
-	else
-		cairo_dock_set_colormap_for_window (pWindow);
 	
 	gtk_widget_set_app_paintable (pWindow, TRUE);
 	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);

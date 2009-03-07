@@ -463,6 +463,7 @@ typedef gpointer CairoDialogRendererConfigParameter;
 typedef CairoDialogRendererConfigParameter* CairoDialogRendererConfigPtr;
 
 typedef void (* CairoDialogRenderFunc) (cairo_t *pCairoContext, CairoDialog *pDialog, double fAlpha);
+typedef void (* CairoDialogGLRenderFunc) (CairoDialog *pDialog, double fAlpha);
 typedef gpointer (* CairoDialogConfigureRendererFunc) (CairoDialog *pDialog, cairo_t *pSourceContext, CairoDialogRendererConfigPtr pConfig);
 typedef void (* CairoDialogUpdateRendererDataFunc) (CairoDialog *pDialog, CairoDialogRendererDataPtr pNewData);
 typedef void (* CairoDialogFreeRendererDataFunc) (CairoDialog *pDialog);
@@ -471,13 +472,16 @@ struct _CairoDialogRenderer {
 	CairoDialogConfigureRendererFunc 	configure;
 	CairoDialogFreeRendererDataFunc 	free_data;
 	CairoDialogUpdateRendererDataFunc 	update;
+	CairoDialogGLRenderFunc 			render_opengl;
 };
 
 typedef void (* CairoDialogSetDecorationSizeFunc) (CairoDialog *pDialog);
 typedef void (* CairoDialogRenderDecorationFunc) (cairo_t *pCairoContext, CairoDialog *pDialog);
+typedef void (* CairoDialogGLRenderDecorationFunc) (CairoDialog *pDialog);
 struct _CairoDialogDecorator {
 	CairoDialogSetDecorationSizeFunc 		set_size;
 	CairoDialogRenderDecorationFunc 		render;
+	CairoDialogGLRenderDecorationFunc 		render_opengl;
 };
 
 struct _CairoDialogAttribute {

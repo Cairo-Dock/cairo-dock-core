@@ -265,7 +265,7 @@ frame_label =
 pointed icon only = false
 
 #b- Should the labels be always horizontal, even when dock is vertical ?
-always horizontal = FALSE
+always horizontal = true
 
 #f-[0.;50.] label's visibility threshold :
 #{the bigger, the more the labels next to the pointed icon will be transparent.}
@@ -715,7 +715,7 @@ indicator ratio = 1.
 
 #b+ Link the indicator with its icon ?
 #{It will then be resized like the icon, move like the icon, etc. Otherwise it will be drawn directly on the dock.}
-link indicator = TRUE
+link indicator = true
 
 #i+[-10;64] Vertical offset :
 #{in pixels. You can use this parameter to adjust the indicator's vertical position.}

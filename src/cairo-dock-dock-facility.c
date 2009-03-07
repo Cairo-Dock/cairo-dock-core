@@ -690,13 +690,14 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 	CairoDockMousePositionType iMousePositionType;
 	int iWidth = pDock->iCurrentWidth;
 	int iHeight = pDock->iCurrentHeight;
+	int iExtraHeight = (pDock->bAtBottom ? 0 : myLabels.iconTextDescription.iSize);
 	int iMouseX = pDock->iMouseX;
 	int iMouseY = pDock->iMouseY;
 	//g_print ("%s (%dx%d, %dx%d, %f)\n", __func__, iMouseX, iMouseY, iWidth, iHeight, pDock->fFoldingFactor);
 
 	//\_______________ On regarde si le curseur est dans le dock ou pas, et on joue sur la taille des icones en consequence.
 	int x_abs = pDock->iMouseX + (pDock->fFlatDockWidth - iWidth) / 2;  // abscisse par rapport a la gauche du dock minimal plat.
-	gboolean bMouseInsideDock = (/**pDock->bInside && */x_abs >= 0 && x_abs <= pDock->fFlatDockWidth && iMouseX > 0 && iMouseX < iWidth);
+	gboolean bMouseInsideDock = (x_abs >= 0 && x_abs <= pDock->fFlatDockWidth && iMouseX > 0 && iMouseX < iWidth);
 	//g_print ("bMouseInsideDock : %d (%d;%d/%.2f)\n", bMouseInsideDock, pDock->bInside, x_abs, pDock->fFlatDockWidth);
 
 	if (! bMouseInsideDock)
@@ -707,7 +708,7 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 		else
 			iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;
 	}
-	else if (iMouseY >= 0 && iMouseY <= iHeight)  // et en plus on est dedans en y.  //  && pPointedIcon != NULL
+	else if ((pDock->bDirectionUp && iMouseY >= iExtraHeight && iMouseY <= iHeight) || (!pDock->bDirectionUp && iMouseY >= 0 && iMouseY <= iHeight - iExtraHeight))  // et en plus on est dedans en y.  //  && pPointedIcon != NULL
 	{
 		//g_print ("on est dedans en x et en y (iMouseX=%d => x_abs=%d)\n", iMouseX, x_abs);
 		//pDock->bInside = TRUE;

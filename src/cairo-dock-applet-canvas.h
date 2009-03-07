@@ -336,19 +336,19 @@ CD_APPLET_ON_UPDATE_ICON_PROTO \
 #define CD_APPLET_ON_UPDATE_ICON_END \
 	*bContinueAnimation = TRUE;\
 	CD_APPLET_REDRAW_MY_ICON; \
-	return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
 }
 
 #define CD_APPLET_SKIP_UPDATE_ICON do { \
 	*bContinueAnimation = TRUE; \
-	return CAIRO_DOCK_INTERCEPT_NOTIFICATION; } while (0)
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION; } while (0)
 
 #define CD_APPLET_STOP_UPDATE_ICON \
-	return CAIRO_DOCK_INTERCEPT_NOTIFICATION
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION
 
 #define CD_APPLET_PAUSE_UPDATE_ICON do { \
 	CD_APPLET_REDRAW_MY_ICON; \
-	return CAIRO_DOCK_INTERCEPT_NOTIFICATION; } while (0)
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION; } while (0)
 
 //\______________________ about.
 /** Fonction 'A propos' toute faite, qui affiche un message dans une info-bulle. A inclure dans le .c.

@@ -516,6 +516,20 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 */
 #define CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET(cImagePath) \
 	cairo_dock_create_surface_for_icon (cImagePath, myDrawContext, myIcon->fWidth * (myDock ? (1 + g_fAmplitude) / myDock->fRatio : 1), myIcon->fHeight* (myDock ? (1 + g_fAmplitude) / myDock->fRatio : 1))
+/**
+*Charge une image utilisateur dans une surface, aux dimensions de l'icone de l'applet, ou une image par defaut si l'utilisateur n'a rien precise.
+*@param cImagePath chemin du fichier de l'image.
+*@return la surface nouvellement creee.
+*/
+#define CD_APPLET_LOAD_USER_SURFACE_FOR_MY_APPLET(cUserImageName, cDefaultLocalImageName) do { \
+	gchar *cImagePath; \
+	if (cUserImageName != NULL) \
+		cImagePath = cairo_dock_generate_file_path (cUserImageName); \
+	else \
+		cImagePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, cDefaultLocalImageName); \
+	CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET (cImagePath); \
+	g_free (cImagePath); } while (0)
+
 
 /**
 *Applique une surface existante sur le contexte de dessin de l'applet, et la rafraichit.
@@ -569,9 +583,9 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 *@param cImageName nom du fichier de l'image 
 */
 #define CD_APPLET_SET_LOCAL_IMAGE_ON_MY_ICON(cImageName) do { \
-		gchar *_cImageFilePath = g_strconcat (MY_APPLET_SHARE_DATA_DIR, "/", cImageName, NULL); \
-		CD_APPLET_SET_IMAGE_ON_MY_ICON (_cImageFilePath); \
-		g_free (_cImageFilePath); } while (0)
+	gchar *_cImageFilePath = g_strconcat (MY_APPLET_SHARE_DATA_DIR, "/", cImageName, NULL); \
+	CD_APPLET_SET_IMAGE_ON_MY_ICON (_cImageFilePath); \
+	g_free (_cImageFilePath); } while (0)
 
 /**
 *Idem que precedemment mais l'image est definie soit relativement au repertoire utilisateur, soit relativement au repertoire d'installation de l'applet si la 1ere est NULL.
@@ -579,13 +593,13 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 *@param cDefaultLocalImageName image locale par defaut cote installation.
 */
 #define CD_APPLET_SET_USER_IMAGE_ON_MY_ICON(cUserImageName, cDefaultLocalImageName) do { \
-		gchar *cImagePath; \
-		if (cUserImageName != NULL) \
-			cImagePath = cairo_dock_generate_file_path (cUserImageName); \
-		else \
-			cImagePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, cDefaultLocalImageName); \
-		CD_APPLET_SET_IMAGE_ON_MY_ICON (cImagePath); \
-		g_free (cImagePath); } while (0)
+	gchar *cImagePath; \
+	if (cUserImageName != NULL) \
+		cImagePath = cairo_dock_generate_file_path (cUserImageName); \
+	else \
+		cImagePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, cDefaultLocalImageName); \
+	CD_APPLET_SET_IMAGE_ON_MY_ICON (cImagePath); \
+	g_free (cImagePath); } while (0)
 
 #define CD_APPLET_SET_DEFAULT_IMAGE_ON_MY_ICON_IF_NONE do { \
 	if (myIcon->acFileName == NULL) { \

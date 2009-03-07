@@ -116,9 +116,6 @@ gboolean cairo_dock_render_flying_container_notification (gpointer pUserData, Ca
 		if (pIcon != NULL)
 		{
 			cairo_save (pCairoContext);
-			cairo_translate (pCairoContext, 
-				(pFlyingContainer->iWidth - pIcon->fWidth * pIcon->fScale) / 2,
-				pFlyingContainer->iHeight - pIcon->fHeight * pIcon->fScale);
 			cairo_dock_render_one_icon (pIcon, pFlyingContainer, pCairoContext, 1., TRUE);
 			cairo_restore (pCairoContext);
 			
@@ -168,14 +165,14 @@ gboolean cairo_dock_render_flying_container_notification (gpointer pUserData, Ca
 			int iCurrentFrame = EXPLOSION_NB_FRAMES - pFlyingContainer->iAnimationCount;
 			
 			glEnable (GL_SCISSOR_TEST);
-			glScissor (x,
-				y,
+			glScissor (pFlyingContainer->iWidth/2-s_fExplosionWidth/2,
+				pFlyingContainer->iHeight/2-s_fExplosionHeight/2,
 				s_fExplosionWidth,
 				s_fExplosionHeight);
 			
-			glTranslatef (x + s_fExplosionWidth * (.5 * EXPLOSION_NB_FRAMES - iCurrentFrame),
-				y - .5 * s_fExplosionHeight,
-				0.);
+			glTranslatef (pFlyingContainer->iWidth/2 + s_fExplosionWidth * (.5 * EXPLOSION_NB_FRAMES - iCurrentFrame),
+				pFlyingContainer->iHeight/2,
+				-3.);
 			
 			glColor4f (1., 1., 1., 1.);
 			cairo_dock_draw_texture (s_iExplosionTexture,
@@ -318,7 +315,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	
 	pFlyingContainer->bDrawHand = bDrawHand;
 	if (bDrawHand)
-		cairo_dock_request_icon_animation (pFlyingIcon, pFlyingContainer, bDrawHand ? "fire" : "bounce", 1e6);
+		cairo_dock_request_icon_animation (pFlyingIcon, pFlyingContainer, bDrawHand ? "pulse" : "bounce", 1e6);
 	cairo_dock_launch_animation (pFlyingContainer);  // au cas ou pas d'animation.
 	
 	return pFlyingContainer;

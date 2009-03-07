@@ -1817,7 +1817,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			if (bAddBackButton && cOriginalConfFilePath != NULL)
 			{
 				pBackButton = gtk_button_new ();
-				GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_UNDO, GTK_ICON_SIZE_BUTTON);  // GTK_STOCK_CLEAR
+				GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_UNDO, GTK_ICON_SIZE_MENU);  // GTK_STOCK_CLEAR  // gtk_image_new_from_stock (GTK_STOCK_UNDO, GTK_ICON_SIZE_BUTTON);
 				gtk_button_set_image (GTK_BUTTON (pBackButton), pImage);
 				g_signal_connect (G_OBJECT (pBackButton), "clicked", G_CALLBACK(_cairo_dock_set_original_value), pGroupKeyWidget);
 				_pack_in_widget_box (pBackButton);

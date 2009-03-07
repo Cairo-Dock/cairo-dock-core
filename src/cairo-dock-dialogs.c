@@ -11,10 +11,17 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <math.h>
 #include <gdk/gdkkeysyms.h>
 
+#include <gtk/gtkgl.h>
+#include <GL/gl.h> 
+#include <GL/glu.h> 
+#include <GL/glx.h> 
+#include <gdk/x11/gdkglx.h>
+
 #include "cairo-dock-icons.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-draw.h"
+#include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-dock-manager.h"
@@ -27,6 +34,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-animations.h"
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-dialogs.h"
 
 extern CairoDock *g_pMainDock;
@@ -35,6 +43,7 @@ extern gint g_iScreenWidth[2], g_iScreenHeight[2];
 extern int g_iScreenOffsetX, g_iScreenOffsetY;
 extern gboolean g_bSticky;
 extern gboolean g_bKeepAbove;
+extern gboolean g_bUseOpenGL;
 
 static GSList *s_pDialogList = NULL;
 static cairo_surface_t *s_pButtonOkSurface = NULL;
@@ -272,96 +281,134 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 {
 	//cd_message ("%s (%dx%d)", __func__, pDialog->iWidth, pDialog->iHeight);
 	int x, y;
-	cairo_t *pCairoContext;
-	
-	if ((pExpose->area.x != 0 || pExpose->area.y != 0) && pDialog->fReflectAlpha == 0)
+	if (g_bUseOpenGL && (pDialog->pDecorator == NULL || pDialog->pDecorator->render_opengl != NULL) && (pDialog->pRenderer == NULL || pDialog->pRenderer->render_opengl != NULL))
 	{
-		if (pDialog->pIconBuffer != NULL)
+		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pDialog->pWidget);
+		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pDialog->pWidget);
+		if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+			return FALSE;
+		
+		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glLoadIdentity ();
+		
+		cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDialog));
+		
+		if (pDialog->pDecorator != NULL && pDialog->pDecorator->render_opengl != NULL)
 		{
-			x = pDialog->iLeftMargin;
-			y = (pDialog->bDirectionUp ? pDialog->iTopMargin : pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
-			if (pExpose->area.x >= x &&
-				pExpose->area.x + pExpose->area.width <= x + pDialog->iIconSize &&
-				pExpose->area.y >= y &&
-				pExpose->area.y + pExpose->area.height <= y + pDialog->iIconSize)
-			{
-				//cd_debug ("icon redraw");
-				pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &pExpose->area, myDialogs.fDialogColor);
-				cairo_set_source_surface (pCairoContext,
-					pDialog->pIconBuffer,
-					x - (pDialog->iCurrentFrame * pDialog->iIconSize),
-					y);
-				cairo_paint (pCairoContext);
-				cairo_destroy (pCairoContext);
-				return FALSE;
-			}
+			glPushMatrix ();
+			pDialog->pDecorator->render_opengl (pDialog);
+			glPopMatrix ();
 		}
-
-		if (pDialog->pTextBuffer != NULL)
+		
+		cairo_dock_notify (CAIRO_DOCK_RENDER_DIALOG, pDialog, 1.);
+		if (pDialog->fReflectAlpha != 0)
 		{
-			x = pDialog->iLeftMargin + pDialog->iIconSize + CAIRO_DIALOG_TEXT_MARGIN;
-			y = (pDialog->bDirectionUp ? pDialog->iTopMargin : pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
-			if (pExpose->area.x >= x &&
-				pExpose->area.x + pExpose->area.width <= x + _drawn_text_width (pDialog) && 
-				pExpose->area.y >=  y&&
-				pExpose->area.y + pExpose->area.height <= y + pDialog->iTextHeight)
+			glTranslatef (0.,
+				pDialog->iHeight - 2* (pDialog->iTopMargin + pDialog->iBubbleHeight),
+				0.);
+			glScalef (1., -1., 1.);
+			cairo_dock_notify (CAIRO_DOCK_RENDER_DIALOG, pDialog, pDialog->fReflectAlpha);
+		}
+		
+		if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
+			gdk_gl_drawable_swap_buffers (pGlDrawable);
+		else
+			glFlush ();
+		gdk_gl_drawable_gl_end (pGlDrawable);
+	}
+	else
+	{
+		cairo_t *pCairoContext;
+		
+		if ((pExpose->area.x != 0 || pExpose->area.y != 0) && pDialog->fReflectAlpha == 0)
+		{
+			if (pDialog->pIconBuffer != NULL)
 			{
-				//cd_debug ("text redraw");
-				pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &pExpose->area, myDialogs.fDialogColor);
-				if (pDialog->iTextHeight < pDialog->iMessageHeight)  // on centre le texte.
-					y += (pDialog->iMessageHeight - pDialog->iTextHeight) / 2;
-				cairo_set_source_surface (pCairoContext,
-					pDialog->pTextBuffer,
-					x - pDialog->iCurrentTextOffset,
-					y);
-				cairo_paint (pCairoContext);
-				
-				if (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth)
+				x = pDialog->iLeftMargin;
+				y = (pDialog->bDirectionUp ? pDialog->iTopMargin : pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
+				if (pExpose->area.x >= x &&
+					pExpose->area.x + pExpose->area.width <= x + pDialog->iIconSize &&
+					pExpose->area.y >= y &&
+					pExpose->area.y + pExpose->area.height <= y + pDialog->iIconSize)
 				{
+					//cd_debug ("icon redraw");
+					pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &pExpose->area, myDialogs.fDialogColor);
 					cairo_set_source_surface (pCairoContext,
-						pDialog->pTextBuffer,
-						x - pDialog->iCurrentTextOffset + pDialog->iTextWidth + 10,
+						pDialog->pIconBuffer,
+						x - (pDialog->iCurrentFrame * pDialog->iIconSize),
 						y);
 					cairo_paint (pCairoContext);
-					cairo_restore (pCairoContext);
+					cairo_destroy (pCairoContext);
+					return FALSE;
 				}
-				
-				cairo_destroy (pCairoContext);
-				return FALSE;
+			}
+
+			if (pDialog->pTextBuffer != NULL)
+			{
+				x = pDialog->iLeftMargin + pDialog->iIconSize + CAIRO_DIALOG_TEXT_MARGIN;
+				y = (pDialog->bDirectionUp ? pDialog->iTopMargin : pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
+				if (pExpose->area.x >= x &&
+					pExpose->area.x + pExpose->area.width <= x + _drawn_text_width (pDialog) && 
+					pExpose->area.y >=  y&&
+					pExpose->area.y + pExpose->area.height <= y + pDialog->iTextHeight)
+				{
+					//cd_debug ("text redraw");
+					pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &pExpose->area, myDialogs.fDialogColor);
+					if (pDialog->iTextHeight < pDialog->iMessageHeight)  // on centre le texte.
+						y += (pDialog->iMessageHeight - pDialog->iTextHeight) / 2;
+					cairo_set_source_surface (pCairoContext,
+						pDialog->pTextBuffer,
+						x - pDialog->iCurrentTextOffset,
+						y);
+					cairo_paint (pCairoContext);
+					
+					if (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth)
+					{
+						cairo_set_source_surface (pCairoContext,
+							pDialog->pTextBuffer,
+							x - pDialog->iCurrentTextOffset + pDialog->iTextWidth + 10,
+							y);
+						cairo_paint (pCairoContext);
+						cairo_restore (pCairoContext);
+					}
+					
+					cairo_destroy (pCairoContext);
+					return FALSE;
+				}
 			}
 		}
-	}
-	pCairoContext = cairo_dock_create_drawing_context (CAIRO_CONTAINER (pDialog));
-	//cd_debug ("redraw");
-	
-	if (pDialog->pDecorator != NULL)
-	{
-		cairo_save (pCairoContext);
-		pDialog->pDecorator->render (pCairoContext, pDialog);
-		cairo_restore (pCairoContext);
-	}
-	
-	_cairo_dock_draw_inside_dialog (pCairoContext, pDialog, 0.);
+		pCairoContext = cairo_dock_create_drawing_context (CAIRO_CONTAINER (pDialog));
+		//cd_debug ("redraw");
+		
+		if (pDialog->pDecorator != NULL)
+		{
+			cairo_save (pCairoContext);
+			pDialog->pDecorator->render (pCairoContext, pDialog);
+			cairo_restore (pCairoContext);
+		}
+		
+		_cairo_dock_draw_inside_dialog (pCairoContext, pDialog, 0.);
 
-	if (pDialog->fReflectAlpha != 0)
-	{
-		cairo_save (pCairoContext);
-		cairo_rectangle (pCairoContext,
-			0.,
-			pDialog->iTopMargin + pDialog->iBubbleHeight,
-			pDialog->iBubbleWidth,
-			pDialog->iBottomMargin);
-		g_print( "pDialog->iBottomMargin:%d\n", pDialog->iBottomMargin);
-		cairo_clip (pCairoContext);
+		if (pDialog->fReflectAlpha != 0)
+		{
+			cairo_save (pCairoContext);
+			cairo_rectangle (pCairoContext,
+				0.,
+				pDialog->iTopMargin + pDialog->iBubbleHeight,
+				pDialog->iBubbleWidth,
+				pDialog->iBottomMargin);
+			g_print( "pDialog->iBottomMargin:%d\n", pDialog->iBottomMargin);
+			cairo_clip (pCairoContext);
 
-		cairo_translate (pCairoContext,
-			0.,
-			2* (pDialog->iTopMargin + pDialog->iBubbleHeight));
-		cairo_scale (pCairoContext, 1., -1.);
-		_cairo_dock_draw_inside_dialog (pCairoContext, pDialog, pDialog->fReflectAlpha);
+			cairo_translate (pCairoContext,
+				0.,
+				2* (pDialog->iTopMargin + pDialog->iBubbleHeight));
+			cairo_scale (pCairoContext, 1., -1.);
+			_cairo_dock_draw_inside_dialog (pCairoContext, pDialog, pDialog->fReflectAlpha);
+		}
+
+		cairo_destroy (pCairoContext);
 	}
-
-	cairo_destroy (pCairoContext);
 	return FALSE;
 }
 

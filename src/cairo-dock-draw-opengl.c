@@ -1035,7 +1035,7 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 #define B3(t) t*t*t
 #define Bezier(x0,x1,x2,x3,t) (B0(t)*x0 + B1(t)*x1 + B2(t)*x2 + B3(t)*x3)
 #define _get_icon_center_x(icon) (icon->fDrawX + icon->fWidth * icon->fScale/2)
-#define _get_icon_center_y(icon) (icon->fDrawY - icon->fHeight * icon->fScale/2 - (bForceConstantSeparator && CAIRO_DOCK_IS_SEPARATOR (icon) ? icon->fHeight * (icon->fScale - 1) / 2 : 0))
+#define _get_icon_center_y(icon) (icon->fDrawY + (bForceConstantSeparator && CAIRO_DOCK_IS_SEPARATOR (icon) ? icon->fHeight * (icon->fScale - .5) : icon->fHeight * icon->fScale/2))
 #define _get_icon_center(icon,x,y) do {\
 	x = _get_icon_center_x (icon);\
 	y = _get_icon_center_y (icon); } while (0)
@@ -1079,9 +1079,9 @@ GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsL
 		next2_ic = cairo_dock_get_previous_element (ic, pDock->icons);  // icone precedente dans la boucle.
 		pNext2Icon = next2_ic->data;
 		_get_icon_center (pNext2Icon,x2,y2);
-		_calculate_slope (x2,y2, x1,y1, dx,dy);
+		_calculate_slope (x2,y2, x0,y0, dx,dy);
 	}
-	// direction initiale au point suivant.
+	// point suivant.
 	next2_ic = cairo_dock_get_next_element (next_ic, pDock->icons);
 	pNext2Icon = next2_ic->data;
 	_get_icon_center (pNext2Icon,x2,y2);
@@ -1105,7 +1105,7 @@ GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsL
 		_calculate_slope (x0,y0, x2,y2, dx_,dy_);
 		
 		// points de controle.
-		norme = sqrt ((x1-x0) * (x1-x0) + (y1-y0) * (y1-y0))/3;  // distance de prolongation suivant la pente.
+		norme = sqrt ((x1-x0) * (x1-x0) + (y1-y0) * (y1-y0))/2;  // distance de prolongation suivant la pente.
 		x0_ = x0 + dx * norme;
 		y0_ = y0 + dy * norme;
 		x1_ = x1 - dx_ * norme;
@@ -1122,6 +1122,8 @@ GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsL
 		ic = next_ic;
 		next_ic = next2_ic;
 		next2_ic = cairo_dock_get_next_element (next_ic, pDock->icons);
+		dx = dx_;
+		dy = dy_;
 		if (next_ic == pFirstDrawnElement && ! bIsLoop)
 			break ;
 	}
@@ -1379,10 +1381,8 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 {
 	g_return_if_fail (pIcon->iIconTexture != 0);
 	// taille de la texture
-	double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	double fRatio = pContainer->fRatio;
-	int iWidth = (int) pIcon->fWidth / fRatio * fMaxScale;
-	int iHeight = (int) pIcon->fHeight / fRatio * fMaxScale;
+	int iWidth, iHeight;
+	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
 	
 	// copie dans notre texture
 	glEnable (GL_TEXTURE_2D);
@@ -1391,8 +1391,22 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_ZERO, GL_ONE);
 	glColor4f(1., 1., 1., 1.);
-	glCopyTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, iWidth, iHeight, 0);  // target, num mipmap, format, x,y, w,h, border.
+	
+	int x,y;
+	if (CAIRO_DOCK_IS_DESKLET (pContainer))
+	{
+		x = (pContainer->iWidth - iWidth)/2;
+		y = (pContainer->iHeight - iHeight)/2;
+	}
+	else
+	{
+		x = (s_iIconPbufferWidth - iWidth)/2;
+		y = (s_iIconPbufferHeight - iHeight)/2;
+	}
+	
+	glCopyTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, x, y, iWidth, iHeight, 0);  // target, num mipmap, format, x,y, w,h, border.
 	glDisable (GL_TEXTURE_2D);
+	glDisable (GL_ZERO);
 	
 	//end
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
@@ -1424,11 +1438,10 @@ void cairo_dock_set_perspective_view (int iWidth, int iHeight)
 	glMatrixMode (GL_MODELVIEW);
 	
 	glLoadIdentity ();
-	gluLookAt (iWidth/2, iHeight/2, 3.,
-		iWidth/2, iHeight/2, 0.,
+	gluLookAt (0., 0., 3.,
+		0., 0., 0.,
 		0.0f, 1.0f, 0.0f);
-	glTranslatef (0.0f, 0.0f, -3);
-	glTranslatef (iWidth/2, iHeight/2, -iHeight*(sqrt(3)/2));
+	glTranslatef (0., 0., -iHeight*(sqrt(3)/2) - 1);
 }
 
 void cairo_dock_set_ortho_view (int iWidth, int iHeight)
@@ -1439,10 +1452,10 @@ void cairo_dock_set_ortho_view (int iWidth, int iHeight)
 	glMatrixMode (GL_MODELVIEW);
 	
 	glLoadIdentity ();
-	gluLookAt (iWidth/2, iHeight/2, 3.,
-		iWidth/2, iHeight/2, 0.,
+	gluLookAt (0., 0., 3.,
+		0., 0., 0.,
 		0.0f, 1.0f, 0.0f);
-	glTranslatef (iWidth, iHeight, - iHeight/2);
+	glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
 }
 
 GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHasBeenForced)  // taken from a MacSlow's exemple.
