@@ -98,6 +98,10 @@ _("This allows to group windows in some soft like Gimp, and to have only 1 icon 
 
 _("Should the applications with same class be grouped in a sub-dock ?")
 
+_("enter the class of the applications, separated by a semi-colon ';'")
+
+_("Except the following classes :")
+
 _("Only show icons whose window is minimized ?")
 
 _("Only show applis on current desktop ?")
@@ -109,6 +113,10 @@ _("Mix launchers and applis ?")
 _("If not set, will use the icon provided by X for each appli. If set, the same icon as the corresponding launcher will be used for each appli.")
 
 _("Overwrite X icons with launchers' one ?")
+
+_("enter the class of the applications, separated by a semi-colon ';'")
+
+_("Except the following classes :")
 
 _("You need a composite manager for it.")
 
@@ -248,7 +256,7 @@ _("Hidden dock")
 
 _("Place the mouse into it will make the dock re-appear.")
 
-_("Size of the dock (width x height, in pixels) :")
+_("Size of the callback zone (width x height, in pixels) :")
 
 _("This is what you see when the dock hides itselfs. Any format is allowed. Let this field empty to have an invisible zone.")
 
@@ -346,15 +354,15 @@ _("Configure the label readability.")
 
 _("Icons")
 
-_("Wave's shape")
+_("Zoom effect")
 
-_("the maximum zoom will be 1+C.")
+_("set to 1 if you don't want the icons to zoom when you hover them.")
 
-_("Crest of the wave :")
+_("Maximum zoom of the icons :")
 
-_("in pixels. Outside of this interval (centered on the mouse), the wave is flat.")
+_("in pixels. Outside of this interval (centered on the mouse), there is no zoom.")
 
-_("Width of the interval in which the wave will be effective :")
+_("Width of the interval in which the zoom will be effective :")
 
 _("in pixels.")
 
@@ -380,11 +388,11 @@ _("It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are no
 
 _("Reflecting power of the plane :")
 
-_(/* xgettext:no-c-format */ "More precisely, it is the fraction of the max icon height that will be used to draw reflect. So setting it to 0.33 will mean that 33% of the icons will reflect on the ground, and the icons will be placed at the right distance from the front border of the frame so that the reflect is fully visible.")
+_("Setting it to 0.33 will mean that 33% of the icons will reflect on the ground. The icons will be placed at the right distance from the front border of the frame so that the reflect is fully visible.")
 
-_("Field depth of the view:")
+_("Fraction of the icon height that will reflect :")
 
-_("It is their transparency when the wave is flat; they will \"materialize\" progressively as the dock grows up. The closer to 0, the more transparent they will be.")
+_("It is their transparency when the dock is at rest; they will \"materialize\" progressively as the dock grows up. The closer to 0, the more transparent they will be.")
 
 _("Icons' transparency at rest :")
 
@@ -396,15 +404,9 @@ _("Color of the string (red, blue, green, alpha) :")
 
 _("Icons size")
 
-_("Put 0 if you don't want to restrain them")
-
 _("Launcher's size at rest (width x height) :")
 
-_("Put 0 if you don't want to restrain them")
-
 _("Appli's size at rest (width x height) :")
-
-_("Put 0 if you don't want to restrain them")
 
 _("Applet's size at rest (width x height) :")
 
@@ -415,8 +417,6 @@ _("Configure icons special effects (require OpenGL capacity).")
 _("Configure icons animations on appearing/disappearing (require OpenGL capacity).")
 
 _("Separators")
-
-_("Put 0 if you don't want to restrain them")
 
 _("Icon size at rest (width x height) :")
 
@@ -552,6 +552,10 @@ _("If you don't provide any, a default image will be used.")
 
 _("Name of an image to use for the 'retach' button :")
 
+_("If you don't provide any, a default image will be used.")
+
+_("Name of an image to use for the 'depth rotate' button :")
+
 _("Indicators")
 
 _("Indicator of drag'n'drop on icons")
@@ -599,6 +603,14 @@ _("Link the indicator with its icon ?")
 _("in pixels. You can use this parameter to adjust the indicator's vertical position.")
 
 _("Vertical offset :")
+
+_("Indicator of class subdock")
+
+_("It only makes sense if you choosed to group the applis of the same class togather. Let blank to use the default one.")
+
+_("Filename of an image to indicate that a class has been grouped in a subdock :")
+
+_("Zoom the indicator with its icon ?")
 
 _("Misc. Emblems")
 
@@ -1298,6 +1310,238 @@ _("Name of the container it belongs to:")
 
 _("Name of the view used for the sub-dock :")
 
+_("Icons")
+
+_("How can I re-order my icons ?")
+
+_("Hint : you can even re-order the icons of the current applications.")
+
+_("Simply drag them with the mouse, and drop it where you want.")
+
+_("How can I place the applets and taskbar icons at the beginning of the dock ?")
+
+_("Hint : you can also place applets amongst launchers, by ticking the box below.")
+
+_("In the \342\200\234icons\342\200\235 module, on the bottom,  you can choose the order of icons according to their type (launcher/appli/applet).")
+
+_("How can I change the image of an icon ?")
+
+_("Hint : you can also directly edit a launcher\342\200\231s configuration, and set a path for an image. If you don\342\200\231t write a path, but simply the name of an image, don\342\200\231t put the extension (.svg, .png, etc), to let the dock choose the best.")
+
+_("In the \342\200\234Icons\342\200\235 module, you can choose a <b>icon theme</b>. Enter a name of a theme, for exemple : Human or Gartoon.\nYou can even enter the path of a folder  containing personnal icons.\nBy default, all the themes put here the local icons folder \342\200\234_LocalIcons\342\200\235, that is in fact  ~/.config/cairo-dock/current_theme/icons.\nYou can enter many themes or folders, the dock will search for images In them in the same order as you entered them. If you let  it empty, the default icon theme of your system wil be used.")
+
+_("How can I quickly remove many icons ?")
+
+_("Hint : if you delete an icon pointing on a sub-dock, you will be asked to delete the sub-dock\342\200\231s icons as well, or to move them in the main dock.")
+
+_("Just drag and drop them out of the dock, they will disappear in an explosion !")
+
+_("Dock")
+
+_("How can I place my dock on the screen ?")
+
+_("Hint : If you have a multi-screen managed by Xinerama, you can tick the option \342\200\234Use Xinerama\342\200\235, and choose the screen where you want your dock to be.")
+
+_("All is in the \342\200\234Position\342\200\235 module. You can choose to place it on the bottom, top, left or right side of your screen.\nMoreover, you can also place it on the beginning, center, or end of the screen border.")
+
+_("How can I adjust the position of the dock above the gnome-panel ?")
+
+_("Hint : you can also just dragging your dock with the mouse, by pressing the ALT key at the same time.")
+
+_("In the \342\200\234Position\342\200\235 module, you can add an offset to the screen border.")
+
+_("The dock is hidden by the gnome-panel")
+
+_("it\342\200\231s normal, because they both are \342\200\234docks\342\200\235. You can either move the dock above the panel, or launch it wih the command \342\200\234cairo-dock \342\200\223keep-above\342\200\235.")
+
+_("How can I add a separator ?")
+
+_("Simply right-click on the dock where you want to add a separator, and select \342\200\234add a separator\342\200\235.\nYou can place it wherever you want (except in amongst taskbar icons) by dragging it with the mouse.")
+
+_("I don\342\200\231t want to have a separator between launchers , applis and applets")
+
+_("In the \342\200\234Icons\342\200\235 module, under the \342\200\234separator\342\200\235 part, untick the box that says to \342\200\234add automatic separators\342\200\235.")
+
+_("How can I add a sub-dock ?")
+
+_("Hint : to move an icon into a subdock, edit  its configuration, and in the list of the docks, choose the one you want. You can do the same with applets as well, allowing you to group many applets in a sub-dok !")
+
+_("Just right-click on the dock, then select \342\200\234add a sub-dock\342\200\235. Fill the config panel with some name and image, then validate.")
+
+_("How can I have many main docks ?")
+
+_("Hint : you can then move icons inside this new dock by following the previous method.\nTo place this new dock, right click on it, and in the Cairo-dock sub-menu choose \342\200\234configure this dock\342\200\235.")
+
+_("Edit a launcher or an applet, and in the list of the available docks, enter a name that doesn\342\200\231t exist yet. A new dock will be created, with this icon inside.")
+
+_("How do I get a 3D dock ?")
+
+_("Hint : you can setup the view for each sub-dock; just edit the icon pointing on the sub-dock, and choose the view you want for it.")
+
+_("any dock can be displayed with one view, and many views are available (3D, Curve, etc). They are mostly provided by the \342\200\234dock-rendering\342\200\235 plug-in, so be sure to activate it.\nThen, go to the \342\200\234Views\342\200\235 module, and choose the view you want for main dock, and for sub-dock.")
+
+_("I don\342\200\231t want other windows to hover the dock")
+
+_("Hint : if you use it, you don\342\200\231t need to use the \342\200\234keep the dock below \342\200\234option.")
+
+_("Just use the option \342\200\234reserve space for dock\342\200\235 in the \342\200\234Accessibility\342\200\235 module.")
+
+_("I don\342\200\231t want to dock to hover windows")
+
+_("Hint : you can choose to pop-up the dock only when the mouse hits the screen corner instead of the whole screen border.\nYou can also setup the size of the trigger zone in the \342\200\234Hidden dock\342\200\235 module, and even set an image to it.")
+
+_("choices are available, in the \342\200\234Accessibility\342\200\235 module :\n - either choose to \342\200\234keep the dock below other windows\342\200\235. The dock will then pop-up when you place the mouse on its screen border.\n - or activate the auto-hide. The dock will then appear when you enter the trigger zone.")
+
+_("Desklet")
+
+_("What are these \342\200\234desklets\342\200\235 ?")
+
+_("Hint : to detach an applet, you can drag and drop its icon from the dock to the desktop")
+
+_("they are widgets that\342\200\231s are displayed on your desktop. Each applet can be detached from the dock to act as a desklet.")
+
+_("How do I setup their position ?")
+
+_("Hint : If you don\342\200\231t want to move it anymore, you can lock its position. Simply right click on the desklet, and select \342\200\234lock position\342\200\235. To unlock it, de-select this option.")
+
+_("Simply drag them with the mouse.")
+
+_("How do I set up their attitude ?")
+
+_("Hint : if you locked the desklet, the buttons won\342\200\231t appear. You can reset a rotation by middle-clicking on the appropriate button.")
+
+_("There are small buttons on the top and left side of the desklet. They allow  you to rotate the desklet in 3D !")
+
+_("How can I change their decorations ?")
+
+_("Hint : you can add new decorations, by choosing the \342\200\234personnal\342\200\235 decoration, and providing a background and/or foreground image. You can setup the offsets of these images to adjust the position of the drawings relatively to the decoration.")
+
+_("You need to have the \342\200\234desklet-rendering\342\200\235 plug-in activated. The default decoration is located in the \342\200\234desklet\342\200\235 module. You can choose between many decorations, and then apply.. All the desklet that don\342\200\231t use a \nEach desklet can have its own decoration. To change a desklet\342\200\231s decoration, go to the applet\342\200\231s configuration, click on the \342\200\234desklet\342\200\235 tab, and then choose the decoration you want.")
+
+_("How do I insert a desklet into the dock ?")
+
+_("Hint :  if the desklet is locked, the button won\342\200\231t appear.")
+
+_("Simply click on the top right button.")
+
+_("Taskbar")
+
+_("How do I activate the Taskbar ?")
+
+_("Hint : All the Taskbar\342\200\231s options are located in this module.")
+
+_("go to the \342\200\234Taskbar\342\200\235 module, then tick the first box, and apply.")
+
+_("I don\342\200\231t want to have many icons in the dock when I use Gimp/Pidgin/etc")
+
+_("Hint : You can then (middle)-click on this icon to switch from a window to another, in an ALT+TAB way.")
+
+_("Use the \342\200\234group applis by class\342\200\235 option. Only a single icon will appear in the dock. and if there are several windows, they will be group In a sub-dock above this icon.")
+
+_("I have ugly icons for some applis")
+
+_("Hint : This way, you can setup your personnal icon for any application. Just place an icon with the same name as the class of the application in a folder used by the dock (by default, ~/.config/cairo-dock/current_theme/icons)\nThe class of an appli can be found by typing xprop in a terminal, then clicking on the window of the appli.")
+
+_("it\342\200\231s because X provides small icons for applis, that don\342\200\231t look nice when zoomed. Use the option \342\200\234overwrite X icons\342\200\235, to tell the dock to not use them.")
+
+_("When I launch a program with its launcher, I don\342\200\231t want an additional icon in the taskbar")
+
+_("Hint : to launch another instance of theprogram, shift+click on the launcher.")
+
+_("Use the \342\200\234Mix applis and launchers\342\200\235 option.\nWhen a program is launched, if it has a launcher in the dock, this one will take an indicator to signal you that the corresponding application is running.\nYou can then act on the window as if it was a taskbar icon.")
+
+_("I\342\200\231m using Pidgin, and I want to see my friends\342\200\231 avatar")
+
+_("If you choosed to overwrite X icons, then the Pidgin icons will be overwritten as well.\nYou can edit the Pidgin launcher, and in the \342\200\234Extra parameters\342\200\235, tick the box that says to not overwrite X icon for this appli.")
+
+_("Replacing the gnome-panel")
+
+_("How can I have the main menu ?")
+
+_("Hint : if you removed your gnome-panel, then the \342\200\234alt+F1\342\200\235 shortkey does not work anymore. This applet let you setup a shortcut to pop up the menu at the mouse\342\200\231s location.")
+
+_("activate the Gmenu applet.")
+
+_("How can I have a simple \342\200\234quick launch\342\200\235 panel ?")
+
+_("Hint : if you removed your gnome-panel, then the \342\200\234alt+F2\342\200\235 shortkey does not work anymore. This applet let you setup a shortcut to pop up the quick-launch dialog.")
+
+_("activate the Gmenu applet, then you can have it by middle-clicking on its icon.")
+
+_("How can I have a logout icon ?")
+
+_("Hint : In the last Gnome version, there are 2 panel : one to logout, and one to turn off computer. The first one is raised by a click on the icon, the second by a middle-click, but the applet let you invert this order, and even let you enter your own commands.")
+
+_("Simply activate the \342\200\234logout\342\200\235 applet.")
+
+_("How can I access the dustbin ?")
+
+_("Hint : you can delete a file by dragging it into the dustbin. You can even unmount a mount-point this way !")
+
+_("Simply activate the \342\200\234dustbin\342\200\235 applet.")
+
+_("How can I access to my mount points ?")
+
+_("Hint : you can mount a volume by clicking on its icon. To unmount  it, right-click and select \342\200\234unmount\342\200\235.")
+
+_("Simply activate the \342\200\234shortcuts\342\200\235 applet.")
+
+_("How can I access to my Nautilus bookmarks ?")
+
+_("Hint : you can add a bookmark by dragging the folder onto the applet or into its sub-dock. You can also rename and remove them. This will also take effect in Nautilus immediately, and vice versa.")
+
+_("Simply activate the \342\200\234shortcuts\342\200\235 applet.")
+
+_("How can I access to my desktop ?")
+
+_("Hint : middle-clicking on it will hide all the windows, but not the desklets.")
+
+_("Simply activate the \342\200\234show desktop\342\200\235 applet.")
+
+_("How can I have an easy-to-acces calendar ?")
+
+_("activate the \342\200\234clock\342\200\235 applet; clicking on it will display a calendar, clicking again will hide it.")
+
+_("How can I have the notification area (also called systray) ?")
+
+_("activate the \342\200\234systray\342\200\235 applet. For the moment it can\342\200\231t be displayed directly into the dock, so clicking on the icon will pop-up a dialog containing the systray, middle-click will hide it. I recommend to detach this applet to make it a desklet, place it in a corner of your screen, and keep it above other windows.")
+
+_("How can I have an easy-to-access terminal with real transparence, like Tilda ?")
+
+_("Hint : clicking next to the last tab will create a new tab. Double-clicking on a tab allows you to rename it. You can even change the color of a tab !")
+
+_("activate the \342\200\234terminal\342\200\235 applet. You can detach it and place it on the Widget Layer for instance, or setup a shorkey to make it pop-up instantly.")
+
+_("So then, how can I remove completely the gnome-panel ?")
+
+_("Open gconf-editor, edit the key /desktop/gnome/session/required_components_list, and erase its content (\"panel\").\nRestart your session : the gnome-panel has not been started.")
+
+_("Other applets")
+
+_("The \342\200\234netspeed\342\200\235 applet displays 0 even when I\342\200\231m downloading something")
+
+_("Hint : you can instantiate this applet many times if you want to monitor many interfaces.")
+
+_("You have to tell it which interface you\342\200\231re using to connect to the Net (by default, it\342\200\231s \342\200\234eth0\342\200\235).\nJust edit its configuration, and enter the interface\342\200\231s name. To find it, type \342\200\234ifconfig\342\200\235 in a terminal, and ignore the \342\200\234loop\342\200\235 interface. It\342\200\231s probably something like \342\200\234eth1\342\200\235, \342\200\234ath0\342\200\235, or \342\200\234wifi0\342\200\235.")
+
+_("The dustbin remains empty even when I delete a file")
+
+_("if you\342\200\231re under KDE, you may have to tell it the path of the trash folder.\nJust edit the applet\342\200\231s configuration, and fill in the Trash path; it is probably \342\200\234~/.locale/share/Trash/files\342\200\235. Be very careful when typing a path here !!! (do not insert spaces or some invisible caracters).")
+
+_("I have a personal gauge that I want to use in the dock (for cpusage or others)")
+
+_("move the folder containing your gauge in ~/.config/cairo-dock/extras/gauges, you\342\200\231re done !")
+
+_("I have a personal Cairo-Clock theme that I want to use in the \342\200\234clock\342\200\235 applet.")
+
+_("Hint : the same goes on for all the applets that propose a theme : dustbin, Cairo-Penguin, weather, etc.")
+
+_("move the folder containing your theme in ~/.config/cairo-dock/extras/clock, you\342\200\231re done !")
+
+_("Help us !")
+
+_("We value your help ! If you see a bug, or if you think something could be improved,\nor if you just made a dream about the dock, pay us a visit on cairo-dock.org.\nEnglish speakers are welcome, so don\342\200\231t be shy ! ;-)\n\nIf you made a theme for the dock or one of the applet, and want to share it, we\342\200\231ll be happy to integrate it with the other themes !\nFabounet")
+
 _("Desktop Entry")
 
 _("Launcher's name :")
@@ -1432,5 +1676,5 @@ _("v1.6.2 : the first version integrated in the Ubuntu repositories !\n - 2 new 
 
 _("v1.6.3 : \n - first the bad news :\n user datas have been moved into ~/.config to respect the FreeDesktop standards.\n and local icons are now in a dedicated 'icons' sub-folder.\n So in advance, sorry for the possible inconvenience ^_^\n - And now the very good news !\n - 2 new applets have just been born : Clipper and GMenu. \n - Lot of improvements for Desklets : decorations, rotation, dragging, etc\n - Cpusage and other applets can now display nice graphics.\n - You can now remove launchers by dragging them out of the dock\n  and detach applet in the same way.\n - Smooth icons movement when dragging them inside the dock\n - The dock is now translated in Sweden and partially in Greek.")
 
-_("Cairo-Dock II\n - The lucky owners of NVidia cards can now benefit from a full OpenGL dock !\n For the moment, only the default and 3D-plane views are in OpenGL.\n - The config panel has been widely rewritten.\n - Lot of bug fixes and small upgrades in all plug-ins.")
+_("Cairo-Dock II\n - The lucky owners of NVidia/Intel cards can now benefit from a full OpenGL dock !\n including a lot of new effects and animations.\n - The config panel has been widely rewritten.\n - Desklets are now in 3D\n - Lot of bug fixes and upgrades in all plug-ins.")
 

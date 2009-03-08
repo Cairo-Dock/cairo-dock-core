@@ -690,7 +690,8 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 	CairoDockMousePositionType iMousePositionType;
 	int iWidth = pDock->iCurrentWidth;
 	int iHeight = pDock->iCurrentHeight;
-	int iExtraHeight = (pDock->bAtBottom ? 0 : myLabels.iconTextDescription.iSize);
+	///int iExtraHeight = (pDock->bAtBottom ? 0 : myLabels.iconTextDescription.iSize);
+	int iExtraHeight = 0;  /// il faudrait voir si on a un sous-dock ou un dialogue au dessus :-/
 	int iMouseX = pDock->iMouseX;
 	int iMouseY = pDock->iMouseY;
 	//g_print ("%s (%dx%d, %dx%d, %f)\n", __func__, iMouseX, iMouseY, iWidth, iHeight, pDock->fFoldingFactor);
