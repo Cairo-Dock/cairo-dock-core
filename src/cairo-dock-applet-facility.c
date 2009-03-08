@@ -398,6 +398,11 @@ gboolean cairo_dock_measure_is_active (CairoDockMeasure *pMeasureTimer)
 	return (pMeasureTimer != NULL && pMeasureTimer->iSidTimer != 0);
 }
 
+gboolean cairo_dock_measure_is_running (CairoDockMeasure *pMeasureTimer)
+{
+	return (pMeasureTimer != NULL && pMeasureTimer->iSidTimerRedraw != 0);
+}
+
 static void _cairo_dock_restart_timer_with_frequency (CairoDockMeasure *pMeasureTimer, int iNewCheckInterval)
 {
 	gboolean bNeedsRestart = (pMeasureTimer->iSidTimer != 0);

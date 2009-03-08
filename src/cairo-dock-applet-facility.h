@@ -165,6 +165,12 @@ void cairo_dock_free_measure_timer (CairoDockMeasure *pMeasureTimer);
 */
 gboolean cairo_dock_measure_is_active (CairoDockMeasure *pMeasureTimer);
 /**
+*Dis si une mesure est en cours, c'est a dire si elle est soit dans le thread, soit en attente d'update.
+*@param pMeasureTimer la mesure periodique.
+*@return TRUE ssi la mesure est en cours.
+*/
+gboolean cairo_dock_measure_is_running (CairoDockMeasure *pMeasureTimer);
+/**
 *Change la frequence des mesures. La prochaine mesure aura lien dans 1 iteration si elle etait deja active.
 *@param pMeasureTimer la mesure periodique.
 *@param iNewCheckInterval le nouvel intervalle entre 2 mesures, en s.
