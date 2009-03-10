@@ -1114,8 +1114,16 @@ GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsL
 		for (i = 0; i < NB_VERTEX_PER_ICON_PAIR; i ++, n++)
 		{
 			t = 1.*i/NB_VERTEX_PER_ICON_PAIR;  // [0;1[
-			pVertexTab[3*n] = Bezier (x0,x0_,x1_,x1,t);
-			pVertexTab[3*n+1] = pDock->iCurrentHeight - Bezier (y0,y0_,y1_,y1,t);
+			if (pDock->bHorizontalDock)
+			{
+				pVertexTab[3*n] = Bezier (x0,x0_,x1_,x1,t);
+				pVertexTab[3*n+1] = pDock->iCurrentHeight - Bezier (y0,y0_,y1_,y1,t);
+			}
+			else
+			{
+				pVertexTab[3*n] = Bezier (y0,y0_,y1_,y1,t);
+				pVertexTab[3*n+1] = pDock->iCurrentWidth - Bezier (x0,x0_,x1_,x1,t);
+			}
 		}
 		
 		// on decale tout d'un cran.
