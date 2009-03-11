@@ -513,7 +513,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		}
 		fLastTime = pMotion->time;
 
-		if (s_pIconClicked != NULL/* && pDock->iAvoidingMouseIconType == -1*/)
+		if (s_pIconClicked != NULL && s_pIconClicked->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT)
 		{
 			s_pIconClicked->iAnimationState = CAIRO_DOCK_STATE_FOLLOW_MOUSE;
 			//pDock->fAvoidingMouseMargin = .5;
@@ -1286,7 +1286,10 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 			case GDK_BUTTON_PRESS :
 				if ( ! (pButton->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
 				{
-					s_pIconClicked = icon;  // on ne definit pas l'animation FOLLOW_MOUSE ici , on le fera apres le 1er mouvement, pour eviter que l'icone soit dessinee comme tel quand on clique dessus alors que le dock est en train de jouer une animation (ca provoque un flash desagreable).
+					if (icon && icon->fPersonnalScale <= 0)
+						s_pIconClicked = icon;  // on ne definit pas l'animation FOLLOW_MOUSE ici , on le fera apres le 1er mouvement, pour eviter que l'icone soit dessinee comme tel quand on clique dessus alors que le dock est en train de jouer une animation (ca provoque un flash desagreable).
+					else
+						s_pIconClicked = NULL;
 				}
 			break ;
 
