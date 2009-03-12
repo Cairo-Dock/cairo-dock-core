@@ -354,7 +354,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 {
 	//cd_message ("%s (%dx%d)", __func__, pDialog->iWidth, pDialog->iHeight);
 	int x, y;
-	if (g_bUseOpenGL && (pDialog->pDecorator == NULL || pDialog->pDecorator->render_opengl != NULL) && (pDialog->pRenderer == NULL || pDialog->pRenderer->render_opengl != NULL))
+	if (0 && g_bUseOpenGL && (pDialog->pDecorator == NULL || pDialog->pDecorator->render_opengl != NULL) && (pDialog->pRenderer == NULL || pDialog->pRenderer->render_opengl != NULL))
 	{
 		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pDialog->pWidget);
 		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pDialog->pWidget);
