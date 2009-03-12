@@ -33,6 +33,8 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImagePath, doubl
 
 GLuint cairo_dock_load_local_texture (const gchar *cImageName, const gchar *cDirPath);
 
+#define _cairo_dock_delete_texture(iTexture) glDeleteTextures (1, &iTexture)
+
 
 void cairo_dock_update_icon_texture (Icon *pIcon);
 void cairo_dock_update_label_texture (Icon *pIcon);
@@ -72,6 +74,21 @@ void cairo_dock_update_quick_info_texture (Icon *pIcon);
 	glTexCoord2f(1., 1.); glVertex3f( .5*w, -.5*h, 0.);\
 	glTexCoord2f(0., 1.); glVertex3f(-.5*w, -.5*h, 0.);\
 	glEnd(); } while (0)
+#define _cairo_dock_apply_current_texture_at_size_with_offset(w, h, x, y) do { \
+	glBegin(GL_QUADS);\
+	glTexCoord2f(0., 0.); glVertex3f(x-.5*w, y+.5*h, 0.);\
+	glTexCoord2f(1., 0.); glVertex3f(x+.5*w, y+.5*h, 0.);\
+	glTexCoord2f(1., 1.); glVertex3f(x+.5*w, y-.5*h, 0.);\
+	glTexCoord2f(0., 1.); glVertex3f(x-.5*w, y-.5*h, 0.);\
+	glEnd(); } while (0)
+#define _cairo_dock_apply_current_texture_portion_at_size_with_offset(u, v, du, dv, w, h, x, y) do { \
+	glBegin(GL_QUADS);\
+	glTexCoord2f(u, v); glVertex3f(x-.5*w, y+.5*h, 0.);\
+	glTexCoord2f(u+du, v); glVertex3f(x+.5*w, y+.5*h, 0.);\
+	glTexCoord2f(u+du, v+dv); glVertex3f(x+.5*w, y-.5*h, 0.);\
+	glTexCoord2f(u, v+dv); glVertex3f(x-.5*w, y-.5*h, 0.);\
+	glEnd(); } while (0)
+
 
 #define _cairo_dock_apply_texture_at_size(iTexture, w, h) do { \
 	glBindTexture (GL_TEXTURE_2D, iTexture);\

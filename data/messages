@@ -1504,7 +1504,7 @@ _("activate the \342\200\234clock\342\200\235 applet; clicking on it will displa
 
 _("How can I have the notification area (also called systray) ?")
 
-_("activate the \342\200\234systray\342\200\235 applet. For the moment it can\342\200\231t be displayed directly into the dock, so clicking on the icon will pop-up a dialog containing the systray, middle-click will hide it. I recommend to detach this applet to make it a desklet, place it in a corner of your screen, and keep it above other windows.")
+_("activate the \342\200\234systray\342\200\235 applet. For the moment it can\342\200\231t be displayed directly into the dock,\nso clicking on the icon will pop-up a dialog containing the systray, middle-click will hide it.\nI recommend to detach this applet to make it a desklet, place it in a corner of your screen, and keep it above other windows.")
 
 _("How can I have an easy-to-access terminal with real transparence, like Tilda ?")
 
@@ -1518,15 +1518,11 @@ _("Open gconf-editor, edit the key /desktop/gnome/session/required_components_li
 
 _("Other applets")
 
-_("The \342\200\234netspeed\342\200\235 applet displays 0 even when I\342\200\231m downloading something")
+_("How can I have a same applet many times ?")
 
-_("Hint : you can instantiate this applet many times if you want to monitor many interfaces.")
+_("Hint : This allows you, for example, to have the time of different countries in your dock, or to have many animated caracters in your dock, or the weather of different cities.")
 
-_("You have to tell it which interface you\342\200\231re using to connect to the Net (by default, it\342\200\231s \342\200\234eth0\342\200\235).\nJust edit its configuration, and enter the interface\342\200\231s name. To find it, type \342\200\234ifconfig\342\200\235 in a terminal, and ignore the \342\200\234loop\342\200\235 interface. It\342\200\231s probably something like \342\200\234eth1\342\200\235, \342\200\234ath0\342\200\235, or \342\200\234wifi0\342\200\235.")
-
-_("The dustbin remains empty even when I delete a file")
-
-_("if you\342\200\231re under KDE, you may have to tell it the path of the trash folder.\nJust edit the applet\342\200\231s configuration, and fill in the Trash path; it is probably \342\200\234~/.locale/share/Trash/files\342\200\235. Be very careful when typing a path here !!! (do not insert spaces or some invisible caracters).")
+_("Some applets can run several times at the same time : Clock, Cairo-Penguin, Weather, Netspeed, \342\200\246\nRight click on the applet\342\200\231s icon, and select \342\200\234launch another instance\342\200\235. A new instance of this applet appears in the main dock.\nYou can configure this new one like any other applet.")
 
 _("I have a personal gauge that I want to use in the dock (for cpusage or others)")
 
@@ -1537,6 +1533,38 @@ _("I have a personal Cairo-Clock theme that I want to use in the \342\200\234clo
 _("Hint : the same goes on for all the applets that propose a theme : dustbin, Cairo-Penguin, weather, etc.")
 
 _("move the folder containing your theme in ~/.config/cairo-dock/extras/clock, you\342\200\231re done !")
+
+_("Troubleshooting")
+
+_("I have a black background around my dock")
+
+_("You have to turn on the compositing. For instance, you can run Compiz or xcompmgr. \nIf you\342\200\231re under XFCE or KDE, you can just activate the compositing in the window manager\342\200\231s options.")
+
+_("My machine is too old to run a composite manager")
+
+_("Don\342\200\231t panic, Cairo-Dock can emulate the transparency.\nSo to get rid of the black background, just activate the corresponding option, in the end of the \342\200\234System\342\200\235 module")
+
+_("The dock is horribly slow when I move the mouse into it")
+
+_("Hint : ")
+
+_("If you have a GeForce8, you have to install the latest drivers, because the first ones were really buggy.\nIf the dock is running without openGL, try to reduce the number of icons in the main dock, or try to reduce its size.\nIf the dock is running with openGL, try to deactivate it by launching the dock with \342\200\234cairo-dock \342\200\223c\342\200\235.")
+
+_("I don\342\200\231t have these wonderful effects like fire, cube rotating, etc")
+
+_("Hint : You can force the openGL by launching the dock with \342\200\234cairo-dock \342\200\223o\342\200\235.but you might get a lot of visual artifacts.")
+
+_("You need a graphic card with drivers that support openGL2.0. Most of Nvidia cards can do that, more and more Intel cards can do too. Most of ATI cards can\342\200\231t do that.")
+
+_("The \342\200\234netspeed\342\200\235 applet displays 0 even when I\342\200\231m downloading something")
+
+_("Hint : you can instantiate this applet many times if you want to monitor many interfaces.")
+
+_("You have to tell it which interface you\342\200\231re using to connect to the Net (by default, it\342\200\231s \342\200\234eth0\342\200\235).\nJust edit its configuration, and enter the interface\342\200\231s name. To find it, type \342\200\234ifconfig\342\200\235 in a terminal, and ignore the \342\200\234loop\342\200\235 interface. It\342\200\231s probably something like \342\200\234eth1\342\200\235, \342\200\234ath0\342\200\235, or \342\200\234wifi0\342\200\235.")
+
+_("The dustbin remains empty even when I delete a file")
+
+_("if you\342\200\231re under KDE, you may have to tell it the path of the trash folder.\nJust edit the applet\342\200\231s configuration, and fill in the Trash path; it is probably \342\200\234~/.locale/share/Trash/files\342\200\235. Be very careful when typing a path here !!! (do not insert spaces or some invisible caracters).")
 
 _("Help us !")
 

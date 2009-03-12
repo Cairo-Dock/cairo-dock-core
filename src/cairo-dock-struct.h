@@ -502,7 +502,8 @@ struct _CairoDialogAttribute {
 
 struct _CairoDialogButton {
 	cairo_surface_t *pSurface;
-	int iOffset;
+	GLuint iTexture;
+	int iOffset;  // offset courant du au clic.
 };
 
 struct _CairoDialog {
@@ -615,6 +616,7 @@ struct _CairoDialog {
 	gint iSidAnimateIcon, iSidAnimateText;
 	int iNbButtons;
 	CairoDialogButton *pButtons;
+	GLuint iIconTexture, iTextTexture;
 };
 
 

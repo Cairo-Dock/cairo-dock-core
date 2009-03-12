@@ -520,6 +520,8 @@ void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpoi
 	{
 		icon = ic->data;
 		
+		icon->fWidth /= pDock->fRatio;
+		icon->fHeight /= pDock->fRatio;
 		if (CAIRO_DOCK_IS_APPLET (icon))
 		{
 			if (bReloadAppletsToo)
@@ -527,12 +529,10 @@ void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpoi
 		}
 		else
 		{
-			icon->fWidth /= pDock->fRatio;
-			icon->fHeight /= pDock->fRatio;
 			cairo_dock_fill_icon_buffers_for_dock (icon, pCairoContext, pDock);
-			icon->fWidth *= pDock->fRatio;
-			icon->fHeight *= pDock->fRatio;
 		}
+		icon->fWidth *= pDock->fRatio;
+		icon->fHeight *= pDock->fRatio;
 		
 		//g_print (" =size <- %.2fx%.2f\n", icon->fWidth, icon->fHeight);
 		fFlatDockWidth += myIcons.iIconGap + icon->fWidth;

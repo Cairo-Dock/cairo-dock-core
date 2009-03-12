@@ -48,6 +48,8 @@ extern gboolean g_bUseOpenGL;
 static GSList *s_pDialogList = NULL;
 static cairo_surface_t *s_pButtonOkSurface = NULL;
 static cairo_surface_t *s_pButtonCancelSurface = NULL;
+static GLuint s_iButtonOkTexture = 0;
+static GLuint s_iButtonCancelTexture = 0;
 
 #define CAIRO_DIALOG_MIN_SIZE 20
 #define CAIRO_DIALOG_TEXT_MARGIN 3
@@ -188,13 +190,84 @@ static gboolean on_key_press_dialog (GtkWidget *pWidget,
 	return FALSE;
 }
 
+gboolean cairo_dock_render_dialog_opengl_notification (cairo_t *pCairoContext, CairoDialog *pDialog, double fAlpha)
+{
+	_cairo_dock_enable_texture ();
+	_cairo_dock_set_blend_alpha ();
+	_cairo_dock_set_alpha (fAlpha);
+	
+	double x, y;
+	if (pDialog->iIconTexture != 0)
+	{
+		x = pDialog->iLeftMargin;
+		y = (pDialog->bDirectionUp ? pDialog->iTopMargin : pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
+		
+		glBindTexture (GL_TEXTURE_2D, pDialog->iIconTexture);
+		_cairo_dock_apply_current_texture_portion_at_size_with_offset (1.*pDialog->iCurrentFrame/pDialog->iNbFrames, 0.,
+			1. / pDialog->iNbFrames, 1.,
+			pDialog->iIconSize, pDialog->iIconSize,
+			x + pDialog->iIconSize/2, pDialog->iHeight - y - pDialog->iIconSize/2);
+	}
+	
+	if (pDialog->iTextTexture != 0)
+	{
+		x = pDialog->iLeftMargin + pDialog->iIconSize + CAIRO_DIALOG_TEXT_MARGIN;
+		y = (pDialog->bDirectionUp ? pDialog->iTopMargin : pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
+		if (pDialog->iTextHeight < pDialog->iMessageHeight)  // on centre le texte.
+			y += (pDialog->iMessageHeight - pDialog->iTextHeight) / 2;
+		
+		glBindTexture (GL_TEXTURE_2D, pDialog->iTextTexture);
+		if (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth)
+		{
+			double w = MIN (pDialog->iMaxTextWidth, pDialog->iTextWidth - pDialog->iCurrentTextOffset);  // taille de la portion de texte a gauche.
+			_cairo_dock_apply_current_texture_portion_at_size_with_offset (1.*pDialog->iCurrentTextOffset/pDialog->iTextWidth, 0.,
+				1.*(pDialog->iTextWidth - pDialog->iCurrentTextOffset) / pDialog->iTextWidth, 1.,
+				w, pDialog->iTextHeight,
+				x + w/2, pDialog->iHeight - y - pDialog->iTextHeight/2);
+			
+			if (pDialog->iTextWidth - pDialog->iCurrentTextOffset < pDialog->iMaxTextWidth)
+			{
+				w = pDialog->iMaxTextWidth - (pDialog->iTextWidth - pDialog->iCurrentTextOffset);  // taille de la portion de texte a droite.
+				_cairo_dock_apply_current_texture_portion_at_size_with_offset (0., 0.,
+					w / pDialog->iTextWidth, 1.,
+					w, pDialog->iTextHeight,
+					x + pDialog->iMaxTextWidth - w/2, pDialog->iHeight - y - pDialog->iTextHeight/2);
+			}
+		}
+		else
+		{
+			_cairo_dock_apply_current_texture_at_size_with_offset (pDialog->iTextWidth, pDialog->iTextHeight,
+				x + pDialog->iTextWidth/2, pDialog->iHeight - y - pDialog->iTextHeight/2);
+		}
+	}
+	
+	if (pDialog->pButtons != NULL)
+	{
+		int iButtonX, iButtonY;
+		int i, n = pDialog->iNbButtons;
+		iButtonY = (pDialog->bDirectionUp ? pDialog->iTopMargin + pDialog->iMessageHeight + pDialog->iInteractiveHeight + CAIRO_DIALOG_VGAP : pDialog->iHeight - pDialog->iTopMargin - pDialog->iButtonsHeight - CAIRO_DIALOG_VGAP);
+		int iMinButtonX = .5 * (pDialog->iWidth - (n - 1) * CAIRO_DIALOG_BUTTON_GAP - n * myDialogs.iDialogButtonWidth);
+		for (i = 0; i < pDialog->iNbButtons; i++)
+		{
+			iButtonX = iMinButtonX + i * (CAIRO_DIALOG_BUTTON_GAP + myDialogs.iDialogButtonWidth);
+			glBindTexture (GL_TEXTURE_2D, pDialog->pButtons[i].iTexture);
+			_cairo_dock_apply_current_texture_at_size_with_offset (myDialogs.iDialogButtonWidth,
+				myDialogs.iDialogButtonWidth,
+				iButtonX + pDialog->pButtons[i].iOffset + myDialogs.iDialogButtonWidth/2,
+				pDialog->iHeight - (iButtonY + pDialog->pButtons[i].iOffset + myDialogs.iDialogButtonWidth/2));			}
+	}
+	
+	if (pDialog->pRenderer != NULL && pDialog->pRenderer->render_opengl)
+		pDialog->pRenderer->render_opengl (pDialog, fAlpha);
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
 
 #define _drawn_text_width(pDialog) (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth ? pDialog->iMaxTextWidth : pDialog->iTextWidth)
 #define _paint_inside_dialog(pCairoContext, fAlpha) do { \
 	if (fAlpha != 0) \
 		cairo_paint_with_alpha (pCairoContext, fAlpha); \
 	else \
-	cairo_paint (pCairoContext); } while (0)
+		cairo_paint (pCairoContext); } while (0)
 static void _cairo_dock_draw_inside_dialog (cairo_t *pCairoContext, CairoDialog *pDialog, double fAlpha)
 {
 	double x, y;
@@ -349,7 +422,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 				y = (pDialog->bDirectionUp ? pDialog->iTopMargin : pDialog->iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
 				if (pExpose->area.x >= x &&
 					pExpose->area.x + pExpose->area.width <= x + _drawn_text_width (pDialog) && 
-					pExpose->area.y >=  y&&
+					pExpose->area.y >=  y &&
 					pExpose->area.y + pExpose->area.height <= y + pDialog->iTextHeight)
 				{
 					//cd_debug ("text redraw");
@@ -483,11 +556,19 @@ static cairo_surface_t *_cairo_dock_load_button_icon (cairo_t *pCairoContext, gc
 
 	return pButtonSurface;
 }
+
+#define _load_button_texture(iTexture, pSurface) do {\
+	if (iTexture != 0)\
+		_cairo_dock_delete_texture (iTexture);\
+	if (pSurface != NULL)\
+		iTexture = cairo_dock_create_texture_from_surface (pSurface);\
+	else\
+		iTexture = 0; } while (0)
 void cairo_dock_load_dialog_buttons (CairoContainer *pContainer, gchar *cButtonOkImage, gchar *cButtonCancelImage)
 {
 	//g_print ("%s (%s ; %s)\n", __func__, cButtonOkImage, cButtonCancelImage);
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (pContainer);
-
+	
 	if (s_pButtonOkSurface != NULL)
 		cairo_surface_destroy (s_pButtonOkSurface);
 	s_pButtonOkSurface = _cairo_dock_load_button_icon (pCairoContext, cButtonOkImage, "cairo-dock-ok.svg");
@@ -495,8 +576,14 @@ void cairo_dock_load_dialog_buttons (CairoContainer *pContainer, gchar *cButtonO
 	if (s_pButtonCancelSurface != NULL)
 		cairo_surface_destroy (s_pButtonCancelSurface);
 	s_pButtonCancelSurface = _cairo_dock_load_button_icon (pCairoContext, cButtonCancelImage, "cairo-dock-cancel.svg");
-
+	
 	cairo_destroy (pCairoContext);
+	
+	if (g_bUseOpenGL)
+	{
+		_load_button_texture (s_iButtonOkTexture, s_pButtonOkSurface);
+		_load_button_texture (s_iButtonCancelTexture, s_pButtonCancelSurface);
+	}
 }
 void cairo_dock_unload_dialog_buttons (void)
 {
@@ -509,6 +596,16 @@ void cairo_dock_unload_dialog_buttons (void)
 	{
 		cairo_surface_destroy (s_pButtonCancelSurface);
 		s_pButtonCancelSurface = NULL;
+	}
+	if (s_iButtonOkTexture != 0)
+	{
+		_cairo_dock_delete_texture (s_iButtonOkTexture);
+		s_iButtonOkTexture = 0;
+	}
+	if (s_iButtonCancelTexture != 0)
+	{
+		_cairo_dock_delete_texture (s_iButtonCancelTexture);
+		s_iButtonCancelTexture = 0;
 	}
 }
 
@@ -582,23 +679,27 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 	s_pDialogList = g_slist_remove (s_pDialogList, pDialog);
 
 	if (pDialog->pTextBuffer != NULL)
-	{
 		cairo_surface_destroy (pDialog->pTextBuffer);
-	}
 	if (pDialog->pIconBuffer != NULL)
-	{
 		cairo_surface_destroy (pDialog->pIconBuffer);
-	}
+	if (pDialog->iIconTexture != 0)
+		_cairo_dock_delete_texture (pDialog->iIconTexture);
+	if (pDialog->iTextTexture != 0)
+		_cairo_dock_delete_texture (pDialog->iTextTexture);
 	
 	if (pDialog->pButtons != NULL)
 	{
 		cairo_surface_t *pSurface;
+		GLuint iTexture;
 		int i;
 		for (i = 0; i < pDialog->iNbButtons; i++)
 		{
 			pSurface = pDialog->pButtons[i].pSurface;
 			if (pSurface != NULL && pSurface != s_pButtonOkSurface && pSurface != s_pButtonCancelSurface)
 				cairo_surface_destroy (pSurface);
+			iTexture = pDialog->pButtons[i].iTexture;
+			if (iTexture != 0 && iTexture != s_iButtonOkTexture && iTexture != s_iButtonCancelTexture)
+				_cairo_dock_delete_texture (iTexture);
 		}
 		g_free (pDialog->pButtons);
 	}
@@ -807,6 +908,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 		pDialog->pTextBuffer = _cairo_dock_create_dialog_text_surface (pAttribute->cText,
 			pAttribute->pTextDescription, pSourceContext,
 			&pDialog->iTextWidth, &pDialog->iTextHeight);
+		pDialog->iTextTexture = cairo_dock_create_texture_from_surface (pDialog->pTextBuffer);
 		if (pDialog->iMaxTextWidth > 0 && pDialog->pTextBuffer != NULL && pDialog->iTextWidth > pDialog->iMaxTextWidth)
 		{
 			pDialog->iSidAnimateText = g_timeout_add (200, (GSourceFunc) _cairo_dock_animate_dialog_text, (gpointer) pDialog);  // multiple du timeout de l'icone animee.
@@ -818,6 +920,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	{
 		pDialog->iNbFrames = (pAttribute->iNbFrames > 0 ? pAttribute->iNbFrames : 1);
 		pDialog->pIconBuffer = _cairo_dock_create_dialog_icon_surface (pAttribute->cImageFilePath, pDialog->iNbFrames, pSourceContext, pIcon, pContainer, pAttribute->iIconSize, &pDialog->iIconSize);
+		pDialog->iIconTexture = cairo_dock_create_texture_from_surface (pDialog->pIconBuffer);
 		if (pDialog->pIconBuffer != NULL && pDialog->iNbFrames > 1)
 		{
 			pDialog->iSidAnimateIcon = g_timeout_add (100, (GSourceFunc) _cairo_dock_animate_dialog_icon, (gpointer) pDialog);
@@ -855,14 +958,23 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 		{
 			cButtonImage = pAttribute->cButtonsImage[i];
 			if (strcmp (cButtonImage, "ok") == 0)
+			{
 				pDialog->pButtons[i].pSurface = s_pButtonOkSurface;
+				pDialog->pButtons[i].iTexture = s_iButtonOkTexture;
+			}
 			else if (strcmp (cButtonImage, "cancel") == 0)
+			{
 				pDialog->pButtons[i].pSurface = s_pButtonCancelSurface;
+				pDialog->pButtons[i].iTexture = s_iButtonCancelTexture;
+			}
 			else
+			{
 				pDialog->pButtons[i].pSurface = cairo_dock_load_image_for_icon (pSourceContext,
 					cButtonImage,
 					myDialogs.iDialogButtonWidth,
 					myDialogs.iDialogButtonHeight);
+				pDialog->pButtons[i].iTexture = cairo_dock_create_texture_from_surface (pDialog->pButtons[i].pSurface);
+			}
 		}
 	}
 
@@ -1571,6 +1683,8 @@ void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface
 
 	cairo_surface_destroy (pDialog->pTextBuffer);
 	pDialog->pTextBuffer = pNewTextSurface;
+	_cairo_dock_delete_texture (pDialog->iTextTexture);
+	pDialog->iTextTexture = cairo_dock_create_texture_from_surface (pNewTextSurface);
 	
 	pDialog->iTextWidth = iNewTextWidth;
 	pDialog->iTextHeight = iNewTextHeight;
@@ -1604,6 +1718,8 @@ void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface
 
 	cairo_surface_destroy (pDialog->pIconBuffer);
 	pDialog->pIconBuffer = pNewIconSurface;
+	_cairo_dock_delete_texture (pDialog->iIconTexture);
+	pDialog->iIconTexture = cairo_dock_create_texture_from_surface (pDialog->pIconBuffer);
 	
 	pDialog->iIconSize = iNewIconSize;
 	cairo_dock_compute_dialog_sizes (pDialog);

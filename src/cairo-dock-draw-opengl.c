@@ -249,14 +249,15 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		glPushMatrix ();
 		double x0, y0, x1, y1;
 		double fScale = ((myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon)) ? 1. : pIcon->fScale);
-		double fReflectRatio = myIcons.fReflectSize * pDock->fRatio / pIcon->fHeight / fScale  / pIcon->fHeightFactor;
-		double fOffsetY = pIcon->fHeight * fScale/2 + myIcons.fReflectSize * pDock->fRatio/2 + pIcon->fDeltaYReflection;
+		double fReflectSize = MIN (myIcons.fReflectSize, pIcon->fHeight/pDock->fRatio*fScale);
+		double fReflectRatio = fReflectSize * pDock->fRatio / pIcon->fHeight / fScale  / pIcon->fHeightFactor;
+		double fOffsetY = pIcon->fHeight * fScale/2 + fReflectSize * pDock->fRatio/2 + pIcon->fDeltaYReflection;
 		if (pDock->bHorizontalDock)
 		{
 			if (pDock->bDirectionUp)
 			{
 				glTranslatef (0., - fOffsetY, 0.);
-				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, - myIcons.fReflectSize * pDock->fRatio, 1.);  // taille du reflet et on se retourne.
+				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, - fReflectSize * pDock->fRatio, 1.);  // taille du reflet et on se retourne.
 				x0 = 0.;
 				y0 = 1. - fReflectRatio;
 				x1 = 1.;
@@ -265,7 +266,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			else
 			{
 				glTranslatef (0., fOffsetY, 0.);
-				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, myIcons.fReflectSize * pDock->fRatio, 1.);
+				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, fReflectSize * pDock->fRatio, 1.);
 				x0 = 0.;
 				y0 = fReflectRatio;
 				x1 = 1.;
@@ -277,7 +278,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			if (pDock->bDirectionUp)
 			{
 				glTranslatef (fOffsetY, 0., 0.);
-				glScalef (- myIcons.fReflectSize * pDock->fRatio, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
+				glScalef (- fReflectSize * pDock->fRatio, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
 				x0 = 1. - fReflectRatio;
 				y0 = 0.;
 				x1 = 1.;
@@ -286,7 +287,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			else
 			{
 				glTranslatef (- fOffsetY, 0., 0.);
-				glScalef (myIcons.fReflectSize * pDock->fRatio, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
+				glScalef (fReflectSize * pDock->fRatio, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
 				x0 = fReflectRatio;
 				y0 = 0.;
 				x1 = 0.;
@@ -663,7 +664,8 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 
 GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 {
-	g_return_val_if_fail (pImageSurface != NULL && g_bUseOpenGL, 0);
+	if (! g_bUseOpenGL || pImageSurface == NULL)
+		return 0;
 	GLuint iTexture = 0;
 	int w = cairo_image_surface_get_width (pImageSurface);
 	int h = cairo_image_surface_get_height (pImageSurface);
@@ -1628,4 +1630,68 @@ void cairo_dock_apply_desktop_background (CairoContainer *pContainer)
 	
 	glDisable (GL_TEXTURE_2D);
 	glDisable (GL_BLEND);
+}
+
+
+
+// A utiliser un jour.
+
+typedef struct _CairoAnimatedImage {
+	cairo_surface_t *pSurface;
+	GLuint iTexture;
+	gint iFrameWidth, iFrameHeight;
+	gint iNbFrames;
+	gint iCurrentFrame;
+	} CairoAnimatedImage;
+
+void cairo_dock_load_animated_image (const gchar *cImageFile, int iNbFrames, int iFrameWidth, int iFrameHeight, cairo_t *pSourceContext, CairoAnimatedImage *pAnimatedImage)
+{
+	pAnimatedImage->iNbFrames = iNbFrames;
+	pAnimatedImage->iCurrentFrame = 0;
+	
+	double fImageWidth = iFrameWidth * iNbFrames, fImageHeight = iFrameHeight;
+	pAnimatedImage->pSurface = cairo_dock_load_image (pSourceContext, cImageFile, &fImageWidth, &fImageHeight, 0., 1., FALSE);
+	pAnimatedImage->iFrameWidth = fImageWidth;
+	pAnimatedImage->iFrameHeight = fImageHeight;
+	
+	if (g_bUseOpenGL && pAnimatedImage->pSurface != NULL)
+	{
+		pAnimatedImage->iTexture = cairo_dock_create_texture_from_surface (pAnimatedImage->pSurface);
+	}
+}
+
+CairoAnimatedImage *cairo_dock_create_animated_image (const gchar *cImageFile, int iNbFrames, int iFrameWidth, int iFrameHeight, cairo_t *pSourceContext)
+{
+	CairoAnimatedImage *pAnimatedImage = g_new0 (CairoAnimatedImage, 1);
+	
+	cairo_dock_load_animated_image (cImageFile, iNbFrames, iFrameWidth, iFrameHeight, pSourceContext, pAnimatedImage);
+	
+	return pAnimatedImage;
+}
+
+#define cairo_dock_update_animated_image_state(pAnimatedImage) do {\
+	(pAnimatedImage)->iCurrentFrame ++;\
+	if ((pAnimatedImage)->iCurrentFrame == (pAnimatedImage)->iNbFrames)\
+		(pAnimatedImage)->iCurrentFrame = 0; } while (0)
+
+void cairo_dock_update_animated_image_cairo (CairoAnimatedImage *pAnimatedImage, cairo_t *pCairoContext)
+{
+	cairo_dock_update_animated_image_state (pAnimatedImage);
+	cairo_save (pCairoContext);
+	cairo_rectangle (pCairoContext, 0., 0., pAnimatedImage->iFrameWidth, pAnimatedImage->iFrameHeight);
+	cairo_clip (pCairoContext);
+	cairo_set_source_surface (pCairoContext,
+		pAnimatedImage->pSurface,
+		- pAnimatedImage->iFrameWidth * pAnimatedImage->iCurrentFrame,
+		0.);
+	cairo_restore (pCairoContext);
+}
+
+void cairo_dock_update_animated_image_opengl (CairoAnimatedImage *pAnimatedImage)
+{
+	cairo_dock_update_animated_image_state (pAnimatedImage);
+	_cairo_dock_apply_current_texture_portion_at_size_with_offset (1.*pAnimatedImage->iCurrentFrame/pAnimatedImage->iNbFrames, 0.,
+		1. / pAnimatedImage->iNbFrames, 1.,
+		pAnimatedImage->iFrameWidth, pAnimatedImage->iFrameHeight,
+		0., 0.);
 }
