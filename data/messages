@@ -1596,6 +1596,8 @@ _("The only reason you may want to modify this parameter is if you made this lau
 
 _("Class of the program :")
 
+_("Run in a terminal ?")
+
 _("Position")
 
 _("Position on the screen")

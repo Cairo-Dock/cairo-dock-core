@@ -369,6 +369,14 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		icon->cClass = NULL;
 	}
 	
+	gboolean bExecInTerminal = g_key_file_get_boolean (keyfile, "Desktop Entry", "Terminal", NULL);
+	if (bExecInTerminal)  // on le fait apres la classe puisqu'on change la commande.
+	{
+		gchar *cOldCommand = icon->acCommand;
+		icon->acCommand = g_strdup_printf ("xterm -e \"%s\"", cOldCommand);
+		g_free (cOldCommand);
+	}
+	
 	g_key_file_free (keyfile);
 }
 

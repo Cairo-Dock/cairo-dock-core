@@ -232,6 +232,22 @@ GtkWidget *cairo_dock_create_sub_menu (gchar *cLabel, GtkWidget *pMenu)
   ///////////////
  /// MEASURE ///
 ///////////////
+#define cairo_dock_schedule_next_measure(pMeasureTimer) do {\
+	if (pMeasureTimer->iSidTimer == 0 && pMeasureTimer->iCheckInterval)\
+		pMeasureTimer->iSidTimer = g_timeout_add_seconds (pMeasureTimer->iCheckInterval, (GSourceFunc) _cairo_dock_timer, pMeasureTimer); } while (0)
+
+#define cairo_dock_cancel_next_measure(pMeasureTimer) do {\
+	if (pMeasureTimer->iSidTimer != 0) {\
+		g_source_remove (pMeasureTimer->iSidTimer);\
+		pMeasureTimer->iSidTimer = 0; } } while (0)
+#define cairo_dock_perform_measure_update(pMeasureTimer) do {\
+	gboolean bContinue = pMeasureTimer->update (pMeasureTimer->pUserData);\
+	if (! bContinue) {\
+		cairo_dock_cancel_next_measure (pMeasureTimer); }\
+	else {\
+		pMeasureTimer->iFrequencyState = CAIRO_DOCK_FREQUENCY_NORMAL;\
+		cairo_dock_schedule_next_measure (pMeasureTimer); } } while (0)
+
 static gboolean _cairo_dock_timer (CairoDockMeasure *pMeasureTimer)
 {
 	cairo_dock_launch_measure (pMeasureTimer);
@@ -239,42 +255,23 @@ static gboolean _cairo_dock_timer (CairoDockMeasure *pMeasureTimer)
 }
 static gpointer _cairo_dock_threaded_calculation (CairoDockMeasure *pMeasureTimer)
 {
-	//cd_debug ("*** debut du thread (%d)", g_atomic_int_get (&pMeasureTimer->iThreadIsRunning));
+	//\_______________________ On obtient nos donnees.
 	if (pMeasureTimer->acquisition != NULL)
 		pMeasureTimer->acquisition (pMeasureTimer->pUserData);
 	
-	g_mutex_lock (pMeasureTimer->pMutexData);
 	pMeasureTimer->read (pMeasureTimer->pUserData);
-	g_mutex_unlock (pMeasureTimer->pMutexData);
 	
+	//\_______________________ On indique qu'on a fini.
 	g_atomic_int_set (&pMeasureTimer->iThreadIsRunning, 0);
 	return NULL;
 }
 static gboolean _cairo_dock_check_for_redraw (CairoDockMeasure *pMeasureTimer)
 {
 	int iThreadIsRunning = g_atomic_int_get (&pMeasureTimer->iThreadIsRunning);
-	//cd_debug ("%s (%d)", __func__, iThreadIsRunning);
-	if (! iThreadIsRunning)
+	if (! iThreadIsRunning)  // le thread a fini.
 	{
-		//\_______________________ On recharge ce qu'il faut avec ces nouvelles donnees.
-		g_mutex_lock (pMeasureTimer->pMutexData);
-		gboolean bContinue = pMeasureTimer->update (pMeasureTimer->pUserData);
-		g_mutex_unlock (pMeasureTimer->pMutexData);
-		
-		//\_______________________ On lance/arrete le timer si necessaire.
-		if (! bContinue)
-		{
-			if (pMeasureTimer->iSidTimer != 0)
-			{
-				g_source_remove (pMeasureTimer->iSidTimer);
-				pMeasureTimer->iSidTimer = 0;
-			}
-		}
-		else if (pMeasureTimer->iSidTimer == 0 && pMeasureTimer->iCheckInterval != 0)
-		{
-			pMeasureTimer->iFrequencyState = CAIRO_DOCK_FREQUENCY_NORMAL;
-			pMeasureTimer->iSidTimer = g_timeout_add_seconds (pMeasureTimer->iCheckInterval, (GSourceFunc) _cairo_dock_timer, pMeasureTimer);
-		}
+		//\_______________________ On met a jour avec ces nouvelles donnees et on lance/arrete le timer.
+		cairo_dock_perform_measure_update (pMeasureTimer);
 		
 		pMeasureTimer->iSidTimerRedraw = 0;
 		return FALSE;
@@ -284,47 +281,38 @@ static gboolean _cairo_dock_check_for_redraw (CairoDockMeasure *pMeasureTimer)
 void cairo_dock_launch_measure (CairoDockMeasure *pMeasureTimer)
 {
 	g_return_if_fail (pMeasureTimer != NULL);
-	if (pMeasureTimer->pMutexData == NULL)
+	if (pMeasureTimer->read == NULL)  // pas de thread, tout est dans la fonction d'update.
 	{
-		if (pMeasureTimer->acquisition != NULL)
-			pMeasureTimer->acquisition (pMeasureTimer->pUserData);
-		if (pMeasureTimer->read != NULL)
-			pMeasureTimer->read (pMeasureTimer->pUserData);
-		gboolean bContinue = pMeasureTimer->update (pMeasureTimer->pUserData);
-		
-		if (! bContinue)
-		{
-			if (pMeasureTimer->iSidTimer != 0)
-			{
-				g_source_remove (pMeasureTimer->iSidTimer);
-				pMeasureTimer->iSidTimer = 0;
-			}
-		}
-		else if (pMeasureTimer->iSidTimer == 0 && pMeasureTimer->iCheckInterval != 0)
-		{
-			pMeasureTimer->iFrequencyState = CAIRO_DOCK_FREQUENCY_NORMAL;
-			pMeasureTimer->iSidTimer = g_timeout_add_seconds (pMeasureTimer->iCheckInterval, (GSourceFunc) _cairo_dock_timer, pMeasureTimer);
-		}
+		cairo_dock_perform_measure_update (pMeasureTimer);
 	}
 	else if (g_atomic_int_compare_and_exchange (&pMeasureTimer->iThreadIsRunning, 0, 1))  // il etait egal a 0, on lui met 1 et on lance le thread.
 	{
-		//cd_debug (" ==> lancement du thread de calcul");
-		
-		if (pMeasureTimer->iSidTimerRedraw == 0) 
-			pMeasureTimer->iSidTimerRedraw = g_timeout_add (MAX (150, MIN (0.15 * pMeasureTimer->iCheckInterval, 333)), (GSourceFunc) _cairo_dock_check_for_redraw, pMeasureTimer);
-		
 		GError *erreur = NULL;
 		GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_threaded_calculation, pMeasureTimer, FALSE, &erreur);
-		if (erreur != NULL)
+		if (erreur != NULL)  // on n'a pas pu lancer le thread.
 		{
 			cd_warning (erreur->message);
 			g_error_free (erreur);
+			g_atomic_int_set (&pMeasureTimer->iThreadIsRunning, 0);
 		}
+		
+		if (pMeasureTimer->iSidTimerRedraw == 0)
+			pMeasureTimer->iSidTimerRedraw = g_timeout_add (MAX (150, MIN (0.15 * pMeasureTimer->iCheckInterval, 333)), (GSourceFunc) _cairo_dock_check_for_redraw, pMeasureTimer);
 	}
-	else if (pMeasureTimer->iSidTimer == 0 && pMeasureTimer->iCheckInterval != 0)
+	else if (pMeasureTimer->iSidTimerRedraw != 0)  // le thread est deja fini.
 	{
-		pMeasureTimer->iFrequencyState = CAIRO_DOCK_FREQUENCY_NORMAL;
-		pMeasureTimer->iSidTimer = g_timeout_add_seconds (pMeasureTimer->iCheckInterval, (GSourceFunc) _cairo_dock_timer, pMeasureTimer);
+		if (pMeasureTimer->iSidTimerRedraw != 0)  // on etait en attente de mise a jour, on fait la mise a jour tout de suite.
+		{
+			g_source_remove (pMeasureTimer->iSidTimerRedraw);
+			pMeasureTimer->iSidTimerRedraw = 0;
+			
+			cairo_dock_perform_measure_update (pMeasureTimer);
+		}
+		else  // la mesure est au repos.
+		{
+			pMeasureTimer->iFrequencyState = CAIRO_DOCK_FREQUENCY_NORMAL;
+			cairo_dock_schedule_next_measure (pMeasureTimer);
+		}
 	}
 }
 
@@ -342,8 +330,8 @@ void cairo_dock_launch_measure_delayed (CairoDockMeasure *pMeasureTimer, double 
 CairoDockMeasure *cairo_dock_new_measure_timer (int iCheckInterval, CairoDockAquisitionTimerFunc acquisition, CairoDockReadTimerFunc read, CairoDockUpdateTimerFunc update, gpointer pUserData)
 {
 	CairoDockMeasure *pMeasureTimer = g_new0 (CairoDockMeasure, 1);
-	if (read != NULL || acquisition != NULL)
-		pMeasureTimer->pMutexData = g_mutex_new ();
+	//if (read != NULL || acquisition != NULL)
+	//	pMeasureTimer->pMutexData = g_mutex_new ();
 	pMeasureTimer->iCheckInterval = iCheckInterval;
 	pMeasureTimer->acquisition = acquisition;
 	pMeasureTimer->read = read;
@@ -356,15 +344,13 @@ static void _cairo_dock_pause_measure_timer (CairoDockMeasure *pMeasureTimer)
 {
 	if (pMeasureTimer == NULL)
 		return ;
+	
+	cairo_dock_cancel_next_measure (pMeasureTimer);
+	
 	if (pMeasureTimer->iSidTimerRedraw != 0)
 	{
 		g_source_remove (pMeasureTimer->iSidTimerRedraw);
 		pMeasureTimer->iSidTimerRedraw = 0;
-	}
-	if (pMeasureTimer->iSidTimer!= 0)
-	{
-		g_source_remove (pMeasureTimer->iSidTimer);
-		pMeasureTimer->iSidTimer= 0;
 	}
 }
 

@@ -73,6 +73,23 @@ extern gboolean g_bIndirectRendering;
 extern gboolean g_bUseCairo;
 extern GdkGLConfig* g_pGlConfig;
 
+static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)
+{
+	if (! g_bUseOpenGL)
+		return ;
+	
+	GdkGLContext* pGlContext = gtk_widget_get_gl_context (pWidget);
+	GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pWidget);
+	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+		return ;
+	
+	g_print ("OpenGL version: %s\nOpenGL vendor: %s\nOpenGL renderer: %s\n",
+		glGetString (GL_VERSION),
+		glGetString (GL_VENDOR),
+		glGetString (GL_RENDERER));
+	
+	gdk_gl_drawable_gl_end (pGlDrawable);
+}
 
 CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockName, gchar *cRendererName)
 {
@@ -119,7 +136,12 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 	gtk_widget_add_events (pWindow,
 		GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
 		GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
-
+	
+	if (pDock->bIsMainDock)
+		g_signal_connect_after (G_OBJECT (pWindow),
+			"realize",
+			G_CALLBACK (_cairo_dock_on_realize_main_dock),
+			NULL);
 	g_signal_connect (G_OBJECT (pWindow),
 		"delete-event",
 		G_CALLBACK (cairo_dock_on_delete),

@@ -557,15 +557,15 @@ msgstr ""
 "Затем, активируйте один за другим плагины, чтобы определить какой из них "
 "нерабочий."
 
-#: ../data/messages:1 ../data/messages:649 ../data/messages:1599
+#: ../data/messages:1 ../data/messages:649 ../data/messages:1601
 msgid "Position"
 msgstr "Позиция"
 
-#: ../data/messages:3 ../data/messages:651 ../data/messages:1601
+#: ../data/messages:3 ../data/messages:651 ../data/messages:1603
 msgid "Position on the screen"
 msgstr "Позиция на экране"
 
-#: ../data/messages:5 ../data/messages:653 ../data/messages:1603
+#: ../data/messages:5 ../data/messages:653 ../data/messages:1605
 msgid ""
 "The icons will scroll according to the chosen placement type. Of course the "
 "dock can be placed anywhere on the screen, here we specify regarding to what."
@@ -573,28 +573,28 @@ msgstr ""
 "Значки будут прокручиваться относительно выбранного расположения панели.Ведь "
 "она может располагаться в любом месте экрана и мы особенно этим гордимся."
 
-#: ../data/messages:7 ../data/messages:655 ../data/messages:1605
+#: ../data/messages:7 ../data/messages:655 ../data/messages:1607
 msgid ""
 "Choose the screen border regarding to which the dock will place itself :"
 msgstr "С какой стороны экрана расположить панель:"
 
-#: ../data/messages:9 ../data/messages:657 ../data/messages:1607
+#: ../data/messages:9 ../data/messages:657 ../data/messages:1609
 msgid "bottom"
 msgstr "снизу"
 
-#: ../data/messages:11 ../data/messages:659 ../data/messages:1609
+#: ../data/messages:11 ../data/messages:659 ../data/messages:1611
 msgid "top"
 msgstr "сверху"
 
-#: ../data/messages:13 ../data/messages:661 ../data/messages:1611
+#: ../data/messages:13 ../data/messages:661 ../data/messages:1613
 msgid "right"
 msgstr "справа"
 
-#: ../data/messages:15 ../data/messages:663 ../data/messages:1613
+#: ../data/messages:15 ../data/messages:663 ../data/messages:1615
 msgid "left"
 msgstr "слева"
 
-#: ../data/messages:17 ../data/messages:665 ../data/messages:1615
+#: ../data/messages:17 ../data/messages:665 ../data/messages:1617
 msgid ""
 "At 0, the dock will place itself regarding the left corner if horizontal and "
 "the top corner if vertical, at 1 regarding the right corner if horizontal "
@@ -607,15 +607,15 @@ msgstr ""
 "относительно верхнего угла, и при значении 0.5 расположение будет изменяться "
 "относительно середины экрана."
 
-#: ../data/messages:19 ../data/messages:667 ../data/messages:1617
+#: ../data/messages:19 ../data/messages:667 ../data/messages:1619
 msgid "Relative alignment :"
 msgstr "Относительное расположение:"
 
-#: ../data/messages:21 ../data/messages:669 ../data/messages:1619
+#: ../data/messages:21 ../data/messages:669 ../data/messages:1621
 msgid "Position regarding the chosen screen's edge"
 msgstr "Положение относительно выбранного края экрана"
 
-#: ../data/messages:23 ../data/messages:671 ../data/messages:1621
+#: ../data/messages:23 ../data/messages:671 ../data/messages:1623
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding ALT or CTRL key and left mouse button."
@@ -624,11 +624,11 @@ msgstr ""
 "перетаскивать панель с помощью нажатых клавиш ALT или CTRL и левой кнопки "
 "мыши."
 
-#: ../data/messages:25 ../data/messages:673 ../data/messages:1623
+#: ../data/messages:25 ../data/messages:673 ../data/messages:1625
 msgid "Lateral gap :"
 msgstr "Сдвиг от боковой стороны:"
 
-#: ../data/messages:27 ../data/messages:675 ../data/messages:1625
+#: ../data/messages:27 ../data/messages:675 ../data/messages:1627
 msgid ""
 "in pixels. You can also move the dock by holding ALT or CTRL key and left "
 "mouse button."
@@ -636,7 +636,7 @@ msgstr ""
 "в пикселях. Также вы можете перетаскивать панель с помощью нажатых клавиш "
 "ALT или CTRL и левой кнопки мыши."
 
-#: ../data/messages:29 ../data/messages:677 ../data/messages:1627
+#: ../data/messages:29 ../data/messages:677 ../data/messages:1629
 msgid "Distance to the screen's edge :"
 msgstr "Дистанция к краю экрана:"
 
@@ -704,7 +704,7 @@ msgstr ""
 "пределы. Оставляя только зону реагирования, панель появится снова, если "
 "поместить в эту зону курсор."
 
-#: ../data/messages:55 ../data/messages:689 ../data/messages:1631
+#: ../data/messages:55 ../data/messages:689 ../data/messages:1633
 msgid "Activate auto-hide ?"
 msgstr "Активировать авто-скрытие?"
 
@@ -2040,7 +2040,7 @@ msgstr "Изображение для эмблемы \"внимание\":"
 msgid "Name of an image to use for the locked emblem :"
 msgstr "Изображение для эмблемы \"заблокировано\":"
 
-#: ../data/messages:687 ../data/messages:1629
+#: ../data/messages:687 ../data/messages:1631
 msgid ""
 "The dock will automatically hide itself outside of the scren when the mouse "
 "leaves it and will show a callback zone instead. Place the mouse into this "
@@ -2244,7 +2244,7 @@ msgstr ""
 msgid "Image for the drag'n'drop animation :"
 msgstr "Изображение для анимации перетаскивания:"
 
-#: ../data/messages:1299 ../data/messages:1573 ../data/messages:1633
+#: ../data/messages:1299 ../data/messages:1573 ../data/messages:1635
 msgid "Desktop Entry"
 msgstr "Элемент рабочего стола"
 
@@ -2252,19 +2252,19 @@ msgstr "Элемент рабочего стола"
 msgid "Sub-dock's name :"
 msgstr "Имя суб-панели:"
 
-#: ../data/messages:1303 ../data/messages:1581 ../data/messages:1635
+#: ../data/messages:1303 ../data/messages:1581 ../data/messages:1637
 msgid "Image's name or path :"
 msgstr "Имя изображения или файла:"
 
-#: ../data/messages:1305 ../data/messages:1587 ../data/messages:1637
+#: ../data/messages:1305 ../data/messages:1587 ../data/messages:1639
 msgid "Extra parameters"
 msgstr "Дополнительные параметры"
 
-#: ../data/messages:1307 ../data/messages:1589 ../data/messages:1639
+#: ../data/messages:1307 ../data/messages:1589 ../data/messages:1641
 msgid "Order you want for this launcher among the others:"
 msgstr "Порядок расположения среди других:"
 
-#: ../data/messages:1309 ../data/messages:1585 ../data/messages:1641
+#: ../data/messages:1309 ../data/messages:1585 ../data/messages:1643
 msgid "Name of the container it belongs to:"
 msgstr "Контейнер которому он принадлежит:"
 
@@ -3059,19 +3059,23 @@ msgstr ""
 msgid "Class of the program :"
 msgstr "Класс программы:"
 
-#: ../data/messages:1643
+#: ../data/messages:1599
+msgid "Run in a terminal ?"
+msgstr ""
+
+#: ../data/messages:1645
 msgid "Themes"
 msgstr "Темы"
 
-#: ../data/messages:1645
+#: ../data/messages:1647
 msgid "Choose a theme"
 msgstr "Выберите тему"
 
-#: ../data/messages:1647
+#: ../data/messages:1649
 msgid "List of themes :"
 msgstr "Список тем:"
 
-#: ../data/messages:1649
+#: ../data/messages:1651
 msgid ""
 "Otherwise the current behaviour will be kept. It's all about the dock's "
 "position, behaviour parameters such as auto-hide, using taskbar or not, etc."
@@ -3080,11 +3084,11 @@ msgstr ""
 "расположение на панели, параметры поведения, такие как авто-скрытие, "
 "использование панели задач и т.д."
 
-#: ../data/messages:1651
+#: ../data/messages:1653
 msgid "Use the new theme's behaviour ?"
 msgstr "Использовать новую тему поведения?"
 
-#: ../data/messages:1653
+#: ../data/messages:1655
 msgid ""
 "So if you check this box, your launchers will be deleted and replaced by the "
 "ones provided in the new theme. Otherwise the current launchers will be "
@@ -3094,53 +3098,53 @@ msgstr ""
 "изаменён на значок предоставленный темой. В противном случае, текущий значок "
 "запуска будет сохранён, и только сам значок будет заменён."
 
-#: ../data/messages:1655
+#: ../data/messages:1657
 msgid "Use the new theme's launchers ?"
 msgstr "Использовать новую тему значков запуска?"
 
-#: ../data/messages:1657
+#: ../data/messages:1659
 msgid "Save"
 msgstr "Сохранить"
 
-#: ../data/messages:1659
+#: ../data/messages:1661
 msgid "Save current theme"
 msgstr "Сохранить текущую тему"
 
-#: ../data/messages:1661
+#: ../data/messages:1663
 msgid "You will then be able to re-open it at any time."
 msgstr "Потом вы сможете открывать его в любое время."
 
-#: ../data/messages:1663
+#: ../data/messages:1665
 msgid "Save as :"
 msgstr "Сохранить как:"
 
-#: ../data/messages:1665
+#: ../data/messages:1667
 msgid "Save current behaviour too ?"
 msgstr "Сохранить текущее поведение тоже?"
 
-#: ../data/messages:1667
+#: ../data/messages:1669
 msgid "Save current launchers too ?"
 msgstr "Сохранить текущие значки запуска тоже?"
 
-#: ../data/messages:1669
+#: ../data/messages:1671
 msgid "Delete"
 msgstr "Удалить"
 
-#: ../data/messages:1671
+#: ../data/messages:1673
 msgid "List of your personnal themes"
 msgstr "Список ваших персональных тем"
 
-#: ../data/messages:1673
+#: ../data/messages:1675
 #, fuzzy
 msgid "Delete from the list themes you don't want anymore :"
 msgstr "Снимите отметку с тех тем, которые вы бы не хотели больше видеть:"
 
-#: ../data/messages:1675
+#: ../data/messages:1677
 msgid "pouet"
 msgstr "монтировать"
 
-#: ../data/messages:1677 ../data/messages:1679 ../data/messages:1681
-#: ../data/messages:1683
+#: ../data/messages:1679 ../data/messages:1681 ../data/messages:1683
+#: ../data/messages:1685
 msgid ""
 "v1.4.6.3 :\n"
 "Just to say :\n"
@@ -3152,7 +3156,7 @@ msgstr ""
 "*** Счастливого нового года 2008 ! ***\n"
 "  Команда Cairo-Dock."
 
-#: ../data/messages:1685
+#: ../data/messages:1687
 msgid ""
 "v1.5.0 : it's been 1 month since previous release, and we worked hardly to "
 "bring you :\n"
@@ -3190,7 +3194,7 @@ msgstr ""
 " — И вишенка нашего пирога это: новая тема (I, Cairo) !\n"
 "  А теперь, почему бы вам не попробовать создать апплет для Cairo-Dock ? ;-)"
 
-#: ../data/messages:1687
+#: ../data/messages:1689
 msgid ""
 "v1.5.1 :\n"
 " - The 1.5 branch is still young, so this version brings a lot of bug fixes\n"
@@ -3210,7 +3214,7 @@ msgstr ""
 " — большинство апплетов теперь могут открепляться от панели\n"
 "      и становиться настоящими десклетами."
 
-#: ../data/messages:1689
+#: ../data/messages:1691
 msgid ""
 "v1.5.2.1 :\n"
 " - a lot of bug fixes, especially on desklets.\n"
@@ -3223,7 +3227,7 @@ msgstr ""
 " — Cairo-Dock теперь полностью переведён на японский, благодарим "
 "Jiro·Kawada·!"
 
-#: ../data/messages:1691
+#: ../data/messages:1693
 msgid ""
 "v1.5.3.2 :\n"
 " - Themes have been deeply reviewed\n"
@@ -3247,7 +3251,7 @@ msgstr ""
 "  Кстати, мы по прежнему ищем кого-нибудь,\n"
 "  кто смог бы помочь в интеграции cairo-dock в KDE ;-)"
 
-#: ../data/messages:1693
+#: ../data/messages:1695
 msgid ""
 "v1.5.4.2 : a huge release !\n"
 " - add a cute pinguin in your dock with the new applet Cairo-Penguin\n"
@@ -3272,7 +3276,7 @@ msgstr ""
 " — обновите вид вашей панели новой темой: Wood\n"
 " — три новых темы в апплете Погоды"
 
-#: ../data/messages:1695
+#: ../data/messages:1697
 msgid ""
 "v1.5.5.4 :\n"
 " - Huge enhancements in the TaskBar :\n"
@@ -3300,7 +3304,7 @@ msgstr ""
 " — Cairo-Dock пока еще не достаточно качественно интегрирован в Gnome 2.22, "
 "но скоро мы это исправим ;-)"
 
-#: ../data/messages:1697
+#: ../data/messages:1699
 msgid ""
 "v1.5.6 :\n"
 " - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still "
@@ -3333,7 +3337,7 @@ msgstr ""
 " — Багфиксы в XGamma/Weather.\n"
 " — Приветствуется любая помощь в интеграции панели в KDE !"
 
-#: ../data/messages:1699
+#: ../data/messages:1701
 msgid ""
 "v1.6.0 :\n"
 " - A new view has appeared : Diapositive !\n"
@@ -3367,7 +3371,7 @@ msgstr ""
 " — Автоматический перезапуск после аварийного завершения.\n"
 " — Действительный эскиз минимизированного окна."
 
-#: ../data/messages:1701
+#: ../data/messages:1703
 msgid ""
 "v1.6.1 :\n"
 "Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
@@ -3389,7 +3393,7 @@ msgstr ""
 " — И мы всё еще надеемся найти кого-нибудь, кто смог бы помочь нам в "
 "написании плагина kde-интеграции ^_^"
 
-#: ../data/messages:1703
+#: ../data/messages:1705
 msgid ""
 "v1.6.2 : the first version integrated in the Ubuntu repositories !\n"
 " - 2 new applets have been released :\n"
@@ -3411,7 +3415,7 @@ msgstr ""
 " — И мы всё равно ищем кого-нибудь заинтересованного в написании плагина kde-"
 "интеграции^_^"
 
-#: ../data/messages:1705
+#: ../data/messages:1707
 msgid ""
 "v1.6.3 : \n"
 " - first the bad news :\n"
@@ -3444,7 +3448,7 @@ msgstr ""
 " — Плавные движения значков при перетаскивании их на панель\n"
 " — Панель переведена теперь на Шведский и частично Греческий языки."
 
-#: ../data/messages:1707
+#: ../data/messages:1709
 #, fuzzy
 msgid ""
 "Cairo-Dock II\n"

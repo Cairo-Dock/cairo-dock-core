@@ -20,6 +20,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <X11/extensions/Xcomposite.h>
 //#include <X11/extensions/Xdamage.h>
 #endif
+//#include <libxklavier/xklavier.h>
 
 #include "cairo-dock-load.h"
 #include "cairo-dock-icons.h"
@@ -527,6 +528,13 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	}
 	XFree (pClassHint);
 	
+	/*const XklEngine *eng = xkl_engine_get_instance (cairo_dock_get_Xdisplay ());
+	XklState state;
+	xkl_engine_get_state (eng, Xid, &state);
+	const gchar **names = xkl_engine_get_group_names (eng);
+	int n = xkl_engine_get_num_groups (eng);
+	for (i=0; i<n; i++)
+		g_print ("name %d : %s\n", i, names[i]);*/
 	
 	//\__________________ On cree, on remplit l'icone, et on l'enregistre, par contre elle sera inseree plus tard.
 	Icon *icon = g_new0 (Icon, 1);

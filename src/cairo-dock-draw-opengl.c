@@ -954,10 +954,21 @@ const GLfloat *cairo_dock_generate_rectangle_path (double fDockWidth, double fFr
 	return pVertexTab;
 }
 
-#define P(t,p,q,s) (1-t) * (1-t) * p + 2 * t * (1-t) * q + t * t * s;
+#define P(t,p,q,s) ((1-t) * (1-t) * p + 2 * t * (1-t) * q + t * t * s)
+void cairo_dock_add_simple_curved_subpath_opengl (GLfloat *pVertexTab, int iNbPts, double x0, double y0, double x1, double y1, double x2, double y2)
+{
+	double t;
+	int i;
+	for (i = 0; i < iNbPts; i ++)
+	{
+		t = 1.*i/iNbPts;  // [0;1[
+		pVertexTab[3*i] = P(t, x0, x1, x2);
+		pVertexTab[3*i+1] = P(t, y0, y1, y2);
+	}
+}
 GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, double fInclination, double *fExtraWidth, int *iNbPoints)
 {
-	static GLfloat pVertexTab[((90/DELTA_ROUND_DEGREE+1)*4+1)*3];
+	static GLfloat pVertexTab[((90/DELTA_ROUND_DEGREE+1+20+1)*2+1)*3];
 	
 	double a = atan (fInclination)/G_PI*180.;
 	double cosa = 1. / sqrt (1 + fInclination * fInclination);
@@ -1022,12 +1033,20 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 		pVertexTab[3*i+1] = -h - rh;
 		i ++;
 	}
-	pVertexTab[3*i] = w + rw * cos (a*RADIAN);  // on boucle.
-	pVertexTab[3*i+1] = h + rh * sin (a*RADIAN);
+	pVertexTab[3*i] = pVertexTab[0];  // on boucle.
+	pVertexTab[3*i+1] = pVertexTab[1];
 	
 	*iNbPoints = i+1;
 	return pVertexTab;
 }
+
+typedef struct _CairoDockOpenglPath {
+	gint iNbVertices;
+	GLfloat *pVertexTab;
+	GLfloat *pColorTab;
+	gint iCurrentIndex;
+	gint iWidthExtent, iHeightExtent;
+	} CairoDockOpenglPath;
 
 // OM(t) = sum ([k=0..n] Bn,k(t)*OAk)
 // Bn,k(x) = Cn,k*x^k*(1-x)^(n-k)
@@ -1036,11 +1055,27 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 #define B2(t) 3*t*t*(1-t)
 #define B3(t) t*t*t
 #define Bezier(x0,x1,x2,x3,t) (B0(t)*x0 + B1(t)*x1 + B2(t)*x2 + B3(t)*x3)
+void cairo_dock_add_curved_subpath_opengl (GLfloat *pVertexTab, int iNbPts, double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3)
+{
+	double t;
+	int i;
+	for (i = 0; i < iNbPts; i ++)
+	{
+		t = 1.*i/iNbPts;  // [0;1[
+		pVertexTab[3*i] = Bezier (x0,x1,x2,x3,t);
+		pVertexTab[3*i+1] = Bezier (y0,y1,y2,y3,t);
+	}
+}
+
 #define _get_icon_center_x(icon) (icon->fDrawX + icon->fWidth * icon->fScale/2)
 #define _get_icon_center_y(icon) (icon->fDrawY + (bForceConstantSeparator && CAIRO_DOCK_IS_SEPARATOR (icon) ? icon->fHeight * (icon->fScale - .5) : icon->fHeight * icon->fScale/2))
 #define _get_icon_center(icon,x,y) do {\
-	x = _get_icon_center_x (icon);\
-	y = _get_icon_center_y (icon); } while (0)
+	if (pDock->bHorizontalDock) {\
+		x = _get_icon_center_x (icon);\
+		y = pDock->iCurrentHeight - _get_icon_center_y (icon); }\
+	else {\
+		 y = _get_icon_center_x (icon);\
+		 x = pDock->iCurrentWidth - _get_icon_center_y (icon); } } while (0)
 #define _calculate_slope(x0,y0,x1,y1,dx,dy) do {\
 	dx = x1 - x0;\
 	dy = y1 - y0;\
@@ -1054,7 +1089,7 @@ GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsL
 	bForceConstantSeparator = bForceConstantSeparator || myIcons.bConstantSeparatorSize;
 	GList *ic, *next_ic, *next2_ic, *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
 	Icon *pIcon, *pNextIcon, *pNext2Icon;
-	double x0,y0, x1,y1, x2,y2;  // centres des icones P0, P1, P2.
+	double x0,y0, x1,y1, x2,y2;  // centres des icones P0, P1, P2, en coordonnees opengl.
 	double norme;  // pour normaliser les pentes.
 	double dx, dy;  // direction au niveau de l'icone courante P0.
 	double dx_, dy_;  // direction au niveau de l'icone suivante P1.
@@ -1116,7 +1151,9 @@ GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsL
 		for (i = 0; i < NB_VERTEX_PER_ICON_PAIR; i ++, n++)
 		{
 			t = 1.*i/NB_VERTEX_PER_ICON_PAIR;  // [0;1[
-			if (pDock->bHorizontalDock)
+			pVertexTab[3*n] = Bezier (x0,x0_,x1_,x1,t);
+			pVertexTab[3*n+1] = Bezier (y0,y0_,y1_,y1,t);
+			/*if (pDock->bHorizontalDock)
 			{
 				pVertexTab[3*n] = Bezier (x0,x0_,x1_,x1,t);
 				pVertexTab[3*n+1] = pDock->iCurrentHeight - Bezier (y0,y0_,y1_,y1,t);
@@ -1125,7 +1162,7 @@ GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsL
 			{
 				pVertexTab[3*n] = Bezier (y0,y0_,y1_,y1,t);
 				pVertexTab[3*n+1] = pDock->iCurrentWidth - Bezier (x0,x0_,x1_,x1,t);
-			}
+			}*/
 		}
 		
 		// on decale tout d'un cran.
@@ -1471,11 +1508,6 @@ void cairo_dock_set_ortho_view (int iWidth, int iHeight)
 GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHasBeenForced)  // taken from a MacSlow's exemple.
 {
 	GdkGLConfig *pGlConfig = NULL;
-	
-	g_print ("OpenGL version: %s\nOpenGL vendor: %s\nOpenGL renderer: %s\n",
-		glGetString (GL_VERSION),
-		glGetString (GL_VENDOR),
-		glGetString (GL_RENDERER));
 	
 	Display *XDisplay = cairo_dock_get_Xdisplay ();
 	

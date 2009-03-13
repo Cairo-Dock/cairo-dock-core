@@ -544,15 +544,15 @@ msgstr ""
 # #################################
 # ########### cairo-dock.conf #############
 # #################################
-#: ../data/messages:1 ../data/messages:649 ../data/messages:1599
+#: ../data/messages:1 ../data/messages:649 ../data/messages:1601
 msgid "Position"
 msgstr "位置"
 
-#: ../data/messages:3 ../data/messages:651 ../data/messages:1601
+#: ../data/messages:3 ../data/messages:651 ../data/messages:1603
 msgid "Position on the screen"
 msgstr "在屏幕上的位置"
 
-#: ../data/messages:5 ../data/messages:653 ../data/messages:1603
+#: ../data/messages:5 ../data/messages:653 ../data/messages:1605
 msgid ""
 "The icons will scroll according to the chosen placement type. Of course the "
 "dock can be placed anywhere on the screen, here we specify regarding to what."
@@ -560,28 +560,28 @@ msgstr ""
 "图标将根据选择的放置类型卷动。当然，我们可以把dock放到屏幕的任何地方。 但我们"
 "只定义了这几个。"
 
-#: ../data/messages:7 ../data/messages:655 ../data/messages:1605
+#: ../data/messages:7 ../data/messages:655 ../data/messages:1607
 msgid ""
 "Choose the screen border regarding to which the dock will place itself :"
 msgstr "选择dock放置的屏幕边："
 
-#: ../data/messages:9 ../data/messages:657 ../data/messages:1607
+#: ../data/messages:9 ../data/messages:657 ../data/messages:1609
 msgid "bottom"
 msgstr "底部"
 
-#: ../data/messages:11 ../data/messages:659 ../data/messages:1609
+#: ../data/messages:11 ../data/messages:659 ../data/messages:1611
 msgid "top"
 msgstr "顶部"
 
-#: ../data/messages:13 ../data/messages:661 ../data/messages:1611
+#: ../data/messages:13 ../data/messages:661 ../data/messages:1613
 msgid "right"
 msgstr "右边"
 
-#: ../data/messages:15 ../data/messages:663 ../data/messages:1613
+#: ../data/messages:15 ../data/messages:663 ../data/messages:1615
 msgid "left"
 msgstr "左边"
 
-#: ../data/messages:17 ../data/messages:665 ../data/messages:1615
+#: ../data/messages:17 ../data/messages:665 ../data/messages:1617
 msgid ""
 "At 0, the dock will place itself regarding the left corner if horizontal and "
 "the top corner if vertical, at 1 regarding the right corner if horizontal "
@@ -591,15 +591,15 @@ msgstr ""
 "取值0时，dock水平位于左角，垂直位于上角；1时，水平位于右角，垂直位于下角；0.5"
 "时，相对屏幕正中定位。"
 
-#: ../data/messages:19 ../data/messages:667 ../data/messages:1617
+#: ../data/messages:19 ../data/messages:667 ../data/messages:1619
 msgid "Relative alignment :"
 msgstr "相对排列："
 
-#: ../data/messages:21 ../data/messages:669 ../data/messages:1619
+#: ../data/messages:21 ../data/messages:669 ../data/messages:1621
 msgid "Position regarding the chosen screen's edge"
 msgstr "依据选择的屏幕边定位："
 
-#: ../data/messages:23 ../data/messages:671 ../data/messages:1621
+#: ../data/messages:23 ../data/messages:671 ../data/messages:1623
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding ALT or CTRL key and left mouse button."
@@ -607,17 +607,17 @@ msgstr ""
 "距离屏幕边的绝对位置的间隔。以点为单位。你也可以按下ALT或CTRL，以及鼠标左键来"
 "移动dock。"
 
-#: ../data/messages:25 ../data/messages:673 ../data/messages:1623
+#: ../data/messages:25 ../data/messages:673 ../data/messages:1625
 msgid "Lateral gap :"
 msgstr "侧间隔："
 
-#: ../data/messages:27 ../data/messages:675 ../data/messages:1625
+#: ../data/messages:27 ../data/messages:675 ../data/messages:1627
 msgid ""
 "in pixels. You can also move the dock by holding ALT or CTRL key and left "
 "mouse button."
 msgstr "以点为单位。你也可以按下ALT或CTRL，以及鼠标左键来移动dock。"
 
-#: ../data/messages:29 ../data/messages:677 ../data/messages:1627
+#: ../data/messages:29 ../data/messages:677 ../data/messages:1629
 msgid "Distance to the screen's edge :"
 msgstr "距离屏幕边的距离："
 
@@ -685,7 +685,7 @@ msgstr ""
 "dock将在你的鼠标离开它后自动隐藏到屏幕外，而留下一个唤回区作为替代。将鼠标移"
 "到此区将重现dock"
 
-#: ../data/messages:55 ../data/messages:689 ../data/messages:1631
+#: ../data/messages:55 ../data/messages:689 ../data/messages:1633
 msgid "Activate auto-hide ?"
 msgstr "启用自动隐藏？"
 
@@ -1967,7 +1967,7 @@ msgstr "警告标志使用的图片名："
 msgid "Name of an image to use for the locked emblem :"
 msgstr "锁定标志使用的图片名："
 
-#: ../data/messages:687 ../data/messages:1629
+#: ../data/messages:687 ../data/messages:1631
 msgid ""
 "The dock will automatically hide itself outside of the scren when the mouse "
 "leaves it and will show a callback zone instead. Place the mouse into this "
@@ -2159,7 +2159,7 @@ msgstr "通常是一个箭头，出现于你将一个启动器放入dock的时�
 msgid "Image for the drag'n'drop animation :"
 msgstr "用于拖曳动画的图片："
 
-#: ../data/messages:1299 ../data/messages:1573 ../data/messages:1633
+#: ../data/messages:1299 ../data/messages:1573 ../data/messages:1635
 msgid "Desktop Entry"
 msgstr "桌面项"
 
@@ -2167,19 +2167,19 @@ msgstr "桌面项"
 msgid "Sub-dock's name :"
 msgstr "子Dock名称："
 
-#: ../data/messages:1303 ../data/messages:1581 ../data/messages:1635
+#: ../data/messages:1303 ../data/messages:1581 ../data/messages:1637
 msgid "Image's name or path :"
 msgstr "图片的名称或路径："
 
-#: ../data/messages:1305 ../data/messages:1587 ../data/messages:1637
+#: ../data/messages:1305 ../data/messages:1587 ../data/messages:1639
 msgid "Extra parameters"
 msgstr "附加参数"
 
-#: ../data/messages:1307 ../data/messages:1589 ../data/messages:1639
+#: ../data/messages:1307 ../data/messages:1589 ../data/messages:1641
 msgid "Order you want for this launcher among the others:"
 msgstr "此启动器的次序："
 
-#: ../data/messages:1309 ../data/messages:1585 ../data/messages:1641
+#: ../data/messages:1309 ../data/messages:1585 ../data/messages:1643
 msgid "Name of the container it belongs to:"
 msgstr "它归属的容器名称："
 
@@ -2969,32 +2969,36 @@ msgstr ""
 msgid "Class of the program :"
 msgstr "程序的类："
 
+#: ../data/messages:1599
+msgid "Run in a terminal ?"
+msgstr ""
+
 # #################################
 # ########### themes.conf #############
 # #################################
-#: ../data/messages:1643
+#: ../data/messages:1645
 msgid "Themes"
 msgstr "主题"
 
-#: ../data/messages:1645
+#: ../data/messages:1647
 msgid "Choose a theme"
 msgstr "选择一个主题"
 
-#: ../data/messages:1647
+#: ../data/messages:1649
 msgid "List of themes :"
 msgstr "主题列表："
 
-#: ../data/messages:1649
+#: ../data/messages:1651
 msgid ""
 "Otherwise the current behaviour will be kept. It's all about the dock's "
 "position, behaviour parameters such as auto-hide, using taskbar or not, etc."
 msgstr "否则，将保持当前的行为。诸如dock的位置，自动隐藏，是否使用任务栏等"
 
-#: ../data/messages:1651
+#: ../data/messages:1653
 msgid "Use the new theme's behaviour ?"
 msgstr "使用新主题的行为？"
 
-#: ../data/messages:1653
+#: ../data/messages:1655
 msgid ""
 "So if you check this box, your launchers will be deleted and replaced by the "
 "ones provided in the new theme. Otherwise the current launchers will be "
@@ -3003,54 +3007,54 @@ msgstr ""
 "如果你勾选此项，你的启动器将被新主题提供的取代。否则，将保留你当前的启动器，"
 "仅替换其图标。"
 
-#: ../data/messages:1655
+#: ../data/messages:1657
 msgid "Use the new theme's launchers ?"
 msgstr "使用新主题的启动器么？"
 
-#: ../data/messages:1657
+#: ../data/messages:1659
 #, fuzzy
 msgid "Save"
 msgstr "保存"
 
-#: ../data/messages:1659
+#: ../data/messages:1661
 msgid "Save current theme"
 msgstr "保存当前主题"
 
-#: ../data/messages:1661
+#: ../data/messages:1663
 msgid "You will then be able to re-open it at any time."
 msgstr "您将可以在任何时候重新打开它。"
 
-#: ../data/messages:1663
+#: ../data/messages:1665
 msgid "Save as :"
 msgstr "另存为："
 
-#: ../data/messages:1665
+#: ../data/messages:1667
 msgid "Save current behaviour too ?"
 msgstr "同时保存当前行为？"
 
-#: ../data/messages:1667
+#: ../data/messages:1669
 msgid "Save current launchers too ?"
 msgstr "同时保存当前启动器？"
 
-#: ../data/messages:1669
+#: ../data/messages:1671
 msgid "Delete"
 msgstr "删除"
 
-#: ../data/messages:1671
+#: ../data/messages:1673
 msgid "List of your personnal themes"
 msgstr "您的个人主题列表"
 
-#: ../data/messages:1673
+#: ../data/messages:1675
 #, fuzzy
 msgid "Delete from the list themes you don't want anymore :"
 msgstr "勾去列表中您不想保留的主题："
 
-#: ../data/messages:1675
+#: ../data/messages:1677
 msgid "pouet"
 msgstr ""
 
-#: ../data/messages:1677 ../data/messages:1679 ../data/messages:1681
-#: ../data/messages:1683
+#: ../data/messages:1679 ../data/messages:1681 ../data/messages:1683
+#: ../data/messages:1685
 msgid ""
 "v1.4.6.3 :\n"
 "Just to say :\n"
@@ -3061,7 +3065,7 @@ msgstr ""
 # #################################
 # ########### ChangeLog #############
 # #################################
-#: ../data/messages:1685
+#: ../data/messages:1687
 msgid ""
 "v1.5.0 : it's been 1 month since previous release, and we worked hardly to "
 "bring you :\n"
@@ -3100,7 +3104,7 @@ msgstr ""
 "  Maintenant, pourquoi ne pas essayer d'Ã©crire une applet pour Cairo-"
 "Dock ? ;-)"
 
-#: ../data/messages:1687
+#: ../data/messages:1689
 msgid ""
 "v1.5.1 :\n"
 " - The 1.5 branch is still young, so this version brings a lot of bug fixes\n"
@@ -3121,7 +3125,7 @@ msgstr ""
 "  La plupart des applets peuvent se dÃ©tacher du dock\n"
 "  et se comporter comme de vrais desklets."
 
-#: ../data/messages:1689
+#: ../data/messages:1691
 msgid ""
 "v1.5.2.1 :\n"
 " - a lot of bug fixes, especially on desklets.\n"
@@ -3134,7 +3138,7 @@ msgstr ""
 " - Cairo-Dock est maintenant complÃ¨tement traduit en Japonais, grÃ¢ce Ã  "
 "Jiro Kawada !"
 
-#: ../data/messages:1691
+#: ../data/messages:1693
 msgid ""
 "v1.5.3.2 :\n"
 " - Themes have been deeply reviewed\n"
@@ -3148,7 +3152,7 @@ msgid ""
 "  who could help cairo-dock to be well-integrated into KDE ;-)"
 msgstr ""
 
-#: ../data/messages:1693
+#: ../data/messages:1695
 msgid ""
 "v1.5.4.2 : a huge release !\n"
 " - add a cute pinguin in your dock with the new applet Cairo-Penguin\n"
@@ -3173,7 +3177,7 @@ msgstr ""
 " - rafraÃ®chissez votre dock avec le nouveau thÃ¨me Wood\n"
 " - 3 thÃ¨mes supplÃ©mentaires pour l'applet Weather."
 
-#: ../data/messages:1695
+#: ../data/messages:1697
 msgid ""
 "v1.5.5.4 :\n"
 " - Huge enhancements in the TaskBar :\n"
@@ -3189,7 +3193,7 @@ msgid ""
 "soon ;-)"
 msgstr ""
 
-#: ../data/messages:1697
+#: ../data/messages:1699
 msgid ""
 "v1.5.6 :\n"
 " - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still "
@@ -3207,7 +3211,7 @@ msgid ""
 " - Any help would be welcome to integrate the dock into KDE !"
 msgstr ""
 
-#: ../data/messages:1699
+#: ../data/messages:1701
 msgid ""
 "v1.6.0 :\n"
 " - A new view has appeared : Diapositive !\n"
@@ -3226,7 +3230,7 @@ msgid ""
 " - Real window thumbnail when minimized."
 msgstr ""
 
-#: ../data/messages:1701
+#: ../data/messages:1703
 msgid ""
 "v1.6.1 :\n"
 "Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
@@ -3239,7 +3243,7 @@ msgid ""
 "plug-in ^_^"
 msgstr ""
 
-#: ../data/messages:1703
+#: ../data/messages:1705
 msgid ""
 "v1.6.2 : the first version integrated in the Ubuntu repositories !\n"
 " - 2 new applets have been released :\n"
@@ -3252,7 +3256,7 @@ msgid ""
 "plug-in ^_^"
 msgstr ""
 
-#: ../data/messages:1705
+#: ../data/messages:1707
 msgid ""
 "v1.6.3 : \n"
 " - first the bad news :\n"
@@ -3270,7 +3274,7 @@ msgid ""
 " - The dock is now translated in Sweden and partially in Greek."
 msgstr ""
 
-#: ../data/messages:1707
+#: ../data/messages:1709
 msgid ""
 "Cairo-Dock II\n"
 " - The lucky owners of NVidia/Intel cards can now benefit from a full OpenGL "

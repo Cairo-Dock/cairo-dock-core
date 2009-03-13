@@ -595,7 +595,6 @@ static gboolean _cairo_desklet_animation_loop (CairoDesklet *pDesklet)
 	
 	if (! bContinue && ! pDesklet->bKeepSlowAnimation)
 	{
-		g_print ("||| Arret de l'animation du desklet (%x)\n", pDesklet->pIcon);
 		pDesklet->iSidGLAnimation = 0;
 		return FALSE;
 	}
