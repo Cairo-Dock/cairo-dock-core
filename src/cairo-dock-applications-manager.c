@@ -76,6 +76,7 @@ static Atom s_aNetWmMaximizedVert;
 static Atom s_aRootMapID;
 static Atom s_aNetNbDesktops;
 static Atom s_aNetWmDemandsAttention;
+static Atom s_aXKlavierState;
 
 void cairo_dock_initialize_application_manager (Display *pDisplay)
 {
@@ -102,6 +103,7 @@ void cairo_dock_initialize_application_manager (Display *pDisplay)
 	s_aRootMapID = XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
 	s_aNetNbDesktops = XInternAtom (s_XDisplay, "_NET_NUMBER_OF_DESKTOPS", False);
 	s_aNetWmDemandsAttention = XInternAtom (s_XDisplay, "_NET_WM_STATE_DEMANDS_ATTENTION", False);
+	s_aXKlavierState = XInternAtom (s_XDisplay, "XKLAVIER_STATE", False);
 }
 
 
@@ -772,7 +774,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 		if (event.type == PropertyNotify)
 		{
 			//g_print ("  type : %d; atom : %s; window : %d\n", event.xproperty.type, gdk_x11_get_xatom_name (event.xproperty.atom), Xid);
-			if (Xid == root)
+			if (Xid == root)  // PropertyNotify sur root
 			{
 				if (event.xproperty.atom == s_aNetClientList)
 				{
@@ -900,15 +902,19 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						cairo_dock_invalidate_desktop_bg_surface ();
 					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED, NULL);
 				}
+				else if (event.xproperty.atom == s_aXKlavierState)
+				{
+					cairo_dock_notify (CAIRO_DOCK_KBD_STATE_CHANGED, NULL);
+				}
 			}
-			else
+			else  // PropertyNotify sur une fenetre
 			{
 				if (event.xproperty.atom == s_aNetWmState)
 				{
 					icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
 					gboolean bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention;
 					cairo_dock_window_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention);
-					cd_message ("changement d'etat de %d => {%d ; %d ; %d ; %d}", Xid, bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention);
+					g_print ("changement d'etat de %d => {%d ; %d ; %d ; %d}\n", Xid, bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention);
 					
 					if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
 					{
@@ -1036,7 +1042,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						}
 					}
 				}
-				if (event.xproperty.atom == s_aNetWmDesktop)  // cela ne gere pas les changements de viewports, qui eux se font en changeant les coordonnees. Il faut donc recueillir les ConfigureNotify, qui donnent les redimensionnements et les deplacements.
+				else if (event.xproperty.atom == s_aNetWmDesktop)  // cela ne gere pas les changements de viewports, qui eux se font en changeant les coordonnees. Il faut donc recueillir les ConfigureNotify, qui donnent les redimensionnements et les deplacements.
 				{
 					cd_message ("changement de bureau pour %d", Xid);
 					icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
@@ -1051,6 +1057,10 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 							_cairo_dock_hide_show_windows_on_other_desktops (&Xid, icon, data);
 						}
 					}
+				}
+				else if (event.xproperty.atom == s_aXKlavierState)
+				{
+					cairo_dock_notify (CAIRO_DOCK_KBD_STATE_CHANGED, &Xid);
 				}
 				else
 				{

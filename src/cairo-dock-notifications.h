@@ -64,6 +64,7 @@ typedef enum {
 	CAIRO_DOCK_RENDER_FLYING_CONTAINER,
 	CAIRO_DOCK_UPDATE_DIALOG,
 	CAIRO_DOCK_RENDER_DIALOG,
+	CAIRO_DOCK_KBD_STATE_CHANGED,  // changement dans le clavier (caps lock, ver num, agencement, etc).
 	CAIRO_DOCK_NB_NOTIFICATIONS
 	} CairoDockNotificationType;
 

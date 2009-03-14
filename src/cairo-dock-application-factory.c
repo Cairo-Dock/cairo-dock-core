@@ -20,7 +20,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <X11/extensions/Xcomposite.h>
 //#include <X11/extensions/Xdamage.h>
 #endif
-//#include <libxklavier/xklavier.h>
 
 #include "cairo-dock-load.h"
 #include "cairo-dock-icons.h"
@@ -587,7 +586,6 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 	int aReturnedFormat = 0;
 	unsigned long iLeftBytes, iBufferNbElements=0;
 	cairo_t* pCairoContext;
-	
 	if (iState == PropertyNewValue && (aProperty == s_aNetWmName || aProperty == s_aWmName))
 	{
 		//g_print ("chgt de nom (%d)\n", aProperty);

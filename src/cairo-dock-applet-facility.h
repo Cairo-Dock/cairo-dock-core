@@ -527,14 +527,18 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 *@param cImagePath chemin du fichier de l'image.
 *@return la surface nouvellement creee.
 */
-#define CD_APPLET_LOAD_USER_SURFACE_FOR_MY_APPLET(cUserImageName, cDefaultLocalImageName) do { \
+#define CD_APPLET_LOAD_USER_SURFACE_FOR_MY_APPLET(cUserImageName, cDefaultLocalImageName) \
+	__extension__ ({\
 	gchar *cImagePath; \
 	if (cUserImageName != NULL) \
 		cImagePath = cairo_dock_generate_file_path (cUserImageName); \
-	else \
+	else if (cDefaultLocalImageName != NULL)\
 		cImagePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, cDefaultLocalImageName); \
-	CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET (cImagePath); \
-	g_free (cImagePath); } while (0)
+	else\
+		cImagePath = NULL;\
+	cairo_surface_t *pSurface = CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET (cImagePath); \
+	g_free (cImagePath);\
+	pSurface; })
 
 
 /**

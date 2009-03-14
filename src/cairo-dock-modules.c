@@ -24,7 +24,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-applet-facility.h"
 #include "cairo-dock-applet-factory.h"
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-animations.h"
