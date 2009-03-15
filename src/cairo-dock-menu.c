@@ -1019,10 +1019,8 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 	//\_________________________ On ajoute le sous-menu Cairo-Dock, toujours present.
 	GtkWidget *pMenuItem, *image;
 	pMenuItem = gtk_image_menu_item_new_with_label ("Cairo-Dock");
-	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
-	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cIconPath, 32, 32, NULL);
+	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, 32, 32, NULL);
 	image = gtk_image_new_from_pixbuf (pixbuf);
-	g_free (cIconPath);
 	g_object_unref (pixbuf);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
 	gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
@@ -1045,10 +1043,8 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 	}
 	
 	pMenuItem = gtk_image_menu_item_new_with_label (myAccessibility.bLockIcons ? _("unlock icons") : _("lock icons"));
-	cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, "icon-lock-icons.svg");
-	pixbuf = gdk_pixbuf_new_from_file_at_size (cIconPath, 16, 16, NULL);
+	pixbuf = gdk_pixbuf_new_from_file_at_size (CAIRO_DOCK_SHARE_DATA_DIR"/icon-lock-icons.svg", 16, 16, NULL);
 	image = gtk_image_new_from_pixbuf (pixbuf);
-	g_free (cIconPath);
 	g_object_unref (pixbuf);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
 	gtk_menu_shell_append  (GTK_MENU_SHELL (pSubMenu), pMenuItem);

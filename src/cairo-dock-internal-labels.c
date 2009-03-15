@@ -33,9 +33,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	
 	gboolean bLabelStyleItalic = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "italic", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
 	if (bLabelStyleItalic)
-		pLabels->iconTextDescription.iStyle  = PANGO_STYLE_ITALIC;
+		pLabels->iconTextDescription.iStyle = PANGO_STYLE_ITALIC;
 	else
-		pLabels->iconTextDescription.iStyle  = PANGO_STYLE_NORMAL;
+		pLabels->iconTextDescription.iStyle = PANGO_STYLE_NORMAL;
 	
 
 	if (pLabels->iconTextDescription.cFont == NULL)

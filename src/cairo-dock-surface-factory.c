@@ -746,7 +746,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	}
 	
 	//g_print ("ink : %d;%d\n", (int) ink.x, (int) ink.y);
-	cairo_translate (pCairoContext, -ink.x, -ink.y + 0);  // meme remarque pour le +1.
+	cairo_translate (pCairoContext, -ink.x*fZoom, -ink.y*fZoom);  // meme remarque pour le +1.
 	
 	//\_________________ On dessine les contours du texte.
 	if (pLabelDescription->bOutlined)

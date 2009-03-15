@@ -383,11 +383,25 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 *@param pSubMenu GtkWidget du sous-menu; il doit juste avoir ete declare, il sera cree par la macro.
 *@param pMenu GtkWidget du menu auquel on rajoutera le sous-menu.
 */
-#define CD_APPLET_ADD_SUB_MENU(cLabel, pSubMenu, pMenu) \
+#define CD_APPLET_ADD_SUB_MENU(cLabel, pMenu) \
+	__extension__ ({\
 	GtkWidget *pSubMenu = gtk_menu_new (); \
 	pMenuItem = gtk_menu_item_new_with_label (cLabel); \
 	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem); \
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu)
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);\
+	pSubMenu; })
+
+#define CD_APPLET_CREATE_MY_SUB_MENU(...) \
+	__extension__ ({\
+	pMenuItem = gtk_image_menu_item_new_with_label (myApplet->pModule->pVisitCard->cModuleName);\
+	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, 32, 32, NULL);\
+	image = gtk_image_new_from_pixbuf (pixbuf);\
+	g_object_unref (pixbuf);\
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);\
+	gtk_menu_shell_append  (GTK_MENU_SHELL (CD_APPLET_MY_MENU), pMenuItem);\
+	GtkWidget *pSubMenu = gtk_menu_new ();\
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);\
+	pSubMenu; })
 
 /** Cree et ajoute un sous-menu a un menu deja existant.
 *@param cLabel nom du sous-menu, tel qu'il apparaitra dans le menu.
