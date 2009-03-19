@@ -254,7 +254,7 @@ msgstr "このランチャー設定項目を入力"
 msgid "Undefined"
 msgstr "未定義"
 
-#: ../src/cairo-dock-menu.c:462 ../src/cairo-dock-menu.c:1178
+#: ../src/cairo-dock-menu.c:462 ../src/cairo-dock-menu.c:1174
 msgid "Modify this launcher"
 msgstr "このランチャーを編集"
 
@@ -302,201 +302,201 @@ msgstr "このモジュール(%s)をドックから削除しようとしてい�
 msgid "Set position for the dock '%s'"
 msgstr "ドック '%s' の配置位置の設定"
 
-#: ../src/cairo-dock-menu.c:1035
+#: ../src/cairo-dock-menu.c:1033
 msgid "Configure"
 msgstr "設定"
 
-#: ../src/cairo-dock-menu.c:1042
+#: ../src/cairo-dock-menu.c:1040
 msgid "Set up this dock"
 msgstr "このドックの設定"
 
-#: ../src/cairo-dock-menu.c:1044
+#: ../src/cairo-dock-menu.c:1042
 msgid "Manage themes"
 msgstr "テーマ管理"
 
-#: ../src/cairo-dock-menu.c:1047
+#: ../src/cairo-dock-menu.c:1045
 msgid "unlock icons"
 msgstr "アイコン固定解除"
 
-#: ../src/cairo-dock-menu.c:1047
+#: ../src/cairo-dock-menu.c:1045
 msgid "lock icons"
 msgstr "アイコン固定"
 
-#: ../src/cairo-dock-menu.c:1057
+#: ../src/cairo-dock-menu.c:1053
 msgid "About"
 msgstr "情報"
 
-#: ../src/cairo-dock-menu.c:1059
+#: ../src/cairo-dock-menu.c:1055
 msgid "Development's site"
 msgstr "開発向けサイト"
 
-#: ../src/cairo-dock-menu.c:1061
+#: ../src/cairo-dock-menu.c:1057
 msgid "Community's site"
 msgstr "コミュニティサイト"
 
-#: ../src/cairo-dock-menu.c:1065
+#: ../src/cairo-dock-menu.c:1061
 msgid "Quick-Hide"
 msgstr "一時的に隠す"
 
-#: ../src/cairo-dock-menu.c:1070
+#: ../src/cairo-dock-menu.c:1066
 msgid "Quit"
 msgstr "終了"
 
-#: ../src/cairo-dock-menu.c:1098 ../src/cairo-dock-menu.c:1160
+#: ../src/cairo-dock-menu.c:1094 ../src/cairo-dock-menu.c:1156
 msgid "Add a manual launcher"
 msgstr "手製ランチャーを追加"
 
-#: ../src/cairo-dock-menu.c:1099 ../src/cairo-dock-menu.c:1161
+#: ../src/cairo-dock-menu.c:1095 ../src/cairo-dock-menu.c:1157
 msgid ""
 "Don't forget you can drag a launcher from the menu and drop it in the dock !"
 msgstr ""
 "メニューから既存のランチャーをドラッグして、ドックにドロップできることもお忘"
 "れなく！"
 
-#: ../src/cairo-dock-menu.c:1101 ../src/cairo-dock-menu.c:1163
+#: ../src/cairo-dock-menu.c:1097 ../src/cairo-dock-menu.c:1159
 msgid "Add a sub-dock"
 msgstr "サブ・ドックを追加"
 
-#: ../src/cairo-dock-menu.c:1105 ../src/cairo-dock-menu.c:1167
+#: ../src/cairo-dock-menu.c:1101 ../src/cairo-dock-menu.c:1163
 msgid "Add a separator"
 msgstr "区切りを追加"
 
-#: ../src/cairo-dock-menu.c:1125
+#: ../src/cairo-dock-menu.c:1121
 msgid "Unmount"
 msgstr "アンマウント"
 
-#: ../src/cairo-dock-menu.c:1125
+#: ../src/cairo-dock-menu.c:1121
 msgid "Mount"
 msgstr "マウント"
 
-#: ../src/cairo-dock-menu.c:1131
+#: ../src/cairo-dock-menu.c:1127
 msgid "Eject"
 msgstr "イジェクト"
 
-#: ../src/cairo-dock-menu.c:1138
+#: ../src/cairo-dock-menu.c:1134
 msgid "Delete this file"
 msgstr "このファイルを削除"
 
-#: ../src/cairo-dock-menu.c:1142
+#: ../src/cairo-dock-menu.c:1138
 msgid "Rename this file"
 msgstr "このファイルをリネーム"
 
-#: ../src/cairo-dock-menu.c:1146
+#: ../src/cairo-dock-menu.c:1142
 msgid "Properties"
 msgstr "プロパティ"
 
-#: ../src/cairo-dock-menu.c:1176
+#: ../src/cairo-dock-menu.c:1172
 msgid "Remove this separator"
 msgstr "この区切りを削除"
 
-#: ../src/cairo-dock-menu.c:1176
+#: ../src/cairo-dock-menu.c:1172
 msgid "Remove this launcher"
 msgstr "このランチャーを削除"
 
-#: ../src/cairo-dock-menu.c:1178
+#: ../src/cairo-dock-menu.c:1174
 msgid "Modify this separator"
 msgstr "この区切りを編集"
 
-#: ../src/cairo-dock-menu.c:1188
+#: ../src/cairo-dock-menu.c:1184
 msgid "Other actions"
 msgstr "その他のアクション"
 
-#: ../src/cairo-dock-menu.c:1193
+#: ../src/cairo-dock-menu.c:1189
 msgid "Move to this desktop"
 msgstr "このデスクトップに移動"
 
-#: ../src/cairo-dock-menu.c:1196
+#: ../src/cairo-dock-menu.c:1192
 msgid "Not Fullscreen"
 msgstr "全画面表示解除"
 
-#: ../src/cairo-dock-menu.c:1196
+#: ../src/cairo-dock-menu.c:1192
 msgid "Fullscreen"
 msgstr "全画面表示"
 
-#: ../src/cairo-dock-menu.c:1200
+#: ../src/cairo-dock-menu.c:1196
 msgid "Don't keep above"
 msgstr "最前面表示解除"
 
-#: ../src/cairo-dock-menu.c:1200
+#: ../src/cairo-dock-menu.c:1196
 msgid "Keep above"
 msgstr "最前面に表示"
 
-#: ../src/cairo-dock-menu.c:1207
+#: ../src/cairo-dock-menu.c:1203
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "デスクトップ %d - 面 %d へ移動"
 
-#: ../src/cairo-dock-menu.c:1209
+#: ../src/cairo-dock-menu.c:1205
 #, c-format
 msgid "Move to desktop %d"
 msgstr "デスクトップ %d へ移動"
 
-#: ../src/cairo-dock-menu.c:1211
+#: ../src/cairo-dock-menu.c:1207
 #, c-format
 msgid "Move to face %d"
 msgstr "面 %d へ移動"
 
-#: ../src/cairo-dock-menu.c:1242
+#: ../src/cairo-dock-menu.c:1238
 msgid "Kill"
 msgstr "強制終了"
 
-#: ../src/cairo-dock-menu.c:1248
+#: ../src/cairo-dock-menu.c:1244
 msgid "Launch new"
 msgstr "追加起動"
 
-#: ../src/cairo-dock-menu.c:1252
+#: ../src/cairo-dock-menu.c:1248
 msgid "Unmaximize"
 msgstr "最大化解除"
 
-#: ../src/cairo-dock-menu.c:1252
+#: ../src/cairo-dock-menu.c:1248
 msgid "Maximize"
 msgstr "最大化"
 
-#: ../src/cairo-dock-menu.c:1254
+#: ../src/cairo-dock-menu.c:1250
 msgid "Show"
 msgstr "表示"
 
-#: ../src/cairo-dock-menu.c:1256
+#: ../src/cairo-dock-menu.c:1252
 msgid "Minimize"
 msgstr "最小化"
 
-#: ../src/cairo-dock-menu.c:1258
+#: ../src/cairo-dock-menu.c:1254
 msgid "Close"
 msgstr "閉じる"
 
-#: ../src/cairo-dock-menu.c:1277
+#: ../src/cairo-dock-menu.c:1273
 msgid "Configure this applet"
 msgstr "このモジュールの設定"
 
-#: ../src/cairo-dock-menu.c:1281
+#: ../src/cairo-dock-menu.c:1277
 msgid "Detach this applet"
 msgstr "このモジュールを分離"
 
-#: ../src/cairo-dock-menu.c:1281
+#: ../src/cairo-dock-menu.c:1277
 msgid "Return to dock"
 msgstr "ドックに戻す"
 
-#: ../src/cairo-dock-menu.c:1284
+#: ../src/cairo-dock-menu.c:1280
 msgid "Remove this applet"
 msgstr "このモジュールを削除"
 
-#: ../src/cairo-dock-menu.c:1288
+#: ../src/cairo-dock-menu.c:1284
 msgid "Launch another instance of this applet"
 msgstr "このアプレットをもう1つ起動"
 
-#: ../src/cairo-dock-menu.c:1307
+#: ../src/cairo-dock-menu.c:1303
 msgid "Always on top"
 msgstr "常に最前面に表示"
 
-#: ../src/cairo-dock-menu.c:1314
+#: ../src/cairo-dock-menu.c:1310
 msgid "Normal"
 msgstr "普通"
 
-#: ../src/cairo-dock-menu.c:1321
+#: ../src/cairo-dock-menu.c:1317
 msgid "Always below"
 msgstr "常に最後面に表示"
 
-#: ../src/cairo-dock-menu.c:1336
+#: ../src/cairo-dock-menu.c:1332
 msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "Compiz の動作設定での指定法: (name=cairo-dock & type=utility)"
 

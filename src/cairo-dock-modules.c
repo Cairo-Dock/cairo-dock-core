@@ -97,13 +97,15 @@ void cairo_dock_initialize_module_manager (gchar *cModuleDirPath)
 	pVisitCard->cUserDataDir = g_strdup ("help");
 	pVisitCard->cShareDataDir = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR);
 	pVisitCard->cConfFileName = g_strdup ("help.conf");
-	pVisitCard->cModuleVersion = g_strdup ("0.0.1");
+	pVisitCard->cModuleVersion = g_strdup ("0.0.3");
 	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
 	pVisitCard->cIconFilePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, "help.svg");
 	pVisitCard->iSizeOfConfig = 0;
 	pVisitCard->iSizeOfData = 0;
 	pHelpModule->pInterface = g_new0 (CairoDockModuleInterface, 1);
 	g_hash_table_insert (s_hModuleTable, pHelpModule->pVisitCard->cModuleName, pHelpModule);
+	pHelpModule->cConfFilePath = cairo_dock_check_module_conf_file (pHelpModule->pVisitCard);
+	cairo_dock_activate_module (pHelpModule, NULL);
 }
 
 
@@ -1027,6 +1029,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 		if (pDesklet)
 		{
 			pDesklet->pIcon = pIcon;
+			gtk_window_set_title (GTK_WINDOW(pContainer->pWidget), pInstance->pModule->pVisitCard->cModuleName);
 			///gtk_widget_queue_draw (pContainer->pWidget);
 		}
 		cairo_dock_free_minimal_config (pMinimalConfig);

@@ -59,9 +59,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 	pSystem->fStripesSpeedFactor = MIN (1., pSystem->fStripesSpeedFactor);
 	pSystem->bDecorationsFollowMouse = cairo_dock_get_boolean_key_value (pKeyFile, "System", "decorations enslaved", &bFlushConfFileNeeded, TRUE, "Background", NULL);
 	
-	pSystem->iScrollAmount = cairo_dock_get_integer_key_value (pKeyFile, "System", "scroll amount", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
-	pSystem->bResetScrollOnLeave = cairo_dock_get_boolean_key_value (pKeyFile, "System", "reset scroll", &bFlushConfFileNeeded, TRUE, "Icons", NULL);
-	pSystem->fScrollAcceleration = cairo_dock_get_double_key_value (pKeyFile, "System", "reset scroll acceleration", &bFlushConfFileNeeded, 0.9, "Icons", NULL);
 	
 	gsize length=0;
 	pSystem->cActiveModuleList = cairo_dock_get_string_list_key_value (pKeyFile, "System", "modules", &bFlushConfFileNeeded, &length, NULL, "Applets", "modules_0");

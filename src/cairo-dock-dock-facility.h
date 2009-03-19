@@ -21,12 +21,6 @@ G_BEGIN_DECLS
 */
 #define CAIRO_DOCK(pContainer) ((CairoDock *)pContainer)
 
-/** Retourne le zoom max des icones contenues dans un conteneur donne.
-* @param pContainer le container.
-* @return le facteur d'echelle max.
-*/
-#define cairo_dock_get_max_scale(pContainer) (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) : 1)
-
 /** Retourne la largeur max autorisee pour un dock.
 * @param pDock le dock.
 * @return la taille max.
@@ -35,7 +29,7 @@ G_BEGIN_DECLS
 
 
 /**
-* Recharge les reflets d'un dock. Utile si le dock a changé de position.
+* Recharge les reflets (cairo) d'un dock. Utile si le dock a changé de position.
 * @param pDock un dock.
 */
 void cairo_dock_reload_reflects_in_dock (CairoDock *pDock);
@@ -101,6 +95,9 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock);
 void cairo_dock_check_can_drop_linear (CairoDock *pDock);
 
 void cairo_dock_stop_marking_icons (CairoDock *pDock);
+
+
+void cairo_dock_scroll_dock_icons (CairoDock *pDock, int iScrollAmount);
 
 
 G_END_DECLS

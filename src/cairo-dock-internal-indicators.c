@@ -14,6 +14,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-container.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-indicators.h"
 

@@ -852,3 +852,33 @@ void cairo_dock_stop_marking_icons (CairoDock *pDock)
 		cairo_dock_stop_marking_icon_as_avoiding_mouse (icon);
 	}
 }
+
+
+void cairo_dock_scroll_dock_icons (CairoDock *pDock, int iScrollAmount)
+{
+	if (iScrollAmount == 0)  // fin de scroll
+	{
+		cairo_dock_set_icons_geometry_for_window_manager (pDock);
+		return ;
+	}
+	
+	//\_______________ On fait tourner les icones.
+	pDock->iScrollOffset += iScrollAmount;
+	if (pDock->iScrollOffset >= pDock->fFlatDockWidth)
+		pDock->iScrollOffset -= pDock->fFlatDockWidth;
+	if (pDock->iScrollOffset < 0)
+		pDock->iScrollOffset += pDock->fFlatDockWidth;
+	
+	pDock->calculate_max_dock_size (pDock);  // recalcule le pFirstDrawnElement.
+	
+	//\_______________ On recalcule toutes les icones.
+	Icon *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
+	Icon *pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
+	gtk_widget_queue_draw (pDock->pWidget);
+	
+	//\_______________ On gere le changement d'icone.
+	if (pPointedIcon != pLastPointedIcon)
+	{
+		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
+	}
+}

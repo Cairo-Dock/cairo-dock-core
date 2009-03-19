@@ -1569,7 +1569,7 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 	if (pVisInfo == NULL)
 	{
 		cd_warning ("couldn't find an appropriate visual ourself, trying something else ...");
-		pGlConfig = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGBA |
+		pGlConfig = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
 			GDK_GL_MODE_ALPHA |
 			GDK_GL_MODE_DEPTH |
 			GDK_GL_MODE_DOUBLE |
@@ -1577,8 +1577,8 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 		
 		if (pGlConfig == NULL)
 		{
-			cd_warning ("no luck, trying a default one...");
-			pGlConfig = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGBA |
+			cd_warning ("no luck, trying without double-buffer ...");
+			pGlConfig = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
 				GDK_GL_MODE_ALPHA |
 				GDK_GL_MODE_DEPTH);
 		}
@@ -1588,7 +1588,7 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 	
 	if (pVisInfo == NULL && bForceOpenGL)
 	{
-		cd_warning ("we could not get an ARGB-visual, trying to get an RGB one...");
+		cd_warning ("we could not get an ARGB-visual, trying to get an RGB one (fake transparency will be used in return) ...");
 		*bHasBeenForced = TRUE;
 		doubleBufferAttributes[13] = 0;
 		pFBConfigs = glXChooseFBConfig (XDisplay,

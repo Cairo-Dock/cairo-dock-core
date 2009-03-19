@@ -23,6 +23,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-dialogs.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-renderer-manager.h"
 
 extern gboolean g_bUseOpenGL;
@@ -336,11 +337,7 @@ void cairo_dock_render_desklet_with_new_data (CairoDesklet *pDesklet, CairoDeskl
 	if (pDesklet->pRenderer != NULL && pDesklet->pRenderer->update != NULL)
 		pDesklet->pRenderer->update (pDesklet, pNewData);
 	
-	gtk_widget_queue_draw_area (pDesklet->pWidget,
-		.5*myBackground.iDockRadius,
-		.5*myBackground.iDockRadius,
-		pDesklet->iWidth - myBackground.iDockRadius,
-		pDesklet->iHeight- myBackground.iDockRadius);  // marche avec glitz ?...
+	gtk_widget_queue_draw (pDesklet->pWidget);
 }
 
 void cairo_dock_render_dialog_with_new_data (CairoDialog *pDialog, CairoDialogRendererDataPtr pNewData)

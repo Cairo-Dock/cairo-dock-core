@@ -1042,7 +1042,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				if (iElementType == 'j')
 				{
 					pToggleButton = gtk_toggle_button_new ();
-					GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_REFRESH, GTK_ICON_SIZE_MENU);  // trouver une image...
+					GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_MEDIA_PAUSE, GTK_ICON_SIZE_MENU);  // trouver une image...
 					gtk_button_set_image (GTK_BUTTON (pToggleButton), pImage);
 				}
 				for (k = 0; k < iNbElements; k ++)

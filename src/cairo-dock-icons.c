@@ -43,6 +43,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-load.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-icons.h"
 
 extern gchar *g_cCurrentLaunchersPath;

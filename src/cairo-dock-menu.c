@@ -194,6 +194,14 @@ static void _cairo_dock_help (GtkMenuItem *pMenuItem, gpointer *data)
 	_launch_url (CAIRO_DOCK_HELP_URL);
 }
 
+static void _cairo_dock_present_help (GtkMenuItem *pMenuItem, gpointer *data)
+{
+	CairoDockModule *pModule = cairo_dock_find_module_from_name ("Help");
+	g_return_if_fail (pModule != NULL && pModule->pInstancesList != NULL);
+	cairo_dock_build_main_ihm (g_cConfFile, FALSE);
+	cairo_dock_present_module_instance_gui (pModule->pInstancesList->data);
+}
+
 static void _cairo_dock_quick_hide (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	CairoDock *pDock = data[1];
@@ -1049,18 +1057,20 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
 	gtk_menu_shell_append  (GTK_MENU_SHELL (pSubMenu), pMenuItem);
 	g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK(_cairo_dock_lock_icons), data);
-		
-	_add_entry_in_menu (_("About"), GTK_STOCK_ABOUT, _cairo_dock_about, pSubMenu);
-
-	_add_entry_in_menu (_("Development's site"), GTK_STOCK_REFRESH, _cairo_dock_check_for_updates, pSubMenu);
-
-	_add_entry_in_menu (_("Community's site"), GTK_STOCK_HELP, _cairo_dock_help, pSubMenu);
-
+	
 	if (CAIRO_DOCK_IS_DOCK (pContainer) && ! CAIRO_DOCK (pContainer)->bAutoHide)
 	{
 		_add_entry_in_menu (_("Quick-Hide"), GTK_STOCK_GOTO_BOTTOM, _cairo_dock_quick_hide, pSubMenu);
 	}
 	
+	_add_entry_in_menu (_("Development's site"), GTK_STOCK_DIALOG_WARNING, _cairo_dock_check_for_updates, pSubMenu);
+
+	_add_entry_in_menu (_("Community's site"), GTK_STOCK_DIALOG_INFO, _cairo_dock_help, pSubMenu);
+
+	_add_entry_in_menu (_("Help"), GTK_STOCK_HELP, _cairo_dock_present_help, pSubMenu);
+
+	_add_entry_in_menu (_("About"), GTK_STOCK_ABOUT, _cairo_dock_about, pSubMenu);
+
 	if (! g_bLocked)
 	{
 		_add_entry_in_menu (_("Quit"), GTK_STOCK_QUIT, _cairo_dock_quit, pSubMenu);

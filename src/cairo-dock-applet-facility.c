@@ -42,10 +42,7 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 	g_return_if_fail (cairo_status (pIconContext) == CAIRO_STATUS_SUCCESS);
 	
 	//\________________ On efface l'ancienne image.
-	cairo_set_source_rgba (pIconContext, 0.0, 0.0, 0.0, 0.0);
-	cairo_set_operator (pIconContext, CAIRO_OPERATOR_SOURCE);
-	cairo_paint (pIconContext);
-	cairo_set_operator (pIconContext, CAIRO_OPERATOR_OVER);
+	cairo_dock_erase_cairo_context (pIconContext);
 	
 	//\________________ On applique la nouvelle image.
 	if (pSurface != NULL && fScale > 0)

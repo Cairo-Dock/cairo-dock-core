@@ -73,5 +73,13 @@ gboolean cairo_dock_string_is_adress (const gchar *cString);
 */
 void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, double fOrder, CairoContainer *pContainer);
 
+
+/** Retourne le zoom max des icones contenues dans un conteneur donne.
+* @param pContainer le container.
+* @return le facteur d'echelle max.
+*/
+#define cairo_dock_get_max_scale(pContainer) (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) : 1)
+
+
 G_END_DECLS
 #endif

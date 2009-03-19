@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([cairo-dock], [2.0.0-beta3], [Fabrice Rey (fabounet@users.berlios.de)])
+AC_INIT([cairo-dock], [2.0.0-beta3.1], [Fabrice Rey (fabounet@users.berlios.de)])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 
@@ -64,7 +64,7 @@ AC_SUBST(xextend_required)
 AM_CONDITIONAL( [WITH_XEXTEND], [test "$XExt_detected" = "true"] )
 
 AC_ARG_ENABLE(glitz,
-	[  --enable-glitz  :  Turn on hardware acceleration through Glitz],
+	[  --enable-glitz  :  Turn on hardware acceleration through Glitz (quite deprecated now)],
 	[case "${enableval}" in
 		yes) useglitz=true ;;
 		no)  useglitz=false ;;
@@ -72,7 +72,7 @@ AC_ARG_ENABLE(glitz,
 	esac],[useglitz=false])
 
 if test "$useglitz" = "true" ; then
-	PKG_CHECK_MODULES(GLITZ, glitz glitz-glx, [glitz_detected=true], [ glitz_detected=false; AC_MSG_WARN(Could not find glitz and/or glitz-glx; Cairo-Dock won't be built with hardware acceleration.) ])
+	PKG_CHECK_MODULES(GLITZ, glitz glitz-glx, [glitz_detected=true], [ glitz_detected=false; AC_MSG_WARN(Could not find glitz and/or glitz-glx; Cairo-Dock won't be built with Glitz hardware acceleration.) ])
 	AC_SUBST(GLITZ_CFLAGS)
 	AC_SUBST(GLITZ_LIBS)
 	

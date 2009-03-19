@@ -28,9 +28,6 @@ struct _CairoConfigSystem {
 	gboolean bAnimateSubDock;
 	gdouble fStripesSpeedFactor;
 	gboolean bDecorationsFollowMouse;
-	gint iScrollAmount;
-	gboolean bResetScrollOnLeave;
-	gdouble fScrollAcceleration;
 	gchar **cActiveModuleList;
 	gint iFileSortType;
 	gboolean bShowHiddenFiles;

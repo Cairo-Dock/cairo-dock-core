@@ -31,6 +31,7 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock);
 */
 #define cairo_dock_animation_will_be_visible(pDock) ((pDock)->bInside || (! (pDock)->bAutoHide && (pDock)->iRefCount == 0) || ! (pDock)->bAtBottom)
 
+#define cairo_dock_container_is_animating(pContainer) ((pContainer)->iSidGLAnimation != 0)
 
 /** Lance l'animation du container. Ne fait rien si l'animation ne sera pas visible (dock cache).
 *@param pContainer le container a animer.
@@ -69,7 +70,7 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gch
 /** Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms).
 *@param pContainer le container.
 */
-#define cairo_dock_get_slow_animation_delta_t(pContainer) (int) ceil (1.*CAIRO_DOCK_MIN_SLOW_DELTA_T / (pContainer)->iAnimationDeltaT) * (pContainer)->iAnimationDeltaT;
+#define cairo_dock_get_slow_animation_delta_t(pContainer) ((int) ceil (1.*CAIRO_DOCK_MIN_SLOW_DELTA_T / (pContainer)->iAnimationDeltaT) * (pContainer)->iAnimationDeltaT)
 
 #define cairo_dock_set_default_animation_delta_t(pContainer) (pContainer)->iAnimationDeltaT = (g_bUseOpenGL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT)
 
@@ -97,6 +98,12 @@ void cairo_dock_update_removing_inserting_icon_size_default (Icon *icon);
 gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation);
 gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock);
 gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon);
+
+
+void cairo_dock_set_transition_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pIconContext, CairoDockTransitionRenderFunc render_step_cairo, CairoDockTransitionGLRenderFunc render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData);
+
+void cairo_dock_remove_transition_on_icon (Icon *pIcon);
+
 
 G_END_DECLS
 #endif

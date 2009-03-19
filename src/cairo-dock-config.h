@@ -119,7 +119,7 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, gchar *cGroupName
 		g_key_file_set_integer_list (pKeyFile, cGroupName, cKeyPrefix"size", iSize, 2); } \
 	if (iHeight == 0) iHeight = iWidth;
 
-
+#define cairo_dock_get_pango_weight_from_1_9(iWeight) (((PANGO_WEIGHT_HEAVY - PANGO_WEIGHT_ULTRALIGHT) * iWeight + 9 * PANGO_WEIGHT_ULTRALIGHT - PANGO_WEIGHT_HEAVY) / 8)
 /**
 *Lis le fichier de conf et recharge l'appli en consequence.
 *@param cConfFilePath chemin du fichier de conf.

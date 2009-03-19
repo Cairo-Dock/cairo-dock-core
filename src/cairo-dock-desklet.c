@@ -589,7 +589,8 @@ gboolean on_scroll_desklet (GtkWidget* pWidget,
 	GdkEventScroll* pScroll,
 	CairoDesklet *pDesklet)
 {
-	if (pScroll->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
+	g_print ("scroll\n");
+	if (! (pScroll->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)))
 	{
 		Icon *icon = cairo_dock_find_clicked_icon_in_desklet (pDesklet);
 		if (icon != NULL)
@@ -605,7 +606,7 @@ Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet)
 {
 	int iMouseX = pDesklet->iMouseX;
 	int iMouseY = pDesklet->iMouseY;
-	cd_debug (" clic en (%d;%d)", iMouseX, iMouseY);
+	cd_debug (" clic en (%d;%d)", (int)iMouseX, (int)iMouseY);
 	
 	Icon *icon = pDesklet->pIcon;
 	g_return_val_if_fail (icon != NULL, NULL);  // peut arriver au tout debut, car on associe l'icone au desklet _apres_ l'avoir cree, et on fait tourner la gtk_main entre-temps (pour le redessiner invisible).
@@ -1004,6 +1005,8 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 			pAttribute->iDeskletWidth,
 			pAttribute->iDeskletHeight);
 	}
+	if (! pAttribute->bDeskletUseSize)
+		gtk_container_set_border_width (GTK_CONTAINER (pDesklet->pWidget), 0);
 	
 	int iAbsolutePositionX = (pAttribute->iDeskletPositionX < 0 ? g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + pAttribute->iDeskletPositionX : pAttribute->iDeskletPositionX);
 	iAbsolutePositionX = MAX (0, MIN (g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - pAttribute->iDeskletWidth, iAbsolutePositionX));

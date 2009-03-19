@@ -244,7 +244,7 @@ msgstr "Llenar este Lanzador"
 msgid "Undefined"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:462 ../src/cairo-dock-menu.c:1178
+#: ../src/cairo-dock-menu.c:462 ../src/cairo-dock-menu.c:1174
 msgid "Modify this launcher"
 msgstr "Modificar Este Lanzador"
 
@@ -295,211 +295,211 @@ msgstr "Tamaño permitido para el dock :"
 # Fabrice Rey <fabounet@users.berlios.de>, 2007.
 # Henrry OSwaldo Ortiz Rodriguez <hoortiz@gmail.com>, 2008
 #
-#: ../src/cairo-dock-menu.c:1035
+#: ../src/cairo-dock-menu.c:1033
 msgid "Configure"
 msgstr "Configurar"
 
-#: ../src/cairo-dock-menu.c:1042
+#: ../src/cairo-dock-menu.c:1040
 #, fuzzy
 msgid "Set up this dock"
 msgstr "Volver al dock"
 
-#: ../src/cairo-dock-menu.c:1044
+#: ../src/cairo-dock-menu.c:1042
 msgid "Manage themes"
 msgstr "Administración De Temas"
 
-#: ../src/cairo-dock-menu.c:1047
+#: ../src/cairo-dock-menu.c:1045
 msgid "unlock icons"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1047
+#: ../src/cairo-dock-menu.c:1045
 msgid "lock icons"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1057
+#: ../src/cairo-dock-menu.c:1053
 msgid "About"
 msgstr "Acerca De"
 
-#: ../src/cairo-dock-menu.c:1059
+#: ../src/cairo-dock-menu.c:1055
 #, fuzzy
 msgid "Development's site"
 msgstr "Desarollo"
 
-#: ../src/cairo-dock-menu.c:1061
+#: ../src/cairo-dock-menu.c:1057
 msgid "Community's site"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1065
+#: ../src/cairo-dock-menu.c:1061
 msgid "Quick-Hide"
 msgstr "Esconderse-Rápido"
 
-#: ../src/cairo-dock-menu.c:1070
+#: ../src/cairo-dock-menu.c:1066
 msgid "Quit"
 msgstr "Quitar"
 
-#: ../src/cairo-dock-menu.c:1098 ../src/cairo-dock-menu.c:1160
+#: ../src/cairo-dock-menu.c:1094 ../src/cairo-dock-menu.c:1156
 #, fuzzy
 msgid "Add a manual launcher"
 msgstr "Agregar Un Lanzador"
 
-#: ../src/cairo-dock-menu.c:1099 ../src/cairo-dock-menu.c:1161
+#: ../src/cairo-dock-menu.c:1095 ../src/cairo-dock-menu.c:1157
 msgid ""
 "Don't forget you can drag a launcher from the menu and drop it in the dock !"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1101 ../src/cairo-dock-menu.c:1163
+#: ../src/cairo-dock-menu.c:1097 ../src/cairo-dock-menu.c:1159
 msgid "Add a sub-dock"
 msgstr "Agregar Un Sub-dock"
 
-#: ../src/cairo-dock-menu.c:1105 ../src/cairo-dock-menu.c:1167
+#: ../src/cairo-dock-menu.c:1101 ../src/cairo-dock-menu.c:1163
 msgid "Add a separator"
 msgstr "Agregar Un Separador"
 
-#: ../src/cairo-dock-menu.c:1125
+#: ../src/cairo-dock-menu.c:1121
 #, fuzzy
 msgid "Unmount"
 msgstr "desmontar"
 
-#: ../src/cairo-dock-menu.c:1125
+#: ../src/cairo-dock-menu.c:1121
 #, fuzzy
 msgid "Mount"
 msgstr "montar"
 
-#: ../src/cairo-dock-menu.c:1131
+#: ../src/cairo-dock-menu.c:1127
 msgid "Eject"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1138
+#: ../src/cairo-dock-menu.c:1134
 #, fuzzy
 msgid "Delete this file"
 msgstr "Soltar este modulo"
 
-#: ../src/cairo-dock-menu.c:1142
+#: ../src/cairo-dock-menu.c:1138
 #, fuzzy
 msgid "Rename this file"
 msgstr "Eliminar este modulo"
 
-#: ../src/cairo-dock-menu.c:1146
+#: ../src/cairo-dock-menu.c:1142
 msgid "Properties"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1176
+#: ../src/cairo-dock-menu.c:1172
 #, fuzzy
 msgid "Remove this separator"
 msgstr "Eliminar Este Lanzador"
 
-#: ../src/cairo-dock-menu.c:1176
+#: ../src/cairo-dock-menu.c:1172
 msgid "Remove this launcher"
 msgstr "Eliminar Este Lanzador"
 
-#: ../src/cairo-dock-menu.c:1178
+#: ../src/cairo-dock-menu.c:1174
 #, fuzzy
 msgid "Modify this separator"
 msgstr "Modificar Este Lanzador"
 
-#: ../src/cairo-dock-menu.c:1188
+#: ../src/cairo-dock-menu.c:1184
 msgid "Other actions"
 msgstr "Otras Acciones"
 
-#: ../src/cairo-dock-menu.c:1193
+#: ../src/cairo-dock-menu.c:1189
 msgid "Move to this desktop"
 msgstr "Mover a este Escritorio"
 
-#: ../src/cairo-dock-menu.c:1196
+#: ../src/cairo-dock-menu.c:1192
 msgid "Not Fullscreen"
 msgstr "Sin Pantalla Completa"
 
-#: ../src/cairo-dock-menu.c:1196
+#: ../src/cairo-dock-menu.c:1192
 msgid "Fullscreen"
 msgstr "Pantalla Completa"
 
-#: ../src/cairo-dock-menu.c:1200
+#: ../src/cairo-dock-menu.c:1196
 msgid "Don't keep above"
 msgstr "No mantener arriba"
 
-#: ../src/cairo-dock-menu.c:1200
+#: ../src/cairo-dock-menu.c:1196
 msgid "Keep above"
 msgstr "Mantener arriba"
 
-#: ../src/cairo-dock-menu.c:1207
+#: ../src/cairo-dock-menu.c:1203
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Mover al escritorio %d - cara %d"
 
-#: ../src/cairo-dock-menu.c:1209
+#: ../src/cairo-dock-menu.c:1205
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Mover al escritorio %d"
 
-#: ../src/cairo-dock-menu.c:1211
+#: ../src/cairo-dock-menu.c:1207
 #, c-format
 msgid "Move to face %d"
 msgstr "Mover a la cara %d"
 
-#: ../src/cairo-dock-menu.c:1242
+#: ../src/cairo-dock-menu.c:1238
 msgid "Kill"
 msgstr "Matar"
 
-#: ../src/cairo-dock-menu.c:1248
+#: ../src/cairo-dock-menu.c:1244
 msgid "Launch new"
 msgstr "Lanzar uno nuevo"
 
-#: ../src/cairo-dock-menu.c:1252
+#: ../src/cairo-dock-menu.c:1248
 msgid "Unmaximize"
 msgstr "Restaurar"
 
-#: ../src/cairo-dock-menu.c:1252
+#: ../src/cairo-dock-menu.c:1248
 msgid "Maximize"
 msgstr "Maximizar"
 
-#: ../src/cairo-dock-menu.c:1254
+#: ../src/cairo-dock-menu.c:1250
 msgid "Show"
 msgstr "Mostrar"
 
-#: ../src/cairo-dock-menu.c:1256
+#: ../src/cairo-dock-menu.c:1252
 msgid "Minimize"
 msgstr "Minimizar"
 
-#: ../src/cairo-dock-menu.c:1258
+#: ../src/cairo-dock-menu.c:1254
 msgid "Close"
 msgstr "Cerrar"
 
-#: ../src/cairo-dock-menu.c:1277
+#: ../src/cairo-dock-menu.c:1273
 #, fuzzy
 msgid "Configure this applet"
 msgstr "Configurar este modulo"
 
-#: ../src/cairo-dock-menu.c:1281
+#: ../src/cairo-dock-menu.c:1277
 #, fuzzy
 msgid "Detach this applet"
 msgstr "Soltar este modulo"
 
-#: ../src/cairo-dock-menu.c:1281
+#: ../src/cairo-dock-menu.c:1277
 msgid "Return to dock"
 msgstr "Volver al dock"
 
-#: ../src/cairo-dock-menu.c:1284
+#: ../src/cairo-dock-menu.c:1280
 #, fuzzy
 msgid "Remove this applet"
 msgstr "Eliminar este modulo"
 
-#: ../src/cairo-dock-menu.c:1288
+#: ../src/cairo-dock-menu.c:1284
 msgid "Launch another instance of this applet"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1307
+#: ../src/cairo-dock-menu.c:1303
 msgid "Always on top"
 msgstr "Simpre visible"
 
-#: ../src/cairo-dock-menu.c:1314
+#: ../src/cairo-dock-menu.c:1310
 msgid "Normal"
 msgstr "Normal"
 
-#: ../src/cairo-dock-menu.c:1321
+#: ../src/cairo-dock-menu.c:1317
 msgid "Always below"
 msgstr "Siempre detras"
 
-#: ../src/cairo-dock-menu.c:1336
+#: ../src/cairo-dock-menu.c:1332
 msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "asignar comportamiento en Compiz a : (name=cairo-dock & type=utility)"
 

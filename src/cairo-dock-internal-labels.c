@@ -9,11 +9,13 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <string.h>
 
 #include "cairo-dock-load.h"
+#include "cairo-dock-config.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-internal-dialogs.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-container.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-labels.h"
 
@@ -29,7 +31,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	pLabels->iconTextDescription.iSize = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "size", &bFlushConfFileNeeded, 14, "Icons", NULL);
 	
 	int iLabelWeight = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "weight", &bFlushConfFileNeeded, 5, "Icons", NULL);
-	pLabels->iconTextDescription.iWeight = ((PANGO_WEIGHT_HEAVY - PANGO_WEIGHT_ULTRALIGHT) * iLabelWeight + 9 * PANGO_WEIGHT_ULTRALIGHT - PANGO_WEIGHT_HEAVY) / 8;  // on se ramene aux intervalles definit par Pango.
+	pLabels->iconTextDescription.iWeight = cairo_dock_get_pango_weight_from_1_9 (iLabelWeight);  // on se ramene aux intervalles definit par Pango.
 	
 	gboolean bLabelStyleItalic = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "italic", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
 	if (bLabelStyleItalic)

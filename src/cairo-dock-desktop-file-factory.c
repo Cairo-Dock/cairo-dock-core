@@ -98,7 +98,7 @@ gchar *cairo_dock_generate_desktop_file_for_launcher (const gchar *cDesktopURI, 
 		g_key_file_free (pKeyFile);
 		return NULL;
 	}
-	if (g_str_has_suffix (cIconName, ".svg") || g_str_has_suffix (cIconName, ".png") || g_str_has_suffix (cIconName, ".xpm"))
+	if (*cIconName != '/' && (g_str_has_suffix (cIconName, ".svg") || g_str_has_suffix (cIconName, ".png") || g_str_has_suffix (cIconName, ".xpm")))
 	{
 		cIconName[strlen(cIconName) - 4] = '\0';
 		g_key_file_set_string (pKeyFile, "Desktop Entry", "Icon", cIconName);

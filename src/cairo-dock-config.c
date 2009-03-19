@@ -60,6 +60,7 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-internal-desklets.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-background.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-config.h"
 
 extern CairoDock *g_pMainDock;

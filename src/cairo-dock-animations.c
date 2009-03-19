@@ -22,6 +22,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-draw.h"
+#include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-dock-manager.h"
@@ -36,6 +37,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-flying-container.h"
+#include "cairo-dock-load.h"
 #include "cairo-dock-animations.h"
 
 extern int g_iXScreenHeight[2];
@@ -95,7 +97,7 @@ gboolean cairo_dock_pop_down (CairoDock *pDock)
 gboolean cairo_dock_move_down (CairoDock *pDock)
 {
 	//g_print ("%s ()\n", __func__);
-	if (pDock->iMagnitudeIndex > 0 || (mySystem.bResetScrollOnLeave && pDock->iScrollOffset != 0))  // on retarde le cachage du dock pour apercevoir les effets.
+	if (pDock->iMagnitudeIndex > 0/** || (mySystem.bResetScrollOnLeave && pDock->iScrollOffset != 0)*/)  // on retarde le cachage du dock pour apercevoir les effets.
 		return TRUE;
 	int deltaY_possible = (pDock->bDirectionUp ? g_iXScreenHeight[pDock->bHorizontalDock] - pDock->iGapY - 0 : pDock->iGapY + 0 - pDock->iMaxDockHeight) - pDock->iWindowPositionY;  // 0 <-> g_iVisibleZoneHeight
 	//g_print ("%s (%d)\n", __func__, deltaY_possible);
@@ -153,7 +155,7 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 					pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
 				}
 			}
-			pDock->iScrollOffset = 0;
+			///pDock->iScrollOffset = 0;
 
 			pDock->calculate_max_dock_size (pDock);  // utilite ?
 			pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? mySystem.fUnfoldAcceleration : 0);
@@ -238,7 +240,7 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 		pDock->iMagnitudeIndex = 0;
 	
 	//\_________________ On replie le dock.
-	if (pDock->fFoldingFactor != 0 && (! mySystem.bResetScrollOnLeave || pDock->iScrollOffset == 0))
+	if (pDock->fFoldingFactor != 0/** && (! mySystem.bResetScrollOnLeave || pDock->iScrollOffset == 0)*/)
 	{
 		pDock->fFoldingFactor = pow (pDock->fFoldingFactor, 2./3);
 		if (pDock->fFoldingFactor > mySystem.fUnfoldAcceleration)
@@ -251,7 +253,7 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 		pDock->fDecorationsOffsetX = 0.;
 	
 	//\_________________ On remet les icones a l'equilibre.
-	if (pDock->iScrollOffset != 0 && mySystem.bResetScrollOnLeave)
+	/**if (pDock->iScrollOffset != 0 && mySystem.bResetScrollOnLeave)
 	{
 		//g_print ("iScrollOffset : %d\n", pDock->iScrollOffset);
 		if (pDock->iScrollOffset < pDock->fFlatDockWidth / 2)
@@ -268,7 +270,7 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 				pDock->iScrollOffset = 0;
 		}
 		pDock->calculate_max_dock_size (pDock);
-	}
+	}*/
 	
 	//\_________________ On recupere la position de la souris pour le cas ou on est hors du dock.
 	if (pDock->bHorizontalDock)  // ce n'est pas le motion_notify qui va nous donner des coordonnees en dehors du dock, et donc le fait d'etre dedans va nous faire interrompre le shrink_down et re-grossir, du coup il faut le faire ici. L'inconvenient, c'est que quand on sort par les cotes, il n'y a soudain plus d'icone pointee, et donc le dock devient tout plat subitement au lieu de le faire doucement. Heureusement j'ai trouve une astuce. ^_^
@@ -287,7 +289,7 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 	if (! pDock->bInside)
 		cairo_dock_replace_all_dialogs ();
 
-	if ((pDock->iScrollOffset == 0 || ! mySystem.bResetScrollOnLeave) &&
+	if (/**(pDock->iScrollOffset == 0 || ! mySystem.bResetScrollOnLeave) &&*/
 		(pDock->iMagnitudeIndex == 0) &&
 		(pDock->fDecorationsOffsetX == 0) &&
 		(pDock->fFoldingFactor == 0 || pDock->fFoldingFactor == mySystem.fUnfoldAcceleration))
@@ -747,4 +749,104 @@ gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserDat
 {
 	pIcon->bBeingRemovedByCairo = FALSE;
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
+
+#define cairo_dock_get_transition(pIcon) (pIcon)->pTransition
+
+#define cairo_dock_set_transition(pIcon, transition) (pIcon)->pTransition = transition
+
+#define cairo_dock_get_transition_count(pIcon) (pIcon)->pTransition->iCount
+
+#define cairo_dock_get_transition_elapsed_time(pIcon) (pIcon)->pTransition->iElapsedTime
+
+#define cairo_dock_get_transition_fraction(pIcon) ((pIcon)->pTransition->iDuration ? 1.*(pIcon)->pTransition->iElapsedTime / (pIcon)->pTransition->iDuration : 0)
+
+
+static gboolean _cairo_dock_transition_step (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, gboolean *bContinueAnimation)
+{
+	CairoDockTransition *pTransition = cairo_dock_get_transition (pIcon);
+	
+	pTransition->iCount ++;
+	int iDetlaT = (pTransition->bFastPace ? cairo_dock_get_animation_delta_t (pContainer) : cairo_dock_get_slow_animation_delta_t (pContainer));
+	//int iNbSteps = 1.*pTransition->iDuration / iDetlaT;
+	pTransition->iElapsedTime += iDetlaT;
+	
+	if (! pTransition->bRemoveWhenFinished && pTransition->iDuration != 0 && pTransition->iElapsedTime > pTransition->iDuration)  // skip
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	
+	gboolean bContinue;
+	if (CAIRO_CONTAINER_IS_OPENGL (pTransition->pContainer))
+	{
+		if (pTransition->render_opengl)
+		{
+			if (! cairo_dock_begin_draw_icon (pIcon, pContainer))
+				return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+			bContinue = pTransition->render_opengl (pTransition->pUserData);
+			cairo_dock_end_draw_icon (pIcon, pContainer);
+		}
+		else
+		{
+			cairo_dock_erase_cairo_context (pTransition->pIconContext);
+			bContinue = pTransition->render (pTransition->pUserData, pTransition->pIconContext);
+			cairo_dock_update_icon_texture (pIcon);
+		}
+	}
+	else if (pTransition->render && pTransition->pIconContext != NULL)
+	{
+		cairo_dock_erase_cairo_context (pTransition->pIconContext);
+		bContinue = pTransition->render (pTransition->pUserData, pTransition->pIconContext);
+		if (pContainer->bUseReflect)
+			cairo_dock_add_reflection_to_icon (pTransition->pIconContext, pIcon, pContainer);
+	}
+	
+	cairo_dock_redraw_icon (pIcon, pContainer);
+	
+	if (pTransition->iDuration != 0 && pTransition->iElapsedTime >= pTransition->iDuration)
+		bContinue = FALSE;
+	
+	if (! bContinue)
+	{
+		if (pTransition->bRemoveWhenFinished)
+			cairo_dock_remove_transition_on_icon (pIcon);
+	}
+	else
+	{
+		*bContinueAnimation = TRUE;
+	}
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+void cairo_dock_set_transition_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pIconContext, CairoDockTransitionRenderFunc render_step_cairo, CairoDockTransitionGLRenderFunc render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData)
+{
+	cairo_dock_remove_transition_on_icon (pIcon);
+	
+	CairoDockTransition *pTransition = g_new0 (CairoDockTransition, 1);
+	pTransition->render = render_step_cairo;
+	pTransition->render_opengl = render_step_opengl;
+	pTransition->bFastPace = bFastPace;
+	pTransition->iDuration = iDuration;
+	pTransition->bRemoveWhenFinished = bRemoveWhenFinished;
+	pTransition->pContainer = pContainer;
+	pTransition->pIconContext = pIconContext;
+	pTransition->pUserData = pUserData;
+	cairo_dock_set_transition (pIcon, pTransition);
+	
+	cairo_dock_register_notification (bFastPace ? CAIRO_DOCK_UPDATE_ICON : CAIRO_DOCK_UPDATE_ICON_SLOW,
+		(CairoDockNotificationFunc) _cairo_dock_transition_step, CAIRO_DOCK_RUN_FIRST, pUserData);
+	
+	cairo_dock_launch_animation (pContainer);
+}
+
+void cairo_dock_remove_transition_on_icon (Icon *pIcon)
+{
+	CairoDockTransition *pTransition = cairo_dock_get_transition (pIcon);
+	if (pTransition == NULL)
+		return ;
+	
+	cairo_dock_remove_notification_func (pTransition->bFastPace ? CAIRO_DOCK_UPDATE_ICON : CAIRO_DOCK_UPDATE_ICON_SLOW,
+		(CairoDockNotificationFunc) _cairo_dock_transition_step,
+		pTransition->pUserData);
+
+	g_free (pTransition);
+	cairo_dock_set_transition (pIcon, NULL);
 }

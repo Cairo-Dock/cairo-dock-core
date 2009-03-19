@@ -640,6 +640,21 @@ typedef enum {
 	} CairoDockAnimationState;
 
 
+typedef gboolean (*CairoDockTransitionRenderFunc) (gpointer pUserData, cairo_t *pIconContext);
+typedef gboolean (*CairoDockTransitionGLRenderFunc) (gpointer pUserData);
+typedef struct _CairoDockTransition {
+	CairoDockTransitionRenderFunc render;
+	CairoDockTransitionGLRenderFunc render_opengl;
+	gpointer pUserData;
+	gboolean bFastPace;
+	gboolean bRemoveWhenFinished;
+	gint iDuration;  // en ms.
+	gint iElapsedTime;
+	gint iCount;
+	cairo_t *pIconContext;  // attention a bien detruire la transition
+	CairoContainer *pContainer;  // si l'un de ces 2 parametres change !
+	} CairoDockTransition;
+
 struct _Icon {
 	//\____________ renseignes lors de la creation de l'icone.
 	/// Nom (et non pas chemin) du fichier .desktop definissant l'icone, ou NULL si l'icone n'est pas definie pas un fichier.
@@ -777,6 +792,7 @@ struct _Icon {
 	gint iNumDesktop;
 	gint iViewPortX, iViewPortY;
 	gint iStackOrder;
+	CairoDockTransition *pTransition;
 };
 
 
@@ -990,6 +1006,7 @@ struct _CairoDeskletDecoration {
 	gint iTopMargin;
 	gint iRightMargin;
 	gint iBottomMargin;
+	gint iDecorationPlanesRotation;
 	};
 
 #define CAIRO_DOCK_FM_VFS_ROOT "_vfsroot_"

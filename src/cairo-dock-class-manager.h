@@ -146,5 +146,8 @@ void cairo_dock_set_overwrite_exceptions (const gchar *cExceptions);
 void cairo_dock_set_group_exceptions (const gchar *cExceptions);
 
 
+Icon *cairo_dock_get_prev_next_classmate_icon (Icon *pIcon, gboolean bNext);
+
+
 G_END_DECLS
 #endif
