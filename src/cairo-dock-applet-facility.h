@@ -385,11 +385,11 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 */
 #define CD_APPLET_ADD_SUB_MENU(cLabel, pMenu) \
 	__extension__ ({\
-	GtkWidget *pSubMenu = gtk_menu_new (); \
+	GtkWidget *_pSubMenu = gtk_menu_new (); \
 	pMenuItem = gtk_menu_item_new_with_label (cLabel); \
 	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem); \
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);\
-	pSubMenu; })
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), _pSubMenu);\
+	_pSubMenu; })
 
 #define CD_APPLET_CREATE_MY_SUB_MENU(...) \
 	__extension__ ({\
@@ -399,9 +399,9 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 	g_object_unref (pixbuf);\
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);\
 	gtk_menu_shell_append  (GTK_MENU_SHELL (CD_APPLET_MY_MENU), pMenuItem);\
-	GtkWidget *pSubMenu = gtk_menu_new ();\
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);\
-	pSubMenu; })
+	GtkWidget *_pSubMenu = gtk_menu_new ();\
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), _pSubMenu);\
+	_pSubMenu; })
 
 /** Cree et ajoute un sous-menu a un menu deja existant.
 *@param cLabel nom du sous-menu, tel qu'il apparaitra dans le menu.
