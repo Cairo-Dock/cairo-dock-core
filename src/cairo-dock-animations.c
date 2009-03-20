@@ -756,16 +756,11 @@ gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserDat
 
 #define cairo_dock_set_transition(pIcon, transition) (pIcon)->pTransition = transition
 
-#define cairo_dock_get_transition_count(pIcon) (pIcon)->pTransition->iCount
-
-#define cairo_dock_get_transition_elapsed_time(pIcon) (pIcon)->pTransition->iElapsedTime
-
-#define cairo_dock_get_transition_fraction(pIcon) ((pIcon)->pTransition->iDuration ? 1.*(pIcon)->pTransition->iElapsedTime / (pIcon)->pTransition->iDuration : 0)
-
-
 static gboolean _cairo_dock_transition_step (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, gboolean *bContinueAnimation)
 {
 	CairoDockTransition *pTransition = cairo_dock_get_transition (pIcon);
+	if (pTransition == NULL)
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
 	pTransition->iCount ++;
 	int iDetlaT = (pTransition->bFastPace ? cairo_dock_get_animation_delta_t (pContainer) : cairo_dock_get_slow_animation_delta_t (pContainer));

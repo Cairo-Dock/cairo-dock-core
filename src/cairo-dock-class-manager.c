@@ -835,7 +835,7 @@ void cairo_dock_set_group_exceptions (const gchar *cExceptions)
 
 Icon *cairo_dock_get_prev_next_classmate_icon (Icon *pIcon, gboolean bNext)
 {
-	cd_debug ("%s (%s)", __func__, pIcon->cClass);
+	g_print ("%s (%s, %s)\n", __func__, pIcon->cClass, pIcon->acName);
 	g_return_val_if_fail (pIcon->cClass != NULL, NULL);
 	
 	Icon *pActiveIcon = cairo_dock_get_current_active_icon ();
@@ -895,9 +895,10 @@ Icon *cairo_dock_get_prev_next_classmate_icon (Icon *pIcon, gboolean bNext)
 	for (pElement = pClassAppli->pAppliOfClass; pElement != NULL && pNextIcon == NULL; pElement = pElement->next)
 	{
 		pClassmateIcon = pElement->data;
-		if (pClassmateIcon->Xid == pIcon->Xid)  // on a trouve la fenetre active.
+		g_print (" %s est-elle active ?\n", pClassmateIcon->acName);
+		if (pClassmateIcon->Xid == pActiveIcon->Xid)  // on a trouve la fenetre active.
 		{
-			g_print (" fenetre active trouvee\n");
+			g_print ("  fenetre active trouvee (%s; %d)\n", pClassmateIcon->acName, pClassmateIcon->Xid);
 			if (bNext)  // on prend la 1ere non nulle qui suit.
 			{
 				ic = pElement;
@@ -905,13 +906,18 @@ Icon *cairo_dock_get_prev_next_classmate_icon (Icon *pIcon, gboolean bNext)
 				{
 					ic = cairo_dock_get_next_element (ic, pClassAppli->pAppliOfClass);
 					if (ic == pElement)
+					{
+						g_print ("  on a fait le tour sans rien trouve\n");
 						break ;
+					}
 					pClassmateIcon = ic->data;
 					if (pClassmateIcon != NULL && pClassmateIcon->Xid != 0)
 					{
+						g_print ("  ok on prend celle-la (%s; %d)\n", pClassmateIcon->acName, pClassmateIcon->Xid);
 						pNextIcon = pClassmateIcon;
 						break ;
 					}
+					g_print ("un coup pour rien\n");
 				}
 				while (1);
 			}
@@ -932,6 +938,7 @@ Icon *cairo_dock_get_prev_next_classmate_icon (Icon *pIcon, gboolean bNext)
 				}
 				while (1);
 			}
+			break ;
 		}
 	}
 	return pNextIcon;

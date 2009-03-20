@@ -104,6 +104,14 @@ void cairo_dock_set_transition_on_icon (Icon *pIcon, CairoContainer *pContainer,
 
 void cairo_dock_remove_transition_on_icon (Icon *pIcon);
 
+#define cairo_dock_has_transition(pIcon) ((pIcon)->pTransition != NULL)
+
+#define cairo_dock_get_transition_count(pIcon) (pIcon)->pTransition->iCount
+
+#define cairo_dock_get_transition_elapsed_time(pIcon) (pIcon)->pTransition->iElapsedTime
+
+#define cairo_dock_get_transition_fraction(pIcon) ((pIcon)->pTransition->iDuration ? 1.*(pIcon)->pTransition->iElapsedTime / (pIcon)->pTransition->iDuration : 0)
+
 
 G_END_DECLS
 #endif

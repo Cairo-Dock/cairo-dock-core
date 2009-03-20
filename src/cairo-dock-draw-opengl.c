@@ -1313,7 +1313,12 @@ GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pCont
 		DefaultScreen (XDisplay),
 		visAttribs,
 		&iNumOfFBConfigs);
-	g_return_val_if_fail (iNumOfFBConfigs > 0, 0);
+	if (iNumOfFBConfigs == 0)
+	{
+		cd_warning ("No suitable visual could be found for pbuffer\n this might affect the drawing of applets that inside a dock");
+		*pContext = 0;
+		return 0;
+	}
 	cd_debug (" -> %d FBConfig(s) pour le pbuffer", iNumOfFBConfigs);
 	
 	
@@ -1366,12 +1371,13 @@ void cairo_dock_create_icon_pbuffer (void)
 		{
 			glXDestroyPbuffer (XDisplay, s_iconPbuffer);
 			glXDestroyContext (XDisplay, s_iconContext);
+			s_iconContext = 0;
 		}
 		s_iconPbuffer = cairo_dock_create_pbuffer (iWidth, iHeight, &s_iconContext);
 		s_iIconPbufferWidth = iWidth;
 		s_iIconPbufferHeight = iHeight;
 		
-		if (glXMakeCurrent (XDisplay, s_iconPbuffer, s_iconContext))
+		if (s_iconPbuffer != 0 && s_iconContext != 0 && glXMakeCurrent (XDisplay, s_iconPbuffer, s_iconContext))
 		{
 			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
@@ -1393,16 +1399,6 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 			return FALSE;
 		
 		cairo_dock_set_ortho_view (pContainer->iWidth, pContainer->iHeight);
-		/*glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0, pContainer->iWidth, 0, pContainer->iHeight, 0.0, 500.0);
-		glMatrixMode (GL_MODELVIEW);
-		
-		glLoadIdentity ();
-		gluLookAt (pContainer->iWidth/2, pContainer->iHeight/2, 3.,
-			pContainer->iWidth/2, pContainer->iHeight/2, 0.,
-			0.0f, 1.0f, 0.0f);
-		glTranslatef (pContainer->iWidth, pContainer->iHeight, - pContainer->iHeight/2);*/
 	}
 	else if (s_iconContext != 0)
 	{
@@ -1459,16 +1455,6 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		cairo_dock_set_perspective_view (pContainer->iWidth, pContainer->iHeight);
-		/*glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		gluPerspective(60.0, 1.0*(GLfloat)pContainer->iWidth/(GLfloat)pContainer->iHeight, 1., 4*pContainer->iHeight);
-		glMatrixMode (GL_MODELVIEW);
-		
-		glLoadIdentity ();
-		gluLookAt (pContainer->iWidth/2, pContainer->iHeight/2, 3.,
-			pContainer->iWidth/2, pContainer->iHeight/2, 0.,
-			0.0f, 1.0f, 0.0f);
-		glTranslatef (0.0f, 0.0f, -3);*/
 		
 		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pContainer->pWidget);
 		gdk_gl_drawable_gl_end (pGlDrawable);
@@ -1577,7 +1563,7 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 		
 		if (pGlConfig == NULL)
 		{
-			cd_warning ("no luck, trying without double-buffer ...");
+			cd_warning ("no luck, trying without double-buffer and stencil ...");
 			pGlConfig = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
 				GDK_GL_MODE_ALPHA |
 				GDK_GL_MODE_DEPTH);
