@@ -62,6 +62,7 @@ static int s_iPreviewWidth, s_iNbButtonsByRow;
 extern gchar *g_cConfFile;
 extern CairoDock *g_pMainDock;
 extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
+extern CairoDockDesktopEnv g_iDesktopEnv;
 
 gchar *cCategoriesDescription[2*CAIRO_DOCK_NB_CATEGORY] = {
 	N_("Behaviour"), "gtk-preferences",
@@ -86,13 +87,13 @@ void cairo_dock_config_panel_destroyed (void)
 		if (g_pMainDock != NULL)  // peut arriver au 1er lancement.
 			cairo_dock_pop_down (g_pMainDock);
 	}
-	g_print ("iNbConfigDialogs <- %d\n", iNbConfigDialogs);
+	cd_debug ("iNbConfigDialogs <- %d", iNbConfigDialogs);
 	
 }
 void cairo_dock_config_panel_created (void)
 {
 	iNbConfigDialogs ++;
-	g_print ("iNbConfigDialogs <- %d\n", iNbConfigDialogs);
+	cd_debug ("iNbConfigDialogs <- %d", iNbConfigDialogs);
 }
 
 
@@ -167,7 +168,7 @@ static GtkToolItem *_cairo_dock_make_toolbutton (const gchar *cLabel, const gcha
 	return pWidget;
 }
 
-static CairoDockGroupDescription *_cairo_dock_add_group_button (gchar *cGroupName, gchar *cIcon, int iCategory, gchar *cDescription, gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, gchar *cOriginalConfFilePath,const gchar **cDependencies)
+static CairoDockGroupDescription *_cairo_dock_add_group_button (gchar *cGroupName, gchar *cIcon, int iCategory, gchar *cDescription, gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, gchar *cOriginalConfFilePath, const gchar *cGettextDomain, const gchar **cDependencies)
 {
 	//\____________ On garde une trace de ses caracteristiques.
 	CairoDockGroupDescription *pGroupDescription = g_new0 (CairoDockGroupDescription, 1);
@@ -177,6 +178,7 @@ static CairoDockGroupDescription *_cairo_dock_add_group_button (gchar *cGroupNam
 	pGroupDescription->cPreviewFilePath = g_strdup (cPreviewFilePath);
 	pGroupDescription->cOriginalConfFilePath = g_strdup (cOriginalConfFilePath);
 	pGroupDescription->cIcon = g_strdup (cIcon);
+	pGroupDescription->cGettextDomain = cGettextDomain;
 	pGroupDescription->cDependencies = cDependencies;
 	
 	s_pGroupDescriptionList = g_list_prepend (s_pGroupDescriptionList, pGroupDescription);
@@ -211,7 +213,7 @@ static CairoDockGroupDescription *_cairo_dock_add_group_button (gchar *cGroupNam
 		FALSE,
 		0);
 
-	pGroupDescription->pLabel = gtk_label_new (gettext (cGroupName));
+	pGroupDescription->pLabel = gtk_label_new (dgettext (pGroupDescription->cGettextDomain, cGroupName));
 	gtk_box_pack_start (GTK_BOX (pGroupHBox),
 		pGroupDescription->pLabel,
 		FALSE,
@@ -255,15 +257,15 @@ static gboolean _cairo_dock_add_one_module_widget (gchar *cModuleName, CairoDock
 	CairoDockGroupDescription *pGroupDescription = _cairo_dock_add_group_button (cModuleName,
 		pModule->pVisitCard->cIconFilePath,
 		pModule->pVisitCard->iCategory,
-		pModule->pVisitCard->cReadmeFilePath,
+		(pModule->pVisitCard->cDescription != NULL ? pModule->pVisitCard->cDescription : pModule->pVisitCard->cReadmeFilePath),
 		pModule->pVisitCard->cPreviewFilePath,
 		iActive,
 		pModule->cConfFilePath != NULL,
 		NULL,
+		pModule->pVisitCard->cGettextDomain,
 		NULL);
-	g_print ("+ %s : %x;%x\n", cModuleName,pGroupDescription, pGroupDescription->pActivateButton);
+	//g_print ("+ %s : %x;%x\n", cModuleName,pGroupDescription, pGroupDescription->pActivateButton);
 	pGroupDescription->cOriginalConfFilePath = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);  // petite optimisation, pour pas dupliquer la chaine 2 fois.
-	pGroupDescription->cGettextDomain = pModule->pVisitCard->cGettextDomain;  // inutile de dupliquer ca.
 	pGroupDescription->load_custom_widget = pModule->pInterface->load_custom_widget;
 	return FALSE;
 }
@@ -359,10 +361,11 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	
 	cairo_dock_set_colormap_for_window (s_pMainWindow);
 	gtk_widget_set_app_paintable (s_pMainWindow, TRUE);
-	g_signal_connect (G_OBJECT (s_pMainWindow),
-		"expose-event",
-		G_CALLBACK (on_expose),
-		NULL);
+	if (g_iDesktopEnv != CAIRO_DOCK_KDE)
+		g_signal_connect (G_OBJECT (s_pMainWindow),
+			"expose-event",
+			G_CALLBACK (on_expose),
+			NULL);
 	
 	/*g_signal_connect (G_OBJECT (s_pGroupsVBox),
 		"expose-event",
@@ -472,54 +475,12 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 			pInternalModule->cIcon,
 			pInternalModule->iCategory,
 			pInternalModule->cDescription,
-			NULL,  // prevue
-			-1,  // actif
-			TRUE,  // configurable
+			NULL,  // pas de prevue
+			-1,  // <=> non desactivable
+			TRUE,  // <=> configurable
 			cOriginalConfFilePath,
+			NULL,  // domaine de traduction : celui du dock.
 			pInternalModule->cDependencies);
-		/*//\____________ On recupere les caracteristiqes du groupe.
-		cGroupComment  = g_key_file_get_comment (pKeyFile, cGroupName, NULL, NULL);
-		iCategory = 0;
-		cIcon = NULL;
-		cDescription = NULL;
-		if (cGroupComment != NULL)
-		{
-			cGroupComment[strlen(cGroupComment)-1] = '\0';
-			gchar *ptr = cGroupComment;
-			if (*ptr == '!')
-			{
-				ptr = strrchr (cGroupComment, '\n');
-				if (ptr != NULL)
-					ptr ++;
-				else
-					ptr = cGroupComment;
-			}
-			gchar *str = strchr (ptr, ';');
-			if (str != NULL)
-			{
-				*str = '\0';
-				cIcon = ptr;
-				ptr = str+1;
-				
-				str = strchr (ptr, ';');
-				if (str != NULL)
-				{
-					*str = '\0';
-					iCategory = atoi (ptr);
-					ptr = str+1;
-					
-					cDescription = ptr;
-				}
-				else
-					iCategory = atoi (ptr);
-			}
-			else
-				cIcon = ptr;
-		}
-		
-		_cairo_dock_add_group_button (cGroupName, cIcon, iCategory, cDescription, NULL, -1, TRUE, cOriginalConfFilePath, );
-		
-		g_free (cGroupComment);*/
 	}
 	g_free (cOriginalConfFilePath);
 	g_strfreev (pGroupList);
@@ -837,7 +798,7 @@ void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget)
 
 GtkWidget *cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance)
 {
-	g_print ("%s (%s, %s)\n", __func__, cConfFilePath, pGroupDescription->cGroupName);
+	cd_debug ("%s (%s, %s)", __func__, cConfFilePath, pGroupDescription->cGroupName);
 	g_free (pGroupDescription->cConfFilePath);
 	pGroupDescription->cConfFilePath = g_strdup (cConfFilePath);
 	
@@ -1034,7 +995,6 @@ void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription)
 			cd_warning ("couldn't load a conf file for this module => can't configure it.");
 			return;
 		}
-		g_print ("  %s (%s)\n", __func__, pModule->cConfFilePath);
 		
 		pModuleInstance = (pModule->pInstancesList != NULL ? pModule->pInstancesList->data : NULL);
 		cConfFilePath = (pModuleInstance != NULL ? pModuleInstance->cConfFilePath : pModule->cConfFilePath);
@@ -1207,7 +1167,7 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 		
 		g_main_loop_unref (pBlockingLoop);
 		iResult = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMainWindow), "result"));
-		g_print ("iResult : %d\n", iResult);
+		cd_debug ("iResult : %d", iResult);
 		gtk_widget_destroy (pMainWindow);
 	}
 	
@@ -1280,7 +1240,7 @@ GtkWidget *cairo_dock_get_widget_from_name (const gchar *cGroupName, const gchar
 
 void cairo_dock_apply_current_filter (gchar **pKeyWords, gboolean bAllWords, gboolean bSearchInToolTip, gboolean bHighLightText, gboolean bHideOther)
 {
-	g_print ("%s ()\n", __func__);
+	cd_debug ("");
 	if (s_pCurrentGroup != NULL)
 	{
 		cairo_dock_apply_filter_on_group_widget (pKeyWords, bAllWords, bSearchInToolTip, bHighLightText, bHideOther, s_pCurrentWidgetList);

@@ -301,10 +301,9 @@ gchar *cairo_dock_build_temporary_themes_conf_file (void/*GHashTable **hThemeTab
 	return cTmpConfFile;
 }
 
-void cairo_dock_load_theme (gchar *cThemePath)
+void cairo_dock_load_current_theme (void)
 {
-	cd_message ("%s (%s)", __func__, cThemePath);
-	g_return_if_fail (cThemePath != NULL && g_file_test (cThemePath, G_FILE_TEST_IS_DIR));
+	cd_message ("%s ()", __func__);
 
 	//\___________________ On libere toute la memoire allouee pour les docks (stoppe aussi tous les timeout).
 	cairo_dock_free_all_docks ();
@@ -537,7 +536,7 @@ static void on_theme_apply (gpointer *user_data)
 		}
 		
 		//\___________________ On charge le theme courant.
-		cairo_dock_load_theme (g_cCurrentThemePath);
+		cairo_dock_load_current_theme ();
 
 		g_free (cNewThemeName);
 		g_free (cNewThemePath);

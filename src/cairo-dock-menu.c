@@ -197,9 +197,10 @@ static void _cairo_dock_help (GtkMenuItem *pMenuItem, gpointer *data)
 static void _cairo_dock_present_help (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	CairoDockModule *pModule = cairo_dock_find_module_from_name ("Help");
-	g_return_if_fail (pModule != NULL && pModule->pInstancesList != NULL);
+	g_print ("%x\n", pModule);
+	g_return_if_fail (pModule != NULL);
 	cairo_dock_build_main_ihm (g_cConfFile, FALSE);
-	cairo_dock_present_module_instance_gui (pModule->pInstancesList->data);
+	cairo_dock_present_module_gui (pModule);
 }
 
 static void _cairo_dock_quick_hide (GtkMenuItem *pMenuItem, gpointer *data)

@@ -88,7 +88,7 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 			
 			gsize length = 0;
 			GError *erreur = NULL;
-			g_file_get_contents  (pGroupDescription->cDescription,
+			g_file_get_contents (pGroupDescription->cDescription,
 				&cDescription,
 				&length,
 				&erreur);

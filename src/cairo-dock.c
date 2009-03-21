@@ -204,6 +204,11 @@ static void _cairo_dock_set_signal_interception (void)
 }
 
 
+#define _create_dir_or_die(cDirPath) do {\
+	if (g_mkdir (cDirPath, 7*8*8+7*8+5) != 0) {\
+		cd_warning ("couldn't create directory %s", cDirPath);\
+		exit (1); } } while (0)
+
 int main (int argc, char** argv)
 {
 	int i;
@@ -230,9 +235,11 @@ int main (int argc, char** argv)
 		{"log", 'l', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cVerbosity,
 			"log verbosity (debug,message,warning,critical,error) default is warning", NULL},
+#ifdef HAVE_GLITZ
 		{"glitz", 'g', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bUseGlitz,
 			"force Glitz backend (hardware acceleration for cairo, needs a glitz-enabled libcairo)", NULL},
+#endif
 		{"cairo", 'c', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bForceCairo,
 			"force cairo backend", NULL},
@@ -355,13 +362,7 @@ int main (int argc, char** argv)
 		g_free (cEnvironment);
 	}
 #ifdef HAVE_GLITZ
-	cd_message ("Compiled with Glitz (hardware acceleration support)n");
-#else
-	if (g_bUseGlitz)
-	{
-		cd_warning ("Attention : Cairo-Dock was not compiled with glitz");
-		g_bUseGlitz = FALSE;
-	}
+	cd_message ("Compiled with Glitz (hardware acceleration support for cairo)n");
 #endif
 	
 	if (bCappuccino)
@@ -385,7 +386,8 @@ int main (int argc, char** argv)
 	bind_textdomain_codeset (CAIRO_DOCK_GETTEXT_PACKAGE, "UTF-8");
 	textdomain (CAIRO_DOCK_GETTEXT_PACKAGE);
 
-	//\___________________ On teste l'existence du repertoire des donnees .cairo-dock.
+	//\___________________ On teste l'existence du repertoire des donnees ~/.config/cairo-dock.
+	gboolean bFirstLaunch = FALSE;
 	int r;
 	if (cUserDefinedDataDir != NULL)
 	{
@@ -393,8 +395,7 @@ int main (int argc, char** argv)
 		cUserDefinedDataDir = NULL;
 		if (! g_file_test (g_cCairoDockDataDir, G_FILE_TEST_IS_DIR))
 		{
-			if (g_mkdir (g_cCairoDockDataDir, 7*8*8+7*8+5) != 0)
-				cd_warning ("couldn't create directory %s", g_cCairoDockDataDir);
+			_create_dir_or_die (g_cCairoDockDataDir);
 		}
 	}
 	else
@@ -407,29 +408,29 @@ int main (int argc, char** argv)
 			{
 				cd_warning ("Cairo-Dock's data dir is now located in ~/.config, it will be moved there");
 				gchar *cCommand = g_strdup_printf ("mkdir '%s/.config' > /dev/null", getenv("HOME"));
-				cd_message ("%s", cCommand);
+				cd_message (cCommand);
 				r = system (cCommand);
 				g_free (cCommand);
 					
 				cCommand = g_strdup_printf ("mv '%s' '%s'", cOldDataDir, g_cCairoDockDataDir);
-				cd_message ("%s", cCommand);
+				cd_message (cCommand);
 				r = system (cCommand);
 				g_free (cCommand);
 				
 				cCommand = g_strdup_printf ("sed -i \"s/~\\/.cairo-dock/~\\/.config\\/%s/g\" '%s/%s/%s'", CAIRO_DOCK_DATA_DIR, g_cCairoDockDataDir, CAIRO_DOCK_CURRENT_THEME_NAME, CAIRO_DOCK_CONF_FILE);
-				cd_message ("%s", cCommand);
+				cd_message (cCommand);
 				r = system (cCommand);
 				g_free (cCommand);
 				
 				cCommand = g_strdup_printf ("sed -i \"/default icon directory/ { s/~\\/.config\\/%s\\/%s\\/icons/%s/g }\" '%s/%s'", CAIRO_DOCK_DATA_DIR, CAIRO_DOCK_CURRENT_THEME_NAME, CAIRO_DOCK_LOCAL_THEME_KEYWORD, g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
-				cd_message ("%s", cCommand);
+				cd_message (cCommand);
 				r = system (cCommand);
 				g_free (cCommand);
 			}
 			else
 			{
-				if (g_mkdir (g_cCairoDockDataDir, 7*8*8+7*8+5) != 0)
-					cd_warning ("couldn't create directory %s", g_cCairoDockDataDir);
+				_create_dir_or_die (g_cCairoDockDataDir);
+				bFirstLaunch = TRUE;
 			}
 			g_free (cOldDataDir);
 		}
@@ -437,49 +438,44 @@ int main (int argc, char** argv)
 	gchar *cThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
 	if (! g_file_test (cThemesDir, G_FILE_TEST_IS_DIR))
 	{
-		if (g_mkdir (cThemesDir, 7*8*8+7*8+5) != 0)
-			cd_warning ("couldn't create directory %s", cThemesDir);
+		_create_dir_or_die (cThemesDir);
 	}
 	g_free (cThemesDir);
 	gchar *cExtrasDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR);
 	if (! g_file_test (cExtrasDir, G_FILE_TEST_IS_DIR))
 	{
-		if (g_mkdir (cExtrasDir, 7*8*8+7*8+5) != 0)
-			cd_warning ("couldn't create directory %s", cExtrasDir);
+		_create_dir_or_die (cExtrasDir);
 	}
 	g_free (cExtrasDir);
 	g_cCurrentThemePath = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_CURRENT_THEME_NAME);
 	if (! g_file_test (g_cCurrentThemePath, G_FILE_TEST_IS_DIR))
 	{
-		if (g_mkdir (g_cCurrentThemePath, 7*8*8+7*8+5) != 0)
-			cd_warning ("couldn't create directory %s", g_cCurrentThemePath);
+		_create_dir_or_die (g_cCurrentThemePath);
 	}
 	g_cCurrentLaunchersPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
 	if (! g_file_test (g_cCurrentLaunchersPath, G_FILE_TEST_IS_DIR))
 	{
-		if (g_mkdir (g_cCurrentLaunchersPath, 7*8*8+7*8+5) != 0)
-			cd_warning ("couldn't create directory %s", g_cCurrentLaunchersPath);
+		_create_dir_or_die (g_cCurrentLaunchersPath);
 	}
 	gchar *cLocalIconsPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 	if (! g_file_test (cLocalIconsPath, G_FILE_TEST_IS_DIR))
 	{
-		if (g_mkdir (cLocalIconsPath, 7*8*8+7*8+5) != 0)
-			cd_warning ("couldn't create directory %s", cLocalIconsPath);
-		else
+		_create_dir_or_die (cLocalIconsPath);
+		if (! bFirstLaunch)
 		{
 			cd_warning ("Cairo-Dock's local icons are now located in the 'icons' folder, they will be moved there");
 			gchar *cCommand = g_strdup_printf ("cd '%s' && mv *.svg *.png *.xpm *.jpg *.bmp *.gif '%s' > /dev/null", g_cCurrentLaunchersPath, cLocalIconsPath);
-			cd_message ("%s", cCommand);
+			cd_message (cCommand);
 			r = system (cCommand);
 			g_free (cCommand);
 			
 			cCommand = g_strdup_printf ("sed -i \"s/_ThemeDirectory_/%s/g\" '%s/%s'", CAIRO_DOCK_LOCAL_THEME_KEYWORD, g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
-			cd_message ("%s", cCommand);
+			cd_message (cCommand);
 			r = system (cCommand);
 			g_free (cCommand);
 			
 			cCommand = g_strdup_printf ("sed -i \"/default icon directory/ { s/~\\/.config\\/%s\\/%s\\/icons/%s/g }\" '%s/%s'", CAIRO_DOCK_DATA_DIR, CAIRO_DOCK_CURRENT_THEME_NAME, CAIRO_DOCK_LOCAL_THEME_KEYWORD, g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
-			cd_message ("%s", cCommand);
+			cd_message (cCommand);
 			r = system (cCommand);
 			g_free (cCommand);
 		}
@@ -502,13 +498,13 @@ int main (int argc, char** argv)
 	//\___________________ On initialise le support de X.
 	cairo_dock_initialize_X_support ();
 	
-	//\___________________ On initialise le keybinder
+	//\___________________ On initialise le keybinder.
 	cd_keybinder_init();
 	
 	//\___________________ On detecte l'environnement de bureau (apres les applis et avant les modules).
 	if (g_iDesktopEnv == CAIRO_DOCK_UNKNOWN_ENV)
 		g_iDesktopEnv = cairo_dock_guess_environment ();
-	cd_message ("environnement de bureau : %d", g_iDesktopEnv);
+	cd_debug ("environnement de bureau : %d", g_iDesktopEnv);
 	
 	//\___________________ On initialise le support d'OpenGL.
 	if (! bForceCairo && ! g_bUseGlitz)
@@ -591,16 +587,32 @@ int main (int argc, char** argv)
 	cd_message ("loading theme ...");
 	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS) || bSafeMode)
 	{
-		if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS))
-			cairo_dock_mark_theme_as_modified (FALSE);  // le fichier n'existe pas, on ne proposera pas de sauvegarder ce theme.
-		do
+		if (! bSafeMode)  // le fichier de conf n'existe pas, on copie le theme par defaut dans current_theme.
 		{
-			cairo_dock_manage_themes (NULL, bSafeMode ? CAIRO_DOCK_START_SAFE : CAIRO_DOCK_START_MAINTENANCE);
+			gchar *cCommand = g_strdup_printf ("/bin/cp -r '%s'/* '%s/%s'", CAIRO_DOCK_SHARE_DATA_DIR"/default-theme", g_cCairoDockDataDir, CAIRO_DOCK_CURRENT_THEME_NAME);
+			cd_message (cCommand);
+			r = system (cCommand);
+			g_free (cCommand);
+			
+			cairo_dock_mark_theme_as_modified (FALSE);  // on ne proposera pas de sauvegarder ce theme.
 		}
-		while (g_pMainDock == NULL);
+		else  // on propose de choisir un theme.
+		{
+			do
+			{
+				cairo_dock_manage_themes (NULL, bSafeMode ? CAIRO_DOCK_START_SAFE : CAIRO_DOCK_START_MAINTENANCE);
+			}
+			while (g_pMainDock == NULL);
+		}
 	}
 	else
-		cairo_dock_load_theme (g_cCurrentThemePath);
+		cairo_dock_load_current_theme ();
+	
+	//\___________________ On affiche un petit message de bienvenue.
+	if (bFirstLaunch)
+	{
+		cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Theme manager\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit : right-click -> Cairo-Dock -> Communauty site.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);
+	}
 	
 	//\___________________ On affiche le changelog en cas de nouvelle version.
 	gchar *cLastVersionFilePath = g_strdup_printf ("%s/.cairo-dock-last-version", g_cCairoDockDataDir);
@@ -630,7 +642,7 @@ int main (int argc, char** argv)
 		NULL);
 	g_free (cLastVersionFilePath);
 
-	if (bWriteChangeLog)
+	if (bWriteChangeLog && ! bFirstLaunch)
 	{
 		gchar *cChangeLogFilePath = g_strdup_printf ("%s/ChangeLog.txt", CAIRO_DOCK_SHARE_DATA_DIR);
 		GKeyFile *pKeyFile = g_key_file_new ();
@@ -659,80 +671,9 @@ int main (int argc, char** argv)
 			g_free (cChangeLogMessage);
 		}
 	}
-	else
-	{
-		//\___________________ Message a caractere informatif (ou pas).
-		gchar *cSillyMessageFilePath = g_strdup_printf ("%s/.cairo-dock-silly-question", g_cCairoDockDataDir);
-		//const gchar *cSillyMessage = "Le saviez-vous ?\nUtiliser cairo-dock vous rendra beau et intelligent !";
-		//const gchar *cSillyMessage = "Le saviez-vous ?\nUtiliser cairo-dock augmentera votre popularité auprès de la gente féminine !";
-		//const gchar *cSillyMessage = "Le saviez-vous ?\nCairo-Dock contribue à réduire le trou de la couche d'ozone !";
-		//const gchar *cSillyMessage = "Montrer Cairo-Dock à un utilisateur de Mac est le meilleur moyen de s'en faire un ennemi;\nN'oubliez pas qu'il a payé 129$ pour avoir la même chose !";  // 7500
-		//const gchar *cSillyMessage = "Petite annonce :\n  Projet sérieux recherche secrétaire pour rédiger documentation.\n  Niveau d'étude exigé : 95C.";  // 7500
-		//const gchar *cSillyMessage = "Cairo-Dock fait même le café ! Au choix :\n cairo-dock --capuccino , cairo-dock --expresso , cairo-dock --cafe_latte";  // 8000
-		//const gchar *cSillyMessage = "Veuillez rentrer un compliment élogieux à la gloire Fab pour pouvoir utiliser cairo-dock.";
-		//const gchar *cSillyMessage = "Sondage :\n Combien cairo-dock c'est trop bien :";
-		//const gchar *cSillyMessage = "Cairo-Dock : just launch it !";  // 4000
-		//const gchar *cSillyMessage = "Cairo-Dock lave plus blanc que blanc.";  // 4000
-		//const gchar *cSillyMessage = "Sondage :\nVoulez-vous voir plus de filles nues dans Cairo-Dock ?";
-		//const gchar *cSillyMessage = "C'est les soldes !\n Pour tout sous-dock acheté, un sous-dock offert !";
-		//const gchar *cSillyMessage = "J-2 avant la 1.5, la tension monte !";
-		//const gchar *cSillyMessage = "Cairo-Dock : sans danger si l'on se conforme au mode d'emploi.";
-		//const gchar *cSillyMessage = "Nochka, ton home a disparu !";
-		//const gchar *cSillyMessage = "La nouvelle sauce Cairo-Dock rehaussera le goût de tous vos plats !";
-		//const gchar *cSillyMessage = "Avec Cairo-Dock c'est vous qui avez la plus grosse (barre de lancement) !";
-		const gchar *cSillyMessage = "\n   Bonne Année 2009 !!!\n";
-		const gchar *cNumSilllyMessage = "20";
-		gboolean bWriteSillyMessage;
-		if (! g_file_test (cSillyMessageFilePath, G_FILE_TEST_EXISTS))
-		{
-			bWriteSillyMessage = TRUE;
-		}
-		else
-		{
-			gsize length = 0;
-			gchar *cContent = NULL;
-			g_file_get_contents (cSillyMessageFilePath,
-				&cContent,
-				&length,
-				NULL);
-			if (length > 0 && strcmp (cContent, cNumSilllyMessage) == 0)
-				bWriteSillyMessage = FALSE;
-			else
-				bWriteSillyMessage = TRUE;
-			g_free (cContent);
-		}
-	
-		g_file_set_contents (cSillyMessageFilePath,
-			cNumSilllyMessage,
-			-1,
-			NULL);
-		g_free (cSillyMessageFilePath);
-	
-		if (bWriteSillyMessage && cSillyMessage != NULL)
-		{
-			cairo_dock_show_general_message (cSillyMessage, 6000);
-			/*double fAnswer = cairo_dock_show_value_and_wait (cSillyMessage, pFirstIcon, g_pMainDock, 1.);
-			cd_message (" ==> %.2f\n", fAnswer);
-			if (fAnswer == 0)
-				cd_message ("Cela sera consigné et utilisé contre vous le moment venu ;-)\n");
-			else if (fAnswer == 1)
-				cd_message ("je suis aussi d'accord ! ;-)\n");*/
-	
-			/*int iAnswer = cairo_dock_ask_question_and_wait (cSillyMessage, pFirstIcon, g_pMainDock);
-			if (iAnswer == GTK_RESPONSE_YES)
-				cd_message ("c'est bien ce que je pensais ;-)\n");
-			else
-				cd_message ("allez on ne me la fais pas ! ;-)\n");*/
-	
-			/*gchar *cAnswer = cairo_dock_show_demand_and_wait ("Test :", NULL, g_pMainDock, "pouet");
-			cd_message (" -> %s\n", cAnswer);*/
-			/*double fAnswer = cairo_dock_show_value_and_wait ("Test :", cairo_dock_get_first_appli (g_pMainDock->icons), g_pMainDock, .7);
-			cd_message (" ==> %.2f\n", fAnswer);*/
-		}
-	}
 	
 	if (! bTesting)
-		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
+		g_timeout_add_seconds (4, _cairo_dock_successful_launch, NULL);
 	
 	gtk_main ();
 

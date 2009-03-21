@@ -104,5 +104,8 @@ gboolean cairo_dock_get_internal_module_config (CairoDockInternalModule *pModule
 gboolean cairo_dock_get_global_config (GKeyFile *pKeyFile);
 
 
+void cairo_dock_popup_module_instance_description (CairoDockModuleInstance *pModuleInstance);
+
+
 G_END_DECLS
 #endif

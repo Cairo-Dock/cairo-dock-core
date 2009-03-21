@@ -29,7 +29,6 @@ typedef struct _AppletData AppletData;
 #define CD_APPLET_ON_DROP_DATA_FUNC action_on_drop_data
 #define CD_APPLET_ON_SCROLL_FUNC action_on_scroll
 #define CD_APPLET_ON_UPDATE_ICON_FUNC action_on_update_icon
-#define CD_APPLET_ABOUT_FUNC about
 
 //\_________________________________ PROTO
 #define CD_APPLET_PRE_INIT_PROTO \
@@ -60,8 +59,6 @@ gboolean CD_APPLET_ON_DROP_DATA_FUNC (CairoDockModuleInstance *myApplet, const g
 gboolean CD_APPLET_ON_SCROLL_FUNC (CairoDockModuleInstance *myApplet, Icon *pClickedIcon, CairoContainer *pClickedContainer, int iDirection)
 #define CD_APPLET_ON_UPDATE_ICON_PROTO \
 gboolean CD_APPLET_ON_UPDATE_ICON_FUNC (CairoDockModuleInstance *myApplet, Icon *pIcon, CairoContainer *pContainer, gboolean *bContinueAnimation)
-#define CD_APPLET_ABOUT_PROTO \
-void about (GtkMenuItem *menu_item, CairoDockModuleInstance *myApplet)
 
 //\_________________________________ HEADERS
 #define CD_APPLET_H \
@@ -87,8 +84,7 @@ CD_APPLET_ON_DROP_DATA_PROTO;
 CD_APPLET_ON_SCROLL_PROTO;
 #define CD_APPLET_ON_UPDATE_ICON_H \
 CD_APPLET_ON_UPDATE_ICON_PROTO;
-#define CD_APPLET_ABOUT_H \
-CD_APPLET_ABOUT_PROTO;
+#define CD_APPLET_ABOUT_H  //deprecated
 
 //\_________________________________ BODY
 //\______________________ pre_init.
@@ -100,25 +96,26 @@ CD_APPLET_ABOUT_PROTO;
 *@param iMicroVersion version micro du dock necessaire au bon fonctionnement de l'applet.
 *@param iAppletCategory Categorie de l'applet (CAIRO_DOCK_CATEGORY_ACCESSORY, CAIRO_DOCK_CATEGORY_DESKTOP, CAIRO_DOCK_CATEGORY_CONTROLER)
 */
-#define CD_APPLET_PRE_INIT_ALL_BEGIN(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory) \
+#define CD_APPLET_PRE_INIT_ALL_BEGIN(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, ...) \
 CD_APPLET_PRE_INIT_PROTO \
 { \
 	pVisitCard->cModuleName = g_strdup (cName); \
-	pVisitCard->cReadmeFilePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, MY_APPLET_README_FILE); \
 	pVisitCard->iMajorVersionNeeded = iMajorVersion; \
 	pVisitCard->iMinorVersionNeeded = iMinorVersion; \
 	pVisitCard->iMicroVersionNeeded = iMicroVersion; \
-	pVisitCard->cPreviewFilePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, MY_APPLET_PREVIEW_FILE); \
-	pVisitCard->cGettextDomain = g_strdup (MY_APPLET_GETTEXT_DOMAIN); \
-	pVisitCard->cDockVersionOnCompilation = g_strdup (MY_APPLET_DOCK_VERSION); \
-	pVisitCard->cUserDataDir = g_strdup (MY_APPLET_USER_DATA_DIR); \
-	pVisitCard->cShareDataDir = g_strdup (MY_APPLET_SHARE_DATA_DIR); \
-	pVisitCard->cConfFileName = (MY_APPLET_CONF_FILE != NULL && strcmp (MY_APPLET_CONF_FILE, "none") != 0 ? g_strdup (MY_APPLET_CONF_FILE) : NULL); \
-	pVisitCard->cModuleVersion = g_strdup (MY_APPLET_VERSION);\
+	pVisitCard->cPreviewFilePath = MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_PREVIEW_FILE; \
+	pVisitCard->cGettextDomain = MY_APPLET_GETTEXT_DOMAIN; \
+	pVisitCard->cDockVersionOnCompilation = MY_APPLET_DOCK_VERSION; \
+	pVisitCard->cUserDataDir = MY_APPLET_USER_DATA_DIR; \
+	pVisitCard->cShareDataDir = MY_APPLET_SHARE_DATA_DIR; \
+	pVisitCard->cConfFileName = (MY_APPLET_CONF_FILE != NULL && strcmp (MY_APPLET_CONF_FILE, "none") != 0 ? MY_APPLET_CONF_FILE : NULL); \
+	pVisitCard->cModuleVersion = MY_APPLET_VERSION;\
 	pVisitCard->iCategory = iAppletCategory; \
-	pVisitCard->cIconFilePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, MY_APPLET_ICON_FILE); \
+	pVisitCard->cIconFilePath = MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE; \
 	pVisitCard->iSizeOfConfig = sizeof (AppletConfig);\
-	pVisitCard->iSizeOfData = sizeof (AppletData);
+	pVisitCard->iSizeOfData = sizeof (AppletData);\
+	pVisitCard->cAuthor = "Cairo-Dock team";/** A remplacer dans toutes les applets... */ \
+	pVisitCard->cDescription = g_strdup_printf ("%s", ##__VA_ARGS__, "");
 
 #define CD_APPLET_DEFINE_COMMON_APPLET_INTERFACE \
 	pInterface->initModule = CD_APPLET_INIT_FUNC;\
@@ -135,8 +132,8 @@ CD_APPLET_PRE_INIT_PROTO \
 }
 /** Fonction de pre-initialisation generique. Ne fais que definir l'applet (en appelant les 2 macros precedentes), la plupart du temps cela est suffisant.
 */
-#define CD_APPLET_DEFINITION(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory) \
-CD_APPLET_PRE_INIT_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory) \
+#define CD_APPLET_DEFINITION(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, ...) \
+CD_APPLET_PRE_INIT_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, ##__VA_ARGS__) \
 CD_APPLET_DEFINE_COMMON_APPLET_INTERFACE \
 CD_APPLET_PRE_INIT_END
 
@@ -350,15 +347,7 @@ CD_APPLET_ON_UPDATE_ICON_PROTO \
 	CD_APPLET_REDRAW_MY_ICON; \
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; } while (0)
 
-//\______________________ about.
-/** Fonction 'A propos' toute faite, qui affiche un message dans une info-bulle. A inclure dans le .c.
-*@param cMessage message a afficher dans l'info-bulle.
-*/
-#define CD_APPLET_ABOUT(cMessage) \
-CD_APPLET_ABOUT_PROTO \
-{ \
-	cairo_dock_show_temporary_dialog (cMessage, myIcon, myContainer, 0); \
-}
+#define CD_APPLET_ABOUT(...) //deprecated
 
 
 //\_________________________________ NOTIFICATIONS
@@ -412,8 +401,6 @@ CD_APPLET_ABOUT_PROTO \
 
 
 //\_________________________________ INSTANCE
-#define CD_APPLET_INCLUDE_MY_VARS  // deprecated
-
 #ifdef CD_APPLET_MULTI_INSTANCE
 #include <cairo-dock-applet-multi-instance.h>
 #else

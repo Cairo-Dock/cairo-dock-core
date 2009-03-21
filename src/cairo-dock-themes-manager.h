@@ -29,8 +29,8 @@ gchar *cairo_dock_edit_themes (GHashTable **hThemeTable, gboolean bSafeMode);
 
 gchar *cairo_dock_get_chosen_theme (gchar *cConfFile, gboolean *bUseThemeBehaviour, gboolean *bUseThemeLaunchers);
 
-void cairo_dock_load_theme (gchar *cThemePath);
-
+void cairo_dock_load_current_theme (void);
+#define cairo_dock_load_theme(...) cairo_dock_load_current_theme ()
 
 void cairo_dock_mark_theme_as_modified (gboolean bModified);
 gboolean cairo_dock_theme_need_save (void);

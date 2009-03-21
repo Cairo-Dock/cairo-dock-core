@@ -210,6 +210,9 @@ void cairo_dock_play_sound (const gchar *cSoundPath);
 void cairo_dock_get_gnome_version (int *iMajor, int *iMinor, int *iMicro);
 
 
+void cairo_dock_pop_up_about_applet (GtkMenuItem *menu_item, CairoDockModuleInstance *pModuleInstance);
+
+
   //////////////
  /// CONFIG ///
 //////////////
@@ -394,9 +397,9 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 #define CD_APPLET_CREATE_MY_SUB_MENU(...) \
 	__extension__ ({\
 	pMenuItem = gtk_image_menu_item_new_with_label (myApplet->pModule->pVisitCard->cModuleName);\
-	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, 32, 32, NULL);\
-	image = gtk_image_new_from_pixbuf (pixbuf);\
-	g_object_unref (pixbuf);\
+	GdkPixbuf *_pixbuf = gdk_pixbuf_new_from_file_at_size (MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, 32, 32, NULL);\
+	image = gtk_image_new_from_pixbuf (_pixbuf);\
+	g_object_unref (_pixbuf);\
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);\
 	gtk_menu_shell_append  (GTK_MENU_SHELL (CD_APPLET_MY_MENU), pMenuItem);\
 	GtkWidget *_pSubMenu = gtk_menu_new ();\
@@ -458,7 +461,7 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 *Ajoute une entree pour la fonction 'A propos'.
 *@param pMenu GtkWidget du menu auquel sera ajoutee l'entree.
 */
-#define CD_APPLET_ADD_ABOUT_IN_MENU(pMenu) CD_APPLET_ADD_IN_MENU_WITH_STOCK (_("About"), GTK_STOCK_ABOUT, CD_APPLET_ABOUT_FUNC, pMenu)
+#define CD_APPLET_ADD_ABOUT_IN_MENU(pMenu) CD_APPLET_ADD_IN_MENU_WITH_STOCK (_("About this applet"), GTK_STOCK_ABOUT, cairo_dock_pop_up_about_applet, pMenu)
 
 
   /////////////////////////////
@@ -543,15 +546,15 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 */
 #define CD_APPLET_LOAD_USER_SURFACE_FOR_MY_APPLET(cUserImageName, cDefaultLocalImageName) \
 	__extension__ ({\
-	gchar *cImagePath; \
+	gchar *_cImagePath; \
 	if (cUserImageName != NULL) \
-		cImagePath = cairo_dock_generate_file_path (cUserImageName); \
+		_cImagePath = cairo_dock_generate_file_path (cUserImageName); \
 	else if (cDefaultLocalImageName != NULL)\
-		cImagePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, cDefaultLocalImageName); \
+		_cImagePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, cDefaultLocalImageName); \
 	else\
-		cImagePath = NULL;\
-	cairo_surface_t *pSurface = CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET (cImagePath); \
-	g_free (cImagePath);\
+		_cImagePath = NULL;\
+	cairo_surface_t *pSurface = CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET (_cImagePath); \
+	g_free (_cImagePath);\
 	pSurface; })
 
 
@@ -741,6 +744,20 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 #define CD_APPLET_LOAD_LOCAL_TEXTURE(cImageName) cairo_dock_load_local_texture (cImageName, MY_APPLET_SHARE_DATA_DIR)
 
 #define CD_APPLET_MY_CONTAINER_IS_OPENGL (g_bUseOpenGL && ((myDock && myDock->render_opengl) || (myDesklet && myDesklet->pRenderer && myDesklet->pRenderer->render_opengl)))
+
+#define CD_APPLET_SET_TRANSITION_ON_MY_ICON(render_step_cairo, render_step_opengl, bFastPace, iDuration, bRemoveWhenFinished) \
+	cairo_dock_set_transition_on_icon (myIcon, myContainer, myDrawContext,\
+		(CairoDockTransitionRenderFunc) render_step_cairo,\
+		(CairoDockTransitionGLRenderFunc) render_step_opengl,\
+		bFastPace,\
+		iDuration,\
+		bRemoveWhenFinished,\
+		myApplet)
+#define CD_APPLET_GET_TRANSITION_FRACTION(...) \
+	(cairo_dock_has_transition (myIcon) ? cairo_dock_get_transition_fraction (myIcon) : 1.)
+#define CD_APPLET_REMOVE_TRANSITION_ON_MY_ICON \
+	cairo_dock_remove_transition_on_icon (myIcon)
+
 
 //\_________________________________ DESKLETS et SOUS-DOCKS
 

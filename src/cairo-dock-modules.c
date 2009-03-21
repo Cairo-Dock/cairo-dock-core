@@ -39,6 +39,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-desklets.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-dialogs.h"
 #include "cairo-dock-modules.h"
 
 #define CAIRO_DOCK_MODULE_PANEL_WIDTH 700
@@ -87,7 +88,6 @@ void cairo_dock_initialize_module_manager (gchar *cModuleDirPath)
 	CairoDockVisitCard *pVisitCard = g_new0 (CairoDockVisitCard, 1);
 	pHelpModule->pVisitCard = pVisitCard;
 	pVisitCard->cModuleName = g_strdup ("Help");
-	pVisitCard->cReadmeFilePath = NULL;
 	pVisitCard->iMajorVersionNeeded = 2;
 	pVisitCard->iMinorVersionNeeded = 0;
 	pVisitCard->iMicroVersionNeeded = 0;
@@ -142,13 +142,14 @@ gchar *cairo_dock_check_module_conf_file (CairoDockVisitCard *pVisitCard)
 	if (pVisitCard->cConfFileName == NULL)
 		return NULL;
 	
+	int r;
 	gchar *cUserDataDirPath = g_strdup_printf ("%s/plug-ins/%s", g_cCurrentThemePath, pVisitCard->cUserDataDir);
 	if (! g_file_test (cUserDataDirPath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
 	{
 		cd_message ("directory %s doesn't exist, it will be added.", cUserDataDirPath);
 		
 		gchar *command = g_strdup_printf ("mkdir -p %s", cUserDataDirPath);
-		system (command);
+		r = system (command);
 		g_free (command);
 	}
 	
@@ -157,7 +158,7 @@ gchar *cairo_dock_check_module_conf_file (CairoDockVisitCard *pVisitCard)
 	{
 		cd_message ("no conf file %s, we will take the default one", cConfFilePath);
 		gchar *command = g_strdup_printf ("cp %s/%s %s", pVisitCard->cShareDataDir, pVisitCard->cConfFileName, cConfFilePath);
-		system (command);
+		r = system (command);
 		g_free (command);
 	}
 	
@@ -175,7 +176,7 @@ gchar *cairo_dock_check_module_conf_file (CairoDockVisitCard *pVisitCard)
 
 void cairo_dock_free_visit_card (CairoDockVisitCard *pVisitCard)
 {
-	g_free (pVisitCard->cReadmeFilePath);
+	/*g_free (pVisitCard->cReadmeFilePath);
 	g_free (pVisitCard->cPreviewFilePath);
 	g_free (pVisitCard->cGettextDomain);
 	g_free (pVisitCard->cDockVersionOnCompilation);
@@ -184,8 +185,8 @@ void cairo_dock_free_visit_card (CairoDockVisitCard *pVisitCard)
 	g_free (pVisitCard->cShareDataDir);
 	g_free (pVisitCard->cConfFileName);
 	g_free (pVisitCard->cModuleVersion);
-	g_free (pVisitCard->cIconFilePath);
-	g_free (pVisitCard);
+	g_free (pVisitCard->cIconFilePath);*/
+	g_free (pVisitCard);  // toutes les chaines sont statiques.
 }
 
 static void cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError **erreur)
@@ -422,12 +423,12 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 	}
 	
 	gboolean bUseless;
-	cairo_dock_get_size_key_value_helper (pKeyFile, "Icon", "", bUseless, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
+	cairo_dock_get_size_key_value_helper (pKeyFile, "Icon", "icon ", bUseless, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
 	
-	pMinimalConfig->iDesiredIconWidth = cairo_dock_get_integer_key_value (pKeyFile, "Icon", "width", NULL, 48, NULL, NULL);
+	//pMinimalConfig->iDesiredIconWidth = cairo_dock_get_integer_key_value (pKeyFile, "Icon", "width", NULL, 48, NULL, NULL);
 	if (pMinimalConfig->iDesiredIconWidth == 0 || pMinimalConfig->iDesiredIconWidth > myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLET])
 		pMinimalConfig->iDesiredIconWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLET];
-	pMinimalConfig->iDesiredIconHeight = cairo_dock_get_integer_key_value (pKeyFile, "Icon", "height", NULL, 48, NULL, NULL);
+	//pMinimalConfig->iDesiredIconHeight = cairo_dock_get_integer_key_value (pKeyFile, "Icon", "height", NULL, 48, NULL, NULL);
 	if (pMinimalConfig->iDesiredIconHeight == 0 || pMinimalConfig->iDesiredIconHeight > myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLET])
 		pMinimalConfig->iDesiredIconHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLET];
 	pMinimalConfig->cLabel = cairo_dock_get_string_key_value (pKeyFile, "Icon", "name", NULL, NULL, NULL, NULL);
@@ -1169,7 +1170,7 @@ void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance)
 			if (strcmp (pOneInstance->cConfFilePath, cLastInstanceFilePath) == 0)
 			{
 				gchar *cCommand = g_strdup_printf ("mv '%s' '%s'", cLastInstanceFilePath, cConfFilePath);
-				system (cCommand);
+				int r = system (cCommand);
 				g_free (cCommand);
 				
 				g_free (pOneInstance->cConfFilePath);
@@ -1198,7 +1199,7 @@ void cairo_dock_add_module_instance (CairoDockModule *pModule)
 	{
 		gchar *cCommand = g_strdup_printf ("cp %s/%s %s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName, cInstanceFilePath);
 		cd_debug (cCommand);
-		system (cCommand);
+		int r = system (cCommand);
 		g_free (cCommand);
 	}
 	
@@ -1354,4 +1355,30 @@ gboolean cairo_dock_get_global_config (GKeyFile *pKeyFile)
 	gpointer data[2] = {pKeyFile, &bFlushConfFileNeeded};
 	g_hash_table_foreach (s_hInternalModuleTable, (GHFunc) _cairo_dock_get_one_internal_module_config, data);
 	return bFlushConfFileNeeded;
+}
+
+
+void cairo_dock_popup_module_instance_description (CairoDockModuleInstance *pModuleInstance)
+{
+	gchar *cDescription = pModuleInstance->pModule->pVisitCard->cDescription;
+	gchar *cReadmeContent = NULL;
+	if (cDescription != NULL && *cDescription == '/')
+	{
+		gsize length = 0;
+		GError *erreur = NULL;
+		g_file_get_contents (cDescription,
+			&cReadmeContent,
+			&length,
+			&erreur);
+		if (erreur != NULL)
+		{
+			cd_warning (erreur->message);
+			g_error_free (erreur);
+		}
+		cDescription = cReadmeContent;
+	}
+	cDescription = g_strdup_printf ("%s (v%s) by %s\n%s", pModuleInstance->pModule->pVisitCard->cModuleName, pModuleInstance->pModule->pVisitCard->cModuleVersion, pModuleInstance->pModule->pVisitCard->cAuthor, cDescription);
+	cairo_dock_show_temporary_dialog_with_icon (cDescription, pModuleInstance->pIcon, pModuleInstance->pContainer, 0, pModuleInstance->pModule->pVisitCard->cIconFilePath);
+	g_free (cDescription);
+	g_free (cReadmeContent);
 }

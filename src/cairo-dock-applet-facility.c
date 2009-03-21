@@ -550,3 +550,8 @@ void cairo_dock_get_gnome_version (int *iMajor, int *iMinor, int *iMicro) {
 	g_free (cContent);
 	g_strfreev (cLineList);
 }
+
+void cairo_dock_pop_up_about_applet (GtkMenuItem *menu_item, CairoDockModuleInstance *pModuleInstance)
+{
+	cairo_dock_popup_module_instance_description (pModuleInstance);
+}

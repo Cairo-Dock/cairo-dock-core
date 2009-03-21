@@ -371,6 +371,8 @@ struct _CairoDockVisitCard {
 	/// octets reserves pour preserver la compatibilite binaire lors de futurs ajouts sur l'interface entre plug-ins et dock.
 	/// VRAI ssi le plug-in peut etre instancie plusiers fois.
 	gboolean bMultiInstance;
+	gchar *cDescription;
+	gchar *cAuthor;
 	char reserved[8];
 };
 
