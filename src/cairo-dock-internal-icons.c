@@ -154,12 +154,24 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 
 	//\___________________ Parametres des lanceurs.
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "launcher ", bFlushConfFileNeeded, pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER]);
+	if (pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] == 0)
+		pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] = 48;
+	if (pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] == 0)
+		pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] = 48;
 	
 	//\___________________ Parametres des applis.
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "appli ", bFlushConfFileNeeded, pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLI], pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLI]);
+	if (pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLI] == 0)
+		pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLET] = pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
+	if (pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLI] == 0)
+		pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLET] = pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
 	
 	//\___________________ Parametres des applets.
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "applet ", bFlushConfFileNeeded, pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLET], pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLET]);
+	if (pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLET] == 0)
+		pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLET] = pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
+	if (pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLET] == 0)
+		pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLET] = pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
 	
 	//\___________________ Parametres des separateurs.
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "separator ", bFlushConfFileNeeded, pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12], pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12]);

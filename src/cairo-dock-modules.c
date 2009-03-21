@@ -425,10 +425,8 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 	gboolean bUseless;
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Icon", "icon ", bUseless, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
 	
-	//pMinimalConfig->iDesiredIconWidth = cairo_dock_get_integer_key_value (pKeyFile, "Icon", "width", NULL, 48, NULL, NULL);
 	if (pMinimalConfig->iDesiredIconWidth == 0 || pMinimalConfig->iDesiredIconWidth > myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLET])
 		pMinimalConfig->iDesiredIconWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLET];
-	//pMinimalConfig->iDesiredIconHeight = cairo_dock_get_integer_key_value (pKeyFile, "Icon", "height", NULL, 48, NULL, NULL);
 	if (pMinimalConfig->iDesiredIconHeight == 0 || pMinimalConfig->iDesiredIconHeight > myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLET])
 		pMinimalConfig->iDesiredIconHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLET];
 	pMinimalConfig->cLabel = cairo_dock_get_string_key_value (pKeyFile, "Icon", "name", NULL, NULL, NULL, NULL);
@@ -1307,7 +1305,8 @@ static void _cairo_dock_reload_internal_module (CairoDockInternalModule *pModule
 	
 	pModule->get_config (pKeyFile, pModule->pConfig);
 	
-	pModule->reload (pPrevConfig, pModule->pConfig);
+	if (g_pMainDock != NULL)  // si on est en mode maintenance, inutile de recharger.
+		pModule->reload (pPrevConfig, pModule->pConfig);
 	
 	if (pModule->reset_config)
 		pModule->reset_config (pPrevConfig);

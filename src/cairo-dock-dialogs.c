@@ -1283,6 +1283,8 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 		pDialog->iPositionX = g_iScreenOffsetX + (g_iScreenWidth [CAIRO_DOCK_HORIZONTAL] - pDialog->iWidth) / 2;
 		pDialog->iPositionY = g_iScreenOffsetY + (g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] - pDialog->iHeight) / 2;
 		pDialog->iHeight = pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin;
+		g_print (" au milieu de l'ecran (%d;%d) %dx%d\n", pDialog->iPositionX, pDialog->iPositionY, pDialog->iWidth, pDialog->iHeight);
+		
 		gtk_window_resize (GTK_WINDOW (pDialog->pWidget),
 			pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin,
 			pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin);

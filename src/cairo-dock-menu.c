@@ -211,6 +211,13 @@ static void _cairo_dock_quick_hide (GtkMenuItem *pMenuItem, gpointer *data)
 	cairo_dock_quick_hide_all_docks ();
 }
 
+static void _cairo_dock_add_autostart (GtkMenuItem *pMenuItem, gpointer *data)
+{
+	gchar *cCommand = g_strdup_printf ("cp '/usr/share/applications/cairo-dock.desktop' '%s/.config/autostart'", g_getenv ("HOME"));
+	system (cCommand);
+	g_free (cCommand);
+}
+
 static void _cairo_dock_quit (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	CairoDock *pDock = data[1];
@@ -1063,6 +1070,13 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 	{
 		_add_entry_in_menu (_("Quick-Hide"), GTK_STOCK_GOTO_BOTTOM, _cairo_dock_quick_hide, pSubMenu);
 	}
+	
+	gchar *cCairoAutoStartEntryPath = g_strdup_printf ("%s/.config/autostart/cairo-dock.desktop", g_getenv ("HOME"));
+	if (! g_file_test (cCairoAutoStartEntryPath, G_FILE_TEST_EXISTS))
+	{
+		_add_entry_in_menu (_("Launch Cairo-Dock on startup"), GTK_STOCK_ADD, _cairo_dock_add_autostart, pSubMenu);
+	}
+	g_free (cCairoAutoStartEntryPath);
 	
 	_add_entry_in_menu (_("Development's site"), GTK_STOCK_DIALOG_WARNING, _cairo_dock_check_for_updates, pSubMenu);
 

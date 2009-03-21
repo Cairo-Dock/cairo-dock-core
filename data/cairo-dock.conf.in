@@ -204,14 +204,14 @@ animate subdocks = true
 #{The icons will appear folded on themselves, regarding the alignement point, then will unfold untill they fill the whole dock. Use 0 to not use unfolding, the more it's close to 0, the faster it will be}
 unfold factor = 8
 
-#i-[5;50] Number of steps for icons' resizing (grow up/shrink down) :
+#i-[5;50] Number of steps in the zoom animation (grow up/shrink down) :
 #{The more there are, the slower it will be}
 grow up steps = 10
 #i-[5;50] ...
-shrink down steps = 12
+shrink down steps = 8
 
 #f-[0.1;0.9] Window's move acceleration (move up/move down) :
-#{in percentage of the distance it can move at each step . After n steps, the remaining distance will be reduced by (1-s)^n.}
+#{the smaller, the faster the dock will hide.}
 move up speed = 0.35
 #f-[0.1;0.9] ...
 move down speed = 0.25

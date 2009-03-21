@@ -993,7 +993,7 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 {
 	if (g_pVisibleZoneSurface != NULL)
 	{
-		g_print ("%d;%d\n", myHiddenDock.bReverseVisibleImage, pDock->bDirectionUp);
+		g_print ("render hidden (%d;%d)\n", myHiddenDock.bReverseVisibleImage, pDock->bDirectionUp);
 		cairo_dock_draw_surface (pCairoContext, g_pVisibleZoneSurface,
 			pDock->iCurrentWidth, pDock->iCurrentHeight,
 			(myHiddenDock.bReverseVisibleImage ? pDock->bDirectionUp : TRUE),

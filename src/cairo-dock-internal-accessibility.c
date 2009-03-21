@@ -127,11 +127,14 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
 	
 	//\_______________ Auto-Hide
-	pDock->bAutoHide = pAccessibility->bAutoHide;
-	if (! pAccessibility->bAutoHide && pPrevAccessibility->bAutoHide)
-		cairo_dock_deactivate_temporary_auto_hide ();
-	else
-		cairo_dock_place_root_dock (pDock);
+	if (pDock)
+	{
+		pDock->bAutoHide = pAccessibility->bAutoHide;
+		if (! pAccessibility->bAutoHide && pPrevAccessibility->bAutoHide)
+			cairo_dock_deactivate_temporary_auto_hide ();
+		else
+			cairo_dock_place_root_dock (pDock);
+	}
 }
 
 
