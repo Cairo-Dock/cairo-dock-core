@@ -240,7 +240,7 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 		pDock->iMagnitudeIndex = 0;
 	
 	//\_________________ On replie le dock.
-	if (pDock->fFoldingFactor != 0/** && (! mySystem.bResetScrollOnLeave || pDock->iScrollOffset == 0)*/)
+	if (pDock->fFoldingFactor != 0)
 	{
 		pDock->fFoldingFactor = pow (pDock->fFoldingFactor, 2./3);
 		if (pDock->fFoldingFactor > mySystem.fUnfoldAcceleration)
@@ -252,93 +252,75 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 	if (fabs (pDock->fDecorationsOffsetX) < 3)
 		pDock->fDecorationsOffsetX = 0.;
 	
-	//\_________________ On remet les icones a l'equilibre.
-	/**if (pDock->iScrollOffset != 0 && mySystem.bResetScrollOnLeave)
-	{
-		//g_print ("iScrollOffset : %d\n", pDock->iScrollOffset);
-		if (pDock->iScrollOffset < pDock->fFlatDockWidth / 2)
-		{
-			//pDock->iScrollOffset = pDock->iScrollOffset * mySystem.fScrollAcceleration;
-			pDock->iScrollOffset -= MAX (2, ceil (pDock->iScrollOffset * (1 - mySystem.fScrollAcceleration)));
-			if (pDock->iScrollOffset < 0)
-				pDock->iScrollOffset = 0;
-		}
-		else
-		{
-			pDock->iScrollOffset += MAX (2, ceil ((pDock->fFlatDockWidth - pDock->iScrollOffset) * (1 - mySystem.fScrollAcceleration)));
-			if (pDock->iScrollOffset > pDock->fFlatDockWidth)
-				pDock->iScrollOffset = 0;
-		}
-		pDock->calculate_max_dock_size (pDock);
-	}*/
-	
-	//\_________________ On recupere la position de la souris pour le cas ou on est hors du dock.
+	//\_________________ On recupere la position de la souris manuellement (car a priori on est hors du dock).
 	if (pDock->bHorizontalDock)  // ce n'est pas le motion_notify qui va nous donner des coordonnees en dehors du dock, et donc le fait d'etre dedans va nous faire interrompre le shrink_down et re-grossir, du coup il faut le faire ici. L'inconvenient, c'est que quand on sort par les cotes, il n'y a soudain plus d'icone pointee, et donc le dock devient tout plat subitement au lieu de le faire doucement. Heureusement j'ai trouve une astuce. ^_^
 		gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseX, &pDock->iMouseY, NULL);
 	else
 		gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseY, &pDock->iMouseX, NULL);
 	
 	//\_________________ On recalcule les icones.
-	cairo_dock_calculate_dock_icons (pDock);
-	if (! pDock->bIsShrinkingDown)
-		return FALSE;
-	
-	if (g_bEasterEggs && iPrevMagnitudeIndex != 0 && pDock->iMagnitudeIndex == 0 && pDock->bInside)  // on arrive en fin de retrecissement.
-		cairo_dock_set_input_shape (pDock);
-	
-	if (! pDock->bInside)
+	if (iPrevMagnitudeIndex != 0)
+	{
+		cairo_dock_calculate_dock_icons (pDock);
+		if (! pDock->bIsShrinkingDown)
+			return FALSE;
+		
 		cairo_dock_replace_all_dialogs ();
+		
+		if (g_bEasterEggs)
+			cairo_dock_set_input_shape (pDock);
+	}
 
-	if (/**(pDock->iScrollOffset == 0 || ! mySystem.bResetScrollOnLeave) &&*/
-		(pDock->iMagnitudeIndex == 0) &&
-		(pDock->fDecorationsOffsetX == 0) &&
-		(pDock->fFoldingFactor == 0 || pDock->fFoldingFactor == mySystem.fUnfoldAcceleration))
+	if (pDock->iMagnitudeIndex == 0)  // on est arrive en bas.
 	{
 		//g_print ("equilibre atteint (%d)\n", pDock->bInside);
-		if (! pDock->bInside)
+		if (iPrevMagnitudeIndex != 0)  // on vient d'arriver en bas.
 		{
-			//g_print ("rideau !\n");
-			//\__________________ On repasse derriere si on etait devant.
-			if (pDock->bPopped)
-				cairo_dock_pop_down (pDock);
-			
-			//\__________________ On se redimensionne en taille normale.
-			if (! (pDock->bAutoHide && pDock->iRefCount == 0) && ! pDock->bMenuVisible)
+			if (! pDock->bInside)  // on peut etre hors des icones sans etre hors de la fenetre.
 			{
-				int iNewWidth, iNewHeight;
-				cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
-				if (pDock->bHorizontalDock)
-					gdk_window_move_resize (pDock->pWidget->window,
-						pDock->iWindowPositionX,
-						pDock->iWindowPositionY,
-						iNewWidth,
-						iNewHeight);
-				else
-					gdk_window_move_resize (pDock->pWidget->window,
-						pDock->iWindowPositionY,
-						pDock->iWindowPositionX,
-						iNewHeight,
-						iNewWidth);
-			}
-			
-			//\__________________ On se cache si sous-dock.
-			if (pDock->iRefCount > 0)
-			{
-				//g_print ("on cache ce sous-dock en sortant par lui\n");
-				gtk_widget_hide (pDock->pWidget);
-				cairo_dock_hide_parent_dock (pDock);
-			}
+				//g_print ("rideau !\n");
+				//\__________________ On repasse derriere si on etait devant.
+				if (pDock->bPopped)
+					cairo_dock_pop_down (pDock);
+				
+				//\__________________ On se redimensionne en taille normale.
+				if (! (pDock->bAutoHide && pDock->iRefCount == 0) && ! pDock->bMenuVisible)
+				{
+					int iNewWidth, iNewHeight;
+					cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
+					if (pDock->bHorizontalDock)
+						gdk_window_move_resize (pDock->pWidget->window,
+							pDock->iWindowPositionX,
+							pDock->iWindowPositionY,
+							iNewWidth,
+							iNewHeight);
+					else
+						gdk_window_move_resize (pDock->pWidget->window,
+							pDock->iWindowPositionY,
+							pDock->iWindowPositionX,
+							iNewHeight,
+							iNewWidth);
+				}
+				
+				//\__________________ On se cache si sous-dock.
+				if (pDock->iRefCount > 0)
+				{
+					//g_print ("on cache ce sous-dock en sortant par lui\n");
+					gtk_widget_hide (pDock->pWidget);
+					cairo_dock_hide_parent_dock (pDock);
+				}
 
-			pDock->bAtBottom = TRUE;
-			cairo_dock_hide_dock_like_a_menu ();
-		}
-		else
-		{
-			cairo_dock_calculate_dock_icons (pDock);  // relance le grossissement si on est dedans.
-			if (! pDock->bIsGrowingUp)
 				pDock->bAtBottom = TRUE;
+				cairo_dock_hide_dock_like_a_menu ();
+			}
+			else
+			{
+				cairo_dock_calculate_dock_icons (pDock);  // relance le grossissement si on est dedans.
+				if (! pDock->bIsGrowingUp)
+					pDock->bAtBottom = TRUE;
+			}
 		}
-		return FALSE;
+		return (!pDock->bIsGrowingUp && (pDock->fDecorationsOffsetX != 0 || (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != mySystem.fUnfoldAcceleration)));
 	}
 	else
 	{

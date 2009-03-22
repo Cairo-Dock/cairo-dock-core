@@ -601,7 +601,7 @@ int main (int argc, char** argv)
 		{
 			do
 			{
-				cairo_dock_manage_themes (NULL, bSafeMode ? CAIRO_DOCK_START_SAFE : CAIRO_DOCK_START_MAINTENANCE);
+				cairo_dock_manage_themes (NULL, CAIRO_DOCK_START_SAFE);
 			}
 			while (g_pMainDock == NULL);
 		}

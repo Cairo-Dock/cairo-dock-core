@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Application
 Exec=cairo-dock
-Icon=cairo-dock
+Icon=cairo-dock.svg
 #DocPath=
 Terminal=false
 #X-KDE-StartupNotify=true

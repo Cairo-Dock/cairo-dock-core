@@ -1071,12 +1071,14 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 		_add_entry_in_menu (_("Quick-Hide"), GTK_STOCK_GOTO_BOTTOM, _cairo_dock_quick_hide, pSubMenu);
 	}
 	
-	gchar *cCairoAutoStartEntryPath = g_strdup_printf ("%s/.config/autostart/cairo-dock.desktop", g_getenv ("HOME"));
-	if (! g_file_test (cCairoAutoStartEntryPath, G_FILE_TEST_EXISTS))
+	gchar *cCairoAutoStartDirPath = g_strdup_printf ("%s/.config/autostart", g_getenv ("HOME"));
+	gchar *cCairoAutoStartEntryPath = g_strdup_printf ("%s/cairo-dock.desktop", cCairoAutoStartDirPath);
+	if (g_file_test (cCairoAutoStartDirPath, G_FILE_TEST_IS_DIR) && ! g_file_test (cCairoAutoStartEntryPath, G_FILE_TEST_EXISTS))
 	{
 		_add_entry_in_menu (_("Launch Cairo-Dock on startup"), GTK_STOCK_ADD, _cairo_dock_add_autostart, pSubMenu);
 	}
 	g_free (cCairoAutoStartEntryPath);
+	g_free (cCairoAutoStartDirPath);
 	
 	_add_entry_in_menu (_("Development's site"), GTK_STOCK_DIALOG_WARNING, _cairo_dock_check_for_updates, pSubMenu);
 

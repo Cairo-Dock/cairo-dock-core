@@ -1,5 +1,8 @@
 #!/bin/sh
-export CONF_FILE="$1/cairo-dock.conf"
+if test "x$1"="x"; then
+	export CONF_FILE="cairo-dock.conf"
+else
+	export CONF_FILE="$1/cairo-dock.conf"
 
 set_value()
 {
@@ -39,8 +42,8 @@ set_value "max name length"			15
 set_value "visibility alpha"		"0.2"
 set_value "animate subdocks"		true
 set_value "unfold factor"		8
-set_value "grow up steps" 		12
-set_value "shrink down steps"		8
+set_value "grow nb steps" 		10
+set_value "shrink nb steps"		8
 #set_value "move down speed"		"0.25"
 set_value "refresh frequency"		35
 set_value "dynamic reflection"		false

@@ -48,7 +48,10 @@ essentialdata_DATA = \
 	help.conf\
 	help.svg
 	
-	
+autostartdatadir = $(datadir)/applications
+autostartdata_DATA = \
+	cairo-dock.desktop
+
 EXTRA_DIST = $(essentialdata_DATA)\
 	cairo-dock
 	

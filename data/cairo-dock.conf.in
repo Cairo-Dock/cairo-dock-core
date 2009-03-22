@@ -204,11 +204,11 @@ animate subdocks = true
 #{The icons will appear folded on themselves, regarding the alignement point, then will unfold untill they fill the whole dock. Use 0 to not use unfolding, the more it's close to 0, the faster it will be}
 unfold factor = 8
 
-#i-[5;50] Number of steps in the zoom animation (grow up/shrink down) :
+#i-[4;40] Number of steps in the zoom animation (grow up/shrink down) :
 #{The more there are, the slower it will be}
-grow up steps = 10
-#i-[5;50] ...
-shrink down steps = 8
+grow nb steps = 10
+#i-[4;40] ...
+shrink nb steps = 8
 
 #f-[0.1;0.9] Window's move acceleration (move up/move down) :
 #{the smaller, the faster the dock will hide.}
@@ -216,7 +216,7 @@ move up speed = 0.35
 #f-[0.1;0.9] ...
 move down speed = 0.25
 
-#F-[Mouse;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-mouse.png]
+#F-[Background movments;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-mouse.png]
 frame_mouse = 
 
 #e-[0;1] Scroll speed factor for background decorations :
@@ -226,17 +226,6 @@ scroll speed factor = 0.5
 #b- Should the decorations be enslaved to the cursor ?
 #{Otherwise the amount of movement of the decorations will only depend on the direction of the cursor's movement, as if the decorations were "gliding".}
 decorations enslaved = true
-
-#i-[-1;99] Amount of pixels the icons will scroll at each wheel scroll :
-#{If you put 0, this will make them scroll of exactly one icon each time. If you put -1, the scroll wil be de-activated}
-scroll amount = 0
-
-#b- Re-center the dock on leaving if it has been scrolled ?
-reset scroll = true
-
-#e-[0.;0.99] If so, you can specify the scrolling acceleration :
-#{The more it's close to 0, the faster the scroll will be.}
-reset scroll acceleration = .9
 
 #F-[CPU;gtk-execute]
 frame_cpu =

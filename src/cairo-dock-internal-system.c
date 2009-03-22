@@ -33,10 +33,10 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 	pSystem->fUnfoldAcceleration = 1 - pow (2, - fUserValue);
 	pSystem->bAnimateOnAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, "System", "animate on auto-hide", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
-	int iNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "grow up steps", &bFlushConfFileNeeded, 8, "Cairo Dock", NULL);
+	int iNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "grow nb steps", &bFlushConfFileNeeded, 10, "Cairo Dock", NULL);
 	iNbSteps = MAX (iNbSteps, 1);
 	pSystem->iGrowUpInterval = MAX (1, CAIRO_DOCK_NB_MAX_ITERATIONS / iNbSteps);
-	iNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "shrink down steps", &bFlushConfFileNeeded, 10, "Cairo Dock", NULL);
+	iNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "shrink nb steps", &bFlushConfFileNeeded, 8, "Cairo Dock", NULL);
 	iNbSteps = MAX (iNbSteps, 1);
 	pSystem->iShrinkDownInterval = MAX (1, CAIRO_DOCK_NB_MAX_ITERATIONS / iNbSteps);
 	pSystem->fMoveUpSpeed = cairo_dock_get_double_key_value (pKeyFile, "System", "move up speed", &bFlushConfFileNeeded, 0.35, "Cairo Dock", NULL);
