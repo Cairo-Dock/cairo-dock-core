@@ -1,13 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
-Exec=cairo-dock
+Exec=cairo-dock -c
 Icon=cairo-dock.svg
 #DocPath=
 Terminal=false
 
-Name=Cairo-Dock with OpenGL
-Name[fr]=Cairo-Dock avec l'OpenGL
+Name=Cairo-Dock without OpenGL
+Name[fr]=Cairo-Dock sans l'OpenGL
 
 GenericName=Multi-purpose Dock
 GenericName[fr]=Dock multi-usage

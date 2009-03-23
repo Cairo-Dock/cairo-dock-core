@@ -50,7 +50,8 @@ essentialdata_DATA = \
 	
 autostartdatadir = $(datadir)/applications
 autostartdata_DATA = \
-	cairo-dock.desktop
+	cairo-dock.desktop\
+	cairo-dock-cairo.desktop
 
 EXTRA_DIST = $(essentialdata_DATA)\
 	cairo-dock

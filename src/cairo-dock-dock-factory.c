@@ -70,7 +70,6 @@ extern gboolean g_bSticky;
 extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bIndirectRendering;
-extern gboolean g_bUseCairo;
 extern GdkGLConfig* g_pGlConfig;
 
 static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)

@@ -151,7 +151,7 @@ gboolean g_bLocked = FALSE;
 
 gboolean g_bUseOpenGL = FALSE;
 gboolean g_bForcedOpenGL = FALSE;
-gboolean g_bUseCairo = FALSE;
+gboolean g_bForceCairo = FALSE;
 gboolean g_bIndirectRendering = FALSE;
 GdkGLConfig* g_pGlConfig = NULL;
 GLuint g_iBackgroundTexture=0;
@@ -228,7 +228,7 @@ int main (int argc, char** argv)
 	GError *erreur = NULL;
 	
 	//\___________________ On recupere quelques options.
-	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSkipPager = FALSE, bNoSkipTaskbar = FALSE, bNoSticky = FALSE, bToolBarHint = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bExpresso = FALSE, bCafeLatte = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceCairo = FALSE, bForceOpenGL = FALSE;
+	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSkipPager = FALSE, bNoSkipTaskbar = FALSE, bNoSticky = FALSE, bToolBarHint = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bExpresso = FALSE, bCafeLatte = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceOpenGL = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL;
 	GOptionEntry TableDesOptions[] =
 	{
@@ -241,7 +241,7 @@ int main (int argc, char** argv)
 			"force Glitz backend (hardware acceleration for cairo, needs a glitz-enabled libcairo)", NULL},
 #endif
 		{"cairo", 'c', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&bForceCairo,
+			&g_bForceCairo,
 			"force cairo backend", NULL},
 		{"opengl", 'o', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bForceOpenGL,
@@ -507,7 +507,7 @@ int main (int argc, char** argv)
 	cd_debug ("environnement de bureau : %d", g_iDesktopEnv);
 	
 	//\___________________ On initialise le support d'OpenGL.
-	if (! bForceCairo && ! g_bUseGlitz)
+	if (! g_bForceCairo && ! g_bUseGlitz)
 		g_pGlConfig = cairo_dock_get_opengl_config (bForceOpenGL, &g_bForcedOpenGL);
 	g_bUseOpenGL = (g_pGlConfig != NULL);
 	

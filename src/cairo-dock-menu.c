@@ -64,6 +64,7 @@ extern int g_iNbViewportX,g_iNbViewportY ;
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
 extern gboolean g_bLocked;
 extern gboolean g_bEasterEggs;
+extern gboolean g_bForceCairo;
 
 
 static void _cairo_dock_edit_and_reload_conf (GtkMenuItem *pMenuItem, gpointer *data)
@@ -213,7 +214,7 @@ static void _cairo_dock_quick_hide (GtkMenuItem *pMenuItem, gpointer *data)
 
 static void _cairo_dock_add_autostart (GtkMenuItem *pMenuItem, gpointer *data)
 {
-	gchar *cCommand = g_strdup_printf ("cp '/usr/share/applications/cairo-dock.desktop' '%s/.config/autostart'", g_getenv ("HOME"));
+	gchar *cCommand = g_strdup_printf ("cp '/usr/share/applications/cairo-dock%s.desktop' '%s/.config/autostart'", (g_bForceCairo ? "-cairo" : ""), g_getenv ("HOME"));
 	system (cCommand);
 	g_free (cCommand);
 }
@@ -1073,11 +1074,13 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 	
 	gchar *cCairoAutoStartDirPath = g_strdup_printf ("%s/.config/autostart", g_getenv ("HOME"));
 	gchar *cCairoAutoStartEntryPath = g_strdup_printf ("%s/cairo-dock.desktop", cCairoAutoStartDirPath);
-	if (g_file_test (cCairoAutoStartDirPath, G_FILE_TEST_IS_DIR) && ! g_file_test (cCairoAutoStartEntryPath, G_FILE_TEST_EXISTS))
+	gchar *cCairoAutoStartEntryPath2 = g_strdup_printf ("%s/cairo-dock-cairo.desktop", cCairoAutoStartDirPath);
+	if (g_file_test (cCairoAutoStartDirPath, G_FILE_TEST_IS_DIR) && ! g_file_test (cCairoAutoStartEntryPath, G_FILE_TEST_EXISTS) && ! g_file_test (cCairoAutoStartEntryPath2, G_FILE_TEST_EXISTS))
 	{
 		_add_entry_in_menu (_("Launch Cairo-Dock on startup"), GTK_STOCK_ADD, _cairo_dock_add_autostart, pSubMenu);
 	}
 	g_free (cCairoAutoStartEntryPath);
+	g_free (cCairoAutoStartEntryPath2);
 	g_free (cCairoAutoStartDirPath);
 	
 	_add_entry_in_menu (_("Development's site"), GTK_STOCK_DIALOG_WARNING, _cairo_dock_check_for_updates, pSubMenu);

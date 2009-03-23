@@ -178,13 +178,13 @@ _("Icons' lateral unfolding acceleration :")
 
 _("The more there are, the slower it will be")
 
-_("Number of steps for icons' resizing (grow up/shrink down) :")
+_("Number of steps in the zoom animation (grow up/shrink down) :")
 
-_("in percentage of the distance it can move at each step . After n steps, the remaining distance will be reduced by (1-s)^n.")
+_("the smaller, the faster the dock will hide.")
 
 _("Window's move acceleration (move up/move down) :")
 
-_("Mouse")
+_("Background movments")
 
 _("The smaller, the lower the decorations will move along with the cursor. At 0 they will be static.")
 
@@ -193,16 +193,6 @@ _("Scroll speed factor for background decorations :")
 _("Otherwise the amount of movement of the decorations will only depend on the direction of the cursor's movement, as if the decorations were \"gliding\".")
 
 _("Should the decorations be enslaved to the cursor ?")
-
-_("If you put 0, this will make them scroll of exactly one icon each time. If you put -1, the scroll wil be de-activated")
-
-_("Amount of pixels the icons will scroll at each wheel scroll :")
-
-_("Re-center the dock on leaving if it has been scrolled ?")
-
-_("The more it's close to 0, the faster the scroll will be.")
-
-_("If so, you can specify the scrolling acceleration :")
 
 _("CPU")
 
@@ -1328,7 +1318,7 @@ _("How can I change the image of an icon ?")
 
 _("Hint : you can also directly edit a launcher\342\200\231s configuration, and set a path for an image. If you don\342\200\231t write a path, but simply the name of an image, don\342\200\231t put the extension (.svg, .png, etc), to let the dock choose the best.")
 
-_("In the \342\200\234Icons\342\200\235 module, you can choose a <b>icon theme</b>. Enter a name of a theme, for exemple : Human or Gartoon.\nYou can even enter the path of a folder  containing personnal icons.\nBy default, all the themes put here the local icons folder \342\200\234_LocalIcons\342\200\235, that is in fact  ~/.config/cairo-dock/current_theme/icons.\nYou can enter many themes or folders, the dock will search for images In them in the same order as you entered them. If you let  it empty, the default icon theme of your system wil be used.")
+_("In the \342\200\234Icons\342\200\235 module, you can choose a <b>icon theme</b>. Enter a name of a theme, for exemple : Human or Gartoon.\nYou can even enter the path of a folder  containing personnal icons.\nBy default, all the themes put here the local icons folder \342\200\234_LocalIcons\342\200\235, that is in fact  ~/.config/cairo-dock/current_theme/icons.\nYou can enter many themes or folders, the dock will search for images In them in the same order as you entered them.\nIf you let it empty, the default icon theme of your system wil be used.")
 
 _("How can I quickly remove many icons ?")
 
@@ -1416,13 +1406,19 @@ _("How can I change their decorations ?")
 
 _("Hint : you can add new decorations, by choosing the \342\200\234personnal\342\200\235 decoration, and providing a background and/or foreground image. You can setup the offsets of these images to adjust the position of the drawings relatively to the decoration.")
 
-_("You need to have the \342\200\234desklet-rendering\342\200\235 plug-in activated. The default decoration is located in the \342\200\234desklet\342\200\235 module. You can choose between many decorations, and then apply.. All the desklet that don\342\200\231t use a \nEach desklet can have its own decoration. To change a desklet\342\200\231s decoration, go to the applet\342\200\231s configuration, click on the \342\200\234desklet\342\200\235 tab, and then choose the decoration you want.")
+_("You need to have the \342\200\234desklet-rendering\342\200\235 plug-in activated. The default decoration is defined in the \342\200\234desklet\342\200\235 module.\nMoreover, each desklet can have its own decoration. To change a desklet\342\200\231s decoration,\n go to the applet\342\200\231s configuration, click on the \342\200\234desklet\342\200\235 tab, and then choose the decoration you want.")
 
 _("How do I insert a desklet into the dock ?")
 
 _("Hint :  if the desklet is locked, the button won\342\200\231t appear.")
 
 _("Simply click on the top right button.")
+
+_("How can I\302\240place a desklet on the <i>Compiz Widget Layer</i> ?")
+
+_("Hint : you may have to switch one time to the Widget Layer so that Compiz takes into account the modification.")
+
+_("In the Compiz-Fusion config, activate the 'Widget Layer' plug-in, and set the rule (class=cairo-dock &amp; type=utility).\nYou can then switch an applet to the Widget Layer by left-clicking on its desklet and selecting 'Compiz-Fusion Widget'.")
 
 _("Taskbar")
 
@@ -1533,6 +1529,14 @@ _("I have a personal Cairo-Clock theme that I want to use in the \342\200\234clo
 _("Hint : the same goes on for all the applets that propose a theme : dustbin, Cairo-Penguin, weather, etc.")
 
 _("move the folder containing your theme in ~/.config/cairo-dock/extras/clock, you\342\200\231re done !")
+
+_("How can I change quickly the luminosity of my screen ?")
+
+_("Activate the Xgamma applet, then you can scroll up/down on the icon with the mouse.")
+
+_("How can I change quickly the speakers volume ?")
+
+_("Activate the AlsaMixer applet, then you can scroll up/down on the icon with the mouse.")
 
 _("Troubleshooting")
 
