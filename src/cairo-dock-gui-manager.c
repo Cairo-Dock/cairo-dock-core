@@ -359,14 +359,15 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 		TRUE,
 		0);
 	
-	cairo_dock_set_colormap_for_window (s_pMainWindow);
-	gtk_widget_set_app_paintable (s_pMainWindow, TRUE);
 	if (g_iDesktopEnv != CAIRO_DOCK_KDE)
+	{
+		cairo_dock_set_colormap_for_window (s_pMainWindow);
+		gtk_widget_set_app_paintable (s_pMainWindow, TRUE);
 		g_signal_connect (G_OBJECT (s_pMainWindow),
 			"expose-event",
 			G_CALLBACK (on_expose),
 			NULL);
-	
+	}
 	/*g_signal_connect (G_OBJECT (s_pGroupsVBox),
 		"expose-event",
 		G_CALLBACK (on_expose),
@@ -878,7 +879,7 @@ GtkWidget *cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroup
 	cairo_dock_trigger_current_filter ();
 	
 	//\_______________ On gere les dependances.
-	if (pGroupDescription->cDependencies != NULL && ! pGroupDescription->bIgnoreDependencies)
+	if (pGroupDescription->cDependencies != NULL && ! pGroupDescription->bIgnoreDependencies && g_pMainDock != NULL)
 	{
 		pGroupDescription->bIgnoreDependencies = TRUE;  // cette fonction re-entrante.
 		gboolean bReload = FALSE;

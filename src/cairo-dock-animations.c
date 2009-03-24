@@ -100,7 +100,7 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 	if (pDock->iMagnitudeIndex > 0/** || (mySystem.bResetScrollOnLeave && pDock->iScrollOffset != 0)*/)  // on retarde le cachage du dock pour apercevoir les effets.
 		return TRUE;
 	int deltaY_possible = (pDock->bDirectionUp ? g_iXScreenHeight[pDock->bHorizontalDock] - pDock->iGapY - 0 : pDock->iGapY + 0 - pDock->iMaxDockHeight) - pDock->iWindowPositionY;  // 0 <-> g_iVisibleZoneHeight
-	//g_print ("%s (%d)\n", __func__, deltaY_possible);
+	g_print ("%s (%d)\n", __func__, deltaY_possible);
 	if ((pDock->bDirectionUp && deltaY_possible > 8) || (! pDock->bDirectionUp && deltaY_possible < -8))  // alors on peut encore descendre.
 	{
 		pDock->iWindowPositionY += (int) (deltaY_possible * mySystem.fMoveDownSpeed) + (pDock->bDirectionUp ? 1 : -1);  // 0.33
@@ -288,6 +288,23 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 				{
 					int iNewWidth, iNewHeight;
 					cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
+					if (pDock->bHorizontalDock)
+						gdk_window_move_resize (pDock->pWidget->window,
+							pDock->iWindowPositionX,
+							pDock->iWindowPositionY,
+							iNewWidth,
+							iNewHeight);
+					else
+						gdk_window_move_resize (pDock->pWidget->window,
+							pDock->iWindowPositionY,
+							pDock->iWindowPositionX,
+							iNewHeight,
+							iNewWidth);
+				}
+				else if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->fFoldingFactor != 0)  // si le dock se replie, inutile de rester en taille grande avec une fenetre transparente, ca perturbe.
+				{
+					int iNewWidth, iNewHeight;
+					cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MIN_SIZE, &iNewWidth, &iNewHeight);
 					if (pDock->bHorizontalDock)
 						gdk_window_move_resize (pDock->pWidget->window,
 							pDock->iWindowPositionX,

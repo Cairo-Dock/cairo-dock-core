@@ -43,8 +43,9 @@ essentialdata_DATA = \
 	icon-hidden-dock.png\
 	icon-indicators.png\
 	icon-system.png\
-	cairo-dock-animated.xpm\
 	icon-lock-icons.svg\
+	icon-position.png\
+	cairo-dock-animated.xpm\
 	help.conf\
 	help.svg
 	
@@ -54,5 +55,6 @@ autostartdata_DATA = \
 	cairo-dock-cairo.desktop
 
 EXTRA_DIST = $(essentialdata_DATA)\
+	$(autostartdata_DATA)\
 	cairo-dock
 	

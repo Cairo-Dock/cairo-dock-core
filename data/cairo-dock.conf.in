@@ -284,7 +284,7 @@ modules=
 #@prefix@/@DATADIRNAME@/@PACKAGE@/icon-hidden-dock.png;1;Define the appearance of the dock when it's hidden.
 [Hidden dock]
 
-#j+[1;1024] Size of the callback zone (width x height, in pixels) :
+#j+[1;1280] Size of the callback zone (width x height, in pixels) :
 #{Place the mouse into it will make the dock re-appear.}
 zone size = 200;20
 

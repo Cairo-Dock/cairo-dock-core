@@ -730,27 +730,31 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 	pSubWidgetList = g_slist_append (pSubWidgetList, pSubWidget);\
 	_pack_in_widget_box (pSubWidget); } while (0)
 #define _add_combo_from_modele(modele, bAddPreviewWidgets, bWithEntry) do {\
-	cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);\
-	pOneWidget = (bWithEntry ? gtk_combo_box_entry_new_with_model (GTK_TREE_MODEL (modele), CAIRO_DOCK_MODEL_NAME) : gtk_combo_box_new_with_model (GTK_TREE_MODEL (modele)));\
-	rend = gtk_cell_renderer_text_new ();\
-	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);\
-	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);\
-	if (bAddPreviewWidgets) {\
-		pDescriptionLabel = gtk_label_new (NULL);\
-		gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);\
-		pPreviewImage = gtk_image_new_from_pixbuf (NULL);\
-		_allocate_new_buffer;\
-		data[0] = pDescriptionLabel;\
-		data[1] = pPreviewImage;\
-		g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_one_item_in_combo), data);\
-		pPreviewBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);\
-		gtk_box_pack_start (GTK_BOX (pKeyBox), pPreviewBox, FALSE, FALSE, 0);\
-		gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionLabel, FALSE, FALSE, 0);\
-		gtk_box_pack_start (GTK_BOX (pPreviewBox), pPreviewImage, FALSE, FALSE, 0); }\
-	if (_cairo_dock_find_iter_from_name (modele, cValue, &iter))\
-		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);\
-	_pack_subwidget (pOneWidget);\
-	g_free (cValue); } while (0)
+	if (modele == NULL) { \
+		pOneWidget = gtk_combo_box_entry_new ();\
+		_pack_subwidget (pOneWidget); }\
+	else {\
+		cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);\
+		pOneWidget = (bWithEntry ? gtk_combo_box_entry_new_with_model (GTK_TREE_MODEL (modele), CAIRO_DOCK_MODEL_NAME) : gtk_combo_box_new_with_model (GTK_TREE_MODEL (modele)));\
+		rend = gtk_cell_renderer_text_new ();\
+		gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);\
+		gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);\
+		if (bAddPreviewWidgets) {\
+			pDescriptionLabel = gtk_label_new (NULL);\
+			gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);\
+			pPreviewImage = gtk_image_new_from_pixbuf (NULL);\
+			_allocate_new_buffer;\
+			data[0] = pDescriptionLabel;\
+			data[1] = pPreviewImage;\
+			g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_one_item_in_combo), data);\
+			pPreviewBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);\
+			gtk_box_pack_start (GTK_BOX (pKeyBox), pPreviewBox, FALSE, FALSE, 0);\
+			gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionLabel, FALSE, FALSE, 0);\
+			gtk_box_pack_start (GTK_BOX (pPreviewBox), pPreviewImage, FALSE, FALSE, 0); }\
+		if (_cairo_dock_find_iter_from_name (modele, cValue, &iter))\
+			gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);\
+		_pack_subwidget (pOneWidget);\
+		g_free (cValue); } } while (0)
 
 gchar *cairo_dock_parse_key_comment (gchar *cKeyComment, char *iElementType, int *iNbElements, gchar ***pAuthorizedValuesList, gboolean *bAligned, gchar **cTipString)
 {

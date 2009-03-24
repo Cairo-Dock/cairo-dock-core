@@ -128,7 +128,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		{
 			// on laisse transparent
 		}
-		else if (pDock->bAtBottom && pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->bInside)
+		else if (pDock->bAtBottom && pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->bInside && pDock->iSidMoveDown == 0)
 		{
 			cairo_dock_render_hidden_dock_opengl (pDock);
 		}
@@ -171,7 +171,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	{
 		
 	}
-	else if (pDock->bAtBottom && pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->bInside)
+	else if (pDock->bAtBottom && pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->bInside && pDock->iSidMoveDown == 0)
 	{
 		cairo_dock_render_hidden_dock (pCairoContext, pDock);
 	}
@@ -685,6 +685,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	
 	if (pDock->iSidMoveUp != 0)  // si on est en train de monter, on arrete.
 	{
+		g_print ("on arrete de monter\n");
 		g_source_remove (pDock->iSidMoveUp);
 		pDock->iSidMoveUp = 0;
 	}
@@ -888,9 +889,14 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 
 	if (pDock->bAtTop || pDock->bInside || (pDock->iSidMoveDown != 0))  // le 'iSidMoveDown != 0' est la pour empecher le dock de "vibrer" si l'utilisateur sort par en bas avec l'auto-hide active.
 	{
-		//g_print ("  %d;%d;%d\n", pDock->bAtTop,  pDock->bInside, pDock->iSidMoveDown);
+		g_print ("  %d;%d;%d\n", pDock->bAtTop,  pDock->bInside, pDock->iSidMoveDown);
 		pDock->bInside = TRUE;  /// ajoute pour les plug-ins opengl.
 		cairo_dock_start_growing (pDock);
+		if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->iSidMoveUp == 0)
+		{
+			g_print ("  on commence a monter en force\n");
+			pDock->iSidMoveUp = g_timeout_add (40, (GSourceFunc) cairo_dock_move_up, (gpointer) pDock);
+		}
 		return FALSE;
 	}
 	//g_print ("%s (main dock : %d ; %d)\n", __func__, pDock->bIsMainDock, pDock->bHorizontalDock);
@@ -970,7 +976,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	
 	if (pDock->bAutoHide && pDock->iRefCount == 0)
 	{
-		//g_print ("  on commence a monter\n");
+		g_print ("  on commence a monter\n");
 		if (pDock->iSidMoveUp == 0)  // on commence a monter.
 			pDock->iSidMoveUp = g_timeout_add (40, (GSourceFunc) cairo_dock_move_up, (gpointer) pDock);
 	}

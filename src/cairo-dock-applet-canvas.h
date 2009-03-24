@@ -84,7 +84,6 @@ CD_APPLET_ON_DROP_DATA_PROTO;
 CD_APPLET_ON_SCROLL_PROTO;
 #define CD_APPLET_ON_UPDATE_ICON_H \
 CD_APPLET_ON_UPDATE_ICON_PROTO;
-#define CD_APPLET_ABOUT_H  //deprecated
 
 //\_________________________________ BODY
 //\______________________ pre_init.
@@ -96,13 +95,13 @@ CD_APPLET_ON_UPDATE_ICON_PROTO;
 *@param iMicroVersion version micro du dock necessaire au bon fonctionnement de l'applet.
 *@param iAppletCategory Categorie de l'applet (CAIRO_DOCK_CATEGORY_ACCESSORY, CAIRO_DOCK_CATEGORY_DESKTOP, CAIRO_DOCK_CATEGORY_CONTROLER)
 */
-#define CD_APPLET_PRE_INIT_ALL_BEGIN(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, ...) \
+#define CD_APPLET_PRE_INIT_ALL_BEGIN(_cName, _iMajorVersion, _iMinorVersion, _iMicroVersion, _iAppletCategory, _cDescription, _cAuthor) \
 CD_APPLET_PRE_INIT_PROTO \
 { \
-	pVisitCard->cModuleName = g_strdup (cName); \
-	pVisitCard->iMajorVersionNeeded = iMajorVersion; \
-	pVisitCard->iMinorVersionNeeded = iMinorVersion; \
-	pVisitCard->iMicroVersionNeeded = iMicroVersion; \
+	pVisitCard->cModuleName = g_strdup (_cName); \
+	pVisitCard->iMajorVersionNeeded = _iMajorVersion; \
+	pVisitCard->iMinorVersionNeeded = _iMinorVersion; \
+	pVisitCard->iMicroVersionNeeded = _iMicroVersion; \
 	pVisitCard->cPreviewFilePath = MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_PREVIEW_FILE; \
 	pVisitCard->cGettextDomain = MY_APPLET_GETTEXT_DOMAIN; \
 	pVisitCard->cDockVersionOnCompilation = MY_APPLET_DOCK_VERSION; \
@@ -110,12 +109,12 @@ CD_APPLET_PRE_INIT_PROTO \
 	pVisitCard->cShareDataDir = MY_APPLET_SHARE_DATA_DIR; \
 	pVisitCard->cConfFileName = (MY_APPLET_CONF_FILE != NULL && strcmp (MY_APPLET_CONF_FILE, "none") != 0 ? MY_APPLET_CONF_FILE : NULL); \
 	pVisitCard->cModuleVersion = MY_APPLET_VERSION;\
-	pVisitCard->iCategory = iAppletCategory; \
+	pVisitCard->iCategory = _iAppletCategory; \
 	pVisitCard->cIconFilePath = MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE; \
 	pVisitCard->iSizeOfConfig = sizeof (AppletConfig);\
 	pVisitCard->iSizeOfData = sizeof (AppletData);\
-	pVisitCard->cAuthor = "Cairo-Dock team";/** A remplacer dans toutes les applets... */ \
-	pVisitCard->cDescription = g_strdup_printf ("%s", ##__VA_ARGS__, "");
+	pVisitCard->cAuthor = _cAuthor;\
+	pVisitCard->cDescription = _cDescription;
 
 #define CD_APPLET_DEFINE_COMMON_APPLET_INTERFACE \
 	pInterface->initModule = CD_APPLET_INIT_FUNC;\
@@ -132,8 +131,8 @@ CD_APPLET_PRE_INIT_PROTO \
 }
 /** Fonction de pre-initialisation generique. Ne fais que definir l'applet (en appelant les 2 macros precedentes), la plupart du temps cela est suffisant.
 */
-#define CD_APPLET_DEFINITION(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, ...) \
-CD_APPLET_PRE_INIT_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, ##__VA_ARGS__) \
+#define CD_APPLET_DEFINITION(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
+CD_APPLET_PRE_INIT_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
 CD_APPLET_DEFINE_COMMON_APPLET_INTERFACE \
 CD_APPLET_PRE_INIT_END
 
@@ -346,8 +345,6 @@ CD_APPLET_ON_UPDATE_ICON_PROTO \
 #define CD_APPLET_PAUSE_UPDATE_ICON do { \
 	CD_APPLET_REDRAW_MY_ICON; \
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; } while (0)
-
-#define CD_APPLET_ABOUT(...) //deprecated
 
 
 //\_________________________________ NOTIFICATIONS

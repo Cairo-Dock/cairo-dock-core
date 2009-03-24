@@ -158,9 +158,12 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 void on_enter_group_button (GtkButton *button, CairoDockGroupDescription *pGroupDescription)
 {
 	//g_print ("%s (%s)\n", __func__, pGroupDescription->cDescription);
+	if (g_pMainDock == NULL)  // inutile en maintenance, le dialogue risque d'apparaitre sur la souris.
+		return ;
+	
 	if (s_iSidShowGroupDialog != 0)
 		g_source_remove (s_iSidShowGroupDialog);
-
+	
 	s_iSidShowGroupDialog = g_timeout_add (500, (GSourceFunc)_show_group_dialog, (gpointer) pGroupDescription);
 }
 void on_leave_group_button (GtkButton *button, gpointer *data)

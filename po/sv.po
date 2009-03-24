@@ -72,7 +72,7 @@ msgid ""
 "Be sure to activate it to enjoy these features."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1689
+#: ../src/cairo-dock-gui-factory.c:1693
 msgid "grab"
 msgstr "fånga"
 
@@ -101,62 +101,62 @@ msgstr ""
 msgid "Plug-ins"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:381
+#: ../src/cairo-dock-gui-manager.c:382
 msgid "Categories"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:402
+#: ../src/cairo-dock-gui-manager.c:403
 msgid "All"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:505
+#: ../src/cairo-dock-gui-manager.c:506
 #, fuzzy
 msgid "Activate this module"
 msgstr "Dölj automatiskt?"
 
-#: ../src/cairo-dock-gui-manager.c:523
+#: ../src/cairo-dock-gui-manager.c:524
 #, fuzzy
 msgid "Filter"
 msgstr "Filer"
 
-#: ../src/cairo-dock-gui-manager.c:563
+#: ../src/cairo-dock-gui-manager.c:564
 msgid "All words"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:570
+#: ../src/cairo-dock-gui-manager.c:571
 msgid "Highlight words"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:578
+#: ../src/cairo-dock-gui-manager.c:579
 msgid "Hide others"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:585
+#: ../src/cairo-dock-gui-manager.c:586
 msgid "Search in description"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:648
+#: ../src/cairo-dock-gui-manager.c:649
 msgid "< Maintenance mode >"
 msgstr "< Underhållsläge >"
 
-#: ../src/cairo-dock-gui-manager.c:666 ../src/cairo-dock-gui-manager.c:737
+#: ../src/cairo-dock-gui-manager.c:667 ../src/cairo-dock-gui-manager.c:738
 #, fuzzy
 msgid "Configuration of Cairo-Dock"
 msgstr "Inställningar för %s"
 
-#: ../src/cairo-dock-gui-manager.c:901
+#: ../src/cairo-dock-gui-manager.c:902
 #, c-format
 msgid ""
 "The module '%s' is not present. You need to install it or its dependencies "
 "to make the most of this module."
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:907
+#: ../src/cairo-dock-gui-manager.c:908
 #, c-format
 msgid "The module '%s' is not activated."
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:908
+#: ../src/cairo-dock-gui-manager.c:909
 #, fuzzy
 msgid "Do you want to activate it now ?"
 msgstr "Vill du montera denna plats?"
@@ -223,19 +223,19 @@ msgstr ""
 msgid "Select a view for each of your docks."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:142
+#: ../src/cairo-dock-menu.c:143
 msgid "Development"
 msgstr "Utveckling"
 
-#: ../src/cairo-dock-menu.c:148
+#: ../src/cairo-dock-menu.c:149
 msgid "Artwork"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:152
+#: ../src/cairo-dock-menu.c:153
 msgid "Support"
 msgstr "Support"
 
-#: ../src/cairo-dock-menu.c:237
+#: ../src/cairo-dock-menu.c:238
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock ?\n"
@@ -244,24 +244,24 @@ msgstr ""
 "Vill du placera ikonerna i behållaren på dockan igen\n"
 "(annars kommer de att tas bort)?"
 
-#: ../src/cairo-dock-menu.c:258
+#: ../src/cairo-dock-menu.c:259
 #, c-format
 msgid "You're about removing this icon (%s) from the dock. Sure ?"
 msgstr "Ikonen (%s) kommer att tas bort från dockan. Är du säker?"
 
-#: ../src/cairo-dock-menu.c:314
+#: ../src/cairo-dock-menu.c:315
 msgid "Fill this launcher"
 msgstr "Fyll"
 
-#: ../src/cairo-dock-menu.c:326
+#: ../src/cairo-dock-menu.c:327
 msgid "Undefined"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:478 ../src/cairo-dock-menu.c:1201
+#: ../src/cairo-dock-menu.c:479 ../src/cairo-dock-menu.c:1204
 msgid "Modify this launcher"
 msgstr "Redigera"
 
-#: ../src/cairo-dock-menu.c:623
+#: ../src/cairo-dock-menu.c:624
 #, c-format
 msgid ""
 "You're about deleting this file\n"
@@ -272,7 +272,7 @@ msgstr ""
 "(%s)\n"
 "kommer att raderas från datorn. Vill du fortsätta?"
 
-#: ../src/cairo-dock-menu.c:632
+#: ../src/cairo-dock-menu.c:633
 msgid ""
 "Attention : couldn't delete this file.\n"
 "Check that you have writing rights on it."
@@ -280,11 +280,11 @@ msgstr ""
 "Varning: kunde inte radera filen.\n"
 "Kontrollera att du har skrivrättigheter för den."
 
-#: ../src/cairo-dock-menu.c:656
+#: ../src/cairo-dock-menu.c:657
 msgid "Rename to :"
 msgstr "Byt namn till:"
 
-#: ../src/cairo-dock-menu.c:663
+#: ../src/cairo-dock-menu.c:664
 #, c-format
 msgid ""
 "Attention : couldn't rename %s.\n"
@@ -295,220 +295,226 @@ msgstr ""
 "Kontrollera att du har skrivrättigheter för filen\n"
 "och att filen inte redan existerar."
 
-#: ../src/cairo-dock-menu.c:708
+#: ../src/cairo-dock-menu.c:709
 #, c-format
 msgid "You're about removing this applet (%s) from the dock. Sure ?"
 msgstr "Appleten (%s) kommer att tas bort från dockan. Är du säker?"
 
-#: ../src/cairo-dock-menu.c:966
+#: ../src/cairo-dock-menu.c:967
 #, c-format
 msgid "Set position for the dock '%s'"
 msgstr "Ange placering för dockan '%s'"
 
-#: ../src/cairo-dock-menu.c:1049
+#: ../src/cairo-dock-menu.c:1050
 msgid "Configure"
 msgstr "Inställningar"
 
-#: ../src/cairo-dock-menu.c:1056
+#: ../src/cairo-dock-menu.c:1057
 msgid "Set up this dock"
 msgstr "Konfigurera dockan"
 
-#: ../src/cairo-dock-menu.c:1058
+#: ../src/cairo-dock-menu.c:1059
 msgid "Manage themes"
 msgstr "Hantera teman"
 
-#: ../src/cairo-dock-menu.c:1061
+#: ../src/cairo-dock-menu.c:1062
 msgid "unlock icons"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1061
+#: ../src/cairo-dock-menu.c:1062
 msgid "lock icons"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1071
+#: ../src/cairo-dock-menu.c:1072
 msgid "Quick-Hide"
 msgstr "Dölj"
 
-#: ../src/cairo-dock-menu.c:1078
+#: ../src/cairo-dock-menu.c:1080
 msgid "Launch Cairo-Dock on startup"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1083
+#: ../src/cairo-dock-menu.c:1086
 msgid "Development's site"
 msgstr "Utvecklarnas hemsida"
 
-#: ../src/cairo-dock-menu.c:1085
+#: ../src/cairo-dock-menu.c:1088
 msgid "Community's site"
 msgstr "Cairo-Docks hemsida"
 
-#: ../src/cairo-dock-menu.c:1087
+#: ../src/cairo-dock-menu.c:1090
 msgid "Help"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1089
+#: ../src/cairo-dock-menu.c:1092
 msgid "About"
 msgstr "Om"
 
-#: ../src/cairo-dock-menu.c:1093
+#: ../src/cairo-dock-menu.c:1096
 msgid "Quit"
 msgstr "Avsluta"
 
-#: ../src/cairo-dock-menu.c:1121 ../src/cairo-dock-menu.c:1183
+#: ../src/cairo-dock-menu.c:1124 ../src/cairo-dock-menu.c:1186
 msgid "Add a manual launcher"
 msgstr "Lägg till manuell startare"
 
-#: ../src/cairo-dock-menu.c:1122 ../src/cairo-dock-menu.c:1184
+#: ../src/cairo-dock-menu.c:1125 ../src/cairo-dock-menu.c:1187
 msgid ""
 "Don't forget you can drag a launcher from the menu and drop it in the dock !"
 msgstr ""
 "Glöm inte att du kan dra en startare från menyn och släppa den i dockan!"
 
-#: ../src/cairo-dock-menu.c:1124 ../src/cairo-dock-menu.c:1186
+#: ../src/cairo-dock-menu.c:1127 ../src/cairo-dock-menu.c:1189
 msgid "Add a sub-dock"
 msgstr "Lägg till sub-docka"
 
-#: ../src/cairo-dock-menu.c:1128 ../src/cairo-dock-menu.c:1190
+#: ../src/cairo-dock-menu.c:1131 ../src/cairo-dock-menu.c:1193
 msgid "Add a separator"
 msgstr "Lägg till avgränsare"
 
-#: ../src/cairo-dock-menu.c:1148
+#: ../src/cairo-dock-menu.c:1151
 msgid "Unmount"
 msgstr "Avmontera"
 
-#: ../src/cairo-dock-menu.c:1148
+#: ../src/cairo-dock-menu.c:1151
 msgid "Mount"
 msgstr "Montera"
 
-#: ../src/cairo-dock-menu.c:1154
+#: ../src/cairo-dock-menu.c:1157
 msgid "Eject"
 msgstr "Mata ut"
 
-#: ../src/cairo-dock-menu.c:1161
+#: ../src/cairo-dock-menu.c:1164
 msgid "Delete this file"
 msgstr "Radera filen"
 
-#: ../src/cairo-dock-menu.c:1165
+#: ../src/cairo-dock-menu.c:1168
 msgid "Rename this file"
 msgstr "Byt namn på filen"
 
-#: ../src/cairo-dock-menu.c:1169
+#: ../src/cairo-dock-menu.c:1172
 msgid "Properties"
 msgstr "Egenskaper"
 
-#: ../src/cairo-dock-menu.c:1199
+#: ../src/cairo-dock-menu.c:1202
 msgid "Remove this separator"
 msgstr "Ta bort avgränsaren"
 
-#: ../src/cairo-dock-menu.c:1199
+#: ../src/cairo-dock-menu.c:1202
 msgid "Remove this launcher"
 msgstr "Ta bort"
 
-#: ../src/cairo-dock-menu.c:1201
+#: ../src/cairo-dock-menu.c:1204
 msgid "Modify this separator"
 msgstr "Redigera avgränsaren"
 
-#: ../src/cairo-dock-menu.c:1211
+#: ../src/cairo-dock-menu.c:1214
 msgid "Other actions"
 msgstr "Andra aktiviteter"
 
-#: ../src/cairo-dock-menu.c:1216
+#: ../src/cairo-dock-menu.c:1219
 msgid "Move to this desktop"
 msgstr "Flytta till detta skrivbord"
 
-#: ../src/cairo-dock-menu.c:1219
+#: ../src/cairo-dock-menu.c:1222
 msgid "Not Fullscreen"
 msgstr "Återställ"
 
-#: ../src/cairo-dock-menu.c:1219
+#: ../src/cairo-dock-menu.c:1222
 msgid "Fullscreen"
 msgstr "Helskärm"
 
-#: ../src/cairo-dock-menu.c:1223
+#: ../src/cairo-dock-menu.c:1226
 msgid "Don't keep above"
 msgstr "Placera inte överst"
 
-#: ../src/cairo-dock-menu.c:1223
+#: ../src/cairo-dock-menu.c:1226
 msgid "Keep above"
 msgstr "Placera överst"
 
-#: ../src/cairo-dock-menu.c:1230
+#: ../src/cairo-dock-menu.c:1233
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Flytta till skrivbord %d - yta %d"
 
-#: ../src/cairo-dock-menu.c:1232
+#: ../src/cairo-dock-menu.c:1235
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Flyyta till skrivbord %d"
 
-#: ../src/cairo-dock-menu.c:1234
+#: ../src/cairo-dock-menu.c:1237
 #, c-format
 msgid "Move to face %d"
 msgstr "Flytta till yta %d"
 
-#: ../src/cairo-dock-menu.c:1265
+#: ../src/cairo-dock-menu.c:1268
 msgid "Kill"
 msgstr "Döda"
 
-#: ../src/cairo-dock-menu.c:1271
+#: ../src/cairo-dock-menu.c:1274
 msgid "Launch new"
 msgstr "Starta ny"
 
-#: ../src/cairo-dock-menu.c:1275
+#: ../src/cairo-dock-menu.c:1278
 msgid "Unmaximize"
 msgstr "Återställ"
 
-#: ../src/cairo-dock-menu.c:1275
+#: ../src/cairo-dock-menu.c:1278
 msgid "Maximize"
 msgstr "Maximera"
 
-#: ../src/cairo-dock-menu.c:1277
+#: ../src/cairo-dock-menu.c:1280
 msgid "Show"
 msgstr "Visa"
 
-#: ../src/cairo-dock-menu.c:1279
+#: ../src/cairo-dock-menu.c:1282
 msgid "Minimize"
 msgstr "Minimera"
 
-#: ../src/cairo-dock-menu.c:1281
+#: ../src/cairo-dock-menu.c:1284
 msgid "Close"
 msgstr "Stäng"
 
-#: ../src/cairo-dock-menu.c:1300
+#: ../src/cairo-dock-menu.c:1303
 msgid "Configure this applet"
 msgstr "Redigera"
 
-#: ../src/cairo-dock-menu.c:1304
+#: ../src/cairo-dock-menu.c:1307
 msgid "Detach this applet"
 msgstr "Koppla loss"
 
-#: ../src/cairo-dock-menu.c:1304
+#: ../src/cairo-dock-menu.c:1307
 msgid "Return to dock"
 msgstr "Fäst vid dockan"
 
-#: ../src/cairo-dock-menu.c:1307
+#: ../src/cairo-dock-menu.c:1310
 msgid "Remove this applet"
 msgstr "Ta bort"
 
-#: ../src/cairo-dock-menu.c:1311
+#: ../src/cairo-dock-menu.c:1314
 msgid "Launch another instance of this applet"
 msgstr "Starta kopia"
 
-#: ../src/cairo-dock-menu.c:1330
+#: ../src/cairo-dock-menu.c:1333
 msgid "Always on top"
 msgstr "Alltid överst"
 
-#: ../src/cairo-dock-menu.c:1337
+#: ../src/cairo-dock-menu.c:1340
 msgid "Normal"
 msgstr "Normal"
 
-#: ../src/cairo-dock-menu.c:1344
+#: ../src/cairo-dock-menu.c:1347
 msgid "Always below"
 msgstr "Alltid under"
 
-#: ../src/cairo-dock-menu.c:1359
+#: ../src/cairo-dock-menu.c:1362
 msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "Ange beteendet i Compiz med: (name=cairo-dock & type=utility)"
+
+#: ../src/cairo-dock-modules.c:105
+msgid ""
+"A useful FAQ that contains also a lot of hints.\n"
+"Let the mouse over a sentence to make the hint dialog popups."
+msgstr ""
 
 #: ../src/cairo-dock-themes-manager.c:395
 msgid ""

@@ -20,13 +20,26 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigHiddenDock *pHiddenDo
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
-	pHiddenDock->cVisibleZoneImageFile = cairo_dock_get_string_key_value (pKeyFile, "Hidden dock", "callback image", &bFlushConfFileNeeded, NULL, "Background", "background image");
 	
-	cairo_dock_get_size_key_value_helper (pKeyFile, "Hidden dock", "zone ", bFlushConfFileNeeded, pHiddenDock->iVisibleZoneWidth, pHiddenDock->iVisibleZoneHeight);
-	if (pHiddenDock->iVisibleZoneWidth < 10)
-		pHiddenDock->iVisibleZoneWidth = 10;
-	if (pHiddenDock->iVisibleZoneHeight < 1)
-		pHiddenDock->iVisibleZoneHeight = 1;
+	cairo_dock_get_size_key_value (pKeyFile, "Hidden dock", "zone size", &bFlushConfFileNeeded, 0, NULL, NULL, &pHiddenDock->iVisibleZoneWidth, &pHiddenDock->iVisibleZoneHeight);
+	if (pHiddenDock->iVisibleZoneWidth == 0)
+	{
+		pHiddenDock->iVisibleZoneWidth = g_key_file_get_integer (pKeyFile, "Hidden dock", "zone width", NULL);
+		pHiddenDock->iVisibleZoneHeight = g_key_file_get_integer (pKeyFile, "Hidden dock", "zone height", NULL);
+		if (pHiddenDock->iVisibleZoneWidth == 0)
+		{
+			pHiddenDock->iVisibleZoneWidth = g_key_file_get_integer (pKeyFile, "Background", "zone width", NULL);
+			pHiddenDock->iVisibleZoneHeight = g_key_file_get_integer (pKeyFile, "Background", "zone height", NULL);
+		}
+		int iSize[2] = {pHiddenDock->iVisibleZoneWidth, pHiddenDock->iVisibleZoneHeight};
+		g_key_file_set_integer_list (pKeyFile, "Hidden dock", "zone size", iSize, 2);
+	}
+	if (pHiddenDock->iVisibleZoneWidth < 20)
+		pHiddenDock->iVisibleZoneWidth = 20;
+	if (pHiddenDock->iVisibleZoneHeight == 0)
+		pHiddenDock->iVisibleZoneHeight = 2;
+	
+	pHiddenDock->cVisibleZoneImageFile = cairo_dock_get_string_key_value (pKeyFile, "Hidden dock", "callback image", &bFlushConfFileNeeded, NULL, "Background", "background image");
 	
 	pHiddenDock->fVisibleZoneAlpha = cairo_dock_get_double_key_value (pKeyFile, "Hidden dock", "alpha", &bFlushConfFileNeeded, 0.5, "Background", NULL);
 	pHiddenDock->bReverseVisibleImage = cairo_dock_get_boolean_key_value (pKeyFile, "Hidden dock", "reverse visible image", &bFlushConfFileNeeded, TRUE, "Background", NULL);
