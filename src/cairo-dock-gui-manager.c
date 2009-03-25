@@ -577,6 +577,7 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 		FALSE,
 		0);
 	pOptionButton = gtk_check_button_new_with_label (_("Hide others"));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pOptionButton), TRUE);
 	g_signal_connect (pOptionButton, "toggled", G_CALLBACK (cairo_dock_toggle_hide_others), NULL);
 	gtk_box_pack_start (GTK_BOX (pOptionVBox),
 		pOptionButton,

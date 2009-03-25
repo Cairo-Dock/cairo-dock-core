@@ -114,10 +114,10 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, gchar *cGroupName
 	cairo_dock_get_size_key_value (pKeyFile, cGroupName, cKeyPrefix"size", &bFlushConfFileNeeded, 0, NULL, NULL, &iWidth, &iHeight);\
 	if (iWidth == 0) {\
 		iWidth = g_key_file_get_integer (pKeyFile, cGroupName, cKeyPrefix"width", NULL);\
-		iHeight = g_key_file_get_integer (pKeyFile, cGroupName, cKeyPrefix"height", NULL);\
-		int iSize[2] = {iWidth, iHeight};\
-		g_key_file_set_integer_list (pKeyFile, cGroupName, cKeyPrefix"size", iSize, 2); } \
-	if (iHeight == 0) iHeight = iWidth;
+		if (iWidth != 0) {\
+			iHeight = g_key_file_get_integer (pKeyFile, cGroupName, cKeyPrefix"height", NULL);\
+			int iSize[2] = {iWidth, iHeight};\
+			g_key_file_set_integer_list (pKeyFile, cGroupName, cKeyPrefix"size", iSize, 2); } }
 
 #define cairo_dock_get_pango_weight_from_1_9(iWeight) (((PANGO_WEIGHT_HEAVY - PANGO_WEIGHT_ULTRALIGHT) * iWeight + 9 * PANGO_WEIGHT_ULTRALIGHT - PANGO_WEIGHT_HEAVY) / 8)
 /**

@@ -386,7 +386,7 @@ void cairo_dock_reset_filter_state (void)
 	bAllWords = FALSE;
 	bSearchInToolTip = TRUE;
 	bHighLightText = TRUE;
-	bHideOther = FALSE;
+	bHideOther = TRUE;
 }
 
 void cairo_dock_activate_filter (GtkEntry *pEntry, gpointer data)

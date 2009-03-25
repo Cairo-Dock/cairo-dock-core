@@ -1,8 +1,11 @@
 #!/bin/sh
-if test "x$1"="x"; then
+if test "x$1" = "x"; then
 	export CONF_FILE="cairo-dock.conf"
+	echo "${CONF_FILE}"
 else
 	export CONF_FILE="$1/cairo-dock.conf"
+fi
+
 
 set_value()
 {
@@ -52,8 +55,8 @@ set_value "cairo anim freq"			25
 set_value "always horizontal"		true
 set_value "show hidden files"		false
 set_value "fake transparency"		false
-set_value "modules"					"dock-rendering;dialog-rendering;Animated icons;clock;logout;dustbin;stack;shortcuts;GMenu;switcher;icon effects;illusion"
+set_value "modules"					"dock rendering;dialog rendering;Animated icons;drop indicator;clock;logout;dustbin;stack;shortcuts;GMenu;switcher;icon effects;illusion"
 
 echo ""
-echo "le thème a été mis à jour."
+echo "le theme a ete mis a jour."
 exit 0

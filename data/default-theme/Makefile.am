@@ -1,11 +1,11 @@
-SUBDIRS = . launchers icons
+SUBDIRS = . launchers icons plug-ins
 
 themedir = $(pkgdatadir)/themes/_default_
 
 theme_DATA = \
 	cairo-dock.conf\
 	readme\
-	background-snow.svg\
+	winter-landscape.jpg\
 	separateur.svg\
 	preview\
 	drop-indicator-rain.svg\

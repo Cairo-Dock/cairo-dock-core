@@ -636,6 +636,10 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	if (g_pVisibleZoneTexture == 0)
 		return ;
 	
+	glLoadIdentity ();
+	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
+	cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDock));
+	
 	glEnable (GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
@@ -1377,6 +1381,7 @@ void cairo_dock_create_icon_pbuffer (void)
 		s_iIconPbufferWidth = iWidth;
 		s_iIconPbufferHeight = iHeight;
 		
+		g_print ("if your drivers are crappy, we'll know it immediately ...");
 		if (s_iconPbuffer != 0 && s_iconContext != 0 && glXMakeCurrent (XDisplay, s_iconPbuffer, s_iconContext))
 		{
 			glMatrixMode(GL_PROJECTION);
@@ -1386,6 +1391,7 @@ void cairo_dock_create_icon_pbuffer (void)
 			glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
 			glClearDepth (1.0f);
 		}
+		g_print (" ok, seems fine\n");
 	}
 }
 
@@ -1554,7 +1560,7 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 	
 	if (pVisInfo == NULL)
 	{
-		cd_warning ("couldn't find an appropriate visual ourself, trying something else ...");
+		cd_warning ("couldn't find an appropriate visual ourself, trying something else, this may not work with some drivers ...");
 		pGlConfig = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
 			GDK_GL_MODE_ALPHA |
 			GDK_GL_MODE_DEPTH |

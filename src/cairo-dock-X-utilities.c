@@ -200,7 +200,7 @@ void cairo_dock_set_strut_partial (int Xid, int left, int right, int top, int bo
 
 	XChangeProperty (s_XDisplay,
 		Xid,
-		XInternAtom (s_XDisplay, "_NET_WM_STRUT", False),
+		XInternAtom (s_XDisplay, "_NET_WM_STRUT_PARTIAL", False),
 		XA_CARDINAL, 32, PropModeReplace,
 		(guchar *) iGeometryStrut, 12);
 	

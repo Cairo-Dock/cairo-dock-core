@@ -255,14 +255,24 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		cairo_dock_remove_all_separators (pDock);
 	
 	
-	int i = 0;
-	while (pIcons->pDirectoryList[i] != NULL && pPrevIcons->pDirectoryList[i] != NULL)
+	gboolean bThemeChanged = FALSE;
+	if ((pIcons->pDirectoryList == NULL && pPrevIcons->pDirectoryList != NULL) || (pIcons->pDirectoryList != NULL && pPrevIcons->pDirectoryList == NULL))
 	{
-		if (strcmp (pPrevIcons->pDirectoryList[i], pIcons->pDirectoryList[i])== 0)
-			break ;
-		i ++;
+		bThemeChanged = TRUE;
 	}
-
+	else if (pIcons->pDirectoryList != NULL && pPrevIcons->pDirectoryList != NULL)
+	{
+		int i;
+		for (i = 0; pIcons->pDirectoryList[i] != NULL || pPrevIcons->pDirectoryList[i] != NULL; i ++)
+		{
+			if (cairo_dock_strings_differ (pIcons->pDirectoryList[i], pPrevIcons->pDirectoryList[i]))
+			{
+				bThemeChanged = TRUE;
+				break ;
+			}
+		}
+	}
+	
 	gboolean bIconBackgroundImagesChanged = FALSE;
 	// if background images are different, reload them and trigger the reload of all icons
 	if (cairo_dock_strings_differ (pPrevIcons->cBackgroundImagePath, pIcons->cBackgroundImagePath))
@@ -284,8 +294,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		pPrevIcons->fAmplitude != pIcons->fAmplitude ||
 		(!g_bUseOpenGL && pPrevIcons->fFieldDepth != pIcons->fFieldDepth) ||
 		(!g_bUseOpenGL && pPrevIcons->fAlbedo != pIcons->fAlbedo) ||
-		pIcons->pDirectoryList[i] != NULL ||
-		pPrevIcons->pDirectoryList[i] != NULL ||
+		bThemeChanged ||
 		bIconBackgroundImagesChanged)  // oui on ne fait pas dans la finesse.
 	{
 		g_fBackgroundImageWidth = 0.;  // pour mettre a jour les decorations.

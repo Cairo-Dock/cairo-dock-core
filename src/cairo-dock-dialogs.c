@@ -171,7 +171,7 @@ static gboolean on_key_press_dialog (GtkWidget *pWidget,
 {
 	cd_debug ("key pressed");
 	
-	if (pKey->type == GDK_KEY_PRESS)
+	if (pKey->type == GDK_KEY_PRESS && pDialog->action_on_answer != NULL)
 	{
 		GdkEventScroll dummyScroll;
 		int iX, iY;

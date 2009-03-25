@@ -673,7 +673,7 @@ frame_window =
 #{Set transparency to 0 if you don't want to use an indicator.}
 active color = 0.; 0.4; 0.8; 0.25
 
-#i+[0;10] Linewidth of the frame around the active window :
+#i+[0;20] Linewidth of the frame around the active window :
 #{Set 0 to fill the frame.}
 active line width = 3
 

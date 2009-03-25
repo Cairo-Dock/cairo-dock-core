@@ -126,7 +126,7 @@ sudo cp -rpP /usr/share/cairo-dock/ usr/share/
 sudo rm -rf usr/share/cairo-dock/plug-ins
 sudo cp ../cairo-dock/data/cairo-dock.svg usr/share/pixmaps
 sudo cp ../cairo-dock/data/cairo-dock usr/share/menu
-sudo cp ../cairo-dock/data/cairo-dock.desktop usr/share/applications
+sudo cp ../cairo-dock/data/cairo-dock*.desktop usr/share/applications
 
 cd $CAIRO_DOCK_DIR
 sed "s/^Version:.*/Version: "`cairo-dock --version`"/g" deb/DEBIAN/control > tmp

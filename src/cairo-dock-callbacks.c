@@ -124,6 +124,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 			glScissor ((int) pExpose->area.x, (int) pExpose->area.y, (int) pExpose->area.width, (int) pExpose->area.height);
 		}
 		
+		
 		if (cairo_dock_is_loading ())
 		{
 			// on laisse transparent
@@ -997,6 +998,7 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	GdkEventKey *pKey,
 	CairoDock *pDock)
 {
+	g_print ("on a appuye sur uen touche\n");
 	if (pKey->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
 	{
 		if (pDock->iRefCount == 0)

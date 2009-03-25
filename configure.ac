@@ -106,6 +106,15 @@ AC_CONFIG_FILES([Makefile
 		data/default-theme/Makefile
 		data/default-theme/launchers/Makefile
 		data/default-theme/icons/Makefile
+		data/default-theme/plug-ins/Makefile
+		data/default-theme/plug-ins/Animated-icons/Makefile
+		data/default-theme/plug-ins/clock/Makefile
+		data/default-theme/plug-ins/dialog-rendering/Makefile
+		data/default-theme/plug-ins/dustbin/Makefile
+		data/default-theme/plug-ins/icon-effect/Makefile
+		data/default-theme/plug-ins/illusion/Makefile
+		data/default-theme/plug-ins/logout/Makefile
+		data/default-theme/plug-ins/rendering/Makefile
 		data/gauges/Makefile
 		data/gauges/radium/Makefile
 		data/gauges/radium-fuel/Makefile
