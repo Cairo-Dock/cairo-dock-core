@@ -715,6 +715,7 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 gboolean cairo_dock_remove_dialog_if_any (Icon *icon)
 {
 	g_return_val_if_fail (icon != NULL, FALSE);
+	g_print ("%s (%s)\n", __func__, (icon?icon->acName : "nobody"));
 	CairoDialog *pDialog;
 	GSList *ic;
 	gboolean bDialogRemoved = FALSE;
@@ -894,7 +895,7 @@ static gboolean _cairo_dock_dialog_auto_delete (CairoDialog *pDialog)
 CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer)
 {
 	g_return_val_if_fail (pAttribute != NULL, NULL);
-	g_print ("%s (%s, %s, %x, %x, %x)\n", __func__, pAttribute->cText, pAttribute->cImageFilePath, pAttribute->pInteractiveWidget, pAttribute->pActionFunc, pAttribute->pTextDescription);
+	g_print ("%s (%s, %s, %x, %x, %x (%x;%x))\n", __func__, pAttribute->cText, pAttribute->cImageFilePath, pAttribute->pInteractiveWidget, pAttribute->pActionFunc, pAttribute->pTextDescription, pIcon, pContainer);
 	
 	//\________________ On cree un nouveau dialogue.
 	CairoDialog *pDialog = _cairo_dock_create_new_dialog ();

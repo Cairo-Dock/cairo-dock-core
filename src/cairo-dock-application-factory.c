@@ -669,7 +669,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock)
 	cd_debug ("%s (%s)\n", __func__, icon->acName);
 	icon->bIsDemandingAttention = TRUE;
 	if (myTaskBar.bDemandsAttentionWithDialog)
-		cairo_dock_show_temporary_dialog_with_icon (icon->acName, icon, CAIRO_CONTAINER (pDock), myTaskBar.iDialogDuration, "same icon");
+		cairo_dock_show_temporary_dialog_with_icon (icon->acName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration, "same icon");
 	if (myTaskBar.cAnimationOnDemandsAttention)
 	{
 		if (pDock->iRefCount == 0)
@@ -681,7 +681,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock)
 				pDock->iSidPopDown = 0;
 			}
 		}
-		cairo_dock_request_icon_animation (icon, pDock, myTaskBar.cAnimationOnDemandsAttention, 10);
+		cairo_dock_request_icon_animation (icon, pDock, myTaskBar.cAnimationOnDemandsAttention, 1000);
 	}
 }
 void cairo_dock_appli_demands_attention (Icon *icon)

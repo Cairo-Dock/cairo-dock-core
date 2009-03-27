@@ -803,13 +803,13 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 								else if (! pParentDock->bIsShrinkingDown)
 									cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
 							}
-							///icon->bIsActive = TRUE;
+							if (icon->bIsDemandingAttention)  // on force ici, car il semble qu'on ne recoive pas toujours le retour a la normale.
+								cairo_dock_appli_stops_demanding_attention (icon);
 						}
 						
 						Icon *pLastActiveIcon = g_hash_table_lookup (s_hXWindowTable, &s_iCurrentActiveWindow);
 						if (pLastActiveIcon != NULL)
 						{
-							///pLastActiveIcon->bIsActive = FALSE;
 							CairoDock *pLastActiveParentDock = cairo_dock_search_dock_from_name (pLastActiveIcon->cParentDockName);
 							if (pLastActiveParentDock != NULL)
 							{

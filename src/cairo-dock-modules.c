@@ -695,11 +695,16 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		}
 		if (CAIRO_DOCK_IS_DOCK (pNewContainer) && pIcon != NULL)
 		{
-			if (pMinimalConfig != NULL)
+			if (pMinimalConfig == NULL)  // on recupere sa taille, car elle peut avoir change (si c'est la taille par defaut, ou si elle est devenue trop grande).
 			{
-				pIcon->fWidth = pMinimalConfig->iDesiredIconWidth;
-				pIcon->fHeight = pMinimalConfig->iDesiredIconHeight;
+				pMinimalConfig = g_new0 (CairoDockMinimalAppletConfig, 1);
+				pKeyFile = cairo_dock_pre_read_module_instance_config (pInstance, pMinimalConfig);
+				g_key_file_free (pKeyFile);
+				pKeyFile = NULL;
 			}
+			pIcon->fWidth = pMinimalConfig->iDesiredIconWidth;
+			pIcon->fHeight = pMinimalConfig->iDesiredIconHeight;
+			
 			cairo_dock_load_one_icon_from_scratch (pIcon, pNewContainer);
 
 			if (bToBeInserted)

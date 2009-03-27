@@ -406,6 +406,8 @@ void cairo_dock_change_measure_frequency (CairoDockMeasure *pMeasureTimer, int i
 void cairo_dock_relaunch_measure_immediately (CairoDockMeasure *pMeasureTimer, int iNewCheckInterval)
 {
 	cairo_dock_stop_measure_timer (pMeasureTimer);  // on stoppe avant car on ne veut pas attendre la prochaine iteration.
+	if (iNewCheckInterval == -1)  // valeur inchangee.
+		iNewCheckInterval = pMeasureTimer->iCheckInterval;
 	cairo_dock_change_measure_frequency (pMeasureTimer, iNewCheckInterval); // nouvelle frequence eventuelement.
 	cairo_dock_launch_measure (pMeasureTimer);  // mesure immediate.
 }

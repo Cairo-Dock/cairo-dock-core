@@ -69,6 +69,7 @@ extern gboolean g_bSticky;
 
 extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
+extern gboolean g_bForceOpenGL;
 extern gboolean g_bIndirectRendering;
 extern GdkGLConfig* g_pGlConfig;
 
@@ -76,6 +77,30 @@ static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)
 {
 	if (! g_bUseOpenGL)
 		return ;
+	
+	if (! g_bForceOpenGL)
+	{
+		GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Use OpenGL ?"),
+			NULL,
+			GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_STOCK_YES,
+			GTK_RESPONSE_YES,
+			GTK_STOCK_NO,
+			GTK_RESPONSE_NO,
+			NULL);
+		GtkWidget *label = gtk_label_new (_("OpenGL allows you to use the hardware acceleration, reducing the CPU load to the minimum.\nIt also allows some pretty visual effects similar to Compiz.\nHowever, some cards and/or their drivers don't fully support it, which may prevent the dock from running correctly.\nDo you want to activate OpenGL ?\n (To not show this dialog, launch the dock from the Application menu,\n  or with the -o option to force OpenGL and -c to force cairo.)"));
+		gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), label);
+		gtk_widget_show_all (dialog);
+
+		gint iAnswer = gtk_dialog_run (GTK_DIALOG (dialog));
+		//int iAnswer = cairo_dock_ask_general_question_and_wait (_("Use OpenGL ?"));
+		gtk_widget_destroy (dialog);
+		if (iAnswer == GTK_RESPONSE_NO)
+		{
+			g_bUseOpenGL = FALSE;
+			return ;
+		}
+	}
 	
 	GdkGLContext* pGlContext = gtk_widget_get_gl_context (pWidget);
 	GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pWidget);
