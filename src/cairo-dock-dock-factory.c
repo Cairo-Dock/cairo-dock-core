@@ -80,7 +80,7 @@ static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)
 	
 	if (! g_bForceOpenGL)
 	{
-		GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Use OpenGL ?"),
+		GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Use OpenGL in Cairo-Dock ?"),
 			NULL,
 			GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_STOCK_YES,

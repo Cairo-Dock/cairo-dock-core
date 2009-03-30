@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
-"POT-Creation-Date: 2009-03-26 01:49+0100\n"
+"POT-Creation-Date: 2009-03-29 23:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,6 +26,22 @@ msgstr ""
 
 #: ../src/cairo-dock-desktop-file-factory.c:167
 msgid "Do you want to monitor the content of the directory ?"
+msgstr ""
+
+#: ../src/cairo-dock-dock-factory.c:83
+msgid "Use OpenGL in Cairo-Dock ?"
+msgstr ""
+
+#: ../src/cairo-dock-dock-factory.c:91
+msgid ""
+"OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
+"the minimum.\n"
+"It also allows some pretty visual effects similar to Compiz.\n"
+"However, some cards and/or their drivers don't fully support it, which may "
+"prevent the dock from running correctly.\n"
+"Do you want to activate OpenGL ?\n"
+" (To not show this dialog, launch the dock from the Application menu,\n"
+"  or with the -o option to force OpenGL and -c to force cairo.)"
 msgstr ""
 
 #: ../src/cairo-dock-file-manager.c:482 ../src/cairo-dock-file-manager.c:529
@@ -531,7 +547,7 @@ msgid ""
 "Then, activate plug-ins one by one to guess which one is wrong."
 msgstr ""
 
-#: ../src/cairo-dock.c:615
+#: ../src/cairo-dock.c:616
 msgid ""
 "Welcome in Cairo-Dock2 !\n"
 "A default and simple theme has been loaded.\n"
@@ -2928,7 +2944,7 @@ msgstr ""
 #: ../data/messages:1063
 msgid ""
 "Cairo-Dock II\n"
-" - Cairo-Dock is now a full openGL dock ! (the cairo backend is still "
+" - Cairo-Dock is now a full OpenGL dock ! (the cairo backend is still "
 "available for old graphic cards or ATI)\n"
 " - New plug-ins provide many visual affects : Animated icons, icon effects, "
 "illusion, drop indicator, motion blur, dialog rendering\n"

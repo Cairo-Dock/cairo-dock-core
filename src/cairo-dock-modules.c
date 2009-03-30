@@ -97,7 +97,7 @@ void cairo_dock_initialize_module_manager (gchar *cModuleDirPath)
 	pVisitCard->cUserDataDir = g_strdup ("help");
 	pVisitCard->cShareDataDir = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR);
 	pVisitCard->cConfFileName = g_strdup ("help.conf");
-	pVisitCard->cModuleVersion = g_strdup ("0.0.3");
+	pVisitCard->cModuleVersion = g_strdup ("0.0.4");
 	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
 	pVisitCard->cIconFilePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, "help.svg");
 	pVisitCard->iSizeOfConfig = 0;
@@ -251,8 +251,10 @@ static void cairo_dock_close_module (CairoDockModule *module)
 	g_module_close (module->pModule);
 	
 	g_free (module->pInterface);
+	module->pInterface = NULL;
 	
 	cairo_dock_free_visit_card (module->pVisitCard);
+	module->pVisitCard = NULL;
 	
 	g_free (module->cConfFilePath);
 	module->cConfFilePath = NULL;

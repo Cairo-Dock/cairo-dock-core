@@ -490,7 +490,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDialog *pDialog)
 {
-	g_print ("%s (%dx%d)\n", __func__, pEvent->width, pEvent->height);
+	//g_print ("%s (%dx%d)\n", __func__, pEvent->width, pEvent->height);
 	if (pEvent->width == CAIRO_DIALOG_MIN_SIZE && pEvent->height == CAIRO_DIALOG_MIN_SIZE)
 		return FALSE;
 	
@@ -502,11 +502,11 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 		gtk_widget_size_request (pDialog->pInteractiveWidget, &requisition);
 		pDialog->iInteractiveWidth = requisition.width;
 		pDialog->iInteractiveHeight = requisition.height;
-		g_print ("  pInteractiveWidget : %dx%d\n", pDialog->iInteractiveWidth, pDialog->iInteractiveHeight);
+		//g_print ("  pInteractiveWidget : %dx%d\n", pDialog->iInteractiveWidth, pDialog->iInteractiveHeight);
 
 		pDialog->iBubbleWidth = MAX (pDialog->iMessageWidth, MAX (pDialog->iInteractiveWidth, pDialog->iButtonsWidth));
 		pDialog->iBubbleHeight = pDialog->iMessageHeight + pDialog->iInteractiveHeight + pDialog->iButtonsHeight;
-		g_print (" -> iBubbleWidth: %d , iBubbleHeight : %d\n", pDialog->iBubbleWidth, pDialog->iBubbleHeight);
+		//g_print (" -> iBubbleWidth: %d , iBubbleHeight : %d\n", pDialog->iBubbleWidth, pDialog->iBubbleHeight);
 		cairo_dock_compute_dialog_sizes (pDialog);
 	}
 
@@ -514,8 +514,8 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	{
 		if ((pEvent->width != CAIRO_DIALOG_MIN_SIZE || pEvent->height != CAIRO_DIALOG_MIN_SIZE) && (pEvent->width < iWidth || pEvent->height < iHeight))
 		{
-			g_print ("non, on a dit %dx%d !\n", pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin,
-				pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock);
+			//g_print ("non, on a dit %dx%d !\n", pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin,
+			//	pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock);
 			gtk_window_resize (GTK_WINDOW (pDialog->pWidget),
 				pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin,
 				pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock);
@@ -1235,7 +1235,7 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 	if (pContainer != NULL && pDialog->pIcon != NULL)
 	{
 		cairo_dock_dialog_calculate_aimed_point (pDialog->pIcon, pContainer, &pDialog->iAimedX, &pDialog->iAimedY, &pDialog->bRight, &pDialog->bIsHorizontal, &pDialog->bDirectionUp, pDialog->fAlign);
-		g_print (" Aim (%d;%d) / %d,%d,%d\n", pDialog->iAimedX, pDialog->iAimedY, pDialog->bIsHorizontal, pDialog->bDirectionUp, pDialog->bInside);
+		//g_print (" Aim (%d;%d) / %d,%d,%d\n", pDialog->iAimedX, pDialog->iAimedY, pDialog->bIsHorizontal, pDialog->bDirectionUp, pDialog->bInside);
 		
 		if (pDialog->bIsHorizontal)
 		{
@@ -1258,7 +1258,7 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 				pDialog->iPositionY = (pDialog->bDirectionUp ? pDialog->iAimedY - (pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iMinBottomGap) : pDialog->iAimedY + pDialog->iMinBottomGap);  // on place la bulle (et non pas la fenetre) sans faire d'optimisation.
 			}
 		}
-		g_print (" => position : (%d;%d)\n", pDialog->iPositionX, pDialog->iPositionY);
+		//g_print (" => position : (%d;%d)\n", pDialog->iPositionX, pDialog->iPositionY);
 		int iOldDistance = pDialog->iDistanceToDock;
 		pDialog->iDistanceToDock = (pDialog->bDirectionUp ? pDialog->iAimedY - pDialog->iPositionY - (pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin) : pDialog->iPositionY - pDialog->iAimedY);
 		if (! pDialog->bDirectionUp)  // iPositionY est encore la position du coin haut gauche de la bulle et non de la fenetre.
@@ -1632,7 +1632,6 @@ void cairo_dock_unhide_dialog (CairoDialog *pDialog)
 {
 	if (! GTK_WIDGET_VISIBLE (pDialog->pWidget))
 	{
-		gtk_window_present (GTK_WINDOW (pDialog->pWidget));
 		if (pDialog->pInteractiveWidget != NULL)
 			gtk_widget_grab_focus (pDialog->pInteractiveWidget);
 		Icon *pIcon = pDialog->pIcon;
@@ -1642,6 +1641,7 @@ void cairo_dock_unhide_dialog (CairoDialog *pDialog)
 			cairo_dock_place_dialog (pDialog, pContainer);
 		}
 	}
+	gtk_window_present (GTK_WINDOW (pDialog->pWidget));
 }
 
 void cairo_dock_toggle_dialog_visibility (CairoDialog *pDialog)

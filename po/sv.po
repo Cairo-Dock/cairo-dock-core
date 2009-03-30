@@ -31,6 +31,23 @@ msgstr "Avsluta Cairo-Dock?"
 msgid "Do you want to monitor the content of the directory ?"
 msgstr "Vill du bevaka mappens innehåll?"
 
+#: ../src/cairo-dock-dock-factory.c:83
+#, fuzzy
+msgid "Use OpenGL in Cairo-Dock ?"
+msgstr "Avsluta Cairo-Dock?"
+
+#: ../src/cairo-dock-dock-factory.c:91
+msgid ""
+"OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
+"the minimum.\n"
+"It also allows some pretty visual effects similar to Compiz.\n"
+"However, some cards and/or their drivers don't fully support it, which may "
+"prevent the dock from running correctly.\n"
+"Do you want to activate OpenGL ?\n"
+" (To not show this dialog, launch the dock from the Application menu,\n"
+"  or with the -o option to force OpenGL and -c to force cairo.)"
+msgstr ""
+
 #: ../src/cairo-dock-file-manager.c:482 ../src/cairo-dock-file-manager.c:529
 #, c-format
 msgid "%s is now %s"
@@ -567,7 +584,7 @@ msgstr ""
 "Aktivera dina applets ett efter ett tills du hittar den applet som\n"
 "inte fungerar korrekt."
 
-#: ../src/cairo-dock.c:615
+#: ../src/cairo-dock.c:616
 msgid ""
 "Welcome in Cairo-Dock2 !\n"
 "A default and simple theme has been loaded.\n"
@@ -3291,7 +3308,7 @@ msgstr ""
 #: ../data/messages:1063
 msgid ""
 "Cairo-Dock II\n"
-" - Cairo-Dock is now a full openGL dock ! (the cairo backend is still "
+" - Cairo-Dock is now a full OpenGL dock ! (the cairo backend is still "
 "available for old graphic cards or ATI)\n"
 " - New plug-ins provide many visual affects : Animated icons, icon effects, "
 "illusion, drop indicator, motion blur, dialog rendering\n"
