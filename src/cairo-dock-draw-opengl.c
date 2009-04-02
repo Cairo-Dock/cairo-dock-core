@@ -63,7 +63,7 @@ extern double g_fIndicatorWidth, g_fIndicatorHeight;
 extern GLuint g_iIndicatorTexture;
 extern GLuint g_iActiveIndicatorTexture;
 extern GLuint g_iClassIndicatorTexture;
-extern GLuint g_pVisibleZoneTexture;
+extern GLuint g_iVisibleZoneTexture;
 extern GLuint g_iDesktopBgTexture;
 extern cairo_surface_t *g_pIndicatorSurface;
 extern cairo_surface_t *g_pActiveIndicatorSurface;
@@ -313,40 +313,41 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		
 		glBegin(GL_QUADS);
 		
+		double fReflectAlpha = myIcons.fAlbedo * pIcon->fAlpha;
 		if (pDock->bHorizontalDock)
 		{
 			glTexCoord2f (x0, y0);
-			glColor4f (1., 1., 1., 0.);
+			glColor4f (1., 1., 1., fReflectAlpha * pIcon->fReflectShading);
 			glVertex3f (-.5, .5, 0.);  // Bottom Left Of The Texture and Quad
 			
 			glTexCoord2f (x1, y0);
-			glColor4f (1., 1., 1., 0.);
+			glColor4f (1., 1., 1., fReflectAlpha * pIcon->fReflectShading);
 			glVertex3f (.5, .5, 0.);  // Bottom Right Of The Texture and Quad
 			
 			glTexCoord2f (x1, y1);
-			glColor4f (1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);
+			glColor4f (1., 1., 1., fReflectAlpha);
 			glVertex3f (.5, -.5, 0.);  // Top Right Of The Texture and Quad
 			
 			glTexCoord2f (x0, y1);
-			glColor4f (1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);
+			glColor4f (1., 1., 1., fReflectAlpha);
 			glVertex3f (-.5, -.5, 0.);  // Top Left Of The Texture and Quad
 		}
 		else
 		{
 			glTexCoord2f (x0, y0);
-			glColor4f (1., 1., 1., 0.);
+			glColor4f (1., 1., 1., fReflectAlpha * pIcon->fReflectShading);
 			glVertex3f (-.5, .5, 0.);  // Bottom Left Of The Texture and Quad
 			
 			glTexCoord2f (x1, y0);
-			glColor4f (1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);
+			glColor4f (1., 1., 1., fReflectAlpha);
 			glVertex3f (.5, .5, 0.);  // Bottom Right Of The Texture and Quad
 			
 			glTexCoord2f (x1, y1);
-			glColor4f (1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);
+			glColor4f (1., 1., 1., fReflectAlpha);
 			glVertex3f (.5, -.5, 0.);  // Top Right Of The Texture and Quad
 			
 			glTexCoord2f (x0, y1);
-			glColor4f (1., 1., 1., 0.);
+			glColor4f (1., 1., 1., fReflectAlpha * pIcon->fReflectShading);
 			glVertex3f (-.5, -.5, 0.);  // Top Left Of The Texture and Quad
 		}
 		glEnd();
@@ -628,17 +629,18 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %x)\n", __func__, pDock->bIsMainDock, g_pVisibleZoneSurface);
-	if (g_pVisibleZoneTexture == 0 && g_pVisibleZoneSurface != NULL)
+	if (g_iVisibleZoneTexture == 0 && g_pVisibleZoneSurface != NULL)
 	{
-		g_pVisibleZoneTexture = cairo_dock_create_texture_from_surface (g_pVisibleZoneSurface);
-		g_print ("g_pVisibleZoneTexture <- %d\n", g_pVisibleZoneTexture);
+		g_iVisibleZoneTexture = cairo_dock_create_texture_from_surface (g_pVisibleZoneSurface);
+		g_print ("g_iVisibleZoneTexture <- %d\n", g_iVisibleZoneTexture);
 	}
-	if (g_pVisibleZoneTexture == 0)
-		return ;
 	
 	glLoadIdentity ();
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
 	cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDock));
+	
+	if (g_iVisibleZoneTexture == 0)
+		return ;
 	
 	glEnable (GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -658,7 +660,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	if (! pDock->bHorizontalDock)
 		glRotatef (-90., 0, 0, 1);
 	
-	cairo_dock_apply_texture_at_size (g_pVisibleZoneTexture, pDock->iCurrentWidth, pDock->iCurrentHeight);
+	cairo_dock_apply_texture_at_size (g_iVisibleZoneTexture, pDock->iCurrentWidth, pDock->iCurrentHeight);
 	
 	glDisable (GL_TEXTURE_2D);
 	glDisable (GL_BLEND);
@@ -791,7 +793,7 @@ void cairo_dock_update_icon_texture (Icon *pIcon)
 			GL_BGRA,  // GL_ALPHA / GL_BGRA
 			GL_UNSIGNED_BYTE,
 			cairo_image_surface_get_data (pIcon->pIconBuffer));
-		glBindTexture (GL_TEXTURE_2D, 0);
+		glDisable (GL_TEXTURE_2D);
 	}
 }
 
@@ -820,7 +822,7 @@ void cairo_dock_update_label_texture (Icon *pIcon)
 			GL_BGRA,  // GL_ALPHA / GL_BGRA
 			GL_UNSIGNED_BYTE,
 			cairo_image_surface_get_data (pIcon->pTextBuffer));
-		glBindTexture (GL_TEXTURE_2D, 0);
+		glDisable (GL_TEXTURE_2D);
 	}
 }
 
@@ -849,7 +851,7 @@ void cairo_dock_update_quick_info_texture (Icon *pIcon)
 			GL_BGRA,  // GL_ALPHA / GL_BGRA
 			GL_UNSIGNED_BYTE,
 			cairo_image_surface_get_data (pIcon->pQuickInfoBuffer));
-		glBindTexture (GL_TEXTURE_2D, 0);
+		glDisable (GL_TEXTURE_2D);
 	}
 }
 
@@ -906,11 +908,12 @@ void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer)
 		pIcon->fAlpha);
 }
 
-
+/// PATH ///
 
 const GLfloat *cairo_dock_generate_rectangle_path (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, int *iNbPoints)
 {
-	static GLfloat pVertexTab[((90/DELTA_ROUND_DEGREE+1)*4+1)*3];
+	//static GLfloat pVertexTab[((90/DELTA_ROUND_DEGREE+1)*4+1)*_CAIRO_DOCK_PATH_DIM];
+	_cairo_dock_define_static_vertex_tab ((90/DELTA_ROUND_DEGREE+1)*4+1);
 	
 	double fTotalWidth = fDockWidth + 2 * fRadius;
 	double w = fDockWidth / fTotalWidth / 2;
@@ -921,41 +924,60 @@ const GLfloat *cairo_dock_generate_rectangle_path (double fDockWidth, double fFr
 	int iPrecision = DELTA_ROUND_DEGREE;
 	for (t = 0;t <= 90;t += iPrecision, i++) // cote haut droit.
 	{
-		pVertexTab[3*i] = w + rw * cos (t*RADIAN);
-		pVertexTab[3*i+1] = h + rh * sin (t*RADIAN);
+		_cairo_dock_set_vertex_xy (i,
+			w + rw * cos (t*RADIAN),
+			h + rh * sin (t*RADIAN));
+		//vx(i) = w + rw * cos (t*RADIAN);
+		//vy(i) = h + rh * sin (t*RADIAN);
 	}
 	for (t = 90;t <= 180;t += iPrecision, i++) // haut gauche.
 	{
-		pVertexTab[3*i] = -w + rw * cos (t*RADIAN);
-		pVertexTab[3*i+1] = h + rh * sin (t*RADIAN);
+		_cairo_dock_set_vertex_xy (i,
+			-w + rw * cos (t*RADIAN),
+			h + rh * sin (t*RADIAN));
+		//vx(i) = -w + rw * cos (t*RADIAN);
+		//vy(i) = h + rh * sin (t*RADIAN);
 	}
 	if (bRoundedBottomCorner)
 	{
 		for (t = 180;t <= 270;t += iPrecision, i++) // bas gauche.
 		{
-			pVertexTab[3*i] = -w + rw * cos (t*RADIAN);
-			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN);
+			_cairo_dock_set_vertex_xy (i,
+				-w + rw * cos (t*RADIAN),
+				-h + rh * sin (t*RADIAN));
+			//vx(i) = -w + rw * cos (t*RADIAN);
+			//vy(i) = -h + rh * sin (t*RADIAN);
 		}
 		for (t = 270;t <= 360;t += iPrecision, i++) // bas droit.
 		{
-			pVertexTab[3*i] = w + rw * cos (t*RADIAN);
-			pVertexTab[3*i+1] = -h + rh * sin (t*RADIAN);
+			_cairo_dock_set_vertex_xy (i,
+				w + rw * cos (t*RADIAN),
+				-h + rh * sin (t*RADIAN));
+			//vx(i) = w + rw * cos (t*RADIAN);
+			//vy(i) = -h + rh * sin (t*RADIAN);
 		}
 	}
 	else
 	{
-		pVertexTab[3*i] = -w - rw; // bas gauche.
-		pVertexTab[3*i+1] = -h - rh;
+		_cairo_dock_set_vertex_xy (i,
+			-w - rw,
+			-h - rh);  // bas gauche.
+		//vx(i) = -w - rw; // bas gauche.
+		//vy(i) = -h - rh;
 		i ++;
-		pVertexTab[3*i] = w + rw; // bas droit.
-		pVertexTab[3*i+1] = -h - rh;
+		_cairo_dock_set_vertex_xy (i,
+			w + rw,
+			-h - rh);  // bas droit.
+		//vx(i) = w + rw; // bas droit.
+		//vy(i) = -h - rh;
 		i ++;
 	}
-	pVertexTab[3*i] = w + rw;  // on boucle.
-	pVertexTab[3*i+1] = h;
+	_cairo_dock_close_path (i);  // on boucle.
+	//vx(i) = w + rw;  // on boucle.
+	//vy(i) = h;
 	
 	*iNbPoints = i+1;
-	return pVertexTab;
+	_cairo_dock_return_vertex_tab ();
 }
 
 #define P(t,p,q,s) ((1-t) * (1-t) * p + 2 * t * (1-t) * q + t * t * s)
@@ -966,13 +988,18 @@ void cairo_dock_add_simple_curved_subpath_opengl (GLfloat *pVertexTab, int iNbPt
 	for (i = 0; i < iNbPts; i ++)
 	{
 		t = 1.*i/iNbPts;  // [0;1[
-		pVertexTab[3*i] = P(t, x0, x1, x2);
-		pVertexTab[3*i+1] = P(t, y0, y1, y2);
+		_cairo_dock_set_vertex_xy (i,
+			P(t, x0, x1, x2),
+			P(t, y0, y1, y2));
+		//vx(i) = P(t, x0, x1, x2);
+		//vy(i) = P(t, y0, y1, y2);
 	}
 }
+#define NB_PTS_SIMPLE_CURVE 20
 GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, double fInclination, double *fExtraWidth, int *iNbPoints)
 {
-	static GLfloat pVertexTab[((90/DELTA_ROUND_DEGREE+1+20+1)*2+1)*3];
+	//static GLfloat pVertexTab[((90/DELTA_ROUND_DEGREE+1+20+1)*2+1)*_CAIRO_DOCK_PATH_DIM];
+	_cairo_dock_define_static_vertex_tab ((90/DELTA_ROUND_DEGREE+1+NB_PTS_SIMPLE_CURVE+1)*2+1);
 	
 	double a = atan (fInclination)/G_PI*180.;
 	double cosa = 1. / sqrt (1 + fInclination * fInclination);
@@ -991,13 +1018,19 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 	int iPrecision = DELTA_ROUND_DEGREE;
 	for (t = a;t <= 90;t += iPrecision, i++) // cote haut droit.
 	{
-		pVertexTab[3*i] = w + rw * cos (t*RADIAN);
-		pVertexTab[3*i+1] = h + rh * sin (t*RADIAN);
+		_cairo_dock_set_vertex_xy (i,
+			w + rw * cos (t*RADIAN),
+			h + rh * sin (t*RADIAN));
+		//vx(i) = w + rw * cos (t*RADIAN);
+		//vy(i) = h + rh * sin (t*RADIAN);
 	}
 	for (t = 90;t <= 180-a;t += iPrecision, i++) // haut gauche.
 	{
-		pVertexTab[3*i] = -w + rw * cos (t*RADIAN);
-		pVertexTab[3*i+1] = h + rh * sin (t*RADIAN);
+		_cairo_dock_set_vertex_xy (i,
+			-w + rw * cos (t*RADIAN),
+			h + rh * sin (t*RADIAN));
+		//vx(i) = -w + rw * cos (t*RADIAN);
+		//vy(i) = h + rh * sin (t*RADIAN);
 	}
 	if (bRoundedBottomCorner)
 	{
@@ -1012,8 +1045,11 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 		double y2 = y1;
 		for (t=0; t<=1; t+=.05, i++) // bas gauche.
 		{
-			pVertexTab[3*i] = P(t, x0, x1, x2);
-			pVertexTab[3*i+1] = P(t, y0, y1, y2);
+			_cairo_dock_set_vertex_xy (i,
+				P(t, x0, x1, x2),
+				P(t, y0, y1, y2));
+			//vx(i) = P(t, x0, x1, x2);
+			//vy(i) = P(t, y0, y1, y2);
 		}
 		
 		double x3 = x0, y3 = y0;
@@ -1024,33 +1060,35 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 		y2 = y3;
 		for (t=0; t<=1; t+=.05, i++) // bas gauche.
 		{
-			pVertexTab[3*i] = P(t, x0, x1, x2);
-			pVertexTab[3*i+1] = P(t, y0, y1, y2);
+			_cairo_dock_set_vertex_xy (i,
+				P(t, x0, x1, x2),
+				P(t, y0, y1, y2));
+			//vx(i) = P(t, x0, x1, x2);
+			//vy(i) = P(t, y0, y1, y2);
 		}
 	}
 	else
 	{
-		pVertexTab[3*i] = -w_; // bas gauche.
-		pVertexTab[3*i+1] = -h - rh;
+		_cairo_dock_set_vertex_xy (i,
+			-w_,
+			-h - rh);  // bas gauche.
+		//vx(i) = -w_; // bas gauche.
+		//vy(i) = -h - rh;
 		i ++;
-		pVertexTab[3*i] = w_; // bas droit.
-		pVertexTab[3*i+1] = -h - rh;
+		_cairo_dock_set_vertex_xy (i,
+			w_,
+			-h - rh);  // bas droit.
+		//vx(i) = w_; // bas droit.
+		//vy(i) = -h - rh;
 		i ++;
 	}
-	pVertexTab[3*i] = pVertexTab[0];  // on boucle.
-	pVertexTab[3*i+1] = pVertexTab[1];
+	_cairo_dock_close_path (i);  // on boucle.
+	//vx(i) = vx(0);  // on boucle.
+	//vy(i) = vy(0);
 	
 	*iNbPoints = i+1;
-	return pVertexTab;
+	_cairo_dock_return_vertex_tab ();
 }
-
-typedef struct _CairoDockOpenglPath {
-	gint iNbVertices;
-	GLfloat *pVertexTab;
-	GLfloat *pColorTab;
-	gint iCurrentIndex;
-	gint iWidthExtent, iHeightExtent;
-	} CairoDockOpenglPath;
 
 // OM(t) = sum ([k=0..n] Bn,k(t)*OAk)
 // Bn,k(x) = Cn,k*x^k*(1-x)^(n-k)
@@ -1059,17 +1097,6 @@ typedef struct _CairoDockOpenglPath {
 #define B2(t) 3*t*t*(1-t)
 #define B3(t) t*t*t
 #define Bezier(x0,x1,x2,x3,t) (B0(t)*x0 + B1(t)*x1 + B2(t)*x2 + B3(t)*x3)
-void cairo_dock_add_curved_subpath_opengl (GLfloat *pVertexTab, int iNbPts, double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3)
-{
-	double t;
-	int i;
-	for (i = 0; i < iNbPts; i ++)
-	{
-		t = 1.*i/iNbPts;  // [0;1[
-		pVertexTab[3*i] = Bezier (x0,x1,x2,x3,t);
-		pVertexTab[3*i+1] = Bezier (y0,y1,y2,y3,t);
-	}
-}
 
 #define _get_icon_center_x(icon) (icon->fDrawX + icon->fWidth * icon->fScale/2)
 #define _get_icon_center_y(icon) (icon->fDrawY + (bForceConstantSeparator && CAIRO_DOCK_IS_SEPARATOR (icon) ? icon->fHeight * (icon->fScale - .5) : icon->fHeight * icon->fScale/2))
@@ -1089,7 +1116,9 @@ void cairo_dock_add_curved_subpath_opengl (GLfloat *pVertexTab, int iNbPts, doub
 #define NB_VERTEX_PER_ICON_PAIR 10
 GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsLoop, gboolean bForceConstantSeparator, int *iNbPoints)
 {
-	static GLfloat pVertexTab[100*NB_VERTEX_PER_ICON_PAIR*3];
+	//static GLfloat pVertexTab[100*NB_VERTEX_PER_ICON_PAIR*3];
+	_cairo_dock_define_static_vertex_tab (100*NB_VERTEX_PER_ICON_PAIR);
+	
 	bForceConstantSeparator = bForceConstantSeparator || myIcons.bConstantSeparatorSize;
 	GList *ic, *next_ic, *next2_ic, *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
 	Icon *pIcon, *pNextIcon, *pNext2Icon;
@@ -1101,7 +1130,7 @@ GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsL
 	if (pFirstDrawnElement == NULL)
 	{
 		*iNbPoints = 0;
-		return pVertexTab;
+		_cairo_dock_return_vertex_tab ();
 	}
 	
 	// direction initiale.
@@ -1155,18 +1184,11 @@ GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsL
 		for (i = 0; i < NB_VERTEX_PER_ICON_PAIR; i ++, n++)
 		{
 			t = 1.*i/NB_VERTEX_PER_ICON_PAIR;  // [0;1[
-			pVertexTab[3*n] = Bezier (x0,x0_,x1_,x1,t);
-			pVertexTab[3*n+1] = Bezier (y0,y0_,y1_,y1,t);
-			/*if (pDock->bHorizontalDock)
-			{
-				pVertexTab[3*n] = Bezier (x0,x0_,x1_,x1,t);
-				pVertexTab[3*n+1] = pDock->iCurrentHeight - Bezier (y0,y0_,y1_,y1,t);
-			}
-			else
-			{
-				pVertexTab[3*n] = Bezier (y0,y0_,y1_,y1,t);
-				pVertexTab[3*n+1] = pDock->iCurrentWidth - Bezier (x0,x0_,x1_,x1,t);
-			}*/
+			_cairo_dock_set_vertex_xy (n,
+				Bezier (x0,x0_,x1_,x1,t),
+				Bezier (y0,y0_,y1_,y1,t));
+			//vx(n) = Bezier (x0,x0_,x1_,x1,t);
+			//vy(n) = Bezier (y0,y0_,y1_,y1,t);
 		}
 		
 		// on decale tout d'un cran.
@@ -1181,7 +1203,7 @@ GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsL
 	while (ic != pFirstDrawnElement && n < 100*NB_VERTEX_PER_ICON_PAIR);
 	
 	*iNbPoints = n;
-	return pVertexTab;
+	_cairo_dock_return_vertex_tab ();
 }
 
 
@@ -1244,7 +1266,8 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 	
 	//\__________________ On dessine le cadre.
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, pVertexTab);
+	//glVertexPointer(_CAIRO_DOCK_PATH_DIM, GL_FLOAT, 0, pVertexTab);
+	_cairo_dock_set_vertex_pointer (pVertexTab);
 	glDrawArrays(GL_POLYGON, 0, iNbVertex);  // GL_TRIANGLE_FAN
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
@@ -1289,7 +1312,8 @@ void cairo_dock_draw_string_opengl (CairoDock *pDock, double fStringLineWidth, g
 	GLfloat *pVertexTab = cairo_dock_generate_string_path_opengl (pDock, bIsLoop, bForceConstantSeparator, &iNbVertex);
 	if (iNbVertex == 0)
 		return;
-	glVertexPointer(3, GL_FLOAT, 0, pVertexTab);
+	//glVertexPointer(_CAIRO_DOCK_PATH_DIM, GL_FLOAT, 0, pVertexTab);
+	_cairo_dock_set_vertex_pointer (pVertexTab);
 	cairo_dock_draw_current_path_opengl (fStringLineWidth, myIcons.fStringColor, iNbVertex);
 }
 
@@ -1718,4 +1742,46 @@ void cairo_dock_update_animated_image_opengl (CairoAnimatedImage *pAnimatedImage
 		1. / pAnimatedImage->iNbFrames, 1.,
 		pAnimatedImage->iFrameWidth, pAnimatedImage->iFrameHeight,
 		0., 0.);
+}
+
+
+
+
+
+
+
+typedef struct _CairoDockOpenglPath {
+	gint iNbVertices;
+	GLfloat *pVertexTab;
+	GLfloat *pColorTab;
+	gint iCurrentIndex;
+	gint iWidthExtent, iHeightExtent;
+	} CairoDockOpenglPath;
+
+#define _cairo_dock_ith_vertex_x(pVertexPath, i) (pVertexPath)->pVertexTab[i*_CAIRO_DOCK_PATH_DIM]
+#define _cairo_dock_ith_vertex_y(pVertexPath, i) (pVertexPath)->pVertexTab[i*_CAIRO_DOCK_PATH_DIM+1]
+#define _cairo_dock_set_ith_vertex_x(pVertexPath, i, x) _cairo_dock_ith_vertex_x(pVertexPath, i) = x
+#define _cairo_dock_set_ith_vertex_y(pVertexPath, i, y) _cairo_dock_ith_vertex_y(pVertexPath, i) = y
+#define cairo_dock_get_current_vertex_x(pVertexPath) _cairo_dock_ith_vertex_x(pVertexPath, pVertexPath->iCurrentIndex-1)
+#define cairo_dock_get_current_vertex_y(pVertexPath) _cairo_dock_ith_vertex_y(pVertexPath, pVertexPath->iCurrentIndex-1)
+#define cairo_dock_add_vertex(pVertexPath, x, y) do {\
+	_cairo_dock_set_ith_vertex_x (pVertexPath, (pVertexPath)->iCurrentIndex, x);\
+	_cairo_dock_set_ith_vertex_y (pVertexPath, (pVertexPath)->iCurrentIndex, y);\
+	(pVertexPath)->iCurrentIndex ++; } while (0)
+
+void cairo_dock_add_curved_subpath_opengl (CairoDockOpenglPath *pVertexPath, int iNbPts, double x1, double y1, double x2, double y2, double x3, double y3)
+{
+	double x0 = cairo_dock_get_current_vertex_x (pVertexPath);  // doit avoir ete initialise.
+	double y0 = cairo_dock_get_current_vertex_y (pVertexPath);
+	double t;
+	int i;
+	for (i = 1; i < iNbPts+1; i ++)
+	{
+		t = 1.*i/iNbPts;  // ]0;1]
+		cairo_dock_add_vertex(pVertexPath,
+			Bezier (x0,x1,x2,x3,t),
+			Bezier (y0,y1,y2,y3,t));
+		//vx(i) = Bezier (x0,x1,x2,x3,t);
+		//vy(i) = Bezier (y0,y1,y2,y3,t);
+	}
 }

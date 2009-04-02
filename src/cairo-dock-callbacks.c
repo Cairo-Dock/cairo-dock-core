@@ -64,7 +64,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 static Icon *s_pIconClicked = NULL;  // pour savoir quand on deplace une icone a la souris. Dangereux si l'icone se fait effacer en cours ...
 static CairoDock *s_pLastPointedDock = NULL;  // pour savoir quand on passe d'un dock a un autre.
-static int s_iSidNonStopScrolling = 0;
 static int s_iSidShowSubDockDemand = 0;
 static int s_iSidShowAppliForDrop = 0;
 static CairoDock *s_pDockShowingSubDock = NULL;  // on n'accede pas a son contenu, seulement l'adresse.
@@ -123,7 +122,6 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 			///glEnable (GL_SCISSOR_TEST);  // n'a pas l'air de marcher ...
 			glScissor ((int) pExpose->area.x, (int) pExpose->area.y, (int) pExpose->area.width, (int) pExpose->area.height);
 		}
-		
 		
 		if (cairo_dock_is_loading ())
 		{
@@ -315,6 +313,7 @@ static gboolean _cairo_dock_show_sub_dock_delayed (CairoDock *pDock)
 static gboolean _cairo_dock_show_xwindow_for_drop (Icon *pIcon)
 {
 	cairo_dock_show_xwindow (pIcon->Xid);
+	s_iSidShowAppliForDrop = 0;
 	return FALSE;
 }
 void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, CairoDock *pDock)
@@ -346,11 +345,11 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		CairoDock *pSubDock = pLastPointedIcon->pSubDock;
 		if (GTK_WIDGET_VISIBLE (pSubDock->pWidget))
 		{
-			//g_print ("on cache %s en changeant d'icône\n", pLastPointedIcon->acName);
-			if (pLastPointedIcon->pSubDock->iSidLeaveDemand == 0)
+			g_print ("on cache %s en changeant d'icône\n", pLastPointedIcon->acName);
+			if (pSubDock->iSidLeaveDemand == 0)
 			{
-				//g_print ("  on retarde le cachage du dock de %dms\n", MAX (myAccessibility.iLeaveSubDockDelay, 330));
-				pLastPointedIcon->pSubDock->iSidLeaveDemand = g_timeout_add (MAX (myAccessibility.iLeaveSubDockDelay, 330), (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pLastPointedIcon->pSubDock);
+				g_print ("  on retarde le cachage du dock de %dms\n", MAX (myAccessibility.iLeaveSubDockDelay, 330));
+				pSubDock->iSidLeaveDemand = g_timeout_add (MAX (myAccessibility.iLeaveSubDockDelay, 330), (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pSubDock);
 			}
 		}
 		//else
@@ -375,7 +374,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 			cairo_dock_show_subdock (pPointedIcon, FALSE, pDock);
 		s_pLastPointedDock = pDock;
 	}
-	pLastPointedIcon = pPointedIcon;
+
 	if (s_pLastPointedDock == NULL)
 	{
 		//g_print ("pLastPointedDock n'est plus null\n");
@@ -686,7 +685,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	
 	if (pDock->iSidMoveUp != 0)  // si on est en train de monter, on arrete.
 	{
-		g_print ("on arrete de monter\n");
+		//g_print ("on arrete de monter\n");
 		g_source_remove (pDock->iSidMoveUp);
 		pDock->iSidMoveUp = 0;
 	}
@@ -742,7 +741,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	}
 	else
 	{
-		pDock->fFoldingFactor = 0.03;
+		pDock->fFoldingFactor = (mySystem.bAnimateSubDock ? 0.03 : 0.);
 		pDock->bAtBottom = TRUE;  // mis en commentaire le 12/11/07 pour permettre le quick-hide.
 		//cd_debug ("on force bAtBottom");
 	}
@@ -787,12 +786,6 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		}
 	}
 	pDock->iSidLeaveDemand = 0;
-
-	if (s_iSidNonStopScrolling > 0)
-	{
-		g_source_remove (s_iSidNonStopScrolling);
-		s_iSidNonStopScrolling = 0;
-	}
 	
 	/*if (! pDock->bInside)
 	{
@@ -890,7 +883,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 
 	if (pDock->bAtTop || pDock->bInside || (pDock->iSidMoveDown != 0))  // le 'iSidMoveDown != 0' est la pour empecher le dock de "vibrer" si l'utilisateur sort par en bas avec l'auto-hide active.
 	{
-		g_print ("  %d;%d;%d\n", pDock->bAtTop,  pDock->bInside, pDock->iSidMoveDown);
+		//g_print ("  %d;%d;%d\n", pDock->bAtTop,  pDock->bInside, pDock->iSidMoveDown);
 		pDock->bInside = TRUE;  /// ajoute pour les plug-ins opengl.
 		cairo_dock_start_growing (pDock);
 		if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->iSidMoveUp == 0)
@@ -977,7 +970,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	
 	if (pDock->bAutoHide && pDock->iRefCount == 0)
 	{
-		g_print ("  on commence a monter\n");
+		//g_print ("  on commence a monter\n");
 		if (pDock->iSidMoveUp == 0)  // on commence a monter.
 			pDock->iSidMoveUp = g_timeout_add (40, (GSourceFunc) cairo_dock_move_up, (gpointer) pDock);
 	}
@@ -998,7 +991,7 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	GdkEventKey *pKey,
 	CairoDock *pDock)
 {
-	g_print ("on a appuye sur uen touche\n");
+	g_print ("on a appuye sur une touche\n");
 	if (pKey->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
 	{
 		if (pDock->iRefCount == 0)

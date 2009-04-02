@@ -991,7 +991,7 @@ void cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 {
 	cd_debug ("");
 	pDock->bMenuVisible = FALSE;
-	if (CAIRO_DOCK_IS_DOCK (pDock) && ! pDock->bInside)
+	if (CAIRO_DOCK_IS_DOCK (pDock)/* && ! pDock->bInside*/)
 	{
 		cd_message ("on force a quitter");
 		pDock->bInside = TRUE;

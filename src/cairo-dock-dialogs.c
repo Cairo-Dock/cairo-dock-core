@@ -1515,6 +1515,17 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 		//g_print ("fin de boucle bloquante -> %d\n", iAnswer);
 		if (myAccessibility.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
 			cairo_dock_pop_down (CAIRO_DOCK (pContainer));
+		if (CAIRO_DOCK_IS_DOCK (pContainer)/* && ! pDock->bInside*/)
+		{
+			cd_message ("on force a quitter");
+			CairoDock *pDock = CAIRO_DOCK (pContainer);
+			pDock->bInside = TRUE;
+			pDock->bAtBottom = FALSE;
+			///cairo_dock_disable_entrance ();  // trop violent, il faudrait trouver un autre truc.
+			cairo_dock_on_leave_notify (pDock->pWidget,
+				NULL,
+				pDock);
+		}
 	}
 
 	g_main_loop_unref (pBlockingLoop);

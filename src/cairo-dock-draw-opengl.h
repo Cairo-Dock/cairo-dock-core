@@ -112,6 +112,17 @@ void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer);
 /////////////////
 /// DRAW PATH ///
 /////////////////
+#define _CAIRO_DOCK_PATH_DIM 2
+#define _cairo_dock_define_static_vertex_tab(iNbVertices) static GLfloat pVertexTab[(iNbVertices) * _CAIRO_DOCK_PATH_DIM]
+#define _cairo_dock_return_vertex_tab(...) return pVertexTab
+#define _cairo_dock_set_vertex_x(_i, _x) pVertexTab[_CAIRO_DOCK_PATH_DIM*_i] = _x
+#define _cairo_dock_set_vertex_y(_i, _y) pVertexTab[_CAIRO_DOCK_PATH_DIM*_i+1] = _y
+#define _cairo_dock_set_vertex_xy(_i, _x, _y) do {\
+	_cairo_dock_set_vertex_x(_i, _x);\
+	_cairo_dock_set_vertex_y(_i, _y); } while (0)
+#define _cairo_dock_close_path(i) _cairo_dock_set_vertex_xy (i, pVertexTab[0], pVertexTab[1])
+#define _cairo_dock_set_vertex_pointer(pVertexTab) glVertexPointer (_CAIRO_DOCK_PATH_DIM, GL_FLOAT, 0, pVertexTab)
+
 const GLfloat *cairo_dock_generate_rectangle_path (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, int *iNbPoints);
 GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, double fInclination, double *fExtraWidth, int *iNbPoints);
 

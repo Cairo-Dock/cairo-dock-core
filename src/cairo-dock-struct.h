@@ -795,6 +795,7 @@ struct _Icon {
 	gint iViewPortX, iViewPortY;
 	gint iStackOrder;
 	CairoDockTransition *pTransition;
+	gdouble fReflectShading;
 };
 
 

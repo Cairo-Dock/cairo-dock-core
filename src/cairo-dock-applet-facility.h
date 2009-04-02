@@ -630,7 +630,7 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 
 #define CD_APPLET_SET_DEFAULT_IMAGE_ON_MY_ICON_IF_NONE do { \
 	if (myIcon->acFileName == NULL) { \
-		CD_APPLET_SET_LOCAL_IMAGE_ON_MY_ICON (MY_APPLET_ICON_FILE);	} } while (0)
+		CD_APPLET_SET_LOCAL_IMAGE_ON_MY_ICON (MY_APPLET_ICON_FILE); } } while (0)
 
 /**
 *Applique une surface existante sur le contexte de dessin de l'applet, et la redessine. La surface est redimensionnee aux dimensions de l'icone.
@@ -792,6 +792,7 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 *Detruit notre sous-dock et les icones contenues dedans s'il y'en a.
 */
 #define CD_APPLET_DESTROY_MY_SUBDOCK do { \
+	g_print ("CD_APPLET_DESTROY_MY_SUBDOCK\n");\
 	cairo_dock_destroy_dock (myIcon->pSubDock, myIcon->acName, NULL, NULL); \
 	myIcon->pSubDock = NULL; } while (0)
 /**
@@ -806,6 +807,7 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)
 
 #define CD_APPLET_DELETE_MY_ICONS_LIST do {\
+	g_print ("CD_APPLET_DELETE_MY_ICONS_LIST\n");\
 	if (myDesklet && myDesklet->icons != NULL) {\
 		g_list_foreach (myDesklet->icons, (GFunc) cairo_dock_free_icon, NULL);\
 		g_list_free (myDesklet->icons);\
@@ -827,6 +829,7 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 			if (pIconList == NULL) {\
 				CD_APPLET_DESTROY_MY_SUBDOCK; }\
 			else {\
+				cairo_dock_set_renderer (myIcon->pSubDock, cDockRendererName); \
 				CD_APPLET_LOAD_ICONS_IN_MY_SUBDOCK (pIconList); } } }\
 	else {\
 		if (myIcon->pSubDock != NULL) {\
@@ -835,6 +838,9 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 		CD_APPLET_SET_DESKLET_RENDERER_WITH_DATA (cDeskletRendererName, pDeskletRendererConfig);\
 		CAIRO_DOCK_REDRAW_MY_CONTAINER;\
 	} } while (0)
+
+#define CD_APPLET_MY_ICONS_LIST (myDock ? (myIcon->pSubDock ? myIcon->pSubDock->icons : NULL) : myDesklet->icons)
+#define CD_APPLET_MY_ICONS_LIST_CONTAINER (myDock ? CAIRO_CONTAINER (myIcon->pSubDock) : CAIRO_CONTAINER (myDesklet))
 
 
 //\_________________________________ INTERNATIONNALISATION

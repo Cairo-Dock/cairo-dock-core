@@ -571,13 +571,15 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	CairoDockModule *module = pInstance->pModule;
 	cd_message ("%s (%s, %d)", __func__, module->pVisitCard->cModuleName, bReloadAppletConf);
 	
+	if (module->pInterface->reloadModule == NULL)
+		return ;
 	GError *erreur = NULL;
 	CairoContainer *pActualContainer = pInstance->pContainer;
 	pInstance->pContainer = NULL;
 	
 	//\______________ On tente de recharger le module.
 	gboolean bModuleReloaded = FALSE;
-	if (module->pInstancesList != NULL && module->pInterface->reloadModule != NULL)
+	///if (module->pInstancesList != NULL && module->pInterface->reloadModule != NULL)
 	{
 		Icon *pIcon = pInstance->pIcon;
 
@@ -722,7 +724,10 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				pIcon->fHeight *= CAIRO_DOCK (pActualContainer)->fRatio;
 				
 				if (bReloadAppletConf)
+				{
 					cairo_dock_update_dock_size (CAIRO_DOCK (pNewContainer));
+					gtk_widget_queue_draw (pNewContainer->pWidget);
+				}
 			}
 		}
 		

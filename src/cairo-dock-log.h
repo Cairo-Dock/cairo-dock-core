@@ -26,12 +26,8 @@
 #ifndef   	CAIRO_DOCK_LOG_H_
 # define   	CAIRO_DOCK_LOG_H_
 
-# include <gtk/gtk.h>
+# include <glib.h>
 G_BEGIN_DECLS
-
-# ifndef _INSIDE_CAIRO_DOCK_LOG_C_
-  extern GLogLevelFlags gLogLevel;
-# endif
 
 /*
  * internal function

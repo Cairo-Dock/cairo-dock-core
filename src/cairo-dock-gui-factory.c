@@ -37,6 +37,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 extern CairoDock *g_pMainDock;
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cConfFile;
+extern gchar *g_cCurrentThemePath;
 
 typedef enum {
 	CAIRO_DOCK_MODEL_NAME = 0,
@@ -326,7 +327,8 @@ static void _cairo_dock_pick_a_file (GtkButton *button, gpointer *data)
 		GTK_STOCK_CANCEL,
 		GTK_RESPONSE_CANCEL,
 		NULL);
-	gchar *cDirectoryPath = g_path_get_dirname (gtk_entry_get_text (pEntry));
+	const gchar *cFilePath = gtk_entry_get_text (pEntry);
+	gchar *cDirectoryPath = (cFilePath == NULL || *cFilePath != '/' ? g_strdup (g_cCurrentThemePath) : g_path_get_dirname (cFilePath));
 	g_print (">>> on se place sur '%s'\n", cDirectoryPath);
 	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog), cDirectoryPath);
 	g_free (cDirectoryPath);

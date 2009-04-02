@@ -26,14 +26,11 @@
 
 #include <stdio.h>
 #include <stdarg.h>
-#include <glib.h>
-
-#define _INSIDE_CAIRO_DOCK_LOG_C_
 
 #include "cairo-dock-log.h"
 
-char s_iLogColor = '0';
-static GLogLevelFlags gLogLevel = 0;
+static char s_iLogColor = '0';
+static GLogLevelFlags s_gLogLevel = 0;
 
 /* #    'default'     => "\033[1m", */
 
@@ -76,7 +73,7 @@ void cd_log_location(const GLogLevelFlags loglevel,
 {
   va_list args;
 
-  if (loglevel > gLogLevel)
+  if (loglevel > s_gLogLevel)
     return;
   g_print(_cd_log_level_to_string(loglevel));
   g_print("\033[0;37m(%s:%s:%d) \033[%cm \n  ", file, func, line, s_iLogColor);
@@ -90,7 +87,7 @@ static void cairo_dock_log_handler(const gchar *log_domain,
                                    const gchar *message,
                                    gpointer user_data)
 {
-  if (log_level > gLogLevel)
+  if (log_level > s_gLogLevel)
     return;
   g_print("%s\n", message);
 }
@@ -103,5 +100,5 @@ void cd_log_init(gboolean bBlackTerminal)
 
 void cd_log_set_level(GLogLevelFlags loglevel)
 {
-  gLogLevel = loglevel;
+  s_gLogLevel = loglevel;
 }

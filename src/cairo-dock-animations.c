@@ -100,7 +100,7 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 	if (pDock->iMagnitudeIndex > 0/** || (mySystem.bResetScrollOnLeave && pDock->iScrollOffset != 0)*/)  // on retarde le cachage du dock pour apercevoir les effets.
 		return TRUE;
 	int deltaY_possible = (pDock->bDirectionUp ? g_iXScreenHeight[pDock->bHorizontalDock] - pDock->iGapY - 0 : pDock->iGapY + 0 - pDock->iMaxDockHeight) - pDock->iWindowPositionY;  // 0 <-> g_iVisibleZoneHeight
-	g_print ("%s (%d)\n", __func__, deltaY_possible);
+	//g_print ("%s (%d)\n", __func__, deltaY_possible);
 	if ((pDock->bDirectionUp && deltaY_possible > 8) || (! pDock->bDirectionUp && deltaY_possible < -8))  // alors on peut encore descendre.
 	{
 		pDock->iWindowPositionY += (int) (deltaY_possible * mySystem.fMoveDownSpeed) + (pDock->bDirectionUp ? 1 : -1);  // 0.33
@@ -274,7 +274,7 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 	if (pDock->iMagnitudeIndex == 0)  // on est arrive en bas.
 	{
 		//g_print ("equilibre atteint (%d)\n", pDock->bInside);
-		if (iPrevMagnitudeIndex != 0)  // on vient d'arriver en bas.
+		if (iPrevMagnitudeIndex != 0 || (pDock->fDecorationsOffsetX == 0 && (pDock->fFoldingFactor == 0 || pDock->fFoldingFactor == mySystem.fUnfoldAcceleration)))  // on vient d'arriver en bas OU l'animation de shrink est finie.
 		{
 			if (! pDock->bInside)  // on peut etre hors des icones sans etre hors de la fenetre.
 			{

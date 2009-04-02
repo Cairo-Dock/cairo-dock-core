@@ -23,6 +23,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #endif
 
 #include "cairo-dock-draw.h"
+#include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
@@ -92,6 +93,13 @@ void cairo_dock_free_icon_buffers (Icon *icon)
 	cairo_surface_destroy (icon->pReflectionBuffer);
 	cairo_surface_destroy (icon->pTextBuffer);
 	cairo_surface_destroy (icon->pQuickInfoBuffer);
+	
+	if (icon->iIconTexture != 0)
+		_cairo_dock_delete_texture (icon->iIconTexture);
+	if (icon->iLabelTexture != 0)
+		_cairo_dock_delete_texture (icon->iLabelTexture);
+	if (icon->iQuickInfoTexture != 0)
+		_cairo_dock_delete_texture (icon->iQuickInfoTexture);
 }
 
 CairoDockIconType cairo_dock_get_icon_type (Icon *icon)
