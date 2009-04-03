@@ -1412,6 +1412,12 @@ void cairo_dock_create_icon_pbuffer (void)
 			glLoadIdentity();
 			glOrtho(0, iWidth, 0, iHeight, 0.0, 500.0);
 			glMatrixMode (GL_MODELVIEW);
+			
+			glLoadIdentity();
+			gluLookAt (0., 0., 3.,
+				0., 0., 0.,
+				0.0f, 1.0f, 0.0f);
+			
 			glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
 			glClearDepth (1.0f);
 		}
@@ -1479,7 +1485,7 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	
 	glCopyTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, x, y, iWidth, iHeight, 0);  // target, num mipmap, format, x,y, w,h, border.
 	glDisable (GL_TEXTURE_2D);
-	glDisable (GL_ZERO);
+	glDisable (GL_BLEND);
 	
 	//end
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))

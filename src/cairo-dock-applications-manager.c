@@ -784,6 +784,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				else if (event.xproperty.atom == s_aNetActiveWindow)
 				{
 					Window XActiveWindow = cairo_dock_get_active_xwindow ();
+					g_print ("%d devient active (%d)\n", XActiveWindow, root);
 					if (s_iCurrentActiveWindow != XActiveWindow)
 					{
 						icon = g_hash_table_lookup (s_hXWindowTable, &XActiveWindow);
@@ -807,6 +808,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 								cairo_dock_appli_stops_demanding_attention (icon);
 						}
 						
+						gboolean bHackMe = FALSE;
 						Icon *pLastActiveIcon = g_hash_table_lookup (s_hXWindowTable, &s_iCurrentActiveWindow);
 						if (pLastActiveIcon != NULL)
 						{
@@ -821,8 +823,12 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 								cairo_dock_update_inactivity_on_inhibators (pLastActiveIcon->cClass, pLastActiveIcon->Xid);
 							}
 						}
+						else
+							bHackMe = TRUE;
 						s_iCurrentActiveWindow = XActiveWindow;
 						cairo_dock_notify (CAIRO_DOCK_WINDOW_ACTIVATED, &XActiveWindow);
+						if (bHackMe)  // si on active une fenetre n'ayant pas de focus clavier, on n'aura pas d'evenement kbd_changed, pourtant en interne le clavier changera. du coup si apres on revient sur une fenetre qui a un focus clavier, il risque de ne pas y avoir de changement de clavier, et donc encore une fois pas d'evenement ! pour palier a ce, on considere que les fenetres avec focus clavier sont celles presentes en barre des taches. On decide de generer un evenement lorsqu'on revient sur une fenetre avec focus, a partir d'une fenetre sans focus (mettre a jour le clavier pour une fenetre sans focus n'a pas grand interet, autant le laisser inchange).
+							cairo_dock_notify (CAIRO_DOCK_KBD_STATE_CHANGED, &XActiveWindow);
 					}
 				}
 				else if (event.xproperty.atom == s_aNetCurrentDesktop || event.xproperty.atom == s_aNetDesktopViewport)

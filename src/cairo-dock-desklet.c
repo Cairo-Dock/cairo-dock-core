@@ -346,7 +346,7 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 	}
 	
 	_cairo_dock_enable_texture ();
-	_cairo_dock_set_blend_alpha ();
+	_cairo_dock_set_blend_pbuffer ();
 	
 	if (pDesklet->iBackGroundTexture != 0 && pDesklet->fBackGroundAlpha != 0)
 	{
@@ -370,7 +370,7 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 	glPopMatrix ();
 	
 	_cairo_dock_enable_texture ();
-	_cairo_dock_set_blend_alpha ();
+	_cairo_dock_set_blend_pbuffer ();
 	if (pDesklet->iForeGroundTexture != 0 && pDesklet->fForeGroundAlpha != 0)
 	{
 		_cairo_dock_apply_texture_at_size_with_alpha (pDesklet->iForeGroundTexture, pDesklet->iWidth, pDesklet->iHeight, pDesklet->fForeGroundAlpha);

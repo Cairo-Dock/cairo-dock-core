@@ -208,7 +208,7 @@ void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle 
 	g_return_if_fail (pContainer != NULL);
 	if (! GTK_WIDGET_VISIBLE (pContainer->pWidget))
 		return ;
-	if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->bAtBottom && (CAIRO_DOCK (pContainer)->iRefCount > 0 || CAIRO_DOCK (pContainer)->bAutoHide))  // inutile de redessiner.
+	if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->bAtBottom && (/**CAIRO_DOCK (pContainer)->iRefCount > 0 || */CAIRO_DOCK (pContainer)->bAutoHide))  // inutile de redessiner.
 		return ;
 	if (pArea->y < 0)
 		pArea->y = 0;
