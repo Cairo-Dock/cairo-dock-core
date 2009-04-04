@@ -575,7 +575,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		
 		if (! pDock->bHorizontalDock && mySystem.bTextAlwaysHorizontal)
 		{
-			glTranslatef (-icon->fHeight * icon->fScale/2 - (pDock->bDirectionUp ? 0. : myIcons.fReflectSize) + icon->iTextWidth / 2,
+			glTranslatef (-icon->fHeight * icon->fScale/2 - (pDock->bDirectionUp ? myLabels.iconTextDescription.iSize : (pDock->bUseReflect ? myIcons.fReflectSize : 0.)) + icon->iTextWidth / 2,
 				(icon->fWidth * icon->fScale + icon->iTextHeight) / 2,
 				0.);
 		}
@@ -668,13 +668,76 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 
 
 
+
+
+GLboolean CheckExtension (char *extName)
+{
+	/*
+	** Search for extName in the extensions string.  Use of strstr()
+	** is not sufficient because extension names can be prefixes of
+	** other extension names.  Could use strtok() but the constant
+	** string returned by glGetString can be in read-only memory.
+	*/
+	char *p = (char *) glGetString (GL_EXTENSIONS);
+
+	char *end;
+	int extNameLen;
+
+	extNameLen = strlen(extName);
+	end = p + strlen(p);
+
+	while (p < end)
+	{
+		int n = strcspn(p, " ");
+		if ((extNameLen == n) && (strncmp(extName, p, n) == 0))
+		{
+			return GL_TRUE;
+		}
+		p += (n + 1);
+	}
+	return GL_FALSE;
+}
+
+
 GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 {
+	static gint iNonPowerOfTwoAvailable = -1;
 	if (! g_bUseOpenGL || pImageSurface == NULL)
 		return 0;
 	GLuint iTexture = 0;
 	int w = cairo_image_surface_get_width (pImageSurface);
 	int h = cairo_image_surface_get_height (pImageSurface);
+	
+	// GL_ARB_texture_non_power_of_two
+	cairo_surface_t *pPowerOfwoSurface = pImageSurface;
+	
+	if (iNonPowerOfTwoAvailable == -1)
+	{
+		iNonPowerOfTwoAvailable = CheckExtension ("GL_ARB_texture_non_power_of_two");
+		
+	}
+	int iMaxTextureWidth = 4096, iMaxTextureHeight = 4096;
+	if (! iNonPowerOfTwoAvailable)
+	{
+		double log2_w = log (w) / log (2);
+		double log2_h = log (h) / log (2);
+		int w_ = MIN (iMaxTextureWidth, pow (2, ceil (log2_w)));
+		int h_ = MIN (iMaxTextureHeight, pow (2, ceil (log2_h)));
+		g_print ("%dx%d --> %dx%d\n", w, h, w_, h_);
+		
+		if (w != w_ || h != h_)
+		{
+			pPowerOfwoSurface = _cairo_dock_create_blank_surface (NULL, w_, h_);
+			cairo_t *pCairoContext = cairo_create (pPowerOfwoSurface);
+			cairo_scale (pCairoContext, (double) w_ / w, (double) h_ / h);
+			cairo_set_source_surface (pCairoContext, pImageSurface, 0., 0.);
+			cairo_paint (pCairoContext);
+			cairo_destroy (pCairoContext);
+			w = w_;
+			h = h_;
+		}
+	}
+	
 	glEnable(GL_TEXTURE_2D);
 	glGenTextures (1, &iTexture);
 	//g_print ("texture %d generee (%x, %dx%d)\n", iTexture, cairo_image_surface_get_data (pImageSurface), w, h);
@@ -690,7 +753,9 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 		0,
 		GL_BGRA,  // GL_ALPHA / GL_BGRA
 		GL_UNSIGNED_BYTE,
-		cairo_image_surface_get_data (pImageSurface));
+		cairo_image_surface_get_data (pPowerOfwoSurface));
+	if (pPowerOfwoSurface != pImageSurface)
+		cairo_surface_destroy (pPowerOfwoSurface);
 	return iTexture;
 }
 

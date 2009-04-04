@@ -345,10 +345,10 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		CairoDock *pSubDock = pLastPointedIcon->pSubDock;
 		if (GTK_WIDGET_VISIBLE (pSubDock->pWidget))
 		{
-			g_print ("on cache %s en changeant d'icône\n", pLastPointedIcon->acName);
+			//g_print ("on cache %s en changeant d'icône\n", pLastPointedIcon->acName);
 			if (pSubDock->iSidLeaveDemand == 0)
 			{
-				g_print ("  on retarde le cachage du dock de %dms\n", MAX (myAccessibility.iLeaveSubDockDelay, 330));
+				//g_print ("  on retarde le cachage du dock de %dms\n", MAX (myAccessibility.iLeaveSubDockDelay, 330));
 				pSubDock->iSidLeaveDemand = g_timeout_add (MAX (myAccessibility.iLeaveSubDockDelay, 330), (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pSubDock);
 			}
 		}

@@ -784,7 +784,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				else if (event.xproperty.atom == s_aNetActiveWindow)
 				{
 					Window XActiveWindow = cairo_dock_get_active_xwindow ();
-					g_print ("%d devient active (%d)\n", XActiveWindow, root);
+					//g_print ("%d devient active (%d)\n", XActiveWindow, root);
 					if (s_iCurrentActiveWindow != XActiveWindow)
 					{
 						icon = g_hash_table_lookup (s_hXWindowTable, &XActiveWindow);

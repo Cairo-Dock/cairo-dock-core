@@ -58,6 +58,9 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 */
 CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWidget, gboolean bOnWidgetLayer);
 
+
+void cairo_dock_project_coords_on_3D_desklet (CairoDesklet *pDesklet, int iMouseX, int iMouseY, int *iX, int *iY);
+#define cairo_dock_get_coords_on_3D_desklet(pDesklet, xptr, yptr) cairo_dock_project_coords_on_3D_desklet (pDesklet, pDesklet->iMouseX, pDesklet->iMouseY, xptr, yptr)
 /**
 * Trouve l'icône cliquée dans un desklet, en cherchant parmi l'icône principale et éventuellement la liste des icônes associées.
 *@param pDesklet le desklet cliqué.

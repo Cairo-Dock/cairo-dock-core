@@ -35,6 +35,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-notifications.h"
+#include "cairo-dock-callbacks.h"
 #include "cairo-dock-dialogs.h"
 
 extern CairoDock *g_pMainDock;
@@ -525,8 +526,8 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 
 		if (pDialog->pIcon != NULL && ! pDialog->bInside)
 		{
-			//g_print ("configure (%d) => place\n", pDialog->bInside);
 			CairoContainer *pContainer = cairo_dock_search_container_from_icon (pDialog->pIcon);
+			//g_print ("configure (%d) => place (%s, %s, %x)\n", pDialog->bInside, pDialog->pIcon->acName, pDialog->pIcon->cParentDockName, pContainer);
 			cairo_dock_place_dialog (pDialog, pContainer);
 		}
 	}
@@ -1521,7 +1522,6 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 			CairoDock *pDock = CAIRO_DOCK (pContainer);
 			pDock->bInside = TRUE;
 			pDock->bAtBottom = FALSE;
-			///cairo_dock_disable_entrance ();  // trop violent, il faudrait trouver un autre truc.
 			cairo_dock_on_leave_notify (pDock->pWidget,
 				NULL,
 				pDock);

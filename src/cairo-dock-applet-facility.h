@@ -801,7 +801,14 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 */
 #define CD_APPLET_LOAD_ICONS_IN_MY_SUBDOCK(pIconsList) do { \
 	if (myIcon->acName == NULL) { \
-		CD_APPLET_SET_NAME_FOR_MY_ICON (myIcon->pModuleInstance->pModule->pVisitCard->cModuleName); } \
+		CD_APPLET_SET_NAME_FOR_MY_ICON (myIcon->pModuleInstance->pModule->pVisitCard->cModuleName); }\
+	else { \
+		Icon *icon;\
+		GList *ic;\
+		for (ic = pIconsList; ic != NULL; ic = ic->next) {\
+			icon = ic->data;\
+			if (icon->cParentDockName == NULL)\
+				icon->cParentDockName = g_strdup (myIcon->acName); } } \
 	myIcon->pSubDock->icons = pIconsList; \
 	cairo_dock_load_buffers_in_one_dock (myIcon->pSubDock); \
 	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)

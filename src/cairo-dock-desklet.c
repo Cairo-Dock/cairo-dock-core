@@ -602,11 +602,42 @@ gboolean on_scroll_desklet (GtkWidget* pWidget,
 }
 
 
+void cairo_dock_project_coords_on_3D_desklet (CairoDesklet *pDesklet, int iMouseX, int iMouseY, int *iX, int *iY)
+{
+	const double a = 2.;  // formule completement approximative, qu'il faudrait affiner.
+	double dw = pDesklet->iWidth/2, dh = pDesklet->iHeight/2;
+	if (pDesklet->fDepthRotationY > 0 && iMouseX < dw)
+	{
+		*iX = dw - (dw - iMouseX) / (a*pDesklet->fDepthRotationY != G_PI/2 ? 1-sin (a*pDesklet->fDepthRotationY) : 1e-6);
+		g_print (" correction sur iMouseX : %d -> %d\n", pDesklet->iMouseX, *iX);
+	}
+	else if (pDesklet->fDepthRotationY < 0 && iMouseX > dw)
+	{
+		*iX = dw + (iMouseX - dw) / (a*pDesklet->fDepthRotationY != -G_PI/2 ? 1+sin (a*pDesklet->fDepthRotationY) : 1e-6);
+		g_print (" correction sur iMouseX : %d -> %d\n", pDesklet->iMouseX, *iX);
+	}
+	else
+		*iX = iMouseX;
+	
+	if (pDesklet->fDepthRotationX > 0 && iMouseY < dh)
+	{
+		*iY = dh - (dh - iMouseY) / (a*pDesklet->fDepthRotationX != G_PI/2 ? 1-sin (a*pDesklet->fDepthRotationX) : 1e-6);
+		g_print (" correction sur iMouseY : %d -> %d\n", pDesklet->iMouseY, *iY);
+	}
+	else if (pDesklet->fDepthRotationX < 0 && iMouseY > dh)
+	{
+		*iY = dh + (iMouseY - dh) / (a*pDesklet->fDepthRotationX != -G_PI/2 ? 1-sin (a*pDesklet->fDepthRotationX) : 1e-6);
+		g_print (" correction sur iMouseY : %d -> %d\n", pDesklet->iMouseY, *iY);
+	}
+	else
+		*iY = iMouseY;
+}
+
 Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet)
 {
-	int iMouseX = pDesklet->iMouseX;
-	int iMouseY = pDesklet->iMouseY;
-	cd_debug (" clic en (%d;%d)", (int)iMouseX, (int)iMouseY);
+	g_print (" clic en (%d;%d) (rotations : %.2frad; %.2frad)\n", pDesklet->iMouseX, pDesklet->iMouseY, pDesklet->fDepthRotationX, pDesklet->fDepthRotationY);
+	int iMouseX, iMouseY;
+	cairo_dock_get_coords_on_3D_desklet (pDesklet, &iMouseX, &iMouseY);
 	
 	Icon *icon = pDesklet->pIcon;
 	g_return_val_if_fail (icon != NULL, NULL);  // peut arriver au tout debut, car on associe l'icone au desklet _apres_ l'avoir cree, et on fait tourner la gtk_main entre-temps (pour le redessiner invisible).

@@ -479,7 +479,8 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 					g_free (cUri);
 					
 					cd_message (" c'est un volume, on considere qu'il vient de se faire (de)monter");
-					gchar *cMessage = g_strdup_printf (_("%s is now %s"), pNewIcon->acName, (bIsMounted ? _("mounted") : _("unmounted")));
+					gchar *cMessage = g_strdup_printf (bIsMounted ? _("%s is now mounted") : _("%s is now unmounted"), pNewIcon->acName);
+					//gchar *cMessage = g_strdup_printf (_("%s is now %s"), pNewIcon->acName, (bIsMounted ? _("mounted") : _("unmounted")));
 					cairo_dock_show_temporary_dialog (cMessage, pNewIcon, CAIRO_DOCK_IS_DOCK (pParentContainer) ? CAIRO_CONTAINER (pIcon->pSubDock) : pParentContainer, 4000);
 					g_free (cMessage);
 				}
@@ -500,7 +501,7 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 			else if (pIcon->pSubDock != NULL)  // c'est a l'interieur du repertoire qu'elle represente.
 			{
 				pConcernedIcon = cairo_dock_get_icon_with_base_uri (pIcon->pSubDock->icons, cURI);
-				g_print ("cURI : %s\n", cURI);
+				g_print ("cURI in sub-dock: %s\n", cURI);
 				if (pConcernedIcon == NULL)  // on cherche par nom.
 				{
 					pConcernedIcon = cairo_dock_get_icon_with_name (pIcon->pSubDock->icons, cURI);
@@ -526,7 +527,7 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 					gchar *cActivationURI = s_pVFSBackend->is_mounted (pNewIcon->acCommand, &bIsMounted);
 					g_free (cActivationURI);
 				}
-				gchar *cMessage = g_strdup_printf (_("%s is now %s"), pNewIcon->acName, (bIsMounted ? _("mounted") : _("unmounted")));
+				gchar *cMessage = g_strdup_printf (bIsMounted ? _("%s is now mounted") : _("%s is now unmounted"), pNewIcon->acName);
 				
 				cairo_dock_show_temporary_dialog (cMessage, pNewIcon, pParentContainer, 4000);
 				g_free (cMessage);
@@ -547,13 +548,12 @@ void cairo_dock_fm_action_after_mounting (gboolean bMounting, gboolean bSuccess,
 	cd_message ("%s (%s) : %d\n", __func__, (bMounting ? "mount" : "unmount"), bSuccess);  // en cas de demontage effectif, l'icone n'est plus valide !
 	if ((! bSuccess && pContainer != NULL) || icon == NULL)  // dans l'autre cas (succes), l'icone peut ne plus etre valide ! mais on s'en fout, puisqu'en cas de succes, il y'aura rechargement de l'icone, et donc on pourra balancer le message a ce moment-la.
 	{
-		gchar *cMessage = g_strdup_printf (_("failed to %s %s"), (bMounting ? _("mount") : _("unmount")), cName);
+		gchar *cMessage = g_strdup_printf (bMounting ? _("failed to mount %s") : _("failed to unmount %s"), cName);
+		//gchar *cMessage = g_strdup_printf (_("failed to %s %s"), (bMounting ? _("mount") : _("unmount")), cName);
 		if (icon != NULL)
 			cairo_dock_show_temporary_dialog (cMessage, icon, pContainer, 4000);
 		else
-		{
 			cairo_dock_show_general_message (cMessage, 4000);
-		}
 		g_free (cMessage);
 	}
 }
