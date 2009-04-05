@@ -87,6 +87,8 @@ int cairo_dock_dbus_get_integer (DBusGProxy *pDbusProxy, const gchar *cParameter
 */
 gchar *cairo_dock_dbus_get_string (DBusGProxy *pDbusProxy, const gchar *cParameter);
 
+gchar **cairo_dock_dbus_get_string_list (DBusGProxy *pDbusProxy, const gchar *cParameter);
+
 /**
 * Recupere la valeur d'un parametre 'caracteres non signe' sur le bus.
 *@param pDbusProxy associe a la connexion.
@@ -94,6 +96,8 @@ gchar *cairo_dock_dbus_get_string (DBusGProxy *pDbusProxy, const gchar *cParamet
 *@return la valeur du parametre.
 */
 guchar *cairo_dock_dbus_get_uchar (DBusGProxy *pDbusProxy, const gchar *cParameter);
+
+gdouble cairo_dock_dbus_get_double (DBusGProxy *pDbusProxy, const gchar *cParameter);
 
 /**
 * Appelle une commande sur le bus.

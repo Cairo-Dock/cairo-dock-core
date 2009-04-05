@@ -668,9 +668,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 
 
 
-
-
-GLboolean CheckExtension (char *extName)
+static GLboolean _check_extension (char *extName)
 {
 	/*
 	** Search for extName in the extensions string.  Use of strstr()
@@ -697,8 +695,6 @@ GLboolean CheckExtension (char *extName)
 	}
 	return GL_FALSE;
 }
-
-
 GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 {
 	static gint iNonPowerOfTwoAvailable = -1;
@@ -713,8 +709,8 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	
 	if (iNonPowerOfTwoAvailable == -1)
 	{
-		iNonPowerOfTwoAvailable = CheckExtension ("GL_ARB_texture_non_power_of_two");
-		
+		iNonPowerOfTwoAvailable = _check_extension ("GL_ARB_texture_non_power_of_two");
+		cd_message ("non power of two available : %d", iNonPowerOfTwoAvailable);
 	}
 	int iMaxTextureWidth = 4096, iMaxTextureHeight = 4096;
 	if (! iNonPowerOfTwoAvailable)

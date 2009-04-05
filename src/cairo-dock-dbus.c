@@ -186,7 +186,7 @@ gboolean cairo_dock_dbus_get_boolean (DBusGProxy *pDbusProxy, const gchar *cPara
 		G_TYPE_INVALID);
 	if (erreur != NULL)
 	{
-		cd_warning ("Attention : %s", erreur->message);
+		cd_warning (erreur->message);
 		g_error_free (erreur);
 	}
 	return bValue;
@@ -202,7 +202,7 @@ int cairo_dock_dbus_get_integer (DBusGProxy *pDbusProxy, const gchar *cParameter
 		G_TYPE_INVALID);
 	if (erreur != NULL)
 	{
-		cd_warning ("Attention : %s", erreur->message);
+		cd_warning (erreur->message);
 		g_error_free (erreur);
 	}
 	return iValue;
@@ -218,7 +218,7 @@ guint cairo_dock_dbus_get_uinteger (DBusGProxy *pDbusProxy, const gchar *cParame
 		G_TYPE_INVALID);
 	if (erreur != NULL)
 	{
-		cd_warning ("Attention : %s", erreur->message);
+		cd_warning (erreur->message);
 		g_error_free (erreur);
 	}
 	return iValue;
@@ -234,7 +234,7 @@ gchar *cairo_dock_dbus_get_string (DBusGProxy *pDbusProxy, const gchar *cParamet
 		G_TYPE_INVALID);
 	if (erreur != NULL)
 	{
-		cd_warning ("Attention : %s", erreur->message);
+		cd_warning (erreur->message);
 		g_error_free (erreur);
 	}
 	return cValue;
@@ -249,9 +249,49 @@ guchar *cairo_dock_dbus_get_uchar (DBusGProxy *pDbusProxy, const gchar *cParamet
 		G_TYPE_INVALID,
 		G_TYPE_UCHAR, &uValue,
 		G_TYPE_INVALID);
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+	}
 	
 	return uValue;
 }
+
+gdouble cairo_dock_dbus_get_double (DBusGProxy *pDbusProxy, const gchar *cParameter)
+{
+	GError *erreur = NULL;
+	gdouble fValue = 0.;
+	
+	dbus_g_proxy_call (pDbusProxy, cParameter, &erreur,
+		G_TYPE_INVALID,
+		G_TYPE_DOUBLE, &fValue,
+		G_TYPE_INVALID);
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+	}
+	
+	return fValue;
+}
+
+gchar **cairo_dock_dbus_get_string_list (DBusGProxy *pDbusProxy, const gchar *cParameter)
+{
+	GError *erreur = NULL;
+	gchar **cValues = NULL;
+	dbus_g_proxy_call (pDbusProxy, cParameter, &erreur,
+		G_TYPE_INVALID,
+		G_TYPE_POINTER, &cValues,
+		G_TYPE_INVALID);
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+	}
+	return cValues;
+}
+
 
 void cairo_dock_dbus_call (DBusGProxy *pDbusProxy, const gchar *cCommand)
 {
