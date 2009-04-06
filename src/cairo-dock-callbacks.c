@@ -880,7 +880,13 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		g_source_remove (pDock->iSidLeaveDemand);
 		pDock->iSidLeaveDemand = 0;
 	}
-
+	
+	if (s_iSidShowSubDockDemand != 0)  // gere un cas tordu mais bien reel.
+	{
+		g_source_remove (s_iSidShowSubDockDemand);
+		s_iSidShowSubDockDemand = 0;
+	}
+	
 	if (pDock->bAtTop || pDock->bInside || (pDock->iSidMoveDown != 0))  // le 'iSidMoveDown != 0' est la pour empecher le dock de "vibrer" si l'utilisateur sort par en bas avec l'auto-hide active.
 	{
 		//g_print ("  %d;%d;%d\n", pDock->bAtTop,  pDock->bInside, pDock->iSidMoveDown);

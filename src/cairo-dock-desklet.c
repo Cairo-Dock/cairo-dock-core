@@ -507,6 +507,7 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 		
 		if (pDesklet->pIcon != NULL && pDesklet->pIcon->pModuleInstance != NULL)
 		{
+			g_print ("RELOAD\n");
 			cairo_dock_reload_module_instance (pDesklet->pIcon->pModuleInstance, FALSE);
 			gtk_widget_queue_draw (pDesklet->pWidget);  // sinon on ne redessine que l'interieur.
 		}
@@ -533,7 +534,7 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDesklet *pDesklet)
 {
-	//cd_debug ("%s (%dx%d ; %d,%d)", __func__, pEvent->width, pEvent->height, (int) pEvent->x, (int) pEvent->y);
+	//g_print (" >>>>>>>>> %s (%dx%d)", __func__, pEvent->width, pEvent->height);
 	if (pDesklet->iWidth != pEvent->width || pDesklet->iHeight != pEvent->height)
 	{
 		if ((pEvent->width < pDesklet->iWidth || pEvent->height < pDesklet->iHeight) && (pDesklet->iDesiredWidth != 0 && pDesklet->iDesiredHeight != 0))

@@ -810,6 +810,7 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 			if (icon->cParentDockName == NULL)\
 				icon->cParentDockName = g_strdup (myIcon->acName); } } \
 	myIcon->pSubDock->icons = pIconsList; \
+	myIcon->pSubDock->pFirstDrawnElement = pIconsList; \
 	cairo_dock_load_buffers_in_one_dock (myIcon->pSubDock); \
 	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)
 
@@ -825,7 +826,8 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 		else {\
 			g_list_foreach (myIcon->pSubDock->icons, (GFunc) cairo_dock_free_icon, NULL);\
 			g_list_free (myIcon->pSubDock->icons);\
-			myIcon->pSubDock->icons = NULL; } } } while (0)
+			myIcon->pSubDock->icons = NULL;\
+			myIcon->pSubDock->pFirstDrawnElement = NULL; } } } while (0)
 
 #define CD_APPLET_LOAD_MY_ICONS_LIST(pIconList, cDockRendererName, cDeskletRendererName, pDeskletRendererConfig) do {\
 	if (myDock) {\

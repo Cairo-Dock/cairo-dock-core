@@ -45,6 +45,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-desklet.h"
 #include "cairo-dock-icons.h"
 
 extern gchar *g_cCurrentLaunchersPath;
@@ -425,7 +426,7 @@ Icon *cairo_dock_get_icon_with_class (GList *pIconList, gchar *cClass)
 void cairo_dock_get_icon_extent (Icon *pIcon, CairoContainer *pContainer, int *iWidth, int *iHeight)
 {
 	double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	double fRatio = pContainer->fRatio;
+	double fRatio = (CAIRO_DOCK_IS_DESKLET (pContainer) ? 1. : pContainer->fRatio);  // on ne tient pas compte de l'effet de zoom initial du desklet.
 	if (pContainer->bIsHorizontal)
 	{
 		*iWidth = (int) (pIcon->fWidth / fRatio * fMaxScale);
