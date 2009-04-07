@@ -1,15 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-animations.h</title>
+<title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-animations.h</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.3 -->
-<div class="tabs">
-  <ul>
-    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
-    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+<!-- Généré par Doxygen 1.5.5 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>Page&nbsp;principale</span></a></li>
+      <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
     <li>
       <form action="search.php" method="get">
         <table cellspacing="0" cellpadding="0" border="0">
@@ -20,19 +21,63 @@
         </table>
       </form>
     </li>
-  </ul>
+    </ul>
+  </div>
 </div>
-<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-animations.h</h1>
-<p>
-<a href="cairo-dock-animations_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<div class="contents">
+<h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-animations.h</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Macros</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#c23808bba4ecd5ddb4ef803a4e2e39c5">cairo_dock_animation_will_be_visible</a>(pDock)&nbsp;&nbsp;&nbsp;((pDock)-&gt;bInside || (! <a class="el" href="cairo-dock-global-variables_8h.html#263de39492b5e16c81c98792f183edcf">g_bAutoHide</a> &amp;&amp; (pDock)-&gt;iRefCount == 0) || ! (pDock)-&gt;bAtBottom)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#66d221ced0fa114b6b61562a1c719f4a">CAIRO_DOCK_MIN_SLOW_DELTA_T</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#c23808bba4ecd5ddb4ef803a4e2e39c5">cairo_dock_animation_will_be_visible</a>(pDock)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#c535a1413dc34d932ea99cd9e61dedc2">cairo_dock_container_is_animating</a>(pContainer)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#8608bfedb96a5937872900bb9003452e">cairo_dock_stop_icon_animation</a>(pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#372f43dc0d60070c3247a4fcaa1519cb">cairo_dock_get_animation_delta_t</a>(pContainer)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#35d13f6c9bac8d92ce615c54d2d9ec00">cairo_dock_get_slow_animation_delta_t</a>(pContainer)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#de6e28773007b533a0dfe13f8fc3a7e0">cairo_dock_set_default_animation_delta_t</a>(pContainer)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#18ddf3238d6d10b0e5dcea83ffee20c2">cairo_dock_mark_icon_as_hovered_by_mouse</a>(pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#c380db358b7967644cd7026f375bb5d8">cairo_dock_stop_marking_icon_as_hovered_by_mouse</a>(pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#0f34307a3c16e1d0313b3cd37035c169">cairo_dock_mark_icon_as_clicked</a>(pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#17dac1c39a100a9247f25c89943d06ba">cairo_dock_stop_marking_icon_as_clicked</a>(pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#5c6ebc276b359e7c2903cc8a087099b0">cairo_dock_mark_icon_as_avoiding_mouse</a>(pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#041800c072eddee397e131b71b527f54">cairo_dock_stop_marking_icon_as_avoiding_mouse</a>(pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#d186ff1312cd1ba874299e2b9c847c98">cairo_dock_mark_icon_as_following_mouse</a>(pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#f366cf88499ad05a6ca9520c770956f7">cairo_dock_stop_marking_icon_as_following_mouse</a>(pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#933557820f417dfad4b2c4f523f44c32">cairo_dock_mark_icon_as_inserting_removing</a>(pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#31f63daf3b7515401634117cf2236622">cairo_dock_stop_marking_icon_as_inserting_removing</a>(pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#608f7b28acce432f199a8d2914c32e5c">cairo_dock_has_transition</a>(pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#ffd481de6a2bf557945fe88d533cdbb4">cairo_dock_get_transition_count</a>(pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#48eedee470f81a6ce2621ffb0cf96b94">cairo_dock_get_transition_elapsed_time</a>(pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#40b4f21bc6d621bc8827febd75f7e76a">cairo_dock_get_transition_fraction</a>(pIcon)</td></tr>
 
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#dbdf2df4bca3c8693babeda5fba8b110">cairo_dock_move_up</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#0ceefbf48eaf88fbcde2fc204f91c82d">cairo_dock_move_down</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#a2d77d4298d46b320fd668ffca7968ef">cairo_dock_pop_up</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#0e80f9e6617d4f18ddbf3a1b178dbe2a">cairo_dock_pop_down</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gfloat&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#9e998350ee650b466b278b892f8e6d98">cairo_dock_calculate_magnitude</a> (gint iMagnitudeIndex)</td></tr>
 
@@ -40,12 +85,51 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#9c19b3db8ce61a2e377cbd66aff22ee3">cairo_dock_shrink_down</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#2341802d978d04a570615adb01e1046f">cairo_dock_arm_animation</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="cairo-dock-struct_8h.html#72c6f286d96c028feb8d4516820b74d9">CairoDockAnimationType</a> iAnimationType, int iNbRounds)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#935a24bf813a47706deaba420e088d3b">cairo_dock_handle_inserting_removing_icons</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#551472639c25a63d7d996c7efea4960c">cairo_dock_start_animation</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#3d49e146c8720f44260ce65c667e6264">cairo_dock_launch_animation</a> (<a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#0f4995eb5d54708e6d2ecebcbd096470">cairo_dock_start_shrinking</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#26bfbfcdc0540c96d3aec9bfc65940b9">cairo_dock_start_growing</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#b7fe6bcbb52cd3acf6557c6ac73966cb">cairo_dock_start_icon_animation</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#3feab7e913e2676a6a1e31477e2c4bec">cairo_dock_request_icon_animation</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, const gchar *cAnimation, int iNbRounds)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#5b4c122bc1b0f9d384e67a5d7b8c9bc8">cairo_dock_mark_icon_animation_as</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="cairo-dock-struct_8h.html#6f884cd4a5b75b5c1ef0d2580c91e4b9">CairoDockAnimationState</a> iAnimationState)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#55c17ac12914651b5b33743acfc317d6">cairo_dock_stop_marking_icon_animation_as</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="cairo-dock-struct_8h.html#6f884cd4a5b75b5c1ef0d2580c91e4b9">CairoDockAnimationState</a> iAnimationState)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#de6a289e536c87440401a47d1013f6ef">cairo_dock_update_removing_inserting_icon_size_default</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#c3dd709a2ca50f265ed1b8df9b2bda7b">cairo_dock_update_inserting_removing_icon_notification</a> (gpointer pUserData, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, gboolean *bContinueAnimation)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#323ee458d1a365be48b1ff7439ea6e58">cairo_dock_on_insert_remove_icon_notification</a> (gpointer pUserData, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#1aaf9a9e3e7ac8cb6866ef29c1d37d78">cairo_dock_stop_inserting_removing_icon_notification</a> (gpointer pUserData, <a class="el" href="struct__Icon.html">Icon</a> *pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#168253d9b65cb118c4fb1b68dac08564">cairo_dock_set_transition_on_icon</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer, cairo_t *pIconContext, <a class="el" href="cairo-dock-struct_8h.html#b668f92c35584a3ef184d96eef2f2952">CairoDockTransitionRenderFunc</a> render_step_cairo, <a class="el" href="cairo-dock-struct_8h.html#f38605676d9b48e9c9640f9c80fd9c7e">CairoDockTransitionGLRenderFunc</a> render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#c116241f05aaa75f7d4c488e0bd6ac54">cairo_dock_remove_transition_on_icon</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon)</td></tr>
 
 </table>
 <hr><h2>Documentation des macros</h2>
+<a class="anchor" name="66d221ced0fa114b6b61562a1c719f4a"></a><!-- doxytag: member="cairo-dock-animations.h::CAIRO_DOCK_MIN_SLOW_DELTA_T" ref="66d221ced0fa114b6b61562a1c719f4a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CAIRO_DOCK_MIN_SLOW_DELTA_T          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
 <a class="anchor" name="c23808bba4ecd5ddb4ef803a4e2e39c5"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_animation_will_be_visible" ref="c23808bba4ecd5ddb4ef803a4e2e39c5" args="(pDock)" -->
 <div class="memitem">
 <div class="memproto">
@@ -56,7 +140,7 @@
           <td class="paramtype">pDock&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;((pDock)-&gt;bInside || (! <a class="el" href="cairo-dock-global-variables_8h.html#263de39492b5e16c81c98792f183edcf">g_bAutoHide</a> &amp;&amp; (pDock)-&gt;iRefCount == 0) || ! (pDock)-&gt;bAtBottom)</td>
+          <td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -68,6 +152,401 @@ Definit s'il est utile de lancer l'animation d'un dock (il est inutile de la lan
     <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>le dock a animer. </td></tr>
   </table>
 </dl>
+
+</div>
+</div><p>
+<a class="anchor" name="c535a1413dc34d932ea99cd9e61dedc2"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_container_is_animating" ref="c535a1413dc34d932ea99cd9e61dedc2" args="(pContainer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_container_is_animating          </td>
+          <td>(</td>
+          <td class="paramtype">pContainer&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="8608bfedb96a5937872900bb9003452e"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_icon_animation" ref="8608bfedb96a5937872900bb9003452e" args="(pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_stop_icon_animation          </td>
+          <td>(</td>
+          <td class="paramtype">pIcon&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Stoppe toute animation sur l'icone, sauf l'animation de disparition/apparition. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone eventuellement en cours d'animation. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="372f43dc0d60070c3247a4fcaa1519cb"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_get_animation_delta_t" ref="372f43dc0d60070c3247a4fcaa1519cb" args="(pContainer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_get_animation_delta_t          </td>
+          <td>(</td>
+          <td class="paramtype">pContainer&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Renvoie l'intervalle de temps entre 2 etapes de l'animation rapide (en ms). <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="35d13f6c9bac8d92ce615c54d2d9ec00"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_get_slow_animation_delta_t" ref="35d13f6c9bac8d92ce615c54d2d9ec00" args="(pContainer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_get_slow_animation_delta_t          </td>
+          <td>(</td>
+          <td class="paramtype">pContainer&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="de6e28773007b533a0dfe13f8fc3a7e0"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_set_default_animation_delta_t" ref="de6e28773007b533a0dfe13f8fc3a7e0" args="(pContainer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_set_default_animation_delta_t          </td>
+          <td>(</td>
+          <td class="paramtype">pContainer&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="18ddf3238d6d10b0e5dcea83ffee20c2"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_mark_icon_as_hovered_by_mouse" ref="18ddf3238d6d10b0e5dcea83ffee20c2" args="(pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_mark_icon_as_hovered_by_mouse          </td>
+          <td>(</td>
+          <td class="paramtype">pIcon&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="c380db358b7967644cd7026f375bb5d8"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_marking_icon_as_hovered_by_mouse" ref="c380db358b7967644cd7026f375bb5d8" args="(pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_stop_marking_icon_as_hovered_by_mouse          </td>
+          <td>(</td>
+          <td class="paramtype">pIcon&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="0f34307a3c16e1d0313b3cd37035c169"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_mark_icon_as_clicked" ref="0f34307a3c16e1d0313b3cd37035c169" args="(pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_mark_icon_as_clicked          </td>
+          <td>(</td>
+          <td class="paramtype">pIcon&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="17dac1c39a100a9247f25c89943d06ba"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_marking_icon_as_clicked" ref="17dac1c39a100a9247f25c89943d06ba" args="(pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_stop_marking_icon_as_clicked          </td>
+          <td>(</td>
+          <td class="paramtype">pIcon&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="5c6ebc276b359e7c2903cc8a087099b0"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_mark_icon_as_avoiding_mouse" ref="5c6ebc276b359e7c2903cc8a087099b0" args="(pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_mark_icon_as_avoiding_mouse          </td>
+          <td>(</td>
+          <td class="paramtype">pIcon&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="041800c072eddee397e131b71b527f54"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_marking_icon_as_avoiding_mouse" ref="041800c072eddee397e131b71b527f54" args="(pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_stop_marking_icon_as_avoiding_mouse          </td>
+          <td>(</td>
+          <td class="paramtype">pIcon&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="d186ff1312cd1ba874299e2b9c847c98"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_mark_icon_as_following_mouse" ref="d186ff1312cd1ba874299e2b9c847c98" args="(pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_mark_icon_as_following_mouse          </td>
+          <td>(</td>
+          <td class="paramtype">pIcon&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="f366cf88499ad05a6ca9520c770956f7"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_marking_icon_as_following_mouse" ref="f366cf88499ad05a6ca9520c770956f7" args="(pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_stop_marking_icon_as_following_mouse          </td>
+          <td>(</td>
+          <td class="paramtype">pIcon&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="933557820f417dfad4b2c4f523f44c32"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_mark_icon_as_inserting_removing" ref="933557820f417dfad4b2c4f523f44c32" args="(pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_mark_icon_as_inserting_removing          </td>
+          <td>(</td>
+          <td class="paramtype">pIcon&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="31f63daf3b7515401634117cf2236622"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_marking_icon_as_inserting_removing" ref="31f63daf3b7515401634117cf2236622" args="(pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_stop_marking_icon_as_inserting_removing          </td>
+          <td>(</td>
+          <td class="paramtype">pIcon&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="608f7b28acce432f199a8d2914c32e5c"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_has_transition" ref="608f7b28acce432f199a8d2914c32e5c" args="(pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_has_transition          </td>
+          <td>(</td>
+          <td class="paramtype">pIcon&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ffd481de6a2bf557945fe88d533cdbb4"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_get_transition_count" ref="ffd481de6a2bf557945fe88d533cdbb4" args="(pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_get_transition_count          </td>
+          <td>(</td>
+          <td class="paramtype">pIcon&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="48eedee470f81a6ce2621ffb0cf96b94"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_get_transition_elapsed_time" ref="48eedee470f81a6ce2621ffb0cf96b94" args="(pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_get_transition_elapsed_time          </td>
+          <td>(</td>
+          <td class="paramtype">pIcon&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="40b4f21bc6d621bc8827febd75f7e76a"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_get_transition_fraction" ref="40b4f21bc6d621bc8827febd75f7e76a" args="(pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_get_transition_fraction          </td>
+          <td>(</td>
+          <td class="paramtype">pIcon&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
 
 </div>
 </div><p>
@@ -98,6 +577,46 @@ Definit s'il est utile de lancer l'animation d'un dock (il est inutile de la lan
       <table class="memname">
         <tr>
           <td class="memname">gboolean cairo_dock_move_down           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="a2d77d4298d46b320fd668ffca7968ef"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_pop_up" ref="a2d77d4298d46b320fd668ffca7968ef" args="(CairoDock *pDock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_pop_up           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="0e80f9e6617d4f18ddbf3a1b178dbe2a"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_pop_down" ref="0e80f9e6617d4f18ddbf3a1b178dbe2a" args="(CairoDock *pDock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_pop_down           </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
@@ -172,54 +691,97 @@ Definit s'il est utile de lancer l'animation d'un dock (il est inutile de la lan
 
 </div>
 </div><p>
-<a class="anchor" name="2341802d978d04a570615adb01e1046f"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_arm_animation" ref="2341802d978d04a570615adb01e1046f" args="(Icon *icon, CairoDockAnimationType iAnimationType, int iNbRounds)" -->
+<a class="anchor" name="935a24bf813a47706deaba420e088d3b"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_handle_inserting_removing_icons" ref="935a24bf813a47706deaba420e088d3b" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cairo_dock_arm_animation           </td>
+          <td class="memname">gboolean cairo_dock_handle_inserting_removing_icons           </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
-          <td class="paramname"> <em>icon</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#72c6f286d96c028feb8d4516820b74d9">CairoDockAnimationType</a>&nbsp;</td>
-          <td class="paramname"> <em>iAnimationType</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>iNbRounds</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>
-Arme l'animation d'une icone <dl compact><dt><b>Paramètres:</b></dt><dd>
+
+</div>
+</div><p>
+<a class="anchor" name="3d49e146c8720f44260ce65c667e6264"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_launch_animation" ref="3d49e146c8720f44260ce65c667e6264" args="(CairoContainer *pContainer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_launch_animation           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoContainer.html">CairoContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Lance l'animation du container. Ne fait rien si l'animation ne sera pas visible (dock cache). <dl compact><dt><b>Paramètres:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>icon</em>&nbsp;</td><td>l'icone dont on veut preparer l'animation. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>iAnimationType</em>&nbsp;</td><td>le type d'animation voulu, ou -1 pour utiliser l'animtion correspondante au type de l'icone. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>iNbRounds</em>&nbsp;</td><td>le nombre de fois ou l'animation sera jouee, ou -1 pour utiliser la valeur correspondante au type de l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container a animer. </td></tr>
   </table>
 </dl>
 
 </div>
 </div><p>
-<a class="anchor" name="551472639c25a63d7d996c7efea4960c"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_start_animation" ref="551472639c25a63d7d996c7efea4960c" args="(Icon *icon, CairoDock *pDock)" -->
+<a class="anchor" name="0f4995eb5d54708e6d2ecebcbd096470"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_start_shrinking" ref="0f4995eb5d54708e6d2ecebcbd096470" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cairo_dock_start_animation           </td>
+          <td class="memname">void cairo_dock_start_shrinking           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="26bfbfcdc0540c96d3aec9bfc65940b9"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_start_growing" ref="26bfbfcdc0540c96d3aec9bfc65940b9" args="(CairoDock *pDock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_start_growing           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="b7fe6bcbb52cd3acf6557c6ac73966cb"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_start_icon_animation" ref="b7fe6bcbb52cd3acf6557c6ac73966cb" args="(Icon *icon, CairoDock *pDock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_start_icon_animation           </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
           <td class="paramname"> <em>icon</em>, </td>
@@ -249,8 +811,332 @@ Lance l'animation de l'icone. Ne fait rien si l'icone ne sera pas animee. <dl co
 
 </div>
 </div><p>
-<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:15 2008 pour Cairo-Dock par&nbsp;
+<a class="anchor" name="3feab7e913e2676a6a1e31477e2c4bec"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_request_icon_animation" ref="3feab7e913e2676a6a1e31477e2c4bec" args="(Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_request_icon_animation           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cAnimation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>iNbRounds</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas animee ou si l'animation n'existe pas <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone a animer. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>le dock contenant l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cAnimation</em>&nbsp;</td><td>le nom de l'animation. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iNbRounds</em>&nbsp;</td><td>le nombre de fois que l'animation sera jouee. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="5b4c122bc1b0f9d384e67a5d7b8c9bc8"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_mark_icon_animation_as" ref="5b4c122bc1b0f9d384e67a5d7b8c9bc8" args="(Icon *pIcon, CairoDockAnimationState iAnimationState)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_mark_icon_animation_as           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#6f884cd4a5b75b5c1ef0d2580c91e4b9">CairoDockAnimationState</a>&nbsp;</td>
+          <td class="paramname"> <em>iAnimationState</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="55c17ac12914651b5b33743acfc317d6"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_marking_icon_animation_as" ref="55c17ac12914651b5b33743acfc317d6" args="(Icon *pIcon, CairoDockAnimationState iAnimationState)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_stop_marking_icon_animation_as           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#6f884cd4a5b75b5c1ef0d2580c91e4b9">CairoDockAnimationState</a>&nbsp;</td>
+          <td class="paramname"> <em>iAnimationState</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="de6a289e536c87440401a47d1013f6ef"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_update_removing_inserting_icon_size_default" ref="de6a289e536c87440401a47d1013f6ef" args="(Icon *icon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_update_removing_inserting_icon_size_default           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>icon</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="c3dd709a2ca50f265ed1b8df9b2bda7b"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_update_inserting_removing_icon_notification" ref="c3dd709a2ca50f265ed1b8df9b2bda7b" args="(gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_update_inserting_removing_icon_notification           </td>
+          <td>(</td>
+          <td class="paramtype">gpointer&nbsp;</td>
+          <td class="paramname"> <em>pUserData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean *&nbsp;</td>
+          <td class="paramname"> <em>bContinueAnimation</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="323ee458d1a365be48b1ff7439ea6e58"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_on_insert_remove_icon_notification" ref="323ee458d1a365be48b1ff7439ea6e58" args="(gpointer pUserData, Icon *pIcon, CairoDock *pDock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_on_insert_remove_icon_notification           </td>
+          <td>(</td>
+          <td class="paramtype">gpointer&nbsp;</td>
+          <td class="paramname"> <em>pUserData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="1aaf9a9e3e7ac8cb6866ef29c1d37d78"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_inserting_removing_icon_notification" ref="1aaf9a9e3e7ac8cb6866ef29c1d37d78" args="(gpointer pUserData, Icon *pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_stop_inserting_removing_icon_notification           </td>
+          <td>(</td>
+          <td class="paramtype">gpointer&nbsp;</td>
+          <td class="paramname"> <em>pUserData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="168253d9b65cb118c4fb1b68dac08564"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_set_transition_on_icon" ref="168253d9b65cb118c4fb1b68dac08564" args="(Icon *pIcon, CairoContainer *pContainer, cairo_t *pIconContext, CairoDockTransitionRenderFunc render_step_cairo, CairoDockTransitionGLRenderFunc render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_set_transition_on_icon           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoContainer.html">CairoContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pIconContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#b668f92c35584a3ef184d96eef2f2952">CairoDockTransitionRenderFunc</a>&nbsp;</td>
+          <td class="paramname"> <em>render_step_cairo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#f38605676d9b48e9c9640f9c80fd9c7e">CairoDockTransitionGLRenderFunc</a>&nbsp;</td>
+          <td class="paramname"> <em>render_step_opengl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bFastPace</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&nbsp;</td>
+          <td class="paramname"> <em>iDuration</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bRemoveWhenFinished</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gpointer&nbsp;</td>
+          <td class="paramname"> <em>pUserData</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="c116241f05aaa75f7d4c488e0bd6ac54"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_remove_transition_on_icon" ref="c116241f05aaa75f7d4c488e0bd6ac54" args="(Icon *pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_remove_transition_on_icon           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
 </html>

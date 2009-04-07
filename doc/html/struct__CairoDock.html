@@ -4,12 +4,13 @@
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.3 -->
-<div class="tabs">
-  <ul>
-    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
-    <li class="current"><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li><a href="files.html"><span>Fichiers</span></a></li>
+<!-- Généré par Doxygen 1.5.5 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>Page&nbsp;principale</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li><a href="files.html"><span>Fichiers</span></a></li>
     <li>
       <form action="search.php" method="get">
         <table cellspacing="0" cellpadding="0" border="0">
@@ -20,14 +21,16 @@
         </table>
       </form>
     </li>
-  </ul>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li><a href="functions.html"><span>Champs&nbsp;de&nbsp;donnée</span></a></li>
+    </ul>
+  </div>
 </div>
-<div class="tabs">
-  <ul>
-    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li><a href="functions.html"><span>Champs&nbsp;de&nbsp;donnée</span></a></li>
-  </ul>
-</div>
+<div class="contents">
 <h1>Référence de la structure _CairoDock</h1><!-- doxytag: class="_CairoDock" --><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Champs de données</h2></td></tr>
@@ -55,11 +58,44 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#35a7692ad6c6de1d8606b26d6f8ca57f">CairoDockTypeHorizontality</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#290f1d413855290cad575617e02a57bb">bHorizontalDock</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">dit si le dock est horizontal ou vertical.  <a href="#290f1d413855290cad575617e02a57bb"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#e0206f91ad244c593c007d818a75b1f4">bDirectionUp</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">donne l'orientation du dock.  <a href="#e0206f91ad244c593c007d818a75b1f4"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gpointer&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#ee5c36bf971747e251769ebd7326a730">padding</a> [3]</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gpointer&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#2f43bc42191b1621eae6a253f957c7b2">pDataSlot</a> [CAIRO_DOCK_NB_DATA_SLOT]</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Donnees exterieures.  <a href="#2f43bc42191b1621eae6a253f957c7b2"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#62421af03cae9cd9e25e1a1a4f5c48f8">iSidGLAnimation</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">pour l'animation des docks.  <a href="#62421af03cae9cd9e25e1a1a4f5c48f8"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#3024d7d2aca41991dd34c5060f6bf8c5">iAnimationDeltaT</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">intervalle entre 2 etapes de l'animation.  <a href="#3024d7d2aca41991dd34c5060f6bf8c5"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#cdb944e2110e7dc7df9e895663980a73">iMouseX</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">derniere position en X du curseur dans le referentiel du dock.  <a href="#cdb944e2110e7dc7df9e895663980a73"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#a7ce6faa5f3cb3d1ebf8a9954dd1a145">iMouseY</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">derniere position en Y du curseur dans le referentiel du dock.  <a href="#a7ce6faa5f3cb3d1ebf8a9954dd1a145"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#6d1282000361e13ce5156604df1accde">fRatio</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">ratio applique aux icones.  <a href="#6d1282000361e13ce5156604df1accde"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#fef9a496c9a10f1ef83c4a4a4f4c5cc3">bUseReflect</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">dit si la vue courante utilise les reflets ou pas (utile pour les plug-ins).  <a href="#fef9a496c9a10f1ef83c4a4a4f4c5cc3"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GLXContext&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#c77f3b37a3ae695e74405a739c414906">glContext</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">contexte OpenGL associe a la fenetre.  <a href="#c77f3b37a3ae695e74405a739c414906"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#4106e7139269793ee385922cc5ef07cb">bKeepSlowAnimation</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">TRUE &lt;=&gt; une animation lente est en cours.  <a href="#4106e7139269793ee385922cc5ef07cb"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">GList *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#70a1f2c47eccc9f9180688dc4a3542ee">icons</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">la liste de ses icones.  <a href="#70a1f2c47eccc9f9180688dc4a3542ee"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GPtrArray *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#0aaf5f442c2de92c3577201a355f175e">pNotificationsTab</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">liste des notifications disponibles.  <a href="#0aaf5f442c2de92c3577201a355f175e"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#dac8dc2d21b68aa1ca0d7e9c5b54faab">bIsMainDock</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">si le dock est le dock racine.  <a href="#dac8dc2d21b68aa1ca0d7e9c5b54faab"></a><br></td></tr>
@@ -75,6 +111,9 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#b57e22909edfc5389d77da68d687c429">fAlign</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">alignement, entre 0 et 1, du dock sur le bord de l'ecran.  <a href="#b57e22909edfc5389d77da68d687c429"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#47b054db2fe1d0682ea7ee2383a0bf09">bAutoHide</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">TRUE ssi le dock doit se cacher automatiquement.  <a href="#47b054db2fe1d0682ea7ee2383a0bf09"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#15a4a04476f5c0cbb7c5592f93b581a3">fMagnitudeMax</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">magnitude maximale de la vague.  <a href="#15a4a04476f5c0cbb7c5592f93b581a3"></a><br></td></tr>
@@ -102,14 +141,19 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#28faa8b5272d11886cebba27f04c9e1d">iDecorationsHeight</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">hauteur des decorations.  <a href="#28faa8b5272d11886cebba27f04c9e1d"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#6d1282000361e13ce5156604df1accde">fRatio</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">ratio applique aux icones.  <a href="#6d1282000361e13ce5156604df1accde"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#3b94296f4a8c1d16c4c33686f3b7d39a">iMaxLabelWidth</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#bc526dc0aa58554b0ffd1072004b0af1">iRightMargin</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#5f9a847778f32ec6183cf8e41ad96660">iMinLeftMargin</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#9502acd8c1e04f2a06ad2c37562d7bdb">iTopMargin</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#024aea3a9cadc061a42d59c36a91adfa">iMinRightMargin</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#ac0158366e993b03bba59983a2b75d85">iMaxLeftMargin</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#81ed6012469f54024e27d05be6ac9f36">iMaxRightMargin</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#a3a702f36d39466f4bc30fd70c129393">iLeftMargin</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#bc526dc0aa58554b0ffd1072004b0af1">iRightMargin</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#b90ff76504c9f131b1dd325b25edcc33">iScrollOffset</a></td></tr>
 
@@ -120,12 +164,6 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#baa79bb3acc6fcf84a01d1f70fe1b829">fFoldingFactor</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">un facteur d'acceleration lateral des icones lors du grossissement initial.  <a href="#baa79bb3acc6fcf84a01d1f70fe1b829"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#cdb944e2110e7dc7df9e895663980a73">iMouseX</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">derniere position en X du curseur dans le referentiel du dock.  <a href="#cdb944e2110e7dc7df9e895663980a73"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#a7ce6faa5f3cb3d1ebf8a9954dd1a145">iMouseY</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">derniere position en Y du curseur dans le referentiel du dock.  <a href="#a7ce6faa5f3cb3d1ebf8a9954dd1a145"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#5438b1a8cd1df4d6f3eaaf50fcd9463f">iAvoidingMouseIconType</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">type d'icone devant eviter la souris, -1 si aucun.  <a href="#5438b1a8cd1df4d6f3eaaf50fcd9463f"></a><br></td></tr>
@@ -144,27 +182,39 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#2451c4ec51ea3b0a422b0897c7524c99">bAtTop</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">le dock est en haut pret a etre utilise.  <a href="#2451c4ec51ea3b0a422b0897c7524c99"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#6551f10567fdd560ab7c3d33c5672d24">bPopped</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Whether the dock is in a popped up state or not.  <a href="#6551f10567fdd560ab7c3d33c5672d24"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#5c0b8267beb8afd377f56d134df50a26">bMenuVisible</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">lorsque le menu du clique droit est visible.  <a href="#5c0b8267beb8afd377f56d134df50a26"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#abc3a64a8ea7b8c84b0b03d16a225b27">bIsDragging</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Est-on en train de survoler le dock avec quelque chose dans la souris ?  <a href="#abc3a64a8ea7b8c84b0b03d16a225b27"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#e1a0b7c5d48f6a1092ff63a542fcf672">bAutoHideInitialValue</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Valeur de l'auto-hide avant le cachage-rapide.  <a href="#e1a0b7c5d48f6a1092ff63a542fcf672"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#b1e13004c80ec50f667e447de2516c2b">bEntranceDisabled</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">TRUE ssi on ne peut plus entrer dans un dock.  <a href="#b1e13004c80ec50f667e447de2516c2b"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#b873dfdfa1a1b7503d6f6a9cd720f5c8">iSidMoveDown</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">serial ID du thread de descente de la fenetre.  <a href="#b873dfdfa1a1b7503d6f6a9cd720f5c8"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#c0126219b7bc08457b720a942a4591bc">iSidMoveUp</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">serial ID du thread de montee de la fenetre.  <a href="#c0126219b7bc08457b720a942a4591bc"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#8bd5c9c83a354366f9736759634c11f8">iSidGrowUp</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#2ad4f1271de75d6e5e20eb2aac51584e">iSidPopUp</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">serial ID du thread de grossisement des icones.  <a href="#8bd5c9c83a354366f9736759634c11f8"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#9d697f0abf14e88492e4795317b4b3c3">iSidShrinkDown</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">serial ID for window popping up to the top layer event.  <a href="#2ad4f1271de75d6e5e20eb2aac51584e"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#e9a75990394fa377eb2d5a978e617c3e">iSidPopDown</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">serial ID du thread de diminution des icones.  <a href="#9d697f0abf14e88492e4795317b4b3c3"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">serial ID for window popping down to the bottom layer.  <a href="#e9a75990394fa377eb2d5a978e617c3e"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#ce8631cc9f3338f254327cfa8dfe1dda">iSidLeaveDemand</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">serial ID du thread qui enverra le signal de sortie retarde.  <a href="#ce8631cc9f3338f254327cfa8dfe1dda"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#e757a7538f1b64235752f0f7c7470c18">iSidIconGlide</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">serial ID du thread qui deplace les icones lateralement lors d'un glisse d'icone interne  <a href="#e757a7538f1b64235752f0f7c7470c18"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#9376e8aa1cdcecb260fa1e838cbe0925">cRendererName</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">nom de la vue, utile pour charger les fonctions de rendu posterieurement a la creation du dock.  <a href="#9376e8aa1cdcecb260fa1e838cbe0925"></a><br></td></tr>
@@ -174,18 +224,36 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#50877c6b006fcf5a0836335c01a91fa3">CairoDockCalculateIconsFunc</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#992cbda2e0f36045bbebfe5b2796fd75">calculate_icons</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">calculer tous les parametres des icones.  <a href="#992cbda2e0f36045bbebfe5b2796fd75"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#7ca64e532d1a6d04a5e1b39288638476">CairoDockRenderFunc</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#b80e203ce33cfbccf2c5d42531708782">render</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#f24e123d830813f38930ddcd38b5b734">CairoDockRenderFunc</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#b80e203ce33cfbccf2c5d42531708782">render</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">dessiner le tout.  <a href="#b80e203ce33cfbccf2c5d42531708782"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#3e84daef3dc6c6267ae35474da900357">CairoDockRenderOptimizedFunc</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#402e9bbf49b5b74866b90b41743d3e33">render_optimized</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#e050e4f985f1272affdd8c88fe6e698a">CairoDockRenderOptimizedFunc</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#402e9bbf49b5b74866b90b41743d3e33">render_optimized</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">dessiner une portion du dock de maniere optimisee.  <a href="#402e9bbf49b5b74866b90b41743d3e33"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#7fecee5e5143752782b9126c9dd31b04">CairoDockGLRenderFunc</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#894e2c94bf6652daa93e218cb454f780">render_opengl</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">fonction de rendu OpenGL (optionnelle).  <a href="#894e2c94bf6652daa93e218cb454f780"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#51980608490eb2b5df8a97459d3e36f2">CairoDockSetSubDockPositionFunc</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#98f2d017465563550de31aa4fe1f491d">set_subdock_position</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">calculer la position d'un sous-dock.  <a href="#98f2d017465563550de31aa4fe1f491d"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#fef9a496c9a10f1ef83c4a4a4f4c5cc3">bUseReflect</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#e5f75cc312eab7c43572cbc9567176ac">bCanDrop</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">dit si la vue courante utilise les reflets ou pas (utile pour les plug-ins).  <a href="#fef9a496c9a10f1ef83c4a4a4f4c5cc3"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">TRUE ssi on peut dropper entre 2 icones.  <a href="#e5f75cc312eab7c43572cbc9567176ac"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#fb87a447cc0ab563bbc5cddc006ed78d">bIsShrinkingDown</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#839decd66fbe8bbe6b7ce285938a72d1">bIsGrowingUp</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GdkRectangle&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#7ac09a0770d31c6c033037d49b48f3fe">inputArea</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GdkBitmap *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#ecbd4a88440511dca2ef143c0cf37a6f">pShapeBitmap</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#8381e20c54bf015162ac9a0e38dbbf51">CairoDockMousePositionType</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#4c6b137617f3591115a5376cccadf7e4">iMousePositionType</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#07d33c9b5b793dba2b4ef9c73842224d">bUseStencil</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">TRUE ssi cette vue utilise le stencil buffer d'OpenGL.  <a href="#07d33c9b5b793dba2b4ef9c73842224d"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDock.html#f4a81e834bcf83c36e7944164d84de41">iAnimationStep</a></td></tr>
+
 </table>
 <hr><h2>Documentation des champs</h2>
 <a class="anchor" name="c1fbd9f7a45c599b9ceeddd4614f0208"></a><!-- doxytag: member="_CairoDock::iType" ref="c1fbd9f7a45c599b9ceeddd4614f0208" args="" -->
@@ -324,6 +392,23 @@ dit si le dock est horizontal ou vertical.
 
 </div>
 </div><p>
+<a class="anchor" name="e0206f91ad244c593c007d818a75b1f4"></a><!-- doxytag: member="_CairoDock::bDirectionUp" ref="e0206f91ad244c593c007d818a75b1f4" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__CairoDock.html#e0206f91ad244c593c007d818a75b1f4">_CairoDock::bDirectionUp</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+donne l'orientation du dock. 
+<p>
+
+</div>
+</div><p>
 <a class="anchor" name="ee5c36bf971747e251769ebd7326a730"></a><!-- doxytag: member="_CairoDock::padding" ref="ee5c36bf971747e251769ebd7326a730" args="[3]" -->
 <div class="memitem">
 <div class="memproto">
@@ -335,6 +420,159 @@ dit si le dock est horizontal ou vertical.
 </div>
 <div class="memdoc">
 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="2f43bc42191b1621eae6a253f957c7b2"></a><!-- doxytag: member="_CairoDock::pDataSlot" ref="2f43bc42191b1621eae6a253f957c7b2" args="[CAIRO_DOCK_NB_DATA_SLOT]" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gpointer <a class="el" href="struct__CairoDock.html#2f43bc42191b1621eae6a253f957c7b2">_CairoDock::pDataSlot</a>[CAIRO_DOCK_NB_DATA_SLOT]          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Donnees exterieures. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="62421af03cae9cd9e25e1a1a4f5c48f8"></a><!-- doxytag: member="_CairoDock::iSidGLAnimation" ref="62421af03cae9cd9e25e1a1a4f5c48f8" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__CairoDock.html#62421af03cae9cd9e25e1a1a4f5c48f8">_CairoDock::iSidGLAnimation</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+pour l'animation des docks. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="3024d7d2aca41991dd34c5060f6bf8c5"></a><!-- doxytag: member="_CairoDock::iAnimationDeltaT" ref="3024d7d2aca41991dd34c5060f6bf8c5" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__CairoDock.html#3024d7d2aca41991dd34c5060f6bf8c5">_CairoDock::iAnimationDeltaT</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+intervalle entre 2 etapes de l'animation. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="cdb944e2110e7dc7df9e895663980a73"></a><!-- doxytag: member="_CairoDock::iMouseX" ref="cdb944e2110e7dc7df9e895663980a73" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__CairoDock.html#cdb944e2110e7dc7df9e895663980a73">_CairoDock::iMouseX</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+derniere position en X du curseur dans le referentiel du dock. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="a7ce6faa5f3cb3d1ebf8a9954dd1a145"></a><!-- doxytag: member="_CairoDock::iMouseY" ref="a7ce6faa5f3cb3d1ebf8a9954dd1a145" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__CairoDock.html#a7ce6faa5f3cb3d1ebf8a9954dd1a145">_CairoDock::iMouseY</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+derniere position en Y du curseur dans le referentiel du dock. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="6d1282000361e13ce5156604df1accde"></a><!-- doxytag: member="_CairoDock::fRatio" ref="6d1282000361e13ce5156604df1accde" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gdouble <a class="el" href="struct__CairoDock.html#6d1282000361e13ce5156604df1accde">_CairoDock::fRatio</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+ratio applique aux icones. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="fef9a496c9a10f1ef83c4a4a4f4c5cc3"></a><!-- doxytag: member="_CairoDock::bUseReflect" ref="fef9a496c9a10f1ef83c4a4a4f4c5cc3" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__CairoDock.html#fef9a496c9a10f1ef83c4a4a4f4c5cc3">_CairoDock::bUseReflect</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+dit si la vue courante utilise les reflets ou pas (utile pour les plug-ins). 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="c77f3b37a3ae695e74405a739c414906"></a><!-- doxytag: member="_CairoDock::glContext" ref="c77f3b37a3ae695e74405a739c414906" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GLXContext <a class="el" href="struct__CairoDock.html#c77f3b37a3ae695e74405a739c414906">_CairoDock::glContext</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+contexte OpenGL associe a la fenetre. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="4106e7139269793ee385922cc5ef07cb"></a><!-- doxytag: member="_CairoDock::bKeepSlowAnimation" ref="4106e7139269793ee385922cc5ef07cb" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__CairoDock.html#4106e7139269793ee385922cc5ef07cb">_CairoDock::bKeepSlowAnimation</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+TRUE &lt;=&gt; une animation lente est en cours. 
 <p>
 
 </div>
@@ -352,6 +590,23 @@ dit si le dock est horizontal ou vertical.
 
 <p>
 la liste de ses icones. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="0aaf5f442c2de92c3577201a355f175e"></a><!-- doxytag: member="_CairoDock::pNotificationsTab" ref="0aaf5f442c2de92c3577201a355f175e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GPtrArray* <a class="el" href="struct__CairoDock.html#0aaf5f442c2de92c3577201a355f175e">_CairoDock::pNotificationsTab</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+liste des notifications disponibles. 
 <p>
 
 </div>
@@ -437,6 +692,23 @@ decalage de la fenetre par rapport au point d'alignement sur le bord de l'ecran.
 
 <p>
 alignement, entre 0 et 1, du dock sur le bord de l'ecran. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="47b054db2fe1d0682ea7ee2383a0bf09"></a><!-- doxytag: member="_CairoDock::bAutoHide" ref="47b054db2fe1d0682ea7ee2383a0bf09" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__CairoDock.html#47b054db2fe1d0682ea7ee2383a0bf09">_CairoDock::bAutoHide</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+TRUE ssi le dock doit se cacher automatiquement. 
 <p>
 
 </div>
@@ -594,23 +866,6 @@ hauteur des decorations.
 
 </div>
 </div><p>
-<a class="anchor" name="6d1282000361e13ce5156604df1accde"></a><!-- doxytag: member="_CairoDock::fRatio" ref="6d1282000361e13ce5156604df1accde" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">gdouble <a class="el" href="struct__CairoDock.html#6d1282000361e13ce5156604df1accde">_CairoDock::fRatio</a>          </td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-ratio applique aux icones. 
-<p>
-
-</div>
-</div><p>
 <a class="anchor" name="3b94296f4a8c1d16c4c33686f3b7d39a"></a><!-- doxytag: member="_CairoDock::iMaxLabelWidth" ref="3b94296f4a8c1d16c4c33686f3b7d39a" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -626,12 +881,12 @@ ratio applique aux icones.
 
 </div>
 </div><p>
-<a class="anchor" name="bc526dc0aa58554b0ffd1072004b0af1"></a><!-- doxytag: member="_CairoDock::iRightMargin" ref="bc526dc0aa58554b0ffd1072004b0af1" args="" -->
+<a class="anchor" name="5f9a847778f32ec6183cf8e41ad96660"></a><!-- doxytag: member="_CairoDock::iMinLeftMargin" ref="5f9a847778f32ec6183cf8e41ad96660" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">gint <a class="el" href="struct__CairoDock.html#bc526dc0aa58554b0ffd1072004b0af1">_CairoDock::iRightMargin</a>          </td>
+          <td class="memname">gint <a class="el" href="struct__CairoDock.html#5f9a847778f32ec6183cf8e41ad96660">_CairoDock::iMinLeftMargin</a>          </td>
         </tr>
       </table>
 </div>
@@ -641,12 +896,72 @@ ratio applique aux icones.
 
 </div>
 </div><p>
-<a class="anchor" name="9502acd8c1e04f2a06ad2c37562d7bdb"></a><!-- doxytag: member="_CairoDock::iTopMargin" ref="9502acd8c1e04f2a06ad2c37562d7bdb" args="" -->
+<a class="anchor" name="024aea3a9cadc061a42d59c36a91adfa"></a><!-- doxytag: member="_CairoDock::iMinRightMargin" ref="024aea3a9cadc061a42d59c36a91adfa" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">gint <a class="el" href="struct__CairoDock.html#9502acd8c1e04f2a06ad2c37562d7bdb">_CairoDock::iTopMargin</a>          </td>
+          <td class="memname">gint <a class="el" href="struct__CairoDock.html#024aea3a9cadc061a42d59c36a91adfa">_CairoDock::iMinRightMargin</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ac0158366e993b03bba59983a2b75d85"></a><!-- doxytag: member="_CairoDock::iMaxLeftMargin" ref="ac0158366e993b03bba59983a2b75d85" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__CairoDock.html#ac0158366e993b03bba59983a2b75d85">_CairoDock::iMaxLeftMargin</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="81ed6012469f54024e27d05be6ac9f36"></a><!-- doxytag: member="_CairoDock::iMaxRightMargin" ref="81ed6012469f54024e27d05be6ac9f36" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__CairoDock.html#81ed6012469f54024e27d05be6ac9f36">_CairoDock::iMaxRightMargin</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="a3a702f36d39466f4bc30fd70c129393"></a><!-- doxytag: member="_CairoDock::iLeftMargin" ref="a3a702f36d39466f4bc30fd70c129393" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__CairoDock.html#a3a702f36d39466f4bc30fd70c129393">_CairoDock::iLeftMargin</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="bc526dc0aa58554b0ffd1072004b0af1"></a><!-- doxytag: member="_CairoDock::iRightMargin" ref="bc526dc0aa58554b0ffd1072004b0af1" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__CairoDock.html#bc526dc0aa58554b0ffd1072004b0af1">_CairoDock::iRightMargin</a>          </td>
         </tr>
       </table>
 </div>
@@ -703,40 +1018,6 @@ indice de calcul du coef multiplicateur de l'amplitude de la sinusoide (entre 0 
 
 <p>
 un facteur d'acceleration lateral des icones lors du grossissement initial. 
-<p>
-
-</div>
-</div><p>
-<a class="anchor" name="cdb944e2110e7dc7df9e895663980a73"></a><!-- doxytag: member="_CairoDock::iMouseX" ref="cdb944e2110e7dc7df9e895663980a73" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">gint <a class="el" href="struct__CairoDock.html#cdb944e2110e7dc7df9e895663980a73">_CairoDock::iMouseX</a>          </td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-derniere position en X du curseur dans le referentiel du dock. 
-<p>
-
-</div>
-</div><p>
-<a class="anchor" name="a7ce6faa5f3cb3d1ebf8a9954dd1a145"></a><!-- doxytag: member="_CairoDock::iMouseY" ref="a7ce6faa5f3cb3d1ebf8a9954dd1a145" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">gint <a class="el" href="struct__CairoDock.html#a7ce6faa5f3cb3d1ebf8a9954dd1a145">_CairoDock::iMouseY</a>          </td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-derniere position en Y du curseur dans le referentiel du dock. 
 <p>
 
 </div>
@@ -843,6 +1124,23 @@ le dock est en haut pret a etre utilise.
 
 </div>
 </div><p>
+<a class="anchor" name="6551f10567fdd560ab7c3d33c5672d24"></a><!-- doxytag: member="_CairoDock::bPopped" ref="6551f10567fdd560ab7c3d33c5672d24" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__CairoDock.html#6551f10567fdd560ab7c3d33c5672d24">_CairoDock::bPopped</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Whether the dock is in a popped up state or not. 
+<p>
+
+</div>
+</div><p>
 <a class="anchor" name="5c0b8267beb8afd377f56d134df50a26"></a><!-- doxytag: member="_CairoDock::bMenuVisible" ref="5c0b8267beb8afd377f56d134df50a26" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -873,6 +1171,40 @@ lorsque le menu du clique droit est visible.
 
 <p>
 Est-on en train de survoler le dock avec quelque chose dans la souris ? 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="e1a0b7c5d48f6a1092ff63a542fcf672"></a><!-- doxytag: member="_CairoDock::bAutoHideInitialValue" ref="e1a0b7c5d48f6a1092ff63a542fcf672" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__CairoDock.html#e1a0b7c5d48f6a1092ff63a542fcf672">_CairoDock::bAutoHideInitialValue</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Valeur de l'auto-hide avant le cachage-rapide. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="b1e13004c80ec50f667e447de2516c2b"></a><!-- doxytag: member="_CairoDock::bEntranceDisabled" ref="b1e13004c80ec50f667e447de2516c2b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__CairoDock.html#b1e13004c80ec50f667e447de2516c2b">_CairoDock::bEntranceDisabled</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+TRUE ssi on ne peut plus entrer dans un dock. 
 <p>
 
 </div>
@@ -911,36 +1243,36 @@ serial ID du thread de montee de la fenetre.
 
 </div>
 </div><p>
-<a class="anchor" name="8bd5c9c83a354366f9736759634c11f8"></a><!-- doxytag: member="_CairoDock::iSidGrowUp" ref="8bd5c9c83a354366f9736759634c11f8" args="" -->
+<a class="anchor" name="2ad4f1271de75d6e5e20eb2aac51584e"></a><!-- doxytag: member="_CairoDock::iSidPopUp" ref="2ad4f1271de75d6e5e20eb2aac51584e" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">gint <a class="el" href="struct__CairoDock.html#8bd5c9c83a354366f9736759634c11f8">_CairoDock::iSidGrowUp</a>          </td>
+          <td class="memname">gint <a class="el" href="struct__CairoDock.html#2ad4f1271de75d6e5e20eb2aac51584e">_CairoDock::iSidPopUp</a>          </td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>
-serial ID du thread de grossisement des icones. 
+serial ID for window popping up to the top layer event. 
 <p>
 
 </div>
 </div><p>
-<a class="anchor" name="9d697f0abf14e88492e4795317b4b3c3"></a><!-- doxytag: member="_CairoDock::iSidShrinkDown" ref="9d697f0abf14e88492e4795317b4b3c3" args="" -->
+<a class="anchor" name="e9a75990394fa377eb2d5a978e617c3e"></a><!-- doxytag: member="_CairoDock::iSidPopDown" ref="e9a75990394fa377eb2d5a978e617c3e" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">gint <a class="el" href="struct__CairoDock.html#9d697f0abf14e88492e4795317b4b3c3">_CairoDock::iSidShrinkDown</a>          </td>
+          <td class="memname">gint <a class="el" href="struct__CairoDock.html#e9a75990394fa377eb2d5a978e617c3e">_CairoDock::iSidPopDown</a>          </td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>
-serial ID du thread de diminution des icones. 
+serial ID for window popping down to the bottom layer. 
 <p>
 
 </div>
@@ -958,6 +1290,23 @@ serial ID du thread de diminution des icones.
 
 <p>
 serial ID du thread qui enverra le signal de sortie retarde. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="e757a7538f1b64235752f0f7c7470c18"></a><!-- doxytag: member="_CairoDock::iSidIconGlide" ref="e757a7538f1b64235752f0f7c7470c18" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__CairoDock.html#e757a7538f1b64235752f0f7c7470c18">_CairoDock::iSidIconGlide</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+serial ID du thread qui deplace les icones lateralement lors d'un glisse d'icone interne 
 <p>
 
 </div>
@@ -1018,7 +1367,7 @@ calculer tous les parametres des icones.
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="cairo-dock-struct_8h.html#7ca64e532d1a6d04a5e1b39288638476">CairoDockRenderFunc</a> <a class="el" href="struct__CairoDock.html#b80e203ce33cfbccf2c5d42531708782">_CairoDock::render</a>          </td>
+          <td class="memname"><a class="el" href="cairo-dock-struct_8h.html#f24e123d830813f38930ddcd38b5b734">CairoDockRenderFunc</a> <a class="el" href="struct__CairoDock.html#b80e203ce33cfbccf2c5d42531708782">_CairoDock::render</a>          </td>
         </tr>
       </table>
 </div>
@@ -1035,7 +1384,7 @@ dessiner le tout.
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="cairo-dock-struct_8h.html#3e84daef3dc6c6267ae35474da900357">CairoDockRenderOptimizedFunc</a> <a class="el" href="struct__CairoDock.html#402e9bbf49b5b74866b90b41743d3e33">_CairoDock::render_optimized</a>          </td>
+          <td class="memname"><a class="el" href="cairo-dock-struct_8h.html#e050e4f985f1272affdd8c88fe6e698a">CairoDockRenderOptimizedFunc</a> <a class="el" href="struct__CairoDock.html#402e9bbf49b5b74866b90b41743d3e33">_CairoDock::render_optimized</a>          </td>
         </tr>
       </table>
 </div>
@@ -1043,6 +1392,23 @@ dessiner le tout.
 
 <p>
 dessiner une portion du dock de maniere optimisee. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="894e2c94bf6652daa93e218cb454f780"></a><!-- doxytag: member="_CairoDock::render_opengl" ref="894e2c94bf6652daa93e218cb454f780" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="cairo-dock-struct_8h.html#7fecee5e5143752782b9126c9dd31b04">CairoDockGLRenderFunc</a> <a class="el" href="struct__CairoDock.html#894e2c94bf6652daa93e218cb454f780">_CairoDock::render_opengl</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+fonction de rendu OpenGL (optionnelle). 
 <p>
 
 </div>
@@ -1064,27 +1430,135 @@ calculer la position d'un sous-dock.
 
 </div>
 </div><p>
-<a class="anchor" name="fef9a496c9a10f1ef83c4a4a4f4c5cc3"></a><!-- doxytag: member="_CairoDock::bUseReflect" ref="fef9a496c9a10f1ef83c4a4a4f4c5cc3" args="" -->
+<a class="anchor" name="e5f75cc312eab7c43572cbc9567176ac"></a><!-- doxytag: member="_CairoDock::bCanDrop" ref="e5f75cc312eab7c43572cbc9567176ac" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">gboolean <a class="el" href="struct__CairoDock.html#fef9a496c9a10f1ef83c4a4a4f4c5cc3">_CairoDock::bUseReflect</a>          </td>
+          <td class="memname">gboolean <a class="el" href="struct__CairoDock.html#e5f75cc312eab7c43572cbc9567176ac">_CairoDock::bCanDrop</a>          </td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>
-dit si la vue courante utilise les reflets ou pas (utile pour les plug-ins). 
+TRUE ssi on peut dropper entre 2 icones. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="fb87a447cc0ab563bbc5cddc006ed78d"></a><!-- doxytag: member="_CairoDock::bIsShrinkingDown" ref="fb87a447cc0ab563bbc5cddc006ed78d" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__CairoDock.html#fb87a447cc0ab563bbc5cddc006ed78d">_CairoDock::bIsShrinkingDown</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="839decd66fbe8bbe6b7ce285938a72d1"></a><!-- doxytag: member="_CairoDock::bIsGrowingUp" ref="839decd66fbe8bbe6b7ce285938a72d1" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__CairoDock.html#839decd66fbe8bbe6b7ce285938a72d1">_CairoDock::bIsGrowingUp</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="7ac09a0770d31c6c033037d49b48f3fe"></a><!-- doxytag: member="_CairoDock::inputArea" ref="7ac09a0770d31c6c033037d49b48f3fe" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GdkRectangle <a class="el" href="struct__CairoDock.html#7ac09a0770d31c6c033037d49b48f3fe">_CairoDock::inputArea</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ecbd4a88440511dca2ef143c0cf37a6f"></a><!-- doxytag: member="_CairoDock::pShapeBitmap" ref="ecbd4a88440511dca2ef143c0cf37a6f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GdkBitmap* <a class="el" href="struct__CairoDock.html#ecbd4a88440511dca2ef143c0cf37a6f">_CairoDock::pShapeBitmap</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="4c6b137617f3591115a5376cccadf7e4"></a><!-- doxytag: member="_CairoDock::iMousePositionType" ref="4c6b137617f3591115a5376cccadf7e4" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="cairo-dock-struct_8h.html#8381e20c54bf015162ac9a0e38dbbf51">CairoDockMousePositionType</a> <a class="el" href="struct__CairoDock.html#4c6b137617f3591115a5376cccadf7e4">_CairoDock::iMousePositionType</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="07d33c9b5b793dba2b4ef9c73842224d"></a><!-- doxytag: member="_CairoDock::bUseStencil" ref="07d33c9b5b793dba2b4ef9c73842224d" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__CairoDock.html#07d33c9b5b793dba2b4ef9c73842224d">_CairoDock::bUseStencil</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+TRUE ssi cette vue utilise le stencil buffer d'OpenGL. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="f4a81e834bcf83c36e7944164d84de41"></a><!-- doxytag: member="_CairoDock::iAnimationStep" ref="f4a81e834bcf83c36e7944164d84de41" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__CairoDock.html#f4a81e834bcf83c36e7944164d84de41">_CairoDock::iAnimationStep</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
 <p>
 
 </div>
 </div><p>
 <hr>La documentation de cette structure a été générée à partir du fichier suivant :<ul>
-<li>/opt/cairo-dock/trunk/cairo-dock/src/<a class="el" href="cairo-dock-struct_8h-source.html">cairo-dock-struct.h</a></ul>
-<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<li>/home/fab/CD/trunk/cairo-dock/src/<a class="el" href="cairo-dock-struct_8h.html">cairo-dock-struct.h</a></ul>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
 </html>

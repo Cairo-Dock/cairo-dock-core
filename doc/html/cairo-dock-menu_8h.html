@@ -1,15 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-menu.h</title>
+<title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-menu.h</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.3 -->
-<div class="tabs">
-  <ul>
-    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
-    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+<!-- Généré par Doxygen 1.5.5 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>Page&nbsp;principale</span></a></li>
+      <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
     <li>
       <form action="search.php" method="get">
         <table cellspacing="0" cellpadding="0" border="0">
@@ -20,30 +21,45 @@
         </table>
       </form>
     </li>
-  </ul>
+    </ul>
+  </div>
 </div>
-<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-menu.h</h1>
-<p>
-<a href="cairo-dock-menu_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<div class="contents">
+<h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-menu.h</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Macros</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-menu_8h.html#0c10aa5343fb605fa12e13887ddcb506">CAIRO_DOCK_ADD_IN_MENU_WITH_STOCK_AND_DATA</a>(cLabel, gtkStock, pFunction, pMenu, pData)</td></tr>
+
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-menu_8h.html#613b3a0561c8323bbf7537b4c97c369e">cairo_dock_notification_remove_icon</a> (gpointer *data)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GtkWidget *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-menu_8h.html#02b34d4a10f5274b70b2fc588da96cab">cairo_dock_build_menu</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">GtkWidget *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-menu_8h.html#b4d6c26e8a8b53f0f623135ccfab1965">cairo_dock_build_menu</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-menu_8h.html#89f0fc3f97109eca31a846fe685c5db1">cairo_dock_notification_build_menu</a> (gpointer *pUserData, <a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer, GtkWidget *menu)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-menu_8h.html#e75d5444afb0de3d95d5217509ac1fa7">cairo_dock_notification_build_menu</a> (gpointer *data)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-menu_8h.html#da853dca56e5bcc6d461ab705b43378c">cairo_dock_delete_menu</a> (GtkMenuShell *menu, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
 </table>
-<hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="613b3a0561c8323bbf7537b4c97c369e"></a><!-- doxytag: member="cairo-dock-menu.h::cairo_dock_notification_remove_icon" ref="613b3a0561c8323bbf7537b4c97c369e" args="(gpointer *data)" -->
+<hr><h2>Documentation des macros</h2>
+<a class="anchor" name="0c10aa5343fb605fa12e13887ddcb506"></a><!-- doxytag: member="cairo-dock-menu.h::CAIRO_DOCK_ADD_IN_MENU_WITH_STOCK_AND_DATA" ref="0c10aa5343fb605fa12e13887ddcb506" args="(cLabel, gtkStock, pFunction, pMenu, pData)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">gboolean cairo_dock_notification_remove_icon           </td>
+          <td class="memname">#define CAIRO_DOCK_ADD_IN_MENU_WITH_STOCK_AND_DATA          </td>
           <td>(</td>
-          <td class="paramtype">gpointer *&nbsp;</td>
-          <td class="paramname"> <em>data</em>          </td>
+          <td class="paramtype">cLabel,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gtkStock,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">pFunction,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">pMenu,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">pData&nbsp;</td>
+          <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
           <td width="100%"></td>
         </tr>
@@ -52,10 +68,20 @@
 <div class="memdoc">
 
 <p>
+Ajoute une entree avec une icone GTK a un menu deja existant. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cLabel</em>&nbsp;</td><td>nom de l'entree, tel qu'il apparaitra dans le menu. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>gtkStock</em>&nbsp;</td><td>nom d'une icone de GTK. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pFunction</em>&nbsp;</td><td>fonction appelee lors de la selection de cette entree. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pMenu</em>&nbsp;</td><td>GtkWidget du menu auquel on rajoutera l'entree. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pData</em>&nbsp;</td><td>donnees passees en parametre de la fonction (doit contenir myApplet). </td></tr>
+  </table>
+</dl>
 
 </div>
 </div><p>
-<a class="anchor" name="b4d6c26e8a8b53f0f623135ccfab1965"></a><!-- doxytag: member="cairo-dock-menu.h::cairo_dock_build_menu" ref="b4d6c26e8a8b53f0f623135ccfab1965" args="(Icon *icon, CairoDockContainer *pContainer)" -->
+<hr><h2>Documentation des fonctions</h2>
+<a class="anchor" name="02b34d4a10f5274b70b2fc588da96cab"></a><!-- doxytag: member="cairo-dock-menu.h::cairo_dock_build_menu" ref="02b34d4a10f5274b70b2fc588da96cab" args="(Icon *icon, CairoContainer *pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -68,7 +94,7 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoContainer.html">CairoContainer</a> *&nbsp;</td>
           <td class="paramname"> <em>pContainer</em></td><td>&nbsp;</td>
         </tr>
         <tr>
@@ -84,7 +110,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="e75d5444afb0de3d95d5217509ac1fa7"></a><!-- doxytag: member="cairo-dock-menu.h::cairo_dock_notification_build_menu" ref="e75d5444afb0de3d95d5217509ac1fa7" args="(gpointer *data)" -->
+<a class="anchor" name="89f0fc3f97109eca31a846fe685c5db1"></a><!-- doxytag: member="cairo-dock-menu.h::cairo_dock_notification_build_menu" ref="89f0fc3f97109eca31a846fe685c5db1" args="(gpointer *pUserData, Icon *icon, CairoContainer *pContainer, GtkWidget *menu)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -92,9 +118,30 @@
           <td class="memname">gboolean cairo_dock_notification_build_menu           </td>
           <td>(</td>
           <td class="paramtype">gpointer *&nbsp;</td>
-          <td class="paramname"> <em>data</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td class="paramname"> <em>pUserData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>icon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoContainer.html">CairoContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GtkWidget *&nbsp;</td>
+          <td class="paramname"> <em>menu</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -104,8 +151,38 @@
 
 </div>
 </div><p>
-<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<a class="anchor" name="da853dca56e5bcc6d461ab705b43378c"></a><!-- doxytag: member="cairo-dock-menu.h::cairo_dock_delete_menu" ref="da853dca56e5bcc6d461ab705b43378c" args="(GtkMenuShell *menu, CairoDock *pDock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_delete_menu           </td>
+          <td>(</td>
+          <td class="paramtype">GtkMenuShell *&nbsp;</td>
+          <td class="paramname"> <em>menu</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
 </html>

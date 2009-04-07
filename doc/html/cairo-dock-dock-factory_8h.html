@@ -1,15 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dock-factory.h</title>
+<title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-dock-factory.h</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.3 -->
-<div class="tabs">
-  <ul>
-    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
-    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+<!-- Généré par Doxygen 1.5.5 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>Page&nbsp;principale</span></a></li>
+      <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
     <li>
       <form action="search.php" method="get">
         <table cellspacing="0" cellpadding="0" border="0">
@@ -20,131 +21,49 @@
         </table>
       </form>
     </li>
-  </ul>
+    </ul>
+  </div>
 </div>
-<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dock-factory.h</h1>
-<p>
-<a href="cairo-dock-dock-factory_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<div class="contents">
+<h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-dock-factory.h</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Macros</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#c4f6c5a5c84de7b6d97de3c10e62f8fd">CAIRO_DOCK_IS_DOCK</a>(pContainer)&nbsp;&nbsp;&nbsp;(pContainer != NULL &amp;&amp; pContainer-&gt;iType == CAIRO_DOCK_TYPE_DOCK)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#3a6bc266f211c4fa36733d0dfbe03248">cairo_dock_create_subdock_from_scratch</a>(pIconList, cDockName, pParentDock)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#5ca7986fedee6408dbd7d1c9d5d6e423">CAIRO_DOCK_DOCK</a>(pContainer)&nbsp;&nbsp;&nbsp;((<a class="el" href="struct__CairoDock.html">CairoDock</a> *)pContainer)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#1c39c4f8efc286c13b675ef86c400ec8">cairo_dock_create_subdock_for_class_appli</a>(cClassName, pParentDock)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#29d59a47afa7735160b0ddbd281163ab">cairo_dock_get_max_scale</a>(pContainer)&nbsp;&nbsp;&nbsp;(CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + <a class="el" href="cairo-dock-global-variables_8h.html#71125a40fdc7b421002f176b9b82ac79">g_fAmplitude</a>) / CAIRO_DOCK_DOCK (pContainer)-&gt;fRatio : 1)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#baa51f1389568edc833bb7029a1f2374">cairo_dock_create_subdock_from_scratch</a>(pIconList, cDockName)&nbsp;&nbsp;&nbsp;cairo_dock_create_subdock_from_scratch_with_type (pIconList, cDockName, GDK_WINDOW_TYPE_HINT_DOCK)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#48f675f813296c74f102ff555bd38e09">cairo_dock_create_subdock_for_class_appli</a>(cClassName)&nbsp;&nbsp;&nbsp;cairo_dock_create_subdock_from_scratch_with_type (NULL, cClassName, GDK_WINDOW_TYPE_HINT_DOCK)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#7658d0ec05872fc96e87d12d91b85e43">cairo_dock_insert_icon_in_dock</a>(icon, pDock, bUpdateSize, bAnimated, bApplyRatio, bInsertSeparator)</td></tr>
 
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#78d3f78cb0fc9d32154f2282eefa3023">cairo_dock_create_new_dock</a> (GdkWindowTypeHint iWmHint, gchar *cDockName, gchar *cRendererName)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS <a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#82fadbec307a6a30e822e79db583f6ce">cairo_dock_create_new_dock</a> (GdkWindowTypeHint iWmHint, gchar *cDockName, gchar *cRendererName)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#1abe6bc9433435ac1f17bac025673f71">cairo_dock_deactivate_one_dock</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#3f52d7df636dcc6ad91ccd775c79050b">cairo_dock_free_dock</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
-
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#96c2324a71cd648e8ba0e4421c9e2886">cairo_dock_destroy_dock</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, const gchar *cDockName, <a class="el" href="struct__CairoDock.html">CairoDock</a> *ReceivingDock, gchar *cReceivingDockName)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#3724a68583cf130b44051bec3e22797e">cairo_dock_reference_dock</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#0458afd2bb5b9a103602bffa76bb3638">cairo_dock_reference_dock</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pParentDock)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#61acf06fa512907b849016e4f66e7f78">cairo_dock_create_subdock_from_scratch_with_type</a> (GList *pIconList, gchar *cDockName, GdkWindowTypeHint iWindowTypeHint)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#abbfcc9e367bb1c4e77830af2c4ad9d6">cairo_dock_create_subdock_from_scratch_with_type</a> (GList *pIconList, gchar *cDockName, GdkWindowTypeHint iWindowTypeHint, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pParentDock)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#93532a96d0bc2b65dabcf442fd706278">cairo_dock_build_docks_tree_with_desktop_files</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pMainDock, gchar *cDirectory)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#1a8320466d03daf112e6435298ba1a8f">cairo_dock_free_all_docks</a> (void)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#9dde58fc3ae35123ba5802cdafa0048c">cairo_dock_update_dock_size</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#4697dc0886b1b3556b99698c3bdf6292">cairo_dock_insert_icon_in_dock_full</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bApplyRatio, gboolean bInsertSeparator, GCompareFunc pCompareFunc)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#6f97adb1d59a0a853f03ad1c2609a19b">cairo_dock_insert_icon_in_dock</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bApplyRatio, gboolean bInsertSeparator)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#612fb1983b7cee66c5724a57610e5688">cairo_dock_detach_icon_from_dock</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, gboolean bCheckUnusedSeparator)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#343e005ccbc53eb36062aa98b35476a7">cairo_dock_reserve_space_for_dock</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, gboolean bReserve)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#d66a0e6a2a1922353b51d07c8f07423e">cairo_dock_remove_one_icon_from_dock</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="el" href="struct__Icon.html">Icon</a> *icon)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#54489dd6575db90cf8d5708162499688">cairo_dock_allow_widget_to_receive_data</a> (GtkWidget *pWidget, GCallback pCallBack, gpointer data)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#7a43c7c13c5d65eca70bb4dd5161520f">cairo_dock_remove_icon_from_dock</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, <a class="el" href="struct__Icon.html">Icon</a> *icon)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#a437625616b8658c1fe9c4752c5fe6a6">cairo_dock_notify_drop_data</a> (gchar *cReceivedData, <a class="el" href="struct__Icon.html">Icon</a> *pPointedIcon, double fOrder, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#f2b6ce6d65ba32099af9d5321f751d3f">cairo_dock_remove_all_separators</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dock-factory_8h.html#4682e00c88df4fe4886f140154323a6d">cairo_dock_insert_separators_in_dock</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
 </table>
 <hr><h2>Documentation des macros</h2>
-<a class="anchor" name="c4f6c5a5c84de7b6d97de3c10e62f8fd"></a><!-- doxytag: member="cairo-dock-dock-factory.h::CAIRO_DOCK_IS_DOCK" ref="c4f6c5a5c84de7b6d97de3c10e62f8fd" args="(pContainer)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define CAIRO_DOCK_IS_DOCK          </td>
-          <td>(</td>
-          <td class="paramtype">pContainer&nbsp;</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;(pContainer != NULL &amp;&amp; pContainer-&gt;iType == CAIRO_DOCK_TYPE_DOCK)</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Teste si le container est un dock. <dl compact><dt><b>Paramètres:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container. </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>TRUE ssi le container a ete declare comme un dock. </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="5ca7986fedee6408dbd7d1c9d5d6e423"></a><!-- doxytag: member="cairo-dock-dock-factory.h::CAIRO_DOCK_DOCK" ref="5ca7986fedee6408dbd7d1c9d5d6e423" args="(pContainer)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define CAIRO_DOCK_DOCK          </td>
-          <td>(</td>
-          <td class="paramtype">pContainer&nbsp;</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;((<a class="el" href="struct__CairoDock.html">CairoDock</a> *)pContainer)</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Caste un container en dock. <dl compact><dt><b>Paramètres:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container. </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>le dock. </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="29d59a47afa7735160b0ddbd281163ab"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_get_max_scale" ref="29d59a47afa7735160b0ddbd281163ab" args="(pContainer)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define cairo_dock_get_max_scale          </td>
-          <td>(</td>
-          <td class="paramtype">pContainer&nbsp;</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;(CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + <a class="el" href="cairo-dock-global-variables_8h.html#71125a40fdc7b421002f176b9b82ac79">g_fAmplitude</a>) / CAIRO_DOCK_DOCK (pContainer)-&gt;fRatio : 1)</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Retourne le zoom max des icones contenues dans un conteneur donne. <dl compact><dt><b>Paramètres:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container. </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>le facteur d'echelle max. </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="baa51f1389568edc833bb7029a1f2374"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_create_subdock_from_scratch" ref="baa51f1389568edc833bb7029a1f2374" args="(pIconList, cDockName)" -->
+<a class="anchor" name="3a6bc266f211c4fa36733d0dfbe03248"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_create_subdock_from_scratch" ref="3a6bc266f211c4fa36733d0dfbe03248" args="(pIconList, cDockName, pParentDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -154,10 +73,13 @@ Retourne le zoom max des icones contenues dans un conteneur donne. <dl compact><
           <td class="paramtype">pIconList,         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">cDockName&nbsp;</td>
+          <td class="paramtype">cDockName,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">pParentDock&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;cairo_dock_create_subdock_from_scratch_with_type (pIconList, cDockName, GDK_WINDOW_TYPE_HINT_DOCK)</td>
+          <td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -167,17 +89,55 @@ Retourne le zoom max des icones contenues dans un conteneur donne. <dl compact><
 
 </div>
 </div><p>
-<a class="anchor" name="48f675f813296c74f102ff555bd38e09"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_create_subdock_for_class_appli" ref="48f675f813296c74f102ff555bd38e09" args="(cClassName)" -->
+<a class="anchor" name="1c39c4f8efc286c13b675ef86c400ec8"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_create_subdock_for_class_appli" ref="1c39c4f8efc286c13b675ef86c400ec8" args="(cClassName, pParentDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">#define cairo_dock_create_subdock_for_class_appli          </td>
           <td>(</td>
-          <td class="paramtype">cClassName&nbsp;</td>
+          <td class="paramtype">cClassName,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">pParentDock&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;cairo_dock_create_subdock_from_scratch_with_type (NULL, cClassName, GDK_WINDOW_TYPE_HINT_DOCK)</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="7658d0ec05872fc96e87d12d91b85e43"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_insert_icon_in_dock" ref="7658d0ec05872fc96e87d12d91b85e43" args="(icon, pDock, bUpdateSize, bAnimated, bApplyRatio, bInsertSeparator)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_insert_icon_in_dock          </td>
+          <td>(</td>
+          <td class="paramtype">icon,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">pDock,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bUpdateSize,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bAnimated,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bApplyRatio,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bInsertSeparator&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -188,12 +148,12 @@ Retourne le zoom max des icones contenues dans un conteneur donne. <dl compact><
 </div>
 </div><p>
 <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="78d3f78cb0fc9d32154f2282eefa3023"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_create_new_dock" ref="78d3f78cb0fc9d32154f2282eefa3023" args="(GdkWindowTypeHint iWmHint, gchar *cDockName, gchar *cRendererName)" -->
+<a class="anchor" name="82fadbec307a6a30e822e79db583f6ce"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_create_new_dock" ref="82fadbec307a6a30e822e79db583f6ce" args="(GdkWindowTypeHint iWmHint, gchar *cDockName, gchar *cRendererName)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct__CairoDock.html">CairoDock</a>* cairo_dock_create_new_dock           </td>
+          <td class="memname">G_BEGIN_DECLS <a class="el" href="struct__CairoDock.html">CairoDock</a>* cairo_dock_create_new_dock           </td>
           <td>(</td>
           <td class="paramtype">GdkWindowTypeHint&nbsp;</td>
           <td class="paramname"> <em>iWmHint</em>, </td>
@@ -224,7 +184,7 @@ Cree un nouveau dock principal. <dl compact><dt><b>Paramètres:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>iWmHint</em>&nbsp;</td><td>indicateur du type de fenetre pour le WM. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>cDockName</em>&nbsp;</td><td>nom du dock, qui pourra etre utilise pour retrouver celui-ci rapidement. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>cRendererName</em>&nbsp;</td><td>nom de la fonction de rendu a applisuer au dock. si NULL, le rendu par defaut sera applique. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cRendererName</em>&nbsp;</td><td>nom de la fonction de rendu a appliquer au dock. si NULL, le rendu par defaut sera applique. </td></tr>
   </table>
 </dl>
 <dl class="return" compact><dt><b>Renvoie:</b></dt><dd>le dock nouvellement alloué, a detruire avec <a class="el" href="cairo-dock-dock-factory_8h.html#96c2324a71cd648e8ba0e4421c9e2886">cairo_dock_destroy_dock</a> </dd></dl>
@@ -249,31 +209,6 @@ Cree un nouveau dock principal. <dl compact><dt><b>Paramètres:</b></dt><dd>
 
 <p>
 Desactive un dock : le rend inoperant, en detruisant tout ce qu'il contient, sauf sa liste d'icones. <dl compact><dt><b>Paramètres:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>le dock. </td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
-<a class="anchor" name="3f52d7df636dcc6ad91ccd775c79050b"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_free_dock" ref="3f52d7df636dcc6ad91ccd775c79050b" args="(CairoDock *pDock)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cairo_dock_free_dock           </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
-          <td class="paramname"> <em>pDock</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Detruit un dock et tout ce qu'il contient, y compris ses icones et lui-meme. <dl compact><dt><b>Paramètres:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>le dock. </td></tr>
   </table>
@@ -330,7 +265,7 @@ Diminue le nombre d'icones pointant sur un dock de 1. Si aucune icone ne pointe 
 
 </div>
 </div><p>
-<a class="anchor" name="3724a68583cf130b44051bec3e22797e"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_reference_dock" ref="3724a68583cf130b44051bec3e22797e" args="(CairoDock *pDock)" -->
+<a class="anchor" name="0458afd2bb5b9a103602bffa76bb3638"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_reference_dock" ref="0458afd2bb5b9a103602bffa76bb3638" args="(CairoDock *pDock, CairoDock *pParentDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -338,9 +273,18 @@ Diminue le nombre d'icones pointant sur un dock de 1. Si aucune icone ne pointe 
           <td class="memname">void cairo_dock_reference_dock           </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
-          <td class="paramname"> <em>pDock</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td class="paramname"> <em>pDock</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pParentDock</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -350,12 +294,13 @@ Diminue le nombre d'icones pointant sur un dock de 1. Si aucune icone ne pointe 
 Incremente de 1 la reference d'un dock, c'est-a-dire le nombre d'icones pointant sur ce dock. Si le dock etait auparavant un dock principal, il devient un sous-dock, prenant du meme coup les parametres propres aux sous-docks. <dl compact><dt><b>Paramètres:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>un dock. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pParentDock</em>&nbsp;</td><td>son dock parent, si sa reference passse a 1, sinon peu etre NULL. </td></tr>
   </table>
 </dl>
 
 </div>
 </div><p>
-<a class="anchor" name="61acf06fa512907b849016e4f66e7f78"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_create_subdock_from_scratch_with_type" ref="61acf06fa512907b849016e4f66e7f78" args="(GList *pIconList, gchar *cDockName, GdkWindowTypeHint iWindowTypeHint)" -->
+<a class="anchor" name="abbfcc9e367bb1c4e77830af2c4ad9d6"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_create_subdock_from_scratch_with_type" ref="abbfcc9e367bb1c4e77830af2c4ad9d6" args="(GList *pIconList, gchar *cDockName, GdkWindowTypeHint iWindowTypeHint, CairoDock *pParentDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -375,7 +320,13 @@ Incremente de 1 la reference d'un dock, c'est-a-dire le nombre d'icones pointant
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">GdkWindowTypeHint&nbsp;</td>
-          <td class="paramname"> <em>iWindowTypeHint</em></td><td>&nbsp;</td>
+          <td class="paramname"> <em>iWindowTypeHint</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pParentDock</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -392,6 +343,7 @@ Cree un nouveau dock de type "sous-dock", et y insere la liste des icones fourni
     <tr><td valign="top"></td><td valign="top"><em>pIconList</em>&nbsp;</td><td>une liste d'icones qui seront entierement chargees et inserees dans le dock. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>cDockName</em>&nbsp;</td><td>le nom desire pour le dock. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>iWindowTypeHint</em>&nbsp;</td><td>indicateur du type de fenetre pour le WM. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pParentDock</em>&nbsp;</td><td>le dock parent du sous-dock cree. </td></tr>
   </table>
 </dl>
 <dl class="return" compact><dt><b>Renvoie:</b></dt><dd>le dock nouvellement alloue. </dd></dl>
@@ -453,37 +405,12 @@ Charge un ensemble de fichiers .desktop definissant des icones, et construit l'a
 Detruit tous les docks et toutes les icones contenues dedans, et libere la memoire qui leur etait allouee. Les applets sont stoppees au prealable, ainsi que la barre des taches. 
 </div>
 </div><p>
-<a class="anchor" name="9dde58fc3ae35123ba5802cdafa0048c"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_update_dock_size" ref="9dde58fc3ae35123ba5802cdafa0048c" args="(CairoDock *pDock)" -->
+<a class="anchor" name="4697dc0886b1b3556b99698c3bdf6292"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_insert_icon_in_dock_full" ref="4697dc0886b1b3556b99698c3bdf6292" args="(Icon *icon, CairoDock *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bApplyRatio, gboolean bInsertSeparator, GCompareFunc pCompareFunc)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cairo_dock_update_dock_size           </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
-          <td class="paramname"> <em>pDock</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Recalcule la taille maximale du dock, si par exemple une icone a ete enlevee/rajoutee. Met a jour la taille des decorations si necessaire et adapte a la taille max imposee. Le dock est deplace de maniere a rester centre sur la meme position, et les coordonnees des icones des applis sont recalculees et renvoyees au WM. <dl compact><dt><b>Paramètres:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>le dock. </td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
-<a class="anchor" name="6f97adb1d59a0a853f03ad1c2609a19b"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_insert_icon_in_dock" ref="6f97adb1d59a0a853f03ad1c2609a19b" args="(Icon *icon, CairoDock *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bApplyRatio, gboolean bInsertSeparator)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cairo_dock_insert_icon_in_dock           </td>
+          <td class="memname">void cairo_dock_insert_icon_in_dock_full           </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
           <td class="paramname"> <em>icon</em>, </td>
@@ -516,7 +443,13 @@ Recalcule la taille maximale du dock, si par exemple une icone a ete enlevee/raj
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">gboolean&nbsp;</td>
-          <td class="paramname"> <em>bInsertSeparator</em></td><td>&nbsp;</td>
+          <td class="paramname"> <em>bInsertSeparator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GCompareFunc&nbsp;</td>
+          <td class="paramname"> <em>pCompareFunc</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -528,7 +461,7 @@ Recalcule la taille maximale du dock, si par exemple une icone a ete enlevee/raj
 <div class="memdoc">
 
 <p>
-Insere une icone dans le dock, a la position indiquee par le champ /a fOrder. Insere un separateur si necessaire, et reserve l'espace correspondant aux nouvelles dimensions du dock si necessaire. <dl compact><dt><b>Paramètres:</b></dt><dd>
+Insere une icone dans le dock, a la position indiquee par son champ fOrder. Insere un separateur si necessaire, et reserve l'espace correspondant aux nouvelles dimensions du dock si necessaire. Ne fais rien si l'icone existe deja dans le dock. <dl compact><dt><b>Paramètres:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>icon</em>&nbsp;</td><td>l'icone a inserer. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>le dock dans lequel l'inserer. </td></tr>
@@ -536,18 +469,25 @@ Insere une icone dans le dock, a la position indiquee par le champ /a fOrder. In
     <tr><td valign="top"></td><td valign="top"><em>bAnimated</em>&nbsp;</td><td>TRUE pour regler la taille de l'icone au minimum de facon a la faire grossir apres. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>bApplyRatio</em>&nbsp;</td><td>TRUE pour appliquer le facteur de taille propre au sous-dock. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>bInsertSeparator</em>&nbsp;</td><td>TRUE pour inserer un separateur si necessaire. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>GCompareFunc</em>&nbsp;</td><td>la fonction de comparaison </td></tr>
   </table>
 </dl>
 
 </div>
 </div><p>
-<a class="anchor" name="343e005ccbc53eb36062aa98b35476a7"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_reserve_space_for_dock" ref="343e005ccbc53eb36062aa98b35476a7" args="(CairoDock *pDock, gboolean bReserve)" -->
+<a class="anchor" name="612fb1983b7cee66c5724a57610e5688"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_detach_icon_from_dock" ref="612fb1983b7cee66c5724a57610e5688" args="(Icon *icon, CairoDock *pDock, gboolean bCheckUnusedSeparator)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cairo_dock_reserve_space_for_dock           </td>
+          <td class="memname">gboolean cairo_dock_detach_icon_from_dock           </td>
           <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>icon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>, </td>
         </tr>
@@ -555,7 +495,7 @@ Insere une icone dans le dock, a la position indiquee par le champ /a fOrder. In
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">gboolean&nbsp;</td>
-          <td class="paramname"> <em>bReserve</em></td><td>&nbsp;</td>
+          <td class="paramname"> <em>bCheckUnusedSeparator</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -567,84 +507,32 @@ Insere une icone dans le dock, a la position indiquee par le champ /a fOrder. In
 <div class="memdoc">
 
 <p>
-Demande au WM d'empecher les autres fenetres d'empieter sur l'espace du dock. L'espace reserve est pris sur la taille minimale du dock, c'est-a-dire la taille de la zone de rappel si l'auto-hide est active, ou la taille du dock au repos sinon. <dl compact><dt><b>Paramètres:</b></dt><dd>
+Detache une icone de son dock, en enlevant les separateurs superflus si necessaires. L'icone n'est pas detruite, et peut etre re-inseree autre part telle qu'elle; elle garde son sous-dock, mais perd ses dialogues. Ne fais rien si l'icone n'existe pas dans le dock. <dl compact><dt><b>Paramètres:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>le dock. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>bReserve</em>&nbsp;</td><td>TRUE pour reserver l'espace, FALSE pour annuler la reservation. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>icon</em>&nbsp;</td><td>l'icone a detacher. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>le dock contenant l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>bCheckUnusedSeparator</em>&nbsp;</td><td>si TRUE, alors teste si des separateurs sont devenus superflus, et les enleve le cas echeant. </td></tr>
   </table>
 </dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>TRUE ssi l'icone a ete detachee. </dd></dl>
 
 </div>
 </div><p>
-<a class="anchor" name="54489dd6575db90cf8d5708162499688"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_allow_widget_to_receive_data" ref="54489dd6575db90cf8d5708162499688" args="(GtkWidget *pWidget, GCallback pCallBack, gpointer data)" -->
+<a class="anchor" name="d66a0e6a2a1922353b51d07c8f07423e"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_remove_one_icon_from_dock" ref="d66a0e6a2a1922353b51d07c8f07423e" args="(CairoDock *pDock, Icon *icon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cairo_dock_allow_widget_to_receive_data           </td>
+          <td class="memname">void cairo_dock_remove_one_icon_from_dock           </td>
           <td>(</td>
-          <td class="paramtype">GtkWidget *&nbsp;</td>
-          <td class="paramname"> <em>pWidget</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">GCallback&nbsp;</td>
-          <td class="paramname"> <em>pCallBack</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gpointer&nbsp;</td>
-          <td class="paramname"> <em>data</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Autorise un widget a accepter les glisse-deposes. <dl compact><dt><b>Paramètres:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>pWidget</em>&nbsp;</td><td>un widget. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>pCallBack</em>&nbsp;</td><td>la fonction qui sera appelee lors d'une reception de donnee. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>data</em>&nbsp;</td><td>donnees passees en entree de la callback. </td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
-<a class="anchor" name="a437625616b8658c1fe9c4752c5fe6a6"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_notify_drop_data" ref="a437625616b8658c1fe9c4752c5fe6a6" args="(gchar *cReceivedData, Icon *pPointedIcon, double fOrder, CairoDockContainer *pContainer)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cairo_dock_notify_drop_data           </td>
-          <td>(</td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cReceivedData</em>, </td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
-          <td class="paramname"> <em>pPointedIcon</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&nbsp;</td>
-          <td class="paramname"> <em>fOrder</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
-          <td class="paramname"> <em>pContainer</em></td><td>&nbsp;</td>
+          <td class="paramname"> <em>icon</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -656,11 +544,103 @@ Autorise un widget a accepter les glisse-deposes. <dl compact><dt><b>Paramètres
 <div class="memdoc">
 
 <p>
+Enleve une icone du dock : l'icone n'est pas detruite, et garde son sous-dock, mais est n'existe plus nulle part (son .desktop est detruit, son module est desactive, et son Xid est effacee du registre (la classe est geree aussi)). Les separateurs superflus ne sont pas testes. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>le dock contenant l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>icon</em>&nbsp;</td><td>l'icone a detacher. </td></tr>
+  </table>
+</dl>
 
 </div>
 </div><p>
-<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<a class="anchor" name="7a43c7c13c5d65eca70bb4dd5161520f"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_remove_icon_from_dock" ref="7a43c7c13c5d65eca70bb4dd5161520f" args="(CairoDock *pDock, Icon *icon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_remove_icon_from_dock           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>icon</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Idem que precedemment, mais enleve aussi les separateurs superflus; <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>le dock contenant l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>icon</em>&nbsp;</td><td>l'icone a detacher. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="f2b6ce6d65ba32099af9d5321f751d3f"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_remove_all_separators" ref="f2b6ce6d65ba32099af9d5321f751d3f" args="(CairoDock *pDock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_remove_all_separators           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Enleve et detruit toutes les icones de separateurs automatiques. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>le dock duquel supprimer les icones. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="4682e00c88df4fe4886f140154323a6d"></a><!-- doxytag: member="cairo-dock-dock-factory.h::cairo_dock_insert_separators_in_dock" ref="4682e00c88df4fe4886f140154323a6d" args="(CairoDock *pDock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_insert_separators_in_dock           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Ajoute des separateurs automatiques entre les differents types d'icones. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>le dock auquel rajouter les separateurs. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
 </html>

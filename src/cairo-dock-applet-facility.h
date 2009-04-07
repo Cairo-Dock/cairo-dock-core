@@ -145,6 +145,7 @@ void cairo_dock_launch_measure_delayed (CairoDockMeasure *pMeasureTimer, double 
 *@param acquisition fonction realisant l'acquisition des donnees. N'accede jamais a la structure des resultats.
 *@param read fonction realisant la lecture des donnees precedemment acquises; stocke les resultats dans la structures des resultats.
 *@param update fonction realisant la mise a jour de l'interface en fonction des nouveaux resultats, lus dans la structures des resultats.
+*@param pUserData structure passee en entree des fonctions read et update.
 *@return la mesure nouvellement allouee. A liberer avec #cairo_dock_free_measure_timer.
 */
 CairoDockMeasure *cairo_dock_new_measure_timer (int iCheckInterval, CairoDockAquisitionTimerFunc acquisition, CairoDockReadTimerFunc read, CairoDockUpdateTimerFunc update, gpointer pUserData);
@@ -312,22 +313,6 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_CONFIG_GET_STRING_LIST(cGroupName, cKeyName, length) CD_CONFIG_GET_STRING_LIST_WITH_DEFAULT(cGroupName, cKeyName, length, NULL)
 
 /**
-*Recupere la valeur d'un parametre 'type d'animation' du fichier de conf.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@param iDefaultAnimation valeur par defaut si la cle et/ou le groupe n'est pas trouve (typiquement si cette cle est nouvelle).
-*@return le type de l'animation, un #CairoDockAnimationType.
-*/
-#define CD_CONFIG_GET_ANIMATION_WITH_DEFAULT(cGroupName, cKeyName, iDefaultAnimation) cairo_dock_get_animation_type_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, iDefaultAnimation, NULL, NULL)
-/**
-*Recupere la valeur d'un parametre 'type d'animation' du fichier de conf, avec #CAIRO_DOCK_BOUNCE comme valeur par defaut.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@return le type de l'animation, un #CairoDockAnimationType.
-*/
-#define CD_CONFIG_GET_ANIMATION(cGroupName, cKeyName) CD_CONFIG_GET_ANIMATION_WITH_DEFAULT(cGroupName, cKeyName, CAIRO_DOCK_BOUNCE)
-
-/**
 *Recupere la valeur d'un parametre 'couleur' au format RVBA. du fichier de conf.
 *@param cGroupName nom du groupe dans le fichier de conf.
 *@param cKeyName nom de la cle dans le fichier de conf.
@@ -359,10 +344,10 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_CONFIG_GET_COLOR_RVB(cGroupName, cKeyName, pColorBuffer) CD_CONFIG_GET_COLOR_RVB_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, NULL)
 
 /**
-*Liste les themes contenu dans un repertoire, met a jour le fichier de conf avec, et renvoie le chemin correspondant au theme choisi.
+*Trouve le chemin du theme specifie en conf.
 *@param cGroupName nom du groupe (dans le fichier de conf) du parametre correspondant au theme.
 *@param cKeyName nom de la cle (dans le fichier de conf) du parametre correspondant au theme.
-*@param cThemesDirName nom du sous-repertoire regroupant tous les themes.
+*@param cThemeDirName nom commun aux repertoires contenant les themes locaux, utilisateurs, et distants.
 *@param cDefaultThemeName valeur par defaut si la cle et/ou le groupe et/ou le theme n'existe(nt) pas.
 *@return Le chemin vers le repertoire du theme, dans une chaine nouvellement allouee.
 */
@@ -383,8 +368,8 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 ////////////
 /** Cree et ajoute un sous-menu a un menu.
 *@param cLabel nom du sous-menu, tel qu'il apparaitra dans le menu.
-*@param pSubMenu GtkWidget du sous-menu; il doit juste avoir ete declare, il sera cree par la macro.
 *@param pMenu GtkWidget du menu auquel on rajoutera le sous-menu.
+*@return le sous-menu nouvellement cree et attache au menu.
 */
 #define CD_APPLET_ADD_SUB_MENU(cLabel, pMenu) \
 	__extension__ ({\
@@ -394,6 +379,9 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), _pSubMenu);\
 	_pSubMenu; })
 
+/** Cree et ajoute un sous-menu par defaut au menu principal. Ce sous-menu est nomme suivant le nom de l'applet, et est represente par l'icone de l'applet.
+*@return le sous-menu nouvellement cree et attache au menu.
+*/
 #define CD_APPLET_CREATE_MY_SUB_MENU(...) \
 	__extension__ ({\
 	pMenuItem = gtk_image_menu_item_new_with_label (myApplet->pModule->pVisitCard->cModuleName);\
@@ -444,6 +432,7 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 /**
 *Ajoute une entree avec une icone GTK a un menu deja existant.
 *@param cLabel nom de l'entree, tel qu'il apparaitra dans le menu.
+*@param gtkStock icone GTK
 *@param pFunction fonction appelee lors de la selection de cette entree.
 *@param pMenu GtkWidget du menu auquel on rajoutera l'entree.
 */
@@ -540,8 +529,9 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 #define CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET(cImagePath) \
 	cairo_dock_create_surface_for_icon (cImagePath, myDrawContext, myIcon->fWidth * (myDock ? (1 + g_fAmplitude) / myDock->fRatio : 1), myIcon->fHeight* (myDock ? (1 + g_fAmplitude) / myDock->fRatio : 1))
 /**
-*Charge une image utilisateur dans une surface, aux dimensions de l'icone de l'applet, ou une image par defaut si l'utilisateur n'a rien precise.
-*@param cImagePath chemin du fichier de l'image.
+*Charge une image utilisateur dans une surface, aux dimensions de l'icone de l'applet, ou une image par defaut si la premiere est NULL.
+*@param cUserImageName nom de l'image utilisateur.
+*@param cDefaultLocalImageName icone par defaut
 *@return la surface nouvellement creee.
 */
 #define CD_APPLET_LOAD_USER_SURFACE_FOR_MY_APPLET(cUserImageName, cDefaultLocalImageName) \
@@ -703,7 +693,7 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 #define CD_APPLET_SET_STATIC_ICON cairo_dock_set_icon_static (myIcon)
 
 /** Lance l'animation de l'icone de l'applet.
-*@param iAnimationType type de l'animation (un #CairoDockAnimationType).
+*@param cAnimationName nom de l'animation.
 *@param iAnimationLength duree de l'animation, en nombre de tours.
 */
 #define CD_APPLET_ANIMATE_MY_ICON(cAnimationName, iAnimationLength) \

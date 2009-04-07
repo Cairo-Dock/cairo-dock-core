@@ -1,15 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-file-manager.h</title>
+<title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-file-manager.h</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.3 -->
-<div class="tabs">
-  <ul>
-    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
-    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+<!-- Généré par Doxygen 1.5.5 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>Page&nbsp;principale</span></a></li>
+      <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
     <li>
       <form action="search.php" method="get">
         <table cellspacing="0" cellpadding="0" border="0">
@@ -20,23 +21,23 @@
         </table>
       </form>
     </li>
-  </ul>
+    </ul>
+  </div>
 </div>
-<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-file-manager.h</h1>
-<p>
-<a href="cairo-dock-file-manager_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<div class="contents">
+<h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-file-manager.h</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Macros</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#efc75e98230531c171d33d40cc3f2abb">cairo_dock_fm_add_monitor</a>(pIcon)&nbsp;&nbsp;&nbsp;cairo_dock_fm_add_monitor_full (pIcon-&gt;cBaseURI, (pIcon-&gt;pSubDock != NULL), (pIcon-&gt;iVolumeID != 0 ? pIcon-&gt;acCommand : NULL), (<a class="el" href="cairo-dock-struct_8h.html#88570158e8e59f35fb892ca2fbf05143">CairoDockFMMonitorCallback</a>) cairo_dock_fm_action_on_file_event, (gpointer) pIcon)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#efc75e98230531c171d33d40cc3f2abb">cairo_dock_fm_add_monitor</a>(pIcon)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#29d9e02536a078301b54a109e0afeca8">cairo_dock_fm_remove_monitor</a>(pIcon)&nbsp;&nbsp;&nbsp;cairo_dock_fm_remove_monitor_full (pIcon-&gt;cBaseURI, (pIcon-&gt;pSubDock != NULL), (pIcon-&gt;iVolumeID != 0 ? pIcon-&gt;acCommand : NULL))</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#29d9e02536a078301b54a109e0afeca8">cairo_dock_fm_remove_monitor</a>(pIcon)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#744d73bc4ec2a0ad9587526998d0ae40">cairo_dock_fm_mount</a>(icon, pDock)&nbsp;&nbsp;&nbsp;cairo_dock_fm_mount_full (icon-&gt;acCommand, icon-&gt;iVolumeID, cairo_dock_fm_action_after_mounting, icon, pDock)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#e26dc393c38a08a8f861eab141d9bb1f">cairo_dock_fm_mount</a>(icon, pContainer)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#b3d8f4db30fd8bdbd1c78f33dc8190d8">cairo_dock_fm_unmount</a>(icon, pDock)&nbsp;&nbsp;&nbsp;cairo_dock_fm_unmount_full (icon-&gt;acCommand, icon-&gt;iVolumeID, cairo_dock_fm_action_after_mounting, icon, pDock)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#f47c973fdecadd97f9944e51ae32186d">cairo_dock_fm_unmount</a>(icon, pContainer)</td></tr>
 
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#550e7883243efc448cf21a3a45d3351f">cairo_dock_fm_register_vfs_backend</a> (<a class="el" href="struct__CairoDockVFSBackend.html">CairoDockVFSBackend</a> *pVFSBackend)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#bcf9b652d2320fa0549d83e02563360d">cairo_dock_fm_register_vfs_backend</a> (<a class="el" href="struct__CairoDockVFSBackend.html">CairoDockVFSBackend</a> *pVFSBackend)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">GList *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#83f7ed2d2f2bca5b47469a3966404c8c">cairo_dock_fm_list_directory</a> (const gchar *cURI, <a class="el" href="cairo-dock-struct_8h.html#44bc0366369fedba4ea97ed4c5dbc5ee">CairoDockFMSortType</a> g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, gchar **cFullURI)</td></tr>
 
@@ -52,35 +53,43 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#f52bb3e5e98e84f6da3fc6a010202945">cairo_dock_fm_move_file</a> (const gchar *cURI, const gchar *cDirectoryURI)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#dc4e798eb03a83cbaca4c4960d4eca32">cairo_dock_fm_mount_full</a> (const gchar *cURI, int iVolumeID, <a class="el" href="cairo-dock-struct_8h.html#3133e84bd38ce3f12b5199726c23fcf3">CairoDockFMMountCallback</a> pCallback, <a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#4411ad4e38754e5d7e2b4783ad2e12ec">cairo_dock_fm_mount_full</a> (const gchar *cURI, int iVolumeID, <a class="el" href="cairo-dock-struct_8h.html#c06b8471ab1dde9170dbcb101356cd7a">CairoDockFMMountCallback</a> pCallback, <a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#e7c503e762b954abdf62411f6f88f6be">cairo_dock_fm_unmount_full</a> (const gchar *cURI, int iVolumeID, <a class="el" href="cairo-dock-struct_8h.html#3133e84bd38ce3f12b5199726c23fcf3">CairoDockFMMountCallback</a> pCallback, <a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#6bf54e5dd7625c3ca39c5c837f65d942">cairo_dock_fm_unmount_full</a> (const gchar *cURI, int iVolumeID, <a class="el" href="cairo-dock-struct_8h.html#c06b8471ab1dde9170dbcb101356cd7a">CairoDockFMMountCallback</a> pCallback, <a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#0f65c98d8d234088da5d0ff568db1c7f">cairo_dock_fm_is_mounted</a> (const gchar *cURI, gboolean *bIsMounted)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#7f9aa4ecd49f01a817cbcbb8fa6a5fb1">cairo_dock_fm_can_eject</a> (const gchar *cURI)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#3a26da1b832583856ddcd08182dbd435">cairo_dock_fm_eject_drive</a> (const gchar *cURI)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#1f8810698077af882edca1eb6fe6109a">cairo_dock_fm_delete_file</a> (const gchar *cURI)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#2c9c840832b082dfa13339423eb9afaa">cairo_dock_fm_rename_file</a> (const gchar *cOldURI, const gchar *cNewName)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#f457dcbad326420e2bc756f5fceb4ef0">cairo_dock_fm_get_trash_path</a> (const gchar *cNearURI, gboolean bCreateIfNecessary)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#94bb0d54cc516b9c1ef73ac220fd7df9">cairo_dock_fm_get_trash_path</a> (const gchar *cNearURI, gchar **cFileInfoPath)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#2dd3626fd9850c3a4bdab4d1a7237367">cairo_dock_fm_get_desktop_path</a> (void)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#fdd23479680976ed59792cc1f3b7fcd5">cairo_dock_fm_logout</a> (void)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#56cbd53fa60a9d3cb4d381a865cc76ac">cairo_dock_fm_shutdown</a> (void)</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#75a5c45877a66431607c14acf5dad4c1">cairo_dock_fm_setup_time</a> (void)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#53c54369805cfe6db42602737059d5cd">cairo_dock_fm_create_icon_from_URI</a> (const gchar *cURI, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#2ce892c689c0b276a7c3ff397bf669e4">cairo_dock_fm_show_system_monitor</a> (void)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#f7cf475653106cfbf90c05332e2a2bc4">cairo_dock_fm_create_dock_from_directory</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#7c8c4578667ce32c74f3470aea4caaf0">cairo_dock_fm_create_icon_from_URI</a> (const gchar *cURI, <a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#1ed4b09095bcdfe3eb36cc019b1aa2cf">cairo_dock_fm_create_dock_from_directory</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pParentDock)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#b9933ff88de6b73c351dc8590fce7815">cairo_dock_fm_manage_event_on_file</a> (<a class="el" href="cairo-dock-struct_8h.html#87d5bf15e6a33b9ac3f56f5c3e568970">CairoDockFMEventType</a> iEventType, const gchar *cURI, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="cairo-dock-struct_8h.html#bab3fe5b912f0abef3f1e2b0b4b44e4e">CairoDockIconType</a> iTypeOnCreation)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#d461573c3b84a6dd7a86c3b854d863fe">cairo_dock_fm_action_on_file_event</a> (<a class="el" href="cairo-dock-struct_8h.html#87d5bf15e6a33b9ac3f56f5c3e568970">CairoDockFMEventType</a> iEventType, const gchar *cURI, <a class="el" href="struct__Icon.html">Icon</a> *pIcon)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#5b4345525a21a7d99d8703c42777897b">cairo_dock_fm_action_after_mounting</a> (gboolean bMounting, gboolean bSuccess, const gchar *cName, <a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#3c047c3ea4f4207f870b00641051bbcb">cairo_dock_fm_action_after_mounting</a> (gboolean bMounting, gboolean bSuccess, const gchar *cName, <a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#403d40617edf70d57f51c42cee8b5835">cairo_dock_fm_move_into_directory</a> (const gchar *cURI, <a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#c2fcd4c547bf19739807e7753a660532">cairo_dock_fm_move_into_directory</a> (const gchar *cURI, <a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer)</td></tr>
 
 </table>
 <hr><h2>Documentation des macros</h2>
@@ -94,7 +103,7 @@
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;cairo_dock_fm_add_monitor_full (pIcon-&gt;cBaseURI, (pIcon-&gt;pSubDock != NULL), (pIcon-&gt;iVolumeID != 0 ? pIcon-&gt;acCommand : NULL), (<a class="el" href="cairo-dock-struct_8h.html#88570158e8e59f35fb892ca2fbf05143">CairoDockFMMonitorCallback</a>) cairo_dock_fm_action_on_file_event, (gpointer) pIcon)</td>
+          <td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -114,7 +123,7 @@
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;cairo_dock_fm_remove_monitor_full (pIcon-&gt;cBaseURI, (pIcon-&gt;pSubDock != NULL), (pIcon-&gt;iVolumeID != 0 ? pIcon-&gt;acCommand : NULL))</td>
+          <td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -124,7 +133,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="744d73bc4ec2a0ad9587526998d0ae40"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_mount" ref="744d73bc4ec2a0ad9587526998d0ae40" args="(icon, pDock)" -->
+<a class="anchor" name="e26dc393c38a08a8f861eab141d9bb1f"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_mount" ref="e26dc393c38a08a8f861eab141d9bb1f" args="(icon, pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -134,10 +143,10 @@
           <td class="paramtype">icon,         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">pDock&nbsp;</td>
+          <td class="paramtype">pContainer&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;cairo_dock_fm_mount_full (icon-&gt;acCommand, icon-&gt;iVolumeID, cairo_dock_fm_action_after_mounting, icon, pDock)</td>
+          <td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -147,7 +156,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="b3d8f4db30fd8bdbd1c78f33dc8190d8"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_unmount" ref="b3d8f4db30fd8bdbd1c78f33dc8190d8" args="(icon, pDock)" -->
+<a class="anchor" name="f47c973fdecadd97f9944e51ae32186d"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_unmount" ref="f47c973fdecadd97f9944e51ae32186d" args="(icon, pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -157,10 +166,10 @@
           <td class="paramtype">icon,         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">pDock&nbsp;</td>
+          <td class="paramtype">pContainer&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;cairo_dock_fm_unmount_full (icon-&gt;acCommand, icon-&gt;iVolumeID, cairo_dock_fm_action_after_mounting, icon, pDock)</td>
+          <td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -171,12 +180,12 @@
 </div>
 </div><p>
 <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="550e7883243efc448cf21a3a45d3351f"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_register_vfs_backend" ref="550e7883243efc448cf21a3a45d3351f" args="(CairoDockVFSBackend *pVFSBackend)" -->
+<a class="anchor" name="bcf9b652d2320fa0549d83e02563360d"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_register_vfs_backend" ref="bcf9b652d2320fa0549d83e02563360d" args="(CairoDockVFSBackend *pVFSBackend)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cairo_dock_fm_register_vfs_backend           </td>
+          <td class="memname">G_BEGIN_DECLS void cairo_dock_fm_register_vfs_backend           </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct__CairoDockVFSBackend.html">CairoDockVFSBackend</a> *&nbsp;</td>
           <td class="paramname"> <em>pVFSBackend</em>          </td>
@@ -493,7 +502,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="dc4e798eb03a83cbaca4c4960d4eca32"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_mount_full" ref="dc4e798eb03a83cbaca4c4960d4eca32" args="(const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoDock *pDock)" -->
+<a class="anchor" name="4411ad4e38754e5d7e2b4783ad2e12ec"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_mount_full" ref="4411ad4e38754e5d7e2b4783ad2e12ec" args="(const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -512,7 +521,7 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#3133e84bd38ce3f12b5199726c23fcf3">CairoDockFMMountCallback</a>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#c06b8471ab1dde9170dbcb101356cd7a">CairoDockFMMountCallback</a>&nbsp;</td>
           <td class="paramname"> <em>pCallback</em>, </td>
         </tr>
         <tr>
@@ -524,8 +533,8 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
-          <td class="paramname"> <em>pDock</em></td><td>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoContainer.html">CairoContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -540,7 +549,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="e7c503e762b954abdf62411f6f88f6be"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_unmount_full" ref="e7c503e762b954abdf62411f6f88f6be" args="(const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoDock *pDock)" -->
+<a class="anchor" name="6bf54e5dd7625c3ca39c5c837f65d942"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_unmount_full" ref="6bf54e5dd7625c3ca39c5c837f65d942" args="(const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -559,7 +568,7 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#3133e84bd38ce3f12b5199726c23fcf3">CairoDockFMMountCallback</a>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#c06b8471ab1dde9170dbcb101356cd7a">CairoDockFMMountCallback</a>&nbsp;</td>
           <td class="paramname"> <em>pCallback</em>, </td>
         </tr>
         <tr>
@@ -571,8 +580,8 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
-          <td class="paramname"> <em>pDock</em></td><td>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoContainer.html">CairoContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -607,6 +616,46 @@
           <td></td>
           <td>)</td>
           <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="7f9aa4ecd49f01a817cbcbb8fa6a5fb1"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_can_eject" ref="7f9aa4ecd49f01a817cbcbb8fa6a5fb1" args="(const gchar *cURI)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_fm_can_eject           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cURI</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="3a26da1b832583856ddcd08182dbd435"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_eject_drive" ref="3a26da1b832583856ddcd08182dbd435" args="(const gchar *cURI)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_fm_eject_drive           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cURI</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -665,7 +714,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="f457dcbad326420e2bc756f5fceb4ef0"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_get_trash_path" ref="f457dcbad326420e2bc756f5fceb4ef0" args="(const gchar *cNearURI, gboolean bCreateIfNecessary)" -->
+<a class="anchor" name="94bb0d54cc516b9c1ef73ac220fd7df9"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_get_trash_path" ref="94bb0d54cc516b9c1ef73ac220fd7df9" args="(const gchar *cNearURI, gchar **cFileInfoPath)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -678,8 +727,8 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gboolean&nbsp;</td>
-          <td class="paramname"> <em>bCreateIfNecessary</em></td><td>&nbsp;</td>
+          <td class="paramtype">gchar **&nbsp;</td>
+          <td class="paramname"> <em>cFileInfoPath</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -734,6 +783,26 @@
 
 </div>
 </div><p>
+<a class="anchor" name="56cbd53fa60a9d3cb4d381a865cc76ac"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_shutdown" ref="56cbd53fa60a9d3cb4d381a865cc76ac" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_fm_shutdown           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
 <a class="anchor" name="75a5c45877a66431607c14acf5dad4c1"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_setup_time" ref="75a5c45877a66431607c14acf5dad4c1" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
@@ -754,7 +823,27 @@
 
 </div>
 </div><p>
-<a class="anchor" name="53c54369805cfe6db42602737059d5cd"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_create_icon_from_URI" ref="53c54369805cfe6db42602737059d5cd" args="(const gchar *cURI, CairoDock *pDock)" -->
+<a class="anchor" name="2ce892c689c0b276a7c3ff397bf669e4"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_show_system_monitor" ref="2ce892c689c0b276a7c3ff397bf669e4" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_fm_show_system_monitor           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="7c8c4578667ce32c74f3470aea4caaf0"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_create_icon_from_URI" ref="7c8c4578667ce32c74f3470aea4caaf0" args="(const gchar *cURI, CairoContainer *pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -767,8 +856,8 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
-          <td class="paramname"> <em>pDock</em></td><td>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoContainer.html">CairoContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -783,7 +872,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="f7cf475653106cfbf90c05332e2a2bc4"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_create_dock_from_directory" ref="f7cf475653106cfbf90c05332e2a2bc4" args="(Icon *pIcon)" -->
+<a class="anchor" name="1ed4b09095bcdfe3eb36cc019b1aa2cf"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_create_dock_from_directory" ref="1ed4b09095bcdfe3eb36cc019b1aa2cf" args="(Icon *pIcon, CairoDock *pParentDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -791,9 +880,18 @@
           <td class="memname">void cairo_dock_fm_create_dock_from_directory           </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
-          <td class="paramname"> <em>pIcon</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pParentDock</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -879,7 +977,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="5b4345525a21a7d99d8703c42777897b"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_action_after_mounting" ref="5b4345525a21a7d99d8703c42777897b" args="(gboolean bMounting, gboolean bSuccess, const gchar *cName, Icon *icon, CairoDock *pDock)" -->
+<a class="anchor" name="3c047c3ea4f4207f870b00641051bbcb"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_action_after_mounting" ref="3c047c3ea4f4207f870b00641051bbcb" args="(gboolean bMounting, gboolean bSuccess, const gchar *cName, Icon *icon, CairoContainer *pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -910,8 +1008,8 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
-          <td class="paramname"> <em>pDock</em></td><td>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoContainer.html">CairoContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -926,7 +1024,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="403d40617edf70d57f51c42cee8b5835"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_move_into_directory" ref="403d40617edf70d57f51c42cee8b5835" args="(const gchar *cURI, Icon *icon, CairoDock *pDock)" -->
+<a class="anchor" name="c2fcd4c547bf19739807e7753a660532"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_move_into_directory" ref="c2fcd4c547bf19739807e7753a660532" args="(const gchar *cURI, Icon *icon, CairoContainer *pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -945,8 +1043,8 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
-          <td class="paramname"> <em>pDock</em></td><td>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoContainer.html">CairoContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -961,8 +1059,9 @@
 
 </div>
 </div><p>
-<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+</div>
+<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
 </html>

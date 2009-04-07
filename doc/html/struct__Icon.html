@@ -4,12 +4,13 @@
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.3 -->
-<div class="tabs">
-  <ul>
-    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
-    <li class="current"><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li><a href="files.html"><span>Fichiers</span></a></li>
+<!-- Généré par Doxygen 1.5.5 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>Page&nbsp;principale</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li><a href="files.html"><span>Fichiers</span></a></li>
     <li>
       <form action="search.php" method="get">
         <table cellspacing="0" cellpadding="0" border="0">
@@ -20,14 +21,16 @@
         </table>
       </form>
     </li>
-  </ul>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li><a href="functions.html"><span>Champs&nbsp;de&nbsp;donnée</span></a></li>
+    </ul>
+  </div>
 </div>
-<div class="tabs">
-  <ul>
-    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li><a href="functions.html"><span>Champs&nbsp;de&nbsp;donnée</span></a></li>
-  </ul>
-</div>
+<div class="contents">
 <h1>Référence de la structure _Icon</h1><!-- doxytag: class="_Icon" --><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Champs de données</h2></td></tr>
@@ -66,10 +69,9 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Nom du dock contenant l'icone (y compris lorsque l'icone est dans un desklet).  <a href="#3a79d44f8a7ff21cb0d73f5570a35266"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#1601cdc5344f5ee7e399c6b1a65feb50">fWidth</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Largeur de l'image de l'icone.  <a href="#1601cdc5344f5ee7e399c6b1a65feb50"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Dimensions de la surface de l'icone.  <a href="#1601cdc5344f5ee7e399c6b1a65feb50"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#5849393004f8412ac1468827b7e810f3">fHeight</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Hauteur de l'image de l'icone.  <a href="#5849393004f8412ac1468827b7e810f3"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#eabd5f48e2453ec0eb2f7bb223a9873b">pIconBuffer</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Surface cairo de l'image.  <a href="#eabd5f48e2453ec0eb2f7bb223a9873b"></a><br></td></tr>
@@ -79,21 +81,16 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#50875c55a277b82454943fafc462a299">pReflectionBuffer</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Surface cairo du reflet.  <a href="#50875c55a277b82454943fafc462a299"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#4e57fdf58863fa55440149a73907edca">pFullIconBuffer</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#4e8865c6122822983d02ab6784e7ef48">iTextWidth</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Surface cairo de l'image et de son reflet.  <a href="#4e57fdf58863fa55440149a73907edca"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#9711919e518a35cb4409033221db63a9">iTextWidth</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">dimensions de l'etiquette.  <a href="#4e8865c6122822983d02ab6784e7ef48"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#6a391a293f3161c00885d3b83c5a1cbb">iTextHeight</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Largeur de l'etiquette.  <a href="#9711919e518a35cb4409033221db63a9"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#7d3c6d0abb489f7d4eb7be7865163b10">iTextHeight</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Hauteur de l'etiquette.  <a href="#7d3c6d0abb489f7d4eb7be7865163b10"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#732eeef9df7a86833b6e800be2bd6507">fTextXOffset</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Decalage en X de l'etiquette.  <a href="#732eeef9df7a86833b6e800be2bd6507"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Decalage en X et en Y de l'etiquette.  <a href="#732eeef9df7a86833b6e800be2bd6507"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#0c5ce4dac4822d860c384824a1cfcff4">fTextYOffset</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Decalage en Y de l'etiquette.  <a href="#0c5ce4dac4822d860c384824a1cfcff4"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#7f54b7ebaa94e52a5e12d83f58358aee">fXMax</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Abscisse maximale (droite) que l'icone atteindra (variable avec la vague).  <a href="#7f54b7ebaa94e52a5e12d83f58358aee"></a><br></td></tr>
@@ -133,12 +130,6 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#477df6868e6077e74f348fd2a773fd2a">bPointed</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">TRUE ssi l'icone est couramment pointee.  <a href="#477df6868e6077e74f348fd2a773fd2a"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#470706f7184913004a81a32c0c96ff40">iCount</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Compteur de l'animation de l'icone (&gt; 0 si une animation est en cours, 0 sinon).  <a href="#470706f7184913004a81a32c0c96ff40"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#72c6f286d96c028feb8d4516820b74d9">CairoDockAnimationType</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#f6f5d75a4d7bc97ffd1698c5b9f228c9">iAnimationType</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Type de l'animation.  <a href="#f6f5d75a4d7bc97ffd1698c5b9f228c9"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#d82607fc388efb4d012e5a8de872f8ca">fPersonnalScale</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Facteur de zoom personnel, utilise pour l'apparition et la suppression des icones.  <a href="#d82607fc388efb4d012e5a8de872f8ca"></a><br></td></tr>
@@ -147,7 +138,13 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Decalage en ordonnees de reflet (pour le rebond, &gt;= 0).  <a href="#68af6b183dd833a9c1a9c7072d20522c"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#30c29ae51f620d51dcee811ebd1c8295">fOrientation</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Orientation de l'icone (angle par rapport a la verticale).  <a href="#30c29ae51f620d51dcee811ebd1c8295"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Orientation de l'icone (angle par rapport a la verticale Oz).  <a href="#30c29ae51f620d51dcee811ebd1c8295"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#b271912817a090676c4198ca9da6ac93">iRotationX</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Rotation autour de l'axe Ox (animation upside-down).  <a href="#b271912817a090676c4198ca9da6ac93"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#0d07614347c1a9d16f7de0d1b133fa85">iRotationY</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Rotation autour de l'axe Oy (animation rotate).  <a href="#0d07614347c1a9d16f7de0d1b133fa85"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#f3b6afeb6207d6efd48f494823c4e8fa">iPid</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">PID de l'application correspondante.  <a href="#f3b6afeb6207d6efd48f494823c4e8fa"></a><br></td></tr>
@@ -157,39 +154,96 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#5b779d58aeebeedf08bb06131a871e9b">cClass</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Classe de l'application correspondante (ou NULL si aucune).  <a href="#5b779d58aeebeedf08bb06131a871e9b"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#a615848185216245e435335c50a84edb">fLastCheckTime</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#7cf461a374f98e4a5fb13a00a64ecdb6">cInitialName</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Heure de derniere verification de la presence de l'application dans la barre des taches.  <a href="#a615848185216245e435335c50a84edb"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Etiquette du lanceur a sa creation, ecrasee par le nom courant de l'appli.  <a href="#7cf461a374f98e4a5fb13a00a64ecdb6"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#b3f5f1f4c7c4691b02bb36d46a746f6c">iLastCheckTime</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Heure de derniere verification de la presence de l'application dans la barre des taches.  <a href="#b3f5f1f4c7c4691b02bb36d46a746f6c"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#ec7e3513e8e070992c131a08f80819d2">bIsHidden</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">TRUE ssi la fenetre de l'application correspondante est minimisee.  <a href="#ec7e3513e8e070992c131a08f80819d2"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">GtkAllocation&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#182062b6757318f975e5638b90132fe2">windowGeometry</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Position et taille de la fenetre.  <a href="#182062b6757318f975e5638b90132fe2"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#3e869dde23dbc5a378b089546b7f69ee">pModule</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#583b489f1402063692490524afd9daa6">bIsFullScreen</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Module que represente l'icone.  <a href="#3e869dde23dbc5a378b089546b7f69ee"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">TRUE ssi la fenetre est en mode plein ecran.  <a href="#583b489f1402063692490524afd9daa6"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#88fc0a6cde370516df83d1b7efe54036">bIsMaximized</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">TRUE ssi la fenetre est en mode maximisee.  <a href="#88fc0a6cde370516df83d1b7efe54036"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#24e26efeff9aff73a5e97fb4017dd8c0">bIsDemandingAttention</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">TRUE ssi la fenetre demande l'attention ou est en mode urgente.  <a href="#24e26efeff9aff73a5e97fb4017dd8c0"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#babf418c6dd218fc6e90dd36b8ef2355">bHasIndicator</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">TRUE ssi l'icone a un indicateur (elle controle une appli).  <a href="#babf418c6dd218fc6e90dd36b8ef2355"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">Pixmap&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#c665541face20282ffec846301aa9cff">iBackingPixmap</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">ID du pixmap de sauvegarde de la fenetre pour quand elle est cachee.  <a href="#c665541face20282ffec846301aa9cff"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#a776ed0f55a7001b517759c68d3ea789">pModuleInstance</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Instance de module que represente l'icone.  <a href="#a776ed0f55a7001b517759c68d3ea789"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#a9d8cbea9ad2bdb074a968c0d6759246">cQuickInfo</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Texte de l'info rapide.  <a href="#a9d8cbea9ad2bdb074a968c0d6759246"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#d76fc0ce7debba080e598955f87f5ce4">pQuickInfoBuffer</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Surface cairo de l'info rapide.  <a href="#d76fc0ce7debba080e598955f87f5ce4"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#455e501ac7cbec2e9f7b88f8bb064438">iQuickInfoWidth</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#d05c5e5cd68cd435e91ed733959fd2b6">iQuickInfoWidth</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Largeur de l'info rapide.  <a href="#455e501ac7cbec2e9f7b88f8bb064438"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#766df2d95a65730626349bdb5901962f">iQuickInfoHeight</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Largeur de l'info rapide.  <a href="#d05c5e5cd68cd435e91ed733959fd2b6"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#75bfaea852a7e4ad85c3532eee307676">iQuickInfoHeight</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Heuteur de l'info rapide.  <a href="#766df2d95a65730626349bdb5901962f"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#aa5953181fa5eb4dc927396b1d3436cf">fQuickInfoXOffset</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Heuteur de l'info rapide.  <a href="#75bfaea852a7e4ad85c3532eee307676"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#2472a24ee2bb440c0d18dbed4acde235">fQuickInfoXOffset</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Decalage en X de la surface de l'info rapide.  <a href="#aa5953181fa5eb4dc927396b1d3436cf"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#301e7fc7080150fcabbb0931319a9d0a">fQuickInfoYOffset</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Decalage en X de la surface de l'info rapide.  <a href="#2472a24ee2bb440c0d18dbed4acde235"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#6023363a7d2a69fa01001eee012492a3">fQuickInfoYOffset</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Decalage en Y de la surface de l'info rapide.  <a href="#301e7fc7080150fcabbb0931319a9d0a"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#babf418c6dd218fc6e90dd36b8ef2355">bHasIndicator</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Decalage en Y de la surface de l'info rapide.  <a href="#6023363a7d2a69fa01001eee012492a3"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#7cabf965ab96988363bd8a6f3eee95a2">fGlideOffset</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">TRUE ssi l'icone a un indicateur (elle controle une appli).  <a href="#babf418c6dd218fc6e90dd36b8ef2355"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">decalage pour le glissement des icones.  <a href="#7cabf965ab96988363bd8a6f3eee95a2"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#1138107d4d8aba882adbb71642560b58">iGlideDirection</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">direction dans laquelle glisse l'icone.  <a href="#1138107d4d8aba882adbb71642560b58"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#88969c564902970fc9bad7be381e4be8">fGlideScale</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">echelle d'adaptation au glissement.  <a href="#88969c564902970fc9bad7be381e4be8"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GLuint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#3eba4ef6dad2aed9ef82e533d504e461">iIconTexture</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GLuint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#5c6a119a89da0f69b6a9ff9813955045">iLabelTexture</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GLuint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#190ac3f565df8f9f12a978ab36ac3055">iQuickInfoTexture</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gpointer&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#1671c54381c24e2f27e5572570206c74">pDataSlot</a> [CAIRO_DOCK_NB_DATA_SLOT]</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#35ffdcfb64eeaed1adbe2c00668ee3ea">bStatic</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#6f884cd4a5b75b5c1ef0d2580c91e4b9">CairoDockAnimationState</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#e0a1f4b6b6720e0c154d037db7c91e64">iAnimationState</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#ea888980113def6c08a5db1e4009ba81">bBeingRemovedByCairo</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gpointer&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#c121b6dbb21a86512f176bb95391a06d">pbuffer</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GPtrArray *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#63e25b5a9fbaba7f5c5fc6c4692a28e4">pNotificationsTab</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">liste des notifications disponibles.  <a href="#63e25b5a9fbaba7f5c5fc6c4692a28e4"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDataRenderer.html">CairoDataRenderer</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#1a0006cdd9a3c8af75486f429a089d76">pDataRenderer</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#37dc07e3096487f7eb1ff00991bf7b12">iNumDesktop</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#3ac50c7f63facfd196f7bfccfb0e9b57">iViewPortX</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#318235a57599e7f14a45ee4d787acffc">iViewPortY</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#c00ee1f070b8777c28db345766c14838">iStackOrder</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockTransition.html">CairoDockTransition</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#8d4ca2c5450ff77835ea76cbf74e132c">pTransition</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__Icon.html#be2548102d20b7ca9b6c2e305e1818b6">fReflectShading</a></td></tr>
+
 </table>
 <hr><h2>Documentation des champs</h2>
 <a class="anchor" name="5f3113020e0305c64fe6b6e87002b0fb"></a><!-- doxytag: member="_Icon::acDesktopFileName" ref="5f3113020e0305c64fe6b6e87002b0fb" args="" -->
@@ -391,7 +445,7 @@ Nom du dock contenant l'icone (y compris lorsque l'icone est dans un desklet).
 <div class="memdoc">
 
 <p>
-Largeur de l'image de l'icone. 
+Dimensions de la surface de l'icone. 
 <p>
 
 </div>
@@ -407,8 +461,6 @@ Largeur de l'image de l'icone.
 </div>
 <div class="memdoc">
 
-<p>
-Hauteur de l'image de l'icone. 
 <p>
 
 </div>
@@ -464,53 +516,34 @@ Surface cairo du reflet.
 
 </div>
 </div><p>
-<a class="anchor" name="4e57fdf58863fa55440149a73907edca"></a><!-- doxytag: member="_Icon::pFullIconBuffer" ref="4e57fdf58863fa55440149a73907edca" args="" -->
+<a class="anchor" name="4e8865c6122822983d02ab6784e7ef48"></a><!-- doxytag: member="_Icon::iTextWidth" ref="4e8865c6122822983d02ab6784e7ef48" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">cairo_surface_t* <a class="el" href="struct__Icon.html#4e57fdf58863fa55440149a73907edca">_Icon::pFullIconBuffer</a>          </td>
+          <td class="memname">gint <a class="el" href="struct__Icon.html#4e8865c6122822983d02ab6784e7ef48">_Icon::iTextWidth</a>          </td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>
-Surface cairo de l'image et de son reflet. 
+dimensions de l'etiquette. 
 <p>
 
 </div>
 </div><p>
-<a class="anchor" name="9711919e518a35cb4409033221db63a9"></a><!-- doxytag: member="_Icon::iTextWidth" ref="9711919e518a35cb4409033221db63a9" args="" -->
+<a class="anchor" name="6a391a293f3161c00885d3b83c5a1cbb"></a><!-- doxytag: member="_Icon::iTextHeight" ref="6a391a293f3161c00885d3b83c5a1cbb" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int <a class="el" href="struct__Icon.html#9711919e518a35cb4409033221db63a9">_Icon::iTextWidth</a>          </td>
+          <td class="memname">gint <a class="el" href="struct__Icon.html#6a391a293f3161c00885d3b83c5a1cbb">_Icon::iTextHeight</a>          </td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>
-Largeur de l'etiquette. 
-<p>
-
-</div>
-</div><p>
-<a class="anchor" name="7d3c6d0abb489f7d4eb7be7865163b10"></a><!-- doxytag: member="_Icon::iTextHeight" ref="7d3c6d0abb489f7d4eb7be7865163b10" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int <a class="el" href="struct__Icon.html#7d3c6d0abb489f7d4eb7be7865163b10">_Icon::iTextHeight</a>          </td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Hauteur de l'etiquette. 
 <p>
 
 </div>
@@ -527,7 +560,7 @@ Hauteur de l'etiquette.
 <div class="memdoc">
 
 <p>
-Decalage en X de l'etiquette. 
+Decalage en X et en Y de l'etiquette. 
 <p>
 
 </div>
@@ -543,8 +576,6 @@ Decalage en X de l'etiquette.
 </div>
 <div class="memdoc">
 
-<p>
-Decalage en Y de l'etiquette. 
 <p>
 
 </div>
@@ -770,40 +801,6 @@ TRUE ssi l'icone est couramment pointee.
 
 </div>
 </div><p>
-<a class="anchor" name="470706f7184913004a81a32c0c96ff40"></a><!-- doxytag: member="_Icon::iCount" ref="470706f7184913004a81a32c0c96ff40" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">gint <a class="el" href="struct__Icon.html#470706f7184913004a81a32c0c96ff40">_Icon::iCount</a>          </td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Compteur de l'animation de l'icone (&gt; 0 si une animation est en cours, 0 sinon). 
-<p>
-
-</div>
-</div><p>
-<a class="anchor" name="f6f5d75a4d7bc97ffd1698c5b9f228c9"></a><!-- doxytag: member="_Icon::iAnimationType" ref="f6f5d75a4d7bc97ffd1698c5b9f228c9" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="cairo-dock-struct_8h.html#72c6f286d96c028feb8d4516820b74d9">CairoDockAnimationType</a> <a class="el" href="struct__Icon.html#f6f5d75a4d7bc97ffd1698c5b9f228c9">_Icon::iAnimationType</a>          </td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Type de l'animation. 
-<p>
-
-</div>
-</div><p>
 <a class="anchor" name="d82607fc388efb4d012e5a8de872f8ca"></a><!-- doxytag: member="_Icon::fPersonnalScale" ref="d82607fc388efb4d012e5a8de872f8ca" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -850,7 +847,41 @@ Decalage en ordonnees de reflet (pour le rebond, &gt;= 0).
 <div class="memdoc">
 
 <p>
-Orientation de l'icone (angle par rapport a la verticale). 
+Orientation de l'icone (angle par rapport a la verticale Oz). 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="b271912817a090676c4198ca9da6ac93"></a><!-- doxytag: member="_Icon::iRotationX" ref="b271912817a090676c4198ca9da6ac93" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__Icon.html#b271912817a090676c4198ca9da6ac93">_Icon::iRotationX</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Rotation autour de l'axe Ox (animation upside-down). 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="0d07614347c1a9d16f7de0d1b133fa85"></a><!-- doxytag: member="_Icon::iRotationY" ref="0d07614347c1a9d16f7de0d1b133fa85" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__Icon.html#0d07614347c1a9d16f7de0d1b133fa85">_Icon::iRotationY</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Rotation autour de l'axe Oy (animation rotate). 
 <p>
 
 </div>
@@ -906,12 +937,29 @@ Classe de l'application correspondante (ou NULL si aucune).
 
 </div>
 </div><p>
-<a class="anchor" name="a615848185216245e435335c50a84edb"></a><!-- doxytag: member="_Icon::fLastCheckTime" ref="a615848185216245e435335c50a84edb" args="" -->
+<a class="anchor" name="7cf461a374f98e4a5fb13a00a64ecdb6"></a><!-- doxytag: member="_Icon::cInitialName" ref="7cf461a374f98e4a5fb13a00a64ecdb6" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double <a class="el" href="struct__Icon.html#a615848185216245e435335c50a84edb">_Icon::fLastCheckTime</a>          </td>
+          <td class="memname">gchar* <a class="el" href="struct__Icon.html#7cf461a374f98e4a5fb13a00a64ecdb6">_Icon::cInitialName</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Etiquette du lanceur a sa creation, ecrasee par le nom courant de l'appli. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="b3f5f1f4c7c4691b02bb36d46a746f6c"></a><!-- doxytag: member="_Icon::iLastCheckTime" ref="b3f5f1f4c7c4691b02bb36d46a746f6c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__Icon.html#b3f5f1f4c7c4691b02bb36d46a746f6c">_Icon::iLastCheckTime</a>          </td>
         </tr>
       </table>
 </div>
@@ -957,19 +1005,104 @@ Position et taille de la fenetre.
 
 </div>
 </div><p>
-<a class="anchor" name="3e869dde23dbc5a378b089546b7f69ee"></a><!-- doxytag: member="_Icon::pModule" ref="3e869dde23dbc5a378b089546b7f69ee" args="" -->
+<a class="anchor" name="583b489f1402063692490524afd9daa6"></a><!-- doxytag: member="_Icon::bIsFullScreen" ref="583b489f1402063692490524afd9daa6" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a>* <a class="el" href="struct__Icon.html#3e869dde23dbc5a378b089546b7f69ee">_Icon::pModule</a>          </td>
+          <td class="memname">gboolean <a class="el" href="struct__Icon.html#583b489f1402063692490524afd9daa6">_Icon::bIsFullScreen</a>          </td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>
-Module que represente l'icone. 
+TRUE ssi la fenetre est en mode plein ecran. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="88fc0a6cde370516df83d1b7efe54036"></a><!-- doxytag: member="_Icon::bIsMaximized" ref="88fc0a6cde370516df83d1b7efe54036" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__Icon.html#88fc0a6cde370516df83d1b7efe54036">_Icon::bIsMaximized</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+TRUE ssi la fenetre est en mode maximisee. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="24e26efeff9aff73a5e97fb4017dd8c0"></a><!-- doxytag: member="_Icon::bIsDemandingAttention" ref="24e26efeff9aff73a5e97fb4017dd8c0" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__Icon.html#24e26efeff9aff73a5e97fb4017dd8c0">_Icon::bIsDemandingAttention</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+TRUE ssi la fenetre demande l'attention ou est en mode urgente. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="babf418c6dd218fc6e90dd36b8ef2355"></a><!-- doxytag: member="_Icon::bHasIndicator" ref="babf418c6dd218fc6e90dd36b8ef2355" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__Icon.html#babf418c6dd218fc6e90dd36b8ef2355">_Icon::bHasIndicator</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+TRUE ssi l'icone a un indicateur (elle controle une appli). 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="c665541face20282ffec846301aa9cff"></a><!-- doxytag: member="_Icon::iBackingPixmap" ref="c665541face20282ffec846301aa9cff" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Pixmap <a class="el" href="struct__Icon.html#c665541face20282ffec846301aa9cff">_Icon::iBackingPixmap</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+ID du pixmap de sauvegarde de la fenetre pour quand elle est cachee. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="a776ed0f55a7001b517759c68d3ea789"></a><!-- doxytag: member="_Icon::pModuleInstance" ref="a776ed0f55a7001b517759c68d3ea789" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a>* <a class="el" href="struct__Icon.html#a776ed0f55a7001b517759c68d3ea789">_Icon::pModuleInstance</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Instance de module que represente l'icone. 
 <p>
 
 </div>
@@ -1008,12 +1141,12 @@ Surface cairo de l'info rapide.
 
 </div>
 </div><p>
-<a class="anchor" name="455e501ac7cbec2e9f7b88f8bb064438"></a><!-- doxytag: member="_Icon::iQuickInfoWidth" ref="455e501ac7cbec2e9f7b88f8bb064438" args="" -->
+<a class="anchor" name="d05c5e5cd68cd435e91ed733959fd2b6"></a><!-- doxytag: member="_Icon::iQuickInfoWidth" ref="d05c5e5cd68cd435e91ed733959fd2b6" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int <a class="el" href="struct__Icon.html#455e501ac7cbec2e9f7b88f8bb064438">_Icon::iQuickInfoWidth</a>          </td>
+          <td class="memname">gint <a class="el" href="struct__Icon.html#d05c5e5cd68cd435e91ed733959fd2b6">_Icon::iQuickInfoWidth</a>          </td>
         </tr>
       </table>
 </div>
@@ -1025,12 +1158,12 @@ Largeur de l'info rapide.
 
 </div>
 </div><p>
-<a class="anchor" name="766df2d95a65730626349bdb5901962f"></a><!-- doxytag: member="_Icon::iQuickInfoHeight" ref="766df2d95a65730626349bdb5901962f" args="" -->
+<a class="anchor" name="75bfaea852a7e4ad85c3532eee307676"></a><!-- doxytag: member="_Icon::iQuickInfoHeight" ref="75bfaea852a7e4ad85c3532eee307676" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int <a class="el" href="struct__Icon.html#766df2d95a65730626349bdb5901962f">_Icon::iQuickInfoHeight</a>          </td>
+          <td class="memname">gint <a class="el" href="struct__Icon.html#75bfaea852a7e4ad85c3532eee307676">_Icon::iQuickInfoHeight</a>          </td>
         </tr>
       </table>
 </div>
@@ -1042,12 +1175,12 @@ Heuteur de l'info rapide.
 
 </div>
 </div><p>
-<a class="anchor" name="aa5953181fa5eb4dc927396b1d3436cf"></a><!-- doxytag: member="_Icon::fQuickInfoXOffset" ref="aa5953181fa5eb4dc927396b1d3436cf" args="" -->
+<a class="anchor" name="2472a24ee2bb440c0d18dbed4acde235"></a><!-- doxytag: member="_Icon::fQuickInfoXOffset" ref="2472a24ee2bb440c0d18dbed4acde235" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double <a class="el" href="struct__Icon.html#aa5953181fa5eb4dc927396b1d3436cf">_Icon::fQuickInfoXOffset</a>          </td>
+          <td class="memname">gdouble <a class="el" href="struct__Icon.html#2472a24ee2bb440c0d18dbed4acde235">_Icon::fQuickInfoXOffset</a>          </td>
         </tr>
       </table>
 </div>
@@ -1059,12 +1192,12 @@ Decalage en X de la surface de l'info rapide.
 
 </div>
 </div><p>
-<a class="anchor" name="301e7fc7080150fcabbb0931319a9d0a"></a><!-- doxytag: member="_Icon::fQuickInfoYOffset" ref="301e7fc7080150fcabbb0931319a9d0a" args="" -->
+<a class="anchor" name="6023363a7d2a69fa01001eee012492a3"></a><!-- doxytag: member="_Icon::fQuickInfoYOffset" ref="6023363a7d2a69fa01001eee012492a3" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double <a class="el" href="struct__Icon.html#301e7fc7080150fcabbb0931319a9d0a">_Icon::fQuickInfoYOffset</a>          </td>
+          <td class="memname">gdouble <a class="el" href="struct__Icon.html#6023363a7d2a69fa01001eee012492a3">_Icon::fQuickInfoYOffset</a>          </td>
         </tr>
       </table>
 </div>
@@ -1076,27 +1209,304 @@ Decalage en Y de la surface de l'info rapide.
 
 </div>
 </div><p>
-<a class="anchor" name="babf418c6dd218fc6e90dd36b8ef2355"></a><!-- doxytag: member="_Icon::bHasIndicator" ref="babf418c6dd218fc6e90dd36b8ef2355" args="" -->
+<a class="anchor" name="7cabf965ab96988363bd8a6f3eee95a2"></a><!-- doxytag: member="_Icon::fGlideOffset" ref="7cabf965ab96988363bd8a6f3eee95a2" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">gboolean <a class="el" href="struct__Icon.html#babf418c6dd218fc6e90dd36b8ef2355">_Icon::bHasIndicator</a>          </td>
+          <td class="memname">gdouble <a class="el" href="struct__Icon.html#7cabf965ab96988363bd8a6f3eee95a2">_Icon::fGlideOffset</a>          </td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>
-TRUE ssi l'icone a un indicateur (elle controle une appli). 
+decalage pour le glissement des icones. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="1138107d4d8aba882adbb71642560b58"></a><!-- doxytag: member="_Icon::iGlideDirection" ref="1138107d4d8aba882adbb71642560b58" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__Icon.html#1138107d4d8aba882adbb71642560b58">_Icon::iGlideDirection</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+direction dans laquelle glisse l'icone. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="88969c564902970fc9bad7be381e4be8"></a><!-- doxytag: member="_Icon::fGlideScale" ref="88969c564902970fc9bad7be381e4be8" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gdouble <a class="el" href="struct__Icon.html#88969c564902970fc9bad7be381e4be8">_Icon::fGlideScale</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+echelle d'adaptation au glissement. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="3eba4ef6dad2aed9ef82e533d504e461"></a><!-- doxytag: member="_Icon::iIconTexture" ref="3eba4ef6dad2aed9ef82e533d504e461" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GLuint <a class="el" href="struct__Icon.html#3eba4ef6dad2aed9ef82e533d504e461">_Icon::iIconTexture</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="5c6a119a89da0f69b6a9ff9813955045"></a><!-- doxytag: member="_Icon::iLabelTexture" ref="5c6a119a89da0f69b6a9ff9813955045" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GLuint <a class="el" href="struct__Icon.html#5c6a119a89da0f69b6a9ff9813955045">_Icon::iLabelTexture</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="190ac3f565df8f9f12a978ab36ac3055"></a><!-- doxytag: member="_Icon::iQuickInfoTexture" ref="190ac3f565df8f9f12a978ab36ac3055" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GLuint <a class="el" href="struct__Icon.html#190ac3f565df8f9f12a978ab36ac3055">_Icon::iQuickInfoTexture</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="1671c54381c24e2f27e5572570206c74"></a><!-- doxytag: member="_Icon::pDataSlot" ref="1671c54381c24e2f27e5572570206c74" args="[CAIRO_DOCK_NB_DATA_SLOT]" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gpointer <a class="el" href="struct__Icon.html#1671c54381c24e2f27e5572570206c74">_Icon::pDataSlot</a>[CAIRO_DOCK_NB_DATA_SLOT]          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="35ffdcfb64eeaed1adbe2c00668ee3ea"></a><!-- doxytag: member="_Icon::bStatic" ref="35ffdcfb64eeaed1adbe2c00668ee3ea" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__Icon.html#35ffdcfb64eeaed1adbe2c00668ee3ea">_Icon::bStatic</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="e0a1f4b6b6720e0c154d037db7c91e64"></a><!-- doxytag: member="_Icon::iAnimationState" ref="e0a1f4b6b6720e0c154d037db7c91e64" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="cairo-dock-struct_8h.html#6f884cd4a5b75b5c1ef0d2580c91e4b9">CairoDockAnimationState</a> <a class="el" href="struct__Icon.html#e0a1f4b6b6720e0c154d037db7c91e64">_Icon::iAnimationState</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ea888980113def6c08a5db1e4009ba81"></a><!-- doxytag: member="_Icon::bBeingRemovedByCairo" ref="ea888980113def6c08a5db1e4009ba81" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__Icon.html#ea888980113def6c08a5db1e4009ba81">_Icon::bBeingRemovedByCairo</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="c121b6dbb21a86512f176bb95391a06d"></a><!-- doxytag: member="_Icon::pbuffer" ref="c121b6dbb21a86512f176bb95391a06d" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gpointer <a class="el" href="struct__Icon.html#c121b6dbb21a86512f176bb95391a06d">_Icon::pbuffer</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="63e25b5a9fbaba7f5c5fc6c4692a28e4"></a><!-- doxytag: member="_Icon::pNotificationsTab" ref="63e25b5a9fbaba7f5c5fc6c4692a28e4" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GPtrArray* <a class="el" href="struct__Icon.html#63e25b5a9fbaba7f5c5fc6c4692a28e4">_Icon::pNotificationsTab</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+liste des notifications disponibles. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="1a0006cdd9a3c8af75486f429a089d76"></a><!-- doxytag: member="_Icon::pDataRenderer" ref="1a0006cdd9a3c8af75486f429a089d76" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDataRenderer.html">CairoDataRenderer</a>* <a class="el" href="struct__Icon.html#1a0006cdd9a3c8af75486f429a089d76">_Icon::pDataRenderer</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="37dc07e3096487f7eb1ff00991bf7b12"></a><!-- doxytag: member="_Icon::iNumDesktop" ref="37dc07e3096487f7eb1ff00991bf7b12" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__Icon.html#37dc07e3096487f7eb1ff00991bf7b12">_Icon::iNumDesktop</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="3ac50c7f63facfd196f7bfccfb0e9b57"></a><!-- doxytag: member="_Icon::iViewPortX" ref="3ac50c7f63facfd196f7bfccfb0e9b57" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__Icon.html#3ac50c7f63facfd196f7bfccfb0e9b57">_Icon::iViewPortX</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="318235a57599e7f14a45ee4d787acffc"></a><!-- doxytag: member="_Icon::iViewPortY" ref="318235a57599e7f14a45ee4d787acffc" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__Icon.html#318235a57599e7f14a45ee4d787acffc">_Icon::iViewPortY</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="c00ee1f070b8777c28db345766c14838"></a><!-- doxytag: member="_Icon::iStackOrder" ref="c00ee1f070b8777c28db345766c14838" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__Icon.html#c00ee1f070b8777c28db345766c14838">_Icon::iStackOrder</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="8d4ca2c5450ff77835ea76cbf74e132c"></a><!-- doxytag: member="_Icon::pTransition" ref="8d4ca2c5450ff77835ea76cbf74e132c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockTransition.html">CairoDockTransition</a>* <a class="el" href="struct__Icon.html#8d4ca2c5450ff77835ea76cbf74e132c">_Icon::pTransition</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="be2548102d20b7ca9b6c2e305e1818b6"></a><!-- doxytag: member="_Icon::fReflectShading" ref="be2548102d20b7ca9b6c2e305e1818b6" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gdouble <a class="el" href="struct__Icon.html#be2548102d20b7ca9b6c2e305e1818b6">_Icon::fReflectShading</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
 <p>
 
 </div>
 </div><p>
 <hr>La documentation de cette structure a été générée à partir du fichier suivant :<ul>
-<li>/opt/cairo-dock/trunk/cairo-dock/src/<a class="el" href="cairo-dock-struct_8h-source.html">cairo-dock-struct.h</a></ul>
-<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<li>/home/fab/CD/trunk/cairo-dock/src/<a class="el" href="cairo-dock-struct_8h.html">cairo-dock-struct.h</a></ul>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
 </html>

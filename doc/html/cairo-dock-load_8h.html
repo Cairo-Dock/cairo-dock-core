@@ -1,15 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-load.h</title>
+<title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-load.h</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.3 -->
-<div class="tabs">
-  <ul>
-    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
-    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+<!-- Généré par Doxygen 1.5.5 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>Page&nbsp;principale</span></a></li>
+      <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
     <li>
       <form action="search.php" method="get">
         <table cellspacing="0" cellpadding="0" border="0">
@@ -20,37 +21,53 @@
         </table>
       </form>
     </li>
-  </ul>
+    </ul>
+  </div>
 </div>
-<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-load.h</h1>
-<p>
-<a href="cairo-dock-load_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<div class="contents">
+<h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-load.h</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Macros</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#909a189c250a899f1f358da27af3b4e3">cairo_dock_load_image_for_square_icon</a>(pSourceContext, cImageFile, fImageSize)&nbsp;&nbsp;&nbsp;cairo_dock_load_image_for_icon (pSourceContext, cImageFile, fImageSize, fImageSize)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#890b6f4d0bfb83ac3279fba3c489fec2">cairo_dock_strings_differ</a>(s1, s2)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#3a3f741090564804aa10bd696d4dafd4">cairo_dock_fill_icon_buffers_for_desklet</a>(pIcon, pSourceContext)&nbsp;&nbsp;&nbsp;cairo_dock_fill_icon_buffers (pIcon, pSourceContext, 1, CAIRO_DOCK_HORIZONTAL, (pIcon-&gt;fWidth == 0 || pIcon-&gt;fHeight == 0));</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#895f526945aad300836e51563c1aa01d">cairo_dock_colors_rvb_differ</a>(c1, c2)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#833c01f83f46a6371522bc610d53b748">cairo_dock_fill_icon_buffers_for_dock</a>(pIcon, pSourceContext, pDock)&nbsp;&nbsp;&nbsp;cairo_dock_fill_icon_buffers (pIcon, pSourceContext, 1 + <a class="el" href="cairo-dock-global-variables_8h.html#71125a40fdc7b421002f176b9b82ac79">g_fAmplitude</a>, pDock-&gt;bHorizontalDock, TRUE);</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#ebc2d7c5a0bb089c328c0d0c68494a99">cairo_dock_colors_differ</a>(c1, c2)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#9cab631b347ee9c8b29271ac3acffc71">cairo_dock_load_buffers_in_one_dock</a>(pDock)&nbsp;&nbsp;&nbsp;cairo_dock_reload_buffers_in_dock (NULL, pDock, NULL)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#909a189c250a899f1f358da27af3b4e3">cairo_dock_load_image_for_square_icon</a>(pSourceContext, cImageFile, fImageSize)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#3a3f741090564804aa10bd696d4dafd4">cairo_dock_fill_icon_buffers_for_desklet</a>(pIcon, pSourceContext)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#833c01f83f46a6371522bc610d53b748">cairo_dock_fill_icon_buffers_for_dock</a>(pIcon, pSourceContext, pDock)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#9cab631b347ee9c8b29271ac3acffc71">cairo_dock_load_buffers_in_one_dock</a>(pDock)</td></tr>
 
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#7c32138319b7720c1dc03948223ad14b">cairo_dock_generate_file_path</a> (gchar *cImageFile)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#1b7d4d0b9b8753a2c423f8ab8ffde8de">cairo_dock_free_label_description</a> (<a class="el" href="struct__CairoDockLabelDescription.html">CairoDockLabelDescription</a> *pTextDescription)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#9f99a2ad5d78bae91031bdad24116375">cairo_dock_load_image</a> (cairo_t *pSourceContext, gchar *cImageFile, double *fImageWidth, double *fImageHeight, double fRotationAngle, double fAlpha, gboolean bReapeatAsPattern)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#31c1afca808bdfc3b24737250e9761b1">cairo_dock_copy_label_description</a> (<a class="el" href="struct__CairoDockLabelDescription.html">CairoDockLabelDescription</a> *pDestTextDescription, <a class="el" href="struct__CairoDockLabelDescription.html">CairoDockLabelDescription</a> *pOrigTextDescription)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#2773d15f186da24a5ce837a12f9c9339">cairo_dock_load_image_for_icon</a> (cairo_t *pSourceContext, gchar *cImageFile, double fImageWidth, double fImageHeight)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockLabelDescription.html">CairoDockLabelDescription</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#3ed0f56f352c99138220b95c1bfe6baa">cairo_dock_duplicate_label_description</a> (<a class="el" href="struct__CairoDockLabelDescription.html">CairoDockLabelDescription</a> *pOrigTextDescription)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#bc6ef046a83f95e29d3e50112ad1a06e">cairo_dock_fill_one_icon_buffer</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, cairo_t *pSourceContext, gdouble fMaxScale, gboolean bHorizontalDock, gboolean bApplySizeRestriction)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#7613693c420d1f4f2afe19eb0b2b265b">cairo_dock_generate_file_path</a> (const gchar *cImageFile)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#c1c4f6235fed0fe3c1e929d9e3b28a1d">cairo_dock_fill_one_text_buffer</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, cairo_t *pSourceContext, int iLabelSize, gchar *cLabelPolice, gboolean bHorizontalDock)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#41724caff92a04b3c8cdac42a57efa7b">cairo_dock_load_image</a> (cairo_t *pSourceContext, const gchar *cImageFile, double *fImageWidth, double *fImageHeight, double fRotationAngle, double fAlpha, gboolean bReapeatAsPattern)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#db3794cb1c5c277ebbfabbf7f9cf0353">cairo_dock_fill_one_quick_info_buffer</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, cairo_t *pSourceContext, int iLabelSize, gchar *cLabelPolice, int iLabelWeight, double fMaxScale)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#bd81d778b34fdc775e1911809074ff05">cairo_dock_load_image_for_icon</a> (cairo_t *pSourceContext, const gchar *cImageFile, double fImageWidth, double fImageHeight)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#82082132f1b2114fc29bade81a05435f">cairo_dock_fill_icon_buffers</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bApplySizeRestriction)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#50c6f632fcac1565a0f4a953dd644525">cairo_dock_add_reflection_to_icon</a> (cairo_t *pSourceContext, <a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#eb97abc40aeadf4a672cd3c12b4dc018">cairo_dock_load_one_icon_from_scratch</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#8876f421f0521f0b1b188f8e1f13185c">cairo_dock_fill_one_icon_buffer</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, cairo_t *pSourceContext, gdouble fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#7d45505093ecf41ad662d12da11dcad9">cairo_dock_cut_string</a> (const gchar *cString, int iNbCaracters)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#ad6cc8590e323394276ac47a5f04386f">cairo_dock_fill_one_text_buffer</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, cairo_t *pSourceContext, <a class="el" href="struct__CairoDockLabelDescription.html">CairoDockLabelDescription</a> *pTextDescription)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#bbeac35ae2862d6099809a070e8e757d">cairo_dock_fill_one_quick_info_buffer</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, cairo_t *pSourceContext, <a class="el" href="struct__CairoDockLabelDescription.html">CairoDockLabelDescription</a> *pTextDescription, double fMaxScale)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#d6e81e1f44dc580e4057d9a916b0183e">cairo_dock_fill_icon_buffers</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon, cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#b09097327e75199b5d6ed355191b3099">cairo_dock_load_one_icon_from_scratch</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#30995214491a8ba09aa8183d0556f4e1">cairo_dock_reload_buffers_in_dock</a> (gchar *cDockName, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, gpointer data)</td></tr>
 
@@ -62,8 +79,91 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#268069f58c9e5be378711e0fda8c4de9">cairo_dock_load_background_decorations</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#23f67ec90003c4cbb6ceb798fb65fd8e">cairo_dock_load_icons_background_surface</a> (const gchar *cImagePath, cairo_t *pSourceContext, double fMaxScale)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#6d93052f594348036a0b7d999e228e24">cairo_dock_load_desktop_background_surface</a> (void)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#59074ef902660eb9991665272ed24309">cairo_dock_invalidate_desktop_bg_surface</a> (void)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#d06f7ab48e236d5688e51cefd0e9f8bd">cairo_dock_get_desktop_bg_surface</a> (void)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#2ffc337770a375a0fc17e434a56b729e">cairo_dock_load_task_indicator</a> (const gchar *cIndicatorImagePath, cairo_t *pSourceContext, double fMaxScale, double fIndicatorRatio)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#cf151320d1c1923c38160ca3512e7981">cairo_dock_load_active_window_indicator</a> (cairo_t *pSourceContext, const gchar *cImagePath, double fMaxScale, double fCornerRadius, double fLineWidth, double *fActiveColor)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-load_8h.html#fbba88035704fcfabd0e779ccbb7a34a">cairo_dock_load_class_indicator</a> (const gchar *cIndicatorImagePath, cairo_t *pSourceContext, double fMaxScale)</td></tr>
+
 </table>
 <hr><h2>Documentation des macros</h2>
+<a class="anchor" name="890b6f4d0bfb83ac3279fba3c489fec2"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_strings_differ" ref="890b6f4d0bfb83ac3279fba3c489fec2" args="(s1, s2)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_strings_differ          </td>
+          <td>(</td>
+          <td class="paramtype">s1,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">s2&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="895f526945aad300836e51563c1aa01d"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_colors_rvb_differ" ref="895f526945aad300836e51563c1aa01d" args="(c1, c2)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_colors_rvb_differ          </td>
+          <td>(</td>
+          <td class="paramtype">c1,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">c2&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ebc2d7c5a0bb089c328c0d0c68494a99"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_colors_differ" ref="ebc2d7c5a0bb089c328c0d0c68494a99" args="(c1, c2)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_colors_differ          </td>
+          <td>(</td>
+          <td class="paramtype">c1,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">c2&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
 <a class="anchor" name="909a189c250a899f1f358da27af3b4e3"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_load_image_for_square_icon" ref="909a189c250a899f1f358da27af3b4e3" args="(pSourceContext, cImageFile, fImageSize)" -->
 <div class="memitem">
 <div class="memproto">
@@ -80,7 +180,7 @@
           <td class="paramtype">fImageSize&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;cairo_dock_load_image_for_icon (pSourceContext, cImageFile, fImageSize, fImageSize)</td>
+          <td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -103,7 +203,7 @@
           <td class="paramtype">pSourceContext&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;cairo_dock_fill_icon_buffers (pIcon, pSourceContext, 1, CAIRO_DOCK_HORIZONTAL, (pIcon-&gt;fWidth == 0 || pIcon-&gt;fHeight == 0));</td>
+          <td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -129,7 +229,7 @@
           <td class="paramtype">pDock&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;cairo_dock_fill_icon_buffers (pIcon, pSourceContext, 1 + <a class="el" href="cairo-dock-global-variables_8h.html#71125a40fdc7b421002f176b9b82ac79">g_fAmplitude</a>, pDock-&gt;bHorizontalDock, TRUE);</td>
+          <td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -149,7 +249,7 @@
           <td class="paramtype">pDock&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;cairo_dock_reload_buffers_in_dock (NULL, pDock, NULL)</td>
+          <td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -160,14 +260,83 @@
 </div>
 </div><p>
 <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="7c32138319b7720c1dc03948223ad14b"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_generate_file_path" ref="7c32138319b7720c1dc03948223ad14b" args="(gchar *cImageFile)" -->
+<a class="anchor" name="1b7d4d0b9b8753a2c423f8ab8ffde8de"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_free_label_description" ref="1b7d4d0b9b8753a2c423f8ab8ffde8de" args="(CairoDockLabelDescription *pTextDescription)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">G_BEGIN_DECLS void cairo_dock_free_label_description           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockLabelDescription.html">CairoDockLabelDescription</a> *&nbsp;</td>
+          <td class="paramname"> <em>pTextDescription</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="31c1afca808bdfc3b24737250e9761b1"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_copy_label_description" ref="31c1afca808bdfc3b24737250e9761b1" args="(CairoDockLabelDescription *pDestTextDescription, CairoDockLabelDescription *pOrigTextDescription)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_copy_label_description           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockLabelDescription.html">CairoDockLabelDescription</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDestTextDescription</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockLabelDescription.html">CairoDockLabelDescription</a> *&nbsp;</td>
+          <td class="paramname"> <em>pOrigTextDescription</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="3ed0f56f352c99138220b95c1bfe6baa"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_duplicate_label_description" ref="3ed0f56f352c99138220b95c1bfe6baa" args="(CairoDockLabelDescription *pOrigTextDescription)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockLabelDescription.html">CairoDockLabelDescription</a>* cairo_dock_duplicate_label_description           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockLabelDescription.html">CairoDockLabelDescription</a> *&nbsp;</td>
+          <td class="paramname"> <em>pOrigTextDescription</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="7613693c420d1f4f2afe19eb0b2b265b"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_generate_file_path" ref="7613693c420d1f4f2afe19eb0b2b265b" args="(const gchar *cImageFile)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">gchar* cairo_dock_generate_file_path           </td>
           <td>(</td>
-          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cImageFile</em>          </td>
           <td>&nbsp;)&nbsp;</td>
           <td width="100%"></td>
@@ -180,7 +349,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="9f99a2ad5d78bae91031bdad24116375"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_load_image" ref="9f99a2ad5d78bae91031bdad24116375" args="(cairo_t *pSourceContext, gchar *cImageFile, double *fImageWidth, double *fImageHeight, double fRotationAngle, double fAlpha, gboolean bReapeatAsPattern)" -->
+<a class="anchor" name="41724caff92a04b3c8cdac42a57efa7b"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_load_image" ref="41724caff92a04b3c8cdac42a57efa7b" args="(cairo_t *pSourceContext, const gchar *cImageFile, double *fImageWidth, double *fImageHeight, double fRotationAngle, double fAlpha, gboolean bReapeatAsPattern)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -193,7 +362,7 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cImageFile</em>, </td>
         </tr>
         <tr>
@@ -239,7 +408,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="2773d15f186da24a5ce837a12f9c9339"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_load_image_for_icon" ref="2773d15f186da24a5ce837a12f9c9339" args="(cairo_t *pSourceContext, gchar *cImageFile, double fImageWidth, double fImageHeight)" -->
+<a class="anchor" name="bd81d778b34fdc775e1911809074ff05"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_load_image_for_icon" ref="bd81d778b34fdc775e1911809074ff05" args="(cairo_t *pSourceContext, const gchar *cImageFile, double fImageWidth, double fImageHeight)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -252,7 +421,7 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cImageFile</em>, </td>
         </tr>
         <tr>
@@ -280,7 +449,49 @@
 
 </div>
 </div><p>
-<a class="anchor" name="bc6ef046a83f95e29d3e50112ad1a06e"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_fill_one_icon_buffer" ref="bc6ef046a83f95e29d3e50112ad1a06e" args="(Icon *icon, cairo_t *pSourceContext, gdouble fMaxScale, gboolean bHorizontalDock, gboolean bApplySizeRestriction)" -->
+<a class="anchor" name="50c6f632fcac1565a0f4a953dd644525"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_add_reflection_to_icon" ref="50c6f632fcac1565a0f4a953dd644525" args="(cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_add_reflection_to_icon           </td>
+          <td>(</td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoContainer.html">CairoContainer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pContainer</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Cree la surface de reflection d'une icone. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pSourceContext</em>&nbsp;</td><td>le contexte de dessin lie a la surface de l'icone; n'est pas altere par la fonction. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container de l'icone. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="8876f421f0521f0b1b188f8e1f13185c"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_fill_one_icon_buffer" ref="8876f421f0521f0b1b188f8e1f13185c" args="(Icon *icon, cairo_t *pSourceContext, gdouble fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -312,7 +523,7 @@
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">gboolean&nbsp;</td>
-          <td class="paramname"> <em>bApplySizeRestriction</em></td><td>&nbsp;</td>
+          <td class="paramname"> <em>bDirectionUp</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -327,7 +538,36 @@
 
 </div>
 </div><p>
-<a class="anchor" name="c1c4f6235fed0fe3c1e929d9e3b28a1d"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_fill_one_text_buffer" ref="c1c4f6235fed0fe3c1e929d9e3b28a1d" args="(Icon *icon, cairo_t *pSourceContext, int iLabelSize, gchar *cLabelPolice, gboolean bHorizontalDock)" -->
+<a class="anchor" name="7d45505093ecf41ad662d12da11dcad9"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_cut_string" ref="7d45505093ecf41ad662d12da11dcad9" args="(const gchar *cString, int iNbCaracters)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gchar* cairo_dock_cut_string           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cString</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>iNbCaracters</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ad6cc8590e323394276ac47a5f04386f"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_fill_one_text_buffer" ref="ad6cc8590e323394276ac47a5f04386f" args="(Icon *icon, cairo_t *pSourceContext, CairoDockLabelDescription *pTextDescription)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -346,20 +586,8 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>iLabelSize</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cLabelPolice</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gboolean&nbsp;</td>
-          <td class="paramname"> <em>bHorizontalDock</em></td><td>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockLabelDescription.html">CairoDockLabelDescription</a> *&nbsp;</td>
+          <td class="paramname"> <em>pTextDescription</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -374,7 +602,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="db3794cb1c5c277ebbfabbf7f9cf0353"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_fill_one_quick_info_buffer" ref="db3794cb1c5c277ebbfabbf7f9cf0353" args="(Icon *icon, cairo_t *pSourceContext, int iLabelSize, gchar *cLabelPolice, int iLabelWeight, double fMaxScale)" -->
+<a class="anchor" name="bbeac35ae2862d6099809a070e8e757d"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_fill_one_quick_info_buffer" ref="bbeac35ae2862d6099809a070e8e757d" args="(Icon *icon, cairo_t *pSourceContext, CairoDockLabelDescription *pTextDescription, double fMaxScale)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -393,20 +621,8 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>iLabelSize</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cLabelPolice</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>iLabelWeight</em>, </td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockLabelDescription.html">CairoDockLabelDescription</a> *&nbsp;</td>
+          <td class="paramname"> <em>pTextDescription</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -427,7 +643,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="82082132f1b2114fc29bade81a05435f"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_fill_icon_buffers" ref="82082132f1b2114fc29bade81a05435f" args="(Icon *icon, cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bApplySizeRestriction)" -->
+<a class="anchor" name="d6e81e1f44dc580e4057d9a916b0183e"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_fill_icon_buffers" ref="d6e81e1f44dc580e4057d9a916b0183e" args="(Icon *icon, cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -459,7 +675,7 @@
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">gboolean&nbsp;</td>
-          <td class="paramname"> <em>bApplySizeRestriction</em></td><td>&nbsp;</td>
+          <td class="paramname"> <em>bDirectionUp</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -474,7 +690,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="eb97abc40aeadf4a672cd3c12b4dc018"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_load_one_icon_from_scratch" ref="eb97abc40aeadf4a672cd3c12b4dc018" args="(Icon *pIcon, CairoDockContainer *pContainer)" -->
+<a class="anchor" name="b09097327e75199b5d6ed355191b3099"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_load_one_icon_from_scratch" ref="b09097327e75199b5d6ed355191b3099" args="(Icon *pIcon, CairoContainer *pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -487,7 +703,7 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoContainer.html">CairoContainer</a> *&nbsp;</td>
           <td class="paramname"> <em>pContainer</em></td><td>&nbsp;</td>
         </tr>
         <tr>
@@ -681,8 +897,233 @@
 
 </div>
 </div><p>
-<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<a class="anchor" name="23f67ec90003c4cbb6ceb798fb65fd8e"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_load_icons_background_surface" ref="23f67ec90003c4cbb6ceb798fb65fd8e" args="(const gchar *cImagePath, cairo_t *pSourceContext, double fMaxScale)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_load_icons_background_surface           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cImagePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fMaxScale</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="6d93052f594348036a0b7d999e228e24"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_load_desktop_background_surface" ref="6d93052f594348036a0b7d999e228e24" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_load_desktop_background_surface           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="59074ef902660eb9991665272ed24309"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_invalidate_desktop_bg_surface" ref="59074ef902660eb9991665272ed24309" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_invalidate_desktop_bg_surface           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="d06f7ab48e236d5688e51cefd0e9f8bd"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_get_desktop_bg_surface" ref="d06f7ab48e236d5688e51cefd0e9f8bd" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cairo_surface_t* cairo_dock_get_desktop_bg_surface           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="2ffc337770a375a0fc17e434a56b729e"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_load_task_indicator" ref="2ffc337770a375a0fc17e434a56b729e" args="(const gchar *cIndicatorImagePath, cairo_t *pSourceContext, double fMaxScale, double fIndicatorRatio)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_load_task_indicator           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cIndicatorImagePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fMaxScale</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fIndicatorRatio</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="cf151320d1c1923c38160ca3512e7981"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_load_active_window_indicator" ref="cf151320d1c1923c38160ca3512e7981" args="(cairo_t *pSourceContext, const gchar *cImagePath, double fMaxScale, double fCornerRadius, double fLineWidth, double *fActiveColor)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_load_active_window_indicator           </td>
+          <td>(</td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cImagePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fMaxScale</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fCornerRadius</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fLineWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&nbsp;</td>
+          <td class="paramname"> <em>fActiveColor</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="fbba88035704fcfabd0e779ccbb7a34a"></a><!-- doxytag: member="cairo-dock-load.h::cairo_dock_load_class_indicator" ref="fbba88035704fcfabd0e779ccbb7a34a" args="(const gchar *cIndicatorImagePath, cairo_t *pSourceContext, double fMaxScale)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_load_class_indicator           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cIndicatorImagePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fMaxScale</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
 </html>

@@ -1,15 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-applet-factory.h</title>
+<title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-applet-factory.h</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.3 -->
-<div class="tabs">
-  <ul>
-    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
-    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+<!-- Généré par Doxygen 1.5.5 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>Page&nbsp;principale</span></a></li>
+      <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
     <li>
       <form action="search.php" method="get">
         <table cellspacing="0" cellpadding="0" border="0">
@@ -20,25 +21,25 @@
         </table>
       </form>
     </li>
-  </ul>
+    </ul>
+  </div>
 </div>
-<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-applet-factory.h</h1>
-<p>
-<a href="cairo-dock-applet-factory_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<div class="contents">
+<h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-applet-factory.h</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-applet-factory_8h.html#eae3d51600a868ecf56f95a64df24539">cairo_dock_create_applet_surface</a> (gchar *cIconFileName, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight, gboolean bApplySizeRestriction)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-applet-factory_8h.html#c4395992f032dfaa56ef5a53d965a892">cairo_dock_create_applet_surface</a> (gchar *cIconFileName, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-applet-factory_8h.html#32a4b2bfcc94203e18a69c14d351db01">cairo_dock_create_icon_for_applet</a> (<a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *pContainer, int iWidth, int iHeight, gchar *cName, gchar *cIconFileName, <a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *pModule)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-applet-factory_8h.html#c7a3499f06413e3c9c29014bf07ef66f">cairo_dock_create_icon_for_applet</a> (<a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer, int <a class="el" href="essai_8h.html#e4abd8cd04e0af751c7c2da30457bcbf">iWidth</a>, int iHeight, gchar *cName, gchar *cIconFileName, <a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a> *pModuleInstance)</td></tr>
 
 </table>
 <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="eae3d51600a868ecf56f95a64df24539"></a><!-- doxytag: member="cairo-dock-applet-factory.h::cairo_dock_create_applet_surface" ref="eae3d51600a868ecf56f95a64df24539" args="(gchar *cIconFileName, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight, gboolean bApplySizeRestriction)" -->
+<a class="anchor" name="c4395992f032dfaa56ef5a53d965a892"></a><!-- doxytag: member="cairo-dock-applet-factory.h::cairo_dock_create_applet_surface" ref="c4395992f032dfaa56ef5a53d965a892" args="(gchar *cIconFileName, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">cairo_surface_t* cairo_dock_create_applet_surface           </td>
+          <td class="memname">G_BEGIN_DECLS cairo_surface_t* cairo_dock_create_applet_surface           </td>
           <td>(</td>
           <td class="paramtype">gchar *&nbsp;</td>
           <td class="paramname"> <em>cIconFileName</em>, </td>
@@ -65,13 +66,7 @@
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double *&nbsp;</td>
-          <td class="paramname"> <em>fHeight</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gboolean&nbsp;</td>
-          <td class="paramname"> <em>bApplySizeRestriction</em></td><td>&nbsp;</td>
+          <td class="paramname"> <em>fHeight</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -97,14 +92,14 @@ Cree une surface cairo qui pourra servir de zone de dessin pour une applet. <dl 
 
 </div>
 </div><p>
-<a class="anchor" name="32a4b2bfcc94203e18a69c14d351db01"></a><!-- doxytag: member="cairo-dock-applet-factory.h::cairo_dock_create_icon_for_applet" ref="32a4b2bfcc94203e18a69c14d351db01" args="(CairoDockContainer *pContainer, int iWidth, int iHeight, gchar *cName, gchar *cIconFileName, CairoDockModule *pModule)" -->
+<a class="anchor" name="c7a3499f06413e3c9c29014bf07ef66f"></a><!-- doxytag: member="cairo-dock-applet-factory.h::cairo_dock_create_icon_for_applet" ref="c7a3499f06413e3c9c29014bf07ef66f" args="(CairoContainer *pContainer, int iWidth, int iHeight, gchar *cName, gchar *cIconFileName, CairoDockModuleInstance *pModuleInstance)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="struct__Icon.html">Icon</a>* cairo_dock_create_icon_for_applet           </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct__CairoDockContainer.html">CairoDockContainer</a> *&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoContainer.html">CairoContainer</a> *&nbsp;</td>
           <td class="paramname"> <em>pContainer</em>, </td>
         </tr>
         <tr>
@@ -134,8 +129,8 @@ Cree une surface cairo qui pourra servir de zone de dessin pour une applet. <dl 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td>
-          <td class="paramname"> <em>pModule</em></td><td>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a> *&nbsp;</td>
+          <td class="paramname"> <em>pModuleInstance</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -161,8 +156,9 @@ Cree une icone destinee a une applet. <dl compact><dt><b>Paramètres:</b></dt><d
 
 </div>
 </div><p>
-<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+</div>
+<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
 </html>

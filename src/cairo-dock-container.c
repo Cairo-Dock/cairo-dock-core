@@ -101,6 +101,24 @@ GtkWidget *cairo_dock_create_container_window (void)
 	return pWindow;
 }
 
+GtkWidget *cairo_dock_create_container_window_no_opengl (void)
+{
+	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	
+	if (g_bSticky)
+		gtk_window_stick (GTK_WINDOW (pWindow));
+	gtk_window_set_skip_pager_hint (GTK_WINDOW(pWindow), TRUE);
+	gtk_window_set_skip_taskbar_hint (GTK_WINDOW(pWindow), TRUE);
+	
+	cairo_dock_set_colormap_for_window (pWindow);
+	
+	gtk_widget_set_app_paintable (pWindow, TRUE);
+	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
+	gtk_window_set_resizable (GTK_WINDOW (pWindow), TRUE);
+	return pWindow;
+}
+
+
 void cairo_dock_set_colormap_for_window (GtkWidget *pWidget)
 {
 	GdkScreen* pScreen = gtk_widget_get_screen (pWidget);

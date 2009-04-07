@@ -1,15 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-config.h</title>
+<title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-config.h</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.3 -->
-<div class="tabs">
-  <ul>
-    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
-    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+<!-- Généré par Doxygen 1.5.5 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>Page&nbsp;principale</span></a></li>
+      <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
     <li>
       <form action="search.php" method="get">
         <table cellspacing="0" cellpadding="0" border="0">
@@ -20,17 +21,21 @@
         </table>
       </form>
     </li>
-  </ul>
+    </ul>
+  </div>
 </div>
-<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-config.h</h1>
-<p>
-<a href="cairo-dock-config_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<div class="contents">
+<h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-config.h</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Macros</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#a9839c43a080311d048fc2f5f9e2b11e">cairo_dock_edit_conf_file</a>(pWindow, cConfFilePath, cTitle, iWindowWidth, iWindowHeight, iIdentifier, cPresentedGroup, pConfigFunc, data, pFreeUserDataFunc, cGettextDomain)&nbsp;&nbsp;&nbsp;cairo_dock_edit_conf_file_full (pWindow, cConfFilePath, cTitle, iWindowWidth, iWindowHeight, iIdentifier, cPresentedGroup, pConfigFunc, data, pFreeUserDataFunc, NULL, NULL, NULL, NULL, cGettextDomain)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#474ee6d75303e22e62981615ce44abcb">cairo_dock_get_size_key_value_helper</a>(pKeyFile, cGroupName, cKeyPrefix, bFlushConfFileNeeded, <a class="el" href="essai_8h.html#e4abd8cd04e0af751c7c2da30457bcbf">iWidth</a>, iHeight)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#c34df155f9f570525b3d1a00f724ede2">cairo_dock_get_pango_weight_from_1_9</a>(iWeight)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#61f49d0679c076b880f6bc1c6b3e62a1">DEFINE_PRE_INIT</a>(cGroupName)</td></tr>
 
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#7f221b2e5161810f62738ed51a2a732e">cairo_dock_get_boolean_key_value</a> (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gboolean bDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#43c48857469ba72f97a9d98e379d2a1f">cairo_dock_get_boolean_key_value</a> (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gboolean bDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#3f9539c7257b48c2e28371c565c2e076">cairo_dock_get_integer_key_value</a> (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, int iDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName)</td></tr>
 
@@ -44,75 +49,94 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gchar **&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#0eaefc540f50e5580de58cfeb997a0c4">cairo_dock_get_string_list_key_value</a> (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gsize *length, gchar *cDefaultValues, gchar *cDefaultGroupName, gchar *cDefaultKeyName)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#72c6f286d96c028feb8d4516820b74d9">CairoDockAnimationType</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#0f38d81a9b3b79fa90c5c5a87fd38f95">cairo_dock_get_animation_type_key_value</a> (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, <a class="el" href="cairo-dock-struct_8h.html#72c6f286d96c028feb8d4516820b74d9">CairoDockAnimationType</a> iDefaultAnimation, gchar *cDefaultGroupName, gchar *cDefaultKeyName)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#96128d4a65d5869b027d840032e9ad9a">cairo_dock_get_size_key_value</a> (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gint iDefaultSize, gchar *cDefaultGroupName, gchar *cDefaultKeyName, int *<a class="el" href="essai_8h.html#e4abd8cd04e0af751c7c2da30457bcbf">iWidth</a>, int *iHeight)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#a0e41f20545f4057a5ee19b50302c607">cairo_dock_get_file_path_key_value</a> (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultGroupName, gchar *cDefaultKeyName, gchar *cDefaultDir, gchar *cDefaultFileName)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#c64f3ee3060851d08a10b674983ceef6">cairo_dock_read_conf_file</a> (gchar *cConfFilePath, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#e03d7453919e67aff991868dd71c2413">cairo_dock_is_loading</a> (void)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#dd9495916490fa41367914e6ca0ed982">cairo_dock_edit_conf_file_full</a> (GtkWindow *pWindow, gchar *cConfFilePath, gchar *cTitle, int iWindowWidth, int iWindowHeight, gchar iIdentifier, gchar *cPresentedGroup, <a class="el" href="cairo-dock-struct_8h.html#9418283e8b248f5df23a4f97067b2897">CairoDockConfigFunc</a> pConfigFunc, gpointer data, GFunc pFreeUserDataFunc, <a class="el" href="cairo-dock-struct_8h.html#9418283e8b248f5df23a4f97067b2897">CairoDockConfigFunc</a> pConfigFunc2, gchar *cConfFilePath2, gchar *cButtonConvert, gchar *cButtonRevert, gchar *cGettextDomain)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#6e32860e58eaff0f6ef30e50427093a5">cairo_dock_update_conf_file</a> (const gchar *cConfFilePath, GType iFirstDataType,...)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#aa96248a38e7aac5b9df7ce355cc0f59">cairo_dock_update_conf_file</a> (gchar *cConfFilePath, GType iFirstDataType,...)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#4fbe55818645f3a7eababc1023ccb205">cairo_dock_update_conf_file_with_position</a> (gchar *cConfFilePath, int x, int y)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#67afc5cbf2d110bb5c61e593aa7e0120">cairo_dock_update_conf_file_with_position</a> (const gchar *cConfFilePath, int x, int y)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#8324649699485e21a6b820e9f8ff77c6">CairoDockDesktopEnv</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#e4f8b1a235338cc84135c147972d7ca1">cairo_dock_guess_environment</a> (void)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#99b1a5ec61008af612dd93c43a711d0e">cairo_dock_copy_easy_conf_file</a> (gchar *cEasyConfFilePath, GKeyFile *pMainKeyFile)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#02fbf3fc360297c5ccde16ebd21db802">cairo_dock_get_version_from_string</a> (gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#39c75b5dca429d1ce0f043e4ba94a3ac">cairo_dock_copy_to_easy_conf_file</a> (GKeyFile *pMainKeyFile, gchar *cEasyConfFilePath)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#d19cd231b63f530aedff409d839eefdb">cairo_dock_decrypt_string</a> (const guchar *cEncryptedString, guchar **cDecryptedString)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#33f275343b1af7c5fccc9a66eb87967b">cairo_dock_build_easy_conf_file</a> (gchar *cMainConfFilePath, gchar *cEasyConfFilePath)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#3c83e742ee7d6a6d9d4781dbf82a1dc8">cairo_dock_read_easy_conf_file</a> (gchar *cEasyConfFilePath, gpointer data)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#a114a97808acd1212d04cc424186d2f5">cairo_dock_use_full_conf_file</a> (void)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#8aab139403895e5d792e02de7e3d899c">cairo_dock_mark_prefered_conf_file</a> (gchar *cConfFilePath)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#d0920755bbad231e29552b40fd2723b7">cairo_dock_encrypt_string</a> (const guchar *cDecryptedString, guchar **cEncryptedString)</td></tr>
 
 </table>
 <hr><h2>Documentation des macros</h2>
-<a class="anchor" name="a9839c43a080311d048fc2f5f9e2b11e"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_edit_conf_file" ref="a9839c43a080311d048fc2f5f9e2b11e" args="(pWindow, cConfFilePath, cTitle, iWindowWidth, iWindowHeight, iIdentifier, cPresentedGroup, pConfigFunc, data, pFreeUserDataFunc, cGettextDomain)" -->
+<a class="anchor" name="474ee6d75303e22e62981615ce44abcb"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_get_size_key_value_helper" ref="474ee6d75303e22e62981615ce44abcb" args="(pKeyFile, cGroupName, cKeyPrefix, bFlushConfFileNeeded, iWidth, iHeight)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define cairo_dock_edit_conf_file          </td>
+          <td class="memname">#define cairo_dock_get_size_key_value_helper          </td>
           <td>(</td>
-          <td class="paramtype">pWindow,         <tr>
+          <td class="paramtype">pKeyFile,         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">cConfFilePath,         <tr>
+          <td class="paramtype">cGroupName,         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">cTitle,         <tr>
+          <td class="paramtype">cKeyPrefix,         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">iWindowWidth,         <tr>
+          <td class="paramtype">bFlushConfFileNeeded,         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">iWindowHeight,         <tr>
+          <td class="paramtype"><a class="el" href="essai_8h.html#e4abd8cd04e0af751c7c2da30457bcbf">iWidth</a>,         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">iIdentifier,         <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">cPresentedGroup,         <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">pConfigFunc,         <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">data,         <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">pFreeUserDataFunc,         <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">cGettextDomain&nbsp;</td>
+          <td class="paramtype">iHeight&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;cairo_dock_edit_conf_file_full (pWindow, cConfFilePath, cTitle, iWindowWidth, iWindowHeight, iIdentifier, cPresentedGroup, pConfigFunc, data, pFreeUserDataFunc, NULL, NULL, NULL, NULL, cGettextDomain)</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="c34df155f9f570525b3d1a00f724ede2"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_get_pango_weight_from_1_9" ref="c34df155f9f570525b3d1a00f724ede2" args="(iWeight)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_get_pango_weight_from_1_9          </td>
+          <td>(</td>
+          <td class="paramtype">iWeight&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="61f49d0679c076b880f6bc1c6b3e62a1"></a><!-- doxytag: member="cairo-dock-config.h::DEFINE_PRE_INIT" ref="61f49d0679c076b880f6bc1c6b3e62a1" args="(cGroupName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DEFINE_PRE_INIT          </td>
+          <td>(</td>
+          <td class="paramtype">cGroupName&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
         </tr>
       </table>
 </div>
@@ -123,12 +147,12 @@
 </div>
 </div><p>
 <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="7f221b2e5161810f62738ed51a2a732e"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_get_boolean_key_value" ref="7f221b2e5161810f62738ed51a2a732e" args="(GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gboolean bDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName)" -->
+<a class="anchor" name="43c48857469ba72f97a9d98e379d2a1f"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_get_boolean_key_value" ref="43c48857469ba72f97a9d98e379d2a1f" args="(GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gboolean bDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">gboolean cairo_dock_get_boolean_key_value           </td>
+          <td class="memname">G_BEGIN_DECLS gboolean cairo_dock_get_boolean_key_value           </td>
           <td>(</td>
           <td class="paramtype">GKeyFile *&nbsp;</td>
           <td class="paramname"> <em>pKeyFile</em>, </td>
@@ -653,12 +677,12 @@ Recupere une cle d'un fichier de cles sous la forme d'un tableau de chaines de c
 
 </div>
 </div><p>
-<a class="anchor" name="0f38d81a9b3b79fa90c5c5a87fd38f95"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_get_animation_type_key_value" ref="0f38d81a9b3b79fa90c5c5a87fd38f95" args="(GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, CairoDockAnimationType iDefaultAnimation, gchar *cDefaultGroupName, gchar *cDefaultKeyName)" -->
+<a class="anchor" name="96128d4a65d5869b027d840032e9ad9a"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_get_size_key_value" ref="96128d4a65d5869b027d840032e9ad9a" args="(GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gint iDefaultSize, gchar *cDefaultGroupName, gchar *cDefaultKeyName, int *iWidth, int *iHeight)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="cairo-dock-struct_8h.html#72c6f286d96c028feb8d4516820b74d9">CairoDockAnimationType</a> cairo_dock_get_animation_type_key_value           </td>
+          <td class="memname">void cairo_dock_get_size_key_value           </td>
           <td>(</td>
           <td class="paramtype">GKeyFile *&nbsp;</td>
           <td class="paramname"> <em>pKeyFile</em>, </td>
@@ -684,8 +708,8 @@ Recupere une cle d'un fichier de cles sous la forme d'un tableau de chaines de c
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#72c6f286d96c028feb8d4516820b74d9">CairoDockAnimationType</a>&nbsp;</td>
-          <td class="paramname"> <em>iDefaultAnimation</em>, </td>
+          <td class="paramtype">gint&nbsp;</td>
+          <td class="paramname"> <em>iDefaultSize</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -697,7 +721,19 @@ Recupere une cle d'un fichier de cles sous la forme d'un tableau de chaines de c
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cDefaultKeyName</em></td><td>&nbsp;</td>
+          <td class="paramname"> <em>cDefaultKeyName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&nbsp;</td>
+          <td class="paramname"> <em>iWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&nbsp;</td>
+          <td class="paramname"> <em>iHeight</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -709,18 +745,84 @@ Recupere une cle d'un fichier de cles sous la forme d'un tableau de chaines de c
 <div class="memdoc">
 
 <p>
-Recupere une cle d'un fichier de cles sous la forme d'un tableau de chaines de caracteres. <dl compact><dt><b>Paramètres:</b></dt><dd>
+
+</div>
+</div><p>
+<a class="anchor" name="a0e41f20545f4057a5ee19b50302c607"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_get_file_path_key_value" ref="a0e41f20545f4057a5ee19b50302c607" args="(GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultGroupName, gchar *cDefaultKeyName, gchar *cDefaultDir, gchar *cDefaultFileName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gchar* cairo_dock_get_file_path_key_value           </td>
+          <td>(</td>
+          <td class="paramtype">GKeyFile *&nbsp;</td>
+          <td class="paramname"> <em>pKeyFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cGroupName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cKeyName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean *&nbsp;</td>
+          <td class="paramname"> <em>bFlushConfFileNeeded</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cDefaultGroupName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cDefaultKeyName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cDefaultDir</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cDefaultFileName</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Recupere une cle d'un fichier de cles sous la forme d'un chemin de fichier complet. La clé peut soit être un fichier relatif au thème courant, soit un chemin començant par '~', soit un chemin complet, soit vide auquel cas le chemin d'un fichier par defaut est renvoye s'il est specifie. <dl compact><dt><b>Paramètres:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>pKeyFile</em>&nbsp;</td><td>le fichier de cles. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>cGroupName</em>&nbsp;</td><td>le com du groupe. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>cKeyName</em>&nbsp;</td><td>le nom de la cle. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>bFlushConfFileNeeded</em>&nbsp;</td><td>est mis a TRUE si la cle est manquante. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>iDefaultAnimation</em>&nbsp;</td><td>valeur par defaut a utiliser et a inserer dans le fichier de cles au cas ou la cle est manquante. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>cDefaultGroupName</em>&nbsp;</td><td>nom de groupe alternatif, ou NULL si aucun autre. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>cDefaultKeyName</em>&nbsp;</td><td>nom de cle alternative, ou NULL si aucune autre. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cDefaultDir</em>&nbsp;</td><td>si la cle est vide, on prendra un fichier par defaut situe dans ce repertoire. (optionnel) </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cDefaultFileName</em>&nbsp;</td><td>si la cle est vide, on prendra ce fichier par defaut dans le repertoire defini ci-dessus. (optionnel) </td></tr>
   </table>
 </dl>
-<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>le type de l'animation correspondante a la cle. </dd></dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>le chemin complet du fichier, a liberer avec g_free(). </dd></dl>
 
 </div>
 </div><p>
@@ -780,141 +882,14 @@ Dis si l'appli est en cours de chargement. <dl class="return" compact><dt><b>Ren
 
 </div>
 </div><p>
-<a class="anchor" name="dd9495916490fa41367914e6ca0ed982"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_edit_conf_file_full" ref="dd9495916490fa41367914e6ca0ed982" args="(GtkWindow *pWindow, gchar *cConfFilePath, gchar *cTitle, int iWindowWidth, int iWindowHeight, gchar iIdentifier, gchar *cPresentedGroup, CairoDockConfigFunc pConfigFunc, gpointer data, GFunc pFreeUserDataFunc, CairoDockConfigFunc pConfigFunc2, gchar *cConfFilePath2, gchar *cButtonConvert, gchar *cButtonRevert, gchar *cGettextDomain)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">gboolean cairo_dock_edit_conf_file_full           </td>
-          <td>(</td>
-          <td class="paramtype">GtkWindow *&nbsp;</td>
-          <td class="paramname"> <em>pWindow</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cConfFilePath</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cTitle</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>iWindowWidth</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>iWindowHeight</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gchar&nbsp;</td>
-          <td class="paramname"> <em>iIdentifier</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cPresentedGroup</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#9418283e8b248f5df23a4f97067b2897">CairoDockConfigFunc</a>&nbsp;</td>
-          <td class="paramname"> <em>pConfigFunc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gpointer&nbsp;</td>
-          <td class="paramname"> <em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">GFunc&nbsp;</td>
-          <td class="paramname"> <em>pFreeUserDataFunc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#9418283e8b248f5df23a4f97067b2897">CairoDockConfigFunc</a>&nbsp;</td>
-          <td class="paramname"> <em>pConfigFunc2</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cConfFilePath2</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cButtonConvert</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cButtonRevert</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cGettextDomain</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Lis un fichier de conf, construit l'IHM appropriee, et la presente a l'utilisateur. <dl compact><dt><b>Paramètres:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>pWindow</em>&nbsp;</td><td>fenetre pour laquelle le panneau de conf sera modal. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>cConfFilePath</em>&nbsp;</td><td>chemin du fichier de conf. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>cTitle</em>&nbsp;</td><td>titre du panneau de conf. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>iWindowWidth</em>&nbsp;</td><td>largeur du panneau de conf. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>iWindowHeight</em>&nbsp;</td><td>hauteur du panneau de conf. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>iIdentifier</em>&nbsp;</td><td>identifiant des cles, ou 0 pour aucun. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>cPresentedGroup</em>&nbsp;</td><td>onglet devant etre selectionne initialement. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>pConfigFunc</em>&nbsp;</td><td>fonction appelee a l'appui sur le bouton "valider" </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>data</em>&nbsp;</td><td>donnees passees a la fonction. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>pFreeUserDataFunc</em>&nbsp;</td><td>fonction liberant les donnees, ou NULL. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>pConfigFunc2</em>&nbsp;</td><td>2eme fonction dans le cas d'une config s'affichant sous 2 formes. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>cConfFilePath2</em>&nbsp;</td><td>2eme fichier de conf dans le cas d'une config s'affichant sous 2 formes. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>cButtonConvert</em>&nbsp;</td><td>chaine a afficher dans le bouton permettant de passer d'une forme a l'autre. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>cButtonRevert</em>&nbsp;</td><td>chaine a afficher dans le bouton permettant de passer d'une forme a l'autre dans l'autre sens. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>cGettextDomain</em>&nbsp;</td><td>nom du domainde de traduction a utiliser, ou NULL pour utiliser celui du dock. </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>TRUE si l'utilisateur a ferme le panneau de conf en appuyant sur OK, FALSE sinon. </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="aa96248a38e7aac5b9df7ce355cc0f59"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_update_conf_file" ref="aa96248a38e7aac5b9df7ce355cc0f59" args="(gchar *cConfFilePath, GType iFirstDataType,...)" -->
+<a class="anchor" name="6e32860e58eaff0f6ef30e50427093a5"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_update_conf_file" ref="6e32860e58eaff0f6ef30e50427093a5" args="(const gchar *cConfFilePath, GType iFirstDataType,...)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void cairo_dock_update_conf_file           </td>
           <td>(</td>
-          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cConfFilePath</em>, </td>
         </tr>
         <tr>
@@ -948,14 +923,14 @@ Met a jour un fichier de conf avec une liste de valeurs de la forme : type, nom 
 
 </div>
 </div><p>
-<a class="anchor" name="4fbe55818645f3a7eababc1023ccb205"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_update_conf_file_with_position" ref="4fbe55818645f3a7eababc1023ccb205" args="(gchar *cConfFilePath, int x, int y)" -->
+<a class="anchor" name="67afc5cbf2d110bb5c61e593aa7e0120"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_update_conf_file_with_position" ref="67afc5cbf2d110bb5c61e593aa7e0120" args="(const gchar *cConfFilePath, int x, int y)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void cairo_dock_update_conf_file_with_position           </td>
           <td>(</td>
-          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cConfFilePath</em>, </td>
         </tr>
         <tr>
@@ -980,6 +955,13 @@ Met a jour un fichier de conf avec une liste de valeurs de la forme : type, nom 
 <div class="memdoc">
 
 <p>
+Met a jour un fichier de conf de dock racine avec sa position définie par les écarts en x et en y. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cConfFilePath</em>&nbsp;</td><td>chemin du fichier de conf. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>écart latéral. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>y</em>&nbsp;</td><td>écart vertical. </td></tr>
+  </table>
+</dl>
 
 </div>
 </div><p>
@@ -1000,25 +982,37 @@ Met a jour un fichier de conf avec une liste de valeurs de la forme : type, nom 
 <div class="memdoc">
 
 <p>
-Essaye de determiner l'environnement de bureau dela session courante. <dl class="return" compact><dt><b>Renvoie:</b></dt><dd>l'environnement de bureau (couramment Gnome et KDE son detectes). </dd></dl>
+Essaye de determiner l'environnement de bureau dela session courante. <dl class="return" compact><dt><b>Renvoie:</b></dt><dd>l'environnement de bureau (couramment Gnome, KDE et XFCE sont detectés). </dd></dl>
 
 </div>
 </div><p>
-<a class="anchor" name="99b1a5ec61008af612dd93c43a711d0e"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_copy_easy_conf_file" ref="99b1a5ec61008af612dd93c43a711d0e" args="(gchar *cEasyConfFilePath, GKeyFile *pMainKeyFile)" -->
+<a class="anchor" name="02fbf3fc360297c5ccde16ebd21db802"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_get_version_from_string" ref="02fbf3fc360297c5ccde16ebd21db802" args="(gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cairo_dock_copy_easy_conf_file           </td>
+          <td class="memname">void cairo_dock_get_version_from_string           </td>
           <td>(</td>
           <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cEasyConfFilePath</em>, </td>
+          <td class="paramname"> <em>cVersionString</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">GKeyFile *&nbsp;</td>
-          <td class="paramname"> <em>pMainKeyFile</em></td><td>&nbsp;</td>
+          <td class="paramtype">int *&nbsp;</td>
+          <td class="paramname"> <em>iMajorVersion</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&nbsp;</td>
+          <td class="paramname"> <em>iMinorVersion</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&nbsp;</td>
+          <td class="paramname"> <em>iMicroVersion</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -1030,24 +1024,32 @@ Essaye de determiner l'environnement de bureau dela session courante. <dl class=
 <div class="memdoc">
 
 <p>
+Recupere les 3 numeros de version d'une chaine. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cVersionString</em>&nbsp;</td><td>la version representee par une chaine. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iMajorVersion</em>&nbsp;</td><td>numero de version majeure renvoyee. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iMinorVersion</em>&nbsp;</td><td>numero de version mineure renvoyee. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iMicroVersion</em>&nbsp;</td><td>numero de version micro renvoyee. </td></tr>
+  </table>
+</dl>
 
 </div>
 </div><p>
-<a class="anchor" name="39c75b5dca429d1ce0f043e4ba94a3ac"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_copy_to_easy_conf_file" ref="39c75b5dca429d1ce0f043e4ba94a3ac" args="(GKeyFile *pMainKeyFile, gchar *cEasyConfFilePath)" -->
+<a class="anchor" name="d19cd231b63f530aedff409d839eefdb"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_decrypt_string" ref="d19cd231b63f530aedff409d839eefdb" args="(const guchar *cEncryptedString, guchar **cDecryptedString)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cairo_dock_copy_to_easy_conf_file           </td>
+          <td class="memname">void cairo_dock_decrypt_string           </td>
           <td>(</td>
-          <td class="paramtype">GKeyFile *&nbsp;</td>
-          <td class="paramname"> <em>pMainKeyFile</em>, </td>
+          <td class="paramtype">const guchar *&nbsp;</td>
+          <td class="paramname"> <em>cEncryptedString</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cEasyConfFilePath</em></td><td>&nbsp;</td>
+          <td class="paramtype">guchar **&nbsp;</td>
+          <td class="paramname"> <em>cDecryptedString</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -1059,24 +1061,30 @@ Essaye de determiner l'environnement de bureau dela session courante. <dl class=
 <div class="memdoc">
 
 <p>
+Decrypte une chaine de caracteres (DES-encryption de libcrypt). <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cEncryptedString</em>&nbsp;</td><td>la version encryptee de la chaine. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cDecryptedString</em>&nbsp;</td><td>la version non encryptee de la chaine. </td></tr>
+  </table>
+</dl>
 
 </div>
 </div><p>
-<a class="anchor" name="33f275343b1af7c5fccc9a66eb87967b"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_build_easy_conf_file" ref="33f275343b1af7c5fccc9a66eb87967b" args="(gchar *cMainConfFilePath, gchar *cEasyConfFilePath)" -->
+<a class="anchor" name="d0920755bbad231e29552b40fd2723b7"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_encrypt_string" ref="d0920755bbad231e29552b40fd2723b7" args="(const guchar *cDecryptedString, guchar **cEncryptedString)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cairo_dock_build_easy_conf_file           </td>
+          <td class="memname">void cairo_dock_encrypt_string           </td>
           <td>(</td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cMainConfFilePath</em>, </td>
+          <td class="paramtype">const guchar *&nbsp;</td>
+          <td class="paramname"> <em>cDecryptedString</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cEasyConfFilePath</em></td><td>&nbsp;</td>
+          <td class="paramtype">guchar **&nbsp;</td>
+          <td class="paramname"> <em>cEncryptedString</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -1088,80 +1096,18 @@ Essaye de determiner l'environnement de bureau dela session courante. <dl class=
 <div class="memdoc">
 
 <p>
+Crypte une chaine de caracteres (DES-encryption de libcrypt). <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cDecryptedString</em>&nbsp;</td><td>la version non encryptee de la chaine. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cEncryptedString</em>&nbsp;</td><td>la version encryptee de la chaine. </td></tr>
+  </table>
+</dl>
 
 </div>
 </div><p>
-<a class="anchor" name="3c83e742ee7d6a6d9d4781dbf82a1dc8"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_read_easy_conf_file" ref="3c83e742ee7d6a6d9d4781dbf82a1dc8" args="(gchar *cEasyConfFilePath, gpointer data)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cairo_dock_read_easy_conf_file           </td>
-          <td>(</td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cEasyConfFilePath</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gpointer&nbsp;</td>
-          <td class="paramname"> <em>data</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td width="100%"></td>
-        </tr>
-      </table>
 </div>
-<div class="memdoc">
-
-<p>
-
-</div>
-</div><p>
-<a class="anchor" name="a114a97808acd1212d04cc424186d2f5"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_use_full_conf_file" ref="a114a97808acd1212d04cc424186d2f5" args="(void)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">gboolean cairo_dock_use_full_conf_file           </td>
-          <td>(</td>
-          <td class="paramtype">void&nbsp;</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-
-</div>
-</div><p>
-<a class="anchor" name="8aab139403895e5d792e02de7e3d899c"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_mark_prefered_conf_file" ref="8aab139403895e5d792e02de7e3d899c" args="(gchar *cConfFilePath)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cairo_dock_mark_prefered_conf_file           </td>
-          <td>(</td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cConfFilePath</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-
-</div>
-</div><p>
-<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
 </html>

@@ -4,12 +4,13 @@
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.3 -->
-<div class="tabs">
-  <ul>
-    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
-    <li class="current"><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li><a href="files.html"><span>Fichiers</span></a></li>
+<!-- Généré par Doxygen 1.5.5 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>Page&nbsp;principale</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li><a href="files.html"><span>Fichiers</span></a></li>
     <li>
       <form action="search.php" method="get">
         <table cellspacing="0" cellpadding="0" border="0">
@@ -20,14 +21,16 @@
         </table>
       </form>
     </li>
-  </ul>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li><a href="functions.html"><span>Champs&nbsp;de&nbsp;donnée</span></a></li>
+    </ul>
+  </div>
 </div>
-<div class="tabs">
-  <ul>
-    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li><a href="functions.html"><span>Champs&nbsp;de&nbsp;donnée</span></a></li>
-  </ul>
-</div>
+<div class="contents">
 <h1>Référence de la structure _CairoDockVisitCard</h1><!-- doxytag: class="_CairoDockVisitCard" --><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Champs de données</h2></td></tr>
@@ -36,7 +39,7 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">nom du module qui servira a l'identifier.  <a href="#977fd14b591a762065c6deba330a2aea"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockVisitCard.html#259449090259b643ae3304a9195892e3">cReadmeFilePath</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">chemin d'un fichier readme destine a presenter de maniere succinte le module.  <a href="#259449090259b643ae3304a9195892e3"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">presente de maniere succinte le module.  <a href="#259449090259b643ae3304a9195892e3"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">short&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockVisitCard.html#2eb94b4a94f50fd73dab9bba5f8cce9f">iMajorVersionNeeded</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">numero de version majeure de cairo-dock necessaire au bon fonctionnement du module.  <a href="#2eb94b4a94f50fd73dab9bba5f8cce9f"></a><br></td></tr>
@@ -73,9 +76,20 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockVisitCard.html#00ac300e133ff92b5ee07e088d68e3c2">cIconFilePath</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">chemin d'une image pour l'icone du module dans le panneau de conf du dock.  <a href="#00ac300e133ff92b5ee07e088d68e3c2"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">char&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockVisitCard.html#8faa02b3122dafb080ee87adcbda06ed">reserved</a> [40]</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockVisitCard.html#06c98c7c6f70f48ef894903fec61eee0">iSizeOfConfig</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">octets reserves pour preserver la compatibilite binaire lors de futurs ajouts sur l'interface entre plug-ins et dock.  <a href="#8faa02b3122dafb080ee87adcbda06ed"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">taille de la structure contenant la config du module.  <a href="#06c98c7c6f70f48ef894903fec61eee0"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockVisitCard.html#ced25a5a0f657f0cae336a478c879159">iSizeOfData</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">taille de la structure contenant les donnees du module.  <a href="#ced25a5a0f657f0cae336a478c879159"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockVisitCard.html#2217868d2defdcf787e89642f973bab0">bMultiInstance</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockVisitCard.html#5c3d272d0ee75f6b21fcb85babb8cac3">cDescription</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockVisitCard.html#b6d548e43f7ed6b6f9624a60eebf5861">cAuthor</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">char&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockVisitCard.html#ef830c9456f34c81777477d52fe85020">reserved</a> [8]</td></tr>
+
 </table>
 <hr><h2>Documentation des champs</h2>
 <a class="anchor" name="977fd14b591a762065c6deba330a2aea"></a><!-- doxytag: member="_CairoDockVisitCard::cModuleName" ref="977fd14b591a762065c6deba330a2aea" args="" -->
@@ -107,7 +121,7 @@ nom du module qui servira a l'identifier.
 <div class="memdoc">
 
 <p>
-chemin d'un fichier readme destine a presenter de maniere succinte le module. 
+presente de maniere succinte le module. 
 <p>
 
 </div>
@@ -316,27 +330,105 @@ chemin d'une image pour l'icone du module dans le panneau de conf du dock.
 
 </div>
 </div><p>
-<a class="anchor" name="8faa02b3122dafb080ee87adcbda06ed"></a><!-- doxytag: member="_CairoDockVisitCard::reserved" ref="8faa02b3122dafb080ee87adcbda06ed" args="[40]" -->
+<a class="anchor" name="06c98c7c6f70f48ef894903fec61eee0"></a><!-- doxytag: member="_CairoDockVisitCard::iSizeOfConfig" ref="06c98c7c6f70f48ef894903fec61eee0" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">char <a class="el" href="struct__CairoDockVisitCard.html#8faa02b3122dafb080ee87adcbda06ed">_CairoDockVisitCard::reserved</a>[40]          </td>
+          <td class="memname">gint <a class="el" href="struct__CairoDockVisitCard.html#06c98c7c6f70f48ef894903fec61eee0">_CairoDockVisitCard::iSizeOfConfig</a>          </td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>
-octets reserves pour preserver la compatibilite binaire lors de futurs ajouts sur l'interface entre plug-ins et dock. 
+taille de la structure contenant la config du module. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ced25a5a0f657f0cae336a478c879159"></a><!-- doxytag: member="_CairoDockVisitCard::iSizeOfData" ref="ced25a5a0f657f0cae336a478c879159" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint <a class="el" href="struct__CairoDockVisitCard.html#ced25a5a0f657f0cae336a478c879159">_CairoDockVisitCard::iSizeOfData</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+taille de la structure contenant les donnees du module. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="2217868d2defdcf787e89642f973bab0"></a><!-- doxytag: member="_CairoDockVisitCard::bMultiInstance" ref="2217868d2defdcf787e89642f973bab0" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean <a class="el" href="struct__CairoDockVisitCard.html#2217868d2defdcf787e89642f973bab0">_CairoDockVisitCard::bMultiInstance</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+octets reserves pour preserver la compatibilite binaire lors de futurs ajouts sur l'interface entre plug-ins et dock. VRAI ssi le plug-in peut etre instancie plusiers fois. 
+</div>
+</div><p>
+<a class="anchor" name="5c3d272d0ee75f6b21fcb85babb8cac3"></a><!-- doxytag: member="_CairoDockVisitCard::cDescription" ref="5c3d272d0ee75f6b21fcb85babb8cac3" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gchar* <a class="el" href="struct__CairoDockVisitCard.html#5c3d272d0ee75f6b21fcb85babb8cac3">_CairoDockVisitCard::cDescription</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="b6d548e43f7ed6b6f9624a60eebf5861"></a><!-- doxytag: member="_CairoDockVisitCard::cAuthor" ref="b6d548e43f7ed6b6f9624a60eebf5861" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gchar* <a class="el" href="struct__CairoDockVisitCard.html#b6d548e43f7ed6b6f9624a60eebf5861">_CairoDockVisitCard::cAuthor</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ef830c9456f34c81777477d52fe85020"></a><!-- doxytag: member="_CairoDockVisitCard::reserved" ref="ef830c9456f34c81777477d52fe85020" args="[8]" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char <a class="el" href="struct__CairoDockVisitCard.html#ef830c9456f34c81777477d52fe85020">_CairoDockVisitCard::reserved</a>[8]          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
 <p>
 
 </div>
 </div><p>
 <hr>La documentation de cette structure a été générée à partir du fichier suivant :<ul>
-<li>/opt/cairo-dock/trunk/cairo-dock/src/<a class="el" href="cairo-dock-struct_8h-source.html">cairo-dock-struct.h</a></ul>
-<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<li>/home/fab/CD/trunk/cairo-dock/src/<a class="el" href="cairo-dock-struct_8h.html">cairo-dock-struct.h</a></ul>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
 </html>

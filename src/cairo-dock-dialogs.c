@@ -800,7 +800,7 @@ static CairoDialog *_cairo_dock_create_new_dialog (void)
 
 	//\________________ On construit la fenetre du dialogue.
 	//GtkWidget* pWindow = gtk_window_new (bInteractiveWindow ? GTK_WINDOW_TOPLEVEL : GTK_WINDOW_POPUP);  // les popus ne prennent pas le focus. En fait, ils ne sont meme pas controles par le WM.
-	GtkWidget* pWindow = cairo_dock_create_container_window ();
+	GtkWidget* pWindow = cairo_dock_create_container_window_no_opengl ();
 	pDialog->pWidget = pWindow;
 
 	gtk_window_set_keep_above (GTK_WINDOW (pWindow), g_bKeepAbove || myAccessibility.bPopUp);

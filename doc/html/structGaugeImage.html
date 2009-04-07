@@ -4,12 +4,13 @@
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.3 -->
-<div class="tabs">
-  <ul>
-    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
-    <li class="current"><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li><a href="files.html"><span>Fichiers</span></a></li>
+<!-- Généré par Doxygen 1.5.5 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>Page&nbsp;principale</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li><a href="files.html"><span>Fichiers</span></a></li>
     <li>
       <form action="search.php" method="get">
         <table cellspacing="0" cellpadding="0" border="0">
@@ -20,14 +21,16 @@
         </table>
       </form>
     </li>
-  </ul>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li><a href="functions.html"><span>Champs&nbsp;de&nbsp;donnée</span></a></li>
+    </ul>
+  </div>
 </div>
-<div class="tabs">
-  <ul>
-    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li><a href="functions.html"><span>Champs&nbsp;de&nbsp;donnée</span></a></li>
-  </ul>
-</div>
+<div class="contents">
 <h1>Référence de la structure GaugeImage</h1><!-- doxytag: class="GaugeImage" --><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Champs de données</h2></td></tr>
@@ -35,9 +38,9 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGaugeImage.html#59e6e21003945bcae1cdf7c20cb20c7e">cairoSurface</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGaugeImage.html#a7263dffc6e8097bed37ccea562645bf">sizeX</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGaugeImage.html#2dfc95bea4039c6b3937f3b14283c279">sizeX</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGaugeImage.html#b1b3457ef14dc3a7faee6fa5c76d5acc">sizeY</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGaugeImage.html#bdf80e13a5a101af327322175b4fc5ab">sizeY</a></td></tr>
 
 </table>
 <hr><h2>Documentation des champs</h2>
@@ -71,12 +74,12 @@
 
 </div>
 </div><p>
-<a class="anchor" name="a7263dffc6e8097bed37ccea562645bf"></a><!-- doxytag: member="GaugeImage::sizeX" ref="a7263dffc6e8097bed37ccea562645bf" args="" -->
+<a class="anchor" name="2dfc95bea4039c6b3937f3b14283c279"></a><!-- doxytag: member="GaugeImage::sizeX" ref="2dfc95bea4039c6b3937f3b14283c279" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int <a class="el" href="structGaugeImage.html#a7263dffc6e8097bed37ccea562645bf">GaugeImage::sizeX</a>          </td>
+          <td class="memname">gint <a class="el" href="structGaugeImage.html#2dfc95bea4039c6b3937f3b14283c279">GaugeImage::sizeX</a>          </td>
         </tr>
       </table>
 </div>
@@ -86,12 +89,12 @@
 
 </div>
 </div><p>
-<a class="anchor" name="b1b3457ef14dc3a7faee6fa5c76d5acc"></a><!-- doxytag: member="GaugeImage::sizeY" ref="b1b3457ef14dc3a7faee6fa5c76d5acc" args="" -->
+<a class="anchor" name="bdf80e13a5a101af327322175b4fc5ab"></a><!-- doxytag: member="GaugeImage::sizeY" ref="bdf80e13a5a101af327322175b4fc5ab" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int <a class="el" href="structGaugeImage.html#b1b3457ef14dc3a7faee6fa5c76d5acc">GaugeImage::sizeY</a>          </td>
+          <td class="memname">gint <a class="el" href="structGaugeImage.html#bdf80e13a5a101af327322175b4fc5ab">GaugeImage::sizeY</a>          </td>
         </tr>
       </table>
 </div>
@@ -102,9 +105,10 @@
 </div>
 </div><p>
 <hr>La documentation de cette structure a été générée à partir du fichier suivant :<ul>
-<li>/opt/cairo-dock/trunk/cairo-dock/src/<a class="el" href="cairo-dock-gauge_8h-source.html">cairo-dock-gauge.h</a></ul>
-<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<li>/home/fab/CD/trunk/cairo-dock/src/<a class="el" href="cairo-dock-gauge_8h.html">cairo-dock-gauge.h</a></ul>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
 </html>

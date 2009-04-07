@@ -1,15 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-class-manager.h</title>
+<title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-class-manager.h</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.3 -->
-<div class="tabs">
-  <ul>
-    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
-    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+<!-- Généré par Doxygen 1.5.5 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>Page&nbsp;principale</span></a></li>
+      <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
     <li>
       <form action="search.php" method="get">
         <table cellspacing="0" cellpadding="0" border="0">
@@ -20,14 +21,14 @@
         </table>
       </form>
     </li>
-  </ul>
+    </ul>
+  </div>
 </div>
-<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-class-manager.h</h1>
-<p>
-<a href="cairo-dock-class-manager_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<div class="contents">
+<h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-class-manager.h</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#379149f84a7b56323ab5be1389470c5c">cairo_dock_initialize_class_manager</a> (void)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#14d9b329c6deef4780ca84dcf4324899">cairo_dock_initialize_class_manager</a> (void)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#c480e21484f875cbddefbf973d04ee77">cairo_dock_free_class_appli</a> (<a class="el" href="struct__CairoDockClassAppli.html">CairoDockClassAppli</a> *pClassAppli)</td></tr>
 
@@ -45,6 +46,8 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#e32327ef4ecea98797f8e9ea633d18a3">cairo_dock_class_is_using_xicon</a> (const gchar *cClass)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#c7d033deb9ff283e792a7ac68bf531ee">cairo_dock_class_is_expanded</a> (const gchar *cClass)</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#d0d6f72a22ef8edecf020060c9a0f6d0">cairo_dock_prevent_inhibated_class</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#ea8b1b10e030ec4f822f064b0e511e50">cairo_dock_remove_icon_from_class</a> (<a class="el" href="struct__Icon.html">Icon</a> *pInhibatorIcon)</td></tr>
@@ -57,20 +60,36 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#b1078c0867a7e1d4ff1153ca565f8a77">cairo_dock_reset_class_table</a> (void)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#8d3b78e7395f9fd453feced62dea9a87">cairo_dock_duplicate_inhibator_surface_for_appli</a> (cairo_t *pSourceContext, <a class="el" href="struct__Icon.html">Icon</a> *pInhibatorIcon, double fMaxScale, double *fWidth, double *fHeight)</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#b967d2b84e7c7b00619da715e2904147">cairo_dock_create_surface_from_class</a> (gchar *cClass, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#c677286b39819406d9e5584afc5190c3">cairo_dock_update_visibility_on_inhibators</a> (gchar *cClass, Window Xid, gboolean bIsHidden)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#3e1527f25e9105b53aaa5b25d39f7874">cairo_dock_update_activity_on_inhibators</a> (gchar *cClass, Window Xid)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#bf3b6ab12f9ac8b19ab68535cf46361a">cairo_dock_update_inactivity_on_inhibators</a> (gchar *cClass, Window Xid)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#1ff505b20ebf0fe457e2cc1744bc3c3f">cairo_dock_update_name_on_inhibators</a> (gchar *cClass, Window Xid, gchar *cNewName)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#4de95aa81b64be6e6807112acc4f50ef">cairo_dock_get_classmate</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#6d22670ce8ff03daedc77c4ce8d0722c">cairo_dock_check_class_subdock_is_empty</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, const gchar *cClass)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#23400e79d4a64c238da20658b0b0dfb1">cairo_dock_set_overwrite_exceptions</a> (const gchar *cExceptions)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#6e7502e9b72218dc17abb67f22a0d6a5">cairo_dock_set_group_exceptions</a> (const gchar *cExceptions)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-class-manager_8h.html#a2649828416cd5f417a10fc56ae4729c">cairo_dock_get_prev_next_classmate_icon</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, gboolean bNext)</td></tr>
+
 </table>
 <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="379149f84a7b56323ab5be1389470c5c"></a><!-- doxytag: member="cairo-dock-class-manager.h::cairo_dock_initialize_class_manager" ref="379149f84a7b56323ab5be1389470c5c" args="(void)" -->
+<a class="anchor" name="14d9b329c6deef4780ca84dcf4324899"></a><!-- doxytag: member="cairo-dock-class-manager.h::cairo_dock_initialize_class_manager" ref="14d9b329c6deef4780ca84dcf4324899" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cairo_dock_initialize_class_manager           </td>
+          <td class="memname">G_BEGIN_DECLS void cairo_dock_initialize_class_manager           </td>
           <td>(</td>
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
@@ -302,6 +321,27 @@ Dis si une classe donnee utilise les icones fournies par X. <dl class="return" c
 
 </div>
 </div><p>
+<a class="anchor" name="c7d033deb9ff283e792a7ac68bf531ee"></a><!-- doxytag: member="cairo-dock-class-manager.h::cairo_dock_class_is_expanded" ref="c7d033deb9ff283e792a7ac68bf531ee" args="(const gchar *cClass)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_class_is_expanded           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cClass</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Dis si une classe donnee peut etre groupee en sous-dock ou non. <dl class="return" compact><dt><b>Renvoie:</b></dt><dd>TRUE ssi les applis de cette classe ne sont pas groupees. </dd></dl>
+
+</div>
+</div><p>
 <a class="anchor" name="d0d6f72a22ef8edecf020060c9a0f6d0"></a><!-- doxytag: member="cairo-dock-class-manager.h::cairo_dock_prevent_inhibated_class" ref="d0d6f72a22ef8edecf020060c9a0f6d0" args="(Icon *pIcon)" -->
 <div class="memitem">
 <div class="memproto">
@@ -464,6 +504,53 @@ Enleve toutes les applis de toutes les classes, et met a jour les inhibiteurs.
 Detruit toutes les classes, enlevant tous les inhibiteurs et toutes les applis de toutes les classes. 
 </div>
 </div><p>
+<a class="anchor" name="8d3b78e7395f9fd453feced62dea9a87"></a><!-- doxytag: member="cairo-dock-class-manager.h::cairo_dock_duplicate_inhibator_surface_for_appli" ref="8d3b78e7395f9fd453feced62dea9a87" args="(cairo_t *pSourceContext, Icon *pInhibatorIcon, double fMaxScale, double *fWidth, double *fHeight)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cairo_surface_t* cairo_dock_duplicate_inhibator_surface_for_appli           </td>
+          <td>(</td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pInhibatorIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fMaxScale</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&nbsp;</td>
+          <td class="paramname"> <em>fWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&nbsp;</td>
+          <td class="paramname"> <em>fHeight</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
 <a class="anchor" name="b967d2b84e7c7b00619da715e2904147"></a><!-- doxytag: member="cairo-dock-class-manager.h::cairo_dock_create_surface_from_class" ref="b967d2b84e7c7b00619da715e2904147" args="(gchar *cClass, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)" -->
 <div class="memitem">
 <div class="memproto">
@@ -598,8 +685,197 @@ Met a jour les inhibiteurs controlant une appli donnee pour les faire reagir a l
 
 </div>
 </div><p>
-<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<a class="anchor" name="bf3b6ab12f9ac8b19ab68535cf46361a"></a><!-- doxytag: member="cairo-dock-class-manager.h::cairo_dock_update_inactivity_on_inhibators" ref="bf3b6ab12f9ac8b19ab68535cf46361a" args="(gchar *cClass, Window Xid)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_update_inactivity_on_inhibators           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cClass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Window&nbsp;</td>
+          <td class="paramname"> <em>Xid</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Met a jour les inhibiteurs controlant une appli donnee pour les redessiner en mode normal lors de la perte d'activite de la fenetre. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cClass</em>&nbsp;</td><td>la classe. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>Xid</em>&nbsp;</td><td>l'ID de l'appli. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="1ff505b20ebf0fe457e2cc1744bc3c3f"></a><!-- doxytag: member="cairo-dock-class-manager.h::cairo_dock_update_name_on_inhibators" ref="1ff505b20ebf0fe457e2cc1744bc3c3f" args="(gchar *cClass, Window Xid, gchar *cNewName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_update_name_on_inhibators           </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cClass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Window&nbsp;</td>
+          <td class="paramname"> <em>Xid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramname"> <em>cNewName</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="4de95aa81b64be6e6807112acc4f50ef"></a><!-- doxytag: member="cairo-dock-class-manager.h::cairo_dock_get_classmate" ref="4de95aa81b64be6e6807112acc4f50ef" args="(Icon *pIcon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__Icon.html">Icon</a>* cairo_dock_get_classmate           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="6d22670ce8ff03daedc77c4ce8d0722c"></a><!-- doxytag: member="cairo-dock-class-manager.h::cairo_dock_check_class_subdock_is_empty" ref="6d22670ce8ff03daedc77c4ce8d0722c" args="(CairoDock *pDock, const gchar *cClass)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_check_class_subdock_is_empty           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cClass</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="23400e79d4a64c238da20658b0b0dfb1"></a><!-- doxytag: member="cairo-dock-class-manager.h::cairo_dock_set_overwrite_exceptions" ref="23400e79d4a64c238da20658b0b0dfb1" args="(const gchar *cExceptions)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_set_overwrite_exceptions           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cExceptions</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="6e7502e9b72218dc17abb67f22a0d6a5"></a><!-- doxytag: member="cairo-dock-class-manager.h::cairo_dock_set_group_exceptions" ref="6e7502e9b72218dc17abb67f22a0d6a5" args="(const gchar *cExceptions)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_set_group_exceptions           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cExceptions</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="a2649828416cd5f417a10fc56ae4729c"></a><!-- doxytag: member="cairo-dock-class-manager.h::cairo_dock_get_prev_next_classmate_icon" ref="a2649828416cd5f417a10fc56ae4729c" args="(Icon *pIcon, gboolean bNext)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__Icon.html">Icon</a>* cairo_dock_get_prev_next_classmate_icon           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>pIcon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bNext</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
 </html>

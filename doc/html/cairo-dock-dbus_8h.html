@@ -1,15 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dbus.h</title>
+<title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-dbus.h</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.3 -->
-<div class="tabs">
-  <ul>
-    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
-    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+<!-- Généré par Doxygen 1.5.5 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>Page&nbsp;principale</span></a></li>
+      <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
     <li>
       <form action="search.php" method="get">
         <table cellspacing="0" cellpadding="0" border="0">
@@ -20,53 +21,85 @@
         </table>
       </form>
     </li>
-  </ul>
+    </ul>
+  </div>
 </div>
-<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-dbus.h</h1>
-<p>
-<a href="cairo-dock-dbus_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<div class="contents">
+<h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-dbus.h</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
-<tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#649db601a61296129cd1612a2abe7368">cairo_dock_initialize_dbus_manager</a> (void)</td></tr>
+<tr><td colspan="2"><br><h2>Macros</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#e3a5698fb80d550afa09798e58384400">cairo_dock_get_dbus_connection</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">DBusGConnection *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#1813624dabbef2d5b9f247106372c5a6">cairo_dock_get_dbus_connection</a> (void)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#2496a94c4d58527e981163c423410cdb">cairo_dock_create_new_dbus_proxy</a></td></tr>
+
+<tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS DBusGConnection *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#3bd8ca47aa817305babe79a54bc2d6ee">cairo_dock_get_session_connection</a> (void)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#0a1d26dfa93988a16756512e467b9ed0">cairo_dock_register_service_name</a> (const gchar *cServiceName)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#8e64b42f79ff518bc8512529423756b5">cairo_dock_bdus_is_enabled</a> (void)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">DBusGProxy *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#1177d4b7d39129b56d5b7e1c657b1f83">cairo_dock_create_new_dbus_proxy</a> (const char *name, const char *path, const char *interface)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">DBusGProxy *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#1768f6e20e8e986c486d3a7361f00f7d">cairo_dock_create_new_session_proxy</a> (const char *name, const char *path, const char *interface)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">DBusGProxy *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#70b688dc7ec6f48d82ce586a6965b513">cairo_dock_create_new_system_proxy</a> (const char *name, const char *path, const char *interface)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#afb96e15a8c3382b18c94897fda490f7">cairo_dock_dbus_detect_application</a> (const gchar *cName)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#03aa125e849b3a746c14e7dfc4551601">cairo_dock_dbus_get_boolean</a> (DBusGProxy *pDbusProxy, const gchar *cParameter)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">guint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#fd1109dcc2675050edd2769edd01e6d2">cairo_dock_dbus_get_uinteger</a> (DBusGProxy *pDbusProxy, const gchar *cParameter)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#613201e9a329032468ef5954803a4c95">cairo_dock_dbus_get_integer</a> (DBusGProxy *pDbusProxy, const gchar *cParameter)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#4428c0f343e18b66c76e0159d6f47b08">cairo_dock_dbus_get_string</a> (DBusGProxy *pDbusProxy, const gchar *cParameter)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar **&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#55c197b43734d84c4a7545f95e4c7466">cairo_dock_dbus_get_string_list</a> (DBusGProxy *pDbusProxy, const gchar *cParameter)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">guchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#69f9e3d60ae837bee7bdce48799c44a3">cairo_dock_dbus_get_uchar</a> (DBusGProxy *pDbusProxy, const gchar *cParameter)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#7ccbb24b077770c0cec4b992dfbcab1c">cairo_dock_dbus_get_double</a> (DBusGProxy *pDbusProxy, const gchar *cParameter)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#aec159a9c08b7cc9b147e17524d289e4">cairo_dock_dbus_call</a> (DBusGProxy *pDbusProxy, const gchar *cCommand)</td></tr>
+
 </table>
-<hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="649db601a61296129cd1612a2abe7368"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_initialize_dbus_manager" ref="649db601a61296129cd1612a2abe7368" args="(void)" -->
+<hr><h2>Documentation des macros</h2>
+<a class="anchor" name="e3a5698fb80d550afa09798e58384400"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_get_dbus_connection" ref="e3a5698fb80d550afa09798e58384400" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cairo_dock_initialize_dbus_manager           </td>
-          <td>(</td>
-          <td class="paramtype">void&nbsp;</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td class="memname">#define cairo_dock_get_dbus_connection          </td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>
-Initialise le gestionnaire de bus dans le dock. Il recupere la connexion 'session' de DBus, y etablit un proxy, et les met a disposition de tout le monde. 
+
 </div>
 </div><p>
-<a class="anchor" name="1813624dabbef2d5b9f247106372c5a6"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_get_dbus_connection" ref="1813624dabbef2d5b9f247106372c5a6" args="(void)" -->
+<a class="anchor" name="2496a94c4d58527e981163c423410cdb"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_create_new_dbus_proxy" ref="2496a94c4d58527e981163c423410cdb" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">DBusGConnection* cairo_dock_get_dbus_connection           </td>
+          <td class="memname">#define cairo_dock_create_new_dbus_proxy          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<hr><h2>Documentation des fonctions</h2>
+<a class="anchor" name="3bd8ca47aa817305babe79a54bc2d6ee"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_get_session_connection" ref="3bd8ca47aa817305babe79a54bc2d6ee" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">G_BEGIN_DECLS DBusGConnection* cairo_dock_get_session_connection           </td>
           <td>(</td>
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
@@ -128,12 +161,12 @@ Dis si le bus est disponible dans le dock. <dl class="return" compact><dt><b>Ren
 
 </div>
 </div><p>
-<a class="anchor" name="1177d4b7d39129b56d5b7e1c657b1f83"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_create_new_dbus_proxy" ref="1177d4b7d39129b56d5b7e1c657b1f83" args="(const char *name, const char *path, const char *interface)" -->
+<a class="anchor" name="1768f6e20e8e986c486d3a7361f00f7d"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_create_new_session_proxy" ref="1768f6e20e8e986c486d3a7361f00f7d" args="(const char *name, const char *path, const char *interface)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">DBusGProxy* cairo_dock_create_new_dbus_proxy           </td>
+          <td class="memname">DBusGProxy* cairo_dock_create_new_session_proxy           </td>
           <td>(</td>
           <td class="paramtype">const char *&nbsp;</td>
           <td class="paramname"> <em>name</em>, </td>
@@ -171,6 +204,49 @@ Cree un nouveau proxy pour la connexion 'session'. <dl compact><dt><b>Paramètre
 
 </div>
 </div><p>
+<a class="anchor" name="70b688dc7ec6f48d82ce586a6965b513"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_create_new_system_proxy" ref="70b688dc7ec6f48d82ce586a6965b513" args="(const char *name, const char *path, const char *interface)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">DBusGProxy* cairo_dock_create_new_system_proxy           </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>interface</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Cree un nouveau proxy pour la connexion 'system'. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>name</em>&nbsp;</td><td>un nom sur le bus. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>path</em>&nbsp;</td><td>le chemin associe. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>interface</em>&nbsp;</td><td>nom de l'interface associee. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>le proxy nouvellement cree. </dd></dl>
+
+</div>
+</div><p>
 <a class="anchor" name="afb96e15a8c3382b18c94897fda490f7"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_dbus_detect_application" ref="afb96e15a8c3382b18c94897fda490f7" args="(const gchar *cName)" -->
 <div class="memitem">
 <div class="memproto">
@@ -197,8 +273,282 @@ Detecte si une application est couramment lancee. <dl compact><dt><b>Paramètres
 
 </div>
 </div><p>
-<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<a class="anchor" name="03aa125e849b3a746c14e7dfc4551601"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_dbus_get_boolean" ref="03aa125e849b3a746c14e7dfc4551601" args="(DBusGProxy *pDbusProxy, const gchar *cParameter)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_dbus_get_boolean           </td>
+          <td>(</td>
+          <td class="paramtype">DBusGProxy *&nbsp;</td>
+          <td class="paramname"> <em>pDbusProxy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cParameter</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Recupere la valeur d'un parametre booleen sur le bus. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDbusProxy</em>&nbsp;</td><td>associe a la connexion. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cParameter</em>&nbsp;</td><td>nom du parametre. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>la valeur du parametre. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="fd1109dcc2675050edd2769edd01e6d2"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_dbus_get_uinteger" ref="fd1109dcc2675050edd2769edd01e6d2" args="(DBusGProxy *pDbusProxy, const gchar *cParameter)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">guint cairo_dock_dbus_get_uinteger           </td>
+          <td>(</td>
+          <td class="paramtype">DBusGProxy *&nbsp;</td>
+          <td class="paramname"> <em>pDbusProxy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cParameter</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Recupere la valeur d'un parametre entier non signe sur le bus. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDbusProxy</em>&nbsp;</td><td>associe a la connexion. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cParameter</em>&nbsp;</td><td>nom du parametre. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>la valeur du parametre. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="613201e9a329032468ef5954803a4c95"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_dbus_get_integer" ref="613201e9a329032468ef5954803a4c95" args="(DBusGProxy *pDbusProxy, const gchar *cParameter)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cairo_dock_dbus_get_integer           </td>
+          <td>(</td>
+          <td class="paramtype">DBusGProxy *&nbsp;</td>
+          <td class="paramname"> <em>pDbusProxy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cParameter</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Recupere la valeur d'un parametre entier sur le bus. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDbusProxy</em>&nbsp;</td><td>associe a la connexion. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cParameter</em>&nbsp;</td><td>nom du parametre. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>la valeur du parametre. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="4428c0f343e18b66c76e0159d6f47b08"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_dbus_get_string" ref="4428c0f343e18b66c76e0159d6f47b08" args="(DBusGProxy *pDbusProxy, const gchar *cParameter)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gchar* cairo_dock_dbus_get_string           </td>
+          <td>(</td>
+          <td class="paramtype">DBusGProxy *&nbsp;</td>
+          <td class="paramname"> <em>pDbusProxy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cParameter</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Recupere la valeur d'un parametre 'chaine de caracteres' sur le bus. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDbusProxy</em>&nbsp;</td><td>associe a la connexion. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cParameter</em>&nbsp;</td><td>nom du parametre. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>la valeur du parametre. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="55c197b43734d84c4a7545f95e4c7466"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_dbus_get_string_list" ref="55c197b43734d84c4a7545f95e4c7466" args="(DBusGProxy *pDbusProxy, const gchar *cParameter)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gchar** cairo_dock_dbus_get_string_list           </td>
+          <td>(</td>
+          <td class="paramtype">DBusGProxy *&nbsp;</td>
+          <td class="paramname"> <em>pDbusProxy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cParameter</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="69f9e3d60ae837bee7bdce48799c44a3"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_dbus_get_uchar" ref="69f9e3d60ae837bee7bdce48799c44a3" args="(DBusGProxy *pDbusProxy, const gchar *cParameter)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">guchar* cairo_dock_dbus_get_uchar           </td>
+          <td>(</td>
+          <td class="paramtype">DBusGProxy *&nbsp;</td>
+          <td class="paramname"> <em>pDbusProxy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cParameter</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Recupere la valeur d'un parametre 'caracteres non signe' sur le bus. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDbusProxy</em>&nbsp;</td><td>associe a la connexion. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cParameter</em>&nbsp;</td><td>nom du parametre. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>la valeur du parametre. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="7ccbb24b077770c0cec4b992dfbcab1c"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_dbus_get_double" ref="7ccbb24b077770c0cec4b992dfbcab1c" args="(DBusGProxy *pDbusProxy, const gchar *cParameter)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gdouble cairo_dock_dbus_get_double           </td>
+          <td>(</td>
+          <td class="paramtype">DBusGProxy *&nbsp;</td>
+          <td class="paramname"> <em>pDbusProxy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cParameter</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="aec159a9c08b7cc9b147e17524d289e4"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_dbus_call" ref="aec159a9c08b7cc9b147e17524d289e4" args="(DBusGProxy *pDbusProxy, const gchar *cCommand)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_dbus_call           </td>
+          <td>(</td>
+          <td class="paramtype">DBusGProxy *&nbsp;</td>
+          <td class="paramname"> <em>pDbusProxy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cCommand</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Appelle une commande sur le bus. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDbusProxy</em>&nbsp;</td><td>associe a la connexion. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>cCommand</em>&nbsp;</td><td>nom de la commande. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
 </html>

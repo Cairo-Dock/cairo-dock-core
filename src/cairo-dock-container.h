@@ -14,6 +14,9 @@ G_BEGIN_DECLS
 *@return la fenetre GTK nouvellement cree.
 */
 GtkWidget *cairo_dock_create_container_window (void);
+
+GtkWidget *cairo_dock_create_container_window_no_opengl (void);
+
 /** Applique la colormap de l'ecran a une fenetre GTK, lui ajoutant la transparence.
 *@param pWidget
 */

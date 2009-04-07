@@ -1,15 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>Cairo-Dock: Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-renderer-manager.h</title>
+<title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-renderer-manager.h</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.3 -->
-<div class="tabs">
-  <ul>
-    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
-    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+<!-- Généré par Doxygen 1.5.5 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>Page&nbsp;principale</span></a></li>
+      <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
     <li>
       <form action="search.php" method="get">
         <table cellspacing="0" cellpadding="0" border="0">
@@ -20,53 +21,142 @@
         </table>
       </form>
     </li>
-  </ul>
+    </ul>
+  </div>
 </div>
-<h1>Référence du fichier /opt/cairo-dock/trunk/cairo-dock/src/cairo-dock-renderer-manager.h</h1>
-<p>
-<a href="cairo-dock-renderer-manager_8h-source.html">Aller au code source de ce fichier.</a><table border="0" cellpadding="0" cellspacing="0">
+<div class="contents">
+<h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-renderer-manager.h</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Macros</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#54f3e11e4d2aa6cd7061cfa533d03881">CAIRO_CONTAINER_IS_OPENGL</a>(pContainer)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#eaeb75fb074e992af19b7d4d24fb60c8">CAIRO_DOCK_CONTAINER_IS_OPENGL</a></td></tr>
+
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockRenderer.html">CairoDockRenderer</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#a73c48c0b9ecc34645d09d3d80185c1e">cairo_dock_get_renderer</a> (gchar *cRendererName, gboolean bForMainDock)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS <a class="el" href="struct__CairoDockRenderer.html">CairoDockRenderer</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#f0764eedc6f5c72f3d83824044e431e9">cairo_dock_get_renderer</a> (const gchar *cRendererName, gboolean bForMainDock)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#d8bda3c1da807d8b3cf5d7564bc4d215">cairo_dock_register_renderer</a> (gchar *cRendererName, <a class="el" href="struct__CairoDockRenderer.html">CairoDockRenderer</a> *pRenderer)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#a7df051fa8a3ce7bcc93af34f88595ee">cairo_dock_register_renderer</a> (const gchar *cRendererName, <a class="el" href="struct__CairoDockRenderer.html">CairoDockRenderer</a> *pRenderer)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#ce3fd14c4035c66d68eaaf7767c541aa">cairo_dock_remove_renderer</a> (gchar *cRendererName)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#5d3b6f8333f26bca8f5db6de749d436d">cairo_dock_remove_renderer</a> (const gchar *cRendererName)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockDeskletRenderer.html">CairoDockDeskletRenderer</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#5e6645653180451ed4de5f89a680a9ae">cairo_dock_get_desklet_renderer</a> (gchar *cRendererName)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDeskletRenderer.html">CairoDeskletRenderer</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#3e7c7786a11a1a21251daafe2bc7c10c">cairo_dock_get_desklet_renderer</a> (const gchar *cRendererName)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#6cb7d55b39862434bdf69172cc8baf8d">cairo_dock_register_desklet_renderer</a> (gchar *cRendererName, <a class="el" href="struct__CairoDockDeskletRenderer.html">CairoDockDeskletRenderer</a> *pRenderer)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#0025b3a859a06a32a56b218b9032882d">cairo_dock_register_desklet_renderer</a> (const gchar *cRendererName, <a class="el" href="struct__CairoDeskletRenderer.html">CairoDeskletRenderer</a> *pRenderer)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#f0ed20b500a0324b04dc26fedc16fc41">cairo_dock_remove_desklet_renderer</a> (gchar *cRendererName)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#6ce3e465affa0e7cec5d7e8cf61e0ad9">cairo_dock_remove_desklet_renderer</a> (const gchar *cRendererName)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#0e443f9cd84376701d9aee55e2a888ef">cairo_dock_predefine_desklet_renderer_config</a> (<a class="el" href="struct__CairoDeskletRenderer.html">CairoDeskletRenderer</a> *pRenderer, const gchar *cConfigName, <a class="el" href="cairo-dock-struct_8h.html#823fabe3f630ea14322663dc03a0ee4e">CairoDeskletRendererConfigPtr</a> pConfig)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-struct_8h.html#823fabe3f630ea14322663dc03a0ee4e">CairoDeskletRendererConfigPtr</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#a9a5138f4177c7c1df128ce4429df1eb">cairo_dock_get_desklet_renderer_predefined_config</a> (const gchar *cRendererName, const gchar *cConfigName)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDialogRenderer.html">CairoDialogRenderer</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#0d0c9ea061c6f340ce88cb31c71bb562">cairo_dock_get_dialog_renderer</a> (const gchar *cRendererName)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#a72db06742749cf83c0f62fa2a913c11">cairo_dock_register_dialog_renderer</a> (const gchar *cRendererName, <a class="el" href="struct__CairoDialogRenderer.html">CairoDialogRenderer</a> *pRenderer)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#d676c872d71bb5eb2e89341f12e38e6f">cairo_dock_remove_dialog_renderer</a> (const gchar *cRendererName)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDeskletDecoration.html">CairoDeskletDecoration</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#744c807f9e74aa7341b264c89667b6a7">cairo_dock_get_desklet_decoration</a> (const gchar *cDecorationName)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#40deeef98a9578c959338ebf04fb3508">cairo_dock_register_desklet_decoration</a> (const gchar *cDecorationName, <a class="el" href="struct__CairoDeskletDecoration.html">CairoDeskletDecoration</a> *pDecoration)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#727eacf07da1f41021aebd30e04a0650">cairo_dock_remove_desklet_decoration</a> (const gchar *cDecorationName)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-data-renderer_8h.html#44fc3394d28c67d54a84bb3755ba7579">CairoDataRendererNewFunc</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#04a7a6c268bcac8716b850fb355e607f">cairo_dock_get_data_renderer_entry_point</a> (const gchar *cRendererName)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#bf8629914379ca5ac82a0ab1ceeacfbb">cairo_dock_register_data_renderer_entry_point</a> (const gchar *cRendererName, <a class="el" href="cairo-dock-data-renderer_8h.html#44fc3394d28c67d54a84bb3755ba7579">CairoDataRendererNewFunc</a> *pFunc)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#b5105f18584e04fe182fd7a2aa6ae4c0">cairo_dock_remove_data_renderer_entry_point</a> (const gchar *cRendererName)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#b14521c7d0570b30f4eaa2690eb72644">cairo_dock_initialize_renderer_manager</a> (void)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#294a36bea221e1f38fee85c567589aaa">cairo_dock_set_renderer</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, gchar *cRendererName)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#16c1d824af120729c936a775746f1738">cairo_dock_set_renderer</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, const gchar *cRendererName)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#4a2369a5806de2dc8c2a2c5f2ef77767">cairo_dock_set_default_renderer</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#b214698165cfc5eb2e9601abd18ee76d">cairo_dock_set_desklet_renderer</a> (<a class="el" href="struct__CairoDockDesklet.html">CairoDockDesklet</a> *pDesklet, <a class="el" href="struct__CairoDockDeskletRenderer.html">CairoDockDeskletRenderer</a> *pRenderer, cairo_t *pSourceContext, gpointer *pConfig)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#306662b9827ef9d1b2b76f086f9ae451">cairo_dock_set_desklet_renderer</a> (<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, <a class="el" href="struct__CairoDeskletRenderer.html">CairoDeskletRenderer</a> *pRenderer, cairo_t *pSourceContext, gboolean bLoadIcons, <a class="el" href="cairo-dock-struct_8h.html#823fabe3f630ea14322663dc03a0ee4e">CairoDeskletRendererConfigPtr</a> pConfig)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#d88054ca8f1a4f120f739f2bfce777a0">cairo_dock_set_desklet_renderer_by_name</a> (<a class="el" href="struct__CairoDockDesklet.html">CairoDockDesklet</a> *pDesklet, gchar *cRendererName, cairo_t *pSourceContext, gboolean bLoadIcons, gpointer *pConfig)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#73a39951e14673223e2493356bf05159">cairo_dock_set_desklet_renderer_by_name</a> (<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, const gchar *cRendererName, cairo_t *pSourceContext, gboolean bLoadIcons, <a class="el" href="cairo-dock-struct_8h.html#823fabe3f630ea14322663dc03a0ee4e">CairoDeskletRendererConfigPtr</a> pConfig)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#d7c6aeb096ede626804e0a81b58f8489">cairo_dock_update_conf_file_with_renderers</a> (GKeyFile *pOpenedKeyFile, gchar *cConfFile, gchar *cGroupName, gchar *cKeyName)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#16f54137aceb9a886d27de2f86312b55">cairo_dock_set_dialog_renderer</a> (<a class="el" href="struct__CairoDialog.html">CairoDialog</a> *pDialog, <a class="el" href="struct__CairoDialogRenderer.html">CairoDialogRenderer</a> *pRenderer, cairo_t *pSourceContext, <a class="el" href="cairo-dock-struct_8h.html#c7664dd26acbafb26399002c4b0a4877">CairoDialogRendererConfigPtr</a> pConfig)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#e96aa41c3c98f0cc385a9396fa58681f">cairo_dock_update_main_conf_file_with_renderers</a> (GKeyFile *pOpenedKeyFile, gchar *cConfFile)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#65d99b3abea923b7c306f226a903493b">cairo_dock_set_dialog_renderer_by_name</a> (<a class="el" href="struct__CairoDialog.html">CairoDialog</a> *pDialog, const gchar *cRendererName, cairo_t *pSourceContext, <a class="el" href="cairo-dock-struct_8h.html#c7664dd26acbafb26399002c4b0a4877">CairoDialogRendererConfigPtr</a> pConfig)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#6be105db755e560218d7e36320834ae5">cairo_dock_update_launcher_conf_file_with_renderers</a> (GKeyFile *pOpenedKeyFile, gchar *cConfFile)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDialogDecorator.html">CairoDialogDecorator</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#49b64cb4896caf0dac1ff1ed3563dcf3">cairo_dock_get_dialog_decorator</a> (const gchar *cDecoratorName)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#cf48f677385c87f8e91482afca0215d1">cairo_dock_update_easy_conf_file_with_renderers</a> (GKeyFile *pOpenedKeyFile, gchar *cConfFile)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#03dfe9dec45faac9415dd5caf67897b0">cairo_dock_register_dialog_decorator</a> (const gchar *cDecoratorName, <a class="el" href="struct__CairoDialogDecorator.html">CairoDialogDecorator</a> *pDecorator)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#b75385fe09eaa52d98eae5a16925d3ee">cairo_dock_remove_dialog_decorator</a> (const gchar *cDecoratorName)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#180441c8dc0e2a34ff2b6abe99d8c5a8">cairo_dock_set_dialog_decorator</a> (<a class="el" href="struct__CairoDialog.html">CairoDialog</a> *pDialog, <a class="el" href="struct__CairoDialogDecorator.html">CairoDialogDecorator</a> *pDecorator)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#6a6056a2a4a1c01369a5d1abd8233d3d">cairo_dock_set_dialog_decorator_by_name</a> (<a class="el" href="struct__CairoDialog.html">CairoDialog</a> *pDialog, const gchar *cDecoratorName)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#c355f4f80b01c7a1a2418365c4720a79">cairo_dock_render_desklet_with_new_data</a> (<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, <a class="el" href="cairo-dock-struct_8h.html#8b4a26e3c0cf2ddd99f29181ce2cf4e3">CairoDeskletRendererDataPtr</a> pNewData)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#d21a3a6b30c72d890ad5fe0de5c5d4d6">cairo_dock_render_dialog_with_new_data</a> (<a class="el" href="struct__CairoDialog.html">CairoDialog</a> *pDialog, <a class="el" href="cairo-dock-struct_8h.html#9f900f942e8f80abcb9a112f2c5c1263">CairoDialogRendererDataPtr</a> pNewData)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#86879f3da407888c4b030306a211fbe9">cairo_dock_update_renderer_list_for_gui</a> (void)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#a467d3718062c4246aec09a9f666ffae">cairo_dock_update_desklet_decorations_list_for_gui</a> (void)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#c629304ff63935cbe458f9426fad0e9a">cairo_dock_update_desklet_decorations_list_for_applet_gui</a> (void)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#f5d59003c258bc8c726acdbb6a587cc9">cairo_dock_update_animations_list_for_gui</a> (void)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#00c0037f301eaa878cedb3391394baff">cairo_dock_update_dialog_decorator_list_for_gui</a> (void)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#7189bf9868772db6b0247e36050d1f23">cairo_dock_register_animation</a> (const gchar *cAnimation)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#86dbaa73b4675ba0cab944bd96134410">cairo_dock_get_animation_id</a> (const gchar *cAnimation)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-renderer-manager_8h.html#b1942fa8a2168d67f037ec065d0d2532">cairo_dock_unregister_animation</a> (const gchar *cAnimation)</td></tr>
 
 </table>
-<hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="a73c48c0b9ecc34645d09d3d80185c1e"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_get_renderer" ref="a73c48c0b9ecc34645d09d3d80185c1e" args="(gchar *cRendererName, gboolean bForMainDock)" -->
+<hr><h2>Documentation des macros</h2>
+<a class="anchor" name="54f3e11e4d2aa6cd7061cfa533d03881"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::CAIRO_CONTAINER_IS_OPENGL" ref="54f3e11e4d2aa6cd7061cfa533d03881" args="(pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct__CairoDockRenderer.html">CairoDockRenderer</a>* cairo_dock_get_renderer           </td>
+          <td class="memname">#define CAIRO_CONTAINER_IS_OPENGL          </td>
           <td>(</td>
-          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramtype">pContainer&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="eaeb75fb074e992af19b7d4d24fb60c8"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::CAIRO_DOCK_CONTAINER_IS_OPENGL" ref="eaeb75fb074e992af19b7d4d24fb60c8" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CAIRO_DOCK_CONTAINER_IS_OPENGL          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<hr><h2>Documentation des fonctions</h2>
+<a class="anchor" name="f0764eedc6f5c72f3d83824044e431e9"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_get_renderer" ref="f0764eedc6f5c72f3d83824044e431e9" args="(const gchar *cRendererName, gboolean bForMainDock)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">G_BEGIN_DECLS <a class="el" href="struct__CairoDockRenderer.html">CairoDockRenderer</a>* cairo_dock_get_renderer           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cRendererName</em>, </td>
         </tr>
         <tr>
@@ -88,14 +178,14 @@
 
 </div>
 </div><p>
-<a class="anchor" name="d8bda3c1da807d8b3cf5d7564bc4d215"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_register_renderer" ref="d8bda3c1da807d8b3cf5d7564bc4d215" args="(gchar *cRendererName, CairoDockRenderer *pRenderer)" -->
+<a class="anchor" name="a7df051fa8a3ce7bcc93af34f88595ee"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_register_renderer" ref="a7df051fa8a3ce7bcc93af34f88595ee" args="(const gchar *cRendererName, CairoDockRenderer *pRenderer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void cairo_dock_register_renderer           </td>
           <td>(</td>
-          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cRendererName</em>, </td>
         </tr>
         <tr>
@@ -117,14 +207,14 @@
 
 </div>
 </div><p>
-<a class="anchor" name="ce3fd14c4035c66d68eaaf7767c541aa"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_remove_renderer" ref="ce3fd14c4035c66d68eaaf7767c541aa" args="(gchar *cRendererName)" -->
+<a class="anchor" name="5d3b6f8333f26bca8f5db6de749d436d"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_remove_renderer" ref="5d3b6f8333f26bca8f5db6de749d436d" args="(const gchar *cRendererName)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void cairo_dock_remove_renderer           </td>
           <td>(</td>
-          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cRendererName</em>          </td>
           <td>&nbsp;)&nbsp;</td>
           <td width="100%"></td>
@@ -137,14 +227,14 @@
 
 </div>
 </div><p>
-<a class="anchor" name="5e6645653180451ed4de5f89a680a9ae"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_get_desklet_renderer" ref="5e6645653180451ed4de5f89a680a9ae" args="(gchar *cRendererName)" -->
+<a class="anchor" name="3e7c7786a11a1a21251daafe2bc7c10c"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_get_desklet_renderer" ref="3e7c7786a11a1a21251daafe2bc7c10c" args="(const gchar *cRendererName)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct__CairoDockDeskletRenderer.html">CairoDockDeskletRenderer</a>* cairo_dock_get_desklet_renderer           </td>
+          <td class="memname"><a class="el" href="struct__CairoDeskletRenderer.html">CairoDeskletRenderer</a>* cairo_dock_get_desklet_renderer           </td>
           <td>(</td>
-          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cRendererName</em>          </td>
           <td>&nbsp;)&nbsp;</td>
           <td width="100%"></td>
@@ -157,20 +247,20 @@
 
 </div>
 </div><p>
-<a class="anchor" name="6cb7d55b39862434bdf69172cc8baf8d"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_register_desklet_renderer" ref="6cb7d55b39862434bdf69172cc8baf8d" args="(gchar *cRendererName, CairoDockDeskletRenderer *pRenderer)" -->
+<a class="anchor" name="0025b3a859a06a32a56b218b9032882d"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_register_desklet_renderer" ref="0025b3a859a06a32a56b218b9032882d" args="(const gchar *cRendererName, CairoDeskletRenderer *pRenderer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void cairo_dock_register_desklet_renderer           </td>
           <td>(</td>
-          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cRendererName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct__CairoDockDeskletRenderer.html">CairoDockDeskletRenderer</a> *&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDeskletRenderer.html">CairoDeskletRenderer</a> *&nbsp;</td>
           <td class="paramname"> <em>pRenderer</em></td><td>&nbsp;</td>
         </tr>
         <tr>
@@ -186,14 +276,285 @@
 
 </div>
 </div><p>
-<a class="anchor" name="f0ed20b500a0324b04dc26fedc16fc41"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_remove_desklet_renderer" ref="f0ed20b500a0324b04dc26fedc16fc41" args="(gchar *cRendererName)" -->
+<a class="anchor" name="6ce3e465affa0e7cec5d7e8cf61e0ad9"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_remove_desklet_renderer" ref="6ce3e465affa0e7cec5d7e8cf61e0ad9" args="(const gchar *cRendererName)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void cairo_dock_remove_desklet_renderer           </td>
           <td>(</td>
-          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cRendererName</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="0e443f9cd84376701d9aee55e2a888ef"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_predefine_desklet_renderer_config" ref="0e443f9cd84376701d9aee55e2a888ef" args="(CairoDeskletRenderer *pRenderer, const gchar *cConfigName, CairoDeskletRendererConfigPtr pConfig)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_predefine_desklet_renderer_config           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDeskletRenderer.html">CairoDeskletRenderer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pRenderer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cConfigName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#823fabe3f630ea14322663dc03a0ee4e">CairoDeskletRendererConfigPtr</a>&nbsp;</td>
+          <td class="paramname"> <em>pConfig</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="a9a5138f4177c7c1df128ce4429df1eb"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_get_desklet_renderer_predefined_config" ref="a9a5138f4177c7c1df128ce4429df1eb" args="(const gchar *cRendererName, const gchar *cConfigName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="cairo-dock-struct_8h.html#823fabe3f630ea14322663dc03a0ee4e">CairoDeskletRendererConfigPtr</a> cairo_dock_get_desklet_renderer_predefined_config           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cRendererName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cConfigName</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="0d0c9ea061c6f340ce88cb31c71bb562"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_get_dialog_renderer" ref="0d0c9ea061c6f340ce88cb31c71bb562" args="(const gchar *cRendererName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDialogRenderer.html">CairoDialogRenderer</a>* cairo_dock_get_dialog_renderer           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cRendererName</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="a72db06742749cf83c0f62fa2a913c11"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_register_dialog_renderer" ref="a72db06742749cf83c0f62fa2a913c11" args="(const gchar *cRendererName, CairoDialogRenderer *pRenderer)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_register_dialog_renderer           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cRendererName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDialogRenderer.html">CairoDialogRenderer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pRenderer</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="d676c872d71bb5eb2e89341f12e38e6f"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_remove_dialog_renderer" ref="d676c872d71bb5eb2e89341f12e38e6f" args="(const gchar *cRendererName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_remove_dialog_renderer           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cRendererName</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="744c807f9e74aa7341b264c89667b6a7"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_get_desklet_decoration" ref="744c807f9e74aa7341b264c89667b6a7" args="(const gchar *cDecorationName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDeskletDecoration.html">CairoDeskletDecoration</a>* cairo_dock_get_desklet_decoration           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cDecorationName</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="40deeef98a9578c959338ebf04fb3508"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_register_desklet_decoration" ref="40deeef98a9578c959338ebf04fb3508" args="(const gchar *cDecorationName, CairoDeskletDecoration *pDecoration)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_register_desklet_decoration           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cDecorationName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDeskletDecoration.html">CairoDeskletDecoration</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDecoration</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="727eacf07da1f41021aebd30e04a0650"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_remove_desklet_decoration" ref="727eacf07da1f41021aebd30e04a0650" args="(const gchar *cDecorationName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_remove_desklet_decoration           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cDecorationName</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="04a7a6c268bcac8716b850fb355e607f"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_get_data_renderer_entry_point" ref="04a7a6c268bcac8716b850fb355e607f" args="(const gchar *cRendererName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="cairo-dock-data-renderer_8h.html#44fc3394d28c67d54a84bb3755ba7579">CairoDataRendererNewFunc</a> cairo_dock_get_data_renderer_entry_point           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cRendererName</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="bf8629914379ca5ac82a0ab1ceeacfbb"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_register_data_renderer_entry_point" ref="bf8629914379ca5ac82a0ab1ceeacfbb" args="(const gchar *cRendererName, CairoDataRendererNewFunc *pFunc)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_register_data_renderer_entry_point           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cRendererName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-data-renderer_8h.html#44fc3394d28c67d54a84bb3755ba7579">CairoDataRendererNewFunc</a> *&nbsp;</td>
+          <td class="paramname"> <em>pFunc</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="b5105f18584e04fe182fd7a2aa6ae4c0"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_remove_data_renderer_entry_point" ref="b5105f18584e04fe182fd7a2aa6ae4c0" args="(const gchar *cRendererName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_remove_data_renderer_entry_point           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cRendererName</em>          </td>
           <td>&nbsp;)&nbsp;</td>
           <td width="100%"></td>
@@ -226,7 +587,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="294a36bea221e1f38fee85c567589aaa"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_set_renderer" ref="294a36bea221e1f38fee85c567589aaa" args="(CairoDock *pDock, gchar *cRendererName)" -->
+<a class="anchor" name="16c1d824af120729c936a775746f1738"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_set_renderer" ref="16c1d824af120729c936a775746f1738" args="(CairoDock *pDock, const gchar *cRendererName)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -239,7 +600,7 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cRendererName</em></td><td>&nbsp;</td>
         </tr>
         <tr>
@@ -275,20 +636,20 @@
 
 </div>
 </div><p>
-<a class="anchor" name="b214698165cfc5eb2e9601abd18ee76d"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_set_desklet_renderer" ref="b214698165cfc5eb2e9601abd18ee76d" args="(CairoDockDesklet *pDesklet, CairoDockDeskletRenderer *pRenderer, cairo_t *pSourceContext, gpointer *pConfig)" -->
+<a class="anchor" name="306662b9827ef9d1b2b76f086f9ae451"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_set_desklet_renderer" ref="306662b9827ef9d1b2b76f086f9ae451" args="(CairoDesklet *pDesklet, CairoDeskletRenderer *pRenderer, cairo_t *pSourceContext, gboolean bLoadIcons, CairoDeskletRendererConfigPtr pConfig)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void cairo_dock_set_desklet_renderer           </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct__CairoDockDesklet.html">CairoDockDesklet</a> *&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
           <td class="paramname"> <em>pDesklet</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct__CairoDockDeskletRenderer.html">CairoDockDeskletRenderer</a> *&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDeskletRenderer.html">CairoDeskletRenderer</a> *&nbsp;</td>
           <td class="paramname"> <em>pRenderer</em>, </td>
         </tr>
         <tr>
@@ -300,7 +661,13 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gpointer *&nbsp;</td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bLoadIcons</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#823fabe3f630ea14322663dc03a0ee4e">CairoDeskletRendererConfigPtr</a>&nbsp;</td>
           <td class="paramname"> <em>pConfig</em></td><td>&nbsp;</td>
         </tr>
         <tr>
@@ -316,20 +683,20 @@
 
 </div>
 </div><p>
-<a class="anchor" name="d88054ca8f1a4f120f739f2bfce777a0"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_set_desklet_renderer_by_name" ref="d88054ca8f1a4f120f739f2bfce777a0" args="(CairoDockDesklet *pDesklet, gchar *cRendererName, cairo_t *pSourceContext, gboolean bLoadIcons, gpointer *pConfig)" -->
+<a class="anchor" name="73a39951e14673223e2493356bf05159"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_set_desklet_renderer_by_name" ref="73a39951e14673223e2493356bf05159" args="(CairoDesklet *pDesklet, const gchar *cRendererName, cairo_t *pSourceContext, gboolean bLoadIcons, CairoDeskletRendererConfigPtr pConfig)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void cairo_dock_set_desklet_renderer_by_name           </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct__CairoDockDesklet.html">CairoDockDesklet</a> *&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
           <td class="paramname"> <em>pDesklet</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cRendererName</em>, </td>
         </tr>
         <tr>
@@ -347,7 +714,7 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gpointer *&nbsp;</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#823fabe3f630ea14322663dc03a0ee4e">CairoDeskletRendererConfigPtr</a>&nbsp;</td>
           <td class="paramname"> <em>pConfig</em></td><td>&nbsp;</td>
         </tr>
         <tr>
@@ -363,33 +730,33 @@
 
 </div>
 </div><p>
-<a class="anchor" name="d7c6aeb096ede626804e0a81b58f8489"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_update_conf_file_with_renderers" ref="d7c6aeb096ede626804e0a81b58f8489" args="(GKeyFile *pOpenedKeyFile, gchar *cConfFile, gchar *cGroupName, gchar *cKeyName)" -->
+<a class="anchor" name="16f54137aceb9a886d27de2f86312b55"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_set_dialog_renderer" ref="16f54137aceb9a886d27de2f86312b55" args="(CairoDialog *pDialog, CairoDialogRenderer *pRenderer, cairo_t *pSourceContext, CairoDialogRendererConfigPtr pConfig)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cairo_dock_update_conf_file_with_renderers           </td>
+          <td class="memname">void cairo_dock_set_dialog_renderer           </td>
           <td>(</td>
-          <td class="paramtype">GKeyFile *&nbsp;</td>
-          <td class="paramname"> <em>pOpenedKeyFile</em>, </td>
+          <td class="paramtype"><a class="el" href="struct__CairoDialog.html">CairoDialog</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDialog</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cConfFile</em>, </td>
+          <td class="paramtype"><a class="el" href="struct__CairoDialogRenderer.html">CairoDialogRenderer</a> *&nbsp;</td>
+          <td class="paramname"> <em>pRenderer</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cGroupName</em>, </td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cKeyName</em></td><td>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#c7664dd26acbafb26399002c4b0a4877">CairoDialogRendererConfigPtr</a>&nbsp;</td>
+          <td class="paramname"> <em>pConfig</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -404,21 +771,33 @@
 
 </div>
 </div><p>
-<a class="anchor" name="e96aa41c3c98f0cc385a9396fa58681f"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_update_main_conf_file_with_renderers" ref="e96aa41c3c98f0cc385a9396fa58681f" args="(GKeyFile *pOpenedKeyFile, gchar *cConfFile)" -->
+<a class="anchor" name="65d99b3abea923b7c306f226a903493b"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_set_dialog_renderer_by_name" ref="65d99b3abea923b7c306f226a903493b" args="(CairoDialog *pDialog, const gchar *cRendererName, cairo_t *pSourceContext, CairoDialogRendererConfigPtr pConfig)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cairo_dock_update_main_conf_file_with_renderers           </td>
+          <td class="memname">void cairo_dock_set_dialog_renderer_by_name           </td>
           <td>(</td>
-          <td class="paramtype">GKeyFile *&nbsp;</td>
-          <td class="paramname"> <em>pOpenedKeyFile</em>, </td>
+          <td class="paramtype"><a class="el" href="struct__CairoDialog.html">CairoDialog</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDialog</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cConfFile</em></td><td>&nbsp;</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cRendererName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pSourceContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#c7664dd26acbafb26399002c4b0a4877">CairoDialogRendererConfigPtr</a>&nbsp;</td>
+          <td class="paramname"> <em>pConfig</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -433,21 +812,41 @@
 
 </div>
 </div><p>
-<a class="anchor" name="6be105db755e560218d7e36320834ae5"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_update_launcher_conf_file_with_renderers" ref="6be105db755e560218d7e36320834ae5" args="(GKeyFile *pOpenedKeyFile, gchar *cConfFile)" -->
+<a class="anchor" name="49b64cb4896caf0dac1ff1ed3563dcf3"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_get_dialog_decorator" ref="49b64cb4896caf0dac1ff1ed3563dcf3" args="(const gchar *cDecoratorName)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cairo_dock_update_launcher_conf_file_with_renderers           </td>
+          <td class="memname"><a class="el" href="struct__CairoDialogDecorator.html">CairoDialogDecorator</a>* cairo_dock_get_dialog_decorator           </td>
           <td>(</td>
-          <td class="paramtype">GKeyFile *&nbsp;</td>
-          <td class="paramname"> <em>pOpenedKeyFile</em>, </td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cDecoratorName</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="03dfe9dec45faac9415dd5caf67897b0"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_register_dialog_decorator" ref="03dfe9dec45faac9415dd5caf67897b0" args="(const gchar *cDecoratorName, CairoDialogDecorator *pDecorator)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_register_dialog_decorator           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cDecoratorName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cConfFile</em></td><td>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDialogDecorator.html">CairoDialogDecorator</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDecorator</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -462,21 +861,41 @@
 
 </div>
 </div><p>
-<a class="anchor" name="cf48f677385c87f8e91482afca0215d1"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_update_easy_conf_file_with_renderers" ref="cf48f677385c87f8e91482afca0215d1" args="(GKeyFile *pOpenedKeyFile, gchar *cConfFile)" -->
+<a class="anchor" name="b75385fe09eaa52d98eae5a16925d3ee"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_remove_dialog_decorator" ref="b75385fe09eaa52d98eae5a16925d3ee" args="(const gchar *cDecoratorName)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cairo_dock_update_easy_conf_file_with_renderers           </td>
+          <td class="memname">void cairo_dock_remove_dialog_decorator           </td>
           <td>(</td>
-          <td class="paramtype">GKeyFile *&nbsp;</td>
-          <td class="paramname"> <em>pOpenedKeyFile</em>, </td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cDecoratorName</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="180441c8dc0e2a34ff2b6abe99d8c5a8"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_set_dialog_decorator" ref="180441c8dc0e2a34ff2b6abe99d8c5a8" args="(CairoDialog *pDialog, CairoDialogDecorator *pDecorator)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_set_dialog_decorator           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDialog.html">CairoDialog</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDialog</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cConfFile</em></td><td>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDialogDecorator.html">CairoDialogDecorator</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDecorator</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -491,8 +910,256 @@
 
 </div>
 </div><p>
-<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<a class="anchor" name="6a6056a2a4a1c01369a5d1abd8233d3d"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_set_dialog_decorator_by_name" ref="6a6056a2a4a1c01369a5d1abd8233d3d" args="(CairoDialog *pDialog, const gchar *cDecoratorName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_set_dialog_decorator_by_name           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDialog.html">CairoDialog</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDialog</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cDecoratorName</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="c355f4f80b01c7a1a2418365c4720a79"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_render_desklet_with_new_data" ref="c355f4f80b01c7a1a2418365c4720a79" args="(CairoDesklet *pDesklet, CairoDeskletRendererDataPtr pNewData)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_render_desklet_with_new_data           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDesklet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#8b4a26e3c0cf2ddd99f29181ce2cf4e3">CairoDeskletRendererDataPtr</a>&nbsp;</td>
+          <td class="paramname"> <em>pNewData</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="d21a3a6b30c72d890ad5fe0de5c5d4d6"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_render_dialog_with_new_data" ref="d21a3a6b30c72d890ad5fe0de5c5d4d6" args="(CairoDialog *pDialog, CairoDialogRendererDataPtr pNewData)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_render_dialog_with_new_data           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDialog.html">CairoDialog</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDialog</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#9f900f942e8f80abcb9a112f2c5c1263">CairoDialogRendererDataPtr</a>&nbsp;</td>
+          <td class="paramname"> <em>pNewData</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="86879f3da407888c4b030306a211fbe9"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_update_renderer_list_for_gui" ref="86879f3da407888c4b030306a211fbe9" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_update_renderer_list_for_gui           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="a467d3718062c4246aec09a9f666ffae"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_update_desklet_decorations_list_for_gui" ref="a467d3718062c4246aec09a9f666ffae" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_update_desklet_decorations_list_for_gui           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="c629304ff63935cbe458f9426fad0e9a"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_update_desklet_decorations_list_for_applet_gui" ref="c629304ff63935cbe458f9426fad0e9a" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_update_desklet_decorations_list_for_applet_gui           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="f5d59003c258bc8c726acdbb6a587cc9"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_update_animations_list_for_gui" ref="f5d59003c258bc8c726acdbb6a587cc9" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_update_animations_list_for_gui           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="00c0037f301eaa878cedb3391394baff"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_update_dialog_decorator_list_for_gui" ref="00c0037f301eaa878cedb3391394baff" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_update_dialog_decorator_list_for_gui           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="7189bf9868772db6b0247e36050d1f23"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_register_animation" ref="7189bf9868772db6b0247e36050d1f23" args="(const gchar *cAnimation)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cairo_dock_register_animation           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cAnimation</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="86dbaa73b4675ba0cab944bd96134410"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_get_animation_id" ref="86dbaa73b4675ba0cab944bd96134410" args="(const gchar *cAnimation)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cairo_dock_get_animation_id           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cAnimation</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="b1942fa8a2168d67f037ec065d0d2532"></a><!-- doxytag: member="cairo-dock-renderer-manager.h::cairo_dock_unregister_animation" ref="b1942fa8a2168d67f037ec065d0d2532" args="(const gchar *cAnimation)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_unregister_animation           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cAnimation</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
 </html>

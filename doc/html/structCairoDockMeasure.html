@@ -4,12 +4,13 @@
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.3 -->
-<div class="tabs">
-  <ul>
-    <li><a href="index.html"><span>Page&nbsp;principale</span></a></li>
-    <li class="current"><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li><a href="files.html"><span>Fichiers</span></a></li>
+<!-- Généré par Doxygen 1.5.5 -->
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="main.html"><span>Page&nbsp;principale</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li><a href="files.html"><span>Fichiers</span></a></li>
     <li>
       <form action="search.php" method="get">
         <table cellspacing="0" cellpadding="0" border="0">
@@ -20,33 +21,49 @@
         </table>
       </form>
     </li>
-  </ul>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
+      <li><a href="functions.html"><span>Champs&nbsp;de&nbsp;donnée</span></a></li>
+    </ul>
+  </div>
 </div>
-<div class="tabs">
-  <ul>
-    <li><a href="annotated.html"><span>Structures&nbsp;de&nbsp;données</span></a></li>
-    <li><a href="functions.html"><span>Champs&nbsp;de&nbsp;donnée</span></a></li>
-  </ul>
-</div>
+<div class="contents">
 <h1>Référence de la structure CairoDockMeasure</h1><!-- doxytag: class="CairoDockMeasure" --><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Champs de données</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCairoDockMeasure.html#08d82d09bb8e1c1ad4675f352711bf6d">iSidTimer</a></td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Sid du timer des mesures.  <a href="#08d82d09bb8e1c1ad4675f352711bf6d"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCairoDockMeasure.html#685311d3dcec16ff5967508ad93827a5">iSidTimerRedraw</a></td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Sid du timer de fin de mesure.  <a href="#685311d3dcec16ff5967508ad93827a5"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCairoDockMeasure.html#4edd5a2ef9cf4c9e5190e7b075e8208c">iThreadIsRunning</a></td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Valeur atomique a 1 ssi le thread de mesure est en cours.  <a href="#4edd5a2ef9cf4c9e5190e7b075e8208c"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">GMutex *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCairoDockMeasure.html#90e5c1a98fd894e117a8b208afbf95db">pMutexData</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">GVoidFunc&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCairoDockMeasure.html#6f2c9df47e005e2cb71742451ecd1e68">acquisition</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">mutex d'accessibilite a la structure des resultats.  <a href="#90e5c1a98fd894e117a8b208afbf95db"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-applet-facility_8h.html#49d32e98c22bbe2df8ea803bf585a23f">CairoDockAquisitionTimerFunc</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCairoDockMeasure.html#bd60c93b1875b7471c1cb08d9eec551c">acquisition</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">GVoidFunc&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCairoDockMeasure.html#aa32a18d3004cbe56395b9f31b8de317">read</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">fonction realisant l'acquisition des donnees. N'accede jamais a la structure des resultats.  <a href="#bd60c93b1875b7471c1cb08d9eec551c"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-applet-facility_8h.html#e240cb07ea4eeb839eb446a35cc8a679">CairoDockReadTimerFunc</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCairoDockMeasure.html#333e250a3d0da24f910b0fec10506ad1">read</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">GVoidFunc&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCairoDockMeasure.html#6bfd9761bf2263a4659bef76ed3bec43">update</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">fonction realisant la lecture des donnees precedemment acquises; stocke les resultats dans la structures des resultats.  <a href="#333e250a3d0da24f910b0fec10506ad1"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-applet-facility_8h.html#92b93ed0eec2a14854eb3b55677c9d59">CairoDockUpdateTimerFunc</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCairoDockMeasure.html#8e5302588adceacd2cb7bfe62b2fe857">update</a></td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">fonction realisant la mise a jour de l'IHM en fonction des nouveaux resultats. Renvoie TRUE pour continuer, FALSE pour arreter.  <a href="#8e5302588adceacd2cb7bfe62b2fe857"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCairoDockMeasure.html#671738bdcda10637faa3e194035d2c26">iCheckInterval</a></td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">intervalle de temps en secondes, eventuellement nul pour une mesure unitaire.  <a href="#671738bdcda10637faa3e194035d2c26"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="cairo-dock-applet-facility_8h.html#0631d743fee8102eaecf918c90f2c9e5">CairoDockFrequencyState</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCairoDockMeasure.html#386a420314089043ab8f2c14e780dfa9">iFrequencyState</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">etat de la frequence des mesures.  <a href="#386a420314089043ab8f2c14e780dfa9"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gpointer&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCairoDockMeasure.html#194f1847c43314f53d8163110972aee4">pUserData</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">donnees passees en entree de chaque fonction.  <a href="#194f1847c43314f53d8163110972aee4"></a><br></td></tr>
 </table>
 <hr><h2>Documentation des champs</h2>
 <a class="anchor" name="08d82d09bb8e1c1ad4675f352711bf6d"></a><!-- doxytag: member="CairoDockMeasure::iSidTimer" ref="08d82d09bb8e1c1ad4675f352711bf6d" args="" -->
@@ -60,6 +77,8 @@
 </div>
 <div class="memdoc">
 
+<p>
+Sid du timer des mesures. 
 <p>
 
 </div>
@@ -76,6 +95,8 @@
 <div class="memdoc">
 
 <p>
+Sid du timer de fin de mesure. 
+<p>
 
 </div>
 </div><p>
@@ -90,6 +111,8 @@
 </div>
 <div class="memdoc">
 
+<p>
+Valeur atomique a 1 ssi le thread de mesure est en cours. 
 <p>
 
 </div>
@@ -106,50 +129,58 @@
 <div class="memdoc">
 
 <p>
+mutex d'accessibilite a la structure des resultats. 
+<p>
 
 </div>
 </div><p>
-<a class="anchor" name="6f2c9df47e005e2cb71742451ecd1e68"></a><!-- doxytag: member="CairoDockMeasure::acquisition" ref="6f2c9df47e005e2cb71742451ecd1e68" args="" -->
+<a class="anchor" name="bd60c93b1875b7471c1cb08d9eec551c"></a><!-- doxytag: member="CairoDockMeasure::acquisition" ref="bd60c93b1875b7471c1cb08d9eec551c" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">GVoidFunc <a class="el" href="structCairoDockMeasure.html#6f2c9df47e005e2cb71742451ecd1e68">CairoDockMeasure::acquisition</a>          </td>
+          <td class="memname"><a class="el" href="cairo-dock-applet-facility_8h.html#49d32e98c22bbe2df8ea803bf585a23f">CairoDockAquisitionTimerFunc</a> <a class="el" href="structCairoDockMeasure.html#bd60c93b1875b7471c1cb08d9eec551c">CairoDockMeasure::acquisition</a>          </td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>
+fonction realisant l'acquisition des donnees. N'accede jamais a la structure des resultats. 
+<p>
 
 </div>
 </div><p>
-<a class="anchor" name="aa32a18d3004cbe56395b9f31b8de317"></a><!-- doxytag: member="CairoDockMeasure::read" ref="aa32a18d3004cbe56395b9f31b8de317" args="" -->
+<a class="anchor" name="333e250a3d0da24f910b0fec10506ad1"></a><!-- doxytag: member="CairoDockMeasure::read" ref="333e250a3d0da24f910b0fec10506ad1" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">GVoidFunc <a class="el" href="structCairoDockMeasure.html#aa32a18d3004cbe56395b9f31b8de317">CairoDockMeasure::read</a>          </td>
+          <td class="memname"><a class="el" href="cairo-dock-applet-facility_8h.html#e240cb07ea4eeb839eb446a35cc8a679">CairoDockReadTimerFunc</a> <a class="el" href="structCairoDockMeasure.html#333e250a3d0da24f910b0fec10506ad1">CairoDockMeasure::read</a>          </td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>
+fonction realisant la lecture des donnees precedemment acquises; stocke les resultats dans la structures des resultats. 
+<p>
 
 </div>
 </div><p>
-<a class="anchor" name="6bfd9761bf2263a4659bef76ed3bec43"></a><!-- doxytag: member="CairoDockMeasure::update" ref="6bfd9761bf2263a4659bef76ed3bec43" args="" -->
+<a class="anchor" name="8e5302588adceacd2cb7bfe62b2fe857"></a><!-- doxytag: member="CairoDockMeasure::update" ref="8e5302588adceacd2cb7bfe62b2fe857" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">GVoidFunc <a class="el" href="structCairoDockMeasure.html#6bfd9761bf2263a4659bef76ed3bec43">CairoDockMeasure::update</a>          </td>
+          <td class="memname"><a class="el" href="cairo-dock-applet-facility_8h.html#92b93ed0eec2a14854eb3b55677c9d59">CairoDockUpdateTimerFunc</a> <a class="el" href="structCairoDockMeasure.html#8e5302588adceacd2cb7bfe62b2fe857">CairoDockMeasure::update</a>          </td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
+<p>
+fonction realisant la mise a jour de l'IHM en fonction des nouveaux resultats. Renvoie TRUE pour continuer, FALSE pour arreter. 
 <p>
 
 </div>
@@ -166,13 +197,50 @@
 <div class="memdoc">
 
 <p>
+intervalle de temps en secondes, eventuellement nul pour une mesure unitaire. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="386a420314089043ab8f2c14e780dfa9"></a><!-- doxytag: member="CairoDockMeasure::iFrequencyState" ref="386a420314089043ab8f2c14e780dfa9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="cairo-dock-applet-facility_8h.html#0631d743fee8102eaecf918c90f2c9e5">CairoDockFrequencyState</a> <a class="el" href="structCairoDockMeasure.html#386a420314089043ab8f2c14e780dfa9">CairoDockMeasure::iFrequencyState</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+etat de la frequence des mesures. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="194f1847c43314f53d8163110972aee4"></a><!-- doxytag: member="CairoDockMeasure::pUserData" ref="194f1847c43314f53d8163110972aee4" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gpointer <a class="el" href="structCairoDockMeasure.html#194f1847c43314f53d8163110972aee4">CairoDockMeasure::pUserData</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+donnees passees en entree de chaque fonction. 
+<p>
 
 </div>
 </div><p>
 <hr>La documentation de cette structure a été générée à partir du fichier suivant :<ul>
-<li>/opt/cairo-dock/trunk/cairo-dock/src/<a class="el" href="cairo-dock-applet-facility_8h-source.html">cairo-dock-applet-facility.h</a></ul>
-<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 16 03:27:16 2008 pour Cairo-Dock par&nbsp;
+<li>/home/fab/CD/trunk/cairo-dock/src/<a class="el" href="cairo-dock-applet-facility_8h.html">cairo-dock-applet-facility.h</a></ul>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
 </html>
