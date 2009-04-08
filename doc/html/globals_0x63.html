@@ -332,6 +332,8 @@ Liste des fonctions, variables, macros, enumérations, et définitions de type a
 : <a class="el" href="cairo-dock-applet-factory_8h.html#c4395992f032dfaa56ef5a53d965a892">cairo-dock-applet-factory.h</a>
 <li>cairo_dock_create_container_window()
 : <a class="el" href="cairo-dock-container_8h.html#205ce2c7d2a0d2610e01e254a9e1fee4">cairo-dock-container.h</a>
+<li>cairo_dock_create_container_window_no_opengl()
+: <a class="el" href="cairo-dock-container_8h.html#034fff8bdb45c0199d8cee5ce59379c8">cairo-dock-container.h</a>
 <li>cairo_dock_create_context_from_container()
 : <a class="el" href="cairo-dock-draw_8h.html#e3a3991fcab3b240351b1da1f323ef16">cairo-dock-draw.h</a>
 <li>cairo_dock_create_context_from_window
@@ -354,8 +356,6 @@ Liste des fonctions, variables, macros, enumérations, et définitions de type a
 : <a class="el" href="cairo-dock-application-factory_8h.html#e28b5fa69e1fb9cf38fccc6ba95e0efc">cairo-dock-application-factory.h</a>
 <li>cairo_dock_create_icon_pbuffer()
 : <a class="el" href="cairo-dock-draw-opengl_8h.html#7c1a8f87674ec2d1dfe13f5e46a9a736">cairo-dock-draw-opengl.h</a>
-<li>cairo_dock_create_icon_surface_with_reflection()
-: <a class="el" href="cairo-dock-surface-factory_8h.html#990164528c864f67e2e6cabd3b73397d">cairo-dock-surface-factory.h</a>
 <li>cairo_dock_create_new_dbus_proxy
 : <a class="el" href="cairo-dock-dbus_8h.html#2496a94c4d58527e981163c423410cdb">cairo-dock-dbus.h</a>
 <li>cairo_dock_create_new_dock()
@@ -683,7 +683,7 @@ Liste des fonctions, variables, macros, enumérations, et définitions de type a
 <li>CAIRO_DOCK_FM_NETWORK
 : <a class="el" href="cairo-dock-struct_8h.html#8b49d19ec28c1278343f64a85a1c3bf2">cairo-dock-struct.h</a>
 <li>cairo_dock_fm_register_vfs_backend()
-: <a class="el" href="cairo-dock-file-manager_8h.html#bcf9b652d2320fa0549d83e02563360d">cairo-dock-file-manager.h</a>
+: <a class="el" href="cairo-dock-file-manager_8h.html#550e7883243efc448cf21a3a45d3351f">cairo-dock-file-manager.h</a>
 <li>cairo_dock_fm_remove_monitor
 : <a class="el" href="cairo-dock-file-manager_8h.html#29d9e02536a078301b54a109e0afeca8">cairo-dock-file-manager.h</a>
 <li>cairo_dock_fm_remove_monitor_full()
@@ -812,7 +812,7 @@ Liste des fonctions, variables, macros, enumérations, et définitions de type a
 <li>cairo_dock_get_applet_contenair_from_name()
 : <a class="el" href="cairo-dock-applet-container_8h.html#9a9870bd943e07013806b01f30d9666f">cairo-dock-applet-container.h</a>
 <li>cairo_dock_get_boolean_key_value()
-: <a class="el" href="cairo-dock-config_8h.html#43c48857469ba72f97a9d98e379d2a1f">cairo-dock-config.h</a>
+: <a class="el" href="cairo-dock-config_8h.html#7f221b2e5161810f62738ed51a2a732e">cairo-dock-config.h</a>
 <li>cairo_dock_get_chosen_theme()
 : <a class="el" href="cairo-dock-themes-manager_8h.html#45bfce739852d43b48219926540d6769">cairo-dock-themes-manager.h</a>
 <li>cairo_dock_get_classmate()
@@ -986,7 +986,7 @@ Liste des fonctions, variables, macros, enumérations, et définitions de type a
 <li>cairo_dock_get_screen_offsets()
 : <a class="el" href="cairo-dock-X-utilities_8h.html#47223e98f77e3a8f90ed3fd067037e0c">cairo-dock-X-utilities.h</a>
 <li>cairo_dock_get_session_connection()
-: <a class="el" href="cairo-dock-dbus_8h.html#3bd8ca47aa817305babe79a54bc2d6ee">cairo-dock-dbus.h</a>
+: <a class="el" href="cairo-dock-dbus_8h.html#deac2a6cfc7d5500124370c128ed2376">cairo-dock-dbus.h</a>
 <li>cairo_dock_get_size_key_value()
 : <a class="el" href="cairo-dock-config_8h.html#96128d4a65d5869b027d840032e9ad9a">cairo-dock-config.h</a>
 <li>cairo_dock_get_size_key_value_helper
@@ -1083,9 +1083,9 @@ Liste des fonctions, variables, macros, enumérations, et définitions de type a
 <li>cairo_dock_initialize_application_factory()
 : <a class="el" href="cairo-dock-application-factory_8h.html#6d3ee127f784fe99e5c703a088e751e4">cairo-dock-application-factory.h</a>
 <li>cairo_dock_initialize_application_manager()
-: <a class="el" href="cairo-dock-applications-manager_8h.html#8aac38a0287830253081f9281157c04c">cairo-dock-applications-manager.h</a>
+: <a class="el" href="cairo-dock-applications-manager_8h.html#3674e2a1512118427bff36712cc35b28">cairo-dock-applications-manager.h</a>
 <li>cairo_dock_initialize_class_manager()
-: <a class="el" href="cairo-dock-class-manager_8h.html#14d9b329c6deef4780ca84dcf4324899">cairo-dock-class-manager.h</a>
+: <a class="el" href="cairo-dock-class-manager_8h.html#379149f84a7b56323ab5be1389470c5c">cairo-dock-class-manager.h</a>
 <li>cairo_dock_initialize_dock_manager()
 : <a class="el" href="cairo-dock-dock-manager_8h.html#bb9cbcf363a4cf0d508bd04a65b0bcd6">cairo-dock-dock-manager.h</a>
 <li>cairo_dock_initialize_module_manager()
@@ -2627,7 +2627,7 @@ Liste des fonctions, variables, macros, enumérations, et définitions de type a
 : <a class="el" href="cairo-dock-clock_8h.html#59f8878c33b1a702f1895d22ae56706ca3ef440db79b80b17bb8655d977afafc">cairo-dock-clock.h</a>
 </ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:29 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 8 02:54:14 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

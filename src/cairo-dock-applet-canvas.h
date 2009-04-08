@@ -8,6 +8,11 @@
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
+/**
+*@file cairo-dock-applet-canvas.h This file defines numerous macros, that form a canvas for all the applets.
+* You probably won't need to dig into this file, since you can generate an applet with the 'generate-new-applet.sh' script, that will build the whole canvas for you.
+* Moreover, you can have a look at an applet that has a similar functioning to yours.
+*/
 
 //\_________________________________ STRUCT
 typedef struct _AppletConfig AppletConfig;
@@ -89,11 +94,13 @@ CD_APPLET_ON_UPDATE_ICON_PROTO;
 //\______________________ pre_init.
 /** Debut de la fonction de pre-initialisation de l'applet (celle qui est appele a l'enregistrement de tous les plug-ins).
 *Definit egalement les variables globales suivantes : myIcon, myDock, myDesklet, myContainer, et myDrawContext.
-*@param cName nom de sous lequel l'applet sera enregistree par Cairo-Dock.
-*@param iMajorVersion version majeure du dock necessaire au bon fonctionnement de l'applet.
-*@param iMinorVersion version mineure du dock necessaire au bon fonctionnement de l'applet.
-*@param iMicroVersion version micro du dock necessaire au bon fonctionnement de l'applet.
-*@param iAppletCategory Categorie de l'applet (CAIRO_DOCK_CATEGORY_ACCESSORY, CAIRO_DOCK_CATEGORY_DESKTOP, CAIRO_DOCK_CATEGORY_CONTROLER)
+*@param _cName nom de sous lequel l'applet sera enregistree par Cairo-Dock.
+*@param _iMajorVersion version majeure du dock necessaire au bon fonctionnement de l'applet.
+*@param _iMinorVersion version mineure du dock necessaire au bon fonctionnement de l'applet.
+*@param _iMicroVersion version micro du dock necessaire au bon fonctionnement de l'applet.
+*@param _iAppletCategory Categorie de l'applet (CAIRO_DOCK_CATEGORY_ACCESSORY, CAIRO_DOCK_CATEGORY_DESKTOP, CAIRO_DOCK_CATEGORY_CONTROLER)
+*@param _cDescription description et mode d'emploi succint de l'applet.
+*@param _cAuthor nom de l'auteur et eventuellement adresse mail.
 */
 #define CD_APPLET_PRE_INIT_ALL_BEGIN(_cName, _iMajorVersion, _iMinorVersion, _iMicroVersion, _iAppletCategory, _cDescription, _cAuthor) \
 CD_APPLET_PRE_INIT_PROTO \
@@ -141,7 +148,7 @@ CD_APPLET_PRE_INIT_END
 //\______________________ init.
 /** Debut de la fonction d'initialisation de l'applet (celle qui est appelee a chaque chargement de l'applet).
 *Lis le fichier de conf de l'applet, et cree son icone ainsi que son contexte de dessin.
-*@param erreur une GError, utilisable pour reporter une erreur ayant lieu durant l'initialisation.
+*@param pApplet une instance du module.
 */
 #define CD_APPLET_INIT_ALL_BEGIN(pApplet) \
 CD_APPLET_INIT_PROTO (pApplet)\

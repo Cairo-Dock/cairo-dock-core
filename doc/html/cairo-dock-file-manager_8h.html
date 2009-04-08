@@ -37,7 +37,7 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#f47c973fdecadd97f9944e51ae32186d">cairo_dock_fm_unmount</a>(icon, pContainer)</td></tr>
 
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#bcf9b652d2320fa0549d83e02563360d">cairo_dock_fm_register_vfs_backend</a> (<a class="el" href="struct__CairoDockVFSBackend.html">CairoDockVFSBackend</a> *pVFSBackend)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#550e7883243efc448cf21a3a45d3351f">cairo_dock_fm_register_vfs_backend</a> (<a class="el" href="struct__CairoDockVFSBackend.html">CairoDockVFSBackend</a> *pVFSBackend)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">GList *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#83f7ed2d2f2bca5b47469a3966404c8c">cairo_dock_fm_list_directory</a> (const gchar *cURI, <a class="el" href="cairo-dock-struct_8h.html#44bc0366369fedba4ea97ed4c5dbc5ee">CairoDockFMSortType</a> g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, gchar **cFullURI)</td></tr>
 
@@ -92,7 +92,8 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-file-manager_8h.html#c2fcd4c547bf19739807e7753a660532">cairo_dock_fm_move_into_directory</a> (const gchar *cURI, <a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer)</td></tr>
 
 </table>
-<hr><h2>Documentation des macros</h2>
+<hr><a name="_details"></a><h2>Description détaillée</h2>
+This class handles the integration into the desktop environment, which includes : the VFS (Virtual File System) the various desktop-related tools. <hr><h2>Documentation des macros</h2>
 <a class="anchor" name="efc75e98230531c171d33d40cc3f2abb"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_add_monitor" ref="efc75e98230531c171d33d40cc3f2abb" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
@@ -180,12 +181,12 @@
 </div>
 </div><p>
 <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="bcf9b652d2320fa0549d83e02563360d"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_register_vfs_backend" ref="bcf9b652d2320fa0549d83e02563360d" args="(CairoDockVFSBackend *pVFSBackend)" -->
+<a class="anchor" name="550e7883243efc448cf21a3a45d3351f"></a><!-- doxytag: member="cairo-dock-file-manager.h::cairo_dock_fm_register_vfs_backend" ref="550e7883243efc448cf21a3a45d3351f" args="(CairoDockVFSBackend *pVFSBackend)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">G_BEGIN_DECLS void cairo_dock_fm_register_vfs_backend           </td>
+          <td class="memname">void cairo_dock_fm_register_vfs_backend           </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct__CairoDockVFSBackend.html">CairoDockVFSBackend</a> *&nbsp;</td>
           <td class="paramname"> <em>pVFSBackend</em>          </td>
@@ -1060,7 +1061,7 @@
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 8 02:54:13 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

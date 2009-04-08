@@ -10,9 +10,12 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-applet-facility.h Les macros forment un canevas dedie aux applets. Elles permettent un developpement rapide et normalise d'une applet pour Cairo-Dock.
-*
-* Pour un exemple tres simple, consultez les sources de l'applet 'logout'.
+*@file cairo-dock-applet-facility.h A collection of useful macros for applets.
+* Macros provides a normalized API that will :
+*   let you perform complex operations with a minimum amount of code
+*   ensure a bug-free functioning
+*   mask the internal complexity
+*   allow a normalized and easy-to-maintain code amongst all the applets.
 */
 
 /**

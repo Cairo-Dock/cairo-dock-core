@@ -634,68 +634,6 @@ cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurfac
 }
 
 
-cairo_surface_t * cairo_dock_create_icon_surface_with_reflection_horizontal (cairo_surface_t *pIconSurface, cairo_surface_t *pReflectionSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fMaxScale, gboolean bDirectionUp)
-{
-	g_return_val_if_fail (pIconSurface != NULL && pReflectionSurface!= NULL && pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
-
-	//\_______________ On cree la surface de telle facon qu'elle contienne les 2 surfaces.
-	double fReflectHeight = myIcons.fReflectSize * fMaxScale;
-	if (fReflectHeight == 0 || myIcons.fAlbedo == 0)
-		return NULL;
-	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
-		fImageWidth,
-		fImageHeight + fReflectHeight);
-	cairo_t *pCairoContext = cairo_create (pNewSurface);
-
-	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-	cairo_set_source_surface (pCairoContext, pIconSurface, 0, (bDirectionUp ? 0. : fReflectHeight));
-	cairo_paint (pCairoContext);
-
-	if (pReflectionSurface != NULL)
-	{
-		cairo_set_source_surface (pCairoContext, pReflectionSurface, 0, (bDirectionUp ? fImageHeight : 0));
-		cairo_paint (pCairoContext);
-	}
-
-	cairo_destroy (pCairoContext);
-	return pNewSurface;
-}
-cairo_surface_t * cairo_dock_create_icon_surface_with_reflection_vertical (cairo_surface_t *pIconSurface, cairo_surface_t *pReflectionSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fMaxScale, gboolean bDirectionUp)
-{
-	g_return_val_if_fail (pIconSurface != NULL && pReflectionSurface!= NULL && pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
-
-	//\_______________ On cree la surface de telle facon qu'elle contienne les 2 surfaces.
-	double fReflectWidth = myIcons.fReflectSize * fMaxScale;
-	if (fReflectWidth == 0 || myIcons.fAlbedo == 0)
-		return NULL;
-	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
-		fImageWidth + fReflectWidth,
-		fImageHeight);
-	cairo_t *pCairoContext = cairo_create (pNewSurface);
-
-	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-	cairo_set_source_surface (pCairoContext, pIconSurface, (bDirectionUp ? 0. : fReflectWidth), 0);
-	cairo_paint (pCairoContext);
-
-	if (pReflectionSurface != NULL)
-	{
-		cairo_set_source_surface (pCairoContext, pReflectionSurface, (bDirectionUp ? fImageWidth : 0), 0);
-		cairo_paint (pCairoContext);
-	}
-
-	cairo_destroy (pCairoContext);
-	return pNewSurface;
-}
-
-cairo_surface_t * cairo_dock_create_icon_surface_with_reflection (cairo_surface_t *pIconSurface, cairo_surface_t *pReflectionSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, gboolean bHorizontalDock, double fMaxScale, gboolean bDirectionUp)
-{
-	if (bHorizontalDock)
-		return cairo_dock_create_icon_surface_with_reflection_horizontal (pIconSurface, pReflectionSurface, pSourceContext, fImageWidth, fImageHeight, fMaxScale, bDirectionUp);
-	else
-		return cairo_dock_create_icon_surface_with_reflection_vertical (pIconSurface, pReflectionSurface, pSourceContext, fImageWidth, fImageHeight, fMaxScale, bDirectionUp);
-}
-
-
 cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t* pSourceContext, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight, double *fTextXOffset, double *fTextYOffset)
 {
 	g_return_val_if_fail (cText != NULL && pLabelDescription != NULL && pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);

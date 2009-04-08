@@ -350,7 +350,10 @@ static Icon *cairo_dock_fm_alter_icon_if_necessary (Icon *pIcon, CairoContainer 
 	{
 		cd_message ("  on remplace %s", pIcon->acName);
 		if (CAIRO_DOCK_IS_DOCK (pContainer))
+		{
+			pNewIcon->cParentDockName = g_strdup (pIcon->cParentDockName);
 			cairo_dock_remove_one_icon_from_dock (CAIRO_DOCK (pContainer), pIcon);
+		}
 		else
 		{
 			CAIRO_DESKLET (pContainer)->icons = g_list_remove (CAIRO_DESKLET (pContainer)->icons, pIcon);
@@ -359,7 +362,6 @@ static Icon *cairo_dock_fm_alter_icon_if_necessary (Icon *pIcon, CairoContainer 
 			cairo_dock_fm_remove_monitor (pIcon);
 
 		pNewIcon->acDesktopFileName = g_strdup (pIcon->acDesktopFileName);
-		pNewIcon->cParentDockName = g_strdup (pIcon->cParentDockName);
 		if (pIcon->pSubDock != NULL)
 		{
 			pNewIcon->pSubDock == pIcon->pSubDock;
@@ -479,10 +481,7 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 					g_free (cUri);
 					
 					cd_message (" c'est un volume, on considere qu'il vient de se faire (de)monter");
-					gchar *cMessage = g_strdup_printf (bIsMounted ? _("%s is now mounted") : _("%s is now unmounted"), pNewIcon->acName);
-					//gchar *cMessage = g_strdup_printf (_("%s is now %s"), pNewIcon->acName, (bIsMounted ? _("mounted") : _("unmounted")));
-					cairo_dock_show_temporary_dialog (cMessage, pNewIcon, CAIRO_DOCK_IS_DOCK (pParentContainer) ? CAIRO_CONTAINER (pIcon->pSubDock) : pParentContainer, 4000);
-					g_free (cMessage);
+					cairo_dock_show_temporary_dialog_with_icon (bIsMounted ? _("%s is now mounted") : _("%s is now unmounted"), pNewIcon, CAIRO_DOCK_IS_DOCK (pParentContainer) ? CAIRO_CONTAINER (pIcon->pSubDock) : pParentContainer, 4000, pNewIcon->acName);
 				}
 			}
 		}
@@ -511,14 +510,14 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 			}
 			else
 			{
-				cd_warning ("  on n'aurait pas du arriver la !");
+				cd_warning ("  a file has been modified but we couldn't find which one.");
 				return ;
 			}
 			cd_message ("  %s est modifiee", pConcernedIcon->acName);
 			
-			Icon *pNewIcon = cairo_dock_fm_alter_icon_if_necessary (pConcernedIcon, pParentContainer);
+			Icon *pNewIcon = cairo_dock_fm_alter_icon_if_necessary (pConcernedIcon, pParentContainer);  // pConcernedIcon a ete remplacee et n'est donc peut-etre plus valide.
 			
-			if (pNewIcon != NULL && pNewIcon->iVolumeID > 0)  // && pNewIcon != pConcernedIcon
+			if (pNewIcon != NULL && pNewIcon->iVolumeID > 0)
 			{
 				cd_message ("ce volume a change");
 				gboolean bIsMounted = FALSE;
@@ -527,10 +526,7 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 					gchar *cActivationURI = s_pVFSBackend->is_mounted (pNewIcon->acCommand, &bIsMounted);
 					g_free (cActivationURI);
 				}
-				gchar *cMessage = g_strdup_printf (bIsMounted ? _("%s is now mounted") : _("%s is now unmounted"), pNewIcon->acName);
-				
-				cairo_dock_show_temporary_dialog (cMessage, pNewIcon, pParentContainer, 4000);
-				g_free (cMessage);
+				cairo_dock_show_temporary_dialog_with_icon (bIsMounted ? _("%s is now mounted") : _("%s is now unmounted"), pNewIcon, pParentContainer, 4000, "same icon", pNewIcon->acName);
 			}
 		}
 		break ;
@@ -548,13 +544,10 @@ void cairo_dock_fm_action_after_mounting (gboolean bMounting, gboolean bSuccess,
 	cd_message ("%s (%s) : %d\n", __func__, (bMounting ? "mount" : "unmount"), bSuccess);  // en cas de demontage effectif, l'icone n'est plus valide !
 	if ((! bSuccess && pContainer != NULL) || icon == NULL)  // dans l'autre cas (succes), l'icone peut ne plus etre valide ! mais on s'en fout, puisqu'en cas de succes, il y'aura rechargement de l'icone, et donc on pourra balancer le message a ce moment-la.
 	{
-		gchar *cMessage = g_strdup_printf (bMounting ? _("failed to mount %s") : _("failed to unmount %s"), cName);
-		//gchar *cMessage = g_strdup_printf (_("failed to %s %s"), (bMounting ? _("mount") : _("unmount")), cName);
-		if (icon != NULL)
-			cairo_dock_show_temporary_dialog (cMessage, icon, pContainer, 4000);
-		else
-			cairo_dock_show_general_message (cMessage, 4000);
-		g_free (cMessage);
+		///if (icon != NULL)
+			cairo_dock_show_temporary_dialog_with_icon (bMounting ? _("failed to mount %s") : _("failed to unmount %s"), icon, pContainer, 4000, "same icon", cName);
+		///else
+		///	cairo_dock_show_general_message (cMessage, 4000);
 	}
 }
 
@@ -567,7 +560,7 @@ gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, Cairo
 	gboolean bSuccess = cairo_dock_fm_move_file (cURI, icon->cBaseURI);
 	if (! bSuccess)
 	{
-		cd_warning ("Attention : couldn't copy this file.\nCheck that you have writing rights, and that the new does not already exist.");
+		cd_warning ("couldn't copy this file.\nCheck that you have writing rights, and that the new does not already exist.");
 		gchar *cMessage = g_strdup_printf ("Attention : couldn't copy %s into %s.\nCheck that you have writing rights, and that the name does not already exist.", cURI, icon->cBaseURI);
 		cairo_dock_show_temporary_dialog (cMessage, icon, pContainer, 4000);
 		g_free (cMessage);

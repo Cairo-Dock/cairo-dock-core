@@ -54,7 +54,10 @@ autostartdata_DATA = \
 	cairo-dock.desktop\
 	cairo-dock-cairo.desktop
 
+icondatadir = $(datadir)/pixmaps
+icondata_DATA = \
+	cairo-dock.svg
+
 EXTRA_DIST = $(essentialdata_DATA)\
 	$(autostartdata_DATA)\
-	cairo-dock
-	
+	$(icondata_DATA)

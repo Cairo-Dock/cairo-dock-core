@@ -8,6 +8,10 @@
 G_BEGIN_DECLS
 
 /**
+*@file cairo-dock-config.h This file, together with cairo-dock-keyfile-utilities, handles the configuration system of Cairo-Dock.
+*/
+
+/**
 *Recupere une cle booleene d'un fichier de cles.
 *@param pKeyFile le fichier de cles.
 *@param cGroupName le com du groupe.

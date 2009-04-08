@@ -54,7 +54,9 @@ double cairo_dock_draw_frame (cairo_t *pCairoContext, double fRadius, double fLi
 *Dessine les decorations d'un dock a l'interieur d'un cadre prealablement trace sur le contexte.
 *@param pCairoContext le contexte du dessin, est laisse intact par la fonction.
 *@param pDock le dock sur lequel appliquer les decorations.
-*@param fOffsetY un decalage, dans le sens de la hauteur du dock, a partir duquel appliquer les decorations.
+*@param fOffsetY position du coin haut gauche du cadre, dans le sens de la hauteur du dock.
+*@param fOffsetX position du coin haut gauche du cadre, dans le sens de la largeur du dock.
+*@param fWidth largeur du cadre (et donc des decorations)
 */
 void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *pDock, double fOffsetY, double fOffsetX, double fWidth);
 
@@ -68,14 +70,10 @@ gboolean cairo_dock_render_icon_notification_cairo (gpointer pUserData, Icon *pI
 /**
 *Dessine entierement une icone, dont toutes les caracteristiques ont ete prealablement calculees. Gere sa position, sa transparence (modulee par la transparence du dock au repos), son reflet, son placement de profil, son etiquette, et son info-rapide.
 *@param icon l'icone a dessiner.
+*@param pDock le dock contenant l'icone.
 *@param pCairoContext le contexte du dessin, est altere pendant le dessin.
-*@param bHorizontalDock l'horizontalite du dock contenant l'icone.
-*@param fRatio le ratio de taille des icones dans ce dock.
 *@param fDockMagnitude la magnitude actuelle du dock.
-*@param bUseReflect TRUE pour dessiner les reflets.
 *@param bUseText TRUE pour dessiner les etiquettes.
-*@param iWidth largeur du container, utilisee pour que les etiquettes n'en debordent pas.
-*@param bDirectionUp TRUE si le dock est oriente vers le haut.
 */
 void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude, gboolean bUseText);
 void cairo_dock_render_icons_linear (cairo_t *pCairoContext, CairoDock *pDock);

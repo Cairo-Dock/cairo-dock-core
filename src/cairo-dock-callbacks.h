@@ -65,17 +65,6 @@ void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint tim
 gboolean cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, CairoDock *pDock);
 
 
-/*void on_selection_get (GtkWidget *pWidget, GtkSelectionData *data, guint info, guint time, gpointer user_data);
-
-void on_selection_received (GtkWidget *pWidget, GtkSelectionData *data, guint time, gpointer user_data);
-
-gboolean on_selection_clear_event (GtkWidget *pWidget, GdkEventSelection *event, gpointer user_data);
-
-gboolean on_selection_request_event (GtkWidget *pWidget, GdkEventSelection *event, gpointer user_data);
-
-gboolean on_selection_notify_event (GtkWidget *pWidget, GdkEventSelection *event, gpointer user_data);*/
-
-
 void cairo_dock_show_dock_at_mouse (CairoDock *pDock);
 void cairo_dock_raise_from_keyboard (const char *cKeyShortcut, gpointer data);
 

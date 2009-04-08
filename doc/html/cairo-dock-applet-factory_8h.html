@@ -85,7 +85,6 @@ Cree une surface cairo qui pourra servir de zone de dessin pour une applet. <dl 
     <tr><td valign="top"></td><td valign="top"><em>fMaxScale</em>&nbsp;</td><td>le zoom max auquel sera soumis la surface. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>fWidth</em>&nbsp;</td><td>largeur de la surface obtenue. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>fHeight</em>&nbsp;</td><td>hauteur de la surface obtenue. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>bApplySizeRestriction</em>&nbsp;</td><td>restreindre la taille de la surface aux valeurs autorisees dans les docks. </td></tr>
   </table>
 </dl>
 <dl class="return" compact><dt><b>Renvoie:</b></dt><dd>la surface nouvellement generee. </dd></dl>
@@ -149,7 +148,7 @@ Cree une icone destinee a une applet. <dl compact><dt><b>Paramètres:</b></dt><d
     <tr><td valign="top"></td><td valign="top"><em>iHeight</em>&nbsp;</td><td>la hauteur desiree de l'icone. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>cName</em>&nbsp;</td><td>le nom de l'icone, tel qu'il apparaitra en etiquette de l'icone. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>cIconFileName</em>&nbsp;</td><td>le nom d'un fichier image a afficher dans l'icone, ou NULL si l'on souhaitera dessiner soi-meme dans l'icone. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>pModule</em>&nbsp;</td><td>le module (necessaire poru que l'icone soit consideree comme une applet lors de son remplissage). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pModuleInstance</em>&nbsp;</td><td>l'instance du module (necessaire pour que l'icone soit consideree comme une applet lors de son remplissage). </td></tr>
   </table>
 </dl>
 <dl class="return" compact><dt><b>Renvoie:</b></dt><dd>l'icone nouvellement cree. Elle n'est _pas_ inseree dans le dock, c'est le gestionnaire de module qui se charge d'inserer les icones renvoyees par les modules. </dd></dl>
@@ -157,7 +156,7 @@ Cree une icone destinee a une applet. <dl compact><dt><b>Paramètres:</b></dt><d
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 8 02:54:13 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

@@ -5,6 +5,11 @@
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
+/**
+*@file cairo-dock-file-manager.h This class handles the integration into the desktop environment, which includes :
+*  the VFS (Virtual File System)
+*  the various desktop-related tools.
+*/
 
 void cairo_dock_fm_register_vfs_backend (CairoDockVFSBackend *pVFSBackend);
 

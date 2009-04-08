@@ -379,7 +379,9 @@ Dessine les decorations d'un dock a l'interieur d'un cadre prealablement trace s
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>pCairoContext</em>&nbsp;</td><td>le contexte du dessin, est laisse intact par la fonction. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>le dock sur lequel appliquer les decorations. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>fOffsetY</em>&nbsp;</td><td>un decalage, dans le sens de la hauteur du dock, a partir duquel appliquer les decorations. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fOffsetY</em>&nbsp;</td><td>position du coin haut gauche du cadre, dans le sens de la hauteur du dock. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fOffsetX</em>&nbsp;</td><td>position du coin haut gauche du cadre, dans le sens de la largeur du dock. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fWidth</em>&nbsp;</td><td>largeur du cadre (et donc des decorations) </td></tr>
   </table>
 </dl>
 
@@ -561,14 +563,10 @@ Dessine les decorations d'un dock a l'interieur d'un cadre prealablement trace s
 Dessine entierement une icone, dont toutes les caracteristiques ont ete prealablement calculees. Gere sa position, sa transparence (modulee par la transparence du dock au repos), son reflet, son placement de profil, son etiquette, et son info-rapide. <dl compact><dt><b>Paramètres:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>icon</em>&nbsp;</td><td>l'icone a dessiner. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>le dock contenant l'icone. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>pCairoContext</em>&nbsp;</td><td>le contexte du dessin, est altere pendant le dessin. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>bHorizontalDock</em>&nbsp;</td><td>l'horizontalite du dock contenant l'icone. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>fRatio</em>&nbsp;</td><td>le ratio de taille des icones dans ce dock. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>fDockMagnitude</em>&nbsp;</td><td>la magnitude actuelle du dock. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>bUseReflect</em>&nbsp;</td><td>TRUE pour dessiner les reflets. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>bUseText</em>&nbsp;</td><td>TRUE pour dessiner les etiquettes. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>iWidth</em>&nbsp;</td><td>largeur du container, utilisee pour que les etiquettes n'en debordent pas. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>bDirectionUp</em>&nbsp;</td><td>TRUE si le dock est oriente vers le haut. </td></tr>
   </table>
 </dl>
 
@@ -795,7 +793,7 @@ Dessine une ficelle reliant le centre de toutes les icones, en commencant par la
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 8 02:54:13 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

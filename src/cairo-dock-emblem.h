@@ -102,7 +102,6 @@ void cairo_dock_draw_emblem_classic (cairo_t *pIconContext, Icon *pIcon, CairoCo
 *@param cIconFile le fichier image a afficher comme embleme.
 *@param iEmblemClassic énumération du type d'embleme classique.
 *@param iEmblemType énumération du type d'embleme.
-*@param bPersistent a TRUE l'emblème est imprimé directement sur l'icône, FALSE l'emblème est sur une couche supérieur et s'éffacera si on touche au CairoContexte de l'icône.
 *@param fTimeLength temps en millisecondes.
 */
 void cairo_dock_draw_temporary_emblem_on_my_icon (cairo_t *pIconContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconFile, CairoDockClassicEmblem iEmblemClassic, CairoDockEmblem iEmblemType, double fTimeLength);

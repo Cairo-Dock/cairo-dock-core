@@ -45,9 +45,7 @@ typedef struct _CairoDockGraph {
 	} CairoDockGraph;
 
 /** Trace un graphe sur un contexte.
-* @param pSourceContext le contexte de dessin sur lequel dessiner le graphe.
-* @param pContainer le container de l'icone.
-* @param pIcon l'icone.
+* @param pCairoContext le contexte de dessin sur lequel dessiner le graphe.
 * @param pGraph le graphe a dessiner.
 */
 void cairo_dock_draw_graph (cairo_t *pCairoContext, CairoDockGraph *pGraph);

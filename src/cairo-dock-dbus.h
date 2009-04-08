@@ -7,6 +7,10 @@
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
+/**
+*@file cairo-dock-dbus.h This class defines numerous convenient functions to use DBus inside Cairo-Dock.
+* DBus is used to communicate and interact with other running applications.
+*/
 
 /*
 * Initialise le gestionnaire de bus dans le dock. Il recupere la connexion 'session' de DBus, y etablit un proxy, et les met a disposition de tout le monde.

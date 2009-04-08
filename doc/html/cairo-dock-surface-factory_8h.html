@@ -53,8 +53,6 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#df15787fd2e1937ae407c31f543780ac">cairo_dock_create_reflection_surface</a> (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, gboolean bHorizontalDock, double fMaxScale, gboolean bDirectionUp)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#990164528c864f67e2e6cabd3b73397d">cairo_dock_create_icon_surface_with_reflection</a> (cairo_surface_t *pIconSurface, cairo_surface_t *pReflectionSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, gboolean bHorizontalDock, double fMaxScale, gboolean bDirectionUp)</td></tr>
-
 <tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#432723de3bb3976debea58b05d4e234f">cairo_dock_create_surface_from_text_full</a> (gchar *cText, cairo_t *pSourceContext, <a class="el" href="struct__CairoDockLabelDescription.html">CairoDockLabelDescription</a> *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight, double *fTextXOffset, double *fTextYOffset)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#157233143037e32dc1b3866b31387380">cairo_dock_duplicate_surface</a> (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fWidth, double fHeight, double fDesiredWidth, double fDesiredHeight)</td></tr>
@@ -528,18 +526,11 @@ Cree une surface à partir d'un GdkPixbuf. <dl compact><dt><b>Paramètres:</b></
 <div class="memdoc">
 
 <p>
-Cree une surface à partir d'une image au format quelconque. <dl compact><dt><b>Paramètres:</b></dt><dd>
+Cree une surface vide (transparente) de taille donnee. En mode opengl, cette surface pourra servir de tampon pour generer une texture. <dl compact><dt><b>Paramètres:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>cImagePath</em>&nbsp;</td><td>le chemin complet de l'image. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>pSourceContext</em>&nbsp;</td><td>un contexte (non modifié par la fonction). </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>fMaxScale</em>&nbsp;</td><td>le zoom maximal de l'icone. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>iWidthConstraint</em>&nbsp;</td><td>contrainte sur la largeur, ou 0 pour ne pas la contraindre. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>iHeightConstraint</em>&nbsp;</td><td>contrainte sur la hauteur, ou 0 pour ne pas la contraindre. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>iLoadingModifier</em>&nbsp;</td><td>composition de modificateurs de chargement. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>fImageWidth</em>&nbsp;</td><td>sera renseigné avec la largeur de l'icone (hors zoom). </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>fImageHeight</em>&nbsp;</td><td>sera renseigné avec la hauteur de l'icone (hors zoom). </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>fZoomX</em>&nbsp;</td><td>si non NULL, sera renseigné avec le zoom horizontal qui a ete appliqué à l'image originale. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>fZoomY</em>&nbsp;</td><td>si non NULL, sera renseigné avec le zoom vertical qui a ete appliqué à l'image originale. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pSourceContext</em>&nbsp;</td><td>un contexte cairo, ou NULL pour creer une surface tampon. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iWidth</em>&nbsp;</td><td>largeur de la surface. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iHeight</em>&nbsp;</td><td>hauteur de la surface. </td></tr>
   </table>
 </dl>
 <dl class="return" compact><dt><b>Renvoie:</b></dt><dd>la surface nouvellement créée. </dd></dl>
@@ -620,6 +611,21 @@ Cree une surface à partir d'une image au format quelconque. <dl compact><dt><b>
 <div class="memdoc">
 
 <p>
+Cree une surface à partir d'une image au format quelconque. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cImagePath</em>&nbsp;</td><td>le chemin complet de l'image. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pSourceContext</em>&nbsp;</td><td>un contexte (non modifié par la fonction). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fMaxScale</em>&nbsp;</td><td>le zoom maximal de l'icone. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iWidthConstraint</em>&nbsp;</td><td>contrainte sur la largeur, ou 0 pour ne pas la contraindre. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iHeightConstraint</em>&nbsp;</td><td>contrainte sur la hauteur, ou 0 pour ne pas la contraindre. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iLoadingModifier</em>&nbsp;</td><td>composition de modificateurs de chargement. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fImageWidth</em>&nbsp;</td><td>sera renseigné avec la largeur de l'icone (hors zoom). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fImageHeight</em>&nbsp;</td><td>sera renseigné avec la hauteur de l'icone (hors zoom). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fZoomX</em>&nbsp;</td><td>si non NULL, sera renseigné avec le zoom horizontal qui a ete appliqué à l'image originale. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fZoomY</em>&nbsp;</td><td>si non NULL, sera renseigné avec le zoom vertical qui a ete appliqué à l'image originale. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>la surface nouvellement créée. </dd></dl>
 
 </div>
 </div><p>
@@ -801,84 +807,6 @@ Cree une surface par réflection d'une autre. Applique un dégradé de transpare
 
 </div>
 </div><p>
-<a class="anchor" name="990164528c864f67e2e6cabd3b73397d"></a><!-- doxytag: member="cairo-dock-surface-factory.h::cairo_dock_create_icon_surface_with_reflection" ref="990164528c864f67e2e6cabd3b73397d" args="(cairo_surface_t *pIconSurface, cairo_surface_t *pReflectionSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, gboolean bHorizontalDock, double fMaxScale, gboolean bDirectionUp)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">cairo_surface_t* cairo_dock_create_icon_surface_with_reflection           </td>
-          <td>(</td>
-          <td class="paramtype">cairo_surface_t *&nbsp;</td>
-          <td class="paramname"> <em>pIconSurface</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">cairo_surface_t *&nbsp;</td>
-          <td class="paramname"> <em>pReflectionSurface</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">cairo_t *&nbsp;</td>
-          <td class="paramname"> <em>pSourceContext</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&nbsp;</td>
-          <td class="paramname"> <em>fImageWidth</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&nbsp;</td>
-          <td class="paramname"> <em>fImageHeight</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gboolean&nbsp;</td>
-          <td class="paramname"> <em>bHorizontalDock</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&nbsp;</td>
-          <td class="paramname"> <em>fMaxScale</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gboolean&nbsp;</td>
-          <td class="paramname"> <em>bDirectionUp</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Cree une surface contenant une surface accolée à sa réflection. <dl compact><dt><b>Paramètres:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>pIconSurface</em>&nbsp;</td><td>la surface de l'icône. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>pReflectionSurface</em>&nbsp;</td><td>la surface du reflet. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>pSourceContext</em>&nbsp;</td><td>un contexte (non modifié par la fonction). </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>fImageWidth</em>&nbsp;</td><td>la largeur de la surface de l'icône. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>fImageHeight</em>&nbsp;</td><td>la hauteur de la surface de l'icône. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>bHorizontalDock</em>&nbsp;</td><td>TRUE ssi l'icône est à l'horizontal. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>fMaxScale</em>&nbsp;</td><td>facteur de zoom max qui sera appliqué à l'icône. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>bDirectionUp</em>&nbsp;</td><td>TRUE ssi l'icône a la tête en haut. </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>la surface nouvellement créée. </dd></dl>
-
-</div>
-</div><p>
 <a class="anchor" name="432723de3bb3976debea58b05d4e234f"></a><!-- doxytag: member="cairo-dock-surface-factory.h::cairo_dock_create_surface_from_text_full" ref="432723de3bb3976debea58b05d4e234f" args="(gchar *cText, cairo_t *pSourceContext, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight, double *fTextXOffset, double *fTextYOffset)" -->
 <div class="memitem">
 <div class="memproto">
@@ -953,6 +881,7 @@ Cree une surface contenant un texte, avec une couleur de fond optionnel. <dl com
     <tr><td valign="top"></td><td valign="top"><em>pSourceContext</em>&nbsp;</td><td>un contexte (non modifié par la fonction). </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>pLabelDescription</em>&nbsp;</td><td>la description du texte. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>fMaxScale</em>&nbsp;</td><td>facteur de zoom max qui sera appliqué au texte. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iMaxWidth</em>&nbsp;</td><td>largeur max autorisee pour la surface, celle-ci sera zoomee pour tenir dedans. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>iTextWidth</em>&nbsp;</td><td>sera renseigne avec la largeur de la surface obtenue. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>iTextHeight</em>&nbsp;</td><td>sera renseigne avec la hauteur de la surface obtenue. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>fTextXOffset</em>&nbsp;</td><td>sera renseigne avec le décalage horizontal à appliquer pour centrer le texte horizontalement. </td></tr>
@@ -1028,7 +957,7 @@ Cree une surface à l'identique d'une autre, en la redimensionnant eventuellemen
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 8 02:54:14 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

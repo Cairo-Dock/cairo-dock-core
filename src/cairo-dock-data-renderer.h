@@ -7,6 +7,11 @@
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
+/**
+*@file cairo-dock-data-renderer.h This class defines the data renderer structure and API.
+* Data renderer is a generic way to render onto an icon a set of values defined by : {yk = f(tk)} where k=0..n and yk is a vector.
+*/
+
 
 ///
 /// Structures
@@ -93,6 +98,7 @@ struct _CairoDataRenderer {
 ///
 /**Add a Data Renderer on an icon (usually the icon of an applet). A Data Renderer is a view that will be used to display a set a values on the icon.
 *@param pIcon the icon
+*@param pContainer the icon's container
 *@param pSourceContext a drawing context
 *@param pAttribute attributes defining the Renderer*/
 void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pSourceContext, CairoDataRendererAttribute *pAttribute);

@@ -267,7 +267,7 @@ void cairo_dock_get_icon_extent (Icon *pIcon, CairoContainer *pContainer, int *i
 */
 void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, double *fSizeX, double *fSizeY);
 /** Renvoie la zone totale occupee par une icone sur son container (reflet, zoom et etirement compris).
-@param pIcon l'icone
+@param icon l'icone
 @param pContainer son container
 @param pArea zone occupee par l'icone sur son container.
 */

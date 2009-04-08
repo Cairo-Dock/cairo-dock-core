@@ -745,7 +745,7 @@ static void _cairo_dock_fill_icon_buffer_with_thumbnail (Icon *icon, CairoDock *
 			XFreePixmap (s_XDisplay, icon->iBackingPixmap);
 		if (myTaskBar.bShowThumbnail)
 			icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, icon->Xid);
-		g_print ("new backing pixmap (bis) : %d\n", icon->iBackingPixmap);
+		//g_print ("new backing pixmap (bis) : %d\n", icon->iBackingPixmap);
 	}
 	#endif
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pParentDock));

@@ -41,7 +41,7 @@ void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer);
 void cairo_dock_redraw_container (CairoContainer *pContainer);
 /** Efface et programme le redessin d'une partie d'un container.
 *@param pContainer le container a redessiner.
-*@pArea zone a redessiner.
+*@param pArea zone a redessiner.
 */
 void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle *pArea);
 

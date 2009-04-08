@@ -35,7 +35,7 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#61f49d0679c076b880f6bc1c6b3e62a1">DEFINE_PRE_INIT</a>(cGroupName)</td></tr>
 
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#43c48857469ba72f97a9d98e379d2a1f">cairo_dock_get_boolean_key_value</a> (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gboolean bDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#7f221b2e5161810f62738ed51a2a732e">cairo_dock_get_boolean_key_value</a> (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gboolean bDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#3f9539c7257b48c2e28371c565c2e076">cairo_dock_get_integer_key_value</a> (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, int iDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName)</td></tr>
 
@@ -70,7 +70,8 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-config_8h.html#d0920755bbad231e29552b40fd2723b7">cairo_dock_encrypt_string</a> (const guchar *cDecryptedString, guchar **cEncryptedString)</td></tr>
 
 </table>
-<hr><h2>Documentation des macros</h2>
+<hr><a name="_details"></a><h2>Description détaillée</h2>
+This file, together with cairo-dock-keyfile-utilities, handles the configuration system of Cairo-Dock. <hr><h2>Documentation des macros</h2>
 <a class="anchor" name="474ee6d75303e22e62981615ce44abcb"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_get_size_key_value_helper" ref="474ee6d75303e22e62981615ce44abcb" args="(pKeyFile, cGroupName, cKeyPrefix, bFlushConfFileNeeded, iWidth, iHeight)" -->
 <div class="memitem">
 <div class="memproto">
@@ -147,12 +148,12 @@
 </div>
 </div><p>
 <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="43c48857469ba72f97a9d98e379d2a1f"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_get_boolean_key_value" ref="43c48857469ba72f97a9d98e379d2a1f" args="(GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gboolean bDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName)" -->
+<a class="anchor" name="7f221b2e5161810f62738ed51a2a732e"></a><!-- doxytag: member="cairo-dock-config.h::cairo_dock_get_boolean_key_value" ref="7f221b2e5161810f62738ed51a2a732e" args="(GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gboolean bDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">G_BEGIN_DECLS gboolean cairo_dock_get_boolean_key_value           </td>
+          <td class="memname">gboolean cairo_dock_get_boolean_key_value           </td>
           <td>(</td>
           <td class="paramtype">GKeyFile *&nbsp;</td>
           <td class="paramname"> <em>pKeyFile</em>, </td>
@@ -1106,7 +1107,7 @@ Crypte une chaine de caracteres (DES-encryption de libcrypt). <dl compact><dt><b
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 8 02:54:13 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

@@ -1723,36 +1723,6 @@ gboolean cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, CairoDock *p
 }
 
 
-// Tests sur les selections.
-/*void on_selection_get (GtkWidget *pWidget, GtkSelectionData *data, guint info, guint time, gpointer user_data)
-{
-	cd_message ("***%s ()", __func__);
-}
-
-void on_selection_received (GtkWidget *pWidget, GtkSelectionData *data, guint time, gpointer user_data)
-{
-	cd_message ("***%s ()", __func__);
-}
-
-gboolean on_selection_clear_event (GtkWidget *pWidget, GdkEventSelection *event, gpointer user_data)
-{
-	cd_message ("***%s ()", __func__);
-	return FALSE;
-}
-
-gboolean on_selection_request_event (GtkWidget *pWidget, GdkEventSelection *event, gpointer user_data)
-{
-	cd_message ("***%s ()", __func__);
-	return FALSE;
-}
-
-gboolean on_selection_notify_event (GtkWidget *pWidget, GdkEventSelection *event, gpointer user_data)
-{
-	g_print ("***%s ()\n", __func__);
-	return FALSE;
-}*/
-
-
 void cairo_dock_show_dock_at_mouse (CairoDock *pDock)
 {
 	g_return_if_fail (pDock != NULL);

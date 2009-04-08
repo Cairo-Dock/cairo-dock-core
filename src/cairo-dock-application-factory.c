@@ -267,75 +267,71 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 			else
 				cd_message ("  sous-dock de la classe %s existant", icon->cClass);
 			
-			/*if (! g_bEasterEggs)
+			if (CAIRO_DOCK_IS_LAUNCHER (pSameClassIcon) || CAIRO_DOCK_IS_APPLET (pSameClassIcon))  // c'est un inhibiteur.
 			{
-				//\____________ On l'associe au classmate.
-				if (pSameClassIcon->pSubDock == NULL)
-					pSameClassIcon->pSubDock = pParentDock;
-				else if (pSameClassIcon->pSubDock != pParentDock)
+				if (pSameClassIcon->Xid != 0)  // actuellement l'inhibiteur inhibe 1 seule appli.
 				{
-					cd_warning ("this appli (%s) already has a subdock, but it is not the class's subdock => we'll add its classmate in the main dock", pSameClassIcon->acName);
-					g_free (icon->cParentDockName);
-					icon->cParentDockName = g_strdup (CAIRO_DOCK_MAIN_DOCK_NAME);
-					pParentDock = pMainDock;
-				}
-			}
-			else*/
-			{
-				if (CAIRO_DOCK_IS_LAUNCHER (pSameClassIcon) || CAIRO_DOCK_IS_APPLET (pSameClassIcon))  // c'est un inhibiteur.
-				{
-					if (pSameClassIcon->Xid != 0)  // actuellement l'inhibiteur inhibe 1 seule appli.
+					g_print ("actuellement l'inhibiteur inhibe 1 seule appli\n");
+					Icon *pInhibatedIcon = cairo_dock_get_icon_with_Xid (pSameClassIcon->Xid);
+					pSameClassIcon->Xid = 0;  // on lui laisse par contre l'indicateur.
+					if (pSameClassIcon->pSubDock == NULL)
 					{
-						g_print ("actuellement l'inhibiteur inhibe 1 seule appli\n");
-						Icon *pInhibatedIcon = cairo_dock_get_icon_with_Xid (pSameClassIcon->Xid);
-						pSameClassIcon->Xid = 0;  // on lui laisse par contre l'indicateur.
-						if (pSameClassIcon->pSubDock == NULL)
-							pSameClassIcon->pSubDock = pParentDock;
-						else if (pSameClassIcon->pSubDock != pParentDock)
-							cd_warning ("this launcher (%s) already has a subdock, but it's not the class's subdock !", pSameClassIcon->acName);
-						if (pInhibatedIcon != NULL)
+						if (pSameClassIcon->cInitialName != NULL)
 						{
-							g_print (" on insere %s dans le dock de la classe\n", pInhibatedIcon->acName);
-							g_free (pInhibatedIcon->cParentDockName);
-							pInhibatedIcon->cParentDockName = g_strdup (icon->cClass);
-							cairo_dock_insert_icon_in_dock (pInhibatedIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, FALSE);
+							CairoDock *pSameClassDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
+							if (pSameClassDock != NULL)
+							{
+								cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pSameClassDock));
+								cairo_dock_set_icon_name (pCairoContext, pSameClassIcon->cInitialName, pSameClassIcon, CAIRO_CONTAINER (pSameClassDock));  // on lui remet son nom de lanceur.
+								cairo_destroy (pCairoContext);
+							}
 						}
+						pSameClassIcon->pSubDock = pParentDock;
 					}
 					else if (pSameClassIcon->pSubDock != pParentDock)
-						cd_warning ("this inhibator doesn't hold the class dock !");
+						cd_warning ("this launcher (%s) already has a subdock, but it's not the class's subdock !", pSameClassIcon->acName);
+					if (pInhibatedIcon != NULL)
+					{
+						g_print (" on insere %s dans le dock de la classe\n", pInhibatedIcon->acName);
+						g_free (pInhibatedIcon->cParentDockName);
+						pInhibatedIcon->cParentDockName = g_strdup (icon->cClass);
+						cairo_dock_insert_icon_in_dock (pInhibatedIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, FALSE);
+					}
 				}
-				else  // c'est donc une appli du main dock.
-				{
-					//\______________ On cree une icone de paille.
-					g_print (" on cree un fake...\n");
-					Icon *pFakeClassIcon = g_new0 (Icon, 1);
-					pFakeClassIcon->acName = g_strdup (pSameClassIcon->cClass);
-					pFakeClassIcon->cClass = g_strdup (pSameClassIcon->cClass);
-					pFakeClassIcon->iType = pSameClassIcon->iType;
-					pFakeClassIcon->fOrder = pSameClassIcon->fOrder;
-					pFakeClassIcon->cParentDockName = g_strdup (pSameClassIcon->cParentDockName);
-					pFakeClassIcon->fWidth = pSameClassIcon->fWidth;
-					pFakeClassIcon->fHeight = pSameClassIcon->fHeight;
-					pFakeClassIcon->fXMax = pSameClassIcon->fXMax;
-					pFakeClassIcon->fXMin = pSameClassIcon->fXMin;
-					pFakeClassIcon->fXAtRest = pSameClassIcon->fXAtRest;
-					pFakeClassIcon->pSubDock = pParentDock;  // grace a cela ce sera un lanceur.
-					
-					//\______________ On la charge.
-					CairoDock *pClassMateParentDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
-					cairo_dock_load_one_icon_from_scratch (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
-					
-					//\______________ On detache le classmate, on le place dans le sous-dock, et on lui substitue le faux.
-					g_print (" on detache %s pour la passer dans le sous-dock de sa classe\n", pSameClassIcon->acName);
-					cairo_dock_detach_icon_from_dock (pSameClassIcon, pClassMateParentDock, FALSE);
-					g_free (pSameClassIcon->cParentDockName);
-					pSameClassIcon->cParentDockName = g_strdup (pSameClassIcon->cClass);
-					cairo_dock_insert_icon_in_dock (pSameClassIcon, pParentDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, FALSE);
-					
-					g_print (" on lui substitue le fake\n");
-					cairo_dock_insert_icon_in_dock (pFakeClassIcon, pClassMateParentDock,  CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_APPLY_RATIO, FALSE);
-					cairo_dock_redraw_icon (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
-				}
+				else if (pSameClassIcon->pSubDock != pParentDock)
+					cd_warning ("this inhibator doesn't hold the class dock !");
+			}
+			else  // c'est donc une appli du main dock.
+			{
+				//\______________ On cree une icone de paille.
+				g_print (" on cree un fake...\n");
+				Icon *pFakeClassIcon = g_new0 (Icon, 1);
+				pFakeClassIcon->acName = g_strdup (pSameClassIcon->cClass);
+				pFakeClassIcon->cClass = g_strdup (pSameClassIcon->cClass);
+				pFakeClassIcon->iType = pSameClassIcon->iType;
+				pFakeClassIcon->fOrder = pSameClassIcon->fOrder;
+				pFakeClassIcon->cParentDockName = g_strdup (pSameClassIcon->cParentDockName);
+				pFakeClassIcon->fWidth = pSameClassIcon->fWidth;
+				pFakeClassIcon->fHeight = pSameClassIcon->fHeight;
+				pFakeClassIcon->fXMax = pSameClassIcon->fXMax;
+				pFakeClassIcon->fXMin = pSameClassIcon->fXMin;
+				pFakeClassIcon->fXAtRest = pSameClassIcon->fXAtRest;
+				pFakeClassIcon->pSubDock = pParentDock;  // grace a cela ce sera un lanceur.
+				
+				//\______________ On la charge.
+				CairoDock *pClassMateParentDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
+				cairo_dock_load_one_icon_from_scratch (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
+				
+				//\______________ On detache le classmate, on le place dans le sous-dock, et on lui substitue le faux.
+				g_print (" on detache %s pour la passer dans le sous-dock de sa classe\n", pSameClassIcon->acName);
+				cairo_dock_detach_icon_from_dock (pSameClassIcon, pClassMateParentDock, FALSE);
+				g_free (pSameClassIcon->cParentDockName);
+				pSameClassIcon->cParentDockName = g_strdup (pSameClassIcon->cClass);
+				cairo_dock_insert_icon_in_dock (pSameClassIcon, pParentDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, FALSE);
+				
+				g_print (" on lui substitue le fake\n");
+				cairo_dock_insert_icon_in_dock (pFakeClassIcon, pClassMateParentDock,  CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_APPLY_RATIO, FALSE);
+				cairo_dock_redraw_icon (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
 			}
 		}
 	}

@@ -788,7 +788,7 @@ GtkWidget *cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int iWidth,
 	return pBox;
 }
 
-static CairoDialog *_cairo_dock_create_new_dialog (void)
+static CairoDialog *_cairo_dock_create_new_dialog (gboolean bInteractive)
 {
 	//\________________ On cree un dialogue qu'on insere immediatement dans la liste.
 	CairoDialog *pDialog = g_new0 (CairoDialog, 1);
@@ -801,17 +801,16 @@ static CairoDialog *_cairo_dock_create_new_dialog (void)
 	//\________________ On construit la fenetre du dialogue.
 	//GtkWidget* pWindow = gtk_window_new (bInteractiveWindow ? GTK_WINDOW_TOPLEVEL : GTK_WINDOW_POPUP);  // les popus ne prennent pas le focus. En fait, ils ne sont meme pas controles par le WM.
 	GtkWidget* pWindow = cairo_dock_create_container_window_no_opengl ();
+	
 	pDialog->pWidget = pWindow;
 
 	gtk_window_set_keep_above (GTK_WINDOW (pWindow), g_bKeepAbove || myAccessibility.bPopUp);
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
-	/*if (bInteractiveWindow)
-		GTK_WIDGET_SET_FLAGS (pWindow, GTK_CAN_FOCUS);  // a priori inutile mais bon.
-	else
-		GTK_WIDGET_UNSET_FLAGS (pWindow, GTK_CAN_FOCUS);  // pareil, mais bon on ne sait jamais avec ces WM.*/
 
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock-dialog");
-
+	if (! bInteractive)
+		gtk_window_set_type_hint (GTK_WINDOW (pDialog->pWidget), GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);  // pour ne pas prendre le focus.
+	
 	gtk_widget_add_events (pWindow, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 	gtk_window_resize (GTK_WINDOW (pWindow), CAIRO_DIALOG_MIN_SIZE, CAIRO_DIALOG_MIN_SIZE);
 	gtk_widget_show_all (pWindow);
@@ -899,7 +898,8 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	g_print ("%s (%s, %s, %x, %x, %x (%x;%x))\n", __func__, pAttribute->cText, pAttribute->cImageFilePath, pAttribute->pInteractiveWidget, pAttribute->pActionFunc, pAttribute->pTextDescription, pIcon, pContainer);
 	
 	//\________________ On cree un nouveau dialogue.
-	CairoDialog *pDialog = _cairo_dock_create_new_dialog ();
+	CairoDialog *pDialog = _cairo_dock_create_new_dialog (pAttribute->pInteractiveWidget || pAttribute->pActionFunc);
+	
 	pDialog->pIcon = pIcon;
 	cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDialog));
 	

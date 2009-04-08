@@ -978,10 +978,14 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	CairoDockModuleInstance *pInstance = calloc (1, sizeof (CairoDockModuleInstance) + pModule->pVisitCard->iSizeOfConfig + pModule->pVisitCard->iSizeOfData);
 	pInstance->pModule = pModule;
 	pInstance->cConfFilePath = cConfFilePath;
-	/*/if (pModule->pVisitCard->iSizeOfConfig > 0)
+	/*if (pModule->pVisitCard->iSizeOfConfig > 0)
 		pInstance->pConfig = g_new0 (gpointer, pModule->pVisitCard->iSizeOfConfig);
 	if (pModule->pVisitCard->iSizeOfData > 0)
 		pInstance->pData = g_new0 (gpointer, pModule->pVisitCard->iSizeOfData);*/
+	
+	CairoDockMinimalAppletConfig *pMinimalConfig = g_new0 (CairoDockMinimalAppletConfig, 1);
+	GKeyFile *pKeyFile = cairo_dock_pre_read_module_instance_config (pInstance, pMinimalConfig);
+	g_return_val_if_fail (cConfFilePath == NULL || pKeyFile != NULL, NULL);  // protection en cas de fichier de conf illisible.
 	pModule->pInstancesList = g_list_prepend (pModule->pInstancesList, pInstance);
 	
 	//\____________________ On cree le container de l'instance, ainsi que son icone.
@@ -989,9 +993,6 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	CairoDock *pDock = NULL;
 	CairoDesklet *pDesklet = NULL;
 	Icon *pIcon = NULL;
-	GKeyFile *pKeyFile = NULL;
-	CairoDockMinimalAppletConfig *pMinimalConfig = g_new0 (CairoDockMinimalAppletConfig, 1);
-	pKeyFile = cairo_dock_pre_read_module_instance_config (pInstance, pMinimalConfig);
 	
 	if (pMinimalConfig->iDesiredIconWidth > 0)  // le module a une icone, c'est donc une applet.
 	{

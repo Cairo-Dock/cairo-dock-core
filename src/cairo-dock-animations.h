@@ -7,6 +7,10 @@
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
+/**
+*@file cairo-dock-animations.h This class handles the icons and containers animations.
+*/
+
 #define CAIRO_DOCK_MIN_SLOW_DELTA_T 90
 
 gboolean cairo_dock_move_up (CairoDock *pDock);

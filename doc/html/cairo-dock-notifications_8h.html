@@ -271,13 +271,6 @@
 <div class="memdoc">
 
 <p>
-Appelle toutes les fonctions enregistrees pour une notification donnee. <dl compact><dt><b>Paramètres:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>iNotifType</em>&nbsp;</td><td>type de la notification. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>...</em>&nbsp;</td><td>donnees passees a la fonction notifiee. </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>TRUE si la notification a ete utilisee par quelqu'un, FALSE si aucune fonction n'est enregistree pour elle. </dd></dl>
 
 </div>
 </div><p>
@@ -301,6 +294,13 @@ Appelle toutes les fonctions enregistrees pour une notification donnee. <dl comp
 <div class="memdoc">
 
 <p>
+Appelle toutes les fonctions enregistrees pour une notification donnee. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>iNotifType</em>&nbsp;</td><td>type de la notification. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>...</em>&nbsp;</td><td>donnees passees a la fonction notifiee. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>TRUE si la notification a ete utilisee par quelqu'un, FALSE si aucune fonction n'est enregistree pour elle. </dd></dl>
 
 </div>
 </div><p>
@@ -327,6 +327,14 @@ Appelle toutes les fonctions enregistrees pour une notification donnee. <dl comp
 <div class="memdoc">
 
 <p>
+Appelle toutes les fonctions enregistrees pour une notification donnee sur une icone donnee. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icone concernee par les messages. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iNotifType</em>&nbsp;</td><td>type de la notification. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>...</em>&nbsp;</td><td>donnees passees a la fonction notifiee. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>TRUE si la notification a ete utilisee par quelqu'un, FALSE si aucune fonction n'est enregistree pour elle. </dd></dl>
 
 </div>
 </div><p>
@@ -834,6 +842,7 @@ Enregistre une action a appeler lors d'une notification. <dl compact><dt><b>Para
     <tr><td valign="top"></td><td valign="top"><em>iNotifType</em>&nbsp;</td><td>type de la notification. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>pFunction</em>&nbsp;</td><td>fonction notifiee. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>bRunFirst</em>&nbsp;</td><td>CAIRO_DOCK_RUN_FIRST pour etre enregistre en 1er, CAIRO_DOCK_RUN_AFTER pour etre enregistreé en dernier. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pUserData</em>&nbsp;</td><td>donnees qui seront passees en parametre de la callback. </td></tr>
   </table>
 </dl>
 
@@ -918,10 +927,11 @@ Enregistre une action a appeler lors d'une notification. <dl compact><dt><b>Para
 <div class="memdoc">
 
 <p>
-Enleve une fonction de la liste des fonctions appelees par une notification donnee. <dl compact><dt><b>Paramètres:</b></dt><dd>
+Enleve une fonction de la liste des fonctions appelees par une notification donnee et une 'user data' donnee. <dl compact><dt><b>Paramètres:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>iNotifType</em>&nbsp;</td><td>type de la notification. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>pFunction</em>&nbsp;</td><td>fonction notifiee. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pUserData</em>&nbsp;</td><td>donnees qui ont ete enregistrees. </td></tr>
   </table>
 </dl>
 
@@ -1005,7 +1015,7 @@ Enleve une fonction de la liste des fonctions appelees par une notification donn
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 8 02:54:13 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

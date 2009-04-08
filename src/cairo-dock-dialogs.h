@@ -71,7 +71,6 @@ void cairo_dock_compute_dialog_sizes (CairoDialog *pDialog);
 *@param pContainer le container contenant l'icone.
 *@param fTimeLength duree de vie du dialogue, ou 0 pour une duree de vie illimitee.
 *@param cIconPath le chemin vers une icone a afficher dans la marge.
-*@param iButtonsType type des boutons (GTK_BUTTONS_OK_CANCEL, GTK_BUTTONS_YES_NO, ou GTK_BUTTONS_NONE).
 *@param pInteractiveWidget un widget d'interaction avec l'utilisateur; il est rattache au dialogue, donc sera detruit avec lui. Faire un 'gtk_widget_reparent()' avant de detruire le dialogue pour eviter cela, ou bien utilisez #cairo_dock_show_dialog_and_wait.
 *@param pActionFunc la fonction d'action appelee lorsque l'utilisateur valide son choix. NULL revient a avoir des boutons du type GTK_BUTTONS_NONE.
 *@param data donnees transmises a la fonction ci-dessus.
@@ -158,7 +157,6 @@ CairoDialog *cairo_dock_show_dialog_with_value (const gchar *cText, Icon *pIcon,
 *@param pContainer le container de l'icone.
 *@param fTimeLength duree de vie du dialogue, ou 0 pour une duree de vie illimitee.
 *@param cIconPath le chemin vers une icone a afficher dans la marge.
-*@param iButtonsType type des boutons (GTK_BUTTONS_OK_CANCEL ou GTK_BUTTONS_YES_NO).
 *@param pInteractiveWidget un widget d'interaction avec l'utilisateur.
 *@return GTK_RESPONSE_OK si l'utilisateur a valide, GTK_RESPONSE_CANCEL s'il a annule, GTK_RESPONSE_NONE si le dialogue s'est fait detruire avant que l'utilisateur ait pu repondre. Le widget interactif n'est pas detruit avec le dialogue, ce qui permet de recuperer les modifications effectuees par l'utilisateur. Il vous appartient de le detruire avec gtk_widget_destroy() quand vous en avez fini avec lui.
 */

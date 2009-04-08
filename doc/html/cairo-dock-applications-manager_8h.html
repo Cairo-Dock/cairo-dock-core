@@ -28,7 +28,7 @@
 <h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-applications-manager.h</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-applications-manager_8h.html#8aac38a0287830253081f9281157c04c">cairo_dock_initialize_application_manager</a> (Display *pDisplay)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-applications-manager_8h.html#3674e2a1512118427bff36712cc35b28">cairo_dock_initialize_application_manager</a> (Display *pDisplay)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-applications-manager_8h.html#a3ed958743c3d92ab3605ed4522e4684">cairo_dock_register_appli</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon)</td></tr>
 
@@ -111,13 +111,14 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-applications-manager_8h.html#1bbf8966cbfdaede78ed322c659ed38a">cairo_dock_detach_appli</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon)</td></tr>
 
 </table>
-<hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="8aac38a0287830253081f9281157c04c"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_initialize_application_manager" ref="8aac38a0287830253081f9281157c04c" args="(Display *pDisplay)" -->
+<hr><a name="_details"></a><h2>Description détaillée</h2>
+This class manages the taskbar and the interactions with X. Most of the internal functions make request to X, so you shouldn't use them directly, for performance considerations. Instead, use the data exposed by Cairo-Dock or available in the icon structure. Only the functions that don't make request to X are documented above. <hr><h2>Documentation des fonctions</h2>
+<a class="anchor" name="3674e2a1512118427bff36712cc35b28"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_initialize_application_manager" ref="3674e2a1512118427bff36712cc35b28" args="(Display *pDisplay)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">G_BEGIN_DECLS void cairo_dock_initialize_application_manager           </td>
+          <td class="memname">void cairo_dock_initialize_application_manager           </td>
           <td>(</td>
           <td class="paramtype">Display *&nbsp;</td>
           <td class="paramname"> <em>pDisplay</em>          </td>
@@ -1016,6 +1017,7 @@
 <div class="memdoc">
 
 <p>
+Get the state of the applications manager. <dl class="return" compact><dt><b>Renvoie:</b></dt><dd>TRUE if it is running (the X events are taken into account), FALSE otherwise. </dd></dl>
 
 </div>
 </div><p>
@@ -1036,6 +1038,7 @@
 <div class="memdoc">
 
 <p>
+Get the list of appli's icons currently known by Cairo-Dock, including the icons not displayed in the dock. You can then order the list by z-order, name, etc. <dl class="return" compact><dt><b>Renvoie:</b></dt><dd>a newly allocated list of applis's icons. You must free the list when you're finished with it, but not the icons. </dd></dl>
 
 </div>
 </div><p>
@@ -1056,6 +1059,7 @@
 <div class="memdoc">
 
 <p>
+Get the currently active window ID. <dl class="return" compact><dt><b>Renvoie:</b></dt><dd>the X id. </dd></dl>
 
 </div>
 </div><p>
@@ -1076,6 +1080,7 @@
 <div class="memdoc">
 
 <p>
+Get the icon of the currently active window. <dl class="return" compact><dt><b>Renvoie:</b></dt><dd>the icon (maybe not inside a dock). </dd></dl>
 
 </div>
 </div><p>
@@ -1096,6 +1101,12 @@
 <div class="memdoc">
 
 <p>
+Get the icon of a given window. The search is fast. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>Xid</em>&nbsp;</td><td>the id of the X window. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>the icon (maybe not inside a dock). </dd></dl>
 
 </div>
 </div><p>
@@ -1131,6 +1142,13 @@
 <div class="memdoc">
 
 <p>
+Run a function on all appli's icons. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pFunction</em>&nbsp;</td><td>a <a class="el" href="cairo-dock-struct_8h.html#e316236f8ec52f6c0da7e8de56cbeda2">CairoDockForeachIconFunc</a> function to be called </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>bOutsideDockOnly</em>&nbsp;</td><td>TRUE if you only want to go through icons that are not inside a dock, FALSE to go through all icons. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pUserData</em>&nbsp;</td><td>a data passed to the function. </td></tr>
+  </table>
+</dl>
 
 </div>
 </div><p>
@@ -1155,7 +1173,7 @@
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 8 02:54:13 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

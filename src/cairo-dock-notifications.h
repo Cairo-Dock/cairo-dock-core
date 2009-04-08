@@ -108,26 +108,22 @@ GSList *cairo_dock_get_notifications_list (CairoDockNotificationType iNotifType)
 *@param iNotifType type de la notification.
 *@param pFunction fonction notifiee.
 *@param bRunFirst CAIRO_DOCK_RUN_FIRST pour etre enregistre en 1er, CAIRO_DOCK_RUN_AFTER pour etre enregistreé en dernier.
+*@param pUserData donnees qui seront passees en parametre de la callback.
 */
 void cairo_dock_register_notification (CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData);
 
 void cairo_dock_register_notification_on_icon (Icon *pIcon, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData);
 
 /**
-*Enleve une fonction de la liste des fonctions appelees par une notification donnee.
+*Enleve une fonction de la liste des fonctions appelees par une notification donnee et une 'user data' donnee.
 *@param iNotifType type de la notification.
 *@param pFunction fonction notifiee.
+*@param pUserData donnees qui ont ete enregistrees.
 */
 void cairo_dock_remove_notification_func (CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
 
 void cairo_dock_remove_notification_func_on_icon (Icon *pIcon, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
 
-/**
-*Appelle toutes les fonctions enregistrees pour une notification donnee.
-*@param iNotifType type de la notification.
-*@param ... donnees passees a la fonction notifiee.
-@return TRUE si la notification a ete utilisee par quelqu'un, FALSE si aucune fonction n'est enregistree pour elle.
-*/
 
 #define _cairo_dock_notify(pNotificationRecordList, bStop, ...) do {\
 	if (pNotificationRecordList == NULL) {\
@@ -142,13 +138,25 @@ void cairo_dock_remove_notification_func_on_icon (Icon *pIcon, CairoDockNotifica
 			pElement = pElement->next; }\
 		TRUE; }\
 	} while (0)
-
+/**
+*Appelle toutes les fonctions enregistrees pour une notification donnee.
+*@param iNotifType type de la notification.
+*@param ... donnees passees a la fonction notifiee.
+@return TRUE si la notification a ete utilisee par quelqu'un, FALSE si aucune fonction n'est enregistree pour elle.
+*/
 #define cairo_dock_notify(iNotifType, ...) do {\
 	gboolean bStop = FALSE;\
 	GSList *pNotificationRecordList = cairo_dock_get_notifications_list (iNotifType);\
 	_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);\
 	} while (0)
 
+/**
+*Appelle toutes les fonctions enregistrees pour une notification donnee sur une icone donnee.
+*@param pIcon l'icone concernee par les messages.
+*@param iNotifType type de la notification.
+*@param ... donnees passees a la fonction notifiee.
+@return TRUE si la notification a ete utilisee par quelqu'un, FALSE si aucune fonction n'est enregistree pour elle.
+*/
 #define cairo_dock_notify_on_icon(pIcon, iNotifType, ...) do {\
 	gboolean bStop = FALSE;\
 	GSList *pNotificationRecordList = cairo_dock_get_notifications_list (iNotifType);\

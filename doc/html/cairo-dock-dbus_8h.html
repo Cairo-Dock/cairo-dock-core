@@ -33,7 +33,7 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#2496a94c4d58527e981163c423410cdb">cairo_dock_create_new_dbus_proxy</a></td></tr>
 
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS DBusGConnection *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#3bd8ca47aa817305babe79a54bc2d6ee">cairo_dock_get_session_connection</a> (void)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">DBusGConnection *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#deac2a6cfc7d5500124370c128ed2376">cairo_dock_get_session_connection</a> (void)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#0a1d26dfa93988a16756512e467b9ed0">cairo_dock_register_service_name</a> (const gchar *cServiceName)</td></tr>
 
@@ -62,7 +62,8 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-dbus_8h.html#aec159a9c08b7cc9b147e17524d289e4">cairo_dock_dbus_call</a> (DBusGProxy *pDbusProxy, const gchar *cCommand)</td></tr>
 
 </table>
-<hr><h2>Documentation des macros</h2>
+<hr><a name="_details"></a><h2>Description détaillée</h2>
+This class defines numerous convenient functions to use DBus inside Cairo-Dock. DBus is used to communicate and interact with other running applications. <hr><h2>Documentation des macros</h2>
 <a class="anchor" name="e3a5698fb80d550afa09798e58384400"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_get_dbus_connection" ref="e3a5698fb80d550afa09798e58384400" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -94,12 +95,12 @@
 </div>
 </div><p>
 <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="3bd8ca47aa817305babe79a54bc2d6ee"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_get_session_connection" ref="3bd8ca47aa817305babe79a54bc2d6ee" args="(void)" -->
+<a class="anchor" name="deac2a6cfc7d5500124370c128ed2376"></a><!-- doxytag: member="cairo-dock-dbus.h::cairo_dock_get_session_connection" ref="deac2a6cfc7d5500124370c128ed2376" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">G_BEGIN_DECLS DBusGConnection* cairo_dock_get_session_connection           </td>
+          <td class="memname">DBusGConnection* cairo_dock_get_session_connection           </td>
           <td>(</td>
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
@@ -547,7 +548,7 @@ Appelle une commande sur le bus. <dl compact><dt><b>Paramètres:</b></dt><dd>
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 8 02:54:13 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

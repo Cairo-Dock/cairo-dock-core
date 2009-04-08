@@ -8,6 +8,12 @@
 G_BEGIN_DECLS
 
 /**
+*@file cairo-dock-animations.h This class handles the managment of the applications classes.
+* Classes are used to group the windows of a same program, and to bind a launcher to the launched application.
+*/
+
+
+/**
 * Initialise le gestionnaire de classes. Ne fait rien la 2eme fois.
 */
 void cairo_dock_initialize_class_manager (void);

@@ -609,7 +609,6 @@ Fait apparaitre un dialogue avec un message, un widget et 2 boutons, tous option
     <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container contenant l'icone. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>fTimeLength</em>&nbsp;</td><td>duree de vie du dialogue, ou 0 pour une duree de vie illimitee. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>cIconPath</em>&nbsp;</td><td>le chemin vers une icone a afficher dans la marge. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>iButtonsType</em>&nbsp;</td><td>type des boutons (GTK_BUTTONS_OK_CANCEL, GTK_BUTTONS_YES_NO, ou GTK_BUTTONS_NONE). </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>pInteractiveWidget</em>&nbsp;</td><td>un widget d'interaction avec l'utilisateur; il est rattache au dialogue, donc sera detruit avec lui. Faire un 'gtk_widget_reparent()' avant de detruire le dialogue pour eviter cela, ou bien utilisez <a class="el" href="cairo-dock-dialogs_8h.html#4338cc42263cfdf28f39b6e4b1c5ae47">cairo_dock_show_dialog_and_wait</a>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>pActionFunc</em>&nbsp;</td><td>la fonction d'action appelee lorsque l'utilisateur valide son choix. NULL revient a avoir des boutons du type GTK_BUTTONS_NONE. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>data</em>&nbsp;</td><td>donnees transmises a la fonction ci-dessus. </td></tr>
@@ -1082,7 +1081,6 @@ Fait apparaitre un dialogue avec un widget et 2 boutons, et met en pause le prog
     <tr><td valign="top"></td><td valign="top"><em>pContainer</em>&nbsp;</td><td>le container de l'icone. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>fTimeLength</em>&nbsp;</td><td>duree de vie du dialogue, ou 0 pour une duree de vie illimitee. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>cIconPath</em>&nbsp;</td><td>le chemin vers une icone a afficher dans la marge. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>iButtonsType</em>&nbsp;</td><td>type des boutons (GTK_BUTTONS_OK_CANCEL ou GTK_BUTTONS_YES_NO). </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>pInteractiveWidget</em>&nbsp;</td><td>un widget d'interaction avec l'utilisateur. </td></tr>
   </table>
 </dl>
@@ -1679,7 +1677,7 @@ Retire un widget de son container GTK sans le detruire Le widget peut alors etre
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Tue Apr 7 02:52:28 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Wed Apr 8 02:54:13 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

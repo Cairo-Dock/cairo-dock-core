@@ -74,7 +74,7 @@ void cairo_dock_free_all_docks (void);
 * @param bAnimated TRUE pour regler la taille de l'icone au minimum de facon a la faire grossir apres.
 * @param bApplyRatio TRUE pour appliquer le facteur de taille propre au sous-dock.
 * @param bInsertSeparator TRUE pour inserer un separateur si necessaire.
-* @param GCompareFunc la fonction de comparaison
+* @param pCompareFunc la fonction de comparaison
 */
 void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bApplyRatio, gboolean bInsertSeparator, GCompareFunc pCompareFunc);
 
