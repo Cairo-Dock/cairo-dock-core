@@ -293,7 +293,7 @@ gchar *cairo_dock_build_temporary_themes_conf_file (void/*GHashTable **hThemeTab
 	}
 	
 	//\___________________ On copie le fichier de conf par defaut dedans.
-	gchar *cCommand = g_strdup_printf ("cp %s/%s %s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_THEME_CONF_FILE, cTmpConfFile);
+	gchar *cCommand = g_strdup_printf ("cp %s %s", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_THEME_CONF_FILE, cTmpConfFile);
 	int r = system (cCommand);
 	g_free (cCommand);
 
@@ -562,6 +562,14 @@ static void on_theme_apply (gpointer *user_data)
 
 	if (cNewThemeName != NULL)
 	{
+		g_print ("cNewThemeName : '%s'\n", cNewThemeName);
+		if (strncmp (cNewThemeName, CAIRO_DOCK_PREFIX_USER_THEME, strlen (CAIRO_DOCK_PREFIX_USER_THEME) == 0))
+		{
+			gchar *tmp = cNewThemeName;
+			cNewThemeName = g_strdup (cNewThemeName+strlen (CAIRO_DOCK_PREFIX_USER_THEME));
+			g_free (tmp);
+			g_print (" => cNewThemeName : '%s'\n", cNewThemeName);
+		}
 		cd_message ("on sauvegarde dans %s", cNewThemeName);
 		gboolean bThemeSaved = FALSE;
 		gchar *cNewThemePath = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR, cNewThemeName);

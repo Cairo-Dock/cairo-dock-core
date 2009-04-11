@@ -1,6 +1,11 @@
 #ifndef __CAIRO_DOCK_H__
 #define __CAIRO_DOCK_H__
 
+/** /mainpage ceci est la mainpage
+* /subsection ceci est une sous-section 1
+* /subsection ceci est une sous-section 2
+*/
+
 #include <stdlib.h>
 #include <string.h>
 #include <GL/gl.h>

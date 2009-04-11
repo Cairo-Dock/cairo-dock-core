@@ -34,6 +34,9 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
 
+extern cairo_surface_t *g_pIconBackgroundImageSurface;
+extern double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
+
 extern gboolean g_bUseOpenGL;
 
 
@@ -43,6 +46,26 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 	
 	//\________________ On efface l'ancienne image.
 	cairo_dock_erase_cairo_context (pIconContext);
+	
+	//\_____________ On met le background de l'icone si necessaire
+	if (pIcon->pIconBuffer != NULL &&
+		g_pIconBackgroundImageSurface != NULL &&
+		(CAIRO_DOCK_IS_NORMAL_LAUNCHER(pIcon) || CAIRO_DOCK_IS_APPLI(pIcon) || (myIcons.bBgForApplets && CAIRO_DOCK_IS_APPLET(pIcon))))
+	{
+		cd_message (">>> %s prendra un fond d'icone", pIcon->acName);
+
+		cairo_save (pIconContext);
+		cairo_scale(pIconContext,
+			pIcon->fWidth / g_iIconBackgroundImageWidth,
+			pIcon->fHeight / g_iIconBackgroundImageHeight);
+		cairo_set_source_surface (pIconContext,
+			g_pIconBackgroundImageSurface,
+			0.,
+			0.);
+		cairo_set_operator (pIconContext, CAIRO_OPERATOR_DEST_OVER);
+		cairo_paint (pIconContext);
+		cairo_restore (pIconContext);
+	}
 	
 	//\________________ On applique la nouvelle image.
 	if (pSurface != NULL && fScale > 0)

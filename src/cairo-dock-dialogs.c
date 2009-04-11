@@ -716,7 +716,7 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 gboolean cairo_dock_remove_dialog_if_any (Icon *icon)
 {
 	g_return_val_if_fail (icon != NULL, FALSE);
-	g_print ("%s (%s)\n", __func__, (icon?icon->acName : "nobody"));
+	cd_debug ("%s (%s)", __func__, (icon?icon->acName : "nobody"));
 	CairoDialog *pDialog;
 	GSList *ic;
 	gboolean bDialogRemoved = FALSE;

@@ -160,26 +160,21 @@ gboolean cairo_dock_render_flying_container_notification (gpointer pUserData, Ca
 		}
 		else if (pFlyingContainer->iAnimationCount > 0)
 		{
-			int x = 0;
-			int y = (pFlyingContainer->iHeight - pFlyingContainer->iWidth) / 2;
 			int iCurrentFrame = EXPLOSION_NB_FRAMES - pFlyingContainer->iAnimationCount;
 			
-			glEnable (GL_SCISSOR_TEST);
-			glScissor (pFlyingContainer->iWidth/2-s_fExplosionWidth/2,
-				pFlyingContainer->iHeight/2-s_fExplosionHeight/2,
-				s_fExplosionWidth,
-				s_fExplosionHeight);
-			
-			glTranslatef (pFlyingContainer->iWidth/2 + s_fExplosionWidth * (.5 * EXPLOSION_NB_FRAMES - iCurrentFrame),
+			glTranslatef (pFlyingContainer->iWidth/2,
 				pFlyingContainer->iHeight/2,
 				-3.);
+			glBindTexture (GL_TEXTURE_2D, s_iExplosionTexture);
+			_cairo_dock_enable_texture ();
+			_cairo_dock_set_blend_source ();
+			_cairo_dock_set_alpha (1.);
+			_cairo_dock_apply_current_texture_portion_at_size_with_offset ((double) iCurrentFrame / EXPLOSION_NB_FRAMES, 1.,
+				1. / EXPLOSION_NB_FRAMES, 1.,
+				s_fExplosionWidth, s_fExplosionHeight,
+				0., 0.);
 			
-			glColor4f (1., 1., 1., 1.);
-			cairo_dock_draw_texture (s_iExplosionTexture,
-				s_fExplosionWidth * EXPLOSION_NB_FRAMES,
-				s_fExplosionHeight);
-			
-			glDisable (GL_SCISSOR_TEST);
+			_cairo_dock_disable_texture ();
 		}
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;

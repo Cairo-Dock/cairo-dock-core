@@ -1259,7 +1259,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			
 			case 'O' :  // liste des decorations de desklet.
 			case 'o' :  // idem mais avec le choix "defaut" en plus.
-				_add_combo_from_modele (iElementType == 'O' ? s_pDecorationsListStore : s_pDecorationsListStore2, FALSE, FALSE);
+				_add_combo_from_modele ((iElementType == 'O' ? s_pDecorationsListStore : s_pDecorationsListStore2), FALSE, FALSE);
 			break ;
 			
 			case 'g' :  // liste des themes de jauge.

@@ -355,7 +355,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		//else
 		//	cd_debug ("pas encore visible !\n");
 	}
-	if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && pPointedIcon->pSubDock != s_pLastPointedDock && (! myAccessibility.bShowSubDockOnClick || CAIRO_DOCK_IS_APPLI (pPointedIcon)))
+	if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && pPointedIcon->pSubDock != s_pLastPointedDock && (! myAccessibility.bShowSubDockOnClick || CAIRO_DOCK_IS_APPLI (pPointedIcon) || pDock->bIsDragging))
 	{
 		//cd_debug ("il faut montrer un sous-dock");
 		if (pPointedIcon->pSubDock->iSidLeaveDemand != 0)
@@ -454,7 +454,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	static double fLastTime = 0;
 	Icon *pPointedIcon, *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 	int iLastMouseX = pDock->iMouseX;
-	//g_print ("pDock->fAvoidingMouseMargin : %.2f\n", pDock->fAvoidingMouseMargin);
+	//g_print ("%s (%.2f;%.2f)\n", __func__, pMotion->x, pMotion->y);
 	
 	//\_______________ On elague le flux des MotionNotify, sinon X en envoie autant que le permet le CPU !
 	if (pMotion != NULL)
@@ -500,7 +500,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 			cairo_dock_drag_flying_container (s_pFlyingContainer, pDock);
 		}
 		
-		if (pMotion->time - fLastTime < mySystem.fRefreshInterval && s_pIconClicked == NULL)  // pDock->bIsShrinkingDown ||
+		if (pMotion->time != 0 && pMotion->time - fLastTime < mySystem.fRefreshInterval && s_pIconClicked == NULL)  // pDock->bIsShrinkingDown ||
 		{
 			gdk_device_get_state (pMotion->device, pMotion->window, NULL, NULL);
 			return FALSE;
@@ -537,12 +537,6 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
  			gdk_window_get_pointer (pWidget->window, &pDock->iMouseX, &pDock->iMouseY, NULL);
 		else
 			gdk_window_get_pointer (pWidget->window, &pDock->iMouseY, &pDock->iMouseX, NULL);
-
-		if (pDock->bIsShrinkingDown)  // si les icones sont en train de diminuer de taille (suite a un clic) on on laisse l'animation se finir, sinon elle va trop vite.  // || ! pDock->bInside || pDock->bAtBottom
-		{
-			//gdk_device_get_state (pMotion->device, pMotion->window, NULL, NULL);
-			return FALSE;
-		}
 
 		pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
 		gtk_widget_queue_draw (pWidget);
@@ -887,6 +881,14 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		s_iSidShowSubDockDemand = 0;
 	}
 	
+	if (pDock->iSidMoveDown == 0)
+	{
+		gboolean bStartAnimation = FALSE;
+		cairo_dock_notify (CAIRO_DOCK_ENTER_DOCK, pDock, &bStartAnimation);
+		if (bStartAnimation)
+			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
+	}
+	
 	if (pDock->bAtTop || pDock->bInside || (pDock->iSidMoveDown != 0))  // le 'iSidMoveDown != 0' est la pour empecher le dock de "vibrer" si l'utilisateur sort par en bas avec l'auto-hide active.
 	{
 		//g_print ("  %d;%d;%d\n", pDock->bAtTop,  pDock->bInside, pDock->iSidMoveDown);
@@ -901,13 +903,13 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	//g_print ("%s (main dock : %d ; %d)\n", __func__, pDock->bIsMainDock, pDock->bHorizontalDock);
 
-	if (g_bUseOpenGL && pDock->render_opengl != NULL)
+	/**if (g_bUseOpenGL && pDock->render_opengl != NULL)
 	{
 		gboolean bStartAnimation = FALSE;
 		cairo_dock_notify (CAIRO_DOCK_ENTER_DOCK, pDock, &bStartAnimation);
 		if (bStartAnimation)
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
-	}
+	}*/
 	
 	pDock->fDecorationsOffsetX = 0;
 	if (pDock->iRefCount != 0)
@@ -998,10 +1000,17 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	CairoDock *pDock)
 {
 	g_print ("on a appuye sur une touche\n");
-	if (pKey->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
+	if (pKey->type == GDK_KEY_PRESS)
 	{
-		if (pDock->iRefCount == 0)
-			cairo_dock_write_root_dock_gaps (pDock);
+		cairo_dock_notify (CAIRO_DOCK_KEY_PRESSED, pDock, pKey->keyval, pKey->state);
+	}
+	else if (pKey->type == GDK_KEY_RELEASE)
+	{
+		if (pKey->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
+		{
+			if (pDock->iRefCount == 0)
+				cairo_dock_write_root_dock_gaps (pDock);
+		}
 	}
 	return FALSE;
 }

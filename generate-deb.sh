@@ -73,7 +73,7 @@ fi
 #\_____________ On compile de zero.
 if test "$FAST_COMPIL" = "0"; then
 	cd $CAIRO_DOCK_DIR/cairo-dock
-	./compile-all.sh -a -c -C -i -t -d $CAIRO_DOCK_DIR
+	./compile-all.sh -a -c -C -i -d $CAIRO_DOCK_DIR
 fi
 
 #\_____________ On cree les archives.

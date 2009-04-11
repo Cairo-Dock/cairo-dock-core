@@ -183,6 +183,10 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 		G_CALLBACK (cairo_dock_on_key_release),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
+		"key-press-event",
+		G_CALLBACK (cairo_dock_on_key_release),
+		pDock);
+	g_signal_connect (G_OBJECT (pWindow),
 		"button-press-event",
 		G_CALLBACK (cairo_dock_on_button_press),
 		pDock);
