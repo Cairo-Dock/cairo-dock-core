@@ -144,7 +144,7 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 		if (! cairo_dock_dialog_unreference (s_pDialog))
 			cairo_dock_dialog_unreference (s_pDialog);
 	Icon *pIcon = cairo_dock_get_current_active_icon ();
-	if (pIcon == NULL)
+	if (pIcon == NULL || pIcon->cParentDockName == NULL)
 		pIcon = cairo_dock_get_dialogless_icon ();
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
 	s_pDialog = cairo_dock_show_temporary_dialog_with_icon (cDescription != NULL ? cDescription : pGroupDescription->cDescription, pIcon, CAIRO_CONTAINER (pDock), 0., pGroupDescription->cIcon);

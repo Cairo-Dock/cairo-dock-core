@@ -43,10 +43,10 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	pTaskBar->fVisibleAppliAlpha = cairo_dock_get_double_key_value (pKeyFile, "TaskBar", "visibility alpha", &bFlushConfFileNeeded, .25, "Applications", NULL);  // >0 <=> les fenetres minimisees sont transparentes.
 	if (pTaskBar->bHideVisibleApplis && pTaskBar->fVisibleAppliAlpha < 0)
 		pTaskBar->fVisibleAppliAlpha = 0.;  // on inhibe ce parametre, puisqu'il ne sert alors a rien.
-	else if (pTaskBar->bHideVisibleApplis > .6)
-		pTaskBar->bHideVisibleApplis = .6;
-	else if (pTaskBar->bHideVisibleApplis < -.6)
-		pTaskBar->bHideVisibleApplis = -.6;
+	else if (pTaskBar->fVisibleAppliAlpha > .6)
+		pTaskBar->fVisibleAppliAlpha = .6;
+	else if (pTaskBar->fVisibleAppliAlpha < -.6)
+		pTaskBar->fVisibleAppliAlpha = -.6;
 	pTaskBar->bAppliOnCurrentDesktopOnly = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "current desktop only", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 	
 	pTaskBar->bDemandsAttentionWithDialog = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "demands attention with dialog", &bFlushConfFileNeeded, TRUE, "Applications", NULL);

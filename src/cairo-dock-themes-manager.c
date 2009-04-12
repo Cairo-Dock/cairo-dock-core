@@ -35,7 +35,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #define CAIRO_DOCK_PREFIX_LOCAL_THEME "(Local) "
 #define CAIRO_DOCK_DEFAULT_THEME_LIST_NAME "liste.txt"
 #define CAIRO_DOCK_DL_NB_RETRY 2
-#define CAIRO_DOCK_DL_TIMEOUT 3
+#define CAIRO_DOCK_DL_TIMEOUT 5
 
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cConfFile;
@@ -562,8 +562,7 @@ static void on_theme_apply (gpointer *user_data)
 
 	if (cNewThemeName != NULL)
 	{
-		g_print ("cNewThemeName : '%s'\n", cNewThemeName);
-		if (strncmp (cNewThemeName, CAIRO_DOCK_PREFIX_USER_THEME, strlen (CAIRO_DOCK_PREFIX_USER_THEME) == 0))
+		if (strncmp (cNewThemeName, CAIRO_DOCK_PREFIX_USER_THEME, strlen (CAIRO_DOCK_PREFIX_USER_THEME)) == 0)
 		{
 			gchar *tmp = cNewThemeName;
 			cNewThemeName = g_strdup (cNewThemeName+strlen (CAIRO_DOCK_PREFIX_USER_THEME));

@@ -1107,12 +1107,14 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 	
 			if (pDock->bAutoHide)
 			{
-				*iX = pDock->iWindowPositionX + (pIcon->fXAtRest + pIcon->fWidth * (*bRight ? .7 : .3) * 2*(.5-fAlign)) / pDock->fFlatDockWidth * myHiddenDock.iVisibleZoneWidth;
+				*iX = pDock->iWindowPositionX +
+					(pIcon->fXAtRest + pIcon->fWidth * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign))) / pDock->fFlatDockWidth * myHiddenDock.iVisibleZoneWidth;
 				cd_debug ("placement sur un dock cache -> %d", *iX);
 			}
 			else
 			{
-				*iX = pDock->iWindowPositionX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale * pIcon->fWidthFactor / 2 + pIcon->fWidth * (*bRight ? .2 : - .2);
+				*iX = pDock->iWindowPositionX +
+					pIcon->fDrawX + pIcon->fWidth * pIcon->fScale * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign));
 			}
 		}
 		else if (pDock->iRefCount > 0 && ! GTK_WIDGET_VISIBLE (pDock->pWidget))  // sous-dock invisible.  // pDock->bAtBottom
@@ -1231,7 +1233,7 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 
 void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 {
-	//g_print ("%s ()\n", __func__);
+	g_print ("%s (%x;%d)\n", __func__, pDialog->pIcon, pContainer);
 	int iPrevPositionX = pDialog->iPositionX, iPrevPositionY = pDialog->iPositionY;
 	if (pContainer != NULL && pDialog->pIcon != NULL)
 	{
@@ -1598,19 +1600,19 @@ Icon *cairo_dock_get_dialogless_icon (void)
 		return NULL;
 
 	Icon *pIcon = cairo_dock_get_first_icon_of_type (g_pMainDock->icons, CAIRO_DOCK_SEPARATOR12);
-	if (pIcon == NULL)
+	if (pIcon == NULL || cairo_dock_icon_has_dialog (pIcon) || pIcon->cParentDockName == NULL)
 	{
 		pIcon = cairo_dock_get_first_icon_of_type (g_pMainDock->icons, CAIRO_DOCK_SEPARATOR23);
-		if (pIcon == NULL)
+		if (pIcon == NULL || cairo_dock_icon_has_dialog (pIcon) || pIcon->cParentDockName == NULL)
 		{
 			pIcon = cairo_dock_get_pointed_icon (g_pMainDock->icons);
-			if (pIcon == NULL || CAIRO_DOCK_IS_NORMAL_APPLI (pIcon))
+			if (pIcon == NULL || CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) || cairo_dock_icon_has_dialog (pIcon) || pIcon->cParentDockName == NULL)
 			{
 				GList *ic;
 				for (ic = g_pMainDock->icons; ic != NULL; ic = ic->next)
 				{
 					pIcon = ic->data;
-					if (! cairo_dock_icon_has_dialog (pIcon) && ! CAIRO_DOCK_IS_NORMAL_APPLI (pIcon))
+					if (! cairo_dock_icon_has_dialog (pIcon) && ! CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) && pIcon->cParentDockName != NULL)
 						break;
 				}
 			}

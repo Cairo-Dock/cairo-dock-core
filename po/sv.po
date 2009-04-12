@@ -19,11 +19,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/cairo-dock-callbacks.c:1077
+#: ../src/cairo-dock-callbacks.c:1085
 msgid "Do you want to mount this point ?"
 msgstr "Vill du montera denna plats?"
 
-#: ../src/cairo-dock-callbacks.c:1720
+#: ../src/cairo-dock-callbacks.c:1728
 msgid "Quit Cairo-Dock ?"
 msgstr "Avsluta Cairo-Dock?"
 
@@ -48,33 +48,27 @@ msgid ""
 "  or with the -o option to force OpenGL and -c to force cairo.)"
 msgstr ""
 
-#: ../src/cairo-dock-file-manager.c:482 ../src/cairo-dock-file-manager.c:529
-#, c-format
-msgid "%s is now %s"
+#: ../src/cairo-dock-file-manager.c:484 ../src/cairo-dock-file-manager.c:529
+#, fuzzy, c-format
+msgid "%s is now mounted"
 msgstr "%s är nu %s"
 
-#: ../src/cairo-dock-file-manager.c:482 ../src/cairo-dock-file-manager.c:529
-msgid "mounted"
-msgstr "monterad"
+#: ../src/cairo-dock-file-manager.c:484 ../src/cairo-dock-file-manager.c:529
+#, fuzzy, c-format
+msgid "%s is now unmounted"
+msgstr "%s är nu %s"
 
-#: ../src/cairo-dock-file-manager.c:482 ../src/cairo-dock-file-manager.c:529
-msgid "unmounted"
-msgstr "avmonterad"
-
-#: ../src/cairo-dock-file-manager.c:550
-#, c-format
-msgid "failed to %s %s"
+#: ../src/cairo-dock-file-manager.c:548
+#, fuzzy, c-format
+msgid "failed to mount %s"
 msgstr "kunde inte %s %s"
 
-#: ../src/cairo-dock-file-manager.c:550
-msgid "mount"
-msgstr "montera"
+#: ../src/cairo-dock-file-manager.c:548
+#, fuzzy, c-format
+msgid "failed to unmount %s"
+msgstr "kunde inte %s %s"
 
-#: ../src/cairo-dock-file-manager.c:550
-msgid "unmount"
-msgstr "avmontera"
-
-#: ../src/cairo-dock-gui-factory.c:697
+#: ../src/cairo-dock-gui-factory.c:699
 #, c-format
 msgid ""
 "The '%s' plug-in was not found.\n"
@@ -82,14 +76,14 @@ msgid ""
 "features."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:709
+#: ../src/cairo-dock-gui-factory.c:711
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
 "Be sure to activate it to enjoy these features."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1693
+#: ../src/cairo-dock-gui-factory.c:1695
 msgid "grab"
 msgstr "fånga"
 
@@ -178,7 +172,7 @@ msgstr ""
 msgid "Do you want to activate it now ?"
 msgstr "Vill du montera denna plats?"
 
-#: ../src/cairo-dock-internal-accessibility.c:147
+#: ../src/cairo-dock-internal-accessibility.c:155
 #, fuzzy
 msgid "How do you access to your docks ?"
 msgstr "Välj användbara tillbehör!"
@@ -542,25 +536,25 @@ msgstr ""
 "Du kommer att förlora ändringarna i det aktuella temat\n"
 "om du inte sparar dem innan du väljer ett nytt tema. Vill du fortsätta ändå?"
 
-#: ../src/cairo-dock-themes-manager.c:571
+#: ../src/cairo-dock-themes-manager.c:578
 #, c-format
 msgid "Are you sure you want to overwrite theme %s ?"
 msgstr "Är du säker på att du vill skriva över tema %s?"
 
-#: ../src/cairo-dock-themes-manager.c:650
+#: ../src/cairo-dock-themes-manager.c:657
 #, c-format
 msgid "Are you sure you want to delete theme %s ?"
 msgstr "Är du säker på att du vill radera temat %s?"
 
-#: ../src/cairo-dock-themes-manager.c:672
+#: ../src/cairo-dock-themes-manager.c:679
 msgid "< Safe Mode >"
 msgstr "< Säkert Läge >"
 
-#: ../src/cairo-dock-themes-manager.c:672
+#: ../src/cairo-dock-themes-manager.c:679
 msgid "Manage Themes"
 msgstr "Hantera teman"
 
-#: ../src/cairo-dock-themes-manager.c:677
+#: ../src/cairo-dock-themes-manager.c:684
 msgid ""
 "You are running Cairo-Dock in safe mode.\n"
 "Why ? Probably because a plug-in has messed into your dock,\n"
@@ -600,15 +594,15 @@ msgstr ""
 # #################################
 # ########### cairo-dock.conf #############
 # #################################
-#: ../data/messages:1 ../data/messages:955
+#: ../data/messages:1 ../data/messages:953
 msgid "Position"
 msgstr "Placering"
 
-#: ../data/messages:3 ../data/messages:957
+#: ../data/messages:3 ../data/messages:955
 msgid "Position on the screen"
 msgstr "Placering på skärmen"
 
-#: ../data/messages:5 ../data/messages:959
+#: ../data/messages:5 ../data/messages:957
 msgid ""
 "The icons will scroll according to the chosen placement type. Of course the "
 "dock can be placed anywhere on the screen, here we specify regarding to what."
@@ -616,28 +610,28 @@ msgstr ""
 "Ikonerna kommer att bläddras enligt vald placering. Dockan kan placeras var "
 "som helst på skärmen, bläddring sker i förhållande till detta."
 
-#: ../data/messages:7 ../data/messages:961
+#: ../data/messages:7 ../data/messages:959
 msgid ""
 "Choose the screen border regarding to which the dock will place itself :"
 msgstr "Skärmkant för dockan:"
 
-#: ../data/messages:9 ../data/messages:963
+#: ../data/messages:9 ../data/messages:961
 msgid "bottom"
 msgstr "nederkant"
 
-#: ../data/messages:11 ../data/messages:965
+#: ../data/messages:11 ../data/messages:963
 msgid "top"
 msgstr "ovankant"
 
-#: ../data/messages:13 ../data/messages:967
+#: ../data/messages:13 ../data/messages:965
 msgid "right"
 msgstr "högerkant"
 
-#: ../data/messages:15 ../data/messages:969
+#: ../data/messages:15 ../data/messages:967
 msgid "left"
 msgstr "västerkant"
 
-#: ../data/messages:17 ../data/messages:971
+#: ../data/messages:17 ../data/messages:969
 msgid ""
 "At 0, the dock will place itself regarding the left corner if horizontal and "
 "the top corner if vertical, at 1 regarding the right corner if horizontal "
@@ -649,15 +643,15 @@ msgstr ""
 "att placera sig i förhållande till högerkanten vid horisontell placering och "
 "i förhållande till underkant vid vertikal placering."
 
-#: ../data/messages:19 ../data/messages:973
+#: ../data/messages:19 ../data/messages:971
 msgid "Relative alignment :"
 msgstr "Relativ justering:"
 
-#: ../data/messages:21 ../data/messages:975
+#: ../data/messages:21 ../data/messages:973
 msgid "Position regarding the chosen screen's edge"
 msgstr "Placering i förhållande till vald skärmkant"
 
-#: ../data/messages:23 ../data/messages:977
+#: ../data/messages:23 ../data/messages:975
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding ALT or CTRL key and left mouse button."
@@ -665,11 +659,11 @@ msgstr ""
 "Avstånd i pixlar från vald skärmkant. Du kan också flytta fönstret genom att "
 "trycka CTRL eller ALT och sedan dra fönstret med musen. "
 
-#: ../data/messages:25 ../data/messages:979
+#: ../data/messages:25 ../data/messages:977
 msgid "Lateral gap :"
 msgstr "Parallellt avstånd:"
 
-#: ../data/messages:27 ../data/messages:981
+#: ../data/messages:27 ../data/messages:979
 msgid ""
 "in pixels. You can also move the dock by holding ALT or CTRL key and left "
 "mouse button."
@@ -677,7 +671,7 @@ msgstr ""
 "Avstånd i pixlar från vald skärmkant. Du kan också flytta fönstret genom att "
 "trycka CTRL eller ALT och sedan dra fönstret med musen. "
 
-#: ../data/messages:29 ../data/messages:983
+#: ../data/messages:29 ../data/messages:981
 msgid "Distance to the screen's edge :"
 msgstr "Vinkelrät avstånd:"
 
@@ -747,7 +741,7 @@ msgstr ""
 "Dockan kommer att döljas automatiskt när musen lämnar fönstret och en "
 "aktiveringszon visas istället. För in musen i zonen för att visa dockan igen."
 
-#: ../data/messages:55 ../data/messages:987
+#: ../data/messages:55 ../data/messages:985
 msgid "Activate auto-hide ?"
 msgstr "Dölj automatiskt?"
 
@@ -2052,7 +2046,7 @@ msgstr "Bild för varning:"
 msgid "Name of an image to use for the locked emblem :"
 msgstr "Bild för låsning:"
 
-#: ../data/messages:639 ../data/messages:927 ../data/messages:989
+#: ../data/messages:639 ../data/messages:925 ../data/messages:987
 msgid "Desktop Entry"
 msgstr "Skrivbord"
 
@@ -2060,19 +2054,19 @@ msgstr "Skrivbord"
 msgid "Sub-dock's name :"
 msgstr "Sub-dockans namn:"
 
-#: ../data/messages:643 ../data/messages:935 ../data/messages:991
+#: ../data/messages:643 ../data/messages:933 ../data/messages:989
 msgid "Image's name or path :"
 msgstr "Bildens namn eller sökväg"
 
-#: ../data/messages:645 ../data/messages:941 ../data/messages:993
+#: ../data/messages:645 ../data/messages:939 ../data/messages:991
 msgid "Extra parameters"
 msgstr "Extra parametrar"
 
-#: ../data/messages:647 ../data/messages:943 ../data/messages:995
+#: ../data/messages:647 ../data/messages:941 ../data/messages:993
 msgid "Order you want for this launcher among the others:"
 msgstr "Relativ sortering på dockan:"
 
-#: ../data/messages:649 ../data/messages:939 ../data/messages:997
+#: ../data/messages:649 ../data/messages:937 ../data/messages:995
 msgid "Name of the container it belongs to:"
 msgstr "Namn på tillhörande behållare:"
 
@@ -2499,58 +2493,50 @@ msgid "I’m using Pidgin, and I want to see my friends’ avatar"
 msgstr ""
 
 #: ../data/messages:801
-msgid ""
-"If you choosed to overwrite X icons, then the Pidgin icons will be "
-"overwritten as well.\n"
-"You can edit the Pidgin launcher, and in the “Extra parameters”, tick the "
-"box that says to not overwrite X icon for this appli."
-msgstr ""
-
-#: ../data/messages:803
 msgid "Replacing the gnome-panel"
 msgstr ""
 
-#: ../data/messages:805
+#: ../data/messages:803
 #, fuzzy
 msgid "How can I have the main menu ?"
 msgstr "Lägg till avgränsare"
 
-#: ../data/messages:807
+#: ../data/messages:805
 msgid ""
 "Hint : if you removed your gnome-panel, then the “alt+F1” shortkey does not "
 "work anymore. This applet let you setup a shortcut to pop up the menu at the "
 "mouse’s location."
 msgstr ""
 
-#: ../data/messages:809
+#: ../data/messages:807
 #, fuzzy
 msgid "activate the Gmenu applet."
 msgstr "Dölj automatiskt?"
 
-#: ../data/messages:811
+#: ../data/messages:809
 #, fuzzy
 msgid "How can I have a simple “quick launch” panel ?"
 msgstr "Lägg till avgränsare"
 
-#: ../data/messages:813
+#: ../data/messages:811
 msgid ""
 "Hint : if you removed your gnome-panel, then the “alt+F2” shortkey does not "
 "work anymore. This applet let you setup a shortcut to pop up the quick-"
 "launch dialog."
 msgstr ""
 
-#: ../data/messages:815
+#: ../data/messages:813
 msgid ""
 "activate the Gmenu applet, then you can have it by middle-clicking on its "
 "icon."
 msgstr ""
 
-#: ../data/messages:817
+#: ../data/messages:815
 #, fuzzy
 msgid "How can I have a logout icon ?"
 msgstr "Vill du montera denna plats?"
 
-#: ../data/messages:819
+#: ../data/messages:817
 msgid ""
 "Hint : In the last Gnome version, there are 2 panel : one to logout, and one "
 "to turn off computer. The first one is raised by a click on the icon, the "
@@ -2558,86 +2544,86 @@ msgid ""
 "let you enter your own commands."
 msgstr ""
 
-#: ../data/messages:821
+#: ../data/messages:819
 #, fuzzy
 msgid "Simply activate the “logout” applet."
 msgstr "Dölj automatiskt?"
 
-#: ../data/messages:823
+#: ../data/messages:821
 #, fuzzy
 msgid "How can I access the dustbin ?"
 msgstr "Vill du montera denna plats?"
 
-#: ../data/messages:825
+#: ../data/messages:823
 msgid ""
 "Hint : you can delete a file by dragging it into the dustbin. You can even "
 "unmount a mount-point this way !"
 msgstr ""
 
-#: ../data/messages:827
+#: ../data/messages:825
 #, fuzzy
 msgid "Simply activate the “dustbin” applet."
 msgstr "Dölj automatiskt?"
 
-#: ../data/messages:829
+#: ../data/messages:827
 #, fuzzy
 msgid "How can I access to my mount points ?"
 msgstr "Vill du montera denna plats?"
 
-#: ../data/messages:831
+#: ../data/messages:829
 msgid ""
 "Hint : you can mount a volume by clicking on its icon. To unmount  it, right-"
 "click and select “unmount”."
 msgstr ""
 
-#: ../data/messages:833 ../data/messages:839
+#: ../data/messages:831 ../data/messages:837
 #, fuzzy
 msgid "Simply activate the “shortcuts” applet."
 msgstr "Dölj automatiskt?"
 
-#: ../data/messages:835
+#: ../data/messages:833
 #, fuzzy
 msgid "How can I access to my Nautilus bookmarks ?"
 msgstr "Vill du montera denna plats?"
 
-#: ../data/messages:837
+#: ../data/messages:835
 msgid ""
 "Hint : you can add a bookmark by dragging the folder onto the applet or into "
 "its sub-dock. You can also rename and remove them. This will also take "
 "effect in Nautilus immediately, and vice versa."
 msgstr ""
 
-#: ../data/messages:841
+#: ../data/messages:839
 #, fuzzy
 msgid "How can I access to my desktop ?"
 msgstr "Vill du montera denna plats?"
 
-#: ../data/messages:843
+#: ../data/messages:841
 msgid ""
 "Hint : middle-clicking on it will hide all the windows, but not the desklets."
 msgstr ""
 
-#: ../data/messages:845
+#: ../data/messages:843
 #, fuzzy
 msgid "Simply activate the “show desktop” applet."
 msgstr "Dölj automatiskt?"
 
-#: ../data/messages:847
+#: ../data/messages:845
 #, fuzzy
 msgid "How can I have an easy-to-acces calendar ?"
 msgstr "Lägg till avgränsare"
 
-#: ../data/messages:849
+#: ../data/messages:847
 msgid ""
 "activate the “clock” applet; clicking on it will display a calendar, "
 "clicking again will hide it."
 msgstr ""
 
-#: ../data/messages:851
+#: ../data/messages:849
 msgid "How can I have the notification area (also called systray) ?"
 msgstr ""
 
-#: ../data/messages:853
+#: ../data/messages:851
 msgid ""
 "activate the “systray” applet. For the moment it can’t be displayed directly "
 "into the dock,\n"
@@ -2647,53 +2633,53 @@ msgid ""
 "of your screen, and keep it above other windows."
 msgstr ""
 
-#: ../data/messages:855
+#: ../data/messages:853
 msgid ""
 "How can I have an easy-to-access terminal with real transparence, like "
 "Tilda ?"
 msgstr ""
 
-#: ../data/messages:857
+#: ../data/messages:855
 msgid ""
 "Hint : clicking next to the last tab will create a new tab. Double-clicking "
 "on a tab allows you to rename it. You can even change the color of a tab !"
 msgstr ""
 
-#: ../data/messages:859
+#: ../data/messages:857
 msgid ""
 "activate the “terminal” applet. You can detach it and place it on the Widget "
 "Layer for instance, or setup a shorkey to make it pop-up instantly."
 msgstr ""
 
-#: ../data/messages:861
+#: ../data/messages:859
 msgid "So then, how can I remove completely the gnome-panel ?"
 msgstr ""
 
-#: ../data/messages:863
+#: ../data/messages:861
 msgid ""
 "Open gconf-editor, edit the key /desktop/gnome/session/"
 "required_components_list, and erase its content (\"panel\").\n"
 "Restart your session : the gnome-panel has not been started."
 msgstr ""
 
-#: ../data/messages:865
+#: ../data/messages:863
 #, fuzzy
 msgid "Other applets"
 msgstr "Andra aktiviteter"
 
-#: ../data/messages:867
+#: ../data/messages:865
 #, fuzzy
 msgid "How can I have a same applet many times ?"
 msgstr "Lägg till avgränsare"
 
-#: ../data/messages:869
+#: ../data/messages:867
 msgid ""
 "Hint : This allows you, for example, to have the time of different countries "
 "in your dock, or to have many animated caracters in your dock, or the "
 "weather of different cities."
 msgstr ""
 
-#: ../data/messages:871
+#: ../data/messages:869
 msgid ""
 "Some applets can run several times at the same time : Clock, Cairo-Penguin, "
 "Weather, Netspeed, …\n"
@@ -2702,64 +2688,64 @@ msgid ""
 "You can configure this new one like any other applet."
 msgstr ""
 
-#: ../data/messages:873
+#: ../data/messages:871
 msgid ""
 "I have a personal gauge that I want to use in the dock (for cpusage or "
 "others)"
 msgstr ""
 
-#: ../data/messages:875
+#: ../data/messages:873
 msgid ""
 "move the folder containing your gauge in ~/.config/cairo-dock/extras/gauges, "
 "you’re done !"
 msgstr ""
 
-#: ../data/messages:877
+#: ../data/messages:875
 msgid ""
 "I have a personal Cairo-Clock theme that I want to use in the “clock” applet."
 msgstr ""
 
-#: ../data/messages:879
+#: ../data/messages:877
 msgid ""
 "Hint : the same goes on for all the applets that propose a theme : dustbin, "
 "Cairo-Penguin, weather, etc."
 msgstr ""
 
-#: ../data/messages:881
+#: ../data/messages:879
 msgid ""
 "move the folder containing your theme in ~/.config/cairo-dock/extras/clock, "
 "you’re done !"
 msgstr ""
 
-#: ../data/messages:883
+#: ../data/messages:881
 msgid "How can I change quickly the luminosity of my screen ?"
 msgstr ""
 
-#: ../data/messages:885
+#: ../data/messages:883
 msgid ""
 "Activate the Xgamma applet, then you can scroll up/down on the icon with the "
 "mouse."
 msgstr ""
 
-#: ../data/messages:887
+#: ../data/messages:885
 msgid "How can I change quickly the speakers volume ?"
 msgstr ""
 
-#: ../data/messages:889
+#: ../data/messages:887
 msgid ""
 "Activate the AlsaMixer applet, then you can scroll up/down on the icon with "
 "the mouse."
 msgstr ""
 
-#: ../data/messages:891
+#: ../data/messages:889
 msgid "Troubleshooting"
 msgstr ""
 
-#: ../data/messages:893
+#: ../data/messages:891
 msgid "I have a black background around my dock"
 msgstr ""
 
-#: ../data/messages:895
+#: ../data/messages:893
 msgid ""
 "You have to turn on the compositing. For instance, you can run Compiz or "
 "xcompmgr. \n"
@@ -2767,26 +2753,26 @@ msgid ""
 "window manager’s options."
 msgstr ""
 
-#: ../data/messages:897
+#: ../data/messages:895
 msgid "My machine is too old to run a composite manager"
 msgstr ""
 
-#: ../data/messages:899
+#: ../data/messages:897
 msgid ""
 "Don’t panic, Cairo-Dock can emulate the transparency.\n"
 "So to get rid of the black background, just activate the corresponding "
 "option, in the end of the “System” module"
 msgstr ""
 
-#: ../data/messages:901
+#: ../data/messages:899
 msgid "The dock is horribly slow when I move the mouse into it"
 msgstr ""
 
-#: ../data/messages:903
+#: ../data/messages:901
 msgid "Hint : "
 msgstr ""
 
-#: ../data/messages:905
+#: ../data/messages:903
 msgid ""
 "If you have a GeForce8, you have to install the latest drivers, because the "
 "first ones were really buggy.\n"
@@ -2796,34 +2782,34 @@ msgid ""
 "dock with “cairo-dock –c”."
 msgstr ""
 
-#: ../data/messages:907
+#: ../data/messages:905
 msgid "I don’t have these wonderful effects like fire, cube rotating, etc"
 msgstr ""
 
-#: ../data/messages:909
+#: ../data/messages:907
 msgid ""
 "Hint : You can force the openGL by launching the dock with “cairo-dock –o”."
 "but you might get a lot of visual artifacts."
 msgstr ""
 
-#: ../data/messages:911
+#: ../data/messages:909
 msgid ""
 "You need a graphic card with drivers that support openGL2.0. Most of Nvidia "
 "cards can do that, more and more Intel cards can do too. Most of ATI cards "
 "can’t do that."
 msgstr ""
 
-#: ../data/messages:913
+#: ../data/messages:911
 msgid "The “netspeed” applet displays 0 even when I’m downloading something"
 msgstr ""
 
-#: ../data/messages:915
+#: ../data/messages:913
 msgid ""
 "Hint : you can instantiate this applet many times if you want to monitor "
 "many interfaces."
 msgstr ""
 
-#: ../data/messages:917
+#: ../data/messages:915
 msgid ""
 "You have to tell it which interface you’re using to connect to the Net (by "
 "default, it’s “eth0”).\n"
@@ -2832,11 +2818,11 @@ msgid ""
 "probably something like “eth1”, “ath0”, or “wifi0”."
 msgstr ""
 
-#: ../data/messages:919
+#: ../data/messages:917
 msgid "The dustbin remains empty even when I delete a file"
 msgstr ""
 
-#: ../data/messages:921
+#: ../data/messages:919
 msgid ""
 "if you’re under KDE, you may have to tell it the path of the trash folder.\n"
 "Just edit the applet’s configuration, and fill in the Trash path; it is "
@@ -2844,11 +2830,11 @@ msgid ""
 "here !!! (do not insert spaces or some invisible caracters)."
 msgstr ""
 
-#: ../data/messages:923
+#: ../data/messages:921
 msgid "Help us !"
 msgstr ""
 
-#: ../data/messages:925
+#: ../data/messages:923
 msgid ""
 "We value your help ! If you see a bug, or if you think something could be "
 "improved,\n"
@@ -2864,11 +2850,11 @@ msgstr ""
 # #################################
 # ########### launcher.conf #############
 # #################################
-#: ../data/messages:929
+#: ../data/messages:927
 msgid "Launcher's name :"
 msgstr "Etikett:"
 
-#: ../data/messages:931
+#: ../data/messages:929
 msgid ""
 "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard "
 "shortcut, for exemple <Alt>F1 for the Applications Menu, <Ctrl>c or <Ctrl>v "
@@ -2878,18 +2864,18 @@ msgstr ""
 "tangentkombinationer som <Alt>F1 för Programmenyn, <Ctrl>c eller <Ctrl>v för "
 "att kopiera, klistra in etc"
 
-#: ../data/messages:933
+#: ../data/messages:931
 msgid "Command to launch on click :"
 msgstr "Kommando som ska köras:"
 
-#: ../data/messages:937
+#: ../data/messages:935
 msgid ""
 "If you write here a container's name that doesn't exist yet, a new one will "
 "be created, with this icon inside."
 msgstr ""
 "Om du anger ett namn på en behållare som inte finns, skapas den automatiskt."
 
-#: ../data/messages:945
+#: ../data/messages:943
 msgid ""
 "Use this option for exemple if the launcher launches a script in a terminal "
 "but you don't want it to steal normal terminal's icons from the TaskBar, or "
@@ -2902,11 +2888,11 @@ msgstr ""
 "i aktivitetsfältet innehåller speciell information som du vill använda dig "
 "av (t ex så visar Pidgin status genom att byta ikonen i aktivitetsfältet)."
 
-#: ../data/messages:947
+#: ../data/messages:945
 msgid "Prevent this launcher from stealing appli from taskbar ?"
 msgstr "Hindra startaren att stjäla program från aktivitetsfältet?"
 
-#: ../data/messages:949
+#: ../data/messages:947
 msgid ""
 "The only reason you may want to modify this parameter is if you made this "
 "launcher by hands. If you dropped it into the dock from the menu, it is "
@@ -2918,15 +2904,15 @@ msgstr ""
 "ändra detta. Klassnamnet används för att länka ihop startaren med sitt "
 "program."
 
-#: ../data/messages:951
+#: ../data/messages:949
 msgid "Class of the program :"
 msgstr "Programklass:"
 
-#: ../data/messages:953
+#: ../data/messages:951
 msgid "Run in a terminal ?"
 msgstr ""
 
-#: ../data/messages:985
+#: ../data/messages:983
 msgid ""
 "The dock will automatically hide itself outside of the scren when the mouse "
 "leaves it and will show a callback zone instead. Place the mouse into this "
@@ -2938,19 +2924,19 @@ msgstr ""
 # #################################
 # ########### themes.conf #############
 # #################################
-#: ../data/messages:999
+#: ../data/messages:997
 msgid "Themes"
 msgstr "Teman"
 
-#: ../data/messages:1001
+#: ../data/messages:999
 msgid "Choose a theme"
 msgstr "Välj ett tema"
 
-#: ../data/messages:1003
+#: ../data/messages:1001
 msgid "List of themes :"
 msgstr "Teman:"
 
-#: ../data/messages:1005
+#: ../data/messages:1003
 msgid ""
 "Otherwise the current behaviour will be kept. It's all about the dock's "
 "position, behaviour parameters such as auto-hide, using taskbar or not, etc."
@@ -2958,11 +2944,11 @@ msgstr ""
 "Markera för att ersätta alla aktuella beteenden med temats inbyggda. "
 "Avmarkera för att behålla aktuella beteenden."
 
-#: ../data/messages:1007
+#: ../data/messages:1005
 msgid "Use the new theme's behaviour ?"
 msgstr "Använd temats beteenden?"
 
-#: ../data/messages:1009
+#: ../data/messages:1007
 msgid ""
 "So if you check this box, your launchers will be deleted and replaced by the "
 "ones provided in the new theme. Otherwise the current launchers will be "
@@ -2971,54 +2957,54 @@ msgstr ""
 "Markera för att ersätta alla aktuella startare med temats inbyggda. "
 "Avmarkera för att endast ersätta ikonerna."
 
-#: ../data/messages:1011
+#: ../data/messages:1009
 msgid "Use the new theme's launchers ?"
 msgstr "Använd temats startare?"
 
-#: ../data/messages:1013
+#: ../data/messages:1011
 #, fuzzy
 msgid "Save"
 msgstr "Spara"
 
-#: ../data/messages:1015
+#: ../data/messages:1013
 msgid "Save current theme"
 msgstr "Spara aktuellt tema"
 
-#: ../data/messages:1017
+#: ../data/messages:1015
 msgid "You will then be able to re-open it at any time."
 msgstr "Du kan sedan öppna dem igen när som helst."
 
-#: ../data/messages:1019
+#: ../data/messages:1017
 msgid "Save as :"
 msgstr "Spara som:"
 
-#: ../data/messages:1021
+#: ../data/messages:1019
 msgid "Save current behaviour too ?"
 msgstr "Spara beteenden också?"
 
-#: ../data/messages:1023
+#: ../data/messages:1021
 msgid "Save current launchers too ?"
 msgstr "Spara startare också?"
 
-#: ../data/messages:1025
+#: ../data/messages:1023
 msgid "Delete"
 msgstr "Radera"
 
-#: ../data/messages:1027
+#: ../data/messages:1025
 msgid "List of your personnal themes"
 msgstr "Egna teman"
 
-#: ../data/messages:1029
+#: ../data/messages:1027
 #, fuzzy
 msgid "Delete from the list themes you don't want anymore :"
 msgstr "Avmarkera teman du *inte* vill behålla:"
 
-#: ../data/messages:1031
+#: ../data/messages:1029
 msgid "pouet"
 msgstr "pouet"
 
-#: ../data/messages:1033 ../data/messages:1035 ../data/messages:1037
-#: ../data/messages:1039
+#: ../data/messages:1031 ../data/messages:1033 ../data/messages:1035
+#: ../data/messages:1037
 msgid ""
 "v1.4.6.3 :\n"
 "Just to say :\n"
@@ -3033,7 +3019,7 @@ msgstr ""
 # #################################
 # ########### ChangeLog #############
 # #################################
-#: ../data/messages:1041
+#: ../data/messages:1039
 msgid ""
 "v1.5.0 : it's been 1 month since previous release, and we worked hardly to "
 "bring you :\n"
@@ -3068,226 +3054,226 @@ msgstr ""
 "etc\n"
 " - And cherry on the cake, a new theme (I, Cairo) !\n"
 "  Now, why not try to make an applet for Cairo-Dock ? ;-)"
+
+#: ../data/messages:1041
+msgid ""
+"v1.5.1 :\n"
+" - The 1.5 branch is still young, so this version brings a lot of bug fixes\n"
+" - Cairo-Dock is now translated in Japanese, thanks to Jiro Kawada for his "
+"work !\n"
+" - A new view has appeared : Rainbow\n"
+" - Cairo-Dock has become a desklet manager !\n"
+"  most of applets can now detached themselves from the dock\n"
+" and behave as real desklets."
+msgstr ""
+"v1.5.1 :\n"
+" - The 1.5 branch is still young, so this version brings a lot of bug fixes\n"
+" - Cairo-Dock is now translated in Japanese, thanks to Jiro Kawada for his "
+"work !\n"
+" - A new view has appeared : Rainbow\n"
+" - Cairo-Dock has become a desklet manager !\n"
+"  most of applets can now detached themselves from the dock\n"
+" and behave as real desklets."
 
 #: ../data/messages:1043
 msgid ""
-"v1.5.1 :\n"
-" - The 1.5 branch is still young, so this version brings a lot of bug fixes\n"
-" - Cairo-Dock is now translated in Japanese, thanks to Jiro Kawada for his "
-"work !\n"
-" - A new view has appeared : Rainbow\n"
-" - Cairo-Dock has become a desklet manager !\n"
-"  most of applets can now detached themselves from the dock\n"
-" and behave as real desklets."
+"v1.5.2.1 :\n"
+" - a lot of bug fixes, especially on desklets.\n"
+" - New applet : weather !\n"
+" - Cairo-Dock is now fully translated in Japanese, thanks to Jiro Kawada !"
 msgstr ""
-"v1.5.1 :\n"
-" - The 1.5 branch is still young, so this version brings a lot of bug fixes\n"
-" - Cairo-Dock is now translated in Japanese, thanks to Jiro Kawada for his "
-"work !\n"
-" - A new view has appeared : Rainbow\n"
-" - Cairo-Dock has become a desklet manager !\n"
-"  most of applets can now detached themselves from the dock\n"
-" and behave as real desklets."
+"v1.5.2.1 :\n"
+" - a lot of bug fixes, especially on desklets.\n"
+" - New applet : weather !\n"
+" - Cairo-Dock is now fully translated in Japanese, thanks to Jiro Kawada !"
 
 #: ../data/messages:1045
 msgid ""
-"v1.5.2.1 :\n"
-" - a lot of bug fixes, especially on desklets.\n"
-" - New applet : weather !\n"
-" - Cairo-Dock is now fully translated in Japanese, thanks to Jiro Kawada !"
+"v1.5.3.2 :\n"
+" - Themes have been deeply reviewed\n"
+" to switch from one to another completely.\n"
+" - New applet : alsaMixer !\n"
+" - Desklets improvment with the 'showDesklets' applet.\n"
+" - The 'Shortcuts' applet can now detached itself from the dock.\n"
+" - The dock can now behave like a menu 'on-the-mouse'\n"
+" - Updates in translations and the usual bug fixes. ^_^\n"
+"  By the way, we are still searching someone\n"
+"  who could help cairo-dock to be well-integrated into KDE ;-)"
 msgstr ""
-"v1.5.2.1 :\n"
-" - a lot of bug fixes, especially on desklets.\n"
-" - New applet : weather !\n"
-" - Cairo-Dock is now fully translated in Japanese, thanks to Jiro Kawada !"
+"v1.5.3.2 :\n"
+" - Themes have been deeply reviewed\n"
+" to switch from one to another completely.\n"
+" - New applet : alsaMixer !\n"
+" - Desklets improvment with the 'showDesklets' applet.\n"
+" - The 'Shortcuts' applet can now detached itself from the dock.\n"
+" - The dock can now behave like a menu 'on-the-mouse'\n"
+" - Updates in translations and the usual bug fixes. ^_^\n"
+"  By the way, we are still searching someone\n"
+"  who could help cairo-dock to be well-integrated into KDE ;-)"
 
 #: ../data/messages:1047
 msgid ""
-"v1.5.3.2 :\n"
-" - Themes have been deeply reviewed\n"
-" to switch from one to another completely.\n"
-" - New applet : alsaMixer !\n"
-" - Desklets improvment with the 'showDesklets' applet.\n"
-" - The 'Shortcuts' applet can now detached itself from the dock.\n"
-" - The dock can now behave like a menu 'on-the-mouse'\n"
-" - Updates in translations and the usual bug fixes. ^_^\n"
-"  By the way, we are still searching someone\n"
-"  who could help cairo-dock to be well-integrated into KDE ;-)"
+"v1.5.4.2 : a huge release !\n"
+" - add a cute pinguin in your dock with the new applet Cairo-Penguin\n"
+" - monitor your wifi connection with the Wifi applet\n"
+" - control xmms, audacious, banshee and exaile with the Xmms applet\n"
+" - Cairo-Dock is now fully integrated into XFCE environment !\n"
+" - better detection of battery in the Powermanager applet\n"
+" - lot of improvments in the Terminal applet.\n"
+" - the dock can auto-resize when it grows too large\n"
+" - refresh your dock with the new theme : Wood\n"
+" - 3 more themes in Weather"
 msgstr ""
-"v1.5.3.2 :\n"
-" - Themes have been deeply reviewed\n"
-" to switch from one to another completely.\n"
-" - New applet : alsaMixer !\n"
-" - Desklets improvment with the 'showDesklets' applet.\n"
-" - The 'Shortcuts' applet can now detached itself from the dock.\n"
-" - The dock can now behave like a menu 'on-the-mouse'\n"
-" - Updates in translations and the usual bug fixes. ^_^\n"
-"  By the way, we are still searching someone\n"
-"  who could help cairo-dock to be well-integrated into KDE ;-)"
+"v1.5.4.2 : a huge release !\n"
+" - add a cute pinguin in your dock with the new applet Cairo-Penguin\n"
+" - monitor your wifi connection with the Wifi applet\n"
+" - control xmms, audacious, banshee and exaile with the Xmms applet\n"
+" - Cairo-Dock is now fully integrated into XFCE environment !\n"
+" - better detection of battery in the Powermanager applet\n"
+" - lot of improvments in the Terminal applet.\n"
+" - the dock can auto-resize when it grows too large\n"
+" - refresh your dock with the new theme : Wood\n"
+" - 3 more themes in Weather"
 
 #: ../data/messages:1049
 msgid ""
-"v1.5.4.2 : a huge release !\n"
-" - add a cute pinguin in your dock with the new applet Cairo-Penguin\n"
-" - monitor your wifi connection with the Wifi applet\n"
-" - control xmms, audacious, banshee and exaile with the Xmms applet\n"
-" - Cairo-Dock is now fully integrated into XFCE environment !\n"
-" - better detection of battery in the Powermanager applet\n"
-" - lot of improvments in the Terminal applet.\n"
-" - the dock can auto-resize when it grows too large\n"
-" - refresh your dock with the new theme : Wood\n"
-" - 3 more themes in Weather"
+"v1.5.5.4 :\n"
+" - Huge enhancements in the TaskBar :\n"
+"  launchers and applets can now behave as applications.\n"
+"  windows can show up during drag and drop if mouse stay on them\n"
+" - hiqh quality launchers' icons can be used instead of X ones\n"
+" - Quickly manage Compiz with the 'Compiz-Icon' applet\n"
+" - Control Cairo-Dock from an external program thanks to the Dbus plug-in.\n"
+" - Added a 'ShowDesktop' applet for convenience.\n"
+" - Some fix in PowerManager (now ok !)\n"
+" - The ability to have many docks for a single instance of Cairo-Dock.\n"
+" - Cairo-Dock is not yet well integrated into Gnome 2.22, but it will come "
+"soon ;-)"
 msgstr ""
-"v1.5.4.2 : a huge release !\n"
-" - add a cute pinguin in your dock with the new applet Cairo-Penguin\n"
-" - monitor your wifi connection with the Wifi applet\n"
-" - control xmms, audacious, banshee and exaile with the Xmms applet\n"
-" - Cairo-Dock is now fully integrated into XFCE environment !\n"
-" - better detection of battery in the Powermanager applet\n"
-" - lot of improvments in the Terminal applet.\n"
-" - the dock can auto-resize when it grows too large\n"
-" - refresh your dock with the new theme : Wood\n"
-" - 3 more themes in Weather"
+"v1.5.5.4 :\n"
+" - Huge enhancements in the TaskBar :\n"
+"  launchers and applets can now behave as applications.\n"
+"  windows can show up during drag and drop if mouse stay on them\n"
+" - hiqh quality launchers' icons can be used instead of X ones\n"
+" - Quickly manage Compiz with the 'Compiz-Icon' applet\n"
+" - Control Cairo-Dock from an external program thanks to the Dbus plug-in.\n"
+" - Added a 'ShowDesktop' applet for convenience.\n"
+" - Some fix in PowerManager (now ok !)\n"
+" - The ability to have many docks for a single instance of Cairo-Dock.\n"
+" - Cairo-Dock is not yet well integrated into Gnome 2.22, but it will come "
+"soon ;-)"
 
 #: ../data/messages:1051
 msgid ""
-"v1.5.5.4 :\n"
-" - Huge enhancements in the TaskBar :\n"
-"  launchers and applets can now behave as applications.\n"
-"  windows can show up during drag and drop if mouse stay on them\n"
-" - hiqh quality launchers' icons can be used instead of X ones\n"
-" - Quickly manage Compiz with the 'Compiz-Icon' applet\n"
-" - Control Cairo-Dock from an external program thanks to the Dbus plug-in.\n"
-" - Added a 'ShowDesktop' applet for convenience.\n"
-" - Some fix in PowerManager (now ok !)\n"
-" - The ability to have many docks for a single instance of Cairo-Dock.\n"
-" - Cairo-Dock is not yet well integrated into Gnome 2.22, but it will come "
-"soon ;-)"
+"v1.5.6 :\n"
+" - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still "
+"experimental\n"
+" - You can now have many docks in 1 instance of Cairo-Dock.\n"
+" Just place a launcher or an applet in a dock, giving this dock a name that "
+"doesn't exist yet\n"
+" a new one will be created.\n"
+" - SHIFT+mouse wheel on AlsaMixer, Xmms, Rhythmbox, etc.\n"
+" - Launchers can now launch keyboard shortcuts.\n"
+" - The dock can now auto-hide itself when a window is maximized.\n"
+" - Improvment in drag and drop with animated indicator.\n"
+" - Physical separator in 3D-plane view.\n"
+" - Bug fixes in XGamma/Weather.\n"
+" - Any help would be welcome to integrate the dock into KDE !"
 msgstr ""
-"v1.5.5.4 :\n"
-" - Huge enhancements in the TaskBar :\n"
-"  launchers and applets can now behave as applications.\n"
-"  windows can show up during drag and drop if mouse stay on them\n"
-" - hiqh quality launchers' icons can be used instead of X ones\n"
-" - Quickly manage Compiz with the 'Compiz-Icon' applet\n"
-" - Control Cairo-Dock from an external program thanks to the Dbus plug-in.\n"
-" - Added a 'ShowDesktop' applet for convenience.\n"
-" - Some fix in PowerManager (now ok !)\n"
-" - The ability to have many docks for a single instance of Cairo-Dock.\n"
-" - Cairo-Dock is not yet well integrated into Gnome 2.22, but it will come "
-"soon ;-)"
+"v1.5.6 :\n"
+" - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still "
+"experimental\n"
+" - You can now have many docks in 1 instance of Cairo-Dock.\n"
+" Just place a launcher or an applet in a dock, giving this dock a name that "
+"doesn't exist yet\n"
+" a new one will be created.\n"
+" - SHIFT+mouse wheel on AlsaMixer, Xmms, Rhythmbox, etc.\n"
+" - Launchers can now launch keyboard shortcuts.\n"
+" - The dock can now auto-hide itself when a window is maximized.\n"
+" - Improvment in drag and drop with animated indicator.\n"
+" - Physical separator in 3D-plane view.\n"
+" - Bug fixes in XGamma/Weather.\n"
+" - Any help would be welcome to integrate the dock into KDE !"
 
 #: ../data/messages:1053
 msgid ""
-"v1.5.6 :\n"
-" - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still "
-"experimental\n"
-" - You can now have many docks in 1 instance of Cairo-Dock.\n"
-" Just place a launcher or an applet in a dock, giving this dock a name that "
-"doesn't exist yet\n"
-" a new one will be created.\n"
-" - SHIFT+mouse wheel on AlsaMixer, Xmms, Rhythmbox, etc.\n"
-" - Launchers can now launch keyboard shortcuts.\n"
-" - The dock can now auto-hide itself when a window is maximized.\n"
-" - Improvment in drag and drop with animated indicator.\n"
-" - Physical separator in 3D-plane view.\n"
-" - Bug fixes in XGamma/Weather.\n"
-" - Any help would be welcome to integrate the dock into KDE !"
+"v1.6.0 :\n"
+" - A new view has appeared : Diapositive !\n"
+" - A huge stock of new applets :\n"
+"   cpusage\n"
+"   ram-meter\n"
+"   netspeed\n"
+"   tomboy\n"
+"   nVidia\n"
+" - 2 new themes : Neon & Clear\n"
+" - A new cute character for Cairo-Penguin : Wanda the Cairo-Fish ^_^\n"
+" - Cairo-Dock can now run without composite manager, with fake "
+"transparency.\n"
+" - The dock can now stay below windows and be popped up on demand.\n"
+" - Auto-reload on crash.\n"
+" - Real window thumbnail when minimized."
 msgstr ""
-"v1.5.6 :\n"
-" - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still "
-"experimental\n"
-" - You can now have many docks in 1 instance of Cairo-Dock.\n"
-" Just place a launcher or an applet in a dock, giving this dock a name that "
-"doesn't exist yet\n"
-" a new one will be created.\n"
-" - SHIFT+mouse wheel on AlsaMixer, Xmms, Rhythmbox, etc.\n"
-" - Launchers can now launch keyboard shortcuts.\n"
-" - The dock can now auto-hide itself when a window is maximized.\n"
-" - Improvment in drag and drop with animated indicator.\n"
-" - Physical separator in 3D-plane view.\n"
-" - Bug fixes in XGamma/Weather.\n"
-" - Any help would be welcome to integrate the dock into KDE !"
+"v1.6.0 :\n"
+" - A new view has appeared : Diapositive !\n"
+" - A huge stock of new applets :\n"
+"   cpusage\n"
+"   ram-meter\n"
+"   netspeed\n"
+"   tomboy\n"
+"   nVidia\n"
+" - 2 new themes : Neon & Clear\n"
+" - A new cute character for Cairo-Penguin : Wanda the Cairo-Fish ^_^\n"
+" - Cairo-Dock can now run without composite manager, with fake "
+"transparency.\n"
+" - The dock can now stay below windows and be popped up on demand.\n"
+" - Auto-reload on crash.\n"
+" - Real window thumbnail when minimized."
 
 #: ../data/messages:1055
 msgid ""
-"v1.6.0 :\n"
-" - A new view has appeared : Diapositive !\n"
-" - A huge stock of new applets :\n"
-"   cpusage\n"
-"   ram-meter\n"
-"   netspeed\n"
-"   tomboy\n"
-"   nVidia\n"
-" - 2 new themes : Neon & Clear\n"
-" - A new cute character for Cairo-Penguin : Wanda the Cairo-Fish ^_^\n"
-" - Cairo-Dock can now run without composite manager, with fake "
-"transparency.\n"
-" - The dock can now stay below windows and be popped up on demand.\n"
-" - Auto-reload on crash.\n"
-" - Real window thumbnail when minimized."
+"v1.6.1 :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
+"you :\n"
+" - Once again a new view : Curve !\n"
+" - A long time waited applet : the desktop Switcher.\n"
+" - A very complete theme : Brit\n"
+" - Translation in italian and chinese.\n"
+" - And we are still hoping someone would help us writing a kde-integration "
+"plug-in ^_^"
 msgstr ""
-"v1.6.0 :\n"
-" - A new view has appeared : Diapositive !\n"
-" - A huge stock of new applets :\n"
-"   cpusage\n"
-"   ram-meter\n"
-"   netspeed\n"
-"   tomboy\n"
-"   nVidia\n"
-" - 2 new themes : Neon & Clear\n"
-" - A new cute character for Cairo-Penguin : Wanda the Cairo-Fish ^_^\n"
-" - Cairo-Dock can now run without composite manager, with fake "
-"transparency.\n"
-" - The dock can now stay below windows and be popped up on demand.\n"
-" - Auto-reload on crash.\n"
-" - Real window thumbnail when minimized."
+"v1.6.1 :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
+"you :\n"
+" - Once again a new view : Curve !\n"
+" - A long time waited applet : the desktop Switcher.\n"
+" - A very complete theme : Brit\n"
+" - Translation in italian and chinese.\n"
+" - And we are still hoping someone would help us writing a kde-integration "
+"plug-in ^_^"
 
 #: ../data/messages:1057
 msgid ""
-"v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
-" - Once again a new view : Curve !\n"
-" - A long time waited applet : the desktop Switcher.\n"
-" - A very complete theme : Brit\n"
-" - Translation in italian and chinese.\n"
-" - And we are still hoping someone would help us writing a kde-integration "
+"v1.6.2 : the first version integrated in the Ubuntu repositories !\n"
+" - 2 new applets have been released :\n"
+"  Slider and Stack. Enjoy !\n"
+" - Applets can now be launched many times\n"
+" (Clock, Cairo-Penguin, Slider, Stack), each with a different config.\n"
+" - Cairo-Dock is now able to load themes on its own server,\n"
+" so feel free to send us all your themes, we can distribute them ! :-)\n"
+" - And we are still searching someone motivated to write a kde-integration "
 "plug-in ^_^"
 msgstr ""
-"v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
-" - Once again a new view : Curve !\n"
-" - A long time waited applet : the desktop Switcher.\n"
-" - A very complete theme : Brit\n"
-" - Translation in italian and chinese.\n"
-" - And we are still hoping someone would help us writing a kde-integration "
+"v1.6.2 : the first version integrated in the Ubuntu repositories !\n"
+" - 2 new applets have been released :\n"
+"  Slider and Stack. Enjoy !\n"
+" - Applets can now be launched many times\n"
+" (Clock, Cairo-Penguin, Slider, Stack), each with a different config.\n"
+" - Cairo-Dock is now able to load themes on its own server,\n"
+" so feel free to send us all your themes, we can distribute them ! :-)\n"
+" - And we are still searching someone motivated to write a kde-integration "
 "plug-in ^_^"
 
 #: ../data/messages:1059
-msgid ""
-"v1.6.2 : the first version integrated in the Ubuntu repositories !\n"
-" - 2 new applets have been released :\n"
-"  Slider and Stack. Enjoy !\n"
-" - Applets can now be launched many times\n"
-" (Clock, Cairo-Penguin, Slider, Stack), each with a different config.\n"
-" - Cairo-Dock is now able to load themes on its own server,\n"
-" so feel free to send us all your themes, we can distribute them ! :-)\n"
-" - And we are still searching someone motivated to write a kde-integration "
-"plug-in ^_^"
-msgstr ""
-"v1.6.2 : the first version integrated in the Ubuntu repositories !\n"
-" - 2 new applets have been released :\n"
-"  Slider and Stack. Enjoy !\n"
-" - Applets can now be launched many times\n"
-" (Clock, Cairo-Penguin, Slider, Stack), each with a different config.\n"
-" - Cairo-Dock is now able to load themes on its own server,\n"
-" so feel free to send us all your themes, we can distribute them ! :-)\n"
-" - And we are still searching someone motivated to write a kde-integration "
-"plug-in ^_^"
-
-#: ../data/messages:1061
 msgid ""
 "v1.6.3 : \n"
 " - first the bad news :\n"
@@ -3305,7 +3291,7 @@ msgid ""
 " - The dock is now translated in Sweden and partially in Greek."
 msgstr ""
 
-#: ../data/messages:1063
+#: ../data/messages:1061
 msgid ""
 "Cairo-Dock II\n"
 " - Cairo-Dock is now a full OpenGL dock ! (the cairo backend is still "
@@ -3317,6 +3303,18 @@ msgid ""
 " - New applets : mail, keyboard indicator, quick folder.\n"
 " - Lot of bug fixes and upgrades in all plug-ins."
 msgstr ""
+
+#~ msgid "mounted"
+#~ msgstr "monterad"
+
+#~ msgid "unmounted"
+#~ msgstr "avmonterad"
+
+#~ msgid "mount"
+#~ msgstr "montera"
+
+#~ msgid "unmount"
+#~ msgstr "avmontera"
 
 #~ msgid "Number of steps for icons' resizing (grow up/shrink down) :"
 #~ msgstr "Antal steg i storleksändring (väx upp, krymp ner):"

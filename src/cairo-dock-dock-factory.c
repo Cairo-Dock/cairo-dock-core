@@ -586,6 +586,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 				Icon *pSeparatorIcon = cairo_dock_create_separator_icon (pSourceContext, iSeparatorType, pDock, bApplyRatio);
 				if (pSeparatorIcon != NULL)
 				{
+					pSeparatorIcon->cParentDockName = g_strdup (pNextIcon->cParentDockName);
 					pDock->icons = g_list_insert_sorted (pDock->icons,
 						pSeparatorIcon,
 						(GCompareFunc) cairo_dock_compare_icons_order);
@@ -607,6 +608,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 				Icon *pSeparatorIcon = cairo_dock_create_separator_icon (pSourceContext, iSeparatorType, pDock, bApplyRatio);
 				if (pSeparatorIcon != NULL)
 				{
+					pSeparatorIcon->cParentDockName = g_strdup (pPrevIcon->cParentDockName);
 					pDock->icons = g_list_insert_sorted (pDock->icons,
 						pSeparatorIcon,
 						(GCompareFunc) cairo_dock_compare_icons_order);
@@ -784,6 +786,7 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 					cairo_destroy (pCairoContext);
 
 					cairo_dock_insert_icon_in_dock (pSeparator, pDock, !CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, ! CAIRO_DOCK_INSERT_SEPARATOR);
+					pSeparator->cParentDockName = g_strdup (next_icon->cParentDockName);
 				}
 			}
 		}
