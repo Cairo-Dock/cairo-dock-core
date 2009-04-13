@@ -100,5 +100,8 @@ void cairo_dock_stop_marking_icons (CairoDock *pDock);
 void cairo_dock_scroll_dock_icons (CairoDock *pDock, int iScrollAmount);
 
 
+GList *cairo_dock_get_first_drawn_element_linear (GList *icons);
+
+
 G_END_DECLS
 #endif

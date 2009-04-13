@@ -1,3 +1,4 @@
+
 /*********************************************************************************
 
 This file is a part of the cairo-dock program,
@@ -1002,7 +1003,7 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	g_print ("on a appuye sur une touche\n");
 	if (pKey->type == GDK_KEY_PRESS)
 	{
-		cairo_dock_notify (CAIRO_DOCK_KEY_PRESSED, pDock, pKey->keyval, pKey->state);
+		cairo_dock_notify (CAIRO_DOCK_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string);
 	}
 	else if (pKey->type == GDK_KEY_RELEASE)
 	{

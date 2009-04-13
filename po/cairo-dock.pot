@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
-"POT-Creation-Date: 2009-04-11 16:50+0200\n"
+"POT-Creation-Date: 2009-04-13 03:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/cairo-dock-callbacks.c:1085
+#: ../src/cairo-dock-callbacks.c:1086
 msgid "Do you want to mount this point ?"
 msgstr ""
 
-#: ../src/cairo-dock-callbacks.c:1728
+#: ../src/cairo-dock-callbacks.c:1729
 msgid "Quit Cairo-Dock ?"
 msgstr ""
 

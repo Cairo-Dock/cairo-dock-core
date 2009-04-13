@@ -13,11 +13,11 @@ msgstr ""
 "X-Poedit-Language: French\n"
 "X-Poedit-Country: France\n"
 
-#: ../src/cairo-dock-callbacks.c:1085
+#: ../src/cairo-dock-callbacks.c:1086
 msgid "Do you want to mount this point ?"
 msgstr "Voulez-vous monter ce point ?"
 
-#: ../src/cairo-dock-callbacks.c:1728
+#: ../src/cairo-dock-callbacks.c:1729
 msgid "Quit Cairo-Dock ?"
 msgstr "Quitter Cairo-Dock ?"
 

@@ -14,11 +14,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/cairo-dock-callbacks.c:1085
+#: ../src/cairo-dock-callbacks.c:1086
 msgid "Do you want to mount this point ?"
 msgstr "このポイントにマウントしますか？"
 
-#: ../src/cairo-dock-callbacks.c:1728
+#: ../src/cairo-dock-callbacks.c:1729
 msgid "Quit Cairo-Dock ?"
 msgstr "Cairo-Dock 終了？"
 

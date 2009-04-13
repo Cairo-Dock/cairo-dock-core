@@ -19,11 +19,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/cairo-dock-callbacks.c:1085
+#: ../src/cairo-dock-callbacks.c:1086
 msgid "Do you want to mount this point ?"
 msgstr "Vill du montera denna plats?"
 
-#: ../src/cairo-dock-callbacks.c:1728
+#: ../src/cairo-dock-callbacks.c:1729
 msgid "Quit Cairo-Dock ?"
 msgstr "Avsluta Cairo-Dock?"
 

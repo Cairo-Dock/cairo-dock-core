@@ -325,20 +325,21 @@ void cd_render_opengl_default (CairoDock *pDock)
 	GLfloat fDirection[4] = {.3, .0, -.8, 0.};  // le dernier 0 <=> direction.
 	glLightfv(GL_LIGHT0, GL_POSITION, fDirection);*/
 	
+	pFirstDrawnElement = cairo_dock_get_first_drawn_element_linear (pDock->icons);
+	if (pFirstDrawnElement == NULL)
+		return;
+	
 	glPushMatrix ();
-	if (pFirstDrawnElement != NULL)
+	Icon *icon;
+	GList *ic = pFirstDrawnElement;
+	do
 	{
-		Icon *icon;
-		GList *ic = pFirstDrawnElement;
-		do
-		{
-			icon = ic->data;
-			
-			cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
-			
-			ic = cairo_dock_get_next_element (ic, pDock->icons);
-		} while (ic != pFirstDrawnElement);
-	}
+		icon = ic->data;
+		
+		cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
+		
+		ic = cairo_dock_get_next_element (ic, pDock->icons);
+	} while (ic != pFirstDrawnElement);
 	glPopMatrix ();
 	//glDisable (GL_LIGHTING);
 }

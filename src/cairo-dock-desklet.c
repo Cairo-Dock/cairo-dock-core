@@ -489,10 +489,13 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 {
 	if (pDesklet->pIcon != NULL && pDesklet->pIcon->pModuleInstance != NULL)
+	{
+		gchar *cSize = g_strdup_printf ("%d;%d", pDesklet->iWidth, pDesklet->iHeight);
 		cairo_dock_update_conf_file (pDesklet->pIcon->pModuleInstance->cConfFilePath,
-			G_TYPE_INT, "Desklet", "width", pDesklet->iWidth,
-			G_TYPE_INT, "Desklet", "height", pDesklet->iHeight,
+			G_TYPE_STRING, "Desklet", "size", cSize,
 			G_TYPE_INVALID);
+		g_free (cSize);
+	}
 	pDesklet->iSidWriteSize = 0;
 	pDesklet->iKnownWidth = pDesklet->iWidth;
 	pDesklet->iKnownHeight = pDesklet->iHeight;

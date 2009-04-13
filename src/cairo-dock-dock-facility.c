@@ -882,3 +882,23 @@ void cairo_dock_scroll_dock_icons (CairoDock *pDock, int iScrollAmount)
 		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
 	}
 }
+
+
+GList *cairo_dock_get_first_drawn_element_linear (GList *icons)
+{
+	Icon *icon;
+	GList *ic;
+	GList *pFirstDrawnElement = NULL;
+	for (ic = icons; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		if (icon->bPointed)
+			break ;
+	}
+	
+	if (ic == NULL || ic->next == NULL)  // derniere icone ou aucune pointee.
+		pFirstDrawnElement = icons;
+	else
+		pFirstDrawnElement = ic->next;
+	return pFirstDrawnElement;
+}

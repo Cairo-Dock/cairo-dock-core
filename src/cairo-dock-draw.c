@@ -933,7 +933,8 @@ void cairo_dock_draw_string (cairo_t *pCairoContext, CairoDock *pDock, double fS
 
 void cairo_dock_render_icons_linear (cairo_t *pCairoContext, CairoDock *pDock)
 {
-	GList *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
+	//GList *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
+	GList *pFirstDrawnElement = cairo_dock_get_first_drawn_element_linear (pDock->icons);
 	if (pFirstDrawnElement == NULL)
 		return;
 	
