@@ -51,22 +51,22 @@ msgstr ""
 "APplications,\n"
 "  ou avec l'option -o pour forcer l'OpenGL, et -c pour forcer cairo.)"
 
-#: ../src/cairo-dock-file-manager.c:484 ../src/cairo-dock-file-manager.c:529
+#: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
 #, fuzzy, c-format
 msgid "%s is now mounted"
 msgstr "%s est maintenant %s"
 
-#: ../src/cairo-dock-file-manager.c:484 ../src/cairo-dock-file-manager.c:529
+#: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
 #, fuzzy, c-format
 msgid "%s is now unmounted"
 msgstr "%s est maintenant %s"
 
-#: ../src/cairo-dock-file-manager.c:548
+#: ../src/cairo-dock-file-manager.c:550
 #, fuzzy, c-format
 msgid "failed to mount %s"
 msgstr "échec pour %s %s"
 
-#: ../src/cairo-dock-file-manager.c:548
+#: ../src/cairo-dock-file-manager.c:550
 #, fuzzy, c-format
 msgid "failed to unmount %s"
 msgstr "échec pour %s %s"

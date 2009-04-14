@@ -756,7 +756,7 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 
 		case CAIRO_DOCK_MOUSE_ON_THE_EDGE :
 			///pDock->fDecorationsOffsetX = - pDock->iCurrentWidth / 2;  // on fixe les decorations.
-			if (pDock->iMagnitudeIndex > 0)
+			if (pDock->iMagnitudeIndex > 0 && ! pDock->bIsGrowingUp)
 				cairo_dock_start_shrinking (pDock);
 		break ;
 

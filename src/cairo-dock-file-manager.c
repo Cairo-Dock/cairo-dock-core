@@ -71,6 +71,7 @@ gboolean cairo_dock_fm_get_file_properties (const gchar *cURI, guint64 *iSize, t
 static gpointer _cairo_dock_fm_launch_uri_threaded (gchar *cURI)
 {
 	s_pVFSBackend->launch_uri (cURI);
+	g_free (cURI);
 }
 gboolean cairo_dock_fm_launch_uri (const gchar *cURI)
 {
@@ -78,7 +79,8 @@ gboolean cairo_dock_fm_launch_uri (const gchar *cURI)
 	{
 		//s_pVFSBackend->launch_uri (cURI);
 		GError *erreur = NULL;
-		GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_fm_launch_uri_threaded, (gpointer) cURI, FALSE, &erreur);
+		gchar *cThreadURI = g_strdup (cURI);
+		GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_fm_launch_uri_threaded, (gpointer) cThreadURI, FALSE, &erreur);
 		if (erreur != NULL)
 		{
 			cd_warning (erreur->message);

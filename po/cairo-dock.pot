@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
-"POT-Creation-Date: 2009-04-13 03:28+0200\n"
+"POT-Creation-Date: 2009-04-14 03:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,22 +44,22 @@ msgid ""
 "  or with the -o option to force OpenGL and -c to force cairo.)"
 msgstr ""
 
-#: ../src/cairo-dock-file-manager.c:484 ../src/cairo-dock-file-manager.c:529
+#: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
 #, c-format
 msgid "%s is now mounted"
 msgstr ""
 
-#: ../src/cairo-dock-file-manager.c:484 ../src/cairo-dock-file-manager.c:529
+#: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
 #, c-format
 msgid "%s is now unmounted"
 msgstr ""
 
-#: ../src/cairo-dock-file-manager.c:548
+#: ../src/cairo-dock-file-manager.c:550
 #, c-format
 msgid "failed to mount %s"
 msgstr ""
 
-#: ../src/cairo-dock-file-manager.c:548
+#: ../src/cairo-dock-file-manager.c:550
 #, c-format
 msgid "failed to unmount %s"
 msgstr ""

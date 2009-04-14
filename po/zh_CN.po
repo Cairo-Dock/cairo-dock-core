@@ -40,22 +40,22 @@ msgid ""
 "  or with the -o option to force OpenGL and -c to force cairo.)"
 msgstr ""
 
-#: ../src/cairo-dock-file-manager.c:484 ../src/cairo-dock-file-manager.c:529
+#: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
 #, fuzzy, c-format
 msgid "%s is now mounted"
 msgstr "%s现在是%s"
 
-#: ../src/cairo-dock-file-manager.c:484 ../src/cairo-dock-file-manager.c:529
+#: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
 #, fuzzy, c-format
 msgid "%s is now unmounted"
 msgstr "%s现在是%s"
 
-#: ../src/cairo-dock-file-manager.c:548
+#: ../src/cairo-dock-file-manager.c:550
 #, fuzzy, c-format
 msgid "failed to mount %s"
 msgstr "%s %s 失败"
 
-#: ../src/cairo-dock-file-manager.c:548
+#: ../src/cairo-dock-file-manager.c:550
 #, fuzzy, c-format
 msgid "failed to unmount %s"
 msgstr "%s %s 失败"

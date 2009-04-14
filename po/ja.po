@@ -52,22 +52,22 @@ msgstr ""
 "　OpenGL を強制使用する -o オプション、または Cairo を強制使用する -c オプ"
 "ションを付けて起動します。）"
 
-#: ../src/cairo-dock-file-manager.c:484 ../src/cairo-dock-file-manager.c:529
+#: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
 #, fuzzy, c-format
 msgid "%s is now mounted"
 msgstr "%s は現在 %s"
 
-#: ../src/cairo-dock-file-manager.c:484 ../src/cairo-dock-file-manager.c:529
+#: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
 #, fuzzy, c-format
 msgid "%s is now unmounted"
 msgstr "%s は現在 %s"
 
-#: ../src/cairo-dock-file-manager.c:548
+#: ../src/cairo-dock-file-manager.c:550
 #, fuzzy, c-format
 msgid "failed to mount %s"
 msgstr "%s %s に失敗"
 
-#: ../src/cairo-dock-file-manager.c:548
+#: ../src/cairo-dock-file-manager.c:550
 #, fuzzy, c-format
 msgid "failed to unmount %s"
 msgstr "%s %s に失敗"
