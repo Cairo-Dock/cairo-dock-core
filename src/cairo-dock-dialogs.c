@@ -1390,6 +1390,7 @@ CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, Cairo
 
 CairoDialog *cairo_dock_show_temporary_dialog_with_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, gchar *cIconPath, ...)
 {
+	g_return_val_if_fail (cText != NULL, NULL);
 	va_list args;
 	va_start (args, cIconPath);
 	gchar *cFullText = g_strdup_vprintf (cText, args);
@@ -1401,6 +1402,7 @@ CairoDialog *cairo_dock_show_temporary_dialog_with_icon (const gchar *cText, Ico
 
 CairoDialog *cairo_dock_show_temporary_dialog (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, ...)
 {
+	g_return_val_if_fail (cText != NULL, NULL);
 	va_list args;
 	va_start (args, fTimeLength);
 	gchar *cFullText = g_strdup_vprintf (cText, args);
@@ -1412,6 +1414,7 @@ CairoDialog *cairo_dock_show_temporary_dialog (const gchar *cText, Icon *pIcon, 
 
 CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, ...)
 {
+	g_return_val_if_fail (cText != NULL, NULL);
 	va_list args;
 	va_start (args, fTimeLength);
 	gchar *cFullText = g_strdup_vprintf (cText, args);
@@ -1770,6 +1773,7 @@ void cairo_dock_set_dialog_message (CairoDialog *pDialog, const gchar *cMessage)
 }
 void cairo_dock_set_dialog_message_printf (CairoDialog *pDialog, const gchar *cMessageFormat, ...)
 {
+	g_return_if_fail (cMessageFormat != NULL);
 	va_list args;
 	va_start (args, cMessageFormat);
 	gchar *cMessage = g_strdup_vprintf (cMessageFormat, args);

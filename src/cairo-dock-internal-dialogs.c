@@ -68,8 +68,12 @@ static void reload (CairoConfigDialogs *pPrevDialogs, CairoConfigDialogs *pDialo
 {
 	CairoDock *pDock = g_pMainDock;
 	
-	if (cairo_dock_strings_differ (pPrevDialogs->cButtonOkImage, pDialogs->cButtonOkImage) || cairo_dock_strings_differ (pPrevDialogs->cButtonCancelImage, pDialogs->cButtonCancelImage))
+	if (cairo_dock_strings_differ (pPrevDialogs->cButtonOkImage, pDialogs->cButtonOkImage) ||
+		cairo_dock_strings_differ (pPrevDialogs->cButtonCancelImage, pDialogs->cButtonCancelImage) ||
+		pPrevDialogs->iDialogIconSize != pDialogs->iDialogIconSize)
+	{
 		cairo_dock_load_dialog_buttons (CAIRO_CONTAINER (pDock), pDialogs->cButtonOkImage, pDialogs->cButtonCancelImage);
+	}
 	if (pDialogs->bHomogeneous)
 	{
 		pDialogs->dialogTextDescription.iSize = myLabels.iconTextDescription.iSize;

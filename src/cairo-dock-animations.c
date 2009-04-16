@@ -361,86 +361,13 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 			gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);  // car apres avoir ete enleve du dock elle n'est plus rien.
 			cairo_dock_remove_icon_from_dock (pDock, pIcon);
 			
-			/*if (! g_bEasterEggs)
+			if (pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass))
 			{
-				if (pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass) && pDock->icons == NULL)  // il n'y a plus aucune icone de cette classe.
-				{
-					cd_message ("   le sous-dock de la classe %s n'a plus d'element et va etre detruit", pIcon->cClass);
-					cairo_dock_destroy_dock (pDock, pIcon->cClass, NULL, NULL);
+				gboolean bEmptyClassSubDock = cairo_dock_check_class_subdock_is_empty (pDock, pIcon->cClass);
+				if (bEmptyClassSubDock)
 					return FALSE;
-				}
-				else
-				{
-					cairo_dock_update_dock_size (pDock);
-				}
 			}
-			else*/
-			{
-				if (pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass))
-				{
-					gboolean bEmptyClassSubDock = cairo_dock_check_class_subdock_is_empty (pDock, pIcon->cClass);
-					if (bEmptyClassSubDock)
-						return FALSE;
-					/*if (pDock->icons == NULL)  // ne devrait plus arriver.
-					{
-						cd_warning ("   le sous-dock de la classe %s n'a plus d'element !\nil va etre detruit", pIcon->cClass);
-						CairoDock *pFakeParentDock = NULL;
-						Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
-						cairo_dock_destroy_dock (pDock, pIcon->cClass, NULL, NULL);
-						pFakeClassIcon->pSubDock = NULL;
-						cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
-						cairo_dock_free_icon (pFakeClassIcon);
-						cairo_dock_update_dock_size (pFakeParentDock);
-						return FALSE;
-					}
-					else if (pDock->icons->next == NULL)
-					{
-						g_print ("   le sous-dock de la classe %s n'a plus que 1 element et va etre vide puis detruit\n", pIcon->cClass);
-						Icon *pLastClassIcon = pDock->icons->data;
-						
-						CairoDock *pFakeParentDock = NULL;
-						Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
-						g_return_val_if_fail (pFakeClassIcon != NULL, TRUE);
-						if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (pFakeClassIcon) || CAIRO_DOCK_IS_APPLET (pFakeClassIcon))
-						{
-							cairo_dock_detach_icon_from_dock (pLastClassIcon, pDock, FALSE);
-							g_free (pLastClassIcon->cParentDockName);
-							pLastClassIcon->cParentDockName = NULL;
-							
-							cairo_dock_destroy_dock (pDock, pIcon->cClass, NULL, NULL);
-							pFakeClassIcon->pSubDock = NULL;
-							g_print ("sanity check : pFakeClassIcon->Xid : %d\n", pFakeClassIcon->Xid);
-							cairo_dock_insert_appli_in_dock (pLastClassIcon, g_pMainDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
-						}
-						else  // le sous-dock est donc pointe par un inhibiteur.
-						{
-							g_print ("trouve l'icone en papier (%x;%x)\n", pFakeClassIcon, pFakeParentDock);
-							cairo_dock_detach_icon_from_dock (pLastClassIcon, pDock, FALSE);
-							g_free (pLastClassIcon->cParentDockName);
-							pLastClassIcon->cParentDockName = g_strdup (pFakeClassIcon->cParentDockName);
-							pLastClassIcon->fOrder = pFakeClassIcon->fOrder;
-							
-							g_print (" on detruit le sous-dock...\n");
-							cairo_dock_destroy_dock (pDock, pIcon->cClass, NULL, NULL);
-							pFakeClassIcon->pSubDock = NULL;
-							
-							g_print (" et l'icone de paille\n");
-							cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
-							cairo_dock_free_icon (pFakeClassIcon);
-							
-							g_print (" puis on re-insere l'appli restante\n");
-							cairo_dock_insert_icon_in_dock (pLastClassIcon, pFakeParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, FALSE);
-							cairo_dock_redraw_icon (pLastClassIcon, CAIRO_CONTAINER (pFakeParentDock));  // on suppose que les tailles des 2 icones sont identiques.
-						}
-						return FALSE;
-					}
-					else
-					{
-						cairo_dock_update_dock_size (pDock);
-					}*/
-				}
-				cairo_dock_update_dock_size (pDock);
-			}
+			cairo_dock_update_dock_size (pDock);
 			cairo_dock_free_icon (pIcon);
 		}
 		else if (pIcon->fPersonnalScale == -0.05)

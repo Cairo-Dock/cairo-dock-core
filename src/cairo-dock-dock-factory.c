@@ -376,7 +376,7 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDoc
 			icon->fHeight /= pDock->fRatio;
 			
 			cd_debug (" on re-attribue %s au dock %s", icon->acName, icon->cParentDockName);
-			cairo_dock_insert_icon_in_dock (icon, pReceivingDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);
+			cairo_dock_insert_icon_in_dock (icon, pReceivingDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 			
 			if (CAIRO_DOCK_IS_APPLET (icon))
 			{
@@ -500,7 +500,7 @@ void cairo_dock_build_docks_tree_with_desktop_files (CairoDock *pMainDock, gchar
 
 			if (pParentDock != NULL)  // a priori toujours vrai.
 			{
-				cairo_dock_insert_icon_in_dock (icon, pParentDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, ! CAIRO_DOCK_INSERT_SEPARATOR);
+				cairo_dock_insert_icon_in_dock_full (icon, pParentDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 				/// synchroniser icon->pSubDock avec pParentDock ?...
 			}
 		}
@@ -524,7 +524,7 @@ void cairo_dock_free_all_docks (void)
 }
 
 
-void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bApplyRatio, gboolean bInsertSeparator, GCompareFunc pCompareFunc)
+void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bInsertSeparator, GCompareFunc pCompareFunc)
 {
 	g_return_if_fail (icon != NULL);
 	if (g_list_find (pDock->icons, icon) != NULL)  // elle est deja dans ce dock.
@@ -561,11 +561,8 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		icon,
 		pCompareFunc);
 
-	if (bApplyRatio)
-	{
-		icon->fWidth *= pDock->fRatio;
-		icon->fHeight *= pDock->fRatio;
-	}
+	icon->fWidth *= pDock->fRatio;
+	icon->fHeight *= pDock->fRatio;
 
 	pDock->fFlatDockWidth += myIcons.iIconGap + icon->fWidth;
 	pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
@@ -583,7 +580,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 				//g_print (" insertion de %s avant %s -> iSeparatorType : %d\n", icon->acName, pNextIcon->acName, iSeparatorType);
 
 				cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-				Icon *pSeparatorIcon = cairo_dock_create_separator_icon (pSourceContext, iSeparatorType, pDock, bApplyRatio);
+				Icon *pSeparatorIcon = cairo_dock_create_separator_icon (pSourceContext, iSeparatorType, pDock);
 				if (pSeparatorIcon != NULL)
 				{
 					pSeparatorIcon->cParentDockName = g_strdup (pNextIcon->cParentDockName);
@@ -605,7 +602,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 				//g_print (" insertion de %s (%d) apres %s -> iSeparatorType : %d\n", icon->acName, icon->pModuleInstance != NULL, pPrevIcon->acName, iSeparatorType);
 
 				cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-				Icon *pSeparatorIcon = cairo_dock_create_separator_icon (pSourceContext, iSeparatorType, pDock, bApplyRatio);
+				Icon *pSeparatorIcon = cairo_dock_create_separator_icon (pSourceContext, iSeparatorType, pDock);
 				if (pSeparatorIcon != NULL)
 				{
 					pSeparatorIcon->cParentDockName = g_strdup (pPrevIcon->cParentDockName);
@@ -782,11 +779,13 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 					int iSeparatorType = myIcons.tIconTypeOrder[next_icon->iType] - 1;
 					//g_print ("un separateur entre %s et %s, dans le groupe %d (=%d)\n", icon->acName, next_icon->acName, iSeparatorType, myIcons.tIconTypeOrder[iSeparatorType]);
 					cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-					Icon *pSeparator = cairo_dock_create_separator_icon (pCairoContext, iSeparatorType, pDock, ! CAIRO_DOCK_APPLY_RATIO);
+					Icon *pSeparator = cairo_dock_create_separator_icon (pCairoContext, iSeparatorType, pDock);
+					pSeparator->fWidth /= pDock->fRatio;
+					pSeparator->fHeight /= pDock->fRatio;
 					cairo_destroy (pCairoContext);
 					if (pSeparator != NULL)
 					{
-						cairo_dock_insert_icon_in_dock (pSeparator, pDock, !CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, ! CAIRO_DOCK_INSERT_SEPARATOR);
+						cairo_dock_insert_icon_in_dock_full (pSeparator, pDock, !CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 						pSeparator->cParentDockName = g_strdup (next_icon->cParentDockName);
 					}
 				}

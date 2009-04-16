@@ -7,11 +7,75 @@ G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-file-manager.h This class handles the integration into the desktop environment, which includes :
-*  the VFS (Virtual File System)
-*  the various desktop-related tools.
+* - the VFS (Virtual File System)
+* - the various desktop-related tools.
 */
 
-void cairo_dock_fm_register_vfs_backend (CairoDockVFSBackend *pVFSBackend);
+typedef enum {
+	CAIRO_DOCK_FILE_MODIFIED=0,
+	CAIRO_DOCK_FILE_DELETED,
+	CAIRO_DOCK_FILE_CREATED,
+	CAIRO_DOCK_NB_EVENT_ON_FILES
+	} CairoDockFMEventType;
+
+typedef enum {
+	CAIRO_DOCK_FM_SORT_BY_NAME=0,
+	CAIRO_DOCK_FM_SORT_BY_DATE,
+	CAIRO_DOCK_FM_SORT_BY_SIZE,
+	CAIRO_DOCK_FM_SORT_BY_TYPE,
+	CAIRO_DOCK_NB_SORT_ON_FILE
+	} CairoDockFMSortType;
+
+typedef void (*CairoDockFMGetFileInfoFunc) (const gchar *cBaseURI, gchar **cName, gchar **cURI, gchar **cIconName, gboolean *bIsDirectory, int *iVolumeID, double *fOrder, CairoDockFMSortType iSortType);
+typedef void (*CairoDockFMFilePropertiesFunc) (const gchar *cURI, guint64 *iSize, time_t *iLastModificationTime, gchar **cMimeType, int *iUID, int *iGID, int *iPermissionsMask);
+typedef GList * (*CairoDockFMListDirectoryFunc) (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, gchar **cFullURI);
+typedef void (*CairoDockFMLaunchUriFunc) (const gchar *cURI);
+
+typedef gchar * (*CairoDockFMIsMountedFunc) (const gchar *cURI, gboolean *bIsMounted);
+typedef gboolean (*CairoDockFMCanEjectFunc) (const gchar *cURI);
+typedef gboolean (*CairoDockFMEjectDriveFunc) (const gchar *cURI);
+
+typedef void (*CairoDockFMMountCallback) (gboolean bMounting, gboolean bSuccess, const gchar *cName, Icon *icon, CairoContainer *pContainer);
+typedef void (*CairoDockFMMountFunc) (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer);
+typedef void (*CairoDockFMUnmountFunc) (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer);
+
+typedef void (*CairoDockFMMonitorCallback) (CairoDockFMEventType iEventType, const gchar *cURI, gpointer data);
+typedef void (*CairoDockFMAddMonitorFunc) (const gchar *cURI, gboolean bDirectory, CairoDockFMMonitorCallback pCallback, gpointer data);
+typedef void (*CairoDockFMRemoveMonitorFunc) (const gchar *cURI);
+
+typedef gboolean (*CairoDockFMDeleteFileFunc) (const gchar *cURI);
+typedef gboolean (*CairoDockFMRenameFileFunc) (const gchar *cOldURI, const gchar *cNewName);
+typedef gboolean (*CairoDockFMMoveFileFunc) (const gchar *cURI, const gchar *cDirectoryURI);
+
+typedef gchar * (*CairoDockFMGetTrashFunc) (const gchar *cNearURI, gchar **cFileInfoPath);
+typedef gchar * (*CairoDockFMGetDesktopFunc) (void);
+typedef void (*CairoDockFMUserActionFunc) (void);
+
+struct _CairoDockDesktopEnvBackend {
+	CairoDockFMGetFileInfoFunc 		get_file_info;
+	CairoDockFMFilePropertiesFunc 	get_file_properties;
+	CairoDockFMListDirectoryFunc 	list_directory;
+	CairoDockFMLaunchUriFunc 		launch_uri;
+	CairoDockFMIsMountedFunc 		is_mounted;
+	CairoDockFMCanEjectFunc 		can_eject;
+	CairoDockFMEjectDriveFunc 		eject;
+	CairoDockFMMountFunc 			mount;
+	CairoDockFMUnmountFunc 		unmount;
+	CairoDockFMAddMonitorFunc 	add_monitor;
+	CairoDockFMRemoveMonitorFunc 	remove_monitor;
+	CairoDockFMDeleteFileFunc 		delete_file;
+	CairoDockFMRenameFileFunc 	rename;
+	CairoDockFMMoveFileFunc 		move;
+	CairoDockFMGetTrashFunc 		get_trash_path;
+	CairoDockFMGetDesktopFunc 	get_desktop_path;
+	CairoDockFMUserActionFunc		logout;
+	CairoDockFMUserActionFunc		shutdown;
+	CairoDockFMUserActionFunc		setup_time;
+	CairoDockFMUserActionFunc		show_system_monitor;
+};
+
+
+void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend);
 
 
 GList * cairo_dock_fm_list_directory (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, gchar **cFullURI);

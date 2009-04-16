@@ -327,7 +327,7 @@ static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, Icon *icon, Cai
 			pNewIcon->acName = g_strdup (_("Undefined"));
 
 		CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-		cairo_dock_insert_icon_in_dock (pNewIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);
+		cairo_dock_insert_icon_in_dock (pNewIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 		cairo_dock_mark_theme_as_modified (TRUE);
@@ -426,7 +426,7 @@ static void _on_modify_launcher (Icon *icon)
 	if (pDock != pNewContainer && icon->fOrder > g_list_length (pNewContainer->icons) + 1)
 		icon->fOrder = CAIRO_DOCK_LAST_ORDER;
 
-	cairo_dock_insert_icon_in_dock (icon, pNewContainer, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, myIcons.bUseSeparator);  // on n'empeche pas les bouclages.
+	cairo_dock_insert_icon_in_dock (icon, pNewContainer, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);  // on n'empeche pas les bouclages.
 
 	if (pDock != pNewContainer)
 		cairo_dock_update_dock_size (pDock);

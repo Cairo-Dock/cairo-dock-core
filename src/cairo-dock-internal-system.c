@@ -10,6 +10,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "math.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-dock-manager.h"
+#include "cairo-dock-file-manager.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-system.h"
 

@@ -67,18 +67,24 @@ void cairo_dock_free_all_docks (void);
 
 /**
 * Insere une icone dans le dock, a la position indiquee par son champ fOrder.
-* Insere un separateur si necessaire, et reserve l'espace correspondant aux nouvelles dimensions du dock si necessaire. Ne fais rien si l'icone existe deja dans le dock.
+* Ne fais rien si l'icone existe deja dans le dock.
+* @param icon l'icone a inserer.
+* @param pDock le dock dans lequel l'inserer.
+* @param bUpdateSize TRUE pour mettre a jour la taille du dock apres insertion.
+* @param bAnimated TRUE pour regler la taille de l'icone au minimum de facon a la faire grossir apres.
+* @param bInsertSeparator TRUE pour inserer un separateur si necessaire.
+* @param pCompareFunc la fonction de comparaison
+*/
+void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bInsertSeparator, GCompareFunc pCompareFunc);
+/**
+* Insere une icone dans le dock, a la position indiquee par son champ fOrder.
+* Insere un separateur si necessaire. Ne fais rien si l'icone existe deja dans le dock.
 * @param icon l'icone a inserer.
 * @param pDock le dock dans lequel l'inserer.
 * @param bUpdateSize TRUE pour recalculer la taille du dock apres insertion.
 * @param bAnimated TRUE pour regler la taille de l'icone au minimum de facon a la faire grossir apres.
-* @param bApplyRatio TRUE pour appliquer le facteur de taille propre au sous-dock.
-* @param bInsertSeparator TRUE pour inserer un separateur si necessaire.
-* @param pCompareFunc la fonction de comparaison
 */
-void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bApplyRatio, gboolean bInsertSeparator, GCompareFunc pCompareFunc);
-
-#define cairo_dock_insert_icon_in_dock(icon, pDock, bUpdateSize, bAnimated, bApplyRatio, bInsertSeparator) cairo_dock_insert_icon_in_dock_full (icon, pDock, bUpdateSize, bAnimated, bApplyRatio, bInsertSeparator, NULL)
+#define cairo_dock_insert_icon_in_dock(icon, pDock, bUpdateSize, bAnimated) cairo_dock_insert_icon_in_dock_full (icon, pDock, bUpdateSize, bAnimated, myIcons.bUseSeparator, NULL)
 
 /**
 *Detache une icone de son dock, en enlevant les separateurs superflus si necessaires. L'icone n'est pas detruite, et peut etre re-inseree autre part telle qu'elle; elle garde son sous-dock, mais perd ses dialogues. Ne fais rien si l'icone n'existe pas dans le dock.

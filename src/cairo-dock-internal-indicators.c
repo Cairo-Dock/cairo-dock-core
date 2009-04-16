@@ -103,11 +103,11 @@ static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicator
 		cairo_dock_colors_differ (pPrevIndicators->fActiveColor, pIndicators->fActiveColor))
 	{
 		cairo_dock_load_active_window_indicator (pCairoContext,
-			pPrevIndicators->cActiveIndicatorImagePath,
+			pIndicators->cActiveIndicatorImagePath,
 			fMaxScale,
-			pPrevIndicators->iActiveCornerRadius,
-			pPrevIndicators->iActiveLineWidth,
-			pPrevIndicators->fActiveColor);
+			pIndicators->iActiveCornerRadius,
+			pIndicators->iActiveLineWidth,
+			pIndicators->fActiveColor);
 	}
 	
 	if (cairo_dock_strings_differ (pPrevIndicators->cClassIndicatorImagePath, pIndicators->cClassIndicatorImagePath))

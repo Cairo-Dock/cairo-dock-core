@@ -78,7 +78,7 @@ cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, d
 
 
 
-Icon *cairo_dock_create_separator_icon (cairo_t *pSourceContext, int iSeparatorType, CairoDock *pDock, gboolean bApplyRatio)
+Icon *cairo_dock_create_separator_icon (cairo_t *pSourceContext, int iSeparatorType, CairoDock *pDock)
 {
 	//g_print ("%s ()\n", __func__);
 	if ((iSeparatorType & 1) && ! myIcons.bUseSeparator)
@@ -88,11 +88,8 @@ Icon *cairo_dock_create_separator_icon (cairo_t *pSourceContext, int iSeparatorT
 	icon->iType = iSeparatorType;
 	cairo_dock_fill_one_icon_buffer (icon, pSourceContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, pDock->bDirectionUp);
 
-	if (bApplyRatio)  ///  && pDock->iRefCount > 0
-	{
-		icon->fWidth *= pDock->fRatio;  /// g_fSubDockSizeRatio
-		icon->fHeight *= pDock->fRatio;
-	}
+	icon->fWidth *= pDock->fRatio;
+	icon->fHeight *= pDock->fRatio;
 	//g_print ("1 separateur : %.2fx%.2f\n", icon->fWidth, icon->fHeight);
 
 	return icon;

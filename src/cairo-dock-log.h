@@ -40,27 +40,42 @@ void cd_log_location(const GLogLevelFlags loglevel,
                      ...);
 
 /**
- * initialise the log system
+ * Initialize the log system.
  */
 void cd_log_init(gboolean bBlackTerminal);
 
 /**
- * set the verbosity level
+ * Set the verbosity level.
  */
 void cd_log_set_level(GLogLevelFlags loglevel);
 
+/* Write an error message on the terminal. Error messages are used to indicate the cause of the program stop.
+*@param ... the message format and parameters, in a 'printf' style.
+*/
 #define cd_error(...)                                                  \
   cd_log_location(G_LOG_LEVEL_ERROR, __FILE__, __PRETTY_FUNCTION__, __LINE__,__VA_ARGS__)
 
+/* Write a critical message on the terminal. Critical messages should be as clear as possible to be useful for end-users.
+*@param ... the message format and parameters, in a 'printf' style.
+*/
 #define cd_critical(...)                                               \
   cd_log_location(G_LOG_LEVEL_CRITICAL, __FILE__, __PRETTY_FUNCTION__, __LINE__,__VA_ARGS__)
 
+/* Write a warning message on the terminal. Warnings should be as clear as possible to be useful for end-users.
+*@param ... the message format and parameters, in a 'printf' style.
+*/
 #define cd_warning(...)                                                \
   cd_log_location(G_LOG_LEVEL_WARNING, __FILE__, __PRETTY_FUNCTION__, __LINE__,__VA_ARGS__)
 
+/* Write a message on the terminal. Messages are used to trace the sequence of functions, and may be used by users for a quick debug.
+*@param ... the message format and parameters, in a 'printf' style.
+*/
 #define cd_message(...)                                                \
   cd_log_location(G_LOG_LEVEL_MESSAGE, __FILE__, __PRETTY_FUNCTION__, __LINE__,__VA_ARGS__)
 
+/* Write a debug message on the terminal. Debug message are only useful for developpers.
+*@param ... the message format and parameters, in a 'printf' style.
+*/
 #define cd_debug(...)                                                  \
   cd_log_location(G_LOG_LEVEL_DEBUG, __FILE__, __PRETTY_FUNCTION__, __LINE__,__VA_ARGS__)
 

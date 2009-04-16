@@ -295,7 +295,7 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 						g_print (" on insere %s dans le dock de la classe\n", pInhibatedIcon->acName);
 						g_free (pInhibatedIcon->cParentDockName);
 						pInhibatedIcon->cParentDockName = g_strdup (icon->cClass);
-						cairo_dock_insert_icon_in_dock (pInhibatedIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, FALSE);
+						cairo_dock_insert_icon_in_dock_full (pInhibatedIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 					}
 				}
 				else if (pSameClassIcon->pSubDock != pParentDock)
@@ -305,21 +305,21 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 			{
 				//\______________ On cree une icone de paille.
 				g_print (" on cree un fake...\n");
+				CairoDock *pClassMateParentDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
 				Icon *pFakeClassIcon = g_new0 (Icon, 1);
 				pFakeClassIcon->acName = g_strdup (pSameClassIcon->cClass);
 				pFakeClassIcon->cClass = g_strdup (pSameClassIcon->cClass);
 				pFakeClassIcon->iType = pSameClassIcon->iType;
 				pFakeClassIcon->fOrder = pSameClassIcon->fOrder;
 				pFakeClassIcon->cParentDockName = g_strdup (pSameClassIcon->cParentDockName);
-				pFakeClassIcon->fWidth = pSameClassIcon->fWidth;
-				pFakeClassIcon->fHeight = pSameClassIcon->fHeight;
+				pFakeClassIcon->fWidth = pSameClassIcon->fWidth / pClassMateParentDock->fRatio;
+				pFakeClassIcon->fHeight = pSameClassIcon->fHeight / pClassMateParentDock->fRatio;
 				pFakeClassIcon->fXMax = pSameClassIcon->fXMax;
 				pFakeClassIcon->fXMin = pSameClassIcon->fXMin;
 				pFakeClassIcon->fXAtRest = pSameClassIcon->fXAtRest;
 				pFakeClassIcon->pSubDock = pParentDock;  // grace a cela ce sera un lanceur.
 				
 				//\______________ On la charge.
-				CairoDock *pClassMateParentDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
 				cairo_dock_load_one_icon_from_scratch (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
 				
 				//\______________ On detache le classmate, on le place dans le sous-dock, et on lui substitue le faux.
@@ -327,10 +327,10 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 				cairo_dock_detach_icon_from_dock (pSameClassIcon, pClassMateParentDock, FALSE);
 				g_free (pSameClassIcon->cParentDockName);
 				pSameClassIcon->cParentDockName = g_strdup (pSameClassIcon->cClass);
-				cairo_dock_insert_icon_in_dock (pSameClassIcon, pParentDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, CAIRO_DOCK_APPLY_RATIO, FALSE);
+				cairo_dock_insert_icon_in_dock_full (pSameClassIcon, pParentDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 				
 				g_print (" on lui substitue le fake\n");
-				cairo_dock_insert_icon_in_dock (pFakeClassIcon, pClassMateParentDock,  CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_APPLY_RATIO, FALSE);
+				cairo_dock_insert_icon_in_dock_full (pFakeClassIcon, pClassMateParentDock,  CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 				cairo_dock_redraw_icon (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
 			}
 		}

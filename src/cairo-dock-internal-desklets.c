@@ -13,6 +13,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-file-manager.h"
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-desklet.h"
 #define _INTERNAL_MODULE_
