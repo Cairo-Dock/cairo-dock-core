@@ -427,7 +427,7 @@ msgstr ""
 
 #: ../data/messages:7 ../data/messages:657 ../data/messages:835
 msgid ""
-"Choose the screen border regarding to which the dock will place itself :"
+"Choose which screen border the dock will placed on :"
 msgstr ""
 "Επιλέξτε το όριο της οθόνης σε σχέση με το οποίο θα τοποθετηθεί το dock:"
 
@@ -988,9 +988,8 @@ msgstr "Εμφάνιση κρυφών αρχείων;"
 # ########### cairo-dock.conf #############
 # #################################
 #: ../data/messages:207
-#, fuzzy
 msgid "Composition"
-msgstr "Θέση"
+msgstr ""
 
 #: ../data/messages:209
 msgid ""
@@ -1369,7 +1368,6 @@ msgid "Icons' themes"
 msgstr "Θέματα εικόνων"
 
 #: ../data/messages:367 ../data/messages:731
-#, fuzzy
 msgid ""
 "Directories or themes where to search icons. Put some directories where you "
 "have icons you wish to see in the dock, or put some theme's name you've "
@@ -1377,11 +1375,6 @@ msgid ""
 "research). The key word _LocalTheme_ represents the directory ~/.config/"
 "cairo-dock/current_theme/icons"
 msgstr ""
-"Φάκελοι θεματών όπου μπορείτε να αναζητήσετε εικονίδια. Τοποθετήστε φακέλους "
-"εκεί που έχετε εικονίδια τα οποία επιθυμείτε να δείτε στο dock, ή "
-"τοποθετήστε το όνομα ενός θέματος που έχετε εγκατεστημένο στο σύστημά σας. "
-"(Η σειρά λαμβάνεται υπόψη κατά τη διάρκεια της έρευνας). Η λέξη κλειδί "
-"_ThemeDirectory_ αναπαριστά τον φάκελο ~/.cairo-dock/current_theme/launchers"
 
 #: ../data/messages:369 ../data/messages:733
 msgid "List of icons themes or directories :"
@@ -1618,97 +1611,68 @@ msgid "Desklets"
 msgstr "Desklets"
 
 #: ../data/messages:533
-#, fuzzy
 msgid "Choose a default decoration for all desklets :"
-msgstr "Επιλέξτε προκαθορισμένη εμφάνιση για τα βασικά docks:"
+msgstr ""
 
 #: ../data/messages:535
-#, fuzzy
 msgid ""
 "It's an image that will be displayed below the drawings, like a frame for "
 "exemple. Let empty to not use any."
 msgstr ""
-"Πρόκειται για μια εικόνα που θα εμφανίζεται πάνω στο εικονίδιο και θα σας "
-"δείχνει ότι μπορείτε να το αποθέσετε. Αφήστε το κενό για να χρησιμοποιηθεί η "
-"προκαθορισμένη εικόνα."
 
 #: ../data/messages:537
-#, fuzzy
 msgid "Background image :"
-msgstr "Εικόνα παρασκηνίου..."
+msgstr ""
 
 #: ../data/messages:539
-#, fuzzy
 msgid "Background tansparency :"
-msgstr "Διαφάνεια εικόνας:"
+msgstr ""
 
 #: ../data/messages:541
-#, fuzzy
 msgid "in pixels. Use this to adjust the left position of the drawings."
 msgstr ""
-"Σε pixels. Μπορείτε να χρησιμοποιήσετε αυτή την παράμετρο για να ρυθμίσετε "
-"την κάθετη θέση του δείκτη."
 
 #: ../data/messages:543
-#, fuzzy
 msgid "Left offset :"
-msgstr "Έναρξη καθέτου:"
+msgstr ""
 
 #: ../data/messages:545
-#, fuzzy
 msgid "in pixels. Use this to adjust the top position of the drawings."
 msgstr ""
-"Σε pixels. Μπορείτε να χρησιμοποιήσετε αυτή την παράμετρο για να ρυθμίσετε "
-"την κάθετη θέση του δείκτη."
 
 #: ../data/messages:547
-#, fuzzy
 msgid "Top offset :"
-msgstr "Έναρξη καθέτου:"
+msgstr ""
 
 #: ../data/messages:549
-#, fuzzy
 msgid "in pixels. Use this to adjust the right position of the drawings."
 msgstr ""
-"Σε pixels. Μπορείτε να χρησιμοποιήσετε αυτή την παράμετρο για να ρυθμίσετε "
-"την κάθετη θέση του δείκτη."
 
 #: ../data/messages:551
-#, fuzzy
 msgid "Right offset :"
-msgstr "Έναρξη καθέτου:"
+msgstr ""
 
 #: ../data/messages:553
-#, fuzzy
 msgid "in pixels. Use this to adjust the bottom position of the drawings."
 msgstr ""
-"Σε pixels. Μπορείτε να χρησιμοποιήσετε αυτή την παράμετρο για να ρυθμίσετε "
-"την κάθετη θέση του δείκτη."
 
 #: ../data/messages:555
-#, fuzzy
 msgid "Bottom offset :"
-msgstr "Έναρξη καθέτου:"
+msgstr ""
 
 #: ../data/messages:557
-#, fuzzy
 msgid ""
 "It's an image that will be displayed above the drawings, like a reflect for "
 "exemple. Let empty to not use any."
 msgstr ""
-"Πρόκειται για μια εικόνα που θα εμφανίζεται πάνω στο εικονίδιο και θα σας "
-"δείχνει ότι μπορείτε να το αποθέσετε. Αφήστε το κενό για να χρησιμοποιηθεί η "
-"προκαθορισμένη εικόνα."
 
 #: ../data/messages:559
-#, fuzzy
 msgid "Foreground image :"
-msgstr "Εικόνα παρασκηνίου..."
+msgstr ""
 
 #: ../data/messages:561
-#, fuzzy
 msgid "Foreground tansparency :"
-msgstr "Διαφάνεια εικόνας:"
+msgstr ""
 
 #: ../data/messages:563
 msgid "Indicators"
@@ -1945,9 +1909,8 @@ msgid "Color of the extern line (red, blue, green, alpha):"
 msgstr "Χρώμα εξωτερικής γραμμής (κόκκινο, πράσινο, μπλε, alpha):"
 
 #: ../data/messages:787
-#, fuzzy
 msgid "Desklet's decorations :"
-msgstr "Χρώμα παρασκηνίου των desklets:"
+msgstr ""
 
 #: ../data/messages:789 ../data/messages:803 ../data/messages:863
 msgid "Desktop Entry"
@@ -2425,14 +2388,3 @@ msgid ""
 " - Smooth icons movement when dragging them inside the dock\n"
 " - The dock is now translated in Sweden and partially in Greek."
 msgstr ""
-
-#~ msgid "Background color (r,v,b,a) :"
-#~ msgstr "Χρώμα παρασκηνίου (κόκκινο, πράσινο, μπλε, alpha):"
-
-#~ msgid "Background color when mouse hovers it (r,v,b,a) :"
-#~ msgstr ""
-#~ "Χρώμα παρασκηνίου όταν το ποντίκι αιωρείται από πάνω του (κόκκινο, "
-#~ "πράσινο, μπλε, alpha):"
-
-#~ msgid "Desklet's background color when mouse hovers it :"
-#~ msgstr "Χρώμα παρασκηνίου του desklet όταν το ποντίκι περνά από πάνω του:"

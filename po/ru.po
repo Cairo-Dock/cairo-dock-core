@@ -613,7 +613,7 @@ msgstr ""
 
 #: ../data/messages:7 ../data/messages:959
 msgid ""
-"Choose the screen border regarding to which the dock will place itself :"
+"Choose which screen border the dock will placed on :"
 msgstr "С какой стороны экрана расположить панель:"
 
 #: ../data/messages:9 ../data/messages:961

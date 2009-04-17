@@ -48,28 +48,24 @@ msgstr ""
 " ce qui peut empêcher le dock de fonctionner correctement.\n"
 "Voulez-vous activer l'OpenGL ?\n"
 " (Pour ne pas montrer ce dialogue, lancez le dock à partir du menu "
-"APplications,\n"
+"Applications,\n"
 "  ou avec l'option -o pour forcer l'OpenGL, et -c pour forcer cairo.)"
 
 #: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
-#, fuzzy, c-format
 msgid "%s is now mounted"
-msgstr "%s est maintenant %s"
+msgstr "%s est maintenant monté"
 
 #: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
-#, fuzzy, c-format
 msgid "%s is now unmounted"
-msgstr "%s est maintenant %s"
+msgstr "%s est maintenant démonté"
 
 #: ../src/cairo-dock-file-manager.c:550
-#, fuzzy, c-format
 msgid "failed to mount %s"
-msgstr "échec pour %s %s"
+msgstr "échec pour monter %s"
 
 #: ../src/cairo-dock-file-manager.c:550
-#, fuzzy, c-format
 msgid "failed to unmount %s"
-msgstr "échec pour %s %s"
+msgstr "échec pour démonter %s"
 
 #: ../src/cairo-dock-gui-factory.c:699
 #, c-format
@@ -525,8 +521,8 @@ msgid "Always below"
 msgstr "Toujours derrière"
 
 #: ../src/cairo-dock-menu.c:1362
-msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
-msgstr "Réglez le comportement de Compiz à : (name=cairo-dock & type=utility)"
+msgid "set behaviour in Compiz to: (class=Cairo-dock & type=utility)"
+msgstr "Réglez le comportement de Compiz à : (class=Cairo-dock & type=utility)"
 
 #: ../src/cairo-dock-modules.c:105
 msgid ""
@@ -634,7 +630,7 @@ msgstr ""
 
 #: ../data/messages:7 ../data/messages:959
 msgid ""
-"Choose the screen border regarding to which the dock will place itself :"
+"Choose which screen border the dock will placed on :"
 msgstr "Choisissez par rapport à quel bord de l'écran le dock doit se placer :"
 
 #: ../data/messages:9 ../data/messages:961
@@ -2529,12 +2525,12 @@ msgstr ""
 #: ../data/messages:771
 msgid ""
 "In the Compiz-Fusion config, activate the 'Widget Layer' plug-in, and set "
-"the rule (class=cairo-dock &amp; type=utility).\n"
+"the rule (class=Cairo-dock &amp; type=utility).\n"
 "You can then switch an applet to the Widget Layer by left-clicking on its "
 "desklet and selecting 'Compiz-Fusion Widget'."
 msgstr ""
 "Dans la configuration de Compiz, activez le plug-in 'Widget Layer', et "
-"mettez-y la règle (class=cairo-dock &amp; type=utility).\n"
+"mettez-y la règle (class=Cairo-dock &amp; type=utility).\n"
 "Vous pourrez alors basculer une applet sur la couche Widget en cliquant "
 "droit dessus, et en sélectionnant 'Widget Compiz-Fusion'."
 
@@ -3503,7 +3499,6 @@ msgstr ""
 " - Traduction en suédois et partiellement en grec"
 
 #: ../data/messages:1061
-#, fuzzy
 msgid ""
 "Cairo-Dock II\n"
 " - Cairo-Dock is now a full OpenGL dock ! (the cairo backend is still "
@@ -3512,7 +3507,7 @@ msgid ""
 "illusion, drop indicator, motion blur, dialog rendering\n"
 " - The config panel has been widely rewritten.\n"
 " - Desklets are now in 3D\n"
-" - New applets : mail, keyboard indicator, quick folder.\n"
+" - New applets : mail, keyboard indicator, quick folder, Toons.\n"
 " - Lot of bug fixes and upgrades in all plug-ins."
 msgstr ""
 "Cairo-Dock II\n"
@@ -3523,29 +3518,5 @@ msgstr ""
 "rendering\n"
 " - Le panneau de config a été largement ré-écrit.\n"
 " - Les desklets sont désormais en 3D\n"
-" - Nouvelles applets : mail, keyboard indicator, quick folder.\n"
+" - Nouvelles applets : mail, keyboard indicator, quick folder, Toons.\n"
 " - Nombreuses corrections et améliorations dans tous les plug-ins."
-
-#~ msgid "mounted"
-#~ msgstr "monté"
-
-#~ msgid "unmounted"
-#~ msgstr "démonté"
-
-#~ msgid "mount"
-#~ msgstr "monter"
-
-#~ msgid "unmount"
-#~ msgstr "démonter"
-
-#~ msgid ""
-#~ "If you choosed to overwrite X icons, then the Pidgin icons will be "
-#~ "overwritten as well.\n"
-#~ "You can edit the Pidgin launcher, and in the “Extra parameters”, tick the "
-#~ "box that says to not overwrite X icon for this appli."
-#~ msgstr ""
-#~ "Si vous avez choisi d'écraser les icônes X, alors forcément l'icône de "
-#~ "Pidgin sera écrasée.\n"
-#~ "Vous pouvez éditer le lanceur de Pidgin, et dans les 'Paramètres "
-#~ "supplémentaires',\n"
-#~ "cochez la case disant de ne pas écraser l'icône X pour cette appli."

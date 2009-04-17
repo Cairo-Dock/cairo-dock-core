@@ -41,22 +41,22 @@ msgstr ""
 #: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
 #, fuzzy, c-format
 msgid "%s is now mounted"
-msgstr "%s es ahora %s"
+msgstr ""
 
 #: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
 #, fuzzy, c-format
 msgid "%s is now unmounted"
-msgstr "%s es ahora %s"
+msgstr ""
 
 #: ../src/cairo-dock-file-manager.c:550
 #, fuzzy, c-format
 msgid "failed to mount %s"
-msgstr "Fallo %s %s"
+msgstr ""
 
 #: ../src/cairo-dock-file-manager.c:550
 #, fuzzy, c-format
 msgid "failed to unmount %s"
-msgstr "Fallo %s %s"
+msgstr ""
 
 #: ../src/cairo-dock-gui-factory.c:699
 #, c-format
@@ -619,7 +619,7 @@ msgstr ""
 
 #: ../data/messages:7 ../data/messages:959
 msgid ""
-"Choose the screen border regarding to which the dock will place itself :"
+"Choose which screen border the dock will placed on :"
 msgstr ""
 "Escoge el borde de la pantalla para escoger en la cual el sitio para el "
 "dock  :"

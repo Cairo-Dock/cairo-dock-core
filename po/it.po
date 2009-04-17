@@ -29,9 +29,8 @@ msgid "Do you want to monitor the content of the directory ?"
 msgstr "Sorvegliare il contenuto di questa cartella ?"
 
 #: ../src/cairo-dock-dock-factory.c:83
-#, fuzzy
 msgid "Use OpenGL in Cairo-Dock ?"
-msgstr "Uscire da Cairo-Dock ?"
+msgstr ""
 
 #: ../src/cairo-dock-dock-factory.c:91
 msgid ""
@@ -46,24 +45,20 @@ msgid ""
 msgstr ""
 
 #: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
-#, fuzzy, c-format
 msgid "%s is now mounted"
-msgstr "%s è adesso %s"
+msgstr "%s è adesso montato"
 
 #: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
-#, fuzzy, c-format
 msgid "%s is now unmounted"
-msgstr "%s è adesso %s"
+msgstr "%s è adesso smontato"
 
 #: ../src/cairo-dock-file-manager.c:550
-#, fuzzy, c-format
 msgid "failed to mount %s"
-msgstr "impossibile %s %s"
+msgstr "impossibile montato %s"
 
 #: ../src/cairo-dock-file-manager.c:550
-#, fuzzy, c-format
 msgid "failed to unmount %s"
-msgstr "impossibile %s %s"
+msgstr "impossibile smontato %s"
 
 #: ../src/cairo-dock-gui-factory.c:699
 #, c-format
@@ -517,9 +512,9 @@ msgid "Always below"
 msgstr "Sempre al di sotto"
 
 #: ../src/cairo-dock-menu.c:1362
-msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+msgid "set behaviour in Compiz to: (class=Cairo-dock & type=utility)"
 msgstr ""
-"Regolate il comportamento di Compiz in : (name=cairo-dock & type=utility)"
+"Regolate il comportamento di Compiz in : (class=Cairo-dock & type=utility)"
 
 #: ../src/cairo-dock-modules.c:105
 msgid ""
@@ -616,7 +611,7 @@ msgstr ""
 
 #: ../data/messages:7 ../data/messages:959
 msgid ""
-"Choose the screen border regarding to which the dock will place itself :"
+"Choose which screen border the dock will placed on :"
 msgstr ""
 "Scegliere il bordo dello schermo in rapporto al quale la barra verrà "
 "piazzata:"
@@ -1063,23 +1058,20 @@ msgid "The more there are, the slower it will be"
 msgstr "Più ce ne sono, più sarà lento"
 
 #: ../data/messages:181
-#, fuzzy
 msgid "Number of steps in the zoom animation (grow up/shrink down) :"
-msgstr "Numero di passi nel ridimensionamento delle icone (crescita/ritiro) :"
+msgstr ""
 
 #: ../data/messages:183
-#, fuzzy
 msgid "the smaller, the faster the dock will hide."
-msgstr "Più si avvicina a 0 più lo svolgimento sarà rapido."
+msgstr ""
 
 #: ../data/messages:185
 msgid "Window's move acceleration (move up/move down) :"
 msgstr "Accelerazione del movimento delle finestre (movimento sopra/sotto) :"
 
 #: ../data/messages:187
-#, fuzzy
 msgid "Background movments"
-msgstr "Immagine di sfondo :"
+msgstr ""
 
 #: ../data/messages:189
 msgid ""
@@ -2122,7 +2114,6 @@ msgstr ""
 "la casella sotto"
 
 #: ../data/messages:665
-#, fuzzy
 msgid ""
 "In the “icons” module, on the bottom, you can choose the order of icons "
 "according to their type (launcher/appli/applet)."
@@ -2147,7 +2138,6 @@ msgstr ""
 "scelta migliore."
 
 #: ../data/messages:671
-#, fuzzy
 msgid ""
 "In the “Icons” module, you can choose a <b>icon theme</b>. Enter a name of a "
 "theme, for exemple : Human or Gartoon.\n"
@@ -2240,7 +2230,6 @@ msgid "The dock is hidden by the gnome-panel"
 msgstr "La barra è nascosta dallo gnome-panel"
 
 #: ../data/messages:695
-#, fuzzy
 msgid ""
 "it’s normal, because they both are “docks”. You can either move the dock out "
 "of the panel, or launch it wih the command “cairo-dock -–keep-above”."
@@ -2368,7 +2357,6 @@ msgstr ""
 "Usate l'opzione 'Riserva lo spazio per la barra' nel modulo 'Accessibilità'."
 
 #: ../data/messages:729
-#, fuzzy
 msgid "I don’t want that the dock hovers windows"
 msgstr "Non voglio che la barra vada sopra altre finestre."
 
@@ -2385,7 +2373,6 @@ msgstr ""
 "'Nascondere la barra', e anche scegliere un'immagine per tale zona."
 
 #: ../data/messages:733
-#, fuzzy
 msgid ""
 "Two choices are available, in the “Accessibility” module :\n"
 " - either choose to “keep the dock below other windows”. The dock will then "
@@ -2467,7 +2454,6 @@ msgid "How can I change their decorations ?"
 msgstr "Come posso cambiare la loro decorazione ?"
 
 #: ../data/messages:757
-#, fuzzy
 msgid ""
 "Hint : you can add new decorations, by choosing the “personnal” decoration, "
 "and providing a background and/or foreground image. You can setup the "
@@ -2480,7 +2466,6 @@ msgstr ""
 "sistemare la posizione dei disegni rispetto alle decorazioni."
 
 #: ../data/messages:759
-#, fuzzy
 msgid ""
 "You need to have the “desklet-rendering” plug-in activated. The default "
 "decoration is defined in the “Desklets” module.\n"
@@ -2521,7 +2506,7 @@ msgstr ""
 #: ../data/messages:771
 msgid ""
 "In the Compiz-Fusion config, activate the 'Widget Layer' plug-in, and set "
-"the rule (class=cairo-dock &amp; type=utility).\n"
+"the rule (class=Cairo-dock &amp; type=utility).\n"
 "You can then switch an applet to the Widget Layer by left-clicking on its "
 "desklet and selecting 'Compiz-Fusion Widget'."
 msgstr ""
@@ -2535,7 +2520,6 @@ msgid "How do I activate the Taskbar ?"
 msgstr "Come attivo la Taskbar ?"
 
 #: ../data/messages:777
-#, fuzzy
 msgid "Hint : All the Taskbar’s options are grouped together in this module."
 msgstr "Suggerimento : tutte le opzioni della TaskBar stanno in questo modulo."
 
@@ -2550,7 +2534,6 @@ msgid "I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
 msgstr "Non voglio avere troppe icone sulla barra quando uso Gimp/Pidgin/etc"
 
 #: ../data/messages:783
-#, fuzzy
 msgid ""
 "Hint : You can then scroll on this icon to switch from a window to another, "
 "in an ALT+TAB way."
@@ -2892,32 +2875,24 @@ msgstr ""
 "clock, ed è fatta !"
 
 #: ../data/messages:881
-#, fuzzy
 msgid "How can I change quickly the luminosity of my screen ?"
-msgstr "Come posso cambiare l'immagine di un'icona ?"
+msgstr ""
 
 #: ../data/messages:883
-#, fuzzy
 msgid ""
 "Activate the Xgamma applet, then you can scroll up/down on the icon with the "
 "mouse."
 msgstr ""
-"attivate l'applet Gmenu, quindi potete averlo facendo click col tasto "
-"centrale sulla sua icona."
 
 #: ../data/messages:885
-#, fuzzy
 msgid "How can I change quickly the speakers volume ?"
-msgstr "Come posso cambiare l'immagine di un'icona ?"
+msgstr ""
 
 #: ../data/messages:887
-#, fuzzy
 msgid ""
 "Activate the AlsaMixer applet, then you can scroll up/down on the icon with "
 "the mouse."
 msgstr ""
-"attivate l'applet Gmenu, quindi potete averlo facendo click col tasto "
-"centrale sulla sua icona."
 
 #: ../data/messages:889
 msgid "Troubleshooting"
@@ -3416,341 +3391,3 @@ msgid ""
 " - New applets : mail, keyboard indicator, quick folder.\n"
 " - Lot of bug fixes and upgrades in all plug-ins."
 msgstr ""
-
-#~ msgid "mounted"
-#~ msgstr "montato"
-
-#~ msgid "unmounted"
-#~ msgstr "smontato"
-
-#~ msgid "mount"
-#~ msgstr "monta"
-
-#~ msgid "unmount"
-#~ msgstr "smonta"
-
-#~ msgid ""
-#~ "If you choosed to overwrite X icons, then the Pidgin icons will be "
-#~ "overwritten as well.\n"
-#~ "You can edit the Pidgin launcher, and in the “Extra parameters”, tick the "
-#~ "box that says to not overwrite X icon for this appli."
-#~ msgstr ""
-#~ "Se avete scelto di sostituire le icone di X, anche le icone di Pidgin "
-#~ "saranno sostituite.\n"
-#~ " Potete aprire la configurazione del lanciatore di Pidgin, e in 'Altri "
-#~ "parametri' selezionate la casella che dice di non sostituire le icone di "
-#~ "X per questa applicazione."
-
-#~ msgid "Number of steps for icons' resizing (grow up/shrink down) :"
-#~ msgstr ""
-#~ "Numero di passi nel ridimensionamento delle icone (crescita/ritiro) :"
-
-#~ msgid ""
-#~ "in percentage of the distance it can move at each step . After n steps, "
-#~ "the remaining distance will be reduced by (1-s)^n."
-#~ msgstr ""
-#~ "in percentuale della distanza che può essere percorsa ad ogni passo "
-#~ "(crescente,discendente). Dopo n passi, la distanza restante sara ridotta "
-#~ "per (1-a)^n"
-
-#~ msgid "Mouse"
-#~ msgstr "Mouse"
-
-#~ msgid ""
-#~ "If you put 0, this will make them scroll of exactly one icon each time. "
-#~ "If you put -1, the scroll wil be de-activated"
-#~ msgstr ""
-#~ "Se si mette 0, questo le farà defilare esattamente di un'icona ogni "
-#~ "volta. Se si mette -1, lo scroll verrà disattivato"
-
-#~ msgid "Amount of pixels the icons will scroll at each wheel scroll :"
-#~ msgstr "Di quanti pixel le icone si defileranno ad ogni colpo di scroll :"
-
-#~ msgid "Re-center the dock on leaving if it has been scrolled ?"
-#~ msgstr "Ri-centrare la barra quando si abbandona, se è stata 'scrollata' ?"
-
-#~ msgid "The more it's close to 0, the faster the scroll will be."
-#~ msgstr "Più si avvicina a 0 più lo svolgimento sarà rapido."
-
-#~ msgid "If so, you can specify the scrolling acceleration :"
-#~ msgstr ""
-#~ "Se affermativo potete specificare l'accelerazione dello svolgimento :"
-
-#~ msgid "Sub-docks"
-#~ msgstr "Sotto-barre"
-
-#~ msgid "Applets"
-#~ msgstr "Applets"
-
-#~ msgid "Choose some useful accessories for your dock !"
-#~ msgstr "Scegliete gli accessori utili alla vostra barra !"
-
-#~ msgid ""
-#~ "Just check the box to activate a plug-in, or uncheck to deactivate it. "
-#~ "Once activated, you can use it and configure it."
-#~ msgstr ""
-#~ "Spuntare semplicemente la casella per attivare il plug-in corrispondente, "
-#~ "o togliere la spunta per disattivarlo. Una volta attivato si potrà usare "
-#~ "e configurare."
-
-#~ msgid "List of available accessories :"
-#~ msgstr "Lista degli accessori disponibili :"
-
-#~ msgid "Add fonctionnalities to your dock !"
-#~ msgstr "Aggiungete delle funzionalità alla vostra barra !"
-
-#~ msgid "List of available desktop enhancements :"
-#~ msgstr "Lista delle migliorie disponibili per il vostro desktop :"
-
-#~ msgid "Control your PC from your dock !"
-#~ msgstr "Controllate il pc dalla vostra barra !"
-
-#~ msgid "List of available controlers :"
-#~ msgstr "Lista dei controllori disponibili :"
-
-#~ msgid "Callback zone"
-#~ msgstr "Zona di richiamo"
-
-#~ msgid "Place the mouse into this zone will make the dock re-appear."
-#~ msgstr "Posizionare il mouse in questa zona farà riapparire la barra."
-
-#~ msgid ""
-#~ "Any format allowed; let this field empty to have an invisible callback "
-#~ "zone. The callback zone is what you see when the dock hides itselfs."
-#~ msgstr ""
-#~ "Tutti i formati sono accettati; lasciare questo campo vuoto per avere una "
-#~ "zona di richiamo invisibile. La zona di richiamo è ciò che si vede quando "
-#~ "la barra si nasconde."
-
-#~ msgid "Filename of an image to put on the callback zone :"
-#~ msgstr "Nome dell'immagine da mettere nella zona di richiamo :"
-
-#~ msgid "Transparency of the callback zone :"
-#~ msgstr "Trasparenza della zona di richiamo :"
-
-#~ msgid ""
-#~ "Rotate the callback zone's image when the dock is on top/left/right ?"
-#~ msgstr ""
-#~ "Ruotare l'immagine della zona di richiamo quando la barra è in alto/"
-#~ "sinistra/destra ?"
-
-#~ msgid "Wave's shape"
-#~ msgstr "Forma dell'onda"
-
-#~ msgid "the maximum zoom will be 1+C."
-#~ msgstr "lo zoom massimo sarà 1+C."
-
-#~ msgid "Crest of the wave :"
-#~ msgstr "Cresta dell'onda :"
-
-#~ msgid ""
-#~ "in pixels. Outside of this interval (centered on the mouse), the wave is "
-#~ "flat."
-#~ msgstr ""
-#~ "in pixels. Fuori da quest'intervallo (centrato dal mouse), l'onda è "
-#~ "piatta."
-
-#~ msgid "Width of the interval in which the wave will be effective :"
-#~ msgstr "Larghezza dell'intervallo nel quale l'onda sarà effettiva :"
-
-#~ msgid ""
-#~ "It is their transparency when the wave is flat; they will \"materialize\" "
-#~ "progressively as the dock grows up. The closer to 0, the more transparent "
-#~ "they will be."
-#~ msgstr ""
-#~ "E' la loro trasparenza quando l'onda è piatta; loro si \"materializzeranno"
-#~ "\" progressivamente quando la barra cresce. Più si avvicina a 0, più "
-#~ "sarano trasparenti."
-
-#~ msgid ""
-#~ "More precisely, it is the fraction of the max icon height that will be "
-#~ "used to draw reflect. So setting it to 0.33 will mean that 33% of the "
-#~ "icons will reflect on the ground, and the icons will be placed at the "
-#~ "right distance from the front border of the frame so that the reflect is "
-#~ "fully visible."
-#~ msgstr ""
-#~ "Precisamente è la frazione di altezza massima delle icone che sarà "
-#~ "utilizzata per disegnare il riflesso. Dunque mettere 0.33 significa che "
-#~ "il 33% dell'icona si rifletterà sul piano, e le icone si piazzeranno "
-#~ "correttamente dal bordo inferiore della cornice per permettere al "
-#~ "riflesso di essere interamente visibile."
-
-#~ msgid "Field depth of the view:"
-#~ msgstr "Profondità del campo della vista :"
-
-#~ msgid "Style of the icons' labels"
-#~ msgstr "Stile delle etichette"
-
-#~ msgid "Launchers"
-#~ msgstr "Lanciatori"
-
-#~ msgid "Put 0 if you don't want to restrain them"
-#~ msgstr "Mettere 0 se non volete che si restringano."
-
-#~ msgid "Animation type when clicked :"
-#~ msgstr "Tipo di animazione al momento del click :"
-
-#~ msgid "bounce"
-#~ msgstr "rimbalzo"
-
-#~ msgid "rotate"
-#~ msgstr "rotazione"
-
-#~ msgid "blink"
-#~ msgstr "lampeggiamento"
-
-#~ msgid "pulse"
-#~ msgstr "pulsazione"
-
-#~ msgid "upside-down"
-#~ msgstr "capovolgimento"
-
-#~ msgid "wobbly"
-#~ msgstr "wobbly"
-
-#~ msgid "random"
-#~ msgstr "casuale"
-
-#~ msgid "Number of times the icon will bounce/rotate/blink/etc when clicked :"
-#~ msgstr "Quante volte l'icona rimbalza/ruota/lampeggia/etc quando cliccata :"
-
-#~ msgid "Applications"
-#~ msgstr "Applicazioni"
-
-#~ msgid "Put 0 to let the size adapt itself to the text."
-#~ msgstr ""
-#~ "Mettere 0 per fare sì che la dimensione si adatti a quella del testo."
-
-#~ msgid "Indicator of drag'n'drop on the dock"
-#~ msgstr "Indicatore del copia-incolla sulla barra"
-
-#~ msgid ""
-#~ "Typically an arrow, that will be displayed when you try to drop a new "
-#~ "launcher into the dock. Let empty to use the default one."
-#~ msgstr ""
-#~ "Tipicamente una freccia, che sarà mostrata quando proverete a incollare "
-#~ "un nuovo lanciatore sulla barra. Lasciare vuoto per utilizzare quello di "
-#~ "default."
-
-#~ msgid "Image for the drag'n'drop animation :"
-#~ msgstr "Immagine per l'animazione del trascina-e-rilascia :"
-
-#~ msgid "Size of the dock (width x height, in pixels) :"
-#~ msgstr "Dimensione della barra (larghezza x altezza, in pixels) :"
-
-#~ msgid "Line color of the bubble (r,v,b,a) :"
-#~ msgstr "Linee di colore per bubble (r,v,b,a):"
-
-#~ msgid "Easy Mode"
-#~ msgstr "Modalità semplice"
-
-#~ msgid "Advanced mode"
-#~ msgstr "Modalità avanzata"
-
-#~ msgid "Images"
-#~ msgstr "Immagini"
-
-#~ msgid "Size of the icons at rest :"
-#~ msgstr "Dimensione delle icone a riposo :"
-
-#~ msgid "Space between icons (in pixels) :"
-#~ msgstr "Spazio tra le icone (in pixels) :"
-
-#~ msgid "Animations"
-#~ msgstr "Animazioni"
-
-#~ msgid "Animation type for launchers :"
-#~ msgstr "Tipo di animazione per i lanciatori :"
-
-#~ msgid "Animation type for applis :"
-#~ msgstr "Tipo di animazione per le applicazioni :"
-
-#~ msgid "Extern frame"
-#~ msgstr "Cornice esterna"
-
-#~ msgid "Corner radius, in pixels:"
-#~ msgstr "Raggio degli angoli, in pixels :"
-
-#~ msgid "Color of the extern line (red, blue, green, alpha):"
-#~ msgstr "Colore della cornice (rosso, verde, blu, alpha):"
-
-#~ msgid "Desklet's decorations :"
-#~ msgstr "Decorazioni delle desklets :"
-
-#~ msgid "Background color (r,v,b,a) :"
-#~ msgstr "Colore di sfondo (r,v,b,a) :"
-
-#~ msgid "Background color when mouse hovers it (r,v,b,a) :"
-#~ msgstr "Colore di sfondo al momento in cui il mouse la sorvola(r,v,b,a) :"
-
-#~ msgid "Desklet's background color when mouse hovers it :"
-#~ msgstr "Colore di sfondo al momento in cui il mouse sorvola la desklet :"
-
-#~ msgid "Add a launcher"
-#~ msgstr "Aggiungi un lanciatore"
-
-#~ msgid "Choose or Create a launcher"
-#~ msgstr "Scegliere o Creare un lanciatore"
-
-#~ msgid "Color of the indicator (r,v,b,a) :"
-#~ msgstr "Colore degli indicatori (r,v,b,a) :"
-
-#~ msgid ""
-#~ "The ratio between indicator's size and icon's size. The bigger, the "
-#~ "bigger the indicators are."
-#~ msgstr ""
-#~ "Il rapporto tra la dimensione degli indicatori e quella delle icone dei "
-#~ "lanciatori. Più è elevata, più gli indicatori sono spessi."
-
-#~ msgid "Options"
-#~ msgstr "Opzioni"
-
-#~ msgid "Name of an image to use for the drop indicator emblem :"
-#~ msgstr ""
-#~ "Nome dell'immagine da usare per il simbolo 'incollare nell'indicatore':"
-
-#~ msgid "Modules"
-#~ msgstr "Moduli"
-
-#~ msgid "Check updates"
-#~ msgstr "Verifica aggiornamenti"
-
-#~ msgid "Move this icon"
-#~ msgstr "Muovere questa icona"
-
-#~ msgid "To the left"
-#~ msgstr "A sinistra"
-
-#~ msgid "To the right"
-#~ msgstr "A destra"
-
-#~ msgid "To the beginning"
-#~ msgstr "All'inizio"
-
-#~ msgid "To the end"
-#~ msgstr "Alla fine"
-
-#~ msgid "Is this icon a container ?"
-#~ msgstr "E' un contenitore questo ?"
-
-#~ msgid "Etiquettes"
-#~ msgstr "Etichette"
-
-#~ msgid "Activate a plug-in to use it and configure it."
-#~ msgstr "Attivare un plug-in per usarlo e configurarlo."
-
-#~ msgid "List of available plug-ins (applets and others) :"
-#~ msgstr "Lista dei plug-ins disponibili (applets e altri) :"
-
-#~ msgid "Maximum width that can have the dock :"
-#~ msgstr "Larghezza massima che la barra può avere :"
-
-#~ msgid "Text color (r,v,b,a) :"
-#~ msgstr "Colore del Testo (r,v,a,a) :"
-
-#~ msgid "Well, maybe not ..."
-#~ msgstr "Hmm, forse no ..."
-
-#~ msgid "set behaviour in Compiz to: (name=cairo-dock-desklet & type=utility)"
-#~ msgstr ""
-#~ "Regolate il comportamento di Compiz in : (name=cairo-dock & type=utility)"

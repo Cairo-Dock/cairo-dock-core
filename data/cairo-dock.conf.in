@@ -9,7 +9,7 @@
 #F-[Position on the screen;gtk-fullscreen]
 frame_pos =
 
-#r-[bottom;top;right;left] Choose the screen border regarding to which the dock will place itself :
+#r-[bottom;top;right;left] Choose which screen border the dock will placed on :
 #{The icons will scroll according to the chosen placement type. Of course the dock can be placed anywhere on the screen, here we specify regarding to what.}
 screen border = 0
 

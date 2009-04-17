@@ -768,6 +768,10 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 */
 #define CD_APPLET_SET_DESKLET_RENDERER(cRendererName) CD_APPLET_SET_DESKLET_RENDERER_WITH_DATA (cRendererName, NULL)
 
+/** Empeche le desklet d'etre tourner dans l'espace ou le plan.
+*/
+#define CD_APPLET_SET_STATIC_DESKLET cairo_dock_set_static_desklet (myDesklet)
+
 /**
 *Cree et charge entierement un sous-dock pour notre icone.
 *@param pIconsList la liste (eventuellement NULL) des icones du sous-dock; celles-ci seront chargees en dans la foulee.

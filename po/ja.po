@@ -53,24 +53,20 @@ msgstr ""
 "ションを付けて起動します。）"
 
 #: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
-#, fuzzy, c-format
 msgid "%s is now mounted"
-msgstr "%s は現在 %s"
+msgstr "%s は現在 マウント済み"
 
 #: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
-#, fuzzy, c-format
 msgid "%s is now unmounted"
-msgstr "%s は現在 %s"
+msgstr "%s は現在 アンマウント済み"
 
 #: ../src/cairo-dock-file-manager.c:550
-#, fuzzy, c-format
 msgid "failed to mount %s"
-msgstr "%s %s に失敗"
+msgstr "%s マウント済み に失敗"
 
 #: ../src/cairo-dock-file-manager.c:550
-#, fuzzy, c-format
 msgid "failed to unmount %s"
-msgstr "%s %s に失敗"
+msgstr "%s アンマウント済み に失敗"
 
 #: ../src/cairo-dock-gui-factory.c:699
 #, c-format
@@ -524,8 +520,8 @@ msgid "Always below"
 msgstr "常に最後面に表示"
 
 #: ../src/cairo-dock-menu.c:1362
-msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
-msgstr "Compiz の動作設定での指定法: (name=cairo-dock & type=utility)"
+msgid "set behaviour in Compiz to: (class=Cairo-dock & type=utility)"
+msgstr "Compiz の動作設定での指定法: (class=Cairo-dock & type=utility)"
 
 #: ../src/cairo-dock-modules.c:105
 msgid ""
@@ -632,7 +628,7 @@ msgstr ""
 
 #: ../data/messages:7 ../data/messages:959
 msgid ""
-"Choose the screen border regarding to which the dock will place itself :"
+"Choose which screen border the dock will placed on :"
 msgstr "ドックを配置する画面端の選択 :"
 
 #: ../data/messages:9 ../data/messages:961
@@ -1524,7 +1520,6 @@ msgid "Reflecting power of the plane :"
 msgstr "地面の反射力 :"
 
 #: ../data/messages:381
-#, fuzzy, c-format
 msgid ""
 "Setting it to 0.33 will mean that 33% of the icons will reflect on the "
 "ground. The icons will be placed at the right distance from the front border "
@@ -2490,12 +2485,12 @@ msgstr ""
 #: ../data/messages:771
 msgid ""
 "In the Compiz-Fusion config, activate the 'Widget Layer' plug-in, and set "
-"the rule (class=cairo-dock &amp; type=utility).\n"
+"the rule (class=Cairo-dock &amp; type=utility).\n"
 "You can then switch an applet to the Widget Layer by left-clicking on its "
 "desklet and selecting 'Compiz-Fusion Widget'."
 msgstr ""
 "Compiz-Fusion の設定から「ウィジェット・レイヤ」プラグインを有効にして、"
-"(class=cairo-dock &amp; type=utility) というルールを登録します。\n"
+"(class=Cairo-dock &amp; type=utility) というルールを登録します。\n"
 "その上で、デスクレット上を左クリックして、メニューから「Compiz-Fusion "
 "Widget」を選択します。"
 
@@ -3398,419 +3393,3 @@ msgstr ""
 " - デスクレットの 3D 表示\n"
 " - 新しいアプレット : mail, keyboard indicator, quick folder\n"
 " - 多くのバグ修正とすべてのプラグインのアップグレード"
-
-#~ msgid "mounted"
-#~ msgstr "マウント済み"
-
-#~ msgid "unmounted"
-#~ msgstr "アンマウント済み"
-
-#~ msgid "mount"
-#~ msgstr "マウント"
-
-#~ msgid "unmount"
-#~ msgstr "アンマウント"
-
-#~ msgid ""
-#~ "If you choosed to overwrite X icons, then the Pidgin icons will be "
-#~ "overwritten as well.\n"
-#~ "You can edit the Pidgin launcher, and in the “Extra parameters”, tick the "
-#~ "box that says to not overwrite X icon for this appli."
-#~ msgstr ""
-#~ "「X アイコンを上書き」オプションを選択していると、Pidgin アイコンも上書き"
-#~ "されてしまいます。\n"
-#~ "Pidgin ランチャーを編集して、追加的パラメータの項目にあるボックスのチェッ"
-#~ "クを外し、\n"
-#~ "このアプリに関しては X アイコンの上書きをさせないようにします。"
-
-#~ msgid "Number of steps for icons' resizing (grow up/shrink down) :"
-#~ msgstr "アイコンのサイズ変更の段階数（拡大/縮小） :"
-
-#~ msgid ""
-#~ "in percentage of the distance it can move at each step . After n steps, "
-#~ "the remaining distance will be reduced by (1-s)^n."
-#~ msgstr ""
-#~ "各段階ごとに移動できる距離の割合です。N 段階後、残りの距離は (1-S)^N 分だ"
-#~ "け縮まります。"
-
-#~ msgid "Mouse"
-#~ msgstr "マウス"
-
-#~ msgid ""
-#~ "If you put 0, this will make them scroll of exactly one icon each time. "
-#~ "If you put -1, the scroll wil be de-activated"
-#~ msgstr ""
-#~ "0 に指定すると、ちょうど 1 アイコン単位のスクロールになります。-1 に指定す"
-#~ "ると、スクロール機能が無効になります。"
-
-#~ msgid "Amount of pixels the icons will scroll at each wheel scroll :"
-#~ msgstr "1回のホイールスクロールにつきアイコンがスクロールするピクセル数 :"
-
-#~ msgid "Re-center the dock on leaving if it has been scrolled ?"
-#~ msgstr ""
-#~ "アイコンをスクロールさせた場合はドックからの退出時に元の配列に戻す？"
-
-#~ msgid "The more it's close to 0, the faster the scroll will be."
-#~ msgstr "0 に近いほどスクロールが速くなります。"
-
-#~ msgid "If so, you can specify the scrolling acceleration :"
-#~ msgstr "元の配列に戻す場合のスクロール加速度の指定 :"
-
-#~ msgid "Sub-docks"
-#~ msgstr "サブ・ドック"
-
-#~ msgid "Applets"
-#~ msgstr "アプレット"
-
-#~ msgid "Choose some useful accessories for your dock !"
-#~ msgstr "ドック用の便利なアクセサリを選ぼう！"
-
-#~ msgid ""
-#~ "Just check the box to activate a plug-in, or uncheck to deactivate it. "
-#~ "Once activated, you can use it and configure it."
-#~ msgstr ""
-#~ "プラグインを有効にするにはボックスにチェックを入れ、無効にするにはチェック"
-#~ "を外してください。有効にするとそのプラグインの使用と設定が可能になります。"
-
-#~ msgid "List of available accessories :"
-#~ msgstr "利用可能なアクセサリのリスト :"
-
-#~ msgid "Add fonctionnalities to your dock !"
-#~ msgstr "ドックに機能を追加しよう！"
-
-#~ msgid "List of available desktop enhancements :"
-#~ msgstr "利用可能なデスクトップ追加機能のリスト :"
-
-#~ msgid "Control your PC from your dock !"
-#~ msgstr "ドックから PC を操作しよう！"
-
-#~ msgid "List of available controlers :"
-#~ msgstr "利用可能なコントローラのリスト :"
-
-#~ msgid "Callback zone"
-#~ msgstr "呼び戻しゾーン"
-
-#~ msgid "Place the mouse into this zone will make the dock re-appear."
-#~ msgstr "ドックを再表示させるには、このゾーンにマウスを置きます。"
-
-#~ msgid ""
-#~ "Any format allowed; let this field empty to have an invisible callback "
-#~ "zone. The callback zone is what you see when the dock hides itselfs."
-#~ msgstr ""
-#~ "画像形式は問いません。呼び戻しゾーンを見えなくするにはここを空欄にしてくだ"
-#~ "さい。ドックが隠れた際に見られるのが、呼び戻しゾーンです。"
-
-#~ msgid "Filename of an image to put on the callback zone :"
-#~ msgstr "呼び戻しゾーン上に配置する画像のファイル名 :"
-
-#~ msgid "Transparency of the callback zone :"
-#~ msgstr "呼び戻しゾーンの透明度 :"
-
-#~ msgid ""
-#~ "Rotate the callback zone's image when the dock is on top/left/right ?"
-#~ msgstr "ドックが上/左/右に配置されたとき呼び戻しゾーンの画像を回転？"
-
-#~ msgid "Wave's shape"
-#~ msgstr "波の形"
-
-#~ msgid "the maximum zoom will be 1+C."
-#~ msgstr "ズームの最大は 1＋この指定値 になります。"
-
-#~ msgid "Crest of the wave :"
-#~ msgstr "アイコンの波の高さ :"
-
-#~ msgid ""
-#~ "in pixels. Outside of this interval (centered on the mouse), the wave is "
-#~ "flat."
-#~ msgstr ""
-#~ "ピクセル単位。マウスを中心としたこの指定幅の外側は、アイコンのうねりがない"
-#~ "平坦な状態になります。"
-
-#~ msgid "Width of the interval in which the wave will be effective :"
-#~ msgstr "波のようにアイコンをうねらせる効果が適用される幅 :"
-
-#~ msgid ""
-#~ "It is their transparency when the wave is flat; they will \"materialize\" "
-#~ "progressively as the dock grows up. The closer to 0, the more transparent "
-#~ "they will be."
-#~ msgstr ""
-#~ "アイコンが波のようにうねっていない平坦な状態ときの透明度です。ドックが伸び"
-#~ "るにつれてアイコンが徐々に姿を現します。0 に近い数字ほど透明になります。"
-
-#~ msgid ""
-#~ "More precisely, it is the fraction of the max icon height that will be "
-#~ "used to draw reflect. So setting it to 0.33 will mean that 33% of the "
-#~ "icons will reflect on the ground, and the icons will be placed at the "
-#~ "right distance from the front border of the frame so that the reflect is "
-#~ "fully visible."
-#~ msgstr ""
-#~ "より正確に言えば、反射の描画に使用されるアイコンの高さの割合の最大値です。"
-#~ "例えば 0.33 に設定するとアイコンの高さの 33% が地面上に反射し、外枠手前の"
-#~ "境界線からその反射全体が表示されるようにする分だけ奥に離れた場所にアイコン"
-#~ "が置かれます。"
-
-#~ msgid "Field depth of the view:"
-#~ msgstr "ドック地面の奥行き :"
-
-#~ msgid "Style of the icons' labels"
-#~ msgstr "アイコンのラベルのスタイル"
-
-#~ msgid "Launchers"
-#~ msgstr "ランチャー"
-
-#~ msgid "Put 0 if you don't want to restrain them"
-#~ msgstr "大きさを制限したくない場合は 0 に指定します。"
-
-#~ msgid "Animation type when clicked :"
-#~ msgstr "クリック時のアニメーションの種類 :"
-
-#~ msgid "bounce"
-#~ msgstr "バウンド"
-
-#~ msgid "rotate"
-#~ msgstr "回転"
-
-#~ msgid "blink"
-#~ msgstr "点滅"
-
-#~ msgid "pulse"
-#~ msgstr "パルス"
-
-#~ msgid "upside-down"
-#~ msgstr "上下逆さま"
-
-#~ msgid "wobbly"
-#~ msgstr "伸び縮み"
-
-#~ msgid "random"
-#~ msgstr "ランダム"
-
-#~ msgid "Number of times the icon will bounce/rotate/blink/etc when clicked :"
-#~ msgstr "クリック時にアイコンがバウンドや回転、点滅等する回数 :"
-
-#~ msgid "Applications"
-#~ msgstr "アプリケーション"
-
-#~ msgid "Put 0 to let the size adapt itself to the text."
-#~ msgstr "0 に指定すると、テキストに合わせて大きさを調整します。"
-
-#~ msgid "Indicator of drag'n'drop on the dock"
-#~ msgstr "ドック上のドラッグ＆ドロップの標示"
-
-#~ msgid ""
-#~ "Typically an arrow, that will be displayed when you try to drop a new "
-#~ "launcher into the dock. Let empty to use the default one."
-#~ msgstr ""
-#~ "一般的には矢印です。ドックに新しいランチャーをドロップしようとするときに表"
-#~ "示されます。デフォルトのものを使用するには空欄のままにしてください。"
-
-#~ msgid "Image for the drag'n'drop animation :"
-#~ msgstr "ドラッグ＆ドロップ・アニメーション用の画像 :"
-
-#~ msgid "Size of the dock (width x height, in pixels) :"
-#~ msgstr "ドックの大きさ（幅×高さ、ピクセル単位） :"
-
-#, fuzzy
-#~ msgid "Line color of the bubble (r,v,b,a) :"
-#~ msgstr "吹き出しの背景色（赤、緑、青、透明）:"
-
-# #################################
-# ########### themes.conf #############
-# #################################
-#, fuzzy
-#~ msgid "Theme"
-#~ msgstr "テーマ"
-
-#~ msgid "Auto-Hide"
-#~ msgstr "自動で隠す"
-
-# #################################
-# ########### cairo-dock-easy.conf #############
-# #################################
-#~ msgid "Personnalisation"
-#~ msgstr "カスタマイズ"
-
-#~ msgid "Images"
-#~ msgstr "画像"
-
-#~ msgid "Size of the icons at rest :"
-#~ msgstr "アイコンの待機時の大きさ :"
-
-#~ msgid "Space between icons (in pixels) :"
-#~ msgstr "アイコン同士の間隔（ピクセル単位）:"
-
-#~ msgid "Animations"
-#~ msgstr "アニメーション"
-
-#~ msgid "Animation type for launchers :"
-#~ msgstr "ランチャーのアニメーションの種類 :"
-
-#~ msgid "Animation type for applis :"
-#~ msgstr "アプリケーションのアニメーションの種類 :"
-
-#~ msgid "Extern frame"
-#~ msgstr "外枠"
-
-#~ msgid "Corner radius, in pixels:"
-#~ msgstr "角の丸み（ピクセル単位） :"
-
-#~ msgid "Color of the extern line (red, blue, green, alpha):"
-#~ msgstr "外枠の色（赤、青、緑、アルファ）:"
-
-#~ msgid "Desklet's decorations :"
-#~ msgstr "デスクレットの装飾 :"
-
-#~ msgid "Easy Mode"
-#~ msgstr "簡易設定モード"
-
-#~ msgid "Advanced mode"
-#~ msgstr "詳細設定モード"
-
-#~ msgid "Background color (r,v,b,a) :"
-#~ msgstr "背景色（赤、緑、青、アルファ）:"
-
-#~ msgid "Background color when mouse hovers it (r,v,b,a) :"
-#~ msgstr "マウスを置いたときの背景色（赤、緑、青、アルファ）:"
-
-#~ msgid "Desklet's background color when mouse hovers it :"
-#~ msgstr "マウスが置かれたときのデスクレットの背景色 :"
-
-#~ msgid "Add a launcher"
-#~ msgstr "ランチャーを追加"
-
-#~ msgid "Choose or Create a launcher"
-#~ msgstr "ランチャーの選択または作成"
-
-#, fuzzy
-#~ msgid "Color of the indicator (r,v,b,a) :"
-#~ msgstr "外枠線の色（赤、緑、青、アルファ） :"
-
-#~ msgid ""
-#~ "The ratio between indicator's size and icon's size. The bigger, the "
-#~ "bigger the indicators are."
-#~ msgstr ""
-#~ "標示の大きさとアイコンの大きさとの割合です。数字が大きいほど標示は大きくな"
-#~ "ります。"
-
-#, fuzzy
-#~ msgid "Options"
-#~ msgstr "アプリケーション"
-
-#, fuzzy
-#~ msgid "Name of an image to use for the drop indicator emblem :"
-#~ msgstr "標示に使用する画像のファイル名 :"
-
-#~ msgid "Modules"
-#~ msgstr "モジュール"
-
-#~ msgid "Check updates"
-#~ msgstr "更新版チェック"
-
-#~ msgid "Move this icon"
-#~ msgstr "このアイコンを移動"
-
-#~ msgid "To the left"
-#~ msgstr "左へ"
-
-#~ msgid "To the right"
-#~ msgstr "右へ"
-
-#~ msgid "To the beginning"
-#~ msgstr "先頭へ"
-
-#~ msgid "To the end"
-#~ msgstr "最後尾へ"
-
-#~ msgid "Is this icon a container ?"
-#~ msgstr "このアイコンはコンテナ？"
-
-#~ msgid ""
-#~ "So if you check this box, your launchers and their icons will be deleted "
-#~ "and replaced by the ones provided in the new theme. Otherwise the current "
-#~ "launchers will be kept."
-#~ msgstr ""
-#~ "このボックスにチェックを入れた場合、現在のランチャーやアイコンは削除され、"
-#~ "新しいテーマによって提供されるものに入れ替えられます。チェックを入れない場"
-#~ "合は現在のものがそのまま維持されます。"
-
-#~ msgid "Etiquettes"
-#~ msgstr "表示"
-
-#~ msgid "Activate a plug-in to use it and configure it."
-#~ msgstr "プラグインを使用できるよう有効化して、設定を行います。"
-
-#~ msgid "List of available plug-ins (applets and others) :"
-#~ msgstr "利用可能なプラグインのリスト（アプレット等） :"
-
-#~ msgid "Maximum width that can have the dock :"
-#~ msgstr "ドックの幅の最大値 :"
-
-#~ msgid ""
-#~ "You can scroll with the mouse's wheel to make the icons scroll, like a "
-#~ "carousel. If you put 0, the dock will automatically adapt itself to the "
-#~ "desktop's size."
-#~ msgstr ""
-#~ "マウスホイールを使用して回転台のようにアイコンをスクロールさせることが可能"
-#~ "です。0 に設定するとドックは自動的にデスクトップの大きさに合わせます。"
-
-#~ msgid "Text color (r,v,b,a) :"
-#~ msgstr "テキストの色（赤、緑、青、透明）:"
-
-#~ msgid "Well, maybe not ..."
-#~ msgstr "知りたくないかも …"
-
-#~ msgid "Compiz Fusion Widget"
-#~ msgstr "Compiz Fusion ウィジェット"
-
-#~ msgid "set behaviour in Compiz to: (name=cairo-dock-desklet & type=utility)"
-#~ msgstr "Compiz 設定時の指定記入法: (name=cairo-dock-desklet & type=utility)"
-
-#~ msgid ""
-#~ "Gap from the absolute position on the screen's edge, in pixels.. You can "
-#~ "also move the dock by holding ALT or CTRL key and left mouse button."
-#~ msgstr ""
-#~ "選択した画面端の基本配置位置からのずれの大きさ（ピクセル単位）です。ALT ま"
-#~ "たは CTRL キーとマウス左ボタンを押し続けることで、ドックを移動させることも"
-#~ "可能です。"
-
-#~ msgid "default"
-#~ msgstr "デフォルト"
-
-#~ msgid "List of available desktop enhancement :"
-#~ msgstr "利用可能なデスクトップ追加機能のリスト :"
-
-#~ msgid ""
-#~ "The icons will scroll according to the chosen placement type.\n"
-#~ " Of course the dock can be placed anywhere on the screen, here we specify "
-#~ "regarding to what"
-#~ msgstr ""
-#~ "アイコンは選択したドック配置位置に応じたスクロールをします。\n"
-#~ "ドックは画面上のどの位置にも配置可能ですが、ここではその基本となる位置を指"
-#~ "定します。"
-
-#~ msgid ""
-#~ "Cairo-Dock will then replace your taskbar.\n"
-#~ " It is recommanded to remove any other taskbar, and to not force the "
-#~ "dock's type to normal."
-#~ msgstr ""
-#~ "有効にすると Cairo-Dock はタスクバーに代替する機能を提供するので、他のタス"
-#~ "クバーを取り除くことをお薦めします。\n"
-#~ "その場合、ドックのウィンドウ・タイプを normal に強制しないこともお薦めしま"
-#~ "す。"
-
-#~ msgid ""
-#~ "Cairo-Dock II\n"
-#~ " - The lucky owners of NVidia/Intel cards can now benefit from a full "
-#~ "OpenGL dock !\n"
-#~ " including a lot of new effects and animations.\n"
-#~ " - The config panel has been widely rewritten.\n"
-#~ " - Desklets are now in 3D\n"
-#~ " - Lot of bug fixes and upgrades in all plug-ins."
-#~ msgstr ""
-#~ "Cairo-Dock II\n"
-#~ " - NVidia/Intel カード使用者は、多数の新エフェクトやアニメーションを含"
-#~ "む \n"
-#~ "OpenGL ドックの全機能が利用可能！\n"
-#~ " - 設定パネルの大幅な改訂\n"
-#~ " - デスクレットの 3D 化\n"
-#~ " - 多数のバグ修正や全てのプラグインのアップグレード"

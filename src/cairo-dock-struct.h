@@ -919,6 +919,7 @@ struct _CairoDesklet {
 	GLuint iBackGroundTexture;
 	GLuint iForeGroundTexture;
 	gint iAnimationStep;
+	gboolean bFixedAttitude;
 };
 
 typedef enum {

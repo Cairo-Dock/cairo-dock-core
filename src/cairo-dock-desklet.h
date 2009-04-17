@@ -134,6 +134,8 @@ void cairo_dock_reload_desklets_decorations (gboolean bDefaultThemeOnly, cairo_t
 
 void cairo_dock_free_desklet_decoration (CairoDeskletDecoration *pDecoration);
 
+#define cairo_dock_set_static_desklet(pDesklet) (pDesklet)->bFixedAttitude = TRUE
+
 G_END_DECLS
 
 #endif
