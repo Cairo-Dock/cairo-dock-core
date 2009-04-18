@@ -18,7 +18,7 @@ msgstr ""
 msgid "Do you want to mount this point ?"
 msgstr "このポイントにマウントしますか？"
 
-#: ../src/cairo-dock-callbacks.c:1729
+#: ../src/cairo-dock-callbacks.c:1777
 msgid "Quit Cairo-Dock ?"
 msgstr "Cairo-Dock 終了？"
 
@@ -53,22 +53,26 @@ msgstr ""
 "ションを付けて起動します。）"
 
 #: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
+#, c-format
 msgid "%s is now mounted"
 msgstr "%s は現在 マウント済み"
 
 #: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
+#, c-format
 msgid "%s is now unmounted"
 msgstr "%s は現在 アンマウント済み"
 
 #: ../src/cairo-dock-file-manager.c:550
+#, c-format
 msgid "failed to mount %s"
 msgstr "%s マウント済み に失敗"
 
 #: ../src/cairo-dock-file-manager.c:550
+#, c-format
 msgid "failed to unmount %s"
 msgstr "%s アンマウント済み に失敗"
 
-#: ../src/cairo-dock-gui-factory.c:699
+#: ../src/cairo-dock-gui-factory.c:700
 #, c-format
 msgid ""
 "The '%s' plug-in was not found.\n"
@@ -79,7 +83,7 @@ msgstr ""
 "機能を利用するには、ドック本体と同じバージョンのプラグインをインストールして"
 "下さい。"
 
-#: ../src/cairo-dock-gui-factory.c:711
+#: ../src/cairo-dock-gui-factory.c:712
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -88,7 +92,7 @@ msgstr ""
 "'%s' プラグインが有効化されていません。\n"
 "機能を利用するには、プラグインを有効にして下さい。"
 
-#: ../src/cairo-dock-gui-factory.c:1695
+#: ../src/cairo-dock-gui-factory.c:1699
 msgid "grab"
 msgstr "取得"
 
@@ -182,11 +186,11 @@ msgstr "ドックへのアクセス方法"
 msgid "Set a background to your dock."
 msgstr "ドックに背景をセットします。"
 
-#: ../src/cairo-dock-internal-desklets.c:90
+#: ../src/cairo-dock-internal-desklets.c:91
 msgid "The applets can be set on your desktop as widgets."
 msgstr "アプレットをウィジェットとしてデスクトップに配置可能"
 
-#: ../src/cairo-dock-internal-dialogs.c:87
+#: ../src/cairo-dock-internal-dialogs.c:91
 msgid ""
 "It provides different window decorators. Activate it first if you want to "
 "select a different decorator for your dialogs."
@@ -194,7 +198,7 @@ msgstr ""
 "このモジュールが様々なウィンドウ装飾を提供しているので、ダイアログに異なる装"
 "飾を選択したい場合は、最初に有効にしてください。"
 
-#: ../src/cairo-dock-internal-dialogs.c:91
+#: ../src/cairo-dock-internal-dialogs.c:95
 msgid "Configure the look of the dialog bubbles."
 msgstr "ダイアログ吹き出しの外観に関わる設定"
 
@@ -218,10 +222,13 @@ msgstr "アイコンのラベルやクイック情報のスタイルの定義"
 msgid "Set the position of the main dock."
 msgstr "メイン・ドックの配置位置の設定"
 
-#: ../src/cairo-dock-internal-system.c:109
-#: ../src/cairo-dock-internal-taskbar.c:154
+#: ../src/cairo-dock-internal-system.c:110
 msgid "All the parameters you will never want to tweak."
 msgstr "積極的に手を加えたくはないと思われるパラメータ群"
+
+#: ../src/cairo-dock-internal-taskbar.c:167
+msgid "Display and interact with the currently open windows."
+msgstr ""
 
 #: ../src/cairo-dock-internal-views.c:74
 msgid ""
@@ -463,7 +470,7 @@ msgstr "面 %d へ移動"
 msgid "Kill"
 msgstr "強制終了"
 
-#: ../src/cairo-dock-menu.c:1274
+#: ../src/cairo-dock-menu.c:1274 ../src/cairo-dock-menu.c:1293
 msgid "Launch new"
 msgstr "追加起動"
 
@@ -487,43 +494,44 @@ msgstr "最小化"
 msgid "Close"
 msgstr "閉じる"
 
-#: ../src/cairo-dock-menu.c:1303
+#: ../src/cairo-dock-menu.c:1313
 msgid "Configure this applet"
 msgstr "このモジュールの設定"
 
-#: ../src/cairo-dock-menu.c:1307
+#: ../src/cairo-dock-menu.c:1317
 msgid "Detach this applet"
 msgstr "このモジュールを分離"
 
-#: ../src/cairo-dock-menu.c:1307
+#: ../src/cairo-dock-menu.c:1317
 msgid "Return to dock"
 msgstr "ドックに戻す"
 
-#: ../src/cairo-dock-menu.c:1310
+#: ../src/cairo-dock-menu.c:1320
 msgid "Remove this applet"
 msgstr "このモジュールを削除"
 
-#: ../src/cairo-dock-menu.c:1314
+#: ../src/cairo-dock-menu.c:1324
 msgid "Launch another instance of this applet"
 msgstr "このアプレットをもう1つ起動"
 
-#: ../src/cairo-dock-menu.c:1333
+#: ../src/cairo-dock-menu.c:1343
 msgid "Always on top"
 msgstr "常に最前面に表示"
 
-#: ../src/cairo-dock-menu.c:1340
+#: ../src/cairo-dock-menu.c:1350
 msgid "Normal"
 msgstr "普通"
 
-#: ../src/cairo-dock-menu.c:1347
+#: ../src/cairo-dock-menu.c:1357
 msgid "Always below"
 msgstr "常に最後面に表示"
 
-#: ../src/cairo-dock-menu.c:1362
-msgid "set behaviour in Compiz to: (class=Cairo-dock & type=utility)"
-msgstr "Compiz の動作設定での指定法: (class=Cairo-dock & type=utility)"
+#: ../src/cairo-dock-menu.c:1372
+#, fuzzy
+msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+msgstr "Compiz の動作設定での指定法: (name=cairo-dock & type=utility)"
 
-#: ../src/cairo-dock-modules.c:105
+#: ../src/cairo-dock-modules.c:106
 msgid ""
 "A useful FAQ that contains also a lot of hints.\n"
 "Let the mouse over a sentence to make the hint dialog popups."
@@ -531,7 +539,7 @@ msgstr ""
 "多くのヒントも含む便利な FAQ。\n"
 "マウスを説明文上に置くと、ヒント・ダイアログがポップアップ。"
 
-#: ../src/cairo-dock-themes-manager.c:395
+#: ../src/cairo-dock-themes-manager.c:405
 msgid ""
 "You made some modifications in the current theme.\n"
 "You will loose them if you don't save before choosing a new theme. Continue "
@@ -541,25 +549,25 @@ msgstr ""
 "新しいテーマの選択前にあらかじめ保存を行っておかないと、変更が失われてしまい"
 "ます。かまわず続行しますか？"
 
-#: ../src/cairo-dock-themes-manager.c:578
+#: ../src/cairo-dock-themes-manager.c:588
 #, c-format
 msgid "Are you sure you want to overwrite theme %s ?"
 msgstr "本当に %s テーマを上書きしますか？"
 
-#: ../src/cairo-dock-themes-manager.c:657
+#: ../src/cairo-dock-themes-manager.c:667
 #, c-format
 msgid "Are you sure you want to delete theme %s ?"
 msgstr "本当に %s テーマを削除しますか？"
 
-#: ../src/cairo-dock-themes-manager.c:679
+#: ../src/cairo-dock-themes-manager.c:689
 msgid "< Safe Mode >"
 msgstr "< セーフモード >"
 
-#: ../src/cairo-dock-themes-manager.c:679
+#: ../src/cairo-dock-themes-manager.c:689
 msgid "Manage Themes"
 msgstr "テーマの管理"
 
-#: ../src/cairo-dock-themes-manager.c:684
+#: ../src/cairo-dock-themes-manager.c:694
 msgid ""
 "You are running Cairo-Dock in safe mode.\n"
 "Why ? Probably because a plug-in has messed into your dock,\n"
@@ -627,8 +635,9 @@ msgstr ""
 "上のどの位置にも配置可能ですが、ここではその基本となる位置を指定します。"
 
 #: ../data/messages:7 ../data/messages:959
+#, fuzzy
 msgid ""
-"Choose which screen border the dock will placed on :"
+"Choose the screen border regarding to which the dock will place itself :"
 msgstr "ドックを配置する画面端の選択 :"
 
 #: ../data/messages:9 ../data/messages:961
@@ -1520,6 +1529,7 @@ msgid "Reflecting power of the plane :"
 msgstr "地面の反射力 :"
 
 #: ../data/messages:381
+#, fuzzy, c-format
 msgid ""
 "Setting it to 0.33 will mean that 33% of the icons will reflect on the "
 "ground. The icons will be placed at the right distance from the front border "
@@ -2483,14 +2493,15 @@ msgstr ""
 "レイヤ画面を一度呼び出してやる必要があるかもしれません。"
 
 #: ../data/messages:771
+#, fuzzy
 msgid ""
 "In the Compiz-Fusion config, activate the 'Widget Layer' plug-in, and set "
-"the rule (class=Cairo-dock &amp; type=utility).\n"
+"the rule (name=cairo-dock &amp; type=utility).\n"
 "You can then switch an applet to the Widget Layer by left-clicking on its "
 "desklet and selecting 'Compiz-Fusion Widget'."
 msgstr ""
 "Compiz-Fusion の設定から「ウィジェット・レイヤ」プラグインを有効にして、"
-"(class=Cairo-dock &amp; type=utility) というルールを登録します。\n"
+"(name=cairo-dock &amp; type=utility) というルールを登録します。\n"
 "その上で、デスクレット上を左クリックして、メニューから「Compiz-Fusion "
 "Widget」を選択します。"
 

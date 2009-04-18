@@ -131,6 +131,14 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	
 	if (cTmpFilePath != NULL && cExtractTo != NULL)
 	{
+		if (!g_file_test (cExtractTo, G_FILE_TEST_EXISTS))
+		{
+			if (g_mkdir (cExtractTo, 7*8*8+7*8+5) != 0)
+			{
+				cd_warning ("couldn't create directory %s", cExtractTo);
+				return NULL;
+			}
+		}
 		if (pDialog != NULL)
 		{
 			cairo_dock_set_dialog_message_printf (pDialog, "uncompressing %s", cTmpFilePath);
@@ -139,18 +147,28 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 				gtk_main_iteration ();
 		}
 		cCommand = g_strdup_printf ("tar xfz \"%s\" -C \"%s\"", cTmpFilePath, cExtractTo);
+		g_free (cTmpFilePath);
 		r = system (cCommand);
 		if (r != 0)
 		{
 			g_set_error (erreur, 1, 1, "an error occured while executing '%s'", cCommand);
-			g_free (cTmpFilePath);
 			cTmpFilePath = NULL;
 		}
 		else
 		{
-			g_free (cTmpFilePath);
-			cTmpFilePath = g_strdup_printf ("%s/%s", cExtractTo, cDistantFileName);
+			gchar *cLocalFileName;  // on construit le nom local du theme apres decompression.
+			gchar *str = strrchr (cDistantFileName, '/');
+			if (str != NULL)
+				cLocalFileName = g_strdup (str+1);
+			else
+				cLocalFileName = g_strdup (cDistantFileName);
+			
+			if (g_str_has_suffix (cLocalFileName, ".tar.gz"))
+				cLocalFileName[strlen(cLocalFileName)-7] = '\0';
+			
+			cTmpFilePath = g_strdup_printf ("%s/%s", cExtractTo, cLocalFileName);
 		}
+		g_free (cCommand);
 	}
 	
 	if (! cairo_dock_dialog_unreference (pDialog))
@@ -279,7 +297,7 @@ GHashTable *cairo_dock_list_themes (const gchar *cShareThemesDir, const gchar *c
 
 
 
-gchar *cairo_dock_build_temporary_themes_conf_file (void/*GHashTable **hThemeTable*/)
+gchar *cairo_dock_build_temporary_themes_conf_file (void)
 {
 	//\___________________ On cree un fichier de conf temporaire.
 	const gchar *cTmpDir = g_get_tmp_dir ();
@@ -403,7 +421,7 @@ static void on_theme_apply (gpointer *user_data)
 		
 		//\___________________ On obtient le chemin du nouveau theme (telecharge si necessaire).
 		gchar *cUserThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
-		gchar *cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, cUserThemesDir, "");  /// mettre CAIRO_DOCK_THEMES_DIR pour la finale...
+		gchar *cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, cUserThemesDir, CAIRO_DOCK_THEMES_DIR);
 		g_free (cUserThemesDir);
 		g_return_if_fail (cNewThemePath != NULL);
 		g_print ("cNewThemePath : %s\n", cNewThemePath);

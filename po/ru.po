@@ -2405,7 +2405,7 @@ msgstr ""
 #: ../data/messages:771
 msgid ""
 "In the Compiz-Fusion config, activate the 'Widget Layer' plug-in, and set "
-"the rule (class=cairo-dock &amp; type=utility).\n"
+"the rule (name=cairo-dock &amp; type=utility).\n"
 "You can then switch an applet to the Widget Layer by left-clicking on its "
 "desklet and selecting 'Compiz-Fusion Widget'."
 msgstr ""

@@ -5,6 +5,9 @@
 #include <gtk/gtk.h>
 G_BEGIN_DECLS
 
+/** @file cairo-dock-gui-manager.h This file manages the GUIs of Cairo-Dock. GUIs are built from a .conf file; .conf files are normal config files, but with some special indications in comments. Each value will be represented by a pre-defined widget, that is defined by the first letter of the value's comment. The comment also contains a description of the value, and an optionnal tooltip. See cairo-dock-gui-factory.c for the list of pre-defined widgets, and see cairo-dock.conf for a complete exemple.
+GUIs can be stand-alone, or embedded in the main GUI in the case of modules.
+*/
 
 struct _CairoDockCategoryWidgetTable {
 	GtkWidget *pFrame;
@@ -68,14 +71,21 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 gpointer cairo_dock_get_previous_widget (void);
 
 
+/** Completely reload the current module's GUI by reading again its conf file and re-building it from scratch (so if the module has a custom widget builder, it will be called too).
+*@param pInstance the instance of the external module (myApplet) or NULL for an internal module.
+*/
 void cairo_dock_reload_current_group_widget (CairoDockModuleInstance *pInstance);
 
+/** Retrieve the widget associated with a given (group;key) pair of the conf file it was built from.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*/
 GtkWidget *cairo_dock_get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName);
 
 
-GList *cairo_dock_search_keywords_in_group_names (gchar **pKeyWords, gboolean bAllWords, gboolean bSearchInToolTip);
-
 void cairo_dock_apply_current_filter (gchar **pKeyWords, gboolean bAllWords, gboolean bSearchInToolTip, gboolean bHighLightText, gboolean bHideOther);
+/** Trigger the filter, according to the current text and filter's options.
+*/
 void cairo_dock_trigger_current_filter (void);
 
 

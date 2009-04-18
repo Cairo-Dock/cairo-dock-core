@@ -765,9 +765,28 @@ static void _cairo_dock_launch_new (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	if (icon->Xid > 0)
+	if (icon->acCommand != NULL)
 	{
 		cairo_dock_notify (CAIRO_DOCK_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+	}
+}
+
+static void _cairo_dock_close_class (GtkMenuItem *pMenuItem, gpointer *data)
+{
+	Icon *icon = data[0];
+	CairoDock *pDock = data[1];
+	if (icon->pSubDock != NULL)
+	{
+		Icon *pIcon;
+		GList *ic;
+		for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+		{
+			pIcon = ic->data;
+			if (pIcon->Xid != 0)
+			{
+				cairo_dock_close_xwindow (pIcon->Xid);
+			}
+		}
 	}
 }
 
@@ -1282,6 +1301,18 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		_add_entry_in_menu (_("Minimize"), GTK_STOCK_GO_DOWN, _cairo_dock_minimize_appli, menu);
 
 		_add_entry_in_menu (_("Close"), GTK_STOCK_CLOSE, _cairo_dock_close_appli, menu);
+	}
+	else if (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->pSubDock != NULL && icon->cClass != NULL)  // inhibiteur avec sous-dock de classe.
+	{
+		pMenuItem = gtk_separator_menu_item_new ();
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+		
+		if (icon->acDesktopFileName != NULL)  // c'est un lanceur inhibiteur.
+		{
+			_add_entry_in_menu (_("Launch new"), GTK_STOCK_ADD, _cairo_dock_launch_new, menu);
+		}
+		
+		_add_entry_in_menu (_("Close all"), GTK_STOCK_CLOSE, _cairo_dock_close_class, menu);
 	}
 	
 	if (CAIRO_DOCK_IS_APPLET (icon) || CAIRO_DOCK_IS_DESKLET (pContainer))  // on regarde si pModule != NULL de facon a le faire que pour l'icone qui detient effectivement le module.

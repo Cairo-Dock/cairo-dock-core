@@ -12,9 +12,13 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-load.h"
+#include "cairo-dock-draw.h"
+#include "cairo-dock-container.h"
+#include "cairo-dock-dock-factory.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-internal-accessibility.h"
+#include "cairo-dock-internal-indicators.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-taskbar.h"
 
@@ -135,7 +139,16 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 			}
 		}
 	}
-
+	
+	if (pPrevTaskBar->bShowAppli != pTaskBar->bShowAppli ||
+		pPrevTaskBar->bGroupAppliByClass != pTaskBar->bGroupAppliByClass)
+	{
+		cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+		double fMaxScale = cairo_dock_get_max_scale (pDock);
+		cairo_dock_load_class_indicator (pTaskBar->bShowAppli && pTaskBar->bGroupAppliByClass ? myIndicators.cClassIndicatorImagePath : NULL, pCairoContext, fMaxScale);
+		cairo_destroy (pCairoContext);
+	}
+	
 	/**if (bUpdateSize)  // utile ?...
 	{
 		cairo_dock_calculate_dock_icons (pDock);
@@ -151,7 +164,7 @@ DEFINE_PRE_INIT (TaskBar)
 	pModule->cModuleName = "TaskBar";
 	pModule->cTitle = "TaskBar";
 	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-taskbar.png";
-	pModule->cDescription = N_("All the parameters you will never want to tweak.");
+	pModule->cDescription = N_("Display and interact with the currently open windows.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
 	pModule->iSizeOfConfig = sizeof (CairoConfigTaskBar);
 	pModule->iSizeOfData = 0;

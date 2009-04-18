@@ -483,7 +483,7 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 					g_free (cUri);
 					
 					cd_message (" c'est un volume, on considere qu'il vient de se faire (de)monter");
-					cairo_dock_show_temporary_dialog_with_icon (bIsMounted ? _("%s is now mounted") : _("%s is now unmounted"), pNewIcon, CAIRO_DOCK_IS_DOCK (pParentContainer) ? CAIRO_CONTAINER (pIcon->pSubDock) : pParentContainer, 4000, pNewIcon->acName);
+					cairo_dock_show_temporary_dialog_with_icon (bIsMounted ? _("%s is now mounted") : _("%s is now unmounted"), pNewIcon, CAIRO_DOCK_IS_DOCK (pParentContainer) ? CAIRO_CONTAINER (pIcon->pSubDock) : pParentContainer, 4000, "same-icon", pNewIcon->acName);
 				}
 			}
 		}

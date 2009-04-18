@@ -530,6 +530,7 @@ static void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer 
 		pListStore = NULL;\
 		return ; }\
 	pListStore = gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF);\
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pListStore), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);\
 	if (cEmptyItem) {\
 		pHFunction (cEmptyItem, NULL, pListStore); }\
 	g_hash_table_foreach (pHashTable, (GHFunc) pHFunction, pListStore); } while (0)
@@ -1186,6 +1187,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case 'H' :  // idem mais avec une combo-entry.
 				//\______________ On construit le widget de visualisation de themes.
 				modele = _allocate_new_model ();
+				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
+				
 				_add_combo_from_modele (modele, TRUE, iElementType == 'H');
 				
 				//\______________ On recupere les themes.
@@ -1214,6 +1217,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case 'x' :  // liste des themes utilisateurs, avec une encoche a cote (pour suppression).
 				//\______________ On construit le treeview des themes.
 				modele = _allocate_new_model ();
+				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
 				pOneWidget = gtk_tree_view_new ();
 				gtk_tree_view_set_model (GTK_TREE_VIEW (pOneWidget), GTK_TREE_MODEL (modele));
 				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_ORDER, GTK_SORT_ASCENDING);

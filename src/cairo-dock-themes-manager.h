@@ -91,5 +91,6 @@ gboolean cairo_dock_manage_themes (GtkWidget *pWidget, CairoDockStartMode iMode)
 */
 gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir);
 
+
 G_END_DECLS
 #endif

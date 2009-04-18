@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
-"POT-Creation-Date: 2009-04-14 03:26+0200\n"
+"POT-Creation-Date: 2009-04-18 02:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "Do you want to mount this point ?"
 msgstr ""
 
-#: ../src/cairo-dock-callbacks.c:1729
+#: ../src/cairo-dock-callbacks.c:1777
 msgid "Quit Cairo-Dock ?"
 msgstr ""
 
@@ -64,7 +64,7 @@ msgstr ""
 msgid "failed to unmount %s"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:699
+#: ../src/cairo-dock-gui-factory.c:700
 #, c-format
 msgid ""
 "The '%s' plug-in was not found.\n"
@@ -72,14 +72,14 @@ msgid ""
 "features."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:711
+#: ../src/cairo-dock-gui-factory.c:712
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
 "Be sure to activate it to enjoy these features."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1695
+#: ../src/cairo-dock-gui-factory.c:1699
 msgid "grab"
 msgstr ""
 
@@ -171,17 +171,17 @@ msgstr ""
 msgid "Set a background to your dock."
 msgstr ""
 
-#: ../src/cairo-dock-internal-desklets.c:90
+#: ../src/cairo-dock-internal-desklets.c:91
 msgid "The applets can be set on your desktop as widgets."
 msgstr ""
 
-#: ../src/cairo-dock-internal-dialogs.c:87
+#: ../src/cairo-dock-internal-dialogs.c:91
 msgid ""
 "It provides different window decorators. Activate it first if you want to "
 "select a different decorator for your dialogs."
 msgstr ""
 
-#: ../src/cairo-dock-internal-dialogs.c:91
+#: ../src/cairo-dock-internal-dialogs.c:95
 msgid "Configure the look of the dialog bubbles."
 msgstr ""
 
@@ -205,9 +205,12 @@ msgstr ""
 msgid "Set the position of the main dock."
 msgstr ""
 
-#: ../src/cairo-dock-internal-system.c:109
-#: ../src/cairo-dock-internal-taskbar.c:154
+#: ../src/cairo-dock-internal-system.c:110
 msgid "All the parameters you will never want to tweak."
+msgstr ""
+
+#: ../src/cairo-dock-internal-taskbar.c:167
+msgid "Display and interact with the currently open windows."
 msgstr ""
 
 #: ../src/cairo-dock-internal-views.c:74
@@ -436,7 +439,7 @@ msgstr ""
 msgid "Kill"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1274
+#: ../src/cairo-dock-menu.c:1274 ../src/cairo-dock-menu.c:1293
 msgid "Launch new"
 msgstr ""
 
@@ -460,74 +463,74 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1303
+#: ../src/cairo-dock-menu.c:1313
 msgid "Configure this applet"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1307
+#: ../src/cairo-dock-menu.c:1317
 msgid "Detach this applet"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1307
+#: ../src/cairo-dock-menu.c:1317
 msgid "Return to dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1310
+#: ../src/cairo-dock-menu.c:1320
 msgid "Remove this applet"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1314
+#: ../src/cairo-dock-menu.c:1324
 msgid "Launch another instance of this applet"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1333
+#: ../src/cairo-dock-menu.c:1343
 msgid "Always on top"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1340
+#: ../src/cairo-dock-menu.c:1350
 msgid "Normal"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1347
+#: ../src/cairo-dock-menu.c:1357
 msgid "Always below"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1362
+#: ../src/cairo-dock-menu.c:1372
 msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr ""
 
-#: ../src/cairo-dock-modules.c:105
+#: ../src/cairo-dock-modules.c:106
 msgid ""
 "A useful FAQ that contains also a lot of hints.\n"
 "Let the mouse over a sentence to make the hint dialog popups."
 msgstr ""
 
-#: ../src/cairo-dock-themes-manager.c:395
+#: ../src/cairo-dock-themes-manager.c:405
 msgid ""
 "You made some modifications in the current theme.\n"
 "You will loose them if you don't save before choosing a new theme. Continue "
 "anyway ?"
 msgstr ""
 
-#: ../src/cairo-dock-themes-manager.c:578
+#: ../src/cairo-dock-themes-manager.c:588
 #, c-format
 msgid "Are you sure you want to overwrite theme %s ?"
 msgstr ""
 
-#: ../src/cairo-dock-themes-manager.c:657
+#: ../src/cairo-dock-themes-manager.c:667
 #, c-format
 msgid "Are you sure you want to delete theme %s ?"
 msgstr ""
 
-#: ../src/cairo-dock-themes-manager.c:679
+#: ../src/cairo-dock-themes-manager.c:689
 msgid "< Safe Mode >"
 msgstr ""
 
-#: ../src/cairo-dock-themes-manager.c:679
+#: ../src/cairo-dock-themes-manager.c:689
 msgid "Manage Themes"
 msgstr ""
 
-#: ../src/cairo-dock-themes-manager.c:684
+#: ../src/cairo-dock-themes-manager.c:694
 msgid ""
 "You are running Cairo-Dock in safe mode.\n"
 "Why ? Probably because a plug-in has messed into your dock,\n"

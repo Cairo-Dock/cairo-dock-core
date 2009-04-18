@@ -17,7 +17,7 @@ msgstr ""
 msgid "Do you want to mount this point ?"
 msgstr "Voulez-vous monter ce point ?"
 
-#: ../src/cairo-dock-callbacks.c:1729
+#: ../src/cairo-dock-callbacks.c:1777
 msgid "Quit Cairo-Dock ?"
 msgstr "Quitter Cairo-Dock ?"
 
@@ -52,22 +52,26 @@ msgstr ""
 "  ou avec l'option -o pour forcer l'OpenGL, et -c pour forcer cairo.)"
 
 #: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
+#, c-format
 msgid "%s is now mounted"
 msgstr "%s est maintenant monté"
 
 #: ../src/cairo-dock-file-manager.c:486 ../src/cairo-dock-file-manager.c:531
+#, c-format
 msgid "%s is now unmounted"
 msgstr "%s est maintenant démonté"
 
 #: ../src/cairo-dock-file-manager.c:550
+#, c-format
 msgid "failed to mount %s"
 msgstr "échec pour monter %s"
 
 #: ../src/cairo-dock-file-manager.c:550
+#, c-format
 msgid "failed to unmount %s"
 msgstr "échec pour démonter %s"
 
-#: ../src/cairo-dock-gui-factory.c:699
+#: ../src/cairo-dock-gui-factory.c:700
 #, c-format
 msgid ""
 "The '%s' plug-in was not found.\n"
@@ -78,7 +82,7 @@ msgstr ""
 "Soyez sûr de l'installer dans la même version que le dock pour pouvoir en "
 "bénéficier."
 
-#: ../src/cairo-dock-gui-factory.c:711
+#: ../src/cairo-dock-gui-factory.c:712
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -87,7 +91,7 @@ msgstr ""
 "Le plug-in '%s' n'est pas actif.\n"
 "Soyez sûr de l'activer pour pouvoir en bénéficier."
 
-#: ../src/cairo-dock-gui-factory.c:1695
+#: ../src/cairo-dock-gui-factory.c:1699
 msgid "grab"
 msgstr "récupérer"
 
@@ -181,11 +185,11 @@ msgstr "Comment accédez-vous à vos docks ?"
 msgid "Set a background to your dock."
 msgstr "Mettez un fond à votre dock."
 
-#: ../src/cairo-dock-internal-desklets.c:90
+#: ../src/cairo-dock-internal-desklets.c:91
 msgid "The applets can be set on your desktop as widgets."
 msgstr "Les applets peuvent se placer sur votre bureau comme des widgets."
 
-#: ../src/cairo-dock-internal-dialogs.c:87
+#: ../src/cairo-dock-internal-dialogs.c:91
 msgid ""
 "It provides different window decorators. Activate it first if you want to "
 "select a different decorator for your dialogs."
@@ -193,7 +197,7 @@ msgstr ""
 "Il fournit différents décorateurs de fenêtres. Activez-le d'abord si vous "
 "voulez sélectionner un décorateur pour vos dialogues."
 
-#: ../src/cairo-dock-internal-dialogs.c:91
+#: ../src/cairo-dock-internal-dialogs.c:95
 msgid "Configure the look of the dialog bubbles."
 msgstr "Configurer l'apparence des bulles de dialogues"
 
@@ -218,10 +222,13 @@ msgstr "Définissez le Style des étiquettes des icônes et des info-rapides."
 msgid "Set the position of the main dock."
 msgstr "Réglez la position du dock principal."
 
-#: ../src/cairo-dock-internal-system.c:109
-#: ../src/cairo-dock-internal-taskbar.c:154
+#: ../src/cairo-dock-internal-system.c:110
 msgid "All the parameters you will never want to tweak."
 msgstr "Tous les paramètres que vous ne voudrez jamais toucher."
+
+#: ../src/cairo-dock-internal-taskbar.c:167
+msgid "Display and interact with the currently open windows."
+msgstr "Affichez et interagissez avec les fenêtres des applications courantes."
 
 #: ../src/cairo-dock-internal-views.c:74
 msgid ""
@@ -464,7 +471,7 @@ msgstr "Aller sur la face %d"
 msgid "Kill"
 msgstr "Tuer"
 
-#: ../src/cairo-dock-menu.c:1274
+#: ../src/cairo-dock-menu.c:1274 ../src/cairo-dock-menu.c:1293
 msgid "Launch new"
 msgstr "Lancer un nouveau"
 
@@ -488,43 +495,43 @@ msgstr "Minimiser"
 msgid "Close"
 msgstr "Fermer"
 
-#: ../src/cairo-dock-menu.c:1303
+#: ../src/cairo-dock-menu.c:1313
 msgid "Configure this applet"
 msgstr "Configurer cette applet"
 
-#: ../src/cairo-dock-menu.c:1307
+#: ../src/cairo-dock-menu.c:1317
 msgid "Detach this applet"
 msgstr "Détacher cette applet"
 
-#: ../src/cairo-dock-menu.c:1307
+#: ../src/cairo-dock-menu.c:1317
 msgid "Return to dock"
 msgstr "Retourner au dock"
 
-#: ../src/cairo-dock-menu.c:1310
+#: ../src/cairo-dock-menu.c:1320
 msgid "Remove this applet"
 msgstr "Enlever cette applet"
 
-#: ../src/cairo-dock-menu.c:1314
+#: ../src/cairo-dock-menu.c:1324
 msgid "Launch another instance of this applet"
 msgstr "Lancer une nouvelle instance de cette applet"
 
-#: ../src/cairo-dock-menu.c:1333
+#: ../src/cairo-dock-menu.c:1343
 msgid "Always on top"
 msgstr "Toujours devant"
 
-#: ../src/cairo-dock-menu.c:1340
+#: ../src/cairo-dock-menu.c:1350
 msgid "Normal"
 msgstr "Normal"
 
-#: ../src/cairo-dock-menu.c:1347
+#: ../src/cairo-dock-menu.c:1357
 msgid "Always below"
 msgstr "Toujours derrière"
 
-#: ../src/cairo-dock-menu.c:1362
-msgid "set behaviour in Compiz to: (class=Cairo-dock & type=utility)"
-msgstr "Réglez le comportement de Compiz à : (class=Cairo-dock & type=utility)"
+#: ../src/cairo-dock-menu.c:1372
+msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+msgstr "Réglez le comportement de Compiz à : (name=cairo-dock & type=utility)"
 
-#: ../src/cairo-dock-modules.c:105
+#: ../src/cairo-dock-modules.c:106
 msgid ""
 "A useful FAQ that contains also a lot of hints.\n"
 "Let the mouse over a sentence to make the hint dialog popups."
@@ -532,7 +539,7 @@ msgstr ""
 "Une FAQ utile qui contient aussi de nombreuses astuces.\n"
 "Laissez le pointeur au-dessus d'une phrase pour faire apparaître une astuce."
 
-#: ../src/cairo-dock-themes-manager.c:395
+#: ../src/cairo-dock-themes-manager.c:405
 msgid ""
 "You made some modifications in the current theme.\n"
 "You will loose them if you don't save before choosing a new theme. Continue "
@@ -541,25 +548,25 @@ msgstr ""
 "Vous avez fait des modifications dans le thème courant\n"
 "Vous les perdrez si vous ne le sauvez pas d'abord. Continuer malgré tout ?"
 
-#: ../src/cairo-dock-themes-manager.c:578
+#: ../src/cairo-dock-themes-manager.c:588
 #, c-format
 msgid "Are you sure you want to overwrite theme %s ?"
 msgstr "Etes-vous sûr de vouloir écraser le thème %s ?"
 
-#: ../src/cairo-dock-themes-manager.c:657
+#: ../src/cairo-dock-themes-manager.c:667
 #, c-format
 msgid "Are you sure you want to delete theme %s ?"
 msgstr "Etes-vous sûr de vouloir effacer le thème %s ?"
 
-#: ../src/cairo-dock-themes-manager.c:679
+#: ../src/cairo-dock-themes-manager.c:689
 msgid "< Safe Mode >"
 msgstr "< Mode sûreté >"
 
-#: ../src/cairo-dock-themes-manager.c:679
+#: ../src/cairo-dock-themes-manager.c:689
 msgid "Manage Themes"
 msgstr "Gérer les thèmes"
 
-#: ../src/cairo-dock-themes-manager.c:684
+#: ../src/cairo-dock-themes-manager.c:694
 msgid ""
 "You are running Cairo-Dock in safe mode.\n"
 "Why ? Probably because a plug-in has messed into your dock,\n"
@@ -627,11 +634,6 @@ msgstr ""
 "Les icônes se dérouleront en accord avec le type de placement choisi. Le "
 "dock peut bien sûr se placer n'importe où sur l'écran, ici il s'agit de "
 "préciser par rapport à quoi"
-
-#: ../data/messages:7 ../data/messages:959
-msgid ""
-"Choose which screen border the dock will placed on :"
-msgstr "Choisissez par rapport à quel bord de l'écran le dock doit se placer :"
 
 #: ../data/messages:9 ../data/messages:961
 msgid "bottom"
@@ -2525,12 +2527,12 @@ msgstr ""
 #: ../data/messages:771
 msgid ""
 "In the Compiz-Fusion config, activate the 'Widget Layer' plug-in, and set "
-"the rule (class=Cairo-dock &amp; type=utility).\n"
+"the rule (name=cairo-dock &amp; type=utility).\n"
 "You can then switch an applet to the Widget Layer by left-clicking on its "
 "desklet and selecting 'Compiz-Fusion Widget'."
 msgstr ""
 "Dans la configuration de Compiz, activez le plug-in 'Widget Layer', et "
-"mettez-y la règle (class=Cairo-dock &amp; type=utility).\n"
+"mettez-y la règle (name=cairo-dock &amp; type=utility).\n"
 "Vous pourrez alors basculer une applet sur la couche Widget en cliquant "
 "droit dessus, et en sélectionnant 'Widget Compiz-Fusion'."
 

@@ -11,53 +11,59 @@ G_BEGIN_DECLS
 *TRUE ssi l'icone est une icone de lanceur.
 *@param icon une icone.
 */
-#define CAIRO_DOCK_IS_LAUNCHER(icon) (icon != NULL && (icon->acCommand != NULL || (icon->pSubDock != NULL && icon->pModuleInstance == NULL && icon->Xid == 0)))
+#define CAIRO_DOCK_IS_LAUNCHER(icon) (icon != NULL && ((icon)->acCommand != NULL || ((icon)->pSubDock != NULL && (icon)->pModuleInstance == NULL && (icon)->Xid == 0)))
 /**
 *TRUE ssi l'icone est une icone d'appli.
 *@param icon une icone.
 */
-#define CAIRO_DOCK_IS_APPLI(icon) (icon != NULL && icon->Xid != 0)
+#define CAIRO_DOCK_IS_APPLI(icon) (icon != NULL && (icon)->Xid != 0)
 /**
 *TRUE ssi l'icone est une icone d'applet.
 *@param icon une icone.
 */
-#define CAIRO_DOCK_IS_APPLET(icon) (icon != NULL && icon->pModuleInstance != NULL)
+#define CAIRO_DOCK_IS_APPLET(icon) (icon != NULL && (icon)->pModuleInstance != NULL)
 /**
 *TRUE ssi l'icone est une icone de separateur.
 *@param icon une icone.
 */
-#define CAIRO_DOCK_IS_SEPARATOR(icon) (icon != NULL && (icon->acName == NULL && icon->pModuleInstance == NULL && icon->Xid == 0))  /* (icon->iType & 1) || */
+#define CAIRO_DOCK_IS_SEPARATOR(icon) (icon != NULL && ((icon)->acName == NULL && (icon)->pModuleInstance == NULL && (icon)->Xid == 0))  /* ((icon)->iType & 1) || */
 
 /**
 *TRUE ssi l'icone est une icone de lanceur defini par un fichier .desktop.
 *@param icon une icone.
 */
-#define CAIRO_DOCK_IS_NORMAL_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->acDesktopFileName != NULL)
+#define CAIRO_DOCK_IS_NORMAL_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->acDesktopFileName != NULL)
 /**
 *TRUE ssi l'icone est une icone de lanceur representant une URI.
 *@param icon une icone.
 */
-#define CAIRO_DOCK_IS_URI_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->cBaseURI != NULL)
+#define CAIRO_DOCK_IS_URI_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->cBaseURI != NULL)
+/**
+*TRUE ssi l'icone est une icone de paille.
+*@param icon une icone.
+*/
+#define CAIRO_DOCK_IS_FAKE_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->acCommand == NULL && (icon)->cClass != NULL)
 /**
 *TRUE ssi l'icone est une icone de separateur ajoutee automatiquement.
 *@param icon une icone.
 */
-#define CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR(icon) (CAIRO_DOCK_IS_SEPARATOR (icon) && icon->acDesktopFileName == NULL)
+#define CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR(icon) (CAIRO_DOCK_IS_SEPARATOR (icon) && (icon)->acDesktopFileName == NULL)
 /**
 *TRUE ssi l'icone est une icone de separateur ajoutee par l'utilisateur.
 *@param icon une icone.
 */
-#define CAIRO_DOCK_IS_USER_SEPARATOR(icon) (CAIRO_DOCK_IS_SEPARATOR (icon) && icon->acDesktopFileName != NULL)
+#define CAIRO_DOCK_IS_USER_SEPARATOR(icon) (CAIRO_DOCK_IS_SEPARATOR (icon) && (icon)->acDesktopFileName != NULL)
 /**
 *TRUE ssi l'icone est une icone d'appli seulement.
 *@param icon une icone.
 */
-#define CAIRO_DOCK_IS_NORMAL_APPLI(icon) (CAIRO_DOCK_IS_APPLI (icon) && icon->acDesktopFileName == NULL && icon->pModuleInstance == NULL)
+#define CAIRO_DOCK_IS_NORMAL_APPLI(icon) (CAIRO_DOCK_IS_APPLI (icon) && (icon)->acDesktopFileName == NULL && (icon)->pModuleInstance == NULL)
 /**
 *TRUE ssi l'icone est une icone d'applet detachable en desklet.
 *@param icon une icone.
 */
-#define CAIRO_DOCK_IS_DETACHABLE_APPLET(icon) (CAIRO_DOCK_IS_APPLET (icon) && icon->pModuleInstance->bCanDetach)
+#define CAIRO_DOCK_IS_DETACHABLE_APPLET(icon) (CAIRO_DOCK_IS_APPLET (icon) && (icon)->pModuleInstance->bCanDetach)
+
 
 /**
 * Desactive une icone, et libere tous ses buffers, ainsi qu'elle-meme. Le sous-dock pointee par elle n'est pas dereferencee, cela doit etre fait au prealable. Gere egalement la classe.
@@ -72,7 +78,7 @@ void cairo_dock_free_icon_buffers (Icon *icon);
 
 
 #define cairo_dock_get_group_order(iType) (iType < CAIRO_DOCK_NB_TYPES ? myIcons.tIconTypeOrder[iType] : iType)
-#define cairo_dock_get_icon_order(icon) cairo_dock_get_group_order (icon->iType)
+#define cairo_dock_get_icon_order(icon) cairo_dock_get_group_order ((icon)->iType)
 
 /**
 *Donne le type d'une icone relativement a son contenu.

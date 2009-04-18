@@ -1068,11 +1068,11 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	if (icon == NULL)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	cd_debug ("%s (%s)", __func__, icon->acName);
-	if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick)  // icone de sous-dock.
+	if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick)  // icone de sous-dock a montrer au clic.
 	{
 		cairo_dock_show_subdock (icon, FALSE, pDock);
 	}
-	else if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))
+	else if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))  // URI : on lance ou on monte.
 	{
 		cd_debug (" uri launcher");
 		gboolean bIsMounted = FALSE;
@@ -1094,7 +1094,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 			cairo_dock_fm_launch_uri (icon->acCommand);
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	}
-	else if (CAIRO_DOCK_IS_APPLI (icon) && ! ((iButtonState & GDK_SHIFT_MASK) && CAIRO_DOCK_IS_LAUNCHER (icon)) && ! CAIRO_DOCK_IS_APPLET (icon))
+	else if (CAIRO_DOCK_IS_APPLI (icon) && ! ((iButtonState & GDK_SHIFT_MASK) && CAIRO_DOCK_IS_LAUNCHER (icon)) && ! CAIRO_DOCK_IS_APPLET (icon))  // une icone d'appli ou d'inhibiteur mais sans le shift+clic : on cache ou on montre.
 	{
 		cd_debug (" appli");
 		if (cairo_dock_get_current_active_window () == icon->Xid && myTaskBar.bMinimizeOnClick)  // ne marche que si le dock est une fenêtre de type 'dock', sinon il prend le focus.
@@ -1106,39 +1106,37 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	else if (CAIRO_DOCK_IS_LAUNCHER (icon))
 	{
 		cd_debug (" launcher");
-		if (icon->acCommand != NULL && strcmp (icon->acCommand, "none") != 0)
+		if (icon->pSubDock != NULL && icon->pSubDock->icons != NULL && icon->cClass != NULL && ! (iButtonState & GDK_SHIFT_MASK))  // un lanceur ayant un sous-dock de classe ou une icone de paille : on emule un alt+tab sur la liste des applis du sous-dock.
 		{
-			if (icon->pSubDock != NULL)  // on emule un alt+tab sur la liste des applis du sous-dock.
+			Icon *pActiveIcon = cairo_dock_get_current_active_icon ();
+			Icon *pNextIcon = NULL;
+			if (pActiveIcon != NULL)
 			{
-				Icon *pActiveIcon = cairo_dock_get_current_active_icon ();
-				Icon *pNextIcon = NULL;
-				if (pActiveIcon != NULL)
-				{
-					pNextIcon = cairo_dock_get_next_icon (icon->pSubDock->icons, pActiveIcon);
-				}
-				if (pNextIcon == NULL)  // pas trouvee ou derniere de la liste.
-					pNextIcon = icon->pSubDock->icons->data;
-				cairo_dock_show_xwindow (pNextIcon->Xid);
+				pNextIcon = cairo_dock_get_next_icon (icon->pSubDock->icons, pActiveIcon);
+			}
+			if (pNextIcon == NULL)  // pas trouvee ou derniere de la liste.
+				pNextIcon = icon->pSubDock->icons->data;
+			cairo_dock_show_xwindow (pNextIcon->Xid);
+			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+		}
+		else if (icon->acCommand != NULL && strcmp (icon->acCommand, "none") != 0)  // finalement, on lance la commande.
+		{
+			gboolean bSuccess = FALSE;
+			if (*icon->acCommand == '<')
+			{
+				bSuccess = cairo_dock_simulate_key_sequence (icon->acCommand);
+				if (!bSuccess)
+					bSuccess = cairo_dock_launch_command_full (icon->acCommand, icon->cWorkingDirectory);
 			}
 			else
 			{
-				gboolean bSuccess = FALSE;
-				if (*icon->acCommand == '<')
-				{
-					bSuccess = cairo_dock_simulate_key_sequence (icon->acCommand);
-					if (!bSuccess)
-						bSuccess = cairo_dock_launch_command_full (icon->acCommand, icon->cWorkingDirectory);
-				}
-				else
-				{
-					bSuccess = cairo_dock_launch_command_full (icon->acCommand, icon->cWorkingDirectory);
-					if (! bSuccess)
-						bSuccess = cairo_dock_simulate_key_sequence (icon->acCommand);
-				}
+				bSuccess = cairo_dock_launch_command_full (icon->acCommand, icon->cWorkingDirectory);
 				if (! bSuccess)
-				{
-					cairo_dock_request_icon_animation (icon, pDock, "blink", 1);  // 1 clignotement si echec
-				}
+					bSuccess = cairo_dock_simulate_key_sequence (icon->acCommand);
+			}
+			if (! bSuccess)
+			{
+				cairo_dock_request_icon_animation (icon, pDock, "blink", 1);  // 1 clignotement si echec
 			}
 			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 		}
@@ -1147,6 +1145,15 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 }
 
 
+static int _compare_zorder (Icon *icon1, Icon *icon2)  // classe par z-order decroissant.
+{
+	if (icon1->iStackOrder < icon2->iStackOrder)
+		return -1;
+	else if (icon1->iStackOrder > icon2->iStackOrder)
+		return 1;
+	else
+		return 0;
+}
 gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock)
 {
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.bCloseAppliOnMiddleClick && ! CAIRO_DOCK_IS_APPLET (icon))
@@ -1157,6 +1164,49 @@ gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *ic
 	if (CAIRO_DOCK_IS_URI_LAUNCHER (icon) && icon->pSubDock != NULL)  // icone de repertoire.
 	{
 		cairo_dock_fm_launch_uri (icon->acCommand);
+		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+	}
+	if (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->pSubDock != NULL && icon->pSubDock->icons != NULL &&icon->cClass != NULL)
+	{
+		Icon *pIcon;
+		GList *ic;
+		for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+		{
+			pIcon = ic->data;
+			if (pIcon->Xid != 0 && ! pIcon->bIsHidden)  // par defaut on cache tout.
+			{
+				break;
+			}
+		}
+		
+		if (ic != NULL)  // au moins une fenetre est visible, on cache tout.
+		{
+			for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+			{
+				pIcon = ic->data;
+				if (pIcon->Xid != 0 && ! pIcon->bIsHidden)
+				{
+					cairo_dock_minimize_xwindow (pIcon->Xid);
+				}
+			}
+		}
+		else  // on montre tout, dans l'ordre du z-order.
+		{
+			GList *pZOrderList = NULL;
+			for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+			{
+				pIcon = ic->data;
+				if (pIcon->Xid != 0)
+					pZOrderList = g_list_insert_sorted (pZOrderList, pIcon, (GCompareFunc) _compare_zorder);
+			}
+			for (ic = pZOrderList; ic != NULL; ic = ic->next)
+			{
+				pIcon = ic->data;
+				cairo_dock_show_xwindow (pIcon->Xid);
+			}
+			g_list_free (pZOrderList);
+		}
+		
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -1211,8 +1261,6 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							///cairo_dock_remove_icon_from_dock (pOriginDock, s_pIconClicked);
 							cairo_dock_update_dock_size (pOriginDock);
 
-							///s_pIconClicked->fWidth /= (pOriginDock->iRefCount == 0 ? 1. : myViews.fSubDockSizeRatio);
-							///s_pIconClicked->fHeight /= (pOriginDock->iRefCount == 0 ? 1. : myViews.fSubDockSizeRatio);
 							cairo_dock_update_icon_s_container_name (s_pIconClicked, icon->cParentDockName);
 							if (pOriginDock->iRefCount > 0 && ! myViews.bSameHorizontality)
 							{
@@ -1361,7 +1409,7 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
 	if (icon != NULL)
 	{
-		if (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->acCommand != NULL && strcmp (icon->acCommand, "none") != 0 && icon->pSubDock != NULL)  // on emule un alt+tab sur la liste des applis du sous-dock.
+		if (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->pSubDock != NULL && icon->cClass != NULL)  // on emule un alt+tab sur la liste des applis du sous-dock.
 		{
 			Icon *pActiveIcon = cairo_dock_get_current_active_icon ();
 			Icon *pNextIcon;
