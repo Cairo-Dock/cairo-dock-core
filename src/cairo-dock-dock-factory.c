@@ -780,11 +780,11 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 					//g_print ("un separateur entre %s et %s, dans le groupe %d (=%d)\n", icon->acName, next_icon->acName, iSeparatorType, myIcons.tIconTypeOrder[iSeparatorType]);
 					cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 					Icon *pSeparator = cairo_dock_create_separator_icon (pCairoContext, iSeparatorType, pDock);
-					pSeparator->fWidth /= pDock->fRatio;
-					pSeparator->fHeight /= pDock->fRatio;
 					cairo_destroy (pCairoContext);
 					if (pSeparator != NULL)
 					{
+						pSeparator->fWidth /= pDock->fRatio;
+						pSeparator->fHeight /= pDock->fRatio;
 						cairo_dock_insert_icon_in_dock_full (pSeparator, pDock, !CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 						pSeparator->cParentDockName = g_strdup (next_icon->cParentDockName);
 					}
