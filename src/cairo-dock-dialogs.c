@@ -1702,7 +1702,8 @@ void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface
 
 	cairo_surface_destroy (pDialog->pTextBuffer);
 	pDialog->pTextBuffer = pNewTextSurface;
-	_cairo_dock_delete_texture (pDialog->iTextTexture);
+	if (pDialog->iTextTexture != 0)
+		_cairo_dock_delete_texture (pDialog->iTextTexture);
 	pDialog->iTextTexture = cairo_dock_create_texture_from_surface (pNewTextSurface);
 	
 	pDialog->iTextWidth = iNewTextWidth;
@@ -1737,7 +1738,8 @@ void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface
 
 	cairo_surface_destroy (pDialog->pIconBuffer);
 	pDialog->pIconBuffer = pNewIconSurface;
-	_cairo_dock_delete_texture (pDialog->iIconTexture);
+	if (pDialog->iIconTexture != 0)
+		_cairo_dock_delete_texture (pDialog->iIconTexture);
 	pDialog->iIconTexture = cairo_dock_create_texture_from_surface (pDialog->pIconBuffer);
 	
 	pDialog->iIconSize = iNewIconSize;
