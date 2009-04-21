@@ -266,7 +266,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 		}
 		else if (icon->pSubDock != NULL && icon->cClass != NULL)  // c'est un epouvantail
 		{
-			g_print ("c'est un epouvantail\n");
+			//g_print ("c'est un epouvantail\n");
 			icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass,
 				pSourceContext,
 				fMaxScale,
@@ -299,6 +299,10 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 	else if (CAIRO_DOCK_IS_APPLI (icon))  // c'est l'icône d'une appli valide. Dans cet ordre on n'a pas besoin de verifier que c'est NORMAL_APPLI.
 	{
+		if (icon->fWidth == 0)
+			icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI];
+		if (icon->fHeight == 0)
+			icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI];
 		if (myTaskBar.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass) && ! (myTaskBar.bShowThumbnail && icon->bIsHidden))
 			icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
 		if (icon->pIconBuffer == NULL && myTaskBar.bShowThumbnail && icon->bIsHidden && icon->iBackingPixmap != 0)
@@ -370,8 +374,10 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 }
 
+
 gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l'UTF-8
 {
+	g_return_val_if_fail (cString != NULL, NULL);
 	gchar *cTruncatedName = NULL;
 	gsize bytes_read, bytes_written;
 	GError *erreur = NULL;
@@ -547,6 +553,14 @@ void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpoi
 	pDock->fFlatDockWidth = (int) fFlatDockWidth;  /// (int) n'est plus tellement necessaire ...
 	cairo_destroy (pCairoContext);
 }
+
+void cairo_dock_reload_one_icon_buffer_in_dock (Icon *icon, CairoDock *pDock)
+{
+	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+	cairo_dock_reload_one_icon_buffer_in_dock_full (icon, pDock, pCairoContext);
+	cairo_destroy (pCairoContext);
+}
+
 
 
 void cairo_dock_load_visible_zone (CairoDock *pDock, gchar *cVisibleZoneImageFile, int iVisibleZoneWidth, int iVisibleZoneHeight, double fVisibleZoneAlpha)

@@ -756,6 +756,7 @@ struct _CairoDesklet {
 	GLuint iForeGroundTexture;
 	gint iAnimationStep;
 	gboolean bFixedAttitude;
+	GtkWidget *pInteractiveWidget;
 };
 
 typedef enum {

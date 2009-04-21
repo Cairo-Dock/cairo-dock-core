@@ -555,7 +555,7 @@ void cairo_dock_window_is_fullscreen_or_hidden_or_maximized (Window Xid, gboolea
 			}
 			else if (pXStateBuffer[i] == s_aNetWmDemandsAttention && bDemandsAttention != NULL)
 			{
-				g_print (" cette fenetre demande notre attention !\n");
+				cd_debug (" cette fenetre demande notre attention !");
 				*bDemandsAttention = TRUE;
 			}
 		}
@@ -736,24 +736,6 @@ static void _cairo_dock_hide_show_windows_on_other_desktops (Window *Xid, Icon *
 			gtk_widget_queue_draw (pParentDock->pWidget);
 	}
 }
-static void _cairo_dock_fill_icon_buffer_with_thumbnail (Icon *icon, CairoDock *pParentDock)
-{
-	#ifdef HAVE_XEXTEND
-	if (! icon->bIsHidden)  // elle vient d'apparaitre => nouveau backing pixmap.
-	{
-		if (icon->iBackingPixmap != 0)
-			XFreePixmap (s_XDisplay, icon->iBackingPixmap);
-		if (myTaskBar.bShowThumbnail)
-			icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, icon->Xid);
-		//g_print ("new backing pixmap (bis) : %d\n", icon->iBackingPixmap);
-	}
-	#endif
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pParentDock));
-	cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pParentDock->bHorizontalDock, pParentDock->bDirectionUp);
-	cairo_destroy (pCairoContext);
-	icon->fWidth *= pParentDock->fRatio;
-	icon->fHeight *= pParentDock->fRatio;
-}
 gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 {
 	static XEvent event;
@@ -920,13 +902,13 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
 					gboolean bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention;
 					cairo_dock_window_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention);
-					g_print ("changement d'etat de %d => {%d ; %d ; %d ; %d}\n", Xid, bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention);
+					cd_debug ("changement d'etat de %d => {%d ; %d ; %d ; %d}", Xid, bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention);
 					
 					if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
 					{
 						if (icon != NULL)  // elle peut demander l'attention plusieurs fois de suite.
 						{
-							g_print ("%s demande votre attention !\n", icon->acName);
+							cd_debug ("%s demande votre attention !", icon->acName);
 							if (icon->cParentDockName == NULL)  // appli inhibee.
 							{
 								Icon *pInhibitorIcon = cairo_dock_get_classmate (icon);
@@ -941,7 +923,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					{
 						if (icon != NULL && icon->bIsDemandingAttention)
 						{
-							g_print ("%s se tait.\n", icon->acName);
+							cd_debug ("%s se tait", icon->acName);
 							cairo_dock_appli_stops_demanding_attention (icon);  // ca c'est plus une precaution qu'autre chose.
 							if (icon->cParentDockName == NULL)  // appli inhibee.
 							{
@@ -990,58 +972,45 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 										cairo_dock_deactivate_temporary_auto_hide ();
 								}*/
 								#ifdef HAVE_XEXTEND
-								if (myTaskBar.bShowThumbnail && pParentDock != NULL)
+								if (myTaskBar.bShowThumbnail && pParentDock != NULL)  // on recupere la miniature ou au contraire on remet l'icone.
 								{
-									if (! icon->bIsHidden)
+									if (! icon->bIsHidden)  // fenetre mappee => BackingPixmap disponible.
 									{
 										if (icon->iBackingPixmap != 0)
 											XFreePixmap (s_XDisplay, icon->iBackingPixmap);
 										if (myTaskBar.bShowThumbnail)
 											icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
+										else
+											icon->iBackingPixmap = 0;
 										cd_message ("new backing pixmap (bis) : %d", icon->iBackingPixmap);
 									}
-									cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pParentDock));
-									cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, pDock->bDirectionUp);
-									cairo_destroy (pCairoContext);
-									icon->fWidth *= pParentDock->fRatio;
-									icon->fHeight *= pParentDock->fRatio;
+									// on redessine avec ou sans la miniature.
+									cairo_dock_reload_one_icon_buffer_in_dock (icon, pParentDock);
+									cairo_dock_redraw_my_icon (icon, CAIRO_CONTAINER (pParentDock));
 								}
 								#endif
-								if (myTaskBar.bHideVisibleApplis)
+								if (myTaskBar.bHideVisibleApplis)  // on insere/detache l'icone selon la visibilite de la fenetre.
 								{
-									if (bIsHidden)
+									if (bIsHidden)  // se cache => on insere son icone.
 									{
 										cd_message (" => se cache");
 										if (! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_window_is_on_current_desktop (Xid))
 										{
 											pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
-											if (pParentDock != NULL)
-												_cairo_dock_fill_icon_buffer_with_thumbnail (icon, pParentDock);
 										}
 									}
-									else
+									else  // se montre => on detache l'icone.
 									{
 										cd_message (" => re-apparait");
-										/*if (pParentDock != NULL)
-										{
-											cairo_dock_detach_icon_from_dock (icon, pParentDock, TRUE);
-											cairo_dock_update_dock_size (pParentDock);
-										}*/
 										pParentDock = cairo_dock_detach_appli (icon);
 									}
 									if (pParentDock != NULL)
 										gtk_widget_queue_draw (pParentDock->pWidget);
 								}
-								else if (myTaskBar.bShowThumbnail && pParentDock != NULL)
-								{
-									_cairo_dock_fill_icon_buffer_with_thumbnail (icon, pParentDock);
-									if (! pParentDock->bIsShrinkingDown)
-										cairo_dock_redraw_my_icon (icon, CAIRO_CONTAINER (pParentDock));
-								}
 								else if (myTaskBar.fVisibleAppliAlpha != 0)
 								{
 									icon->fAlpha = 1;  // on triche un peu.
-									if (pParentDock != NULL && ! pParentDock->bIsShrinkingDown)
+									if (pParentDock != NULL)
 										cairo_dock_redraw_my_icon (icon, CAIRO_CONTAINER (pParentDock));
 								}
 							}

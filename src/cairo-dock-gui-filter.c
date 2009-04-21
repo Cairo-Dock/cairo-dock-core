@@ -42,7 +42,7 @@ static gchar *cairo_dock_highlight_key_word (const gchar *cSentence, const gchar
 	gchar *str = _search_in_buffer (cKeyWord);
 	if (str != NULL)
 	{
-		g_print ("* trouve %s dans '%s'\n", cKeyWord, sBuffer->str);
+		//g_print ("* trouve %s dans '%s'\n", cKeyWord, sBuffer->str);
 		gchar *cBuffer = g_strdup (cSentence);
 		str = cBuffer + (str - sBuffer->str);
 		*str = '\0';
@@ -60,7 +60,7 @@ static gboolean _cairo_dock_search_words_in_frame_title (gchar **pKeyWords, GtkW
 	GtkWidget *pLabelContainer = (GTK_IS_FRAME (pCurrentFrame) ?
 		gtk_frame_get_label_widget (GTK_FRAME (pCurrentFrame)) :
 		gtk_expander_get_label_widget (GTK_EXPANDER (pCurrentFrame)));
-	g_print ("pLabelContainer : %x\n", pLabelContainer);
+	//g_print ("pLabelContainer : %x\n", pLabelContainer);
 	if (GTK_IS_LABEL (pLabelContainer))
 	{
 		pFrameLabel = pLabelContainer;
@@ -89,7 +89,7 @@ static gboolean _cairo_dock_search_words_in_frame_title (gchar **pKeyWords, GtkW
 				str = _search_in_buffer (cKeyWord);
 			if (cModifiedText != NULL || str != NULL)  // on a trouve ce mot.
 			{
-				g_print ("  on a trouve %s dans le titre\n", cKeyWord);
+				//g_print ("  on a trouve %s dans le titre\n", cKeyWord);
 				bFoundInFrameTitle = TRUE;
 				if (cModifiedText != NULL)
 				{
@@ -123,7 +123,7 @@ static gboolean _cairo_dock_search_words_in_frame_title (gchar **pKeyWords, GtkW
 
 void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWords, gboolean bSearchInToolTip, gboolean bHighLightText, gboolean bHideOther, GSList *pWidgetList)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	if (sBuffer == NULL)
 		sBuffer = g_string_new ("");
 	gpointer *pGroupKeyWidget;
@@ -140,7 +140,7 @@ void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWo
 	{
 		bFound = FALSE;
 		pGroupKeyWidget = w->data;
-		g_print ("widget : %s - %s\n", pGroupKeyWidget[0], pGroupKeyWidget[1]);
+		//g_print ("widget : %s - %s\n", pGroupKeyWidget[0], pGroupKeyWidget[1]);
 		pSubWidgetList = pGroupKeyWidget[2];
 		if (pSubWidgetList == NULL)
 			continue;
@@ -211,7 +211,7 @@ void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWo
 			
 			if (cModifiedText != NULL || str != NULL)
 			{
-				g_print ("  on a trouve %s\n", cKeyWord);
+				//g_print ("  on a trouve %s\n", cKeyWord);
 				bFound = TRUE;
 				if (cModifiedText != NULL)
 				{
@@ -267,7 +267,7 @@ void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWo
 
 void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWords, gboolean bSearchInToolTip, gboolean bHighLightText, gboolean bHideOther, GList *pGroupDescriptionList)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	if (sBuffer == NULL)
 		sBuffer = g_string_new ("");
 	CairoDockGroupDescription *pGroupDescription;
@@ -283,11 +283,11 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 	gchar *cGettextDomain;
 	for (gd = pGroupDescriptionList; gd != NULL; gd = gd->next)
 	{
-		g_print ("pGroupDescription:%x\n", gd->data);
+		//g_print ("pGroupDescription:%x\n", gd->data);
 		//\_______________ On recupere le group description.
 		pGroupDescription = gd->data;
 		pGroupBox = gtk_widget_get_parent (pGroupDescription->pActivateButton);
-		g_print ("  %x\n", pGroupDescription->pActivateButton);
+		//g_print ("  %x\n", pGroupDescription->pActivateButton);
 		pCategoryFrame = gtk_widget_get_parent (pGroupBox);
 		pLabel = pGroupDescription->pLabel;
 		cGettextDomain = pGroupDescription->cGettextDomain;
@@ -296,7 +296,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 		cDescription = dgettext (cGettextDomain, pGroupDescription->cGroupName);
 		if (bSearchInToolTip)
 			cToolTip = dgettext (cGettextDomain, pGroupDescription->cDescription);
-		g_print ("cDescription : %s (%s)(%x,%x)\n", cDescription, cToolTip, cModifiedText, str);
+		//g_print ("cDescription : %s (%s)(%x,%x)\n", cDescription, cToolTip, cModifiedText, str);
 		
 		//\_______________ On change de frame.
 		if (pCategoryFrame != pCurrentCategoryFrame)  // on a change de frame.
@@ -305,7 +305,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 			{
 				if (! bFrameVisible && bHideOther)
 				{
-					g_print (" on cache cette categorie\n");
+					//g_print (" on cache cette categorie\n");
 					gtk_widget_hide (pCurrentCategoryFrame);
 				}
 				else
@@ -453,7 +453,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 							
 							if (str != NULL)
 							{
-								g_print (">>>on a trouve %s\n", pKeyWords[i]);
+								//g_print (">>>on a trouve %s\n", pKeyWords[i]);
 								bFound = TRUE;
 								str = NULL;
 								if (! bAllWords)
@@ -480,7 +480,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 					{
 						if (! bFoundWords[i])
 						{
-							g_print ("par contre il manque %s, dommage\n", pKeyWords[i]);
+							//g_print ("par contre il manque %s, dommage\n", pKeyWords[i]);
 							bFound = FALSE;
 							break;
 						}
@@ -490,12 +490,12 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 			}  // fin du cas ou on avait des groupes a etudier.
 			if (pKeyFile != pMainKeyFile)
 				g_key_file_free (pKeyFile);
-			g_print ("bFound : %d\n", bFound);
+			//g_print ("bFound : %d\n", bFound);
 			
 			if (bHighLightText && bFound)  // on passe le label du groupe en bleu + gras.
 			{
 				cModifiedText = g_strdup_printf ("<b><span color=\"blue\">%s</span></b>", cDescription);
-				g_print ("cModifiedText : %s\n", cModifiedText);
+				//g_print ("cModifiedText : %s\n", cModifiedText);
 				gtk_label_set_markup (GTK_LABEL (pLabel), dgettext (cGettextDomain, cModifiedText));
 				g_free (cModifiedText);
 				cModifiedText = NULL;
@@ -504,14 +504,14 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 		
 		if (bFound)
 		{
-			g_print ("on montre ce groupe\n");
+			//g_print ("on montre ce groupe\n");
 			gtk_widget_show (pGroupBox);
 			if (pCurrentCategoryFrame != NULL)
 				bFrameVisible = TRUE;
 		}
 		else if (bHideOther)
 		{
-			g_print ("on cache ce groupe\n");
+			//g_print ("on cache ce groupe\n");
 			gtk_widget_hide (pGroupBox);
 		}
 		else

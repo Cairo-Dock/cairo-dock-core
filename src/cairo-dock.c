@@ -38,7 +38,7 @@
 **    great deal by sending me additional tweaked and optimized versions. I've
 **    now merged all that with my recent additions.
 **
-*********************** VERSION 0.1.0 and above (2007-2008)*********************
+*********************** VERSION 0.1.0 and above (2007-2009)*********************
 **
 ** author(s) :
 **     Fabrice Rey <fabounet@users.berlios.de>
@@ -192,7 +192,7 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 }
 static void _cairo_dock_intercept_signal (int signal)
 {
-	cd_warning ("Attention : Cairo-Dock has crashed (sig %d).\nIt will be restarted now.\nFeel free to report this bug on cairo-dock.org to help improving the dock !", signal);
+	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now.\nFeel free to report this bug on cairo-dock.org to help improving the dock !", signal);
 	execl ("/bin/sh", "/bin/sh", "-c", cLaunchCommand, NULL);  // on ne revient pas de cette fonction.
 	cd_warning ("Sorry, couldn't restart the dock");
 }

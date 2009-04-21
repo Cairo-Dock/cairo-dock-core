@@ -461,7 +461,7 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 		//pDeskletAttribute->iDeskletWidth = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "width", NULL, 92, NULL, NULL);
 		//pDeskletAttribute->iDeskletHeight = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "height", NULL, 92, NULL, NULL);
 		cairo_dock_get_size_key_value_helper (pKeyFile, "Desklet", "", bUseless, pDeskletAttribute->iDeskletWidth, pDeskletAttribute->iDeskletHeight);
-		g_print ("desklet : %dx%d\n", pDeskletAttribute->iDeskletWidth, pDeskletAttribute->iDeskletHeight);
+		//g_print ("desklet : %dx%d\n", pDeskletAttribute->iDeskletWidth, pDeskletAttribute->iDeskletHeight);
 		if (pDeskletAttribute->iDeskletWidth == 0)
 			pDeskletAttribute->iDeskletWidth = 96;
 		if (pDeskletAttribute->iDeskletHeight == 0)
@@ -609,7 +609,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 					if (pIcon->acName != NULL && pIcon->pSubDock != NULL && cairo_dock_strings_differ (pIcon->acName, pMinimalConfig->cLabel))
 					{
 						gchar *cNewName = cairo_dock_get_unique_dock_name (pMinimalConfig->cLabel);
-						g_print ("* le sous-dock %s prend le nom '%s'\n", pIcon->acName, cNewName);
+						cd_debug ("* le sous-dock %s prend le nom '%s'", pIcon->acName, cNewName);
 						if (pMinimalConfig->cLabel == NULL)
 							cairo_dock_alter_dock_name (pIcon->acName, pIcon->pSubDock, cNewName);  // on change juste son enregistrement, le nom cParentDockName des icones sera change lorsqu'on mettra un nom a l'icone.
 						else if (strcmp (pIcon->acName, cNewName) != 0)

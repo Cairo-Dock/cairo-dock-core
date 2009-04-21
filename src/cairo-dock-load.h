@@ -23,7 +23,7 @@ cairo_surface_t *cairo_dock_load_image_for_icon (cairo_t *pSourceContext, const 
 #define cairo_dock_load_image_for_square_icon(pSourceContext, cImageFile, fImageSize) cairo_dock_load_image_for_icon (pSourceContext, cImageFile, fImageSize, fImageSize)
 
 /**
-*Cree la surface de reflection d'une icone.
+*Cree la surface de reflection d'une icone (pour cairo).
 *@param pSourceContext le contexte de dessin lie a la surface de l'icone; n'est pas altere par la fonction.
 *@param pIcon l'icone.
 *@param pContainer le container de l'icone.
@@ -45,6 +45,16 @@ void cairo_dock_load_one_icon_from_scratch (Icon *pIcon, CairoContainer *pContai
 
 void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpointer data);
 #define cairo_dock_load_buffers_in_one_dock(pDock) cairo_dock_reload_buffers_in_dock (NULL, pDock, GINT_TO_POINTER (TRUE))
+
+#define cairo_dock_reload_one_icon_buffer_in_dock_full(icon, pDock, pCairoContext) do {\
+	icon->fWidth /= pDock->fRatio;\
+	icon->fHeight /= pDock->fRatio;\
+	cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, pDock->bDirectionUp);\
+	icon->fWidth *= pDock->fRatio;\
+	icon->fHeight *= pDock->fRatio; } while (0)
+
+void cairo_dock_reload_one_icon_buffer_in_dock (Icon *icon, CairoDock *pDock);
+
 
 
 void cairo_dock_load_visible_zone (CairoDock *pDock, gchar *cVisibleZoneImageFile, int iVisibleZoneWidth, int iVisibleZoneHeight, double fVisibleZoneAlpha);

@@ -822,7 +822,7 @@ static cairo_surface_t *_cairo_dock_create_dialog_text_surface (const gchar *cTe
 {
 	if (cText == NULL)
 		return NULL;
-	g_print ("%x;%x\n", pTextDescription, pSourceContext);
+	//g_print ("%x;%x\n", pTextDescription, pSourceContext);
 	double fTextXOffset, fTextYOffset;
 	cairo_surface_t *pTextBuffer = cairo_dock_create_surface_from_text_full (cText,
 		pSourceContext,
@@ -895,7 +895,7 @@ static gboolean _cairo_dock_dialog_auto_delete (CairoDialog *pDialog)
 CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer)
 {
 	g_return_val_if_fail (pAttribute != NULL, NULL);
-	g_print ("%s (%s, %s, %x, %x, %x (%x;%x))\n", __func__, pAttribute->cText, pAttribute->cImageFilePath, pAttribute->pInteractiveWidget, pAttribute->pActionFunc, pAttribute->pTextDescription, pIcon, pContainer);
+	cd_debug ("%s (%s, %s, %x, %x, %x (%x;%x))", __func__, pAttribute->cText, pAttribute->cImageFilePath, pAttribute->pInteractiveWidget, pAttribute->pActionFunc, pAttribute->pTextDescription, pIcon, pContainer);
 	
 	//\________________ On cree un nouveau dialogue.
 	CairoDialog *pDialog = _cairo_dock_create_new_dialog (pAttribute->pInteractiveWidget || pAttribute->pActionFunc);
@@ -1269,12 +1269,12 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 		
 		if (pDialog->iDistanceToDock != iOldDistance)
 		{
-			g_print ("  On change la taille de la pointe a : %d pixels ( -> %d)\n", pDialog->iDistanceToDock, pDialog->iMessageHeight + pDialog->iInteractiveHeight +pDialog->iButtonsHeight + pDialog->iDistanceToDock);
+			//g_print ("  On change la taille de la pointe a : %d pixels ( -> %d)\n", pDialog->iDistanceToDock, pDialog->iMessageHeight + pDialog->iInteractiveHeight +pDialog->iButtonsHeight + pDialog->iDistanceToDock);
 			gtk_widget_set (pDialog->pTipWidget, "height-request", MAX (0, pDialog->iDistanceToDock + pDialog->iBottomMargin), NULL);
 
 			if ((iOldDistance == 0) || (pDialog->iDistanceToDock < iOldDistance))
 			{
-				g_print ("    cela reduit la fenetre a %dx%d\n", pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin, pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock);
+				//g_print ("    cela reduit la fenetre a %dx%d\n", pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin, pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock);
 				gtk_window_resize (GTK_WINDOW (pDialog->pWidget),
 					pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin,
 					pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock);
@@ -1287,7 +1287,7 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 		pDialog->iPositionX = g_iScreenOffsetX + (g_iScreenWidth [CAIRO_DOCK_HORIZONTAL] - pDialog->iWidth) / 2;
 		pDialog->iPositionY = g_iScreenOffsetY + (g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] - pDialog->iHeight) / 2;
 		pDialog->iHeight = pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin;
-		g_print (" au milieu de l'ecran (%d;%d) %dx%d\n", pDialog->iPositionX, pDialog->iPositionY, pDialog->iWidth, pDialog->iHeight);
+		//g_print (" au milieu de l'ecran (%d;%d) %dx%d\n", pDialog->iPositionX, pDialog->iPositionY, pDialog->iWidth, pDialog->iHeight);
 		
 		gtk_window_resize (GTK_WINDOW (pDialog->pWidget),
 			pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin,
@@ -1296,7 +1296,7 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 
 	if (iPrevPositionX != pDialog->iPositionX || iPrevPositionY != pDialog->iPositionY)
 	{
-		g_print (" => move to (%d;%d) %dx%d\n", pDialog->iPositionX, pDialog->iPositionY, pDialog->iWidth, pDialog->iHeight);
+		//g_print (" => move to (%d;%d) %dx%d\n", pDialog->iPositionX, pDialog->iPositionY, pDialog->iWidth, pDialog->iHeight);
 		gtk_window_move (GTK_WINDOW (pDialog->pWidget),
 			pDialog->iPositionX,
 			pDialog->iPositionY);

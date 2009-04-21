@@ -56,7 +56,7 @@ void cairo_dock_free_icon (Icon *icon)
 {
 	if (icon == NULL)
 		return ;
-	g_print ("%s (%s , %s)\n", __func__, icon->acName, icon->cClass);
+	cd_debug ("%s (%s , %s)", __func__, icon->acName, icon->cClass);
 	
 	cairo_dock_remove_dialog_if_any (icon);
 	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))

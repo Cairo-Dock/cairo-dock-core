@@ -178,6 +178,7 @@ struct _CairoDialog {
 	int iNbButtons;
 	CairoDialogButton *pButtons;
 	GLuint iIconTexture, iTextTexture;
+	gboolean bFinalized;
 };
 
 

@@ -510,7 +510,7 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 		
 		if (pDesklet->pIcon != NULL && pDesklet->pIcon->pModuleInstance != NULL)
 		{
-			g_print ("RELOAD\n");
+			//g_print ("RELOAD\n");
 			cairo_dock_reload_module_instance (pDesklet->pIcon->pModuleInstance, FALSE);
 			gtk_widget_queue_draw (pDesklet->pWidget);  // sinon on ne redessine que l'interieur.
 		}
@@ -593,7 +593,7 @@ gboolean on_scroll_desklet (GtkWidget* pWidget,
 	GdkEventScroll* pScroll,
 	CairoDesklet *pDesklet)
 {
-	g_print ("scroll\n");
+	//g_print ("scroll\n");
 	if (! (pScroll->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)))
 	{
 		Icon *icon = cairo_dock_find_clicked_icon_in_desklet (pDesklet);
@@ -1020,7 +1020,7 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
   if (pInteractiveWidget != NULL)
   {
     cd_debug ("ref = %d", pInteractiveWidget->object.parent_instance.ref_count);
-    gtk_container_add (GTK_CONTAINER (pDesklet->pWidget), pInteractiveWidget);
+    cairo_dock_add_interactive_widget_to_desklet (pInteractiveWidget, pDesklet);
     cd_debug ("pack -> ref = %d", pInteractiveWidget->object.parent_instance.ref_count);
   }
 
@@ -1083,17 +1083,6 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 	}
 }
 
-
-void cairo_dock_steal_interactive_widget_from_desklet (CairoDesklet *pDesklet)
-{
-	if (pDesklet == NULL)
-		return;
-
-	GtkWidget *pInteractiveWidget = gtk_bin_get_child (GTK_BIN (pDesklet->pWidget));
-	if (pInteractiveWidget != NULL)
-		cairo_dock_steal_widget_from_its_container (pInteractiveWidget);
-}
-
 void cairo_dock_free_desklet (CairoDesklet *pDesklet)
 {
 	if (pDesklet == NULL)
@@ -1146,6 +1135,74 @@ void cairo_dock_free_desklet (CairoDesklet *pDesklet)
 	g_free(pDesklet);
 }
 
+
+
+void cairo_dock_add_interactive_widget_to_desklet_full (GtkWidget *pInteractiveWidget, CairoDesklet *pDesklet, int iRightMargin)
+{
+	g_return_if_fail (pDesklet != NULL && pInteractiveWidget != NULL);
+	if (pDesklet->pInteractiveWidget != NULL || gtk_bin_get_child (GTK_BIN (pDesklet->pWidget)) != NULL)
+	{
+		cd_warning ("This desklet already has an interactive widget !");
+		return;
+	}
+	
+	//gtk_container_add (GTK_CONTAINER (pDesklet->pWidget), pInteractiveWidget);
+	GtkWidget *pHBox = gtk_hbox_new (FALSE, 0);
+	gtk_container_add (GTK_CONTAINER (pDesklet->pWidget), pHBox);
+	
+	gtk_box_pack_start (GTK_BOX (pHBox), pInteractiveWidget, TRUE, TRUE, 0);
+	pDesklet->pInteractiveWidget = pInteractiveWidget;
+	
+	iRightMargin=25;
+	if (iRightMargin != 0)
+	{
+		GtkWidget *pMarginBox = gtk_vbox_new (FALSE, 0);
+		gtk_widget_set (pMarginBox, "width-request", iRightMargin, NULL);
+		gtk_box_pack_start (GTK_BOX (pHBox), pMarginBox, FALSE, FALSE, 0);  // a tester ...
+	}
+	
+	gtk_widget_show_all (pHBox);
+}
+
+void cairo_dock_set_desklet_margin (CairoDesklet *pDesklet, int iRightMargin)
+{
+	g_return_if_fail (pDesklet != NULL && pDesklet->pInteractiveWidget != NULL);
+	
+	GtkWidget *pHBox = gtk_bin_get_child (GTK_BIN (pDesklet->pWidget));
+	if (pHBox != pDesklet->pInteractiveWidget)  // precaution.
+	{
+		GList *pChildList = gtk_container_get_children (GTK_CONTAINER (pHBox));
+		if (pChildList != NULL && pChildList->next != NULL)
+		{
+			GtkWidget *pMarginBox = GTK_WIDGET (pChildList->next->data);
+			gtk_widget_set (pMarginBox, "width-request", iRightMargin, NULL);
+		}
+		else
+		{
+			GtkWidget *pMarginBox = gtk_vbox_new (FALSE, 0);
+			gtk_widget_set (pMarginBox, "width-request", iRightMargin, NULL);
+			gtk_box_pack_start (GTK_BOX (pHBox), pMarginBox, FALSE, FALSE, 0);
+		}
+	}
+}
+
+void cairo_dock_steal_interactive_widget_from_desklet (CairoDesklet *pDesklet)
+{
+	if (pDesklet == NULL)
+		return;
+
+	GtkWidget *pInteractiveWidget = pDesklet->pInteractiveWidget;
+	if (pInteractiveWidget != NULL)
+	{
+		cairo_dock_steal_widget_from_its_container (pInteractiveWidget);
+		GtkWidget *pBox = gtk_bin_get_child (GTK_BIN (pDesklet->pWidget));
+		if (pBox != NULL)
+			gtk_widget_destroy (pBox);
+	}
+}
+
+
+
 void cairo_dock_hide_desklet (CairoDesklet *pDesklet)
 {
 	if (pDesklet)
@@ -1157,14 +1214,6 @@ void cairo_dock_show_desklet (CairoDesklet *pDesklet)
 	if (pDesklet)
 		gtk_window_present(GTK_WINDOW(pDesklet->pWidget));
 }
-
-
-void cairo_dock_add_interactive_widget_to_desklet (GtkWidget *pInteractiveWidget, CairoDesklet *pDesklet)
-{
-	g_return_if_fail (pDesklet != NULL);
-	gtk_container_add (GTK_CONTAINER (pDesklet->pWidget), pInteractiveWidget);
-}
-
 
 
 static gboolean _cairo_dock_set_one_desklet_visible (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, gpointer data)

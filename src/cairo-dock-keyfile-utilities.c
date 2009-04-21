@@ -299,7 +299,7 @@ void cairo_dock_add_remove_element_to_key (const gchar *cConfFilePath, const gch
 	
 	if (bAdd)
 	{
-		g_print ("on rajoute %s\n", cElementName);
+		//g_print ("on rajoute %s\n", cElementName);
 		if (cElementList != NULL)
 			cNewElementList = g_strdup_printf ("%s;%s", cElementList, cElementName);
 		else
@@ -307,7 +307,7 @@ void cairo_dock_add_remove_element_to_key (const gchar *cConfFilePath, const gch
 	}
 	else
 	{
-		g_print ("on enleve %s\n", cElementName);
+		//g_print ("on enleve %s\n", cElementName);
 		gchar *str = g_strstr_len (cElementList, strlen (cElementList), cElementName);
 		g_return_if_fail (str != NULL);
 		if (str == cElementList)

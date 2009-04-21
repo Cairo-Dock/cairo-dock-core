@@ -685,7 +685,8 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		else
 		{
 			fMagnitude = (icon->fScale - 1) / myIcons.fAmplitude;  /// il faudrait diviser par pDock->fMagnitudeMax ...
-			fMagnitude *= (fMagnitude * mySystem.fLabelAlphaThreshold + 1) / (mySystem.fLabelAlphaThreshold + 1);
+			fMagnitude = pow (fMagnitude, mySystem.fLabelAlphaThreshold);
+			///fMagnitude *= (fMagnitude * mySystem.fLabelAlphaThreshold + 1) / (mySystem.fLabelAlphaThreshold + 1);
 		}
 		if (fMagnitude > .1)
 			cairo_paint_with_alpha (pCairoContext, fMagnitude);
@@ -994,7 +995,7 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 {
 	if (g_pVisibleZoneSurface != NULL)
 	{
-		g_print ("render hidden (%d;%d)\n", myHiddenDock.bReverseVisibleImage, pDock->bDirectionUp);
+		//g_print ("render hidden (%d;%d)\n", myHiddenDock.bReverseVisibleImage, pDock->bDirectionUp);
 		cairo_dock_draw_surface (pCairoContext, g_pVisibleZoneSurface,
 			pDock->iCurrentWidth, pDock->iCurrentHeight,
 			(myHiddenDock.bReverseVisibleImage ? pDock->bDirectionUp : TRUE),

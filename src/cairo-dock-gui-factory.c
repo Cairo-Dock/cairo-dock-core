@@ -199,16 +199,18 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 	GtkImage *pPreviewImage = data[1];
 	GError *erreur = NULL;
 	gchar *cDescriptionFilePath = NULL, *cPreviewFilePath = NULL;
-	g_print ("iter:%d\n", iter);
-	gtk_tree_model_get (model, &iter, CAIRO_DOCK_MODEL_DESCRIPTION_FILE, &cDescriptionFilePath, CAIRO_DOCK_MODEL_IMAGE, &cPreviewFilePath, -1);
-	g_print ("ok\n");
+	//g_print ("iter:%d\n", iter);
+	gtk_tree_model_get (model, &iter,
+		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, &cDescriptionFilePath,
+		CAIRO_DOCK_MODEL_IMAGE, &cPreviewFilePath, -1);
+	//g_print ("ok\n");
 	
 	if (cDescriptionFilePath != NULL)
 	{
 		gchar *cDescription = NULL;
 		if (strncmp (cDescriptionFilePath, "http://", 7) == 0 || strncmp (cDescriptionFilePath, "ftp://", 6) == 0)
 		{
-			g_print ("fichier readme distant (%s)\n", cDescriptionFilePath);
+			cd_debug ("fichier readme distant (%s)", cDescriptionFilePath);
 
 			gchar *str = strrchr (cDescriptionFilePath, '/');
 			g_return_if_fail (str != NULL);
@@ -233,7 +235,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		gboolean bDistant = FALSE;
 		if (strncmp (cPreviewFilePath, "http://", 7) == 0 || strncmp (cPreviewFilePath, "ftp://", 6) == 0)
 		{
-			g_print ("fichier preview distant (%s)\n", cPreviewFilePath);
+			cd_debug ("fichier preview distant (%s)", cPreviewFilePath);
 			
 			gchar *str = strrchr (cPreviewFilePath, '/');
 			g_return_if_fail (str != NULL);
@@ -329,7 +331,7 @@ static void _cairo_dock_pick_a_file (GtkButton *button, gpointer *data)
 		NULL);
 	const gchar *cFilePath = gtk_entry_get_text (pEntry);
 	gchar *cDirectoryPath = (cFilePath == NULL || *cFilePath != '/' ? g_strdup (g_cCurrentThemePath) : g_path_get_dirname (cFilePath));
-	g_print (">>> on se place sur '%s'\n", cDirectoryPath);
+	//g_print (">>> on se place sur '%s'\n", cDirectoryPath);
 	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog), cDirectoryPath);
 	g_free (cDirectoryPath);
 	gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (pFileChooserDialog), FALSE);
@@ -362,7 +364,7 @@ static void _cairo_dock_set_original_value (GtkButton *button, gpointer *data)
 	gchar *cKeyName = data[1];
 	GSList *pSubWidgetList = data[2];
 	gchar *cOriginalConfFilePath = data[3];
-	g_print ("%s (%s, %s, %s)\n", __func__, cGroupName, cKeyName, cOriginalConfFilePath);
+	//g_print ("%s (%s, %s, %s)\n", __func__, cGroupName, cKeyName, cOriginalConfFilePath);
 	
 	GSList *pList;
 	gsize i = 0;
@@ -675,7 +677,7 @@ static gboolean _cairo_dock_test_one_name (GtkTreeModel *model, GtkTreePath *pat
 }
 static gboolean _cairo_dock_find_iter_from_name (GtkListStore *pModele, gchar *cName, GtkTreeIter *iter)
 {
-	g_print ("%s (%s)\n", __func__, cName);
+	//g_print ("%s (%s)\n", __func__, cName);
 	if (cName == NULL)
 		return FALSE;
 	gboolean bFound = FALSE;
@@ -1767,7 +1769,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						gtk_frame_set_shadow_type (GTK_FRAME (pExternFrame), GTK_SHADOW_OUT);
 						gtk_frame_set_label_widget (GTK_FRAME (pExternFrame), (pLabelContainer != NULL ? pLabelContainer : pLabel));
 						pFrame = pExternFrame;
-						g_print ("on met pLabelContainer:%x (%x > %x)\n", pLabelContainer, gtk_frame_get_label_widget (GTK_FRAME (pFrame)), pLabel);
+						//g_print ("on met pLabelContainer:%x (%x > %x)\n", pLabelContainer, gtk_frame_get_label_widget (GTK_FRAME (pFrame)), pLabel);
 					}
 					else
 					{
@@ -1971,7 +1973,10 @@ static gboolean _cairo_dock_get_active_elements (GtkTreeModel * model, GtkTreePa
 	//g_print ("%s (%d)\n", __func__, *pOrder);
 	gboolean bActive;
 	gchar *cValue = NULL, *cResult = NULL;
-	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_ACTIVE, &bActive, CAIRO_DOCK_MODEL_NAME, &cValue, CAIRO_DOCK_MODEL_RESULT, &cResult, -1);
+	gtk_tree_model_get (model, iter,
+		CAIRO_DOCK_MODEL_ACTIVE, &bActive,
+		CAIRO_DOCK_MODEL_NAME, &cValue,
+		CAIRO_DOCK_MODEL_RESULT, &cResult, -1);
 	if (cResult != NULL)
 	{
 		g_free (cValue);
@@ -1980,7 +1985,6 @@ static gboolean _cairo_dock_get_active_elements (GtkTreeModel * model, GtkTreePa
 	
 	if (bActive)
 	{
-		
 		*pStringList = g_slist_append (*pStringList, cValue);
 	}
 	else

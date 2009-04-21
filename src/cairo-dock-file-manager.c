@@ -502,7 +502,7 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 			else if (pIcon->pSubDock != NULL)  // c'est a l'interieur du repertoire qu'elle represente.
 			{
 				pConcernedIcon = cairo_dock_get_icon_with_base_uri (pIcon->pSubDock->icons, cURI);
-				g_print ("cURI in sub-dock: %s\n", cURI);
+				//g_print ("cURI in sub-dock: %s\n", cURI);
 				if (pConcernedIcon == NULL)  // on cherche par nom.
 				{
 					pConcernedIcon = cairo_dock_get_icon_with_name (pIcon->pSubDock->icons, cURI);

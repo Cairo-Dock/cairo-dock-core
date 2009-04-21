@@ -751,7 +751,7 @@ gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareTh
 	{
 		gchar *cDistantFileName = g_strdup_printf ("%s/%s.tar.gz", cThemeName, cThemeName);
 		GError *erreur = NULL;
-		cThemePath = cairo_dock_download_file (g_cThemeServerAdress != NULL ? g_cThemeServerAdress : CAIRO_DOCK_THEME_SERVER, cDistantThemesDir, cDistantFileName, 1, cUserThemesDir, &erreur);
+		cThemePath = cairo_dock_download_file (g_cThemeServerAdress != NULL ? g_cThemeServerAdress : CAIRO_DOCK_THEME_SERVER, cDistantThemesDir, cDistantFileName, 2, cUserThemesDir, &erreur);
 		g_free (cDistantFileName);
 		if (erreur != NULL)
 		{

@@ -80,7 +80,7 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHoriz
 	if (g_iIndicatorTexture == 0 && g_pIndicatorSurface != NULL)
 	{
 		g_iIndicatorTexture = cairo_dock_create_texture_from_surface (g_pIndicatorSurface);
-		g_print ("g_iIndicatorTexture <- %d\n", g_iIndicatorTexture);
+		cd_debug ("g_iIndicatorTexture <- %d", g_iIndicatorTexture);
 	}
 	
 	//\__________________ On place l'indicateur.
@@ -142,7 +142,7 @@ static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDo
 	if (g_iActiveIndicatorTexture == 0 && g_pActiveIndicatorSurface != NULL)
 	{
 		g_iActiveIndicatorTexture = cairo_dock_create_texture_from_surface (g_pActiveIndicatorSurface);
-		g_print ("g_iActiveIndicatorTexture <- %d\n", g_iActiveIndicatorTexture);
+		cd_debug ("g_iActiveIndicatorTexture <- %d", g_iActiveIndicatorTexture);
 	}
 	
 	if (icon->fOrientation != 0)
@@ -160,7 +160,7 @@ static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bHoriz
 	if (g_iClassIndicatorTexture == 0 && g_pClassIndicatorSurface != NULL)
 	{
 		g_iClassIndicatorTexture = cairo_dock_create_texture_from_surface (g_pClassIndicatorSurface);
-		g_print ("g_iClassIndicatorTexture <- %d\n", g_iClassIndicatorTexture);
+		cd_debug ("g_iClassIndicatorTexture <- %d", g_iClassIndicatorTexture);
 	}
 	
 	if (icon->fOrientation != 0)
@@ -425,7 +425,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		g_pGradationTexture[pDock->bHorizontalDock] = cairo_dock_load_texture_from_raw_data (gradationTex,
 			pDock->bHorizontalDock ? 1:48,
 			pDock->bHorizontalDock ? 48:1);
-		g_print ("g_pGradationTexture(%d) <- %d\n", pDock->bHorizontalDock, g_pGradationTexture[pDock->bHorizontalDock]);
+		cd_debug ("g_pGradationTexture(%d) <- %d", pDock->bHorizontalDock, g_pGradationTexture[pDock->bHorizontalDock]);
 	}
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.fVisibleAppliAlpha != 0 && ! CAIRO_DOCK_IS_APPLET (icon))
 	{
@@ -599,7 +599,8 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		else
 		{
 			fMagnitude = (icon->fScale - 1) / myIcons.fAmplitude;  /// il faudrait diviser par pDock->fMagnitudeMax ...
-			fMagnitude *= (fMagnitude * mySystem.fLabelAlphaThreshold + 1) / (mySystem.fLabelAlphaThreshold + 1);
+			fMagnitude = pow (fMagnitude, mySystem.fLabelAlphaThreshold);
+			///fMagnitude *= (fMagnitude * mySystem.fLabelAlphaThreshold + 1) / (mySystem.fLabelAlphaThreshold + 1);
 		}
 		
 		cairo_dock_draw_texture_with_alpha (icon->iLabelTexture,
@@ -632,7 +633,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	if (g_iVisibleZoneTexture == 0 && g_pVisibleZoneSurface != NULL)
 	{
 		g_iVisibleZoneTexture = cairo_dock_create_texture_from_surface (g_pVisibleZoneSurface);
-		g_print ("g_iVisibleZoneTexture <- %d\n", g_iVisibleZoneTexture);
+		cd_debug ("g_iVisibleZoneTexture <- %d", g_iVisibleZoneTexture);
 	}
 	
 	glLoadIdentity ();
@@ -719,7 +720,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 		double log2_h = log (h) / log (2);
 		int w_ = MIN (iMaxTextureWidth, pow (2, ceil (log2_w)));
 		int h_ = MIN (iMaxTextureHeight, pow (2, ceil (log2_h)));
-		g_print ("%dx%d --> %dx%d\n", w, h, w_, h_);
+		cd_debug ("%dx%d --> %dx%d", w, h, w_, h_);
 		
 		if (w != w_ || h != h_)
 		{
@@ -808,7 +809,7 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImagePath, doubl
 		&fWidth,
 		&fHeight,
 		NULL, NULL);
-	g_print ("texture genere (%x, %.2fx%.2f)\n", pSurface, fWidth, fHeight);
+	cd_debug ("texture genere (%x, %.2fx%.2f)", pSurface, fWidth, fHeight);
 	cairo_destroy (pCairoContext);
 	
 	if (fImageWidth != NULL)
@@ -825,7 +826,7 @@ GLuint cairo_dock_load_local_texture (const gchar *cImageName, const gchar *cDir
 	g_return_val_if_fail (GTK_WIDGET_REALIZED (g_pMainDock->pWidget), 0);
 
 	gchar *cTexturePath = g_strdup_printf ("%s/%s", cDirPath, cImageName);
-	g_print ("%s\n", cTexturePath);
+	//g_print ("%s\n", cTexturePath);
 	GLuint iTexture = cairo_dock_create_texture_from_image (cTexturePath);
 	g_free (cTexturePath);
 	return iTexture;

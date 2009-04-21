@@ -58,6 +58,38 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 */
 CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWidget, gboolean bOnWidgetLayer);
 
+/**
+* Configure entièrement un desklet en fonction de ses paramètres de sauvegarde extraits d'un fichier de conf. Le place, le dimensionne, le garde devant/derrière, vérouille sa position, et le place sur la couche des widgets, et pour finir definit ses decorations.
+*@param pDesklet le desklet à placer.
+*@param pAttribute la config du desklet, contenant tous les paramètres necessaires.
+*/
+void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute *pAttribute);
+
+/**
+* Détruit un desklet, et libère toutes les ressources allouées. Son widget interactif est épargné et peut être re-inséré autre part après l'opération.
+*@param pDesklet le desklet à détruire.
+*/
+void cairo_dock_free_desklet (CairoDesklet *pDesklet);
+
+
+/**
+* Ajoute un GtkWidget à la fenêtre du desklet. Ce widget ne doit pas appartenir à un autre container. 1 seul widget par desklet, mais si ce widget est un GtkContainer, on peut en mettre plusieurs autres dedans.
+*@param pInteractiveWidget le widget à ajouter.
+*@param pDesklet le desklet dans lequel le rajouter.
+*@param iRightMargin marge a droite en pixels, 0 si on ne veut pas de marge.
+*/
+void cairo_dock_add_interactive_widget_to_desklet_full (GtkWidget *pInteractiveWidget, CairoDesklet *pDesklet, int iRightMargin);
+
+#define cairo_dock_add_interactive_widget_to_desklet(pInteractiveWidget, pDesklet) cairo_dock_add_interactive_widget_to_desklet_full (pInteractiveWidget, pDesklet, 0)
+
+void cairo_dock_set_desklet_margin (CairoDesklet *pDesklet, int iRightMargin);
+
+/**
+* Détache un GtkWidget d'un desklet, le rendant libre d'être inséré autre part.
+*@param pDesklet le desklet contenant un widge tinteractif.
+*/
+void cairo_dock_steal_interactive_widget_from_desklet (CairoDesklet *pDesklet);
+
 
 void cairo_dock_project_coords_on_3D_desklet (CairoDesklet *pDesklet, int iMouseX, int iMouseY, int *iX, int *iY);
 #define cairo_dock_get_coords_on_3D_desklet(pDesklet, xptr, yptr) cairo_dock_project_coords_on_3D_desklet (pDesklet, pDesklet->iMouseX, pDesklet->iMouseY, xptr, yptr)
@@ -69,24 +101,6 @@ void cairo_dock_project_coords_on_3D_desklet (CairoDesklet *pDesklet, int iMouse
 Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet);
 
 /**
-* Configure entièrement un desklet en fonction de ses paramètres de sauvegarde extraits d'un fichier de conf. Le place, le dimensionne, le garde devant/derrière, vérouille sa position, et le place sur la couche des widgets, et pour finir definit ses decorations.
-*@param pDesklet le desklet à placer.
-*@param pAttribute la config du desklet, contenant tous les paramètres necessaires.
-*/
-void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute *pAttribute);
-
-/**
-* Détache un GtkWidget d'un desklet, le rendant libre d'être inséré autre part.
-*@param pDesklet le desklet contenant un widge tinteractif.
-*/
-void cairo_dock_steal_interactive_widget_from_desklet (CairoDesklet *pDesklet);
-/**
-* Détruit un desklet, et libère toutes les ressources allouées. Son widget interactif est épargné et peut être re-inséré autre part après l'opération.
-*@param pDesklet le desklet à détruire.
-*/
-void cairo_dock_free_desklet (CairoDesklet *pDesklet);
-
-/**
 * Cache un desklet.
 *@param pDesklet le desklet à cacher.
 */
@@ -96,13 +110,6 @@ void cairo_dock_hide_desklet (CairoDesklet *pDesklet);
 *@param pDesklet le desklet à montrer.
 */
 void cairo_dock_show_desklet (CairoDesklet *pDesklet);
-
-/**
-* Ajoute un GtkWidget à la fenêtre du desklet. Ce widget ne doit pas appartenir à un autre container. 1 seul widget par desklet, mais si ce widget est un GtkContainer, on peut en mettre plusieurs autres dedans.
-*@param pInteractiveWidget le widget à ajouter.
-*@param pDesklet le desklet dans lequel le rajouter.
-*/
-void cairo_dock_add_interactive_widget_to_desklet (GtkWidget *pInteractiveWidget, CairoDesklet *pDesklet);
 
 /**
 * Rend tous les desklets visibles si ils étaient cachés, et au premier plan s'ils étaient derrière ou sur la widget layer.

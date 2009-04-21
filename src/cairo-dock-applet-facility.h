@@ -789,7 +789,6 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 *Detruit notre sous-dock et les icones contenues dedans s'il y'en a.
 */
 #define CD_APPLET_DESTROY_MY_SUBDOCK do { \
-	g_print ("CD_APPLET_DESTROY_MY_SUBDOCK\n");\
 	cairo_dock_destroy_dock (myIcon->pSubDock, myIcon->acName, NULL, NULL); \
 	myIcon->pSubDock = NULL; } while (0)
 /**
@@ -812,7 +811,6 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)
 
 #define CD_APPLET_DELETE_MY_ICONS_LIST do {\
-	g_print ("CD_APPLET_DELETE_MY_ICONS_LIST\n");\
 	if (myDesklet && myDesklet->icons != NULL) {\
 		g_list_foreach (myDesklet->icons, (GFunc) cairo_dock_free_icon, NULL);\
 		g_list_free (myDesklet->icons);\

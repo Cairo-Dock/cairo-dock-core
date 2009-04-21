@@ -329,10 +329,10 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 		}
 		else
 		{
-			g_print (" + adresse\n");
+			cd_debug (" + adresse");
 			if (sArg->str[sArg->len-1] == '\r')
 			{
-				g_print ("retour charriot\n");
+				cd_debug ("retour charriot");
 				sArg->str[sArg->len-1] = '\0';
 			}
 			i ++;

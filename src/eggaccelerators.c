@@ -764,7 +764,7 @@ int *egg_keystring_to_keysyms (gchar *accelerator, int *iNbKeys)
 		
 		if (cKeyName != NULL)
 		{
-			g_print ("cKeyName : %s\n", cKeyName);
+			//g_print ("cKeyName : %s\n", cKeyName);
 			int keysym = XStringToKeysym (cKeyName);
 			if (keysym == NoSymbol)
 			{

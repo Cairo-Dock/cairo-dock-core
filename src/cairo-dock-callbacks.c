@@ -1055,7 +1055,7 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommandFormat, gchar *cWo
 	GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_launch_threaded, data, FALSE, &erreur);
 	if (erreur != NULL)
 	{
-		cd_warning ("couldn't launch this command (%s)", erreur->message);
+		cd_warning ("couldn't launch this command (%s : %s)", cBGCommand, erreur->message);
 		g_error_free (erreur);
 		g_free (cBGCommand);
 		return FALSE;

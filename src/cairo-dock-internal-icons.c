@@ -328,7 +328,7 @@ DEFINE_PRE_INIT (Icons)
 	pModule->cModuleName = "Icons";
 	pModule->cTitle = "Icons";
 	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-icons.svg";
-	pModule->cDescription = "All about icons :\n size, reflection, icon theme, ...";
+	pModule->cDescription = N_("All about icons :\n size, reflection, icon theme, ...");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigIcons);
 	pModule->iSizeOfData = 0;

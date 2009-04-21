@@ -35,20 +35,20 @@ static int s_iSidShowGroupDialog = 0;
 void on_click_category_button (GtkButton *button, gpointer data)
 {
 	int iCategory = GPOINTER_TO_INT (data);
-	g_print ("%s (%d)\n", __func__, iCategory);
+	//g_print ("%s (%d)\n", __func__, iCategory);
 	cairo_dock_show_one_category (iCategory);
 }
 
 void on_click_all_button (GtkButton *button, gpointer data)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	cairo_dock_show_all_categories ();
 }
 
 
 void on_click_group_button (GtkButton *button, CairoDockGroupDescription *pGroupDescription)
 {
-	g_print ("%s (%s)\n", __func__, pGroupDescription->cGroupName);
+	//g_print ("%s (%s)\n", __func__, pGroupDescription->cGroupName);
 	cairo_dock_show_group (pGroupDescription);
 }
 
@@ -84,7 +84,7 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 	{
 		if (*pGroupDescription->cDescription == '/')
 		{
-			g_print ("on recupere la description de %s\n", pGroupDescription->cDescription);
+			//g_print ("on recupere la description de %s\n", pGroupDescription->cDescription);
 			
 			gsize length = 0;
 			GError *erreur = NULL;
@@ -104,7 +104,7 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 	GtkWidget *pPreviewImage = cairo_dock_get_preview_image (&iPreviewWidgetWidth);
 	if (pGroupDescription->cPreviewFilePath != NULL)
 	{
-		g_print ("on recupere la prevue de %s\n", pGroupDescription->cPreviewFilePath);
+		//g_print ("on recupere la prevue de %s\n", pGroupDescription->cPreviewFilePath);
 		int iPreviewWidth, iPreviewHeight;
 		GdkPixbuf *pPreviewPixbuf = NULL;
 		if (gdk_pixbuf_get_file_info (pGroupDescription->cPreviewFilePath, &iPreviewWidth, &iPreviewHeight) != NULL)
@@ -187,7 +187,7 @@ void on_leave_group_button (GtkButton *button, gpointer *data)
 
 void on_click_apply (GtkButton *button, GtkWidget *pWindow)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	
 	CairoDockGroupDescription *pGroupDescription = cairo_dock_get_current_group ();
 	if (pGroupDescription == NULL)
@@ -222,7 +222,7 @@ void on_click_apply (GtkButton *button, GtkWidget *pWindow)
 		CairoDockInternalModule *pInternalModule = cairo_dock_find_internal_module_from_name (pGroupDescription->cGroupName);
 		if (pInternalModule != NULL)
 		{
-			g_print ("found module %s\n", pInternalModule->cModuleName);
+			//g_print ("found module %s\n", pInternalModule->cModuleName);
 			cairo_dock_reload_internal_module (pInternalModule, g_cConfFile);
 
 		}
@@ -233,7 +233,7 @@ void on_click_apply (GtkButton *button, GtkWidget *pWindow)
 
 void on_click_ok (GtkButton *button, GtkWidget *pWindow)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	
 	on_click_apply (button, pWindow);
 	on_click_quit (button, pWindow);
@@ -241,7 +241,7 @@ void on_click_ok (GtkButton *button, GtkWidget *pWindow)
 
 void on_click_quit (GtkButton *button, GtkWidget *pWindow)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	GMainLoop *pBlockingLoop = g_object_get_data (G_OBJECT (pWindow), "loop");
 	on_delete_main_gui (pWindow, NULL, pBlockingLoop);
 	gtk_widget_destroy (pWindow);
@@ -250,7 +250,7 @@ void on_click_quit (GtkButton *button, GtkWidget *pWindow)
 void on_click_activate_given_group (GtkToggleButton *button, CairoDockGroupDescription *pGroupDescription)
 {
 	g_return_if_fail (pGroupDescription != NULL);
-	g_print ("%s (%s)\n", __func__, pGroupDescription->cGroupName);
+	//g_print ("%s (%s)\n", __func__, pGroupDescription->cGroupName);
 	
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 	g_return_if_fail (pModule != NULL);
@@ -270,9 +270,9 @@ void on_click_activate_given_group (GtkToggleButton *button, CairoDockGroupDescr
 
 void on_click_activate_current_group (GtkToggleButton *button, gpointer *data)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	CairoDockGroupDescription *pGroupDescription = cairo_dock_get_current_group ();
-	g_print ("%s\n", pGroupDescription->cGroupName);
+	//g_print ("%s\n", pGroupDescription->cGroupName);
 	
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 	g_return_if_fail (pModule != NULL);
@@ -296,7 +296,7 @@ void on_click_activate_current_group (GtkToggleButton *button, gpointer *data)
 
 void on_click_normal_apply (GtkButton *button, GtkWidget *pWindow)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWindow), "widget-list");
 	gchar *cConfFilePath = g_object_get_data (G_OBJECT (pWindow), "conf-file");
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
@@ -317,7 +317,7 @@ void on_click_normal_apply (GtkButton *button, GtkWidget *pWindow)
 
 void on_click_normal_quit (GtkButton *button, GtkWidget *pWindow)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	GMainLoop *pBlockingLoop = g_object_get_data (G_OBJECT (pWindow), "loop");
 	on_delete_normal_gui (pWindow, NULL, pBlockingLoop);
 	if (pBlockingLoop == NULL)
@@ -326,7 +326,7 @@ void on_click_normal_quit (GtkButton *button, GtkWidget *pWindow)
 
 void on_click_normal_ok (GtkButton *button, GtkWidget *pWindow)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	
 	on_click_normal_apply (button, pWindow);
 	on_click_normal_quit (button, pWindow);
@@ -335,10 +335,10 @@ void on_click_normal_ok (GtkButton *button, GtkWidget *pWindow)
 
 gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
 {
-	g_print ("%s (%x)\n", __func__, pBlockingLoop);
+	cd_debug ("%s (%x)", __func__, pBlockingLoop);
 	if (pBlockingLoop != NULL)
 	{
-		g_print ("dialogue detruit, on sort de la boucle");
+		cd_debug ("dialogue detruit, on sort de la boucle");
 		if (g_main_loop_is_running (pBlockingLoop))
 			g_main_loop_quit (pBlockingLoop);
 	}
@@ -353,7 +353,7 @@ gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBl
 
 gboolean on_delete_normal_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	
 	if (pBlockingLoop != NULL && g_main_loop_is_running (pBlockingLoop))
 	{
@@ -421,25 +421,25 @@ void cairo_dock_activate_filter (GtkEntry *pEntry, gpointer data)
 }
 void cairo_dock_toggle_all_words (GtkToggleButton *pButton, gpointer data)
 {
-	g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
+	//g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
 	bAllWords = gtk_toggle_button_get_active (pButton);
 	cairo_dock_trigger_current_filter ();
 }
 void cairo_dock_toggle_search_in_tooltip (GtkToggleButton *pButton, gpointer data)
 {
-	g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
+	//g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
 	bSearchInToolTip = gtk_toggle_button_get_active (pButton);
 	cairo_dock_trigger_current_filter ();
 }
 void cairo_dock_toggle_highlight_words (GtkToggleButton *pButton, gpointer data)
 {
-	g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
+	//g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
 	bHighLightText = gtk_toggle_button_get_active (pButton);
 	cairo_dock_trigger_current_filter ();
 }
 void cairo_dock_toggle_hide_others (GtkToggleButton *pButton, gpointer data)
 {
-	g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
+	//g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
 	bHideOther = gtk_toggle_button_get_active (pButton);
 	cairo_dock_trigger_current_filter ();
 }
@@ -447,7 +447,7 @@ void cairo_dock_clear_filter (GtkButton *pButton, GtkEntry *pEntry)
 {
 	gtk_entry_set_text (pEntry, "");
 	gpointer pCurrentPlace = cairo_dock_get_current_widget ();
-	g_print ("pCurrentPlace : %x\n", pCurrentPlace);
+	//g_print ("pCurrentPlace : %x\n", pCurrentPlace);
 	//_show_group_or_category (pCurrentPlace);
 	gchar *keyword[2] = {"fabounetfabounetfabounet", NULL};
 	cairo_dock_apply_current_filter (keyword, FALSE, FALSE, FALSE, FALSE);

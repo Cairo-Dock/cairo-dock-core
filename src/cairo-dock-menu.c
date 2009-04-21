@@ -184,21 +184,21 @@ which opera > /dev/null && opera %s ",
 
 static void _cairo_dock_check_for_updates (GtkMenuItem *pMenuItem, gpointer *data)
 {
-	g_print ("launching %s...\n", CAIRO_DOCK_FILE_HOST_URL);
+	//g_print ("launching %s...\n", CAIRO_DOCK_FILE_HOST_URL);
 	_launch_url (CAIRO_DOCK_FILE_HOST_URL);
 	//system ("xterm -e cairo-dock-update.sh &");
 }
 
 static void _cairo_dock_help (GtkMenuItem *pMenuItem, gpointer *data)
 {
-	g_print ("launching %s...\n", CAIRO_DOCK_HELP_URL);
+	//g_print ("launching %s...\n", CAIRO_DOCK_HELP_URL);
 	_launch_url (CAIRO_DOCK_HELP_URL);
 }
 
 static void _cairo_dock_present_help (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	CairoDockModule *pModule = cairo_dock_find_module_from_name ("Help");
-	g_print ("%x\n", pModule);
+	//g_print ("%x\n", pModule);
 	g_return_if_fail (pModule != NULL);
 	cairo_dock_build_main_ihm (g_cConfFile, FALSE);
 	cairo_dock_present_module_gui (pModule);
@@ -263,8 +263,8 @@ static void _cairo_dock_remove_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 	{
 		_cairo_dock_on_user_remove_icon (icon, pDock);
 	}
-	else
-		g_print ("ok on la garde\n");
+	//else
+	//	g_print ("ok on la garde\n");
 }
 
 static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, Icon *icon, CairoDock *pDock, CairoDockNewLauncherType iLauncherType)
@@ -367,7 +367,7 @@ static void cairo_dock_add_separator (GtkMenuItem *pMenuItem, gpointer *data)
 
 static void _on_modify_launcher (Icon *icon)
 {
-	g_print ("%s (%s)\n", __func__, icon->acName);
+	//g_print ("%s (%s)\n", __func__, icon->acName);
 	GError *erreur = NULL;
 	//\_____________ On detache l'icone.
 	gchar *cPrevDockName = icon->cParentDockName;
@@ -1125,7 +1125,7 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, CairoContainer *pContainer, GtkWidget *menu)
 {
 	static gpointer *data = NULL;
-	g_print ("%x;%x;%x\n", icon, pContainer, menu);
+	//g_print ("%x;%x;%x\n", icon, pContainer, menu);
 	if (data == NULL)
 		data = g_new (gpointer, 3);
 	data[0] = icon;

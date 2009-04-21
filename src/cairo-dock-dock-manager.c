@@ -437,7 +437,7 @@ static void _cairo_dock_redraw_one_root_dock (gchar *cDockName, CairoDock *pDock
 	if (pDock->iRefCount == 0 && ! (data && pDock->bIsMainDock))
 	{
 		gtk_widget_queue_draw (pDock->pWidget);
-		g_print ("redessin de %s\n", cDockName);
+		//g_print ("redessin de %s\n", cDockName);
 	}
 }
 void cairo_dock_redraw_root_docks (gboolean bExceptMainDock)
@@ -673,13 +673,13 @@ gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix)
 
 gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon)
 {
-	g_print ("%s (%s)\n", __func__, pIcon->acName);
+	cd_debug ("%s (%s)", __func__, pIcon->acName);
 	gchar *cUniqueName = cairo_dock_get_unique_dock_name (pIcon->acName);
 	if (pIcon->acName == NULL || strcmp (pIcon->acName, cUniqueName) != 0)
 	{
 		g_free (pIcon->acName);
 		pIcon->acName = cUniqueName;
-		g_print ("acName <- %s\n", cUniqueName);
+		cd_debug ("acName <- %s", cUniqueName);
 		return TRUE;
 	}
 	return FALSE;

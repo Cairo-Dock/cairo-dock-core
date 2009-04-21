@@ -273,10 +273,10 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 		if (cairo_dock_get_root_dock_position (cDockName, pDock))
 			cairo_dock_place_root_dock (pDock);
 	}
-	g_print ("redessin force ...\n");
+	/*g_print ("redessin force ...\n");
 		while (gtk_events_pending ())  // on force le redessin pour eviter les carres gris.
 			gtk_main_iteration ();
-	g_print ("done.\n");
+	g_print ("done.\n");*/
 	
 	return pDock;
 }
@@ -327,7 +327,7 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 
 void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDock *pReceivingDock, gchar *cpReceivingDockName)
 {
-	g_print ("%s (%s, %d)\n", __func__, cDockName, pDock->iRefCount);
+	cd_debug ("%s (%s, %d)", __func__, cDockName, pDock->iRefCount);
 	g_return_if_fail (pDock != NULL);  // && cDockName != NULL
 	if (pDock->bIsMainDock)  // utiliser cairo_dock_free_all_docks ().
 		return;

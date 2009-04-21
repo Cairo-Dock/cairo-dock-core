@@ -20,11 +20,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 CairoConfigAccessibility myAccessibility;
 extern CairoDock *g_pMainDock;
 extern gint g_iScreenWidth[2];
-_present_dock (const char *cKeyShortcut, gpointer data)
-{
-	g_print ("_present_dock\n");
-	gtk_window_present (g_pMainDock->pWidget);
-}
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAccessibility)
 {
@@ -58,9 +53,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 		pAccessibility->bReserveSpace = FALSE;
 		pAccessibility->bAutoHide = FALSE;
 	}
-	
-	cd_keybinder_bind ("<Shift>F1", (CDBindkeyHandler) _present_dock, NULL);
-	
 	
 	return bFlushConfFileNeeded;
 }

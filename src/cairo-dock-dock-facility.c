@@ -391,7 +391,7 @@ void cairo_dock_set_input_shape (CairoDock *pDock)
 		g_print ("ShapeQueryExtension too old\n");*/
 	if (pDock->pShapeBitmap == NULL || pDock->inputArea.width == 0 || pDock->inputArea.height == 0)
 		return ;
-	g_print ("%s (%d;%d ; %dx%d\n", __func__, pDock->inputArea.x, pDock->inputArea.y, pDock->inputArea.width, pDock->inputArea.height);
+	//g_print ("%s (%d;%d ; %dx%d\n", __func__, pDock->inputArea.x, pDock->inputArea.y, pDock->inputArea.width, pDock->inputArea.height);
 	
 	cairo_t *pCairoContext = gdk_cairo_create (pDock->pShapeBitmap);
 	cairo_set_source_rgba (pCairoContext, 1.0f, 1.0f, 1.0f, 0.0f);
@@ -428,7 +428,7 @@ void cairo_dock_set_input_shape (CairoDock *pDock)
 
 void cairo_dock_unset_input_shape (CairoDock *pDock)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	gtk_widget_input_shape_combine_mask (pDock->pWidget,
 		NULL,
 		0,

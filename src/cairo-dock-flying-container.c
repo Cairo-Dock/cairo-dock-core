@@ -336,7 +336,7 @@ void cairo_dock_drag_flying_container (CairoFlyingContainer *pFlyingContainer, C
 
 void cairo_dock_free_flying_container (CairoFlyingContainer *pFlyingContainer)
 {
-	g_print ("%s ()\n", __func__);
+	cd_debug ("%s ()", __func__);
 	gtk_widget_destroy (pFlyingContainer->pWidget);  // enleve les signaux.
 	if (pFlyingContainer->iSidGLAnimation != 0)
 		g_source_remove (pFlyingContainer->iSidGLAnimation);
@@ -363,7 +363,7 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 	}
 	else if (CAIRO_DOCK_IS_APPLET(pIcon))
 	{
-		g_print ("le module %s devient un desklet\n", pIcon->pModuleInstance->cConfFilePath);
+		cd_debug ("le module %s devient un desklet", pIcon->pModuleInstance->cConfFilePath);
 		
 		GError *erreur = NULL;
 		GKeyFile *pKeyFile = cairo_dock_open_key_file (pIcon->pModuleInstance->cConfFilePath);
