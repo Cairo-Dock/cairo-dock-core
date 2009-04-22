@@ -646,6 +646,22 @@ static void on_theme_apply (gpointer *user_data)
 				bThemeSaved = TRUE;
 			}
 		}
+		
+		if (g_key_file_get_boolean (pKeyFile, "Save", "package", NULL))
+		{
+			cd_message ("building theme package ...");
+			if (g_file_test (CAIRO_DOCK_SHARE_DATA_DIR"/../../bin/cairo-dock-package-theme.sh", G_FILE_TEST_EXISTS))
+			{
+				gchar *cCommand = g_strdup_printf ("xterm -e '%s \"%s\"'", "cairo-dock-package-theme.sh", cNewThemeName);
+				system (cCommand);
+				g_free (cCommand);
+			}
+			else
+			{
+				cd_warning ("the package builder script was not found !");
+			}
+		}	
+		
 		g_free (cNewThemePath);
 		if (bThemeSaved)
 			cairo_dock_mark_theme_as_modified (FALSE);

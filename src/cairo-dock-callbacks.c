@@ -202,7 +202,6 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 }
 
 
-
 void cairo_dock_show_subdock (Icon *pPointedIcon, gboolean bUpdate, CairoDock *pDock)
 {
 	cd_debug ("on montre le dock fils");
@@ -311,9 +310,10 @@ static gboolean _cairo_dock_show_sub_dock_delayed (CairoDock *pDock)
 }
 
 
-static gboolean _cairo_dock_show_xwindow_for_drop (Icon *pIcon)
+static gboolean _cairo_dock_show_xwindow_for_drop (gpointer data)
 {
-	cairo_dock_show_xwindow (pIcon->Xid);
+	Window Xid = GPOINTER_TO_INT (data);
+	cairo_dock_show_xwindow (Xid);
 	s_iSidShowAppliForDrop = 0;
 	return FALSE;
 }
@@ -337,7 +337,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 	cairo_dock_replace_all_dialogs ();
 	if (pDock->bIsDragging && CAIRO_DOCK_IS_APPLI (pPointedIcon))
 	{
-		s_iSidShowAppliForDrop = g_timeout_add (500, (GSourceFunc) _cairo_dock_show_xwindow_for_drop, (gpointer) pPointedIcon);
+		s_iSidShowAppliForDrop = g_timeout_add (500, (GSourceFunc) _cairo_dock_show_xwindow_for_drop, GINT_TO_POINTER (pPointedIcon->Xid));
 	}
 	
 	//g_print ("%x/%x , %x, %x\n", pDock, s_pLastPointedDock, pLastPointedIcon, pLastPointedIcon?pLastPointedIcon->pSubDock:NULL);
@@ -1063,6 +1063,99 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommandFormat, gchar *cWo
 	return TRUE;
 }
 
+static int _compare_zorder (Icon *icon1, Icon *icon2)  // classe par z-order decroissant.
+{
+	if (icon1->iStackOrder < icon2->iStackOrder)
+		return -1;
+	else if (icon1->iStackOrder > icon2->iStackOrder)
+		return 1;
+	else
+		return 0;
+}
+static void _cairo_dock_hide_show_in_class_subdock (Icon *icon)
+{
+	Icon *pIcon;
+	GList *ic;
+	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+	{
+		pIcon = ic->data;
+		if (pIcon->Xid != 0 && ! pIcon->bIsHidden)  // par defaut on cache tout.
+		{
+			break;
+		}
+	}
+	
+	if (ic != NULL)  // au moins une fenetre est visible, on cache tout.
+	{
+		for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+		{
+			pIcon = ic->data;
+			if (pIcon->Xid != 0 && ! pIcon->bIsHidden)
+			{
+				cairo_dock_minimize_xwindow (pIcon->Xid);
+			}
+		}
+	}
+	else  // on montre tout, dans l'ordre du z-order.
+	{
+		GList *pZOrderList = NULL;
+		for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+		{
+			pIcon = ic->data;
+			if (pIcon->Xid != 0)
+				pZOrderList = g_list_insert_sorted (pZOrderList, pIcon, (GCompareFunc) _compare_zorder);
+		}
+		for (ic = pZOrderList; ic != NULL; ic = ic->next)
+		{
+			pIcon = ic->data;
+			cairo_dock_show_xwindow (pIcon->Xid);
+		}
+		g_list_free (pZOrderList);
+	}
+}
+
+static void _cairo_dock_show_prev_next_in_class_subdock (Icon *icon, gboolean bNext)
+{
+	Icon *pActiveIcon = cairo_dock_get_current_active_icon ();
+	Icon *pNextIcon;
+	if (pActiveIcon != NULL)
+	{
+		if (bNext)
+		{
+			pNextIcon = cairo_dock_get_next_icon (icon->pSubDock->icons, pActiveIcon);
+			if (pNextIcon == NULL)  // pas trouvee ou derniere de la liste.
+				pNextIcon = cairo_dock_get_first_icon (icon->pSubDock->icons);
+		}
+		else
+		{
+			pNextIcon = cairo_dock_get_previous_icon (icon->pSubDock->icons, pActiveIcon);
+			if (pNextIcon == NULL)  // pas trouvee ou premiere de la liste.
+				pNextIcon = cairo_dock_get_last_icon (icon->pSubDock->icons);
+		}
+	}
+	else
+	{
+		pNextIcon = cairo_dock_get_first_icon (icon->pSubDock->icons);
+	}
+	if (pNextIcon != NULL)
+		cairo_dock_show_xwindow (pNextIcon->Xid);
+}
+
+static void _cairo_dock_close_all_in_class_subdock (Icon *icon)
+{
+	Icon *pIcon;
+	GList *ic;
+	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+	{
+		pIcon = ic->data;
+		if (pIcon->Xid != 0)
+		{
+			cairo_dock_close_xwindow (pIcon->Xid);
+		}
+	}
+}
+
+
 gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState)
 {
 	if (icon == NULL)
@@ -1106,17 +1199,12 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	else if (CAIRO_DOCK_IS_LAUNCHER (icon))
 	{
 		cd_debug (" launcher");
-		if (icon->pSubDock != NULL && icon->pSubDock->icons != NULL && icon->cClass != NULL && ! (iButtonState & GDK_SHIFT_MASK))  // un lanceur ayant un sous-dock de classe ou une icone de paille : on emule un alt+tab sur la liste des applis du sous-dock.
+		if (icon->pSubDock != NULL && icon->pSubDock->icons != NULL && icon->cClass != NULL && ! (iButtonState & GDK_SHIFT_MASK))  // un lanceur ayant un sous-dock de classe ou une icone de paille : on cache ou on montre.
 		{
-			Icon *pActiveIcon = cairo_dock_get_current_active_icon ();
-			Icon *pNextIcon = NULL;
-			if (pActiveIcon != NULL)
+			if (myAccessibility.bShowSubDockOnClick)
 			{
-				pNextIcon = cairo_dock_get_next_icon (icon->pSubDock->icons, pActiveIcon);
+				_cairo_dock_hide_show_in_class_subdock (icon);
 			}
-			if (pNextIcon == NULL)  // pas trouvee ou derniere de la liste.
-				pNextIcon = icon->pSubDock->icons->data;
-			cairo_dock_show_xwindow (pNextIcon->Xid);
 			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 		}
 		else if (icon->acCommand != NULL && strcmp (icon->acCommand, "none") != 0)  // finalement, on lance la commande.
@@ -1145,15 +1233,6 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 }
 
 
-static int _compare_zorder (Icon *icon1, Icon *icon2)  // classe par z-order decroissant.
-{
-	if (icon1->iStackOrder < icon2->iStackOrder)
-		return -1;
-	else if (icon1->iStackOrder > icon2->iStackOrder)
-		return 1;
-	else
-		return 0;
-}
 gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock)
 {
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.bCloseAppliOnMiddleClick && ! CAIRO_DOCK_IS_APPLET (icon))
@@ -1168,44 +1247,8 @@ gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *ic
 	}
 	if (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->pSubDock != NULL && icon->pSubDock->icons != NULL &&icon->cClass != NULL)
 	{
-		Icon *pIcon;
-		GList *ic;
-		for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
-		{
-			pIcon = ic->data;
-			if (pIcon->Xid != 0 && ! pIcon->bIsHidden)  // par defaut on cache tout.
-			{
-				break;
-			}
-		}
-		
-		if (ic != NULL)  // au moins une fenetre est visible, on cache tout.
-		{
-			for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
-			{
-				pIcon = ic->data;
-				if (pIcon->Xid != 0 && ! pIcon->bIsHidden)
-				{
-					cairo_dock_minimize_xwindow (pIcon->Xid);
-				}
-			}
-		}
-		else  // on montre tout, dans l'ordre du z-order.
-		{
-			GList *pZOrderList = NULL;
-			for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
-			{
-				pIcon = ic->data;
-				if (pIcon->Xid != 0)
-					pZOrderList = g_list_insert_sorted (pZOrderList, pIcon, (GCompareFunc) _compare_zorder);
-			}
-			for (ic = pZOrderList; ic != NULL; ic = ic->next)
-			{
-				pIcon = ic->data;
-				cairo_dock_show_xwindow (pIcon->Xid);
-			}
-			g_list_free (pZOrderList);
-		}
+		// On ferme tout.
+		_cairo_dock_close_all_in_class_subdock (icon);
 		
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	}
@@ -1409,28 +1452,9 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
 	if (icon != NULL)
 	{
-		if (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->pSubDock != NULL && icon->cClass != NULL)  // on emule un alt+tab sur la liste des applis du sous-dock.
+		if (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->pSubDock != NULL && icon->pSubDock->icons != NULL && icon->cClass != NULL)  // on emule un alt+tab sur la liste des applis du sous-dock.
 		{
-			Icon *pActiveIcon = cairo_dock_get_current_active_icon ();
-			Icon *pNextIcon;
-			if (pActiveIcon != NULL)
-			{
-				if (pScroll->direction == GDK_SCROLL_DOWN)
-				{
-					pNextIcon = cairo_dock_get_next_icon (icon->pSubDock->icons, pActiveIcon);
-					if (pNextIcon == NULL)  // pas trouvee ou derniere de la liste.
-						pNextIcon = cairo_dock_get_first_icon (icon->pSubDock->icons);
-				}
-				else
-				{
-					pNextIcon = cairo_dock_get_previous_icon (icon->pSubDock->icons, pActiveIcon);
-					if (pNextIcon == NULL)  // pas trouvee ou premiere de la liste.
-						pNextIcon = cairo_dock_get_last_icon (icon->pSubDock->icons);
-				}
-			}
-			else
-				pNextIcon = cairo_dock_get_first_icon (icon->pSubDock->icons);
-			cairo_dock_show_xwindow (pNextIcon->Xid);
+			_cairo_dock_show_prev_next_in_class_subdock (icon, pScroll->direction == GDK_SCROLL_DOWN);
 		}
 		else if (CAIRO_DOCK_IS_APPLI (icon) && icon->cClass != NULL)
 		{
