@@ -10,7 +10,8 @@ pkgconfig_DATA = cairo-dock.pc
 scriptdir = ${bindir}
 script_DATA = \
 	launch-cairo-dock-after-beryl.sh\
-	cairo-dock-update.sh
+	cairo-dock-update.sh\
+	cairo-dock-package-theme.sh
 
 EXTRA_DIST = \
 	${script_DATA}\

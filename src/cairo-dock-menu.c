@@ -771,6 +771,22 @@ static void _cairo_dock_launch_new (GtkMenuItem *pMenuItem, gpointer *data)
 	}
 }
 
+static void _cairo_dock_make_launcher_from_appli (GtkMenuItem *pMenuItem, gpointer *data)
+{
+	Icon *icon = data[0];
+	CairoDock *pDock = data[1];
+	g_return_if_fail (icon->Xid != 0);
+	
+	/// trouver URI
+	
+	gchar *cDesktopFileURI = NULL;
+	if (cDesktopFileURI != NULL)
+	{
+		cairo_dock_add_new_launcher_by_uri (cDesktopFileURI, g_pMainDock, CAIRO_DOCK_LAST_ORDER);
+		g_free (cDesktopFileURI);
+	}
+}
+
 static void _cairo_dock_close_class (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];

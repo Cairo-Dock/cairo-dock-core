@@ -56,6 +56,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-desktop-file-factory.h"
+#include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dock-factory.h"
 
 extern CairoDock *g_pMainDock;
@@ -790,6 +792,45 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 					}
 				}
 			}
+		}
+	}
+}
+
+
+void cairo_dock_add_new_launcher_by_uri (const gchar *cDesktopFileURI, CairoDock *pReceivingDock, double fOrder)
+{
+	//\_________________ On l'ajoute dans le repertoire des lanceurs du theme courant.
+	GError *erreur = NULL;
+	const gchar *cDockName = cairo_dock_search_dock_name (pReceivingDock);
+	gchar *cNewDesktopFileName = cairo_dock_add_desktop_file_from_uri (cDesktopFileURI, cDockName, fOrder, pReceivingDock, &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+		return ;
+	}
+
+	//\_________________ On charge ce nouveau lanceur.
+	if (cNewDesktopFileName != NULL)
+	{
+		cairo_dock_mark_theme_as_modified (TRUE);
+
+		cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pReceivingDock));
+		Icon *pNewIcon = cairo_dock_create_icon_from_desktop_file (cNewDesktopFileName, pCairoContext);
+		g_free (cNewDesktopFileName);
+		cairo_destroy (pCairoContext);
+
+		if (pNewIcon != NULL)
+		{
+			cairo_dock_insert_icon_in_dock (pNewIcon, pReceivingDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
+
+			if (CAIRO_DOCK_IS_URI_LAUNCHER (pNewIcon))
+			{
+				cairo_dock_fm_add_monitor (pNewIcon);
+			}
+			
+			//cairo_dock_start_shrinking (pDock);
+			cairo_dock_launch_animation (CAIRO_CONTAINER (pReceivingDock));
 		}
 	}
 }

@@ -6,6 +6,8 @@
 G_BEGIN_DECLS
 
 
+void cairo_dock_freeze_docks (gboolean bFreeze);
+
 gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext);
 gboolean cairo_dock_on_expose (GtkWidget *pWidget, GdkEventExpose *pExpose, CairoDock *pDock);
 

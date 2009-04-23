@@ -77,9 +77,6 @@ extern gint g_iXScreenWidth[2];
 extern gint g_iXScreenHeight[2];
 extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
 
-extern gchar *g_cConfFile;
-
-extern gboolean g_bUseGlitz;
 extern gboolean g_bEasterEggs;
 
 extern gboolean g_bUseOpenGL;
@@ -87,11 +84,14 @@ extern gboolean g_bUseOpenGL;
 extern gboolean g_bDisplayDropEmblem;
 extern gboolean g_bLocked;
 
-static gboolean s_bTemporaryAutoHide = FALSE;
-static gboolean s_bEntranceAllowed = TRUE;
-static gboolean s_bAutoHideInitialValue;
 static gboolean s_bHideAfterShortcut = FALSE;
+static gboolean s_bFrozenDock = FALSE;
 
+
+void cairo_dock_freeze_docks (gboolean bFreeze)
+{
+	s_bFrozenDock = bFreeze;
+}
 
 gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext)
 {
@@ -453,6 +453,8 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	CairoDock *pDock)
 {
 	static double fLastTime = 0;
+	if (s_bFrozenDock && pMotion != NULL && pMotion->time != 0)
+		return FALSE;
 	Icon *pPointedIcon, *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 	int iLastMouseX = pDock->iMouseX;
 	//g_print ("%s (%.2f;%.2f)\n", __func__, pMotion->x, pMotion->y);
@@ -1629,6 +1631,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 	cairo_dock_notify_drop_data (cReceivedData, pPointedIcon, fOrder, CAIRO_CONTAINER (pDock));
 }
 
+
 gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, CairoContainer *pContainer)
 {
 	if (! CAIRO_DOCK_IS_DOCK (pContainer))
@@ -1698,41 +1701,7 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 		if (g_bLocked)
 			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 		
-		//\_________________ On l'ajoute dans le repertoire des lanceurs du theme courant.
-		GError *erreur = NULL;
-		const gchar *cDockName = cairo_dock_search_dock_name (pReceivingDock);
-		gchar *cNewDesktopFileName = cairo_dock_add_desktop_file_from_uri (cReceivedData, cDockName, fOrder, pDock, &erreur);
-		if (erreur != NULL)
-		{
-			cd_warning (erreur->message);
-			g_error_free (erreur);
-			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-		}
-
-		//\_________________ On charge ce nouveau lanceur.
-		if (cNewDesktopFileName != NULL)
-		{
-			cairo_dock_mark_theme_as_modified (TRUE);
-
-			cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pReceivingDock));
-			Icon *pNewIcon = cairo_dock_create_icon_from_desktop_file (cNewDesktopFileName, pCairoContext);
-			g_free (cNewDesktopFileName);
-			cairo_destroy (pCairoContext);
-
-			if (pNewIcon != NULL)
-			{
-				cairo_dock_insert_icon_in_dock (pNewIcon, pReceivingDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
-
-				if (CAIRO_DOCK_IS_URI_LAUNCHER (pNewIcon))
-				{
-					cairo_dock_fm_add_monitor (pNewIcon);  // n'est-ce pas trop lourd de rajouter un moniteur sur les fichiers simples ?
-				}
-
-				/*if (pDock->iSidShrinkDown == 0)  // on lance l'animation.
-					pDock->iSidShrinkDown = g_timeout_add (50, (GSourceFunc) cairo_dock_shrink_down, (gpointer) pDock);*/
-				cairo_dock_start_shrinking (pDock);
-			}
-		}
+		cairo_dock_add_new_launcher_by_uri (cReceivedData, pReceivingDock, fOrder);
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }

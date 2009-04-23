@@ -402,7 +402,23 @@ static void on_theme_apply (gpointer *user_data)
 		g_free (cNewThemeName);
 		cNewThemeName = NULL;
 	}
-
+	
+	if (cNewThemeName == NULL)
+	{
+		cNewThemeName = g_key_file_get_string (pKeyFile, "Themes", "package", &erreur);
+		if (erreur != NULL)
+		{
+			cd_warning (erreur->message);
+			g_error_free (erreur);
+			erreur = NULL;
+		}
+		if (cNewThemeName != NULL && *cNewThemeName == '\0')
+		{
+			g_free (cNewThemeName);
+			cNewThemeName = NULL;
+		}
+	}
+	
 	//\___________________ On charge le nouveau theme choisi.
 	GString *sCommand = g_string_new ("");
 	if (cNewThemeName != NULL)
@@ -420,9 +436,34 @@ static void on_theme_apply (gpointer *user_data)
 		}
 		
 		//\___________________ On obtient le chemin du nouveau theme (telecharge si necessaire).
-		gchar *cUserThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
-		gchar *cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, cUserThemesDir, CAIRO_DOCK_THEMES_DIR);
-		g_free (cUserThemesDir);
+		gchar *cNewThemePath;
+		g_print ("cNewThemeName : %s\n", cNewThemeName);
+		int length = strlen (cNewThemeName);
+		if (cNewThemeName[length-1] == '\n')
+			cNewThemeName[--length] = '\0';  // on vire le retour chariot final.
+		if (cNewThemeName[length-1] == '\r')
+			cNewThemeName[--length] = '\0';
+		if (g_str_has_suffix (cNewThemeName, ".tar.gz"))  // c'est un paquet.
+		{
+			g_print ("POUET\n");
+			cNewThemePath = cNewThemeName;
+			if (strncmp (cNewThemePath, "file://", 7) == 0)
+			{
+			  gchar *tmp = cNewThemePath;
+			  cNewThemePath = g_strdup (cNewThemePath+7);
+			  g_free (tmp);
+			}
+			cNewThemeName = g_path_get_basename (cNewThemePath);
+			cNewThemeName[strlen (cNewThemeName) - 7] = '\0';
+		}
+		else  // c'est un theme officiel.
+		{
+			g_print ("POUIC\n");
+			gchar *cUserThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
+			cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, cUserThemesDir, CAIRO_DOCK_THEMES_DIR);
+			g_free (cUserThemesDir);
+		}
+		
 		g_return_if_fail (cNewThemePath != NULL);
 		g_print ("cNewThemePath : %s\n", cNewThemePath);
 		

@@ -365,8 +365,8 @@ static void _cairo_dock_draw_active_window_indicator (cairo_t *pCairoContext, Ic
 	if (icon->fOrientation != 0)
 		cairo_rotate (pCairoContext, icon->fOrientation);
 	cairo_scale (pCairoContext,
-		icon->fWidth * icon->fWidthFactor / fRatio / g_fActiveIndicatorWidth * icon->fScale / (1 + myIcons.fAmplitude),
-		icon->fHeight * icon->fHeightFactor / fRatio / g_fActiveIndicatorHeight * icon->fScale / (1 + myIcons.fAmplitude));
+		icon->fWidth * icon->fWidthFactor / g_fActiveIndicatorWidth * icon->fScale / (1 + myIcons.fAmplitude),
+		icon->fHeight * icon->fHeightFactor / g_fActiveIndicatorHeight * icon->fScale / (1 + myIcons.fAmplitude));
 	cairo_set_source_surface (pCairoContext, g_pActiveIndicatorSurface, 0., 0.);
 	cairo_paint (pCairoContext);
 	cairo_restore (pCairoContext);

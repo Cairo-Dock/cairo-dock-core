@@ -120,5 +120,7 @@ void cairo_dock_remove_all_separators (CairoDock *pDock);
 void cairo_dock_insert_separators_in_dock (CairoDock *pDock);
 
 
+void cairo_dock_add_new_launcher_by_uri (const gchar *cDesktopFileURI, CairoDock *pReceivingDock, double fOrder);
+
 G_END_DECLS
 #endif
