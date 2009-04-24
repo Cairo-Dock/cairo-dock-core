@@ -316,7 +316,9 @@ import_file "Configuration"	"broken icon"	.
 
 cd ..
 echo "building of the tarball ..."
-tar cfz "${THEME_NAME}.tar.gz" current_theme
+mv current_theme "${THEME_NAME}"
+tar cfz "${THEME_NAME}.tar.gz" "${THEME_NAME}"
+mv "${THEME_NAME}" current_theme
 
 echo ""
 echo "The theme has been packaged. It is available in ~/.config/cairo-dock"

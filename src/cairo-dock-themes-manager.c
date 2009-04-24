@@ -98,6 +98,45 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 	return pThemeTable;
 }
 
+gchar *cairo_dock_uncompress_file (gchar *cArchivePath, gchar *cExtractTo, gchar *cRealArchiveName)
+{
+  if (!g_file_test (cExtractTo, G_FILE_TEST_EXISTS))
+  {
+	  if (g_mkdir (cExtractTo, 7*8*8+7*8+5) != 0)
+	  {
+		  cd_warning ("couldn't create directory %s", cExtractTo);
+		  return NULL;
+	  }
+  }
+  gchar *cResultPath;
+  gchar *cCommand = g_strdup_printf ("tar xfz \"%s\" -C \"%s\"", cArchivePath, cExtractTo);
+  int r = system (cCommand);
+  if (r != 0)
+  {
+	  cd_warning ("an error occured while executing '%s'", cCommand);
+	  cResultPath = NULL;
+  }
+  else
+  {
+	  gchar *cLocalFileName;  // on construit le nom local du theme apres decompression.
+	  if (cRealArchiveName == NULL)
+	    cRealArchiveName = cArchivePath;
+	  gchar *str = strrchr (cRealArchiveName, '/');
+	  if (str != NULL)
+		  cLocalFileName = g_strdup (str+1);
+	  else
+		  cLocalFileName = g_strdup (cRealArchiveName);
+	  
+	  if (g_str_has_suffix (cLocalFileName, ".tar.gz"))
+		  cLocalFileName[strlen(cLocalFileName)-7] = '\0';
+	  
+	  cResultPath = g_strdup_printf ("%s/%s", cExtractTo, cLocalFileName);
+	  g_free (cLocalFileName);
+  }
+  g_free (cCommand);
+  return cResultPath;
+}
+
 gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, gint iShowActivity, const gchar *cExtractTo, GError **erreur)
 {
 	gchar *cTmpFilePath = g_strdup ("/tmp/cairo-dock-net-file.XXXXXX");
@@ -131,14 +170,6 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	
 	if (cTmpFilePath != NULL && cExtractTo != NULL)
 	{
-		if (!g_file_test (cExtractTo, G_FILE_TEST_EXISTS))
-		{
-			if (g_mkdir (cExtractTo, 7*8*8+7*8+5) != 0)
-			{
-				cd_warning ("couldn't create directory %s", cExtractTo);
-				return NULL;
-			}
-		}
 		if (pDialog != NULL)
 		{
 			cairo_dock_set_dialog_message_printf (pDialog, "uncompressing %s", cTmpFilePath);
@@ -146,29 +177,10 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 			while (gtk_events_pending ())
 				gtk_main_iteration ();
 		}
-		cCommand = g_strdup_printf ("tar xfz \"%s\" -C \"%s\"", cTmpFilePath, cExtractTo);
+		
+		gchar *cPath = cairo_dock_uncompress_file (cTmpFilePath, cExtractTo, cDistantFileName);
 		g_free (cTmpFilePath);
-		r = system (cCommand);
-		if (r != 0)
-		{
-			g_set_error (erreur, 1, 1, "an error occured while executing '%s'", cCommand);
-			cTmpFilePath = NULL;
-		}
-		else
-		{
-			gchar *cLocalFileName;  // on construit le nom local du theme apres decompression.
-			gchar *str = strrchr (cDistantFileName, '/');
-			if (str != NULL)
-				cLocalFileName = g_strdup (str+1);
-			else
-				cLocalFileName = g_strdup (cDistantFileName);
-			
-			if (g_str_has_suffix (cLocalFileName, ".tar.gz"))
-				cLocalFileName[strlen(cLocalFileName)-7] = '\0';
-			
-			cTmpFilePath = g_strdup_printf ("%s/%s", cExtractTo, cLocalFileName);
-		}
-		g_free (cCommand);
+		cTmpFilePath = cPath;
 	}
 	
 	if (! cairo_dock_dialog_unreference (pDialog))
@@ -436,33 +448,44 @@ static void on_theme_apply (gpointer *user_data)
 		}
 		
 		//\___________________ On obtient le chemin du nouveau theme (telecharge si necessaire).
-		gchar *cNewThemePath;
-		g_print ("cNewThemeName : %s\n", cNewThemeName);
 		int length = strlen (cNewThemeName);
 		if (cNewThemeName[length-1] == '\n')
 			cNewThemeName[--length] = '\0';  // on vire le retour chariot final.
 		if (cNewThemeName[length-1] == '\r')
 			cNewThemeName[--length] = '\0';
+		g_print ("cNewThemeName : '%s'\n", cNewThemeName);
+		gchar *cUserThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
+		gchar *cNewThemePath = NULL;
 		if (g_str_has_suffix (cNewThemeName, ".tar.gz"))  // c'est un paquet.
 		{
-			g_print ("POUET\n");
-			cNewThemePath = cNewThemeName;
-			if (strncmp (cNewThemePath, "file://", 7) == 0)
+			g_print ("c'est un paquet\n");
+			if (*cNewThemeName == '/' || strncmp (cNewThemeName, "file://", 7) == 0)  // paquet en local.
 			{
-			  gchar *tmp = cNewThemePath;
-			  cNewThemePath = g_strdup (cNewThemePath+7);
-			  g_free (tmp);
+			  g_print (" paquet local\n");
+			  cNewThemePath = cairo_dock_uncompress_file (*cNewThemeName == '/' ? cNewThemeName : cNewThemeName+7, cUserThemesDir, NULL);
 			}
+			else  // paquet distant.
+			{
+			  g_print (" paquet distant\n");
+			  gchar *str = strchr (cNewThemeName, '/');
+			  if (str != NULL)
+			  {
+			    *str = '\0';
+			    cNewThemePath = cairo_dock_download_file (cNewThemeName, "", str+1, 2, cUserThemesDir, NULL);
+			  }
+			}
+			 g_print (" => cNewThemePath = '%s'\n", cNewThemePath);
+			gchar *tmp = cNewThemeName;
 			cNewThemeName = g_path_get_basename (cNewThemePath);
 			cNewThemeName[strlen (cNewThemeName) - 7] = '\0';
+			g_free (tmp);
 		}
 		else  // c'est un theme officiel.
 		{
-			g_print ("POUIC\n");
-			gchar *cUserThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
+			g_print ("c'est un theme officiel\n");
 			cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, cUserThemesDir, CAIRO_DOCK_THEMES_DIR);
-			g_free (cUserThemesDir);
 		}
+		g_free (cUserThemesDir);
 		
 		g_return_if_fail (cNewThemePath != NULL);
 		g_print ("cNewThemePath : %s\n", cNewThemePath);
@@ -817,5 +840,6 @@ gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareTh
 		}
 	}
 	
+	g_print (" ====> cThemePath : %s\n", cThemePath);
 	return cThemePath;
 }
