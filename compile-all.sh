@@ -158,6 +158,7 @@ if test "$CAIRO_DOCK_INSTALL" = "1"; then
 	fi
 	$SUDO chmod +x $CAIRO_DOCK_PREFIX/bin/cairo-dock-update.sh
 	$SUDO chmod +x $CAIRO_DOCK_PREFIX/bin/launch-cairo-dock-after-beryl.sh
+	$SUDO chmod +x $CAIRO_DOCK_PREFIX/bin/cairo-dock-package-theme.sh
 fi
 
 

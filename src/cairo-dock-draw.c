@@ -209,7 +209,8 @@ static double cairo_dock_draw_frame_horizontal (cairo_t *pCairoContext, double f
 		fRadius * cosa, -sens * fRadius * (1 - sina));
 	if (fRadius < 1)
 		cairo_close_path (pCairoContext);
-	return fDeltaXForLoop + fRadius * cosa;
+	//return fDeltaXForLoop + fRadius * cosa;
+	return fInclination * (fFrameHeight - (FALSE ? 2 : 1-sina) * fRadius) + fRadius * (FALSE ? 1 : cosa);
 }
 static double cairo_dock_draw_frame_vertical (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination)
 {
@@ -250,7 +251,8 @@ static double cairo_dock_draw_frame_vertical (cairo_t *pCairoContext, double fRa
 		-sens * fRadius * (1 - sina), fRadius * cosa);
 	if (fRadius < 1)
 		cairo_close_path (pCairoContext);
-	return fDeltaXForLoop + fRadius * cosa;
+	//return fDeltaXForLoop + fRadius * cosa;
+	return fInclination * (fFrameHeight - (FALSE ? 2 : 1-sina) * fRadius) + fRadius * (FALSE ? 1 : cosa);
 }
 double cairo_dock_draw_frame (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination, gboolean bHorizontal)
 {

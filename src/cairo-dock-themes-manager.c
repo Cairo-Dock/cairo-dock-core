@@ -158,15 +158,17 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 			gtk_main_iteration ();
 	}
 	gchar *cCommand = g_strdup_printf ("%s wget \"%s/%s/%s\" -O \"%s\" -t %d -T %d%s", (iShowActivity == 2 ? "xterm -e '" : ""), cServerAdress, cDistantFilePath, cDistantFileName, cTmpFilePath, CAIRO_DOCK_DL_NB_RETRY, CAIRO_DOCK_DL_TIMEOUT, (iShowActivity == 2 ? "'" : ""));
+	g_print ("%s\n", cCommand);
 	int r = system (cCommand);
+	close(fds);
 	if (r != 0)
 	{
 		g_set_error (erreur, 1, 1, "an error occured while executing '%s'", cCommand);
 		g_free (cTmpFilePath);
 		cTmpFilePath = NULL;
+		g_remove (cTmpFilePath);
 	}
 	g_free (cCommand);
-	close(fds);
 	
 	if (cTmpFilePath != NULL && cExtractTo != NULL)
 	{
@@ -212,7 +214,7 @@ gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gc
 		g_set_error (erreur, 1, 1, "couldn't info from '%s/%s/%s'\n check that your connection is alive, or retry later", cServerAdress, cDistantFilePath, cDistantFileName);
 	}
 	
-	g_remove (cTmpFilePath);
+	///g_remove (cTmpFilePath);
 	g_free (cTmpFilePath);
 	return cContent;
 }
@@ -285,7 +287,7 @@ GHashTable *cairo_dock_list_themes (const gchar *cShareThemesDir, const gchar *c
 		pThemeTable = cairo_dock_list_net_themes (g_cThemeServerAdress != NULL ? g_cThemeServerAdress : CAIRO_DOCK_THEME_SERVER, cDistantThemesDir, CAIRO_DOCK_DEFAULT_THEME_LIST_NAME, pThemeTable, &erreur);
 	if (erreur != NULL)
 	{
-		cd_warning ("while loading distant themes in '%s/%s' : %s", CAIRO_DOCK_THEME_SERVER, cDistantThemesDir, erreur->message);
+		cd_warning ("while loading distant themes in '%s/%s' : %s", g_cThemeServerAdress != NULL ? g_cThemeServerAdress : CAIRO_DOCK_THEME_SERVER, cDistantThemesDir, erreur->message);
 		g_error_free (erreur);
 		erreur = NULL;
 	}
@@ -467,14 +469,19 @@ static void on_theme_apply (gpointer *user_data)
 			else  // paquet distant.
 			{
 			  g_print (" paquet distant\n");
-			  gchar *str = strchr (cNewThemeName, '/');
+			  gchar *str = strrchr (cNewThemeName, '/');
 			  if (str != NULL)
 			  {
 			    *str = '\0';
 			    cNewThemePath = cairo_dock_download_file (cNewThemeName, "", str+1, 2, cUserThemesDir, NULL);
+			    if (cNewThemePath == NULL)
+			    {
+				cairo_dock_show_temporary_dialog_with_default_icon (_("couldn't get distant file %s/%s, maybe the server is down.\nPlease retry later or contact the administrator."), NULL, NULL, 0, cNewThemeName, str+1);
+			    }
 			  }
 			}
-			 g_print (" => cNewThemePath = '%s'\n", cNewThemePath);
+			g_return_if_fail (cNewThemePath != NULL);
+			g_print (" => cNewThemePath = '%s'\n", cNewThemePath);
 			gchar *tmp = cNewThemeName;
 			cNewThemeName = g_path_get_basename (cNewThemePath);
 			cNewThemeName[strlen (cNewThemeName) - 7] = '\0';
@@ -495,7 +502,7 @@ static void on_theme_apply (gpointer *user_data)
 		{
 			g_string_printf (sCommand, "/bin/cp '%s'/%s '%s'", cNewThemePath, CAIRO_DOCK_CONF_FILE, g_cCurrentThemePath);
 			cd_message ("%s", sCommand->str);
-			system (sCommand->str);
+			r = system (sCommand->str);
 		}
 		else
 		{
@@ -538,7 +545,7 @@ static void on_theme_apply (gpointer *user_data)
 		{
 			g_string_printf (sCommand, "cp -r '%s/%s'/* '%s/%s'", cNewThemePath, CAIRO_DOCK_EXTRAS_DIR, g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR);
 			cd_message ("%s", sCommand->str);
-			system (sCommand->str);
+			r = system (sCommand->str);
 		}
 		
 		//\___________________ On charge les lanceurs si necessaire, en effacant ceux existants.
@@ -546,11 +553,11 @@ static void on_theme_apply (gpointer *user_data)
 		{
 			g_string_printf (sCommand, "rm -f '%s'/*.desktop", g_cCurrentLaunchersPath);
 			cd_message ("%s", sCommand->str);
-			system (sCommand->str);
+			r = system (sCommand->str);
 
 			g_string_printf (sCommand, "cp '%s/%s'/*.desktop '%s'", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentLaunchersPath);
 			cd_message ("%s", sCommand->str);
-			system (sCommand->str);
+			r = system (sCommand->str);
 		}
 		
 		//\___________________ On remplace tous les autres fichiers par les nouveaux.
@@ -717,7 +724,7 @@ static void on_theme_apply (gpointer *user_data)
 			if (g_file_test (CAIRO_DOCK_SHARE_DATA_DIR"/../../bin/cairo-dock-package-theme.sh", G_FILE_TEST_EXISTS))
 			{
 				gchar *cCommand = g_strdup_printf ("xterm -e '%s \"%s\"'", "cairo-dock-package-theme.sh", cNewThemeName);
-				system (cCommand);
+				r = system (cCommand);
 				g_free (cCommand);
 			}
 			else

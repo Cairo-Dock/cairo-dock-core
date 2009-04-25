@@ -540,8 +540,8 @@ cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_t *pSou
 	
 	cairo_surface_t *pSurface = cairo_dock_duplicate_surface (pInhibatorIcon->pIconBuffer,
 		pSourceContext,
-		pInhibatorIcon->fWidth * fInhibatorMaxScale,
-		pInhibatorIcon->fHeight * fInhibatorMaxScale,
+		pInhibatorIcon->fWidth * fInhibatorMaxScale / pInhibhatorContainer->fRatio,
+		pInhibatorIcon->fHeight * fInhibatorMaxScale / pInhibhatorContainer->fRatio,
 		*fWidth * fMaxScale,
 		*fHeight * fMaxScale);
 	return pSurface;

@@ -122,6 +122,7 @@ done;
 sudo cp /usr/bin/cairo-dock usr/bin
 sudo cp /usr/bin/launch-cairo-dock-after-beryl.sh usr/bin
 sudo cp /usr/bin/cairo-dock-update.sh usr/bin
+sudo cp /usr/bin/cairo-dock-package-theme.sh usr/bin
 sudo cp -rpP /usr/share/cairo-dock/ usr/share/
 sudo rm -rf usr/share/cairo-dock/plug-ins
 sudo cp ../cairo-dock/data/cairo-dock.svg usr/share/pixmaps

@@ -314,6 +314,11 @@ import_file "Configuration"	"stop icon"		.
 import_file "Configuration"	"pause icon"	.
 import_file "Configuration"	"broken icon"	.
 
+for f in launchers/*.desktop; do
+  set_current_conf_file "launchers/$f"
+  import_file "Desktop Entry"	"Icon"		icons
+done;
+
 cd ..
 echo "building of the tarball ..."
 mv current_theme "${THEME_NAME}"
