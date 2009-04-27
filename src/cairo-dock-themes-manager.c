@@ -100,41 +100,41 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 
 gchar *cairo_dock_uncompress_file (gchar *cArchivePath, gchar *cExtractTo, gchar *cRealArchiveName)
 {
-  if (!g_file_test (cExtractTo, G_FILE_TEST_EXISTS))
-  {
-	  if (g_mkdir (cExtractTo, 7*8*8+7*8+5) != 0)
-	  {
-		  cd_warning ("couldn't create directory %s", cExtractTo);
-		  return NULL;
-	  }
-  }
-  gchar *cResultPath;
-  gchar *cCommand = g_strdup_printf ("tar xfz \"%s\" -C \"%s\"", cArchivePath, cExtractTo);
-  int r = system (cCommand);
-  if (r != 0)
-  {
-	  cd_warning ("an error occured while executing '%s'", cCommand);
-	  cResultPath = NULL;
-  }
-  else
-  {
-	  gchar *cLocalFileName;  // on construit le nom local du theme apres decompression.
-	  if (cRealArchiveName == NULL)
-	    cRealArchiveName = cArchivePath;
-	  gchar *str = strrchr (cRealArchiveName, '/');
-	  if (str != NULL)
-		  cLocalFileName = g_strdup (str+1);
-	  else
-		  cLocalFileName = g_strdup (cRealArchiveName);
-	  
-	  if (g_str_has_suffix (cLocalFileName, ".tar.gz"))
-		  cLocalFileName[strlen(cLocalFileName)-7] = '\0';
-	  
-	  cResultPath = g_strdup_printf ("%s/%s", cExtractTo, cLocalFileName);
-	  g_free (cLocalFileName);
-  }
-  g_free (cCommand);
-  return cResultPath;
+	if (!g_file_test (cExtractTo, G_FILE_TEST_EXISTS))
+	{
+		if (g_mkdir (cExtractTo, 7*8*8+7*8+5) != 0)
+		{
+			cd_warning ("couldn't create directory %s", cExtractTo);
+			return NULL;
+		}
+	}
+	gchar *cResultPath;
+	gchar *cCommand = g_strdup_printf ("tar xfz \"%s\" -C \"%s\"", cArchivePath, cExtractTo);
+	int r = system (cCommand);
+	if (r != 0)
+	{
+		cd_warning ("an error occured while executing '%s'", cCommand);
+		cResultPath = NULL;
+	}
+	else
+	{
+		gchar *cLocalFileName;  // on construit le nom local du theme apres decompression.
+		if (cRealArchiveName == NULL)
+			cRealArchiveName = cArchivePath;
+		gchar *str = strrchr (cRealArchiveName, '/');
+		if (str != NULL)
+			cLocalFileName = g_strdup (str+1);
+		else
+			cLocalFileName = g_strdup (cRealArchiveName);
+		
+		if (g_str_has_suffix (cLocalFileName, ".tar.gz"))
+			cLocalFileName[strlen(cLocalFileName)-7] = '\0';
+		
+		cResultPath = g_strdup_printf ("%s/%s", cExtractTo, cLocalFileName);
+		g_free (cLocalFileName);
+	}
+	g_free (cCommand);
+	return cResultPath;
 }
 
 gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, gint iShowActivity, const gchar *cExtractTo, GError **erreur)
@@ -214,7 +214,7 @@ gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gc
 		g_set_error (erreur, 1, 1, "couldn't info from '%s/%s/%s'\n check that your connection is alive, or retry later", cServerAdress, cDistantFilePath, cDistantFileName);
 	}
 	
-	///g_remove (cTmpFilePath);
+	g_remove (cTmpFilePath);
 	g_free (cTmpFilePath);
 	return cContent;
 }
@@ -253,7 +253,7 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 				g_print ("%s\n", cThemeName+1);
 				pTheme->fSize = atof (cThemeName+1);
 				pTheme->cAuthor = g_strdup (strchr (cThemeName, ' '));
-				gchar *cDisplayedName = g_strdup_printf ("%s by %s [%.1f MB]", pTheme->cDisplayedName, (pTheme->cAuthor ? pTheme->cAuthor : "---"), pTheme->fSize);
+				gchar *cDisplayedName = g_strdup_printf ("%s by %s [%.2f MB]", pTheme->cDisplayedName, (pTheme->cAuthor ? pTheme->cAuthor : "---"), pTheme->fSize);
 				g_free (pTheme->cDisplayedName);
 				pTheme->cDisplayedName = cDisplayedName;
 			}
@@ -264,7 +264,7 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 		{
 			cd_debug ("+ theme : %s", cThemeName);
 			pTheme = g_new0 (CairoDockTheme, 1);
-			pTheme->iType = 2;
+			pTheme->iType = CAIRO_DOCK_DISTANT_THEME;
 			pTheme->cThemePath = g_strdup_printf ("%s/%s/%s", cServerAdress, cDirectory, cThemeName);
 			pTheme->cDisplayedName = g_strconcat (CAIRO_DOCK_PREFIX_NET_THEME, cThemeName, NULL);
 			g_hash_table_insert (pThemeTable, cThemeName, pTheme);

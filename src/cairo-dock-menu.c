@@ -120,13 +120,12 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	gchar *cTitle = g_strdup_printf ("\nCairo-Dock (2007-2009)\n version %s", CAIRO_DOCK_VERSION);
+	const gchar *cTitle = "\nCairo-Dock (2007-2009)\n version "CAIRO_DOCK_VERSION;
 	GtkWidget *pDialog = gtk_message_dialog_new (GTK_WINDOW (pDock->pWidget),
 		GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_MESSAGE_INFO,
 		GTK_BUTTONS_CLOSE,
 		cTitle);
-	g_free (cTitle);
 	
 	gchar *cImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_LOGO);
 	GtkWidget *pImage = gtk_image_new_from_file (cImagePath);
@@ -777,14 +776,19 @@ static void _cairo_dock_make_launcher_from_appli (GtkMenuItem *pMenuItem, gpoint
 	CairoDock *pDock = data[1];
 	g_return_if_fail (icon->Xid != 0);
 	
-	/// trouver URI
+	// on trouve le .desktop du programme.
+	gchar *cDesktopFilePath = g_strdup_printf ("/usr/share/applications/%s.desktop", icon->cClass);
 	
-	gchar *cDesktopFileURI = NULL;
-	if (cDesktopFileURI != NULL)
+	// on cree un nouveau lanceur a partir.
+	if (! g_file_test (cDesktopFilePath, G_FILE_TEST_EXISTS))
 	{
-		cairo_dock_add_new_launcher_by_uri (cDesktopFileURI, g_pMainDock, CAIRO_DOCK_LAST_ORDER);
-		g_free (cDesktopFileURI);
+	   // chercher un desktop qui contiennent StartupWMClass=class.
+	   
 	}
+	{
+		cairo_dock_add_new_launcher_by_uri (cDesktopFilePath, g_pMainDock, CAIRO_DOCK_LAST_ORDER);
+	}
+	g_free (cDesktopFilePath);
 }
 
 static void _cairo_dock_close_class (GtkMenuItem *pMenuItem, gpointer *data)
@@ -1307,6 +1311,11 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		if (icon->acDesktopFileName != NULL)  // c'est un lanceur inhibiteur.
 		{
 			_add_entry_in_menu (_("Launch new"), GTK_STOCK_ADD, _cairo_dock_launch_new, menu);
+		}
+		
+		if (! cairo_dock_class_is_inhibated (icon->cClass))
+		{
+			_add_entry_in_menu (_("Make it a launcher"), GTK_STOCK_CONVERT, _cairo_dock_make_launcher_from_appli, menu);
 		}
 		
 		gboolean bIsMaximized = cairo_dock_window_is_maximized (icon->Xid);
