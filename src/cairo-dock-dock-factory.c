@@ -77,11 +77,13 @@ extern GdkGLConfig* g_pGlConfig;
 
 static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)
 {
+	static bAsked = FALSE;
 	if (! g_bUseOpenGL)
 		return ;
 	
 	if (! g_bForceOpenGL)
 	{
+		bAsked = TRUE;
 		GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Use OpenGL in Cairo-Dock ?"),
 			NULL,
 			GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,

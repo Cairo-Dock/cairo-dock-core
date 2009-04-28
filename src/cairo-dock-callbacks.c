@@ -1489,7 +1489,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 
 	if ((iNewWidth != pDock->iCurrentWidth || iNewHeight != pDock->iCurrentHeight) && iNewWidth > 1)
 	{
-		g_print ("-> %dx%d\n", iNewWidth, iNewHeight);
+		//g_print ("-> %dx%d\n", iNewWidth, iNewHeight);
 		pDock->iCurrentWidth = iNewWidth;
 		pDock->iCurrentHeight = iNewHeight;
 

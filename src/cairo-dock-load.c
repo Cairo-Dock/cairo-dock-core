@@ -687,10 +687,16 @@ void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, in
 	//g_print ("%s (%dx%d) [%.2fx%.2f]\n", __func__, iNewDecorationsWidth, iNewDecorationsHeight, g_fBackgroundImageWidth, g_fBackgroundImageHeight);
 	if (2 * iNewDecorationsWidth > g_fBackgroundImageWidth || iNewDecorationsHeight > g_fBackgroundImageHeight)
 	{
-		cairo_surface_destroy (g_pBackgroundSurface);
-		g_pBackgroundSurface =NULL;
-		cairo_surface_destroy (g_pBackgroundSurfaceFull);
-		g_pBackgroundSurfaceFull = NULL;
+		if (g_pBackgroundSurface != NULL)
+		{
+			cairo_surface_destroy (g_pBackgroundSurface);
+			g_pBackgroundSurface = NULL;
+		}
+		if (g_pBackgroundSurfaceFull != NULL)
+		{
+			cairo_surface_destroy (g_pBackgroundSurfaceFull);
+			g_pBackgroundSurfaceFull = NULL;
+		}
 		cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 		
 		if (myBackground.cBackgroundImageFile != NULL)

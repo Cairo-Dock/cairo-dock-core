@@ -497,10 +497,18 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	pDock->fAlign = myPosition.fAlign;
 	pDock->bAutoHide = myAccessibility.bAutoHide;
 	
-	if (myAccessibility.bAutoHide || myAccessibility.bPopUp)
+	if (myAccessibility.bAutoHide || myAccessibility.bPopUp || myAccessibility.bReserveSpace)
 	{
-		myTaskBar.bAutoHideOnFullScreen = FALSE;
-		myTaskBar.bAutoHideOnMaximized = FALSE;
+		if (myTaskBar.bAutoHideOnFullScreen)
+		{
+			cd_warning ("The option 'auto-hide on fullsecreen window' is in conflict with the accessibility options, it will be deactivated");
+			myTaskBar.bAutoHideOnFullScreen = FALSE;
+		}
+		if (myTaskBar.bAutoHideOnMaximized)
+		{
+			cd_warning ("The option 'auto-hide on maximized window' is in conflict with the accessibility options, it will be deactivated");
+			myTaskBar.bAutoHideOnMaximized = FALSE;
+		}
 	}
 	
 	gboolean bGroupOrderChanged;

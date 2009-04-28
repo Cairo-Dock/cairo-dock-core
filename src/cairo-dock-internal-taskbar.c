@@ -86,8 +86,16 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 	
 	if (myAccessibility.bAutoHide || myAccessibility.bPopUp || myAccessibility.bReserveSpace)
 	{
-		pTaskBar->bAutoHideOnFullScreen = FALSE;
-		pTaskBar->bAutoHideOnMaximized = FALSE;
+		if (pTaskBar->bAutoHideOnFullScreen)
+		{
+			cd_warning ("The option 'auto-hide on fullsecreen window' is in conflict with the accessibility options, it will be deactivated");
+			pTaskBar->bAutoHideOnFullScreen = FALSE;
+		}
+		if (pTaskBar->bAutoHideOnMaximized)
+		{
+			cd_warning ("The option 'auto-hide on maximized window' is in conflict with the accessibility options, it will be deactivated");
+			pTaskBar->bAutoHideOnMaximized = FALSE;
+		}
 	}
 	
 	gboolean bUpdateSize = FALSE;
@@ -110,6 +118,7 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 	if (cairo_dock_application_manager_is_running () && pPrevTaskBar->iAppliMaxNameLength != pTaskBar->iAppliMaxNameLength)
 	{
 		/// recharger les noms ...
+		
 	}
 	
 	if (! cairo_dock_application_manager_is_running () && pTaskBar->bShowAppli)  // maintenant on veut voir les applis !

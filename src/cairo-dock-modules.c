@@ -566,7 +566,7 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 void cairo_dock_deactivate_module (CairoDockModule *module)
 {
 	g_return_if_fail (module != NULL);
-	cd_debug ("%s (%s)", __func__, module->cConfFilePath);
+	cd_debug ("%s (%s, %s)", __func__, module->pVisitCard->cModuleName, module->cConfFilePath);
 	g_list_foreach (module->pInstancesList, (GFunc) cairo_dock_stop_module_instance, NULL);
 	g_list_foreach (module->pInstancesList, (GFunc) cairo_dock_free_module_instance, NULL);
 	g_list_free (module->pInstancesList);

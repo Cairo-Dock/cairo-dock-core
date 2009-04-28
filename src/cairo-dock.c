@@ -228,6 +228,8 @@ int main (int argc, char** argv)
 	gtk_init (&argc, &argv);
 	GError *erreur = NULL;
 	
+	g_setenv ("LC_NUMERIC", "C", TRUE);
+	
 	//\___________________ On recupere quelques options.
 	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSkipPager = FALSE, bNoSkipTaskbar = FALSE, bNoSticky = FALSE, bToolBarHint = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bExpresso = FALSE, bCafeLatte = FALSE, bPrintVersion = FALSE, bTesting = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL;
