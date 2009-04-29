@@ -66,7 +66,7 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	Icon *pLastIcon = cairo_dock_get_last_icon (pDock->icons);
 	if (pLastIcon != NULL)
 		pDock->iMaxRightMargin = pDock->iMaxDockWidth - (pLastIcon->fXMin + pLastIcon->fWidth);
-	g_print(" marges min: %d | %d\n marges max: %d | %d\n", pDock->iMinLeftMargin, pDock->iMinRightMargin, pDock->iMaxLeftMargin, pDock->iMaxRightMargin);
+	//g_print(" marges min: %d | %d\n marges max: %d | %d\n", pDock->iMinLeftMargin, pDock->iMinRightMargin, pDock->iMaxLeftMargin, pDock->iMaxRightMargin);
 }
 
 

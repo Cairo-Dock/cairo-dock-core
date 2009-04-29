@@ -643,9 +643,9 @@ gboolean cairo_dock_window_is_on_this_desktop (int Xid, int iDesktopNumber)
 
 	cd_message (" -> %d/%d ; (%d ; %d)", iWindowDesktopNumber, iDesktopNumber, iGlobalPositionX, iGlobalPositionY);
 	return ( (iWindowDesktopNumber == iDesktopNumber || iWindowDesktopNumber == -1) &&
-		iGlobalPositionX + iWidthExtent >= 0 &&
+		iGlobalPositionX + iWidthExtent > 0 &&
 		iGlobalPositionX < g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
-		iGlobalPositionY + iHeightExtent >= 0 &&
+		iGlobalPositionY + iHeightExtent > 0 &&
 		iGlobalPositionY < g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] );  // -1 <=> 0xFFFFFFFF en unsigned.
 }
 
@@ -676,7 +676,7 @@ static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, int *
 	{
 		gboolean bIsFullScreen, bIsHidden, bIsMaximized;
 		cairo_dock_window_is_fullscreen_or_hidden_or_maximized (*Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, NULL);
-		if ((data[1] && bIsMaximized & ! bIsHidden) || (data[2] && bIsFullScreen))
+		if ((data[1] && bIsMaximized && ! bIsHidden) || (data[2] && bIsFullScreen))
 		{
 			cd_message ("%s est genante (%d, %d) (%d;%d %dx%d)", icon->acName, bIsMaximized, bIsFullScreen, icon->windowGeometry.x, icon->windowGeometry.y, icon->windowGeometry.width, icon->windowGeometry.height);
 			if (cairo_dock_window_hovers_dock (&icon->windowGeometry, g_pMainDock))
@@ -1194,7 +1194,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 	if (icon != NULL)
 	{
 		//g_print ("%s (%s, %f / %f)\n", __func__, icon->acName, icon->fLastCheckTime, *fTime);
-		if (icon->iLastCheckTime > 0 && icon->iLastCheckTime < iTime && icon->fPersonnalScale <= 0)
+		if (icon->iLastCheckTime >= 0 && icon->iLastCheckTime < iTime && icon->fPersonnalScale <= 0)
 		{
 			cd_message ("cette fenetre (%ld, %s) est trop vieille (%d / %d)", *Xid, icon->acName, icon->iLastCheckTime, iTime);
 			

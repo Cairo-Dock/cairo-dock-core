@@ -475,10 +475,10 @@ applet size = 48;48
 #m[Animated icons] Configure icons animations.
 config_anim = 
 
-#m[icon effects] Configure icons special effects (require OpenGL capacity).
+#M[icon effects] Configure icons special effects (require OpenGL capacity).
 config_effect = 
 
-#m[illusion] Configure icons animations on appearing/disappearing (require OpenGL capacity).
+#M[illusion] Configure icons animations on appearing/disappearing (require OpenGL capacity).
 config_illusion = 
 
 #X+[Separators]
