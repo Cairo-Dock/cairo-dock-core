@@ -486,7 +486,7 @@ void cairo_dock_update_Xid_on_inhibators (Window Xid, const gchar *cClass)
 						CairoDock *pClassSubDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
 						if (pClassSubDock != NULL)
 						{
-							cairo_dock_detach_icon_from_dock (pSameClassIcon, pClassSubDock, FALSE);
+							cairo_dock_detach_icon_from_dock (pSameClassIcon, pClassSubDock, myIcons.bUseSeparator);
 							if (pClassSubDock->icons == NULL && pClassSubDock == cairo_dock_search_dock_from_name (cClass))  // le sous-dock de la classe devient vide.
 								cairo_dock_destroy_dock (pClassSubDock, cClass, NULL, NULL);
 							else
