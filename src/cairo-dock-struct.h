@@ -538,7 +538,7 @@ struct _Icon {
 	/// Abscisse de l'icone au repos.
 	gdouble fXAtRest;
 	//\____________ calcules a chaque fois.
-	/// Phase de l'icone (entre -pi et pi).
+	/// Phase de l'icone (entre -pi et piconi).
 	gdouble fPhase;
 	/// Abscisse temporaire du bord gauche de l'image de l'icone.
 	gdouble fX;

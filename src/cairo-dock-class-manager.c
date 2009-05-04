@@ -431,7 +431,7 @@ void cairo_dock_deinhibate_class (const gchar *cClass, Icon *pInhibatorIcon)
 			}
 			else
 			{
-				cairo_dock_fill_one_icon_buffer (pIcon, pCairoContext, (1 + myIcons.fAmplitude), pParentDock->bHorizontalDock, pParentDock->bDirectionUp);
+				cairo_dock_fill_one_icon_buffer (pIcon, pCairoContext, (1 + myIcons.fAmplitude), g_pMainDock->bHorizontalDock, g_pMainDock->bDirectionUp);
 			}
 		}
 		cairo_destroy (pCairoContext);

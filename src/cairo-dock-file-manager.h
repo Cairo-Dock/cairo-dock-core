@@ -96,10 +96,10 @@ gboolean cairo_dock_fm_move_file (const gchar *cURI, const gchar *cDirectoryURI)
 
 
 gboolean cairo_dock_fm_mount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer);
-#define cairo_dock_fm_mount(icon, pContainer) cairo_dock_fm_mount_full (icon->acCommand, icon->iVolumeID, cairo_dock_fm_action_after_mounting, icon, pContainer)
+#define cairo_dock_fm_mount(icon, pContainer) cairo_dock_fm_mount_full (icon->cBaseURI, icon->iVolumeID, cairo_dock_fm_action_after_mounting, icon, pContainer)
 
 gboolean cairo_dock_fm_unmount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer);
-#define cairo_dock_fm_unmount(icon, pContainer) cairo_dock_fm_unmount_full (icon->acCommand, icon->iVolumeID, cairo_dock_fm_action_after_mounting, icon, pContainer)
+#define cairo_dock_fm_unmount(icon, pContainer) cairo_dock_fm_unmount_full (icon->cBaseURI, icon->iVolumeID, cairo_dock_fm_action_after_mounting, icon, pContainer)
 
 gchar *cairo_dock_fm_is_mounted (const gchar *cURI, gboolean *bIsMounted);
 

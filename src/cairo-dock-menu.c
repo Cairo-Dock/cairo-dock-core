@@ -590,10 +590,10 @@ static void _cairo_dock_mount_unmount (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	cd_message ("%s (%s / %s)\n", __func__, icon->acName, icon->acCommand);
+	cd_message ("%s (%s / %s)\n", __func__, icon->acName, icon->cBaseURI);
 
 	gboolean bIsMounted = FALSE;
-	gchar *cActivationURI = cairo_dock_fm_is_mounted (icon->acCommand, &bIsMounted);
+	gchar *cActivationURI = cairo_dock_fm_is_mounted (icon->cBaseURI, &bIsMounted);
 	cd_message ("  cActivationURI : %s; bIsMounted : %d\n", cActivationURI, bIsMounted);
 	g_free (cActivationURI);
 
@@ -1183,7 +1183,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 			{
 				gboolean bIsMounted = FALSE;
 				cd_message ("%s (%s / %s)\n", __func__, icon->acName, icon->acCommand);
-				gchar *cActivationURI = cairo_dock_fm_is_mounted  (icon->acCommand, &bIsMounted);
+				gchar *cActivationURI = cairo_dock_fm_is_mounted  (icon->cBaseURI, &bIsMounted);
 				cd_message ("  cActivationURI : %s; bIsMounted : %d\n", cActivationURI, bIsMounted);
 				g_free (cActivationURI);
 

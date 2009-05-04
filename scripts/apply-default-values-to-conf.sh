@@ -1,9 +1,15 @@
 #!/bin/sh
-export CONF_FILE="cairo-dock.conf"
+if test "x$1" = "x"; then
+	export CONF_FILE="cairo-dock.conf"
+	echo "${CONF_FILE}"
+else
+	export CONF_FILE="$1/cairo-dock.conf"
+fi
 
-function set_value()
+
+set_value()
 {
-	sed -i "s/^$1 *=/$1 = $2/g"
+	sed -i "s/^$1 *=.*/$1 = $2/g" "${CONF_FILE}"
 	echo -n "."
 }
 
@@ -34,12 +40,13 @@ set_value "auto quick hide"			false
 set_value "auto quick hide on max"	false
 set_value "demands attention with dialog" true
 set_value "animation on demands attention" "rotate"
-set_value "animation on active window" "wobbly
+set_value "animation on active window" "wobbly"
 set_value "max name length"			15
 set_value "visibility alpha"		"0.2"
 set_value "animate subdocks"		true
-#set_value "unfold factor"			8
-#set_value "shrink down steps"		12
+set_value "unfold factor"		8
+set_value "grow nb steps" 		10
+set_value "shrink nb steps"		8
 #set_value "move down speed"		"0.25"
 set_value "refresh frequency"		35
 set_value "dynamic reflection"		false
@@ -48,8 +55,8 @@ set_value "cairo anim freq"			25
 set_value "always horizontal"		true
 set_value "show hidden files"		false
 set_value "fake transparency"		false
-set_value "modules"					"dock-rendering;dialog-rendering;Animated icons;clock;logout;dustbin;stack;shortcuts;GMenu;switcher;icon effects;illusion"
+set_value "modules"					"dock rendering;dialog rendering;Animated icons;drop indicator;clock;logout;dustbin;stack;shortcuts;GMenu;switcher;icon effects;illusion"
 
 echo ""
-echo "le thème a été mis à jour."
+echo "le theme a ete mis a jour."
 exit 0

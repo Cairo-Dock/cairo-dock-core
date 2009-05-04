@@ -133,7 +133,7 @@ gboolean cairo_dock_fm_remove_monitor_full (const gchar *cURI, gboolean bDirecto
 
 gboolean cairo_dock_fm_mount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->mount != NULL && iVolumeID > 0)
+	if (s_pEnvBackend != NULL && s_pEnvBackend->mount != NULL && iVolumeID > 0 && cURI != NULL)
 	{
 		s_pEnvBackend->mount (cURI, iVolumeID, pCallback, icon, pContainer);
 		return TRUE;
@@ -144,7 +144,7 @@ gboolean cairo_dock_fm_mount_full (const gchar *cURI, int iVolumeID, CairoDockFM
 
 gboolean cairo_dock_fm_unmount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->unmount != NULL && iVolumeID > 0)
+	if (s_pEnvBackend != NULL && s_pEnvBackend->unmount != NULL && iVolumeID > 0 && cURI != NULL)
 	{
 		s_pEnvBackend->unmount (cURI, iVolumeID, pCallback, icon, pContainer);
 		return TRUE;
@@ -525,7 +525,7 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 				gboolean bIsMounted = FALSE;
 				if (s_pEnvBackend->is_mounted != NULL)
 				{
-					gchar *cActivationURI = s_pEnvBackend->is_mounted (pNewIcon->acCommand, &bIsMounted);
+					gchar *cActivationURI = s_pEnvBackend->is_mounted (pNewIcon->cBaseURI, &bIsMounted);
 					g_free (cActivationURI);
 				}
 				cairo_dock_show_temporary_dialog_with_icon (bIsMounted ? _("%s is now mounted") : _("%s is now unmounted"), pNewIcon, pParentContainer, 4000, "same icon", pNewIcon->acName);

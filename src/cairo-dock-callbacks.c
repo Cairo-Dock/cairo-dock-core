@@ -1024,7 +1024,8 @@ static gpointer _cairo_dock_launch_threaded (gchar **data)
 	int r;
 	if (data[1] != NULL)
 	{
-		chdir (data[1]);
+		g_print (" * cd '%s'\n", data[1]);
+		r = chdir (data[1]);
 	}
 	r = system (data[0]);
 	g_free (data[0]);
@@ -1173,7 +1174,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 		gboolean bIsMounted = FALSE;
 		if (icon->iVolumeID > 0)
 		{
-			gchar *cActivationURI = cairo_dock_fm_is_mounted (icon->acCommand, &bIsMounted);
+			gchar *cActivationURI = cairo_dock_fm_is_mounted (icon->cBaseURI, &bIsMounted);
 			g_free (cActivationURI);
 		}
 		if (icon->iVolumeID > 0 && ! bIsMounted)
