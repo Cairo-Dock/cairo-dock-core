@@ -59,6 +59,7 @@ CairoDockModule *cairo_dock_find_module_from_name (const gchar *cModuleName);
 
 CairoDockModuleInstance *cairo_dock_foreach_desklet (CairoDockForeachDeskletFunc pCallback, gpointer user_data);
 CairoDockModule *cairo_dock_foreach_module (GHRFunc pCallback, gpointer user_data);
+CairoDockModule *cairo_dock_foreach_module_in_alphabetical_order (GCompareFunc pCallback, gpointer user_data);
 
 
 gchar *cairo_dock_list_active_modules (void);

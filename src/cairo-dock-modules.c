@@ -924,6 +924,24 @@ CairoDockModule *cairo_dock_foreach_module (GHRFunc pCallback, gpointer user_dat
 	return g_hash_table_find (s_hModuleTable, (GHRFunc) pCallback, user_data);
 }
 
+static int _sort_module_by_alphabetical_order (CairoDockModule *m1, CairoDockModule *m2)
+{
+	if (!m1 || !m1->pVisitCard || !m1->pVisitCard->cModuleName)
+		return 1;
+	if (!m2 || !m2->pVisitCard || !m2->pVisitCard->cModuleName)
+		return -1;
+	return g_ascii_strncasecmp (m1->pVisitCard->cModuleName, m2->pVisitCard->cModuleName, -1);
+}
+CairoDockModule *cairo_dock_foreach_module_in_alphabetical_order (GCompareFunc pCallback, gpointer user_data)
+{
+	GList *pModuleList = g_hash_table_get_values (s_hModuleTable);
+	pModuleList = g_list_sort (pModuleList, (GCompareFunc) _sort_module_by_alphabetical_order);
+	
+	CairoDockModule *pModule = g_list_find_custom (pModuleList, user_data, pCallback);
+	
+	g_list_free (pModuleList);
+	return pModule;
+}
 
 
 

@@ -1167,6 +1167,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick)  // icone de sous-dock a montrer au clic.
 	{
 		cairo_dock_show_subdock (icon, FALSE, pDock);
+		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	}
 	else if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))  // URI : on lance ou on monte.
 	{

@@ -46,6 +46,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 
 extern gboolean g_bEasterEggs;
+extern CairoDock *g_pMainDock;
 
 static GHashTable *s_hAppliTable = NULL;  // table des PID connus de cairo-dock (affichees ou non dans le dock).
 static Display *s_XDisplay = NULL;
@@ -648,12 +649,28 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 }
 
 
-static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock)
+static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, Icon *pHiddenIcon)
 {
 	cd_debug ("%s (%s)\n", __func__, icon->acName);
 	icon->bIsDemandingAttention = TRUE;
 	if (myTaskBar.bDemandsAttentionWithDialog)
-		cairo_dock_show_temporary_dialog_with_icon (icon->acName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration, "same icon");
+	{
+		CairoDialog *pDialog;
+		if (pHiddenIcon == NULL)
+		{
+			pDialog = cairo_dock_show_temporary_dialog_with_icon (icon->acName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration, "same icon");
+		}
+		else
+		{
+			pDialog = cairo_dock_show_temporary_dialog (pHiddenIcon->acName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration);
+			g_return_if_fail (pDialog != NULL);
+			cairo_dock_set_new_dialog_icon_surface (pDialog, pHiddenIcon->pIconBuffer, pDialog->iIconSize);
+		}
+		if (pDialog && myTaskBar.cForceDemandsAttention && icon->cClass && g_strstr_len (myTaskBar.cForceDemandsAttention, -1, icon->cClass))
+		{
+			gtk_window_set_keep_above (GTK_WINDOW (pDialog->pWidget), TRUE);
+		}
+	}
 	if (myTaskBar.cAnimationOnDemandsAttention)
 	{
 		if (pDock->iRefCount == 0)
@@ -678,11 +695,17 @@ void cairo_dock_appli_demands_attention (Icon *icon)
 		{
 			pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
 			if (pParentDock != NULL)
-				_cairo_dock_appli_demands_attention (pInhibitorIcon, pParentDock);
+				_cairo_dock_appli_demands_attention (pInhibitorIcon, pParentDock, NULL);
+		}
+		else if (myTaskBar.cForceDemandsAttention && icon->cClass && g_strstr_len (myTaskBar.cForceDemandsAttention, -1, icon->cClass))  // appli pas dans le dock, mais on veut tout de même etre notifie.
+		{
+			Icon *pOneIcon = cairo_dock_get_dialogless_icon ();
+			if (pOneIcon != NULL)
+				_cairo_dock_appli_demands_attention (pOneIcon, g_pMainDock, icon);
 		}
 	}
 	else
-		_cairo_dock_appli_demands_attention (icon, pParentDock);
+		_cairo_dock_appli_demands_attention (icon, pParentDock, NULL);
 }
 
 static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *pDock)

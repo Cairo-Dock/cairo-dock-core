@@ -35,6 +35,7 @@ struct _CairoConfigTaskBar {
 	gboolean bMixLauncherAppli;
 	gchar *cOverwriteException;
 	gchar *cGroupException;
+	gchar *cForceDemandsAttention;
 	} ;
 
 

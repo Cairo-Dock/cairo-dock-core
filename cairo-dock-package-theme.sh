@@ -22,15 +22,31 @@ get_value()
 	sed -n "/^\[$1\]/,/^\[.*\]/ {/^$2 *=.*/p}" "${CURRENT_CONF_FILE}" | sed "s/^$2 *= *//g"
 }
 
+set_value_on_all_groups()
+{
+	sed -i "s/^$1 *=.*/$1 = $2/g" "${CURRENT_CONF_FILE}"
+	echo -n "."
+}
+
 set_current_conf_file()
 {
 	if test -e "$1"; then
-		echo "packaging module "${1%.conf}" ..."
+		echo " + packaging module "${1%.conf}" ..."
 		export CURRENT_CONF_FILE="$1"
 	else
 		export CURRENT_CONF_FILE=""
 	fi
-	
+}
+
+set_current_conf_file_with_backup()
+{
+	set_current_conf_file "$1"
+	cp "$1" "$1.bak"
+}
+
+restore_conf_file ()
+{
+	/bin/mv "$1.bak" "$1"
 }
 
 import_file()
@@ -98,6 +114,9 @@ import_gauge()
 	_import_theme "$1" "$2" "gauges" ""
 }
 
+echo "*********************************"
+echo "*** BUILDING THEME PACKAGE ...***"
+echo "*********************************"
 
 cd "$CURRENT_THEME_DIR"
 mkdir extras
@@ -314,6 +333,29 @@ import_file "Configuration"	"stop icon"		.
 import_file "Configuration"	"pause icon"	.
 import_file "Configuration"	"broken icon"	.
 
+set_current_conf_file_with_backup "plug-ins/mail/mail.conf"
+set_value_on_all_groups		"username"				"toto"
+set_value_on_all_groups		"password"				"***"
+
+set_current_conf_file_with_backup "plug-ins/slider/slider.conf"
+set_value "Configuration"	"directory"				""
+
+set_current_conf_file_with_backup "plug-ins/stack/stack.conf"
+set_value "Configuration"	"stack dir"				""
+
+set_current_conf_file_with_backup "plug-ins/Clipper/Clipper.conf"
+set_value "Configuration"	"persistent"			""
+
+set_current_conf_file_with_backup "plug-ins/shortcuts/shortcuts.conf"
+set_value "Module"			"list network"			false
+
+set_current_conf_file_with_backup "plug-ins/Xgamma/Xgamma.conf"
+set_value "Configuration"	"initial gamma"			0
+
+set_current_conf_file_with_backup "plug-ins/weblets/weblets.conf"
+set_value "Configuration"	"weblet URI"			"http://www.google.com"
+set_value "Configuration"	"uri list"				""
+
 for f in launchers/*.desktop; do
   set_current_conf_file "launchers/$f"
   import_file "Desktop Entry"	"Icon"		icons
@@ -324,6 +366,16 @@ echo "building of the tarball ..."
 mv current_theme "${THEME_NAME}"
 tar cfz "${THEME_NAME}.tar.gz" "${THEME_NAME}"
 mv "${THEME_NAME}" current_theme
+
+
+restore_conf_file "plug-ins/slider/slider.conf"
+restore_conf_file "plug-ins/mail/mail.conf"
+restore_conf_file "plug-ins/stack/stack.conf"
+restore_conf_file "plug-ins/Clipper/Clipper.conf"
+restore_conf_file "plug-ins/shortcuts/shortcuts.conf"
+restore_conf_file "plug-ins/Xgamma/Xgamma.conf"
+restore_conf_file "plug-ins/weblets/weblets.conf"
+
 
 echo ""
 echo "The theme has been packaged. It is available in ~/.config/cairo-dock"

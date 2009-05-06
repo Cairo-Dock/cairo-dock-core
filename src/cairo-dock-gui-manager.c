@@ -237,8 +237,9 @@ static CairoDockGroupDescription *_cairo_dock_add_group_button (gchar *cGroupNam
 	return pGroupDescription;
 }
 
-static gboolean _cairo_dock_add_one_module_widget (gchar *cModuleName, CairoDockModule *pModule, gchar *cActiveModules)
+static gboolean _cairo_dock_add_one_module_widget (/*gchar *cModuleName, */CairoDockModule *pModule, const gchar *cActiveModules)
 {
+	gchar *cModuleName = pModule->pVisitCard->cModuleName;
 	if (pModule->cConfFilePath == NULL)
 		pModule->cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
 	int iActive;
@@ -267,7 +268,8 @@ static gboolean _cairo_dock_add_one_module_widget (gchar *cModuleName, CairoDock
 	//g_print ("+ %s : %x;%x\n", cModuleName,pGroupDescription, pGroupDescription->pActivateButton);
 	pGroupDescription->cOriginalConfFilePath = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);  // petite optimisation, pour pas dupliquer la chaine 2 fois.
 	pGroupDescription->load_custom_widget = pModule->pInterface->load_custom_widget;
-	return FALSE;
+	//return FALSE;
+	return TRUE;  // continue.
 }
 
 
@@ -359,7 +361,7 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 		TRUE,
 		0);
 	
-	if (g_iDesktopEnv != CAIRO_DOCK_KDE)
+	if (g_iDesktopEnv != CAIRO_DOCK_KDE && g_iDesktopEnv != CAIRO_DOCK_UNKNOWN_ENV)
 	{
 		cairo_dock_set_colormap_for_window (s_pMainWindow);
 		gtk_widget_set_app_paintable (s_pMainWindow, TRUE);
@@ -489,7 +491,8 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	
 	//\_____________ On remplit avec les modules.
 	gchar *cActiveModules = (g_pMainDock == NULL ? g_key_file_get_string (pKeyFile, "System", "modules", NULL) : NULL);
-	cairo_dock_foreach_module ((GHRFunc) _cairo_dock_add_one_module_widget, cActiveModules);
+	cairo_dock_foreach_module_in_alphabetical_order ((GCompareFunc) _cairo_dock_add_one_module_widget, cActiveModules);
+	//cairo_dock_foreach_module ((GHRFunc) _cairo_dock_add_one_module_widget, cActiveModules);
 	g_free (cActiveModules);
 	g_key_file_free (pKeyFile);
 	

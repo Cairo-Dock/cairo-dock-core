@@ -77,7 +77,7 @@ extern GdkGLConfig* g_pGlConfig;
 
 static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)
 {
-	static bAsked = FALSE;
+	static gboolean bAsked = FALSE;
 	if (! g_bUseOpenGL)
 		return ;
 	

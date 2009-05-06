@@ -187,25 +187,6 @@ CD_APPLET_RELOAD_PROTO \
 	return TRUE; \
 }
 
-/** TRUE ssi le fichier de conf de l'applet a change juste avant le reload.
-*/
-#define CD_APPLET_MY_CONFIG_CHANGED (pKeyFile != NULL)
-
-/** TRUE ssi le type de container a change.
-*/
-#define CD_APPLET_MY_CONTAINER_TYPE_CHANGED (myApplet->pContainer == NULL || myApplet->pContainer->iType != pOldContainer->iType)
-
-/** Le conteneur precedent le reload.
-*/
-#define CD_APPLET_MY_OLD_CONTAINER pOldContainer;
-
-/** Chemin du fichier de conf de l'applet, appelable durant les fonctions d'init, de config, et de reload.
-*/
-#define CD_APPLET_MY_CONF_FILE myApplet->cConfFilePath
-/** Fichier de cles de l'applet, appelable durant les fonctions d'init, de config, et de reload.
-*/
-#define CD_APPLET_MY_KEY_FILE pKeyFile
-
 
 //\______________________ read_conf_file.
 /** Debut de la fonction de configuration de l'applet (celle qui est appelee au debut de l'init).
@@ -342,13 +323,19 @@ CD_APPLET_ON_UPDATE_ICON_PROTO \
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
 }
 
+/** Quit the update function immediately and wait for the next update.
+*/
 #define CD_APPLET_SKIP_UPDATE_ICON do { \
 	*bContinueAnimation = TRUE; \
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; } while (0)
 
+/** Quit the update function immediately with no more updates.
+*/
 #define CD_APPLET_STOP_UPDATE_ICON \
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION
 
+/** Quit the update function immediately with no more updates after redrawing the icon.
+*/
 #define CD_APPLET_PAUSE_UPDATE_ICON do { \
 	CD_APPLET_REDRAW_MY_ICON; \
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; } while (0)

@@ -460,7 +460,29 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
  /// VARIABLES DISPONIBLES ///
 /////////////////////////////
 
-//\______________________ click droit, click milieu, click gauche.
+//\______________________ init, config, reload.
+/** Chemin du fichier de conf de l'applet, appelable durant les fonctions d'init, de config, et de reload.
+*/
+#define CD_APPLET_MY_CONF_FILE myApplet->cConfFilePath
+/** Fichier de cles de l'applet, appelable durant les fonctions d'init, de config, et de reload.
+*/
+#define CD_APPLET_MY_KEY_FILE pKeyFile
+
+//\______________________ reload.
+/** TRUE ssi le fichier de conf de l'applet a change juste avant le reload.
+*/
+#define CD_APPLET_MY_CONFIG_CHANGED (pKeyFile != NULL)
+
+/** TRUE ssi le type de container a change.
+*/
+#define CD_APPLET_MY_CONTAINER_TYPE_CHANGED (myApplet->pContainer == NULL || myApplet->pContainer->iType != pOldContainer->iType)
+
+/** Le conteneur precedent le reload.
+*/
+#define CD_APPLET_MY_OLD_CONTAINER pOldContainer;
+
+
+//\______________________ clic droit, clic milieu, clic gauche.
 /** Icone cliquee.
 */
 #define CD_APPLET_CLICKED_ICON pClickedIcon
@@ -468,7 +490,7 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 */
 #define CD_APPLET_CLICKED_CONTAINER pClickedContainer
 
-//\______________________ click droit
+//\______________________ clic droit
 /**  La touche 'SHIFT' est-elle enfoncee au moment du clic ?
 */
 #define CD_APPLET_SHIFT_CLICK (iButtonState & GDK_SHIFT_MASK)
@@ -702,13 +724,19 @@ cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKe
 #define CD_APPLET_ANIMATE_MY_ICON(cAnimationName, iAnimationLength) \
 	cairo_dock_request_icon_animation (myIcon, myDock, cAnimationName, iAnimationLength)
 
-
+/** Initiate an OpenGL drawing session on the applet's icon.
+*/
 #define CD_APPLET_START_DRAWING_MY_ICON cairo_dock_begin_draw_icon (myIcon, myContainer)
 
+/** Initiate an OpenGL drawing session on the applet's icon, or quit the function if failed.
+*@param ... value to return in case of failure.
+*/
 #define CD_APPLET_START_DRAWING_MY_ICON_OR_RETURN(...) \
 	if (! cairo_dock_begin_draw_icon (myIcon, myContainer)) \
 		return __VA_ARGS__
 
+/** Terminate an OpenGL drawing session on the applet's icon. Does not trigger the icon's redraw.
+*/
 #define CD_APPLET_FINISH_DRAWING_MY_ICON cairo_dock_end_draw_icon (myIcon, myContainer)
 
 
