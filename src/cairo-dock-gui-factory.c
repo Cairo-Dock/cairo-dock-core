@@ -1813,7 +1813,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			break ;
 
 			default :
-				cd_warning ("this conf has an unknown widget type !");
+				cd_warning ("this conf file has an unknown widget type ! (%c)", iElementType);
 			break ;
 		}
 

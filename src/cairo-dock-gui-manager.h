@@ -74,7 +74,11 @@ gpointer cairo_dock_get_previous_widget (void);
 /** Completely reload the current module's GUI by reading again its conf file and re-building it from scratch (so if the module has a custom widget builder, it will be called too).
 *@param pInstance the instance of the external module (myApplet) or NULL for an internal module.
 */
-void cairo_dock_reload_current_group_widget (CairoDockModuleInstance *pInstance);
+void cairo_dock_reload_current_group_widget_full (CairoDockModuleInstance *pInstance, int iShowPage);
+/** Completely reload the current module's GUI by reading again its conf file and re-building it from scratch (so if the module has a custom widget builder, it will be called too).
+*@param pInstance the instance of the external module (myApplet) or NULL for an internal module.
+*/
+#define cairo_dock_reload_current_group_widget(pInstance) cairo_dock_reload_current_group_widget_full (pInstance, -1)
 
 /** Retrieve the widget associated with a given (group;key) pair of the conf file it was built from.
 *@param cGroupName name of the group in the conf file.

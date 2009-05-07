@@ -829,6 +829,8 @@ struct _CairoDockLabelDescription {
 	gdouble fBackgroundColor[4];
 	/// TRUE ssi on trace un contour.
 	gboolean bOutlined;
+	/// marge autour du texte
+	gint iMargin;
 };
 
 typedef gpointer CairoInternalModuleConfigPtr;

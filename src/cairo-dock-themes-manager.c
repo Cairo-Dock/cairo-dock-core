@@ -468,17 +468,17 @@ static void on_theme_apply (gpointer *user_data)
 			}
 			else  // paquet distant.
 			{
-			  g_print (" paquet distant\n");
-			  gchar *str = strrchr (cNewThemeName, '/');
-			  if (str != NULL)
-			  {
-			    *str = '\0';
-			    cNewThemePath = cairo_dock_download_file (cNewThemeName, "", str+1, 2, cUserThemesDir, NULL);
-			    if (cNewThemePath == NULL)
-			    {
-				cairo_dock_show_temporary_dialog_with_default_icon (_("couldn't get distant file %s/%s, maybe the server is down.\nPlease retry later or contact the administrator."), NULL, NULL, 0, cNewThemeName, str+1);
-			    }
-			  }
+				g_print (" paquet distant\n");
+				gchar *str = strrchr (cNewThemeName, '/');
+				if (str != NULL)
+				{
+					*str = '\0';
+					cNewThemePath = cairo_dock_download_file (cNewThemeName, "", str+1, 2, cUserThemesDir, NULL);
+					if (cNewThemePath == NULL)
+					{
+						cairo_dock_show_temporary_dialog_with_default_icon (_("couldn't get distant file %s/%s, maybe the server is down.\nPlease retry later or contact us at cairo-dock.org."), NULL, NULL, 0, cNewThemeName, str+1);
+					}
+				}
 			}
 			g_return_if_fail (cNewThemePath != NULL);
 			g_print (" => cNewThemePath = '%s'\n", cNewThemePath);
@@ -511,9 +511,15 @@ static void on_theme_apply (gpointer *user_data)
 			g_free (cNewConfFilePath);
 		}
 		//\___________________ On charge les icones.
-		g_string_printf (sCommand, "rm -f '%s/%s'/*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
-		cd_message ("%s", sCommand->str);
-		r = system (sCommand->str);
+		if (g_key_file_get_boolean (pKeyFile, "Themes", "use theme launchers", NULL))
+		{
+			g_string_printf (sCommand, "rm -f '%s/%s'/*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+			cd_message ("%s", sCommand->str);
+			r = system (sCommand->str);
+			g_string_printf (sCommand, "rm -f '%s/%s'/.*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+			cd_message ("%s", sCommand->str);
+			r = system (sCommand->str);
+		}
 		gchar *cNewLocalIconsPath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 		if (! g_file_test (cNewLocalIconsPath, G_FILE_TEST_IS_DIR))  // c'est un ancien theme, mettons-le vite a jour !
 		{

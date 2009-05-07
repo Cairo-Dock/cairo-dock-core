@@ -1207,11 +1207,15 @@ gpointer cairo_dock_get_current_widget (void)
 
 
 
-void cairo_dock_reload_current_group_widget (CairoDockModuleInstance *pInstance)
+void cairo_dock_reload_current_group_widget_full (CairoDockModuleInstance *pInstance, int iShowPage)
 {
 	g_return_if_fail (s_pCurrentGroupWidget != NULL && s_pCurrentGroup != NULL && s_pCurrentWidgetList != NULL);
 	
-	int iNotebookPage = (GTK_IS_NOTEBOOK (s_pCurrentGroupWidget) ? gtk_notebook_get_current_page (GTK_NOTEBOOK (s_pCurrentGroupWidget)) : -1);
+	int iNotebookPage = (GTK_IS_NOTEBOOK (s_pCurrentGroupWidget) ? 
+		(iShowPage >= 0 ?
+			iShowPage :
+			gtk_notebook_get_current_page (GTK_NOTEBOOK (s_pCurrentGroupWidget))) :
+		-1);
 	
 	gtk_widget_destroy (s_pCurrentGroupWidget);
 	s_pCurrentGroupWidget = NULL;

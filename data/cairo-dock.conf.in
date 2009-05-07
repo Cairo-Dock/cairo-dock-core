@@ -394,6 +394,12 @@ vertical label pattern = false
 #{If you set it to fully transparent, there will be no background for the text, but the letters' outline will be thicker.}
 text background color =0;0;0;.5
 
+#i+[0;20] Margin around the text (in pixels) :
+text margin = 4
+
+#b+ Should the text be oulined ?
+text oulined = true
+
 #b+ Use background color for labels ?
 #{If false, only the quick-info will have this background color.}
 background for label = false

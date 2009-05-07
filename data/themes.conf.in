@@ -44,8 +44,12 @@ save current behaviour = true
 #b Save current launchers too ?
 save current launchers = true
 
+#v
+sep=
+
 #b Build a package of the theme ?
-package = true
+#{The dock will build a complete tarball of your current theme, allowing you to exchange it easily with other people.}
+package = false
 
 
 #[gtk-delete]

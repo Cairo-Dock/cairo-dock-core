@@ -59,8 +59,10 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	double couleur_backlabel[4] = {0., 0., 0., 0.5};
 	cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text background color", &bFlushConfFileNeeded, pLabels->iconTextDescription.fBackgroundColor, 4, couleur_backlabel, "Icons", NULL);
 	
-	pLabels->iconTextDescription.bOutlined = TRUE;
-
+	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text oulined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	
+	pLabels->iconTextDescription.iMargin = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "text margin", &bFlushConfFileNeeded, 4, NULL, NULL);;
+	
 	memcpy (&pLabels->quickInfoTextDescription, &pLabels->iconTextDescription, sizeof (CairoDockLabelDescription));
 	pLabels->quickInfoTextDescription.cFont = g_strdup (pLabels->iconTextDescription.cFont);
 	pLabels->quickInfoTextDescription.iSize = 12;
@@ -113,7 +115,8 @@ static void reload (CairoConfigLabels *pPrevLabels, CairoConfigLabels *pLabels)
 	cairo_dock_foreach_icons ((CairoDockForeachIconFunc) _reload_one_label, data);
 	cairo_destroy (pCairoContext);
 	
-	if (pPrevLabels->iconTextDescription.iSize != pLabels->iconTextDescription.iSize)
+	if (pPrevLabels->iconTextDescription.iSize != pLabels->iconTextDescription.iSize ||
+		pPrevLabels->iconTextDescription.iMargin != pLabels->iconTextDescription.iMargin)
 	{
 		cairo_dock_foreach_docks ((GHFunc) _cairo_dock_resize_one_dock, NULL);
 	}
