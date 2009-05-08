@@ -108,13 +108,23 @@ AC_CONFIG_FILES([Makefile
 		data/default-theme/icons/Makefile
 		data/default-theme/plug-ins/Makefile
 		data/default-theme/plug-ins/Animated-icons/Makefile
+		data/default-theme/plug-ins/Cairo-Penguin/Makefile
 		data/default-theme/plug-ins/clock/Makefile
+		data/default-theme/plug-ins/cpusage/Makefile
 		data/default-theme/plug-ins/dialog-rendering/Makefile
 		data/default-theme/plug-ins/dustbin/Makefile
+		data/default-theme/plug-ins/GMenu/Makefile
+		data/default-theme/plug-ins/help/Makefile
 		data/default-theme/plug-ins/icon-effect/Makefile
 		data/default-theme/plug-ins/illusion/Makefile
 		data/default-theme/plug-ins/logout/Makefile
+		data/default-theme/plug-ins/motion_blur/Makefile
+		data/default-theme/plug-ins/rame/Makefile
 		data/default-theme/plug-ins/rendering/Makefile
+		data/default-theme/plug-ins/shortcuts/Makefile
+		data/default-theme/plug-ins/showDesktop/Makefile
+		data/default-theme/plug-ins/switcher/Makefile
+		data/default-theme/plug-ins/weather/Makefile
 		data/gauges/Makefile
 		data/gauges/battery/Makefile
 		data/gauges/turbo-night-fuel/Makefile
