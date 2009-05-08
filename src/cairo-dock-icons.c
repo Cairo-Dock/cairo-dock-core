@@ -744,7 +744,7 @@ void cairo_dock_set_icon_name (cairo_t *pSourceContext, const gchar *cIconName, 
 		cIconName = cUniqueName;
 		cairo_dock_rename_dock (pIcon->acName, pIcon->pSubDock, cUniqueName);
 	}
-	
+	g_print ("++++pIcon->acName:%s\n", pIcon->acName);
 	if (pIcon->acName != cIconName)
 	{
 		g_free (pIcon->acName);

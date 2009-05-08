@@ -759,17 +759,20 @@ static void on_theme_apply (gpointer *user_data)
 		gchar *cQuestion;
 		gchar *cThemeName;
 		int i;
-		for (i = 0; cThemesList[i] != NULL; i ++)
-		{
-			cThemeName = cThemesList[i];
-			if (cNewThemeName && strcmp (cNewThemeName, cThemeName) == 0)  // pour ne pas effacer le theme qu'on vient d'enregistrer.
-				continue;
-			
+		if (cThemesList[1] == NULL)
 			cQuestion = g_strdup_printf (_("Are you sure you want to delete theme %s ?"), cThemeName);
-			answer = cairo_dock_ask_general_question_and_wait (cQuestion);
-			g_free (cQuestion);
-			if (answer == GTK_RESPONSE_YES)
+		else
+			cQuestion = g_strdup (_("Are you sure you want to delete these themes ?"));
+		answer = cairo_dock_ask_general_question_and_wait (cQuestion);
+		g_free (cQuestion);
+		if (answer == GTK_RESPONSE_YES)
+		{
+			for (i = 0; cThemesList[i] != NULL; i ++)
 			{
+				cThemeName = cThemesList[i];
+				if (cNewThemeName && strcmp (cNewThemeName, cThemeName) == 0)  // pour ne pas effacer le theme qu'on vient d'enregistrer.
+					continue;
+			
 				g_string_printf (sCommand, "rm -rf '%s/%s/%s'", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR, cThemeName);
 				r = system (sCommand->str);  // g_rmdir n'efface qu'un repertoire vide.
 			}
