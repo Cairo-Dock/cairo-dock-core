@@ -698,6 +698,10 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked) || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)) && s_pFlyingContainer == NULL && ! g_bLocked && ! myAccessibility.bLockIcons)
 	{
 		//g_print ("on a sorti %s du dock (%d;%d) / %dx%d\n", s_pIconClicked->acName, pDock->iMouseX, pDock->iMouseY, pDock->iCurrentWidth, pDock->iCurrentHeight);
+		
+		//if (! cairo_dock_hide_child_docks (pDock))  // on quitte si on entre dans un sous-dock, pour rester en position "haute".
+		//	return ;
+		
 		CairoDock *pOriginDock = cairo_dock_search_dock_from_name (s_pIconClicked->cParentDockName);
 		g_return_if_fail (pOriginDock != NULL);
 		if (pOriginDock == pDock && (pOriginDock->iMouseX <= 0 || pOriginDock->iMouseX >= pOriginDock->iCurrentWidth || pOriginDock->iMouseY <= 0 || pOriginDock->iMouseY >= pOriginDock->iCurrentHeight))
