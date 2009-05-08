@@ -1,0 +1,181 @@
+#!en
+
+[Desktop Entry]
+#s Launcher's name :
+Name=Terminal
+#s Command to launch on click :
+#{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1 for the Applications Menu, <Ctrl>c or <Ctrl>v to copy or paste, etc}
+Exec=gnome-terminal
+#S Image's name or path :
+Icon=terminal
+#E[_MainDock_;Quimper, France;Blog;Documents;Vidéos]  Name of the container it belongs to:
+#{If you write here a container's name that doesn't exist yet, a new one will be created, with this icon inside.}
+Container=_MainDock_
+
+#X[Extra parameters]
+frame_extra=
+#f Order you want for this launcher among the others:
+Order=0.18194580078125
+#b Prevent this launcher from stealing appli from taskbar ?
+#{Use this option for exemple if the launcher launches a script in a terminal but you don't want it to steal normal terminal's icons from the TaskBar, or if you explicitely want to use the original icon of the TaskBar because it provides some info, for exemple Pidgin's icons represent the avatar of the contact.}
+prevent inhibate=false
+
+#s Class of the program :
+#{The only reason you may want to modify this parameter is if you made this launcher by hands. If you dropped it into the dock from the menu, it is nearly sure that you shouldn't touch it. It defines the class of the program, which is useful to link the appli with its launcher.}
+StartupWMClass=
+
+Is container=false
+
+Renderer=Caroussel
+
+Base URI=
+Is mounting point=false
+Categories=GNOME;GTK;Utility;TerminalEmulator;
+Comment=Use the command line
+Comment[ar]=استعمل سطرالأوامر
+Comment[be]=Ужыць загадны радок
+Comment[bg]=Използване на команден ред
+Comment[bn]=কমান্ড লাইন ব্যবহার করুন
+Comment[bn_IN]=কমান্ড লাইন ব্যবহার করুন
+Comment[ca]=Obriu la línia d'ordres
+Comment[cs]=Používat příkazový řádek
+Comment[cy]=Defnyddio'r llinell orchymyn
+Comment[da]=Brug kommandolinjen
+Comment[de]=Befehlszeile verwenden
+Comment[dz]=བཀོད་ལམ་ལག་ལེན་འཐབ།
+Comment[el]=Χρήση γραμμής εντολών
+Comment[en_CA]=Use the command line
+Comment[en_GB]=Use the command line
+Comment[es]=Use la línea de comandos
+Comment[et]=Käsurea kasutamine
+Comment[eu]=Erabili komando-lerroa
+Comment[fa]=استفاده از سطر فرمان
+Comment[fi]=Käytä komentoriviä
+Comment[fr]=Utiliser la ligne de commande
+Comment[gl]=Usar a liña de comandos
+Comment[gu]=આદેશ વાક્ય વાપરો
+Comment[he]=השתמש בשורת הפקודה
+Comment[hi]=कमांड लाइन का प्रयोग करें
+Comment[hu]=Parancssor használata
+Comment[id]=Pergunakan perintah baris
+Comment[it]=Usa la riga di comando
+Comment[ja]=コマンド・ライン端末です
+Comment[ka]=ბრზანების ხაზის გამოყენება
+Comment[ko]=명령 행을 사용합니다
+Comment[ku]=Rêzika fermanan bikar bîne
+Comment[lt]=Naudoti komandų eilutę
+Comment[lv]=Izmantot komandrindu
+Comment[mg]=Hampiasa ny lazam-baiko
+Comment[mk]=Користи ја командната линија
+Comment[ml]=കമാന്‍ഡ് ലൈന്‍ ഉപയോഗിക്കുക
+Comment[mr]=आदेश पंक्ती वापरा
+Comment[nb]=Bruk kommandolinjen
+Comment[nl]=Gebruik de opdrachtregel
+Comment[nn]=Bruk kommandolinja
+Comment[pa]=ਕਮਾਂਡ ਲਾਇਨ ਵਰਤੋਂ
+Comment[pl]=Wiersz poleceń
+Comment[pt]=Utilizar a linha de comando
+Comment[pt_BR]=Use a linha de comando
+Comment[ro]=Foloseşte linia de comandă
+Comment[ru]=Использовать командную строку
+Comment[sk]=Použiť príkazový riadok
+Comment[sl]=Uporabi ukazno vrstico
+Comment[sq]=Përdor rreshtin e komandës
+Comment[sr@Latn]=Koristite liniju naredbi
+Comment[sr]=Користите линију наредби
+Comment[sv]=Använd kommandoraden
+Comment[ta]=கட்டளை வரியை பயன்படுத்து
+Comment[th]=สั่งการด้วยบรรทัดคำสั่ง
+Comment[tr]=Komut satırını kullan
+Comment[uk]=Командний рядок
+Comment[vi]=Dùng dòng lệnh
+Comment[wa]=Eployî l' roye di comande
+Comment[zh_CN]=使用命令行
+Comment[zh_HK]=使用命令列
+Comment[zh_TW]=使用命令列
+Encoding=UTF-8
+Name[am]=ተርሚናል
+Name[ar]=طرفية
+Name[az]=Terminal
+Name[be]=Тэрмінал
+Name[bg]=Терминал
+Name[bn]=টার্মিনাল
+Name[bn_IN]=টার্মিনাল
+Name[bs]=Terminal
+Name[ca]=Terminal
+Name[cs]=Terminál
+Name[cy]=Terfynell
+Name[da]=Terminal
+Name[de]=Terminal
+Name[dz]=ཊར་མི་ནཱལ་།
+Name[el]=Τερματικό
+Name[en_CA]=Terminal
+Name[en_GB]=Terminal
+Name[es]=Terminal
+Name[et]=Terminal
+Name[eu]=Terminala
+Name[fa]=پایانه
+Name[fi]=Pääte
+Name[fr]=Terminal
+Name[ga]=Terminéal
+Name[gl]=Terminal
+Name[gu]=ટર્મિનલ
+Name[he]=מסוף
+Name[hi]=टर्मिनल
+Name[hr]=Terminal
+Name[hu]=Terminál
+Name[hy]=Տերմինալ
+Name[id]=Terminal
+Name[it]=Terminale
+Name[ja]=端末
+Name[ka]=ტერმინალი
+Name[ko]=터미널
+Name[ku]=Termînal
+Name[lt]=Terminalas
+Name[lv]=Terminālis
+Name[mg]=Terminal
+Name[mk]=Терминал
+Name[ml]=ടെര്‍മിനല്‍
+Name[mn]=Терминал
+Name[mr]=टर्मिनल
+Name[ms]=Terminal
+Name[nb]=Terminal
+Name[ne]=टर्मिनल
+Name[nl]=Terminalvenster
+Name[nn]=Terminal
+Name[or]=ଟର୍ମିନାଲ
+Name[pa]=ਟਰਮੀਨਲ
+Name[pl]=Terminal
+Name[pt]=Consola
+Name[pt_BR]=Terminal
+Name[ro]=Terminal
+Name[ru]=Терминал
+Name[sk]=Terminál
+Name[sl]=Terminal
+Name[sq]=Terminali
+Name[sr@Latn]=Terminal
+Name[sr]=Терминал
+Name[sv]=Terminal
+Name[ta]=முனையம்
+Name[th]=เทอร์มินัล
+Name[tr]=Uçbirim
+Name[uk]=Термінал
+Name[vi]=Thiết bị cuối
+Name[wa]=Terminå
+Name[xh]=i-Terminal
+Name[zh_CN]=终端
+Name[zh_HK]=終端機
+Name[zh_TW]=終端機
+NoDisplay=false
+StartupNotify=true
+TryExec=gnome-terminal
+Type=Application
+X-GNOME-Bugzilla-Bugzilla=GNOME
+X-GNOME-Bugzilla-Component=general
+X-GNOME-Bugzilla-Product=gnome-terminal
+X-GNOME-Bugzilla-Version=2.18.0
+X-GNOME-DocPath=gnome-terminal/index.html
+Is URI=false
+
+[Icon]
+order=2

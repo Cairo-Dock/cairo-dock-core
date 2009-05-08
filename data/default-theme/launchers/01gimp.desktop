@@ -1,0 +1,143 @@
+#!en
+
+[Desktop Entry]
+#s Launcher's name :
+Name=Gimp
+#s Command to launch on click :
+#{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1 for the Applications Menu, <Ctrl>c or <Ctrl>v to copy or paste, etc}
+Exec=gimp-2.6 
+#S Image's name or path :
+Icon=gimp
+#E[_MainDock_;Quimper, France;Blog;Documents;Vidéos]  Name of the container it belongs to:
+#{If you write here a container's name that doesn't exist yet, a new one will be created, with this icon inside.}
+Container=_MainDock_
+
+#X[Extra parameters]
+frame_extra=
+#f Order you want for this launcher among the others:
+Order=0.3638916015625
+#b Prevent this launcher from stealing appli from taskbar ?
+#{Use this option for exemple if the launcher launches a script in a terminal but you don't want it to steal normal terminal's icons from the TaskBar, or if you explicitely want to use the original icon of the TaskBar because it provides some info, for exemple Pidgin's icons represent the avatar of the contact.}
+prevent inhibate=false
+
+#s Class of the program :
+#{The only reason you may want to modify this parameter is if you made this launcher by hands. If you dropped it into the dock from the menu, it is nearly sure that you shouldn't touch it. It defines the class of the program, which is useful to link the appli with its launcher.}
+StartupWMClass=
+
+Is container=false
+
+Renderer=
+
+Base URI=
+Is mounting point=false
+Version=1.0
+Type=Application
+GenericName=Image Editor
+GenericName[ar]=محرر صور
+GenericName[be]=Рэдактар відарысаў
+GenericName[bg]=Редактор на изображения
+GenericName[ca]=Editor d'imatges
+GenericName[ca@valencia]=Editor d'imatges
+GenericName[cs]=Editor obrázků
+GenericName[da]=Billedredigering
+GenericName[de]=Bildeditor
+GenericName[dz]=གཟུགས་བརྙན་ ཞུན་དག་པ།
+GenericName[en_CA]=Image Editor
+GenericName[en_GB]=Image Editor
+GenericName[eo]=Bilada Redaktilo
+GenericName[es]=Editor de imagen
+GenericName[et]=Pildiredaktor
+GenericName[eu]=Irudi-editorea
+GenericName[fa]=ویرایشگر تصویر
+GenericName[fi]=Kuvaeditori
+GenericName[fr]=Éditeur d'image
+GenericName[gl]=Editor de imaxes
+GenericName[gu]=ચિત્ર સંપાદક
+GenericName[hu]=Képszerkesztő
+GenericName[is]=Myndvinnsluforrit
+GenericName[it]=Editor immagine
+GenericName[ja]=画像エディタ
+GenericName[ka]=გამოსახულებების რედაქტორი
+GenericName[km]=កម្មវិធី​និពន្ធ​រូបភាព
+GenericName[ko]=이미지 편집기
+GenericName[lt]=Paveikslėlių rengyklė
+GenericName[lv]=Attēla redaktors
+GenericName[mk]=Уредник за слики
+GenericName[nb]=Bildebehandler
+GenericName[ne]=छवि सम्पादक
+GenericName[nl]=Afbeeldingsbewerker
+GenericName[nn]=Biletbehandlar
+GenericName[pa]=ਚਿੱਤਰ ਐਡੀਟਰ
+GenericName[pl]=Edytor obrazu
+GenericName[pt_BR]=Editor de Imagens
+GenericName[ru]=Редактор изображений
+GenericName[sk]=Editor obrázkov
+GenericName[sl]=Urejevalnik slik
+GenericName[sr]=Обрада слика
+GenericName[sr@latin]=Obrada slika
+GenericName[sv]=Bildredigerare
+GenericName[th]=ตัวแก้ไขภาพ
+GenericName[tr]=Resim Düzenleyici
+GenericName[tt]=Sürät Tözätkeç
+GenericName[uk]=Редактор зображень
+GenericName[vi]=Bộ biên soạn ảnh
+GenericName[xh]=UmHleli woMfanekiso
+GenericName[zh_CN]=图像编辑器
+GenericName[zh_HK]=圖片編輯器
+GenericName[zh_TW]=圖片編輯器
+Comment=Create images and edit photographs
+Comment[ar]=أنشئ صورا وحرّر لقطات
+Comment[be]=Стварэньне відарысаў і рэдагаваньне фатаграфій
+Comment[bg]=Създаване на изображения и редакция на снимки
+Comment[ca]=Creeu imatges i editeu fotografies
+Comment[ca@valencia]=Creeu imatges i editeu fotografies
+Comment[cs]=Vytvářet obrázky a upravovat fotografie
+Comment[da]=Opret billeder og redigér fotografier
+Comment[de]=Bilder erstellen und Fotografien bearbeiten
+Comment[dz]=གཟུགས་བརྙན་ཚུ་ གསར་བསྐྲུན་འབད་ནི་དང་ དཔར་ཚུ་ཞུན་དག་འབད།
+Comment[en_CA]=Create images and edit photographs
+Comment[en_GB]=Create images and edit photographs
+Comment[eo]=Kreu bildojn aŭ redaktu fotojn
+Comment[es]=Cree imágenes y edite fotografías
+Comment[et]=Loo pilte ja redigeeri fotosid
+Comment[eu]=Sortu irudiak eta editatu argazkiak
+Comment[fi]=Luo kuvia ja muokkaa valokuvia
+Comment[fr]=Créer des images et modifier des photographies
+Comment[gl]=Crear imaxes e editar fotografías
+Comment[gu]=ચિત્રો બનાવો અને ફોટાઓમાં ફેરફાર કરો
+Comment[hu]=Képek létrehozása és fotók szerkesztése
+Comment[it]=Crea immagini o modifica fotografie
+Comment[ja]=画像の作成と写真の編集
+Comment[km]=បង្កើត​រូបភាព និង កែសម្រួល​រូបថត
+Comment[ko]=이미지를 만들거나 사진을 편집합니다.
+Comment[lt]=Kurti paveikslėlius ir redaguoti fotografijas
+Comment[lv]=Attēlu vai fotogrāfiju izveide un koriģēšana
+Comment[mk]=Направи слики и уреди фотографии
+Comment[nb]=Lag bilder og rediger fotografier
+Comment[ne]=छवि सिर्जना गर्नुहोस् र फोटोग्राफ सम्पादन गर्नुहोस्
+Comment[nl]=Afbeeldingen of foto's aanmaken en bewerken
+Comment[nn]=Lag teikningar eller rediger foto
+Comment[pa]=ਚਿੱਤਰ ਬਣਾਓ ਅਤੇ ਤਸਵੀਰਾਂ ਸੋਧੋ
+Comment[pl]=Program do tworzenia oraz obróbki obrazów i fotografii
+Comment[pt_BR]=Crie e edite imagens ou fotografias
+Comment[ru]=Создание изображений и редактирование фотографий
+Comment[sl]=Ustvari slike in uredi fotografije
+Comment[sr]=Направите слике и уредите фотографије
+Comment[sr@latin]=Napravite slike i uredite fotografije
+Comment[sv]=Skapa bilder och redigera fotografier
+Comment[tr]=Resim ya da fotoğrafları oluşturun ve düzenleyin
+Comment[uk]=Створення зображень та редагування фотографій
+Comment[vi]=Tạo và biên soạn ảnh hay ảnh chụp
+Comment[zh_CN]=创建图像或编辑照片
+Comment[zh_HK]=建立圖像與編輯照片
+Comment[zh_TW]=建立圖像與編輯照片
+TryExec=gimp-2.6
+Terminal=false
+Categories=Graphics;2DGraphics;RasterGraphics;GTK;
+X-GNOME-Bugzilla-Bugzilla=GNOME
+X-GNOME-Bugzilla-Product=GIMP
+X-GNOME-Bugzilla-Component=General
+X-GNOME-Bugzilla-Version=2.6.0
+X-GNOME-Bugzilla-OtherBinaries=gimp-2.6
+StartupNotify=true
+MimeType=application/postscript;application/pdf;image/bmp;image/g3fax;image/gif;image/x-fits;image/pcx;image/x-portable-anymap;image/x-portable-bitmap;image/x-portable-graymap;image/x-portable-pixmap;image/x-psd;image/x-sgi;image/x-tga;image/x-xbitmap;image/x-xwindowdump;image/x-xcf;image/x-compressed-xcf;image/tiff;image/jpeg;image/x-psd;image/png;image/x-icon;image/x-xpixmap;image/svg+xml;image/x-wmf;

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 12.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 51448)  --><svg height="135.788" id="Layer_1" inkscape:version="0.42" sodipodi:docbase="F:\openclip\svg da inviare" sodipodi:docname="tasto07.svg" sodipodi:version="0.32" space="preserve" style="overflow:visible;enable-background:new 0 0 135.828 135.788;" version="1.1" viewBox="0 0 135.828 135.788" width="135.828" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg">
+  <metadata>
+    <rdf:RDF xmlns:cc="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <cc:Work rdf:about="">
+        <dc:title>Tasto 7</dc:title>
+        <dc:description></dc:description>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>unsorted</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:publisher>
+          <cc:Agent rdf:about="http://www.openclipart.org/">
+            <dc:title>Open Clip Art Library</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Architetto Francesco Rollandin</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>Architetto Francesco Rollandin</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:date></dc:date>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <cc:license rdf:resource="http://web.resource.org/cc/PublicDomain"/>
+        <dc:language>en</dc:language>
+      </cc:Work>
+      <cc:License rdf:about="http://web.resource.org/cc/PublicDomain">
+        <cc:permits rdf:resource="http://web.resource.org/cc/Reproduction"/>
+        <cc:permits rdf:resource="http://web.resource.org/cc/Distribution"/>
+        <cc:permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"/>
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs id="defs23"/>
+  <sodipodi:namedview bordercolor="#666666" borderopacity="1.0" id="base" inkscape:current-layer="Layer_1" inkscape:cx="67.914001" inkscape:cy="67.893997" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:window-height="510" inkscape:window-width="787" inkscape:window-x="88" inkscape:window-y="116" inkscape:zoom="2.6511917" pagecolor="#ffffff"/>
+  <g id="g3">
+    <path d="M0,67.872c0,34.604,27.145,64.467,61.629,67.638c34.499,3.172,66.779-21.087,73.093-55.204   c6.309-34.109-14.982-68.469-48.41-77.844c-33.44-9.378-69.575,8.831-81.906,41.291C1.485,51.44,0,59.648,0,67.872" id="path5" style="fill:#5A9908;"/>
+    <radialGradient cx="67.9282" cy="67.8696" gradientUnits="userSpaceOnUse" id="XMLID_2_" r="63.1235">
+      <stop id="stop8" offset="0" style="stop-color:#D1F593"/>
+      <stop id="stop10" offset="1" style="stop-color:#81CE09"/>
+    </radialGradient>
+    <path d="M4.805,67.872c0,34.4,28.723,63.122,63.124,63.122c34.4,0,63.123-28.722,63.123-63.122   c0-34.401-28.721-63.125-63.123-63.125S4.805,33.471,4.805,67.872" id="path12" style="fill:url(#XMLID_2_);"/>
+    <path d="M10.892,43.334c-5.097,29.729,12.654,59.589,41.207,69.317   c30.282,10.318,64.357-4.932,77.021-34.264c-6.086,35.498-42.582,58.835-77.36,49.449C15.851,118.147-3.905,77.572,10.892,43.334" id="path14" style="fill:#67BA06;"/>
+    <path d="M28.502,39.848c8.729,1.808,18.781-10.559,26.351-13.707c14.141-5.877,31.806-3.147,44.617,4.857   c13.551,8.467,23.19,24.729,24.673,40.692c0.004,0.047,0.004,0.055,0,0.024c-1.001-9.667-0.325-18.753-4.006-28.098   c-6.1-15.49-19.292-27.619-35.196-32.492c-16.446-5.038-34.429-1.832-48.596,7.769C31.97,21.858,15.131,37.081,28.502,39.848" id="path16" style="fill:#B2ED21;"/>
+    <path d="M98.494,44.133C86.456,54.562,74.415,64.986,62.382,75.419   c-5.911-6.822-11.819-13.644-17.729-20.466c-2.35-2.712-4.534-5.902-8.198-6.885c-5.947-1.596-13.654,3.867-14.911,9.807   c-1.695,8.014,9.643,17.108,14.241,22.415c5.265,6.077,10.342,12.396,15.586,18.447c7.188,8.292,13.557,5.293,20.431-0.663   C79.525,91.382,87.249,84.691,94.971,78c6.073-5.262,12.145-10.521,18.216-15.782C123.653,53.151,108.883,35.131,98.494,44.133    M62.877,77.36c6.32-5.475,12.638-10.949,18.958-16.424c5.94-5.146,12.429-13.128,19.595-16.615   c6.15-2.99,14.369,4.087,13.905,10.545c-0.28,3.906-3.333,6.012-6.002,8.322c-8.16,7.071-16.32,14.141-24.481,21.211   C78.642,89.78,72.43,95.16,66.221,100.54c-7.872,6.82-13.896-3.893-18.428-9.124c-7.042-8.128-14.083-16.255-21.126-24.382   c-2.938-3.391-5.104-7.569-2.024-11.833c3.501-4.843,10.741-8.208,15.394-2.838C42.896,55.664,60.84,78.702,62.877,77.36" id="path18" style="fill:#739B07;"/>
+    <path d="M114.062,48.424c-9.625-12.197-19.166,0.01-27.288,7.047c-8.16,7.071-16.321,14.142-24.483,21.212   c-5.044-5.823-10.087-11.645-15.131-17.467c-6.288-7.258-11.859-14.72-21.423-6.43c-8.281,7.179,0.231,14.806,5.142,20.477   c6.161,7.11,12.321,14.222,18.484,21.332c4.771,5.508,10.061,13.02,17.857,6.264c5.706-4.942,11.412-9.886,17.116-14.828   c7.325-6.347,14.649-12.692,21.976-19.039C111.518,62.48,120.762,56.157,114.062,48.424" id="path20" style="fill:#FFFFFF;"/>
+  </g>
+</svg>
