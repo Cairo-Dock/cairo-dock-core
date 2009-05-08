@@ -1419,7 +1419,7 @@ void cairo_dock_popup_module_instance_description (CairoDockModuleInstance *pMod
 		}
 		cDescription = cReadmeContent;
 	}
-	cDescription = g_strdup_printf ("%s (v%s) by %s\n%s", pModuleInstance->pModule->pVisitCard->cModuleName, pModuleInstance->pModule->pVisitCard->cModuleVersion, pModuleInstance->pModule->pVisitCard->cAuthor, cDescription);
+	cDescription = g_strdup_printf ("%s (v%s) by %s\n%s", pModuleInstance->pModule->pVisitCard->cModuleName, pModuleInstance->pModule->pVisitCard->cModuleVersion, pModuleInstance->pModule->pVisitCard->cAuthor, dgettext (pModuleInstance->pModule->pVisitCard->cGettextDomain, cDescription));
 	cairo_dock_show_temporary_dialog_with_icon (cDescription, pModuleInstance->pIcon, pModuleInstance->pContainer, 0, pModuleInstance->pModule->pVisitCard->cIconFilePath);
 	g_free (cDescription);
 	g_free (cReadmeContent);
