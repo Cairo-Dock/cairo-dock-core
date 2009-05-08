@@ -251,7 +251,7 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 			if (*cThemeName == '#' && bFirstComment && pTheme != NULL)
 			{
 				g_print ("%s\n", cThemeName+1);
-				pTheme->fSize = atof (cThemeName+1);
+				pTheme->fSize = g_ascii_strtod (cThemeName+1, NULL);
 				pTheme->cAuthor = g_strdup (strchr (cThemeName, ' '));
 				gchar *cDisplayedName = g_strdup_printf ("%s by %s [%.2f MB]", pTheme->cDisplayedName, (pTheme->cAuthor ? pTheme->cAuthor : "---"), pTheme->fSize);
 				g_free (pTheme->cDisplayedName);

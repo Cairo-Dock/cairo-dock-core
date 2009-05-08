@@ -170,6 +170,42 @@ double cairo_dock_calculate_extra_width_for_trapeze (double fFrameHeight, double
 	return (2 * (fLineWidth/2 + fDeltaXForLoop + fDeltaCornerForLoop + myBackground.iFrameMargin));*/
 }
 
+void cairo_dock_draw_rounded_rectangle (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight)
+{
+	double fDockOffsetX = fRadius + fLineWidth/2;
+	double fDockOffsetY = 0.;
+	if (2*fRadius > fFrameHeight + fLineWidth)
+		fRadius = (fFrameHeight + fLineWidth) / 2 - 1;
+	cairo_move_to (pCairoContext, fDockOffsetX, fDockOffsetY);
+	cairo_rel_line_to (pCairoContext, fFrameWidth, 0);
+	//\_________________ Coin haut droit.
+	cairo_rel_curve_to (pCairoContext,
+		0, 0,
+		fRadius, 0,
+		fRadius, fRadius);
+	cairo_rel_line_to (pCairoContext, 0, (fFrameHeight + fLineWidth - fRadius * 2));
+	//\_________________ Coin bas droit.
+	cairo_rel_curve_to (pCairoContext,
+		0, 0,
+		0, fRadius,
+		-fRadius, fRadius);
+
+	cairo_rel_line_to (pCairoContext, - fFrameWidth, 0);
+	//\_________________ Coin bas gauche.
+	cairo_rel_curve_to (pCairoContext,
+		0, 0,
+		-fRadius, 0,
+		-fRadius, - fRadius);
+	cairo_rel_line_to (pCairoContext, 0, (- fFrameHeight - fLineWidth + fRadius * 2));
+	//\_________________ Coin haut gauche.
+	cairo_rel_curve_to (pCairoContext,
+		0, 0,
+		0, -fRadius,
+		fRadius, -fRadius);
+	if (fRadius < 1)
+		cairo_close_path (pCairoContext);
+}
+
 static double cairo_dock_draw_frame_horizontal (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination)  // la largeur est donnee par rapport "au fond".
 {
 	if (2*fRadius > fFrameHeight + fLineWidth)

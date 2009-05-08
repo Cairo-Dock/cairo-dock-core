@@ -455,7 +455,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	static double fLastTime = 0;
 	if (s_bFrozenDock && pMotion != NULL && pMotion->time != 0)
 		return FALSE;
-	Icon *pPointedIcon, *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
+	Icon *pPointedIcon=NULL, *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 	int iLastMouseX = pDock->iMouseX;
 	//g_print ("%s (%.2f;%.2f)\n", __func__, pMotion->x, pMotion->y);
 	
@@ -510,9 +510,9 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		}
 		
 		//\_______________ On recalcule toutes les icones.
+		pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
 		if (myIcons.fAmplitude != 0)
 		{
-			pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
 			gtk_widget_queue_draw (pWidget);
 		}
 		fLastTime = pMotion->time;

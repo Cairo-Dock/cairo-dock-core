@@ -35,6 +35,9 @@ cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, 
 
 double cairo_dock_calculate_extra_width_for_trapeze (double fFrameHeight, double fInclination, double fRadius, double fLineWidth);
 
+
+void cairo_dock_draw_rounded_rectangle (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight);
+
 /**
 *Trace sur le contexte un contour trapezoidale aux coins arrondis. Le contour n'est pas dessine, mais peut l'etre a posteriori, et peut servir de cadre pour y dessiner des choses dedans.
 *@param pCairoContext le contexte du dessin, contenant le cadre a la fin de la fonction.

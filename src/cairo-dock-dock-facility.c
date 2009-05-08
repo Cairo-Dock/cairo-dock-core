@@ -601,7 +601,8 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 				{
 					//g_print ("  on contraint %s (fXMax=%.2f , fX=%.2f\n", prev_icon->acName, prev_icon->fXMax, prev_icon->fX);
 					fDeltaExtremum = icon->fX + icon->fWidth * icon->fScale - (icon->fXMax - myIcons.fAmplitude * fMagnitude * (icon->fWidth + 1.5*myIcons.iIconGap) / 16);
-					icon->fX -= fDeltaExtremum * (1 - (icon->fScale - 1) / myIcons.fAmplitude) * fMagnitude;
+					if (myIcons.fAmplitude != 0)
+						icon->fX -= fDeltaExtremum * (1 - (icon->fScale - 1) / myIcons.fAmplitude) * fMagnitude;
 				}
 			}
 			icon->fX = fAlign * iWidth + (icon->fX - fAlign * iWidth) * (1. - fFoldingFactor);
@@ -650,7 +651,8 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 		{
 			//g_print ("  on contraint %s (fXMin=%.2f , fX=%.2f\n", prev_icon->acName, prev_icon->fXMin, prev_icon->fX);
 			fDeltaExtremum = prev_icon->fX - (prev_icon->fXMin + myIcons.fAmplitude * fMagnitude * (prev_icon->fWidth + 1.5*myIcons.iIconGap) / 16);
-			prev_icon->fX -= fDeltaExtremum * (1 - (prev_icon->fScale - 1) / myIcons.fAmplitude) * fMagnitude;
+			if (myIcons.fAmplitude != 0)
+				prev_icon->fX -= fDeltaExtremum * (1 - (prev_icon->fScale - 1) / myIcons.fAmplitude) * fMagnitude;
 		}
 		prev_icon->fX = fAlign * iWidth + (prev_icon->fX - fAlign * iWidth) * (1. - fFoldingFactor);
 		//g_print ("  prev_icon->fX : %.2f\n", prev_icon->fX);
@@ -778,7 +780,8 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 #define make_icon_avoid_mouse(icon) \
 	cairo_dock_mark_icon_as_avoiding_mouse (icon);\
 	icon->fAlpha = 0.75;\
-	icon->fDrawX += icon->fWidth / 2 * (icon->fScale - 1) / myIcons.fAmplitude * (icon->fPhase < G_PI/2 ? -1 : 1);
+	if (myIcons.fAmplitude != 0)\
+		icon->fDrawX += icon->fWidth / 2 * (icon->fScale - 1) / myIcons.fAmplitude * (icon->fPhase < G_PI/2 ? -1 : 1);
 
 static gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, CairoDockIconType iType, double fMargin)
 {

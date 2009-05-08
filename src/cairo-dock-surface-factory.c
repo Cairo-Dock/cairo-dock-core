@@ -678,7 +678,8 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 		double fFrameHeight = *iTextHeight - fLineWidth;
 		double fDockOffsetX = fRadius + fLineWidth/2;
 		double fDockOffsetY = 0.;
-		cairo_dock_draw_frame (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight, fDockOffsetX, fDockOffsetY, 1, 0., CAIRO_DOCK_HORIZONTAL);
+		cairo_dock_draw_rounded_rectangle (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight);
+		//cairo_dock_draw_frame (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight, fDockOffsetX, fDockOffsetY, 1, 0., CAIRO_DOCK_HORIZONTAL);
 		cairo_set_source_rgba (pCairoContext, pLabelDescription->fBackgroundColor[0], pLabelDescription->fBackgroundColor[1], pLabelDescription->fBackgroundColor[2], pLabelDescription->fBackgroundColor[3]);
 		cairo_fill (pCairoContext);
 		cairo_restore(pCairoContext);

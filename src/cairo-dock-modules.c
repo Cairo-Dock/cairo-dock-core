@@ -429,9 +429,9 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 	gboolean bUseless;
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Icon", "icon ", bUseless, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
 	
-	if (pMinimalConfig->iDesiredIconWidth == 0 || pMinimalConfig->iDesiredIconWidth > myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLET])
+	if (pMinimalConfig->iDesiredIconWidth == 0/* || pMinimalConfig->iDesiredIconWidth > myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLET]*/)
 		pMinimalConfig->iDesiredIconWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLET];
-	if (pMinimalConfig->iDesiredIconHeight == 0 || pMinimalConfig->iDesiredIconHeight > myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLET])
+	if (pMinimalConfig->iDesiredIconHeight == 0/* || pMinimalConfig->iDesiredIconHeight > myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLET]*/)
 		pMinimalConfig->iDesiredIconHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLET];
 	pMinimalConfig->cLabel = cairo_dock_get_string_key_value (pKeyFile, "Icon", "name", NULL, NULL, NULL, NULL);
 	pMinimalConfig->cIconFileName = cairo_dock_get_string_key_value (pKeyFile, "Icon", "icon", NULL, NULL, NULL, NULL);

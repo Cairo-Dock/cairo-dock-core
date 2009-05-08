@@ -58,7 +58,7 @@ set_value "TaskBar"			"hide visible"			false
 set_value "TaskBar"			"current desktop only"	false
 set_value "TaskBar"			"mix launcher appli"	true
 set_value "TaskBar"			"overwrite xicon"		true
-set_value "TaskBar"			"overwrite exception"	"pidgin;xchat;amsn"
+set_value "TaskBar"			"overwrite exception"	"pidgin;xchat;amsn;gimp"
 set_value "TaskBar"			"window thumbnail"		true
 set_value "TaskBar"			"minimize on click"		true
 set_value "TaskBar"			"close on middle click"	true
@@ -68,7 +68,7 @@ set_value "TaskBar"			"demands attention with dialog" true
 set_value "TaskBar"			"animation on demands attention" "rotate"
 set_value "TaskBar"			"animation on active window" "wobbly"
 set_value "TaskBar"			"max name length"		15
-set_value "TaskBar"			"visibility alpha"		"0.25"
+set_value "TaskBar"			"visibility alpha"		"0.4"
 set_value "TaskBar"			"animate subdocks"		true
 set_value "System"			"unfold factor"			8
 set_value "System"			"grow nb steps" 		10
