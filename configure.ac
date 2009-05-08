@@ -116,16 +116,8 @@ AC_CONFIG_FILES([Makefile
 		data/default-theme/plug-ins/logout/Makefile
 		data/default-theme/plug-ins/rendering/Makefile
 		data/gauges/Makefile
-		data/gauges/radium/Makefile
-		data/gauges/radium-fuel/Makefile
 		data/gauges/battery/Makefile
-		data/gauges/old-square/Makefile
-		data/gauges/turbo-night/Makefile
 		data/gauges/turbo-night-fuel/Makefile
-		data/gauges/turbo-night-dual/Makefile
-		data/gauges/rainbow/Makefile
-		data/gauges/tomato/Makefile
-		data/gauges/Circle/Makefile
 		data/emblems/Makefile
 		data/explosion/Makefile])
 AC_OUTPUT
