@@ -61,7 +61,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	
 	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text oulined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
-	pLabels->iconTextDescription.iMargin = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "text margin", &bFlushConfFileNeeded, 4, NULL, NULL);;
+	pLabels->iconTextDescription.iMargin = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "text margin", &bFlushConfFileNeeded, 4, NULL, NULL);
 	
 	memcpy (&pLabels->quickInfoTextDescription, &pLabels->iconTextDescription, sizeof (CairoDockLabelDescription));
 	pLabels->quickInfoTextDescription.cFont = g_strdup (pLabels->iconTextDescription.cFont);
@@ -82,7 +82,13 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 		myDialogs.dialogTextDescription.cFont = g_strdup (pLabels->iconTextDescription.cFont);
 		myDialogs.dialogTextDescription.iWeight = pLabels->iconTextDescription.iWeight;
 		myDialogs.dialogTextDescription.iStyle = pLabels->iconTextDescription.iStyle;
+		myDialogs.dialogTextDescription.fBackgroundColor[3] = 0;
 	}
+	
+	pLabels->iLabelSize = (pLabels->iconTextDescription.iSize != 0 ?
+		pLabels->iconTextDescription.iSize +
+		(pLabels->iconTextDescription.bOutlined ? 2 : 0) +
+		(bUseBackgroundForLabel ? 2 * pLabels->iconTextDescription.iMargin : 0) : 0);
 	
 	return bFlushConfFileNeeded;
 }
@@ -101,7 +107,7 @@ static void _reload_one_label (Icon *pIcon, CairoContainer *pContainer, gpointer
 	cairo_t* pSourceContext = data[1];
 	cairo_dock_fill_one_text_buffer (pIcon, pSourceContext, &pLabels->iconTextDescription);
 	double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	cairo_dock_fill_one_quick_info_buffer (pIcon, pSourceContext, &pLabels->iconTextDescription, fMaxScale);
+	cairo_dock_fill_one_quick_info_buffer (pIcon, pSourceContext, &pLabels->quickInfoTextDescription, fMaxScale);
 }
 static void _cairo_dock_resize_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
 {

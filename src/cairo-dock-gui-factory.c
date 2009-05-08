@@ -767,8 +767,16 @@ gchar *cairo_dock_parse_key_comment (gchar *cKeyComment, char *iElementType, int
 		return NULL;
 	
 	gchar *cUsefulComment = cKeyComment;
-	while (*cUsefulComment == '#' || *cUsefulComment == ' ')  // on saute les # et les espaces.
+	while (*cUsefulComment == '#' || *cUsefulComment == ' ' || *cUsefulComment == '\n')  // on saute les # et les espaces.
 		cUsefulComment ++;
+	
+	int length = strlen (cUsefulComment);
+	while (cUsefulComment[length-1] == '\n')
+	{
+		cUsefulComment[length-1] = '\0';
+		length --;
+	}
+	
 	
 	//\______________ On recupere le type du widget.
 	*iElementType = *cUsefulComment;

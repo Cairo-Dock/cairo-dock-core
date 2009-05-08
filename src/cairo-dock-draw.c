@@ -672,11 +672,11 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
 				fOffsetX,
-				bDirectionUp ? -myLabels.iconTextDescription.iSize : icon->fHeight * icon->fScale - icon->fTextYOffset);
+				bDirectionUp ? -myLabels.iLabelSize : icon->fHeight * icon->fScale - icon->fTextYOffset);
 		else
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
-				bDirectionUp ? -myLabels.iconTextDescription.iSize : icon->fHeight * icon->fScale - icon->fTextYOffset,
+				bDirectionUp ? -myLabels.iLabelSize : icon->fHeight * icon->fScale - icon->fTextYOffset,
 				fOffsetX);
 		
 		double fMagnitude;
@@ -814,7 +814,7 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, 
 		cairo_set_source_surface (pCairoContext,
 			icon->pTextBuffer,
 			fOffsetX,
-			-myLabels.iconTextDescription.iSize);
+			-myLabels.iLabelSize);
 		cairo_paint (pCairoContext);
 	}
 	

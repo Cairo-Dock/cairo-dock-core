@@ -6,8 +6,8 @@ Icon=cairo-dock.svg
 #DocPath=
 Terminal=false
 
-Name=Cairo-Dock with OpenGL
-Name[fr]=Cairo-Dock avec l'OpenGL
+Name=GLX-Dock (Cairo-Dock with OpenGL)
+Name[fr]=GLX-Dock (Cairo-Dock avec OpenGL)
 
 GenericName=Multi-purpose Dock
 GenericName[fr]=Dock multi-usage

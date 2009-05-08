@@ -51,7 +51,7 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	double fExtraWidth = myBackground.iDockLineWidth + 2 * (fRadius + myBackground.iFrameMargin);
 	pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->pFirstDrawnElement, pDock->fFlatDockWidth, 1., fExtraWidth));
 
-	pDock->iMaxDockHeight = (int) ((1 + myIcons.fAmplitude) * pDock->iMaxIconHeight) + myLabels.iconTextDescription.iSize + myBackground.iDockLineWidth + myBackground.iFrameMargin;
+	pDock->iMaxDockHeight = (int) ((1 + myIcons.fAmplitude) * pDock->iMaxIconHeight) + myLabels.iLabelSize + myBackground.iDockLineWidth + myBackground.iFrameMargin;
 
 	pDock->iDecorationsWidth = pDock->iMaxDockWidth;
 

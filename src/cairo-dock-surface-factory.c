@@ -655,7 +655,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	PangoRectangle ink, log;
 	pango_layout_get_pixel_extents (pLayout, &ink, &log);
 	
-	int iOutlineMargin = pLabelDescription->iMargin + (pLabelDescription->bOutlined ? 2 : 0);  // +1 tout autour des lettres.
+	int iOutlineMargin = 2*pLabelDescription->iMargin + (pLabelDescription->bOutlined ? 2 : 0);  // outlined => +1 tout autour des lettres.
 	double fZoomX = ((iMaxWidth != 0 && ink.width + iOutlineMargin > iMaxWidth) ? 1.*iMaxWidth / (ink.width + iOutlineMargin) : 1.);
 	
 	*iTextWidth = (ink.width + iOutlineMargin) * fZoomX;
@@ -671,7 +671,8 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	if (pLabelDescription->fBackgroundColor != NULL && pLabelDescription->fBackgroundColor[3] > 0)  // non transparent.
 	{
 		cairo_save (pCairoContext);
-		double fRadius = fMaxScale * MIN (.5 * myBackground.iDockRadius, 5.);  // bon compromis.
+		//double fRadius = fMaxScale * MIN (.5 * myBackground.iDockRadius, 5.);  // bon compromis.
+		double fRadius = fMaxScale * MAX (pLabelDescription->iMargin, pLabelDescription->iSize/3);  // permet d'avoir un rayon meme si on n'a pas de marge.
 		double fLineWidth = 0.;
 		double fFrameWidth = *iTextWidth - 2 * fRadius - fLineWidth;
 		double fFrameHeight = *iTextHeight - fLineWidth;
@@ -697,7 +698,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 		int i;
 		for (i = 0; i < 4; i++)
 		{
-			cairo_move_to (pCairoContext, i&2, 2*(i&1));
+			cairo_move_to (pCairoContext, i&2-1, 2*(i&1)-1);
 			pango_cairo_show_layout (pCairoContext, pLayout);
 		}
 		cairo_pop_group_to_source (pCairoContext);
