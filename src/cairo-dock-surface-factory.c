@@ -740,7 +740,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	}
 	else
 		cairo_set_source_rgb (pCairoContext, pLabelDescription->fColorStart[0], pLabelDescription->fColorStart[1], pLabelDescription->fColorStart[2]);
-	//cairo_move_to (pCairoContext, iOutlineMargin/2, iOutlineMargin/2);
+	cairo_move_to (pCairoContext, 0, 0);
 	if (fZoomX != 1)
 		cairo_scale (pCairoContext, fZoomX, 1.);
 	pango_cairo_show_layout (pCairoContext, pLayout);
