@@ -740,9 +740,7 @@ void cairo_dock_show_all_categories (void)
 	
 	//\_______________ On actualise le titre de la fenetre.
 	gtk_window_set_title (GTK_WINDOW (cairo_dock_get_main_window ()), _("Configuration of Cairo-Dock"));
-	if (s_path != NULL && s_path->next != NULL && s_path->next->data == GINT_TO_POINTER (0))
-		s_path = g_slist_delete_link (s_path, s_path);
-	else
+	if (s_path == NULL || s_path->data != GINT_TO_POINTER (0))
 		s_path = g_slist_prepend (s_path, GINT_TO_POINTER (0));
 
 	//\_______________ On declenche le filtre.
@@ -778,9 +776,7 @@ void cairo_dock_show_one_category (int iCategory)
 	
 	//\_______________ On actualise le titre de la fenetre.
 	gtk_window_set_title (GTK_WINDOW (cairo_dock_get_main_window ()), gettext (cCategoriesDescription[2*iCategory]));
-	if (s_path != NULL && s_path->next != NULL && s_path->next->data == GINT_TO_POINTER (iCategory+1))
-		s_path = g_slist_delete_link (s_path, s_path);
-	else
+	if (s_path == NULL || s_path->data != GINT_TO_POINTER (iCategory+1))
 		s_path = g_slist_prepend (s_path, GINT_TO_POINTER (iCategory+1));
 
 	//\_______________ On declenche le filtre.
@@ -809,14 +805,8 @@ GtkWidget *cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroup
 	
 	//\_______________ On cree le widget du groupe.
 	GError *erreur = NULL;
-	GKeyFile* pKeyFile = g_key_file_new();
-	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning ("while trying to load %s : %s", cConfFilePath, erreur->message);
-		g_error_free (erreur);
-		return NULL;
-	}
+	GKeyFile* pKeyFile = cairo_dock_open_key_file (cConfFilePath);
+	g_return_val_if_fail (pKeyFile != NULL, NULL);
 	
 	cairo_dock_free_generated_widget_list (s_pCurrentWidgetList);
 	s_pCurrentWidgetList = NULL;
@@ -1192,7 +1182,13 @@ gpointer cairo_dock_get_previous_widget (void)
 		return 0;
 	}
 	
-	return s_path->next->data;
+	//s_path = g_list_delete_link (s_path, s_path);
+	GSList *tmp = s_path;
+	s_path = s_path->next;
+	tmp->next = NULL;
+	g_slist_free (tmp);
+	
+	return s_path->data;
 }
 
 gpointer cairo_dock_get_current_widget (void)

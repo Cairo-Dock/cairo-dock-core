@@ -68,10 +68,11 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	pLabels->quickInfoTextDescription.iSize = 12;
 	pLabels->quickInfoTextDescription.iWeight = PANGO_WEIGHT_HEAVY;
 	pLabels->quickInfoTextDescription.iStyle = PANGO_STYLE_NORMAL;
+	myDialogs.dialogTextDescription.iMargin = 0;
 	
 	gboolean bUseBackgroundForLabel = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "background for label", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
 	if (! bUseBackgroundForLabel)
-		pLabels->iconTextDescription.fBackgroundColor[3] = 0;  // ne sera pas pris en compte.
+		pLabels->iconTextDescription.fBackgroundColor[3] = 0;  // ne sera pas dessine.
 	
 	if (myDialogs.bHomogeneous)
 	{
@@ -88,7 +89,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	pLabels->iLabelSize = (pLabels->iconTextDescription.iSize != 0 ?
 		pLabels->iconTextDescription.iSize +
 		(pLabels->iconTextDescription.bOutlined ? 2 : 0) +
-		(bUseBackgroundForLabel ? 2 * pLabels->iconTextDescription.iMargin : 0) : 0);
+		(/*bUseBackgroundForLabel*/TRUE ? 2 * pLabels->iconTextDescription.iMargin : 0) : 0);
 	
 	return bFlushConfFileNeeded;
 }
@@ -121,8 +122,7 @@ static void reload (CairoConfigLabels *pPrevLabels, CairoConfigLabels *pLabels)
 	cairo_dock_foreach_icons ((CairoDockForeachIconFunc) _reload_one_label, data);
 	cairo_destroy (pCairoContext);
 	
-	if (pPrevLabels->iconTextDescription.iSize != pLabels->iconTextDescription.iSize ||
-		pPrevLabels->iconTextDescription.iMargin != pLabels->iconTextDescription.iMargin)
+	if (pPrevLabels->iLabelSize != pLabels->iLabelSize)
 	{
 		cairo_dock_foreach_docks ((GHFunc) _cairo_dock_resize_one_dock, NULL);
 	}

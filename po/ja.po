@@ -14,11 +14,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/cairo-dock-callbacks.c:1183
+#: ../src/cairo-dock-callbacks.c:1187
 msgid "Do you want to mount this point ?"
 msgstr "このポイントにマウントしますか？"
 
-#: ../src/cairo-dock-callbacks.c:1772
+#: ../src/cairo-dock-callbacks.c:1776
 msgid "Quit Cairo-Dock ?"
 msgstr "Cairo-Dock 終了？"
 
@@ -620,7 +620,7 @@ msgstr ""
 "その後、問題のあるプラグインを特定するため、プラグインを1つずつ有効化してみて"
 "ください。"
 
-#: ../src/cairo-dock.c:618
+#: ../src/cairo-dock.c:616
 msgid ""
 "Welcome in Cairo-Dock2 !\n"
 "A default and simple theme has been loaded.\n"

@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([cairo-dock], [2.0.0-rc5], [Fabrice Rey (fabounet@users.berlios.de)])
+AC_INIT([cairo-dock], [2.0.0], [Fabrice Rey (fabounet@users.berlios.de)])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 
@@ -114,11 +114,9 @@ AC_CONFIG_FILES([Makefile
 		data/default-theme/plug-ins/dialog-rendering/Makefile
 		data/default-theme/plug-ins/dustbin/Makefile
 		data/default-theme/plug-ins/GMenu/Makefile
-		data/default-theme/plug-ins/help/Makefile
 		data/default-theme/plug-ins/icon-effect/Makefile
 		data/default-theme/plug-ins/illusion/Makefile
 		data/default-theme/plug-ins/logout/Makefile
-		data/default-theme/plug-ins/motion_blur/Makefile
 		data/default-theme/plug-ins/rame/Makefile
 		data/default-theme/plug-ins/rendering/Makefile
 		data/default-theme/plug-ins/shortcuts/Makefile

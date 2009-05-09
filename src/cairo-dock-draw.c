@@ -701,7 +701,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		{
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
-				(pDock->bDirectionUp ? 0. : - myIcons.fReflectSize),
+				(pDock->bDirectionUp ? -myLabels.iLabelSize : - myIcons.fReflectSize) - myLabels.iconTextDescription.iMargin,
 				0);
 		}
 		else if (bHorizontalDock)

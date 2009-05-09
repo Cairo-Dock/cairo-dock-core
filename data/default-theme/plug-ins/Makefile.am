@@ -5,11 +5,9 @@ SUBDIRS = . Animated-icons\
 	dialog-rendering\
 	dustbin\
 	GMenu\
-	help\
 	icon-effect\
 	illusion\
 	logout\
-	motion_blur\
 	rame\
 	rendering\
 	shortcuts\

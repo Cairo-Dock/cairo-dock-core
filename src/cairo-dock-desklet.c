@@ -1097,6 +1097,8 @@ void cairo_dock_free_desklet (CairoDesklet *pDesklet)
 	cairo_dock_notify (CAIRO_DOCK_STOP_DESKLET, pDesklet);
 	if (pDesklet->iSidGLAnimation != 0)
 		g_source_remove (pDesklet->iSidGLAnimation);
+	if (pDesklet->iSidGradationOnEnter != 0)
+		g_source_remove (pDesklet->iSidGradationOnEnter);
 	cairo_dock_notify (CAIRO_DOCK_STOP_DESKLET, pDesklet);
 	
 	cairo_dock_steal_interactive_widget_from_desklet (pDesklet);

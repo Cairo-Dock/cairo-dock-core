@@ -470,6 +470,9 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		fX +=  pDock->iCurrentWidth - (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->fGlideOffset * icon->fWidth * icon->fScale * (icon->fGlideOffset < 0 ? fGlideScale : 1));
 	}
 	
+	if (pDock->iRefCount > 0)
+		g_print ("%s : %.2fx%.2f\n", icon->acName, icon->fWidth, icon->fHeight);
+	
 	glLoadIdentity ();
 	if (pDock->bHorizontalDock)
 		glTranslatef (fX, fY - icon->fHeight * icon->fScale * (1 - fGlideScale/2), - icon->fHeight * (1+myIcons.fAmplitude));
@@ -575,7 +578,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		
 		if (! pDock->bHorizontalDock && mySystem.bTextAlwaysHorizontal)
 		{
-			glTranslatef (-icon->fHeight * icon->fScale/2 - (pDock->bDirectionUp ? myLabels.iLabelSize : (pDock->bUseReflect ? myIcons.fReflectSize : 0.)) + icon->iTextWidth / 2,
+			glTranslatef (-icon->fHeight * icon->fScale/2 - (pDock->bDirectionUp ? myLabels.iLabelSize : (pDock->bUseReflect ? myIcons.fReflectSize : 0.)) + icon->iTextWidth / 2 - myLabels.iconTextDescription.iMargin,
 				(icon->fWidth * icon->fScale + icon->iTextHeight) / 2,
 				0.);
 		}
@@ -615,6 +618,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	if (icon->iQuickInfoTexture != 0)
 	{
 		glPushMatrix ();
+		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
 		glTranslatef (0., (- icon->fHeight + icon->iQuickInfoHeight * fRatio) * icon->fScale/2, 0.);
 		
 		cairo_dock_draw_texture_with_alpha (icon->iQuickInfoTexture,
