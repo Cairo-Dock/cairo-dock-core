@@ -2257,9 +2257,11 @@ msgid "How can I resize my icons ?"
 msgstr "Comment puis-je rédimensionner mes icônes ?"
 
 #: ../data/messages:689
+#, fuzzy
 msgid ""
-"Hint : You can define the size of each applet independantely. Set it to 0x0 "
-"to use the default size."
+"Hint : You can define the size of each applet independantely, to any size "
+"smaller or equal than the default size. Set it to 0x0 to use the default "
+"size."
 msgstr ""
 "Astuce : vous pouvez définir la taille de chaque applet de manière "
 "indépendante. Mettez le à 0x0 pour utiliser la taille par défaut."
