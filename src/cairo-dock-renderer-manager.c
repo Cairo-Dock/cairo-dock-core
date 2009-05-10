@@ -229,6 +229,7 @@ void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 	CairoDockRenderer *pRenderer = cairo_dock_get_renderer (cRendererName, (pDock->iRefCount == 0));
 	
 	pDock->calculate_max_dock_size = pRenderer->calculate_max_dock_size;
+	pDock->fMagnitudeMax = 1.;
 	pDock->calculate_icons = pRenderer->calculate_icons;
 	pDock->render = pRenderer->render;
 	pDock->render_optimized = pRenderer->render_optimized;

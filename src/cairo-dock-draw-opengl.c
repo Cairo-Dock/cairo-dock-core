@@ -470,9 +470,6 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		fX +=  pDock->iCurrentWidth - (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->fGlideOffset * icon->fWidth * icon->fScale * (icon->fGlideOffset < 0 ? fGlideScale : 1));
 	}
 	
-	if (pDock->iRefCount > 0)
-		g_print ("%s : %.2fx%.2f\n", icon->acName, icon->fWidth, icon->fHeight);
-	
 	glLoadIdentity ();
 	if (pDock->bHorizontalDock)
 		glTranslatef (fX, fY - icon->fHeight * icon->fScale * (1 - fGlideScale/2), - icon->fHeight * (1+myIcons.fAmplitude));

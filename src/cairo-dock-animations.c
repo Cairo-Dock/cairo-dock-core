@@ -184,7 +184,7 @@ gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex)  // merci a Robrob 
 
 	if (tmp>1.0f)
 		tmp=1.0f;
-
+	
 	return  tmp;
 }
 

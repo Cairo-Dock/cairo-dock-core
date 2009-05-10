@@ -269,11 +269,11 @@ void cairo_dock_prevent_dock_from_out_of_screen (CairoDock *pDock)
 	int x, y;  // position du point invariant du dock.
 	x = pDock->iWindowPositionX +  pDock->iCurrentWidth * pDock->fAlign;
 	y = (pDock->bDirectionUp ? pDock->iWindowPositionY + pDock->iCurrentHeight : pDock->iWindowPositionY);
-	cd_message ("%s (%d;%d)", __func__, x, y);
+	cd_debug ("%s (%d;%d)", __func__, x, y);
 	
 	pDock->iGapX = x - g_iScreenWidth[pDock->bHorizontalDock] * pDock->fAlign;
 	pDock->iGapY = (pDock->bDirectionUp ? g_iScreenHeight[pDock->bHorizontalDock] - y : y);
-	cd_message (" -> (%d;%d)", pDock->iGapX, pDock->iGapY);
+	cd_debug (" -> (%d;%d)", pDock->iGapX, pDock->iGapY);
 	
 	if (pDock->iGapX < - g_iScreenWidth[pDock->bHorizontalDock]/2)
 		pDock->iGapX = - g_iScreenWidth[pDock->bHorizontalDock]/2;
