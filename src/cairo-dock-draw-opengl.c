@@ -1288,7 +1288,7 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 		
 		glEnable(GL_BLEND); // On active le blend
 		//glBlendFunc (GL_ONE, GL_ZERO);
-		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 		glColor4f(1., 1., 1., 1.); // Couleur a fond
 		glPolygonMode(GL_FRONT, GL_FILL);
 		
