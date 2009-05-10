@@ -1107,14 +1107,6 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 		FALSE,
 		0);
 	
-	/*GtkWidget *pOkButton = gtk_button_new_from_stock (GTK_STOCK_OK);
-	g_signal_connect (G_OBJECT (pOkButton), "clicked", G_CALLBACK(on_click_normal_ok), pMainWindow);
-	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
-		pOkButton,
-		FALSE,
-		FALSE,
-		0);
-	*/
 	if (pAction != NULL)
 	{
 		GtkWidget *pApplyButton = gtk_button_new_from_stock (GTK_STOCK_APPLY);
@@ -1124,6 +1116,16 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 			FALSE,
 			FALSE,
 			0);
+	}
+	else
+	{
+		GtkWidget *pOkButton = gtk_button_new_from_stock (GTK_STOCK_OK);
+	g_signal_connect (G_OBJECT (pOkButton), "clicked", G_CALLBACK(on_click_normal_ok), pMainWindow);
+	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
+		pOkButton,
+		FALSE,
+		FALSE,
+		0);
 	}
 	
 	gtk_window_resize (GTK_WINDOW (pMainWindow), iWidth, iHeight);
