@@ -319,7 +319,7 @@ static gboolean _cairo_dock_show_xwindow_for_drop (gpointer data)
 }
 void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, CairoDock *pDock)
 {
-	g_print ("%s (%x;%x)\n", __func__, pLastPointedIcon, pPointedIcon);
+	//g_print ("%s (%x;%x)\n", __func__, pLastPointedIcon, pPointedIcon);
 	//cd_debug ("on change d'icone dans %x (-> %s)", pDock, (pPointedIcon != NULL ? pPointedIcon->acName : "rien"));
 	if (s_iSidShowSubDockDemand != 0 && pDock == s_pDockShowingSubDock)
 	{

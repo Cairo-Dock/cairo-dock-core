@@ -1,4 +1,4 @@
-themedir = $(pkgdatadir)/gauges/turbo-night-fuel
+themedir = $(pkgdatadir)/gauges/Turbo-night-fuel
 
 theme_DATA = \
 	background.svg\

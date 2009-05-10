@@ -314,8 +314,8 @@ static void _cairo_dock_set_one_dock_view_to_default (gchar *cDockName, CairoDoc
 	if (iDockType == 0 || (iDockType == 1 && pDock->iRefCount == 0) || (iDockType == 2 && pDock->iRefCount != 0))
 	{
 		cairo_dock_set_default_renderer (pDock);
-		pDock->calculate_icons (pDock);
 		cairo_dock_update_dock_size (pDock);
+		pDock->calculate_icons (pDock);
 	}
 }
 void cairo_dock_set_all_views_to_default (int iDockType)

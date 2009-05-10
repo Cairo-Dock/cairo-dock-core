@@ -1,4 +1,4 @@
-themedir = $(pkgdatadir)/gauges/battery
+themedir = $(pkgdatadir)/gauges/Battery
 
 theme_DATA = \
 	background.svg\

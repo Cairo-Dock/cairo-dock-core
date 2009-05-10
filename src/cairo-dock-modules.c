@@ -440,6 +440,7 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 	{
 		pMinimalConfig->fOrder = ++ s_iMaxOrder;
 		g_key_file_set_double (pKeyFile, "Icon", "order", pMinimalConfig->fOrder);
+		g_print ("set order\n");
 		cairo_dock_write_keys_to_file (pKeyFile, cInstanceConfFilePath);
 	}
 	else

@@ -16,11 +16,11 @@ msgstr ""
 "X-Poedit-Language: French\n"
 "X-Poedit-Country: France\n"
 
-#: ../src/cairo-dock-callbacks.c:1187
+#: ../src/cairo-dock-callbacks.c:1188
 msgid "Do you want to mount this point ?"
 msgstr "Voulez-vous monter ce point ?"
 
-#: ../src/cairo-dock-callbacks.c:1776
+#: ../src/cairo-dock-callbacks.c:1777
 msgid "Quit Cairo-Dock ?"
 msgstr "Quitter Cairo-Dock ?"
 
@@ -162,7 +162,7 @@ msgstr "< Mode Maintenance >"
 msgid "Configuration of Cairo-Dock"
 msgstr "Configuration de Cairo-Dock"
 
-#: ../src/cairo-dock-gui-manager.c:906
+#: ../src/cairo-dock-gui-manager.c:896
 #, c-format
 msgid ""
 "The module '%s' is not present. You need to install it or its dependencies "
@@ -171,12 +171,12 @@ msgstr ""
 "Le module '%s' n'est pas présent. Vous devez l'installer, lui ou ses "
 "dépendances pour pouvoir en bénéficier."
 
-#: ../src/cairo-dock-gui-manager.c:912
+#: ../src/cairo-dock-gui-manager.c:902
 #, c-format
 msgid "The module '%s' is not activated."
 msgstr "Le module '%s' n'est pas actif."
 
-#: ../src/cairo-dock-gui-manager.c:913
+#: ../src/cairo-dock-gui-manager.c:903
 msgid "Do you want to activate it now ?"
 msgstr "Voulez-vous l'activer maintenant ?"
 

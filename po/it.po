@@ -16,11 +16,11 @@ msgstr ""
 "X-Generator: Lokalize 0.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/cairo-dock-callbacks.c:1187
+#: ../src/cairo-dock-callbacks.c:1188
 msgid "Do you want to mount this point ?"
 msgstr "Volete montare questo punto ?"
 
-#: ../src/cairo-dock-callbacks.c:1776
+#: ../src/cairo-dock-callbacks.c:1777
 msgid "Quit Cairo-Dock ?"
 msgstr "Uscire da Cairo-Dock ?"
 
@@ -152,7 +152,7 @@ msgstr "< Modalità manutenzione >"
 msgid "Configuration of Cairo-Dock"
 msgstr "Configurazione di Cairo-Dock"
 
-#: ../src/cairo-dock-gui-manager.c:906
+#: ../src/cairo-dock-gui-manager.c:896
 #, c-format
 msgid ""
 "The module '%s' is not present. You need to install it or its dependencies "
@@ -161,12 +161,12 @@ msgstr ""
 "Il modulo '%s' manca. Occorre installare lui o le sue dipendenze per carpire "
 "il meglio da questo modulo."
 
-#: ../src/cairo-dock-gui-manager.c:912
+#: ../src/cairo-dock-gui-manager.c:902
 #, c-format
 msgid "The module '%s' is not activated."
 msgstr "Il modulo '%s' non è attivato."
 
-#: ../src/cairo-dock-gui-manager.c:913
+#: ../src/cairo-dock-gui-manager.c:903
 msgid "Do you want to activate it now ?"
 msgstr "Vuoi attivarlo ora ?"
 
