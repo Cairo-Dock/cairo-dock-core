@@ -47,13 +47,10 @@ find . -name ".#*" -delete
 rm -rf plug-ins/conf*[0-9]
 rm -f cairo-dock*.tar.bz2 *.deb
 
-if ! test  -d cairo-dock -o ! -d themes -o ! -d plug-ins -o ! -d deb -o ! -d deb-plug-ins; then
+if ! test  -d cairo-dock -o ! -d plug-ins -o ! -d deb -o ! -d deb-plug-ins; then
 	echo "Attention : folder missing in $CAIRO_DOCK_DIR !"
 	exit 1
 fi
-
-cd $CAIRO_DOCK_DIR/themes
-./cairo-dock-finalize-theme.sh
 
 cd $CAIRO_DOCK_DIR
 sudo rm -rf deb/usr
@@ -84,11 +81,6 @@ if test "$BUILD_TAR" = "1"; then
 	echo ""
 	echo "building dock tarball ..."
 	cd $CAIRO_DOCK_DIR/cairo-dock
-	make dist-bzip2 > /dev/null
-	mv cairo-dock*.tar.bz2 ..
-	
-	echo "building themes tarball ..."
-	cd $CAIRO_DOCK_DIR/themes
 	make dist-bzip2 > /dev/null
 	mv cairo-dock*.tar.bz2 ..
 	
