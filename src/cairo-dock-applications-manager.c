@@ -69,6 +69,7 @@ static Atom s_aNetWmState;
 static Atom s_aNetWmFullScreen;
 static Atom s_aNetWmAbove;
 static Atom s_aNetWmBelow;
+static Atom s_aNetWmSticky;
 static Atom s_aNetWmHidden;
 static Atom s_aNetWmDesktop;
 static Atom s_aNetWmMaximizedHoriz;
@@ -96,6 +97,7 @@ void cairo_dock_initialize_application_manager (Display *pDisplay)
 	s_aNetWmFullScreen = XInternAtom (s_XDisplay, "_NET_WM_STATE_FULLSCREEN", False);
 	s_aNetWmAbove = XInternAtom (s_XDisplay, "_NET_WM_STATE_ABOVE", False);
 	s_aNetWmBelow = XInternAtom (s_XDisplay, "_NET_WM_STATE_BELOW", False);
+	s_aNetWmSticky = XInternAtom (s_XDisplay, "_NET_WM_STATE_STICKY", False);
 	s_aNetWmHidden = XInternAtom (s_XDisplay, "_NET_WM_STATE_HIDDEN", False);
 	s_aNetWmDesktop = XInternAtom (s_XDisplay, "_NET_WM_DESKTOP", False);
 	s_aNetWmMaximizedHoriz = XInternAtom (s_XDisplay, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
@@ -563,6 +565,36 @@ void cairo_dock_window_is_fullscreen_or_hidden_or_maximized (Window Xid, gboolea
 	
 	XFree (pXStateBuffer);
 }
+
+gboolean cairo_dock_window_is_sticky (Window Xid)
+{
+	g_return_val_if_fail (Xid > 0, FALSE);
+	Atom aReturnedType = 0;
+	int aReturnedFormat = 0;
+	unsigned long iLeftBytes, iBufferNbElements = 0;
+	gulong *pXStateBuffer = NULL;
+	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmState, 0, G_MAXULONG, False, XA_ATOM, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pXStateBuffer);
+	
+	gboolean bIsSticky = FALSE;
+	if (iBufferNbElements > 0)
+	{
+		int i;
+		//g_print ("iBufferNbElements : %d (%d;%d)\n", iBufferNbElements, s_aNetWmAbove, s_aNetWmBelow);
+		for (i = 0; i < iBufferNbElements; i ++)
+		{
+			//g_print (" - %d\n", pXStateBuffer[i]);
+			if (pXStateBuffer[i] == s_aNetWmSticky)
+			{
+				bIsSticky = TRUE;
+				break;
+			}
+		}
+	}
+
+	XFree (pXStateBuffer);
+	return bIsSticky;
+}
+
 
 Window cairo_dock_get_active_xwindow (void)
 {

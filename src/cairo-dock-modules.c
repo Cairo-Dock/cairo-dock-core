@@ -457,6 +457,7 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 	}
 	else
 	{
+		pMinimalConfig->bIsDetached = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "initially detached", NULL, FALSE, NULL, NULL);
 		pDeskletAttribute->bDeskletUseSize = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "use size", NULL, TRUE, NULL, NULL);
 		
 		//pDeskletAttribute->iDeskletWidth = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "width", NULL, 92, NULL, NULL);
@@ -470,10 +471,11 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 		
 		pDeskletAttribute->iDeskletPositionX = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "x position", NULL, 0, NULL, NULL);
 		pDeskletAttribute->iDeskletPositionY = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "y position", NULL, 0, NULL, NULL);
-		pDeskletAttribute->bIsDetached = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "initially detached", NULL, FALSE, NULL, NULL);
-		pDeskletAttribute->bKeepBelow = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "keep below", NULL, FALSE, NULL, NULL);
+		/*pDeskletAttribute->bKeepBelow = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "keep below", NULL, FALSE, NULL, NULL);
 		pDeskletAttribute->bKeepAbove = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "keep above", NULL, FALSE, NULL, NULL);
-		pDeskletAttribute->bOnWidgetLayer = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "on widget layer", NULL, FALSE, NULL, NULL);
+		pDeskletAttribute->bOnWidgetLayer = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "on widget layer", NULL, FALSE, NULL, NULL);*/
+		pDeskletAttribute->iAccessibility = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "accessibility", NULL, 0, NULL, NULL);
+		pDeskletAttribute->bOnAllDesktops = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "sticky", NULL, TRUE, NULL, NULL);
 		pDeskletAttribute->bPositionLocked = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "locked", NULL, FALSE, NULL, NULL);
 		pDeskletAttribute->iRotation = cairo_dock_get_double_key_value (pKeyFile, "Desklet", "rotation", NULL, 0, NULL, NULL);
 		pDeskletAttribute->iDepthRotationY = cairo_dock_get_double_key_value (pKeyFile, "Desklet", "depth rotation y", NULL, 0, NULL, NULL);
@@ -631,7 +633,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 					pMinimalConfig->cIconFileName = NULL;
 				}
 
-				if (pMinimalConfig->deskletAttribute.bIsDetached)  // l'applet est maintenant dans un desklet.
+				if (pMinimalConfig->bIsDetached)  // l'applet est maintenant dans un desklet.
 				{
 					CairoDesklet *pDesklet;
 					if (CAIRO_DOCK_IS_DOCK (pActualContainer))  // elle etait dans un dock.
@@ -644,7 +646,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 						else
 							cairo_dock_update_dock_size (CAIRO_DOCK (pActualContainer));
 						g_free (cOldDockName);
-						pDesklet = cairo_dock_create_desklet (pIcon, NULL, pMinimalConfig->deskletAttribute.bOnWidgetLayer);
+						pDesklet = cairo_dock_create_desklet (pIcon, NULL, pMinimalConfig->deskletAttribute.iAccessibility);
 					}
 					else
 					{
@@ -1030,9 +1032,9 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 		pModule->bCanDetach = pInstance->bCanDetach;  // pas encore clair ...
 		gchar *cDockName = (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
 		
-		if (pModule->bCanDetach && pMinimalConfig->deskletAttribute.bIsDetached)
+		if (pModule->bCanDetach && pMinimalConfig->bIsDetached)
 		{
-			pDesklet = cairo_dock_create_desklet (NULL, NULL, pMinimalConfig->deskletAttribute.bOnWidgetLayer);
+			pDesklet = cairo_dock_create_desklet (NULL, NULL, pMinimalConfig->deskletAttribute.iAccessibility);
 			cairo_dock_configure_desklet (pDesklet, &pMinimalConfig->deskletAttribute);
 			/*g_print ("transparence du desklet...\n");
 			while (gtk_events_pending ())  // pour la transparence initiale.
@@ -1267,7 +1269,8 @@ void cairo_dock_read_module_config (GKeyFile *pKeyFile, CairoDockModuleInstance 
 	if (pVisitCard->iSizeOfConfig != 0)
 		memset (((gpointer)pInstance)+sizeof(CairoDockModuleInstance), 0, pVisitCard->iSizeOfConfig);
 	
-	gboolean bFlushConfFileNeeded = pInterface->read_conf_file (pInstance, pKeyFile);
+	gboolean bFlushConfFileNeeded = ! g_key_file_has_key (pKeyFile, "Desklet", "accessibility", NULL);  // petit hack des familles ^_^
+	bFlushConfFileNeeded |= pInterface->read_conf_file (pInstance, pKeyFile);
 	if (! bFlushConfFileNeeded)
 		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, pVisitCard->cModuleVersion);
 	if (bFlushConfFileNeeded)

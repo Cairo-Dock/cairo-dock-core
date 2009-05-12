@@ -45,6 +45,7 @@ static Display *s_XDisplay = NULL;
 static Atom s_aNetWmWindowType;
 static Atom s_aNetWmWindowTypeNormal;
 static Atom s_aNetWmWindowTypeUtility;
+static Atom s_aNetWmWindowTypeDock;
 static Atom s_aNetCurrentDesktop;
 static Atom s_aNetDesktopViewport;
 static Atom s_aNetDesktopGeometry;
@@ -68,6 +69,7 @@ void cairo_dock_initialize_X_support (void)
 	s_aNetWmWindowType = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE", False);
 	s_aNetWmWindowTypeNormal = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_NORMAL", False);
 	s_aNetWmWindowTypeUtility = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_UTILITY", False);
+	s_aNetWmWindowTypeDock = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_DOCK", False);
 	s_aNetCurrentDesktop = XInternAtom (s_XDisplay, "_NET_CURRENT_DESKTOP", False);
 	s_aNetDesktopViewport = XInternAtom (s_XDisplay, "_NET_DESKTOP_VIEWPORT", False);
 	s_aNetDesktopGeometry = XInternAtom (s_XDisplay, "_NET_DESKTOP_GEOMETRY", False);
@@ -222,11 +224,12 @@ void cairo_dock_set_xwindow_type_hint (int Xid, gchar *cWindowTypeName)
 		(guchar *) &iWindowType, 1);
 }
 
-gboolean cairo_dock_window_is_utility (int Xid)
+
+static inline _cairo_dock_window_has_type (int Xid, Atom iType)
 {
 	g_return_val_if_fail (Xid > 0, FALSE);
 	
-	gboolean bIsUtility;
+	gboolean bIsType;
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
 	unsigned long iLeftBytes, iBufferNbElements;
@@ -235,12 +238,21 @@ gboolean cairo_dock_window_is_utility (int Xid)
 	if (iBufferNbElements != 0)
 	{
 		cd_debug ("%s (%d) -> %d (%d,%d)", __func__, Xid, *pTypeBuffer, s_aNetWmWindowTypeNormal, s_aNetWmWindowTypeUtility);
-		bIsUtility = (*pTypeBuffer == s_aNetWmWindowTypeUtility);
+		bIsType = (*pTypeBuffer == iType);
 		XFree (pTypeBuffer);
 	}
 	else
-		bIsUtility = FALSE;
-	return bIsUtility;
+		bIsType = FALSE;
+	return bIsType;
+}
+gboolean cairo_dock_window_is_utility (int Xid)
+{
+	return _cairo_dock_window_has_type (Xid, s_aNetWmWindowTypeUtility);
+}
+
+gboolean cairo_dock_window_is_dock (int Xid)
+{
+	return _cairo_dock_window_has_type (Xid, s_aNetWmWindowTypeDock);
 }
 
 

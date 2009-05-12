@@ -427,22 +427,31 @@ struct _CairoDockModule {
 	GList *pInstancesList;
 };
 
+typedef enum {
+	CAIRO_DESKLET_NORMAL = 0,
+	CAIRO_DESKLET_KEEP_BELOW,
+	CAIRO_DESKLET_KEEP_ABOVE,
+	CAIRO_DESKLET_ON_WIDGET_LAYER,
+	CAIRO_DESKLET_RESERVE_SPACE
+	} CairoDeskletAccessibility;
+
 struct _CairoDeskletAttribute {
 	gboolean bDeskletUseSize;
 	gint iDeskletWidth;
 	gint iDeskletHeight;
 	gint iDeskletPositionX;
 	gint iDeskletPositionY;
-	gboolean bIsDetached;
-	gboolean bKeepBelow;
-	gboolean bKeepAbove;
-	gboolean bOnWidgetLayer;
+	gboolean bKeepBelow_deprecated;  /// deprecated
+	gboolean bKeepAbove_deprecated;  /// deprecated
+	gboolean bOnWidgetLayer_deprecated;  /// deprecated
 	gboolean bPositionLocked;
 	gint iRotation;
 	gint iDepthRotationY;
 	gint iDepthRotationX;
 	gchar *cDecorationTheme;
 	CairoDeskletDecoration *pUserDecoration;
+	CairoDeskletAccessibility iAccessibility;
+	gboolean bOnAllDesktops;
 };
 
 struct _CairoDockMinimalAppletConfig {
@@ -453,6 +462,7 @@ struct _CairoDockMinimalAppletConfig {
 	gdouble fOrder;
 	gchar *cDockName;
 	CairoDeskletAttribute deskletAttribute;
+	gboolean bIsDetached;
 };
 
 typedef void (* CairoDockApplyConfigFunc) (gpointer data);
@@ -757,6 +767,7 @@ struct _CairoDesklet {
 	gint iAnimationStep;
 	gboolean bFixedAttitude;
 	GtkWidget *pInteractiveWidget;
+	gboolean bSpaceReserved;
 };
 
 typedef enum {

@@ -488,7 +488,7 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 
 static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 {
-	if (pDesklet->pIcon != NULL && pDesklet->pIcon->pModuleInstance != NULL)
+	if ((pDesklet->iDesiredWidth == 0 && pDesklet->iDesiredHeight == 0) && pDesklet->pIcon != NULL && pDesklet->pIcon->pModuleInstance != NULL)
 	{
 		gchar *cSize = g_strdup_printf ("%d;%d", pDesklet->iWidth, pDesklet->iHeight);
 		cairo_dock_update_conf_file (pDesklet->pIcon->pModuleInstance->cConfFilePath,
@@ -514,6 +514,12 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 			cairo_dock_reload_module_instance (pDesklet->pIcon->pModuleInstance, FALSE);
 			gtk_widget_queue_draw (pDesklet->pWidget);  // sinon on ne redessine que l'interieur.
 		}
+		
+		Window Xid = GDK_WINDOW_XID (pDesklet->pWidget->window);
+		if (cairo_dock_window_is_dock (Xid) || pDesklet->bSpaceReserved)
+		{
+			cairo_dock_reserve_space_for_desklet (pDesklet, TRUE);
+		}
 	}
 	
 	//g_print ("iWidth <- %d;iHeight <- %d ; (%dx%d) (%x)\n", pDesklet->iWidth, pDesklet->iHeight, pDesklet->iKnownWidth, pDesklet->iKnownHeight, pDesklet->pIcon);
@@ -529,6 +535,12 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 			G_TYPE_INT, "Desklet", "x position", iRelativePositionX,
 			G_TYPE_INT, "Desklet", "y position", iRelativePositionY,
 			G_TYPE_INVALID);
+	}
+	
+	Window Xid = GDK_WINDOW_XID (pDesklet->pWidget->window);
+	if (cairo_dock_window_is_dock (Xid) || pDesklet->bSpaceReserved)
+	{
+		cairo_dock_reserve_space_for_desklet (pDesklet, TRUE);
 	}
 	pDesklet->iSidWritePosition = 0;
 	return FALSE;
@@ -949,7 +961,7 @@ gboolean on_delete_desklet (GtkWidget *pWidget, GdkEvent *event, CairoDesklet *p
 }
 
 
-CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWidget, gboolean bOnWidgetLayer)
+CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWidget, CairoDeskletAccessibility iAccessibility)
 {
 	cd_message ("%s ()", __func__);
 	CairoDesklet *pDesklet = g_new0(CairoDesklet, 1);
@@ -959,8 +971,11 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
 	pDesklet->fZoom = 1;
 	
 	GtkWidget* pWindow = cairo_dock_create_container_window ();
-	if (bOnWidgetLayer)
+	if (iAccessibility == CAIRO_DESKLET_ON_WIDGET_LAYER)
 		gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_UTILITY);
+	else if (iAccessibility == CAIRO_DESKLET_RESERVE_SPACE)
+		gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_DOCK);
+		
 	pDesklet->pWidget = pWindow;
 	pDesklet->pIcon = pIcon;
 	
@@ -1031,7 +1046,7 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
 
 void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute *pAttribute)
 {
-	cd_debug ("%s (%dx%d ; (%d,%d) ; %d,%d,%d)", __func__, pAttribute->iDeskletWidth, pAttribute->iDeskletHeight, pAttribute->iDeskletPositionX, pAttribute->iDeskletPositionY, pAttribute->bKeepBelow, pAttribute->bKeepAbove, pAttribute->bOnWidgetLayer);
+	cd_debug ("%s (%dx%d ; (%d,%d) ; %d)", __func__, pAttribute->iDeskletWidth, pAttribute->iDeskletHeight, pAttribute->iDeskletPositionX, pAttribute->iDeskletPositionY, pAttribute->iAccessibility);
 	if (pAttribute->bDeskletUseSize && (pAttribute->iDeskletWidth != pDesklet->iWidth || pAttribute->iDeskletHeight != pDesklet->iHeight))
 	{
 		pDesklet->iDesiredWidth = pAttribute->iDeskletWidth;
@@ -1053,14 +1068,24 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 		iAbsolutePositionY);
 	cd_debug (" -> (%d;%d)", iAbsolutePositionX, iAbsolutePositionY);
 
-	gtk_window_set_keep_below (GTK_WINDOW (pDesklet->pWidget), pAttribute->bKeepBelow);
-	gtk_window_set_keep_above (GTK_WINDOW (pDesklet->pWidget), pAttribute->bKeepAbove);
+	gtk_window_set_keep_below (GTK_WINDOW (pDesklet->pWidget), pAttribute->iAccessibility == CAIRO_DESKLET_KEEP_BELOW);
+	gtk_window_set_keep_above (GTK_WINDOW (pDesklet->pWidget), pAttribute->iAccessibility == CAIRO_DESKLET_KEEP_ABOVE);
 
 	Window Xid = GDK_WINDOW_XID (pDesklet->pWidget->window);
-	if (pAttribute->bOnWidgetLayer)
+	pDesklet->bSpaceReserved = FALSE;
+	if (pAttribute->iAccessibility == CAIRO_DESKLET_ON_WIDGET_LAYER)
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");  // le hide-show le fait deconner completement, il perd son skip_task_bar ! au moins sous KDE3.
+	else if (pAttribute->iAccessibility == CAIRO_DESKLET_RESERVE_SPACE)
+		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
 	else
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
+	cairo_dock_reserve_space_for_desklet (pDesklet, pAttribute->iAccessibility == CAIRO_DESKLET_RESERVE_SPACE);
+	pDesklet->bSpaceReserved = (pAttribute->iAccessibility == CAIRO_DESKLET_RESERVE_SPACE);
+	
+	if (pAttribute->bOnAllDesktops)
+		gtk_window_stick (GTK_WINDOW (pDesklet->pWidget));
+	else
+		gtk_window_unstick (GTK_WINDOW (pDesklet->pWidget));
 	
 	pDesklet->bPositionLocked = pAttribute->bPositionLocked;
 	pDesklet->fRotation = pAttribute->iRotation / 180. * G_PI ;
@@ -1247,12 +1272,21 @@ static gboolean _cairo_dock_set_one_desklet_visibility_to_default (CairoDesklet 
 	GKeyFile *pKeyFile = cairo_dock_pre_read_module_instance_config (pInstance, pMinimalConfig);
 	g_key_file_free (pKeyFile);
 	
-	gtk_window_set_keep_below (GTK_WINDOW (pDesklet->pWidget), pMinimalConfig->deskletAttribute.bKeepBelow);
-	gtk_window_set_keep_above (GTK_WINDOW (pDesklet->pWidget), pMinimalConfig->deskletAttribute.bKeepAbove);
+	gtk_window_set_keep_below (GTK_WINDOW (pDesklet->pWidget), pMinimalConfig->deskletAttribute.iAccessibility == CAIRO_DESKLET_KEEP_BELOW);
+	gtk_window_set_keep_above (GTK_WINDOW (pDesklet->pWidget), pMinimalConfig->deskletAttribute.iAccessibility == CAIRO_DESKLET_KEEP_ABOVE);
 	
 	Window Xid = GDK_WINDOW_XID (pDesklet->pWidget->window);
-	if (pMinimalConfig->deskletAttribute.bOnWidgetLayer)
+	if (pMinimalConfig->deskletAttribute.iAccessibility == CAIRO_DESKLET_ON_WIDGET_LAYER)
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");
+	else
+		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
+	
+	if (pMinimalConfig->deskletAttribute.iAccessibility == CAIRO_DESKLET_RESERVE_SPACE)
+	{
+		pDesklet->bSpaceReserved = TRUE;
+		//cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");
+		cairo_dock_reserve_space_for_desklet (pDesklet, TRUE);
+	}
 	else
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
 	return FALSE;
@@ -1410,4 +1444,50 @@ void cairo_dock_free_desklet_decoration (CairoDeskletDecoration *pDecoration)
 	g_free (pDecoration->cBackGroundImagePath);
 	g_free (pDecoration->cForeGroundImagePath);
 	g_free (pDecoration);
+}
+
+
+void cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gboolean bReserve)
+{
+	g_print ("%s (%d)\n", __func__, bReserve);
+	Window Xid = GDK_WINDOW_XID (pDesklet->pWidget->window);
+	int left=0, right=0, top=0, bottom=0;
+	int left_start_y=0, left_end_y=0, right_start_y=0, right_end_y=0, top_start_x=0, top_end_x=0, bottom_start_x=0, bottom_end_x=0;
+	int iHeight = pDesklet->iHeight, iWidth = pDesklet->iWidth;
+	int iX = pDesklet->iWindowPositionX, iY = pDesklet->iWindowPositionY;
+	if (bReserve)
+	{
+		int iTopOffset, iBottomOffset, iRightOffset, iLeftOffset;
+		iTopOffset = iY;
+		iBottomOffset = g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 1 - (iY + iHeight);
+		iLeftOffset = iX;
+		iRightOffset = g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - 1 - (iX + iWidth);
+		
+		if (iBottomOffset < MIN (iLeftOffset, iRightOffset))  // en bas.
+		{
+			bottom = iHeight + iBottomOffset;
+			bottom_start_x = iX;
+			bottom_end_x = iX + iWidth;
+		}
+		else if (iTopOffset < MIN (iLeftOffset, iRightOffset))  // en haut.
+		{
+			top = iHeight + iTopOffset;
+			top_start_x = iX;
+			top_end_x = iX + iWidth;
+		}
+		else if (iLeftOffset < iRightOffset)  // a gauche.
+		{
+			left = iWidth + iLeftOffset;
+			left_start_y = iY;
+			left_end_y = iY + iHeight;
+		}
+		else  // a droite.
+		{
+			right = iWidth + iRightOffset;
+			right_start_y = iY;
+			right_end_y = iY + iHeight;
+		}
+	}
+
+	cairo_dock_set_strut_partial (Xid, left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
 }

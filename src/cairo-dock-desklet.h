@@ -53,10 +53,10 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 * Créer un desklet tout simple, sans le placer ni lui définir un moteur de rendu.
 *@param pIcon l'icône principale du desklet (jamais testé avec une icône nulle).
 *@param pInteractiveWidget le widget d'interaction du desklet, ou NULL si aucun.
-*@param bOnWidgetLayer TRUE ssi il faut placer dés maintenant le desklet sur la couche des widgets.
+*@param iAccessibility pour savoir s'il faut placer dés maintenant le desklet sur la couche des widgets ou reserver son espace.
 *@return le desklet nouvellement crée.
 */
-CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWidget, gboolean bOnWidgetLayer);
+CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWidget, CairoDeskletAccessibility iAccessibility);
 
 /**
 * Configure entièrement un desklet en fonction de ses paramètres de sauvegarde extraits d'un fichier de conf. Le place, le dimensionne, le garde devant/derrière, vérouille sa position, et le place sur la couche des widgets, et pour finir definit ses decorations.
@@ -141,7 +141,12 @@ void cairo_dock_reload_desklets_decorations (gboolean bDefaultThemeOnly, cairo_t
 
 void cairo_dock_free_desklet_decoration (CairoDeskletDecoration *pDecoration);
 
+
 #define cairo_dock_set_static_desklet(pDesklet) (pDesklet)->bFixedAttitude = TRUE
+
+
+void cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gboolean bReserve);
+
 
 G_END_DECLS
 
