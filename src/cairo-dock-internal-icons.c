@@ -326,7 +326,7 @@ DEFINE_PRE_INIT (Icons)
 {
 	static const gchar *cDependencies[3] = {"Animated icons", N_("It provides many animations to your icons."), NULL};
 	pModule->cModuleName = "Icons";
-	pModule->cTitle = "Icons";
+	pModule->cTitle = N_("Icons");
 	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-icons.svg";
 	pModule->cDescription = N_("All about icons :\n size, reflection, icon theme, ...");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;

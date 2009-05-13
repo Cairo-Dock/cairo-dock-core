@@ -124,7 +124,7 @@ static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicator
 DEFINE_PRE_INIT (Indicators)
 {
 	pModule->cModuleName = "Indicators";
-	pModule->cTitle = "Indicators";
+	pModule->cTitle = N_("Indicators");
 	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-indicators.png";
 	pModule->cDescription = N_("Indicators are extra indications on your icons.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;

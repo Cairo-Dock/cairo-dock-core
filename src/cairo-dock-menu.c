@@ -1415,7 +1415,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		cairo_dock_window_is_above_or_below (Xid, &bIsAbove, &bIsBelow);  // gdk_window_get_state bugue.
 		//cd_debug (" -> %d;%d", bIsAbove, bIsBelow);
 		gboolean bIsUtility = cairo_dock_window_is_utility (Xid);  // gtk_window_get_type_hint me renvoie toujours 0 !
-		gboolean bIsDock = cairo_dock_window_is_dock (Xid) || CAIRO_DESKLET (pContainer)->bSpaceReserved;
+		gboolean bIsDock = (/*cairo_dock_window_is_dock (Xid) || */CAIRO_DESKLET (pContainer)->bSpaceReserved);
 		gboolean bIsNormal = (!bIsAbove && !bIsBelow && !bIsUtility && !bIsDock);
 		gboolean bIsSticky = /*(cairo_dock_get_window_desktop (Xid) == -1) || */cairo_dock_window_is_sticky (Xid);
 		

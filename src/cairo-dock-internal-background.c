@@ -90,7 +90,7 @@ static void reload (CairoConfigBackground *pPrevBackground, CairoConfigBackgroun
 DEFINE_PRE_INIT (Background)
 {
 	pModule->cModuleName = "Background";
-	pModule->cTitle = "Background";
+	pModule->cTitle = N_("Background");
 	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-background.svg";
 	pModule->cDescription = N_("Set a background to your dock.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;

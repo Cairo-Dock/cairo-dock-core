@@ -73,7 +73,7 @@ DEFINE_PRE_INIT (Views)
 {
 	static const gchar *cDependencies[3] = {"dock rendering", N_("It provides different views to Cairo-Dock. Activate it first if you want to select a different view for your docks."), NULL};
 	pModule->cModuleName = "Views";
-	pModule->cTitle = "Views";
+	pModule->cTitle = N_("Views");
 	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-views.svg";
 	pModule->cDescription = N_("Select a view for each of your docks.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;

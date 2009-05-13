@@ -11,6 +11,7 @@ export CAIRO_DOCK_THEMES="0"
 export CAIRO_DOCK_DOC="0"
 export CAIRO_DOCK_EXCLUDE="template musicplayer stacks gauge-test"
 export CAIRO_DOCK_GLITZ_OPTION=""
+export CAIRO_DOCK_PLUG_INS_OPTION=""
 export SUDO=sudo
 export TIME=time
 
@@ -50,6 +51,10 @@ do
 	g)
 		echo " => enable glitz"
 		export CAIRO_DOCK_GLITZ_OPTION="--enable-glitz"
+		;;
+	m)
+		echo " => minimum requirements"
+		export CAIRO_DOCK_PLUG_INS_OPTION="--without-mail --without-weblet"
 		;;
 	h)
 		echo "-a : run autoreconf"
@@ -204,7 +209,7 @@ fi
 export compil_ok="1"
 if test "$CAIRO_DOCK_AUTORECONF" = "1"; then
 	echo  "* configuring stable plug-ins ..."
-	/usr/bin/time -f "  time elapsed : %Us" autoreconf -isf > /dev/null && ./configure --prefix=$CAIRO_DOCK_PREFIX > /dev/null
+	/usr/bin/time -f "  time elapsed : %Us" autoreconf -isf > /dev/null && ./configure $CAIRO_DOCK_PLUG_INS_OPTION --prefix=$CAIRO_DOCK_PREFIX > /dev/null
 	if test ! "$?" = "0"; then
 		echo "  Attention : an error has occured !"
 		echo "Error while configuring stable plug-ins" >> $CAIRO_DOCK_DIR/compile.log

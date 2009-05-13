@@ -516,7 +516,7 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 		}
 		
 		Window Xid = GDK_WINDOW_XID (pDesklet->pWidget->window);
-		if (cairo_dock_window_is_dock (Xid) || pDesklet->bSpaceReserved)
+		if (/*cairo_dock_window_is_dock (Xid) || */pDesklet->bSpaceReserved)
 		{
 			cairo_dock_reserve_space_for_desklet (pDesklet, TRUE);
 		}
@@ -538,7 +538,7 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 	}
 	
 	Window Xid = GDK_WINDOW_XID (pDesklet->pWidget->window);
-	if (cairo_dock_window_is_dock (Xid) || pDesklet->bSpaceReserved)
+	if (/*cairo_dock_window_is_dock (Xid) || */pDesklet->bSpaceReserved)
 	{
 		cairo_dock_reserve_space_for_desklet (pDesklet, TRUE);
 	}
@@ -1278,10 +1278,7 @@ static gboolean _cairo_dock_set_one_desklet_visibility_to_default (CairoDesklet 
 	Window Xid = GDK_WINDOW_XID (pDesklet->pWidget->window);
 	if (pMinimalConfig->deskletAttribute.iAccessibility == CAIRO_DESKLET_ON_WIDGET_LAYER)
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");
-	else
-		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
-	
-	if (pMinimalConfig->deskletAttribute.iAccessibility == CAIRO_DESKLET_RESERVE_SPACE)
+	else if (pMinimalConfig->deskletAttribute.iAccessibility == CAIRO_DESKLET_RESERVE_SPACE)
 	{
 		pDesklet->bSpaceReserved = TRUE;
 		//cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");
@@ -1289,6 +1286,7 @@ static gboolean _cairo_dock_set_one_desklet_visibility_to_default (CairoDesklet 
 	}
 	else
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
+	
 	return FALSE;
 }
 void cairo_dock_set_desklets_visibility_to_default (void)

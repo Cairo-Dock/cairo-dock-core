@@ -3,6 +3,7 @@
 export CAIRO_DOCK_DIR=`pwd`/..
 export FAST_COMPIL="0"
 export BUILD_TAR="0"
+export MINIMUM_REQUIREMENTS=""
 
 echo "packaging options : "
 while getopts "d:fTh" flag
@@ -27,6 +28,10 @@ do
 		echo "-T : build the sources tarball"
 		exit 0
 		;;
+	m)
+		echo " => minimum requirements"
+		export MINIMUM_REQUIREMENTS="-m"
+		;;
 	*)
 		echo "unexpected argument"
 		exit 1
@@ -47,13 +52,10 @@ find . -name ".#*" -delete
 rm -rf plug-ins/conf*[0-9]
 rm -f cairo-dock*.tar.bz2 *.deb
 
-if ! test  -d cairo-dock -o ! -d themes -o ! -d plug-ins -o ! -d deb -o ! -d deb-plug-ins; then
+if ! test  -d cairo-dock -o ! -d plug-ins -o ! -d deb -o ! -d deb-plug-ins; then
 	echo "Attention : folder missing in $CAIRO_DOCK_DIR !"
 	exit 1
 fi
-
-cd $CAIRO_DOCK_DIR/themes
-./cairo-dock-finalize-theme.sh
 
 cd $CAIRO_DOCK_DIR
 sudo rm -rf deb/usr
@@ -73,7 +75,7 @@ fi
 #\_____________ On compile de zero.
 if test "$FAST_COMPIL" = "0"; then
 	cd $CAIRO_DOCK_DIR/cairo-dock
-	./compile-all.sh -a -c -C -i -t -d $CAIRO_DOCK_DIR
+	./compile-all.sh -a -c -C -i -d $CAIRO_DOCK_DIR $MINIMUM_REQUIREMENTS
 fi
 
 #\_____________ On cree les archives.
@@ -84,11 +86,6 @@ if test "$BUILD_TAR" = "1"; then
 	echo ""
 	echo "building dock tarball ..."
 	cd $CAIRO_DOCK_DIR/cairo-dock
-	make dist-bzip2 > /dev/null
-	mv cairo-dock*.tar.bz2 ..
-	
-	echo "building themes tarball ..."
-	cd $CAIRO_DOCK_DIR/themes
 	make dist-bzip2 > /dev/null
 	mv cairo-dock*.tar.bz2 ..
 	
@@ -122,10 +119,12 @@ done;
 sudo cp /usr/bin/cairo-dock usr/bin
 sudo cp /usr/bin/launch-cairo-dock-after-beryl.sh usr/bin
 sudo cp /usr/bin/cairo-dock-update.sh usr/bin
+sudo cp /usr/bin/cairo-dock-package-theme.sh usr/bin
 sudo cp -rpP /usr/share/cairo-dock/ usr/share/
 sudo rm -rf usr/share/cairo-dock/plug-ins
 sudo cp ../cairo-dock/data/cairo-dock.svg usr/share/pixmaps
 sudo cp ../cairo-dock/data/cairo-dock usr/share/menu
+sudo chmod 644 usr/share/menu/cairo-dock
 sudo cp ../cairo-dock/data/cairo-dock*.desktop usr/share/applications
 
 cd $CAIRO_DOCK_DIR

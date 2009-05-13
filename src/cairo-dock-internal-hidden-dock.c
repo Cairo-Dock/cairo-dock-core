@@ -71,7 +71,7 @@ static void reload (CairoConfigHiddenDock *pPrevHiddenDock, CairoConfigHiddenDoc
 DEFINE_PRE_INIT (HiddenDock)
 {
 	pModule->cModuleName = "Hidden dock";
-	pModule->cTitle = "Hidden Dock";
+	pModule->cTitle = N_("Hidden Dock");
 	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-hidden-dock.png";
 	pModule->cDescription = N_("Define the appearance of the dock when it's hidden.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;

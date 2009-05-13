@@ -13,6 +13,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-callbacks.h"
+#include "cairo-dock-log.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-accessibility.h"
 
@@ -50,8 +51,31 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 	
 	if (pAccessibility->bPopUp)
 	{
-		pAccessibility->bReserveSpace = FALSE;
-		pAccessibility->bAutoHide = FALSE;
+		GString *sWarning = NULL;
+		if (pAccessibility->bReserveSpace)
+		{
+			sWarning = g_string_new ("");
+			g_string_append (sWarning, "The option 'reserve space for dock' is in conflict with the 'keep the dock below' option, it will be ignored");
+			cd_warning ("The option 'reserve space for dock' is in conflict with the 'keep the dock below' option, it will be ignored");
+			pAccessibility->bReserveSpace = FALSE;
+		}
+		if (pAccessibility->bAutoHide)
+		{
+			if (sWarning == NULL)
+				sWarning = g_string_new ("");
+			else
+				g_string_append_c (sWarning, '\n');
+			g_string_append (sWarning, "The option 'auto-hide' is in conflict with the 'keep the dock below' option, it will be ignored");
+			cd_warning ("The option 'auto-hide' is in conflict with the 'keep the dock below' option, it will be ignored");
+			pAccessibility->bAutoHide = FALSE;
+		}
+		
+		if (sWarning != NULL)
+		{
+			if (g_pMainDock)
+				cairo_dock_show_general_message (sWarning->str, 5000);
+			g_string_free (sWarning, TRUE);
+		}
 	}
 	
 	return bFlushConfFileNeeded;
@@ -142,7 +166,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 DEFINE_PRE_INIT (Accessibility)
 {
 	pModule->cModuleName = "Accessibility";
-	pModule->cTitle = "Accessibility";
+	pModule->cTitle = N_("Accessibility");
 	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-accessibility.svg";
 	pModule->cDescription = N_("How do you access to your docks ?");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;

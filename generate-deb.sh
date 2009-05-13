@@ -3,6 +3,7 @@
 export CAIRO_DOCK_DIR=`pwd`/..
 export FAST_COMPIL="0"
 export BUILD_TAR="0"
+export MINIMUM_REQUIREMENTS=""
 
 echo "packaging options : "
 while getopts "d:fTh" flag
@@ -26,6 +27,10 @@ do
 		echo "-f : fast compil (don't clean the sources before (use it with caution))"
 		echo "-T : build the sources tarball"
 		exit 0
+		;;
+	m)
+		echo " => minimum requirements"
+		export MINIMUM_REQUIREMENTS="-m"
 		;;
 	*)
 		echo "unexpected argument"
@@ -70,7 +75,7 @@ fi
 #\_____________ On compile de zero.
 if test "$FAST_COMPIL" = "0"; then
 	cd $CAIRO_DOCK_DIR/cairo-dock
-	./compile-all.sh -a -c -C -i -d $CAIRO_DOCK_DIR
+	./compile-all.sh -a -c -C -i -d $CAIRO_DOCK_DIR $MINIMUM_REQUIREMENTS
 fi
 
 #\_____________ On cree les archives.
@@ -119,6 +124,7 @@ sudo cp -rpP /usr/share/cairo-dock/ usr/share/
 sudo rm -rf usr/share/cairo-dock/plug-ins
 sudo cp ../cairo-dock/data/cairo-dock.svg usr/share/pixmaps
 sudo cp ../cairo-dock/data/cairo-dock usr/share/menu
+sudo chmod 644 usr/share/menu/cairo-dock
 sudo cp ../cairo-dock/data/cairo-dock*.desktop usr/share/applications
 
 cd $CAIRO_DOCK_DIR

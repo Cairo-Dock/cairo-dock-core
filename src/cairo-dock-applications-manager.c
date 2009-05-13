@@ -1004,7 +1004,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 										cairo_dock_deactivate_temporary_auto_hide ();
 								}*/
 								#ifdef HAVE_XEXTEND
-								if (myTaskBar.bShowThumbnail && pParentDock != NULL)  // on recupere la miniature ou au contraire on remet l'icone.
+								if (myTaskBar.bShowThumbnail && (pParentDock != NULL || myTaskBar.bHideVisibleApplis))  // on recupere la miniature ou au contraire on remet l'icone.
 								{
 									if (! icon->bIsHidden)  // fenetre mappee => BackingPixmap disponible.
 									{
@@ -1017,8 +1017,9 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 										cd_message ("new backing pixmap (bis) : %d", icon->iBackingPixmap);
 									}
 									// on redessine avec ou sans la miniature.
-									cairo_dock_reload_one_icon_buffer_in_dock (icon, pParentDock);
-									cairo_dock_redraw_my_icon (icon, CAIRO_CONTAINER (pParentDock));
+									cairo_dock_reload_one_icon_buffer_in_dock (icon, pParentDock ? pParentDock : g_pMainDock);
+									if (pParentDock)
+										cairo_dock_redraw_my_icon (icon, CAIRO_CONTAINER (pParentDock));
 								}
 								#endif
 								if (myTaskBar.bHideVisibleApplis)  // on insere/detache l'icone selon la visibilite de la fenetre.

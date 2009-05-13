@@ -93,7 +93,7 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 DEFINE_PRE_INIT (Position)
 {
 	pModule->cModuleName = "Position";
-	pModule->cTitle = "Position";
+	pModule->cTitle = N_("Position");
 	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-position.png";
 	pModule->cDescription = N_("Set the position of the main dock.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;

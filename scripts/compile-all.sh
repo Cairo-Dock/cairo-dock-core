@@ -11,6 +11,7 @@ export CAIRO_DOCK_THEMES="0"
 export CAIRO_DOCK_DOC="0"
 export CAIRO_DOCK_EXCLUDE="template musicplayer stacks gauge-test"
 export CAIRO_DOCK_GLITZ_OPTION=""
+export CAIRO_DOCK_PLUG_INS_OPTION=""
 export SUDO=sudo
 export TIME=time
 
@@ -35,10 +36,6 @@ do
 		echo " => installation"
 		export CAIRO_DOCK_INSTALL="1"
 		;;
-	t)
-		echo " => themes too"
-		export CAIRO_DOCK_THEMES="1"
-		;;
 	u)
 		echo " => include unstable applets"
 		export CAIRO_DOCK_UNSTABLE="1"
@@ -55,12 +52,15 @@ do
 		echo " => enable glitz"
 		export CAIRO_DOCK_GLITZ_OPTION="--enable-glitz"
 		;;
+	m)
+		echo " => minimum requirements"
+		export CAIRO_DOCK_PLUG_INS_OPTION="--without-mail --without-weblet"
+		;;
 	h)
 		echo "-a : run autoreconf"
 		echo "-c : clean all"
 		echo "-C : compil"
 		echo "-i : install (will ask root password)"
-		echo "-t : compil themes too"
 		echo "-u : include still unstable applets"
 		echo "-d rep : compile in the folder 'rep'"
 		exit 0
@@ -158,53 +158,9 @@ if test "$CAIRO_DOCK_INSTALL" = "1"; then
 	fi
 	$SUDO chmod +x $CAIRO_DOCK_PREFIX/bin/cairo-dock-update.sh
 	$SUDO chmod +x $CAIRO_DOCK_PREFIX/bin/launch-cairo-dock-after-beryl.sh
+	$SUDO chmod +x $CAIRO_DOCK_PREFIX/bin/cairo-dock-package-theme.sh
 fi
 
-
-cd ..
-if test "$CAIRO_DOCK_THEMES" = "1"; then
-	cd $CAIRO_DOCK_DIR/themes
-	echo "*****************************"
-	echo "* Compilation of themes ... *"
-	echo "*****************************"
-	if test "$CAIRO_DOCK_CLEAN" = "1"; then
-		rm -f config.* configure configure.lineno intltool-extract intltool-merge intltool-update libtool ltmain.sh Makefile.in Makefile aclocal.m4 install-sh install depcomp missing compile stamp-h1
-		rm -rf autom4te.cache
-		find . -name Makefile -delete
-		find . -name Makefile.in -delete
-	fi
-	if test "$CAIRO_DOCK_AUTORECONF" = "1"; then
-		echo  "* configuring ..."
-		/usr/bin/time -f "  time elapsed : %Us" autoreconf -isf > /dev/null && ./configure > /dev/null
-		if test ! "$?" = "0"; then
-			echo "  Attention : an error has occured !"
-			echo "Error while configuring themes" >> $CAIRO_DOCK_DIR/compile.log
-		else
-			echo "  -> passed"
-		fi
-	fi
-	if test "$CAIRO_DOCK_COMPIL" = "1"; then
-		echo  "* compiling ..."
-		/usr/bin/time -f "  time elapsed : %Us" make > /dev/null
-		if test ! "$?" = "0"; then
-			echo "  Attention : an error has occured !"
-			echo "Error while compiling themes" >> $CAIRO_DOCK_DIR/compile.log
-		else
-			echo "  -> passed"
-		fi
-	fi
-	if test "$CAIRO_DOCK_INSTALL" = "1"; then
-		echo "*  installation of themes ..."
-		/usr/bin/time -f "  time elapsed : %Us" $SUDO make install > /dev/null
-		if test ! "$?" = "0"; then
-			echo "  Attention : an error has occured !"
-			echo "Error while installing themes" >> $CAIRO_DOCK_DIR/compile.log
-		else
-			echo "  -> passed"
-		fi
-	fi
-	cd ..
-fi
 
 ### On liste les plug-ins a compiler.
 cd $CAIRO_DOCK_DIR/plug-ins
@@ -253,7 +209,7 @@ fi
 export compil_ok="1"
 if test "$CAIRO_DOCK_AUTORECONF" = "1"; then
 	echo  "* configuring stable plug-ins ..."
-	/usr/bin/time -f "  time elapsed : %Us" autoreconf -isf > /dev/null && ./configure --prefix=$CAIRO_DOCK_PREFIX > /dev/null
+	/usr/bin/time -f "  time elapsed : %Us" autoreconf -isf > /dev/null && ./configure $CAIRO_DOCK_PLUG_INS_OPTION --prefix=$CAIRO_DOCK_PREFIX > /dev/null
 	if test ! "$?" = "0"; then
 		echo "  Attention : an error has occured !"
 		echo "Error while configuring stable plug-ins" >> $CAIRO_DOCK_DIR/compile.log

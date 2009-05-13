@@ -86,7 +86,7 @@ static void reload (CairoConfigDesklets *pPrevDesklets, CairoConfigDesklets *pDe
 DEFINE_PRE_INIT (Desklets)
 {
 	pModule->cModuleName = "Desklets";
-	pModule->cTitle = "Desklets";
+	pModule->cTitle = N_("Desklets");
 	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-desklets.png";
 	pModule->cDescription = N_("The applets can be set on your desktop as widgets.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;

@@ -93,7 +93,7 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 	{
 		if (pTaskBar->bAutoHideOnFullScreen)
 		{
-			cd_warning ("The option 'auto-hide on fullsecreen window' is in conflict with the accessibility options, it will be deactivated");
+			cd_warning ("The option 'auto-hide on fullscreen window' is in conflict with the accessibility options, it will be deactivated");
 			pTaskBar->bAutoHideOnFullScreen = FALSE;
 		}
 		if (pTaskBar->bAutoHideOnMaximized)
@@ -176,7 +176,7 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 DEFINE_PRE_INIT (TaskBar)
 {
 	pModule->cModuleName = "TaskBar";
-	pModule->cTitle = "TaskBar";
+	pModule->cTitle = N_("TaskBar");
 	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-taskbar.png";
 	pModule->cDescription = N_("Display and interact with the currently open windows.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
