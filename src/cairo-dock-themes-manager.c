@@ -164,9 +164,9 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	if (r != 0)
 	{
 		g_set_error (erreur, 1, 1, "an error occured while executing '%s'", cCommand);
+		g_remove (cTmpFilePath);
 		g_free (cTmpFilePath);
 		cTmpFilePath = NULL;
-		g_remove (cTmpFilePath);
 	}
 	g_free (cCommand);
 	
@@ -181,6 +181,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 		}
 		
 		gchar *cPath = cairo_dock_uncompress_file (cTmpFilePath, cExtractTo, cDistantFileName);
+		g_remove (cTmpFilePath);
 		g_free (cTmpFilePath);
 		cTmpFilePath = cPath;
 	}
@@ -568,19 +569,19 @@ static void on_theme_apply (gpointer *user_data)
 		
 		//\___________________ On remplace tous les autres fichiers par les nouveaux.
 		g_string_printf (sCommand, "find '%s' -mindepth 1 -maxdepth 1  ! -name '*.conf' -type f -exec rm -f '{}' \\;", g_cCurrentThemePath);  // efface tous les fichiers du theme mais sans toucher aux lanceurs et aux plug-ins.
-		cd_message ("%s", sCommand->str);
+		cd_message (sCommand->str);
 		r = system (sCommand->str);
 
 		if (g_pMainDock == NULL || g_key_file_get_boolean (pKeyFile, "Themes", "use theme behaviour", NULL))
 		{
 			g_string_printf (sCommand, "find '%s'/* -prune ! -name '*.conf' ! -name %s -exec /bin/cp -r '{}' '%s' \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // copie tous les fichiers du nouveau theme sauf les lanceurs et le .conf, dans le repertoire du theme courant. Ecrase les fichiers de memes noms.
-			cd_message ("%s", sCommand->str);
+			cd_message (sCommand->str);
 			r = system (sCommand->str);
 		}
 		else
 		{
-			g_string_printf (sCommand, "find '%s' ! -name '*.conf' ! -path '%s/%s*'  -mindepth 1 ! -type d -exec cp -p {} '%s' \\;", cNewThemePath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // copie tous les fichiers du nouveau theme sauf les lanceurs/icones et les .conf du dock et des plug-ins.
-			cd_message ("%s", sCommand->str);
+			g_string_printf (sCommand, "find '%s' -mindepth 1 ! -name '*.conf' ! -path '%s/%s*' ! -type d -exec cp -p {} '%s' \\;", cNewThemePath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // copie tous les fichiers du nouveau theme sauf les lanceurs/icones et les .conf du dock et des plug-ins.
+			cd_message (sCommand->str);
 			r = system (sCommand->str);
 			
 			gchar *cNewPlugInsDir = g_strdup_printf ("%s/%s", cNewThemePath, "plug-ins");

@@ -373,8 +373,8 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 		else if (pIcon->fPersonnalScale == -0.05)
 		{
 			pIcon->fPersonnalScale = 0;
-			cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon);
-			pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
+			//cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon);
+			//pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
 		}
 		else if (pIcon->fPersonnalScale != 0)
 		{

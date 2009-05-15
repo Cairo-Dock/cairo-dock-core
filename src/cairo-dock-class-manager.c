@@ -137,11 +137,14 @@ static void _cairo_dock_set_same_indicator_on_sub_dock (Icon *pInhibhatorIcon)
 				}
 			}
 		}
-		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pInhibhatorDock, NULL);
-		if (pPointingIcon != NULL)
+		CairoDock *pParentDock = NULL;
+		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pInhibhatorDock, &pParentDock);
+		if (pPointingIcon != NULL && pPointingIcon->bHasIndicator != bSubDockHasIndicator)
 		{
 			cd_message ("  pour le sous-dock %s : indicateur <- %d", pPointingIcon->acName, bSubDockHasIndicator);
 			pPointingIcon->bHasIndicator = bSubDockHasIndicator;
+			if (pParentDock != NULL)
+				cairo_dock_redraw_icon (pPointingIcon, pParentDock);
 		}
 	}
 }

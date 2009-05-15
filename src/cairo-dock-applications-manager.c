@@ -1312,6 +1312,10 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 							cairo_dock_update_dock_size (pParentDock);
 					}
 				}
+				else if (myTaskBar.bMixLauncherAppli)  // on met l'indicateur sur le lanceur dans tous les cas.
+				{
+					cairo_dock_prevent_inhibated_class (icon);
+				}
 				if ((myTaskBar.bAutoHideOnMaximized && icon->bIsMaximized) || (myTaskBar.bAutoHideOnFullScreen && icon->bIsFullScreen))
 				{
 					if (! cairo_dock_quick_hide_is_activated ())
