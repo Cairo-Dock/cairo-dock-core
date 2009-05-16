@@ -22,10 +22,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
-	pSystem->bUseFakeTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "fake transparency", &bFlushConfFileNeeded, FALSE, NULL, NULL);
-	if (g_bForcedOpenGL)
-			pSystem->bUseFakeTransparency = TRUE;
-	
 	pSystem->bLabelForPointedIconOnly = cairo_dock_get_boolean_key_value (pKeyFile, "System", "pointed icon only", &bFlushConfFileNeeded, FALSE, "Labels", NULL);
 	pSystem->fLabelAlphaThreshold = cairo_dock_get_double_key_value (pKeyFile, "System", "alpha threshold", &bFlushConfFileNeeded, 10., "Labels", NULL);
 	pSystem->fLabelAlphaThreshold = (pSystem->fLabelAlphaThreshold + 10.) / 10.;  // [0;50] -> [1;6]
@@ -61,13 +57,18 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 	pSystem->fStripesSpeedFactor = MIN (1., pSystem->fStripesSpeedFactor);
 	pSystem->bDecorationsFollowMouse = cairo_dock_get_boolean_key_value (pKeyFile, "System", "decorations enslaved", &bFlushConfFileNeeded, TRUE, "Background", NULL);
 	
+	pSystem->iFileSortType = cairo_dock_get_integer_key_value (pKeyFile, "System", "sort files", &bFlushConfFileNeeded, CAIRO_DOCK_FM_SORT_BY_NAME, NULL, NULL);
+	pSystem->bShowHiddenFiles = cairo_dock_get_boolean_key_value (pKeyFile, "System", "show hidden files", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+
+	pSystem->bUseFakeTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "fake transparency", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	if (g_bForcedOpenGL)
+			pSystem->bUseFakeTransparency = TRUE;
+	pSystem->bConfigPanelTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "config transparency", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	
 	
 	gsize length=0;
 	pSystem->cActiveModuleList = cairo_dock_get_string_list_key_value (pKeyFile, "System", "modules", &bFlushConfFileNeeded, &length, NULL, "Applets", "modules_0");
 	
-	pSystem->iFileSortType = cairo_dock_get_integer_key_value (pKeyFile, "System", "sort files", &bFlushConfFileNeeded, CAIRO_DOCK_FM_SORT_BY_NAME, NULL, NULL);
-	pSystem->bShowHiddenFiles = cairo_dock_get_boolean_key_value (pKeyFile, "System", "show hidden files", &bFlushConfFileNeeded, FALSE, NULL, NULL);
-
 	return bFlushConfFileNeeded;
 }
 

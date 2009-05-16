@@ -27,6 +27,7 @@ struct _CairoConfigIndicators {
 	gdouble fIndicatorRatio;
 	gboolean bLinkIndicatorWithIcon;
 	gint iIndicatorDeltaY;
+	gboolean bRotateWithDock;
 	// grouped indicator.
 	gchar *cClassIndicatorImagePath;
 	gboolean bZoomClassIndicator;

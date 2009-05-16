@@ -33,6 +33,7 @@ struct _CairoConfigSystem {
 	gboolean bShowHiddenFiles;
 	gint iGLAnimationDeltaT;
 	gint iCairoAnimationDeltaT;
+	gboolean bConfigPanelTransparency;
 	} ;
 
 DEFINE_PRE_INIT (System);

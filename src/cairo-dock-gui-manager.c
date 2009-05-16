@@ -26,6 +26,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-container.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-gui-filter.h"
+#include "cairo-dock-internal-system.h"
 #include "cairo-dock-gui-manager.h"
 
 #define CAIRO_DOCK_GROUP_ICON_SIZE 32
@@ -277,6 +278,8 @@ static gboolean on_expose (GtkWidget *pWidget,
 	GdkEventExpose *pExpose,
 	gpointer data)
 {
+	if (! mySystem.bConfigPanelTransparency)
+		return FALSE;
 	cairo_t *pCairoContext = gdk_cairo_create (pWidget->window);
 	int w, h;
 	gtk_window_get_size (GTK_WINDOW (pWidget), &w, &h);
@@ -361,7 +364,7 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 		TRUE,
 		0);
 	
-	if (g_iDesktopEnv != CAIRO_DOCK_KDE && g_iDesktopEnv != CAIRO_DOCK_UNKNOWN_ENV)
+	if (g_iDesktopEnv != CAIRO_DOCK_KDE && g_iDesktopEnv != CAIRO_DOCK_UNKNOWN_ENV && mySystem.bConfigPanelTransparency)
 	{
 		cairo_dock_set_colormap_for_window (s_pMainWindow);
 		gtk_widget_set_app_paintable (s_pMainWindow, TRUE);

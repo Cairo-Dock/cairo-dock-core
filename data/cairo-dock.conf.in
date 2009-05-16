@@ -282,6 +282,10 @@ frame_fake =
 #{Only use this if you don't run a composite manager like Compiz, xcompmgr, etc and have a black background around your dock. For esthetic reason, the dock will be kept under other windows.}
 fake transparency = false
 
+#b- Make the config panel transparent ?
+#{It is deactivated by default on KDE.}
+config transparency = true
+
 modules=
 
 
@@ -719,6 +723,10 @@ link indicator = true
 #i+[-10;64] Vertical offset :
 #{in pixels. You can use this parameter to adjust the indicator's vertical position.}
 indicator deltaY = 2
+
+#b+ Rotate the indicator with dock ?
+#{Use it to make the indicator rotate according to the position of the dock (top/bottom/right/left)}
+rotate indicator = true
 
 #F+[Indicator of class subdock]
 frame_class =

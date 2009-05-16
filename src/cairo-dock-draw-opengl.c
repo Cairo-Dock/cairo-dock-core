@@ -83,6 +83,9 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHoriz
 		cd_debug ("g_iIndicatorTexture <- %d", g_iIndicatorTexture);
 	}
 	
+	if (! myIndicators.bRotateWithDock)
+		bDirectionUp = bHorizontalDock = TRUE;
+	
 	//\__________________ On place l'indicateur.
 	if (icon->fOrientation != 0)
 	{

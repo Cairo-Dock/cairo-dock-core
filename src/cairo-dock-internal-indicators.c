@@ -44,6 +44,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 	
 	pIndicators->iIndicatorDeltaY = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "indicator deltaY", &bFlushConfFileNeeded, 2, "Icons", NULL);
 	
+	pIndicators->bRotateWithDock = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "rotate indicator", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	
 	//\__________________ On recupere l'indicateur de fenetre active.
 	cIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "active indicator", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	if (cIndicatorImageName != NULL)
