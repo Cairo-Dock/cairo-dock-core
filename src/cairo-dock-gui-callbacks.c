@@ -102,7 +102,7 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 	
 	int iPreviewWidgetWidth;
 	GtkWidget *pPreviewImage = cairo_dock_get_preview_image (&iPreviewWidgetWidth);
-	if (pGroupDescription->cPreviewFilePath != NULL)
+	if (pGroupDescription->cPreviewFilePath != NULL && strcmp (pGroupDescription->cPreviewFilePath, "none") != 0)
 	{
 		//g_print ("on recupere la prevue de %s\n", pGroupDescription->cPreviewFilePath);
 		int iPreviewWidth, iPreviewHeight;

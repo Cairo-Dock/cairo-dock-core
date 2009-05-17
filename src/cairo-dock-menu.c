@@ -152,7 +152,7 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 		_("Support"),
 		"<b>Installation script and web hosting :</b>\n  Mav\n\
 <b>Site (cairo-dock.org) :</b>\n  Necropotame\n  Tdey\n\
-<b>Suggestions/Comments/Bêta-Testers :</b>\n  AuraHxC\n  Chilperik\n  Cybergoll\n  Damster\n  Djoole\n  Glattering\n  Mav\n  Necropotame\n  Nochka85\n  Ppmt\n  RavanH\n  Rhinopierroce\n  Sombrero\n  Vilraleur");
+<b>Suggestions/Comments/Bêta-Testers :</b>\n  AuraHxC\n  Chilperik\n  Cybergoll\n  Damster\n  Djoole\n  Glattering\n  Mav\n  Necropotame\n  Nochka85\n  Ppmt\n  RavanH\n  Rhinopierroce\n  Rom1\n  Sombrero\n  Vilraleur");
 	
 	cairo_dock_config_panel_created ();
 	gtk_widget_show_all (pDialog);

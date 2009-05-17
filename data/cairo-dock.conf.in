@@ -283,7 +283,7 @@ frame_fake =
 fake transparency = false
 
 #b- Make the config panel transparent ?
-#{It is deactivated by default on KDE.}
+#{You need to re-open the panel. It is deactivated by default on KDE.}
 config transparency = true
 
 modules=

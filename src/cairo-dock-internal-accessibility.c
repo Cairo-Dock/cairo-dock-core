@@ -14,6 +14,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-dialogs.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-accessibility.h"
 
@@ -73,7 +74,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 		if (sWarning != NULL)
 		{
 			if (g_pMainDock)
-				cairo_dock_show_general_message (sWarning->str, 5000);
+				cairo_dock_show_general_message (sWarning->str, 10000.);
 			g_string_free (sWarning, TRUE);
 		}
 	}

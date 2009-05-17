@@ -46,7 +46,7 @@ extern gchar *g_cThemeServerAdress;
 
 extern CairoDock *g_pMainDock;
 extern int g_iWmHint;
-
+extern gboolean g_bForceOpenGL;
 
 void cairo_dock_free_theme (CairoDockTheme *pTheme)
 {
