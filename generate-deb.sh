@@ -4,6 +4,8 @@ export CAIRO_DOCK_DIR=`pwd`/..
 export FAST_COMPIL="0"
 export BUILD_TAR="0"
 export MINIMUM_REQUIREMENTS=""
+export DEB_DIR="deb"
+export DEB_PLUGINS_DIR="deb-plug-ins"
 
 echo "packaging options : "
 while getopts "d:fTh" flag
@@ -31,6 +33,8 @@ do
 	m)
 		echo " => minimum requirements"
 		export MINIMUM_REQUIREMENTS="-m"
+		export DEB_DIR="deb-lpia"
+		export DEB_PLUGINS_DIR="deb-plug-ins-lpia"
 		;;
 	*)
 		echo "unexpected argument"
@@ -52,22 +56,22 @@ find . -name ".#*" -delete
 rm -rf plug-ins/conf*[0-9]
 rm -f cairo-dock*.tar.bz2 *.deb
 
-if ! test  -d cairo-dock -o ! -d plug-ins -o ! -d deb -o ! -d deb-plug-ins; then
+if ! test  -d cairo-dock -o ! -d plug-ins -o ! -d $DEB_DIR -o ! -d $DEB_PLUGINS_DIR; then
 	echo "Attention : folder missing in $CAIRO_DOCK_DIR !"
 	exit 1
 fi
 
 cd $CAIRO_DOCK_DIR
-sudo rm -rf deb/usr
-sudo rm -rf deb-plug-ins/usr
-mv deb/.svn .svn-deb
-mv deb-plug-ins/.svn .svn-deb-plug-ins
+sudo rm -rf $DEB_DIR/usr
+sudo rm -rf $DEB_PLUGINS_DIR/usr
+mv $DEB_DIR/.svn .svn-$DEB_DIR
+mv $DEB_PLUGINS_DIR/.svn .svn-$DEB_PLUGINS_DIR
 
-cd $CAIRO_DOCK_DIR/deb
+cd $CAIRO_DOCK_DIR/$DEB_DIR
 if test -e debian; then
 	mv debian DEBIAN
 fi
-cd $CAIRO_DOCK_DIR/deb-plug-ins
+cd $CAIRO_DOCK_DIR/$DEB_PLUGINS_DIR
 if test -e debian; then
 	mv debian DEBIAN
 fi
@@ -101,10 +105,10 @@ echo "* Generating packages ... *"
 echo "***************************"
 echo ""
 cd $CAIRO_DOCK_DIR
-sudo chmod -R 755 deb deb-plug-ins
+sudo chmod -R 755 $DEB_DIR $DEB_PLUGINS_DIR
 
 echo "building dock package ..."
-cd $CAIRO_DOCK_DIR/deb
+cd $CAIRO_DOCK_DIR/$DEB_DIR
 sudo mkdir usr
 sudo mkdir usr/bin
 sudo mkdir usr/share
@@ -128,13 +132,12 @@ sudo chmod 644 usr/share/menu/cairo-dock
 sudo cp ../cairo-dock/data/cairo-dock*.desktop usr/share/applications
 
 cd $CAIRO_DOCK_DIR
-sed "s/^Version:.*/Version: "`cairo-dock --version`"/g" deb/DEBIAN/control > tmp
-mv tmp deb/DEBIAN/control
-dpkg -b deb "cairo-dock_v`cairo-dock --version`_`uname --machine`.deb"
+sed -i "s/^Version:.*/Version: "`cairo-dock --version`"/g" $DEB_DIR/DEBIAN/control
+dpkg -b $DEB_DIR "cairo-dock_v`cairo-dock --version`_`uname --machine`.deb"
 
 
 echo "building plug-ins package ..."
-cd $CAIRO_DOCK_DIR/deb-plug-ins
+cd $CAIRO_DOCK_DIR/$DEB_PLUGINS_DIR
 for lang in `cat ../cairo-dock/po/LINGUAS`; do
 	sudo mkdir -p usr/share/locale/$lang/LC_MESSAGES
 	sudo cp /usr/share/locale/$lang/LC_MESSAGES/cd-*.mo usr/share/locale/$lang/LC_MESSAGES
@@ -146,12 +149,11 @@ sudo cp -r /usr/lib/cairo-dock usr/lib
 sudo rm -f usr/lib/cairo-dock/*.la
 
 cd $CAIRO_DOCK_DIR
-sed "s/^Version:.*/Version: "`cairo-dock --version`"/g" deb-plug-ins/DEBIAN/control > tmp
-mv tmp deb-plug-ins/DEBIAN/control
-dpkg -b deb-plug-ins "cairo-dock-plug-ins_v`cairo-dock --version`_`uname --machine`.deb"
+sed -i "s/^Version:.*/Version: "`cairo-dock --version`"/g" $DEB_PLUGINS_DIR/DEBIAN/control
+dpkg -b $DEB_PLUGINS_DIR "cairo-dock-plug-ins_v`cairo-dock --version`_`uname --machine`.deb"
 
-mv .svn-deb deb/.svn
-mv .svn-deb-plug-ins deb-plug-ins/.svn
+mv .svn-$DEB_DIR $DEB_DIR/.svn
+mv .svn-$DEB_PLUGINS_DIR $DEB_PLUGINS_DIR/.svn
 
 
 #\_____________ On liste les sommes de controle des fichiers.

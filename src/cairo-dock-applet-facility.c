@@ -29,6 +29,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-icons.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-applet-facility.h"
 
 extern gchar *g_cCurrentThemePath;
@@ -207,25 +208,44 @@ void cairo_dock_set_minutes_secondes_as_quick_info (cairo_t *pSourceContext, Ico
 		cairo_dock_set_quick_info_full (pSourceContext, pIcon, pContainer, "%s0:%02d", (secondes < 0 ? "-" : ""), abs (secondes));
 }
 
-void cairo_dock_set_size_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, long long int iSizeInBytes)
+gchar *cairo_dock_get_human_readable_size (long long int iSizeInBytes)
 {
-	if (iSizeInBytes < 1024)
+	double fValue;
+	if (iSizeInBytes >> 10 == 0)
 	{
-		cairo_dock_set_quick_info_full (pSourceContext, pIcon, pContainer, "%dB", iSizeInBytes);
+		return g_strdup_printf ("%dB", (int) iSizeInBytes);
 	}
-	else if (iSizeInBytes < (1 << 20))
+	else if (iSizeInBytes >> 20 == 0)
 	{
-		cairo_dock_set_quick_info_full (pSourceContext, pIcon, pContainer, "%dK", (int) (iSizeInBytes>>10));
+		fValue = (double) (iSizeInBytes) / 1024.;
+		return g_strdup_printf (fValue < 10 ? "%.1fK" : "%.0fK", fValue);
 	}
-	else if (iSizeInBytes < (1 << 30))
+	else if (iSizeInBytes >> 30 == 0)
 	{
-		cairo_dock_set_quick_info_full (pSourceContext, pIcon, pContainer, "%dM", (int) (iSizeInBytes>>20));
+		fValue = (double) (iSizeInBytes >> 10) / 1024.;
+		return g_strdup_printf (fValue < 10 ? "%.1fM" : "%.0fM", fValue);
+	}
+	else if (iSizeInBytes >> 40 == 0)
+	{
+		fValue = (double) (iSizeInBytes >> 20) / 1024.;
+		return g_strdup_printf (fValue < 10 ? "%.1fG" : "%.0fG", fValue);
 	}
 	else
 	{
-		cairo_dock_set_quick_info_full (pSourceContext, pIcon, pContainer, "%dG", (int) (iSizeInBytes>>30));
+		fValue = (double) (iSizeInBytes >> 30) / 1024.;
+		return g_strdup_printf (fValue < 10 ? "%.1fT" : "%.0fT", fValue);
 	}
 }
+
+void cairo_dock_set_size_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, long long int iSizeInBytes)
+{
+	gchar *cSize = cairo_dock_get_human_readable_size (iSizeInBytes);
+	double fMaxScale = cairo_dock_get_max_scale (pContainer);
+	cairo_dock_set_quick_info (pSourceContext, cSize, pIcon, fMaxScale);
+	g_free (cSize);
+}
+
+
 
 gchar *cairo_dock_get_theme_path_for_module (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName, const gchar *cShareThemesDir, const gchar *cExtraDirName)
 {
