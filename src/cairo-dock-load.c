@@ -257,8 +257,8 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			icon->pIconBuffer = cairo_dock_create_surface_from_image (cIconPath,
 				pSourceContext,
 				fMaxScale,
-				(icon->fWidth == 0 ? myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : icon->fWidth),
-				(icon->fHeight == 0 ? myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : icon->fHeight),
+				myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER],
+				myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER],
 				CAIRO_DOCK_FILL_SPACE,
 				(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
 				(bHorizontalDock ? &icon->fHeight : &icon->fWidth),
@@ -299,10 +299,8 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 	else if (CAIRO_DOCK_IS_APPLI (icon))  // c'est l'icône d'une appli valide. Dans cet ordre on n'a pas besoin de verifier que c'est NORMAL_APPLI.
 	{
-		if (icon->fWidth == 0)
-			icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI];
-		if (icon->fHeight == 0)
-			icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI];
+		icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI];
+		icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI];
 		if (myTaskBar.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass) && ! (myTaskBar.bShowThumbnail && icon->bIsHidden))
 			icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
 		if (icon->pIconBuffer == NULL && myTaskBar.bShowThumbnail && icon->bIsHidden && icon->iBackingPixmap != 0)
@@ -327,8 +325,8 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 		icon->pIconBuffer = cairo_dock_create_surface_from_image (cIconPath,
 			pSourceContext,
 			fMaxScale,
-			(icon->fWidth == 0 ? myIcons.tIconAuthorizedWidth[iType] : icon->fWidth),
-			(icon->fHeight == 0 ? myIcons.tIconAuthorizedHeight[iType] : icon->fHeight),
+			myIcons.tIconAuthorizedWidth[iType],
+			myIcons.tIconAuthorizedHeight[iType],
 			CAIRO_DOCK_FILL_SPACE,
 			(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
 			(bHorizontalDock ? &icon->fHeight : &icon->fWidth),

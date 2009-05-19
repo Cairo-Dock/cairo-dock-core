@@ -16,7 +16,7 @@ G_BEGIN_DECLS
 
 struct _CairoConfigTaskBar {
 	gboolean bShowAppli;
-	gboolean bUniquePid;
+	///gboolean bUniquePid;
 	gboolean bGroupAppliByClass;
 	gint iAppliMaxNameLength;
 	gboolean bMinimizeOnClick;

@@ -270,9 +270,7 @@ void on_click_activate_given_group (GtkToggleButton *button, CairoDockGroupDescr
 
 void on_click_activate_current_group (GtkToggleButton *button, gpointer *data)
 {
-	//g_print ("%s ()\n", __func__);
 	CairoDockGroupDescription *pGroupDescription = cairo_dock_get_current_group ();
-	//g_print ("%s\n", pGroupDescription->cGroupName);
 	
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 	g_return_if_fail (pModule != NULL);

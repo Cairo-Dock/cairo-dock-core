@@ -31,7 +31,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	
 	pTaskBar->bShowAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "show applications", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
 	
-	pTaskBar->bUniquePid = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "unique PID", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
+	///pTaskBar->bUniquePid = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "unique PID", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 	
 	pTaskBar->bGroupAppliByClass = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "group by class", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 	pTaskBar->cGroupException = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "group exception", &bFlushConfFileNeeded, "pidgin;xchat", NULL, NULL);
@@ -104,7 +104,7 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 	}
 	
 	gboolean bUpdateSize = FALSE;
-	if (pPrevTaskBar->bUniquePid != pTaskBar->bUniquePid ||
+	if (/**pPrevTaskBar->bUniquePid != pTaskBar->bUniquePid ||*/
 		pPrevTaskBar->bGroupAppliByClass != pTaskBar->bGroupAppliByClass ||
 		pPrevTaskBar->bHideVisibleApplis != pTaskBar->bHideVisibleApplis ||
 		pPrevTaskBar->bAppliOnCurrentDesktopOnly != pTaskBar->bAppliOnCurrentDesktopOnly ||

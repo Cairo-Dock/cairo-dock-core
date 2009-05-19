@@ -860,7 +860,7 @@ void cairo_dock_deactivate_module_instance_and_unload (CairoDockModuleInstance *
 	cairo_dock_free_icon (pIcon);
 }
 
-void cairo_dock_deactivate_module_and_unload (gchar *cModuleName)
+void cairo_dock_deactivate_module_and_unload (const gchar *cModuleName)
 {
 	if (g_pMainDock == NULL)
 		return ;

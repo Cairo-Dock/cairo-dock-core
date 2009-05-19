@@ -237,7 +237,7 @@ void cairo_dock_close_xwindow (Window Xid)
 	//g_print ("%s (%d)\n", __func__, Xid);
 	g_return_if_fail (Xid > 0);
 	
-	if (myTaskBar.bUniquePid)
+	/**if (myTaskBar.bUniquePid)
 	{
 		gulong *pPidBuffer = NULL;
 		Atom aReturnedType = 0;
@@ -253,7 +253,7 @@ void cairo_dock_close_xwindow (Window Xid)
 		}
 		XFree (pPidBuffer);
 	}
-	else
+	else*/
 	{
 		XEvent xClientMessage;
 		

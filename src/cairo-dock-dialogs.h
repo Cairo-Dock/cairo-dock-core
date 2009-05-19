@@ -43,6 +43,7 @@ struct _CairoDialogDecorator {
 	CairoDialogSetDecorationSizeFunc 		set_size;
 	CairoDialogRenderDecorationFunc 		render;
 	CairoDialogGLRenderDecorationFunc 		render_opengl;
+	const gchar *cDisplayedName;
 };
 
 struct _CairoDialogAttribute {

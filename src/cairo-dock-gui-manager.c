@@ -1267,3 +1267,23 @@ void cairo_dock_trigger_current_filter (void)
 	g_signal_emit_by_name (s_pFilterEntry, "activate", NULL, &bReturn);
 }
 
+
+
+void cairo_dock_deactivate_module_in_gui (const gchar *cModuleName)
+{
+	if (s_pMainWindow == NULL || cModuleName == NULL)
+		return ;
+	
+	if (s_pCurrentGroup != NULL && s_pCurrentGroup->cGroupName != NULL && strcmp (cModuleName, s_pCurrentGroup->cGroupName) == 0)  // on est en train d'editer ce module dans le panneau de conf.
+	{
+		g_signal_handlers_block_by_func (s_pActivateButton, on_click_activate_current_group, NULL);
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (s_pActivateButton), FALSE);
+		g_signal_handlers_unblock_by_func (s_pActivateButton, on_click_activate_current_group, NULL);
+	}
+	
+	CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (cModuleName);
+	g_return_if_fail (pGroupDescription != NULL && pGroupDescription->pActivateButton != NULL);
+	g_signal_handlers_block_by_func (pGroupDescription->pActivateButton, on_click_activate_given_group, pGroupDescription);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pGroupDescription->pActivateButton), FALSE);
+	g_signal_handlers_unblock_by_func (pGroupDescription->pActivateButton, on_click_activate_given_group, pGroupDescription);
+}

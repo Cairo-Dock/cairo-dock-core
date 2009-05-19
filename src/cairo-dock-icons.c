@@ -499,6 +499,7 @@ void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRe
 		pArea->width = ((int) ceil (icon->fHeight * icon->fScale * fabs (icon->fHeightFactor) + fReflectSize)) + 0;
 		pArea->height = (int) ceil (icon->fWidth * icon->fScale * fabs (icon->fWidthFactor));
 	}
+	//g_print ("redraw : %d;%d %dx%d\n", pArea->x, pArea->y, pArea->width,pArea->height);
 }
 
 

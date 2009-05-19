@@ -469,7 +469,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	myAccessibility.cRaiseDockShortcut = NULL;
 	gboolean bPopUpOld = myAccessibility.bPopUp;  // FALSE initialement.
 	gboolean bUseFakeTransparencyOld = mySystem.bUseFakeTransparency;  // FALSE initialement.
-	gboolean bUniquePidOld = myTaskBar.bUniquePid;  // FALSE initialement.
+	///gboolean bUniquePidOld = myTaskBar.bUniquePid;  // FALSE initialement.
 	gboolean bGroupAppliByClassOld = myTaskBar.bGroupAppliByClass;  // FALSE initialement.
 	gboolean bHideVisibleApplisOld = myTaskBar.bHideVisibleApplis;
 	gboolean bAppliOnCurrentDesktopOnlyOld = myTaskBar.bAppliOnCurrentDesktopOnly;
@@ -579,7 +579,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_load_visible_zone (pDock, myHiddenDock.cVisibleZoneImageFile, myHiddenDock.iVisibleZoneWidth, myHiddenDock.iVisibleZoneHeight, myHiddenDock.fVisibleZoneAlpha);
 	
 	
-	if (bUniquePidOld != myTaskBar.bUniquePid ||
+	if (/**bUniquePidOld != myTaskBar.bUniquePid ||*/
 		bGroupAppliByClassOld != myTaskBar.bGroupAppliByClass ||
 		bHideVisibleApplisOld != myTaskBar.bHideVisibleApplis ||
 		bAppliOnCurrentDesktopOnlyOld != myTaskBar.bAppliOnCurrentDesktopOnly ||

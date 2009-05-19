@@ -321,14 +321,15 @@ static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, Icon *icon, Cai
 		Icon *pNewIcon = cairo_dock_create_icon_from_desktop_file (cNewDesktopFileName, pCairoContext);
 
 		if (iLauncherType = CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR)
-			pNewIcon->iType = icon->iType;
+			pNewIcon->iType = (icon ? icon->iType : CAIRO_DOCK_LAUNCHER);
 		else if (pNewIcon->acName == NULL)
 			pNewIcon->acName = g_strdup (_("Undefined"));
 
-		CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+		
+		CairoDock *pParentDock = cairo_dock_search_dock_from_name (pNewIcon->cParentDockName);  // existe forcement puique a ete cree au besoin.
 		cairo_dock_insert_icon_in_dock (pNewIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 
-		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
 		cairo_dock_mark_theme_as_modified (TRUE);
 	}
 	else
@@ -709,6 +710,8 @@ static void _cairo_dock_remove_module_instance (GtkMenuItem *pMenuItem, gpointer
 	int answer = cairo_dock_ask_question_and_wait (question, icon, CAIRO_CONTAINER (pContainer));
 	if (answer == GTK_RESPONSE_YES)
 	{
+		if (icon->pModuleInstance->pModule->pInstancesList->next == NULL)  // plus d'instance du module apres ca.
+			cairo_dock_deactivate_module_in_gui (icon->pModuleInstance->pModule->pVisitCard->cModuleName);
 		cairo_dock_remove_module_instance (icon->pModuleInstance);
 	}
 }
@@ -777,13 +780,18 @@ static void _cairo_dock_make_launcher_from_appli (GtkMenuItem *pMenuItem, gpoint
 	g_return_if_fail (icon->Xid != 0);
 	
 	// on trouve le .desktop du programme.
+	g_print ("%s (%s)\n", __func__, icon->cClass);
 	gchar *cDesktopFilePath = g_strdup_printf ("/usr/share/applications/%s.desktop", icon->cClass);
 	
-	// on cree un nouveau lanceur a partir.
+	// on cree un nouveau lanceur a partir de la classe.
 	if (! g_file_test (cDesktopFilePath, G_FILE_TEST_EXISTS))
 	{
-	   // chercher un desktop qui contiennent StartupWMClass=class.
-	   
+		g_free (cDesktopFilePath);
+		cDesktopFilePath = g_strdup_printf ("/usr/share/applications/kde4/%s.desktop", icon->cClass);
+		if (! g_file_test (cDesktopFilePath, G_FILE_TEST_EXISTS))
+		{
+			// chercher un desktop qui contiennent StartupWMClass=class.
+		}
 	}
 	{
 		cairo_dock_add_new_launcher_by_uri (cDesktopFilePath, g_pMainDock, CAIRO_DOCK_LAST_ORDER);

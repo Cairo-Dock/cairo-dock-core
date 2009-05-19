@@ -93,5 +93,8 @@ void cairo_dock_apply_current_filter (gchar **pKeyWords, gboolean bAllWords, gbo
 void cairo_dock_trigger_current_filter (void);
 
 
+void cairo_dock_deactivate_module_in_gui (const gchar *cModuleName);
+
+
 G_END_DECLS
 #endif

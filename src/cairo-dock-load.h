@@ -29,8 +29,19 @@ cairo_surface_t *cairo_dock_load_image_for_icon (cairo_t *pSourceContext, const 
 *@param pContainer le container de l'icone.
 */
 void cairo_dock_add_reflection_to_icon (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer);
+/**Fills the image buffer (surface & texture) for a given icon, according to its type. Set its size accordingly, and fills the reflection buffer for cairo.
+*@param icon the icon.
+*@param pSourceContext a drawing context, not modified.
+*@param fMaxScale maximum zoom.
+*@param bHorizontalDock TRUE if the icon will be in a horizontal container (needed for the cairo reflect).
+*@param bDirectionUp TRUE if the icon will be in a up container (needed for the cairo reflect).
+*/
 void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdouble fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp);
-
+/**Cut an UTF-8 or ASCII string to n characters, and add '...' to the end in cas it was effectively cut. It manages correctly UTF-8 strings.
+*@param cString the string.
+*@param iNbCaracters the maximum number of characters wished.
+*@return the newly allocated string.
+*/
 gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);
 void cairo_dock_fill_one_text_buffer (Icon *icon, cairo_t* pSourceContext, CairoDockLabelDescription *pTextDescription);
 

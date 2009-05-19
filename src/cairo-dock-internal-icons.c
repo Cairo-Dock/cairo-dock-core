@@ -17,6 +17,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-internal-taskbar.h"
+#include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-container.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-icons.h"
@@ -240,16 +241,16 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	gboolean bGroupOrderChanged;
 	if (pPrevIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER] != pIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER] ||
 		pPrevIcons->tIconTypeOrder[CAIRO_DOCK_APPLI] != pIcons->tIconTypeOrder[CAIRO_DOCK_APPLI] ||
-		pPrevIcons->tIconTypeOrder[CAIRO_DOCK_APPLET] != pIcons->tIconTypeOrder[CAIRO_DOCK_APPLET])
+		pPrevIcons->tIconTypeOrder[CAIRO_DOCK_APPLET] != pIcons->tIconTypeOrder[CAIRO_DOCK_APPLET] ||
+		pPrevIcons->bMixAppletsAndLaunchers != pIcons->bMixAppletsAndLaunchers)
 		bGroupOrderChanged = TRUE;
 	else
 		bGroupOrderChanged = FALSE;
 	
-	if (bGroupOrderChanged || pPrevIcons->bMixAppletsAndLaunchers != pIcons->bMixAppletsAndLaunchers)
+	if (bGroupOrderChanged)
 		pDock->icons = g_list_sort (pDock->icons, (GCompareFunc) cairo_dock_compare_icons_order);
 
 	if ((pPrevIcons->bUseSeparator && ! pIcons->bUseSeparator) ||
-		(! pPrevIcons->bMixAppletsAndLaunchers && pIcons->bMixAppletsAndLaunchers) ||
 		pPrevIcons->cSeparatorImage != pIcons->cSeparatorImage ||
 		bGroupOrderChanged)
 		cairo_dock_remove_all_separators (pDock);
@@ -305,13 +306,22 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	cairo_dock_create_icon_pbuffer ();
 	
 	if ((pIcons->bUseSeparator && ! pPrevIcons->bUseSeparator) ||
-		(pPrevIcons->bMixAppletsAndLaunchers != pIcons->bMixAppletsAndLaunchers) ||
 		pPrevIcons->cSeparatorImage != pIcons->cSeparatorImage ||
 		bGroupOrderChanged)
 	{
 		cairo_dock_insert_separators_in_dock (pDock);
 	}
 	
+	if (pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] ||
+		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER])
+	{
+		cairo_dock_load_active_window_indicator (pCairoContext,
+			myIndicators.cActiveIndicatorImagePath,
+			fMaxScale,
+			myIndicators.iActiveCornerRadius,
+			myIndicators.iActiveLineWidth,
+			myIndicators.fActiveColor);
+	}
 	
 	g_fBackgroundImageWidth = g_fBackgroundImageHeight = 0.;
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks.

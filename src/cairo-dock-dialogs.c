@@ -847,7 +847,7 @@ static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cIm
 	{
 		if (pContainer == NULL)
 			pContainer = cairo_dock_search_container_from_icon (pIcon);
-		double fMaxScale = (pContainer != NULL ? cairo_dock_get_max_scale (pContainer) : 1.);
+		double fMaxScale = (pContainer != NULL ? cairo_dock_get_max_scale (pContainer) / pContainer->fRatio : 1.);
 		pIconBuffer = cairo_dock_duplicate_surface (pIcon->pIconBuffer,
 			pSourceContext,
 			pIcon->fWidth * fMaxScale, pIcon->fHeight * fMaxScale,

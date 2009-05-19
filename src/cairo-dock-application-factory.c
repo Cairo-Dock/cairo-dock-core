@@ -54,7 +54,7 @@ static Atom s_aNetWmIcon;
 static Atom s_aNetWmState;
 static Atom s_aNetWmSkipPager;
 static Atom s_aNetWmSkipTaskbar;
-static Atom s_aNetWmPid;
+///static Atom s_aNetWmPid;
 static Atom s_aNetWmWindowType;
 static Atom s_aNetWmWindowTypeNormal;
 static Atom s_aNetWmWindowTypeDialog;
@@ -87,7 +87,7 @@ void cairo_dock_initialize_application_factory (Display *pXDisplay)
 	s_aNetWmSkipTaskbar = XInternAtom (s_XDisplay, "_NET_WM_STATE_SKIP_TASKBAR", False);
 	s_aNetWmHidden = XInternAtom (s_XDisplay, "_NET_WM_STATE_HIDDEN", False);
 
-	s_aNetWmPid = XInternAtom (s_XDisplay, "_NET_WM_PID", False);
+	///s_aNetWmPid = XInternAtom (s_XDisplay, "_NET_WM_PID", False);
 
 	s_aNetWmWindowType = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE", False);
 	s_aNetWmWindowTypeNormal = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_NORMAL", False);
@@ -108,10 +108,10 @@ void cairo_dock_initialize_application_factory (Display *pXDisplay)
 
 void cairo_dock_unregister_pid (Icon *icon)
 {
-	if (myTaskBar.bUniquePid && CAIRO_DOCK_IS_APPLI (icon) && icon->iPid != 0)
+	/**if (myTaskBar.bUniquePid && CAIRO_DOCK_IS_APPLI (icon) && icon->iPid != 0)
 	{
 		g_hash_table_remove (s_hAppliTable, &icon->iPid);
-	}
+	}*/
 }
 
 cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)
@@ -359,7 +359,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 {
 	//g_print ("%s (%d)\n", __func__, Xid);
 	guchar *pNameBuffer = NULL;
-	gulong *pPidBuffer = NULL;
+	///gulong *pPidBuffer = NULL;
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
 	unsigned long iLeftBytes, iBufferNbElements;
@@ -404,7 +404,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	}
 
 	//\__________________ On recupere son PID si on est en mode "PID unique".
-	if (myTaskBar.bUniquePid)
+	/**if (myTaskBar.bUniquePid)
 	{
 		iBufferNbElements = 0;
 		XGetWindowProperty (s_XDisplay, Xid, s_aNetWmPid, 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pPidBuffer);
@@ -424,7 +424,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 			//g_print ("pas de PID defini -> elle degage\n");
 			return NULL;
 		}
-	}
+	}*/
 
 	//\__________________ On regarde son type.
 	gulong *pTypeBuffer = NULL;
@@ -461,10 +461,10 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 			}
 			else
 			{
-				//g_print ("type indesirable\n");
+				cd_debug ("type indesirable");
 				XFree (pTypeBuffer);
-				if (myTaskBar.bUniquePid)
-					g_hash_table_insert (s_hAppliTable, pPidBuffer, NULL);  // On rajoute son PID meme si c'est une appli qu'on n'affichera pas.
+				/**if (myTaskBar.bUniquePid)
+					g_hash_table_insert (s_hAppliTable, pPidBuffer, NULL);  // On rajoute son PID meme si c'est une appli qu'on n'affichera pas.*/
 				return NULL;
 			}
 		}
@@ -503,9 +503,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	}
 	if (iBufferNbElements == 0)
 	{
-		//g_print ("pas de nom, elle degage\n");
-		if (myTaskBar.bUniquePid)
-			g_hash_table_insert (s_hAppliTable, pPidBuffer, NULL);  // On rajoute son PID meme si c'est une appli qu'on n'affichera pas.
+		cd_debug ("pas de nom, on en mettra un par defaut.");
 		return NULL;
 	}
 	cd_debug ("recuperation de '%s' (bIsHidden : %d)", pNameBuffer, bIsHidden);
@@ -534,9 +532,9 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	
 	//\__________________ On cree, on remplit l'icone, et on l'enregistre, par contre elle sera inseree plus tard.
 	Icon *icon = g_new0 (Icon, 1);
-	icon->acName = g_strdup ((gchar *)pNameBuffer);
-	if (myTaskBar.bUniquePid)
-		icon->iPid = *pPidBuffer;
+	icon->acName = (pNameBuffer ? g_strdup ((gchar *)pNameBuffer) : g_strdup (cClass));
+	/**if (myTaskBar.bUniquePid)
+		icon->iPid = *pPidBuffer;*/
 	icon->Xid = Xid;
 	icon->cClass = cClass;
 	Icon * pLastAppli = cairo_dock_get_last_appli (pDock->icons);
@@ -564,10 +562,11 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	
 	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pDock);
 	
-	if (myTaskBar.bUniquePid)
-		g_hash_table_insert (s_hAppliTable, pPidBuffer, icon);
+	/**if (myTaskBar.bUniquePid)
+		g_hash_table_insert (s_hAppliTable, pPidBuffer, icon);*/
 	cairo_dock_register_appli (icon);
-	XFree (pNameBuffer);
+	if (pNameBuffer)
+		XFree (pNameBuffer);
 	
 	cairo_dock_set_window_mask (Xid, PropertyChangeMask | StructureNotifyMask);
 

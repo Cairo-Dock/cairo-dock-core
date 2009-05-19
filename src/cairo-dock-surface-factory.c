@@ -526,6 +526,7 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, cairo_t 
 static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fMaxScale, gboolean bDirectionUp)
 {
 	g_return_val_if_fail (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
+	//g_print ("%s (%d)\n", __func__, bDirectionUp);
 
 	//\_______________ On cree la surface d'une fraction hauteur de l'image originale.
 	double fReflectHeight = myIcons.fReflectSize * fMaxScale;
@@ -542,7 +543,7 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_
 	//\_______________ On dessine l'image originale inversee.
 	cairo_translate (pCairoContext, 0, fImageHeight);
 	cairo_scale (pCairoContext, 1., -1.);
-	cairo_set_source_surface (pCairoContext, pSurface, 0, 0*(bDirectionUp ? 0 : fImageHeight - fReflectHeight));
+	cairo_set_source_surface (pCairoContext, pSurface, 0, (bDirectionUp ? 0 : fImageHeight - fReflectHeight));
 	
 	//\_______________ On applique un degrade en transparence.
 	/**cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0.,
@@ -598,9 +599,9 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_vertical (cairo_su
 	cairo_set_source_surface (pCairoContext, pSurface, (bDirectionUp ? 0. : fImageHeight - fReflectWidth), 0.);
 	
 	//\_______________ On applique un degrade en transparence.
-	cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (2*fReflectWidth,
+	cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0,
 		0.,
-		fReflectWidth,
+		fImageHeight-fReflectWidth,
 		0.);  // de gauche a droite.
 	g_return_val_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS, NULL);
 
@@ -775,6 +776,7 @@ cairo_surface_t * cairo_dock_duplicate_surface (cairo_surface_t *pSurface, cairo
 	if (fDesiredHeight == 0)
 		fDesiredHeight = fHeight;
 	
+	g_print ("%s (%.2fx%.2f -> %.2fx%.2f)\n", __func__, fWidth, fHeight, fDesiredWidth, fDesiredHeight);
 	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
 		fDesiredWidth,
 		fDesiredHeight);

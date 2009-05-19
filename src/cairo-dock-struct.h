@@ -150,6 +150,8 @@ struct _CairoDockRenderer {
 	gchar *cPreviewFilePath;
 	/// TRUE ssi cette vue utilise le stencil buffer d'OpenGL.
 	gboolean bUseStencil;
+	/// nom affiche dans la liste (traduit suivant la langue).
+	const gchar *cDisplayedName;
 };
 
 typedef enum {
@@ -888,7 +890,7 @@ struct _CairoDockInternalModule {
 /// Nom du dock principal (le 1er cree).
 #define CAIRO_DOCK_MAIN_DOCK_NAME "_MainDock_"
 /// Nom de la vue par defaut.
-#define CAIRO_DOCK_DEFAULT_RENDERER_NAME "default"
+#define CAIRO_DOCK_DEFAULT_RENDERER_NAME N_("default")
 
 
 #define CAIRO_DOCK_LAST_ORDER -1e9
