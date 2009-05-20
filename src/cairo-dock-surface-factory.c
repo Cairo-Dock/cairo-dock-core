@@ -30,7 +30,8 @@ void cairo_dock_calculate_size_fill (double *fImageWidth, double *fImageHeight, 
 		*fZoomWidth = 1. * iWidthConstraint / (*fImageWidth);
 		if (bNoZoomUp && *fZoomWidth > 1)
 			*fZoomWidth = 1;
-		*fImageWidth = (double) iWidthConstraint;
+		else
+			*fImageWidth = (double) iWidthConstraint;
 	}
 	else
 		*fZoomWidth = 1.;
@@ -39,7 +40,8 @@ void cairo_dock_calculate_size_fill (double *fImageWidth, double *fImageHeight, 
 		*fZoomHeight = 1. * iHeightConstraint / (*fImageHeight);
 		if (bNoZoomUp && *fZoomHeight > 1)
 			*fZoomHeight = 1;
-		*fImageHeight = (double) iHeightConstraint;
+		else
+			*fImageHeight = (double) iHeightConstraint;
 	}
 	else
 		*fZoomHeight = 1.;
@@ -61,8 +63,11 @@ void cairo_dock_calculate_size_constant_ratio (double *fImageWidth, double *fIma
 	*fImageHeight = (*fImageHeight) * (*fZoom);
 }
 
+
+
 void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fZoomWidth, double *fZoomHeight)
 {
+	gboolean bFillSpace = iLoadingModifier & CAIRO_DOCK_FILL_SPACE;
 	gboolean bKeepRatio = iLoadingModifier & CAIRO_DOCK_KEEP_RATIO;
 	gboolean bNoZoomUp = iLoadingModifier & CAIRO_DOCK_DONT_ZOOM_IN;
 	gint iOrientation = iLoadingModifier & CAIRO_DOCK_ORIENTATION_MASK;
@@ -81,6 +86,15 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 			bNoZoomUp,
 			fZoomWidth);
 		*fZoomHeight = *fZoomWidth;
+		if (bFillSpace)
+		{
+			//double fUsefulWidth = *fImageWidth;
+			//double fUsefulHeight = *fImageHeight;
+			if (iWidthConstraint != 0)
+				*fImageWidth = iWidthConstraint;
+			if (iHeightConstraint != 0)
+				*fImageHeight = iHeightConstraint;
+		}
 	}
 	else
 	{
@@ -174,10 +188,11 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 	return pNewSurface;
 }
 
-static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDockLoadImageModifier iLoadingModifier, double fImageWidth, double fImageHeight, double fZoomX, double fZoomY)
+static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDockLoadImageModifier iLoadingModifier, double fImageWidth, double fImageHeight, double fZoomX, double fZoomY, double fUsefulWidth, double fUsefulheight)
 {
 	int iOrientation = iLoadingModifier & CAIRO_DOCK_ORIENTATION_MASK;
-	if (iOrientation != 0)
+	
+	//if (iOrientation != 0)
 	{
 		cairo_translate (pCairoContext,
 			fImageWidth/2,
@@ -215,19 +230,19 @@ static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDo
 		}
 		if (iOrientation < CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP)
 			cairo_translate (pCairoContext,
-				- fImageWidth/2/fZoomX,
-				- fImageHeight/2/fZoomY);
+				- fUsefulWidth/2/fZoomX,
+				- fUsefulheight/2/fZoomY);
 		else
 			cairo_translate (pCairoContext,
-				- fImageHeight/2/fZoomY,
-				- fImageWidth/2/fZoomX);
+				- fUsefulheight/2/fZoomY,
+				- fUsefulWidth/2/fZoomX);
 	}
-	else
+	/*else
 	{
 		cairo_scale (pCairoContext,
 			fZoomX,
 			fZoomY);
-	}
+	}*/
 }
 
 cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, cairo_t *pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)
@@ -253,9 +268,8 @@ cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, cairo
 	//\____________________ On pre-multiplie chaque composante par le alpha (necessaire pour libcairo).
 	int iNbChannels = gdk_pixbuf_get_n_channels (pPixbufWithAlpha);
 	int iRowstride = gdk_pixbuf_get_rowstride (pPixbufWithAlpha);
-	guchar *p, *pixels = gdk_pixbuf_get_pixels (pPixbufWithAlpha);
-
 	int w = gdk_pixbuf_get_width (pPixbufWithAlpha);
+	guchar *p, *pixels = gdk_pixbuf_get_pixels (pPixbufWithAlpha);
 	int h = gdk_pixbuf_get_height (pPixbufWithAlpha);
 	int x, y;
 	int red, green, blue;
@@ -274,22 +288,25 @@ cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, cairo
 			p[2] = red;
 		}
 	}
-
+	
 	cairo_surface_t *surface_ini = cairo_image_surface_create_for_data (pixels,
 		CAIRO_FORMAT_ARGB32,
-		gdk_pixbuf_get_width (pPixbufWithAlpha),
-		gdk_pixbuf_get_height (pPixbufWithAlpha),
-		gdk_pixbuf_get_rowstride (pPixbufWithAlpha));
+		w,
+		h,
+		iRowstride);
 
 	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
 		ceil ((*fImageWidth) * fMaxScale),
 		ceil ((*fImageHeight) * fMaxScale));
 	cairo_t *pCairoContext = cairo_create (pNewSurface);
 	
+	double fUsefulWidth = w * fIconWidthSaturationFactor;  // a part dans le cas fill && keep ratio, c'est la meme chose que fImageWidth et fImageHeight.
+	double fUsefulHeight = h * fIconHeightSaturationFactor;
 	_apply_orientation_and_scale (pCairoContext,
 		iLoadingModifier,
 		ceil ((*fImageWidth) * fMaxScale), ceil ((*fImageHeight) * fMaxScale),
-		fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
+		fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor,
+		fUsefulWidth * fMaxScale, fUsefulHeight * fMaxScale);
 	
 	cairo_set_source_surface (pCairoContext, surface_ini, 0, 0);
 	cairo_paint (pCairoContext);
@@ -362,8 +379,10 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 		{
 			g_return_val_if_fail (rsvg_handle != NULL, NULL);
 			rsvg_handle_get_dimensions (rsvg_handle, &rsvg_dimension_data);
-			*fImageWidth = (gdouble) rsvg_dimension_data.width;
-			*fImageHeight = (gdouble) rsvg_dimension_data.height;
+			int w = rsvg_dimension_data.width;
+			int h = rsvg_dimension_data.height;
+			*fImageWidth = (gdouble) w;
+			*fImageHeight = (gdouble) h;
 			//g_print ("%.2fx%.2f\n", *fImageWidth, *fImageHeight);
 			cairo_dock_calculate_constrainted_size (fImageWidth,
 				fImageHeight,
@@ -378,11 +397,13 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 				ceil ((*fImageHeight) * fMaxScale));
 
 			pCairoContext = cairo_create (pNewSurface);
+			double fUsefulWidth = w * fIconWidthSaturationFactor;  // a part dans le cas fill && keep ratio, c'est la meme chose que fImageWidth et fImageHeight.
+			double fUsefulHeight = h * fIconHeightSaturationFactor;
 			_apply_orientation_and_scale (pCairoContext,
 				iLoadingModifier,
 				ceil ((*fImageWidth) * fMaxScale), ceil ((*fImageHeight) * fMaxScale),
-				fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
-			//cairo_scale (pCairoContext, fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
+				fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor,
+				fUsefulWidth * fMaxScale, fUsefulHeight * fMaxScale);
 
 			rsvg_handle_render_cairo (rsvg_handle, pCairoContext);
 			cairo_destroy (pCairoContext);
@@ -394,8 +415,10 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 		surface_ini = cairo_image_surface_create_from_png (cImagePath);  // cree un fond noir :-(
 		if (cairo_surface_status (surface_ini) == CAIRO_STATUS_SUCCESS)
 		{
-			*fImageWidth = (double) cairo_image_surface_get_width (surface_ini);
-			*fImageHeight = (double) cairo_image_surface_get_height (surface_ini);
+			int w = cairo_image_surface_get_width (surface_ini);
+			int h = cairo_image_surface_get_height (surface_ini);
+			*fImageWidth = (double) w;
+			*fImageHeight = (double) h;
 			cairo_dock_calculate_constrainted_size (fImageWidth,
 				fImageHeight,
 				iWidthConstraint,
@@ -413,11 +436,13 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 			cairo_paint (pCairoContext);
 			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 			
+			double fUsefulWidth = w * fIconWidthSaturationFactor;  // a part dans le cas fill && keep ratio, c'est la meme chose que fImageWidth et fImageHeight.
+			double fUsefulHeight = h * fIconHeightSaturationFactor;
 			_apply_orientation_and_scale (pCairoContext,
 				iLoadingModifier,
 				ceil ((*fImageWidth) * fMaxScale), ceil ((*fImageHeight) * fMaxScale),
-				fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
-			//cairo_scale (pCairoContext, fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
+				fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor,
+				fUsefulWidth * fMaxScale, fUsefulHeight * fMaxScale);
 			
 			cairo_set_source_surface (pCairoContext, surface_ini, 0, 0);
 			cairo_paint (pCairoContext);

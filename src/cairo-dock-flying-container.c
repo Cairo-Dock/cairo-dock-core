@@ -365,6 +365,7 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 	{
 		cd_debug ("le module %s devient un desklet", pIcon->pModuleInstance->cConfFilePath);
 		
+		cairo_dock_stop_icon_animation (pIcon);
 		GError *erreur = NULL;
 		GKeyFile *pKeyFile = cairo_dock_open_key_file (pIcon->pModuleInstance->cConfFilePath);
 		if (pKeyFile != NULL)

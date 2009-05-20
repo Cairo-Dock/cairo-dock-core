@@ -1287,3 +1287,43 @@ void cairo_dock_deactivate_module_in_gui (const gchar *cModuleName)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pGroupDescription->pActivateButton), FALSE);
 	g_signal_handlers_unblock_by_func (pGroupDescription->pActivateButton, on_click_activate_given_group, pGroupDescription);
 }
+
+void cairo_dock_update_desklet_size_in_gui (const gchar *cModuleName, int iWidth, int iHeight)
+{
+	if (s_pMainWindow == NULL || cModuleName == NULL || s_pCurrentGroup == NULL || s_pCurrentGroup->cGroupName == NULL || s_pCurrentWidgetList == NULL)
+		return ;
+	
+	if (strcmp (cModuleName, s_pCurrentGroup->cGroupName) == 0)  // on est en train d'editer ce module dans le panneau de conf.
+	{
+		GtkWidget *pOneWidget;
+		GSList *pSubWidgetList = cairo_dock_find_widgets_from_name (s_pCurrentWidgetList, "Desklet", "size");
+		if (pSubWidgetList != NULL)
+		{
+			pOneWidget = pSubWidgetList->data;
+			gtk_spin_button_set_value (GTK_SPIN_BUTTON (pOneWidget), iWidth);
+			if (pSubWidgetList->next != NULL)
+			{
+				pOneWidget = pSubWidgetList->next->data;
+				gtk_spin_button_set_value (GTK_SPIN_BUTTON (pOneWidget), iHeight);
+			}
+		}
+		
+	}
+}
+
+void cairo_dock_update_desklet_position_in_gui (const gchar *cModuleName, int x, int y)
+{
+	if (s_pMainWindow == NULL || cModuleName == NULL || s_pCurrentGroup == NULL || s_pCurrentGroup->cGroupName == NULL || s_pCurrentWidgetList == NULL)
+		return ;
+	
+	if (strcmp (cModuleName, s_pCurrentGroup->cGroupName) == 0)  // on est en train d'editer ce module dans le panneau de conf.
+	{
+		GtkWidget *pOneWidget;
+		pOneWidget = cairo_dock_get_widget_from_name ("Desklet", "x position");
+		if (pOneWidget != NULL)
+			gtk_spin_button_set_value (GTK_SPIN_BUTTON (pOneWidget), x);
+		pOneWidget = cairo_dock_get_widget_from_name ("Desklet", "y position");
+		if (pOneWidget != NULL)
+			gtk_spin_button_set_value (GTK_SPIN_BUTTON (pOneWidget), y);
+	}
+}

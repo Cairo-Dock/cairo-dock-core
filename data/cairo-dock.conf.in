@@ -107,9 +107,6 @@ frame1 =
 #{Cairo-Dock will then replace your taskbar. It is recommanded to remove any other taskbar, and to not force the dock's type to normal.}
 show applications = true
 
-#b- Should the applications with same PID be displayed only once ?
-unique PID = false
-
 #b- Should the applications with same class be grouped in a sub-dock ?
 #{This allows to group windows in some soft like Gimp, and to have only 1 icon in the main dock.The 1st window will appear in the main dock, and the others will be placed in a container associated with this 1st icon.}
 group by class = false

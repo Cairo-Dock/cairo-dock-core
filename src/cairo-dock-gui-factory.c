@@ -1098,11 +1098,12 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						_allocate_new_buffer;
 						data[0] = pPrevOneWidget;
 						data[1] = pToggleButton;
-						g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK(_cairo_dock_set_value_in_pair), data);
+						g_signal_connect (G_OBJECT (pOneWidget), "value-changed", G_CALLBACK(_cairo_dock_set_value_in_pair), data);
 						_allocate_new_buffer;
 						data[0] = pOneWidget;
 						data[1] = pToggleButton;
-						g_signal_connect (G_OBJECT (pPrevOneWidget), "changed", G_CALLBACK(_cairo_dock_set_value_in_pair), data);
+						g_signal_connect (G_OBJECT (pPrevOneWidget), "value-changed", G_CALLBACK(_cairo_dock_set_value_in_pair), data);
+						g_print ("TESTER LE ACTIVATE SUR LES WIDGETS SIZE\n");
 					}
 					pPrevOneWidget = pOneWidget;
 					iPrevValue = iValue;
@@ -2172,7 +2173,7 @@ static int _cairo_dock_find_widget_from_name (gpointer *data, gpointer *pUserDat
 	else
 		return 1;
 }
-GtkWidget *cairo_dock_find_widget_from_name (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName)
+GList *cairo_dock_find_widgets_from_name (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName)
 {
 	const gchar *data[2] = {cGroupName, cKeyName};
 	GSList *pElement = g_slist_find_custom (pWidgetList, data, (GCompareFunc) _cairo_dock_find_widget_from_name);
@@ -2181,6 +2182,11 @@ GtkWidget *cairo_dock_find_widget_from_name (GSList *pWidgetList, const gchar *c
 	
 	gpointer *pWidgetData = pElement->data;
 	GSList *pSubWidgetList = pWidgetData[2];
+	return pSubWidgetList;
+}
+GtkWidget *cairo_dock_find_widget_from_name (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName)
+{
+	GSList *pSubWidgetList = cairo_dock_find_widgets_from_name (pWidgetList, cGroupName, cKeyName);
 	g_return_val_if_fail (pSubWidgetList != NULL, NULL);
 	return pSubWidgetList->data;
 }

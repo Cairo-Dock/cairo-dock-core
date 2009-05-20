@@ -55,6 +55,7 @@
 #include "cairo-dock-internal-desklets.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-background.h"
+#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-desklet.h"
 
 extern CairoDock *g_pMainDock;
@@ -495,6 +496,9 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 			G_TYPE_STRING, "Desklet", "size", cSize,
 			G_TYPE_INVALID);
 		g_free (cSize);
+		cairo_dock_update_desklet_size_in_gui (pDesklet->pIcon->pModuleInstance->pModule->pVisitCard->cModuleName,
+			pDesklet->iWidth,
+			pDesklet->iHeight);
 	}
 	pDesklet->iSidWriteSize = 0;
 	pDesklet->iKnownWidth = pDesklet->iWidth;
@@ -535,6 +539,9 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 			G_TYPE_INT, "Desklet", "x position", iRelativePositionX,
 			G_TYPE_INT, "Desklet", "y position", iRelativePositionY,
 			G_TYPE_INVALID);
+		cairo_dock_update_desklet_position_in_gui (pDesklet->pIcon->pModuleInstance->pModule->pVisitCard->cModuleName,
+			iRelativePositionX,
+			iRelativePositionY);
 	}
 	
 	Window Xid = GDK_WINDOW_XID (pDesklet->pWidget->window);
@@ -620,7 +627,7 @@ gboolean on_scroll_desklet (GtkWidget* pWidget,
 
 void cairo_dock_project_coords_on_3D_desklet (CairoDesklet *pDesklet, int iMouseX, int iMouseY, int *iX, int *iY)
 {
-	const double a = 2.;  // formule completement approximative, qu'il faudrait affiner.
+	const double a = 1.3;  // formule completement approximative, qu'il faudrait affiner.
 	double dw = pDesklet->iWidth/2, dh = pDesklet->iHeight/2;
 	if (pDesklet->fDepthRotationY > 0 && iMouseX < dw)
 	{

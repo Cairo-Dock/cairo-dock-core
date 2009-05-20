@@ -31,6 +31,7 @@ typedef struct _AppletData AppletData;
 #define CD_APPLET_ON_CLICK_FUNC action_on_click
 #define CD_APPLET_ON_BUILD_MENU_FUNC action_on_build_menu
 #define CD_APPLET_ON_MIDDLE_CLICK_FUNC action_on_middle_click
+#define CD_APPLET_ON_DOUBLE_CLICK_FUNC action_on_double_click
 #define CD_APPLET_ON_DROP_DATA_FUNC action_on_drop_data
 #define CD_APPLET_ON_SCROLL_FUNC action_on_scroll
 #define CD_APPLET_ON_UPDATE_ICON_FUNC action_on_update_icon
@@ -58,6 +59,8 @@ gboolean CD_APPLET_ON_CLICK_FUNC (CairoDockModuleInstance *myApplet, Icon *pClic
 gboolean CD_APPLET_ON_BUILD_MENU_FUNC (CairoDockModuleInstance *myApplet, Icon *pClickedIcon, CairoContainer *pClickedContainer, GtkWidget *pAppletMenu)
 #define CD_APPLET_ON_MIDDLE_CLICK_PROTO \
 gboolean CD_APPLET_ON_MIDDLE_CLICK_FUNC (CairoDockModuleInstance *myApplet, Icon *pClickedIcon, CairoContainer *pClickedContainer)
+#define CD_APPLET_ON_DOUBLE_CLICK_PROTO \
+gboolean CD_APPLET_ON_DOUBLE_CLICK_FUNC (CairoDockModuleInstance *myApplet, Icon *pClickedIcon, CairoContainer *pClickedContainer)
 #define CD_APPLET_ON_DROP_DATA_PROTO \
 gboolean CD_APPLET_ON_DROP_DATA_FUNC (CairoDockModuleInstance *myApplet, const gchar *cReceivedData, Icon *pClickedIcon, double fPosition, CairoContainer *pClickedContainer)
 #define CD_APPLET_ON_SCROLL_PROTO \
@@ -83,6 +86,8 @@ CD_APPLET_ON_CLICK_PROTO;
 CD_APPLET_ON_BUILD_MENU_PROTO;
 #define CD_APPLET_ON_MIDDLE_CLICK_H \
 CD_APPLET_ON_MIDDLE_CLICK_PROTO;
+#define CD_APPLET_ON_DOUBLE_CLICK_H \
+CD_APPLET_ON_DOUBLE_CLICK_PROTO;
 #define CD_APPLET_ON_DROP_DATA_H \
 CD_APPLET_ON_DROP_DATA_PROTO;
 #define CD_APPLET_ON_SCROLL_H \
@@ -274,6 +279,22 @@ CD_APPLET_ON_MIDDLE_CLICK_PROTO \
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
 }
 
+//\______________________ on double-click.
+/** Debut de la fonction de notification du clic du milieu.
+*/
+#define CD_APPLET_ON_DOUBLE_CLICK_BEGIN \
+CD_APPLET_ON_DOUBLE_CLICK_PROTO \
+{ \
+	if (pClickedIcon == myIcon || (myIcon != NULL && pClickedContainer == CAIRO_CONTAINER (myIcon->pSubDock)) || pClickedContainer == CAIRO_CONTAINER (myDesklet)) \
+	{
+/** Fin de la fonction de notification du clic du milieu. Par defaut elle intercepte la notification si elle l'a recue.
+*/
+#define CD_APPLET_ON_DOUBLE_CLICK_END \
+		return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \
+	} \
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
+}
+
 //\______________________ on drop-data.
 /** Debut de la fonction de notification du glisse-depose.
 */
@@ -358,13 +379,21 @@ CD_APPLET_ON_UPDATE_ICON_PROTO \
 */
 #define CD_APPLET_UNREGISTER_FOR_BUILD_MENU_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_BUILD_MENU, (CairoDockNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, myApplet);
 
-//\______________________ notification clique milieu.
+//\______________________ notification clic milieu.
 /** Abonne l'applet aux notifications du clic du milieu. A effectuer lors de l'init de l'applet.
 */
 #define CD_APPLET_REGISTER_FOR_MIDDLE_CLICK_EVENT cairo_dock_register_notification (CAIRO_DOCK_MIDDLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK_FUNC, CAIRO_DOCK_RUN_AFTER, myApplet)
 /** Desabonne l'applet aux notifications du clic du milieu. A effectuer lors de l'arret de l'applet.
 */
 #define CD_APPLET_UNREGISTER_FOR_MIDDLE_CLICK_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_MIDDLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK_FUNC, myApplet)
+
+//\______________________ notification double clic.
+/** Abonne l'applet aux notifications du double clic. A effectuer lors de l'init de l'applet.
+*/
+#define CD_APPLET_REGISTER_FOR_DOUBLE_CLICK_EVENT cairo_dock_register_notification (CAIRO_DOCK_DOUBLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, CAIRO_DOCK_RUN_AFTER, myApplet)
+/** Desabonne l'applet aux notifications du double clic. A effectuer lors de l'arret de l'applet.
+*/
+#define CD_APPLET_UNREGISTER_FOR_DOUBLE_CLICK_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_DOUBLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, myApplet)
 
 //\______________________ notification drag'n'drop.
 /** Abonne l'applet aux notifications du glisse-depose. A effectuer lors de l'init de l'applet.

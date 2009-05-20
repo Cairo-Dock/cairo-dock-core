@@ -94,6 +94,8 @@ void cairo_dock_trigger_current_filter (void);
 
 
 void cairo_dock_deactivate_module_in_gui (const gchar *cModuleName);
+void cairo_dock_update_desklet_size_in_gui (const gchar *cModuleName, int iWidth, int iHeight);
+void cairo_dock_update_desklet_position_in_gui (const gchar *cModuleName, int x, int y);
 
 
 G_END_DECLS
