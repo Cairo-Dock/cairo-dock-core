@@ -124,6 +124,7 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 				iPreviewHeight *= 1.*iPreviewWidgetWidth/iPreviewWidth;
 				iPreviewWidth = iPreviewWidgetWidth;
 			}
+			g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight);
 			pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (pGroupDescription->cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
 		}
 		if (pPreviewPixbuf == NULL)
@@ -224,7 +225,22 @@ void on_click_apply (GtkButton *button, GtkWidget *pWindow)
 		{
 			//g_print ("found module %s\n", pInternalModule->cModuleName);
 			cairo_dock_reload_internal_module (pInternalModule, g_cConfFile);
-
+			if (pInternalModule->pExternalModules != NULL)
+			{
+				CairoDockModuleInstance *pModuleInstance;
+				GList *m;
+				int i = 0;
+				for (m = pInternalModule->pExternalModules; m != NULL; m = m->next)
+				{
+					pModule = cairo_dock_find_module_from_name (m->data);
+					if (pModule == NULL || pModule->pInstancesList == NULL)
+						continue;
+					pModuleInstance = pModule->pInstancesList->data;
+					cairo_dock_write_extra_group_conf_file (pModuleInstance->cConfFilePath, pModuleInstance, i);
+					cairo_dock_reload_module_instance (pModuleInstance, TRUE);
+					i ++;
+				}
+			}
 		}
 		else
 			cairo_dock_read_conf_file (g_cConfFile, g_pMainDock);
@@ -308,7 +324,11 @@ void on_click_normal_apply (GtkButton *button, GtkWidget *pWindow)
 	gpointer pUserData = g_object_get_data (G_OBJECT (pWindow), "action-data");
 	
 	if (pAction != NULL)
-		pAction (pUserData);
+	{
+		gboolean bKeepWindow = pAction (pUserData);
+		if (!bKeepWindow)
+			on_click_normal_quit (button, pWindow);
+	}
 	else
 		g_object_set_data (G_OBJECT (pWindow), "result", GINT_TO_POINTER (1));
 }

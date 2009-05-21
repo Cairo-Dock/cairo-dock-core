@@ -160,13 +160,13 @@ void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pI
 	
 	cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
 	cairo_pattern_add_color_stop_rgba (pGradationPattern,
-		0.,
+		(fValue >= 0 ? 0. : 1.),
 		1.,
 		0.,
 		0.,
 		1.);
 	cairo_pattern_add_color_stop_rgba (pGradationPattern,
-		1.,
+		(fValue >= 0 ? 1. : 0.),
 		0.,
 		1.,
 		0.,
@@ -179,7 +179,7 @@ void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pI
 	cairo_set_line_cap (pIconContext, CAIRO_LINE_CAP_ROUND);
 	
 	cairo_move_to (pIconContext, 3, iHeight - 3);
-	cairo_rel_line_to (pIconContext, (iWidth - 6) * fValue, 0);
+	cairo_rel_line_to (pIconContext, (iWidth - 6) * fabs (fValue), 0);
 	
 	cairo_set_source (pIconContext, pGradationPattern);
 	cairo_stroke (pIconContext);

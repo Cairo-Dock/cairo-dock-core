@@ -176,7 +176,7 @@ which opera > /dev/null && opera %s ",
 			cURL,
 			cURL,
 			cURL);  // pas super beau mais efficace ^_^
-		system (cCommand);
+		int r = system (cCommand);
 		g_free (cCommand);
 	}
 }
@@ -214,7 +214,7 @@ static void _cairo_dock_quick_hide (GtkMenuItem *pMenuItem, gpointer *data)
 static void _cairo_dock_add_autostart (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	gchar *cCommand = g_strdup_printf ("cp '/usr/share/applications/cairo-dock%s.desktop' '%s/.config/autostart'", (g_bForceCairo ? "-cairo" : ""), g_getenv ("HOME"));
-	system (cCommand);
+	int r = system (cCommand);
 	g_free (cCommand);
 }
 
@@ -475,10 +475,8 @@ static void _cairo_dock_modify_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 
 	cairo_dock_update_launcher_desktop_file (cDesktopFilePath, CAIRO_DOCK_IS_SEPARATOR (icon) ? CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR : (icon->pSubDock != NULL && icon->Xid == 0) ? CAIRO_DOCK_LAUNCHER_FOR_CONTAINER : CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE);
 
-	
 	gboolean config_ok = cairo_dock_build_normal_gui (cDesktopFilePath, NULL, _("Modify this launcher"), CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT, (CairoDockApplyConfigFunc)NULL, NULL, NULL);
 	g_free (cDesktopFilePath);
-	
 	if (config_ok)
 	{
 		_on_modify_launcher (icon);
@@ -489,9 +487,7 @@ static void _cairo_dock_modify_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 		//g_print ("on force a quitter\n");
 		pDock->bInside = TRUE;
 		pDock->bAtBottom = FALSE;
-		cairo_dock_on_leave_notify (pDock->pWidget,
-			NULL,
-			pDock);
+		cairo_dock_emit_leave_signal (pDock);
 	}
 }
 
@@ -1031,7 +1027,7 @@ static void _cairo_dock_configure_root_dock_position (GtkMenuItem *pMenuItem, gp
 	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 	{
 		gchar *cCommand = g_strdup_printf ("cp %s/%s %s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
-		system (cCommand);
+		int r = system (cCommand);
 		g_free (cCommand);
 	}
 	

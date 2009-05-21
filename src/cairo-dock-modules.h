@@ -108,5 +108,8 @@ gboolean cairo_dock_get_global_config (GKeyFile *pKeyFile);
 void cairo_dock_popup_module_instance_description (CairoDockModuleInstance *pModuleInstance);
 
 
+void cairo_dock_attach_to_another_module (CairoDockVisitCard *pVisitCard, const gchar *cOtherModuleName);
+
+
 G_END_DECLS
 #endif

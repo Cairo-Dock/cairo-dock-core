@@ -370,12 +370,16 @@ struct _CairoDockVisitCard {
 	gint iSizeOfConfig;
 	/// taille de la structure contenant les donnees du module.
 	gint iSizeOfData;
-	/// octets reserves pour preserver la compatibilite binaire lors de futurs ajouts sur l'interface entre plug-ins et dock.
 	/// VRAI ssi le plug-in peut etre instancie plusiers fois.
 	gboolean bMultiInstance;
+	/// description et mode d'emploi succint.
 	gchar *cDescription;
+	/// auteur/pseudo
 	gchar *cAuthor;
-	char reserved[8];
+	/// nom d'un module interne auquel ce module se rattache, ou NULL si aucun.
+	const gchar *cInternalModule;
+	/// octets reserves pour preserver la compatibilite binaire lors de futurs ajouts sur l'interface entre plug-ins et dock.
+	char reserved[4];
 };
 
 struct _CairoDockModuleInterface {
@@ -467,7 +471,7 @@ struct _CairoDockMinimalAppletConfig {
 	gboolean bIsDetached;
 };
 
-typedef void (* CairoDockApplyConfigFunc) (gpointer data);
+typedef gboolean (* CairoDockApplyConfigFunc) (gpointer data);
 
 
 typedef enum {
@@ -870,6 +874,7 @@ struct _CairoDockInternalModule {
 	//\_____________ Instance.
 	CairoInternalModuleConfigPtr pConfig;
 	CairoInternalModuleDataPtr pData;
+	GList *pExternalModules;
 };
 
 

@@ -24,6 +24,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-gauge.h"
 #include "cairo-dock-config.h"
+#include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-gui-factory.h"
 
 #define CAIRO_DOCK_GUI_MARGIN 4
@@ -373,7 +374,7 @@ static void _cairo_dock_set_original_value (GtkButton *button, gpointer *data)
 	gsize length = 0;
 	
 	GKeyFile *pKeyFile = g_key_file_new ();
-	g_key_file_load_from_file (pKeyFile, cOriginalConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
+	g_key_file_load_from_file (pKeyFile, cOriginalConfFilePath, 0, &erreur);  // inutile de garder les commentaires ce coup-ci.
 	if (erreur != NULL)
 	{
 		cd_warning (erreur->message);
@@ -1103,7 +1104,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						data[0] = pOneWidget;
 						data[1] = pToggleButton;
 						g_signal_connect (G_OBJECT (pPrevOneWidget), "value-changed", G_CALLBACK(_cairo_dock_set_value_in_pair), data);
-						g_print ("TESTER LE ACTIVATE SUR LES WIDGETS SIZE\n");
 					}
 					pPrevOneWidget = pOneWidget;
 					iPrevValue = iValue;
@@ -1958,15 +1958,9 @@ GtkWidget *cairo_dock_build_key_file_widget (GKeyFile* pKeyFile, const gchar *cG
 GtkWidget *cairo_dock_build_conf_file_widget (const gchar *cConfFilePath, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)
 {
 	//\_____________ On recupere les groupes du fichier.
-	GError *erreur = NULL;
-	GKeyFile* pKeyFile = g_key_file_new();
-	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning ("while trying to load %s : %s", cConfFilePath, erreur->message);
-		g_error_free (erreur);
+	GKeyFile* pKeyFile = cairo_dock_open_key_file (cConfFilePath);
+	if (pKeyFile == NULL)
 		return NULL;
-	}
 	
 	//\_____________ On construit le widget.
 	GtkWidget *pNoteBook = cairo_dock_build_key_file_widget (pKeyFile, cGettextDomain, pMainWindow, pWidgetList, pDataGarbage, cOriginalConfFilePath);
@@ -2173,7 +2167,7 @@ static int _cairo_dock_find_widget_from_name (gpointer *data, gpointer *pUserDat
 	else
 		return 1;
 }
-GList *cairo_dock_find_widgets_from_name (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName)
+GSList *cairo_dock_find_widgets_from_name (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName)
 {
 	const gchar *data[2] = {cGroupName, cKeyName};
 	GSList *pElement = g_slist_find_custom (pWidgetList, data, (GCompareFunc) _cairo_dock_find_widget_from_name);

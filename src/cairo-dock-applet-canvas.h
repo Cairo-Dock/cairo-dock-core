@@ -150,6 +150,8 @@ CD_APPLET_PRE_INIT_END
 
 #define CD_APPLET_CAN_DETACH TRUE
 
+#define CD_APPLET_ATTACH_TO_INTERNAL_MODULE(cInternalModuleName) cairo_dock_attach_to_another_module (pVisitCard, cInternalModuleName)
+
 //\______________________ init.
 /** Debut de la fonction d'initialisation de l'applet (celle qui est appelee a chaque chargement de l'applet).
 *Lis le fichier de conf de l'applet, et cree son icone ainsi que son contexte de dessin.

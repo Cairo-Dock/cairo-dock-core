@@ -27,7 +27,7 @@ void cairo_dock_update_keyfile_from_widget_list (GKeyFile *pKeyFile, GSList *pWi
 void cairo_dock_free_generated_widget_list (GSList *pWidgetList);
 
 
-GList *cairo_dock_find_widgets_from_name (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName);
+GSList *cairo_dock_find_widgets_from_name (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName);
 GtkWidget *cairo_dock_find_widget_from_name (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName);
 
 void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pThemeTable, gchar *cActiveTheme);

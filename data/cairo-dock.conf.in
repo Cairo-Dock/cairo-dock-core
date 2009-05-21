@@ -3,7 +3,6 @@
 ######## It is parsed by cairo-dock to automatically generate an appropriate GUI,##########
 ######## so don't mess into it, except if you know what you're doing ! ;-)##########
 
-#gtk-fullscreen;0;Set the position of the main dock.
 [Position]
 
 #F-[Position on the screen;gtk-fullscreen]
@@ -38,7 +37,6 @@ xinerama = false
 num screen = 0
 
 
-#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-accessibility.svg;0;How do you access to your docks ?
 [Accessibility]
 
 #F-[Space;gtk-fullscreen]
@@ -97,7 +95,6 @@ show on click = false
 lock icons = false
 
 
-#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-taskbar.png;0;Access your applications easily.
 [TaskBar]
 
 #F-[Behaviour;gtk-properties]
@@ -187,7 +184,7 @@ max name length = 15
 #{To the right, you can control the transparency of minimized windows, to the left the transparency of visible windows. The more you go aside, the more the concerned icons will be transparent; on the middle, icons are always plain.}
 visibility alpha = 0.25
 
-#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-system.png;0;All the parameters you will never want to tweak.
+
 [System]
 
 #F-[Movement parameters;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-movment.png]
@@ -286,7 +283,6 @@ config transparency = true
 modules=
 
 
-#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-hidden-dock.png;1;Define the appearance of the dock when it's hidden.
 [Hidden dock]
 
 #j+[1;1280] Size of the callback zone (width x height, in pixels) :
@@ -308,7 +304,6 @@ reverse visible image = true
 config_hidden = 
 
 
-#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-background.svg;1;Set a background to your dock.
 [Background]
 
 #F+[Extern Frame;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-frame.png]
@@ -359,14 +354,13 @@ stripes angle = 30.
 
 #i+ Number of stripes, in each pattern, to draw in the background :
 #{The bigger, the more the stripes are close to each other; with 0 stripes, the background will be filled with a single gradation.}
-number of stripes = 15
+number of stripes = 0
 
 #f+[0;1] Width of the stripes, in percentage of the pattern size :
 #{1 pattern contains N stripes, so the width can be less or equal than 1/N.}
 stripes width = 0.03
 
 
-#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-labels.png;1;Define the style of the icons' labels and quick-info.
 [Labels]
 
 #i+[0;40] Size of the font :
@@ -413,7 +407,6 @@ background for label = false
 config_labels = 
 
 
-#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-icons.svg;1;All about icons :\n size, reflection, icon theme, ...
 [Icons]
 
 #F+[Zoom effect;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-wave.png]
@@ -519,12 +512,11 @@ frame_order =
 #T+3[launchers;applications;applets] Order of the different types of icons :
 icon's type order = launchers;applications;applets
 
-#b Allow applets to be placed amongst launchers ?
+#b+ Allow applets to be placed amongst launchers ?
 #{This parameter will overwrite the previously defined order, to allow you to mix applets and launchers into the dock.}
 mix applets with launchers = false
 
 
-#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-views.svg;1;Select a view for each of your docks.
 [Views]
 
 #F+[Main Dock]
@@ -549,35 +541,19 @@ same horizontality = true
 relative icon size = 1.
 
 
-#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-dialogs.svg;1;Configure the look of the dialog bubbles.
 [Dialogs]
-
-#F+[Buttons;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-buttons.png]
-frame_button =
-
-#j+[10;64] Size of buttons in the info-bubbles (width x height) :
-#{in pixels.}
-button size = 48;48
-
-#S+ Name of an image to use for the yes/ok button :
-#{If you don't provide any, a default image will be used.}
-button_ok image = 
-
-#S+ Name of an image to use for the no/cancel button :
-#{If you don't provide any, a default image will be used.}
-button_cancel image = 
 
 #F+[Bubble;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-bubble.png]
 frame_bubble =
 
 #c+4[0;1] Background color of the bubble (r,v,b,a) :
-background color = 1.0; 1.0; 1.0; 0.7
+background color = 1.0; 1.0; 1.0; 0.8
 
-#t Choose a window decorator :
+#v
+sep_bul=
+
+#t+ Choose a window decorator :
 decorator = comics
-
-#m[dialog rendering] Configure the decorator :
-config_hidden = 
 
 #F+[Text;gtk-select-font]
 frame_text =
@@ -587,7 +563,7 @@ text color = 0.0; 0.0; 0.0
 
 #b+ Homogeneous with icons' label ?
 #{The messages will have the same style as the icons' labels. The beneath parameters are then unused.}
-homogeneous text = true
+homogeneous text = false
 
 #i+[0;40] Size of the font :
 #{approximately size in pixels, put 0 to not display labels}
@@ -606,14 +582,28 @@ message italic = false
 #b+ Should be outlined ?
 outlined = false
 
+#F+[Buttons;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-buttons.png]
+frame_button =
+
+#j+[10;64] Size of buttons in the info-bubbles (width x height) :
+#{in pixels.}
+button size = 36;36
+
+#S+ Name of an image to use for the yes/ok button :
+#{If you don't provide any, a default image will be used.}
+button_ok image = 
+
+#S+ Name of an image to use for the no/cancel button :
+#{If you don't provide any, a default image will be used.}
+button_cancel image = 
+
 #F+
-fin_text =
+fin_button =
 
 #i+[10;96] Size of the icon displayed next to the text :
 icon size = 48
 
 
-#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-desklets.png;1;The applets can be set on your desktop as widgets.
 [Desklets]
 
 #O+ Choose a default decoration for all desklets :
@@ -663,7 +653,6 @@ retach image =
 #{If you don't provide any, a default image will be used.}
 depth rotate image = 
 
-#@prefix@/@DATADIRNAME@/@PACKAGE@/icon-indicators.png;1;Indicators are extra indications on your icons.
 [Indicators]
 
 #F+[Indicator of drag'n'drop on icons]
@@ -695,7 +684,7 @@ active corner radius = 6
 #{Let it empty to draw a simple frame.}
 active indicator =
 
-#b Draw indicator above the icon ?
+#b+ Draw indicator above the icon ?
 active frame position = true
 
 
@@ -734,7 +723,6 @@ class indicator =
 
 #b+ Zoom the indicator with its icon ?
 zoom class = false
-
 
 
 #X+[Misc. Emblems]

@@ -648,7 +648,7 @@ int main (int argc, char** argv)
 	{
 		gchar *cChangeLogFilePath = g_strdup_printf ("%s/ChangeLog.txt", CAIRO_DOCK_SHARE_DATA_DIR);
 		GKeyFile *pKeyFile = g_key_file_new ();
-		g_key_file_load_from_file (pKeyFile, cChangeLogFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
+		g_key_file_load_from_file (pKeyFile, cChangeLogFilePath, 0, &erreur);  // pas de commentaire utile.
 		if (erreur != NULL)
 		{
 			cd_warning (erreur->message);

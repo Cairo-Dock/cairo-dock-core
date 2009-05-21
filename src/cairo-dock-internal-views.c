@@ -57,7 +57,9 @@ static void reload (CairoConfigViews *pPrevViews, CairoConfigViews *pViews)
 		cairo_dock_reserve_space_for_all_root_docks (myAccessibility.bReserveSpace);
 	}
 	
-	if (cairo_dock_strings_differ (pPrevViews->cSubDockDefaultRendererName, pViews->cSubDockDefaultRendererName) || pPrevViews->bSameHorizontality != pViews->bSameHorizontality || pPrevViews->fSubDockSizeRatio != pViews->fSubDockSizeRatio)
+	if (cairo_dock_strings_differ (pPrevViews->cSubDockDefaultRendererName, pViews->cSubDockDefaultRendererName) ||
+		pPrevViews->bSameHorizontality != pViews->bSameHorizontality ||
+		pPrevViews->fSubDockSizeRatio != pViews->fSubDockSizeRatio)
 	{
 		if (pPrevViews->bSameHorizontality != pViews->bSameHorizontality || pPrevViews->fSubDockSizeRatio != pViews->fSubDockSizeRatio)
 		{

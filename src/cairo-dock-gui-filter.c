@@ -270,7 +270,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 	//g_print ("%s ()\n", __func__);
 	if (sBuffer == NULL)
 		sBuffer = g_string_new ("");
-	CairoDockGroupDescription *pGroupDescription;
+	CairoDockGroupDescription *pGroupDescription, *pInternalGroupDescription;
 	gchar *cKeyWord, *str = NULL, *cModifiedText = NULL, *cDescription, *cToolTip = NULL;
 	gboolean bFound, bFrameVisible;
 	GtkWidget *pGroupBox, *pLabel, *pCategoryFrame, *pCurrentCategoryFrame = NULL;
@@ -283,13 +283,33 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 	gchar *cGettextDomain;
 	for (gd = pGroupDescriptionList; gd != NULL; gd = gd->next)
 	{
+		pGroupDescription = gd->data;
+		pGroupDescription->bMatchFilter = FALSE;
+	}
+	for (gd = pGroupDescriptionList; gd != NULL; gd = gd->next)
+	{
 		//g_print ("pGroupDescription:%x\n", gd->data);
 		//\_______________ On recupere le group description.
 		pGroupDescription = gd->data;
-		pGroupBox = gtk_widget_get_parent (pGroupDescription->pActivateButton);
+		
+		if (pGroupDescription->cInternalModule)
+		{
+			g_print ("%s : bouton emprunte a %s\n", pGroupDescription->cGroupName, pGroupDescription->cInternalModule);
+			pInternalGroupDescription = cairo_dock_find_module_description (pGroupDescription->cInternalModule);
+			if (pInternalGroupDescription != NULL)
+				pGroupBox = gtk_widget_get_parent (pInternalGroupDescription->pActivateButton);
+			else
+				continue;
+			pLabel = pInternalGroupDescription->pLabel;
+			g_print ("ok, found pGroupBox\n");
+		}
+		else
+		{
+			pGroupBox = gtk_widget_get_parent (pGroupDescription->pActivateButton);
+			pLabel = pGroupDescription->pLabel;
+		}
 		//g_print ("  %x\n", pGroupDescription->pActivateButton);
 		pCategoryFrame = gtk_widget_get_parent (pGroupBox);
-		pLabel = pGroupDescription->pLabel;
 		cGettextDomain = pGroupDescription->cGettextDomain;
 		bFound = FALSE;
 		
@@ -363,7 +383,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 		if (! bFound && pGroupDescription->cOriginalConfFilePath != NULL)
 		{
 			//\_______________ On recupere les groupes du module.
-			//g_print ("* on cherche dans le fichier de conf %s ...\n", pGroupDescription->cOriginalConfFilePath);
+			g_print ("* on cherche dans le fichier de conf %s ...\n", pGroupDescription->cOriginalConfFilePath);
 			gchar **pGroupList = NULL;
 			CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 			if (pModule != NULL)
@@ -501,7 +521,21 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 				cModifiedText = NULL;
 			}
 		}  // fin du cas ou on devait chercher dans le groupe.
-		
+
+		if (pGroupDescription->cInternalModule)
+		{
+			pInternalGroupDescription = cairo_dock_find_module_description (pGroupDescription->cInternalModule);
+			if (pInternalGroupDescription != NULL)
+			{
+				pInternalGroupDescription->bMatchFilter |= bFound;
+				bFound = pInternalGroupDescription->bMatchFilter;
+			}
+		}
+		else
+		{
+			pGroupDescription->bMatchFilter |= bFound;
+			bFound = pGroupDescription->bMatchFilter;
+		}
 		if (bFound)
 		{
 			//g_print ("on montre ce groupe\n");
@@ -511,7 +545,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 		}
 		else if (bHideOther)
 		{
-			//g_print ("on cache ce groupe\n");
+			//g_print ("on cache ce groupe (%s)\n", pGroupDescription->cGroupName);
 			gtk_widget_hide (pGroupBox);
 		}
 		else

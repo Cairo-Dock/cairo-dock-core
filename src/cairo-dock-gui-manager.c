@@ -41,6 +41,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #define CAIRO_DOCK_PREVIEW_WIDTH 250
 #define CAIRO_DOCK_PREVIEW_WIDTH_MIN 100
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
+#define CAIRO_DOCK_ICON_MARGIN 6
+#define CAIRO_DOCK_TAB_ICON_SIZE 32
 
 static CairoDockCategoryWidgetTable s_pCategoryWidgetTables[CAIRO_DOCK_NB_CATEGORY];
 static GList *s_pGroupDescriptionList = NULL;
@@ -53,6 +55,7 @@ static GtkWidget *s_pGroupsVBox = NULL;
 static CairoDockGroupDescription *s_pCurrentGroup = NULL;
 static GtkWidget *s_pCurrentGroupWidget = NULL;
 static GSList *s_pCurrentWidgetList = NULL;
+static GSList *s_pExtraCurrentWidgetList = NULL;
 static GtkWidget *s_pToolBar = NULL;
 static GtkWidget *s_pGroupFrame = NULL;
 static GtkWidget *s_pFilterEntry = NULL;
@@ -95,6 +98,16 @@ void cairo_dock_config_panel_created (void)
 {
 	iNbConfigDialogs ++;
 	cd_debug ("iNbConfigDialogs <- %d", iNbConfigDialogs);
+}
+
+
+static void _cairo_dock_reset_current_widget_list (void)
+{
+	cairo_dock_free_generated_widget_list (s_pCurrentWidgetList);
+	s_pCurrentWidgetList = NULL;
+	g_slist_foreach (s_pExtraCurrentWidgetList, (GFunc) cairo_dock_free_generated_widget_list, NULL);
+	g_slist_free (s_pExtraCurrentWidgetList);
+	s_pExtraCurrentWidgetList = NULL;
 }
 
 
@@ -169,7 +182,7 @@ static GtkToolItem *_cairo_dock_make_toolbutton (const gchar *cLabel, const gcha
 	return pWidget;
 }
 
-static CairoDockGroupDescription *_cairo_dock_add_group_button (gchar *cGroupName, gchar *cIcon, int iCategory, gchar *cDescription, gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, gchar *cOriginalConfFilePath, const gchar *cGettextDomain, const gchar **cDependencies)
+static inline CairoDockGroupDescription *_cairo_dock_add_group_button (const gchar *cGroupName, gchar *cIcon, int iCategory, const gchar *cDescription, const gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, const gchar *cOriginalConfFilePath, const gchar *cGettextDomain, const gchar **cDependencies, GList *pExternalModules, const gchar *cInternalModule)
 {
 	//\____________ On garde une trace de ses caracteristiques.
 	CairoDockGroupDescription *pGroupDescription = g_new0 (CairoDockGroupDescription, 1);
@@ -181,8 +194,12 @@ static CairoDockGroupDescription *_cairo_dock_add_group_button (gchar *cGroupNam
 	pGroupDescription->cIcon = g_strdup (cIcon);
 	pGroupDescription->cGettextDomain = cGettextDomain;
 	pGroupDescription->cDependencies = cDependencies;
+	pGroupDescription->pExternalModules = pExternalModules;
+	pGroupDescription->cInternalModule = cInternalModule;
 	
 	s_pGroupDescriptionList = g_list_prepend (s_pGroupDescriptionList, pGroupDescription);
+	if (cInternalModule != NULL)
+		return pGroupDescription;
 	
 	//\____________ On construit le bouton du groupe.
 	GtkWidget *pGroupHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
@@ -265,7 +282,9 @@ static gboolean _cairo_dock_add_one_module_widget (/*gchar *cModuleName, */Cairo
 		pModule->cConfFilePath != NULL,
 		NULL,
 		pModule->pVisitCard->cGettextDomain,
-		NULL);
+		NULL,
+		NULL,
+		pModule->pVisitCard->cInternalModule);
 	//g_print ("+ %s : %x;%x\n", cModuleName,pGroupDescription, pGroupDescription->pActivateButton);
 	pGroupDescription->cOriginalConfFilePath = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);  // petite optimisation, pour pas dupliquer la chaine 2 fois.
 	pGroupDescription->load_custom_widget = pModule->pInterface->load_custom_widget;
@@ -305,7 +324,7 @@ static gboolean on_expose (GtkWidget *pWidget,
 	cairo_destroy (pCairoContext);
 	return FALSE;
 }
-GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanceMode)
+GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMaintenanceMode)
 {
 	//\_____________ On construit la fenetre.
 	if (s_pMainWindow != NULL)
@@ -456,11 +475,12 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	//\_____________ On remplit avec les groupes du fichier.
 	GError *erreur = NULL;
 	GKeyFile* pKeyFile = g_key_file_new();
-	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
+	g_key_file_load_from_file (pKeyFile, cConfFilePath, 0, &erreur);  // inutile de garder les commentaires ici.
 	if (erreur != NULL)
 	{
 		cd_warning ("while trying to load %s : %s", cConfFilePath, erreur->message);
 		g_error_free (erreur);
+		g_key_file_free (pKeyFile);
 		return NULL;
 	}
 	
@@ -486,7 +506,9 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 			TRUE,  // <=> configurable
 			cOriginalConfFilePath,
 			NULL,  // domaine de traduction : celui du dock.
-			pInternalModule->cDependencies);
+			pInternalModule->cDependencies,
+			pInternalModule->pExternalModules,
+			NULL);
 	}
 	g_free (cOriginalConfFilePath);
 	g_strfreev (pGroupList);
@@ -495,7 +517,6 @@ GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanc
 	//\_____________ On remplit avec les modules.
 	gchar *cActiveModules = (g_pMainDock == NULL ? g_key_file_get_string (pKeyFile, "System", "modules", NULL) : NULL);
 	cairo_dock_foreach_module_in_alphabetical_order ((GCompareFunc) _cairo_dock_add_one_module_widget, cActiveModules);
-	//cairo_dock_foreach_module ((GHRFunc) _cairo_dock_add_one_module_widget, cActiveModules);
 	g_free (cActiveModules);
 	g_key_file_free (pKeyFile);
 	
@@ -724,8 +745,8 @@ void cairo_dock_show_all_categories (void)
 	{
 		gtk_widget_destroy (s_pCurrentGroupWidget);
 		s_pCurrentGroupWidget = NULL;
-		cairo_dock_free_generated_widget_list (s_pCurrentWidgetList);
-		s_pCurrentWidgetList = NULL;
+		_cairo_dock_reset_current_widget_list ();
+		
 		s_pCurrentGroup = NULL;
 	}
 
@@ -757,8 +778,7 @@ void cairo_dock_show_one_category (int iCategory)
 	{
 		gtk_widget_destroy (s_pCurrentGroupWidget);
 		s_pCurrentGroupWidget = NULL;
-		cairo_dock_free_generated_widget_list (s_pCurrentWidgetList);
-		s_pCurrentWidgetList = NULL;
+		_cairo_dock_reset_current_widget_list ();
 		s_pCurrentGroup = NULL;
 	}
 
@@ -800,7 +820,7 @@ void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget)
 	gtk_widget_show_all (pWidget);
 }
 
-GtkWidget *cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance)
+GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance)
 {
 	cd_debug ("%s (%s, %s)", __func__, cConfFilePath, pGroupDescription->cGroupName);
 	g_free (pGroupDescription->cConfFilePath);
@@ -811,8 +831,7 @@ GtkWidget *cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroup
 	GKeyFile* pKeyFile = cairo_dock_open_key_file (cConfFilePath);
 	g_return_val_if_fail (pKeyFile != NULL, NULL);
 	
-	cairo_dock_free_generated_widget_list (s_pCurrentWidgetList);
-	s_pCurrentWidgetList = NULL;
+	_cairo_dock_reset_current_widget_list ();
 	
 	GPtrArray *pDataGarbage = g_ptr_array_new ();
 	GtkWidget *pWidget;
@@ -835,6 +854,92 @@ GtkWidget *cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroup
 			pDataGarbage,
 			pGroupDescription->cOriginalConfFilePath);
 	}
+	
+	//\_______________ On complete avec les modules additionnels.
+	if (pGroupDescription->pExternalModules != NULL)
+	{
+		// on cree les widgets de tous les modules externes dans un meme notebook.
+		g_print ("on cree les widgets de tous les modules externes\n");
+		GtkWidget *pNoteBook = NULL;
+		GKeyFile* pExtraKeyFile;
+		CairoDockModule *pModule;
+		CairoDockModuleInstance *pExtraInstance;
+		GSList *pExtraCurrentWidgetList = NULL;
+		CairoDockGroupDescription *pExtraGroupDescription;
+		GList *p;
+		for (p = pGroupDescription->pExternalModules; p != NULL; p = p->next)
+		{
+			g_print (" + %s\n", p->data);
+			pModule = cairo_dock_find_module_from_name (p->data);
+			if (pModule == NULL)
+				continue;
+			if (pModule->cConfFilePath == NULL)  // on n'est pas encore passe par la dans le cas ou le plug-in n'a pas ete active; mais on veut pouvoir configurer un plug-in meme lorsqu'il est inactif.
+			{
+				pModule->cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
+			}
+			g_print (" + %s\n", pModule->cConfFilePath);
+
+			pExtraGroupDescription = cairo_dock_find_module_description (p->data);
+			g_print (" pExtraGroupDescription : %x\n", pExtraGroupDescription);
+			if (pExtraGroupDescription == NULL)
+				continue;
+
+			pExtraKeyFile = cairo_dock_open_key_file (pModule->cConfFilePath);
+			if (pExtraKeyFile == NULL)
+				continue;
+			GPtrArray *pExtraDataGarbage = g_ptr_array_new ();
+			
+			pExtraCurrentWidgetList = NULL;
+			pNoteBook = cairo_dock_build_key_file_widget (pExtraKeyFile,
+				pExtraGroupDescription->cGettextDomain,
+				cairo_dock_get_main_window (),
+				&pExtraCurrentWidgetList,
+				pExtraDataGarbage,
+				pExtraGroupDescription->cOriginalConfFilePath);  /// TODO : fournir pNoteBook a la fonction.
+			s_pExtraCurrentWidgetList = g_slist_prepend (s_pExtraCurrentWidgetList, pExtraCurrentWidgetList);
+			
+			pExtraInstance = (pModule->pInstancesList ? pModule->pInstancesList->data : NULL);  // il y'a la une limitation : les modules attaches a un module interne ne peuvent etre instancie plus d'une fois. Dans la pratique ca ne pose aucun probleme.
+			if (pExtraInstance != NULL && pExtraGroupDescription->load_custom_widget != NULL)
+				pExtraGroupDescription->load_custom_widget (pExtraInstance, pKeyFile);
+			g_key_file_free (pExtraKeyFile);
+		}
+		
+		// on rajoute la page du module interne en 1er dans le notebook.
+		if (pNoteBook != NULL)
+		{
+			GtkWidget *pLabel = gtk_label_new (dgettext (pGroupDescription->cGettextDomain, pGroupDescription->cGroupName));
+			GtkWidget *pLabelContainer = NULL;
+			GtkWidget *pAlign = NULL;
+			if (pGroupDescription->cIcon != NULL && *pGroupDescription->cIcon != '\0')
+			{
+				pLabelContainer = gtk_hbox_new (FALSE, CAIRO_DOCK_ICON_MARGIN);
+				pAlign = gtk_alignment_new (0., 0.5, 0., 0.);
+				gtk_container_add (GTK_CONTAINER (pAlign), pLabelContainer);
+
+				GtkWidget *pImage = gtk_image_new ();
+				GdkPixbuf *pixbuf;
+				if (*pGroupDescription->cIcon != '/')
+					pixbuf = gtk_widget_render_icon (pImage,
+						pGroupDescription->cIcon ,
+						GTK_ICON_SIZE_BUTTON,
+						NULL);
+				else
+					pixbuf = gdk_pixbuf_new_from_file_at_size (pGroupDescription->cIcon, CAIRO_DOCK_TAB_ICON_SIZE, CAIRO_DOCK_TAB_ICON_SIZE, NULL);
+				if (pixbuf != NULL)
+				{
+					gtk_image_set_from_pixbuf (GTK_IMAGE (pImage), pixbuf);
+					gdk_pixbuf_unref (pixbuf);
+				}
+				gtk_container_add (GTK_CONTAINER (pLabelContainer),
+					pImage);
+				gtk_container_add (GTK_CONTAINER (pLabelContainer), pLabel);
+				gtk_widget_show_all (pLabelContainer);
+			}
+			gtk_notebook_prepend_page (GTK_NOTEBOOK (pNoteBook), pWidget, (pAlign != NULL ? pAlign : pLabel));
+			pWidget = pNoteBook;
+		}
+	}
+	
 	if (pInstance != NULL && pGroupDescription->load_custom_widget != NULL)
 		pGroupDescription->load_custom_widget (pInstance, pKeyFile);
 	g_key_file_free (pKeyFile);
@@ -1033,8 +1138,7 @@ void cairo_dock_free_categories (void)
 		s_pCurrentGroup->cConfFilePath = NULL;
 		s_pCurrentGroup = NULL;
 	}
-	cairo_dock_free_generated_widget_list (s_pCurrentWidgetList);
-	s_pCurrentWidgetList = NULL;
+	_cairo_dock_reset_current_widget_list ();
 	s_pCurrentGroupWidget = NULL;  // detruit en meme temps que la fenetre.
 	g_slist_free (s_path);
 	s_path = NULL;
@@ -1046,18 +1150,28 @@ void cairo_dock_free_categories (void)
 void cairo_dock_write_current_group_conf_file (gchar *cConfFilePath, CairoDockModuleInstance *pInstance)
 {
 	g_return_if_fail (cConfFilePath != NULL && s_pCurrentWidgetList != NULL);
-	GKeyFile *pKeyFile = g_key_file_new ();
-
-	GError *erreur = NULL;
-	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
+	if (pKeyFile == NULL)
 		return ;
-	}
 
 	cairo_dock_update_keyfile_from_widget_list (pKeyFile, s_pCurrentWidgetList);
+	if (pInstance != NULL && pInstance->pModule->pInterface->save_custom_widget != NULL)
+		pInstance->pModule->pInterface->save_custom_widget (pInstance, pKeyFile);
+	cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
+	g_key_file_free (pKeyFile);
+}
+
+void cairo_dock_write_extra_group_conf_file (gchar *cConfFilePath, CairoDockModuleInstance *pInstance, int iNumExtraModule)
+{
+	g_return_if_fail (cConfFilePath != NULL && s_pExtraCurrentWidgetList != NULL);
+	GSList *pWidgetList = g_slist_nth_data  (s_pExtraCurrentWidgetList, iNumExtraModule);
+	g_return_if_fail (pWidgetList != NULL);
+
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
+	if (pKeyFile == NULL)
+		return ;
+	
+	cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
 	if (pInstance != NULL && pInstance->pModule->pInterface->save_custom_widget != NULL)
 		pInstance->pModule->pInterface->save_custom_widget (pInstance, pKeyFile);
 	cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
@@ -1152,6 +1266,7 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 	}
 	else  // on bloque.
 	{
+		gtk_window_set_modal (GTK_WINDOW (pMainWindow), TRUE);
 		GMainLoop *pBlockingLoop = g_main_loop_new (NULL, FALSE);
 		g_object_set_data (G_OBJECT (pMainWindow), "loop", pBlockingLoop);
 		g_signal_connect (G_OBJECT (pMainWindow),
@@ -1221,8 +1336,7 @@ void cairo_dock_reload_current_group_widget_full (CairoDockModuleInstance *pInst
 	gtk_widget_destroy (s_pCurrentGroupWidget);
 	s_pCurrentGroupWidget = NULL;
 	
-	cairo_dock_free_generated_widget_list (s_pCurrentWidgetList);
-	s_pCurrentWidgetList = NULL;
+	_cairo_dock_reset_current_widget_list ();
 	
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (s_pCurrentGroup->cGroupName);
 	GtkWidget *pWidget;
@@ -1243,7 +1357,18 @@ void cairo_dock_reload_current_group_widget_full (CairoDockModuleInstance *pInst
 GtkWidget *cairo_dock_get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName)
 {
 	g_return_val_if_fail (s_pCurrentWidgetList != NULL, NULL);
-	return cairo_dock_find_widget_from_name (s_pCurrentWidgetList, cGroupName, cKeyName);
+	GtkWidget *pWidget = cairo_dock_find_widget_from_name (s_pCurrentWidgetList, cGroupName, cKeyName);
+	if (pWidget == NULL && s_pExtraCurrentWidgetList != NULL)
+	{
+		GSList *l;
+		for (l = s_pExtraCurrentWidgetList; l != NULL; l = l->next)
+		{
+			pWidget = cairo_dock_find_widget_from_name (l->data, cGroupName, cKeyName);
+			if (pWidget != NULL)
+				break ;
+		}
+	}
+	return pWidget;
 }
 
 
@@ -1254,6 +1379,14 @@ void cairo_dock_apply_current_filter (gchar **pKeyWords, gboolean bAllWords, gbo
 	if (s_pCurrentGroup != NULL)
 	{
 		cairo_dock_apply_filter_on_group_widget (pKeyWords, bAllWords, bSearchInToolTip, bHighLightText, bHideOther, s_pCurrentWidgetList);
+		if (s_pExtraCurrentWidgetList != NULL)
+		{
+			GSList *l;
+			for (l = s_pExtraCurrentWidgetList; l != NULL; l = l->next)
+			{
+				cairo_dock_apply_filter_on_group_widget (pKeyWords, bAllWords, bSearchInToolTip, bHighLightText, bHideOther, l->data);
+			}
+		}
 	}
 	else
 	{

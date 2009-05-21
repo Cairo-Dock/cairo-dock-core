@@ -55,6 +55,7 @@ extern int g_iWmHint;
 static GHashTable *s_hModuleTable = NULL;
 static GHashTable *s_hInternalModuleTable = NULL;
 static int s_iMaxOrder = 0;
+static GList *s_AutoLoadedModules = NULL;
 
 void cairo_dock_initialize_module_manager (gchar *cModuleDirPath)
 {
@@ -245,6 +246,11 @@ static void cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError **
 
 	if (pVisitCard->cModuleName == NULL)
 		pVisitCard->cModuleName = cairo_dock_extract_default_module_name_from_path (pCairoDockModule->cSoFilePath);
+
+	if (pCairoDockModule->pInterface->initModule == NULL || pCairoDockModule->pInterface->stopModule == NULL || pCairoDockModule->pVisitCard->cInternalModule != NULL)  // c'est un module qui ne peut etre activer et/ou desactiver; on l'activera donc automatiquement.
+	{
+		s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pCairoDockModule);
+	}
 }
 
 static void cairo_dock_close_module (CairoDockModule *module)
@@ -302,6 +308,7 @@ void cairo_dock_preload_module_from_directory (gchar *cModuleDirPath, GHashTable
 		return ;
 	}
 
+	CairoDockModule *pModule;
 	const gchar *cFileName;
 	GString *sFilePath = g_string_new ("");
 	do
@@ -313,7 +320,7 @@ void cairo_dock_preload_module_from_directory (gchar *cModuleDirPath, GHashTable
 		if (g_str_has_suffix (cFileName, ".so"))
 		{
 			g_string_printf (sFilePath, "%s/%s", cModuleDirPath, cFileName);
-			cairo_dock_load_module (sFilePath->str, pModuleTable, &tmp_erreur);
+			pModule = cairo_dock_load_module (sFilePath->str, pModuleTable, &tmp_erreur);
 			if (tmp_erreur != NULL)
 			{
 				cd_warning (tmp_erreur->message);
@@ -365,6 +372,26 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fT
 			cairo_dock_reload_module (pModule, FALSE);
 		}
 		i ++;
+	}
+	GList *m;
+	for (m = s_AutoLoadedModules; m != NULL; m = m->next)
+	{
+		pModule = m->data;
+		pModule->fLastLoadingTime = fTime;
+		if (pModule->pInstancesList == NULL)
+		{
+			cairo_dock_activate_module (pModule, &erreur);
+			if (erreur != NULL)
+			{
+				cd_warning (erreur->message);
+				g_error_free (erreur);
+				erreur = NULL;
+			}
+		}
+		else
+		{
+			cairo_dock_reload_module (pModule, FALSE);
+		}
 	}
 }
 
@@ -1234,7 +1261,6 @@ void cairo_dock_add_module_instance (CairoDockModule *pModule)
 	if (pModule->pInstancesList == NULL)
 	{
 		cd_warning ("This module has not been instanciated yet");
-		
 		return ;
 	}
 	int iNbInstances = g_list_length (pModule->pInstancesList);
@@ -1427,4 +1453,14 @@ void cairo_dock_popup_module_instance_description (CairoDockModuleInstance *pMod
 	cairo_dock_show_temporary_dialog_with_icon (cDescription, pModuleInstance->pIcon, pModuleInstance->pContainer, 0, pModuleInstance->pModule->pVisitCard->cIconFilePath);
 	g_free (cDescription);
 	g_free (cReadmeContent);
+}
+
+
+void cairo_dock_attach_to_another_module (CairoDockVisitCard *pVisitCard, const gchar *cOtherModuleName)
+{
+	CairoDockInternalModule *pInternalModule = cairo_dock_find_internal_module_from_name (cOtherModuleName);
+	g_return_if_fail (pInternalModule != NULL && pInternalModule->iCategory == pVisitCard->iCategory && pVisitCard->cInternalModule == NULL);
+	
+	pInternalModule->pExternalModules = g_list_prepend (pInternalModule->pExternalModules, pVisitCard->cModuleName);
+	pVisitCard->cInternalModule = cOtherModuleName;
 }

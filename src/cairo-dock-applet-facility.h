@@ -37,7 +37,7 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 /**
 *Dessine une barre degradee rouge->vert representant une valeur donnee a la base de l'icone.
 *@param pIconContext le contexte du dessin; n'est pas altere par la fonction.
-*@param fValue la valeur representant un pourcentage, <=1.
+*@param fValue la valeur representant un pourcentage, <=1. Si negative, le degrade est inverse, et sa valeur absolue est utilisee.
 *@param pIcon l'icone.
 *@param pContainer le container de l'icone.
 */

@@ -26,10 +26,13 @@ struct _CairoDockGroupDescription {
 	gchar *cOriginalConfFilePath;
 	gchar *cIcon;
 	gchar *cConfFilePath;
-	gchar *cGettextDomain;
+	const gchar *cGettextDomain;
 	void (* load_custom_widget) (CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile);
 	const gchar **cDependencies;
 	gboolean bIgnoreDependencies;
+	GList *pExternalModules;
+	const gchar *cInternalModule;
+	gboolean bMatchFilter;
 	} ;
 
 typedef struct _CairoDockGroupDescription CairoDockGroupDescription;
@@ -40,7 +43,7 @@ int cairo_dock_get_nb_config_panels (void);
 void cairo_dock_config_panel_destroyed (void);
 void cairo_dock_config_panel_created (void);
 
-GtkWidget *cairo_dock_build_main_ihm (gchar *cConfFilePath, gboolean bMaintenanceMode);
+GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMaintenanceMode);
 
 
 GtkWidget *cairo_dock_get_preview_image (int *iPreviewWidth);
@@ -54,7 +57,7 @@ void cairo_dock_hide_all_categories (void);
 void cairo_dock_show_all_categories (void);
 void cairo_dock_show_one_category (int iCategory);
 void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget);
-GtkWidget *cairo_dock_present_group_widget (gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance);
+GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance);
 CairoDockGroupDescription *cairo_dock_find_module_description (const gchar *cModuleName);
 void cairo_dock_present_module_gui (CairoDockModule *pModule);
 void cairo_dock_present_module_instance_gui (CairoDockModuleInstance *pModuleInstance);
@@ -63,6 +66,7 @@ void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription);
 void cairo_dock_free_categories (void);
 
 void cairo_dock_write_current_group_conf_file (gchar *cConfFilePath, CairoDockModuleInstance *pInstance);
+void cairo_dock_write_extra_group_conf_file (gchar *cConfFilePath, CairoDockModuleInstance *pInstance, int iNumExtraModule);
 
 
 gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData);

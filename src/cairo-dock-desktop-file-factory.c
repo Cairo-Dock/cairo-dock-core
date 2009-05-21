@@ -62,13 +62,9 @@ gchar *cairo_dock_generate_desktop_file_for_launcher (const gchar *cDesktopURI, 
 	cairo_dock_remove_html_spaces (cFilePath);
 
 	//\___________________ On ouvre le patron.
-	GKeyFile *pKeyFile = g_key_file_new ();
-	g_key_file_load_from_file (pKeyFile, cFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &tmp_erreur);
-	if (tmp_erreur != NULL)
-	{
-		g_propagate_error (erreur, tmp_erreur);
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cFilePath);
+	if (pKeyFile == NULL)
 		return NULL;
-	}
 
 	//\___________________ On renseigne nos champs.
 	g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", fOrder);
@@ -126,15 +122,10 @@ gchar *cairo_dock_generate_desktop_file_for_edition (CairoDockNewLauncherType iN
 	//\___________________ On ouvre le patron.
 	gchar *cDesktopFileTemplate = cairo_dock_get_launcher_template_conf_file (iNewLauncherType);
 
-	GKeyFile *pKeyFile = g_key_file_new ();
-	GError *tmp_erreur = NULL;
-	g_key_file_load_from_file (pKeyFile, cDesktopFileTemplate, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &tmp_erreur);
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cDesktopFileTemplate);
 	g_free (cDesktopFileTemplate);
-	if (tmp_erreur != NULL)
-	{
-		g_propagate_error (erreur, tmp_erreur);
+	if (pKeyFile == NULL)
 		return NULL;
-	}
 
 	//\___________________ On renseigne ce qu'on peut.
 	g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", fOrder);
@@ -172,15 +163,10 @@ gchar *cairo_dock_generate_desktop_file_for_file (const gchar *cURI, const gchar
 	//\___________________ On ouvre le patron.
 	gchar *cDesktopFileTemplate = cairo_dock_get_launcher_template_conf_file (bIsDirectory ? CAIRO_DOCK_LAUNCHER_FOR_CONTAINER : CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE);
 
-	GKeyFile *pKeyFile = g_key_file_new ();
-	GError *tmp_erreur = NULL;
-	g_key_file_load_from_file (pKeyFile, cDesktopFileTemplate, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &tmp_erreur);
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cDesktopFileTemplate);
 	g_free (cDesktopFileTemplate);
-	if (tmp_erreur != NULL)
-	{
-		g_propagate_error (erreur, tmp_erreur);
+	if (pKeyFile == NULL)
 		return NULL;
-	}
 
 	//\___________________ On renseigne ce qu'on peut.
 	g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", fOrder);
@@ -276,10 +262,15 @@ void cairo_dock_update_launcher_desktop_file (gchar *cDesktopFilePath, CairoDock
 
 	if (cairo_dock_conf_file_needs_update (pKeyFile, CAIRO_DOCK_VERSION))
 	{
-		cairo_dock_flush_conf_file_full (pKeyFile, cDesktopFilePath, CAIRO_DOCK_SHARE_DATA_DIR, FALSE, (iLauncherType == CAIRO_DOCK_LAUNCHER_FOR_CONTAINER ? CAIRO_DOCK_CONTAINER_CONF_FILE : iLauncherType == CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR ? CAIRO_DOCK_SEPARATOR_CONF_FILE : CAIRO_DOCK_LAUNCHER_CONF_FILE));
-		g_key_file_free (pKeyFile);
-		pKeyFile = g_key_file_new ();
-		g_key_file_load_from_file (pKeyFile, cDesktopFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, NULL);
+		cairo_dock_flush_conf_file_full (pKeyFile,
+			cDesktopFilePath,
+			CAIRO_DOCK_SHARE_DATA_DIR,
+			FALSE,
+			(iLauncherType == CAIRO_DOCK_LAUNCHER_FOR_CONTAINER ?
+				CAIRO_DOCK_CONTAINER_CONF_FILE :
+				(iLauncherType == CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR ?
+					CAIRO_DOCK_SEPARATOR_CONF_FILE :
+					CAIRO_DOCK_LAUNCHER_CONF_FILE)));
 	}
 	
 	g_key_file_free (pKeyFile);
