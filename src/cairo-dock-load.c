@@ -918,7 +918,7 @@ void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* 
 			&g_fIndicatorWidth,
 			&g_fIndicatorHeight,
 			NULL, NULL);
-		g_print ("g_pIndicatorSurface : %.2fx%.2f\n", g_fIndicatorWidth, g_fIndicatorHeight);
+		cd_debug ("g_pIndicatorSurface : %.2fx%.2f", g_fIndicatorWidth, g_fIndicatorHeight);
 	}
 }
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if test "x$1" = "x"; then
-	echo "usage : $0 $1"
+	echo "usage : $0 theme_name"
 	exit 1
 fi
 export THEME_NAME="$1"
@@ -64,7 +64,7 @@ import_file()
 		local_file=${f##*/}
 		echo "  => $local_file"
 		/bin/cp "$f" "$3"
-		set_value "Hidden dock" "callback image" "$local_file"
+		set_value "$1" "$2" "$local_file"
 	fi
 }
 
@@ -357,8 +357,8 @@ set_value "Configuration"	"weblet URI"			"http://www.google.com"
 set_value "Configuration"	"uri list"				""
 
 for f in launchers/*.desktop; do
-  set_current_conf_file "launchers/$f"
-  import_file "Desktop Entry"	"Icon"		icons
+	set_current_conf_file "$f"
+	import_file "Desktop Entry"	"Icon"		icons
 done;
 
 cd ..
@@ -367,7 +367,7 @@ mv current_theme "${THEME_NAME}"
 tar cfz "${THEME_NAME}.tar.gz" "${THEME_NAME}"
 mv "${THEME_NAME}" current_theme
 
-
+cd "$CURRENT_THEME_DIR"
 restore_conf_file "plug-ins/slider/slider.conf"
 restore_conf_file "plug-ins/mail/mail.conf"
 restore_conf_file "plug-ins/stack/stack.conf"

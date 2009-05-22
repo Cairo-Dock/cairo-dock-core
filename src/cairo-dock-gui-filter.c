@@ -383,7 +383,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 		if (! bFound && pGroupDescription->cOriginalConfFilePath != NULL)
 		{
 			//\_______________ On recupere les groupes du module.
-			g_print ("* on cherche dans le fichier de conf %s ...\n", pGroupDescription->cOriginalConfFilePath);
+			//g_print ("* on cherche dans le fichier de conf %s ...\n", pGroupDescription->cOriginalConfFilePath);
 			gchar **pGroupList = NULL;
 			CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 			if (pModule != NULL)
