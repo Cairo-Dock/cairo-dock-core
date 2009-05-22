@@ -230,8 +230,10 @@ void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle 
 		return ;
 	if (pArea->y < 0)
 		pArea->y = 0;
-	if (pArea->y + pArea->height > pContainer->iHeight)
+	if (pContainer->bIsHorizontal && pArea->y + pArea->height > pContainer->iHeight)
 		pArea->height = pContainer->iHeight - pArea->y;
+	else if (! pContainer->bIsHorizontal && pArea->x + pArea->width > pContainer->iHeight)
+		pArea->height = pContainer->iHeight - pArea->x;
 	//g_print ("rect (%d;%d) (%dx%d)\n", pArea->x, pArea->y, pArea->width, pArea->height);
 	if (pArea->width > 0 && pArea->height > 0)
 		gdk_window_invalidate_rect (pContainer->pWidget->window, pArea, FALSE);

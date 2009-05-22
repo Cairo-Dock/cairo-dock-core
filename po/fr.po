@@ -2995,7 +2995,7 @@ msgid ""
 "Restart your session : the gnome-panel has not been started."
 msgstr ""
 "Ouvrez  gconf-editor, éditez la clé /desktop/gnome/session/"
-"required_components_list, et effacez son contenu (\"panneau\").\n"
+"required_components_list, et effacez son contenu (\"panel\").\n"
 "Redémarrez votre session : gnome-panel n'a pas été démarré"
 
 #: ../data/messages:891

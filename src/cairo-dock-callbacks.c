@@ -120,6 +120,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		
 		if (pExpose->area.x + pExpose->area.y != 0)
 		{
+			g_print ("TESTER LE GL_SCISSOR_TEST ...\n");
 			///glEnable (GL_SCISSOR_TEST);  // n'a pas l'air de marcher ...
 			glScissor ((int) pExpose->area.x, (int) pExpose->area.y, (int) pExpose->area.width, (int) pExpose->area.height);
 		}
@@ -1024,18 +1025,11 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 }
 
 
-static gpointer _cairo_dock_launch_threaded (gchar **data)
+static gpointer _cairo_dock_launch_threaded (gchar *cCommand)
 {
 	int r;
-	if (data[1] != NULL)
-	{
-		g_print (" * cd '%s'\n", data[1]);
-		r = chdir (data[1]);
-	}
-	r = system (data[0]);
-	g_free (data[0]);
-	g_free (data[1]);
-	g_free (data);
+	r = system (cCommand);
+	g_free (cCommand);
 	return NULL;
 }
 gboolean cairo_dock_launch_command_full (const gchar *cCommandFormat, gchar *cWorkingDirectory, ...)
@@ -1056,11 +1050,14 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommandFormat, gchar *cWo
 	}
 	else
 		cBGCommand = cCommand;
+	if (cWorkingDirectory != NULL)
+	{
+		cCommand = g_strdup_printf ("cd %s && %s", cWorkingDirectory, cBGCommand);
+		g_free (cBGCommand);
+		cBGCommand = cCommand;
+	}
 	GError *erreur = NULL;
-	gchar **data = g_new (gchar *, 2);
-	data[0] = cBGCommand;
-	data[1] = g_strdup (cWorkingDirectory);
-	GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_launch_threaded, data, FALSE, &erreur);
+	GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_launch_threaded, cBGCommand, FALSE, &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning ("couldn't launch this command (%s : %s)", cBGCommand, erreur->message);

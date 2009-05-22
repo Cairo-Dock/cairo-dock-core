@@ -363,7 +363,7 @@ static void _cairo_dock_draw_appli_indicator (Icon *icon, cairo_t *pCairoContext
 				(bDirectionUp ?
 					(icon->fHeight - (g_fIndicatorHeight - myIndicators.iIndicatorDeltaY / (1 + myIcons.fAmplitude)) * fRatio) * icon->fScale :
 					- myIndicators.iIndicatorDeltaY / (1 + myIcons.fAmplitude) * icon->fScale * fRatio),
-					(icon->fWidth - g_fIndicatorWidth * fRatio) * icon->fWidthFactor * icon->fScale / 2);
+					(icon->fWidth - (bDirectionUp ? 0 : g_fIndicatorWidth * fRatio)) * icon->fWidthFactor * icon->fScale / 2);
 			cairo_scale (pCairoContext,
 				fRatio * icon->fHeightFactor * icon->fScale / (1 + myIcons.fAmplitude) * (bDirectionUp ? 1 : -1),
 				fRatio * icon->fWidthFactor * icon->fScale / (1 + myIcons.fAmplitude));

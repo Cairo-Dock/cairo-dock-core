@@ -46,8 +46,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigPosition *pPosition)
 
 static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPosition)
 {
-	g_print ("%s (%d;%d)\n", __func__, pPosition->iGapX, pPosition->iGapY);
-	
+	//g_print ("%s (%d;%d)\n", __func__, pPosition->iGapX, pPosition->iGapY);
 	if (pPosition->bUseXinerama)
 		cairo_dock_get_screen_offsets (myPosition.iNumScreen);
 	else
