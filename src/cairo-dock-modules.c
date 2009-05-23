@@ -378,7 +378,7 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fT
 	{
 		pModule = m->data;
 		pModule->fLastLoadingTime = fTime;
-		if (pModule->pInstancesList == NULL)
+		if (pModule->pInstancesList == NULL)  // on ne les active qu'une seule fois. Si lors d'un changement de theme on re-active les modules, ceux-la resteront inchanges.
 		{
 			cairo_dock_activate_module (pModule, &erreur);
 			if (erreur != NULL)
@@ -387,10 +387,6 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fT
 				g_error_free (erreur);
 				erreur = NULL;
 			}
-		}
-		else
-		{
-			cairo_dock_reload_module (pModule, FALSE);
 		}
 	}
 }

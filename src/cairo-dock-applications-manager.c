@@ -693,11 +693,17 @@ gboolean cairo_dock_window_is_on_current_desktop (int Xid)
 
 void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 {
+	g_return_if_fail (pParentDock != NULL);
 	if (icon->fPersonnalScale == 0)  // sinon on laisse l'animation actuelle.
 	{
-		if (cairo_dock_animation_will_be_visible (pParentDock) && myTaskBar.cAnimationOnActiveWindow && ! pParentDock->bInside && icon->iAnimationState == CAIRO_DOCK_STATE_REST)
+		if (myTaskBar.cAnimationOnActiveWindow)
 		{
+			if (cairo_dock_animation_will_be_visible (pParentDock) && ! pParentDock->bInside && icon->iAnimationState == CAIRO_DOCK_STATE_REST)
 			cairo_dock_request_icon_animation (icon, pParentDock, myTaskBar.cAnimationOnActiveWindow, 1);
+		}
+		else if (! pParentDock->bIsShrinkingDown)
+		{
+			cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
 		}
 	}
 }
@@ -813,10 +819,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 							}
 							else
 							{
-								if (myTaskBar.cAnimationOnActiveWindow)
-									cairo_dock_animate_icon_on_active (icon, pParentDock);
-								else if (! pParentDock->bIsShrinkingDown)
-									cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
+								cairo_dock_animate_icon_on_active (icon, pParentDock);
 							}
 							if (icon->bIsDemandingAttention)  // on force ici, car il semble qu'on ne recoive pas toujours le retour a la normale.
 								cairo_dock_appli_stops_demanding_attention (icon);

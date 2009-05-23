@@ -85,6 +85,22 @@ void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
 void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatDockWidth doivent avoir ete mis a jour au prealable.
 {
 	g_return_if_fail (pDock != NULL);
+	if (pDock->fRatio != 0 && pDock->fRatio != 1)  // on remet leur taille reelle aux icones, sinon le calcul de max_dock_size sera biaise.
+	{
+		GList *ic;
+		Icon *icon;
+		pDock->fFlatDockWidth = -myIcons.iIconGap;
+		pDock->iMaxIconHeight = 0;
+		for (ic = pDock->icons; ic != NULL; ic = ic->next)
+		{
+			icon = ic->data;
+			icon->fWidth /= pDock->fRatio;
+			icon->fHeight /= pDock->fRatio;
+			pDock->fFlatDockWidth += icon->fWidth + myIcons.iIconGap;
+			pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
+		}
+		pDock->fRatio = 1.;
+	}
 	pDock->calculate_max_dock_size (pDock);
 	
 	int iMaxAuthorizedWidth = cairo_dock_get_max_authorized_dock_width (pDock);
@@ -92,7 +108,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	do
 	{
 		double fPrevRatio = pDock->fRatio;
-		cd_debug ("  %s (%d / %d)", __func__, (int)pDock->iMaxDockWidth, iMaxAuthorizedWidth);
+		//g_print ("  %s (%d / %d)\n", __func__, (int)pDock->iMaxDockWidth, iMaxAuthorizedWidth);
 		if (pDock->iMaxDockWidth > iMaxAuthorizedWidth)
 		{
 			pDock->fRatio *= 1. * iMaxAuthorizedWidth / pDock->iMaxDockWidth;
@@ -116,7 +132,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		
 		if (fPrevRatio != pDock->fRatio)
 		{
-			cd_debug ("  -> changement du ratio : %.3f -> %.3f (%d, %d try)", fPrevRatio, pDock->fRatio, pDock->iRefCount, n);
+			//g_print ("  -> changement du ratio : %.3f -> %.3f (%d, %d try)\n", fPrevRatio, pDock->fRatio, pDock->iRefCount, n);
 			Icon *icon;
 			GList *ic;
 			pDock->fFlatDockWidth = -myIcons.iIconGap;
@@ -133,7 +149,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		}
 		
 		n ++;
-	} while ((pDock->iMaxDockWidth > iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_iScreenHeight[pDock->bHorizontalDock]) && n < 3);
+	} while ((pDock->iMaxDockWidth > iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_iScreenHeight[pDock->bHorizontalDock]) && n < 4);
 	
 	if (! pDock->bInside && (pDock->bAutoHide && pDock->iRefCount == 0))
 		return;

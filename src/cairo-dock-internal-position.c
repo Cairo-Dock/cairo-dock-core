@@ -74,11 +74,12 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 				pDock->bDirectionUp = FALSE;
 			break;
 		}
+		cairo_dock_update_dock_size (pDock);  // si bHorizonalDock a change, la taille max a change aussi.
 		cairo_dock_synchronize_sub_docks_position (pDock, FALSE);
 		cairo_dock_reload_buffers_in_all_docks (TRUE);
 	}
-	
-	cairo_dock_update_dock_size (pDock);  // si bHorizonalDock a change, ou si l'ecran a change, la taille max a change aussi.
+	else
+		cairo_dock_update_dock_size (pDock);  // si l'ecran a change, la taille max a change aussi.
 	
 	pDock->iGapX = pPosition->iGapX;
 	pDock->iGapY = pPosition->iGapY;
