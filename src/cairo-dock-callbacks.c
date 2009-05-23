@@ -120,8 +120,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		
 		if (pExpose->area.x + pExpose->area.y != 0)
 		{
-			g_print ("TESTER LE GL_SCISSOR_TEST ...\n");
-			///glEnable (GL_SCISSOR_TEST);  // n'a pas l'air de marcher ...
+			glEnable (GL_SCISSOR_TEST);  // ou comment diviser par 4 l'occupation CPU !
 			glScissor ((int) pExpose->area.x, (int) pExpose->area.y, (int) pExpose->area.width, (int) pExpose->area.height);
 		}
 		

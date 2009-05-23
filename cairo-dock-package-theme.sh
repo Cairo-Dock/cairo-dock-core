@@ -49,7 +49,7 @@ restore_conf_file ()
 	/bin/mv "$1.bak" "$1"
 }
 
-import_file()
+import_file_full()
 {
 	if test "x$CURRENT_CONF_FILE" = "x"; then
 		return
@@ -61,12 +61,28 @@ import_file()
 	fi
 	if test ${f:0:1} = "/" -o ${f:0:1} = "~"; then
 		echo " a importer"
-		local_file=${f##*/}
-		echo "  => $local_file"
 		/bin/cp "$f" "$3"
+		local_file=${f##*/}
+		if test "$4" = "1"; then
+			if test "${local_file:(-4)}" = ".svg" -o "${local_file:(-4)}" = ".png" -o "${local_file:(-4)}" = ".xpm"; then
+				local_file="${local_file%.*}"
+			fi
+		fi
+		echo "  => $local_file"
 		set_value "$1" "$2" "$local_file"
 	fi
 }
+
+import_file()
+{
+	import_file_full "$1" "$2" "$3" "0"
+}
+
+import_file_without_suffix()
+{
+	import_file_full "$1" "$2" "$3" "1"
+}
+
 
 
 _import_theme()

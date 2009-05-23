@@ -698,7 +698,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	{
 		cairo_save (pCairoContext);
 		//double fRadius = fMaxScale * MIN (.5 * myBackground.iDockRadius, 5.);  // bon compromis.
-		double fRadius = fMaxScale * MAX (pLabelDescription->iMargin, pLabelDescription->iSize/3);  // permet d'avoir un rayon meme si on n'a pas de marge.
+		double fRadius = fMaxScale * MAX (pLabelDescription->iMargin, MIN (6, pLabelDescription->iSize/3));  // permet d'avoir un rayon meme si on n'a pas de marge.
 		double fLineWidth = 0.;
 		double fFrameWidth = *iTextWidth - 2 * fRadius - fLineWidth;
 		double fFrameHeight = *iTextHeight - fLineWidth;

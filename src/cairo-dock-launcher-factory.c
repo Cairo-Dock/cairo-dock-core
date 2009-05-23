@@ -61,12 +61,13 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 	{
 		//\_______________________ On determine si le suffixe est present ou non.
 		bAddSuffix = FALSE;
-		j = 0;
+		/*j = 0;
 		while (cSuffixTab[j] != NULL && ! g_str_has_suffix (cFileName, cSuffixTab[j]))
 			j ++;
 
 		if (cSuffixTab[j] == NULL)
-			bAddSuffix = TRUE;
+			bAddSuffix = TRUE;*/
+		bAddSuffix = (strchr (cFileName, '.') == NULL);
 
 		//\_______________________ On parcourt les repertoires disponibles, en testant tous les suffixes connus.
 		i = 0;
@@ -96,7 +97,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 				else if (myIcons.pDefaultIconDirectory[2*i+1] != NULL)
 				{
 					g_string_printf (sIconPath, cFileName);
-					if (! bAddSuffix)
+					if (! bAddSuffix)  // on vire le suffixe pour chercher tous les formats dans le theme d'icones.
 					{
 						gchar *str = strrchr (sIconPath->str, '.');
 						if (str != NULL)
