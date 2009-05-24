@@ -1277,8 +1277,14 @@ GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsL
 void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double fDockWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, const GLfloat *pVertexTab, int iNbVertex, CairoDockTypeHorizontality bHorizontal, gboolean bDirectionUp, double fDecorationsOffsetX)
 {
 	//\__________________ On mappe la texture dans le cadre.
+	glEnable(GL_BLEND); // On active le blend
+	
+	glPolygonMode(GL_FRONT, GL_FILL);
+	
 	if (iBackgroundTexture != 0)
 	{
+		glColor4f(1., 1., 1., 1.); // Couleur a fond
+		glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_TEXTURE_2D); // Je veux de la texture
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		glBindTexture(GL_TEXTURE_2D, iBackgroundTexture); // allez on bind la texture
@@ -1289,12 +1295,6 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		
-		glEnable(GL_BLEND); // On active le blend
-		//glBlendFunc (GL_ONE, GL_ZERO);
-		glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-		glColor4f(1., 1., 1., 1.); // Couleur a fond
-		glPolygonMode(GL_FRONT, GL_FILL);
-		
 		//\__________________ bidouille de la texture.
 		glMatrixMode(GL_TEXTURE); // On selectionne la matrice des textures
 		glPushMatrix ();
@@ -1303,9 +1303,10 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 		glScalef (1., -1., 1.);
 		glMatrixMode(GL_MODELVIEW);
 	}
-	
+	else
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//\__________________ On place le cadre.
-	glLoadIdentity();
+	///glLoadIdentity();
 	if (bHorizontal)
 	{
 		glTranslatef ((int) (fDockOffsetX + fDockWidth/2), (int) (fDockOffsetY - fFrameHeight/2), -100);  // (int) -pDock->iMaxIconHeight * (1 + myIcons.fAmplitude) + 1
@@ -1333,7 +1334,6 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 	
 	//\__________________ On dessine le cadre.
 	glEnableClientState(GL_VERTEX_ARRAY);
-	//glVertexPointer(_CAIRO_DOCK_PATH_DIM, GL_FLOAT, 0, pVertexTab);
 	_cairo_dock_set_vertex_pointer (pVertexTab);
 	glDrawArrays(GL_POLYGON, 0, iNbVertex);  // GL_TRIANGLE_FAN
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -1361,7 +1361,8 @@ void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor,
 	glEnable(GL_BLEND);
 	
 	glLineWidth(fLineWidth); // Ici on choisi l'epaisseur du contour du polygone 
-	glColor4f(fLineColor[0], fLineColor[1], fLineColor[2], fLineColor[3]); // Et sa couleur 
+	if (fLineColor != NULL)
+		glColor4f (fLineColor[0], fLineColor[1], fLineColor[2], fLineColor[3]); // Et sa couleur.
 	
 	glEnableClientState(GL_VERTEX_ARRAY);
 	///glVertexPointer(3, GL_FLOAT, 0, pVertexTab);
@@ -1384,7 +1385,25 @@ void cairo_dock_draw_string_opengl (CairoDock *pDock, double fStringLineWidth, g
 	cairo_dock_draw_current_path_opengl (fStringLineWidth, myIcons.fStringColor, iNbVertex);
 }
 
-
+void cairo_dock_draw_rounded_rectangle_opengl (double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fOffsetX, double fOffsetY, double *fLineColor)
+{
+	int iNbVertex = 0;
+	const GLfloat *pVertexTab = cairo_dock_generate_rectangle_path (fFrameWidth, fFrameHeight, fRadius, TRUE, &iNbVertex);
+	
+	if (fLineWidth == 0)
+	{
+		if (fLineColor != NULL)
+			glColor4f (fLineColor[0], fLineColor[1], fLineColor[2], fLineColor[3]);
+		cairo_dock_draw_frame_background_opengl (0, fFrameWidth+2*fRadius, fFrameHeight, fOffsetX, fOffsetY, pVertexTab, iNbVertex, CAIRO_DOCK_HORIZONTAL, TRUE, 0.);
+	}
+	else
+	{
+		_cairo_dock_set_vertex_pointer (pVertexTab);
+		glTranslatef ((int) (fOffsetX + fFrameWidth/2), (int) (fOffsetY - fFrameHeight/2), -1);
+		glScalef (fFrameHeight, fFrameWidth, 1.);
+		cairo_dock_draw_current_path_opengl (fLineWidth, fLineColor, iNbVertex);
+	}
+}
 
 GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pContext)
 {

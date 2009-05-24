@@ -205,14 +205,14 @@ Icon *cairo_dock_get_previous_icon (GList *pIconList, Icon *pIcon);
 *@param list la liste d'icones.
 *@return l'element suivant de la liste bouclee.
 */
-#define cairo_dock_get_next_element(ic, list) (ic->next == NULL ? list : ic->next)
+#define cairo_dock_get_next_element(ic, list) (ic == NULL || ic->next == NULL ? list : ic->next)
 /**
 *Renvoie l'element precedent dans la liste, en bouclant si necessaire.
 *@param ic l'element courant.
 *@param list la liste d'icones.
 *@return l'element precedent de la liste bouclee.
 */
-#define cairo_dock_get_previous_element(ic, list) (ic->prev == NULL ? g_list_last (list) : ic->prev)
+#define cairo_dock_get_previous_element(ic, list) (ic == NULL || ic->prev == NULL ? g_list_last (list) : ic->prev)
 /**
 *Cherche l'icone ayant une commande donnee parmi une liste d'icones.
 *@param pIconList la liste d'icones.

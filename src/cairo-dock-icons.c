@@ -426,7 +426,7 @@ Icon *cairo_dock_get_icon_with_class (GList *pIconList, gchar *cClass)
 void cairo_dock_get_icon_extent (Icon *pIcon, CairoContainer *pContainer, int *iWidth, int *iHeight)
 {
 	double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	double fRatio = (CAIRO_DOCK_IS_DESKLET (pContainer) ? 1. : pContainer->fRatio);  // on ne tient pas compte de l'effet de zoom initial du desklet.
+	double fRatio = (CAIRO_DOCK_IS_DOCK (pContainer) ? pContainer->fRatio : 1.);  // on ne tient pas compte de l'effet de zoom initial du desklet.
 	if (pContainer->bIsHorizontal)
 	{
 		*iWidth = (int) (pIcon->fWidth / fRatio * fMaxScale);
