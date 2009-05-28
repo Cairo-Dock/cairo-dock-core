@@ -60,6 +60,7 @@ static GtkWidget *s_pToolBar = NULL;
 static GtkWidget *s_pGroupFrame = NULL;
 static GtkWidget *s_pFilterEntry = NULL;
 static GtkWidget *s_pActivateButton = NULL;
+static GtkWidget *s_pStatusBar = NULL;
 static GSList *s_path = NULL;
 static int s_iPreviewWidth, s_iNbButtonsByRow;
 
@@ -1131,6 +1132,7 @@ void cairo_dock_free_categories (void)
 	
 	s_pMainWindow = NULL;
 	s_pToolBar = NULL;
+	s_pStatusBar = NULL;
 	
 	if (s_pCurrentGroup != NULL)
 	{
@@ -1180,7 +1182,7 @@ void cairo_dock_write_extra_group_conf_file (gchar *cConfFilePath, CairoDockModu
 
 
 
-gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData)
+gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData, GtkWidget **pWindow)
 {
 	//\_____________ On construit la fenetre.
 	GtkWidget *pMainWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -1245,6 +1247,14 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 		0);
 	}
 	
+	//\_____________ On ajoute la barre d'etat.
+	s_pStatusBar = gtk_statusbar_new ();
+	gtk_box_pack_end (GTK_BOX (pMainVBox),  /// pButtonsHBox ?...
+		s_pStatusBar,
+		FALSE,
+		FALSE,
+		0);
+	
 	gtk_window_resize (GTK_WINDOW (pMainWindow), iWidth, iHeight);
 	
 	gtk_widget_show_all (pMainWindow);
@@ -1263,6 +1273,8 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 			"delete-event",
 			G_CALLBACK (on_delete_normal_gui),
 			NULL);
+		if (pWindow)
+			*pWindow = pMainWindow;
 	}
 	else  // on bloque.
 	{
@@ -1284,6 +1296,8 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 		iResult = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMainWindow), "result"));
 		cd_debug ("iResult : %d", iResult);
 		gtk_widget_destroy (pMainWindow);
+		if (pWindow)
+			*pWindow = NULL;
 	}
 	
 	return iResult;
@@ -1459,4 +1473,24 @@ void cairo_dock_update_desklet_position_in_gui (const gchar *cModuleName, int x,
 		if (pOneWidget != NULL)
 			gtk_spin_button_set_value (GTK_SPIN_BUTTON (pOneWidget), y);
 	}
+}
+
+void cairo_dock_set_status_message (const gchar *cMessage)
+{
+	if (s_pStatusBar == NULL)
+		return ;
+	gtk_statusbar_pop (GTK_STATUSBAR (s_pStatusBar), 0);  // clear any previous message, underflow is allowed.
+	gtk_statusbar_push (GTK_STATUSBAR (s_pStatusBar), 0, cMessage);
+}
+void cairo_dock_set_status_message_printf (const gchar *cFormat, ...)
+{
+	if (s_pStatusBar == NULL)
+		return ;
+	g_return_if_fail (cFormat != NULL);
+	va_list args;
+	va_start (args, cFormat);
+	gchar *cMessage = g_strdup_vprintf (cFormat, args);
+	cairo_dock_set_status_message (cMessage);
+	g_free (cMessage);
+	va_end (args);
 }

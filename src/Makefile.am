@@ -34,6 +34,7 @@ cairo_dock_CFLAGS = \
 	-DCAIRO_DOCK_THEME_CONF_FILE=\""themes.conf"\"\
 	-DCAIRO_DOCK_MAIN_DOCK_CONF_FILE=\""main-dock.conf"\"\
 	-DCAIRO_DOCK_DEFAULT_ICON_NAME=\""default-icon.svg"\"\
+	-DCAIRO_DOCK_DEFAULT_APPLI_ICON_NAME=\""default-icon-appli.svg"\"\
 	-DCAIRO_DOCK_DEFAULT_INDICATOR_NAME=\""default-indicator.png"\"\
 	-DCAIRO_DOCK_DEFAULT_CLASS_INDICATOR_NAME=\""default-class-indicator.svg"\"\
 	-DCAIRO_DOCK_VERSION=\""$(VERSION)"\"\

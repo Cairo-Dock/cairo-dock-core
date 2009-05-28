@@ -586,26 +586,15 @@ int main (int argc, char** argv)
 	}
 	
 	cd_message ("loading theme ...");
-	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS) || bSafeMode)
+	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS))
 	{
-		if (! bSafeMode)  // le fichier de conf n'existe pas, on copie le theme par defaut dans current_theme.
-		{
-			gchar *cCommand = g_strdup_printf ("/bin/cp -r '%s'/* '%s/%s'", CAIRO_DOCK_SHARE_DATA_DIR"/themes/_default_", g_cCairoDockDataDir, CAIRO_DOCK_CURRENT_THEME_NAME);
-			cd_message (cCommand);
-			r = system (cCommand);
-			g_free (cCommand);
-			
-			cairo_dock_mark_theme_as_modified (FALSE);  // on ne proposera pas de sauvegarder ce theme.
-			cairo_dock_load_current_theme ();
-		}
-		else  // on propose de choisir un theme.
-		{
-			do
-			{
-				cairo_dock_manage_themes (NULL, CAIRO_DOCK_START_SAFE);
-			}
-			while (g_pMainDock == NULL);
-		}
+		gchar *cCommand = g_strdup_printf ("/bin/cp -r '%s'/* '%s/%s'", CAIRO_DOCK_SHARE_DATA_DIR"/themes/_default_", g_cCairoDockDataDir, CAIRO_DOCK_CURRENT_THEME_NAME);
+		cd_message (cCommand);
+		r = system (cCommand);
+		g_free (cCommand);
+		
+		cairo_dock_mark_theme_as_modified (FALSE);  // on ne proposera pas de sauvegarder ce theme.
+		cairo_dock_load_current_theme ();
 	}
 	else
 		cairo_dock_load_current_theme ();

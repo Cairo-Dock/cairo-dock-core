@@ -69,7 +69,7 @@ void cairo_dock_write_current_group_conf_file (gchar *cConfFilePath, CairoDockMo
 void cairo_dock_write_extra_group_conf_file (gchar *cConfFilePath, CairoDockModuleInstance *pInstance, int iNumExtraModule);
 
 
-gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData);
+gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData, GtkWidget **pWindow);
 
 
 gpointer cairo_dock_get_previous_widget (void);
@@ -100,6 +100,9 @@ void cairo_dock_trigger_current_filter (void);
 void cairo_dock_deactivate_module_in_gui (const gchar *cModuleName);
 void cairo_dock_update_desklet_size_in_gui (const gchar *cModuleName, int iWidth, int iHeight);
 void cairo_dock_update_desklet_position_in_gui (const gchar *cModuleName, int x, int y);
+
+void cairo_dock_set_status_message (const gchar *cMessage);
+void cairo_dock_set_status_message_printf (const gchar *cFormat, ...);
 
 
 G_END_DECLS

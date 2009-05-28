@@ -80,11 +80,7 @@ static void _cairo_dock_initiate_theme_management (GtkMenuItem *pMenuItem, gpoin
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
 
-	gboolean bRefreshGUI;
-	do
-	{
-		bRefreshGUI = cairo_dock_manage_themes (pDock->pWidget, 0);
-	} while (bRefreshGUI);
+	cairo_dock_manage_themes ();
 }
 
 
@@ -311,7 +307,7 @@ static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, Icon *icon, Cai
 
 	gboolean config_ok;
 	if (iLauncherType != CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR)  // inutile pour un separateur.
-		config_ok = cairo_dock_build_normal_gui (cNewDesktopFilePath, NULL, _("Fill this launcher"), CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT, NULL, NULL, NULL);
+		config_ok = cairo_dock_build_normal_gui (cNewDesktopFilePath, NULL, _("Fill this launcher"), CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT, NULL, NULL, NULL, NULL);
 		//config_ok = cairo_dock_edit_conf_file (GTK_WINDOW (pDock->pWidget), cNewDesktopFilePath, _("Fill this launcher"), CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT, 0, NULL, NULL, NULL, NULL, CAIRO_DOCK_GETTEXT_PACKAGE);
 	else
 		config_ok = TRUE;
@@ -475,7 +471,7 @@ static void _cairo_dock_modify_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 
 	cairo_dock_update_launcher_desktop_file (cDesktopFilePath, CAIRO_DOCK_IS_SEPARATOR (icon) ? CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR : (icon->pSubDock != NULL && icon->Xid == 0) ? CAIRO_DOCK_LAUNCHER_FOR_CONTAINER : CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE);
 
-	gboolean config_ok = cairo_dock_build_normal_gui (cDesktopFilePath, NULL, _("Modify this launcher"), CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT, (CairoDockApplyConfigFunc)NULL, NULL, NULL);
+	gboolean config_ok = cairo_dock_build_normal_gui (cDesktopFilePath, NULL, _("Modify this launcher"), CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT, (CairoDockApplyConfigFunc)NULL, NULL, NULL, NULL);
 	g_free (cDesktopFilePath);
 	if (config_ok)
 	{
@@ -1033,7 +1029,7 @@ static void _cairo_dock_configure_root_dock_position (GtkMenuItem *pMenuItem, gp
 	
 	gchar *cTitle = g_strdup_printf (_("Set position for the dock '%s'"), cDockName);
 	//gboolean config_ok = cairo_dock_edit_conf_file (GTK_WINDOW (pDock->pWidget), cConfFilePath, cTitle, CAIRO_DOCK_CONF_PANEL_WIDTH, CAIRO_DOCK_CONF_PANEL_HEIGHT, 0, NULL, NULL, NULL, NULL, CAIRO_DOCK_GETTEXT_PACKAGE);
-	gboolean config_ok = cairo_dock_build_normal_gui (cConfFilePath, NULL, cTitle, CAIRO_DOCK_CONF_PANEL_WIDTH, CAIRO_DOCK_CONF_PANEL_HEIGHT, NULL, NULL, NULL);
+	gboolean config_ok = cairo_dock_build_normal_gui (cConfFilePath, NULL, cTitle, CAIRO_DOCK_CONF_PANEL_WIDTH, CAIRO_DOCK_CONF_PANEL_HEIGHT, NULL, NULL, NULL, NULL);
 	g_free (cTitle);
 	
 	if (config_ok)

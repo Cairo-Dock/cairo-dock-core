@@ -356,15 +356,27 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@return Le chemin vers le repertoire du theme, dans une chaine nouvellement allouee.
 */
 #define CD_CONFIG_GET_THEME_PATH(cGroupName, cKeyName, cThemeDirName, cDefaultThemeName) \
-cairo_dock_get_theme_path_for_module (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, cDefaultThemeName, MY_APPLET_SHARE_DATA_DIR"/"cThemeDirName, MY_APPLET_USER_DATA_DIR)
+	__extension__ ({\
+	gchar *_cThemePath = cairo_dock_get_theme_path_for_module (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, cDefaultThemeName, MY_APPLET_SHARE_DATA_DIR"/"cThemeDirName, MY_APPLET_USER_DATA_DIR);\
+	if (_cThemePath == NULL) {\
+		const gchar *_cMessage = _("the theme couldn't be found; the default theme will be used instead.\n You can change this by opening the configuration of this module");\
+		Icon *_pIcon = cairo_dock_get_dialogless_icon ();\
+		cairo_dock_show_temporary_dialog_with_icon ("%s : %s", _pIcon, g_pMainDock, 10000., MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, myApplet->pModule->pVisitCard->cModuleName, _cMessage); }\
+	_cThemePath; })
 
 /**
-*Recupere la valeur d'un theme de gauge, en mettant a jour la liste des jauges disponibles dans le fichier de conf.
+*Recupere la valeur d'un theme de gauge, en cherchant parmi les themes distants si necessaire.
 *@param cGroupName nom du groupe (dans le fichier de conf) du parametre correspondant au theme.
 *@param cKeyName nom de la cle (dans le fichier de conf) du parametre correspondant au theme.
 */
 #define CD_CONFIG_GET_GAUGE_THEME(cGroupName, cKeyName) \
-cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, "turbo-night-fuel")
+	__extension__ ({\
+	gchar *_cThemePath = cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, "turbo-night-fuel");\
+	if (_cThemePath == NULL) {\
+		const gchar *_cMessage = _("the gauge theme couldn't be found; a default gauge will be used instead.\n You can change this by opening the configuration of this module");\
+		Icon *_pIcon = cairo_dock_get_dialogless_icon ();\
+		cairo_dock_show_temporary_dialog_with_icon ("%s : %s", _pIcon, g_pMainDock, 10000., MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, myApplet->pModule->pVisitCard->cModuleName, _cMessage); }\
+	_cThemePath; })
 
 
   ////////////

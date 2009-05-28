@@ -225,7 +225,7 @@ void cairo_dock_set_xwindow_type_hint (int Xid, gchar *cWindowTypeName)
 }
 
 
-static inline _cairo_dock_window_has_type (int Xid, Atom iType)
+static inline gboolean _cairo_dock_window_has_type (int Xid, Atom iType)
 {
 	g_return_val_if_fail (Xid > 0, FALSE);
 	

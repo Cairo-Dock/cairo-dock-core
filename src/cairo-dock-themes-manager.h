@@ -79,8 +79,9 @@ void cairo_dock_load_current_theme (void);
 void cairo_dock_mark_theme_as_modified (gboolean bModified);
 gboolean cairo_dock_theme_need_save (void);
 
-
-gboolean cairo_dock_manage_themes (GtkWidget *pWidget, CairoDockStartMode iMode);
+/** Build and show the Theme Manager window.
+ * */
+void cairo_dock_manage_themes (void);
 
 /** Look for a theme with a given name into differente sources. It is faster than getting the list of themes and looking for the given one.
 *@param cThemeName name of the theme.

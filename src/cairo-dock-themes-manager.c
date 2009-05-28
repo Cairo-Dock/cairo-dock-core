@@ -48,6 +48,8 @@ extern CairoDock *g_pMainDock;
 extern int g_iWmHint;
 extern gboolean g_bForceOpenGL;
 
+static GtkWidget *s_pThemeManager = NULL;
+
 void cairo_dock_free_theme (CairoDockTheme *pTheme)
 {
 	if (pTheme == NULL)
@@ -139,6 +141,7 @@ gchar *cairo_dock_uncompress_file (gchar *cArchivePath, gchar *cExtractTo, gchar
 
 gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, gint iShowActivity, const gchar *cExtractTo, GError **erreur)
 {
+	cairo_dock_set_status_message_printf (_("Downloading theme %s"), cDistantFileName);
 	gchar *cTmpFilePath = g_strdup ("/tmp/cairo-dock-net-file.XXXXXX");
 	int fds = mkstemp (cTmpFilePath);
 	if (fds == -1)
@@ -159,8 +162,35 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	}
 	gchar *cCommand = g_strdup_printf ("%s wget \"%s/%s/%s\" -O \"%s\" -t %d -T %d%s", (iShowActivity == 2 ? "xterm -e '" : ""), cServerAdress, cDistantFilePath, cDistantFileName, cTmpFilePath, CAIRO_DOCK_DL_NB_RETRY, CAIRO_DOCK_DL_TIMEOUT, (iShowActivity == 2 ? "'" : ""));
 	g_print ("%s\n", cCommand);
+	
+	/*GError *tmp_erreur = NULL;
+	gchar *standard_output=NULL, *standard_error=NULL;
+	gint exit_status=0;
+	gboolean r = g_spawn_command_line_sync (cCommand,
+		&standard_output,
+		&standard_error,
+		&exit_status,
+		&tmp_erreur);
+	if (tmp_erreur != NULL)
+	{
+		g_propagate_error (erreur, tmp_erreur);
+		g_remove (cTmpFilePath);
+		g_free (cTmpFilePath);
+		cTmpFilePath = NULL;
+	}
+	else if (standard_error != NULL)
+	{
+		g_print ("wget error : %s\n", standard_error);
+		g_set_error (erreur, 1, 1, standard_error);
+		g_remove (cTmpFilePath);
+		g_free (cTmpFilePath);
+		cTmpFilePath = NULL;
+	}
+	g_print ("wget output : %s\n", standard_output);
+	g_free (standard_output);
+	g_free (standard_error);*/
+	
 	int r = system (cCommand);
-	close(fds);
 	if (r != 0)
 	{
 		g_set_error (erreur, 1, 1, "an error occured while executing '%s'", cCommand);
@@ -168,6 +198,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 		g_free (cTmpFilePath);
 		cTmpFilePath = NULL;
 	}
+	close(fds);
 	g_free (cCommand);
 	
 	if (cTmpFilePath != NULL && cExtractTo != NULL)
@@ -383,18 +414,15 @@ gboolean cairo_dock_theme_need_save (void)
 
 
 
-static void on_theme_destroy (gpointer *user_data)
+static void on_theme_destroy (gchar *cInitConfFile)
 {
 	g_print ("%s ()\n", __func__);
-	g_remove (user_data[0]);
-	g_free (user_data[0]);
-	cairo_dock_dialog_unreference (user_data[2]);
-	g_free (user_data);
+	g_remove (cInitConfFile);
+	g_free (cInitConfFile);
+	s_pThemeManager = NULL;
 }
-static gboolean on_theme_apply (gpointer *user_data)
+static gboolean on_theme_apply (gchar *cInitConfFile)
 {
-	gchar *cInitConfFile = user_data[0];
-	GtkWidget *pWidget = user_data[2];
 	g_print ("%s (%s)\n", __func__, cInitConfFile);
 	GError *erreur = NULL;
 	int r;  // resultat de system().
@@ -798,39 +826,27 @@ static gboolean on_theme_apply (gpointer *user_data)
 	
 	return TRUE;
 }
-gboolean cairo_dock_manage_themes (GtkWidget *pWidget, CairoDockStartMode iMode)
+void cairo_dock_manage_themes (void)
 {
+	if (s_pThemeManager != NULL)
+	{
+		gtk_window_present (s_pThemeManager);
+		return ;
+	}
+	
 	gchar *cInitConfFile = cairo_dock_build_temporary_themes_conf_file ();  // sera supprime a la destruction de la fenetre.
 	
 	//\___________________ On laisse l'utilisateur l'editer.
 	gchar *cPresentedGroup = (cairo_dock_theme_need_save () ? "Save" : NULL);
-	const gchar *cTitle = (iMode == CAIRO_DOCK_START_SAFE ? _("< Safe Mode >") : _("Manage Themes"));
+	const gchar *cTitle = _("Manage Themes");
 	
-	CairoDialog *pDialog = NULL;
-	if (iMode == CAIRO_DOCK_START_SAFE)
-	{
-		pDialog = cairo_dock_show_general_message (_("You are running Cairo-Dock in safe mode.\nWhy ? Probably because a plug-in has messed into your dock,\n or maybe your theme has got corrupted.\nSo, no plug-in will be available, and you can now save your current theme if you want\n before you start using the dock.\nTry with your current theme, if it works, it means a plug-in is wrong.\nOtherwise, try with another theme.\nSave a config that is working, and restart the dock in normal mode.\nThen, activate plug-ins one by one to guess which one is wrong."), 0.);
-		g_print ("safe mode ...\n");
-		while (gtk_events_pending ())
-			gtk_main_iteration ();
-	}
-	
-	gpointer *data = g_new0 (gpointer, 3);
-	data[0] = cInitConfFile;
-	data[1] = NULL;
-	data[2] = pDialog;
-	if (iMode == CAIRO_DOCK_START_NOMINAL)
-	{
-		gboolean bChoiceOK = cairo_dock_build_normal_gui (cInitConfFile, NULL, cTitle, CAIRO_DOCK_THEME_PANEL_WIDTH, CAIRO_DOCK_THEME_PANEL_HEIGHT, (CairoDockApplyConfigFunc) on_theme_apply, data, (GFreeFunc) on_theme_destroy);
-	}
-	else  // maintenance ou sans echec.
-	{
-		gboolean bChoiceOK = cairo_dock_build_normal_gui (cInitConfFile, NULL, cTitle, CAIRO_DOCK_THEME_PANEL_WIDTH, CAIRO_DOCK_THEME_PANEL_HEIGHT, NULL, NULL, NULL);  // bloquant.
-		on_theme_apply (data);
-		on_theme_destroy (data);
-	}
-	
-	return FALSE;
+	cairo_dock_build_normal_gui (cInitConfFile,
+		NULL, cTitle,
+		CAIRO_DOCK_THEME_PANEL_WIDTH, CAIRO_DOCK_THEME_PANEL_HEIGHT,
+		(CairoDockApplyConfigFunc) on_theme_apply,
+		cInitConfFile,
+		(GFreeFunc) on_theme_destroy,
+		&s_pThemeManager);
 }
 
 gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir)
@@ -861,7 +877,7 @@ gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareTh
 	{
 		gchar *cDistantFileName = g_strdup_printf ("%s/%s.tar.gz", cThemeName, cThemeName);
 		GError *erreur = NULL;
-		cThemePath = cairo_dock_download_file (g_cThemeServerAdress != NULL ? g_cThemeServerAdress : CAIRO_DOCK_THEME_SERVER, cDistantThemesDir, cDistantFileName, 2, cUserThemesDir, &erreur);
+		cThemePath = cairo_dock_download_file (g_cThemeServerAdress != NULL ? g_cThemeServerAdress : CAIRO_DOCK_THEME_SERVER, cDistantThemesDir, cDistantFileName, 0, cUserThemesDir, &erreur);
 		g_free (cDistantFileName);
 		if (erreur != NULL)
 		{

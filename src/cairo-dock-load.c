@@ -307,6 +307,25 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			icon->pIconBuffer = cairo_dock_create_surface_from_xpixmap (icon->iBackingPixmap, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
 		if (icon->pIconBuffer == NULL)
 			icon->pIconBuffer = cairo_dock_create_surface_from_xwindow (icon->Xid, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
+		if (icon->pIconBuffer == NULL)
+		{
+			gchar *cIconPath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
+			if (cIconPath == NULL || ! g_file_test (cIconPath, G_FILE_TEST_EXISTS))
+			{
+				g_free (cIconPath);
+				cIconPath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
+			}
+			icon->pIconBuffer = cairo_dock_create_surface_from_image (cIconPath,
+				pSourceContext,
+				fMaxScale,
+				myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
+				myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
+				CAIRO_DOCK_FILL_SPACE,
+				(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
+				(bHorizontalDock ? &icon->fHeight : &icon->fWidth),
+				NULL, NULL);
+			g_free (cIconPath);
+		}
 	}
 	else  // c'est une icone de separation.
 	{

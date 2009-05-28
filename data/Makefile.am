@@ -11,6 +11,7 @@ essentialdata_DATA = \
 	themes.conf\
 	main-dock.conf\
 	default-icon.svg\
+	default-icon-appli.svg\
 	default-indicator.png\
 	default-class-indicator.svg\
 	cairo-dock-ok.svg\

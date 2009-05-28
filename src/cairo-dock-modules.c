@@ -1145,7 +1145,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 				pInstance->pDrawContext = cairo_create (pIcon->pIconBuffer);
 			if (cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
 			{
-				cd_warning ("couldn't initialize drawing context, applet won't be able to draw its stuff !");
+				cd_warning ("couldn't initialize drawing context, applet won't be able to draw itself !");
 				bCanInit = FALSE;
 			}
 		}
