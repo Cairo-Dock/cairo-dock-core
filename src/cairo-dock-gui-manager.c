@@ -661,6 +661,14 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 		FALSE,
 		0);
 	
+	//\_____________ On ajoute la barre de status.
+	s_pStatusBar = gtk_statusbar_new ();
+	gtk_box_pack_end (GTK_BOX (pVBox),  /// pButtonsHBox ?...
+		s_pStatusBar,
+		FALSE,
+		FALSE,
+		0);
+	
 	gtk_window_resize (GTK_WINDOW (s_pMainWindow),
 		MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),
 		MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock ? g_pMainDock->iMaxDockHeight : 0)));
@@ -954,7 +962,7 @@ GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, CairoDoc
 	
 	gtk_window_set_title (GTK_WINDOW (cairo_dock_get_main_window ()), gettext (pGroupDescription->cGroupName));
 	
-	//\_______________ On met a jour la frame du groupe (label + check-button).g
+	//\_______________ On met a jour la frame du groupe (label + check-button).
 	GtkWidget *pLabel = gtk_label_new (NULL);
 	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman italic 15\" color=\"#6B2E96\"><u><b>%s</b></u></span>", pGroupDescription->cGroupName);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
@@ -1239,21 +1247,22 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 	else
 	{
 		GtkWidget *pOkButton = gtk_button_new_from_stock (GTK_STOCK_OK);
-	g_signal_connect (G_OBJECT (pOkButton), "clicked", G_CALLBACK(on_click_normal_ok), pMainWindow);
-	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
-		pOkButton,
-		FALSE,
-		FALSE,
-		0);
+		g_signal_connect (G_OBJECT (pOkButton), "clicked", G_CALLBACK(on_click_normal_ok), pMainWindow);
+		gtk_box_pack_end (GTK_BOX (pButtonsHBox),
+			pOkButton,
+			FALSE,
+			FALSE,
+			0);
 	}
 	
 	//\_____________ On ajoute la barre d'etat.
-	s_pStatusBar = gtk_statusbar_new ();
+	GtkWidget *pStatusBar = gtk_statusbar_new ();
 	gtk_box_pack_end (GTK_BOX (pMainVBox),  /// pButtonsHBox ?...
-		s_pStatusBar,
+		pStatusBar,
 		FALSE,
 		FALSE,
 		0);
+	g_object_set_data (G_OBJECT (pMainWindow), "status-bar", pStatusBar);
 	
 	gtk_window_resize (GTK_WINDOW (pMainWindow), iWidth, iHeight);
 	
@@ -1475,22 +1484,27 @@ void cairo_dock_update_desklet_position_in_gui (const gchar *cModuleName, int x,
 	}
 }
 
-void cairo_dock_set_status_message (const gchar *cMessage)
+void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage)
 {
-	if (s_pStatusBar == NULL)
+	GtkWidget *pStatusBar;
+	if (pWindow == NULL)
+		pStatusBar = s_pStatusBar;
+	else
+		pStatusBar = g_object_get_data (G_OBJECT (pWindow), "status-bar");
+	if (pStatusBar == NULL)
 		return ;
-	gtk_statusbar_pop (GTK_STATUSBAR (s_pStatusBar), 0);  // clear any previous message, underflow is allowed.
-	gtk_statusbar_push (GTK_STATUSBAR (s_pStatusBar), 0, cMessage);
+	gtk_statusbar_pop (GTK_STATUSBAR (pStatusBar), 0);  // clear any previous message, underflow is allowed.
+	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, cMessage);
 }
-void cairo_dock_set_status_message_printf (const gchar *cFormat, ...)
+void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFormat, ...)
 {
-	if (s_pStatusBar == NULL)
+	if (pWindow == NULL && s_pStatusBar == NULL)
 		return ;
 	g_return_if_fail (cFormat != NULL);
 	va_list args;
 	va_start (args, cFormat);
 	gchar *cMessage = g_strdup_vprintf (cFormat, args);
-	cairo_dock_set_status_message (cMessage);
+	cairo_dock_set_status_message (pWindow, cMessage);
 	g_free (cMessage);
 	va_end (args);
 }

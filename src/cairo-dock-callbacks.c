@@ -368,6 +368,8 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		if (myAccessibility.iShowSubDockDelay > 0)
 		{
 			//pDock->iMouseX = iX;
+			if (s_iSidShowSubDockDemand != 0)
+				g_source_remove (s_iSidShowSubDockDemand);
 			s_iSidShowSubDockDemand = g_timeout_add (myAccessibility.iShowSubDockDelay, (GSourceFunc) _cairo_dock_show_sub_dock_delayed, pDock);
 			s_pDockShowingSubDock = pDock;
 			//cd_debug ("s_iSidShowSubDockDemand <- %d\n", s_iSidShowSubDockDemand);
@@ -922,7 +924,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	pDock->fDecorationsOffsetX = 0;
 	if (pDock->iRefCount != 0)
 	{
-		gtk_window_present (GTK_WINDOW (pWidget));
+		gtk_window_present (GTK_WINDOW (pWidget));  /// utile ???
 	}
 	pDock->bInside = TRUE;
 	
@@ -997,6 +999,10 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		pDock->bAtBottom = FALSE;
 	}
 	
+	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
+	if (icon != NULL)
+		icon->bPointed = FALSE;  // sinon on ne detecte pas l'arrive sur l'icone, c'est genant si elle a un sous-dock.
+
 	cairo_dock_start_growing (pDock);
 
 	return FALSE;

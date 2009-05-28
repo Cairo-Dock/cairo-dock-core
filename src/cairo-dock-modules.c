@@ -979,7 +979,7 @@ CairoDockModule *cairo_dock_foreach_module_in_alphabetical_order (GCompareFunc p
 	GList *pModuleList = g_hash_table_get_values (s_hModuleTable);
 	pModuleList = g_list_sort (pModuleList, (GCompareFunc) _sort_module_by_alphabetical_order);
 	
-	CairoDockModule *pModule = g_list_find_custom (pModuleList, user_data, pCallback);
+	CairoDockModule *pModule = (CairoDockModule *)g_list_find_custom (pModuleList, user_data, pCallback);
 	
 	g_list_free (pModuleList);
 	return pModule;

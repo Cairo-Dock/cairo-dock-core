@@ -1440,9 +1440,6 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(pMenuItem), TRUE);
 		g_signal_connect(G_OBJECT(pMenuItem), "toggled", G_CALLBACK(_cairo_dock_keep_below), data);
 		
-		//pMenuItem = gtk_separator_menu_item_new ();
-		//gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
-
 		pMenuItem = gtk_radio_menu_item_new_with_label(group, "Compiz Fusion Widget");
 		group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(pMenuItem));
 		gtk_menu_shell_append(GTK_MENU_SHELL(pSubMenuAccessibility), pMenuItem);

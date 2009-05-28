@@ -101,8 +101,8 @@ void cairo_dock_deactivate_module_in_gui (const gchar *cModuleName);
 void cairo_dock_update_desklet_size_in_gui (const gchar *cModuleName, int iWidth, int iHeight);
 void cairo_dock_update_desklet_position_in_gui (const gchar *cModuleName, int x, int y);
 
-void cairo_dock_set_status_message (const gchar *cMessage);
-void cairo_dock_set_status_message_printf (const gchar *cFormat, ...);
+void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage);
+void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFormat, ...);
 
 
 G_END_DECLS

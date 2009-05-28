@@ -10,6 +10,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <unistd.h>
 #define __USE_XOPEN_EXTENDED
 #include <stdlib.h>
+#include <sys/stat.h>
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
@@ -141,7 +142,7 @@ gchar *cairo_dock_uncompress_file (gchar *cArchivePath, gchar *cExtractTo, gchar
 
 gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, gint iShowActivity, const gchar *cExtractTo, GError **erreur)
 {
-	cairo_dock_set_status_message_printf (_("Downloading theme %s"), cDistantFileName);
+	cairo_dock_set_status_message_printf (s_pThemeManager, _("Downloading file %s ..."), cDistantFileName);
 	gchar *cTmpFilePath = g_strdup ("/tmp/cairo-dock-net-file.XXXXXX");
 	int fds = mkstemp (cTmpFilePath);
 	if (fds == -1)
@@ -163,33 +164,6 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	gchar *cCommand = g_strdup_printf ("%s wget \"%s/%s/%s\" -O \"%s\" -t %d -T %d%s", (iShowActivity == 2 ? "xterm -e '" : ""), cServerAdress, cDistantFilePath, cDistantFileName, cTmpFilePath, CAIRO_DOCK_DL_NB_RETRY, CAIRO_DOCK_DL_TIMEOUT, (iShowActivity == 2 ? "'" : ""));
 	g_print ("%s\n", cCommand);
 	
-	/*GError *tmp_erreur = NULL;
-	gchar *standard_output=NULL, *standard_error=NULL;
-	gint exit_status=0;
-	gboolean r = g_spawn_command_line_sync (cCommand,
-		&standard_output,
-		&standard_error,
-		&exit_status,
-		&tmp_erreur);
-	if (tmp_erreur != NULL)
-	{
-		g_propagate_error (erreur, tmp_erreur);
-		g_remove (cTmpFilePath);
-		g_free (cTmpFilePath);
-		cTmpFilePath = NULL;
-	}
-	else if (standard_error != NULL)
-	{
-		g_print ("wget error : %s\n", standard_error);
-		g_set_error (erreur, 1, 1, standard_error);
-		g_remove (cTmpFilePath);
-		g_free (cTmpFilePath);
-		cTmpFilePath = NULL;
-	}
-	g_print ("wget output : %s\n", standard_output);
-	g_free (standard_output);
-	g_free (standard_error);*/
-	
 	int r = system (cCommand);
 	if (r != 0)
 	{
@@ -197,6 +171,19 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 		g_remove (cTmpFilePath);
 		g_free (cTmpFilePath);
 		cTmpFilePath = NULL;
+	}
+	
+	if (cTmpFilePath != NULL)
+	{
+		struct stat buf;
+		stat (cTmpFilePath, &buf);
+		if (buf.st_size == 0)
+		{
+			g_set_error (erreur, 1, 1, "couldn't get distant file %s", cDistantFileName);
+			g_remove (cTmpFilePath);
+			g_free (cTmpFilePath);
+			cTmpFilePath = NULL;
+		}
 	}
 	close(fds);
 	g_free (cCommand);
@@ -420,6 +407,13 @@ static void on_theme_destroy (gchar *cInitConfFile)
 	g_remove (cInitConfFile);
 	g_free (cInitConfFile);
 	s_pThemeManager = NULL;
+}
+
+static gboolean _find_module_from_user_data_dir (gchar *cModuleName, CairoDockModule *pModule, const gchar *cUserDataDirName)
+{
+	if (pModule->pVisitCard->cUserDataDir && strcmp (cUserDataDirName, pModule->pVisitCard->cUserDataDir) == 0)
+		return TRUE;
+	return FALSE;
 }
 static gboolean on_theme_apply (gchar *cInitConfFile)
 {
@@ -765,36 +759,51 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		}
 		else
 		{
-			g_string_printf (sCommand, "find '%s' -mindepth 1 ! -name '*.conf' ! -path '%s/%s*' ! -type d -exec cp -p {} '%s' \\;", cNewThemePath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // copie tous les fichiers du nouveau theme sauf les lanceurs/icones et les .conf du dock et des plug-ins.
+			g_string_printf (sCommand, "find '%s' -mindepth 1 ! -name '*.conf' ! -path '%s/%s*' ! -type d -exec cp -p {} '%s' \\;", cNewThemePath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // copie tous les fichiers du nouveau theme sauf les lanceurs et les .conf du dock et des plug-ins.
 			cd_message (sCommand->str);
 			r = system (sCommand->str);
 			
 			gchar *cNewPlugInsDir = g_strdup_printf ("%s/%s", cNewThemePath, "plug-ins");
 			GDir *dir = g_dir_open (cNewPlugInsDir, 0, NULL);  // NULL si ce theme n'a pas de repertoire 'plug-ins'.
-			const gchar* cModuleName;
-			gchar *cConfFilePath, *cNewConfFilePath, *cUserDataDirPath;
+			const gchar* cModuleDirName;
+			gchar *cConfFilePath, *cNewConfFilePath, *cUserDataDirPath, *cConfFileName;
 			do
 			{
-				cModuleName = g_dir_read_name (dir);
-				if (cModuleName == NULL)
+				cModuleDirName = g_dir_read_name (dir);
+				if (cModuleDirName == NULL)
 					break ;
 				
-				CairoDockModule *pModule =  cairo_dock_find_module_from_name (cModuleName);
+				/*CairoDockModule *pModule =  cairo_dock_find_module_from_name (cModuleName);
 				if (pModule == NULL || pModule->pVisitCard == NULL)
-					continue;
+					continue;*/
 
-				cd_debug ("  installing %s's config\n", cModuleName);
-				cUserDataDirPath = g_strdup_printf ("%s/plug-ins/%s", g_cCurrentThemePath, pModule->pVisitCard->cUserDataDir);
+				cd_debug ("  installing %s's config\n", cModuleDirName);
+				cUserDataDirPath = g_strdup_printf ("%s/plug-ins/%s", g_cCurrentThemePath, cModuleDirName);
 				if (! g_file_test (cUserDataDirPath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
 				{
 					cd_debug ("    directory %s doesn't exist, it will be created.", cUserDataDirPath);
 					
-					gchar *command = g_strdup_printf ("mkdir -p %s", cUserDataDirPath);
+					gchar *command = g_strdup_printf ("mkdir -p '%s'", cUserDataDirPath);
 					r = system (command);
 					g_free (command);
 				}
-				cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, pModule->pVisitCard->cConfFileName);
-				cNewConfFilePath = g_strdup_printf ("%s/%s/%s", cNewPlugInsDir, pModule->pVisitCard->cUserDataDir, pModule->pVisitCard->cConfFileName);
+				
+				cConfFileName = g_strdup_printf ("%s.conf", cModuleDirName);
+				cNewConfFilePath = g_strdup_printf ("%s/%s/%s", cNewPlugInsDir, cModuleDirName, cConfFileName);
+				if (! g_file_test (cNewConfFilePath, G_FILE_TEST_EXISTS))
+				{
+					g_free (cConfFileName);
+					g_free (cNewConfFilePath);
+					CairoDockModule *pModule = cairo_dock_foreach_module ((GHRFunc) _find_module_from_user_data_dir, cModuleDirName);
+					if (pModule == NULL)  // du coup, dans ce cas-la, on ne charge pas des plug-ins non utilises par l'utilisateur.
+					{
+						cd_warning ("couldn't find the module owning '%s', this file will be ignored.");
+						continue;
+					}
+					cConfFileName = g_strdup (pModule->pVisitCard->cConfFileName);
+					cNewConfFilePath = g_strdup_printf ("%s/%s/%s", cNewPlugInsDir, cModuleDirName, cConfFileName);
+				}
+				cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, cConfFileName);
 				
 				if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 				{
@@ -810,6 +819,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 				g_free (cNewConfFilePath);
 				g_free (cConfFilePath);
 				g_free (cUserDataDirPath);
+				g_free (cConfFileName);
 			}
 			while (1);
 			g_dir_close (dir);
@@ -830,7 +840,7 @@ void cairo_dock_manage_themes (void)
 {
 	if (s_pThemeManager != NULL)
 	{
-		gtk_window_present (s_pThemeManager);
+		gtk_window_present (GTK_WINDOW (s_pThemeManager));
 		return ;
 	}
 	
@@ -882,6 +892,7 @@ gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareTh
 		if (erreur != NULL)
 		{
 			cd_warning ("couldn't retrieve distant theme %s : %s" , cThemeName, erreur->message);
+			cairo_dock_set_status_message_printf (s_pThemeManager, _("couldn't retrieve distant theme %s"), cThemeName);  // le message sera repris par une bulle de dialogue, mais on le met la aussi quand meme.
 			g_error_free (erreur);
 		}
 	}

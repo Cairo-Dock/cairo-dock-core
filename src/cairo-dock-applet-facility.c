@@ -30,11 +30,12 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-applet-facility.h"
 
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
-
+extern gchar *g_cConfFile;
 extern cairo_surface_t *g_pIconBackgroundImageSurface;
 extern double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
 
@@ -600,4 +601,14 @@ void cairo_dock_get_gnome_version (int *iMajor, int *iMinor, int *iMicro) {
 void cairo_dock_pop_up_about_applet (GtkMenuItem *menu_item, CairoDockModuleInstance *pModuleInstance)
 {
 	cairo_dock_popup_module_instance_description (pModuleInstance);
+}
+
+
+void cairo_dock_open_module_config_on_demand (int iClickedButton, GtkWidget *pInteractiveWidget, CairoDockModuleInstance *pModuleInstance, CairoDialog *pDialog)
+{
+	if (iClickedButton == 0 || iClickedButton == -1)  // bouton OK ou touche Entree.
+	{
+		cairo_dock_build_main_ihm (g_cConfFile, FALSE);
+		cairo_dock_present_module_instance_gui (pModuleInstance);
+	}
 }
