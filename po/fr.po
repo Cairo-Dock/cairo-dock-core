@@ -3776,11 +3776,3 @@ msgstr ""
 " - Nouvelles applets : mail, keyboard indicator, quick folder, Toons.\n"
 " - Nombreuses corrections et améliorations dans tous les plug-ins.\n"
 " - 2.0.3 : quelques bug fixs + amelioration dans le panneau de conf."
-
-#~ msgid "Should the applications with same PID be displayed only once ?"
-#~ msgstr ""
-#~ "Les applications avec le même PID ne devraient être affichées qu'une "
-#~ "seule fois ?"
-
-#~ msgid "Configure the decorator :"
-#~ msgstr "Configurer le décorateur"

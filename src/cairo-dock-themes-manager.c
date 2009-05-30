@@ -173,17 +173,24 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 		cTmpFilePath = NULL;
 	}
 	
+	gboolean bOk = (cTmpFilePath != NULL);
 	if (cTmpFilePath != NULL)
 	{
 		struct stat buf;
 		stat (cTmpFilePath, &buf);
-		if (buf.st_size == 0)
-		{
-			g_set_error (erreur, 1, 1, "couldn't get distant file %s", cDistantFileName);
-			g_remove (cTmpFilePath);
-			g_free (cTmpFilePath);
-			cTmpFilePath = NULL;
-		}
+		bOk = (buf.st_size > 0);
+	}
+	if (! bOk)
+	{
+		g_set_error (erreur, 1, 1, "couldn't get distant file %s", cDistantFileName);
+		cairo_dock_set_status_message_printf (s_pThemeManager, _("couldn't get distant file %s"), cDistantFileName);
+		g_remove (cTmpFilePath);
+		g_free (cTmpFilePath);
+		cTmpFilePath = NULL;
+	}
+	else
+	{
+		cairo_dock_set_status_message (s_pThemeManager, "");
 	}
 	close(fds);
 	g_free (cCommand);
@@ -244,7 +251,7 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 	cd_message ("listing net themes on %s/%s ...", cServerAdress, cDirectory);
 	
 	GError *tmp_erreur = NULL;
-	gchar *cContent = cairo_dock_get_distant_file_content (cServerAdress, cDirectory, cListFileName, 1, &tmp_erreur);
+	gchar *cContent = cairo_dock_get_distant_file_content (cServerAdress, cDirectory, cListFileName, 0, &tmp_erreur);
 	if (tmp_erreur != NULL)
 	{
 		cd_warning ("couldn't retrieve themes on %s (check that your connection is alive, or retry later)", cServerAdress);

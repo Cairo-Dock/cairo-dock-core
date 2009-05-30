@@ -1057,7 +1057,7 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommandFormat, gchar *cWo
 		cBGCommand = cCommand;
 	if (cWorkingDirectory != NULL)
 	{
-		cCommand = g_strdup_printf ("cd %s && %s", cWorkingDirectory, cBGCommand);
+		cCommand = g_strdup_printf ("cd '%s' && %s", cWorkingDirectory, cBGCommand);
 		g_free (cBGCommand);
 		cBGCommand = cCommand;
 	}
@@ -1431,6 +1431,20 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 }
 
 
+gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, int iDirection)
+{
+	if (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->pSubDock != NULL && icon->pSubDock->icons != NULL && icon->cClass != NULL)  // on emule un alt+tab sur la liste des applis du sous-dock.
+	{
+		_cairo_dock_show_prev_next_in_class_subdock (icon, iDirection == GDK_SCROLL_DOWN);
+	}
+	else if (CAIRO_DOCK_IS_APPLI (icon) && icon->cClass != NULL)
+	{
+		Icon *pNextIcon = cairo_dock_get_prev_next_classmate_icon (icon, iDirection == GDK_SCROLL_DOWN);
+		if (pNextIcon != NULL)
+			cairo_dock_show_xwindow (pNextIcon->Xid);
+	}
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
 gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, CairoDock *pDock)
 {
 	if (pScroll->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
@@ -1463,18 +1477,7 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
 	if (icon != NULL)
 	{
-		if (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->pSubDock != NULL && icon->pSubDock->icons != NULL && icon->cClass != NULL)  // on emule un alt+tab sur la liste des applis du sous-dock.
-		{
-			_cairo_dock_show_prev_next_in_class_subdock (icon, pScroll->direction == GDK_SCROLL_DOWN);
-		}
-		else if (CAIRO_DOCK_IS_APPLI (icon) && icon->cClass != NULL)
-		{
-			Icon *pNextIcon = cairo_dock_get_prev_next_classmate_icon (icon, pScroll->direction == GDK_SCROLL_DOWN);
-			if (pNextIcon != NULL)
-				cairo_dock_show_xwindow (pNextIcon->Xid);
-		}
 		cairo_dock_notify (CAIRO_DOCK_SCROLL_ICON, icon, pDock, pScroll->direction);
-		
 	}
 
 	return FALSE;

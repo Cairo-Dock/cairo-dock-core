@@ -761,7 +761,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 		CairoDock *pFakeParentDock = NULL;
 		Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
 		g_return_val_if_fail (pFakeClassIcon != NULL, TRUE);
-		if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (pFakeClassIcon) || CAIRO_DOCK_IS_APPLET (pFakeClassIcon))
+		if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (pFakeClassIcon) || CAIRO_DOCK_IS_APPLET (pFakeClassIcon))  // le sous-dock est pointe par un inhibiteur.
 		{
 			cairo_dock_detach_icon_from_dock (pLastClassIcon, pDock, FALSE);
 			g_free (pLastClassIcon->cParentDockName);
@@ -770,9 +770,11 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			cairo_dock_destroy_dock (pDock, cClass, NULL, NULL);
 			pFakeClassIcon->pSubDock = NULL;
 			cd_debug ("sanity check : pFakeClassIcon->Xid : %d", pFakeClassIcon->Xid);
-			cairo_dock_insert_appli_in_dock (pLastClassIcon, g_pMainDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+			cairo_dock_insert_appli_in_dock (pLastClassIcon, g_pMainDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);  // a priori inutile.
+			cairo_dock_update_name_on_inhibators (cClass, pLastClassIcon->Xid, pLastClassIcon->acName);
+			cairo_dock_redraw_icon (pFakeClassIcon, CAIRO_CONTAINER (g_pMainDock));
 		}
-		else  // le sous-dock est donc pointe par un inhibiteur.
+		else  // le sous-dock est donc pointe par une icone de paille.
 		{
 			cd_debug ("trouve l'icone en papier (%x;%x)", pFakeClassIcon, pFakeParentDock);
 			cairo_dock_detach_icon_from_dock (pLastClassIcon, pDock, FALSE);
@@ -786,10 +788,19 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			
 			cd_debug (" et l'icone de paille");
 			cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
+			pLastClassIcon->fScale = pFakeClassIcon->fScale;
+			pLastClassIcon->fDrawX = pFakeClassIcon->fDrawX;
+			pLastClassIcon->fDrawY = pFakeClassIcon->fDrawY;
+			pLastClassIcon->fAlpha = pFakeClassIcon->fAlpha;
+			pLastClassIcon->fWidth = pFakeClassIcon->fWidth;
+			pLastClassIcon->fHeight = pFakeClassIcon->fHeight;
+			//pLastClassIcon-> = pFakeClassIcon->;
 			cairo_dock_free_icon (pFakeClassIcon);
 			
 			cd_debug (" puis on re-insere l'appli restante");
 			cairo_dock_insert_icon_in_dock_full (pLastClassIcon, pFakeParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
+			//pFakeParentDock->calculate_icons (pFakeParentDock);
+			
 			cairo_dock_redraw_icon (pLastClassIcon, CAIRO_CONTAINER (pFakeParentDock));  // on suppose que les tailles des 2 icones sont identiques.
 		}
 		return TRUE;

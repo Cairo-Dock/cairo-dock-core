@@ -368,7 +368,7 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 		FALSE,
 		0);
 	
-	GtkWidget *pVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_TABLE_MARGIN);
+	GtkWidget *pVBox = gtk_vbox_new (FALSE, 0*CAIRO_DOCK_TABLE_MARGIN);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pVBox,
 		TRUE,
@@ -621,8 +621,16 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 		FALSE,
 		0);
 	
+	//\_____________ On ajoute la barre de status a la fin.
+	s_pStatusBar = gtk_statusbar_new ();
+	gtk_box_pack_end (GTK_BOX (pVBox),  /// pButtonsHBox ?...
+		s_pStatusBar,
+		FALSE,
+		FALSE,
+		0);
+	
 	//\_____________ On ajoute les boutons.
-	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN*3);
+	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
 	gtk_box_pack_end (GTK_BOX (pVBox),
 		pButtonsHBox,
 		FALSE,
@@ -657,14 +665,6 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	g_signal_connect (G_OBJECT (s_pApplyButton), "clicked", G_CALLBACK(on_click_apply), NULL);
 	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
 		s_pApplyButton,
-		FALSE,
-		FALSE,
-		0);
-	
-	//\_____________ On ajoute la barre de status.
-	s_pStatusBar = gtk_statusbar_new ();
-	gtk_box_pack_end (GTK_BOX (pVBox),  /// pButtonsHBox ?...
-		s_pStatusBar,
 		FALSE,
 		FALSE,
 		0);
@@ -1218,6 +1218,15 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 		FALSE,
 		0);
 	
+	//\_____________ On ajoute la barre d'etat a la fin.
+	GtkWidget *pStatusBar = gtk_statusbar_new ();
+	gtk_box_pack_end (GTK_BOX (pMainVBox),  /// pButtonsHBox ?...
+		pStatusBar,
+		FALSE,
+		FALSE,
+		0);
+	g_object_set_data (G_OBJECT (pMainWindow), "status-bar", pStatusBar);
+	
 	//\_____________ On ajoute les boutons.
 	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN*2);
 	gtk_box_pack_end (GTK_BOX (pMainVBox),
@@ -1254,15 +1263,6 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 			FALSE,
 			0);
 	}
-	
-	//\_____________ On ajoute la barre d'etat.
-	GtkWidget *pStatusBar = gtk_statusbar_new ();
-	gtk_box_pack_end (GTK_BOX (pMainVBox),  /// pButtonsHBox ?...
-		pStatusBar,
-		FALSE,
-		FALSE,
-		0);
-	g_object_set_data (G_OBJECT (pMainWindow), "status-bar", pStatusBar);
 	
 	gtk_window_resize (GTK_WINDOW (pMainWindow), iWidth, iHeight);
 	
@@ -1493,6 +1493,7 @@ void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage)
 		pStatusBar = g_object_get_data (G_OBJECT (pWindow), "status-bar");
 	if (pStatusBar == NULL)
 		return ;
+	g_print ("%s (%s sur %x/%x)\n", __func__, cMessage, pWindow, pStatusBar);
 	gtk_statusbar_pop (GTK_STATUSBAR (pStatusBar), 0);  // clear any previous message, underflow is allowed.
 	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, cMessage);
 }

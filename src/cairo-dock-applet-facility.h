@@ -365,7 +365,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 		const gchar *_cMessage = _("the theme couldn't be found; the default theme will be used instead.\n You can change this by opening the configuration of this module; do you want to do it now ?");\
 		Icon *_pIcon = cairo_dock_get_dialogless_icon ();\
 		gchar *_cQuestion = g_strdup_printf ("%s : %s", myApplet->pModule->pVisitCard->cModuleName, _cMessage);\
-		cairo_dock_show_dialog_with_question (_cQuestion, _pIcon, g_pMainDock, MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, (CairoDockActionOnAnswerFunc) cairo_dock_open_module_config_on_demand, myApplet, NULL);\
+		cairo_dock_show_dialog_with_question (_cQuestion, _pIcon, CAIRO_CONTAINER (g_pMainDock), MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, (CairoDockActionOnAnswerFunc) cairo_dock_open_module_config_on_demand, myApplet, NULL);\
 		g_free (_cQuestion); }\
 	_cThemePath; })
 
@@ -381,7 +381,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 		const gchar *_cMessage = _("the gauge theme couldn't be found; a default gauge will be used instead.\n You can change this by opening the configuration of this module; do you want to do it now ?");\
 		Icon *_pIcon = cairo_dock_get_dialogless_icon ();\
 		gchar *_cQuestion = g_strdup_printf ("%s : %s", myApplet->pModule->pVisitCard->cModuleName, _cMessage);\
-		cairo_dock_show_dialog_with_question (_cQuestion, _pIcon, g_pMainDock, MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, (CairoDockActionOnAnswerFunc) cairo_dock_open_module_config_on_demand, myApplet, NULL);\
+		cairo_dock_show_dialog_with_question (_cQuestion, _pIcon, CAIRO_CONTAINER (g_pMainDock), MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, (CairoDockActionOnAnswerFunc) cairo_dock_open_module_config_on_demand, myApplet, NULL);\
 		g_free (_cQuestion); }\
 	_cThemePath; })
 

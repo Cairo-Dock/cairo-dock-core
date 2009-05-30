@@ -489,14 +489,14 @@ void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRe
 	{
 		pArea->x = (int) floor (fX);
 		pArea->y = (int) floor (fY);
-		pArea->width = (int) ceil (icon->fWidth * icon->fScale * fabs (icon->fWidthFactor)) + 0;
+		pArea->width = (int) ceil (icon->fWidth * icon->fScale * fabs (icon->fWidthFactor)) + 1;
 		pArea->height = (int) ceil (icon->fHeight * icon->fScale * fabs (icon->fHeightFactor) + fReflectSize);
 	}
 	else
 	{
 		pArea->x = (int) floor (fY);
 		pArea->y = (int) floor (fX);
-		pArea->width = ((int) ceil (icon->fHeight * icon->fScale * fabs (icon->fHeightFactor) + fReflectSize)) + 0;
+		pArea->width = ((int) ceil (icon->fHeight * icon->fScale * fabs (icon->fHeightFactor) + fReflectSize)) + 1;
 		pArea->height = (int) ceil (icon->fWidth * icon->fScale * fabs (icon->fWidthFactor));
 	}
 	//g_print ("redraw : %d;%d %dx%d\n", pArea->x, pArea->y, pArea->width,pArea->height);

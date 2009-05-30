@@ -67,7 +67,8 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 
 		if (cSuffixTab[j] == NULL)
 			bAddSuffix = TRUE;*/
-		bAddSuffix = (strchr (cFileName, '.') == NULL);
+		gchar *str = strrchr (cFileName, '.');
+		bAddSuffix = (str == NULL || ! g_ascii_isalpha (*(str+1)));
 
 		//\_______________________ On parcourt les repertoires disponibles, en testant tous les suffixes connus.
 		i = 0;

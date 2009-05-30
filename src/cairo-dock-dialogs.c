@@ -804,7 +804,7 @@ static CairoDialog *_cairo_dock_create_new_dialog (gboolean bInteractive)
 	
 	pDialog->pWidget = pWindow;
 
-	gtk_window_set_keep_above (GTK_WINDOW (pWindow), g_bKeepAbove || myAccessibility.bPopUp);
+	//gtk_window_set_keep_above (GTK_WINDOW (pWindow), g_bKeepAbove || myAccessibility.bPopUp);
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
 
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock-dialog");

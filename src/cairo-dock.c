@@ -664,7 +664,9 @@ int main (int argc, char** argv)
 	}
 	
 	if (! bTesting)
-		g_timeout_add_seconds (4, _cairo_dock_successful_launch, NULL);
+		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
+	
+	g_print ("\nTESTER LE RELOAD DE WEBLETS\n\n");
 	
 	gtk_main ();
 
