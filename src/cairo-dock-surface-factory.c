@@ -725,7 +725,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 		int i;
 		for (i = 0; i < 4; i++)
 		{
-			cairo_move_to (pCairoContext, i&2-1, 2*(i&1)-1);
+			cairo_move_to (pCairoContext, i&2, 2*(i&1));
 			pango_cairo_show_layout (pCairoContext, pLayout);
 		}
 		cairo_pop_group_to_source (pCairoContext);
@@ -741,13 +741,13 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 		/// faut-il vraiment ajouter les ink dans le pattern ???
 		if (pLabelDescription->bVerticalPattern)
 			pGradationPattern = cairo_pattern_create_linear (0.,
-				ink.y + 0 + 0*iOutlineMargin/2,  // meme remarque pour le +1.
+				ink.y + 1 + 0 + 0*iOutlineMargin/2,  // meme remarque pour le +1.
 				0.,
-				ink.y + 0 + 0*iOutlineMargin/2 + ink.height);
+				ink.y + 1 + 0 + 0*iOutlineMargin/2 + ink.height);
 		else
-			pGradationPattern = cairo_pattern_create_linear (ink.x + 0*iOutlineMargin/2,
+			pGradationPattern = cairo_pattern_create_linear (ink.x + 0*iOutlineMargin/2 + 1,
 				0.,
-				ink.x + 0*iOutlineMargin/2 + ink.width,
+				ink.x + 1 + 0*iOutlineMargin/2 + ink.width,
 				0.);
 		g_return_val_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS, NULL);
 		cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
@@ -770,6 +770,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	cairo_move_to (pCairoContext, 0, 0);
 	if (fZoomX != 1)
 		cairo_scale (pCairoContext, fZoomX, 1.);
+	cairo_move_to (pCairoContext, 1,1);
 	pango_cairo_show_layout (pCairoContext, pLayout);
 	cairo_pattern_destroy (pGradationPattern);
 	

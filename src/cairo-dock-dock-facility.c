@@ -325,10 +325,10 @@ void cairo_dock_set_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 		else if (pDock->iWindowPositionX > g_iScreenWidth[pDock->bHorizontalDock] - iNewWidth + pDock->iMinRightMargin)
 			pDock->iWindowPositionX = g_iScreenWidth[pDock->bHorizontalDock] - iNewWidth + pDock->iMinRightMargin;
 	}
-	if (pDock->iWindowPositionY < 0)
-		pDock->iWindowPositionY = 0;
-	else if (pDock->iWindowPositionY > g_iScreenHeight[pDock->bHorizontalDock] - iNewHeight)
-		pDock->iWindowPositionY = g_iScreenHeight[pDock->bHorizontalDock] - iNewHeight;
+	if (pDock->iWindowPositionY < - pDock->iMaxIconHeight)
+		pDock->iWindowPositionY = - pDock->iMaxIconHeight;
+	else if (pDock->iWindowPositionY > g_iScreenHeight[pDock->bHorizontalDock] - iNewHeight + pDock->iMaxIconHeight)
+		pDock->iWindowPositionY = g_iScreenHeight[pDock->bHorizontalDock] - iNewHeight + pDock->iMaxIconHeight;
 	
 	pDock->iWindowPositionX += g_iScreenOffsetX;
 	pDock->iWindowPositionY += g_iScreenOffsetY;

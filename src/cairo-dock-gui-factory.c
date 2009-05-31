@@ -693,12 +693,12 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 	GtkWindow *pDialog = data[1];
 	gchar *cModuleName = data[2];
 	
-	CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (cModuleName);
-
+	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
+	
 	Icon *pIcon = cairo_dock_get_current_active_icon ();
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
 	gchar *cMessage = NULL;
-	if (pGroupDescription == NULL)
+	if (pModule == NULL)
 	{
 		cMessage = g_strdup_printf (_("The '%s' plug-in was not found.\nBe sure to install it in the same version as the dock to enjoy these features."), cModuleName);
 		int iDuration = 10e3;
@@ -709,6 +709,13 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 	}
 	else
 	{
+		CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (cModuleName);
+		if (pGroupDescription == NULL)
+		{
+			cairo_dock_build_main_ihm (g_cConfFile, FALSE);
+			pGroupDescription = cairo_dock_find_module_description (cModuleName);
+			g_return_if_fail (pGroupDescription != NULL);
+		}
 		CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
 		if (pModule != NULL && pModule->pInstancesList == NULL)
 		{
