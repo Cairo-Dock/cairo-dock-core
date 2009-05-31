@@ -804,6 +804,8 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImagePath, doubl
 {
 	g_return_val_if_fail (GTK_WIDGET_REALIZED (g_pMainDock->pWidget), 0);
 	double fWidth=0, fHeight=0;
+	if (cImagePath == NULL)
+		return 0;
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (g_pMainDock));
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cImagePath,
 		pCairoContext,
@@ -813,7 +815,7 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImagePath, doubl
 		&fWidth,
 		&fHeight,
 		NULL, NULL);
-	cd_debug ("texture genere (%x, %.2fx%.2f)", pSurface, fWidth, fHeight);
+	//cd_debug ("texture genere (%x, %.2fx%.2f)", pSurface, fWidth, fHeight);
 	cairo_destroy (pCairoContext);
 	
 	if (fImageWidth != NULL)

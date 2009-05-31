@@ -894,6 +894,12 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_MY_ICONS_LIST (myDock ? (myIcon->pSubDock ? myIcon->pSubDock->icons : NULL) : myDesklet->icons)
 #define CD_APPLET_MY_ICONS_LIST_CONTAINER (myDock ? CAIRO_CONTAINER (myIcon->pSubDock) : CAIRO_CONTAINER (myDesklet))
 
+//\_________________________________ TASKBAR
+#define CD_APPLET_MANAGE_APPLICATION(cApplicationClass, bStealTaskBarIcon) do {\
+	if (myIcon->cClass != NULL && ! bStealTaskBarIcon)\
+		cairo_dock_deinhibate_class (cApplicationClass, myIcon);\
+	else if (myIcon->cClass == NULL && bStealTaskBarIcon)\
+		cairo_dock_inhibate_class (cApplicationClass, myIcon); } while (0)
 
 //\_________________________________ INTERNATIONNALISATION
 /**
