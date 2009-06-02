@@ -646,6 +646,11 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	
 	cairo_dock_stop_icon_animation (icon);
 	
+	//\___________________ On desactive sa miniature.
+	if (icon->Xid != 0)
+		cairo_dock_set_xicon_geometry (icon->Xid, 0, 0, 0, 0);
+	
+	
 	//\___________________ On l'enleve de la liste.
 	if (pDock->pFirstDrawnElement != NULL && pDock->pFirstDrawnElement->data == icon)
 	{

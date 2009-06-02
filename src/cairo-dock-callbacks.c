@@ -121,7 +121,11 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		if (pExpose->area.x + pExpose->area.y != 0)
 		{
 			glEnable (GL_SCISSOR_TEST);  // ou comment diviser par 4 l'occupation CPU !
-			glScissor ((int) pExpose->area.x, (int) pExpose->area.y, (int) pExpose->area.width, (int) pExpose->area.height);
+			glScissor ((int) pExpose->area.x,
+				(int) (pDock->bHorizontalDock ? pDock->iCurrentHeight : pDock->iCurrentWidth) -
+					pExpose->area.y - pExpose->area.height,  // lower left corner of the scissor box.
+				(int) pExpose->area.width,
+				(int) pExpose->area.height);
 		}
 		
 		if (cairo_dock_is_loading ())

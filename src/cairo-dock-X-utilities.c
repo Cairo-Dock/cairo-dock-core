@@ -46,6 +46,7 @@ static Atom s_aNetWmWindowType;
 static Atom s_aNetWmWindowTypeNormal;
 static Atom s_aNetWmWindowTypeUtility;
 static Atom s_aNetWmWindowTypeDock;
+static Atom s_aNetWmIconGeometry;
 static Atom s_aNetCurrentDesktop;
 static Atom s_aNetDesktopViewport;
 static Atom s_aNetDesktopGeometry;
@@ -70,6 +71,7 @@ void cairo_dock_initialize_X_support (void)
 	s_aNetWmWindowTypeNormal = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_NORMAL", False);
 	s_aNetWmWindowTypeUtility = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_UTILITY", False);
 	s_aNetWmWindowTypeDock = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_DOCK", False);
+	s_aNetWmIconGeometry = XInternAtom (s_XDisplay, "_NET_WM_ICON_GEOMETRY", False);
 	s_aNetCurrentDesktop = XInternAtom (s_XDisplay, "_NET_CURRENT_DESKTOP", False);
 	s_aNetDesktopViewport = XInternAtom (s_XDisplay, "_NET_DESKTOP_VIEWPORT", False);
 	s_aNetDesktopGeometry = XInternAtom (s_XDisplay, "_NET_DESKTOP_GEOMETRY", False);
@@ -264,7 +266,7 @@ void cairo_dock_set_xicon_geometry (int Xid, int iX, int iY, int iWidth, int iHe
 
 	XChangeProperty (s_XDisplay,
 		Xid,
-		XInternAtom (s_XDisplay, "_NET_WM_ICON_GEOMETRY", False),
+		s_aNetWmIconGeometry,
 		XA_CARDINAL, 32, PropModeReplace,
 		(guchar *) iIconGeometry, 4);
 }
