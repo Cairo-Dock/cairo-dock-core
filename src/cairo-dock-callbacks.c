@@ -1024,7 +1024,8 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	}
 	else if (pKey->type == GDK_KEY_RELEASE)
 	{
-		if (pKey->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
+		g_print ("pKey->keyval : %d\n", pKey->keyval);
+		if ((pKey->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && pKey->keyval == 0)  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
 		{
 			if (pDock->iRefCount == 0)
 				cairo_dock_write_root_dock_gaps (pDock);

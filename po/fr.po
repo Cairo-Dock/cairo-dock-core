@@ -2733,7 +2733,7 @@ msgstr ""
 
 #: ../data/messages:813
 msgid ""
-"Hint : to launch another instance of theprogram, shift+click on the launcher."
+"Hint : to launch another instance of the program, shift+click on the launcher."
 msgstr ""
 "Astuce : pour lancer une autre instance du programme, shift+clic sur le "
 "lanceur."

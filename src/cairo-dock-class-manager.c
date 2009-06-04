@@ -337,12 +337,9 @@ gboolean cairo_dock_prevent_inhibated_class (Icon *pIcon)
 				{
 					pInhibatorIcon->Xid = pIcon->Xid;
 					pInhibatorIcon->bIsHidden = pIcon->bIsHidden;
-					///if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (pInhibatorIcon))  // pas d'indicateur pour les applets, elles ont deja leurs propres moyens pour signaler de l'information a l'utilisateur.
-					{
-						cd_message (">>> %s prendra un indicateur au prochain redraw ! (Xid : %d)", pInhibatorIcon->acName, pInhibatorIcon->Xid);
-						pInhibatorIcon->bHasIndicator = TRUE;
-						_cairo_dock_set_same_indicator_on_sub_dock (pInhibatorIcon);
-					}
+					cd_message (">>> %s prendra un indicateur au prochain redraw ! (Xid : %d)", pInhibatorIcon->acName, pInhibatorIcon->Xid);
+					pInhibatorIcon->bHasIndicator = TRUE;
+					_cairo_dock_set_same_indicator_on_sub_dock (pInhibatorIcon);
 				}
 				
 				if (pInhibatorIcon->Xid == pIcon->Xid)  // cette icone nous controle.
@@ -476,7 +473,7 @@ void cairo_dock_update_Xid_on_inhibators (Window Xid, const gchar *cClass)
 					for (ic = pList; ic != NULL; ic = ic->next)
 					{
 						pOneIcon = ic->data;
-						if (pOneIcon != NULL && pOneIcon->fPersonnalScale == 0 && pOneIcon->Xid != Xid)  // la 2eme condition est a priori toujours vraie.
+						if (pOneIcon != NULL && pOneIcon->fPersonnalScale <= 0 && pOneIcon->Xid != Xid)  // la 2eme condition est a priori toujours vraie.
 						{
 							pSameClassIcon = pOneIcon;
 							break ;

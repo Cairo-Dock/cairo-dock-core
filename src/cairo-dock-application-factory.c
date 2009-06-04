@@ -668,6 +668,8 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, I
 		if (pDialog && myTaskBar.cForceDemandsAttention && icon->cClass && g_strstr_len (myTaskBar.cForceDemandsAttention, -1, icon->cClass))
 		{
 			gtk_window_set_keep_above (GTK_WINDOW (pDialog->pWidget), TRUE);
+			Window Xid = GDK_WINDOW_XID (pDialog->pWidget->window);
+			cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // avec ca s'il passe pas devant les fenetres plein ecran on peut flinguer le WM.
 		}
 	}
 	if (myTaskBar.cAnimationOnDemandsAttention)

@@ -2287,7 +2287,7 @@ msgid "When I launch a program with its launcher, I don’t want an additional i
 msgstr "ランチャーでプログラムを起動させたときにアイコンをタスクバーに追加したくありません"
 
 #: ../data/messages:813
-msgid "Hint : to launch another instance of theprogram, shift+click on the launcher."
+msgid "Hint : to launch another instance of the program, shift+click on the launcher."
 msgstr "ヒント : プログラムの別のインスタンスを追加的に起動させたい場合は、Shift を押しながらランチャーをクリックします。"
 
 #: ../data/messages:815

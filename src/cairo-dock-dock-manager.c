@@ -330,7 +330,9 @@ void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
 {
 	if (pDock->iRefCount > 0)
 		return;
+	
 	cairo_dock_prevent_dock_from_out_of_screen (pDock);
+	g_print ("%s (%d;%d)\n", __func__, pDock->iGapX, pDock->iGapY);
 	if (pDock->bIsMainDock)
 	{
 		cairo_dock_update_conf_file_with_position (g_cConfFile, pDock->iGapX, pDock->iGapY);

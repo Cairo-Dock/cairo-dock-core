@@ -523,7 +523,7 @@ static void _cairo_dock_show_file_properties (GtkMenuItem *pMenuItem, gpointer *
 
 		pLabel = gtk_label_new (NULL);
 		gtk_label_set_use_markup (GTK_LABEL (pLabel), TRUE);
-		g_string_printf (sInfo, "<u>Size</u> : %d bytes", iSize);
+		g_string_printf (sInfo, "<u>Size</u> : %ld bytes", iSize);
 		if (iSize > 1024*1024)
 			g_string_append_printf (sInfo, " (%.1f Mo)", 1. * iSize / 1024 / 1024);
 		else if (iSize > 1024)

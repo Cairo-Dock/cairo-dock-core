@@ -139,7 +139,7 @@ void cairo_dock_unregister_appli (Icon *icon)
 		if (icon->iLastCheckTime != -1)
 			g_hash_table_remove (s_hXWindowTable, &icon->Xid);
 		
-		cairo_dock_unregister_pid (icon);  // on n'efface pas sa classe ici car on peut en avoir besoin encore.
+		//cairo_dock_unregister_pid (icon);  // on n'efface pas sa classe ici car on peut en avoir besoin encore.
 		
 		if (icon->iBackingPixmap != 0)
 		{
@@ -188,7 +188,7 @@ static gboolean _cairo_dock_delete_one_appli (Window *pXid, Icon *pIcon, gpointe
 	}
 	
 	cairo_dock_free_icon_buffers (pIcon);  // on ne veut pas passer dans le 'unregister' ni la gestion de la classe.
-	cairo_dock_unregister_pid (pIcon);
+	//cairo_dock_unregister_pid (pIcon);
 	g_free (pIcon);
 	return TRUE;
 }
@@ -989,7 +989,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					}
 					//if (! bChangeIntercepted)
 					{
-						if (icon != NULL && icon->fPersonnalScale <= 0)  // pour une icône en cours de supression, on ne fait rien.
+						if (icon != NULL && icon->fPersonnalScale <= 0)  // pour une icone en cours de supression, on ne fait rien.
 						{
 							CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 							///if (pParentDock == NULL)
@@ -1258,12 +1258,17 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 				
 				//cairo_dock_start_icon_animation (icon, pParentDock);
 				cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
+				
+				icon->iLastCheckTime = -1;  // on va la desenregistrer tout de suite.
+				///cairo_dock_unregister_appli (icon);
+				cairo_dock_remove_appli_from_class (icon);  // elle reste une icone d'appli, et de la meme classe, mais devient invisible aux autres icones de sa classe. Inutile de tester les inhibiteurs, puisqu'elle est dans un dock.
+				bToBeRemoved = TRUE;
 			}
 			else
 			{
 				cd_message ("  pas dans un container, on la detruit donc immediatement");
 				cairo_dock_update_name_on_inhibators (icon->cClass, *Xid, NULL);
-				icon->iLastCheckTime = -1;  // pour ne pas la desenregistrer de la HashTable lors du 'free'.
+				icon->iLastCheckTime = -1;  // pour ne pas la desenregistrer de la HashTable lors du 'free' puisqu'on est en train de parcourir la table.
 				cairo_dock_free_icon (icon);
 				bToBeRemoved = TRUE;
 				/// redessiner les inhibiteurs...
@@ -1315,7 +1320,7 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 							cairo_dock_update_dock_size (pParentDock);
 					}
 				}
-				else if (myTaskBar.bMixLauncherAppli)  // on met l'indicateur sur le lanceur dans tous les cas.
+				else if (myTaskBar.bMixLauncherAppli)  // on met tout de meme l'indicateur sur le lanceur.
 				{
 					cairo_dock_prevent_inhibated_class (icon);
 				}
