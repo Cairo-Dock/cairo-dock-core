@@ -1024,7 +1024,7 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	}
 	else if (pKey->type == GDK_KEY_RELEASE)
 	{
-		g_print ("pKey->keyval : %d\n", pKey->keyval);
+		g_print ("release : pKey->keyval = %d\n", pKey->keyval);
 		if ((pKey->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && pKey->keyval == 0)  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
 		{
 			if (pDock->iRefCount == 0)
@@ -1771,7 +1771,7 @@ void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint tim
 }
 
 
-gboolean cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, CairoDock *pDock)
+/*gboolean cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, CairoDock *pDock)
 {
 	Icon *pIcon = NULL;
 	if (CAIRO_DOCK_IS_DOCK (pDock))
@@ -1788,7 +1788,7 @@ gboolean cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, CairoDock *p
 	if (answer == GTK_RESPONSE_YES)
 		gtk_main_quit ();
 	return FALSE;
-}
+}*/
 
 
 void cairo_dock_show_dock_at_mouse (CairoDock *pDock)

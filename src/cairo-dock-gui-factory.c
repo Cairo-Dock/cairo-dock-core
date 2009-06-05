@@ -1355,10 +1355,9 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				pPreviewImage = NULL;
 				length = 0;
 				GdkPixbuf *pixbuf;
-				cValueList = g_key_file_get_locale_string_list (pKeyFile, cGroupName, cKeyName, NULL, &length, NULL);
 				if (iNbElements == 1)
 				{
-					cValue =  (0 < length ? cValueList[0] : "");
+					cValue = g_key_file_get_locale_string (pKeyFile, cGroupName, cKeyName, NULL, NULL);  // nous permet de recuperer les ';' aussi.
 					if (pAuthorizedValuesList == NULL)
 					{
 						pOneWidget = gtk_entry_new ();
@@ -1453,9 +1452,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							gtk_combo_box_set_active (GTK_COMBO_BOX (pOneWidget), iSelectedItem);
 					}
 					_pack_subwidget (pOneWidget);
+					g_free (cValue);
 				}
-				else
+				else  // valeurs multiples.
 				{
+					cValueList = g_key_file_get_locale_string_list (pKeyFile, cGroupName, cKeyName, NULL, &length, NULL);
 					pOneWidget = gtk_tree_view_new ();
 					modele = _allocate_new_model ();
 					gtk_tree_view_set_model (GTK_TREE_VIEW (pOneWidget), GTK_TREE_MODEL (modele));
@@ -1657,6 +1658,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						data[0] = pOneWidget;
 						data[1] = pEntry;
 					}
+					g_strfreev (cValueList);
 				}
 
 				if (iElementType == 'S' || iElementType == 'D' || iElementType == 'u')
@@ -1727,7 +1729,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					
 					_pack_in_widget_box (pGrabKeyButton);
 				}
-				g_strfreev (cValueList);
 			break;
 
 			case 'F' :  // frame.

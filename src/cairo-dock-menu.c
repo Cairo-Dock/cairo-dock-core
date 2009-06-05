@@ -216,8 +216,20 @@ static void _cairo_dock_add_autostart (GtkMenuItem *pMenuItem, gpointer *data)
 
 static void _cairo_dock_quit (GtkMenuItem *pMenuItem, gpointer *data)
 {
-	CairoDock *pDock = data[1];
-	cairo_dock_on_delete (pDock->pWidget, NULL, pDock);
+	Icon *pIcon = data[0];
+	CairoContainer *pContainer = data[1];
+	//cairo_dock_on_delete (pDock->pWidget, NULL, pDock);
+	if (pIcon == NULL)
+	{
+		if (CAIRO_DOCK_IS_DOCK (pContainer))
+			pIcon = cairo_dock_get_dialogless_icon ();
+		else
+			pIcon = CAIRO_DESKLET (pContainer)->pIcon;
+	}
+	
+	int answer = cairo_dock_ask_question_and_wait (_("Quit Cairo-Dock ?"), pIcon, pContainer);
+	if (answer == GTK_RESPONSE_YES)
+		gtk_main_quit ();
 }
 
 

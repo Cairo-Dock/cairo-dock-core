@@ -954,7 +954,7 @@ static gboolean on_leave_desklet (GtkWidget* pWidget,
 	return FALSE;
 }
 
-gboolean on_delete_desklet (GtkWidget *pWidget, GdkEvent *event, CairoDesklet *pDesklet)
+/*gboolean on_delete_desklet (GtkWidget *pWidget, GdkEvent *event, CairoDesklet *pDesklet)
 {
 	if (pDesklet->pIcon->pModuleInstance != NULL)
 	{
@@ -965,7 +965,7 @@ gboolean on_delete_desklet (GtkWidget *pWidget, GdkEvent *event, CairoDesklet *p
 		cairo_dock_reload_module_instance (pDesklet->pIcon->pModuleInstance, TRUE);
 	}
 	return TRUE;
-}
+}*/
 
 
 CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWidget, CairoDeskletAccessibility iAccessibility)
@@ -1028,10 +1028,10 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
 		"leave-notify-event",
 		G_CALLBACK (on_leave_desklet),
 		pDesklet);
-	g_signal_connect (G_OBJECT (pWindow),
+	/*g_signal_connect (G_OBJECT (pWindow),
 		"delete-event",
 		G_CALLBACK (on_delete_desklet),
-		pDesklet);
+		pDesklet);*/
 	g_signal_connect (G_OBJECT (pWindow),
 		"scroll-event",
 		G_CALLBACK (on_scroll_desklet),

@@ -71,6 +71,11 @@ static void _cairo_dock_on_realize (GtkWidget* pWidget, gpointer data)
 	gdk_gl_drawable_gl_end (pGlDrawable);
 }
 
+static gboolean _cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, gpointer data)
+{
+	return TRUE;  // on empeche les ALT+F4 malheureux.
+}
+
 GtkWidget *cairo_dock_create_container_window (void)
 {
 	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -94,6 +99,11 @@ GtkWidget *cairo_dock_create_container_window (void)
 			G_CALLBACK (_cairo_dock_on_realize),
 			NULL);
 	}
+	
+	g_signal_connect (G_OBJECT (pWindow),
+		"delete-event",
+		G_CALLBACK (_cairo_dock_on_delete),
+		NULL);
 	
 	gtk_widget_set_app_paintable (pWindow, TRUE);
 	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);

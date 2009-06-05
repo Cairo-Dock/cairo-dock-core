@@ -170,10 +170,10 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 			"realize",
 			G_CALLBACK (_cairo_dock_on_realize_main_dock),
 			NULL);
-	g_signal_connect (G_OBJECT (pWindow),
+	/*g_signal_connect (G_OBJECT (pWindow),
 		"delete-event",
 		G_CALLBACK (cairo_dock_on_delete),
-		pDock);
+		pDock);*/
 	g_signal_connect (G_OBJECT (pWindow),
 		"expose-event",
 		G_CALLBACK (cairo_dock_on_expose),
