@@ -48,6 +48,7 @@ void cairo_dock_update_quick_info_texture (Icon *pIcon);
 	glEnable (GL_TEXTURE_2D);\
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);\
 	glHint (GL_POLYGON_SMOOTH_HINT, GL_NICEST);\
+	glEnable (GL_POLYGON_SMOOTH);\
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);\
 	glEnable (GL_LINE_SMOOTH);\
 	glPolygonMode (GL_FRONT, GL_FILL); } while (0)
