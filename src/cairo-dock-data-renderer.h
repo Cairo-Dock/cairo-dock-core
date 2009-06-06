@@ -45,14 +45,14 @@ typedef CairoDataRenderer * (*CairoDataRendererNewFunc) (void);
 typedef void (*CairoDataRendererLoadFunc) (CairoDataRenderer *pDataRenderer, cairo_t *pSourceContext, CairoContainer *pContainer, CairoDataRendererAttribute *pAttribute);
 typedef void (*CairoDataRendererRenderFunc) (CairoDataRenderer *pDataRenderer, cairo_t *pCairoContext);
 typedef void (*CairoDataRendererRenderOpenGLFunc) (CairoDataRenderer *pDataRenderer);
-typedef void (*CairoDataRendererResizeFunc) (CairoDataRenderer *pDataRenderer, int iWidth, int iHeight, CairoContainer *pContainer);
+typedef void (*CairoDataRendererReloadFunc) (CairoDataRenderer *pDataRenderer, cairo_t *pSourceContext);
 typedef void (*CairoDataRendererFreeFunc) (CairoDataRenderer *pDataRenderer);
 struct _CairoDataRendererInterface {
 	CairoDataRendererNewFunc new;
 	CairoDataRendererLoadFunc load;
 	CairoDataRendererRenderFunc render;
 	CairoDataRendererRenderOpenGLFunc render_opengl;
-	CairoDataRendererResizeFunc resize;
+	CairoDataRendererReloadFunc reload;
 	CairoDataRendererFreeFunc free;
 };
 
@@ -121,11 +121,11 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 ///
 /**Get the elementary part of a Data Renderer
 *@param r a high level data renderer
-*@return a CairoDataRenderer*/
+*@return a CairoDataRenderer* */
 #define CAIRO_DATA_RENDERER(r) (&(r)->dataRenderer)
 /**Get the data of a Data Renderer
 *@param pRenderer a data renderer
-*@return a CairoDataToRenderer*/
+*@return a CairoDataToRenderer* */
 #define cairo_data_renderer_get_data(pRenderer) (&(pRenderer)->data);
 
 /*#define cairo_data_renderer_set_attribute(pRendererAttribute, cAttributeName, ) g_datalist_get_data (pRendererAttribute->pExtraProperties)

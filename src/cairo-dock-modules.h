@@ -110,6 +110,7 @@ void cairo_dock_popup_module_instance_description (CairoDockModuleInstance *pMod
 
 void cairo_dock_attach_to_another_module (CairoDockVisitCard *pVisitCard, const gchar *cOtherModuleName);
 
+#define cairo_dock_module_is_auto_loaded(pModule) (pModule->pInterface->initModule == NULL || pModule->pInterface->stopModule == NULL || pModule->pVisitCard->cInternalModule != NULL)
 
 G_END_DECLS
 #endif

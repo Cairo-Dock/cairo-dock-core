@@ -57,7 +57,7 @@ void cairo_dock_render_gauge2 (Gauge2 *pGauge, cairo_t *pCairoContext);
 
 void cairo_dock_render_gauge_opengl2 (Gauge2 *pGauge);
 
-void cairo_dock_reload_gauge2 (cairo_t *pSourceContext, Gauge2 *pGauge, int iWidth, int iHeight);
+void cairo_dock_reload_gauge2 (Gauge2 *pGauge, cairo_t *pSourceContext);
 
 void cairo_dock_free_gauge2 (Gauge2 *pGauge);
 

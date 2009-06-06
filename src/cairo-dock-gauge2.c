@@ -110,7 +110,7 @@ static void _cairo_dock_load_gauge_image (cairo_t *pSourceContext, GaugeImage2 *
 		pGaugeImage2->iTexture = 0;
 	}
 }
-static void cairo_dock_load_gauge_needle (cairo_t *pSourceContext, GaugeIndicator2 *pGaugeIndicator2, int iWidth, int iHeight)
+static void _cairo_dock_load_gauge_needle (cairo_t *pSourceContext, GaugeIndicator2 *pGaugeIndicator2, int iWidth, int iHeight)
 {
 	cd_message ("%s (%dx%d)", __func__, iWidth, iHeight);
 	GaugeImage2 *pGaugeImage2 = pGaugeIndicator2->pImageNeedle;
@@ -124,6 +124,7 @@ static void cairo_dock_load_gauge_needle (cairo_t *pSourceContext, GaugeIndicato
 	if (pGaugeImage2->pSvgHandle != NULL)
 	{
 		int iSize = MIN (iWidth, iHeight);
+		g_print ("size:%d ; %d\n", iSize, pGaugeImage2->sizeX);
 		pGaugeIndicator2->fNeedleScale = (double)iSize / (double) pGaugeImage2->sizeX;  // car l'aiguille est a l'horizontale dans le fichier svg.
 		pGaugeIndicator2->iNeedleWidth = (double) pGaugeIndicator2->iNeedleRealWidth * pGaugeIndicator2->fNeedleScale;
 		pGaugeIndicator2->iNeedleHeight = (double) pGaugeIndicator2->iNeedleRealHeight * pGaugeIndicator2->fNeedleScale;
@@ -464,12 +465,12 @@ void cairo_dock_render_gauge2 (Gauge2 *pGauge, cairo_t *pCairoContext)
 				cairo_translate (pCairoContext, 2 * pRenderer->iWidth / 3, 2 * pRenderer->iHeight / 3);
 				cairo_scale (pCairoContext, 1./3, 1./3);
 			}
-			else if (i = 2)
+			else if (i == 2)
 			{
 				cairo_translate (pCairoContext, 2 * pRenderer->iWidth / 3, 0.);
 				cairo_scale (pCairoContext, 1./3, 1./3);
 			}
-			else if (i = 3)
+			else if (i == 3)
 			{
 				cairo_translate (pCairoContext, 0., 2 * pRenderer->iHeight / 3);
 				cairo_scale (pCairoContext, 1./3, 1./3);
@@ -515,7 +516,7 @@ static void _draw_gauge_needle_opengl (Gauge2 *pGauge, GaugeIndicator2 *pGaugeIn
 	if (pGaugeImage2->iTexture == 0)
 	{
 		int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
-		_cairo_dock_load_gauge_image (NULL, pGaugeImage2, iWidth, iHeight);  // pas besoin d'un cairo_context pour creer une cairo_image_surface.
+		_cairo_dock_load_gauge_needle (NULL, pGaugeIndicator2, iWidth, iHeight);  // pas besoin d'un cairo_context pour creer une cairo_image_surface.
 	}
 	
 	if(pGaugeImage2->iTexture != 0)
@@ -523,14 +524,13 @@ static void _draw_gauge_needle_opengl (Gauge2 *pGauge, GaugeIndicator2 *pGaugeIn
 		double fAngle = (pGaugeIndicator2->posStart + fValue * (pGaugeIndicator2->posStop - pGaugeIndicator2->posStart));
 		if (pGaugeIndicator2->direction < 0)
 			fAngle = - fAngle;
-		
 		double fHalfX = pGauge->pImageBackground->sizeX / 2.0f * (0 + pGaugeIndicator2->posX);
 		double fHalfY = pGauge->pImageBackground->sizeY / 2.0f * (0 + pGaugeIndicator2->posY);
 		
 		glPushMatrix ();
 		
 		glTranslatef (fHalfX, fHalfY, 0.);
-		glRotatef (fAngle + 90., 0., 0., 1.);
+		glRotatef (90. - fAngle, 0., 0., 1.);
 		glTranslatef (pGaugeIndicator2->iNeedleWidth/2 - pGaugeIndicator2->fNeedleScale * pGaugeIndicator2->iNeedleOffsetX, 0., 0.);
 		glScalef (pGaugeIndicator2->iNeedleWidth, pGaugeIndicator2->iNeedleHeight, 1.);
 		cairo_dock_apply_texture (pGaugeImage2->iTexture);
@@ -555,10 +555,7 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge2 *pGauge, int iDataOffset)
 	if(pGauge->pImageBackground != NULL)
 	{
 		pGaugeImage2 = pGauge->pImageBackground;
-		glPushMatrix ();
-		glScalef (iWidth, iHeight, 1.);
-		cairo_dock_apply_texture (pGaugeImage2->iTexture);
-		glPopMatrix ();
+		cairo_dock_apply_texture_at_size (pGaugeImage2->iTexture, iWidth, iHeight);
 	}
 	
 	//\________________ On represente l'indicateur de chaque valeur.
@@ -605,10 +602,7 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge2 *pGauge, int iDataOffset)
 	if(pGauge->pImageForeground != NULL)
 	{
 		pGaugeImage2 = pGauge->pImageForeground;
-		glPushMatrix ();
-		glScalef (iWidth, iHeight, 1.);
-		cairo_dock_apply_texture (pGaugeImage2->iTexture);
-		glPopMatrix ();
+		cairo_dock_apply_texture_at_size (pGaugeImage2->iTexture, iWidth, iHeight);
 	}
 	
 	glDisable (GL_TEXTURE_2D);
@@ -629,21 +623,22 @@ void cairo_dock_render_gauge_opengl2 (Gauge2 *pGauge)
 			glPushMatrix ();
 			if (i == 0)
 			{
+				glTranslatef (-pRenderer->iWidth / 6, pRenderer->iHeight / 6, 0.);
 				glScalef (2./3, 2./3, 1.);
 			}
 			else if (i == 1)
 			{
-				glTranslatef (2 * pRenderer->iWidth / 3, 2 * pRenderer->iHeight / 3, 0.);
+				glTranslatef (pRenderer->iWidth / 3, - pRenderer->iHeight / 3, 0.);
 				glScalef (1./3, 1./3, 1.);
 			}
-			else if (i = 2)
+			else if (i == 2)
 			{
-				glTranslatef (2 * pRenderer->iWidth / 3, 0., 0.);
+				glTranslatef (pRenderer->iWidth / 3, pRenderer->iHeight / 3, 0.);
 				glScalef (1./3, 1./3, 1.);
 			}
-			else if (i = 3)
+			else if (i == 3)
 			{
-				glTranslatef (0., 2 * pRenderer->iHeight / 3, 0.);
+				glTranslatef (-pRenderer->iWidth / 3, -pRenderer->iHeight / 3, 0.);
 				glScalef (1./3, 1./3, 1.);
 			}
 			else  // 5 valeurs faut pas pousser non plus.
@@ -663,15 +658,13 @@ void cairo_dock_render_gauge_opengl2 (Gauge2 *pGauge)
   //////////////////////////////////////////////
  /////////////// RELOAD GAUGE /////////////////
 //////////////////////////////////////////////
-void cairo_dock_reload_gauge2 (cairo_t *pSourceContext, Gauge2 *pGauge, int iWidth, int iHeight)
+void cairo_dock_reload_gauge2 (Gauge2 *pGauge, cairo_t *pSourceContext)
 {
 	//g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
 	g_return_if_fail (pGauge != NULL);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
-	pRenderer->iWidth = iWidth;
-	pRenderer->iHeight = iHeight;
-	
+	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
 	if (pGauge->pImageBackground != NULL)
 	{
 		_cairo_dock_load_gauge_image (pSourceContext, pGauge->pImageBackground, iWidth, iHeight);
@@ -694,12 +687,10 @@ void cairo_dock_reload_gauge2 (cairo_t *pSourceContext, Gauge2 *pGauge, int iWid
 			pGaugeImage2 = &pGaugeIndicator2->pImageList[i];
 			_cairo_dock_load_gauge_image (pSourceContext, pGaugeImage2, iWidth, iHeight);
 		}
-	}
-	
-	if (g_bUseOpenGL)
-	{
-		pGaugeImage2 = pGaugeIndicator2->pImageNeedle;
-		_cairo_dock_load_gauge_image (pSourceContext, pGaugeImage2, iWidth, iHeight);
+		if (g_bUseOpenGL && pGaugeIndicator2->pImageNeedle)
+		{
+			_cairo_dock_load_gauge_needle (pSourceContext, pGaugeIndicator2, iWidth, iHeight);
+		}
 	}
 }
 
@@ -800,6 +791,7 @@ Gauge2 *cairo_dock_new_gauge (void)
 	pGauge->dataRenderer.interface.render			= cairo_dock_render_gauge2;
 	pGauge->dataRenderer.interface.render_opengl	= cairo_dock_render_gauge_opengl2;
 	pGauge->dataRenderer.interface.free				= cairo_dock_free_gauge2;
+	pGauge->dataRenderer.interface.reload			= cairo_dock_reload_gauge2;
 	return pGauge;
 }
 

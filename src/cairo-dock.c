@@ -95,6 +95,7 @@
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-animations.h"
+#include "cairo-dock-gauge2.h"
 
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
 int g_iWmHint = GDK_WINDOW_TYPE_HINT_DOCK;  // hint pour la fenetre du dock principal.
@@ -273,7 +274,7 @@ int main (int argc, char** argv)
 			"force the dock to consider this environnement - it may crash the dock if not set properly.", NULL},
 		{"dir", 'd', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cUserDefinedDataDir,
-			"force the dock to load this directory, instead of ~/.cairo-dock.", NULL},
+			"force the dock to load this directory, instead of ~/.config/cairo-dock.", NULL},
 		{"maintenance", 'm', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bMaintenance,
 			"allow to edit the config before the dock is started and show the config panel on start", NULL},
@@ -512,6 +513,8 @@ int main (int argc, char** argv)
 		g_pGlConfig = cairo_dock_get_opengl_config (g_bForceOpenGL, &g_bForcedOpenGL);
 	g_bUseOpenGL = (g_pGlConfig != NULL);
 	
+	
+	cairo_dock_register_data_renderer_entry_point ("gauge", (CairoDataRendererNewFunc) cairo_dock_new_gauge);
 	
 	//\___________________ On initialise le gestionnaire de modules et on pre-charge les modules existant.
 	if (g_module_supported () && ! bSafeMode)

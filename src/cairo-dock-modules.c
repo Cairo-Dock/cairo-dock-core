@@ -247,7 +247,7 @@ static void cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError **
 	if (pVisitCard->cModuleName == NULL)
 		pVisitCard->cModuleName = cairo_dock_extract_default_module_name_from_path (pCairoDockModule->cSoFilePath);
 
-	if (pCairoDockModule->pInterface->initModule == NULL || pCairoDockModule->pInterface->stopModule == NULL || pCairoDockModule->pVisitCard->cInternalModule != NULL)  // c'est un module qui ne peut etre activer et/ou desactiver; on l'activera donc automatiquement.
+	if (cairo_dock_module_is_auto_loaded (pCairoDockModule))  // c'est un module qui soit ne peut etre activer et/ou desactiver, soit s'est lie a un module interne; on l'activera donc automatiquement.
 	{
 		s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pCairoDockModule);
 	}
@@ -341,9 +341,28 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fT
 	if (cActiveModuleList == NULL)
 		return ;
 
+	//\_______________ On active les modules auto-charges en premier.
 	GError *erreur = NULL;
 	gchar *cModuleName;
 	CairoDockModule *pModule;
+	GList *m;
+	for (m = s_AutoLoadedModules; m != NULL; m = m->next)
+	{
+		pModule = m->data;
+		pModule->fLastLoadingTime = fTime;
+		if (pModule->pInstancesList == NULL)  // on ne les active qu'une seule fois. Si lors d'un changement de theme on re-active les modules, ceux-la resteront inchanges.
+		{
+			cairo_dock_activate_module (pModule, &erreur);
+			if (erreur != NULL)
+			{
+				cd_warning (erreur->message);
+				g_error_free (erreur);
+				erreur = NULL;
+			}
+		}
+	}
+	
+	//\_______________ On active tous les autres.
 	int i = 0;
 	while (cActiveModuleList[i] != NULL)
 	{
@@ -372,22 +391,6 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fT
 			cairo_dock_reload_module (pModule, FALSE);
 		}
 		i ++;
-	}
-	GList *m;
-	for (m = s_AutoLoadedModules; m != NULL; m = m->next)
-	{
-		pModule = m->data;
-		pModule->fLastLoadingTime = fTime;
-		if (pModule->pInstancesList == NULL)  // on ne les active qu'une seule fois. Si lors d'un changement de theme on re-active les modules, ceux-la resteront inchanges.
-		{
-			cairo_dock_activate_module (pModule, &erreur);
-			if (erreur != NULL)
-			{
-				cd_warning (erreur->message);
-				g_error_free (erreur);
-				erreur = NULL;
-			}
-		}
 	}
 }
 
@@ -989,7 +992,7 @@ CairoDockModule *cairo_dock_foreach_module_in_alphabetical_order (GCompareFunc p
 
 static void _cairo_dock_write_one_module_name (gchar *cModuleName, CairoDockModule *pModule, GString *pString)
 {
-	if (pModule->pInstancesList != NULL)
+	if (pModule->pInstancesList != NULL && ! cairo_dock_module_is_auto_loaded (pModule))
 	{
 		g_string_append_printf (pString, "%s;", cModuleName);
 	}
