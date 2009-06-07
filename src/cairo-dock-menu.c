@@ -671,7 +671,7 @@ static void _cairo_dock_rename_file (GtkMenuItem *pMenuItem, gpointer *data)
 	g_free (cNewName);
 }
 
-
+/////////// LES OPERATIONS SUR LES APPLETS ///////////////////////
 
 static void _cairo_dock_initiate_config_module (GtkMenuItem *pMenuItem, gpointer *data)
 {
@@ -731,6 +731,8 @@ static void _cairo_dock_add_module_instance (GtkMenuItem *pMenuItem, gpointer *d
 	cairo_dock_add_module_instance (icon->pModuleInstance->pModule);
 }
 
+/////////// LES OPERATIONS SUR LES APPLIS ///////////////////////
+
 static void _cairo_dock_close_appli (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
@@ -781,45 +783,62 @@ static void _cairo_dock_make_launcher_from_appli (GtkMenuItem *pMenuItem, gpoint
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	g_return_if_fail (icon->Xid != 0);
+	g_return_if_fail (icon->Xid != 0 && icon->cClass != NULL);
 	
 	// on trouve le .desktop du programme.
 	g_print ("%s (%s)\n", __func__, icon->cClass);
 	gchar *cDesktopFilePath = g_strdup_printf ("/usr/share/applications/%s.desktop", icon->cClass);
-	
-	// on cree un nouveau lanceur a partir de la classe.
-	if (! g_file_test (cDesktopFilePath, G_FILE_TEST_EXISTS))
+	if (! g_file_test (cDesktopFilePath, G_FILE_TEST_EXISTS))  // on n'a pas trouve la, on utilise locate.
 	{
 		g_free (cDesktopFilePath);
 		cDesktopFilePath = g_strdup_printf ("/usr/share/applications/kde4/%s.desktop", icon->cClass);
 		if (! g_file_test (cDesktopFilePath, G_FILE_TEST_EXISTS))
 		{
-			// chercher un desktop qui contiennent StartupWMClass=class.
+			g_free (cDesktopFilePath);
+			cDesktopFilePath = NULL;
+			gchar *standard_output=NULL, *standard_error=NULL;
+			gint exit_status=0;
+			GError *erreur = NULL;
+			GString *sCommand = g_string_new ("");
+			gchar *cCommand = g_strdup_printf ("locate /%s.desktop --limit=1 -i", icon->cClass);
+			gboolean r = g_spawn_command_line_sync (cCommand,
+				&standard_output,
+				&standard_error,
+				&exit_status,
+				&erreur);
+			if (erreur != NULL)
+			{
+				cd_warning (erreur->message);
+				g_error_free (erreur);
+			}
+			if (standard_error != NULL && *standard_error != '\0')
+			{
+				cd_warning (standard_error);
+			}
+			if (standard_output != NULL && *standard_output != '\0')
+			{
+				if (standard_output[strlen (standard_output) - 1] == '\n')
+					standard_output[strlen (standard_output) - 1] = '\0';
+				cDesktopFilePath = standard_output;
+				standard_output = NULL;
+			}
+			// else chercher un desktop qui contiennent StartupWMClass=class...
+			g_free (standard_output);
+			g_free (standard_error);
 		}
 	}
+	
+	// on cree un nouveau lanceur a partir de la classe.
+	if (cDesktopFilePath != NULL)
 	{
+		g_print ("cDesktopFilePath : %s\n", cDesktopFilePath);
 		cairo_dock_add_new_launcher_by_uri (cDesktopFilePath, g_pMainDock, CAIRO_DOCK_LAST_ORDER);
 	}
-	g_free (cDesktopFilePath);
-}
-
-static void _cairo_dock_close_class (GtkMenuItem *pMenuItem, gpointer *data)
-{
-	Icon *icon = data[0];
-	CairoDock *pDock = data[1];
-	if (icon->pSubDock != NULL)
+	else
 	{
-		Icon *pIcon;
-		GList *ic;
-		for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
-		{
-			pIcon = ic->data;
-			if (pIcon->Xid != 0)
-			{
-				cairo_dock_close_xwindow (pIcon->Xid);
-			}
-		}
+		cairo_dock_show_temporary_dialog_with_default_icon (_("Sorry, couldn't find the corresponding description file.\nConsider drag and dropping the launcher from the Applications Menu."), icon, CAIRO_CONTAINER (pDock), 8000);
 	}
+	g_free (cDesktopFilePath);
 }
 
 static void _cairo_dock_maximize_appli (GtkMenuItem *pMenuItem, gpointer *data)
@@ -889,6 +908,110 @@ static void _cairo_dock_change_window_above (GtkMenuItem *pMenuItem, gpointer *d
 	}
 }
 
+/////////// LES OPERATIONS SUR LES CLASSES ///////////////////////
+
+static void _cairo_dock_show_class (GtkMenuItem *pMenuItem, gpointer *data)
+{
+	Icon *icon = data[0];
+	CairoDock *pDock = data[1];
+	g_return_if_fail (icon->pSubDock != NULL);
+	
+	Icon *pIcon;
+	GList *ic;
+	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+	{
+		pIcon = ic->data;
+		if (pIcon->Xid != 0)
+		{
+			cairo_dock_show_xwindow (pIcon->Xid);
+		}
+	}
+}
+
+static void _cairo_dock_minimize_class (GtkMenuItem *pMenuItem, gpointer *data)
+{
+	Icon *icon = data[0];
+	CairoDock *pDock = data[1];
+	g_return_if_fail (icon->pSubDock != NULL);
+	
+	Icon *pIcon;
+	GList *ic;
+	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+	{
+		pIcon = ic->data;
+		if (pIcon->Xid != 0)
+		{
+			cairo_dock_minimize_xwindow (pIcon->Xid);
+		}
+	}
+}
+
+static void _cairo_dock_close_class (GtkMenuItem *pMenuItem, gpointer *data)
+{
+	Icon *icon = data[0];
+	CairoDock *pDock = data[1];
+	g_return_if_fail (icon->pSubDock != NULL);
+	
+	Icon *pIcon;
+	GList *ic;
+	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+	{
+		pIcon = ic->data;
+		if (pIcon->Xid != 0)
+		{
+			cairo_dock_close_xwindow (pIcon->Xid);
+		}
+	}
+}
+
+static void _cairo_dock_move_class_to_desktop (GtkMenuItem *pMenuItem, gpointer *user_data)
+{
+	gpointer *data = user_data[0];
+	Icon *icon = data[0];
+	CairoDock *pDock = data[1];
+	g_return_if_fail (icon->pSubDock != NULL);
+	int iDesktopNumber = GPOINTER_TO_INT (user_data[1]);
+	int iViewPortNumberY = GPOINTER_TO_INT (user_data[2]);
+	int iViewPortNumberX = GPOINTER_TO_INT (user_data[3]);
+	cd_message ("%s (%d;%d;%d)", __func__, iDesktopNumber, iViewPortNumberX, iViewPortNumberY);
+	
+	Icon *pIcon;
+	GList *ic;
+	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+	{
+		pIcon = ic->data;
+		if (pIcon->Xid != 0)
+		{
+			int iCurrentDesktopNumber = cairo_dock_get_window_desktop (pIcon->Xid);		
+			int iCurrentViewPortX, iCurrentViewPortY;
+			cairo_dock_get_current_viewport (&iCurrentViewPortX, &iCurrentViewPortY);
+			cd_debug (" current_viewport : %d;%d", iCurrentViewPortX, iCurrentViewPortY);
+			
+			cairo_dock_move_xwindow_to_nth_desktop (pIcon->Xid, iDesktopNumber, iViewPortNumberX * g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] - iCurrentViewPortX, iViewPortNumberY * g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] - iCurrentViewPortY);
+		}
+	}
+}
+
+static void _cairo_dock_move_class_to_current_desktop (GtkMenuItem *pMenuItem, gpointer *data)
+{
+	Icon *icon = data[0];
+	CairoDock *pDock = data[1];
+	g_return_if_fail (icon->pSubDock != NULL);
+	
+	int iCurrentDesktop = cairo_dock_get_current_desktop ();
+	Icon *pIcon;
+	GList *ic;
+	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+	{
+		pIcon = ic->data;
+		if (pIcon->Xid != 0)
+		{
+			cairo_dock_move_xwindow_to_nth_desktop (pIcon->Xid, iCurrentDesktop, 0, 0);  // on ne veut pas decaler son viewport par rapport a nous.
+		}
+	}
+}
+
+///////////////// LES OPERATIONS SUR LES DESKLETS /////////////////////
 
 static void _cairo_dock_keep_below (GtkCheckMenuItem *pMenuItem, gpointer *data)
 {
@@ -1178,6 +1301,52 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 }
 
 
+static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, gpointer data)
+{
+	static gpointer *s_pDesktopData = NULL;
+	GtkWidget *pMenuItem, *image;
+	
+	if (g_iNbDesktops > 1 || g_iNbViewportX > 1 || g_iNbViewportY > 1)
+	{
+		int i, j, k, iDesktopCode;
+		const gchar *cLabel;
+		if (g_iNbDesktops > 1 && (g_iNbViewportX > 1 || g_iNbViewportY > 1))
+			cLabel = bAll ? _("Move all to desktop %d - face %d") : _("Move to desktop %d - face %d");
+		else if (g_iNbDesktops > 1)
+			cLabel = bAll ? _("Move all to desktop %d") : _("Move to desktop %d");
+		else
+			cLabel = bAll ? _("Move all to face %d") : _("Moveto face %d");
+		GString *sDesktop = g_string_new ("");
+		g_free (s_pDesktopData);
+		s_pDesktopData = g_new0 (gpointer, 4 * g_iNbDesktops * g_iNbViewportX * g_iNbViewportY);
+		gpointer *user_data;
+		
+		for (i = 0; i < g_iNbDesktops; i ++)  // on range par bureau.
+		{
+			for (j = 0; j < g_iNbViewportY; j ++)  // puis par rangee.
+			{
+				for (k = 0; k < g_iNbViewportX; k ++)
+				{
+					if (g_iNbDesktops > 1 && (g_iNbViewportX > 1 || g_iNbViewportY > 1))
+						g_string_printf (sDesktop, cLabel, i+1, j*g_iNbViewportX+k+1);
+					else if (g_iNbDesktops > 1)
+						g_string_printf (sDesktop, cLabel, i+1);
+					else
+						g_string_printf (sDesktop, cLabel, j*g_iNbViewportX+k+1);
+					iDesktopCode = i * g_iNbViewportY * g_iNbViewportX + j * g_iNbViewportY + k;
+					user_data = &s_pDesktopData[4*iDesktopCode];
+					user_data[0] = data;
+					user_data[1] = GINT_TO_POINTER (i);
+					user_data[2] = GINT_TO_POINTER (j);
+					user_data[3] = GINT_TO_POINTER (k);
+					
+					CAIRO_DOCK_ADD_IN_MENU_WITH_STOCK_AND_DATA (sDesktop->str, NULL, (bAll ? _cairo_dock_move_class_to_desktop : _cairo_dock_move_appli_to_desktop), pMenu, user_data);
+				}
+			}
+		}
+		g_string_free (sDesktop, TRUE);
+	}
+}
 gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, CairoContainer *pContainer, GtkWidget *menu)
 {
 	static gpointer *data = NULL;
@@ -1188,7 +1357,6 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 	data[1] = pContainer;
 	data[2] = menu;
 	GtkWidget *pMenuItem, *image;
-	static gpointer *pDesktopData = NULL;
 
 	//\_________________________ Si pas d'icone dans un dock, on s'arrete la.
 	if (! g_bLocked && CAIRO_DOCK_IS_DOCK (pContainer) && (icon == NULL || CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon)))
@@ -1280,6 +1448,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 			}
 		}
 	}
+	
 	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
 		pMenuItem = gtk_separator_menu_item_new ();
@@ -1299,49 +1468,10 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		gboolean bIsAbove=FALSE, bIsBelow=FALSE;
 		cairo_dock_window_is_above_or_below (icon->Xid, &bIsAbove, &bIsBelow);
 		_add_entry_in_menu (bIsAbove ? _("Don't keep above") : _("Keep above"), bIsAbove ? GTK_STOCK_GOTO_BOTTOM : GTK_STOCK_GOTO_TOP, _cairo_dock_change_window_above, pSubMenuOtherActions);
-		cd_debug ("g_iNbDesktops : %d ; g_iNbViewportX : %d ; g_iNbViewportY : %d", g_iNbDesktops, g_iNbViewportX, g_iNbViewportY);
-		if (g_iNbDesktops > 1 || g_iNbViewportX > 1 || g_iNbViewportY > 1)
-		{
-			int i, j, k, iDesktopCode;
-			const gchar *cLabel;
-			if (g_iNbDesktops > 1 && (g_iNbViewportX > 1 || g_iNbViewportY > 1))
-				cLabel = _("Move to desktop %d - face %d");
-			else if (g_iNbDesktops > 1)
-				cLabel = _("Move to desktop %d");
-			else
-				cLabel = _("Move to face %d");
-			GString *sDesktop = g_string_new ("");
-			g_free (pDesktopData);
-			pDesktopData = g_new0 (gpointer, 4 * g_iNbDesktops * g_iNbViewportX * g_iNbViewportY);
-			gpointer *user_data;
-			
-			for (i = 0; i < g_iNbDesktops; i ++)  // on range par bureau.
-			{
-				for (j = 0; j < g_iNbViewportY; j ++)  // puis par rangee.
-				{
-					for (k = 0; k < g_iNbViewportX; k ++)
-					{
-						if (g_iNbDesktops > 1 && (g_iNbViewportX > 1 || g_iNbViewportY > 1))
-							g_string_printf (sDesktop, cLabel, i+1, j*g_iNbViewportX+k+1);
-						else if (g_iNbDesktops > 1)
-							g_string_printf (sDesktop, cLabel, i+1);
-						else
-							g_string_printf (sDesktop, cLabel, j*g_iNbViewportX+k+1);
-						iDesktopCode = i * g_iNbViewportY * g_iNbViewportX + j * g_iNbViewportY + k;
-						user_data = &pDesktopData[4*iDesktopCode];
-						user_data[0] = data;
-						user_data[1] = GINT_TO_POINTER (i);
-						user_data[2] = GINT_TO_POINTER (j);
-						user_data[3] = GINT_TO_POINTER (k);
-						
-						CAIRO_DOCK_ADD_IN_MENU_WITH_STOCK_AND_DATA (sDesktop->str, NULL, _cairo_dock_move_appli_to_desktop, pSubMenuOtherActions, user_data);
-					}
-				}
-			}
-			g_string_free (sDesktop, TRUE);
-			
-			_add_entry_in_menu (_("Kill"), GTK_STOCK_CANCEL, _cairo_dock_kill_appli, pSubMenuOtherActions);
-		}
+		
+		_add_desktops_entry (pSubMenuOtherActions, FALSE, data);
+		
+		_add_entry_in_menu (_("Kill"), GTK_STOCK_CANCEL, _cairo_dock_kill_appli, pSubMenuOtherActions);
 		
 		//\_________________________ On rajoute les actions courantes sur les icones d'applis.
 		if (icon->acDesktopFileName != NULL)  // c'est un lanceur inhibiteur.
@@ -1363,15 +1493,29 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 
 		_add_entry_in_menu (_("Close"), GTK_STOCK_CLOSE, _cairo_dock_close_appli, menu);
 	}
-	else if (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->pSubDock != NULL && icon->cClass != NULL)  // inhibiteur avec sous-dock de classe.
+	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
 	{
 		pMenuItem = gtk_separator_menu_item_new ();
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+		
+		//\_________________________ On rajoute les actions supplementaires sur toutes les icones du sous-dock.
+		pMenuItem = gtk_menu_item_new_with_label (_("Other actions"));
+		gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
+		GtkWidget *pSubMenuOtherActions = gtk_menu_new ();
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuOtherActions);
+		
+		_add_entry_in_menu (_("Move all to this desktop"), GTK_STOCK_JUMP_TO, _cairo_dock_move_class_to_current_desktop, pSubMenuOtherActions);
+		
+		_add_desktops_entry (pSubMenuOtherActions, TRUE, data);
 		
 		if (icon->acDesktopFileName != NULL)  // c'est un lanceur inhibiteur.
 		{
 			_add_entry_in_menu (_("Launch new"), GTK_STOCK_ADD, _cairo_dock_launch_new, menu);
 		}
+		
+		_add_entry_in_menu (_("Show all"), GTK_STOCK_FIND, _cairo_dock_show_class, menu);
+
+		_add_entry_in_menu (_("Minimize all"), GTK_STOCK_GO_DOWN, _cairo_dock_minimize_class, menu);
 		
 		_add_entry_in_menu (_("Close all"), GTK_STOCK_CLOSE, _cairo_dock_close_class, menu);
 	}

@@ -131,7 +131,7 @@ overwrite xicon = true
 
 #s- 		Except the following classes :
 #{enter the class of the applications, separated by a semi-colon ';'}
-overwrite exception = pidgin;xchat;gimp
+overwrite exception = pidgin;xchat;gimp-2.6
 
 #b- Show a window thumbnail when it's minimized ?
 #{You need a composite manager for it.}

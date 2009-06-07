@@ -607,7 +607,7 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 	}
 	else if (iState == PropertyNewValue && aProperty == s_aNetWmIcon)
 	{
-		//g_print ("%s change son icone\n", icon->acName);
+		g_print ("%s change son icone (%d)\n", icon->acName, cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons);
 		if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
 		{
 			cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);

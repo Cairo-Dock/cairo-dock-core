@@ -1079,12 +1079,12 @@ msgstr "Durée du dialogue :"
 msgid ""
 "It will notify you even if, for instance, you're watching a video in "
 "fullscreen."
-msgstr "Celà vous notifiera si vous regardez une vidéo par exemple."
+msgstr "Celà vous notifiera même si par exemple vous regardez une vidéo en plein écran."
 
 #: ../data/messages:149
 msgid "Force the following applications to demand your attention ?"
 msgstr ""
-"Signaler les fenêtres demandant votre attention par une bulle de dialogue ?"
+"Forcer les applications suivantes à demander votre attention ?"
 
 #: ../data/messages:151
 msgid "Signal the applications demanding your attention with an animation ?"

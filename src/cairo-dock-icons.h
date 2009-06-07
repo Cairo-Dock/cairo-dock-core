@@ -44,6 +44,11 @@ G_BEGIN_DECLS
 */
 #define CAIRO_DOCK_IS_FAKE_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->acCommand == NULL && (icon)->cClass != NULL)
 /**
+*TRUE ssi l'icone est une icone pointant sur le sous-dock d'une classe d'appli.
+*@param icon une icone.
+*/
+#define CAIRO_DOCK_IS_MULTI_APPLI(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->pSubDock != NULL && icon->pSubDock->icons != NULL && icon->cClass != NULL)
+/**
 *TRUE ssi l'icone est une icone de separateur ajoutee automatiquement.
 *@param icon une icone.
 */

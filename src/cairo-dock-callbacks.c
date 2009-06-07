@@ -78,10 +78,7 @@ extern gint g_iXScreenHeight[2];
 extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
 
 extern gboolean g_bEasterEggs;
-
 extern gboolean g_bUseOpenGL;
-
-extern gboolean g_bDisplayDropEmblem;
 extern gboolean g_bLocked;
 
 static gboolean s_bHideAfterShortcut = FALSE;
@@ -183,17 +180,6 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	{
 		pDock->render (pCairoContext, pDock);
 		cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
-	}
-	
-	//Indicateur de drop, j'ai rajouter le support des surfaces en cache, du coup on ne perd de ressources qu'au dessin.
-	if (pDock->bIsDragging && g_bDisplayDropEmblem)
-	{
-		Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
-		if (pPointedIcon != NULL && pPointedIcon->iAnimationState != CAIRO_DOCK_STATE_AVOID_MOUSE)
-		{
-			cairo_translate (pCairoContext, pPointedIcon->fDrawX, pPointedIcon->fDrawY);
-			cairo_dock_draw_emblem_classic (pCairoContext, pPointedIcon, CAIRO_CONTAINER (pDock), CAIRO_DOCK_EMBLEM_DROP_INDICATOR, CAIRO_DOCK_EMBLEM_UPPER_RIGHT, FALSE);
-		}
 	}
 	
 	cairo_destroy (pCairoContext);
@@ -1215,9 +1201,9 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	else if (CAIRO_DOCK_IS_LAUNCHER (icon))
 	{
 		cd_debug (" launcher");
-		if (icon->pSubDock != NULL && icon->pSubDock->icons != NULL && icon->cClass != NULL && ! (iButtonState & GDK_SHIFT_MASK))  // un lanceur ayant un sous-dock de classe ou une icone de paille : on cache ou on montre.
+		if (CAIRO_DOCK_IS_MULTI_APPLI (icon) && ! (iButtonState & GDK_SHIFT_MASK))  // un lanceur ayant un sous-dock de classe ou une icone de paille : on cache ou on montre.
 		{
-			if (myAccessibility.bShowSubDockOnClick)
+			if (! myAccessibility.bShowSubDockOnClick)
 			{
 				_cairo_dock_hide_show_in_class_subdock (icon);
 			}
@@ -1261,7 +1247,7 @@ gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *ic
 		cairo_dock_fm_launch_uri (icon->acCommand);
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	}
-	if (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->pSubDock != NULL && icon->pSubDock->icons != NULL &&icon->cClass != NULL)
+	if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
 	{
 		// On ferme tout.
 		_cairo_dock_close_all_in_class_subdock (icon);
