@@ -56,7 +56,7 @@ extern cairo_surface_t *g_pDesktopBgSurface;
 
 extern int g_iXScreenWidth[2];
 extern int g_iXScreenHeight[2];
-extern int g_iBackgroundTexture;
+extern GLuint g_iBackgroundTexture;
 extern CairoDock *g_pMainDock;
 
 extern double g_fIndicatorWidth, g_fIndicatorHeight;
@@ -869,7 +869,7 @@ void cairo_dock_update_label_texture (Icon *pIcon)
 {
 	if (pIcon->iLabelTexture != 0)
 	{
-		glDeleteTextures (1, &pIcon->iLabelTexture);
+		_cairo_dock_delete_texture (pIcon->iLabelTexture);
 		pIcon->iLabelTexture = 0;
 	}
 	if (pIcon != NULL && pIcon->pTextBuffer != NULL)
@@ -898,7 +898,7 @@ void cairo_dock_update_quick_info_texture (Icon *pIcon)
 {
 	if (pIcon->iQuickInfoTexture != 0)
 	{
-		glDeleteTextures (1, &pIcon->iQuickInfoTexture);
+		_cairo_dock_delete_texture (pIcon->iQuickInfoTexture);
 		pIcon->iQuickInfoTexture = 0;
 	}
 	if (pIcon != NULL && pIcon->pQuickInfoBuffer != NULL)

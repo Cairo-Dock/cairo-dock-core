@@ -44,7 +44,7 @@ extern cairo_surface_t *g_pBackgroundSurface;
 
 extern gboolean g_bEasterEggs;
 
-extern int g_iBackgroundTexture;
+extern GLuint g_iBackgroundTexture;
 extern gboolean g_bUseOpenGL;
 
 G_END_DECLS

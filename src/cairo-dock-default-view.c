@@ -37,7 +37,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 extern gint g_iScreenWidth[2];
 extern int g_iScreenOffsetX, g_iScreenOffsetY;
 
-extern int g_iBackgroundTexture;
+extern GLuint g_iBackgroundTexture;
 extern gboolean g_bEasterEggs;
 
 

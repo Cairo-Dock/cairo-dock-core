@@ -233,7 +233,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 	if (icon->iIconTexture != 0)
 	{
-		glDeleteTextures (1, &icon->iIconTexture);
+		_cairo_dock_delete_texture (icon->iIconTexture);
 		icon->iIconTexture = 0;
 	}
 	if (icon->pReflectionBuffer != NULL)
@@ -453,7 +453,7 @@ void cairo_dock_fill_one_text_buffer (Icon *icon, cairo_t* pSourceContext, Cairo
 	icon->pTextBuffer = NULL;
 	if (icon->iLabelTexture != 0)
 	{
-		glDeleteTextures (1, &icon->iLabelTexture);
+		_cairo_dock_delete_texture (icon->iLabelTexture);
 		icon->iLabelTexture = 0;
 	}
 	if (icon->acName == NULL || (pTextDescription->iSize == 0))
@@ -487,7 +487,7 @@ void cairo_dock_fill_one_quick_info_buffer (Icon *icon, cairo_t* pSourceContext,
 	icon->pQuickInfoBuffer = NULL;
 	if (icon->iQuickInfoTexture != 0)
 	{
-		glDeleteTextures (1, &icon->iQuickInfoTexture);
+		_cairo_dock_delete_texture (icon->iQuickInfoTexture);
 		icon->iQuickInfoTexture = 0;
 	}
 	if (icon->cQuickInfo == NULL)
@@ -756,7 +756,7 @@ void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, in
 		if (g_bUseOpenGL)
 		{
 			if (g_iBackgroundTexture != 0)
-				glDeleteTextures (1, &g_iBackgroundTexture);
+				_cairo_dock_delete_texture (g_iBackgroundTexture);
 			g_iBackgroundTexture = cairo_dock_create_texture_from_surface (g_pBackgroundSurfaceFull != NULL ? g_pBackgroundSurfaceFull : g_pBackgroundSurface);
 		}
 		
@@ -895,7 +895,7 @@ void cairo_dock_invalidate_desktop_bg_surface (void)
 	}
 	if (g_iDesktopBgTexture != 0)
 	{
-		glDeleteTextures (1, &g_iDesktopBgTexture);
+		_cairo_dock_delete_texture (g_iDesktopBgTexture);
 		g_iDesktopBgTexture = 0;
 	}
 }
@@ -918,7 +918,7 @@ void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* 
 	}
 	if (g_iIndicatorTexture != 0)
 	{
-		glDeleteTextures (1, &g_iIndicatorTexture);
+		_cairo_dock_delete_texture (g_iIndicatorTexture);
 		g_iIndicatorTexture = 0;
 	}
 	if (cIndicatorImagePath != NULL)
@@ -950,7 +950,7 @@ void cairo_dock_load_active_window_indicator (cairo_t* pSourceContext, const gch
 	}
 	if (g_iActiveIndicatorTexture != 0)
 	{
-		glDeleteTextures (1, &g_iActiveIndicatorTexture);
+		_cairo_dock_delete_texture (g_iActiveIndicatorTexture);
 		g_iActiveIndicatorTexture = 0;
 	}
 	g_fActiveIndicatorWidth = MAX (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI]);
@@ -1004,7 +1004,7 @@ void cairo_dock_load_class_indicator (const gchar *cIndicatorImagePath, cairo_t*
 	}
 	if (g_iClassIndicatorTexture != 0)
 	{
-		glDeleteTextures (1, &g_iClassIndicatorTexture);
+		_cairo_dock_delete_texture (g_iClassIndicatorTexture);
 		g_iClassIndicatorTexture = 0;
 	}
 	if (cIndicatorImagePath != NULL)

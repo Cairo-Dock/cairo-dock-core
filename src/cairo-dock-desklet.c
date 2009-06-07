@@ -139,17 +139,17 @@ void cairo_dock_load_desklet_buttons_texture (void)
 	
 	if (iRotateButtonTexture != 0)
 	{
-		glDeleteTextures (1, &iRotateButtonTexture);
+		_cairo_dock_delete_texture (iRotateButtonTexture);
 		iRotateButtonTexture = 0;
 	}
 	if (iRetachButtonTexture != 0)
 	{
-		glDeleteTextures (1, &iRetachButtonTexture);
+		_cairo_dock_delete_texture (iRetachButtonTexture);
 		iRetachButtonTexture = 0;
 	}
 	if (iDepthRotateButtonTexture != 0)
 	{
-		glDeleteTextures (1, &iDepthRotateButtonTexture);
+		_cairo_dock_delete_texture (iDepthRotateButtonTexture);
 		iDepthRotateButtonTexture = 0;
 	}
 
@@ -1162,9 +1162,9 @@ void cairo_dock_free_desklet (CairoDesklet *pDesklet)
 	if (pDesklet->pForeGroundSurface != NULL)
 		cairo_surface_destroy (pDesklet->pForeGroundSurface);
 	if (pDesklet->iBackGroundTexture != 0)
-		glDeleteTextures (1, &pDesklet->iBackGroundTexture);
+		_cairo_dock_delete_texture (pDesklet->iBackGroundTexture);
 	if (pDesklet->iForeGroundTexture != 0)
-		glDeleteTextures (1, &pDesklet->iForeGroundTexture);
+		_cairo_dock_delete_texture (pDesklet->iForeGroundTexture);
 	
 	g_free(pDesklet);
 }
@@ -1349,12 +1349,12 @@ void cairo_dock_load_desklet_decorations (CairoDesklet *pDesklet, cairo_t *pSour
 	}
 	if (pDesklet->iBackGroundTexture != 0)
 	{
-		glDeleteTextures (1, &pDesklet->iBackGroundTexture);
+		_cairo_dock_delete_texture (pDesklet->iBackGroundTexture);
 		pDesklet->iBackGroundTexture = 0;
 	}
 	if (pDesklet->iForeGroundTexture != 0)
 	{
-		glDeleteTextures (1, &pDesklet->iForeGroundTexture);
+		_cairo_dock_delete_texture (pDesklet->iForeGroundTexture);
 		pDesklet->iForeGroundTexture = 0;
 	}
 	
