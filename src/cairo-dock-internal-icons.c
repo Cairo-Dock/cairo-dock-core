@@ -276,7 +276,8 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	
 	gboolean bIconBackgroundImagesChanged = FALSE;
 	// if background images are different, reload them and trigger the reload of all icons
-	if (cairo_dock_strings_differ (pPrevIcons->cBackgroundImagePath, pIcons->cBackgroundImagePath))
+	if (cairo_dock_strings_differ (pPrevIcons->cBackgroundImagePath, pIcons->cBackgroundImagePath) ||
+		pPrevIcons->fAmplitude != pIcons->fAmplitude)
 	{
 		bIconBackgroundImagesChanged = TRUE;
 		cairo_dock_load_icons_background_surface (pIcons->cBackgroundImagePath, pCairoContext, fMaxScale);
@@ -313,7 +314,8 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	}
 	
 	if (pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] ||
-		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER])
+		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] ||
+		pPrevIcons->fAmplitude != pIcons->fAmplitude)
 	{
 		cairo_dock_load_active_window_indicator (pCairoContext,
 			myIndicators.cActiveIndicatorImagePath,
@@ -321,6 +323,15 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 			myIndicators.iActiveCornerRadius,
 			myIndicators.iActiveLineWidth,
 			myIndicators.fActiveColor);
+		if (myTaskBar.bShowAppli && myTaskBar.bGroupAppliByClass)
+			cairo_dock_load_class_indicator (myIndicators.cClassIndicatorImagePath,
+				pCairoContext,
+				fMaxScale);
+		if (myTaskBar.bShowAppli && myTaskBar.bMixLauncherAppli)
+			cairo_dock_load_task_indicator (myIndicators.cIndicatorImagePath,
+				pCairoContext,
+				fMaxScale,
+				myIndicators.fIndicatorRatio);
 	}
 	
 	g_fBackgroundImageWidth = g_fBackgroundImageHeight = 0.;
