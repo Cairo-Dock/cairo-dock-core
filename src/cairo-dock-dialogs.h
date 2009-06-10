@@ -2,7 +2,7 @@
 #ifndef __CAIRO_DIALOGS__
 #define  __CAIRO_DIALOGS__
 
-#include "cairo-dock-struct.h"
+#include "cairo-dock-container.h"
 G_BEGIN_DECLS
 
 /**
@@ -15,8 +15,6 @@ G_BEGIN_DECLS
 *   any buttons.
 * To add buttons, you specify a list of images. "ok" and "cancel" are key words for the default ok/cancel buttons. You also has to provide a callback function that will be called on click. When the user clicks on a button, the function is called with the number of the clicked button, counted from 0. -1 and -2 are set if the user pushed the Return or Escape keys. The dialog is de-referenced after the user's answer, so you have to reference the dialog in the callback if you want to keep the dialog alive.
 */
-
-typedef void (* CairoDockActionOnAnswerFunc) (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog);
 
 typedef gpointer CairoDialogRendererDataParameter;
 typedef CairoDialogRendererDataParameter* CairoDialogRendererDataPtr;
@@ -45,6 +43,8 @@ struct _CairoDialogDecorator {
 	CairoDialogGLRenderDecorationFunc 		render_opengl;
 	const gchar *cDisplayedName;
 };
+
+typedef void (* CairoDockActionOnAnswerFunc) (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog);
 
 struct _CairoDialogAttribute {
 	gchar *cImageFilePath;

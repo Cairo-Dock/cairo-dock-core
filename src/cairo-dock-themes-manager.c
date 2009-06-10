@@ -681,7 +681,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		}
 		g_free (cUserThemesDir);
 		
-		g_return_val_if_fail (cNewThemePath != NULL, TRUE);
+		g_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), TRUE);
 		g_print ("cNewThemePath : %s\n", cNewThemePath);
 		
 		//\___________________ On charge les parametres de comportement.

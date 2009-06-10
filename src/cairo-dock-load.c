@@ -43,6 +43,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-desklet.h"
+#include "cairo-dock-dialogs.h"
 #include "cairo-dock-load.h"
 
 extern CairoDock *g_pMainDock;
@@ -71,10 +73,12 @@ extern cairo_surface_t *g_pIconBackgroundImageSurface;
 extern double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
 
 extern cairo_surface_t *g_pDesktopBgSurface;
+extern GLuint g_pGradationTexture[2];
 
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bEasterEggs;
 extern GLuint g_iBackgroundTexture;
+extern GLuint g_iVisibleZoneTexture;
 extern GLuint g_iIndicatorTexture;
 extern GLuint g_iActiveIndicatorTexture;
 extern GLuint g_iDesktopBgTexture;
@@ -1024,5 +1028,47 @@ void cairo_dock_load_class_indicator (const gchar *cIndicatorImagePath, cairo_t*
 			&g_fClassIndicatorWidth,
 			&g_fClassIndicatorHeight,
 			NULL, NULL);
+	}
+}
+
+
+void cairo_dock_unload_additionnal_textures (void)
+{
+	if (g_iBackgroundTexture != 0)
+	{
+		_cairo_dock_delete_texture (g_iBackgroundTexture);
+		g_iBackgroundTexture = 0;
+	}
+	if (g_iVisibleZoneTexture != 0)
+	{
+		_cairo_dock_delete_texture (g_iVisibleZoneTexture);
+		g_iVisibleZoneTexture = 0;
+	}
+	if (g_iIndicatorTexture != 0)
+	{
+		_cairo_dock_delete_texture (g_iIndicatorTexture);
+		g_iIndicatorTexture = 0;
+	}
+	if (g_iActiveIndicatorTexture != 0)
+	{
+		_cairo_dock_delete_texture (g_iActiveIndicatorTexture);
+		g_iActiveIndicatorTexture = 0;
+	}
+	if (g_iClassIndicatorTexture != 0)
+	{
+		_cairo_dock_delete_texture (g_iClassIndicatorTexture);
+		g_iClassIndicatorTexture = 0;
+	}
+	cairo_dock_unload_desklet_buttons_texture ();
+	cairo_dock_unload_dialog_buttons ();
+	if (g_pGradationTexture[0] != 0)
+	{
+		_cairo_dock_delete_texture (g_pGradationTexture[0]);
+		g_pGradationTexture[0] = 0;
+	}
+	if (g_pGradationTexture[1] != 0)
+	{
+		_cairo_dock_delete_texture (g_pGradationTexture[1]);
+		g_pGradationTexture[1] = 0;
 	}
 }

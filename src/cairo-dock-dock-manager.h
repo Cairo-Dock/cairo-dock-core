@@ -5,11 +5,12 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-dock-factory.h"
 G_BEGIN_DECLS
 
 
 /**
-* Initialise la classe des docks. N'a aucun effet la 2eme fois.
+* Initialise le gestionnaire des docks. N'a aucun effet la 2eme fois.
 */
 void cairo_dock_initialize_dock_manager (void);
 

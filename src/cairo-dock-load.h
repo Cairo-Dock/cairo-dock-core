@@ -89,5 +89,8 @@ void cairo_dock_load_active_window_indicator (cairo_t* pSourceContext, const gch
 void cairo_dock_load_class_indicator (const gchar *cIndicatorImagePath, cairo_t* pSourceContext, double fMaxScale);
 
 
+void cairo_dock_unload_additionnal_textures (void);
+
+
 G_END_DECLS
 #endif

@@ -203,26 +203,33 @@ static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDo
 		switch (iOrientation)
 		{
 			case CAIRO_DOCK_ORIENTATION_HFLIP :
+				g_print ("orientation : HFLIP\n");
 				cairo_scale (pCairoContext, -1., 1.);
 			break ;
 			case CAIRO_DOCK_ORIENTATION_ROT_180 :
+				g_print ("orientation : ROT_180\n");
 				cairo_rotate (pCairoContext, G_PI);
 			break ;
 			case CAIRO_DOCK_ORIENTATION_VFLIP :
+				g_print ("orientation : VFLIP\n");
 				cairo_scale (pCairoContext, 1., -1.);
 			break ;
 			case CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP :
+				g_print ("orientation : ROT_90_HFLIP\n");
 				cairo_scale (pCairoContext, -1., 1.);
 				cairo_rotate (pCairoContext, - G_PI/2);
 			break ;
 			case CAIRO_DOCK_ORIENTATION_ROT_90 :
+				g_print ("orientation : ROT_90\n");
 				cairo_rotate (pCairoContext, - G_PI/2);
 			break ;
 			case CAIRO_DOCK_ORIENTATION_ROT_90_VFLIP :
+				g_print ("orientation : ROT_90_VFLIP\n");
 				cairo_scale (pCairoContext, 1., -1.);
 				cairo_rotate (pCairoContext, - G_PI/2);
 			break ;
 			case CAIRO_DOCK_ORIENTATION_ROT_270 :
+				g_print ("orientation : ROT_270\n");
 				cairo_rotate (pCairoContext, G_PI/2);
 			break ;
 			default :

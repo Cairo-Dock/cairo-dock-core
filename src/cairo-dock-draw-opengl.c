@@ -44,6 +44,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-X-utilities.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-draw-opengl.h"
 
 #include "texture-gradation.h"
@@ -56,7 +57,6 @@ extern cairo_surface_t *g_pDesktopBgSurface;
 
 extern int g_iXScreenWidth[2];
 extern int g_iXScreenHeight[2];
-extern GLuint g_iBackgroundTexture;
 extern CairoDock *g_pMainDock;
 
 extern double g_fIndicatorWidth, g_fIndicatorHeight;
@@ -647,15 +647,9 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	if (g_iVisibleZoneTexture == 0)
 		return ;
 	
-	glEnable (GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-	glEnable (GL_TEXTURE_2D);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	
-	glPolygonMode (GL_FRONT, GL_FILL);
-	
-	glColor4f (1., 1., 1., 1.);
+	_cairo_dock_enable_texture ();
+	_cairo_dock_set_blend_over ();
+	_cairo_dock_set_alpha (1.);
 	
 	glLoadIdentity ();
 	glTranslatef (pDock->iCurrentWidth/2, pDock->iCurrentHeight/2, 0.);
@@ -665,10 +659,9 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	if (! pDock->bHorizontalDock)
 		glRotatef (-90., 0, 0, 1);
 	
-	cairo_dock_apply_texture_at_size (g_iVisibleZoneTexture, pDock->iCurrentWidth, pDock->iCurrentHeight);
+	_cairo_dock_apply_texture_at_size (g_iVisibleZoneTexture, pDock->iCurrentWidth, pDock->iCurrentHeight);
 	
-	glDisable (GL_TEXTURE_2D);
-	glDisable (GL_BLEND);
+	_cairo_dock_disable_texture ();
 }
 
 
@@ -709,7 +702,6 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	int w = cairo_image_surface_get_width (pImageSurface);
 	int h = cairo_image_surface_get_height (pImageSurface);
 	
-	// GL_ARB_texture_non_power_of_two
 	cairo_surface_t *pPowerOfwoSurface = pImageSurface;
 	
 	if (iNonPowerOfTwoAvailable == -1)
@@ -717,8 +709,8 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 		iNonPowerOfTwoAvailable = _check_extension ("GL_ARB_texture_non_power_of_two");
 		cd_message ("non power of two available : %d", iNonPowerOfTwoAvailable);
 	}
-	int iMaxTextureWidth = 4096, iMaxTextureHeight = 4096;
-	if (! iNonPowerOfTwoAvailable)
+	int iMaxTextureWidth = 4096, iMaxTextureHeight = 4096;  // il faudrait le recuperer de glInfo ...
+	if (! iNonPowerOfTwoAvailable)  // cas des vieilles cartes comme la GeForce5.
 	{
 		double log2_w = log (w) / log (2);
 		double log2_h = log (h) / log (2);
@@ -741,11 +733,10 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	
 	glEnable(GL_TEXTURE_2D);
 	glGenTextures (1, &iTexture);
-	//g_print ("texture %d generee (%x, %dx%d)\n", iTexture, cairo_image_surface_get_data (pImageSurface), w, h);
+	cd_debug ("+ texture %d generee (%x, %dx%d)", iTexture, cairo_image_surface_get_data (pImageSurface), w, h);
 	glBindTexture (GL_TEXTURE_2D, iTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	
 	glTexImage2D (GL_TEXTURE_2D,
 		0,
 		4,  // GL_ALPHA / GL_BGRA
@@ -757,6 +748,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 		cairo_image_surface_get_data (pPowerOfwoSurface));
 	if (pPowerOfwoSurface != pImageSurface)
 		cairo_surface_destroy (pPowerOfwoSurface);
+	glDisable(GL_TEXTURE_2D);
 	return iTexture;
 }
 
@@ -796,7 +788,7 @@ GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWi
 	
 	glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, iWidth, iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pTextureRaw);
 	glBindTexture (GL_TEXTURE_2D, 0);
-	
+	glDisable(GL_TEXTURE_2D);
 	return iTexture;
 }
 
@@ -1509,7 +1501,7 @@ void cairo_dock_create_icon_pbuffer (void)
 			glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
 			glClearDepth (1.0f);
 		}
-		g_print (" ok, seems fine\n");
+		g_print (" ok, they seem fine enough.\n");
 	}
 }
 

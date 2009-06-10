@@ -405,7 +405,7 @@ static void cairo_dock_draw_one_gauge (cairo_t *pSourceContext, Gauge2 *pGauge, 
 	for (i = iDataOffset, pIndicatorElement = pGauge->pIndicatorList; i < pData->iNbValues && pIndicatorElement != NULL; i++, pIndicatorElement = pIndicatorElement->next)
 	{
 		pIndicator = pIndicatorElement->data;
-		fValue = cairo_data_renderer_get_normalized_current_value_with_latency (pRenderer, i);
+		fValue = cairo_data_renderer_get_normalized_current_value (pRenderer, i);
 		
 		if (pIndicator->pImageNeedle != NULL)  // c'est une aiguille.
 		{

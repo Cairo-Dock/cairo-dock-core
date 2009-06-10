@@ -6,9 +6,10 @@ export BUILD_TAR="0"
 export MINIMUM_REQUIREMENTS=""
 export DEB_DIR="deb"
 export DEB_PLUGINS_DIR="deb-plug-ins"
+export archi=`uname --machine`
 
 echo "packaging options : "
-while getopts "d:fTh" flag
+while getopts "d:fThm" flag
 do
 	echo " option $flag" $OPTIND $OPTARG
 	case "$flag" in
@@ -17,7 +18,7 @@ do
 		export CAIRO_DOCK_DIR="$OPTARG"
 		;;
 	f)
-		echo " => fast compil"
+		echo " => fast building"
 		export FAST_COMPIL="1"
 		;;
 	T)
@@ -26,7 +27,7 @@ do
 		;;
 	h)
 		echo "-d rep : build in the folder 'rep'"
-		echo "-f : fast compil (don't clean the sources before (use it with caution))"
+		echo "-f : fast building (don't re-compil (use it with caution))"
 		echo "-T : build the sources tarball"
 		exit 0
 		;;
@@ -35,6 +36,7 @@ do
 		export MINIMUM_REQUIREMENTS="-m"
 		export DEB_DIR="deb-lpia"
 		export DEB_PLUGINS_DIR="deb-plug-ins-lpia"
+		export archi=${archi}_light
 		;;
 	*)
 		echo "unexpected argument"
@@ -133,7 +135,7 @@ sudo cp ../cairo-dock/data/cairo-dock*.desktop usr/share/applications
 
 cd $CAIRO_DOCK_DIR
 sed -i "s/^Version:.*/Version: "`cairo-dock --version`"/g" $DEB_DIR/DEBIAN/control
-dpkg -b $DEB_DIR "cairo-dock_v`cairo-dock --version`_`uname --machine`.deb"
+dpkg -b $DEB_DIR "cairo-dock_v`cairo-dock --version`_${archi}.deb"
 
 
 echo "building plug-ins package ..."
@@ -150,7 +152,7 @@ sudo rm -f usr/lib/cairo-dock/*.la
 
 cd $CAIRO_DOCK_DIR
 sed -i "s/^Version:.*/Version: "`cairo-dock --version`"/g" $DEB_PLUGINS_DIR/DEBIAN/control
-dpkg -b $DEB_PLUGINS_DIR "cairo-dock-plug-ins_v`cairo-dock --version`_`uname --machine`.deb"
+dpkg -b $DEB_PLUGINS_DIR "cairo-dock-plug-ins_v`cairo-dock --version`_${archi}.deb"
 
 mv .svn-$DEB_DIR $DEB_DIR/.svn
 mv .svn-$DEB_PLUGINS_DIR $DEB_PLUGINS_DIR/.svn

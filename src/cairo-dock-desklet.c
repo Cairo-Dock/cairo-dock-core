@@ -69,9 +69,9 @@ extern GdkGLConfig* g_pGlConfig;
 static cairo_surface_t *s_pRotateButtonSurface = NULL;
 static cairo_surface_t *s_pRetachButtonSurface = NULL;
 static cairo_surface_t *s_pDepthRotateButtonSurface = NULL;
-static GLuint iRotateButtonTexture = 0;
-static GLuint iRetachButtonTexture = 0;
-static GLuint iDepthRotateButtonTexture = 0;
+static GLuint s_iRotateButtonTexture = 0;
+static GLuint s_iRetachButtonTexture = 0;
+static GLuint s_iDepthRotateButtonTexture = 0;
 
 void cairo_dock_load_desklet_buttons (cairo_t *pSourceContext)
 {
@@ -131,41 +131,48 @@ void cairo_dock_load_desklet_buttons (cairo_t *pSourceContext)
 	
 	cairo_dock_load_desklet_buttons_texture ();
 }
+
 void cairo_dock_load_desklet_buttons_texture (void)
 {
 	cd_message ("%s (%x;%x)", __func__, s_pRotateButtonSurface, s_pRetachButtonSurface);
 	if (! g_bUseOpenGL)
 		return ;
 	
-	if (iRotateButtonTexture != 0)
-	{
-		_cairo_dock_delete_texture (iRotateButtonTexture);
-		iRotateButtonTexture = 0;
-	}
-	if (iRetachButtonTexture != 0)
-	{
-		_cairo_dock_delete_texture (iRetachButtonTexture);
-		iRetachButtonTexture = 0;
-	}
-	if (iDepthRotateButtonTexture != 0)
-	{
-		_cairo_dock_delete_texture (iDepthRotateButtonTexture);
-		iDepthRotateButtonTexture = 0;
-	}
+	cairo_dock_unload_desklet_buttons_texture ();
 
 	if (s_pRotateButtonSurface != NULL)
 	{
-		iRotateButtonTexture = cairo_dock_create_texture_from_surface (s_pRotateButtonSurface);
+		s_iRotateButtonTexture = cairo_dock_create_texture_from_surface (s_pRotateButtonSurface);
 	}
 	if (s_pRetachButtonSurface != NULL)
 	{
-		iRetachButtonTexture = cairo_dock_create_texture_from_surface (s_pRetachButtonSurface);
+		s_iRetachButtonTexture = cairo_dock_create_texture_from_surface (s_pRetachButtonSurface);
 	}
 	if (s_pDepthRotateButtonSurface != NULL)
 	{
-		iDepthRotateButtonTexture = cairo_dock_create_texture_from_surface (s_pDepthRotateButtonSurface);
+		s_iDepthRotateButtonTexture = cairo_dock_create_texture_from_surface (s_pDepthRotateButtonSurface);
 	}
 }
+
+void cairo_dock_unload_desklet_buttons_texture (void)
+{
+	if (s_iRotateButtonTexture != 0)
+	{
+		_cairo_dock_delete_texture (s_iRotateButtonTexture);
+		s_iRotateButtonTexture = 0;
+	}
+	if (s_iRetachButtonTexture != 0)
+	{
+		_cairo_dock_delete_texture (s_iRetachButtonTexture);
+		s_iRetachButtonTexture = 0;
+	}
+	if (s_iDepthRotateButtonTexture != 0)
+	{
+		_cairo_dock_delete_texture (s_iDepthRotateButtonTexture);
+		s_iDepthRotateButtonTexture = 0;
+	}
+}
+
 
 static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *area)
 {
@@ -390,31 +397,31 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 	if ((pDesklet->bInside || pDesklet->rotating || pDesklet->rotatingY || pDesklet->rotatingX) && ! pDesklet->bPositionLocked && ! pDesklet->bFixedAttitude)
 	{
 		_cairo_dock_set_alpha (1.);
-		if (iRotateButtonTexture != 0)
+		if (s_iRotateButtonTexture != 0)
 		{
 			glPushMatrix ();
 			glTranslatef (-pDesklet->iWidth/2 + myDesklets.iDeskletButtonSize/2,
 				pDesklet->iHeight/2 - myDesklets.iDeskletButtonSize/2,
 				0.);
-			_cairo_dock_apply_texture_at_size (iRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
+			_cairo_dock_apply_texture_at_size (s_iRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
 			glPopMatrix ();
 		}
-		if (iRetachButtonTexture != 0)
+		if (s_iRetachButtonTexture != 0)
 		{
 			glPushMatrix ();
 			glTranslatef (pDesklet->iWidth/2 - myDesklets.iDeskletButtonSize/2,
 				pDesklet->iHeight/2 - myDesklets.iDeskletButtonSize/2,
 				0.);
-			_cairo_dock_apply_texture_at_size (iRetachButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
+			_cairo_dock_apply_texture_at_size (s_iRetachButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
 			glPopMatrix ();
 		}
-		if (iDepthRotateButtonTexture != 0)
+		if (s_iDepthRotateButtonTexture != 0)
 		{
 			glPushMatrix ();
 			glTranslatef (0.,
 				pDesklet->iHeight/2 - myDesklets.iDeskletButtonSize/2,
 				0.);
-			_cairo_dock_apply_texture_at_size (iDepthRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
+			_cairo_dock_apply_texture_at_size (s_iDepthRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
 			glPopMatrix ();
 			
 			glPushMatrix ();
@@ -422,7 +429,7 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 			glTranslatef (0.,
 				pDesklet->iWidth/2 - myDesklets.iDeskletButtonSize/2,
 				0.);
-			_cairo_dock_apply_texture_at_size (iDepthRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
+			_cairo_dock_apply_texture_at_size (s_iDepthRotateButtonTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
 			glPopMatrix ();
 		}
 	}

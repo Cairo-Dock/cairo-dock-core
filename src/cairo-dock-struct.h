@@ -77,51 +77,6 @@ typedef enum {
 
 #define CAIRO_DOCK_NB_DATA_SLOT 12
 
-struct _CairoContainer {
-	/// type de container.
-	CairoDockTypeContainer iType;
-	/// La fenetre du widget.
-	GtkWidget *pWidget;
-	/// Taille de la fenetre.
-	gint iWidth, iHeight;
-	/// Position de la fenetre.
-	gint iWindowPositionX, iWindowPositionY;
-	/// Vrai ssi le pointeur est dans le container (widgets fils inclus).
-	gboolean bInside;
-	/// TRUE ssi le container est horizontal.
-	CairoDockTypeHorizontality bIsHorizontal;
-	/// TRUE ssi le container est oriente vers le haut.
-	gboolean bDirectionUp;
-#ifdef HAVE_GLITZ
-	glitz_drawable_format_t *pDrawFormat;
-	glitz_drawable_t* pGlitzDrawable;
-	glitz_format_t* pGlitzFormat;
-#else
-	gpointer padding[3];
-#endif
-	/// Donnees exterieures.
-	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
-	/// pour l'animation du container.
-	gint iSidGLAnimation;
-	/// intervalle de temps entre 2 etapes de l'animation.
-	gint iAnimationDeltaT;
-	/// derniere position en X du curseur dans le referentiel du container.
-	gint iMouseX;
-	/// derniere position en Y du curseur dans le referentiel du container.
-	gint iMouseY;
-	/// zoom applique aux icones du container.
-	gdouble fRatio;
-	/// TRUE ssi le container est reflechissant.
-	gboolean bUseReflect;
-	/// contexte OpenGL associe a la fenetre.
-	GLXContext glContext;
-	/// TRUE <=> une animation lente est en cours.
-	gboolean bKeepSlowAnimation;
-};
-
-#define CAIRO_CONTAINER(p) ((CairoContainer *) (p))
-
-
 typedef void (*CairoDockCalculateMaxDockSizeFunc) (CairoDock *pDock);
 typedef Icon * (*CairoDockCalculateIconsFunc) (CairoDock *pDock);
 typedef void (*CairoDockRenderFunc) (cairo_t *pCairoContext, CairoDock *pDock);
@@ -815,17 +770,6 @@ typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContaine
 
 typedef void (* CairoDockConfigFunc) (gchar *cConfFile, gpointer data);
 
-
-struct _CairoDockClassAppli {
-	/// TRUE ssi l'appli doit utiliser l'icone fournie par X au lieu de celle du theme.
-	gboolean bUseXIcon;
-	/// TRUE ssi l'appli ne se groupe pas par classe.
-	gboolean bExpand;
-	/// Liste des inhibiteurs de la classe.
-	GList *pIconsOfClass;
-	/// Liste des icones d'appli de cette classe.
-	GList *pAppliOfClass;
-};
 
 struct _CairoDockLabelDescription {
 	/// Taille de la police (et hauteur du texte en pixels).

@@ -263,12 +263,17 @@ void cairo_dock_set_xicon_geometry (int Xid, int iX, int iY, int iWidth, int iHe
 	g_return_if_fail (Xid > 0);
 
 	gulong iIconGeometry[4] = {iX, iY, iWidth, iHeight};
-
-	XChangeProperty (s_XDisplay,
-		Xid,
-		s_aNetWmIconGeometry,
-		XA_CARDINAL, 32, PropModeReplace,
-		(guchar *) iIconGeometry, 4);
+	
+	if (iWidth == 0 || iHeight == 0)
+		XDeleteProperty (s_XDisplay,
+			Xid,
+			s_aNetWmIconGeometry);
+	else
+		XChangeProperty (s_XDisplay,
+			Xid,
+			s_aNetWmIconGeometry,
+			XA_CARDINAL, 32, PropModeReplace,
+			(guchar *) iIconGeometry, 4);
 }
 
 gboolean cairo_dock_update_screen_geometry (void)

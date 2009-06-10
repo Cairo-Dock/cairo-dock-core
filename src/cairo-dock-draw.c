@@ -36,6 +36,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-draw.h"
 
 extern gint g_iScreenWidth[2];

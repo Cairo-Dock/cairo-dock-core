@@ -26,7 +26,7 @@
 #ifndef __CAIRO_DESKLET_H__
 #define  __CAIRO_DESKLET_H__
 
-#include <cairo-dock-struct.h>
+#include "cairo-dock-container.h"
 G_BEGIN_DECLS
 
 #define CD_NB_ITER_FOR_GRADUATION 10
@@ -46,6 +46,7 @@ G_BEGIN_DECLS
 
 void cairo_dock_load_desklet_buttons (cairo_t *pSourceContext);
 void cairo_dock_load_desklet_buttons_texture (void);
+void cairo_dock_unload_desklet_buttons_texture (void);
 
 gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDesklet *pDesklet);
 

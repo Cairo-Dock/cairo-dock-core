@@ -10,17 +10,6 @@
 G_BEGIN_DECLS
 
 
-/** Teste si le container est un dock.
-* @param pContainer le container.
-* @return TRUE ssi le container a ete declare comme un dock.
-*/
-#define CAIRO_DOCK_IS_DOCK(pContainer) (pContainer != NULL && (pContainer)->iType == CAIRO_DOCK_TYPE_DOCK)
-/** Caste un container en dock.
-* @param pContainer le container.
-* @return le dock.
-*/
-#define CAIRO_DOCK(pContainer) ((CairoDock *)pContainer)
-
 /** Retourne la largeur max autorisee pour un dock.
 * @param pDock le dock.
 * @return la taille max.

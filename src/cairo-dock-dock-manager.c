@@ -43,6 +43,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-animations.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-views.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-dock-manager.h"
 
 extern CairoDock *g_pMainDock;

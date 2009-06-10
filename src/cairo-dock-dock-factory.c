@@ -525,6 +525,8 @@ void cairo_dock_free_all_docks (void)
 	cairo_dock_stop_polling_screen_edge ();
 
 	cairo_dock_reset_docks_table ();  // detruit tous les docks, vide la table, et met le main-dock a NULL.
+	
+	cairo_dock_unload_additionnal_textures ();
 }
 
 

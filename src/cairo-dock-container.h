@@ -7,6 +7,57 @@
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
+
+/**
+*@file cairo-dock-container.h This class defines the basis of containers, that are classic or hardware accelerated animated windows.
+* A container is a rectangular located surface, has the notion of orientation, can hold external datas, monitors the mouse position, and has its own animation loop.
+* Docks, Desklets, Dialogs, and Flying-containers all derive from Containers.
+*/
+
+struct _CairoContainer {
+	/// type de container.
+	CairoDockTypeContainer iType;
+	/// La fenetre du widget.
+	GtkWidget *pWidget;
+	/// Taille de la fenetre.
+	gint iWidth, iHeight;
+	/// Position de la fenetre.
+	gint iWindowPositionX, iWindowPositionY;
+	/// Vrai ssi le pointeur est dans le container (widgets fils inclus).
+	gboolean bInside;
+	/// TRUE ssi le container est horizontal.
+	CairoDockTypeHorizontality bIsHorizontal;
+	/// TRUE ssi le container est oriente vers le haut.
+	gboolean bDirectionUp;
+#ifdef HAVE_GLITZ
+	glitz_drawable_format_t *pDrawFormat;
+	glitz_drawable_t* pGlitzDrawable;
+	glitz_format_t* pGlitzFormat;
+#else
+	gpointer padding[3];
+#endif
+	/// Donnees exterieures.
+	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
+	/// pour l'animation du container.
+	gint iSidGLAnimation;
+	/// intervalle de temps entre 2 etapes de l'animation.
+	gint iAnimationDeltaT;
+	/// derniere position en X du curseur dans le referentiel du container.
+	gint iMouseX;
+	/// derniere position en Y du curseur dans le referentiel du container.
+	gint iMouseY;
+	/// zoom applique aux icones du container.
+	gdouble fRatio;
+	/// TRUE ssi le container est reflechissant.
+	gboolean bUseReflect;
+	/// contexte OpenGL associe a la fenetre.
+	GLXContext glContext;
+	/// TRUE <=> une animation lente est en cours.
+	gboolean bKeepSlowAnimation;
+};
+
+#define CAIRO_CONTAINER(p) ((CairoContainer *) (p))
+
   //////////////
  /// WINDOW ///
 //////////////
