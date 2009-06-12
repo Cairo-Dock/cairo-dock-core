@@ -5,7 +5,179 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-modules.h"
 G_BEGIN_DECLS
+
+/**
+*@file cairo-dock-icons.h This class defines the elements contained in containers : Icons.
+* An icon is an union of 3 parts : a launcher, an appli, and an applet. It can be all of them at the same time.
+* - a launcher is any icon having a command or pointing to a sub-dock.
+* - an appli is an icon pointing to an X ID, that is to say a window.
+* - an applet is an icon holding a module instance.
+* - an icon being none of them is a separator.
+* 
+*/
+
+typedef enum {
+	CAIRO_DOCK_LAUNCHER = 0,
+	CAIRO_DOCK_SEPARATOR12,
+	CAIRO_DOCK_APPLI,
+	CAIRO_DOCK_SEPARATOR23,
+	CAIRO_DOCK_APPLET,
+	CAIRO_DOCK_NB_TYPES
+	} CairoDockIconType;
+
+typedef enum {
+	CAIRO_DOCK_STATE_REST = 0,
+	CAIRO_DOCK_STATE_MOUSE_HOVERED,
+	CAIRO_DOCK_STATE_CLICKED,
+	CAIRO_DOCK_STATE_AVOID_MOUSE,
+	CAIRO_DOCK_STATE_FOLLOW_MOUSE,
+	CAIRO_DOCK_STATE_REMOVE_INSERT,
+	CAIRO_DOCK_NB_STATES
+	} CairoDockAnimationState;
+
+struct _Icon {
+	//\____________ renseignes lors de la creation de l'icone.
+	/// Nom (et non pas chemin) du fichier .desktop definissant l'icone, ou NULL si l'icone n'est pas definie pas un fichier.
+	gchar *acDesktopFileName;
+	/// URI.
+	gchar *cBaseURI;
+	/// ID d'un volume.
+	gint iVolumeID;
+	/// Nom (et non pas chemin) du fichier de l'image, ou NULL si son image n'est pas definie pas un fichier.
+	gchar *acFileName;
+	/// Nom de l'icone tel qu'il apparaitra dans son etiquette. Donne le nom au sous-dock.
+	gchar *acName;
+	/// Commande a executer lors d'un clique gauche clique, ou NULL si aucune.
+	gchar *acCommand;
+	/// Repertoire ou s'executera la commande.
+	gchar *cWorkingDirectory;
+	/// Type de l'icone.
+	CairoDockIconType iType;
+	/// Ordre de l'icone dans son dock, parmi les icones de meme type.
+	gdouble fOrder;
+	/// Sous-dock sur lequel pointe l'icone, ou NULL si aucun.
+	CairoDock *pSubDock;
+	/// Nom du dock contenant l'icone (y compris lorsque l'icone est dans un desklet).
+	gchar *cParentDockName;
+	//\____________ calcules lors du chargement de l'icone.
+	/// Dimensions de la surface de l'icone.
+	gdouble fWidth, fHeight;
+	/// Surface cairo de l'image.
+	cairo_surface_t* pIconBuffer;
+	/// Surface cairo de l'etiquette.
+	cairo_surface_t* pTextBuffer;
+	/// Surface cairo du reflet.
+	cairo_surface_t* pReflectionBuffer;
+	/// dimensions de l'etiquette.
+	gint iTextWidth, iTextHeight;
+	/// Decalage en X et en Y de l'etiquette.
+	gdouble fTextXOffset, fTextYOffset;
+	/// Abscisse maximale (droite) que l'icone atteindra (variable avec la vague).
+	gdouble fXMax;
+	/// Abscisse minimale (gauche) que l'icone atteindra (variable avec la vague).
+	gdouble fXMin;
+	//\____________ calcules a chaque scroll et insertion/suppression d'une icone.
+	/// Abscisse de l'icone au repos.
+	gdouble fXAtRest;
+	//\____________ calcules a chaque fois.
+	/// Phase de l'icone (entre -pi et piconi).
+	gdouble fPhase;
+	/// Abscisse temporaire du bord gauche de l'image de l'icone.
+	gdouble fX;
+	/// Ordonnee temporaire du bord haut de l'image de l'icone.
+	gdouble fY;
+	/// Echelle courante de l'icone (facteur de zoom, >= 1).
+	gdouble fScale;
+	/// Abscisse du bord gauche de l'image de l'icone.
+	gdouble fDrawX;
+	/// Ordonnee du bord haut de l'image de l'icone.
+	gdouble fDrawY;
+	/// Facteur de zoom sur la largeur de l'icone.
+	gdouble fWidthFactor;
+	/// Facteur de zoom sur la hauteur de l'icone.
+	gdouble fHeightFactor;
+	/// Transparence (<= 1).
+	gdouble fAlpha;
+	/// TRUE ssi l'icone est couramment pointee.
+	gboolean bPointed;
+	/// Facteur de zoom personnel, utilise pour l'apparition et la suppression des icones.
+	gdouble fPersonnalScale;
+	/// Decalage en ordonnees de reflet (pour le rebond, >= 0).
+	gdouble fDeltaYReflection;
+	/// Orientation de l'icone (angle par rapport a la verticale Oz).
+	gdouble fOrientation;
+	/// Rotation autour de l'axe Ox (animation upside-down).
+	gint iRotationX;
+	/// Rotation autour de l'axe Oy (animation rotate).
+	gint iRotationY;
+	//\____________ Pour les applis.
+	/// PID de l'application correspondante.
+	gint iPid;
+	/// ID de la fenetre X de l'application correspondante.
+	Window Xid;
+	/// Classe de l'application correspondante (ou NULL si aucune).
+	gchar *cClass;
+	/// Etiquette du lanceur a sa creation, ecrasee par le nom courant de l'appli.
+	gchar *cInitialName;
+	/// Heure de derniere verification de la presence de l'application dans la barre des taches.
+	gint iLastCheckTime;
+	/// TRUE ssi la fenetre de l'application correspondante est minimisee.
+	gboolean bIsHidden;
+	/// Position et taille de la fenetre.
+	GtkAllocation windowGeometry;
+	/// TRUE ssi la fenetre est en mode plein ecran.
+	gboolean bIsFullScreen;
+	/// TRUE ssi la fenetre est en mode maximisee.
+	gboolean bIsMaximized;
+	/// TRUE ssi la fenetre demande l'attention ou est en mode urgente.
+	gboolean bIsDemandingAttention;
+	/// TRUE ssi l'icone a un indicateur (elle controle une appli).
+	gboolean bHasIndicator;
+	/// ID du pixmap de sauvegarde de la fenetre pour quand elle est cachee.
+	Pixmap iBackingPixmap;
+	//Damage iDamageHandle;
+	//\____________ Pour les modules.
+	/// Instance de module que represente l'icone.
+	CairoDockModuleInstance *pModuleInstance;
+	/// Texte de l'info rapide.
+	gchar *cQuickInfo;
+	/// Surface cairo de l'info rapide.
+	cairo_surface_t* pQuickInfoBuffer;
+	/// Largeur de l'info rapide.
+	gint iQuickInfoWidth;
+	/// Heuteur de l'info rapide.
+	gint iQuickInfoHeight;
+	/// Decalage en X de la surface de l'info rapide.
+	gdouble fQuickInfoXOffset;
+	/// Decalage en Y de la surface de l'info rapide.
+	gdouble fQuickInfoYOffset;
+	/// decalage pour le glissement des icones.
+	gdouble fGlideOffset;
+	/// direction dans laquelle glisse l'icone.
+	gint iGlideDirection;
+	/// echelle d'adaptation au glissement.
+	gdouble fGlideScale;
+	
+	GLuint iIconTexture;
+	GLuint iLabelTexture;
+	GLuint iQuickInfoTexture;
+	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
+	gboolean bStatic;
+	CairoDockAnimationState iAnimationState;
+	gboolean bBeingRemovedByCairo;
+	gpointer pbuffer;
+	/// liste des notifications disponibles.
+	GPtrArray *pNotificationsTab;
+	CairoDataRenderer *pDataRenderer;
+	gint iNumDesktop;
+	gint iViewPortX, iViewPortY;
+	gint iStackOrder;
+	CairoDockTransition *pTransition;
+	gdouble fReflectShading;
+};
+
 
 /**
 *TRUE ssi l'icone est une icone de lanceur.

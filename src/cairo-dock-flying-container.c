@@ -32,6 +32,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-keyfile-utilities.h"
+#include "cairo-dock-dock-factory.h"
 #include "cairo-dock-flying-container.h"
 
 #define HAND_WIDTH 76
@@ -93,10 +94,10 @@ static void _cairo_dock_load_explosion_image (cairo_t *pCairoContext, int iWidth
 
 gboolean cairo_dock_update_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation)
 {
-	if (pFlyingContainer->iAnimationCount > 0)
+	if (pFlyingContainer->iAnimationStep > 0)
 	{
-		pFlyingContainer->iAnimationCount --;
-		if (pFlyingContainer->iAnimationCount == 0)
+		pFlyingContainer->iAnimationStep --;
+		if (pFlyingContainer->iAnimationStep == 0)
 		{
 			*bContinueAnimation = FALSE;
 			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
@@ -122,11 +123,11 @@ gboolean cairo_dock_render_flying_container_notification (gpointer pUserData, Ca
 			cairo_set_source_surface (pCairoContext, s_pHandSurface, 0., 0.);
 			cairo_paint (pCairoContext);
 		}
-		else if (pFlyingContainer->iAnimationCount > 0)
+		else if (pFlyingContainer->iAnimationStep > 0)
 		{
 			int x = 0;
 			int y = (pFlyingContainer->iHeight - pFlyingContainer->iWidth) / 2;
-			int iCurrentFrame = EXPLOSION_NB_FRAMES - pFlyingContainer->iAnimationCount;
+			int iCurrentFrame = EXPLOSION_NB_FRAMES - pFlyingContainer->iAnimationStep;
 			
 			cairo_rectangle (pCairoContext,
 				x,
@@ -158,9 +159,9 @@ gboolean cairo_dock_render_flying_container_notification (gpointer pUserData, Ca
 				- 3.);
 			cairo_dock_draw_texture (s_iHandTexture, s_fHandWidth, s_fHandHeight);
 		}
-		else if (pFlyingContainer->iAnimationCount > 0)
+		else if (pFlyingContainer->iAnimationStep > 0)
 		{
-			int iCurrentFrame = EXPLOSION_NB_FRAMES - pFlyingContainer->iAnimationCount;
+			int iCurrentFrame = EXPLOSION_NB_FRAMES - pFlyingContainer->iAnimationStep;
 			
 			glTranslatef (pFlyingContainer->iWidth/2,
 				pFlyingContainer->iHeight/2,
@@ -347,7 +348,7 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 {
 	Icon *pIcon = pFlyingContainer->pIcon;
 	pFlyingContainer->pIcon = NULL;
-	pFlyingContainer->iAnimationCount = EXPLOSION_NB_FRAMES+1;
+	pFlyingContainer->iAnimationStep = EXPLOSION_NB_FRAMES+1;
 	
 	if (pIcon->acDesktopFileName != NULL)  // c'est un lanceur, ou un separateur manuel, ou un sous-dock.
 	{

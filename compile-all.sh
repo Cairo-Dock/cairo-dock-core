@@ -16,7 +16,7 @@ export SUDO=sudo
 export TIME=time
 
 echo "this script will process : "
-while getopts "acCituhd:Dg" flag
+while getopts "acCituhd:Dgm" flag
 do
 	echo " option $flag $OPTIND $OPTARG"
 	case "$flag" in

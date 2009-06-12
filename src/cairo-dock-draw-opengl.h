@@ -9,6 +9,7 @@
 #include <GL/glu.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-container.h"
 
 G_BEGIN_DECLS
 

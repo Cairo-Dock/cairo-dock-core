@@ -5,7 +5,7 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-internal-icons.h"
+#include "cairo-dock-dock-factory.h"
 #include "cairo-dock-internal-accessibility.h"
 G_BEGIN_DECLS
 

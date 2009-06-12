@@ -22,6 +22,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-dock-factory.h"
 #include "cairo-dock-separator-factory.h"
 
 

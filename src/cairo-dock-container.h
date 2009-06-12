@@ -14,6 +14,18 @@ G_BEGIN_DECLS
 * Docks, Desklets, Dialogs, and Flying-containers all derive from Containers.
 */
 
+typedef enum {
+	CAIRO_DOCK_VERTICAL = 0,
+	CAIRO_DOCK_HORIZONTAL
+	} CairoDockTypeHorizontality;
+
+typedef enum {
+	CAIRO_DOCK_TYPE_DOCK = 0,
+	CAIRO_DOCK_TYPE_DESKLET,
+	CAIRO_DOCK_TYPE_DIALOG,
+	CAIRO_DOCK_TYPE_FLYING_CONTAINER
+	} CairoDockTypeContainer;
+
 struct _CairoContainer {
 	/// type de container.
 	CairoDockTypeContainer iType;
@@ -54,6 +66,8 @@ struct _CairoContainer {
 	GLXContext glContext;
 	/// TRUE <=> une animation lente est en cours.
 	gboolean bKeepSlowAnimation;
+	/// compteur pour l'animation.
+	gint iAnimationStep;
 };
 
 #define CAIRO_CONTAINER(p) ((CairoContainer *) (p))

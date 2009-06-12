@@ -8,6 +8,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 *********************************************************************************/
 #include <string.h>
 
+#include "cairo-dock-modules.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-dock-factory.h"

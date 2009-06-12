@@ -6,6 +6,7 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-config.h"
+#include "cairo-dock-icons.h"
 
 
 typedef struct _CairoConfigIcons CairoConfigIcons;

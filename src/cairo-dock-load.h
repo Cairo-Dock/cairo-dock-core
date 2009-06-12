@@ -7,6 +7,9 @@
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
+/**
+*@file cairo-dock-load.h A collection of surfaces and textures loader functions.
+*/
 
 void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription);
 void cairo_dock_copy_label_description (CairoDockLabelDescription *pDestTextDescription, CairoDockLabelDescription *pOrigTextDescription);

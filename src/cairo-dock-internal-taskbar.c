@@ -9,16 +9,19 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #include <gdk/gdkx.h>
 
+#include "cairo-dock-modules.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-indicators.h"
+#include "cairo-dock-internal-icons.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-taskbar.h"
 

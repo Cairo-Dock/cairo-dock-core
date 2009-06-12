@@ -3,6 +3,7 @@
 #define  __CAIRO_DOCK_FILE_MANAGER__
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-icons.h"
 G_BEGIN_DECLS
 
 /**

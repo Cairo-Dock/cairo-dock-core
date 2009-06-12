@@ -9,9 +9,11 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <string.h>
 #include <stdlib.h>
 
+#include "cairo-dock-modules.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-draw-opengl.h"
@@ -123,15 +125,15 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 				cd_warning ("Cairo-Dock's local icons are now located in the 'icons' folder, they will be moved there");
 				gchar *cCommand = g_strdup_printf ("cd '%s' && mv *.svg *.png *.xpm *.jpg *.bmp *.gif '%s/%s' > /dev/null", g_cCurrentLaunchersPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 				cd_message ("%s", cCommand);
-				system (cCommand);
+				int r = system (cCommand);
 				g_free (cCommand);
 				cCommand = g_strdup_printf ("sed -i \"s/_ThemeDirectory_/%s/g\" '%s/%s'", CAIRO_DOCK_LOCAL_THEME_KEYWORD, g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
 				cd_message ("%s", cCommand);
-				system (cCommand);
+				r = system (cCommand);
 				g_free (cCommand);
 				cCommand = g_strdup_printf ("sed -i \"/default icon directory/ { s/~\\/.config\\/%s\\/%s\\/icons/%s/g }\" '%s/%s'", CAIRO_DOCK_DATA_DIR, CAIRO_DOCK_CURRENT_THEME_NAME, CAIRO_DOCK_LOCAL_THEME_KEYWORD, g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
 				cd_message ("%s", cCommand);
-				system (cCommand);
+				r = system (cCommand);
 				g_free (cCommand);
 			}
 			else

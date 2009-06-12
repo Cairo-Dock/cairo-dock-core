@@ -28,6 +28,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-application-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-class-manager.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-X-utilities.h"
 
 extern int g_iNbDesktops;

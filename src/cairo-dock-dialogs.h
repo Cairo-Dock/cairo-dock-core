@@ -112,6 +112,8 @@ struct _CairoDialog {
 	GLXContext glContext;
 	/// TRUE <=> une animation lente est en cours.
 	gboolean bKeepSlowAnimation;
+	/// compteur pour l'animation (inutilise pour les dialogues).
+	gint iAnimationStep;
 	/// icone sur laquelle pointe le dialogue.
 	Icon *pIcon;
 	/// le moteur de rendu utilise pour dessiner le dialogue.
@@ -150,7 +152,7 @@ struct _CairoDialog {
 	GtkWidget *pTipWidget;
 	/// le timer pour la destruction automatique du dialogue.
 	gint iSidTimer;
-	/// reference atomique.
+	/// conmpteur de reference.
 	gint iRefCount;
 	/// le widget d'interaction utilisateur (GtkEntry, GtkHScale, zone de dessin, etc).
 	GtkWidget *pInteractiveWidget;

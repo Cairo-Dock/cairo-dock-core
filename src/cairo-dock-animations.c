@@ -20,6 +20,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #include "cairo-dock-icons.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"

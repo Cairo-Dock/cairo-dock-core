@@ -8,6 +8,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 *********************************************************************************/
 
 #include <string.h>
+#include "cairo-dock-modules.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-factory.h"
@@ -17,6 +18,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dialogs.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-accessibility.h"
+#include "cairo-dock-dock-facility.h"
 
 
 CairoConfigAccessibility myAccessibility;

@@ -26,10 +26,183 @@
 #ifndef __CAIRO_DESKLET_H__
 #define  __CAIRO_DESKLET_H__
 
+#include "cairo-dock-struct.h"
 #include "cairo-dock-container.h"
+//#include "cairo-dock-icons.h"
 G_BEGIN_DECLS
 
+
+/**
+*@file cairo-dock-desklet.h This class defines the Desklets, that are Widgets placed directly on your desktop.
+* A Desklet is a container that holds 1 applet's icon plus an optionnal list of other icons and an optionnal GTK widget, has a decoration, suports several accessibility types (like Compiz Widget Layer), and has a renderer.
+* Desklets can be resized or moved directly with the mouse, and can be rotated in the 3 directions of space.
+*/
+
+typedef enum {
+	CAIRO_DESKLET_NORMAL = 0,
+	CAIRO_DESKLET_KEEP_ABOVE,
+	CAIRO_DESKLET_KEEP_BELOW,
+	CAIRO_DESKLET_ON_WIDGET_LAYER,
+	CAIRO_DESKLET_RESERVE_SPACE
+	} CairoDeskletAccessibility;
+
+struct _CairoDeskletDecoration {
+	gchar *cBackGroundImagePath;
+	gchar *cForeGroundImagePath;
+	CairoDockLoadImageModifier iLoadingModifier;
+	gdouble fBackGroundAlpha;
+	gdouble fForeGroundAlpha;
+	gint iLeftMargin;
+	gint iTopMargin;
+	gint iRightMargin;
+	gint iBottomMargin;
+	gint iDecorationPlanesRotation;
+	};
+
+struct _CairoDeskletAttribute {
+	gboolean bDeskletUseSize;
+	gint iDeskletWidth;
+	gint iDeskletHeight;
+	gint iDeskletPositionX;
+	gint iDeskletPositionY;
+	gboolean bPositionLocked;
+	gint iRotation;
+	gint iDepthRotationY;
+	gint iDepthRotationX;
+	gchar *cDecorationTheme;
+	CairoDeskletDecoration *pUserDecoration;
+	CairoDeskletAccessibility iAccessibility;
+	gboolean bOnAllDesktops;
+} ;
+
+typedef gpointer CairoDeskletRendererDataParameter;
+typedef CairoDeskletRendererDataParameter* CairoDeskletRendererDataPtr;
+typedef gpointer CairoDeskletRendererConfigParameter;
+typedef CairoDeskletRendererConfigParameter* CairoDeskletRendererConfigPtr;
+typedef struct {
+	gchar *cName;
+	CairoDeskletRendererConfigPtr pConfig;
+} CairoDeskletRendererPreDefinedConfig;
+typedef void (* CairoDeskletRenderFunc) (cairo_t *pCairoContext, CairoDesklet *pDesklet, gboolean bRenderOptimized);
+typedef void (*CairoDeskletGLRenderFunc) (CairoDesklet *pDesklet);
+typedef gpointer (* CairoDeskletConfigureRendererFunc) (CairoDesklet *pDesklet, cairo_t *pSourceContext, CairoDeskletRendererConfigPtr pConfig);
+typedef void (* CairoDeskletLoadRendererDataFunc) (CairoDesklet *pDesklet, cairo_t *pSourceContext);
+typedef void (* CairoDeskletUpdateRendererDataFunc) (CairoDesklet *pDesklet, CairoDeskletRendererDataPtr pNewData);
+typedef void (* CairoDeskletFreeRendererDataFunc) (CairoDesklet *pDesklet);
+typedef void (* CairoDeskletLoadIconsFunc) (CairoDesklet *pDesklet, cairo_t *pSourceContext);
+struct _CairoDeskletRenderer {
+	CairoDeskletRenderFunc 			render;
+	CairoDeskletGLRenderFunc 		render_opengl;
+	CairoDeskletConfigureRendererFunc 	configure;
+	CairoDeskletLoadRendererDataFunc 	load_data;
+	CairoDeskletFreeRendererDataFunc 	free_data;
+	CairoDeskletLoadIconsFunc 		load_icons;
+	CairoDeskletUpdateRendererDataFunc 	update;
+	GList *pPreDefinedConfigList;
+};
+
+struct _CairoDesklet {
+	/// type "desklet".
+	CairoDockTypeContainer iType;
+	/// La fenetre du widget.
+	GtkWidget *pWidget;
+	/// Taille de la fenetre. La surface allouee a l'applet s'en deduit.
+	gint iWidth, iHeight;
+	/// Position de la fenetre.
+	gint iWindowPositionX, iWindowPositionY;
+	/// Vrai ssi le pointeur est dans le desklet (widgets fils inclus).
+	gboolean bInside;
+	/// Toujours vrai pour un desklet.
+	CairoDockTypeHorizontality bIsHorizontal;
+	/// donne l'orientation du desket (toujours TRUE).
+	gboolean bDirectionUp;
+#ifdef HAVE_GLITZ
+	glitz_drawable_format_t *pDrawFormat;
+	glitz_drawable_t* pGlitzDrawable;
+	glitz_format_t* pGlitzFormat;
+#else
+	gpointer padding[3];
+#endif // HAVE_GLITZ
+	/// Donnees exterieures.
+	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
+	/// pour l'animation des desklets.
+	gint iSidGLAnimation;
+	/// intervalle de temps entre 2 etapes de l'animation.
+	gint iAnimationDeltaT;
+	/// derniere position en X du curseur dans le referentiel du dock.
+	gint iMouseX;
+	/// derniere position en Y du curseur dans le referentiel du dock.
+	gint iMouseY;
+	/// le facteur de zoom lors du detachage d'une applet.
+	gdouble fZoom;
+	gboolean bUseReflect_unused;
+	/// contexte OpenGL associe a la fenetre.
+	GLXContext glContext;
+	/// TRUE <=> une animation lente est en cours.
+	gboolean bKeepSlowAnimation;
+	/// compteur pour l'animation.
+	gint iAnimationStep;
+	/// Liste eventuelle d'icones placees sur le desklet, et susceptibles de recevoir des clics.
+	GList *icons;
+	/// liste des notifications disponibles.
+	GPtrArray *pNotificationsTab;
+	/// le moteur de rendu utilise pour dessiner le desklet.
+	CairoDeskletRenderer *pRenderer;
+	/// donnees pouvant etre utilisees par le moteur de rendu.
+	gpointer pRendererData;
+	/// pour le deplacement manuel de la fenetre.
+	gboolean moving;
+	/// L'icone de l'applet.
+	Icon *pIcon;
+	/// un timer pour retarder l'ecriture dans le fichier lors des deplacements.
+	gint iSidWritePosition;
+	/// un timer pour retarder l'ecriture dans le fichier lors des redimensionnements.
+	gint iSidWriteSize;
+	/// compteur pour le fondu lors de l'entree dans le desklet.
+	gint iGradationCount;
+	/// timer associe.
+	gint iSidGradationOnEnter;
+	/// TRUE ssi on ne peut pas deplacer le widget a l'aide du simple clic gauche.
+	gboolean bPositionLocked;
+	/// un timer pour faire apparaitre le desklet avec un effet de zoom lors du detachage d'une applet.
+	gint iSidGrowUp;
+	/// taille a atteindre (fixee par l'utilisateur dans le.conf)
+	gint iDesiredWidth, iDesiredHeight;
+	/// taille connue par l'applet associee.
+	gint iKnownWidth, iKnownHeight;
+	/// les decorations.
+	gchar *cDecorationTheme;
+	CairoDeskletDecoration *pUserDecoration;
+	gint iLeftSurfaceOffset;
+	gint iTopSurfaceOffset;
+	gint iRightSurfaceOffset;
+	gint iBottomSurfaceOffset;
+	cairo_surface_t *pBackGroundSurface;
+	cairo_surface_t *pForeGroundSurface;
+	gdouble fImageWidth;
+	gdouble fImageHeight;
+	gdouble fBackGroundAlpha;
+	gdouble fForeGroundAlpha;
+	/// rotation.
+	gdouble fRotation;
+	gdouble fDepthRotationY;
+	gdouble fDepthRotationX;
+	gboolean rotatingY;
+	gboolean rotatingX;
+	gboolean rotating;
+	/// rattachement au dock.
+	gboolean retaching;
+	/// date du clic.
+	guint time;
+	GLuint iBackGroundTexture;
+	GLuint iForeGroundTexture;
+	gboolean bFixedAttitude;
+	GtkWidget *pInteractiveWidget;
+	gboolean bSpaceReserved;
+};
+
 #define CD_NB_ITER_FOR_GRADUATION 10
+
 
 /**
 * Teste si le container est un desklet.

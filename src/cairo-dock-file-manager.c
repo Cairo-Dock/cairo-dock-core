@@ -9,6 +9,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <string.h>
 
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-draw.h"

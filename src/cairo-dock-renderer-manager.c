@@ -167,7 +167,7 @@ CairoDataRendererNewFunc cairo_dock_get_data_renderer_entry_point (const gchar *
 		return NULL;
 }
 
-void cairo_dock_register_data_renderer_entry_point (const gchar *cRendererName, CairoDataRendererNewFunc *pFunc)
+void cairo_dock_register_data_renderer_entry_point (const gchar *cRendererName, CairoDataRendererNewFunc pFunc)
 {
 	cd_message ("%s (%s)", __func__, cRendererName);
 	g_hash_table_insert (s_hDataRendererTable, g_strdup (cRendererName), pFunc);
@@ -240,6 +240,8 @@ void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 	pDock->bUseStencil = pRenderer->bUseStencil;
 	int iAnimationDeltaT = pDock->iAnimationDeltaT;
 	pDock->iAnimationDeltaT = (g_bUseOpenGL && pDock->render_opengl != NULL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT);
+	if (pDock->iAnimationDeltaT == 0)
+		pDock->iAnimationDeltaT = 30;  // le main dock est cree avant meme qu'on ait recuperer la valeur en conf. Lorsqu'une vue lui sera attribuee, la bonne valeur sera renseignee, en attendant on met un truc non nul.
 	if (iAnimationDeltaT != pDock->iAnimationDeltaT && pDock->iSidGLAnimation != 0)
 	{
 		g_source_remove (pDock->iSidGLAnimation);

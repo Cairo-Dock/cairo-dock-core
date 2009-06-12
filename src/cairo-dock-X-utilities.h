@@ -6,6 +6,9 @@
 #include <glib.h>
 G_BEGIN_DECLS
 
+/**
+*@file cairo-dock-X-utilities.h This class provides many utilities functions to interact very specifically on X.
+*/
 
 void cairo_dock_initialize_X_support (void);
 

@@ -43,10 +43,10 @@ struct _CairoFlyingContainer {
 	GLXContext glContext;
 	/// TRUE <=> une animation lente est en cours.
 	gboolean bKeepSlowAnimation;
+	/// compteur pour l'animation.
+	gint iAnimationStep;
 	/// L'icone volante.
 	Icon *pIcon;
-	/// compteur pour l'animation.
-	gint iAnimationCount;
 	gboolean bDrawHand;
 };
 

@@ -301,7 +301,11 @@ gboolean cairo_dock_string_is_adress (const gchar *cString)
 {
 	gchar *protocole = g_strstr_len (cString, -1, "://");
 	if (protocole == NULL || protocole == cString)
+	{
+		if (strncmp (cString, "www", 3) == 0)
+			return TRUE;
 		return FALSE;
+	}
 	const gchar *str = cString;
 	while (*str == ' ')
 		str ++;

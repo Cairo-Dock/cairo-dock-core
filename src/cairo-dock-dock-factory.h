@@ -5,9 +5,218 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-container.h"
 G_BEGIN_DECLS
+
+/**
+*@file cairo-dock-dock-factory.h This class defines the Docks.
+* A dock is a container that holds a set of icons and a renderer (also known as view).
+* It has the ability to be placed anywhere on the screen edges and to resize itself automatically to fit the screen's size.
+* It supports internal dragging of its icons with the mouse, and dragging of itself with alt+mouse.
+* A dock can be either a main-dock (not linked to any icon) or a sub-dock (linked to an icon of another dock), and there can be as many dock of each sort as you want.
+*/
+
+typedef void (*CairoDockCalculateMaxDockSizeFunc) (CairoDock *pDock);
+typedef Icon * (*CairoDockCalculateIconsFunc) (CairoDock *pDock);
+typedef void (*CairoDockRenderFunc) (cairo_t *pCairoContext, CairoDock *pDock);
+typedef void (*CairoDockRenderOptimizedFunc) (cairo_t *pCairoContext, CairoDock *pDock, GdkRectangle *pArea);
+typedef void (*CairoDockSetSubDockPositionFunc) (Icon *pPointedIcon, CairoDock *pParentDock);
+typedef void (*CairoDockGLRenderFunc) (CairoDock *pDock);
+
+struct _CairoDockRenderer {
+	/// chemin d'un fichier readme destine a presenter de maniere succinte la vue.
+	gchar *cReadmeFilePath;
+	/// fonction calculant la taille max d'un dock.
+	CairoDockCalculateMaxDockSizeFunc calculate_max_dock_size;
+	/// fonction calculant l'ensemble des parametres des icones.
+	CairoDockCalculateIconsFunc calculate_icons;
+	/// fonction de rendu.
+	CairoDockRenderFunc render;
+	/// fonction de rendu optimise, ne dessinant qu'une seule icone.
+	CairoDockRenderOptimizedFunc render_optimized;
+	/// fonction de rendu OpenGL (optionnelle).
+	CairoDockGLRenderFunc render_opengl;
+	/// fonction calculant la position d'un sous-dock.
+	CairoDockSetSubDockPositionFunc set_subdock_position;
+	/// TRUE ssi cette vue utilise les reflets.
+	gboolean bUseReflect;
+	/// chemin d'une image de previsualisation.
+	gchar *cPreviewFilePath;
+	/// TRUE ssi cette vue utilise le stencil buffer d'OpenGL.
+	gboolean bUseStencil;
+	/// nom affiche dans la liste (traduit suivant la langue).
+	const gchar *cDisplayedName;
+};
+
+typedef enum {
+	CAIRO_DOCK_MOUSE_INSIDE,
+	CAIRO_DOCK_MOUSE_ON_THE_EDGE,
+	CAIRO_DOCK_MOUSE_OUTSIDE
+	} CairoDockMousePositionType;
+
+struct _CairoDock {
+	/// type "dock".
+	CairoDockTypeContainer iType;
+	/// sa fenetre de dessin.
+	GtkWidget *pWidget;
+	/// largeur de la fenetre, _apres_ le redimensionnement par GTK.
+	gint iCurrentWidth;
+	/// hauteur de la fenetre, _apres_ le redimensionnement par GTK.
+	gint iCurrentHeight;
+	/// position courante en X du coin haut gauche de la fenetre sur l'ecran.
+	gint iWindowPositionX;
+	/// position courante en Y du coin haut gauche de la fenetre sur l'ecran.
+	gint iWindowPositionY;
+	/// lorsque la souris est dans le dock.
+	gboolean bInside;
+	/// dit si le dock est horizontal ou vertical.
+	CairoDockTypeHorizontality bHorizontalDock;
+	/// donne l'orientation du dock.
+	gboolean bDirectionUp;
+#ifdef HAVE_GLITZ
+	glitz_drawable_format_t *pDrawFormat;
+	glitz_drawable_t* pGlitzDrawable;
+	glitz_format_t* pGlitzFormat;
+#else
+	gpointer padding[3];
+#endif // HAVE_GLITZ
+	/// Donnees exterieures.
+	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
+	/// pour l'animation des docks.
+	gint iSidGLAnimation;
+	/// intervalle entre 2 etapes de l'animation.
+	gint iAnimationDeltaT;
+	/// derniere position en X du curseur dans le referentiel du dock.
+	gint iMouseX;
+	/// derniere position en Y du curseur dans le referentiel du dock.
+	gint iMouseY;
+	/// ratio applique aux icones.
+	gdouble fRatio;
+	/// dit si la vue courante utilise les reflets ou pas (utile pour les plug-ins).
+	gboolean bUseReflect;
+	/// contexte OpenGL associe a la fenetre.
+	GLXContext glContext;
+	/// TRUE <=> une animation lente est en cours.
+	gboolean bKeepSlowAnimation;
+	/// compteur pour l'animation.
+	gint iAnimationStep;
+	/// la liste de ses icones.
+	GList* icons;
+	/// liste des notifications disponibles.
+	GPtrArray *pNotificationsTab;
+	/// si le dock est le dock racine.
+	gboolean bIsMainDock;
+	/// le nombre d'icones pointant sur lui.
+	gint iRefCount;
+
+	//\_______________ Les parametres de position et de geometrie de la fenetre du dock.
+	/// ecart de la fenetre par rapport au bord de l'ecran.
+	gint iGapX;
+	/// decalage de la fenetre par rapport au point d'alignement sur le bord de l'ecran.
+	gint iGapY;
+	/// alignement, entre 0 et 1, du dock sur le bord de l'ecran.
+	gdouble fAlign;
+	/// TRUE ssi le dock doit se cacher automatiquement.
+	gboolean bAutoHide;
+	
+	/// magnitude maximale de la vague.
+	gdouble fMagnitudeMax;
+	/// max des hauteurs des icones.
+	gdouble iMaxIconHeight;
+	/// largeur du dock a plat, avec juste les icones.
+	gdouble fFlatDockWidth;
+	/// largeur du dock au repos.
+	gint iMinDockWidth;
+	/// hauteur du dock au repos.
+	gint iMinDockHeight;
+	/// largeur du dock actif.
+	gint iMaxDockWidth;
+	/// hauteur du dock actif.
+	gint iMaxDockHeight;
+	/// largeur des decorations.
+	gint iDecorationsWidth;
+	/// hauteur des decorations.
+	gint iDecorationsHeight;
+
+	gint iMaxLabelWidth;
+	gint iMinLeftMargin;
+	gint iMinRightMargin;
+	gint iMaxLeftMargin;
+	gint iMaxRightMargin;
+	gint iLeftMargin;
+	gint iRightMargin;
+
+	//\_______________ Les parametres lies a une animation du dock.
+	/// pour faire defiler les icones avec la molette.
+	gint iScrollOffset;
+	/// indice de calcul du coef multiplicateur de l'amplitude de la sinusoide (entre 0 et CAIRO_DOCK_NB_MAX_ITERATIONS).
+	gint iMagnitudeIndex;
+	/// un facteur d'acceleration lateral des icones lors du grossissement initial.
+	gdouble fFoldingFactor;
+	/// type d'icone devant eviter la souris, -1 si aucun.
+	gint iAvoidingMouseIconType;
+	/// marge d'evitement de la souris, en fraction de la largeur d'une icone (entre 0 et 0.5)
+	gdouble fAvoidingMouseMargin;
+
+	/// pointeur sur le 1er element de la liste des icones a etre dessine, en partant de la gauche.
+	GList *pFirstDrawnElement;
+	/// decalage des decorations pour les faire suivre la souris.
+	gdouble fDecorationsOffsetX;
+
+	/// le dock est en bas au repos.
+	gboolean bAtBottom;
+	/// le dock est en haut pret a etre utilise.
+	gboolean bAtTop;
+	/// Whether the dock is in a popped up state or not
+	gboolean bPopped;
+	/// lorsque le menu du clique droit est visible.
+	gboolean bMenuVisible;
+	/// Est-on en train de survoler le dock avec quelque chose dans la souris ?
+	gboolean bIsDragging;
+	/// Valeur de l'auto-hide avant le cachage-rapide.
+	gboolean bAutoHideInitialValue;
+	/// TRUE ssi on ne peut plus entrer dans un dock.
+	gboolean bEntranceDisabled;
+	
+	//\_______________ Les ID des threads en cours sur le dock.
+	/// serial ID du thread de descente de la fenetre.
+	gint iSidMoveDown;
+	/// serial ID du thread de montee de la fenetre.
+	gint iSidMoveUp;
+	/// serial ID for window popping up to the top layer event.
+	gint iSidPopUp;
+	/// serial ID for window popping down to the bottom layer.
+	gint iSidPopDown;
+	/// serial ID du thread qui enverra le signal de sortie retarde.
+	gint iSidLeaveDemand;
+	/// serial ID du thread qui deplace les icones lateralement lors d'un glisse d'icone interne
+	gint iSidIconGlide;
+	
+	//\_______________ Les fonctions de dessin du dock.
+	/// nom de la vue, utile pour charger les fonctions de rendu posterieurement a la creation du dock.
+	gchar *cRendererName;
+	/// recalculer la taille maximale du dock.
+	CairoDockCalculateMaxDockSizeFunc calculate_max_dock_size;
+	/// calculer tous les parametres des icones.
+	CairoDockCalculateIconsFunc calculate_icons;
+	/// dessiner le tout.
+	CairoDockRenderFunc render;
+	/// dessiner une portion du dock de maniere optimisee.
+	CairoDockRenderOptimizedFunc render_optimized;
+	/// fonction de rendu OpenGL (optionnelle).
+	CairoDockGLRenderFunc render_opengl;
+	/// calculer la position d'un sous-dock.
+	CairoDockSetSubDockPositionFunc set_subdock_position;
+	/// TRUE ssi on peut dropper entre 2 icones.
+	gboolean bCanDrop;
+	gboolean bIsShrinkingDown;
+	gboolean bIsGrowingUp;
+	GdkRectangle inputArea;
+	GdkBitmap* pShapeBitmap;
+	CairoDockMousePositionType iMousePositionType;
+	/// TRUE ssi cette vue utilise le stencil buffer d'OpenGL.
+	gboolean bUseStencil;
+};
 
 
 /** Teste si le container est un dock.

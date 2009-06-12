@@ -29,6 +29,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-application-factory.h"
 #include "cairo-dock-separator-factory.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-callbacks.h"

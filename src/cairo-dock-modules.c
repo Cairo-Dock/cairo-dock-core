@@ -21,6 +21,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-load.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-log.h"
@@ -108,7 +109,7 @@ void cairo_dock_initialize_module_manager (gchar *cModuleDirPath)
 	pVisitCard->cDescription = N_("A useful FAQ that contains also a lot of hints.\nLet the mouse over a sentence to make the hint dialog popups.");
 	pHelpModule->pInterface = g_new0 (CairoDockModuleInterface, 1);
 	g_hash_table_insert (s_hModuleTable, pHelpModule->pVisitCard->cModuleName, pHelpModule);
-	pHelpModule->cConfFilePath = cairo_dock_check_module_conf_file (pHelpModule->pVisitCard);
+	///pHelpModule->cConfFilePath = cairo_dock_check_module_conf_file (pHelpModule->pVisitCard);
 	cairo_dock_activate_module (pHelpModule, NULL);
 }
 
@@ -217,7 +218,7 @@ static void cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError **
 		{
 			cairo_dock_free_visit_card (pCairoDockModule->pVisitCard);
 			pCairoDockModule->pVisitCard = NULL;
-			cd_debug ("module '%s' has not been loaded", pCairoDockModule->cSoFilePath);
+			cd_debug ("module '%s' has not been loaded", pCairoDockModule->cSoFilePath);  // peut arriver a xxx-integration.
 			return ;
 		}
 	}
@@ -549,12 +550,8 @@ void cairo_dock_free_minimal_config (CairoDockMinimalAppletConfig *pMinimalConfi
 
 void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 {
+	g_return_if_fail (module != NULL);
 	cd_message ("%s (%s)", __func__, module->pVisitCard->cModuleName);
-	if (module == NULL)
-	{
-		g_set_error (erreur, 1, 1, "%s () : empty module !", __func__);
-		return ;
-	}
 
 	if (module->pInstancesList != NULL)
 	{

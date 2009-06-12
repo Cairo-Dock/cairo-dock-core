@@ -31,7 +31,7 @@ void cairo_dock_register_desklet_decoration (const gchar *cDecorationName, Cairo
 void cairo_dock_remove_desklet_decoration (const gchar *cDecorationName);
 
 CairoDataRendererNewFunc cairo_dock_get_data_renderer_entry_point (const gchar *cRendererName);
-void cairo_dock_register_data_renderer_entry_point (const gchar *cRendererName, CairoDataRendererNewFunc *pFunc);
+void cairo_dock_register_data_renderer_entry_point (const gchar *cRendererName, CairoDataRendererNewFunc pFunc);
 void cairo_dock_remove_data_renderer_entry_point (const gchar *cRendererName);
 
 

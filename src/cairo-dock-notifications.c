@@ -6,6 +6,8 @@ released under the terms of the GNU General Public License.
 Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.berlios.de)
 
 ******************************************************************************/
+
+#include "cairo-dock-icons.h"
 #include "cairo-dock-notifications.h"
 
 static GPtrArray *s_pNotificationsTab = NULL;  // les pre-notifications globales.

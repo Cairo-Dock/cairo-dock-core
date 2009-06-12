@@ -5,11 +5,27 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-icons.h"
 G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-animations.h This class handles the icons and containers animations.
 */
+
+typedef gboolean (*CairoDockTransitionRenderFunc) (gpointer pUserData, cairo_t *pIconContext);
+typedef gboolean (*CairoDockTransitionGLRenderFunc) (gpointer pUserData);
+struct _CairoDockTransition {
+	CairoDockTransitionRenderFunc render;
+	CairoDockTransitionGLRenderFunc render_opengl;
+	gpointer pUserData;
+	gboolean bFastPace;
+	gboolean bRemoveWhenFinished;
+	gint iDuration;  // en ms.
+	gint iElapsedTime;
+	gint iCount;
+	cairo_t *pIconContext;  // attention a bien detruire la transition
+	CairoContainer *pContainer;  // si l'un de ces 2 parametres change !
+	} ;
 
 #define CAIRO_DOCK_MIN_SLOW_DELTA_T 90
 

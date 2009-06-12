@@ -54,10 +54,12 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-labels.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-themes-manager.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dock-factory.h"
 
 extern CairoDock *g_pMainDock;
@@ -649,9 +651,9 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	cairo_dock_stop_icon_animation (icon);
 	
 	//\___________________ On desactive sa miniature.
+	g_print ("%s (%s, Xid : %d)\n", __func__, icon->acName, icon->Xid);
 	if (icon->Xid != 0)
 		cairo_dock_set_xicon_geometry (icon->Xid, 0, 0, 0, 0);
-	
 	
 	//\___________________ On l'enleve de la liste.
 	if (pDock->pFirstDrawnElement != NULL && pDock->pFirstDrawnElement->data == icon)

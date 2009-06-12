@@ -8,8 +8,10 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 *********************************************************************************/
 
 #include <string.h>
+#include "cairo-dock-modules.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-facility.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-hidden-dock.h"
 

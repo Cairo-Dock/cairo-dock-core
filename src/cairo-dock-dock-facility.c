@@ -51,13 +51,14 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-internal-accessibility.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-facility.h"
 
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
 extern int g_iScreenOffsetX, g_iScreenOffsetY;

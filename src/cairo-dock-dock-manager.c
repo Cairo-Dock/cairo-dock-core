@@ -39,6 +39,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-internal-taskbar.h"

@@ -20,6 +20,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-icons.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-data-renderer.h"
 
 extern gboolean g_bUseOpenGL;
@@ -176,7 +177,7 @@ void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer
 	}
 	
 	//\___________________ On met a jour le dessin de l'icone.
-	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer)&& pRenderer->interface.render_opengl)
+	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pRenderer->interface.render_opengl)
 	{
 		if (pRenderer->iLatencyTime > 0)
 		{

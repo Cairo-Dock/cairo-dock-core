@@ -22,6 +22,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-dialogs.h"
+#include "cairo-dock-icons.h"
 #include "cairo-dock-gui-callbacks.h"
 
 #define CAIRO_DOCK_PREVIEW_WIDTH 250

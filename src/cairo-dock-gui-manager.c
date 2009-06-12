@@ -277,7 +277,7 @@ static gboolean _cairo_dock_add_one_module_widget (/*gchar *cModuleName, */Cairo
 	CairoDockGroupDescription *pGroupDescription = _cairo_dock_add_group_button (cModuleName,
 		pModule->pVisitCard->cIconFilePath,
 		pModule->pVisitCard->iCategory,
-		(pModule->pVisitCard->cDescription != NULL ? pModule->pVisitCard->cDescription : pModule->pVisitCard->cReadmeFilePath),
+		pModule->pVisitCard->cDescription,
 		pModule->pVisitCard->cPreviewFilePath,
 		iActive,
 		pModule->cConfFilePath != NULL,
