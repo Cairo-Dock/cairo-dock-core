@@ -219,7 +219,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pS
 				fMaxScale,
 				myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
 				myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
-				FALSE,
+				CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,
 				fWidth,
 				fHeight,
 				NULL, NULL);

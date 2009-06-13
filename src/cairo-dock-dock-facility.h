@@ -6,7 +6,6 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-dock-factory.h"
-#include "cairo-dock-internal-accessibility.h"
 G_BEGIN_DECLS
 
 

@@ -121,73 +121,6 @@ cairo_surface_t *_cairo_dock_create_blank_surface (cairo_t *pSourceContext, int 
 			iHeight);
 }
 
-cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)
-{
-	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
-
-	//\____________________ On recupere la plus grosse des icones presentes dans le tampon (meilleur rendu).
-	int iIndex = 0, iBestIndex = 0;
-	while (iIndex + 2 < iBufferNbElements)
-	{
-		if (pXIconBuffer[iIndex] > pXIconBuffer[iBestIndex])
-			iBestIndex = iIndex;
-		iIndex += 2 + pXIconBuffer[iIndex] * pXIconBuffer[iIndex+1];
-	}
-
-	//\____________________ On pre-multiplie chaque composante par le alpha (necessaire pour libcairo).
-	*fWidth = (double) pXIconBuffer[iBestIndex];
-	*fHeight = (double) pXIconBuffer[iBestIndex+1];
-
-	int i;
-	gint pixel, alpha, red, green, blue;
-	float fAlphaFactor;
-	gint *pPixelBuffer = (gint *) &pXIconBuffer[iBestIndex+2];  // on va ecrire le resultat du filtre directement dans le tableau fourni en entree. C'est ok car sizeof(gulong) >= sizeof(gint), donc le tableau de pixels est plus petit que le buffer fourni en entree. merci a Hannemann pour ses tests et ses screenshots ! :-)
-	for (i = 0; i < (int) (*fHeight) * (*fWidth); i ++)
-	{
-		pixel = (gint) pXIconBuffer[iBestIndex+2+i];
-		alpha = (pixel & 0xFF000000) >> 24;
-		red   = (pixel & 0x00FF0000) >> 16;
-		green = (pixel & 0x0000FF00) >> 8;
-		blue  = (pixel & 0x000000FF);
-		fAlphaFactor = (float) alpha / 255;
-		red *= fAlphaFactor;
-		green *= fAlphaFactor;
-		blue *= fAlphaFactor;
-		pPixelBuffer[i] = (pixel & 0xFF000000) + (red << 16) + (green << 8) + blue;
-	}
-
-	//\____________________ On cree la surface a partir du tampon.
-	int iStride = (int) (*fWidth) * sizeof (gint);  // nbre d'octets entre le debut de 2 lignes.
-	cairo_surface_t *surface_ini = cairo_image_surface_create_for_data ((guchar *)pPixelBuffer,
-		CAIRO_FORMAT_ARGB32,
-		(int) pXIconBuffer[iBestIndex],
-		(int) pXIconBuffer[iBestIndex+1],
-		(int) iStride);
-
-	double fIconWidthSaturationFactor, fIconHeightSaturationFactor;
-	cairo_dock_calculate_size_fill (fWidth,
-		fHeight,
-		myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-		myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
-		FALSE,
-		&fIconWidthSaturationFactor,
-		&fIconHeightSaturationFactor);
-
-	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
-		ceil (*fWidth * fMaxScale),
-		ceil (*fHeight * fMaxScale));
-	cairo_t *pCairoContext = cairo_create (pNewSurface);
-
-	cairo_scale (pCairoContext, fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);
-	cairo_set_source_surface (pCairoContext, surface_ini, 0, 0);
-	cairo_paint (pCairoContext);
-
-	cairo_surface_destroy (surface_ini);
-	cairo_destroy (pCairoContext);
-
-	return pNewSurface;
-}
-
 static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDockLoadImageModifier iLoadingModifier, double fImageWidth, double fImageHeight, double fZoomX, double fZoomY, double fUsefulWidth, double fUsefulheight)
 {
 	int iOrientation = iLoadingModifier & CAIRO_DOCK_ORIENTATION_MASK;
@@ -251,6 +184,94 @@ static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDo
 			fZoomY);
 	}*/
 }
+
+
+cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)
+{
+	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
+
+	//\____________________ On recupere la plus grosse des icones presentes dans le tampon (meilleur rendu).
+	int iIndex = 0, iBestIndex = 0;
+	while (iIndex + 2 < iBufferNbElements)
+	{
+		if (pXIconBuffer[iIndex] > pXIconBuffer[iBestIndex])
+			iBestIndex = iIndex;
+		iIndex += 2 + pXIconBuffer[iIndex] * pXIconBuffer[iIndex+1];
+	}
+
+	//\____________________ On pre-multiplie chaque composante par le alpha (necessaire pour libcairo).
+	int w = pXIconBuffer[iBestIndex];
+	int h = pXIconBuffer[iBestIndex+1];
+	
+	int i;
+	gint pixel, alpha, red, green, blue;
+	float fAlphaFactor;
+	gint *pPixelBuffer = (gint *) &pXIconBuffer[iBestIndex+2];  // on va ecrire le resultat du filtre directement dans le tableau fourni en entree. C'est ok car sizeof(gulong) >= sizeof(gint), donc le tableau de pixels est plus petit que le buffer fourni en entree. merci a Hannemann pour ses tests et ses screenshots ! :-)
+	for (i = 0; i < w * h; i ++)
+	{
+		pixel = (gint) pXIconBuffer[iBestIndex+2+i];
+		alpha = (pixel & 0xFF000000) >> 24;
+		red   = (pixel & 0x00FF0000) >> 16;
+		green = (pixel & 0x0000FF00) >> 8;
+		blue  = (pixel & 0x000000FF);
+		fAlphaFactor = (float) alpha / 255;
+		red *= fAlphaFactor;
+		green *= fAlphaFactor;
+		blue *= fAlphaFactor;
+		pPixelBuffer[i] = (pixel & 0xFF000000) + (red << 16) + (green << 8) + blue;
+	}
+
+	//\____________________ On cree la surface a partir du tampon.
+	int iStride = w * sizeof (gint);  // nbre d'octets entre le debut de 2 lignes.
+	cairo_surface_t *surface_ini = cairo_image_surface_create_for_data ((guchar *)pPixelBuffer,
+		CAIRO_FORMAT_ARGB32,
+		w,
+		h,
+		iStride);
+
+	/**double fIconWidthSaturationFactor, fIconHeightSaturationFactor;
+	cairo_dock_calculate_size_fill (fWidth,
+		fHeight,
+		myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
+		myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
+		CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,
+		&fIconWidthSaturationFactor,
+		&fIconHeightSaturationFactor);*/
+	*fWidth = (double) w;
+	*fHeight = (double) h;
+	double fIconWidthSaturationFactor = 1., fIconHeightSaturationFactor = 1.;
+	cairo_dock_calculate_constrainted_size (fWidth,
+		fHeight,
+		myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
+		myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
+		CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,
+		&fIconWidthSaturationFactor,
+		&fIconHeightSaturationFactor);
+
+	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+		ceil (*fWidth * fMaxScale),
+		ceil (*fHeight * fMaxScale));
+	cairo_t *pCairoContext = cairo_create (pNewSurface);
+	
+	
+	
+	double fUsefulWidth = w * fIconWidthSaturationFactor;  // a part dans le cas fill && keep ratio, c'est la meme chose que fImageWidth et fImageHeight.
+	double fUsefulHeight = h * fIconHeightSaturationFactor;
+	_apply_orientation_and_scale (pCairoContext,
+		CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,
+		ceil ((*fWidth) * fMaxScale), ceil ((*fHeight) * fMaxScale),
+		fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor,
+		fUsefulWidth * fMaxScale, fUsefulHeight * fMaxScale);
+	/**cairo_scale (pCairoContext, fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);*/
+	cairo_set_source_surface (pCairoContext, surface_ini, 0, 0);
+	cairo_paint (pCairoContext);
+
+	cairo_surface_destroy (surface_ini);
+	cairo_destroy (pCairoContext);
+
+	return pNewSurface;
+}
+
 
 cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, cairo_t *pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)
 {

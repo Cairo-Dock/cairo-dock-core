@@ -19,7 +19,7 @@ typedef enum {
 typedef struct _CairoGraph2Attribute CairoGraph2Attribute;
 struct _CairoGraph2Attribute {
 	CairoDataRendererAttribute rendererAttribute;
-	CairoDockTypeGraph iType;
+	CairoDockTypeGraph2 iType;
 	gdouble *fHighColor;  // iNbValues triplets (r,v,b).
 	gdouble *fLowColor;  // idem.
 	gdouble fBackGroundColor[4];

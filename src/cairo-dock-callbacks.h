@@ -3,6 +3,7 @@
 #define  __CAIRO_DOCK_CALLBACKS__
 
 #include <gtk/gtk.h>
+#include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
 

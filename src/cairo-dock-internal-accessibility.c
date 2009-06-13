@@ -25,6 +25,14 @@ CairoConfigAccessibility myAccessibility;
 extern CairoDock *g_pMainDock;
 extern gint g_iScreenWidth[2];
 
+#define _append_warning(w) do {\
+	if (sWarning == NULL)\
+		sWarning = g_string_new ("");\
+	else\
+		g_string_append_c (sWarning, '\n');\
+	g_string_append (sWarning, w);\
+	cd_warning (w); } while (0)
+
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAccessibility)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
@@ -45,40 +53,45 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 	pAccessibility->bShowSubDockOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "show on click", &bFlushConfFileNeeded, FALSE, "System", NULL);
 	pAccessibility->bLockIcons = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "lock icons", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	
+	GString *sWarning = NULL;
 	if (pAccessibility->cRaiseDockShortcut != NULL)
 	{
-		pAccessibility->bPopUp = FALSE;
-		pAccessibility->bReserveSpace = FALSE;
-		pAccessibility->bAutoHide = FALSE;
-	}
-	
-	if (pAccessibility->bPopUp)
-	{
-		GString *sWarning = NULL;
+		if (pAccessibility->bPopUp)
+		{
+			_append_warning ("The option 'keep the dock below' is in conflict with the 'raise on shortcuts' option, it will be ignored");
+			pAccessibility->bPopUp = FALSE;
+		}
 		if (pAccessibility->bReserveSpace)
 		{
-			sWarning = g_string_new ("");
-			g_string_append (sWarning, "The option 'reserve space for dock' is in conflict with the 'keep the dock below' option, it will be ignored");
-			cd_warning ("The option 'reserve space for dock' is in conflict with the 'keep the dock below' option, it will be ignored");
+			_append_warning ("The option 'reserve space' is in conflict with the 'raise on shortcuts' option, it will be ignored");
 			pAccessibility->bReserveSpace = FALSE;
 		}
 		if (pAccessibility->bAutoHide)
 		{
-			if (sWarning == NULL)
-				sWarning = g_string_new ("");
-			else
-				g_string_append_c (sWarning, '\n');
-			g_string_append (sWarning, "The option 'auto-hide' is in conflict with the 'keep the dock below' option, it will be ignored");
-			cd_warning ("The option 'auto-hide' is in conflict with the 'keep the dock below' option, it will be ignored");
+			_append_warning ("The option 'auto-hide' is in conflict with the 'raise on shortcuts' option, it will be ignored");
 			pAccessibility->bAutoHide = FALSE;
 		}
-		
-		if (sWarning != NULL)
+	}
+	
+	if (pAccessibility->bPopUp)
+	{
+		if (pAccessibility->bReserveSpace)
 		{
-			if (g_pMainDock)
-				cairo_dock_show_general_message (sWarning->str, 10000.);
-			g_string_free (sWarning, TRUE);
+			_append_warning ("The option 'reserve space for dock' is in conflict with the 'keep the dock below' option, it will be ignored");
+			pAccessibility->bReserveSpace = FALSE;
 		}
+		if (pAccessibility->bAutoHide)
+		{
+			_append_warning ("The option 'auto-hide' is in conflict with the 'keep the dock below' option, it will be ignored");
+			pAccessibility->bAutoHide = FALSE;
+		}
+	}
+	
+	if (sWarning != NULL)
+	{
+		if (g_pMainDock)
+			cairo_dock_show_general_message (sWarning->str, 12000.);
+		g_string_free (sWarning, TRUE);
 	}
 	
 	return bFlushConfFileNeeded;

@@ -137,6 +137,8 @@ cairo_dock_SOURCES = \
 	cairo-dock-flying-container.h\
 	cairo-dock-graph.c\
 	cairo-dock-graph.h\
+	cairo-dock-graph2.c\
+	cairo-dock-graph2.h\
 	cairo-dock-draw-opengl.c\
 	cairo-dock-draw-opengl.h\
 	cairo-dock-particle-system.c\
@@ -234,6 +236,7 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-applet-canvas.h\
 	cairo-dock-flying-container.h\
 	cairo-dock-graph.h\
+	cairo-dock-graph2.h\
 	cairo-dock-draw-opengl.h\
 	cairo-dock-particle-system.h\
 	cairo-dock-gui-factory.h\

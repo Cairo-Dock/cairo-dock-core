@@ -48,6 +48,7 @@
 #include <cairo-dock/cairo-dock-class-manager.h>
 #include <cairo-dock/cairo-dock-emblem.h>
 #include <cairo-dock/cairo-dock-graph.h>
+#include <cairo-dock/cairo-dock-graph2.h>
 #include <cairo-dock/cairo-dock-particle-system.h>
 #include <cairo-dock/cairo-dock-draw-opengl.h>
 #include <cairo-dock/cairo-dock-gui-manager.h>
