@@ -725,15 +725,11 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (gchar *cText, cairo_t
 	if (pLabelDescription->fBackgroundColor != NULL && pLabelDescription->fBackgroundColor[3] > 0)  // non transparent.
 	{
 		cairo_save (pCairoContext);
-		//double fRadius = fMaxScale * MIN (.5 * myBackground.iDockRadius, 5.);  // bon compromis.
 		double fRadius = fMaxScale * MAX (pLabelDescription->iMargin, MIN (6, pLabelDescription->iSize/3));  // permet d'avoir un rayon meme si on n'a pas de marge.
 		double fLineWidth = 0.;
 		double fFrameWidth = *iTextWidth - 2 * fRadius - fLineWidth;
 		double fFrameHeight = *iTextHeight - fLineWidth;
-		double fDockOffsetX = fRadius + fLineWidth/2;
-		double fDockOffsetY = 0.;
 		cairo_dock_draw_rounded_rectangle (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight);
-		//cairo_dock_draw_frame (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight, fDockOffsetX, fDockOffsetY, 1, 0., CAIRO_DOCK_HORIZONTAL);
 		cairo_set_source_rgba (pCairoContext, pLabelDescription->fBackgroundColor[0], pLabelDescription->fBackgroundColor[1], pLabelDescription->fBackgroundColor[2], pLabelDescription->fBackgroundColor[3]);
 		cairo_fill (pCairoContext);
 		cairo_restore(pCairoContext);

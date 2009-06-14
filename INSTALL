@@ -1,6 +1,7 @@
-To compile the dock, the themes, or any plug-in, you just copy-paste these lines into a terminal (assuming you are in the sources directory of the dock/themes/plug-in) :
+To compile the dock or any plug-in, you just copy-paste these lines into a terminal (assuming you are in the sources directory of the dock/plug-in) :
 autoreconf -isvf && ./configure && make
 sudo make install
+Note: you have to install the dock before compiling any plug-in.
 
 you can provide directory installation by adding --prefix=/path/of/the/directory after the 'configure'.
 

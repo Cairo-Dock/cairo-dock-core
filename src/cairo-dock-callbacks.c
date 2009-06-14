@@ -48,7 +48,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-emblem.h" //Drop Indicator
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-renderer-manager.h"
@@ -828,7 +827,7 @@ gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey fo
 		iPrevPointerX = iMousePosX;
 		iPrevPointerY = iMousePosY;
 		
-		CairoDockPositionType iScreenBorder1 = -1, iScreenBorder2 = -1;
+		CairoDockPositionType iScreenBorder1 = CAIRO_DOCK_INSIDE_SCREEN, iScreenBorder2 = CAIRO_DOCK_INSIDE_SCREEN;
 		if (iMousePosY == 0)
 		{
 			iScreenBorder1 = CAIRO_DOCK_TOP;
@@ -845,13 +844,13 @@ gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey fo
 		{
 			iScreenBorder2 = CAIRO_DOCK_RIGHT;
 		}
-		if (iScreenBorder1 == -1 && iScreenBorder2 == -1)
+		if (iScreenBorder1 == CAIRO_DOCK_INSIDE_SCREEN && iScreenBorder2 == CAIRO_DOCK_INSIDE_SCREEN)
 			return myAccessibility.bPopUp;
-		if ((iScreenBorder1 != -1 && iScreenBorder2 != -1) || myAccessibility.bPopUpOnScreenBorder)
+		if ((iScreenBorder1 != CAIRO_DOCK_INSIDE_SCREEN && iScreenBorder2 != CAIRO_DOCK_INSIDE_SCREEN) || myAccessibility.bPopUpOnScreenBorder)
 		{
-			if (iScreenBorder1 != -1)
+			if (iScreenBorder1 != CAIRO_DOCK_INSIDE_SCREEN)
 				cairo_dock_pop_up_root_docks_on_screen_edge (iScreenBorder1);
-			if (iScreenBorder2 != -1)
+			if (iScreenBorder2 != CAIRO_DOCK_INSIDE_SCREEN)
 				cairo_dock_pop_up_root_docks_on_screen_edge (iScreenBorder2);
 		}
 	}
@@ -1020,6 +1019,35 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	return FALSE;
 }
 
+gchar *cairo_dock_launch_command_sync (const gchar *cCommand)
+{
+	gchar *standard_output=NULL, *standard_error=NULL;
+	gint exit_status=0;
+	GError *erreur = NULL;
+	gboolean r = g_spawn_command_line_sync (cCommand,
+		&standard_output,
+		&standard_error,
+		&exit_status,
+		&erreur);
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+		g_free (standard_error);
+		return NULL;
+	}
+	if (standard_error != NULL && *standard_error != '\0')
+	{
+		cd_warning (standard_error);
+	}
+	g_free (standard_error);
+	if (standard_output != NULL && *standard_output == '\0')
+	{
+		g_free (standard_output);
+		return NULL;
+	}
+	return standard_output;
+}
 
 static gpointer _cairo_dock_launch_threaded (gchar *cCommand)
 {
@@ -1443,7 +1471,7 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 		if (myAccessibility.bLockIcons)
 			return FALSE;
 		
-		int iScrollAmount;
+		int iScrollAmount = 0;
 		Icon *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 		Icon *pNeighborIcon;
 		if (pScroll->direction == GDK_SCROLL_UP)

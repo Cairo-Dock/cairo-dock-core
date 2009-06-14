@@ -62,7 +62,7 @@ void cairo_dock_write_keys_to_file (GKeyFile *pKeyFile, const gchar *cConfFilePa
 }
 
 
-void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, gchar *cConfFilePath, gchar *cShareDataDirPath, gboolean bUseFileKeys, gchar *cTemplateFileName)
+void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, const gchar *cConfFilePath, const gchar *cShareDataDirPath, gboolean bUseFileKeys, const gchar *cTemplateFileName)
 {
 	gchar *cTemplateConfFilePath = g_strdup_printf ("%s/%s", cShareDataDirPath, cTemplateFileName);
 	cd_message ("%s (%s)", __func__, cTemplateConfFilePath);
@@ -270,7 +270,7 @@ void cairo_dock_get_conf_file_version (GKeyFile *pKeyFile, gchar **cConfFileVers
 	g_free (cFirstComment);
 }
 
-gboolean cairo_dock_conf_file_needs_update (GKeyFile *pKeyFile, gchar *cVersion)
+gboolean cairo_dock_conf_file_needs_update (GKeyFile *pKeyFile, const gchar *cVersion)
 {
 	gchar *cPreviousVersion = NULL;
 	cairo_dock_get_conf_file_version (pKeyFile, &cPreviousVersion);

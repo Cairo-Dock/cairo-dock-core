@@ -194,7 +194,7 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 	if (pRenderer->format_value != NULL)\
 		(pRenderer)->format_value (cairo_data_renderer_get_current_value (pRenderer, i), cBuffer, CAIRO_DOCK_DATA_FORMAT_MAX_LEN);\
 	else\
-		snprintf (cBuffer, CAIRO_DOCK_DATA_FORMAT_MAX_LEN, fValue < .1 ? "%.1f%%" : "%.0f", fValue * 100); } while (0)
+		snprintf (cBuffer, CAIRO_DOCK_DATA_FORMAT_MAX_LEN, fValue < .1 ? "%.1f%%" : "%.0f%%", fValue * 100); } while (0)
 /**Write a value in a readable text format in the renderer text buffer.
 *@param pRenderer a data renderer
 *@param fValue the normalized value

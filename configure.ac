@@ -143,3 +143,8 @@ if test "$glitz_detected" = "true"; then
 else
 	echo " * Glitz Hardware Acceleration : no"
 fi
+if test "$LIBCRYPT_LIBS" != ""; then
+	echo " * crypt passwords : yes"
+else
+	echo " * crypt passwords : no"
+fi

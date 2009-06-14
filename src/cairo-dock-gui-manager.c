@@ -69,7 +69,7 @@ extern CairoDock *g_pMainDock;
 extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
 extern CairoDockDesktopEnv g_iDesktopEnv;
 
-gchar *cCategoriesDescription[2*CAIRO_DOCK_NB_CATEGORY] = {
+const gchar *cCategoriesDescription[2*CAIRO_DOCK_NB_CATEGORY] = {
 	N_("Behaviour"), "gtk-preferences",
 	N_("Appearance"), "gtk-color-picker",
 	N_("Accessories"), "gtk-dnd-multiple",
@@ -423,7 +423,6 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	gtk_toolbar_set_icon_size (GTK_TOOLBAR (s_pToolBar), GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_container_add (GTK_CONTAINER (pCategoriesFrame), s_pToolBar);
 	
-	const gchar *cCategoryName;
 	GtkToolItem *pCategoryButton;
 	pCategoryButton = _cairo_dock_make_toolbutton (_("All"),
 		"gtk-file",
@@ -431,7 +430,7 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	g_signal_connect (G_OBJECT (pCategoryButton), "clicked", G_CALLBACK(on_click_all_button), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (s_pToolBar) , pCategoryButton,-1);
 	
-	int i;
+	guint i;
 	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
 	{
 		pCategoryButton = _cairo_dock_make_toolbutton (gettext (cCategoriesDescription[2*i]),
@@ -487,8 +486,7 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	
 	gsize length = 0;
 	gchar **pGroupList = g_key_file_get_groups (pKeyFile, &length);
-	int iCategory;
-	gchar *cGroupName, *cGroupComment, *cIcon, *cDescription;
+	gchar *cGroupName;
 	CairoDockInternalModule *pInternalModule;
 	gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
 	for (i = 0; i < length; i ++)
@@ -749,6 +747,9 @@ void cairo_dock_hide_all_categories (void)
 
 void cairo_dock_show_all_categories (void)
 {
+	if (s_pStatusBar)
+		gtk_statusbar_pop (GTK_STATUSBAR (s_pStatusBar), 0);
+	
 	//\_______________ On detruit le widget du groupe courant.
 	if (s_pCurrentGroupWidget != NULL)
 	{
@@ -782,6 +783,9 @@ void cairo_dock_show_all_categories (void)
 
 void cairo_dock_show_one_category (int iCategory)
 {
+	if (s_pStatusBar)
+		gtk_statusbar_pop (GTK_STATUSBAR (s_pStatusBar), 0);
+	
 	//\_______________ On detruit le widget du groupe courant.
 	if (s_pCurrentGroupWidget != NULL)
 	{
@@ -832,11 +836,13 @@ void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget)
 GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance)
 {
 	cd_debug ("%s (%s, %s)", __func__, cConfFilePath, pGroupDescription->cGroupName);
+	//cairo_dock_set_status_message (NULL, "");
+	if (s_pStatusBar)
+		gtk_statusbar_pop (GTK_STATUSBAR (s_pStatusBar), 0);
 	g_free (pGroupDescription->cConfFilePath);
 	pGroupDescription->cConfFilePath = g_strdup (cConfFilePath);
 	
 	//\_______________ On cree le widget du groupe.
-	GError *erreur = NULL;
 	GKeyFile* pKeyFile = cairo_dock_open_key_file (cConfFilePath);
 	g_return_val_if_fail (pKeyFile != NULL, NULL);
 	
@@ -878,7 +884,7 @@ GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, CairoDoc
 		GList *p;
 		for (p = pGroupDescription->pExternalModules; p != NULL; p = p->next)
 		{
-			g_print (" + %s\n", p->data);
+			//g_print (" + %s\n", p->data);
 			pModule = cairo_dock_find_module_from_name (p->data);
 			if (pModule == NULL)
 				continue;
@@ -886,10 +892,10 @@ GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, CairoDoc
 			{
 				pModule->cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
 			}
-			g_print (" + %s\n", pModule->cConfFilePath);
+			//g_print (" + %s\n", pModule->cConfFilePath);
 
 			pExtraGroupDescription = cairo_dock_find_module_description (p->data);
-			g_print (" pExtraGroupDescription : %x\n", pExtraGroupDescription);
+			//g_print (" pExtraGroupDescription : %x\n", pExtraGroupDescription);
 			if (pExtraGroupDescription == NULL)
 				continue;
 
@@ -1496,6 +1502,8 @@ void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage)
 	g_print ("%s (%s sur %x/%x)\n", __func__, cMessage, pWindow, pStatusBar);
 	gtk_statusbar_pop (GTK_STATUSBAR (pStatusBar), 0);  // clear any previous message, underflow is allowed.
 	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, cMessage);
+	while (gtk_events_pending ())
+		gtk_main_iteration ();
 }
 void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFormat, ...)
 {

@@ -145,10 +145,10 @@ typedef void (* CairoDockInternalModuleResetConfigFunc) (CairoInternalModuleConf
 typedef void (* CairoDockInternalModuleResetDataFunc) (CairoInternalModuleDataPtr *pData);
 struct _CairoDockInternalModule {
 	//\_____________ Carte de visite.
-	gchar *cModuleName;
-	gchar *cDescription;
-	gchar *cIcon;
-	gchar *cTitle;
+	const gchar *cModuleName;
+	const gchar *cDescription;
+	const gchar *cIcon;
+	const gchar *cTitle;
 	CairoDockPluginCategory iCategory;
 	gint iSizeOfConfig;
 	gint iSizeOfData;

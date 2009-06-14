@@ -76,7 +76,7 @@ extern cairo_surface_t *g_pDesktopBgSurface;
 static gboolean s_bLoading = FALSE;
 
 
-gboolean cairo_dock_get_boolean_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gboolean bDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName)
+gboolean cairo_dock_get_boolean_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, gboolean bDefaultValue, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName)
 {
 	GError *erreur = NULL;
 	gboolean bValue = g_key_file_get_boolean (pKeyFile, cGroupName, cKeyName, &erreur);
@@ -119,7 +119,7 @@ gboolean cairo_dock_get_boolean_key_value (GKeyFile *pKeyFile, gchar *cGroupName
 	return bValue;
 }
 
-int cairo_dock_get_integer_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, int iDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName)
+int cairo_dock_get_integer_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, int iDefaultValue, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName)
 {
 	GError *erreur = NULL;
 	int iValue = g_key_file_get_integer (pKeyFile, cGroupName, cKeyName, &erreur);
@@ -162,7 +162,7 @@ int cairo_dock_get_integer_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gch
 	return iValue;
 }
 
-double cairo_dock_get_double_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, double fDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName)
+double cairo_dock_get_double_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, double fDefaultValue, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName)
 {
 	GError *erreur = NULL;
 	double fValue = g_key_file_get_double (pKeyFile, cGroupName, cKeyName, &erreur);
@@ -205,7 +205,7 @@ double cairo_dock_get_double_key_value (GKeyFile *pKeyFile, gchar *cGroupName, g
 	return fValue;
 }
 
-gchar *cairo_dock_get_string_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName)
+gchar *cairo_dock_get_string_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultValue, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName)
 {
 	GError *erreur = NULL;
 	gchar *cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, &erreur);
@@ -253,7 +253,7 @@ gchar *cairo_dock_get_string_key_value (GKeyFile *pKeyFile, gchar *cGroupName, g
 	return cValue;
 }
 
-void cairo_dock_get_integer_list_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, int *iValueBuffer, int iNbElements, int *iDefaultValues, gchar *cDefaultGroupName, gchar *cDefaultKeyName)
+void cairo_dock_get_integer_list_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, int *iValueBuffer, guint iNbElements, int *iDefaultValues, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName)
 {
 	GError *erreur = NULL;
 	gsize length = 0;
@@ -317,7 +317,7 @@ void cairo_dock_get_integer_list_key_value (GKeyFile *pKeyFile, gchar *cGroupNam
 	g_free (iValuesList);
 }
 
-void cairo_dock_get_double_list_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, double *fValueBuffer, int iNbElements, double *fDefaultValues, gchar *cDefaultGroupName, gchar *cDefaultKeyName)
+void cairo_dock_get_double_list_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, double *fValueBuffer, guint iNbElements, double *fDefaultValues, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName)
 {
 	GError *erreur = NULL;
 	gsize length = 0;
@@ -381,7 +381,7 @@ void cairo_dock_get_double_list_key_value (GKeyFile *pKeyFile, gchar *cGroupName
 	g_free (fValuesList);
 }
 
-gchar **cairo_dock_get_string_list_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gsize *length, gchar *cDefaultValues, gchar *cDefaultGroupName, gchar *cDefaultKeyName)
+gchar **cairo_dock_get_string_list_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, gsize *length, const gchar *cDefaultValues, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName)
 {
 	GError *erreur = NULL;
 	*length = 0;
@@ -431,7 +431,7 @@ gchar **cairo_dock_get_string_list_key_value (GKeyFile *pKeyFile, gchar *cGroupN
 	return cValuesList;
 }
 
-gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultGroupName, gchar *cDefaultKeyName, gchar *cDefaultDir, gchar *cDefaultFileName)
+gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName, const gchar *cDefaultDir, const gchar *cDefaultFileName)
 {
 	gchar *cFileName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, NULL, cDefaultGroupName, cDefaultKeyName);
 	gchar *cFilePath = NULL;
@@ -441,7 +441,7 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, gchar *cGroupName
 		cFilePath = g_strdup_printf ("%s/%s", cDefaultDir, cDefaultFileName);
 	return cFilePath;
 }
-void cairo_dock_get_size_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gint iDefaultSize, gchar *cDefaultGroupName, gchar *cDefaultKeyName, int *iWidth, int *iHeight)
+void cairo_dock_get_size_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, gint iDefaultSize, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName, int *iWidth, int *iHeight)
 {
 	int iSize[2];
 	int iDefaultValues[2] = {iDefaultSize, iDefaultSize};
@@ -485,7 +485,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	myDesklets.cDeskletDecorationsName = NULL;
 	gboolean bMixAppletsAndLaunchersOld = (myIcons.tIconTypeOrder[CAIRO_DOCK_APPLET] == myIcons.tIconTypeOrder[CAIRO_DOCK_LAUNCHER]);
 	gboolean bUseSeparatorOld = myIcons.bUseSeparator;  // TRUE initialement.
-	int tIconTypeOrderOld[CAIRO_DOCK_NB_TYPES];
+	CairoDockIconType tIconTypeOrderOld[CAIRO_DOCK_NB_TYPES];
 	memcpy (tIconTypeOrderOld, myIcons.tIconTypeOrder, sizeof (tIconTypeOrderOld));
 	
 	//\___________________ On recupere la conf de tous les modules.
@@ -530,7 +530,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 		myDialogs.dialogTextDescription.iStyle = myLabels.iconTextDescription.iStyle;
 	}
 	
-	cairo_dock_updated_emblem_conf_file (pKeyFile, &bFlushConfFileNeeded);
+	///cairo_dock_updated_emblem_conf_file (pKeyFile, &bFlushConfFileNeeded);
 	
 	//\___________________ On (re)charge tout, car n'importe quel parametre peut avoir change.
 	if (myPosition.bUseXinerama)
@@ -541,6 +541,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	switch (myPosition.iScreenBorder)
 	{
 		case CAIRO_DOCK_BOTTOM :
+		default :
 			pDock->bHorizontalDock = CAIRO_DOCK_HORIZONTAL;
 			pDock->bDirectionUp = TRUE;
 		break;
@@ -752,8 +753,8 @@ void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataTy
 	gchar *cGroupName, *cGroupKey;
 	while (iType != G_TYPE_INVALID)
 	{
-		cGroupName = va_arg (args, gchar *);
-		cGroupKey = va_arg (args, gchar *);
+		cGroupName = va_arg (args, const gchar *);
+		cGroupKey = va_arg (args, const gchar *);
 
 		switch (iType)
 		{
@@ -770,7 +771,7 @@ void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataTy
 				g_key_file_set_double (pKeyFile, cGroupName, cGroupKey, fValue);
 			break ;
 			case G_TYPE_STRING :
-				cValue = va_arg (args, gchar *);
+				cValue = va_arg (args, const gchar *);
 				g_key_file_set_string (pKeyFile, cGroupName, cGroupKey, cValue);
 			break ;
 			default :
@@ -839,7 +840,7 @@ void cairo_dock_get_version_from_string (gchar *cVersionString, int *iMajorVersi
 
 void cairo_dock_decrypt_string( const guchar *cEncryptedString,  guchar **cDecryptedString )
 {
-	if( !cEncryptedString || strlen(cEncryptedString) == 0 )
+	if( !cEncryptedString || *cEncryptedString == '\0' )
 	{
 		*cDecryptedString = g_strdup( "" );
 		return;

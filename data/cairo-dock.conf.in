@@ -655,17 +655,6 @@ depth rotate image =
 
 [Indicators]
 
-#F+[Indicator of drag'n'drop on icons]
-frame_drop2 =
-
-#b+ Display a drop indicator on icon while dragging over them ?
-show drop indicator = true
-
-#S+ Image for the indicator :
-#{It's an image that will be displayed on the icon to indicate you can drop on it. Let empty to use the default one.}
-emblem_2 = 
-
-
 #F+[Indicator of the active window]
 frame_window =
 
@@ -751,3 +740,5 @@ emblem_8 =
 #S+ Name of an image to use for the locked emblem :
 #{If you don't provide any, a default image will be used.}
 emblem_9 = 
+
+emblem_2=

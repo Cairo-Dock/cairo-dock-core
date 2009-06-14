@@ -4,7 +4,6 @@ SUBDIRS = .
 bin_PROGRAMS = \
 	cairo-dock
 
-
 if WITH_GLITZ
 have_glitz=-DHAVE_GLITZ="1"
 endif
@@ -47,8 +46,8 @@ cairo_dock_CFLAGS = \
 	-std=c99\
 	-O3\
 	-g -ggdb\
-	-Wno-unused-parameter
-#	-Wall -Wunreachable-code -Wstrict-prototypes -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration
+	-Wall -Wstrict-prototypes -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration
+#-Wunreachable-code -Wno-unused-parameter
 
 cairo_dock_LDFLAGS = \
 	-Wl,--export-dynamic
@@ -258,3 +257,21 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-data-renderer.h\
 	cairo-dock-dock-facility.h\
 	cairo-dock-container.h
+
+
+lib_LTLIBRARIES = \
+	libcairo-dock.la
+
+libcairo_dock_la_SOURCES = \
+	cairo-dock-struct.h\
+	cairo-dock-icons.h\
+	cairo-dock-icons.c
+
+libcairo_dock_la_CFLAGS = \
+	$(cairo_dock_CFLAGS)
+
+libcairo_dock_la_LIBADD = \
+	$(PACKAGE_LIBS) -lm
+
+libcairo_dock_la_LDFLAGS =\
+	-avoid-version -module

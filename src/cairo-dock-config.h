@@ -22,7 +22,7 @@ G_BEGIN_DECLS
 *@param cDefaultKeyName nom de cle alternative, ou NULL si aucune autre.
 *@return la valeur booleene de la cle.
 */
-gboolean cairo_dock_get_boolean_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gboolean bDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName);
+gboolean cairo_dock_get_boolean_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, gboolean bDefaultValue, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName);
 /**
 *Recupere une cle entiere d'un fichier de cles.
 *@param pKeyFile le fichier de cles.
@@ -34,7 +34,7 @@ gboolean cairo_dock_get_boolean_key_value (GKeyFile *pKeyFile, gchar *cGroupName
 *@param cDefaultKeyName nom de cle alternative, ou NULL si aucune autre.
 @return la valeur entiere de la cle.
 */
-int cairo_dock_get_integer_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, int iDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName);
+int cairo_dock_get_integer_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, int iDefaultValue, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName);
 /**
 *Recupere une cle flottante d'un fichier de cles.
 *@param pKeyFile le fichier de cles.
@@ -46,7 +46,7 @@ int cairo_dock_get_integer_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gch
 *@param cDefaultKeyName nom de cle alternative, ou NULL si aucune autre.
 *@return la valeur flottante de la cle.
 */
-double cairo_dock_get_double_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, double fDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName);
+double cairo_dock_get_double_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, double fDefaultValue, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName);
 /**
 *Recupere une cle d'un fichier de cles sous la forme d'une chaine de caractere.
 *@param pKeyFile le fichier de cles.
@@ -58,7 +58,7 @@ double cairo_dock_get_double_key_value (GKeyFile *pKeyFile, gchar *cGroupName, g
 *@param cDefaultKeyName nom de cle alternative, ou NULL si aucune autre.
 *@return la chaine de caractere nouvellement allouee correspondante a la cle.
 */
-gchar *cairo_dock_get_string_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultValue, gchar *cDefaultGroupName, gchar *cDefaultKeyName);
+gchar *cairo_dock_get_string_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultValue, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName);
 /**
 *Recupere une cle d'un fichier de cles sous la forme d'un tableau d'entiers.
 *@param pKeyFile le fichier de cles.
@@ -71,7 +71,7 @@ gchar *cairo_dock_get_string_key_value (GKeyFile *pKeyFile, gchar *cGroupName, g
 *@param cDefaultGroupName nom de groupe alternatif, ou NULL si aucun autre.
 *@param cDefaultKeyName nom de cle alternative, ou NULL si aucune autre.
 */
-void cairo_dock_get_integer_list_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, int *iValueBuffer, int iNbElements, int *iDefaultValues, gchar *cDefaultGroupName, gchar *cDefaultKeyName);
+void cairo_dock_get_integer_list_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, int *iValueBuffer, guint iNbElements, int *iDefaultValues, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName);
 /**
 *Recupere une cle d'un fichier de cles sous la forme d'un tableau de doubles.
 *@param pKeyFile le fichier de cles.
@@ -84,7 +84,7 @@ void cairo_dock_get_integer_list_key_value (GKeyFile *pKeyFile, gchar *cGroupNam
 *@param cDefaultGroupName nom de groupe alternatif, ou NULL si aucun autre.
 *@param cDefaultKeyName nom de cle alternative, ou NULL si aucune autre.
 */
-void cairo_dock_get_double_list_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, double *fValueBuffer, int iNbElements, double *fDefaultValues, gchar *cDefaultGroupName, gchar *cDefaultKeyName);
+void cairo_dock_get_double_list_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, double *fValueBuffer, guint iNbElements, double *fDefaultValues, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName);
 /**
 *Recupere une cle d'un fichier de cles sous la forme d'un tableau de chaines de caracteres.
 *@param pKeyFile le fichier de cles.
@@ -97,9 +97,9 @@ void cairo_dock_get_double_list_key_value (GKeyFile *pKeyFile, gchar *cGroupName
 *@param cDefaultKeyName nom de cle alternative, ou NULL si aucune autre.
 *@return un tableau de chaines de caracteres; a liberer avec g_strfreev().
 */
-gchar **cairo_dock_get_string_list_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gsize *length, gchar *cDefaultValues, gchar *cDefaultGroupName, gchar *cDefaultKeyName);
+gchar **cairo_dock_get_string_list_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, gsize *length, const gchar *cDefaultValues, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName);
 
-void cairo_dock_get_size_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gint iDefaultSize, gchar *cDefaultGroupName, gchar *cDefaultKeyName, int *iWidth, int *iHeight);
+void cairo_dock_get_size_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, gint iDefaultSize, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName, int *iWidth, int *iHeight);
 /**
 *Recupere une cle d'un fichier de cles sous la forme d'un chemin de fichier complet. La clé peut soit être un fichier relatif au thème courant, soit un chemin començant par '~', soit un chemin complet, soit vide auquel cas le chemin d'un fichier par defaut est renvoye s'il est specifie.
 *@param pKeyFile le fichier de cles.
@@ -112,7 +112,7 @@ void cairo_dock_get_size_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar
 *@param cDefaultFileName si la cle est vide, on prendra ce fichier par defaut dans le repertoire defini ci-dessus. (optionnel)
 *@return le chemin complet du fichier, a liberer avec g_free().
 */
-gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultGroupName, gchar *cDefaultKeyName, gchar *cDefaultDir, gchar *cDefaultFileName);
+gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName, const gchar *cDefaultDir, const gchar *cDefaultFileName);
 
 #define cairo_dock_get_size_key_value_helper(pKeyFile, cGroupName, cKeyPrefix, bFlushConfFileNeeded, iWidth, iHeight) \
 	cairo_dock_get_size_key_value (pKeyFile, cGroupName, cKeyPrefix"size", &bFlushConfFileNeeded, 0, NULL, NULL, &iWidth, &iHeight);\

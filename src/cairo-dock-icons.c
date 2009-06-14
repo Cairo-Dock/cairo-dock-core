@@ -251,7 +251,7 @@ Icon* cairo_dock_get_last_icon_of_type (GList *pIconList, CairoDockIconType iTyp
 }
 Icon* cairo_dock_get_first_icon_of_order (GList *pIconList, CairoDockIconType iType)
 {
-	int iGroupOrder = cairo_dock_get_group_order (iType);
+	CairoDockIconType iGroupOrder = cairo_dock_get_group_order (iType);
 	GList* ic;
 	Icon *icon;
 	for (ic = pIconList; ic != NULL; ic = ic->next)
@@ -264,7 +264,7 @@ Icon* cairo_dock_get_first_icon_of_order (GList *pIconList, CairoDockIconType iT
 }
 Icon* cairo_dock_get_last_icon_of_order (GList *pIconList, CairoDockIconType iType)
 {
-	int iGroupOrder = cairo_dock_get_group_order (iType);
+	CairoDockIconType iGroupOrder = cairo_dock_get_group_order (iType);
 	GList* ic;
 	Icon *icon;
 	for (ic = g_list_last (pIconList); ic != NULL; ic = ic->prev)
@@ -508,7 +508,7 @@ void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconType iType
 {
 	cd_message ("%s (%d)", __func__, iType);
 	int iOrder = 1;
-	int iGroupOrder = cairo_dock_get_group_order (iType);
+	CairoDockIconType iGroupOrder = cairo_dock_get_group_order (iType);
 	GString *sDesktopFilePath = g_string_new ("");
 	GList* ic;
 	Icon *icon;
@@ -550,7 +550,6 @@ void cairo_dock_swap_icons (CairoDock *pDock, Icon *icon1, Icon *icon2)
 	//\_________________ On change l'ordre dans les fichiers des 2 lanceurs.
 	if (CAIRO_DOCK_IS_LAUNCHER (icon1))  // ce sont des lanceurs.
 	{
-		GError *erreur = NULL;
 		gchar *cDesktopFilePath;
 		GKeyFile* pKeyFile;
 

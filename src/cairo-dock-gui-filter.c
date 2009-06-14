@@ -128,11 +128,11 @@ void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWo
 		sBuffer = g_string_new ("");
 	gpointer *pGroupKeyWidget;
 	GList *pSubWidgetList;
-	GtkWidget *pLabel, *pAlign, *pKeyBox, *pVBox, *pFrame, *pOneWidget, *pCurrentFrame = NULL, *pLabelContainer, *pFrameLabel, *pExpander;
+	GtkWidget *pLabel, *pAlign, *pKeyBox, *pVBox, *pFrame, *pCurrentFrame = NULL, *pExpander;
 	const gchar *cDescription;
 	gchar *cToolTip = NULL;
 	gchar *cModifiedText=NULL, *str=NULL;
-	gboolean bFound, bFrameVisible;
+	gboolean bFound, bFrameVisible = !bHideOther;
 	int i;
 	gchar *cKeyWord;
 	GSList *w;
@@ -274,7 +274,6 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 	gchar *cKeyWord, *str = NULL, *cModifiedText = NULL, *cDescription, *cToolTip = NULL;
 	gboolean bFound, bFrameVisible;
 	GtkWidget *pGroupBox, *pLabel, *pCategoryFrame, *pCurrentCategoryFrame = NULL;
-	GError *erreur = NULL;
 	GKeyFile *pKeyFile;
 	GKeyFile *pMainKeyFile = cairo_dock_open_key_file (g_cConfFile);
 	

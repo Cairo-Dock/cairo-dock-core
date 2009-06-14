@@ -398,7 +398,7 @@ static void _cairo_dock_draw_appli_indicator (Icon *icon, cairo_t *pCairoContext
 	cairo_restore (pCairoContext);
 }
 
-static void _cairo_dock_draw_active_window_indicator (cairo_t *pCairoContext, Icon *icon, double fRatio)
+static void _cairo_dock_draw_active_window_indicator (cairo_t *pCairoContext, Icon *icon)
 {
 	cairo_save (pCairoContext);
 	if (icon->fOrientation != 0)
@@ -635,10 +635,12 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		}
 		fGlideScale = (1 + fDockMagnitude * myIcons.fAmplitude * sin (fPhase)) / icon->fScale;  // c'est un peu hacky ... il faudrait passer l'icone precedente en parametre ...
 		if (bDirectionUp)
+		{
 			if (bHorizontalDock)
 				cairo_translate (pCairoContext, 0., (1-fGlideScale)*icon->fHeight*icon->fScale);
 			else
 				cairo_translate (pCairoContext, (1-fGlideScale)*icon->fHeight*icon->fScale, 0.);
+		}
 	}
 	else
 		fGlideScale = 1;
@@ -658,7 +660,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	}
 	if (icon->Xid != 0 && icon->Xid == cairo_dock_get_current_active_window () && ! myIndicators.bActiveIndicatorAbove && g_pActiveIndicatorSurface != NULL)
 	{
-		_cairo_dock_draw_active_window_indicator (pCairoContext, icon, fRatio);
+		_cairo_dock_draw_active_window_indicator (pCairoContext, icon);
 	}
 	
 	//\_____________________ On positionne l'icone.
@@ -674,7 +676,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	//\_____________________ On dessine l'indicateur devant.
 	if (icon->Xid != 0 && icon->Xid == cairo_dock_get_current_active_window () && myIndicators.bActiveIndicatorAbove && g_pActiveIndicatorSurface != NULL)
 	{
-		_cairo_dock_draw_active_window_indicator (pCairoContext, icon, fRatio);
+		_cairo_dock_draw_active_window_indicator (pCairoContext, icon);
 	}
 	if (icon->bHasIndicator && myIndicators.bIndicatorAbove && g_pIndicatorSurface != NULL)
 	{

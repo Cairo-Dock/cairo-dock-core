@@ -124,10 +124,11 @@ static void _cairo_dock_load_gauge_needle (cairo_t *pSourceContext, GaugeIndicat
 	if (pGaugeImage2->pSvgHandle != NULL)
 	{
 		int iSize = MIN (iWidth, iHeight);
-		g_print ("size:%d ; %d\n", iSize, pGaugeImage2->sizeX);
+		g_print ("size : applet : %d, image : %d\n", iSize, pGaugeImage2->sizeX);
 		pGaugeIndicator2->fNeedleScale = (double)iSize / (double) pGaugeImage2->sizeX;  // car l'aiguille est a l'horizontale dans le fichier svg.
 		pGaugeIndicator2->iNeedleWidth = (double) pGaugeIndicator2->iNeedleRealWidth * pGaugeIndicator2->fNeedleScale;
 		pGaugeIndicator2->iNeedleHeight = (double) pGaugeIndicator2->iNeedleRealHeight * pGaugeIndicator2->fNeedleScale;
+		g_print (" + needle %dx%d\n", pGaugeIndicator2->iNeedleWidth, pGaugeIndicator2->iNeedleHeight);
 		
 		cairo_surface_t *pNeedleSurface = _cairo_dock_create_blank_surface (pSourceContext, pGaugeIndicator2->iNeedleWidth, pGaugeIndicator2->iNeedleHeight);
 		g_return_if_fail (cairo_surface_status (pNeedleSurface) == CAIRO_STATUS_SUCCESS);
@@ -223,32 +224,40 @@ static gboolean cairo_dock_load_gauge_theme (Gauge2 *pGauge, cairo_t *pSourceCon
 			xmlNodePtr pGaugeSubNode;
 			for (pGaugeSubNode = pGaugeNode->xmlChildrenNode; pGaugeSubNode != NULL; pGaugeSubNode = pGaugeSubNode->next)
 			{
+				if (xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "text") == 0)
+					continue;
+				//g_print ("+ %s\n", pGaugeSubNode->name);
 				cNodeContent = xmlNodeGetContent (pGaugeSubNode);
 				if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posX") == 0)
 					pGaugeIndicator2->posX = atof (cNodeContent);
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posY") == 0)
 					pGaugeIndicator2->posY = atof (cNodeContent);
-				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "text") == 0)
+				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "text_zone") == 0)
 				{
 					xmlNodePtr pTextSubNode;
 					for (pTextSubNode = pGaugeSubNode->xmlChildrenNode; pTextSubNode != NULL; pTextSubNode = pTextSubNode->next)
 					{
+						if (xmlStrcmp (pTextSubNode->name, (const xmlChar *) "text") == 0)
+							continue;
+						//g_print ("  + %s\n", pTextSubNode->name);
 						cTextNodeContent = xmlNodeGetContent (pTextSubNode);
-						if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textX") == 0)
-							pGaugeIndicator2->textX = atof (cNodeContent);
-						else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textY") == 0)
-							pGaugeIndicator2->textY = atof (cNodeContent);
-						else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textWidth") == 0)
-							pGaugeIndicator2->textWidth = atof (cNodeContent);
-						else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textHeight") == 0)
-							pGaugeIndicator2->textHeight = atof (cNodeContent);
-						else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textColorR") == 0)
-							pGaugeIndicator2->textColor[0] = atof (cNodeContent);
-						else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textColorG") == 0)
-							pGaugeIndicator2->textColor[1] = atof (cNodeContent);
-						else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "textColorB") == 0)
-							pGaugeIndicator2->textColor[2] = atof (cNodeContent);
+						//g_print ("     -> '%s'\n", cTextNodeContent);
+						if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "textX") == 0)
+							pGaugeIndicator2->textX = atof (cTextNodeContent);
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "textY") == 0)
+							pGaugeIndicator2->textY = atof (cTextNodeContent);
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "textWidth") == 0)
+							pGaugeIndicator2->textWidth = atof (cTextNodeContent);
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "textHeight") == 0)
+							pGaugeIndicator2->textHeight = atof (cTextNodeContent);
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "textColorR") == 0)
+							pGaugeIndicator2->textColor[0] = atof (cTextNodeContent);
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "textColorG") == 0)
+							pGaugeIndicator2->textColor[1] = atof (cTextNodeContent);
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "textColorB") == 0)
+							pGaugeIndicator2->textColor[2] = atof (cTextNodeContent);
 					}
+					g_print ("pGaugeIndicator2->textWidth:%.2f\n", pGaugeIndicator2->textWidth);
 				}
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "direction") == 0)
 					pGaugeIndicator2->direction = atof (cNodeContent);
@@ -258,7 +267,7 @@ static gboolean cairo_dock_load_gauge_theme (Gauge2 *pGauge, cairo_t *pSourceCon
 					pGaugeIndicator2->posStop = atof (cNodeContent);
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "nb images") == 0)
 					pGaugeIndicator2->iNbImages = atoi (cNodeContent);
-				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "offset x") == 0)
+				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "offset_x") == 0)
 				{
 					pGaugeIndicator2->iNeedleOffsetX = atoi (cNodeContent);
 				}
@@ -307,7 +316,7 @@ static gboolean cairo_dock_load_gauge_theme (Gauge2 *pGauge, cairo_t *pSourceCon
 				}
 				xmlFree (cNodeContent);
 			}
-			if (pGaugeIndicator2->pImageNeedle != NULL)  // taille par defaut de l'aiguille si non fournie.
+			if (pGaugeIndicator2->pImageNeedle != NULL)  // on gere le cas d'une aiguille dont la taille est non fournie.
 			{
 				if (pGaugeIndicator2->iNeedleRealHeight == 0)
 				{
@@ -334,7 +343,7 @@ static gboolean cairo_dock_load_gauge_theme (Gauge2 *pGauge, cairo_t *pSourceCon
 }
 void cairo_dock_load_gauge2 (Gauge2 *pGauge, cairo_t *pSourceContext, CairoContainer *pContainer, CairoGaugeAttribute *pAttribute)
 {
-	gboolean bLoadOK = cairo_dock_load_gauge_theme (pGauge, pSourceContext, pAttribute->cThemePath);
+	cairo_dock_load_gauge_theme (pGauge, pSourceContext, pAttribute->cThemePath);
 }
 
   ////////////////////////////////////////////
@@ -422,13 +431,16 @@ static void cairo_dock_draw_one_gauge (cairo_t *pSourceContext, Gauge2 *pGauge, 
 			g_print (" >>>%s\n", pRenderer->cFormatBuffer);
 			cairo_save (pSourceContext);
 			cairo_set_source_rgb (pSourceContext, pIndicator->textColor[0], pIndicator->textColor[1], pIndicator->textColor[2]);
-			cairo_set_line_width (pSourceContext, 20.);
+			cairo_set_line_width (pSourceContext, 20);
 			
 			cairo_text_extents_t textExtents;
 			cairo_text_extents (pSourceContext, pRenderer->cFormatBuffer, &textExtents);
 			cairo_move_to (pSourceContext,
-				pIndicator->textX * pRenderer->iWidth - textExtents.width / 2,
-				pIndicator->textY * pRenderer->iHeight + textExtents.height / 2);
+				(1. + pIndicator->textX) * pRenderer->iWidth/2 - textExtents.width / 2,
+				(1. - pIndicator->textY) * pRenderer->iHeight/2 + textExtents.height);
+			cairo_scale (pSourceContext,
+				(double) CAIRO_DATA_RENDERER (pGauge)->iWidth / (double) pGaugeImage2->sizeX,
+				(double) CAIRO_DATA_RENDERER (pGauge)->iHeight / (double) pGaugeImage2->sizeY);
 			cairo_show_text (pSourceContext, pRenderer->cFormatBuffer);
 			cairo_restore (pSourceContext);
 		}
@@ -505,7 +517,7 @@ static void _draw_gauge_image_opengl (Gauge2 *pGauge, GaugeIndicator2 *pGaugeInd
 	
 	if (pGaugeImage2->iTexture != 0)
 	{
-		cairo_dock_apply_texture_at_size (pGaugeImage2->iTexture, iWidth, iHeight);
+		_cairo_dock_apply_texture_at_size (pGaugeImage2->iTexture, iWidth, iHeight);
 	}
 }
 static void _draw_gauge_needle_opengl (Gauge2 *pGauge, GaugeIndicator2 *pGaugeIndicator2, double fValue)
@@ -513,9 +525,9 @@ static void _draw_gauge_needle_opengl (Gauge2 *pGauge, GaugeIndicator2 *pGaugeIn
 	GaugeImage2 *pGaugeImage2 = pGaugeIndicator2->pImageNeedle;
 	g_return_if_fail (pGaugeImage2 != NULL);
 	
+	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
 	if (pGaugeImage2->iTexture == 0)
 	{
-		int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
 		_cairo_dock_load_gauge_needle (NULL, pGaugeIndicator2, iWidth, iHeight);  // pas besoin d'un cairo_context pour creer une cairo_image_surface.
 	}
 	
@@ -524,16 +536,15 @@ static void _draw_gauge_needle_opengl (Gauge2 *pGauge, GaugeIndicator2 *pGaugeIn
 		double fAngle = (pGaugeIndicator2->posStart + fValue * (pGaugeIndicator2->posStop - pGaugeIndicator2->posStart));
 		if (pGaugeIndicator2->direction < 0)
 			fAngle = - fAngle;
-		double fHalfX = pGauge->pImageBackground->sizeX / 2.0f * (0 + pGaugeIndicator2->posX);
-		double fHalfY = pGauge->pImageBackground->sizeY / 2.0f * (0 + pGaugeIndicator2->posY);
+		double fHalfX = iWidth / 2.0f * (0 + pGaugeIndicator2->posX);
+		double fHalfY = iHeight / 2.0f * (0 + pGaugeIndicator2->posY);
 		
 		glPushMatrix ();
 		
 		glTranslatef (fHalfX, fHalfY, 0.);
 		glRotatef (90. - fAngle, 0., 0., 1.);
 		glTranslatef (pGaugeIndicator2->iNeedleWidth/2 - pGaugeIndicator2->fNeedleScale * pGaugeIndicator2->iNeedleOffsetX, 0., 0.);
-		glScalef (pGaugeIndicator2->iNeedleWidth, pGaugeIndicator2->iNeedleHeight, 1.);
-		cairo_dock_apply_texture (pGaugeImage2->iTexture);
+		_cairo_dock_apply_texture_at_size (pGaugeImage2->iTexture, pGaugeIndicator2->iNeedleWidth, pGaugeIndicator2->iNeedleHeight);
 		
 		glPopMatrix ();
 	}
@@ -543,19 +554,11 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge2 *pGauge, int iDataOffset)
 	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
 	GaugeImage2 *pGaugeImage2;
 	
-	glEnable (GL_BLEND);
-	glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);  // ne me demandez pas pourquoi...
-	
-	glEnable (GL_TEXTURE_2D);
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	
-	glPolygonMode (GL_FRONT, GL_FILL);
-	
 	//\________________ On affiche le fond.
 	if(pGauge->pImageBackground != NULL)
 	{
 		pGaugeImage2 = pGauge->pImageBackground;
-		cairo_dock_apply_texture_at_size (pGaugeImage2->iTexture, iWidth, iHeight);
+		_cairo_dock_apply_texture_at_size (pGaugeImage2->iTexture, iWidth, iHeight);
 	}
 	
 	//\________________ On represente l'indicateur de chaque valeur.
@@ -602,15 +605,16 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge2 *pGauge, int iDataOffset)
 	if(pGauge->pImageForeground != NULL)
 	{
 		pGaugeImage2 = pGauge->pImageForeground;
-		cairo_dock_apply_texture_at_size (pGaugeImage2->iTexture, iWidth, iHeight);
+		_cairo_dock_apply_texture_at_size (pGaugeImage2->iTexture, iWidth, iHeight);
 	}
-	
-	glDisable (GL_TEXTURE_2D);
-	glDisable (GL_BLEND);
 }
 void cairo_dock_render_gauge_opengl2 (Gauge2 *pGauge)
 {
 	g_return_if_fail (pGauge != NULL && pGauge->pIndicatorList != NULL);
+	
+	_cairo_dock_enable_texture ();
+	_cairo_dock_set_blend_pbuffer ();  // ceci reste un mystere...
+	_cairo_dock_set_alpha (1.);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
@@ -652,6 +656,7 @@ void cairo_dock_render_gauge_opengl2 (Gauge2 *pGauge)
 		
 		iDataOffset += pRenderer->iRank;
 	}
+	_cairo_dock_disable_texture ();
 }
 
 
@@ -708,7 +713,7 @@ static void _cairo_dock_free_gauge_image(GaugeImage2 *pGaugeImage2, gboolean bFr
 	if(pGaugeImage2->pSurface != NULL)
 		cairo_surface_destroy (pGaugeImage2->pSurface);
 	if (pGaugeImage2->iTexture != 0)
-		glDeleteTextures (1, &pGaugeImage2->iTexture);
+		_cairo_dock_delete_texture (pGaugeImage2->iTexture);
 	
 	if (bFree)
 		g_free (pGaugeImage2);

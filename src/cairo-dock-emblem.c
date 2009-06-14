@@ -20,8 +20,6 @@ Written by ChAnGFu (for any bug report, please mail me to changfu@cairo-dock.org
 #include "cairo-dock-container.h"
 #include "cairo-dock-emblem.h"
 
-extern gboolean g_bDisplayDropEmblem;
-
 static CairoDockFullEmblem s_pFullEmblems[CAIRO_DOCK_EMBLEM_CLASSIC_NB];
 static gchar *s_cEmblemConfPath[CAIRO_DOCK_EMBLEM_CLASSIC_NB];
 
@@ -237,8 +235,6 @@ void cairo_dock_get_emblem_path (GKeyFile *pKeyFile, gboolean *bFlushConfFileNee
 {
 	cd_debug ("");
 	g_return_if_fail (pKeyFile != NULL);
-	
-	g_bDisplayDropEmblem = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "show drop indicator", bFlushConfFileNeeded, TRUE, "Emblems", "drop indicator");
 	
 	gint i;
 	GString *sKeyName = g_string_new ("");

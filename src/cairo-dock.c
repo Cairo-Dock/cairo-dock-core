@@ -146,7 +146,6 @@ double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
 cairo_surface_t *g_pDesktopBgSurface = NULL;  // image en fond d'ecran.
 //int g_iDamageEvent = 0;
 
-gboolean g_bDisplayDropEmblem = FALSE; // indicateur de drop
 gchar *g_cThemeServerAdress = NULL;
 gboolean g_bEasterEggs = FALSE;
 gboolean g_bLocked = FALSE;
@@ -584,7 +583,6 @@ int main (int argc, char** argv)
 	//\___________________ On charge le dernier theme ou on demande a l'utilisateur d'en choisir un.
 	g_cConfFile = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
 	
-	gboolean config_ok;
 	if (bMaintenance)
 	{
 		cairo_dock_build_main_ihm (g_cConfFile, TRUE);

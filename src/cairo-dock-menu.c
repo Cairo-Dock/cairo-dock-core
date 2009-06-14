@@ -403,7 +403,10 @@ static void _on_modify_launcher (Icon *icon)
 	}
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 	cairo_dock_reload_icon_from_desktop_file (cDesktopFileName, pCairoContext, icon);
-
+	
+	if (cName && ! icon->acName)
+		icon->acName = g_strdup (" ");
+	
 	icon->Xid = Xid;
 	//\_____________ On gere le sous-dock.
 	if (Xid != 0)
@@ -1317,7 +1320,7 @@ static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, gpointer data)
 		else if (g_iNbDesktops > 1)
 			cLabel = bAll ? _("Move all to desktop %d") : _("Move to desktop %d");
 		else
-			cLabel = bAll ? _("Move all to face %d") : _("Moveto face %d");
+			cLabel = bAll ? _("Move all to face %d") : _("Move to face %d");
 		GString *sDesktop = g_string_new ("");
 		g_free (s_pDesktopData);
 		s_pDesktopData = g_new0 (gpointer, 4 * g_iNbDesktops * g_iNbViewportX * g_iNbViewportY);

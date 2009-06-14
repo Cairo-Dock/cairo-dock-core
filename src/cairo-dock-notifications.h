@@ -130,14 +130,13 @@ void cairo_dock_remove_notification_func_on_icon (Icon *pIcon, CairoDockNotifica
 	if (pNotificationRecordList == NULL) {\
 		FALSE; }\
 	else {\
-		CairoDockNotificationFunc pFunction;\
 		CairoDockNotificationRecord *pNotificationRecord;\
 		GSList *pElement = pNotificationRecordList;\
 		while (pElement != NULL && ! bStop) {\
 			pNotificationRecord = pElement->data;\
 			bStop = pNotificationRecord->pFunction (pNotificationRecord->pUserData, ##__VA_ARGS__);\
 			pElement = pElement->next; }\
-		TRUE; }\
+		/*TRUE;*/ }\
 	} while (0)
 /**
 *Appelle toutes les fonctions enregistrees pour une notification donnee.
