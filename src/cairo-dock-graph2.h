@@ -48,7 +48,7 @@ void cairo_dock_load_graph2 (CairoDockGraph2 *pGraph, cairo_t *pSourceContext, C
 
 void cairo_dock_free_graph2 (CairoDockGraph2 *pGraph);
 
-CairoDockGraph2* cairo_dock_new_graph2 (void);
+CairoDockGraph2 *cairo_dock_new_graph2 (void);
 
 
 void cairo_dock_add_watermark_on_graph2 (cairo_t *pSourceContext, CairoDockGraph2 *pGraph, gchar *cImagePath, double fAlpha);

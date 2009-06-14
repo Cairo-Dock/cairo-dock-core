@@ -38,6 +38,12 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	
 	pTaskBar->bGroupAppliByClass = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "group by class", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 	pTaskBar->cGroupException = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "group exception", &bFlushConfFileNeeded, "pidgin;xchat", NULL, NULL);
+	if (pTaskBar->cGroupException)
+	{
+		int i;
+		for (i = 0; pTaskBar->cGroupException[i] != '\0'; i ++)
+			pTaskBar->cGroupException[i] = g_ascii_tolower (pTaskBar->cGroupException[i]);
+	}
 	
 	pTaskBar->iAppliMaxNameLength = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "max name length", &bFlushConfFileNeeded, 15, "Applications", NULL);
 
@@ -68,6 +74,12 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	pTaskBar->bMixLauncherAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "mix launcher appli", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	pTaskBar->bOverWriteXIcons = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "overwrite xicon", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	pTaskBar->cOverwriteException = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "overwrite exception", &bFlushConfFileNeeded, "pidgin;xchat", NULL, NULL);
+	if (pTaskBar->cOverwriteException)
+	{
+		int i;
+		for (i = 0; pTaskBar->cOverwriteException[i] != '\0'; i ++)
+			pTaskBar->cOverwriteException[i] = g_ascii_tolower (pTaskBar->cOverwriteException[i]);
+	}
 	pTaskBar->bShowThumbnail = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "window thumbnail", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	if (pTaskBar->bShowThumbnail && ! cairo_dock_xcomposite_is_available ())
 	{

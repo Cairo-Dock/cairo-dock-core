@@ -149,7 +149,7 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 *@param i the number of the value
 *@param t the time (in number of steps)
 *@return a double*/
-#define cairo_data_renderer_get_value(pRenderer, i, t) pRenderer->data.pTabValues[pRenderer->data.iCurrentIndex+t < pRenderer->data.iMemorySize ? pRenderer->data.iCurrentIndex+t : pRenderer->data.iCurrentIndex+t-pRenderer->data.iMemorySize][i]
+#define cairo_data_renderer_get_value(pRenderer, i, t) pRenderer->data.pTabValues[pRenderer->data.iCurrentIndex+t > pRenderer->data.iMemorySize ? pRenderer->data.iCurrentIndex+t-pRenderer->data.iMemorySize : pRenderer->data.iCurrentIndex+t < 0 ? pRenderer->data.iCurrentIndex+t+pRenderer->data.iMemorySize : pRenderer->data.iCurrentIndex+t][i]
 /**Get the current i-th value.
 *@param pRenderer a data renderer
 *@param i the number of the value
@@ -159,7 +159,7 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 *@param pRenderer a data renderer
 *@param i the number of the value
 *@return a double*/
-#define cairo_data_renderer_get_previous_value(pRenderer, i) cairo_data_renderer_get_value (pRenderer, i, 1)
+#define cairo_data_renderer_get_previous_value(pRenderer, i) cairo_data_renderer_get_value (pRenderer, i, -1)
 /**Get the normalized i-th value (between 0 and 1) at the time t.
 *@param pRenderer a data renderer
 *@param i the number of the value
@@ -175,7 +175,7 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 *@param pRenderer a data renderer
 *@param i the number of the value
 *@return a double in [0,1]*/
-#define cairo_data_renderer_get_normalized_previous_value(pRenderer, i) cairo_data_renderer_get_normalized_value(pRenderer, i, 1)
+#define cairo_data_renderer_get_normalized_previous_value(pRenderer, i) cairo_data_renderer_get_normalized_value(pRenderer, i, -1)
 /**Get the normalized current i-th value (between 0 and 1), taking into account the latency of the smooth movement.
 *@param pRenderer a data renderer
 *@param i the number of the value

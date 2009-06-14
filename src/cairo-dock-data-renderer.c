@@ -152,8 +152,7 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext, double *pNewValues)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
-	if (pRenderer == NULL)
-		return ;
+	g_return_if_fail (pRenderer != NULL);
 	
 	//\___________________ On met a jour les valeurs du renderer.
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
@@ -307,19 +306,21 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 			pData = g_memdup (&pOldRenderer->data, sizeof (CairoDataToRenderer));
 			memset (&pOldRenderer->data, 0, sizeof (CairoDataToRenderer));
 			
-			if (pOldRenderer->data.iMemorySize != pAttribute->iMemorySize)  // on redimensionne le tampon des valeurs.
+			pAttribute->iMemorySize = MAX (2, pAttribute->iMemorySize);
+			if (pData->iMemorySize != pAttribute->iMemorySize)  // on redimensionne le tampon des valeurs.
 			{
-				pData->iMemorySize = MAX (2, pAttribute->iMemorySize);
-				gdouble *buf = g_realloc (pData->pValuesBuffer, pData->iMemorySize * pData->iNbValues * sizeof (gdouble));
-				g_free (pData->pValuesBuffer);
-				pData->pValuesBuffer = buf;
+				pData->iMemorySize = pAttribute->iMemorySize;
+				pData->pValuesBuffer = g_realloc (pData->pValuesBuffer, pData->iMemorySize * pData->iNbValues * sizeof (gdouble));  /// mettre a 0 les elements ajoutes...
 				
+				g_free (pData->pTabValues);
 				pData->pTabValues = g_new (gdouble *, pData->iMemorySize);
 				int i;
 				for (i = 0; i < pData->iMemorySize; i ++)
 				{
 					pData->pTabValues[i] = &pData->pValuesBuffer[i*pData->iNbValues];
 				}
+				if (pData->iCurrentIndex >= pData->iMemorySize)
+					pData->iCurrentIndex = pData->iMemorySize - 1;
 			}
 		}
 		
