@@ -396,7 +396,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 }
 
 
-gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l'UTF-8
+gchar *cairo_dock_cut_string (const gchar *cString, guint iNbCaracters)  // gere l'UTF-8
 {
 	g_return_val_if_fail (cString != NULL, NULL);
 	gchar *cTruncatedName = NULL;

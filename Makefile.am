@@ -7,14 +7,14 @@ SUBDIRS = . src po data
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cairo-dock.pc
 
-scriptdir = ${bindir}
-script_DATA = \
+
+dist_bin_SCRIPTS = \
+	cairo-dock-package-theme.sh\
 	launch-cairo-dock-after-beryl.sh\
-	cairo-dock-update.sh\
-	cairo-dock-package-theme.sh
+	cairo-dock-update.sh
+
 
 EXTRA_DIST = \
-	${script_DATA}\
 	intltool-extract.in\
 	intltool-merge.in\
 	intltool-update.in\

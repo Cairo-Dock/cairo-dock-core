@@ -12,6 +12,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-load.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-internal-icons.h"
@@ -79,7 +80,6 @@ static void reset_config (CairoConfigBackground *pBackground)
 static void reload (CairoConfigBackground *pPrevBackground, CairoConfigBackground *pBackground)
 {
 	CairoDock *pDock = g_pMainDock;
-	double fMaxScale = cairo_dock_get_max_scale (pDock);
 	
 	g_fBackgroundImageWidth = g_fBackgroundImageHeight = 0.;
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks.

@@ -428,19 +428,20 @@ static void cairo_dock_draw_one_gauge (cairo_t *pSourceContext, Gauge2 *pGauge, 
 		if (pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
 		{
 			cairo_data_renderer_format_value (pRenderer, fValue, i);
-			g_print (" >>>%s\n", pRenderer->cFormatBuffer);
+			//g_print (" >>>%s\n", pRenderer->cFormatBuffer);
 			cairo_save (pSourceContext);
 			cairo_set_source_rgb (pSourceContext, pIndicator->textColor[0], pIndicator->textColor[1], pIndicator->textColor[2]);
 			cairo_set_line_width (pSourceContext, 20);
 			
 			cairo_text_extents_t textExtents;
 			cairo_text_extents (pSourceContext, pRenderer->cFormatBuffer, &textExtents);
+			double fZoom = MIN (pIndicator->textWidth * pRenderer->iWidth / textExtents.width, pIndicator->textHeight * pRenderer->iHeight / textExtents.height);
 			cairo_move_to (pSourceContext,
 				(1. + pIndicator->textX) * pRenderer->iWidth/2 - textExtents.width / 2,
 				(1. - pIndicator->textY) * pRenderer->iHeight/2 + textExtents.height);
 			cairo_scale (pSourceContext,
-				(double) CAIRO_DATA_RENDERER (pGauge)->iWidth / (double) pGaugeImage2->sizeX,
-				(double) CAIRO_DATA_RENDERER (pGauge)->iHeight / (double) pGaugeImage2->sizeY);
+				fZoom,
+				fZoom);
 			cairo_show_text (pSourceContext, pRenderer->cFormatBuffer);
 			cairo_restore (pSourceContext);
 		}
@@ -586,7 +587,7 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge2 *pGauge, int iDataOffset)
 		if (pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
 		{
 			cairo_data_renderer_format_value (pRenderer, fValue, i);
-			g_print (" >>>%s\n", pRenderer->cFormatBuffer);
+			//g_print (" >>>%s\n", pRenderer->cFormatBuffer);
 			/*cairo_save (pSourceContext);
 			cairo_set_source_rgb (pSourceContext, pIndicator->textColor[0], pIndicator->textColor[1], pIndicator->textColor[2]);
 			cairo_set_line_width (pSourceContext, 20.);

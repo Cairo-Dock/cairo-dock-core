@@ -45,7 +45,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 *@param iNbCaracters the maximum number of characters wished.
 *@return the newly allocated string.
 */
-gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);
+gchar *cairo_dock_cut_string (const gchar *cString, guint iNbCaracters);
 void cairo_dock_fill_one_text_buffer (Icon *icon, cairo_t* pSourceContext, CairoDockLabelDescription *pTextDescription);
 
 void cairo_dock_fill_one_quick_info_buffer (Icon *icon, cairo_t* pSourceContext, CairoDockLabelDescription *pTextDescription, double fMaxScale);
