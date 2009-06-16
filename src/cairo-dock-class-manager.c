@@ -18,6 +18,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-draw.h"
@@ -144,7 +145,7 @@ static void _cairo_dock_set_same_indicator_on_sub_dock (Icon *pInhibhatorIcon)
 			cd_message ("  pour le sous-dock %s : indicateur <- %d", pPointingIcon->acName, bSubDockHasIndicator);
 			pPointingIcon->bHasIndicator = bSubDockHasIndicator;
 			if (pParentDock != NULL)
-				cairo_dock_redraw_icon (pPointingIcon, pParentDock);
+				cairo_dock_redraw_icon (pPointingIcon, CAIRO_CONTAINER (pParentDock));
 		}
 	}
 }
@@ -546,7 +547,7 @@ cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_t *pSou
 		*fHeight * fMaxScale);
 	return pSurface;
 }
-cairo_surface_t *cairo_dock_create_surface_from_class (gchar *cClass, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)
+cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)
 {
 	cd_debug ("%s (%s)", __func__, cClass);
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
@@ -592,7 +593,7 @@ cairo_surface_t *cairo_dock_create_surface_from_class (gchar *cClass, cairo_t *p
 }
 
 
-void cairo_dock_update_visibility_on_inhibators (gchar *cClass, Window Xid, gboolean bIsHidden)
+void cairo_dock_update_visibility_on_inhibators (const gchar *cClass, Window Xid, gboolean bIsHidden)
 {
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	if (pClassAppli != NULL)
@@ -618,7 +619,7 @@ void cairo_dock_update_visibility_on_inhibators (gchar *cClass, Window Xid, gboo
 	}
 }
 
-void cairo_dock_update_activity_on_inhibators (gchar *cClass, Window Xid)
+void cairo_dock_update_activity_on_inhibators (const gchar *cClass, Window Xid)
 {
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	if (pClassAppli != NULL)
@@ -641,7 +642,7 @@ void cairo_dock_update_activity_on_inhibators (gchar *cClass, Window Xid)
 	}
 }
 
-void cairo_dock_update_inactivity_on_inhibators (gchar *cClass, Window Xid)
+void cairo_dock_update_inactivity_on_inhibators (const gchar *cClass, Window Xid)
 {
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	if (pClassAppli != NULL)
@@ -664,7 +665,7 @@ void cairo_dock_update_inactivity_on_inhibators (gchar *cClass, Window Xid)
 	}
 }
 
-void cairo_dock_update_name_on_inhibators (gchar *cClass, Window Xid, gchar *cNewName)
+void cairo_dock_update_name_on_inhibators (const gchar *cClass, Window Xid, gchar *cNewName)
 {
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	if (pClassAppli != NULL)
@@ -791,13 +792,14 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			pLastClassIcon->fAlpha = pFakeClassIcon->fAlpha;
 			pLastClassIcon->fWidth = pFakeClassIcon->fWidth;
 			pLastClassIcon->fHeight = pFakeClassIcon->fHeight;
-			//pLastClassIcon-> = pFakeClassIcon->;
 			cairo_dock_free_icon (pFakeClassIcon);
 			
 			cd_debug (" puis on re-insere l'appli restante");
 			cairo_dock_insert_icon_in_dock_full (pLastClassIcon, pFakeParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 			//pFakeParentDock->calculate_icons (pFakeParentDock);
 			
+			if (pLastClassIcon->fDrawX == 0 && pLastClassIcon->fDrawY == 0)  // icone jamais placee.
+				cairo_dock_calculate_dock_icons (pFakeParentDock);
 			cairo_dock_redraw_icon (pLastClassIcon, CAIRO_CONTAINER (pFakeParentDock));  // on suppose que les tailles des 2 icones sont identiques.
 		}
 		return TRUE;

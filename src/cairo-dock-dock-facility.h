@@ -62,7 +62,6 @@ void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pPar
 
 
 void cairo_dock_set_input_shape (CairoDock *pDock);
-void cairo_dock_unset_input_shape (CairoDock *pDock);
 
 
 GList * cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, double fFlatDockWidth, int iXOffset);

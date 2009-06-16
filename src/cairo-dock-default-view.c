@@ -68,6 +68,11 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	if (pLastIcon != NULL)
 		pDock->iMaxRightMargin = pDock->iMaxDockWidth - (pLastIcon->fXMin + pLastIcon->fWidth);
 	//g_print(" marges min: %d | %d\n marges max: %d | %d\n", pDock->iMinLeftMargin, pDock->iMinRightMargin, pDock->iMaxLeftMargin, pDock->iMaxRightMargin);
+	
+	pDock->inputArea.x = fExtraWidth/2;
+	pDock->inputArea.y = 0;
+	pDock->inputArea.width = pDock->iMinDockWidth - fExtraWidth;
+	pDock->inputArea.height = pDock->iMinDockHeight;
 }
 
 
@@ -380,19 +385,6 @@ Icon *cd_calculate_icons_default (CairoDock *pDock)
 	
 	cairo_dock_check_can_drop_linear (pDock);
 	
-	icon = cairo_dock_get_first_drawn_icon (pDock);
-	if (icon != NULL)
-	{
-		double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
-		pDock->inputArea.x = 0;
-		pDock->inputArea.width = pDock->iCurrentWidth;
-		pDock->inputArea.height = ceil (pDock->iMaxIconHeight * (1 + myIcons.fAmplitude * fDockMagnitude));
-		pDock->inputArea.y = pDock->iCurrentHeight - pDock->inputArea.height;
-	}
-	else
-	{
-		pDock->inputArea.width = pDock->inputArea.height = 0;
-	}
 	return pPointedIcon;
 }
 

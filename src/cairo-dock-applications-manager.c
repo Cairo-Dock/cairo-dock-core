@@ -434,7 +434,7 @@ gboolean cairo_dock_window_is_maximized (Window Xid)
 	int iIsMaximized = 0;
 	if (iBufferNbElements > 0)
 	{
-		int i;
+		guint i;
 		for (i = 0; i < iBufferNbElements && iIsMaximized < 2; i ++)
 		{
 			if (pXStateBuffer[i] == s_aNetWmMaximizedVert)
@@ -460,7 +460,7 @@ static gboolean _cairo_dock_window_is_in_state (Window Xid, Atom iState)
 	gboolean bIsInState = FALSE;
 	if (iBufferNbElements > 0)
 	{
-		int i;
+		guint i;
 		for (i = 0; i < iBufferNbElements; i ++)
 		{
 			if (pXStateBuffer[i] == iState)
@@ -490,7 +490,7 @@ void cairo_dock_window_is_above_or_below (Window Xid, gboolean *bIsAbove, gboole
 
 	if (iBufferNbElements > 0)
 	{
-		int i;
+		guint i;
 		//g_print ("iBufferNbElements : %d (%d;%d)\n", iBufferNbElements, s_aNetWmAbove, s_aNetWmBelow);
 		for (i = 0; i < iBufferNbElements; i ++)
 		{
@@ -530,7 +530,7 @@ void cairo_dock_window_is_fullscreen_or_hidden_or_maximized (Window Xid, gboolea
 		*bDemandsAttention = FALSE;
 	if (iBufferNbElements > 0)
 	{
-		int i, iNbMaximizedDimensions = 0;
+		guint i, iNbMaximizedDimensions = 0;
 		for (i = 0; i < iBufferNbElements; i ++)
 		{
 			if (pXStateBuffer[i] == s_aNetWmFullScreen)
@@ -579,7 +579,7 @@ gboolean cairo_dock_window_is_sticky (Window Xid)
 	gboolean bIsSticky = FALSE;
 	if (iBufferNbElements > 0)
 	{
-		int i;
+		guint i;
 		//g_print ("iBufferNbElements : %d (%d;%d)\n", iBufferNbElements, s_aNetWmAbove, s_aNetWmBelow);
 		for (i = 0; i < iBufferNbElements; i ++)
 		{

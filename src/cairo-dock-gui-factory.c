@@ -694,13 +694,14 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 	gchar *cModuleName = data[2];
 	
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
-	
+	CairoDockInternalModule *pInternalModule = cairo_dock_find_internal_module_from_name (cModuleName);
 	Icon *pIcon = cairo_dock_get_current_active_icon ();
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
 	gchar *cMessage = NULL;
-	if (pModule == NULL)
+	
+	if (pModule == NULL && pInternalModule == NULL)
 	{
-		cMessage = g_strdup_printf (_("The '%s' plug-in was not found.\nBe sure to install it in the same version as the dock to enjoy these features."), cModuleName);
+		cMessage = g_strdup_printf (_("The '%s' module was not found.\nBe sure to install it in the same version as the dock to enjoy these features."), cModuleName);
 		int iDuration = 10e3;
 		if (pIcon != NULL && pDock != NULL)
 			cairo_dock_show_temporary_dialog_with_icon (cMessage, pIcon, CAIRO_CONTAINER (pDock), iDuration, "same icon");
@@ -716,7 +717,6 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 			pGroupDescription = cairo_dock_find_module_description (cModuleName);
 			g_return_if_fail (pGroupDescription != NULL);
 		}
-		CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
 		if (pModule != NULL && pModule->pInstancesList == NULL)
 		{
 			cMessage = g_strdup_printf (_("The '%s' plug-in is not active.\nBe sure to activate it to enjoy these features."), cModuleName);
@@ -1062,8 +1062,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					iNbElements *= 2;
 				length = 0;
 				iValueList = g_key_file_get_integer_list (pKeyFile, cGroupName, cKeyName, &length, NULL);
-				GtkWidget *pPrevOneWidget;
-				int iPrevValue;
+				GtkWidget *pPrevOneWidget=NULL;
+				int iPrevValue=0;
 				if (iElementType == 'j')
 				{
 					pToggleButton = gtk_toggle_button_new ();
@@ -1312,13 +1312,29 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case 'M' :  // idem mais seulement affiche si le module existe.
 				if (pAuthorizedValuesList == NULL || pAuthorizedValuesList[0] == NULL || *pAuthorizedValuesList[0] == '\0')
 					break ;
-				if (iElementType == 'M' && cairo_dock_find_module_from_name (pAuthorizedValuesList[0]) == NULL)
-					break ;
+				
+				gchar *cModuleName = NULL;
+				CairoDockInternalModule *pInternalModule = cairo_dock_find_internal_module_from_name (pAuthorizedValuesList[0]);
+				if (pInternalModule != NULL)
+					cModuleName = pInternalModule->cModuleName;
+				else
+				{
+					CairoDockModule *pModule = cairo_dock_find_module_from_name (pAuthorizedValuesList[0]);
+					if (pModule != NULL)
+						cModuleName = pModule->pVisitCard->cModuleName;
+					else
+					{
+						if (iElementType == 'M')
+							break ;
+						cd_warning ("module '%s' not found", pAuthorizedValuesList[0]);
+						cModuleName = g_strdup (pAuthorizedValuesList[0]);  // petite fuite memoire dans ce cas tres precis ...
+					}
+				}
 				pOneWidget = gtk_button_new_from_stock (GTK_STOCK_JUMP_TO);
 				_allocate_new_buffer;
 				data[0] = pOneWidget;
 				data[1] = pMainWindow;
-				data[2] = g_strdup (pAuthorizedValuesList[0]);  // fuite memoire ...
+				data[2] = cModuleName;
 				g_signal_connect (G_OBJECT (pOneWidget),
 					"clicked",
 					G_CALLBACK (_cairo_dock_configure_module),
@@ -1517,7 +1533,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					int iNbElementsByItem = (iElementType == 'R' ? 3 : 1);
 					if (pAuthorizedValuesList != NULL)  //  && pAuthorizedValuesList[0] != NULL
 					{
-						int l, iOrder = 0;
+						guint l, iOrder = 0;
 						for (l = 0; l < length; l ++)
 						{
 							cValue = cValueList[l];

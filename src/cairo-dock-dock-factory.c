@@ -147,6 +147,7 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockNa
 
 	//\__________________ On cree la fenetre GTK.
 	GtkWidget *pWindow = cairo_dock_create_container_window ();
+	gtk_container_set_border_width(GTK_CONTAINER(pWindow), 0);
 	pDock->pWidget = pWindow;
 
 	if (g_bKeepAbove)

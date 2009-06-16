@@ -158,7 +158,8 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 			}
 			///pDock->iScrollOffset = 0;
 
-			pDock->calculate_max_dock_size (pDock);  // utilite ?
+			///pDock->calculate_max_dock_size (pDock);  // utilite ?...
+			pDock->calculate_icons (pDock);
 			pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? mySystem.fUnfoldAcceleration : 0);
 
 			cairo_dock_allow_entrance (pDock);
@@ -223,8 +224,6 @@ gboolean cairo_dock_grow_up (CairoDock *pDock)
 			cairo_dock_set_icons_geometry_for_window_manager (pDock);
 			cairo_dock_replace_all_dialogs ();
 		}
-		if (g_bEasterEggs)
-			cairo_dock_unset_input_shape (pDock);
 		return FALSE;
 	}
 	else

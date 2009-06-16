@@ -63,6 +63,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
 extern int g_iScreenOffsetX, g_iScreenOffsetY;
 extern int g_iWmHint;
+extern gboolean g_bEasterEggs;
 
 
 void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
@@ -182,6 +183,11 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	cairo_dock_set_icons_geometry_for_window_manager (pDock);
 
 	cairo_dock_update_background_decorations_if_necessary (pDock, pDock->iDecorationsWidth, pDock->iDecorationsHeight);
+	
+	if (g_bEasterEggs)
+	{
+		cairo_dock_set_input_shape (pDock);
+	}
 }
 
 Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock)
@@ -402,11 +408,18 @@ void cairo_dock_set_input_shape (CairoDock *pDock)
 				 &iMinor))
 		g_print ("No ShapeQueryExtension\n");
 
-	/ for shaped input we need at least XShape 1.1
+	// for shaped input we need at least XShape 1.1
 	if (iMajor != 1 && iMinor < 1)
 		g_print ("ShapeQueryExtension too old\n");*/
-	if (pDock->pShapeBitmap == NULL || pDock->inputArea.width == 0 || pDock->inputArea.height == 0)
+	if (pDock->pShapeBitmap != NULL)
+		g_object_unref ((gpointer) pDock->pShapeBitmap);
+	
+	if (pDock->inputArea.width == 0 || pDock->inputArea.height == 0 || pDock->iRefCount > 0 || pDock->bAutoHide)
+	{
+		pDock->pShapeBitmap = NULL;
 		return ;
+	}
+	pDock->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL, pDock->iMinDockWidth, pDock->iMinDockHeight, 1);
 	//g_print ("%s (%d;%d ; %dx%d\n", __func__, pDock->inputArea.x, pDock->inputArea.y, pDock->inputArea.width, pDock->inputArea.height);
 	
 	cairo_t *pCairoContext = gdk_cairo_create (pDock->pShapeBitmap);
@@ -431,25 +444,8 @@ void cairo_dock_set_input_shape (CairoDock *pDock)
 	}
 	cairo_fill (pCairoContext);
 	cairo_destroy (pCairoContext);
-	
-	gtk_widget_input_shape_combine_mask (pDock->pWidget,
-		NULL,
-		0,
-		0);
-	gtk_widget_input_shape_combine_mask (pDock->pWidget,
-		pDock->pShapeBitmap,
-		0,
-		0);
 }
 
-void cairo_dock_unset_input_shape (CairoDock *pDock)
-{
-	//g_print ("%s ()\n", __func__);
-	gtk_widget_input_shape_combine_mask (pDock->pWidget,
-		NULL,
-		0,
-		0);
-}
 
   ///////////////////
  /// LINEAR DOCK ///
@@ -559,9 +555,11 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 {
 	//g_print (">>>>>%s (%d/%.2f, %dx%d, %.2f, %.2f)\n", __func__, x_abs, fFlatDockWidth, iWidth, iHeight, fAlign, fFoldingFactor);
 	if (x_abs < 0 && iWidth > 0)  // ces cas limite sont la pour empecher les icones de retrecir trop rapidement quand on sort par les cotes.
-		x_abs = -1;
+		///x_abs = -1;
+		x_abs = 0;
 	else if (x_abs > fFlatDockWidth && iWidth > 0)
-		x_abs = fFlatDockWidth+1;
+		///x_abs = fFlatDockWidth+1;
+		x_abs = (int) fFlatDockWidth;
 	if (pIconList == NULL)
 		return NULL;
 
@@ -629,10 +627,11 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 		if (x_cumulated + icon->fWidth + .5*myIcons.iIconGap >= x_abs && x_cumulated - .5*myIcons.iIconGap <= x_abs && pointed_ic == NULL)  // on a trouve l'icone sur laquelle on pointe.
 		{
 			pointed_ic = ic;
-			icon->bPointed = TRUE;
+			///icon->bPointed = TRUE;
+			icon->bPointed = (x_abs != (int) fFlatDockWidth && x_abs != 0);
 			icon->fX = x_cumulated - (fFlatDockWidth - iWidth) / 2 + (1 - icon->fScale) * (x_abs - x_cumulated + .5*myIcons.iIconGap);
 			icon->fX = fAlign * iWidth + (icon->fX - fAlign * iWidth) * (1. - fFoldingFactor);
-			//g_print ("  icone pointee : fX = %.2f (%.2f)\n", icon->fX, x_cumulated);
+			//g_print ("  icone pointee : fX = %.2f (%.2f, %d)\n", icon->fX, x_cumulated, icon->bPointed);
 		}
 		else
 			icon->bPointed = FALSE;

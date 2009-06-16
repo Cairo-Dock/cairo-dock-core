@@ -744,6 +744,8 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 }
 gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
+	if (g_bEasterEggs && pDock->bAtBottom)
+		return FALSE;
 	//g_print ("%s (bInside:%d; bAtBottom:%d; iRefCount:%d)\n", __func__, pDock->bInside, pDock->bAtBottom, pDock->iRefCount);
 	/**if (pDock->bAtBottom)  // || ! pDock->bInside  // mis en commentaire pour la 1.5.4
 	{
@@ -860,6 +862,8 @@ gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey fo
 
 gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
+	if (pEvent && g_bEasterEggs && pDock->pShapeBitmap && (pEvent->x < pDock->inputArea.x || pEvent->x > pDock->inputArea.x + pDock->inputArea.width))
+		return FALSE;
 	//g_print ("%s (bIsMainDock : %d; bAtTop:%d; bInside:%d; iSidMoveDown:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->bAtTop, pDock->bInside, pDock->iSidMoveDown, pDock->iMagnitudeIndex);
 	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
 	if (! cairo_dock_entrance_is_allowed (pDock))
@@ -1187,9 +1191,9 @@ static void _cairo_dock_close_all_in_class_subdock (Icon *icon)
 
 gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState)
 {
+	g_print ("+ %s (%s)\n", __func__, icon ? icon->acName : "no icon");
 	if (icon == NULL)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-	cd_debug ("%s (%s)", __func__, icon->acName);
 	if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick)  // icone de sous-dock a montrer au clic.
 	{
 		cairo_dock_show_subdock (icon, FALSE, pDock);
@@ -1228,7 +1232,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	}
 	else if (CAIRO_DOCK_IS_LAUNCHER (icon))
 	{
-		cd_debug (" launcher");
+		g_print ("+ launcher\n");
 		if (CAIRO_DOCK_IS_MULTI_APPLI (icon) && ! (iButtonState & GDK_SHIFT_MASK))  // un lanceur ayant un sous-dock de classe ou une icone de paille : on cache ou on montre.
 		{
 			if (! myAccessibility.bShowSubDockOnClick)
@@ -1259,6 +1263,8 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 		}
 	}
+	else
+		g_print ("no action here\n");
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
@@ -1287,7 +1293,7 @@ gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *ic
 
 gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton, CairoDock *pDock)
 {
-	//g_print ("%s (%d/%d)\n", __func__, pButton->type, pButton->button);
+	g_print ("+ %s (%d/%d)\n", __func__, pButton->type, pButton->button);
 	if (pDock->bHorizontalDock)  // utile ?
 	{
 		pDock->iMouseX = (int) pButton->x;
@@ -1302,14 +1308,16 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
 	if (pButton->button == 1)  // clic gauche.
 	{
+		g_print ("+ left click\n");
 		switch (pButton->type)
 		{
 			case GDK_BUTTON_RELEASE :
+				g_print ("+ GDK_BUTTON_RELEASE (%d)\n", pButton->state);
 				if ( ! (pButton->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
 				{
 					if (s_pIconClicked != NULL)
 					{
-						cd_message ("release de %s (inside:%d)", s_pIconClicked->acName, pDock->bInside);
+						g_print ("release de %s (inside:%d)\n", s_pIconClicked->acName, pDock->bInside);
 						s_pIconClicked->iAnimationState = CAIRO_DOCK_STATE_REST;  // stoppe les animations de suivi du curseur.
 						//cairo_dock_stop_marking_icons (pDock);
 						pDock->iAvoidingMouseIconType = -1;
@@ -1318,6 +1326,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 					if (icon != NULL && ! CAIRO_DOCK_IS_SEPARATOR (icon) && icon == s_pIconClicked)
 					{
 						s_pIconClicked = NULL;  // il faut le faire ici au cas ou le clic induirait un dialogue bloquant qui nous ferait sortir du dock par exemple.
+						g_print ("+ click on '%s' (%s)\n", icon->acName, icon->acCommand);
 						cairo_dock_notify (CAIRO_DOCK_CLICK_ICON, icon, pDock, pButton->state);
 						if (myAccessibility.cRaiseDockShortcut != NULL)
 							s_bHideAfterShortcut = TRUE;
@@ -1326,7 +1335,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 					}
 					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked && ! g_bLocked && ! myAccessibility.bLockIcons)  //  && icon->iType == s_pIconClicked->iType
 					{
-						cd_message ("deplacement de %s", s_pIconClicked->acName);
+						g_print ("deplacement de %s\n", s_pIconClicked->acName);
 						CairoDock *pOriginDock = CAIRO_DOCK (cairo_dock_search_container_from_icon (s_pIconClicked));
 						if (pOriginDock != NULL && pDock != pOriginDock)
 						{
@@ -1520,7 +1529,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 
 	if ((iNewWidth != pDock->iCurrentWidth || iNewHeight != pDock->iCurrentHeight) && iNewWidth > 1)
 	{
-		//g_print ("-> %dx%d\n", iNewWidth, iNewHeight);
+		g_print ("-> %dx%d\n", iNewWidth, iNewHeight);
 		pDock->iCurrentWidth = iNewWidth;
 		pDock->iCurrentHeight = iNewHeight;
 
@@ -1532,9 +1541,12 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 			pDock->iMouseX = 0;
 		
 		if (pDock->pShapeBitmap != NULL)
-			g_object_unref ((gpointer) pDock->pShapeBitmap);
-		if (g_bEasterEggs)
-			pDock->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL, pEvent->width, pEvent->height, 1);
+		{
+			gtk_widget_input_shape_combine_mask (pDock->pWidget,
+				(pDock->bAtBottom && pDock->iRefCount == 0 ? pDock->pShapeBitmap : NULL),
+				0,
+				0);
+		}
 		
 		if (g_bUseOpenGL)
 		{
@@ -1576,8 +1588,6 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		
 		cairo_dock_calculate_dock_icons (pDock);
 		gtk_widget_queue_draw (pWidget);  // il semble qu'il soit necessaire d'en rajouter un la pour eviter un "clignotement" a l'entree dans le dock.
-		if (g_bEasterEggs)
-			cairo_dock_unset_input_shape (pDock);
 		
 		//g_print ("debut du redessin\n");
 		//if (pDock->iRefCount > 0 || pDock->bAutoHide)

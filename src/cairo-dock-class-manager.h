@@ -128,7 +128,7 @@ cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_t *pSou
 * @param fHeight hauteur de la surface, renseignee.
 * @return la surface nouvellement creee, ou NULL si aucun lanceur n'a pu etre trouve ou si l'on veut explicitement les icones X pour cette classe.
 */
-cairo_surface_t *cairo_dock_create_surface_from_class (gchar *cClass, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);
+cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);
 
 /**
 * Met a jour les inhibiteurs controlant une appli donnee pour les faire reagir au changement de visibilite de la fenetre, de la meme maniere que si l'icone etait dans la barre des taches.
@@ -136,21 +136,21 @@ cairo_surface_t *cairo_dock_create_surface_from_class (gchar *cClass, cairo_t *p
 * @param Xid l'ID de l'appli.
 * @param bIsHidden TRUE ssi a fenetre vient de se cacher.
 */
-void cairo_dock_update_visibility_on_inhibators (gchar *cClass, Window Xid, gboolean bIsHidden);
+void cairo_dock_update_visibility_on_inhibators (const gchar *cClass, Window Xid, gboolean bIsHidden);
 /**
 * Met a jour les inhibiteurs controlant une appli donnee pour les faire reagir a la prise d'activite de la fenetre, de la meme maniere que si l'icone etait dans la barre des taches.
 * @param cClass la classe.
 * @param Xid l'ID de l'appli.
 */
-void cairo_dock_update_activity_on_inhibators (gchar *cClass, Window Xid);
+void cairo_dock_update_activity_on_inhibators (const gchar *cClass, Window Xid);
 /**
 * Met a jour les inhibiteurs controlant une appli donnee pour les redessiner en mode normal lors de la perte d'activite de la fenetre.
 * @param cClass la classe.
 * @param Xid l'ID de l'appli.
 */
-void cairo_dock_update_inactivity_on_inhibators (gchar *cClass, Window Xid);
+void cairo_dock_update_inactivity_on_inhibators (const gchar *cClass, Window Xid);
 
-void cairo_dock_update_name_on_inhibators (gchar *cClass, Window Xid, gchar *cNewName);
+void cairo_dock_update_name_on_inhibators (const gchar *cClass, Window Xid, gchar *cNewName);
 
 Icon *cairo_dock_get_classmate (Icon *pIcon);
 

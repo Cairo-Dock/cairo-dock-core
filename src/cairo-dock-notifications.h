@@ -128,7 +128,7 @@ void cairo_dock_remove_notification_func_on_icon (Icon *pIcon, CairoDockNotifica
 
 #define _cairo_dock_notify(pNotificationRecordList, bStop, ...) do {\
 	if (pNotificationRecordList == NULL) {\
-		FALSE; }\
+		/*FALSE;*/ }\
 	else {\
 		CairoDockNotificationRecord *pNotificationRecord;\
 		GSList *pElement = pNotificationRecordList;\
