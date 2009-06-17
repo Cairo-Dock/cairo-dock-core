@@ -102,3 +102,24 @@ void cd_log_set_level(GLogLevelFlags loglevel)
 {
   s_gLogLevel = loglevel;
 }
+
+
+void cd_log_set_level_from_name (const gchar *cVerbosity)
+{
+	if (!cVerbosity)
+		cd_log_set_level(G_LOG_LEVEL_WARNING);
+	else if (!strcmp(cVerbosity, "debug"))
+		cd_log_set_level(G_LOG_LEVEL_DEBUG);
+	else if (!strcmp(cVerbosity, "message"))
+		cd_log_set_level(G_LOG_LEVEL_MESSAGE);
+	else if (!strcmp(cVerbosity, "warning"))
+		cd_log_set_level(G_LOG_LEVEL_WARNING);
+	else if (!strcmp(cVerbosity, "critical"))
+		cd_log_set_level(G_LOG_LEVEL_CRITICAL);
+	else if (!strcmp(cVerbosity, "error"))
+		cd_log_set_level(G_LOG_LEVEL_ERROR);
+	else {
+		cd_log_set_level(G_LOG_LEVEL_WARNING);
+		cd_warning("bad verbosity option: default to warning");
+	}
+}

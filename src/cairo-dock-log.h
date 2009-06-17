@@ -49,6 +49,12 @@ void cd_log_init(gboolean bBlackTerminal);
  */
 void cd_log_set_level(GLogLevelFlags loglevel);
 
+/**
+ * Set the verbosity level from a readable verbosity.
+ */
+void cd_log_set_level_from_name (const gchar *cVerbosity);
+
+
 /* Write an error message on the terminal. Error messages are used to indicate the cause of the program stop.
 *@param ... the message format and parameters, in a 'printf' style.
 */

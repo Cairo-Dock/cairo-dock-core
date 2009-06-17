@@ -19,7 +19,7 @@ G_BEGIN_DECLS
 #define CAIRO_DOCK_ADD_IN_MENU_WITH_STOCK_AND_DATA(cLabel, gtkStock, pFunction, pMenu, pData) do { \
 	pMenuItem = gtk_image_menu_item_new_with_label (cLabel); \
 	if (gtkStock) {\
-		gchar *_cImage = gtkStock;\
+		const gchar *_cImage = gtkStock;\
 		if (*_cImage == '/') {\
 			GdkPixbuf *_pixbuf = gdk_pixbuf_new_from_file_at_size (_cImage, 24, 24, NULL);\
 			image = gtk_image_new_from_pixbuf (_pixbuf);\

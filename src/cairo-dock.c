@@ -166,26 +166,6 @@ GLuint g_iDesktopBgTexture = 0;
 
 static gchar *cLaunchCommand = NULL;
 
-static void _cairo_dock_set_verbosity(gchar *cVerbosity)
-{
-  if (!cVerbosity)
-    cd_log_set_level(G_LOG_LEVEL_WARNING);
-  else if (!strcmp(cVerbosity, "debug"))
-    cd_log_set_level(G_LOG_LEVEL_DEBUG);
-  else if (!strcmp(cVerbosity, "message"))
-    cd_log_set_level(G_LOG_LEVEL_MESSAGE);
-  else if (!strcmp(cVerbosity, "warning"))
-    cd_log_set_level(G_LOG_LEVEL_WARNING);
-  else if (!strcmp(cVerbosity, "critical"))
-    cd_log_set_level(G_LOG_LEVEL_CRITICAL);
-  else if (!strcmp(cVerbosity, "error"))
-    cd_log_set_level(G_LOG_LEVEL_ERROR);
-  else {
-    cd_log_set_level(G_LOG_LEVEL_WARNING);
-    cd_warning("bad verbosity option: default to warning");
-	}
-}
-
 static gboolean _cairo_dock_successful_launch (gpointer data)
 {
 	cLaunchCommand[strlen (cLaunchCommand)-3] = '\0';  // on enleve le mode maintenance.
@@ -338,7 +318,7 @@ int main (int argc, char** argv)
 	if (g_bLocked)
 		g_print ("Cairo-Dock will be locked.\n");
 	
-	_cairo_dock_set_verbosity(cVerbosity);
+	cd_log_set_level_from_name (cVerbosity);
 	g_free (cVerbosity);
 
 	g_bSkipPager = ! bNoSkipPager;

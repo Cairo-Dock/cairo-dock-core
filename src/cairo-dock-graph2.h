@@ -35,6 +35,7 @@ typedef struct _CairoDockGraph2 {
 	cairo_pattern_t **pGradationPatterns;  // iNbValues patterns.
 	gdouble fBackGroundColor[4];
 	cairo_surface_t *pBackgroundSurface;
+	GLuint iBackgroundTexture;
 	gint iRadius;
 	gdouble fMargin;
 	gboolean bMixGraphs;

@@ -727,7 +727,6 @@ void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParen
 			return ;
 		
 		g_key_file_set_string (pKeyFile, "Icon", "dock name", cNewParentDockName);
-		g_print ("container_name\n");
 		cairo_dock_write_keys_to_file (pKeyFile, icon->pModuleInstance->cConfFilePath);
 		g_key_file_free (pKeyFile);
 	}

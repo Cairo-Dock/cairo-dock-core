@@ -1529,7 +1529,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		_add_entry_in_menu (_("Close all"), GTK_STOCK_CLOSE, _cairo_dock_close_class, menu);
 	}
 	
-	if (CAIRO_DOCK_IS_APPLET (icon) || CAIRO_DOCK_IS_DESKLET (pContainer))  // on regarde si pModule != NULL de facon a le faire que pour l'icone qui detient effectivement le module.
+	if (g_pMainDock != NULL && (CAIRO_DOCK_IS_APPLET (icon) || CAIRO_DOCK_IS_DESKLET (pContainer)))
 	{
 		Icon *pIconModule;
 		if (CAIRO_DOCK_IS_APPLET (icon))

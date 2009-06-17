@@ -79,7 +79,7 @@ void cairo_dock_initialize_module_manager (gchar *cModuleDirPath)
 	if (cModuleDirPath != NULL && g_file_test (cModuleDirPath, G_FILE_TEST_IS_DIR))
 	{
 		GError *erreur = NULL;
-		cairo_dock_preload_module_from_directory (cModuleDirPath, s_hModuleTable, &erreur);
+		cairo_dock_preload_module_from_directory (cModuleDirPath, &erreur);
 		if (erreur != NULL)
 		{
 			cd_warning ("%s\n  no module will be available", erreur->message);
@@ -271,7 +271,7 @@ static void cairo_dock_close_module (CairoDockModule *module)
 
 
 
-CairoDockModule * cairo_dock_load_module (gchar *cSoFilePath, GHashTable *pModuleTable, GError **erreur)  // cSoFilePath vers un fichier de la forme 'libtruc.so'. Le module est rajoute en debut de la liste si il n'est pas deja dedans. La liste peut neanmoins etre NULL.
+CairoDockModule * cairo_dock_load_module (gchar *cSoFilePath, GError **erreur)  // cSoFilePath vers un fichier de la forme 'libtruc.so'. Le module est rajoute dans la table des modules.
 {
 	//g_print ("%s (%s)\n", __func__, cSoFilePath);
 	if (cSoFilePath == NULL)  // g_module_open () plante si 'cSoFilePath' est NULL.
@@ -292,14 +292,14 @@ CairoDockModule * cairo_dock_load_module (gchar *cSoFilePath, GHashTable *pModul
 		return NULL;
 	}
 
-	if (pModuleTable != NULL && pCairoDockModule->pVisitCard != NULL)
-		g_hash_table_insert (pModuleTable, pCairoDockModule->pVisitCard->cModuleName, pCairoDockModule);
+	if (s_hModuleTable != NULL && pCairoDockModule->pVisitCard != NULL)
+		g_hash_table_insert (s_hModuleTable, pCairoDockModule->pVisitCard->cModuleName, pCairoDockModule);
 
 	return pCairoDockModule;
 }
 
 
-void cairo_dock_preload_module_from_directory (gchar *cModuleDirPath, GHashTable *pModuleTable, GError **erreur)
+void cairo_dock_preload_module_from_directory (gchar *cModuleDirPath, GError **erreur)
 {
 	cd_message ("%s (%s)", __func__, cModuleDirPath);
 	GError *tmp_erreur = NULL;
@@ -322,7 +322,7 @@ void cairo_dock_preload_module_from_directory (gchar *cModuleDirPath, GHashTable
 		if (g_str_has_suffix (cFileName, ".so"))
 		{
 			g_string_printf (sFilePath, "%s/%s", cModuleDirPath, cFileName);
-			pModule = cairo_dock_load_module (sFilePath->str, pModuleTable, &tmp_erreur);
+			pModule = cairo_dock_load_module (sFilePath->str, &tmp_erreur);
 			if (tmp_erreur != NULL)
 			{
 				cd_warning (tmp_erreur->message);

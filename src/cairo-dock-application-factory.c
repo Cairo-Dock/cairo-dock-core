@@ -288,6 +288,9 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 							}
 						}
 						pSameClassIcon->pSubDock = pParentDock;
+						CairoDock *pRootDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
+						if (pRootDock != NULL)
+							cairo_dock_redraw_icon (pSameClassIcon, pRootDock);  // on la redessine car elle prend l'indicateur de classe.
 					}
 					else if (pSameClassIcon->pSubDock != pParentDock)
 						cd_warning ("this launcher (%s) already has a subdock, but it's not the class's subdock !", pSameClassIcon->acName);

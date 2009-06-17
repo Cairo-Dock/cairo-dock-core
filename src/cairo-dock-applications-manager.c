@@ -1211,7 +1211,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 
 	if (bAnimate && cairo_dock_animation_will_be_visible (pParentDock))
 	{
-		cairo_dock_notify (CAIRO_DOCK_INSERT_ICON, icon, pParentDock);
+		///cairo_dock_notify (CAIRO_DOCK_INSERT_ICON, icon, pParentDock);
 		//cairo_dock_start_icon_animation (icon, pParentDock);
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
 	}

@@ -176,9 +176,9 @@ gchar *cairo_dock_check_module_conf_file (CairoDockVisitCard *pVisitCard);
 
 void cairo_dock_free_visit_card (CairoDockVisitCard *pVisitCard);
 
-CairoDockModule * cairo_dock_load_module (gchar *cSoFilePath, GHashTable *pModuleTable, GError **erreur);
+CairoDockModule * cairo_dock_load_module (gchar *cSoFilePath, GError **erreur);
 
-void cairo_dock_preload_module_from_directory (gchar *cModuleDirPath, GHashTable *pModuleTable, GError **erreur);
+void cairo_dock_preload_module_from_directory (gchar *cModuleDirPath, GError **erreur);
 
 
 
