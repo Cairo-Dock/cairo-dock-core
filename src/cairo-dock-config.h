@@ -165,7 +165,7 @@ CairoDockDesktopEnv cairo_dock_guess_environment (void);
 *@param iMinorVersion numero de version mineure renvoyee.
 *@param iMicroVersion numero de version micro renvoyee.
 */
-void cairo_dock_get_version_from_string (gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion);
+void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion);
 
 
 /**

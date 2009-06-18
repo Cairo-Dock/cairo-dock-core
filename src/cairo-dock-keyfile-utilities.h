@@ -16,8 +16,8 @@ void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, const gchar *cConfFile
 
 void cairo_dock_replace_key_values (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gboolean bUseOriginalKeys, gchar iIdentifier);
 
-void cairo_dock_replace_values_in_conf_file (gchar *cConfFilePath, GKeyFile *pValidKeyFile, gboolean bUseFileKeys, gchar iIdentifier);
-void cairo_dock_replace_keys_by_identifier (gchar *cConfFilePath, gchar *cReplacementConfFilePath, gchar iIdentifier);
+void cairo_dock_replace_values_in_conf_file (const gchar *cConfFilePath, GKeyFile *pValidKeyFile, gboolean bUseFileKeys, gchar iIdentifier);
+void cairo_dock_replace_keys_by_identifier (const gchar *cConfFilePath, gchar *cReplacementConfFilePath, gchar iIdentifier);
 
 void cairo_dock_get_conf_file_version (GKeyFile *pKeyFile, gchar **cConfFileVersion);
 gboolean cairo_dock_conf_file_needs_update (GKeyFile *pKeyFile, const gchar *cVersion);

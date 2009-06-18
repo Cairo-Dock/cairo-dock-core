@@ -753,8 +753,8 @@ void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataTy
 	gchar *cGroupName, *cGroupKey;
 	while (iType != G_TYPE_INVALID)
 	{
-		cGroupName = va_arg (args, const gchar *);
-		cGroupKey = va_arg (args, const gchar *);
+		cGroupName = va_arg (args, gchar *);
+		cGroupKey = va_arg (args, gchar *);
 
 		switch (iType)
 		{
@@ -771,7 +771,7 @@ void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataTy
 				g_key_file_set_double (pKeyFile, cGroupName, cGroupKey, fValue);
 			break ;
 			case G_TYPE_STRING :
-				cValue = va_arg (args, const gchar *);
+				cValue = va_arg (args, gchar *);
 				g_key_file_set_string (pKeyFile, cGroupName, cGroupKey, cValue);
 			break ;
 			default :
@@ -821,7 +821,7 @@ CairoDockDesktopEnv cairo_dock_guess_environment (void)
 	return iDesktopEnv;
 }
 
-void cairo_dock_get_version_from_string (gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion)
+void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion)
 {
 	gchar **cVersions = g_strsplit (cVersionString, ".", -1);
 	if (cVersions[0] != NULL)

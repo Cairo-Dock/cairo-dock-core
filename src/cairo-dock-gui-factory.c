@@ -538,7 +538,7 @@ static void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer 
 		pHFunction (cEmptyItem, NULL, pListStore); }\
 	g_hash_table_foreach (pHashTable, (GHFunc) pHFunction, pListStore); } while (0)
 
-static void _cairo_dock_add_one_renderer_item (gchar *cName, CairoDockRenderer *pRenderer, GtkListStore *pModele)
+static void _cairo_dock_add_one_renderer_item (const gchar *cName, CairoDockRenderer *pRenderer, GtkListStore *pModele)
 {
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
@@ -553,7 +553,7 @@ void cairo_dock_build_renderer_list_for_gui (GHashTable *pHashTable)
 {
 	_build_list_for_gui (s_pRendererListStore, "", pHashTable, _cairo_dock_add_one_renderer_item);
 }
-static void _cairo_dock_add_one_decoration_item (gchar *cName, CairoDeskletDecoration *pDecoration, GtkListStore *pModele)
+static void _cairo_dock_add_one_decoration_item (const gchar *cName, CairoDeskletDecoration *pDecoration, GtkListStore *pModele)
 {
 	cd_debug ("%s (%s)", __func__, cName);
 	GtkTreeIter iter;
@@ -573,7 +573,7 @@ void cairo_dock_build_desklet_decorations_list_for_applet_gui (GHashTable *pHash
 {
 	_build_list_for_gui (s_pDecorationsListStore2, "default", pHashTable, _cairo_dock_add_one_decoration_item);
 }
-static void _cairo_dock_add_one_animation_item (gchar *cName, gpointer data, GtkListStore *pModele)
+static void _cairo_dock_add_one_animation_item (const gchar *cName, gpointer data, GtkListStore *pModele)
 {
 	gint iAnimationID = GPOINTER_TO_INT (data);
 	GtkTreeIter iter;
@@ -590,7 +590,7 @@ void cairo_dock_build_animations_list_for_gui (GHashTable *pHashTable)
 	_build_list_for_gui (s_pAnimationsListStore, "", pHashTable, _cairo_dock_add_one_animation_item);
 }
 
-static void _cairo_dock_add_one_dialog_decorator_item (gchar *cName, CairoDialogDecorator *pDecorator, GtkListStore *pModele)
+static void _cairo_dock_add_one_dialog_decorator_item (const gchar *cName, CairoDialogDecorator *pDecorator, GtkListStore *pModele)
 {
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
@@ -606,7 +606,7 @@ void cairo_dock_build_dialog_decorator_list_for_gui (GHashTable *pHashTable)
 	_build_list_for_gui (s_pDialogDecoratorListStore, NULL, pHashTable, _cairo_dock_add_one_dialog_decorator_item);
 }
 
-static void _cairo_dock_add_one_gauge_item (gchar *cName, CairoDialogDecorator *pDecorator, GtkListStore *pModele)
+static void _cairo_dock_add_one_gauge_item (const gchar *cName, CairoDialogDecorator *pDecorator, GtkListStore *pModele)
 {
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
@@ -622,7 +622,7 @@ static void cairo_dock_build_gauge_list_for_gui (GHashTable *pHashTable)
 	_build_list_for_gui (s_pGaugeListStore, NULL, pHashTable, _cairo_dock_add_one_gauge_item);
 }
 
-static void _cairo_dock_add_one_dock_item (gchar *cName, CairoDock *pDock, GtkListStore *pModele)
+static void _cairo_dock_add_one_dock_item (const gchar *cName, CairoDock *pDock, GtkListStore *pModele)
 {
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
@@ -642,7 +642,7 @@ static void cairo_dock_build_dock_list_for_gui (void)
 	cairo_dock_foreach_docks ((GHFunc) _cairo_dock_add_one_dock_item, s_pDocksListStore);
 }
 
-static void _cairo_dock_fill_modele_with_themes (gchar *cThemeName, CairoDockTheme *pTheme, GtkListStore *pModele)
+static void _cairo_dock_fill_modele_with_themes (const gchar *cThemeName, CairoDockTheme *pTheme, GtkListStore *pModele)
 {
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
@@ -769,7 +769,7 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 		_pack_subwidget (pOneWidget);\
 		g_free (cValue); } } while (0)
 
-gchar *cairo_dock_parse_key_comment (gchar *cKeyComment, char *iElementType, int *iNbElements, gchar ***pAuthorizedValuesList, gboolean *bAligned, gchar **cTipString)
+gchar *cairo_dock_parse_key_comment (gchar *cKeyComment, char *iElementType, guint *iNbElements, gchar ***pAuthorizedValuesList, gboolean *bAligned, gchar **cTipString)
 {
 	if (cKeyComment == NULL || *cKeyComment == '\0')
 		return NULL;
@@ -901,7 +901,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	GtkWidget *pBackButton;
 	gchar *cGroupComment, *cKeyName, *cKeyComment, *cUsefulComment, *cAuthorizedValuesChain, *pTipString, **pAuthorizedValuesList, *cSmallGroupIcon;
 	gpointer *pGroupKeyWidget;
-	int i, j, k, iNbElements;
+	int i, j;
+	guint k, iNbElements;
 	int iNumPage=0, iPresentedNumPage=0;
 	char iElementType;
 	gboolean bValue, *bValueList;

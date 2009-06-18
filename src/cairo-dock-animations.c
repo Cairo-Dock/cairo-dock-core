@@ -720,6 +720,8 @@ static gboolean _cairo_dock_transition_step (gpointer pUserData, Icon *pIcon, Ca
 		if (pContainer->bUseReflect)
 			cairo_dock_add_reflection_to_icon (pTransition->pIconContext, pIcon, pContainer);
 	}
+	else
+		bContinue = FALSE;
 	
 	cairo_dock_redraw_icon (pIcon, pContainer);
 	

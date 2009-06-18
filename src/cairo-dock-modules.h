@@ -165,7 +165,7 @@ struct _CairoDockInternalModule {
 };
 
 
-void cairo_dock_initialize_module_manager (gchar *cModuleDirPath);
+void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath);
 
 /**
 *Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire utilisateur du plug-in, sinon le copie a partir du fichier de conf fournit lors de l'installation. Cree au besoin le repertoire utilisateur du plug-in.

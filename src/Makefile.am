@@ -180,6 +180,8 @@ cairo_dock_SOURCES = \
 	cairo-dock-dock-facility.h\
 	cairo-dock-container.c\
 	cairo-dock-container.h\
+	cairo-dock-task.c\
+	cairo-dock-task.h\
 	texture-gradation.h
 	
 
@@ -256,6 +258,7 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-internal-icons.h\
 	cairo-dock-data-renderer.h\
 	cairo-dock-dock-facility.h\
+	cairo-dock-task.h\
 	cairo-dock-container.h
 
 

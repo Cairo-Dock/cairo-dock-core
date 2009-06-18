@@ -44,7 +44,7 @@ struct _CairoDialogDecorator {
 	const gchar *cDisplayedName;
 };
 
-typedef void (* CairoDockActionOnAnswerFunc) (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog);
+typedef void (* CairoDockActionOnAnswerFunc) (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog);  // la numerotation des boutons commence a 0, -1 pour 'Return' et -2 pour 'Escape'
 
 struct _CairoDialogAttribute {
 	gchar *cImageFilePath;

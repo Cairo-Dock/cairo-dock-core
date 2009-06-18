@@ -479,9 +479,9 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_ADD_ABOUT_IN_MENU(pMenu) CD_APPLET_ADD_IN_MENU_WITH_STOCK (_("About this applet"), GTK_STOCK_ABOUT, cairo_dock_pop_up_about_applet, pMenu)
 
 
-  /////////////////////////////
- /// VARIABLES DISPONIBLES ///
-/////////////////////////////
+  ///////////////////////////
+ /// AVAILABLE VARIABLES ///
+///////////////////////////
 
 //\______________________ init, config, reload.
 /** Chemin du fichier de conf de l'applet, appelable durant les fonctions d'init, de config, et de reload.
@@ -553,7 +553,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 
   //////////////////////
- /// DESSIN SURFACE ///
+ /// DRAWING SURFACE ///
 //////////////////////
 
 /**
@@ -762,10 +762,22 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_FINISH_DRAWING_MY_ICON cairo_dock_end_draw_icon (myIcon, myContainer)
 
+/** Add a Data Renderer the applet's icon.
+*/
+#define CD_APPLET_ADD_DATA_RENDERER_ON_MY_ICON(pAttr) cairo_dock_add_new_data_renderer_on_icon (myIcon, myContainer, myDrawContext, pAttr)
+/** Reload the Data Renderer of the applet's icon. Pass NULL as the attributes to simply reload the current data renderer without changing any of its parameters. Previous values are kept.
+*/
+#define CD_APPLET_RELOAD_MY_DATA_RENDERER(pAttr) cairo_dock_reload_data_renderer_on_icon (myIcon, myContainer, myDrawContext, pAttr)
+/** Add new values to the Data Renderer of the applet's icon. Values are a table of 'double', having the same size as defined when the data renderer was created (1 by default).
+*/
+#define CD_APPLET_RENDER_NEW_DATA_ON_MY_ICON(pValues) cairo_dock_render_new_data_on_icon (myIcon, myContainer, myDrawContext, pValues)
+/** Completely remove the Data Renderer of the applet's icon, including the values associated with.
+*/
+#define CD_APPLET_REMOVE_MY_DATA_RENDERER cairo_dock_remove_data_renderer_on_icon (myIcon)
 
+///__________________ deprecated ___________________
 #define CD_APPLET_RENDER_GAUGE(pGauge, fValue) cairo_dock_render_gauge (myDrawContext, myContainer, myIcon, pGauge, fValue)
 #define CD_APPLET_RENDER_GAUGE_MULTI_VALUE(pGauge, pValueList) cairo_dock_render_gauge_multi_value (myDrawContext, myContainer, myIcon, pGauge, pValueList)
-
 #define CD_APPLET_RENDER_GRAPH(pGraph) cairo_dock_render_graph (myDrawContext, myContainer, myIcon, pGraph);
 #define CD_APPLET_RENDER_GRAPH_NEW_VALUE(pGraph, fValue) do { \
 	cairo_dock_update_graph (pGraph, fValue); \
@@ -773,7 +785,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_RENDER_GRAPH_NEW_VALUES(pGraph, fValue, fValue2) do { \
 	cairo_dock_update_double_graph (pGraph, fValue, fValue2); \
 	CD_APPLET_RENDER_GRAPH (pGraph); } while (0)
-
+///__________________ end of deprecated ____________
 
 #define CD_APPLET_GET_MY_ICON_DATA(pIcon) cairo_dock_get_icon_data (pIcon, myApplet)
 #define CD_APPLET_GET_MY_CONTAINER_DATA(pContainer) cairo_dock_get_container_data (pContainer, myApplet)

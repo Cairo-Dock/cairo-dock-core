@@ -392,12 +392,11 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 		pDock->iGapY = cairo_dock_get_integer_key_value (pKeyFile, "Position", "y gap", &bFlushConfFileNeeded, 0, NULL, NULL);
 		
 		CairoDockPositionType iScreenBorder = cairo_dock_get_integer_key_value (pKeyFile, "Position", "screen border", &bFlushConfFileNeeded, 0, NULL, NULL);
-		if (iScreenBorder < 0 || iScreenBorder >= CAIRO_DOCK_NB_POSITIONS)
-			iScreenBorder = 0;
 		
 		switch (iScreenBorder)
 		{
 			case CAIRO_DOCK_BOTTOM :
+			default :
 				pDock->bHorizontalDock = CAIRO_DOCK_HORIZONTAL;
 				pDock->bDirectionUp = TRUE;
 			break;

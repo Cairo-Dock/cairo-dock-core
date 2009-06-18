@@ -59,7 +59,7 @@ static GHashTable *s_hInternalModuleTable = NULL;
 static int s_iMaxOrder = 0;
 static GList *s_AutoLoadedModules = NULL;
 
-void cairo_dock_initialize_module_manager (gchar *cModuleDirPath)
+void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 {
 	if (s_hModuleTable == NULL)
 		s_hModuleTable = g_hash_table_new_full (g_str_hash,

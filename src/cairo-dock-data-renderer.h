@@ -127,6 +127,11 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 *@param pRenderer a data renderer
 *@return a CairoDataToRenderer* */
 #define cairo_data_renderer_get_data(pRenderer) (&(pRenderer)->data);
+/**Get the elementary part of a Data Renderer Attribute
+*@param r a high level data renderer attribute
+*@return a CairoDataRendererAttribute* */
+#define CAIRO_DATA_RENDERER_ATTRIBUTE(pAttr) ((CairoDataRendererAttribute *) pAttr)
+
 
 /*#define cairo_data_renderer_set_attribute(pRendererAttribute, cAttributeName, ) g_datalist_get_data (pRendererAttribute->pExtraProperties)
 #define cairo_data_renderer_get_attribute(pRendererAttribute, cAttributeName) g_datalist_get_data (pRendererAttribute->pExtraProperties)*/

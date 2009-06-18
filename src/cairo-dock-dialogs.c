@@ -36,6 +36,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-animations.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-callbacks.h"
+#include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-dialogs.h"
 
 extern CairoDock *g_pMainDock;
@@ -536,7 +537,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	return FALSE;
 }
 
-static cairo_surface_t *_cairo_dock_load_button_icon (cairo_t *pCairoContext, gchar *cButtonImage, gchar *cDefaultButtonImage)
+static cairo_surface_t *_cairo_dock_load_button_icon (cairo_t *pCairoContext, const gchar *cButtonImage, const gchar *cDefaultButtonImage)
 {
 	//g_print ("%s (%d ; %d)\n", __func__, myDialogs.iDialogButtonWidth, myDialogs.iDialogButtonHeight);
 	cairo_surface_t *pButtonSurface = cairo_dock_load_image_for_icon (pCairoContext,
@@ -971,10 +972,17 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 			}
 			else
 			{
+				gchar *cButtonPath;
+				if (*cButtonImage != '/')
+					cButtonPath = cairo_dock_search_icon_s_path (cButtonImage);
+				else
+					cButtonPath = cButtonImage;
 				pDialog->pButtons[i].pSurface = cairo_dock_load_image_for_icon (pSourceContext,
-					cButtonImage,
+					cButtonPath,
 					myDialogs.iDialogButtonWidth,
 					myDialogs.iDialogButtonHeight);
+				if (cButtonPath != cButtonImage)
+					g_free (cButtonPath);
 				pDialog->pButtons[i].iTexture = cairo_dock_create_texture_from_surface (pDialog->pButtons[i].pSurface);
 			}
 		}

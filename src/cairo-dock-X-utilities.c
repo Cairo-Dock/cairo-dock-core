@@ -213,7 +213,7 @@ void cairo_dock_set_strut_partial (int Xid, int left, int right, int top, int bo
 	cairo_dock_set_xwindow_timestamp (Xid, cairo_dock_get_xwindow_timestamp (root));
 }
 
-void cairo_dock_set_xwindow_type_hint (int Xid, gchar *cWindowTypeName)
+void cairo_dock_set_xwindow_type_hint (int Xid, const gchar *cWindowTypeName)
 {
 	g_return_if_fail (Xid > 0);
 	
@@ -311,7 +311,7 @@ gboolean cairo_dock_update_screen_geometry (void)
 }
 
 
-gboolean cairo_dock_property_is_present_on_root (gchar *cPropertyName)
+gboolean cairo_dock_property_is_present_on_root (const gchar *cPropertyName)
 {
 	g_return_val_if_fail (s_XDisplay != NULL, FALSE);
 	Atom atom = XInternAtom (s_XDisplay, cPropertyName, False);

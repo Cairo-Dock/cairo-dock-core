@@ -22,7 +22,7 @@ void cairo_dock_set_xwindow_timestamp (Window Xid, gulong iTimeStamp);
 
 void cairo_dock_set_strut_partial (int Xid, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x);
 
-void cairo_dock_set_xwindow_type_hint (int Xid, gchar *cWindowTypeName);
+void cairo_dock_set_xwindow_type_hint (int Xid, const gchar *cWindowTypeName);
 gboolean cairo_dock_window_is_utility (int Xid);
 gboolean cairo_dock_window_is_dock (int Xid);
 
@@ -31,7 +31,7 @@ void cairo_dock_set_xicon_geometry (int Xid, int iX, int iY, int iWidth, int iHe
 
 gboolean cairo_dock_update_screen_geometry (void);
 
-gboolean cairo_dock_property_is_present_on_root (gchar *cPropertyName);
+gboolean cairo_dock_property_is_present_on_root (const gchar *cPropertyName);
 
 
 int cairo_dock_get_current_desktop (void);

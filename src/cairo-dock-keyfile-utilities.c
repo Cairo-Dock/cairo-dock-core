@@ -74,7 +74,7 @@ void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, const gchar *cConfFile
 	else
 	{
 		gchar *cCommand = g_strdup_printf ("/bin/cp %s %s", cTemplateConfFilePath, cConfFilePath);
-		system (cCommand);
+		int r = system (cCommand);
 		g_free (cCommand);
 		
 		cairo_dock_replace_values_in_conf_file (cConfFilePath, pKeyFile, bUseFileKeys, 0);
@@ -217,7 +217,7 @@ void cairo_dock_replace_key_values (GKeyFile *pOriginalKeyFile, GKeyFile *pRepla
 }
 
 
-void cairo_dock_replace_values_in_conf_file (gchar *cConfFilePath, GKeyFile *pValidKeyFile, gboolean bUseFileKeys, gchar iIdentifier)
+void cairo_dock_replace_values_in_conf_file (const gchar *cConfFilePath, GKeyFile *pValidKeyFile, gboolean bUseFileKeys, gchar iIdentifier)
 {
 	//g_print ("%s (%s)\n", __func__,cConfFilePath );
 	GKeyFile *pConfKeyFile = cairo_dock_open_key_file (cConfFilePath);
@@ -231,7 +231,7 @@ void cairo_dock_replace_values_in_conf_file (gchar *cConfFilePath, GKeyFile *pVa
 	g_key_file_free (pConfKeyFile);
 }
 
-void cairo_dock_replace_keys_by_identifier (gchar *cConfFilePath, gchar *cReplacementConfFilePath, gchar iIdentifier)
+void cairo_dock_replace_keys_by_identifier (const gchar *cConfFilePath, gchar *cReplacementConfFilePath, gchar iIdentifier)
 {
 	//g_print ("%s (%s <- %s, '%c')\n", __func__, cConfFilePath, cReplacementConfFilePath, iIdentifier);
 	GKeyFile *pReplacementKeyFile = cairo_dock_open_key_file (cReplacementConfFilePath);
