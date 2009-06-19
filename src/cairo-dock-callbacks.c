@@ -201,22 +201,9 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, gboolean bUpdate, CairoDock *p
 	{
 		if (pSubDock->bIsShrinkingDown)  // il est en cours de diminution, on renverse le processus.
 		{
-			/*g_source_remove (pSubDock->iSidShrinkDown);
-			pSubDock->iSidShrinkDown = 0;
-			if (pSubDock->iSidGrowUp == 0)  // on commence a faire grossir les icones.  //  && pDock->iSidShrinkDown == 0
-				pSubDock->iSidGrowUp = g_timeout_add (40, (GSourceFunc) cairo_dock_grow_up, (gpointer) pSubDock);*/
 			cairo_dock_start_growing (pSubDock);
 		}
 		return ;
-	}
-	
-	if (pSubDock->bIsShrinkingDown)  // precaution sans doute superflue.
-	{
-		//g_source_remove (pSubDock->iSidShrinkDown);
-		//pSubDock->iSidShrinkDown = 0;
-		pSubDock->bIsShrinkingDown = FALSE;
-		pSubDock->iMagnitudeIndex = 0;
-		cairo_dock_shrink_down (pSubDock);
 	}
 
 	if (bUpdate)
@@ -278,13 +265,13 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, gboolean bUpdate, CairoDock *p
 				iNewHeight,
 				iNewWidth);
 
-		/*if (pSubDock->iSidGrowUp == 0)  // on commence a faire grossir les icones.  //  && pDock->iSidShrinkDown == 0
-			pSubDock->iSidGrowUp = g_timeout_add (40, (GSourceFunc) cairo_dock_grow_up, (gpointer) pSubDock);*/
-		cairo_dock_start_growing (pSubDock);
+		cairo_dock_start_growing (pSubDock);  // on commence a faire grossir les icones.
 	}
 	//g_print ("  -> Gap %d;%d -> W(%d;%d) (%d)\n", pSubDock->iGapX, pSubDock->iGapY, pSubDock->iWindowPositionX, pSubDock->iWindowPositionY, pSubDock->bHorizontalDock);
 	
 	gtk_window_set_keep_above (GTK_WINDOW (pSubDock->pWidget), myAccessibility.bPopUp);
+	
+	cairo_dock_replace_all_dialogs ();
 }
 static gboolean _cairo_dock_show_sub_dock_delayed (CairoDock *pDock)
 {
@@ -706,6 +693,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 			cairo_dock_stop_icon_glide (pOriginDock);
 			
 			s_pFlyingContainer = cairo_dock_create_flying_container (s_pIconClicked, pOriginDock, TRUE);
+			g_print ("- s_pIconClicked <- NULL\n");
 			s_pIconClicked = NULL;
 			
 			if (pDock->iRefCount > 0 || pDock->bAutoHide)  // pour garder le dock visible.
@@ -1312,7 +1300,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 		switch (pButton->type)
 		{
 			case GDK_BUTTON_RELEASE :
-				g_print ("+ GDK_BUTTON_RELEASE (%d)\n", pButton->state);
+				g_print ("+ GDK_BUTTON_RELEASE (%d/%d sur %s/%s)\n", pButton->state, GDK_CONTROL_MASK | GDK_MOD1_MASK, icon ? icon->acName : "personne", icon ? icon->acCommand : "");  // 272 = 100010000
 				if ( ! (pButton->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
 				{
 					if (s_pIconClicked != NULL)
@@ -1412,12 +1400,14 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 					if (pDock->iRefCount == 0)
 						cairo_dock_write_root_dock_gaps (pDock);
 				}
+				g_print ("- apres clic : s_pIconClicked <- NULL\n");
 				s_pIconClicked = NULL;
 			break ;
 
 			case GDK_BUTTON_PRESS :
 				if ( ! (pButton->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
 				{
+					g_print ("+ clic sur %s (%.2f)!\n", icon ? icon->acName : "rien", icon ? icon->fPersonnalScale : 0.);
 					if (icon && icon->fPersonnalScale <= 0)
 						s_pIconClicked = icon;  // on ne definit pas l'animation FOLLOW_MOUSE ici , on le fera apres le 1er mouvement, pour eviter que l'icone soit dessinee comme tel quand on clique dessus alors que le dock est en train de jouer une animation (ca provoque un flash desagreable).
 					else
@@ -1461,7 +1451,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 
 gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, int iDirection)
 {
-	if (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->pSubDock != NULL && icon->pSubDock->icons != NULL && icon->cClass != NULL)  // on emule un alt+tab sur la liste des applis du sous-dock.
+	if (CAIRO_DOCK_IS_MULTI_APPLI (icon))  // on emule un alt+tab sur la liste des applis du sous-dock.
 	{
 		_cairo_dock_show_prev_next_in_class_subdock (icon, iDirection == GDK_SCROLL_DOWN);
 	}

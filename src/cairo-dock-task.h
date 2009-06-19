@@ -8,6 +8,7 @@ G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-task.h An easy way to define periodic and asynchronous tasks.
+* Tasks can of course be synchronous and/or not periodic.
 */
 
 
@@ -19,19 +20,19 @@ typedef enum {
 	CAIRO_DOCK_NB_FREQUENCIES
 } CairoDockFrequencyState;
 
-typedef void (* CairoDockReadTimerFunc ) (gpointer pSharedMemory);
-typedef gboolean (* CairoDockUpdateTimerFunc ) (gpointer pSharedMemory);
+typedef void (* CairoDockGetDataAsyncFunc ) (gpointer pSharedMemory);
+typedef gboolean (* CairoDockUpdateSyncFunc ) (gpointer pSharedMemory);
 typedef struct {
 	/// Sid du timer des mesures.
 	gint iSidTimer;
 	/// Sid du timer de fin de mesure.
-	gint iSidTimerRedraw;
+	gint iSidTimerUpdate;
 	/// Valeur atomique a 1 ssi le thread de mesure est en cours.
 	gint iThreadIsRunning;
 	/// fonction realisant l'acquisition asynchrone des donnees; stocke les resultats dans la structures des resultats.
-	CairoDockReadTimerFunc read;
+	CairoDockGetDataAsyncFunc get_data;
 	/// fonction realisant la mise a jour synchrone de l'IHM en fonction des nouveaux resultats. Renvoie TRUE pour continuer, FALSE pour arreter.
-	CairoDockUpdateTimerFunc update;
+	CairoDockUpdateSyncFunc update;
 	/// intervalle de temps en secondes, eventuellement nul pour une mesure unitaire.
 	gint iPeriod;
 	/// etat de la frequence des mesures.
@@ -55,12 +56,12 @@ void cairo_dock_launch_task_delayed (CairoDockTask *pTask, double fDelay);
 *Cree une mesure periodique.
 *@param iPeriod l'intervalle en s entre 2 mesures, eventuellement nul pour une mesure unitaire.
 *@param acquisition fonction realisant l'acquisition des donnees. N'accede jamais a la structure des resultats.
-*@param read fonction realisant la lecture des donnees precedemment acquises; stocke les resultats dans la structures des resultats.
-*@param update fonction realisant la mise a jour de l'interface en fonction des nouveaux resultats, lus dans la structures des resultats.
-*@param pSharedMemory structure passee en entree des fonctions read et update.
+*@param get_data fonction realisant la lecture des donnees precedemment acquises; stocke les resultats dans la memoire partagee.
+*@param update fonction realisant la mise a jour de l'interface en fonction des nouveaux resultats, lus dans la memoire partagee.
+*@param pSharedMemory structure passee en entree des fonctions get_data et update. Ne doit pas etre accedee en dehors de ces 2 fonctions !
 *@return la mesure nouvellement allouee. A liberer avec #cairo_dock_free_task.
 */
-CairoDockTask *cairo_dock_new_task (int iPeriod, CairoDockReadTimerFunc read, CairoDockUpdateTimerFunc update, gpointer pSharedMemory);
+CairoDockTask *cairo_dock_new_task (int iPeriod, CairoDockGetDataAsyncFunc get_data, CairoDockUpdateSyncFunc update, gpointer pSharedMemory);
 /**
 *Stoppe les mesures. Si une mesure est en cours, le thread d'acquisition/lecture se terminera tout seul plus tard, et la mesure sera ignoree. On peut reprendre les mesures par un simple #cairo_dock_launch_task. Ne doit _pas_ etre appelée durant la fonction 'read' ou 'update'; utiliser la sortie de 'update' pour cela.
 *@param pTask la mesure periodique.
@@ -106,10 +107,6 @@ void cairo_dock_downgrade_task_frequency (CairoDockTask *pTask);
 *@param pTask la mesure periodique.
 */
 void cairo_dock_set_normal_task_frequency (CairoDockTask *pTask);
-
-
-#define cairo_dock_downgrade_frequency_state cairo_dock_downgrade_task_frequency
-#define cairo_dock_set_normal_frequency_state cairo_dock_set_normal_task_frequency
 
 G_END_DECLS
 #endif

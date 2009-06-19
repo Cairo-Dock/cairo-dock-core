@@ -121,7 +121,7 @@ static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)
 	gdk_gl_drawable_gl_end (pGlDrawable);
 }
 
-CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockName, gchar *cRendererName)
+CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, const gchar *cDockName, const gchar *cRendererName)
 {
 	cd_message ("%s (%s)", __func__, cDockName);
 	g_return_val_if_fail (cDockName != NULL, NULL);
@@ -332,7 +332,7 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 	pDock->cRendererName = NULL;
 }
 
-void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDock *pReceivingDock, gchar *cpReceivingDockName)
+void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDock *pReceivingDock, const gchar *cpReceivingDockName)
 {
 	cd_debug ("%s (%s, %d)", __func__, cDockName, pDock->iRefCount);
 	g_return_if_fail (pDock != NULL);  // && cDockName != NULL

@@ -106,8 +106,7 @@ void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int
 	glDisableClientState (GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState (GL_VERTEX_ARRAY);
 	
-	glDisable (GL_BLEND);
-	glDisable(GL_TEXTURE_2D);
+	_cairo_dock_disable_texture ();
 }
 
 CairoParticleSystem *cairo_dock_create_particle_system (int iNbParticles, GLuint iTexture, double fWidth, double fHeight)

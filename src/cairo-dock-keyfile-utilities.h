@@ -3,12 +3,15 @@
 #define  __CAIRO_DOCK_KEYFILE_UTILITIES__
 
 #include <glib.h>
-#include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
 
+/** Open a conf file to be read/written. Returns NULL if the file wouldn't be found/opened/parsed.
+*/
 GKeyFile *cairo_dock_open_key_file (const gchar *cConfFilePath);
 
+/** Write a conf file on the disk.
+*/
 void cairo_dock_write_keys_to_file (GKeyFile *pKeyFile, const gchar *cConfFilePath);
 
 void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, const gchar *cConfFilePath, const gchar *cShareDataDirPath, gboolean bUseFileKeys, const gchar *cTemplateFileName);
@@ -22,7 +25,7 @@ void cairo_dock_replace_keys_by_identifier (const gchar *cConfFilePath, gchar *c
 void cairo_dock_get_conf_file_version (GKeyFile *pKeyFile, gchar **cConfFileVersion);
 gboolean cairo_dock_conf_file_needs_update (GKeyFile *pKeyFile, const gchar *cVersion);
 
-/** Add or remove a value in a list of values to a given (group,key) pair in a conf file.
+/** Add or remove a value in a list of values to a given (group,key) pair of a conf file.
 */
 void cairo_dock_add_remove_element_to_key (const gchar *cConfFilePath, const gchar *cGroupName, const gchar *cKeyName, gchar *cElementName, gboolean bAdd);
 

@@ -5,8 +5,51 @@
 #include <glib.h>
 #include <gdk/gdk.h>
 #include <cairo.h>
-#include "cairo-dock-struct.h"
+
+#include <cairo-dock-struct.h>
 G_BEGIN_DECLS
+
+/**
+*@file cairo-dock-surface-factory.h This class contains functions to load any image/X buffer/GdkPixbuf/text into a cairo-surface.
+* The loading of an image can be modified by a mask, to take into account the ratio, zoom, orientation, etc.
+*/
+
+typedef enum {
+	CAIRO_DOCK_FILL_SPACE 			= 1<<0,
+	CAIRO_DOCK_KEEP_RATIO 			= 1<<1,
+	CAIRO_DOCK_DONT_ZOOM_IN 		= 1<<2,
+	CAIRO_DOCK_ORIENTATION_HFLIP 		= 1<<3,
+	CAIRO_DOCK_ORIENTATION_ROT_180 	= 2<<3,
+	CAIRO_DOCK_ORIENTATION_VFLIP 		= 3<<3,
+	CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP = 4<<3,
+	CAIRO_DOCK_ORIENTATION_ROT_90 	= 5<<3,
+	CAIRO_DOCK_ORIENTATION_ROT_90_VFLIP = 6<<3,
+	CAIRO_DOCK_ORIENTATION_ROT_270 	= 7<<3
+	} CairoDockLoadImageModifier;
+#define CAIRO_DOCK_ORIENTATION_MASK (7<<3)
+
+struct _CairoDockLabelDescription {
+	/// Taille de la police (et hauteur du texte en pixels).
+	gint iSize;
+	/// Police de caracteres.
+	gchar *cFont;
+	/// Epaisseur des traits.
+	PangoWeight iWeight;
+	/// Style du trace (italique ou droit).
+	PangoStyle iStyle;
+	/// Couleur de debut du dégradé.
+	gdouble fColorStart[3];
+	/// Couleur de fin du dégradé.
+	gdouble fColorStop[3];
+	/// TRUE ssi le dégradé est du haut vers le bas.
+	gboolean bVerticalPattern;
+	/// Couleur du fond.
+	gdouble fBackgroundColor[4];
+	/// TRUE ssi on trace un contour.
+	gboolean bOutlined;
+	/// marge autour du texte
+	gint iMargin;
+};
 
 
 /**

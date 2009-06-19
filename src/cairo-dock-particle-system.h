@@ -4,7 +4,6 @@
 
 #include <glib.h>
 
-#include "cairo-dock-struct.h"
 
 typedef struct _CairoParticle {
 	GLfloat x, y, z;

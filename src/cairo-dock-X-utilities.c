@@ -24,11 +24,11 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <X11/extensions/shape.h>
 #endif
 
+#include "cairo-dock-container.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-application-factory.h"
-#include "cairo-dock-log.h"
 #include "cairo-dock-class-manager.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-log.h"
 #include "cairo-dock-X-utilities.h"
 
 extern int g_iNbDesktops;
@@ -736,9 +736,6 @@ void cairo_dock_get_screen_offsets (int iNumScreen)
 		g_iScreenOffsetY = pScreens[iNumScreen].y_org;
 		g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] = pScreens[iNumScreen].width;
 		g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] = pScreens[iNumScreen].height;
-		
-		//g_iScreenOffsetX = 640;
-		//g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] = 640;
 		
 		g_iScreenWidth[CAIRO_DOCK_VERTICAL] = g_iScreenHeight[CAIRO_DOCK_HORIZONTAL];
 		g_iScreenHeight[CAIRO_DOCK_VERTICAL] = g_iScreenWidth[CAIRO_DOCK_HORIZONTAL];

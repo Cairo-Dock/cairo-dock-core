@@ -12,13 +12,10 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <librsvg/rsvg-cairo.h>
 #include <pango/pango.h>
 
-#include "cairo-dock-struct.h"
-#include "cairo-dock-draw.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-surface-factory.h"
-#include "cairo-dock-internal-background.h"
+#include "cairo-dock-draw.h"
 #include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-labels.h"
+#include "cairo-dock-surface-factory.h"
 
 extern gboolean g_bUseOpenGL;
 
@@ -228,15 +225,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 		w,
 		h,
 		iStride);
-
-	/**double fIconWidthSaturationFactor, fIconHeightSaturationFactor;
-	cairo_dock_calculate_size_fill (fWidth,
-		fHeight,
-		myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-		myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
-		CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,
-		&fIconWidthSaturationFactor,
-		&fIconHeightSaturationFactor);*/
+	
 	*fWidth = (double) w;
 	*fHeight = (double) h;
 	double fIconWidthSaturationFactor = 1., fIconHeightSaturationFactor = 1.;

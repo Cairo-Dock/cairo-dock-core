@@ -525,6 +525,9 @@ int main (int argc, char** argv)
 	cairo_dock_register_notification (CAIRO_DOCK_MIDDLE_CLICK_ICON,
 		(CairoDockNotificationFunc) cairo_dock_notification_middle_click_icon,
 		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_SCROLL_ICON,
+		(CairoDockNotificationFunc) cairo_dock_notification_scroll_icon,
+		CAIRO_DOCK_RUN_AFTER, NULL);
 	cairo_dock_register_notification (CAIRO_DOCK_RENDER_DOCK,
 		(CairoDockNotificationFunc) cairo_dock_render_dock_notification,
 		CAIRO_DOCK_RUN_FIRST, NULL);

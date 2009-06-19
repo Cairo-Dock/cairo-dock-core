@@ -310,7 +310,7 @@ static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, Icon *icon, Cai
 		return ;
 	if (erreur != NULL)
 	{
-		cd_message ("Attention : while trying to create a new launcher : %s", erreur->message);
+		cd_message ("while trying to create a new launcher : %s", erreur->message);
 		g_error_free (erreur);
 		return ;
 	}

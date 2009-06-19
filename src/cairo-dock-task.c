@@ -9,7 +9,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
-#include <cairo.h>
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-task.h"
@@ -40,7 +39,7 @@ static gboolean _cairo_dock_timer (CairoDockTask *pTask)
 static gpointer _cairo_dock_threaded_calculation (CairoDockTask *pTask)
 {
 	//\_______________________ On obtient nos donnees.
-	pTask->read (pTask->pSharedMemory);
+	pTask->get_data (pTask->pSharedMemory);
 	
 	//\_______________________ On indique qu'on a fini.
 	g_atomic_int_set (&pTask->iThreadIsRunning, 0);
@@ -54,7 +53,7 @@ static gboolean _cairo_dock_check_for_redraw (CairoDockTask *pTask)
 		//\_______________________ On met a jour avec ces nouvelles donnees et on lance/arrete le timer.
 		cairo_dock_perform_task_update (pTask);
 		
-		pTask->iSidTimerRedraw = 0;
+		pTask->iSidTimerUpdate = 0;
 		return FALSE;
 	}
 	return TRUE;
@@ -62,7 +61,7 @@ static gboolean _cairo_dock_check_for_redraw (CairoDockTask *pTask)
 void cairo_dock_launch_task (CairoDockTask *pTask)
 {
 	g_return_if_fail (pTask != NULL);
-	if (pTask->read == NULL)  // pas de thread, tout est dans la fonction d'update.
+	if (pTask->get_data == NULL)  // pas de thread, tout est dans la fonction d'update.
 	{
 		cairo_dock_perform_task_update (pTask);
 	}
@@ -80,29 +79,29 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 			}
 		}
 		
-		if (pTask->iSidTimerRedraw == 0)
-			pTask->iSidTimerRedraw = g_timeout_add (MAX (150, MIN (0.15 * pTask->iPeriod, 333)), (GSourceFunc) _cairo_dock_check_for_redraw, pTask);
+		if (pTask->iSidTimerUpdate == 0)
+			pTask->iSidTimerUpdate = g_timeout_add (MAX (150, MIN (0.15 * pTask->iPeriod, 333)), (GSourceFunc) _cairo_dock_check_for_redraw, pTask);
 	}
 }
 
 
 static gboolean _cairo_dock_one_shot_timer (CairoDockTask *pTask)
 {
-	pTask->iSidTimerRedraw = 0;
+	pTask->iSidTimerUpdate = 0;
 	cairo_dock_launch_task (pTask);
 	return FALSE;
 }
 void cairo_dock_launch_task_delayed (CairoDockTask *pTask, double fDelay)
 {
-	pTask->iSidTimerRedraw = g_timeout_add (fDelay, (GSourceFunc) _cairo_dock_one_shot_timer, pTask);
+	pTask->iSidTimerUpdate = g_timeout_add (fDelay, (GSourceFunc) _cairo_dock_one_shot_timer, pTask);
 }
 
 
-CairoDockTask *cairo_dock_new_task (int iPeriod, CairoDockReadTimerFunc read, CairoDockUpdateTimerFunc update, gpointer pSharedMemory)
+CairoDockTask *cairo_dock_new_task (int iPeriod, CairoDockGetDataAsyncFunc get_data, CairoDockUpdateSyncFunc update, gpointer pSharedMemory)
 {
 	CairoDockTask *pTask = g_new0 (CairoDockTask, 1);
 	pTask->iPeriod = iPeriod;
-	pTask->read = read;
+	pTask->get_data = get_data;
 	pTask->update = update;
 	pTask->pSharedMemory = pSharedMemory;
 	return pTask;
@@ -116,10 +115,10 @@ static void _cairo_dock_pause_task (CairoDockTask *pTask)
 	
 	cairo_dock_cancel_next_iteration (pTask);
 	
-	if (pTask->iSidTimerRedraw != 0)
+	if (pTask->iSidTimerUpdate != 0)
 	{
-		g_source_remove (pTask->iSidTimerRedraw);
-		pTask->iSidTimerRedraw = 0;
+		g_source_remove (pTask->iSidTimerUpdate);
+		pTask->iSidTimerUpdate = 0;
 	}
 }
 
@@ -153,7 +152,7 @@ gboolean cairo_dock_task_is_active (CairoDockTask *pTask)
 
 gboolean cairo_dock_task_is_running (CairoDockTask *pTask)
 {
-	return (pTask != NULL && pTask->iSidTimerRedraw != 0);
+	return (pTask != NULL && pTask->iSidTimerUpdate != 0);
 }
 
 static void _cairo_dock_restart_timer_with_frequency (CairoDockTask *pTask, int iNewPeriod)

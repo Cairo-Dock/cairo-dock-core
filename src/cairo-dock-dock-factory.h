@@ -238,7 +238,7 @@ struct _CairoDock {
 * @param cRendererName nom de la fonction de rendu a appliquer au dock. si NULL, le rendu par defaut sera applique.
 * @return le dock nouvellement alloué, a detruire avec #cairo_dock_destroy_dock
 */
-CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, gchar *cDockName, gchar *cRendererName);
+CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, const gchar *cDockName, const gchar *cRendererName);
 /**
 * Desactive un dock : le rend inoperant, en detruisant tout ce qu'il contient, sauf sa liste d'icones.
 * @param pDock le dock.
@@ -251,7 +251,7 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock);
 * @param ReceivingDock un dock qui recuperera les icones, ou NULL pour detruire toutes les icones contenues dans le dock.
 * @param cReceivingDockName le nom du dock qui recuperera les icones, ou NULL si aucun n'est fourni.
 */
-void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDock *ReceivingDock, gchar *cReceivingDockName);
+void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDock *ReceivingDock, const gchar *cReceivingDockName);
 
 /**
 * Incremente de 1 la reference d'un dock, c'est-a-dire le nombre d'icones pointant sur ce dock. Si le dock etait auparavant un dock principal, il devient un sous-dock, prenant du meme coup les parametres propres aux sous-docks.

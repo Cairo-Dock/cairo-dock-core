@@ -50,6 +50,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget,
 					GdkEventButton* pButton,
 					CairoDock *pDock);
 
+gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, int iDirection);
 gboolean cairo_dock_on_scroll (GtkWidget* pWidget,
 				GdkEventScroll* pScroll,
 				CairoDock *pDock);

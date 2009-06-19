@@ -27,6 +27,7 @@
 #define  __CAIRO_DESKLET_H__
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-surface-factory.h"
 #include "cairo-dock-container.h"
 //#include "cairo-dock-icons.h"
 G_BEGIN_DECLS

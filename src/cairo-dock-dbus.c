@@ -8,49 +8,13 @@ Written by Adrien Pilleboue (for any bug report, please mail me to adrien.pilleb
 ******************************************************************************/
 #include <string.h>
 #include <glib.h>
-#include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib-bindings.h>
+
 #include "cairo-dock-log.h"
 #include "cairo-dock-dbus.h"
 
 static DBusGConnection *s_pSessionConnexion = NULL;
 static DBusGConnection *s_pSystemConnexion = NULL;
 static DBusGProxy *s_pDBusProxy = NULL;
-
-extern gchar *g_cConfFile;
-extern CairoDock *g_pMainDock;
-
-
-/*void cairo_dock_initialize_dbus_manager (void)
-{
-	g_return_if_fail (s_pSessionConnexion == NULL && s_pSystemConnexion == NULL);
-	cd_message ("");
-	GError *erreur = NULL;
-	s_pSessionConnexion = dbus_g_bus_get (DBUS_BUS_SESSION, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning ("Attention : %s", erreur->message);
-		g_error_free (erreur);
-		s_pSessionConnexion = NULL;
-	}
-	if (s_pSessionConnexion == NULL)
-		return ;
-	
-	s_pDBusProxy = dbus_g_proxy_new_for_name(s_pSessionConnexion,
-		DBUS_SERVICE_DBUS,
-		DBUS_PATH_DBUS,
-		DBUS_INTERFACE_DBUS);
-	
-	s_pSystemConnexion = dbus_g_bus_get (DBUS_BUS_SYSTEM, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning ("Attention : %s", erreur->message);
-		g_error_free (erreur);
-		s_pSystemConnexion = NULL;
-	}
-	if (s_pSystemConnexion == NULL)
-		return ;
-}*/
 
 
 DBusGConnection *cairo_dock_get_session_connection (void)
