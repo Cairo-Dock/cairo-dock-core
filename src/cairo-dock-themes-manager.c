@@ -101,7 +101,7 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 	return pThemeTable;
 }
 
-gchar *cairo_dock_uncompress_file (gchar *cArchivePath, gchar *cExtractTo, gchar *cRealArchiveName)
+gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtractTo, const gchar *cRealArchiveName)
 {
 	if (!g_file_test (cExtractTo, G_FILE_TEST_EXISTS))
 	{

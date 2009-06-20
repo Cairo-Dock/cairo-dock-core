@@ -652,7 +652,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	cairo_dock_stop_icon_animation (icon);
 	
 	//\___________________ On desactive sa miniature.
-	g_print ("%s (%s, Xid : %d)\n", __func__, icon->acName, icon->Xid);
+	cd_debug ("%s (%s, Xid : %lx)", __func__, icon->acName, icon->Xid);
 	if (icon->Xid != 0)
 		cairo_dock_set_xicon_geometry (icon->Xid, 0, 0, 0, 0);
 	
@@ -841,7 +841,6 @@ void cairo_dock_add_new_launcher_by_uri (const gchar *cDesktopFileURI, CairoDock
 				cairo_dock_fm_add_monitor (pNewIcon);
 			}
 			
-			//cairo_dock_start_shrinking (pDock);
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pReceivingDock));
 		}
 	}

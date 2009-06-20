@@ -36,6 +36,9 @@ void cairo_dock_free_theme (CairoDockTheme *pTheme);
 
 GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *hProvidedTable, GError **erreur);
 
+
+gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtractTo, const gchar *cRealArchiveName);
+
 /** Download a distant file into a given folder, possibly extracting it.
 *@param cServerAdress adress of the server.
 *@param cDistantFilePath path of the file on the server.

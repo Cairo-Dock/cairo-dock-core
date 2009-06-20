@@ -554,15 +554,15 @@ double cairo_dock_calculate_max_dock_width (CairoDock *pDock, GList *pFirstDrawn
 Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *pFirstDrawnElementGiven, int x_abs, gdouble fMagnitude, double fFlatDockWidth, int iWidth, int iHeight, double fAlign, double fFoldingFactor, gboolean bDirectionUp)
 {
 	//g_print (">>>>>%s (%d/%.2f, %dx%d, %.2f, %.2f)\n", __func__, x_abs, fFlatDockWidth, iWidth, iHeight, fAlign, fFoldingFactor);
+	if (pIconList == NULL)
+		return NULL;
 	if (x_abs < 0 && iWidth > 0)  // ces cas limite sont la pour empecher les icones de retrecir trop rapidement quand on sort par les cotes.
 		///x_abs = -1;
 		x_abs = 0;
 	else if (x_abs > fFlatDockWidth && iWidth > 0)
 		///x_abs = fFlatDockWidth+1;
 		x_abs = (int) fFlatDockWidth;
-	if (pIconList == NULL)
-		return NULL;
-
+	
 	float x_cumulated = 0, fXMiddle, fDeltaExtremum;
 	GList* ic, *pointed_ic;
 	Icon *icon, *prev_icon;

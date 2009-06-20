@@ -400,11 +400,11 @@ void cairo_dock_add_watermark_on_graph2 (cairo_t *pSourceContext, CairoDockGraph
 CairoDockGraph2 *cairo_dock_new_graph2 (void)
 {
 	CairoDockGraph2 *pGraph = g_new0 (CairoDockGraph2, 1);
-	pGraph->dataRenderer.interface.new				= cairo_dock_new_graph2;
-	pGraph->dataRenderer.interface.load				= cairo_dock_load_graph2;
-	pGraph->dataRenderer.interface.render			= cairo_dock_render_graph2;
-	pGraph->dataRenderer.interface.render_opengl	= NULL;
-	pGraph->dataRenderer.interface.free				= cairo_dock_free_graph2;
-	pGraph->dataRenderer.interface.reload			= cairo_dock_reload_graph2;
+	pGraph->dataRenderer.interface.new				= (CairoDataRendererNewFunc) cairo_dock_new_graph2;
+	pGraph->dataRenderer.interface.load				= (CairoDataRendererLoadFunc) cairo_dock_load_graph2;
+	pGraph->dataRenderer.interface.render			= (CairoDataRendererRenderFunc) cairo_dock_render_graph2;
+	pGraph->dataRenderer.interface.render_opengl	= (CairoDataRendererRenderOpenGLFunc) NULL;
+	pGraph->dataRenderer.interface.reload			= (CairoDataRendererReloadFunc) cairo_dock_reload_graph2;
+	pGraph->dataRenderer.interface.free				= (CairoDataRendererFreeFunc) cairo_dock_free_graph2;
 	return pGraph;
 }

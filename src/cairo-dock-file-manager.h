@@ -27,6 +27,11 @@ typedef enum {
 	CAIRO_DOCK_NB_SORT_ON_FILE
 	} CairoDockFMSortType;
 
+#define CAIRO_DOCK_FM_VFS_ROOT "_vfsroot_"
+#define CAIRO_DOCK_FM_NETWORK "_network_"
+#define CAIRO_DOCK_FM_TRASH "_trash_"
+#define CAIRO_DOCK_FM_DESKTOP "_desktop_"
+
 typedef void (*CairoDockFMGetFileInfoFunc) (const gchar *cBaseURI, gchar **cName, gchar **cURI, gchar **cIconName, gboolean *bIsDirectory, int *iVolumeID, double *fOrder, CairoDockFMSortType iSortType);
 typedef void (*CairoDockFMFilePropertiesFunc) (const gchar *cURI, guint64 *iSize, time_t *iLastModificationTime, gchar **cMimeType, int *iUID, int *iGID, int *iPermissionsMask);
 typedef GList * (*CairoDockFMListDirectoryFunc) (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, gchar **cFullURI);

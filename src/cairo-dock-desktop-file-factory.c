@@ -46,7 +46,7 @@ void cairo_dock_remove_html_spaces (gchar *cString)
 	while (TRUE);
 }
 
-gchar *cairo_dock_generate_desktop_file_for_launcher (const gchar *cDesktopURI, const gchar *cDockName, double fOrder, GError **erreur)
+static gchar *_cairo_dock_generate_desktop_file_for_launcher (const gchar *cDesktopURI, const gchar *cDockName, double fOrder, GError **erreur)
 {
 	g_return_val_if_fail (cDesktopURI != NULL, NULL);
 	GError *tmp_erreur = NULL;
@@ -116,7 +116,7 @@ gchar *cairo_dock_generate_desktop_file_for_launcher (const gchar *cDesktopURI, 
 	return cNewDesktopFileName;
 }
 
-gchar *cairo_dock_generate_desktop_file_for_edition (CairoDockNewLauncherType iNewLauncherType, const gchar *cDockName, double fOrder, GError **erreur)
+static gchar *_cairo_dock_generate_desktop_file_for_edition (CairoDockNewLauncherType iNewLauncherType, const gchar *cDockName, double fOrder, GError **erreur)
 {
 	//\___________________ On ouvre le patron.
 	gchar *cDesktopFileTemplate = cairo_dock_get_launcher_template_conf_file (iNewLauncherType);
@@ -141,7 +141,7 @@ gchar *cairo_dock_generate_desktop_file_for_edition (CairoDockNewLauncherType iN
 	return cNewDesktopFileName;
 }
 
-gchar *cairo_dock_generate_desktop_file_for_file (const gchar *cURI, const gchar *cDockName, double fOrder, GError **erreur)
+static gchar *_cairo_dock_generate_desktop_file_for_file (const gchar *cURI, const gchar *cDockName, double fOrder, GError **erreur)
 {
 	//\___________________ On recupere le type mime du fichier.
 	gchar *cIconName = NULL, *cName = NULL, *cRealURI = NULL;
@@ -198,7 +198,7 @@ gchar *cairo_dock_add_desktop_file_from_uri_full (const gchar *cURI, const gchar
 {
 	cd_message ("%s (%s)", __func__, cURI);
 	double fEffectiveOrder;
-	if (fOrder == CAIRO_DOCK_LAST_ORDER)
+	if (fOrder == CAIRO_DOCK_LAST_ORDER && pDock != NULL)
 	{
 		Icon *pLastIcon = cairo_dock_get_last_launcher (pDock->icons);
 		if (pLastIcon != NULL)
@@ -214,15 +214,15 @@ gchar *cairo_dock_add_desktop_file_from_uri_full (const gchar *cURI, const gchar
 	gchar *cNewDesktopFileName;
 	if (cURI == NULL)
 	{
-		cNewDesktopFileName = cairo_dock_generate_desktop_file_for_edition (iNewLauncherType, cDockName, fEffectiveOrder, &tmp_erreur);
+		cNewDesktopFileName = _cairo_dock_generate_desktop_file_for_edition (iNewLauncherType, cDockName, fEffectiveOrder, &tmp_erreur);
 	}
 	else if (g_str_has_suffix (cURI, ".desktop"))  // && (strncmp (cURI, "file://", 7) == 0 || *cURI == '/')
 	{
-		cNewDesktopFileName = cairo_dock_generate_desktop_file_for_launcher (cURI, cDockName, fEffectiveOrder, &tmp_erreur);
+		cNewDesktopFileName = _cairo_dock_generate_desktop_file_for_launcher (cURI, cDockName, fEffectiveOrder, &tmp_erreur);
 	}
 	else
 	{
-		cNewDesktopFileName = cairo_dock_generate_desktop_file_for_file (cURI, cDockName, fEffectiveOrder, &tmp_erreur);
+		cNewDesktopFileName = _cairo_dock_generate_desktop_file_for_file (cURI, cDockName, fEffectiveOrder, &tmp_erreur);
 	}
 
 	if (tmp_erreur != NULL)

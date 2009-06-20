@@ -530,6 +530,7 @@ static void _draw_gauge_needle_opengl (Gauge2 *pGauge, GaugeIndicator2 *pGaugeIn
 	if (pGaugeImage2->iTexture == 0)
 	{
 		_cairo_dock_load_gauge_needle (NULL, pGaugeIndicator2, iWidth, iHeight);  // pas besoin d'un cairo_context pour creer une cairo_image_surface.
+		return ;
 	}
 	
 	if(pGaugeImage2->iTexture != 0)
@@ -559,7 +560,8 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge2 *pGauge, int iDataOffset)
 	if(pGauge->pImageBackground != NULL)
 	{
 		pGaugeImage2 = pGauge->pImageBackground;
-		_cairo_dock_apply_texture_at_size (pGaugeImage2->iTexture, iWidth, iHeight);
+		if (pGaugeImage2->iTexture != 0)
+			_cairo_dock_apply_texture_at_size (pGaugeImage2->iTexture, iWidth, iHeight);
 	}
 	
 	//\________________ On represente l'indicateur de chaque valeur.
@@ -606,7 +608,8 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge2 *pGauge, int iDataOffset)
 	if(pGauge->pImageForeground != NULL)
 	{
 		pGaugeImage2 = pGauge->pImageForeground;
-		_cairo_dock_apply_texture_at_size (pGaugeImage2->iTexture, iWidth, iHeight);
+		if (pGaugeImage2->iTexture != 0)
+			_cairo_dock_apply_texture_at_size (pGaugeImage2->iTexture, iWidth, iHeight);
 	}
 }
 void cairo_dock_render_gauge_opengl2 (Gauge2 *pGauge)
@@ -792,12 +795,12 @@ void cairo_dock_add_watermark_on_gauge2 (cairo_t *pSourceContext, Gauge2 *pGauge
 Gauge2 *cairo_dock_new_gauge (void)
 {
 	Gauge2 *pGauge = g_new0 (Gauge2, 1);
-	pGauge->dataRenderer.interface.new				= cairo_dock_new_gauge;
-	pGauge->dataRenderer.interface.load				= cairo_dock_load_gauge2;
-	pGauge->dataRenderer.interface.render			= cairo_dock_render_gauge2;
-	pGauge->dataRenderer.interface.render_opengl	= cairo_dock_render_gauge_opengl2;
-	pGauge->dataRenderer.interface.free				= cairo_dock_free_gauge2;
-	pGauge->dataRenderer.interface.reload			= cairo_dock_reload_gauge2;
+	pGauge->dataRenderer.interface.new				= (CairoDataRendererNewFunc) cairo_dock_new_gauge;
+	pGauge->dataRenderer.interface.load				= (CairoDataRendererLoadFunc) cairo_dock_load_gauge2;
+	pGauge->dataRenderer.interface.render			= (CairoDataRendererRenderFunc) cairo_dock_render_gauge2;
+	pGauge->dataRenderer.interface.render_opengl	= (CairoDataRendererRenderOpenGLFunc) cairo_dock_render_gauge_opengl2;
+	pGauge->dataRenderer.interface.reload			= (CairoDataRendererReloadFunc) cairo_dock_reload_gauge2;
+	pGauge->dataRenderer.interface.free				= (CairoDataRendererFreeFunc) cairo_dock_free_gauge2;
 	return pGauge;
 }
 

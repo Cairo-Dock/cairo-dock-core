@@ -66,9 +66,9 @@ void cairo_dock_add_watermark_on_gauge2 (cairo_t *pSourceContext, Gauge2 *pGauge
 Gauge2 *cairo_dock_new_gauge (void);
 
 
-GHashTable *cairo_dock_list_available_gauges2 (void);
+/*GHashTable *cairo_dock_list_available_gauges (void);
 
-const gchar *cairo_dock_get_gauge_key_value2 (gchar *cAppletConfFilePath, GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName);
+const gchar *cairo_dock_get_gauge_key_value (gchar *cAppletConfFilePath, GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName);*/
 
 
 G_END_DECLS

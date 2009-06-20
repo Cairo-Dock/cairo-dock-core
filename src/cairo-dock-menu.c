@@ -801,35 +801,18 @@ static void _cairo_dock_make_launcher_from_appli (GtkMenuItem *pMenuItem, gpoint
 		{
 			g_free (cDesktopFilePath);
 			cDesktopFilePath = NULL;
-			gchar *standard_output=NULL, *standard_error=NULL;
-			gint exit_status=0;
-			GError *erreur = NULL;
-			GString *sCommand = g_string_new ("");
+			
 			gchar *cCommand = g_strdup_printf ("locate /%s.desktop --limit=1 -i", icon->cClass);
-			gboolean r = g_spawn_command_line_sync (cCommand,
-				&standard_output,
-				&standard_error,
-				&exit_status,
-				&erreur);
-			if (erreur != NULL)
+			gchar *cResult = cairo_dock_launch_command_sync (cCommand);
+			if (cResult != NULL && *cResult != '\0')
 			{
-				cd_warning (erreur->message);
-				g_error_free (erreur);
-			}
-			if (standard_error != NULL && *standard_error != '\0')
-			{
-				cd_warning (standard_error);
-			}
-			if (standard_output != NULL && *standard_output != '\0')
-			{
-				if (standard_output[strlen (standard_output) - 1] == '\n')
-					standard_output[strlen (standard_output) - 1] = '\0';
-				cDesktopFilePath = standard_output;
-				standard_output = NULL;
+				if (cResult[strlen (cResult) - 1] == '\n')
+					cResult[strlen (cResult) - 1] = '\0';
+				cDesktopFilePath = cResult;
+				cResult = NULL;
 			}
 			// else chercher un desktop qui contiennent StartupWMClass=class...
-			g_free (standard_output);
-			g_free (standard_error);
+			g_free (cResult);
 		}
 	}
 	

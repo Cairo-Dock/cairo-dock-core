@@ -159,7 +159,6 @@ void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer
 	pData->iCurrentIndex ++;
 	if (pData->iCurrentIndex >= pData->iMemorySize)
 		pData->iCurrentIndex -= pData->iMemorySize;
-	
 	double fNewValue;
 	int i;
 	for (i = 0; i < pData->iNbValues; i ++)

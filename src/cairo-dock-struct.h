@@ -73,12 +73,6 @@ typedef struct _CairoDockTheme CairoDockTheme;
 typedef gboolean (* CairoDockApplyConfigFunc) (gpointer data);
 
 
-#define CAIRO_DOCK_FM_VFS_ROOT "_vfsroot_"
-#define CAIRO_DOCK_FM_NETWORK "_network_"
-#define CAIRO_DOCK_FM_TRASH "_trash_"
-#define CAIRO_DOCK_FM_DESKTOP "_desktop_"
-
-
 typedef gboolean (* CairoDockForeachDeskletFunc) (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, gpointer data);
 
 typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContainer, gpointer data);
