@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-applications-manager.h</title>
-<link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
+<link href="doxygen.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.5 -->
+<!-- Généré par Doxygen 1.5.8 -->
 <div class="navigation" id="top">
   <div class="tabs">
     <ul>
@@ -21,6 +21,12 @@
         </table>
       </form>
     </li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>Liste&nbsp;des&nbsp;fichiers</span></a></li>
+      <li><a href="globals.html"><span>Portée&nbsp;globale</span></a></li>
     </ul>
   </div>
 </div>
@@ -63,6 +69,8 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-applications-manager_8h.html#b7899a26100ec5bbc42303bd44f2eae4">cairo_dock_window_is_above_or_below</a> (Window Xid, gboolean *bIsAbove, gboolean *bIsBelow)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-applications-manager_8h.html#12570ff299f5578b1f4f8453a8f6d648">cairo_dock_window_is_fullscreen_or_hidden_or_maximized</a> (Window Xid, gboolean *bIsFullScreen, gboolean *bIsHidden, gboolean *bIsMaximized, gboolean *bDemandsAttention)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-applications-manager_8h.html#6a808c04253b401a1495bae1911cebb2">cairo_dock_window_is_sticky</a> (Window Xid)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">Window&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-applications-manager_8h.html#a05a0f4d76e724c6e79cbcad615f7f3c">cairo_dock_get_active_xwindow</a> (void)</td></tr>
 
@@ -113,7 +121,7 @@
 </table>
 <hr><a name="_details"></a><h2>Description détaillée</h2>
 This class manages the taskbar and the interactions with X. Most of the internal functions make request to X, so you shouldn't use them directly, for performance considerations. Instead, use the data exposed by Cairo-Dock or available in the icon structure. Only the functions that don't make request to X are documented above. <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="3674e2a1512118427bff36712cc35b28"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_initialize_application_manager" ref="3674e2a1512118427bff36712cc35b28" args="(Display *pDisplay)" -->
+<a class="anchor" name="3674e2a1512118427bff36712cc35b28"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_initialize_application_manager" ref="3674e2a1512118427bff36712cc35b28" args="(Display *pDisplay)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -123,7 +131,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype">Display *&nbsp;</td>
           <td class="paramname"> <em>pDisplay</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -133,7 +141,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="a3ed958743c3d92ab3605ed4522e4684"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_register_appli" ref="a3ed958743c3d92ab3605ed4522e4684" args="(Icon *icon)" -->
+<a class="anchor" name="a3ed958743c3d92ab3605ed4522e4684"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_register_appli" ref="a3ed958743c3d92ab3605ed4522e4684" args="(Icon *icon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -143,7 +151,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
           <td class="paramname"> <em>icon</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -153,7 +161,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="23a7ad90233e1c3ec8a09b0f533f229d"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_blacklist_appli" ref="23a7ad90233e1c3ec8a09b0f533f229d" args="(Window Xid)" -->
+<a class="anchor" name="23a7ad90233e1c3ec8a09b0f533f229d"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_blacklist_appli" ref="23a7ad90233e1c3ec8a09b0f533f229d" args="(Window Xid)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -163,7 +171,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype">Window&nbsp;</td>
           <td class="paramname"> <em>Xid</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -173,7 +181,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="65f3f3b215d1bca2d818a039f6139978"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_unregister_appli" ref="65f3f3b215d1bca2d818a039f6139978" args="(Icon *icon)" -->
+<a class="anchor" name="65f3f3b215d1bca2d818a039f6139978"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_unregister_appli" ref="65f3f3b215d1bca2d818a039f6139978" args="(Icon *icon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -183,7 +191,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
           <td class="paramname"> <em>icon</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -193,7 +201,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="1ab4ef5ca197ea250821485ad8abe424"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_set_one_icon_geometry_for_window_manager" ref="1ab4ef5ca197ea250821485ad8abe424" args="(Icon *icon, CairoDock *pDock)" -->
+<a class="anchor" name="1ab4ef5ca197ea250821485ad8abe424"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_set_one_icon_geometry_for_window_manager" ref="1ab4ef5ca197ea250821485ad8abe424" args="(Icon *icon, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -212,7 +220,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -222,7 +230,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="a2ca8f52eeac2632b14d922b79cfbc5d"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_set_icons_geometry_for_window_manager" ref="a2ca8f52eeac2632b14d922b79cfbc5d" args="(CairoDock *pDock)" -->
+<a class="anchor" name="a2ca8f52eeac2632b14d922b79cfbc5d"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_set_icons_geometry_for_window_manager" ref="a2ca8f52eeac2632b14d922b79cfbc5d" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -232,7 +240,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -242,7 +250,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="e683af570c65020752a4c8bc9f572450"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_close_xwindow" ref="e683af570c65020752a4c8bc9f572450" args="(Window Xid)" -->
+<a class="anchor" name="e683af570c65020752a4c8bc9f572450"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_close_xwindow" ref="e683af570c65020752a4c8bc9f572450" args="(Window Xid)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -252,7 +260,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype">Window&nbsp;</td>
           <td class="paramname"> <em>Xid</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -262,7 +270,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="53901b84c365e4af8230790dd78fb005"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_kill_xwindow" ref="53901b84c365e4af8230790dd78fb005" args="(Window Xid)" -->
+<a class="anchor" name="53901b84c365e4af8230790dd78fb005"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_kill_xwindow" ref="53901b84c365e4af8230790dd78fb005" args="(Window Xid)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -272,7 +280,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype">Window&nbsp;</td>
           <td class="paramname"> <em>Xid</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -282,7 +290,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="0f1088b3fe83a5331c959458b78ca86c"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_show_xwindow" ref="0f1088b3fe83a5331c959458b78ca86c" args="(Window Xid)" -->
+<a class="anchor" name="0f1088b3fe83a5331c959458b78ca86c"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_show_xwindow" ref="0f1088b3fe83a5331c959458b78ca86c" args="(Window Xid)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -292,7 +300,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype">Window&nbsp;</td>
           <td class="paramname"> <em>Xid</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -302,7 +310,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="b53c222978e2ff55bb218524e8785675"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_minimize_xwindow" ref="b53c222978e2ff55bb218524e8785675" args="(Window Xid)" -->
+<a class="anchor" name="b53c222978e2ff55bb218524e8785675"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_minimize_xwindow" ref="b53c222978e2ff55bb218524e8785675" args="(Window Xid)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -312,7 +320,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype">Window&nbsp;</td>
           <td class="paramname"> <em>Xid</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -322,7 +330,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="35e5a7e8b01d4407db1b6ff356e0f378"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_maximize_xwindow" ref="35e5a7e8b01d4407db1b6ff356e0f378" args="(Window Xid, gboolean bMaximize)" -->
+<a class="anchor" name="35e5a7e8b01d4407db1b6ff356e0f378"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_maximize_xwindow" ref="35e5a7e8b01d4407db1b6ff356e0f378" args="(Window Xid, gboolean bMaximize)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -341,7 +349,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -351,7 +359,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="2902625deca3f96d18213722a1c0abcc"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_set_xwindow_fullscreen" ref="2902625deca3f96d18213722a1c0abcc" args="(Window Xid, gboolean bFullScreen)" -->
+<a class="anchor" name="2902625deca3f96d18213722a1c0abcc"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_set_xwindow_fullscreen" ref="2902625deca3f96d18213722a1c0abcc" args="(Window Xid, gboolean bFullScreen)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -370,7 +378,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -380,7 +388,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="749373bf77aa9a5628f6ea95eb394ea4"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_set_xwindow_above" ref="749373bf77aa9a5628f6ea95eb394ea4" args="(Window Xid, gboolean bAbove)" -->
+<a class="anchor" name="749373bf77aa9a5628f6ea95eb394ea4"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_set_xwindow_above" ref="749373bf77aa9a5628f6ea95eb394ea4" args="(Window Xid, gboolean bAbove)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -399,7 +407,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -409,7 +417,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="56433a2fc51ac1b156bb0d4449015bfa"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_move_xwindow_to_nth_desktop" ref="56433a2fc51ac1b156bb0d4449015bfa" args="(Window Xid, int iDesktopNumber, int iDesktopViewportX, int iDesktopViewportY)" -->
+<a class="anchor" name="56433a2fc51ac1b156bb0d4449015bfa"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_move_xwindow_to_nth_desktop" ref="56433a2fc51ac1b156bb0d4449015bfa" args="(Window Xid, int iDesktopNumber, int iDesktopViewportX, int iDesktopViewportY)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -440,7 +448,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -450,7 +458,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="893d0d3fe02503ec48a29331a066a0a6"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_window_is_maximized" ref="893d0d3fe02503ec48a29331a066a0a6" args="(Window Xid)" -->
+<a class="anchor" name="893d0d3fe02503ec48a29331a066a0a6"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_window_is_maximized" ref="893d0d3fe02503ec48a29331a066a0a6" args="(Window Xid)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -460,7 +468,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype">Window&nbsp;</td>
           <td class="paramname"> <em>Xid</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -470,7 +478,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="ce9c9717a43029f7578777bb86f7b430"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_window_is_fullscreen" ref="ce9c9717a43029f7578777bb86f7b430" args="(Window Xid)" -->
+<a class="anchor" name="ce9c9717a43029f7578777bb86f7b430"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_window_is_fullscreen" ref="ce9c9717a43029f7578777bb86f7b430" args="(Window Xid)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -480,7 +488,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype">Window&nbsp;</td>
           <td class="paramname"> <em>Xid</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -490,7 +498,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="b7899a26100ec5bbc42303bd44f2eae4"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_window_is_above_or_below" ref="b7899a26100ec5bbc42303bd44f2eae4" args="(Window Xid, gboolean *bIsAbove, gboolean *bIsBelow)" -->
+<a class="anchor" name="b7899a26100ec5bbc42303bd44f2eae4"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_window_is_above_or_below" ref="b7899a26100ec5bbc42303bd44f2eae4" args="(Window Xid, gboolean *bIsAbove, gboolean *bIsBelow)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -515,7 +523,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -525,7 +533,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="12570ff299f5578b1f4f8453a8f6d648"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_window_is_fullscreen_or_hidden_or_maximized" ref="12570ff299f5578b1f4f8453a8f6d648" args="(Window Xid, gboolean *bIsFullScreen, gboolean *bIsHidden, gboolean *bIsMaximized, gboolean *bDemandsAttention)" -->
+<a class="anchor" name="12570ff299f5578b1f4f8453a8f6d648"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_window_is_fullscreen_or_hidden_or_maximized" ref="12570ff299f5578b1f4f8453a8f6d648" args="(Window Xid, gboolean *bIsFullScreen, gboolean *bIsHidden, gboolean *bIsMaximized, gboolean *bDemandsAttention)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -562,7 +570,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -572,7 +580,27 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="a05a0f4d76e724c6e79cbcad615f7f3c"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_get_active_xwindow" ref="a05a0f4d76e724c6e79cbcad615f7f3c" args="(void)" -->
+<a class="anchor" name="6a808c04253b401a1495bae1911cebb2"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_window_is_sticky" ref="6a808c04253b401a1495bae1911cebb2" args="(Window Xid)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_window_is_sticky           </td>
+          <td>(</td>
+          <td class="paramtype">Window&nbsp;</td>
+          <td class="paramname"> <em>Xid</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="a05a0f4d76e724c6e79cbcad615f7f3c"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_get_active_xwindow" ref="a05a0f4d76e724c6e79cbcad615f7f3c" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -582,7 +610,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -592,7 +620,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="90929d4b3ec7c53c0c245a08a946b363"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_get_window_desktop" ref="90929d4b3ec7c53c0c245a08a946b363" args="(int Xid)" -->
+<a class="anchor" name="90929d4b3ec7c53c0c245a08a946b363"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_get_window_desktop" ref="90929d4b3ec7c53c0c245a08a946b363" args="(int Xid)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -602,7 +630,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype">int&nbsp;</td>
           <td class="paramname"> <em>Xid</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -612,7 +640,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="29c370d359f9d0f4a5008b8895a89dcc"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_get_window_geometry" ref="29c370d359f9d0f4a5008b8895a89dcc" args="(int Xid, int *iGlobalPositionX, int *iGlobalPositionY, int *iWidthExtent, int *iHeightExtent)" -->
+<a class="anchor" name="29c370d359f9d0f4a5008b8895a89dcc"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_get_window_geometry" ref="29c370d359f9d0f4a5008b8895a89dcc" args="(int Xid, int *iGlobalPositionX, int *iGlobalPositionY, int *iWidthExtent, int *iHeightExtent)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -649,7 +677,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -659,7 +687,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="6692539865a824b258a2f871cec75d1f"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_get_window_position_on_its_viewport" ref="6692539865a824b258a2f871cec75d1f" args="(int Xid, int *iRelativePositionX, int *iRelativePositionY)" -->
+<a class="anchor" name="6692539865a824b258a2f871cec75d1f"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_get_window_position_on_its_viewport" ref="6692539865a824b258a2f871cec75d1f" args="(int Xid, int *iRelativePositionX, int *iRelativePositionY)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -684,7 +712,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -694,7 +722,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="5d59a0c3e5d4015defe70347becac2d4"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_window_is_on_this_desktop" ref="5d59a0c3e5d4015defe70347becac2d4" args="(int Xid, int iDesktopNumber)" -->
+<a class="anchor" name="5d59a0c3e5d4015defe70347becac2d4"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_window_is_on_this_desktop" ref="5d59a0c3e5d4015defe70347becac2d4" args="(int Xid, int iDesktopNumber)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -713,7 +741,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -723,7 +751,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="26d14849e43bea01b64212023858ddaf"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_window_is_on_current_desktop" ref="26d14849e43bea01b64212023858ddaf" args="(int Xid)" -->
+<a class="anchor" name="26d14849e43bea01b64212023858ddaf"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_window_is_on_current_desktop" ref="26d14849e43bea01b64212023858ddaf" args="(int Xid)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -733,7 +761,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype">int&nbsp;</td>
           <td class="paramname"> <em>Xid</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -743,7 +771,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="687b44fda08b683fd32ce061b8256db6"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_animate_icon_on_active" ref="687b44fda08b683fd32ce061b8256db6" args="(Icon *icon, CairoDock *pParentDock)" -->
+<a class="anchor" name="687b44fda08b683fd32ce061b8256db6"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_animate_icon_on_active" ref="687b44fda08b683fd32ce061b8256db6" args="(Icon *icon, CairoDock *pParentDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -762,7 +790,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -772,7 +800,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="34cf52696397fa66d908394363a42b83"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_search_window_on_our_way" ref="34cf52696397fa66d908394363a42b83" args="(gboolean bMaximizedWindow, gboolean bFullScreenWindow)" -->
+<a class="anchor" name="34cf52696397fa66d908394363a42b83"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_search_window_on_our_way" ref="34cf52696397fa66d908394363a42b83" args="(gboolean bMaximizedWindow, gboolean bFullScreenWindow)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -791,7 +819,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -801,7 +829,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="fc4e3c71945c8204e6f07cf137cd4151"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_unstack_Xevents" ref="fc4e3c71945c8204e6f07cf137cd4151" args="(CairoDock *pDock)" -->
+<a class="anchor" name="fc4e3c71945c8204e6f07cf137cd4151"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_unstack_Xevents" ref="fc4e3c71945c8204e6f07cf137cd4151" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -811,7 +839,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -821,7 +849,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="febdb458e4507c609dfd363c236fbe0c"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_set_window_mask" ref="febdb458e4507c609dfd363c236fbe0c" args="(Window Xid, long iMask)" -->
+<a class="anchor" name="febdb458e4507c609dfd363c236fbe0c"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_set_window_mask" ref="febdb458e4507c609dfd363c236fbe0c" args="(Window Xid, long iMask)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -840,7 +868,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -850,7 +878,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="6854d1a079a4139ba4035940c5630f51"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_get_windows_list" ref="6854d1a079a4139ba4035940c5630f51" args="(gulong *iNbWindows)" -->
+<a class="anchor" name="6854d1a079a4139ba4035940c5630f51"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_get_windows_list" ref="6854d1a079a4139ba4035940c5630f51" args="(gulong *iNbWindows)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -860,7 +888,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype">gulong *&nbsp;</td>
           <td class="paramname"> <em>iNbWindows</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -870,7 +898,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="d223d6fccef2451e387174cbcaac7c6f"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_insert_appli_in_dock" ref="d223d6fccef2451e387174cbcaac7c6f" args="(Icon *icon, CairoDock *pMainDock, gboolean bUpdateSize, gboolean bAnimate)" -->
+<a class="anchor" name="d223d6fccef2451e387174cbcaac7c6f"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_insert_appli_in_dock" ref="d223d6fccef2451e387174cbcaac7c6f" args="(Icon *icon, CairoDock *pMainDock, gboolean bUpdateSize, gboolean bAnimate)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -901,7 +929,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -911,7 +939,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="b26f7b01f2e6aaa3eb8b3cb65170ac25"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_update_applis_list" ref="b26f7b01f2e6aaa3eb8b3cb65170ac25" args="(CairoDock *pDock, gint iTime)" -->
+<a class="anchor" name="b26f7b01f2e6aaa3eb8b3cb65170ac25"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_update_applis_list" ref="b26f7b01f2e6aaa3eb8b3cb65170ac25" args="(CairoDock *pDock, gint iTime)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -930,7 +958,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -940,7 +968,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="7c1241b133a5e587d8e14f6e836ea115"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_start_application_manager" ref="7c1241b133a5e587d8e14f6e836ea115" args="(CairoDock *pDock)" -->
+<a class="anchor" name="7c1241b133a5e587d8e14f6e836ea115"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_start_application_manager" ref="7c1241b133a5e587d8e14f6e836ea115" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -950,7 +978,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -960,7 +988,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="5784935cb0080105fce8a0f64c35dc30"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_pause_application_manager" ref="5784935cb0080105fce8a0f64c35dc30" args="(void)" -->
+<a class="anchor" name="5784935cb0080105fce8a0f64c35dc30"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_pause_application_manager" ref="5784935cb0080105fce8a0f64c35dc30" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -970,7 +998,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -980,7 +1008,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="fcc69363d267833b4ddc483410fc9b9f"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_stop_application_manager" ref="fcc69363d267833b4ddc483410fc9b9f" args="(void)" -->
+<a class="anchor" name="fcc69363d267833b4ddc483410fc9b9f"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_stop_application_manager" ref="fcc69363d267833b4ddc483410fc9b9f" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -990,7 +1018,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1000,7 +1028,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
 
 </div>
 </div><p>
-<a class="anchor" name="7ec3bcd76eadc8a7b0f42e98815c9196"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_application_manager_is_running" ref="7ec3bcd76eadc8a7b0f42e98815c9196" args="(void)" -->
+<a class="anchor" name="7ec3bcd76eadc8a7b0f42e98815c9196"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_application_manager_is_running" ref="7ec3bcd76eadc8a7b0f42e98815c9196" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1010,7 +1038,7 @@ This class manages the taskbar and the interactions with X. Most of the internal
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1021,7 +1049,7 @@ Get the state of the applications manager. <dl class="return" compact><dt><b>Ren
 
 </div>
 </div><p>
-<a class="anchor" name="6dd6dc1e632868a879ee022491651af0"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_get_current_applis_list" ref="6dd6dc1e632868a879ee022491651af0" args="(void)" -->
+<a class="anchor" name="6dd6dc1e632868a879ee022491651af0"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_get_current_applis_list" ref="6dd6dc1e632868a879ee022491651af0" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1031,7 +1059,7 @@ Get the state of the applications manager. <dl class="return" compact><dt><b>Ren
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1042,7 +1070,7 @@ Get the list of appli's icons currently known by Cairo-Dock, including the icons
 
 </div>
 </div><p>
-<a class="anchor" name="377efeeca65a54040739499bbb6fd467"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_get_current_active_window" ref="377efeeca65a54040739499bbb6fd467" args="(void)" -->
+<a class="anchor" name="377efeeca65a54040739499bbb6fd467"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_get_current_active_window" ref="377efeeca65a54040739499bbb6fd467" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1052,7 +1080,7 @@ Get the list of appli's icons currently known by Cairo-Dock, including the icons
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1063,7 +1091,7 @@ Get the currently active window ID. <dl class="return" compact><dt><b>Renvoie:</
 
 </div>
 </div><p>
-<a class="anchor" name="97a9ba4830fef4f619ba7edbb670a3ec"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_get_current_active_icon" ref="97a9ba4830fef4f619ba7edbb670a3ec" args="(void)" -->
+<a class="anchor" name="97a9ba4830fef4f619ba7edbb670a3ec"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_get_current_active_icon" ref="97a9ba4830fef4f619ba7edbb670a3ec" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1073,7 +1101,7 @@ Get the currently active window ID. <dl class="return" compact><dt><b>Renvoie:</
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1084,7 +1112,7 @@ Get the icon of the currently active window. <dl class="return" compact><dt><b>R
 
 </div>
 </div><p>
-<a class="anchor" name="22ca90b0414cbc35a8d12573806785c7"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_get_icon_with_Xid" ref="22ca90b0414cbc35a8d12573806785c7" args="(Window Xid)" -->
+<a class="anchor" name="22ca90b0414cbc35a8d12573806785c7"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_get_icon_with_Xid" ref="22ca90b0414cbc35a8d12573806785c7" args="(Window Xid)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1094,7 +1122,7 @@ Get the icon of the currently active window. <dl class="return" compact><dt><b>R
           <td class="paramtype">Window&nbsp;</td>
           <td class="paramname"> <em>Xid</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1110,7 +1138,7 @@ Get the icon of a given window. The search is fast. <dl compact><dt><b>Paramètr
 
 </div>
 </div><p>
-<a class="anchor" name="2b9ddec89a75928d0811120246520cbf"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_foreach_applis" ref="2b9ddec89a75928d0811120246520cbf" args="(CairoDockForeachIconFunc pFunction, gboolean bOutsideDockOnly, gpointer pUserData)" -->
+<a class="anchor" name="2b9ddec89a75928d0811120246520cbf"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_foreach_applis" ref="2b9ddec89a75928d0811120246520cbf" args="(CairoDockForeachIconFunc pFunction, gboolean bOutsideDockOnly, gpointer pUserData)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1135,7 +1163,7 @@ Get the icon of a given window. The search is fast. <dl compact><dt><b>Paramètr
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -1152,7 +1180,7 @@ Run a function on all appli's icons. <dl compact><dt><b>Paramètres:</b></dt><dd
 
 </div>
 </div><p>
-<a class="anchor" name="1bbf8966cbfdaede78ed322c659ed38a"></a><!-- doxytag: member="cairo-dock-applications-manager.h::cairo_dock_detach_appli" ref="1bbf8966cbfdaede78ed322c659ed38a" args="(Icon *pIcon)" -->
+<a class="anchor" name="1bbf8966cbfdaede78ed322c659ed38a"></a><!-- doxytag: member="cairo&#45;dock&#45;applications&#45;manager.h::cairo_dock_detach_appli" ref="1bbf8966cbfdaede78ed322c659ed38a" args="(Icon *pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1162,7 +1190,7 @@ Run a function on all appli's icons. <dl compact><dt><b>Paramètres:</b></dt><dd
           <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
           <td class="paramname"> <em>pIcon</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1173,8 +1201,8 @@ Run a function on all appli's icons. <dl compact><dt><b>Paramètres:</b></dt><dd
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Thu Apr 9 02:53:49 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Sun Jun 21 04:02:15 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>
 </html>

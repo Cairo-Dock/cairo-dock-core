@@ -46,6 +46,7 @@ struct _CairoDialogDecorator {
 
 typedef void (* CairoDockActionOnAnswerFunc) (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog);  // la numerotation des boutons commence a 0, -1 pour 'Return' et -2 pour 'Escape'
 
+/// Configuration attributes of a Dialog, which derives from a Container.
 struct _CairoDialogAttribute {
 	gchar *cImageFilePath;
 	gint iNbFrames;  // 0 <=> 1.
@@ -68,6 +69,7 @@ struct _CairoDialogButton {
 	int iOffset;  // offset courant du au clic.
 };
 
+/// Definition of a Dialog.
 struct _CairoDialog {
 	/// type de container.
 	CairoDockTypeContainer iType;

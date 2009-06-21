@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-modules.h</title>
-<link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
+<link href="doxygen.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.5 -->
+<!-- Généré par Doxygen 1.5.8 -->
 <div class="navigation" id="top">
   <div class="tabs">
     <ul>
@@ -23,11 +23,36 @@
     </li>
     </ul>
   </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>Liste&nbsp;des&nbsp;fichiers</span></a></li>
+      <li><a href="globals.html"><span>Portée&nbsp;globale</span></a></li>
+    </ul>
+  </div>
 </div>
 <div class="contents">
 <h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-modules.h</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Structures de données</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockVisitCard.html">_CairoDockVisitCard</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockModuleInterface.html">_CairoDockModuleInterface</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockModuleInstance.html">_CairoDockModuleInstance</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockModule.html">_CairoDockModule</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockMinimalAppletConfig.html">_CairoDockMinimalAppletConfig</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockInternalModule.html">_CairoDockInternalModule</a></td></tr>
+
 <tr><td colspan="2"><br><h2>Macros</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#d916a22e1cc36ad4fb5e08e512c4b850">CAIRO_DOCK_CATEGORY_DESKTOP</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#ddf7e28ec84d4ad9dfd72c6ed31d399b">CAIRO_DOCK_CATEGORY_ACCESSORY</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#ffc4a1e934f45fcc6c43ae488f4cfb06">CAIRO_DOCK_CATEGORY_CONTROLER</a></td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#15315ac51e54914550c322745f34378c">cairo_dock_get_icon_data</a>(pIcon, pInstance)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#d5a81078eb578da05c348512dd40b4ce">cairo_dock_get_container_data</a>(pContainer, pInstance)</td></tr>
@@ -36,16 +61,52 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#035cd0d9414351efdc79b1fc94ee3aa4">cairo_dock_set_container_data</a>(pContainer, pInstance, pData)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#56489e55873ab2dc6bc2f80f0611ebdf">cairo_dock_module_is_auto_loaded</a>(pModule)</td></tr>
+
+<tr><td colspan="2"><br><h2>Définition de type</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef gboolean(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#5c9761d0ff88044c2cb1d0855aa4aa84">CairoDockModulePreInit</a> )(<a class="el" href="struct__CairoDockVisitCard.html">CairoDockVisitCard</a> *pVisitCard, <a class="el" href="struct__CairoDockModuleInterface.html">CairoDockModuleInterface</a> *pInterface)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Construit et renvoie la carte de visite du module et son interface.  <a href="#5c9761d0ff88044c2cb1d0855aa4aa84"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef gpointer&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#33db70505a5cc720b207ae5dcb08e932">CairoInternalModuleConfigPtr</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef gpointer&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#5db7bebb4cbb23307f1fbf0fcb9e5a90">CairoInternalModuleDataPtr</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef void(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#d97b1591f88400d1f21c49c3202c3e34">CairoDockInternalModuleReloadFunc</a> )(<a class="el" href="cairo-dock-modules_8h.html#33db70505a5cc720b207ae5dcb08e932">CairoInternalModuleConfigPtr</a> *pPrevConfig, <a class="el" href="cairo-dock-modules_8h.html#33db70505a5cc720b207ae5dcb08e932">CairoInternalModuleConfigPtr</a> *pNewConfig)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef gboolean(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#dcea9a8872a9246a31b914946478957c">CairoDockInternalModuleGetConfigFunc</a> )(GKeyFile *pKeyFile, <a class="el" href="cairo-dock-modules_8h.html#33db70505a5cc720b207ae5dcb08e932">CairoInternalModuleConfigPtr</a> *pConfig)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef void(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#2c07b3bb3e91c491e4aaa351e223851e">CairoDockInternalModuleResetConfigFunc</a> )(<a class="el" href="cairo-dock-modules_8h.html#33db70505a5cc720b207ae5dcb08e932">CairoInternalModuleConfigPtr</a> *pConfig)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef void(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#d5815fe4d6f0e536e3d8a516630c8e26">CairoDockInternalModuleResetDataFunc</a> )(<a class="el" href="cairo-dock-modules_8h.html#5db7bebb4cbb23307f1fbf0fcb9e5a90">CairoInternalModuleDataPtr</a> *pData)</td></tr>
+
+<tr><td colspan="2"><br><h2>Énumérations</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#caee4c763eea2ba2eeea135f69b7f1bd">CairoDockPluginCategory</a> { <br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-modules_8h.html#caee4c763eea2ba2eeea135f69b7f1bd2f6b4f1208a390984e89f97199e37112">CAIRO_DOCK_CATEGORY_SYSTEM</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-modules_8h.html#caee4c763eea2ba2eeea135f69b7f1bdb3937df78b49c97907f8497d94eac8d9">CAIRO_DOCK_CATEGORY_THEME</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-modules_8h.html#caee4c763eea2ba2eeea135f69b7f1bd7c2289960092d72460d6a91d420c7a98">CAIRO_DOCK_CATEGORY_APPLET_ACCESSORY</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-modules_8h.html#caee4c763eea2ba2eeea135f69b7f1bd2fa5b906e0e6e74dd9c03b2c2a8ac6b6">CAIRO_DOCK_CATEGORY_APPLET_DESKTOP</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-modules_8h.html#caee4c763eea2ba2eeea135f69b7f1bdec772982df1b739d579a6e8d94c5006b">CAIRO_DOCK_CATEGORY_APPLET_CONTROLER</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-modules_8h.html#caee4c763eea2ba2eeea135f69b7f1bdf2de50619c20730cefc5a82060230972">CAIRO_DOCK_CATEGORY_PLUG_IN</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-modules_8h.html#caee4c763eea2ba2eeea135f69b7f1bdea769bded57e8fcf1a0637b31b7376d1">CAIRO_DOCK_NB_CATEGORY</a>
+<br>
+ }</td></tr>
+
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#93d07ae874b0dd759490430d17674020">cairo_dock_initialize_module_manager</a> (gchar *cModuleDirPath)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#13a7333610354cbeb4eeec4a9a8c2b69">cairo_dock_initialize_module_manager</a> (const gchar *cModuleDirPath)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#acc842e68b12482ab3e38885918c964e">cairo_dock_check_module_conf_file</a> (<a class="el" href="struct__CairoDockVisitCard.html">CairoDockVisitCard</a> *pVisitCard)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#dce0dd50bfcd266f4bfe19442aa5866b">cairo_dock_free_visit_card</a> (<a class="el" href="struct__CairoDockVisitCard.html">CairoDockVisitCard</a> *pVisitCard)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#b813976c4ae825f539b5b1aa9dc5a242">cairo_dock_load_module</a> (gchar *cSoFilePath, GHashTable *pModuleTable, GError **erreur)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#fe8358b1033a7c1a89a0a0b809a9e088">cairo_dock_load_module</a> (gchar *cSoFilePath, GError **erreur)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#ff31d986bb19e13dd2a0fdd8d9d4ca87">cairo_dock_preload_module_from_directory</a> (gchar *cModuleDirPath, GHashTable *pModuleTable, GError **erreur)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#a6539351ac9112c1fbbdd8383e835188">cairo_dock_preload_module_from_directory</a> (gchar *cModuleDirPath, GError **erreur)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#091f60c978f95b7c8d760afa43951a7d">cairo_dock_activate_modules_from_list</a> (gchar **cActiveModuleList, double fTime)</td></tr>
 
@@ -71,7 +132,7 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#7ca00faa94e15ab8d7cb3ec1d7b78509">cairo_dock_deactivate_module_instance_and_unload</a> (<a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a> *pInstance)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#5e77bb535cc42faefcd1ddf0e049c810">cairo_dock_deactivate_module_and_unload</a> (gchar *cModuleName)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#389a63b1b6018cc9dc44ef22e990887e">cairo_dock_deactivate_module_and_unload</a> (const gchar *cModuleName)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#280a48060dc459c80afb70b74ea72b4b">cairo_dock_configure_module_instance</a> (GtkWindow *pParentWindow, <a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a> *pModuleInstance, GError **erreur)</td></tr>
 
@@ -84,6 +145,8 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#1a2cb6228befba140d98e4919551b0ad">cairo_dock_foreach_desklet</a> (<a class="el" href="cairo-dock-struct_8h.html#cabf4d50fe6657ec41f0013ce63bcda1">CairoDockForeachDeskletFunc</a> pCallback, gpointer user_data)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#40a97f8b485ff1c7b4d06fe2681a7972">cairo_dock_foreach_module</a> (GHRFunc pCallback, gpointer user_data)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#bac6e99d06300666cd4dea678b3fa22f">cairo_dock_foreach_module_in_alphabetical_order</a> (GCompareFunc pCallback, gpointer user_data)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#9cf72c33c44d27f78477e39c344ba8f0">cairo_dock_list_active_modules</a> (void)</td></tr>
 
@@ -123,9 +186,59 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#1cbcc27f9641947d99f2a74a7a7ad594">cairo_dock_popup_module_instance_description</a> (<a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a> *pModuleInstance)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-modules_8h.html#9c215ca16d045c2b9edeb9604c5edd40">cairo_dock_attach_to_another_module</a> (<a class="el" href="struct__CairoDockVisitCard.html">CairoDockVisitCard</a> *pVisitCard, const gchar *cOtherModuleName)</td></tr>
+
 </table>
+<hr><a name="_details"></a><h2>Description détaillée</h2>
+This class defines and handles the external and internal modules of Cairo-Dock. A module has an interface and a visit card :<ul>
+<li>the visit card allows it to define itself (name, category, default icon, etc)</li><li>the interface defines the entry points for init, stop, reload, read config, and reset datas. Modules can be instanciated several times; each time they are, an instance is created. This instance will hold all the data used by the module's functions : the icon and its container, the config structure and its conf file, the data structure and a slot to plug datas into containers and icons. All these parameters are optionnal; a module that has an icon is also called an applet. Internal modules are just simplified version of modules, and are used internally by Cairo-Dock. As a special feature, a module can bind itself to an internal module, if its purpose is to complete it. </li></ul>
 <hr><h2>Documentation des macros</h2>
-<a class="anchor" name="15315ac51e54914550c322745f34378c"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_get_icon_data" ref="15315ac51e54914550c322745f34378c" args="(pIcon, pInstance)" -->
+<a class="anchor" name="d916a22e1cc36ad4fb5e08e512c4b850"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::CAIRO_DOCK_CATEGORY_DESKTOP" ref="d916a22e1cc36ad4fb5e08e512c4b850" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CAIRO_DOCK_CATEGORY_DESKTOP          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ddf7e28ec84d4ad9dfd72c6ed31d399b"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::CAIRO_DOCK_CATEGORY_ACCESSORY" ref="ddf7e28ec84d4ad9dfd72c6ed31d399b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CAIRO_DOCK_CATEGORY_ACCESSORY          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ffc4a1e934f45fcc6c43ae488f4cfb06"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::CAIRO_DOCK_CATEGORY_CONTROLER" ref="ffc4a1e934f45fcc6c43ae488f4cfb06" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CAIRO_DOCK_CATEGORY_CONTROLER          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="15315ac51e54914550c322745f34378c"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_get_icon_data" ref="15315ac51e54914550c322745f34378c" args="(pIcon, pInstance)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -138,7 +251,7 @@
           <td class="paramtype">pInstance&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -148,7 +261,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="d5a81078eb578da05c348512dd40b4ce"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_get_container_data" ref="d5a81078eb578da05c348512dd40b4ce" args="(pContainer, pInstance)" -->
+<a class="anchor" name="d5a81078eb578da05c348512dd40b4ce"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_get_container_data" ref="d5a81078eb578da05c348512dd40b4ce" args="(pContainer, pInstance)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -161,7 +274,7 @@
           <td class="paramtype">pInstance&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -171,7 +284,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="8accdafd179c5acaa0615f3a27e8723c"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_set_icon_data" ref="8accdafd179c5acaa0615f3a27e8723c" args="(pIcon, pInstance, pData)" -->
+<a class="anchor" name="8accdafd179c5acaa0615f3a27e8723c"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_set_icon_data" ref="8accdafd179c5acaa0615f3a27e8723c" args="(pIcon, pInstance, pData)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -187,7 +300,7 @@
           <td class="paramtype">pData&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -197,7 +310,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="035cd0d9414351efdc79b1fc94ee3aa4"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_set_container_data" ref="035cd0d9414351efdc79b1fc94ee3aa4" args="(pContainer, pInstance, pData)" -->
+<a class="anchor" name="035cd0d9414351efdc79b1fc94ee3aa4"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_set_container_data" ref="035cd0d9414351efdc79b1fc94ee3aa4" args="(pContainer, pInstance, pData)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -213,7 +326,7 @@
           <td class="paramtype">pData&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -223,18 +336,17 @@
 
 </div>
 </div><p>
-<hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="93d07ae874b0dd759490430d17674020"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_initialize_module_manager" ref="93d07ae874b0dd759490430d17674020" args="(gchar *cModuleDirPath)" -->
+<a class="anchor" name="56489e55873ab2dc6bc2f80f0611ebdf"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_module_is_auto_loaded" ref="56489e55873ab2dc6bc2f80f0611ebdf" args="(pModule)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">G_BEGIN_DECLS void cairo_dock_initialize_module_manager           </td>
+          <td class="memname">#define cairo_dock_module_is_auto_loaded          </td>
           <td>(</td>
-          <td class="paramtype">gchar *&nbsp;</td>
-          <td class="paramname"> <em>cModuleDirPath</em>          </td>
+          <td class="paramtype">pModule&nbsp;</td>
+          <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -244,7 +356,170 @@
 
 </div>
 </div><p>
-<a class="anchor" name="acc842e68b12482ab3e38885918c964e"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_check_module_conf_file" ref="acc842e68b12482ab3e38885918c964e" args="(CairoDockVisitCard *pVisitCard)" -->
+<hr><h2>Documentation des définition de type</h2>
+<a class="anchor" name="5c9761d0ff88044c2cb1d0855aa4aa84"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::CairoDockModulePreInit" ref="5c9761d0ff88044c2cb1d0855aa4aa84" args=")(CairoDockVisitCard *pVisitCard, CairoDockModuleInterface *pInterface)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef gboolean(*  <a class="el" href="cairo-dock-modules_8h.html#5c9761d0ff88044c2cb1d0855aa4aa84">CairoDockModulePreInit</a>)(<a class="el" href="struct__CairoDockVisitCard.html">CairoDockVisitCard</a> *pVisitCard, <a class="el" href="struct__CairoDockModuleInterface.html">CairoDockModuleInterface</a> *pInterface)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Construit et renvoie la carte de visite du module et son interface. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="33db70505a5cc720b207ae5dcb08e932"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::CairoInternalModuleConfigPtr" ref="33db70505a5cc720b207ae5dcb08e932" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef gpointer <a class="el" href="cairo-dock-modules_8h.html#33db70505a5cc720b207ae5dcb08e932">CairoInternalModuleConfigPtr</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="5db7bebb4cbb23307f1fbf0fcb9e5a90"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::CairoInternalModuleDataPtr" ref="5db7bebb4cbb23307f1fbf0fcb9e5a90" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef gpointer <a class="el" href="cairo-dock-modules_8h.html#5db7bebb4cbb23307f1fbf0fcb9e5a90">CairoInternalModuleDataPtr</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="d97b1591f88400d1f21c49c3202c3e34"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::CairoDockInternalModuleReloadFunc" ref="d97b1591f88400d1f21c49c3202c3e34" args=")(CairoInternalModuleConfigPtr *pPrevConfig, CairoInternalModuleConfigPtr *pNewConfig)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(*  <a class="el" href="cairo-dock-modules_8h.html#d97b1591f88400d1f21c49c3202c3e34">CairoDockInternalModuleReloadFunc</a>)(<a class="el" href="cairo-dock-modules_8h.html#33db70505a5cc720b207ae5dcb08e932">CairoInternalModuleConfigPtr</a> *pPrevConfig, <a class="el" href="cairo-dock-modules_8h.html#33db70505a5cc720b207ae5dcb08e932">CairoInternalModuleConfigPtr</a> *pNewConfig)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="dcea9a8872a9246a31b914946478957c"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::CairoDockInternalModuleGetConfigFunc" ref="dcea9a8872a9246a31b914946478957c" args=")(GKeyFile *pKeyFile, CairoInternalModuleConfigPtr *pConfig)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef gboolean(*  <a class="el" href="cairo-dock-modules_8h.html#dcea9a8872a9246a31b914946478957c">CairoDockInternalModuleGetConfigFunc</a>)(GKeyFile *pKeyFile, <a class="el" href="cairo-dock-modules_8h.html#33db70505a5cc720b207ae5dcb08e932">CairoInternalModuleConfigPtr</a> *pConfig)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="2c07b3bb3e91c491e4aaa351e223851e"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::CairoDockInternalModuleResetConfigFunc" ref="2c07b3bb3e91c491e4aaa351e223851e" args=")(CairoInternalModuleConfigPtr *pConfig)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(*  <a class="el" href="cairo-dock-modules_8h.html#2c07b3bb3e91c491e4aaa351e223851e">CairoDockInternalModuleResetConfigFunc</a>)(<a class="el" href="cairo-dock-modules_8h.html#33db70505a5cc720b207ae5dcb08e932">CairoInternalModuleConfigPtr</a> *pConfig)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="d5815fe4d6f0e536e3d8a516630c8e26"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::CairoDockInternalModuleResetDataFunc" ref="d5815fe4d6f0e536e3d8a516630c8e26" args=")(CairoInternalModuleDataPtr *pData)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(*  <a class="el" href="cairo-dock-modules_8h.html#d5815fe4d6f0e536e3d8a516630c8e26">CairoDockInternalModuleResetDataFunc</a>)(<a class="el" href="cairo-dock-modules_8h.html#5db7bebb4cbb23307f1fbf0fcb9e5a90">CairoInternalModuleDataPtr</a> *pData)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<hr><h2>Documentation du type de l'énumération</h2>
+<a class="anchor" name="caee4c763eea2ba2eeea135f69b7f1bd"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::CairoDockPluginCategory" ref="caee4c763eea2ba2eeea135f69b7f1bd" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="cairo-dock-modules_8h.html#caee4c763eea2ba2eeea135f69b7f1bd">CairoDockPluginCategory</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+<dl compact><dt><b>Valeurs énumérées: </b></dt><dd>
+<table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" name="caee4c763eea2ba2eeea135f69b7f1bd2f6b4f1208a390984e89f97199e37112"></a><!-- doxytag: member="CAIRO_DOCK_CATEGORY_SYSTEM" ref="caee4c763eea2ba2eeea135f69b7f1bd2f6b4f1208a390984e89f97199e37112" args="" -->CAIRO_DOCK_CATEGORY_SYSTEM</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="caee4c763eea2ba2eeea135f69b7f1bdb3937df78b49c97907f8497d94eac8d9"></a><!-- doxytag: member="CAIRO_DOCK_CATEGORY_THEME" ref="caee4c763eea2ba2eeea135f69b7f1bdb3937df78b49c97907f8497d94eac8d9" args="" -->CAIRO_DOCK_CATEGORY_THEME</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="caee4c763eea2ba2eeea135f69b7f1bd7c2289960092d72460d6a91d420c7a98"></a><!-- doxytag: member="CAIRO_DOCK_CATEGORY_APPLET_ACCESSORY" ref="caee4c763eea2ba2eeea135f69b7f1bd7c2289960092d72460d6a91d420c7a98" args="" -->CAIRO_DOCK_CATEGORY_APPLET_ACCESSORY</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="caee4c763eea2ba2eeea135f69b7f1bd2fa5b906e0e6e74dd9c03b2c2a8ac6b6"></a><!-- doxytag: member="CAIRO_DOCK_CATEGORY_APPLET_DESKTOP" ref="caee4c763eea2ba2eeea135f69b7f1bd2fa5b906e0e6e74dd9c03b2c2a8ac6b6" args="" -->CAIRO_DOCK_CATEGORY_APPLET_DESKTOP</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="caee4c763eea2ba2eeea135f69b7f1bdec772982df1b739d579a6e8d94c5006b"></a><!-- doxytag: member="CAIRO_DOCK_CATEGORY_APPLET_CONTROLER" ref="caee4c763eea2ba2eeea135f69b7f1bdec772982df1b739d579a6e8d94c5006b" args="" -->CAIRO_DOCK_CATEGORY_APPLET_CONTROLER</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="caee4c763eea2ba2eeea135f69b7f1bdf2de50619c20730cefc5a82060230972"></a><!-- doxytag: member="CAIRO_DOCK_CATEGORY_PLUG_IN" ref="caee4c763eea2ba2eeea135f69b7f1bdf2de50619c20730cefc5a82060230972" args="" -->CAIRO_DOCK_CATEGORY_PLUG_IN</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="caee4c763eea2ba2eeea135f69b7f1bdea769bded57e8fcf1a0637b31b7376d1"></a><!-- doxytag: member="CAIRO_DOCK_NB_CATEGORY" ref="caee4c763eea2ba2eeea135f69b7f1bdea769bded57e8fcf1a0637b31b7376d1" args="" -->CAIRO_DOCK_NB_CATEGORY</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dl>
+
+</div>
+</div><p>
+<hr><h2>Documentation des fonctions</h2>
+<a class="anchor" name="13a7333610354cbeb4eeec4a9a8c2b69"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_initialize_module_manager" ref="13a7333610354cbeb4eeec4a9a8c2b69" args="(const gchar *cModuleDirPath)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_initialize_module_manager           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cModuleDirPath</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="acc842e68b12482ab3e38885918c964e"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_check_module_conf_file" ref="acc842e68b12482ab3e38885918c964e" args="(CairoDockVisitCard *pVisitCard)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -254,7 +529,7 @@
           <td class="paramtype"><a class="el" href="struct__CairoDockVisitCard.html">CairoDockVisitCard</a> *&nbsp;</td>
           <td class="paramname"> <em>pVisitCard</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -270,7 +545,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="dce0dd50bfcd266f4bfe19442aa5866b"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_free_visit_card" ref="dce0dd50bfcd266f4bfe19442aa5866b" args="(CairoDockVisitCard *pVisitCard)" -->
+<a class="anchor" name="dce0dd50bfcd266f4bfe19442aa5866b"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_free_visit_card" ref="dce0dd50bfcd266f4bfe19442aa5866b" args="(CairoDockVisitCard *pVisitCard)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -280,7 +555,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype"><a class="el" href="struct__CairoDockVisitCard.html">CairoDockVisitCard</a> *&nbsp;</td>
           <td class="paramname"> <em>pVisitCard</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -290,7 +565,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="b813976c4ae825f539b5b1aa9dc5a242"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_load_module" ref="b813976c4ae825f539b5b1aa9dc5a242" args="(gchar *cSoFilePath, GHashTable *pModuleTable, GError **erreur)" -->
+<a class="anchor" name="fe8358b1033a7c1a89a0a0b809a9e088"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_load_module" ref="fe8358b1033a7c1a89a0a0b809a9e088" args="(gchar *cSoFilePath, GError **erreur)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -303,19 +578,13 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">GHashTable *&nbsp;</td>
-          <td class="paramname"> <em>pModuleTable</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">GError **&nbsp;</td>
           <td class="paramname"> <em>erreur</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -325,7 +594,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="ff31d986bb19e13dd2a0fdd8d9d4ca87"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_preload_module_from_directory" ref="ff31d986bb19e13dd2a0fdd8d9d4ca87" args="(gchar *cModuleDirPath, GHashTable *pModuleTable, GError **erreur)" -->
+<a class="anchor" name="a6539351ac9112c1fbbdd8383e835188"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_preload_module_from_directory" ref="a6539351ac9112c1fbbdd8383e835188" args="(gchar *cModuleDirPath, GError **erreur)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -338,19 +607,13 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">GHashTable *&nbsp;</td>
-          <td class="paramname"> <em>pModuleTable</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">GError **&nbsp;</td>
           <td class="paramname"> <em>erreur</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -360,7 +623,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="091f60c978f95b7c8d760afa43951a7d"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_activate_modules_from_list" ref="091f60c978f95b7c8d760afa43951a7d" args="(gchar **cActiveModuleList, double fTime)" -->
+<a class="anchor" name="091f60c978f95b7c8d760afa43951a7d"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_activate_modules_from_list" ref="091f60c978f95b7c8d760afa43951a7d" args="(gchar **cActiveModuleList, double fTime)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -379,7 +642,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -389,7 +652,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="8a392b787b653188feef4cac78aba01a"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_deactivate_old_modules" ref="8a392b787b653188feef4cac78aba01a" args="(double fTime)" -->
+<a class="anchor" name="8a392b787b653188feef4cac78aba01a"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_deactivate_old_modules" ref="8a392b787b653188feef4cac78aba01a" args="(double fTime)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -399,7 +662,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype">double&nbsp;</td>
           <td class="paramname"> <em>fTime</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -409,7 +672,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="a30d8f12c4b2960f885f65214f500e8f"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_free_module" ref="a30d8f12c4b2960f885f65214f500e8f" args="(CairoDockModule *module)" -->
+<a class="anchor" name="a30d8f12c4b2960f885f65214f500e8f"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_free_module" ref="a30d8f12c4b2960f885f65214f500e8f" args="(CairoDockModule *module)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -419,7 +682,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td>
           <td class="paramname"> <em>module</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -429,7 +692,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="4b36cb807583a4476626ecc79fcdbe89"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_pre_read_module_instance_config" ref="4b36cb807583a4476626ecc79fcdbe89" args="(CairoDockModuleInstance *pInstance, CairoDockMinimalAppletConfig *pMinimalConfig)" -->
+<a class="anchor" name="4b36cb807583a4476626ecc79fcdbe89"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_pre_read_module_instance_config" ref="4b36cb807583a4476626ecc79fcdbe89" args="(CairoDockModuleInstance *pInstance, CairoDockMinimalAppletConfig *pMinimalConfig)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -448,7 +711,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -458,7 +721,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="d7df139e2d1d82b366914c7a87157ab0"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_free_minimal_config" ref="d7df139e2d1d82b366914c7a87157ab0" args="(CairoDockMinimalAppletConfig *pMinimalConfig)" -->
+<a class="anchor" name="d7df139e2d1d82b366914c7a87157ab0"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_free_minimal_config" ref="d7df139e2d1d82b366914c7a87157ab0" args="(CairoDockMinimalAppletConfig *pMinimalConfig)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -468,7 +731,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype"><a class="el" href="struct__CairoDockMinimalAppletConfig.html">CairoDockMinimalAppletConfig</a> *&nbsp;</td>
           <td class="paramname"> <em>pMinimalConfig</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -478,7 +741,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="b208472ff3703a7782fb82de474ca5d2"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_activate_module" ref="b208472ff3703a7782fb82de474ca5d2" args="(CairoDockModule *module, GError **erreur)" -->
+<a class="anchor" name="b208472ff3703a7782fb82de474ca5d2"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_activate_module" ref="b208472ff3703a7782fb82de474ca5d2" args="(CairoDockModule *module, GError **erreur)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -497,7 +760,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -507,7 +770,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="b3bc5aeab21bc70a81b0120ceeb60ac5"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_deactivate_module" ref="b3bc5aeab21bc70a81b0120ceeb60ac5" args="(CairoDockModule *module)" -->
+<a class="anchor" name="b3bc5aeab21bc70a81b0120ceeb60ac5"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_deactivate_module" ref="b3bc5aeab21bc70a81b0120ceeb60ac5" args="(CairoDockModule *module)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -517,7 +780,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td>
           <td class="paramname"> <em>module</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -527,7 +790,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="83fa7f7f4d2fa5997e81e7e1e32275ce"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_reload_module_instance" ref="83fa7f7f4d2fa5997e81e7e1e32275ce" args="(CairoDockModuleInstance *pInstance, gboolean bReloadAppletConf)" -->
+<a class="anchor" name="83fa7f7f4d2fa5997e81e7e1e32275ce"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_reload_module_instance" ref="83fa7f7f4d2fa5997e81e7e1e32275ce" args="(CairoDockModuleInstance *pInstance, gboolean bReloadAppletConf)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -546,7 +809,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -556,7 +819,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="637c1b0decc3c6609f9f5ede2d7e1c6e"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_reload_module" ref="637c1b0decc3c6609f9f5ede2d7e1c6e" args="(CairoDockModule *module, gboolean bReloadAppletConf)" -->
+<a class="anchor" name="637c1b0decc3c6609f9f5ede2d7e1c6e"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_reload_module" ref="637c1b0decc3c6609f9f5ede2d7e1c6e" args="(CairoDockModule *module, gboolean bReloadAppletConf)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -575,7 +838,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -585,7 +848,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="7df996221421da2bcb8085f57bb595af"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_deactivate_all_modules" ref="7df996221421da2bcb8085f57bb595af" args="(void)" -->
+<a class="anchor" name="7df996221421da2bcb8085f57bb595af"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_deactivate_all_modules" ref="7df996221421da2bcb8085f57bb595af" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -595,7 +858,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -605,7 +868,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="d7489d59b75c971aed8e0b27b3bccb10"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_activate_module_and_load" ref="d7489d59b75c971aed8e0b27b3bccb10" args="(gchar *cModuleName)" -->
+<a class="anchor" name="d7489d59b75c971aed8e0b27b3bccb10"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_activate_module_and_load" ref="d7489d59b75c971aed8e0b27b3bccb10" args="(gchar *cModuleName)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -615,7 +878,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype">gchar *&nbsp;</td>
           <td class="paramname"> <em>cModuleName</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -625,7 +888,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="7ca00faa94e15ab8d7cb3ec1d7b78509"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_deactivate_module_instance_and_unload" ref="7ca00faa94e15ab8d7cb3ec1d7b78509" args="(CairoDockModuleInstance *pInstance)" -->
+<a class="anchor" name="7ca00faa94e15ab8d7cb3ec1d7b78509"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_deactivate_module_instance_and_unload" ref="7ca00faa94e15ab8d7cb3ec1d7b78509" args="(CairoDockModuleInstance *pInstance)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -635,7 +898,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype"><a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a> *&nbsp;</td>
           <td class="paramname"> <em>pInstance</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -645,17 +908,17 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="5e77bb535cc42faefcd1ddf0e049c810"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_deactivate_module_and_unload" ref="5e77bb535cc42faefcd1ddf0e049c810" args="(gchar *cModuleName)" -->
+<a class="anchor" name="389a63b1b6018cc9dc44ef22e990887e"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_deactivate_module_and_unload" ref="389a63b1b6018cc9dc44ef22e990887e" args="(const gchar *cModuleName)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void cairo_dock_deactivate_module_and_unload           </td>
           <td>(</td>
-          <td class="paramtype">gchar *&nbsp;</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cModuleName</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -665,7 +928,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="280a48060dc459c80afb70b74ea72b4b"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_configure_module_instance" ref="280a48060dc459c80afb70b74ea72b4b" args="(GtkWindow *pParentWindow, CairoDockModuleInstance *pModuleInstance, GError **erreur)" -->
+<a class="anchor" name="280a48060dc459c80afb70b74ea72b4b"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_configure_module_instance" ref="280a48060dc459c80afb70b74ea72b4b" args="(GtkWindow *pParentWindow, CairoDockModuleInstance *pModuleInstance, GError **erreur)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -690,7 +953,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -700,7 +963,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="e61a2d0227b33f057ff52f76014badf3"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_configure_inactive_module" ref="e61a2d0227b33f057ff52f76014badf3" args="(GtkWindow *pParentWindow, CairoDockModule *pModule)" -->
+<a class="anchor" name="e61a2d0227b33f057ff52f76014badf3"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_configure_inactive_module" ref="e61a2d0227b33f057ff52f76014badf3" args="(GtkWindow *pParentWindow, CairoDockModule *pModule)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -719,7 +982,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -729,7 +992,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="78d4d2200a30877082bb31f2cf81114e"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_configure_module" ref="78d4d2200a30877082bb31f2cf81114e" args="(GtkWindow *pParentWindow, const gchar *cModuleName)" -->
+<a class="anchor" name="78d4d2200a30877082bb31f2cf81114e"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_configure_module" ref="78d4d2200a30877082bb31f2cf81114e" args="(GtkWindow *pParentWindow, const gchar *cModuleName)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -748,7 +1011,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -758,7 +1021,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="61b06ff4ca27f0f7e7baa2f9dc37fc5f"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_find_module_from_name" ref="61b06ff4ca27f0f7e7baa2f9dc37fc5f" args="(const gchar *cModuleName)" -->
+<a class="anchor" name="61b06ff4ca27f0f7e7baa2f9dc37fc5f"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_find_module_from_name" ref="61b06ff4ca27f0f7e7baa2f9dc37fc5f" args="(const gchar *cModuleName)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -768,7 +1031,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cModuleName</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -778,7 +1041,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="1a2cb6228befba140d98e4919551b0ad"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_foreach_desklet" ref="1a2cb6228befba140d98e4919551b0ad" args="(CairoDockForeachDeskletFunc pCallback, gpointer user_data)" -->
+<a class="anchor" name="1a2cb6228befba140d98e4919551b0ad"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_foreach_desklet" ref="1a2cb6228befba140d98e4919551b0ad" args="(CairoDockForeachDeskletFunc pCallback, gpointer user_data)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -797,7 +1060,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -807,7 +1070,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="40a97f8b485ff1c7b4d06fe2681a7972"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_foreach_module" ref="40a97f8b485ff1c7b4d06fe2681a7972" args="(GHRFunc pCallback, gpointer user_data)" -->
+<a class="anchor" name="40a97f8b485ff1c7b4d06fe2681a7972"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_foreach_module" ref="40a97f8b485ff1c7b4d06fe2681a7972" args="(GHRFunc pCallback, gpointer user_data)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -826,7 +1089,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -836,7 +1099,36 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="9cf72c33c44d27f78477e39c344ba8f0"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_list_active_modules" ref="9cf72c33c44d27f78477e39c344ba8f0" args="(void)" -->
+<a class="anchor" name="bac6e99d06300666cd4dea678b3fa22f"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_foreach_module_in_alphabetical_order" ref="bac6e99d06300666cd4dea678b3fa22f" args="(GCompareFunc pCallback, gpointer user_data)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a>* cairo_dock_foreach_module_in_alphabetical_order           </td>
+          <td>(</td>
+          <td class="paramtype">GCompareFunc&nbsp;</td>
+          <td class="paramname"> <em>pCallback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gpointer&nbsp;</td>
+          <td class="paramname"> <em>user_data</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="9cf72c33c44d27f78477e39c344ba8f0"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_list_active_modules" ref="9cf72c33c44d27f78477e39c344ba8f0" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -846,7 +1138,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -856,7 +1148,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="1ca94ab7182ffefbf31d787940b71b93"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_update_conf_file_with_active_modules" ref="1ca94ab7182ffefbf31d787940b71b93" args="(void)" -->
+<a class="anchor" name="1ca94ab7182ffefbf31d787940b71b93"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_update_conf_file_with_active_modules" ref="1ca94ab7182ffefbf31d787940b71b93" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -866,7 +1158,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -876,7 +1168,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="321bc77df4a3d1261fe5a682658934b9"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_get_nb_modules" ref="321bc77df4a3d1261fe5a682658934b9" args="(void)" -->
+<a class="anchor" name="321bc77df4a3d1261fe5a682658934b9"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_get_nb_modules" ref="321bc77df4a3d1261fe5a682658934b9" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -886,7 +1178,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -896,7 +1188,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="67bfe85e9e0855cbb10ef66696c226b2"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_update_module_instance_order" ref="67bfe85e9e0855cbb10ef66696c226b2" args="(CairoDockModuleInstance *pModuleInstance, double fOrder)" -->
+<a class="anchor" name="67bfe85e9e0855cbb10ef66696c226b2"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_update_module_instance_order" ref="67bfe85e9e0855cbb10ef66696c226b2" args="(CairoDockModuleInstance *pModuleInstance, double fOrder)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -915,7 +1207,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -925,7 +1217,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="e7fe631338cd962fdfba395b17c473be"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_instanciate_module" ref="e7fe631338cd962fdfba395b17c473be" args="(CairoDockModule *pModule, gchar *cConfFilePah)" -->
+<a class="anchor" name="e7fe631338cd962fdfba395b17c473be"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_instanciate_module" ref="e7fe631338cd962fdfba395b17c473be" args="(CairoDockModule *pModule, gchar *cConfFilePah)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -944,7 +1236,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -954,7 +1246,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="fa0a605ca68bcf1f84b22a34a19519e2"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_free_module_instance" ref="fa0a605ca68bcf1f84b22a34a19519e2" args="(CairoDockModuleInstance *pInstance)" -->
+<a class="anchor" name="fa0a605ca68bcf1f84b22a34a19519e2"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_free_module_instance" ref="fa0a605ca68bcf1f84b22a34a19519e2" args="(CairoDockModuleInstance *pInstance)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -964,7 +1256,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype"><a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a> *&nbsp;</td>
           <td class="paramname"> <em>pInstance</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -974,7 +1266,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="a8dad1142426a0d41125d3d58a4e25f2"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_stop_module_instance" ref="a8dad1142426a0d41125d3d58a4e25f2" args="(CairoDockModuleInstance *pInstance)" -->
+<a class="anchor" name="a8dad1142426a0d41125d3d58a4e25f2"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_stop_module_instance" ref="a8dad1142426a0d41125d3d58a4e25f2" args="(CairoDockModuleInstance *pInstance)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -984,7 +1276,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype"><a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a> *&nbsp;</td>
           <td class="paramname"> <em>pInstance</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -994,7 +1286,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="d8dd26fac0caa0e2c04868eab3bce845"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_deinstanciate_module" ref="d8dd26fac0caa0e2c04868eab3bce845" args="(CairoDockModuleInstance *pInstance)" -->
+<a class="anchor" name="d8dd26fac0caa0e2c04868eab3bce845"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_deinstanciate_module" ref="d8dd26fac0caa0e2c04868eab3bce845" args="(CairoDockModuleInstance *pInstance)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1004,7 +1296,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype"><a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a> *&nbsp;</td>
           <td class="paramname"> <em>pInstance</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1014,7 +1306,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="c1cd75e13df495fd9c2a8d13b6423b3d"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_remove_module_instance" ref="c1cd75e13df495fd9c2a8d13b6423b3d" args="(CairoDockModuleInstance *pInstance)" -->
+<a class="anchor" name="c1cd75e13df495fd9c2a8d13b6423b3d"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_remove_module_instance" ref="c1cd75e13df495fd9c2a8d13b6423b3d" args="(CairoDockModuleInstance *pInstance)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1024,7 +1316,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype"><a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a> *&nbsp;</td>
           <td class="paramname"> <em>pInstance</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1034,7 +1326,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="3da29a5e53164582d2479d89c256b0f1"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_add_module_instance" ref="3da29a5e53164582d2479d89c256b0f1" args="(CairoDockModule *pModule)" -->
+<a class="anchor" name="3da29a5e53164582d2479d89c256b0f1"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_add_module_instance" ref="3da29a5e53164582d2479d89c256b0f1" args="(CairoDockModule *pModule)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1044,7 +1336,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype"><a class="el" href="struct__CairoDockModule.html">CairoDockModule</a> *&nbsp;</td>
           <td class="paramname"> <em>pModule</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1054,7 +1346,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="e23142eb93dc8c27caac77c6268d830d"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_read_module_config" ref="e23142eb93dc8c27caac77c6268d830d" args="(GKeyFile *pKeyFile, CairoDockModuleInstance *pInstance)" -->
+<a class="anchor" name="e23142eb93dc8c27caac77c6268d830d"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_read_module_config" ref="e23142eb93dc8c27caac77c6268d830d" args="(GKeyFile *pKeyFile, CairoDockModuleInstance *pInstance)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1073,7 +1365,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -1083,7 +1375,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="f88a0d40da1adfe698fcb7876347caee"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_reserve_data_slot" ref="f88a0d40da1adfe698fcb7876347caee" args="(CairoDockModuleInstance *pInstance)" -->
+<a class="anchor" name="f88a0d40da1adfe698fcb7876347caee"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_reserve_data_slot" ref="f88a0d40da1adfe698fcb7876347caee" args="(CairoDockModuleInstance *pInstance)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1093,7 +1385,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype"><a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a> *&nbsp;</td>
           <td class="paramname"> <em>pInstance</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1103,7 +1395,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="5bb990b7b7a718c8cb359067b769c717"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_release_data_slot" ref="5bb990b7b7a718c8cb359067b769c717" args="(CairoDockModuleInstance *pInstance)" -->
+<a class="anchor" name="5bb990b7b7a718c8cb359067b769c717"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_release_data_slot" ref="5bb990b7b7a718c8cb359067b769c717" args="(CairoDockModuleInstance *pInstance)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1113,7 +1405,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype"><a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a> *&nbsp;</td>
           <td class="paramname"> <em>pInstance</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1123,7 +1415,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="0f13f82e7e746967e65d6d356a3aafb9"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_preload_internal_modules" ref="0f13f82e7e746967e65d6d356a3aafb9" args="(GHashTable *pModuleTable)" -->
+<a class="anchor" name="0f13f82e7e746967e65d6d356a3aafb9"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_preload_internal_modules" ref="0f13f82e7e746967e65d6d356a3aafb9" args="(GHashTable *pModuleTable)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1133,7 +1425,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype">GHashTable *&nbsp;</td>
           <td class="paramname"> <em>pModuleTable</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1143,7 +1435,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="afe5e32cd6a7d7202d88bea58ec4e571"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_reload_internal_module" ref="afe5e32cd6a7d7202d88bea58ec4e571" args="(CairoDockInternalModule *pModule, const gchar *cConfFilePath)" -->
+<a class="anchor" name="afe5e32cd6a7d7202d88bea58ec4e571"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_reload_internal_module" ref="afe5e32cd6a7d7202d88bea58ec4e571" args="(CairoDockInternalModule *pModule, const gchar *cConfFilePath)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1162,7 +1454,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -1172,7 +1464,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="eb3df0d1de9fdc57044b8ad5104364d2"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_find_internal_module_from_name" ref="eb3df0d1de9fdc57044b8ad5104364d2" args="(const gchar *cModuleName)" -->
+<a class="anchor" name="eb3df0d1de9fdc57044b8ad5104364d2"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_find_internal_module_from_name" ref="eb3df0d1de9fdc57044b8ad5104364d2" args="(const gchar *cModuleName)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1182,7 +1474,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype">const gchar *&nbsp;</td>
           <td class="paramname"> <em>cModuleName</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1192,7 +1484,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="ecdc2e1c0965b306b5eab7d8e1dd7512"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_get_internal_module_config" ref="ecdc2e1c0965b306b5eab7d8e1dd7512" args="(CairoDockInternalModule *pModule, GKeyFile *pKeyFile)" -->
+<a class="anchor" name="ecdc2e1c0965b306b5eab7d8e1dd7512"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_get_internal_module_config" ref="ecdc2e1c0965b306b5eab7d8e1dd7512" args="(CairoDockInternalModule *pModule, GKeyFile *pKeyFile)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1211,7 +1503,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -1221,7 +1513,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="cb55ef54d45f14813ad72eee80fa8c22"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_get_global_config" ref="cb55ef54d45f14813ad72eee80fa8c22" args="(GKeyFile *pKeyFile)" -->
+<a class="anchor" name="cb55ef54d45f14813ad72eee80fa8c22"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_get_global_config" ref="cb55ef54d45f14813ad72eee80fa8c22" args="(GKeyFile *pKeyFile)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1231,7 +1523,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype">GKeyFile *&nbsp;</td>
           <td class="paramname"> <em>pKeyFile</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1241,7 +1533,7 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 
 </div>
 </div><p>
-<a class="anchor" name="1cbcc27f9641947d99f2a74a7a7ad594"></a><!-- doxytag: member="cairo-dock-modules.h::cairo_dock_popup_module_instance_description" ref="1cbcc27f9641947d99f2a74a7a7ad594" args="(CairoDockModuleInstance *pModuleInstance)" -->
+<a class="anchor" name="1cbcc27f9641947d99f2a74a7a7ad594"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_popup_module_instance_description" ref="1cbcc27f9641947d99f2a74a7a7ad594" args="(CairoDockModuleInstance *pModuleInstance)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1251,7 +1543,36 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
           <td class="paramtype"><a class="el" href="struct__CairoDockModuleInstance.html">CairoDockModuleInstance</a> *&nbsp;</td>
           <td class="paramname"> <em>pModuleInstance</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="9c215ca16d045c2b9edeb9604c5edd40"></a><!-- doxytag: member="cairo&#45;dock&#45;modules.h::cairo_dock_attach_to_another_module" ref="9c215ca16d045c2b9edeb9604c5edd40" args="(CairoDockVisitCard *pVisitCard, const gchar *cOtherModuleName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_attach_to_another_module           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDockVisitCard.html">CairoDockVisitCard</a> *&nbsp;</td>
+          <td class="paramname"> <em>pVisitCard</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cOtherModuleName</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -1262,8 +1583,8 @@ Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire 
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Thu Apr 9 02:53:50 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Sun Jun 21 04:02:15 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>
 </html>

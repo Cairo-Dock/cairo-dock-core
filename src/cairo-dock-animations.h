@@ -14,6 +14,8 @@ G_BEGIN_DECLS
 
 typedef gboolean (*CairoDockTransitionRenderFunc) (gpointer pUserData, cairo_t *pIconContext);
 typedef gboolean (*CairoDockTransitionGLRenderFunc) (gpointer pUserData);
+
+/// Transitions are an easy way to set an animation on an Icon to make it change from a state to another.
 struct _CairoDockTransition {
 	CairoDockTransitionRenderFunc render;
 	CairoDockTransitionGLRenderFunc render_opengl;

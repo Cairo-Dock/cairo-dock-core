@@ -30,6 +30,38 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <GL/gl.h>
 #include <GL/glx.h>
 
+/*! \mainpage Cairo-Dock's API documentation.
+ *
+ * \section intro_sec Introduction
+ *
+ * Modules are compiled .so files (that is to say, library) that are plugged into the dock at run-time.
+ * Due to this fact, they can use any function used by the dock, and have a total interacton freedom on the dock.
+ * The advantage is that applets can do anything, in fact they are extensions of the dock itself.
+ * The drawback is that a buggy applet can make the dock unstable.
+ * Cairo-Dock exports its API through the installed .h headers. We will see here the main structures, and then the framework dedicated to easily write applets.
+ *
+ * \section install_sec Installation
+ * 
+ * \section main_struct_sec Main structures
+ *
+ * \subsection containers Containers
+ * 
+ * \subsection icons Icons
+ * 
+ * \subsection dock Dock
+ * 
+ * \subsection desklet Desklet
+ * 
+ * \subsection dialog Dialog
+ * 
+ * \subsection flying Flying Container
+ * 
+ * 
+ *  
+ * etc...
+ */
+
+
 
 typedef struct _CairoDockRenderer CairoDockRenderer;
 typedef struct _CairoDeskletRenderer CairoDeskletRenderer;

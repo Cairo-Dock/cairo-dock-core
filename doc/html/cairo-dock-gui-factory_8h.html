@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-gui-factory.h</title>
-<link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
+<link href="doxygen.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.5 -->
+<!-- Généré par Doxygen 1.5.8 -->
 <div class="navigation" id="top">
   <div class="tabs">
     <ul>
@@ -23,6 +23,12 @@
     </li>
     </ul>
   </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>Liste&nbsp;des&nbsp;fichiers</span></a></li>
+      <li><a href="globals.html"><span>Portée&nbsp;globale</span></a></li>
+    </ul>
+  </div>
 </div>
 <div class="contents">
 <h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-gui-factory.h</h1><table border="0" cellpadding="0" cellspacing="0">
@@ -38,7 +44,7 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gui-factory_8h.html#c5a64ef39c21b486ddfae5634d575021">cairo_dock_build_dialog_decorator_list_for_gui</a> (GHashTable *pHashTable)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gui-factory_8h.html#3ef5b5284e89ba439f9675b625c854f7">cairo_dock_parse_key_comment</a> (gchar *cKeyComment, char *iElementType, int *iNbElements, gchar ***pAuthorizedValuesList, gboolean *bAligned, gchar **cTipString)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gui-factory_8h.html#6e33c5ca5626b2067e75a49d66e6c22a">cairo_dock_parse_key_comment</a> (gchar *cKeyComment, char *iElementType, guint *iNbElements, gchar ***pAuthorizedValuesList, gboolean *bAligned, gchar **cTipString)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">GtkWidget *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gui-factory_8h.html#f5a293b1d076ba1b55ad8e1b56ce627c">cairo_dock_build_group_widget</a> (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)</td></tr>
 
@@ -50,6 +56,8 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gui-factory_8h.html#32eda439a65f9d52b3bb2c6c3f886d51">cairo_dock_free_generated_widget_list</a> (GSList *pWidgetList)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GSList *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gui-factory_8h.html#738c837236456b10d69e98f31cfd6c36">cairo_dock_find_widgets_from_name</a> (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName)</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">GtkWidget *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gui-factory_8h.html#7a5b287ce83b2db63ef07df3e9cece0d">cairo_dock_find_widget_from_name</a> (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-gui-factory_8h.html#544d602d46ee6614ae4581cd1baf3bad">cairo_dock_fill_combo_with_themes</a> (GtkWidget *pCombo, GHashTable *pThemeTable, gchar *cActiveTheme)</td></tr>
@@ -58,7 +66,7 @@
 
 </table>
 <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="96872b45ce172abebf0521890fe9ddc8"></a><!-- doxytag: member="cairo-dock-gui-factory.h::cairo_dock_build_renderer_list_for_gui" ref="96872b45ce172abebf0521890fe9ddc8" args="(GHashTable *pHashTable)" -->
+<a class="anchor" name="96872b45ce172abebf0521890fe9ddc8"></a><!-- doxytag: member="cairo&#45;dock&#45;gui&#45;factory.h::cairo_dock_build_renderer_list_for_gui" ref="96872b45ce172abebf0521890fe9ddc8" args="(GHashTable *pHashTable)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -68,7 +76,7 @@
           <td class="paramtype">GHashTable *&nbsp;</td>
           <td class="paramname"> <em>pHashTable</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -78,7 +86,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="a3739005b9d9442913679ed971ceb336"></a><!-- doxytag: member="cairo-dock-gui-factory.h::cairo_dock_build_desklet_decorations_list_for_gui" ref="a3739005b9d9442913679ed971ceb336" args="(GHashTable *pHashTable)" -->
+<a class="anchor" name="a3739005b9d9442913679ed971ceb336"></a><!-- doxytag: member="cairo&#45;dock&#45;gui&#45;factory.h::cairo_dock_build_desklet_decorations_list_for_gui" ref="a3739005b9d9442913679ed971ceb336" args="(GHashTable *pHashTable)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -88,7 +96,7 @@
           <td class="paramtype">GHashTable *&nbsp;</td>
           <td class="paramname"> <em>pHashTable</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -98,7 +106,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="8803b91d8057f9f250b8a4628425a9f5"></a><!-- doxytag: member="cairo-dock-gui-factory.h::cairo_dock_build_desklet_decorations_list_for_applet_gui" ref="8803b91d8057f9f250b8a4628425a9f5" args="(GHashTable *pHashTable)" -->
+<a class="anchor" name="8803b91d8057f9f250b8a4628425a9f5"></a><!-- doxytag: member="cairo&#45;dock&#45;gui&#45;factory.h::cairo_dock_build_desklet_decorations_list_for_applet_gui" ref="8803b91d8057f9f250b8a4628425a9f5" args="(GHashTable *pHashTable)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -108,7 +116,7 @@
           <td class="paramtype">GHashTable *&nbsp;</td>
           <td class="paramname"> <em>pHashTable</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -118,7 +126,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="fb2e63a2e3505032d08e699773923423"></a><!-- doxytag: member="cairo-dock-gui-factory.h::cairo_dock_build_animations_list_for_gui" ref="fb2e63a2e3505032d08e699773923423" args="(GHashTable *pHashTable)" -->
+<a class="anchor" name="fb2e63a2e3505032d08e699773923423"></a><!-- doxytag: member="cairo&#45;dock&#45;gui&#45;factory.h::cairo_dock_build_animations_list_for_gui" ref="fb2e63a2e3505032d08e699773923423" args="(GHashTable *pHashTable)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -128,7 +136,7 @@
           <td class="paramtype">GHashTable *&nbsp;</td>
           <td class="paramname"> <em>pHashTable</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -138,7 +146,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="c5a64ef39c21b486ddfae5634d575021"></a><!-- doxytag: member="cairo-dock-gui-factory.h::cairo_dock_build_dialog_decorator_list_for_gui" ref="c5a64ef39c21b486ddfae5634d575021" args="(GHashTable *pHashTable)" -->
+<a class="anchor" name="c5a64ef39c21b486ddfae5634d575021"></a><!-- doxytag: member="cairo&#45;dock&#45;gui&#45;factory.h::cairo_dock_build_dialog_decorator_list_for_gui" ref="c5a64ef39c21b486ddfae5634d575021" args="(GHashTable *pHashTable)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -148,7 +156,7 @@
           <td class="paramtype">GHashTable *&nbsp;</td>
           <td class="paramname"> <em>pHashTable</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -158,7 +166,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="3ef5b5284e89ba439f9675b625c854f7"></a><!-- doxytag: member="cairo-dock-gui-factory.h::cairo_dock_parse_key_comment" ref="3ef5b5284e89ba439f9675b625c854f7" args="(gchar *cKeyComment, char *iElementType, int *iNbElements, gchar ***pAuthorizedValuesList, gboolean *bAligned, gchar **cTipString)" -->
+<a class="anchor" name="6e33c5ca5626b2067e75a49d66e6c22a"></a><!-- doxytag: member="cairo&#45;dock&#45;gui&#45;factory.h::cairo_dock_parse_key_comment" ref="6e33c5ca5626b2067e75a49d66e6c22a" args="(gchar *cKeyComment, char *iElementType, guint *iNbElements, gchar ***pAuthorizedValuesList, gboolean *bAligned, gchar **cTipString)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -177,7 +185,7 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int *&nbsp;</td>
+          <td class="paramtype">guint *&nbsp;</td>
           <td class="paramname"> <em>iNbElements</em>, </td>
         </tr>
         <tr>
@@ -201,7 +209,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -211,7 +219,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="f5a293b1d076ba1b55ad8e1b56ce627c"></a><!-- doxytag: member="cairo-dock-gui-factory.h::cairo_dock_build_group_widget" ref="f5a293b1d076ba1b55ad8e1b56ce627c" args="(GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)" -->
+<a class="anchor" name="f5a293b1d076ba1b55ad8e1b56ce627c"></a><!-- doxytag: member="cairo&#45;dock&#45;gui&#45;factory.h::cairo_dock_build_group_widget" ref="f5a293b1d076ba1b55ad8e1b56ce627c" args="(GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -260,7 +268,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -270,7 +278,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="430a1c7db5449173b9c2cd7e11269216"></a><!-- doxytag: member="cairo-dock-gui-factory.h::cairo_dock_build_key_file_widget" ref="430a1c7db5449173b9c2cd7e11269216" args="(GKeyFile *pKeyFile, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)" -->
+<a class="anchor" name="430a1c7db5449173b9c2cd7e11269216"></a><!-- doxytag: member="cairo&#45;dock&#45;gui&#45;factory.h::cairo_dock_build_key_file_widget" ref="430a1c7db5449173b9c2cd7e11269216" args="(GKeyFile *pKeyFile, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -313,7 +321,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -323,7 +331,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="232552428f0f973df55cb15b8a5006df"></a><!-- doxytag: member="cairo-dock-gui-factory.h::cairo_dock_build_conf_file_widget" ref="232552428f0f973df55cb15b8a5006df" args="(const gchar *cConfFilePath, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)" -->
+<a class="anchor" name="232552428f0f973df55cb15b8a5006df"></a><!-- doxytag: member="cairo&#45;dock&#45;gui&#45;factory.h::cairo_dock_build_conf_file_widget" ref="232552428f0f973df55cb15b8a5006df" args="(const gchar *cConfFilePath, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -366,7 +374,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -376,7 +384,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="b247cff92f05bad671971a7435ace512"></a><!-- doxytag: member="cairo-dock-gui-factory.h::cairo_dock_update_keyfile_from_widget_list" ref="b247cff92f05bad671971a7435ace512" args="(GKeyFile *pKeyFile, GSList *pWidgetList)" -->
+<a class="anchor" name="b247cff92f05bad671971a7435ace512"></a><!-- doxytag: member="cairo&#45;dock&#45;gui&#45;factory.h::cairo_dock_update_keyfile_from_widget_list" ref="b247cff92f05bad671971a7435ace512" args="(GKeyFile *pKeyFile, GSList *pWidgetList)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -395,7 +403,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -405,7 +413,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="32eda439a65f9d52b3bb2c6c3f886d51"></a><!-- doxytag: member="cairo-dock-gui-factory.h::cairo_dock_free_generated_widget_list" ref="32eda439a65f9d52b3bb2c6c3f886d51" args="(GSList *pWidgetList)" -->
+<a class="anchor" name="32eda439a65f9d52b3bb2c6c3f886d51"></a><!-- doxytag: member="cairo&#45;dock&#45;gui&#45;factory.h::cairo_dock_free_generated_widget_list" ref="32eda439a65f9d52b3bb2c6c3f886d51" args="(GSList *pWidgetList)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -415,7 +423,7 @@
           <td class="paramtype">GSList *&nbsp;</td>
           <td class="paramname"> <em>pWidgetList</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -425,7 +433,42 @@
 
 </div>
 </div><p>
-<a class="anchor" name="7a5b287ce83b2db63ef07df3e9cece0d"></a><!-- doxytag: member="cairo-dock-gui-factory.h::cairo_dock_find_widget_from_name" ref="7a5b287ce83b2db63ef07df3e9cece0d" args="(GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName)" -->
+<a class="anchor" name="738c837236456b10d69e98f31cfd6c36"></a><!-- doxytag: member="cairo&#45;dock&#45;gui&#45;factory.h::cairo_dock_find_widgets_from_name" ref="738c837236456b10d69e98f31cfd6c36" args="(GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GSList* cairo_dock_find_widgets_from_name           </td>
+          <td>(</td>
+          <td class="paramtype">GSList *&nbsp;</td>
+          <td class="paramname"> <em>pWidgetList</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cGroupName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cKeyName</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="7a5b287ce83b2db63ef07df3e9cece0d"></a><!-- doxytag: member="cairo&#45;dock&#45;gui&#45;factory.h::cairo_dock_find_widget_from_name" ref="7a5b287ce83b2db63ef07df3e9cece0d" args="(GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -450,7 +493,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -460,7 +503,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="544d602d46ee6614ae4581cd1baf3bad"></a><!-- doxytag: member="cairo-dock-gui-factory.h::cairo_dock_fill_combo_with_themes" ref="544d602d46ee6614ae4581cd1baf3bad" args="(GtkWidget *pCombo, GHashTable *pThemeTable, gchar *cActiveTheme)" -->
+<a class="anchor" name="544d602d46ee6614ae4581cd1baf3bad"></a><!-- doxytag: member="cairo&#45;dock&#45;gui&#45;factory.h::cairo_dock_fill_combo_with_themes" ref="544d602d46ee6614ae4581cd1baf3bad" args="(GtkWidget *pCombo, GHashTable *pThemeTable, gchar *cActiveTheme)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -485,7 +528,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -495,7 +538,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="0bc7475dcc72dcbd419253215440a4e8"></a><!-- doxytag: member="cairo-dock-gui-factory.h::cairo_dock_fill_combo_with_list" ref="0bc7475dcc72dcbd419253215440a4e8" args="(GtkWidget *pCombo, GList *pElementList, const gchar *cActiveElement)" -->
+<a class="anchor" name="0bc7475dcc72dcbd419253215440a4e8"></a><!-- doxytag: member="cairo&#45;dock&#45;gui&#45;factory.h::cairo_dock_fill_combo_with_list" ref="0bc7475dcc72dcbd419253215440a4e8" args="(GtkWidget *pCombo, GList *pElementList, const gchar *cActiveElement)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -520,7 +563,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -531,8 +574,8 @@
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Thu Apr 9 02:53:50 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Sun Jun 21 04:02:15 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>
 </html>

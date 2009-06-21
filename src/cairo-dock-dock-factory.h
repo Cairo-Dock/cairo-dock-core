@@ -23,6 +23,7 @@ typedef void (*CairoDockRenderOptimizedFunc) (cairo_t *pCairoContext, CairoDock 
 typedef void (*CairoDockSetSubDockPositionFunc) (Icon *pPointedIcon, CairoDock *pParentDock);
 typedef void (*CairoDockGLRenderFunc) (CairoDock *pDock);
 
+/// Dock's renderer, also known as 'view'.
 struct _CairoDockRenderer {
 	/// chemin d'un fichier readme destine a presenter de maniere succinte la vue.
 	gchar *cReadmeFilePath;
@@ -54,6 +55,7 @@ typedef enum {
 	CAIRO_DOCK_MOUSE_OUTSIDE
 	} CairoDockMousePositionType;
 
+/// Definition of a Dock, which derives from a Container.
 struct _CairoDock {
 	/// type "dock".
 	CairoDockTypeContainer iType;

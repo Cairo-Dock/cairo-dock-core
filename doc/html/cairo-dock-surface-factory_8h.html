@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-surface-factory.h</title>
-<link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
+<link href="doxygen.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.5 -->
+<!-- Généré par Doxygen 1.5.8 -->
 <div class="navigation" id="top">
   <div class="tabs">
     <ul>
@@ -23,29 +23,64 @@
     </li>
     </ul>
   </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>Liste&nbsp;des&nbsp;fichiers</span></a></li>
+      <li><a href="globals.html"><span>Portée&nbsp;globale</span></a></li>
+    </ul>
+  </div>
 </div>
 <div class="contents">
 <h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-surface-factory.h</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Structures de données</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockLabelDescription.html">_CairoDockLabelDescription</a></td></tr>
+
 <tr><td colspan="2"><br><h2>Macros</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#94204b36e17c3d781157da4d7a0e5684">CAIRO_DOCK_ORIENTATION_MASK</a></td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#5a46860771e8a7ec70e00ac7f894efbf">cairo_dock_create_surface_for_square_icon</a>(cImagePath, pSourceContext, fImageSize)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#f0d77251c82633662d9f16daa7d1ce96">cairo_dock_create_surface_from_text</a>(cText, pSourceContext, pLabelDescription, fMaxScale, iTextWidth, iTextHeight, fTextXOffset, fTextYOffset)</td></tr>
 
+<tr><td colspan="2"><br><h2>Énumérations</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072e">CairoDockLoadImageModifier</a> { <br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072eb3a7f233c590624e5c0e7c6e5c4ddf3d">CAIRO_DOCK_FILL_SPACE</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072eb33eb63d3efd7b6f21a789267c8307ae">CAIRO_DOCK_KEEP_RATIO</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072e4db251da9e43be96902688b3c7da54aa">CAIRO_DOCK_DONT_ZOOM_IN</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072efb77ff9563cbae37bf9f9400cb4edcb1">CAIRO_DOCK_ORIENTATION_HFLIP</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072ee2e16d12c7783540f1ae3306101edcfa">CAIRO_DOCK_ORIENTATION_ROT_180</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072e0bebc0418edaed7c7f04cd6c83d902e4">CAIRO_DOCK_ORIENTATION_VFLIP</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072e3c7ba7e3aeb10cc2acce2990c0801dfd">CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072e95346d79b577ec1308db8fdf840155ad">CAIRO_DOCK_ORIENTATION_ROT_90</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072e5dfea71a6aa1ddef38845ccc5a425d98">CAIRO_DOCK_ORIENTATION_ROT_90_VFLIP</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072e3705bb6e6cb5630ba5708d7f7374bec6">CAIRO_DOCK_ORIENTATION_ROT_270</a>
+<br>
+ }</td></tr>
+
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#0dd28c42272cc39c9ff3a80fc2070b96">cairo_dock_calculate_size_fill</a> (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoomWidth, double *fZoomHeight)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#a6bc5bbe3641e32e63c953a610a47602">cairo_dock_calculate_size_fill</a> (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoomWidth, double *fZoomHeight)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#a0f77b781cfe714f6bf441572c20d863">cairo_dock_calculate_size_constant_ratio</a> (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoom)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#45e6e4f68a207f20d6adac07311c337b">cairo_dock_calculate_constrainted_size</a> (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, <a class="el" href="cairo-dock-struct_8h.html#c09dfb92e24fb51c052b60dcdc3c072e">CairoDockLoadImageModifier</a> iLoadingModifier, double *fZoomWidth, double *fZoomHeight)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#45e6e4f68a207f20d6adac07311c337b">cairo_dock_calculate_constrainted_size</a> (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, <a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072e">CairoDockLoadImageModifier</a> iLoadingModifier, double *fZoomWidth, double *fZoomHeight)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#8b6a3e0b8a54450c1a667e558bfd7943">cairo_dock_create_surface_from_xicon_buffer</a> (gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#36752f3cc1f02891618d1c0f7e6b0f82">cairo_dock_create_surface_from_pixbuf</a> (GdkPixbuf *pixbuf, cairo_t *pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, <a class="el" href="cairo-dock-struct_8h.html#c09dfb92e24fb51c052b60dcdc3c072e">CairoDockLoadImageModifier</a> iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#36752f3cc1f02891618d1c0f7e6b0f82">cairo_dock_create_surface_from_pixbuf</a> (GdkPixbuf *pixbuf, cairo_t *pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, <a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072e">CairoDockLoadImageModifier</a> iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#dd90efd1ae48de453cf1a0306769ca76">_cairo_dock_create_blank_surface</a> (cairo_t *pSourceContext, int <a class="el" href="essai_8h.html#e4abd8cd04e0af751c7c2da30457bcbf">iWidth</a>, int iHeight)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#c454ab86c51ef73b68f74cd5cf28ef09">cairo_dock_create_surface_from_image</a> (const gchar *cImagePath, cairo_t *pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, <a class="el" href="cairo-dock-struct_8h.html#c09dfb92e24fb51c052b60dcdc3c072e">CairoDockLoadImageModifier</a> iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#c454ab86c51ef73b68f74cd5cf28ef09">cairo_dock_create_surface_from_image</a> (const gchar *cImagePath, cairo_t *pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, <a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072e">CairoDockLoadImageModifier</a> iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#76c777170b19b18171be9b8eaa7cdb1c">cairo_dock_create_surface_for_icon</a> (const gchar *cImagePath, cairo_t *pSourceContext, double fImageWidth, double fImageHeight)</td></tr>
 
@@ -58,8 +93,24 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-surface-factory_8h.html#157233143037e32dc1b3866b31387380">cairo_dock_duplicate_surface</a> (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fWidth, double fHeight, double fDesiredWidth, double fDesiredHeight)</td></tr>
 
 </table>
-<hr><h2>Documentation des macros</h2>
-<a class="anchor" name="5a46860771e8a7ec70e00ac7f894efbf"></a><!-- doxytag: member="cairo-dock-surface-factory.h::cairo_dock_create_surface_for_square_icon" ref="5a46860771e8a7ec70e00ac7f894efbf" args="(cImagePath, pSourceContext, fImageSize)" -->
+<hr><a name="_details"></a><h2>Description détaillée</h2>
+This class contains functions to load any image/X buffer/GdkPixbuf/text into a cairo-surface. The loading of an image can be modified by a mask, to take into account the ratio, zoom, orientation, etc. <hr><h2>Documentation des macros</h2>
+<a class="anchor" name="94204b36e17c3d781157da4d7a0e5684"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::CAIRO_DOCK_ORIENTATION_MASK" ref="94204b36e17c3d781157da4d7a0e5684" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CAIRO_DOCK_ORIENTATION_MASK          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="5a46860771e8a7ec70e00ac7f894efbf"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::cairo_dock_create_surface_for_square_icon" ref="5a46860771e8a7ec70e00ac7f894efbf" args="(cImagePath, pSourceContext, fImageSize)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -75,7 +126,7 @@
           <td class="paramtype">fImageSize&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -93,7 +144,7 @@ Cree une surface à partir d'une image au format quelconque, a la taille donnée
 
 </div>
 </div><p>
-<a class="anchor" name="f0d77251c82633662d9f16daa7d1ce96"></a><!-- doxytag: member="cairo-dock-surface-factory.h::cairo_dock_create_surface_from_text" ref="f0d77251c82633662d9f16daa7d1ce96" args="(cText, pSourceContext, pLabelDescription, fMaxScale, iTextWidth, iTextHeight, fTextXOffset, fTextYOffset)" -->
+<a class="anchor" name="f0d77251c82633662d9f16daa7d1ce96"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::cairo_dock_create_surface_from_text" ref="f0d77251c82633662d9f16daa7d1ce96" args="(cText, pSourceContext, pLabelDescription, fMaxScale, iTextWidth, iTextHeight, fTextXOffset, fTextYOffset)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -124,7 +175,7 @@ Cree une surface à partir d'une image au format quelconque, a la taille donnée
           <td class="paramtype">fTextYOffset&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -134,13 +185,53 @@ Cree une surface à partir d'une image au format quelconque, a la taille donnée
 
 </div>
 </div><p>
-<hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="0dd28c42272cc39c9ff3a80fc2070b96"></a><!-- doxytag: member="cairo-dock-surface-factory.h::cairo_dock_calculate_size_fill" ref="0dd28c42272cc39c9ff3a80fc2070b96" args="(double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoomWidth, double *fZoomHeight)" -->
+<hr><h2>Documentation du type de l'énumération</h2>
+<a class="anchor" name="c09dfb92e24fb51c052b60dcdc3c072e"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::CairoDockLoadImageModifier" ref="c09dfb92e24fb51c052b60dcdc3c072e" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">G_BEGIN_DECLS void cairo_dock_calculate_size_fill           </td>
+          <td class="memname">enum <a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072e">CairoDockLoadImageModifier</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+<dl compact><dt><b>Valeurs énumérées: </b></dt><dd>
+<table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" name="c09dfb92e24fb51c052b60dcdc3c072eb3a7f233c590624e5c0e7c6e5c4ddf3d"></a><!-- doxytag: member="CAIRO_DOCK_FILL_SPACE" ref="c09dfb92e24fb51c052b60dcdc3c072eb3a7f233c590624e5c0e7c6e5c4ddf3d" args="" -->CAIRO_DOCK_FILL_SPACE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="c09dfb92e24fb51c052b60dcdc3c072eb33eb63d3efd7b6f21a789267c8307ae"></a><!-- doxytag: member="CAIRO_DOCK_KEEP_RATIO" ref="c09dfb92e24fb51c052b60dcdc3c072eb33eb63d3efd7b6f21a789267c8307ae" args="" -->CAIRO_DOCK_KEEP_RATIO</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="c09dfb92e24fb51c052b60dcdc3c072e4db251da9e43be96902688b3c7da54aa"></a><!-- doxytag: member="CAIRO_DOCK_DONT_ZOOM_IN" ref="c09dfb92e24fb51c052b60dcdc3c072e4db251da9e43be96902688b3c7da54aa" args="" -->CAIRO_DOCK_DONT_ZOOM_IN</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="c09dfb92e24fb51c052b60dcdc3c072efb77ff9563cbae37bf9f9400cb4edcb1"></a><!-- doxytag: member="CAIRO_DOCK_ORIENTATION_HFLIP" ref="c09dfb92e24fb51c052b60dcdc3c072efb77ff9563cbae37bf9f9400cb4edcb1" args="" -->CAIRO_DOCK_ORIENTATION_HFLIP</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="c09dfb92e24fb51c052b60dcdc3c072ee2e16d12c7783540f1ae3306101edcfa"></a><!-- doxytag: member="CAIRO_DOCK_ORIENTATION_ROT_180" ref="c09dfb92e24fb51c052b60dcdc3c072ee2e16d12c7783540f1ae3306101edcfa" args="" -->CAIRO_DOCK_ORIENTATION_ROT_180</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="c09dfb92e24fb51c052b60dcdc3c072e0bebc0418edaed7c7f04cd6c83d902e4"></a><!-- doxytag: member="CAIRO_DOCK_ORIENTATION_VFLIP" ref="c09dfb92e24fb51c052b60dcdc3c072e0bebc0418edaed7c7f04cd6c83d902e4" args="" -->CAIRO_DOCK_ORIENTATION_VFLIP</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="c09dfb92e24fb51c052b60dcdc3c072e3c7ba7e3aeb10cc2acce2990c0801dfd"></a><!-- doxytag: member="CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP" ref="c09dfb92e24fb51c052b60dcdc3c072e3c7ba7e3aeb10cc2acce2990c0801dfd" args="" -->CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="c09dfb92e24fb51c052b60dcdc3c072e95346d79b577ec1308db8fdf840155ad"></a><!-- doxytag: member="CAIRO_DOCK_ORIENTATION_ROT_90" ref="c09dfb92e24fb51c052b60dcdc3c072e95346d79b577ec1308db8fdf840155ad" args="" -->CAIRO_DOCK_ORIENTATION_ROT_90</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="c09dfb92e24fb51c052b60dcdc3c072e5dfea71a6aa1ddef38845ccc5a425d98"></a><!-- doxytag: member="CAIRO_DOCK_ORIENTATION_ROT_90_VFLIP" ref="c09dfb92e24fb51c052b60dcdc3c072e5dfea71a6aa1ddef38845ccc5a425d98" args="" -->CAIRO_DOCK_ORIENTATION_ROT_90_VFLIP</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="c09dfb92e24fb51c052b60dcdc3c072e3705bb6e6cb5630ba5708d7f7374bec6"></a><!-- doxytag: member="CAIRO_DOCK_ORIENTATION_ROT_270" ref="c09dfb92e24fb51c052b60dcdc3c072e3705bb6e6cb5630ba5708d7f7374bec6" args="" -->CAIRO_DOCK_ORIENTATION_ROT_270</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dl>
+
+</div>
+</div><p>
+<hr><h2>Documentation des fonctions</h2>
+<a class="anchor" name="a6bc5bbe3641e32e63c953a610a47602"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::cairo_dock_calculate_size_fill" ref="a6bc5bbe3641e32e63c953a610a47602" args="(double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoomWidth, double *fZoomHeight)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_calculate_size_fill           </td>
           <td>(</td>
           <td class="paramtype">double *&nbsp;</td>
           <td class="paramname"> <em>fImageWidth</em>, </td>
@@ -184,7 +275,7 @@ Cree une surface à partir d'une image au format quelconque, a la taille donnée
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -205,7 +296,7 @@ Calcule la taille d'une image selon une contrainte en largeur et hauteur de mani
 
 </div>
 </div><p>
-<a class="anchor" name="a0f77b781cfe714f6bf441572c20d863"></a><!-- doxytag: member="cairo-dock-surface-factory.h::cairo_dock_calculate_size_constant_ratio" ref="a0f77b781cfe714f6bf441572c20d863" args="(double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoom)" -->
+<a class="anchor" name="a0f77b781cfe714f6bf441572c20d863"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::cairo_dock_calculate_size_constant_ratio" ref="a0f77b781cfe714f6bf441572c20d863" args="(double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoom)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -248,7 +339,7 @@ Calcule la taille d'une image selon une contrainte en largeur et hauteur de mani
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -268,7 +359,7 @@ Calcule la taille d'une image selon une contrainte en largeur et hauteur en gard
 
 </div>
 </div><p>
-<a class="anchor" name="45e6e4f68a207f20d6adac07311c337b"></a><!-- doxytag: member="cairo-dock-surface-factory.h::cairo_dock_calculate_constrainted_size" ref="45e6e4f68a207f20d6adac07311c337b" args="(double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fZoomWidth, double *fZoomHeight)" -->
+<a class="anchor" name="45e6e4f68a207f20d6adac07311c337b"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::cairo_dock_calculate_constrainted_size" ref="45e6e4f68a207f20d6adac07311c337b" args="(double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fZoomWidth, double *fZoomHeight)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -299,7 +390,7 @@ Calcule la taille d'une image selon une contrainte en largeur et hauteur en gard
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#c09dfb92e24fb51c052b60dcdc3c072e">CairoDockLoadImageModifier</a>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072e">CairoDockLoadImageModifier</a>&nbsp;</td>
           <td class="paramname"> <em>iLoadingModifier</em>, </td>
         </tr>
         <tr>
@@ -317,7 +408,7 @@ Calcule la taille d'une image selon une contrainte en largeur et hauteur en gard
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -338,7 +429,7 @@ Calcule la taille d'une image selon une contrainte en largeur et hauteur. <dl co
 
 </div>
 </div><p>
-<a class="anchor" name="8b6a3e0b8a54450c1a667e558bfd7943"></a><!-- doxytag: member="cairo-dock-surface-factory.h::cairo_dock_create_surface_from_xicon_buffer" ref="8b6a3e0b8a54450c1a667e558bfd7943" args="(gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)" -->
+<a class="anchor" name="8b6a3e0b8a54450c1a667e558bfd7943"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::cairo_dock_create_surface_from_xicon_buffer" ref="8b6a3e0b8a54450c1a667e558bfd7943" args="(gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -381,7 +472,7 @@ Calcule la taille d'une image selon une contrainte en largeur et hauteur. <dl co
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -402,7 +493,7 @@ Cree une surface à partir des données brutes d'une icone X. L'icone de plus gr
 
 </div>
 </div><p>
-<a class="anchor" name="36752f3cc1f02891618d1c0f7e6b0f82"></a><!-- doxytag: member="cairo-dock-surface-factory.h::cairo_dock_create_surface_from_pixbuf" ref="36752f3cc1f02891618d1c0f7e6b0f82" args="(GdkPixbuf *pixbuf, cairo_t *pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)" -->
+<a class="anchor" name="36752f3cc1f02891618d1c0f7e6b0f82"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::cairo_dock_create_surface_from_pixbuf" ref="36752f3cc1f02891618d1c0f7e6b0f82" args="(GdkPixbuf *pixbuf, cairo_t *pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -439,7 +530,7 @@ Cree une surface à partir des données brutes d'une icone X. L'icone de plus gr
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#c09dfb92e24fb51c052b60dcdc3c072e">CairoDockLoadImageModifier</a>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072e">CairoDockLoadImageModifier</a>&nbsp;</td>
           <td class="paramname"> <em>iLoadingModifier</em>, </td>
         </tr>
         <tr>
@@ -469,7 +560,7 @@ Cree une surface à partir des données brutes d'une icone X. L'icone de plus gr
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -494,7 +585,7 @@ Cree une surface à partir d'un GdkPixbuf. <dl compact><dt><b>Paramètres:</b></
 
 </div>
 </div><p>
-<a class="anchor" name="dd90efd1ae48de453cf1a0306769ca76"></a><!-- doxytag: member="cairo-dock-surface-factory.h::_cairo_dock_create_blank_surface" ref="dd90efd1ae48de453cf1a0306769ca76" args="(cairo_t *pSourceContext, int iWidth, int iHeight)" -->
+<a class="anchor" name="dd90efd1ae48de453cf1a0306769ca76"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::_cairo_dock_create_blank_surface" ref="dd90efd1ae48de453cf1a0306769ca76" args="(cairo_t *pSourceContext, int iWidth, int iHeight)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -519,7 +610,7 @@ Cree une surface à partir d'un GdkPixbuf. <dl compact><dt><b>Paramètres:</b></
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -537,7 +628,7 @@ Cree une surface vide (transparente) de taille donnee. En mode opengl, cette sur
 
 </div>
 </div><p>
-<a class="anchor" name="c454ab86c51ef73b68f74cd5cf28ef09"></a><!-- doxytag: member="cairo-dock-surface-factory.h::cairo_dock_create_surface_from_image" ref="c454ab86c51ef73b68f74cd5cf28ef09" args="(const gchar *cImagePath, cairo_t *pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)" -->
+<a class="anchor" name="c454ab86c51ef73b68f74cd5cf28ef09"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::cairo_dock_create_surface_from_image" ref="c454ab86c51ef73b68f74cd5cf28ef09" args="(const gchar *cImagePath, cairo_t *pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -574,7 +665,7 @@ Cree une surface vide (transparente) de taille donnee. En mode opengl, cette sur
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#c09dfb92e24fb51c052b60dcdc3c072e">CairoDockLoadImageModifier</a>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-surface-factory_8h.html#c09dfb92e24fb51c052b60dcdc3c072e">CairoDockLoadImageModifier</a>&nbsp;</td>
           <td class="paramname"> <em>iLoadingModifier</em>, </td>
         </tr>
         <tr>
@@ -604,7 +695,7 @@ Cree une surface vide (transparente) de taille donnee. En mode opengl, cette sur
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -629,7 +720,7 @@ Cree une surface à partir d'une image au format quelconque. <dl compact><dt><b>
 
 </div>
 </div><p>
-<a class="anchor" name="76c777170b19b18171be9b8eaa7cdb1c"></a><!-- doxytag: member="cairo-dock-surface-factory.h::cairo_dock_create_surface_for_icon" ref="76c777170b19b18171be9b8eaa7cdb1c" args="(const gchar *cImagePath, cairo_t *pSourceContext, double fImageWidth, double fImageHeight)" -->
+<a class="anchor" name="76c777170b19b18171be9b8eaa7cdb1c"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::cairo_dock_create_surface_for_icon" ref="76c777170b19b18171be9b8eaa7cdb1c" args="(const gchar *cImagePath, cairo_t *pSourceContext, double fImageWidth, double fImageHeight)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -660,7 +751,7 @@ Cree une surface à partir d'une image au format quelconque. <dl compact><dt><b>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -679,7 +770,7 @@ Cree une surface à partir d'une image au format quelconque, a la taille donnée
 
 </div>
 </div><p>
-<a class="anchor" name="bb4e67760f9d84c7867bd7598a55406a"></a><!-- doxytag: member="cairo-dock-surface-factory.h::cairo_dock_rotate_surface" ref="bb4e67760f9d84c7867bd7598a55406a" args="(cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fRotationAngle)" -->
+<a class="anchor" name="bb4e67760f9d84c7867bd7598a55406a"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::cairo_dock_rotate_surface" ref="bb4e67760f9d84c7867bd7598a55406a" args="(cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fRotationAngle)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -716,7 +807,7 @@ Cree une surface à partir d'une image au format quelconque, a la taille donnée
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -736,7 +827,7 @@ Cree une surface par rotation d'une autre. N'est couramment utilisée que pour d
 
 </div>
 </div><p>
-<a class="anchor" name="df15787fd2e1937ae407c31f543780ac"></a><!-- doxytag: member="cairo-dock-surface-factory.h::cairo_dock_create_reflection_surface" ref="df15787fd2e1937ae407c31f543780ac" args="(cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, gboolean bHorizontalDock, double fMaxScale, gboolean bDirectionUp)" -->
+<a class="anchor" name="df15787fd2e1937ae407c31f543780ac"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::cairo_dock_create_reflection_surface" ref="df15787fd2e1937ae407c31f543780ac" args="(cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, gboolean bHorizontalDock, double fMaxScale, gboolean bDirectionUp)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -785,7 +876,7 @@ Cree une surface par rotation d'une autre. N'est couramment utilisée que pour d
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -807,7 +898,7 @@ Cree une surface par réflection d'une autre. Applique un dégradé de transpare
 
 </div>
 </div><p>
-<a class="anchor" name="432723de3bb3976debea58b05d4e234f"></a><!-- doxytag: member="cairo-dock-surface-factory.h::cairo_dock_create_surface_from_text_full" ref="432723de3bb3976debea58b05d4e234f" args="(gchar *cText, cairo_t *pSourceContext, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight, double *fTextXOffset, double *fTextYOffset)" -->
+<a class="anchor" name="432723de3bb3976debea58b05d4e234f"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::cairo_dock_create_surface_from_text_full" ref="432723de3bb3976debea58b05d4e234f" args="(gchar *cText, cairo_t *pSourceContext, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight, double *fTextXOffset, double *fTextYOffset)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -868,7 +959,7 @@ Cree une surface par réflection d'une autre. Applique un dégradé de transpare
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -892,7 +983,7 @@ Cree une surface contenant un texte, avec une couleur de fond optionnel. <dl com
 
 </div>
 </div><p>
-<a class="anchor" name="157233143037e32dc1b3866b31387380"></a><!-- doxytag: member="cairo-dock-surface-factory.h::cairo_dock_duplicate_surface" ref="157233143037e32dc1b3866b31387380" args="(cairo_surface_t *pSurface, cairo_t *pSourceContext, double fWidth, double fHeight, double fDesiredWidth, double fDesiredHeight)" -->
+<a class="anchor" name="157233143037e32dc1b3866b31387380"></a><!-- doxytag: member="cairo&#45;dock&#45;surface&#45;factory.h::cairo_dock_duplicate_surface" ref="157233143037e32dc1b3866b31387380" args="(cairo_surface_t *pSurface, cairo_t *pSourceContext, double fWidth, double fHeight, double fDesiredWidth, double fDesiredHeight)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -935,7 +1026,7 @@ Cree une surface contenant un texte, avec une couleur de fond optionnel. <dl com
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -957,8 +1048,8 @@ Cree une surface à l'identique d'une autre, en la redimensionnant eventuellemen
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Thu Apr 9 02:53:50 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Sun Jun 21 04:02:15 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>
 </html>

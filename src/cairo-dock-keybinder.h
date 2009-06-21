@@ -37,7 +37,8 @@ G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-keybinder.h This class contains functions to easily bind a keyboard shortcut to an action. These shortcuts are defined globally in your session, that is to say they will be effective whatever window has the focus.
-* Shortcuts are of the form <alt>F1 or <ctrl><shift>s.
+* Shortcuts are of the form &lt;alt&gt;F1 or &lt;ctrl&gt;&lt;shift&gt;s.
+* 
 */
 
 typedef void (* CDBindkeyHandler) (const char *keystring, gpointer user_data);

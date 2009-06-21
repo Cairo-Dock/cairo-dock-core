@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-draw.h</title>
-<link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
+<link href="doxygen.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.5 -->
+<!-- Généré par Doxygen 1.5.8 -->
 <div class="navigation" id="top">
   <div class="tabs">
     <ul>
@@ -21,6 +21,12 @@
         </table>
       </form>
     </li>
+    </ul>
+  </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>Liste&nbsp;des&nbsp;fichiers</span></a></li>
+      <li><a href="globals.html"><span>Portée&nbsp;globale</span></a></li>
     </ul>
   </div>
 </div>
@@ -41,6 +47,8 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">cairo_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-draw_8h.html#9ae6ca91b762ec8ca7bfaf221a17f364">cairo_dock_create_drawing_context_on_area</a> (<a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer, GdkRectangle *pArea, double *fBgColor)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-draw_8h.html#7482115ade781220cb4c9afbd56c618c">cairo_dock_calculate_extra_width_for_trapeze</a> (double fFrameHeight, double fInclination, double fRadius, double fLineWidth)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-draw_8h.html#b47d982f6b3d78ad1cbe594f9c24ed90">cairo_dock_draw_rounded_rectangle</a> (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-draw_8h.html#6f9e4b2d521a35795eed298ebdd77040">cairo_dock_draw_frame</a> (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination, gboolean bHorizontal)</td></tr>
 
@@ -66,7 +74,7 @@
 
 </table>
 <hr><h2>Documentation des macros</h2>
-<a class="anchor" name="c5ce07e05bdd9d6cb4b2e89ee86dd21f"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_create_context_from_window" ref="c5ce07e05bdd9d6cb4b2e89ee86dd21f" args="" -->
+<a class="anchor" name="c5ce07e05bdd9d6cb4b2e89ee86dd21f"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_create_context_from_window" ref="c5ce07e05bdd9d6cb4b2e89ee86dd21f" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -81,7 +89,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="4de09f0e9196db5f64bead7acb015fbb"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_erase_cairo_context" ref="4de09f0e9196db5f64bead7acb015fbb" args="(pCairoContext)" -->
+<a class="anchor" name="4de09f0e9196db5f64bead7acb015fbb"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_erase_cairo_context" ref="4de09f0e9196db5f64bead7acb015fbb" args="(pCairoContext)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -91,7 +99,7 @@
           <td class="paramtype">pCairoContext&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -102,7 +110,7 @@
 </div>
 </div><p>
 <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="e3a3991fcab3b240351b1da1f323ef16"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_create_context_from_container" ref="e3a3991fcab3b240351b1da1f323ef16" args="(CairoContainer *pContainer)" -->
+<a class="anchor" name="e3a3991fcab3b240351b1da1f323ef16"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_create_context_from_container" ref="e3a3991fcab3b240351b1da1f323ef16" args="(CairoContainer *pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -112,7 +120,7 @@
           <td class="paramtype"><a class="el" href="struct__CairoContainer.html">CairoContainer</a> *&nbsp;</td>
           <td class="paramname"> <em>pContainer</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -130,7 +138,7 @@ Cree un contexte de dessin pour la libcairo. Si glitz est active, le contexte se
 
 </div>
 </div><p>
-<a class="anchor" name="469efc69268353d5c7098214e955ec39"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_create_drawing_context" ref="469efc69268353d5c7098214e955ec39" args="(CairoContainer *pContainer)" -->
+<a class="anchor" name="469efc69268353d5c7098214e955ec39"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_create_drawing_context" ref="469efc69268353d5c7098214e955ec39" args="(CairoContainer *pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -140,7 +148,7 @@ Cree un contexte de dessin pour la libcairo. Si glitz est active, le contexte se
           <td class="paramtype"><a class="el" href="struct__CairoContainer.html">CairoContainer</a> *&nbsp;</td>
           <td class="paramname"> <em>pContainer</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -156,7 +164,7 @@ Cree un contexte de dessin cairo pour dessiner sur un container. Gere la fausse 
 
 </div>
 </div><p>
-<a class="anchor" name="9ae6ca91b762ec8ca7bfaf221a17f364"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_create_drawing_context_on_area" ref="9ae6ca91b762ec8ca7bfaf221a17f364" args="(CairoContainer *pContainer, GdkRectangle *pArea, double *fBgColor)" -->
+<a class="anchor" name="9ae6ca91b762ec8ca7bfaf221a17f364"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_create_drawing_context_on_area" ref="9ae6ca91b762ec8ca7bfaf221a17f364" args="(CairoContainer *pContainer, GdkRectangle *pArea, double *fBgColor)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -181,7 +189,7 @@ Cree un contexte de dessin cairo pour dessiner sur un container. Gere la fausse 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -199,7 +207,7 @@ Cree un contexte de dessin cairo pour dessiner sur une partie d'un container seu
 
 </div>
 </div><p>
-<a class="anchor" name="7482115ade781220cb4c9afbd56c618c"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_calculate_extra_width_for_trapeze" ref="7482115ade781220cb4c9afbd56c618c" args="(double fFrameHeight, double fInclination, double fRadius, double fLineWidth)" -->
+<a class="anchor" name="7482115ade781220cb4c9afbd56c618c"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_calculate_extra_width_for_trapeze" ref="7482115ade781220cb4c9afbd56c618c" args="(double fFrameHeight, double fInclination, double fRadius, double fLineWidth)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -230,7 +238,7 @@ Cree un contexte de dessin cairo pour dessiner sur une partie d'un container seu
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -240,7 +248,54 @@ Cree un contexte de dessin cairo pour dessiner sur une partie d'un container seu
 
 </div>
 </div><p>
-<a class="anchor" name="6f9e4b2d521a35795eed298ebdd77040"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_draw_frame" ref="6f9e4b2d521a35795eed298ebdd77040" args="(cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination, gboolean bHorizontal)" -->
+<a class="anchor" name="b47d982f6b3d78ad1cbe594f9c24ed90"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_draw_rounded_rectangle" ref="b47d982f6b3d78ad1cbe594f9c24ed90" args="(cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_draw_rounded_rectangle           </td>
+          <td>(</td>
+          <td class="paramtype">cairo_t *&nbsp;</td>
+          <td class="paramname"> <em>pCairoContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fRadius</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fLineWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fFrameWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fFrameHeight</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="6f9e4b2d521a35795eed298ebdd77040"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_draw_frame" ref="6f9e4b2d521a35795eed298ebdd77040" args="(cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination, gboolean bHorizontal)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -307,7 +362,7 @@ Cree un contexte de dessin cairo pour dessiner sur une partie d'un container seu
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -331,7 +386,7 @@ Trace sur le contexte un contour trapezoidale aux coins arrondis. Le contour n'e
 
 </div>
 </div><p>
-<a class="anchor" name="e3a7f41c0843c07af2a4a0f305ed484c"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_render_decorations_in_frame" ref="e3a7f41c0843c07af2a4a0f305ed484c" args="(cairo_t *pCairoContext, CairoDock *pDock, double fOffsetY, double fOffsetX, double fWidth)" -->
+<a class="anchor" name="e3a7f41c0843c07af2a4a0f305ed484c"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_render_decorations_in_frame" ref="e3a7f41c0843c07af2a4a0f305ed484c" args="(cairo_t *pCairoContext, CairoDock *pDock, double fOffsetY, double fOffsetX, double fWidth)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -368,7 +423,7 @@ Trace sur le contexte un contour trapezoidale aux coins arrondis. Le contour n'e
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -387,7 +442,7 @@ Dessine les decorations d'un dock a l'interieur d'un cadre prealablement trace s
 
 </div>
 </div><p>
-<a class="anchor" name="156a9b957c81d500f35ba51e90283921"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_set_icon_scale_on_context" ref="156a9b957c81d500f35ba51e90283921" args="(cairo_t *pCairoContext, Icon *icon, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp)" -->
+<a class="anchor" name="156a9b957c81d500f35ba51e90283921"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_set_icon_scale_on_context" ref="156a9b957c81d500f35ba51e90283921" args="(cairo_t *pCairoContext, Icon *icon, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -424,7 +479,7 @@ Dessine les decorations d'un dock a l'interieur d'un cadre prealablement trace s
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -434,7 +489,7 @@ Dessine les decorations d'un dock a l'interieur d'un cadre prealablement trace s
 
 </div>
 </div><p>
-<a class="anchor" name="4180e8f21c2e60a1094bf22b7c1f91d8"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_draw_icon_cairo" ref="4180e8f21c2e60a1094bf22b7c1f91d8" args="(Icon *icon, CairoDock *pDock, cairo_t *pCairoContext)" -->
+<a class="anchor" name="4180e8f21c2e60a1094bf22b7c1f91d8"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_draw_icon_cairo" ref="4180e8f21c2e60a1094bf22b7c1f91d8" args="(Icon *icon, CairoDock *pDock, cairo_t *pCairoContext)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -459,7 +514,7 @@ Dessine les decorations d'un dock a l'interieur d'un cadre prealablement trace s
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -469,7 +524,7 @@ Dessine les decorations d'un dock a l'interieur d'un cadre prealablement trace s
 
 </div>
 </div><p>
-<a class="anchor" name="8de42c5c9e44e434b5cf57137df31cf5"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_render_icon_notification_cairo" ref="8de42c5c9e44e434b5cf57137df31cf5" args="(gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext)" -->
+<a class="anchor" name="8de42c5c9e44e434b5cf57137df31cf5"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_render_icon_notification_cairo" ref="8de42c5c9e44e434b5cf57137df31cf5" args="(gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -506,7 +561,7 @@ Dessine les decorations d'un dock a l'interieur d'un cadre prealablement trace s
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -516,7 +571,7 @@ Dessine les decorations d'un dock a l'interieur d'un cadre prealablement trace s
 
 </div>
 </div><p>
-<a class="anchor" name="b603787b81214c8ad009343faaa9b54f"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_render_one_icon" ref="b603787b81214c8ad009343faaa9b54f" args="(Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude, gboolean bUseText)" -->
+<a class="anchor" name="b603787b81214c8ad009343faaa9b54f"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_render_one_icon" ref="b603787b81214c8ad009343faaa9b54f" args="(Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude, gboolean bUseText)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -553,7 +608,7 @@ Dessine les decorations d'un dock a l'interieur d'un cadre prealablement trace s
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -572,7 +627,7 @@ Dessine entierement une icone, dont toutes les caracteristiques ont ete prealabl
 
 </div>
 </div><p>
-<a class="anchor" name="bd11a4f771c2e176139cc5fca1001cef"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_render_icons_linear" ref="bd11a4f771c2e176139cc5fca1001cef" args="(cairo_t *pCairoContext, CairoDock *pDock)" -->
+<a class="anchor" name="bd11a4f771c2e176139cc5fca1001cef"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_render_icons_linear" ref="bd11a4f771c2e176139cc5fca1001cef" args="(cairo_t *pCairoContext, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -591,7 +646,7 @@ Dessine entierement une icone, dont toutes les caracteristiques ont ete prealabl
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -601,7 +656,7 @@ Dessine entierement une icone, dont toutes les caracteristiques ont ete prealabl
 
 </div>
 </div><p>
-<a class="anchor" name="3c956bf2c6470a4acab797dbf40a0d6c"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_render_one_icon_in_desklet" ref="3c956bf2c6470a4acab797dbf40a0d6c" args="(Icon *icon, cairo_t *pCairoContext, gboolean bUseReflect, gboolean bUseText, int iWidth)" -->
+<a class="anchor" name="3c956bf2c6470a4acab797dbf40a0d6c"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_render_one_icon_in_desklet" ref="3c956bf2c6470a4acab797dbf40a0d6c" args="(Icon *icon, cairo_t *pCairoContext, gboolean bUseReflect, gboolean bUseText, int iWidth)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -638,7 +693,7 @@ Dessine entierement une icone, dont toutes les caracteristiques ont ete prealabl
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -648,7 +703,7 @@ Dessine entierement une icone, dont toutes les caracteristiques ont ete prealabl
 
 </div>
 </div><p>
-<a class="anchor" name="2b8ce54b5b1ce5b64cba73aa8f2431b6"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_draw_string" ref="2b8ce54b5b1ce5b64cba73aa8f2431b6" args="(cairo_t *pCairoContext, CairoDock *pDock, double fStringLineWidth, gboolean bIsLoop, gboolean bForceConstantSeparator)" -->
+<a class="anchor" name="2b8ce54b5b1ce5b64cba73aa8f2431b6"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_draw_string" ref="2b8ce54b5b1ce5b64cba73aa8f2431b6" args="(cairo_t *pCairoContext, CairoDock *pDock, double fStringLineWidth, gboolean bIsLoop, gboolean bForceConstantSeparator)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -685,7 +740,7 @@ Dessine entierement une icone, dont toutes les caracteristiques ont ete prealabl
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -704,7 +759,7 @@ Dessine une ficelle reliant le centre de toutes les icones, en commencant par la
 
 </div>
 </div><p>
-<a class="anchor" name="b1e72add29a68dbc8dbaed8791a2cbbc"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_draw_surface" ref="b1e72add29a68dbc8dbaed8791a2cbbc" args="(cairo_t *pCairoContext, cairo_surface_t *pSurface, int iWidth, int iHeight, gboolean bDirectionUp, gboolean bHorizontal, gdouble fAlpha)" -->
+<a class="anchor" name="b1e72add29a68dbc8dbaed8791a2cbbc"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_draw_surface" ref="b1e72add29a68dbc8dbaed8791a2cbbc" args="(cairo_t *pCairoContext, cairo_surface_t *pSurface, int iWidth, int iHeight, gboolean bDirectionUp, gboolean bHorizontal, gdouble fAlpha)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -753,7 +808,7 @@ Dessine une ficelle reliant le centre de toutes les icones, en commencant par la
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -763,7 +818,7 @@ Dessine une ficelle reliant le centre de toutes les icones, en commencant par la
 
 </div>
 </div><p>
-<a class="anchor" name="8904e1f3480ff557e295a5e0f97a73b0"></a><!-- doxytag: member="cairo-dock-draw.h::cairo_dock_render_hidden_dock" ref="8904e1f3480ff557e295a5e0f97a73b0" args="(cairo_t *pCairoContext, CairoDock *pDock)" -->
+<a class="anchor" name="8904e1f3480ff557e295a5e0f97a73b0"></a><!-- doxytag: member="cairo&#45;dock&#45;draw.h::cairo_dock_render_hidden_dock" ref="8904e1f3480ff557e295a5e0f97a73b0" args="(cairo_t *pCairoContext, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -782,7 +837,7 @@ Dessine une ficelle reliant le centre de toutes les icones, en commencant par la
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -793,8 +848,8 @@ Dessine une ficelle reliant le centre de toutes les icones, en commencant par la
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Thu Apr 9 02:53:50 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Sun Jun 21 04:02:15 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>
 </html>

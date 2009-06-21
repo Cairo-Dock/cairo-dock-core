@@ -9,6 +9,7 @@ G_BEGIN_DECLS
 /**
 *@file cairo-dock-task.h An easy way to define periodic and asynchronous tasks.
 * Tasks can of course be synchronous and/or not periodic.
+* 
 */
 
 
@@ -22,89 +23,89 @@ typedef enum {
 
 typedef void (* CairoDockGetDataAsyncFunc ) (gpointer pSharedMemory);
 typedef gboolean (* CairoDockUpdateSyncFunc ) (gpointer pSharedMemory);
+
+/// Definition of a periodic and asynchronous Task.
 typedef struct {
-	/// Sid du timer des mesures.
+	/// ID du timer de la tâche.
 	gint iSidTimer;
-	/// Sid du timer de fin de mesure.
+	/// ID du timer de fin de traitement asynchrone.
 	gint iSidTimerUpdate;
-	/// Valeur atomique a 1 ssi le thread de mesure est en cours.
+	/// Valeur atomique a 1 ssi le thread de tâche est en cours.
 	gint iThreadIsRunning;
 	/// fonction realisant l'acquisition asynchrone des donnees; stocke les resultats dans la structures des resultats.
 	CairoDockGetDataAsyncFunc get_data;
 	/// fonction realisant la mise a jour synchrone de l'IHM en fonction des nouveaux resultats. Renvoie TRUE pour continuer, FALSE pour arreter.
 	CairoDockUpdateSyncFunc update;
-	/// intervalle de temps en secondes, eventuellement nul pour une mesure unitaire.
+	/// intervalle de temps en secondes, eventuellement nul pour une tâche unitaire.
 	gint iPeriod;
-	/// etat de la frequence des mesures.
+	/// etat de la frequence de la tâche.
 	CairoDockFrequencyState iFrequencyState;
-	/// donnees passees en entree de chaque fonction.
+	/// pSharedMemory structure passee en entree des fonctions get_data et update. Ne doit pas etre accedee en dehors de ces 2 fonctions !
 	gpointer pSharedMemory;
 } CairoDockTask;
 
-/**
-*Lance les mesures periodiques, prealablement preparee avec #cairo_dock_new_task. La 1ere iteration est executee immediatement. L'acquisition et la lecture des donnees est faite de maniere asynchrone (dans un thread secondaire), alors que le chargement des mesures se fait dans la boucle principale. La frequence est remise a son etat normal.
-*@param pTask la mesure periodique.
+/** Lance une tâche periodique, prealablement preparee avec #cairo_dock_new_task. La 1ere iteration est executee immediatement. L'acquisition et la lecture des donnees est faite de maniere asynchrone (dans un thread secondaire), alors que le chargement de la tâche se fait dans la boucle principale. La frequence est remise a son etat normal.
+*@param pTask la tâche periodique.
 */
 void cairo_dock_launch_task (CairoDockTask *pTask);
 /**
 *Idem que ci-dessus mais après un délai.
-*@param pTask la mesure periodique.
+*@param pTask la tâche periodique.
 *@param fDelay délai en ms.
 */
 void cairo_dock_launch_task_delayed (CairoDockTask *pTask, double fDelay);
 /**
-*Cree une mesure periodique.
-*@param iPeriod l'intervalle en s entre 2 mesures, eventuellement nul pour une mesure unitaire.
-*@param acquisition fonction realisant l'acquisition des donnees. N'accede jamais a la structure des resultats.
-*@param get_data fonction realisant la lecture des donnees precedemment acquises; stocke les resultats dans la memoire partagee.
-*@param update fonction realisant la mise a jour de l'interface en fonction des nouveaux resultats, lus dans la memoire partagee.
+*Cree une tâche periodique.
+*@param iPeriod l'intervalle en s entre 2 iterations, eventuellement nul pour une tâche a executer une seule fois.
+*@param get_data fonction realisant l'acquisition asynchrone des donnees; stocke les resultats dans la structures des resultats.
+*@param update realisant la mise a jour synchrone de l'IHM en fonction des nouveaux resultats. Renvoie TRUE pour continuer, FALSE pour arreter.
 *@param pSharedMemory structure passee en entree des fonctions get_data et update. Ne doit pas etre accedee en dehors de ces 2 fonctions !
-*@return la mesure nouvellement allouee. A liberer avec #cairo_dock_free_task.
+*@return la tâche nouvellement allouee. A liberer avec #cairo_dock_free_task.
 */
 CairoDockTask *cairo_dock_new_task (int iPeriod, CairoDockGetDataAsyncFunc get_data, CairoDockUpdateSyncFunc update, gpointer pSharedMemory);
 /**
-*Stoppe les mesures. Si une mesure est en cours, le thread d'acquisition/lecture se terminera tout seul plus tard, et la mesure sera ignoree. On peut reprendre les mesures par un simple #cairo_dock_launch_task. Ne doit _pas_ etre appelée durant la fonction 'read' ou 'update'; utiliser la sortie de 'update' pour cela.
-*@param pTask la mesure periodique.
+*Stoppe les tâches. Si une tâche est en cours, le thread d'acquisition/lecture se terminera tout seul plus tard, et la tâche sera ignoree. On peut reprendre les tâches par un simple #cairo_dock_launch_task. Ne doit _pas_ etre appelée durant la fonction 'read' ou 'update'; utiliser la sortie de 'update' pour cela.
+*@param pTask la tâche periodique.
 */
 void cairo_dock_stop_task (CairoDockTask *pTask);
 /**
-*Stoppe et detruit une mesure periodique, liberant toutes ses ressources allouees.
-*@param pTask la mesure periodique.
+*Stoppe et detruit une tâche periodique, liberant toutes ses ressources allouees.
+*@param pTask la tâche periodique.
 */
 void cairo_dock_free_task (CairoDockTask *pTask);
 /**
-*Dis si une mesure est active, c'est a dire si elle est appelee periodiquement.
-*@param pTask la mesure periodique.
-*@return TRUE ssi la mesure est active.
+*Dis si une tâche est active, c'est a dire si elle est appelee periodiquement.
+*@param pTask la tâche periodique.
+*@return TRUE ssi la tâche est active.
 */
 gboolean cairo_dock_task_is_active (CairoDockTask *pTask);
 /**
-*Dis si une mesure est en cours, c'est a dire si elle est soit dans le thread, soit en attente d'update.
-*@param pTask la mesure periodique.
-*@return TRUE ssi la mesure est en cours.
+*Dis si une tâche est en cours, c'est a dire si elle est soit dans le thread, soit en attente d'update.
+*@param pTask la tâche periodique.
+*@return TRUE ssi la tâche est en cours.
 */
 gboolean cairo_dock_task_is_running (CairoDockTask *pTask);
 /**
-*Change la frequence des mesures. La prochaine mesure aura lien dans 1 iteration si elle etait deja active.
-*@param pTask la mesure periodique.
-*@param iNewPeriod le nouvel intervalle entre 2 mesures, en s.
+*Change la frequence de la tâche. La prochaine tâche aura lien dans 1 iteration si elle etait deja active.
+*@param pTask la tâche periodique.
+*@param iNewPeriod le nouvel intervalle entre 2 tâches, en s.
 */
 void cairo_dock_change_task_frequency (CairoDockTask *pTask, int iNewPeriod);
 /**
-*Change la frequence des mesures et les relance immediatement. La prochaine mesure est donc tout de suite.
-*@param pTask la mesure periodique.
-*@param iNewPeriod le nouvel intervalle entre 2 mesures, en s.
+*Change la frequence de la tâche et les relance immediatement. La prochaine tâche est donc tout de suite.
+*@param pTask la tâche periodique.
+*@param iNewPeriod le nouvel intervalle entre 2 tâches, en s.
 */
 void cairo_dock_relaunch_task_immediately (CairoDockTask *pTask, int iNewPeriod);
 
 /**
-*Degrade la frequence des mesures. La mesure passe dans un etat moins actif (typiquement utile si la mesure a echouee).
-*@param pTask la mesure periodique.
+*Degrade la frequence de la tâche. La tâche passe dans un etat moins actif (typiquement utile si la tâche a echouee).
+*@param pTask la tâche periodique.
 */
 void cairo_dock_downgrade_task_frequency (CairoDockTask *pTask);
 /**
-*Remet la frequence des mesures a un etat normal. Notez que cela est fait automatiquement au 1er lancement de la mesure.
-*@param pTask la mesure periodique.
+*Remet la frequence de la tâche a un etat normal. Notez que cela est fait automatiquement au 1er lancement de la tâche.
+*@param pTask la tâche periodique.
 */
 void cairo_dock_set_normal_task_frequency (CairoDockTask *pTask);
 

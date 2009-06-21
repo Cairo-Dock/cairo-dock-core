@@ -16,6 +16,7 @@ G_BEGIN_DECLS
 *   ensure a bug-free functioning
 *   mask the internal complexity
 *   allow a normalized and easy-to-maintain code amongst all the applets.
+* 
 */
 
 /**
@@ -290,6 +291,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 /** Cree et ajoute un sous-menu a un menu.
 *@param cLabel nom du sous-menu, tel qu'il apparaitra dans le menu.
 *@param pMenu GtkWidget du menu auquel on rajoutera le sous-menu.
+*@param cImage name of an image (can be a path or a GtkStock).
 *@return le sous-menu nouvellement cree et attache au menu.
 */
 #define CD_APPLET_ADD_SUB_MENU_WITH_IMAGE(cLabel, pMenu, cImage) \

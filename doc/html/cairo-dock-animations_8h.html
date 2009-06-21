@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-animations.h</title>
-<link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
+<link href="doxygen.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.5 -->
+<!-- Généré par Doxygen 1.5.8 -->
 <div class="navigation" id="top">
   <div class="tabs">
     <ul>
@@ -23,10 +23,20 @@
     </li>
     </ul>
   </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>Liste&nbsp;des&nbsp;fichiers</span></a></li>
+      <li><a href="globals.html"><span>Portée&nbsp;globale</span></a></li>
+    </ul>
+  </div>
 </div>
 <div class="contents">
 <h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-animations.h</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Structures de données</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDockTransition.html">_CairoDockTransition</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Transitions are an easy way to set an animation on an Icon to make it change from a state to another.  <a href="struct__CairoDockTransition.html#_details">Plus de détails...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Macros</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#66d221ced0fa114b6b61562a1c719f4a">CAIRO_DOCK_MIN_SLOW_DELTA_T</a></td></tr>
 
@@ -70,6 +80,11 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#40b4f21bc6d621bc8827febd75f7e76a">cairo_dock_get_transition_fraction</a>(pIcon)</td></tr>
 
+<tr><td colspan="2"><br><h2>Définition de type</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef gboolean(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#b668f92c35584a3ef184d96eef2f2952">CairoDockTransitionRenderFunc</a> )(gpointer pUserData, cairo_t *pIconContext)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef gboolean(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#f38605676d9b48e9c9640f9c80fd9c7e">CairoDockTransitionGLRenderFunc</a> )(gpointer pUserData)</td></tr>
+
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#dbdf2df4bca3c8693babeda5fba8b110">cairo_dock_move_up</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
@@ -97,9 +112,9 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#3feab7e913e2676a6a1e31477e2c4bec">cairo_dock_request_icon_animation</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, const gchar *cAnimation, int iNbRounds)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#5b4c122bc1b0f9d384e67a5d7b8c9bc8">cairo_dock_mark_icon_animation_as</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="cairo-dock-struct_8h.html#6f884cd4a5b75b5c1ef0d2580c91e4b9">CairoDockAnimationState</a> iAnimationState)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#5b4c122bc1b0f9d384e67a5d7b8c9bc8">cairo_dock_mark_icon_animation_as</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="cairo-dock-icons_8h.html#6f884cd4a5b75b5c1ef0d2580c91e4b9">CairoDockAnimationState</a> iAnimationState)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#55c17ac12914651b5b33743acfc317d6">cairo_dock_stop_marking_icon_animation_as</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="cairo-dock-struct_8h.html#6f884cd4a5b75b5c1ef0d2580c91e4b9">CairoDockAnimationState</a> iAnimationState)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#55c17ac12914651b5b33743acfc317d6">cairo_dock_stop_marking_icon_animation_as</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="cairo-dock-icons_8h.html#6f884cd4a5b75b5c1ef0d2580c91e4b9">CairoDockAnimationState</a> iAnimationState)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#de6a289e536c87440401a47d1013f6ef">cairo_dock_update_removing_inserting_icon_size_default</a> (<a class="el" href="struct__Icon.html">Icon</a> *icon)</td></tr>
 
@@ -109,15 +124,14 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#1aaf9a9e3e7ac8cb6866ef29c1d37d78">cairo_dock_stop_inserting_removing_icon_notification</a> (gpointer pUserData, <a class="el" href="struct__Icon.html">Icon</a> *pIcon)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#168253d9b65cb118c4fb1b68dac08564">cairo_dock_set_transition_on_icon</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer, cairo_t *pIconContext, <a class="el" href="cairo-dock-struct_8h.html#b668f92c35584a3ef184d96eef2f2952">CairoDockTransitionRenderFunc</a> render_step_cairo, <a class="el" href="cairo-dock-struct_8h.html#f38605676d9b48e9c9640f9c80fd9c7e">CairoDockTransitionGLRenderFunc</a> render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#168253d9b65cb118c4fb1b68dac08564">cairo_dock_set_transition_on_icon</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, <a class="el" href="struct__CairoContainer.html">CairoContainer</a> *pContainer, cairo_t *pIconContext, <a class="el" href="cairo-dock-animations_8h.html#b668f92c35584a3ef184d96eef2f2952">CairoDockTransitionRenderFunc</a> render_step_cairo, <a class="el" href="cairo-dock-animations_8h.html#f38605676d9b48e9c9640f9c80fd9c7e">CairoDockTransitionGLRenderFunc</a> render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-animations_8h.html#c116241f05aaa75f7d4c488e0bd6ac54">cairo_dock_remove_transition_on_icon</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon)</td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Description détaillée</h2>
-This class handles the icons and containers animations.<p>
-This class handles the managment of the applications classes. Classes are used to group the windows of a same program, and to bind a launcher to the launched application. <hr><h2>Documentation des macros</h2>
-<a class="anchor" name="66d221ced0fa114b6b61562a1c719f4a"></a><!-- doxytag: member="cairo-dock-animations.h::CAIRO_DOCK_MIN_SLOW_DELTA_T" ref="66d221ced0fa114b6b61562a1c719f4a" args="" -->
+This class handles the icons and containers animations. <hr><h2>Documentation des macros</h2>
+<a class="anchor" name="66d221ced0fa114b6b61562a1c719f4a"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::CAIRO_DOCK_MIN_SLOW_DELTA_T" ref="66d221ced0fa114b6b61562a1c719f4a" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -132,7 +146,7 @@ This class handles the managment of the applications classes. Classes are used t
 
 </div>
 </div><p>
-<a class="anchor" name="c23808bba4ecd5ddb4ef803a4e2e39c5"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_animation_will_be_visible" ref="c23808bba4ecd5ddb4ef803a4e2e39c5" args="(pDock)" -->
+<a class="anchor" name="c23808bba4ecd5ddb4ef803a4e2e39c5"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_animation_will_be_visible" ref="c23808bba4ecd5ddb4ef803a4e2e39c5" args="(pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -142,7 +156,7 @@ This class handles the managment of the applications classes. Classes are used t
           <td class="paramtype">pDock&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -157,7 +171,7 @@ Definit s'il est utile de lancer l'animation d'un dock (il est inutile de la lan
 
 </div>
 </div><p>
-<a class="anchor" name="c535a1413dc34d932ea99cd9e61dedc2"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_container_is_animating" ref="c535a1413dc34d932ea99cd9e61dedc2" args="(pContainer)" -->
+<a class="anchor" name="c535a1413dc34d932ea99cd9e61dedc2"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_container_is_animating" ref="c535a1413dc34d932ea99cd9e61dedc2" args="(pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -167,7 +181,7 @@ Definit s'il est utile de lancer l'animation d'un dock (il est inutile de la lan
           <td class="paramtype">pContainer&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -177,7 +191,7 @@ Definit s'il est utile de lancer l'animation d'un dock (il est inutile de la lan
 
 </div>
 </div><p>
-<a class="anchor" name="8608bfedb96a5937872900bb9003452e"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_icon_animation" ref="8608bfedb96a5937872900bb9003452e" args="(pIcon)" -->
+<a class="anchor" name="8608bfedb96a5937872900bb9003452e"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_stop_icon_animation" ref="8608bfedb96a5937872900bb9003452e" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -187,7 +201,7 @@ Definit s'il est utile de lancer l'animation d'un dock (il est inutile de la lan
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -202,7 +216,7 @@ Stoppe toute animation sur l'icone, sauf l'animation de disparition/apparition. 
 
 </div>
 </div><p>
-<a class="anchor" name="372f43dc0d60070c3247a4fcaa1519cb"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_get_animation_delta_t" ref="372f43dc0d60070c3247a4fcaa1519cb" args="(pContainer)" -->
+<a class="anchor" name="372f43dc0d60070c3247a4fcaa1519cb"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_get_animation_delta_t" ref="372f43dc0d60070c3247a4fcaa1519cb" args="(pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -212,7 +226,7 @@ Stoppe toute animation sur l'icone, sauf l'animation de disparition/apparition. 
           <td class="paramtype">pContainer&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -227,7 +241,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation rapide (en ms). <dl 
 
 </div>
 </div><p>
-<a class="anchor" name="35d13f6c9bac8d92ce615c54d2d9ec00"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_get_slow_animation_delta_t" ref="35d13f6c9bac8d92ce615c54d2d9ec00" args="(pContainer)" -->
+<a class="anchor" name="35d13f6c9bac8d92ce615c54d2d9ec00"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_get_slow_animation_delta_t" ref="35d13f6c9bac8d92ce615c54d2d9ec00" args="(pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -237,7 +251,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation rapide (en ms). <dl 
           <td class="paramtype">pContainer&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -252,7 +266,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="de6e28773007b533a0dfe13f8fc3a7e0"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_set_default_animation_delta_t" ref="de6e28773007b533a0dfe13f8fc3a7e0" args="(pContainer)" -->
+<a class="anchor" name="de6e28773007b533a0dfe13f8fc3a7e0"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_set_default_animation_delta_t" ref="de6e28773007b533a0dfe13f8fc3a7e0" args="(pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -262,7 +276,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">pContainer&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -272,7 +286,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="18ddf3238d6d10b0e5dcea83ffee20c2"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_mark_icon_as_hovered_by_mouse" ref="18ddf3238d6d10b0e5dcea83ffee20c2" args="(pIcon)" -->
+<a class="anchor" name="18ddf3238d6d10b0e5dcea83ffee20c2"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_mark_icon_as_hovered_by_mouse" ref="18ddf3238d6d10b0e5dcea83ffee20c2" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -282,7 +296,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -292,7 +306,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="c380db358b7967644cd7026f375bb5d8"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_marking_icon_as_hovered_by_mouse" ref="c380db358b7967644cd7026f375bb5d8" args="(pIcon)" -->
+<a class="anchor" name="c380db358b7967644cd7026f375bb5d8"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_stop_marking_icon_as_hovered_by_mouse" ref="c380db358b7967644cd7026f375bb5d8" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -302,7 +316,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -312,7 +326,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="0f34307a3c16e1d0313b3cd37035c169"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_mark_icon_as_clicked" ref="0f34307a3c16e1d0313b3cd37035c169" args="(pIcon)" -->
+<a class="anchor" name="0f34307a3c16e1d0313b3cd37035c169"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_mark_icon_as_clicked" ref="0f34307a3c16e1d0313b3cd37035c169" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -322,7 +336,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -332,7 +346,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="17dac1c39a100a9247f25c89943d06ba"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_marking_icon_as_clicked" ref="17dac1c39a100a9247f25c89943d06ba" args="(pIcon)" -->
+<a class="anchor" name="17dac1c39a100a9247f25c89943d06ba"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_stop_marking_icon_as_clicked" ref="17dac1c39a100a9247f25c89943d06ba" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -342,7 +356,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -352,7 +366,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="5c6ebc276b359e7c2903cc8a087099b0"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_mark_icon_as_avoiding_mouse" ref="5c6ebc276b359e7c2903cc8a087099b0" args="(pIcon)" -->
+<a class="anchor" name="5c6ebc276b359e7c2903cc8a087099b0"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_mark_icon_as_avoiding_mouse" ref="5c6ebc276b359e7c2903cc8a087099b0" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -362,7 +376,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -372,7 +386,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="041800c072eddee397e131b71b527f54"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_marking_icon_as_avoiding_mouse" ref="041800c072eddee397e131b71b527f54" args="(pIcon)" -->
+<a class="anchor" name="041800c072eddee397e131b71b527f54"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_stop_marking_icon_as_avoiding_mouse" ref="041800c072eddee397e131b71b527f54" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -382,7 +396,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -392,7 +406,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="d186ff1312cd1ba874299e2b9c847c98"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_mark_icon_as_following_mouse" ref="d186ff1312cd1ba874299e2b9c847c98" args="(pIcon)" -->
+<a class="anchor" name="d186ff1312cd1ba874299e2b9c847c98"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_mark_icon_as_following_mouse" ref="d186ff1312cd1ba874299e2b9c847c98" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -402,7 +416,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -412,7 +426,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="f366cf88499ad05a6ca9520c770956f7"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_marking_icon_as_following_mouse" ref="f366cf88499ad05a6ca9520c770956f7" args="(pIcon)" -->
+<a class="anchor" name="f366cf88499ad05a6ca9520c770956f7"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_stop_marking_icon_as_following_mouse" ref="f366cf88499ad05a6ca9520c770956f7" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -422,7 +436,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -432,7 +446,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="933557820f417dfad4b2c4f523f44c32"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_mark_icon_as_inserting_removing" ref="933557820f417dfad4b2c4f523f44c32" args="(pIcon)" -->
+<a class="anchor" name="933557820f417dfad4b2c4f523f44c32"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_mark_icon_as_inserting_removing" ref="933557820f417dfad4b2c4f523f44c32" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -442,7 +456,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -452,7 +466,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="31f63daf3b7515401634117cf2236622"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_marking_icon_as_inserting_removing" ref="31f63daf3b7515401634117cf2236622" args="(pIcon)" -->
+<a class="anchor" name="31f63daf3b7515401634117cf2236622"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_stop_marking_icon_as_inserting_removing" ref="31f63daf3b7515401634117cf2236622" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -462,7 +476,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -472,7 +486,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="608f7b28acce432f199a8d2914c32e5c"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_has_transition" ref="608f7b28acce432f199a8d2914c32e5c" args="(pIcon)" -->
+<a class="anchor" name="608f7b28acce432f199a8d2914c32e5c"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_has_transition" ref="608f7b28acce432f199a8d2914c32e5c" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -482,7 +496,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -492,7 +506,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="ffd481de6a2bf557945fe88d533cdbb4"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_get_transition_count" ref="ffd481de6a2bf557945fe88d533cdbb4" args="(pIcon)" -->
+<a class="anchor" name="ffd481de6a2bf557945fe88d533cdbb4"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_get_transition_count" ref="ffd481de6a2bf557945fe88d533cdbb4" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -502,7 +516,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -512,7 +526,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="48eedee470f81a6ce2621ffb0cf96b94"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_get_transition_elapsed_time" ref="48eedee470f81a6ce2621ffb0cf96b94" args="(pIcon)" -->
+<a class="anchor" name="48eedee470f81a6ce2621ffb0cf96b94"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_get_transition_elapsed_time" ref="48eedee470f81a6ce2621ffb0cf96b94" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -522,7 +536,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -532,7 +546,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="40b4f21bc6d621bc8827febd75f7e76a"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_get_transition_fraction" ref="40b4f21bc6d621bc8827febd75f7e76a" args="(pIcon)" -->
+<a class="anchor" name="40b4f21bc6d621bc8827febd75f7e76a"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_get_transition_fraction" ref="40b4f21bc6d621bc8827febd75f7e76a" args="(pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -542,7 +556,38 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">pIcon&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<hr><h2>Documentation des définition de type</h2>
+<a class="anchor" name="b668f92c35584a3ef184d96eef2f2952"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::CairoDockTransitionRenderFunc" ref="b668f92c35584a3ef184d96eef2f2952" args=")(gpointer pUserData, cairo_t *pIconContext)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef gboolean(* <a class="el" href="cairo-dock-animations_8h.html#b668f92c35584a3ef184d96eef2f2952">CairoDockTransitionRenderFunc</a>)(gpointer pUserData, cairo_t *pIconContext)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="f38605676d9b48e9c9640f9c80fd9c7e"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::CairoDockTransitionGLRenderFunc" ref="f38605676d9b48e9c9640f9c80fd9c7e" args=")(gpointer pUserData)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef gboolean(* <a class="el" href="cairo-dock-animations_8h.html#f38605676d9b48e9c9640f9c80fd9c7e">CairoDockTransitionGLRenderFunc</a>)(gpointer pUserData)          </td>
         </tr>
       </table>
 </div>
@@ -553,7 +598,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 </div>
 </div><p>
 <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="dbdf2df4bca3c8693babeda5fba8b110"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_move_up" ref="dbdf2df4bca3c8693babeda5fba8b110" args="(CairoDock *pDock)" -->
+<a class="anchor" name="dbdf2df4bca3c8693babeda5fba8b110"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_move_up" ref="dbdf2df4bca3c8693babeda5fba8b110" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -563,7 +608,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -573,7 +618,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="0ceefbf48eaf88fbcde2fc204f91c82d"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_move_down" ref="0ceefbf48eaf88fbcde2fc204f91c82d" args="(CairoDock *pDock)" -->
+<a class="anchor" name="0ceefbf48eaf88fbcde2fc204f91c82d"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_move_down" ref="0ceefbf48eaf88fbcde2fc204f91c82d" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -583,7 +628,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -593,7 +638,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="a2d77d4298d46b320fd668ffca7968ef"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_pop_up" ref="a2d77d4298d46b320fd668ffca7968ef" args="(CairoDock *pDock)" -->
+<a class="anchor" name="a2d77d4298d46b320fd668ffca7968ef"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_pop_up" ref="a2d77d4298d46b320fd668ffca7968ef" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -603,7 +648,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -613,7 +658,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="0e80f9e6617d4f18ddbf3a1b178dbe2a"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_pop_down" ref="0e80f9e6617d4f18ddbf3a1b178dbe2a" args="(CairoDock *pDock)" -->
+<a class="anchor" name="0e80f9e6617d4f18ddbf3a1b178dbe2a"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_pop_down" ref="0e80f9e6617d4f18ddbf3a1b178dbe2a" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -623,7 +668,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -633,7 +678,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="9e998350ee650b466b278b892f8e6d98"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_calculate_magnitude" ref="9e998350ee650b466b278b892f8e6d98" args="(gint iMagnitudeIndex)" -->
+<a class="anchor" name="9e998350ee650b466b278b892f8e6d98"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_calculate_magnitude" ref="9e998350ee650b466b278b892f8e6d98" args="(gint iMagnitudeIndex)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -643,7 +688,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype">gint&nbsp;</td>
           <td class="paramname"> <em>iMagnitudeIndex</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -653,7 +698,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="5f6835106b72e260624d5f09db86a6bf"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_grow_up" ref="5f6835106b72e260624d5f09db86a6bf" args="(CairoDock *pDock)" -->
+<a class="anchor" name="5f6835106b72e260624d5f09db86a6bf"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_grow_up" ref="5f6835106b72e260624d5f09db86a6bf" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -663,7 +708,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -673,7 +718,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="9c19b3db8ce61a2e377cbd66aff22ee3"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_shrink_down" ref="9c19b3db8ce61a2e377cbd66aff22ee3" args="(CairoDock *pDock)" -->
+<a class="anchor" name="9c19b3db8ce61a2e377cbd66aff22ee3"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_shrink_down" ref="9c19b3db8ce61a2e377cbd66aff22ee3" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -683,7 +728,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -693,7 +738,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="935a24bf813a47706deaba420e088d3b"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_handle_inserting_removing_icons" ref="935a24bf813a47706deaba420e088d3b" args="(CairoDock *pDock)" -->
+<a class="anchor" name="935a24bf813a47706deaba420e088d3b"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_handle_inserting_removing_icons" ref="935a24bf813a47706deaba420e088d3b" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -703,7 +748,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -713,7 +758,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
 
 </div>
 </div><p>
-<a class="anchor" name="3d49e146c8720f44260ce65c667e6264"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_launch_animation" ref="3d49e146c8720f44260ce65c667e6264" args="(CairoContainer *pContainer)" -->
+<a class="anchor" name="3d49e146c8720f44260ce65c667e6264"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_launch_animation" ref="3d49e146c8720f44260ce65c667e6264" args="(CairoContainer *pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -723,7 +768,7 @@ Renvoie l'intervalle de temps entre 2 etapes de l'animation lente (en ms). <dl c
           <td class="paramtype"><a class="el" href="struct__CairoContainer.html">CairoContainer</a> *&nbsp;</td>
           <td class="paramname"> <em>pContainer</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -738,7 +783,7 @@ Lance l'animation du container. Ne fait rien si l'animation ne sera pas visible 
 
 </div>
 </div><p>
-<a class="anchor" name="0f4995eb5d54708e6d2ecebcbd096470"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_start_shrinking" ref="0f4995eb5d54708e6d2ecebcbd096470" args="(CairoDock *pDock)" -->
+<a class="anchor" name="0f4995eb5d54708e6d2ecebcbd096470"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_start_shrinking" ref="0f4995eb5d54708e6d2ecebcbd096470" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -748,7 +793,7 @@ Lance l'animation du container. Ne fait rien si l'animation ne sera pas visible 
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -758,7 +803,7 @@ Lance l'animation du container. Ne fait rien si l'animation ne sera pas visible 
 
 </div>
 </div><p>
-<a class="anchor" name="26bfbfcdc0540c96d3aec9bfc65940b9"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_start_growing" ref="26bfbfcdc0540c96d3aec9bfc65940b9" args="(CairoDock *pDock)" -->
+<a class="anchor" name="26bfbfcdc0540c96d3aec9bfc65940b9"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_start_growing" ref="26bfbfcdc0540c96d3aec9bfc65940b9" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -768,7 +813,7 @@ Lance l'animation du container. Ne fait rien si l'animation ne sera pas visible 
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -778,7 +823,7 @@ Lance l'animation du container. Ne fait rien si l'animation ne sera pas visible 
 
 </div>
 </div><p>
-<a class="anchor" name="b7fe6bcbb52cd3acf6557c6ac73966cb"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_start_icon_animation" ref="b7fe6bcbb52cd3acf6557c6ac73966cb" args="(Icon *icon, CairoDock *pDock)" -->
+<a class="anchor" name="b7fe6bcbb52cd3acf6557c6ac73966cb"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_start_icon_animation" ref="b7fe6bcbb52cd3acf6557c6ac73966cb" args="(Icon *icon, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -797,7 +842,7 @@ Lance l'animation du container. Ne fait rien si l'animation ne sera pas visible 
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -813,7 +858,7 @@ Lance l'animation de l'icone. Ne fait rien si l'icone ne sera pas animee. <dl co
 
 </div>
 </div><p>
-<a class="anchor" name="3feab7e913e2676a6a1e31477e2c4bec"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_request_icon_animation" ref="3feab7e913e2676a6a1e31477e2c4bec" args="(Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)" -->
+<a class="anchor" name="3feab7e913e2676a6a1e31477e2c4bec"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_request_icon_animation" ref="3feab7e913e2676a6a1e31477e2c4bec" args="(Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -844,7 +889,7 @@ Lance l'animation de l'icone. Ne fait rien si l'icone ne sera pas animee. <dl co
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -862,7 +907,7 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
 
 </div>
 </div><p>
-<a class="anchor" name="5b4c122bc1b0f9d384e67a5d7b8c9bc8"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_mark_icon_animation_as" ref="5b4c122bc1b0f9d384e67a5d7b8c9bc8" args="(Icon *pIcon, CairoDockAnimationState iAnimationState)" -->
+<a class="anchor" name="5b4c122bc1b0f9d384e67a5d7b8c9bc8"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_mark_icon_animation_as" ref="5b4c122bc1b0f9d384e67a5d7b8c9bc8" args="(Icon *pIcon, CairoDockAnimationState iAnimationState)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -875,13 +920,13 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#6f884cd4a5b75b5c1ef0d2580c91e4b9">CairoDockAnimationState</a>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-icons_8h.html#6f884cd4a5b75b5c1ef0d2580c91e4b9">CairoDockAnimationState</a>&nbsp;</td>
           <td class="paramname"> <em>iAnimationState</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -891,7 +936,7 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
 
 </div>
 </div><p>
-<a class="anchor" name="55c17ac12914651b5b33743acfc317d6"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_marking_icon_animation_as" ref="55c17ac12914651b5b33743acfc317d6" args="(Icon *pIcon, CairoDockAnimationState iAnimationState)" -->
+<a class="anchor" name="55c17ac12914651b5b33743acfc317d6"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_stop_marking_icon_animation_as" ref="55c17ac12914651b5b33743acfc317d6" args="(Icon *pIcon, CairoDockAnimationState iAnimationState)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -904,13 +949,13 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#6f884cd4a5b75b5c1ef0d2580c91e4b9">CairoDockAnimationState</a>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-icons_8h.html#6f884cd4a5b75b5c1ef0d2580c91e4b9">CairoDockAnimationState</a>&nbsp;</td>
           <td class="paramname"> <em>iAnimationState</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -920,7 +965,7 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
 
 </div>
 </div><p>
-<a class="anchor" name="de6a289e536c87440401a47d1013f6ef"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_update_removing_inserting_icon_size_default" ref="de6a289e536c87440401a47d1013f6ef" args="(Icon *icon)" -->
+<a class="anchor" name="de6a289e536c87440401a47d1013f6ef"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_update_removing_inserting_icon_size_default" ref="de6a289e536c87440401a47d1013f6ef" args="(Icon *icon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -930,7 +975,7 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
           <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
           <td class="paramname"> <em>icon</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -940,7 +985,7 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
 
 </div>
 </div><p>
-<a class="anchor" name="c3dd709a2ca50f265ed1b8df9b2bda7b"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_update_inserting_removing_icon_notification" ref="c3dd709a2ca50f265ed1b8df9b2bda7b" args="(gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation)" -->
+<a class="anchor" name="c3dd709a2ca50f265ed1b8df9b2bda7b"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_update_inserting_removing_icon_notification" ref="c3dd709a2ca50f265ed1b8df9b2bda7b" args="(gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -971,7 +1016,7 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -981,7 +1026,7 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
 
 </div>
 </div><p>
-<a class="anchor" name="323ee458d1a365be48b1ff7439ea6e58"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_on_insert_remove_icon_notification" ref="323ee458d1a365be48b1ff7439ea6e58" args="(gpointer pUserData, Icon *pIcon, CairoDock *pDock)" -->
+<a class="anchor" name="323ee458d1a365be48b1ff7439ea6e58"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_on_insert_remove_icon_notification" ref="323ee458d1a365be48b1ff7439ea6e58" args="(gpointer pUserData, Icon *pIcon, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1006,7 +1051,7 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -1016,7 +1061,7 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
 
 </div>
 </div><p>
-<a class="anchor" name="1aaf9a9e3e7ac8cb6866ef29c1d37d78"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_stop_inserting_removing_icon_notification" ref="1aaf9a9e3e7ac8cb6866ef29c1d37d78" args="(gpointer pUserData, Icon *pIcon)" -->
+<a class="anchor" name="1aaf9a9e3e7ac8cb6866ef29c1d37d78"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_stop_inserting_removing_icon_notification" ref="1aaf9a9e3e7ac8cb6866ef29c1d37d78" args="(gpointer pUserData, Icon *pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1035,7 +1080,7 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -1045,7 +1090,7 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
 
 </div>
 </div><p>
-<a class="anchor" name="168253d9b65cb118c4fb1b68dac08564"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_set_transition_on_icon" ref="168253d9b65cb118c4fb1b68dac08564" args="(Icon *pIcon, CairoContainer *pContainer, cairo_t *pIconContext, CairoDockTransitionRenderFunc render_step_cairo, CairoDockTransitionGLRenderFunc render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData)" -->
+<a class="anchor" name="168253d9b65cb118c4fb1b68dac08564"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_set_transition_on_icon" ref="168253d9b65cb118c4fb1b68dac08564" args="(Icon *pIcon, CairoContainer *pContainer, cairo_t *pIconContext, CairoDockTransitionRenderFunc render_step_cairo, CairoDockTransitionGLRenderFunc render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1070,13 +1115,13 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#b668f92c35584a3ef184d96eef2f2952">CairoDockTransitionRenderFunc</a>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-animations_8h.html#b668f92c35584a3ef184d96eef2f2952">CairoDockTransitionRenderFunc</a>&nbsp;</td>
           <td class="paramname"> <em>render_step_cairo</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="cairo-dock-struct_8h.html#f38605676d9b48e9c9640f9c80fd9c7e">CairoDockTransitionGLRenderFunc</a>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-animations_8h.html#f38605676d9b48e9c9640f9c80fd9c7e">CairoDockTransitionGLRenderFunc</a>&nbsp;</td>
           <td class="paramname"> <em>render_step_opengl</em>, </td>
         </tr>
         <tr>
@@ -1106,7 +1151,7 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -1116,7 +1161,7 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
 
 </div>
 </div><p>
-<a class="anchor" name="c116241f05aaa75f7d4c488e0bd6ac54"></a><!-- doxytag: member="cairo-dock-animations.h::cairo_dock_remove_transition_on_icon" ref="c116241f05aaa75f7d4c488e0bd6ac54" args="(Icon *pIcon)" -->
+<a class="anchor" name="c116241f05aaa75f7d4c488e0bd6ac54"></a><!-- doxytag: member="cairo&#45;dock&#45;animations.h::cairo_dock_remove_transition_on_icon" ref="c116241f05aaa75f7d4c488e0bd6ac54" args="(Icon *pIcon)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1126,7 +1171,7 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
           <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
           <td class="paramname"> <em>pIcon</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1137,8 +1182,8 @@ Lance une animation donnee sur l'icone. Ne fait rien si l'icone ne sera pas anim
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Thu Apr 9 02:53:49 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Sun Jun 21 04:02:15 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>
 </html>

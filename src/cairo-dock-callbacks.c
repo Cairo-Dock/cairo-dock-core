@@ -79,6 +79,7 @@ extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
 extern gboolean g_bEasterEggs;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bLocked;
+extern CairoDockDesktopEnv g_iDesktopEnv;
 
 static gboolean s_bHideAfterShortcut = FALSE;
 static gboolean s_bFrozenDock = FALSE;
@@ -981,9 +982,14 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
-	if (icon != NULL)
-		icon->bPointed = FALSE;  // sinon on ne detecte pas l'arrive sur l'icone, c'est genant si elle a un sous-dock.
-
+	if (icon != NULL && g_iDesktopEnv != CAIRO_DOCK_KDE)
+	{
+		if (s_pIconClicked != NULL)
+			g_print (">>> on est rentre par un clic ! KDE se distingue encore une fois ... :-/\n");
+		if (g_iDesktopEnv != CAIRO_DOCK_KDE)  // je crois que KDE nous fait ressortir/rentrer lors d'un clic...
+			icon->bPointed = FALSE;  // sinon on ne detecte pas l'arrive sur l'icone, c'est genant si elle a un sous-dock.
+	}
+	
 	cairo_dock_start_growing (pDock);
 
 	return FALSE;

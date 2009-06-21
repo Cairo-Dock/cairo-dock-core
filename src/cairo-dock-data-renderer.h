@@ -10,6 +10,7 @@ G_BEGIN_DECLS
 /**
 *@file cairo-dock-data-renderer.h This class defines the data renderer structure and API.
 * Data renderer is a generic way to render onto an icon a set of values defined by : {yk = f(tk)} where k=0..n and yk is a vector.
+* 
 */
 
 
@@ -128,7 +129,7 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 *@return a CairoDataToRenderer* */
 #define cairo_data_renderer_get_data(pRenderer) (&(pRenderer)->data);
 /**Get the elementary part of a Data Renderer Attribute
-*@param r a high level data renderer attribute
+*@param pAttr a high level data renderer attribute
 *@return a CairoDataRendererAttribute* */
 #define CAIRO_DATA_RENDERER_ATTRIBUTE(pAttr) ((CairoDataRendererAttribute *) pAttr)
 

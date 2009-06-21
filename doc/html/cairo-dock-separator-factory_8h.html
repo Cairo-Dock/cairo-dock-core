@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-separator-factory.h</title>
-<link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
+<link href="doxygen.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.5 -->
+<!-- Généré par Doxygen 1.5.8 -->
 <div class="navigation" id="top">
   <div class="tabs">
     <ul>
@@ -23,6 +23,12 @@
     </li>
     </ul>
   </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>Liste&nbsp;des&nbsp;fichiers</span></a></li>
+      <li><a href="globals.html"><span>Portée&nbsp;globale</span></a></li>
+    </ul>
+  </div>
 </div>
 <div class="contents">
 <h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-separator-factory.h</h1><table border="0" cellpadding="0" cellspacing="0">
@@ -30,11 +36,11 @@
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS cairo_surface_t *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-separator-factory_8h.html#ddb2147928a9c230c39cbf56c972ae20">cairo_dock_create_separator_surface</a> (cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp, double *fWidth, double *fHeight)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-separator-factory_8h.html#ddc2e2d9758a37515df4e26cb6b24fc1">cairo_dock_create_separator_icon</a> (cairo_t *pSourceContext, int iSeparatorType, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, gboolean bApplyRatio)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-separator-factory_8h.html#3fd6483ad1688ab96a758fa4aef9905a">cairo_dock_create_separator_icon</a> (cairo_t *pSourceContext, int iSeparatorType, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
 </table>
 <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="ddb2147928a9c230c39cbf56c972ae20"></a><!-- doxytag: member="cairo-dock-separator-factory.h::cairo_dock_create_separator_surface" ref="ddb2147928a9c230c39cbf56c972ae20" args="(cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp, double *fWidth, double *fHeight)" -->
+<a class="anchor" name="ddb2147928a9c230c39cbf56c972ae20"></a><!-- doxytag: member="cairo&#45;dock&#45;separator&#45;factory.h::cairo_dock_create_separator_surface" ref="ddb2147928a9c230c39cbf56c972ae20" args="(cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp, double *fWidth, double *fHeight)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -77,7 +83,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -87,7 +93,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="ddc2e2d9758a37515df4e26cb6b24fc1"></a><!-- doxytag: member="cairo-dock-separator-factory.h::cairo_dock_create_separator_icon" ref="ddc2e2d9758a37515df4e26cb6b24fc1" args="(cairo_t *pSourceContext, int iSeparatorType, CairoDock *pDock, gboolean bApplyRatio)" -->
+<a class="anchor" name="3fd6483ad1688ab96a758fa4aef9905a"></a><!-- doxytag: member="cairo&#45;dock&#45;separator&#45;factory.h::cairo_dock_create_separator_icon" ref="3fd6483ad1688ab96a758fa4aef9905a" args="(cairo_t *pSourceContext, int iSeparatorType, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -107,30 +113,32 @@
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
-          <td class="paramname"> <em>pDock</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gboolean&nbsp;</td>
-          <td class="paramname"> <em>bApplyRatio</em></td><td>&nbsp;</td>
+          <td class="paramname"> <em>pDock</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>
+Create an icon that will act as a separator. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pSourceContext</em>&nbsp;</td><td>a cairo context </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iSeparatorType</em>&nbsp;</td><td>the type of separator (CAIRO_DOCK_SEPARATOR12, CAIRO_DOCK_SEPARATOR23 or any other odd number) </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pDock</em>&nbsp;</td><td>the dock it will belong to </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Renvoie:</b></dt><dd>the newly allocated icon, with all buffers filled. </dd></dl>
 
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Thu Apr 9 02:53:50 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Sun Jun 21 04:02:15 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>
 </html>

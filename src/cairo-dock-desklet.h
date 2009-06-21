@@ -47,6 +47,7 @@ typedef enum {
 	CAIRO_DESKLET_RESERVE_SPACE
 	} CairoDeskletAccessibility;
 
+/// Decoration of a Desklet.
 struct _CairoDeskletDecoration {
 	gchar *cBackGroundImagePath;
 	gchar *cForeGroundImagePath;
@@ -60,6 +61,7 @@ struct _CairoDeskletDecoration {
 	gint iDecorationPlanesRotation;
 	};
 
+/// Configuration attributes of a Desklet.
 struct _CairoDeskletAttribute {
 	gboolean bDeskletUseSize;
 	gint iDeskletWidth;
@@ -102,6 +104,7 @@ struct _CairoDeskletRenderer {
 	GList *pPreDefinedConfigList;
 };
 
+/// Definition of a Desklet, which derives from a Container.
 struct _CairoDesklet {
 	/// type "desklet".
 	CairoDockTypeContainer iType;

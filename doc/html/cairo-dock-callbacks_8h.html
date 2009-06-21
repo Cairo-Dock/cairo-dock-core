@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-callbacks.h</title>
-<link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
+<link href="doxygen.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.5 -->
+<!-- Généré par Doxygen 1.5.8 -->
 <div class="navigation" id="top">
   <div class="tabs">
     <ul>
@@ -23,6 +23,12 @@
     </li>
     </ul>
   </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>Liste&nbsp;des&nbsp;fichiers</span></a></li>
+      <li><a href="globals.html"><span>Portée&nbsp;globale</span></a></li>
+    </ul>
+  </div>
 </div>
 <div class="contents">
 <h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-callbacks.h</h1><table border="0" cellpadding="0" cellspacing="0">
@@ -31,7 +37,9 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#26e0a5481e7e68c6ff9883384e7ed50d">cairo_dock_launch_command</a>(cCommand,...)</td></tr>
 
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#6bd612df275b775e248ad80dba057146">cairo_dock_render_dock_notification</a> (gpointer pUserData, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, cairo_t *pCairoContext)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">G_BEGIN_DECLS void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#c9fe7d6621eb628a3ad6d91ff8a210e6">cairo_dock_freeze_docks</a> (gboolean bFreeze)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#91fc54b41542f7f06372de7fa4fd4189">cairo_dock_render_dock_notification</a> (gpointer pUserData, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, cairo_t *pCairoContext)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#bbb8b33179894e4ba0710b51c2ad7fc9">cairo_dock_on_expose</a> (GtkWidget *pWidget, GdkEventExpose *pExpose, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
@@ -57,6 +65,8 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#4034081e1d7343fa7266c5bbe6c78454">cairo_dock_on_key_release</a> (GtkWidget *pWidget, GdkEventKey *pKey, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#97872a661f54f9119d04fb8284941992">cairo_dock_launch_command_sync</a> (const gchar *cCommand)</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#35181a560bbadd5415e80ee62d965932">cairo_dock_launch_command_full</a> (const gchar *cCommand, gchar *cWorkingDirectory,...)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#a7c74904b13be309c24eb5d5389df0bb">cairo_dock_notification_click_icon</a> (gpointer pUserData, <a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, guint iButtonState)</td></tr>
@@ -64,6 +74,8 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#c5aaa6f956b633c8c13a2e07bd12a6c2">cairo_dock_notification_middle_click_icon</a> (gpointer pUserData, <a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#20b98e5bcf47133e3b7ae899930e60d7">cairo_dock_on_button_press</a> (GtkWidget *pWidget, GdkEventButton *pButton, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#e5a4254b4d401fff16910dda2727e73a">cairo_dock_notification_scroll_icon</a> (gpointer pUserData, <a class="el" href="struct__Icon.html">Icon</a> *icon, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock, int iDirection)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#ce105c7bf961e03568cde6ff3ea98d9b">cairo_dock_on_scroll</a> (GtkWidget *pWidget, GdkEventScroll *pScroll, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
@@ -77,8 +89,6 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#587d9521b61e390cd69722b3112d3de7">cairo_dock_on_drag_leave</a> (GtkWidget *pWidget, GdkDragContext *dc, guint time, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#40a9ed4619308802d3c0d1a29dd008c9">cairo_dock_on_delete</a> (GtkWidget *pWidget, GdkEvent *event, <a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
-
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#58776f0ef40d3e0dd821bcc683574fd8">cairo_dock_show_dock_at_mouse</a> (<a class="el" href="struct__CairoDock.html">CairoDock</a> *pDock)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-callbacks_8h.html#2695dfc3a0b884f15818d989be50925d">cairo_dock_raise_from_keyboard</a> (const char *cKeyShortcut, gpointer data)</td></tr>
@@ -89,7 +99,7 @@
 
 </table>
 <hr><h2>Documentation des macros</h2>
-<a class="anchor" name="26e0a5481e7e68c6ff9883384e7ed50d"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_launch_command" ref="26e0a5481e7e68c6ff9883384e7ed50d" args="(cCommand,...)" -->
+<a class="anchor" name="26e0a5481e7e68c6ff9883384e7ed50d"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_launch_command" ref="26e0a5481e7e68c6ff9883384e7ed50d" args="(cCommand,...)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -102,7 +112,7 @@
           <td class="paramtype"> <em>...</em>&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -113,12 +123,32 @@
 </div>
 </div><p>
 <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="6bd612df275b775e248ad80dba057146"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_render_dock_notification" ref="6bd612df275b775e248ad80dba057146" args="(gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext)" -->
+<a class="anchor" name="c9fe7d6621eb628a3ad6d91ff8a210e6"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_freeze_docks" ref="c9fe7d6621eb628a3ad6d91ff8a210e6" args="(gboolean bFreeze)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">G_BEGIN_DECLS gboolean cairo_dock_render_dock_notification           </td>
+          <td class="memname">G_BEGIN_DECLS void cairo_dock_freeze_docks           </td>
+          <td>(</td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bFreeze</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="91fc54b41542f7f06372de7fa4fd4189"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_render_dock_notification" ref="91fc54b41542f7f06372de7fa4fd4189" args="(gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_render_dock_notification           </td>
           <td>(</td>
           <td class="paramtype">gpointer&nbsp;</td>
           <td class="paramname"> <em>pUserData</em>, </td>
@@ -138,7 +168,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -148,7 +178,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="bbb8b33179894e4ba0710b51c2ad7fc9"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_on_expose" ref="bbb8b33179894e4ba0710b51c2ad7fc9" args="(GtkWidget *pWidget, GdkEventExpose *pExpose, CairoDock *pDock)" -->
+<a class="anchor" name="bbb8b33179894e4ba0710b51c2ad7fc9"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_on_expose" ref="bbb8b33179894e4ba0710b51c2ad7fc9" args="(GtkWidget *pWidget, GdkEventExpose *pExpose, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -173,7 +203,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -183,7 +213,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="2d80e09ef2bd4923dbc25375db00c82a"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_show_subdock" ref="2d80e09ef2bd4923dbc25375db00c82a" args="(Icon *pPointedIcon, gboolean bUpdate, CairoDock *pDock)" -->
+<a class="anchor" name="2d80e09ef2bd4923dbc25375db00c82a"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_show_subdock" ref="2d80e09ef2bd4923dbc25375db00c82a" args="(Icon *pPointedIcon, gboolean bUpdate, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -208,7 +238,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -218,7 +248,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="ed51563240c4fbca18ba7014725c5afb"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_on_change_icon" ref="ed51563240c4fbca18ba7014725c5afb" args="(Icon *pLastPointedIcon, Icon *pPointedIcon, CairoDock *pDock)" -->
+<a class="anchor" name="ed51563240c4fbca18ba7014725c5afb"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_on_change_icon" ref="ed51563240c4fbca18ba7014725c5afb" args="(Icon *pLastPointedIcon, Icon *pPointedIcon, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -243,7 +273,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -253,7 +283,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="093c67c453c1fe5b67c73f1cfed33d7b"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_on_motion_notify" ref="093c67c453c1fe5b67c73f1cfed33d7b" args="(GtkWidget *pWidget, GdkEventMotion *pMotion, CairoDock *pDock)" -->
+<a class="anchor" name="093c67c453c1fe5b67c73f1cfed33d7b"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_on_motion_notify" ref="093c67c453c1fe5b67c73f1cfed33d7b" args="(GtkWidget *pWidget, GdkEventMotion *pMotion, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -278,7 +308,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -288,7 +318,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="a852a8b23d2d5fc1c2e22a7b6af8d8a1"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_emit_signal_on_dock" ref="a852a8b23d2d5fc1c2e22a7b6af8d8a1" args="(CairoDock *pDock, const gchar *cSignal)" -->
+<a class="anchor" name="a852a8b23d2d5fc1c2e22a7b6af8d8a1"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_emit_signal_on_dock" ref="a852a8b23d2d5fc1c2e22a7b6af8d8a1" args="(CairoDock *pDock, const gchar *cSignal)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -307,7 +337,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -317,7 +347,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="bec047603af1b0ab3a0544b484c6a8e4"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_emit_leave_signal" ref="bec047603af1b0ab3a0544b484c6a8e4" args="(CairoDock *pDock)" -->
+<a class="anchor" name="bec047603af1b0ab3a0544b484c6a8e4"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_emit_leave_signal" ref="bec047603af1b0ab3a0544b484c6a8e4" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -327,7 +357,7 @@
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -337,7 +367,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="982ca0a1395d109ee94b654bed7ced3f"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_emit_enter_signal" ref="982ca0a1395d109ee94b654bed7ced3f" args="(CairoDock *pDock)" -->
+<a class="anchor" name="982ca0a1395d109ee94b654bed7ced3f"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_emit_enter_signal" ref="982ca0a1395d109ee94b654bed7ced3f" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -347,7 +377,7 @@
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -357,7 +387,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="3bbbe6f442d369122925f15e4ce51a0f"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_poll_screen_edge" ref="3bbbe6f442d369122925f15e4ce51a0f" args="(CairoDock *pDock)" -->
+<a class="anchor" name="3bbbe6f442d369122925f15e4ce51a0f"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_poll_screen_edge" ref="3bbbe6f442d369122925f15e4ce51a0f" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -367,7 +397,7 @@
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -377,7 +407,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="79d1076bf5d597fee7d4b3ba4edd97e9"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_leave_from_main_dock" ref="79d1076bf5d597fee7d4b3ba4edd97e9" args="(CairoDock *pDock)" -->
+<a class="anchor" name="79d1076bf5d597fee7d4b3ba4edd97e9"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_leave_from_main_dock" ref="79d1076bf5d597fee7d4b3ba4edd97e9" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -387,7 +417,7 @@
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -397,7 +427,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="807de3caf2bb218d0485ec3eaacb30ed"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_on_leave_notify" ref="807de3caf2bb218d0485ec3eaacb30ed" args="(GtkWidget *pWidget, GdkEventCrossing *pEvent, CairoDock *pDock)" -->
+<a class="anchor" name="807de3caf2bb218d0485ec3eaacb30ed"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_on_leave_notify" ref="807de3caf2bb218d0485ec3eaacb30ed" args="(GtkWidget *pWidget, GdkEventCrossing *pEvent, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -422,7 +452,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -432,7 +462,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="6882e6aece3e40b27b2c7c89f58830ed"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_on_enter_notify" ref="6882e6aece3e40b27b2c7c89f58830ed" args="(GtkWidget *pWidget, GdkEventCrossing *pEvent, CairoDock *pDock)" -->
+<a class="anchor" name="6882e6aece3e40b27b2c7c89f58830ed"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_on_enter_notify" ref="6882e6aece3e40b27b2c7c89f58830ed" args="(GtkWidget *pWidget, GdkEventCrossing *pEvent, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -457,7 +487,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -467,7 +497,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="4034081e1d7343fa7266c5bbe6c78454"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_on_key_release" ref="4034081e1d7343fa7266c5bbe6c78454" args="(GtkWidget *pWidget, GdkEventKey *pKey, CairoDock *pDock)" -->
+<a class="anchor" name="4034081e1d7343fa7266c5bbe6c78454"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_on_key_release" ref="4034081e1d7343fa7266c5bbe6c78454" args="(GtkWidget *pWidget, GdkEventKey *pKey, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -492,7 +522,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -502,7 +532,27 @@
 
 </div>
 </div><p>
-<a class="anchor" name="35181a560bbadd5415e80ee62d965932"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_launch_command_full" ref="35181a560bbadd5415e80ee62d965932" args="(const gchar *cCommand, gchar *cWorkingDirectory,...)" -->
+<a class="anchor" name="97872a661f54f9119d04fb8284941992"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_launch_command_sync" ref="97872a661f54f9119d04fb8284941992" args="(const gchar *cCommand)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gchar* cairo_dock_launch_command_sync           </td>
+          <td>(</td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>cCommand</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="35181a560bbadd5415e80ee62d965932"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_launch_command_full" ref="35181a560bbadd5415e80ee62d965932" args="(const gchar *cCommand, gchar *cWorkingDirectory,...)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -527,7 +577,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -537,7 +587,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="a7c74904b13be309c24eb5d5389df0bb"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_notification_click_icon" ref="a7c74904b13be309c24eb5d5389df0bb" args="(gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState)" -->
+<a class="anchor" name="a7c74904b13be309c24eb5d5389df0bb"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_notification_click_icon" ref="a7c74904b13be309c24eb5d5389df0bb" args="(gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -568,7 +618,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -578,7 +628,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="c5aaa6f956b633c8c13a2e07bd12a6c2"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_notification_middle_click_icon" ref="c5aaa6f956b633c8c13a2e07bd12a6c2" args="(gpointer pUserData, Icon *icon, CairoDock *pDock)" -->
+<a class="anchor" name="c5aaa6f956b633c8c13a2e07bd12a6c2"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_notification_middle_click_icon" ref="c5aaa6f956b633c8c13a2e07bd12a6c2" args="(gpointer pUserData, Icon *icon, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -603,7 +653,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -613,7 +663,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="20b98e5bcf47133e3b7ae899930e60d7"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_on_button_press" ref="20b98e5bcf47133e3b7ae899930e60d7" args="(GtkWidget *pWidget, GdkEventButton *pButton, CairoDock *pDock)" -->
+<a class="anchor" name="20b98e5bcf47133e3b7ae899930e60d7"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_on_button_press" ref="20b98e5bcf47133e3b7ae899930e60d7" args="(GtkWidget *pWidget, GdkEventButton *pButton, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -638,7 +688,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -648,7 +698,48 @@
 
 </div>
 </div><p>
-<a class="anchor" name="ce105c7bf961e03568cde6ff3ea98d9b"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_on_scroll" ref="ce105c7bf961e03568cde6ff3ea98d9b" args="(GtkWidget *pWidget, GdkEventScroll *pScroll, CairoDock *pDock)" -->
+<a class="anchor" name="e5a4254b4d401fff16910dda2727e73a"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_notification_scroll_icon" ref="e5a4254b4d401fff16910dda2727e73a" args="(gpointer pUserData, Icon *icon, CairoDock *pDock, int iDirection)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean cairo_dock_notification_scroll_icon           </td>
+          <td>(</td>
+          <td class="paramtype">gpointer&nbsp;</td>
+          <td class="paramname"> <em>pUserData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td>
+          <td class="paramname"> <em>icon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDock</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>iDirection</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ce105c7bf961e03568cde6ff3ea98d9b"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_on_scroll" ref="ce105c7bf961e03568cde6ff3ea98d9b" args="(GtkWidget *pWidget, GdkEventScroll *pScroll, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -673,7 +764,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -683,7 +774,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="e2a1c921f89584f7f73199b9a5efcce4"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_on_configure" ref="e2a1c921f89584f7f73199b9a5efcce4" args="(GtkWidget *pWidget, GdkEventConfigure *pEvent, CairoDock *pDock)" -->
+<a class="anchor" name="e2a1c921f89584f7f73199b9a5efcce4"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_on_configure" ref="e2a1c921f89584f7f73199b9a5efcce4" args="(GtkWidget *pWidget, GdkEventConfigure *pEvent, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -708,7 +799,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -718,7 +809,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="b38f11c08b615b78e397b5f684d7aaa7"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_on_drag_data_received" ref="b38f11c08b615b78e397b5f684d7aaa7" args="(GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint t, CairoDock *pDock)" -->
+<a class="anchor" name="b38f11c08b615b78e397b5f684d7aaa7"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_on_drag_data_received" ref="b38f11c08b615b78e397b5f684d7aaa7" args="(GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint t, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -773,7 +864,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -783,7 +874,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="09c77e837bb28c3a67d8aedd75b26bee"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_notification_drop_data" ref="09c77e837bb28c3a67d8aedd75b26bee" args="(gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, CairoContainer *pContainer)" -->
+<a class="anchor" name="09c77e837bb28c3a67d8aedd75b26bee"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_notification_drop_data" ref="09c77e837bb28c3a67d8aedd75b26bee" args="(gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, CairoContainer *pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -820,7 +911,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -830,7 +921,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="bb97b374c1c8d44e7ca1f204a748e641"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_on_drag_motion" ref="bb97b374c1c8d44e7ca1f204a748e641" args="(GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint t, CairoDock *pDock)" -->
+<a class="anchor" name="bb97b374c1c8d44e7ca1f204a748e641"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_on_drag_motion" ref="bb97b374c1c8d44e7ca1f204a748e641" args="(GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint t, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -873,7 +964,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -883,7 +974,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="587d9521b61e390cd69722b3112d3de7"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_on_drag_leave" ref="587d9521b61e390cd69722b3112d3de7" args="(GtkWidget *pWidget, GdkDragContext *dc, guint time, CairoDock *pDock)" -->
+<a class="anchor" name="587d9521b61e390cd69722b3112d3de7"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_on_drag_leave" ref="587d9521b61e390cd69722b3112d3de7" args="(GtkWidget *pWidget, GdkDragContext *dc, guint time, CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -914,7 +1005,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -924,42 +1015,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="40a9ed4619308802d3c0d1a29dd008c9"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_on_delete" ref="40a9ed4619308802d3c0d1a29dd008c9" args="(GtkWidget *pWidget, GdkEvent *event, CairoDock *pDock)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">gboolean cairo_dock_on_delete           </td>
-          <td>(</td>
-          <td class="paramtype">GtkWidget *&nbsp;</td>
-          <td class="paramname"> <em>pWidget</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">GdkEvent *&nbsp;</td>
-          <td class="paramname"> <em>event</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
-          <td class="paramname"> <em>pDock</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-
-</div>
-</div><p>
-<a class="anchor" name="58776f0ef40d3e0dd821bcc683574fd8"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_show_dock_at_mouse" ref="58776f0ef40d3e0dd821bcc683574fd8" args="(CairoDock *pDock)" -->
+<a class="anchor" name="58776f0ef40d3e0dd821bcc683574fd8"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_show_dock_at_mouse" ref="58776f0ef40d3e0dd821bcc683574fd8" args="(CairoDock *pDock)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -969,7 +1025,7 @@
           <td class="paramtype"><a class="el" href="struct__CairoDock.html">CairoDock</a> *&nbsp;</td>
           <td class="paramname"> <em>pDock</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -979,7 +1035,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="2695dfc3a0b884f15818d989be50925d"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_raise_from_keyboard" ref="2695dfc3a0b884f15818d989be50925d" args="(const char *cKeyShortcut, gpointer data)" -->
+<a class="anchor" name="2695dfc3a0b884f15818d989be50925d"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_raise_from_keyboard" ref="2695dfc3a0b884f15818d989be50925d" args="(const char *cKeyShortcut, gpointer data)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -998,7 +1054,7 @@
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -1008,7 +1064,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="7aa578111ffb44b1dd2c1a9f481b7706"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_hide_dock_like_a_menu" ref="7aa578111ffb44b1dd2c1a9f481b7706" args="(void)" -->
+<a class="anchor" name="7aa578111ffb44b1dd2c1a9f481b7706"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_hide_dock_like_a_menu" ref="7aa578111ffb44b1dd2c1a9f481b7706" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1018,7 +1074,7 @@
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1028,7 +1084,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="46ab9efd7ced5cb6555a8efc69f98c8f"></a><!-- doxytag: member="cairo-dock-callbacks.h::cairo_dock_unregister_current_flying_container" ref="46ab9efd7ced5cb6555a8efc69f98c8f" args="(void)" -->
+<a class="anchor" name="46ab9efd7ced5cb6555a8efc69f98c8f"></a><!-- doxytag: member="cairo&#45;dock&#45;callbacks.h::cairo_dock_unregister_current_flying_container" ref="46ab9efd7ced5cb6555a8efc69f98c8f" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1038,7 +1094,7 @@
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -1049,8 +1105,8 @@
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Thu Apr 9 02:53:49 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Sun Jun 21 04:02:15 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>
 </html>

@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>Cairo-Dock: Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-desklet.h</title>
-<link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
+<link href="doxygen.css" rel="stylesheet" type="text/css">
 </head><body>
-<!-- Généré par Doxygen 1.5.5 -->
+<!-- Généré par Doxygen 1.5.8 -->
 <div class="navigation" id="top">
   <div class="tabs">
     <ul>
@@ -23,10 +23,30 @@
     </li>
     </ul>
   </div>
+  <div class="tabs">
+    <ul>
+      <li><a href="files.html"><span>Liste&nbsp;des&nbsp;fichiers</span></a></li>
+      <li><a href="globals.html"><span>Portée&nbsp;globale</span></a></li>
+    </ul>
+  </div>
 </div>
 <div class="contents">
 <h1>Référence du fichier /home/fab/CD/trunk/cairo-dock/src/cairo-dock-desklet.h</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Structures de données</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDeskletDecoration.html">_CairoDeskletDecoration</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Decoration of a Desklet.  <a href="struct__CairoDeskletDecoration.html#_details">Plus de détails...</a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDeskletAttribute.html">_CairoDeskletAttribute</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Configuration attributes of a Desklet.  <a href="struct__CairoDeskletAttribute.html#_details">Plus de détails...</a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCairoDeskletRendererPreDefinedConfig.html">CairoDeskletRendererPreDefinedConfig</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDeskletRenderer.html">_CairoDeskletRenderer</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__CairoDesklet.html">_CairoDesklet</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Definition of a Desklet, which derives from a Container.  <a href="struct__CairoDesklet.html#_details">Plus de détails...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Macros</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#eed859d634690122c790c64427c9e2a5">CD_NB_ITER_FOR_GRADUATION</a></td></tr>
 
@@ -34,32 +54,79 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#e42429e2d675c2b950a8f9eb32a10ad2">CAIRO_DESKLET</a>(pContainer)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#0099d7a90279d54e53c78b747a93f3ee">cairo_dock_add_interactive_widget_to_desklet</a>(pInteractiveWidget, pDesklet)</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#80bd4b17c1732c9cf89370bdd56c811d">cairo_dock_get_coords_on_3D_desklet</a>(pDesklet, xptr, yptr)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#b9fcf71dd623c26d03518efe52dc4702">cairo_dock_set_static_desklet</a>(pDesklet)</td></tr>
+
+<tr><td colspan="2"><br><h2>Définition de type</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef gpointer&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#7068a4b39831fdb9e136051aef8f6e3a">CairoDeskletRendererDataParameter</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef <br class="typebreak">
+<a class="el" href="cairo-dock-desklet_8h.html#7068a4b39831fdb9e136051aef8f6e3a">CairoDeskletRendererDataParameter</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#8b4a26e3c0cf2ddd99f29181ce2cf4e3">CairoDeskletRendererDataPtr</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef gpointer&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#4f09000f176f2f8c37c94c9f0a5507e5">CairoDeskletRendererConfigParameter</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef <br class="typebreak">
+<a class="el" href="cairo-dock-desklet_8h.html#4f09000f176f2f8c37c94c9f0a5507e5">CairoDeskletRendererConfigParameter</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#823fabe3f630ea14322663dc03a0ee4e">CairoDeskletRendererConfigPtr</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef void(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#437a4a36a1f787a4f2f23921685c2d3e">CairoDeskletRenderFunc</a> )(cairo_t *pCairoContext, <a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, gboolean bRenderOptimized)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef void(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#c26661e0ed6016e7d1e9ee4fc22f2d47">CairoDeskletGLRenderFunc</a> )(<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef gpointer(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#851ea2d038472e5fd282d398b508a06a">CairoDeskletConfigureRendererFunc</a> )(<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, cairo_t *pSourceContext, <a class="el" href="cairo-dock-desklet_8h.html#823fabe3f630ea14322663dc03a0ee4e">CairoDeskletRendererConfigPtr</a> pConfig)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef void(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#9edbb48049d20882200c9d0fd7cab4e4">CairoDeskletLoadRendererDataFunc</a> )(<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, cairo_t *pSourceContext)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef void(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#11ae6ae45c5e168c8449f7174e6205f8">CairoDeskletUpdateRendererDataFunc</a> )(<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, <a class="el" href="cairo-dock-desklet_8h.html#8b4a26e3c0cf2ddd99f29181ce2cf4e3">CairoDeskletRendererDataPtr</a> pNewData)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef void(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#2535a64224ad8d2e1bba847c1390c236">CairoDeskletFreeRendererDataFunc</a> )(<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef void(*&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#a30f58cceb93452a94d166717bb498f0">CairoDeskletLoadIconsFunc</a> )(<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, cairo_t *pSourceContext)</td></tr>
+
+<tr><td colspan="2"><br><h2>Énumérations</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#9a8ba30a8169ea9520c080e33b31c50c">CairoDeskletAccessibility</a> { <br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-desklet_8h.html#9a8ba30a8169ea9520c080e33b31c50cd321d526609c923fae6844a10bf79e6a">CAIRO_DESKLET_NORMAL</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-desklet_8h.html#9a8ba30a8169ea9520c080e33b31c50c7aec7d07afb637a188646b2fa731cda4">CAIRO_DESKLET_KEEP_ABOVE</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-desklet_8h.html#9a8ba30a8169ea9520c080e33b31c50cb09a7cee5a16d4755ce171e13069c745">CAIRO_DESKLET_KEEP_BELOW</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-desklet_8h.html#9a8ba30a8169ea9520c080e33b31c50c7255d19e832f7725eac59ed024a3f528">CAIRO_DESKLET_ON_WIDGET_LAYER</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="cairo-dock-desklet_8h.html#9a8ba30a8169ea9520c080e33b31c50c9565fa85473115a0e5c32240678af6ed">CAIRO_DESKLET_RESERVE_SPACE</a>
+<br>
+ }</td></tr>
 
 <tr><td colspan="2"><br><h2>Fonctions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#6d92dc0df3c6234ee7d280e922fb3771">cairo_dock_load_desklet_buttons</a> (cairo_t *pSourceContext)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#513fa1a3574c39a10433a7acf0611ad6">cairo_dock_load_desklet_buttons_texture</a> (void)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#2f2de03de6a835dbeae0d2661a3444b5">cairo_dock_unload_desklet_buttons_texture</a> (void)</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#ea7af4d4a5440b3cc3a9331b70361be1">cairo_dock_render_desklet_notification</a> (gpointer pUserData, <a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#cb913013efbdc2597414a488052b28b1">cairo_dock_create_desklet</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, GtkWidget *pInteractiveWidget, gboolean bOnWidgetLayer)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#1eda3b5b2ac60edc84f2c0861bd775a5">cairo_dock_create_desklet</a> (<a class="el" href="struct__Icon.html">Icon</a> *pIcon, GtkWidget *pInteractiveWidget, <a class="el" href="cairo-dock-desklet_8h.html#9a8ba30a8169ea9520c080e33b31c50c">CairoDeskletAccessibility</a> iAccessibility)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#f0ce2104f8000b9fabddc801c2945fec">cairo_dock_configure_desklet</a> (<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, <a class="el" href="struct__CairoDeskletAttribute.html">CairoDeskletAttribute</a> *pAttribute)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#43fba25e919a8d0f067cbd64e5ca48e3">cairo_dock_free_desklet</a> (<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#326d1ba7208f732b746db49caa4e7d41">cairo_dock_add_interactive_widget_to_desklet_full</a> (GtkWidget *pInteractiveWidget, <a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, int iRightMargin)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#3d48afc59f287bea00d56afd4dd976eb">cairo_dock_set_desklet_margin</a> (<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, int iRightMargin)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#80b6f374e9386f53289c1d358c0301f5">cairo_dock_steal_interactive_widget_from_desklet</a> (<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#7508e7761877b8ccd1a1b9dfbe70c4d6">cairo_dock_project_coords_on_3D_desklet</a> (<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, int iMouseX, int iMouseY, int *iX, int *iY)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct__Icon.html">Icon</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#5abd23e73224470d7316829b43926493">cairo_dock_find_clicked_icon_in_desklet</a> (<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#f0ce2104f8000b9fabddc801c2945fec">cairo_dock_configure_desklet</a> (<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, <a class="el" href="struct__CairoDeskletAttribute.html">CairoDeskletAttribute</a> *pAttribute)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#80b6f374e9386f53289c1d358c0301f5">cairo_dock_steal_interactive_widget_from_desklet</a> (<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#43fba25e919a8d0f067cbd64e5ca48e3">cairo_dock_free_desklet</a> (<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet)</td></tr>
-
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#83607d15ff28416b9a49cb58ac7f364f">cairo_dock_hide_desklet</a> (<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#3424ea4da655fb6f703b7b9cafc6784e">cairo_dock_show_desklet</a> (<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#849ba82f36f50f08088ad538bb09cec6">cairo_dock_add_interactive_widget_to_desklet</a> (GtkWidget *pInteractiveWidget, <a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#7fd97c910ab88fd77b015e781632a56c">cairo_dock_set_all_desklets_visible</a> (gboolean bOnWidgetLayerToo)</td></tr>
 
@@ -75,9 +142,12 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#45b0691bc7bcc67feb034dfd5691ab63">cairo_dock_free_desklet_decoration</a> (<a class="el" href="struct__CairoDeskletDecoration.html">CairoDeskletDecoration</a> *pDecoration)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="cairo-dock-desklet_8h.html#023dcc0643d008b914abd2c57743bc81">cairo_dock_reserve_space_for_desklet</a> (<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, gboolean bReserve)</td></tr>
+
 </table>
-<hr><h2>Documentation des macros</h2>
-<a class="anchor" name="eed859d634690122c790c64427c9e2a5"></a><!-- doxytag: member="cairo-dock-desklet.h::CD_NB_ITER_FOR_GRADUATION" ref="eed859d634690122c790c64427c9e2a5" args="" -->
+<hr><a name="_details"></a><h2>Description détaillée</h2>
+This class defines the Desklets, that are Widgets placed directly on your desktop. A Desklet is a container that holds 1 applet's icon plus an optionnal list of other icons and an optionnal GTK widget, has a decoration, suports several accessibility types (like Compiz Widget Layer), and has a renderer. Desklets can be resized or moved directly with the mouse, and can be rotated in the 3 directions of space. <hr><h2>Documentation des macros</h2>
+<a class="anchor" name="eed859d634690122c790c64427c9e2a5"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::CD_NB_ITER_FOR_GRADUATION" ref="eed859d634690122c790c64427c9e2a5" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -92,7 +162,7 @@
 
 </div>
 </div><p>
-<a class="anchor" name="7d23b2629d7a93bc61bd65366d78fd9e"></a><!-- doxytag: member="cairo-dock-desklet.h::CAIRO_DOCK_IS_DESKLET" ref="7d23b2629d7a93bc61bd65366d78fd9e" args="(pContainer)" -->
+<a class="anchor" name="7d23b2629d7a93bc61bd65366d78fd9e"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::CAIRO_DOCK_IS_DESKLET" ref="7d23b2629d7a93bc61bd65366d78fd9e" args="(pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -102,7 +172,7 @@
           <td class="paramtype">pContainer&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -118,7 +188,7 @@ Teste si le container est un desklet. <dl compact><dt><b>Paramètres:</b></dt><d
 
 </div>
 </div><p>
-<a class="anchor" name="e42429e2d675c2b950a8f9eb32a10ad2"></a><!-- doxytag: member="cairo-dock-desklet.h::CAIRO_DESKLET" ref="e42429e2d675c2b950a8f9eb32a10ad2" args="(pContainer)" -->
+<a class="anchor" name="e42429e2d675c2b950a8f9eb32a10ad2"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::CAIRO_DESKLET" ref="e42429e2d675c2b950a8f9eb32a10ad2" args="(pContainer)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -128,7 +198,7 @@ Teste si le container est un desklet. <dl compact><dt><b>Paramètres:</b></dt><d
           <td class="paramtype">pContainer&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -144,7 +214,30 @@ Caste un container en desklet. <dl compact><dt><b>Paramètres:</b></dt><dd>
 
 </div>
 </div><p>
-<a class="anchor" name="80bd4b17c1732c9cf89370bdd56c811d"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_get_coords_on_3D_desklet" ref="80bd4b17c1732c9cf89370bdd56c811d" args="(pDesklet, xptr, yptr)" -->
+<a class="anchor" name="0099d7a90279d54e53c78b747a93f3ee"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_add_interactive_widget_to_desklet" ref="0099d7a90279d54e53c78b747a93f3ee" args="(pInteractiveWidget, pDesklet)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_add_interactive_widget_to_desklet          </td>
+          <td>(</td>
+          <td class="paramtype">pInteractiveWidget,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">pDesklet&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="80bd4b17c1732c9cf89370bdd56c811d"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_get_coords_on_3D_desklet" ref="80bd4b17c1732c9cf89370bdd56c811d" args="(pDesklet, xptr, yptr)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -160,7 +253,7 @@ Caste un container en desklet. <dl compact><dt><b>Paramètres:</b></dt><dd>
           <td class="paramtype">yptr&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -170,8 +263,224 @@ Caste un container en desklet. <dl compact><dt><b>Paramètres:</b></dt><dd>
 
 </div>
 </div><p>
+<a class="anchor" name="b9fcf71dd623c26d03518efe52dc4702"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_set_static_desklet" ref="b9fcf71dd623c26d03518efe52dc4702" args="(pDesklet)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define cairo_dock_set_static_desklet          </td>
+          <td>(</td>
+          <td class="paramtype">pDesklet&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<hr><h2>Documentation des définition de type</h2>
+<a class="anchor" name="7068a4b39831fdb9e136051aef8f6e3a"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::CairoDeskletRendererDataParameter" ref="7068a4b39831fdb9e136051aef8f6e3a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef gpointer <a class="el" href="cairo-dock-desklet_8h.html#7068a4b39831fdb9e136051aef8f6e3a">CairoDeskletRendererDataParameter</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="8b4a26e3c0cf2ddd99f29181ce2cf4e3"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::CairoDeskletRendererDataPtr" ref="8b4a26e3c0cf2ddd99f29181ce2cf4e3" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="cairo-dock-desklet_8h.html#7068a4b39831fdb9e136051aef8f6e3a">CairoDeskletRendererDataParameter</a>* <a class="el" href="cairo-dock-desklet_8h.html#8b4a26e3c0cf2ddd99f29181ce2cf4e3">CairoDeskletRendererDataPtr</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="4f09000f176f2f8c37c94c9f0a5507e5"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::CairoDeskletRendererConfigParameter" ref="4f09000f176f2f8c37c94c9f0a5507e5" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef gpointer <a class="el" href="cairo-dock-desklet_8h.html#4f09000f176f2f8c37c94c9f0a5507e5">CairoDeskletRendererConfigParameter</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="823fabe3f630ea14322663dc03a0ee4e"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::CairoDeskletRendererConfigPtr" ref="823fabe3f630ea14322663dc03a0ee4e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="cairo-dock-desklet_8h.html#4f09000f176f2f8c37c94c9f0a5507e5">CairoDeskletRendererConfigParameter</a>* <a class="el" href="cairo-dock-desklet_8h.html#823fabe3f630ea14322663dc03a0ee4e">CairoDeskletRendererConfigPtr</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="437a4a36a1f787a4f2f23921685c2d3e"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::CairoDeskletRenderFunc" ref="437a4a36a1f787a4f2f23921685c2d3e" args=")(cairo_t *pCairoContext, CairoDesklet *pDesklet, gboolean bRenderOptimized)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(*  <a class="el" href="cairo-dock-desklet_8h.html#437a4a36a1f787a4f2f23921685c2d3e">CairoDeskletRenderFunc</a>)(cairo_t *pCairoContext, <a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, gboolean bRenderOptimized)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="c26661e0ed6016e7d1e9ee4fc22f2d47"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::CairoDeskletGLRenderFunc" ref="c26661e0ed6016e7d1e9ee4fc22f2d47" args=")(CairoDesklet *pDesklet)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(* <a class="el" href="cairo-dock-desklet_8h.html#c26661e0ed6016e7d1e9ee4fc22f2d47">CairoDeskletGLRenderFunc</a>)(<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="851ea2d038472e5fd282d398b508a06a"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::CairoDeskletConfigureRendererFunc" ref="851ea2d038472e5fd282d398b508a06a" args=")(CairoDesklet *pDesklet, cairo_t *pSourceContext, CairoDeskletRendererConfigPtr pConfig)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef gpointer(*  <a class="el" href="cairo-dock-desklet_8h.html#851ea2d038472e5fd282d398b508a06a">CairoDeskletConfigureRendererFunc</a>)(<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, cairo_t *pSourceContext, <a class="el" href="cairo-dock-desklet_8h.html#823fabe3f630ea14322663dc03a0ee4e">CairoDeskletRendererConfigPtr</a> pConfig)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="9edbb48049d20882200c9d0fd7cab4e4"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::CairoDeskletLoadRendererDataFunc" ref="9edbb48049d20882200c9d0fd7cab4e4" args=")(CairoDesklet *pDesklet, cairo_t *pSourceContext)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(*  <a class="el" href="cairo-dock-desklet_8h.html#9edbb48049d20882200c9d0fd7cab4e4">CairoDeskletLoadRendererDataFunc</a>)(<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, cairo_t *pSourceContext)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="11ae6ae45c5e168c8449f7174e6205f8"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::CairoDeskletUpdateRendererDataFunc" ref="11ae6ae45c5e168c8449f7174e6205f8" args=")(CairoDesklet *pDesklet, CairoDeskletRendererDataPtr pNewData)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(*  <a class="el" href="cairo-dock-desklet_8h.html#11ae6ae45c5e168c8449f7174e6205f8">CairoDeskletUpdateRendererDataFunc</a>)(<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, <a class="el" href="cairo-dock-desklet_8h.html#8b4a26e3c0cf2ddd99f29181ce2cf4e3">CairoDeskletRendererDataPtr</a> pNewData)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="2535a64224ad8d2e1bba847c1390c236"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::CairoDeskletFreeRendererDataFunc" ref="2535a64224ad8d2e1bba847c1390c236" args=")(CairoDesklet *pDesklet)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(*  <a class="el" href="cairo-dock-desklet_8h.html#2535a64224ad8d2e1bba847c1390c236">CairoDeskletFreeRendererDataFunc</a>)(<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="a30f58cceb93452a94d166717bb498f0"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::CairoDeskletLoadIconsFunc" ref="a30f58cceb93452a94d166717bb498f0" args=")(CairoDesklet *pDesklet, cairo_t *pSourceContext)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(*  <a class="el" href="cairo-dock-desklet_8h.html#a30f58cceb93452a94d166717bb498f0">CairoDeskletLoadIconsFunc</a>)(<a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *pDesklet, cairo_t *pSourceContext)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<hr><h2>Documentation du type de l'énumération</h2>
+<a class="anchor" name="9a8ba30a8169ea9520c080e33b31c50c"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::CairoDeskletAccessibility" ref="9a8ba30a8169ea9520c080e33b31c50c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="cairo-dock-desklet_8h.html#9a8ba30a8169ea9520c080e33b31c50c">CairoDeskletAccessibility</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+<dl compact><dt><b>Valeurs énumérées: </b></dt><dd>
+<table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" name="9a8ba30a8169ea9520c080e33b31c50cd321d526609c923fae6844a10bf79e6a"></a><!-- doxytag: member="CAIRO_DESKLET_NORMAL" ref="9a8ba30a8169ea9520c080e33b31c50cd321d526609c923fae6844a10bf79e6a" args="" -->CAIRO_DESKLET_NORMAL</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="9a8ba30a8169ea9520c080e33b31c50c7aec7d07afb637a188646b2fa731cda4"></a><!-- doxytag: member="CAIRO_DESKLET_KEEP_ABOVE" ref="9a8ba30a8169ea9520c080e33b31c50c7aec7d07afb637a188646b2fa731cda4" args="" -->CAIRO_DESKLET_KEEP_ABOVE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="9a8ba30a8169ea9520c080e33b31c50cb09a7cee5a16d4755ce171e13069c745"></a><!-- doxytag: member="CAIRO_DESKLET_KEEP_BELOW" ref="9a8ba30a8169ea9520c080e33b31c50cb09a7cee5a16d4755ce171e13069c745" args="" -->CAIRO_DESKLET_KEEP_BELOW</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="9a8ba30a8169ea9520c080e33b31c50c7255d19e832f7725eac59ed024a3f528"></a><!-- doxytag: member="CAIRO_DESKLET_ON_WIDGET_LAYER" ref="9a8ba30a8169ea9520c080e33b31c50c7255d19e832f7725eac59ed024a3f528" args="" -->CAIRO_DESKLET_ON_WIDGET_LAYER</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="9a8ba30a8169ea9520c080e33b31c50c9565fa85473115a0e5c32240678af6ed"></a><!-- doxytag: member="CAIRO_DESKLET_RESERVE_SPACE" ref="9a8ba30a8169ea9520c080e33b31c50c9565fa85473115a0e5c32240678af6ed" args="" -->CAIRO_DESKLET_RESERVE_SPACE</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dl>
+
+</div>
+</div><p>
 <hr><h2>Documentation des fonctions</h2>
-<a class="anchor" name="6d92dc0df3c6234ee7d280e922fb3771"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_load_desklet_buttons" ref="6d92dc0df3c6234ee7d280e922fb3771" args="(cairo_t *pSourceContext)" -->
+<a class="anchor" name="6d92dc0df3c6234ee7d280e922fb3771"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_load_desklet_buttons" ref="6d92dc0df3c6234ee7d280e922fb3771" args="(cairo_t *pSourceContext)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -181,7 +490,7 @@ Caste un container en desklet. <dl compact><dt><b>Paramètres:</b></dt><dd>
           <td class="paramtype">cairo_t *&nbsp;</td>
           <td class="paramname"> <em>pSourceContext</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -191,7 +500,7 @@ Caste un container en desklet. <dl compact><dt><b>Paramètres:</b></dt><dd>
 
 </div>
 </div><p>
-<a class="anchor" name="513fa1a3574c39a10433a7acf0611ad6"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_load_desklet_buttons_texture" ref="513fa1a3574c39a10433a7acf0611ad6" args="(void)" -->
+<a class="anchor" name="513fa1a3574c39a10433a7acf0611ad6"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_load_desklet_buttons_texture" ref="513fa1a3574c39a10433a7acf0611ad6" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -201,7 +510,7 @@ Caste un container en desklet. <dl compact><dt><b>Paramètres:</b></dt><dd>
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -211,7 +520,27 @@ Caste un container en desklet. <dl compact><dt><b>Paramètres:</b></dt><dd>
 
 </div>
 </div><p>
-<a class="anchor" name="ea7af4d4a5440b3cc3a9331b70361be1"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_render_desklet_notification" ref="ea7af4d4a5440b3cc3a9331b70361be1" args="(gpointer pUserData, CairoDesklet *pDesklet)" -->
+<a class="anchor" name="2f2de03de6a835dbeae0d2661a3444b5"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_unload_desklet_buttons_texture" ref="2f2de03de6a835dbeae0d2661a3444b5" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_unload_desklet_buttons_texture           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ea7af4d4a5440b3cc3a9331b70361be1"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_render_desklet_notification" ref="ea7af4d4a5440b3cc3a9331b70361be1" args="(gpointer pUserData, CairoDesklet *pDesklet)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -230,7 +559,7 @@ Caste un container en desklet. <dl compact><dt><b>Paramètres:</b></dt><dd>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -240,7 +569,7 @@ Caste un container en desklet. <dl compact><dt><b>Paramètres:</b></dt><dd>
 
 </div>
 </div><p>
-<a class="anchor" name="cb913013efbdc2597414a488052b28b1"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_create_desklet" ref="cb913013efbdc2597414a488052b28b1" args="(Icon *pIcon, GtkWidget *pInteractiveWidget, gboolean bOnWidgetLayer)" -->
+<a class="anchor" name="1eda3b5b2ac60edc84f2c0861bd775a5"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_create_desklet" ref="1eda3b5b2ac60edc84f2c0861bd775a5" args="(Icon *pIcon, GtkWidget *pInteractiveWidget, CairoDeskletAccessibility iAccessibility)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -259,13 +588,13 @@ Caste un container en desklet. <dl compact><dt><b>Paramètres:</b></dt><dd>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">gboolean&nbsp;</td>
-          <td class="paramname"> <em>bOnWidgetLayer</em></td><td>&nbsp;</td>
+          <td class="paramtype"><a class="el" href="cairo-dock-desklet_8h.html#9a8ba30a8169ea9520c080e33b31c50c">CairoDeskletAccessibility</a>&nbsp;</td>
+          <td class="paramname"> <em>iAccessibility</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -276,14 +605,170 @@ Créer un desklet tout simple, sans le placer ni lui définir un moteur de rendu
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>pIcon</em>&nbsp;</td><td>l'icône principale du desklet (jamais testé avec une icône nulle). </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>pInteractiveWidget</em>&nbsp;</td><td>le widget d'interaction du desklet, ou NULL si aucun. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>bOnWidgetLayer</em>&nbsp;</td><td>TRUE ssi il faut placer dés maintenant le desklet sur la couche des widgets. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iAccessibility</em>&nbsp;</td><td>pour savoir s'il faut placer dés maintenant le desklet sur la couche des widgets ou reserver son espace. </td></tr>
   </table>
 </dl>
 <dl class="return" compact><dt><b>Renvoie:</b></dt><dd>le desklet nouvellement crée. </dd></dl>
 
 </div>
 </div><p>
-<a class="anchor" name="7508e7761877b8ccd1a1b9dfbe70c4d6"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_project_coords_on_3D_desklet" ref="7508e7761877b8ccd1a1b9dfbe70c4d6" args="(CairoDesklet *pDesklet, int iMouseX, int iMouseY, int *iX, int *iY)" -->
+<a class="anchor" name="f0ce2104f8000b9fabddc801c2945fec"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_configure_desklet" ref="f0ce2104f8000b9fabddc801c2945fec" args="(CairoDesklet *pDesklet, CairoDeskletAttribute *pAttribute)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_configure_desklet           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDesklet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDeskletAttribute.html">CairoDeskletAttribute</a> *&nbsp;</td>
+          <td class="paramname"> <em>pAttribute</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Configure entièrement un desklet en fonction de ses paramètres de sauvegarde extraits d'un fichier de conf. Le place, le dimensionne, le garde devant/derrière, vérouille sa position, et le place sur la couche des widgets, et pour finir definit ses decorations. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDesklet</em>&nbsp;</td><td>le desklet à placer. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pAttribute</em>&nbsp;</td><td>la config du desklet, contenant tous les paramètres necessaires. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="43fba25e919a8d0f067cbd64e5ca48e3"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_free_desklet" ref="43fba25e919a8d0f067cbd64e5ca48e3" args="(CairoDesklet *pDesklet)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_free_desklet           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDesklet</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Détruit un desklet, et libère toutes les ressources allouées. Son widget interactif est épargné et peut être re-inséré autre part après l'opération. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDesklet</em>&nbsp;</td><td>le desklet à détruire. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="326d1ba7208f732b746db49caa4e7d41"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_add_interactive_widget_to_desklet_full" ref="326d1ba7208f732b746db49caa4e7d41" args="(GtkWidget *pInteractiveWidget, CairoDesklet *pDesklet, int iRightMargin)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_add_interactive_widget_to_desklet_full           </td>
+          <td>(</td>
+          <td class="paramtype">GtkWidget *&nbsp;</td>
+          <td class="paramname"> <em>pInteractiveWidget</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDesklet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>iRightMargin</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Ajoute un GtkWidget à la fenêtre du desklet. Ce widget ne doit pas appartenir à un autre container. 1 seul widget par desklet, mais si ce widget est un GtkContainer, on peut en mettre plusieurs autres dedans. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pInteractiveWidget</em>&nbsp;</td><td>le widget à ajouter. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pDesklet</em>&nbsp;</td><td>le desklet dans lequel le rajouter. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>iRightMargin</em>&nbsp;</td><td>marge a droite en pixels, 0 si on ne veut pas de marge. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="3d48afc59f287bea00d56afd4dd976eb"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_set_desklet_margin" ref="3d48afc59f287bea00d56afd4dd976eb" args="(CairoDesklet *pDesklet, int iRightMargin)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_set_desklet_margin           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDesklet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>iRightMargin</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="80b6f374e9386f53289c1d358c0301f5"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_steal_interactive_widget_from_desklet" ref="80b6f374e9386f53289c1d358c0301f5" args="(CairoDesklet *pDesklet)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_steal_interactive_widget_from_desklet           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDesklet</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Détache un GtkWidget d'un desklet, le rendant libre d'être inséré autre part. <dl compact><dt><b>Paramètres:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pDesklet</em>&nbsp;</td><td>le desklet contenant un widge tinteractif. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="7508e7761877b8ccd1a1b9dfbe70c4d6"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_project_coords_on_3D_desklet" ref="7508e7761877b8ccd1a1b9dfbe70c4d6" args="(CairoDesklet *pDesklet, int iMouseX, int iMouseY, int *iX, int *iY)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -320,7 +805,7 @@ Créer un desklet tout simple, sans le placer ni lui définir un moteur de rendu
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -330,7 +815,7 @@ Créer un desklet tout simple, sans le placer ni lui définir un moteur de rendu
 
 </div>
 </div><p>
-<a class="anchor" name="5abd23e73224470d7316829b43926493"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_find_clicked_icon_in_desklet" ref="5abd23e73224470d7316829b43926493" args="(CairoDesklet *pDesklet)" -->
+<a class="anchor" name="5abd23e73224470d7316829b43926493"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_find_clicked_icon_in_desklet" ref="5abd23e73224470d7316829b43926493" args="(CairoDesklet *pDesklet)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -340,7 +825,7 @@ Créer un desklet tout simple, sans le placer ni lui définir un moteur de rendu
           <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
           <td class="paramname"> <em>pDesklet</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -356,92 +841,7 @@ Trouve l'icône cliquée dans un desklet, en cherchant parmi l'icône principale
 
 </div>
 </div><p>
-<a class="anchor" name="f0ce2104f8000b9fabddc801c2945fec"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_configure_desklet" ref="f0ce2104f8000b9fabddc801c2945fec" args="(CairoDesklet *pDesklet, CairoDeskletAttribute *pAttribute)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cairo_dock_configure_desklet           </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
-          <td class="paramname"> <em>pDesklet</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct__CairoDeskletAttribute.html">CairoDeskletAttribute</a> *&nbsp;</td>
-          <td class="paramname"> <em>pAttribute</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Configure entièrement un desklet en fonction de ses paramètres de sauvegarde extraits d'un fichier de conf. Le place, le dimensionne, le garde devant/derrière, vérouille sa position, et le place sur la couche des widgets, et pour finir definit ses decorations. <dl compact><dt><b>Paramètres:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>pDesklet</em>&nbsp;</td><td>le desklet à placer. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>pAttribute</em>&nbsp;</td><td>la config du desklet, contenant tous les paramètres necessaires. </td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
-<a class="anchor" name="80b6f374e9386f53289c1d358c0301f5"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_steal_interactive_widget_from_desklet" ref="80b6f374e9386f53289c1d358c0301f5" args="(CairoDesklet *pDesklet)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cairo_dock_steal_interactive_widget_from_desklet           </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
-          <td class="paramname"> <em>pDesklet</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Détache un GtkWidget d'un desklet, le rendant libre d'être inséré autre part. <dl compact><dt><b>Paramètres:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>pDesklet</em>&nbsp;</td><td>le desklet contenant un widge tinteractif. </td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
-<a class="anchor" name="43fba25e919a8d0f067cbd64e5ca48e3"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_free_desklet" ref="43fba25e919a8d0f067cbd64e5ca48e3" args="(CairoDesklet *pDesklet)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cairo_dock_free_desklet           </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
-          <td class="paramname"> <em>pDesklet</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Détruit un desklet, et libère toutes les ressources allouées. Son widget interactif est épargné et peut être re-inséré autre part après l'opération. <dl compact><dt><b>Paramètres:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>pDesklet</em>&nbsp;</td><td>le desklet à détruire. </td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
-<a class="anchor" name="83607d15ff28416b9a49cb58ac7f364f"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_hide_desklet" ref="83607d15ff28416b9a49cb58ac7f364f" args="(CairoDesklet *pDesklet)" -->
+<a class="anchor" name="83607d15ff28416b9a49cb58ac7f364f"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_hide_desklet" ref="83607d15ff28416b9a49cb58ac7f364f" args="(CairoDesklet *pDesklet)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -451,7 +851,7 @@ Détruit un desklet, et libère toutes les ressources allouées. Son widget inte
           <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
           <td class="paramname"> <em>pDesklet</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -466,7 +866,7 @@ Cache un desklet. <dl compact><dt><b>Paramètres:</b></dt><dd>
 
 </div>
 </div><p>
-<a class="anchor" name="3424ea4da655fb6f703b7b9cafc6784e"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_show_desklet" ref="3424ea4da655fb6f703b7b9cafc6784e" args="(CairoDesklet *pDesklet)" -->
+<a class="anchor" name="3424ea4da655fb6f703b7b9cafc6784e"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_show_desklet" ref="3424ea4da655fb6f703b7b9cafc6784e" args="(CairoDesklet *pDesklet)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -476,7 +876,7 @@ Cache un desklet. <dl compact><dt><b>Paramètres:</b></dt><dd>
           <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
           <td class="paramname"> <em>pDesklet</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -491,42 +891,7 @@ Montre un desklet, lui donnant le focus. <dl compact><dt><b>Paramètres:</b></dt
 
 </div>
 </div><p>
-<a class="anchor" name="849ba82f36f50f08088ad538bb09cec6"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_add_interactive_widget_to_desklet" ref="849ba82f36f50f08088ad538bb09cec6" args="(GtkWidget *pInteractiveWidget, CairoDesklet *pDesklet)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cairo_dock_add_interactive_widget_to_desklet           </td>
-          <td>(</td>
-          <td class="paramtype">GtkWidget *&nbsp;</td>
-          <td class="paramname"> <em>pInteractiveWidget</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
-          <td class="paramname"> <em>pDesklet</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Ajoute un GtkWidget à la fenêtre du desklet. Ce widget ne doit pas appartenir à un autre container. 1 seul widget par desklet, mais si ce widget est un GtkContainer, on peut en mettre plusieurs autres dedans. <dl compact><dt><b>Paramètres:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>pInteractiveWidget</em>&nbsp;</td><td>le widget à ajouter. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>pDesklet</em>&nbsp;</td><td>le desklet dans lequel le rajouter. </td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
-<a class="anchor" name="7fd97c910ab88fd77b015e781632a56c"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_set_all_desklets_visible" ref="7fd97c910ab88fd77b015e781632a56c" args="(gboolean bOnWidgetLayerToo)" -->
+<a class="anchor" name="7fd97c910ab88fd77b015e781632a56c"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_set_all_desklets_visible" ref="7fd97c910ab88fd77b015e781632a56c" args="(gboolean bOnWidgetLayerToo)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -536,7 +901,7 @@ Ajoute un GtkWidget à la fenêtre du desklet. Ce widget ne doit pas appartenir 
           <td class="paramtype">gboolean&nbsp;</td>
           <td class="paramname"> <em>bOnWidgetLayerToo</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -551,7 +916,7 @@ Rend tous les desklets visibles si ils étaient cachés, et au premier plan s'il
 
 </div>
 </div><p>
-<a class="anchor" name="f63efd8dc88d025be5dc1e771318b8bd"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_set_desklets_visibility_to_default" ref="f63efd8dc88d025be5dc1e771318b8bd" args="(void)" -->
+<a class="anchor" name="f63efd8dc88d025be5dc1e771318b8bd"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_set_desklets_visibility_to_default" ref="f63efd8dc88d025be5dc1e771318b8bd" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -561,7 +926,7 @@ Rend tous les desklets visibles si ils étaient cachés, et au premier plan s'il
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -571,7 +936,7 @@ Rend tous les desklets visibles si ils étaient cachés, et au premier plan s'il
 Remet les desklets dans la position occupée avant l'appel à la fonction précédente. 
 </div>
 </div><p>
-<a class="anchor" name="2912defcd5264c33ae529f185e192ff7"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_get_desklet_by_Xid" ref="2912defcd5264c33ae529f185e192ff7" args="(Window Xid)" -->
+<a class="anchor" name="2912defcd5264c33ae529f185e192ff7"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_get_desklet_by_Xid" ref="2912defcd5264c33ae529f185e192ff7" args="(Window Xid)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -581,7 +946,7 @@ Remet les desklets dans la position occupée avant l'appel à la fonction préc�
           <td class="paramtype">Window&nbsp;</td>
           <td class="paramname"> <em>Xid</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -597,7 +962,7 @@ Renvoie le desklet dont la fenetre correspond à la ressource X donnée. <dl com
 
 </div>
 </div><p>
-<a class="anchor" name="26cfbeeb4892393208d617a77e656058"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_zoom_out_desklet" ref="26cfbeeb4892393208d617a77e656058" args="(CairoDesklet *pDesklet)" -->
+<a class="anchor" name="26cfbeeb4892393208d617a77e656058"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_zoom_out_desklet" ref="26cfbeeb4892393208d617a77e656058" args="(CairoDesklet *pDesklet)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -607,7 +972,7 @@ Renvoie le desklet dont la fenetre correspond à la ressource X donnée. <dl com
           <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
           <td class="paramname"> <em>pDesklet</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -622,7 +987,7 @@ Lance une animation de zoom vers l'avant sur un desklet. <dl compact><dt><b>Para
 
 </div>
 </div><p>
-<a class="anchor" name="b3146f1acc6a3b9dd515ea24f2a828c3"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_load_desklet_decorations" ref="b3146f1acc6a3b9dd515ea24f2a828c3" args="(CairoDesklet *pDesklet, cairo_t *pSourceContext)" -->
+<a class="anchor" name="b3146f1acc6a3b9dd515ea24f2a828c3"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_load_desklet_decorations" ref="b3146f1acc6a3b9dd515ea24f2a828c3" args="(CairoDesklet *pDesklet, cairo_t *pSourceContext)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -641,7 +1006,7 @@ Lance une animation de zoom vers l'avant sur un desklet. <dl compact><dt><b>Para
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -651,7 +1016,7 @@ Lance une animation de zoom vers l'avant sur un desklet. <dl compact><dt><b>Para
 
 </div>
 </div><p>
-<a class="anchor" name="bd768a61ad7fb568c184129dfa666439"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_reload_desklets_decorations" ref="bd768a61ad7fb568c184129dfa666439" args="(gboolean bDefaultThemeOnly, cairo_t *pSourceContext)" -->
+<a class="anchor" name="bd768a61ad7fb568c184129dfa666439"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_reload_desklets_decorations" ref="bd768a61ad7fb568c184129dfa666439" args="(gboolean bDefaultThemeOnly, cairo_t *pSourceContext)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -670,7 +1035,7 @@ Lance une animation de zoom vers l'avant sur un desklet. <dl compact><dt><b>Para
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td><td width="100%"></td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -680,7 +1045,7 @@ Lance une animation de zoom vers l'avant sur un desklet. <dl compact><dt><b>Para
 
 </div>
 </div><p>
-<a class="anchor" name="45b0691bc7bcc67feb034dfd5691ab63"></a><!-- doxytag: member="cairo-dock-desklet.h::cairo_dock_free_desklet_decoration" ref="45b0691bc7bcc67feb034dfd5691ab63" args="(CairoDeskletDecoration *pDecoration)" -->
+<a class="anchor" name="45b0691bc7bcc67feb034dfd5691ab63"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_free_desklet_decoration" ref="45b0691bc7bcc67feb034dfd5691ab63" args="(CairoDeskletDecoration *pDecoration)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -690,7 +1055,36 @@ Lance une animation de zoom vers l'avant sur un desklet. <dl compact><dt><b>Para
           <td class="paramtype"><a class="el" href="struct__CairoDeskletDecoration.html">CairoDeskletDecoration</a> *&nbsp;</td>
           <td class="paramname"> <em>pDecoration</em>          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="023dcc0643d008b914abd2c57743bc81"></a><!-- doxytag: member="cairo&#45;dock&#45;desklet.h::cairo_dock_reserve_space_for_desklet" ref="023dcc0643d008b914abd2c57743bc81" args="(CairoDesklet *pDesklet, gboolean bReserve)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cairo_dock_reserve_space_for_desklet           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__CairoDesklet.html">CairoDesklet</a> *&nbsp;</td>
+          <td class="paramname"> <em>pDesklet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&nbsp;</td>
+          <td class="paramname"> <em>bReserve</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -701,8 +1095,8 @@ Lance une animation de zoom vers l'avant sur un desklet. <dl compact><dt><b>Para
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Généré le Thu Apr 9 02:53:49 2009 pour Cairo-Dock par&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Généré le Sun Jun 21 04:02:15 2009 pour Cairo-Dock par&nbsp;
 <a href="http://www.doxygen.org/index.html">
-<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
+<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>
 </html>
