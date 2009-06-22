@@ -497,7 +497,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		}
 		fLastTime = pMotion->time;
 
-		if (s_pIconClicked != NULL && s_pIconClicked->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT)
+		if (s_pIconClicked != NULL && s_pIconClicked->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && ! g_bLocked)
 		{
 			s_pIconClicked->iAnimationState = CAIRO_DOCK_STATE_FOLLOW_MOUSE;
 			//pDock->fAvoidingMouseMargin = .5;
@@ -982,10 +982,10 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
-	if (icon != NULL && g_iDesktopEnv != CAIRO_DOCK_KDE)
+	if (icon != NULL)
 	{
 		if (s_pIconClicked != NULL)
-			g_print (">>> on est rentre par un clic ! KDE se distingue encore une fois ... :-/\n");
+			g_print (">>> on est rentre par un clic ! (KDE:%d)\n", g_iDesktopEnv == CAIRO_DOCK_KDE);
 		if (g_iDesktopEnv != CAIRO_DOCK_KDE)  // je crois que KDE nous fait ressortir/rentrer lors d'un clic...
 			icon->bPointed = FALSE;  // sinon on ne detecte pas l'arrive sur l'icone, c'est genant si elle a un sous-dock.
 	}
