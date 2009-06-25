@@ -55,6 +55,7 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 		g_iScreenOffsetX = g_iScreenOffsetY = 0;
 	
 	CairoDock *pDock = g_pMainDock;
+	gboolean bWasHorizontal = pDock->bHorizontalDock;
 	if (pPosition->iScreenBorder != pPrevPosition->iScreenBorder)
 	{
 		switch (pPosition->iScreenBorder)
@@ -87,8 +88,10 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 	pDock->iGapY = pPosition->iGapY;
 	pDock->fAlign = pPosition->fAlign;
 	cairo_dock_calculate_dock_icons (pDock);
-	gtk_widget_queue_draw (pDock->pWidget);
 	cairo_dock_place_root_dock (pDock);
+	if (bWasHorizontal != pDock->bHorizontalDock)
+		pDock->iCurrentWidth --;  // la taille dans le referentiel du dock ne change pas meme si on change d'horizontalite, par contre la taille de la fenetre change. On introduit donc un biais ici pour forcer le configure-event a faire son travail, sinon ca fausse le redraw.
+	gtk_widget_queue_draw (pDock->pWidget);
 }
 
 

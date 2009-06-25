@@ -10,6 +10,7 @@ G_BEGIN_DECLS
 *@file cairo-dock-X-utilities.h This class provides many utilities functions to interact very specifically on X.
 */
 
+Display *cairo_dock_initialize_X_desktop_support (void);
 void cairo_dock_initialize_X_support (void);
 
 const Display *cairo_dock_get_Xdisplay (void);

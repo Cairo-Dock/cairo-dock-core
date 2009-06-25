@@ -151,11 +151,6 @@ void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataTy
 */
 void cairo_dock_update_conf_file_with_position (const gchar *cConfFilePath, int x, int y);
 
-/**
-*Essaye de determiner l'environnement de bureau dela session courante.
-*@return l'environnement de bureau (couramment Gnome, KDE et XFCE sont detectés).
-*/
-CairoDockDesktopEnv cairo_dock_guess_environment (void);
 
 
 /**

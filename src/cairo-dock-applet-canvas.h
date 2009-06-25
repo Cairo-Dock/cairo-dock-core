@@ -19,7 +19,7 @@ typedef struct _AppletConfig AppletConfig;
 typedef struct _AppletData AppletData;
 
 //\_________________________________ FUNCTIONS NAMES
-#define CD_APPLET_PRE_INIT_FUNC pre_init
+#define CD_APPLET_DEFINE_FUNC pre_init
 #define CD_APPLET_INIT_FUNC init
 #define CD_APPLET_STOP_FUNC stop
 #define CD_APPLET_RELOAD_FUNC reload
@@ -37,8 +37,8 @@ typedef struct _AppletData AppletData;
 #define CD_APPLET_ON_UPDATE_ICON_FUNC action_on_update_icon
 
 //\_________________________________ PROTO
-#define CD_APPLET_PRE_INIT_PROTO \
-gboolean CD_APPLET_PRE_INIT_FUNC (CairoDockVisitCard *pVisitCard, CairoDockModuleInterface *pInterface)
+#define CD_APPLET_DEFINE_PROTO \
+gboolean CD_APPLET_DEFINE_FUNC (CairoDockVisitCard *pVisitCard, CairoDockModuleInterface *pInterface)
 #define CD_APPLET_INIT_PROTO(pApplet) \
 void CD_APPLET_INIT_FUNC (CairoDockModuleInstance *pApplet, GKeyFile *pKeyFile)
 #define CD_APPLET_STOP_PROTO \
@@ -70,7 +70,7 @@ gboolean CD_APPLET_ON_UPDATE_ICON_FUNC (CairoDockModuleInstance *myApplet, Icon 
 
 //\_________________________________ HEADERS
 #define CD_APPLET_H \
-CD_APPLET_PRE_INIT_PROTO; \
+CD_APPLET_DEFINE_PROTO; \
 CD_APPLET_INIT_PROTO (pApplet); \
 CD_APPLET_STOP_PROTO; \
 CD_APPLET_RELOAD_PROTO;
@@ -107,8 +107,8 @@ CD_APPLET_ON_UPDATE_ICON_PROTO;
 *@param _cDescription description et mode d'emploi succint de l'applet.
 *@param _cAuthor nom de l'auteur et eventuellement adresse mail.
 */
-#define CD_APPLET_PRE_INIT_ALL_BEGIN(_cName, _iMajorVersion, _iMinorVersion, _iMicroVersion, _iAppletCategory, _cDescription, _cAuthor) \
-CD_APPLET_PRE_INIT_PROTO \
+#define CD_APPLET_DEFINE_ALL_BEGIN(_cName, _iMajorVersion, _iMinorVersion, _iMicroVersion, _iAppletCategory, _cDescription, _cAuthor) \
+CD_APPLET_DEFINE_PROTO \
 { \
 	pVisitCard->cModuleName = g_strdup (_cName); \
 	pVisitCard->iMajorVersionNeeded = _iMajorVersion; \
@@ -138,15 +138,20 @@ CD_APPLET_PRE_INIT_PROTO \
 
 /** Fin de la fonction de pre-initialisation de l'applet.
 */
-#define CD_APPLET_PRE_INIT_END \
+#define CD_APPLET_DEFINE_END \
 	return TRUE ;\
 }
 /** Fonction de pre-initialisation generique. Ne fais que definir l'applet (en appelant les 2 macros precedentes), la plupart du temps cela est suffisant.
 */
 #define CD_APPLET_DEFINITION(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
-CD_APPLET_PRE_INIT_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
+CD_APPLET_DEFINE_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
 CD_APPLET_DEFINE_COMMON_APPLET_INTERFACE \
-CD_APPLET_PRE_INIT_END
+CD_APPLET_DEFINE_END
+
+// deprecated
+#define CD_APPLET_PRE_INIT_BEGIN CD_APPLET_DEFINE_BEGIN
+#define CD_APPLET_PRE_INIT_END CD_APPLET_DEFINE_END
+// end of deprecated
 
 #define CD_APPLET_CAN_DETACH TRUE
 

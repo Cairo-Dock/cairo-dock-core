@@ -233,7 +233,7 @@ gchar *cairo_dock_add_desktop_file_from_uri_full (const gchar *cURI, const gchar
 }
 
 
-gchar *cairo_dock_generate_desktop_filename (gchar *cBaseName, gchar *cCairoDockDataDir)
+gchar *cairo_dock_generate_desktop_filename (const gchar *cBaseName, gchar *cCairoDockDataDir)
 {
 	int iPrefixNumber = 0;
 	GString *sFileName = g_string_new ("");

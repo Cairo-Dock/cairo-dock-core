@@ -85,6 +85,8 @@ static gboolean s_bHideAfterShortcut = FALSE;
 static gboolean s_bFrozenDock = FALSE;
 
 
+#define _mouse_is_really_outside(pDock) (pDock->iMouseX <= 0 || pDock->iMouseX >= pDock->iCurrentWidth || pDock->iMouseY <= 0 || pDock->iMouseY >= pDock->iCurrentHeight)
+
 void cairo_dock_freeze_docks (gboolean bFreeze)
 {
 	s_bFrozenDock = bFreeze;
@@ -684,7 +686,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 		
 		CairoDock *pOriginDock = cairo_dock_search_dock_from_name (s_pIconClicked->cParentDockName);
 		g_return_if_fail (pOriginDock != NULL);
-		if (pOriginDock == pDock && (pOriginDock->iMouseX <= 0 || pOriginDock->iMouseX >= pOriginDock->iCurrentWidth || pOriginDock->iMouseY <= 0 || pOriginDock->iMouseY >= pOriginDock->iCurrentHeight))
+		if (pOriginDock == pDock && _mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 		{
 			gchar *cParentDockName = s_pIconClicked->cParentDockName;
 			s_pIconClicked->cParentDockName = NULL;
@@ -851,8 +853,12 @@ gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey fo
 
 gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	if (pEvent && g_bEasterEggs && pDock->pShapeBitmap && (pEvent->x < pDock->inputArea.x || pEvent->x > pDock->inputArea.x + pDock->inputArea.width))
-		return FALSE;
+	if (pEvent && g_bEasterEggs && pDock->pShapeBitmap)
+	{
+		int x = (pDock->bHorizontalDock ? pEvent->x : pDock->iCurrentWidth - pEvent->y);
+		if (x < pDock->inputArea.x * pDock->fRatio || x > (pDock->inputArea.x + pDock->inputArea.width) * pDock->fRatio)
+			return FALSE;
+	}
 	//g_print ("%s (bIsMainDock : %d; bAtTop:%d; bInside:%d; iSidMoveDown:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->bAtTop, pDock->bInside, pDock->iSidMoveDown, pDock->iMagnitudeIndex);
 	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
 	if (! cairo_dock_entrance_is_allowed (pDock))
@@ -984,10 +990,13 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
 	if (icon != NULL)
 	{
-		if (s_pIconClicked != NULL)
-			g_print (">>> on est rentre par un clic ! (KDE:%d)\n", g_iDesktopEnv == CAIRO_DOCK_KDE);
-		if (g_iDesktopEnv != CAIRO_DOCK_KDE)  // je crois que KDE nous fait ressortir/rentrer lors d'un clic...
+		//g_print (">>> we've just entered the dock, pointed icon becomes NULL\n");
+		//if (s_pIconClicked != NULL)
+		//	g_print (">>> on est rentre par un clic ! (KDE:%d)\n", g_iDesktopEnv == CAIRO_DOCK_KDE);
+		if (_mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 			icon->bPointed = FALSE;  // sinon on ne detecte pas l'arrive sur l'icone, c'est genant si elle a un sous-dock.
+		else
+			g_print (">>> we already are inside the dock, why does this stupid WM make us enter one more time ???\n");
 	}
 	
 	cairo_dock_start_growing (pDock);
@@ -1525,7 +1534,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 
 	if ((iNewWidth != pDock->iCurrentWidth || iNewHeight != pDock->iCurrentHeight) && iNewWidth > 1)
 	{
-		g_print ("-> %dx%d\n", iNewWidth, iNewHeight);
+		//g_print ("-> %dx%d\n", iNewWidth, iNewHeight);
 		pDock->iCurrentWidth = iNewWidth;
 		pDock->iCurrentHeight = iNewHeight;
 

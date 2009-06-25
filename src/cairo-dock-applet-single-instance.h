@@ -3,7 +3,7 @@
 #define  __CAIRO_DOCK_APPLET_SINGLE_INSTANCE__
 
 
-#define CD_APPLET_PRE_INIT_BEGIN(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
+#define CD_APPLET_DEFINE_BEGIN(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
 Icon *myIcon; \
 CairoContainer *myContainer; \
 CairoDock *myDock; \
@@ -12,9 +12,8 @@ cairo_t *myDrawContext; \
 AppletConfig *myConfigPtr = NULL; \
 AppletData *myDataPtr = NULL; \
 CairoDockModuleInstance *myApplet = NULL; \
-CD_APPLET_PRE_INIT_ALL_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
+CD_APPLET_DEFINE_ALL_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
 pVisitCard->bMultiInstance = FALSE;
-
 
 #define CD_APPLET_INIT_BEGIN \
 CD_APPLET_INIT_ALL_BEGIN(pApplet) \

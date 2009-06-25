@@ -12,7 +12,7 @@ G_BEGIN_DECLS
 * 
 */
 
-
+/// Type of frequency for a periodic task.
 typedef enum {
 	CAIRO_DOCK_FREQUENCY_NORMAL = 0,
 	CAIRO_DOCK_FREQUENCY_LOW,
@@ -21,7 +21,9 @@ typedef enum {
 	CAIRO_DOCK_NB_FREQUENCIES
 } CairoDockFrequencyState;
 
+/// Definition of the asynchronous job, that does the heavy part.
 typedef void (* CairoDockGetDataAsyncFunc ) (gpointer pSharedMemory);
+/// Definition of the synchronous job, that update the dock with the results of the previous job.
 typedef gboolean (* CairoDockUpdateSyncFunc ) (gpointer pSharedMemory);
 
 /// Definition of a periodic and asynchronous Task.

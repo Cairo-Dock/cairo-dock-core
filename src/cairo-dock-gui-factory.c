@@ -29,8 +29,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #define CAIRO_DOCK_GUI_MARGIN 4
 #define CAIRO_DOCK_ICON_MARGIN 6
-#define CAIRO_DOCK_PREVIEW_WIDTH 420
-#define CAIRO_DOCK_PREVIEW_HEIGHT 240
+#define CAIRO_DOCK_PREVIEW_WIDTH 560
+#define CAIRO_DOCK_PREVIEW_HEIGHT 360
 #define CAIRO_DOCK_APPLET_ICON_SIZE 32
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
 #define CAIRO_DOCK_FRAME_ICON_SIZE 24

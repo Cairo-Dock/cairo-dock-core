@@ -685,6 +685,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		g_print ("cNewThemePath : %s\n", cNewThemePath);
 		
 		//\___________________ On charge les parametres de comportement.
+		cairo_dock_set_status_message (s_pThemeManager, _("Applying changes ..."));
 		if (g_pMainDock == NULL || g_key_file_get_boolean (pKeyFile, "Themes", "use theme behaviour", NULL))
 		{
 			g_string_printf (sCommand, "/bin/cp '%s'/%s '%s'", cNewThemePath, CAIRO_DOCK_CONF_FILE, g_cCurrentThemePath);
@@ -697,7 +698,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			cairo_dock_replace_keys_by_identifier (g_cConfFile, cNewConfFilePath, '+');
 			g_free (cNewConfFilePath);
 		}
-		//\___________________ On charge les icones.
+		//\___________________ On charge les lanceurs.
 		if (g_key_file_get_boolean (pKeyFile, "Themes", "use theme launchers", NULL))
 		{
 			g_string_printf (sCommand, "rm -f '%s/%s'/*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
@@ -707,6 +708,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			cd_message ("%s", sCommand->str);
 			r = system (sCommand->str);
 		}
+		//\___________________ On charge les icones.
 		gchar *cNewLocalIconsPath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 		if (! g_file_test (cNewLocalIconsPath, G_FILE_TEST_IS_DIR))  // c'est un ancien theme, mettons-le vite a jour !
 		{
@@ -726,6 +728,10 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		}
 		else
 		{
+			g_string_printf (sCommand, "for f in '%s'/* ; do rm -f \"%s/%s/`basename \"${f%%.*}\"`\"*; done;", cNewLocalIconsPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);  // on efface les doublons car sinon on pourrait avoir x.png et x.svg ensemble et le dock ne saurait pas lequel choisir.
+			cd_message ("%s", sCommand->str);
+			r = system (sCommand->str);
+			
 			g_string_printf (sCommand, "cp '%s'/* '%s/%s'", cNewLocalIconsPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 		}
 		cd_message ("%s", sCommand->str);
@@ -834,11 +840,13 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		}
 		
 		//\___________________ On charge le theme courant.
+		cairo_dock_set_status_message (s_pThemeManager, _("Now reloading theme ..."));
 		cairo_dock_load_current_theme ();
 
 		g_free (cNewThemeName);
 		g_free (cNewThemePath);
 		g_string_free (sCommand, TRUE);
+		cairo_dock_set_status_message (s_pThemeManager, "");
 	}
 	
 	return TRUE;

@@ -14,11 +14,15 @@ G_BEGIN_DECLS
 * Docks, Desklets, Dialogs, and Flying-containers all derive from Containers.
 */
 
+/** Main orientation of a container.
+ */
 typedef enum {
 	CAIRO_DOCK_VERTICAL = 0,
 	CAIRO_DOCK_HORIZONTAL
 	} CairoDockTypeHorizontality;
 
+/** Types of available containers.
+ */
 typedef enum {
 	CAIRO_DOCK_TYPE_DOCK = 0,
 	CAIRO_DOCK_TYPE_DESKLET,
@@ -70,16 +74,19 @@ struct _CairoContainer {
 	gint iAnimationStep;
 };
 
+/// Get the Container part of a pointer.
 #define CAIRO_CONTAINER(p) ((CairoContainer *) (p))
 
-  //////////////
- /// WINDOW ///
-//////////////
+  /////////////
+ // WINDOW //
+///////////
+
 /** Cree une fenetre GTK adaptee a un CairoContainer (notamment transparente).
 *@return la fenetre GTK nouvellement cree.
 */
 GtkWidget *cairo_dock_create_container_window (void);
-
+/** Same as above, but without an OpenGL context.
+ */
 GtkWidget *cairo_dock_create_container_window_no_opengl (void);
 
 /** Applique la colormap de l'ecran a une fenetre GTK, lui ajoutant la transparence.

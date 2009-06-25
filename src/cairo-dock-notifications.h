@@ -7,14 +7,16 @@
 
 G_BEGIN_DECLS
 
-
+/// Generic prototype of a notification callback.
 typedef gboolean (* CairoDockNotificationFunc) (gpointer pUserData, ...);
 
+/// The internal record of a notification.
 typedef struct {
 	CairoDockNotificationFunc pFunction;
 	gpointer pUserData;
 	} CairoDockNotificationRecord;
 
+/// The list of all notifications.
 typedef enum {
 	/// notification appellee lorsque l'utilisateur clique sur une icone; l'animation est preparee juste avant, et lancee juste apres. data : {Icon, CairoDock, iState}
 	CAIRO_DOCK_CLICK_ICON=0,

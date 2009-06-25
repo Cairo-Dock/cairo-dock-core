@@ -31,7 +31,7 @@ gchar *cairo_dock_add_desktop_file_from_uri_full (const gchar *cURI, const gchar
 #define cairo_dock_add_desktop_file_for_separator(cDockName, fOrder, pDock, erreur) cairo_dock_add_desktop_file_from_uri_full (NULL, cDockName, fOrder, CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR, pDock, erreur)
 
 
-gchar *cairo_dock_generate_desktop_filename (gchar *cBaseName, gchar *cCairoDockDataDir);
+gchar *cairo_dock_generate_desktop_filename (const gchar *cBaseName, gchar *cCairoDockDataDir);
 
 
 void cairo_dock_update_launcher_desktop_file (gchar *cDesktopFilePath, CairoDockNewLauncherType iLauncherType);

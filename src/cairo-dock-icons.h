@@ -8,6 +8,7 @@
 #include "cairo-dock-modules.h"
 G_BEGIN_DECLS
 
+
 /**
 *@file cairo-dock-icons.h This class defines the elements contained in containers : Icons.
 * An icon is an union of 3 parts : a launcher, an appli, and an applet. It can be all of them at the same time.

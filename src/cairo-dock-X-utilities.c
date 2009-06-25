@@ -59,10 +59,10 @@ static int _cairo_dock_xerror_handler (Display * pDisplay, XErrorEvent *pXError)
 	cd_debug ("Erreur (%d, %d, %d) lors d'une requete X sur %d", pXError->error_code, pXError->request_code, pXError->minor_code, pXError->resourceid);
 	return 0;
 }
-void cairo_dock_initialize_X_support (void)
+Display *cairo_dock_initialize_X_desktop_support (void)
 {
 	s_XDisplay = XOpenDisplay (0);
-	g_return_if_fail (s_XDisplay != NULL);
+	g_return_val_if_fail (s_XDisplay != NULL, NULL);
 	
 	XSetErrorHandler (_cairo_dock_xerror_handler);
 	
@@ -93,66 +93,16 @@ void cairo_dock_initialize_X_support (void)
 	g_iNbDesktops = cairo_dock_get_nb_desktops ();
 	cairo_dock_get_nb_viewports (&g_iNbViewportX, &g_iNbViewportY);
 	
+	return s_XDisplay;
+}
+
+void cairo_dock_initialize_X_support (void)
+{
+	Display *disp = cairo_dock_initialize_X_desktop_support ();
+	g_return_if_fail (disp != NULL);
 	cairo_dock_initialize_class_manager ();
 	cairo_dock_initialize_application_manager (s_XDisplay);
 	cairo_dock_initialize_application_factory (s_XDisplay);
-	
-	/*GdkWindow * root;
-	GdkPixmap* pix = NULL;
-	GdkPixbuf* img;
-	GdkScreen* screen = gdk_screen_get_default ();
-	root = gdk_screen_get_root_window( screen );
-	GdkColor desktopBg1;
-	desktopBg1.red = 0;
-	desktopBg1.green = 0;
-	desktopBg1.blue = 65535;
-	
-	int screenw, screenh;
-	int imgw, imgh, x = 0, y = 0;
-	screenw = gdk_screen_get_width( screen );
-	screenh = gdk_screen_get_height( screen );
-	img = gdk_pixbuf_new_from_file_at_scale (
-		"/usr/share/backgrounds/space-01.jpg",
-		screenw, screenh,
-		TRUE, NULL);
-	if ( img )
-	{
-		g_print ("WALLPAPER (%dx%d)\n", screenw, screenh);
-		GdkGC * gc;
-		pix = gdk_pixmap_new( root, screenw, screenh, -1 );
-		imgw = gdk_pixbuf_get_width( img );
-		imgh = gdk_pixbuf_get_height( img );
-		if ( imgw == screenw )
-		{
-			//center vertically 
-			y = ( screenh - imgh ) / 2;
-		}
-		else
-		{
-			// center horizontally 
-			x = ( screenw - imgw ) / 2;
-		}
-		// FIXME: fill the blank area with bg color.
-		gc = gdk_gc_new( pix );
-		gdk_gc_set_rgb_fg_color( gc, &desktopBg1 );
-		gdk_gc_set_rgb_bg_color( gc, &desktopBg1 );
-		gdk_gc_set_fill( gc, GDK_SOLID );
-		// fill the whole pixmap is not efficient at all!!! 
-		gdk_draw_rectangle( pix, gc, TRUE,
-			0, 0, screenw, screenh );
-		g_object_unref( G_OBJECT( gc ) );
-		gdk_draw_pixbuf( pix, NULL, img, 0, 0, x, y,
-			imgw, imgh,
-			GDK_RGB_DITHER_NONE, 0, 0 );
-		gdk_pixbuf_unref( img );
-		
-		gdk_window_set_back_pixmap( root, pix, FALSE );
-		if ( pix )
-			g_object_unref( G_OBJECT( pix ) );
-		gdk_window_clear( root );
-		
-		XSetWindowBackgroundPixmap (s_XDisplay, root, pixmap);
-	}*/
 }
 
 const Display *cairo_dock_get_Xdisplay (void)

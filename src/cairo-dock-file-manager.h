@@ -140,6 +140,15 @@ void cairo_dock_fm_action_after_mounting (gboolean bMounting, gboolean bSuccess,
 
 gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, CairoContainer *pContainer);
 
+/**
+*Essaye de determiner l'environnement de bureau dela session courante.
+*@return l'environnement de bureau (couramment Gnome, KDE et XFCE sont detectés).
+*/
+CairoDockDesktopEnv cairo_dock_guess_environment (void);
+
+
+int cairo_dock_get_file_size (const gchar *cFilePath);
+
 
 G_END_DECLS
 #endif

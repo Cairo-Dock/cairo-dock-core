@@ -299,7 +299,7 @@ CairoDockModule * cairo_dock_load_module (gchar *cSoFilePath, GError **erreur)  
 }
 
 
-void cairo_dock_preload_module_from_directory (gchar *cModuleDirPath, GError **erreur)
+void cairo_dock_preload_module_from_directory (const gchar *cModuleDirPath, GError **erreur)
 {
 	cd_message ("%s (%s)", __func__, cModuleDirPath);
 	GError *tmp_erreur = NULL;
@@ -680,7 +680,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			}
 			else  // l'applet est maintenant dans un dock.
 			{
-				gchar *cDockName = (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
+				const gchar *cDockName = (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
 				CairoDock *pDock = cairo_dock_search_dock_from_name (cDockName);
 				if (pDock == NULL)  // c'est un nouveau dock.
 				{
@@ -1068,7 +1068,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	{
 		pInstance->bCanDetach = pMinimalConfig->deskletAttribute.iDeskletWidth > 0;
 		pModule->bCanDetach = pInstance->bCanDetach;  // pas encore clair ...
-		gchar *cDockName = (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
+		const gchar *cDockName = (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
 		
 		if (pModule->bCanDetach && pMinimalConfig->bIsDetached)
 		{

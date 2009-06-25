@@ -1399,7 +1399,7 @@ CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, Cairo
 
 
 
-CairoDialog *cairo_dock_show_temporary_dialog_with_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, gchar *cIconPath, ...)
+CairoDialog *cairo_dock_show_temporary_dialog_with_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, ...)
 {
 	g_return_val_if_fail (cText != NULL, NULL);
 	va_list args;
@@ -1449,12 +1449,12 @@ CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cT
 
 
 
-CairoDialog *cairo_dock_show_dialog_with_question (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, gchar *cIconPath, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
+CairoDialog *cairo_dock_show_dialog_with_question (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconPath, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
 {
 	return cairo_dock_show_dialog_full (cText, pIcon, pContainer, 0, cIconPath, NULL, pActionFunc, data, pFreeDataFunc);
 }
 
-CairoDialog *cairo_dock_show_dialog_with_entry (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, gchar *cIconPath, const gchar *cTextForEntry, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
+CairoDialog *cairo_dock_show_dialog_with_entry (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconPath, const gchar *cTextForEntry, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
 {
 	//GtkWidget *pWidget = cairo_dock_build_common_interactive_widget_for_dialog (cTextForEntry, -1, -1);
 	GtkWidget *pWidget = _cairo_dock_make_entry_for_dialog (cTextForEntry);
@@ -1462,7 +1462,7 @@ CairoDialog *cairo_dock_show_dialog_with_entry (const gchar *cText, Icon *pIcon,
 	return cairo_dock_show_dialog_full (cText, pIcon, pContainer, 0, cIconPath, pWidget, pActionFunc, data, pFreeDataFunc);
 }
 
-CairoDialog *cairo_dock_show_dialog_with_value (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, gchar *cIconPath, double fValue, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
+CairoDialog *cairo_dock_show_dialog_with_value (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconPath, double fValue, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
 {
 	fValue = MAX (0., fValue);
 	fValue = MIN (1., fValue);
@@ -1496,7 +1496,7 @@ static gboolean _cairo_dock_dialog_destroyed (GtkWidget *widget, GdkEvent *event
 		g_main_loop_quit (pBlockingLoop);
 	return FALSE;
 }
-int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, gchar *cIconPath, GtkWidget *pInteractiveWidget)
+int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, GtkWidget *pInteractiveWidget)
 {
 	static GtkWidget *pWidgetCatcher = NULL;  // voir l'astuce plus haut.
 	int iClickedButton = -3;

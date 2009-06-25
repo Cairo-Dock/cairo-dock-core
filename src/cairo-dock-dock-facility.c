@@ -419,7 +419,10 @@ void cairo_dock_set_input_shape (CairoDock *pDock)
 		pDock->pShapeBitmap = NULL;
 		return ;
 	}
-	pDock->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL, pDock->iMinDockWidth, pDock->iMinDockHeight, 1);
+	pDock->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
+		pDock->bHorizontalDock ? pDock->iMinDockWidth : pDock->iMinDockHeight,
+		pDock->bHorizontalDock ? pDock->iMinDockHeight : pDock->iMinDockWidth,
+		1);
 	//g_print ("%s (%d;%d ; %dx%d\n", __func__, pDock->inputArea.x, pDock->inputArea.y, pDock->inputArea.width, pDock->inputArea.height);
 	
 	cairo_t *pCairoContext = gdk_cairo_create (pDock->pShapeBitmap);
@@ -439,7 +442,7 @@ void cairo_dock_set_input_shape (CairoDock *pDock)
 	{
 		cairo_move_to (pCairoContext,
 			pDock->inputArea.y,
-			pDock->bDirectionUp ? pDock->inputArea.x : pDock->iCurrentHeight - pDock->inputArea.x - pDock->inputArea.width);
+			pDock->iCurrentWidth - pDock->inputArea.x - pDock->inputArea.width);
 		cairo_rectangle (pCairoContext, 0., 0., pDock->inputArea.height, pDock->inputArea.width);
 	}
 	cairo_fill (pCairoContext);

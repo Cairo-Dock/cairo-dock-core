@@ -756,7 +756,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	myIcon->pSubDock = NULL; } while (0)
 /**
 *Charge entierement une liste d'icones dans le sous-dock de notre icone.
-*@param pIconsList la liste (eventuellement NULL) des icones du sous-dock; celles-ci seront chargees en dans la foulee.
+*@param pIconsList la liste (eventuellement NULL) des icones du sous-dock; celles-ci seront chargees dans la foulee.
 */
 #define CD_APPLET_LOAD_ICONS_IN_MY_SUBDOCK(pIconsList) do { \
 	if (myIcon->acName == NULL) { \
@@ -773,6 +773,9 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	cairo_dock_load_buffers_in_one_dock (myIcon->pSubDock); \
 	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)
 
+
+/** Delete the list of icons of an applet
+*/
 #define CD_APPLET_DELETE_MY_ICONS_LIST do {\
 	if (myDesklet && myDesklet->icons != NULL) {\
 		g_list_foreach (myDesklet->icons, (GFunc) cairo_dock_free_icon, NULL);\
@@ -787,6 +790,8 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 			myIcon->pSubDock->icons = NULL;\
 			myIcon->pSubDock->pFirstDrawnElement = NULL; } } } while (0)
 
+/** Load a list of icons into an applet, with the given renderer for the sub-dock or the desklet).
+*/
 #define CD_APPLET_LOAD_MY_ICONS_LIST(pIconList, cDockRendererName, cDeskletRendererName, pDeskletRendererConfig) do {\
 	if (myDock) {\
 		if (myIcon->pSubDock == NULL) {\
@@ -806,14 +811,23 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 		CAIRO_DOCK_REDRAW_MY_CONTAINER;\
 	} } while (0)
 
+/** Gets the list of icons of your applet. It is either the icons of your sub-dock or of your desklet.
+*/
 #define CD_APPLET_MY_ICONS_LIST (myDock ? (myIcon->pSubDock ? myIcon->pSubDock->icons : NULL) : myDesklet->icons)
+/** Gets the container of the icons of your applet. It is either your sub-dock or your desklet.
+*/
 #define CD_APPLET_MY_ICONS_LIST_CONTAINER (myDock ? CAIRO_CONTAINER (myIcon->pSubDock) : CAIRO_CONTAINER (myDesklet))
 
+
 //\_________________________________ TASKBAR
+/** Lets your applet control the window of an external program, instead of the Taskbar.
+ *\param cApplicationClass the class of the application you wish to control.
+ * \param bStealTaskBarIcon TRUE to manage the application, FALSE to stop managing it.
+*/
 #define CD_APPLET_MANAGE_APPLICATION(cApplicationClass, bStealTaskBarIcon) do {\
-	if (myIcon->cClass != NULL && ! bStealTaskBarIcon)\
+	if (myIcon->cClass != NULL && (cairo_dock_strings_differ (myIcon->cClass, cApplicationClass) || ! bStealTaskBarIcon))\
 		cairo_dock_deinhibate_class (cApplicationClass, myIcon);\
-	else if (myIcon->cClass == NULL && bStealTaskBarIcon)\
+	if (myIcon->cClass == NULL && bStealTaskBarIcon)\
 		cairo_dock_inhibate_class (cApplicationClass, myIcon); } while (0)
 
 //\_________________________________ INTERNATIONNALISATION

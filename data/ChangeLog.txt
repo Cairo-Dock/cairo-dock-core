@@ -36,3 +36,6 @@
 
 
 2.0.5 = 2.0.5 :\n - This is mainly a bug-fix version\n - improvment in the RB applet\n - Added functionnalities on grouped applications icons.
+
+2.0.6 = 2.0.6 :\n - This version fixes an ennoying bug for KDE users.\n - It also brings the new data-renderer framework (new gauges, graphs, etc)\n - Next version will be the 2.1, with a lot of new applets !
+

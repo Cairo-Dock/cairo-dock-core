@@ -290,7 +290,7 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 						pSameClassIcon->pSubDock = pParentDock;
 						CairoDock *pRootDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
 						if (pRootDock != NULL)
-							cairo_dock_redraw_icon (pSameClassIcon, pRootDock);  // on la redessine car elle prend l'indicateur de classe.
+							cairo_dock_redraw_icon (pSameClassIcon, CAIRO_CONTAINER (pRootDock));  // on la redessine car elle prend l'indicateur de classe.
 					}
 					else if (pSameClassIcon->pSubDock != pParentDock)
 						cd_warning ("this launcher (%s) already has a subdock, but it's not the class's subdock !", pSameClassIcon->acName);
@@ -376,7 +376,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmState, 0, G_MAXULONG, False, XA_ATOM, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pXStateBuffer);
 	if (iBufferNbElements > 0)
 	{
-		int i, iNbMaximizedDimensions = 0;
+		guint i, iNbMaximizedDimensions = 0;
 		for (i = 0; i < iBufferNbElements && ! bSkip; i ++)
 		{
 			if (pXStateBuffer[i] == s_aNetWmSkipTaskbar)

@@ -7,6 +7,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 ******************************************************************************/
 #include <string.h>
+#include <sys/stat.h>
 
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
@@ -569,4 +570,48 @@ gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, Cairo
 		g_free (cMessage);
 	}
 	return bSuccess;
+}
+
+
+CairoDockDesktopEnv cairo_dock_guess_environment (void)
+{
+	const gchar * cEnv = g_getenv ("GNOME_DESKTOP_SESSION_ID");
+	if (cEnv != NULL && *cEnv != '\0')
+		return CAIRO_DOCK_GNOME;
+	
+	cEnv = g_getenv ("KDE_FULL_SESSION");
+	if (cEnv != NULL && *cEnv != '\0')
+		return CAIRO_DOCK_KDE;
+	
+	cEnv = g_getenv ("KDE_SESSION_UID");
+	if (cEnv != NULL && *cEnv != '\0')
+		return CAIRO_DOCK_KDE;
+	
+	if (cairo_dock_property_is_present_on_root ("_DT_SAVE_MODE"))
+		return CAIRO_DOCK_XFCE;
+	
+	gchar *cKWin = cairo_dock_launch_command_sync ("pgrep kwin");
+	if (cKWin != NULL && *cKWin != '\0')
+	{
+		g_free (cKWin);
+		return CAIRO_DOCK_KDE;
+	}
+	g_free (cKWin);
+	
+	return CAIRO_DOCK_UNKNOWN_ENV;
+	
+}
+
+int cairo_dock_get_file_size (const gchar *cFilePath)
+{
+	struct stat buf;
+	if (cFilePath == NULL)
+		return 0;
+	buf.st_size = 0;
+	if (stat (cFilePath, &buf) != -1)
+	{
+		return buf.st_size;
+	}
+	else
+		return 0;
 }
