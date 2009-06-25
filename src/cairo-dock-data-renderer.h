@@ -13,10 +13,10 @@ G_BEGIN_DECLS
 * 
 */
 
+//
+// Structures
+//
 
-///
-/// Structures
-///
 struct _CairoDataToRenderer {
 	gint iNbValues;
 	gint iMemorySize;
@@ -28,6 +28,7 @@ struct _CairoDataToRenderer {
 
 #define CAIRO_DOCK_DATA_FORMAT_MAX_LEN 20
 typedef void (*CairoDockGetValueFormatFunc) (double fValue, gchar *cFormatBuffer, int iBufferLength);
+/// Generic DataRenderer attributes structure. The attributes of any implementation of a DataRenderer will derive from this class.
 struct _CairoDataRendererAttribute {
 	gchar *cModelName;
 	gint iNbValues;
@@ -48,6 +49,7 @@ typedef void (*CairoDataRendererRenderFunc) (CairoDataRenderer *pDataRenderer, c
 typedef void (*CairoDataRendererRenderOpenGLFunc) (CairoDataRenderer *pDataRenderer);
 typedef void (*CairoDataRendererReloadFunc) (CairoDataRenderer *pDataRenderer, cairo_t *pSourceContext);
 typedef void (*CairoDataRendererFreeFunc) (CairoDataRenderer *pDataRenderer);
+/// Interface of a DataRenderer.
 struct _CairoDataRendererInterface {
 	CairoDataRendererNewFunc new;
 	CairoDataRendererLoadFunc load;
@@ -56,6 +58,8 @@ struct _CairoDataRendererInterface {
 	CairoDataRendererReloadFunc reload;
 	CairoDataRendererFreeFunc free;
 };
+
+/// Generic DataRenderer. Any implementation of a DataRenderer will derive from this class.
 
 struct _CairoDataRenderer {
 	// fill at init by the high level renderer.

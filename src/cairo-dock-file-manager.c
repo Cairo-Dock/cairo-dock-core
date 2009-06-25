@@ -21,6 +21,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-internal-system.h"
+#include "cairo-dock-callbacks.h"  // cairo_dock_launch_command_sync
+#include "cairo-dock-X-utilities.h"  // cairo_dock_property_is_present_on_root
 #include "cairo-dock-file-manager.h"
 
 extern CairoDockDesktopEnv g_iDesktopEnv;

@@ -21,7 +21,7 @@ void cairo_dock_blacklist_appli (Window Xid);
 void cairo_dock_unregister_appli (Icon *icon);
 
 void  cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock);
-void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock);;
+void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock);
 
 void cairo_dock_close_xwindow (Window Xid);
 void cairo_dock_kill_xwindow (Window Xid);
@@ -40,13 +40,13 @@ void cairo_dock_window_is_fullscreen_or_hidden_or_maximized (Window Xid, gboolea
 gboolean cairo_dock_window_is_sticky (Window Xid);
 Window cairo_dock_get_active_xwindow (void);
 
-int cairo_dock_get_window_desktop (int Xid);
-void cairo_dock_get_window_geometry (int Xid, int *iGlobalPositionX, int *iGlobalPositionY, int *iWidthExtent, int *iHeightExtent);
-void cairo_dock_get_window_position_on_its_viewport (int Xid, int *iRelativePositionX, int *iRelativePositionY);
+int cairo_dock_get_window_desktop (Window Xid);
+void cairo_dock_get_window_geometry (Window Xid, int *iGlobalPositionX, int *iGlobalPositionY, int *iWidthExtent, int *iHeightExtent);
+void cairo_dock_get_window_position_on_its_viewport (Window Xid, int *iRelativePositionX, int *iRelativePositionY);
 
 
-gboolean cairo_dock_window_is_on_this_desktop (int Xid, int iDesktopNumber);
-gboolean cairo_dock_window_is_on_current_desktop (int Xid);
+gboolean cairo_dock_window_is_on_this_desktop (Window Xid, int iDesktopNumber);
+gboolean cairo_dock_window_is_on_current_desktop (Window Xid);
 
 
 void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock);

@@ -440,10 +440,11 @@ void cairo_dock_set_input_shape (CairoDock *pDock)
 	}
 	else
 	{
-		cairo_move_to (pCairoContext,
-			pDock->inputArea.y,
-			pDock->iCurrentWidth - pDock->inputArea.x - pDock->inputArea.width);
-		cairo_rectangle (pCairoContext, 0., 0., pDock->inputArea.height, pDock->inputArea.width);
+		cairo_rectangle (pCairoContext,
+			pDock->bDirectionUp ? pDock->inputArea.y : pDock->iCurrentHeight - pDock->inputArea.y - pDock->inputArea.height,
+			pDock->iCurrentWidth - pDock->inputArea.x - pDock->inputArea.width,
+			pDock->inputArea.height,
+			pDock->inputArea.width);
 	}
 	cairo_fill (pCairoContext);
 	cairo_destroy (pCairoContext);

@@ -27,7 +27,7 @@ typedef void (* CairoDockGetDataAsyncFunc ) (gpointer pSharedMemory);
 typedef gboolean (* CairoDockUpdateSyncFunc ) (gpointer pSharedMemory);
 
 /// Definition of a periodic and asynchronous Task.
-typedef struct {
+struct _CairoDockTask {
 	/// ID du timer de la tâche.
 	gint iSidTimer;
 	/// ID du timer de fin de traitement asynchrone.
@@ -44,7 +44,7 @@ typedef struct {
 	CairoDockFrequencyState iFrequencyState;
 	/// pSharedMemory structure passee en entree des fonctions get_data et update. Ne doit pas etre accedee en dehors de ces 2 fonctions !
 	gpointer pSharedMemory;
-} CairoDockTask;
+} ;
 
 /** Lance une tâche periodique, prealablement preparee avec #cairo_dock_new_task. La 1ere iteration est executee immediatement. L'acquisition et la lecture des donnees est faite de maniere asynchrone (dans un thread secondaire), alors que le chargement de la tâche se fait dans la boucle principale. La frequence est remise a son etat normal.
 *@param pTask la tâche periodique.

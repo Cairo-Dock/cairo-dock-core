@@ -109,7 +109,6 @@ void cairo_dock_initialize_application_manager (Display *pDisplay)
 	s_aXKlavierState = XInternAtom (s_XDisplay, "XKLAVIER_STATE", False);
 }
 
-
 void cairo_dock_register_appli (Icon *icon)
 {
 	if (CAIRO_DOCK_IS_APPLI (icon))
@@ -612,7 +611,7 @@ Window cairo_dock_get_active_xwindow (void)
 }
 
 
-int cairo_dock_get_window_desktop (int Xid)
+int cairo_dock_get_window_desktop (Window Xid)
 {
 	int iDesktopNumber;
 	gulong iLeftBytes, iBufferNbElements = 0;
@@ -629,7 +628,7 @@ int cairo_dock_get_window_desktop (int Xid)
 	return iDesktopNumber;
 }
 
-void cairo_dock_get_window_geometry (int Xid, int *iGlobalPositionX, int *iGlobalPositionY, int *iWidthExtent, int *iHeightExtent)  // renvoie les coordonnees du coin haut gauche dans le referentiel du viewport actuel. // sous KDE, x et y sont toujours nuls ! (meme avec XGetWindowAttributes).
+void cairo_dock_get_window_geometry (Window Xid, int *iGlobalPositionX, int *iGlobalPositionY, int *iWidthExtent, int *iHeightExtent)  // renvoie les coordonnees du coin haut gauche dans le referentiel du viewport actuel. // sous KDE, x et y sont toujours nuls ! (meme avec XGetWindowAttributes).
 {
 	Window root_return;
 	int x_return=1, y_return=1;
@@ -647,7 +646,7 @@ void cairo_dock_get_window_geometry (int Xid, int *iGlobalPositionX, int *iGloba
 	//g_print ("%s () -> %d;%d %dx%d / %d,%d\n", __func__, x_return, y_return, *iWidthExtent, *iHeightExtent, border_width_return, depth_return);
 }
 
-void cairo_dock_get_window_position_on_its_viewport (int Xid, int *iRelativePositionX, int *iRelativePositionY)
+void cairo_dock_get_window_position_on_its_viewport (Window Xid, int *iRelativePositionX, int *iRelativePositionY)
 {
 	int iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;
 	cairo_dock_get_window_geometry (Xid, &iGlobalPositionX, &iGlobalPositionY, &iWidthExtent, &iHeightExtent);
@@ -667,7 +666,7 @@ void cairo_dock_get_window_position_on_its_viewport (int Xid, int *iRelativePosi
 }
 
 
-gboolean cairo_dock_window_is_on_this_desktop (int Xid, int iDesktopNumber)
+gboolean cairo_dock_window_is_on_this_desktop (Window Xid, int iDesktopNumber)
 {
 	cd_message ("", __func__);
 	int iWindowDesktopNumber, iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;  // coordonnees du coin haut gauche dans le referentiel du viewport actuel.
@@ -682,7 +681,7 @@ gboolean cairo_dock_window_is_on_this_desktop (int Xid, int iDesktopNumber)
 		iGlobalPositionY < g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] );  // -1 <=> 0xFFFFFFFF en unsigned.
 }
 
-gboolean cairo_dock_window_is_on_current_desktop (int Xid)
+gboolean cairo_dock_window_is_on_current_desktop (Window Xid)
 {
 	cd_message ("", __func__);
 	int iDesktopNumber, iDesktopViewportX, iDesktopViewportY;
@@ -875,7 +874,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						}
 					}
 					cd_message ("bureau change");
-					cairo_dock_notify (CAIRO_DOCK_DESKTOP_CHANGED, NULL);
+					cairo_dock_notify (CAIRO_DOCK_DESKTOP_CHANGED);  // , NULL
 					
 					if (! pDock->bIsShrinkingDown && ! pDock->bIsGrowingUp)
 					{
@@ -897,7 +896,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						cd_debug (" -> le dock se place en %d;%d", pDock->iWindowPositionX, pDock->iWindowPositionY);
 						gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionX, pDock->iWindowPositionY);
 					}
-					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED, NULL);
+					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED);  // , NULL
 				}
 				else if (event.xproperty.atom == s_aNetDesktopGeometry)
 				{
@@ -915,7 +914,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						cd_debug (" -> le dock se place en %d;%d", pDock->iWindowPositionX, pDock->iWindowPositionY);
 						gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionX, pDock->iWindowPositionY);
 					}
-					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED, NULL);
+					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED);  // , NULL
 				}
 				else if (event.xproperty.atom == s_aRootMapID)
 				{
@@ -924,7 +923,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						cairo_dock_load_desktop_background_surface ();
 					else
 						cairo_dock_invalidate_desktop_bg_surface ();
-					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED, NULL);
+					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED);  // , NULL
 				}
 				else if (event.xproperty.atom == s_aXKlavierState)
 				{

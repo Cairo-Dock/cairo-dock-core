@@ -3,10 +3,12 @@
 #define  __CAIRO_DOCK_GUI_MANAGER__
 
 #include <gtk/gtk.h>
+#include <cairo-dock-struct.h>
 G_BEGIN_DECLS
 
-/** @file cairo-dock-gui-manager.h This file manages the GUIs of Cairo-Dock. GUIs are built from a .conf file; .conf files are normal config files, but with some special indications in comments. Each value will be represented by a pre-defined widget, that is defined by the first letter of the value's comment. The comment also contains a description of the value, and an optionnal tooltip. See cairo-dock-gui-factory.c for the list of pre-defined widgets, and see cairo-dock.conf for a complete exemple.
-* GUIs can be stand-alone, or embedded in the main GUI in the case of modules.
+/** @file cairo-dock-gui-manager.h This file manages the GUIs of Cairo-Dock.
+* GUIs are built from a .conf file; .conf files are normal group/key files, but with some special indications in the comments. Each key will be represented by a pre-defined widget, that is defined by the first caracter of its comment. The comment also contains a description of the key, and an optionnal tooltip. See cairo-dock-gui-factory.c for the list of pre-defined widgets, and see cairo-dock.conf for a complete exemple.
+* GUIs can be stand-alone (like the Theme-Manager), or embedded inside the main GUI in the case of modules.
 * 
 */
 
@@ -81,6 +83,7 @@ gpointer cairo_dock_get_previous_widget (void);
 * @param iShowPage number of the page of the notebook to show, or -1 to stay on the current page.
 */
 void cairo_dock_reload_current_group_widget_full (CairoDockModuleInstance *pInstance, int iShowPage);
+
 /** Completely reload the current module's GUI by reading again its conf file and re-building it from scratch (so if the module has a custom widget builder, it will be called too).
 *@param pInstance the instance of the external module (myApplet) or NULL for an internal module.
 */
