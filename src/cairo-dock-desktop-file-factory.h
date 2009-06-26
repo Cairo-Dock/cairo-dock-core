@@ -13,6 +13,7 @@ G_BEGIN_DECLS
 
 
 /** Replace the %20 by normal spaces into the string. The string is directly modified.
+*@param cString the string (it can't be a constant string)
 */
 void cairo_dock_remove_html_spaces (gchar *cString);
 

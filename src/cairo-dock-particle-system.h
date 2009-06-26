@@ -4,7 +4,7 @@
 
 #include <glib.h>
 
-
+/// A particle of a particle system.
 typedef struct _CairoParticle {
 	GLfloat x, y, z;
 	GLfloat vx, vy;
@@ -18,6 +18,7 @@ typedef struct _CairoParticle {
 	gint iInitialLife;
 	} CairoParticle;
 
+/// A particle system.
 typedef struct _CairoParticleSystem {
 	CairoParticle *pParticles;
 	gint iNbParticles;

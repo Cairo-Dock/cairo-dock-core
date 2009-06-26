@@ -12,11 +12,14 @@ G_BEGIN_DECLS
 */
 
 /** Search the path of an icon into the defined folders/icons themes. It handles the '~' caracter.
-*/
+ * @param cFileName name of the icon file.
+ */
 gchar *cairo_dock_search_icon_s_path (const gchar *cFileName);
 
 
 /** Read a desktop file and fetch all its data into an Icon.
+ * @param cDesktopFileName name or path of a desktop file. If it's a simple name, it will be taken in the "launchers" folder of the current theme.
+ * @param icon the Icon to fill.
 */
 void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName, Icon *icon);
 

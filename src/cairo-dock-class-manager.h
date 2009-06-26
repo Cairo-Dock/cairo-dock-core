@@ -69,16 +69,19 @@ gboolean cairo_dock_inhibate_class (const gchar *cClass, Icon *pInhibatorIcon);
 
 /**
 * Dis si une classe donnee est inhibee par un inhibiteur, libre ou non.
+* @param cClass la classe.
 * @return TRUE ssi les applis de cette classe sont inhibees.
 */
 gboolean cairo_dock_class_is_inhibated (const gchar *cClass);
 /**
 * Dis si une classe donnee utilise les icones fournies par X.
+* @param cClass la classe.
 * @return TRUE ssi les applis de cette classe utilisent les icones de X.
 */
 gboolean cairo_dock_class_is_using_xicon (const gchar *cClass);
 /**
 * Dis si une classe donnee peut etre groupee en sous-dock ou non.
+* @param cClass la classe.
 * @return TRUE ssi les applis de cette classe ne sont pas groupees.
 */
 gboolean cairo_dock_class_is_expanded (const gchar *cClass);

@@ -20,12 +20,18 @@ typedef enum {
 	CAIRO_DOCK_NB_TYPE_THEME
 } CairoDockThemeType;
 
+/// Definition of a generic theme.
 struct _CairoDockTheme {
+	/// complete path of the theme.
 	gchar *cThemePath;
+	/// size in Mo
 	gdouble fSize;
+	/// author(s)
 	gchar *cAuthor;
+	/// name of the theme
 	gchar *cDisplayedName;
-	CairoDockThemeType iType;  // installed, user, distant.
+	/// type of theme : installed, user, distant.
+	CairoDockThemeType iType;
 };
 
 /** Destroy a theme and free all its allocated memory.
@@ -66,7 +72,7 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 *@param cShareThemesDir path of a local folder containg themes or NULL.
 *@param cUserThemesDir path of a user folder containg themes or NULL.
 *@param cDistantThemesDir path of a distant folder containg themes or NULL.
-*@return a hash table of (name, #CairoDockTheme).
+*@return a hash table of (name, #_CairoDockTheme).
 */
 GHashTable *cairo_dock_list_themes (const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir);
 

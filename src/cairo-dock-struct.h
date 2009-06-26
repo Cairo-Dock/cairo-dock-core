@@ -105,22 +105,22 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
  * \section struct_sec Main structures
  *
  * \subsection containers Containers
- * See \ref _CairoContainer for the definition of a Container, and \ref cairo-dock-container.h for a complete description of the Container class.
+ * See _CairoContainer for the definition of a Container, and cairo-dock-container.h for a complete description of the Container class.
  * 
  * \subsection icons Icons
- * See \ref _Icon for the definition of an Icon, and \ref cairo-dock-icons.h for a complete description of the Icon class.
+ * See _Icon for the definition of an Icon, and cairo-dock-icons.h for a complete description of the Icon class.
  * 
  * \subsection dock Dock
- * See \ref _CairoDock for the definition of a Dock, and \ref cairo-dock-dock-factory.h for a complete description of the Dock class.
+ * See _CairoDock for the definition of a Dock, and cairo-dock-dock-factory.h for a complete description of the Dock class.
  * 
  * \subsection desklet Desklet
- * See \ref _CairoDesklet for the definition of a Desklet, and \ref cairo-dock-desklet.h for a complete description of the Desklet class.
+ * See _CairoDesklet for the definition of a Desklet, and cairo-dock-desklet.h for a complete description of the Desklet class.
  * 
  * \subsection dialog Dialog
- * See \ref _CairoDialog for the definition of a Dialog, and \ref cairo-dock-dialogs.h for a complete description of the Dialog class.
+ * See _CairoDialog for the definition of a Dialog, and cairo-dock-dialogs.h for a complete description of the Dialog class.
  * 
  * \subsection flying Flying Container
- * See \ref _CairoFlyingContainer for the definition of a Flying Container, and \ref cairo-dock-flying-container.h for a complete description of the FlyingContainer class.
+ * See _CairoFlyingContainer for the definition of a Flying Container, and cairo-dock-flying-container.h for a complete description of the FlyingContainer class.
  * 
  * 
  * 
@@ -159,7 +159,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
  * \subsection definition Ok I have a generic applet, how do I define it ?
  * 
  * As we saw, a module must fill a visit card and an interface, to be acecpted by the dock.
- * This is done very easily by the \ref CD_APPLET_DEFINITION macro. All you have to give is the name of the applet, its category, a brief description/manual (very important !), and your name.
+ * This is done very easily by the CD_APPLET_DEFINITION macro. All you have to give is the name of the applet, its category, a brief description/manual (very important !), and your name.
  * When you will have finished, you will be able to make a nice preview and a nice default icon, and place them in the <i>data</i> folder.
  * 
  * 
@@ -176,12 +176,12 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
  * 
  * The framework defines different <b>sections</b>, and all you have to do is to fill them :
  * 
- * - First of all you will have to get your config parameters. This is done in the <b>\ref CD_APPLET_GET_CONFIG_BEGIN/\ref CD_APPLET_GET_CONFIG_END</b> section, in applet-config.c.
- * - Each time you add a parameter, think of freeing it if it's a dynamic ressource like a string; this is done in the <b>\ref CD_APPLET_RESET_CONFIG_BEGIN/\ref CD_APPLET_RESET_CONFIG_END</b> section.
- * - In a similar way, you will free all the ressources you allocated by myData in the <b>\ref CD_APPLET_RESET_DATA_BEGIN/\ref CD_APPLET_RESET_DATA_END</b> section.
- * - After the instance is created, the dock lets you start. This is done in the <b>\ref CD_APPLET_INIT_BEGIN/\ref CD_APPLET_INIT_END</b> section. At this point, myApplet is already fully defined, and myConfig has been filled. Therefore you can already draw on your icon, launch timers, register to notifications, etc.
- * - Each time the user changes something in its config, or the desklet is resized, your applet is reloaded. This is done in the <b>\ref CD_APPLET_RELOAD_BEGIN/\ref CD_APPLET_RELOAD_END</b> section. The macro <b>\ref CD_APPLET_MY_CONFIG_CHANGED</b> tells you if something has changed in your config or if it's just a resizing.
- * - Last, when your applet is stopped, you have to stop everything you set up in the init (timers, notifications, etc) in the <b>\ref CD_APPLET_STOP_BEGIN/\ref CD_APPLET_STOP_END</b> section.
+ * - First of all you will have to get your config parameters. This is done in the CD_APPLET_GET_CONFIG_BEGIN/CD_APPLET_GET_CONFIG_END section, in applet-config.c.
+ * - Each time you add a parameter, think of freeing it if it's a dynamic ressource like a string; this is done in the CD_APPLET_RESET_CONFIG_BEGIN/CD_APPLET_RESET_CONFIG_END section.
+ * - In a similar way, you will free all the ressources you allocated by myData in the CD_APPLET_RESET_DATA_BEGIN/CD_APPLET_RESET_DATA_END section.
+ * - After the instance is created, the dock lets you start. This is done in the CD_APPLET_INIT_BEGIN/CD_APPLET_INIT_END section. At this point, myApplet is already fully defined, and myConfig has been filled. Therefore you can already draw on your icon, launch timers, register to notifications, etc.
+ * - Each time the user changes something in its config, or the desklet is resized, your applet is reloaded. This is done in the CD_APPLET_RELOAD_BEGIN/CD_APPLET_RELOAD_END section. The macro CD_APPLET_MY_CONFIG_CHANGED tells you if something has changed in your config or if it's just a resizing.
+ * - Last, when your applet is stopped, you have to stop everything you set up in the init (timers, notifications, etc) in the CD_APPLET_STOP_BEGIN/CD_APPLET_STOP_END section.
  * 
  * 
  * \subsection notifications The notifications system.
@@ -193,38 +193,38 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
  * To register to a notification, you have the \ref cairo_dock_register_notification function. Always unregister when your applet is stopped, to avoid being notified when you shouldn't, with the function \ref cairo_dock_remove_notification_func.
  * 
  * For convenience, there are sections dedicated to the most common events; you just have to fill the corresponding sections :
- * - \ref CD_APPLET_ON_CLICK_BEGIN/\ref CD_APPLET_ON_CLICK_END for the actions on right click on your icon or one of its sub-dock.
- * - \ref CD_APPLET_ON_MIDDLE_CLICK_BEGIN/\ref CD_APPLET_ON_MIDDLE_CLICK_END for the actions on middle click on your icon or one of its sub-dock.
- * - \ref CD_APPLET_ON_DOUBLE_CLICK_BEGIN/\ref CD_APPLET_ON_DOUBLE_CLICK_END for the actions on double click on your icon or one of its sub-dock.
- * - \ref CD_APPLET_ON_SCROLL_BEGIN/\ref CD_APPLET_ON_SCROLL_END for the actions on scroll on your icon or one of its sub-dock.
- * - \ref CD_APPLET_ON_BUILD_MENU_BEGIN/\ref CD_APPLET_ON_BUILD_MENU_END for the building of the menu on left click on your icon or one of its sub-dock.
+ * - CD_APPLET_ON_CLICK_BEGIN/CD_APPLET_ON_CLICK_END for the actions on right click on your icon or one of its sub-dock.
+ * - CD_APPLET_ON_MIDDLE_CLICK_BEGIN/CD_APPLET_ON_MIDDLE_CLICK_END for the actions on middle click on your icon or one of its sub-dock.
+ * - CD_APPLET_ON_DOUBLE_CLICK_BEGIN/CD_APPLET_ON_DOUBLE_CLICK_END for the actions on double click on your icon or one of its sub-dock.
+ * - CD_APPLET_ON_SCROLL_BEGIN/CD_APPLET_ON_SCROLL_END for the actions on scroll on your icon or one of its sub-dock.
+ * - CD_APPLET_ON_BUILD_MENU_BEGIN/CD_APPLET_ON_BUILD_MENU_END for the building of the menu on left click on your icon or one of its sub-dock.
  * 
  * To register to these notifications, you can use the convenient macros :
- * - \ref CD_APPLET_REGISTER_FOR_CLICK_EVENT
- * - \ref CD_APPLET_REGISTER_FOR_MIDDLE_CLICK_EVENT
- * - \ref CD_APPLET_REGISTER_FOR_DOUBLE_CLICK_EVENT
- * - \ref CD_APPLET_REGISTER_FOR_SCROLL_EVENT
- * - \ref CD_APPLET_REGISTER_FOR_BUILD_MENU_EVENT
+ * - CD_APPLET_REGISTER_FOR_CLICK_EVENT
+ * - CD_APPLET_REGISTER_FOR_MIDDLE_CLICK_EVENT
+ * - CD_APPLET_REGISTER_FOR_DOUBLE_CLICK_EVENT
+ * - CD_APPLET_REGISTER_FOR_SCROLL_EVENT
+ * - CD_APPLET_REGISTER_FOR_BUILD_MENU_EVENT
  *
  *
  * \subsection opengl How can I take advantage of the OpenGL ?
  * 
  * There are 3 cases :
  * - your applet just has a static icon; there is nothing to take into account, the common functions to set an image or a surface on an icon already handle the texture mapping.
- * - you draw dynamically on your icon with libcairo (using myDrawContext), but you don't want to bother with OpenGL; all you have to do is to call \ref cairo_dock_update_icon_texture to update your icon's texture after you drawn your surface. This can be done for occasional drawings, like Switcher redrawing its icon each time a window is moved.
- * - you draw your icon differently whether the dock is in OpenGL mode or not; in this case, you just need to put all the OpenGL commands into a \ref CD_APPLET_START_DRAWING_MY_ICON/\ref CD_APPLET_FINISH_DRAWING_MY_ICON section inside your code.
+ * - you draw dynamically on your icon with libcairo (using myDrawContext), but you don't want to bother with OpenGL; all you have to do is to call cairo_dock_update_icon_texture to update your icon's texture after you drawn your surface. This can be done for occasional drawings, like Switcher redrawing its icon each time a window is moved.
+ * - you draw your icon differently whether the dock is in OpenGL mode or not; in this case, you just need to put all the OpenGL commands into a CD_APPLET_START_DRAWING_MY_ICON/CD_APPLET_FINISH_DRAWING_MY_ICON section inside your code.
  * 
  * 
  * \subsection animation How can I animate my applet to make it more lively ?
  *
- * If you want to animate your icon easily, to signal some action (like Music-Player when a new song starts), you can simply <b>request for one of the registered animations</b> with \ref cairo_dock_request_icon_animation and stop it with \ref cairo_dock_stop_icon_animation. You just specify the name of the animation (like "rotate") and the number of time it will be played.
+ * If you want to animate your icon easily, to signal some action (like Music-Player when a new song starts), you can simply <b>request for one of the registered animations</b> with \ref cairo_dock_request_icon_animation and stop it with cairo_dock_stop_icon_animation. You just specify the name of the animation (like "rotate") and the number of time it will be played.
  * 
  * But you can also make your own animation, like Clock of Cairo-Penguin. You will have to integrate yourself into the rendering loop of your container. Don't panic, here again, Cairo-Dock helps you !
  * 
- * First you will register to the "update container" notification, with the macros \ref CD_APPLET_REGISTER_FOR_UPDATE_ICON_SLOW_EVENT or CD_APPLET_REGISTER_FOR_UPDATE_ICON_EVENT, depending on the refresh frequency you need : ~10Hz or ~33Hz. A high frequency needs of course more CPU, and most of the time the slow frequancy is enough.
+ * First you will register to the "update container" notification, with the macros CD_APPLET_REGISTER_FOR_UPDATE_ICON_SLOW_EVENT or CD_APPLET_REGISTER_FOR_UPDATE_ICON_EVENT, depending on the refresh frequency you need : ~10Hz or ~33Hz. A high frequency needs of course more CPU, and most of the time the slow frequancy is enough.
  * 
- * Then you will just put all your code in a \ref CD_APPLET_ON_UPDATE_ICON_BEGIN/\ref CD_APPLET_ON_UPDATE_ICON_END section. That's all ! In this section, do what you want, like redrawing your icon, possibly incrementing a counter to know until where you went, etc. See \ref opengl "the previous paragraph" to draw on your icon.
- * Inside the rendering loop, you can skip an iteration with \ref CD_APPLET_SKIP_UPDATE_ICON, and quit the loop with \ref CD_APPLET_STOP_UPDATE_ICON or \ref CD_APPLET_PAUSE_UPDATE_ICON (don't forget to quit the loop when you're done, otherwise your container may continue to redraw itself, which means a needless CPU load).
+ * Then you will just put all your code in a CD_APPLET_ON_UPDATE_ICON_BEGIN/CD_APPLET_ON_UPDATE_ICON_END section. That's all ! In this section, do what you want, like redrawing your icon, possibly incrementing a counter to know until where you went, etc. See \ref opengl "the previous paragraph" to draw on your icon.
+ * Inside the rendering loop, you can skip an iteration with CD_APPLET_SKIP_UPDATE_ICON, and quit the loop with CD_APPLET_STOP_UPDATE_ICON or CD_APPLET_PAUSE_UPDATE_ICON (don't forget to quit the loop when you're done, otherwise your container may continue to redraw itself, which means a needless CPU load).
  *
  *
  * \subsection tasks I have heavy treatments to do, how can I make them without slowing the dock ?
@@ -242,9 +242,9 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
  * 
  * \subsection sub-icons I need more than one icon, how can I easily get more ?
  * 
- * In dock mode, your icon can have a sub-dock; in desklet mode, you can load a list of icons into your desklet. Cairo-Dock provides a convenient macro to <b>quickly load a list of icons</b> in both cases : \ref CD_APPLET_LOAD_MY_ICONS_LIST to load a list of icons and \ref CD_APPLET_DELETE_MY_ICONS_LIST to destroy it. Thus you don't need to know in which mode you are, neither to care about loading the icons, freeing them, or anything.
+ * In dock mode, your icon can have a sub-dock; in desklet mode, you can load a list of icons into your desklet. Cairo-Dock provides a convenient macro to <b>quickly load a list of icons</b> in both cases : CD_APPLET_LOAD_MY_ICONS_LIST to load a list of icons and CD_APPLET_DELETE_MY_ICONS_LIST to destroy it. Thus you don't need to know in which mode you are, neither to care about loading the icons, freeing them, or anything.
  * 
- * You can get the list of icons with \ref CD_APPLET_MY_ICONS_LIST and to their container with \ref CD_APPLET_MY_ICONS_LIST_CONTAINER.
+ * You can get the list of icons with CD_APPLET_MY_ICONS_LIST and to their container with CD_APPLET_MY_ICONS_LIST_CONTAINER.
  * 
  * 
  * \n
@@ -254,7 +254,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
  * 
  * Cairo-Dock can build itself the config panel of your applet from the config file. Moreover, it can do the opposite : update the conf file from the config panel. However, it is limited to the widgets it knows, and there are some cases it is not enough.
  * Because of that, Cairo-Dock offers 2 hooks in the process of building/reading the config panel : 
-when defining your applet in the \ref CD_APPLET_DEFINE_BEGIN/\ref CD_APPLET_DEFINE_END section, add to the interface the 2 functions pInterface->load_custom_widget and pInterface->save_custom_widget.
+when defining your applet in the CD_APPLET_DEFINE_BEGIN/CD_APPLET_DEFINE_END section, add to the interface the 2 functions pInterface->load_custom_widget and pInterface->save_custom_widget.
  * They will be respectively called when the config panel of your applet is raised, and when it is validated.
  * 
  * If you want to modify the content of an existing widget, you can grab it with \ref cairo_dock_get_widget_from_name.
@@ -266,18 +266,18 @@ when defining your applet in the \ref CD_APPLET_DEFINE_BEGIN/\ref CD_APPLET_DEFI
  * \subsection steal_appli How can my applet control the window of an application ?
  * 
  * Say your applet launches an external application that has its own window. It is logical to <b>make your applet control this application</b>, rather than letting the Taskbar do.
- * All you need to do is to call the macro \ref CD_APPLET_MANAGE_APPLICATION, indicating which application you wish to manage (you need to enter the class of the application, as you can get from "xprop | grep CLASS"). Your applet will then behave like a launcher that has stolen the appli icon.
+ * All you need to do is to call the macro CD_APPLET_MANAGE_APPLICATION, indicating which application you wish to manage (you need to enter the class of the application, as you can get from "xprop | grep CLASS"). Your applet will then behave like a launcher that has stolen the appli icon.
  * 
  * 
  * \subsection data_renderer How can I render some numerical values on my icon ?
  * 
  * Cairo-Dock offers a powerful and versatile architecture for this case : \ref _CairoDataRenderer.
- * A DataRenderer is a generic way to render a set of values on an icon; there are several implementations of this class : \ref _Gauge "_Gauge", \ref _CairoDockGraph2 "Graph", Bar, and it is quite easy to implement a new kind of DataRenderer.
+ * A DataRenderer is a generic way to render a set of values on an icon; there are several implementations of this class : #Gauge, #CairoDockGraph2, Bar, and it is quite easy to implement a new kind of DataRenderer.
  * 
- * Each kind of renderer has a set of attributes that you can use to customize it; you just need to call the \ref CD_APPLET_ADD_DATA_RENDERER_ON_MY_ICON macro with the attributes, and you're done !
- * Then, each time you want to render some new values, simply call \ref CD_APPLET_RENDER_NEW_DATA_ON_MY_ICON with the new values.
- * When your applet is reloaded, you have to reload the DataRenderer as well, using the convenient \ref CD_APPLET_RELOAD_MY_DATA_RENDERER macro. If you don't specify attributes to it, it will simply reload the current DataRenderer, otherwise it will load the new attributes; the previous data are not lost, which is useful in the case of Graph for instance.
- * You can remove it at any time with \ref CD_APPLET_REMOVE_MY_DATA_RENDERER.
+ * Each kind of renderer has a set of attributes that you can use to customize it; you just need to call the CD_APPLET_ADD_DATA_RENDERER_ON_MY_ICON macro with the attributes, and you're done !
+ * Then, each time you want to render some new values, simply call CD_APPLET_RENDER_NEW_DATA_ON_MY_ICON with the new values.
+ * When your applet is reloaded, you have to reload the DataRenderer as well, using the convenient CD_APPLET_RELOAD_MY_DATA_RENDERER macro. If you don't specify attributes to it, it will simply reload the current DataRenderer, otherwise it will load the new attributes; the previous data are not lost, which is useful in the case of Graph for instance.
+ * You can remove it at any time with CD_APPLET_REMOVE_MY_DATA_RENDERER.
  * 
  * 
  * \subsection multi How can I make my applet multi-instanciable ?
