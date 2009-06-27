@@ -80,55 +80,107 @@ struct _CairoDockDesktopEnvBackend {
 	CairoDockFMUserActionFunc		show_system_monitor;
 };
 
-
+/** Register a environment backend, overwriting any previous backend.
+*/
 void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend);
 
-
+/** List the content of a directory and turn it into a list of icons.
+*/
 GList * cairo_dock_fm_list_directory (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, gchar **cFullURI);
 
+/** Get the main info to represent a file.
+*/
 gboolean cairo_dock_fm_get_file_info (const gchar *cBaseURI, gchar **cName, gchar **cURI, gchar **cIconName, gboolean *bIsDirectory, int *iVolumeID, double *fOrder, CairoDockFMSortType iSortType);
 
+/** Get some properties about a file.
+*/
 gboolean cairo_dock_fm_get_file_properties (const gchar *cURI, guint64 *iSize, time_t *iLastModificationTime, gchar **cMimeType, int *iUID, int *iGID, int *iPermissionsMask);
 
+/** Open a file with the default application.
+*/
 gboolean cairo_dock_fm_launch_uri (const gchar *cURI);
 
+/** Add a monitor on an URI. It will be called each time a modification occurs on the file.
+*/
 gboolean cairo_dock_fm_add_monitor_full (const gchar *cURI, gboolean bDirectory, const gchar *cMountedURI, CairoDockFMMonitorCallback pCallback, gpointer data);
+/** Add a monitor on an icon representing an URI.
+*/
 #define cairo_dock_fm_add_monitor(pIcon) cairo_dock_fm_add_monitor_full (pIcon->cBaseURI, (pIcon->pSubDock != NULL), (pIcon->iVolumeID != 0 ? pIcon->acCommand : NULL), (CairoDockFMMonitorCallback) cairo_dock_fm_action_on_file_event, (gpointer) pIcon)
 
+/** Remove a monitor on an URI.
+*/
 gboolean cairo_dock_fm_remove_monitor_full (const gchar *cURI, gboolean bDirectory, const gchar *cMountedURI);
+/** Remove a monitor on an icon representing an URI.
+*/
 #define cairo_dock_fm_remove_monitor(pIcon) cairo_dock_fm_remove_monitor_full (pIcon->cBaseURI, (pIcon->pSubDock != NULL), (pIcon->iVolumeID != 0 ? pIcon->acCommand : NULL))
 
-gboolean cairo_dock_fm_move_file (const gchar *cURI, const gchar *cDirectoryURI);
 
-
+/** Mount a point.
+*/
 gboolean cairo_dock_fm_mount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer);
+/** Mount an icon representing an URI.
+*/
 #define cairo_dock_fm_mount(icon, pContainer) cairo_dock_fm_mount_full (icon->cBaseURI, icon->iVolumeID, cairo_dock_fm_action_after_mounting, icon, pContainer)
 
+/** Unmount a point.
+*/
 gboolean cairo_dock_fm_unmount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer);
+/** Unmount an icon representing an URI.
+*/
 #define cairo_dock_fm_unmount(icon, pContainer) cairo_dock_fm_unmount_full (icon->cBaseURI, icon->iVolumeID, cairo_dock_fm_action_after_mounting, icon, pContainer)
 
+/** Say if a point is currently mounted.
+*/
 gchar *cairo_dock_fm_is_mounted (const gchar *cURI, gboolean *bIsMounted);
 
+/** Say if a point can be ejected (like a CD player).
+*/
 gboolean cairo_dock_fm_can_eject (const gchar *cURI);
+/** Eject the point.
+*/
 gboolean cairo_dock_fm_eject_drive (const gchar *cURI);
 
 
+/** Delete a file.
+*/
 gboolean cairo_dock_fm_delete_file (const gchar *cURI);
 
+/** Rename a file.
+*/
 gboolean cairo_dock_fm_rename_file (const gchar *cOldURI, const gchar *cNewName);
 
+/** Move a file.
+*/
 gboolean cairo_dock_fm_move_file (const gchar *cURI, const gchar *cDirectoryURI);
 
+/** Get the path to the Trash.
+*/
 gchar *cairo_dock_fm_get_trash_path (const gchar *cNearURI, gchar **cFileInfoPath);
+/** Get the path to the Desktop.
+*/
 gchar *cairo_dock_fm_get_desktop_path (void);
+
+/** Raise the logout panel.
+*/
 gboolean cairo_dock_fm_logout (void);
+/** Raise the shutdown panel.
+*/
 gboolean cairo_dock_fm_shutdown (void);
+
+/** Raise the panel to configure the time.
+*/
 gboolean cairo_dock_fm_setup_time (void);
+
+/** Raise the default system monitor.
+*/
 gboolean cairo_dock_fm_show_system_monitor (void);
 
-
+/** Create an Icon representing a given URI.
+*/
 Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pContainer);
 
+/** Create a Dock with the list of icons representing a folder.
+*/
 void cairo_dock_fm_create_dock_from_directory (Icon *pIcon, CairoDock *pParentDock);
 
 
@@ -140,13 +192,13 @@ void cairo_dock_fm_action_after_mounting (gboolean bMounting, gboolean bSuccess,
 
 gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, CairoContainer *pContainer);
 
-/**
-*Essaye de determiner l'environnement de bureau dela session courante.
-*@return l'environnement de bureau (couramment Gnome, KDE et XFCE sont detectés).
-*/
+
 CairoDockDesktopEnv cairo_dock_guess_environment (void);
 
-
+/** Get the size of a file.
+/*@param cFilePath path of a file on the hard disk.
+*@return the size of the file, or 0 if it doesn't exist.
+*/
 int cairo_dock_get_file_size (const gchar *cFilePath);
 
 

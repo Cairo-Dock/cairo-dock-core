@@ -125,10 +125,7 @@ void cairo_dock_set_icon_surface_with_bar (cairo_t *pIconContext, cairo_surface_
 	g_return_if_fail (cairo_status (pIconContext) == CAIRO_STATUS_SUCCESS);
 	
 	//\________________ On efface l'ancienne image.
-	cairo_set_source_rgba (pIconContext, 0.0, 0.0, 0.0, 0.0);
-	cairo_set_operator (pIconContext, CAIRO_OPERATOR_SOURCE);
-	cairo_paint (pIconContext);
-	cairo_set_operator (pIconContext, CAIRO_OPERATOR_OVER);
+	cairo_dock_erase_cairo_context (pIconContext);
 	
 	//\________________ On applique la nouvelle image.
 	if (pSurface != NULL)
@@ -261,13 +258,31 @@ gchar *cairo_dock_get_theme_path_for_module (GKeyFile *pKeyFile, gchar *cGroupNa
 }
 
 
-GtkWidget *cairo_dock_create_sub_menu (gchar *cLabel, GtkWidget *pMenu)
+GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, const gchar *cImage)
 {
-	GtkWidget *pSubMenu = gtk_menu_new ();
-	GtkWidget *pMenuItem = gtk_menu_item_new_with_label (cLabel);
-	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+	GtkWidget *pMenuItem, *image, *pSubMenu = gtk_menu_new ();
+	if (cImage == NULL)
+	{
+		pMenuItem = gtk_menu_item_new_with_label (cLabel);
+	}
+	else
+	{
+		pMenuItem = gtk_image_menu_item_new_with_label (cLabel);
+		if (*cImage == '/')
+		{
+			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cImage, 32, 32, NULL);
+			image = gtk_image_new_from_pixbuf (pixbuf);
+			g_object_unref (pixbuf);
+		}
+		else
+		{
+			image = gtk_image_new_from_stock (cImage, GTK_ICON_SIZE_MENU);
+		}
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
+	}
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem); 
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);
-	return pSubMenu;
+	return pSubMenu; 
 }
 
 

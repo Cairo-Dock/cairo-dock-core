@@ -12,101 +12,93 @@ G_BEGIN_DECLS
 * DBus is used to communicate and interact with other running applications.
 */
 
-/*
-* Initialise le gestionnaire de bus dans le dock. Il recupere la connexion 'session' de DBus, y etablit un proxy, et les met a disposition de tout le monde.
-*/
-//void cairo_dock_initialize_dbus_manager(void);
-
-/**
-* Retourne la connexion 'session' de DBus.
-*@return la connexion au bus.
+/** Get the connection to the 'session' Bus.
+*@return the connection to the bus.
 */
 DBusGConnection *cairo_dock_get_session_connection (void);
 #define cairo_dock_get_dbus_connection cairo_dock_get_session_connection
-/**
-* Enregistre un nouveau service sur le bus.
-*@param cServiceName le nom du service.
+
+/**Register a new service on the bus.
+*@param cServiceName name of the service.
 */
 void cairo_dock_register_service_name (const gchar *cServiceName);
-/**
-* Dis si le bus est disponible dans le dock.
-*@return TRUE ssi le bus a pu etre recupere precedemment.
+
+/** Say if the bus is available or not.
+*@return TRUE if the connection to the bus has been established.
 */
 gboolean cairo_dock_bdus_is_enabled (void);
 
-/**
-* Cree un nouveau proxy pour la connexion 'session'.
-*@param name un nom sur le bus.
-*@param path le chemin associe.
-*@param interface nom de l'interface associee.
-*@return le proxy nouvellement cree.
+/** Create a new proxy for the 'session' connection.
+*@param name a name on the bus.
+*@param path the path.
+*@param interface name of the interface.
+*@return the newly created proxy. Use g_object_unref when your done with it.
 */
 DBusGProxy *cairo_dock_create_new_session_proxy (const char *name, const char *path, const char *interface);
 #define cairo_dock_create_new_dbus_proxy cairo_dock_create_new_session_proxy
-/**
-* Cree un nouveau proxy pour la connexion 'system'.
-*@param name un nom sur le bus.
-*@param path le chemin associe.
-*@param interface nom de l'interface associee.
-*@return le proxy nouvellement cree.
+
+/**Create a new proxy for the 'system' connection.
+*@param name a name on the bus.
+*@param path the path.
+*@param interface name of the interface.
+*@return the newly created proxy. Use g_object_unref when your done with it.
 */
 DBusGProxy *cairo_dock_create_new_system_proxy (const char *name, const char *path, const char *interface);
 
-/**
-* Detecte si une application est couramment lancee.
-*@param cName nom de l'application.
-*@return TRUE ssi l'application est lancee et possede un service sur le bus.
+/** Detect if an application is currently running.
+*@param cName name of the application.
+*@return TRUE if the application is running and has a service on the bus.
 */
 gboolean cairo_dock_dbus_detect_application (const gchar *cName);
 
-/**
-* Recupere la valeur d'un parametre booleen sur le bus.
-*@param pDbusProxy associe a la connexion.
-*@param cParameter nom du parametre.
-*@return la valeur du parametre.
+
+/** Get the value of a 'boolean' parameter on the bus.
+*@param pDbusProxy proxy to the connection.
+*@param cAccessor name of the accessor.
+*@return the value of the parameter.
 */
-gboolean cairo_dock_dbus_get_boolean (DBusGProxy *pDbusProxy, const gchar *cParameter);
+gboolean cairo_dock_dbus_get_boolean (DBusGProxy *pDbusProxy, const gchar *cAccessor);
 
-/**
-* Recupere la valeur d'un parametre entier non signe sur le bus.
-*@param pDbusProxy associe a la connexion.
-*@param cParameter nom du parametre.
-*@return la valeur du parametre.
+/** Get the value of an 'unsigned integer' parameter non signe on the bus.
+*@param pDbusProxy proxy to the connection.
+*@param cAccessor name of the accessor.
+*@return the value of the parameter.
 */
-guint cairo_dock_dbus_get_uinteger (DBusGProxy *pDbusProxy, const gchar *cParameter);
+guint cairo_dock_dbus_get_uinteger (DBusGProxy *pDbusProxy, const gchar *cAccessor);
 
-/**
-* Recupere la valeur d'un parametre entier sur le bus.
-*@param pDbusProxy associe a la connexion.
-*@param cParameter nom du parametre.
-*@return la valeur du parametre.
+/** Get the value of a 'integer' parameter on the bus.
+*@param pDbusProxy proxy to the connection.
+*@param cAccessor name of the accessor.
+*@return the value of the parameter.
 */
-int cairo_dock_dbus_get_integer (DBusGProxy *pDbusProxy, const gchar *cParameter);
+int cairo_dock_dbus_get_integer (DBusGProxy *pDbusProxy, const gchar *cAccessor);
 
-/**
-* Recupere la valeur d'un parametre 'chaine de caracteres' sur le bus.
-*@param pDbusProxy associe a la connexion.
-*@param cParameter nom du parametre.
-*@return la valeur du parametre.
+/** Get the value of a 'string' parameter on the bus.
+*@param pDbusProxy proxy to the connection.
+*@param cAccessor name of the accessor.
+*@return the value of the parameter, to be freeed with g_free.
 */
-gchar *cairo_dock_dbus_get_string (DBusGProxy *pDbusProxy, const gchar *cParameter);
+gchar *cairo_dock_dbus_get_string (DBusGProxy *pDbusProxy, const gchar *cAccessor);
 
-gchar **cairo_dock_dbus_get_string_list (DBusGProxy *pDbusProxy, const gchar *cParameter);
-
-/**
-* Recupere la valeur d'un parametre 'caracteres non signe' sur le bus.
-*@param pDbusProxy associe a la connexion.
-*@param cParameter nom du parametre.
-*@return la valeur du parametre.
+/** Get the value of a 'string list' parameter on the bus.
+*@param pDbusProxy proxy to the connection.
+*@param cAccessor name of the accessor.
+*@return the value of the parameter, to be freeed with g_strfreev.
 */
-guchar *cairo_dock_dbus_get_uchar (DBusGProxy *pDbusProxy, const gchar *cParameter);
+gchar **cairo_dock_dbus_get_string_list (DBusGProxy *pDbusProxy, const gchar *cAccessor);
 
-gdouble cairo_dock_dbus_get_double (DBusGProxy *pDbusProxy, const gchar *cParameter);
+/** Get the value of an 'unsigned char' parameter on the bus.
+*@param pDbusProxy proxy to the connection.
+*@param cAccessor name of the accessor.
+*@return the value of the parameter.
+*/
+guchar *cairo_dock_dbus_get_uchar (DBusGProxy *pDbusProxy, const gchar *cAccessor);
 
-/**
-* Appelle une commande sur le bus.
-*@param pDbusProxy associe a la connexion.
-*@param cCommand nom de la commande.
+gdouble cairo_dock_dbus_get_double (DBusGProxy *pDbusProxy, const gchar *cAccessor);
+
+/** Call a command on the bus.
+*@param pDbusProxy proxy to the connection.
+*@param cCommand name of the commande.
 */
 void cairo_dock_dbus_call (DBusGProxy *pDbusProxy, const gchar *cCommand);
 

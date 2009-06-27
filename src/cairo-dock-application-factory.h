@@ -11,7 +11,7 @@ G_BEGIN_DECLS
 
 void cairo_dock_initialize_application_factory (Display *pXDisplay);
 
-void cairo_dock_unregister_pid (Icon *icon);
+//void cairo_dock_unregister_pid (Icon *icon);
 
 cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);
 cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);

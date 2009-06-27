@@ -140,11 +140,11 @@ gboolean cairo_dock_dbus_detect_application (const gchar *cName)
 
 
 
-gboolean cairo_dock_dbus_get_boolean (DBusGProxy *pDbusProxy, const gchar *cParameter)
+gboolean cairo_dock_dbus_get_boolean (DBusGProxy *pDbusProxy, const gchar *cAccessor)
 {
 	GError *erreur = NULL;
 	gboolean bValue = FALSE;
-	dbus_g_proxy_call (pDbusProxy, cParameter, &erreur,
+	dbus_g_proxy_call (pDbusProxy, cAccessor, &erreur,
 		G_TYPE_INVALID,
 		G_TYPE_BOOLEAN, &bValue,
 		G_TYPE_INVALID);
@@ -156,11 +156,11 @@ gboolean cairo_dock_dbus_get_boolean (DBusGProxy *pDbusProxy, const gchar *cPara
 	return bValue;
 }
 
-int cairo_dock_dbus_get_integer (DBusGProxy *pDbusProxy, const gchar *cParameter)
+int cairo_dock_dbus_get_integer (DBusGProxy *pDbusProxy, const gchar *cAccessor)
 {
 	GError *erreur = NULL;
 	int iValue = 0;
-	dbus_g_proxy_call (pDbusProxy, cParameter, &erreur,
+	dbus_g_proxy_call (pDbusProxy, cAccessor, &erreur,
 		G_TYPE_INVALID,
 		G_TYPE_INT, &iValue,
 		G_TYPE_INVALID);
@@ -172,11 +172,11 @@ int cairo_dock_dbus_get_integer (DBusGProxy *pDbusProxy, const gchar *cParameter
 	return iValue;
 }
 
-guint cairo_dock_dbus_get_uinteger (DBusGProxy *pDbusProxy, const gchar *cParameter)
+guint cairo_dock_dbus_get_uinteger (DBusGProxy *pDbusProxy, const gchar *cAccessor)
 {
 	GError *erreur = NULL;
 	guint iValue = 0;
-	dbus_g_proxy_call (pDbusProxy, cParameter, &erreur,
+	dbus_g_proxy_call (pDbusProxy, cAccessor, &erreur,
 		G_TYPE_INVALID,
 		G_TYPE_UINT, &iValue,
 		G_TYPE_INVALID);
@@ -188,11 +188,11 @@ guint cairo_dock_dbus_get_uinteger (DBusGProxy *pDbusProxy, const gchar *cParame
 	return iValue;
 }
 
-gchar *cairo_dock_dbus_get_string (DBusGProxy *pDbusProxy, const gchar *cParameter)
+gchar *cairo_dock_dbus_get_string (DBusGProxy *pDbusProxy, const gchar *cAccessor)
 {
 	GError *erreur = NULL;
 	gchar *cValue = NULL;
-	dbus_g_proxy_call (pDbusProxy, cParameter, &erreur,
+	dbus_g_proxy_call (pDbusProxy, cAccessor, &erreur,
 		G_TYPE_INVALID,
 		G_TYPE_STRING, &cValue,
 		G_TYPE_INVALID);
@@ -204,12 +204,12 @@ gchar *cairo_dock_dbus_get_string (DBusGProxy *pDbusProxy, const gchar *cParamet
 	return cValue;
 }
 
-guchar *cairo_dock_dbus_get_uchar (DBusGProxy *pDbusProxy, const gchar *cParameter)
+guchar *cairo_dock_dbus_get_uchar (DBusGProxy *pDbusProxy, const gchar *cAccessor)
 {
 	GError *erreur = NULL;
 	guchar* uValue = NULL;
 	
-	dbus_g_proxy_call (pDbusProxy, cParameter, &erreur,
+	dbus_g_proxy_call (pDbusProxy, cAccessor, &erreur,
 		G_TYPE_INVALID,
 		G_TYPE_UCHAR, &uValue,
 		G_TYPE_INVALID);
@@ -222,12 +222,12 @@ guchar *cairo_dock_dbus_get_uchar (DBusGProxy *pDbusProxy, const gchar *cParamet
 	return uValue;
 }
 
-gdouble cairo_dock_dbus_get_double (DBusGProxy *pDbusProxy, const gchar *cParameter)
+gdouble cairo_dock_dbus_get_double (DBusGProxy *pDbusProxy, const gchar *cAccessor)
 {
 	GError *erreur = NULL;
 	gdouble fValue = 0.;
 	
-	dbus_g_proxy_call (pDbusProxy, cParameter, &erreur,
+	dbus_g_proxy_call (pDbusProxy, cAccessor, &erreur,
 		G_TYPE_INVALID,
 		G_TYPE_DOUBLE, &fValue,
 		G_TYPE_INVALID);
@@ -240,11 +240,11 @@ gdouble cairo_dock_dbus_get_double (DBusGProxy *pDbusProxy, const gchar *cParame
 	return fValue;
 }
 
-gchar **cairo_dock_dbus_get_string_list (DBusGProxy *pDbusProxy, const gchar *cParameter)
+gchar **cairo_dock_dbus_get_string_list (DBusGProxy *pDbusProxy, const gchar *cAccessor)
 {
 	GError *erreur = NULL;
 	gchar **cValues = NULL;
-	dbus_g_proxy_call (pDbusProxy, cParameter, &erreur,
+	dbus_g_proxy_call (pDbusProxy, cAccessor, &erreur,
 		G_TYPE_INVALID,
 		G_TYPE_POINTER, &cValues,
 		G_TYPE_INVALID);

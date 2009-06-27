@@ -77,7 +77,7 @@ static gboolean _cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, gpoi
 	return TRUE;  // on empeche les ALT+F4 malheureux.
 }
 
-GtkWidget *cairo_dock_create_container_window (void)
+GtkWidget *cairo_dock_create_container_window_full (gboolean bOpenGLWindow)
 {
 	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	
@@ -87,7 +87,7 @@ GtkWidget *cairo_dock_create_container_window (void)
 	gtk_window_set_skip_taskbar_hint (GTK_WINDOW(pWindow), TRUE);
 	
 	cairo_dock_set_colormap_for_window (pWindow);
-	if (g_bUseOpenGL)
+	if (g_bUseOpenGL && bOpenGLWindow)
 	{
 		GdkGLContext *pMainGlContext = gtk_widget_get_gl_context (g_pMainDock ? g_pMainDock->pWidget : NULL);  // NULL si on est en train de creer la fenetre du main dock, ce qui nous convient.
 		gtk_widget_set_gl_capability (pWindow,
@@ -105,23 +105,6 @@ GtkWidget *cairo_dock_create_container_window (void)
 		"delete-event",
 		G_CALLBACK (_cairo_dock_on_delete),
 		NULL);
-	
-	gtk_widget_set_app_paintable (pWindow, TRUE);
-	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
-	gtk_window_set_resizable (GTK_WINDOW (pWindow), TRUE);
-	return pWindow;
-}
-
-GtkWidget *cairo_dock_create_container_window_no_opengl (void)
-{
-	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	
-	if (g_bSticky)
-		gtk_window_stick (GTK_WINDOW (pWindow));
-	gtk_window_set_skip_pager_hint (GTK_WINDOW(pWindow), TRUE);
-	gtk_window_set_skip_taskbar_hint (GTK_WINDOW(pWindow), TRUE);
-	
-	cairo_dock_set_colormap_for_window (pWindow);
 	
 	gtk_widget_set_app_paintable (pWindow, TRUE);
 	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
@@ -212,14 +195,6 @@ void cairo_dock_set_colormap (CairoContainer *pContainer)
 
 
 
-void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer)
-{
-	g_return_if_fail (icon != NULL && pContainer != NULL);
-	GdkRectangle rect;
-	cairo_dock_compute_icon_area (icon, pContainer, &rect);
-	cairo_dock_redraw_container_area (pContainer, &rect);
-}
-
 void cairo_dock_redraw_container (CairoContainer *pContainer)
 {
 	g_return_if_fail (pContainer != NULL);
@@ -248,6 +223,14 @@ void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle 
 	//g_print ("rect (%d;%d) (%dx%d)\n", pArea->x, pArea->y, pArea->width, pArea->height);
 	if (pArea->width > 0 && pArea->height > 0)
 		gdk_window_invalidate_rect (pContainer->pWidget->window, pArea, FALSE);
+}
+
+void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer)
+{
+	g_return_if_fail (icon != NULL && pContainer != NULL);
+	GdkRectangle rect;
+	cairo_dock_compute_icon_area (icon, pContainer, &rect);
+	cairo_dock_redraw_container_area (pContainer, &rect);
 }
 
 

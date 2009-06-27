@@ -68,9 +68,6 @@ void cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x, 
 void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint time, CairoDock *pDock);
 
 
-//gboolean cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, CairoDock *pDock);
-
-
 void cairo_dock_show_dock_at_mouse (CairoDock *pDock);
 void cairo_dock_raise_from_keyboard (const char *cKeyShortcut, gpointer data);
 

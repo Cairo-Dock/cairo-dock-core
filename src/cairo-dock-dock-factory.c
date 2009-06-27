@@ -80,7 +80,7 @@ extern GdkGLConfig* g_pGlConfig;
 static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)
 {
 	static gboolean bAsked = FALSE;
-	if (! g_bUseOpenGL)
+	if (! g_bUseOpenGL || bAsked)
 		return ;
 	
 	if (! g_bForceOpenGL)
@@ -99,11 +99,11 @@ static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)
 		gtk_widget_show_all (dialog);
 
 		gint iAnswer = gtk_dialog_run (GTK_DIALOG (dialog));
-		//int iAnswer = cairo_dock_ask_general_question_and_wait (_("Use OpenGL ?"));
 		gtk_widget_destroy (dialog);
 		if (iAnswer == GTK_RESPONSE_NO)
 		{
 			g_bUseOpenGL = FALSE;
+			//gdk_window_unset_gl_capability (pWidget->window);
 			return ;
 		}
 	}
@@ -173,10 +173,6 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, const gchar *c
 			"realize",
 			G_CALLBACK (_cairo_dock_on_realize_main_dock),
 			NULL);
-	/*g_signal_connect (G_OBJECT (pWindow),
-		"delete-event",
-		G_CALLBACK (cairo_dock_on_delete),
-		pDock);*/
 	g_signal_connect (G_OBJECT (pWindow),
 		"expose-event",
 		G_CALLBACK (cairo_dock_on_expose),
@@ -652,10 +648,11 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	cairo_dock_stop_icon_animation (icon);
 	
 	//\___________________ On desactive sa miniature.
-	cd_debug ("%s (%s, Xid : %lx)", __func__, icon->acName, icon->Xid);
 	if (icon->Xid != 0)
+	{
+		cd_debug ("on desactive la miniature de %s (Xid : %lx)", icon->acName, icon->Xid);
 		cairo_dock_set_xicon_geometry (icon->Xid, 0, 0, 0, 0);
-	
+	}
 	//\___________________ On l'enleve de la liste.
 	if (pDock->pFirstDrawnElement != NULL && pDock->pFirstDrawnElement->data == icon)
 	{

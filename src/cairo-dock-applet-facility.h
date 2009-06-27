@@ -12,104 +12,92 @@ G_BEGIN_DECLS
 /**
 *@file cairo-dock-applet-facility.h A collection of useful macros for applets.
 * Macros provides a normalized API that will :
-*   let you perform complex operations with a minimum amount of code
-*   ensure a bug-free functioning
-*   mask the internal complexity
-*   allow a normalized and easy-to-maintain code amongst all the applets.
-* 
+*  - lets you perform complex operations with a minimum amount of code
+*  - ensures a bug-free functioning
+*  - masks the internal complexity
+*  - allows a normalized and easy-to-maintain code amongst all the applets.
 */
 
-/**
-*Applique une surface sur un contexte, en effacant tout au prealable, et en appliquant un facteur de zoom et de transparence.
-*@param pIconContext le contexte du dessin; n'est pas altere par la fonction.
-*@param pSurface la surface a appliquer.
-*@param fScale le zoom.
-*@param fAlpha la transparence.
-*@param pIcon l'icone.
-*@param pContainer le container de l'icone.
+/** Apply a surface on a context, with a zoom and a transparency factor. The context is cleared beforehand with the default icon background.
+*@param pIconContext the drawing context; is not altered by the function.
+*@param pSurface the surface to apply.
+*@param fScale zoom fastor.
+*@param fAlpha transparency in [0,1].
+*@param pIcon the icon.
+*@param pContainer the container of the icon.
 */
 void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *pSurface, double fScale, double fAlpha, Icon *pIcon, CairoContainer *pContainer);
-/**
-*Applique une surface sur un contexte, en effacant tout au prealable.
-*@param pIconContext le contexte du dessin; est modifie par la fonction.
-*@param pSurface la surface a appliquer.
+
+/** Apply a surface on a context. The context is cleared beforehand with the default icon background..
+*@param pIconContext the drawing context; is not altered by the function.
+*@param pSurface the surface to apply.
 */
 #define cairo_dock_set_icon_surface(pIconContext, pSurface) cairo_dock_set_icon_surface_full (pIconContext, pSurface, 1, 1, NULL, NULL)
-/**
-*Dessine une barre degradee rouge->vert representant une valeur donnee a la base de l'icone.
-*@param pIconContext le contexte du dessin; n'est pas altere par la fonction.
-*@param fValue la valeur representant un pourcentage, <=1. Si negative, le degrade est inverse, et sa valeur absolue est utilisee.
-*@param pIcon l'icone.
-*@param pContainer le container de l'icone.
+
+/** Draw a bar at the bottom of an Icon, with a gradation from red to green and a given length.
+*@param pIconContext the drawing context; is not altered by the function.
+*@param fValue the value representing a percentage, in [-1,1]. if negative, the gradation is inverted, and the absolute value is used.
+*@param pIcon the icon.
+*@param pContainer the container of the icon.
 */
 void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pIcon, CairoContainer *pContainer);
 
 void cairo_dock_set_icon_surface_with_bar (cairo_t *pIconContext, cairo_surface_t *pSurface, double fValue, Icon *pIcon, CairoContainer *pContainer);
 
-/**
-*Applique une surface sur le contexte d'une icone, en effacant tout au prealable et en creant les reflets correspondant.
-*@param pIconContext le contexte de dessin lie a la surface de l'icone; est modifie par la fonction.
-*@param pSurface la surface a appliquer a l'icone.
-*@param pIcon l'icone.
-*@param pContainer le container de l'icone.
+/** Apply a surface on the context of an icon, clearing it beforehand, and adding the reflect.
+*@param pIconContext the drawing context; is not altered by the function.
+*@param pSurface the surface to apply.
+*@param pIcon the icon.
+*@param pContainer the container of the icon.
 */
 void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surface_t *pSurface, Icon *pIcon, CairoContainer *pContainer);
-/**
-*Applique une image sur le contexte d'une icone, en effacant tout au prealable et en creant les reflets correspondant.
-*@param pIconContext le contexte de dessin lie a la surface de l'icone; est modifie par la fonction.
-*@param cImagePath chemin de l'image a appliquer a l'icone.
-*@param pIcon l'icone.
-*@param pContainer le container de l'icone.
+
+/** Apply an image on the context of an icon, clearing it beforehand, and adding the reflect.
+*@param pIconContext the drawing context; is not altered by the function.
+*@param cImagePath path of an image t apply on the icon.
+*@param pIcon the icon.
+*@param pContainer the container of the icon.
 */
 void cairo_dock_set_image_on_icon (cairo_t *pIconContext, gchar *cImagePath, Icon *pIcon, CairoContainer *pContainer);
 
 
 void cairo_dock_set_hours_minutes_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds);
 void cairo_dock_set_minutes_secondes_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds);
+
+/** Convert a size in bytes into a readable format.
+*@param iSizeInBytes size in bytes.
+*@return a newly allocated string.
+*/
 gchar *cairo_dock_get_human_readable_size (long long int iSizeInBytes);
 void cairo_dock_set_size_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, long long int iSizeInBytes);
 
+/// type of possible display on a Icon.
 typedef enum {
+	/// don't display anything.
 	CAIRO_DOCK_INFO_NONE = 0,
+	/// display info on the icon (as quick-info).
 	CAIRO_DOCK_INFO_ON_ICON,
+	/// display on the label of the icon.
 	CAIRO_DOCK_INFO_ON_LABEL,
 	CAIRO_DOCK_NB_INFO_DISPLAY
 } CairoDockInfoDisplay;
 
 
-/**
-*Renvoie le chemin correspondant au theme figurant dans la config.
-*@param pKeyFile le fichier de conf ouvert.
-*@param cGroupName nom du groupe (dans le fichier de conf) du parametre correspondant au theme.
-*@param cKeyName nom de la cle (dans le fichier de conf) du parametre correspondant au theme.
-*@param bFlushConfFileNeeded pointeur sur un booleen mis a TRUE si la cle n'existe pas.
-*@param cDefaultThemeName nom du theme par defaut au cas ou le precedent n'existerait pas.
-*@param cShareThemesDir chemin vers les themes pre-installes.
-*@param cExtraDirName nom du repertoire des themes extras et distants.
-*@return Le chemin du repertoire du theme choisi, dans une chaine nouvellement allouee.
-*/
 gchar *cairo_dock_get_theme_path_for_module (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName, const gchar *cShareThemesDir, const gchar *cExtraDirName);
 
-/**
-*Cree un sous-menu, et l'ajoute a un menu deja existant.
-*@param cLabel nom du sous-menu, tel qu'il apparaitra dans le menu.
-*@param pMenu menu auquel on rajoutera le sous-menu.
-*@return le sous-menu cree et ajoute au menu.
-*/
-GtkWidget *cairo_dock_create_sub_menu (gchar *cLabel, GtkWidget *pMenu);
+GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, const gchar *cImage);
 
 
-/**
-*Joue un son par l'intermédiaire de pulseaudio ou alsa (en priorité).
-*@param cSoundPath le chemin vers le fichier audio a jouer.
+/** Play a sound, through Alsa or PulseAudio.
+*@param cSoundPath path to an audio file.
 */
 void cairo_dock_play_sound (const gchar *cSoundPath);
 
 
-/**Renvoie la version de gnome.
-*@param iMajor adresse de la majeure.
-*@param iMinor adresse de la mineure.
-*@param iMicro adresse de la micro.
+/** Get the Gnome's version.
+*@param iMajor pointer to the major.
+*@param iMinor pointer to the minor.
+*@param iMicro pointer to the micro.
 */
 void cairo_dock_get_gnome_version (int *iMajor, int *iMinor, int *iMicro);
 
@@ -120,142 +108,132 @@ void cairo_dock_open_module_config_on_demand (int iClickedButton, GtkWidget *pIn
 
 
 
-  //////////////
- /// CONFIG ///
-//////////////
+  ////////////
+ // CONFIG //
+////////////
 
-/** Recupere la valeur d'un parametre 'booleen' du fichier de conf.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@param bDefaultValue valeur par defaut si la cle et/ou le groupe n'est pas trouve (typiquement si cette cle est nouvelle).
-*@return un gboolean.
+/** Get the value of a 'boolean' from the conf file.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@param bDefaultValue default value if the group/key is not found (typically if the key is new).
+*@return a gboolean.
 */
 #define CD_CONFIG_GET_BOOLEAN_WITH_DEFAULT(cGroupName, cKeyName, bDefaultValue) cairo_dock_get_boolean_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, bDefaultValue, NULL, NULL)
-
-/**
-*Recupere la valeur d'un parametre 'booleen' du fichier de conf, avec TRUE comme valeur par defaut.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@return un gboolean.
+/** Get the value of a 'booleen' from the conf file, with TRUE as default value.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@return a gboolean.
 */
 #define CD_CONFIG_GET_BOOLEAN(cGroupName, cKeyName) CD_CONFIG_GET_BOOLEAN_WITH_DEFAULT (cGroupName, cKeyName, TRUE)
 
-/**
-*Recupere la valeur d'un parametre 'entier' du fichier de conf.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@param iDefaultValue valeur par defaut si la cle et/ou le groupe n'est pas trouve (typiquement si cette cle est nouvelle).
-*@return un entier.
+/** Get the value of an 'integer' from the conf file.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@param iDefaultValue default value if the group/key is not found (typically if the key is new).
+*@return an integer.
 */
 #define CD_CONFIG_GET_INTEGER_WITH_DEFAULT(cGroupName, cKeyName, iDefaultValue) cairo_dock_get_integer_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, iDefaultValue, NULL, NULL)
-/**
-*Recupere la valeur d'un parametre 'entier' du fichier de conf, avec 0 comme valeur par defaut.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@return un entier.
+/** Get the value of a 'entier' from the conf file, with 0 as default value.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@return an integer.
 */
 #define CD_CONFIG_GET_INTEGER(cGroupName, cKeyName) CD_CONFIG_GET_INTEGER_WITH_DEFAULT (cGroupName, cKeyName, 0)
 
-/**
-*Recupere la valeur d'un parametre 'double' du fichier de conf.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@param fDefaultValue valeur par defaut si la cle et/ou le groupe n'est pas trouve (typiquement si cette cle est nouvelle).
-*@return un double.
+/** Get the value of a 'double' from the conf file.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@param fDefaultValue default value if the group/key is not found (typically if the key is new).
+*@return a double.
 */
 #define CD_CONFIG_GET_DOUBLE_WITH_DEFAULT(cGroupName, cKeyName, fDefaultValue) cairo_dock_get_double_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, 0., NULL, NULL)
-/**
-*Recupere la valeur d'un parametre 'double' du fichier de conf, avec 0. comme valeur par defaut.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@return un double.
+/** Get the value of a 'double' from the conf file, with 0. as default value.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@return a double.
 */
 #define CD_CONFIG_GET_DOUBLE(cGroupName, cKeyName) CD_CONFIG_GET_DOUBLE_WITH_DEFAULT (cGroupName, cKeyName, 0.)
 
+/** Get the value of an 'integers list' from the conf file.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@param iNbElements number of elements to get from the conf file.
+*@param iValueBuffer buffer to fill with the values.
+*/
 #define CD_CONFIG_GET_INTEGER_LIST(cGroupName, cKeyName, iNbElements, iValueBuffer) \
 cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, iValueBuffer, iNbElements, NULL, NULL, NULL)
 
-/**
-*Recupere la valeur d'un parametre 'chaine de caracteres' du fichier de conf.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@param cDefaultValue valeur par defaut si la cle et/ou le groupe n'est pas trouve (typiquement si cette cle est nouvelle). NULL accepte.
-*@return une chaine de caracteres nouvellement allouee.
+/** Get the value of a 'string' from the conf file.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@param cDefaultValue default value if the group/key is not found (typically if the key is new). can be NULL.
+*@return a newly allocated string.
 */
 #define CD_CONFIG_GET_STRING_WITH_DEFAULT(cGroupName, cKeyName, cDefaultValue) cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, cDefaultValue, NULL, NULL)
-/**
-*Recupere la valeur d'un parametre 'chaine de caracteres' du fichier de conf, avec NULL comme valeur par defaut.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@return une chaine de caracteres nouvellement allouee.
+/** Get the value of a 'string' from the conf file, with NULL as default value.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@return a newly allocated string.
 */
 #define CD_CONFIG_GET_STRING(cGroupName, cKeyName) CD_CONFIG_GET_STRING_WITH_DEFAULT (cGroupName, cKeyName, NULL)
 
-/**
-*Recupere la valeur d'un parametre 'fichier' du fichier de conf, avec NULL comme valeur par defaut. Si le parametre est NULL, un fichier local a l'applet est utilise, mais le fichier de conf n'est pas renseigné avec.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@param cDefaultFileName fichier par defaut si aucun n'est specifie dans la conf.
-*@return une chaine de caracteres nouvellement allouee donnant le chemin complet du fichier.
+/** Get the value of a 'file' from the conf file, with NULL as default value. If the value is a file name (not a path), it is supposed to be in the Cairo-Dock's current theme folder. If the value is NULL, the default file is used, taken at the applet's data folder, but the conf file is not updated with this value.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@param cDefaultFileName defaul tfile if none is specified in the conf file.
+*@return a newly allocated string giving the complete path of the file.
 */
 #define CD_CONFIG_GET_FILE_PATH(cGroupName, cKeyName, cDefaultFileName) cairo_dock_get_file_path_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, NULL, NULL, MY_APPLET_SHARE_DATA_DIR, cDefaultFileName)
 
-/**
-*Recupere la valeur d'un parametre 'liste de chaines de caracteres' du fichier de conf.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@param length pointeur sur un entier, rempli avec le nombre de chaines recuperees.
-*@param cDefaultValues valeur par defaut si la cle et/ou le groupe n'est pas trouve (typiquement si cette cle est nouvelle). C'est une chaine de caractere contenant les mots separes par des ';', ou NULL.
-*@return un tableau de chaine de caracteres, a liberer avec 'g_strfreev'.
+/** Get the value of a 'strings list' from the conf file.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@param length pointer to the number of strings that were extracted from the conf file.
+*@param cDefaultValues default value if the group/key is not found (typically if the key is new). It is a string with words separated by ';'. It can be NULL.
+*@return a table of strings, to be freeed with 'g_strfreev'.
 */
 #define CD_CONFIG_GET_STRING_LIST_WITH_DEFAULT(cGroupName, cKeyName, length, cDefaultValues) cairo_dock_get_string_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, length, cDefaultValues, NULL, NULL)
-/**
-*Recupere la valeur d'un parametre 'liste de chaines de caracteres' du fichier de conf, avec NULL comme valeur par defaut.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@param length pointeur sur un entier, rempli avec le nombre de chaines recuperees.
-*@return un tableau de chaine de caracteres, a liberer avec 'g_strfreev'.
+/** Get the value of a 'strings list' from the conf file, with NULL as default value.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@param length pointer to the number of strings that were extracted from the conf file.
+*@return a table of strings, to be freeed with 'g_strfreev'.
 */
 #define CD_CONFIG_GET_STRING_LIST(cGroupName, cKeyName, length) CD_CONFIG_GET_STRING_LIST_WITH_DEFAULT(cGroupName, cKeyName, length, NULL)
 
-/**
-*Recupere la valeur d'un parametre 'couleur' au format RVBA. du fichier de conf.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@param pColorBuffer tableau de 4 double deja alloue, et qui sera rempli avec les 4 composantes de la couleur.
-*@param pDefaultColor valeur par defaut si la cle et/ou le groupe n'est pas trouve (typiquement si cette cle est nouvelle). C'est un tableau de 4 double, ou NULL.
+/** Get the value of a 'color' in the RGBA format from the conf file.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@param pColorBuffer a table of 4 'double' already allocated, that will be filled with the color components.
+*@param pDefaultColor default value if the group/key is not found (typically if the key is new). It is a table of 4 'double'. It can be NULL.
 */
 #define CD_CONFIG_GET_COLOR_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, pDefaultColor) cairo_dock_get_double_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, (double*)pColorBuffer, 4, pDefaultColor, NULL, NULL)
-/**
-*Recupere la valeur d'un parametre 'couleur' au format RVBA. du fichier de conf, avec NULL comme valeur par defaut.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@param pColorBuffer tableau de 4 double deja alloue, et qui sera rempli avec les 4 composantes de la couleur.
+/** Get the value of a 'color' in the RGBA format from the conf file, with NULL as default value.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@param pColorBuffer a table of 4 'double' already allocated, that will be filled with the color components.
 */
 #define CD_CONFIG_GET_COLOR(cGroupName, cKeyName, pColorBuffer) CD_CONFIG_GET_COLOR_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, NULL)
-/**
-*Recupere la valeur d'un parametre 'couleur' au format RVB. du fichier de conf.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@param pColorBuffer tableau de 3 double deja alloue, et qui sera rempli avec les 3 composantes de la couleur.
-*@param pDefaultColor valeur par defaut si la cle et/ou le groupe n'est pas trouve (typiquement si cette cle est nouvelle). C'est un tableau de 3 double, ou NULL.
+/** Get the value of a 'color' in the RGB format from the conf file.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@param pColorBuffer a table of 3 'double' already allocated, that will be filled with the color components.
+*@param pDefaultColor default value if the group/key is not found (typically if the key is new). It is a table of 3 'double'. It can be NULL.
 */
 #define CD_CONFIG_GET_COLOR_RVB_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, pDefaultColor) cairo_dock_get_double_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, pColorBuffer, 3, pDefaultColor, NULL, NULL)
-/**
-*Recupere la valeur d'un parametre 'couleur' au format RVB. du fichier de conf, avec NULL comme valeur par defaut.
-*@param cGroupName nom du groupe dans le fichier de conf.
-*@param cKeyName nom de la cle dans le fichier de conf.
-*@param pColorBuffer tableau de 3 double deja alloue, et qui sera rempli avec les 3 composantes de la couleur.
+/** Get the value of a 'color' in the RGB format from the conf file, with NULL as default value.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@param pColorBuffer a table of 3 'double' already allocated, that will be filled with the color components.
 */
 #define CD_CONFIG_GET_COLOR_RVB(cGroupName, cKeyName, pColorBuffer) CD_CONFIG_GET_COLOR_RVB_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, NULL)
 
-/**
-*Trouve le chemin du theme specifie en conf.
-*@param cGroupName nom du groupe (dans le fichier de conf) du parametre correspondant au theme.
-*@param cKeyName nom de la cle (dans le fichier de conf) du parametre correspondant au theme.
-*@param cThemeDirName nom commun aux repertoires contenant les themes locaux, utilisateurs, et distants.
-*@param cDefaultThemeName valeur par defaut si la cle et/ou le groupe et/ou le theme n'existe(nt) pas.
-*@return Le chemin vers le repertoire du theme, dans une chaine nouvellement allouee.
+/** Get the complete path of a theme in the conf file.
+*@param cGroupName name of the group (in the conf file).
+*@param cKeyName name of the key (in the conf file).
+*@param cThemeDirName name of the folder containing the local, user, and distant themes.
+*@param cDefaultThemeName default value, if the key/group/theme doesn't exist.
+*@return Path to the folder of the theme, in a newly allocated string.
 */
 #define CD_CONFIG_GET_THEME_PATH(cGroupName, cKeyName, cThemeDirName, cDefaultThemeName) \
 	__extension__ ({\
@@ -268,10 +246,9 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 		g_free (_cQuestion); }\
 	_cThemePath; })
 
-/**
-*Recupere la valeur d'un theme de gauge, en cherchant parmi les themes distants si necessaire.
-*@param cGroupName nom du groupe (dans le fichier de conf) du parametre correspondant au theme.
-*@param cKeyName nom de la cle (dans le fichier de conf) du parametre correspondant au theme.
+/** Get the complete path of a Gauge theme in the conf file.
+*@param cGroupName name of the group (in the conf file).
+*@param cKeyName name of the key (in the conf file).
 */
 #define CD_CONFIG_GET_GAUGE_THEME(cGroupName, cKeyName) \
 	__extension__ ({\
@@ -285,200 +262,169 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	_cThemePath; })
 
 
-  ////////////
- /// MENU ///
-////////////
-/** Cree et ajoute un sous-menu a un menu.
-*@param cLabel nom du sous-menu, tel qu'il apparaitra dans le menu.
-*@param pMenu GtkWidget du menu auquel on rajoutera le sous-menu.
+  //////////
+ // MENU //
+//////////
+/** Create and add a sub-menu to a given menu.
+*@param cLabel name of the sub-menu.
+*@param pMenu GtkWidget of the menu we will add the sub-menu to..
 *@param cImage name of an image (can be a path or a GtkStock).
-*@return le sous-menu nouvellement cree et attache au menu.
+*@return the sub-menu, newly created and attached to the menu.
 */
 #define CD_APPLET_ADD_SUB_MENU_WITH_IMAGE(cLabel, pMenu, cImage) \
-	__extension__ ({\
-	GtkWidget *_pSubMenu = gtk_menu_new (); \
-	if (cImage == NULL) {\
-		pMenuItem = gtk_menu_item_new_with_label (cLabel); }\
-	else {\
-		gchar *__cImage = cImage;\
-		pMenuItem = gtk_image_menu_item_new_with_label (cLabel);\
-		if (*__cImage == '/') {\
-			GdkPixbuf *_pixbuf = gdk_pixbuf_new_from_file_at_size (__cImage, 32, 32, NULL);\
-			image = gtk_image_new_from_pixbuf (_pixbuf);\
-			g_object_unref (_pixbuf); }\
-		else {\
-			image = gtk_image_new_from_stock (__cImage, GTK_ICON_SIZE_MENU); }\
-		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image); }\
-	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem); \
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), _pSubMenu);\
-	_pSubMenu; })
+	cairo_dock_create_sub_menu (cLabel, pMenu, cImage)
 
+/** Create and add a sub-menu to a given menu.
+*@param cLabel name of the sub-menu.
+*@param pMenu GtkWidget of the menu we will add the sub-menu to..
+*@return the sub-menu, newly created and attached to the menu.
+*/
 #define CD_APPLET_ADD_SUB_MENU(cLabel, pMenu) CD_APPLET_ADD_SUB_MENU_WITH_IMAGE(cLabel, pMenu, NULL)
+#define CD_APPLET_CREATE_AND_ADD_SUB_MENU CD_APPLET_ADD_SUB_MENU
 
-/** Cree et ajoute un sous-menu par defaut au menu principal. Ce sous-menu est nomme suivant le nom de l'applet, et est represente par l'icone de l'applet.
-*@return le sous-menu nouvellement cree et attache au menu.
+/** Create and add the default sub-menu of an applet to the main menu. This sub-menu is named according to the name of the applet, and is represented by the default icon of the applet.
+*@return the sub-menu, newly created and attached to the main menu.
 */
 #define CD_APPLET_CREATE_MY_SUB_MENU(...) CD_APPLET_ADD_SUB_MENU_WITH_IMAGE (myApplet->pModule->pVisitCard->cModuleName, CD_APPLET_MY_MENU, MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE)
 
-/** Cree et ajoute un sous-menu a un menu deja existant.
-*@param cLabel nom du sous-menu, tel qu'il apparaitra dans le menu.
-*@param pMenu GtkWidget du menu auquel on rajoutera le sous-menu.
-*@return le GtkWidget du sous-menu.
-*/
-#define CD_APPLET_CREATE_AND_ADD_SUB_MENU(cLabel, pMenu) cairo_dock_create_sub_menu (cLabel, pMenu)
-
-/** Cree et ajoute un sous-menu a un menu.
-*@param cLabel nom du sous-menu, tel qu'il apparaitra dans le menu.
-*@param pFunction fonction appelee lors de la selection de cette entree.
-*@param pMenu GtkWidget du menu auquel on rajoutera le sous-menu.
-*@param pData donnees passees en parametre de la fonction (doit contenir myApplet).
+/** Create and add an entry to a menu.
+*@param cLabel name of the entry.
+*@param pFunction function called when the user selects this entry.
+*@param pMenu menu to add the entry to.
+*@param pData data passed as parameter of the callback.
 */
 #define CD_APPLET_ADD_IN_MENU_WITH_DATA(cLabel, pFunction, pMenu, pData) do { \
 	pMenuItem = gtk_menu_item_new_with_label (cLabel); \
 	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem); \
 	g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK (pFunction), pData); } while (0)
 
-/** Ajoute une entree a un menu deja existant.
-*@param cLabel nom de l'entree, tel qu'il apparaitra dans le menu.
-*@param pFunction fonction appelee lors de la selection de cette entree.
-*@param pMenu GtkWidget du menu auquel on rajoutera l'entree.
+/** Create and add an entry to a menu. 'myApplet' will be passed to the callback.
+*@param cLabel name of the entry.
+*@param pFunction function called when the user selects this entry.
+*@param pMenu menu to add the entry to.
 */
 #define CD_APPLET_ADD_IN_MENU(cLabel, pFunction, pMenu) CD_APPLET_ADD_IN_MENU_WITH_DATA(cLabel, pFunction, pMenu, myApplet)
 
-/**
-*Ajoute une entree avec une icone GTK a un menu deja existant.
-*@param cLabel nom de l'entree, tel qu'il apparaitra dans le menu.
-*@param gtkStock nom d'une icone de GTK ou chemin complet d'une image quelconque.
-*@param pFunction fonction appelee lors de la selection de cette entree.
-*@param pMenu GtkWidget du menu auquel on rajoutera l'entree.
-*@param pData donnees passees en parametre de la fonction (doit contenir myApplet).
+/** Create and add an entry to a menu, with an icon.
+*@param cLabel name of the entry.
+*@param gtkStock name of a GTK icon or path to an image.
+*@param pFunction function called when the user selects this entry.
+*@param pMenu menu to add the entry to.
+*@param pData data passed as parameter of the callback.
 */
 #define CD_APPLET_ADD_IN_MENU_WITH_STOCK_AND_DATA CAIRO_DOCK_ADD_IN_MENU_WITH_STOCK_AND_DATA
 
-/**
-*Ajoute une entree avec une icone GTK a un menu deja existant.
-*@param cLabel nom de l'entree, tel qu'il apparaitra dans le menu.
-*@param gtkStock icone GTK
-*@param pFunction fonction appelee lors de la selection de cette entree.
-*@param pMenu GtkWidget du menu auquel on rajoutera l'entree.
+/** Create and add an entry to a menu, with an icon. 'myApplet' will be passed to the callback.
+*@param cLabel name of the entry.
+*@param gtkStock name of a GTK icon or path to an image.
+*@param pFunction function called when the user selects this entry.
+*@param pMenu menu to add the entry to.
 */
 #define CD_APPLET_ADD_IN_MENU_WITH_STOCK(cLabel, gtkStock, pFunction, pMenu) CD_APPLET_ADD_IN_MENU_WITH_STOCK_AND_DATA(cLabel, gtkStock, pFunction, pMenu, myApplet)
 
-/**
- * Ajoute un separateur dans un menu deja existant
+/** Create and add a separator to a menu.
  */
 #define CD_APPLET_ADD_SEPARATOR_IN_MENU(pMenu) do { \
 	pMenuItem = gtk_separator_menu_item_new (); \
 	gtk_menu_shell_append(GTK_MENU_SHELL (pMenu), pMenuItem); } while (0)
 #define CD_APPLET_ADD_SEPARATOR CD_APPLET_ADD_SEPARATOR_IN_MENU
 
-/**
-*Ajoute une entree pour la fonction 'A propos'.
-*@param pMenu GtkWidget du menu auquel sera ajoutee l'entree.
+/** Create and add an entry to a menu for the 'about' function.
+*@param pMenu menu to add the entry to.
 */
 #define CD_APPLET_ADD_ABOUT_IN_MENU(pMenu) CD_APPLET_ADD_IN_MENU_WITH_STOCK (_("About this applet"), GTK_STOCK_ABOUT, cairo_dock_pop_up_about_applet, pMenu)
 
 
-  ///////////////////////////
- /// AVAILABLE VARIABLES ///
-///////////////////////////
+  /////////////////////////
+ // AVAILABLE VARIABLES //
+/////////////////////////
 
 //\______________________ init, config, reload.
-/** Chemin du fichier de conf de l'applet, appelable durant les fonctions d'init, de config, et de reload.
+/** Path of the applet instance's conf file.
 */
 #define CD_APPLET_MY_CONF_FILE myApplet->cConfFilePath
-/** Fichier de cles de l'applet, appelable durant les fonctions d'init, de config, et de reload.
+/** Key file of the applet instance, availale during the init, config, and reload.
 */
 #define CD_APPLET_MY_KEY_FILE pKeyFile
 
 //\______________________ reload.
-/** TRUE ssi le fichier de conf de l'applet a change juste avant le reload.
+/** TRUE if the conf file has changed before the reload.
 */
 #define CD_APPLET_MY_CONFIG_CHANGED (pKeyFile != NULL)
 
-/** TRUE ssi le type de container a change.
+/** TRUE if the container type has changed.
 */
 #define CD_APPLET_MY_CONTAINER_TYPE_CHANGED (myApplet->pContainer == NULL || myApplet->pContainer->iType != pOldContainer->iType)
 
-/** Le conteneur precedent le reload.
+/** The previous Container.
 */
 #define CD_APPLET_MY_OLD_CONTAINER pOldContainer;
 
 
 //\______________________ clic droit, clic milieu, clic gauche.
-/** Icone cliquee.
+/** The clicked Icon.
 */
 #define CD_APPLET_CLICKED_ICON pClickedIcon
-/** Container clique.
+/** The clicked Container.
 */
 #define CD_APPLET_CLICKED_CONTAINER pClickedContainer
 
 //\______________________ clic droit
-/**  La touche 'SHIFT' est-elle enfoncee au moment du clic ?
+/**  TRUE if the 'SHIFT' key was pressed during the click ?
 */
 #define CD_APPLET_SHIFT_CLICK (iButtonState & GDK_SHIFT_MASK)
-/**  La touche 'CTRL' est-elle enfoncee au moment du clic ?
+/**  TRUE if the 'CTRL' key was pressed during the click ?
 */
 #define CD_APPLET_CTRL_CLICK (iButtonState & GDK_CONTROL_MASK)
-/**  La touche 'ALT' est-elle enfoncee au moment du clic ?
+/**  TRUE if the 'ALT' key was pressed during the click ?
 */
 #define CD_APPLET_ALT_CLICK (iButtonState & GDK_MOD1_MASK)
 
 //\______________________ construction du menu.
-/** Menu principal de l'applet.
+/** Main menu of the applet.
 */
 #define CD_APPLET_MY_MENU pAppletMenu
-/** Icone cliquee.
-*/
-/** Donne la derniere entree ajoutee au menu par vous.
-*@return le GtkWidget de la derniere entree.
-*/
-#define CD_APPLET_LAST_ITEM_IN_MENU pMenuItem
 
 //\______________________ drop.
-/** Donnees recues (chaine de caracteres).
+/** Data received after a drop occured (string).
 */
 #define CD_APPLET_RECEIVED_DATA cReceivedData
 
 //\______________________ scroll
-/** Direction du scroll.
-*/
 #define CD_APPLET_SCROLL_DIRECTION iDirection
-/** Scroll vers le haut.
+/** TRUE if the users scrolled up.
 */
 #define CD_APPLET_SCROLL_UP (CD_APPLET_SCROLL_DIRECTION == GDK_SCROLL_UP)
-/** Scroll vers le bas.
+/** TRUE if the users scrolled down.
 */
 #define CD_APPLET_SCROLL_DOWN (CD_APPLET_SCROLL_DIRECTION == GDK_SCROLL_DOWN)
 
 
-  //////////////////////
- /// DRAWING SURFACE ///
-//////////////////////
+  /////////////////////
+ // DRAWING SURFACE //
+/////////////////////
 
-/**
-*Redessine l'icone de l'applet a l'ecran (des que la main loop est disponible).
+/** Redraw the applet's icon (as soon as the main loop is available).
 */
 #define CD_APPLET_REDRAW_MY_ICON \
 	cairo_dock_redraw_icon (myIcon, myContainer)
 #define CAIRO_DOCK_REDRAW_MY_CONTAINER \
 	cairo_dock_redraw_container (myContainer)
-/**
-*Recalcule le reflet de l'icone pour son dessin cairo (inutile en OpenGL).
+/** Reload the reflect of the applet's icon (useless in OpenGL mode).
 */
 #define CD_APPLET_UPDATE_REFLECT_ON_MY_ICON \
 	if (myContainer->bUseReflect) cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer)
 
 /**
-*Charge une image dans une surface, aux dimensions de l'icone de l'applet.
-*@param cImagePath chemin du fichier de l'image.
+*Charge une image dans une surface, aux dimensions of the icon of l'applet.
+*@param cImagePath chemin du fichier of l'image.
 *@return la surface nouvellement creee.
 */
 #define CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET(cImagePath) \
 	cairo_dock_create_surface_for_icon (cImagePath, myDrawContext, myIcon->fWidth * (myDock ? (1 + g_fAmplitude) / myDock->fRatio : 1), myIcon->fHeight* (myDock ? (1 + g_fAmplitude) / myDock->fRatio : 1))
 /**
-*Charge une image utilisateur dans une surface, aux dimensions de l'icone de l'applet, ou une image par defaut si la premiere est NULL.
-*@param cUserImageName nom de l'image utilisateur.
+*Charge une image utilisateur dans une surface, aux dimensions of the icon of l'applet, ou une image par defaut si la premiere est NULL.
+*@param cUserImageName nom of l'image utilisateur.
 *@param cDefaultLocalImageName icone par defaut
 *@return la surface nouvellement creee.
 */
@@ -497,23 +443,23 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 
 /**
-*Applique une surface existante sur le contexte de dessin de l'applet, et la rafraichit.
+*Applique une surface existante sur le contexte of dessin of l'applet, et la rafraichit.
 *@param pSurface la surface cairo a dessiner.
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON(pSurface) do { \
 	cairo_dock_set_icon_surface_with_reflect (myDrawContext, pSurface, myIcon, myContainer); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
 /**
-*Applique une surface existante sur le contexte de dessin de l'applet en la zoomant, et la redessine.
+*Applique une surface existante sur le contexte of dessin of l'applet en la zoomant, et la redessine.
 *@param pSurface la surface cairo a dessiner.
-*@param fScale le facteur de zoom (a 1 la surface remplit toute l'icone).
+*@param fScale le facteur of zoom (a 1 la surface remplit toute the icon).
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_ZOOM(pSurface, fScale) do { \
 	cairo_dock_set_icon_surface_full (myDrawContext, pSurface, fScale, 1., myIcon, myContainer); \
 	cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
 /**
-*Applique une surface existante sur le contexte de dessin de l'applet avec un facteur de transparence, et la rafraichit.
+*Applique une surface existante sur le contexte of dessin of l'applet with un facteur of transparence, et la rafraichit.
 *@param pSurface la surface cairo a dessiner.
 *@param fAlpha la transparence (dans [0 , 1]).
 */
@@ -522,9 +468,9 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
 /**
-*Applique une surface existante sur le contexte de dessin de l'applet et ajoute une barre a sa base, et la rafraichit.
+*Applique une surface existante sur le contexte of dessin of l'applet et ajoute une barre a sa base, et la rafraichit.
 *@param pSurface la surface cairo a dessiner.
-*@param fValue la valeur en fraction de la valeur max (donc dans [0 , 1]).
+*@param fValue la valeur en fraction of la valeur max (donc dans [0 , 1]).
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_BAR(pSurface, fValue) do { \
 	cairo_dock_set_icon_surface_with_bar (myDrawContext, pSurface, fValue, myIcon, myContainer); \
@@ -532,8 +478,8 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
 
 /**
-*Applique une image definie par son chemin sur le contexte de dessin de l'applet, mais ne la rafraichit pas. L'image est redimensionnee aux dimensions de l'icone.
-*@param cImagePath chemin du fichier de l'image.
+*Applique une image definie par son chemin sur le contexte of dessin of l'applet, mais ne la rafraichit pas. L'image est redimensionnee aux dimensions of the icon.
+*@param cImagePath chemin du fichier of l'image.
 */
 #define CD_APPLET_SET_IMAGE_ON_MY_ICON(cImagePath) do { \
 	if (cImagePath != myIcon->acFileName) \
@@ -544,8 +490,8 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	cairo_dock_set_image_on_icon (myDrawContext, cImagePath, myIcon, myContainer); } while (0)
 
 /**
-*Idem que precedemment mais l'image est definie par son nom localement au repertoire d'installation de l'applet
-*@param cImageName nom du fichier de l'image 
+*Idem que precedemment mais l'image est definie par son nom localement au repertoire d'installation of l'applet
+*@param cImageName nom du fichier of l'image 
 */
 #define CD_APPLET_SET_LOCAL_IMAGE_ON_MY_ICON(cImageName) do { \
 	gchar *_cImageFilePath = g_strconcat (MY_APPLET_SHARE_DATA_DIR, "/", cImageName, NULL); \
@@ -553,8 +499,8 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	g_free (_cImageFilePath); } while (0)
 
 /**
-*Idem que precedemment mais l'image est definie soit relativement au repertoire utilisateur, soit relativement au repertoire d'installation de l'applet si la 1ere est NULL.
-*@param cUserImageName nom du fichier de l'image cote utilisateur.
+*Idem que precedemment mais l'image est definie soit relativement au repertoire utilisateur, soit relativement au repertoire d'installation of l'applet si la 1ere est NULL.
+*@param cUserImageName nom du fichier of l'image cote utilisateur.
 *@param cDefaultLocalImageName image locale par defaut cote installation.
 */
 #define CD_APPLET_SET_USER_IMAGE_ON_MY_ICON(cUserImageName, cDefaultLocalImageName) do { \
@@ -571,7 +517,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 		CD_APPLET_SET_LOCAL_IMAGE_ON_MY_ICON (MY_APPLET_ICON_FILE); } } while (0)
 
 /**
-*Applique une surface existante sur le contexte de dessin de l'applet, et la redessine. La surface est redimensionnee aux dimensions de l'icone.
+*Applique une surface existante sur le contexte of dessin of l'applet, et la redessine. La surface est redimensionnee aux dimensions of the icon.
 *@param pSurface
 *@param fScale
 */
@@ -584,13 +530,13 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
  /// LABEL ///
 /////////////
 /**
-*Remplace l'etiquette de l'icone de l'applet par une nouvelle.
+*Remplace l'etiquette of the icon of l'applet par une nouvelle.
 *@param cIconName la nouvelle etiquette.
 */
 #define CD_APPLET_SET_NAME_FOR_MY_ICON(cIconName) \
 	cairo_dock_set_icon_name (myDrawContext, cIconName, myIcon, myContainer)
 /**
-*Remplace l'etiquette de l'icone de l'applet par une nouvelle.
+*Remplace l'etiquette of the icon of l'applet par une nouvelle.
 *@param cIconNameFormat la nouvelle etiquette au format 'printf'.
 */
 #define CD_APPLET_SET_NAME_FOR_MY_ICON_PRINTF(cIconNameFormat, ...) \
@@ -601,48 +547,45 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
  /// QUICK-INFO///
 /////////////////
 /**
-*Ecris une info-rapide sur l'icone de l'applet.
-*@param cQuickInfo l'info-rapide. Ce doit etre une chaine de caracteres particulièrement petite, representant une info concise, puisque ecrite directement sur l'icone.
+*Ecris une info-rapide sur the icon of l'applet.
+*@param cQuickInfo l'info-rapide. Ce doit etre une chaine of caracteres particulièrement petite, representant une info concise, puisque ecrite directement sur the icon.
 */
 #define CD_APPLET_SET_QUICK_INFO_ON_MY_ICON(cQuickInfo) \
 	cairo_dock_set_quick_info (myDrawContext, cQuickInfo, myIcon, myDock ? (1 + myIcons.fAmplitude) / 1 : 1)
 /**
-*Ecris une info-rapide sur l'icone de l'applet.
-*@param cQuickInfoFormat l'info-rapide, au format 'printf'. Ce doit etre une chaine de caracteres particulièrement petite, representant une info concise, puisque ecrite directement sur l'icone.
+*Ecris une info-rapide sur the icon of l'applet.
+*@param cQuickInfoFormat l'info-rapide, au format 'printf'. Ce doit etre une chaine of caracteres particulièrement petite, representant une info concise, puisque ecrite directement sur the icon.
 */
 #define CD_APPLET_SET_QUICK_INFO_ON_MY_ICON_PRINTF(cQuickInfoFormat, ...) \
 	cairo_dock_set_quick_info_full (myDrawContext, myIcon, myContainer, cQuickInfoFormat, ##__VA_ARGS__)
 
-/**
-*Ecris le temps en heures-minutes en info-rapide sur l'icone de l'applet.
-*@param iTimeInSeconds le temps en secondes.
+/** Write the time in hours-minutes as a quick-info on the applet's icon.
+*@param iTimeInSeconds the time in seconds.
 */
 #define CD_APPLET_SET_HOURS_MINUTES_AS_QUICK_INFO(iTimeInSeconds) \
 	cairo_dock_set_hours_minutes_as_quick_info (myDrawContext, myIcon, myContainer, iTimeInSeconds)
-/**
-*Ecris le temps en minutes-secondes en info-rapide sur l'icone de l'applet.
-*@param iTimeInSeconds le temps en secondes.
+/** Write the time in minutes-secondes as a quick-info on the applet's icon.
+*@param iTimeInSeconds the time in seconds.
 */
 #define CD_APPLET_SET_MINUTES_SECONDES_AS_QUICK_INFO(iTimeInSeconds) \
 	cairo_dock_set_minutes_secondes_as_quick_info (myDrawContext, myIcon, myContainer, iTimeInSeconds)
-/**
-*Ecris une taille en octets en info-rapide sur l'icone de l'applet.
-*@param iSizeInBytes la taille en octets.
+/** Write a size in bytes as a quick-info on the applet's icon.
+*@param iSizeInBytes the size in bytes, converted into a readable format.
 */
 #define CD_APPLET_SET_SIZE_AS_QUICK_INFO(iSizeInBytes) \
 	cairo_dock_set_size_as_quick_info (myDrawContext, myIcon, myContainer, iSizeInBytes)
 
 
-  /////////////////
- /// ANIMATION ///
-/////////////////
-/** Empeche l'icone d'etre animee au passage de la souris (a faire 1 fois au debut).
+  ///////////////
+ // ANIMATION //
+///////////////
+/** Prevent the applet's icon to be animated when the mouse hovers it (call it once at init).
 */
 #define CD_APPLET_SET_STATIC_ICON cairo_dock_set_icon_static (myIcon)
 
-/** Lance l'animation de l'icone de l'applet.
-*@param cAnimationName nom de l'animation.
-*@param iAnimationLength duree de l'animation, en nombre de tours.
+/** Request an animation on applet's icon.
+*@param cAnimationName name of the animation.
+*@param iAnimationLength number of rounds the animation should be played.
 */
 #define CD_APPLET_ANIMATE_MY_ICON(cAnimationName, iAnimationLength) \
 	cairo_dock_request_icon_animation (myIcon, myDock, cAnimationName, iAnimationLength)
@@ -718,28 +661,22 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 //\_________________________________ DESKLETS et SOUS-DOCKS
 
 /**
-*Definit le moteur de rendu de l'applet en mode desklet et le contexte de dessin associe a l'icone. A appeler a l'init mais ausi au reload pour prendre en compte les redimensionnements.
-*@param cRendererName nom du rendu.
-*@param pConfig donnees de configuration du rendu.
+/** Set a renderer to the applet's desklet and create myDrawContext. Call it at the beginning of init and also reload, to take into account the desklet's resizing.
+*@param cRendererName name of the renderer.
+*@param pConfig configuration data for the renderer, or NULL.
 */
 #define CD_APPLET_SET_DESKLET_RENDERER_WITH_DATA(cRendererName, pConfig) do { \
 	cairo_dock_set_desklet_renderer_by_name (myDesklet, cRendererName, NULL, CAIRO_DOCK_LOAD_ICONS_FOR_DESKLET, (CairoDeskletRendererConfigPtr) pConfig); \
 	myDrawContext = cairo_create (myIcon->pIconBuffer); } while (0)
-/**
-*Definit le moteur de rendu de l'applet en mode desklet et le contexte de dessin associe a l'icone. A appeler a l'init mais ausi au reload pour prendre en compte les redimensionnements.
-*@param cRendererName nom du rendu.
+/** Set a renderer to the applet's desklet and create myDrawContext. Call it at the beginning of init and also reload, to take into account the desklet's resizing.
+*@param cRendererName name of the renderer.
 */
 #define CD_APPLET_SET_DESKLET_RENDERER(cRendererName) CD_APPLET_SET_DESKLET_RENDERER_WITH_DATA (cRendererName, NULL)
 
-/** Empeche le desklet d'etre tourner dans l'espace ou le plan.
+/** Prevent the desklet from being rotated. Use it if your desklet has some static GtkWidget inside.
 */
 #define CD_APPLET_SET_STATIC_DESKLET cairo_dock_set_static_desklet (myDesklet)
 
-/**
-*Cree et charge entierement un sous-dock pour notre icone.
-*@param pIconsList la liste (eventuellement NULL) des icones du sous-dock; celles-ci seront chargees en dans la foulee.
-*@param cRenderer nom du rendu (optionnel).
-*/
 #define CD_APPLET_CREATE_MY_SUBDOCK(pIconsList, cRenderer) do { \
 	if (myIcon->acName == NULL) { \
 		CD_APPLET_SET_NAME_FOR_MY_ICON (myApplet->pModule->pVisitCard->cModuleName); } \
@@ -748,16 +685,11 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	myIcon->pSubDock = cairo_dock_create_subdock_from_scratch (pIconsList, myIcon->acName, myDock); \
 	cairo_dock_set_renderer (myIcon->pSubDock, cRenderer); \
 	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)
-/**
-*Detruit notre sous-dock et les icones contenues dedans s'il y'en a.
-*/
+
 #define CD_APPLET_DESTROY_MY_SUBDOCK do { \
 	cairo_dock_destroy_dock (myIcon->pSubDock, myIcon->acName, NULL, NULL); \
 	myIcon->pSubDock = NULL; } while (0)
-/**
-*Charge entierement une liste d'icones dans le sous-dock de notre icone.
-*@param pIconsList la liste (eventuellement NULL) des icones du sous-dock; celles-ci seront chargees dans la foulee.
-*/
+
 #define CD_APPLET_LOAD_ICONS_IN_MY_SUBDOCK(pIconsList) do { \
 	if (myIcon->acName == NULL) { \
 		CD_APPLET_SET_NAME_FOR_MY_ICON (myIcon->pModuleInstance->pModule->pVisitCard->cModuleName); }\
@@ -772,7 +704,6 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	myIcon->pSubDock->pFirstDrawnElement = pIconsList; \
 	cairo_dock_load_buffers_in_one_dock (myIcon->pSubDock); \
 	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)
-
 
 /** Delete the list of icons of an applet
 */
@@ -822,7 +753,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 //\_________________________________ TASKBAR
 /** Lets your applet control the window of an external program, instead of the Taskbar.
  *\param cApplicationClass the class of the application you wish to control.
- * \param bStealTaskBarIcon TRUE to manage the application, FALSE to stop managing it.
+ *\param bStealTaskBarIcon TRUE to manage the application, FALSE to stop managing it.
 */
 #define CD_APPLET_MANAGE_APPLICATION(cApplicationClass, bStealTaskBarIcon) do {\
 	if (myIcon->cClass != NULL && (cairo_dock_strings_differ (myIcon->cClass, cApplicationClass) || ! bStealTaskBarIcon))\
@@ -832,7 +763,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 //\_________________________________ INTERNATIONNALISATION
 /**
-*Macro pour gettext, similaire a _() et N_(), mais avec le nom de domaine en parametre. Encadrez toutes vos chaines de caracteres statiques avec ca, de maniere a ce que l'utilitaire 'xgettext' puisse les trouver et les inclure automatiquement dans les fichiers de traduction.
+*Macro for gettext, similar to _() et N_(), but with the domaine of the applet. Surround all your strings with this, so that 'xgettext' can find them and automatically include them in the translation files.
 */
 #define D_(message) dgettext (MY_APPLET_GETTEXT_DOMAIN, message)
 #define _D D_

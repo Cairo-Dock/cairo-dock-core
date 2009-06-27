@@ -678,6 +678,7 @@ gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserDat
 }
 
 
+
 #define cairo_dock_get_transition(pIcon) (pIcon)->pTransition
 
 #define cairo_dock_set_transition(pIcon, transition) (pIcon)->pTransition = transition

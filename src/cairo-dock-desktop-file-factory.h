@@ -8,7 +8,7 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-desktop-file-factory.h This class handles the creation of desktop files, which are group/key files used by the dock to store information about icons : launchers, separators, sub-docks, files.
+*@file cairo-dock-desktop-file-factory.h This class handles the creation of desktop files, which are group/key pair files used by the dock to store information about icons : launchers, separators, sub-docks, files.
 */
 
 

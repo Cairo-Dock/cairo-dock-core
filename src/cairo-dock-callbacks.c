@@ -856,7 +856,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	if (pEvent && g_bEasterEggs && pDock->pShapeBitmap)
 	{
 		int x = (pDock->bHorizontalDock ? pEvent->x : pDock->iCurrentWidth - pEvent->y);
-		if (x < pDock->inputArea.x * pDock->fRatio || x > (pDock->inputArea.x + pDock->inputArea.width) * pDock->fRatio)
+		if (x < pDock->inputArea.x || x > (pDock->inputArea.x + pDock->inputArea.width))
 			return FALSE;
 	}
 	//g_print ("%s (bIsMainDock : %d; bAtTop:%d; bInside:%d; iSidMoveDown:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->bAtTop, pDock->bInside, pDock->iSidMoveDown, pDock->iMagnitudeIndex);
@@ -995,8 +995,8 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		//	g_print (">>> on est rentre par un clic ! (KDE:%d)\n", g_iDesktopEnv == CAIRO_DOCK_KDE);
 		if (_mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 			icon->bPointed = FALSE;  // sinon on ne detecte pas l'arrive sur l'icone, c'est genant si elle a un sous-dock.
-		else
-			g_print (">>> we already are inside the dock, why does this stupid WM make us enter one more time ???\n");
+		//else
+		//	g_print (">>> we already are inside the dock, why does this stupid WM make us enter one more time ???\n");
 	}
 	
 	cairo_dock_start_growing (pDock);
@@ -1398,6 +1398,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							Icon *pFlyingIcon = s_pFlyingContainer->pIcon;
 							cairo_dock_free_flying_container (s_pFlyingContainer);
 							cairo_dock_stop_marking_icon_as_following_mouse (pFlyingIcon);
+							cairo_dock_stop_icon_animation (pFlyingIcon);
 							cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 							cairo_dock_start_icon_animation (pFlyingIcon, pDock);
 						}
@@ -1798,26 +1799,6 @@ void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint tim
 	pDock->iAvoidingMouseIconType = -1;
 	cairo_dock_emit_leave_signal (pDock);
 }
-
-
-/*gboolean cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, CairoDock *pDock)
-{
-	Icon *pIcon = NULL;
-	if (CAIRO_DOCK_IS_DOCK (pDock))
-	{
-		pIcon = cairo_dock_get_pointed_icon (pDock->icons);
-		if (pIcon == NULL)
-			pIcon = cairo_dock_get_dialogless_icon ();
-	}
-	else
-	{
-		pIcon = CAIRO_DESKLET (pDock)->pIcon;
-	}
-	int answer = cairo_dock_ask_question_and_wait (_("Quit Cairo-Dock ?"), pIcon, CAIRO_CONTAINER (pDock));
-	if (answer == GTK_RESPONSE_YES)
-		gtk_main_quit ();
-	return FALSE;
-}*/
 
 
 void cairo_dock_show_dock_at_mouse (CairoDock *pDock)
