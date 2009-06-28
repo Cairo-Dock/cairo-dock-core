@@ -86,11 +86,12 @@ void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, const gchar *cConfFile
 
 void cairo_dock_replace_key_values (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gboolean bUseOriginalKeys, gchar iIdentifier)
 {
-	//g_print ("%s (%d)\n", __func__, iIdentifier);
+	g_print ("%s (%d)\n", __func__, iIdentifier);
 	GError *erreur = NULL;
 	gsize length = 0;
 	gchar **pKeyList;
 	gchar **pGroupList = g_key_file_get_groups ((bUseOriginalKeys ? pOriginalKeyFile : pReplacementKeyFile), &length);
+	g_return_if_fail (pGroupList != NULL);
 	gchar *cGroupName, *cKeyName, *cKeyValue, *cComment;
 	int i, j;
 
@@ -101,7 +102,8 @@ void cairo_dock_replace_key_values (GKeyFile *pOriginalKeyFile, GKeyFile *pRepla
 
 		length = 0;
 		pKeyList = g_key_file_get_keys ((bUseOriginalKeys ? pOriginalKeyFile : pReplacementKeyFile), cGroupName, NULL, NULL);
-
+		g_return_if_fail (pKeyList != NULL);
+		
 		j = 0;
 		while (pKeyList[j] != NULL)
 		{
@@ -219,11 +221,11 @@ void cairo_dock_replace_key_values (GKeyFile *pOriginalKeyFile, GKeyFile *pRepla
 
 void cairo_dock_replace_values_in_conf_file (const gchar *cConfFilePath, GKeyFile *pValidKeyFile, gboolean bUseFileKeys, gchar iIdentifier)
 {
-	//g_print ("%s (%s)\n", __func__,cConfFilePath );
 	GKeyFile *pConfKeyFile = cairo_dock_open_key_file (cConfFilePath);
 	if (pConfKeyFile == NULL)
 		return ;
 
+	g_print ("%s (%s)\n", __func__,cConfFilePath );
 	cairo_dock_replace_key_values (pConfKeyFile, pValidKeyFile, bUseFileKeys, iIdentifier);
 
 	cairo_dock_write_keys_to_file (pConfKeyFile, cConfFilePath);
@@ -233,11 +235,11 @@ void cairo_dock_replace_values_in_conf_file (const gchar *cConfFilePath, GKeyFil
 
 void cairo_dock_replace_keys_by_identifier (const gchar *cConfFilePath, gchar *cReplacementConfFilePath, gchar iIdentifier)
 {
-	//g_print ("%s (%s <- %s, '%c')\n", __func__, cConfFilePath, cReplacementConfFilePath, iIdentifier);
 	GKeyFile *pReplacementKeyFile = cairo_dock_open_key_file (cReplacementConfFilePath);
 	if (pReplacementKeyFile == NULL)
 		return ;
 	
+	g_print ("%s (%s <- %s, '%c')\n", __func__, cConfFilePath, cReplacementConfFilePath, iIdentifier);
 	cairo_dock_replace_values_in_conf_file (cConfFilePath, pReplacementKeyFile, TRUE, iIdentifier);
 
 	g_key_file_free (pReplacementKeyFile);
