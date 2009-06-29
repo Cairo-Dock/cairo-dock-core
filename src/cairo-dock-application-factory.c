@@ -614,7 +614,7 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 		if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
 		{
 			cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
-			cairo_dock_redraw_my_icon (icon, CAIRO_CONTAINER (pDock));
+			cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
 		}
 	}
 	else if (aProperty == s_aWmHints)
@@ -643,7 +643,7 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 				if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
 				{
 					cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
-					cairo_dock_redraw_my_icon (icon, CAIRO_CONTAINER (pDock));
+					cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
 				}
 			}
 		}

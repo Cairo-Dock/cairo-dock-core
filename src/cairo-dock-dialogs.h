@@ -26,6 +26,7 @@ typedef void (* CairoDialogGLRenderFunc) (CairoDialog *pDialog, double fAlpha);
 typedef gpointer (* CairoDialogConfigureRendererFunc) (CairoDialog *pDialog, cairo_t *pSourceContext, CairoDialogRendererConfigPtr pConfig);
 typedef void (* CairoDialogUpdateRendererDataFunc) (CairoDialog *pDialog, CairoDialogRendererDataPtr pNewData);
 typedef void (* CairoDialogFreeRendererDataFunc) (CairoDialog *pDialog);
+/// Definition of a Dialog renderer. It draws the inside of the Dialog.
 struct _CairoDialogRenderer {
 	CairoDialogRenderFunc 				render;
 	CairoDialogConfigureRendererFunc 	configure;
@@ -37,6 +38,7 @@ struct _CairoDialogRenderer {
 typedef void (* CairoDialogSetDecorationSizeFunc) (CairoDialog *pDialog);
 typedef void (* CairoDialogRenderDecorationFunc) (cairo_t *pCairoContext, CairoDialog *pDialog);
 typedef void (* CairoDialogGLRenderDecorationFunc) (CairoDialog *pDialog);
+	/// Definition of a Dialog decorator. It draw the frame of the Dialog.
 struct _CairoDialogDecorator {
 	CairoDialogSetDecorationSizeFunc 		set_size;
 	CairoDialogRenderDecorationFunc 		render;
@@ -177,11 +179,15 @@ struct _CairoDialog {
 	gint iNbFrames, iCurrentFrame;
 	/// pour le defilement du texte.
 	gint iMaxTextWidth;
+	/// offset for text scrolling.
 	gint iCurrentTextOffset;
-	/// les timer de ces 2 animations.
+	/// timers these 2 animations.
 	gint iSidAnimateIcon, iSidAnimateText;
+	/// number of buttons.
 	int iNbButtons;
+	/// List of buttons.
 	CairoDialogButton *pButtons;
+	/// textures.
 	GLuint iIconTexture, iTextTexture;
 	gboolean bFinalized;
 };

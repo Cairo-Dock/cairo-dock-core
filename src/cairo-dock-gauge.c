@@ -382,7 +382,7 @@ void cairo_dock_render_gauge_multi_value(cairo_t *pSourceContext, CairoContainer
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer))
 		cairo_dock_update_icon_texture (pIcon);
 	
-	cairo_dock_redraw_my_icon (pIcon, pContainer);
+	cairo_dock_redraw_icon (pIcon, pContainer);
 }
 
 void draw_cd_Gauge_needle(cairo_t *pSourceContext, Gauge *pGauge, GaugeIndicator *pGaugeIndicator, double fValue)

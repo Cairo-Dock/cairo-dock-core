@@ -48,6 +48,7 @@ extern gchar *g_cThemeServerAdress;
 extern CairoDock *g_pMainDock;
 extern int g_iWmHint;
 extern gboolean g_bForceOpenGL;
+extern gboolean g_bEasterEggs;
 
 static GtkWidget *s_pThemeManager = NULL;
 
@@ -161,7 +162,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 		while (gtk_events_pending ())
 			gtk_main_iteration ();
 	}
-	gchar *cCommand = g_strdup_printf ("%s wget \"%s/%s/%s\" -O \"%s\" -t %d -T %d%s", (iShowActivity == 2 ? "xterm -e '" : ""), cServerAdress, cDistantFilePath, cDistantFileName, cTmpFilePath, CAIRO_DOCK_DL_NB_RETRY, CAIRO_DOCK_DL_TIMEOUT, (iShowActivity == 2 ? "'" : ""));
+	gchar *cCommand = g_strdup_printf ("%s wget \"%s/%s/%s\" -O \"%s\" -t %d -T %d%s", (iShowActivity == 2 ? "$TERM -e '" : ""), cServerAdress, cDistantFilePath, cDistantFileName, cTmpFilePath, CAIRO_DOCK_DL_NB_RETRY, CAIRO_DOCK_DL_TIMEOUT, (iShowActivity == 2 ? "'" : ""));
 	g_print ("%s\n", cCommand);
 	
 	int r = system (cCommand);
@@ -258,6 +259,13 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 		g_propagate_error (erreur, tmp_erreur);
 		return hProvidedTable;
 	}
+	if (cContent == NULL || (g_bEasterEggs && strncmp (cContent, "#CD", 3) != 0))
+	{
+		cd_warning ("empty themes list on %s (check that your connection is alive, or retry later)", cServerAdress);
+		g_set_error (erreur, 1, 1, "empty themes list on %s", cServerAdress);
+		g_free (cContent);
+		return hProvidedTable;
+	}
 	
 	GHashTable *pThemeTable = (hProvidedTable != NULL ? hProvidedTable : g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) cairo_dock_free_theme));
 	
@@ -313,6 +321,7 @@ GHashTable *cairo_dock_list_themes (const gchar *cShareThemesDir, const gchar *c
 	if (erreur != NULL)
 	{
 		cd_warning ("while loading distant themes in '%s/%s' : %s", g_cThemeServerAdress != NULL ? g_cThemeServerAdress : CAIRO_DOCK_THEME_SERVER, cDistantThemesDir, erreur->message);
+		cairo_dock_set_status_message_printf (s_pThemeManager, _("couldn't get the list of themes for %s (no connection ?)"), cDistantThemesDir);
 		g_error_free (erreur);
 		erreur = NULL;
 	}
@@ -526,7 +535,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			cd_message ("building theme package ...");
 			if (g_file_test (CAIRO_DOCK_SHARE_DATA_DIR"/../../bin/cairo-dock-package-theme.sh", G_FILE_TEST_EXISTS))
 			{
-				gchar *cCommand = g_strdup_printf ("xterm -e '%s \"%s\"'", "cairo-dock-package-theme.sh", cNewThemeName);
+				gchar *cCommand = g_strdup_printf ("$TERM -e '%s \"%s\"'", "cairo-dock-package-theme.sh", cNewThemeName);
 				r = system (cCommand);
 				g_free (cCommand);
 			}
@@ -650,8 +659,9 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			g_print ("c'est un paquet\n");
 			if (*cNewThemeName == '/' || strncmp (cNewThemeName, "file://", 7) == 0)  // paquet en local.
 			{
-			  g_print (" paquet local\n");
-			  cNewThemePath = cairo_dock_uncompress_file (*cNewThemeName == '/' ? cNewThemeName : cNewThemeName+7, cUserThemesDir, NULL);
+				g_print (" paquet local\n");
+				//cairo_dock_remove_html_spaces (cNewThemeName);
+				cNewThemePath = cairo_dock_uncompress_file (*cNewThemeName == '/' ? cNewThemeName : cNewThemeName+7, cUserThemesDir, NULL);
 			}
 			else  // paquet distant.
 			{
@@ -671,7 +681,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			g_print (" => cNewThemePath = '%s'\n", cNewThemePath);
 			gchar *tmp = cNewThemeName;
 			cNewThemeName = g_path_get_basename (cNewThemePath);
-			cNewThemeName[strlen (cNewThemeName) - 7] = '\0';
+			//cNewThemeName[strlen (cNewThemeName) - 7] = '\0';
 			g_free (tmp);
 		}
 		else  // c'est un theme officiel.
@@ -682,7 +692,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		g_free (cUserThemesDir);
 		
 		g_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), TRUE);
-		g_print ("cNewThemePath : %s\n", cNewThemePath);
+		g_print ("cNewThemePath : %s ; cNewThemeName : %s\n", cNewThemePath, cNewThemeName);
 		
 		//\___________________ On charge les parametres de comportement.
 		cairo_dock_set_status_message (s_pThemeManager, _("Applying changes ..."));

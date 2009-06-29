@@ -120,7 +120,7 @@ void cairo_dock_draw_emblem_from_surface (cairo_t *pIconContext, cairo_surface_t
 	if (!bPersistent)
 		cairo_restore (pIconContext);
 		
-	cairo_dock_redraw_my_icon (pIcon, pContainer); //Test 
+	cairo_dock_redraw_icon (pIcon, pContainer); //Test 
 }
 
 void cairo_dock_draw_emblem_classic (cairo_t *pIconContext, Icon *pIcon, CairoContainer *pContainer, CairoDockClassicEmblem iEmblemClassic, CairoDockEmblem iEmblemType, gboolean bPersistent)
@@ -198,7 +198,7 @@ gboolean _cairo_dock_erase_temporary_emblem (CairoDockTempEmblem *pEmblem)
 	if (pEmblem != NULL) {
 		pEmblem->iSidTimer = 0;
 		cairo_dock_draw_emblem_classic (pEmblem->pIconContext, pEmblem->pIcon, pEmblem->pContainer, CAIRO_DOCK_EMBLEM_BLANK, CAIRO_DOCK_EMBLEM_MIDDLE, FALSE);
-		cairo_dock_redraw_my_icon (pEmblem->pIcon, pEmblem->pContainer);
+		cairo_dock_redraw_icon (pEmblem->pIcon, pEmblem->pContainer);
 	}
 	g_free (pEmblem);
 	return FALSE;
@@ -218,7 +218,7 @@ void cairo_dock_draw_temporary_emblem_on_my_icon (cairo_t *pIconContext, Icon *p
 	else
 		cairo_dock_draw_emblem_classic (pIconContext, pIcon, pContainer, iEmblemClassic, iEmblemType, FALSE);
 	
-	cairo_dock_redraw_my_icon (pIcon, pContainer);
+	cairo_dock_redraw_icon (pIcon, pContainer);
 	
 	CairoDockTempEmblem *pEmblem = g_new0 (CairoDockTempEmblem, 1);
 	pEmblem->pIcon = pIcon;

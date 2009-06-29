@@ -8,22 +8,30 @@ export THEME_NAME="$1"
 
 export CAIRO_DOCK_DIR="$HOME/.config/cairo-dock"
 export CURRENT_THEME_DIR="$CAIRO_DOCK_DIR/current_theme"
+export CURRENT_WORKING_DIR="$CAIRO_DOCK_DIR/$THEME_NAME"
 export CURRENT_CONF_FILE=""
 export THEME_SERVER="http://themes.cairo-dock.org"
 export INSTALL_DIR="/usr/share/cairo-dock"
 
 set_value()
 {
+	
 	sed -i "/^\[$1\]/,/^\[.*\]/ s/^$2 *=.*/$2 = $3/g" "${CURRENT_CONF_FILE}"
 }
 
 get_value()
 {
+	if test "x$CURRENT_CONF_FILE" = "x"; then
+		return
+	fi
 	sed -n "/^\[$1\]/,/^\[.*\]/ {/^$2 *=.*/p}" "${CURRENT_CONF_FILE}" | sed "s/^$2 *= *//g"
 }
 
 set_value_on_all_groups()
 {
+	if test "x$CURRENT_CONF_FILE" = "x"; then
+		return
+	fi
 	sed -i "s/^$1 *=.*/$1 = $2/g" "${CURRENT_CONF_FILE}"
 	echo -n "."
 }
@@ -46,7 +54,9 @@ set_current_conf_file_with_backup()
 
 restore_conf_file ()
 {
-	/bin/mv "$1.bak" "$1"
+	if test -e "$1.bak"; then
+		/bin/mv "$1.bak" "$1"
+	fi
 }
 
 import_file_full()
@@ -134,8 +144,14 @@ echo "*********************************"
 echo "*** BUILDING THEME PACKAGE ...***"
 echo "*********************************"
 
-cd "$CURRENT_THEME_DIR"
-mkdir extras
+cd "$CAIRO_DOCK_DIR"
+cp -r "$CURRENT_THEME_DIR" "$CURRENT_WORKING_DIR"
+cd "$CURRENT_WORKING_DIR"
+if test -e extras; then
+	rm -rf extras/*
+else
+	mkdir extras
+fi
 
 set_current_conf_file "cairo-dock.conf"
 import_file "Hidden dock"	"callback image"		.
@@ -349,26 +365,26 @@ import_file "Configuration"	"stop icon"		.
 import_file "Configuration"	"pause icon"	.
 import_file "Configuration"	"broken icon"	.
 
-set_current_conf_file_with_backup "plug-ins/mail/mail.conf"
+set_current_conf_file "plug-ins/mail/mail.conf"
 set_value_on_all_groups		"username"				"toto"
 set_value_on_all_groups		"password"				"***"
 
-set_current_conf_file_with_backup "plug-ins/slider/slider.conf"
+set_current_conf_file "plug-ins/slider/slider.conf"
 set_value "Configuration"	"directory"				""
 
-set_current_conf_file_with_backup "plug-ins/stack/stack.conf"
+set_current_conf_file "plug-ins/stack/stack.conf"
 set_value "Configuration"	"stack dir"				""
 
-set_current_conf_file_with_backup "plug-ins/Clipper/Clipper.conf"
+set_current_conf_file "plug-ins/Clipper/Clipper.conf"
 set_value "Configuration"	"persistent"			""
 
-set_current_conf_file_with_backup "plug-ins/shortcuts/shortcuts.conf"
+set_current_conf_file "plug-ins/shortcuts/shortcuts.conf"
 set_value "Module"			"list network"			false
 
-set_current_conf_file_with_backup "plug-ins/Xgamma/Xgamma.conf"
+set_current_conf_file "plug-ins/Xgamma/Xgamma.conf"
 set_value "Configuration"	"initial gamma"			0
 
-set_current_conf_file_with_backup "plug-ins/weblets/weblets.conf"
+set_current_conf_file "plug-ins/weblets/weblets.conf"
 set_value "Configuration"	"weblet URI"			"http://www.google.com"
 set_value "Configuration"	"uri list"				""
 
@@ -379,22 +395,12 @@ done;
 
 cd ..
 echo "building of the tarball ..."
-mv current_theme "${THEME_NAME}"
 tar cfz "${THEME_NAME}.tar.gz" "${THEME_NAME}"
-mv "${THEME_NAME}" current_theme
-
-cd "$CURRENT_THEME_DIR"
-restore_conf_file "plug-ins/slider/slider.conf"
-restore_conf_file "plug-ins/mail/mail.conf"
-restore_conf_file "plug-ins/stack/stack.conf"
-restore_conf_file "plug-ins/Clipper/Clipper.conf"
-restore_conf_file "plug-ins/shortcuts/shortcuts.conf"
-restore_conf_file "plug-ins/Xgamma/Xgamma.conf"
-restore_conf_file "plug-ins/weblets/weblets.conf"
-
+mv "${THEME_NAME}.tar.gz" ~
+rm -rf "$CURRENT_WORKING_DIR"
 
 echo ""
-echo "The theme has been packaged. It is available in ~/.config/cairo-dock"
+echo "The theme has been packaged. It is available in your home"
 sleep 2
 
 exit 0

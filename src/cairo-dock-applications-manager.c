@@ -833,7 +833,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 							if (pLastActiveParentDock != NULL)
 							{
 								if (! pLastActiveParentDock->bIsShrinkingDown)
-									cairo_dock_redraw_my_icon (pLastActiveIcon, CAIRO_CONTAINER (pLastActiveParentDock));
+									cairo_dock_redraw_icon (pLastActiveIcon, CAIRO_CONTAINER (pLastActiveParentDock));
 							}
 							else
 							{
@@ -1022,7 +1022,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 									// on redessine avec ou sans la miniature.
 									cairo_dock_reload_one_icon_buffer_in_dock (icon, pParentDock ? pParentDock : g_pMainDock);
 									if (pParentDock)
-										cairo_dock_redraw_my_icon (icon, CAIRO_CONTAINER (pParentDock));
+										cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
 								}
 								#endif
 								if (myTaskBar.bHideVisibleApplis)  // on insere/detache l'icone selon la visibilite de la fenetre.
@@ -1047,7 +1047,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 								{
 									icon->fAlpha = 1;  // on triche un peu.
 									if (pParentDock != NULL)
-										cairo_dock_redraw_my_icon (icon, CAIRO_CONTAINER (pParentDock));
+										cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
 								}
 							}
 						}

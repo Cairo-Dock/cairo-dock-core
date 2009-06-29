@@ -388,7 +388,7 @@ static Icon *cairo_dock_fm_alter_icon_if_necessary (Icon *pIcon, CairoContainer 
 			CAIRO_DESKLET (pContainer)->icons = g_list_insert_sorted (CAIRO_DESKLET (pContainer)->icons,
 				pIcon,
 				(GCompareFunc) cairo_dock_compare_icons_order);  // on n'utilise pas le pDesklet->pRenderer->load_icons, car on remplace juste une icone par une autre quasi identique, et on ne sait pas si load_icons a ete utilisee.
-		cairo_dock_redraw_my_icon (pNewIcon, pContainer);
+		cairo_dock_redraw_icon (pNewIcon, pContainer);
 
 		if (pNewIcon->acDesktopFileName != NULL)
 			cairo_dock_fm_add_monitor (pNewIcon);

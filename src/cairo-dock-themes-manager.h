@@ -13,6 +13,7 @@ G_BEGIN_DECLS
 *   distant (located on the cairo-dock's server)
 */
 
+/// Types of themes.
 typedef enum {
 	CAIRO_DOCK_LOCAL_THEME=0,
 	CAIRO_DOCK_USER_THEME,

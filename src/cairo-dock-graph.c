@@ -197,7 +197,7 @@ void cairo_dock_render_graph (cairo_t *pSourceContext, CairoContainer *pContaine
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer))
 		cairo_dock_update_icon_texture (pIcon);
 	
-	cairo_dock_redraw_my_icon (pIcon, pContainer);
+	cairo_dock_redraw_icon (pIcon, pContainer);
 }
 
 static cairo_surface_t *_cairo_dock_create_graph_background (cairo_t *pSourceContext, double fWidth, double fHeight, int iRadius, gdouble *pBackGroundColor, CairoDockTypeGraph iType)
