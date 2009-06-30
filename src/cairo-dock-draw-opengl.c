@@ -49,7 +49,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #include "texture-gradation.h"
 #define RADIAN (G_PI / 180.0)  // Conversion Radian/Degres
-#define DELTA_ROUND_DEGREE 1
+#define DELTA_ROUND_DEGREE 3
 
 GLuint g_pGradationTexture[2];
 
@@ -1354,7 +1354,7 @@ void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor,
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	
-	glLineWidth(fLineWidth); // Ici on choisi l'epaisseur du contour du polygone 
+	glLineWidth(fLineWidth); // Ici on choisit l'epaisseur du contour du polygone 
 	if (fLineColor != NULL)
 		glColor4f (fLineColor[0], fLineColor[1], fLineColor[2], fLineColor[3]); // Et sa couleur.
 	
@@ -1503,6 +1503,23 @@ void cairo_dock_create_icon_pbuffer (void)
 		}
 		g_print (" ok, they seem fine enough.\n");
 	}
+}
+
+void cairo_dock_destroy_icon_pbuffer (void)
+{
+	Display *XDisplay = cairo_dock_get_Xdisplay ();
+	if (s_iconPbuffer != 0)
+	{
+		glXDestroyPbuffer (XDisplay, s_iconPbuffer);
+		s_iconPbuffer = 0;
+	}
+	if (s_iconContext != 0)
+	{
+		glXDestroyContext (XDisplay, s_iconContext);
+		s_iconContext = 0;
+	}
+	s_iIconPbufferWidth = 0;
+	s_iIconPbufferHeight = 0;
 }
 
 gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)

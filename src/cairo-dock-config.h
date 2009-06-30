@@ -8,10 +8,12 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-config.h This file, together with cairo-dock-keyfile-utilities, handles the configuration system of Cairo-Dock.
+*@file cairo-dock-config.h This class manages the configuration system of Cairo-Dock.
+* Cairo-Dock and any items (icons, root docks, modules, etc) are configured by conf files.
+* Conf files containes some information usable by the GUI manager to build a corresponding config panel and update the conf file automatically, which relieves you from this thankless task.
 */
 
-/**
+/*
 *Recupere une cle booleene d'un fichier de cles.
 *@param pKeyFile le fichier de cles.
 *@param cGroupName le com du groupe.
@@ -23,7 +25,7 @@ G_BEGIN_DECLS
 *@return la valeur booleene de la cle.
 */
 gboolean cairo_dock_get_boolean_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, gboolean bDefaultValue, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName);
-/**
+/*
 *Recupere une cle entiere d'un fichier de cles.
 *@param pKeyFile le fichier de cles.
 *@param cGroupName le com du groupe.
@@ -35,7 +37,7 @@ gboolean cairo_dock_get_boolean_key_value (GKeyFile *pKeyFile, const gchar *cGro
 @return la valeur entiere de la cle.
 */
 int cairo_dock_get_integer_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, int iDefaultValue, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName);
-/**
+/*
 *Recupere une cle flottante d'un fichier de cles.
 *@param pKeyFile le fichier de cles.
 *@param cGroupName le com du groupe.
@@ -47,7 +49,7 @@ int cairo_dock_get_integer_key_value (GKeyFile *pKeyFile, const gchar *cGroupNam
 *@return la valeur flottante de la cle.
 */
 double cairo_dock_get_double_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, double fDefaultValue, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName);
-/**
+/*
 *Recupere une cle d'un fichier de cles sous la forme d'une chaine de caractere.
 *@param pKeyFile le fichier de cles.
 *@param cGroupName le com du groupe.
@@ -59,7 +61,7 @@ double cairo_dock_get_double_key_value (GKeyFile *pKeyFile, const gchar *cGroupN
 *@return la chaine de caractere nouvellement allouee correspondante a la cle.
 */
 gchar *cairo_dock_get_string_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultValue, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName);
-/**
+/*
 *Recupere une cle d'un fichier de cles sous la forme d'un tableau d'entiers.
 *@param pKeyFile le fichier de cles.
 *@param cGroupName le com du groupe.
@@ -72,7 +74,7 @@ gchar *cairo_dock_get_string_key_value (GKeyFile *pKeyFile, const gchar *cGroupN
 *@param cDefaultKeyName nom de cle alternative, ou NULL si aucune autre.
 */
 void cairo_dock_get_integer_list_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, int *iValueBuffer, guint iNbElements, int *iDefaultValues, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName);
-/**
+/*
 *Recupere une cle d'un fichier de cles sous la forme d'un tableau de doubles.
 *@param pKeyFile le fichier de cles.
 *@param cGroupName le com du groupe.
@@ -85,7 +87,7 @@ void cairo_dock_get_integer_list_key_value (GKeyFile *pKeyFile, const gchar *cGr
 *@param cDefaultKeyName nom de cle alternative, ou NULL si aucune autre.
 */
 void cairo_dock_get_double_list_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, double *fValueBuffer, guint iNbElements, double *fDefaultValues, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName);
-/**
+/*
 *Recupere une cle d'un fichier de cles sous la forme d'un tableau de chaines de caracteres.
 *@param pKeyFile le fichier de cles.
 *@param cGroupName le com du groupe.
@@ -100,7 +102,7 @@ void cairo_dock_get_double_list_key_value (GKeyFile *pKeyFile, const gchar *cGro
 gchar **cairo_dock_get_string_list_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, gsize *length, const gchar *cDefaultValues, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName);
 
 void cairo_dock_get_size_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, gint iDefaultSize, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName, int *iWidth, int *iHeight);
-/**
+/*
 *Recupere une cle d'un fichier de cles sous la forme d'un chemin de fichier complet. La clé peut soit être un fichier relatif au thème courant, soit un chemin començant par '~', soit un chemin complet, soit vide auquel cas le chemin d'un fichier par defaut est renvoye s'il est specifie.
 *@param pKeyFile le fichier de cles.
 *@param cGroupName le com du groupe.
@@ -123,28 +125,29 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, const gchar *cGro
 			int iSize[2] = {iWidth, iHeight};\
 			g_key_file_set_integer_list (pKeyFile, cGroupName, cKeyPrefix"size", iSize, 2); } }
 
+/** Convert an integer in [0,9] into a Pango text weight.
+*@param iWeight weight between 0 and 9.
+*/
 #define cairo_dock_get_pango_weight_from_1_9(iWeight) (((PANGO_WEIGHT_HEAVY - PANGO_WEIGHT_ULTRALIGHT) * iWeight + 9 * PANGO_WEIGHT_ULTRALIGHT - PANGO_WEIGHT_HEAVY) / 8)
-/**
-*Lis le fichier de conf et recharge l'appli en consequence.
-*@param cConfFilePath chemin du fichier de conf.
-*@param pDock le dock principal, cree prealablement si necessaire.
+
+/** Get the Cairo-Dock's config and reload everything.
+*@param cConfFilePath path to the main conf file.
+*@param pDock the main dock, created beforehand.
 */
 void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock);
 
-/**
-*Dis si l'appli est en cours de chargement.
-*@return TRUE ssi le dock est en cours de rechargement.
+/** Say if Cairo-Dock is loading.
+*@return TRUE if the global config is being loaded (this happens when a theme is loaded).
 */
 gboolean cairo_dock_is_loading (void);
 
-/**
-*Met a jour un fichier de conf avec une liste de valeurs de la forme : type, nom du groupe, nom de la cle, valeur. Finir par G_TYPE_INVALID.
-*@param cConfFilePath chemin du fichier de conf.
-*@param iFirstDataType type de la 1ere donnee.
+/** Update a conf file with a list of values of the form : {type, name of the groupe, name of the key, value}. Must end with G_TYPE_INVALID.
+*@param cConfFilePath path to the conf file.
+*@param iFirstDataType type of the first value.
 */
 void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataType, ...);
-/**
-*Met a jour un fichier de conf de dock racine avec sa position définie par les écarts en x et en y.
+
+/* Met a jour un fichier de conf de dock racine avec sa position définie par les écarts en x et en y.
 *@param cConfFilePath chemin du fichier de conf.
 *@param x écart latéral.
 *@param y écart vertical.
@@ -153,27 +156,25 @@ void cairo_dock_update_conf_file_with_position (const gchar *cConfFilePath, int 
 
 
 
-/**
-*Recupere les 3 numeros de version d'une chaine.
-*@param cVersionString la version representee par une chaine.
-*@param iMajorVersion numero de version majeure renvoyee.
-*@param iMinorVersion numero de version mineure renvoyee.
-*@param iMicroVersion numero de version micro renvoyee.
+/** Get the 3 version numbers of a string.
+*@param cVersionString the string of the form "x.y.z".
+*@param iMajorVersion pointer to the major version.
+*@param iMinorVersion pointer to the minor version.
+*@param iMicroVersion pointer to the micro version.
 */
 void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion);
 
 
-/**
-* Decrypte une chaine de caracteres (DES-encryption de libcrypt).
-*@param cEncryptedString la version encryptee de la chaine.
-*@param cDecryptedString la version non encryptee de la chaine.
+/** Decrypt a string (uses DES-encryption from libcrypt).
+*@param cEncryptedString the encrypted string.
+*@param cDecryptedString the decrypted string.
 */
 void cairo_dock_decrypt_string( const guchar *cEncryptedString,  guchar **cDecryptedString );
 
 /**
-* Crypte une chaine de caracteres (DES-encryption de libcrypt).
-*@param cDecryptedString la version non encryptee de la chaine.
-*@param cEncryptedString la version encryptee de la chaine.
+* Encrypt a string (uses DES-encryption from libcrypt).
+*@param cDecryptedString the decrypted string.
+*@param cEncryptedString the encrypted string.
 */
 void cairo_dock_encrypt_string( const guchar *cDecryptedString,  guchar **cEncryptedString );
 

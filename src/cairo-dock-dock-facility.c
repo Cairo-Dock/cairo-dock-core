@@ -62,7 +62,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
 extern int g_iScreenOffsetX, g_iScreenOffsetY;
-extern int g_iWmHint;
 extern gboolean g_bEasterEggs;
 
 

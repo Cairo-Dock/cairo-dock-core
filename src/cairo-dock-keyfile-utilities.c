@@ -253,7 +253,7 @@ void cairo_dock_get_conf_file_version (GKeyFile *pKeyFile, gchar **cConfFileVers
 	
 	gchar *cFirstComment =  g_key_file_get_comment (pKeyFile, NULL, NULL, NULL);
 	
-	if (cFirstComment != NULL && *cFirstComment == '!')
+	if (cFirstComment != NULL && *cFirstComment != '\0')
 	{
 		gchar *str = strchr (cFirstComment, '\n');
 		if (str != NULL)
@@ -266,7 +266,7 @@ void cairo_dock_get_conf_file_version (GKeyFile *pKeyFile, gchar **cConfFileVers
 		}
 		else
 		{
-			*cConfFileVersion = g_strdup (cFirstComment+1);
+			*cConfFileVersion = g_strdup (cFirstComment + (*cFirstComment == '!'));  // le '!' est obsolete.
 		}
 	}
 	g_free (cFirstComment);
@@ -335,4 +335,13 @@ void cairo_dock_add_remove_element_to_key (const gchar *cConfFilePath, const gch
 	g_free (cElementList);
 	g_free (cNewElementList);
 	g_key_file_free (pKeyFile);
+}
+
+
+void cairo_dock_add_widget_to_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *ckeyName, const gchar *cInitialValue, gchar iWidgetType, const gchar *cDescription, const gchar *cTooltip)
+{
+	g_key_file_set_string (pKeyFile, cGroupName, ckeyName, cInitialValue);
+	gchar *Comment = g_strdup_printf ("%c0 %s%s%s%s", iWidgetType, cDescription, cTooltip ? "\n{" : "", cTooltip ? cTooltip : "", cTooltip ? "}" : "");
+	g_key_file_set_comment (pKeyFile, cGroupName, ckeyName, Comment, NULL);
+	g_free (Comment);
 }

@@ -9,7 +9,7 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-dock-factory.h This class defines the Docks.
+*@file cairo-dock-dock-factory.h This class defines the Docks, and gives the way to create, destroy, and fill them.
 * A dock is a container that holds a set of icons and a renderer (also known as view).
 * It has the ability to be placed anywhere on the screen edges and to resize itself automatically to fit the screen's size.
 * It supports internal dragging of its icons with the mouse, and dragging of itself with alt+mouse.
@@ -27,7 +27,7 @@ typedef void (*CairoDockGLRenderFunc) (CairoDock *pDock);
 struct _CairoDockRenderer {
 	/// chemin d'un fichier readme destine a presenter de maniere succinte la vue.
 	gchar *cReadmeFilePath;
-	/// fonction calculant la taille max d'un dock.
+	/// fonction calculant la taille max d'a dock.
 	CairoDockCalculateMaxDockSizeFunc calculate_max_dock_size;
 	/// fonction calculant l'ensemble des parametres des icones.
 	CairoDockCalculateIconsFunc calculate_icons;
@@ -69,9 +69,9 @@ struct _CairoDock {
 	gint iWindowPositionX;
 	/// position courante en Y du coin haut gauche de la fenetre sur l'ecran.
 	gint iWindowPositionY;
-	/// lorsque la souris est dans le dock.
+	/// lorsque la souris est dans the dock.
 	gboolean bInside;
-	/// dit si le dock est horizontal ou vertical.
+	/// dit si the dock est horizontal ou vertical.
 	CairoDockTypeHorizontality bHorizontalDock;
 	/// donne l'orientation du dock.
 	gboolean bDirectionUp;
@@ -106,7 +106,7 @@ struct _CairoDock {
 	GList* icons;
 	/// liste des notifications disponibles.
 	GPtrArray *pNotificationsTab;
-	/// si le dock est le dock racine.
+	/// si the dock est the dock racine.
 	gboolean bIsMainDock;
 	/// le nombre d'icones pointant sur lui.
 	gint iRefCount;
@@ -118,7 +118,7 @@ struct _CairoDock {
 	gint iGapY;
 	/// alignement, entre 0 et 1, du dock sur le bord de l'ecran.
 	gdouble fAlign;
-	/// TRUE ssi le dock doit se cacher automatiquement.
+	/// TRUE ssi the dock doit se cacher automatiquement.
 	gboolean bAutoHide;
 	
 	/// magnitude maximale de la vague.
@@ -157,7 +157,7 @@ struct _CairoDock {
 	gdouble fFoldingFactor;
 	/// type d'icone devant eviter la souris, -1 si aucun.
 	gint iAvoidingMouseIconType;
-	/// marge d'evitement de la souris, en fraction de la largeur d'une icone (entre 0 et 0.5)
+	/// marge d'evitement de la souris, en fraction de la largeur d'an icon (entre 0 et 0.5)
 	gdouble fAvoidingMouseMargin;
 
 	/// pointeur sur le 1er element de la liste des icones a etre dessine, en partant de la gauche.
@@ -165,22 +165,22 @@ struct _CairoDock {
 	/// decalage des decorations pour les faire suivre la souris.
 	gdouble fDecorationsOffsetX;
 
-	/// le dock est en bas au repos.
+	/// the dock est en bas au repos.
 	gboolean bAtBottom;
-	/// le dock est en haut pret a etre utilise.
+	/// the dock est en haut pret a etre utilise.
 	gboolean bAtTop;
 	/// Whether the dock is in a popped up state or not
 	gboolean bPopped;
 	/// lorsque le menu du clique droit est visible.
 	gboolean bMenuVisible;
-	/// Est-on en train de survoler le dock avec quelque chose dans la souris ?
+	/// Est-on en train de survoler the dock avec quelque chose dans la souris ?
 	gboolean bIsDragging;
 	/// Valeur de l'auto-hide avant le cachage-rapide.
 	gboolean bAutoHideInitialValue;
-	/// TRUE ssi on ne peut plus entrer dans un dock.
+	/// TRUE ssi on ne peut plus entrer dans a dock.
 	gboolean bEntranceDisabled;
 	
-	//\_______________ Les ID des threads en cours sur le dock.
+	//\_______________ Les ID des threads en cours sur the dock.
 	/// serial ID du thread de descente de la fenetre.
 	gint iSidMoveDown;
 	/// serial ID du thread de montee de la fenetre.
@@ -221,131 +221,128 @@ struct _CairoDock {
 };
 
 
-/** Teste si le container est un dock.
-* @param pContainer le container.
-* @return TRUE ssi le container a ete declare comme un dock.
+/** Say if a Container is a Dock.
+* @param pContainer the container.
+* @return TRUE if the container is a Dock.
 */
 #define CAIRO_DOCK_IS_DOCK(pContainer) (pContainer != NULL && (pContainer)->iType == CAIRO_DOCK_TYPE_DOCK)
-/** Caste un container en dock.
-* @param pContainer le container.
-* @return le dock.
+
+/** Cast a Container into a Dock.
+* @param pContainer the container.
+* @return the dock.
 */
 #define CAIRO_DOCK(pContainer) ((CairoDock *)pContainer)
 
 
-/**
-* Cree un nouveau dock principal.
-* @param iWmHint indicateur du type de fenetre pour le WM.
-* @param cDockName nom du dock, qui pourra etre utilise pour retrouver celui-ci rapidement.
-* @param cRendererName nom de la fonction de rendu a appliquer au dock. si NULL, le rendu par defaut sera applique.
-* @return le dock nouvellement alloué, a detruire avec #cairo_dock_destroy_dock
+/** Create a new root dock.
+* @param cDockName name of the dock, used to identify it quickly. If the name is already used, the corresponding dock is returned.
+* @param cRendererName name of a renderer. If NULL, the default renderer will be applied.
+* @return the newly allocated dock, to destroy with #cairo_dock_destroy_dock
 */
-CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, const gchar *cDockName, const gchar *cRendererName);
-/**
-* Desactive un dock : le rend inoperant, en detruisant tout ce qu'il contient, sauf sa liste d'icones.
-* @param pDock le dock.
+CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRendererName);
+
+/*
+* Desactive a dock : le rend inoperant, en detruisant tout ce qu'il contient, sauf sa liste d'icones.
+* @param pDock the dock.
 */
 void cairo_dock_deactivate_one_dock (CairoDock *pDock);
-/**
-* Diminue le nombre d'icones pointant sur un dock de 1. Si aucune icone ne pointe plus sur lui apres ca, le detruit ainsi que tous ses sous-docks, et libere la memoire qui lui etait allouee. Ne fais rien pour le dock principal, utiliser #cairo_dock_free_all_docks pour cela.
-* @param pDock le dock a detruire.
-* @param cDockName son nom.
-* @param ReceivingDock un dock qui recuperera les icones, ou NULL pour detruire toutes les icones contenues dans le dock.
-* @param cReceivingDockName le nom du dock qui recuperera les icones, ou NULL si aucun n'est fourni.
+
+/** Decrease the number of pointing icons, and destroy the dock if no more icons point on it. Also destroy all of its sub-docks, and free any allocated ressources. Do nothing for the main dock, use #cairo_dock_free_all_docks for it.
+* @param pDock the dock to be destroyed.
+* @param cDockName its name.
+* @param ReceivingDock a dock that will get its icons, or NULL to also destroy its icons.
+* @param cReceivingDockName the name of the dock that will get its icons, or NULL if none is provided.
 */
 void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDock *ReceivingDock, const gchar *cReceivingDockName);
 
-/**
-* Incremente de 1 la reference d'un dock, c'est-a-dire le nombre d'icones pointant sur ce dock. Si le dock etait auparavant un dock principal, il devient un sous-dock, prenant du meme coup les parametres propres aux sous-docks.
-* @param pDock un dock.
-* @param pParentDock son dock parent, si sa reference passse a 1, sinon peu etre NULL.
+/** Increase by 1 the number of pointing icons. If the dock was a root dock, it becomes a sub-dock.
+* @param pDock a dock.
+* @param pParentDock its parent dock, if it becomes a sub-dock, otherwise it can be NULL.
 */
 void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock);
 
-/**
-* Cree un nouveau dock de type "sous-dock", et y insere la liste des icones fournie. La liste est appropriee par le dock, et ne doit donc _pas_ etre liberee apres cela. Chaque icone est chargee, et a donc juste besoin d'avoir un nom et un fichier d'image.
-* @param pIconList une liste d'icones qui seront entierement chargees et inserees dans le dock.
-* @param cDockName le nom desire pour le dock.
-* @param iWindowTypeHint indicateur du type de fenetre pour le WM.
-* @param pParentDock le dock parent du sous-dock cree.
-* @return le dock nouvellement alloue.
+/** Create a new dock of type "sub-dock", and load a given list of icons inside. The list then belongs to the dock, so it must not be freeed after that. The buffers of each icon are loaded, so they just need to have an image filename and a name.
+* @param pIconList a list of icons that will be loaded and inserted into the new dock.
+* @param cDockName desired name for the new dock.
+* @param pParentDock the parent dock.
+* @return the newly allocated dock.
 */
-CairoDock *cairo_dock_create_subdock_from_scratch_with_type (GList *pIconList, gchar *cDockName, GdkWindowTypeHint iWindowTypeHint, CairoDock *pParentDock);
-#define cairo_dock_create_subdock_from_scratch(pIconList, cDockName, pParentDock) cairo_dock_create_subdock_from_scratch_with_type (pIconList, cDockName, GDK_WINDOW_TYPE_HINT_DOCK, pParentDock)
-#define cairo_dock_create_subdock_for_class_appli(cClassName, pParentDock) cairo_dock_create_subdock_from_scratch_with_type (NULL, cClassName, GDK_WINDOW_TYPE_HINT_DOCK, pParentDock)
+CairoDock *cairo_dock_create_subdock_from_scratch (GList *pIconList, gchar *cDockName, CairoDock *pParentDock);
 
-/**
-* Charge un ensemble de fichiers .desktop definissant des icones, et construit l'arborescence des docks.
-* Toutes les icones sont creees et placees dans leur conteneur repectif, qui est cree si necessaire. Cette fonction peut tres bien s'utiliser pour 
-* A la fin du processus, chaque dock est calcule, et place a la position qui lui est assignee.
-* Il faut fournir un dock pour avoir ujn contexte de dessin, car les icones sont crees avant leur conteneur.
-* @param pMainDock un dock quelconque.
-* @param cDirectory le repertoire contenant les fichiers .desktop.
+/** Load a set of .desktop files that define icons, and build the corresponding tree of docks.
+* All the icons are created and placed inside their dock, which is created if necessary.
+* In the end, each dock is computed and placed on the screen.
+* @param pMainDock a dock, needed to have an initial cairo context (because icons are created before their container).
+* @param cDirectory a folder containing some .desktop files.
 */
 void cairo_dock_build_docks_tree_with_desktop_files (CairoDock *pMainDock, gchar *cDirectory);
 
-/**
-* Detruit tous les docks et toutes les icones contenues dedans, et libere la memoire qui leur etait allouee. Les applets sont stoppees au prealable, ainsi que la barre des taches.
+/** Destroy all docks and all icons contained inside, and free all allocated ressources. Applets and Taskbar are stopped beforehand.
 */
 void cairo_dock_free_all_docks (void);
 
 
-/**
-* Insere une icone dans le dock, a la position indiquee par son champ fOrder.
-* Ne fais rien si l'icone existe deja dans le dock.
-* @param icon l'icone a inserer.
-* @param pDock le dock dans lequel l'inserer.
-* @param bUpdateSize TRUE pour mettre a jour la taille du dock apres insertion.
-* @param bAnimated TRUE pour regler la taille de l'icone au minimum de facon a la faire grossir apres.
-* @param bInsertSeparator TRUE pour inserer un separateur si necessaire.
-* @param pCompareFunc la fonction de comparaison
+/** Insert an icon into a dock.
+* Do nothing if the icon already exists inside the dock.
+* @param icon the icon to be inserted.
+* @param pDock the dock to insert inside.
+* @param bUpdateSize TRUE to update the size of the dock after the insertion.
+* @param bAnimated TRUE to arm the icon's animation for insertion.
+* @param bInsertSeparator TRUE to insert an automatic separator if needed.
+* @param pCompareFunc a sorting function to place the new icon amongst the others, or NULL to sort by group/order.
 */
 void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bInsertSeparator, GCompareFunc pCompareFunc);
-/**
-* Insere une icone dans le dock, a la position indiquee par son champ fOrder.
-* Insere un separateur si necessaire. Ne fais rien si l'icone existe deja dans le dock.
-* @param icon l'icone a inserer.
-* @param pDock le dock dans lequel l'inserer.
-* @param bUpdateSize TRUE pour recalculer la taille du dock apres insertion.
-* @param bAnimated TRUE pour regler la taille de l'icone au minimum de facon a la faire grossir apres.
+
+/** Insert an icon into a dock, at the position given by its 'fOrder' field.
+* Insert an automatic separator if needed. Do nothing if the icon already exists inside the dock.
+* @param icon the icon to be inserted.
+* @param pDock the dock to insert inside.
+* @param bUpdateSize TRUE to update the size of the dock after the insertion.
+* @param bAnimated TRUE to arm the icon's animation for insertion.
 */
 #define cairo_dock_insert_icon_in_dock(icon, pDock, bUpdateSize, bAnimated) cairo_dock_insert_icon_in_dock_full (icon, pDock, bUpdateSize, bAnimated, myIcons.bUseSeparator, NULL)
 
-/**
-*Detache une icone de son dock, en enlevant les separateurs superflus si necessaires. L'icone n'est pas detruite, et peut etre re-inseree autre part telle qu'elle; elle garde son sous-dock, mais perd ses dialogues. Ne fais rien si l'icone n'existe pas dans le dock.
-*@param icon l'icone a detacher.
-*@param pDock le dock contenant l'icone.
-*@param bCheckUnusedSeparator si TRUE, alors teste si des separateurs sont devenus superflus, et les enleve le cas echeant.
-*@return TRUE ssi l'icone a ete detachee.
+/** Detach an icon from its dock, removing the unnecessary separators. The icon is not destroyed, and can be directly re-inserted in another container; it keeps its sub-dock, but loose its dialogs. Do nothing if the icon doesn't exist inside the dock.
+*@param icon the icon to detach.
+*@param pDock the dock containing the icon.
+*@param bCheckUnusedSeparator TRUE to check and remove unnecessary separators.
+*@return TRUE if the icon has been detached.
 */
 gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolean bCheckUnusedSeparator);
-/**
-*Enleve une icone du dock : l'icone n'est pas detruite, et garde son sous-dock, mais est n'existe plus nulle part (son .desktop est detruit, son module est desactive, et son Xid est effacee du registre (la classe est geree aussi)). Les separateurs superflus ne sont pas testes.
-*@param pDock le dock contenant l'icone.
-*@param icon l'icone a detacher.
-*/
-void cairo_dock_remove_one_icon_from_dock (CairoDock *pDock, Icon *icon);
-/**
-*Idem que precedemment, mais enleve aussi les separateurs superflus;
-*@param pDock le dock contenant l'icone.
-*@param icon l'icone a detacher.
-*/
-void cairo_dock_remove_icon_from_dock (CairoDock *pDock, Icon *icon);
 
-/**
-*Enleve et detruit toutes les icones de separateurs automatiques.
-*@param pDock le dock duquel supprimer les icones.
-*/
-void cairo_dock_remove_all_separators (CairoDock *pDock);
+void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboolean bCheckUnusedSeparator);
 
-/**
-*Ajoute des separateurs automatiques entre les differents types d'icones.
-*@param pDock le dock auquel rajouter les separateurs.
+/** Remove an icon from its dock, that is to say detach the icon, and  remove all links with Cairo-Dock : its .desktop is deleted, its module is deactivated, and its Xid is removed from the Taskbar (its class is handled too).
+* Unnecessary separators are not tested.
+* The icon is not yet destroyed, and keeps its sub-dock.
+*@param pDock the dock contenant the icon.
+*@param icon the icon to be removed.
+*/
+#define cairo_dock_remove_one_icon_from_dock(pDock, icon) cairo_dock_remove_icon_from_dock_full (pDock, icon, FALSE)
+
+/** Remove an icon from its dock, that is to say detach the icon, and  remove all links with Cairo-Dock : its .desktop is deleted, its module is deactivated, and its Xid is removed from the Taskbar (its class is handled too).
+* Unnecessary separators are removed as well.
+* The icon is not yet destroyed, and keeps its sub-dock.
+*@param pDock the dock contenant the icon.
+*@param icon the icon to be removed.
+*/
+#define cairo_dock_remove_icon_from_dock(pDock, icon) cairo_dock_remove_icon_from_dock_full (pDock, icon, TRUE)
+
+/** Remove and destroy all automatic separators from a dock.
+*@param pDock the dock.
+*/
+void cairo_dock_remove_automatic_separators (CairoDock *pDock);
+
+/** Add automatic separators between the different types of icons inside a dock.
+*@param pDock the dock.
 */
 void cairo_dock_insert_separators_in_dock (CairoDock *pDock);
 
+/** Add a launcher from a given common desktop file : create abd add the corresponding desktop file with the others, load the corresponding icon, and insert it inside a dock with an animtion.
+*@param pDock the dock.
+*/
+void cairo_dock_add_new_launcher_by_uri (const gchar *cExternDesktopFileURI, CairoDock *pReceivingDock, double fOrder);
 
-void cairo_dock_add_new_launcher_by_uri (const gchar *cDesktopFileURI, CairoDock *pReceivingDock, double fOrder);
 
 G_END_DECLS
 #endif

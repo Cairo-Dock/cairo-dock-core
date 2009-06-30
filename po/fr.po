@@ -24,11 +24,11 @@ msgstr "Voulez-vous monter ce point ?"
 msgid "Do you want to monitor the content of the directory ?"
 msgstr "Voulez-vous surveiller le contenu de ce répertoire ?"
 
-#: ../src/cairo-dock-dock-factory.c:89
+#: ../src/cairo-dock-dock-factory.c:90
 msgid "Use OpenGL in Cairo-Dock ?"
 msgstr "Utiliser l'OpenGL dans Cairo-Dock ?"
 
-#: ../src/cairo-dock-dock-factory.c:97
+#: ../src/cairo-dock-dock-factory.c:98
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -71,7 +71,7 @@ msgid "failed to unmount %s"
 msgstr "échec pour démonter %s"
 
 #: ../src/cairo-dock-gui-factory.c:704
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The '%s' module was not found.\n"
 "Be sure to install it in the same version as the dock to enjoy these "
@@ -242,11 +242,11 @@ msgstr ""
 "Configuration des icônes :\n"
 " taille, reflexion, thèmes des icônes"
 
-#: ../src/cairo-dock-internal-indicators.c:130 ../data/messages:557
+#: ../src/cairo-dock-internal-indicators.c:132 ../data/messages:557
 msgid "Indicators"
 msgstr "Indicateurs"
 
-#: ../src/cairo-dock-internal-indicators.c:132
+#: ../src/cairo-dock-internal-indicators.c:134
 msgid "Indicators are extra indications on your icons."
 msgstr ""
 "Les indicateurs sont des petites indications supplémentaires sur vos icônes."
@@ -447,9 +447,9 @@ msgid "Quit"
 msgstr "Quitter"
 
 #: ../src/cairo-dock-menu.c:1306
-#, fuzzy, c-format
+#, c-format
 msgid "Move all to desktop %d - face %d"
-msgstr "Aller au bureau %d - face %d"
+msgstr "Déplacer tout au bureau %d - face %d"
 
 #: ../src/cairo-dock-menu.c:1306
 #, c-format
@@ -457,9 +457,9 @@ msgid "Move to desktop %d - face %d"
 msgstr "Aller au bureau %d - face %d"
 
 #: ../src/cairo-dock-menu.c:1308
-#, fuzzy, c-format
+#, c-format
 msgid "Move all to desktop %d"
-msgstr "Aller au bureau %d"
+msgstr "Déplacer tout au bureau %d"
 
 #: ../src/cairo-dock-menu.c:1308
 #, c-format
@@ -467,14 +467,14 @@ msgid "Move to desktop %d"
 msgstr "Aller au bureau %d"
 
 #: ../src/cairo-dock-menu.c:1310
-#, fuzzy, c-format
+#, c-format
 msgid "Move all to face %d"
-msgstr "Aller sur la face %d"
+msgstr "Déplacer tout sur la face %d"
 
 #: ../src/cairo-dock-menu.c:1310
-#, fuzzy, c-format
+#, c-format
 msgid "Move to face %d"
-msgstr "Aller sur la face %d"
+msgstr "Déplacer sur la face %d"
 
 #: ../src/cairo-dock-menu.c:1359 ../src/cairo-dock-menu.c:1421
 msgid "Add a manual launcher"
@@ -588,19 +588,16 @@ msgid "Close"
 msgstr "Fermer"
 
 #: ../src/cairo-dock-menu.c:1499
-#, fuzzy
 msgid "Move all to this desktop"
-msgstr "Déplacer sur ce bureau"
+msgstr "Déplacer tout sur ce bureau"
 
 #: ../src/cairo-dock-menu.c:1508
-#, fuzzy
 msgid "Show all"
-msgstr "Montrer"
+msgstr "Montrer tout"
 
 #: ../src/cairo-dock-menu.c:1510
-#, fuzzy
 msgid "Minimize all"
-msgstr "Minimiser"
+msgstr "Minimiser tout"
 
 #: ../src/cairo-dock-menu.c:1512
 msgid "Close all"
@@ -657,7 +654,7 @@ msgstr "Sur tous les bureaux"
 msgid "Lock position"
 msgstr "Verrouiller la position"
 
-#: ../src/cairo-dock-modules.c:109
+#: ../src/cairo-dock-modules.c:108
 msgid ""
 "A useful FAQ that contains also a lot of hints.\n"
 "Let the mouse over a sentence to make the hint dialog popups."
@@ -675,21 +672,26 @@ msgstr "En cours de téléchargement de %s ..."
 msgid "couldn't get distant file %s"
 msgstr "Impossible de récupérer le fichier distant %s."
 
-#: ../src/cairo-dock-themes-manager.c:468
+#: ../src/cairo-dock-themes-manager.c:323
+#, c-format
+msgid "couldn't get the list of themes for %s (no connection ?)"
+msgstr ""
+
+#: ../src/cairo-dock-themes-manager.c:476
 #, c-format
 msgid "Are you sure you want to overwrite theme %s ?"
 msgstr "Etes-vous sûr de vouloir écraser le thème %s ?"
 
-#: ../src/cairo-dock-themes-manager.c:566
+#: ../src/cairo-dock-themes-manager.c:574
 #, c-format
 msgid "Are you sure you want to delete theme %s ?"
 msgstr "Etes-vous sûr de vouloir effacer le thème %s ?"
 
-#: ../src/cairo-dock-themes-manager.c:568
+#: ../src/cairo-dock-themes-manager.c:576
 msgid "Are you sure you want to delete these themes ?"
 msgstr "Etes-vous sûr de vouloir effacer ces thèmes ?"
 
-#: ../src/cairo-dock-themes-manager.c:630
+#: ../src/cairo-dock-themes-manager.c:638
 msgid ""
 "You made some modifications in the current theme.\n"
 "You will loose them if you don't save before choosing a new theme. Continue "
@@ -698,7 +700,7 @@ msgstr ""
 "Vous avez fait des modifications dans le thème courant\n"
 "Vous les perdrez si vous ne le sauvez pas d'abord. Continuer malgré tout ?"
 
-#: ../src/cairo-dock-themes-manager.c:666
+#: ../src/cairo-dock-themes-manager.c:675
 #, c-format
 msgid ""
 "couldn't get distant file %s/%s, maybe the server is down.\n"
@@ -708,20 +710,19 @@ msgstr ""
 "être pas.\n"
 "Merci de réessayer ultérieurement ou de nous contacter sur cairo-dock.org."
 
-#: ../src/cairo-dock-themes-manager.c:688
+#: ../src/cairo-dock-themes-manager.c:697
 msgid "Applying changes ..."
 msgstr ""
 
-#: ../src/cairo-dock-themes-manager.c:843
-#, fuzzy
+#: ../src/cairo-dock-themes-manager.c:852
 msgid "Now reloading theme ..."
-msgstr "En cours de téléchargement de %s ..."
+msgstr "En cours de rechargement du thème ..."
 
-#: ../src/cairo-dock-themes-manager.c:866
+#: ../src/cairo-dock-themes-manager.c:875
 msgid "Manage Themes"
 msgstr "Gérer les thèmes"
 
-#: ../src/cairo-dock-themes-manager.c:910
+#: ../src/cairo-dock-themes-manager.c:919
 #, c-format
 msgid "couldn't retrieve distant theme %s"
 msgstr "Impossible de récupérer le thème distant %s"
@@ -2804,13 +2805,12 @@ msgstr ""
 "avec un clic milieu sur l'icône pointant le sous-dock."
 
 #: ../data/messages:817
-#, fuzzy
 msgid ""
 "Scroll on the icon of one of the windows of this appli, or even on the icon "
 "pointing on the sub-dock if you group windows in a sub-dock."
 msgstr ""
-"Scrollez sur l'une des fenêtre de cette application, ou sur l'icône du sous-"
-"dock si vous groupez vos fenêtres dans un sous-dock."
+"Scrollez sur l'icône d'une des fenêtre de cette application, ou même sur "
+"l'icône du sous-dock si vous groupez vos fenêtres dans un sous-dock."
 
 #: ../data/messages:819
 msgid "Replacing the gnome-panel"
@@ -3366,11 +3366,11 @@ msgstr "Choisissez un des thèmes disponibles :"
 
 #: ../data/messages:1023
 msgid "You can even drop an internet URL."
-msgstr "Vous pouvez aussi "
+msgstr "Vous pouvez aussi déposer directement une adresse Internet."
 
 #: ../data/messages:1025
 msgid "... or drag and drop a theme package here :"
-msgstr "... or glissez/déposez un package de thème ici"
+msgstr "... ou bien glissez/déposez un paquet de thème ici"
 
 #: ../data/messages:1027
 msgid ""

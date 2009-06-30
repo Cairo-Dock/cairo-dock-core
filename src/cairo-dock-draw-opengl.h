@@ -140,6 +140,7 @@ void cairo_dock_draw_string_opengl (CairoDock *pDock, double fStringLineWidth, g
 /////////////////////////
 GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pContext);
 void cairo_dock_create_icon_pbuffer (void);
+void cairo_dock_destroy_icon_pbuffer (void);
 gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer);
 void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);
 

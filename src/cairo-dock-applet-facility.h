@@ -660,7 +660,6 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 //\_________________________________ DESKLETS et SOUS-DOCKS
 
-/**
 /** Set a renderer to the applet's desklet and create myDrawContext. Call it at the beginning of init and also reload, to take into account the desklet's resizing.
 *@param cRendererName name of the renderer.
 *@param pConfig configuration data for the renderer, or NULL.

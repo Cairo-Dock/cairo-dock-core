@@ -22,11 +22,11 @@ msgstr "このポイントにマウントしますか？"
 msgid "Do you want to monitor the content of the directory ?"
 msgstr "このディレクトリの内容をモニターしますか？"
 
-#: ../src/cairo-dock-dock-factory.c:89
+#: ../src/cairo-dock-dock-factory.c:90
 msgid "Use OpenGL in Cairo-Dock ?"
 msgstr "Cairo-Dock で OpenGL を使用？"
 
-#: ../src/cairo-dock-dock-factory.c:97
+#: ../src/cairo-dock-dock-factory.c:98
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -240,11 +240,11 @@ msgstr ""
 "アイコンに関する設定 :\n"
 "大きさ、反射、アイコンのテーマ ..."
 
-#: ../src/cairo-dock-internal-indicators.c:130 ../data/messages:557
+#: ../src/cairo-dock-internal-indicators.c:132 ../data/messages:557
 msgid "Indicators"
 msgstr "標示"
 
-#: ../src/cairo-dock-internal-indicators.c:132
+#: ../src/cairo-dock-internal-indicators.c:134
 msgid "Indicators are extra indications on your icons."
 msgstr "アイコン上の追加的な情報表示としての目印"
 
@@ -651,7 +651,7 @@ msgstr "全デスクトップに配置"
 msgid "Lock position"
 msgstr "位置固定"
 
-#: ../src/cairo-dock-modules.c:109
+#: ../src/cairo-dock-modules.c:108
 msgid ""
 "A useful FAQ that contains also a lot of hints.\n"
 "Let the mouse over a sentence to make the hint dialog popups."
@@ -669,21 +669,26 @@ msgstr ""
 msgid "couldn't get distant file %s"
 msgstr ""
 
-#: ../src/cairo-dock-themes-manager.c:468
+#: ../src/cairo-dock-themes-manager.c:323
+#, c-format
+msgid "couldn't get the list of themes for %s (no connection ?)"
+msgstr ""
+
+#: ../src/cairo-dock-themes-manager.c:476
 #, c-format
 msgid "Are you sure you want to overwrite theme %s ?"
 msgstr "本当に %s テーマを上書きしますか？"
 
-#: ../src/cairo-dock-themes-manager.c:566
+#: ../src/cairo-dock-themes-manager.c:574
 #, c-format
 msgid "Are you sure you want to delete theme %s ?"
 msgstr "本当に %s テーマを削除しますか？"
 
-#: ../src/cairo-dock-themes-manager.c:568
+#: ../src/cairo-dock-themes-manager.c:576
 msgid "Are you sure you want to delete these themes ?"
 msgstr "本当にこれらのテーマを削除しますか？"
 
-#: ../src/cairo-dock-themes-manager.c:630
+#: ../src/cairo-dock-themes-manager.c:638
 msgid ""
 "You made some modifications in the current theme.\n"
 "You will loose them if you don't save before choosing a new theme. Continue "
@@ -693,7 +698,7 @@ msgstr ""
 "新しいテーマの選択前にあらかじめ保存を行っておかないと、変更が失われてしまい"
 "ます。かまわず続行しますか？"
 
-#: ../src/cairo-dock-themes-manager.c:666
+#: ../src/cairo-dock-themes-manager.c:675
 #, c-format
 msgid ""
 "couldn't get distant file %s/%s, maybe the server is down.\n"
@@ -703,19 +708,19 @@ msgstr ""
 "ません。\n"
 "後でもう一度試すか、cairo-dock.org に連絡を取ってみてください。"
 
-#: ../src/cairo-dock-themes-manager.c:688
+#: ../src/cairo-dock-themes-manager.c:697
 msgid "Applying changes ..."
 msgstr ""
 
-#: ../src/cairo-dock-themes-manager.c:843
+#: ../src/cairo-dock-themes-manager.c:852
 msgid "Now reloading theme ..."
 msgstr ""
 
-#: ../src/cairo-dock-themes-manager.c:866
+#: ../src/cairo-dock-themes-manager.c:875
 msgid "Manage Themes"
 msgstr "テーマの管理"
 
-#: ../src/cairo-dock-themes-manager.c:910
+#: ../src/cairo-dock-themes-manager.c:919
 #, c-format
 msgid "couldn't retrieve distant theme %s"
 msgstr ""

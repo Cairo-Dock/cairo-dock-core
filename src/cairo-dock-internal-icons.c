@@ -255,7 +255,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	if ((pPrevIcons->bUseSeparator && ! pIcons->bUseSeparator) ||
 		pPrevIcons->cSeparatorImage != pIcons->cSeparatorImage ||
 		bGroupOrderChanged)
-		cairo_dock_remove_all_separators (pDock);
+		cairo_dock_remove_automatic_separators (pDock);
 	
 	
 	gboolean bThemeChanged = FALSE;

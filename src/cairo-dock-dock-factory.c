@@ -70,6 +70,7 @@ extern gboolean g_bKeepAbove;
 extern gboolean g_bSkipPager;
 extern gboolean g_bSkipTaskbar;
 extern gboolean g_bSticky;
+extern GdkWindowTypeHint g_iWmHint;
 
 extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
@@ -121,7 +122,7 @@ static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)
 	gdk_gl_drawable_gl_end (pGlDrawable);
 }
 
-CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, const gchar *cDockName, const gchar *cRendererName)
+CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRendererName)
 {
 	cd_message ("%s (%s)", __func__, cDockName);
 	g_return_val_if_fail (cDockName != NULL, NULL);
@@ -157,7 +158,7 @@ CairoDock *cairo_dock_create_new_dock (GdkWindowTypeHint iWmHint, const gchar *c
 	if (mySystem.bUseFakeTransparency)
 		gtk_window_set_keep_below (GTK_WINDOW (pWindow), TRUE);
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
-	gtk_window_set_type_hint (GTK_WINDOW (pWindow), iWmHint);
+	gtk_window_set_type_hint (GTK_WINDOW (pWindow), g_iWmHint);
 
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock");  // GTK renseigne la classe avec la meme valeur.
 	
@@ -454,9 +455,9 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 	}
 }
 
-CairoDock *cairo_dock_create_subdock_from_scratch_with_type (GList *pIconList, gchar *cDockName, GdkWindowTypeHint iWindowTypeHint, CairoDock *pParentDock)
+CairoDock *cairo_dock_create_subdock_from_scratch (GList *pIconList, gchar *cDockName, CairoDock *pParentDock)
 {
-	CairoDock *pSubDock = cairo_dock_create_new_dock (iWindowTypeHint, cDockName, NULL);
+	CairoDock *pSubDock = cairo_dock_create_new_dock (cDockName, NULL);
 	g_return_val_if_fail (pSubDock != NULL, NULL);
 	
 	cairo_dock_reference_dock (pSubDock, pParentDock);  // on le fait tout de suite pour avoir la bonne reference avant le 'load'.
@@ -710,7 +711,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	}
 	return TRUE;
 }
-static void _cairo_dock_remove_one_icon_from_dock (CairoDock *pDock, Icon *icon, gboolean bCheckUnusedSeparator)
+void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboolean bCheckUnusedSeparator)
 {
 	g_return_if_fail (icon != NULL && pDock != NULL);
 	//\___________________ On effectue les taches de fermeture de l'icone suivant son type.
@@ -743,17 +744,8 @@ static void _cairo_dock_remove_one_icon_from_dock (CairoDock *pDock, Icon *icon,
 		cairo_dock_reserve_space_for_dock (pDock, TRUE);  // l'espace est reserve sur la taille min, qui a deja ete mise a jour.
 }
 
-void cairo_dock_remove_one_icon_from_dock (CairoDock *pDock, Icon *icon)
-{
-	_cairo_dock_remove_one_icon_from_dock (pDock, icon, FALSE);
-}
-void cairo_dock_remove_icon_from_dock (CairoDock *pDock, Icon *icon)
-{
-	_cairo_dock_remove_one_icon_from_dock (pDock, icon, TRUE);
-}
 
-
-void cairo_dock_remove_all_separators (CairoDock *pDock)
+void cairo_dock_remove_automatic_separators (CairoDock *pDock)
 {
 	//g_print ("%s ()\n", __func__);
 	Icon *icon;
@@ -806,12 +798,12 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 }
 
 
-void cairo_dock_add_new_launcher_by_uri (const gchar *cDesktopFileURI, CairoDock *pReceivingDock, double fOrder)
+void cairo_dock_add_new_launcher_by_uri (const gchar *cExternDesktopFileURI, CairoDock *pReceivingDock, double fOrder)
 {
 	//\_________________ On l'ajoute dans le repertoire des lanceurs du theme courant.
 	GError *erreur = NULL;
 	const gchar *cDockName = cairo_dock_search_dock_name (pReceivingDock);
-	gchar *cNewDesktopFileName = cairo_dock_add_desktop_file_from_uri (cDesktopFileURI, cDockName, fOrder, pReceivingDock, &erreur);
+	gchar *cNewDesktopFileName = cairo_dock_add_desktop_file_from_uri (cExternDesktopFileURI, cDockName, fOrder, pReceivingDock, &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning (erreur->message);

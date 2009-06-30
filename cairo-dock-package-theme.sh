@@ -15,7 +15,9 @@ export INSTALL_DIR="/usr/share/cairo-dock"
 
 set_value()
 {
-	
+	if test "x$CURRENT_CONF_FILE" = "x"; then
+		return
+	fi
 	sed -i "/^\[$1\]/,/^\[.*\]/ s/^$2 *=.*/$2 = $3/g" "${CURRENT_CONF_FILE}"
 }
 
@@ -401,6 +403,6 @@ rm -rf "$CURRENT_WORKING_DIR"
 
 echo ""
 echo "The theme has been packaged. It is available in your home"
-sleep 2
+sleep 3
 
 exit 0

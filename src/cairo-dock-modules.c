@@ -52,7 +52,6 @@ extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern short g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
-extern int g_iWmHint;
 
 static GHashTable *s_hModuleTable = NULL;
 static GHashTable *s_hInternalModuleTable = NULL;
@@ -684,7 +683,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				CairoDock *pDock = cairo_dock_search_dock_from_name (cDockName);
 				if (pDock == NULL)  // c'est un nouveau dock.
 				{
-					pDock = cairo_dock_create_new_dock (g_iWmHint, cDockName, NULL);
+					pDock = cairo_dock_create_new_dock (cDockName, NULL);
 					///cairo_dock_place_root_dock (pDock);
 				}
 				
@@ -1084,7 +1083,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 			pDock = cairo_dock_search_dock_from_name (cDockName);
 			if (pDock == NULL)
 			{
-				pDock = cairo_dock_create_new_dock (g_iWmHint, cDockName, NULL);
+				pDock = cairo_dock_create_new_dock (cDockName, NULL);
 				///cairo_dock_place_root_dock (pDock);
 			}
 			pContainer = CAIRO_CONTAINER (pDock);

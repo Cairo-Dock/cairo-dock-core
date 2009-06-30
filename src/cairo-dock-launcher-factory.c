@@ -285,7 +285,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	if (pParentDock == NULL)
 	{
 		cd_message ("le dock parent (%s) n'existe pas, on le cree", icon->cParentDockName);
-		pParentDock = cairo_dock_create_new_dock (GDK_WINDOW_TYPE_HINT_DOCK, icon->cParentDockName, NULL);
+		pParentDock = cairo_dock_create_new_dock (icon->cParentDockName, NULL);
 	}
 	
 	gboolean bIsContainer = g_key_file_get_boolean (keyfile, "Desktop Entry", "Is container", &erreur);

@@ -10,78 +10,61 @@ G_BEGIN_DECLS
 
 
 /**
-* Initialise le gestionnaire des docks. N'a aucun effet la 2eme fois.
+*@file cairo-dock-dock-manager.h This class manages all the Docks.
+* Each Dock has a name that is unique. A Dock can be a sub-dock or a root-dock, whether there exists an icon that points on it or not, but there is no fundamental difference between both.
 */
+
 void cairo_dock_initialize_dock_manager (void);
 
-/**
-* Enregistre un dock dans la table des docks.
-* @param cDockName nom du dock.
-* @param pDock le dock.
-* @return le dock portant ce nom s'il en existait deja un, sinon le dock qui a ete insere.
-*/
 CairoDock *cairo_dock_register_dock (const gchar *cDockName, CairoDock *pDock);
-/**
-* Desenregistre un dock de la table des docks.
-* @param cDockName le nom du dock.
-*/
+
 void cairo_dock_unregister_dock (const gchar *cDockName);
-/**
-* Vide la table des docks, en detruisant tous les docks et leurs icones.
-*/
+
 void cairo_dock_reset_docks_table (void);
 
 
-/**
-* Cherche le nom d'un dock, en parcourant la table des docks jusqu'a trouver celui passe en entree.
-* @param pDock le dock.
-* @return le nom du dock, ou NULL si ce dock n'existe pas.
+/** Search the name of a Dock. It does a linear search in the table of Docks.
+* @param pDock the dock.
+* @return the name of the dock, or NULL if not found.
 */
 const gchar *cairo_dock_search_dock_name (CairoDock *pDock);
-/**
-* Cherche un dock etant donne son nom.
-* @param cDockName le nom du dock.
-* @return le dock qui a ete enregistre sous ce nom, ou NULL si aucun ne correspond.
+
+/** Search a Dock from a given name. It does a fast search in the table of Docks.
+* @param cDockName the name of the dock.
+* @return the dock that has been registerd under this name, or NULL if none exists.
 */
 CairoDock *cairo_dock_search_dock_from_name (const gchar *cDockName);
-/**
-* Cherche l'icone pointant sur un dock. Si plusieurs icones pointent sur ce dock, la premiere sera renvoyee.
-* @param pDock le dock.
-* @param pParentDock si non NULL, sera renseigne avec le dock contenant l'icone.
-* @return l'icone pointant sur le dock.
+
+/** Search an icon pointing on a dock. If several icons point on it, the first one will be returned.
+* @param pDock the dock.
+* @param pParentDock if not NULL, this will be filled with the dock containing the icon.
+* @return the icon pointing on the dock.
 */
 Icon *cairo_dock_search_icon_pointing_on_dock (CairoDock *pDock, CairoDock **pParentDock);
 
 
 void cairo_dock_search_max_decorations_size (int *iWidth, int *iHeight);
 
-/**
-*Cache recursivement tous les dock peres d'un dock.
-*@param pDock le dock fils.
+/** Recursively hides all the parent docks of a sub-dock.
+*@param pDock the (sub)dock.
 */
 void cairo_dock_hide_parent_dock (CairoDock *pDock);
-/**
-*Cache recursivement tous les sous-docks fils d'un dock donne.
-*@param pDock le dock parent.
+
+/** Recursively hides all the sub-docks of a given dock.
+*@param pDock the dock.
 */
 gboolean cairo_dock_hide_child_docks (CairoDock *pDock);
-/**
-*Recharge les buffers de toutes les icones de tous les docks.
+
+/** (Re)load all buffers of all icons in all docks.
 */
 void cairo_dock_reload_buffers_in_all_docks (gboolean bReloadAppletsToo);
-/**
-* Renomme un dock dans la table des docks.
-*@param cDockName nom du dock.
-*@param pDock le dock (optionnel).
-*@param cNewName son nouveau nom.
-*@return le dock renomme.
-*/
+
 CairoDock *cairo_dock_alter_dock_name (const gchar *cDockName, CairoDock *pDock, const gchar *cNewName);
-/**
-* Renomme un dock. Met a jour le nom du container de ses icones.
-*@param cDockName nom du dock.
-*@param pDock le dock (optionnel).
-*@param cNewName son nouveau nom.
+
+/** Rename a dock. Update the container's name of all of its icons.
+*@param cDockName name of the dock.
+*@param pDock the dock (optional).
+*@param cNewName the new name.
 */
 void cairo_dock_rename_dock (const gchar *cDockName, CairoDock *pDock, const gchar *cNewName);
 
@@ -89,18 +72,18 @@ void cairo_dock_reset_all_views (void);
 void cairo_dock_set_all_views_to_default (int iDockType);
 
 
-/**
-* Ecrit les ecarts en x et en y d'un dock racine dans son fichier de conf.
-*@param pDock le dock.
+/* Ecrit les ecarts en x et en y d'un dock racine dans son fichier de conf.
+*@param pDock the dock.
 */
 void cairo_dock_write_root_dock_gaps (CairoDock *pDock);
-/**
-* Recupere le positionnement complet d'un dock racine a partir de son fichier de conf.
+
+/* Recupere le positionnement complet d'un dock racine a partir de son fichier de conf.
 *@param cDockName nom du dock.
-*@param pDock le dock.
+*@param pDock the dock.
 */
 gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *pDock);
-/**
+
+/*
 * Supprime le fichier de conf d'un dock racine.
 *@param cDockName le nom du dock.
 */
@@ -133,10 +116,29 @@ void cairo_dock_reserve_space_for_all_root_docks (gboolean bReserve);
 gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix);
 gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon);
 
-
+/*
+* Execute an action on all icons.
+*@param pFunction the action.
+*@param data data passed to the callback.
+*/
 void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer data);
+/*
+* Execute an action on all icons being inside a dock.
+*@param pFunction the action.
+*@param data data passed to the callback.
+*/
 void cairo_dock_foreach_icons_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData);
+/*
+* Execute an action on all icons being inside a desklet.
+*@param pFunction the action.
+*@param data data passed to the callback.
+*/
 void cairo_dock_foreach_icons_in_desklets (CairoDockForeachIconFunc pFunction, gpointer pUserData);
+/*
+* Execute an action on all docks.
+*@param pFunction the action.
+*@param data data passed to the callback.
+*/
 void cairo_dock_foreach_docks (GHFunc pFunction, gpointer data);
 
 

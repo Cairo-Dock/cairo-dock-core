@@ -38,7 +38,7 @@ struct _CairoDialogRenderer {
 typedef void (* CairoDialogSetDecorationSizeFunc) (CairoDialog *pDialog);
 typedef void (* CairoDialogRenderDecorationFunc) (cairo_t *pCairoContext, CairoDialog *pDialog);
 typedef void (* CairoDialogGLRenderDecorationFunc) (CairoDialog *pDialog);
-	/// Definition of a Dialog decorator. It draw the frame of the Dialog.
+/// Definition of a Dialog decorator. It draws the frame of the Dialog.
 struct _CairoDialogDecorator {
 	CairoDialogSetDecorationSizeFunc 		set_size;
 	CairoDialogRenderDecorationFunc 		render;
@@ -46,7 +46,8 @@ struct _CairoDialogDecorator {
 	const gchar *cDisplayedName;
 };
 
-typedef void (* CairoDockActionOnAnswerFunc) (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog);  // la numerotation des boutons commence a 0, -1 pour 'Return' et -2 pour 'Escape'
+/// Definition of a generic callback of a dialog, called when the user clicks on a button. Buttons unmber starts wito 0, -1 means 'Return' and -2 means 'Escape'.
+typedef void (* CairoDockActionOnAnswerFunc) (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog);
 
 /// Configuration attributes of a Dialog, which derives from a Container.
 struct _CairoDialogAttribute {
@@ -75,19 +76,19 @@ struct _CairoDialogButton {
 struct _CairoDialog {
 	/// type de container.
 	CairoDockTypeContainer iType;
-	/// la fenetre GTK du dialogue.
+	/// la fenetre GTK du dialog.
 	GtkWidget *pWidget;
-	/// largeur de la fenetre GTK du dialogue (pointe comprise).
+	/// largeur de la fenetre GTK du dialog (pointe comprise).
 	gint iWidth;
-	/// hauteur de la fenetre GTK du dialogue (pointe comprise).
+	/// hauteur de la fenetre GTK du dialog (pointe comprise).
 	gint iHeight;
-	/// position en X du coin haut gauche de la fenetre GTK du dialogue.
+	/// position en X du coin haut gauche de la fenetre GTK du dialog.
 	gint iPositionX;
-	/// position en Y du coin haut gauche de la fenetre GTK du dialogue.
+	/// position en Y du coin haut gauche de la fenetre GTK du dialog.
 	gint iPositionY;
-	/// vrai ssi la souris est dans le dialogue, auquel cas on le garde immobile.
+	/// vrai ssi la souris est dans the dialog, auquel cas on le garde immobile.
 	gboolean bInside;
-	/// FALSE ssi le dialogue est perpendiculaire au dock.
+	/// FALSE ssi the dialog est perpendiculaire au dock.
 	CairoDockTypeHorizontality bIsHorizontal;
 	/// TRUE ssi la pointe est orientée vers le bas.
 	gboolean bDirectionUp;
@@ -100,7 +101,7 @@ struct _CairoDialog {
 #endif // HAVE_GLITZ
 	/// Donnees exterieures.
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
-	/// pour l'animation des dialogues.
+	/// pour l'animation des dialogs.
 	gint iSidGLAnimation;
 	/// intervalle de temps entre 2 etapes de l'animation.
 	gint iAnimationDeltaT;
@@ -108,19 +109,19 @@ struct _CairoDialog {
 	gint iMouseX;
 	/// derniere position en Y du curseur dans le referentiel du dock.
 	gint iMouseY;
-	/// ratio des icones (non utilise).
+	/// ratio des icons (non utilise).
 	gdouble fRatio;
-	/// transparence du reflet du dialogue, 0 si le decorateur ne gere pas le reflet.
+	/// transparence du reflet du dialog, 0 si le decorateur ne gere pas le reflet.
 	gdouble fReflectAlpha;
 	/// contexte OpenGL associe a la fenetre.
 	GLXContext glContext;
 	/// TRUE <=> une animation lente est en cours.
 	gboolean bKeepSlowAnimation;
-	/// compteur pour l'animation (inutilise pour les dialogues).
+	/// compteur pour l'animation (inutilise pour les dialogs).
 	gint iAnimationStep;
-	/// icone sur laquelle pointe le dialogue.
+	/// icon sur laquelle pointe the dialog.
 	Icon *pIcon;
-	/// le moteur de rendu utilise pour dessiner le dialogue.
+	/// le moteur de rendu utilise pour dessiner the dialog.
 	CairoDialogRenderer *pRenderer;
 	/// donnees pouvant etre utilisees par le moteur de rendu.
 	gpointer pRendererData;
@@ -128,15 +129,15 @@ struct _CairoDialog {
 	gint iAimedX;
 	/// position en Y visee par la pointe dans le référentiel de l'écran.
 	gint iAimedY;
-	/// TRUE ssi le dialogue est a droite de l'écran; dialogue a droite <=> pointe a gauche.
+	/// TRUE ssi the dialog est a droite de l'écran; dialog a droite <=> pointe a gauche.
 	gboolean bRight;
 	/// dimension de la surface du texte.
 	gint iTextWidth, iTextHeight;
-	/// surface representant le message du dialogue.
+	/// surface representant the message to display.
 	cairo_surface_t* pTextBuffer;
-	/// surface representant l'icone dans la marge a gauche du texte.
+	/// surface representant the icon dans la marge a gauche du texte.
 	cairo_surface_t* pIconBuffer;
-	/// dimension de l'icone, sans les marges (0 si aucune icone).
+	/// dimension de the icon, sans les marges (0 si aucune icon).
 	gint iIconSize;
 	/// dimensions de la bulle (message + widget utilisateur + boutons).
 	gint iBubbleWidth, iBubbleHeight;
@@ -154,7 +155,7 @@ struct _CairoDialog {
 	GtkWidget *pButtonsWidget;
 	/// le widget de remplissage ou l'on dessine la pointe.
 	GtkWidget *pTipWidget;
-	/// le timer pour la destruction automatique du dialogue.
+	/// le timer pour la destruction automatique du dialog.
 	gint iSidTimer;
 	/// conmpteur de reference.
 	gint iRefCount;
@@ -172,10 +173,10 @@ struct _CairoDialog {
 	CairoDialogDecorator *pDecorator;
 	/// taille que s'est reserve le decorateur.
 	gint iLeftMargin, iRightMargin, iTopMargin, iBottomMargin, 	iMinFrameWidth, iMinBottomGap;
-	/// position relative du dialogue par rapport a l'icone, ou ce qui revient au meme, de sa pointe par rapport au bord d'alignement.
+	/// position relative du dialog par rapport a the icon, ou ce qui revient au meme, de sa pointe par rapport au bord d'alignement.
 	/// alignement de la pointe.
 	gdouble fAlign;
-	/// pour l'animation de l'icone.
+	/// pour l'animation de the icon.
 	gint iNbFrames, iCurrentFrame;
 	/// pour le defilement du texte.
 	gint iMaxTextWidth;
@@ -193,44 +194,41 @@ struct _CairoDialog {
 };
 
 
-/**
-*Teste si le container est un dialogue.
-*@param pContainer le container.
-*@return TRUE ssi le container a ete declare comme un dialogue.
+/** Say if a Container is a Dialog.
+*@param pContainer the container.
+*@return TRUE if the container is a dialog.
 */
 #define CAIRO_DOCK_IS_DIALOG(pContainer) (pContainer != NULL && (pContainer)->iType == CAIRO_DOCK_TYPE_DIALOG)
-/**
-*Caste un container en dialogue.
-*@param pContainer le container.
-*@return le dialogue.
+
+/** Cast a Container into a Dialog.
+*@param pContainer the container.
+*@return the dialog.
 */
 #define CAIRO_DIALOG(pContainer) ((CairoDialog *)pContainer)
 
 void cairo_dock_load_dialog_buttons (CairoContainer *pContainer, gchar *cButtonOkImage, gchar *cButtonCancelImage);
 void cairo_dock_unload_dialog_buttons (void);
 
-/**
-*Incremente le compteur de reference de 1 de maniere atomique, de maniere a empecher toute destruction du dialogue pendant son utilisation. Utiliser #cairo_dock_dialog_unreference apres en avoir termine.
-*@param pDialog le dialogue.
-*@return TRUE ssi la reference sur le dialogue n'etait pas deja nulle et a pu etre incrementee, FALSE sinon, auquel cas il ne faut pas l'utiliser.
+/** Increase by 1 the reference of a dialog. Use #cairo_dock_dialog_unreference when you're done, so that the dialog can be destroyed.
+*@param pDialog the dialog.
+*@return TRUE if the reference was not nul, otherwise you must not use it.
 */
 gboolean cairo_dock_dialog_reference (CairoDialog *pDialog);
-/**
-*Decremente le compteur de reference de 1 de maniere atomique. Si la reference est tombee a 0, tente de detruire le dialogue si la liste des dialogues n'est pas verouillee, et sinon l'isole (il sera alors detruit plus tard).
-*@param pDialog le dialogue.
-*@return TRUE ssi la reference sur le dialogue est tombee a zero, auquel cas il ne faut plus l'utiliser.
+
+/** Decrease by 1 the reference of a dialog. If the reference becomes nul, the disalog is destroyed.
+*@param pDialog the dialog.
+*@return TRUE if the reference became nul, in which case the dialog must not be used anymore.
 */
 gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog);
 
-/**
-*Detruit un dialogue, libere les ressources allouees, et l'enleve de la liste des dialogues. Ne devrait pas etre utilise tel quel, utiliser #cairo_dock_dialog_unreference.
-*@param pDialog le dialogue.
+/** Free a dialog and all its allocated ressources, and remove it from the list of dialogs. Should never be used, use #cairo_dock_dialog_unreference instead.
+*@param pDialog the dialog.
 */
 void cairo_dock_free_dialog (CairoDialog *pDialog);
-/**
-*Dereference tous les dialogues pointant sur une icone; si les dialogues sont utilises par quelqu'un d'autre, il seront detruits plus tard, mais seront au moins isoles, et ne pourront donc plus etre utilises par une nouvelle personne.
-*@param icon l'icone dont on veut supprimer les dialogues.
-*@returns TRUE ssi au moins un dialogue a ete detruit.
+
+/** Unreference all the dialogs pointed by an icon.
+*@param icon the icon dont on veut supprimer les dialogs.
+*@returns TRUE if at least one dialog has been unreferenced.
 */
 gboolean cairo_dock_remove_dialog_if_any (Icon *icon);
 
@@ -245,187 +243,180 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pContainer, int *iX, int *iY, gboolean *bRight, CairoDockTypeHorizontality *bIsHorizontal, gboolean *bDirectionUp, double fAlign);
 
 void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer);
-/**
-*Recalcule la positions de tous les dialogues et les y deplace.
-*/
+
 void cairo_dock_replace_all_dialogs (void);
 
 void cairo_dock_compute_dialog_sizes (CairoDialog *pDialog);
 
-/**
-*Fait apparaitre un dialogue avec un message, un widget et 2 boutons, tous optionnels.
-*@param cText le message du dialogue.
-*@param pIcon l'icone sur laquelle pointe le dialogue.
-*@param pContainer le container contenant l'icone.
-*@param fTimeLength duree de vie du dialogue, ou 0 pour une duree de vie illimitee.
-*@param cIconPath le chemin vers une icone a afficher dans la marge.
-*@param pInteractiveWidget un widget d'interaction avec l'utilisateur; il est rattache au dialogue, donc sera detruit avec lui. Faire un 'gtk_widget_reparent()' avant de detruire le dialogue pour eviter cela, ou bien utilisez #cairo_dock_show_dialog_and_wait.
-*@param pActionFunc la fonction d'action appelee lorsque l'utilisateur valide son choix. NULL revient a avoir des boutons du type GTK_BUTTONS_NONE.
-*@param data donnees transmises a la fonction ci-dessus.
-*@param pFreeDataFunc fonction de liberation des donnees ci-dessus, appelee lors de la destruction du dialogue, ou NULL si non necessaire.
-*@return Le dialogue nouvellement cree et visible, avec une reference a 1.
+/** Pop up a dialog with a message, a widget, 2 buttons ok/cancel and an icon, all optionnal.
+*@param cText the message to display.
+*@param pIcon the icon that will hold the dialog.
+*@param pContainer the container of the icon.
+*@param fTimeLength the duration of the dialog (in ms), or 0 for an unlimited dialog.
+*@param cIconPath path to an icon to display in the margin.
+*@param pInteractiveWidget a GTK widget; It is destroyed with the dialog. Use 'gtk_widget_reparent()' before if you want to keep it alive, or use #cairo_dock_show_dialog_and_wait.
+*@param pActionFunc the callback called when the user makes its choice. NULL means there will be no buttons.
+*@param data data passed as a parameter of the callback.
+*@param pFreeDataFunc function used to free the data when the dialog is destroyed, or NULL if unnecessary.
+*@return the newly created dialog, visible, with a reference of 1.
 */
 CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, gchar *cIconPath, GtkWidget *pInteractiveWidget, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc);
 
-/**
-*Fait apparaitre un dialogue a duree de vie limitee avec une icone dans la marge a cote du texte.
-*@param cText le message du dialogue.
-*@param pIcon l'icone sur laquelle pointe le dialogue.
-*@param pContainer le container de l'icone.
-*@param fTimeLength la duree de vie du dialogue (ou 0 pour une duree de vie illimitee).
-*@param cIconPath le chemin vers une icone.
-*@param ... les arguments a inserer dans la chaine de texte, facon printf.
-*@return Le dialogue nouvellement cree et visible, avec une reference a 1.
+/** Pop up a dialog with a message, and a limited duration, and an icon in the margin.
+*@param cText the message to display.
+*@param pIcon the icon that will hold the dialog.
+*@param pContainer the container of the icon.
+*@param fTimeLength the duration of the dialog (in ms), or 0 for an unlimited dialog.
+*@param cIconPath path to an icon.
+*@param ... arguments to insert in the message, in a printf way, facon printf.
+*@return the newly created dialog, visible, with a reference of 1.
 */
 CairoDialog *cairo_dock_show_temporary_dialog_with_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, ...);
-/**
-*Fait apparaitre un dialogue a duree de vie limitee sans icone.
-*@param cText le message du dialogue.
-*@param pIcon l'icone sur laquelle pointe le dialogue.
-*@param pContainer le container de l'icone.
-*@param fTimeLength la duree de vie du dialogue (ou 0 pour une duree de vie illimitee).
-*@param ... les arguments a inserer dans la chaine de texte.
-*@return Le dialogue nouvellement cree et visible, avec une reference a 1.
+
+/** Pop up a dialog with a message, and a limited duration, with no icon.
+*@param cText the message to display.
+*@param pIcon the icon that will hold the dialog.
+*@param pContainer the container of the icon.
+*@param fTimeLength the duration of the dialog (in ms), or 0 for an unlimited dialog.
+*@param ... arguments to insert in the message, in a printf way.
+*@return the newly created dialog, visible, with a reference of 1 et visible, avec une reference a 1.
 */
 CairoDialog *cairo_dock_show_temporary_dialog (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, ...);
-/**
-*Fait apparaitre un dialogue a duree de vie limitee et avec l'icone par defaut.
-*@param cText le message du dialogue.
-*@param pIcon l'icone sur laquelle pointe le dialogue.
-*@param pContainer le container de l'icone.
-*@param fTimeLength la duree de vie du dialogue (ou 0 pour une duree de vie illimitee).
-*@param ... les arguments a inserer dans la chaine de texte, facon printf.
-*@return Le dialogue nouvellement cree et visible, avec une reference a 1.
+
+/** Pop up a dialog with a message, and a limited duration, and a default icon.
+*@param cText the format of the message to display.
+*@param pIcon the icon that will hold the dialog.
+*@param pContainer the container of the icon.
+*@param fTimeLength the duration of the dialog (in ms), or 0 for an unlimited dialog.
+*@param ... arguments to insert in the message, in a printf way.
+*@return the newly created dialog, visible, with a reference of 1 et visible, avec une reference a 1.
 */
 CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, ...);
 
-/**
-*Fait apparaitre un dialogue a duree de vie illimitee avec une question et 2 boutons oui/non. Lorsque l'utilisateur clique sur "oui", la fonction d'action est appelee avec "yes", et avec "no" s'il a clique sur "non".
-*@param cText le message du dialogue.
-*@param pIcon l'icone sur laquelle pointe le dialogue.
-*@param pContainer le container de l'icone.
-*@param cIconPath le chemin vers une icone a afficher dans la marge.
-*@param pActionFunc la fonction d'action, appelee lors du clique utilisateur.
-*@param data pointeur qui sera passe en argument de la fonction d'action.
-*@param pFreeDataFunc fonction qui liberera le pointeur.
-*@return Le dialogue nouvellement cree et visible, avec une reference a 1.
+/** Pop up a dialog with a question and 2 buttons ok/cancel.
+* When the user make its choice, the callback is called with the value "yes" if he clicked on "ok", and with "no" if he clicked on "cancel".
+* The dialog is unreferenced after that, so if you want to keep it alive, you have to reference it in the callback.
+*@param cText the message to display.
+*@param pIcon the icon that will hold the dialog.
+*@param pContainer the container of the icon.
+*@param cIconPath path to an icon to display in the margin.
+*@param pActionFunc the callback.
+*@param data data passed as a parameter of the callback.
+*@param pFreeDataFunc function used to free the data.
+*@return the newly created dialog, visible, with a reference of 1 et visible, avec une reference a 1.
 */
 CairoDialog *cairo_dock_show_dialog_with_question (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconPath, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc);
-/**
-*Fait apparaitre un dialogue a duree de vie illimitee avec une entree texte et 2 boutons ok/annuler. Lorsque l'utilisateur clique sur "ok", la fonction d'action est appelee avec le texte de l'entree, et avec "" s'il a clique sur "annuler".
-*@param cText le message du dialogue.
-*@param pIcon l'icone sur laquelle pointe le dialogue.
-*@param pContainer le container de l'icone.
-*@param cIconPath le chemin vers une icone a afficher dans la marge.
-*@param cTextForEntry le texte a afficher initialement dans l'entree.
-*@param pActionFunc la fonction d'action, appelee lors du clique utilisateur.
-*@param data pointeur qui sera passe en argument de la fonction d'action.
-*@param pFreeDataFunc fonction qui liberera le pointeur.
-*@return le dialogue nouvellement cree.
+
+/** Pop up a dialog with a text entry and 2 buttons ok/cancel.
+* When the user make its choice, the callback is called with the value of the entry if he clicked on "ok", and with "" if he clicked on "cancel".
+* The dialog is unreferenced after that, so if you want to keep it alive, you have to reference it in the callback.
+*@param cText the message to display.
+*@param pIcon the icon that will hold the dialog.
+*@param pContainer the container of the icon.
+*@param cIconPath path to an icon to display in the margin.
+*@param cTextForEntry text to display initially in the entry.
+*@param pActionFunc the callback.
+*@param data data passed as a parameter of the callback.
+*@param pFreeDataFunc function used to free the data.
+*@return the newly created dialog, visible, with a reference of 1.
 */
 CairoDialog *cairo_dock_show_dialog_with_entry (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconPath, const gchar *cTextForEntry, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc);
-/**
-*Fait apparaitre un dialogue a duree de vie illimitee avec une echelle horizontale et 2 boutons ok/annuler. Lorsque l'utilisateur clique sur "ok", la fonction d'action est appelee avec la valeur de l'echelle sous forme de texte, et avec "-1" s'il a clique sur "annuler".
-*@param cText le message du dialogue.
-*@param pIcon l'icone sur laquelle pointe le dialogue.
-*@param pContainer le container de l'icone.
-*@param cIconPath le chemin vers une icone a afficher dans la marge.
-*@param fValue la valeur initiale de l'echelle.
-*@param pActionFunc la fonction d'action, appelee lors du clique utilisateur.
-*@param data pointeur qui sera passe en argument de la fonction d'action.
-*@param pFreeDataFunc fonction qui liberera le pointeur.
-*@return le dialogue nouvellement cree.
+
+/** Pop up a dialog with an horizontal scale between 0 and fMaxValue and 2 buttons ok/cancel.
+* When the user make its choice, the callback is called with the value of the scale in a text form if he clicked on "ok", and with "-1" if he clicked on "cancel".
+* The dialog is unreferenced after that, so if you want to keep it alive, you have to reference it in the callback.
+*@param cText the message to display.
+*@param pIcon the icon that will hold the dialog.
+*@param pContainer the container of the icon.
+*@param cIconPath path to an icon to display in the margin.
+*@param fValue initial value of the scale.
+*@param pActionFunc the callback.
+*@param data data passed as a parameter of the callback.
+*@param pFreeDataFunc function used to free the data.
+*@return the newly created dialog, visible, with a reference of 1.
 */
 CairoDialog *cairo_dock_show_dialog_with_value (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconPath, double fValue, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc);
 
-/**
-*Fait apparaitre un dialogue avec un widget et 2 boutons, et met en pause le programme jusqu'a ce que l'utilisateur ait fait son choix.
-*@param cText le message du dialogue.
-*@param pIcon l'icone sur laquelle pointe le dialogue.
-*@param pContainer le container de l'icone.
-*@param fTimeLength duree de vie du dialogue, ou 0 pour une duree de vie illimitee.
-*@param cIconPath le chemin vers une icone a afficher dans la marge.
-*@param pInteractiveWidget un widget d'interaction avec l'utilisateur.
-*@return GTK_RESPONSE_OK si l'utilisateur a valide, GTK_RESPONSE_CANCEL s'il a annule, GTK_RESPONSE_NONE si le dialogue s'est fait detruire avant que l'utilisateur ait pu repondre. Le widget interactif n'est pas detruit avec le dialogue, ce qui permet de recuperer les modifications effectuees par l'utilisateur. Il vous appartient de le detruire avec gtk_widget_destroy() quand vous en avez fini avec lui.
+
+
+/** Pop up a dialog with GTK widget and 2 buttons ok/cancel, and block until the user makes its choice.
+*@param cText the message to display.
+*@param pIcon the icon that will hold the dialog.
+*@param pContainer the container of the icon.
+*@param fTimeLength time length of the dialog, or 0 for an unlimited dialog.
+*@param cIconPath path to an icon to display in the margin.
+*@param pInteractiveWidget an interactive widget.
+*@return GTK_RESPONSE_OK if the user has valideated, GTK_RESPONSE_CANCEL if he cancelled, GTK_RESPONSE_NONE if the dialog has been destroyed before. The dialog is destroyed after the user choosed, but the interactive widget is not destroyed, which allows to retrieve the changes made by the user. Destroy it with 'gtk_widget_destroy' when you're done with it.
 */
 int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, GtkWidget *pInteractiveWidget);
-/**
-*Fait apparaitre un dialogue avec une entree de texte et 2 boutons ok/annuler, et met en pause le programme jusqu'a ce que l'utilisateur ait fait son choix.
-*@param cMessage le message du dialogue.
-*@param pIcon l'icone qui fait la demande.
-*@param pContainer le container de l'icone.
-*@param cInitialAnswer la valeur initiale de l'entree de texte, ou NULL si aucune n'est fournie.
-*@return le texte entre par l'utilisateur, ou NULL s'il a annule ou si le dialogue s'est fait detruire avant.
+
+/** Pop up a dialog with a text entry, and 2 buttons ok/cancel, and block until the user makes its choice.
+*@param cMessage the message to display.
+*@param pIcon the icon that will hold the dialog.
+*@param pContainer the container of the icon.
+*@param cInitialAnswer the initial value of the entry (can be NULL).
+*@return the text entered by the user, or NULL if he cancelled or if the dialog has been destroyed before.
 */
 gchar *cairo_dock_show_demand_and_wait (const gchar *cMessage, Icon *pIcon, CairoContainer *pContainer, const gchar *cInitialAnswer);
-/**
-*Fait apparaitre un dialogue avec une echelle horizontale entre 0 et fMaxValue, et 2 boutons ok/annuler, et met en pause le programme jusqu'a ce que l'utilisateur ait fait son choix.
-*@param cMessage le message du dialogue.
-*@param pIcon l'icone qui fait la demande.
-*@param pContainer le container de l'icone.
-*@param fInitialValue la valeur initiale de l'echelle, entre 0 et 1.
-*@param fMaxValue la borne superieure de l'intervalle [0 , max].
-*@return la valeur choisie par l'utilisateur, ou -1 s'il a annule ou si le dialogue s'est fait detruire avant.
+
+/** Pop up a dialog with an horizontal scale between 0 and fMaxValue, and 2 buttons ok/cancel, and block until the user makes its choice.
+*@param cMessage the message to display.
+*@param pIcon the icon that will hold the dialog.
+*@param pContainer the container of the icon.
+*@param fInitialValue the initial value of the scale.
+*@param fMaxValue the maximum value of the scale.
+*@return the value choosed by the user, or -1 if he cancelled or if the dialog has been destroyed before.
 */
 double cairo_dock_show_value_and_wait (const gchar *cMessage, Icon *pIcon, CairoContainer *pContainer, double fInitialValue, double fMaxValue);
-/**
-*Fait apparaitre un dialogue de question pointant sur l'icone pointee (ou la 1ere si aucune n'est pointee) avec une question et 2 boutons oui/non, et met en pause le programme jusqu'a ce que l'utilisateur ait fait son choix.
-*@param cQuestion la question a poser.
-*@param pIcon l'icone qui fait la demande.
-*@param pContainer le container de l'icone.
-*@return GTK_RESPONSE_YES ou GTK_RESPONSE_NO suivant le choix de l'utilisateur, ou GTK_RESPONSE_NONE si le dialogue s'est fait detruire avant.
+
+/** Pop up a dialog with a question and 2 buttons yes/no, and block until the user makes its choice.
+*@param cQuestion the question to ask.
+*@param pIcon the icon that will hold the dialog.
+*@param pContainer the container of the icon.
+*@return GTK_RESPONSE_YES ou GTK_RESPONSE_NO according to the user's choice, or GTK_RESPONSE_NONE if the dialog has been destroyed before.
 */
 int cairo_dock_ask_question_and_wait (const gchar *cQuestion, Icon *pIcon, CairoContainer *pContainer);
 
 
-/**
-*Cherche si une icone donnee possede au moins un dialogue.
-*@param pIcon l'icone.
-*@return TRUE ssi l'icone possede au moins un dialogue.
+/** Test if an icon has at least one dialog.
+*@param pIcon the icon.
+*@return TRUE if the icon has one or more dialog(s).
 */
 gboolean cairo_dock_icon_has_dialog (Icon *pIcon);
-/**
-*Cherche une icone propice pour montrer un dialogue d'ordre general, dans le dock principal.
-*@return une icone, ou NULL si le dock est vide.
+
+/** Search the "the best icon possible" to hold a general dialog.
+*@return an icon, never NULL except if the dock is.
 */
 Icon *cairo_dock_get_dialogless_icon (void);
 
 
-/**
-*Fait apparaitre un dialogue de message non bloquant, et pointant sur une icone de separateur si possible, ou sinon sur l'icone pointee du dock principal (ou la 1ere icone sans dialogue si aucune n'est pointee). Cela permet a cairo-dock de poser une question d'ordre general.
+/** Pop up a dialog, pointing on "the best icon possible". This allows to display a general message.
 *@param cMessage le message.
-*@param fTimeLength la duree de vie du dialogue.
-*@return Le dialogue nouvellement cree et visible, avec une reference a 1.
+*@param fTimeLength la duree de vie du dialog.
+*@return the newly created dialog, visible and with a reference of 1.
 */
 CairoDialog * cairo_dock_show_general_message (const gchar *cMessage, double fTimeLength);
-/**
-*Fait apparaitre un dialogue de question bloquant, et pointant sur une icone de separateur si possible, ou sinon sur l'icone pointee du dock principal (ou la 1ere icone sans dialogue si aucune n'est pointee). Cela permet a cairo-dock de poser une question d'ordre general.
-*@param cQuestion la question a poser.
-*@return idem que pour #cairo_dock_ask_question_and_wait.
+
+/* Pop up a blocking dialog with a question, pointing on "the best icon possible". This allows to ask a general question.
+*@param cQuestion the question to ask.
+*@return same #cairo_dock_ask_question_and_wait.
 */
 int cairo_dock_ask_general_question_and_wait (const gchar *cQuestion);
 
 
-/**
-*Cache un dialogue, sans le detruire.
-*@param pDialog le dialogue.
+/** Hide a dialog.
+*@param pDialog the dialog.
 */
 void cairo_dock_hide_dialog (CairoDialog *pDialog);
-/**
-*Montre et fait prendre le focus a un dialogue.
-*@param pDialog le dialogue.
+/** Show a dialog and give it focus.
+*@param pDialog the dialog.
 */
 void cairo_dock_unhide_dialog (CairoDialog *pDialog);
-/**
-*Inverse la visibilite d'un dialogue (appelle simplement les 2 fonctions ci-dessus suivant la visibilité du dialogue).
-*@param pDialog le dialogue.
+/** Toggle the visibility of a dialog.
+*@param pDialog the dialog.
 */
 void cairo_dock_toggle_dialog_visibility (CairoDialog *pDialog);
 
-/**
-*Retire un widget de son container GTK sans le detruire Le widget peut alors etre replace ailleurs ulterieurement.
-*@param pWidget le widget.
-*/
 GtkWidget *cairo_dock_steal_widget_from_its_container (GtkWidget *pWidget);
 
 

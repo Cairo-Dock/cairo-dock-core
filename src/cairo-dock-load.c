@@ -1072,4 +1072,5 @@ void cairo_dock_unload_additionnal_textures (void)
 		g_pGradationTexture[1] = 0;
 	}
 	cairo_dock_invalidate_desktop_bg_surface ();
+	cairo_dock_destroy_icon_pbuffer ();
 }

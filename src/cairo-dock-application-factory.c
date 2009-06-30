@@ -263,7 +263,7 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 			if (pParentDock == NULL)  // alors il faut creer le sous-dock, et on decide de l'associer a pSameClassIcon.
 			{
 				cd_message ("  creation du dock pour la classe %s", icon->cClass);
-				pParentDock = cairo_dock_create_subdock_for_class_appli (icon->cClass, pMainDock);
+				pParentDock = cairo_dock_create_subdock_from_scratch (NULL, icon->cClass, pMainDock);
 			}
 			else
 				cd_message ("  sous-dock de la classe %s existant", icon->cClass);

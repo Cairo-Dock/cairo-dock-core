@@ -99,7 +99,7 @@
 #include "cairo-dock-graph2.h"
 
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
-int g_iWmHint = GDK_WINDOW_TYPE_HINT_DOCK;  // hint pour la fenetre du dock principal.
+GdkWindowTypeHint g_iWmHint = GDK_WINDOW_TYPE_HINT_DOCK;  // hint pour la fenetre du dock principal.
 
 int g_iScreenWidth[2];  // dimensions de l'ecran physique sur lequel reside le dock
 int g_iScreenHeight[2];

@@ -597,7 +597,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 		pDock->icons = g_list_sort (pDock->icons, (GCompareFunc) cairo_dock_compare_icons_order);
 
 	if ((bUseSeparatorOld && ! myIcons.bUseSeparator) || (! bMixAppletsAndLaunchersOld && myIcons.bMixAppletsAndLaunchers) || bGroupOrderChanged)
-		cairo_dock_remove_all_separators (pDock);
+		cairo_dock_remove_automatic_separators (pDock);
 		
 	g_fBackgroundImageWidth = 1e4;  // inutile de mettre a jour les decorations maintenant.
 	g_fBackgroundImageHeight = 1e4;
