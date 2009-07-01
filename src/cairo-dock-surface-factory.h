@@ -14,198 +14,202 @@ G_BEGIN_DECLS
 * The loading of an image can be modified by a mask, to take into account the ratio, zoom, orientation, etc.
 */
 
+/// Types of image loading modifiers.
 typedef enum {
+	/// fill the space, with transparency if necessary.
 	CAIRO_DOCK_FILL_SPACE 			= 1<<0,
+	/// keep the ratio of the original image.
 	CAIRO_DOCK_KEEP_RATIO 			= 1<<1,
+	/// don't zoom in the image if the final surface is larger than the original image.
 	CAIRO_DOCK_DONT_ZOOM_IN 		= 1<<2,
+	/// orientation horizontal flip
 	CAIRO_DOCK_ORIENTATION_HFLIP 		= 1<<3,
+	/// orientation 180° rotation
 	CAIRO_DOCK_ORIENTATION_ROT_180 	= 2<<3,
+	/// orientation vertical flip
 	CAIRO_DOCK_ORIENTATION_VFLIP 		= 3<<3,
+	/// orientation 90° rotation + horizontal flip
 	CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP = 4<<3,
+	/// orientation 90° rotation
 	CAIRO_DOCK_ORIENTATION_ROT_90 	= 5<<3,
+	/// orientation 90° rotation + vertical flip
 	CAIRO_DOCK_ORIENTATION_ROT_90_VFLIP = 6<<3,
+	/// orientation 270° rotation
 	CAIRO_DOCK_ORIENTATION_ROT_270 	= 7<<3
 	} CairoDockLoadImageModifier;
+/// mask to get the orientation from a CairoDockLoadImageModifier.
 #define CAIRO_DOCK_ORIENTATION_MASK (7<<3)
 
+/// Description of the rendering of a text.
 struct _CairoDockLabelDescription {
-	/// Taille de la police (et hauteur du texte en pixels).
+	/// font size (also approximately the resulting size in pixels)
 	gint iSize;
-	/// Police de caracteres.
+	/// font.
 	gchar *cFont;
-	/// Epaisseur des traits.
+	/// text weight. The higher, the thicker the strokes are.
 	PangoWeight iWeight;
-	/// Style du trace (italique ou droit).
+	/// text style (italic or normal).
 	PangoStyle iStyle;
-	/// Couleur de debut du dégradé.
+	/// first color of the characters.
 	gdouble fColorStart[3];
-	/// Couleur de fin du dégradé.
+	/// second color of the characters. If different from the first one, it will make a gradation.
 	gdouble fColorStop[3];
-	/// TRUE ssi le dégradé est du haut vers le bas.
+	/// TRUE if the gradation is vertical (from top to bottom).
 	gboolean bVerticalPattern;
-	/// Couleur du fond.
+	/// frame background color. Set the alpha channel to 0 to not draw a frame in the background.
 	gdouble fBackgroundColor[4];
-	/// TRUE ssi on trace un contour.
+	/// TRUE to stroke the outline of the characters (in black).
 	gboolean bOutlined;
-	/// marge autour du texte
+	/// margin around the text, it is also the dimension of the frame if available.
 	gint iMargin;
 };
 
 
-/**
-* Calcule la taille d'une image selon une contrainte en largeur et hauteur de manière à remplir l'espace donné.
-*@param fImageWidth la largeur de l'image. Contient initialement la largeur de l'image, et sera écrasée avec la largeur obtenue.
-*@param fImageHeight la hauteur de l'image. Contient initialement la hauteur de l'image, et sera écrasée avec la hauteur obtenue.
+/* Calcule la taille d'une image selon une contrainte en largeur et hauteur de manière à remplir l'espace donné.
+*@param fImageWidth the width of the image. Contient initialement the width of the image, et sera écrasée avec la largeur obtenue.
+*@param fImageHeight the height of the image. Contient initialement the height of the image, et sera écrasée avec la hauteur obtenue.
 *@param iWidthConstraint contrainte en largeur (0 <=> pas de contrainte).
 *@param iHeightConstraint contrainte en hauteur (0 <=> pas de contrainte).
-*@param bNoZoomUp TRUE ssi on ne doit pas agrandir l'image (seulement la rétrécir).
+*@param bNoZoomUp TRUE ssi on ne doit pas agrandir the image (seulement la rétrécir).
 *@param fZoomWidth sera renseigné avec le facteur de zoom en largeur qui a été appliqué.
 *@param fZoomHeight sera renseigné avec le facteur de zoom en hauteur qui a été appliqué.
 */
 void cairo_dock_calculate_size_fill (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoomWidth, double *fZoomHeight);
-/**
-* Calcule la taille d'une image selon une contrainte en largeur et hauteur en gardant le ratio hauteur/largeur constant.
-*@param fImageWidth la largeur de l'image. Contient initialement la largeur de l'image, et sera écrasée avec la largeur obtenue.
-*@param fImageHeight la hauteur de l'image. Contient initialement la hauteur de l'image, et sera écrasée avec la hauteur obtenue.
+
+/* Calcule la taille d'une image selon une contrainte en largeur et hauteur en gardant le ratio hauteur/largeur constant.
+*@param fImageWidth the width of the image. Contient initialement the width of the image, et sera écrasée avec la largeur obtenue.
+*@param fImageHeight the height of the image. Contient initialement the height of the image, et sera écrasée avec la hauteur obtenue.
 *@param iWidthConstraint contrainte en largeur (0 <=> pas de contrainte).
 *@param iHeightConstraint contrainte en hauteur (0 <=> pas de contrainte).
-*@param bNoZoomUp TRUE ssi on ne doit pas agrandir l'image (seulement la rétrécir).
+*@param bNoZoomUp TRUE ssi on ne doit pas agrandir the image (seulement la rétrécir).
 *@param fZoom sera renseigné avec le facteur de zoom qui a été appliqué.
 */
 void cairo_dock_calculate_size_constant_ratio (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoom);
-/**
-* Calcule la taille d'une image selon une contrainte en largeur et hauteur.
-*@param fImageWidth la largeur de l'image. Contient initialement la largeur de l'image, et sera écrasée avec la largeur obtenue.
-*@param fImageHeight la hauteur de l'image. Contient initialement la hauteur de l'image, et sera écrasée avec la hauteur obtenue.
-*@param iWidthConstraint contrainte en largeur (0 <=> pas de contrainte).
-*@param iHeightConstraint contrainte en hauteur (0 <=> pas de contrainte).
-*@param iLoadingModifier composition de modificateurs de chargement.
-*@param fZoomWidth sera renseigné avec le facteur de zoom en largeur qui a été appliqué.
-*@param fZoomHeight sera renseigné avec le facteur de zoom en hauteur qui a été appliqué.
+
+/** Calculate the size of an image according to a constraint on width and height, and a loading modifier.
+*@param fImageWidth pointer to the width of the image. Initially contains the width of the original image, and is updated with the resulting width.
+*@param fImageHeight pointer to the height of the image. Initially contains the height of the original image, and is updated with the resulting height.
+*@param iWidthConstraint constraint on width (0 <=> no constraint).
+*@param iHeightConstraint constraint on height (0 <=> no constraint).
+*@param iLoadingModifier a mask of different loading modifiers.
+*@param fZoomWidth will be filled with the zoom that has been applied on width.
+*@param fZoomHeight will be filled with the zoom that has been applied on height.
 */
 void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fZoomWidth, double *fZoomHeight);
 
-/**
-* Cree une surface à partir des données brutes d'une icone X. L'icone de plus grande taille contenue dans le buffer est prise.
-*@param pXIconBuffer le tableau de données.
-*@param iBufferNbElements le nombre d'éléments du tableau.
-*@param pSourceContext un contexte (non modifié par la fonction).
-*@param fMaxScale le zoom maximal de l'icone.
-*@param fWidth sera renseigné avec la largeur de l'icone.
-*@param fHeight sera renseigné avec la hauteur de l'icone.
-*@returns la surface nouvellement créée.
+/** Create a surface from raw data of an X icon. The biggest icon possible is taken. The ratio is kept, and the surface will fill the space with transparency if necessary.
+*@param pXIconBuffer raw data of the icon.
+*@param iBufferNbElements number of elements in the buffer.
+*@param pSourceContext a drawing context (not altered by the function).
+*@param fMaxScale maximum zoom of the icon.
+*@param fWidth will be filled with the resulting width of the surface.
+*@param fHeight will be filled with the resulting height of the surface.
+*@return the newly allocated surface.
 */
 cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);
 
-/**
-* Cree une surface à partir d'un GdkPixbuf.
-*@param pixbuf le pixbuf.
-*@param pSourceContext un contexte (non modifié par la fonction).
-*@param fMaxScale le zoom maximal de l'icone.
-*@param iWidthConstraint contrainte sur la largeur, ou 0 pour ne pas la contraindre.
-*@param iHeightConstraint contrainte sur la hauteur, ou 0 pour ne pas la contraindre.
-*@param iLoadingModifier composition de modificateurs de chargement.
-*@param fImageWidth sera renseigné avec la largeur de l'icone (hors zoom).
-*@param fImageHeight sera renseigné avec la hauteur de l'icone (hors zoom).
-*@param fZoomX si non NULL, sera renseigné avec le zoom horizontal qui a ete appliqué à l'image originale.
-*@param fZoomY si non NULL, sera renseigné avec le zoom vertical qui a ete appliqué à l'image originale.
-*@returns la surface nouvellement créée.
+/** Create a surface from a GdkPixbuf.
+*@param pixbuf the pixbuf.
+*@param pSourceContext a drawing context (not altered by the function).
+*@param fMaxScale maximum zoom of the icon.
+*@param iWidthConstraint constraint on the width, or 0 to not constraint it.
+*@param iHeightConstraint constraint on the height, or 0 to not constraint it.
+*@param iLoadingModifier a mask of different loading modifiers.
+*@param fImageWidth will be filled with the resulting width of the surface (hors zoom).
+*@param fImageHeight will be filled with the resulting height of the surface (hors zoom).
+*@param fZoomX if non NULL, will be filled with the zoom that has been applied on width.
+*@param fZoomY if non NULL, will be filled with the zoom that has been applied on width.
+*@return the newly allocated surface.
 */
 cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, cairo_t *pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY);
 
 
-/**
-* Cree une surface vide (transparente) de taille donnee. En mode opengl, cette surface pourra servir de tampon pour generer une texture.
+/** Create an empty surface (transparent) of a given size. In OpenGL mode, this surface can act as a buffer to generate a texture.
 *@param pSourceContext un contexte cairo, ou NULL pour creer une surface tampon.
-*@param iWidth largeur de la surface.
-*@param iHeight hauteur de la surface.
-*@returns la surface nouvellement créée.
+*@param iWidth width of the surface.
+*@param iHeight height of the surface.
+*@return the newly allocated surface.
 */
 cairo_surface_t *_cairo_dock_create_blank_surface (cairo_t *pSourceContext, int iWidth, int iHeight);
 
-/**
-* Cree une surface à partir d'une image au format quelconque.
-*@param cImagePath le chemin complet de l'image.
-*@param pSourceContext un contexte (non modifié par la fonction).
-*@param fMaxScale le zoom maximal de l'icone.
-*@param iWidthConstraint contrainte sur la largeur, ou 0 pour ne pas la contraindre.
-*@param iHeightConstraint contrainte sur la hauteur, ou 0 pour ne pas la contraindre.
-*@param iLoadingModifier composition de modificateurs de chargement.
-*@param fImageWidth sera renseigné avec la largeur de l'icone (hors zoom).
-*@param fImageHeight sera renseigné avec la hauteur de l'icone (hors zoom).
-*@param fZoomX si non NULL, sera renseigné avec le zoom horizontal qui a ete appliqué à l'image originale.
-*@param fZoomY si non NULL, sera renseigné avec le zoom vertical qui a ete appliqué à l'image originale.
-*@returns la surface nouvellement créée.
+/** Create a surface from any image.
+*@param cImagePath complete path to the image.
+*@param pSourceContext a drawing context (not altered by the function).
+*@param fMaxScale maximum zoom of the icon.
+*@param iWidthConstraint constraint on the width, or 0 to not constraint it.
+*@param iHeightConstraint constraint on the height, or 0 to not constraint it.
+*@param iLoadingModifier a mask of different loading modifiers.
+*@param fImageWidth will be filled with the resulting width of the surface (hors zoom).
+*@param fImageHeight will be filled with the resulting height of the surface (hors zoom).
+*@param fZoomX if non NULL, will be filled with the zoom that has been applied on width.
+*@param fZoomY if non NULL, will be filled with the zoom that has been applied on width.
+*@return the newly allocated surface.
 */
 cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, cairo_t* pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY);
-/**
-* Cree une surface à partir d'une image au format quelconque, a la taille donnée, sans zoom.
-*@param cImagePath le chemin complet de l'image.
-*@param pSourceContext un contexte (non modifié par la fonction).
-*@param fImageWidth la largeur de l'icone.
-*@param fImageHeight la hauteur de l'icone.
-*@returns la surface nouvellement créée.
+
+/** Create a surface from any image, at a given size.
+*@param cImagePath complete path to the image.
+*@param pSourceContext a drawing context (not altered by the function).
+*@param fImageWidth the desired surface width.
+*@param fImageHeight the desired surface height.
+*@return the newly allocated surface.
 */
 cairo_surface_t *cairo_dock_create_surface_for_icon (const gchar *cImagePath, cairo_t* pSourceContext, double fImageWidth, double fImageHeight);
-/**
-* Cree une surface à partir d'une image au format quelconque, a la taille donnée carrée, sans zoom.
-*@param cImagePath le chemin complet de l'image.
-*@param pSourceContext un contexte (non modifié par la fonction).
-*@param fImageSize la taille de l'icone.
-*@returns la surface nouvellement créée.
+
+/** Create a square surface from any image, at a given size.
+*@param cImagePath complete path to the image.
+*@param pSourceContext a drawing context (not altered by the function).
+*@param fImageSize the desired surface size.
+*@return the newly allocated surface.
 */
 #define cairo_dock_create_surface_for_square_icon(cImagePath, pSourceContext, fImageSize) cairo_dock_create_surface_for_icon (cImagePath, pSourceContext, fImageSize, fImageSize)
 
 
-/**
-* Cree une surface par rotation d'une autre. N'est couramment utilisée que pour des rotations de quarts de tour.
-*@param pSurface surface à faire tourner.
-*@param pSourceContext un contexte (non modifié par la fonction).
-*@param fImageWidth la largeur de la surface.
-*@param fImageHeight la hauteur de la surface.
-*@param fRotationAngle l'angle de rotation à appliquer.
-*@returns la surface nouvellement créée.
+/** Create a surface by rotating another. Only works for 1/4 of rounds.
+*@param pSurface surface to rotate.
+*@param pSourceContext a drawing context (not altered by the function).
+*@param fImageWidth the width of the surface.
+*@param fImageHeight the height of the surface.
+*@param fRotationAngle rotation angle to apply, in radians.
+*@return the newly allocated surface.
 */
 cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fRotationAngle);
 
-/**
-* Cree une surface par réflection d'une autre. Applique un dégradé de transparence. La taille du reflet est déterminé par la config du dock, tandis que sa position est fonction de l'orientation de l'icône. Si l'icône change de container, il faut donc recreer le reflet.
-*@param pSurface surface à réfléchir.
-*@param pSourceContext un contexte (non modifié par la fonction).
-*@param fImageWidth la largeur de la surface.
-*@param fImageHeight la hauteur de la surface.
-*@param bHorizontalDock TRUE ssi la surface est à l'horizontal.
-*@param fMaxScale facteur de zoom max qui sera appliqué à la surface.
-*@param bDirectionUp TRUE ssi la surface a la tête en haut.
-*@returns la surface nouvellement créée.
+/** Create a surface by reflection of another. Apply a transparency gradation. The size of the reflect is given by the global config,and its position if given by the orientation of the icon; if this changes, the reflect needs to be re-created.
+*@param pSurface surface to reflect.
+*@param pSourceContext a drawing context (not altered by the function).
+*@param fImageWidth the width of the surface.
+*@param fImageHeight the height of the surface.
+*@param bHorizontalDock TRUE if the surface is in an horizontal container.
+*@param fMaxScale maximum zoom of the surface.
+*@param bDirectionUp TRUE if the surface is in a container whose direction is towards.
+*@return the newly allocated surface.
 */
 cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, gboolean bHorizontalDock, double fMaxScale, gboolean bDirectionUp);
 
-/**
-* Cree une surface contenant un texte, avec une couleur de fond optionnel.
-*@param cText le texte.
-*@param pSourceContext un contexte (non modifié par la fonction).
-*@param pLabelDescription la description du texte.
-*@param fMaxScale facteur de zoom max qui sera appliqué au texte.
-*@param iMaxWidth largeur max autorisee pour la surface, celle-ci sera zoomee pour tenir dedans.
-*@param iTextWidth sera renseigne avec la largeur de la surface obtenue.
-*@param iTextHeight sera renseigne avec la hauteur de la surface obtenue.
-*@param fTextXOffset sera renseigne avec le décalage horizontal à appliquer pour centrer le texte horizontalement.
-*@param fTextYOffset sera renseigne avec le décalage vertical à appliquer pour placer le texte verticalament.
-*@returns la surface nouvellement créée.
+/** Create a surface representing a text, according to a given text description.
+*@param cText the text.
+*@param pSourceContext a drawing context (not altered by the function).
+*@param pLabelDescription description of the text rendering.
+*@param fMaxScale maximum zoom of the text.
+*@param iMaxWidth maximum authorized width for the surface; it will be zoomed in to fits this limit. 0 for no limit.
+*@param iTextWidth will be filled the width of the resulting surface.
+*@param iTextHeight will be filled the height of the resulting surface.
+*@param fTextXOffset will be filled the horizontal offset to apply to center the text horizontally.
+*@param fTextYOffset will be filled the vertical offset to apply to center the text vertically.
+*@return the newly allocated surface.
 */
 cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, cairo_t *pSourceContext, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight, double *fTextXOffset, double *fTextYOffset);
 #define cairo_dock_create_surface_from_text(cText, pSourceContext, pLabelDescription, fMaxScale, iTextWidth, iTextHeight, fTextXOffset, fTextYOffset) cairo_dock_create_surface_from_text_full (cText, pSourceContext, pLabelDescription, fMaxScale, 0, iTextWidth, iTextHeight, fTextXOffset, fTextYOffset) 
 
-/**
-* Cree une surface à l'identique d'une autre, en la redimensionnant eventuellement.
-*@param pSurface surface à dupliquer.
-*@param pSourceContext un contexte (non modifié par la fonction).
-*@param fWidth la largeur de la surface.
-*@param fHeight la hauteur de la surface.
-*@param fDesiredWidth largeur désirée de la copie (0 pour garder la même taille).
-*@param fDesiredHeight hauteur désirée de la copie (0 pour garder la même taille).
-*@returns la surface nouvellement créée.
+/** Create a surface identical to another, possibly resizing it.
+*@param pSurface surface to duplicate.
+*@param pSourceContext a drawing context (not altered by the function).
+*@param fWidth the width of the surface.
+*@param fHeight the height of the surface.
+*@param fDesiredWidth desired width of the copy (0 to keep the same size).
+*@param fDesiredHeight desired height of the copy (0 to keep the same size).
+*@return the newly allocated surface.
 */
 cairo_surface_t * cairo_dock_duplicate_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fWidth, double fHeight, double fDesiredWidth, double fDesiredHeight);
 

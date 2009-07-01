@@ -116,26 +116,25 @@ void cairo_dock_reserve_space_for_all_root_docks (gboolean bReserve);
 gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix);
 gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon);
 
-/*
-* Execute an action on all icons.
+/** Execute an action on all icons.
 *@param pFunction the action.
 *@param data data passed to the callback.
 */
 void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer data);
-/*
-* Execute an action on all icons being inside a dock.
+
+/** Execute an action on all icons being inside a dock.
 *@param pFunction the action.
 *@param data data passed to the callback.
 */
 void cairo_dock_foreach_icons_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData);
-/*
-* Execute an action on all icons being inside a desklet.
+
+/** Execute an action on all icons being inside a desklet.
 *@param pFunction the action.
 *@param data data passed to the callback.
 */
 void cairo_dock_foreach_icons_in_desklets (CairoDockForeachIconFunc pFunction, gpointer pUserData);
-/*
-* Execute an action on all docks.
+
+/** Execute an action on all docks.
 *@param pFunction the action.
 *@param data data passed to the callback.
 */

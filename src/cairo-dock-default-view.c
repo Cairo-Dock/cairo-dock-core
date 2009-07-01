@@ -370,7 +370,7 @@ static void _cd_calculate_construction_parameters_generic (Icon *icon, CairoDock
 }
 Icon *cd_calculate_icons_default (CairoDock *pDock)
 {
-	Icon *pPointedIcon = cairo_dock_apply_wave_effect (pDock);
+	Icon *pPointedIcon = cairo_dock_apply_wave_effect_linear (pDock);
 	
 	//\____________________ On calcule les position/etirements/alpha des icones.
 	Icon* icon;

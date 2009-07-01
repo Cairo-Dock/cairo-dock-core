@@ -12,6 +12,7 @@ G_BEGIN_DECLS
 * - the various desktop-related tools.
 */
 
+/// type of events that can occur to a file.
 typedef enum {
 	CAIRO_DOCK_FILE_MODIFIED=0,
 	CAIRO_DOCK_FILE_DELETED,
@@ -19,6 +20,7 @@ typedef enum {
 	CAIRO_DOCK_NB_EVENT_ON_FILES
 	} CairoDockFMEventType;
 
+/// Type of sorting available on files.
 typedef enum {
 	CAIRO_DOCK_FM_SORT_BY_NAME=0,
 	CAIRO_DOCK_FM_SORT_BY_DATE,
@@ -57,6 +59,7 @@ typedef gchar * (*CairoDockFMGetTrashFunc) (const gchar *cNearURI, gchar **cFile
 typedef gchar * (*CairoDockFMGetDesktopFunc) (void);
 typedef void (*CairoDockFMUserActionFunc) (void);
 
+/// Definition of the Desktop Environment backend.
 struct _CairoDockDesktopEnvBackend {
 	CairoDockFMGetFileInfoFunc 		get_file_info;
 	CairoDockFMFilePropertiesFunc 	get_file_properties;
@@ -136,7 +139,7 @@ gchar *cairo_dock_fm_is_mounted (const gchar *cURI, gboolean *bIsMounted);
 /** Say if a point can be ejected (like a CD player).
 */
 gboolean cairo_dock_fm_can_eject (const gchar *cURI);
-/** Eject the point.
+/** Eject a drive, like a CD player.
 */
 gboolean cairo_dock_fm_eject_drive (const gchar *cURI);
 

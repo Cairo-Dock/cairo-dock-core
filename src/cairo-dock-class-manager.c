@@ -350,7 +350,10 @@ gboolean cairo_dock_prevent_inhibated_class (Icon *pIcon)
 					if (! bToBeInhibited)  // on ne met le thumbnail que sur la 1ere.
 					{
 						if (pInhibhatorDock != NULL)
+						{
+							g_print ("on positionne la miniature de %s\n", pInhibatorIcon->acName);
 							cairo_dock_set_one_icon_geometry_for_window_manager (pInhibatorIcon, pInhibhatorDock);
+						}
 						bToBeInhibited = TRUE;
 					}
 					//\______________ On met a jour l'etiquette de l'inhibiteur.

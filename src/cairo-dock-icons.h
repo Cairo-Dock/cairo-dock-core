@@ -16,9 +16,11 @@ G_BEGIN_DECLS
 * - an appli is an icon pointing to an X ID, that is to say a window.
 * - an applet is an icon holding a module instance.
 * - an icon being none of them is a separator.
-* 
+* The type of an icon is dynamic (for instance a launcher can become an application).
+* To group icons togather, they define a group, which is also usually their initial type, and an order, which is the order inside a group.
 */
 
+/// Types and groups of icons.
 typedef enum {
 	CAIRO_DOCK_LAUNCHER = 0,
 	CAIRO_DOCK_SEPARATOR12,
@@ -28,6 +30,7 @@ typedef enum {
 	CAIRO_DOCK_NB_TYPES
 	} CairoDockIconType;
 
+/// Animation state of an icon, sorted by priority.
 typedef enum {
 	CAIRO_DOCK_STATE_REST = 0,
 	CAIRO_DOCK_STATE_MOUSE_HOVERED,
@@ -38,6 +41,7 @@ typedef enum {
 	CAIRO_DOCK_NB_STATES
 	} CairoDockAnimationState;
 
+/// Definition of an Icon.
 struct _Icon {
 	//\____________ renseignes lors de la creation de the icon.
 	/// Nom (et non pas chemin) du fichier .desktop definissant the icon, ou NULL si the icon n'est pas definie pas un fichier.
@@ -56,7 +60,7 @@ struct _Icon {
 	gchar *cWorkingDirectory;
 	/// Type de the icon.
 	CairoDockIconType iType;
-	/// Ordre de the icon dans son dock, parmi les icones de meme type.
+	/// Ordre de the icon dans son dock, parmi les icons de meme type.
 	gdouble fOrder;
 	/// Sous-dock sur lequel pointe the icon, ou NULL si aucun.
 	CairoDock *pSubDock;
@@ -103,7 +107,7 @@ struct _Icon {
 	gdouble fAlpha;
 	/// TRUE if the icon is couramment pointee.
 	gboolean bPointed;
-	/// Facteur de zoom personnel, utilise pour l'apparition et la suppression des icones.
+	/// Facteur de zoom personnel, utilise pour l'apparition et la suppression des icons.
 	gdouble fPersonnalScale;
 	/// Decalage en ordonnees de reflet (pour le rebond, >= 0).
 	gdouble fDeltaYReflection;
@@ -154,7 +158,7 @@ struct _Icon {
 	gdouble fQuickInfoXOffset;
 	/// Decalage en Y de la surface de l'info rapide.
 	gdouble fQuickInfoYOffset;
-	/// decalage pour le glissement des icones.
+	/// decalage pour le glissement des icons.
 	gdouble fGlideOffset;
 	/// direction dans laquelle glisse the icon.
 	gint iGlideDirection;
@@ -241,217 +245,210 @@ struct _Icon {
 #define CAIRO_DOCK_IS_DETACHABLE_APPLET(icon) (CAIRO_DOCK_IS_APPLET (icon) && (icon)->pModuleInstance->bCanDetach)
 
 
-/**
-* Desactive an icon, et libere tous ses buffers, ainsi qu'elle-meme. Le sous-dock pointee par elle n'est pas dereferencee, cela doit etre fait au prealable. Gere egalement la classe.
-*@param icon the icon a liberer.
+/** Destroy an icon, freeing all allocated ressources. Ths sub-dock is not unreferenced, this must be done beforehand. It also deactivate the icon before (dialog, class, Xid, module) if necessary.
+*@param icon the icon to free.
 */
 void cairo_dock_free_icon (Icon *icon);
-/**
-* Libere tous les buffers d'une incone.
+/*
+* Libere tous les buffers d'une icon.
 *@param icon the icon.
 */
 void cairo_dock_free_icon_buffers (Icon *icon);
 
 
 #define cairo_dock_get_group_order(iType) (iType < CAIRO_DOCK_NB_TYPES ? myIcons.tIconTypeOrder[iType] : iType)
+/** Get the group order of an icon. 3 groups are available by default : launchers, applis, and applets, and each group has an order.
+*/
 #define cairo_dock_get_icon_order(icon) cairo_dock_get_group_order ((icon)->iType)
 
-/**
-*Donne le type d'an icon relativement a son contenu.
+/** Get the type of an icon according to its content (launcher, appli, applet). This can be different from its group.
 *@param icon the icon.
 */
 CairoDockIconType cairo_dock_get_icon_type (Icon *icon);
-/**
-*Compare 2 icones grace a la relation d'ordre sur le couple (position du type , ordre).
+/** Compare 2 icons with the order relation on (group order, icon order).
 *@param icon1 an icon.
-*@param icon2 une autre icone.
-*@return -1 si icone1 < icone2, 1 si icone1 > icone2, 0 si icone1 = icone2 (au sens de la relation d'ordre).
+*@param icon2 another icon.
+*@return -1 if icon1 < icon2, 1 if icon1 > icon2, 0 if icon1 = icon2.
 */
 int cairo_dock_compare_icons_order (Icon *icon1, Icon *icon2);
-/**
-*Compare 2 icones grace a la relation d'ordre sur le nom (ordre alphabetique sur les noms passes en minuscules).
+
+/** Compare 2 icons with the order relation on the name (case unsensitive alphabetical order).
 *@param icon1 an icon.
-*@param icon2 une autre icone.
-*@return -1 si icone1 < icone2, 1 si icone1 > icone2, 0 si icone1 = icone2 (au sens de la relation d'ordre).
+*@param icon2 another icon.
+*@return -1 if icon1 < icon2, 1 if icon1 > icon2, 0 if icon1 = icon2.
 */
 int cairo_dock_compare_icons_name (Icon *icon1, Icon *icon2);
+
 /**
-*Compare 2 icones grace a la relation d'ordre sur l'extension des URIs (ordre alphabetique compte en passant en minuscules).
+*Compare 2 icons with the order relation on the extension of their URIs (case unsensitive alphabetical order).
 *@param icon1 an icon.
-*@param icon2 une autre icone.
-*@return -1 si icone1 < icone2, 1 si icone1 > icone2, 0 si icone1 = icone2 (au sens de la relation d'ordre).
+*@param icon2 another icon.
+*@return -1 if icon1 < icon2, 1 if icon1 > icon2, 0 if icon1 = icon2.
 */
 int cairo_dock_compare_icons_extension (Icon *icon1, Icon *icon2);
 
-/**
-*Trie une liste en se basant sur la relation d'ordre sur le couple (position du type , ordre).
-*@param pIconList la liste d'icones.
-*@return la liste triee. Les elements sont les memes que ceux de la liste initiale, seul leur ordre a change.
+/** Sort a list with the order relation on (group order, icon order).
+*@param pIconList a list of icons.
+*@return the sorted list. Elements are the same as the initial list, only their order has changed.
 */
 GList *cairo_dock_sort_icons_by_order (GList *pIconList);
-/**
-*Trie une liste en se basant sur la relation d'ordre alphanumerique sur le nom des icones.
-*@param pIconList la liste d'icones.
-*@return la liste triee. Les elements sont les memes que ceux de la liste initiale, seul leur ordre a change. Les ordres des icones sont mis a jour pour refleter le nouvel ordre global.
+
+/** Sort a list with the alphabetical order on the icons' name.
+*@param pIconList a list of icons.
+*@return the sorted list. Elements are the same as the initial list, only their order has changed. Icon's orders are updated to reflect the new order.
 */
 GList *cairo_dock_sort_icons_by_name (GList *pIconList);
 
-/**
-*Renvoie la 1ere icone d'une liste d'icones.
-*@param pIconList la liste d'icones.
-*@return la 1ere icone, ou NULL si la liste is vide.
+/** Get the first icon of a list of icons.
+*@param pIconList a list of icons.
+*@return the first icon, or NULL if the list is empty.
 */
-
 Icon *cairo_dock_get_first_icon (GList *pIconList);
-/**
-*Renvoie la derniere icone d'une liste d'icones.
-*@param pIconList la liste d'icones.
-*@return la derniere icone, ou NULL si la liste is vide.
+
+/** Get the last icon of a list of icons.
+*@param pIconList a list of icons.
+*@return the last icon, or NULL if the list is empty.
 */
 Icon *cairo_dock_get_last_icon (GList *pIconList);
-/**
-*Renvoie la 1ere icone a etre dessinee dans un dock (qui n'est pas forcement la 1ere icone de la liste, si l'utilisateur a scrolle).
+
+/*
+*Renvoie la 1ere icon a etre dessinee dans un dock (qui n'est pas forcement la 1ere icon de la liste, si l'utilisateur a scrolle).
 *@param pDock le dock.
-*@return la 1ere icone a etre dessinee, ou NULL si la liste is vide.
+*@return la 1ere icon a etre dessinee, ou NULL si la liste is vide.
 */
 Icon *cairo_dock_get_first_drawn_icon (CairoDock *pDock);
-/**
-*Renvoie la derniere icone a etre dessinee dans un dock (qui n'est pas forcement la derniere icone de la liste, si l'utilisateur a scrolle).
+
+/*
+*Renvoie la derniere icon a etre dessinee dans un dock (qui n'est pas forcement la derniere icon de la liste, si l'utilisateur a scrolle).
 *@param pDock le dock.
-*@return la derniere icone a etre dessinee, ou NULL si la liste is vide.
+*@return la derniere icon a etre dessinee, ou NULL si la liste is vide.
 */
 Icon *cairo_dock_get_last_drawn_icon (CairoDock *pDock);
-/**
-*Renvoie la 1ere icone du type donne.
-*@param pIconList la liste d'icones.
-*@param iType le type d'icone recherche.
-*@return la 1ere icone trouvee ayant ce type, ou NULL si aucan icon n'est trouvee.
+
+/** Get the first icon of a given group.
+*@param pIconList a list of icons.
+*@param iType the group of icon.
+*@return the first found icon with this group, or NULL if none matches.
 */
-Icon *cairo_dock_get_first_icon_of_type (GList *pIconList, CairoDockIconType iType);
-/**
-*Renvoie la derniere icone du type donne.
-*@param pIconList la liste d'icones.
-*@param iType le type d'icone recherche.
-*@return la derniere icone trouvee ayant ce type, ou NULL si aucan icon n'est trouvee.
+Icon *cairo_dock_get_first_icon_of_group (GList *pIconList, CairoDockIconType iType);
+#define cairo_dock_get_first_icon_of_type cairo_dock_get_first_icon_of_group
+
+/** Get the last icon of a given group.
+*@param pIconList a list of icons.
+*@param iType the group of icon.
+*@return the last found icon with this group, or NULL if none matches.
 */
-Icon *cairo_dock_get_last_icon_of_type (GList *pIconList, CairoDockIconType iType);
-/**
-*Renvoie la 1ere icone dont le groupe correspond.
-*@param pIconList la liste d'icones.
-*@param iType le type/groupe dont on recherche l'ordre.
-*@return la 1ere icone trouvee ayant cet ordre, ou NULL si aucan icon n'est trouvee.
+Icon *cairo_dock_get_last_icon_of_group (GList *pIconList, CairoDockIconType iType);
+#define cairo_dock_get_last_icon_of_type cairo_dock_get_last_icon_of_group
+
+/** Get the first icon whose group has the same order as a given one.
+*@param pIconList a list of icons.
+*@param iType a type of icon.
+*@return the first found icon, or NULL if none matches.
 */
 Icon* cairo_dock_get_first_icon_of_order (GList *pIconList, CairoDockIconType iType);
-/**
-*Renvoie la derniere icone dont le groupe correspond.
-*@param pIconList la liste d'icones.
-*@param iType le type/groupe d'icone recherche.
-*@return la derniere icone trouvee ayant cet ordre, ou NULL si aucan icon n'est trouvee.
+
+/** Get the last icon whose group has the same order as a given one.
+*@param pIconList a list of icons.
+*@param iType a type of icon.
+*@return the last found icon, or NULL if none matches.
 */
 Icon* cairo_dock_get_last_icon_of_order (GList *pIconList, CairoDockIconType iType);
-/**
-*Renvoie the icon actuellement pointee parmi une liste d'icones.
-*@param pIconList la liste d'icones.
-*@return the icon dont le champ bPointed a TRUE, ou NULL si aucan icon n'est pointee.
+
+/** Get the currently pointed icon in a list of icons.
+*@param pIconList a list of icons.
+*@return the icon whose field 'bPointed' is TRUE, or NULL if none is pointed.
 */
 Icon *cairo_dock_get_pointed_icon (GList *pIconList);
-/**
-*Renvoie the icon actuellement en cours d'insertion ou de suppression parmi une liste d'icones.
-*@param pIconList la liste d'icones.
-*@return la 1ere icone dont le champ fPersonnalScale is non nul ou NULL si aucan icon n'est en cours d'insertion / suppression.
-*/
-Icon *cairo_dock_get_removing_or_inserting_icon (GList *pIconList);
-/**
-*Renvoie the icon suivante dans la liste d'icones. Cout en O(n).
-*@param pIconList la liste d'icones.
-*@param pIcon the icon dont on veut le voisin.
-*@return the icon dont le voisin de gauche is pIcon, ou NULL si pIcon is la derniere icone de la liste.
+
+/** Get the icon next to a given one. The cost is O(n).
+*@param pIconList a list of icons.
+*@param pIcon an icon in the list.
+*@return the icon whose left neighboor is pIcon, or NULL if the list is empty or if pIcon is the last icon.
 */
 Icon *cairo_dock_get_next_icon (GList *pIconList, Icon *pIcon);
-/**
-*Renvoie the icon precedente dans la liste d'icones. Cout en O(n).
-*@param pIconList la liste d'icones.
-*@param pIcon the icon dont on veut le voisin.
-*@return the icon dont le voisin de droite is pIcon, ou NULL si pIcon is la 1ere icone de la liste.
+
+/** Get the icon previous to a given one. The cost is O(n).
+*@param pIconList a list of icons.
+*@param pIcon an icon in the list.
+*@return the icon whose right neighboor is pIcon, or NULL if the list is empty or if pIcon is the first icon.
 */
 Icon *cairo_dock_get_previous_icon (GList *pIconList, Icon *pIcon);
-/**
-*Renvoie le prochain element dans la liste, en bouclant si necessaire.
-*@param ic l'element courant.
-*@param list la liste d'icones.
-*@return l'element suivant de la liste bouclee.
+
+/** Get the next element in a list, looping if necessary..
+*@param ic the current element.
+*@param list a list.
+*@return the next element, or the first element of the list if 'ic' is the last one.
 */
 #define cairo_dock_get_next_element(ic, list) (ic == NULL || ic->next == NULL ? list : ic->next)
-/**
-*Renvoie l'element precedent dans la liste, en bouclant si necessaire.
-*@param ic l'element courant.
-*@param list la liste d'icones.
-*@return l'element precedent de la liste bouclee.
+
+/** Get the previous element in a list, looping if necessary..
+*@param ic the current element.
+*@param list a list.
+*@return the previous element, or the last element of the list if 'ic' is the first one.
 */
 #define cairo_dock_get_previous_element(ic, list) (ic == NULL || ic->prev == NULL ? g_list_last (list) : ic->prev)
-/**
-*Cherche the icon ayant une commande donnee parmi une liste d'icones.
-*@param pIconList la liste d'icones.
-*@param cCommand la chaine de commande.
-*@return la 1ere icone ayant le champ 'acExec' identique a la commande fournie, ou NULL si aucan icon ne correspond.
+
+/** Search an icon with a given command in a list of icons.
+*@param pIconList a list of icons.
+*@param cCommand the command.
+*@return the first icon whose field 'acCommand' is identical to the given command, or NULL if no icon matches.
 */
 Icon *cairo_dock_get_icon_with_command (GList *pIconList, gchar *cCommand);
-/**
-*Cherche the icon ayant une URI de base donnee parmi une liste d'icones.
-*@param pIconList la liste d'icones.
-*@param cBaseURI l'URI.
-*@return la 1ere icone ayant le champ 'cBaseURI' identique a l'URI fournie, ou NULL si aucan icon ne correspond.
+
+/** Search an icon with a given URI in a list of icons.
+*@param pIconList a list of icons.
+*@param cCommand the command.
+*@return the first icon whose field 'cURI' is identical to the given URI, or NULL if no icon matches.
 */
 Icon *cairo_dock_get_icon_with_base_uri (GList *pIconList, const gchar *cBaseURI);
 
+/** Search an icon with a given name in a list of icons.
+*@param pIconList a list of icons.
+*@param cCommand the command.
+*@return the first icon whose field 'acName' is identical to the given name, or NULL if no icon matches.
+*/
 Icon *cairo_dock_get_icon_with_name (GList *pIconList, const gchar *cName);
 
-/**
-*Cherche the icon pointant sur un sous-dock donne parmi une liste d'icones.
-*@param pIconList la liste d'icones.
-*@param pSubDock le sous-dock.
-*@return la 1ere icone ayant le champ 'pSubDock' identique au sous-dock fourni, ou NULL si aucan icon ne correspond.
+/** Search the icon pointing on a given sub-dock in a list of icons.
+*@param pIconList a list of icons.
+*@param pSubDock a sub-dock.
+*@return the first icon whose field 'pSubDock' is equal to the given sub-dock, or NULL if no icon matches.
 */
 Icon *cairo_dock_get_icon_with_subdock (GList *pIconList, CairoDock *pSubDock);
-/**
-*Cherche the icon correspondante a un module donne parmi une liste d'icones.
-*@param pIconList la liste d'icones.
-*@param pModule le module.
-*@return la 1ere icone ayant le champ 'pModule' identique au module fourni, ou NULL si aucan icon ne correspond.
+
+/** Search the icon of a given module in a list of icons.
+*@param pIconList a list of icons.
+*@param pModule the module.
+*@return the first icon which has an instance of the given module, or NULL if no icon matches.
 */
 Icon *cairo_dock_get_icon_with_module (GList *pIconList, CairoDockModule *pModule);
-/**
-*Cherche the icon d'une application de classe donnee parmi une liste d'icones.
-*@param pIconList la liste d'icones.
-*@param cClass la classe d'application.
-*@return la 1ere icone ayant le champ 'cClass' identique a la classe fournie, ou NULL si aucan icon ne correspond.
-*/
-Icon *cairo_dock_get_icon_with_class (GList *pIconList, gchar *cClass);
 
 #define cairo_dock_get_first_launcher(pIconList) cairo_dock_get_first_icon_of_type (pIconList, CAIRO_DOCK_LAUNCHER)
 #define cairo_dock_get_last_launcher(pIconList) cairo_dock_get_last_icon_of_type (pIconList, CAIRO_DOCK_LAUNCHER)
 #define cairo_dock_get_first_appli(pIconList) cairo_dock_get_first_icon_of_type (pIconList, CAIRO_DOCK_APPLI)
 #define cairo_dock_get_last_appli(pIconList) cairo_dock_get_last_icon_of_type (pIconList, CAIRO_DOCK_APPLI)
 
-/** Renvoie les dimensions allouee a la surface/texture d'an icon.
-@param pIcon the icon
-@param pContainer son container
-@param iWidth pointeur sur la largeur
-@param iHeight pointeur sur la hauteur
+/** Get the dimension allocated to the surface/texture of an icon.
+@param pIcon the icon.
+@param pContainer its container.
+@param iWidth pointer to the width.
+@param iHeight pointer to the height.
 */
 void cairo_dock_get_icon_extent (Icon *pIcon, CairoContainer *pContainer, int *iWidth, int *iHeight);
-#define CD_APPLET_GET_MY_ICON_EXTENT(iWidthPtr, iHeightPtr) cairo_dock_get_icon_extent (myIcon, myContainer, iWidthPtr, iHeightPtr)
-/** Renvoie la taille d'an icon a laquelle elle is couramment dessinee sur l'ecran (en tenant compte de son zoom et de celui du container).
+
+/** Get the current size of an icon as it is seen on the screen (taking into account the zoom and the ratio).
 @param pIcon the icon
-@param pContainer son container
-@param fSizeX pointeur sur la taille en X (horizontal)
-@param fSizeY pointeur sur la taille en Y (vertical)
+@param pContainer its container
+@param fSizeX pointer to the X size (horizontal)
+@param fSizeY pointer to the Y size (vertical)
 */
 void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, double *fSizeX, double *fSizeY);
-/** Renvoie la zone totale occupee par an icon sur son container (reflet, zoom et etirement compris).
+
+/** Get the total zone used by an icon on its container (taking into account reflect, gap to reflect, zoom and stretching).
 @param icon the icon
-@param pContainer son container
-@param pArea zone occupee par the icon sur son container.
+@param pContainer its container
+@param pArea a rectangle filled with the zone used by the icon on its container.
 */
 void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRectangle *pArea);
 
@@ -461,61 +458,61 @@ void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconType iType
 void cairo_dock_swap_icons (CairoDock *pDock, Icon *icon1, Icon *icon2);
 void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2);
 
-/**
-*Effectue une action sur toutes les icones d'un type donne. L'action peut meme detruire et enlever de la liste the icon courante.
-*@param pIconList la liste d'icones a parcourir.
-*@param iType le type d'icone.
-*@param pFuntion l'action a effectuer sur chaque icone.
-*@param data un pointeur qui sera passe en entree de l'action.
-*@return le separateur avec le type a gauche si il y'en a, NULL sinon.
+/** Run an action on all the icons of a given group. The action can even destroy or remove the icon from the list.
+*@param pIconList a list of icons.
+*@param iType the group.
+*@param pFuntion the callback.
+*@param data data passed as a parameter of the callback.
+*@return the first automatic separator with another group, or NULL if there is none.
 */
 Icon *cairo_dock_foreach_icons_of_type (GList *pIconList, CairoDockIconType iType, CairoDockForeachIconFunc pFuntion, gpointer data);
 
-/**
-*Met a jour an icon de lanceur ou d'applet avec le nom de son nouveau dock. Met a jour son fichier de conf aussi.
-*@param icon the icon du lanceur ou de l'applet.
-*@param cNewParentDockName le nom de son nouveau dock.
+/** Update the container's name of an icon with the name of a dock. In the casse of a launcher or an applet, the conf file is updated too.
+*@param icon the icon.
+*@param cNewParentDockName the name of its new dock.
 */
 void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParentDockName);
 
+/** Make an icon static. Static icon are not animated when mouse hovers them.
+*@param icon the icon.
+*/
 #define cairo_dock_set_icon_static(icon) ((icon)->bStatic = TRUE)
 
-/**
-*Modifie l'etiquette d'an icon.
-*@param pSourceContext un contexte de dessin; n'est pas altere par la fonction.
-*@param cIconName la nouvelle etiquette de the icon.
+/** Set the label of an icon. If it has a sub-dock, it is renamed (the name is possibly altered to stay unique). The label buffer is updated too.
+*@param pSourceContext a drawing context; is not altered by the function.
+*@param cIconName the new label of the icon. You can even pass pIcon->acName.
 *@param pIcon the icon.
-*@param pContainer le container de the icon.
+*@param pContainer the container of the icon.
 */
 void cairo_dock_set_icon_name (cairo_t *pSourceContext, const gchar *cIconName, Icon *pIcon, CairoContainer *pContainer);
-/**
-*Modifie l'etiquette d'an icon, en prenant une chaine au format 'printf'.
-*@param pSourceContext un contexte de dessin; n'est pas altere par la fonction.
+
+/** Same as above, but takes a printf-like format string.
+*@param pSourceContext a drawing context; is not altered by the function.
 *@param pIcon the icon.
-*@param pContainer le container de the icon.
-*@param cIconNameFormat la nouvelle etiquette de the icon.
+*@param pContainer the container of the icon.
+*@param cIconNameFormat the new label of the icon, in a 'printf' way.
+*@param ... data to be inserted into the string.
 */
 void cairo_dock_set_icon_name_full (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconNameFormat, ...);
 
-/**
-*Ecris une info-rapide sur the icon. C'est un petit texte (quelques caracteres) qui vient se superposer sur the icon, avec un fond fonce.
-*@param pSourceContext un contexte de dessin; n'est pas altere par la fonction.
-*@param cQuickInfo le texte de l'info-rapide.
+/** Set the quick-info of an icon. This is a small text (a few characters) that is superimposed on the icon.
+*@param pSourceContext a drawing context; is not altered by the function.
+*@param cQuickInfo the text of the quick-info.
 *@param pIcon the icon.
-*@param fMaxScale le facteur de zoom max.
+*@param fMaxScale maximum zoom factor of the icon.
 */
 void cairo_dock_set_quick_info (cairo_t *pSourceContext, const gchar *cQuickInfo, Icon *pIcon, double fMaxScale);
-/**
-*Ecris une info-rapide sur the icon, en prenant une chaine au format 'printf'.
-*@param pSourceContext un contexte de dessin; n'est pas altere par la fonction.
+
+/** Same as above, but takes a printf-like format string.
+*@param pSourceContext a drawing context; is not altered by the function.
 *@param pIcon the icon.
-*@param pContainer le container de the icon.
-*@param cQuickInfoFormat le texte de l'info-rapide, au format 'printf' (%s, %d, etc)
-*@param ... les donnees a inserer dans la chaine de caracteres.
+*@param pContainer the container of the icon.
+*@param cQuickInfoFormat the text of the quick-info, in a 'printf' way.
+*@param ... data to be inserted into the string.
 */
 void cairo_dock_set_quick_info_full (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfoFormat, ...);
-/**
-*Efface l'info-rapide d'an icon.
+
+/** Clear the quick-info of an icon.
 *@param pIcon the icon.
 */
 #define cairo_dock_remove_quick_info(pIcon) cairo_dock_set_quick_info (NULL, NULL, pIcon, 1)

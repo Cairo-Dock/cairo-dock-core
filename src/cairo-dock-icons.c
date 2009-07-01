@@ -289,18 +289,6 @@ Icon* cairo_dock_get_pointed_icon (GList *pIconList)
 	return NULL;
 }
 
-Icon *cairo_dock_get_removing_or_inserting_icon (GList *pIconList)
-{
-	GList* ic;
-	Icon *icon;
-	for (ic = pIconList; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		if (icon->fPersonnalScale != 0)
-			return icon;
-	}
-	return NULL;
-}
 
 Icon *cairo_dock_get_next_icon (GList *pIconList, Icon *pIcon)
 {
@@ -407,21 +395,6 @@ Icon *cairo_dock_get_icon_with_module (GList *pIconList, CairoDockModule *pModul
 	}
 	return NULL;
 }
-
-Icon *cairo_dock_get_icon_with_class (GList *pIconList, gchar *cClass)
-{
-	g_return_val_if_fail (cClass != NULL, NULL);
-	GList* ic;
-	Icon *icon;
-	for (ic = pIconList; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		if (CAIRO_DOCK_IS_APPLI (icon) && icon->cClass != NULL && strcmp (icon->cClass, cClass) == 0)
-			return icon;
-	}
-	return NULL;
-}
-
 
 void cairo_dock_get_icon_extent (Icon *pIcon, CairoContainer *pContainer, int *iWidth, int *iHeight)
 {
@@ -710,25 +683,16 @@ void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParen
 	{
 		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->acDesktopFileName);
 
-		GKeyFile *pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
-		if (pKeyFile == NULL)
-			return ;
-
-		g_key_file_set_string (pKeyFile, "Desktop Entry", "Container", cNewParentDockName);
-		cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
-
+		cairo_dock_update_conf_file (cDesktopFilePath,
+			G_TYPE_STRING, "Desktop Entry", "Container", cNewParentDockName,
+			G_TYPE_INVALID);
 		g_free (cDesktopFilePath);
-		g_key_file_free (pKeyFile);
 	}
 	else if (CAIRO_DOCK_IS_APPLET (icon))
 	{
-		GKeyFile *pKeyFile = cairo_dock_open_key_file (icon->pModuleInstance->cConfFilePath);
-		if (pKeyFile == NULL)
-			return ;
-		
-		g_key_file_set_string (pKeyFile, "Icon", "dock name", cNewParentDockName);
-		cairo_dock_write_keys_to_file (pKeyFile, icon->pModuleInstance->cConfFilePath);
-		g_key_file_free (pKeyFile);
+		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
+			G_TYPE_STRING, "Icon", "dock name", cNewParentDockName,
+			G_TYPE_INVALID);
 	}
 }
 

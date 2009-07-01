@@ -777,6 +777,7 @@ static void _cairo_dock_hide_show_windows_on_other_desktops (Window *Xid, Icon *
 gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 {
 	static XEvent event;
+	static gboolean bHackMeToo = FALSE;
 	g_return_val_if_fail (pDock != NULL, FALSE);
 	
 	s_iTime ++;
@@ -784,6 +785,17 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 	Window Xid;
 	Window root = DefaultRootWindow (s_XDisplay);
 	Icon *icon;
+	if (bHackMeToo)
+	{
+		//g_print ("HACK ME\n");
+		bHackMeToo = FALSE;
+		if (pDock->bHorizontalDock)
+			gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseX, &pDock->iMouseY, NULL);
+		else
+			gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseY, &pDock->iMouseX, NULL);
+		cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
+	}
+	
 	while (XCheckMaskEvent (s_XDisplay, event_mask, &event))
 	{
 		icon = NULL;
@@ -882,7 +894,11 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 							gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseX, &pDock->iMouseY, NULL);
 						else
 							gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseY, &pDock->iMouseX, NULL);
+						g_print ("on met a jour de force\n");
 						cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
+						if (pDock->bInside)
+							bHackMeToo = TRUE;
+						//g_print (">>> %d;%d, %dx%d\n", pDock->iMouseX, pDock->iMouseY,pDock->iCurrentWidth,  pDock->iCurrentHeight);
 					}
 				}
 				else if (event.xproperty.atom == s_aNetNbDesktops)
@@ -1111,12 +1127,6 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				{
 					if (event.xconfigure.x + event.xconfigure.width <= 0 || event.xconfigure.x >= g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || event.xconfigure.y + event.xconfigure.height <= 0 || event.xconfigure.y >= g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // en fait il faudrait faire ca modulo le nombre de viewports * la largeur d'un bureau, car avec une fenetre a droite, elle peut revenir sur le bureau par la gauche si elle est tres large...
 					{
-						/*CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-						if (pParentDock == NULL)
-							pParentDock = pDock;  /// pertinent ?...
-						cairo_dock_detach_icon_from_dock (icon, pParentDock, TRUE);
-						cairo_dock_update_dock_size (pParentDock);
-						gtk_widget_queue_draw (pParentDock->pWidget);*/
 						CairoDock *pParentDock = cairo_dock_detach_appli (icon);
 						if (pParentDock)
 							gtk_widget_queue_draw (pParentDock->pWidget);
@@ -1124,20 +1134,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					else  // elle est sur le bureau.
 					{
 						cd_message ("cette fenetre s'est deplacee sur le bureau courant (%d;%d)", event.xconfigure.x, event.xconfigure.y);
-						gboolean bInsideDock;
-						/**if (g_list_find (pDock->icons, icon) == NULL)
-						{
-							if (! myTaskBar.bGroupAppliByClass)
-								bInsideDock = FALSE;
-							else
-							{
-								Icon *pSameClassIcon = cairo_dock_get_icon_with_class (pDock->icons, icon->cClass);
-								bInsideDock = (pSameClassIcon != NULL && pSameClassIcon->pSubDock != NULL && g_list_find (pSameClassIcon->pSubDock->icons, icon) != NULL);
-							}
-						}
-						else
-							bInsideDock = TRUE;*/
-						bInsideDock = (icon->cParentDockName != NULL);  /// a verifier ...
+						gboolean bInsideDock = (icon->cParentDockName != NULL);  // jamais verifie mais ca devrait etre bon.
 						if (! bInsideDock)
 							cairo_dock_insert_appli_in_dock (icon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 					}

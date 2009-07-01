@@ -11,3 +11,5 @@ do
 	msgmerge ${lang}.po cairo-dock.pot -o ${lang}.po
 	sed -i "/POT-Creation-Date/d" ${lang}.po
 done;
+
+sed -i "/POT-Creation-Date/d" cairo-dock.pot 

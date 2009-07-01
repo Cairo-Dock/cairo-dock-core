@@ -707,6 +707,12 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			cairo_dock_replace_keys_by_identifier (g_cConfFile, cNewConfFilePath, '+');
 			g_free (cNewConfFilePath);
 		}
+		
+		//\___________________ On charge les .conf des autres docks racines.
+		g_string_printf (sCommand, "find '%s' -mindepth 1 -maxdepth 1 -name '*.conf' ! -name '%s' -exec /bin/cp '{}' '%s' \\;", cNewThemePath, CAIRO_DOCK_CONF_FILE, g_cCurrentThemePath);
+		cd_message ("%s", sCommand->str);
+		r = system (sCommand->str);
+		
 		//\___________________ On charge les lanceurs.
 		if (g_key_file_get_boolean (pKeyFile, "Themes", "use theme launchers", NULL))
 		{

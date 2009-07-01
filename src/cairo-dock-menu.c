@@ -1175,18 +1175,16 @@ static void _cairo_dock_configure_root_dock_position (GtkMenuItem *pMenuItem, gp
 
 void cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 {
-	cd_debug ("");
+	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));
 	pDock->bMenuVisible = FALSE;
-	if (CAIRO_DOCK_IS_DOCK (pDock)/* && ! pDock->bInside*/)
-	{
-		cd_message ("on force a quitter");
-		pDock->bInside = TRUE;
-		pDock->bAtBottom = FALSE;
-		///cairo_dock_disable_entrance ();  // trop violent, il faudrait trouver un autre truc.
-		cairo_dock_on_leave_notify (pDock->pWidget,
-			NULL,
-			pDock);
-	}
+	
+	cd_message ("on force a quitter");
+	pDock->bInside = TRUE;
+	pDock->bAtBottom = FALSE;
+	///cairo_dock_disable_entrance ();  // trop violent, il faudrait trouver un autre truc.
+	cairo_dock_on_leave_notify (pDock->pWidget,
+		NULL,
+		pDock);
 }
 
 
@@ -1617,4 +1615,26 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 	}
 
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
+void cairo_dock_popup_menu_on_container (GtkWidget *menu, CairoContainer *pContainer)
+{
+	if (CAIRO_DOCK_IS_DOCK (pContainer))
+	{
+		g_signal_connect (G_OBJECT (menu),
+			"deactivate",
+			G_CALLBACK (cairo_dock_delete_menu),
+			pContainer);
+		CAIRO_DOCK (pContainer)->bMenuVisible = TRUE;
+	}
+	
+	gtk_widget_show_all (menu);
+
+	gtk_menu_popup (GTK_MENU (menu),
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		1,
+		gtk_get_current_event_time ());
 }

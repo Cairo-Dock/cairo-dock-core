@@ -590,6 +590,11 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_ANIMATE_MY_ICON(cAnimationName, iAnimationLength) \
 	cairo_dock_request_icon_animation (myIcon, myDock, cAnimationName, iAnimationLength)
 
+/** Get the dimension allocated to the surface/texture of the applet's icon.
+*/
+#define CD_APPLET_GET_MY_ICON_EXTENT(iWidthPtr, iHeightPtr) cairo_dock_get_icon_extent (myIcon, myContainer, iWidthPtr, iHeightPtr)
+
+
 /** Initiate an OpenGL drawing session on the applet's icon.
 */
 #define CD_APPLET_START_DRAWING_MY_ICON cairo_dock_begin_draw_icon (myIcon, myContainer)

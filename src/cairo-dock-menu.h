@@ -7,8 +7,12 @@
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
-
 /**
+*@file cairo-dock-menu.h This class manages the menu of Cairo-Dock.
+* It is called on a left click on a Container, builds a main menu, and notifies everybody about it, so that the menu is completed.
+*/
+
+/*
 *Ajoute une entree avec une icone GTK a un menu deja existant.
 *@param cLabel nom de l'entree, tel qu'il apparaitra dans le menu.
 *@param gtkStock nom d'une icone de GTK ou chemin complet d'une image quelconque.
@@ -30,12 +34,24 @@ G_BEGIN_DECLS
 	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem); \
 	g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK(pFunction), pData); } while (0)
 
+/** Build the main menu of a Container.
+*@param icon the icon that was left-clicked, or NULL if none.
+*@param pContainer the container that was left-clicked.
+*/
 GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer);
 
 
 gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, CairoContainer *pContainer, GtkWidget *menu);
 
+
 void cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock);
+
+/** Pop-up a menu on a container. In the case of a dock, it prevents this one from shrinking down.
+*@param menu the menu.
+*@param pContainer the container that was clicked.
+*/
+void cairo_dock_popup_menu_on_container (GtkWidget *menu, CairoContainer *pContainer);
+
 
 G_END_DECLS
 #endif

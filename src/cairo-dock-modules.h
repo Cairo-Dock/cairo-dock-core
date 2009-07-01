@@ -18,6 +18,7 @@ G_BEGIN_DECLS
 * Internal modules are just simplified version of modules, and are used internally by Cairo-Dock. As a special feature, a module can bind itself to an internal module, if its purpose is to complete it.
 */
 
+/// Categories a module can be in.
 typedef enum {
 	CAIRO_DOCK_CATEGORY_SYSTEM,
 	CAIRO_DOCK_CATEGORY_THEME,
@@ -31,6 +32,7 @@ typedef enum {
 #define CAIRO_DOCK_CATEGORY_ACCESSORY CAIRO_DOCK_CATEGORY_APPLET_ACCESSORY
 #define CAIRO_DOCK_CATEGORY_CONTROLER CAIRO_DOCK_CATEGORY_APPLET_CONTROLER
 
+/// Definition of the visit card of a module.
 struct _CairoDockVisitCard {
 	/// nom du module qui servira a l'identifier.
 	gchar *cModuleName;
@@ -74,6 +76,7 @@ struct _CairoDockVisitCard {
 	char reserved[8];
 };
 
+/// Definition of the interface of a module.
 struct _CairoDockModuleInterface {
 	void		(* initModule)			(CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile);
 	void		(* stopModule)			(CairoDockModuleInstance *pInstance);
@@ -85,6 +88,7 @@ struct _CairoDockModuleInterface {
 	void		(* save_custom_widget)	(CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile);
 };
 
+/// Definition of an instance of a module.
 struct _CairoDockModuleInstance {
 	CairoDockModule *pModule;
 	gchar *cConfFilePath;
@@ -99,9 +103,10 @@ struct _CairoDockModuleInstance {
 	gpointer *myData;*/
 };
 
-/// Construit et renvoie la carte de visite du module et son interface.
+/// Fill the visit card and the interface of a module.
 typedef gboolean (* CairoDockModulePreInit) (CairoDockVisitCard *pVisitCard, CairoDockModuleInterface *pInterface);
 
+/// Definition of an external module.
 struct _CairoDockModule {
 	/// chemin du .so
 	gchar *cSoFilePath;
@@ -143,6 +148,7 @@ typedef void (* CairoDockInternalModuleReloadFunc) (CairoInternalModuleConfigPtr
 typedef gboolean (* CairoDockInternalModuleGetConfigFunc) (GKeyFile *pKeyFile, CairoInternalModuleConfigPtr *pConfig);
 typedef void (* CairoDockInternalModuleResetConfigFunc) (CairoInternalModuleConfigPtr *pConfig);
 typedef void (* CairoDockInternalModuleResetDataFunc) (CairoInternalModuleDataPtr *pData);
+/// Definition of an internal module.
 struct _CairoDockInternalModule {
 	//\_____________ Carte de visite.
 	const gchar *cModuleName;
@@ -167,7 +173,7 @@ struct _CairoDockInternalModule {
 
 void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath);
 
-/**
+/*
 *Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire utilisateur du plug-in, sinon le copie a partir du fichier de conf fournit lors de l'installation. Cree au besoin le repertoire utilisateur du plug-in.
 *@param pVisitCard la carte de visite du module.
 *@return Le chemin du fichier de conf en espace utilisateur, ou NULL si le fichier n'a pu etre ni trouve, ni cree.
@@ -176,8 +182,17 @@ gchar *cairo_dock_check_module_conf_file (CairoDockVisitCard *pVisitCard);
 
 void cairo_dock_free_visit_card (CairoDockVisitCard *pVisitCard);
 
+/** Load a module into the table of modules. The module is opened and its visit card and interface are retrieved.
+*@param cSoFilePath path to the .so file.
+*@param erreur error set if something bad happens.
+*@return the newly allocated module.
+*/
 CairoDockModule * cairo_dock_load_module (gchar *cSoFilePath, GError **erreur);
 
+/** Load all th emodules of a given folder.
+*@param cModuleDirPath path to the a folder containing .so files.
+*@param erreur error set if something bad happens.
+*/
 void cairo_dock_preload_module_from_directory (const gchar *cModuleDirPath, GError **erreur);
 
 
@@ -193,11 +208,23 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 
 void cairo_dock_free_minimal_config (CairoDockMinimalAppletConfig *pMinimalConfig);
 
+/** Create and initialize all the instances of a module.
+*@param module the module to activate.
+*@param erreur error set if something bad happens.
+*/
 void cairo_dock_activate_module (CairoDockModule *module, GError **erreur);
 
+/** Stop and destroy all the instances of a module.
+*@param module the module to deactivate
+*/
 void cairo_dock_deactivate_module (CairoDockModule *module);
 
 void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboolean bReloadAppletConf);
+
+/** Reload all the instances of the module.
+*@param module the module to reload
+*@param bReloadAppletConf TRUE to reload the config of the instances before reloading them.
+*/
 void cairo_dock_reload_module (CairoDockModule *module, gboolean bReloadAppletConf);
 
 
@@ -211,7 +238,9 @@ void cairo_dock_configure_module_instance (GtkWindow *pParentWindow, CairoDockMo
 void cairo_dock_configure_inactive_module (GtkWindow *pParentWindow, CairoDockModule *pModule);
 void cairo_dock_configure_module (GtkWindow *pParentWindow, const gchar *cModuleName);
 
-
+/** Get the module which has a given name.
+*@param cModuleName the unique name of the module.
+*/
 CairoDockModule *cairo_dock_find_module_from_name (const gchar *cModuleName);
 
 CairoDockModuleInstance *cairo_dock_foreach_desklet (CairoDockForeachDeskletFunc pCallback, gpointer user_data);
@@ -268,6 +297,7 @@ void cairo_dock_popup_module_instance_description (CairoDockModuleInstance *pMod
 void cairo_dock_attach_to_another_module (CairoDockVisitCard *pVisitCard, const gchar *cOtherModuleName);
 
 #define cairo_dock_module_is_auto_loaded(pModule) (pModule->pInterface->initModule == NULL || pModule->pInterface->stopModule == NULL || pModule->pVisitCard->cInternalModule != NULL)
+
 
 G_END_DECLS
 #endif
