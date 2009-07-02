@@ -3798,30 +3798,15 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1093
+#, fuzzy
 msgid ""
 "2.0.6 :\n"
 " - This version fixes an ennoying bug for KDE users.\n"
 " - It also brings the new data-renderer framework (new gauges, graphs, etc)\n"
 " - Next version will be the 2.1, with a lot of new applets !"
 msgstr ""
-"2.0.6 :\n"
+"2.0.7 :\n"
 " - Cette version fixe un bug ennuyeux pour les utilisateurs de KDE.\n"
 " - Elle apporte aussi une nouvelle architecture pour les rendus de données "
 "(jauges, graphes, etc)\n"
 " - La prochaine version sera la 2.1, avec tout un tas de nouvelles applets !"
-
-#~ msgid "Indicator of drag'n'drop on icons"
-#~ msgstr "Indicateur de glisser-déposer sur les icônes"
-
-#~ msgid "Display a drop indicator on icon while dragging over them ?"
-#~ msgstr "Afficher un indicateur sur l'icone au survol du glisser-déposer ?"
-
-#~ msgid ""
-#~ "It's an image that will be displayed on the icon to indicate you can drop "
-#~ "on it. Let empty to use the default one."
-#~ msgstr ""
-#~ "C'est une image qui sera dessinée sur l'icône pour indiquer que vous "
-#~ "pouvez lacher dessus. Laissez vide pour utiliser celle par défaut."
-
-#~ msgid "Image for the indicator :"
-#~ msgstr "Image pour l'indicateur :"

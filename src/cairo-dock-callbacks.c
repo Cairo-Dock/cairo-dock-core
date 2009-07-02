@@ -651,7 +651,7 @@ gboolean cairo_dock_emit_enter_signal (CairoDock *pDock)
 
 void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 {
-	g_print ("%s (bMenuVisible:%d)\n", __func__, pDock->bMenuVisible);
+	//g_print ("%s (bMenuVisible:%d)\n", __func__, pDock->bMenuVisible);
 	pDock->iAvoidingMouseIconType = -1;
 	pDock->fAvoidingMouseMargin = 0;
 	pDock->bInside = FALSE;
@@ -730,7 +730,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 		//cd_debug ("on force bAtBottom");
 	}
 	
-	g_print ("start_shrinking\n");
+	//g_print ("start_shrinking\n");
 	///pDock->fDecorationsOffsetX = 0;
 	cairo_dock_start_shrinking (pDock);  // on commence a faire diminuer la taille des icones.
 }
@@ -738,7 +738,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 {
 	if (g_bEasterEggs && pDock->bAtBottom)
 		return FALSE;
-	g_print ("%s (bInside:%d; bAtBottom:%d; iRefCount:%d)\n", __func__, pDock->bInside, pDock->bAtBottom, pDock->iRefCount);
+	//g_print ("%s (bInside:%d; bAtBottom:%d; iRefCount:%d)\n", __func__, pDock->bInside, pDock->bAtBottom, pDock->iRefCount);
 	/**if (pDock->bAtBottom)  // || ! pDock->bInside  // mis en commentaire pour la 1.5.4
 	{
 		pDock->iSidLeaveDemand = 0;
@@ -748,7 +748,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	{
 		return FALSE;
 	}
-	g_print ("%s (main dock : %d)\n", __func__, pDock->bIsMainDock);
+	//g_print ("%s (main dock : %d)\n", __func__, pDock->bIsMainDock);
 
 	if (pDock->iRefCount == 0)
 	{
@@ -860,7 +860,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		if (x < pDock->inputArea.x || x > (pDock->inputArea.x + pDock->inputArea.width))
 			return FALSE;
 	}
-	g_print ("%s (bIsMainDock : %d; bAtTop:%d; bInside:%d; iSidMoveDown:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->bAtTop, pDock->bInside, pDock->iSidMoveDown, pDock->iMagnitudeIndex);
+	//g_print ("%s (bIsMainDock : %d; bAtTop:%d; bInside:%d; iSidMoveDown:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->bAtTop, pDock->bInside, pDock->iSidMoveDown, pDock->iMagnitudeIndex);
 	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
 	if (! cairo_dock_entrance_is_allowed (pDock))
 	{

@@ -1145,7 +1145,7 @@ static void _cairo_dock_configure_root_dock_position (GtkMenuItem *pMenuItem, gp
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
 	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 	{
-		gchar *cCommand = g_strdup_printf ("cp %s/%s %s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
+		gchar *cCommand = g_strdup_printf ("cp '%s/%s' '%s'", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
 		int r = system (cCommand);
 		g_free (cCommand);
 	}

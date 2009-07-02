@@ -360,6 +360,8 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 	g_return_val_if_fail (cDockName != NULL && pDock != NULL, FALSE);
 	if (pDock->iRefCount > 0)
 		return FALSE;
+	if (strcmp (cDockName, "cairo-dock") == 0)
+		return TRUE;
 	
 	//g_print ("%s (%s)\n", __func__, cDockName);
 	gchar *cConfFilePath = (pDock->bIsMainDock ? g_cConfFile : g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName));
@@ -374,13 +376,10 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 		return FALSE;
 	}
 	
-	GKeyFile *pKeyFile = g_key_file_new ();
-	GError *erreur = NULL;
-	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
-	if (erreur != NULL)
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
+	if (pKeyFile == NULL)
 	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
+		cd_warning ("no conf file !");
 		if (! pDock->bIsMainDock)
 			g_free (cConfFilePath);
 		return FALSE;
@@ -416,7 +415,8 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 		
 		pDock->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Position", "alignment", &bFlushConfFileNeeded, 0.5, NULL, NULL);
 		
-		pDock->bAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, "Position", "auto-hide", &bFlushConfFileNeeded, FALSE, "Auto-Hide", "auto-hide");
+		//g_print ("%s (%s, %s, main dock:%d)\n", __func__, cDockName, cConfFilePath, pDock->bIsMainDock);
+		pDock->bAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, pDock->bIsMainDock ? "Accessibility" : "Position", "auto-hide", &bFlushConfFileNeeded, FALSE, "Auto-Hide", "auto-hide");
 		
 		g_key_file_free (pKeyFile);
 	}
@@ -428,6 +428,8 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 
 void cairo_dock_remove_root_dock_config (const gchar *cDockName)
 {
+	if (! cDockName || strcmp (cDockName, "cairo-dock") == 0)
+		return ;
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
 	if (g_file_test (cConfFilePath, G_FILE_TEST_EXISTS) && cDockName && strcmp (cDockName, "cairo-dock.conf") != 0)
 	{

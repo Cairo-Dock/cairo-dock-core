@@ -1200,9 +1200,7 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 {
 	//\_____________ On construit la fenetre.
 	GtkWidget *pMainWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
-	gtk_window_set_icon_from_file (GTK_WINDOW (pMainWindow), cIconPath, NULL);
-	g_free (cIconPath);
+	gtk_window_set_icon_from_file (GTK_WINDOW (pMainWindow), CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
 	if (cTitle != NULL)
 		gtk_window_set_title (GTK_WINDOW (pMainWindow), cTitle);
 	
