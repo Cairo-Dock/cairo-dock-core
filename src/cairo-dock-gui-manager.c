@@ -27,6 +27,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-gui-filter.h"
 #include "cairo-dock-internal-system.h"
+#include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-gui-manager.h"
 
 #define CAIRO_DOCK_GROUP_ICON_SIZE 32
@@ -669,7 +670,18 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	
 	gtk_window_resize (GTK_WINDOW (s_pMainWindow),
 		MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),
-		MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock ? g_pMainDock->iMaxDockHeight : 0)));
+		MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->bHorizontalDock ? g_pMainDock->iMaxDockHeight : 0)));
+	
+	if (g_pMainDock != NULL && ! myAccessibility.bReserveSpace)  // evitons d'empieter sur le dock.
+	{
+		if (g_pMainDock->bHorizontalDock)
+		{
+			if (g_pMainDock->bDirectionUp)
+				gtk_window_move (GTK_WINDOW (s_pMainWindow), 0, 0);
+			else
+				gtk_window_move (GTK_WINDOW (s_pMainWindow), 0, g_pMainDock->iMaxDockHeight);
+		}
+	}
 	
 	gtk_widget_show_all (s_pMainWindow);
 	gtk_widget_hide (s_pApplyButton);

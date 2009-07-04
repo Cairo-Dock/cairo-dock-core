@@ -308,8 +308,13 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 			pAttribute->iMemorySize = MAX (2, pAttribute->iMemorySize);
 			if (pData->iMemorySize != pAttribute->iMemorySize)  // on redimensionne le tampon des valeurs.
 			{
+				int iOldMemorySize = pData->iMemorySize;
 				pData->iMemorySize = pAttribute->iMemorySize;
-				pData->pValuesBuffer = g_realloc (pData->pValuesBuffer, pData->iMemorySize * pData->iNbValues * sizeof (gdouble));  /// mettre a 0 les elements ajoutes...
+				pData->pValuesBuffer = g_realloc (pData->pValuesBuffer, pData->iMemorySize * pData->iNbValues * sizeof (gdouble));
+				if (pData->iMemorySize > iOldMemorySize)
+				{
+					memset (&pData->pValuesBuffer[iOldMemorySize * pData->iNbValues], 0, (pData->iMemorySize - iOldMemorySize) * pData->iNbValues * sizeof (gdouble));
+				}
 				
 				g_free (pData->pTabValues);
 				pData->pTabValues = g_new (gdouble *, pData->iMemorySize);
@@ -335,4 +340,35 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 			memcpy (&pNewRenderer->data, pData, sizeof (CairoDataToRenderer));
 		g_free (pData);
 	}
+}
+
+
+void cairo_dock_resize_data_renderer_history (Icon *pIcon, int iNewMemorySize)
+{
+	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
+	g_return_if_fail (pRenderer != NULL);
+	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
+	
+	iNewMemorySize = MAX (2, iNewMemorySize);
+	g_print ("iMemorySize : %d -> %d\n", pData->iMemorySize, iNewMemorySize);
+	if (pData->iMemorySize == iNewMemorySize)
+		return ;
+	
+	int iOldMemorySize = pData->iMemorySize;
+	pData->iMemorySize = iNewMemorySize;
+	pData->pValuesBuffer = g_realloc (pData->pValuesBuffer, pData->iMemorySize * pData->iNbValues * sizeof (gdouble));
+	if (iNewMemorySize > iOldMemorySize)
+	{
+		memset (&pData->pValuesBuffer[iOldMemorySize * pData->iNbValues], 0, (iNewMemorySize - iOldMemorySize) * pData->iNbValues * sizeof (gdouble));
+	}
+	
+	g_free (pData->pTabValues);
+	pData->pTabValues = g_new (gdouble *, pData->iMemorySize);
+	int i;
+	for (i = 0; i < pData->iMemorySize; i ++)
+	{
+		pData->pTabValues[i] = &pData->pValuesBuffer[i*pData->iNbValues];
+	}
+	if (pData->iCurrentIndex >= pData->iMemorySize)
+		pData->iCurrentIndex = pData->iMemorySize - 1;
 }

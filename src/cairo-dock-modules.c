@@ -760,6 +760,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			if (bReloadAppletConf)
 			{
 				cairo_dock_update_dock_size (CAIRO_DOCK (pNewContainer));
+				cairo_dock_calculate_dock_icons (CAIRO_DOCK (pNewContainer));
 				gtk_widget_queue_draw (pNewContainer->pWidget);
 			}
 		}

@@ -115,11 +115,19 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 *@param pNewValues a set a new values (must be of the size defined on the creation of the Renderer)*/
 void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext, double *pNewValues);
 
-/**Remove a Data Renderer on an icon. All the allocated ressources will be freed.
+/**Remove the Data Renderer of an icon. All the allocated ressources will be freed.
 *@param pIcon the icon*/
 void cairo_dock_remove_data_renderer_on_icon (Icon *pIcon);
 
+/**Reload the Data Renderer of an icon. If no attributes are provided, it simply reload it with its current attributes. History is kept.
+*@param pIcon the icon
+*@param pContainer the icon's container
+*@param pSourceContext a drawing context
+*@param pAttribute new attributes defining the Renderer, or NULL to keep the current ones*/
 void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pSourceContext, CairoDataRendererAttribute *pAttribute);
+
+void cairo_dock_resize_data_renderer_history (Icon *pIcon, int iNewMemorySize);
+
 
 ///
 /// Structure Access
