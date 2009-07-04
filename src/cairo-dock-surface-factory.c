@@ -14,6 +14,9 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
+#include "cairo-dock-draw.h"
+#include "cairo-dock-launcher-factory.h"
+#include "cairo-dock-load.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-surface-factory.h"
 
@@ -498,10 +501,17 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 	return pNewSurface;
 }
 
-cairo_surface_t *cairo_dock_create_surface_for_icon (const gchar *cImagePath, cairo_t* pSourceContext, double fImageWidth, double fImageHeight)
+cairo_surface_t *cairo_dock_create_surface_from_image_simple (const gchar *cImageFile, cairo_t* pSourceContext, double fImageWidth, double fImageHeight)
 {
+	g_return_val_if_fail (cImageFile != NULL, NULL);
 	double fImageWidth_ = fImageWidth, fImageHeight_ = fImageHeight;
-	return cairo_dock_create_surface_from_image (cImagePath,
+	gchar *cImagePath;
+	if (*cImageFile == '/')
+		cImagePath = (gchar *)cImageFile;
+	else
+		cImagePath = cairo_dock_generate_file_path (cImageFile);
+		
+	cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cImagePath,
 		pSourceContext,
 		1.,
 		fImageWidth,
@@ -511,6 +521,34 @@ cairo_surface_t *cairo_dock_create_surface_for_icon (const gchar *cImagePath, ca
 		&fImageHeight_,
 		NULL,
 		NULL);
+	if (cImagePath != cImageFile)
+		g_free (cImagePath);
+	return pSurface;
+}
+
+cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImageFile, cairo_t* pSourceContext, double fImageWidth, double fImageHeight)
+{
+	g_return_val_if_fail (cImageFile != NULL, NULL);
+	double fImageWidth_ = fImageWidth, fImageHeight_ = fImageHeight;
+	gchar *cIconPath;
+	if (*cImageFile == '/')
+		cIconPath = (gchar *)cImageFile;
+	else
+		cIconPath = cairo_dock_search_icon_s_path (cImageFile);
+		
+	cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cIconPath,
+		pSourceContext,
+		1.,
+		fImageWidth,
+		fImageHeight,
+		CAIRO_DOCK_FILL_SPACE,
+		&fImageWidth_,
+		&fImageHeight_,
+		NULL,
+		NULL);
+	if (cIconPath != cImageFile)
+		g_free (cIconPath);
+	return pSurface;
 }
 
 
@@ -793,8 +831,10 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, c
 	cairo_surface_set_device_offset (pNewSurface,
 					 log.width / 2. - ink.x,
 					 log.height     - ink.y);*/
-	*fTextXOffset = (log.width * fZoomX / 2. - ink.x) / fMaxScale;
-	*fTextYOffset = - (pLabelDescription->iSize - (log.height - ink.y)) / fMaxScale ;  // en tenant compte de l'ecart du bas du texte.
+	if (fTextXOffset != NULL)
+		*fTextXOffset = (log.width * fZoomX / 2. - ink.x) / fMaxScale;
+	if (fTextYOffset != NULL)
+		*fTextYOffset = - (pLabelDescription->iSize - (log.height - ink.y)) / fMaxScale ;  // en tenant compte de l'ecart du bas du texte.
 	// *fTextYOffset = - (ink.y) / fMaxScale;  // pour tenir compte de l'ecart du bas du texte.
 	
 	*iTextWidth = *iTextWidth / fMaxScale;

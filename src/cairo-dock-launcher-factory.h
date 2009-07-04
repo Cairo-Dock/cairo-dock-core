@@ -13,6 +13,7 @@ G_BEGIN_DECLS
 
 /** Search the path of an icon into the defined folders/icons themes. It handles the '~' caracter.
  * @param cFileName name of the icon file.
+ * @return the complete path of the icon, or NULL if not found.
  */
 gchar *cairo_dock_search_icon_s_path (const gchar *cFileName);
 
@@ -25,10 +26,16 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 
 
 /** Create an Icon from a given desktop file, and fill its buffers. The resulting icon can directly be used inside a container. Class inhibating is handled.
+ * @param cDesktopFileName nameof the desktop file, taken in the "launchers" folder of the current theme.
+ * @param pSourceContext a drawing context, not altered.
+ * @return the newly created icon.
 */
 Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName, cairo_t *pSourceContext);
 
 /** Reload an Icon from a given desktop file, and fill its buffers. It doesn't handle the side-effects like modifying the class, the sub-dock's view, the container, etc.
+ * @param cDesktopFileName nameof the desktop file, taken in the "launchers" folder of the current theme.
+ * @param pSourceContext a drawing context, not altered.
+ * @param icon the Icon to reload.
 */
 void cairo_dock_reload_icon_from_desktop_file (const gchar *cDesktopFileName, cairo_t *pSourceContext, Icon *icon);
 

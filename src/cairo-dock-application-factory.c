@@ -548,12 +548,12 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	icon->bIsFullScreen = bIsFullScreen;
 	icon->bIsDemandingAttention = bDemandsAttention;
 	
-	cairo_dock_get_window_geometry (Xid,
+	cairo_dock_get_xwindow_geometry (Xid,
 		&icon->windowGeometry.x,
 		&icon->windowGeometry.y,
 		&icon->windowGeometry.width,
 		&icon->windowGeometry.height);
-	icon->iNumDesktop = cairo_dock_get_window_desktop (Xid);
+	icon->iNumDesktop = cairo_dock_get_xwindow_desktop (Xid);
 	#ifdef HAVE_XEXTEND
 	if (myTaskBar.bShowThumbnail)
 	{
@@ -571,7 +571,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	if (pNameBuffer)
 		XFree (pNameBuffer);
 	
-	cairo_dock_set_window_mask (Xid, PropertyChangeMask | StructureNotifyMask);
+	cairo_dock_set_xwindow_mask (Xid, PropertyChangeMask | StructureNotifyMask);
 
 	return icon;
 }

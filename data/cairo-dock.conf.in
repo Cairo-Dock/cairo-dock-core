@@ -182,7 +182,7 @@ max name length = 15
 
 #e-[-.6;.6] Transparency of icons whose window is or isn't minimized :
 #{To the right, you can control the transparency of minimized windows, to the left the transparency of visible windows. The more you go aside, the more the concerned icons will be transparent; on the middle, icons are always plain.}
-visibility alpha = 0.25
+visibility alpha = 0.35
 
 
 [System]
@@ -320,7 +320,7 @@ line width = 2
 #{in pixels.}
 frame margin = 2
 
-#c+4[0;1] Color of the extern line (r,v,b,a) :
+#C+ Color of the extern line (r,v,b,a) :
 line color = 0.0; 0.0; 0.8; 0.4
 
 #b+ Are the bottom left and right corners rounded ?
@@ -343,10 +343,10 @@ repeat image = true
 #F+[...or Gradation;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-gradation.png]
 frame3 = 
 
-#c+4[0;1] Bright color (red, green, blue, alpha) :
+#C+ Bright color (red, green, blue, alpha) :
 stripes color bright = 0.933; 0.933; 0.925; 0.4
 
-#c+4[0;1] Dark color (red, green, blue, alpha) :
+#C+ Dark color (red, green, blue, alpha) :
 stripes color dark = 0.827; 0.843; 0.811; 0.6
 
 #f+[-90;90] Angle of the stripes / gradation, in relation to the vertical (in degree) :
@@ -377,11 +377,11 @@ italic = false
 #i+[1;9] Weight (between 1 and 9, the bigger, the heavier):
 weight = 5
 
-#c+3[0;1] Start color :
+#c+ Start color :
 #{It's the first color of the gradation.}
 text color start = 1;1;1
 
-#c+3[0;1] Stop color :
+#c+ Stop color :
 #{It's the second color of the gradation. Set it to the same value as the first if you just don't want to have a gradation.}
 text color stop = 1;1;1
 
@@ -389,8 +389,8 @@ text color stop = 1;1;1
 #{If checked, the pattern will go from top to bottom, otherwise from left to right.}
 vertical label pattern = false
 
-#c+4[0;1] Color of the label's background :
-#{If you set it to fully transparent, there will be no background for the text, but the letters' outline will be thicker.}
+#C+ Color of the label's background :
+#{If you set it to fully transparent, there will be no background for the text, but the margin around the text will still be effective.}
 text background color =0;0;0;.5
 
 #i+[0;20] Margin around the text (in pixels) :
@@ -461,7 +461,7 @@ frame_string =
 #i+[0;20] Linewidth of the string, in pixels (0 to not use string) :
 string width = 0
 
-#c+4[0;1] Color of the string (red, blue, green, alpha) :
+#C+ Color of the string (red, blue, green, alpha) :
 string color = 0.0; 0.0; 0.8; 0.4
 
 #X+[Icons size]
@@ -546,7 +546,7 @@ relative icon size = 1.
 #F+[Bubble;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-bubble.png]
 frame_bubble =
 
-#c+4[0;1] Background color of the bubble (r,v,b,a) :
+#C+ Background color of the bubble (r,v,b,a) :
 background color = 1.0; 1.0; 1.0; 0.8
 
 #v
@@ -558,7 +558,7 @@ decorator = comics
 #F+[Text;gtk-select-font]
 frame_text =
 
-#c+3[0;1] Text color (r,g,b) :
+#c+ Text color (r,g,b) :
 text color = 0.0; 0.0; 0.0
 
 #b+ Homogeneous with icons' label ?
@@ -658,7 +658,7 @@ depth rotate image =
 #F+[Indicator of the active window]
 frame_window =
 
-#c+4[0;1] Color of the frame (r,v,b,a) :
+#C+ Color of the frame (r,v,b,a) :
 #{Set transparency to 0 if you don't want to use an indicator.}
 active color = 0.; 0.4; 0.8; 0.25
 

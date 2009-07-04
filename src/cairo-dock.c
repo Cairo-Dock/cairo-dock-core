@@ -95,8 +95,8 @@
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-gauge2.h"
-#include "cairo-dock-graph2.h"
+#include "cairo-dock-gauge.h"
+#include "cairo-dock-graph.h"
 
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
 GdkWindowTypeHint g_iWmHint = GDK_WINDOW_TYPE_HINT_DOCK;  // hint pour la fenetre du dock principal.
@@ -495,7 +495,7 @@ int main (int argc, char** argv)
 	
 	//\___________________ On enregistre les rendus de donnees.
 	cairo_dock_register_data_renderer_entry_point ("gauge", (CairoDataRendererNewFunc) cairo_dock_new_gauge);
-	cairo_dock_register_data_renderer_entry_point ("graph", (CairoDataRendererNewFunc) cairo_dock_new_graph2);
+	cairo_dock_register_data_renderer_entry_point ("graph", (CairoDataRendererNewFunc) cairo_dock_new_graph);
 	
 	//\___________________ On initialise le gestionnaire de modules et on pre-charge les modules existant.
 	if (g_module_supported () && ! bSafeMode)

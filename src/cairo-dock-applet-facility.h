@@ -54,11 +54,11 @@ void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surf
 
 /** Apply an image on the context of an icon, clearing it beforehand, and adding the reflect.
 *@param pIconContext the drawing context; is not altered by the function.
-*@param cImagePath path of an image t apply on the icon.
+*@param cImagePath path of an image to apply on the icon.
 *@param pIcon the icon.
 *@param pContainer the container of the icon.
 */
-void cairo_dock_set_image_on_icon (cairo_t *pIconContext, gchar *cImagePath, Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cImagePath, Icon *pIcon, CairoContainer *pContainer);
 
 
 void cairo_dock_set_hours_minutes_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds);
@@ -119,7 +119,7 @@ void cairo_dock_open_module_config_on_demand (int iClickedButton, GtkWidget *pIn
 *@return a gboolean.
 */
 #define CD_CONFIG_GET_BOOLEAN_WITH_DEFAULT(cGroupName, cKeyName, bDefaultValue) cairo_dock_get_boolean_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, bDefaultValue, NULL, NULL)
-/** Get the value of a 'booleen' from the conf file, with TRUE as default value.
+/** Get the value of a 'boolean' from the conf file, with TRUE as default value.
 *@param cGroupName name of the group in the conf file.
 *@param cKeyName name of the key in the conf file.
 *@return a gboolean.
@@ -340,7 +340,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 /////////////////////////
 
 //\______________________ init, config, reload.
-/** Path of the applet instance's conf file.
+/** Path of the applet's instance's conf file.
 */
 #define CD_APPLET_MY_CONF_FILE myApplet->cConfFilePath
 /** Key file of the applet instance, availale during the init, config, and reload.
@@ -370,13 +370,13 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_CLICKED_CONTAINER pClickedContainer
 
 //\______________________ clic droit
-/**  TRUE if the 'SHIFT' key was pressed during the click ?
+/**  TRUE if the 'SHIFT' key was pressed during the click.
 */
 #define CD_APPLET_SHIFT_CLICK (iButtonState & GDK_SHIFT_MASK)
-/**  TRUE if the 'CTRL' key was pressed during the click ?
+/**  TRUE if the 'CTRL' key was pressed during the click.
 */
 #define CD_APPLET_CTRL_CLICK (iButtonState & GDK_CONTROL_MASK)
-/**  TRUE if the 'ALT' key was pressed during the click ?
+/**  TRUE if the 'ALT' key was pressed during the click.
 */
 #define CD_APPLET_ALT_CLICK (iButtonState & GDK_MOD1_MASK)
 
@@ -392,10 +392,10 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 //\______________________ scroll
 #define CD_APPLET_SCROLL_DIRECTION iDirection
-/** TRUE if the users scrolled up.
+/** TRUE if the user scrolled up.
 */
 #define CD_APPLET_SCROLL_UP (CD_APPLET_SCROLL_DIRECTION == GDK_SCROLL_UP)
-/** TRUE if the users scrolled down.
+/** TRUE if the user scrolled down.
 */
 #define CD_APPLET_SCROLL_DOWN (CD_APPLET_SCROLL_DIRECTION == GDK_SCROLL_DOWN)
 
@@ -408,98 +408,87 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_REDRAW_MY_ICON \
 	cairo_dock_redraw_icon (myIcon, myContainer)
+/** Redraw the applet's container (as soon as the main loop is available).
+*/
 #define CAIRO_DOCK_REDRAW_MY_CONTAINER \
 	cairo_dock_redraw_container (myContainer)
-/** Reload the reflect of the applet's icon (useless in OpenGL mode).
+/** Reload the reflect of the applet's icon (do nothing in OpenGL mode).
 */
 #define CD_APPLET_UPDATE_REFLECT_ON_MY_ICON \
 	if (myContainer->bUseReflect) cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer)
 
-/**
-*Charge une image dans une surface, aux dimensions of the icon of l'applet.
-*@param cImagePath chemin du fichier of l'image.
-*@return la surface nouvellement creee.
+/** Load an image into a surface, at the same size as the applet's icon. If the image is given by its sole name, it is searched inside the current theme root folder. 
+*@param cImagePath path or name of an image.
+*@return the newly allocated surface.
 */
 #define CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET(cImagePath) \
-	cairo_dock_create_surface_for_icon (cImagePath, myDrawContext, myIcon->fWidth * (myDock ? (1 + g_fAmplitude) / myDock->fRatio : 1), myIcon->fHeight* (myDock ? (1 + g_fAmplitude) / myDock->fRatio : 1))
-/**
-*Charge une image utilisateur dans une surface, aux dimensions of the icon of l'applet, ou une image par defaut si la premiere est NULL.
-*@param cUserImageName nom of l'image utilisateur.
-*@param cDefaultLocalImageName icone par defaut
-*@return la surface nouvellement creee.
+	cairo_dock_create_surface_from_image_simple (cImagePath, myDrawContext, myIcon->fWidth * (myDock ? (1 + g_fAmplitude) / myDock->fRatio : 1), myIcon->fHeight* (myDock ? (1 + g_fAmplitude) / myDock->fRatio : 1))
+
+/** Load a user image into a surface, at the same size as the applet's icon, or a default image taken in the installed folder of the applet if the first one is NULL. If the user image is given by its sole name, it is searched inside the current theme root folder.
+*@param cUserImageName name or path of an user image.
+*@param cDefaultLocalImageName default image
+*@return the newly allocated surface.
 */
-#define CD_APPLET_LOAD_USER_SURFACE_FOR_MY_APPLET(cUserImageName, cDefaultLocalImageName) \
+#define CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET_WITH_DEFAULT(cUserImageName, cDefaultLocalImageName) \
 	__extension__ ({\
-	gchar *_cImagePath; \
+	cairo_surface_t *pSurface; \
 	if (cUserImageName != NULL) \
-		_cImagePath = cairo_dock_generate_file_path (cUserImageName); \
+		pSurface = CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET (cUserImageName); \
 	else if (cDefaultLocalImageName != NULL)\
-		_cImagePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, cDefaultLocalImageName); \
+		pSurface = CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET (MY_APPLET_SHARE_DATA_DIR"/"cDefaultLocalImageName); \
 	else\
-		_cImagePath = NULL;\
-	cairo_surface_t *pSurface = CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET (_cImagePath); \
-	g_free (_cImagePath);\
+		pSurface = NULL;\
 	pSurface; })
 
-
-/**
-*Applique une surface existante sur le contexte of dessin of l'applet, et la rafraichit.
-*@param pSurface la surface cairo a dessiner.
+/** Apply a surface on the applet's icon, and redraw it.
+*@param pSurface the surface to draw on your icon.
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON(pSurface) do { \
 	cairo_dock_set_icon_surface_with_reflect (myDrawContext, pSurface, myIcon, myContainer); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
-/**
-*Applique une surface existante sur le contexte of dessin of l'applet en la zoomant, et la redessine.
-*@param pSurface la surface cairo a dessiner.
-*@param fScale le facteur of zoom (a 1 la surface remplit toute the icon).
+
+/** Apply a surface on the applet's icon, with a zoom factor and centered, and redraw it.
+*@param pSurface the surface to draw on your icon.
+*@param fScale zoom factor (at 1 the surface will fill all the icon).
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_ZOOM(pSurface, fScale) do { \
 	cairo_dock_set_icon_surface_full (myDrawContext, pSurface, fScale, 1., myIcon, myContainer); \
 	cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
-/**
-*Applique une surface existante sur le contexte of dessin of l'applet with un facteur of transparence, et la rafraichit.
-*@param pSurface la surface cairo a dessiner.
-*@param fAlpha la transparence (dans [0 , 1]).
+
+/** Apply a surface on the applet's icon with a transparency factor, and redraw it.
+*@param pSurface the surface to draw on your icon.
+*@param fAlpha transparency (in [0,1]).
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_ALPHA(pSurface, fAlpha) do { \
 	cairo_dock_set_icon_surface_full (myDrawContext, pSurface, 1., fAlpha, myIcon, myContainer); \
 	cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
-/**
-*Applique une surface existante sur le contexte of dessin of l'applet et ajoute une barre a sa base, et la rafraichit.
-*@param pSurface la surface cairo a dessiner.
-*@param fValue la valeur en fraction of la valeur max (donc dans [0 , 1]).
+
+/** Apply a surface on the applet's icon with add a bar at the bottom, and redraw it. The bar is drawn at the bottom of the icon with a gradation from red to green and a given length.
+*@param pSurface the surface to draw on your icon.
+*@param fValue the value representing a percentage, in [-1,1]. If negative, the gradation is inverted, and the absolute value is used.
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_BAR(pSurface, fValue) do { \
 	cairo_dock_set_icon_surface_with_bar (myDrawContext, pSurface, fValue, myIcon, myContainer); \
 	cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
 
-/**
-*Applique une image definie par son chemin sur le contexte of dessin of l'applet, mais ne la rafraichit pas. L'image est redimensionnee aux dimensions of the icon.
-*@param cImagePath chemin du fichier of l'image.
+/** Apply an image on the applet's icon. The image is resized at the same size as the icon. Does not trigger the icon refresh.
+*@param cImagePath path to an image.
 */
-#define CD_APPLET_SET_IMAGE_ON_MY_ICON(cImagePath) do { \
-	if (cImagePath != myIcon->acFileName) \
-	{ \
-		g_free (myIcon->acFileName); \
-		myIcon->acFileName = g_strdup (cImagePath); \
-	} \
-	cairo_dock_set_image_on_icon (myDrawContext, cImagePath, myIcon, myContainer); } while (0)
+#define CD_APPLET_SET_IMAGE_ON_MY_ICON(cImagePath)  \
+	cairo_dock_set_image_on_icon (myDrawContext, cImagePath, myIcon, myContainer)
 
-/**
-*Idem que precedemment mais l'image est definie par son nom localement au repertoire d'installation of l'applet
-*@param cImageName nom du fichier of l'image 
+/** Apply an image, taken inside the installation folder of the applet, on the applet's icon. The image is resized at the same size as the icon. Does not trigger the icon refresh.
+*@param cImageName name of an image 
 */
 #define CD_APPLET_SET_LOCAL_IMAGE_ON_MY_ICON(cImageName) do { \
 	gchar *_cImageFilePath = g_strconcat (MY_APPLET_SHARE_DATA_DIR, "/", cImageName, NULL); \
 	CD_APPLET_SET_IMAGE_ON_MY_ICON (_cImageFilePath); \
 	g_free (_cImageFilePath); } while (0)
 
-/**
-*Idem que precedemment mais l'image est definie soit relativement au repertoire utilisateur, soit relativement au repertoire d'installation of l'applet si la 1ere est NULL.
+/** Apply an image on the applet's icon at the same size as the applet's icon, or a default image taken in the installed folder of the applet if the first one is NULL. If the user image is given by its sole name, it is searched inside the current theme root folder.
 *@param cUserImageName nom du fichier of l'image cote utilisateur.
 *@param cDefaultLocalImageName image locale par defaut cote installation.
 */
@@ -512,49 +501,40 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	CD_APPLET_SET_IMAGE_ON_MY_ICON (cImagePath); \
 	g_free (cImagePath); } while (0)
 
+/** Apply the default icon on the applet's icon if there is no image yet.
+*/
 #define CD_APPLET_SET_DEFAULT_IMAGE_ON_MY_ICON_IF_NONE do { \
 	if (myIcon->acFileName == NULL) { \
-		CD_APPLET_SET_LOCAL_IMAGE_ON_MY_ICON (MY_APPLET_ICON_FILE); } } while (0)
-
-/**
-*Applique une surface existante sur le contexte of dessin of l'applet, et la redessine. La surface est redimensionnee aux dimensions of the icon.
-*@param pSurface
-*@param fScale
-*/
-#define CD_APPLET_SET_ZOOMED_SURFACE_ON_MY_ICON(pSurface, fScale) do { \
-	cairo_dock_set_icon_surface_with_zoom (myDrawContext, pSurface, fScale, myIcon, myContainer); \
-	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
+		CD_APPLET_SET_IMAGE_ON_MY_ICON (MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE); } } while (0)
 
 
-  /////////////
- /// LABEL ///
-/////////////
-/**
-*Remplace l'etiquette of the icon of l'applet par une nouvelle.
-*@param cIconName la nouvelle etiquette.
+  ///////////
+ // LABEL //
+///////////
+/** Set a new label on the applet's icon.
+*@param cIconName the label.
 */
 #define CD_APPLET_SET_NAME_FOR_MY_ICON(cIconName) \
 	cairo_dock_set_icon_name (myDrawContext, cIconName, myIcon, myContainer)
-/**
-*Remplace l'etiquette of the icon of l'applet par une nouvelle.
-*@param cIconNameFormat la nouvelle etiquette au format 'printf'.
+/** Set a new label on the applet's icon.
+*@param cIconNameFormat the label, in a 'printf'-like format.
+*@param ... values to be written in the string.
 */
 #define CD_APPLET_SET_NAME_FOR_MY_ICON_PRINTF(cIconNameFormat, ...) \
 	cairo_dock_set_icon_name_full (myDrawContext, myIcon, myContainer, cIconNameFormat, ##__VA_ARGS__)
 
 
-  /////////////////
- /// QUICK-INFO///
-/////////////////
-/**
-*Ecris une info-rapide sur the icon of l'applet.
-*@param cQuickInfo l'info-rapide. Ce doit etre une chaine of caracteres particulièrement petite, representant une info concise, puisque ecrite directement sur the icon.
+  ///////////////
+ // QUICK-INFO//
+///////////////
+/** Set a quick-info on the applet's icon.
+*@param cQuickInfo the quick-info. This is a small text (a few characters) that is superimposed on the icon.
 */
 #define CD_APPLET_SET_QUICK_INFO_ON_MY_ICON(cQuickInfo) \
 	cairo_dock_set_quick_info (myDrawContext, cQuickInfo, myIcon, myDock ? (1 + myIcons.fAmplitude) / 1 : 1)
-/**
-*Ecris une info-rapide sur the icon of l'applet.
-*@param cQuickInfoFormat l'info-rapide, au format 'printf'. Ce doit etre une chaine of caracteres particulièrement petite, representant une info concise, puisque ecrite directement sur the icon.
+/** Set a quick-info on the applet's icon.
+*@param cQuickInfoFormat the label, in a 'printf'-like format.
+*@param ... values to be written in the string.
 */
 #define CD_APPLET_SET_QUICK_INFO_ON_MY_ICON_PRINTF(cQuickInfoFormat, ...) \
 	cairo_dock_set_quick_info_full (myDrawContext, myIcon, myContainer, cQuickInfoFormat, ##__VA_ARGS__)
@@ -583,17 +563,24 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_SET_STATIC_ICON cairo_dock_set_icon_static (myIcon)
 
-/** Request an animation on applet's icon.
+/** Launch an animation on the applet's icon.
 *@param cAnimationName name of the animation.
 *@param iAnimationLength number of rounds the animation should be played.
 */
 #define CD_APPLET_ANIMATE_MY_ICON(cAnimationName, iAnimationLength) \
 	cairo_dock_request_icon_animation (myIcon, myDock, cAnimationName, iAnimationLength)
 
+/** Stop any animation on the applet's icon.
+*/
+#define CD_APPLET_STOP_ANIMATING_MY_ICON \
+	cairo_dock_stop_icon_animation (myIcon)
+
+
 /** Get the dimension allocated to the surface/texture of the applet's icon.
+*@param iWidthPtr pointer to the width.
+*@param iHeightPtr pointer to the height.
 */
 #define CD_APPLET_GET_MY_ICON_EXTENT(iWidthPtr, iHeightPtr) cairo_dock_get_icon_extent (myIcon, myContainer, iWidthPtr, iHeightPtr)
-
 
 /** Initiate an OpenGL drawing session on the applet's icon.
 */
@@ -610,30 +597,26 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_FINISH_DRAWING_MY_ICON cairo_dock_end_draw_icon (myIcon, myContainer)
 
+
 /** Add a Data Renderer the applet's icon.
+*@param pAttr the attributes of the Data Renderer. They allow you to define its properties.
 */
 #define CD_APPLET_ADD_DATA_RENDERER_ON_MY_ICON(pAttr) cairo_dock_add_new_data_renderer_on_icon (myIcon, myContainer, myDrawContext, pAttr)
+
 /** Reload the Data Renderer of the applet's icon. Pass NULL as the attributes to simply reload the current data renderer without changing any of its parameters. Previous values are kept.
+*@param pAttr the attributes of the Data Renderer, or NULL to simply reload the Data Renderer as it it.
 */
 #define CD_APPLET_RELOAD_MY_DATA_RENDERER(pAttr) cairo_dock_reload_data_renderer_on_icon (myIcon, myContainer, myDrawContext, pAttr)
+
 /** Add new values to the Data Renderer of the applet's icon. Values are a table of 'double', having the same size as defined when the data renderer was created (1 by default).
+*@param pValues the values, a table of double of the correct size.
 */
 #define CD_APPLET_RENDER_NEW_DATA_ON_MY_ICON(pValues) cairo_dock_render_new_data_on_icon (myIcon, myContainer, myDrawContext, pValues)
+
 /** Completely remove the Data Renderer of the applet's icon, including the values associated with.
 */
 #define CD_APPLET_REMOVE_MY_DATA_RENDERER cairo_dock_remove_data_renderer_on_icon (myIcon)
 
-///__________________ deprecated ___________________
-#define CD_APPLET_RENDER_GAUGE(pGauge, fValue) cairo_dock_render_gauge (myDrawContext, myContainer, myIcon, pGauge, fValue)
-#define CD_APPLET_RENDER_GAUGE_MULTI_VALUE(pGauge, pValueList) cairo_dock_render_gauge_multi_value (myDrawContext, myContainer, myIcon, pGauge, pValueList)
-#define CD_APPLET_RENDER_GRAPH(pGraph) cairo_dock_render_graph (myDrawContext, myContainer, myIcon, pGraph);
-#define CD_APPLET_RENDER_GRAPH_NEW_VALUE(pGraph, fValue) do { \
-	cairo_dock_update_graph (pGraph, fValue); \
-	CD_APPLET_RENDER_GRAPH (pGraph); } while (0)
-#define CD_APPLET_RENDER_GRAPH_NEW_VALUES(pGraph, fValue, fValue2) do { \
-	cairo_dock_update_double_graph (pGraph, fValue, fValue2); \
-	CD_APPLET_RENDER_GRAPH (pGraph); } while (0)
-///__________________ end of deprecated ____________
 
 #define CD_APPLET_GET_MY_ICON_DATA(pIcon) cairo_dock_get_icon_data (pIcon, myApplet)
 #define CD_APPLET_GET_MY_CONTAINER_DATA(pContainer) cairo_dock_get_container_data (pContainer, myApplet)
@@ -645,8 +628,10 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_SET_MY_DOCK_DATA(pDock, pData) CD_APPLET_SET_MY_CONTAINER_DATA (CAIRO_CONTAINER (pDock), pData)
 #define CD_APPLET_SET_MY_DESKLET_DATA(pDesklet, pData) CD_APPLET_SET_MY_CONTAINER_DATA (CAIRO_CONTAINER (pDesklet), pData)
 
-#define CD_APPLET_LOAD_LOCAL_TEXTURE(cImageName) cairo_dock_load_local_texture (cImageName, MY_APPLET_SHARE_DATA_DIR)
+#define CD_APPLET_LOAD_LOCAL_TEXTURE(cImageName) cairo_dock_create_texture_from_image (MY_APPLET_SHARE_DATA_DIR"/"cImageName)
 
+/** Say if the applet's container currently supports OpenGL.
+*/
 #define CD_APPLET_MY_CONTAINER_IS_OPENGL (g_bUseOpenGL && ((myDock && myDock->render_opengl) || (myDesklet && myDesklet->pRenderer && myDesklet->pRenderer->render_opengl)))
 
 #define CD_APPLET_SET_TRANSITION_ON_MY_ICON(render_step_cairo, render_step_opengl, bFastPace, iDuration, bRemoveWhenFinished) \
@@ -672,6 +657,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_SET_DESKLET_RENDERER_WITH_DATA(cRendererName, pConfig) do { \
 	cairo_dock_set_desklet_renderer_by_name (myDesklet, cRendererName, NULL, CAIRO_DOCK_LOAD_ICONS_FOR_DESKLET, (CairoDeskletRendererConfigPtr) pConfig); \
 	myDrawContext = cairo_create (myIcon->pIconBuffer); } while (0)
+
 /** Set a renderer to the applet's desklet and create myDrawContext. Call it at the beginning of init and also reload, to take into account the desklet's resizing.
 *@param cRendererName name of the renderer.
 */
@@ -726,6 +712,10 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 			myIcon->pSubDock->pFirstDrawnElement = NULL; } } } while (0)
 
 /** Load a list of icons into an applet, with the given renderer for the sub-dock or the desklet).
+*@param pIconList a list of icons. It will belong to the applet's container after that.
+*@param cDockRendererName name of a renderer in case the applet is in dock mode.
+*@param cDeskletRendererName name of a renderer in case the applet is in desklet mode.
+*@param pDeskletRendererConfig possible configuration parameters for the desklet renderer.
 */
 #define CD_APPLET_LOAD_MY_ICONS_LIST(pIconList, cDockRendererName, cDeskletRendererName, pDeskletRendererConfig) do {\
 	if (myDock) {\
@@ -766,8 +756,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 		cairo_dock_inhibate_class (cApplicationClass, myIcon); } while (0)
 
 //\_________________________________ INTERNATIONNALISATION
-/**
-*Macro for gettext, similar to _() et N_(), but with the domaine of the applet. Surround all your strings with this, so that 'xgettext' can find them and automatically include them in the translation files.
+/** Macro for gettext, similar to _() et N_(), but with the domain of the applet. Surround all your strings with this, so that 'xgettext' can find them and automatically include them in the translation files.
 */
 #define D_(message) dgettext (MY_APPLET_GETTEXT_DOMAIN, message)
 #define _D D_

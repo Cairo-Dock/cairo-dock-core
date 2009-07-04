@@ -928,3 +928,87 @@ GList *cairo_dock_get_first_drawn_element_linear (GList *icons)
 		pFirstDrawnElement = ic->next;
 	return pFirstDrawnElement;
 }
+
+
+void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboolean bUpdateBefore)
+{
+	cd_debug ("on montre le dock fils");
+	CairoDock *pSubDock = pPointedIcon->pSubDock;
+	g_return_if_fail (pSubDock != NULL);
+	
+	if (GTK_WIDGET_VISIBLE (pSubDock->pWidget))  // il est deja visible.
+	{
+		if (pSubDock->bIsShrinkingDown)  // il est en cours de diminution, on renverse le processus.
+		{
+			cairo_dock_start_growing (pSubDock);
+		}
+		return ;
+	}
+
+	if (bUpdateBefore)
+	{
+		pParentDock->calculate_icons (pParentDock);  // c'est un peu un hack pourri, l'idee c'est de recalculer la position exacte de l'icone pointee pour pouvoir placer le sous-dock precisement, car sa derniere position connue est decalee d'un coup de molette par rapport a la nouvelle, ce qui fait beaucoup. L'ideal etant de le faire que pour l'icone concernee ...
+	}
+
+	pSubDock->set_subdock_position (pPointedIcon, pParentDock);
+
+	pSubDock->fFoldingFactor = (mySystem.bAnimateSubDock ? mySystem.fUnfoldAcceleration : 0);
+	pSubDock->bAtBottom = FALSE;
+	int iNewWidth, iNewHeight;
+	if (pSubDock->fFoldingFactor == 0)
+	{
+		cd_debug ("  on montre le sous-dock sans animation");
+		cairo_dock_get_window_position_and_geometry_at_balance (pSubDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);  // CAIRO_DOCK_NORMAL_SIZE -> CAIRO_DOCK_MAX_SIZE pour la 1.5.4
+		pSubDock->bAtBottom = TRUE;  // bAtBottom ajoute pour la 1.5.4
+
+		gtk_window_present (GTK_WINDOW (pSubDock->pWidget));
+
+		if (pSubDock->bHorizontalDock)
+			gdk_window_move_resize (pSubDock->pWidget->window,
+				pSubDock->iWindowPositionX,
+				pSubDock->iWindowPositionY,
+				iNewWidth,
+				iNewHeight);
+		else
+			gdk_window_move_resize (pSubDock->pWidget->window,
+				pSubDock->iWindowPositionY,
+				pSubDock->iWindowPositionX,
+				iNewHeight,
+				iNewWidth);
+
+		/*if (pSubDock->bHorizontalDock)
+			gtk_window_move (GTK_WINDOW (pSubDock->pWidget), pSubDock->iWindowPositionX, pSubDock->iWindowPositionY);
+		else
+			gtk_window_move (GTK_WINDOW (pSubDock->pWidget), pSubDock->iWindowPositionY, pSubDock->iWindowPositionX);
+
+		gtk_window_present (GTK_WINDOW (pSubDock->pWidget));*/
+		///gtk_widget_show (GTK_WIDGET (pSubDock->pWidget));
+	}
+	else
+	{
+		cd_debug ("  on montre le sous-dock avec animation");
+		cairo_dock_get_window_position_and_geometry_at_balance (pSubDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
+
+		gtk_window_present (GTK_WINDOW (pSubDock->pWidget));
+		///gtk_widget_show (GTK_WIDGET (pSubDock->pWidget));
+		if (pSubDock->bHorizontalDock)
+			gdk_window_move_resize (pSubDock->pWidget->window,
+				pSubDock->iWindowPositionX,
+				pSubDock->iWindowPositionY,
+				iNewWidth,
+				iNewHeight);
+		else
+			gdk_window_move_resize (pSubDock->pWidget->window,
+				pSubDock->iWindowPositionY,
+				pSubDock->iWindowPositionX,
+				iNewHeight,
+				iNewWidth);
+
+		cairo_dock_start_growing (pSubDock);  // on commence a faire grossir les icones.
+	}
+	//g_print ("  -> Gap %d;%d -> W(%d;%d) (%d)\n", pSubDock->iGapX, pSubDock->iGapY, pSubDock->iWindowPositionX, pSubDock->iWindowPositionY, pSubDock->bHorizontalDock);
+	
+	gtk_window_set_keep_above (GTK_WINDOW (pSubDock->pWidget), myAccessibility.bPopUp);
+	
+	cairo_dock_replace_all_dialogs ();
+}

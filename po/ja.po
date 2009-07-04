@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/cairo-dock-callbacks.c:1217
+#: ../src/cairo-dock-callbacks.c:1136
 msgid "Do you want to mount this point ?"
 msgstr "このポイントにマウントしますか？"
 
@@ -3605,11 +3605,7 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1093
-msgid ""
-"2.0.6 :\n"
-" - This version fixes an ennoying bug for KDE users.\n"
-" - It also brings the new data-renderer framework (new gauges, graphs, etc)\n"
-" - Next version will be the 2.1, with a lot of new applets !"
+msgid "Happy New Year Cairo-Dock !!! :-)"
 msgstr ""
 
 #~ msgid "Indicator of drag'n'drop on icons"

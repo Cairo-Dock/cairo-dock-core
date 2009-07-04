@@ -16,7 +16,7 @@ msgstr ""
 "X-Poedit-Language: French\n"
 "X-Poedit-Country: France\n"
 
-#: ../src/cairo-dock-callbacks.c:1217
+#: ../src/cairo-dock-callbacks.c:1136
 msgid "Do you want to mount this point ?"
 msgstr "Voulez-vous monter ce point ?"
 
@@ -1559,11 +1559,10 @@ msgstr "Le motif doit être vertical ?"
 
 #: ../data/messages:341
 msgid ""
-"If you set it to fully transparent, there will be no background for the "
-"text, but the letters' outline will be thicker."
+"If you set it to fully transparent, there will be no background for the text, but the margin around the text will still be effective."
 msgstr ""
 "Si vous le rendez complètement transparent, il n'y aura pas de fond pour le "
-"texte, mais les contours des lettres seront plus épaisses."
+"texte, mais la marge autour du texte sera toujours présente."
 
 #: ../data/messages:343
 msgid "Color of the label's background :"
@@ -3798,15 +3797,20 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1093
-#, fuzzy
-msgid ""
-"2.0.6 :\n"
-" - This version fixes an ennoying bug for KDE users.\n"
-" - It also brings the new data-renderer framework (new gauges, graphs, etc)\n"
-" - Next version will be the 2.1, with a lot of new applets !"
+msgid "Happy New Year Cairo-Dock !!! :-)"
 msgstr ""
-"2.0.7 :\n"
-" - Cette version fixe un bug ennuyeux pour les utilisateurs de KDE.\n"
-" - Elle apporte aussi une nouvelle architecture pour les rendus de données "
-"(jauges, graphes, etc)\n"
-" - La prochaine version sera la 2.1, avec tout un tas de nouvelles applets !"
+
+#, fuzzy
+#~ msgid ""
+#~ "2.0.6 :\n"
+#~ " - This version fixes an ennoying bug for KDE users.\n"
+#~ " - It also brings the new data-renderer framework (new gauges, graphs, "
+#~ "etc)\n"
+#~ " - Next version will be the 2.1, with a lot of new applets !"
+#~ msgstr ""
+#~ "2.0.7 :\n"
+#~ " - Cette version fixe un bug ennuyeux pour les utilisateurs de KDE.\n"
+#~ " - Elle apporte aussi une nouvelle architecture pour les rendus de "
+#~ "données (jauges, graphes, etc)\n"
+#~ " - La prochaine version sera la 2.1, avec tout un tas de nouvelles "
+#~ "applets !"

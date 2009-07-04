@@ -5,6 +5,7 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-icons.h"
 #include "cairo-dock-dock-factory.h"
 G_BEGIN_DECLS
 
@@ -56,6 +57,7 @@ void cairo_dock_hide_parent_dock (CairoDock *pDock);
 gboolean cairo_dock_hide_child_docks (CairoDock *pDock);
 
 /** (Re)load all buffers of all icons in all docks.
+*@param bReloadAppletsToo TRUE to reload applet icons too.
 */
 void cairo_dock_reload_buffers_in_all_docks (gboolean bReloadAppletsToo);
 
@@ -118,27 +120,27 @@ gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon);
 
 /** Execute an action on all icons.
 *@param pFunction the action.
-*@param data data passed to the callback.
+*@param pUserData data passed to the callback.
 */
-void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer data);
+void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUserData);
 
 /** Execute an action on all icons being inside a dock.
 *@param pFunction the action.
-*@param data data passed to the callback.
+*@param pUserData data passed to the callback.
 */
 void cairo_dock_foreach_icons_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData);
 
 /** Execute an action on all icons being inside a desklet.
 *@param pFunction the action.
-*@param data data passed to the callback.
+*@param pUserData data passed to the callback.
 */
 void cairo_dock_foreach_icons_in_desklets (CairoDockForeachIconFunc pFunction, gpointer pUserData);
 
 /** Execute an action on all docks.
 *@param pFunction the action.
-*@param data data passed to the callback.
+*@param pUserData data passed to the callback.
 */
-void cairo_dock_foreach_docks (GHFunc pFunction, gpointer data);
+void cairo_dock_foreach_docks (GHFunc pFunction, gpointer pUserData);
 
 
 G_END_DECLS

@@ -835,7 +835,7 @@ static void _cairo_dock_maximize_appli (GtkMenuItem *pMenuItem, gpointer *data)
 	CairoDock *pDock = data[1];
 	if (icon->Xid > 0)
 	{
-		gboolean bIsMaximized = cairo_dock_window_is_maximized (icon->Xid);
+		gboolean bIsMaximized = cairo_dock_xwindow_is_maximized (icon->Xid);
 		cairo_dock_maximize_xwindow (icon->Xid, ! bIsMaximized);
 	}
 }
@@ -846,7 +846,7 @@ static void _cairo_dock_set_appli_fullscreen (GtkMenuItem *pMenuItem, gpointer *
 	CairoDock *pDock = data[1];
 	if (icon->Xid > 0)
 	{
-		gboolean bIsFullScreen = cairo_dock_window_is_fullscreen (icon->Xid);
+		gboolean bIsFullScreen = cairo_dock_xwindow_is_fullscreen (icon->Xid);
 		cairo_dock_set_xwindow_fullscreen (icon->Xid, ! bIsFullScreen);
 	}
 }
@@ -874,7 +874,7 @@ static void _cairo_dock_move_appli_to_desktop (GtkMenuItem *pMenuItem, gpointer 
 	cd_message ("%s (%d;%d;%d)", __func__, iDesktopNumber, iViewPortNumberX, iViewPortNumberY);
 	if (icon->Xid > 0)
 	{
-		int iCurrentDesktopNumber = cairo_dock_get_window_desktop (icon->Xid);
+		int iCurrentDesktopNumber = cairo_dock_get_xwindow_desktop (icon->Xid);
 		
 		int iCurrentViewPortX, iCurrentViewPortY;
 		cairo_dock_get_current_viewport (&iCurrentViewPortX, &iCurrentViewPortY);
@@ -891,7 +891,7 @@ static void _cairo_dock_change_window_above (GtkMenuItem *pMenuItem, gpointer *d
 	if (icon->Xid > 0)
 	{
 		gboolean bIsAbove=FALSE, bIsBelow=FALSE;
-		cairo_dock_window_is_above_or_below (icon->Xid, &bIsAbove, &bIsBelow);
+		cairo_dock_xwindow_is_above_or_below (icon->Xid, &bIsAbove, &bIsBelow);
 		cairo_dock_set_xwindow_above (icon->Xid, ! bIsAbove);
 	}
 }
@@ -970,7 +970,7 @@ static void _cairo_dock_move_class_to_desktop (GtkMenuItem *pMenuItem, gpointer 
 		pIcon = ic->data;
 		if (pIcon->Xid != 0)
 		{
-			int iCurrentDesktopNumber = cairo_dock_get_window_desktop (pIcon->Xid);		
+			int iCurrentDesktopNumber = cairo_dock_get_xwindow_desktop (pIcon->Xid);		
 			int iCurrentViewPortX, iCurrentViewPortY;
 			cairo_dock_get_current_viewport (&iCurrentViewPortX, &iCurrentViewPortY);
 			cd_debug (" current_viewport : %d;%d", iCurrentViewPortX, iCurrentViewPortY);
@@ -1452,11 +1452,11 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		
 		_add_entry_in_menu (_("Move to this desktop"), GTK_STOCK_JUMP_TO, _cairo_dock_move_appli_to_current_desktop, pSubMenuOtherActions);
 		
-		gboolean bIsFullScreen = cairo_dock_window_is_fullscreen (icon->Xid);
+		gboolean bIsFullScreen = cairo_dock_xwindow_is_fullscreen (icon->Xid);
 		_add_entry_in_menu (bIsFullScreen ? _("Not Fullscreen") : _("Fullscreen"), bIsFullScreen ? GTK_STOCK_LEAVE_FULLSCREEN : GTK_STOCK_FULLSCREEN, _cairo_dock_set_appli_fullscreen, pSubMenuOtherActions);
 		
 		gboolean bIsAbove=FALSE, bIsBelow=FALSE;
-		cairo_dock_window_is_above_or_below (icon->Xid, &bIsAbove, &bIsBelow);
+		cairo_dock_xwindow_is_above_or_below (icon->Xid, &bIsAbove, &bIsBelow);
 		_add_entry_in_menu (bIsAbove ? _("Don't keep above") : _("Keep above"), bIsAbove ? GTK_STOCK_GOTO_BOTTOM : GTK_STOCK_GOTO_TOP, _cairo_dock_change_window_above, pSubMenuOtherActions);
 		
 		_add_desktops_entry (pSubMenuOtherActions, FALSE, data);
@@ -1474,7 +1474,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 			_add_entry_in_menu (_("Make it a launcher"), GTK_STOCK_CONVERT, _cairo_dock_make_launcher_from_appli, menu);
 		}
 		
-		gboolean bIsMaximized = cairo_dock_window_is_maximized (icon->Xid);
+		gboolean bIsMaximized = cairo_dock_xwindow_is_maximized (icon->Xid);
 		_add_entry_in_menu (bIsMaximized ? _("Unmaximize") : _("Maximize"), GTK_STOCK_GO_UP, _cairo_dock_maximize_appli, menu);
 		
 		_add_entry_in_menu (_("Show"), GTK_STOCK_FIND, _cairo_dock_show_appli, menu);
@@ -1558,12 +1558,12 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		gboolean bIsAbove=FALSE, bIsBelow=FALSE;
 		Window Xid = GDK_WINDOW_XID (pContainer->pWidget->window);
 		//cd_debug ("Xid : %d", Xid);
-		cairo_dock_window_is_above_or_below (Xid, &bIsAbove, &bIsBelow);  // gdk_window_get_state bugue.
+		cairo_dock_xwindow_is_above_or_below (Xid, &bIsAbove, &bIsBelow);  // gdk_window_get_state bugue.
 		//cd_debug (" -> %d;%d", bIsAbove, bIsBelow);
 		gboolean bIsUtility = cairo_dock_window_is_utility (Xid);  // gtk_window_get_type_hint me renvoie toujours 0 !
 		gboolean bIsDock = (/*cairo_dock_window_is_dock (Xid) || */CAIRO_DESKLET (pContainer)->bSpaceReserved);
 		gboolean bIsNormal = (!bIsAbove && !bIsBelow && !bIsUtility && !bIsDock);
-		gboolean bIsSticky = /*(cairo_dock_get_window_desktop (Xid) == -1) || */cairo_dock_window_is_sticky (Xid);
+		gboolean bIsSticky = /*(cairo_dock_get_xwindow_desktop (Xid) == -1) || */cairo_dock_xwindow_is_sticky (Xid);
 		
 		pMenuItem = gtk_radio_menu_item_new_with_label(group, _("Normal"));
 		group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(pMenuItem));

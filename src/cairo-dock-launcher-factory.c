@@ -43,7 +43,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 {
 	g_return_val_if_fail (cFileName != NULL, NULL);
 	GString *sIconPath = g_string_new ("");
-	gchar *cSuffixTab[4] = {".svg", ".png", ".xpm", NULL};
+	const gchar *cSuffixTab[4] = {".svg", ".png", ".xpm", NULL};
 	gboolean bAddSuffix, bFileFound;
 	GtkIconInfo* pIconInfo = NULL;
 	int i, j;
@@ -55,7 +55,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 	}
 	else if (*cFileName == '/')
 	{
-		g_string_printf (sIconPath, cFileName);
+		g_string_assign (sIconPath, cFileName);
 	}
 	else
 	{
@@ -83,7 +83,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 					j = 0;
 					while (! bFileFound && (cSuffixTab[j] != NULL || ! bAddSuffix))
 					{
-						g_string_printf (sIconPath, "%s/%s", myIcons.pDefaultIconDirectory[2*i], cFileName);
+						g_string_printf (sIconPath, "%s/%s", (gchar *)myIcons.pDefaultIconDirectory[2*i], cFileName);
 						if (bAddSuffix)
 							g_string_append_printf (sIconPath, "%s", cSuffixTab[j]);
 						//g_print ("  -> %s\n", sIconPath->str);
@@ -97,7 +97,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 				}
 				else if (myIcons.pDefaultIconDirectory[2*i+1] != NULL)
 				{
-					g_string_printf (sIconPath, cFileName);
+					g_string_assign (sIconPath, cFileName);
 					if (! bAddSuffix)  // on vire le suffixe pour chercher tous les formats dans le theme d'icones.
 					{
 						gchar *str = strrchr (sIconPath->str, '.');
@@ -111,7 +111,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 						GTK_ICON_LOOKUP_FORCE_SVG);
 					if (pIconInfo != NULL)
 					{
-						g_string_printf (sIconPath, gtk_icon_info_get_filename (pIconInfo));
+						g_string_assign (sIconPath, gtk_icon_info_get_filename (pIconInfo));
 						bFileFound = TRUE;
 						gtk_icon_info_free (pIconInfo);
 					}
@@ -122,7 +122,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 
 		if (! bFileFound)
 		{
-			g_string_printf (sIconPath, cFileName);
+			g_string_assign (sIconPath, cFileName);
 			if (! bAddSuffix)
 			{
 				gchar *str = strrchr (sIconPath->str, '.');
@@ -138,7 +138,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 
 			if (pIconInfo != NULL)
 			{
-				g_string_printf (sIconPath, gtk_icon_info_get_filename (pIconInfo));
+				g_string_assign (sIconPath, gtk_icon_info_get_filename (pIconInfo));
 				gtk_icon_info_free (pIconInfo);
 			}
 			else

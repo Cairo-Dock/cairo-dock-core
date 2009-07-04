@@ -1125,16 +1125,29 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			break;
 
 			case 'f' :  // float.
-			case 'c' :  // float avec un bouton de choix de couleur.
+			case 'c' :  // float x3 avec un bouton de choix de couleur.
+			case 'C' :  // float x4 avec un bouton de choix de couleur.
 			case 'e' :  // float dans un HScale.
-				if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL)
-					fMinValue = g_ascii_strtod (pAuthorizedValuesList[0], NULL);
-				else
+				if (iElementType == 'c' || iElementType == 'C')  // couleur
+				{
 					fMinValue = 0;
-				if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[1] != NULL)
-					fMaxValue = g_ascii_strtod (pAuthorizedValuesList[1], NULL);
+					fMaxValue = 1;
+					if (iNbElements == 1)  // nbre d'elements non precise
+					{
+						iNbElements = (iElementType == 'c' ? 3 : 4);
+					}
+				}
 				else
-					fMaxValue = 9999;
+				{
+					if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL)
+						fMinValue = g_ascii_strtod (pAuthorizedValuesList[0], NULL);
+					else
+						fMinValue = 0;
+					if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[1] != NULL)
+						fMaxValue = g_ascii_strtod (pAuthorizedValuesList[1], NULL);
+					else
+						fMaxValue = 9999;
+				}
 				length = 0;
 				fValueList = g_key_file_get_double_list (pKeyFile, cGroupName, cKeyName, &length, NULL);
 				for (k = 0; k < iNbElements; k ++)
@@ -1165,16 +1178,22 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 
 					_pack_subwidget (pOneWidget);
 				}
-				if (iElementType == 'c' && length > 2)
+				if (iElementType == 'c' || iElementType == 'C')
 				{
-					gdkColor.red = fValueList[0] * 65535;
-					gdkColor.green = fValueList[1] * 65535;
-					gdkColor.blue = fValueList[2] * 65535;
+					if (length > 2)
+					{
+						gdkColor.red = fValueList[0] * 65535;
+						gdkColor.green = fValueList[1] * 65535;
+						gdkColor.blue = fValueList[2] * 65535;
+					}
 					pColorButton = gtk_color_button_new_with_color (&gdkColor);
-					if (length > 3)
+					if (iNbElements > 3)
 					{
 						gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (pColorButton), TRUE);
-						gtk_color_button_set_alpha (GTK_COLOR_BUTTON (pColorButton), fValueList[3] * 65535);
+						if (length > 3)
+							gtk_color_button_set_alpha (GTK_COLOR_BUTTON (pColorButton), fValueList[3] * 65535);
+						else
+							gtk_color_button_set_alpha (GTK_COLOR_BUTTON (pColorButton), 65535);
 					}
 					else
 						gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (pColorButton), FALSE);

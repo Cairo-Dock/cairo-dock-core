@@ -39,19 +39,28 @@ G_BEGIN_DECLS
 *@file cairo-dock-keybinder.h This class contains functions to easily bind a keyboard shortcut to an action. These shortcuts are defined globally in your session, that is to say they will be effective whatever window has the focus.
 * Shortcuts are of the form &lt;alt&gt;F1 or &lt;ctrl&gt;&lt;shift&gt;s.
 * 
+* You bind an action to a shortcut \ref with cd_keybinder_bind, and unbind it with \ref cd_keybinder_unbind.
 */
 
+/// Definition of a callback, called when a shortcut is pressed by the user.
 typedef void (* CDBindkeyHandler) (const char *keystring, gpointer user_data);
 
 void cd_keybinder_init (void);
 void cd_keybinder_stop (void);
 
 /** Bind a shortcut to an action. Unbind it when you don't want it anymore, or when 'user_data' is freed.
+ * @param keystring a shortcut.
+ * @param handler callback to register for this shortcut.
+ * @param user_data data passed to the callback.
+ * @return TRUE if success.
 */
 gboolean cd_keybinder_bind (const char           *keystring,
                             CDBindkeyHandler  handler,
                             gpointer              user_data);
+
 /** Unbind a shortcut to an action.
+ * @param keystring a shortcut.
+ * @param handler the callback that was registered for this shortcut.
 */
 void cd_keybinder_unbind   (const char           *keystring,
                             CDBindkeyHandler  handler);
@@ -60,7 +69,8 @@ gboolean cd_keybinder_is_modifier (guint keycode);
 
 guint32 cd_keybinder_get_current_event_time (void);
 
-/** Trigger the given shortcut. It will be as if the user effectively made the shortcut on its keyboard. It uses the XText extension.
+/** Trigger the given shortcut. It will be as if the user effectively pressed the shortcut on its keyboard. It uses the 'XTest' X extension.
+ * @param cKeyString a shortcut.
 */
 gboolean cairo_dock_simulate_key_sequence (gchar *cKeyString);
 

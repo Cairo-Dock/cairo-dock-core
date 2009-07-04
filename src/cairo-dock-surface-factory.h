@@ -12,6 +12,13 @@ G_BEGIN_DECLS
 /**
 *@file cairo-dock-surface-factory.h This class contains functions to load any image/X buffer/GdkPixbuf/text into a cairo-surface.
 * The loading of an image can be modified by a mask, to take into account the ratio, zoom, orientation, etc.
+*
+* The general way to load an image is by using \ref cairo_dock_create_surface_from_image.
+* 
+* If you just want to load an image at a given size, use \ref cairo_dock_create_surface_from_image_simple, or \ref cairo_dock_create_surface_from_icon.
+* 
+* To load a text, use \ref cairo_dock_create_surface_from_text.
+*
 */
 
 /// Types of image loading modifiers.
@@ -147,17 +154,27 @@ cairo_surface_t *_cairo_dock_create_blank_surface (cairo_t *pSourceContext, int 
 */
 cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, cairo_t* pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY);
 
-/** Create a surface from any image, at a given size.
-*@param cImagePath complete path to the image.
+/** Create a surface from any image, at a given size. If the image is given by its sole name, it is searched inside the current theme root folder.
+*@param cImageFile path or name of an image.
 *@param pSourceContext a drawing context (not altered by the function).
 *@param fImageWidth the desired surface width.
 *@param fImageHeight the desired surface height.
 *@return the newly allocated surface.
 */
-cairo_surface_t *cairo_dock_create_surface_for_icon (const gchar *cImagePath, cairo_t* pSourceContext, double fImageWidth, double fImageHeight);
+cairo_surface_t *cairo_dock_create_surface_from_image_simple (const gchar *cImageFile, cairo_t* pSourceContext, double fImageWidth, double fImageHeight);
 
-/** Create a square surface from any image, at a given size.
-*@param cImagePath complete path to the image.
+/** Create a surface from any image, at a given size. If the image is given by its sole name, it is searched inside the icons themes known by Cairo-Dock. 
+*@param cImagePath path or name of an image.
+*@param pSourceContext a drawing context (not altered by the function).
+*@param fImageWidth the desired surface width.
+*@param fImageHeight the desired surface height.
+*@return the newly allocated surface.
+*/
+cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImagePath, cairo_t* pSourceContext, double fImageWidth, double fImageHeight);
+#define cairo_dock_create_surface_for_icon cairo_dock_create_surface_from_icon
+
+/** Create a square surface from any image, at a given size. If the image is given by its sole name, it is searched inside the icons themes known by Cairo-Dock.
+*@param cImagePath path or name of an image.
 *@param pSourceContext a drawing context (not altered by the function).
 *@param fImageSize the desired surface size.
 *@return the newly allocated surface.
@@ -195,12 +212,21 @@ cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurfac
 *@param iMaxWidth maximum authorized width for the surface; it will be zoomed in to fits this limit. 0 for no limit.
 *@param iTextWidth will be filled the width of the resulting surface.
 *@param iTextHeight will be filled the height of the resulting surface.
-*@param fTextXOffset will be filled the horizontal offset to apply to center the text horizontally.
-*@param fTextYOffset will be filled the vertical offset to apply to center the text vertically.
+*@param fTextXOffset if non NULL, will be filled the horizontal offset to apply to center the text horizontally.
+*@param fTextYOffset if non NULL, will be filled the vertical offset to apply to center the text vertically.
 *@return the newly allocated surface.
 */
 cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, cairo_t *pSourceContext, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight, double *fTextXOffset, double *fTextYOffset);
-#define cairo_dock_create_surface_from_text(cText, pSourceContext, pLabelDescription, fMaxScale, iTextWidth, iTextHeight, fTextXOffset, fTextYOffset) cairo_dock_create_surface_from_text_full (cText, pSourceContext, pLabelDescription, fMaxScale, 0, iTextWidth, iTextHeight, fTextXOffset, fTextYOffset) 
+
+/** Create a surface representing a text, according to a given text description.
+*@param cText the text.
+*@param pSourceContext a drawing context (not altered by the function).
+*@param pLabelDescription description of the text rendering.
+*@param iTextWidthPtr will be filled the width of the resulting surface.
+*@param iTextHeightPtr will be filled the height of the resulting surface.
+*@return the newly allocated surface.
+*/
+#define cairo_dock_create_surface_from_text(cText, pSourceContext, pLabelDescription, iTextWidthPtr, iTextHeightPtr) cairo_dock_create_surface_from_text_full (cText, pSourceContext, pLabelDescription, 1., 0, iTextWidthPtr, iTextHeightPtr, NULL, NULL) 
 
 /** Create a surface identical to another, possibly resizing it.
 *@param pSurface surface to duplicate.

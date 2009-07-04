@@ -12,15 +12,21 @@
 
 /// A particle of a particle system.
 typedef struct _CairoParticle {
-	/// position in space
-	GLfloat x, y, z;
-	/// speed
-	GLfloat vx, vy;
+	/// horizontal position, in fraction of the particle system's width, and relatively to the center of the particle system. So it is comprised between -1 and 1.
+	GLfloat x;
+	/// vertical position, in fraction of the particle system's height, and relatively to the bottom of the particle system. So it is comprised between 0 and 1.
+	GLfloat y;
+	/// depth of the particle, negative to be "behind". 0 means it is at the same depth as icons.
+	GLfloat z;
+	/// horizontal speed
+	GLfloat vx;
+	/// vertical speed
+	GLfloat vy;
 	/// size
 	GLfloat fWidth, fHeight;
 	/// color r,g,b,a
 	GLfloat color[4];
-	/// phase of the oscillations
+	/// phase of the oscillations.
 	GLfloat fOscillation;
 	/// oscillation variation speed.
 	GLfloat fOmega;
@@ -28,9 +34,9 @@ typedef struct _CairoParticle {
 	GLfloat fSizeFactor;
 	/// size variation speed.
 	GLfloat fResizeSpeed;
-	/// current life time.
+	/// current life time, decreased by 1 at each step.
 	gint iLife;
-	/// initial life time.
+	/// total life time.
 	gint iInitialLife;
 	} CairoParticle;
 

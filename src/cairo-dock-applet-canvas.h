@@ -10,6 +10,7 @@ G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-applet-canvas.h This file defines numerous macros, that form a canvas for all the applets.
+* 
 * You probably won't need to dig into this file, since you can generate an applet with the 'generate-new-applet.sh' script, that will build the whole canvas for you.
 * Moreover, you can have a look at an applet that has a similar functioning to yours.
 */
@@ -421,9 +422,17 @@ CD_APPLET_ON_UPDATE_ICON_PROTO \
 #define CD_APPLET_UNREGISTER_FOR_SCROLL_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_SCROLL_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_SCROLL_FUNC, myApplet)
 
 //\______________________ notification de update icon.
+/** Register the applet to the 'update icon' notifications of the slow rendering loop. 
+*/
 #define CD_APPLET_REGISTER_FOR_UPDATE_ICON_SLOW_EVENT cairo_dock_register_notification (CAIRO_DOCK_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet)
+/** Unregister the applet from the slow rendering loop. 
+*/
 #define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_SLOW_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
+/** Register the applet to the 'update icon' notifications of the fast rendering loop. 
+*/
 #define CD_APPLET_REGISTER_FOR_UPDATE_ICON_EVENT cairo_dock_register_notification (CAIRO_DOCK_UPDATE_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet)
+/** Unregister the applet from the fast rendering loop. 
+*/
 #define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_UPDATE_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
 
 

@@ -16,7 +16,9 @@ G_BEGIN_DECLS
 * - an appli is an icon pointing to an X ID, that is to say a window.
 * - an applet is an icon holding a module instance.
 * - an icon being none of them is a separator.
+*
 * The type of an icon is dynamic (for instance a launcher can become an application).
+*
 * To group icons togather, they define a group, which is also usually their initial type, and an order, which is the order inside a group.
 */
 
@@ -182,6 +184,9 @@ struct _Icon {
 	CairoDockTransition *pTransition;
 	gdouble fReflectShading;
 };
+
+/// Definition of a function that runs through all icons.
+typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContainer, gpointer data);
 
 
 /** TRUE if the icon is a launcher.
@@ -398,14 +403,14 @@ Icon *cairo_dock_get_icon_with_command (GList *pIconList, gchar *cCommand);
 
 /** Search an icon with a given URI in a list of icons.
 *@param pIconList a list of icons.
-*@param cCommand the command.
+*@param cBaseURI the URI.
 *@return the first icon whose field 'cURI' is identical to the given URI, or NULL if no icon matches.
 */
 Icon *cairo_dock_get_icon_with_base_uri (GList *pIconList, const gchar *cBaseURI);
 
 /** Search an icon with a given name in a list of icons.
 *@param pIconList a list of icons.
-*@param cCommand the command.
+*@param cName the name.
 *@return the first icon whose field 'acName' is identical to the given name, or NULL if no icon matches.
 */
 Icon *cairo_dock_get_icon_with_name (GList *pIconList, const gchar *cName);

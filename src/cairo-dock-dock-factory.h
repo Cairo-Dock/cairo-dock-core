@@ -10,10 +10,14 @@ G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-dock-factory.h This class defines the Docks, and gives the way to create, destroy, and fill them.
+*
 * A dock is a container that holds a set of icons and a renderer (also known as view).
+*
 * It has the ability to be placed anywhere on the screen edges and to resize itself automatically to fit the screen's size.
+*
 * It supports internal dragging of its icons with the mouse, and dragging of itself with alt+mouse.
-* A dock can be either a main-dock (not linked to any icon) or a sub-dock (linked to an icon of another dock), and there can be as many dock of each sort as you want.
+*
+* A dock can be either a main-dock (not linked to any icon) or a sub-dock (linked to an icon of another dock), and there can be as many docks of each sort as you want.
 */
 
 typedef void (*CairoDockCalculateMaxDockSizeFunc) (CairoDock *pDock);
@@ -328,7 +332,7 @@ void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboole
 */
 #define cairo_dock_remove_icon_from_dock(pDock, icon) cairo_dock_remove_icon_from_dock_full (pDock, icon, TRUE)
 
-/** Remove and destroy all automatic separators from a dock.
+/** Remove and destroy all automatic separators inside a dock.
 *@param pDock the dock.
 */
 void cairo_dock_remove_automatic_separators (CairoDock *pDock);
@@ -338,8 +342,10 @@ void cairo_dock_remove_automatic_separators (CairoDock *pDock);
 */
 void cairo_dock_insert_separators_in_dock (CairoDock *pDock);
 
-/** Add a launcher from a given common desktop file : create abd add the corresponding desktop file with the others, load the corresponding icon, and insert it inside a dock with an animtion.
-*@param pDock the dock.
+/** Add a launcher from a common desktop file : create and add the corresponding .desktop file with the others, load the corresponding icon, and insert it inside a dock with an animtion.
+*@param cExternDesktopFileURI path to a desktop file.
+*@param pReceivingDock the dock that will hold the new launcher.
+*@param fOrder the order of the icon inside the dock.
 */
 void cairo_dock_add_new_launcher_by_uri (const gchar *cExternDesktopFileURI, CairoDock *pReceivingDock, double fOrder);
 

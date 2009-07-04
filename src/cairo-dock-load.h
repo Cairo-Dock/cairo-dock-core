@@ -26,14 +26,12 @@ CairoDockLabelDescription *cairo_dock_duplicate_label_description (CairoDockLabe
 #define cairo_dock_colors_differ(c1, c2) (cairo_dock_colors_rvb_differ (c1, c2) || (c1[3] != c2[3]))
 
 /** Generate a complete path from a file name. '~' is handled, and files are supposed to be in the root folder of the current theme.
-*@param a file name or path. If it's already a path, it will just be duplicated.
+*@param cImageFile a file name or path. If it's already a path, it will just be duplicated.
 *@return the path of the file.
 */
 gchar *cairo_dock_generate_file_path (const gchar *cImageFile);
 
 cairo_surface_t *cairo_dock_load_image (cairo_t *pSourceContext, const gchar *cImageFile, double *fImageWidth, double *fImageHeight, double fRotationAngle, double fAlpha, gboolean bReapeatAsPattern);
-cairo_surface_t *cairo_dock_load_image_for_icon (cairo_t *pSourceContext, const gchar *cImageFile, double fImageWidth, double fImageHeight);
-#define cairo_dock_load_image_for_square_icon(pSourceContext, cImageFile, fImageSize) cairo_dock_load_image_for_icon (pSourceContext, cImageFile, fImageSize, fImageSize)
 
 /*
 *Cree la surface de reflection d'une icone (pour cairo).
@@ -79,11 +77,8 @@ void cairo_dock_fill_icon_buffers (Icon *icon, cairo_t *pSourceContext, double f
 #define cairo_dock_fill_icon_buffers_for_dock(pIcon, pSourceContext, pDock) cairo_dock_fill_icon_buffers (pIcon, pSourceContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, pDock->bDirectionUp);
 
 /** Fill all the buffers (surfaces & textures) of a given icon, according to its type. Set its size accordingly, and fills the reflection buffer for cairo. Label and quick-info are loaded with the current global text description.
-*@param icon the icon.
-*@param pSourceContext a drawing context, not modified.
-*@param fMaxScale maximum zoom.
-*@param bHorizontalDock TRUE if the icon will be in a horizontal container (needed for the cairo reflect).
-*@param bDirectionUp TRUE if the icon will be in a up container (needed for the cairo reflect).
+*@param pIcon the icon.
+*@param pContainer its container.
 */
 void cairo_dock_load_one_icon_from_scratch (Icon *pIcon, CairoContainer *pContainer);
 

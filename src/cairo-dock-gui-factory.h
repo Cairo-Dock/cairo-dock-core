@@ -6,6 +6,33 @@
 G_BEGIN_DECLS
 
 
+/**
+*@file cairo-dock-gui-factory.h This class handles the construction of the common widgets used in the conf files.
+* 
+* A conf file is a common group/key file, with the following syntax :
+* \code
+* [Group]
+* #comment about key1
+* key1 = 1
+* #comment about key2
+* key2 = pouic
+* \endcode
+* 
+* Each key in the conf file has a comment.
+* 
+* The first character of the comment defines the type of widget. Known types are listed in the CairoDockGUIWidgetType enum.
+* 
+* A key can be a behaviour key or an appearance key. Appearance keys are keys that defines the look of the appli, they belong to the theme. Behaviour keys are keys that define some configuration parameters, that depends on the user. To mark a key as an apppearance one, suffix the widget character with a '+'. Thus, keys not marked with a '+' won't be loaded when the user loads a theme, except if he forces it.
+* 
+* After the widget character and its suffix, some widget accept a list of values. For instance, a spinbutton can have a min and a max limits, a list can have pre-defined elements, etc. Such values are set between '[' and ']' brackets, and separated by ';' inside.
+* 
+* After that, let a blank to start the widget description. It will appear on the left of the widget; description must be short enough to fit the config panel width.
+* 
+* You can complete this description with a tooltip. To do that, on a new comment line, add some text between '{' and '}' brackets. Tooltips appear above the widget when you let the mouse over it for ~1 second. They can be as long as you want. Use '\n' to insert new lines inside the tooltip.
+* 
+*/
+
+
 /// Types of widgets that Cairo-Dock can automatically build.
 typedef enum {
 	/// boolean in a button to tick.
@@ -16,10 +43,12 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_HSCALE_INTEGER='I',
 	/// pair of integers for dimansion WidthxHeight
 	CAIRO_DOCK_WIDGET_SIZE_INTEGER='j',
-	/// double  in a spin button.
+	/// double in a spin button.
 	CAIRO_DOCK_WIDGET_SPIN_DOUBLE='f',
-	/// 3 or 4 doubles with a color selector.
-	CAIRO_DOCK_WIDGET_COLOR_SELECTOR='c',
+	/// 3 doubles with a color selector (RGB).
+	CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGB='c',
+	/// 4 doubles with a color selector (RGBA).
+	CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGBA='C',
 	/// double in an horizontal scale.
 	CAIRO_DOCK_WIDGET_HSCALE_DOUBLE='e',
 	/// list of views.

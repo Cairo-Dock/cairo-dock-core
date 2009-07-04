@@ -67,6 +67,13 @@ void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, C
 
 void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pParentDock);
 
+/** Pop up a sub-dock.
+*@param pPointedIcon icon pointing on the sub-dock.
+*@param pParentDock dock containing the icon.
+*@param bUpdateBefore TRUE to re-calculate the parent dock before.
+*/
+void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboolean bUpdateBefore);
+
 
 void cairo_dock_set_input_shape (CairoDock *pDock);
 

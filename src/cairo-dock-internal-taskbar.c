@@ -53,7 +53,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	pTaskBar->bAutoHideOnFullScreen = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "auto quick hide", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 	pTaskBar->bAutoHideOnMaximized = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "auto quick hide on max", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 	pTaskBar->bHideVisibleApplis = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "hide visible", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
-	pTaskBar->fVisibleAppliAlpha = cairo_dock_get_double_key_value (pKeyFile, "TaskBar", "visibility alpha", &bFlushConfFileNeeded, .25, "Applications", NULL);  // >0 <=> les fenetres minimisees sont transparentes.
+	pTaskBar->fVisibleAppliAlpha = cairo_dock_get_double_key_value (pKeyFile, "TaskBar", "visibility alpha", &bFlushConfFileNeeded, .35, "Applications", NULL);  // >0 <=> les fenetres minimisees sont transparentes.
 	if (pTaskBar->bHideVisibleApplis && pTaskBar->fVisibleAppliAlpha < 0)
 		pTaskBar->fVisibleAppliAlpha = 0.;  // on inhibe ce parametre, puisqu'il ne sert alors a rien.
 	else if (pTaskBar->fVisibleAppliAlpha > .6)

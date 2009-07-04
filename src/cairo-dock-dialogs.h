@@ -5,15 +5,25 @@
 #include "cairo-dock-container.h"
 G_BEGIN_DECLS
 
-/**
-*@file cairo-dock-dialogs.h This class defines the dialog container. Dialogs are useful to bring interaction with the user.
-* You can pop-up messages, ask for question, etc. Any GTK widget can be embedded inside a dialog, giving you any possible interaction with the user.
-* Dialogs are constructed with a set of attributes grouped inside a #CairoDialogAttribute. A dialog contains the followinf optionnal components :
-*   an icon
-*   a text next to the icon
-*   a interaction widget below the text and the icon
-*   any buttons.
-* To add buttons, you specify a list of images. "ok" and "cancel" are key words for the default ok/cancel buttons. You also has to provide a callback function that will be called on click. When the user clicks on a button, the function is called with the number of the clicked button, counted from 0. -1 and -2 are set if the user pushed the Return or Escape keys. The dialog is de-referenced after the user's answer, so you have to reference the dialog in the callback if you want to keep the dialog alive.
+/** @file cairo-dock-dialogs.h This class defines the dialog container, that are useful to bring interaction with the user.
+* 
+* With dialogs, you can pop-up messages, ask for question, etc. Any GTK widget can be embedded inside a dialog, giving you any possible interaction with the user.
+* 
+* Dialogs are constructed with a set of attributes grouped inside a _CairoDialogAttribute. A dialog contains the following optionnal components :
+* - a message
+* - an image on its left
+* - a interaction widget below it
+* - some buttons at the bottom.
+* 
+* To add buttons, you specify a list of images in the attributes. "ok" and "cancel" are key words for the default ok/cancel buttons. You also has to provide a callback function that will be called on click. When the user clicks on a button, the function is called with the number of the clicked button, counted from 0. -1 and -2 are set if the user pushed the Return or Escape keys. The dialog is unreferenced after the user's answer, so <i>you have to reference the dialog in the callback if you want to keep the dialog alive</i>.
+* 
+* The most generic way to build a Dialog is to fill a _CairoDialogAttribute and pass it to cairo_dock_build_dialog.
+* 
+* But in most of case, you can just use one of the following convenient functions, that will do the job for you.
+* - to show a message, you can use cairo_dock_show_temporary_dialog_with_icon
+* - to ask the user a choice, a value or a text, you can use cairo_dock_show_dialog_with_question, cairo_dock_show_dialog_with_value or cairo_dock_show_dialog_with_entry.
+* - if you need to block while waiting for the user, use the xxx_and_wait version of these functions.
+* - if you want to pop up only 1 dialog at once on a fgiven icon, use cairo_dock_remove_dialog_if_any before you pop up your dialog.
 */
 
 typedef gpointer CairoDialogRendererDataParameter;
@@ -51,19 +61,35 @@ typedef void (* CairoDockActionOnAnswerFunc) (int iClickedButton, GtkWidget *pIn
 
 /// Configuration attributes of a Dialog, which derives from a Container.
 struct _CairoDialogAttribute {
+	/// path to an image to display in the left margin, or NULL.
 	gchar *cImageFilePath;
-	gint iNbFrames;  // 0 <=> 1.
-	gchar *cText;
-	gint iMaxTextWidth;  // 0 => pas de limite.
-	CairoDockLabelDescription *pTextDescription;  // NULL => &myDialogs.dialogTextDescription
-	GtkWidget *pInteractiveWidget;
-	gchar **cButtonsImage;  // NULL-terminated
-	CairoDockActionOnAnswerFunc pActionFunc;
-	gpointer pUserData;
-	GFreeFunc pFreeDataFunc;
-	gint iTimeLength;
-	gchar *cDecoratorName;
+	/// size of the icon in the left margin, or 0 to use the default one.
 	gint iIconSize;
+	
+	/// number of frames of the image, if it's an animated image, otherwise 0.
+	gint iNbFrames;  // 0 <=> 1.
+	/// text of the message, or NULL.
+	gchar *cText;
+	/// maximum authorized width of the message; it will scroll if it is too large. Set 0 to not limit it.
+	gint iMaxTextWidth;  // 0 => pas de limite.
+	/// A text rendering description of the message, or NULL to use the default one.
+	CairoDockLabelDescription *pTextDescription;  // NULL => &myDialogs.dialogTextDescription
+	
+	/// a widget to interact with the user, or NULL.
+	GtkWidget *pInteractiveWidget;
+	/// a NULL-terminated list of images for buttons, or NULL. "ok" and "cancel" are key word to load the default "ok" and "cancel" buttons.
+	gchar **cButtonsImage;
+	/// function that will be called when the user click on a button, or NULL.
+	CairoDockActionOnAnswerFunc pActionFunc;
+	/// data passed as a parameter of the callback, or NULL.
+	gpointer pUserData;
+	/// a function to free the data when the dialog is destroyed, or NULL.
+	GFreeFunc pFreeDataFunc;
+	
+	/// life time of the dialog, or 0 for an unlimited dialog.
+	gint iTimeLength;
+	/// name of a decorator, or NULL to use the default one.
+	gchar *cDecoratorName;
 };
 
 struct _CairoDialogButton {
@@ -74,9 +100,9 @@ struct _CairoDialogButton {
 
 /// Definition of a Dialog.
 struct _CairoDialog {
-	/// type de container.
+	/// type of container.
 	CairoDockTypeContainer iType;
-	/// la fenetre GTK du dialog.
+	/// GTK window of the dialog.
 	GtkWidget *pWidget;
 	/// largeur de la fenetre GTK du dialog (pointe comprise).
 	gint iWidth;
@@ -227,16 +253,20 @@ gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog);
 void cairo_dock_free_dialog (CairoDialog *pDialog);
 
 /** Unreference all the dialogs pointed by an icon.
-*@param icon the icon dont on veut supprimer les dialogs.
+*@param icon the icon you want to delete all dialogs from.
 *@returns TRUE if at least one dialog has been unreferenced.
 */
 gboolean cairo_dock_remove_dialog_if_any (Icon *icon);
 
-
-
 GtkWidget *cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int iWidth, int iHeight, gboolean bCanResize);
 
 
+/** Generic function to pop up a dialog.
+*@param pAttribute attributes of the dialog.
+*@param pIcon the icon that will hold the dialog.
+*@param pContainer the container of the icon.
+*@return a newly created dialog, visible, with a reference of 1.
+*/
 CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer);
 
 
@@ -260,7 +290,7 @@ void cairo_dock_compute_dialog_sizes (CairoDialog *pDialog);
 *@param pFreeDataFunc function used to free the data when the dialog is destroyed, or NULL if unnecessary.
 *@return the newly created dialog, visible, with a reference of 1.
 */
-CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, gchar *cIconPath, GtkWidget *pInteractiveWidget, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc);
+CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, GtkWidget *pInteractiveWidget, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc);
 
 /** Pop up a dialog with a message, and a limited duration, and an icon in the margin.
 *@param cText the message to display.
@@ -268,7 +298,7 @@ CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, Cairo
 *@param pContainer the container of the icon.
 *@param fTimeLength the duration of the dialog (in ms), or 0 for an unlimited dialog.
 *@param cIconPath path to an icon.
-*@param ... arguments to insert in the message, in a printf way, facon printf.
+*@param ... arguments to insert in the message, in a printf way.
 *@return the newly created dialog, visible, with a reference of 1.
 */
 CairoDialog *cairo_dock_show_temporary_dialog_with_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, ...);

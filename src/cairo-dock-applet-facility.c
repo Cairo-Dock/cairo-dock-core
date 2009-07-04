@@ -106,8 +106,13 @@ void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surf
 	cairo_dock_add_reflection_to_icon (pIconContext, pIcon, pContainer);
 }
 
-void cairo_dock_set_image_on_icon (cairo_t *pIconContext, gchar *cImagePath, Icon *pIcon, CairoContainer *pContainer)
+void cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cImagePath, Icon *pIcon, CairoContainer *pContainer)
 {
+	if (cImagePath != pIcon->acFileName)
+	{
+		g_free (pIcon->acFileName);
+		pIcon->acFileName = g_strdup (cImagePath);
+	}
 	int iWidth, iHeight;
 	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
 	cairo_surface_t *pImageSurface = cairo_dock_create_surface_for_icon (cImagePath,

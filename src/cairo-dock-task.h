@@ -7,10 +7,20 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-task.h An easy way to define periodic and asynchronous tasks.
-* Tasks can of course be synchronous and/or not periodic.
-* 
-*/
+*@file cairo-dock-task.h An easy way to define periodic and asynchronous tasks, that can perform heavy jobs without blocking the dock.
+ *
+ *  A Task is divided in 2 phases : 
+ * - the asynchronous phase will be executed in another thread, while the dock continues to run on its own thread, in parallel. During this phase you will do all the heavy job (like downloading a file or computing something) but you can't interact on the dock.
+ * - the synchronous phase will be executed after the first one has finished. There you will update your applet with the result of the first phase.
+ * 
+ * \attention A data buffer is used to communicate between the 2 phases. It is important that these datas are never accessed outside of the task, and vice versa that the asynchronous thread never accesses other data than these ones.\n
+ * If you want to access these datas outside of the task, you have to copy them in a safe place during the 2nd phase, or to stop the task before (beware that stopping the task means waiting for the 1st phase to finish, which can take some time).
+ * 
+ * You create a Task with \ref cairo_dock_new_task, launch it with \ref cairo_dock_launch_task, and destroy it with \ref cairo_dock_free_task.
+ *
+ * A Task can be periodic if you specify a period, otherwise it will be executed once. It also can also be fully synchronous if you don't specify an asynchronous function.
+ * 
+ */
 
 /// Type of frequency for a periodic task. The frequency of the Task is divided by 2, 4, and 10 for each state.
 typedef enum {
@@ -38,11 +48,11 @@ struct _CairoDockTask {
 	CairoDockGetDataAsyncFunc get_data;
 	/// function carrying out the update of the dock. Returns TRUE to continue, FALSE to stop.
 	CairoDockUpdateSyncFunc update;
-	/// intervalle de temps en secondes, eventuellement nul pour une Task unitaire.
+	/// interval of time in seconds, 0 to run the Task once.
 	gint iPeriod;
 	/// etat of the frequency of the Task.
 	CairoDockFrequencyState iFrequencyState;
-	/// pSharedMemory structure passee en entree des fonctions get_data et update. Ne doit pas etre accedee en dehors de ces 2 fonctions !
+	/// pSharedMemory structure passed as parameter of the 'get_data' and 'update' functions. Must not be accessed outside of these 2 functions !
 	gpointer pSharedMemory;
 } ;
 

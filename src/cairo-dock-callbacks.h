@@ -12,7 +12,6 @@ void cairo_dock_freeze_docks (gboolean bFreeze);
 gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext);
 gboolean cairo_dock_on_expose (GtkWidget *pWidget, GdkEventExpose *pExpose, CairoDock *pDock);
 
-void cairo_dock_show_subdock (Icon *pPointedIcon, gboolean bUpdate, CairoDock *pDock);
 void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, CairoDock *pDock);
 gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 					GdkEventMotion* pMotion,

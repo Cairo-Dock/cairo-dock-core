@@ -68,8 +68,8 @@
 #include <cairo-dock/cairo-dock-applet-canvas.h>
 // classes presque independantes de CD.
 #include <cairo-dock/cairo-dock-data-renderer.h>
-#include <cairo-dock/cairo-dock-graph2.h>
-#include <cairo-dock/cairo-dock-gauge2.h>
+#include <cairo-dock/cairo-dock-graph.h>
+#include <cairo-dock/cairo-dock-gauge.h>
 #include <cairo-dock/cairo-dock-notifications.h>
 #include <cairo-dock/cairo-dock-surface-factory.h>
 #include <cairo-dock/cairo-dock-X-utilities.h>
@@ -80,8 +80,5 @@
 #include <cairo-dock/cairo-dock-keybinder.h>
 #include <cairo-dock/cairo-dock-task.h>
 #include <cairo-dock/cairo-dock-particle-system.h>
-// deprecated
-#include <cairo-dock/cairo-dock-gauge.h>
-#include <cairo-dock/cairo-dock-graph.h>
 
 #endif

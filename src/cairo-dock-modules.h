@@ -11,10 +11,13 @@ G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-modules.h This class defines and handles the external and internal modules of Cairo-Dock.
+*
 * A module has an interface and a visit card :
 *  - the visit card allows it to define itself (name, category, default icon, etc)
 *  - the interface defines the entry points for init, stop, reload, read config, and reset datas.
+*
 * Modules can be instanciated several times; each time they are, an instance is created. This instance will hold all the data used by the module's functions : the icon and its container, the config structure and its conf file, the data structure and a slot to plug datas into containers and icons. All these parameters are optionnal; a module that has an icon is also called an applet.
+*
 * Internal modules are just simplified version of modules, and are used internally by Cairo-Dock. As a special feature, a module can bind itself to an internal module, if its purpose is to complete it.
 */
 
@@ -27,7 +30,7 @@ typedef enum {
 	CAIRO_DOCK_CATEGORY_APPLET_CONTROLER,
 	CAIRO_DOCK_CATEGORY_PLUG_IN,
 	CAIRO_DOCK_NB_CATEGORY
-	} CairoDockPluginCategory;
+	} CairoDockModuleCategory;
 #define CAIRO_DOCK_CATEGORY_DESKTOP CAIRO_DOCK_CATEGORY_APPLET_DESKTOP
 #define CAIRO_DOCK_CATEGORY_ACCESSORY CAIRO_DOCK_CATEGORY_APPLET_ACCESSORY
 #define CAIRO_DOCK_CATEGORY_CONTROLER CAIRO_DOCK_CATEGORY_APPLET_CONTROLER
@@ -57,7 +60,7 @@ struct _CairoDockVisitCard {
 	/// nom de son fichier de conf.
 	gchar *cConfFileName;
 	/// categorie de l'applet.
-	CairoDockPluginCategory iCategory;
+	CairoDockModuleCategory iCategory;
 	/// chemin d'une image pour l'icone du module dans le panneau de conf du dock.
 	gchar *cIconFilePath;
 	/// taille de la structure contenant la config du module.
@@ -90,43 +93,48 @@ struct _CairoDockModuleInterface {
 
 /// Definition of an instance of a module.
 struct _CairoDockModuleInstance {
+	/// the module this instance represents.
 	CairoDockModule *pModule;
+	/// conf file of the instance.
 	gchar *cConfFilePath;
+	/// TRUE if the instance can be detached from docks (desklet mode).
 	gboolean bCanDetach;
+	/// the icon holding the instance.
 	Icon *pIcon;
+	/// container of the icon.
 	CairoContainer *pContainer;
+	/// this field repeats the 'pContainer' field if the container is a dock, and is NULL otherwise.
 	CairoDock *pDock;
+	/// this field repeats the 'pContainer' field if the container is a desklet, and is NULL otherwise.
 	CairoDesklet *pDesklet;
+	/// a drawing context on the icon.
 	cairo_t *pDrawContext;
+	/// a unique ID to insert external data on icons and containers.
 	gint iSlotID;
-	/**gpointer *myConfig;
+	/*gpointer *myConfig;
 	gpointer *myData;*/
 };
 
-/// Fill the visit card and the interface of a module.
+/// Pre-init function of a module. Fills the visit card and the interface of a module.
 typedef gboolean (* CairoDockModulePreInit) (CairoDockVisitCard *pVisitCard, CairoDockModuleInterface *pInterface);
 
 /// Definition of an external module.
 struct _CairoDockModule {
-	/// chemin du .so
+	/// path to the .so file.
 	gchar *cSoFilePath;
-	/// structure du module, contenant les pointeurs vers les fonctions du module.
+	/// internal structure of the .so file, containing pointers to the module's functions.
 	GModule *pModule;
-	/// fonctions d'interface du module.
+	/// interface of the module.
 	CairoDockModuleInterface *pInterface;
-	/// carte de visite du module.
+	/// visit card of the module.
 	CairoDockVisitCard *pVisitCard;
-	/// chemin du fichier de conf du module.
+	/// conf file of the module.
 	gchar *cConfFilePath;
-	/// TRUE si le module est actif (c'est-a-dire utilise).
-	///gboolean bActive;
-	/// VRAI ssi l'appet est prevue pour pouvoir se detacher.
+	/// TRUE if the appet can be detached from a dock (desklet mode).
 	gboolean bCanDetach;
-	/// le container dans lequel va se charger le module, ou NULL.
-	///CairoContainer *pContainer;
-	/// Heure de derniere (re)activation du module.
+	/// last time the module was (re)activated.
 	gdouble fLastLoadingTime;
-	/// Liste d'instance du plug-in.
+	/// List of instances of the module.
 	GList *pInstancesList;
 };
 
@@ -148,14 +156,13 @@ typedef void (* CairoDockInternalModuleReloadFunc) (CairoInternalModuleConfigPtr
 typedef gboolean (* CairoDockInternalModuleGetConfigFunc) (GKeyFile *pKeyFile, CairoInternalModuleConfigPtr *pConfig);
 typedef void (* CairoDockInternalModuleResetConfigFunc) (CairoInternalModuleConfigPtr *pConfig);
 typedef void (* CairoDockInternalModuleResetDataFunc) (CairoInternalModuleDataPtr *pData);
-/// Definition of an internal module.
 struct _CairoDockInternalModule {
 	//\_____________ Carte de visite.
 	const gchar *cModuleName;
 	const gchar *cDescription;
 	const gchar *cIcon;
 	const gchar *cTitle;
-	CairoDockPluginCategory iCategory;
+	CairoDockModuleCategory iCategory;
 	gint iSizeOfConfig;
 	gint iSizeOfData;
 	const gchar **cDependencies;  // NULL terminated.
@@ -189,7 +196,7 @@ void cairo_dock_free_visit_card (CairoDockVisitCard *pVisitCard);
 */
 CairoDockModule * cairo_dock_load_module (gchar *cSoFilePath, GError **erreur);
 
-/** Load all th emodules of a given folder.
+/** Load all the modules of a given folder.
 *@param cModuleDirPath path to the a folder containing .so files.
 *@param erreur error set if something bad happens.
 */
@@ -250,9 +257,6 @@ CairoDockModule *cairo_dock_foreach_module_in_alphabetical_order (GCompareFunc p
 
 gchar *cairo_dock_list_active_modules (void);
 void cairo_dock_update_conf_file_with_active_modules (void);
-
-
-int cairo_dock_get_nb_modules (void);
 
 void cairo_dock_update_module_instance_order (CairoDockModuleInstance *pModuleInstance, double fOrder);
 

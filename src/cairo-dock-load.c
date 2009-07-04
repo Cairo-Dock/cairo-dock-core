@@ -200,12 +200,6 @@ cairo_surface_t *cairo_dock_load_image (cairo_t *pSourceContext, const gchar *cI
 	return pNewSurface;
 }
 
-cairo_surface_t *cairo_dock_load_image_for_icon (cairo_t *pSourceContext, const gchar *cImageFile, double fImageWidth, double fImageHeight)
-{
-	double fImageWidth_ = fImageWidth, fImageHeight_ = fImageHeight;
-	return cairo_dock_load_image (pSourceContext, cImageFile, &fImageWidth_, &fImageHeight_, 0., 1., FALSE);
-}
-
 
 void cairo_dock_add_reflection_to_icon (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer)
 {
@@ -469,10 +463,10 @@ void cairo_dock_fill_one_text_buffer (Icon *icon, cairo_t* pSourceContext, Cairo
 		cTruncatedName = cairo_dock_cut_string (icon->acName, myTaskBar.iAppliMaxNameLength);
 	}
 	
-	cairo_surface_t* pNewSurface = cairo_dock_create_surface_from_text ((cTruncatedName != NULL ? cTruncatedName : icon->acName),
+	cairo_surface_t* pNewSurface = cairo_dock_create_surface_from_text_full ((cTruncatedName != NULL ? cTruncatedName : icon->acName),
 		pSourceContext,
 		pTextDescription,
-		1.,
+		1., 0,
 		&icon->iTextWidth, &icon->iTextHeight, &icon->fTextXOffset, &icon->fTextYOffset);
 	g_free (cTruncatedName);
 	//g_print (" -> %s : (%.2f;%.2f) %dx%d\n", icon->acName, icon->fTextXOffset, icon->fTextYOffset, icon->iTextWidth, icon->iTextHeight);

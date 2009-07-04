@@ -1019,12 +1019,6 @@ void cairo_dock_update_conf_file_with_active_modules (void)
 }
 
 
-int cairo_dock_get_nb_modules (void)
-{
-	return g_hash_table_size (s_hModuleTable);
-}
-
-
 void cairo_dock_update_module_instance_order (CairoDockModuleInstance *pModuleInstance, double fOrder)
 {
 	cd_message ("%s <- %.2f", pModuleInstance->pModule->pVisitCard->cModuleName, fOrder);

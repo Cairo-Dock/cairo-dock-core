@@ -7,27 +7,34 @@
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
+
+/**
+*@file cairo-dock-draw.h This class provides some useful functions to draw with libcairo.
+*/
+
   ///////////////
  /// CONTEXT ///
 ///////////////
-/** Cree un contexte de dessin pour la libcairo. Si glitz est active, le contexte sera lie a une surface glitz (et donc on dessinera directement sur la carte graphique), sinon a une surface X representant la fenetre du container.
-*@param pContainer un container.
-*@return le contexte sur lequel dessiner. N'est jamais nul; tester sa coherence avec cairo_status() avant de l'utiliser, et le detruire avec cairo_destroy() apres en avoir fini avec lui.
+/** Create a drawing context. It links it to a Glitz surface if this one is activated, or to an X surface representing the window of the container.
+*@param pContainer a container.
+*@return the context on which to draw. Is never NULL, test it with cairo_status() before use it, and destroy it with cairo_destroy() when you're done with it.
 */
 cairo_t * cairo_dock_create_context_from_container (CairoContainer *pContainer);
 #define cairo_dock_create_context_from_window cairo_dock_create_context_from_container
+#define cairo_dock_create_drawing_context_generic cairo_dock_create_context_from_container
 
-/** Cree un contexte de dessin cairo pour dessiner sur un container. Gere la fausse transparence.
-*@param pContainer le container sur lequel on veut dessiner
-*@return le contexte cairo nouvellement alloue.
+/** Create a drawing context to draw on a container. It handles fake transparency.
+*@param pContainer the container on which you want to draw.
+*@return the newly allocated context, to be destroyed with 'cairo_destroy'.
 */
 cairo_t *cairo_dock_create_drawing_context (CairoContainer *pContainer);
+#define cairo_dock_create_drawing_context_on_container cairo_dock_create_drawing_context
 
-/** Cree un contexte de dessin cairo pour dessiner sur une partie d'un container seulement. Gere la fausse transparence.
-*@param pContainer le container sur lequel on veut dessiner
-*@param pArea la partie du container a redessiner
-*@param fBgColor la couleur de fond (rvba) avec laquelle remplir l'aire, ou NULL pour la laisser transparente.
-*@return le contexte cairo nouvellement alloue, avec un clip correspondant a l'aire.
+/** Create a drawing context to draw on a part of a container. It handles fake transparency.
+*@param pContainer the container on which you want to draw
+*@param pArea part of the container to draw.
+*@param fBgColor background color (rgba) to fill the area with, or NULL to let it transparent.
+*@return the newly allocated context, with a clip corresponding to the area, to be destroyed with 'cairo_destroy'.
 */
 cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, GdkRectangle *pArea, double *fBgColor);
 
@@ -35,12 +42,17 @@ cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, 
 
 double cairo_dock_calculate_extra_width_for_trapeze (double fFrameHeight, double fInclination, double fRadius, double fLineWidth);
 
-
+/** Compute the path of a rectangle with rounded corners. It doesn't stroke it, use cairo_stroke or cairo_fill to draw the line or the inside.
+*@param pCairoContext a drawing context; the current matrix is not altered, but the current path is.
+*@param fRadius radius if the corners.
+*@param fLineWidth width of the line.
+*@param fFrameWidth width of the rectangle, without the corners.
+*@param fFrameHeight height of the rectangle, including the corners.
+*/
 void cairo_dock_draw_rounded_rectangle (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight);
 
-/**
-*Trace sur le contexte un contour trapezoidale aux coins arrondis. Le contour n'est pas dessine, mais peut l'etre a posteriori, et peut servir de cadre pour y dessiner des choses dedans.
-*@param pCairoContext le contexte du dessin, contenant le cadre a la fin de la fonction.
+/* Trace sur the context un contour trapezoidale aux coins arrondis. Le contour n'est pas dessine, mais peut l'etre a posteriori, et peut servir de cadre pour y dessiner des choses dedans.
+*@param pCairoContext the context du dessin, contenant le cadre a la fin de la fonction.
 *@param fRadius le rayon en pixels des coins.
 *@param fLineWidth l'epaisseur en pixels du contour.
 *@param fFrameWidth la largeur de la plus petite base du trapeze.
@@ -53,9 +65,8 @@ void cairo_dock_draw_rounded_rectangle (cairo_t *pCairoContext, double fRadius, 
 */
 double cairo_dock_draw_frame (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination, gboolean bHorizontal);
 
-/**
-*Dessine les decorations d'un dock a l'interieur d'un cadre prealablement trace sur le contexte.
-*@param pCairoContext le contexte du dessin, est laisse intact par la fonction.
+/* Dessine les decorations d'un dock a l'interieur d'un cadre prealablement trace sur the context.
+*@param pCairoContext the context du dessin, est laisse intact par la fonction.
 *@param pDock le dock sur lequel appliquer les decorations.
 *@param fOffsetY position du coin haut gauche du cadre, dans le sens de la hauteur du dock.
 *@param fOffsetX position du coin haut gauche du cadre, dans le sens de la largeur du dock.
@@ -66,17 +77,21 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 
 void cairo_dock_set_icon_scale_on_context (cairo_t *pCairoContext, Icon *icon, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp);
 
+/** Draw an icon and its reflect on a dock. Only draw the icon's image and reflect, and nothing else.
+*@param icon the icon to draw.
+*@param pDock the dock containing the icon.
+*@param pCairoContext a context on the dock, not altered by the function.
+*/
 void cairo_dock_draw_icon_cairo (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext);
 
 gboolean cairo_dock_render_icon_notification_cairo (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext);
 
-/**
-*Dessine entierement une icone, dont toutes les caracteristiques ont ete prealablement calculees. Gere sa position, sa transparence (modulee par la transparence du dock au repos), son reflet, son placement de profil, son etiquette, et son info-rapide.
-*@param icon l'icone a dessiner.
-*@param pDock le dock contenant l'icone.
-*@param pCairoContext le contexte du dessin, est altere pendant le dessin.
-*@param fDockMagnitude la magnitude actuelle du dock.
-*@param bUseText TRUE pour dessiner les etiquettes.
+/** Draw an icon, according to its current parameters : position, transparency, reflect, rotation, stretching. Also draws its indicators, label, and quick-info. It generates a CAIRO_DOCK_RENDER_ICON notification.
+*@param icon the icon to draw.
+*@param pDock the dock containing the icon.
+*@param pCairoContext a context on the dock, it is altered by the function.
+*@param fDockMagnitude current magnitude of the dock.
+*@param bUseText TRUE to draw the labels.
 */
 void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude, gboolean bUseText);
 void cairo_dock_render_icons_linear (cairo_t *pCairoContext, CairoDock *pDock);
@@ -84,19 +99,21 @@ void cairo_dock_render_icons_linear (cairo_t *pCairoContext, CairoDock *pDock);
 void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, gboolean bUseReflect, gboolean bUseText, int iWidth);
 
 
-/**
-*Dessine une ficelle reliant le centre de toutes les icones, en commencant par la 1ere dessinee.
-*@param pCairoContext le contexte du dessin, n'est pas altere par la fonction.
-*@param pDock le dock contenant les icônes a relier.
-*@param fStringLineWidth epaisseur de la ligne.
-*@param bIsLoop TRUE si on veut boucler (relier la derniere icone a la 1ere).
-*@param bForceConstantSeparator TRUE pour forcer les separateurs a etre consideres comme de taille constante.
+/** Draw a string linking the center of all the icons of a dock.
+*@param pCairoContext a context on the dock, not altered by the function.
+*@param pDock the dock.
+*@param fStringLineWidth width of the line.
+*@param bIsLoop TRUE to loop (link the last icon to the first one).
+*@param bForceConstantSeparator TRUE to consider separators having a constant size.
 */
 void cairo_dock_draw_string (cairo_t *pCairoContext, CairoDock *pDock, double fStringLineWidth, gboolean bIsLoop, gboolean bForceConstantSeparator);
 
 
 void cairo_dock_draw_surface (cairo_t *pCairoContext, cairo_surface_t *pSurface, int iWidth, int iHeight, gboolean bDirectionUp, gboolean bHorizontal, gdouble fAlpha);
 
+/** Erase a drawing context, making it fully transparent. You don't need to erase a newly created context.
+*@param pCairoContext a drawing context.
+*/
 #define cairo_dock_erase_cairo_context(pCairoContext) do {\
 	cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 0.0);\
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);\
@@ -107,7 +124,7 @@ void cairo_dock_draw_surface (cairo_t *pCairoContext, cairo_surface_t *pSurface,
 void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock);
 
 
-/**#define _cairo_dock_extend_area(area, x, y, w, h) do {\
+/*#define _cairo_dock_extend_area(area, x, y, w, h) do {\
 	int xmin = MIN (area.x, x);
 	int ymin = MIN (area.y, y);
 	area.width = MAX (area.x + area.width, x + w) - xmin;\

@@ -29,7 +29,6 @@
 #include "cairo-dock-struct.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-container.h"
-//#include "cairo-dock-icons.h"
 G_BEGIN_DECLS
 
 
@@ -41,10 +40,15 @@ G_BEGIN_DECLS
 
 /// Type of accessibility of a Desklet.
 typedef enum {
+	/// Normal, like normal window
 	CAIRO_DESKLET_NORMAL = 0,
+	/// always above
 	CAIRO_DESKLET_KEEP_ABOVE,
+	/// always below
 	CAIRO_DESKLET_KEEP_BELOW,
+	/// on the Compiz widget layer
 	CAIRO_DESKLET_ON_WIDGET_LAYER,
+	/// prevent other windows form overlapping it
 	CAIRO_DESKLET_RESERVE_SPACE
 	} CairoDeskletAccessibility;
 
@@ -207,7 +211,8 @@ struct _CairoDesklet {
 	gboolean bSpaceReserved;
 };
 
-#define CD_NB_ITER_FOR_GRADUATION 10
+/// Definition of a function that runs through all desklets.
+typedef gboolean (* CairoDockForeachDeskletFunc) (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, gpointer data);
 
 
 /** Say if a Container is a desklet.

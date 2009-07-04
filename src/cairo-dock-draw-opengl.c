@@ -819,17 +819,6 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImagePath, doubl
 	return iTexture;
 }
 
-GLuint cairo_dock_load_local_texture (const gchar *cImageName, const gchar *cDirPath)
-{
-	g_return_val_if_fail (GTK_WIDGET_REALIZED (g_pMainDock->pWidget), 0);
-
-	gchar *cTexturePath = g_strdup_printf ("%s/%s", cDirPath, cImageName);
-	//g_print ("%s\n", cTexturePath);
-	GLuint iTexture = cairo_dock_create_texture_from_image (cTexturePath);
-	g_free (cTexturePath);
-	return iTexture;
-}
-
 
 void cairo_dock_update_icon_texture (Icon *pIcon)
 {
@@ -916,15 +905,6 @@ void cairo_dock_update_quick_info_texture (Icon *pIcon)
 }
 
 
-void cairo_dock_apply_texture (GLuint iTexture)
-{
-	_cairo_dock_apply_texture (iTexture);
-}
-
-void cairo_dock_apply_texture_at_size (GLuint iTexture, int iWidth, int iHeight)
-{
-	_cairo_dock_apply_texture_at_size (iTexture, iWidth, iHeight);
-}
 
 void cairo_dock_draw_texture_with_alpha (GLuint iTexture, int iWidth, int iHeight, double fAlpha)
 {
@@ -943,11 +923,6 @@ void cairo_dock_draw_texture_with_alpha (GLuint iTexture, int iWidth, int iHeigh
 void cairo_dock_draw_texture (GLuint iTexture, int iWidth, int iHeight)
 {
 	cairo_dock_draw_texture_with_alpha (iTexture, iWidth, iHeight, 1.);
-}
-
-void cairo_dock_apply_icon_texture (Icon *pIcon)
-{
-	_cairo_dock_apply_texture (pIcon->iIconTexture);
 }
 
 void cairo_dock_apply_icon_texture_at_current_size (Icon *pIcon, CairoContainer *pContainer)
@@ -1800,10 +1775,12 @@ void cairo_dock_load_animated_image (const gchar *cImageFile, int iNbFrames, int
 	pAnimatedImage->iNbFrames = iNbFrames;
 	pAnimatedImage->iCurrentFrame = 0;
 	
-	double fImageWidth = iFrameWidth * iNbFrames, fImageHeight = iFrameHeight;
-	pAnimatedImage->pSurface = cairo_dock_load_image (pSourceContext, cImageFile, &fImageWidth, &fImageHeight, 0., 1., FALSE);
-	pAnimatedImage->iFrameWidth = fImageWidth;
-	pAnimatedImage->iFrameHeight = fImageHeight;
+	pAnimatedImage->iFrameWidth = iFrameWidth * iNbFrames;
+	pAnimatedImage->iFrameHeight = iFrameHeight;
+	pAnimatedImage->pSurface = cairo_dock_create_surface_from_image_simple (cImageFile,
+			pSourceContext,
+			pAnimatedImage->iFrameWidth,
+			pAnimatedImage->iFrameHeight);
 	
 	if (g_bUseOpenGL && pAnimatedImage->pSurface != NULL)
 	{

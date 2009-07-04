@@ -540,8 +540,8 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 static cairo_surface_t *_cairo_dock_load_button_icon (cairo_t *pCairoContext, const gchar *cButtonImage, const gchar *cDefaultButtonImage)
 {
 	//g_print ("%s (%d ; %d)\n", __func__, myDialogs.iDialogButtonWidth, myDialogs.iDialogButtonHeight);
-	cairo_surface_t *pButtonSurface = cairo_dock_load_image_for_icon (pCairoContext,
-		cButtonImage,
+	cairo_surface_t *pButtonSurface = cairo_dock_create_surface_from_image_simple (cButtonImage,
+		pCairoContext,
 		myDialogs.iDialogButtonWidth,
 		myDialogs.iDialogButtonHeight);
 
@@ -549,8 +549,8 @@ static cairo_surface_t *_cairo_dock_load_button_icon (cairo_t *pCairoContext, co
 	{
 		gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, cDefaultButtonImage);
 		//g_print ("  on charge %s par defaut\n", cIconPath);
-		pButtonSurface = cairo_dock_load_image_for_icon (pCairoContext,
-			cIconPath,
+		pButtonSurface = cairo_dock_create_surface_from_image_simple (cIconPath,
+			pCairoContext,
 			myDialogs.iDialogButtonWidth,
 			myDialogs.iDialogButtonHeight);
 		g_free (cIconPath);
@@ -832,8 +832,8 @@ static cairo_surface_t *_cairo_dock_create_dialog_text_surface (const gchar *cTe
 		0,
 		iTextWidth,
 		iTextHeight,
-		&fTextXOffset,
-		&fTextYOffset);
+		NULL,
+		NULL);
 	return pTextBuffer;
 }
 
@@ -857,9 +857,10 @@ static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cIm
 	else
 	{
 		double fImageWidth = iNbFrames * iDesiredSize, fImageHeight = iDesiredSize;
-		pIconBuffer = cairo_dock_load_image (pSourceContext, cImageFilePath,
-			&fImageWidth, &fImageHeight,
-			0., 1., FALSE);
+		pIconBuffer = cairo_dock_create_surface_from_image_simple (cImageFilePath,
+			pSourceContext,
+			fImageWidth,
+			fImageHeight);
 	}
 	if (pIconBuffer != NULL)
 		*iIconSize = iDesiredSize;
@@ -977,8 +978,8 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 					cButtonPath = cairo_dock_search_icon_s_path (cButtonImage);
 				else
 					cButtonPath = cButtonImage;
-				pDialog->pButtons[i].pSurface = cairo_dock_load_image_for_icon (pSourceContext,
-					cButtonPath,
+				pDialog->pButtons[i].pSurface = cairo_dock_create_surface_from_image_simple (cButtonPath,
+					pSourceContext,
 					myDialogs.iDialogButtonWidth,
 					myDialogs.iDialogButtonHeight);
 				if (cButtonPath != cButtonImage)
@@ -1370,7 +1371,7 @@ void cairo_dock_replace_all_dialogs (void)
 }
 
 
-CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, gchar *cIconPath, GtkWidget *pInteractiveWidget, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
+CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, GtkWidget *pInteractiveWidget, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
 {
 	if (pIcon != NULL && pIcon->fPersonnalScale > 0)  // icone en cours de suppression.
 	{
@@ -1380,8 +1381,8 @@ CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, Cairo
 	
 	CairoDialogAttribute attr;
 	memset (&attr, 0, sizeof (CairoDialogAttribute));
-	attr.cText = cText;
-	attr.cImageFilePath = cIconPath;
+	attr.cText = (gchar *)cText;
+	attr.cImageFilePath = (gchar *)cIconPath;
 	attr.pInteractiveWidget = pInteractiveWidget;
 	attr.pActionFunc = pActionFunc;
 	attr.pUserData = data;
@@ -1389,8 +1390,8 @@ CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, Cairo
 	attr.iTimeLength = (int) fTimeLength;
 	if (pActionFunc != NULL)
 	{
-		gchar *cButtons[3] = {"ok", "cancel", NULL};
-		attr.cButtonsImage = cButtons;
+		const gchar *cButtons[3] = {"ok", "cancel", NULL};
+		attr.cButtonsImage = (gchar **)cButtons;
 	}
 	
 	CairoDialog *pDialog = cairo_dock_build_dialog (&attr, pIcon, pContainer);

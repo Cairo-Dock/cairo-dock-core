@@ -60,6 +60,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-class-manager.h"
+#include "cairo-dock-X-utilities.h"
 #include "cairo-dock-callbacks.h"
 
 static Icon *s_pIconClicked = NULL;  // pour savoir quand on deplace une icone a la souris. Dangereux si l'icone se fait effacer en cours ...
@@ -194,88 +195,6 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 }
 
 
-void cairo_dock_show_subdock (Icon *pPointedIcon, gboolean bUpdate, CairoDock *pDock)
-{
-	cd_debug ("on montre le dock fils");
-	CairoDock *pSubDock = pPointedIcon->pSubDock;
-	g_return_if_fail (pSubDock != NULL);
-	
-	if (GTK_WIDGET_VISIBLE (pSubDock->pWidget))  // il est deja visible.
-	{
-		if (pSubDock->bIsShrinkingDown)  // il est en cours de diminution, on renverse le processus.
-		{
-			cairo_dock_start_growing (pSubDock);
-		}
-		return ;
-	}
-
-	if (bUpdate)
-	{
-		pDock->calculate_icons (pDock);  // c'est un peu un hack pourri, l'idee c'est de recalculer la position exacte de l'icone pointee pour pouvoir placer le sous-dock precisement, car sa derniere position connue est decalee d'un coup de molette par rapport a la nouvelle, ce qui fait beaucoup. L'ideal etant de le faire que pour l'icone concernee ...
-	}
-
-	pSubDock->set_subdock_position (pPointedIcon, pDock);
-
-	pSubDock->fFoldingFactor = (mySystem.bAnimateSubDock ? mySystem.fUnfoldAcceleration : 0);
-	pSubDock->bAtBottom = FALSE;
-	int iNewWidth, iNewHeight;
-	if (pSubDock->fFoldingFactor == 0)
-	{
-		cd_debug ("  on montre le sous-dock sans animation");
-		cairo_dock_get_window_position_and_geometry_at_balance (pSubDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);  // CAIRO_DOCK_NORMAL_SIZE -> CAIRO_DOCK_MAX_SIZE pour la 1.5.4
-		pSubDock->bAtBottom = TRUE;  // bAtBottom ajoute pour la 1.5.4
-
-		gtk_window_present (GTK_WINDOW (pSubDock->pWidget));
-
-		if (pSubDock->bHorizontalDock)
-			gdk_window_move_resize (pSubDock->pWidget->window,
-				pSubDock->iWindowPositionX,
-				pSubDock->iWindowPositionY,
-				iNewWidth,
-				iNewHeight);
-		else
-			gdk_window_move_resize (pSubDock->pWidget->window,
-				pSubDock->iWindowPositionY,
-				pSubDock->iWindowPositionX,
-				iNewHeight,
-				iNewWidth);
-
-		/*if (pSubDock->bHorizontalDock)
-			gtk_window_move (GTK_WINDOW (pSubDock->pWidget), pSubDock->iWindowPositionX, pSubDock->iWindowPositionY);
-		else
-			gtk_window_move (GTK_WINDOW (pSubDock->pWidget), pSubDock->iWindowPositionY, pSubDock->iWindowPositionX);
-
-		gtk_window_present (GTK_WINDOW (pSubDock->pWidget));*/
-		///gtk_widget_show (GTK_WIDGET (pSubDock->pWidget));
-	}
-	else
-	{
-		cd_debug ("  on montre le sous-dock avec animation");
-		cairo_dock_get_window_position_and_geometry_at_balance (pSubDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
-
-		gtk_window_present (GTK_WINDOW (pSubDock->pWidget));
-		///gtk_widget_show (GTK_WIDGET (pSubDock->pWidget));
-		if (pSubDock->bHorizontalDock)
-			gdk_window_move_resize (pSubDock->pWidget->window,
-				pSubDock->iWindowPositionX,
-				pSubDock->iWindowPositionY,
-				iNewWidth,
-				iNewHeight);
-		else
-			gdk_window_move_resize (pSubDock->pWidget->window,
-				pSubDock->iWindowPositionY,
-				pSubDock->iWindowPositionX,
-				iNewHeight,
-				iNewWidth);
-
-		cairo_dock_start_growing (pSubDock);  // on commence a faire grossir les icones.
-	}
-	//g_print ("  -> Gap %d;%d -> W(%d;%d) (%d)\n", pSubDock->iGapX, pSubDock->iGapY, pSubDock->iWindowPositionX, pSubDock->iWindowPositionY, pSubDock->bHorizontalDock);
-	
-	gtk_window_set_keep_above (GTK_WINDOW (pSubDock->pWidget), myAccessibility.bPopUp);
-	
-	cairo_dock_replace_all_dialogs ();
-}
 static gboolean _cairo_dock_show_sub_dock_delayed (CairoDock *pDock)
 {
 	cd_debug ("");
@@ -283,7 +202,7 @@ static gboolean _cairo_dock_show_sub_dock_delayed (CairoDock *pDock)
 	s_pDockShowingSubDock = NULL;
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
 	if (icon != NULL && icon->pSubDock != NULL)
-		cairo_dock_show_subdock (icon, FALSE, pDock);
+		cairo_dock_show_subdock (icon, pDock, FALSE);
 
 	return FALSE;
 }
@@ -354,7 +273,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 			//cd_debug ("s_iSidShowSubDockDemand <- %d\n", s_iSidShowSubDockDemand);
 		}
 		else
-			cairo_dock_show_subdock (pPointedIcon, FALSE, pDock);
+			cairo_dock_show_subdock (pPointedIcon, pDock, FALSE);
 		s_pLastPointedDock = pDock;
 	}
 
@@ -930,6 +849,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		Icon *pFlyingIcon = s_pFlyingContainer->pIcon;
 		g_print ("on remet l'icone volante dans son dock d'origine (%s)\n", pFlyingIcon->cParentDockName);
 		cairo_dock_free_flying_container (s_pFlyingContainer);
+		cairo_dock_stop_icon_animation (pFlyingIcon);
 		cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 		cairo_dock_start_icon_animation (pFlyingIcon, pDock);
 		s_pFlyingContainer = NULL;
@@ -1200,7 +1120,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick)  // icone de sous-dock a montrer au clic.
 	{
-		cairo_dock_show_subdock (icon, FALSE, pDock);
+		cairo_dock_show_subdock (icon, pDock, FALSE);
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	}
 	else if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))  // URI : on lance ou on monte.
@@ -1446,7 +1366,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 	{
 		GtkWidget *menu = cairo_dock_build_menu (icon, CAIRO_CONTAINER (pDock));  // genere un CAIRO_DOCK_BUILD_MENU.
 		
-		cairo_dock_popup_menu_on_container (menu, pDock);
+		cairo_dock_popup_menu_on_container (menu, CAIRO_CONTAINER (pDock));
 	}
 	else if (pButton->button == 2 && pButton->type == GDK_BUTTON_PRESS)  // clique milieu.
 	{

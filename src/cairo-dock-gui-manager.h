@@ -7,7 +7,9 @@
 G_BEGIN_DECLS
 
 /** @file cairo-dock-gui-manager.h This file manages the GUIs of Cairo-Dock.
-* GUIs are built from a .conf file; .conf files are normal group/key files, but with some special indications in the comments. Each key will be represented by a pre-defined widget, that is defined by the first caracter of its comment. The comment also contains a description of the key, and an optionnal tooltip. See cairo-dock-gui-factory.c for the list of pre-defined widgets, and see cairo-dock.conf for a complete exemple.
+* 
+* GUIs are built from a .conf file; .conf files are normal group/key files, but with some special indications in the comments. Each key will be represented by a pre-defined widget, that is defined by the first caracter of its comment. The comment also contains a description of the key, and an optionnal tooltip. See cairo-dock-gui-factory.h for the list of pre-defined widgets and a short explanation on how to use them inside a conf file. The file 'cairo-dock.conf' can be an useful example.
+* 
 * GUIs can be stand-alone (like the Theme-Manager), or embedded inside the main GUI in the case of modules.
 * 
 */
@@ -40,6 +42,9 @@ struct _CairoDockGroupDescription {
 
 typedef struct _CairoDockGroupDescription CairoDockGroupDescription;
 typedef struct _CairoDockCategoryWidgetTable CairoDockCategoryWidgetTable;
+
+/// Definition of the callback called when the user apply the config panelS.
+typedef gboolean (* CairoDockApplyConfigFunc) (gpointer data);
 
 
 int cairo_dock_get_nb_config_panels (void);

@@ -10,7 +10,9 @@ G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-container.h This class defines the basis of containers, that are classic or hardware accelerated animated windows.
+*
 * A container is a rectangular located surface, has the notion of orientation, can hold external datas, monitors the mouse position, and has its own animation loop.
+*
 * Docks, Desklets, Dialogs, and Flying-containers all derive from Containers.
 */
 
@@ -119,7 +121,6 @@ void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle 
 *@param pContainer le container de l'icone.
 */
 void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer);
-#define cairo_dock_redraw_my_icon cairo_dock_redraw_icon
 
 
 
