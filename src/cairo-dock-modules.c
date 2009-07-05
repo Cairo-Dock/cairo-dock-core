@@ -1300,7 +1300,7 @@ void cairo_dock_read_module_config (GKeyFile *pKeyFile, CairoDockModuleInstance 
 	if (pVisitCard->iSizeOfConfig != 0)
 		memset (((gpointer)pInstance)+sizeof(CairoDockModuleInstance), 0, pVisitCard->iSizeOfConfig);
 	
-	gboolean bFlushConfFileNeeded = ! g_key_file_has_key (pKeyFile, "Desklet", "accessibility", NULL);  // petit hack des familles ^_^
+	gboolean bFlushConfFileNeeded = g_key_file_has_group (pKeyFile, "Desklet") && ! g_key_file_has_key (pKeyFile, "Desklet", "accessibility", NULL);  // petit hack des familles ^_^
 	bFlushConfFileNeeded |= pInterface->read_conf_file (pInstance, pKeyFile);
 	if (! bFlushConfFileNeeded)
 		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, pVisitCard->cModuleVersion);
@@ -1356,7 +1356,7 @@ void cairo_dock_release_data_slot (CairoDockModuleInstance *pInstance)
 #define REGISTER_INTERNAL_MODULE(cGroupName) \
 	pModule = g_new0 (CairoDockInternalModule, 1);\
 	cairo_dock_pre_init_##cGroupName (pModule);\
-	g_hash_table_insert (pModuleTable, pModule->cModuleName, pModule)
+	g_hash_table_insert (pModuleTable, (gchar *)pModule->cModuleName, pModule)
 void cairo_dock_preload_internal_modules (GHashTable *pModuleTable)
 {
 	cd_message ("");

@@ -1115,7 +1115,7 @@ static void _cairo_dock_close_all_in_class_subdock (Icon *icon)
 
 gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState)
 {
-	g_print ("+ %s (%s)\n", __func__, icon ? icon->acName : "no icon");
+	//g_print ("+ %s (%s)\n", __func__, icon ? icon->acName : "no icon");
 	if (icon == NULL)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick)  // icone de sous-dock a montrer au clic.
@@ -1156,7 +1156,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	}
 	else if (CAIRO_DOCK_IS_LAUNCHER (icon))
 	{
-		g_print ("+ launcher\n");
+		//g_print ("+ launcher\n");
 		if (CAIRO_DOCK_IS_MULTI_APPLI (icon) && ! (iButtonState & GDK_SHIFT_MASK))  // un lanceur ayant un sous-dock de classe ou une icone de paille : on cache ou on montre.
 		{
 			if (! myAccessibility.bShowSubDockOnClick)

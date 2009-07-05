@@ -755,6 +755,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 		cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
 		cairo_dock_free_icon (pFakeClassIcon);
 		cairo_dock_update_dock_size (pFakeParentDock);
+		cairo_dock_calculate_dock_icons (pFakeParentDock);
 		return TRUE;
 	}
 	else if (pDock->icons->next == NULL)
@@ -802,10 +803,9 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			
 			cd_debug (" puis on re-insere l'appli restante");
 			cairo_dock_insert_icon_in_dock_full (pLastClassIcon, pFakeParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
+			//if (pLastClassIcon->fDrawX == 0 && pLastClassIcon->fDrawY == 0)  // icone jamais placee.
 			//pFakeParentDock->calculate_icons (pFakeParentDock);
-			
-			if (pLastClassIcon->fDrawX == 0 && pLastClassIcon->fDrawY == 0)  // icone jamais placee.
-				cairo_dock_calculate_dock_icons (pFakeParentDock);
+			cairo_dock_calculate_dock_icons (pFakeParentDock);
 			cairo_dock_redraw_icon (pLastClassIcon, CAIRO_CONTAINER (pFakeParentDock));  // on suppose que les tailles des 2 icones sont identiques.
 		}
 		return TRUE;

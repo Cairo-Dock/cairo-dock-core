@@ -335,6 +335,7 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 				
 				cd_debug (" on lui substitue le fake");
 				cairo_dock_insert_icon_in_dock_full (pFakeClassIcon, pClassMateParentDock,  CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
+				cairo_dock_calculate_dock_icons (pClassMateParentDock);
 				cairo_dock_redraw_icon (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
 			}
 		}

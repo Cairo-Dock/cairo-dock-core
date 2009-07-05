@@ -855,7 +855,7 @@ cairo_surface_t * cairo_dock_duplicate_surface (cairo_surface_t *pSurface, cairo
 	if (fDesiredHeight == 0)
 		fDesiredHeight = fHeight;
 	
-	g_print ("%s (%.2fx%.2f -> %.2fx%.2f)\n", __func__, fWidth, fHeight, fDesiredWidth, fDesiredHeight);
+	//g_print ("%s (%.2fx%.2f -> %.2fx%.2f)\n", __func__, fWidth, fHeight, fDesiredWidth, fDesiredHeight);
 	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
 		fDesiredWidth,
 		fDesiredHeight);

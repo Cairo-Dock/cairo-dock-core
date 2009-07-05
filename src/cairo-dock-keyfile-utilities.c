@@ -276,7 +276,6 @@ gboolean cairo_dock_conf_file_needs_update (GKeyFile *pKeyFile, const gchar *cVe
 {
 	gchar *cPreviousVersion = NULL;
 	cairo_dock_get_conf_file_version (pKeyFile, &cPreviousVersion);
-	
 	gboolean bNeedsUpdate;
 	if (cPreviousVersion == NULL || strcmp (cPreviousVersion, cVersion) != 0)
 		bNeedsUpdate = TRUE;
