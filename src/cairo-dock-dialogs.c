@@ -12,9 +12,9 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <gdk/gdkkeysyms.h>
 
 #include <gtk/gtkgl.h>
-#include <GL/gl.h> 
-#include <GL/glu.h> 
-#include <GL/glx.h> 
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glx.h>
 #include <gdk/x11/gdkglx.h>
 
 #include "cairo-dock-icons.h"
@@ -943,12 +943,11 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	}
 	
 	//\________________ On prend en compte les boutons.
-	if (pAttribute->cButtonsImage != NULL && pAttribute->pActionFunc != NULL)
-	{
-		pDialog->action_on_answer = pAttribute->pActionFunc;
+	pDialog->action_on_answer = pAttribute->pActionFunc;
 		pDialog->pUserData = pAttribute->pUserData;
 		pDialog->pFreeUserDataFunc = pAttribute->pFreeDataFunc;
-		
+	if (pAttribute->cButtonsImage != NULL && pAttribute->pActionFunc != NULL)
+	{
 		if (s_pButtonOkSurface == NULL || s_pButtonCancelSurface == NULL)
 			cairo_dock_load_dialog_buttons (CAIRO_CONTAINER (pDialog), myDialogs.cButtonOkImage, myDialogs.cButtonCancelImage);
 		
