@@ -252,11 +252,16 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 		//\_______________________ On cree la surface cairo a afficher.
 		if (cIconPath != NULL && *cIconPath != '\0')
 		{
+			/// A FAIRE : verifier qu'on peut enlever le test sur fMaxScale ...
+			if (icon->fWidth == 0 || fMaxScale != 1.)
+				icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
+			if (icon->fHeight == 0 || fMaxScale != 1.)
+				icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
 			icon->pIconBuffer = cairo_dock_create_surface_from_image (cIconPath,
 				pSourceContext,
 				fMaxScale,
-				myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER],
-				myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER],
+				icon->fWidth/*myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER]*/,
+				icon->fHeight/*myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER]*/,
 				CAIRO_DOCK_FILL_SPACE,
 				(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
 				(bHorizontalDock ? &icon->fHeight : &icon->fWidth),
@@ -339,11 +344,16 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			cIconPath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_ICON_NAME);
 		}
 		CairoDockIconType iType = cairo_dock_get_icon_type  (icon);
+		/// A FAIRE : verifier qu'on peut enlever le test sur fMaxScale ...
+		if (icon->fWidth == 0 || fMaxScale != 1.)
+			icon->fWidth = myIcons.tIconAuthorizedWidth[iType];
+		if (icon->fHeight == 0 || fMaxScale != 1.)
+			icon->fHeight = myIcons.tIconAuthorizedHeight[iType];
 		icon->pIconBuffer = cairo_dock_create_surface_from_image (cIconPath,
 			pSourceContext,
 			fMaxScale,
-			myIcons.tIconAuthorizedWidth[iType],
-			myIcons.tIconAuthorizedHeight[iType],
+			icon->fWidth,
+			icon->fHeight,
 			CAIRO_DOCK_FILL_SPACE,
 			(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
 			(bHorizontalDock ? &icon->fHeight : &icon->fWidth),

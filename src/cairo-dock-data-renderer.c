@@ -300,7 +300,7 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 	else  // on recree le data-renderer avec les nouveaux attributs.
 	{
 		//\_____________ On recupere les donnees courantes.
-		if (pOldRenderer->data.iNbValues == pAttribute->iNbValues)
+		if (pOldRenderer && pOldRenderer->data.iNbValues == pAttribute->iNbValues)
 		{
 			pData = g_memdup (&pOldRenderer->data, sizeof (CairoDataToRenderer));
 			memset (&pOldRenderer->data, 0, sizeof (CairoDataToRenderer));
