@@ -496,15 +496,8 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					{
 						if (icon != NULL)  // elle peut demander l'attention plusieurs fois de suite.
 						{
-							cd_debug ("%s demande votre attention !", icon->acName);
-							if (icon->cParentDockName == NULL)  // appli inhibee.
-							{
-								Icon *pInhibitorIcon = cairo_dock_get_classmate (icon);
-								if (pInhibitorIcon != NULL)
-									cairo_dock_appli_demands_attention (pInhibitorIcon);
-							}
-							else
-								cairo_dock_appli_demands_attention (icon);
+							cd_debug ("%s demande votre attention %s !", icon->acName, icon->bIsDemandingAttention?"encore une fois":"");
+							cairo_dock_appli_demands_attention (icon);
 						}
 					}
 					else if (! bDemandsAttention)

@@ -695,15 +695,15 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 		{
 			Icon * pSeparatorIcon = NULL;
 			int iOrder = cairo_dock_get_icon_order (icon);
-			//g_print ("iOrder : %d\n", iOrder);
-			if (iOrder > 1)  // attention : iType - 1 > 0 si iType = 0, car c'est un unsigned int (enum) !
+			g_print ("plus d'icone de cet ordre : %d\n", iOrder);
+			if (iOrder > 1)
 				pSeparatorIcon = cairo_dock_get_first_icon_of_order (pDock->icons, iOrder - 1);
 			if (iOrder + 1 < CAIRO_DOCK_NB_TYPES && pSeparatorIcon == NULL)
 				pSeparatorIcon = cairo_dock_get_first_icon_of_order (pDock->icons, iOrder + 1);
 
 			if (pSeparatorIcon != NULL)
 			{
-				//g_print ("  on enleve un separateur\n");
+				g_print (" -> on enleve un separateur\n");
 				cairo_dock_detach_icon_from_dock (pSeparatorIcon, pDock, FALSE);
 				cairo_dock_free_icon (pSeparatorIcon);
 			}

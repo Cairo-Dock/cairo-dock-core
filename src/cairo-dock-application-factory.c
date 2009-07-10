@@ -261,7 +261,7 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 
 			//\____________ On cree ce sous-dock si necessaire.
 			pParentDock = cairo_dock_search_dock_from_name (icon->cClass);
-			if (pParentDock == NULL)  // alors il faut creer le sous-dock, et on decide de l'associer a pSameClassIcon.
+			if (pParentDock == NULL)  // alors il faut creer le sous-dock, qu'on associera soit a pSameClassIcon soit a un fake.
 			{
 				cd_message ("  creation du dock pour la classe %s", icon->cClass);
 				pParentDock = cairo_dock_create_subdock_from_scratch (NULL, icon->cClass, pMainDock);
@@ -695,10 +695,10 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, I
 void cairo_dock_appli_demands_attention (Icon *icon)
 {
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-	if (pParentDock == NULL)  // appli inhibee.
+	if (pParentDock == NULL)  // appli inhibee ou non affichee.
 	{
 		Icon *pInhibitorIcon = cairo_dock_get_classmate (icon);
-		if (pInhibitorIcon != NULL)
+		if (pInhibitorIcon != NULL)  // appli inhibee. 
 		{
 			pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
 			if (pParentDock != NULL)

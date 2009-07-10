@@ -359,7 +359,7 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 		{
 			cd_message (" - %s va etre supprimee", pIcon->acName);
 			gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);  // car apres avoir ete enleve du dock elle n'est plus rien.
-			cairo_dock_remove_icon_from_dock (pDock, pIcon);
+			cairo_dock_remove_icon_from_dock (pDock, pIcon);  // enleve le separateur automatique avec.
 			
 			if (pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass))
 			{
@@ -372,9 +372,8 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 		}
 		else if (pIcon->fPersonnalScale == -0.05)
 		{
-			pIcon->fPersonnalScale = 0;
-			//cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon);
-			//pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
+			pIcon->fPersonnalScale = 0;  // on n'arrete pas l'animation car elle peut se poursuivre meme apres que l'icone ait atteint sa taille maximale.
+			bRecalculateIcons = TRUE;
 		}
 		else if (pIcon->fPersonnalScale != 0)
 		{

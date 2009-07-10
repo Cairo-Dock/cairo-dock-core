@@ -35,7 +35,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-default-view.h"
 
 extern gint g_iScreenWidth[2];
-extern int g_iScreenOffsetX, g_iScreenOffsetY;
 
 extern GLuint g_iBackgroundTexture;
 extern gboolean g_bEasterEggs;

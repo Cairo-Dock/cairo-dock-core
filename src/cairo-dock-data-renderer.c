@@ -299,6 +299,7 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 	}
 	else  // on recree le data-renderer avec les nouveaux attributs.
 	{
+		pAttribute->iNbValues = MAX (1, pAttribute->iNbValues);
 		//\_____________ On recupere les donnees courantes.
 		if (pOldRenderer && pOldRenderer->data.iNbValues == pAttribute->iNbValues)
 		{

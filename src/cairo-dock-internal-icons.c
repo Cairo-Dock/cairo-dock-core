@@ -92,46 +92,70 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	pIcons->fAlphaAtRest = cairo_dock_get_double_key_value (pKeyFile, "Icons", "alpha at rest", &bFlushConfFileNeeded, 1., NULL, NULL);
 	
 	//\___________________ Themes.
+	pIcons->bUseLocalIcons = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "local icons", &bFlushConfFileNeeded, TRUE , NULL, NULL);
 	pIcons->pDirectoryList = cairo_dock_get_string_list_key_value (pKeyFile, "Icons", "default icon directory", &bFlushConfFileNeeded, &length, NULL, "Launchers", NULL);
-	if (pIcons->pDirectoryList == NULL)
+	
+	pIcons->pDefaultIconDirectory = g_new0 (gpointer, 2 * length + 2 + 2);  // +2 pour le theme local et +2 pour les NULL final.
+	int j = 0;
+	
+	if (pIcons->bUseLocalIcons)
 	{
-		pIcons->pDefaultIconDirectory = NULL;
+		pIcons->pDefaultIconDirectory[j] = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+		cd_message (" utilisation du repertoire local %s", pIcons->pDefaultIconDirectory[j]);
+		j += 2;
 	}
-	else
+	
+	if (pIcons->pDirectoryList != NULL && pIcons->pDirectoryList[0] != NULL)
 	{
-		pIcons->pDefaultIconDirectory = g_new0 (gpointer, 2 * length + 2);  // +2 pour les NULL final.
-		i = 0;
-		int j = 0;
-		while (pIcons->pDirectoryList[i] != NULL)
+		for (i = 0; pIcons->pDirectoryList[i] != NULL; i ++)
 		{
+			if (pIcons->pDirectoryList[i][0] == '\0')
+				continue;
 			if (pIcons->pDirectoryList[i][0] == '~')
 			{
 				pIcons->pDefaultIconDirectory[j] = g_strdup_printf ("%s%s", getenv ("HOME"), pIcons->pDirectoryList[i]+1);
 				cd_message (" utilisation du repertoire %s", pIcons->pDefaultIconDirectory[j]);
+				j += 2;
 			}
 			else if (pIcons->pDirectoryList[i][0] == '/')
 			{
 				pIcons->pDefaultIconDirectory[j] = g_strdup (pIcons->pDirectoryList[i]);
 				cd_message (" utilisation du repertoire %s", pIcons->pDefaultIconDirectory[j]);
+				j += 2;
 			}
-			else if (strncmp (pIcons->pDirectoryList[i], CAIRO_DOCK_LOCAL_THEME_KEYWORD, strlen (CAIRO_DOCK_LOCAL_THEME_KEYWORD)) == 0)
+			else if (strncmp (pIcons->pDirectoryList[i], "_LocalTheme_", 12) == 0)
 			{
-				pIcons->pDefaultIconDirectory[j] = g_strdup_printf ("%s/%s%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR, pIcons->pDirectoryList[i]+strlen (CAIRO_DOCK_LOCAL_THEME_KEYWORD));
-				cd_message (" utilisation du repertoire local %s", pIcons->pDefaultIconDirectory[j]);
+				if (bFlushConfFileNeeded)
+				{
+					g_key_file_set_string_list (pKeyFile,
+						"Icons",
+						"default icon directory",
+						pIcons->pDirectoryList,
+						length-1);
+				}
+				else
+				{
+					gchar *cCommand = g_strdup_printf ("sed -i \"s/_LocalTheme_;*//g\" '%s/%s'", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
+					cd_message ("%s", cCommand);
+					int r = system (cCommand);
+					g_free (cCommand);
+					g_free (pIcons->pDirectoryList[i]);
+					pIcons->pDirectoryList[i] = NULL;
+					if (pIcons->pDirectoryList[i+1] != NULL)
+					{
+						pIcons->pDirectoryList[i] = pIcons->pDirectoryList[i+1];
+						pIcons->pDirectoryList[i+1] = NULL;
+					}
+				}
 			}
 			else if (strncmp (pIcons->pDirectoryList[i], "_ThemeDirectory_", 16) == 0)
 			{
-				pIcons->pDefaultIconDirectory[j] = g_strdup_printf ("%s/%s%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR, pIcons->pDirectoryList[i]+16);
 				cd_warning ("Cairo-Dock's local icons are now located in the 'icons' folder, they will be moved there");
 				gchar *cCommand = g_strdup_printf ("cd '%s' && mv *.svg *.png *.xpm *.jpg *.bmp *.gif '%s/%s' > /dev/null", g_cCurrentLaunchersPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 				cd_message ("%s", cCommand);
 				int r = system (cCommand);
 				g_free (cCommand);
-				cCommand = g_strdup_printf ("sed -i \"s/_ThemeDirectory_/%s/g\" '%s/%s'", CAIRO_DOCK_LOCAL_THEME_KEYWORD, g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
-				cd_message ("%s", cCommand);
-				r = system (cCommand);
-				g_free (cCommand);
-				cCommand = g_strdup_printf ("sed -i \"/default icon directory/ { s/~\\/.config\\/%s\\/%s\\/icons/%s/g }\" '%s/%s'", CAIRO_DOCK_DATA_DIR, CAIRO_DOCK_CURRENT_THEME_NAME, CAIRO_DOCK_LOCAL_THEME_KEYWORD, g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
+				cCommand = g_strdup_printf ("sed -i \"s/_ThemeDirectory_;*//g\" '%s/%s'", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
 				cd_message ("%s", cCommand);
 				r = system (cCommand);
 				g_free (cCommand);
@@ -141,9 +165,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 				cd_message (" utilisation du theme %s", pIcons->pDirectoryList[i]);
 				pIcons->pDefaultIconDirectory[j+1] = gtk_icon_theme_new ();
 				gtk_icon_theme_set_custom_theme (pIcons->pDefaultIconDirectory[j+1], pIcons->pDirectoryList[i]);
+				j += 2;
 			}
-			i ++;
-			j += 2;
 		}
 	}
 	
@@ -251,14 +274,20 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	
 	if (bGroupOrderChanged)
 		pDock->icons = g_list_sort (pDock->icons, (GCompareFunc) cairo_dock_compare_icons_order);
-
+	
+	gboolean bInsertSeparators = FALSE;
 	if ((pPrevIcons->bUseSeparator && ! pIcons->bUseSeparator) ||
 		pPrevIcons->cSeparatorImage != pIcons->cSeparatorImage ||
-		bGroupOrderChanged)
+		bGroupOrderChanged ||
+		pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] ||
+		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] ||
+		pPrevIcons->fAmplitude != pIcons->fAmplitude)
+	{
+		bInsertSeparators = TRUE;
 		cairo_dock_remove_automatic_separators (pDock);
+	}
 	
-	
-	gboolean bThemeChanged = FALSE;
+	gboolean bThemeChanged = (pPrevIcons->bUseLocalIcons != pIcons->bUseLocalIcons);
 	if ((pIcons->pDirectoryList == NULL && pPrevIcons->pDirectoryList != NULL) || (pIcons->pDirectoryList != NULL && pPrevIcons->pDirectoryList == NULL))
 	{
 		bThemeChanged = TRUE;
@@ -308,9 +337,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	
 	cairo_dock_create_icon_pbuffer ();
 	
-	if ((pIcons->bUseSeparator && ! pPrevIcons->bUseSeparator) ||
-		pPrevIcons->cSeparatorImage != pIcons->cSeparatorImage ||
-		bGroupOrderChanged)
+	if (bInsertSeparators)
 	{
 		cairo_dock_insert_separators_in_dock (pDock);
 	}

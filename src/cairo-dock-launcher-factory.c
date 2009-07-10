@@ -329,27 +329,41 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		gchar *cStartupWMClass = g_key_file_get_string (keyfile, "Desktop Entry", "StartupWMClass", NULL);
 		if (cStartupWMClass == NULL || *cStartupWMClass == '\0')
 		{
+			// plusieurs cas sont possibles : 
+			// Exec=toto
+			// Exec=toto -x -y
+			// Exec=/path/to/toto -x -y
+			// Exec=gksu toto
+			// Exec=gksu --description /usr/share/applications/synaptic.desktop /usr/sbin/synaptic
 			g_free (cStartupWMClass);
 			cStartupWMClass = g_ascii_strdown (icon->acCommand, -1);
-			gchar *str = strchr (cStartupWMClass, ' ');
-			if (str != NULL)
-				*str = '\0';
-			if (strcmp (cStartupWMClass, "gksu") == 0 || strcmp (cStartupWMClass, "kdesu") == 0)
-				icon->cClass = str + 1;
-			else
-				icon->cClass = cStartupWMClass;
+			gchar *str, *cClass = cStartupWMClass;
 			
-			while (*icon->cClass == ' ')
-				icon->cClass ++;
-			
-			if (*icon->cClass == '/')
+			if (strncmp (cClass, "gksu", 4) == 0 || strncmp (cClass, "kdesu", 4) == 0)  // on prend la fin .
 			{
-				str = strrchr (icon->cClass, '/');  // forcement non NULL.
-				icon->cClass = str + 1;
+				while (cClass[strlen(cClass)-1] == ' ')  // par securite on enleve les espaces en fin de ligne.
+					cClass[strlen(cClass)-1] = '\0';
+				str = strrchr (cClass, ' ');  // on cherche le dernier espace.
+				if (str != NULL)  // on prend apres.
+					cClass = str + 1;
+				str = strrchr (cClass, '/');  // on cherche le dernier '/'.
+				if (str != NULL)  // on prend apres.
+					cClass = str + 1;
+			}
+			else
+			{
+				while (*cClass == ' ')  // par securite on enleve les espaces en debut de ligne.
+					cClass ++;
+				str = strchr (cClass, ' ');  // on cherche le premier espace.
+				if (str != NULL)  // on vire apres.
+					*str = '\0';
+				str = strrchr (cClass, '/');  // on cherche le dernier '/'.
+				if (str != NULL)  // on prend apres.
+					cClass = str + 1;
 			}
 			
-			if (*icon->cClass != '\0')
-				icon->cClass = g_strdup (icon->cClass);
+			if (*cClass != '\0')
+				icon->cClass = g_strdup (cClass);
 			else
 				icon->cClass = NULL;
 			cd_message ("no class defined for the launcher %s\n we will assume that its class is '%s'", cDesktopFileName, icon->cClass);
@@ -365,7 +379,6 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	
 	if (bPreventFromInhibating && icon->cClass != NULL)
 	{
-		//cairo_dock_set_class_use_xicon (icon->cClass, TRUE);
 		cairo_dock_deinhibate_class (icon->cClass, icon);
 		g_free (icon->cClass);
 		icon->cClass = NULL;

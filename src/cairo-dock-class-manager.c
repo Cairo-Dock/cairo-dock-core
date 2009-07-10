@@ -794,11 +794,9 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			cd_debug (" et l'icone de paille");
 			cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
 			pLastClassIcon->fScale = pFakeClassIcon->fScale;
-			pLastClassIcon->fDrawX = pFakeClassIcon->fDrawX;
-			pLastClassIcon->fDrawY = pFakeClassIcon->fDrawY;
 			pLastClassIcon->fAlpha = pFakeClassIcon->fAlpha;
-			pLastClassIcon->fWidth = pFakeClassIcon->fWidth;
-			pLastClassIcon->fHeight = pFakeClassIcon->fHeight;
+			//pLastClassIcon->fXAtRest = pFakeClassIcon->fXAtRest;
+			//pLastClassIcon->fX = pFakeClassIcon->fX;
 			cairo_dock_free_icon (pFakeClassIcon);
 			
 			cd_debug (" puis on re-insere l'appli restante");

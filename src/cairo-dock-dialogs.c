@@ -1653,8 +1653,12 @@ int cairo_dock_ask_general_question_and_wait (const gchar *cQuestion)
 
 void cairo_dock_hide_dialog (CairoDialog *pDialog)
 {
-	gtk_widget_hide (pDialog->pWidget);
-	pDialog->bInside = FALSE;
+	if (GTK_WIDGET_VISIBLE (pDialog->pWidget))
+	{
+		gtk_widget_hide (pDialog->pWidget);
+		pDialog->bInside = FALSE;
+		cairo_dock_replace_all_dialogs ();
+	}
 }
 
 void cairo_dock_unhide_dialog (CairoDialog *pDialog)

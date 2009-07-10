@@ -426,9 +426,13 @@ icon gap = 0
 #F+[Icons' themes;gtk-select-color]
 frame_theme=
 
-#D+99 List of icons themes or directories :
-#{Directories or themes where to search icons. Put some directories where you have icons you wish to see in the dock, or put some theme's name you've installed on your system. (the order is taken into account during the research). The key word _LocalTheme_ represents the directory ~/.config/cairo-dock/current_theme/icons}/
-default icon directory = _LocalTheme_
+#b+ Use local icons ?
+#{These are icons located in ~/.config/cairo-dock/current_theme/icons, coming from the theme you choosed. If you use this option, the dock will search here first, and then in the icons theme.}
+local icons = true
+
+#D+99 Choose a theme of icons :
+#{Let empty to use the current icons theme of your system. You can enter the name of a theme that is installed on your system (like 'Gartoon' or 'Human'), or even a path to a folder containing icons.}
+default icon directory = 
 
 #S+ Image's filename to use as a background for icons :
 #{Any format allowed; let this field empty if you don't want to use an image as background.}
