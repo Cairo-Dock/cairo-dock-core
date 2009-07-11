@@ -240,7 +240,7 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 	g_free (icon->cParentDockName);
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.bGroupAppliByClass && icon->cClass != NULL && ! cairo_dock_class_is_expanded (icon->cClass))
 	{
-		Icon *pSameClassIcon = cairo_dock_get_classmate (icon);
+		Icon *pSameClassIcon = cairo_dock_get_classmate (icon);  // un inhibiteur dans un dock OU une appli de meme classe dans le main dock.
 		if (pSameClassIcon == NULL)  // aucun classmate => elle va dans le main dock.
 		{
 			cd_message ("  classe %s encore vide", icon->cClass);
@@ -310,7 +310,7 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 			{
 				//\______________ On cree une icone de paille.
 				cd_debug (" on cree un fake...");
-				CairoDock *pClassMateParentDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
+				CairoDock *pClassMateParentDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);  // c'est en fait le main dock.
 				Icon *pFakeClassIcon = g_new0 (Icon, 1);
 				pFakeClassIcon->acName = g_strdup (pSameClassIcon->cClass);
 				pFakeClassIcon->cClass = g_strdup (pSameClassIcon->cClass);
@@ -653,7 +653,7 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 }
 
 
-static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, Icon *pHiddenIcon)
+static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, gboolean bForceDemand, Icon *pHiddenIcon)
 {
 	cd_debug ("%s (%s)\n", __func__, icon->acName);
 	icon->bIsDemandingAttention = TRUE;
@@ -670,15 +670,15 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, I
 			g_return_if_fail (pDialog != NULL);
 			cairo_dock_set_new_dialog_icon_surface (pDialog, pHiddenIcon->pIconBuffer, pDialog->iIconSize);
 		}
-		if (pDialog && myTaskBar.cForceDemandsAttention && icon->cClass && g_strstr_len (myTaskBar.cForceDemandsAttention, -1, icon->cClass))
+		if (pDialog && bForceDemand)
 		{
-			g_print ("force above\n");
+			g_print ("force demanding attention\n");
 			gtk_window_set_keep_above (GTK_WINDOW (pDialog->pWidget), TRUE);
 			Window Xid = GDK_WINDOW_XID (pDialog->pWidget->window);
-			cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // avec ca s'il passe pas devant les fenetres plein ecran on peut flinguer le WM.
+			cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // pour passer devant les fenetres plein ecran; depend du WM.
 		}
 	}
-	if (myTaskBar.cAnimationOnDemandsAttention)
+	if (myTaskBar.cAnimationOnDemandsAttention && ! pHiddenIcon)  // on ne l'anime pas si elle n'est pas dans un dock.
 	{
 		if (pDock->iRefCount == 0)
 		{
@@ -688,31 +688,46 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, I
 				g_source_remove(pDock->iSidPopDown);
 				pDock->iSidPopDown = 0;
 			}
+			if (pDock->bAutoHide && bForceDemand)
+			{
+				cairo_dock_emit_enter_signal (pDock);
+			}
 		}
-		cairo_dock_request_icon_animation (icon, pDock, myTaskBar.cAnimationOnDemandsAttention, 1000);
+		else if (bForceDemand)
+		{
+			CairoDock *pParentDock = NULL;
+			Icon *pPointedIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
+			if (pParentDock)
+				cairo_dock_show_subdock (pPointedIcon, pParentDock, FALSE);
+		}
+		cairo_dock_request_icon_animation (icon, pDock, myTaskBar.cAnimationOnDemandsAttention, 10000);
+		if (bForceDemand)
+			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));  // precaution au cas ou le dock ne serait pas encore visible.
 	}
 }
 void cairo_dock_appli_demands_attention (Icon *icon)
 {
+	gboolean bForceDemand = (myTaskBar.cForceDemandsAttention && icon->cClass && g_strstr_len (myTaskBar.cForceDemandsAttention, -1, icon->cClass));
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	if (pParentDock == NULL)  // appli inhibee ou non affichee.
 	{
-		Icon *pInhibitorIcon = cairo_dock_get_classmate (icon);
-		if (pInhibitorIcon != NULL)  // appli inhibee. 
+		icon->bIsDemandingAttention = TRUE;  // on met a TRUE meme si ce n'est pas reellement elle qui va prendre la demande.
+		Icon *pInhibitorIcon = cairo_dock_get_inhibator (icon, TRUE);  // on cherche son inhibiteur dans un dock.
+		if (pInhibitorIcon != NULL)  // appli inhibee.
 		{
 			pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
 			if (pParentDock != NULL)
-				_cairo_dock_appli_demands_attention (pInhibitorIcon, pParentDock, NULL);
+				_cairo_dock_appli_demands_attention (pInhibitorIcon, pParentDock, bForceDemand, NULL);
 		}
-		else if (myTaskBar.cForceDemandsAttention && icon->cClass && g_strstr_len (myTaskBar.cForceDemandsAttention, -1, icon->cClass))  // appli pas dans le dock, mais on veut tout de même etre notifie.
+		else if (bForceDemand)  // appli pas affichee, mais on veut tout de même etre notifie.
 		{
 			Icon *pOneIcon = cairo_dock_get_dialogless_icon ();
 			if (pOneIcon != NULL)
-				_cairo_dock_appli_demands_attention (pOneIcon, g_pMainDock, icon);
+				_cairo_dock_appli_demands_attention (pOneIcon, g_pMainDock, bForceDemand, icon);
 		}
 	}
-	else
-		_cairo_dock_appli_demands_attention (icon, pParentDock, NULL);
+	else  // appli dans un dock.
+		_cairo_dock_appli_demands_attention (icon, pParentDock, bForceDemand, NULL);
 }
 
 static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *pDock)
@@ -731,7 +746,8 @@ void cairo_dock_appli_stops_demanding_attention (Icon *icon)
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	if (pParentDock == NULL)
 	{
-		Icon *pInhibitorIcon = cairo_dock_get_classmate (icon);
+		icon->bIsDemandingAttention = FALSE;  // idem que plus haut.
+		Icon *pInhibitorIcon = cairo_dock_get_inhibator (icon, TRUE);
 		if (pInhibitorIcon != NULL)
 		{
 			pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);

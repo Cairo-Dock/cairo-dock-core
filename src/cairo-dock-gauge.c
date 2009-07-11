@@ -82,7 +82,7 @@ static void _cairo_dock_load_gauge_image (cairo_t *pSourceContext, GaugeImage *p
 	if (pGaugeImage->pSurface != NULL)
 		cairo_surface_destroy (pGaugeImage->pSurface);
 	if (pGaugeImage->iTexture != 0)
-		glDeleteTextures (1, &pGaugeImage->iTexture);
+		_cairo_dock_delete_texture (pGaugeImage->iTexture);
 	
 	if (pGaugeImage->pSvgHandle != NULL)
 	{
@@ -119,7 +119,7 @@ static void _cairo_dock_load_gauge_needle (cairo_t *pSourceContext, GaugeIndicat
 	if (pGaugeImage->pSurface != NULL)
 		cairo_surface_destroy (pGaugeImage->pSurface);
 	if (pGaugeImage->iTexture != 0)
-		glDeleteTextures (1, &pGaugeImage->iTexture);
+		_cairo_dock_delete_texture (pGaugeImage->iTexture);
 	
 	if (pGaugeImage->pSvgHandle != NULL)
 	{
@@ -309,6 +309,8 @@ static gboolean cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCont
 						{
 							g_string_printf (sImagePath, "%s/%s", cThemePath, cNodeContent);
 							_cairo_dock_init_gauge_image (sImagePath->str, &pGaugeIndicator->pImageList[pGaugeIndicator->iNbImageLoaded]);
+							if (g_bUseOpenGL)  // il faut les charger maintenant, car on ne peut pas le faire durant le dessin sur le pbuffer (le chargement n'est pas effectif tout de suite et ca donne des textures blanches).
+								_cairo_dock_load_gauge_image (pSourceContext, &pGaugeIndicator->pImageList[pGaugeIndicator->iNbImageLoaded], iWidth, iHeight);
 							pGaugeIndicator->iNbImageLoaded ++;
 						}
 					}
@@ -328,6 +330,8 @@ static gboolean cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCont
 					pGaugeIndicator->iNeedleRealWidth = pGaugeIndicator->pImageNeedle->sizeY;  // 100px utiles sur les 100
 					pGaugeIndicator->iNeedleOffsetX = 10;
 				}
+				if (g_bUseOpenGL)  // meme remarque.
+					_cairo_dock_load_gauge_needle (pSourceContext, pGaugeIndicator, iWidth, iHeight);
 			}
 			pGauge->pIndicatorList = g_list_append (pGauge->pIndicatorList, pGaugeIndicator);
 		}
@@ -511,10 +515,11 @@ static void _draw_gauge_image_opengl (Gauge *pGauge, GaugeIndicator2 *pGaugeIndi
 	
 	GaugeImage *pGaugeImage = &pGaugeIndicator->pImageList[iNumImage];
 	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
-	if (pGaugeImage->iTexture == 0)
+	/*if (pGaugeImage->iTexture == 0)
 	{
 		_cairo_dock_load_gauge_image (NULL, pGaugeImage, iWidth, iHeight);  // pas besoin d'un cairo_context pour creer une cairo_image_surface.
-	}
+		return ;
+	}*/
 	
 	if (pGaugeImage->iTexture != 0)
 	{
@@ -527,11 +532,11 @@ static void _draw_gauge_needle_opengl (Gauge *pGauge, GaugeIndicator2 *pGaugeInd
 	g_return_if_fail (pGaugeImage != NULL);
 	
 	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
-	if (pGaugeImage->iTexture == 0)
+	/*if (pGaugeImage->iTexture == 0)
 	{
 		_cairo_dock_load_gauge_needle (NULL, pGaugeIndicator, iWidth, iHeight);  // pas besoin d'un cairo_context pour creer une cairo_image_surface.
 		return ;
-	}
+	}*/
 	
 	if(pGaugeImage->iTexture != 0)
 	{

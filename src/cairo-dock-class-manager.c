@@ -720,7 +720,7 @@ Icon *cairo_dock_get_classmate (Icon *pIcon)
 	for (pElement = pClassAppli->pIconsOfClass; pElement != NULL; pElement = pElement->next)
 	{
 		pFriendIcon = pElement->data;
-		if (pFriendIcon == NULL)
+		if (pFriendIcon == NULL || pFriendIcon->cParentDockName == NULL)  // on ne prend pas les inhibiteurs situes dans un desklet.
 			continue ;
 		cd_debug (" friend : %s (%d)", pFriendIcon->acName, pFriendIcon->Xid);
 		if (pFriendIcon->Xid != 0 || pFriendIcon->pSubDock != NULL)
@@ -935,3 +935,27 @@ Icon *cairo_dock_get_prev_next_classmate_icon (Icon *pIcon, gboolean bNext)
 	}
 	return pNextIcon;
 }
+
+
+
+Icon *cairo_dock_get_inhibator (Icon *pIcon, gboolean bOnlyInDock)
+{
+	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
+	if (pClassAppli != NULL)
+	{
+		GList *pElement;
+		Icon *pInhibatorIcon;
+		for (pElement = pClassAppli->pIconsOfClass; pElement != NULL; pElement = pElement->next)
+		{
+			pInhibatorIcon = pElement->data;
+			
+			if (pInhibatorIcon->Xid == pIcon->Xid)
+			{
+				if (! bOnlyInDock || pInhibatorIcon->cParentDockName != NULL)
+					return pInhibatorIcon;
+			}
+		}
+	}
+	return NULL;
+}
+

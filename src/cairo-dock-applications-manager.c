@@ -506,12 +506,6 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						{
 							cd_debug ("%s se tait", icon->acName);
 							cairo_dock_appli_stops_demanding_attention (icon);  // ca c'est plus une precaution qu'autre chose.
-							if (icon->cParentDockName == NULL)  // appli inhibee.
-							{
-								Icon *pInhibitorIcon = cairo_dock_get_classmate (icon);
-								if (pInhibitorIcon != NULL)
-									cairo_dock_appli_stops_demanding_attention (pInhibitorIcon);
-							}
 						}
 					}
 					if (myTaskBar.bAutoHideOnMaximized || myTaskBar.bAutoHideOnFullScreen)

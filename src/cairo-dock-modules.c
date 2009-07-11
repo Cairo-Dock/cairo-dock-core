@@ -690,9 +690,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				if (CAIRO_DOCK_IS_DESKLET (pActualContainer))  // elle etait dans un desklet.
 				{
 					bNeedFreeDesklet = TRUE;  // le desklet sera detruit apres le reload.
-					cairo_dock_steal_interactive_widget_from_desklet (CAIRO_DESKLET (pActualContainer));
-					///cairo_dock_free_desklet (CAIRO_DESKLET (pActualContainer));
-					///pActualContainer = NULL;
+					//cairo_dock_steal_interactive_widget_from_desklet (CAIRO_DESKLET (pActualContainer));
 					bToBeInserted = TRUE;  // l'icone sera inseree dans le dock avant le reload.
 				}
 				else  // elle etait deja dans un dock.
@@ -1029,7 +1027,7 @@ void cairo_dock_update_module_instance_order (CairoDockModuleInstance *pModuleIn
 }
 
 
-/**
+/*
 * Cree une nouvelle instance d'un module. Cree l'icone et le container associe, et les place ou il faut.
 */
 CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule, gchar *cConfFilePath)  // prend possession de 'cConfFilePah'.
@@ -1163,7 +1161,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	return pInstance;
 }
 
-/**
+/*
 * Detruit une instance de module et libere les resources associees.
 */
 void cairo_dock_free_module_instance (CairoDockModuleInstance *pInstance)
@@ -1174,7 +1172,7 @@ void cairo_dock_free_module_instance (CairoDockModuleInstance *pInstance)
 	g_free (pInstance);
 }
 
-/**
+/*
 * Stoppe une instance d'un module.
 */
 void cairo_dock_stop_module_instance (CairoDockModuleInstance *pInstance)
@@ -1196,7 +1194,7 @@ void cairo_dock_stop_module_instance (CairoDockModuleInstance *pInstance)
 	if (pInstance->pIcon != NULL)
 		pInstance->pIcon->pModuleInstance = NULL;
 }
-/**
+/*
 * Stoppe une instance d'un module, et la detruit.
 */
 void cairo_dock_deinstanciate_module (CairoDockModuleInstance *pInstance)
@@ -1208,7 +1206,7 @@ void cairo_dock_deinstanciate_module (CairoDockModuleInstance *pInstance)
 	cairo_dock_free_module_instance (pInstance);
 }
 
-/**
+/*
 * Stoppe une instance d'un module, et la supprime.
 */
 void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance)

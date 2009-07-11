@@ -245,18 +245,15 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	
 	if (CAIRO_DOCK_IS_LAUNCHER (icon) || (CAIRO_DOCK_IS_USER_SEPARATOR (icon) && icon->acFileName != NULL))
 	{
-		//\_______________________ On recherche une icone.
+		/// A FAIRE : verifier qu'on peut enlever le test sur fMaxScale ...
+		if (icon->fWidth == 0 || fMaxScale != 1.)
+			icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
+		if (icon->fHeight == 0 || fMaxScale != 1.)
+			icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
 		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->acFileName);
-		//g_print (" -> %s\n", cIconPath);
-
-		//\_______________________ On cree la surface cairo a afficher.
-		if (cIconPath != NULL && *cIconPath != '\0')
+		
+		if (cIconPath != NULL && *cIconPath != '\0')  // c'est un lanceur classique.
 		{
-			/// A FAIRE : verifier qu'on peut enlever le test sur fMaxScale ...
-			if (icon->fWidth == 0 || fMaxScale != 1.)
-				icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
-			if (icon->fHeight == 0 || fMaxScale != 1.)
-				icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
 			icon->pIconBuffer = cairo_dock_create_surface_from_image (cIconPath,
 				pSourceContext,
 				fMaxScale,
@@ -280,7 +277,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 				const GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
 				if (pApplis != NULL)
 				{
-					Icon *pOneIcon = pApplis->data;
+					Icon *pOneIcon = (Icon *) (g_list_last (pApplis)->data);  // on prend le dernier car les applis sont inserees a l'envers, et on veut avoir celle qui etait deja present dans le dock (pour 2 raison : continuite, et la nouvelle (en 1ere position) n'est pas forcement deja dans un dock, ce qui fausse le ratio).
 					icon->pIconBuffer = cairo_dock_duplicate_inhibator_surface_for_appli (pSourceContext,
 						pOneIcon,
 						fMaxScale,
@@ -304,13 +301,13 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	{
 		icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI];
 		icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI];
-		if (myTaskBar.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass) && ! (myTaskBar.bShowThumbnail && icon->bIsHidden))
-			icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
-		if (icon->pIconBuffer == NULL && myTaskBar.bShowThumbnail && icon->bIsHidden && icon->iBackingPixmap != 0)
+		if (myTaskBar.bShowThumbnail && icon->bIsHidden && icon->iBackingPixmap != 0)
 			icon->pIconBuffer = cairo_dock_create_surface_from_xpixmap (icon->iBackingPixmap, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
+		if (icon->pIconBuffer == NULL && myTaskBar.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass))
+			icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
 		if (icon->pIconBuffer == NULL)
 			icon->pIconBuffer = cairo_dock_create_surface_from_xwindow (icon->Xid, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
-		if (icon->pIconBuffer == NULL)
+		if (icon->pIconBuffer == NULL)  // certaines applis comme xterm ne definissent pas d'icone, on en met une par defaut.
 		{
 			gchar *cIconPath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
 			if (cIconPath == NULL || ! g_file_test (cIconPath, G_FILE_TEST_EXISTS))

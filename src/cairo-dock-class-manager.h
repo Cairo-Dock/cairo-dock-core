@@ -167,6 +167,8 @@ void cairo_dock_set_group_exceptions (const gchar *cExceptions);
 
 Icon *cairo_dock_get_prev_next_classmate_icon (Icon *pIcon, gboolean bNext);
 
+Icon *cairo_dock_get_inhibator (Icon *pIcon, gboolean bOnlyInDock);
+
 
 G_END_DECLS
 #endif

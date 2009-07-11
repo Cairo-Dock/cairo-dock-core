@@ -413,20 +413,20 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gch
 static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %d, %d)\n", __func__, pDock->iRefCount, pDock->bIsShrinkingDown, pDock->bIsGrowingUp);
+	gboolean bContinue = FALSE;
 	if (pDock->bIsShrinkingDown)
 	{
 		pDock->bIsShrinkingDown = cairo_dock_shrink_down (pDock);
-		//g_print ("pDock->bIsShrinkingDown <- %d\n", pDock->bIsShrinkingDown);
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
+		bContinue = TRUE;
 	}
 	if (pDock->bIsGrowingUp)
 	{
 		pDock->bIsGrowingUp = cairo_dock_grow_up (pDock);
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
+		bContinue = TRUE;
 	}
 	//g_print (" => %d, %d\n", pDock->bIsShrinkingDown, pDock->bIsGrowingUp);
-	
-	gboolean bContinue = pDock->bIsShrinkingDown || pDock->bIsGrowingUp;
 	
 	gboolean bUpdateSlowAnimation = FALSE;
 	pDock->iAnimationStep ++;
@@ -476,8 +476,6 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 	if (! bContinue && ! pDock->bKeepSlowAnimation)
 	{
 		pDock->iSidGLAnimation = 0;
-		pDock->bIsGrowingUp = FALSE;
-		pDock->bIsShrinkingDown = FALSE;
 		return FALSE;
 	}
 	else
@@ -582,7 +580,6 @@ void cairo_dock_launch_animation (CairoContainer *pContainer)
 				cd_warning ("This type of container has no animation capability yet");
 			break ;
 		}
-		
 	}
 }
 

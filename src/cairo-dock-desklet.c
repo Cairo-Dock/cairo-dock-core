@@ -1235,6 +1235,7 @@ void cairo_dock_steal_interactive_widget_from_desklet (CairoDesklet *pDesklet)
 	if (pInteractiveWidget != NULL)
 	{
 		cairo_dock_steal_widget_from_its_container (pInteractiveWidget);
+		pDesklet->pInteractiveWidget = NULL;
 		GtkWidget *pBox = gtk_bin_get_child (GTK_BIN (pDesklet->pWidget));
 		if (pBox != NULL)
 			gtk_widget_destroy (pBox);
