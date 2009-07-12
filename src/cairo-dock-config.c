@@ -477,10 +477,6 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	gboolean bMixLauncherAppliOld = myTaskBar.bMixLauncherAppli;
 	gboolean bOverWriteXIconsOld = myTaskBar.bOverWriteXIcons;  // TRUE initialement.
 	gboolean bShowThumbnailOld = myTaskBar.bShowThumbnail;
-	gchar *cIndicatorImagePathOld = myIndicators.cIndicatorImagePath;
-	myIndicators.cIndicatorImagePath = NULL;
-	gchar *cActiveIndicatorImagePathOld = myIndicators.cActiveIndicatorImagePath;
-	myIndicators.cActiveIndicatorImagePath = NULL;
 	gchar *cDeskletDecorationsNameOld = myDesklets.cDeskletDecorationsName;
 	myDesklets.cDeskletDecorationsName = NULL;
 	gboolean bMixAppletsAndLaunchersOld = (myIcons.tIconTypeOrder[CAIRO_DOCK_APPLET] == myIcons.tIconTypeOrder[CAIRO_DOCK_LAUNCHER]);
