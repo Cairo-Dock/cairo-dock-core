@@ -700,7 +700,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	cairo_dock_load_buffers_in_one_dock (myIcon->pSubDock); \
 	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)
 
-/** Delete the list of icons of an applet
+/** Delete the list of icons of an applet (keep the subdock in dock mode).
 */
 #define CD_APPLET_DELETE_MY_ICONS_LIST do {\
 	if (myDesklet && myDesklet->icons != NULL) {\
@@ -746,7 +746,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_MY_ICONS_LIST (myDock ? (myIcon->pSubDock ? myIcon->pSubDock->icons : NULL) : myDesklet->icons)
 /** Gets the container of the icons of your applet. It is either your sub-dock or your desklet.
 */
-#define CD_APPLET_MY_ICONS_LIST_CONTAINER (myDock ? CAIRO_CONTAINER (myIcon->pSubDock) : CAIRO_CONTAINER (myDesklet))
+#define CD_APPLET_MY_ICONS_LIST_CONTAINER (myDock && myIcon->pSubDock ? CAIRO_CONTAINER (myIcon->pSubDock) : myContainer)
 
 
 //\_________________________________ TASKBAR

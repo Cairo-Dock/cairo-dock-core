@@ -1374,7 +1374,7 @@ CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, Cairo
 {
 	if (pIcon != NULL && pIcon->fPersonnalScale > 0)  // icone en cours de suppression.
 	{
-		g_print ("dialog skipped\n");
+		g_print ("dialog skipped for %s (%.2f)\n", pIcon->acName, pIcon->fPersonnalScale);
 		return NULL;
 	}
 	

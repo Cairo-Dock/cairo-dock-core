@@ -836,11 +836,10 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, 
 	
 	cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).
 	
-	cairo_save (pCairoContext);
-	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
 	if (bUseText && icon->pTextBuffer != NULL)
 	{
+		cairo_save (pCairoContext);
 		double fOffsetX = -icon->fTextXOffset + icon->fWidthFactor * icon->fWidth * icon->fScale * 0.5;
 		if (fOffsetX < - icon->fDrawX)
 			fOffsetX = - icon->fDrawX;
@@ -855,10 +854,13 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, 
 			fOffsetX,
 			-myLabels.iLabelSize);
 		cairo_paint (pCairoContext);
+		cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).
 	}
 	
+	if (icon->bHasIndicator)
+		_cairo_dock_draw_appli_indicator (icon, pCairoContext, TRUE, 1., TRUE);
+	
 	//\_____________________ On dessine les infos additionnelles.
-	cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).
 	if (icon->pQuickInfoBuffer != NULL)
 	{
 		cairo_translate (pCairoContext,
