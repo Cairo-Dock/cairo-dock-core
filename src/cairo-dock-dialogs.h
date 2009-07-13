@@ -17,13 +17,13 @@ G_BEGIN_DECLS
 * 
 * To add buttons, you specify a list of images in the attributes. "ok" and "cancel" are key words for the default ok/cancel buttons. You also has to provide a callback function that will be called on click. When the user clicks on a button, the function is called with the number of the clicked button, counted from 0. -1 and -2 are set if the user pushed the Return or Escape keys. The dialog is unreferenced after the user's answer, so <i>you have to reference the dialog in the callback if you want to keep the dialog alive</i>.
 * 
-* The most generic way to build a Dialog is to fill a _CairoDialogAttribute and pass it to cairo_dock_build_dialog.
+* The most generic way to build a Dialog is to fill a _CairoDialogAttribute and pass it to \ref cairo_dock_build_dialog.
 * 
 * But in most of case, you can just use one of the following convenient functions, that will do the job for you.
-* - to show a message, you can use cairo_dock_show_temporary_dialog_with_icon
-* - to ask the user a choice, a value or a text, you can use cairo_dock_show_dialog_with_question, cairo_dock_show_dialog_with_value or cairo_dock_show_dialog_with_entry.
+* - to show a message, you can use \ref cairo_dock_show_temporary_dialog_with_icon
+* - to ask the user a choice, a value or a text, you can use \ref cairo_dock_show_dialog_with_question, \ref cairo_dock_show_dialog_with_value or \ref cairo_dock_show_dialog_with_entry.
 * - if you need to block while waiting for the user, use the xxx_and_wait version of these functions.
-* - if you want to pop up only 1 dialog at once on a fgiven icon, use cairo_dock_remove_dialog_if_any before you pop up your dialog.
+* - if you want to pop up only 1 dialog at once on a given icon, use \ref cairo_dock_remove_dialog_if_any before you pop up your dialog.
 */
 
 typedef gpointer CairoDialogRendererDataParameter;
