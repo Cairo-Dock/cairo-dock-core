@@ -73,6 +73,8 @@ struct _CairoContainer {
 	gboolean bKeepSlowAnimation;
 	/// counter for the animation.
 	gint iAnimationStep;
+	/// liste des notifications disponibles.
+	GPtrArray *pNotificationsTab;
 };
 
 /// Get the Container part of a pointer.

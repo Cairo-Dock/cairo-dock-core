@@ -145,6 +145,8 @@ struct _CairoDialog {
 	gboolean bKeepSlowAnimation;
 	/// compteur pour l'animation (inutilise pour les dialogs).
 	gint iAnimationStep;
+	/// liste des notifications disponibles.
+	GPtrArray *pNotificationsTab;
 	/// icon sur laquelle pointe the dialog.
 	Icon *pIcon;
 	/// le moteur de rendu utilise pour dessiner the dialog.

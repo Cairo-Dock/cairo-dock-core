@@ -152,10 +152,10 @@ struct _CairoDesklet {
 	gboolean bKeepSlowAnimation;
 	/// compteur pour l'animation.
 	gint iAnimationStep;
-	/// Liste eventuelle d'icones placees sur le desklet, et susceptibles de recevoir des clics.
-	GList *icons;
 	/// liste des notifications disponibles.
 	GPtrArray *pNotificationsTab;
+	/// Liste eventuelle d'icones placees sur le desklet, et susceptibles de recevoir des clics.
+	GList *icons;
 	/// le moteur de rendu utilise pour dessiner le desklet.
 	CairoDeskletRenderer *pRenderer;
 	/// donnees pouvant etre utilisees par le moteur de rendu.

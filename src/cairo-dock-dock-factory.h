@@ -106,10 +106,10 @@ struct _CairoDock {
 	gboolean bKeepSlowAnimation;
 	/// compteur pour l'animation.
 	gint iAnimationStep;
-	/// la liste de ses icones.
-	GList* icons;
 	/// liste des notifications disponibles.
 	GPtrArray *pNotificationsTab;
+	/// la liste de ses icones.
+	GList* icons;
 	/// si the dock est the dock racine.
 	gboolean bIsMainDock;
 	/// le nombre d'icones pointant sur lui.

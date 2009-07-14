@@ -185,6 +185,8 @@ void cairo_dock_register_notification (CairoDockNotificationType iNotifType, Cai
 
 void cairo_dock_register_notification_on_icon (Icon *pIcon, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData);
 
+void cairo_dock_register_notification_on_container (CairoContainer *pContainer, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData);
+
 /** Remove a callback from the list list of callbacks for a given notification and a given data.
 *@param iNotifType type of the notification.
 *@param pFunction callback.
@@ -193,6 +195,8 @@ void cairo_dock_register_notification_on_icon (Icon *pIcon, CairoDockNotificatio
 void cairo_dock_remove_notification_func (CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
 
 void cairo_dock_remove_notification_func_on_icon (Icon *pIcon, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
+
+void cairo_dock_remove_notification_func_on_container (CairoContainer *pContainer, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
 
 
 #define _cairo_dock_notify(pNotificationRecordList, bStop, ...) do {\
@@ -219,8 +223,17 @@ void cairo_dock_remove_notification_func_on_icon (Icon *pIcon, CairoDockNotifica
 	gboolean bStop = FALSE;\
 	GSList *pNotificationRecordList = cairo_dock_get_notifications_list (iNotifType);\
 	_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);\
-	if (pIcon && pIcon->pNotificationTab) {\
-		GSList *pNotificationRecordList = g_ptr_array_index (pIcon->pNotificationTab, iNotifType);\
+	if (pIcon && pIcon->pNotificationsTab) {\
+		GSList *pNotificationRecordList = g_ptr_array_index (pIcon->pNotificationsTab, iNotifType);\
+		_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);}\
+	} while (0)
+
+#define cairo_dock_notify_on_container(pContainer, iNotifType, ...) do {\
+	gboolean bStop = FALSE;\
+	GSList *pNotificationRecordList = cairo_dock_get_notifications_list (iNotifType);\
+	_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);\
+	if (pContainer && pContainer->pNotificationsTab) {\
+		GSList *pNotificationRecordList = g_ptr_array_index (pContainer->pNotificationsTab, iNotifType);\
 		_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);}\
 	} while (0)
 

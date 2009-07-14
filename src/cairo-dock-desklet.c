@@ -635,15 +635,17 @@ void cairo_dock_project_coords_on_3D_desklet (CairoDesklet *pDesklet, int iMouse
 {
 	const double a = 1.3;  // formule completement approximative, qu'il faudrait affiner.
 	double dw = pDesklet->iWidth/2, dh = pDesklet->iHeight/2;
-	if (pDesklet->fDepthRotationY > 0 && iMouseX < dw)
+	if (pDesklet->fDepthRotationY > 0 && iMouseX < dw)  // <
 	{
 		*iX = dw - (dw - iMouseX) / (a*pDesklet->fDepthRotationY != G_PI/2 ? 1-sin (a*pDesklet->fDepthRotationY) : 1e-6);
-		g_print (" correction sur iMouseX : %d -> %d\n", pDesklet->iMouseX, *iX);
+		*iY = iMouseY + (dw - iMouseX) * sin (pDesklet->fDepthRotationY) * (iMouseY < dh ? 1 : -1);
+		g_print (" correction sur iMouseX : %d -> %d et iMouseY : %d -> %d\n", pDesklet->iMouseX, *iX, pDesklet->iMouseY, *iY);
 	}
 	else if (pDesklet->fDepthRotationY < 0 && iMouseX > dw)
 	{
 		*iX = dw + (iMouseX - dw) / (a*pDesklet->fDepthRotationY != -G_PI/2 ? 1+sin (a*pDesklet->fDepthRotationY) : 1e-6);
-		g_print (" correction sur iMouseX : %d -> %d\n", pDesklet->iMouseX, *iX);
+		*iY = iMouseY + (iMouseX - dw) * sin (pDesklet->fDepthRotationY) * (iMouseY < dh ? 1 : -1);
+		g_print (" correction sur iMouseX : %d -> %d et iMouseY : %d -> %d\n", pDesklet->iMouseX, *iX, pDesklet->iMouseY, *iY);
 	}
 	else
 		*iX = iMouseX;
@@ -853,7 +855,7 @@ static gboolean on_motion_notify_desklet(GtkWidget *pWidget,
 		pDesklet->iMouseX = pMotion->x;
 		pDesklet->iMouseY = pMotion->y;
 		gboolean bStartAnimation = FALSE;
-		cairo_dock_notify (CAIRO_DOCK_MOUSE_MOVED, pDesklet, &bStartAnimation);
+		cairo_dock_notify_on_container (pDesklet, CAIRO_DOCK_MOUSE_MOVED, pDesklet, &bStartAnimation);
 		if (bStartAnimation)
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pDesklet));
 	}

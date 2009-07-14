@@ -45,6 +45,8 @@ struct _CairoFlyingContainer {
 	gboolean bKeepSlowAnimation;
 	/// compteur pour l'animation.
 	gint iAnimationStep;
+	/// liste des notifications disponibles.
+	GPtrArray *pNotificationsTab;
 	/// L'icone volante.
 	Icon *pIcon;
 	gboolean bDrawHand;

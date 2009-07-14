@@ -10,8 +10,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-icons.h"
 #include "cairo-dock-notifications.h"
 
-static GPtrArray *s_pNotificationsTab = NULL;  // les pre-notifications globales.
-static GPtrArray *s_pNotifications2Tab = NULL;  // les post-notifications globales.
+static GPtrArray *s_pNotificationsTab = NULL;  // tables des notifications globales.
 
 
 #define _check_notification_table(pNotificationsTab) do {\
@@ -45,6 +44,12 @@ void cairo_dock_register_notification_on_icon (Icon *pIcon, CairoDockNotificatio
 	
 	_cairo_dock_register_notification_in_tab (pIcon->pNotificationsTab, iNotifType, pFunction, bRunFirst, pUserData);
 }
+void cairo_dock_register_notification_on_container (CairoContainer *pContainer, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData)
+{
+	_check_notification_table (pContainer->pNotificationsTab);
+	
+	_cairo_dock_register_notification_in_tab (pContainer->pNotificationsTab, iNotifType, pFunction, bRunFirst, pUserData);
+}
 
 
 
@@ -72,6 +77,10 @@ void cairo_dock_remove_notification_func (CairoDockNotificationType iNotifType, 
 void cairo_dock_remove_notification_func_on_icon (Icon *pIcon, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData)
 {
 	_cairo_dock_remove_notification_func_in_tab (pIcon->pNotificationsTab, iNotifType, pFunction, pUserData);
+}
+void cairo_dock_remove_notification_func_on_container (CairoContainer *pContainer, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData)
+{
+	_cairo_dock_remove_notification_func_in_tab (pContainer->pNotificationsTab, iNotifType, pFunction, pUserData);
 }
 
 
