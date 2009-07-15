@@ -451,10 +451,10 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 		bIconIsAnimating = FALSE;
 		if (bUpdateSlowAnimation)
 		{
-			cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON_SLOW, icon, pDock, &bIconIsAnimating);
+			cairo_dock_notify_on_icon (icon, CAIRO_DOCK_UPDATE_ICON_SLOW, icon, pDock, &bIconIsAnimating);
 			pDock->bKeepSlowAnimation |= bIconIsAnimating;
 		}
-		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
+		cairo_dock_notify_on_icon (icon, CAIRO_DOCK_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
 		bContinue |= bIconIsAnimating;
 		if (! bIconIsAnimating)
 			icon->iAnimationState = CAIRO_DOCK_STATE_REST;
@@ -469,9 +469,9 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 	
 	if (bUpdateSlowAnimation)
 	{
-		cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK_SLOW, pDock, &pDock->bKeepSlowAnimation);
+		cairo_dock_notify_on_container (pDock, CAIRO_DOCK_UPDATE_DOCK_SLOW, pDock, &pDock->bKeepSlowAnimation);
 	}
-	cairo_dock_notify (CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);
+	cairo_dock_notify_on_container (pDock, CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);
 	
 	if (! bContinue && ! pDock->bKeepSlowAnimation)
 	{
@@ -500,11 +500,11 @@ static gboolean _cairo_desklet_animation_loop (CairoDesklet *pDesklet)
 		
 		if (bUpdateSlowAnimation)
 		{
-			cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON_SLOW, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
+			cairo_dock_notify_on_icon (pDesklet->pIcon, CAIRO_DOCK_UPDATE_ICON_SLOW, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
 			pDesklet->bKeepSlowAnimation |= bIconIsAnimating;
 		}
 		
-		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
+		cairo_dock_notify_on_icon (pDesklet->pIcon, CAIRO_DOCK_UPDATE_ICON, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
 		if (! bIconIsAnimating)
 			pDesklet->pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
 		else
@@ -513,10 +513,10 @@ static gboolean _cairo_desklet_animation_loop (CairoDesklet *pDesklet)
 	
 	if (bUpdateSlowAnimation)
 	{
-		cairo_dock_notify (CAIRO_DOCK_UPDATE_DESKLET_SLOW, pDesklet, &pDesklet->bKeepSlowAnimation);
+		cairo_dock_notify_on_container (pDesklet, CAIRO_DOCK_UPDATE_DESKLET_SLOW, pDesklet, &pDesklet->bKeepSlowAnimation);
 	}
 	
-	cairo_dock_notify (CAIRO_DOCK_UPDATE_DESKLET, pDesklet, &bContinue);
+	cairo_dock_notify_on_container (pDesklet, CAIRO_DOCK_UPDATE_DESKLET, pDesklet, &bContinue);
 	
 	if (! bContinue && ! pDesklet->bKeepSlowAnimation)
 	{

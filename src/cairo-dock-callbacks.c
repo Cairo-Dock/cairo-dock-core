@@ -138,7 +138,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		}
 		else
 		{
-			cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, NULL);
+			cairo_dock_notify_on_container (pDock, CAIRO_DOCK_RENDER_DOCK, pDock, NULL);
 		}
 		glDisable (GL_SCISSOR_TEST);
 		
@@ -161,7 +161,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 				pDock->render_optimized (pCairoContext, pDock, &pExpose->area);
 			else
 				pDock->render (pCairoContext, pDock);
-			cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
+			cairo_dock_notify_on_container (pDock, CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
 			
 			cairo_destroy (pCairoContext);
 		}
@@ -182,7 +182,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	else
 	{
 		pDock->render (pCairoContext, pDock);
-		cairo_dock_notify (CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
+		cairo_dock_notify_on_container (pDock, CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
 	}
 	
 	cairo_destroy (pCairoContext);

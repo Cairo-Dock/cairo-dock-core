@@ -331,8 +331,8 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 
 void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDock *pReceivingDock, const gchar *cpReceivingDockName)
 {
-	cd_debug ("%s (%s, %d)", __func__, cDockName, pDock->iRefCount);
 	g_return_if_fail (pDock != NULL);  // && cDockName != NULL
+	cd_debug ("%s (%s, %d)", __func__, cDockName, pDock->iRefCount);
 	if (pDock->bIsMainDock)  // utiliser cairo_dock_free_all_docks ().
 		return;
 	pDock->iRefCount --;

@@ -638,13 +638,13 @@ void cairo_dock_project_coords_on_3D_desklet (CairoDesklet *pDesklet, int iMouse
 	if (pDesklet->fDepthRotationY > 0 && iMouseX < dw)  // <
 	{
 		*iX = dw - (dw - iMouseX) / (a*pDesklet->fDepthRotationY != G_PI/2 ? 1-sin (a*pDesklet->fDepthRotationY) : 1e-6);
-		*iY = iMouseY + (dw - iMouseX) * sin (pDesklet->fDepthRotationY) * (iMouseY < dh ? 1 : -1);
+		*iY = iMouseY + (iMouseY - dh) * (dw - iMouseX) * sin (pDesklet->fDepthRotationY) / 3;
 		g_print (" correction sur iMouseX : %d -> %d et iMouseY : %d -> %d\n", pDesklet->iMouseX, *iX, pDesklet->iMouseY, *iY);
 	}
 	else if (pDesklet->fDepthRotationY < 0 && iMouseX > dw)
 	{
 		*iX = dw + (iMouseX - dw) / (a*pDesklet->fDepthRotationY != -G_PI/2 ? 1+sin (a*pDesklet->fDepthRotationY) : 1e-6);
-		*iY = iMouseY + (iMouseX - dw) * sin (pDesklet->fDepthRotationY) * (iMouseY < dh ? 1 : -1);
+		*iY = iMouseY + (iMouseY - dh) * (iMouseX - dw) * sin (pDesklet->fDepthRotationY) / 3;
 		g_print (" correction sur iMouseX : %d -> %d et iMouseY : %d -> %d\n", pDesklet->iMouseX, *iX, pDesklet->iMouseY, *iY);
 	}
 	else
