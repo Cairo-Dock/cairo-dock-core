@@ -311,11 +311,8 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 
 	cairo_destroy (pCairoContext);
 }
-gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDesklet *pDesklet)
+static void _cairo_dock_set_desklet_matrix (CairoDesklet *pDesklet)
 {
-	glPushMatrix ();
-	///glTranslatef (0*pDesklet->iWidth/2, 0*pDesklet->iHeight/2, 0.);  // avec une perspective ortho.
-	///glTranslatef (0*pDesklet->iWidth/2, 0*pDesklet->iHeight/2, -pDesklet->iWidth*(1.87 +.35*fabs (sin(pDesklet->fDepthRotationY))));  // avec 30 deg de perspective
 	glTranslatef (0., 0., -pDesklet->iHeight * sqrt(3)/2 - 
 		.45 * MAX (pDesklet->iWidth * fabs (sin (pDesklet->fDepthRotationY)),
 			pDesklet->iHeight * fabs (sin (pDesklet->fDepthRotationX)))
@@ -351,6 +348,14 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 	{
 		glRotatef (- pDesklet->fDepthRotationX / G_PI * 180., 1., 0., 0.);
 	}
+}
+
+gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDesklet *pDesklet)
+{
+	glPushMatrix ();
+	///glTranslatef (0*pDesklet->iWidth/2, 0*pDesklet->iHeight/2, 0.);  // avec une perspective ortho.
+	///glTranslatef (0*pDesklet->iWidth/2, 0*pDesklet->iHeight/2, -pDesklet->iWidth*(1.87 +.35*fabs (sin(pDesklet->fDepthRotationY))));  // avec 30 deg de perspective
+	_cairo_dock_set_desklet_matrix (pDesklet);
 	
 	_cairo_dock_enable_texture ();
 	_cairo_dock_set_blend_pbuffer ();
@@ -631,46 +636,95 @@ gboolean on_scroll_desklet (GtkWidget* pWidget,
 }
 
 
-void cairo_dock_project_coords_on_3D_desklet (CairoDesklet *pDesklet, int iMouseX, int iMouseY, int *iX, int *iY)
+
+Icon *cairo_dock_pick_icon_on_desklet (CairoDesklet *pDesklet)
 {
-	const double a = 1.3;  // formule completement approximative, qu'il faudrait affiner.
-	double dw = pDesklet->iWidth/2, dh = pDesklet->iHeight/2;
-	if (pDesklet->fDepthRotationY > 0 && iMouseX < dw)  // <
-	{
-		*iX = dw - (dw - iMouseX) / (a*pDesklet->fDepthRotationY != G_PI/2 ? 1-sin (a*pDesklet->fDepthRotationY) : 1e-6);
-		*iY = iMouseY + (iMouseY - dh) * (dw - iMouseX) * sin (pDesklet->fDepthRotationY) / 3;
-		g_print (" correction sur iMouseX : %d -> %d et iMouseY : %d -> %d\n", pDesklet->iMouseX, *iX, pDesklet->iMouseY, *iY);
-	}
-	else if (pDesklet->fDepthRotationY < 0 && iMouseX > dw)
-	{
-		*iX = dw + (iMouseX - dw) / (a*pDesklet->fDepthRotationY != -G_PI/2 ? 1+sin (a*pDesklet->fDepthRotationY) : 1e-6);
-		*iY = iMouseY + (iMouseY - dh) * (iMouseX - dw) * sin (pDesklet->fDepthRotationY) / 3;
-		g_print (" correction sur iMouseX : %d -> %d et iMouseY : %d -> %d\n", pDesklet->iMouseX, *iX, pDesklet->iMouseY, *iY);
-	}
-	else
-		*iX = iMouseX;
+	if (pDesklet->pRenderer->render_bounding_box == NULL)
+		return NULL;
+	GLuint selectBuf[4];
+    GLint hits=0;
+    GLint viewport[4];
 	
-	if (pDesklet->fDepthRotationX > 0 && iMouseY < dh)
+	GdkGLContext* pGlContext = gtk_widget_get_gl_context (pDesklet->pWidget);
+	GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pDesklet->pWidget);
+	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+		return NULL;
+	
+	glGetIntegerv (GL_VIEWPORT, viewport);
+	glSelectBuffer (4, selectBuf);
+	
+	glRenderMode(GL_SELECT);
+	glInitNames();
+	glPushName(0);
+	
+	glMatrixMode (GL_PROJECTION);
+	glPushMatrix ();
+	glLoadIdentity ();
+    gluPickMatrix ((GLdouble) pDesklet->iMouseX, (GLdouble) (viewport[3] - pDesklet->iMouseY), 2.0, 2.0, viewport);
+	gluPerspective (60.0, 1.0*(GLfloat)pDesklet->iWidth/(GLfloat)pDesklet->iHeight, 1., 4*pDesklet->iHeight);
+	
+	glMatrixMode (GL_MODELVIEW);
+	glPushMatrix ();
+	glLoadIdentity ();
+	
+	_cairo_dock_set_desklet_matrix (pDesklet);
+	
+	if (pDesklet->iLeftSurfaceOffset != 0 || pDesklet->iTopSurfaceOffset != 0 || pDesklet->iRightSurfaceOffset != 0 || pDesklet->iBottomSurfaceOffset != 0)
 	{
-		*iY = dh - (dh - iMouseY) / (a*pDesklet->fDepthRotationX != G_PI/2 ? 1-sin (a*pDesklet->fDepthRotationX) : 1e-6);
-		g_print (" correction sur iMouseY : %d -> %d\n", pDesklet->iMouseY, *iY);
+		glTranslatef ((pDesklet->iLeftSurfaceOffset - pDesklet->iRightSurfaceOffset)/2, (pDesklet->iBottomSurfaceOffset - pDesklet->iTopSurfaceOffset)/2, 0.);
+		glScalef (1. - 1.*(pDesklet->iLeftSurfaceOffset + pDesklet->iRightSurfaceOffset) / pDesklet->iWidth,
+			1. - 1.*(pDesklet->iTopSurfaceOffset + pDesklet->iBottomSurfaceOffset) / pDesklet->iHeight,
+			1.);
 	}
-	else if (pDesklet->fDepthRotationX < 0 && iMouseY > dh)
+	
+	glPolygonMode (GL_FRONT, GL_FILL);
+	glColor4f (1., 1., 1., 1.);
+	
+	pDesklet->pRenderer->render_bounding_box (pDesklet);
+	
+	glPopName();
+	
+	hits = glRenderMode (GL_RENDER);
+	g_print ("%d hit(s)\n", hits);
+	
+	glMatrixMode (GL_PROJECTION);
+	glPopMatrix ();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix ();
+	
+	Icon *pFoundIcon = NULL;
+	if (hits != 0)
 	{
-		*iY = dh + (iMouseY - dh) / (a*pDesklet->fDepthRotationX != -G_PI/2 ? 1-sin (a*pDesklet->fDepthRotationX) : 1e-6);
-		g_print (" correction sur iMouseY : %d -> %d\n", pDesklet->iMouseY, *iY);
+		Icon *pIcon;
+		GList *ic;
+		GLuint id = selectBuf[3];
+		for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
+		{
+			pIcon = ic->data;
+			if (pIcon->iIconTexture == id)
+			{
+				pFoundIcon = pIcon;
+				break ;
+			}
+		}
 	}
-	else
-		*iY = iMouseY;
+	
+	gdk_gl_drawable_gl_end (pGlDrawable);
+	return pFoundIcon;
 }
+
 
 Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet)
 {
 	g_print (" clic en (%d;%d) (rotations : %.2frad; %.2frad)\n", pDesklet->iMouseX, pDesklet->iMouseY, pDesklet->fDepthRotationX, pDesklet->fDepthRotationY);
-	int iMouseX, iMouseY;
-	cairo_dock_get_coords_on_3D_desklet (pDesklet, &iMouseX, &iMouseY);
 	
-	Icon *icon = pDesklet->pIcon;
+	Icon *icon = cairo_dock_pick_icon_on_desklet (pDesklet);
+	if (icon != NULL)
+		return icon;
+	
+	int iMouseX = pDesklet->iMouseX, iMouseY = pDesklet->iMouseY;
+	
+	icon = pDesklet->pIcon;
 	g_return_val_if_fail (icon != NULL, NULL);  // peut arriver au tout debut, car on associe l'icone au desklet _apres_ l'avoir cree, et on fait tourner la gtk_main entre-temps (pour le redessiner invisible).
 	if (icon->fDrawX < iMouseX && icon->fDrawX + icon->fWidth * icon->fScale > iMouseX && icon->fDrawY < iMouseY && icon->fDrawY + icon->fHeight * icon->fScale > iMouseY)
 	{
@@ -935,7 +989,7 @@ static gboolean on_enter_desklet (GtkWidget* pWidget,
 		if (g_bUseOpenGL/* && pDesklet->pRenderer && pDesklet->pRenderer->render_opengl != NULL*/)
 		{
 			gboolean bStartAnimation = FALSE;
-			cairo_dock_notify (CAIRO_DOCK_ENTER_DESKLET, pDesklet, &bStartAnimation);
+			cairo_dock_notify_on_container (CAIRO_DOCK_ENTER_DESKLET, pDesklet, &bStartAnimation);
 			if (bStartAnimation)
 				cairo_dock_launch_animation (CAIRO_CONTAINER (pDesklet));
 		}

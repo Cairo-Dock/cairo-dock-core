@@ -100,13 +100,23 @@ typedef void (* CairoDeskletFreeRendererDataFunc) (CairoDesklet *pDesklet);
 typedef void (* CairoDeskletLoadIconsFunc) (CairoDesklet *pDesklet, cairo_t *pSourceContext);
 /// Definition of a Desklet's renderer.
 struct _CairoDeskletRenderer {
-	CairoDeskletRenderFunc 			render;
-	CairoDeskletGLRenderFunc 		render_opengl;
+	/// rendering function with libcairo.
+	CairoDeskletRenderFunc 				render;
+	/// rendering function with OpenGL.
+	CairoDeskletGLRenderFunc 			render_opengl;
+	/// get the configuration of the renderer from a set of config attributes.
 	CairoDeskletConfigureRendererFunc 	configure;
+	/// load the internal data of the renderer.
 	CairoDeskletLoadRendererDataFunc 	load_data;
+	/// free all internal data of the renderer.
 	CairoDeskletFreeRendererDataFunc 	free_data;
-	CairoDeskletLoadIconsFunc 		load_icons;
+	/// define the icons' size and load them.
+	CairoDeskletLoadIconsFunc 			load_icons;
+	/// function called on each iteration of the rendering loop.
 	CairoDeskletUpdateRendererDataFunc 	update;
+	/// optionnal rendering function with OpenGL that only draws the bounding boxes of the icon (for picking).
+	CairoDeskletGLRenderFunc 			render_bounding_box;
+	/// An optionnal list of preset configs.
 	GList *pPreDefinedConfigList;
 };
 
@@ -277,15 +287,12 @@ void cairo_dock_set_desklet_margin (CairoDesklet *pDesklet, int iRightMargin);
 void cairo_dock_steal_interactive_widget_from_desklet (CairoDesklet *pDesklet);
 
 
-void cairo_dock_project_coords_on_3D_desklet (CairoDesklet *pDesklet, int iMouseX, int iMouseY, int *iX, int *iY);
-#define cairo_dock_get_coords_on_3D_desklet(pDesklet, xptr, yptr) cairo_dock_project_coords_on_3D_desklet (pDesklet, pDesklet->iMouseX, pDesklet->iMouseY, xptr, yptr)
-
-/*
-* Trouve l'icône cliquée dans un desklet, en cherchant parmi l'icône principale et éventuellement la liste des icônes associées.
+/* Trouve l'icône cliquée dans un desklet, en cherchant parmi l'icône principale et éventuellement la liste des icônes associées.
 *@param pDesklet le desklet cliqué.
 *@return l'icône cliquée ou NULL si on a cliqué à côté.
 */
 Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet);
+
 
 /** Hide a desklet.
 *@param pDesklet the desklet.

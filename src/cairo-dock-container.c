@@ -58,7 +58,6 @@ static void _cairo_dock_on_realize (GtkWidget* pWidget, gpointer data)
 	glClearDepth (1.0f);
 	glClearStencil (0);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
-	glHint (GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 	
 	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);  // GL_MODULATE / GL_DECAL /  GL_BLEND
 	
