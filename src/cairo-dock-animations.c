@@ -42,7 +42,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-animations.h"
 
 extern int g_iXScreenHeight[2];
-extern gboolean g_bEasterEggs;
 extern gboolean g_bUseOpenGL;
 extern CairoDock *g_pMainDock;
 
@@ -266,9 +265,6 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 			return FALSE;
 		
 		cairo_dock_replace_all_dialogs ();
-		
-		if (g_bEasterEggs)
-			cairo_dock_set_input_shape (pDock);
 	}
 
 	if (pDock->iMagnitudeIndex == 0)  // on est arrive en bas.

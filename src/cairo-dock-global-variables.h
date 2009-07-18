@@ -34,8 +34,6 @@ extern int g_iVisibleZoneHeight;
 extern cairo_surface_t *g_pVisibleZoneSurface;
 extern double g_fVisibleZoneImageWidth, g_fVisibleZoneImageHeight;
 
-extern GLuint g_pGradationTexture[2];
-
 /// Environnement de bureau detecte.
 extern CairoDockDesktopEnv g_iDesktopEnv;
 
@@ -46,6 +44,10 @@ extern gboolean g_bEasterEggs;
 
 extern GLuint g_iBackgroundTexture;
 extern gboolean g_bUseOpenGL;
+
+extern GLuint g_pGradationTexture[2];
+extern GLuint g_iIndicatorTexture;
+extern double g_fIndicatorWidth, g_fIndicatorHeight;
 
 G_END_DECLS
 #endif

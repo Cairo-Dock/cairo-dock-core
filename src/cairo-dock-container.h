@@ -73,7 +73,7 @@ struct _CairoContainer {
 	gboolean bKeepSlowAnimation;
 	/// counter for the animation.
 	gint iAnimationStep;
-	/// liste des notifications disponibles.
+	/// list of available notifications.
 	GPtrArray *pNotificationsTab;
 };
 

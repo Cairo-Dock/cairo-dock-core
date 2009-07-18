@@ -311,7 +311,7 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 
 	cairo_destroy (pCairoContext);
 }
-static void _cairo_dock_set_desklet_matrix (CairoDesklet *pDesklet)
+static inline void _cairo_dock_set_desklet_matrix (CairoDesklet *pDesklet)
 {
 	glTranslatef (0., 0., -pDesklet->iHeight * sqrt(3)/2 - 
 		.45 * MAX (pDesklet->iWidth * fabs (sin (pDesklet->fDepthRotationY)),
@@ -637,10 +637,8 @@ gboolean on_scroll_desklet (GtkWidget* pWidget,
 
 
 
-Icon *cairo_dock_pick_icon_on_desklet (CairoDesklet *pDesklet)
+Icon *cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 {
-	if (pDesklet->pRenderer->render_bounding_box == NULL)
-		return NULL;
 	GLuint selectBuf[4];
     GLint hits=0;
     GLint viewport[4];
@@ -680,12 +678,62 @@ Icon *cairo_dock_pick_icon_on_desklet (CairoDesklet *pDesklet)
 	glPolygonMode (GL_FRONT, GL_FILL);
 	glColor4f (1., 1., 1., 1.);
 	
-	pDesklet->pRenderer->render_bounding_box (pDesklet);
+	if (pDesklet->pRenderer && pDesklet->pRenderer->render_bounding_box != NULL)
+	{
+		pDesklet->pRenderer->render_bounding_box (pDesklet);
+	}
+	else  // on le fait nous-memes a partir des coordonnees des icones.
+	{
+		glTranslatef (-pDesklet->iWidth/2, -pDesklet->iHeight/2, 0.);
+		
+		double x, y, w, h;
+		int numActive = 0;
+		Icon *pIcon;
+		
+		pIcon = pDesklet->pIcon;
+		if (pIcon != NULL && pIcon->iIconTexture != 0)
+		{
+			w = pIcon->fWidth/2;
+			h = pIcon->fHeight/2;
+			x = pIcon->fDrawX + w;
+			y = pDesklet->iHeight - pIcon->fDrawY - h;
+			
+			glLoadName(pIcon->iIconTexture);
+			
+			glBegin(GL_QUADS);
+			glVertex3f(x-.5*w, y+.5*h, 0.);
+			glVertex3f(x+.5*w, y+.5*h, 0.);
+			glVertex3f(x+.5*w, y-.5*h, 0.);
+			glVertex3f(x-.5*w, y-.5*h, 0.);
+			glEnd();
+		}
+		
+		GList *ic;
+		for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
+		{
+			pIcon = ic->data;
+			if (pIcon->iIconTexture == 0)
+				continue;
+			
+			w = pIcon->fWidth/2;
+			h = pIcon->fHeight/2;
+			x = pIcon->fDrawX + w;
+			y = pDesklet->iHeight - pIcon->fDrawY - h;
+			
+			glLoadName(pIcon->iIconTexture);
+			
+			glBegin(GL_QUADS);
+			glVertex3f(x-.5*w, y+.5*h, 0.);
+			glVertex3f(x+.5*w, y+.5*h, 0.);
+			glVertex3f(x+.5*w, y-.5*h, 0.);
+			glVertex3f(x-.5*w, y-.5*h, 0.);
+			glEnd();
+		}
+	}
 	
 	glPopName();
 	
 	hits = glRenderMode (GL_RENDER);
-	g_print ("%d hit(s)\n", hits);
 	
 	glMatrixMode (GL_PROJECTION);
 	glPopMatrix ();
@@ -716,15 +764,16 @@ Icon *cairo_dock_pick_icon_on_desklet (CairoDesklet *pDesklet)
 
 Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet)
 {
-	g_print (" clic en (%d;%d) (rotations : %.2frad; %.2frad)\n", pDesklet->iMouseX, pDesklet->iMouseY, pDesklet->fDepthRotationX, pDesklet->fDepthRotationY);
+	//g_print (" clic en (%d;%d) (rotations : %.2frad; %.2frad)\n", pDesklet->iMouseX, pDesklet->iMouseY, pDesklet->fDepthRotationX, pDesklet->fDepthRotationY);
 	
-	Icon *icon = cairo_dock_pick_icon_on_desklet (pDesklet);
-	if (icon != NULL)
-		return icon;
+	if (g_bUseOpenGL && pDesklet->pRenderer && pDesklet->pRenderer->render_opengl)
+	{
+		return cairo_dock_pick_icon_on_opengl_desklet (pDesklet);
+	}
 	
 	int iMouseX = pDesklet->iMouseX, iMouseY = pDesklet->iMouseY;
 	
-	icon = pDesklet->pIcon;
+	Icon *icon = pDesklet->pIcon;
 	g_return_val_if_fail (icon != NULL, NULL);  // peut arriver au tout debut, car on associe l'icone au desklet _apres_ l'avoir cree, et on fait tourner la gtk_main entre-temps (pour le redessiner invisible).
 	if (icon->fDrawX < iMouseX && icon->fDrawX + icon->fWidth * icon->fScale > iMouseX && icon->fDrawY < iMouseY && icon->fDrawY + icon->fHeight * icon->fScale > iMouseY)
 	{
@@ -943,6 +992,41 @@ static gboolean on_motion_notify_desklet(GtkWidget *pWidget,
 			pDesklet->time/*pButton->time*/);
 		pDesklet->moving = TRUE;
 	}
+	else
+	{
+		gboolean bStartAnimation = FALSE;
+		Icon *pIcon = cairo_dock_find_clicked_icon_in_desklet (pDesklet);
+		if (pIcon != NULL)
+		{
+			if (! pIcon->bPointed)
+			{
+				Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDesklet->icons);
+				if (pPointedIcon != NULL)
+					pPointedIcon->bPointed = FALSE;
+				pIcon->bPointed = TRUE;
+				
+				g_print ("on survole %s\n", pIcon->acName);
+				cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_ENTER_ICON, pIcon, pDesklet, &bStartAnimation);
+			}
+		}
+		else
+		{
+			Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDesklet->icons);
+			if (pPointedIcon != NULL)
+			{
+				pPointedIcon->bPointed = FALSE;
+				
+				g_print ("kedal\n");
+				cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_ENTER_ICON, pPointedIcon, pDesklet, &bStartAnimation);
+
+			}
+		}
+		if (bStartAnimation)
+		{
+			cairo_dock_launch_animation (CAIRO_CONTAINER (pDesklet));
+		}
+	}
+	
 	gdk_device_get_state (pMotion->device, pMotion->window, NULL, NULL);  // pour recevoir d'autres MotionNotify.
 	return FALSE;
 }
@@ -989,7 +1073,7 @@ static gboolean on_enter_desklet (GtkWidget* pWidget,
 		if (g_bUseOpenGL/* && pDesklet->pRenderer && pDesklet->pRenderer->render_opengl != NULL*/)
 		{
 			gboolean bStartAnimation = FALSE;
-			cairo_dock_notify_on_container (CAIRO_DOCK_ENTER_DESKLET, pDesklet, &bStartAnimation);
+			cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_ENTER_DESKLET, pDesklet, &bStartAnimation);
 			if (bStartAnimation)
 				cairo_dock_launch_animation (CAIRO_CONTAINER (pDesklet));
 		}

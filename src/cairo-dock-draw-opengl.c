@@ -792,12 +792,18 @@ GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWi
 	return iTexture;
 }
 
-GLuint cairo_dock_create_texture_from_image_full (const gchar *cImagePath, double *fImageWidth, double *fImageHeight)
+GLuint cairo_dock_create_texture_from_image_full (const gchar *cImageFile, double *fImageWidth, double *fImageHeight)
 {
 	g_return_val_if_fail (GTK_WIDGET_REALIZED (g_pMainDock->pWidget), 0);
 	double fWidth=0, fHeight=0;
-	if (cImagePath == NULL)
+	if (cImageFile == NULL)
 		return 0;
+	gchar *cImagePath;
+	if (*cImageFile == '/')
+		cImagePath = (gchar *)cImageFile;
+	else
+		cImagePath = cairo_dock_generate_file_path (cImageFile);
+	
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (g_pMainDock));
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cImagePath,
 		pCairoContext,
@@ -816,6 +822,8 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImagePath, doubl
 		*fImageHeight = fHeight;
 	GLuint iTexture = cairo_dock_create_texture_from_surface (pSurface);
 	cairo_surface_destroy (pSurface);
+	if (cImagePath != cImageFile)
+		g_free (cImagePath);
 	return iTexture;
 }
 

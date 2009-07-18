@@ -77,7 +77,6 @@ extern gint g_iXScreenWidth[2];
 extern gint g_iXScreenHeight[2];
 extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
 
-extern gboolean g_bEasterEggs;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bLocked;
 extern CairoDockDesktopEnv g_iDesktopEnv;
@@ -285,7 +284,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 	if (pPointedIcon != NULL && pDock->render_opengl != NULL && ! CAIRO_DOCK_IS_SEPARATOR (pPointedIcon) && pPointedIcon->iAnimationState <= CAIRO_DOCK_STATE_MOUSE_HOVERED)
 	{
 		gboolean bStartAnimation = FALSE;
-		cairo_dock_notify (CAIRO_DOCK_ENTER_ICON, pPointedIcon, pDock, &bStartAnimation);
+		cairo_dock_notify_on_container (pDock, CAIRO_DOCK_ENTER_ICON, pPointedIcon, pDock, &bStartAnimation);
 		
 		if (bStartAnimation)
 		{
@@ -655,14 +654,12 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 }
 gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	if (g_bEasterEggs && pDock->bAtBottom)
-		return FALSE;
-	//g_print ("%s (bInside:%d; bAtBottom:%d; iRefCount:%d)\n", __func__, pDock->bInside, pDock->bAtBottom, pDock->iRefCount);
-	/**if (pDock->bAtBottom)  // || ! pDock->bInside  // mis en commentaire pour la 1.5.4
+	if (pDock->bAtBottom)  /// je l'avais mis en commentaire, mais c'est utile maintenant pour le input shape. A valider ...
 	{
 		pDock->iSidLeaveDemand = 0;
 		return FALSE;
-	}*/
+	}
+	//g_print ("%s (bInside:%d; bAtBottom:%d; iRefCount:%d)\n", __func__, pDock->bInside, pDock->bAtBottom, pDock->iRefCount);
 	if (pEvent != NULL && (pEvent->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && (pEvent->state & GDK_BUTTON1_MASK))
 	{
 		return FALSE;
@@ -773,7 +770,7 @@ gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey fo
 
 gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	if (pEvent && g_bEasterEggs && pDock->pShapeBitmap)
+	if (pEvent && pDock->pShapeBitmap)  // XInputShape is broken. We manage ourself the entry.
 	{
 		int x = (pDock->bHorizontalDock ? pEvent->x : pDock->iCurrentWidth - pEvent->y);
 		if (x < pDock->inputArea.x || x > (pDock->inputArea.x + pDock->inputArea.width))

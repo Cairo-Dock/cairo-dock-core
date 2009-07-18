@@ -62,7 +62,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
 extern int g_iScreenOffsetX, g_iScreenOffsetY;
-extern gboolean g_bEasterEggs;
 
 
 void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
@@ -183,10 +182,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 
 	cairo_dock_update_background_decorations_if_necessary (pDock, pDock->iDecorationsWidth, pDock->iDecorationsHeight);
 	
-	if (g_bEasterEggs)
-	{
-		cairo_dock_set_input_shape (pDock);
-	}
+	cairo_dock_update_input_shape (pDock);
 }
 
 Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock)
@@ -391,29 +387,32 @@ void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pDoc
 
 
 
-void cairo_dock_set_input_shape (CairoDock *pDock)
+void cairo_dock_update_input_shape (CairoDock *pDock)
 {
 	/*gint   iIgnore;
 	gint   iMajor;
 	gint   iMinor;
-
 	if (!XShapeQueryExtension (GDK_WINDOW_XDISPLAY (pDock->pWidget->window),
-				   &iIgnore,
-				   &iIgnore))
-		g_print ("No ShapeQueryExtension\n");
-
+				&iIgnore,
+				&iIgnore))
+	{
+		cd_warning ("No ShapeQueryExtension");
+		return;
+	}
 	if (!XShapeQueryVersion (GDK_WINDOW_XDISPLAY (pDock->pWidget->window),
-				 &iMajor,
-				 &iMinor))
-		g_print ("No ShapeQueryExtension\n");
-
+				&iMajor,
+				&iMinor))
+	{
+		cd_warning ("No ShapeQueryExtension");
+		return;
+	}
 	// for shaped input we need at least XShape 1.1
 	if (iMajor != 1 && iMinor < 1)
 		g_print ("ShapeQueryExtension too old\n");*/
 	if (pDock->pShapeBitmap != NULL)
 		g_object_unref ((gpointer) pDock->pShapeBitmap);
 	
-	if (pDock->inputArea.width == 0 || pDock->inputArea.height == 0 || pDock->iRefCount > 0 || pDock->bAutoHide)
+	if (pDock->inputArea.width == 0 || pDock->inputArea.height == 0 || pDock->iRefCount > 0 || pDock->bAutoHide || ! pDock->bHorizontalDock)  /// marche pas bien a la vertical ...
 	{
 		pDock->pShapeBitmap = NULL;
 		return ;
@@ -433,22 +432,17 @@ void cairo_dock_set_input_shape (CairoDock *pDock)
 	{
 		cairo_rectangle (pCairoContext,
 			pDock->inputArea.x,
-			pDock->bDirectionUp ? pDock->inputArea.y : pDock->iCurrentHeight - pDock->inputArea.y - pDock->inputArea.height,
+			pDock->bDirectionUp ? pDock->inputArea.y : pDock->iMinDockHeight - pDock->inputArea.y - pDock->inputArea.height,
 			pDock->inputArea.width,
 			pDock->inputArea.height);
 	}
 	else
 	{
 		cairo_rectangle (pCairoContext,
-			pDock->bDirectionUp ? pDock->inputArea.y : pDock->iCurrentHeight - pDock->inputArea.y - pDock->inputArea.height,
-			pDock->iCurrentWidth - pDock->inputArea.x - pDock->inputArea.width,
+			pDock->bDirectionUp ? pDock->inputArea.y : pDock->iMinDockHeight - pDock->inputArea.y - pDock->inputArea.height,
+			pDock->iMinDockWidth - pDock->inputArea.x - pDock->inputArea.width,
 			pDock->inputArea.height,
 			pDock->inputArea.width);
-		/*cairo_rectangle (pCairoContext,
-			0,
-			0,
-			pDock->inputArea.height,
-			200);*/
 	}
 	cairo_fill (pCairoContext);
 	cairo_destroy (pCairoContext);

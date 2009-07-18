@@ -63,7 +63,6 @@ struct _CairoDeskletDecoration {
 	gint iTopMargin;
 	gint iRightMargin;
 	gint iBottomMargin;
-	gint iDecorationPlanesRotation;
 	};
 
 /// Configuration attributes of a Desklet.
@@ -114,7 +113,7 @@ struct _CairoDeskletRenderer {
 	CairoDeskletLoadIconsFunc 			load_icons;
 	/// function called on each iteration of the rendering loop.
 	CairoDeskletUpdateRendererDataFunc 	update;
-	/// optionnal rendering function with OpenGL that only draws the bounding boxes of the icon (for picking).
+	/// optionnal rendering function with OpenGL that only draws the bounding boxes of the icons (for picking).
 	CairoDeskletGLRenderFunc 			render_bounding_box;
 	/// An optionnal list of preset configs.
 	GList *pPreDefinedConfigList;
@@ -124,11 +123,11 @@ struct _CairoDeskletRenderer {
 struct _CairoDesklet {
 	/// type "desklet".
 	CairoDockTypeContainer iType;
-	/// La fenetre du widget.
+	/// window of the desklet.
 	GtkWidget *pWidget;
-	/// Taille de la fenetre. La surface allouee a l'applet s'en deduit.
+	/// desklet's dimension.
 	gint iWidth, iHeight;
-	/// Position de la fenetre.
+	/// desklet's position on screen.
 	gint iWindowPositionX, iWindowPositionY;
 	/// Vrai ssi le pointeur est dans le desklet (widgets fils inclus).
 	gboolean bInside;
@@ -287,9 +286,9 @@ void cairo_dock_set_desklet_margin (CairoDesklet *pDesklet, int iRightMargin);
 void cairo_dock_steal_interactive_widget_from_desklet (CairoDesklet *pDesklet);
 
 
-/* Trouve l'icône cliquée dans un desklet, en cherchant parmi l'icône principale et éventuellement la liste des icônes associées.
-*@param pDesklet le desklet cliqué.
-*@return l'icône cliquée ou NULL si on a cliqué à côté.
+/** Find the currently pointed icon in a desklet, taking into account the 3D rotations.
+*@param pDesklet the desklet.
+*@return the pointed icon, or NULL if none.
 */
 Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet);
 

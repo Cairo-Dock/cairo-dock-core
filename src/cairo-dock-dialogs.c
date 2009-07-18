@@ -1241,7 +1241,7 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 
 void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 {
-	//g_print ("%s (%x;%d)\n", __func__, pDialog->pIcon, pContainer);
+	g_print ("%s (%x;%d)\n", __func__, pDialog->pIcon, pContainer);
 	int iPrevPositionX = pDialog->iPositionX, iPrevPositionY = pDialog->iPositionY;
 	if (pContainer != NULL && pDialog->pIcon != NULL)
 	{

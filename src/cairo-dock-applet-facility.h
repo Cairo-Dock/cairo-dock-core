@@ -635,6 +635,17 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 #define CD_APPLET_LOAD_LOCAL_TEXTURE(cImageName) cairo_dock_create_texture_from_image (MY_APPLET_SHARE_DATA_DIR"/"cImageName)
 
+#define CD_APPLET_LOAD_TEXTURE_WITH_DEFAULT(cUserImageName, cDefaultLocalImageName) \
+	__extension__ ({\
+	GLuint iTexture; \
+	if (cUserImageName != NULL) \
+		iTexture = cairo_dock_create_texture_from_image (cUserImageName); \
+	else if (cDefaultLocalImageName != NULL)\
+		iTexture = cairo_dock_create_texture_from_image (MY_APPLET_SHARE_DATA_DIR"/"cDefaultLocalImageName); \
+	else\
+		iTexture = 0;\
+	iTexture; })
+
 /** Say if the applet's container currently supports OpenGL.
 */
 #define CD_APPLET_MY_CONTAINER_IS_OPENGL (g_bUseOpenGL && ((myDock && myDock->render_opengl) || (myDesklet && myDesklet->pRenderer && myDesklet->pRenderer->render_opengl)))

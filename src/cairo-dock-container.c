@@ -234,14 +234,38 @@ void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer)
 
 
 
-
+static gboolean _cairo_dock_search_icon_in_desklet (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, Icon *icon)
+{
+	if (pDesklet->icons != NULL)
+	{
+		Icon *pIcon;
+		GList *ic;
+		for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
+		{
+			pIcon = ic->data;
+			if (pIcon == icon)
+				return TRUE;
+		}
+	}
+	return FALSE;
+}
 CairoContainer *cairo_dock_search_container_from_icon (Icon *icon)
 {
 	g_return_val_if_fail (icon != NULL, NULL);
 	if (CAIRO_DOCK_IS_APPLET (icon))
+	{
 		return icon->pModuleInstance->pContainer;
-	else
+	}
+	else if (icon->cParentDockName != NULL)
+	{
 		return CAIRO_CONTAINER (cairo_dock_search_dock_from_name (icon->cParentDockName));
+	}
+	else
+	{
+		CairoDockModuleInstance *pApplet = cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc)_cairo_dock_search_icon_in_desklet, icon);
+		if (pApplet != NULL)
+			return pApplet->pContainer;
+	}
 }
 
 
