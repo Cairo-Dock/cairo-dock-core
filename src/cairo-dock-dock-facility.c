@@ -999,6 +999,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboole
 				iNewWidth);
 
 		cairo_dock_start_growing (pSubDock);  // on commence a faire grossir les icones.
+		pSubDock->calculate_icons (pSubDock);  // on recalcule les icones car sinon le 1er dessin se fait avec les parametres tels qu'ils etaient lorsque le dock s'est caché; or l'animation de pliage peut prendre plus de temps que celle de cachage.
 	}
 	//g_print ("  -> Gap %d;%d -> W(%d;%d) (%d)\n", pSubDock->iGapX, pSubDock->iGapY, pSubDock->iWindowPositionX, pSubDock->iWindowPositionY, pSubDock->bHorizontalDock);
 	

@@ -16,7 +16,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-applet-facility.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-icons.h"
@@ -61,16 +60,16 @@ void cairo_dock_init_data_renderer (CairoDataRenderer *pRenderer, cairo_t *pSour
 		{
 			for (i = 0; i < pRenderer->data.iNbValues; i ++)
 			{
-				pRenderer->data.pMinMaxValues[2*i] = 1e6;
-				pRenderer->data.pMinMaxValues[2*i+1] = -1e6;
+				pRenderer->data.pMinMaxValues[2*i] = 1.e6;
+				pRenderer->data.pMinMaxValues[2*i+1] = -1.e6;
 			}
 		}
 		else
 		{
 			for (i = 0; i < pRenderer->data.iNbValues; i ++)
 			{
-				pRenderer->data.pMinMaxValues[2*i] = 0;
-				pRenderer->data.pMinMaxValues[2*i+1] = 1;
+				pRenderer->data.pMinMaxValues[2*i] = 0.;
+				pRenderer->data.pMinMaxValues[2*i+1] = 1.;
 			}
 		}
 	}
@@ -169,7 +168,7 @@ void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer
 			if (fNewValue < pData->pMinMaxValues[2*i])
 				pData->pMinMaxValues[2*i] = fNewValue;
 			if (fNewValue > pData->pMinMaxValues[2*i+1])
-				pData->pMinMaxValues[2*i] = fNewValue;
+				pData->pMinMaxValues[2*i+1] = fNewValue;
 		}
 		pData->pTabValues[pData->iCurrentIndex][i] = fNewValue;
 	}

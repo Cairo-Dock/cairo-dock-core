@@ -38,7 +38,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-notifications.h"
-#include "cairo-dock-applet-facility.h"
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-dock-factory.h"

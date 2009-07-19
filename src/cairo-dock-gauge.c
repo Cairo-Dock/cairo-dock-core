@@ -12,19 +12,18 @@ Written by Necropotame (for any bug report, please mail me to fabounet@users.ber
 #include <libxml/parser.h>
 
 //#include <cairo-dock-struct.h>
-#include <cairo-dock-log.h>
-#include <cairo-dock-applet-facility.h>
-#include <cairo-dock-draw.h>
-#include <cairo-dock-draw-opengl.h>
-#include <cairo-dock-themes-manager.h>
-#include <cairo-dock-surface-factory.h>
-#include <cairo-dock-dock-factory.h>
-#include <cairo-dock-keyfile-utilities.h>
-#include <cairo-dock-config.h>
-#include <cairo-dock-renderer-manager.h>
-#include <cairo-dock-internal-icons.h>
-#include <cairo-dock-gui-factory.h>
-#include <cairo-dock-gauge.h>
+#include "cairo-dock-log.h"
+#include "cairo-dock-draw.h"
+#include "cairo-dock-draw-opengl.h"
+#include "cairo-dock-themes-manager.h"
+#include "cairo-dock-surface-factory.h"
+#include "cairo-dock-dock-factory.h"
+#include "cairo-dock-keyfile-utilities.h"
+#include "cairo-dock-config.h"
+#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-internal-icons.h"
+#include "cairo-dock-gui-factory.h"
+#include "cairo-dock-gauge.h"
 
 extern gchar *g_cCairoDockDataDir;
 extern gboolean g_bUseOpenGL;

@@ -10,6 +10,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
+#define __USE_POSIX 1
 #include <time.h>
 #include <glib.h>
 #include <glib/gi18n.h>
@@ -53,7 +54,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #define CAIRO_DOCK_FILE_HOST_URL "https://developer.berlios.de/project/showfiles.php?group_id=8724"
 #define CAIRO_DOCK_HELP_URL "http://www.cairo-dock.org"
 
-extern struct tm *localtime_r (time_t *timer, struct tm *tp);
+//extern struct tm *localtime_r (time_t *timer, struct tm *tp);
 
 extern CairoDock *g_pMainDock;
 

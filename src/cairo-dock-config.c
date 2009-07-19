@@ -16,7 +16,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #ifdef HAVE_LIBCRYPT
 /* libC crypt */
-#include "crypt.h"
+#include <crypt.h>
 
 static char DES_crypt_key[64] =
 {
