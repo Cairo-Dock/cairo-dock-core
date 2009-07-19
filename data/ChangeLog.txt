@@ -37,4 +37,4 @@
 
 2.0.5 = 2.0.5 :\n - This is mainly a bug-fix version\n - improvment in the RB applet\n - Added functionnalities on grouped applications icons.
 
-2.1.0 = Happy New Year Cairo-Dock !!! :-)
+2.1.0 = Happy Birthday Cairo-Dock !!! :-)

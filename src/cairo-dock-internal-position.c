@@ -29,7 +29,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigPosition *pPosition)
 	pPosition->iGapY = cairo_dock_get_integer_key_value (pKeyFile, "Position", "y gap", &bFlushConfFileNeeded, 0, NULL, NULL);
 
 	pPosition->iScreenBorder = cairo_dock_get_integer_key_value (pKeyFile, "Position", "screen border", &bFlushConfFileNeeded, 0, NULL, NULL);
-	if (pPosition->iScreenBorder < 0 || pPosition->iScreenBorder >= CAIRO_DOCK_NB_POSITIONS)
+	if (pPosition->iScreenBorder >= CAIRO_DOCK_NB_POSITIONS)
 		pPosition->iScreenBorder = 0;
 
 	pPosition->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Position", "alignment", &bFlushConfFileNeeded, 0.5, NULL, NULL);
@@ -55,7 +55,7 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 		g_iScreenOffsetX = g_iScreenOffsetY = 0;
 	
 	CairoDock *pDock = g_pMainDock;
-	gboolean bWasHorizontal = pDock->bHorizontalDock;
+	CairoDockTypeHorizontality bWasHorizontal = pDock->bHorizontalDock;
 	if (pPosition->iScreenBorder != pPrevPosition->iScreenBorder)
 	{
 		switch (pPosition->iScreenBorder)

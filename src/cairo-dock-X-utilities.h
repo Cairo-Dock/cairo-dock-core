@@ -13,7 +13,7 @@ G_BEGIN_DECLS
 Display *cairo_dock_initialize_X_desktop_support (void);
 void cairo_dock_initialize_X_support (void);
 
-const Display *cairo_dock_get_Xdisplay (void);
+Display *cairo_dock_get_Xdisplay (void);
 
   /////////////
  // DESKTOP //

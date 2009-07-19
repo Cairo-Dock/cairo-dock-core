@@ -666,7 +666,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 
 
 
-static GLboolean _check_extension (char *extName)
+static GLboolean _check_extension (const char *extName)
 {
 	/*
 	** Search for extName in the extensions string.  Use of strstr()

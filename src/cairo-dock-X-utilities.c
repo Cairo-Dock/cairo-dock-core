@@ -132,7 +132,7 @@ void cairo_dock_initialize_X_support (void)
 	cairo_dock_initialize_application_factory (s_XDisplay);
 }
 
-const Display *cairo_dock_get_Xdisplay (void)
+Display *cairo_dock_get_Xdisplay (void)
 {
 	return s_XDisplay;
 }

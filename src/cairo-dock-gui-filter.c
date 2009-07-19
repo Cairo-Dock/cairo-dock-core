@@ -22,7 +22,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 extern gchar *g_cConfFile;
 
 static GString *sBuffer = NULL;
-static void _copy_string_to_buffer (gchar *cSentence)
+static inline void _copy_string_to_buffer (const gchar *cSentence)
 {
 	g_string_assign (sBuffer, cSentence);
 	gchar *str;
