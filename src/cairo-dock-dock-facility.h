@@ -75,7 +75,7 @@ void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pPar
 void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboolean bUpdateBefore);
 
 
-void cairo_dock_set_input_shape (CairoDock *pDock);
+void cairo_dock_update_input_shape (CairoDock *pDock);
 
 /** Calculate the position at rest (when the mouse is outside of the dock and its size is normal) of the icons of a linear dock. 
 *@param pIconList a list of icons.

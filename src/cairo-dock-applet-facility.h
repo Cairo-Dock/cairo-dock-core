@@ -774,7 +774,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 //\_________________________________ INTERNATIONNALISATION
 /** Macro for gettext, similar to _() et N_(), but with the domain of the applet. Surround all your strings with this, so that 'xgettext' can find them and automatically include them in the translation files.
 */
-#define D_(message) dgettext (MY_APPLET_GETTEXT_DOMAIN, message)
+#define D_(message) dgettext ("cairo-dock-plugins", message)
 #define _D D_
 
 G_END_DECLS
