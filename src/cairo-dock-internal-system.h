@@ -19,7 +19,7 @@ struct _CairoConfigSystem {
 	gboolean bLabelForPointedIconOnly;
 	gdouble fLabelAlphaThreshold;
 	gboolean bTextAlwaysHorizontal;
-	gdouble fUnfoldAcceleration;
+	gint iUnfoldingDuration;
 	gboolean bAnimateOnAutoHide;
 	gint iGrowUpInterval, iShrinkDownInterval;
 	gdouble fMoveUpSpeed, fMoveDownSpeed;

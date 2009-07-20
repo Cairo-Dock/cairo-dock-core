@@ -198,9 +198,9 @@ animate on auto-hide = true
 #{Always true if sub-docks appear with mouse click.}
 animate subdocks = true
 
-#e-[0.;12.] Icons' lateral unfolding acceleration :
-#{The icons will appear folded on themselves, regarding the alignement point, then will unfold untill they fill the whole dock. Use 0 to not use unfolding, the more it's close to 0, the faster it will be}
-unfold factor = 8
+#I-[100;600] Unfolding animation duration :
+#{The icons will appear folded on themselves, then will unfold untill they fill the whole dock. The smaller, the faster it will be.}
+unfold duration = 400
 
 #i-[4;40] Number of steps in the zoom animation (grow up/shrink down) :
 #{The more there are, the slower it will be}

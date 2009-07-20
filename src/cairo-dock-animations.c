@@ -159,7 +159,7 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 
 			///pDock->calculate_max_dock_size (pDock);  // utilite ?...
 			pDock->calculate_icons (pDock);
-			pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? mySystem.fUnfoldAcceleration : 0);
+			pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? 1. : 0.);  // on arme le depliage.
 
 			cairo_dock_allow_entrance (pDock);
 		}
@@ -199,10 +199,22 @@ gboolean cairo_dock_grow_up (CairoDock *pDock)
 	if (pDock->iMagnitudeIndex > CAIRO_DOCK_NB_MAX_ITERATIONS)
 		pDock->iMagnitudeIndex = CAIRO_DOCK_NB_MAX_ITERATIONS;
 
-	pDock->fFoldingFactor *= sqrt (pDock->fFoldingFactor);
-	if (pDock->fFoldingFactor < 0.03)
-		pDock->fFoldingFactor = 0;
-
+	//pDock->fFoldingFactor *= sqrt (pDock->fFoldingFactor);
+	//if (pDock->fFoldingFactor < 0.03)
+	//	pDock->fFoldingFactor = 0;
+	if (pDock->fFoldingFactor != 0)
+	{
+		int iAnimationDeltaT = cairo_dock_get_animation_delta_t (pDock);
+		if (iAnimationDeltaT == 0)  // precaution.
+		{
+			cairo_dock_set_default_animation_delta_t (pDock);
+			iAnimationDeltaT = cairo_dock_get_animation_delta_t (pDock);
+		}
+		pDock->fFoldingFactor -= (double) iAnimationDeltaT / mySystem.iUnfoldingDuration;
+		if (pDock->fFoldingFactor < 0)
+			pDock->fFoldingFactor = 0;
+	}
+	
 	if (pDock->bHorizontalDock)
 		gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseX, &pDock->iMouseY, NULL);
 	else
@@ -216,7 +228,7 @@ gboolean cairo_dock_grow_up (CairoDock *pDock)
 	if (pLastPointedIcon != pPointedIcon && pDock->bInside)
 		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
 
-	if (pDock->iMagnitudeIndex == CAIRO_DOCK_NB_MAX_ITERATIONS && pDock->fFoldingFactor == 0)  // fin de grossissement.
+	if (pDock->iMagnitudeIndex == CAIRO_DOCK_NB_MAX_ITERATIONS && pDock->fFoldingFactor == 0)  // fin de grossissement et de depliage.
 	{
 		if (pDock->iRefCount == 0 && pDock->bAutoHide)  // on arrive en fin de l'animation qui montre le dock, les icones sont bien placees a partir de maintenant.
 		{
@@ -239,11 +251,20 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 		pDock->iMagnitudeIndex = 0;
 	
 	//\_________________ On replie le dock.
-	if (pDock->fFoldingFactor != 0)
+	if (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != 1)
 	{
-		pDock->fFoldingFactor = pow (pDock->fFoldingFactor, 2./3);
-		if (pDock->fFoldingFactor > mySystem.fUnfoldAcceleration)
-			pDock->fFoldingFactor = mySystem.fUnfoldAcceleration;
+		//pDock->fFoldingFactor = pow (pDock->fFoldingFactor, 2./3);
+		//if (pDock->fFoldingFactor > mySystem.fUnfoldAcceleration)
+		//	pDock->fFoldingFactor = mySystem.fUnfoldAcceleration;
+		int iAnimationDeltaT = cairo_dock_get_animation_delta_t (pDock);
+		if (iAnimationDeltaT == 0)  // precaution.
+		{
+			cairo_dock_set_default_animation_delta_t (pDock);
+			iAnimationDeltaT = cairo_dock_get_animation_delta_t (pDock);
+		}
+		pDock->fFoldingFactor += (double) iAnimationDeltaT / mySystem.iUnfoldingDuration;
+		if (pDock->fFoldingFactor > 1)
+			pDock->fFoldingFactor = 1;
 	}
 	
 	//\_________________ On remet les decorations a l'equilibre.
@@ -270,7 +291,7 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 	if (pDock->iMagnitudeIndex == 0)  // on est arrive en bas.
 	{
 		//g_print ("equilibre atteint (%d)\n", pDock->bInside);
-		if (iPrevMagnitudeIndex != 0 || (pDock->fDecorationsOffsetX == 0 && (pDock->fFoldingFactor == 0 || pDock->fFoldingFactor == mySystem.fUnfoldAcceleration)))  // on vient d'arriver en bas OU l'animation de shrink est finie.
+		if (iPrevMagnitudeIndex != 0 || (pDock->fDecorationsOffsetX == 0 && (pDock->fFoldingFactor == 0 || pDock->fFoldingFactor == 1)))  // on vient d'arriver en bas OU l'animation de shrink est finie.
 		{
 			if (! pDock->bInside)  // on peut etre hors des icones sans etre hors de la fenetre.
 			{
@@ -333,7 +354,7 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 					pDock->bAtBottom = TRUE;
 			}
 		}
-		return (!pDock->bIsGrowingUp && (pDock->fDecorationsOffsetX != 0 || (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != mySystem.fUnfoldAcceleration)));
+		return (!pDock->bIsGrowingUp && (pDock->fDecorationsOffsetX != 0 || (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != 1)));
 	}
 	else
 	{

@@ -29,8 +29,10 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 	pSystem->fLabelAlphaThreshold = (pSystem->fLabelAlphaThreshold + 10.) / 10.;  // [0;50] -> [1;6]
 	pSystem->bTextAlwaysHorizontal = cairo_dock_get_boolean_key_value (pKeyFile, "System", "always horizontal", &bFlushConfFileNeeded, FALSE, "Labels", NULL);
 	
-	double fUserValue = cairo_dock_get_double_key_value (pKeyFile, "System", "unfold factor", &bFlushConfFileNeeded, 8., "Cairo Dock", NULL);
-	pSystem->fUnfoldAcceleration = 1 - pow (2, - fUserValue);
+	//double fUserValue = cairo_dock_get_double_key_value (pKeyFile, "System", "unfold factor", &bFlushConfFileNeeded, 8., "Cairo Dock", NULL);
+	//pSystem->fUnfoldAcceleration = 1 - pow (2, - fUserValue);
+	pSystem->iUnfoldingDuration = cairo_dock_get_integer_key_value (pKeyFile, "System", "unfold duration", &bFlushConfFileNeeded, 400, NULL, NULL);
+
 	pSystem->bAnimateOnAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, "System", "animate on auto-hide", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
 	int iNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "grow nb steps", &bFlushConfFileNeeded, 10, "Cairo Dock", NULL);

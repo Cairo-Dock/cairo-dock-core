@@ -258,11 +258,11 @@ void cairo_dock_place_root_dock (CairoDock *pDock)
 	if (pDock->bAutoHide && pDock->iRefCount == 0)
 	{
 		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MIN_SIZE, &iNewWidth, &iNewHeight);
-		pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? mySystem.fUnfoldAcceleration : 0);
+		pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? 1. : 0.);
 	}
 	else
 	{
-		pDock->fFoldingFactor = 0;
+		pDock->fFoldingFactor = 0.;
 		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
 	}
 	
@@ -946,10 +946,10 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboole
 
 	pSubDock->set_subdock_position (pPointedIcon, pParentDock);
 
-	pSubDock->fFoldingFactor = (mySystem.bAnimateSubDock ? mySystem.fUnfoldAcceleration : 0);
+	pSubDock->fFoldingFactor = (mySystem.bAnimateSubDock ? 1. : 0.);
 	pSubDock->bAtBottom = FALSE;
 	int iNewWidth, iNewHeight;
-	if (pSubDock->fFoldingFactor == 0)
+	if (pSubDock->fFoldingFactor == 0.)
 	{
 		cd_debug ("  on montre le sous-dock sans animation");
 		cairo_dock_get_window_position_and_geometry_at_balance (pSubDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);  // CAIRO_DOCK_NORMAL_SIZE -> CAIRO_DOCK_MAX_SIZE pour la 1.5.4

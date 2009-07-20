@@ -634,7 +634,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	{
 		if (pDock->bAutoHide)
 		{
-			pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide && mySystem.fUnfoldAcceleration != 0. ? 0.03 : 0.);
+			pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? 0.001 : 0.);
 			if (pDock->iSidMoveDown == 0)  // on commence a descendre.
 				pDock->iSidMoveDown = g_timeout_add (40, (GSourceFunc) cairo_dock_move_down, (gpointer) pDock);
 		}
@@ -643,7 +643,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	}
 	else
 	{
-		pDock->fFoldingFactor = (mySystem.bAnimateSubDock ? 0.03 : 0.);
+		pDock->fFoldingFactor = (mySystem.bAnimateSubDock ? 0.001 : 0.);
 		pDock->bAtBottom = TRUE;  // mis en commentaire le 12/11/07 pour permettre le quick-hide.
 		//cd_debug ("on force bAtBottom");
 	}

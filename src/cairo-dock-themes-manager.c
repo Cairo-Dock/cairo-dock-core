@@ -822,7 +822,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 				{
 					g_free (cConfFileName);
 					g_free (cNewConfFilePath);
-					CairoDockModule *pModule = cairo_dock_foreach_module ((GHRFunc) _find_module_from_user_data_dir, cModuleDirName);
+					CairoDockModule *pModule = cairo_dock_foreach_module ((GHRFunc) _find_module_from_user_data_dir, (gpointer) cModuleDirName);
 					if (pModule == NULL)  // du coup, dans ce cas-la, on ne charge pas des plug-ins non utilises par l'utilisateur.
 					{
 						cd_warning ("couldn't find the module owning '%s', this file will be ignored.");
@@ -877,7 +877,7 @@ void cairo_dock_manage_themes (void)
 	gchar *cInitConfFile = cairo_dock_build_temporary_themes_conf_file ();  // sera supprime a la destruction de la fenetre.
 	
 	//\___________________ On laisse l'utilisateur l'editer.
-	gchar *cPresentedGroup = (cairo_dock_theme_need_save () ? "Save" : NULL);
+	const gchar *cPresentedGroup = (cairo_dock_theme_need_save () ? "Save" : NULL);
 	const gchar *cTitle = _("Manage Themes");
 	
 	cairo_dock_build_normal_gui (cInitConfFile,
