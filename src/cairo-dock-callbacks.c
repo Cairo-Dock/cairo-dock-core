@@ -654,7 +654,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 }
 gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	if (pDock->bAtBottom)  /// je l'avais mis en commentaire, mais c'est utile maintenant pour le input shape. A valider ...
+	if (pDock->bAtBottom && pDock->iRefCount == 0)  /// je l'avais mis en commentaire, mais c'est utile maintenant pour le input shape. A valider ...
 	{
 		pDock->iSidLeaveDemand = 0;
 		return FALSE;
