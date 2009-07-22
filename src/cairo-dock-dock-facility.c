@@ -414,9 +414,17 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	
 	if (pDock->inputArea.width == 0 || pDock->inputArea.height == 0 || pDock->iRefCount > 0 || pDock->bAutoHide || ! pDock->bHorizontalDock)  /// marche pas bien a la vertical ...
 	{
-		pDock->pShapeBitmap = NULL;
+		if (pDock->pShapeBitmap != NULL)  // plus de shape, on la remet a 0.
+		{
+			pDock->pShapeBitmap = NULL;
+			gtk_widget_input_shape_combine_mask (pDock->pWidget,
+				NULL,
+				0,
+				0);
+		}
 		return ;
 	}
+
 	pDock->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
 		pDock->bHorizontalDock ? pDock->iMinDockWidth : pDock->iMinDockHeight,
 		pDock->bHorizontalDock ? pDock->iMinDockHeight : pDock->iMinDockWidth,

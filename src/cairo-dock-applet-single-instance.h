@@ -42,7 +42,6 @@ myDrawContext = myApplet->pDrawContext;
 	myDock = NULL; \
 	myContainer = NULL; \
 	myIcon = NULL; \
-	myConfigPtr = NULL; \
 	memset (myDataPtr, 0, sizeof (AppletData)); \
 	myDataPtr = NULL; \
 	if (myDesklet) \
@@ -58,6 +57,9 @@ myDrawContext = myApplet->pDrawContext;
 	if (myConfigPtr == NULL) \
 		return ;
 
+#define CD_APPLET_RESET_CONFIG_END \
+	myConfigPtr = NULL; \
+	CD_APPLET_RESET_CONFIG_ALL_END
 
 #define CD_APPLET_GET_CONFIG_BEGIN \
 	CD_APPLET_GET_CONFIG_ALL_BEGIN\

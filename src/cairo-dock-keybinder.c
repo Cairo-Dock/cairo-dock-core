@@ -312,6 +312,7 @@ void
 cd_keybinder_unbind (const char           *keystring,
 			 CDBindkeyHandler  handler)
 {
+	g_print ("%s (%s, %x)\n", __func__, keystring, bindings);
 	GSList *iter;
 
         if (!keystring)
@@ -326,7 +327,8 @@ cd_keybinder_unbind (const char           *keystring,
 		do_ungrab_key (binding);
 
 		bindings = g_slist_remove (bindings, binding);
-
+		
+		g_print (" --- remove key binding '%s'\n", binding->keystring);
 		g_free (binding->keystring);
 		g_free (binding);
 		break;

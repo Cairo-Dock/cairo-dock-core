@@ -223,7 +223,7 @@ CD_APPLET_RESET_CONFIG_PROTO \
 {
 /** Fin de la fonction de liberation des donnees de la config.
 */
-#define CD_APPLET_RESET_CONFIG_END \
+#define CD_APPLET_RESET_CONFIG_ALL_END \
 }
 
 //\______________________ reset_data.
