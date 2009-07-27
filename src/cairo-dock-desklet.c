@@ -1134,7 +1134,6 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
 	
 	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-desklet");
 	gtk_widget_add_events( pWindow, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_FOCUS_CHANGE_MASK);
-	//the border is were cairo paint
 	gtk_container_set_border_width(GTK_CONTAINER(pWindow), 3);  // comme ca.
 	gtk_window_set_default_size(GTK_WINDOW(pWindow), 10, 10);  // idem.
 

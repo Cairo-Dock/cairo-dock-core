@@ -620,14 +620,6 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 		FALSE,
 		0);
 	
-	//\_____________ On ajoute la barre de status a la fin.
-	s_pStatusBar = gtk_statusbar_new ();
-	gtk_box_pack_end (GTK_BOX (pVBox),  /// pButtonsHBox ?...
-		s_pStatusBar,
-		FALSE,
-		FALSE,
-		0);
-	
 	//\_____________ On ajoute les boutons.
 	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
 	gtk_box_pack_end (GTK_BOX (pVBox),
@@ -664,6 +656,14 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	g_signal_connect (G_OBJECT (s_pApplyButton), "clicked", G_CALLBACK(on_click_apply), NULL);
 	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
 		s_pApplyButton,
+		FALSE,
+		FALSE,
+		0);
+	
+	//\_____________ On ajoute la barre de status a la fin.
+	s_pStatusBar = gtk_statusbar_new ();
+	gtk_box_pack_end (GTK_BOX (pVBox),  /// pButtonsHBox ?...
+		s_pStatusBar,
 		FALSE,
 		FALSE,
 		0);

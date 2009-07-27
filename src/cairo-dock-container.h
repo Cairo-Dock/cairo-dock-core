@@ -27,7 +27,8 @@ typedef enum {
 	CAIRO_DOCK_TYPE_DOCK = 0,
 	CAIRO_DOCK_TYPE_DESKLET,
 	CAIRO_DOCK_TYPE_DIALOG,
-	CAIRO_DOCK_TYPE_FLYING_CONTAINER
+	CAIRO_DOCK_TYPE_FLYING_CONTAINER,
+	CAIRO_DOCK_NB_CONTAINER_TYPES
 	} CairoDockTypeContainer;
 
 /// Definition of a Container, whom derive Dock, Desklet, Dialog and FlyingContainer. 
