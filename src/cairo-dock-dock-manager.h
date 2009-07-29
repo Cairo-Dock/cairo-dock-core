@@ -93,6 +93,9 @@ void cairo_dock_remove_root_dock_config (const gchar *cDockName);
 
 void cairo_dock_redraw_root_docks (gboolean bExceptMainDock);
 
+void cairo_dock_reposition_root_docks (gboolean bExceptMainDock);
+
+
 void cairo_dock_activate_temporary_auto_hide (void);
 void cairo_dock_quick_hide_all_docks (void);
 void cairo_dock_deactivate_temporary_auto_hide (void);

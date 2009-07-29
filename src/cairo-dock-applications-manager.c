@@ -440,15 +440,8 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				{
 					cd_message ("changement du nombre de bureaux virtuels");
 					
-					g_iNbDesktops = cairo_dock_get_nb_desktops ();
+					g_iNbDesktops = cairo_dock_get_nb_desktops ();  // concretement ca ne change rien pour nous.
 					
-					if (g_iNbDesktops <= myPosition.iNumScreen && myPosition.bUseXinerama)
-					{
-						cairo_dock_get_screen_offsets (myPosition.iNumScreen);
-						cairo_dock_set_window_position_at_balance (pDock, pDock->iCurrentWidth, pDock->iCurrentHeight);
-						cd_debug (" -> le dock se place en %d;%d", pDock->iWindowPositionX, pDock->iWindowPositionY);
-						gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionX, pDock->iWindowPositionY);
-					}
 					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED);  // , NULL
 				}
 				else if (event.xproperty.atom == s_aNetDesktopGeometry)
@@ -460,12 +453,13 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					if (cairo_dock_update_screen_geometry ())  // modification de la resolution.
 					{
 						cd_message ("resolution alteree");
-						if (myPosition.bUseXinerama)
+						cairo_dock_reposition_root_docks (FALSE);  // main dock compris.
+						/*if (myPosition.bUseXinerama)
 							cairo_dock_get_screen_offsets (myPosition.iNumScreen);
-						cairo_dock_update_dock_size (pDock);  /// le faire pour tous les docks racine ...
+						cairo_dock_update_dock_size (pDock);  // la taille max du dock a change, on recalcule son ratio.
 						cairo_dock_set_window_position_at_balance (pDock, pDock->iCurrentWidth, pDock->iCurrentHeight);
 						g_print (" -> le dock se place en %d;%d", pDock->iWindowPositionX, pDock->iWindowPositionY);
-						gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionX, pDock->iWindowPositionY);
+						gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionX, pDock->iWindowPositionY);*/
 					}
 					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED);  // , NULL
 				}

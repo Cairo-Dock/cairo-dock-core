@@ -27,7 +27,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-themes-manager.h"
 
 #define CAIRO_DOCK_MODIFIED_THEME_FILE ".cairo-dock-need-save"
-#define CAIRO_DOCK_THEME_PANEL_WIDTH 750
+#define CAIRO_DOCK_THEME_PANEL_WIDTH 850
 #define CAIRO_DOCK_THEME_PANEL_HEIGHT 400
 #define CAIRO_DOCK_THEME_SERVER "http://themes.cairo-dock.org"
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"

@@ -34,10 +34,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-default-view.h"
 
-extern gint g_iScreenWidth[2];
-
 extern GLuint g_iBackgroundTexture;
-extern gboolean g_bEasterEggs;
 
 
 void cd_calculate_max_dock_size_default (CairoDock *pDock)

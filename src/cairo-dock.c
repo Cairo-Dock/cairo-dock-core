@@ -105,8 +105,6 @@ int g_iScreenWidth[2];  // dimensions de l'ecran physique sur lequel reside le d
 int g_iScreenHeight[2];
 int g_iXScreenWidth[2];  // dimensions de l'ecran logique X.
 int g_iXScreenHeight[2];
-int g_iScreenOffsetX = 0;
-int g_iScreenOffsetY = 0;
 
 gchar *g_cCurrentThemePath = NULL;  // le chemin vers le repertoire du theme courant.
 gchar *g_cCurrentLaunchersPath = NULL;  // le chemin vers le repertoire des lanceurs/icones du theme courant.

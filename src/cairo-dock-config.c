@@ -70,7 +70,6 @@ extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cCurrentLaunchersPath;
 extern double g_fBackgroundImageWidth;
 extern double g_fBackgroundImageHeight;
-extern int g_iScreenOffsetX, g_iScreenOffsetY;
 extern cairo_surface_t *g_pDesktopBgSurface;
 
 static gboolean s_bLoading = FALSE;
@@ -530,9 +529,9 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	
 	//\___________________ On (re)charge tout, car n'importe quel parametre peut avoir change.
 	if (myPosition.bUseXinerama)
-		cairo_dock_get_screen_offsets (myPosition.iNumScreen);
+		cairo_dock_get_screen_offsets (myPosition.iNumScreen, &pDock->iScreenOffsetX, &pDock->iScreenOffsetY);
 	else
-		g_iScreenOffsetX = g_iScreenOffsetY = 0;
+		pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
 	
 	switch (myPosition.iScreenBorder)
 	{

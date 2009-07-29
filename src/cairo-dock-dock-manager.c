@@ -44,6 +44,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-animations.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-views.h"
+#include "cairo-dock-internal-position.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-dock-manager.h"
 
@@ -415,8 +416,15 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 		
 		pDock->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Position", "alignment", &bFlushConfFileNeeded, 0.5, NULL, NULL);
 		
-		//g_print ("%s (%s, %s, main dock:%d)\n", __func__, cDockName, cConfFilePath, pDock->bIsMainDock);
 		pDock->bAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, pDock->bIsMainDock ? "Accessibility" : "Position", "auto-hide", &bFlushConfFileNeeded, FALSE, "Auto-Hide", "auto-hide");
+		
+		if (myPosition.bUseXinerama)
+		{
+			int iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Position", "num screen", &bFlushConfFileNeeded, 0, NULL, NULL);
+			cairo_dock_get_screen_offsets (iNumScreen, &pDock->iScreenOffsetX, &pDock->iScreenOffsetY);
+		}
+		else
+			pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
 		
 		g_key_file_free (pKeyFile);
 	}
@@ -450,6 +458,21 @@ void cairo_dock_redraw_root_docks (gboolean bExceptMainDock)
 {
 	g_hash_table_foreach (s_hDocksTable, (GHFunc)_cairo_dock_redraw_one_root_dock, GINT_TO_POINTER (bExceptMainDock));
 }
+
+static void _cairo_dock_reposition_one_root_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
+{
+	if (pDock->iRefCount == 0 && ! (data && pDock->bIsMainDock))
+	{
+		cairo_dock_get_root_dock_position (cDockName, pDock);
+		cairo_dock_update_dock_size (pDock);  // la taille max du dock depend de la taille de l'ecran, donc on recalcule son ratio.
+		cairo_dock_place_root_dock (pDock);
+	}
+}
+void cairo_dock_reposition_root_docks (gboolean bExceptMainDock)
+{
+	g_hash_table_foreach (s_hDocksTable, (GHFunc)_cairo_dock_reposition_one_root_dock, GINT_TO_POINTER (bExceptMainDock));
+}
+
 
 
 static gboolean s_bTemporaryAutoHide = FALSE;
@@ -738,3 +761,4 @@ void cairo_dock_foreach_docks (GHFunc pFunction, gpointer data)
 {
 	g_hash_table_foreach (s_hDocksTable, pFunction, data);
 }
+

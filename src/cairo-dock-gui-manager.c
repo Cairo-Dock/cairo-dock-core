@@ -172,12 +172,12 @@ static GtkToolItem *_cairo_dock_make_toolbutton (const gchar *cLabel, const gcha
 		return pWidget;
 	
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gchar *cLabel2 = g_strdup_printf ("<span font_desc=\"Century Schoolbook L 16\">%s</span>", cLabel);
+	gchar *cLabel2 = g_strdup_printf ("<span font_desc=\"Century Schoolbook L 15\">%s</span>", cLabel);  /// 16
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel2);
 	g_free (cLabel2);
 	
 	GtkWidget *pAlign = gtk_alignment_new (0., 0.5, 0., 1.);
-	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_GUI_MARGIN*2, 0);
+	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_GUI_MARGIN, 0);  /// *2
 	gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
 	gtk_tool_button_set_label_widget (GTK_TOOL_BUTTON (pWidget), pAlign);
 	
@@ -216,7 +216,8 @@ static inline CairoDockGroupDescription *_cairo_dock_add_group_button (const gch
 		FALSE,
 		FALSE,
 		0);
-
+	
+	/// Essayer de regrouper le label et l'icone dans le bouton, et mettre a jour la recherche dans le nom du groupe...
 	GtkWidget *pGroupButton = gtk_button_new ();
 	if (bConfigurable)
 		g_signal_connect (G_OBJECT (pGroupButton), "clicked", G_CALLBACK(on_click_group_button), pGroupDescription);
@@ -340,9 +341,9 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	gtk_window_set_icon_from_file (GTK_WINDOW (s_pMainWindow), cIconPath, NULL);
 	g_free (cIconPath);
 	
-	GtkWidget *pMainHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pMainHBox = gtk_hbox_new (FALSE, 0);  /// CAIRO_DOCK_GUI_MARGIN
 	gtk_container_add (GTK_CONTAINER (s_pMainWindow), pMainHBox);
-	gtk_container_set_border_width (GTK_CONTAINER (pMainHBox), CAIRO_DOCK_GUI_MARGIN);
+	///gtk_container_set_border_width (GTK_CONTAINER (pMainHBox), CAIRO_DOCK_GUI_MARGIN);
 	
 	if (g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] > CAIRO_DOCK_CONF_PANEL_WIDTH)
 	{
@@ -369,7 +370,7 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 		FALSE,
 		0);
 	
-	GtkWidget *pVBox = gtk_vbox_new (FALSE, 0*CAIRO_DOCK_TABLE_MARGIN);
+	GtkWidget *pVBox = gtk_vbox_new (FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pVBox,
 		TRUE,
@@ -662,10 +663,10 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	
 	//\_____________ On ajoute la barre de status a la fin.
 	s_pStatusBar = gtk_statusbar_new ();
-	gtk_box_pack_end (GTK_BOX (pVBox),  /// pButtonsHBox ?...
+	gtk_box_pack_start (GTK_BOX (pButtonsHBox),  /// pButtonsHBox ?...
 		s_pStatusBar,
-		FALSE,
-		FALSE,
+		TRUE,
+		TRUE,
 		0);
 	
 	gtk_window_resize (GTK_WINDOW (s_pMainWindow),

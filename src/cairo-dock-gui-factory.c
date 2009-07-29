@@ -29,8 +29,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #define CAIRO_DOCK_GUI_MARGIN 4
 #define CAIRO_DOCK_ICON_MARGIN 6
-#define CAIRO_DOCK_PREVIEW_WIDTH 560
-#define CAIRO_DOCK_PREVIEW_HEIGHT 360
+#define CAIRO_DOCK_PREVIEW_WIDTH 500
+#define CAIRO_DOCK_PREVIEW_HEIGHT 282
 #define CAIRO_DOCK_APPLET_ICON_SIZE 32
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
 #define CAIRO_DOCK_FRAME_ICON_SIZE 24
@@ -220,6 +220,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		}
 		else
 		{
+			g_print ("fichier readme local (%s)\n", cDescriptionFilePath);
 			gsize length = 0;
 			g_file_get_contents  (cDescriptionFilePath,
 				&cDescription,
@@ -254,6 +255,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		{
 			iPreviewWidth = MIN (iPreviewWidth, CAIRO_DOCK_PREVIEW_WIDTH);
 			iPreviewHeight = MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT);
+			g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight);
 			pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
 		}
 		if (pPreviewPixbuf == NULL)
@@ -676,13 +678,13 @@ static gboolean _cairo_dock_test_one_name (GtkTreeModel *model, GtkTreePath *pat
 	g_free (cResult);
 	return FALSE;
 }
-static gboolean _cairo_dock_find_iter_from_name (GtkListStore *pModele, gchar *cName, GtkTreeIter *iter)
+static gboolean _cairo_dock_find_iter_from_name (GtkListStore *pModele, const gchar *cName, GtkTreeIter *iter)
 {
 	//g_print ("%s (%s)\n", __func__, cName);
 	if (cName == NULL)
 		return FALSE;
 	gboolean bFound = FALSE;
-	gpointer data[3] = {cName, iter, &bFound};
+	gconstpointer data[3] = {cName, iter, &bFound};
 	gtk_tree_model_foreach (GTK_TREE_MODEL (pModele), (GtkTreeModelForeachFunc) _cairo_dock_test_one_name, data);
 	return bFound;
 }
@@ -732,7 +734,7 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 }
 
 #define _allocate_new_buffer\
-	data = g_new (gpointer, 3); \
+	data = g_new (gconstpointer, 3); \
 	g_ptr_array_add (pDataGarbage, data);
 
 #define _allocate_new_model(...)\
@@ -760,10 +762,10 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 			data[0] = pDescriptionLabel;\
 			data[1] = pPreviewImage;\
 			g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_one_item_in_combo), data);\
-			pPreviewBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);\
-			gtk_box_pack_start (GTK_BOX (pKeyBox), pPreviewBox, FALSE, FALSE, 0);\
-			gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionLabel, FALSE, FALSE, 0);\
-			gtk_box_pack_start (GTK_BOX (pPreviewBox), pPreviewImage, FALSE, FALSE, 0); }\
+			pPreviewBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);\
+			gtk_box_pack_start (GTK_BOX (pAdditionalItemsVBox ? pAdditionalItemsVBox : pKeyBox), pPreviewBox, FALSE, FALSE, 0);\
+			gtk_box_pack_start (GTK_BOX (pPreviewBox), pPreviewImage, FALSE, FALSE, 0);\
+			gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionLabel, FALSE, FALSE, 0); }\
 		if (_cairo_dock_find_iter_from_name (modele, cValue, &iter))\
 			gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);\
 		_pack_subwidget (pOneWidget);\
@@ -874,15 +876,15 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	//GPtrArray *pDataGarbage = g_ptr_array_new ();
 	//GPtrArray *pModelGarbage = g_ptr_array_new ();
 	
-	gpointer *data;
+	gconstpointer *data;
 	int iNbBuffers = 0;
 	gsize length = 0;
 	gchar **pKeyList;
 	
 	GtkWidget *pOneWidget;
 	GSList * pSubWidgetList;
-	GtkWidget *pLabel, *pLabelContainer;
-	GtkWidget *pGroupBox, *pKeyBox, *pSmallVBox, *pWidgetBox;
+	GtkWidget *pLabel=NULL, *pLabelContainer;
+	GtkWidget *pGroupBox, *pKeyBox=NULL, *pSmallVBox, *pWidgetBox=NULL;
 	GtkWidget *pEntry;
 	GtkWidget *pTable;
 	GtkWidget *pButtonAdd, *pButtonRemove;
@@ -895,11 +897,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	GtkWidget *pDescriptionLabel;
 	GtkWidget *pPreviewImage;
 	GtkWidget *pButtonConfigRenderer;
-	GtkWidget *pToggleButton;
+	GtkWidget *pToggleButton=NULL;
 	GtkCellRenderer *rend;
 	GtkTreeIter iter;
 	GtkWidget *pBackButton;
-	gchar *cGroupComment, *cKeyName, *cKeyComment, *cUsefulComment, *cAuthorizedValuesChain, *pTipString, **pAuthorizedValuesList, *cSmallGroupIcon;
+	gchar *cGroupComment, *cKeyName, *cKeyComment, *cUsefulComment, *cAuthorizedValuesChain, *pTipString, **pAuthorizedValuesList, *cSmallGroupIcon=NULL;
 	gpointer *pGroupKeyWidget;
 	int i, j;
 	guint k, iNbElements;
@@ -908,11 +910,12 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	gboolean bValue, *bValueList;
 	int iValue, iMinValue, iMaxValue, *iValueList;
 	double fValue, fMinValue, fMaxValue, *fValueList;
-	gchar *cValue, **cValueList, *cSmallIcon;
+	gchar *cValue, **cValueList, *cSmallIcon=NULL;
 	GdkColor gdkColor;
 	GtkListStore *modele;
 	gboolean bAddBackButton;
 	GtkWidget *pPreviewBox;
+	GtkWidget *pAdditionalItemsVBox;
 	gboolean bIsAligned;
 	
 	pGroupBox = NULL;
@@ -987,15 +990,34 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			gtk_container_set_border_width (GTK_CONTAINER (pGroupBox), CAIRO_DOCK_GUI_MARGIN);
 		}
 		
+		pAdditionalItemsVBox = NULL;
 		if (iElementType != 'F' && iElementType != 'X' && iElementType != 'v')
 		{
 			//\______________ On cree la boite de la cle.
-			pKeyBox = (bIsAligned ? gtk_hbox_new : gtk_vbox_new) (FALSE, CAIRO_DOCK_GUI_MARGIN);
-			gtk_box_pack_start (pFrameVBox != NULL ? GTK_BOX (pFrameVBox) :  GTK_BOX (pGroupBox),
-				pKeyBox,
-				FALSE,
-				FALSE,
-				0);
+			if (iElementType == 'h' || iElementType == 'H' || iElementType == 'n')
+			{
+				pAdditionalItemsVBox = gtk_vbox_new (FALSE, 0);
+				gtk_box_pack_start (pFrameVBox != NULL ? GTK_BOX (pFrameVBox) :  GTK_BOX (pGroupBox),
+					pAdditionalItemsVBox,
+					FALSE,
+					FALSE,
+					0);
+				pKeyBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+				gtk_box_pack_start (GTK_BOX (pAdditionalItemsVBox),
+					pKeyBox,
+					FALSE,
+					FALSE,
+					0);
+			}
+			else
+			{
+				pKeyBox = (bIsAligned ? gtk_hbox_new : gtk_vbox_new) (FALSE, CAIRO_DOCK_GUI_MARGIN);
+				gtk_box_pack_start (pFrameVBox != NULL ? GTK_BOX (pFrameVBox) :  GTK_BOX (pGroupBox),
+					pKeyBox,
+					FALSE,
+					FALSE,
+					0);
+			}
 			if (pTipString != NULL)
 			{
 				gtk_widget_set_tooltip_text (pKeyBox, dgettext (cGettextDomain, pTipString));
@@ -1213,7 +1235,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_allocate_new_buffer;
 				data[0] = pOneWidget;
 				data[1] = pMainWindow;
-				data[2] = "dock rendering";
+				data[2] = "Views";  /// dock rendering
 				g_signal_connect (G_OBJECT (pButtonConfigRenderer),
 					"clicked",
 					G_CALLBACK (_cairo_dock_configure_module),
@@ -1244,7 +1266,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					}
 					GHashTable *pThemeTable = cairo_dock_list_themes (cShareThemesDir, cUserThemesDir, cDistantThemesDir);
 					g_free (cUserThemesDir);
-
+					
 					cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
 					cairo_dock_fill_combo_with_themes (pOneWidget, pThemeTable, cValue);
 					g_hash_table_destroy (pThemeTable);
@@ -1333,7 +1355,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				if (pAuthorizedValuesList == NULL || pAuthorizedValuesList[0] == NULL || *pAuthorizedValuesList[0] == '\0')
 					break ;
 				
-				gchar *cModuleName = NULL;
+				const gchar *cModuleName = NULL;
 				CairoDockInternalModule *pInternalModule = cairo_dock_find_internal_module_from_name (pAuthorizedValuesList[0]);
 				if (pInternalModule != NULL)
 					cModuleName = pInternalModule->cModuleName;
@@ -1381,7 +1403,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case 'D' :  // string avec un selecteur de repertoire a cote du GtkEntry.
 			case 'T' :  // string, mais sans pouvoir decochez les cases.
 			case 'E' :  // string, mais avec un GtkComboBoxEntry pour le choix unique.
-			case 'R' :  // string, avec un label pour la description.
+			//case 'R' :  // string, avec un label pour la description.
 			case 'P' :  // string avec un selecteur de font a cote du GtkEntry.
 			case 'r' :  // string representee par son numero dans une liste de choix.
 			case 'k' :  // string avec un selecteur de touche clavier (Merci Ctaf !)
@@ -1724,7 +1746,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				}
 				else if (iElementType == 'R')
 				{
-					GtkWidget *pPreviewBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+					GtkWidget *pPreviewBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
 					_pack_in_widget_box (pPreviewBox);
 					if (pDescriptionLabel != NULL)
 						gtk_box_pack_start (GTK_BOX (pPreviewBox),
@@ -1872,12 +1894,13 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 
 		if (pSubWidgetList != NULL)
 		{
-			pGroupKeyWidget = g_new (gpointer, 4);
+			pGroupKeyWidget = g_new (gpointer, 6);
 			pGroupKeyWidget[0] = g_strdup (cGroupName);  // car on ne pourra pas le liberer s'il est partage entre plusieurs 'data'.
 			pGroupKeyWidget[1] = cKeyName;
 			pGroupKeyWidget[2] = pSubWidgetList;
 			pGroupKeyWidget[3] = (gchar *)cOriginalConfFilePath;
 			pGroupKeyWidget[4] = pLabel;
+			pGroupKeyWidget[5] = pKeyBox;  // on ne peut pas remonter a la keybox a partir du label a cause du cas particulier des widgets a prevue.
 			*pWidgetList = g_slist_prepend (*pWidgetList, pGroupKeyWidget);
 			if (bAddBackButton && cOriginalConfFilePath != NULL)
 			{

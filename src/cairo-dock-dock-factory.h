@@ -222,6 +222,8 @@ struct _CairoDock {
 	CairoDockMousePositionType iMousePositionType;
 	/// TRUE ssi cette vue utilise le stencil buffer d'OpenGL.
 	gboolean bUseStencil;
+	gint iScreenOffsetX;
+	gint iScreenOffsetY;
 };
 
 

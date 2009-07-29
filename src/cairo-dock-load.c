@@ -49,8 +49,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 extern CairoDock *g_pMainDock;
 
-extern gint g_iScreenWidth[2];
-extern gint g_iScreenHeight[2];
+extern gint g_iXScreenWidth[2];  // change tous les g_iScreen par g_iXScreen le 28/07/2009
+extern gint g_iXScreenHeight[2];
 
 extern cairo_surface_t *g_pVisibleZoneSurface;
 
@@ -829,8 +829,8 @@ void cairo_dock_load_desktop_background_surface (void)  // attention : fonction 
 			cd_message ("c'est une couleur unie (%.2f, %.2f, %.2f)", (double) pixels[0] / 255, (double) pixels[1] / 255, (double) pixels[2] / 255);
 			
 			g_pDesktopBgSurface = _cairo_dock_create_blank_surface (pSourceContext,
-				g_iScreenWidth[CAIRO_DOCK_HORIZONTAL],
-				g_iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+				g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
+				g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 			
 			cairo_t *pCairoContext = cairo_create (g_pDesktopBgSurface);
 			cairo_set_source_rgb (pCairoContext,
@@ -855,12 +855,12 @@ void cairo_dock_load_desktop_background_surface (void)  // attention : fonction 
 				&fHeight,
 				NULL, NULL);
 			
-			if (fWidth < g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] || fHeight < g_iScreenHeight[CAIRO_DOCK_HORIZONTAL])
+			if (fWidth < g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || fHeight < g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
 			{
 				cd_message ("c'est un degrade ou un motif (%dx%d)", (int) fWidth, (int) fHeight);
 				g_pDesktopBgSurface = _cairo_dock_create_blank_surface (pSourceContext,
-					g_iScreenWidth[CAIRO_DOCK_HORIZONTAL],
-					g_iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+					g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
+					g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 				cairo_t *pCairoContext = cairo_create (g_pDesktopBgSurface);
 				
 				cairo_pattern_t *pPattern = cairo_pattern_create_for_surface (pBgSurface);

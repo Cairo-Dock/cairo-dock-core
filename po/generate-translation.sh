@@ -7,7 +7,7 @@ else
 	export sources="../src/*.c ../data/messages"
 fi
 
-sed -i 's/\"More precisely/\/\* xgettext:no-c-format \*\/ \"More precisely/g' ../data/messages
+#sed -i 's/\"More precisely/\/\* xgettext:no-c-format \*\/ \"More precisely/g' ../data/messages
 
 xgettext -L C -k_ -k_D -kD_ -kN_ --from-code=UTF-8 --copyright-holder="Cairo-Dock project" --msgid-bugs-address="fabounet@users.berlios.de" -p . $sources -o cairo-dock.pot
 #--omit-header

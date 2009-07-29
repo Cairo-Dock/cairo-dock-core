@@ -64,7 +64,7 @@ extern gchar *g_cCurrentThemePath;
 
 extern int g_iNbDesktops;
 extern int g_iNbViewportX,g_iNbViewportY ;
-extern int g_iScreenWidth[2], g_iScreenHeight[2];
+extern int g_iXScreenWidth[2], g_iXScreenHeight[2];  // change tous les g_iScreen par g_iXScreen le 28/07/2009
 extern gboolean g_bLocked;
 extern gboolean g_bEasterEggs;
 extern gboolean g_bForceCairo;
@@ -881,7 +881,7 @@ static void _cairo_dock_move_appli_to_desktop (GtkMenuItem *pMenuItem, gpointer 
 		cairo_dock_get_current_viewport (&iCurrentViewPortX, &iCurrentViewPortY);
 		cd_debug (" current_viewport : %d;%d", iCurrentViewPortX, iCurrentViewPortY);
 		
-		cairo_dock_move_xwindow_to_nth_desktop (icon->Xid, iDesktopNumber, iViewPortNumberX * g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] - iCurrentViewPortX, iViewPortNumberY * g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] - iCurrentViewPortY);
+		cairo_dock_move_xwindow_to_nth_desktop (icon->Xid, iDesktopNumber, iViewPortNumberX * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - iCurrentViewPortX, iViewPortNumberY * g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - iCurrentViewPortY);
 	}
 }
 
@@ -976,7 +976,7 @@ static void _cairo_dock_move_class_to_desktop (GtkMenuItem *pMenuItem, gpointer 
 			cairo_dock_get_current_viewport (&iCurrentViewPortX, &iCurrentViewPortY);
 			cd_debug (" current_viewport : %d;%d", iCurrentViewPortX, iCurrentViewPortY);
 			
-			cairo_dock_move_xwindow_to_nth_desktop (pIcon->Xid, iDesktopNumber, iViewPortNumberX * g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] - iCurrentViewPortX, iViewPortNumberY * g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] - iCurrentViewPortY);
+			cairo_dock_move_xwindow_to_nth_desktop (pIcon->Xid, iDesktopNumber, iViewPortNumberX * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - iCurrentViewPortX, iViewPortNumberY * g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - iCurrentViewPortY);
 		}
 	}
 }

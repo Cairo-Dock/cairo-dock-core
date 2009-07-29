@@ -19,7 +19,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 CairoConfigPosition myPosition;
 extern CairoDock *g_pMainDock;
-extern int g_iScreenOffsetX, g_iScreenOffsetY;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigPosition *pPosition)
 {
@@ -40,7 +39,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigPosition *pPosition)
 		cd_warning ("Sorry but either your X server does not have the Xinerama extension, or your version of Cairo-Dock was not built with the support of Xinerama.\n You can't place the dock on a particular screen");
 		pPosition->bUseXinerama = FALSE;
 	}
-	pPosition->iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Position", "num screen", &bFlushConfFileNeeded, 0, NULL, NULL);
+	if (pPosition->bUseXinerama)
+		pPosition->iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Position", "num screen", &bFlushConfFileNeeded, 0, NULL, NULL);
 
 	return bFlushConfFileNeeded;
 }
@@ -49,12 +49,18 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigPosition *pPosition)
 static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPosition)
 {
 	//g_print ("%s (%d;%d)\n", __func__, pPosition->iGapX, pPosition->iGapY);
-	if (pPosition->bUseXinerama)
-		cairo_dock_get_screen_offsets (myPosition.iNumScreen);
-	else
-		g_iScreenOffsetX = g_iScreenOffsetY = 0;
-	
 	CairoDock *pDock = g_pMainDock;
+	
+	if (pPosition->bUseXinerama)
+		cairo_dock_get_screen_offsets (pPosition->iNumScreen, &pDock->iScreenOffsetX, &pDock->iScreenOffsetY);
+	else
+		pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
+	
+	if (pPosition->bUseXinerama != pPrevPosition->bUseXinerama)
+	{
+		cairo_dock_reposition_root_docks (TRUE);  // on replace tous les docks racines sauf le main dock.
+	}
+	
 	CairoDockTypeHorizontality bWasHorizontal = pDock->bHorizontalDock;
 	if (pPosition->iScreenBorder != pPrevPosition->iScreenBorder)
 	{

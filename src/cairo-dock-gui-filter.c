@@ -128,7 +128,7 @@ void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWo
 		sBuffer = g_string_new ("");
 	gpointer *pGroupKeyWidget;
 	GList *pSubWidgetList;
-	GtkWidget *pLabel, *pAlign, *pKeyBox, *pVBox, *pFrame, *pCurrentFrame = NULL, *pExpander;
+	GtkWidget *pLabel, *pKeyBox, *pVBox, *pFrame, *pCurrentFrame = NULL, *pExpander;
 	const gchar *cDescription;
 	gchar *cToolTip = NULL;
 	gchar *cModifiedText=NULL, *str=NULL;
@@ -147,10 +147,9 @@ void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWo
 		pLabel = pGroupKeyWidget[4];
 		if (pLabel == NULL)
 			continue;
-		
-		//pOneWidget = pSubWidgetList->data;
-		pAlign = gtk_widget_get_parent (pLabel);
-		pKeyBox = gtk_widget_get_parent (pAlign);
+		pKeyBox = pGroupKeyWidget[5];
+		if (pKeyBox == NULL)
+			continue;
 		pVBox = gtk_widget_get_parent (pKeyBox);
 		pFrame = gtk_widget_get_parent (pVBox);
 		

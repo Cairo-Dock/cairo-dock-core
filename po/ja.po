@@ -88,7 +88,7 @@ msgstr ""
 "'%s' プラグインが有効化されていません。\n"
 "機能を利用するには、プラグインを有効にして下さい。"
 
-#: ../src/cairo-dock-gui-factory.c:1755
+#: ../src/cairo-dock-gui-factory.c:1775
 msgid "grab"
 msgstr "取得"
 
@@ -116,47 +116,47 @@ msgstr "コントローラ"
 msgid "Plug-ins"
 msgstr "プラグイン"
 
-#: ../src/cairo-dock-gui-manager.c:408
+#: ../src/cairo-dock-gui-manager.c:409
 msgid "Categories"
 msgstr "カテゴリ"
 
-#: ../src/cairo-dock-gui-manager.c:428
+#: ../src/cairo-dock-gui-manager.c:429
 msgid "All"
 msgstr "すべて"
 
-#: ../src/cairo-dock-gui-manager.c:533
+#: ../src/cairo-dock-gui-manager.c:534
 msgid "Activate this module"
 msgstr "このモジュールを有効化"
 
-#: ../src/cairo-dock-gui-manager.c:551
+#: ../src/cairo-dock-gui-manager.c:552
 msgid "Filter"
 msgstr "フィルタ"
 
-#: ../src/cairo-dock-gui-manager.c:591
+#: ../src/cairo-dock-gui-manager.c:592
 msgid "All words"
 msgstr "アンド検索"
 
-#: ../src/cairo-dock-gui-manager.c:598
+#: ../src/cairo-dock-gui-manager.c:599
 msgid "Highlight words"
 msgstr "該当ワードを強調表示"
 
-#: ../src/cairo-dock-gui-manager.c:606
+#: ../src/cairo-dock-gui-manager.c:607
 msgid "Hide others"
 msgstr "該当外を隠す"
 
-#: ../src/cairo-dock-gui-manager.c:614
+#: ../src/cairo-dock-gui-manager.c:615
 msgid "Search in description"
 msgstr "ツールチップも検索"
 
-#: ../src/cairo-dock-gui-manager.c:696
+#: ../src/cairo-dock-gui-manager.c:697
 msgid "< Maintenance mode >"
 msgstr "< メンテナンスモード >"
 
-#: ../src/cairo-dock-gui-manager.c:714 ../src/cairo-dock-gui-manager.c:788
+#: ../src/cairo-dock-gui-manager.c:715 ../src/cairo-dock-gui-manager.c:789
 msgid "Configuration of Cairo-Dock"
 msgstr "Cairo-Dock の設定"
 
-#: ../src/cairo-dock-gui-manager.c:1031
+#: ../src/cairo-dock-gui-manager.c:1032
 #, c-format
 msgid ""
 "The module '%s' is not present. You need to install it or its dependencies "
@@ -165,21 +165,21 @@ msgstr ""
 "'%s' モジュールが存在しません。モジュールまたはその依存関係をインストールする"
 "必要があります。"
 
-#: ../src/cairo-dock-gui-manager.c:1037
+#: ../src/cairo-dock-gui-manager.c:1038
 #, c-format
 msgid "The module '%s' is not activated."
 msgstr "'%s' モジュールが有効になっていません。"
 
-#: ../src/cairo-dock-gui-manager.c:1038
+#: ../src/cairo-dock-gui-manager.c:1039
 msgid "Do you want to activate it now ?"
 msgstr "直ちに有効にしますか？"
 
-#: ../src/cairo-dock-internal-accessibility.c:185
+#: ../src/cairo-dock-internal-accessibility.c:184
 #: ../src/cairo-dock-menu.c:1552 ../data/messages:39
 msgid "Accessibility"
 msgstr "アクセシビリティ"
 
-#: ../src/cairo-dock-internal-accessibility.c:187
+#: ../src/cairo-dock-internal-accessibility.c:186
 msgid "How do you access to your docks ?"
 msgstr "ドックへのアクセス方法の設定"
 
@@ -259,20 +259,20 @@ msgstr "アイコンのラベルやクイック情報のスタイルの定義"
 # #################################
 # ########### cairo-dock.conf #############
 # #################################
-#: ../src/cairo-dock-internal-position.c:101 ../data/messages:1
+#: ../src/cairo-dock-internal-position.c:107 ../data/messages:1
 #: ../data/messages:977
 msgid "Position"
 msgstr "配置位置"
 
-#: ../src/cairo-dock-internal-position.c:103
+#: ../src/cairo-dock-internal-position.c:109
 msgid "Set the position of the main dock."
 msgstr "メイン・ドックの配置位置の設定"
 
-#: ../src/cairo-dock-internal-system.c:112 ../data/messages:165
+#: ../src/cairo-dock-internal-system.c:114 ../data/messages:165
 msgid "System"
 msgstr "システム"
 
-#: ../src/cairo-dock-internal-system.c:114
+#: ../src/cairo-dock-internal-system.c:116
 msgid "All the parameters you will never want to tweak."
 msgstr "積極的に手を加えたくはないと思われるパラメータ群"
 
@@ -725,7 +725,7 @@ msgstr "テーマの管理"
 msgid "couldn't retrieve distant theme %s"
 msgstr ""
 
-#: ../src/cairo-dock.c:591
+#: ../src/cairo-dock.c:589
 msgid ""
 "Welcome in Cairo-Dock2 !\n"
 "A default and simple theme has been loaded.\n"
@@ -832,11 +832,11 @@ msgstr "マルチ・スクリーン"
 msgid "Use Xinerama ?"
 msgstr "Xinerama を使用？"
 
-#: ../data/messages:35
+#: ../data/messages:35 ../data/messages:1011
 msgid "starting from 0"
 msgstr "0 から数え始め"
 
-#: ../data/messages:37
+#: ../data/messages:37 ../data/messages:1013
 msgid "Number of the screen where the dock should be located :"
 msgstr "ドックを配置するスクリーンの番号 :"
 
@@ -1171,18 +1171,18 @@ msgid "Animate sub-docks when they appear ?"
 msgstr "サブ・ドック表示時にアニメーション効果？"
 
 #: ../data/messages:177
+#, fuzzy
 msgid ""
-"The icons will appear folded on themselves, regarding the alignement point, "
-"then will unfold untill they fill the whole dock. Use 0 to not use "
-"unfolding, the more it's close to 0, the faster it will be"
+"The icons will appear folded on themselves, then will unfold untill they "
+"fill the whole dock. The smaller, the faster it will be."
 msgstr ""
 "アイコンはドック配置点において折り重なった状態で現れ、その後ドック全体を埋め"
 "るまで展開していきます。0 に指定すると展開は使用されません。0 に近い数字ほ"
 "ど、展開速度は速くなります。"
 
 #: ../data/messages:179
-msgid "Icons' lateral unfolding acceleration :"
-msgstr "アイコンの側面方向の展開加速度 :"
+msgid "Unfolding animation duration :"
+msgstr ""
 
 #: ../data/messages:181
 msgid "The more there are, the slower it will be"
@@ -2147,7 +2147,7 @@ msgstr "警告の標示に使用する画像の名前 :"
 msgid "Name of an image to use for the locked emblem :"
 msgstr "ロック状態の標示に使用する画像の名前 :"
 
-#: ../data/messages:647 ../data/messages:947 ../data/messages:1011
+#: ../data/messages:647 ../data/messages:947 ../data/messages:1015
 msgid "Desktop Entry"
 msgstr "デスクトップエントリ"
 
@@ -2155,19 +2155,19 @@ msgstr "デスクトップエントリ"
 msgid "Sub-dock's name :"
 msgstr "サブ・ドックの名前 :"
 
-#: ../data/messages:651 ../data/messages:955 ../data/messages:1013
+#: ../data/messages:651 ../data/messages:955 ../data/messages:1017
 msgid "Image's name or path :"
 msgstr "画像の名前またはパス :"
 
-#: ../data/messages:653 ../data/messages:961 ../data/messages:1015
+#: ../data/messages:653 ../data/messages:961 ../data/messages:1019
 msgid "Extra parameters"
 msgstr "追加的パラメータ"
 
-#: ../data/messages:655 ../data/messages:963 ../data/messages:1017
+#: ../data/messages:655 ../data/messages:963 ../data/messages:1021
 msgid "Order you want for this launcher among the others:"
 msgstr "このランチャーに割り当てる並び順 :"
 
-#: ../data/messages:657 ../data/messages:959 ../data/messages:1019
+#: ../data/messages:657 ../data/messages:959 ../data/messages:1023
 msgid "Name of the container it belongs to:"
 msgstr "帰属先コンテナの名前 :"
 
@@ -3306,27 +3306,27 @@ msgstr ""
 # #################################
 # ########### themes.conf #############
 # #################################
-#: ../data/messages:1021
+#: ../data/messages:1025
 msgid "Themes"
 msgstr "テーマ"
 
-#: ../data/messages:1023
+#: ../data/messages:1027
 msgid "Choose a theme"
 msgstr "テーマ選択"
 
-#: ../data/messages:1025
+#: ../data/messages:1029
 msgid "Choose one of the available themes :"
 msgstr "利用可能なテーマから１つ選択 :"
 
-#: ../data/messages:1027
+#: ../data/messages:1031
 msgid "You can even drop an internet URL."
 msgstr "インターネット URL をドロップすることもできます。"
 
-#: ../data/messages:1029
+#: ../data/messages:1033
 msgid "... or drag and drop a theme package here :"
 msgstr "... または、テーマのパッケージをここにドラッグ＆ドロップ :"
 
-#: ../data/messages:1031
+#: ../data/messages:1035
 msgid ""
 "So if you check this box, your launchers will be deleted and replaced by the "
 "ones provided in the new theme. Otherwise the current launchers will be "
@@ -3336,11 +3336,11 @@ msgstr ""
 "提供されるものに置き換えられます。チェックを入れない場合は現在のランチャーが"
 "保持され、アイコンのみが置き換えられます。"
 
-#: ../data/messages:1033
+#: ../data/messages:1037
 msgid "Use the new theme's launchers ?"
 msgstr "新しいテーマのランチャーを使用？"
 
-#: ../data/messages:1035
+#: ../data/messages:1039
 msgid ""
 "Otherwise the current behaviour will be kept. It's all about the dock's "
 "position, behaviour parameters such as auto-hide, using taskbar or not, etc."
@@ -3348,35 +3348,35 @@ msgstr ""
 "使用しない場合は現在の動作、すなわちドックの配置位置や自動で隠すか否かの設"
 "定、タスクバー使用不使用の設定などといった動作パラメータが維持されます。"
 
-#: ../data/messages:1037
+#: ../data/messages:1041
 msgid "Use the new theme's behaviour ?"
 msgstr "新しいテーマの動作設定を使用？"
 
-#: ../data/messages:1039
+#: ../data/messages:1043
 msgid "Save"
 msgstr "保存"
 
-#: ../data/messages:1041
+#: ../data/messages:1045
 msgid "Save current theme"
 msgstr "現在のテーマを保存"
 
-#: ../data/messages:1043
+#: ../data/messages:1047
 msgid "You will then be able to re-open it at any time."
 msgstr "保存しておけば、いつでも再び開くことができます。"
 
-#: ../data/messages:1045
+#: ../data/messages:1049
 msgid "Save as :"
 msgstr "名前を付けて保存 :"
 
-#: ../data/messages:1047
+#: ../data/messages:1051
 msgid "Save current behaviour too ?"
 msgstr "現在の動作設定も保存？"
 
-#: ../data/messages:1049
+#: ../data/messages:1053
 msgid "Save current launchers too ?"
 msgstr "現在のランチャーも保存？"
 
-#: ../data/messages:1051
+#: ../data/messages:1055
 msgid ""
 "The dock will build a complete tarball of your current theme, allowing you "
 "to exchange it easily with other people."
@@ -3384,28 +3384,28 @@ msgstr ""
 "ドックは現在のテーマ一式の tarball を作成して、他のユーザーと簡単にテーマの交"
 "換ができるようにします。"
 
-#: ../data/messages:1053
+#: ../data/messages:1057
 msgid "Build a package of the theme ?"
 msgstr "このテーマのパッケージを作成？"
 
-#: ../data/messages:1055
+#: ../data/messages:1059
 msgid "Delete"
 msgstr "削除"
 
-#: ../data/messages:1057
+#: ../data/messages:1061
 msgid "List of your personnal themes"
 msgstr "個人的テーマのリスト"
 
-#: ../data/messages:1059
+#: ../data/messages:1063
 msgid "Delete from the list themes you don't want anymore :"
 msgstr "不要になったテーマのチェックを外してリストから削除 :"
 
-#: ../data/messages:1061
+#: ../data/messages:1065
 msgid "pouet"
 msgstr ""
 
-#: ../data/messages:1063 ../data/messages:1065 ../data/messages:1067
-#: ../data/messages:1069
+#: ../data/messages:1067 ../data/messages:1069 ../data/messages:1071
+#: ../data/messages:1073
 msgid ""
 "v1.4.6.3 :\n"
 "Just to say :\n"
@@ -3416,7 +3416,7 @@ msgstr ""
 # #################################
 # ########### ChangeLog #############
 # #################################
-#: ../data/messages:1071
+#: ../data/messages:1075
 msgid ""
 "v1.5.0 : it's been 1 month since previous release, and we worked hardly to "
 "bring you :\n"
@@ -3436,7 +3436,7 @@ msgid ""
 "  Now, why not try to make an applet for Cairo-Dock ? ;-)"
 msgstr ""
 
-#: ../data/messages:1073
+#: ../data/messages:1077
 msgid ""
 "v1.5.1 :\n"
 " - The 1.5 branch is still young, so this version brings a lot of bug fixes\n"
@@ -3448,7 +3448,7 @@ msgid ""
 " and behave as real desklets."
 msgstr ""
 
-#: ../data/messages:1075
+#: ../data/messages:1079
 msgid ""
 "v1.5.2.1 :\n"
 " - a lot of bug fixes, especially on desklets.\n"
@@ -3456,7 +3456,7 @@ msgid ""
 " - Cairo-Dock is now fully translated in Japanese, thanks to Jiro Kawada !"
 msgstr ""
 
-#: ../data/messages:1077
+#: ../data/messages:1081
 msgid ""
 "v1.5.3.2 :\n"
 " - Themes have been deeply reviewed\n"
@@ -3470,7 +3470,7 @@ msgid ""
 "  who could help cairo-dock to be well-integrated into KDE ;-)"
 msgstr ""
 
-#: ../data/messages:1079
+#: ../data/messages:1083
 msgid ""
 "v1.5.4.2 : a huge release !\n"
 " - add a cute pinguin in your dock with the new applet Cairo-Penguin\n"
@@ -3484,7 +3484,7 @@ msgid ""
 " - 3 more themes in Weather"
 msgstr ""
 
-#: ../data/messages:1081
+#: ../data/messages:1085
 msgid ""
 "v1.5.5.4 :\n"
 " - Huge enhancements in the TaskBar :\n"
@@ -3500,7 +3500,7 @@ msgid ""
 "soon ;-)"
 msgstr ""
 
-#: ../data/messages:1083
+#: ../data/messages:1087
 msgid ""
 "v1.5.6 :\n"
 " - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still "
@@ -3518,7 +3518,7 @@ msgid ""
 " - Any help would be welcome to integrate the dock into KDE !"
 msgstr ""
 
-#: ../data/messages:1085
+#: ../data/messages:1089
 msgid ""
 "v1.6.0 :\n"
 " - A new view has appeared : Diapositive !\n"
@@ -3537,7 +3537,7 @@ msgid ""
 " - Real window thumbnail when minimized."
 msgstr ""
 
-#: ../data/messages:1087
+#: ../data/messages:1091
 msgid ""
 "v1.6.1 :\n"
 "Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
@@ -3550,7 +3550,7 @@ msgid ""
 "plug-in ^_^"
 msgstr ""
 
-#: ../data/messages:1089
+#: ../data/messages:1093
 msgid ""
 "v1.6.2 : the first version integrated in the Ubuntu repositories !\n"
 " - 2 new applets have been released :\n"
@@ -3563,7 +3563,7 @@ msgid ""
 "plug-in ^_^"
 msgstr ""
 
-#: ../data/messages:1091
+#: ../data/messages:1095
 msgid ""
 "v1.6.3 : \n"
 " - first the bad news :\n"
@@ -3581,7 +3581,7 @@ msgid ""
 " - The dock is now translated in Sweden and partially in Greek."
 msgstr ""
 
-#: ../data/messages:1093
+#: ../data/messages:1097
 msgid ""
 "Cairo-Dock II\n"
 " - Cairo-Dock is now a full OpenGL dock ! (the cairo backend is still "
@@ -3603,7 +3603,7 @@ msgstr ""
 " - 新しいアプレット : mail, keyboard indicator, quick folder, Toons.\n"
 " - 多くのバグ修正とすべてのプラグインのアップグレード"
 
-#: ../data/messages:1095
+#: ../data/messages:1099
 msgid ""
 "2.0.5 :\n"
 " - This is mainly a bug-fix version\n"
@@ -3611,9 +3611,12 @@ msgid ""
 " - Added functionnalities on grouped applications icons."
 msgstr ""
 
-#: ../data/messages:1097
-msgid "Happy New Year Cairo-Dock !!! :-)"
+#: ../data/messages:1101
+msgid "Happy Birthday Cairo-Dock !!! :-)"
 msgstr ""
+
+#~ msgid "Icons' lateral unfolding acceleration :"
+#~ msgstr "アイコンの側面方向の展開加速度 :"
 
 #~ msgid ""
 #~ "Directories or themes where to search icons. Put some directories where "

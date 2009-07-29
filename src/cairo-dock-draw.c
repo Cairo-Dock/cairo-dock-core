@@ -41,7 +41,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 extern gint g_iScreenWidth[2];
 extern gint g_iScreenHeight[2];
-extern int g_iScreenOffsetX, g_iScreenOffsetY;
 
 extern gboolean bDirectionUp;
 extern double g_fBackgroundImageWidth, g_fBackgroundImageHeight;

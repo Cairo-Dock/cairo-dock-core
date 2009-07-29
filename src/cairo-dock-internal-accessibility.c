@@ -23,7 +23,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 CairoConfigAccessibility myAccessibility;
 extern CairoDock *g_pMainDock;
-extern gint g_iScreenWidth[2];
 
 #define _append_warning(w) do {\
 	if (sWarning == NULL)\

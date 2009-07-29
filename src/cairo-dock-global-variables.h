@@ -19,8 +19,6 @@ extern gchar *g_cCurrentLaunchersPath;
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
 /// Dimensions de l'ecran logique en mode horizontal/vertical.
 extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
-/// Sa position.
-extern int g_iScreenOffsetX, g_iScreenOffsetY;;
 /// Nombre de bureaux virtuels.
 extern int g_iNbDesktops;
 /// Nombre de "faces" du cube en largeur et en hauteur.

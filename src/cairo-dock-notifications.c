@@ -98,7 +98,7 @@ void cairo_dock_free_notification_table (GPtrArray *pNotificationsTab)
 {
 	if (pNotificationsTab == NULL)
 		return ;
-	int i;
+	guint i;
 	for (i = 0; i < pNotificationsTab->len; i ++)
 	{
 		GSList *pNotificationRecordList = g_ptr_array_index (pNotificationsTab, i);

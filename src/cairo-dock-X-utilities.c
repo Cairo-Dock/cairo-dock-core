@@ -35,7 +35,6 @@ extern int g_iNbDesktops;
 extern int g_iNbViewportX,g_iNbViewportY ;
 extern int g_iScreenWidth[2], g_iScreenHeight[2];  // dimension de l'ecran sur lequel est place le dock.
 extern int g_iXScreenWidth[2], g_iXScreenHeight[2];  // dimension de l'ecran logique compose eventuellement de plusieurs moniteurs.
-extern int g_iScreenOffsetX, g_iScreenOffsetY;
 static gboolean s_bUseXComposite = TRUE;
 static gboolean s_bUseXTest = TRUE;
 static gboolean s_bUseXinerama = TRUE;
@@ -591,7 +590,7 @@ gboolean cairo_dock_xinerama_is_available (void)
 }
 
 
-void cairo_dock_get_screen_offsets (int iNumScreen)
+void cairo_dock_get_screen_offsets (int iNumScreen, int *iScreenOffsetX, int *iScreenOffsetY)
 {
 #ifdef HAVE_XEXTEND
 	g_return_if_fail (s_bUseXinerama);
@@ -604,21 +603,21 @@ void cairo_dock_get_screen_offsets (int iNumScreen)
 			cd_warning ("the number of screen where to place the dock is too big, we'll choose the last one.");
 			iNumScreen = iNbScreens - 1;
 		}
-		g_iScreenOffsetX = pScreens[iNumScreen].x_org;
-		g_iScreenOffsetY = pScreens[iNumScreen].y_org;
+		*iScreenOffsetX = pScreens[iNumScreen].x_org;
+		*iScreenOffsetY = pScreens[iNumScreen].y_org;
 		g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] = pScreens[iNumScreen].width;
 		g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] = pScreens[iNumScreen].height;
 		
 		g_iScreenWidth[CAIRO_DOCK_VERTICAL] = g_iScreenHeight[CAIRO_DOCK_HORIZONTAL];
 		g_iScreenHeight[CAIRO_DOCK_VERTICAL] = g_iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-		cd_message (" * screen %d => (%d;%d) %dx%d\n", iNumScreen, g_iScreenOffsetX, g_iScreenOffsetY, g_iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+		cd_message (" * screen %d => (%d;%d) %dx%d\n", iNumScreen, *iScreenOffsetX, *iScreenOffsetY, g_iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		
 		XFree (pScreens);
 	}
 	else
 	{
-		cd_warning ("No screens found from Xinerama, is it really active ?");
-		g_iScreenOffsetX = g_iScreenOffsetY = 0;
+		cd_warning ("No screen found from Xinerama, is it really active ?");
+		*iScreenOffsetX = *iScreenOffsetY = 0;
 	}
 #else
 	cd_warning ("The dock was not compiled with the support of Xinerama.");

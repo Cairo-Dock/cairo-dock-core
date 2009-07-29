@@ -74,7 +74,7 @@ msgid ""
 "Be sure to activate it to enjoy these features."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1755
+#: ../src/cairo-dock-gui-factory.c:1775
 msgid "grab"
 msgstr ""
 
@@ -102,68 +102,68 @@ msgstr ""
 msgid "Plug-ins"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:408
+#: ../src/cairo-dock-gui-manager.c:409
 msgid "Categories"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:428
+#: ../src/cairo-dock-gui-manager.c:429
 msgid "All"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:533
+#: ../src/cairo-dock-gui-manager.c:534
 msgid "Activate this module"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:551
+#: ../src/cairo-dock-gui-manager.c:552
 msgid "Filter"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:591
+#: ../src/cairo-dock-gui-manager.c:592
 msgid "All words"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:598
+#: ../src/cairo-dock-gui-manager.c:599
 msgid "Highlight words"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:606
+#: ../src/cairo-dock-gui-manager.c:607
 msgid "Hide others"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:614
+#: ../src/cairo-dock-gui-manager.c:615
 msgid "Search in description"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:696
+#: ../src/cairo-dock-gui-manager.c:697
 msgid "< Maintenance mode >"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:714 ../src/cairo-dock-gui-manager.c:788
+#: ../src/cairo-dock-gui-manager.c:715 ../src/cairo-dock-gui-manager.c:789
 msgid "Configuration of Cairo-Dock"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:1031
+#: ../src/cairo-dock-gui-manager.c:1032
 #, c-format
 msgid ""
 "The module '%s' is not present. You need to install it or its dependencies "
 "to make the most of this module."
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:1037
+#: ../src/cairo-dock-gui-manager.c:1038
 #, c-format
 msgid "The module '%s' is not activated."
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:1038
+#: ../src/cairo-dock-gui-manager.c:1039
 msgid "Do you want to activate it now ?"
 msgstr ""
 
-#: ../src/cairo-dock-internal-accessibility.c:185
+#: ../src/cairo-dock-internal-accessibility.c:184
 #: ../src/cairo-dock-menu.c:1552 ../data/messages:39
 msgid "Accessibility"
 msgstr ""
 
-#: ../src/cairo-dock-internal-accessibility.c:187
+#: ../src/cairo-dock-internal-accessibility.c:186
 msgid "How do you access to your docks ?"
 msgstr ""
 
@@ -236,20 +236,20 @@ msgstr ""
 msgid "Define the style of the icons' labels and quick-info."
 msgstr ""
 
-#: ../src/cairo-dock-internal-position.c:101 ../data/messages:1
+#: ../src/cairo-dock-internal-position.c:107 ../data/messages:1
 #: ../data/messages:977
 msgid "Position"
 msgstr ""
 
-#: ../src/cairo-dock-internal-position.c:103
+#: ../src/cairo-dock-internal-position.c:109
 msgid "Set the position of the main dock."
 msgstr ""
 
-#: ../src/cairo-dock-internal-system.c:112 ../data/messages:165
+#: ../src/cairo-dock-internal-system.c:114 ../data/messages:165
 msgid "System"
 msgstr ""
 
-#: ../src/cairo-dock-internal-system.c:114
+#: ../src/cairo-dock-internal-system.c:116
 msgid "All the parameters you will never want to tweak."
 msgstr ""
 
@@ -674,7 +674,7 @@ msgstr ""
 msgid "couldn't retrieve distant theme %s"
 msgstr ""
 
-#: ../src/cairo-dock.c:591
+#: ../src/cairo-dock.c:589
 msgid ""
 "Welcome in Cairo-Dock2 !\n"
 "A default and simple theme has been loaded.\n"
@@ -761,11 +761,11 @@ msgstr ""
 msgid "Use Xinerama ?"
 msgstr ""
 
-#: ../data/messages:35
+#: ../data/messages:35 ../data/messages:1011
 msgid "starting from 0"
 msgstr ""
 
-#: ../data/messages:37
+#: ../data/messages:37 ../data/messages:1013
 msgid "Number of the screen where the dock should be located :"
 msgstr ""
 
@@ -1062,13 +1062,12 @@ msgstr ""
 
 #: ../data/messages:177
 msgid ""
-"The icons will appear folded on themselves, regarding the alignement point, "
-"then will unfold untill they fill the whole dock. Use 0 to not use "
-"unfolding, the more it's close to 0, the faster it will be"
+"The icons will appear folded on themselves, then will unfold untill they "
+"fill the whole dock. The smaller, the faster it will be."
 msgstr ""
 
 #: ../data/messages:179
-msgid "Icons' lateral unfolding acceleration :"
+msgid "Unfolding animation duration :"
 msgstr ""
 
 #: ../data/messages:181
@@ -1957,7 +1956,7 @@ msgstr ""
 msgid "Name of an image to use for the locked emblem :"
 msgstr ""
 
-#: ../data/messages:647 ../data/messages:947 ../data/messages:1011
+#: ../data/messages:647 ../data/messages:947 ../data/messages:1015
 msgid "Desktop Entry"
 msgstr ""
 
@@ -1965,19 +1964,19 @@ msgstr ""
 msgid "Sub-dock's name :"
 msgstr ""
 
-#: ../data/messages:651 ../data/messages:955 ../data/messages:1013
+#: ../data/messages:651 ../data/messages:955 ../data/messages:1017
 msgid "Image's name or path :"
 msgstr ""
 
-#: ../data/messages:653 ../data/messages:961 ../data/messages:1015
+#: ../data/messages:653 ../data/messages:961 ../data/messages:1019
 msgid "Extra parameters"
 msgstr ""
 
-#: ../data/messages:655 ../data/messages:963 ../data/messages:1017
+#: ../data/messages:655 ../data/messages:963 ../data/messages:1021
 msgid "Order you want for this launcher among the others:"
 msgstr ""
 
-#: ../data/messages:657 ../data/messages:959 ../data/messages:1019
+#: ../data/messages:657 ../data/messages:959 ../data/messages:1023
 msgid "Name of the container it belongs to:"
 msgstr ""
 
@@ -2843,99 +2842,99 @@ msgid ""
 "zone will make the dock re-appear."
 msgstr ""
 
-#: ../data/messages:1021
+#: ../data/messages:1025
 msgid "Themes"
 msgstr ""
 
-#: ../data/messages:1023
+#: ../data/messages:1027
 msgid "Choose a theme"
 msgstr ""
 
-#: ../data/messages:1025
+#: ../data/messages:1029
 msgid "Choose one of the available themes :"
 msgstr ""
 
-#: ../data/messages:1027
+#: ../data/messages:1031
 msgid "You can even drop an internet URL."
 msgstr ""
 
-#: ../data/messages:1029
+#: ../data/messages:1033
 msgid "... or drag and drop a theme package here :"
 msgstr ""
 
-#: ../data/messages:1031
+#: ../data/messages:1035
 msgid ""
 "So if you check this box, your launchers will be deleted and replaced by the "
 "ones provided in the new theme. Otherwise the current launchers will be "
 "kept, only icons will be replaced."
 msgstr ""
 
-#: ../data/messages:1033
+#: ../data/messages:1037
 msgid "Use the new theme's launchers ?"
 msgstr ""
 
-#: ../data/messages:1035
+#: ../data/messages:1039
 msgid ""
 "Otherwise the current behaviour will be kept. It's all about the dock's "
 "position, behaviour parameters such as auto-hide, using taskbar or not, etc."
 msgstr ""
 
-#: ../data/messages:1037
+#: ../data/messages:1041
 msgid "Use the new theme's behaviour ?"
 msgstr ""
 
-#: ../data/messages:1039
+#: ../data/messages:1043
 msgid "Save"
 msgstr ""
 
-#: ../data/messages:1041
+#: ../data/messages:1045
 msgid "Save current theme"
 msgstr ""
 
-#: ../data/messages:1043
+#: ../data/messages:1047
 msgid "You will then be able to re-open it at any time."
 msgstr ""
 
-#: ../data/messages:1045
+#: ../data/messages:1049
 msgid "Save as :"
 msgstr ""
 
-#: ../data/messages:1047
+#: ../data/messages:1051
 msgid "Save current behaviour too ?"
 msgstr ""
 
-#: ../data/messages:1049
+#: ../data/messages:1053
 msgid "Save current launchers too ?"
 msgstr ""
 
-#: ../data/messages:1051
+#: ../data/messages:1055
 msgid ""
 "The dock will build a complete tarball of your current theme, allowing you "
 "to exchange it easily with other people."
 msgstr ""
 
-#: ../data/messages:1053
+#: ../data/messages:1057
 msgid "Build a package of the theme ?"
 msgstr ""
 
-#: ../data/messages:1055
+#: ../data/messages:1059
 msgid "Delete"
 msgstr ""
 
-#: ../data/messages:1057
+#: ../data/messages:1061
 msgid "List of your personnal themes"
 msgstr ""
 
-#: ../data/messages:1059
+#: ../data/messages:1063
 msgid "Delete from the list themes you don't want anymore :"
 msgstr ""
 
-#: ../data/messages:1061
+#: ../data/messages:1065
 msgid "pouet"
 msgstr ""
 
-#: ../data/messages:1063 ../data/messages:1065 ../data/messages:1067
-#: ../data/messages:1069
+#: ../data/messages:1067 ../data/messages:1069 ../data/messages:1071
+#: ../data/messages:1073
 msgid ""
 "v1.4.6.3 :\n"
 "Just to say :\n"
@@ -2943,7 +2942,7 @@ msgid ""
 "  the Cairo-Dock's team."
 msgstr ""
 
-#: ../data/messages:1071
+#: ../data/messages:1075
 msgid ""
 "v1.5.0 : it's been 1 month since previous release, and we worked hardly to "
 "bring you :\n"
@@ -2963,7 +2962,7 @@ msgid ""
 "  Now, why not try to make an applet for Cairo-Dock ? ;-)"
 msgstr ""
 
-#: ../data/messages:1073
+#: ../data/messages:1077
 msgid ""
 "v1.5.1 :\n"
 " - The 1.5 branch is still young, so this version brings a lot of bug fixes\n"
@@ -2975,7 +2974,7 @@ msgid ""
 " and behave as real desklets."
 msgstr ""
 
-#: ../data/messages:1075
+#: ../data/messages:1079
 msgid ""
 "v1.5.2.1 :\n"
 " - a lot of bug fixes, especially on desklets.\n"
@@ -2983,7 +2982,7 @@ msgid ""
 " - Cairo-Dock is now fully translated in Japanese, thanks to Jiro Kawada !"
 msgstr ""
 
-#: ../data/messages:1077
+#: ../data/messages:1081
 msgid ""
 "v1.5.3.2 :\n"
 " - Themes have been deeply reviewed\n"
@@ -2997,7 +2996,7 @@ msgid ""
 "  who could help cairo-dock to be well-integrated into KDE ;-)"
 msgstr ""
 
-#: ../data/messages:1079
+#: ../data/messages:1083
 msgid ""
 "v1.5.4.2 : a huge release !\n"
 " - add a cute pinguin in your dock with the new applet Cairo-Penguin\n"
@@ -3011,7 +3010,7 @@ msgid ""
 " - 3 more themes in Weather"
 msgstr ""
 
-#: ../data/messages:1081
+#: ../data/messages:1085
 msgid ""
 "v1.5.5.4 :\n"
 " - Huge enhancements in the TaskBar :\n"
@@ -3027,7 +3026,7 @@ msgid ""
 "soon ;-)"
 msgstr ""
 
-#: ../data/messages:1083
+#: ../data/messages:1087
 msgid ""
 "v1.5.6 :\n"
 " - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still "
@@ -3045,7 +3044,7 @@ msgid ""
 " - Any help would be welcome to integrate the dock into KDE !"
 msgstr ""
 
-#: ../data/messages:1085
+#: ../data/messages:1089
 msgid ""
 "v1.6.0 :\n"
 " - A new view has appeared : Diapositive !\n"
@@ -3064,7 +3063,7 @@ msgid ""
 " - Real window thumbnail when minimized."
 msgstr ""
 
-#: ../data/messages:1087
+#: ../data/messages:1091
 msgid ""
 "v1.6.1 :\n"
 "Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
@@ -3077,7 +3076,7 @@ msgid ""
 "plug-in ^_^"
 msgstr ""
 
-#: ../data/messages:1089
+#: ../data/messages:1093
 msgid ""
 "v1.6.2 : the first version integrated in the Ubuntu repositories !\n"
 " - 2 new applets have been released :\n"
@@ -3090,7 +3089,7 @@ msgid ""
 "plug-in ^_^"
 msgstr ""
 
-#: ../data/messages:1091
+#: ../data/messages:1095
 msgid ""
 "v1.6.3 : \n"
 " - first the bad news :\n"
@@ -3108,7 +3107,7 @@ msgid ""
 " - The dock is now translated in Sweden and partially in Greek."
 msgstr ""
 
-#: ../data/messages:1093
+#: ../data/messages:1097
 msgid ""
 "Cairo-Dock II\n"
 " - Cairo-Dock is now a full OpenGL dock ! (the cairo backend is still "
@@ -3121,7 +3120,7 @@ msgid ""
 " - Lot of bug fixes and upgrades in all plug-ins."
 msgstr ""
 
-#: ../data/messages:1095
+#: ../data/messages:1099
 msgid ""
 "2.0.5 :\n"
 " - This is mainly a bug-fix version\n"
@@ -3129,6 +3128,6 @@ msgid ""
 " - Added functionnalities on grouped applications icons."
 msgstr ""
 
-#: ../data/messages:1097
-msgid "Happy New Year Cairo-Dock !!! :-)"
+#: ../data/messages:1101
+msgid "Happy Birthday Cairo-Dock !!! :-)"
 msgstr ""

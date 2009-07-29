@@ -42,7 +42,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 extern CairoDock *g_pMainDock;
 extern gint g_iXScreenWidth[2], g_iXScreenHeight[2];
 extern gint g_iScreenWidth[2], g_iScreenHeight[2];
-extern int g_iScreenOffsetX, g_iScreenOffsetY;
 extern gboolean g_bSticky;
 extern gboolean g_bKeepAbove;
 extern gboolean g_bUseOpenGL;
@@ -1108,7 +1107,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 			}
 			else
 			{
-				*bRight = (pDock->iWindowPositionY < g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
+				*bRight = (pDock->iWindowPositionY < g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
 				*bDirectionUp = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
 				*iY = (! (*bRight) ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iCurrentHeight);
 			}
@@ -1142,7 +1141,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 			}
 			else
 			{
-				*bRight = (pDock->iWindowPositionY < g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
+				*bRight = (pDock->iWindowPositionY < g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
 				*bDirectionUp = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
 				*iY = (! (*bRight) ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iCurrentHeight);
 			}
@@ -1292,8 +1291,8 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 	else  // au milieu de l'ecran courant.
 	{
 		pDialog->bDirectionUp = TRUE;
-		pDialog->iPositionX = g_iScreenOffsetX + (g_iScreenWidth [CAIRO_DOCK_HORIZONTAL] - pDialog->iWidth) / 2;
-		pDialog->iPositionY = g_iScreenOffsetY + (g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] - pDialog->iHeight) / 2;
+		pDialog->iPositionX = (g_pMainDock ? g_pMainDock->iScreenOffsetX : 0) + (g_iScreenWidth [CAIRO_DOCK_HORIZONTAL] - pDialog->iWidth) / 2;
+		pDialog->iPositionY = (g_pMainDock ? g_pMainDock->iScreenOffsetY : 0) + (g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] - pDialog->iHeight) / 2;
 		pDialog->iHeight = pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin;
 		//g_print (" au milieu de l'ecran (%d;%d) %dx%d\n", pDialog->iPositionX, pDialog->iPositionY, pDialog->iWidth, pDialog->iHeight);
 		
