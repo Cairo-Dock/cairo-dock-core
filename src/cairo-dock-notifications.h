@@ -102,6 +102,13 @@ typedef enum {
 	CAIRO_DOCK_UPDATE_DIALOG,
 	/// notification called when a Dialog is rendered.
 	CAIRO_DOCK_RENDER_DIALOG,
+	
+	/// notification called for the fast rendering loop on a default container.
+	CAIRO_DOCK_UPDATE_DEFAULT_CONTAINER,
+	/// notification called for the slow rendering loop on a default container.
+	CAIRO_DOCK_UPDATE_DEFAULT_CONTAINER_SLOW,
+	/// notification called when a default container is rendered.
+	CAIRO_DOCK_RENDER_DEFAULT_CONTAINER,
 	CAIRO_DOCK_NB_NOTIFICATIONS
 	} CairoDockNotificationType;
 
@@ -154,9 +161,9 @@ typedef gboolean (* CairoDockStopIconFunc) (gpointer pUserData, Icon *pIcon);
 
 /// prototype of the callback to the CAIRO_DOCK_ENTER_DOCK and CAIRO_DOCK_ENTER_DESKLET notifications.
 typedef gboolean (* CairoDockEnterContainerFunc) (gpointer pUserData, CairoContainer *pContainer, gboolean *bStartAnimation);
-/// prototype of the callback to the CAIRO_DOCK_UPDATE_DOCK,  CAIRO_DOCK_UPDATE_DOCK_SLOW, CAIRO_DOCK_UPDATE_DESKLET, CAIRO_DOCK_UPDATE_DESKLET_SLOW, CAIRO_DOCK_UPDATE_DIALOG and CAIRO_DOCK_UPDATE_FLYING_CONTAINER notifications.
+/// prototype of the callback to the CAIRO_DOCK_UPDATE_DOCK, CAIRO_DOCK_UPDATE_DOCK_SLOW, CAIRO_DOCK_UPDATE_DESKLET, CAIRO_DOCK_UPDATE_DESKLET_SLOW, CAIRO_DOCK_UPDATE_DIALOG and CAIRO_DOCK_UPDATE_FLYING_CONTAINER notifications.
 typedef gboolean (* CairoDockUpdateContainerFunc) (gpointer pUserData, CairoContainer *pContainer, gboolean *bContinueAnimation);
-/// prototype of the callback to the CAIRO_DOCK_RENDER_DOCK, CAIRO_DOCK_RENDER_DESKLET, CAIRO_DOCK_RENDER_DIALOG, CAIRO_DOCK_RENDER_FLYING_CONTAINER notifications.
+/// prototype of the callback to the CAIRO_DOCK_RENDER_DOCK, CAIRO_DOCK_RENDER_DESKLET, CAIRO_DOCK_RENDER_DIALOG, CAIRO_DOCK_RENDER_FLYING_CONTAINER notifications. 'pCairoContext' is NULL for an OpenGL rendering.
 typedef gboolean (* CairoDockRenderContainerFunc) (gpointer pUserData, CairoContainer *pContainer, cairo_t *pCairoContext);
 /// prototype of the callback to the CAIRO_DOCK_STOP_DOCK and CAIRO_DOCK_STOP_DESKLET notifications.
 typedef gboolean (* CairoDockStopContainerFunc) (gpointer pUserData, CairoContainer *pContainer);

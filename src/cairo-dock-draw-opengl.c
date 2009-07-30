@@ -1384,7 +1384,7 @@ void cairo_dock_draw_rounded_rectangle_opengl (double fRadius, double fLineWidth
 
 GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pContext)
 {
-	Display *XDisplay = cairo_dock_get_Xdisplay ();
+	Display *XDisplay = gdk_x11_get_default_xdisplay ();
 	
 	GLXFBConfig *pFBConfigs; 
 	XRenderPictFormat *pPictFormat = NULL;
@@ -1457,7 +1457,7 @@ void cairo_dock_create_icon_pbuffer (void)
 	cd_debug ("%s (%dx%d)", __func__, iWidth, iHeight);
 	if (s_iIconPbufferWidth != iWidth || s_iIconPbufferHeight != iHeight)
 	{
-		Display *XDisplay = cairo_dock_get_Xdisplay ();
+		Display *XDisplay = gdk_x11_get_default_xdisplay ();
 		if (s_iconPbuffer != 0)
 		{
 			glXDestroyPbuffer (XDisplay, s_iconPbuffer);
@@ -1490,7 +1490,7 @@ void cairo_dock_create_icon_pbuffer (void)
 
 void cairo_dock_destroy_icon_pbuffer (void)
 {
-	Display *XDisplay = cairo_dock_get_Xdisplay ();
+	Display *XDisplay = gdk_x11_get_default_xdisplay ();
 	if (s_iconPbuffer != 0)
 	{
 		glXDestroyPbuffer (XDisplay, s_iconPbuffer);
@@ -1518,7 +1518,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	}
 	else if (s_iconContext != 0)
 	{
-		Display *XDisplay = cairo_dock_get_Xdisplay ();
+		Display *XDisplay = gdk_x11_get_default_xdisplay ();
 		if (! glXMakeCurrent (XDisplay, s_iconPbuffer, s_iconContext))
 			return FALSE;
 		glLoadIdentity ();
@@ -1611,7 +1611,7 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 {
 	GdkGLConfig *pGlConfig = NULL;
 	
-	Display *XDisplay = cairo_dock_get_Xdisplay ();
+	Display *XDisplay = gdk_x11_get_default_xdisplay ();
 	
 	GLXFBConfig *pFBConfigs; 
 	XRenderPictFormat *pPictFormat = NULL;

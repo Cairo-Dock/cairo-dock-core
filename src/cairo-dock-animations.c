@@ -571,6 +571,35 @@ static gboolean _cairo_flying_container_animation_loop (CairoFlyingContainer *pF
 }
 
 
+static gboolean _cairo_default_container_animation_loop (CairoContainer *pContainer)
+{
+	gboolean bContinue = FALSE;
+	
+	gboolean bUpdateSlowAnimation = FALSE;
+	pContainer->iAnimationStep ++;
+	if (pContainer->iAnimationStep * pContainer->iAnimationDeltaT >= CAIRO_DOCK_MIN_SLOW_DELTA_T)
+	{
+		bUpdateSlowAnimation = TRUE;
+		pContainer->iAnimationStep = 0;
+		pContainer->bKeepSlowAnimation = FALSE;
+	}
+	
+	if (bUpdateSlowAnimation)
+	{
+		cairo_dock_notify_on_container (pContainer, CAIRO_DOCK_UPDATE_DEFAULT_CONTAINER_SLOW, pContainer, &pContainer->bKeepSlowAnimation);
+	}
+	
+	cairo_dock_notify_on_container (pContainer, CAIRO_DOCK_UPDATE_DEFAULT_CONTAINER, pContainer, &bContinue);
+	
+	if (! bContinue && ! pContainer->bKeepSlowAnimation)
+	{
+		pContainer->iSidGLAnimation = 0;
+		return FALSE;
+	}
+	else
+		return TRUE;
+}
+
 void cairo_dock_launch_animation (CairoContainer *pContainer)
 {
 	if (pContainer->iSidGLAnimation == 0)
@@ -593,8 +622,11 @@ void cairo_dock_launch_animation (CairoContainer *pContainer)
 			case CAIRO_DOCK_TYPE_FLYING_CONTAINER :
 				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc)_cairo_flying_container_animation_loop, pContainer);
 			break ;
+			case CAIRO_DOCK_TYPE_DIALOG:
+				cd_warning ("Dialogs has no animation capability yet");
+			break;
 			default :
-				cd_warning ("This type of container has no animation capability yet");
+				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc)_cairo_default_container_animation_loop, pContainer);
 			break ;
 		}
 	}

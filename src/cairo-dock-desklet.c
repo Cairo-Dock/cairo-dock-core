@@ -455,7 +455,7 @@ static void _cairo_dock_render_desklet_opengl (CairoDesklet *pDesklet)
 	
 	cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDesklet));
 	
-	cairo_dock_notify (CAIRO_DOCK_RENDER_DESKLET, pDesklet);
+	cairo_dock_notify_on_container (pDesklet, CAIRO_DOCK_RENDER_DESKLET, pDesklet);
 	
 	if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
 		gdk_gl_drawable_swap_buffers (pGlDrawable);
