@@ -1183,17 +1183,17 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
 		pDesklet);
 	cairo_dock_allow_widget_to_receive_data (pWindow, G_CALLBACK (on_drag_data_received_desklet), pDesklet);
 
-  //user widget
-  if (pInteractiveWidget != NULL)
-  {
-    cd_debug ("ref = %d", pInteractiveWidget->object.parent_instance.ref_count);
-    cairo_dock_add_interactive_widget_to_desklet (pInteractiveWidget, pDesklet);
-    cd_debug ("pack -> ref = %d", pInteractiveWidget->object.parent_instance.ref_count);
-  }
+	//user widget
+	if (pInteractiveWidget != NULL)
+	{
+		cd_debug ("ref = %d", pInteractiveWidget->object.parent_instance.ref_count);
+		cairo_dock_add_interactive_widget_to_desklet (pInteractiveWidget, pDesklet);
+		cd_debug ("pack -> ref = %d", pInteractiveWidget->object.parent_instance.ref_count);
+	}
 
-  gtk_widget_show_all(pWindow);
+	gtk_widget_show_all(pWindow);
 
-  return pDesklet;
+	return pDesklet;
 }
 
 void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute *pAttribute)

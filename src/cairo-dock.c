@@ -97,6 +97,7 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-gauge.h"
 #include "cairo-dock-graph.h"
+#include "cairo-dock-internal-system.h"
 
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
 GdkWindowTypeHint g_iWmHint = GDK_WINDOW_TYPE_HINT_DOCK;  // hint pour la fenetre du dock principal.
@@ -587,6 +588,18 @@ int main (int argc, char** argv)
 	if (bFirstLaunch)
 	{
 		cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Theme manager\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit : right-click -> Cairo-Dock -> Communauty site.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);
+		
+		GdkScreen *pScreen = gdk_screen_get_default ();
+		if (! mySystem.bUseFakeTransparency && ! gdk_screen_is_composited (pScreen))
+		{
+			// ps -ef | /bin/grep metacity
+			// tester que 2 lignes non vides au moins (1 pour metacity et une pour le grep) ou 1 ligne sans grep
+			//   proposer d'activer le composite et parler de l'emulation.
+			//     si oui, gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true
+			// si pas de metacity, afficher le dialogue general.
+			
+			cairo_dock_show_general_message (_("To remove the black rectangle around the dock, you need to activate a composite manager.\nFor instance, it can be done by activating the desktop effects, launching Compiz, or activating the composition in Metacity.\nIf your machine can't support composition, Cairo-Dock can emulate it; this option is in the 'System' module of the configuration, at the bottom of the page."), 0);
+		}
 	}
 	
 	//\___________________ On affiche le changelog en cas de nouvelle version.

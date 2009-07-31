@@ -655,7 +655,7 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 
 static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, gboolean bForceDemand, Icon *pHiddenIcon)
 {
-	cd_debug ("%s (%s)\n", __func__, icon->acName);
+	cd_debug ("%s (%s, force:%d)\n", __func__, icon->acName, bForceDemand);
 	icon->bIsDemandingAttention = TRUE;
 	if (myTaskBar.bDemandsAttentionWithDialog)
 	{
@@ -672,7 +672,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 		}
 		if (pDialog && bForceDemand)
 		{
-			g_print ("force demanding attention\n");
+			g_print ("force dialog on top\n");
 			gtk_window_set_keep_above (GTK_WINDOW (pDialog->pWidget), TRUE);
 			Window Xid = GDK_WINDOW_XID (pDialog->pWidget->window);
 			cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // pour passer devant les fenetres plein ecran; depend du WM.
@@ -690,11 +690,13 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 			}
 			if (pDock->bAutoHide && bForceDemand)
 			{
+				g_print ("force dock to raise\n");
 				cairo_dock_emit_enter_signal (pDock);
 			}
 		}
 		else if (bForceDemand)
 		{
+			g_print ("force sub-dock to raise\n");
 			CairoDock *pParentDock = NULL;
 			Icon *pPointedIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
 			if (pParentDock)
@@ -738,7 +740,14 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);  // arrete son animation quelqu'elle soit.
 	if (! pDock->bInside)
 	{
+		g_print ("pop down the dock\n");
 		cairo_dock_pop_down (pDock);
+		
+		if (pDock->bAutoHide)
+		{
+			g_print ("force dock to auto-hide\n");
+			cairo_dock_emit_leave_signal (pDock);
+		}
 	}
 }
 void cairo_dock_appli_stops_demanding_attention (Icon *icon)

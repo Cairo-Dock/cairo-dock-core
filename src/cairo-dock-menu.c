@@ -1070,11 +1070,64 @@ static void _cairo_dock_keep_on_widget_layer (GtkMenuItem *pMenuItem, gpointer *
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
 		//gtk_window_set_type_hint(GTK_WINDOW(pDock->pWidget), GDK_WINDOW_TYPE_HINT_NORMAL);
 	cairo_dock_show_desklet (pDesklet);
-
+	
 	if (CAIRO_DOCK_IS_APPLET (icon) && bOnCompizWidgetLayer)
 		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
 			G_TYPE_INT, "Desklet", "accessibility", CAIRO_DESKLET_ON_WIDGET_LAYER,
 			G_TYPE_INVALID);
+	
+	if (bOnCompizWidgetLayer)  // on verifie que la regle de Compiz est correcte.
+	{
+		// on recupere la regle
+		gchar *cDbusAnswer = cairo_dock_launch_command_sync ("dbus-send --print-reply --type=method_call --dest=org.freedesktop.compiz /org/freedesktop/compiz/widget/screen0/match org.freedesktop.compiz.get");
+		g_print ("cDbusAnswer : '%s'\n", cDbusAnswer);
+		gchar *cRule = NULL;
+		gchar *str = strchr (cDbusAnswer, '\n');
+		if (str)
+		{
+			str ++;
+			while (*str == ' ')
+				str ++;
+			if (strncmp (str, "string", 6) == 0)
+			{
+				str += 6;
+				while (*str == ' ')
+					str ++;
+				if (*str == '"')
+				{
+					str ++;
+					gchar *ptr = strrchr (str, '"');
+					if (ptr)
+					{
+						*ptr = '\0';
+						cRule = g_strdup (str);
+					}
+				}
+			}
+		}
+		g_free (cDbusAnswer);
+		g_print ("got rule : '%s'\n", cRule);
+		
+		/// gerer le cas ou Compiz n'est pas lance : comment le distinguer d'une regle vide ?...
+		if (cRule == NULL)
+		{
+			cd_warning ("couldn't get Widget Layer rule from Compiz");
+		}
+		
+		// on complete la regle si necessaire.
+		if (cRule == NULL || *cRule == '\0' || (g_strstr_len (cRule, -1, "class=Cairo-dock & type=utility") == NULL && g_strstr_len (cRule, -1, "(class=Cairo-dock) & (type=utility)") == NULL && g_strstr_len (cRule, -1, "name=cairo-dock & type=utility") == NULL))
+		{
+			gchar *cNewRule = (cRule == NULL || *cRule == '\0' ?
+				g_strdup ("(class=Cairo-dock & type=utility)") :
+				g_strdup_printf ("(%s) | (class=Cairo-dock & type=utility)", cRule));
+			g_print ("set rule : %s\n", cNewRule);
+			gchar *cCommand = g_strdup_printf ("dbus-send --print-reply --type=method_call --dest=org.freedesktop.compiz /org/freedesktop/compiz/widget/screen0/match org.freedesktop.compiz.set string:\"%s\"", cNewRule);
+			cairo_dock_launch_command_sync (cCommand);
+			g_free (cCommand);
+			g_free (cNewRule);
+		}
+		g_free (cRule);
+	}
 }
 
 static void _cairo_dock_keep_space (GtkCheckMenuItem *pMenuItem, gpointer *data)

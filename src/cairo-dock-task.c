@@ -45,7 +45,7 @@ static gpointer _cairo_dock_threaded_calculation (CairoDockTask *pTask)
 	g_atomic_int_set (&pTask->iThreadIsRunning, 0);
 	return NULL;
 }
-static gboolean _cairo_dock_check_for_redraw (CairoDockTask *pTask)
+static gboolean _cairo_dock_check_for_update (CairoDockTask *pTask)
 {
 	int iThreadIsRunning = g_atomic_int_get (&pTask->iThreadIsRunning);
 	if (! iThreadIsRunning)  // le thread a fini.
@@ -80,7 +80,7 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 		}
 		
 		if (pTask->iSidTimerUpdate == 0)
-			pTask->iSidTimerUpdate = g_timeout_add (MAX (150, MIN (0.15 * pTask->iPeriod, 333)), (GSourceFunc) _cairo_dock_check_for_redraw, pTask);
+			pTask->iSidTimerUpdate = g_timeout_add (MAX (100, MIN (0.10 * pTask->iPeriod, 333)), (GSourceFunc) _cairo_dock_check_for_update, pTask);
 	}
 }
 

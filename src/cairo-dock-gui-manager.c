@@ -963,7 +963,12 @@ GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, CairoDoc
 				gtk_container_add (GTK_CONTAINER (pLabelContainer), pLabel);
 				gtk_widget_show_all (pLabelContainer);
 			}
-			gtk_notebook_prepend_page (GTK_NOTEBOOK (pNoteBook), pWidget, (pAlign != NULL ? pAlign : pLabel));
+			
+			GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
+			gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+			gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pWidget);
+			
+			gtk_notebook_prepend_page (GTK_NOTEBOOK (pNoteBook), pScrolledWindow, (pAlign != NULL ? pAlign : pLabel));
 			pWidget = pNoteBook;
 		}
 	}

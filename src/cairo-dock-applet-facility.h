@@ -358,7 +358,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 /** The previous Container.
 */
-#define CD_APPLET_MY_OLD_CONTAINER pOldContainer;
+#define CD_APPLET_MY_OLD_CONTAINER pOldContainer
 
 
 //\______________________ clic droit, clic milieu, clic gauche.

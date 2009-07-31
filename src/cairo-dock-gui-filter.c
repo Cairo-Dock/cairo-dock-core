@@ -278,7 +278,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 	
 	int i;
 	GList *gd;
-	gchar *cGettextDomain;
+	const gchar *cGettextDomain;
 	for (gd = pGroupDescriptionList; gd != NULL; gd = gd->next)
 	{
 		pGroupDescription = gd->data;
