@@ -800,8 +800,8 @@ void cairo_dock_set_transition_on_icon (Icon *pIcon, CairoContainer *pContainer,
 	pTransition->pUserData = pUserData;
 	cairo_dock_set_transition (pIcon, pTransition);
 	
-	cairo_dock_register_notification (bFastPace ? CAIRO_DOCK_UPDATE_ICON : CAIRO_DOCK_UPDATE_ICON_SLOW,
-		(CairoDockNotificationFunc) _cairo_dock_transition_step, CAIRO_DOCK_RUN_FIRST, pUserData);
+	cairo_dock_register_notification_on_icon (pIcon, bFastPace ? CAIRO_DOCK_UPDATE_ICON : CAIRO_DOCK_UPDATE_ICON_SLOW,
+		(CairoDockNotificationFunc) _cairo_dock_transition_step, CAIRO_DOCK_RUN_AFTER, pUserData);
 	
 	cairo_dock_launch_animation (pContainer);
 }
@@ -812,7 +812,7 @@ void cairo_dock_remove_transition_on_icon (Icon *pIcon)
 	if (pTransition == NULL)
 		return ;
 	
-	cairo_dock_remove_notification_func (pTransition->bFastPace ? CAIRO_DOCK_UPDATE_ICON : CAIRO_DOCK_UPDATE_ICON_SLOW,
+	cairo_dock_remove_notification_func_on_icon (pIcon, pTransition->bFastPace ? CAIRO_DOCK_UPDATE_ICON : CAIRO_DOCK_UPDATE_ICON_SLOW,
 		(CairoDockNotificationFunc) _cairo_dock_transition_step,
 		pTransition->pUserData);
 

@@ -209,11 +209,12 @@ void cairo_dock_remove_notification_func_on_container (CairoContainer *pContaine
 #define _cairo_dock_notify(pNotificationRecordList, bStop, ...) do {\
 	if (pNotificationRecordList != NULL) {\
 		CairoDockNotificationRecord *pNotificationRecord;\
-		GSList *pElement = pNotificationRecordList;\
+		GSList *pElement = pNotificationRecordList, *pNextElement;\
 		while (pElement != NULL && ! bStop) {\
 			pNotificationRecord = pElement->data;\
+			pNextElement = pElement->next;\
 			bStop = pNotificationRecord->pFunction (pNotificationRecord->pUserData, ##__VA_ARGS__);\
-			pElement = pElement->next; } }\
+			pElement = pNextElement; } }\
 	} while (0)
 
 /** Broadcast a notification.

@@ -690,7 +690,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	if (bUseText && icon->pTextBuffer != NULL && icon->fScale > 1.01 && (! mySystem.bLabelForPointedIconOnly || icon->bPointed))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
 	{
 		cairo_save (pCairoContext);
-		double fOffsetX = -icon->fTextXOffset + icon->fWidthFactor * icon->fWidth * icon->fScale / 2;
+		double fOffsetX = (icon->fWidthFactor * icon->fWidth * icon->fScale - icon->iTextWidth) / 2;
 		if (fOffsetX < - icon->fDrawX)
 			fOffsetX = - icon->fDrawX;
 		else if (icon->fDrawX + fOffsetX + icon->iTextWidth > iWidth)
@@ -839,7 +839,7 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, 
 	if (bUseText && icon->pTextBuffer != NULL)
 	{
 		cairo_save (pCairoContext);
-		double fOffsetX = -icon->fTextXOffset + icon->fWidthFactor * icon->fWidth * icon->fScale * 0.5;
+		double fOffsetX = (icon->fWidthFactor * icon->fWidth * icon->fScale - icon->iTextWidth) / 2;
 		if (fOffsetX < - icon->fDrawX)
 			fOffsetX = - icon->fDrawX;
 		else if (icon->fDrawX + fOffsetX + icon->iTextWidth > iWidth)

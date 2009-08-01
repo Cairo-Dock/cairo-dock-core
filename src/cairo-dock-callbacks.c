@@ -971,6 +971,8 @@ gchar *cairo_dock_launch_command_sync (const gchar *cCommand)
 		g_free (standard_output);
 		return NULL;
 	}
+	if (standard_output[strlen (standard_output) - 1] == '\n')
+		standard_output[strlen (standard_output) - 1] ='\0';
 	return standard_output;
 }
 
