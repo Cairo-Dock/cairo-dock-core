@@ -51,6 +51,12 @@ DBusGProxy *cairo_dock_create_new_system_proxy (const char *name, const char *pa
 */
 gboolean cairo_dock_dbus_detect_application (const gchar *cName);
 
+/** Detect if an application is currently running on the System bus.
+*@param cName name of the application.
+*@return TRUE if the application is running and has a service on the System bus.
+*/
+gboolean cairo_dock_dbus_detect_system_application (const gchar *cName);
+
 
 /** Get the value of a 'boolean' parameter on the bus.
 *@param pDbusProxy proxy to the connection.
@@ -96,11 +102,22 @@ guchar *cairo_dock_dbus_get_uchar (DBusGProxy *pDbusProxy, const gchar *cAccesso
 
 gdouble cairo_dock_dbus_get_double (DBusGProxy *pDbusProxy, const gchar *cAccessor);
 
-/** Call a command on the bus.
+/** Call a command on the bus with no reply.
 *@param pDbusProxy proxy to the connection.
 *@param cCommand name of the commande.
 */
 void cairo_dock_dbus_call (DBusGProxy *pDbusProxy, const gchar *cCommand);
+
+
+
+/** Get properties on bus interface.
+*@param pDbusProxy proxy to the connection.
+*@param cCommand name of the property command.
+*@param cInterface name of the interface.
+*@param cProperty name of the property to get
+*@param vProperties pointer to the returned value  
+*/
+void cairo_dock_dbus_get_properties (DBusGProxy *pDbusProxy, const gchar *cCommand, const gchar *cInterface, const gchar *cProperty, GValue *vProperties );
 
 G_END_DECLS
 #endif
