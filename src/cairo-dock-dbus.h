@@ -10,7 +10,7 @@ G_BEGIN_DECLS
 /**
 *@file cairo-dock-dbus.h This class defines numerous convenient functions to use DBus inside Cairo-Dock.
 * DBus is used to communicate and interact with other running applications.
-*/
+*/ 
 
 /** Get the connection to the 'session' Bus.
 *@return the connection to the bus.
