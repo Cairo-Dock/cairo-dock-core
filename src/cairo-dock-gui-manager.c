@@ -1236,8 +1236,8 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 		NULL);
 	gtk_box_pack_start (GTK_BOX (pMainVBox),
 		pNoteBook,
-		FALSE,
-		FALSE,
+		TRUE,
+		TRUE,
 		0);
 	
 	//\_____________ On ajoute la barre d'etat a la fin.

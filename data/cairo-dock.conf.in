@@ -8,7 +8,7 @@
 #F-[Position on the screen;gtk-fullscreen]
 frame_pos =
 
-#r-[bottom;top;right;left] Choose which screen border the dock will placed on :
+#l-[bottom;top;right;left] Choose which screen border the dock will placed on :
 #{The icons will scroll according to the chosen placement type. Of course the dock can be placed anywhere on the screen, here we specify regarding to what.}
 screen border = 0
 
@@ -264,7 +264,7 @@ config_labels =
 #F-[Files;gtk-file]
 frame_file =
 
-#r-[Name;Size;Date] Sort files by :
+#l-[Name;Size;Date] Sort files by :
 sort files = 0
 
 #b- Show hidden files ?
@@ -513,8 +513,8 @@ force size = false
 #X+[Icons order]
 frame_order =
 
-#T+3[launchers;applications;applets] Order of the different types of icons :
-icon's type order = launchers;applications;applets
+#T+[launchers;applications;applets] Order of the different types of icons :
+icon's type order = 0;1;2
 
 #b+ Allow applets to be placed amongst launchers ?
 #{This parameter will overwrite the previously defined order, to allow you to mix applets and launchers into the dock.}

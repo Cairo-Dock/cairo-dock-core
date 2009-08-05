@@ -42,22 +42,38 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	for (i = 0; i < CAIRO_DOCK_NB_TYPES; i ++)
 		pIcons->tIconTypeOrder[i] = i;
 	gsize length=0;
-	gchar **cIconsTypesList = cairo_dock_get_string_list_key_value (pKeyFile, "Icons", "icon's type order", &bFlushConfFileNeeded, &length, NULL, "Cairo Dock", NULL);
-	if (cIconsTypesList != NULL && length > 0)
+	
+	int iIconsTypesList[3];
+	int iDefaultValues[3] = {0,1,2};
+	cairo_dock_get_integer_list_key_value (pKeyFile, "Icons", "icon's type order", &bFlushConfFileNeeded, iIconsTypesList, 3, iDefaultValues, "Cairo Dock", NULL);
+	if (iIconsTypesList[0] == 0 && iIconsTypesList[1] == 0)  // old format.
 	{
-		unsigned int i, j;
-		for (i = 0; i < length; i ++)
+		gchar **cIconsTypesList = cairo_dock_get_string_list_key_value (pKeyFile, "Icons", "icon's type order", &bFlushConfFileNeeded, &length, NULL, "Cairo Dock", NULL);
+		
+		if (cIconsTypesList != NULL && length > 0)
 		{
-			for (j = 0; j < ((CAIRO_DOCK_NB_TYPES + 1) / 2); j ++)
+			unsigned int i, j;
+			for (i = 0; i < length; i ++)
 			{
-				if (strcmp (cIconsTypesList[i], s_cIconTypeNames[j]) == 0)
+				for (j = 0; j < ((CAIRO_DOCK_NB_TYPES + 1) / 2); j ++)
 				{
-					pIcons->tIconTypeOrder[2*j] = 2 * i;
+					if (strcmp (cIconsTypesList[i], s_cIconTypeNames[j]) == 0)
+					{
+						pIcons->tIconTypeOrder[2*j] = 2 * i;
+					}
 				}
 			}
 		}
+		g_strfreev (cIconsTypesList);
+		
+		iIconsTypesList[0] = pIcons->tIconTypeOrder[2*0];
+		iIconsTypesList[1] = pIcons->tIconTypeOrder[2*1];
+		iIconsTypesList[2] = pIcons->tIconTypeOrder[2*2];
+		g_key_file_set_integer_list (pKeyFile, "Icons", "icon's type order", iIconsTypesList, 3);
+		bFlushConfFileNeeded = TRUE;
 	}
-	g_strfreev (cIconsTypesList);
+	for (i = 0; i < 3; i ++)
+		pIcons->tIconTypeOrder[2*i] = 2*iIconsTypesList[i];
 	
 	pIcons->bMixAppletsAndLaunchers = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "mix applets with launchers", &bFlushConfFileNeeded, FALSE , NULL, NULL);
 	if (pIcons->bMixAppletsAndLaunchers)
@@ -262,6 +278,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	CairoDock *pDock = g_pMainDock;
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
 	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+	gboolean bInsertSeparators = FALSE;
 	
 	gboolean bGroupOrderChanged;
 	if (pPrevIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER] != pIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER] ||
@@ -273,12 +290,14 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		bGroupOrderChanged = FALSE;
 	
 	if (bGroupOrderChanged)
+	{
+		bInsertSeparators = TRUE;  // on enleve les separateurs avant de re-ordonner.
+		cairo_dock_remove_automatic_separators (pDock);
 		pDock->icons = g_list_sort (pDock->icons, (GCompareFunc) cairo_dock_compare_icons_order);
+	}
 	
-	gboolean bInsertSeparators = FALSE;
 	if ((pPrevIcons->bUseSeparator && ! pIcons->bUseSeparator) ||
 		pPrevIcons->cSeparatorImage != pIcons->cSeparatorImage ||
-		bGroupOrderChanged ||
 		pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] ||
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] ||
 		pPrevIcons->fAmplitude != pIcons->fAmplitude)

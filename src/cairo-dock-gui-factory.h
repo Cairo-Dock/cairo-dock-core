@@ -51,59 +51,69 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGBA='C',
 	/// double in an horizontal scale.
 	CAIRO_DOCK_WIDGET_HSCALE_DOUBLE='e',
+	
 	/// list of views.
-	CAIRO_DOCK_WIDGET_VIEW_COMBO='n',
+	CAIRO_DOCK_WIDGET_VIEW_LIST='n',
 	/// list of themes in a combo, with preview and readme.
-	CAIRO_DOCK_WIDGET_THEME_COMBO='h',
+	CAIRO_DOCK_WIDGET_THEME_LIST='h',
 	/// same but with a combo-entry to let the user enter any text.
-	CAIRO_DOCK_WIDGET_THEME_COMBO_ENTRY='H',
+	CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY='H',
 	/// list of user dock themes, with a check button to select several themes.
-	CAIRO_DOCK_WIDGET_USER_THEME_TREE_VIEW='x',
+	CAIRO_DOCK_WIDGET_USER_THEME_SELECTOR='x',
 	/// list of available animations.
-	CAIRO_DOCK_WIDGET_ANIMATION_COMBO='a',
+	CAIRO_DOCK_WIDGET_ANIMATION_LIST='a',
 	/// list of available dialog decorators.
-	CAIRO_DOCK_WIDGET_DIALOG_DECORATOR_COMBO='t',
+	CAIRO_DOCK_WIDGET_DIALOG_DECORATOR_LIST='t',
 	/// list of available desklet decorations.
-	CAIRO_DOCK_WIDGET_DESKLET_DECORATION_COMBO='O',
+	CAIRO_DOCK_WIDGET_DESKLET_DECORATION_LIST='O',
 	/// same but with the 'default' choice too.
-	CAIRO_DOCK_WIDGET_DESKLET_DECORATION_COMBO_WITH_DEFAULT='o',
+	CAIRO_DOCK_WIDGET_DESKLET_DECORATION_LIST_WITH_DEFAULT='o',
 	/// list of gauges themes.
-	CAIRO_DOCK_WIDGET_GAUGE_COMBO='g',
+	CAIRO_DOCK_WIDGET_GAUGE_LIST='g',
 	/// list of existing docks.
-	CAIRO_DOCK_WIDGET_DOCK_COMBO='d',
+	CAIRO_DOCK_WIDGET_DOCK_LIST='d',
 	/// a button to jump to another module inside the config panel.
 	CAIRO_DOCK_WIDGET_JUMP_TO_MODULE='m',
 	/// same but only if the module exists.
 	CAIRO_DOCK_WIDGET_JUMP_TO_MODULE_IF_EXISTS='M',
-	/// an empty GtkContainer, to use by applets that want to build custom widgets.
-	CAIRO_DOCK_WIDGET_EMPTY_WIDGET='_',
-	/// a simple text label.
-	CAIRO_DOCK_WIDGET_TEXT_LABEL='>',
-	/// a text entry or combo.
-	CAIRO_DOCK_WIDGET_STRING_ENTRY_OR_COMBO='s',
+	
+	/// a text entry.
+	CAIRO_DOCK_WIDGET_STRING_ENTRY='s',
 	/// a text entry with a file selector.
 	CAIRO_DOCK_WIDGET_FILE_SELECTOR='S',
-	/// a text entry with a file selector and a 'play' button, for sound files.
-	CAIRO_DOCK_WIDGET_SOUND_SELECTOR='u',
 	/// a text entry with a folder selector.
 	CAIRO_DOCK_WIDGET_FOLDER_SELECTOR='D',
-	/// a tree view, where lines can be added, removed, and moved up and down.
-	CAIRO_DOCK_WIDGET_TREE_VIEW_CONSTANT='T',
-	/// a combo-entry, that is to say a list where one can add a custom choice.
-	CAIRO_DOCK_WIDGET_COMBO_ENTRY='E',
-	/// a como with a preview and a readme.
-	CAIRO_DOCK_WIDGET_COMBO_WITH_README_AND_PREVIEW='R',
+	/// a text entry with a file selector and a 'play' button, for sound files.
+	CAIRO_DOCK_WIDGET_SOUND_SELECTOR='u',
 	/// a text entry with a font selector.
 	CAIRO_DOCK_WIDGET_FONT_SELECTOR='P',
-	/// a combo where the number of the line is used for the choice.
-	CAIRO_DOCK_WIDGET_NUMBERED_COMBO='r',
 	/// a text entry with a shortkey selector.
 	CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR='k',
 	/// a text entry, where text is hidden and the result is encrypted in the .conf file.
 	CAIRO_DOCK_WIDGET_PASSWORD_ENTRY='p',
-	/// a frame. can't be embedded into another frame.
+	
+	/// a text list.
+	CAIRO_DOCK_WIDGET_LIST='L',
+	/// a combo-entry, that is to say a list where one can add a custom choice.
+	CAIRO_DOCK_WIDGET_LIST_WITH_ENTRY='E',
+	/// a combo where the number of the line is used for the choice.
+	CAIRO_DOCK_WIDGET_NUMBERED_LIST='l',
+	/// a tree view, where lines are numbered and can be moved up and down.
+	CAIRO_DOCK_WIDGET_TREE_VIEW_SORT='T',
+	/// a tree view, where lines can be added, removed, and moved up and down.
+	CAIRO_DOCK_WIDGET_TREE_VIEW_SORT_AND_MODIFY='U',
+	/// a tree view, where lines are numbered and can be selected or not.
+	CAIRO_DOCK_WIDGET_TREE_VIEW_MULTI_CHOICE='V',
+	
+	/// an empty GtkContainer, to use by applets that want to build custom widgets.
+	CAIRO_DOCK_WIDGET_EMPTY_WIDGET='_',
+	/// a simple text label.
+	CAIRO_DOCK_WIDGET_TEXT_LABEL='>',
+	/// an horizontal separator.
+	CAIRO_DOCK_WIDGET_SEPARATOR='v',
+	/// a frame. The previous frame will be closed.
 	CAIRO_DOCK_WIDGET_FRAME='F',
-	/// a frame inside an expander. can't be embedded into another frame.
+	/// a frame inside an expander. The previous frame will be closed.
 	CAIRO_DOCK_WIDGET_EXPANDER='X',
 	CAIRO_DOCK_NB_GUI_WIDGETS
 	} CairoDockGUIWidgetType;

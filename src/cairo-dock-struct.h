@@ -363,7 +363,7 @@ typedef struct _CairoDockTheme CairoDockTheme;
 
 /// Nom du repertoire de travail de cairo-dock.
 #define CAIRO_DOCK_DATA_DIR "cairo-dock"
-/// Nom du repertoire des extras utilisateur/themes (jauges, clock, etc).
+/// Nom du repertoire des themes additionnels (jauges, clock, weather, etc).
 #define CAIRO_DOCK_EXTRAS_DIR "extras"
 /// Nom du repertoire des jauges utilisateur/themes.
 #define CAIRO_DOCK_GAUGES_DIR "gauges"
@@ -373,8 +373,6 @@ typedef struct _CairoDockTheme CairoDockTheme;
 #define CAIRO_DOCK_LAUNCHERS_DIR "launchers"
 /// Nom du repertoire des icones locales.
 #define CAIRO_DOCK_LOCAL_ICONS_DIR "icons"
-/// Mot cle representant le repertoire local des icones.
-#define CAIRO_DOCK_LOCAL_THEME_KEYWORD "_LocalTheme_"
 /// Nom du dock principal (le 1er cree).
 #define CAIRO_DOCK_MAIN_DOCK_NAME "_MainDock_"
 /// Nom de la vue par defaut.

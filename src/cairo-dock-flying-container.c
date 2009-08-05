@@ -42,6 +42,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 extern CairoDock *g_pMainDock;
 extern GdkGLConfig* g_pGlConfig;
 extern gchar *g_cCurrentLaunchersPath;
+extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bIndirectRendering;
 extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
@@ -77,10 +78,22 @@ static void _cairo_dock_load_explosion_image (cairo_t *pCairoContext, int iWidth
 	if (s_pExplosionSurface != NULL || s_iExplosionTexture != 0)
 		return ;
 	
-	s_pExplosionSurface = cairo_dock_create_surface_for_icon (CAIRO_DOCK_SHARE_DATA_DIR"/explosion/explosion.png",
-		pCairoContext,
-		iWidth * EXPLOSION_NB_FRAMES,
-		iWidth);
+	gchar *cExplosionFile = g_strdup_printf ("%s/%s", g_cCurrentThemePath, "explosion.png");
+	if (g_file_test (cExplosionFile, G_FILE_TEST_EXISTS))
+	{
+		s_pExplosionSurface = cairo_dock_create_surface_for_icon (cExplosionFile,
+			pCairoContext,
+			iWidth * EXPLOSION_NB_FRAMES,
+			iWidth);
+	}
+	else
+	{
+		s_pExplosionSurface = cairo_dock_create_surface_for_icon (CAIRO_DOCK_SHARE_DATA_DIR"/explosion/explosion.png",
+			pCairoContext,
+			iWidth * EXPLOSION_NB_FRAMES,
+			iWidth);
+	}
+	g_free (cExplosionFile);
 	s_fExplosionWidth = iWidth;
 	s_fExplosionHeight = iWidth;
 	if (s_pExplosionSurface != NULL && g_bUseOpenGL)
