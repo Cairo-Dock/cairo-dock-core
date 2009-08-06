@@ -927,14 +927,14 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	GdkEventKey *pKey,
 	CairoDock *pDock)
 {
-	g_print ("on a appuye sur une touche\n");
+	//g_print ("on a appuye sur une touche\n");
 	if (pKey->type == GDK_KEY_PRESS)
 	{
 		cairo_dock_notify (CAIRO_DOCK_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string);
 	}
 	else if (pKey->type == GDK_KEY_RELEASE)
 	{
-		g_print ("release : pKey->keyval = %d\n", pKey->keyval);
+		//g_print ("release : pKey->keyval = %d\n", pKey->keyval);
 		if ((pKey->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && pKey->keyval == 0)  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
 		{
 			if (pDock->iRefCount == 0)

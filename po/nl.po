@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
-"PO-Revision-Date: 2009-07-25 20:34+0100\n"
+"PO-Revision-Date: 2009-08-04 20:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1074,7 +1074,7 @@ msgstr "Sub-docks animeren wanneer ze verschijnen ?"
 
 #: ../data/messages:177
 msgid "The icons will appear folded on themselves, regarding the alignement point, then will unfold untill they fill the whole dock. Use 0 to not use unfolding, the more it's close to 0, the faster it will be"
-msgstr "De icons zullen zijn opgevouwen, bij het uitlijnpunt zullen ze zich ontvouwen, totdat ze het hele dock vullen. Gebruik 0 als u geen ontvouwen wilt gebruiken, hoe dichter bij 0, hoe sneller het zal gaan"
+msgstr "De iconen zullen zijn opgevouwen, bij het uitlijnpunt zullen ze zich ontvouwen, totdat ze het hele dock vullen. Gebruik 0 als u geen ontvouwen wilt gebruiken, hoe dichter bij 0, hoe sneller het zal gaan"
 
 #: ../data/messages:179
 msgid "Icons' lateral unfolding acceleration :"
@@ -1664,7 +1664,7 @@ msgstr "Knoppen"
 
 #: ../data/messages:501
 msgid "Size of buttons in the info-bubbles (width x height) :"
-msgstr "Grootte van de knoppen in de info-ballonnen (breedt x hoogte) :"
+msgstr "Grootte van de knoppen in de info-ballonnen (breedte x hoogte) :"
 
 #: ../data/messages:503
 #: ../data/messages:507
@@ -2123,7 +2123,7 @@ msgid ""
 "any dock can be displayed with one view, and many views are available (3D, Curve, etc). They are mostly provided by the “dock-rendering” plug-in, so be sure to activate it.\n"
 "Then, go to the “Views” module, and choose the view you want for main dock, and for sub-dock."
 msgstr ""
-"Elk dock kan getoond worden met één weergave, er zijn meerdere weergaves beschikbaar (3D, Curve, etc). Deze zijn over het algemeen beschikbaar via de “dock-rendering” plug-in, let er dus op dat u deze activeert.\n"
+"Elk dock kan getoond worden met één weergave, er zijn meerdere weergaves beschikbaar (3D, Kromming, etc). Deze zijn over het algemeen beschikbaar via de “dock-rendering” plug-in, let er dus op dat u deze activeert.\n"
 "Ga dan naar de “Weergave” module en selecteer de weergave die u wilt voor het hoofd-dock en sub-dock."
 
 #: ../data/messages:737
@@ -2982,7 +2982,7 @@ msgid ""
 msgstr ""
 "v1.6.1 :\n"
 "Cairo-Dock bestaat één jaar ! Om dit te vieren, geven wij u graag :\n"
-" - Opnieuw een nieuwe weergave : Curve !\n"
+" - Opnieuw een nieuwe weergave : Kromming !\n"
 " - Een lang verwacht applet : de desktop Switcher.\n"
 " - Een zeer compleet thema : Brit\n"
 " - Vertalingen in het Italiaans en Chinees.\n"
