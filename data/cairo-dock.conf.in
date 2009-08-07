@@ -1,4 +1,4 @@
-#!en;@VERSION@
+#@VERSION@
 ######## This is the conf file of cairo-dock, released under the GPL.##########
 ######## It is parsed by cairo-dock to automatically generate an appropriate GUI,##########
 ######## so don't mess into it, except if you know what you're doing ! ;-)##########
@@ -56,6 +56,14 @@ frame_auto=
 #b- Activate auto-hide ?
 #{The dock will automatically hide itself outside of the scren when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.}
 auto-hide = false
+
+#b- Automatically quick-hide the dock when a window becomes fullscreen ?
+#{This is only usefull if you don't already use the auto-hide, and if your WM let the dock in front of fullscreen windows (which is rare).}
+auto quick hide = false
+
+#b- Automatically quick-hide the dock when a window becomes maximized ?
+#{This is only usefull if don't already use the auto-hide, and if you don't want to reserve the space for your dock nor let it below the other windows.}
+auto quick hide on max = false
 
 #m[Hidden dock] Configure the dock's appearence when hidden.
 config_hidden = 
@@ -147,14 +155,6 @@ minimize on click = true
 #b- Middle click on an icon closes its relative application ?
 #{In a Firefox's tabs manner.}
 close on middle click = true
-
-#b- Automatically quick-hide the dock when a window becomes fullscreen ?
-#{This is only usefull if you don't already use the auto-hide, and if your WM let the dock in front of fullscreen windows (which is rare).}
-auto quick hide = false
-
-#b- Automatically quick-hide the dock when a window becomes maximized ?
-#{This is only usefull if don't already use the auto-hide, and if you don't want to reserve the space for your dock nor let it below the other windows.}
-auto quick hide on max = false
 
 #b- Signal the applications demanding your attention with a dialog tip ?
 demands attention with dialog = true

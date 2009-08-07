@@ -61,6 +61,7 @@ extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCurrentThemePath;
+extern gchar *g_cCairoDockDataDir;
 
 extern int g_iNbDesktops;
 extern int g_iNbViewportX,g_iNbViewportY ;
@@ -70,12 +71,40 @@ extern gboolean g_bEasterEggs;
 extern gboolean g_bForceCairo;
 
 
+static void _present_help_from_dialog (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog)
+{
+	if (iClickedButton == 0 || iClickedButton == -1)  // click OK or press Enter.
+	{
+		CairoDockModule *pModule = cairo_dock_find_module_from_name ("Help");
+		cairo_dock_build_main_ihm (g_cConfFile, FALSE);
+		cairo_dock_present_module_gui (pModule);
+	}
+}
 static void _cairo_dock_edit_and_reload_conf (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
 
 	GtkWidget *pWindow = cairo_dock_build_main_ihm (g_cConfFile, FALSE);
+	
+	CairoDockModule *pModule = cairo_dock_find_module_from_name ("Help");
+	if (pModule != NULL)
+	{
+		gchar *cHelpHistory = g_strdup_printf ("%s/.help/entered-once", g_cCairoDockDataDir);
+		if (! g_file_test (cHelpHistory, G_FILE_TEST_EXISTS))
+		{
+			Icon *pIcon = cairo_dock_get_dialogless_icon ();
+			cairo_dock_show_dialog_full (_("It seems that you've never entered the help module yet.\nIf you have some difficulty to configure the dock, or if you are willing to customize it,\nthe Help module is here for you !\nDo you want to take a look at it now ?"),
+			pIcon,
+			CAIRO_CONTAINER (g_pMainDock),
+			10e3,
+			CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON,
+			NULL,
+			(CairoDockActionOnAnswerFunc) _present_help_from_dialog,
+			NULL,
+			NULL);
+		}
+	}
 }
 
 static void _cairo_dock_initiate_theme_management (GtkMenuItem *pMenuItem, gpointer *data)
@@ -142,7 +171,7 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 		"<b>Main developer :</b>\n  Fabounet (Fabrice Rey)\n\
 <b>Original idea/first development :</b>\n  Mac Slow\n\
 <b>Applets :</b>\n  Fabounet\n  Necropotame\n  Ctaf\n  ChAnGFu\n  Tofe\n  Paradoxxx_Zero\n\
-<b>Patchs :</b>\n  Special thanks to Augur for his great help with OpenGL\n  Ctaf\n  M.Tasaka\n  Necropotame\n  Robrob\n  Smidgey\n  Tshirtman\n");
+<b>Patchs :</b>\n  Special thanks to Augur for his great help with OpenGL\n  Ctaf\n  M.Tasaka\n  Matttbe\n  Necropotame\n  Robrob\n  Smidgey\n  Tshirtman\n");
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Artwork"),
 		"<b>Themes :</b>\n  Fabounet\n  Chilperik\n  Djoole\n  Glattering\n  Vilraleur\n  Lord Northam\n  Paradoxxx_Zero\n  Coz\n  Benoit2600\n  Nochka85\n\
@@ -150,7 +179,7 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Support"),
 		"<b>Installation script and web hosting :</b>\n  Mav\n\
-<b>Site (cairo-dock.org) :</b>\n  Necropotame\n  Tdey\n\
+<b>Site (cairo-dock.org) :</b>\n  Necropotame\n  Matttbe\n  Tdey\n\
 <b>Suggestions/Comments/Bêta-Testers :</b>\n  AuraHxC\n  Chilperik\n  Cybergoll\n  Damster\n  Djoole\n  Glattering\n  Mav\n  Necropotame\n  Nochka85\n  Ppmt\n  RavanH\n  Rhinopierroce\n  Rom1\n  Sombrero\n  Vilraleur");
 	
 	cairo_dock_config_panel_created ();

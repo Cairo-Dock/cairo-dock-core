@@ -42,9 +42,9 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-position.h"
+#include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-dock-manager.h"
 
@@ -548,7 +548,7 @@ void cairo_dock_deactivate_temporary_auto_hide (void)
 void cairo_dock_stop_quick_hide (void)
 {
 	cd_message ("");
-	if (s_bTemporaryAutoHide && s_bQuickHide && cairo_dock_search_window_on_our_way (myTaskBar.bAutoHideOnMaximized, myTaskBar.bAutoHideOnFullScreen) == NULL)
+	if (s_bTemporaryAutoHide && s_bQuickHide && cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
 	{
 		s_bTemporaryAutoHide = FALSE;
 		g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_stop_quick_hide_one_root_dock, NULL);

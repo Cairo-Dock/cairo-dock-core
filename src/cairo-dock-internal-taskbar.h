@@ -21,8 +21,6 @@ struct _CairoConfigTaskBar {
 	gint iAppliMaxNameLength;
 	gboolean bMinimizeOnClick;
 	gboolean bCloseAppliOnMiddleClick;
-	gboolean bAutoHideOnFullScreen;
-	gboolean bAutoHideOnMaximized;
 	gboolean bHideVisibleApplis;
 	gdouble fVisibleAppliAlpha;
 	gboolean bAppliOnCurrentDesktopOnly;

@@ -1552,10 +1552,9 @@ gchar *cairo_dock_show_demand_and_wait (const gchar *cMessage, Icon *pIcon, Cair
 {
 	//GtkWidget *pWidget = cairo_dock_build_common_interactive_widget_for_dialog ((cInitialAnswer != NULL ? cInitialAnswer : ""), -1, -1);
 	GtkWidget *pWidget = _cairo_dock_make_entry_for_dialog (cInitialAnswer);
-	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
+	const gchar *cIconPath = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON;
 
 	int iClickedButton = cairo_dock_show_dialog_and_wait (cMessage, pIcon, pContainer, 0, cIconPath, pWidget);
-	g_free (cIconPath);
 
 	gchar *cAnswer = (iClickedButton == 0 || iClickedButton == -1 ? g_strdup (gtk_entry_get_text (GTK_ENTRY (pWidget))) : NULL);
 	cd_message ("cAnswer : %s", cAnswer);

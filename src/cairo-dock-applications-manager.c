@@ -44,6 +44,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-position.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-applications-manager.h"
 
 #define CAIRO_DOCK_TASKBAR_CHECK_INTERVAL 200
@@ -404,17 +405,17 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						int data[2] = {iDesktopNumber, GPOINTER_TO_INT (pDock)};
 						g_hash_table_foreach (s_hXWindowTable, (GHFunc) _cairo_dock_hide_show_windows_on_other_desktops, data);
 					}
-					if (cairo_dock_quick_hide_is_activated () && (myTaskBar.bAutoHideOnFullScreen || myTaskBar.bAutoHideOnMaximized))
+					if (cairo_dock_quick_hide_is_activated () && (myAccessibility.bAutoHideOnFullScreen || myAccessibility.bAutoHideOnMaximized))
 					{
-						if (cairo_dock_search_window_on_our_way (myTaskBar.bAutoHideOnMaximized, myTaskBar.bAutoHideOnFullScreen) == NULL)
+						if (cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
 						{
 							cd_message (" => plus aucune fenetre genante");
 							cairo_dock_deactivate_temporary_auto_hide ();
 						}
 					}
-					else if (! cairo_dock_quick_hide_is_activated () && (myTaskBar.bAutoHideOnFullScreen || myTaskBar.bAutoHideOnMaximized))
+					else if (! cairo_dock_quick_hide_is_activated () && (myAccessibility.bAutoHideOnFullScreen || myAccessibility.bAutoHideOnMaximized))
 					{
-						if (cairo_dock_search_window_on_our_way (myTaskBar.bAutoHideOnMaximized, myTaskBar.bAutoHideOnFullScreen) != NULL)
+						if (cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) != NULL)
 						{
 							cd_message (" => une fenetre est genante");
 							cairo_dock_activate_temporary_auto_hide ();
@@ -502,17 +503,17 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 							cairo_dock_appli_stops_demanding_attention (icon);  // ca c'est plus une precaution qu'autre chose.
 						}
 					}
-					if (myTaskBar.bAutoHideOnMaximized || myTaskBar.bAutoHideOnFullScreen)
+					if (myAccessibility.bAutoHideOnMaximized || myAccessibility.bAutoHideOnFullScreen)
 					{
-						if ( ((bIsMaximized && ! bIsHidden && myTaskBar.bAutoHideOnMaximized) || (bIsFullScreen && myTaskBar.bAutoHideOnFullScreen)) && ! cairo_dock_quick_hide_is_activated ())
+						if ( ((bIsMaximized && ! bIsHidden && myAccessibility.bAutoHideOnMaximized) || (bIsFullScreen && myAccessibility.bAutoHideOnFullScreen)) && ! cairo_dock_quick_hide_is_activated ())
 						{
 							cd_message (" => %s devient genante", icon != NULL ? icon->acName : "une fenetre");
 							if (icon != NULL && cairo_dock_window_hovers_dock (&icon->windowGeometry, g_pMainDock))
 								cairo_dock_activate_temporary_auto_hide ();
 						}
-						else if ((! bIsMaximized || ! myTaskBar.bAutoHideOnMaximized || bIsHidden) && (! bIsFullScreen || ! myTaskBar.bAutoHideOnFullScreen) && cairo_dock_quick_hide_is_activated ())
+						else if ((! bIsMaximized || ! myAccessibility.bAutoHideOnMaximized || bIsHidden) && (! bIsFullScreen || ! myAccessibility.bAutoHideOnFullScreen) && cairo_dock_quick_hide_is_activated ())
 						{
-							if (cairo_dock_search_window_on_our_way (myTaskBar.bAutoHideOnMaximized, myTaskBar.bAutoHideOnFullScreen) == NULL)
+							if (cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
 							{
 								cd_message (" => plus aucune fenetre genante");
 								cairo_dock_deactivate_temporary_auto_hide ();
@@ -534,7 +535,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 							
 							/*if (cairo_dock_quick_hide_is_activated ())
 							{
-								if (cairo_dock_search_window_on_our_way (myTaskBar.bAutoHideOnMaximized, myTaskBar.bAutoHideOnFullScreen) == NULL)
+								if (cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
 									cairo_dock_deactivate_temporary_auto_hide ();
 							}*/
 							#ifdef HAVE_XEXTEND
@@ -690,9 +691,9 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 		{
 			cd_message ("cette fenetre (%ld, %s) est trop vieille (%d / %d)", *Xid, icon->acName, icon->iLastCheckTime, iTime);
 			
-			if (cairo_dock_quick_hide_is_activated () && (myTaskBar.bAutoHideOnFullScreen || myTaskBar.bAutoHideOnMaximized))
+			if (cairo_dock_quick_hide_is_activated () && (myAccessibility.bAutoHideOnFullScreen || myAccessibility.bAutoHideOnMaximized))
 			{
-				if (cairo_dock_search_window_on_our_way (myTaskBar.bAutoHideOnMaximized, myTaskBar.bAutoHideOnFullScreen) == NULL)
+				if (cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
 				{
 					cd_message (" => plus aucune fenetre genante");
 					cairo_dock_deactivate_temporary_auto_hide ();
@@ -780,7 +781,7 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 				{
 					cairo_dock_prevent_inhibated_class (icon);
 				}
-				if ((myTaskBar.bAutoHideOnMaximized && icon->bIsMaximized) || (myTaskBar.bAutoHideOnFullScreen && icon->bIsFullScreen))
+				if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen))
 				{
 					if (! cairo_dock_quick_hide_is_activated ())
 					{
@@ -859,7 +860,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 						cairo_dock_update_dock_size (pParentDock);
 				}
 			}
-			if ((myTaskBar.bAutoHideOnMaximized && pIcon->bIsMaximized) || (myTaskBar.bAutoHideOnFullScreen && pIcon->bIsFullScreen))
+			if ((myAccessibility.bAutoHideOnMaximized && pIcon->bIsMaximized) || (myAccessibility.bAutoHideOnFullScreen && pIcon->bIsFullScreen))
 			{
 				if (! cairo_dock_quick_hide_is_activated () && cairo_dock_xwindow_is_on_this_desktop (pIcon->Xid, iDesktopNumber))
 				{

@@ -1638,7 +1638,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					cValue = cDecryptedString;
 				}
 				gtk_entry_set_text (GTK_ENTRY (pOneWidget), cValue);
-				_pack_in_widget_box (pOneWidget);
+				_pack_subwidget (pOneWidget);
 				
 				// on ajoute des boutons qui la rempliront.
 				if (iElementType == CAIRO_DOCK_WIDGET_FILE_SELECTOR || iElementType == CAIRO_DOCK_WIDGET_FOLDER_SELECTOR || iElementType == CAIRO_DOCK_WIDGET_SOUND_SELECTOR)  // on ajoute un selecteur de fichier.

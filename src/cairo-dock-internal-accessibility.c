@@ -16,6 +16,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dialogs.h"
+#include "cairo-dock-applications-manager.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-dock-facility.h"
@@ -39,6 +40,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 	pAccessibility->bReserveSpace = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "reserve space", &bFlushConfFileNeeded, FALSE, "Position", NULL);
 
 	pAccessibility->bAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "auto-hide", &bFlushConfFileNeeded, FALSE, "Position", "auto-hide");
+	pAccessibility->bAutoHideOnFullScreen = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "auto quick hide", &bFlushConfFileNeeded, FALSE, "TaskBar", NULL);
+	pAccessibility->bAutoHideOnMaximized = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "auto quick hide on max", &bFlushConfFileNeeded, FALSE, "TaskBar", NULL);
 	
 	pAccessibility->bPopUp = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "pop-up", &bFlushConfFileNeeded, FALSE, "Position", NULL);
 	pAccessibility->bPopUpOnScreenBorder = ! cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "pop in corner only", &bFlushConfFileNeeded, FALSE, "Position", NULL);
@@ -70,6 +73,16 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 			_append_warning ("The option 'auto-hide' is in conflict with the 'raise on shortcuts' option, it will be ignored");
 			pAccessibility->bAutoHide = FALSE;
 		}
+		if (pAccessibility->bAutoHideOnFullScreen)
+		{
+			_append_warning ("The option 'auto-hide on fullscreen window' is in conflict with the 'raise on shortcuts' option, it will be ignored");
+			pAccessibility->bAutoHideOnFullScreen = FALSE;
+		}
+		if (pAccessibility->bAutoHideOnMaximized)
+		{
+			_append_warning ("The option 'auto-hide on maximized window' is in conflict with the 'raise on shortcuts' option, it will be ignored");
+			pAccessibility->bAutoHideOnMaximized = FALSE;
+		}
 	}
 	
 	if (pAccessibility->bPopUp)
@@ -84,7 +97,33 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 			_append_warning ("The option 'auto-hide' is in conflict with the 'keep the dock below' option, it will be ignored");
 			pAccessibility->bAutoHide = FALSE;
 		}
-	}
+		if (pAccessibility->bAutoHideOnFullScreen)
+		{
+			_append_warning ("The option 'auto-hide on fullscreen window' is in conflict with the 'keep the dock below' option, it will be ignored");
+			pAccessibility->bAutoHideOnFullScreen = FALSE;
+		}
+		if (pAccessibility->bAutoHideOnMaximized)
+		{
+			_append_warning ("The option 'auto-hide on maximized window' is in conflict with the 'keep the dock below' option, it will be ignored");
+			pAccessibility->bAutoHideOnMaximized = FALSE;
+		}
+	}  // par contre on peut avoir reserve space avec auto-hide.
+	
+	
+	
+	if (pAccessibility->bReserveSpace)
+	{
+		if (pAccessibility->bAutoHideOnFullScreen)
+		{
+			cd_warning ("The option 'auto-hide on fullscreen window' is in conflict with the option 'reserve space for dock', it will be ignored");
+			pAccessibility->bAutoHideOnFullScreen = FALSE;
+		}
+		if (pAccessibility->bAutoHideOnMaximized)
+		{
+			cd_warning ("The option 'auto-hide on maximized window' is in conflict with the option 'reserve space for dock', it will be ignored");
+			pAccessibility->bAutoHideOnMaximized = FALSE;
+		}
+	}  // par contre l'auto-hide est une propriete pour chaque dock principal, donc il n'y a pas de redondance avec l'auto-hide de la barre des taches.
 	
 	if (sWarning != NULL)
 	{
@@ -173,6 +212,27 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 			cairo_dock_deactivate_temporary_auto_hide ();
 		else
 			cairo_dock_place_root_dock (pDock);
+		
+		if (pAccessibility->bAutoHideOnFullScreen != pPrevAccessibility->bAutoHideOnFullScreen ||
+			pAccessibility->bAutoHideOnMaximized != pPrevAccessibility->bAutoHideOnMaximized)
+		{
+			if (cairo_dock_search_window_on_our_way (pAccessibility->bAutoHideOnMaximized, pAccessibility->bAutoHideOnFullScreen) == NULL)
+			{
+				if (cairo_dock_quick_hide_is_activated ())
+				{
+					cd_message (" => aucune fenetre n'est desormais genante");
+					cairo_dock_deactivate_temporary_auto_hide ();
+				}
+			}
+			else
+			{
+				if (! cairo_dock_quick_hide_is_activated ())
+				{
+					cd_message (" => une fenetre desormais genante");
+					cairo_dock_activate_temporary_auto_hide ();
+				}
+			}
+		}
 	}
 }
 

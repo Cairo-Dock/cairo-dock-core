@@ -51,12 +51,36 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
+extern gchar *g_cCairoDockDataDir;
 extern short g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
 static GHashTable *s_hModuleTable = NULL;
 static GHashTable *s_hInternalModuleTable = NULL;
 static int s_iMaxOrder = 0;
 static GList *s_AutoLoadedModules = NULL;
+
+static void _entered_help_once (CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile)
+{
+	gchar *cHelpDir = g_strdup_printf ("%s/.help", g_cCairoDockDataDir);
+	gchar *cHelpHistory = g_strdup_printf ("%s/entered-once", cHelpDir);
+	if (! g_file_test (cHelpDir, G_FILE_TEST_EXISTS))
+	{
+		if (g_mkdir (cHelpDir, 7*8*8+7*8+5) != 0)
+		{
+			cd_warning ("couldn't create directory %s", cHelpDir);
+			return;
+		}
+	}
+	if (! g_file_test (cHelpHistory, G_FILE_TEST_EXISTS))
+	{
+		g_file_set_contents (cHelpHistory,
+			"1",
+			-1,
+			NULL);
+	}
+	g_free (cHelpHistory);
+	g_free (cHelpDir);
+}
 
 void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 {
@@ -100,16 +124,18 @@ void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 	pVisitCard->cUserDataDir = g_strdup ("help");
 	pVisitCard->cShareDataDir = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR);
 	pVisitCard->cConfFileName = g_strdup ("help.conf");
-	pVisitCard->cModuleVersion = g_strdup ("0.0.5");
+	pVisitCard->cModuleVersion = g_strdup ("0.0.6");
 	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
 	pVisitCard->cIconFilePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, "help.svg");
 	pVisitCard->iSizeOfConfig = 0;
 	pVisitCard->iSizeOfData = 0;
 	pVisitCard->cDescription = N_("A useful FAQ that contains also a lot of hints.\nLet the mouse over a sentence to make the hint dialog popups.");
 	pHelpModule->pInterface = g_new0 (CairoDockModuleInterface, 1);
+	pHelpModule->pInterface->load_custom_widget = _entered_help_once;
 	g_hash_table_insert (s_hModuleTable, pHelpModule->pVisitCard->cModuleName, pHelpModule);
 	///pHelpModule->cConfFilePath = cairo_dock_check_module_conf_file (pHelpModule->pVisitCard);
 	cairo_dock_activate_module (pHelpModule, NULL);
+	pHelpModule->fLastLoadingTime = time (NULL) + 1e6;
 }
 
 
@@ -1032,7 +1058,7 @@ void cairo_dock_update_module_instance_order (CairoDockModuleInstance *pModuleIn
 */
 CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule, gchar *cConfFilePath)  // prend possession de 'cConfFilePah'.
 {
-	g_return_val_if_fail (pModule != NULL, NULL);  ///  && cConfFilePath != NULL
+	g_return_val_if_fail (pModule != NULL, NULL);
 	cd_message ("%s (%s)", __func__, cConfFilePath);
 	
 	//\____________________ On cree une instance du module.

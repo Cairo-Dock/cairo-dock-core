@@ -17,6 +17,8 @@ G_BEGIN_DECLS
 struct _CairoConfigAccessibility {
 	gboolean bReserveSpace;
 	gboolean bAutoHide;
+	gboolean bAutoHideOnFullScreen;
+	gboolean bAutoHideOnMaximized;
 	gboolean bPopUp;
 	gboolean bPopUpOnScreenBorder;
 	gint iMaxAuthorizedWidth;

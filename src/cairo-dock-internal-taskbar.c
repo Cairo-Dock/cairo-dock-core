@@ -50,8 +50,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	pTaskBar->bMinimizeOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "minimize on click", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
 	pTaskBar->bCloseAppliOnMiddleClick = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "close on middle click", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
 
-	pTaskBar->bAutoHideOnFullScreen = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "auto quick hide", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
-	pTaskBar->bAutoHideOnMaximized = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "auto quick hide on max", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 	pTaskBar->bHideVisibleApplis = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "hide visible", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 	pTaskBar->fVisibleAppliAlpha = cairo_dock_get_double_key_value (pKeyFile, "TaskBar", "visibility alpha", &bFlushConfFileNeeded, .35, "Applications", NULL);  // >0 <=> les fenetres minimisees sont transparentes.
 	if (pTaskBar->bHideVisibleApplis && pTaskBar->fVisibleAppliAlpha < 0)
@@ -104,20 +102,6 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 {
 	CairoDock *pDock = g_pMainDock;
 	
-	if (myAccessibility.bAutoHide || myAccessibility.bPopUp || myAccessibility.bReserveSpace)
-	{
-		if (pTaskBar->bAutoHideOnFullScreen)
-		{
-			cd_warning ("The option 'auto-hide on fullscreen window' is in conflict with the accessibility options, it will be deactivated");
-			pTaskBar->bAutoHideOnFullScreen = FALSE;
-		}
-		if (pTaskBar->bAutoHideOnMaximized)
-		{
-			cd_warning ("The option 'auto-hide on maximized window' is in conflict with the accessibility options, it will be deactivated");
-			pTaskBar->bAutoHideOnMaximized = FALSE;
-		}
-	}
-	
 	gboolean bUpdateSize = FALSE;
 	if (/**pPrevTaskBar->bUniquePid != pTaskBar->bUniquePid ||*/
 		pPrevTaskBar->bGroupAppliByClass != pTaskBar->bGroupAppliByClass ||
@@ -148,26 +132,6 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 	}
 	else
 		gtk_widget_queue_draw (pDock->pWidget);  // pour le fVisibleAlpha
-	
-	if (pTaskBar->bAutoHideOnFullScreen != pPrevTaskBar->bAutoHideOnFullScreen || pTaskBar->bAutoHideOnMaximized != pPrevTaskBar->bAutoHideOnMaximized)
-	{
-		if (cairo_dock_search_window_on_our_way (pTaskBar->bAutoHideOnMaximized, pTaskBar->bAutoHideOnFullScreen) == NULL)
-		{
-			if (cairo_dock_quick_hide_is_activated ())
-			{
-				cd_message (" => aucune fenetre n'est desormais genante");
-				cairo_dock_deactivate_temporary_auto_hide ();
-			}
-		}
-		else
-		{
-			if (! cairo_dock_quick_hide_is_activated ())
-			{
-				cd_message (" => une fenetre desormais genante");
-				cairo_dock_activate_temporary_auto_hide ();
-			}
-		}
-	}
 	
 	if (pPrevTaskBar->bShowAppli != pTaskBar->bShowAppli ||
 		pPrevTaskBar->bGroupAppliByClass != pTaskBar->bGroupAppliByClass)

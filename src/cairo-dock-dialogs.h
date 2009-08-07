@@ -423,13 +423,13 @@ Icon *cairo_dock_get_dialogless_icon (void);
 
 
 /** Pop up a dialog, pointing on "the best icon possible". This allows to display a general message.
-*@param cMessage le message.
-*@param fTimeLength la duree de vie du dialog.
+*@param cMessage the message.
+*@param fTimeLength life time of the dialog, in ms.
 *@return the newly created dialog, visible and with a reference of 1.
 */
 CairoDialog * cairo_dock_show_general_message (const gchar *cMessage, double fTimeLength);
 
-/* Pop up a blocking dialog with a question, pointing on "the best icon possible". This allows to ask a general question.
+/* Pop up a blocking dialog with a question, pointing on "the best icon possible". This allows to ask a general question and freeze the application until the user answers.
 *@param cQuestion the question to ask.
 *@return same #cairo_dock_ask_question_and_wait.
 */

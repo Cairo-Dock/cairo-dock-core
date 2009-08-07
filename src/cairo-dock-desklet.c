@@ -623,7 +623,7 @@ gboolean on_scroll_desklet (GtkWidget* pWidget,
 	GdkEventScroll* pScroll,
 	CairoDesklet *pDesklet)
 {
-	//g_print ("scroll\n");
+	g_print ("scroll\n");
 	if (! (pScroll->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)))
 	{
 		Icon *icon = cairo_dock_find_clicked_icon_in_desklet (pDesklet);
@@ -701,10 +701,10 @@ Icon *cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 			glLoadName(pIcon->iIconTexture);
 			
 			glBegin(GL_QUADS);
-			glVertex3f(x-.5*w, y+.5*h, 0.);
-			glVertex3f(x+.5*w, y+.5*h, 0.);
-			glVertex3f(x+.5*w, y-.5*h, 0.);
-			glVertex3f(x-.5*w, y-.5*h, 0.);
+			glVertex3f(x-w, y+h, 0.);
+			glVertex3f(x+w, y+h, 0.);
+			glVertex3f(x+w, y-h, 0.);
+			glVertex3f(x-w, y-h, 0.);
 			glEnd();
 		}
 		
@@ -723,10 +723,10 @@ Icon *cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 			glLoadName(pIcon->iIconTexture);
 			
 			glBegin(GL_QUADS);
-			glVertex3f(x-.5*w, y+.5*h, 0.);
-			glVertex3f(x+.5*w, y+.5*h, 0.);
-			glVertex3f(x+.5*w, y-.5*h, 0.);
-			glVertex3f(x-.5*w, y-.5*h, 0.);
+			glVertex3f(x-w, y+h, 0.);
+			glVertex3f(x+w, y+h, 0.);
+			glVertex3f(x+w, y-h, 0.);
+			glVertex3f(x-w, y-h, 0.);
 			glEnd();
 		}
 	}
@@ -734,7 +734,7 @@ Icon *cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 	glPopName();
 	
 	hits = glRenderMode (GL_RENDER);
-	
+
 	glMatrixMode (GL_PROJECTION);
 	glPopMatrix ();
 	glMatrixMode(GL_MODELVIEW);
@@ -743,16 +743,29 @@ Icon *cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 	Icon *pFoundIcon = NULL;
 	if (hits != 0)
 	{
-		Icon *pIcon;
-		GList *ic;
 		GLuint id = selectBuf[3];
-		for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
+		Icon *pIcon;
+		
+		pIcon = pDesklet->pIcon;
+		if (pIcon != NULL && pIcon->iIconTexture != 0)
 		{
-			pIcon = ic->data;
 			if (pIcon->iIconTexture == id)
 			{
 				pFoundIcon = pIcon;
-				break ;
+			}
+		}
+		
+		if (pFoundIcon == NULL)
+		{
+			GList *ic;
+			for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
+			{
+				pIcon = ic->data;
+				if (pIcon->iIconTexture == id)
+				{
+					pFoundIcon = pIcon;
+					break ;
+				}
 			}
 		}
 	}
