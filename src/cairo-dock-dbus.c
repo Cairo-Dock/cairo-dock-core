@@ -14,7 +14,8 @@ Written by Adrien Pilleboue (for any bug report, please mail me to adrien.pilleb
 
 static DBusGConnection *s_pSessionConnexion = NULL;
 static DBusGConnection *s_pSystemConnexion = NULL;
-static DBusGProxy *s_pDBusProxy = NULL;
+static DBusGProxy *s_pDBusSessionProxy = NULL;
+static DBusGProxy *s_pDBusSystemProxy = NULL;
 
 
 DBusGConnection *cairo_dock_get_session_connection (void)
@@ -51,25 +52,24 @@ DBusGConnection *cairo_dock_get_system_connection (void)
 
 DBusGProxy *cairo_dock_get_main_proxy (void)
 {
-	if (s_pDBusProxy == NULL)
+	if (s_pDBusSessionProxy == NULL)
 	{
-		s_pDBusProxy = cairo_dock_create_new_session_proxy (DBUS_SERVICE_DBUS,
+		s_pDBusSessionProxy = cairo_dock_create_new_session_proxy (DBUS_SERVICE_DBUS,
 			DBUS_PATH_DBUS,
 			DBUS_INTERFACE_DBUS);
 	}
-	return s_pDBusProxy;
+	return s_pDBusSessionProxy;
 }
 
 DBusGProxy *cairo_dock_get_main_system_proxy (void)
 {
-
-	if (s_pDBusProxy == NULL)
+	if (s_pDBusSystemProxy == NULL)
 	{
-		s_pDBusProxy = cairo_dock_create_new_system_proxy (DBUS_SERVICE_DBUS,
+		s_pDBusSystemProxy = cairo_dock_create_new_system_proxy (DBUS_SERVICE_DBUS,
 			DBUS_PATH_DBUS,
 			DBUS_INTERFACE_DBUS);
 	} 
-	return s_pDBusProxy;
+	return s_pDBusSystemProxy;
 }
 
 void cairo_dock_register_service_name (const gchar *cServiceName)
@@ -119,12 +119,10 @@ DBusGProxy *cairo_dock_create_new_system_proxy (const char *name, const char *pa
 		return NULL;
 }
 
-gboolean cairo_dock_dbus_detect_application (const gchar *cName)
+
+static inline gboolean _dbus_detect_application (const gchar *cName, DBusGProxy *pProxy)
 {
-	cd_message ("");
-	DBusGProxy *pProxy = cairo_dock_get_main_proxy ();
-	if (pProxy == NULL)
-		return FALSE;
+	g_return_val_if_fail (cName != NULL && pProxy != NULL, FALSE);
 	
 	gchar **name_list = NULL;
 	gboolean bPresent = FALSE;
@@ -150,35 +148,18 @@ gboolean cairo_dock_dbus_detect_application (const gchar *cName)
 	return bPresent;
 }
 
+gboolean cairo_dock_dbus_detect_application (const gchar *cName)
+{
+	cd_message ("");
+	DBusGProxy *pProxy = cairo_dock_get_main_proxy ();
+	return _dbus_detect_application (cName, pProxy);
+}
+
 gboolean cairo_dock_dbus_detect_system_application (const gchar *cName)
 {
 	cd_message ("");
 	DBusGProxy *pProxy = cairo_dock_get_main_system_proxy ();
-	if (pProxy == NULL)
-		return FALSE;
-	
-	gchar **name_list = NULL;
-	gboolean bPresent = FALSE;
-	
-	if(dbus_g_proxy_call (pProxy, "ListNames", NULL,
-		G_TYPE_INVALID,
-		G_TYPE_STRV,
-		&name_list,
-		G_TYPE_INVALID))
-	{
-		cd_message ("detection du service %s ...", cName);
-		int i;
-		for (i = 0; name_list[i] != NULL; i ++)
-		{
-			if (strcmp (name_list[i], cName) == 0)
-			{
-				bPresent = TRUE;
-				break;
-			}
-		}
-	}
-	g_strfreev (name_list);
-	return bPresent;
+	return _dbus_detect_application (cName, pProxy);
 }
 
 
@@ -314,24 +295,21 @@ void cairo_dock_dbus_get_properties (DBusGProxy *pDbusProxy, const gchar *cComma
 	GError *erreur=NULL;
 	
 	dbus_g_proxy_call(pDbusProxy, cCommand, &erreur,
-					G_TYPE_STRING, cInterface,
-					G_TYPE_STRING, cProperty,
-					G_TYPE_INVALID,
-					G_TYPE_VALUE, vProperties,
-					G_TYPE_INVALID);
+		G_TYPE_STRING, cInterface,
+		G_TYPE_STRING, cProperty,
+		G_TYPE_INVALID,
+		G_TYPE_VALUE, vProperties,
+		G_TYPE_INVALID);
 					
 	if (erreur != NULL)
 	{
 		cd_warning (erreur->message);
 		g_error_free (erreur);
 	}
-	/*
-	 dbus_g_proxy_call(dbus_proxy_Device_temp, "Get", &erreur,
-					G_TYPE_STRING,"org.freedesktop.NetworkManager.Device",
-					G_TYPE_STRING,"Interface",
-					G_TYPE_INVALID,
-					G_TYPE_VALUE, &vInterface,
-					G_TYPE_INVALID);
-	*/
-	
+	/*dbus_g_proxy_call(dbus_proxy_Device_temp, "Get", &erreur,
+		G_TYPE_STRING,"org.freedesktop.NetworkManager.Device",
+		G_TYPE_STRING,"Interface",
+		G_TYPE_INVALID,
+		G_TYPE_VALUE, &vInterface,
+		G_TYPE_INVALID);*/
 }
