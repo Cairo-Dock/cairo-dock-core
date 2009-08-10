@@ -1117,7 +1117,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	//g_print ("+ %s (%s)\n", __func__, icon ? icon->acName : "no icon");
 	if (icon == NULL)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-	if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick)  // icone de sous-dock a montrer au clic.
+	if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick && ! (iButtonState & GDK_SHIFT_MASK))  // icone de sous-dock a montrer au clic.
 	{
 		cairo_dock_show_subdock (icon, pDock, FALSE);
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
@@ -1460,7 +1460,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		if (pDock->pShapeBitmap != NULL)
 		{
 			gtk_widget_input_shape_combine_mask (pDock->pWidget,
-				(pDock->bAtBottom && pDock->iRefCount == 0 ? pDock->pShapeBitmap : NULL),
+				(pDock->bAtBottom && pDock->iRefCount == 0 && ! pDock->bAutoHide ? pDock->pShapeBitmap : NULL),
 				0,
 				0);
 		}

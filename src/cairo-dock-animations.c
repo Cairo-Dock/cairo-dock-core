@@ -435,13 +435,13 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 	{
 		pDock->bIsShrinkingDown = cairo_dock_shrink_down (pDock);
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
-		bContinue = TRUE;
+		bContinue |= pDock->bIsShrinkingDown;
 	}
 	if (pDock->bIsGrowingUp)
 	{
 		pDock->bIsGrowingUp = cairo_dock_grow_up (pDock);
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
-		bContinue = TRUE;
+		bContinue |= pDock->bIsGrowingUp;
 	}
 	//g_print (" => %d, %d\n", pDock->bIsShrinkingDown, pDock->bIsGrowingUp);
 	

@@ -160,7 +160,7 @@ CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRen
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
 	gtk_window_set_type_hint (GTK_WINDOW (pWindow), g_iWmHint);
 
-	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock");  // GTK renseigne la classe avec la meme valeur.
+	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock");
 	
 	cairo_dock_set_renderer (pDock, cRendererName);
 
@@ -428,6 +428,7 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 			gtk_window_set_keep_above (GTK_WINDOW (pDock->pWidget), FALSE);
 		if (myAccessibility.bPopUp)
 			gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), FALSE);
+		gtk_window_set_title (GTK_WINDOW (pDock->pWidget), "cairo-dock-sub");
 		
 		pDock->bAutoHide = FALSE;
 		double fPrevRatio = pDock->fRatio;
