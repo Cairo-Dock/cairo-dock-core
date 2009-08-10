@@ -45,12 +45,17 @@ DBusGProxy *cairo_dock_create_new_session_proxy (const char *name, const char *p
 */
 DBusGProxy *cairo_dock_create_new_system_proxy (const char *name, const char *path, const char *interface);
 
-/** Detect if an application is currently running.
+/** Detect if an application is currently running on Session bus.
 *@param cName name of the application.
 *@return TRUE if the application is running and has a service on the bus.
 */
 gboolean cairo_dock_dbus_detect_application (const gchar *cName);
 
+/** Detect if an application is currently running on System bus.
+*@param cName name of the application.
+*@return TRUE if the application is running and has a service on the bus.
+*/
+gboolean cairo_dock_dbus_detect_system_application (const gchar *cName);
 
 /** Get the value of a 'boolean' parameter on the bus.
 *@param pDbusProxy proxy to the connection.
@@ -101,6 +106,10 @@ gdouble cairo_dock_dbus_get_double (DBusGProxy *pDbusProxy, const gchar *cAccess
 *@param cCommand name of the commande.
 */
 void cairo_dock_dbus_call (DBusGProxy *pDbusProxy, const gchar *cCommand);
+
+
+void cairo_dock_dbus_get_properties (DBusGProxy *pDbusProxy, const gchar *cCommand, const gchar *cInterface, const gchar *cProperty, GValue *vProperties);
+
 
 G_END_DECLS
 #endif

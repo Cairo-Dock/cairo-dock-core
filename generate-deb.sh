@@ -36,7 +36,7 @@ do
 		export MINIMUM_REQUIREMENTS="-m"
 		export DEB_DIR="deb-lpia"
 		export DEB_PLUGINS_DIR="deb-plug-ins-lpia"
-		export archi=${archi}_light
+		export archi=${archi}_hardy
 		;;
 	*)
 		echo "unexpected argument"
