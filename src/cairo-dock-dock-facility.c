@@ -577,9 +577,8 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 	GList* ic, *pointed_ic;
 	Icon *icon, *prev_icon;
 
-	double fIconWidth = 0.;
-	double fIconWidthReal = 0.;
-	for (ic = pIconList; ic != NULL; ic = ic->next)
+	double offset = 0.;
+	/*for (ic = pIconList; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
 		
@@ -598,9 +597,8 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 	fIconWidth -= myIcons.iIconGap;
 	fIconWidthReal -= myIcons.iIconGap;
 	double offset = (fIconWidth - fIconWidthReal)/2;
-	
 	if (offset)
-		g_print ("offset : %.2f\n", offset);
+		g_print ("offset : %.2f\n", offset);*/
 	
 	GList *pFirstDrawnElement = (pFirstDrawnElementGiven != NULL ? pFirstDrawnElementGiven : pIconList);
 	ic = pFirstDrawnElement;
@@ -626,11 +624,14 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 		icon->fScale = 1 + fMagnitude * myIcons.fAmplitude * sin (icon->fPhase);
 		if (iWidth > 0 && icon->fPersonnalScale != 0)
 		{
+			offset += (icon->fWidth * icon->fScale) * (pointed_ic == NULL ? 1 : -1);
 			if (icon->fPersonnalScale > 0)
 				icon->fScale *= icon->fPersonnalScale;
 			else
 				icon->fScale *= (1 + icon->fPersonnalScale);
+			offset -= (icon->fWidth * icon->fScale) * (pointed_ic == NULL ? 1 : -1);
 		}
+		
 		icon->fY = (bDirectionUp ? iHeight - myBackground.iDockLineWidth - myBackground.iFrameMargin - icon->fScale * icon->fHeight : 0*myBackground.iDockLineWidth + 0*myBackground.iFrameMargin);
 		
 		//\_______________ Si on avait deja defini l'icone pointee, on peut placer l'icone courante par rapport a la precedente.
@@ -666,10 +667,6 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 			icon->bPointed = (x_abs != (int) fFlatDockWidth && x_abs != 0);
 			icon->fX = x_cumulated - (fFlatDockWidth - iWidth) / 2 + (1 - icon->fScale) * (x_abs - x_cumulated + .5*myIcons.iIconGap);
 			icon->fX = fAlign * iWidth + (icon->fX - fAlign * iWidth) * (1. - fFoldingFactor);
-			if (icon->fX > iWidth/2)
-				icon->fX -= offset;
-			else
-				icon->fX += offset;
 			//g_print ("  icone pointee : fX = %.2f (%.2f, %d)\n", icon->fX, x_cumulated, icon->bPointed);
 		}
 		else
@@ -711,7 +708,18 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 		prev_icon->fX = fAlign * iWidth + (prev_icon->fX - fAlign * iWidth) * (1. - fFoldingFactor);
 		//g_print ("  prev_icon->fX : %.2f\n", prev_icon->fX);
 	}
-
+	
+	if (offset != 0)
+	{
+		offset /= 2;
+		//g_print ("offset : %.2f\n", offset);
+		for (ic = pIconList; ic != NULL; ic = ic->next)
+		{
+			icon = ic->data;
+			icon->fX -= offset;
+		}
+	}
+	
 	return pointed_ic->data;
 }
 

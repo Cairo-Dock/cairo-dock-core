@@ -170,7 +170,7 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 		_("Development"),
 		"<b>Main developer :</b>\n  Fabounet (Fabrice Rey)\n\
 <b>Original idea/first development :</b>\n  Mac Slow\n\
-<b>Applets :</b>\n  Fabounet\n  Necropotame\n  Ctaf\n  ChAnGFu\n  Tofe\n  Paradoxxx_Zero\n\
+<b>Applets :</b>\n  Fabounet\n  Necropotame\n  Ctaf\n  ChAnGFu\n  Tofe\n  Paradoxxx_Zero\n  Mav\n  Nochka85\n\
 <b>Patchs :</b>\n  Special thanks to Augur for his great help with OpenGL\n  Ctaf\n  M.Tasaka\n  Matttbe\n  Necropotame\n  Robrob\n  Smidgey\n  Tshirtman\n");
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Artwork"),
@@ -180,6 +180,7 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 		_("Support"),
 		"<b>Installation script and web hosting :</b>\n  Mav\n\
 <b>Site (cairo-dock.org) :</b>\n  Necropotame\n  Matttbe\n  Tdey\n\
+<b>LaunchPad :</b>\n  Matttbe\n  Mav\n\
 <b>Suggestions/Comments/Bêta-Testers :</b>\n  AuraHxC\n  Chilperik\n  Cybergoll\n  Damster\n  Djoole\n  Glattering\n  Mav\n  Necropotame\n  Nochka85\n  Ppmt\n  RavanH\n  Rhinopierroce\n  Rom1\n  Sombrero\n  Vilraleur");
 	
 	cairo_dock_config_panel_created ();

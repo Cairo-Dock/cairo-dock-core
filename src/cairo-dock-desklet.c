@@ -635,7 +635,15 @@ gboolean on_scroll_desklet (GtkWidget* pWidget,
 	return FALSE;
 }
 
-
+gboolean on_unmap_desklet (GtkWidget* pWidget,
+	GdkEvent *pEvent,
+	CairoDesklet *pDesklet)
+{
+	g_print ("unmap\n");
+	if (! cairo_dock_desktop_is_visible())
+		gtk_window_present (GTK_WINDOW (pWidget));
+	return TRUE;
+}
 
 Icon *cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 {
@@ -1186,10 +1194,10 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
 		"leave-notify-event",
 		G_CALLBACK (on_leave_desklet),
 		pDesklet);
-	/*g_signal_connect (G_OBJECT (pWindow),
-		"delete-event",
-		G_CALLBACK (on_delete_desklet),
-		pDesklet);*/
+	g_signal_connect (G_OBJECT (pWindow),
+		"unmap-event",
+		G_CALLBACK (on_unmap_desklet),
+		pDesklet);
 	g_signal_connect (G_OBJECT (pWindow),
 		"scroll-event",
 		G_CALLBACK (on_scroll_desklet),
