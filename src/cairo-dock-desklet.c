@@ -455,7 +455,7 @@ static void _cairo_dock_render_desklet_opengl (CairoDesklet *pDesklet)
 	
 	cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDesklet));
 	
-	cairo_dock_notify_on_container (pDesklet, CAIRO_DOCK_RENDER_DESKLET, pDesklet);
+	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_RENDER_DESKLET, pDesklet);
 	
 	if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
 		gdk_gl_drawable_swap_buffers (pGlDrawable);
@@ -629,7 +629,7 @@ gboolean on_scroll_desklet (GtkWidget* pWidget,
 		Icon *icon = cairo_dock_find_clicked_icon_in_desklet (pDesklet);
 		if (icon != NULL)
 		{
-			cairo_dock_notify (CAIRO_DOCK_SCROLL_ICON, icon, pDesklet, pScroll->direction);
+			cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_SCROLL_ICON, icon, pDesklet, pScroll->direction);
 		}
 	}
 	return FALSE;
@@ -640,9 +640,7 @@ gboolean on_unmap_desklet (GtkWidget* pWidget,
 	CairoDesklet *pDesklet)
 {
 	g_print ("unmap\n");
-	if (! cairo_dock_desktop_is_visible())
-		gtk_window_present (GTK_WINDOW (pWidget));
-	return TRUE;
+	return TRUE;  // stops other handlers from being invoked for the event.
 }
 
 Icon *cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
@@ -695,7 +693,6 @@ Icon *cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 		glTranslatef (-pDesklet->iWidth/2, -pDesklet->iHeight/2, 0.);
 		
 		double x, y, w, h;
-		int numActive = 0;
 		Icon *pIcon;
 		
 		pIcon = pDesklet->pIcon;
@@ -979,7 +976,7 @@ static gboolean on_motion_notify_desklet(GtkWidget *pWidget,
 		pDesklet->iMouseX = pMotion->x;
 		pDesklet->iMouseY = pMotion->y;
 		gboolean bStartAnimation = FALSE;
-		cairo_dock_notify_on_container (pDesklet, CAIRO_DOCK_MOUSE_MOVED, pDesklet, &bStartAnimation);
+		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_MOUSE_MOVED, pDesklet, &bStartAnimation);
 		if (bStartAnimation)
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pDesklet));
 	}
@@ -1292,12 +1289,11 @@ void cairo_dock_free_desklet (CairoDesklet *pDesklet)
 		g_source_remove (pDesklet->iSidWritePosition);
 	if (pDesklet->iSidGrowUp != 0)
 		g_source_remove (pDesklet->iSidGrowUp);
-	cairo_dock_notify (CAIRO_DOCK_STOP_DESKLET, pDesklet);
 	if (pDesklet->iSidGLAnimation != 0)
 		g_source_remove (pDesklet->iSidGLAnimation);
 	if (pDesklet->iSidGradationOnEnter != 0)
 		g_source_remove (pDesklet->iSidGradationOnEnter);
-	cairo_dock_notify (CAIRO_DOCK_STOP_DESKLET, pDesklet);
+	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_STOP_DESKLET, pDesklet);
 	
 	cairo_dock_steal_interactive_widget_from_desklet (pDesklet);
 

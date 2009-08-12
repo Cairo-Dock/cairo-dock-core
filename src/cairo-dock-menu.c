@@ -175,7 +175,7 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Artwork"),
 		"<b>Themes :</b>\n  Fabounet\n  Chilperik\n  Djoole\n  Glattering\n  Vilraleur\n  Lord Northam\n  Paradoxxx_Zero\n  Coz\n  Benoit2600\n  Nochka85\n\
-<b>Translations :</b>\n  Fabounet\n  Ppmt \n  Jiro Kawada (Kawaji)\n  BiAji\n  Mattia Tavernini (Maathias)\n  Peter Thornqvist\n  Yannis Kaskamanidis");
+<b>Translations :</b>\n  Fabounet\n  Ppmt \n  Jiro Kawada (Kawaji)\n  BiAji\n  Mattia Tavernini (Maathias)\n  Peter Thornqvist\n  Yannis Kaskamanidis\n  Eduardo Mucelli\n");
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Support"),
 		"<b>Installation script and web hosting :</b>\n  Mav\n\

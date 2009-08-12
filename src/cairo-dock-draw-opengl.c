@@ -578,7 +578,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		
 		if (! pDock->bHorizontalDock && mySystem.bTextAlwaysHorizontal)
 		{
-			glTranslatef (-icon->fHeight * icon->fScale/2 - (pDock->bDirectionUp ? myLabels.iLabelSize : (pDock->bUseReflect ? myIcons.fReflectSize : 0.)) + icon->iTextWidth / 2 - myLabels.iconTextDescription.iMargin,
+			glTranslatef (-icon->fHeight * icon->fScale/2 - (pDock->bDirectionUp ? myLabels.iLabelSize : (pDock->bUseReflect ? myIcons.fReflectSize : 0.)) + icon->iTextWidth / 2 - myLabels.iconTextDescription.iMargin + 1,
 				(icon->fWidth * icon->fScale + icon->iTextHeight) / 2,
 				0.);
 		}
