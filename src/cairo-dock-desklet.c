@@ -639,7 +639,11 @@ gboolean on_unmap_desklet (GtkWidget* pWidget,
 	GdkEvent *pEvent,
 	CairoDesklet *pDesklet)
 {
-	g_print ("unmap\n");
+	//g_print ("unmap (%d)\n", pDesklet->bAllowMinimize);
+	if (! pDesklet->bAllowMinimize)
+		gtk_window_present (pWidget);
+	else
+		pDesklet->bAllowMinimize = FALSE;
 	return TRUE;  // stops other handlers from being invoked for the event.
 }
 
@@ -1456,6 +1460,7 @@ static gboolean _cairo_dock_set_one_desklet_visibility_to_default (CairoDesklet 
 	}
 	else
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
+	pDesklet->bAllowMinimize = FALSE;
 	
 	return FALSE;
 }

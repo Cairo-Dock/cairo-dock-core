@@ -668,7 +668,7 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
 	
-	g_print ("\nVERIFIER LE CHANGEMENT DE CONTAINER POUR TERMINAL\n\nAINSI QUE LES SEPARATEURS AUTOMATIQUES\n\n");
+	g_print ("\nVERIFIER LE CHANGEMENT DE CONTAINER POUR TERMINAL\n\nAINSI QUE LES SEPARATEURS AUTOMATIQUES\n\nLES SEPARATEURS PHYSIQUES EN MODE VERTICCAL\n\n...ET PENSER A MON CV ^_^");
 	
 	gtk_main ();
 

@@ -536,6 +536,17 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	return FALSE;
 }
 
+
+gboolean on_unmap_dialog (GtkWidget* pWidget,
+	GdkEvent *pEvent,
+	CairoDialog *pDialog)
+{
+	g_print ("unmap\n");
+	gtk_window_present (pWidget);
+	return TRUE;  // stops other handlers from being invoked for the event.
+}
+
+
 static cairo_surface_t *_cairo_dock_load_button_icon (cairo_t *pCairoContext, const gchar *cButtonImage, const gchar *cDefaultButtonImage)
 {
 	//g_print ("%s (%d ; %d)\n", __func__, myDialogs.iDialogButtonWidth, myDialogs.iDialogButtonHeight);
@@ -1077,6 +1088,10 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 			G_CALLBACK (on_leave_dialog),
 			pDialog);
 	}
+	g_signal_connect (G_OBJECT (pDialog->pWidget),
+		"unmap-event",
+		G_CALLBACK (on_unmap_dialog),
+		pDialog);
 
 	cairo_dock_place_dialog (pDialog, pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.
 	

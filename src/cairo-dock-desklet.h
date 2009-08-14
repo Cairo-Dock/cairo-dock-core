@@ -218,6 +218,7 @@ struct _CairoDesklet {
 	gboolean bFixedAttitude;
 	GtkWidget *pInteractiveWidget;
 	gboolean bSpaceReserved;
+	gboolean bAllowMinimize;
 };
 
 /// Definition of a function that runs through all desklets.

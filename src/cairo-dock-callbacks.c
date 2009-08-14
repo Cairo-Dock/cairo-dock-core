@@ -927,7 +927,7 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	GdkEventKey *pKey,
 	CairoDock *pDock)
 {
-	//g_print ("on a appuye sur une touche\n");
+	g_print ("on a appuye sur une touche (%d)\n", pKey->keyval);
 	if (pKey->type == GDK_KEY_PRESS)
 	{
 		cairo_dock_notify (CAIRO_DOCK_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string);
@@ -941,7 +941,7 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 				cairo_dock_write_root_dock_gaps (pDock);
 		}
 	}
-	return FALSE;
+	return TRUE;
 }
 
 gchar *cairo_dock_launch_command_sync (const gchar *cCommand)
