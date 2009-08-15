@@ -607,6 +607,9 @@ int main (int argc, char** argv)
 		}
 	}
 	
+	if (cairo_dock_get_nb_modules () == 0)
+		cairo_dock_show_general_message (_("No plug-in were found.\nTo make the most of Cairo-Dock, please consider installing its plug-ins.\nThey provide a lot of interesting functionnalities, animations, etc,\n that you certainly don't want to miss !"), 0);
+	
 	//\___________________ On affiche le changelog en cas de nouvelle version.
 	gchar *cLastVersionFilePath = g_strdup_printf ("%s/.cairo-dock-last-version", g_cCairoDockDataDir);
 	gboolean bWriteChangeLog;
@@ -668,7 +671,7 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
 	
-	g_print ("\nVERIFIER LE CHANGEMENT DE CONTAINER POUR TERMINAL\n\nAINSI QUE LES SEPARATEURS AUTOMATIQUES\n\nLES SEPARATEURS PHYSIQUES EN MODE VERTICCAL\n\n...ET PENSER A MON CV ^_^");
+	g_print ("\nVERIFIER LE CHANGEMENT DE CONTAINER POUR TERMINAL\n\nAINSI QUE LES SEPARATEURS AUTOMATIQUES\n\nLES SEPARATEURS PHYSIQUES EN MODE VERTICAL");
 	
 	gtk_main ();
 

@@ -45,9 +45,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-container.h"
 #include "cairo-dock-modules.h"
 
-#define CAIRO_DOCK_MODULE_PANEL_WIDTH 700
-#define CAIRO_DOCK_MODULE_PANEL_HEIGHT 450
-
 extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
@@ -1492,4 +1489,10 @@ void cairo_dock_attach_to_another_module (CairoDockVisitCard *pVisitCard, const 
 	
 	pInternalModule->pExternalModules = g_list_prepend (pInternalModule->pExternalModules, pVisitCard->cModuleName);
 	pVisitCard->cInternalModule = cOtherModuleName;
+}
+
+
+int cairo_dock_get_nb_modules (void)
+{
+	return g_hash_table_size (s_hModuleTable);
 }
