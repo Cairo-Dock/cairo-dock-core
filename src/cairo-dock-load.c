@@ -590,15 +590,20 @@ void cairo_dock_load_visible_zone (CairoDock *pDock, gchar *cVisibleZoneImageFil
 	double fVisibleZoneWidth = iVisibleZoneWidth, fVisibleZoneHeight = iVisibleZoneHeight;
 	if (g_pVisibleZoneSurface != NULL)
 		cairo_surface_destroy (g_pVisibleZoneSurface);
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-	g_pVisibleZoneSurface = cairo_dock_load_image (pCairoContext,
-		cVisibleZoneImageFile,
-		&fVisibleZoneWidth,
-		&fVisibleZoneHeight,
-		0.,
-		fVisibleZoneAlpha,
-		FALSE);
-	cairo_destroy (pCairoContext);
+	if (cVisibleZoneImageFile != NULL)
+	{
+		cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+		g_pVisibleZoneSurface = cairo_dock_load_image (pCairoContext,
+			cVisibleZoneImageFile,
+			&fVisibleZoneWidth,
+			&fVisibleZoneHeight,
+			0.,
+			fVisibleZoneAlpha,
+			FALSE);
+		cairo_destroy (pCairoContext);
+	}
+	else
+		g_pVisibleZoneSurface = NULL;
 }
 
 cairo_surface_t *cairo_dock_load_stripes (cairo_t* pSourceContext, int iStripesWidth, int iStripesHeight, double fRotationAngle)

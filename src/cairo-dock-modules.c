@@ -1145,7 +1145,8 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	pInstance->pDesklet = pDesklet;
 	pInstance->pContainer = pContainer;
 	
-	cairo_dock_read_module_config (pKeyFile, pInstance);
+	if (pKeyFile)
+		cairo_dock_read_module_config (pKeyFile, pInstance);
 	
 	gboolean bCanInit = TRUE;
 	if (pDock)

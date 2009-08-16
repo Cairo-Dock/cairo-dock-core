@@ -82,10 +82,13 @@ void cairo_dock_load_desklet_buttons (cairo_t *pSourceContext)
 		cairo_surface_destroy (s_pRotateButtonSurface);
 		s_pRotateButtonSurface = NULL;
 	}
-	s_pRotateButtonSurface = cairo_dock_create_surface_from_image_simple (myDesklets.cRotateButtonImage,
-		pSourceContext,
-		myDesklets.iDeskletButtonSize,
-		myDesklets.iDeskletButtonSize);
+	if (myDesklets.cRotateButtonImage != NULL)
+	{
+		s_pRotateButtonSurface = cairo_dock_create_surface_from_image_simple (myDesklets.cRotateButtonImage,
+			pSourceContext,
+			myDesklets.iDeskletButtonSize,
+			myDesklets.iDeskletButtonSize);
+	}
 	if (s_pRotateButtonSurface == NULL)
 	{
 		s_pRotateButtonSurface = cairo_dock_create_surface_from_image_simple (CAIRO_DOCK_SHARE_DATA_DIR"/rotate-desklet.svg",
@@ -99,10 +102,13 @@ void cairo_dock_load_desklet_buttons (cairo_t *pSourceContext)
 		cairo_surface_destroy (s_pRetachButtonSurface);
 		s_pRetachButtonSurface = NULL;
 	}
-	s_pRetachButtonSurface = cairo_dock_create_surface_from_image_simple (myDesklets.cRetachButtonImage,
-		pSourceContext,
-		myDesklets.iDeskletButtonSize,
-		myDesklets.iDeskletButtonSize);
+	if (myDesklets.cRetachButtonImage != NULL)
+	{
+		s_pRetachButtonSurface = cairo_dock_create_surface_from_image_simple (myDesklets.cRetachButtonImage,
+			pSourceContext,
+			myDesklets.iDeskletButtonSize,
+			myDesklets.iDeskletButtonSize);
+	}
 	if (s_pRetachButtonSurface == NULL)
 	{
 		s_pRetachButtonSurface = cairo_dock_create_surface_from_image_simple (CAIRO_DOCK_SHARE_DATA_DIR"/retach-desklet.svg",
@@ -116,10 +122,13 @@ void cairo_dock_load_desklet_buttons (cairo_t *pSourceContext)
 		cairo_surface_destroy (s_pDepthRotateButtonSurface);
 		s_pDepthRotateButtonSurface = NULL;
 	}
-	s_pDepthRotateButtonSurface = cairo_dock_create_surface_from_image_simple (myDesklets.cDepthRotateButtonImage,
-		pSourceContext,
-		myDesklets.iDeskletButtonSize,
-		myDesklets.iDeskletButtonSize);
+	if (myDesklets.cDepthRotateButtonImage != NULL)
+	{
+		s_pDepthRotateButtonSurface = cairo_dock_create_surface_from_image_simple (myDesklets.cDepthRotateButtonImage,
+			pSourceContext,
+			myDesklets.iDeskletButtonSize,
+			myDesklets.iDeskletButtonSize);
+	}
 	if (s_pDepthRotateButtonSurface == NULL)
 	{
 		s_pDepthRotateButtonSurface = cairo_dock_create_surface_from_image_simple (CAIRO_DOCK_SHARE_DATA_DIR"/depth-rotate-desklet.svg",

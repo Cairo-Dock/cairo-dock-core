@@ -372,13 +372,13 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 				bIsPNG = TRUE;
 			else if (strncmp (buffer+3, "XPM", 3) == 0)
 				bIsXPM = TRUE;
-			cd_debug ("  format : %d;%d;%d", bIsSVG, bIsPNG, bIsXPM);
+			//cd_debug ("  format : %d;%d;%d", bIsSVG, bIsPNG, bIsXPM);
 		}
 		fclose (fd);
 	}
 	if (! bIsSVG && ! bIsPNG && ! bIsXPM)  // sinon en desespoir de cause on se base sur l'extension.
 	{
-		cd_debug ("  on se base sur l'extension en desespoir de cause.");
+		//cd_debug ("  on se base sur l'extension en desespoir de cause.");
 		if (g_str_has_suffix (cImagePath, ".svg"))
 			bIsSVG = TRUE;
 		else if (g_str_has_suffix (cImagePath, ".png"))

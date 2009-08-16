@@ -69,7 +69,7 @@ void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, const gchar *cConfFile
 	
 	if (! g_file_test (cTemplateConfFilePath, G_FILE_TEST_EXISTS))
 	{
-		cd_warning ("Couldn't find any installed conf file");
+		cd_warning ("Couldn't find any installed conf file in %s", cShareDataDirPath);
 	}
 	else
 	{
