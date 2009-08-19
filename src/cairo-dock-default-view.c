@@ -35,7 +35,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-default-view.h"
 
 extern GLuint g_iBackgroundTexture;
-
+extern int g_iScreenWidth[2], g_iScreenHeight[2];
+extern gboolean g_bEasterEggs;
 
 void cd_calculate_max_dock_size_default (CairoDock *pDock)
 {
@@ -46,15 +47,31 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	double fRadius = MIN (myBackground.iDockRadius, (pDock->iDecorationsHeight + myBackground.iDockLineWidth) / 2 - 1);
 	double fExtraWidth = myBackground.iDockLineWidth + 2 * (fRadius + myBackground.iFrameMargin);
 	pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->pFirstDrawnElement, pDock->fFlatDockWidth, 1., fExtraWidth));
-
+	
+	if (g_bEasterEggs && pDock->iRefCount == 0)  // mode panel etendu.
+	{
+		if (pDock->iMaxDockWidth < g_iScreenWidth[pDock->bHorizontalDock])  // alors on etend.
+		{
+			fExtraWidth += (g_iScreenWidth[pDock->bHorizontalDock] - pDock->iMaxDockWidth);
+			pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->pFirstDrawnElement, pDock->fFlatDockWidth, 1., fExtraWidth));  // on pourra optimiser, ce qui nous interesse ici c'est les fXMin/fXMax.
+			g_print ("mode etendu : pDock->iMaxDockWidth : %d\n", pDock->iMaxDockWidth);
+		}
+	}
+	
 	pDock->iMaxDockHeight = (int) ((1 + myIcons.fAmplitude) * pDock->iMaxIconHeight) + myLabels.iLabelSize + myBackground.iDockLineWidth + myBackground.iFrameMargin;
 	//g_print ("myLabels.iLabelSize : %d => %d\n", myLabels.iLabelSize, (int)pDock->iMaxDockHeight);
 
 	pDock->iDecorationsWidth = pDock->iMaxDockWidth;
-
-	pDock->iMinDockWidth = pDock->fFlatDockWidth + fExtraWidth;
 	pDock->iMinDockHeight = pDock->iMaxIconHeight + 2 * myBackground.iFrameMargin + 2 * myBackground.iDockLineWidth;
 	
+	if (g_bEasterEggs && pDock->iRefCount == 0)  // mode panel etendu.
+	{
+		pDock->iMinDockWidth = g_iScreenWidth[pDock->bHorizontalDock];
+	}
+	else
+	{
+		pDock->iMinDockWidth = pDock->fFlatDockWidth + fExtraWidth;
+	}
 	pDock->iMinLeftMargin = fExtraWidth/2;
 	pDock->iMinRightMargin = fExtraWidth/2;
 	Icon *pFirstIcon = cairo_dock_get_first_icon (pDock->icons);
@@ -65,6 +82,7 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 		pDock->iMaxRightMargin = pDock->iMaxDockWidth - (pLastIcon->fXMin + pLastIcon->fWidth);
 	//g_print(" marges min: %d | %d\n marges max: %d | %d\n", pDock->iMinLeftMargin, pDock->iMinRightMargin, pDock->iMaxLeftMargin, pDock->iMaxRightMargin);
 	
+	g_print ("clic area : %.2f\n", fExtraWidth/2);
 	pDock->inputArea.x = fExtraWidth/2;
 	pDock->inputArea.y = 0;
 	pDock->inputArea.width = pDock->iMinDockWidth - fExtraWidth;
@@ -75,20 +93,28 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 {
 	//\____________________ On trace le cadre.
-	double fChangeAxes = 0.5 * (pDock->iCurrentWidth - pDock->iMaxDockWidth);
 	double fLineWidth = myBackground.iDockLineWidth;
 	double fMargin = myBackground.iFrameMargin;
 	double fRadius = (pDock->iDecorationsHeight + fLineWidth - 2 * myBackground.iDockRadius > 0 ? myBackground.iDockRadius : (pDock->iDecorationsHeight + fLineWidth) / 2 - 1);
-	double fDockWidth = cairo_dock_get_current_dock_width_linear (pDock);
-
+	double fExtraWidth = 2 * fRadius + fLineWidth;
+	double fDockWidth;
 	int sens;
 	double fDockOffsetX, fDockOffsetY;  // Offset du coin haut gauche du cadre.
-	Icon *pFirstIcon = cairo_dock_get_first_drawn_icon (pDock);
-	fDockOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX + 0 - fMargin : fRadius + fLineWidth / 2);  // fChangeAxes
-	if (fDockOffsetX - (fRadius + fLineWidth / 2) < 0)
-		fDockOffsetX = fRadius + fLineWidth / 2;
-	if (fDockOffsetX + fDockWidth + (fRadius + fLineWidth / 2) > pDock->iCurrentWidth)
-		fDockWidth = pDock->iCurrentWidth - fDockOffsetX - (fRadius + fLineWidth / 2);
+	if (g_bEasterEggs && pDock->iRefCount == 0)  // mode panel etendu.
+	{
+		fDockWidth = pDock->iCurrentWidth - fExtraWidth;
+		fDockOffsetX = fExtraWidth / 2;
+	}
+	else
+	{
+		fDockWidth = cairo_dock_get_current_dock_width_linear (pDock);
+		Icon *pFirstIcon = cairo_dock_get_first_drawn_icon (pDock);
+		fDockOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX - fMargin : fExtraWidth / 2);
+		if (fDockOffsetX < fExtraWidth / 2)
+			fDockOffsetX = fExtraWidth / 2;
+		if (fDockOffsetX + fDockWidth + fExtraWidth / 2 > pDock->iCurrentWidth)
+			fDockWidth = pDock->iCurrentWidth - fDockOffsetX - fExtraWidth / 2;
+	}
 	if (pDock->bDirectionUp)
 	{
 		sens = 1;
@@ -160,13 +186,20 @@ void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkR
 	fDockOffsetY = (pDock->bDirectionUp ? pDock->iCurrentHeight - pDock->iDecorationsHeight - fLineWidth : fLineWidth);
 	
 	double fRadius = MIN (myBackground.iDockRadius, (pDock->iDecorationsHeight + myBackground.iDockLineWidth) / 2 - 1);
-	Icon *pFirstIcon = cairo_dock_get_first_drawn_icon (pDock);
-	double fOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX + 0 - fMargin : fRadius + fLineWidth / 2);
+	double fOffsetX;
+	if (g_bEasterEggs && pDock->iRefCount == 0)  // mode panel etendu.
+	{
+		fDockOffsetX = fRadius + fLineWidth / 2;
+	}
+	else
+	{
+		Icon *pFirstIcon = cairo_dock_get_first_drawn_icon (pDock);
+		fDockOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX - fMargin : fRadius + fLineWidth / 2);
+	}
 	double fDockWidth = cairo_dock_get_current_dock_width_linear (pDock);
 	double fDeltaXTrapeze = fRadius;
 	cairo_dock_render_decorations_in_frame (pCairoContext, pDock, fDockOffsetY, fOffsetX - fDeltaXTrapeze, fDockWidth + 2*fDeltaXTrapeze);
-
-
+	
 	//\____________________ On dessine la partie du cadre qui va bien.
 	cairo_new_path (pCairoContext);
 
@@ -204,7 +237,6 @@ void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkR
 
 	//\____________________ On dessine les icones impactees.
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-
 
 	GList *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
 	if (pFirstDrawnElement != NULL)
@@ -263,20 +295,30 @@ void cd_render_opengl_default (CairoDock *pDock)
 	double fLineWidth = myBackground.iDockLineWidth;
 	double fMargin = myBackground.iFrameMargin;
 	double fRadius = (pDock->iDecorationsHeight + fLineWidth - 2 * myBackground.iDockRadius > 0 ? myBackground.iDockRadius : (pDock->iDecorationsHeight + fLineWidth) / 2 - 1);
-	double fDockWidth = cairo_dock_get_current_dock_width_linear (pDock);
-	double fFrameHeight = pDock->iDecorationsHeight + fLineWidth/* - 2 * fRadius*/;
+	double fExtraWidth = 2 * fRadius + fLineWidth;
+	double fDockWidth;
+	double fFrameHeight = pDock->iDecorationsHeight + fLineWidth;
 	
 	int sens;
 	double fDockOffsetX, fDockOffsetY;  // Offset du coin haut gauche du cadre.
 	GList *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
 	if (pFirstDrawnElement == NULL)
 		return ;
-	Icon *pFirstIcon = pFirstDrawnElement->data;
-	fDockOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX + 0 - fMargin : fRadius + fLineWidth / 2);
-	if (fDockOffsetX - (fRadius + fLineWidth / 2) < 0)
+	if (g_bEasterEggs && pDock->iRefCount == 0)  // mode panel etendu.
+	{
+		fDockWidth = pDock->iCurrentWidth - fExtraWidth;
 		fDockOffsetX = fRadius + fLineWidth / 2;
-	if (fDockOffsetX + fDockWidth + (fRadius + fLineWidth / 2) > pDock->iCurrentWidth)
-		fDockWidth = pDock->iCurrentWidth - fDockOffsetX - (fRadius + fLineWidth / 2);
+	}
+	else
+	{
+		fDockWidth = cairo_dock_get_current_dock_width_linear (pDock);
+		Icon *pFirstIcon = pFirstDrawnElement->data;
+		fDockOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX + 0 - fMargin : fRadius + fLineWidth / 2);
+		if (fDockOffsetX - (fRadius + fLineWidth / 2) < 0)
+			fDockOffsetX = fRadius + fLineWidth / 2;
+		if (fDockOffsetX + fDockWidth + (fRadius + fLineWidth / 2) > pDock->iCurrentWidth)
+			fDockWidth = pDock->iCurrentWidth - fDockOffsetX - (fRadius + fLineWidth / 2);
+	}
 	
 	if ((pDock->bHorizontalDock && ! pDock->bDirectionUp) || (! pDock->bHorizontalDock && pDock->bDirectionUp))
 		fDockOffsetY = pDock->iCurrentHeight - .5 * fLineWidth;
@@ -293,7 +335,7 @@ void cd_render_opengl_default (CairoDock *pDock)
 	if (! pDock->bHorizontalDock)
 		fDockOffsetX = pDock->iCurrentWidth - fDockOffsetX + fRadius;
 	else
-		fDockOffsetX = fDockOffsetX-fRadius;
+		fDockOffsetX = fDockOffsetX - fRadius;
 	
 	//\_____________ On trace le fond en texturant par des triangles.
 	glPushMatrix ();

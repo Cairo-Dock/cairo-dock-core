@@ -30,7 +30,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-class-manager.h"
 
 extern CairoDock *g_pMainDock;
-extern gboolean g_bEasterEggs;
 
 static GHashTable *s_hClassTable = NULL;
 

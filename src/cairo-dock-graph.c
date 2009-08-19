@@ -148,7 +148,7 @@ void cairo_dock_render_graph (CairoDockGraph *pGraph, cairo_t *pCairoContext)
 }
 
 
-void cairo_dock_render_graph_opengl (CairoDockGraph *pGraph)
+static void cairo_dock_render_graph_opengl (CairoDockGraph *pGraph)
 {
 	g_return_if_fail (pGraph != NULL);
 	
@@ -282,7 +282,7 @@ static cairo_pattern_t *_cairo_dock_create_graph_pattern (CairoDockGraph *pGraph
 	}
 	return pGradationPattern;
 }
-void cairo_dock_load_graph (CairoDockGraph *pGraph, cairo_t *pSourceContext, CairoContainer *pContainer, CairoGraphAttribute *pAttribute)
+static void cairo_dock_load_graph (CairoDockGraph *pGraph, cairo_t *pSourceContext, CairoContainer *pContainer, CairoGraphAttribute *pAttribute)
 {
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
@@ -328,7 +328,7 @@ void cairo_dock_load_graph (CairoDockGraph *pGraph, cairo_t *pSourceContext, Cai
 }
 
 
-void cairo_dock_reload_graph (CairoDockGraph *pGraph, cairo_t *pSourceContext)
+static void cairo_dock_reload_graph (CairoDockGraph *pGraph, cairo_t *pSourceContext)
 {
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
@@ -352,7 +352,7 @@ void cairo_dock_reload_graph (CairoDockGraph *pGraph, cairo_t *pSourceContext)
 }
 
 
-void cairo_dock_free_graph (CairoDockGraph *pGraph)
+static void cairo_dock_free_graph (CairoDockGraph *pGraph)
 {
 	cd_debug ("");
 	if (pGraph == NULL)
@@ -374,24 +374,6 @@ void cairo_dock_free_graph (CairoDockGraph *pGraph)
 	g_free (pGraph);
 }
 
-
-
-void cairo_dock_add_watermark_on_graph (cairo_t *pSourceContext, CairoDockGraph *pGraph, gchar *cImagePath, double fAlpha)
-{
-	/*g_return_if_fail (pGraph != NULL && pGraph->pBackgroundSurface != NULL && cImagePath != NULL);
-	
-	cairo_surface_t *pWatermarkSurface = cairo_dock_create_surface_for_icon (cImagePath, pSourceContext, pGraph->fWidth/2, pGraph->fHeight/2);
-	
-	cairo_t *pCairoContext = cairo_create (pGraph->pBackgroundSurface);
-	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-	
-	cairo_set_source_surface (pCairoContext, pWatermarkSurface, pGraph->fWidth/4, pGraph->fHeight/4);
-	cairo_paint_with_alpha (pCairoContext, fAlpha);
-	
-	cairo_destroy (pCairoContext);
-	
-	cairo_surface_destroy (pWatermarkSurface);*/
-}
 
 
   //////////////////////////////////////////

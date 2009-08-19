@@ -61,7 +61,6 @@ extern double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
 extern cairo_surface_t *g_pDesktopBgSurface;
 extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
-extern gboolean g_bEasterEggs;
 
 
 cairo_t * cairo_dock_create_context_from_container (CairoContainer *pContainer)

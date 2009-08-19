@@ -611,7 +611,7 @@ icon size = 48
 [Desklets]
 
 #O+ Choose a default decoration for all desklets :
-decorations = dark
+decorations = clear
 
 #F+[Personnal decorations;gtk-paste]
 frame_perso =

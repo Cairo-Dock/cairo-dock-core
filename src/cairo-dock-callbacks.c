@@ -1216,7 +1216,7 @@ gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *ic
 
 gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton, CairoDock *pDock)
 {
-	g_print ("+ %s (%d/%d)\n", __func__, pButton->type, pButton->button);
+	//g_print ("+ %s (%d/%d)\n", __func__, pButton->type, pButton->button);
 	if (pDock->bHorizontalDock)  // utile ?
 	{
 		pDock->iMouseX = (int) pButton->x;

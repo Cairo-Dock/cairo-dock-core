@@ -258,7 +258,7 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 		g_propagate_error (erreur, tmp_erreur);
 		return hProvidedTable;
 	}
-	if (cContent == NULL || (g_bEasterEggs && strncmp (cContent, "#CD", 3) != 0))
+	if (cContent == NULL || (g_bEasterEggs && strncmp (cContent, "#CD", 3) != 0))  // avec une connexion wifi etablie sur un operateur auquel on ne s'est pas logue, il peut nous renvoyer des messages au lieu de juste rien. On filtre ca par un entete dedie.
 	{
 		cd_warning ("empty themes list on %s (check that your connection is alive, or retry later)", cServerAdress);
 		g_set_error (erreur, 1, 1, "empty themes list on %s", cServerAdress);

@@ -132,7 +132,7 @@ void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 	g_hash_table_insert (s_hModuleTable, pHelpModule->pVisitCard->cModuleName, pHelpModule);
 	///pHelpModule->cConfFilePath = cairo_dock_check_module_conf_file (pHelpModule->pVisitCard);
 	cairo_dock_activate_module (pHelpModule, NULL);
-	pHelpModule->fLastLoadingTime = time (NULL) + 1e6;
+	pHelpModule->fLastLoadingTime = time (NULL) + 1e6;  // pour ne pas qu'il soit desactive lors d'un reload general, car il n'est pas dans la liste des modules actifs du fichier de conf.
 }
 
 
@@ -279,7 +279,8 @@ static void cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError **
 
 static void cairo_dock_close_module (CairoDockModule *module)
 {
-	g_module_close (module->pModule);
+	if (module->pModule)
+		g_module_close (module->pModule);
 	
 	g_free (module->pInterface);
 	module->pInterface = NULL;
@@ -318,6 +319,15 @@ CairoDockModule * cairo_dock_load_module (gchar *cSoFilePath, GError **erreur)  
 		g_hash_table_insert (s_hModuleTable, pCairoDockModule->pVisitCard->cModuleName, pCairoDockModule);
 
 	return pCairoDockModule;
+}
+
+void cairo_dock_load_manual_module (CairoDockModule *pModule)
+{
+	if (s_hModuleTable != NULL && pModule->pVisitCard != NULL && pModule->pVisitCard->cModuleName != NULL)
+	{
+		pModule->pVisitCard->cDockVersionOnCompilation = g_strdup (CAIRO_DOCK_VERSION);
+		g_hash_table_insert (s_hModuleTable, pModule->pVisitCard->cModuleName, pModule);
+	}
 }
 
 

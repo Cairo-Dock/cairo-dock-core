@@ -45,8 +45,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-application-factory.h"
 
-
-extern gboolean g_bEasterEggs;
 extern CairoDock *g_pMainDock;
 
 static GHashTable *s_hAppliTable = NULL;  // table des PID connus de cairo-dock (affichees ou non dans le dock).

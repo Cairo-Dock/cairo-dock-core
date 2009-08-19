@@ -196,6 +196,8 @@ void cairo_dock_free_visit_card (CairoDockVisitCard *pVisitCard);
 */
 CairoDockModule * cairo_dock_load_module (gchar *cSoFilePath, GError **erreur);
 
+void cairo_dock_load_manual_module (CairoDockModule *pModule);
+
 /** Load all the modules of a given folder.
 *@param cModuleDirPath path to the a folder containing .so files.
 *@param erreur error set if something bad happens.

@@ -8,6 +8,11 @@
 #include <libxml/parser.h>
 G_BEGIN_DECLS
 
+/**
+*@file cairo-dock-gauge.h This class defines the Gauge, which derives from the DataRenderer.
+* All you need to know is the attributes that define a Gauge, the API to use is the common API for DataRenderer, i ncairo-dock-data-renderer.h.
+*/ 
+
 typedef struct {
 	RsvgHandle *pSvgHandle;
 	cairo_surface_t *pSurface;
@@ -34,7 +39,7 @@ typedef struct {
 	gdouble textX, textY;
 	gdouble textWidth, textHeight;
 	gdouble textColor[3];
-} GaugeIndicator2;
+} GaugeIndicator;
 
 typedef struct {
 	CairoDataRenderer dataRenderer;
@@ -53,18 +58,6 @@ struct _CairoGaugeAttribute {
 	gchar *cThemePath;
 };
 
-
-void cairo_dock_xml_open_file2 (const gchar *filePath, const gchar *mainNodeName,xmlDocPtr *xmlDoc,xmlNodePtr *node);
-
-void cairo_dock_render_gauge (Gauge *pGauge, cairo_t *pCairoContext);
-
-void cairo_dock_render_gauge_opengl2 (Gauge *pGauge);
-
-void cairo_dock_reload_gauge (Gauge *pGauge, cairo_t *pSourceContext);
-
-void cairo_dock_free_gauge (Gauge *pGauge);
-
-void cairo_dock_add_watermark_on_gauge (cairo_t *pSourceContext, Gauge *pGauge, gchar *cImagePath, double fAlpha);
 
 Gauge *cairo_dock_new_gauge (void);
 

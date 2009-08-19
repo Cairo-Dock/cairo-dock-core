@@ -67,7 +67,6 @@ extern int g_iNbDesktops;
 extern int g_iNbViewportX,g_iNbViewportY ;
 extern int g_iXScreenWidth[2], g_iXScreenHeight[2];  // change tous les g_iScreen par g_iXScreen le 28/07/2009
 extern gboolean g_bLocked;
-extern gboolean g_bEasterEggs;
 extern gboolean g_bForceCairo;
 
 

@@ -76,7 +76,6 @@ extern cairo_surface_t *g_pDesktopBgSurface;
 extern GLuint g_pGradationTexture[2];
 
 extern gboolean g_bUseOpenGL;
-extern gboolean g_bEasterEggs;
 extern GLuint g_iBackgroundTexture;
 extern GLuint g_iVisibleZoneTexture;
 extern GLuint g_iIndicatorTexture;

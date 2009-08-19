@@ -8,6 +8,11 @@ G_BEGIN_DECLS
 #include <cairo-dock-struct.h>
 #include <cairo-dock-data-renderer.h>
 
+/**
+*@file cairo-dock-graph.h This class defines the Graph, which derives from the DataRenderer.
+* All you need to know is the attributes that define a Graph, the API to use is the common API for DataRenderer, i ncairo-dock-data-renderer.h.
+*/ 
+
 /// Types of graph.
 typedef enum {
 	/// a continuous line.
@@ -55,18 +60,8 @@ typedef struct _CairoDockGraph {
 	gboolean bMixGraphs;
 	} CairoDockGraph;
 
-void cairo_dock_render_graph (CairoDockGraph *pGraph, cairo_t *pCairoContext);
-
-void cairo_dock_reload_graph (CairoDockGraph *pGraph, cairo_t *pSourceContext);
-
-void cairo_dock_load_graph (CairoDockGraph *pGraph, cairo_t *pSourceContext, CairoContainer *pContainer, CairoGraphAttribute *pAttribute);
-
-void cairo_dock_free_graph (CairoDockGraph *pGraph);
 
 CairoDockGraph *cairo_dock_new_graph (void);
-
-
-void cairo_dock_add_watermark_on_graph (cairo_t *pSourceContext, CairoDockGraph *pGraph, gchar *cImagePath, double fAlpha);
 
 
 G_END_DECLS
