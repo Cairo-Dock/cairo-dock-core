@@ -30,13 +30,13 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-background.h"
+#include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-default-view.h"
 
 extern GLuint g_iBackgroundTexture;
-extern int g_iScreenWidth[2], g_iScreenHeight[2];
-extern gboolean g_bEasterEggs;
+extern int g_iScreenWidth[2];
 
 void cd_calculate_max_dock_size_default (CairoDock *pDock)
 {
@@ -48,11 +48,11 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	double fExtraWidth = myBackground.iDockLineWidth + 2 * (fRadius + myBackground.iFrameMargin);
 	pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->pFirstDrawnElement, pDock->fFlatDockWidth, 1., fExtraWidth));
 	
-	if (g_bEasterEggs && pDock->iRefCount == 0)  // mode panel etendu.
+	if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
 	{
-		if (pDock->iMaxDockWidth < g_iScreenWidth[pDock->bHorizontalDock])  // alors on etend.
+		if (pDock->iMaxDockWidth < cairo_dock_get_max_authorized_dock_width (pDock))  // alors on etend.
 		{
-			fExtraWidth += (g_iScreenWidth[pDock->bHorizontalDock] - pDock->iMaxDockWidth);
+			fExtraWidth += (cairo_dock_get_max_authorized_dock_width (pDock) - pDock->iMaxDockWidth);
 			pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->pFirstDrawnElement, pDock->fFlatDockWidth, 1., fExtraWidth));  // on pourra optimiser, ce qui nous interesse ici c'est les fXMin/fXMax.
 			g_print ("mode etendu : pDock->iMaxDockWidth : %d\n", pDock->iMaxDockWidth);
 		}
@@ -64,9 +64,9 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	pDock->iDecorationsWidth = pDock->iMaxDockWidth;
 	pDock->iMinDockHeight = pDock->iMaxIconHeight + 2 * myBackground.iFrameMargin + 2 * myBackground.iDockLineWidth;
 	
-	if (g_bEasterEggs && pDock->iRefCount == 0)  // mode panel etendu.
+	if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
 	{
-		pDock->iMinDockWidth = g_iScreenWidth[pDock->bHorizontalDock];
+		pDock->iMinDockWidth = cairo_dock_get_max_authorized_dock_width (pDock);
 	}
 	else
 	{
@@ -100,7 +100,7 @@ void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 	double fDockWidth;
 	int sens;
 	double fDockOffsetX, fDockOffsetY;  // Offset du coin haut gauche du cadre.
-	if (g_bEasterEggs && pDock->iRefCount == 0)  // mode panel etendu.
+	if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
 	{
 		fDockWidth = pDock->iCurrentWidth - fExtraWidth;
 		fDockOffsetX = fExtraWidth / 2;
@@ -177,7 +177,6 @@ void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkR
 		fDockOffsetY = pArea->y;
 	}
 
-	//cairo_move_to (pCairoContext, fDockOffsetX, fDockOffsetY);
 	if (pDock->bHorizontalDock)
 		cairo_rectangle (pCairoContext, fDockOffsetX, fDockOffsetY, pArea->width, pDock->iDecorationsHeight);
 	else
@@ -187,14 +186,14 @@ void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkR
 	
 	double fRadius = MIN (myBackground.iDockRadius, (pDock->iDecorationsHeight + myBackground.iDockLineWidth) / 2 - 1);
 	double fOffsetX;
-	if (g_bEasterEggs && pDock->iRefCount == 0)  // mode panel etendu.
+	if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
 	{
-		fDockOffsetX = fRadius + fLineWidth / 2;
+		fOffsetX = fRadius + fLineWidth / 2;
 	}
 	else
 	{
 		Icon *pFirstIcon = cairo_dock_get_first_drawn_icon (pDock);
-		fDockOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX - fMargin : fRadius + fLineWidth / 2);
+		fOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX - fMargin : fRadius + fLineWidth / 2);
 	}
 	double fDockWidth = cairo_dock_get_current_dock_width_linear (pDock);
 	double fDeltaXTrapeze = fRadius;
@@ -304,7 +303,7 @@ void cd_render_opengl_default (CairoDock *pDock)
 	GList *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
 	if (pFirstDrawnElement == NULL)
 		return ;
-	if (g_bEasterEggs && pDock->iRefCount == 0)  // mode panel etendu.
+	if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
 	{
 		fDockWidth = pDock->iCurrentWidth - fExtraWidth;
 		fDockOffsetX = fRadius + fLineWidth / 2;

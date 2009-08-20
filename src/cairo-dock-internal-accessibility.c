@@ -47,6 +47,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 	pAccessibility->bPopUpOnScreenBorder = ! cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "pop in corner only", &bFlushConfFileNeeded, FALSE, "Position", NULL);
 	
 	pAccessibility->iMaxAuthorizedWidth = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "max autorized width", &bFlushConfFileNeeded, 0, "Position", NULL);
+	pAccessibility->bExtendedMode = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "extended", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	
 	pAccessibility->cRaiseDockShortcut = cairo_dock_get_string_key_value (pKeyFile, "Accessibility", "raise shortcut", &bFlushConfFileNeeded, NULL, "Position", NULL);
 	
@@ -182,7 +183,8 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 	}
 	
 	//\_______________ Max Size.
-	if (pAccessibility->iMaxAuthorizedWidth != pPrevAccessibility->iMaxAuthorizedWidth)
+	if (pAccessibility->iMaxAuthorizedWidth != pPrevAccessibility->iMaxAuthorizedWidth ||
+		pAccessibility->bExtendedMode != pPrevAccessibility->bExtendedMode)
 	{
 		/// le faire pour tous les docks racine...
 		cairo_dock_update_dock_size (pDock);  // met a jour les icones et le fond aussi.

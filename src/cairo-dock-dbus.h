@@ -57,6 +57,9 @@ gboolean cairo_dock_dbus_detect_application (const gchar *cName);
 */
 gboolean cairo_dock_dbus_detect_system_application (const gchar *cName);
 
+
+gchar **cairo_dock_dbus_get_services (void);
+
 /** Get the value of a 'boolean' parameter on the bus.
 *@param pDbusProxy proxy to the connection.
 *@param cAccessor name of the accessor.

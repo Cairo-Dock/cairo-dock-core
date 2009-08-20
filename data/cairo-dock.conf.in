@@ -42,9 +42,10 @@ num screen = 0
 #F-[Space;gtk-fullscreen]
 frame_size =
 
-#i-[0;9999] Size allowed for the dock :
-#{The dock will automatically resize itself to fit this size. Set it to 0 to make the dock fit the screen's size.}
 max autorized width = 0
+
+#b- Extend the dock to always fill the screen ?
+extended = false
 
 #b- Reserve space at the edge of the screen for the dock ?
 #{This will prevent other windows from overlapping the dock. It has no effect if you defined the 'show/hide' shortcut below, cause then the dock behaves like a menu.}
@@ -108,17 +109,17 @@ lock icons = false
 #F-[Behaviour;gtk-properties]
 frame1 =
 
-#b- Show the current applications in the dock ?
+#b- Show currently opened applications in the dock ?
 #{Cairo-Dock will then replace your taskbar. It is recommanded to remove any other taskbar, and to not force the dock's type to normal.}
 show applications = true
 
 #b- Should the applications with same class be grouped in a sub-dock ?
 #{This allows to group windows in some soft like Gimp, and to have only 1 icon in the main dock.The 1st window will appear in the main dock, and the others will be placed in a container associated with this 1st icon.}
-group by class = false
+group by class = true
 
 #s- 		Except the following classes :
 #{enter the class of the applications, separated by a semi-colon ';'}
-group exception = pidgin;xchat
+group exception = pidgin;xchat;amsn
 
 #b- Only show icons whose window is minimized ?
 hide visible = false
@@ -139,7 +140,7 @@ overwrite xicon = true
 
 #s- 		Except the following classes :
 #{enter the class of the applications, separated by a semi-colon ';'}
-overwrite exception = pidgin;xchat;gimp-2.6
+overwrite exception = pidgin;xchat;amsn;gimp-2.6
 
 #b- Show a window thumbnail when it's minimized ?
 #{You need a composite manager for it.}
@@ -156,7 +157,7 @@ minimize on click = true
 #{In a Firefox's tabs manner.}
 close on middle click = true
 
-#b- Signal the applications demanding your attention with a dialog tip ?
+#b- Signal the applications demanding your attention with a dialog bubble ?
 demands attention with dialog = true
 
 #i-[1;20] Duration of the dialog :
@@ -165,7 +166,7 @@ duration = 2
 
 #s- Force the following applications to demand your attention ?
 #{It will notify you even if, for instance, you're watching a video in fullscreen.}
-force demands attention = pidgin;xchat
+force demands attention = pidgin;xchat;amsn
 
 #a- Signal the applications demanding your attention with an animation ?
 animation on demands attention = fire

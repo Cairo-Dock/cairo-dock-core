@@ -26,7 +26,7 @@ DBusGConnection *cairo_dock_get_session_connection (void)
 		s_pSessionConnexion = dbus_g_bus_get (DBUS_BUS_SESSION, &erreur);
 		if (erreur != NULL)
 		{
-			cd_warning ("Attention : %s", erreur->message);
+			cd_warning (erreur->message);
 			g_error_free (erreur);
 			s_pSessionConnexion = NULL;
 		}
@@ -42,7 +42,7 @@ DBusGConnection *cairo_dock_get_system_connection (void)
 		s_pSystemConnexion = dbus_g_bus_get (DBUS_BUS_SYSTEM, &erreur);
 		if (erreur != NULL)
 		{
-			cd_warning ("Attention : %s", erreur->message);
+			cd_warning (erreur->message);
 			g_error_free (erreur);
 			s_pSystemConnexion = NULL;
 		}
@@ -150,18 +150,32 @@ static inline gboolean _dbus_detect_application (const gchar *cName, DBusGProxy 
 
 gboolean cairo_dock_dbus_detect_application (const gchar *cName)
 {
-	cd_message ("");
+	cd_message ("%s (%s)", __func__, cName);
 	DBusGProxy *pProxy = cairo_dock_get_main_proxy ();
 	return _dbus_detect_application (cName, pProxy);
 }
 
 gboolean cairo_dock_dbus_detect_system_application (const gchar *cName)
 {
-	cd_message ("");
+	cd_message ("%s (%s)", __func__, cName);
 	DBusGProxy *pProxy = cairo_dock_get_main_system_proxy ();
 	return _dbus_detect_application (cName, pProxy);
 }
 
+
+gchar **cairo_dock_dbus_get_services (void)
+{
+	DBusGProxy *pProxy = cairo_dock_get_main_proxy ();
+	gchar **name_list = NULL;
+	if(dbus_g_proxy_call (pProxy, "ListNames", NULL,
+		G_TYPE_INVALID,
+		G_TYPE_STRV,
+		&name_list,
+		G_TYPE_INVALID))
+		return name_list;
+	else
+		return NULL;
+}
 
 
 
