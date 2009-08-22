@@ -6,7 +6,7 @@
 #F[Choose a theme]
 frame1=
 
-#h[@prefix@/@DATADIRNAME@/@PACKAGE@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes] Choose one of the available themes :/
+#R[@prefix@/@DATADIRNAME@/@PACKAGE@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes] Choose one of the available themes :/
 chosen theme = 
 
 #S ... or drag and drop a theme package here :

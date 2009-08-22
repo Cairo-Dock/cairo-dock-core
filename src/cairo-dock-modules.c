@@ -1208,7 +1208,7 @@ void cairo_dock_free_module_instance (CairoDockModuleInstance *pInstance)
 }
 
 /*
-* Stoppe une instance d'un module.
+* Stoppe une instance d'un module en vue de la detruire.
 */
 void cairo_dock_stop_module_instance (CairoDockModuleInstance *pInstance)
 {

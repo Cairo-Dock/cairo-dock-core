@@ -605,7 +605,7 @@ button_cancel image =
 #F+
 fin_button =
 
-#i+[10;96] Size of the icon displayed next to the text :
+#i+[16;96] Size of the icon displayed next to the text :
 icon size = 48
 
 

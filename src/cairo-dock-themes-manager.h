@@ -33,6 +33,10 @@ struct _CairoDockTheme {
 	gchar *cDisplayedName;
 	/// type of theme : installed, user, distant.
 	CairoDockThemeType iType;
+	/// rating of the theme, between 1 and 5.
+	gint iRating;
+	/// gint sobriety/simplicity of the theme, between 1 and 5.
+	gint iSobriety;
 };
 
 /** Destroy a theme and free all its allocated memory.

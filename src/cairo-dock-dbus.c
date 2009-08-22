@@ -87,6 +87,7 @@ void cairo_dock_register_service_name (const gchar *cServiceName)
 	}
 }
 
+
 gboolean cairo_dock_bdus_is_enabled (void)
 {
 	return (cairo_dock_get_session_connection () != NULL && cairo_dock_get_system_connection () != NULL);

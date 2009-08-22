@@ -589,7 +589,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		else
 		{
 			glTranslatef ((pDock->bDirectionUp ? -.5:.5) * (icon->fHeight * icon->fScale + icon->iTextHeight),
-				0.,
+				fOffsetX,
 				0.);
 			glRotatef (pDock->bDirectionUp ? 90 : -90, 0., 0., 1.);
 		}

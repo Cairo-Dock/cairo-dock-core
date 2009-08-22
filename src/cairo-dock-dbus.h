@@ -18,6 +18,10 @@ G_BEGIN_DECLS
 DBusGConnection *cairo_dock_get_session_connection (void);
 #define cairo_dock_get_dbus_connection cairo_dock_get_session_connection
 
+DBusGProxy *cairo_dock_get_main_proxy (void);
+
+DBusGProxy *cairo_dock_get_main_system_proxy (void);
+
 /**Register a new service on the bus.
 *@param cServiceName name of the service.
 */

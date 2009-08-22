@@ -181,6 +181,20 @@ void cairo_dock_unload_desklet_buttons_texture (void)
 	}
 }
 
+static inline double _compute_zoom_for_rotation (CairoDesklet *pDesklet)
+{
+	double w = pDesklet->iWidth/2, h = pDesklet->iHeight/2;
+	double alpha = atan2 (h, w);
+	double theta = fabs (pDesklet->fRotation);
+	if (theta > G_PI/2)
+		theta -= G_PI/2;
+	
+	double d = sqrt (w * w + h * h);
+	double xmax = d * MAX (fabs (cos (alpha + theta)), fabs (cos (alpha - theta)));
+	double ymax = d * MAX (fabs (sin (alpha + theta)), fabs (sin (alpha - theta)));
+	double fZoom = MIN (w / xmax, h / ymax);
+	return fZoom;
+}
 
 static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *area)
 {
@@ -240,15 +254,7 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 	
 	if (pDesklet->fRotation != 0)
 	{
-		double alpha = atan2 (pDesklet->iHeight, pDesklet->iWidth);
-		double theta = fabs (pDesklet->fRotation);
-		if (theta > G_PI/2)
-			theta -= G_PI/2;
-		double fZoomX, fZoomY;
-		double d = .5 * sqrt (pDesklet->iWidth * pDesklet->iWidth + pDesklet->iHeight * pDesklet->iHeight);
-		fZoomX = fabs (.5 * pDesklet->iWidth / (d * sin (alpha + theta)));
-		fZoomY = fabs (.5 * pDesklet->iHeight / (d * cos (alpha - theta)));
-		//g_print ("d = %.2f ; alpha = %.2f ; zoom : %.2fx%.2f\n", d, alpha/G_PI*180., fZoomX, fZoomY);
+		double fZoom = _compute_zoom_for_rotation (pDesklet);
 		
 		cairo_translate (pCairoContext,
 			.5*pDesklet->iWidth,
@@ -256,7 +262,7 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 		
 		cairo_rotate (pCairoContext, pDesklet->fRotation);
 		
-		cairo_scale (pCairoContext, fZoomX, fZoomY);
+		cairo_scale (pCairoContext, fZoom, fZoom);
 		
 		cairo_translate (pCairoContext,
 			-.5*pDesklet->iWidth,
@@ -334,17 +340,8 @@ static inline void _cairo_dock_set_desklet_matrix (CairoDesklet *pDesklet)
 	
 	if (pDesklet->fRotation != 0)
 	{
-		double alpha = atan2 (pDesklet->iHeight, pDesklet->iWidth);
-		double theta = fabs (pDesklet->fRotation);
-		if (theta > G_PI/2)
-			theta -= G_PI/2;
-		double fZoomX, fZoomY;
-		double d = .5 * sqrt (pDesklet->iWidth * pDesklet->iWidth + pDesklet->iHeight * pDesklet->iHeight);
-		fZoomX = fabs (.5 * pDesklet->iHeight / (d * sin (alpha + theta)));
-		fZoomY = fabs (.5 * pDesklet->iWidth / (d * cos (alpha - theta)));
-		//g_print ("d = %.2f ; alpha = %.2f ; zoom : %.2fx%.2f\n", d, alpha/G_PI*180., fZoomX, fZoomY);
-		
-		glScalef (fZoomX, fZoomY, 1.);
+		double fZoom = _compute_zoom_for_rotation (pDesklet);
+		glScalef (fZoom, fZoom, 1.);
 		glRotatef (- pDesklet->fRotation / G_PI * 180., 0., 0., 1.);
 	}
 	
@@ -650,7 +647,7 @@ gboolean on_unmap_desklet (GtkWidget* pWidget,
 {
 	//g_print ("unmap (%d)\n", pDesklet->bAllowMinimize);
 	if (! pDesklet->bAllowMinimize)
-		gtk_window_present (pWidget);
+		gtk_window_present (GTK_WINDOW (pWidget));
 	else
 		pDesklet->bAllowMinimize = FALSE;
 	return TRUE;  // stops other handlers from being invoked for the event.
@@ -697,7 +694,12 @@ Icon *cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 	glPolygonMode (GL_FRONT, GL_FILL);
 	glColor4f (1., 1., 1., 1.);
 	
-	if (pDesklet->pRenderer && pDesklet->pRenderer->render_bounding_box != NULL)
+	pDesklet->iPickedObject = 0;
+	if (pDesklet->render_bounding_box != NULL)  // surclasse la fonction du moteur de rendu.
+	{
+		pDesklet->render_bounding_box (pDesklet);
+	}
+	else if (pDesklet->pRenderer && pDesklet->pRenderer->render_bounding_box != NULL)
 	{
 		pDesklet->pRenderer->render_bounding_box (pDesklet);
 	}
@@ -764,25 +766,34 @@ Icon *cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 		GLuint id = selectBuf[3];
 		Icon *pIcon;
 		
-		pIcon = pDesklet->pIcon;
-		if (pIcon != NULL && pIcon->iIconTexture != 0)
+		if (pDesklet->render_bounding_box != NULL)
 		{
-			if (pIcon->iIconTexture == id)
-			{
-				pFoundIcon = pIcon;
-			}
+			pDesklet->iPickedObject = id;
+			g_print ("iPickedObject <- %d\n", id);
+			pFoundIcon = pDesklet->pIcon;  // il faut mettre qqch, sinon la notification est filtree par la macro CD_APPLET_ON_CLICK_BEGIN.
 		}
-		
-		if (pFoundIcon == NULL)
+		else
 		{
-			GList *ic;
-			for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
+			pIcon = pDesklet->pIcon;
+			if (pIcon != NULL && pIcon->iIconTexture != 0)
 			{
-				pIcon = ic->data;
 				if (pIcon->iIconTexture == id)
 				{
 					pFoundIcon = pIcon;
-					break ;
+				}
+			}
+			
+			if (pFoundIcon == NULL)
+			{
+				GList *ic;
+				for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
+				{
+					pIcon = ic->data;
+					if (pIcon->iIconTexture == id)
+					{
+						pFoundIcon = pIcon;
+						break ;
+					}
 				}
 			}
 		}
@@ -795,14 +806,35 @@ Icon *cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 
 Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet)
 {
-	//g_print (" clic en (%d;%d) (rotations : %.2frad; %.2frad)\n", pDesklet->iMouseX, pDesklet->iMouseY, pDesklet->fDepthRotationX, pDesklet->fDepthRotationY);
-	
 	if (g_bUseOpenGL && pDesklet->pRenderer && pDesklet->pRenderer->render_opengl)
 	{
 		return cairo_dock_pick_icon_on_opengl_desklet (pDesklet);
 	}
 	
 	int iMouseX = pDesklet->iMouseX, iMouseY = pDesklet->iMouseY;
+	if (pDesklet->fRotation != 0)
+	{
+		g_print (" clic en (%d;%d) rotations : %.2frad\n", iMouseX, iMouseY, pDesklet->fRotation);
+		double x, y;  // par rapport au centre du desklet.
+		x = iMouseX - pDesklet->iWidth/2;
+		y = pDesklet->iHeight/2 - iMouseY;
+		
+		double r, t;  // coordonnees polaires.
+		r = sqrt (x*x + y*y);
+		t = atan2 (y, x);
+		
+		double z = _compute_zoom_for_rotation (pDesklet);
+		r /= z;
+		
+		x = r * cos (t + pDesklet->fRotation);  // la rotation de cairo est dans le sene horaire.
+		y = r * sin (t + pDesklet->fRotation);
+		
+		iMouseX = x + pDesklet->iWidth/2;
+		iMouseY = pDesklet->iHeight/2 - y;
+		g_print (" => (%d;%d)\n", iMouseX, iMouseY);
+	}
+	pDesklet->iMouseX2d = iMouseX;
+	pDesklet->iMouseY2d = iMouseY;
 	
 	Icon *icon = pDesklet->pIcon;
 	g_return_val_if_fail (icon != NULL, NULL);  // peut arriver au tout debut, car on associe l'icone au desklet _apres_ l'avoir cree, et on fait tourner la gtk_main entre-temps (pour le redessiner invisible).
@@ -1131,19 +1163,6 @@ static gboolean on_leave_desklet (GtkWidget* pWidget,
 	return FALSE;
 }
 
-/*gboolean on_delete_desklet (GtkWidget *pWidget, GdkEvent *event, CairoDesklet *pDesklet)
-{
-	if (pDesklet->pIcon->pModuleInstance != NULL)
-	{
-		cairo_dock_update_conf_file (pDesklet->pIcon->pModuleInstance->cConfFilePath,
-			G_TYPE_BOOLEAN, "Desklet", "initially detached", FALSE,
-			G_TYPE_INVALID);
-
-		cairo_dock_reload_module_instance (pDesklet->pIcon->pModuleInstance, TRUE);
-	}
-	return TRUE;
-}*/
-
 
 CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWidget, CairoDeskletAccessibility iAccessibility)
 {
@@ -1362,7 +1381,6 @@ void cairo_dock_add_interactive_widget_to_desklet_full (GtkWidget *pInteractiveW
 	gtk_box_pack_start (GTK_BOX (pHBox), pInteractiveWidget, TRUE, TRUE, 0);
 	pDesklet->pInteractiveWidget = pInteractiveWidget;
 	
-	iRightMargin=25;
 	if (iRightMargin != 0)
 	{
 		GtkWidget *pMarginBox = gtk_vbox_new (FALSE, 0);

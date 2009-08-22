@@ -27,8 +27,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-themes-manager.h"
 
 #define CAIRO_DOCK_MODIFIED_THEME_FILE ".cairo-dock-need-save"
-#define CAIRO_DOCK_THEME_PANEL_WIDTH 850
-#define CAIRO_DOCK_THEME_PANEL_HEIGHT 400
+#define CAIRO_DOCK_THEME_PANEL_WIDTH 1000
+#define CAIRO_DOCK_THEME_PANEL_HEIGHT 500
 #define CAIRO_DOCK_THEME_SERVER "http://themes.cairo-dock.org"
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"
 #define CAIRO_DOCK_PREFIX_NET_THEME "(Net)   "
@@ -258,7 +258,7 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 		g_propagate_error (erreur, tmp_erreur);
 		return hProvidedTable;
 	}
-	if (cContent == NULL || (g_bEasterEggs && strncmp (cContent, "#CD", 3) != 0))  // avec une connexion wifi etablie sur un operateur auquel on ne s'est pas logue, il peut nous renvoyer des messages au lieu de juste rien. On filtre ca par un entete dedie.
+	if (cContent == NULL || strncmp (cContent, "#!CD", 4) != 0)  // avec une connexion wifi etablie sur un operateur auquel on ne s'est pas logue, il peut nous renvoyer des messages au lieu de juste rien. On filtre ca par un entete dedie.
 	{
 		cd_warning ("empty themes list on %s (check that your connection is alive, or retry later)", cServerAdress);
 		g_set_error (erreur, 1, 1, "empty themes list on %s", cServerAdress);
@@ -273,7 +273,7 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 	
 	int i;
 	gboolean bFirstComment = FALSE;
-	gchar *cThemeName;
+	gchar *cThemeName, *str, *str2;
 	CairoDockTheme *pTheme = NULL;
 	for (i = 0; cNetThemesList[i] != NULL; i ++)
 	{
@@ -282,9 +282,37 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 		{
 			if (*cThemeName == '#' && bFirstComment && pTheme != NULL)
 			{
-				cd_debug ("+ commentaire : %s", cThemeName+1);
-				pTheme->fSize = g_ascii_strtod (cThemeName+1, NULL);
-				pTheme->cAuthor = g_strdup (strchr (cThemeName, ' '));
+				str = cThemeName+1;
+				while (*str == '#')
+					str ++;
+				if (*str == '\0')
+				{
+					g_free (cThemeName);
+					continue;
+				}
+				cd_debug ("+ commentaire : %s", str);
+				
+				pTheme->fSize = g_ascii_strtod (str, NULL);
+				
+				while (*str != ' ' && *str != ';' && *str != '\0')
+					str ++;
+				if (*str != '\0')
+				{
+					str2 = strchr (str, ';');
+					if (str2)
+						*str2 = '\0';
+					pTheme->cAuthor = g_strdup (str);
+					if (str2)
+					{
+						str = str2 + 1;
+						pTheme->iRating = atoi (str);
+						str = strchr (str, ';');
+						if (str)
+							pTheme->iSobriety = atoi (str+1);
+						g_print (" iRating : %d; iSobriety : %d\n", pTheme->iRating, pTheme->iSobriety);
+					}
+				}
+				
 				gchar *cDisplayedName = g_strdup_printf ("%s by %s [%.2f MB]", pTheme->cDisplayedName, (pTheme->cAuthor ? pTheme->cAuthor : "---"), pTheme->fSize);
 				g_free (pTheme->cDisplayedName);
 				pTheme->cDisplayedName = cDisplayedName;

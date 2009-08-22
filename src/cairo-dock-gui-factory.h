@@ -60,6 +60,8 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY='H',
 	/// list of user dock themes, with a check button to select several themes.
 	CAIRO_DOCK_WIDGET_USER_THEME_SELECTOR='x',
+	/// list of dock themes, sortable by name, rating, and sobriety.
+	CAIRO_DOCK_WIDGET_THEME_SELECTOR='R',
 	/// list of available animations.
 	CAIRO_DOCK_WIDGET_ANIMATION_LIST='a',
 	/// list of available dialog decorators.

@@ -29,8 +29,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #define CAIRO_DOCK_GUI_MARGIN 4
 #define CAIRO_DOCK_ICON_MARGIN 6
-#define CAIRO_DOCK_PREVIEW_WIDTH 500
-#define CAIRO_DOCK_PREVIEW_HEIGHT 282
+#define CAIRO_DOCK_PREVIEW_WIDTH 400
+#define CAIRO_DOCK_PREVIEW_HEIGHT 250
 #define CAIRO_DOCK_APPLET_ICON_SIZE 32
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
 #define CAIRO_DOCK_FRAME_ICON_SIZE 24
@@ -48,6 +48,7 @@ typedef enum {
 	CAIRO_DOCK_MODEL_ORDER,
 	CAIRO_DOCK_MODEL_IMAGE,
 	CAIRO_DOCK_MODEL_ICON,
+	CAIRO_DOCK_MODEL_ORDER2,
 	CAIRO_DOCK_MODEL_NB_COLUMNS
 	} _CairoDockModelColumns;
 
@@ -58,6 +59,9 @@ static GtkListStore *s_pAnimationsListStore = NULL;
 static GtkListStore *s_pDialogDecoratorListStore = NULL;
 static GtkListStore *s_pGaugeListStore = NULL;
 static GtkListStore *s_pDocksListStore = NULL;
+
+#define _allocate_new_model(...)\
+	gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF, G_TYPE_INT)
 
 static void _cairo_dock_activate_one_element (GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
 {
@@ -196,6 +200,7 @@ static void _cairo_dock_remove (GtkButton *button, gpointer *data)
 
 static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter, gpointer *data)
 {
+	static gchar *s_cPrevPreview = NULL, *s_cPrevReadme = NULL;
 	GtkLabel *pDescriptionLabel = data[0];
 	GtkImage *pPreviewImage = data[1];
 	GError *erreur = NULL;
@@ -206,8 +211,11 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		CAIRO_DOCK_MODEL_IMAGE, &cPreviewFilePath, -1);
 	//g_print ("ok\n");
 	
-	if (cDescriptionFilePath != NULL)
+	
+	if (cDescriptionFilePath != NULL && (!s_cPrevPreview || strcmp (s_cPrevPreview, cDescriptionFilePath) != 0))
 	{
+		g_free (s_cPrevPreview);
+		s_cPrevPreview = g_strdup (cDescriptionFilePath);
 		gchar *cDescription = NULL;
 		if (strncmp (cDescriptionFilePath, "http://", 7) == 0 || strncmp (cDescriptionFilePath, "ftp://", 6) == 0)
 		{
@@ -232,8 +240,11 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		g_free (cDescription);
 	}
 
-	if (cPreviewFilePath != NULL)
+	if (cPreviewFilePath != NULL && (!s_cPrevReadme || strcmp (s_cPrevReadme, cPreviewFilePath) != 0))
 	{
+		g_free (s_cPrevReadme);
+		s_cPrevReadme = g_strdup (cPreviewFilePath);
+		
 		gboolean bDistant = FALSE;
 		if (strncmp (cPreviewFilePath, "http://", 7) == 0 || strncmp (cPreviewFilePath, "ftp://", 6) == 0)
 		{
@@ -290,8 +301,12 @@ static void _cairo_dock_select_one_item_in_combo (GtkComboBox *widget, gpointer 
 
 	_cairo_dock_selection_changed (model, iter, data);
 }
+
 static gboolean _cairo_dock_select_one_item_in_tree (GtkTreeSelection * selection, GtkTreeModel * model, GtkTreePath * path, gboolean path_currently_selected, gpointer *data)
 {
+	g_print ("%s (%d)\n", __func__, path_currently_selected);
+	if (path_currently_selected)
+		return TRUE;
 	GtkTreeIter iter;
 	if (! gtk_tree_model_get_iter (model, &iter, path))
 		return FALSE;
@@ -534,7 +549,7 @@ static void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer 
 	if (pHashTable == NULL) {\
 		pListStore = NULL;\
 		return ; }\
-	pListStore = gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF);\
+	pListStore = _allocate_new_model ();\
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pListStore), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);\
 	if (cEmptyItem) {\
 		pHFunction (cEmptyItem, NULL, pListStore); }\
@@ -639,7 +654,7 @@ static void cairo_dock_build_dock_list_for_gui (void)
 {
 	if (s_pDocksListStore != NULL)
 		g_object_unref (s_pDocksListStore);
-	s_pDocksListStore = gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF);
+	s_pDocksListStore = _allocate_new_model ();
 	_cairo_dock_add_one_dock_item ("", NULL, s_pDocksListStore);
 	cairo_dock_foreach_docks ((GHFunc) _cairo_dock_add_one_dock_item, s_pDocksListStore);
 }
@@ -656,7 +671,9 @@ static void _cairo_dock_fill_modele_with_themes (const gchar *cThemeName, CairoD
 		CAIRO_DOCK_MODEL_RESULT, cThemeName,
 		CAIRO_DOCK_MODEL_ACTIVE, FALSE,
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, cReadmePath,
-		CAIRO_DOCK_MODEL_IMAGE, cPreviewPath, -1);
+		CAIRO_DOCK_MODEL_IMAGE, cPreviewPath, 
+		CAIRO_DOCK_MODEL_ORDER, pTheme->iRating,
+		CAIRO_DOCK_MODEL_ORDER2, pTheme->iSobriety, -1);
 }
 static gboolean _cairo_dock_test_one_name (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
 {
@@ -687,6 +704,38 @@ static gboolean _cairo_dock_find_iter_from_name (GtkListStore *pModele, const gc
 	gconstpointer data[3] = {cName, iter, &bFound};
 	gtk_tree_model_foreach (GTK_TREE_MODEL (pModele), (GtkTreeModelForeachFunc) _cairo_dock_test_one_name, data);
 	return bFound;
+}
+
+#define CD_MAX_RATING 5
+static inline void _render_rating (GtkCellRenderer *cell, GtkTreeModel *model, GtkTreeIter *iter, int iColumnIndex)
+{
+	gint iRating = 0;
+	gtk_tree_model_get (model, iter, iColumnIndex, &iRating, -1);
+	if (iRating > CD_MAX_RATING)
+		iRating = CD_MAX_RATING;
+	if (iRating > 0)
+	{
+		GString *s = g_string_sized_new (CD_MAX_RATING*4+1);
+		int i;
+		for (i= 0; i < iRating; i ++)
+			g_string_append (s, "★");
+		for (;i < CD_MAX_RATING; i ++)
+			g_string_append (s, "☆");
+		g_object_set (cell, "text", s->str, NULL);  // markup
+		g_string_free (s, TRUE);
+	}
+	else
+	{
+		g_object_set (cell, "text", "-", NULL);
+	}
+}
+static void _cairo_dock_render_sobriety (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
+{
+	_render_rating (cell, model, iter, CAIRO_DOCK_MODEL_ORDER2);
+}
+static void _cairo_dock_render_rating (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
+{
+	_render_rating (cell, model, iter, CAIRO_DOCK_MODEL_ORDER);
 }
 
 static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
@@ -736,9 +785,6 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 #define _allocate_new_buffer\
 	data = g_new (gconstpointer, 3); \
 	g_ptr_array_add (pDataGarbage, data);
-
-#define _allocate_new_model(...)\
-	gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF)
 
 #define _pack_in_widget_box(pSubWidget) gtk_box_pack_start (GTK_BOX (pWidgetBox), pSubWidget, FALSE, FALSE, 0)
 #define _pack_subwidget(pSubWidget) do {\
@@ -902,7 +948,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	GtkTreeIter iter;
 	GtkTreeSelection *selection;
 	GtkWidget *pBackButton;
-	gchar *cGroupComment, *cKeyName, *cKeyComment, *cUsefulComment, *cAuthorizedValuesChain, *pTipString, **pAuthorizedValuesList, *cSmallGroupIcon=NULL;
+	gchar *cGroupComment, *cKeyName, *cKeyComment, *cUsefulComment, *cAuthorizedValuesChain, *pTipString, **pAuthorizedValuesList, *cSmallGroupIcon=NULL, *cDisplayedGroupName=NULL;
 	gpointer *pGroupKeyWidget;
 	int i, j;
 	guint k, iNbElements;
@@ -923,7 +969,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	pFrame = NULL;
 	pFrameVBox = NULL;
 	cGroupComment  = g_key_file_get_comment (pKeyFile, cGroupName, NULL, NULL);
-	cSmallGroupIcon = NULL;
 	if (cGroupComment != NULL)
 	{
 		cGroupComment[strlen(cGroupComment)-1] = '\0';
@@ -934,8 +979,13 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			str = strrchr (cSmallGroupIcon, ']');
 			if (str != NULL)
 				*str = '\0';
+			str = strrchr (cSmallGroupIcon, ';');
+			if (str != NULL)
+			{
+				*str = '\0';
+				cDisplayedGroupName = str + 1;
+			}	
 		}
-		g_free (cGroupComment);
 	}
 	
 	pKeyList = g_key_file_get_keys (pKeyFile, cGroupName, NULL, NULL);
@@ -956,7 +1006,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 		//\______________ On cree la boite du groupe si c'est la 1ere cle valide.
 		if (pGroupBox == NULL)  // maintenant qu'on a au moins un element dans ce groupe, on cree sa page dans le notebook.
 		{
-			pLabel = gtk_label_new (dgettext (cGettextDomain, cGroupName));
+			pLabel = gtk_label_new (dgettext (cGettextDomain, cDisplayedGroupName ? cDisplayedGroupName : cGroupName));
 			
 			pLabelContainer = NULL;
 			GtkWidget *pAlign = NULL;
@@ -1236,17 +1286,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 
 			case CAIRO_DOCK_WIDGET_VIEW_LIST :  // liste des vues.
 				_add_combo_from_modele (s_pRendererListStore, TRUE, FALSE);
-				
-				pButtonConfigRenderer = gtk_button_new_from_stock (GTK_STOCK_PREFERENCES);
-				_allocate_new_buffer;
-				data[0] = pOneWidget;
-				data[1] = pMainWindow;
-				data[2] = "Views";  /// dock rendering
-				g_signal_connect (G_OBJECT (pButtonConfigRenderer),
-					"clicked",
-					G_CALLBACK (_cairo_dock_configure_module),
-					data);
-				_pack_in_widget_box (pButtonConfigRenderer);
 			break ;
 			
 			case CAIRO_DOCK_WIDGET_THEME_LIST :  // liste les themes dans combo, avec prevue et readme.
@@ -1286,8 +1325,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
 				pOneWidget = gtk_tree_view_new ();
 				gtk_tree_view_set_model (GTK_TREE_VIEW (pOneWidget), GTK_TREE_MODEL (modele));
-				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_ORDER, GTK_SORT_ASCENDING);
 				gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pOneWidget), FALSE);
+				g_object_set_data (G_OBJECT (pOneWidget), "get-active-only", GINT_TO_POINTER (1));
 				
 				rend = gtk_cell_renderer_toggle_new ();
 				gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "active", CAIRO_DOCK_MODEL_ACTIVE, NULL);
@@ -1298,7 +1337,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pOneWidget));
 				gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
-					
+				
 				pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 				gtk_widget_set (pScrolledWindow, "height-request", 100, NULL);
 				gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -1393,29 +1432,23 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_NUMBERED_LIST :  // a list of numbered strings.
 			case CAIRO_DOCK_WIDGET_LIST_WITH_ENTRY :  // a list of strings with possibility to select a non-existing one.
 				cValue = g_key_file_get_locale_string (pKeyFile, cGroupName, cKeyName, NULL, NULL);  // nous permet de recuperer les ';' aussi.
-				if (pAuthorizedValuesList == NULL)  // ne devrait pas arriver, mais au cas ou, on laisse la possibilite de rentrer ce qu'on veut.
+				// on construit la combo.
+				modele = _allocate_new_model ();
+				if (iElementType == CAIRO_DOCK_WIDGET_LIST_WITH_ENTRY)
 				{
-					pOneWidget = gtk_entry_new ();
-					pEntry = pOneWidget;
-					gtk_entry_set_text (GTK_ENTRY (pOneWidget), cValue);
+					pOneWidget = gtk_combo_box_entry_new_with_model (GTK_TREE_MODEL (modele), CAIRO_DOCK_MODEL_NAME);
 				}
 				else
 				{
-					// on construit la combo.
-					modele = _allocate_new_model ();
-					if (iElementType == CAIRO_DOCK_WIDGET_LIST_WITH_ENTRY)
-					{
-						pOneWidget = gtk_combo_box_entry_new_with_model (GTK_TREE_MODEL (modele), CAIRO_DOCK_MODEL_NAME);
-					}
-					else
-					{
-						pOneWidget = gtk_combo_box_new_with_model (GTK_TREE_MODEL (modele));
-						rend = gtk_cell_renderer_text_new ();
-						gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);
-						gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
-					}
-					
-					// on la remplit.
+					pOneWidget = gtk_combo_box_new_with_model (GTK_TREE_MODEL (modele));
+					rend = gtk_cell_renderer_text_new ();
+					gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);
+					gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+				}
+				
+				// on la remplit.
+				if (pAuthorizedValuesList != NULL)
+				{
 					k = 0;
 					int iSelectedItem = -1;
 					if (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_LIST)
@@ -1437,13 +1470,14 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					}
 					g_free (cResult);
 					
+					// on active l'element courant.
 					if (iElementType != CAIRO_DOCK_WIDGET_LIST_WITH_ENTRY && iSelectedItem == -1)  // si le choix courant n'etait pas dans la liste, on decide de selectionner le 1er.
 						iSelectedItem = 0;
 					if (k != 0)  // rien dans le gtktree => plantage.
 						gtk_combo_box_set_active (GTK_COMBO_BOX (pOneWidget), iSelectedItem);
-					}
-					_pack_subwidget (pOneWidget);
-					g_free (cValue);
+				}
+				_pack_subwidget (pOneWidget);
+				g_free (cValue);
 			break ;
 			
 			case CAIRO_DOCK_WIDGET_TREE_VIEW_SORT :  // N strings listed from top to bottom.
@@ -1468,7 +1502,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
 				selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pOneWidget));
 				gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
-
+				
 				pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
 				
 				pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
@@ -1566,10 +1600,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				}
 				else if (pAuthorizedValuesList != NULL)  // on liste les choix possibles dans l'ordre choisi. Pour CAIRO_DOCK_WIDGET_TREE_VIEW_MULTI_CHOICE, on complete avec ceux n'ayant pas ete selectionnes.
 				{
-					int iNbPossibleValues = 0;
+					gint iNbPossibleValues = 0, iOrder = 0;
 					while (pAuthorizedValuesList[iNbPossibleValues] != NULL)
 						iNbPossibleValues ++;
-					guint l, iOrder = 0;
+					guint l;
 					for (l = 0; l < length; l ++)
 					{
 						cValue = cValueList[l];
@@ -1588,7 +1622,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					
 					if (iOrder < iNbPossibleValues)  // il reste des valeurs a inserer (ce peut etre de nouvelles valeurs apparues lors d'une maj du fichier de conf, donc CAIRO_DOCK_WIDGET_TREE_VIEW_SORT est concerne aussi). 
 					{
-						const gchar cResult[10];
+						gchar cResult[10];
 						for (k = 0; pAuthorizedValuesList[k] != NULL; k ++)
 						{
 							cValue =  pAuthorizedValuesList[k];
@@ -1614,6 +1648,91 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					}
 				}
 			break ;
+			
+			case CAIRO_DOCK_WIDGET_THEME_SELECTOR :  // tree view with 3 sortable columns.
+				//\______________ On construit le treeview des themes.
+				modele = _allocate_new_model ();
+				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
+				pOneWidget = gtk_tree_view_new ();
+				gtk_tree_view_set_model (GTK_TREE_VIEW (pOneWidget), GTK_TREE_MODEL (modele));
+				gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pOneWidget), TRUE);
+				gtk_tree_view_set_headers_clickable (GTK_TREE_VIEW (pOneWidget), TRUE);
+				
+				rend = gtk_cell_renderer_text_new ();
+				//gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, _("theme"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+				GtkTreeViewColumn* col = gtk_tree_view_column_new_with_attributes (_("theme"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_NAME);
+				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
+				
+				rend = gtk_cell_renderer_text_new ();
+				//gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, _("rating"), rend, "text", CAIRO_DOCK_MODEL_ORDER, NULL);
+				col = gtk_tree_view_column_new_with_attributes (_("rating"), rend, "text", CAIRO_DOCK_MODEL_ORDER, NULL);
+				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_ORDER);
+				gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_rating, NULL, NULL);
+				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
+				
+				rend = gtk_cell_renderer_text_new ();
+				//gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (pOneWidget), -1, _("sobriety"), rend, (GtkTreeCellDataFunc)_render_sobriety, NULL, NULL );
+				col = gtk_tree_view_column_new_with_attributes (_("sobriety"), rend, "text", CAIRO_DOCK_MODEL_ORDER2, NULL);
+				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_ORDER2);
+				gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_sobriety, NULL, NULL);
+				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
+				
+				selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pOneWidget));
+				gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
+				
+				GtkObject *adj = gtk_adjustment_new (0., 0., 100., 1, 10, 10);
+				gtk_tree_view_set_vadjustment (GTK_TREE_VIEW (pOneWidget), GTK_ADJUSTMENT (adj));
+				pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
+				gtk_widget_set (pScrolledWindow, "height-request", CAIRO_DOCK_PREVIEW_HEIGHT+20, NULL);  // prevue + readme.
+				gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+				gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
+				pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
+				_pack_in_widget_box (pScrolledWindow);
+				
+				//\______________ On construit le widget de prevue et on le rajoute a la suite. 
+				pDescriptionLabel = gtk_label_new (NULL);
+				gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
+				pPreviewImage = gtk_image_new_from_pixbuf (NULL);
+				_allocate_new_buffer;
+				data[0] = pDescriptionLabel;
+				data[1] = pPreviewImage;
+				gtk_tree_selection_set_select_function (selection,
+					(GtkTreeSelectionFunc) _cairo_dock_select_one_item_in_tree,
+					data,
+					NULL);
+				pPreviewBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+				gtk_box_pack_start (GTK_BOX (pPreviewBox), pPreviewImage, FALSE, FALSE, 0);
+				gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionLabel, FALSE, FALSE, 0);
+				_pack_in_widget_box (pPreviewBox);
+				
+				//\______________ On recupere les themes.
+				if (pAuthorizedValuesList != NULL)
+				{
+					gchar *cShareThemesDir = NULL, *cUserThemesDir = NULL, *cDistantThemesDir = NULL;
+					if (pAuthorizedValuesList[0] != NULL)
+					{
+						cShareThemesDir = (*pAuthorizedValuesList[0] != '\0' ? pAuthorizedValuesList[0] : NULL);
+						if (pAuthorizedValuesList[1] != NULL)
+						{
+							cUserThemesDir = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR, pAuthorizedValuesList[1]);
+							cDistantThemesDir = pAuthorizedValuesList[2];
+						}
+					}
+					GHashTable *pThemeTable = cairo_dock_list_themes (cShareThemesDir, cUserThemesDir, cDistantThemesDir);
+					g_free (cUserThemesDir);
+
+					g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_modele_with_themes, modele);
+					g_hash_table_destroy (pThemeTable);
+					
+					GtkTreeIter iter;
+					if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (modele), &iter))
+						gtk_tree_selection_select_iter (selection, &iter);
+					
+				}
+			break ;
+			
+			
 			case 'r' :  // deprecated.
 				cd_warning ("\nTHIS CONF FILE IS OUT OF DATE\n");
 			break ;
@@ -1830,6 +1949,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 		g_strfreev (pAuthorizedValuesList);
 		g_free (cKeyComment);
 	}
+	g_free (cGroupComment);  // cSmallGroupIcon et cDisplayedGroupName pointaient dessus.
 	g_free (pKeyList);  // on libere juste la liste de chaines, pas les chaines a l'interieur.
 	
 	return pGroupBox;
@@ -1960,7 +2080,7 @@ GtkWidget *cairo_dock_build_conf_file_widget (const gchar *cConfFilePath, const 
 
 static gboolean _cairo_dock_get_active_elements (GtkTreeModel * model, GtkTreePath * path, GtkTreeIter * iter, GSList **pStringList)
 {
-	//g_print ("%s (%d)\n", __func__, *pOrder);
+	//g_print ("%s ()\n", __func__);
 	gboolean bActive;
 	gchar *cValue = NULL, *cResult = NULL;
 	gtk_tree_model_get (model, iter,
@@ -2098,25 +2218,52 @@ static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFil
 	}
 	else if (GTK_IS_TREE_VIEW (pOneWidget))
 	{
+		gboolean bGetActiveOnly = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pOneWidget), "get-active-only"));
 		GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pOneWidget));
-		GSList *pActiveElementList = NULL;
-		gtk_tree_model_foreach (GTK_TREE_MODEL (pModel), (GtkTreeModelForeachFunc) _cairo_dock_get_active_elements, &pActiveElementList);
-
-		iNbElements = g_slist_length (pActiveElementList);
-		gchar **tStringValues = g_new0 (gchar *, iNbElements + 1);
-
-		i = 0;
-		GSList * pListElement;
-		for (pListElement = pActiveElementList; pListElement != NULL; pListElement = pListElement->next)
+		gchar **tStringValues = NULL;
+		
+		if (bGetActiveOnly)
 		{
-			tStringValues[i] = pListElement->data;
-			i ++;
+			GSList *pActiveElementList = NULL;
+			gtk_tree_model_foreach (GTK_TREE_MODEL (pModel), (GtkTreeModelForeachFunc) _cairo_dock_get_active_elements, &pActiveElementList);
+			iNbElements = g_slist_length (pActiveElementList);
+			tStringValues = g_new0 (gchar *, iNbElements + 1);
+			
+			i = 0;
+			GSList * pListElement;
+			for (pListElement = pActiveElementList; pListElement != NULL; pListElement = pListElement->next)
+			{
+				tStringValues[i++] = pListElement->data;
+			}
+			g_slist_free (pActiveElementList);  // ses donnees sont dans 'tStringValues' et seront donc liberees avec.
+		}
+		else
+		{
+			GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pOneWidget));
+			GList *pRows = gtk_tree_selection_get_selected_rows (selection, NULL);
+			iNbElements = g_list_length (pRows);
+			tStringValues = g_new0 (gchar *, iNbElements + 1);
+			
+			i = 0;
+			GList *r;
+			GtkTreePath *cPath;
+			for (r = pRows; r != NULL; r = r->next)
+			{
+				cPath = r->data;
+				GtkTreeIter iter;
+				if (! gtk_tree_model_get_iter (pModel, &iter, cPath))
+					continue;
+				
+				gchar *cName = NULL;
+				gtk_tree_model_get (pModel, &iter, CAIRO_DOCK_MODEL_RESULT, &cName, -1);
+				tStringValues[i++] = cName;
+			}
+			iNbElements = i;
 		}
 		if (iNbElements > 1)
 			g_key_file_set_string_list (pKeyFile, cGroupName, cKeyName, (const gchar * const *)tStringValues, iNbElements);
 		else
 			g_key_file_set_string (pKeyFile, cGroupName, cKeyName, (tStringValues[0] != NULL ? tStringValues[0] : ""));
-		g_slist_free (pActiveElementList);  // ses donnees sont dans 'tStringValues' et seront donc liberees avec.
 		g_strfreev (tStringValues);
 	}
 }

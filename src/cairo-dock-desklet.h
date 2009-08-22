@@ -119,6 +119,7 @@ struct _CairoDeskletRenderer {
 	GList *pPreDefinedConfigList;
 };
 
+
 /// Definition of a Desklet, which derives from a Container.
 struct _CairoDesklet {
 	/// type "desklet".
@@ -218,7 +219,16 @@ struct _CairoDesklet {
 	gboolean bFixedAttitude;
 	GtkWidget *pInteractiveWidget;
 	gboolean bSpaceReserved;
+	// TRUE to allow the desklet to be minimized once. The flag is reseted to FALSE after the desklet has minimized.
 	gboolean bAllowMinimize;
+	/// X position of the pointer taking into account the 2D transformations on the desklet (for an opengl renderer, you'll have to use the picking).
+	gint iMouseX2d;
+	/// Y position of the pointer taking into account the 2D transformations on the desklet (for an opengl renderer, you'll have to use the picking).
+	gint iMouseY2d;
+	/// The following function outclasses the corresponding function of the renderer. This is useful if you don't want to pick icons but some elements that you draw yourself on the desklet.
+	CairoDeskletGLRenderFunc render_bounding_box;
+	/// ID of the object that was picked thanks in case the previous function is not null.
+	GLuint iPickedObject;
 };
 
 /// Definition of a function that runs through all desklets.
