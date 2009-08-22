@@ -411,7 +411,7 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	if (pDock->pShapeBitmap != NULL)
 		g_object_unref ((gpointer) pDock->pShapeBitmap);
 	
-	if (pDock->inputArea.width == 0 || pDock->inputArea.height == 0 || pDock->iRefCount > 0 || pDock->bAutoHide || ! pDock->bHorizontalDock)  /// marche pas bien a la vertical ...
+	if (pDock->inputArea.width == 0 || pDock->inputArea.height == 0 || pDock->iRefCount > 0 || pDock->bAutoHide || pDock->iMinDockWidth == 0 || pDock->iMinDockHeight == 0 || ! pDock->bHorizontalDock)  /// marche pas bien a la vertical ...
 	{
 		if (pDock->pShapeBitmap != NULL)  // plus de shape, on la remet a 0.
 		{

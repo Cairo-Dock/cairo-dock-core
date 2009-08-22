@@ -564,16 +564,26 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 									cd_message (" => se cache");
 									if (! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_xwindow_is_on_current_desktop (Xid))
 									{
-										pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+										pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);  /// ! CAIRO_DOCK_ANIMATE_ICON
+										if (pParentDock != NULL)
+											gtk_widget_queue_draw (pParentDock->pWidget);
 									}
 								}
 								else  // se montre => on detache l'icone.
 								{
 									cd_message (" => re-apparait");
-									pParentDock = cairo_dock_detach_appli (icon);
+									///pParentDock = cairo_dock_detach_appli (icon);
+									///if (pParentDock != NULL)
+									///	gtk_widget_queue_draw (pParentDock->pWidget);
+									pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+									if (pParentDock)
+									{
+										cairo_dock_stop_icon_animation (icon);
+										icon->fPersonnalScale = 1.0;
+										cairo_dock_notify (CAIRO_DOCK_REMOVE_ICON, icon, pParentDock);
+										cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
+									}
 								}
-								if (pParentDock != NULL)
-									gtk_widget_queue_draw (pParentDock->pWidget);
 							}
 							else if (myTaskBar.fVisibleAppliAlpha != 0)
 							{
@@ -713,13 +723,12 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 				}
 				//g_print ("icon->fPersonnalScale <- %.2f\n", icon->fPersonnalScale);
 				
-				//cairo_dock_start_icon_animation (icon, pParentDock);
-				cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
-				
-				icon->iLastCheckTime = -1;  // on va la desenregistrer tout de suite.
+				icon->iLastCheckTime = -1;  // inutile de chercher a la desenregistrer par la suite, puisque ce sera fait ici. Cela sert aussi a bien supprimer l'icone en fin d'animation.
 				///cairo_dock_unregister_appli (icon);
 				cairo_dock_remove_appli_from_class (icon);  // elle reste une icone d'appli, et de la meme classe, mais devient invisible aux autres icones de sa classe. Inutile de tester les inhibiteurs, puisqu'elle est dans un dock.
-				bToBeRemoved = TRUE;
+				
+				//cairo_dock_start_icon_animation (icon, pParentDock);
+				cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
 			}
 			else
 			{
@@ -727,9 +736,9 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 				cairo_dock_update_name_on_inhibators (icon->cClass, *Xid, NULL);
 				icon->iLastCheckTime = -1;  // pour ne pas la desenregistrer de la HashTable lors du 'free' puisqu'on est en train de parcourir la table.
 				cairo_dock_free_icon (icon);
-				bToBeRemoved = TRUE;
 				/// redessiner les inhibiteurs...
 			}
+			bToBeRemoved = TRUE;
 		}
 	}
 	return bToBeRemoved;
@@ -765,7 +774,7 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 			{
 				icon->iLastCheckTime = iTime;
 				icon->iStackOrder = iStackOrder ++;
-				if ((icon->bIsHidden || ! myTaskBar.bHideVisibleApplis) && (! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_xwindow_is_on_current_desktop (Xid)))
+				if (/*(icon->bIsHidden || ! myTaskBar.bHideVisibleApplis) && */(! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_xwindow_is_on_current_desktop (Xid)))
 				{
 					cd_message (" insertion de %s ... (%d)", icon->acName, icon->iLastCheckTime);
 					pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
@@ -848,7 +857,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 		if (pIcon != NULL)
 		{
 			pIcon->iStackOrder = iStackOrder ++;
-			if ((pIcon->bIsHidden || ! myTaskBar.bHideVisibleApplis) && (! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_xwindow_is_on_current_desktop (Xid)))
+			if (/*(pIcon->bIsHidden || ! myTaskBar.bHideVisibleApplis) && */(! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_xwindow_is_on_current_desktop (Xid)))
 			{
 				pParentDock = cairo_dock_insert_appli_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 				//g_print (">>>>>>>>>>>> Xid : %d\n", Xid);
@@ -859,6 +868,10 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 					else
 						cairo_dock_update_dock_size (pParentDock);
 				}
+			}
+			else if (myTaskBar.bMixLauncherAppli)  // on met tout de meme l'indicateur sur le lanceur.
+			{
+				cairo_dock_prevent_inhibated_class (pIcon);
 			}
 			if ((myAccessibility.bAutoHideOnMaximized && pIcon->bIsMaximized) || (myAccessibility.bAutoHideOnFullScreen && pIcon->bIsFullScreen))
 			{
@@ -973,6 +986,10 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 		cd_message (" -> se fait inhiber");
 		return NULL;
 	}
+	
+	//\_________________ On gere les filtres.
+	if (!icon->bIsHidden && myTaskBar.bHideVisibleApplis)
+		return NULL;
 	
 	//\_________________ On determine dans quel dock l'inserer.
 	CairoDock *pParentDock = cairo_dock_manage_appli_class (icon, pMainDock);  // renseigne cParentDockName.

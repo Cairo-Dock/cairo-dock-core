@@ -73,11 +73,23 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 	}
 
 	GHashTable *pThemeTable = (hProvidedTable != NULL ? hProvidedTable : g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) cairo_dock_free_theme));
-
+	
+	int iType;
+	const gchar *cPrefix;
+	if (strncmp (cThemesDir, "/usr", 4) == 0)
+	{
+		iType = CAIRO_DOCK_LOCAL_THEME;
+		cPrefix = CAIRO_DOCK_PREFIX_LOCAL_THEME;
+	}
+	else
+	{
+		iType = CAIRO_DOCK_USER_THEME;
+		cPrefix = CAIRO_DOCK_PREFIX_USER_THEME;
+	}
+	
 	gchar *cThemePath;
 	const gchar* cThemeName;
-	int iType = (strncmp (cThemesDir, "/usr", 4) == 0 ? 0 : 1);
-	const gchar *cPrefix = (iType == 0 ? CAIRO_DOCK_PREFIX_LOCAL_THEME : CAIRO_DOCK_PREFIX_USER_THEME);
+	int iVersion;
 	CairoDockTheme *pTheme;
 	do
 	{
@@ -85,16 +97,52 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 		if (cThemeName == NULL)
 			break ;
 		
+		// on ecarte les non repertoires.
 		cThemePath = g_strdup_printf ("%s/%s", cThemesDir, cThemeName);
-		if (g_file_test (cThemePath, G_FILE_TEST_IS_DIR))
+		if (! g_file_test (cThemePath, G_FILE_TEST_IS_DIR))
 		{
-			pTheme = g_new0 (CairoDockTheme, 1);
-			pTheme->cThemePath = cThemePath;
-			pTheme->cDisplayedName = g_strdup_printf ("%s%s", (cPrefix != NULL ? cPrefix : ""), cThemeName);
-			pTheme->iType = iType;
-			
-			g_hash_table_insert (pThemeTable, g_strdup (cThemeName), pTheme);  // donc ecrase un theme installe ayant le meme nom.
+			g_free (cThemePath);
+			continue;
 		}
+		
+		// on recupere la version du theme.
+		iVersion = 0;
+		gchar *cVersionFile = g_strdup_printf ("%s/version", cThemePath);
+		if (g_file_test (cVersionFile, G_FILE_TEST_EXISTS))
+		{
+			gsize length = 0;
+			gchar *cContent = NULL;
+			g_file_get_contents (cVersionFile,
+				&cContent,
+				&length,
+				NULL);
+			if (cContent)
+			{
+				iVersion = atoi (cContent);
+				g_free (cContent);
+			}
+		}
+		
+		// on regarde si on n'ecrase pas un theme de meme nom de version superieure.
+		CairoDockTheme *pSameTheme = g_hash_table_lookup (pThemeTable, cThemeName);
+		if (pSameTheme != NULL)
+		{
+			if (pSameTheme->iVersion > iVersion)
+			{
+				g_free (cThemePath);
+				continue;
+			}
+		}
+		
+		// on insere le theme dans la table.
+		pTheme = g_new0 (CairoDockTheme, 1);
+		pTheme->cThemePath = cThemePath;
+		pTheme->cDisplayedName = g_strdup_printf ("%s%s", (cPrefix != NULL ? cPrefix : ""), cThemeName);
+		pTheme->iType = iType;
+		
+		g_free (cVersionFile);
+		
+		g_hash_table_insert (pThemeTable, g_strdup (cThemeName), pTheme);  // donc ecrase un theme installe ayant le meme nom.
 	}
 	while (1);
 	g_dir_close (dir);
@@ -278,46 +326,52 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 	for (i = 0; cNetThemesList[i] != NULL; i ++)
 	{
 		cThemeName = cNetThemesList[i];
-		if (*cThemeName == '#' || *cThemeName == '\0')
+		if (*cThemeName == '\0')
+			continue;
+		if (*cThemeName == '#')
 		{
-			if (*cThemeName == '#' && bFirstComment && pTheme != NULL)
+			if (bFirstComment && pTheme != NULL)  // 1er commentaire apres un theme.
 			{
-				str = cThemeName+1;
+				str = cThemeName+1;  // on saute les #
 				while (*str == '#')
 					str ++;
 				if (*str == '\0')
-				{
-					g_free (cThemeName);
 					continue;
-				}
 				cd_debug ("+ commentaire : %s", str);
 				
-				pTheme->fSize = g_ascii_strtod (str, NULL);
-				
-				while (*str != ' ' && *str != ';' && *str != '\0')
-					str ++;
-				if (*str != '\0')
+				char **pValues = g_strsplit (str, ";", -1);
+				if (!pValues)
+					continue;
+				gchar *cValue;
+				int i;
+				for (i = 0; pValues[i] != NULL; i ++)
 				{
-					str2 = strchr (str, ';');
-					if (str2)
-						*str2 = '\0';
-					pTheme->cAuthor = g_strdup (str);
-					if (str2)
+					cValue = pValues[i];
+					switch (i)
 					{
-						str = str2 + 1;
-						pTheme->iRating = atoi (str);
-						str = strchr (str, ';');
-						if (str)
-							pTheme->iSobriety = atoi (str+1);
-						g_print (" iRating : %d; iSobriety : %d\n", pTheme->iRating, pTheme->iSobriety);
+						case 0:
+							pTheme->fSize = g_ascii_strtod (cValue, NULL);
+						break ;
+						case 1:
+							pTheme->cAuthor = g_strdup (cValue);
+						break ;
+						case 2:
+							pTheme->iRating = atoi (cValue);
+						break ;
+						case 3:
+							pTheme->iSobriety = atoi (cValue);
+						break ;
+						case 4:
+							pTheme->iVersion = atoi (cValue);
+						break ;
 					}
 				}
+				g_strfreev (pValues);
 				
 				gchar *cDisplayedName = g_strdup_printf ("%s by %s [%.2f MB]", pTheme->cDisplayedName, (pTheme->cAuthor ? pTheme->cAuthor : "---"), pTheme->fSize);
 				g_free (pTheme->cDisplayedName);
 				pTheme->cDisplayedName = cDisplayedName;
 			}
-			g_free (cThemeName);
 			bFirstComment = FALSE;
 		}
 		else
@@ -327,12 +381,12 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 			pTheme->iType = CAIRO_DOCK_DISTANT_THEME;
 			pTheme->cThemePath = g_strdup_printf ("%s/%s/%s", cServerAdress, cDirectory, cThemeName);
 			pTheme->cDisplayedName = g_strconcat (CAIRO_DOCK_PREFIX_NET_THEME, cThemeName, NULL);
-			g_hash_table_insert (pThemeTable, cThemeName, pTheme);
+			g_hash_table_insert (pThemeTable, g_strdup (cThemeName), pTheme);
 			bFirstComment = TRUE;
 		}
 	}
 	
-	g_free (cNetThemesList);  // car les noms sont passes dans la hashtable.
+	g_strfreev (cNetThemesList);
 	return pThemeTable;
 }
 

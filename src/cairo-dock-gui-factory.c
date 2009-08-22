@@ -217,7 +217,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		g_free (s_cPrevPreview);
 		s_cPrevPreview = g_strdup (cDescriptionFilePath);
 		gchar *cDescription = NULL;
-		if (strncmp (cDescriptionFilePath, "http://", 7) == 0 || strncmp (cDescriptionFilePath, "ftp://", 6) == 0)
+		if (strncmp (cDescriptionFilePath, "http://", 7) == 0)
 		{
 			cd_debug ("fichier readme distant (%s)", cDescriptionFilePath);
 
@@ -228,7 +228,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		}
 		else
 		{
-			g_print ("fichier readme local (%s)\n", cDescriptionFilePath);
+			cd_debug ("fichier readme local (%s)", cDescriptionFilePath);
 			gsize length = 0;
 			g_file_get_contents  (cDescriptionFilePath,
 				&cDescription,
@@ -246,7 +246,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		s_cPrevReadme = g_strdup (cPreviewFilePath);
 		
 		gboolean bDistant = FALSE;
-		if (strncmp (cPreviewFilePath, "http://", 7) == 0 || strncmp (cPreviewFilePath, "ftp://", 6) == 0)
+		if (strncmp (cPreviewFilePath, "http://", 7) == 0)
 		{
 			cd_debug ("fichier preview distant (%s)", cPreviewFilePath);
 			
@@ -304,7 +304,6 @@ static void _cairo_dock_select_one_item_in_combo (GtkComboBox *widget, gpointer 
 
 static gboolean _cairo_dock_select_one_item_in_tree (GtkTreeSelection * selection, GtkTreeModel * model, GtkTreePath * path, gboolean path_currently_selected, gpointer *data)
 {
-	g_print ("%s (%d)\n", __func__, path_currently_selected);
 	if (path_currently_selected)
 		return TRUE;
 	GtkTreeIter iter;

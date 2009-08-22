@@ -37,6 +37,8 @@ struct _CairoDockTheme {
 	gint iRating;
 	/// gint sobriety/simplicity of the theme, between 1 and 5.
 	gint iSobriety;
+	/// version of the theme.
+	gint iVersion;
 };
 
 /** Destroy a theme and free all its allocated memory.

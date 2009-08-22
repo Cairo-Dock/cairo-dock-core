@@ -81,7 +81,7 @@ set_value "System"			"cairo anim freq"		25
 set_value "System"			"always horizontal"		true
 set_value "System"			"show hidden files"		false
 set_value "System"			"fake transparency"		false
-set_value "System"			"modules"				"dock rendering;dialog rendering;Animated icons;drop indicator;clock;logout;dustbin;stack;shortcuts;GMenu;switcher;icon effects;illusion"
+#set_value "System"			"modules"				"dock rendering;dialog rendering;Animated icons;drop indicator;clock;logout;dustbin;stack;shortcuts;GMenu;switcher;icon effects;illusion"
 
 set_current_conf_file "plug-ins/mail/mail.conf"
 set_value_on_all_groups		"username"				"toto"

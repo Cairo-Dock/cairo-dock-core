@@ -42,6 +42,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-background.h"
+#include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-container.h"
@@ -449,6 +450,7 @@ void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRe
 	{
 		fReflectSize = myIcons.fReflectSize * icon->fScale * fabs (icon->fHeightFactor) + icon->fDeltaYReflection;
 	}
+	fReflectSize = MAX (fReflectSize, myIndicators.iIndicatorDeltaY);
 	
 	double fX = icon->fDrawX;
 	fX += icon->fWidth * icon->fScale * (1 - fabs (icon->fWidthFactor))/2;

@@ -374,18 +374,29 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 		next_ic = ic->next;
 		if (pIcon->fPersonnalScale == 0.05)
 		{
-			cd_message (" - %s va etre supprimee", pIcon->acName);
-			gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);  // car apres avoir ete enleve du dock elle n'est plus rien.
-			cairo_dock_remove_icon_from_dock (pDock, pIcon);  // enleve le separateur automatique avec.
-			
-			if (pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass))
+			gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);
+			if (bIsAppli && pIcon->iLastCheckTime != -1)  // c'est une icone d'appli non vieille qui disparait, elle s'est probablement cachee => on la detache juste.
 			{
-				gboolean bEmptyClassSubDock = cairo_dock_check_class_subdock_is_empty (pDock, pIcon->cClass);
-				if (bEmptyClassSubDock)
-					return FALSE;
+				g_print ("cette (%s) appli est toujours valide, on la detache juste\n", pIcon->acName);
+				cairo_dock_detach_appli (pIcon);
+				pIcon->fPersonnalScale = 0.;
 			}
-			cairo_dock_update_dock_size (pDock);
-			cairo_dock_free_icon (pIcon);
+			else
+			{
+				cd_message (" - %s va etre supprimee", pIcon->acName);
+				gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);  // car apres avoir ete enleve du dock elle n'est plus rien.
+				cairo_dock_remove_icon_from_dock (pDock, pIcon);  // enleve le separateur automatique avec.
+				
+				if (pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass))
+				{
+					gboolean bEmptyClassSubDock = cairo_dock_check_class_subdock_is_empty (pDock, pIcon->cClass);
+					if (bEmptyClassSubDock)
+						return FALSE;
+				}
+				
+				cairo_dock_update_dock_size (pDock);
+				cairo_dock_free_icon (pIcon);
+			}
 		}
 		else if (pIcon->fPersonnalScale == -0.05)
 		{

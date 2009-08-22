@@ -61,27 +61,27 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 	{
 		if (pAccessibility->bPopUp)
 		{
-			_append_warning ("The option 'keep the dock below' is in conflict with the 'raise on shortcuts' option, it will be ignored");
+			_append_warning ("The option 'keep the dock below' is in conflict with the 'raise on shortcuts' option,\n it will be ignored");
 			pAccessibility->bPopUp = FALSE;
 		}
 		if (pAccessibility->bReserveSpace)
 		{
-			_append_warning ("The option 'reserve space' is in conflict with the 'raise on shortcuts' option, it will be ignored");
+			_append_warning ("The option 'reserve space' is in conflict with the 'raise on shortcuts' option,\n it will be ignored");
 			pAccessibility->bReserveSpace = FALSE;
 		}
 		if (pAccessibility->bAutoHide)
 		{
-			_append_warning ("The option 'auto-hide' is in conflict with the 'raise on shortcuts' option, it will be ignored");
+			_append_warning ("The option 'auto-hide' is in conflict with the 'raise on shortcuts' option,\n it will be ignored");
 			pAccessibility->bAutoHide = FALSE;
 		}
 		if (pAccessibility->bAutoHideOnFullScreen)
 		{
-			_append_warning ("The option 'auto-hide on fullscreen window' is in conflict with the 'raise on shortcuts' option, it will be ignored");
+			_append_warning ("The option 'auto-hide on fullscreen window' is in conflict with the 'raise on shortcuts' option,\n it will be ignored");
 			pAccessibility->bAutoHideOnFullScreen = FALSE;
 		}
 		if (pAccessibility->bAutoHideOnMaximized)
 		{
-			_append_warning ("The option 'auto-hide on maximized window' is in conflict with the 'raise on shortcuts' option, it will be ignored");
+			_append_warning ("The option 'auto-hide on maximized window' is in conflict with the 'raise on shortcuts' option,\n it will be ignored");
 			pAccessibility->bAutoHideOnMaximized = FALSE;
 		}
 	}
@@ -90,22 +90,22 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 	{
 		if (pAccessibility->bReserveSpace)
 		{
-			_append_warning ("The option 'reserve space for dock' is in conflict with the 'keep the dock below' option, it will be ignored");
+			_append_warning ("The option 'reserve space for dock' is in conflict with the 'keep the dock below' option,\n it will be ignored");
 			pAccessibility->bReserveSpace = FALSE;
 		}
 		if (pAccessibility->bAutoHide)
 		{
-			_append_warning ("The option 'auto-hide' is in conflict with the 'keep the dock below' option, it will be ignored");
+			_append_warning ("The option 'auto-hide' is in conflict with the 'keep the dock below' option,\n it will be ignored");
 			pAccessibility->bAutoHide = FALSE;
 		}
 		if (pAccessibility->bAutoHideOnFullScreen)
 		{
-			_append_warning ("The option 'auto-hide on fullscreen window' is in conflict with the 'keep the dock below' option, it will be ignored");
+			_append_warning ("The option 'auto-hide on fullscreen window' is in conflict with the 'keep the dock below' option,\n it will be ignored");
 			pAccessibility->bAutoHideOnFullScreen = FALSE;
 		}
 		if (pAccessibility->bAutoHideOnMaximized)
 		{
-			_append_warning ("The option 'auto-hide on maximized window' is in conflict with the 'keep the dock below' option, it will be ignored");
+			_append_warning ("The option 'auto-hide on maximized window' is in conflict with the 'keep the dock below' option,\n it will be ignored");
 			pAccessibility->bAutoHideOnMaximized = FALSE;
 		}
 	}  // par contre on peut avoir reserve space avec auto-hide.
@@ -116,12 +116,12 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 	{
 		if (pAccessibility->bAutoHideOnFullScreen)
 		{
-			cd_warning ("The option 'auto-hide on fullscreen window' is in conflict with the option 'reserve space for dock', it will be ignored");
+			cd_warning ("The option 'auto-hide on fullscreen window' is in conflict with the option 'reserve space for dock',\n it will be ignored");
 			pAccessibility->bAutoHideOnFullScreen = FALSE;
 		}
 		if (pAccessibility->bAutoHideOnMaximized)
 		{
-			cd_warning ("The option 'auto-hide on maximized window' is in conflict with the option 'reserve space for dock', it will be ignored");
+			cd_warning ("The option 'auto-hide on maximized window' is in conflict with the option 'reserve space for dock',\n it will be ignored");
 			pAccessibility->bAutoHideOnMaximized = FALSE;
 		}
 	}  // par contre l'auto-hide est une propriete pour chaque dock principal, donc il n'y a pas de redondance avec l'auto-hide de la barre des taches.
