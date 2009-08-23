@@ -1325,7 +1325,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				pOneWidget = gtk_tree_view_new ();
 				gtk_tree_view_set_model (GTK_TREE_VIEW (pOneWidget), GTK_TREE_MODEL (modele));
 				gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pOneWidget), FALSE);
-				g_object_set_data (G_OBJECT (pOneWidget), "get-active-only", GINT_TO_POINTER (1));
 				
 				rend = gtk_cell_renderer_toggle_new ();
 				gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "active", CAIRO_DOCK_MODEL_ACTIVE, NULL);
@@ -1656,6 +1655,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_tree_view_set_model (GTK_TREE_VIEW (pOneWidget), GTK_TREE_MODEL (modele));
 				gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pOneWidget), TRUE);
 				gtk_tree_view_set_headers_clickable (GTK_TREE_VIEW (pOneWidget), TRUE);
+				g_object_set_data (G_OBJECT (pOneWidget), "get-active-line-only", GINT_TO_POINTER (1));
 				
 				rend = gtk_cell_renderer_text_new ();
 				//gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, _("theme"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
@@ -2217,26 +2217,11 @@ static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFil
 	}
 	else if (GTK_IS_TREE_VIEW (pOneWidget))
 	{
-		gboolean bGetActiveOnly = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pOneWidget), "get-active-only"));
+		gboolean bGetActiveOnly = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pOneWidget), "get-active-line-only"));
 		GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pOneWidget));
 		gchar **tStringValues = NULL;
 		
 		if (bGetActiveOnly)
-		{
-			GSList *pActiveElementList = NULL;
-			gtk_tree_model_foreach (GTK_TREE_MODEL (pModel), (GtkTreeModelForeachFunc) _cairo_dock_get_active_elements, &pActiveElementList);
-			iNbElements = g_slist_length (pActiveElementList);
-			tStringValues = g_new0 (gchar *, iNbElements + 1);
-			
-			i = 0;
-			GSList * pListElement;
-			for (pListElement = pActiveElementList; pListElement != NULL; pListElement = pListElement->next)
-			{
-				tStringValues[i++] = pListElement->data;
-			}
-			g_slist_free (pActiveElementList);  // ses donnees sont dans 'tStringValues' et seront donc liberees avec.
-		}
-		else
 		{
 			GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pOneWidget));
 			GList *pRows = gtk_tree_selection_get_selected_rows (selection, NULL);
@@ -2258,6 +2243,21 @@ static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFil
 				tStringValues[i++] = cName;
 			}
 			iNbElements = i;
+		}
+		else
+		{
+			GSList *pActiveElementList = NULL;
+			gtk_tree_model_foreach (GTK_TREE_MODEL (pModel), (GtkTreeModelForeachFunc) _cairo_dock_get_active_elements, &pActiveElementList);
+			iNbElements = g_slist_length (pActiveElementList);
+			tStringValues = g_new0 (gchar *, iNbElements + 1);
+			
+			i = 0;
+			GSList * pListElement;
+			for (pListElement = pActiveElementList; pListElement != NULL; pListElement = pListElement->next)
+			{
+				tStringValues[i++] = pListElement->data;
+			}
+			g_slist_free (pActiveElementList);  // ses donnees sont dans 'tStringValues' et seront donc liberees avec.
 		}
 		if (iNbElements > 1)
 			g_key_file_set_string_list (pKeyFile, cGroupName, cKeyName, (const gchar * const *)tStringValues, iNbElements);

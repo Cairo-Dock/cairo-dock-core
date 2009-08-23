@@ -769,7 +769,7 @@ Icon *cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 		if (pDesklet->render_bounding_box != NULL)
 		{
 			pDesklet->iPickedObject = id;
-			g_print ("iPickedObject <- %d\n", id);
+			//g_print ("iPickedObject <- %d\n", id);
 			pFoundIcon = pDesklet->pIcon;  // il faut mettre qqch, sinon la notification est filtree par la macro CD_APPLET_ON_CLICK_BEGIN.
 		}
 		else

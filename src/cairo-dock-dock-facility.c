@@ -155,7 +155,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	{
 		//g_print ("%s (%d;%d => %s size)\n", __func__, pDock->bInside, pDock->bIsShrinkingDown, pDock->bInside || pDock->bIsShrinkingDown ? "max" : "normal");
 		int iNewWidth, iNewHeight;
-		cairo_dock_get_window_position_and_geometry_at_balance (pDock, (pDock->bInside || pDock->bIsShrinkingDown ? CAIRO_DOCK_MAX_SIZE : CAIRO_DOCK_NORMAL_SIZE), &iNewWidth, &iNewHeight);  // inutile de recalculer Y mais bon...
+		cairo_dock_get_window_position_and_geometry_at_balance (pDock, (pDock->bInside || pDock->bIsShrinkingDown || pDock->iMagnitudeIndex > 0 ? CAIRO_DOCK_MAX_SIZE : CAIRO_DOCK_NORMAL_SIZE), &iNewWidth, &iNewHeight);  // iMagnitudeIndex > 0 rajoute le 23/08/09, a priori ca doit corriger le probleme d'icones trop grande par rapport au dock.
 
 		if (pDock->bHorizontalDock)
 		{
@@ -578,28 +578,6 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 	Icon *icon, *prev_icon;
 
 	double offset = 0.;
-	/*for (ic = pIconList; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		
-		fIconWidthReal += icon->fWidth * icon->fScale + myIcons.iIconGap;
-		if (icon->fPersonnalScale != 0 && fabs (icon->fPersonnalScale) > .05 && fabs (icon->fPersonnalScale) < .95)
-		{
-			//g_print (" %s :  %f -> ", icon->acName, icon->fScale);
-			if (icon->fPersonnalScale > 0)
-				icon->fScale /= icon->fPersonnalScale;
-			else
-				icon->fScale /= (1 + icon->fPersonnalScale);
-			//g_print (" %f (x %f)\n", icon->fScale, icon->fPersonnalScale);
-		}
-		fIconWidth += icon->fWidth * icon->fScale + myIcons.iIconGap;
-	}
-	fIconWidth -= myIcons.iIconGap;
-	fIconWidthReal -= myIcons.iIconGap;
-	double offset = (fIconWidth - fIconWidthReal)/2;
-	if (offset)
-		g_print ("offset : %.2f\n", offset);*/
-	
 	GList *pFirstDrawnElement = (pFirstDrawnElementGiven != NULL ? pFirstDrawnElementGiven : pIconList);
 	ic = pFirstDrawnElement;
 	pointed_ic = (x_abs < 0 ? ic : NULL);

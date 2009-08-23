@@ -482,6 +482,7 @@ static void _cairo_dock_quick_hide_one_root_dock (const gchar *cDockName, CairoD
 {
 	if (pDock->iRefCount == 0)
 	{
+		//cairo_dock_hide_child_docks (pDock);
 		pDock->bAtBottom = FALSE;  // car on a deja quitte le dock lors de la fermeture du menu, donc le "leave-notify" serait ignore.
 		pDock->bAutoHideInitialValue = pDock->bAutoHide;
 		pDock->bAutoHide = TRUE;

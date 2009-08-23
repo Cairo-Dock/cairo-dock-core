@@ -323,7 +323,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 	Icon *icon;
 	if (bHackMeToo)
 	{
-		//g_print ("HACK ME\n");
+		g_print ("HACK ME\n");
 		bHackMeToo = FALSE;
 		if (pDock->bHorizontalDock)
 			gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseX, &pDock->iMouseY, NULL);

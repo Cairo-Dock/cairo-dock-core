@@ -127,6 +127,7 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 		CairoDockTheme *pSameTheme = g_hash_table_lookup (pThemeTable, cThemeName);
 		if (pSameTheme != NULL)
 		{
+			g_print (" same theme : %d\n", pSameTheme->iVersion);
 			if (pSameTheme->iVersion > iVersion)
 			{
 				g_free (cThemePath);
