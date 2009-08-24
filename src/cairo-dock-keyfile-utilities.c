@@ -86,7 +86,7 @@ void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, const gchar *cConfFile
 
 void cairo_dock_replace_key_values (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gboolean bUseOriginalKeys, gchar iIdentifier)
 {
-	g_print ("%s (%d)\n", __func__, iIdentifier);
+	g_print ("%s (%d, %d)\n", __func__, iIdentifier, bUseOriginalKeys);
 	GError *erreur = NULL;
 	gsize length = 0;
 	gchar **pKeyList;
@@ -112,8 +112,8 @@ void cairo_dock_replace_key_values (GKeyFile *pOriginalKeyFile, GKeyFile *pRepla
 
 			if (iIdentifier != 0)
 			{
-				cComment = g_key_file_get_comment (pReplacementKeyFile, cGroupName, cKeyName, NULL);
-
+				cComment = g_key_file_get_comment (bUseOriginalKeys ? pOriginalKeyFile : pReplacementKeyFile, cGroupName, cKeyName, NULL);
+				//g_print ("%s\n  %s", cKeyName, cComment);
 				if (cComment == NULL || strlen (cComment) < 2 || cComment[1] != iIdentifier)
 				{
 					//g_print ("  on saute %s;%s (%s)\n", cGroupName, cKeyName, cComment);

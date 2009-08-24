@@ -127,7 +127,7 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 		CairoDockTheme *pSameTheme = g_hash_table_lookup (pThemeTable, cThemeName);
 		if (pSameTheme != NULL)
 		{
-			g_print (" same theme : %d\n", pSameTheme->iVersion);
+			//g_print (" same theme : %d\n", pSameTheme->iVersion);
 			if (pSameTheme->iVersion > iVersion)
 			{
 				g_free (cThemePath);
@@ -858,26 +858,25 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		}
 		else
 		{
-			g_string_printf (sCommand, "find '%s' -mindepth 1 ! -name '*.conf' ! -path '%s/%s*' ! -type d -exec cp -p {} '%s' \\;", cNewThemePath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // copie tous les fichiers du nouveau theme sauf les lanceurs et les .conf du dock et des plug-ins.
+			// on copie tous les fichiers du nouveau theme sauf les lanceurs et les .conf (dock et plug-ins).
+			g_string_printf (sCommand, "find '%s' -mindepth 1 ! -name '*.conf' ! -path '%s/%s*' ! -type d -exec cp -p {} '%s' \\;", cNewThemePath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);
 			cd_message (sCommand->str);
 			r = system (sCommand->str);
 			
-			gchar *cNewPlugInsDir = g_strdup_printf ("%s/%s", cNewThemePath, "plug-ins");
+			// on parcours les .conf des plug-ins, on les met a jour, et on fusionne avec le theme courant.
+			gchar *cNewPlugInsDir = g_strdup_printf ("%s/%s", cNewThemePath, "plug-ins");  // repertoire des plug-ins du nouveau theme.
 			GDir *dir = g_dir_open (cNewPlugInsDir, 0, NULL);  // NULL si ce theme n'a pas de repertoire 'plug-ins'.
 			const gchar* cModuleDirName;
 			gchar *cConfFilePath, *cNewConfFilePath, *cUserDataDirPath, *cConfFileName;
 			do
 			{
-				cModuleDirName = g_dir_read_name (dir);
+				cModuleDirName = g_dir_read_name (dir);  // nom du repertoire du theme (pas forcement egal au nom du theme)
 				if (cModuleDirName == NULL)
 					break ;
 				
-				/*CairoDockModule *pModule =  cairo_dock_find_module_from_name (cModuleName);
-				if (pModule == NULL || pModule->pVisitCard == NULL)
-					continue;*/
-
+				// on cree le repertoire du plug-in dans le theme courant.
 				cd_debug ("  installing %s's config\n", cModuleDirName);
-				cUserDataDirPath = g_strdup_printf ("%s/plug-ins/%s", g_cCurrentThemePath, cModuleDirName);
+				cUserDataDirPath = g_strdup_printf ("%s/plug-ins/%s", g_cCurrentThemePath, cModuleDirName);  // repertoire du plug-in dans le theme courant.
 				if (! g_file_test (cUserDataDirPath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
 				{
 					cd_debug ("    directory %s doesn't exist, it will be created.", cUserDataDirPath);
@@ -887,6 +886,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 					g_free (command);
 				}
 				
+				// on recupere le nom et le chemin du .conf du plug-in dans le nouveau theme.
 				cConfFileName = g_strdup_printf ("%s.conf", cModuleDirName);
 				cNewConfFilePath = g_strdup_printf ("%s/%s/%s", cNewPlugInsDir, cModuleDirName, cConfFileName);
 				if (! g_file_test (cNewConfFilePath, G_FILE_TEST_EXISTS))
@@ -902,8 +902,24 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 					cConfFileName = g_strdup (pModule->pVisitCard->cConfFileName);
 					cNewConfFilePath = g_strdup_printf ("%s/%s/%s", cNewPlugInsDir, cModuleDirName, cConfFileName);
 				}
-				cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, cConfFileName);
+				cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, cConfFileName);  // chemin du .conf dans le theme courant.
 				
+				// on met a jour le .conf du nouveau theme.
+				/*GError *erreur = NULL;
+				GKeyFile *pKeyFile = cairo_dock_open_key_file (cInstanceConfFilePath);
+				if (pKeyFile == NULL)
+					return NULL;
+
+				gboolean bNeedsUpgrade = cairo_dock_conf_file_needs_update (pKeyFile, pModule->pVisitCard->cModuleVersion);
+				if (bNeedsUpgrade)
+				{
+					cairo_dock_flush_conf_file (pKeyFile, cInstanceConfFilePath, pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);
+					g_key_file_free (pKeyFile);
+					pKeyFile = cairo_dock_open_key_file (cInstanceConfFilePath);
+					if (pKeyFile == NULL)
+						return NULL;
+				}*/
+				// on fusionne les 2 .conf.
 				if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 				{
 					cd_debug ("    no conf file %s, we will take the theme's one", cConfFilePath);

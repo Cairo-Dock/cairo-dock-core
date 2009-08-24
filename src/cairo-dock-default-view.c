@@ -82,7 +82,7 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 		pDock->iMaxRightMargin = pDock->iMaxDockWidth - (pLastIcon->fXMin + pLastIcon->fWidth);
 	//g_print(" marges min: %d | %d\n marges max: %d | %d\n", pDock->iMinLeftMargin, pDock->iMinRightMargin, pDock->iMaxLeftMargin, pDock->iMaxRightMargin);
 	
-	g_print ("clic area : %.2f\n", fExtraWidth/2);
+	//g_print ("clic area : %.2f\n", fExtraWidth/2);
 	pDock->inputArea.x = fExtraWidth/2;
 	pDock->inputArea.y = 0;
 	pDock->inputArea.width = pDock->iMinDockWidth - fExtraWidth;

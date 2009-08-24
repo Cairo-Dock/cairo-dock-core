@@ -657,7 +657,8 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	if (pDock->bAtBottom && pDock->iRefCount == 0)  /// je l'avais mis en commentaire, mais c'est utile maintenant pour le input shape. A valider ...
 	{
 		pDock->iSidLeaveDemand = 0;
-		return FALSE;  /// cela pose probleme lors d'un quick-hide avec souris sur icone de sous-dock...
+		if (! (pDock->bAutoHide && ! pDock->bAutoHideInitialValue))  // sauf quick hide, car cela pose probleme lors d'un quick-hide avec souris sur icone de sous-dock.
+			return FALSE;
 	}
 	//g_print ("%s (bInside:%d; bAtBottom:%d; iRefCount:%d)\n", __func__, pDock->bInside, pDock->bAtBottom, pDock->iRefCount);
 	if (pEvent != NULL && (pEvent->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && (pEvent->state & GDK_BUTTON1_MASK))
