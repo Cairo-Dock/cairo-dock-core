@@ -66,8 +66,10 @@ auto quick hide = false
 #{This is only usefull if don't already use the auto-hide, and if you don't want to reserve the space for your dock nor let it below the other windows.}
 auto quick hide on max = false
 
-#m[Hidden dock] Configure the dock's appearence when hidden.
-config_hidden = 
+#j-[1;1600] Size of the callback zone (width x height, in pixels) :
+#{Place the mouse into it will make the dock re-appear.}
+zone size = 800;5
+
 
 #F-[Pop-up;gtk-go-up]
 frame_pop =
@@ -284,27 +286,6 @@ config transparency = true
 modules=
 
 
-[Hidden dock]
-
-#j+[1;1280] Size of the callback zone (width x height, in pixels) :
-#{Place the mouse into it will make the dock re-appear.}
-zone size = 200;20
-
-#S+ Filename of an image to put on :
-#{This is what you see when the dock hides itselfs. Any format is allowed. Let this field empty to have an invisible zone.}
-callback image = background-cairo-dock.svg
-
-#e+[0;1] Transparency of the image :
-alpha = 0.5
-
-#b+ Rotate the image when the dock is on top/left/right ?
-#{Use it when the image is an arrow pointing to the center of the screen for exemple.}
-reverse visible image = true
-
-#m[Accessibility] Configure the auto-hide behaviour.
-config_hidden = 
-
-
 [Background]
 
 #F+[Extern Frame;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-frame.png]
@@ -329,6 +310,7 @@ rounded bottom corner = true
 
 
 #F+[Background image...;gtk-orientation-portrait]
+#{Use a background image or a color gradation.}
 frame2 = 
 
 #S+ Image's filename to use as a background :
@@ -342,6 +324,7 @@ image alpha = 0.5
 repeat image = true
 
 #F+[...or Gradation;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-gradation.png]
+#{Use a background image or a color gradation.}
 frame3 = 
 
 #C+ Bright color (red, green, blue, alpha) :
@@ -360,6 +343,25 @@ number of stripes = 0
 #f+[0;1] Width of the stripes, in percentage of the pattern size :
 #{1 pattern contains N stripes, so the width can be less or equal than 1/N.}
 stripes width = 0.03
+
+
+#F[Hidden dock;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-hidden-dock.png]
+#{Configure the dock's appearence when hidden.}
+hidden_dock = 
+
+#S+ Filename of an image to put on :
+#{This is what you see when the dock hides itselfs. Any format is allowed. Let this field empty to have an invisible zone.}
+callback image = background-cairo-dock.svg
+
+#e+[0;1] Transparency of the image :
+callback alpha = 0.5
+
+#b+ Rotate the image when the dock is on top/left/right ?
+#{Use it when the image is an arrow pointing to the center of the screen for exemple.}
+callback reverse = true
+
+#m[Accessibility] Configure the auto-hide behaviour.
+config_hidden = 
 
 
 [Labels]
@@ -431,7 +433,7 @@ frame_theme=
 #{These are icons located in ~/.config/cairo-dock/current_theme/icons, coming from the theme you choosed. If you use this option, the dock will search here first, and then in the icons theme.}
 local icons = true
 
-#D+99 Choose a theme of icons :
+#s+ Choose a theme of icons :
 #{Let empty to use the current icons theme of your system. You can enter the name of a theme that is installed on your system (like 'Gartoon' or 'Human'), or even a path to a folder containing icons.}
 default icon directory = 
 
@@ -441,7 +443,7 @@ icons bg =
 
 #b+ Use this background for applets too ?
 #{Some applets may not use it, because they redraw periodically themselves.}
-bg for applets = false
+bg for applets = true
 
 
 #F+[Reflections]

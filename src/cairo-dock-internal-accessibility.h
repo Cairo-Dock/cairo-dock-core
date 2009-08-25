@@ -28,6 +28,7 @@ struct _CairoConfigAccessibility {
 	gboolean bShowSubDockOnClick;
 	gboolean bLockIcons;
 	gboolean bExtendedMode;
+	gint iVisibleZoneWidth, iVisibleZoneHeight;
 	} ;
 
 DEFINE_PRE_INIT (Accessibility);

@@ -1605,8 +1605,30 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					for (l = 0; l < length; l ++)
 					{
 						cValue = cValueList[l];
-						iValue = atoi (cValue);
-						if (iValue < iNbPossibleValues)  // devrait toujours etre vrai.
+						if (! g_ascii_isdigit (*cValue))  // ancien format.
+						{
+							g_print ("old format\n");
+							int k;
+							for (k = 0; k < iNbPossibleValues; k ++)  // on cherche la correspondance.
+							{
+								if (strcmp (cValue, pAuthorizedValuesList[k]) == 0)
+								{
+									g_print (" correspondance %s <-> %d\n", cValue, k);
+									g_free (cValueList[l]);
+									cValueList[l] = g_strdup_printf ("%d", k);
+									cValue = cValueList[l];
+									break ;
+								}
+							}
+							if (k < iNbPossibleValues)
+								iValue = k;
+							else
+								continue;
+						}
+						else
+							iValue = atoi (cValue);
+						
+						if (iValue < iNbPossibleValues)
 						{
 							memset (&iter, 0, sizeof (GtkTreeIter));
 							gtk_list_store_append (modele, &iter);
@@ -1620,6 +1642,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					
 					if (iOrder < iNbPossibleValues)  // il reste des valeurs a inserer (ce peut etre de nouvelles valeurs apparues lors d'une maj du fichier de conf, donc CAIRO_DOCK_WIDGET_TREE_VIEW_SORT est concerne aussi). 
 					{
+						g_print ("on complete\n");
 						gchar cResult[10];
 						for (k = 0; pAuthorizedValuesList[k] != NULL; k ++)
 						{
@@ -1634,10 +1657,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							if (l == length)  // elle n'a pas encore ete inseree.
 							{
 								snprintf (cResult, 9, "%d", k);
+								g_print (" avec '%s'\n", cResult);
 								memset (&iter, 0, sizeof (GtkTreeIter));
 								gtk_list_store_append (modele, &iter);
 								gtk_list_store_set (modele, &iter,
-									CAIRO_DOCK_MODEL_ACTIVE, FALSE,
+									CAIRO_DOCK_MODEL_ACTIVE, (iElementType == CAIRO_DOCK_WIDGET_TREE_VIEW_SORT),
 									CAIRO_DOCK_MODEL_NAME, dgettext (cGettextDomain, cValue),
 									CAIRO_DOCK_MODEL_RESULT, cResult,
 									CAIRO_DOCK_MODEL_ORDER, iOrder ++, -1);
@@ -2218,6 +2242,7 @@ static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFil
 	else if (GTK_IS_TREE_VIEW (pOneWidget))
 	{
 		gboolean bGetActiveOnly = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pOneWidget), "get-active-line-only"));
+		g_print ("%s : bGetActiveOnly=%d\n", cKeyName, bGetActiveOnly);
 		GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pOneWidget));
 		gchar **tStringValues = NULL;
 		
@@ -2255,6 +2280,7 @@ static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFil
 			GSList * pListElement;
 			for (pListElement = pActiveElementList; pListElement != NULL; pListElement = pListElement->next)
 			{
+				g_print (" %d) %s\n", i, pListElement->data);
 				tStringValues[i++] = pListElement->data;
 			}
 			g_slist_free (pActiveElementList);  // ses donnees sont dans 'tStringValues' et seront donc liberees avec.

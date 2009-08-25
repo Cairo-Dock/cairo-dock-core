@@ -28,7 +28,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-internal-accessibility.h"
-#include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-internal-dialogs.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-system.h"
@@ -542,7 +541,7 @@ gboolean on_unmap_dialog (GtkWidget* pWidget,
 	CairoDialog *pDialog)
 {
 	g_print ("unmap\n");
-	gtk_window_present (pWidget);
+	gtk_window_present (GTK_WINDOW (pWidget));
 	return TRUE;  // stops other handlers from being invoked for the event.
 }
 
@@ -1130,7 +1129,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 			if (pDock->bAutoHide)
 			{
 				*iX = pDock->iWindowPositionX +
-					(pIcon->fXAtRest + pIcon->fWidth * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign))) / pDock->fFlatDockWidth * myHiddenDock.iVisibleZoneWidth;
+					(pIcon->fXAtRest + pIcon->fWidth * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign))) / pDock->fFlatDockWidth * myAccessibility.iVisibleZoneWidth;
 				cd_debug ("placement sur un dock cache -> %d", *iX);
 			}
 			else

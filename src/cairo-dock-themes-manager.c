@@ -61,9 +61,9 @@ void cairo_dock_free_theme (CairoDockTheme *pTheme)
 	g_free (pTheme);
 }
 
-GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *hProvidedTable, GError **erreur)
+GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *hProvidedTable, gboolean bUpdateThemeValidity, GError **erreur)
 {
-	cd_message ("%s (%s)", __func__, cThemesDir);
+	g_print ("%s (%s)\n", __func__, cThemesDir);
 	GError *tmp_erreur = NULL;
 	GDir *dir = g_dir_open (cThemesDir, 0, &tmp_erreur);
 	if (tmp_erreur != NULL)
@@ -90,6 +90,7 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 	gchar *cThemePath;
 	const gchar* cThemeName;
 	int iVersion;
+	gboolean bOutdated;
 	CairoDockTheme *pTheme;
 	do
 	{
@@ -106,6 +107,8 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 		}
 		
 		// on recupere la version du theme.
+		g_print (" referencement du theme local %s...\n", cThemeName);
+		bOutdated = FALSE;
 		iVersion = 0;
 		gchar *cVersionFile = g_strdup_printf ("%s/version", cThemePath);
 		if (g_file_test (cVersionFile, G_FILE_TEST_EXISTS))
@@ -119,6 +122,7 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 			if (cContent)
 			{
 				iVersion = atoi (cContent);
+				bOutdated = (iVersion == 0);
 				g_free (cContent);
 			}
 		}
@@ -127,12 +131,27 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 		CairoDockTheme *pSameTheme = g_hash_table_lookup (pThemeTable, cThemeName);
 		if (pSameTheme != NULL)
 		{
-			//g_print (" same theme : %d\n", pSameTheme->iVersion);
+			g_print (" le meme theme existe deja en version %d (> %d)\n", pSameTheme->iVersion, iVersion);
 			if (pSameTheme->iVersion > iVersion)
 			{
+				g_file_set_contents (cVersionFile,
+					"0",
+					-1,
+					NULL);
 				g_free (cThemePath);
+				g_free (cVersionFile);
 				continue;
 			}
+		}
+		
+		if (bOutdated && bUpdateThemeValidity)  // theme precedement marque obsolete, mais aucun theme ne l'ecrase => on le rehabilite.
+		{
+			g_print (" le theme n'est plus obsolete\n");
+			iVersion = 1;
+			g_file_set_contents (cVersionFile,
+				"1",
+				-1,
+				NULL);
 		}
 		
 		// on insere le theme dans la table.
@@ -140,6 +159,7 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 		pTheme->cThemePath = cThemePath;
 		pTheme->cDisplayedName = g_strdup_printf ("%s%s", (cPrefix != NULL ? cPrefix : ""), cThemeName);
 		pTheme->iType = iType;
+		pTheme->iVersion = iVersion;
 		
 		g_free (cVersionFile);
 		
@@ -410,7 +430,7 @@ GHashTable *cairo_dock_list_themes (const gchar *cShareThemesDir, const gchar *c
 	
 	//\______________ On recupere les themes pre-installes (qui ecrasent donc les precedents).
 	if (cShareThemesDir != NULL)
-		pThemeTable = cairo_dock_list_local_themes (cShareThemesDir, pThemeTable, &erreur);
+		pThemeTable = cairo_dock_list_local_themes (cShareThemesDir, pThemeTable, cDistantThemesDir != NULL, &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning ("while loading pre-installed themes in '%s' : %s", cShareThemesDir, erreur->message);
@@ -420,7 +440,7 @@ GHashTable *cairo_dock_list_themes (const gchar *cShareThemesDir, const gchar *c
 	
 	//\______________ On recupere les themes utilisateurs (qui ecrasent donc tout le monde).
 	if (cUserThemesDir != NULL)
-		pThemeTable = cairo_dock_list_local_themes (cUserThemesDir, pThemeTable, NULL);
+		pThemeTable = cairo_dock_list_local_themes (cUserThemesDir, pThemeTable, cDistantThemesDir != NULL, NULL);
 	
 	return pThemeTable;
 }
@@ -986,11 +1006,34 @@ gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareTh
 	if (cUserThemesDir != NULL)
 	{
 		cThemePath = g_strdup_printf ("%s/%s", cUserThemesDir, cThemeName);
+		
 		if (g_file_test (cThemePath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+		{
+			gboolean bOutdated = FALSE;
+			gchar *cVersionFile = g_strdup_printf ("%s/version", cThemePath);
+			if (g_file_test (cVersionFile, G_FILE_TEST_EXISTS))
+			{
+				gsize length = 0;
+				gchar *cContent = NULL;
+				g_file_get_contents (cVersionFile,
+					&cContent,
+					&length,
+					NULL);
+				if (cContent)
+				{
+					int iVersion = atoi (cContent);
+					bOutdated = (iVersion == 0);
+					g_free (cContent);
+				}
+			}
+			if (! bOutdated)
 			return cThemePath;
+		}
+		
 		g_free (cThemePath);
 		cThemePath = NULL;
 	}
+	
 	if (cShareThemesDir != NULL)
 	{
 		cThemePath = g_strdup_printf ("%s/%s", cShareThemesDir, cThemeName);

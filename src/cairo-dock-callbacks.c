@@ -54,7 +54,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
@@ -856,7 +855,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	int iNewWidth, iNewHeight;
 	cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
 	if ((pDock->bAutoHide && pDock->iRefCount == 0) && pDock->bAtBottom)
-		pDock->iWindowPositionY = (pDock->bDirectionUp ? g_iXScreenHeight[pDock->bHorizontalDock] - myHiddenDock.iVisibleZoneHeight - pDock->iGapY : myHiddenDock.iVisibleZoneHeight + pDock->iGapY - pDock->iMaxDockHeight);
+		pDock->iWindowPositionY = (pDock->bDirectionUp ? g_iXScreenHeight[pDock->bHorizontalDock] - myAccessibility.iVisibleZoneHeight - pDock->iGapY : myAccessibility.iVisibleZoneHeight + pDock->iGapY - pDock->iMaxDockHeight);
 	
 	if (pDock->iCurrentWidth != iNewWidth || pDock->iCurrentHeight != iNewHeight)
 	{

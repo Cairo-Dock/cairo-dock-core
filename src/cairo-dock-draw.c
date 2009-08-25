@@ -29,7 +29,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
@@ -1036,10 +1035,9 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 {
 	if (g_pVisibleZoneSurface != NULL)
 	{
-		//g_print ("render hidden (%d;%d)\n", myHiddenDock.bReverseVisibleImage, pDock->bDirectionUp);
 		cairo_dock_draw_surface (pCairoContext, g_pVisibleZoneSurface,
 			pDock->iCurrentWidth, pDock->iCurrentHeight,
-			(myHiddenDock.bReverseVisibleImage ? pDock->bDirectionUp : TRUE),
+			(myBackground.bReverseVisibleImage ? pDock->bDirectionUp : TRUE),
 			pDock->bHorizontalDock,
 			1.);
 	}

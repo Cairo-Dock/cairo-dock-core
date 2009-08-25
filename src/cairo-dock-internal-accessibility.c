@@ -37,25 +37,49 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
+	// espace du dock.
 	pAccessibility->bReserveSpace = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "reserve space", &bFlushConfFileNeeded, FALSE, "Position", NULL);
 
+	pAccessibility->iMaxAuthorizedWidth = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "max autorized width", &bFlushConfFileNeeded, 0, "Position", NULL);
+	pAccessibility->bExtendedMode = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "extended", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	
+	// auto-hide
 	pAccessibility->bAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "auto-hide", &bFlushConfFileNeeded, FALSE, "Position", "auto-hide");
 	pAccessibility->bAutoHideOnFullScreen = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "auto quick hide", &bFlushConfFileNeeded, FALSE, "TaskBar", NULL);
 	pAccessibility->bAutoHideOnMaximized = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "auto quick hide on max", &bFlushConfFileNeeded, FALSE, "TaskBar", NULL);
 	
+	cairo_dock_get_size_key_value (pKeyFile, "Accessibility", "zone size", &bFlushConfFileNeeded, 0, "Hidden dock", "zone size", &pAccessibility->iVisibleZoneWidth, &pAccessibility->iVisibleZoneHeight);
+	if (pAccessibility->iVisibleZoneWidth == 0)
+	{
+		pAccessibility->iVisibleZoneWidth = g_key_file_get_integer (pKeyFile, "Hidden dock", "zone width", NULL);
+		pAccessibility->iVisibleZoneHeight = g_key_file_get_integer (pKeyFile, "Hidden dock", "zone height", NULL);
+		if (pAccessibility->iVisibleZoneWidth == 0)
+		{
+			pAccessibility->iVisibleZoneWidth = g_key_file_get_integer (pKeyFile, "Background", "zone width", NULL);
+			pAccessibility->iVisibleZoneHeight = g_key_file_get_integer (pKeyFile, "Background", "zone height", NULL);
+		}
+		int iSize[2] = {pAccessibility->iVisibleZoneWidth, pAccessibility->iVisibleZoneHeight};
+		g_key_file_set_integer_list (pKeyFile, "Accessibility", "zone size", iSize, 2);
+	}
+	if (pAccessibility->iVisibleZoneWidth < 20)
+		pAccessibility->iVisibleZoneWidth = 20;
+	if (pAccessibility->iVisibleZoneHeight == 0)
+		pAccessibility->iVisibleZoneHeight = 2;
+	
+	// pop-up
 	pAccessibility->bPopUp = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "pop-up", &bFlushConfFileNeeded, FALSE, "Position", NULL);
 	pAccessibility->bPopUpOnScreenBorder = ! cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "pop in corner only", &bFlushConfFileNeeded, FALSE, "Position", NULL);
 	
-	pAccessibility->iMaxAuthorizedWidth = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "max autorized width", &bFlushConfFileNeeded, 0, "Position", NULL);
-	pAccessibility->bExtendedMode = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "extended", &bFlushConfFileNeeded, FALSE, NULL, NULL);
-	
+	// shortcut
 	pAccessibility->cRaiseDockShortcut = cairo_dock_get_string_key_value (pKeyFile, "Accessibility", "raise shortcut", &bFlushConfFileNeeded, NULL, "Position", NULL);
 	
+	// sous-docks.
 	pAccessibility->iLeaveSubDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "leaving delay", &bFlushConfFileNeeded, 330, "System", NULL);
 	pAccessibility->iShowSubDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "show delay", &bFlushConfFileNeeded, 300, "System", NULL);
 	pAccessibility->bShowSubDockOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "show on click", &bFlushConfFileNeeded, FALSE, "System", NULL);
 	pAccessibility->bLockIcons = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "lock icons", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	
+	// on verifie les options en conflit.
 	GString *sWarning = NULL;
 	if (pAccessibility->cRaiseDockShortcut != NULL)
 	{
@@ -109,8 +133,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 			pAccessibility->bAutoHideOnMaximized = FALSE;
 		}
 	}  // par contre on peut avoir reserve space avec auto-hide.
-	
-	
 	
 	if (pAccessibility->bReserveSpace)
 	{
@@ -190,8 +212,19 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		cairo_dock_update_dock_size (pDock);  // met a jour les icones et le fond aussi.
 	}
 	
+	//\_______________ Zone de rappel.
+	if (pAccessibility->iVisibleZoneWidth != pPrevAccessibility->iVisibleZoneWidth ||
+		pAccessibility->iVisibleZoneHeight != pPrevAccessibility->iVisibleZoneHeight)
+	{
+		cairo_dock_place_root_dock (pDock);
+		gtk_widget_queue_draw (pDock->pWidget);  // le 'gdk_window_move_resize' ci-dessus ne provoquera pas le redessin si la taille n'a pas change.
+	}
+	
 	//\_______________ Reserve Spave.
-	if (pAccessibility->bReserveSpace != pPrevAccessibility->bReserveSpace)
+	if (pAccessibility->bReserveSpace != pPrevAccessibility->bReserveSpace ||
+		pAccessibility->bReserveSpace &&
+			(pAccessibility->iVisibleZoneWidth != pPrevAccessibility->iVisibleZoneWidth ||
+			pAccessibility->iVisibleZoneHeight != pPrevAccessibility->iVisibleZoneHeight))
 		cairo_dock_reserve_space_for_all_root_docks (pAccessibility->bReserveSpace);
 	
 	//\_______________ Pop-up.

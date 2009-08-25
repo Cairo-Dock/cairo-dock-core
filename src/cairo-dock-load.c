@@ -36,7 +36,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-background.h"
@@ -273,7 +272,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 				(bHorizontalDock ? &icon->fHeight : &icon->fWidth));
 			if (icon->pIconBuffer == NULL)
 			{
-				const GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
+				GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
 				if (pApplis != NULL)
 				{
 					Icon *pOneIcon = (Icon *) (g_list_last (pApplis)->data);  // on prend le dernier car les applis sont inserees a l'envers, et on veut avoir celle qui etait deja present dans le dock (pour 2 raison : continuite, et la nouvelle (en 1ere position) n'est pas forcement deja dans un dock, ce qui fausse le ratio).
@@ -589,6 +588,11 @@ void cairo_dock_load_visible_zone (CairoDock *pDock, gchar *cVisibleZoneImageFil
 	double fVisibleZoneWidth = iVisibleZoneWidth, fVisibleZoneHeight = iVisibleZoneHeight;
 	if (g_pVisibleZoneSurface != NULL)
 		cairo_surface_destroy (g_pVisibleZoneSurface);
+	if (g_iVisibleZoneTexture != 0)
+	{
+		_cairo_dock_delete_texture (g_iVisibleZoneTexture);
+		g_iVisibleZoneTexture = 0;
+	}
 	if (cVisibleZoneImageFile != NULL)
 	{
 		cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));

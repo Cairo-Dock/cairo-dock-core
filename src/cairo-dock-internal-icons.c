@@ -43,22 +43,26 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 		pIcons->tIconTypeOrder[i] = i;
 	gsize length=0;
 	
-	int iIconsTypesList[3];
-	int iDefaultValues[3] = {0,1,2};
-	cairo_dock_get_integer_list_key_value (pKeyFile, "Icons", "icon's type order", &bFlushConfFileNeeded, iIconsTypesList, 3, iDefaultValues, "Cairo Dock", NULL);
+	int iIconsTypesList[3] = {0,0,0};
+	int iDefaultValues[3] = {0,0,0};
+	cairo_dock_get_integer_list_key_value (pKeyFile, "Icons", "icon's type order", &bFlushConfFileNeeded, iIconsTypesList, 3, NULL, "Cairo Dock", NULL);
 	if (iIconsTypesList[0] == 0 && iIconsTypesList[1] == 0)  // old format.
 	{
+		g_print ("icon's type order : old format\n");
 		gchar **cIconsTypesList = cairo_dock_get_string_list_key_value (pKeyFile, "Icons", "icon's type order", &bFlushConfFileNeeded, &length, NULL, "Cairo Dock", NULL);
 		
 		if (cIconsTypesList != NULL && length > 0)
 		{
+			g_print (" conversion ...\n");
 			unsigned int i, j;
 			for (i = 0; i < length; i ++)
 			{
+				g_print (" %d) %s\n", i, cIconsTypesList[i]);
 				for (j = 0; j < ((CAIRO_DOCK_NB_TYPES + 1) / 2); j ++)
 				{
 					if (strcmp (cIconsTypesList[i], s_cIconTypeNames[j]) == 0)
 					{
+						g_print ("   => %d\n", j);
 						pIcons->tIconTypeOrder[2*j] = 2 * i;
 					}
 				}
@@ -66,9 +70,10 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 		}
 		g_strfreev (cIconsTypesList);
 		
-		iIconsTypesList[0] = pIcons->tIconTypeOrder[2*0];
-		iIconsTypesList[1] = pIcons->tIconTypeOrder[2*1];
-		iIconsTypesList[2] = pIcons->tIconTypeOrder[2*2];
+		iIconsTypesList[0] = pIcons->tIconTypeOrder[2*0]/2;
+		iIconsTypesList[1] = pIcons->tIconTypeOrder[2*1]/2;
+		iIconsTypesList[2] = pIcons->tIconTypeOrder[2*2]/2;
+		g_print ("mise a jour avec {%d;%d;%d}\n", iIconsTypesList[0], iIconsTypesList[1], iIconsTypesList[2]);
 		g_key_file_set_integer_list (pKeyFile, "Icons", "icon's type order", iIconsTypesList, 3);
 		bFlushConfFileNeeded = TRUE;
 	}

@@ -282,21 +282,20 @@ void cairo_dock_show_hide_container (CairoContainer *pContainer)
 
 void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCallBack, gpointer data)
 {
-	GtkTargetEntry *pTargetEntry = g_new0 (GtkTargetEntry, 6);
-	pTargetEntry[0].target = "text/*";
+	GtkTargetEntry pTargetEntry[6];
+	pTargetEntry[0].target = (gchar *)"text/*";
 	pTargetEntry[0].flags = (GtkTargetFlags) 0;
 	pTargetEntry[0].info = 0;
-	pTargetEntry[1].target = "text/uri-list";
-	pTargetEntry[2].target = "text/plain";
-	pTargetEntry[3].target = "text/plain;charset=UTF-8";
-	pTargetEntry[4].target = "text/directory";
-	pTargetEntry[5].target = "text/html";
+	pTargetEntry[1].target = (gchar *)"text/uri-list";
+	pTargetEntry[2].target = (gchar *)"text/plain";
+	pTargetEntry[3].target = (gchar *)"text/plain;charset=UTF-8";
+	pTargetEntry[4].target = (gchar *)"text/directory";
+	pTargetEntry[5].target = (gchar *)"text/html";
 	gtk_drag_dest_set (pWidget,
 		GTK_DEST_DEFAULT_DROP | GTK_DEST_DEFAULT_MOTION,  // GTK_DEST_DEFAULT_HIGHLIGHT ne rend pas joli je trouve.
 		pTargetEntry,
 		6,
 		GDK_ACTION_COPY | GDK_ACTION_MOVE);  // le 'GDK_ACTION_MOVE' c'est pour KDE.
-	g_free (pTargetEntry);
 
 	g_signal_connect (G_OBJECT (pWidget),
 		"drag_data_received",

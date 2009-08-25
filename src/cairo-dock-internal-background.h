@@ -28,6 +28,9 @@ struct _CairoConfigBackground {
 	gdouble fStripesWidth;
 	gdouble fStripesColorDark[4];
 	gdouble fStripesAngle;
+	gchar *cVisibleZoneImageFile;
+	gdouble fVisibleZoneAlpha;
+	gboolean bReverseVisibleImage;
 	};
 
 #define g_iDockLineWidth myBackground.iDockLineWidth

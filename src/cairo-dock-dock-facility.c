@@ -55,7 +55,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-labels.h"
-#include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-dock-facility.h"
@@ -353,8 +352,8 @@ void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, C
 	}
 	else
 	{
-		*iNewWidth = myHiddenDock.iVisibleZoneWidth;
-		*iNewHeight = myHiddenDock.iVisibleZoneHeight;
+		*iNewWidth = myAccessibility.iVisibleZoneWidth;
+		*iNewHeight = myAccessibility.iVisibleZoneHeight;
 		pDock->iLeftMargin = 0;
 		pDock->iRightMargin = 0;
 	}

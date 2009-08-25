@@ -36,7 +36,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-internal-system.h"
-#include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-internal-labels.h"
@@ -654,7 +653,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	glLoadIdentity ();
 	glTranslatef (pDock->iCurrentWidth/2, pDock->iCurrentHeight/2, 0.);
 	
-	if (! pDock->bDirectionUp && myHiddenDock.bReverseVisibleImage)
+	if (! pDock->bDirectionUp && myBackground.bReverseVisibleImage)
 		glScalef (1., -1., 1.);
 	if (! pDock->bHorizontalDock)
 		glRotatef (-90., 0, 0, 1);

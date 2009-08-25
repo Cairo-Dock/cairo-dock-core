@@ -32,7 +32,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-internal-dialogs.h"
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-indicators.h"
@@ -1399,14 +1398,13 @@ void cairo_dock_preload_internal_modules (GHashTable *pModuleTable)
 	REGISTER_INTERNAL_MODULE (Accessibility);
 	REGISTER_INTERNAL_MODULE (System);
 	REGISTER_INTERNAL_MODULE (TaskBar);
-	REGISTER_INTERNAL_MODULE (HiddenDock);
+	REGISTER_INTERNAL_MODULE (Background);
+	REGISTER_INTERNAL_MODULE (Icons);
+	REGISTER_INTERNAL_MODULE (Labels);
 	REGISTER_INTERNAL_MODULE (Dialogs);
 	REGISTER_INTERNAL_MODULE (Indicators);
 	REGISTER_INTERNAL_MODULE (Views);
-	REGISTER_INTERNAL_MODULE (Labels);
 	REGISTER_INTERNAL_MODULE (Desklets);
-	REGISTER_INTERNAL_MODULE (Icons);
-	REGISTER_INTERNAL_MODULE (Background);
 }
 
 static void _cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, GKeyFile *pKeyFile)

@@ -52,7 +52,6 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-hidden-dock.h"
 #include "cairo-dock-internal-dialogs.h"
 #include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-internal-views.h"
@@ -303,8 +302,9 @@ void cairo_dock_get_integer_list_key_value (GKeyFile *pKeyFile, const gchar *cGr
 				memcpy (iValueBuffer, iValuesList, MIN (iNbElements, length) * sizeof (int));
 		}
 		g_free (cGroupNameUpperCase);
-
-		g_key_file_set_integer_list (pKeyFile, cGroupName, cKeyName, iValueBuffer, iNbElements);
+		
+		if (iDefaultValues != NULL)  // on ne modifie les valeurs actuelles que si on a explicitement passe des valeurs par defaut en entree; sinon on considere que l'on va traiter le cas en aval.
+			g_key_file_set_integer_list (pKeyFile, cGroupName, cKeyName, iValueBuffer, iNbElements);
 		if (bFlushConfFileNeeded != NULL)
 			*bFlushConfFileNeeded = TRUE;
 	}
@@ -559,7 +559,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	
 	cairo_dock_load_desklet_buttons (pCairoContext);
 	
-	cairo_dock_load_visible_zone (pDock, myHiddenDock.cVisibleZoneImageFile, myHiddenDock.iVisibleZoneWidth, myHiddenDock.iVisibleZoneHeight, myHiddenDock.fVisibleZoneAlpha);
+	cairo_dock_load_visible_zone (pDock, myBackground.cVisibleZoneImageFile, myAccessibility.iVisibleZoneWidth, myAccessibility.iVisibleZoneHeight, myBackground.fVisibleZoneAlpha);
 	
 	
 	if (/**bUniquePidOld != myTaskBar.bUniquePid ||*/
