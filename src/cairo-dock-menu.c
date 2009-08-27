@@ -1271,7 +1271,7 @@ void cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 }
 
 
-#define _add_entry_in_menu(cLabel, gtkStock, pSubMenu, pCallBack) CAIRO_DOCK_ADD_IN_MENU_WITH_STOCK_AND_DATA (cLabel, gtkStock, pSubMenu, pCallBack, data)
+#define _add_entry_in_menu(cLabel, gtkStock, pCallBack, pSubMenu) cairo_dock_add_in_menu_with_stock_and_data (cLabel, gtkStock, (GFunc) (pCallBack), pSubMenu, data)
 
 GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 {
@@ -1413,7 +1413,7 @@ static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, gpointer data)
 					user_data[2] = GINT_TO_POINTER (j);
 					user_data[3] = GINT_TO_POINTER (k);
 					
-					CAIRO_DOCK_ADD_IN_MENU_WITH_STOCK_AND_DATA (sDesktop->str, NULL, (bAll ? _cairo_dock_move_class_to_desktop : _cairo_dock_move_appli_to_desktop), pMenu, user_data);
+					cairo_dock_add_in_menu_with_stock_and_data (sDesktop->str, NULL, (bAll ? _cairo_dock_move_class_to_desktop : _cairo_dock_move_appli_to_desktop), pMenu, user_data);
 				}
 			}
 		}
@@ -1720,4 +1720,28 @@ void cairo_dock_popup_menu_on_container (GtkWidget *menu, CairoContainer *pConta
 		NULL,
 		1,
 		gtk_get_current_event_time ());
+}
+
+
+GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GFunc pFunction, GtkWidget *pMenu, gpointer pData)
+{
+	GtkWidget *pMenuItem = gtk_image_menu_item_new_with_label (cLabel);
+	if (gtkStock)
+	{
+		GtkWidget *image = NULL;
+		if (*gtkStock == '/')
+		{
+			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (gtkStock, 24, 24, NULL);
+			image = gtk_image_new_from_pixbuf (pixbuf);
+			g_object_unref (pixbuf);
+		}
+		else
+		{
+			image = gtk_image_new_from_stock (gtkStock, GTK_ICON_SIZE_MENU);
+		}
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
+	}
+	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem); 
+	g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK (pFunction), pData);
+	return pMenuItem;
 }

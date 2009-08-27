@@ -122,14 +122,13 @@ void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 	pVisitCard->cConfFileName = g_strdup ("help.conf");
 	pVisitCard->cModuleVersion = g_strdup ("0.0.6");
 	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
-	pVisitCard->cIconFilePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, "help.svg");
+	pVisitCard->cIconFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/help.svg";
 	pVisitCard->iSizeOfConfig = 0;
 	pVisitCard->iSizeOfData = 0;
 	pVisitCard->cDescription = N_("A useful FAQ that contains also a lot of hints.\nLet the mouse over a sentence to make the hint dialog popups.");
 	pHelpModule->pInterface = g_new0 (CairoDockModuleInterface, 1);
 	pHelpModule->pInterface->load_custom_widget = _entered_help_once;
 	g_hash_table_insert (s_hModuleTable, pHelpModule->pVisitCard->cModuleName, pHelpModule);
-	///pHelpModule->cConfFilePath = cairo_dock_check_module_conf_file (pHelpModule->pVisitCard);
 	cairo_dock_activate_module (pHelpModule, NULL);
 	pHelpModule->fLastLoadingTime = time (NULL) + 1e6;  // pour ne pas qu'il soit desactive lors d'un reload general, car il n'est pas dans la liste des modules actifs du fichier de conf.
 }
@@ -322,11 +321,16 @@ CairoDockModule * cairo_dock_load_module (gchar *cSoFilePath, GError **erreur)  
 
 void cairo_dock_load_manual_module (CairoDockModule *pModule)
 {
-	if (s_hModuleTable != NULL && pModule->pVisitCard != NULL && pModule->pVisitCard->cModuleName != NULL)
+	g_return_if_fail (s_hModuleTable != NULL && pModule->pVisitCard != NULL && pModule->pVisitCard->cModuleName != NULL);
+	
+	if (g_hash_table_lookup (s_hModuleTable, pModule->pVisitCard->cModuleName) != NULL)
 	{
-		pModule->pVisitCard->cDockVersionOnCompilation = g_strdup (CAIRO_DOCK_VERSION);
-		g_hash_table_insert (s_hModuleTable, pModule->pVisitCard->cModuleName, pModule);
+		cd_warning ("a module with the name '%s' is already registered", pModule->pVisitCard->cModuleName);
+		return ;
 	}
+	
+	pModule->pVisitCard->cDockVersionOnCompilation = CAIRO_DOCK_VERSION;
+	g_hash_table_insert (s_hModuleTable, pModule->pVisitCard->cModuleName, pModule);
 }
 
 

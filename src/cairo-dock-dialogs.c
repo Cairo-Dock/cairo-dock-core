@@ -541,7 +541,10 @@ gboolean on_unmap_dialog (GtkWidget* pWidget,
 	CairoDialog *pDialog)
 {
 	g_print ("unmap\n");
-	gtk_window_present (GTK_WINDOW (pWidget));
+	if (! pDialog->bAllowMinimize)
+		gtk_window_present (GTK_WINDOW (pWidget));
+	else
+		pDialog->bAllowMinimize = FALSE;
 	return TRUE;  // stops other handlers from being invoked for the event.
 }
 
@@ -1667,6 +1670,7 @@ void cairo_dock_hide_dialog (CairoDialog *pDialog)
 {
 	if (GTK_WIDGET_VISIBLE (pDialog->pWidget))
 	{
+		pDialog->bAllowMinimize = TRUE;
 		gtk_widget_hide (pDialog->pWidget);
 		pDialog->bInside = FALSE;
 		cairo_dock_replace_all_dialogs ();

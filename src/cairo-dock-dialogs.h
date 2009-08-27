@@ -219,6 +219,8 @@ struct _CairoDialog {
 	/// textures.
 	GLuint iIconTexture, iTextTexture;
 	gboolean bFinalized;
+	/// TRUE to allow the dialog to be minimized once. The flag is reseted to FALSE after the desklet has minimized.
+	gboolean bAllowMinimize;
 };
 
 

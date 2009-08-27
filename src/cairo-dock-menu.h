@@ -12,28 +12,6 @@ G_BEGIN_DECLS
 * It is called on a left click on a Container, builds a main menu, and notifies everybody about it, so that the menu is completed.
 */
 
-/*
-*Ajoute une entree avec une icone GTK a un menu deja existant.
-*@param cLabel nom de l'entree, tel qu'il apparaitra dans le menu.
-*@param gtkStock nom d'une icone de GTK ou chemin complet d'une image quelconque.
-*@param pFunction fonction appelee lors de la selection de cette entree.
-*@param pMenu GtkWidget du menu auquel on rajoutera l'entree.
-*@param pData donnees passees en parametre de la fonction (doit contenir myApplet).
-*/
-#define CAIRO_DOCK_ADD_IN_MENU_WITH_STOCK_AND_DATA(cLabel, gtkStock, pFunction, pMenu, pData) do { \
-	pMenuItem = gtk_image_menu_item_new_with_label (cLabel); \
-	if (gtkStock) {\
-		const gchar *_cImage = gtkStock;\
-		if (*_cImage == '/') {\
-			GdkPixbuf *_pixbuf = gdk_pixbuf_new_from_file_at_size (_cImage, 24, 24, NULL);\
-			image = gtk_image_new_from_pixbuf (_pixbuf);\
-			g_object_unref (_pixbuf); }\
-		else {\
-			image = gtk_image_new_from_stock (_cImage, GTK_ICON_SIZE_MENU); }\
-		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image); }\
-	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem); \
-	g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK(pFunction), pData); } while (0)
-
 /** Build the main menu of a Container.
 *@param icon the icon that was left-clicked, or NULL if none.
 *@param pContainer the container that was left-clicked.
@@ -51,6 +29,16 @@ void cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock);
 *@param pContainer the container that was clicked.
 */
 void cairo_dock_popup_menu_on_container (GtkWidget *menu, CairoContainer *pContainer);
+
+/*
+*Ajoute une entree avec une icone (GTK ou chemin) a un menu deja existant.
+*@param cLabel nom de l'entree, tel qu'il apparaitra dans le menu.
+*@param gtkStock nom d'une icone de GTK ou chemin complet d'une image quelconque.
+*@param pFunction fonction appelee lors de la selection de cette entree.
+*@param pMenu GtkWidget du menu auquel on rajoutera l'entree.
+*@param pData donnees passees en parametre de la fonction (doit contenir myApplet).
+*/
+GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GFunc pFunction, GtkWidget *pMenu, gpointer pData);
 
 
 G_END_DECLS

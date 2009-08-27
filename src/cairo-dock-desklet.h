@@ -219,7 +219,7 @@ struct _CairoDesklet {
 	gboolean bFixedAttitude;
 	GtkWidget *pInteractiveWidget;
 	gboolean bSpaceReserved;
-	// TRUE to allow the desklet to be minimized once. The flag is reseted to FALSE after the desklet has minimized.
+	/// TRUE to allow the desklet to be minimized once. The flag is reseted to FALSE after the desklet has minimized.
 	gboolean bAllowMinimize;
 	/// X position of the pointer taking into account the 2D transformations on the desklet (for an opengl renderer, you'll have to use the picking).
 	gint iMouseX2d;

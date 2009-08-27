@@ -172,6 +172,7 @@ void cairo_dock_register_appli (Icon *icon)
 {
 	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
+		cd_debug ("%s (%ld ; %s)\n", __func__, icon->Xid, icon->acName);
 		Window *pXid = g_new (Window, 1);
 			*pXid = icon->Xid;
 		g_hash_table_insert (s_hXWindowTable, pXid, icon);
@@ -184,6 +185,7 @@ void cairo_dock_blacklist_appli (Window Xid)
 {
 	if (Xid > 0)
 	{
+		cd_debug ("%s (%ld)\n", __func__, Xid);
 		Window *pXid = g_new (Window, 1);
 			*pXid = Xid;
 		g_hash_table_insert (s_hXWindowTable, pXid, NULL);
@@ -194,7 +196,7 @@ void cairo_dock_unregister_appli (Icon *icon)
 {
 	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
-		cd_message ("%s (%s)", __func__, icon->acName);
+		cd_message ("%s (%ld ; %s)", __func__, icon->Xid, icon->acName);
 		if (icon->iLastCheckTime != -1)
 			g_hash_table_remove (s_hXWindowTable, &icon->Xid);
 		
@@ -745,10 +747,9 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 }
 void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 {
-	//g_print ("%s ()\n", __func__);
 	gulong i, iNbWindows = 0;
 	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows);
-
+	
 	Window Xid;
 	Icon *icon;
 	int iStackOrder = 0;
@@ -758,6 +759,7 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 	CairoDock *pParentDock;
 	cairo_t *pCairoContext = NULL;
 	
+	cd_debug ("%s (%d)", __func__, iNbWindows);
 	for (i = 0; i < iNbWindows; i ++)
 	{
 		Xid = pXWindowsList[i];

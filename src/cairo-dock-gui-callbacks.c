@@ -226,7 +226,7 @@ void on_click_apply (GtkButton *button, GtkWidget *pWindow)
 		{
 			//g_print ("found module %s\n", pInternalModule->cModuleName);
 			cairo_dock_reload_internal_module (pInternalModule, g_cConfFile);
-			if (pInternalModule->pExternalModules != NULL)
+			if (pInternalModule->pExternalModules != NULL)  // comme on ne sait pas sur quel(s) module(s) on a fait des modif, on les met tous a jour.
 			{
 				CairoDockModuleInstance *pModuleInstance;
 				GList *m;
