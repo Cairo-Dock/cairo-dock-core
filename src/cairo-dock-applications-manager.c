@@ -956,6 +956,8 @@ Icon *cairo_dock_get_icon_with_Xid (Window Xid)
 
 static void _cairo_dock_for_one_appli (Window *Xid, Icon *icon, gpointer *data)
 {
+	if (icon == NULL)
+		return ;
 	CairoDockForeachIconFunc pFunction = data[0];
 	gpointer pUserData = data[1];
 	gboolean bOutsideDockOnly =  GPOINTER_TO_INT (data[2]);

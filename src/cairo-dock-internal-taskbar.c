@@ -70,6 +70,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	pTaskBar->cAnimationOnActiveWindow = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "animation on active window", &bFlushConfFileNeeded, "wobbly", NULL, NULL);
 	
 	pTaskBar->bMixLauncherAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "mix launcher appli", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	pTaskBar->bDrawIndicatorOnAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "indic on appli", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	pTaskBar->bOverWriteXIcons = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "overwrite xicon", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	pTaskBar->cOverwriteException = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "overwrite exception", &bFlushConfFileNeeded, "pidgin;xchat", NULL, NULL);
 	if (pTaskBar->cOverwriteException)
@@ -98,6 +99,10 @@ static void reset_config (CairoConfigTaskBar *pTaskBar)
 	g_free (pTaskBar->cForceDemandsAttention);
 }
 
+static void _set_indicator (Icon *pIcon, CairoContainer *pContainer, gpointer data)
+{
+	pIcon->bHasIndicator = GPOINTER_TO_INT (data);
+}
 static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskBar)
 {
 	CairoDock *pDock = g_pMainDock;
@@ -119,10 +124,11 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 		bUpdateSize = TRUE;
 	}
 	
-	if (cairo_dock_application_manager_is_running () && pPrevTaskBar->iAppliMaxNameLength != pTaskBar->iAppliMaxNameLength)
+	if (cairo_dock_application_manager_is_running () &&
+		pPrevTaskBar->bDrawIndicatorOnAppli != pTaskBar->bDrawIndicatorOnAppli)
 	{
-		/// recharger les noms ...
-		
+		cairo_dock_foreach_applis ((CairoDockForeachIconFunc) _set_indicator, FALSE, GINT_TO_POINTER (pTaskBar->bDrawIndicatorOnAppli));
+		gtk_widget_queue_draw (pDock->pWidget);
 	}
 	
 	if (! cairo_dock_application_manager_is_running () && pTaskBar->bShowAppli)  // maintenant on veut voir les applis !

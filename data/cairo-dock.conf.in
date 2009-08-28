@@ -136,6 +136,10 @@ sep_app =
 #{Allows launchers to act as applis when their program is running, and displays an indicator on their icon to signal it. You can launch other occurences of the program with SHIFT+click.}
 mix launcher appli = true
 
+#b- Display an indicator on applis ?
+#{The indicator is drawn on active launchers, but you may want to display it on applis too.}
+indic on appli = false
+
 #b- Overwrite X icons with launchers' one ?
 #{If not set, will use the icon provided by X for each appli. If set, the same icon as the corresponding launcher will be used for each appli.}
 overwrite xicon = true

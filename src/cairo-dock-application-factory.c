@@ -547,6 +547,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	icon->bIsMaximized = bIsMaximized;
 	icon->bIsFullScreen = bIsFullScreen;
 	icon->bIsDemandingAttention = bDemandsAttention;
+	icon->bHasIndicator = myTaskBar.bDrawIndicatorOnAppli;
 	
 	cairo_dock_get_xwindow_geometry (Xid,
 		&icon->windowGeometry.x,

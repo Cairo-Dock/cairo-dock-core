@@ -34,6 +34,7 @@ struct _CairoConfigTaskBar {
 	gchar *cOverwriteException;
 	gchar *cGroupException;
 	gchar *cForceDemandsAttention;
+	gboolean bDrawIndicatorOnAppli;
 	} ;
 
 
