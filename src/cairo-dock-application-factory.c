@@ -708,6 +708,18 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 }
 void cairo_dock_appli_demands_attention (Icon *icon)
 {
+	//g_print ("%s (%s)\n", __func__, icon->acName);
+	
+	if (icon->bIsDemandingAttention &&
+		cairo_dock_icon_has_dialog (icon) &&
+		((! icon->cLastAttentionDemand && ! icon->acName) ||
+		(icon->cLastAttentionDemand && icon->acName && strcmp (icon->cLastAttentionDemand, icon->acName) == 0)))  // la demande n'a pas change entre les 2 demandes.
+	{
+		return ;
+	}
+	g_free (icon->cLastAttentionDemand);
+	icon->cLastAttentionDemand = g_strdup (icon->acName);
+	
 	gboolean bForceDemand = (myTaskBar.cForceDemandsAttention && icon->cClass && g_strstr_len (myTaskBar.cForceDemandsAttention, -1, icon->cClass));
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	if (pParentDock == NULL)  // appli inhibee ou non affichee.

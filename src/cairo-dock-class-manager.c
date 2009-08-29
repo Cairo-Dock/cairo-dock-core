@@ -320,7 +320,7 @@ gboolean cairo_dock_class_is_expanded (const gchar *cClass)
 gboolean cairo_dock_prevent_inhibated_class (Icon *pIcon)
 {
 	g_return_val_if_fail (pIcon != NULL, FALSE);
-	cd_message ("");
+	//g_print ("%s (%s)\n", __func__, pIcon->cClass);
 	
 	gboolean bToBeInhibited = FALSE;
 	CairoDockClassAppli *pClassAppli = cairo_dock_find_class_appli (pIcon->cClass);

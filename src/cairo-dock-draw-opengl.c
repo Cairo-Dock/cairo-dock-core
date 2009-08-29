@@ -1606,36 +1606,12 @@ void cairo_dock_set_ortho_view (int iWidth, int iHeight)
 	glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
 }
 
-GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHasBeenForced)  // taken from a MacSlow's exemple.
+
+static inline XVisualInfo *_get_visual_from_fbconfigs (GLXFBConfig *pFBConfigs, int iNumOfFBConfigs, Display *XDisplay)
 {
-	GdkGLConfig *pGlConfig = NULL;
-	
-	Display *XDisplay = gdk_x11_get_default_xdisplay ();
-	
-	GLXFBConfig *pFBConfigs; 
-	XRenderPictFormat *pPictFormat = NULL;
-	int doubleBufferAttributes[] = {
-		GLX_DRAWABLE_TYPE, 	GLX_WINDOW_BIT,
-		GLX_RENDER_TYPE, 		GLX_RGBA_BIT,
-		GLX_DOUBLEBUFFER, 	True,
-		GLX_RED_SIZE, 		1,
-		GLX_GREEN_SIZE, 		1,
-		GLX_BLUE_SIZE, 		1,
-		GLX_ALPHA_SIZE, 		1,
-		GLX_DEPTH_SIZE, 		1,
-		GLX_STENCIL_SIZE, 	1,
-		None};
-	
-	
+	XRenderPictFormat *pPictFormat;
 	XVisualInfo *pVisInfo = NULL;
-	int i, iNumOfFBConfigs = 0;
-	cd_debug ("cherchons les configs ...");
-	pFBConfigs = glXChooseFBConfig (XDisplay,
-		DefaultScreen (XDisplay),
-		doubleBufferAttributes,
-		&iNumOfFBConfigs);
-	
-	cd_debug (" -> %d FBConfig(s)", iNumOfFBConfigs);
+	int i;
 	for (i = 0; i < iNumOfFBConfigs; i++)
 	{
 		pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]);
@@ -1657,19 +1633,67 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 		if (pPictFormat->direct.alphaMask > 0)
 		{
 			cd_message ("Strike, found a GLX visual with alpha-support !");
-			*bHasBeenForced = FALSE;
 			break;
 		}
 
 		XFree (pVisInfo);
 		pVisInfo = NULL;
 	}
+	return pVisInfo;
+}
+GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHasBeenForced)  // taken from a MacSlow's exemple.
+{
+	GdkGLConfig *pGlConfig = NULL;
+	
+	Display *XDisplay = gdk_x11_get_default_xdisplay ();
+	
+	GLXFBConfig *pFBConfigs; 
+	XRenderPictFormat *pPictFormat = NULL;
+	int doubleBufferAttributes[] = {
+		GLX_DRAWABLE_TYPE, 	GLX_WINDOW_BIT,
+		GLX_RENDER_TYPE, 		GLX_RGBA_BIT,
+		GLX_DOUBLEBUFFER, 	True,
+		GLX_RED_SIZE, 		1,
+		GLX_GREEN_SIZE, 		1,
+		GLX_BLUE_SIZE, 		1,
+		GLX_DEPTH_SIZE, 		1,
+		GLX_ALPHA_SIZE, 		1,
+		GLX_STENCIL_SIZE, 	1,
+		None};
+	
+	
+	XVisualInfo *pVisInfo = NULL;
+	int iNumOfFBConfigs = 0;
+	cd_debug ("cherchons les configs ...");
+	pFBConfigs = glXChooseFBConfig (XDisplay,
+		DefaultScreen (XDisplay),
+		doubleBufferAttributes,
+		&iNumOfFBConfigs);
+	
+	cd_debug (" -> %d FBConfig(s)", iNumOfFBConfigs);
+	*bHasBeenForced = FALSE;
+	
+	pVisInfo = _get_visual_from_fbconfigs (pFBConfigs, iNumOfFBConfigs, XDisplay);
 	if (pFBConfigs)
 		XFree (pFBConfigs);
 	
 	if (pVisInfo == NULL)
 	{
-		cd_warning ("couldn't find an appropriate visual ourself, trying something else, this may not work with some drivers ...");
+		cd_warning ("couldn't find an appropriate visual, trying to get one without Stencil buffer\n(it may cause some little deterioration in the rendering) ...");
+		doubleBufferAttributes[16] = None;
+		pFBConfigs = glXChooseFBConfig (XDisplay,
+			DefaultScreen (XDisplay),
+			doubleBufferAttributes,
+			&iNumOfFBConfigs);
+		
+		pVisInfo = _get_visual_from_fbconfigs (pFBConfigs, iNumOfFBConfigs, XDisplay);
+		if (pFBConfigs)
+			XFree (pFBConfigs);
+	}
+	
+	if (pVisInfo == NULL)
+	{
+		cd_warning ("still couldn't find an appropriate visual ourself, trying something else, this may not work with some drivers ...");
 		pGlConfig = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
 			GDK_GL_MODE_ALPHA |
 			GDK_GL_MODE_DEPTH |
@@ -1691,7 +1715,8 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 	{
 		cd_warning ("we could not get an ARGB-visual, trying to get an RGB one (fake transparency will be used in return) ...");
 		*bHasBeenForced = TRUE;
-		doubleBufferAttributes[13] = 0;
+		doubleBufferAttributes[14] = None;
+		int i, iNumOfFBConfigs;
 		pFBConfigs = glXChooseFBConfig (XDisplay,
 			DefaultScreen (XDisplay),
 			doubleBufferAttributes,

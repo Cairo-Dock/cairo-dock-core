@@ -2242,7 +2242,7 @@ static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFil
 	else if (GTK_IS_TREE_VIEW (pOneWidget))
 	{
 		gboolean bGetActiveOnly = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pOneWidget), "get-active-line-only"));
-		g_print ("%s : bGetActiveOnly=%d\n", cKeyName, bGetActiveOnly);
+		//g_print ("%s : bGetActiveOnly=%d\n", cKeyName, bGetActiveOnly);
 		GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pOneWidget));
 		gchar **tStringValues = NULL;
 		
@@ -2280,7 +2280,7 @@ static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFil
 			GSList * pListElement;
 			for (pListElement = pActiveElementList; pListElement != NULL; pListElement = pListElement->next)
 			{
-				g_print (" %d) %s\n", i, pListElement->data);
+				//g_print (" %d) %s\n", i, pListElement->data);
 				tStringValues[i++] = pListElement->data;
 			}
 			g_slist_free (pActiveElementList);  // ses donnees sont dans 'tStringValues' et seront donc liberees avec.

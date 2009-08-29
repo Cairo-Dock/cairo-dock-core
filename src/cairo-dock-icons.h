@@ -183,6 +183,7 @@ struct _Icon {
 	gint iStackOrder;
 	CairoDockTransition *pTransition;
 	gdouble fReflectShading;
+	gchar *cLastAttentionDemand;
 };
 
 /// Definition of a function that runs through all icons.

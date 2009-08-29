@@ -775,12 +775,12 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 				//pDock->bInside = TRUE;
 				if ((pDock->bAtBottom && pDock->iRefCount == 0 && ! pDock->bAutoHide) || (pDock->iCurrentWidth != pDock->iMaxDockWidth || pDock->iCurrentHeight != pDock->iMaxDockHeight) || (!pDock->bInside))  // on le fait pas avec l'auto-hide, car un signal d'entree est deja emis a cause des mouvements/redimensionnements de la fenetre, et en rajouter un ici fout le boxon.  // !pDock->bInside ajoute pour le bug du chgt de bureau.
 				{
-					g_print ("  on emule une re-rentree (pDock->iMagnitudeIndex:%d)\n", pDock->iMagnitudeIndex);
+					//g_print ("  on emule une re-rentree (pDock->iMagnitudeIndex:%d)\n", pDock->iMagnitudeIndex);
 					g_signal_emit_by_name (pDock->pWidget, "enter-notify-event", NULL, &bReturn);
 				}
 				else // on se contente de faire grossir les icones.
 				{
-					g_print ("  on se contente de faire grossir les icones\n");
+					//g_print ("  on se contente de faire grossir les icones\n");
 					pDock->bAtBottom = FALSE;
 					cairo_dock_start_growing (pDock);
 					

@@ -188,7 +188,7 @@ void cairo_dock_blacklist_appli (Window Xid)
 		cd_debug ("%s (%ld)\n", __func__, Xid);
 		Window *pXid = g_new (Window, 1);
 			*pXid = Xid;
-		g_hash_table_insert (s_hXWindowTable, pXid, NULL);
+		g_hash_table_insert (s_hXWindowTable, pXid, g_new0 (Icon, 1));  // NULL
 	}
 }
 
@@ -219,6 +219,11 @@ static gboolean _cairo_dock_delete_one_appli (Window *pXid, Icon *pIcon, gpointe
 {
 	if (pIcon == NULL)
 		return TRUE;
+	if (pIcon->Xid == 0)
+	{
+		g_free (pIcon);
+		return TRUE;
+	}
 	
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
 	if (pDock != NULL)
@@ -292,7 +297,7 @@ static void _cairo_dock_hide_show_windows_on_other_desktops (Window *Xid, Icon *
 {
 	g_return_if_fail (Xid != NULL && pCurrentDesktop != NULL);
 
-	if (icon != NULL && (! myTaskBar.bHideVisibleApplis || icon->bIsHidden))
+	if (CAIRO_DOCK_IS_APPLI (icon) && (! myTaskBar.bHideVisibleApplis || icon->bIsHidden))
 	{
 		cd_debug ("%s (%d)", __func__, *Xid);
 		CairoDock *pParentDock;
@@ -325,7 +330,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 	Icon *icon;
 	if (bHackMeToo)
 	{
-		g_print ("HACK ME\n");
+		//g_print ("HACK ME\n");
 		bHackMeToo = FALSE;
 		if (pDock->bHorizontalDock)
 			gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseX, &pDock->iMouseY, NULL);
@@ -359,7 +364,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					{
 						icon = g_hash_table_lookup (s_hXWindowTable, &XActiveWindow);
 						CairoDock *pParentDock = NULL;
-						if (icon != NULL)
+						if (CAIRO_DOCK_IS_APPLI (icon))
 						{
 							cd_message ("%s devient active", icon->acName);
 							pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
@@ -377,7 +382,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						
 						gboolean bHackMe = FALSE;
 						Icon *pLastActiveIcon = g_hash_table_lookup (s_hXWindowTable, &s_iCurrentActiveWindow);
-						if (pLastActiveIcon != NULL)
+						if (CAIRO_DOCK_IS_APPLI (pLastActiveIcon))
 						{
 							CairoDock *pLastActiveParentDock = cairo_dock_search_dock_from_name (pLastActiveIcon->cParentDockName);
 							if (pLastActiveParentDock != NULL)
@@ -484,14 +489,14 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 			{
 				if (event.xproperty.atom == s_aNetWmState)
 				{
-					icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
 					gboolean bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention;
 					cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention);
 					cd_debug ("changement d'etat de %d => {%d ; %d ; %d ; %d}", Xid, bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention);
 					
+					icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
 					if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
 					{
-						if (icon != NULL)  // elle peut demander l'attention plusieurs fois de suite.
+						if (CAIRO_DOCK_IS_APPLI (icon))  // elle peut demander l'attention plusieurs fois de suite.
 						{
 							cd_debug ("%s demande votre attention %s !", icon->acName, icon->bIsDemandingAttention?"encore une fois":"");
 							cairo_dock_appli_demands_attention (icon);
@@ -499,7 +504,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					}
 					else if (! bDemandsAttention)
 					{
-						if (icon != NULL && icon->bIsDemandingAttention)
+						if (CAIRO_DOCK_IS_APPLI (icon) && icon->bIsDemandingAttention)
 						{
 							cd_debug ("%s se tait", icon->acName);
 							cairo_dock_appli_stops_demanding_attention (icon);  // ca c'est plus une precaution qu'autre chose.
@@ -509,8 +514,8 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					{
 						if ( ((bIsMaximized && ! bIsHidden && myAccessibility.bAutoHideOnMaximized) || (bIsFullScreen && myAccessibility.bAutoHideOnFullScreen)) && ! cairo_dock_quick_hide_is_activated ())
 						{
-							cd_message (" => %s devient genante", icon != NULL ? icon->acName : "une fenetre");
-							if (icon != NULL && cairo_dock_window_hovers_dock (&icon->windowGeometry, g_pMainDock))
+							cd_message (" => %s devient genante", CAIRO_DOCK_IS_APPLI (icon) ? icon->acName : "une fenetre");
+							if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_window_hovers_dock (&icon->windowGeometry, g_pMainDock))
 								cairo_dock_activate_temporary_auto_hide ();
 						}
 						else if ((! bIsMaximized || ! myAccessibility.bAutoHideOnMaximized || bIsHidden) && (! bIsFullScreen || ! myAccessibility.bAutoHideOnFullScreen) && cairo_dock_quick_hide_is_activated ())
@@ -523,7 +528,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						}
 					}
 					
-					if (icon != NULL && icon->fPersonnalScale <= 0)  // pour une icone en cours de supression, on ne fait rien.
+					if (CAIRO_DOCK_IS_APPLI (icon) && icon->fPersonnalScale <= 0)  // pour une icone en cours de supression, on ne fait rien.
 					{
 						CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 						///if (pParentDock == NULL)
@@ -600,7 +605,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				{
 					cd_message ("changement de bureau pour %d", Xid);
 					icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
-					if (icon != NULL)
+					if (CAIRO_DOCK_IS_APPLI (icon))
 					{
 						icon->iNumDesktop = cairo_dock_get_xwindow_desktop (Xid);
 						if (myTaskBar.bAppliOnCurrentDesktopOnly)
@@ -619,7 +624,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				else
 				{
 					icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
-					if (icon != NULL && icon->fPersonnalScale <= 0)  // pour une icone en cours de supression, on ne fait rien.
+					if (CAIRO_DOCK_IS_APPLI (icon) && icon->fPersonnalScale <= 0)  // pour une icone en cours de supression, on ne fait rien.
 					{
 						CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 						if (pParentDock == NULL)
@@ -633,7 +638,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 		{
 			//g_print ("  type : %d; (%d;%d) %dx%d window : %d\n", event.xconfigure.type, event.xconfigure.x, event.xconfigure.y, event.xconfigure.width, event.xconfigure.height, Xid);
 			icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
-			if (icon != NULL)
+			if (CAIRO_DOCK_IS_APPLI (icon))
 			{
 				#ifdef HAVE_XEXTEND
 				if (event.xconfigure.width != icon->windowGeometry.width || event.xconfigure.height != icon->windowGeometry.height)
@@ -650,7 +655,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 			
 			if (myTaskBar.bAppliOnCurrentDesktopOnly)
 			{
-				if (icon != NULL && icon->fPersonnalScale <= 0)  // pour une icone en cours de supression, on ne fait rien.
+				if (CAIRO_DOCK_IS_APPLI (icon) && icon->fPersonnalScale <= 0)  // pour une icone en cours de supression, on ne fait rien.
 				{
 					if (event.xconfigure.x + event.xconfigure.width <= 0 || event.xconfigure.x >= g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || event.xconfigure.y + event.xconfigure.height <= 0 || event.xconfigure.y >= g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // en fait il faudrait faire ca modulo le nombre de viewports * la largeur d'un bureau, car avec une fenetre a droite, elle peut revenir sur le bureau par la gauche si elle est tres large...
 					{
@@ -694,15 +699,16 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 
 static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer iTimePtr)
 {
+	if (icon == NULL)
+		return FALSE;
 	gint iTime = GPOINTER_TO_INT (iTimePtr);
-	gboolean bToBeRemoved = FALSE;
-	if (icon != NULL)
+	
+	//g_print ("%s (%s, %f / %f)\n", __func__, icon->acName, icon->fLastCheckTime, *fTime);
+	if (icon->iLastCheckTime >= 0 && icon->iLastCheckTime < iTime && icon->fPersonnalScale <= 0)
 	{
-		//g_print ("%s (%s, %f / %f)\n", __func__, icon->acName, icon->fLastCheckTime, *fTime);
-		if (icon->iLastCheckTime >= 0 && icon->iLastCheckTime < iTime && icon->fPersonnalScale <= 0)
+		cd_message ("cette fenetre (%ld, %s) est trop vieille (%d / %d)", *Xid, icon->acName, icon->iLastCheckTime, iTime);
+		if (CAIRO_DOCK_IS_APPLI (icon))
 		{
-			cd_message ("cette fenetre (%ld, %s) est trop vieille (%d / %d)", *Xid, icon->acName, icon->iLastCheckTime, iTime);
-			
 			if (cairo_dock_quick_hide_is_activated () && (myAccessibility.bAutoHideOnFullScreen || myAccessibility.bAutoHideOnMaximized))
 			{
 				if (cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
@@ -740,10 +746,14 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 				cairo_dock_free_icon (icon);
 				/// redessiner les inhibiteurs...
 			}
-			bToBeRemoved = TRUE;
 		}
+		else
+		{
+			g_free (icon);
+		}
+		return TRUE;
 	}
-	return bToBeRemoved;
+	return FALSE;
 }
 void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 {
@@ -772,6 +782,8 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 				pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 			if (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS)
 				icon = cairo_dock_create_icon_from_xwindow (pCairoContext, Xid, pDock);
+			else
+				cd_warning ("couldn't create a cairo context => this window (%ld) will not have an icon", Xid);
 			if (icon != NULL)
 			{
 				icon->iLastCheckTime = iTime;
@@ -811,7 +823,8 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 		else if (icon != NULL)
 		{
 			icon->iLastCheckTime = iTime;
-			icon->iStackOrder = iStackOrder ++;
+			if (CAIRO_DOCK_IS_APPLI (icon))
+				icon->iStackOrder = iStackOrder ++;
 		}
 	}
 	if (pCairoContext != NULL)
@@ -945,18 +958,26 @@ Window cairo_dock_get_current_active_window (void)
 
 Icon *cairo_dock_get_current_active_icon (void)
 {
-	return g_hash_table_lookup (s_hXWindowTable, &s_iCurrentActiveWindow);
+	Icon *pIcon = g_hash_table_lookup (s_hXWindowTable, &s_iCurrentActiveWindow);
+	if (CAIRO_DOCK_IS_APPLI (pIcon))
+		return pIcon;
+	else
+		return NULL;
 }
 
 Icon *cairo_dock_get_icon_with_Xid (Window Xid)
 {
-	return g_hash_table_lookup (s_hXWindowTable, &Xid);
+	Icon *pIcon = g_hash_table_lookup (s_hXWindowTable, &Xid);
+	if (CAIRO_DOCK_IS_APPLI (pIcon))
+		return pIcon;
+	else
+		return NULL;
 }
 
 
 static void _cairo_dock_for_one_appli (Window *Xid, Icon *icon, gpointer *data)
 {
-	if (icon == NULL)
+	if (! CAIRO_DOCK_IS_APPLI (icon))
 		return ;
 	CairoDockForeachIconFunc pFunction = data[0];
 	gpointer pUserData = data[1];

@@ -1187,7 +1187,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 		}
 	}
 	else
-		g_print ("no action here\n");
+		cd_debug ("no action here");
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 

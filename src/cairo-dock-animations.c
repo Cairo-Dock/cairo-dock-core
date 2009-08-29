@@ -377,7 +377,7 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 			gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);
 			if (bIsAppli && pIcon->iLastCheckTime != -1)  // c'est une icone d'appli non vieille qui disparait, elle s'est probablement cachee => on la detache juste.
 			{
-				g_print ("cette (%s) appli est toujours valide, on la detache juste\n", pIcon->acName);
+				cd_message ("cette (%s) appli est toujours valide, on la detache juste", pIcon->acName);
 				cairo_dock_detach_appli (pIcon);
 				pIcon->fPersonnalScale = 0.;
 			}
