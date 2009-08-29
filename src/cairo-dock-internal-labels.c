@@ -91,7 +91,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	pLabels->iLabelSize = (pLabels->iconTextDescription.iSize != 0 ?
 		pLabels->iconTextDescription.iSize +
 		(pLabels->iconTextDescription.bOutlined ? 2 : 0) +
-		(/*bUseBackgroundForLabel*/TRUE ? 2 * pLabels->iconTextDescription.iMargin : 0) : 0);
+		2 * pLabels->iconTextDescription.iMargin : 0);
 	
 	return bFlushConfFileNeeded;
 }
