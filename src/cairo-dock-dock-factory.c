@@ -741,7 +741,7 @@ void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboole
 		cairo_dock_unregister_appli (icon);
 	}
 	
-	if (pDock->iRefCount == 0 && myAccessibility.bReserveSpace)  // bIsMainDock
+	if (pDock->iRefCount == 0 && myAccessibility.bReserveSpace)
 		cairo_dock_reserve_space_for_dock (pDock, TRUE);  // l'espace est reserve sur la taille min, qui a deja ete mise a jour.
 }
 

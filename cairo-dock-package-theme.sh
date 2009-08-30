@@ -156,7 +156,7 @@ else
 fi
 
 set_current_conf_file "cairo-dock.conf"
-import_file "Hidden dock"	"callback image"		.
+import_file "Background"	"callback image"		.
 import_file "Background"	"background image"		.
 import_file "Icons"			"icons bg"				.
 import_file "Icons"			"separator image"		.
@@ -183,7 +183,7 @@ set_current_conf_file "plug-ins/Cairo-Penguin/Cairo-Penguin.conf"
 import_theme "Configuration" "theme"		"Cairo-Penguin"
 
 set_current_conf_file "plug-ins/Clipper/Clipper.conf"
-import_file "Icon"			"icon"			.
+import_file "Icon"			"icon"			icons
 import_file "Desklet"		"bg desklet"	.
 import_file "Desklet"		"fg desklet"	.
 
@@ -204,11 +204,6 @@ import_file "Configuration"	"reload icon"	.
 import_file "Configuration"	"expo icon"		.
 import_file "Configuration"	"wlayer icon"	.
 
-set_current_conf_file "plug-ins/cpusage/cpusage.conf"
-import_file "Desklet"		"bg desklet"	.
-import_file "Desklet"		"fg desklet"	.
-import_gauge "Configuration"	"theme"
-
 set_current_conf_file "plug-ins/drop-indicator/drop_indicator.conf"
 import_file "Configuration" "drop indicator" .
 
@@ -226,7 +221,7 @@ if test "x$theme" = "x"; then  # cas special : les images passent avant le theme
 fi
 
 set_current_conf_file "plug-ins/GMenu/GMenu.conf"
-import_file "Icon"			"icon"			.
+import_file "Icon"			"icon"			icons
 import_file "Desklet"		"bg desklet"	.
 import_file "Desklet"		"fg desklet"	.
 
@@ -236,7 +231,7 @@ import_file "Desklet"		"fg desklet"	.
 import_file "Configuration"	"bg image"		.
 
 set_current_conf_file "plug-ins/logout/logout.conf"
-import_file "Icon"			"icon"			.
+import_file "Icon"			"icon"			icons
 import_file "Desklet"		"bg desklet"	.
 import_file "Desklet"		"fg desklet"	.
 
@@ -246,14 +241,17 @@ import_file "Desklet"		"fg desklet"	.
 import_file "Configuration"	"no mail image"	.
 import_file "Configuration"	"has mail image" .
 
-set_current_conf_file "plug-ins/netspeed/netspeed.conf"
-import_file "Icon"			"icon"			.
+set_current_conf_file "plug-ins/musicPlayer/musicPlayer.conf"
 import_file "Desklet"		"bg desklet"	.
 import_file "Desklet"		"fg desklet"	.
-import_gauge "Configuration"	"theme"
+import_file "Configuration"	"default icon"	.
+import_file "Configuration"	"play icon"		.
+import_file "Configuration"	"stop icon"		.
+import_file "Configuration"	"pause icon"	.
+import_file "Configuration"	"broken icon"	.
 
-set_current_conf_file "plug-ins/nVidia/nVidia.conf"
-import_file "Icon"			"icon"			.
+set_current_conf_file "plug-ins/netspeed/netspeed.conf"
+import_file "Icon"			"icon"			icons
 import_file "Desklet"		"bg desklet"	.
 import_file "Desklet"		"fg desklet"	.
 import_gauge "Configuration"	"theme"
@@ -266,26 +264,12 @@ import_file "Configuration"	"charge icon"	.
 import_gauge "Configuration"	"theme"
 
 set_current_conf_file "plug-ins/quick-browser/quick-browser.conf"
-import_file "Icon"			"icon"			.
+import_file "Icon"			"icon"			icons
 import_file "Desklet"		"bg desklet"	.
 import_file "Desklet"		"fg desklet"	.
-
-set_current_conf_file "plug-ins/rame/rame.conf"
-import_file "Desklet"		"bg desklet"	.
-import_file "Desklet"		"fg desklet"	.
-import_gauge "Configuration"	"theme"
-
-set_current_conf_file "plug-ins/rhythmbox/rhythmbox.conf"
-import_file "Desklet"		"bg desklet"	.
-import_file "Desklet"		"fg desklet"	.
-import_file "Configuration"	"default icon"	.
-import_file "Configuration"	"play icon"		.
-import_file "Configuration"	"stop icon"		.
-import_file "Configuration"	"pause icon"	.
-import_file "Configuration"	"broken icon"	.
 
 set_current_conf_file "plug-ins/shortcuts/shortcuts.conf"
-import_file "Icon"			"icon"			.
+import_file "Icon"			"icon"			icons
 import_file "Desklet"		"bg desklet"	.
 import_file "Desklet"		"fg desklet"	.
 
@@ -294,7 +278,7 @@ import_file "Icon"			"show image"	.
 import_file "Icon"			"hide image"	.
 
 set_current_conf_file "plug-ins/showDesktop/showDesktop.conf"
-import_file "Icon"			"icon"			.
+import_file "Icon"			"icon"			icons
 import_file "Desklet"		"bg desklet"	.
 import_file "Desklet"		"fg desklet"	.
 
@@ -303,23 +287,28 @@ import_file "Desklet"		"bg desklet"	.
 import_file "Desklet"		"fg desklet"	.
 
 set_current_conf_file "plug-ins/stack/stack.conf"
-import_file "Icon"			"icon"			.
+import_file "Icon"			"icon"			icons
 import_file "Desklet"		"bg desklet"	.
 import_file "Desklet"		"fg desklet"	.
 import_file "Configuration"	"text icon"		.
 import_file "Configuration"	"url icon"		.
 
 set_current_conf_file "plug-ins/switcher/switcher.conf"
-import_file "Icon"			"icon"			.
+import_file "Icon"			"icon"			icons
 import_file "Desklet"		"bg desklet"	.
 import_file "Desklet"		"fg desklet"	.
 import_file "Configuration"	"default icon"	.
+
+set_current_conf_file "plug-ins/System-Monitor/System-Monitor.conf"
+import_file "Desklet"		"bg desklet"	.
+import_file "Desklet"		"fg desklet"	.
+import_gauge "Configuration"	"theme"
 
 set_current_conf_file "plug-ins/systray/systray.conf"
 import_file "Icon"			"icon"			.
 
 set_current_conf_file "plug-ins/terminal/terminal.conf"
-import_file "Icon"			"icon"			.
+import_file "Icon"			"icon"			icons
 import_file "Desklet"		"bg desklet"	.
 import_file "Desklet"		"fg desklet"	.
 
@@ -339,7 +328,7 @@ import_file "Desklet"		"fg desklet"	.
 import_theme "Configuration" "theme"		"weather"
 
 set_current_conf_file "plug-ins/weblets/weblets.conf"
-import_file "Icon"			"icon"			.
+import_file "Icon"			"icon"			icons
 import_file "Desklet"		"bg desklet"	.
 import_file "Desklet"		"fg desklet"	.
 
@@ -354,18 +343,9 @@ import_file "Configuration"	"icon_4"		.
 import_file "Configuration"	"icon_5"		.
 
 set_current_conf_file "plug-ins/Xgamma/Xgamma.conf"
-import_file "Icon"			"icon"			.
+import_file "Icon"			"icon"			icons
 import_file "Desklet"		"bg desklet"	.
 import_file "Desklet"		"fg desklet"	.
-
-set_current_conf_file "plug-ins/xmms/xmms.conf"
-import_file "Desklet"		"bg desklet"	.
-import_file "Desklet"		"fg desklet"	.
-import_file "Configuration"	"default icon"	.
-import_file "Configuration"	"play icon"		.
-import_file "Configuration"	"stop icon"		.
-import_file "Configuration"	"pause icon"	.
-import_file "Configuration"	"broken icon"	.
 
 set_current_conf_file "plug-ins/mail/mail.conf"
 set_value_on_all_groups		"username"				"toto"
@@ -402,7 +382,7 @@ mv "${THEME_NAME}.tar.gz" ~
 rm -rf "$CURRENT_WORKING_DIR"
 
 echo ""
-echo "The theme has been packaged. It is available in your home"
+echo "The theme has been packaged. It is available in your home."
 sleep 3
 
 exit 0

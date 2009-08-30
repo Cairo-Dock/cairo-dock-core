@@ -319,7 +319,7 @@ static void _cairo_dock_set_one_dock_view_to_default (gchar *cDockName, CairoDoc
 		cairo_dock_set_default_renderer (pDock);
 		cairo_dock_update_dock_size (pDock);
 		pDock->calculate_icons (pDock);
-		if (pDock->iRefCount == 0)
+		if (pDock->iRefCount == 0 && myAccessibility.bReserveSpace)
 			cairo_dock_reserve_space_for_dock (pDock, TRUE);
 	}
 }

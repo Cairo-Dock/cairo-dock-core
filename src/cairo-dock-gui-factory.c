@@ -1748,9 +1748,9 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_modele_with_themes, modele);
 					g_hash_table_destroy (pThemeTable);
 					
-					GtkTreeIter iter;
+					/*GtkTreeIter iter;
 					if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (modele), &iter))
-						gtk_tree_selection_select_iter (selection, &iter);
+						gtk_tree_selection_select_iter (selection, &iter);*/
 					
 				}
 			break ;
