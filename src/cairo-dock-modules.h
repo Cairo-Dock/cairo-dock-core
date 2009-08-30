@@ -265,6 +265,7 @@ void cairo_dock_update_module_instance_order (CairoDockModuleInstance *pModuleIn
 
 CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule, gchar *cConfFilePah);
 void cairo_dock_free_module_instance (CairoDockModuleInstance *pInstance);
+void cairo_dock_unregister_module (const gchar *cModuleName);
 void cairo_dock_stop_module_instance (CairoDockModuleInstance *pInstance);
 void cairo_dock_deinstanciate_module (CairoDockModuleInstance *pInstance);
 

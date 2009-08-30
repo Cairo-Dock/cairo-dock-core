@@ -458,6 +458,11 @@ void cairo_dock_free_module (CairoDockModule *module)
 	g_free (module);
 }
 
+void cairo_dock_unregister_module (const gchar *cModuleName)
+{
+	g_return_if_fail (cModuleName != NULL);
+	g_hash_table_remove (s_hModuleTable, cModuleName);
+}
 
 GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *pInstance, CairoDockMinimalAppletConfig *pMinimalConfig)
 {
