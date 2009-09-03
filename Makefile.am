@@ -9,12 +9,14 @@ pkgconfig_DATA = cairo-dock.pc
 
 
 dist_bin_SCRIPTS = \
-	cairo-dock-package-theme.sh\
-	launch-cairo-dock-after-compiz.sh
+	cairo-dock-package-theme\
+	launch-cairo-dock-after-compiz
 
 
 EXTRA_DIST = \
 	intltool-extract.in\
 	intltool-merge.in\
 	intltool-update.in\
-	LICENSE
+	LICENSE\
+	LGPL-2\
+	copyright

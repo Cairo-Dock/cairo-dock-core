@@ -1,11 +1,22 @@
-/***********************************************************************************
+/**
+* This file is a part of the Cairo-Dock project
+*
+* Copyright : (C) see the 'copyright' file.
+* E-mail    : see the 'copyright' file.
+*
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public License
+* as published by the Free Software Foundation; either version 3
+* of the License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
-This file is a part of the cairo-dock program,
-released under the terms of the GNU General Public License.
-
-Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.berlios.de)
-
-************************************************************************************/
 #include <string.h>
 #include <unistd.h>
 #define __USE_XOPEN_EXTENDED
@@ -658,9 +669,9 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		if (g_key_file_get_boolean (pKeyFile, "Save", "package", NULL))
 		{
 			cd_message ("building theme package ...");
-			if (g_file_test (CAIRO_DOCK_SHARE_DATA_DIR"/../../bin/cairo-dock-package-theme.sh", G_FILE_TEST_EXISTS))
+			if (g_file_test (CAIRO_DOCK_SHARE_DATA_DIR"/../../bin/cairo-dock-package-theme", G_FILE_TEST_EXISTS))
 			{
-				gchar *cCommand = g_strdup_printf ("$TERM -e '%s \"%s\"'", "cairo-dock-package-theme.sh", cNewThemeName);
+				gchar *cCommand = g_strdup_printf ("$TERM -e '%s \"%s\"'", "cairo-dock-package-theme", cNewThemeName);
 				r = system (cCommand);
 				g_free (cCommand);
 			}
