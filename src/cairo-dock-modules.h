@@ -239,7 +239,7 @@ void cairo_dock_reload_module (CairoDockModule *module, gboolean bReloadAppletCo
 
 void cairo_dock_deactivate_all_modules (void);
 
-void cairo_dock_activate_module_and_load (gchar *cModuleName);
+void cairo_dock_activate_module_and_load (const gchar *cModuleName);
 void cairo_dock_deactivate_module_instance_and_unload (CairoDockModuleInstance *pInstance);
 void cairo_dock_deactivate_module_and_unload (const gchar *cModuleName);
 

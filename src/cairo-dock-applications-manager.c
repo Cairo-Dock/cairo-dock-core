@@ -704,7 +704,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 	gint iTime = GPOINTER_TO_INT (iTimePtr);
 	
 	//g_print ("%s (%s, %f / %f)\n", __func__, icon->acName, icon->fLastCheckTime, *fTime);
-	if (icon->iLastCheckTime >= 0 && icon->iLastCheckTime < iTime && icon->fPersonnalScale <= 0)
+	if (icon->iLastCheckTime > 0 && icon->iLastCheckTime < iTime && icon->fPersonnalScale <= 0)
 	{
 		cd_message ("cette fenetre (%ld, %s) est trop vieille (%d / %d)", *Xid, icon->acName, icon->iLastCheckTime, iTime);
 		if (CAIRO_DOCK_IS_APPLI (icon))

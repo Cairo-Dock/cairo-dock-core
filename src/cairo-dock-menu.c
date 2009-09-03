@@ -302,8 +302,6 @@ static void _cairo_dock_remove_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 	{
 		_cairo_dock_on_user_remove_icon (icon, pDock);
 	}
-	//else
-	//	g_print ("ok on la garde\n");
 }
 
 static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, Icon *icon, CairoDock *pDock, CairoDockNewLauncherType iLauncherType)
@@ -408,106 +406,7 @@ static void cairo_dock_add_separator (GtkMenuItem *pMenuItem, gpointer *data)
 static void _on_modify_launcher (Icon *icon)
 {
 	//g_print ("%s (%s)\n", __func__, icon->acName);
-	GError *erreur = NULL;
-	//\_____________ On detache l'icone.
-	gchar *cPrevDockName = icon->cParentDockName;
-	CairoDock *pDock = cairo_dock_search_dock_from_name (cPrevDockName);
-	icon->cParentDockName = NULL;  // astuce.
-	cairo_dock_detach_icon_from_dock (icon, pDock, TRUE);  // il va falloir la recreer, car tous ses parametres peuvent avoir change; neanmoins, on ne souhaite pas detruire son .desktop.
-
-	//\_____________ On recharge l'icone.
-	Window Xid = icon->Xid;
-	CairoDock *pSubDock = icon->pSubDock;
-	icon->pSubDock = NULL;
-	gchar *cClass = icon->cClass;
-	icon->cClass = NULL;
-	gchar *cDesktopFileName = icon->acDesktopFileName;
-	icon->acDesktopFileName = NULL;
-	gchar *cName = icon->acName;
-	icon->acName = NULL;
-	gchar *cRendererName = NULL;
-	if (pSubDock != NULL)
-	{
-		cRendererName = pSubDock->cRendererName;
-		pSubDock->cRendererName = NULL;
-	}
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-	cairo_dock_reload_icon_from_desktop_file (cDesktopFileName, pCairoContext, icon);
-	
-	if (cName && ! icon->acName)
-		icon->acName = g_strdup (" ");
-	
-	icon->Xid = Xid;
-	//\_____________ On gere le sous-dock.
-	if (Xid != 0)
-	{
-		if (icon->pSubDock == NULL)
-			icon->pSubDock = pSubDock;
-		else  // ne devrait pas arriver (une icone de container n'est pas un lanceur pouvant prendre un Xid).
-			cairo_dock_destroy_dock (pSubDock, cName, g_pMainDock, CAIRO_DOCK_MAIN_DOCK_NAME);
-	}
-	else
-	{
-		if (pSubDock != icon->pSubDock)  // ca n'est plus le meme container, on transvase ou on detruit.
-		{
-			cairo_dock_destroy_dock (pSubDock, cName, icon->pSubDock, icon->acName);
-		}
-	}
-
-	if (icon->pSubDock != NULL && pSubDock == icon->pSubDock)  // c'est le meme sous-dock, son rendu a pu change.
-	{
-		if ((cRendererName != NULL && icon->pSubDock->cRendererName == NULL)
-		 || (cRendererName == NULL && icon->pSubDock->cRendererName != NULL)
-		 || (cRendererName != NULL && icon->pSubDock->cRendererName != NULL && strcmp (cRendererName, icon->pSubDock->cRendererName) != 0))
-			cairo_dock_update_dock_size (icon->pSubDock);
-	}
-
-	//\_____________ On l'insere dans le dock auquel elle appartient maintenant.
-	CairoDock *pNewContainer = cairo_dock_search_dock_from_name (icon->cParentDockName);
-	g_return_if_fail (pNewContainer != NULL);
-
-	if (pDock != pNewContainer && icon->fOrder > g_list_length (pNewContainer->icons) + 1)
-		icon->fOrder = CAIRO_DOCK_LAST_ORDER;
-
-	cairo_dock_insert_icon_in_dock (icon, pNewContainer, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);  // on n'empeche pas les bouclages.
-
-	if (pDock != pNewContainer)
-		cairo_dock_update_dock_size (pDock);
-
-	//\_____________ On gere l'inhibition de sa classe.
-	gchar *cNowClass = icon->cClass;
-	if (cClass != NULL && (cNowClass == NULL || strcmp (cNowClass, cClass) != 0))
-	{
-		icon->cClass = cClass;
-		cairo_dock_deinhibate_class (cClass, icon);
-		cClass = NULL;  // libere par la fonction precedente.
-		icon->cClass = cNowClass;
-	}
-	if (cNowClass != NULL && (cClass == NULL || strcmp (cNowClass, cClass) != 0))
-		cairo_dock_inhibate_class (cNowClass, icon);
-
-	//\_____________ On redessine les docks impactes.
-	cairo_dock_calculate_dock_icons (pDock);
-	gtk_widget_queue_draw (pDock->pWidget);
-	if (pNewContainer != pDock)
-	{
-		cairo_dock_calculate_dock_icons (pNewContainer);
-		gtk_widget_queue_draw (pNewContainer->pWidget);
-
-		if (pDock->icons == NULL)
-		{
-			cd_message ("dock %s vide => a la poubelle", cPrevDockName);
-			cairo_dock_destroy_dock (pDock, cPrevDockName, NULL, NULL);
-		}
-	}
-
-	g_free (cPrevDockName);
-	g_free (cClass);
-	g_free (cDesktopFileName);
-	g_free (cName);
-	g_free (cRendererName);
-	cairo_destroy (pCairoContext);
-	cairo_dock_mark_theme_as_modified (TRUE);
+	cairo_dock_reload_launcher (icon);
 }
 static void _cairo_dock_modify_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 {
@@ -1419,7 +1318,7 @@ static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, gpointer data)
 					user_data[2] = GINT_TO_POINTER (j);
 					user_data[3] = GINT_TO_POINTER (k);
 					
-					cairo_dock_add_in_menu_with_stock_and_data (sDesktop->str, NULL, (bAll ? _cairo_dock_move_class_to_desktop : _cairo_dock_move_appli_to_desktop), pMenu, user_data);
+					cairo_dock_add_in_menu_with_stock_and_data (sDesktop->str, NULL, (GFunc)(bAll ? _cairo_dock_move_class_to_desktop : _cairo_dock_move_appli_to_desktop), pMenu, user_data);
 				}
 			}
 		}

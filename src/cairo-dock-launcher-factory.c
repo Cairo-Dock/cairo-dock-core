@@ -21,6 +21,7 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 
 #include "cairo-dock-load.h"
 #include "cairo-dock-icons.h"
+#include "cairo-dock-draw.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-renderer-manager.h"
@@ -32,6 +33,8 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-themes-manager.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-launcher-factory.h"
 
 extern CairoDock *g_pMainDock;
@@ -415,6 +418,8 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName, 
 	return icon;
 }
 
+
+
 void cairo_dock_reload_icon_from_desktop_file (const gchar *cDesktopFileName, cairo_t *pSourceContext, Icon *icon)
 {
 	cairo_dock_load_icon_info_from_desktop_file (cDesktopFileName, icon);
@@ -422,4 +427,114 @@ void cairo_dock_reload_icon_from_desktop_file (const gchar *cDesktopFileName, ca
 	
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pParentDock)
+}
+
+void cairo_dock_reload_launcher (Icon *icon)
+{
+	if (icon->acDesktopFileName == NULL || strcmp (icon->acDesktopFileName, "none") == 0)
+	{
+		cd_warning ("tried to reload a launcher whereas this icon (%s) is obviously not a launcher", icon->acName);
+		return ;
+	}
+	GError *erreur = NULL;
+	
+	//\_____________ On detache l'icone.
+	gchar *cPrevDockName = icon->cParentDockName;
+	CairoDock *pDock = cairo_dock_search_dock_from_name (cPrevDockName);
+	icon->cParentDockName = NULL;  // astuce.
+	cairo_dock_detach_icon_from_dock (icon, pDock, TRUE);  // il va falloir la recreer, car tous ses parametres peuvent avoir change; neanmoins, on ne souhaite pas detruire son .desktop.
+
+	//\_____________ On recharge l'icone.
+	Window Xid = icon->Xid;
+	CairoDock *pSubDock = icon->pSubDock;
+	icon->pSubDock = NULL;
+	gchar *cClass = icon->cClass;
+	icon->cClass = NULL;
+	gchar *cDesktopFileName = icon->acDesktopFileName;
+	icon->acDesktopFileName = NULL;
+	gchar *cName = icon->acName;
+	icon->acName = NULL;
+	gchar *cRendererName = NULL;
+	if (pSubDock != NULL)
+	{
+		cRendererName = pSubDock->cRendererName;
+		pSubDock->cRendererName = NULL;
+	}
+	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+	cairo_dock_reload_icon_from_desktop_file (cDesktopFileName, pCairoContext, icon);
+	
+	if (cName && ! icon->acName)
+		icon->acName = g_strdup (" ");
+	
+	icon->Xid = Xid;
+	//\_____________ On gere le sous-dock.
+	if (Xid != 0)
+	{
+		if (icon->pSubDock == NULL)
+			icon->pSubDock = pSubDock;
+		else  // ne devrait pas arriver (une icone de container n'est pas un lanceur pouvant prendre un Xid).
+			cairo_dock_destroy_dock (pSubDock, cName, g_pMainDock, CAIRO_DOCK_MAIN_DOCK_NAME);
+	}
+	else
+	{
+		if (pSubDock != icon->pSubDock)  // ca n'est plus le meme container, on transvase ou on detruit.
+		{
+			cairo_dock_destroy_dock (pSubDock, cName, icon->pSubDock, icon->acName);
+		}
+	}
+
+	if (icon->pSubDock != NULL && pSubDock == icon->pSubDock)  // c'est le meme sous-dock, son rendu a pu change.
+	{
+		if ((cRendererName != NULL && icon->pSubDock->cRendererName == NULL)
+		 || (cRendererName == NULL && icon->pSubDock->cRendererName != NULL)
+		 || (cRendererName != NULL && icon->pSubDock->cRendererName != NULL && strcmp (cRendererName, icon->pSubDock->cRendererName) != 0))
+			cairo_dock_update_dock_size (icon->pSubDock);
+	}
+
+	//\_____________ On l'insere dans le dock auquel elle appartient maintenant.
+	CairoDock *pNewContainer = cairo_dock_search_dock_from_name (icon->cParentDockName);
+	g_return_if_fail (pNewContainer != NULL);
+
+	if (pDock != pNewContainer && icon->fOrder > g_list_length (pNewContainer->icons) + 1)
+		icon->fOrder = CAIRO_DOCK_LAST_ORDER;
+
+	cairo_dock_insert_icon_in_dock (icon, pNewContainer, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);  // on n'empeche pas les bouclages.
+
+	if (pDock != pNewContainer)
+		cairo_dock_update_dock_size (pDock);
+
+	//\_____________ On gere l'inhibition de sa classe.
+	gchar *cNowClass = icon->cClass;
+	if (cClass != NULL && (cNowClass == NULL || strcmp (cNowClass, cClass) != 0))
+	{
+		icon->cClass = cClass;
+		cairo_dock_deinhibate_class (cClass, icon);
+		cClass = NULL;  // libere par la fonction precedente.
+		icon->cClass = cNowClass;
+	}
+	if (cNowClass != NULL && (cClass == NULL || strcmp (cNowClass, cClass) != 0))
+		cairo_dock_inhibate_class (cNowClass, icon);
+
+	//\_____________ On redessine les docks impactes.
+	cairo_dock_calculate_dock_icons (pDock);
+	gtk_widget_queue_draw (pDock->pWidget);
+	if (pNewContainer != pDock)
+	{
+		cairo_dock_calculate_dock_icons (pNewContainer);
+		gtk_widget_queue_draw (pNewContainer->pWidget);
+
+		if (pDock->icons == NULL)
+		{
+			cd_message ("dock %s vide => a la poubelle", cPrevDockName);
+			cairo_dock_destroy_dock (pDock, cPrevDockName, NULL, NULL);
+		}
+	}
+
+	g_free (cPrevDockName);
+	g_free (cClass);
+	g_free (cDesktopFileName);
+	g_free (cName);
+	g_free (cRendererName);
+	cairo_destroy (pCairoContext);
+	cairo_dock_mark_theme_as_modified (TRUE);
 }

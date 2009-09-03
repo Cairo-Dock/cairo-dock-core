@@ -507,7 +507,8 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	if (iBufferNbElements == 0)
 	{
 		cd_debug ("pas de nom, on en mettra un par defaut.");
-		return NULL;
+		
+		//return NULL;
 	}
 	cd_debug ("recuperation de '%s' (bIsHidden : %d)", pNameBuffer, bIsHidden);
 	
@@ -522,6 +523,10 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 		XFree (pClassHint->res_name);
 		XFree (pClassHint->res_class);
 		//g_print (".\n");
+	}
+	else
+	{
+		cd_warning ("this window doesn't belong to any class, skip it.");
 	}
 	XFree (pClassHint);
 	

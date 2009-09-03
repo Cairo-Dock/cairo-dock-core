@@ -31,9 +31,6 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet@users.ber
 #define CAIRO_DOCK_THEME_PANEL_HEIGHT 530
 #define CAIRO_DOCK_THEME_SERVER "http://themes.cairo-dock.org"
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"
-#define CAIRO_DOCK_PREFIX_NET_THEME "(Net)   "
-#define CAIRO_DOCK_PREFIX_USER_THEME "(User)  "
-#define CAIRO_DOCK_PREFIX_LOCAL_THEME "(Local) "
 #define CAIRO_DOCK_DEFAULT_THEME_LIST_NAME "liste.txt"
 #define CAIRO_DOCK_DL_NB_RETRY 2
 #define CAIRO_DOCK_DL_TIMEOUT 5
@@ -59,6 +56,25 @@ void cairo_dock_free_theme (CairoDockTheme *pTheme)
 	g_free (pTheme->cAuthor);
 	g_free (pTheme->cDisplayedName);
 	g_free (pTheme);
+}
+
+static inline int _get_theme_rating (const gchar *cThemesDir, const gchar *cThemeName)
+{
+	gchar *cRatingFile = g_strdup_printf ("%s/.rating/%s", cThemesDir, cThemeName);
+	int iRating = 0;
+	gsize length = 0;
+	gchar *cContent = NULL;
+	g_file_get_contents (cRatingFile,
+		&cContent,
+		&length,
+		NULL);
+	if (cContent)
+	{
+		iRating = atoi (cContent);
+		g_free (cContent);
+	}
+	g_free (cRatingFile);
+	return iRating;	
 }
 
 GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *hProvidedTable, gboolean bUpdateThemeValidity, GError **erreur)
@@ -87,6 +103,7 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 		cPrefix = CAIRO_DOCK_PREFIX_USER_THEME;
 	}
 	
+	GString *sRatingFile = g_string_new (cThemesDir);
 	gchar *cThemePath;
 	const gchar* cThemeName;
 	int iVersion;
@@ -131,8 +148,8 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 		CairoDockTheme *pSameTheme = g_hash_table_lookup (pThemeTable, cThemeName);
 		if (pSameTheme != NULL)
 		{
-			g_print (" le meme theme existe deja en version %d (> %d)\n", pSameTheme->iVersion, iVersion);
-			if (pSameTheme->iVersion > iVersion)
+			g_print (" le meme theme existe deja en version %d (<> %d)\n", pSameTheme->iVersion, iVersion);
+			if (pSameTheme->iVersion > iVersion)  // on saute ce theme, et on le marque comme obsolete.
 			{
 				g_file_set_contents (cVersionFile,
 					"0",
@@ -140,6 +157,10 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 					NULL);
 				g_free (cThemePath);
 				g_free (cVersionFile);
+				// par contre on affiche la note que l'utilisateur avait precedemment etablie.
+				int iRating = _get_theme_rating (cThemesDir, cThemeName);
+				if (iRating > 0)
+					pSameTheme->iRating = iRating;
 				continue;
 			}
 		}
@@ -154,15 +175,17 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 				NULL);
 		}
 		
+		g_free (cVersionFile);
+		
 		// on insere le theme dans la table.
 		pTheme = g_new0 (CairoDockTheme, 1);
 		pTheme->cThemePath = cThemePath;
 		pTheme->cDisplayedName = g_strdup_printf ("%s%s", (cPrefix != NULL ? cPrefix : ""), cThemeName);
 		pTheme->iType = iType;
 		pTheme->iVersion = iVersion;
-		
-		g_free (cVersionFile);
-		
+		pTheme->iRating = _get_theme_rating (cThemesDir, cThemeName);
+		if (pSameTheme != NULL)
+			pTheme->iSobriety = pSameTheme->iSobriety;
 		g_hash_table_insert (pThemeTable, g_strdup (cThemeName), pTheme);  // donc ecrase un theme installe ayant le meme nom.
 	}
 	while (1);

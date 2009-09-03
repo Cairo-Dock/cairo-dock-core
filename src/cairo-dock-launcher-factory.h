@@ -40,5 +40,11 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName, 
 void cairo_dock_reload_icon_from_desktop_file (const gchar *cDesktopFileName, cairo_t *pSourceContext, Icon *icon);
 
 
+/** Reload completely a launcher. It handles the side-effects like modifying the class, the sub-dock's view, the container, etc.
+ * @param icon the launcher Icon to reload.
+*/
+void cairo_dock_reload_launcher (Icon *icon);
+
+
 G_END_DECLS
 #endif

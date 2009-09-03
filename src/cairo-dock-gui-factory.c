@@ -725,7 +725,7 @@ static inline void _render_rating (GtkCellRenderer *cell, GtkTreeModel *model, G
 	}
 	else
 	{
-		g_object_set (cell, "text", "-", NULL);
+		g_object_set (cell, "text", iColumnIndex == CAIRO_DOCK_MODEL_ORDER ? "rate me" : "-", NULL);
 	}
 }
 static void _cairo_dock_render_sobriety (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
@@ -735,6 +735,95 @@ static void _cairo_dock_render_sobriety (GtkTreeViewColumn *tree_column, GtkCell
 static void _cairo_dock_render_rating (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
 {
 	_render_rating (cell, model, iter, CAIRO_DOCK_MODEL_ORDER);
+}
+static GtkListStore *_make_note_list_store (void)
+{
+	GString *s = g_string_sized_new (CD_MAX_RATING*4+1);
+	GtkListStore *note_list = gtk_list_store_new (2, G_TYPE_INT, G_TYPE_STRING);
+	GtkTreeIter iter;
+	int i, j;
+	for (i = 1; i <= 5; i ++)
+	{
+		g_string_assign (s, "");
+		for (j= 0; j < i; j ++)
+			g_string_append (s, "★");
+		for (;j < CD_MAX_RATING; j ++)
+			g_string_append (s, "☆");
+		
+		memset (&iter, 0, sizeof (GtkTreeIter));
+		gtk_list_store_append (GTK_LIST_STORE (note_list), &iter);
+		gtk_list_store_set (GTK_LIST_STORE (note_list), &iter,
+			0, i,
+			1, s->str, -1);
+	}
+	g_string_free (s, TRUE);
+	return note_list;
+}
+static void _change_rating (GtkCellRendererText * cell, gchar * path_string, gchar * new_text, GtkTreeModel * model)
+{
+	//g_print ("%s (%s : %s)\n", __func__, path_string, new_text);
+	g_return_if_fail (new_text != NULL && *new_text != '\0');
+	
+	GtkTreeIter it;
+	if (! gtk_tree_model_get_iter_from_string (model, &it, path_string))
+		return ;
+	
+	int iRating = 0;
+	gchar *str = new_text;
+	do
+	{
+		if (strncmp (str, "★", strlen ("★")) == 0)
+		{
+			str += strlen ("★");
+			iRating ++;
+		}
+		else
+			break ;
+	} while (1);
+	//g_print ("iRating : %d\n", iRating);
+	
+	gtk_list_store_set (GTK_LIST_STORE (model), &it, CAIRO_DOCK_MODEL_ORDER, iRating, -1);
+	
+	gchar *cDisplayedName = NULL, *cThemeName = NULL;
+	gtk_tree_model_get (model, &it, CAIRO_DOCK_MODEL_NAME, &cDisplayedName, CAIRO_DOCK_MODEL_RESULT, &cThemeName, -1);
+	g_return_if_fail (cDisplayedName != NULL && cThemeName != NULL);
+	//g_print ("theme : %s / %s\n", cThemeName, cDisplayedName);
+	
+	gchar *cRatingDir = g_strdup_printf ("%s/%s/.rating", g_cCairoDockDataDir, "themes");  // il y'a un probleme ici, on ne connait pas le repertoire utilisateur des themes. donc ce code ne marche que pour les themes du dock (et n'est utilise que pour ca)
+	gchar *cRatingFile = g_strdup_printf ("%s/%s", cRatingDir, cThemeName);
+	//g_print ("on ecrit dans %s\n", cRatingFile);
+	if (strncmp (cDisplayedName, CAIRO_DOCK_PREFIX_NET_THEME, strlen (CAIRO_DOCK_PREFIX_NET_THEME)) != 0 || g_file_test (cRatingFile, G_FILE_TEST_EXISTS))  // ca n'est pas un theme distant, ou l'utilisateur a deja vote auparavant pour ce theme.
+	{
+		if (!g_file_test (cRatingDir, G_FILE_TEST_IS_DIR))
+		{
+			if (g_mkdir (cRatingDir, 7*8*8+7*8+5) != 0)
+			{
+				cd_warning ("couldn't create directory %s", cRatingDir);
+				return ;
+			}
+		}
+		gchar *cContent = g_strdup_printf ("%d", iRating);
+		g_file_set_contents (cRatingFile,
+			cContent,
+			-1,
+			NULL);
+		g_free (cContent);
+	}
+	else
+	{
+		Icon *pIcon = cairo_dock_get_current_active_icon ();
+		CairoDock *pDock = NULL;
+		if (pIcon != NULL)
+			pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+		if (pDock != NULL)
+			cairo_dock_show_temporary_dialog_with_icon (_("You have to try the theme before you can rate it."), pIcon, CAIRO_CONTAINER (pDock), 3000, "same icon");
+		else
+			cairo_dock_show_general_message (_("You have to try the theme before you can rate it."), 3000);
+	}
+	g_free (cDisplayedName);
+	g_free (cThemeName);
+	g_free (cRatingFile);
+	g_free (cRatingDir);
 }
 
 static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
@@ -1679,31 +1768,35 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_tree_view_set_model (GTK_TREE_VIEW (pOneWidget), GTK_TREE_MODEL (modele));
 				gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pOneWidget), TRUE);
 				gtk_tree_view_set_headers_clickable (GTK_TREE_VIEW (pOneWidget), TRUE);
+				selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pOneWidget));
+				gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
 				g_object_set_data (G_OBJECT (pOneWidget), "get-active-line-only", GINT_TO_POINTER (1));
-				
+				// nom du theme
 				rend = gtk_cell_renderer_text_new ();
-				//gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, _("theme"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
 				GtkTreeViewColumn* col = gtk_tree_view_column_new_with_attributes (_("theme"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
 				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_NAME);
 				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
-				
-				rend = gtk_cell_renderer_text_new ();
-				//gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, _("rating"), rend, "text", CAIRO_DOCK_MODEL_ORDER, NULL);
+				// note
+				GtkListStore *note_list = _make_note_list_store ();
+				rend = gtk_cell_renderer_combo_new ();
+				g_object_set (G_OBJECT (rend),
+					"text-column", 1,
+					"model", note_list,
+					"has-entry", FALSE,
+					"editable", TRUE,
+					NULL);
+				g_signal_connect (G_OBJECT (rend), "edited", (GCallback) _change_rating, modele);
 				col = gtk_tree_view_column_new_with_attributes (_("rating"), rend, "text", CAIRO_DOCK_MODEL_ORDER, NULL);
 				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_ORDER);
 				gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_rating, NULL, NULL);
 				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
-				
+				// sobriete
 				rend = gtk_cell_renderer_text_new ();
-				//gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (pOneWidget), -1, _("sobriety"), rend, (GtkTreeCellDataFunc)_render_sobriety, NULL, NULL );
 				col = gtk_tree_view_column_new_with_attributes (_("sobriety"), rend, "text", CAIRO_DOCK_MODEL_ORDER2, NULL);
 				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_ORDER2);
 				gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_sobriety, NULL, NULL);
 				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
-				
-				selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pOneWidget));
-				gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
-				
+				// barres de defilement
 				GtkObject *adj = gtk_adjustment_new (0., 0., 100., 1, 10, 10);
 				gtk_tree_view_set_vadjustment (GTK_TREE_VIEW (pOneWidget), GTK_ADJUSTMENT (adj));
 				pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
@@ -1747,14 +1840,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 
 					g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_modele_with_themes, modele);
 					g_hash_table_destroy (pThemeTable);
-					
-					/*GtkTreeIter iter;
-					if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (modele), &iter))
-						gtk_tree_selection_select_iter (selection, &iter);*/
-					
 				}
 			break ;
-			
 			
 			case 'r' :  // deprecated.
 				cd_warning ("\nTHIS CONF FILE IS OUT OF DATE\n");

@@ -877,7 +877,7 @@ void cairo_dock_deactivate_all_modules (void)
 }
 
 
-void cairo_dock_activate_module_and_load (gchar *cModuleName)
+void cairo_dock_activate_module_and_load (const gchar *cModuleName)
 {
 	if (g_pMainDock == NULL)
 		return ;
@@ -1029,7 +1029,7 @@ CairoDockModule *cairo_dock_foreach_module_in_alphabetical_order (GCompareFunc p
 
 static void _cairo_dock_write_one_module_name (gchar *cModuleName, CairoDockModule *pModule, GString *pString)
 {
-	if (pModule->pInstancesList != NULL && ! cairo_dock_module_is_auto_loaded (pModule))
+	if (pModule->pInstancesList != NULL && ! cairo_dock_module_is_auto_loaded (pModule) && pModule->cSoFilePath != NULL)
 	{
 		g_string_append_printf (pString, "%s;", cModuleName);
 	}

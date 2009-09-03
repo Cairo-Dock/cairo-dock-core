@@ -273,7 +273,7 @@ void on_click_activate_given_group (GtkToggleButton *button, CairoDockGroupDescr
 	g_return_if_fail (pModule != NULL);
 	if (g_pMainDock == NULL)
 	{
-		cairo_dock_add_remove_element_to_key (g_cConfFile,  "System", "modules", pGroupDescription->cGroupName, gtk_toggle_button_get_active (button));
+		cairo_dock_add_remove_element_to_key (g_cConfFile, "System", "modules", pGroupDescription->cGroupName, gtk_toggle_button_get_active (button));
 	}
 	else if (pModule->pInstancesList == NULL)
 	{
