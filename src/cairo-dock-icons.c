@@ -338,7 +338,7 @@ Icon *cairo_dock_get_previous_icon (GList *pIconList, Icon *pIcon)
 	return NULL;
 }
 
-Icon *cairo_dock_get_icon_with_command (GList *pIconList, gchar *cCommand)
+Icon *cairo_dock_get_icon_with_command (GList *pIconList, const gchar *cCommand)
 {
 	g_return_val_if_fail (cCommand != NULL, NULL);
 	GList* ic;

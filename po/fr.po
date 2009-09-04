@@ -94,17 +94,16 @@ msgstr ""
 # ########### themes.conf #############
 # #################################
 #: ../src/cairo-dock-gui-factory.c:1663
-#, fuzzy
 msgid "theme"
-msgstr "Thèmes"
+msgstr "thème"
 
 #: ../src/cairo-dock-gui-factory.c:1669
 msgid "rating"
-msgstr ""
+msgstr "note"
 
 #: ../src/cairo-dock-gui-factory.c:1676
 msgid "sobriety"
-msgstr ""
+msgstr "sobriété"
 
 #: ../src/cairo-dock-gui-factory.c:1798
 msgid "grab"
@@ -785,9 +784,8 @@ msgid ""
 msgstr ""
 
 #: ../src/cairo-dock.c:599
-#, fuzzy
 msgid "Do you want to keep this setting ?"
-msgstr "Voulez-vous monter ce point ?"
+msgstr "Voulez-vous garder cette configuration ?"
 
 #: ../src/cairo-dock.c:605
 msgid ""
@@ -1050,7 +1048,6 @@ msgstr ""
 "'normal'."
 
 #: ../data/messages:99
-#, fuzzy
 msgid "Show currently opened applications in the dock ?"
 msgstr "Montrer les applications actuellement ouvertes dans le dock ?"
 
@@ -1147,7 +1144,6 @@ msgid "Middle click on an icon closes its relative application ?"
 msgstr "Clique du milieu sur une icône ferme l'application correspondante ?"
 
 #: ../data/messages:139
-#, fuzzy
 msgid "Signal the applications demanding your attention with a dialog bubble ?"
 msgstr ""
 "Signaler les fenêtres demandant votre attention par une bulle de dialogue ?"
@@ -1859,19 +1855,16 @@ msgid "Order of the different types of icons :"
 msgstr "Ordre des differents types d'icônes :"
 
 #: ../data/messages:441
-#, fuzzy
 msgid "launchers"
-msgstr "Lancer un nouveau"
+msgstr "lanceurs"
 
 #: ../data/messages:443
-#, fuzzy
 msgid "applications"
-msgstr "Réflections"
+msgstr "applications"
 
 #: ../data/messages:445
-#, fuzzy
 msgid "applets"
-msgstr "Autres applets"
+msgstr "applets"
 
 #: ../data/messages:447
 msgid ""

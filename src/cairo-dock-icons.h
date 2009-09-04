@@ -419,7 +419,7 @@ Icon *cairo_dock_get_previous_icon (GList *pIconList, Icon *pIcon);
 *@param cCommand the command.
 *@return the first icon whose field 'acCommand' is identical to the given command, or NULL if no icon matches.
 */
-Icon *cairo_dock_get_icon_with_command (GList *pIconList, gchar *cCommand);
+Icon *cairo_dock_get_icon_with_command (GList *pIconList, const gchar *cCommand);
 
 /** Search an icon with a given URI in a list of icons.
 *@param pIconList a list of icons.

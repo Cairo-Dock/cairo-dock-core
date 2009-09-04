@@ -537,7 +537,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 		if (pDock->icons == NULL)
 		{
 			cd_message ("dock %s vide => a la poubelle", cPrevDockName);
-			cairo_dock_destroy_dock (pDock, cPrevDockName, NULL, NULL);
+			//cairo_dock_destroy_dock (pDock, cPrevDockName, NULL, NULL);
 		}
 	}
 

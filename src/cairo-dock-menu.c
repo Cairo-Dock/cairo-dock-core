@@ -55,6 +55,7 @@
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-menu.h"
 
 #define CAIRO_DOCK_CONF_PANEL_WIDTH 800
@@ -356,7 +357,7 @@ static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, Icon *icon, Cai
 	//\___________________ On ouvre automatiquement l'IHM pour permettre de modifier ses champs.
 	gchar *cNewDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cNewDesktopFileName);
 	cairo_dock_update_launcher_desktop_file (cNewDesktopFilePath, iLauncherType);
-
+	
 	gboolean config_ok;
 	if (iLauncherType != CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR)  // inutile pour un separateur.
 		config_ok = cairo_dock_build_normal_gui (cNewDesktopFilePath, NULL, _("Fill this launcher"), CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT, NULL, NULL, NULL, NULL);
@@ -365,14 +366,33 @@ static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, Icon *icon, Cai
 		config_ok = TRUE;
 	if (config_ok)
 	{
+		if (iLauncherType == 1)  // on assure l'unicite du nom du dock ici, car cela n'est volontairement pas fait dans la fonction de creation de l'icone.
+		{
+			GKeyFile* pKeyFile = cairo_dock_open_key_file (cNewDesktopFilePath);
+			g_return_if_fail (pKeyFile != NULL);
+			
+			gchar *cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
+			if (cName == NULL)
+				cName = g_strdup ("dock");
+			gchar *cUniqueName = cairo_dock_get_unique_dock_name (cName);
+			if (strcmp (cName, cUniqueName) != 0)
+			{
+				g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", cUniqueName);
+				cairo_dock_write_keys_to_file (pKeyFile, cNewDesktopFilePath);
+			}
+			g_free (cName);
+			g_free (cUniqueName);
+			g_key_file_free (pKeyFile);
+		}
+		
 		cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 		Icon *pNewIcon = cairo_dock_create_icon_from_desktop_file (cNewDesktopFileName, pCairoContext);
-
+		cairo_destroy (pCairoContext);
+		
 		if (iLauncherType = CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR)
 			pNewIcon->iType = (icon ? icon->iType : CAIRO_DOCK_LAUNCHER);
 		else if (pNewIcon->acName == NULL)
 			pNewIcon->acName = g_strdup (_("Undefined"));
-
 		
 		CairoDock *pParentDock = cairo_dock_search_dock_from_name (pNewIcon->cParentDockName);  // existe forcement puique a ete cree au besoin.
 		cairo_dock_insert_icon_in_dock (pNewIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
