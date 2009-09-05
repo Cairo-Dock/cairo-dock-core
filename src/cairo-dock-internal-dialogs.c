@@ -46,14 +46,48 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDialogs *pDialogs)
 	pDialogs->bHomogeneous = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "homogeneous text", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	if (! pDialogs->bHomogeneous)
 	{
-		pDialogs->dialogTextDescription.cFont = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "message police", &bFlushConfFileNeeded, "sans", NULL, NULL);
+		gchar *cFontDescription = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "message police", &bFlushConfFileNeeded, "sans 12", "Icons", NULL);
+		
+		PangoFontDescription *fd = pango_font_description_from_string (cFontDescription);
+		pDialogs->dialogTextDescription.cFont = g_strdup (pango_font_description_get_family (fd));
+		pDialogs->dialogTextDescription.iSize = pango_font_description_get_size (fd);
+		if (!pango_font_description_get_size_is_absolute (fd))
+			pDialogs->dialogTextDescription.iSize /= PANGO_SCALE;
+		if (pDialogs->dialogTextDescription.iSize == 0)
+			pDialogs->dialogTextDescription.iSize = 14;
+		pDialogs->dialogTextDescription.iWeight = pango_font_description_get_weight (fd);
+		pDialogs->dialogTextDescription.iStyle = pango_font_description_get_style (fd);
+		
+		if (g_key_file_has_key (pKeyFile, "Dialogs", "message size", NULL))
+		{
+			pDialogs->dialogTextDescription.iSize = g_key_file_get_integer (pKeyFile, "Dialogs", "message size", NULL);
+			int iLabelWeight = g_key_file_get_integer (pKeyFile, "Dialogs", "message weight", NULL);
+			pDialogs->dialogTextDescription.iWeight = cairo_dock_get_pango_weight_from_1_9 (iLabelWeight);
+			gboolean bLabelStyleItalic = g_key_file_get_boolean (pKeyFile, "Dialogs", "message italic", NULL);
+			if (bLabelStyleItalic)
+				pDialogs->dialogTextDescription.iStyle = PANGO_STYLE_ITALIC;
+			else
+				pDialogs->dialogTextDescription.iStyle = PANGO_STYLE_NORMAL;
+			
+			pango_font_description_set_size (fd, pDialogs->dialogTextDescription.iSize * PANGO_SCALE);
+			pango_font_description_set_weight (fd, pDialogs->dialogTextDescription.iWeight);
+			pango_font_description_set_style (fd, pDialogs->dialogTextDescription.iStyle);
+			
+			g_free (cFontDescription);
+			cFontDescription = pango_font_description_to_string (fd);
+			g_key_file_set_string (pKeyFile, "Dialogs", "message police", cFontDescription);
+			bFlushConfFileNeeded = TRUE;
+		}
+		pango_font_description_free (fd);
+		g_free (cFontDescription);
+		/*pDialogs->dialogTextDescription.cFont = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "message police", &bFlushConfFileNeeded, "sans", NULL, NULL);
 		pDialogs->dialogTextDescription.iSize = cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "message size", &bFlushConfFileNeeded, 14, NULL, NULL);
 		int iLabelWeight = cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "message weight", &bFlushConfFileNeeded, 5, NULL, NULL);
 		pDialogs->dialogTextDescription.iWeight = cairo_dock_get_pango_weight_from_1_9 (iLabelWeight);  // on se ramene aux intervalles definit par Pango.
 		if (cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "message italic", &bFlushConfFileNeeded, FALSE, NULL, NULL))
 			pDialogs->dialogTextDescription.iStyle = PANGO_STYLE_ITALIC;
 		else
-			pDialogs->dialogTextDescription.iStyle = PANGO_STYLE_NORMAL;
+			pDialogs->dialogTextDescription.iStyle = PANGO_STYLE_NORMAL;*/
 		pDialogs->dialogTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "outlined", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 		pDialogs->dialogTextDescription.iMargin = 0;
 	}

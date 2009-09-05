@@ -551,7 +551,7 @@ gboolean on_unmap_dialog (GtkWidget* pWidget,
 	GdkEvent *pEvent,
 	CairoDialog *pDialog)
 {
-	g_print ("unmap\n");
+	g_print ("unmap (bAllowMinimize:%d)\n", pDialog->bAllowMinimize);
 	if (! pDialog->bAllowMinimize)
 		gtk_window_present (GTK_WINDOW (pWidget));
 	else

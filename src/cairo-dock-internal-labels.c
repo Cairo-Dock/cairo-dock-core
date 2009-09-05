@@ -39,13 +39,56 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
-	pLabels->iconTextDescription.cFont = cairo_dock_get_string_key_value (pKeyFile, "Labels", "police", &bFlushConfFileNeeded, "sans", "Icons", NULL);
-
-	pLabels->iconTextDescription.iSize = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "size", &bFlushConfFileNeeded, 14, "Icons", NULL);
+	gchar *cFontDescription = cairo_dock_get_string_key_value (pKeyFile, "Labels", "police", &bFlushConfFileNeeded, "sans 12", "Icons", NULL);
 	
+	PangoFontDescription *fd = pango_font_description_from_string (cFontDescription);
+	pLabels->iconTextDescription.cFont = g_strdup (pango_font_description_get_family (fd));
+	pLabels->iconTextDescription.iSize = pango_font_description_get_size (fd);
+	g_print ("font : %s => %d\n", cFontDescription, pLabels->iconTextDescription.iSize);
+	if (!pango_font_description_get_size_is_absolute (fd))
+		pLabels->iconTextDescription.iSize /= PANGO_SCALE;
+	g_print (" => %d\n", pLabels->iconTextDescription.iSize);
+	if (pLabels->iconTextDescription.iSize == 0)
+		pLabels->iconTextDescription.iSize = 14;
+	pLabels->iconTextDescription.iWeight = pango_font_description_get_weight (fd);
+	pLabels->iconTextDescription.iStyle = pango_font_description_get_style (fd);
+	
+	if (g_key_file_has_key (pKeyFile, "Labels", "size", NULL))
+	{
+		pLabels->iconTextDescription.iSize = g_key_file_get_integer (pKeyFile, "Labels", "size", NULL);
+		int iLabelWeight = g_key_file_get_integer (pKeyFile, "Labels", "weight", NULL);
+		pLabels->iconTextDescription.iWeight = cairo_dock_get_pango_weight_from_1_9 (iLabelWeight);
+		gboolean bLabelStyleItalic = g_key_file_get_boolean (pKeyFile, "Labels", "italic", NULL);
+		if (bLabelStyleItalic)
+			pLabels->iconTextDescription.iStyle = PANGO_STYLE_ITALIC;
+		else
+			pLabels->iconTextDescription.iStyle = PANGO_STYLE_NORMAL;
+		
+		pango_font_description_set_size (fd, pLabels->iconTextDescription.iSize * PANGO_SCALE);
+		pango_font_description_set_weight (fd, pLabels->iconTextDescription.iWeight);
+		pango_font_description_set_style (fd, pLabels->iconTextDescription.iStyle);
+		
+		g_free (cFontDescription);
+		cFontDescription = pango_font_description_to_string (fd);
+		g_key_file_set_string (pKeyFile, "Labels", "police", cFontDescription);
+		bFlushConfFileNeeded = TRUE;
+	}
+	pango_font_description_free (fd);
+	g_free (cFontDescription);
+	
+	gboolean bShow = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "show labels", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	if (! bShow)
+	{
+		g_free (pLabels->iconTextDescription.cFont);
+		pLabels->iconTextDescription.cFont = NULL;
+		pLabels->iconTextDescription.iSize = 0;
+	}
+	
+	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text oulined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	
+	/*pLabels->iconTextDescription.iSize = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "size", &bFlushConfFileNeeded, 14, "Icons", NULL);
 	int iLabelWeight = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "weight", &bFlushConfFileNeeded, 5, "Icons", NULL);
 	pLabels->iconTextDescription.iWeight = cairo_dock_get_pango_weight_from_1_9 (iLabelWeight);  // on se ramene aux intervalles definit par Pango.
-	
 	gboolean bLabelStyleItalic = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "italic", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
 	if (bLabelStyleItalic)
 		pLabels->iconTextDescription.iStyle = PANGO_STYLE_ITALIC;
@@ -60,7 +103,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	{
 		g_free (pLabels->iconTextDescription.cFont);
 		pLabels->iconTextDescription.cFont = NULL;
-	}
+	}*/
 	
 	double couleur_label[3] = {1., 1., 1.};
 	cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text color start", &bFlushConfFileNeeded, pLabels->iconTextDescription.fColorStart, 3, couleur_label, "Icons", NULL);
@@ -71,8 +114,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 
 	double couleur_backlabel[4] = {0., 0., 0., 0.5};
 	cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text background color", &bFlushConfFileNeeded, pLabels->iconTextDescription.fBackgroundColor, 4, couleur_backlabel, "Icons", NULL);
-	
-	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text oulined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
 	pLabels->iconTextDescription.iMargin = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "text margin", &bFlushConfFileNeeded, 4, NULL, NULL);
 	

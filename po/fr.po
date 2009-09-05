@@ -323,9 +323,12 @@ msgid ""
 "It seems that you've never entered the help module yet.\n"
 "If you have some difficulty to configure the dock, or if you are willing to "
 "customize it,\n"
-"the Help module is here for you !\n"
+"the Help module is here for you ! It also contains a lot of hints !\n"
 "Do you want to take a look at it now ?"
-msgstr ""
+msgstr "Il semble que vous ne soyez pas encore entré dans le module d'aide.\n"
+"Si vous avez des difficultés pour configurer le dock, ou si vous souhaitez le personnaliser,\n"
+"le module Aide est là pour vous ! Il contient aussi de nombreuses astuces !\n"
+"Voulez-vous le visiter maintenant ?"
 
 #: ../src/cairo-dock-menu.c:169
 msgid "Development"
@@ -781,7 +784,9 @@ msgid ""
 "For instance, it can be done by activating the desktop effects, launching "
 "Compiz, or activating the composition in Metacity.\n"
 "I can do this lattest operation for you, do you want to proceed ?"
-msgstr ""
+msgstr "Pour enlever le rectangle nois autour du dock, vous avez besoin d'activer un gestionnaire de composite.\n"
+"Par exemple, cela peut être fait en activant les effets de bureau, en lançant Compiz, ou en activant le composite dans Metacity.\n"
+"Je peux faire cette dernière opération pour vous, voulez-vous le faire ?"
 
 #: ../src/cairo-dock.c:599
 msgid "Do you want to keep this setting ?"
@@ -793,10 +798,12 @@ msgid ""
 "composite manager.\n"
 "For instance, it can be done by activating the desktop effects, launching "
 "Compiz, or activating the composition in Metacity.\n"
-"If your machine can't support composition, Cairo-Dock can emulate it; this "
+"If your machine can't support composition, Cairo-Dock can emulate it\n this "
 "option is in the 'System' module of the configuration, at the bottom of the "
 "page."
-msgstr ""
+msgstr "Pour enlever le rectangle nois autour du dock, vous avez besoin d'activer un gestionnaire de composite.\n"
+"Par exemple, cela peut être fait en activant les effets de bureau, en lançant Compiz, ou en activant le composite dans Metacity.\n"
+"Si votre machine ne supporte pas le composite, Cairo-Dock peut l'émuler\n cette option se trouve dans le module \"Système\" du panneau de config, au bas de la page."
 
 #: ../src/cairo-dock.c:611
 msgid ""
@@ -804,7 +811,10 @@ msgid ""
 "To make the most of Cairo-Dock, please consider installing its plug-ins.\n"
 "They provide a lot of interesting functionnalities, animations, etc,\n"
 " that you certainly don't want to miss !"
-msgstr ""
+msgstr "Aucun plug-in trouvé.\n"
+"Pour profiter vraiment de Cairo-Dock, pensez à installer ses plug-ins.\n"
+"Ils fournissent de nombreuses fonctionnalités intéressantes, animations, etc,\n"
+"que vous ne pouvez pas manquer !"
 
 #: ../data/messages:3 ../data/messages:1011
 msgid "Position on the screen"
@@ -904,7 +914,7 @@ msgstr "Espace"
 
 #: ../data/messages:43
 msgid "Extend the dock to always fill the screen ?"
-msgstr ""
+msgstr "Etendre le dock pour qu'il remplisse toujours tout l'écran ?"
 
 #: ../data/messages:45
 msgid ""
@@ -2272,14 +2282,15 @@ msgstr "Nom de la vue utilisée pour le sous-dock :"
 
 #: ../data/messages:667
 msgid "Yes, like that :-)"
-msgstr ""
+msgstr "Oui, comme cela :-)"
 
 #: ../data/messages:669
 msgid ""
 "Note : many answers have an extra hint.\n"
 "To popup the hint, simply let the mouse over the sentence for 1 second, a "
 "tooltip will appear."
-msgstr ""
+msgstr "Note : beaucoup de réponses ont une astuce supplémentaire.\n"
+"Pour la faire apparaître, laissez simplement la souris au-dessus de la phrase pendant 1 seconde."
 
 # ##############################
 # ########### Help #############
@@ -2332,27 +2343,6 @@ msgstr ""
 "et mettre un chemin pour l'image. Si vous n'écrivez pas un chemin, mais "
 "simplement le nom d'une image, n'incluez pas l'extension (.svg, .png, etc), "
 "pour laisser le dock choisir le meilleur format."
-
-#: ../data/messages:687
-#, fuzzy
-msgid ""
-"In the “Icons” module, you can choose a <b>icon theme</b>. Enter a name of a "
-"theme, for exemple : Human or Gartoon.\n"
-"You can even enter the path of a folder containing personnal icons.\n"
-"You can enter many themes or folders, the dock will search for images in "
-"them in the same order as you entered them.\n"
-"If you let it empty, the default icon theme of your system wil be used."
-msgstr ""
-"Dans le module 'Icons', vous pouvez choisir un <b>theme d'icônes</b>. Entrez "
-"le nom d'un thème, par exemple Human ou Gartoon.\n"
-"Vous pouvez même entrer le chemin d'un répertoire contenant des icônes "
-"personnelles.\n"
-"Par défaut, tous les thèmes Cairo-Dock mettent ici le répertoire des icônes "
-"locales '_LocalIcons_', qui est en fait ~/.config/cairo-dock/current_theme/"
-"icons.\n"
-"Vous pouvez spécifier plusieurs thèmes ou répertoires, le dock ira chercher "
-"les images dedans dans le même ordreoù vous les avez rentrés.\n"
-"Si vous le laissez vide, le thème d'icônes par défaut sera utilisé."
 
 #: ../data/messages:689
 msgid "How can I quickly remove many icons ?"
@@ -2600,7 +2590,6 @@ msgstr ""
 "désirez pour lui."
 
 #: ../data/messages:755
-#, fuzzy
 msgid ""
 "Any dock can be displayed with one view, and many views are available (3D, "
 "Curve, etc).\n"
@@ -2609,21 +2598,18 @@ msgid ""
 msgstr ""
 "Tout dock peut être affiché avec une vue donnée, et plusieurs vues sont "
 "disponibles (3D, Curve, etc).\n"
-"Elles sont fournies par le plug-in 'dock-rendering', donc pensez à "
-"l'activer.\n"
-"Puis, allez dans le module 'Vues', et choisissez la vue que vous voulez pour "
+"Allez dans le module 'Vues', et choisissez la vue que vous voulez pour "
 "le dock principal, et pour les sous-docks."
 
 #: ../data/messages:757
-#, fuzzy
 msgid "How can I change the background of my docks ?"
-msgstr "Comment puis-je changer l'image d'une icône ?"
+msgstr "Comment puis-je changer le fond de mes docks ?"
 
 #: ../data/messages:759
 msgid ""
 "Hint : the Parabolic view doe not have a background, and the Slide and "
 "Rainbow views have their own background parameters."
-msgstr ""
+msgstr "la vue Parabolique n'a pas de fond, et les vues Diapositive et Arc-en-ciel ont leur propres paramètres pour le fond."
 
 #: ../data/messages:761
 msgid ""
@@ -2631,17 +2617,18 @@ msgid ""
 "gradation.\n"
 "If you set an image, it will be used as the background, if you don't, the "
 "gradatoin will be used."
-msgstr ""
+msgstr "Dans le module 'Fond du dock', vous pouvez au choix choisir une image, ou un dégradé de couleur.\n"
+"Si vous choisissez une image, elle sera utilisée, sinon le dégradé le sera."
 
 #: ../data/messages:763
 msgid "I find the dock too much flashy, can it be more sober ?"
-msgstr ""
+msgstr "Je trouve le dock trop flashy, peut-il être plus sobre ?"
 
 #: ../data/messages:765
 msgid ""
 "Hint : try different themes, some are already very sober, like Dust-Sand or "
 "Elementary."
-msgstr ""
+msgstr "Essayez différents thèmes, certains sont déjà très sobres, comme Dust-Sand ou Elementary."
 
 #: ../data/messages:767
 msgid ""
@@ -2654,7 +2641,11 @@ msgid ""
 "view to the \"default\" view in the \"Views\" module.\n"
 "In brief, you can easily have something as much sober as a gnome-panel, but "
 "this would be a shame ! ^_^"
-msgstr ""
+msgstr "Qui peut le plus peut le moins ! Vous pouvez par exemple désactiver le plug-in \"effets d'icônes\",\n"
+"ou désactiver l'effet au passage de la souris dans le plug-in \"Icônes Animées\".\n"
+"Vous pouvez aussi diminuer l'effet de zoom ou les reflets des icônes, dans le module \"Icônes\",\n"
+"ou changer la vue pour la vue \"défaut\" dans le module \"Vues\".\n"
+"En bref, vous pouvez facilement avoir quelque chose d'aussi sobre qu'un gnome-panel, mais ce serait dommage ! ^_^"
 
 #: ../data/messages:769
 msgid "Desklet"
@@ -2736,7 +2727,6 @@ msgstr ""
 "position du dessin à l'intérieur des décorations."
 
 #: ../data/messages:793
-#, fuzzy
 msgid ""
 "The default decoration is defined in the “Desklets” module.\n"
 "You can setup a different decoration for each desklet. To change a desklet’s "
@@ -2744,11 +2734,10 @@ msgid ""
 " go to the applet’s configuration, click on the “desklet” tab, and then "
 "choose the decoration you want."
 msgstr ""
-"Vous devez avoir le plug-in 'desklet-rendering' activé. La décoration par "
-"défaut est définie dans le module 'Desklets'.\n"
+"La décoration par défaut est définie dans le module 'Desklets'.\n"
 "De plus, chaque desklet peut avoir sa propre décoration. Pour changer la "
 "décoration d'un desklet,\n"
-"allez dans la configuration de l'applet, onglet 'deslet', et choisissez la "
+"allez dans la configuration de l'applet, onglet 'desklet', et choisissez la "
 "décoration que vous voulez."
 
 #: ../data/messages:795
@@ -2957,7 +2946,6 @@ msgid "activate the Gmenu applet."
 msgstr "Activez l'applet 'GMenu'."
 
 #: ../data/messages:851
-#, fuzzy
 msgid "How can I have a simple “quick launch” window ?"
 msgstr "Comment puis-je un simple panneau 'lancement rapide' ?"
 
@@ -3023,13 +3011,12 @@ msgid "How can I access to my mount points ?"
 msgstr "Comment puis-je accéder à mes points de montage ?"
 
 #: ../data/messages:871
-#, fuzzy
 msgid ""
 "Hint : you can mount a volume by clicking on its icon. To unmount it, middle-"
 "click on its icon, or right-click -> unmount."
 msgstr ""
 "Astuce : vous pouvez monter un volume en cliquant sur son icône. Pour le "
-"démonter, clic-droit dessus et sélectionnez 'démonter'."
+"démonter, clic-milieu dessus, ou clic-droit -> 'démonter'."
 
 #: ../data/messages:873 ../data/messages:879
 msgid "Simply activate the “shortcuts” applet."
@@ -3171,12 +3158,11 @@ msgstr ""
 "Vous pouvez le configurer ensuite comme n'importe quel autre applet."
 
 #: ../data/messages:913
-#, fuzzy
 msgid ""
 "I have a personal gauge that I want to use in the dock (for System-Monitor "
 "or others)"
 msgstr ""
-"J'ai un thème de jauge que je voudrais utiliser (pour cpusage or autres)"
+"J'ai un thème de jauge que je voudrais utiliser (pour Moniteur-Système ou autre)"
 
 #: ../data/messages:915
 msgid ""
@@ -3202,13 +3188,12 @@ msgstr ""
 "dustbin, Cairo-Penguin, weather, etc."
 
 #: ../data/messages:921
-#, fuzzy
 msgid ""
 "move the folder containing your theme in ~/.config/cairo-dock/extras/clock, "
 "now it will appear in the list of themes !"
 msgstr ""
 "Déplacez le répertoire contenant votre thème dans ~/.config/cairo-dock/"
-"extras/clock, et c'est bon !"
+"extras/clock, et il apparaîtra dans la liste des thèmes !"
 
 #: ../data/messages:923
 msgid "How can I change quickly the luminosity of my screen ?"
@@ -3235,34 +3220,32 @@ msgstr ""
 "la souris sur l'icône."
 
 #: ../data/messages:931
-#, fuzzy
 msgid "How can I quickly switch to another desktop ?"
-msgstr "Comment puis-je accéder au bureau ?"
+msgstr "Comment puis-je rapidement basculer à un autre bureau ?"
 
 #: ../data/messages:933
 msgid "Hint : this applet even lets you add/remove quickly a desktop !"
-msgstr ""
+msgstr "Astuce : cette applet vous permet même d'enlever/rajouter rapidement un bureau (via son menu) !"
 
 #: ../data/messages:935
-#, fuzzy
 msgid ""
 "Activate the Switcher applet, then you can scroll up/down on the icon with "
 "the mouse to go to the previous/next desktop,\n"
 " or click on the icon to select a desktop."
 msgstr ""
-"Activez l'applet 'AlsaMixer ', vous pouvez alors scroller avec la molette de "
-"la souris sur l'icône."
+"Activez l'applet 'Sélecteur de bureau ', vous pouvez alors scroller avec la molette de "
+"la souris sur l'icône pour basculer sur le bureau précédent/suivant\n"
+" ou cliquer sur l'icône pour sélectionner un bureau."
 
 #: ../data/messages:937
-#, fuzzy
 msgid "How can I control my dock with the keyboard ?"
-msgstr "Comment puis-je placer mon dock sur l'écran ?"
+msgstr "Comment puis-je contrôler mon dock avec le clavier ?"
 
 #: ../data/messages:939
 msgid ""
 "Hint : when you define a shorkey, try it before to be sure it's not already "
 "used by another application."
-msgstr ""
+msgstr "Astuce : quand vous définissez un raccourci, essayez-le avant pour être sûr qu'il n'est pas déjà utilisé par une autre application."
 
 #: ../data/messages:941
 msgid ""
@@ -3281,7 +3264,21 @@ msgid ""
 "b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
-msgstr ""
+msgstr "Plusieurs applets ont des actions qui peuvent être déclenchées par un raccourci clavier :\n"
+" - l'applet <i>AlsaMixer</i> vous permet de faire apparaître un <b>bouton de volume</b> "
+"qui peut être contrôlé avec les flèches du clavier.\n"
+" - l'applet <i>Terminal</i> vous permet de faire apparaître la <b>fenêtre du terminal</"
+"b> et directement écrire dedans.\n"
+" - l'applet <i>Systray</i> vous permet de faire apparaître la <b>zone de notification</"
+"b>.\n"
+" - l'applet <i>Quick Browser</i> vous permet de faire apparaître le <b>menu de navigation</"
+"b>, vous pouvez ensuite naviguer dedans avec les flèches.\n"
+" - l'applet <i>GMenu</i> vous permet de faire apparaître le menu <b>Applications</b> "
+", ainsi qu'un dialogue de <b>lanceur rapide</b>.\n"
+" - l'applet <i>Clipper</i> vous permet de faire apparaître l'<b>historique du presse-papier</"
+"b>.\n"
+" - et bien sûr, le plug-in <i>Scooby-Do</i> vous permet de <b>naviguer à l'intérieur"
+"de vos docks</b> et de rapidement <b>chercher et lancer</b> applications et fichiers !"
 
 #: ../data/messages:943
 msgid "Troubleshooting"
@@ -3300,7 +3297,6 @@ msgstr ""
 "l'OpenGL d'abord, car les drivers ne sont pas encore parfaits."
 
 #: ../data/messages:949
-#, fuzzy
 msgid ""
 "You have to turn on the compositing. For instance, you can run Compiz or "
 "xcompmgr. \n"
@@ -3313,7 +3309,9 @@ msgstr ""
 "Vous devez activer la gestion du composite. Par exemple, vous pouvez lancer "
 "Compiz ou xcompmgr.\n"
 "Si vous êtes sous XFCE, vous pouvez juste activer le composite dans les "
-"options du gestionnaire de fenêtres."
+"options du gestionnaire de fenêtres.\n"
+"Si vous êtes sous Gnome, vous pouvez l'activer dans Metacity de cette manière :\n"
+" ouvrez gconf-editor, éditer la clé \"/apps/metacity/general/compositing_manager\" et mettez-la à 'true'."
 
 #: ../data/messages:951
 msgid "My machine is too old to run a composite manager"
@@ -3423,7 +3421,6 @@ msgid "Help us !"
 msgstr "Aidez-nous !"
 
 #: ../data/messages:977
-#, fuzzy
 msgid ""
 "We value your help ! If you see a bug, or if you think something could be "
 "improved,\n"
@@ -3444,6 +3441,8 @@ msgstr ""
 "\n"
 "Si vous avez fait un thème pour le dock ou une des applets, et voulez le "
 "partager, nous serons heureux de l'intégrer aux autres thèmes !\n"
+"Si vous souhaitez développer une applet, une documentation complète est disponible à "
+"http://doc.cairo-dock.org.\n"
 "Fabounet"
 
 # #################################
@@ -3993,19 +3992,14 @@ msgid ""
 " - Finally, Cairo-Dock has its own ppa on LaunchPad, and a complete "
 "documentation on http://doc.cairo-dock.org."
 msgstr ""
-
-#~ msgid ""
-#~ "The dock will automatically resize itself to fit this size. Set it to 0 "
-#~ "to make the dock fit the screen's size."
-#~ msgstr ""
-#~ "Le dock se redimensionnera automatiquement pour satisfaire à cette "
-#~ "contrainte. Mettez 0 pour lui indiquer de prendre la taille de l'écran."
-
-#~ msgid "Size allowed for the dock :"
-#~ msgstr "Taille autorisée pour le dock :"
-
-#~ msgid "Happy Birthday Cairo-Dock !!! :-)"
-#~ msgstr "Bon anniversaire Cairo-Dock !!! :-)"
-
-#~ msgid "Icons' lateral unfolding acceleration :"
-#~ msgstr "Acceleration de depliage latéral des icônes :"
+"2.1.0 : Une version vraiment bien remplie !\n"
+" - Contrôlez n'importe quel lecteur de musique avec l'applet MusicPlayer\n"
+"   Partagez facilement vos fichiers avec le monde grâce à l'applet dnd2share,\n"
+"   Surveillez votre système grâce à l'applet System-Monitor,\n"
+"   Prenez des notes rapidement grâce à l'applet Notes.\n"
+" - Le dock a un mode \"panneau étendu\" et un nouveau sélecteur de thèmes.\n"
+" - Nombreuses updates dans les applets Keyboard-indicator et Shortcuts.\n"
+" - Nouvelle animation pour la vue 'Diapositive'.\n"
+" - Corrections dans les applets Clipper, Powermanager, Clock et Cairo-Penguin.\n"
+" - Et finalement, Cairo-Dock a son propre ppa sur LaunchPad, et une documentation complète "
+"sur http://doc.cairo-dock.org."

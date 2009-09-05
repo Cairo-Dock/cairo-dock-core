@@ -478,6 +478,12 @@ static void _cairo_dock_set_font (GtkFontButton *widget, GtkEntry *pEntry)
 {
 	const gchar *cFontName = gtk_font_button_get_font_name (GTK_FONT_BUTTON (widget));
 	cd_message (" -> %s\n", cFontName);
+	PangoFontDescription *fd = pango_font_description_from_string (cFontName);
+	g_print ("familly : %s\n", pango_font_description_get_family (fd));
+	g_print ("style : %d\n", pango_font_description_get_style (fd));
+	g_print ("weight : %d\n", pango_font_description_get_weight (fd));
+	g_print ("size : %d\n", pango_font_description_get_size (fd));
+	
 	if (cFontName != NULL)
 		gtk_entry_set_text (pEntry, cFontName);
 }
@@ -1742,7 +1748,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					
 					if (iOrder < iNbPossibleValues)  // il reste des valeurs a inserer (ce peut etre de nouvelles valeurs apparues lors d'une maj du fichier de conf, donc CAIRO_DOCK_WIDGET_TREE_VIEW_SORT est concerne aussi). 
 					{
-						g_print ("on complete\n");
 						gchar cResult[10];
 						for (k = 0; pAuthorizedValuesList[k] != NULL; k ++)
 						{
@@ -1757,7 +1762,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							if (l == length)  // elle n'a pas encore ete inseree.
 							{
 								snprintf (cResult, 9, "%d", k);
-								g_print (" avec '%s'\n", cResult);
 								memset (&iter, 0, sizeof (GtkTreeIter));
 								gtk_list_store_append (modele, &iter);
 								gtk_list_store_set (modele, &iter,
@@ -1858,12 +1862,27 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				cd_warning ("\nTHIS CONF FILE IS OUT OF DATE\n");
 			break ;
 			
+			case CAIRO_DOCK_WIDGET_FONT_SELECTOR :  // string avec un selecteur de font a cote du GtkEntry.
+				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
+				pOneWidget = gtk_font_button_new_with_font (cValue);
+				gtk_font_button_set_show_style (GTK_FONT_BUTTON (pOneWidget), TRUE);
+				gtk_font_button_set_show_size (GTK_FONT_BUTTON (pOneWidget), TRUE);
+				gtk_font_button_set_use_size (GTK_FONT_BUTTON (pOneWidget), TRUE);
+				gtk_font_button_set_use_font (GTK_FONT_BUTTON (pOneWidget), TRUE);
+				/*g_signal_connect (G_OBJECT (pFontButton),
+					"font-set",
+					G_CALLBACK (_cairo_dock_set_font),
+					pEntry);*/
+				_pack_in_widget_box (pOneWidget);
+				_pack_subwidget (pOneWidget);
+				g_free (cValue);
+			break;
+			
 			case CAIRO_DOCK_WIDGET_STRING_ENTRY :  // string
 			case CAIRO_DOCK_WIDGET_PASSWORD_ENTRY :  // string de type "password", crypte dans le .conf et cache dans l'UI (Merci Tofe !) :-)
 			case CAIRO_DOCK_WIDGET_FILE_SELECTOR :  // string avec un selecteur de fichier a cote du GtkEntry.
 			case CAIRO_DOCK_WIDGET_FOLDER_SELECTOR :  // string avec un selecteur de repertoire a cote du GtkEntry.
 			case CAIRO_DOCK_WIDGET_SOUND_SELECTOR :  // string avec un selecteur de fichier a cote du GtkEntry et un boutton play.
-			case CAIRO_DOCK_WIDGET_FONT_SELECTOR :  // string avec un selecteur de font a cote du GtkEntry.
 			case CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR :  // string avec un selecteur de touche clavier (Merci Ctaf !)
 				// on construit l'entree de texte.
 				cValue = g_key_file_get_locale_string (pKeyFile, cGroupName, cKeyName, NULL, NULL);  // nous permet de recuperer les ';' aussi.
@@ -1903,17 +1922,19 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						_pack_in_widget_box (pButtonPlay);
 					}
 				}
-				else if (iElementType == CAIRO_DOCK_WIDGET_FONT_SELECTOR)  // on ajoute un selecteur de font.
+				/*else if (iElementType == CAIRO_DOCK_WIDGET_FONT_SELECTOR)  // on ajoute un selecteur de font.
 				{
 					pFontButton = gtk_font_button_new_with_font (gtk_entry_get_text (GTK_ENTRY (pEntry)));
-					gtk_font_button_set_show_style (GTK_FONT_BUTTON (pFontButton), FALSE);
-					gtk_font_button_set_show_size (GTK_FONT_BUTTON (pFontButton), FALSE);
+					gtk_font_button_set_show_style (GTK_FONT_BUTTON (pFontButton), TRUE);
+					gtk_font_button_set_show_size (GTK_FONT_BUTTON (pFontButton), TRUE);
+					gtk_font_button_set_use_size (GTK_FONT_BUTTON (pFontButton), TRUE);
+					gtk_font_button_set_use_font (GTK_FONT_BUTTON (pFontButton), TRUE);
 					g_signal_connect (G_OBJECT (pFontButton),
 						"font-set",
 						G_CALLBACK (_cairo_dock_set_font),
 						pEntry);
 					_pack_in_widget_box (pFontButton);
-				}
+				}*/
 				else if (iElementType == CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR)  // on ajoute un selecteur de touches.
 				{
 					GtkWidget *pGrabKeyButton = gtk_button_new_with_label(_("grab"));
@@ -1929,6 +1950,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					
 					_pack_in_widget_box (pGrabKeyButton);
 				}
+				g_free (cValue);
 			break;
 
 			case CAIRO_DOCK_WIDGET_EMPTY_WIDGET :  // container pour widget personnalise.
@@ -2302,6 +2324,11 @@ static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFil
 		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, (cValue != NULL ? cValue : ""));
 		g_free (cValue);
 	}
+	else if (GTK_IS_FONT_BUTTON (pOneWidget))
+	{
+		const gchar *cFontName = gtk_font_button_get_font_name (GTK_FONT_BUTTON (pOneWidget));
+		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, cFontName);
+	}
 	else if (GTK_IS_ENTRY (pOneWidget))
 	{
 		gchar *cValue = NULL;
@@ -2312,7 +2339,7 @@ static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFil
 		}
 		else
 		{
-			cValue = g_strdup( cWidgetValue );
+			cValue = g_strdup (cWidgetValue);
 		}
 		const gchar* const * cPossibleLocales = g_get_language_names ();
 		gchar *cKeyNameFull, *cTranslatedValue;

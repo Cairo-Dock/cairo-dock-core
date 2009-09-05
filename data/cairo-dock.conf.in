@@ -285,7 +285,7 @@ fake transparency = false
 
 #b- Make the config panel transparent ?
 #{You need to re-open the panel. It is deactivated by default on KDE.}
-config transparency = true
+config transparency = false
 
 modules=
 
@@ -370,19 +370,20 @@ config_hidden =
 
 [Labels]
 
-#i+[0;40] Size of the font :
-#{approximately size in pixels, put 0 to not display labels}
-size = 14
+#F+[Font;gtk-select-font]
+frame_font =
 
-#P+ Family of the font used for labels :
-#{for exemple Monospace, Purisa, ... Just write the font name wihtout any number or so.}
-police = Sans
+#b+ Display labels on icons ?
+show labels = true
 
-#b+ Should be italic ?
-italic = false
+#P+ Font used for labels :
+police = Sans 14
 
-#i+[1;9] Weight (between 1 and 9, the bigger, the heavier):
-weight = 5
+#b+ Should the text be oulined ?
+text oulined = true
+
+#F+[Color;gtk-select-color]
+frame_col =
 
 #c+ Start color :
 #{It's the first color of the gradation.}
@@ -396,19 +397,19 @@ text color stop = 1;1;1
 #{If checked, the pattern will go from top to bottom, otherwise from left to right.}
 vertical label pattern = false
 
+#F+[Background;gtk-orientation-portrait]
+frame_bg =
+
 #C+ Color of the label's background :
 #{If you set it to fully transparent, there will be no background for the text, but the margin around the text will still be effective.}
 text background color =0;0;0;.5
 
-#i+[0;20] Margin around the text (in pixels) :
-text margin = 4
-
-#b+ Should the text be oulined ?
-text oulined = true
-
 #b+ Use background color for labels ?
 #{If false, only the quick-info will have this background color.}
 background for label = false
+
+#i+[0;20] Margin around the text (in pixels) :
+text margin = 4
 
 #m[System] Configure the label readability.
 config_labels = 
@@ -576,19 +577,9 @@ text color = 0.0; 0.0; 0.0
 #{The messages will have the same style as the icons' labels. The beneath parameters are then unused.}
 homogeneous text = false
 
-#i+[0;40] Size of the font :
-#{approximately size in pixels, put 0 to not display labels}
-message size = 14
-
 #P+ Family of the font used for labels :
 #{for exemple Monospace, Purisa, ... Just write the font name wihtout any number or so.}
 message police = Sans
-
-#i+[1;9] Weight (between 1 and 9, the bigger, the heavier):
-message weight = 5
-
-#b+ Should be italic ?
-message italic = false
 
 #b+ Should be outlined ?
 outlined = false

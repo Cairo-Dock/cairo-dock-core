@@ -147,7 +147,9 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, const gchar *cGro
 /** Convert an integer in [0,9] into a Pango text weight.
 *@param iWeight weight between 0 and 9.
 */
-#define cairo_dock_get_pango_weight_from_1_9(iWeight) (((PANGO_WEIGHT_HEAVY - PANGO_WEIGHT_ULTRALIGHT) * iWeight + 9 * PANGO_WEIGHT_ULTRALIGHT - PANGO_WEIGHT_HEAVY) / 8)
+#define cairo_dock_get_pango_weight_from_1_9(iWeight) floor ((((PANGO_WEIGHT_HEAVY - PANGO_WEIGHT_ULTRALIGHT) * iWeight + 9 * PANGO_WEIGHT_ULTRALIGHT - PANGO_WEIGHT_HEAVY) / 8) / 100) * 100
+
+
 
 /** Get the Cairo-Dock's config and reload everything.
 *@param cConfFilePath path to the main conf file.
