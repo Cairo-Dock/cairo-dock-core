@@ -126,6 +126,9 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 		if (cThemeName == NULL)
 			break ;
 		
+		if (*cThemeName == '.')
+			continue;
+		
 		// on ecarte les non repertoires.
 		cThemePath = g_strdup_printf ("%s/%s", cThemesDir, cThemeName);
 		if (! g_file_test (cThemePath, G_FILE_TEST_IS_DIR))

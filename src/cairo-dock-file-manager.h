@@ -217,8 +217,8 @@ gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, Cairo
 
 CairoDockDesktopEnv cairo_dock_guess_environment (void);
 
-/** Get the size of a file.
-/*@param cFilePath path of a file on the hard disk.
+/** Get the size of a local file.
+*@param cFilePath path of a file on the hard disk.
 *@return the size of the file, or 0 if it doesn't exist.
 */
 int cairo_dock_get_file_size (const gchar *cFilePath);

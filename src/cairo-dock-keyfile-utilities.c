@@ -97,7 +97,7 @@ void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, const gchar *cConfFile
 
 void cairo_dock_replace_key_values (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gboolean bUseOriginalKeys, gchar iIdentifier)
 {
-	g_print ("%s (%d, %d)\n", __func__, iIdentifier, bUseOriginalKeys);
+	//g_print ("%s (%d, %d)\n", __func__, iIdentifier, bUseOriginalKeys);
 	GError *erreur = NULL;
 	gsize length = 0;
 	gchar **pKeyList;

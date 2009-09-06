@@ -120,22 +120,23 @@ void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 	CairoDockModule *pHelpModule = g_new0 (CairoDockModule, 1);
 	CairoDockVisitCard *pVisitCard = g_new0 (CairoDockVisitCard, 1);
 	pHelpModule->pVisitCard = pVisitCard;
-	pVisitCard->cModuleName = g_strdup ("Help");
+	pVisitCard->cModuleName = "Help";
 	pVisitCard->iMajorVersionNeeded = 2;
 	pVisitCard->iMinorVersionNeeded = 0;
 	pVisitCard->iMicroVersionNeeded = 0;
 	pVisitCard->cPreviewFilePath = NULL;
 	pVisitCard->cGettextDomain = NULL;
-	pVisitCard->cDockVersionOnCompilation = g_strdup (CAIRO_DOCK_VERSION);
-	pVisitCard->cUserDataDir = g_strdup ("help");
-	pVisitCard->cShareDataDir = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR);
-	pVisitCard->cConfFileName = g_strdup ("help.conf");
-	pVisitCard->cModuleVersion = g_strdup ("0.0.6");
+	pVisitCard->cDockVersionOnCompilation = CAIRO_DOCK_VERSION;
+	pVisitCard->cUserDataDir = "help";
+	pVisitCard->cShareDataDir = CAIRO_DOCK_SHARE_DATA_DIR;
+	pVisitCard->cConfFileName = "help.conf";
+	pVisitCard->cModuleVersion = "0.0.6";
 	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
 	pVisitCard->cIconFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/help.svg";
 	pVisitCard->iSizeOfConfig = 0;
 	pVisitCard->iSizeOfData = 0;
 	pVisitCard->cDescription = N_("A useful FAQ that contains also a lot of hints.\nLet the mouse over a sentence to make the hint dialog popups.");
+	pVisitCard->cAuthor = "Fabounet";
 	pHelpModule->pInterface = g_new0 (CairoDockModuleInterface, 1);
 	pHelpModule->pInterface->load_custom_widget = _entered_help_once;
 	g_hash_table_insert (s_hModuleTable, pHelpModule->pVisitCard->cModuleName, pHelpModule);
@@ -605,6 +606,7 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 
 	if (module->pInstancesList != NULL)
 	{
+		cd_warning ("module %s already activated", module->pVisitCard->cModuleName);
 		g_set_error (erreur, 1, 1, "%s () : module %s is already active !", __func__, module->pVisitCard->cModuleName);
 		return ;
 	}

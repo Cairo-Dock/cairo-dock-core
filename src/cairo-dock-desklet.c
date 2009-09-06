@@ -1068,7 +1068,7 @@ static gboolean on_motion_notify_desklet(GtkWidget *pWidget,
 					pPointedIcon->bPointed = FALSE;
 				pIcon->bPointed = TRUE;
 				
-				g_print ("on survole %s\n", pIcon->acName);
+				//g_print ("on survole %s\n", pIcon->acName);
 				cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_ENTER_ICON, pIcon, pDesklet, &bStartAnimation);
 			}
 		}
@@ -1079,7 +1079,7 @@ static gboolean on_motion_notify_desklet(GtkWidget *pWidget,
 			{
 				pPointedIcon->bPointed = FALSE;
 				
-				g_print ("kedal\n");
+				//g_print ("kedal\n");
 				cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_ENTER_ICON, pPointedIcon, pDesklet, &bStartAnimation);
 
 			}

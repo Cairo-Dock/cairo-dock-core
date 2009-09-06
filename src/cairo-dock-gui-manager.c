@@ -183,7 +183,7 @@ static GtkToolItem *_cairo_dock_make_toolbutton (const gchar *cLabel, const gcha
 		return pWidget;
 	
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gchar *cLabel2 = g_strdup_printf ("<span font_desc=\"Century Schoolbook L 14\">%s</span>", cLabel);  /// 16
+	gchar *cLabel2 = g_strdup_printf ("<span font_desc=\"Times New Roman 12\"><b>%s</b></span>", cLabel);  /// 16
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel2);
 	g_free (cLabel2);
 	
@@ -195,7 +195,7 @@ static GtkToolItem *_cairo_dock_make_toolbutton (const gchar *cLabel, const gcha
 	return pWidget;
 }
 
-static inline CairoDockGroupDescription *_cairo_dock_add_group_button (const gchar *cGroupName, gchar *cIcon, int iCategory, const gchar *cDescription, const gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, const gchar *cOriginalConfFilePath, const gchar *cGettextDomain, const gchar **cDependencies, GList *pExternalModules, const gchar *cInternalModule)
+static inline CairoDockGroupDescription *_cairo_dock_add_group_button (const gchar *cGroupName, const gchar *cIcon, int iCategory, const gchar *cDescription, const gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, const gchar *cOriginalConfFilePath, const gchar *cGettextDomain, const gchar **cDependencies, GList *pExternalModules, const gchar *cInternalModule)
 {
 	//\____________ On garde une trace de ses caracteristiques.
 	CairoDockGroupDescription *pGroupDescription = g_new0 (CairoDockGroupDescription, 1);
@@ -271,7 +271,7 @@ static inline CairoDockGroupDescription *_cairo_dock_add_group_button (const gch
 
 static gboolean _cairo_dock_add_one_module_widget (/*gchar *cModuleName, */CairoDockModule *pModule, const gchar *cActiveModules)
 {
-	gchar *cModuleName = pModule->pVisitCard->cModuleName;
+	const gchar *cModuleName = pModule->pVisitCard->cModuleName;
 	if (pModule->cConfFilePath == NULL)
 		pModule->cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
 	int iActive;
@@ -417,7 +417,7 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	gtk_frame_set_shadow_type (GTK_FRAME (pCategoriesFrame), GTK_SHADOW_OUT);
 	
 	GtkWidget *pLabel;
-	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman italic 14\" color=\"#6B2E96\"><b><u>%s :</u></b></span>", _("Categories"));
+	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman 12\" color=\"#81728C\"><b><u>%s :</u></b></span>", _("Categories"));
 	pLabel = gtk_label_new (NULL);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 	g_free (cLabel);
@@ -465,7 +465,7 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 		gtk_frame_set_shadow_type (GTK_FRAME (pCategoryWidget->pFrame), GTK_SHADOW_OUT);
 		
 		pLabel = gtk_label_new (NULL);
-		cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman italic 14\"><b>%s</b></span>", gettext (cCategoriesDescription[2*i]));
+		cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman 12\"><b>%s</b></span>", gettext (cCategoriesDescription[2*i]));
 		gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 		g_free (cLabel);
 		gtk_frame_set_label_widget (GTK_FRAME (pCategoryWidget->pFrame), pLabel);
@@ -560,7 +560,7 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	
 	//\_____________ On ajoute le filtre.
 	GtkWidget *pFilterFrame = gtk_frame_new (NULL);
-	cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman italic 14\" color=\"#6B2E96\"><b><u>%s :</u></b></span>", _("Filter"));
+	cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman 12\" color=\"#81728C\"><b><u>%s :</u></b></span>", _("Filter"));
 	pLabel = gtk_label_new (NULL);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 	g_free (cLabel);
@@ -999,7 +999,7 @@ GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, CairoDoc
 	
 	//\_______________ On met a jour la frame du groupe (label + check-button).
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman italic 14\" color=\"#6B2E96\"><u><b>%s</b></u></span>", pGroupDescription->cGroupName);
+	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman 12\" color=\"#81728C\"><u><b>%s</b></u></span>", pGroupDescription->cGroupName);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 	g_free (cLabel);
 	gtk_frame_set_label_widget (GTK_FRAME (s_pGroupFrame), pLabel);
@@ -1526,7 +1526,7 @@ void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage)
 		pStatusBar = g_object_get_data (G_OBJECT (pWindow), "status-bar");
 	if (pStatusBar == NULL)
 		return ;
-	g_print ("%s (%s sur %x/%x)\n", __func__, cMessage, pWindow, pStatusBar);
+	//g_print ("%s (%s sur %x/%x)\n", __func__, cMessage, pWindow, pStatusBar);
 	gtk_statusbar_pop (GTK_STATUSBAR (pStatusBar), 0);  // clear any previous message, underflow is allowed.
 	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, cMessage);
 	while (gtk_events_pending ())

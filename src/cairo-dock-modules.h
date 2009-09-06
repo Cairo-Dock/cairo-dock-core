@@ -57,7 +57,7 @@ typedef enum {
 /// Definition of the visit card of a module.
 struct _CairoDockVisitCard {
 	/// nom du module qui servira a l'identifier.
-	gchar *cModuleName;
+	const gchar *cModuleName;
 	/// numero de version majeure de cairo-dock necessaire au bon fonctionnement du module.
 	short iMajorVersionNeeded;
 	/// numero de version mineure de cairo-dock necessaire au bon fonctionnement du module.
@@ -65,23 +65,23 @@ struct _CairoDockVisitCard {
 	/// numero de version micro de cairo-dock necessaire au bon fonctionnement du module.
 	short iMicroVersionNeeded;
 	/// chemin d'une image de previsualisation.
-	gchar *cPreviewFilePath;
+	const gchar *cPreviewFilePath;
 	/// Nom du domaine pour la traduction du module par 'gettext'.
-	gchar *cGettextDomain;
+	const gchar *cGettextDomain;
 	/// Version du dock pour laquelle a ete compilee le module.
-	gchar *cDockVersionOnCompilation;
+	const gchar *cDockVersionOnCompilation;
 	/// version courante du module.
-	gchar *cModuleVersion;
+	const gchar *cModuleVersion;
 	/// repertoire du plug-in cote utilisateur.
-	gchar *cUserDataDir;
+	const gchar *cUserDataDir;
 	/// repertoire d'installation du plug-in.
-	gchar *cShareDataDir;
+	const gchar *cShareDataDir;
 	/// nom de son fichier de conf.
-	gchar *cConfFileName;
+	const gchar *cConfFileName;
 	/// categorie de l'applet.
 	CairoDockModuleCategory iCategory;
 	/// chemin d'une image pour l'icone du module dans le panneau de conf du dock.
-	gchar *cIconFilePath;
+	const gchar *cIconFilePath;
 	/// taille de la structure contenant la config du module.
 	gint iSizeOfConfig;
 	/// taille de la structure contenant les donnees du module.
@@ -89,9 +89,9 @@ struct _CairoDockVisitCard {
 	/// VRAI ssi le plug-in peut etre instancie plusiers fois.
 	gboolean bMultiInstance;
 	/// description et mode d'emploi succint.
-	gchar *cDescription;
+	const gchar *cDescription;
 	/// auteur/pseudo
-	gchar *cAuthor;
+	const gchar *cAuthor;
 	/// nom d'un module interne auquel ce module se rattache, ou NULL si aucun.
 	const gchar *cInternalModule;
 	/// octets reserves pour preserver la compatibilite binaire lors de futurs ajouts sur l'interface entre plug-ins et dock.

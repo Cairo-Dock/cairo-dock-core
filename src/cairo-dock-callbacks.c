@@ -331,7 +331,7 @@ static gboolean _cairo_dock_make_icon_glide (CairoDock *pDock)
 	
 	if (! bGliding)
 	{
-		g_print ("plus de glissement\n");
+		cd_message ("plus de glissement");
 		pDock->iSidIconGlide = 0;
 		return FALSE;
 	}
@@ -854,7 +854,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	if (s_pFlyingContainer != NULL)
 	{
 		Icon *pFlyingIcon = s_pFlyingContainer->pIcon;
-		g_print ("on remet l'icone volante dans son dock d'origine (%s)\n", pFlyingIcon->cParentDockName);
+		cd_message ("on remet l'icone volante dans son dock d'origine (%s)", pFlyingIcon->cParentDockName);
 		cairo_dock_free_flying_container (s_pFlyingContainer);
 		cairo_dock_stop_icon_animation (pFlyingIcon);
 		cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);

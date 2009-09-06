@@ -147,6 +147,8 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 
 void cairo_dock_resize_data_renderer_history (Icon *pIcon, int iNewMemorySize);
 
+void cairo_dock_refresh_data_renderer (Icon *pIcon, CairoContainer *pContainer, cairo_t *pSourceContex);
+
 
 ///
 /// Structure Access

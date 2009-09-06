@@ -218,8 +218,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 	if (pAccessibility->iMaxAuthorizedWidth != pPrevAccessibility->iMaxAuthorizedWidth ||
 		pAccessibility->bExtendedMode != pPrevAccessibility->bExtendedMode)
 	{
-		/// le faire pour tous les docks racine...
-		cairo_dock_update_dock_size (pDock);  // met a jour les icones et le fond aussi.
+		cairo_dock_set_all_views_to_default (1);  // 1 <=> tous les docks racines. met a jour la taille et reserve l'espace.
 	}
 	
 	//\_______________ Zone de rappel.
