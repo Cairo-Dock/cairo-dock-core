@@ -29,3 +29,4 @@ data/themes.conf
 data/cairo-dock.conf
 stamp-h1
 cairo-dock.pc
+compile*
