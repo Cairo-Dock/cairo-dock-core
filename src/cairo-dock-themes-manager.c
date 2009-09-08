@@ -138,7 +138,7 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 		}
 		
 		// on recupere la version du theme.
-		g_print (" referencement du theme local %s...\n", cThemeName);
+		//g_print (" referencement du theme local %s...\n", cThemeName);
 		bOutdated = FALSE;
 		iVersion = 0;
 		gchar *cVersionFile = g_strdup_printf ("%s/version", cThemePath);
@@ -162,7 +162,7 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 		CairoDockTheme *pSameTheme = g_hash_table_lookup (pThemeTable, cThemeName);
 		if (pSameTheme != NULL)
 		{
-			g_print (" le meme theme existe deja en version %d (<> %d)\n", pSameTheme->iVersion, iVersion);
+			//g_print (" le meme theme existe deja en version %d (<> %d)\n", pSameTheme->iVersion, iVersion);
 			if (pSameTheme->iVersion > iVersion)  // on saute ce theme, et on le marque comme obsolete.
 			{
 				g_file_set_contents (cVersionFile,
@@ -891,6 +891,12 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		}
 		
 		//\___________________ On charge les lanceurs si necessaire, en effacant ceux existants.
+		if (! g_file_test (g_cCurrentLaunchersPath, G_FILE_TEST_EXISTS))
+		{
+			gchar *command = g_strdup_printf ("mkdir -p '%s'", g_cCurrentLaunchersPath);
+			r = system (command);
+			g_free (command);
+		}
 		if (g_pMainDock == NULL || g_key_file_get_boolean (pKeyFile, "Themes", "use theme launchers", NULL))
 		{
 			g_string_printf (sCommand, "rm -f '%s'/*.desktop", g_cCurrentLaunchersPath);

@@ -39,6 +39,7 @@ void on_leave_group_button (GtkButton *button, gpointer *data);
 void on_click_apply (GtkButton *button, GtkWidget *pWindow);
 void on_click_ok (GtkButton *button, GtkWidget *pWindow);
 void on_click_quit (GtkButton *button, GtkWidget *pWindow);
+gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop);
 
 void on_click_activate_given_group (GtkToggleButton *button, CairoDockGroupDescription *pGroupDescription);
 void on_click_activate_current_group (GtkToggleButton *button, gpointer *data);
@@ -47,9 +48,13 @@ void on_click_activate_current_group (GtkToggleButton *button, gpointer *data);
 void on_click_normal_apply (GtkButton *button, GtkWidget *pWindow);
 void on_click_normal_ok (GtkButton *button, GtkWidget *pWindow);
 void on_click_normal_quit (GtkButton *button, GtkWidget *pWindow);
-
-gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop);
 gboolean on_delete_normal_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop);
+
+
+void on_click_launcher_apply (GtkButton *button, GtkWidget *pWindow);
+void on_click_launcher_quit (GtkButton *button, GtkWidget *pWindow);
+gboolean on_delete_launcher_gui (GtkWidget *pWidget, GdkEvent *event, gpointer data);
+
 
 
 void cairo_dock_reset_filter_state (void);

@@ -543,7 +543,7 @@ static void _cairo_dock_get_current_color (GtkColorButton *pColorButton, GSList 
 		gtk_color_button_set_alpha (pColorButton, color[3]);
 }
 
-static void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data)
+void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data)
 {
 	GtkWidget *pPairSpinButton = data[0];
 	GtkWidget *pToggleButton = data[1];
@@ -657,6 +657,12 @@ static void cairo_dock_build_gauge_list_for_gui (GHashTable *pHashTable)
 
 static void _cairo_dock_add_one_dock_item (const gchar *cName, CairoDock *pDock, GtkListStore *pModele)
 {
+	if (pDock != NULL)  // peut etre NULL (entree vide)
+	{
+		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+		if (CAIRO_DOCK_IS_APPLET (pPointingIcon) || CAIRO_DOCK_IS_MULTI_APPLI (pPointingIcon))
+			return ;
+	}
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);

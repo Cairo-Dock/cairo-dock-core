@@ -106,12 +106,12 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_FOLDER_SELECTOR='D',
 	/// a text entry with a file selector and a 'play' button, for sound files.
 	CAIRO_DOCK_WIDGET_SOUND_SELECTOR='u',
-	/// a text entry with a font selector.
-	CAIRO_DOCK_WIDGET_FONT_SELECTOR='P',
 	/// a text entry with a shortkey selector.
 	CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR='k',
 	/// a text entry, where text is hidden and the result is encrypted in the .conf file.
 	CAIRO_DOCK_WIDGET_PASSWORD_ENTRY='p',
+	/// a font selector button.
+	CAIRO_DOCK_WIDGET_FONT_SELECTOR='P',
 	
 	/// a text list.
 	CAIRO_DOCK_WIDGET_LIST='L',
@@ -146,6 +146,8 @@ void cairo_dock_build_desklet_decorations_list_for_applet_gui (GHashTable *pHash
 void cairo_dock_build_animations_list_for_gui (GHashTable *pHashTable);
 void cairo_dock_build_dialog_decorator_list_for_gui (GHashTable *pHashTable);
 
+
+void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data);
 
 gchar *cairo_dock_parse_key_comment (gchar *cKeyComment, char *iElementType, guint *iNbElements, gchar ***pAuthorizedValuesList, gboolean *bAligned, gchar **cTipString);
 

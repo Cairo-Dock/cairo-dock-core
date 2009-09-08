@@ -534,10 +534,10 @@ void cairo_dock_reload_launcher (Icon *icon)
 		cairo_dock_calculate_dock_icons (pNewContainer);
 		gtk_widget_queue_draw (pNewContainer->pWidget);
 
-		if (pDock->icons == NULL)
+		if (pDock->icons == NULL && pDock->iRefCount == 0 && ! pDock->bIsMainDock)
 		{
 			cd_message ("dock %s vide => a la poubelle", cPrevDockName);
-			//cairo_dock_destroy_dock (pDock, cPrevDockName, NULL, NULL);
+			cairo_dock_destroy_dock (pDock, cPrevDockName, NULL, NULL);
 		}
 	}
 

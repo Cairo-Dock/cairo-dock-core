@@ -156,7 +156,10 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 			cd_warning ("The option 'auto-hide on maximized window' is in conflict with the option 'reserve space for dock',\n it will be ignored");
 			pAccessibility->bAutoHideOnMaximized = FALSE;
 		}
-	}  // par contre l'auto-hide est une propriete pour chaque dock principal, donc il n'y a pas de redondance avec l'auto-hide de la barre des taches.
+	}
+	
+	/// faire aussi l'auto-hide sur fenetres maximisees ...
+	
 	
 	if (sWarning != NULL)
 	{

@@ -134,5 +134,14 @@ void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage);
 void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFormat, ...);
 
 
+GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon);
+
+void cairo_dock_free_launcher_gui (void);
+
+void cairo_dock_delete_current_launcher_widget (void);
+
+void cairo_dock_refresh_launcher_gui (void);
+
+
 G_END_DECLS
 #endif

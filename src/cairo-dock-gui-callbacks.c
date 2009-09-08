@@ -34,6 +34,8 @@
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-icons.h"
+#include "cairo-dock-load.h"
+#include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-gui-callbacks.h"
 
 #define CAIRO_DOCK_PREVIEW_WIDTH 250
@@ -41,6 +43,7 @@
 
 extern gchar *g_cConfFile;
 extern CairoDock *g_pMainDock;
+extern gchar *g_cCurrentLaunchersPath;
 static CairoDialog *s_pDialog = NULL;
 static int s_iSidShowGroupDialog = 0;
 
@@ -275,6 +278,24 @@ void on_click_quit (GtkButton *button, GtkWidget *pWindow)
 	gtk_widget_destroy (pWindow);
 }
 
+gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
+{
+	cd_debug ("%s (%x)", __func__, pBlockingLoop);
+	if (pBlockingLoop != NULL)
+	{
+		cd_debug ("dialogue detruit, on sort de la boucle");
+		if (g_main_loop_is_running (pBlockingLoop))
+			g_main_loop_quit (pBlockingLoop);
+	}
+	cairo_dock_free_categories ();
+	if (s_iSidShowGroupDialog != 0)
+	{
+		g_source_remove (s_iSidShowGroupDialog);
+		s_iSidShowGroupDialog = 0;
+	}
+	return FALSE;
+}
+
 void on_click_activate_given_group (GtkToggleButton *button, CairoDockGroupDescription *pGroupDescription)
 {
 	g_return_if_fail (pGroupDescription != NULL);
@@ -362,29 +383,9 @@ void on_click_normal_ok (GtkButton *button, GtkWidget *pWindow)
 	on_click_normal_quit (button, pWindow);
 }
 
-
-gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
-{
-	cd_debug ("%s (%x)", __func__, pBlockingLoop);
-	if (pBlockingLoop != NULL)
-	{
-		cd_debug ("dialogue detruit, on sort de la boucle");
-		if (g_main_loop_is_running (pBlockingLoop))
-			g_main_loop_quit (pBlockingLoop);
-	}
-	cairo_dock_free_categories ();
-	if (s_iSidShowGroupDialog != 0)
-	{
-		g_source_remove (s_iSidShowGroupDialog);
-		s_iSidShowGroupDialog = 0;
-	}
-	return FALSE;
-}
-
 gboolean on_delete_normal_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
 {
 	//g_print ("%s ()\n", __func__);
-	
 	if (pBlockingLoop != NULL && g_main_loop_is_running (pBlockingLoop))
 	{
 		g_main_loop_quit (pBlockingLoop);
@@ -397,13 +398,68 @@ gboolean on_delete_normal_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *p
 	
 	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWidget), "widget-list");
 	cairo_dock_free_generated_widget_list (pWidgetList);
-	cairo_dock_config_panel_destroyed ();
 	
 	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pWidget), "garbage");
 	/// nettoyer.
 	
+	gchar *cConfFilePath = g_object_get_data (G_OBJECT (pWidget), "conf-file");
+	g_free (cConfFilePath);
+	
+	cairo_dock_config_panel_destroyed ();
+	
+	GCallback pFreeFunc = g_object_get_data (G_OBJECT (pWidget), "reset-gui");
+	if (pFreeFunc != NULL)
+		pFreeFunc ();
+	
 	return FALSE;
 }
+
+
+
+void on_click_launcher_apply (GtkButton *button, GtkWidget *pWindow)
+{
+	g_print ("%s ()\n", __func__);
+	
+	Icon *pIcon = g_object_get_data (G_OBJECT (pWindow), "current-icon");
+	if (pIcon == NULL)  // ligne correspondante a un dock principal.
+		return;
+	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWindow), "widget-list");
+	
+	gchar *cConfFilePath = (*pIcon->acDesktopFileName == '/' ? g_strdup (pIcon->acDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->acDesktopFileName));
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
+	g_return_if_fail (pKeyFile != NULL);
+	
+	cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
+	cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
+	g_key_file_free (pKeyFile);
+	g_free (cConfFilePath);
+	
+	cairo_dock_reload_launcher (pIcon);  // prend tout en compte, y compris le redessin.
+	cairo_dock_refresh_launcher_gui ();
+}
+
+void on_click_launcher_quit (GtkButton *button, GtkWidget *pWindow)
+{
+	//g_print ("%s ()\n", __func__);
+	on_delete_launcher_gui (pWindow, NULL, NULL);
+	gtk_widget_destroy (pWindow);
+}
+
+gboolean on_delete_launcher_gui (GtkWidget *pWidget, GdkEvent *event, gpointer data)
+{
+	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWidget), "widget-list");
+	cairo_dock_free_generated_widget_list (pWidgetList);
+	
+	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pWidget), "garbage");
+	/// nettoyer.
+	
+	cairo_dock_config_panel_destroyed ();
+	
+	cairo_dock_free_launcher_gui ();
+	
+	return FALSE;
+}
+
 
 
 static gboolean bAllWords = FALSE;

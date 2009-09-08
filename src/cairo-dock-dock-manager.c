@@ -698,7 +698,7 @@ void cairo_dock_reserve_space_for_all_root_docks (gboolean bReserve)
 
 gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix)
 {
-	const gchar *cNamepattern = (cPrefix != NULL && *cPrefix != '\0' ? cPrefix : "dock");
+	const gchar *cNamepattern = (cPrefix != NULL && *cPrefix != '\0' && strcmp (cPrefix, "cairo-dock") != 0 ? cPrefix : "dock");
 	GString *sNameString = g_string_new (cNamepattern);
 	
 	int i = 1;
