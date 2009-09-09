@@ -58,6 +58,8 @@
 #include "cairo-dock-load.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-desklet.h"
+#include "cairo-dock-desktop-file-factory.h"
+#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-icons.h"
 
 extern gchar *g_cCurrentLaunchersPath;
@@ -522,76 +524,6 @@ void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconType iType
 	g_string_free (sDesktopFilePath, TRUE);
 }
 
-void cairo_dock_swap_icons (CairoDock *pDock, Icon *icon1, Icon *icon2)
-{
-	//g_print ("%s (%s, %s) : %.2f <-> %.2f\n", __func__, icon1->acName, icon2->acName, icon1->fOrder, icon2->fOrder);
-	if (! ( (CAIRO_DOCK_IS_APPLI (icon1) && CAIRO_DOCK_IS_APPLI (icon2)) || (CAIRO_DOCK_IS_LAUNCHER (icon1) && CAIRO_DOCK_IS_LAUNCHER (icon2)) || (CAIRO_DOCK_IS_APPLET (icon1) && CAIRO_DOCK_IS_APPLET (icon2)) ) )
-		return ;
-
-	//\_________________ On intervertit les ordres des 2 lanceurs.
-	double fSwap = icon1->fOrder;
-	icon1->fOrder = icon2->fOrder;
-	icon2->fOrder = fSwap;
-
-	//\_________________ On change l'ordre dans les fichiers des 2 lanceurs.
-	if (CAIRO_DOCK_IS_LAUNCHER (icon1))  // ce sont des lanceurs.
-	{
-		gchar *cDesktopFilePath;
-		GKeyFile* pKeyFile;
-
-		if (icon1->acDesktopFileName != NULL)
-		{
-			cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon1->acDesktopFileName);
-			pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
-			if (pKeyFile == NULL)
-				return ;
-
-			g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", icon1->fOrder);
-			cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
-			g_key_file_free (pKeyFile);
-			g_free (cDesktopFilePath);
-		}
-
-		if (icon2->acDesktopFileName != NULL)
-		{
-			cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon2->acDesktopFileName);
-			pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
-			if (pKeyFile == NULL)
-				return ;
-
-			g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", icon2->fOrder);
-			cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
-			g_key_file_free (pKeyFile);
-			g_free (cDesktopFilePath);
-		}
-	}
-
-	//\_________________ On les intervertit dans la liste.
-	if (pDock->pFirstDrawnElement != NULL && (pDock->pFirstDrawnElement->data == icon1 || pDock->pFirstDrawnElement->data == icon2))
-		pDock->pFirstDrawnElement = NULL;
-	pDock->icons = g_list_remove (pDock->icons, icon1);
-	pDock->icons = g_list_remove (pDock->icons, icon2);
-	pDock->icons = g_list_insert_sorted (pDock->icons,
-		icon1,
-		(GCompareFunc) cairo_dock_compare_icons_order);
-	pDock->icons = g_list_insert_sorted (pDock->icons,
-		icon2,
-		(GCompareFunc) cairo_dock_compare_icons_order);
-
-	//\_________________ On recalcule la largeur max, qui peut avoir ete influencee par le changement d'ordre.
-	cairo_dock_update_dock_size (pDock);
-
-	//\_________________ On met a jour l'ordre des applets dans le fichier de conf.
-	if (CAIRO_DOCK_IS_APPLET (icon1))
-		cairo_dock_update_module_instance_order (icon1->pModuleInstance, icon1->fOrder);
-	if (CAIRO_DOCK_IS_APPLET (icon2))
-		cairo_dock_update_module_instance_order (icon2->pModuleInstance, icon2->fOrder);
-	if (fabs (icon2->fOrder - icon1->fOrder) < 1e-3)
-	{
-		cairo_dock_normalize_icons_order (pDock->icons, icon1->iType);
-	}
-}
-
 void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2)
 {
 	//g_print ("%s (%s, %.2f, %x)\n", __func__, icon1->acName, icon1->fOrder, icon2);
@@ -646,6 +578,8 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 	
 	if (bForceUpdate)
 		cairo_dock_normalize_icons_order (pDock->icons, icon1->iType);
+	if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon1) || CAIRO_DOCK_IS_USER_SEPARATOR (icon1) || CAIRO_DOCK_IS_APPLET (icon1))
+		cairo_dock_refresh_launcher_gui ();
 }
 
 
@@ -692,21 +626,7 @@ void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParen
 	g_free (icon->cParentDockName);
 	icon->cParentDockName = g_strdup (cNewParentDockName);
 
-	if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon))  // icon->acDesktopFileName != NULL
-	{
-		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->acDesktopFileName);
-
-		cairo_dock_update_conf_file (cDesktopFilePath,
-			G_TYPE_STRING, "Desktop Entry", "Container", cNewParentDockName,
-			G_TYPE_INVALID);
-		g_free (cDesktopFilePath);
-	}
-	else if (CAIRO_DOCK_IS_APPLET (icon))
-	{
-		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
-			G_TYPE_STRING, "Icon", "dock name", cNewParentDockName,
-			G_TYPE_INVALID);
-	}
+	cairo_dock_write_container_name_in_conf_file (icon, cNewParentDockName);
 }
 
 

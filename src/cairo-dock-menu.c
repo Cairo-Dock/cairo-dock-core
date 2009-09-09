@@ -159,12 +159,11 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	const gchar *cTitle = "\nCairo-Dock (2007-2009)\n version "CAIRO_DOCK_VERSION;
 	GtkWidget *pDialog = gtk_message_dialog_new (GTK_WINDOW (pDock->pWidget),
 		GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_MESSAGE_INFO,
 		GTK_BUTTONS_CLOSE,
-		cTitle);
+		"\nCairo-Dock (2007-2009)\n version "CAIRO_DOCK_VERSION);
 	
 	gchar *cImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_LOGO);
 	GtkWidget *pImage = gtk_image_new_from_file (cImagePath);
@@ -266,7 +265,10 @@ static void _cairo_dock_quit (GtkMenuItem *pMenuItem, gpointer *data)
 	if (pIcon == NULL)
 	{
 		if (CAIRO_DOCK_IS_DOCK (pContainer))
+		{
 			pIcon = cairo_dock_get_dialogless_icon ();
+			pContainer = CAIRO_CONTAINER (g_pMainDock);
+		}
 		else
 			pIcon = CAIRO_DESKLET (pContainer)->pIcon;
 	}
@@ -280,9 +282,16 @@ static void _cairo_dock_quit (GtkMenuItem *pMenuItem, gpointer *data)
  /////////// LES OPERATIONS SUR LES LANCEURS ///////////////////////
 ///////////////////////////////////////////////////////////////////
 
-static void _cairo_dock_on_user_remove_icon (Icon *icon, CairoDock *pDock)
+static void _cairo_dock_remove_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 {
-	cd_debug ("%s (%s)", __func__, icon->acName);
+	Icon *icon = data[0];
+	CairoDock *pDock = data[1];
+
+	gchar *question = g_strdup_printf (_("You're about removing this icon (%s) from the dock. Sure ?"), (icon->cInitialName != NULL ? icon->cInitialName : icon->acName));
+	int answer = cairo_dock_ask_question_and_wait (question, icon, CAIRO_CONTAINER (pDock));
+	g_free (question);
+	if (answer != GTK_RESPONSE_YES)
+		return ;
 	
 	if (icon->pSubDock != NULL)
 	{
@@ -298,31 +307,12 @@ static void _cairo_dock_on_user_remove_icon (Icon *icon, CairoDock *pDock)
 		icon->pSubDock = NULL;
 	}
 	
-	cairo_dock_stop_icon_animation (icon);
-	icon->fPersonnalScale = 1.0;
-	cairo_dock_notify (CAIRO_DOCK_REMOVE_ICON, icon, pDock);
-	cairo_dock_start_icon_animation (icon, pDock);
-	
-	cairo_dock_mark_theme_as_modified (TRUE);
-}
-static void _cairo_dock_remove_launcher (GtkMenuItem *pMenuItem, gpointer *data)
-{
-	Icon *icon = data[0];
-	CairoDock *pDock = data[1];
-
-	gchar *question = g_strdup_printf (_("You're about removing this icon (%s) from the dock. Sure ?"), (icon->cInitialName != NULL ? icon->cInitialName : icon->acName));
-	int answer = cairo_dock_ask_question_and_wait (question, icon, CAIRO_CONTAINER (pDock));
-	g_free (question);
-	if (answer == GTK_RESPONSE_YES)
-	{
-		_cairo_dock_on_user_remove_icon (icon, pDock);
-	}
+	cairo_dock_trigger_icon_removal_from_dock (icon);
 }
 
-static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, Icon *icon, CairoDock *pDock, CairoDockNewLauncherType iLauncherType)
+static void _cairo_dock_create_launcher (Icon *icon, CairoDock *pDock, CairoDockNewLauncherType iLauncherType)
 {
 	//\___________________ On determine l'ordre d'insertion suivant l'endroit du clique.
-	GError *erreur = NULL;
 	double fOrder;
 	if (CAIRO_DOCK_IS_LAUNCHER (icon))
 	{
@@ -341,41 +331,77 @@ static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, Icon *icon, Cai
 		fOrder = CAIRO_DOCK_LAST_ORDER;
 
 	//\___________________ On cree un fichier de lanceur avec des valeurs par defaut.
+	GError *erreur = NULL;
 	const gchar *cDockName = cairo_dock_search_dock_name (pDock);
 	gchar *cNewDesktopFileName;
-	if (iLauncherType == 1)  // conteneur.
-		cNewDesktopFileName = cairo_dock_add_desktop_file_for_container (cDockName, fOrder, pDock, &erreur);
-	else if (iLauncherType == 0)  // lanceur vide.
-		cNewDesktopFileName = cairo_dock_add_desktop_file_from_uri (NULL, cDockName, fOrder, pDock, &erreur);
-	else if (iLauncherType == 2)  // separateur.
-		cNewDesktopFileName = cairo_dock_add_desktop_file_for_separator (cDockName, fOrder, pDock, &erreur);
-	else
+	switch (iLauncherType)
+	{
+		case CAIRO_DOCK_LAUNCHER_FOR_CONTAINER :
+			cNewDesktopFileName = cairo_dock_add_desktop_file_for_container (cDockName, fOrder, pDock, &erreur);
+		break ;
+		case CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE :
+			cNewDesktopFileName = cairo_dock_add_desktop_file_from_uri (NULL, cDockName, fOrder, pDock, &erreur);
+		break ;
+		case CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR :
+			cNewDesktopFileName = cairo_dock_add_desktop_file_for_separator (cDockName, fOrder, pDock, &erreur);
+		break ;
+		default :
 		return ;
+	}
 	if (erreur != NULL)
 	{
-		cd_message ("while trying to create a new launcher : %s", erreur->message);
+		cd_warning ("while trying to create a new launcher : %s\nCheck that you have writing permissions on ~/.config/cairo-dock", erreur->message);
 		g_error_free (erreur);
 		return ;
 	}
-
-	//\___________________ On ouvre automatiquement l'IHM pour permettre de modifier ses champs.
-	gchar *cNewDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cNewDesktopFileName);
-	cairo_dock_update_launcher_desktop_file (cNewDesktopFilePath, iLauncherType);
 	
-	gboolean config_ok;
-	if (iLauncherType != CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR)  // inutile pour un separateur.
-		config_ok = cairo_dock_build_normal_gui (cNewDesktopFilePath, NULL, _("Fill this launcher"), CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT, NULL, NULL, NULL, NULL);
-		//config_ok = cairo_dock_edit_conf_file (GTK_WINDOW (pDock->pWidget), cNewDesktopFilePath, _("Fill this launcher"), CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT, 0, NULL, NULL, NULL, NULL, CAIRO_DOCK_GETTEXT_PACKAGE);
-	else
-		config_ok = TRUE;
-	if (config_ok)
+	if (g_bEasterEggs)
 	{
-		if (iLauncherType == 1)  // on assure l'unicite du nom du dock ici, car cela n'est volontairement pas fait dans la fonction de creation de l'icone.
+		//\___________________ On cree l'icone et on l'insere.
+		cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+		Icon *pNewIcon = cairo_dock_create_icon_from_desktop_file (cNewDesktopFileName, pCairoContext);
+		cairo_destroy (pCairoContext);
+		
+		if (iLauncherType == CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR)
+			pNewIcon->iType = (icon ? icon->iType : CAIRO_DOCK_LAUNCHER);
+		else if (pNewIcon->acName == NULL)
+			pNewIcon->acName = g_strdup (_("Undefined"));
+		
+		CairoDock *pParentDock = cairo_dock_search_dock_from_name (pNewIcon->cParentDockName);  // existe forcement puique a ete cree au besoin.
+		cairo_dock_insert_icon_in_dock (pNewIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
+
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
+		cairo_dock_mark_theme_as_modified (TRUE);
+		
+		g_free (cNewDesktopFileName);
+		
+		//\___________________ On ouvre automatiquement l'IHM pour permettre de modifier ses champs.
+		if (iLauncherType != CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR)  // inutile pour un separateur.
+			cairo_dock_build_launcher_gui (icon);
+	}
+	else
+	{
+		//\___________________ On ouvre automatiquement l'IHM pour permettre de modifier ses champs.
+		gchar *cNewDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cNewDesktopFileName);
+		cairo_dock_update_launcher_desktop_file (cNewDesktopFilePath, iLauncherType);
+		if (iLauncherType != CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR)  // inutile pour un separateur.
+		{
+			gboolean config_ok = cairo_dock_build_normal_gui (cNewDesktopFilePath, NULL, _("Fill this launcher"), CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT, NULL, NULL, NULL, NULL);
+			if (! config_ok)
+			{
+				g_remove (cNewDesktopFilePath);
+				g_free (cNewDesktopFilePath);
+				return ;
+			}
+		}
+		
+		//\___________________ On cree l'icone et on l'insere.
+		if (iLauncherType == CAIRO_DOCK_LAUNCHER_FOR_CONTAINER)  // on assure l'unicite du nom du dock ici, car cela n'est volontairement pas fait dans la fonction de creation de l'icone.
 		{
 			GKeyFile* pKeyFile = cairo_dock_open_key_file (cNewDesktopFilePath);
 			g_return_if_fail (pKeyFile != NULL);
 			
-			gchar *cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
+			gchar *cName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Name", NULL);
 			if (cName == NULL)
 				cName = g_strdup ("dock");
 			gchar *cUniqueName = cairo_dock_get_unique_dock_name (cName);
@@ -393,7 +419,7 @@ static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, Icon *icon, Cai
 		Icon *pNewIcon = cairo_dock_create_icon_from_desktop_file (cNewDesktopFileName, pCairoContext);
 		cairo_destroy (pCairoContext);
 		
-		if (iLauncherType = CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR)
+		if (iLauncherType == CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR)
 			pNewIcon->iType = (icon ? icon->iType : CAIRO_DOCK_LAUNCHER);
 		else if (pNewIcon->acName == NULL)
 			pNewIcon->acName = g_strdup (_("Undefined"));
@@ -403,14 +429,10 @@ static void _cairo_dock_create_launcher (GtkMenuItem *pMenuItem, Icon *icon, Cai
 
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
 		cairo_dock_mark_theme_as_modified (TRUE);
+		
+		g_free (cNewDesktopFilePath);
+		g_free (cNewDesktopFileName);
 	}
-	else
-	{
-		g_remove (cNewDesktopFilePath);
-	}
-
-	g_free (cNewDesktopFilePath);
-	g_free (cNewDesktopFileName);
 }
 
 static void cairo_dock_add_launcher (GtkMenuItem *pMenuItem, gpointer *data)
@@ -418,7 +440,7 @@ static void cairo_dock_add_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
 	
-	_cairo_dock_create_launcher (pMenuItem, icon, pDock, CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE);
+	_cairo_dock_create_launcher (icon, pDock, CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE);
 }
 
 static void cairo_dock_add_container (GtkMenuItem *pMenuItem, gpointer *data)
@@ -426,7 +448,7 @@ static void cairo_dock_add_container (GtkMenuItem *pMenuItem, gpointer *data)
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
 
-	_cairo_dock_create_launcher (pMenuItem, icon, pDock, CAIRO_DOCK_LAUNCHER_FOR_CONTAINER);
+	_cairo_dock_create_launcher (icon, pDock, CAIRO_DOCK_LAUNCHER_FOR_CONTAINER);
 }
 
 static void cairo_dock_add_separator (GtkMenuItem *pMenuItem, gpointer *data)
@@ -434,7 +456,7 @@ static void cairo_dock_add_separator (GtkMenuItem *pMenuItem, gpointer *data)
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
 	if (icon != NULL)
-		_cairo_dock_create_launcher (pMenuItem, icon, pDock, CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR);
+		_cairo_dock_create_launcher (icon, pDock, CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR);
 }
 
 static void _cairo_dock_modify_launcher (GtkMenuItem *pMenuItem, gpointer *data)
@@ -447,31 +469,26 @@ static void _cairo_dock_modify_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 		cairo_dock_show_temporary_dialog_with_icon (_("This icon doesn't have a desktop file."), icon, CAIRO_CONTAINER (pDock), 4000, "same icon");
 		return ;
 	}
-	
-	gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->acDesktopFileName);
-	cairo_dock_update_launcher_desktop_file (cDesktopFilePath, CAIRO_DOCK_IS_SEPARATOR (icon) ? CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR : (icon->pSubDock != NULL && icon->Xid == 0) ? CAIRO_DOCK_LAUNCHER_FOR_CONTAINER : CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE);
-	
+
 	if (g_bEasterEggs)
 	{
 		cairo_dock_build_launcher_gui (icon);
 	}
 	else
 	{
+		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->acDesktopFileName);
 		gboolean config_ok = cairo_dock_build_normal_gui (cDesktopFilePath, NULL, _("Modify this launcher"), CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT, (CairoDockApplyConfigFunc)NULL, NULL, NULL, NULL);
+		g_free (cDesktopFilePath);
 		
 		if (config_ok)
-		{
 			cairo_dock_reload_launcher (icon);
+		if (! pDock->bInside)
+		{
+			//g_print ("on force a quitter\n");
+			pDock->bInside = TRUE;
+			pDock->bAtBottom = FALSE;
+			cairo_dock_emit_leave_signal (pDock);
 		}
-	}
-	g_free (cDesktopFilePath);
-	
-	if (! pDock->bInside)
-	{
-		//g_print ("on force a quitter\n");
-		pDock->bInside = TRUE;
-		pDock->bAtBottom = FALSE;
-		cairo_dock_emit_leave_signal (pDock);
 	}
 }
 
@@ -517,7 +534,7 @@ static void _add_one_dock_to_menu (const gchar *cName, CairoDock *pDock, GtkWidg
 	Icon *pIcon = g_object_get_data (G_OBJECT (pMenu), "launcher");
 	if (strcmp (pIcon->cParentDockName, cName) == 0)
 		return;
-	GtkWidget *pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (cName, NULL, (GFunc)_cairo_dock_move_launcher_to_dock, pMenu, cName);
+	GtkWidget *pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (cName, NULL, (GFunc)_cairo_dock_move_launcher_to_dock, pMenu, (gpointer)cName);
 	g_object_set_data (G_OBJECT (pMenuItem), "launcher", pIcon);
 }
 
@@ -659,7 +676,7 @@ static void _cairo_dock_delete_file (GtkMenuItem *pMenuItem, gpointer *data)
 		gboolean bSuccess = cairo_dock_fm_delete_file (icon->acCommand);
 		if (! bSuccess)
 		{
-			cd_message ("Attention : couldn't delete this file.\nCheck that you have writing rights on this file.\n");
+			cd_warning ("couldn't delete this file.\nCheck that you have writing rights on this file.\n");
 			gchar *cMessage = g_strdup_printf (_("Attention : couldn't delete this file.\nCheck that you have writing rights on it."));
 			cairo_dock_show_temporary_dialog_with_default_icon (cMessage, icon, CAIRO_CONTAINER (pDock), 4000);
 			g_free (cMessage);
@@ -1435,8 +1452,6 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		pMenuItem = gtk_separator_menu_item_new ();
 		gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
 		
-		_add_entry_in_menu (_("Add a manual launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, menu);
-		gtk_widget_set_tooltip_text (pMenuItem, _("Don't forget you can drag a launcher from the menu and drop it in the dock !"));
 		
 		_add_entry_in_menu (_("Add a sub-dock"), GTK_STOCK_ADD, cairo_dock_add_container, menu);
 		
@@ -1444,7 +1459,10 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		{
 			_add_entry_in_menu (_("Add a separator"), GTK_STOCK_ADD, cairo_dock_add_separator, menu);
 		}
-
+		
+		pMenuItem = _add_entry_in_menu (_("Add a custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, menu);
+		gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it into the dock."));
+		
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	}
 
@@ -1496,21 +1514,22 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		{
 			pMenuItem = gtk_separator_menu_item_new ();
 			gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
-			
-			_add_entry_in_menu (_("Add a manual launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, menu);
-			gtk_widget_set_tooltip_text (pMenuItem, _("Don't forget you can drag a launcher from the menu and drop it in the dock !"));
 	
 			_add_entry_in_menu (_("Add a sub-dock"), GTK_STOCK_ADD, cairo_dock_add_container, menu);
 			
 			_add_entry_in_menu (_("Add a separator"), GTK_STOCK_ADD, cairo_dock_add_separator, menu);
 			
+			pMenuItem = _add_entry_in_menu (_("Add a custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, menu);
+		gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it into the dock."));
+		
 			///if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon))  // possede un .desktop.
 			if (icon->acDesktopFileName != NULL)
 			{
 				pMenuItem = gtk_separator_menu_item_new ();
 				gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
 			
-				_add_entry_in_menu (CAIRO_DOCK_IS_USER_SEPARATOR (icon) ? _("Remove this separator") : _("Remove this launcher"), GTK_STOCK_REMOVE, _cairo_dock_remove_launcher, menu);
+				pMenuItem = _add_entry_in_menu (CAIRO_DOCK_IS_USER_SEPARATOR (icon) ? _("Remove this separator") : _("Remove this launcher"), GTK_STOCK_REMOVE, _cairo_dock_remove_launcher, menu);
+				gtk_widget_set_tooltip_text (pMenuItem, _("You can remove a launcher by dragging it with the mouse out of the dock."));
 			
 				_add_entry_in_menu (CAIRO_DOCK_IS_USER_SEPARATOR (icon) ? _("Modify this separator") : _("Modify this launcher"), GTK_STOCK_EDIT, _cairo_dock_modify_launcher, menu);
 				
@@ -1518,7 +1537,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 				GtkWidget *pSubMenuDocks = gtk_menu_new ();
 				gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuDocks);
 				g_object_set_data (G_OBJECT (pSubMenuDocks), "launcher", icon);
-				pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("A new dock"), GTK_STOCK_NEW, (GFunc)_cairo_dock_move_launcher_to_dock, pSubMenuDocks, NULL);
+				pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("A new main dock"), GTK_STOCK_NEW, (GFunc)_cairo_dock_move_launcher_to_dock, pSubMenuDocks, NULL);
 				g_object_set_data (G_OBJECT (pMenuItem), "launcher", icon);
 				cairo_dock_foreach_docks ((GHFunc) _add_one_dock_to_menu, pSubMenuDocks);
 			}
@@ -1626,13 +1645,16 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 				_add_entry_in_menu (_("Launch another instance of this applet"), GTK_STOCK_ADD, _cairo_dock_add_module_instance, menu);
 			}
 			
-			pMenuItem = _add_entry_in_menu (_("Move to another dock"), GTK_STOCK_JUMP_TO, NULL, menu);
-			GtkWidget *pSubMenuDocks = gtk_menu_new ();
-			gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuDocks);
-			g_object_set_data (G_OBJECT (pSubMenuDocks), "launcher", pIconModule);
-			pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("A new dock"), GTK_STOCK_NEW, (GFunc)_cairo_dock_move_launcher_to_dock, pSubMenuDocks, NULL);
-			g_object_set_data (G_OBJECT (pMenuItem), "launcher", pIconModule);
-			cairo_dock_foreach_docks ((GHFunc) _add_one_dock_to_menu, pSubMenuDocks);
+			if (CAIRO_DOCK_IS_DOCK (pContainer))
+			{
+				pMenuItem = _add_entry_in_menu (_("Move to another dock"), GTK_STOCK_JUMP_TO, NULL, menu);
+				GtkWidget *pSubMenuDocks = gtk_menu_new ();
+				gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuDocks);
+				g_object_set_data (G_OBJECT (pSubMenuDocks), "launcher", pIconModule);
+				pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("A new main dock"), GTK_STOCK_NEW, (GFunc)_cairo_dock_move_launcher_to_dock, pSubMenuDocks, NULL);
+				g_object_set_data (G_OBJECT (pMenuItem), "launcher", pIconModule);
+				cairo_dock_foreach_docks ((GHFunc) _add_one_dock_to_menu, pSubMenuDocks);
+			}
 		}
 	}
 
@@ -1753,6 +1775,7 @@ GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, cons
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
 	}
 	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem); 
-	g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK (pFunction), pData);
+	if (pFunction)
+		g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK (pFunction), pData);
 	return pMenuItem;
 }

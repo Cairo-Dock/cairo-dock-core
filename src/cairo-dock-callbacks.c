@@ -1272,10 +1272,9 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						CairoDock *pOriginDock = CAIRO_DOCK (cairo_dock_search_container_from_icon (s_pIconClicked));
 						if (pOriginDock != NULL && pDock != pOriginDock)
 						{
-							cairo_dock_detach_icon_from_dock (s_pIconClicked, pOriginDock, TRUE);  // plutot que 'cairo_dock_remove_icon_from_dock', afin de ne pas la fermer.
-							///cairo_dock_remove_icon_from_dock (pOriginDock, s_pIconClicked);
+							cairo_dock_detach_icon_from_dock (s_pIconClicked, pOriginDock, TRUE);
 							cairo_dock_update_dock_size (pOriginDock);
-
+							
 							cairo_dock_update_icon_s_container_name (s_pIconClicked, icon->cParentDockName);
 							if (pOriginDock->iRefCount > 0 && ! myViews.bSameHorizontality)
 							{
@@ -1574,7 +1573,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 			//g_print ("On pointe sur %s\n", icon->acName);
 			pPointedIcon = icon;
 			double fMargin;
-			if (g_str_has_suffix (cReceivedData, ".desktop"))  // si c'est un .desktop, on l'ajoute.
+			if (g_str_has_suffix (cReceivedData, ".desktop") || g_str_has_suffix (cReceivedData, ".sh"))  // si c'est un .desktop, on l'ajoute.
 				fMargin = 0.5;  // on ne sera jamais dessus.
 			else  // sinon on le lance si on est sur l'icone, et on l'ajoute autrement.
 				fMargin = 0.25;
@@ -1609,9 +1608,9 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 	if (icon == NULL || CAIRO_DOCK_IS_LAUNCHER (icon) || CAIRO_DOCK_IS_SEPARATOR (icon))
 	{
 		CairoDock *pReceivingDock = pDock;
-		if (g_str_has_suffix (cReceivedData, ".desktop"))  // c'est un fichier .desktop, on choisit de l'ajouter quoiqu'il arrive.
+		if (g_str_has_suffix (cReceivedData, ".desktop") || g_str_has_suffix (cReceivedData, ".sh"))  // c'est un fichier .desktop, on choisit de l'ajouter quoiqu'il arrive.
 		{
-			if (fOrder == CAIRO_DOCK_LAST_ORDER)  // on a lache dessus.
+			//if (fOrder == CAIRO_DOCK_LAST_ORDER)  // on a lache dessus.
 			{
 				if (icon && icon->pSubDock != NULL)  // on l'ajoutera au sous-dock.
 				{

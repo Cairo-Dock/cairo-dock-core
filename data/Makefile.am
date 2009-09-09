@@ -8,6 +8,7 @@ essentialdata_DATA = \
 	launcher.conf\
 	container.conf\
 	separator.conf\
+	file.conf\
 	themes.conf\
 	main-dock.conf\
 	default-icon.svg\

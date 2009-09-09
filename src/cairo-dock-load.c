@@ -283,10 +283,10 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 				(bHorizontalDock ? &icon->fHeight : &icon->fWidth));
 			if (icon->pIconBuffer == NULL)
 			{
-				GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
+				const GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
 				if (pApplis != NULL)
 				{
-					Icon *pOneIcon = (Icon *) (g_list_last (pApplis)->data);  // on prend le dernier car les applis sont inserees a l'envers, et on veut avoir celle qui etait deja present dans le dock (pour 2 raison : continuite, et la nouvelle (en 1ere position) n'est pas forcement deja dans un dock, ce qui fausse le ratio).
+					Icon *pOneIcon = (Icon *) (g_list_last ((GList*)pApplis)->data);  // on prend le dernier car les applis sont inserees a l'envers, et on veut avoir celle qui etait deja present dans le dock (pour 2 raison : continuite, et la nouvelle (en 1ere position) n'est pas forcement deja dans un dock, ce qui fausse le ratio).
 					icon->pIconBuffer = cairo_dock_duplicate_inhibator_surface_for_appli (pSourceContext,
 						pOneIcon,
 						fMaxScale,

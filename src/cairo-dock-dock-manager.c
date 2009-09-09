@@ -294,20 +294,7 @@ void cairo_dock_rename_dock (const gchar *cDockName, CairoDock *pDock, const gch
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		g_free (icon->cParentDockName);
-		icon->cParentDockName = g_strdup (cNewName);
-		if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon))
-		{
-			cairo_dock_update_conf_file (icon->acDesktopFileName,
-				G_TYPE_STRING, "Desktop Entry", "Container", cNewName,
-				G_TYPE_INVALID);
-		}
-		else if (CAIRO_DOCK_IS_APPLET (icon))
-		{
-			cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
-				G_TYPE_STRING, "Icon", "dock name", cNewName,
-				G_TYPE_INVALID);
-		}
+		cairo_dock_update_icon_s_container_name (icon, cNewName);
 	}
 }
 
@@ -452,7 +439,7 @@ void cairo_dock_remove_root_dock_config (const gchar *cDockName)
 	if (! cDockName || strcmp (cDockName, "cairo-dock") == 0)
 		return ;
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
-	if (g_file_test (cConfFilePath, G_FILE_TEST_EXISTS) && cDockName && strcmp (cDockName, "cairo-dock.conf") != 0)
+	if (g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 	{
 		g_remove (cConfFilePath);
 	}

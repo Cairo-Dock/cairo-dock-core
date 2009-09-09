@@ -431,15 +431,6 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName, 
 
 
 
-void cairo_dock_reload_icon_from_desktop_file (const gchar *cDesktopFileName, cairo_t *pSourceContext, Icon *icon)
-{
-	cairo_dock_load_icon_info_from_desktop_file (cDesktopFileName, icon);
-	g_return_if_fail (icon->acDesktopFileName != NULL);
-	
-	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pParentDock)
-}
-
 void cairo_dock_reload_launcher (Icon *icon)
 {
 	if (icon->acDesktopFileName == NULL || strcmp (icon->acDesktopFileName, "none") == 0)
@@ -454,7 +445,29 @@ void cairo_dock_reload_launcher (Icon *icon)
 	CairoDock *pDock = cairo_dock_search_dock_from_name (cPrevDockName);
 	icon->cParentDockName = NULL;  // astuce.
 	cairo_dock_detach_icon_from_dock (icon, pDock, TRUE);  // il va falloir la recreer, car tous ses parametres peuvent avoir change; neanmoins, on ne souhaite pas detruire son .desktop.
-
+	
+	//\_____________ On on assure l'unicite du nom du sous-dock.
+	if (icon->pSubDock != NULL)  // on assure l'unicite du nom du dock ici, car cela n'est volontairement pas fait dans la fonction de creation de l'icone.
+	{
+		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->acDesktopFileName);
+		GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
+		g_return_if_fail (pKeyFile != NULL);
+		
+		gchar *cName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Name", NULL);
+		if (cName == NULL)
+			cName = g_strdup ("dock");
+		gchar *cUniqueName = cairo_dock_get_unique_dock_name (cName);
+		if (strcmp (cName, cUniqueName) != 0)
+		{
+			g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", cUniqueName);
+			cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
+		}
+		g_free (cName);
+		g_free (cUniqueName);
+		g_key_file_free (pKeyFile);
+		g_free (cDesktopFilePath);
+	}
+	
 	//\_____________ On recharge l'icone.
 	Window Xid = icon->Xid;
 	CairoDock *pSubDock = icon->pSubDock;
@@ -472,7 +485,11 @@ void cairo_dock_reload_launcher (Icon *icon)
 		pSubDock->cRendererName = NULL;
 	}
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-	cairo_dock_reload_icon_from_desktop_file (cDesktopFileName, pCairoContext, icon);
+	cairo_dock_load_icon_info_from_desktop_file (cDesktopFileName, icon);
+	g_return_if_fail (icon->acDesktopFileName != NULL);
+	
+	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+	cairo_dock_fill_icon_buffers_for_dock (icon, pCairoContext, pParentDock)
 	
 	if (cName && ! icon->acName)
 		icon->acName = g_strdup (" ");
@@ -494,7 +511,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 		}
 	}
 
-	if (icon->pSubDock != NULL && pSubDock == icon->pSubDock)  // c'est le meme sous-dock, son rendu a pu change.
+	if (icon->pSubDock != NULL && pSubDock == icon->pSubDock)  // c'est le meme sous-dock, son rendu a pu changer.
 	{
 		if ((cRendererName != NULL && icon->pSubDock->cRendererName == NULL)
 		 || (cRendererName == NULL && icon->pSubDock->cRendererName != NULL)

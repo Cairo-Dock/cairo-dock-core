@@ -93,6 +93,8 @@ void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
 void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatDockWidth doivent avoir ete mis a jour au prealable.
 {
 	g_return_if_fail (pDock != NULL);
+	int iPrevMaxDockHeight = pDock->iMaxDockHeight;
+	
 	if (pDock->fRatio != 0 && pDock->fRatio != 1)  // on remet leur taille reelle aux icones, sinon le calcul de max_dock_size sera biaise.
 	{
 		GList *ic;
@@ -187,11 +189,14 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		}
 	}
 	
-	cairo_dock_set_icons_geometry_for_window_manager (pDock);
+	cairo_dock_set_icons_geometry_for_window_manager (pDock);  // se fait sur le dock a plat, qu'on vient de calculer.
 
 	cairo_dock_update_background_decorations_if_necessary (pDock, pDock->iDecorationsWidth, pDock->iDecorationsHeight);
 	
 	cairo_dock_update_input_shape (pDock);
+	
+	if (pDock->iRefCount == 0 && myAccessibility.bReserveSpace && ! pDock->bAutoHide && iPrevMaxDockHeight != pDock->iMaxDockHeight)
+		cairo_dock_reserve_space_for_dock (pDock, TRUE);
 }
 
 Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock)

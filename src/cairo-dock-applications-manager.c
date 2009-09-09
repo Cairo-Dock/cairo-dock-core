@@ -593,14 +593,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 									///pParentDock = cairo_dock_detach_appli (icon);
 									///if (pParentDock != NULL)
 									///	gtk_widget_queue_draw (pParentDock->pWidget);
-									pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-									if (pParentDock)
-									{
-										cairo_dock_stop_icon_animation (icon);
-										icon->fPersonnalScale = 1.0;
-										cairo_dock_notify (CAIRO_DOCK_REMOVE_ICON, icon, pParentDock);
-										cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
-									}
+									cairo_dock_trigger_icon_removal_from_dock (icon);
 								}
 							}
 							else if (myTaskBar.fVisibleAppliAlpha != 0)
@@ -732,30 +725,19 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 			CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 			if (pParentDock != NULL)
 			{
-				if (! pParentDock->bInside && (pParentDock->bAutoHide || pParentDock->iRefCount != 0) && pParentDock->bAtBottom)
-					icon->fPersonnalScale = 0.05;
-				else
-				{
-					cairo_dock_stop_icon_animation (icon);
-					icon->fPersonnalScale = 1.0;
-					cairo_dock_notify (CAIRO_DOCK_REMOVE_ICON, icon, pParentDock);
-				}
-				//g_print ("icon->fPersonnalScale <- %.2f\n", icon->fPersonnalScale);
+				cairo_dock_trigger_icon_removal_from_dock (icon);
 				
 				icon->iLastCheckTime = -1;  // inutile de chercher a la desenregistrer par la suite, puisque ce sera fait ici. Cela sert aussi a bien supprimer l'icone en fin d'animation.
 				///cairo_dock_unregister_appli (icon);
 				cairo_dock_remove_appli_from_class (icon);  // elle reste une icone d'appli, et de la meme classe, mais devient invisible aux autres icones de sa classe. Inutile de tester les inhibiteurs, puisqu'elle est dans un dock.
-				
-				//cairo_dock_start_icon_animation (icon, pParentDock);
-				cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
 			}
-			else
+			else  // n'etait pas dans un dock, on la detruit donc immediatement.
 			{
 				cd_message ("  pas dans un container, on la detruit donc immediatement");
 				cairo_dock_update_name_on_inhibators (icon->cClass, *Xid, NULL);
 				icon->iLastCheckTime = -1;  // pour ne pas la desenregistrer de la HashTable lors du 'free' puisqu'on est en train de parcourir la table.
 				cairo_dock_free_icon (icon);
-				/// redessiner les inhibiteurs...
+				/// redessiner les inhibiteurs ?...
 			}
 		}
 		else

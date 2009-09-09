@@ -41,6 +41,7 @@
 #include "cairo-dock-load.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-accessibility.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-gui-manager.h"
 
@@ -1572,7 +1573,7 @@ void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFor
 static GtkWidget *s_pLauncherWindow = NULL;
 static GtkWidget *s_pCurrentLauncherWidget = NULL;
 static GtkWidget *s_pLauncherTreeView = NULL;
-static GtkWidget *s_pLauncherHBox = NULL;
+static GtkWidget *s_pLauncherPane = NULL;
 static GtkWidget *s_pLauncherScrolledWindow = NULL;
 
 static gboolean _search_icon_in_line (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
@@ -1591,6 +1592,8 @@ static gboolean _search_icon_in_line (GtkTreeModel *model, GtkTreePath *path, Gt
 }
 static gboolean _search_icon_in_model (GtkWidget *pTreeView, Icon *pIcon, GtkTreeIter *iter)
 {
+	if (pIcon == NULL)
+		return FALSE;
 	g_print ("%s (%s)\n", __func__, pIcon->acName);
 	GtkTreeModel * model = gtk_tree_view_get_model (GTK_TREE_VIEW (pTreeView));
 	gpointer data[3] = {pIcon, iter, GINT_TO_POINTER (FALSE)};
@@ -1622,13 +1625,21 @@ static gboolean _cairo_dock_select_one_launcher_in_tree (GtkTreeSelection * sele
 		return TRUE;
 	
 	// on charge son .conf
-	
 	if (pIcon->acDesktopFileName != NULL)
 	{
 		g_print ("on presente %s...\n", pIcon->acDesktopFileName);
 		gchar *cConfFilePath = (*pIcon->acDesktopFileName == '/' ? g_strdup (pIcon->acDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->acDesktopFileName));
 		
-		cairo_dock_update_launcher_desktop_file (cConfFilePath, CAIRO_DOCK_IS_SEPARATOR (pIcon) ? CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR : (pIcon->pSubDock != NULL && pIcon->Xid == 0) ? CAIRO_DOCK_LAUNCHER_FOR_CONTAINER : CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE);
+		CairoDockNewLauncherType iLauncherType;
+		if (CAIRO_DOCK_IS_URI_LAUNCHER (pIcon))
+			iLauncherType = CAIRO_DOCK_LAUNCHER_FOR_FILE;
+		else if (CAIRO_DOCK_IS_SEPARATOR (pIcon))
+			iLauncherType = CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR;
+		else if (pIcon->pSubDock != NULL && pIcon->cClass == NULL)
+			iLauncherType = CAIRO_DOCK_LAUNCHER_FOR_CONTAINER;
+		else 
+			iLauncherType = CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE;
+		cairo_dock_update_launcher_desktop_file (cConfFilePath, iLauncherType);
 		
 		GSList *pWidgetList = NULL;
 		GPtrArray *pDataGarbage = g_ptr_array_new ();
@@ -1639,18 +1650,32 @@ static gboolean _cairo_dock_select_one_launcher_in_tree (GtkTreeSelection * sele
 			pDataGarbage,
 			NULL);
 		
-		/*gtk_box_pack_start (GTK_BOX (s_pLauncherHBox),
-			s_pCurrentLauncherWidget,
-			TRUE,
-			TRUE,
-			0);*/
-		gtk_paned_pack2 (GTK_PANED (s_pLauncherHBox), s_pCurrentLauncherWidget, TRUE, FALSE);
+		gtk_paned_pack2 (GTK_PANED (s_pLauncherPane), s_pCurrentLauncherWidget, TRUE, FALSE);
 		
 		g_object_set_data (G_OBJECT (s_pLauncherWindow), "widget-list", pWidgetList);
 		g_object_set_data (G_OBJECT (s_pLauncherWindow), "garbage", pDataGarbage);
 		g_object_set_data (G_OBJECT (s_pLauncherWindow), "current-icon", pIcon);
 		
 		g_free (cConfFilePath);
+		gtk_widget_show_all (s_pCurrentLauncherWidget);
+	}
+	else if (CAIRO_DOCK_IS_APPLET (pIcon))
+	{
+		GSList *pWidgetList = NULL;
+		GPtrArray *pDataGarbage = g_ptr_array_new ();
+		
+		GKeyFile* pKeyFile = cairo_dock_open_key_file (pIcon->pModuleInstance->cConfFilePath);
+		g_return_val_if_fail (pKeyFile != NULL, FALSE);
+		
+		gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", pIcon->pModuleInstance->pModule->pVisitCard->cShareDataDir, pIcon->pModuleInstance->pModule->pVisitCard->cConfFileName);
+		s_pCurrentLauncherWidget = cairo_dock_build_group_widget (pKeyFile, "Icon", pIcon->pModuleInstance->pModule->pVisitCard->cGettextDomain, s_pLauncherWindow, &pWidgetList, pDataGarbage, cOriginalConfFilePath);
+		g_free (cOriginalConfFilePath);
+		
+		gtk_paned_pack2 (GTK_PANED (s_pLauncherPane), s_pCurrentLauncherWidget, TRUE, FALSE);
+		
+		g_object_set_data (G_OBJECT (s_pLauncherWindow), "widget-list", pWidgetList);
+		g_object_set_data (G_OBJECT (s_pLauncherWindow), "garbage", pDataGarbage);
+		g_object_set_data (G_OBJECT (s_pLauncherWindow), "current-icon", pIcon);
 		gtk_widget_show_all (s_pCurrentLauncherWidget);
 	}
 	return TRUE;
@@ -1667,7 +1692,10 @@ static void _cairo_dock_add_one_sub_dock_to_model (CairoDock *pDock, GtkTreeStor
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (! CAIRO_DOCK_IS_LAUNCHER (pIcon) && ! CAIRO_DOCK_IS_USER_SEPARATOR (pIcon))
+		if (! CAIRO_DOCK_IS_LAUNCHER (pIcon) && ! CAIRO_DOCK_IS_USER_SEPARATOR (pIcon) && ! CAIRO_DOCK_IS_APPLET (pIcon))
+			continue;
+		
+		if (pIcon->fPersonnalScale > 0)
 			continue;
 		
 		if (pIcon->acFileName != NULL)
@@ -1683,6 +1711,11 @@ static void _cairo_dock_add_one_sub_dock_to_model (CairoDock *pDock, GtkTreeStor
 				cImagePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_ICON_NAME);
 			}
 		}
+		else if (CAIRO_DOCK_IS_SEPARATOR (pIcon))
+		{
+			cImagePath = cairo_dock_generate_file_path (myIcons.cSeparatorImage);
+		}
+		
 		if (cImagePath != NULL)
 		{
 			pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, 32, 32, &erreur);
@@ -1701,14 +1734,15 @@ static void _cairo_dock_add_one_sub_dock_to_model (CairoDock *pDock, GtkTreeStor
 			2, pIcon,
 			-1);
 		
-		if (pIcon->pSubDock != NULL)
+		if (CAIRO_DOCK_IS_LAUNCHER (pIcon) && pIcon->pSubDock != NULL && ! CAIRO_DOCK_IS_URI_LAUNCHER (pIcon))
 		{
 			_cairo_dock_add_one_sub_dock_to_model (pIcon->pSubDock, model, &iter);
 		}
 		
 		g_free (cImagePath);
 		cImagePath = NULL;
-		g_object_unref (pixbuf);
+		if (pixbuf)
+			g_object_unref (pixbuf);
 		pixbuf = NULL;
 	}
 }
@@ -1738,6 +1772,24 @@ static GtkTreeModel *_cairo_dock_build_tree_model (void)
 	return GTK_TREE_MODEL (model);
 }
 
+static inline void _select_item (Icon *pIcon)
+{
+	GtkTreeIter iter;
+	if (_search_icon_in_model (s_pLauncherTreeView, pIcon, &iter))
+	{
+		GtkTreeModel * model = gtk_tree_view_get_model (GTK_TREE_VIEW (s_pLauncherTreeView));
+		GtkTreePath *path =  gtk_tree_model_get_path (model, &iter);
+		gtk_tree_view_expand_to_path (GTK_TREE_VIEW (s_pLauncherTreeView), path);
+		gtk_tree_path_free (path);
+		
+		GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (s_pLauncherTreeView));
+		gtk_tree_selection_select_iter (pSelection, &iter);
+	}
+	else
+	{
+		gtk_window_set_title (GTK_WINDOW (s_pLauncherWindow), _("Configuration of the launchers"));
+	}
+}
 GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon)
 {
 	g_print ("%s ()\n", __func__);
@@ -1746,16 +1798,7 @@ GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon)
 	{
 		cairo_dock_delete_current_launcher_widget ();
 		
-		GtkTreeIter iter;
-		if (_search_icon_in_model (s_pLauncherTreeView, pIcon, &iter))
-		{
-			GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (s_pLauncherTreeView));
-			gtk_tree_selection_select_iter (pSelection, &iter);
-		}
-		else
-		{
-			gtk_window_set_title (GTK_WINDOW (s_pLauncherWindow), _("Configuration of the launchers"));
-		}
+		_select_item (pIcon);
 		
 		gtk_window_present (GTK_WINDOW (s_pLauncherWindow));
 		return s_pLauncherWindow;
@@ -1766,10 +1809,9 @@ GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon)
 	GtkWidget *pMainVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
 	gtk_container_add (GTK_CONTAINER (s_pLauncherWindow), pMainVBox);
 	
-	//s_pLauncherHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
-	s_pLauncherHBox = gtk_hpaned_new ();
+	s_pLauncherPane = gtk_hpaned_new ();
 	gtk_box_pack_start (GTK_BOX (pMainVBox),
-		s_pLauncherHBox,
+		s_pLauncherPane,
 		TRUE,
 		TRUE,
 		0);
@@ -1801,12 +1843,7 @@ GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon)
 	gtk_widget_set (s_pLauncherScrolledWindow, "height-request", CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT - 30, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (s_pLauncherScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (s_pLauncherScrolledWindow), s_pLauncherTreeView);
-	gtk_paned_pack1 (GTK_PANED (s_pLauncherHBox), s_pLauncherScrolledWindow, TRUE, FALSE);
-	/*gtk_box_pack_start (GTK_BOX (s_pLauncherHBox),
-		s_pLauncherScrolledWindow,
-		TRUE,
-		TRUE,
-		0);*/
+	gtk_paned_pack1 (GTK_PANED (s_pLauncherPane), s_pLauncherScrolledWindow, TRUE, FALSE);
 	
 	//\_____________ On ajoute les boutons.
 	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN*2);
@@ -1852,22 +1889,7 @@ GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon)
 		NULL);
 	
 	//\_____________ On selectionne l'entree courante.
-	GtkTreeIter iter;
-	if (_search_icon_in_model (s_pLauncherTreeView, pIcon, &iter))
-	{
-		g_print ("trouve\n");
-		
-		GtkTreePath *path =  gtk_tree_model_get_path (model, &iter);
-		gtk_tree_view_expand_to_path (GTK_TREE_VIEW (s_pLauncherTreeView), path);
-		gtk_tree_path_free (path);
-		
-		gtk_tree_selection_select_iter (pSelection, &iter);
-		//g_signal_connect (s_pLauncherTreeView, "realize", G_CALLBACK (gtk_tree_view_expand_all), NULL);
-	}
-	else
-	{
-		gtk_window_set_title (GTK_WINDOW (s_pLauncherWindow), _("Configuration of the launchers"));
-	}
+	_select_item (pIcon);
 	
 	return s_pLauncherWindow;
 }
@@ -1876,7 +1898,7 @@ void cairo_dock_free_launcher_gui (void)
 {
 	s_pLauncherWindow = NULL;
 	s_pCurrentLauncherWidget = NULL;
-	s_pLauncherHBox = NULL;
+	s_pLauncherPane = NULL;
 	s_pLauncherTreeView = NULL;
 	s_pLauncherScrolledWindow = NULL;
 }
@@ -1908,6 +1930,8 @@ void cairo_dock_delete_current_launcher_widget (void)
 
 void cairo_dock_refresh_launcher_gui (void)
 {
+	if (cairo_dock_is_loading ())
+		return;
 	g_print ("%s ()\n", __func__);
 	if (s_pLauncherWindow == NULL)
 		return ;
@@ -1920,21 +1944,8 @@ void cairo_dock_refresh_launcher_gui (void)
 	gtk_tree_view_set_model (GTK_TREE_VIEW (s_pLauncherTreeView), GTK_TREE_MODEL (model));
 	g_object_unref (model);
 	
-	GtkTreeIter iter;
-	if (_search_icon_in_model (s_pLauncherTreeView, pCurrentIcon, &iter))
-	{
-		g_print ("select\n");
-		GtkTreePath *path =  gtk_tree_model_get_path (model, &iter);
-		gtk_tree_view_expand_to_path (GTK_TREE_VIEW (s_pLauncherTreeView), path);
-		gtk_tree_path_free (path);
-		
-		GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (s_pLauncherTreeView));
-		gtk_tree_selection_select_iter (pSelection, &iter);
-	}
-	else
-	{
-		gtk_window_set_title (GTK_WINDOW (s_pLauncherWindow), _("Configuration of the launchers"));
-	}
+	_select_item (pCurrentIcon);
 	
 	gtk_widget_show_all (s_pLauncherWindow);
+	g_object_set_data (G_OBJECT (s_pLauncherWindow), "current-icon", pCurrentIcon);
 }

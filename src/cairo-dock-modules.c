@@ -51,6 +51,7 @@
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-file-manager.h"
+#include "cairo-dock-callbacks.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-modules.h"
 
@@ -139,7 +140,7 @@ void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 	pVisitCard->cAuthor = "Fabounet";
 	pHelpModule->pInterface = g_new0 (CairoDockModuleInterface, 1);
 	pHelpModule->pInterface->load_custom_widget = _entered_help_once;
-	g_hash_table_insert (s_hModuleTable, pHelpModule->pVisitCard->cModuleName, pHelpModule);
+	g_hash_table_insert (s_hModuleTable, (gpointer)pHelpModule->pVisitCard->cModuleName, pHelpModule);
 	cairo_dock_activate_module (pHelpModule, NULL);
 	pHelpModule->fLastLoadingTime = time (NULL) + 1e6;  // pour ne pas qu'il soit desactive lors d'un reload general, car il n'est pas dans la liste des modules actifs du fichier de conf.
 }
@@ -325,7 +326,7 @@ CairoDockModule * cairo_dock_load_module (gchar *cSoFilePath, GError **erreur)  
 	}
 
 	if (s_hModuleTable != NULL && pCairoDockModule->pVisitCard != NULL)
-		g_hash_table_insert (s_hModuleTable, pCairoDockModule->pVisitCard->cModuleName, pCairoDockModule);
+		g_hash_table_insert (s_hModuleTable, (gpointer)pCairoDockModule->pVisitCard->cModuleName, pCairoDockModule);
 
 	return pCairoDockModule;
 }
@@ -341,7 +342,7 @@ void cairo_dock_load_manual_module (CairoDockModule *pModule)
 	}
 	
 	pModule->pVisitCard->cDockVersionOnCompilation = CAIRO_DOCK_VERSION;
-	g_hash_table_insert (s_hModuleTable, pModule->pVisitCard->cModuleName, pModule);
+	g_hash_table_insert (s_hModuleTable, (gpointer)pModule->pVisitCard->cModuleName, pModule);
 }
 
 
@@ -411,15 +412,16 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fT
 	}
 	
 	//\_______________ On active tous les autres.
-	int i = 0;
-	while (cActiveModuleList[i] != NULL)
+	int i;
+	GList *pNotFoundModules = NULL;
+	for (i = 0; cActiveModuleList[i] != NULL; i ++)
 	{
 		cModuleName = cActiveModuleList[i];
 		pModule = g_hash_table_lookup (s_hModuleTable, cModuleName);
 		if (pModule == NULL)
 		{
-			cd_warning ("No such module (%s)", cModuleName);
-			i ++;
+			cd_message ("No such module (%s)", cModuleName);
+			pNotFoundModules = g_list_prepend (pNotFoundModules, cModuleName);
 			continue ;
 		}
 		
@@ -438,7 +440,20 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fT
 		{
 			cairo_dock_reload_module (pModule, FALSE);
 		}
-		i ++;
+	}
+	
+	for (m = pNotFoundModules; m != NULL; m = m->next)
+	{
+		cModuleName = m->data;
+		gchar *cDistantModulePath = g_strdup_printf ("%s/third-party/%s/%s", CAIRO_DOCK_MODULES_DIR, cModuleName, cModuleName);
+		if (g_file_test (cDistantModulePath, G_FILE_TEST_EXISTS))
+		{
+			gchar *cCommand = g_strdup_printf ("cd \"%s\" && ./\"%s\"", cDistantModulePath, cModuleName);
+			g_print ("on lance une applet distante : '%s'\n", cCommand);
+			cairo_dock_launch_command (cCommand);
+			g_free (cCommand);
+		}
+		g_free (cDistantModulePath);
 	}
 }
 
@@ -936,7 +951,7 @@ void cairo_dock_deactivate_module_instance_and_unload (CairoDockModuleInstance *
 	CairoDock *pDock = pInstance->pDock;
 	if (pDock)
 	{
-		cairo_dock_remove_icon_from_dock (pDock, pInstance->pIcon);  // desinstancie le module.
+		cairo_dock_remove_icon_from_dock (pDock, pInstance->pIcon);  // desinstancie le module et tout.
 		cairo_dock_update_dock_size (pDock);
 		gtk_widget_queue_draw (pDock->pWidget);
 	}
@@ -1409,7 +1424,7 @@ void cairo_dock_release_data_slot (CairoDockModuleInstance *pInstance)
 #define REGISTER_INTERNAL_MODULE(cGroupName) \
 	pModule = g_new0 (CairoDockInternalModule, 1);\
 	cairo_dock_pre_init_##cGroupName (pModule);\
-	g_hash_table_insert (pModuleTable, (gchar *)pModule->cModuleName, pModule)
+	g_hash_table_insert (pModuleTable, (gpointer)pModule->cModuleName, pModule)
 void cairo_dock_preload_internal_modules (GHashTable *pModuleTable)
 {
 	cd_message ("");
@@ -1489,27 +1504,15 @@ gboolean cairo_dock_get_global_config (GKeyFile *pKeyFile)
 
 void cairo_dock_popup_module_instance_description (CairoDockModuleInstance *pModuleInstance)
 {
-	gchar *cDescription = pModuleInstance->pModule->pVisitCard->cDescription;
-	gchar *cReadmeContent = NULL;
-	if (cDescription != NULL && *cDescription == '/')
-	{
-		gsize length = 0;
-		GError *erreur = NULL;
-		g_file_get_contents (cDescription,
-			&cReadmeContent,
-			&length,
-			&erreur);
-		if (erreur != NULL)
-		{
-			cd_warning (erreur->message);
-			g_error_free (erreur);
-		}
-		cDescription = cReadmeContent;
-	}
-	cDescription = g_strdup_printf ("%s (v%s) by %s\n%s", pModuleInstance->pModule->pVisitCard->cModuleName, pModuleInstance->pModule->pVisitCard->cModuleVersion, pModuleInstance->pModule->pVisitCard->cAuthor, dgettext (pModuleInstance->pModule->pVisitCard->cGettextDomain, cDescription));
+	gchar *cDescription = g_strdup_printf ("%s (v%s) by %s\n%s",
+		pModuleInstance->pModule->pVisitCard->cModuleName,
+		pModuleInstance->pModule->pVisitCard->cModuleVersion,
+		pModuleInstance->pModule->pVisitCard->cAuthor,
+		dgettext (pModuleInstance->pModule->pVisitCard->cGettextDomain,
+			pModuleInstance->pModule->pVisitCard->cDescription));
+	
 	cairo_dock_show_temporary_dialog_with_icon (cDescription, pModuleInstance->pIcon, pModuleInstance->pContainer, 0, pModuleInstance->pModule->pVisitCard->cIconFilePath);
 	g_free (cDescription);
-	g_free (cReadmeContent);
 }
 
 
@@ -1518,7 +1521,7 @@ void cairo_dock_attach_to_another_module (CairoDockVisitCard *pVisitCard, const 
 	CairoDockInternalModule *pInternalModule = cairo_dock_find_internal_module_from_name (cOtherModuleName);
 	g_return_if_fail (pInternalModule != NULL && pInternalModule->iCategory == pVisitCard->iCategory && pVisitCard->cInternalModule == NULL);
 	
-	pInternalModule->pExternalModules = g_list_prepend (pInternalModule->pExternalModules, pVisitCard->cModuleName);
+	pInternalModule->pExternalModules = g_list_prepend (pInternalModule->pExternalModules, (gpointer)pVisitCard->cModuleName);
 	pVisitCard->cInternalModule = cOtherModuleName;
 }
 

@@ -480,7 +480,7 @@ void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRe
 
 
 void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconType iType);
-void cairo_dock_swap_icons (CairoDock *pDock, Icon *icon1, Icon *icon2);
+
 void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2);
 
 /** Run an action on all the icons of a given group. The action can even destroy or remove the icon from the list.
@@ -492,7 +492,7 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 */
 Icon *cairo_dock_foreach_icons_of_type (GList *pIconList, CairoDockIconType iType, CairoDockForeachIconFunc pFuntion, gpointer data);
 
-/** Update the container's name of an icon with the name of a dock. In the casse of a launcher or an applet, the conf file is updated too.
+/** Update the container's name of an icon with the name of a dock. In the case of a launcher or an applet, the conf file is updated too.
 *@param icon the icon.
 *@param cNewParentDockName the name of its new dock.
 */

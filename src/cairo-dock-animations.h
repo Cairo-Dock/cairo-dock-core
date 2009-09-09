@@ -85,7 +85,7 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock);
 /** Say if it's usefull to launch an animation on a Dock (indeed, it's useless to launch it if it's invisible).
 *@param pDock the dock to animate.
 */
-#define cairo_dock_animation_will_be_visible(pDock) ((pDock)->bInside || (! (pDock)->bAutoHide && (pDock)->iRefCount == 0) || ! (pDock)->bAtBottom)
+#define cairo_dock_animation_will_be_visible(pDock) (((pDock)->iRefCount != 0 && GTK_WIDGET_VISIBLE ((pDock)->pWidget)) || ((pDock)->iRefCount == 0 && (! (pDock)->bAutoHide || (pDock)->bInside || ! (pDock)->bAtBottom)))
 
 #define cairo_dock_container_is_animating(pContainer) ((pContainer)->iSidGLAnimation != 0)
 
@@ -151,6 +151,12 @@ void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationS
 
 
 void cairo_dock_update_removing_inserting_icon_size_default (Icon *icon);
+
+/** Trigger the removal of an Icon from its Dock. The icon will effectively be removed at the end of the animation.
+*If the icon is not inside a dock, nothing happens.
+*@param pIcon the icon to remove
+*/
+void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon);
 
 gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation);
 gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock);

@@ -396,7 +396,7 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 			{
 				cd_message (" - %s va etre supprimee", pIcon->acName);
 				gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);  // car apres avoir ete enleve du dock elle n'est plus rien.
-				cairo_dock_remove_icon_from_dock (pDock, pIcon);  // enleve le separateur automatique avec.
+				cairo_dock_remove_icon_from_dock (pDock, pIcon);  // enleve le separateur automatique avec; supprime le .desktop des lanceurs et marque le theme.
 				
 				if (pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass))
 				{
@@ -432,7 +432,8 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 	g_return_if_fail (pIcon != NULL && pDock != NULL);
 	cd_message ("%s (%s, %d)", __func__, pIcon->acName, pIcon->iAnimationState);
 	
-	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST && (cairo_dock_animation_will_be_visible (pDock) || pIcon->fPersonnalScale != 0))
+	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST &&
+		(pIcon->fPersonnalScale != 0 || cairo_dock_animation_will_be_visible (pDock)))
 	{
 		//g_print ("  c'est parti\n");
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
@@ -694,18 +695,31 @@ void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationS
 }
 
 
+void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon)
+{
+	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+	if (pDock != NULL)
+	{
+		cairo_dock_stop_icon_animation (pIcon);
+		if (cairo_dock_animation_will_be_visible (pDock))  // sinon inutile de se taper toute l'animation.
+			pIcon->fPersonnalScale = 1.0;
+		else
+			pIcon->fPersonnalScale = 0.05;
+		cairo_dock_notify (CAIRO_DOCK_REMOVE_ICON, pIcon, pDock);
+		cairo_dock_start_icon_animation (pIcon, pDock);
+	}
+}
 
 void cairo_dock_update_removing_inserting_icon_size_default (Icon *icon)
 {
+	icon->fPersonnalScale *= .85;
 	if (icon->fPersonnalScale > 0)
 	{
-		icon->fPersonnalScale *= .85;
 		if (icon->fPersonnalScale < 0.05)
 			icon->fPersonnalScale = 0.05;
 	}
 	else if (icon->fPersonnalScale < 0)
 	{
-		icon->fPersonnalScale *= .85;
 		if (icon->fPersonnalScale > -0.05)
 			icon->fPersonnalScale = -0.05;
 	}

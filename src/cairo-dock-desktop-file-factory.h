@@ -71,7 +71,7 @@ gchar *cairo_dock_generate_desktop_filename (const gchar *cBaseName, gchar *cCai
 void cairo_dock_update_launcher_desktop_file (gchar *cDesktopFilePath, CairoDockNewLauncherType iLauncherType);
 
 
-gchar *cairo_dock_get_launcher_template_conf_file (CairoDockNewLauncherType iNewLauncherType);
+void cairo_dock_write_container_name_in_conf_file (Icon *pIcon, const gchar *cParentDockName);
 
 
 G_END_DECLS

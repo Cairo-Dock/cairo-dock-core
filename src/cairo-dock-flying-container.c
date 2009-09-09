@@ -376,14 +376,7 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 	
 	if (pIcon->acDesktopFileName != NULL)  // c'est un lanceur, ou un separateur manuel, ou un sous-dock.
 	{
-		gchar *cIconPath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->acDesktopFileName);
-		g_remove (cIconPath);
-		g_free (cIconPath);
-
-		if (CAIRO_DOCK_IS_URI_LAUNCHER (pIcon))
-		{
-			cairo_dock_fm_remove_monitor (pIcon);
-		}
+		cairo_dock_remove_one_icon_from_dock (NULL, pIcon);
 		cairo_dock_free_icon (pIcon);
 	}
 	else if (CAIRO_DOCK_IS_APPLET(pIcon))

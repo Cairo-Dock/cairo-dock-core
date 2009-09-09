@@ -70,6 +70,7 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-themes-manager.h"
+#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dock-factory.h"
 
@@ -340,7 +341,7 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 	pDock->cRendererName = NULL;
 }
 
-void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDock *pReceivingDock, const gchar *cpReceivingDockName)
+void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDock *pReceivingDock, const gchar *cReceivingDockName)
 {
 	g_return_if_fail (pDock != NULL);  // && cDockName != NULL
 	cd_debug ("%s (%s, %d)", __func__, cDockName, pDock->iRefCount);
@@ -368,7 +369,7 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDoc
 			icon->pSubDock = NULL;
 		}
 
-		if (pReceivingDock == NULL || cpReceivingDockName == NULL)  // alors on les jete.
+		if (pReceivingDock == NULL || cReceivingDockName == NULL)  // alors on les jete.
 		{
 			if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon))  // icon->acDesktopFileName != NULL
 			{
@@ -381,11 +382,11 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDoc
 				cairo_dock_update_icon_s_container_name (icon, CAIRO_DOCK_MAIN_DOCK_NAME);
 				bModuleWasRemoved = TRUE;
 			}
-			cairo_dock_free_icon (icon);
+			cairo_dock_free_icon (icon);  // de-instancie l'applet.
 		}
 		else  // on les re-attribue au dock receveur.
 		{
-			cairo_dock_update_icon_s_container_name (icon, cpReceivingDockName);
+			cairo_dock_update_icon_s_container_name (icon, cReceivingDockName);
 
 			icon->fWidth /= pDock->fRatio;
 			icon->fHeight /= pDock->fRatio;
@@ -416,6 +417,7 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDoc
 		cairo_dock_remove_root_dock_config (cDockName);
 	
 	g_free (pDock);
+	cairo_dock_refresh_launcher_gui ();
 }
 
 
@@ -646,6 +648,9 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 
 	if (pDock->iRefCount == 0 && myAccessibility.bReserveSpace && bUpdateSize && ! pDock->bAutoHide && (pDock->fFlatDockWidth != iPreviousMinWidth || pDock->iMaxIconHeight != iPreviousMaxIconHeight))
 		cairo_dock_reserve_space_for_dock (pDock, TRUE);
+	
+	if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_IS_APPLET (icon))
+		cairo_dock_refresh_launcher_gui ();
 }
 
 
@@ -721,39 +726,45 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 			}
 		}
 	}
+	
+	if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_IS_APPLET (icon))
+		cairo_dock_refresh_launcher_gui ();
 	return TRUE;
 }
 void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboolean bCheckUnusedSeparator)
 {
-	g_return_if_fail (icon != NULL && pDock != NULL);
+	g_return_if_fail (icon != NULL);
 	//\___________________ On effectue les taches de fermeture de l'icone suivant son type.
 	if (icon->acDesktopFileName != NULL)
 	{
-		gchar *icon_path = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->acDesktopFileName);
-		g_remove (icon_path);
-		g_free (icon_path);
+		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->acDesktopFileName);
+		g_remove (cDesktopFilePath);
+		g_free (cDesktopFilePath);
+		cairo_dock_mark_theme_as_modified (TRUE);
 
 		if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))
 		{
 			cairo_dock_fm_remove_monitor (icon);
 		}
 	}
-	if (CAIRO_DOCK_IS_APPLET (icon))
+	else if (CAIRO_DOCK_IS_APPLET (icon))
 	{
 		cairo_dock_deinstanciate_module (icon->pModuleInstance);  // desactive l'instance du module.
-		icon->pModuleInstance = NULL;  // l'instance n'est plus valide apres ca.
+		cairo_dock_update_conf_file_with_active_modules ();
+		cairo_dock_mark_theme_as_modified (TRUE);
 	}  // rien a faire pour les separateurs automatiques.
 
 	//\___________________ On detache l'icone du dock.
-	cairo_dock_detach_icon_from_dock (icon, pDock, bCheckUnusedSeparator);
+	if (pDock != NULL)
+		cairo_dock_detach_icon_from_dock (icon, pDock, bCheckUnusedSeparator);
 	
 	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
 	{
 		cairo_dock_unregister_appli (icon);
 	}
 	
-	if (pDock->iRefCount == 0 && myAccessibility.bReserveSpace)
-		cairo_dock_reserve_space_for_dock (pDock, TRUE);  // l'espace est reserve sur la taille min, qui a deja ete mise a jour.
+	//if (pDock && pDock->iRefCount == 0 && myAccessibility.bReserveSpace)
+	//	cairo_dock_reserve_space_for_dock (pDock, TRUE);  // l'espace est reserve sur la taille min, qui a deja ete mise a jour.
 }
 
 

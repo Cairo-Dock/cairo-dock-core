@@ -58,6 +58,7 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-emblem.h"
 #include "cairo-dock-gauge.h"
+#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-internal-position.h"
 #include "cairo-dock-internal-accessibility.h"
@@ -720,6 +721,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_mark_theme_as_modified (TRUE);  // force a FALSE apres coup dans le cas d'un chargement de theme.
 	
 	s_bLoading = FALSE;
+	cairo_dock_refresh_launcher_gui ();
 }
 
 gboolean cairo_dock_is_loading (void)

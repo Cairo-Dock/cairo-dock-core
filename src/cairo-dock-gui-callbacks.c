@@ -425,7 +425,14 @@ void on_click_launcher_apply (GtkButton *button, GtkWidget *pWindow)
 		return;
 	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWindow), "widget-list");
 	
-	gchar *cConfFilePath = (*pIcon->acDesktopFileName == '/' ? g_strdup (pIcon->acDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->acDesktopFileName));
+	gchar *cConfFilePath;
+	if (pIcon->acDesktopFileName != NULL)
+		cConfFilePath = (*pIcon->acDesktopFileName == '/' ? g_strdup (pIcon->acDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->acDesktopFileName));
+	else if (CAIRO_DOCK_IS_APPLET (pIcon))
+		cConfFilePath = g_strdup (pIcon->pModuleInstance->cConfFilePath);
+	else
+		return ;
+	
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
 	g_return_if_fail (pKeyFile != NULL);
 	
@@ -434,8 +441,12 @@ void on_click_launcher_apply (GtkButton *button, GtkWidget *pWindow)
 	g_key_file_free (pKeyFile);
 	g_free (cConfFilePath);
 	
-	cairo_dock_reload_launcher (pIcon);  // prend tout en compte, y compris le redessin.
-	cairo_dock_refresh_launcher_gui ();
+	if (pIcon->acDesktopFileName != NULL)
+		cairo_dock_reload_launcher (pIcon);  // prend tout en compte, y compris le redessin.
+	else
+		cairo_dock_reload_module_instance (pIcon->pModuleInstance, TRUE);  // idem
+	
+	//cairo_dock_refresh_launcher_gui ();
 }
 
 void on_click_launcher_quit (GtkButton *button, GtkWidget *pWindow)
