@@ -60,6 +60,7 @@ extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
 extern short g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
+extern gboolean g_bEasterEggs;
 
 static GHashTable *s_hModuleTable = NULL;
 static GHashTable *s_hInternalModuleTable = NULL;
@@ -387,9 +388,6 @@ void cairo_dock_preload_module_from_directory (const gchar *cModuleDirPath, GErr
 
 void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fTime)
 {
-	if (cActiveModuleList == NULL)
-		return ;
-
 	//\_______________ On active les modules auto-charges en premier.
 	GError *erreur = NULL;
 	gchar *cModuleName;
@@ -410,6 +408,9 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fT
 			}
 		}
 	}
+	
+	if (cActiveModuleList == NULL)
+		return ;
 	
 	//\_______________ On active tous les autres.
 	int i;
@@ -442,6 +443,40 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fT
 		}
 	}
 	
+	//\_______________ On enregistre les applets distantes.
+	if (! g_bEasterEggs)
+		return ;
+	GError *tmp_erreur = NULL;
+	const gchar *cModuleDirPath = CAIRO_DOCK_MODULES_DIR"/third-party";
+	GDir *dir = g_dir_open (cModuleDirPath, 0, &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+		erreur = NULL;
+	}
+	else
+	{
+		const gchar *cFileName;
+		GString *sModulePath = g_string_new ("");
+		do
+		{
+			cFileName = g_dir_read_name (dir);
+			if (cFileName == NULL)
+				break ;
+			
+			g_string_printf (sModulePath, "%s/%s", cModuleDirPath, cFileName);
+			gchar *cCommand = g_strdup_printf ("cd \"%s\" && ./\"%s\" register", sModulePath->str, cFileName);
+			g_print ("on lance une applet distante : '%s'\n", cCommand);
+			cairo_dock_launch_command (cCommand);
+			g_free (cCommand);
+		}
+		while (1);
+		g_string_free (sModulePath, TRUE);
+		g_dir_close (dir);
+	}
+	
+	//\_______________ On demarre celles qu'il faut.
 	for (m = pNotFoundModules; m != NULL; m = m->next)
 	{
 		cModuleName = m->data;

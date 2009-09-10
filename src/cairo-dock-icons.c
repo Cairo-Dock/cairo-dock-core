@@ -466,7 +466,7 @@ void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRe
 	fReflectSize = MAX (fReflectSize, myIndicators.iIndicatorDeltaY);
 	
 	double fX = icon->fDrawX;
-	fX += icon->fWidth * icon->fScale * (1 - fabs (icon->fWidthFactor))/2;
+	fX += icon->fWidth * icon->fScale * (1 - fabs (icon->fWidthFactor))/2 + icon->fGlideOffset * icon->fWidth * icon->fScale;
 	
 	double fY = icon->fDrawY;
 	fY += (pContainer->bDirectionUp ? icon->fHeight * icon->fScale * (1 - icon->fHeightFactor)/2 : - fReflectSize);

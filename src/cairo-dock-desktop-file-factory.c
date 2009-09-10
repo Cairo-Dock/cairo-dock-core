@@ -43,6 +43,25 @@ extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCurrentLaunchersPath;
 
 
+static gchar *_cairo_dock_generate_desktop_filename (const gchar *cBaseName, gchar *cCairoDockDataDir)
+{
+	int iPrefixNumber = 0;
+	GString *sFileName = g_string_new ("");
+
+	do
+	{
+		iPrefixNumber ++;
+		g_string_printf (sFileName, "%s/%02d%s", cCairoDockDataDir, iPrefixNumber, cBaseName);
+	} while (iPrefixNumber < 99 && g_file_test (sFileName->str, G_FILE_TEST_EXISTS));
+
+	g_string_free (sFileName, TRUE);
+	if (iPrefixNumber == 99)
+		return NULL;
+	else
+		return g_strdup_printf ("%02d%s", iPrefixNumber, cBaseName);
+}
+
+
 void cairo_dock_remove_html_spaces (gchar *cString)
 {
 	gchar *str = cString;
@@ -59,30 +78,30 @@ void cairo_dock_remove_html_spaces (gchar *cString)
 }
 
 
-static inline const gchar *_cairo_dock_get_launcher_template_conf_file (CairoDockNewLauncherType iNewLauncherType)
+static inline const gchar *_cairo_dock_get_launcher_template_conf_file (CairoDockDesktopFileType iNewDesktopFileType)
 {
 	const gchar *cTemplateFile;
-	switch (iNewLauncherType)
+	switch (iNewDesktopFileType)
 	{
-		case CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE :
+		case CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER :
 		default :
 			cTemplateFile = CAIRO_DOCK_LAUNCHER_CONF_FILE;
 		break ;
-		case CAIRO_DOCK_LAUNCHER_FOR_CONTAINER :
+		case CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER :
 			cTemplateFile = CAIRO_DOCK_CONTAINER_CONF_FILE;
 		break ;
-		case CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR :
+		case CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR :
 			cTemplateFile = CAIRO_DOCK_SEPARATOR_CONF_FILE;
 		break ;
-		case CAIRO_DOCK_LAUNCHER_FOR_FILE :
+		case CAIRO_DOCK_DESKTOP_FILE_FOR_FILE :
 			cTemplateFile = CAIRO_DOCK_FILE_CONF_FILE;
 		break ;
 	}
 	return cTemplateFile;
 }
-static inline gchar *_cairo_dock_get_launcher_template_conf_file_path (CairoDockNewLauncherType iNewLauncherType)
+static inline gchar *_cairo_dock_get_launcher_template_conf_file_path (CairoDockDesktopFileType iNewDesktopFileType)
 {
-	const gchar *cTemplateFile = _cairo_dock_get_launcher_template_conf_file (iNewLauncherType);
+	const gchar *cTemplateFile = _cairo_dock_get_launcher_template_conf_file (iNewDesktopFileType);
 	return g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, cTemplateFile);
 }
 
@@ -142,7 +161,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_launcher (const gchar *cDesk
 
 	//\___________________ On lui choisit un nom de fichier tel qu'il n'y ait pas de collision.
 	gchar *cBaseName = g_path_get_basename (cFilePath);
-	gchar *cNewDesktopFileName = cairo_dock_generate_desktop_filename (cBaseName, g_cCurrentLaunchersPath);
+	gchar *cNewDesktopFileName = _cairo_dock_generate_desktop_filename (cBaseName, g_cCurrentLaunchersPath);
 	g_free (cBaseName);
 
 	//\___________________ On ecrit tout ca dans un fichier base sur le template.
@@ -156,10 +175,10 @@ static gchar *_cairo_dock_generate_desktop_file_for_launcher (const gchar *cDesk
 	return cNewDesktopFileName;
 }
 
-static gchar *_cairo_dock_generate_desktop_file_for_edition (CairoDockNewLauncherType iNewLauncherType, const gchar *cDockName, double fOrder, GError **erreur)
+static gchar *_cairo_dock_generate_desktop_file_for_edition (CairoDockDesktopFileType iNewDesktopFileType, const gchar *cDockName, double fOrder, GError **erreur)
 {
 	//\___________________ On ouvre le patron.
-	gchar *cDesktopFileTemplate = _cairo_dock_get_launcher_template_conf_file_path (iNewLauncherType);
+	gchar *cDesktopFileTemplate = _cairo_dock_get_launcher_template_conf_file_path (iNewDesktopFileType);
 
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cDesktopFileTemplate);
 	g_free (cDesktopFileTemplate);
@@ -170,7 +189,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_edition (CairoDockNewLaunche
 	g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", fOrder);
 	g_key_file_set_string (pKeyFile, "Desktop Entry", "Container", cDockName);
 	
-	if (iNewLauncherType == CAIRO_DOCK_LAUNCHER_FOR_CONTAINER)  // on assure l'unicite du nom du dock ici, car cela n'est volontairement pas fait dans la fonction de creation de l'icone.
+	if (iNewDesktopFileType == CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER)  // on assure l'unicite du nom du dock ici, car cela n'est volontairement pas fait dans la fonction de creation de l'icone.
 	{
 		gchar *cUniqueName = cairo_dock_get_unique_dock_name ("_SubDock_");
 		g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", cUniqueName);
@@ -178,7 +197,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_edition (CairoDockNewLaunche
 	}
 	
 	//\___________________ On lui choisit un nom de fichier tel qu'il n'y ait pas de collision, et qu'il soit comprehensible par l'utilisateur, au cas ou il voudrait les modifier a la main.
-	gchar *cNewDesktopFileName = cairo_dock_generate_desktop_filename (iNewLauncherType == CAIRO_DOCK_LAUNCHER_FOR_CONTAINER ? "container.desktop" : iNewLauncherType == CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR ? "separator.desktop" : "launcher.desktop", g_cCurrentLaunchersPath);
+	gchar *cNewDesktopFileName = _cairo_dock_generate_desktop_filename (iNewDesktopFileType == CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER ? "container.desktop" : iNewDesktopFileType == CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR ? "separator.desktop" : "launcher.desktop", g_cCurrentLaunchersPath);
 
 	//\___________________ On ecrit tout.
 	gchar *cNewDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cNewDesktopFileName);
@@ -207,7 +226,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_file (const gchar *cURI, con
 	}
 
 	//\___________________ On ouvre le patron.
-	gchar *cDesktopFileTemplate = _cairo_dock_get_launcher_template_conf_file_path (CAIRO_DOCK_LAUNCHER_FOR_FILE);
+	gchar *cDesktopFileTemplate = _cairo_dock_get_launcher_template_conf_file_path (CAIRO_DOCK_DESKTOP_FILE_FOR_FILE);
 
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cDesktopFileTemplate);
 	g_free (cDesktopFileTemplate);
@@ -230,7 +249,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_file (const gchar *cURI, con
 	g_key_file_set_boolean (pKeyFile, "Desktop Entry", "Is container", bIsDirectory);
 
 	//\___________________ On lui choisit un nom de fichier tel qu'il n'y ait pas de collision.
-	gchar *cNewDesktopFileName = cairo_dock_generate_desktop_filename ("file-launcher.desktop", g_cCurrentLaunchersPath);
+	gchar *cNewDesktopFileName = _cairo_dock_generate_desktop_filename ("file-launcher.desktop", g_cCurrentLaunchersPath);
 
 	//\___________________ On ecrit tout.
 	gchar *cNewDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cNewDesktopFileName);
@@ -244,7 +263,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_file (const gchar *cURI, con
 static gchar *_cairo_dock_generate_desktop_file_for_script (const gchar *cURI, const gchar *cDockName, double fOrder, GError **erreur)
 {
 	//\___________________ On ouvre le patron.
-	gchar *cDesktopFileTemplate = _cairo_dock_get_launcher_template_conf_file_path (CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE);
+	gchar *cDesktopFileTemplate = _cairo_dock_get_launcher_template_conf_file_path (CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER);
 
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cDesktopFileTemplate);
 	g_free (cDesktopFileTemplate);
@@ -262,7 +281,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_script (const gchar *cURI, c
 	g_free (cFilePath);
 	
 	//\___________________ On lui choisit un nom de fichier tel qu'il n'y ait pas de collision.
-	gchar *cNewDesktopFileName = cairo_dock_generate_desktop_filename ("script-launcher.desktop", g_cCurrentLaunchersPath);
+	gchar *cNewDesktopFileName = _cairo_dock_generate_desktop_filename ("script-launcher.desktop", g_cCurrentLaunchersPath);
 	
 	//\___________________ On ecrit tout.
 	gchar *cNewDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cNewDesktopFileName);
@@ -274,7 +293,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_script (const gchar *cURI, c
 }
 
 
-gchar *cairo_dock_add_desktop_file_from_uri_full (const gchar *cURI, const gchar *cDockName, double fOrder, CairoDockNewLauncherType iNewLauncherType, CairoDock *pDock, GError **erreur)
+gchar *cairo_dock_add_desktop_file_from_uri_full (const gchar *cURI, const gchar *cDockName, double fOrder, CairoDockDesktopFileType iNewDesktopFileType, CairoDock *pDock, GError **erreur)
 {
 	cd_message ("%s (%s)", __func__, cURI);
 	double fEffectiveOrder;
@@ -289,23 +308,23 @@ gchar *cairo_dock_add_desktop_file_from_uri_full (const gchar *cURI, const gchar
 	else
 		fEffectiveOrder = fOrder;
 
-	//\_________________ On regarde si c'est un repertoire ou un fichier ou sinon un fichier cree a partir de zero.
+	//\_________________ On cree un desktop-file correspondant.
 	GError *tmp_erreur = NULL;
 	gchar *cNewDesktopFileName;
-	if (cURI == NULL)
+	if (cURI == NULL)  // on s'appuie sur le type fourni en entree.
 	{
-		cNewDesktopFileName = _cairo_dock_generate_desktop_file_for_edition (iNewLauncherType, cDockName, fEffectiveOrder, &tmp_erreur);
+		cNewDesktopFileName = _cairo_dock_generate_desktop_file_for_edition (iNewDesktopFileType, cDockName, fEffectiveOrder, &tmp_erreur);
 	}
-	else if (g_str_has_suffix (cURI, ".desktop"))  // && (strncmp (cURI, "file://", 7) == 0 || *cURI == '/')
+	else if (g_str_has_suffix (cURI, ".desktop"))  // lanceur.
 	{
 		cNewDesktopFileName = _cairo_dock_generate_desktop_file_for_launcher (cURI, cDockName, fEffectiveOrder, &tmp_erreur);
 	}
-	else if (g_str_has_suffix (cURI, ".sh"))
+	else if (g_str_has_suffix (cURI, ".sh"))  // script.
 	{
 		cd_message ("This file will be treated as a launcher, not as a file.\nIf this doesn't fit you, you should use the Stack applet, which is dedicated to file stacking.");
 		cNewDesktopFileName = _cairo_dock_generate_desktop_file_for_script (cURI, cDockName, fEffectiveOrder, &tmp_erreur);
 	}
-	else
+	else  // fichier, repertoire ou point de montage.
 	{
 		cNewDesktopFileName = _cairo_dock_generate_desktop_file_for_file (cURI, cDockName, fEffectiveOrder, &tmp_erreur);
 	}
@@ -318,26 +337,8 @@ gchar *cairo_dock_add_desktop_file_from_uri_full (const gchar *cURI, const gchar
 }
 
 
-gchar *cairo_dock_generate_desktop_filename (const gchar *cBaseName, gchar *cCairoDockDataDir)
-{
-	int iPrefixNumber = 0;
-	GString *sFileName = g_string_new ("");
 
-	do
-	{
-		iPrefixNumber ++;
-		g_string_printf (sFileName, "%s/%02d%s", cCairoDockDataDir, iPrefixNumber, cBaseName);
-	} while (iPrefixNumber < 99 && g_file_test (sFileName->str, G_FILE_TEST_EXISTS));
-
-	g_string_free (sFileName, TRUE);
-	if (iPrefixNumber == 99)
-		return NULL;
-	else
-		return g_strdup_printf ("%02d%s", iPrefixNumber, cBaseName);
-}
-
-
-void cairo_dock_update_launcher_desktop_file (gchar *cDesktopFilePath, CairoDockNewLauncherType iLauncherType)
+void cairo_dock_update_launcher_desktop_file (gchar *cDesktopFilePath, CairoDockDesktopFileType iLauncherType)
 {
 	GError *erreur = NULL;
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);

@@ -286,15 +286,15 @@ cd_keybinder_bind (const char           *keystring,
 	Binding *binding;
 	gboolean success;
 
-        if (!keystring)
-          return FALSE;
+	cd_debug ("%s (%s)", __func__, keystring);
+	if (!keystring)
+		return FALSE;
 	binding = g_new0 (Binding, 1);
 	binding->keystring = g_strdup (keystring);
 	binding->handler = handler;
 	binding->user_data = user_data;
 
 	/* Sets the binding's keycode and modifiers */
-	cd_debug ("%s", keystring);
 	success = do_grab_key (binding);
 
 	if (success) {
@@ -312,7 +312,7 @@ void
 cd_keybinder_unbind (const char           *keystring,
 			 CDBindkeyHandler  handler)
 {
-	g_print ("%s (%s, %x)\n", __func__, keystring, bindings);
+	cd_debug ("%s (%s)", __func__, keystring);
 	GSList *iter;
 
         if (!keystring)

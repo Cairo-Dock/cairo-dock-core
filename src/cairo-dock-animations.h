@@ -17,7 +17,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_DOCK_ANIMATIONS__
 #define  __CAIRO_DOCK_ANIMATIONS__
 
@@ -30,8 +29,9 @@ G_BEGIN_DECLS
 /**
 *@file cairo-dock-animations.h This class handles the icons and containers animations.
 * Each container has a rendering loop. An iteration of this loop is separated in 2 phases : the update of each element of the container and of the container itself, and the redraw of each element and of the container itself.
-* The loop has 2 possible frequencies : fast (~33Hz) and slow (~10Hz), to optimize the CPU load.
-* To be called on each iteration of the loop, you register to the CAIRO_DOCK_UPDATE_X or CAIRO_DOCK_UPDATE_X_SLOW, and CAIRO_DOCK_RENDER_X, where X is either ICON, DOCK, DESKLET, DIALOG or FLYING_CONTAINER. 
+* The loop has 2 possible frequencies : fast (~33Hz) and slow (~10Hz), to optimize the CPU load according to the needs of the animation.
+* To be called on each iteration of the loop, you register to the CAIRO_DOCK_UPDATE_X or CAIRO_DOCK_UPDATE_X_SLOW, where X is either ICON, DOCK, DESKLET, DIALOG or FLYING_CONTAINER.
+* If you need to draw things directly on the container, you register to CAIRO_DOCK_RENDER_X, where X is either ICON, DOCK, DESKLET, DIALOG or FLYING_CONTAINER.
 */
 
 /// callback to render the icon with libcairo at each step of the Transition.
@@ -69,27 +69,27 @@ gboolean cairo_dock_move_up (CairoDock *pDock);
 
 gboolean cairo_dock_move_down (CairoDock *pDock);
 
+/** Pop up a Dock above other windows, if docks are in mode "keep below other windows"; otherwise do nothing.
+*@param pDock the dock.
+*/
 void cairo_dock_pop_up (CairoDock *pDock);
 
+/** Make a Dock pop down, keeping it below other windows, if this mode is activated in config.
+*@param pDock the dock.
+*/
 gboolean cairo_dock_pop_down (CairoDock *pDock);
 
 
 gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex);
 
-gboolean cairo_dock_grow_up (CairoDock *pDock);
-
-gboolean cairo_dock_shrink_down (CairoDock *pDock);
-
-gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock);
-
-/** Say if it's usefull to launch an animation on a Dock (indeed, it's useless to launch it if it's invisible).
+/** Say if it's usefull to launch an animation on a Dock (indeed, it's useless to launch it if it will be invisible).
 *@param pDock the dock to animate.
 */
 #define cairo_dock_animation_will_be_visible(pDock) (((pDock)->iRefCount != 0 && GTK_WIDGET_VISIBLE ((pDock)->pWidget)) || ((pDock)->iRefCount == 0 && (! (pDock)->bAutoHide || (pDock)->bInside || ! (pDock)->bAtBottom)))
 
 #define cairo_dock_container_is_animating(pContainer) ((pContainer)->iSidGLAnimation != 0)
 
-/** Launch the animation of a Container. Do nothing if the container is invisible (hidden dock).
+/** Launch the animation of a Container.
 *@param pContainer the container to animate.
 */
 void cairo_dock_launch_animation (CairoContainer *pContainer);
@@ -98,7 +98,7 @@ void cairo_dock_start_shrinking (CairoDock *pDock);
 
 void cairo_dock_start_growing (CairoDock *pDock);
 
-/** Launch the animation of an Icon. Do nothing if the icon will not be animated.
+/** Launch the animation of an Icon. Do nothing if the icon will not be animated or if the icon is at rest.
 *@param icon the icon to animate.
 *@param pDock the dock containing the icon.
 */
@@ -119,6 +119,12 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gch
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT) {\
 		cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon); \
 		pIcon->iAnimationState = CAIRO_DOCK_STATE_REST; } } while (0)
+
+/** Trigger the removal of an Icon from its Dock. The icon will effectively be removed at the end of the animation.
+*If the icon is not inside a dock, nothing happens.
+*@param pIcon the icon to remove
+*/
+void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon);
 
 /** Get the interval of time between 2 iterations of the fast loop (in ms).
 *@param pContainer the container.
@@ -151,12 +157,6 @@ void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationS
 
 
 void cairo_dock_update_removing_inserting_icon_size_default (Icon *icon);
-
-/** Trigger the removal of an Icon from its Dock. The icon will effectively be removed at the end of the animation.
-*If the icon is not inside a dock, nothing happens.
-*@param pIcon the icon to remove
-*/
-void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon);
 
 gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation);
 gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock);

@@ -39,6 +39,26 @@ G_BEGIN_DECLS
 * A dock can be either a main-dock (not linked to any icon) or a sub-dock (linked to an icon of another dock), and there can be as many docks of each sort as you want.
 */
 
+
+typedef enum {
+	CAIRO_DOCK_BOTTOM = 0,
+	CAIRO_DOCK_TOP,
+	CAIRO_DOCK_RIGHT,
+	CAIRO_DOCK_LEFT,
+	CAIRO_DOCK_INSIDE_SCREEN,
+	CAIRO_DOCK_NB_POSITIONS
+	} CairoDockPositionType;
+
+typedef enum {
+	CAIRO_DOCK_MAX_SIZE,
+	CAIRO_DOCK_NORMAL_SIZE,
+	CAIRO_DOCK_MIN_SIZE
+	} CairoDockSizeType;
+
+#define CAIRO_DOCK_UPDATE_DOCK_SIZE TRUE
+#define CAIRO_DOCK_ANIMATE_ICON TRUE
+#define CAIRO_DOCK_INSERT_SEPARATOR TRUE
+
 typedef void (*CairoDockCalculateMaxDockSizeFunc) (CairoDock *pDock);
 typedef Icon * (*CairoDockCalculateIconsFunc) (CairoDock *pDock);
 typedef void (*CairoDockRenderFunc) (cairo_t *pCairoContext, CairoDock *pDock);
@@ -218,7 +238,7 @@ struct _CairoDock {
 	gint iSidIconGlide;
 	
 	//\_______________ Les fonctions de dessin du dock.
-	/// nom de la vue, utile pour charger les fonctions de rendu posterieurement a la creation du dock.
+	/// nom de la vue, utile pour (re)charger les fonctions de rendu posterieurement a la creation du dock.
 	gchar *cRendererName;
 	/// recalculer la taille maximale du dock.
 	CairoDockCalculateMaxDockSizeFunc calculate_max_dock_size;

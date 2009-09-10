@@ -88,7 +88,6 @@ extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
 
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bLocked;
-extern CairoDockDesktopEnv g_iDesktopEnv;
 
 static gboolean s_bHideAfterShortcut = FALSE;
 static gboolean s_bFrozenDock = FALSE;
@@ -214,8 +213,6 @@ static gboolean _cairo_dock_show_sub_dock_delayed (CairoDock *pDock)
 
 	return FALSE;
 }
-
-
 static gboolean _cairo_dock_show_xwindow_for_drop (gpointer data)
 {
 	Window Xid = GPOINTER_TO_INT (data);
@@ -302,7 +299,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		}
 	}
 }
-static gboolean _cairo_dock_make_icon_glide (CairoDock *pDock)
+/*static gboolean _cairo_dock_make_icon_glide (CairoDock *pDock)
 {
 	//g_print ("%s ()\n", __func__);
 	Icon *icon;
@@ -338,10 +335,9 @@ static gboolean _cairo_dock_make_icon_glide (CairoDock *pDock)
 	
 	gtk_widget_queue_draw (pDock->pWidget);
 	return TRUE;
-}
+}*/
 void cairo_dock_stop_icon_glide (CairoDock *pDock)
 {
-	cd_message ("");
 	Icon *icon;
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
@@ -350,12 +346,56 @@ void cairo_dock_stop_icon_glide (CairoDock *pDock)
 		icon->fGlideOffset = 0;
 		icon->iGlideDirection = 0;
 	}
-	if (pDock->iSidIconGlide != 0)
+}
+static void _cairo_dock_make_icon_glide (Icon *pPointedIcon, Icon *pMovingicon, CairoDock *pDock)
+{
+	Icon *icon;
+	GList *ic;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
-		g_source_remove (pDock->iSidIconGlide);
-		pDock->iSidIconGlide = 0;
+		icon = ic->data;
+		if (icon == pMovingicon)
+			continue;
+		//if (pDock->iMouseX > s_pMovingicon->fDrawXAtRest + s_pMovingicon->fWidth * s_pMovingicon->fScale /2)  // on a deplace l'icone a droite.  // fDrawXAtRest
+		if (pMovingicon->fXAtRest < pPointedIcon->fXAtRest)  // on a deplace l'icone a droite.
+		{
+			//g_print ("%s : %.2f / %.2f ; %.2f / %d (%.2f)\n", icon->acName, icon->fXAtRest, s_pMovingicon->fXAtRest, icon->fDrawX, pDock->iMouseX, icon->fGlideOffset);
+			if (icon->fXAtRest > pMovingicon->fXAtRest && icon->fDrawX < pDock->iMouseX + 1 && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
+			{
+				//g_print ("  %s glisse vers la gauche\n", icon->acName);
+				icon->iGlideDirection = -1;
+			}
+			else if (icon->fXAtRest > pMovingicon->fXAtRest && icon->fDrawX > pDock->iMouseX && icon->fGlideOffset != 0)
+			{
+				//g_print ("  %s glisse vers la droite\n", icon->acName);
+				icon->iGlideDirection = 1;
+			}
+			else if (icon->fXAtRest < pMovingicon->fXAtRest && icon->fGlideOffset > 0)
+			{
+				//g_print ("  %s glisse en sens inverse vers la gauche\n", icon->acName);
+				icon->iGlideDirection = -1;
+			}
+		}
+		else
+		{
+			//g_print ("deplacement de %s vers la gauche (%.2f / %d)\n", icon->acName, icon->fDrawX + icon->fWidth * (1+myIcons.fAmplitude) + myIcons.iIconGap, pDock->iMouseX);
+			if (icon->fXAtRest < pMovingicon->fXAtRest && icon->fDrawX + icon->fWidth * (1+myIcons.fAmplitude) + myIcons.iIconGap >= pDock->iMouseX && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
+			{
+				//g_print ("  %s glisse vers la droite\n", icon->acName);
+				icon->iGlideDirection = 1;
+			}
+			else if (icon->fXAtRest < pMovingicon->fXAtRest && icon->fDrawX + icon->fWidth * (1+myIcons.fAmplitude) + myIcons.iIconGap <= pDock->iMouseX && icon->fGlideOffset != 0)
+			{
+				//g_print ("  %s glisse vers la gauche\n", icon->acName);
+				icon->iGlideDirection = -1;
+			}
+			else if (icon->fXAtRest > pMovingicon->fXAtRest && icon->fGlideOffset < 0)
+			{
+				//g_print ("  %s glisse en sens inverse vers la droite\n", icon->acName);
+				icon->iGlideDirection = 1;
+			}
+		}
 	}
-	///gtk_widget_queue_draw (pDock->pWidget);
 }
 gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	GdkEventMotion* pMotion,
@@ -492,67 +532,22 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	}
 	
 	//g_print ("%x -> %x\n", pLastPointedIcon, pPointedIcon);
+	gboolean bStartAnimation = FALSE;
 	if (pPointedIcon != pLastPointedIcon || s_pLastPointedDock == NULL)
 	{
 		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
 		
 		if (pPointedIcon != NULL && s_pIconClicked != NULL && cairo_dock_get_icon_order (s_pIconClicked) == cairo_dock_get_icon_order (pPointedIcon) && ! g_bLocked && ! myAccessibility.bLockIcons)
 		{
-			Icon *icon;
-			GList *ic;
-			for (ic = pDock->icons; ic != NULL; ic = ic->next)
-			{
-				icon = ic->data;
-				if (icon == s_pIconClicked)
-					continue;
-				//if (pDock->iMouseX > s_pIconClicked->fDrawXAtRest + s_pIconClicked->fWidth * s_pIconClicked->fScale /2)  // on a deplace l'icone a droite.  // fDrawXAtRest
-				if (s_pIconClicked->fXAtRest < pPointedIcon->fXAtRest)  // on a deplace l'icone a droite.
-				{
-					//g_print ("%s : %.2f / %.2f ; %.2f / %d (%.2f)\n", icon->acName, icon->fXAtRest, s_pIconClicked->fXAtRest, icon->fDrawX, pDock->iMouseX, icon->fGlideOffset);
-					if (icon->fXAtRest > s_pIconClicked->fXAtRest && icon->fDrawX < pDock->iMouseX + 1 && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
-					{
-						//g_print ("  %s glisse vers la gauche\n", icon->acName);
-						icon->iGlideDirection = -1;
-					}
-					else if (icon->fXAtRest > s_pIconClicked->fXAtRest && icon->fDrawX > pDock->iMouseX && icon->fGlideOffset != 0)
-					{
-						//g_print ("  %s glisse vers la droite\n", icon->acName);
-						icon->iGlideDirection = 1;
-					}
-					else if (icon->fXAtRest < s_pIconClicked->fXAtRest && icon->fGlideOffset > 0)
-					{
-						//g_print ("  %s glisse en sens inverse vers la gauche\n", icon->acName);
-						icon->iGlideDirection = -1;
-					}
-				}
-				else
-				{
-					//g_print ("deplacement de %s vers la gauche (%.2f / %d)\n", icon->acName, icon->fDrawX + icon->fWidth * (1+myIcons.fAmplitude) + myIcons.iIconGap, pDock->iMouseX);
-					if (icon->fXAtRest < s_pIconClicked->fXAtRest && icon->fDrawX + icon->fWidth * (1+myIcons.fAmplitude) + myIcons.iIconGap >= pDock->iMouseX && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
-					{
-						//g_print ("  %s glisse vers la droite\n", icon->acName);
-						icon->iGlideDirection = 1;
-					}
-					else if (icon->fXAtRest < s_pIconClicked->fXAtRest && icon->fDrawX + icon->fWidth * (1+myIcons.fAmplitude) + myIcons.iIconGap <= pDock->iMouseX && icon->fGlideOffset != 0)
-					{
-						//g_print ("  %s glisse vers la gauche\n", icon->acName);
-						icon->iGlideDirection = -1;
-					}
-					else if (icon->fXAtRest > s_pIconClicked->fXAtRest && icon->fGlideOffset < 0)
-					{
-						//g_print ("  %s glisse en sens inverse vers la droite\n", icon->acName);
-						icon->iGlideDirection = 1;
-					}
-				}
-			}
-			if (pDock->iSidIconGlide == 0)
+			_cairo_dock_make_icon_glide (pPointedIcon, s_pIconClicked, pDock);
+			bStartAnimation = TRUE;
+			/*if (pDock->iSidIconGlide == 0)
 			{
 				pDock->iSidIconGlide = g_timeout_add (50, (GSourceFunc) _cairo_dock_make_icon_glide, pDock);
-			}
+			}*/
 		}
 	}
 	
-	gboolean bStartAnimation = FALSE;
 	cairo_dock_notify (CAIRO_DOCK_MOUSE_MOVED, pDock, &bStartAnimation);
 	if (bStartAnimation)
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
@@ -1252,7 +1247,6 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 					{
 						//g_print ("release de %s (inside:%d)\n", s_pIconClicked->acName, pDock->bInside);
 						s_pIconClicked->iAnimationState = CAIRO_DOCK_STATE_REST;  // stoppe les animations de suivi du curseur.
-						//cairo_dock_stop_marking_icons (pDock);
 						pDock->iAvoidingMouseIconType = -1;
 						cairo_dock_stop_icon_glide (pDock);
 					}
@@ -1336,7 +1330,6 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							cairo_dock_terminate_flying_container (s_pFlyingContainer);  // supprime ou detache l'icone, l'animation se terminera toute seule.
 						}
 						s_pFlyingContainer = NULL;
-						//cairo_dock_stop_marking_icons (pDock);
 						cairo_dock_stop_icon_glide (pDock);
 					}
 				}

@@ -80,31 +80,6 @@ gboolean cairo_dock_move_up (CairoDock *pDock)
 	}
 }
 
-void cairo_dock_pop_up (CairoDock *pDock)
-{
-	cd_debug ("%s (%d)", __func__, pDock->bPopped);
-	if (! pDock->bPopped && myAccessibility.bPopUp)
-	{
-		gtk_window_set_keep_above (GTK_WINDOW (pDock->pWidget), TRUE);
-		pDock->bPopped = TRUE;
-	}
-}
-
-
-gboolean cairo_dock_pop_down (CairoDock *pDock)
-{
-	cd_debug ("%s (%d)", __func__, pDock->bPopped);
-	if (pDock->bIsMainDock && cairo_dock_get_nb_config_panels () != 0)
-		return FALSE;
-	if (pDock->bPopped && myAccessibility.bPopUp)
-	{
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), TRUE);
-		pDock->bPopped = FALSE;
-	}
-	pDock->iSidPopDown = 0;
-	return FALSE;
-}
-
 gboolean cairo_dock_move_down (CairoDock *pDock)
 {
 	//g_print ("%s ()\n", __func__);
@@ -182,6 +157,31 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 }
 
 
+void cairo_dock_pop_up (CairoDock *pDock)
+{
+	cd_debug ("%s (%d)", __func__, pDock->bPopped);
+	if (! pDock->bPopped && myAccessibility.bPopUp)
+	{
+		gtk_window_set_keep_above (GTK_WINDOW (pDock->pWidget), TRUE);
+		pDock->bPopped = TRUE;
+	}
+}
+
+gboolean cairo_dock_pop_down (CairoDock *pDock)
+{
+	cd_debug ("%s (%d)", __func__, pDock->bPopped);
+	if (pDock->bIsMainDock && cairo_dock_get_nb_config_panels () != 0)
+		return FALSE;
+	if (pDock->bPopped && myAccessibility.bPopUp)
+	{
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), TRUE);
+		pDock->bPopped = FALSE;
+	}
+	pDock->iSidPopDown = 0;
+	return FALSE;
+}
+
+
 gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex)  // merci a Robrob pour le patch !
 {
 	gfloat tmp= ((gfloat)iMagnitudeIndex)/CAIRO_DOCK_NB_MAX_ITERATIONS;
@@ -197,10 +197,10 @@ gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex)  // merci a Robrob 
 	if (tmp>1.0f)
 		tmp=1.0f;
 	
-	return  tmp;
+	return tmp;
 }
 
-gboolean cairo_dock_grow_up (CairoDock *pDock)
+static gboolean _cairo_dock_grow_up (CairoDock *pDock)
 {
 	//g_print ("%s (%d ; %2f ; bInside:%d)\n", __func__, pDock->iMagnitudeIndex, pDock->fFoldingFactor, pDock->bInside);
 	if (pDock->bIsShrinkingDown)
@@ -252,7 +252,7 @@ gboolean cairo_dock_grow_up (CairoDock *pDock)
 		return TRUE;
 }
 
-gboolean cairo_dock_shrink_down (CairoDock *pDock)
+static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %f, %f)\n", __func__, pDock->iMagnitudeIndex, pDock->fFoldingFactor, pDock->fDecorationsOffsetX);
 	//\_________________ On fait decroitre la magnitude du dock.
@@ -374,7 +374,7 @@ gboolean cairo_dock_shrink_down (CairoDock *pDock)
 }
 
 
-gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
+static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 {
 	gboolean bRecalculateIcons = FALSE;
 	GList* ic = pDock->icons, *next_ic;
@@ -427,42 +427,19 @@ gboolean cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 }
 
 
-void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
-{
-	g_return_if_fail (pIcon != NULL && pDock != NULL);
-	cd_message ("%s (%s, %d)", __func__, pIcon->acName, pIcon->iAnimationState);
-	
-	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST &&
-		(pIcon->fPersonnalScale != 0 || cairo_dock_animation_will_be_visible (pDock)))
-	{
-		//g_print ("  c'est parti\n");
-		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
-	}
-}
-
-void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)
-{
-	cairo_dock_stop_icon_animation (pIcon);
-	
-	if (cAnimation == NULL || iNbRounds == 0 || pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)
-		return ;
-	cairo_dock_notify (CAIRO_DOCK_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
-	cairo_dock_start_icon_animation (pIcon, pDock);
-}
-
 static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %d, %d)\n", __func__, pDock->iRefCount, pDock->bIsShrinkingDown, pDock->bIsGrowingUp);
 	gboolean bContinue = FALSE;
 	if (pDock->bIsShrinkingDown)
 	{
-		pDock->bIsShrinkingDown = cairo_dock_shrink_down (pDock);
+		pDock->bIsShrinkingDown = _cairo_dock_shrink_down (pDock);
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 		bContinue |= pDock->bIsShrinkingDown;
 	}
 	if (pDock->bIsGrowingUp)
 	{
-		pDock->bIsGrowingUp = cairo_dock_grow_up (pDock);
+		pDock->bIsGrowingUp = _cairo_dock_grow_up (pDock);
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 		bContinue |= pDock->bIsGrowingUp;
 	}
@@ -501,7 +478,7 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 	}
 	bContinue |= pDock->bKeepSlowAnimation;
 	
-	if (! cairo_dock_handle_inserting_removing_icons (pDock))
+	if (! _cairo_dock_handle_inserting_removing_icons (pDock))
 	{
 		cd_debug ("ce dock n'a plus de raison d'etre");
 		return FALSE;
@@ -657,7 +634,6 @@ void cairo_dock_launch_animation (CairoContainer *pContainer)
 
 void cairo_dock_start_shrinking (CairoDock *pDock)
 {
-	//g_print ("%s (%d, %d)\n", __func__, pDock->bIsShrinkingDown, pDock->iSidGLAnimation);
 	if (! pDock->bIsShrinkingDown)  // on lance l'animation.
 	{
 		pDock->bIsGrowingUp = FALSE;
@@ -678,20 +654,27 @@ void cairo_dock_start_growing (CairoDock *pDock)
 	}
 }
 
-
-void cairo_dock_mark_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState)
+void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 {
-	if (pIcon->iAnimationState < iAnimationState)
+	g_return_if_fail (pIcon != NULL && pDock != NULL);
+	cd_message ("%s (%s, %d)", __func__, pIcon->acName, pIcon->iAnimationState);
+	
+	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST &&
+		(pIcon->fPersonnalScale != 0 || cairo_dock_animation_will_be_visible (pDock)))
 	{
-		pIcon->iAnimationState = iAnimationState;
+		//g_print ("  c'est parti\n");
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
 }
-void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState)
+
+void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)
 {
-	if (pIcon->iAnimationState == iAnimationState)
-	{
-		pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
-	}
+	cairo_dock_stop_icon_animation (pIcon);
+	
+	if (cAnimation == NULL || iNbRounds == 0 || pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)
+		return ;
+	cairo_dock_notify (CAIRO_DOCK_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
+	cairo_dock_start_icon_animation (pIcon, pDock);
 }
 
 
@@ -710,6 +693,23 @@ void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon)
 	}
 }
 
+
+void cairo_dock_mark_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState)
+{
+	if (pIcon->iAnimationState < iAnimationState)
+	{
+		pIcon->iAnimationState = iAnimationState;
+	}
+}
+void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState)
+{
+	if (pIcon->iAnimationState == iAnimationState)
+	{
+		pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
+	}
+}
+
+
 void cairo_dock_update_removing_inserting_icon_size_default (Icon *icon)
 {
 	icon->fPersonnalScale *= .85;
@@ -725,8 +725,26 @@ void cairo_dock_update_removing_inserting_icon_size_default (Icon *icon)
 	}
 }
 
+
 gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation)
 {
+	if (pIcon->iGlideDirection != 0)
+	{
+		pIcon->fGlideOffset += pIcon->iGlideDirection * .1;
+		if (fabs (pIcon->fGlideOffset) > .99)
+		{
+			pIcon->fGlideOffset = pIcon->iGlideDirection;
+			pIcon->iGlideDirection = 0;
+		}
+		else if (fabs (pIcon->fGlideOffset) < .01)
+		{
+			pIcon->fGlideOffset = 0;
+			pIcon->iGlideDirection = 0;
+		}
+		*bContinueAnimation = TRUE;
+		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
+	}
+	
 	if (pIcon->fPersonnalScale == 0 || ! pIcon->bBeingRemovedByCairo)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
@@ -754,6 +772,8 @@ gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon
 
 gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon)
 {
+	pIcon->fGlideOffset = 0;
+	pIcon->iGlideDirection = 0;
 	pIcon->bBeingRemovedByCairo = FALSE;
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }

@@ -43,6 +43,7 @@
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-desktop-file-factory.h"
+#include "cairo-dock-file-manager.h"
 #include "cairo-dock-gui-manager.h"
 
 #define CAIRO_DOCK_GROUP_ICON_SIZE 32
@@ -1630,15 +1631,15 @@ static gboolean _cairo_dock_select_one_launcher_in_tree (GtkTreeSelection * sele
 		g_print ("on presente %s...\n", pIcon->acDesktopFileName);
 		gchar *cConfFilePath = (*pIcon->acDesktopFileName == '/' ? g_strdup (pIcon->acDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->acDesktopFileName));
 		
-		CairoDockNewLauncherType iLauncherType;
+		CairoDockDesktopFileType iLauncherType;
 		if (CAIRO_DOCK_IS_URI_LAUNCHER (pIcon))
-			iLauncherType = CAIRO_DOCK_LAUNCHER_FOR_FILE;
+			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_FILE;
 		else if (CAIRO_DOCK_IS_SEPARATOR (pIcon))
-			iLauncherType = CAIRO_DOCK_LAUNCHER_FOR_SEPARATOR;
+			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR;
 		else if (pIcon->pSubDock != NULL && pIcon->cClass == NULL)
-			iLauncherType = CAIRO_DOCK_LAUNCHER_FOR_CONTAINER;
+			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER;
 		else 
-			iLauncherType = CAIRO_DOCK_LAUNCHER_FROM_DESKTOP_FILE;
+			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER;
 		cairo_dock_update_launcher_desktop_file (cConfFilePath, iLauncherType);
 		
 		GSList *pWidgetList = NULL;
@@ -1702,18 +1703,22 @@ static void _cairo_dock_add_one_sub_dock_to_model (CairoDock *pDock, GtkTreeStor
 		{
 			cImagePath = cairo_dock_search_icon_s_path (pIcon->acFileName);
 		}
-		else if (CAIRO_DOCK_IS_LAUNCHER (pIcon))
+		if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
 		{
-			cImagePath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
-			if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
+			g_free (cImagePath);
+			if (CAIRO_DOCK_IS_SEPARATOR (pIcon))
 			{
-				g_free (cImagePath);
-				cImagePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_ICON_NAME);
+				cImagePath = cairo_dock_generate_file_path (myIcons.cSeparatorImage);
 			}
-		}
-		else if (CAIRO_DOCK_IS_SEPARATOR (pIcon))
-		{
-			cImagePath = cairo_dock_generate_file_path (myIcons.cSeparatorImage);
+			else
+			{
+				cImagePath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
+				if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
+				{
+					g_free (cImagePath);
+					cImagePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_ICON_NAME);
+				}
+			}
 		}
 		
 		if (cImagePath != NULL)
