@@ -426,8 +426,8 @@ void on_click_launcher_apply (GtkButton *button, GtkWidget *pWindow)
 	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWindow), "widget-list");
 	
 	gchar *cConfFilePath;
-	if (pIcon->acDesktopFileName != NULL)
-		cConfFilePath = (*pIcon->acDesktopFileName == '/' ? g_strdup (pIcon->acDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->acDesktopFileName));
+	if (pIcon->cDesktopFileName != NULL)
+		cConfFilePath = (*pIcon->cDesktopFileName == '/' ? g_strdup (pIcon->cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName));
 	else if (CAIRO_DOCK_IS_APPLET (pIcon))
 		cConfFilePath = g_strdup (pIcon->pModuleInstance->cConfFilePath);
 	else
@@ -441,7 +441,7 @@ void on_click_launcher_apply (GtkButton *button, GtkWidget *pWindow)
 	g_key_file_free (pKeyFile);
 	g_free (cConfFilePath);
 	
-	if (pIcon->acDesktopFileName != NULL)
+	if (pIcon->cDesktopFileName != NULL)
 		cairo_dock_reload_launcher (pIcon);  // prend tout en compte, y compris le redessin.
 	else
 		cairo_dock_reload_module_instance (pIcon->pModuleInstance, TRUE);  // idem

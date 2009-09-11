@@ -105,9 +105,9 @@ struct _CairoDock {
 	/// sa fenetre de dessin.
 	GtkWidget *pWidget;
 	/// largeur de la fenetre, _apres_ le redimensionnement par GTK.
-	gint iCurrentWidth;
+	gint iWidth;
 	/// hauteur de la fenetre, _apres_ le redimensionnement par GTK.
-	gint iCurrentHeight;
+	gint iHeight;
 	/// position courante en X du coin haut gauche de la fenetre sur l'ecran.
 	gint iWindowPositionX;
 	/// position courante en Y du coin haut gauche de la fenetre sur l'ecran.
@@ -115,7 +115,7 @@ struct _CairoDock {
 	/// lorsque la souris est dans the dock.
 	gboolean bInside;
 	/// dit si the dock est horizontal ou vertical.
-	CairoDockTypeHorizontality bHorizontalDock;
+	CairoDockTypeHorizontality bIsHorizontal;
 	/// donne l'orientation du dock.
 	gboolean bDirectionUp;
 #ifdef HAVE_GLITZ

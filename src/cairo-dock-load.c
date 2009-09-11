@@ -230,9 +230,9 @@ void cairo_dock_add_reflection_to_icon (cairo_t *pSourceContext, Icon *pIcon, Ca
 }
 
 
-void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdouble fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp)
+void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdouble fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp)
 {
-	//g_print ("%s (%d, %.2f, %s)\n", __func__, icon->iType, fMaxScale, icon->acFileName);
+	//g_print ("%s (%d, %.2f, %s)\n", __func__, icon->iType, fMaxScale, icon->cFileName);
 	if (icon->pIconBuffer != NULL)
 	{
 		cairo_surface_destroy (icon->pIconBuffer);
@@ -252,14 +252,14 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	if (icon->fWidth < 0 || icon->fHeight < 0)  // on ne veut pas de surface.
 		return;
 	
-	if (CAIRO_DOCK_IS_LAUNCHER (icon) || (CAIRO_DOCK_IS_USER_SEPARATOR (icon) && icon->acFileName != NULL))
+	if (CAIRO_DOCK_IS_LAUNCHER (icon) || (CAIRO_DOCK_IS_USER_SEPARATOR (icon) && icon->cFileName != NULL))
 	{
 		/// A FAIRE : verifier qu'on peut enlever le test sur fMaxScale ...
 		if (icon->fWidth == 0 || fMaxScale != 1.)
 			icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
 		if (icon->fHeight == 0 || fMaxScale != 1.)
 			icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
-		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->acFileName);
+		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
 		
 		if (cIconPath != NULL && *cIconPath != '\0')  // c'est un lanceur classique.
 		{
@@ -269,8 +269,8 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 				icon->fWidth/*myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER]*/,
 				icon->fHeight/*myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER]*/,
 				CAIRO_DOCK_FILL_SPACE,
-				(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
-				(bHorizontalDock ? &icon->fHeight : &icon->fWidth),
+				(bIsHorizontal ? &icon->fWidth : &icon->fHeight),
+				(bIsHorizontal ? &icon->fHeight : &icon->fWidth),
 				NULL, NULL);
 		}
 		else if (icon->pSubDock != NULL && icon->cClass != NULL)  // c'est un epouvantail
@@ -279,8 +279,8 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass,
 				pSourceContext,
 				fMaxScale,
-				(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
-				(bHorizontalDock ? &icon->fHeight : &icon->fWidth));
+				(bIsHorizontal ? &icon->fWidth : &icon->fHeight),
+				(bIsHorizontal ? &icon->fHeight : &icon->fWidth));
 			if (icon->pIconBuffer == NULL)
 			{
 				const GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
@@ -290,8 +290,8 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 					icon->pIconBuffer = cairo_dock_duplicate_inhibator_surface_for_appli (pSourceContext,
 						pOneIcon,
 						fMaxScale,
-						(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
-						(bHorizontalDock ? &icon->fHeight : &icon->fWidth));
+						(bIsHorizontal ? &icon->fWidth : &icon->fHeight),
+						(bIsHorizontal ? &icon->fHeight : &icon->fWidth));
 				}
 			}
 		}
@@ -299,12 +299,12 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 	else if (CAIRO_DOCK_IS_APPLET (icon))  // c'est l'icône d'une applet.
 	{
-		//g_print ("  icon->acFileName : %s\n", icon->acFileName);
-		icon->pIconBuffer = cairo_dock_create_applet_surface (icon->acFileName,
+		//g_print ("  icon->cFileName : %s\n", icon->cFileName);
+		icon->pIconBuffer = cairo_dock_create_applet_surface (icon->cFileName,
 			pSourceContext,
 			fMaxScale,
-			(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
-			(bHorizontalDock ? &icon->fHeight : &icon->fWidth));
+			(bIsHorizontal ? &icon->fWidth : &icon->fHeight),
+			(bIsHorizontal ? &icon->fHeight : &icon->fWidth));
 	}
 	else if (CAIRO_DOCK_IS_APPLI (icon))  // c'est l'icône d'une appli valide. Dans cet ordre on n'a pas besoin de verifier que c'est NORMAL_APPLI.
 	{
@@ -330,15 +330,15 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 				myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
 				myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
 				CAIRO_DOCK_FILL_SPACE,
-				(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
-				(bHorizontalDock ? &icon->fHeight : &icon->fWidth),
+				(bIsHorizontal ? &icon->fWidth : &icon->fHeight),
+				(bIsHorizontal ? &icon->fHeight : &icon->fWidth),
 				NULL, NULL);
 			g_free (cIconPath);
 		}
 	}
 	else  // c'est une icone de separation.
 	{
-		icon->pIconBuffer = cairo_dock_create_separator_surface (pSourceContext, fMaxScale, bHorizontalDock, bDirectionUp, &icon->fWidth, &icon->fHeight);
+		icon->pIconBuffer = cairo_dock_create_separator_surface (pSourceContext, fMaxScale, bIsHorizontal, bDirectionUp, &icon->fWidth, &icon->fHeight);
 	}
 
 	if (icon->pIconBuffer == NULL)
@@ -361,8 +361,8 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			icon->fWidth,
 			icon->fHeight,
 			CAIRO_DOCK_FILL_SPACE,
-			(bHorizontalDock ? &icon->fWidth : &icon->fHeight),
-			(bHorizontalDock ? &icon->fHeight : &icon->fWidth),
+			(bIsHorizontal ? &icon->fWidth : &icon->fHeight),
+			(bIsHorizontal ? &icon->fHeight : &icon->fWidth),
 			NULL, NULL);
 		g_free (cIconPath);
 	}
@@ -371,9 +371,9 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	//\_____________ On met le background de l'icone si necessaire
 	if (icon->pIconBuffer != NULL &&
 		g_pIconBackgroundImageSurface != NULL &&
-		(CAIRO_DOCK_IS_NORMAL_LAUNCHER(icon) || CAIRO_DOCK_IS_APPLI(icon) || (myIcons.bBgForApplets && CAIRO_DOCK_IS_APPLET(icon))))
+		(! CAIRO_DOCK_IS_SEPARATOR (icon)/* && (myIcons.bBgForApplets || ! CAIRO_DOCK_IS_APPLET(pIcon))*/))
 	{
-		cd_message (">>> %s prendra un fond d'icone", icon->acName);
+		cd_message (">>> %s prendra un fond d'icone", icon->cName);
 
 		cairo_t *pCairoIconBGContext = cairo_create (icon->pIconBuffer);
 		cairo_scale(pCairoIconBGContext,
@@ -388,13 +388,13 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 		cairo_destroy (pCairoIconBGContext);
 	}
 
-	if (! g_bUseOpenGL && myIcons.fAlbedo > 0 && icon->pIconBuffer != NULL && ! (CAIRO_DOCK_IS_APPLET (icon) && icon->acFileName == NULL))
+	if (! g_bUseOpenGL && myIcons.fAlbedo > 0 && icon->pIconBuffer != NULL && ! (CAIRO_DOCK_IS_APPLET (icon) && icon->cFileName == NULL))
 	{
 		icon->pReflectionBuffer = cairo_dock_create_reflection_surface (icon->pIconBuffer,
 			pSourceContext,
-			(bHorizontalDock ? icon->fWidth : icon->fHeight) * fMaxScale,
-			(bHorizontalDock ? icon->fHeight : icon->fWidth) * fMaxScale,
-			bHorizontalDock,
+			(bIsHorizontal ? icon->fWidth : icon->fHeight) * fMaxScale,
+			(bIsHorizontal ? icon->fHeight : icon->fWidth) * fMaxScale,
+			bIsHorizontal,
 			fMaxScale,
 			bDirectionUp);
 	}
@@ -470,22 +470,22 @@ void cairo_dock_fill_one_text_buffer (Icon *icon, cairo_t* pSourceContext, Cairo
 		_cairo_dock_delete_texture (icon->iLabelTexture);
 		icon->iLabelTexture = 0;
 	}
-	if (icon->acName == NULL || (pTextDescription->iSize == 0))
+	if (icon->cName == NULL || (pTextDescription->iSize == 0))
 		return ;
 
 	gchar *cTruncatedName = NULL;
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.iAppliMaxNameLength > 0)
 	{
-		cTruncatedName = cairo_dock_cut_string (icon->acName, myTaskBar.iAppliMaxNameLength);
+		cTruncatedName = cairo_dock_cut_string (icon->cName, myTaskBar.iAppliMaxNameLength);
 	}
 	
-	cairo_surface_t* pNewSurface = cairo_dock_create_surface_from_text_full ((cTruncatedName != NULL ? cTruncatedName : icon->acName),
+	cairo_surface_t* pNewSurface = cairo_dock_create_surface_from_text_full ((cTruncatedName != NULL ? cTruncatedName : icon->cName),
 		pSourceContext,
 		pTextDescription,
 		1., 0,
 		&icon->iTextWidth, &icon->iTextHeight, &icon->fTextXOffset, &icon->fTextYOffset);
 	g_free (cTruncatedName);
-	//g_print (" -> %s : (%.2f;%.2f) %dx%d\n", icon->acName, icon->fTextXOffset, icon->fTextYOffset, icon->iTextWidth, icon->iTextHeight);
+	//g_print (" -> %s : (%.2f;%.2f) %dx%d\n", icon->cName, icon->fTextXOffset, icon->fTextYOffset, icon->iTextWidth, icon->iTextHeight);
 
 	icon->pTextBuffer = pNewSurface;
 	
@@ -522,9 +522,9 @@ void cairo_dock_fill_one_quick_info_buffer (Icon *icon, cairo_t* pSourceContext,
 
 
 
-void cairo_dock_fill_icon_buffers (Icon *icon, cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp)
+void cairo_dock_fill_icon_buffers (Icon *icon, cairo_t *pSourceContext, double fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp)
 {
-	cairo_dock_fill_one_icon_buffer (icon, pSourceContext, fMaxScale, bHorizontalDock, bDirectionUp);
+	cairo_dock_fill_one_icon_buffer (icon, pSourceContext, fMaxScale, bIsHorizontal, bDirectionUp);
 
 	cairo_dock_fill_one_text_buffer (icon, pSourceContext, &myLabels.iconTextDescription);
 

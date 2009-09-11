@@ -37,7 +37,7 @@
 #include "cairo-dock-separator-factory.h"
 
 
-cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp, double *fWidth, double *fHeight)
+cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, double fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp, double *fWidth, double *fHeight)
 {
 	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	
@@ -56,7 +56,7 @@ cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, d
 		double fRotationAngle;
 		if (! myIcons.bRevolveSeparator)
 			fRotationAngle = 0;
-		else if (bHorizontalDock)
+		else if (bIsHorizontal)
 			if (bDirectionUp)
 				fRotationAngle = 0;
 			else
@@ -98,7 +98,7 @@ Icon *cairo_dock_create_separator_icon (cairo_t *pSourceContext, int iSeparatorT
 
 	Icon *icon = g_new0 (Icon, 1);
 	icon->iType = iSeparatorType;
-	cairo_dock_fill_one_icon_buffer (icon, pSourceContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, pDock->bDirectionUp);
+	cairo_dock_fill_one_icon_buffer (icon, pSourceContext, 1 + myIcons.fAmplitude, pDock->bIsHorizontal, pDock->bDirectionUp);
 
 	icon->fWidth *= pDock->fRatio;
 	icon->fHeight *= pDock->fRatio;

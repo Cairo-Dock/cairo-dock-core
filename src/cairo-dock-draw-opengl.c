@@ -85,7 +85,7 @@ extern gboolean g_bIndirectRendering;
 extern GdkGLConfig* g_pGlConfig;
 
 
-static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp)
+static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp)
 {
 	if (g_iIndicatorTexture == 0 && g_pIndicatorSurface != NULL)
 	{
@@ -94,7 +94,7 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHoriz
 	}
 	
 	if (! myIndicators.bRotateWithDock)
-		bDirectionUp = bHorizontalDock = TRUE;
+		bDirectionUp = bIsHorizontal = TRUE;
 	
 	//\__________________ On place l'indicateur.
 	if (icon->fOrientation != 0)
@@ -109,7 +109,7 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHoriz
 		fY = - icon->fHeight * icon->fScale/2
 			+ (g_fIndicatorHeight/2 - myIndicators.iIndicatorDeltaY/(1 + myIcons.fAmplitude)) * fRatio * icon->fScale;
 		
-		if (bHorizontalDock)
+		if (bIsHorizontal)
 		{
 			if (! bDirectionUp)
 				fY = - fY;
@@ -130,7 +130,7 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bHoriz
 	{
 		fY = - icon->fHeight * icon->fScale/2
 			+ (g_fIndicatorHeight/2 - myIndicators.iIndicatorDeltaY/(1 + myIcons.fAmplitude)) * fRatio;
-		if (bHorizontalDock)
+		if (bIsHorizontal)
 		{
 			if (! bDirectionUp)
 				fY = - fY;
@@ -166,9 +166,9 @@ static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDo
 	}
 	
 	cairo_dock_set_icon_scale (icon, CAIRO_CONTAINER (pDock), 1.);
-	cairo_dock_draw_texture_with_alpha (g_iActiveIndicatorTexture, 1., 1., 1.);
+	cairo_dock_draw_texture_with_alpha (g_iActiveIndicatorTexture, 1., 1., .99);
 }
-static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bHorizontalDock, double fRatio, gboolean bDirectionUp)
+static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp)
 {
 	if (g_iClassIndicatorTexture == 0 && g_pClassIndicatorSurface != NULL)
 	{
@@ -186,7 +186,7 @@ static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bHoriz
 	if (myIndicators.bZoomClassIndicator)
 		fRatio *= icon->fScale;
 	
-	if (! bHorizontalDock)
+	if (! bIsHorizontal)
 		glRotatef (90., 0., 0., 1.);
 	if (! bDirectionUp)
 		glScalef (1., -1., 1.);
@@ -265,7 +265,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		double fReflectSize = MIN (myIcons.fReflectSize, pIcon->fHeight/pDock->fRatio*fScale);
 		double fReflectRatio = fReflectSize * pDock->fRatio / pIcon->fHeight / fScale  / pIcon->fHeightFactor;
 		double fOffsetY = pIcon->fHeight * fScale/2 + fReflectSize * pDock->fRatio/2 + pIcon->fDeltaYReflection;
-		if (pDock->bHorizontalDock)
+		if (pDock->bIsHorizontal)
 		{
 			if (pDock->bDirectionUp)
 			{
@@ -308,7 +308,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 			}
 		}
 		/**glActiveTexture (GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, g_pGradationTexture[pDock->bHorizontalDock]);
+		glBindTexture(GL_TEXTURE_2D, g_pGradationTexture[pDock->bIsHorizontal]);
 		glActiveTexture (GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
 		cairo_dock_combine_argb_argb ();*/
@@ -327,7 +327,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		glBegin(GL_QUADS);
 		
 		double fReflectAlpha = myIcons.fAlbedo * pIcon->fAlpha;
-		if (pDock->bHorizontalDock)
+		if (pDock->bIsHorizontal)
 		{
 			glTexCoord2f (x0, y0);
 			glColor4f (1., 1., 1., fReflectAlpha * pIcon->fReflectShading);
@@ -375,7 +375,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		
 		glActiveTexture(GL_TEXTURE1_ARB); // Go pour le texturing 2eme passe
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, g_pGradationTexture[pDock->bHorizontalDock]);
+		glBindTexture(GL_TEXTURE_2D, g_pGradationTexture[pDock->bIsHorizontal]);
 		glColor4f(1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);  // transparence du reflet.
 		glEnable(GL_BLEND);
 		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -432,13 +432,13 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		return ;
 	double fRatio = pDock->fRatio;
 	
-	if (g_pGradationTexture[pDock->bHorizontalDock] == 0)
+	if (g_pGradationTexture[pDock->bIsHorizontal] == 0)
 	{
-		//g_pGradationTexture[pDock->bHorizontalDock] = cairo_dock_load_local_texture (pDock->bHorizontalDock ? "texture-gradation-vert.png" : "texture-gradation-horiz.png", CAIRO_DOCK_SHARE_DATA_DIR);
-		g_pGradationTexture[pDock->bHorizontalDock] = cairo_dock_load_texture_from_raw_data (gradationTex,
-			pDock->bHorizontalDock ? 1:48,
-			pDock->bHorizontalDock ? 48:1);
-		cd_debug ("g_pGradationTexture(%d) <- %d", pDock->bHorizontalDock, g_pGradationTexture[pDock->bHorizontalDock]);
+		//g_pGradationTexture[pDock->bIsHorizontal] = cairo_dock_load_local_texture (pDock->bIsHorizontal ? "texture-gradation-vert.png" : "texture-gradation-horiz.png", CAIRO_DOCK_SHARE_DATA_DIR);
+		g_pGradationTexture[pDock->bIsHorizontal] = cairo_dock_load_texture_from_raw_data (gradationTex,
+			pDock->bIsHorizontal ? 1:48,
+			pDock->bIsHorizontal ? 48:1);
+		cd_debug ("g_pGradationTexture(%d) <- %d", pDock->bIsHorizontal, g_pGradationTexture[pDock->bIsHorizontal]);
 	}
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.fVisibleAppliAlpha != 0 && ! CAIRO_DOCK_IS_APPLET (icon) && !(icon->iBackingPixmap != 0 && icon->bIsHidden))
 	{
@@ -463,7 +463,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		}
 		fGlideScale = (1 + fDockMagnitude * myIcons.fAmplitude * sin (fPhase)) / icon->fScale;  // c'est un peu hacky ... il faudrait passer l'icone precedente en parametre ...
 		if (! pDock->bDirectionUp)
-			if (pDock->bHorizontalDock)
+			if (pDock->bIsHorizontal)
 				fY = (1-fGlideScale)*icon->fHeight*icon->fScale;
 			else
 				fX = (1-fGlideScale)*icon->fHeight*icon->fScale;
@@ -472,19 +472,19 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		fGlideScale = 1;
 	icon->fGlideScale = fGlideScale;
 	
-	if (pDock->bHorizontalDock)
+	if (pDock->bIsHorizontal)
 	{
-		fY += pDock->iCurrentHeight - icon->fDrawY;  // ordonnee du haut de l'icone.
+		fY += pDock->iHeight - icon->fDrawY;  // ordonnee du haut de l'icone.
 		fX += icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->fGlideOffset * icon->fWidth * icon->fScale * (icon->fGlideOffset < 0 ? fGlideScale : 1);  // abscisse du milieu de l'icone.
 	}
 	else
 	{
 		fY += icon->fDrawY;  // ordonnee du haut de l'icone.
-		fX +=  pDock->iCurrentWidth - (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->fGlideOffset * icon->fWidth * icon->fScale * (icon->fGlideOffset < 0 ? fGlideScale : 1));
+		fX +=  pDock->iWidth - (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->fGlideOffset * icon->fWidth * icon->fScale * (icon->fGlideOffset < 0 ? fGlideScale : 1));
 	}
 	
 	glLoadIdentity ();
-	if (pDock->bHorizontalDock)
+	if (pDock->bIsHorizontal)
 		glTranslatef (fX, fY - icon->fHeight * icon->fScale * (1 - fGlideScale/2), - icon->fHeight * (1+myIcons.fAmplitude));
 	else
 		glTranslatef (fY + icon->fHeight * icon->fScale * (1 - fGlideScale/2), fX, - icon->fHeight * (1+myIcons.fAmplitude));
@@ -494,7 +494,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	if (icon->bHasIndicator && ! myIndicators.bIndicatorAbove /*&& g_iIndicatorTexture != 0*/)
 	{
 		glPushMatrix ();
-		_cairo_dock_draw_appli_indicator_opengl (icon, pDock->bHorizontalDock, fRatio, pDock->bDirectionUp);
+		_cairo_dock_draw_appli_indicator_opengl (icon, pDock->bIsHorizontal, fRatio, pDock->bDirectionUp);
 		glPopMatrix ();
 	}
 	if (icon->Xid != 0 && icon->Xid == cairo_dock_get_current_active_window () && ! myIndicators.bActiveIndicatorAbove && g_pActiveIndicatorSurface != NULL)
@@ -507,7 +507,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	//\_____________________ On positionne l'icone.
 	if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (icon))
 	{
-		if (pDock->bHorizontalDock)
+		if (pDock->bIsHorizontal)
 		{
 			glTranslatef (0., (pDock->bDirectionUp ? icon->fHeight * (- icon->fScale + 1)/2 : icon->fHeight * (icon->fScale - 1)/2), 0.);
 		}
@@ -551,7 +551,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	{
 		glPushMatrix ();
 		glTranslatef (0., 0., icon->fHeight * (1+myIcons.fAmplitude) -1);  // avant-plan
-		_cairo_dock_draw_appli_indicator_opengl (icon, pDock->bHorizontalDock, fRatio, pDock->bDirectionUp);
+		_cairo_dock_draw_appli_indicator_opengl (icon, pDock->bIsHorizontal, fRatio, pDock->bDirectionUp);
 		glPopMatrix ();
 	}
 	if (icon->Xid != 0 && icon->Xid == cairo_dock_get_current_active_window () && myIndicators.bActiveIndicatorAbove && g_pActiveIndicatorSurface != NULL)
@@ -565,7 +565,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	{
 		glPushMatrix ();
 		glTranslatef (0., 0., icon->fHeight * (1+myIcons.fAmplitude) -1);  // avant-plan
-		_cairo_dock_draw_class_indicator_opengl (icon, pDock->bHorizontalDock, fRatio, pDock->bDirectionUp);
+		_cairo_dock_draw_class_indicator_opengl (icon, pDock->bIsHorizontal, fRatio, pDock->bDirectionUp);
 		glPopMatrix ();
 	}
 	
@@ -577,8 +577,8 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		double fOffsetX = 0.;
 		if (icon->fDrawX + icon->fWidth * icon->fScale/2 - icon->iTextWidth/2 < 0)
 			fOffsetX = icon->iTextWidth/2 - (icon->fDrawX + icon->fWidth * icon->fScale/2);
-		else if (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2 > pDock->iCurrentWidth)
-			fOffsetX = pDock->iCurrentWidth - (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2);
+		else if (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2 > pDock->iWidth)
+			fOffsetX = pDock->iWidth - (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2);
 		if (icon->fOrientation != 0 && ! mySystem.bTextAlwaysHorizontal)
 		{
 			glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
@@ -586,13 +586,13 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
 		}
 		
-		if (! pDock->bHorizontalDock && mySystem.bTextAlwaysHorizontal)
+		if (! pDock->bIsHorizontal && mySystem.bTextAlwaysHorizontal)
 		{
 			glTranslatef (-icon->fHeight * icon->fScale/2 - (pDock->bDirectionUp ? myLabels.iLabelSize : (pDock->bUseReflect ? myIcons.fReflectSize : 0.)) + icon->iTextWidth / 2 - myLabels.iconTextDescription.iMargin + 1,
 				(icon->fWidth * icon->fScale + icon->iTextHeight) / 2,
 				0.);
 		}
-		else if (pDock->bHorizontalDock)
+		else if (pDock->bIsHorizontal)
 		{
 			glTranslatef (fOffsetX, (pDock->bDirectionUp ? 1:-1) * (icon->fHeight * icon->fScale/2 + myLabels.iLabelSize - icon->iTextHeight / 2), 0.);
 		}
@@ -662,14 +662,14 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	_cairo_dock_set_alpha (1.);
 	
 	glLoadIdentity ();
-	glTranslatef (pDock->iCurrentWidth/2, pDock->iCurrentHeight/2, 0.);
+	glTranslatef (pDock->iWidth/2, pDock->iHeight/2, 0.);
 	
 	if (! pDock->bDirectionUp && myBackground.bReverseVisibleImage)
 		glScalef (1., -1., 1.);
-	if (! pDock->bHorizontalDock)
+	if (! pDock->bIsHorizontal)
 		glRotatef (-90., 0, 0, 1);
 	
-	_cairo_dock_apply_texture_at_size (g_iVisibleZoneTexture, pDock->iCurrentWidth, pDock->iCurrentHeight);
+	_cairo_dock_apply_texture_at_size (g_iVisibleZoneTexture, pDock->iWidth, pDock->iHeight);
 	
 	_cairo_dock_disable_texture ();
 }
@@ -1155,12 +1155,12 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 #define _get_icon_center_x(icon) (icon->fDrawX + icon->fWidth * icon->fScale/2)
 #define _get_icon_center_y(icon) (icon->fDrawY + (bForceConstantSeparator && CAIRO_DOCK_IS_SEPARATOR (icon) ? icon->fHeight * (icon->fScale - .5) : icon->fHeight * icon->fScale/2))
 #define _get_icon_center(icon,x,y) do {\
-	if (pDock->bHorizontalDock) {\
+	if (pDock->bIsHorizontal) {\
 		x = _get_icon_center_x (icon);\
-		y = pDock->iCurrentHeight - _get_icon_center_y (icon); }\
+		y = pDock->iHeight - _get_icon_center_y (icon); }\
 	else {\
 		 y = _get_icon_center_x (icon);\
-		 x = pDock->iCurrentWidth - _get_icon_center_y (icon); } } while (0)
+		 x = pDock->iWidth - _get_icon_center_y (icon); } } while (0)
 #define _calculate_slope(x0,y0,x1,y1,dx,dy) do {\
 	dx = x1 - x0;\
 	dy = y1 - y0;\
@@ -1611,10 +1611,10 @@ void cairo_dock_set_ortho_view (int iWidth, int iHeight)
 	glMatrixMode (GL_MODELVIEW);
 	
 	glLoadIdentity ();
-	gluLookAt (0., 0., 3.,
-		0., 0., 0.,
+	gluLookAt (iWidth/2, iHeight/2, 3.,
+		iWidth/2, iHeight/2, 0.,
 		0.0f, 1.0f, 0.0f);
-	glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
+	glTranslatef (0., 0., - iHeight/2);
 }
 
 

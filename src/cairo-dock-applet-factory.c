@@ -72,8 +72,8 @@ Icon *cairo_dock_create_icon_for_applet (CairoContainer *pContainer, int iWidth,
 	icon->iType = CAIRO_DOCK_APPLET;
 	icon->pModuleInstance = pModuleInstance;
 
-	icon->acName = g_strdup (cName);
-	icon->acFileName = g_strdup (cIconFileName);  // NULL si cIconFileName = NULL.
+	icon->cName = g_strdup (cName);
+	icon->cFileName = g_strdup (cIconFileName);  // NULL si cIconFileName = NULL.
 
 	icon->fScale = 1;
 	icon->fGlideScale = 1;

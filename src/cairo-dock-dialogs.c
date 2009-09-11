@@ -537,7 +537,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 		if (pDialog->pIcon != NULL && ! pDialog->bInside)
 		{
 			CairoContainer *pContainer = cairo_dock_search_container_from_icon (pDialog->pIcon);
-			//g_print ("configure (%d) => place (%s, %s, %x)\n", pDialog->bInside, pDialog->pIcon->acName, pDialog->pIcon->cParentDockName, pContainer);
+			//g_print ("configure (%d) => place (%s, %s, %x)\n", pDialog->bInside, pDialog->pIcon->cName, pDialog->pIcon->cParentDockName, pContainer);
 			cairo_dock_place_dialog (pDialog, pContainer);
 		}
 	}
@@ -740,7 +740,7 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 gboolean cairo_dock_remove_dialog_if_any (Icon *icon)
 {
 	g_return_val_if_fail (icon != NULL, FALSE);
-	cd_debug ("%s (%s)", __func__, (icon?icon->acName : "nobody"));
+	cd_debug ("%s (%s)", __func__, (icon?icon->cName : "nobody"));
 	CairoDialog *pDialog;
 	GSList *ic;
 	gboolean bDialogRemoved = FALSE;
@@ -1126,18 +1126,18 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
 		if (pDock->iRefCount == 0 && pDock->bAtBottom)  // un dock principal au repos.
 		{
-			*bIsHorizontal = (pDock->bHorizontalDock == CAIRO_DOCK_HORIZONTAL);
-			if (pDock->bHorizontalDock)
+			*bIsHorizontal = (pDock->bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
+			if (pDock->bIsHorizontal)
 			{
 				*bRight = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
 				*bDirectionUp = (pDock->iWindowPositionY > g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
-				*iY = (*bDirectionUp ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iCurrentHeight);
+				*iY = (*bDirectionUp ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iHeight);
 			}
 			else
 			{
 				*bRight = (pDock->iWindowPositionY < g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
 				*bDirectionUp = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
-				*iY = (! (*bRight) ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iCurrentHeight);
+				*iY = (! (*bRight) ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iHeight);
 			}
 	
 			if (pDock->bAutoHide)
@@ -1160,18 +1160,18 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 		}
 		else  // dock actif.
 		{
-			*bIsHorizontal = (pDock->bHorizontalDock == CAIRO_DOCK_HORIZONTAL);
-			if (pDock->bHorizontalDock)
+			*bIsHorizontal = (pDock->bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
+			if (pDock->bIsHorizontal)
 			{
 				*bRight = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
 				*bDirectionUp = (pDock->iWindowPositionY > g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
-				*iY = (*bDirectionUp ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iCurrentHeight);
+				*iY = (*bDirectionUp ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iHeight);
 			}
 			else
 			{
 				*bRight = (pDock->iWindowPositionY < g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
 				*bDirectionUp = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
-				*iY = (! (*bRight) ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iCurrentHeight);
+				*iY = (! (*bRight) ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iHeight);
 			}
 			*iX = pDock->iWindowPositionX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale * pIcon->fWidthFactor / 2 + pIcon->fWidth * (*bRight ? .2 : - .2);
 		}
@@ -1401,7 +1401,7 @@ CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, Cairo
 {
 	if (pIcon != NULL && pIcon->fPersonnalScale > 0)  // icone en cours de suppression.
 	{
-		g_print ("dialog skipped for %s (%.2f)\n", pIcon->acName, pIcon->fPersonnalScale);
+		g_print ("dialog skipped for %s (%.2f)\n", pIcon->cName, pIcon->fPersonnalScale);
 		return NULL;
 	}
 	

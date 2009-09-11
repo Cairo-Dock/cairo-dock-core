@@ -70,7 +70,7 @@ void cairo_dock_free_icon (Icon *icon)
 {
 	if (icon == NULL)
 		return ;
-	cd_debug ("%s (%s , %s)", __func__, icon->acName, icon->cClass);
+	cd_debug ("%s (%s , %s)", __func__, icon->cName, icon->cClass);
 	
 	cairo_dock_remove_dialog_if_any (icon);
 	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
@@ -82,9 +82,8 @@ void cairo_dock_free_icon (Icon *icon)
 	cairo_dock_stop_icon_animation (icon);
 	
 	cairo_dock_free_notification_table (icon->pNotificationsTab);
-	cd_debug ("icon stopped\n");
 	cairo_dock_free_icon_buffers (icon);
-	cd_debug ("icon freeed\n");
+	cd_debug ("icon freeed");
 	g_free (icon);
 }
 
@@ -93,17 +92,18 @@ void cairo_dock_free_icon_buffers (Icon *icon)
 	if (icon == NULL)
 		return ;
 	
-	g_free (icon->acDesktopFileName);
-	g_free (icon->acFileName);
-	g_free (icon->acName);
+	g_free (icon->cDesktopFileName);
+	g_free (icon->cFileName);
+	g_free (icon->cName);
 	g_free (icon->cInitialName);
-	g_free (icon->acCommand);
+	g_free (icon->cCommand);
 	g_free (icon->cWorkingDirectory);
 	g_free (icon->cBaseURI);
 	g_free (icon->cParentDockName);  // on ne liberera pas le sous-dock ici sous peine de se mordre la queue, donc il faut l'avoir fait avant.
 	g_free (icon->cClass);
 	g_free (icon->cQuickInfo);
-
+	g_free (icon->cLastAttentionDemand);
+	
 	cairo_surface_destroy (icon->pIconBuffer);
 	cairo_surface_destroy (icon->pReflectionBuffer);
 	cairo_surface_destroy (icon->pTextBuffer);
@@ -150,12 +150,12 @@ int cairo_dock_compare_icons_order (Icon *icon1, Icon *icon2)
 }
 int cairo_dock_compare_icons_name (Icon *icon1, Icon *icon2)
 {
-	if (icon1->acName == NULL)
+	if (icon1->cName == NULL)
 		return -1;
-	if (icon2->acName == NULL)
+	if (icon2->cName == NULL)
 		return 1;
-	gchar *cURI_1 = g_ascii_strdown (icon1->acName, -1);
-	gchar *cURI_2 = g_ascii_strdown (icon2->acName, -1);
+	gchar *cURI_1 = g_ascii_strdown (icon1->cName, -1);
+	gchar *cURI_2 = g_ascii_strdown (icon2->cName, -1);
 	int iOrder = strcmp (cURI_1, cURI_2);
 	g_free (cURI_1);
 	g_free (cURI_2);
@@ -348,7 +348,7 @@ Icon *cairo_dock_get_icon_with_command (GList *pIconList, const gchar *cCommand)
 	for (ic = pIconList; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		if (icon->acCommand != NULL && strncmp (icon->acCommand, cCommand, MIN (strlen (icon->acCommand), strlen (cCommand))) == 0)
+		if (icon->cCommand != NULL && strncmp (icon->cCommand, cCommand, MIN (strlen (icon->cCommand), strlen (cCommand))) == 0)
 			return icon;
 	}
 	return NULL;
@@ -377,8 +377,8 @@ Icon *cairo_dock_get_icon_with_name (GList *pIconList, const gchar *cName)
 	for (ic = pIconList; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		//cd_message ("  icon->acName : %s\n", icon->acName);
-		if (icon->acName != NULL && strcmp (icon->acName, cName) == 0)
+		//cd_message ("  icon->cName : %s\n", icon->cName);
+		if (icon->cName != NULL && strcmp (icon->cName, cName) == 0)
 			return icon;
 	}
 	return NULL;
@@ -507,9 +507,9 @@ void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconType iType
 			continue;
 		
 		icon->fOrder = iOrder ++;
-		if (icon->acDesktopFileName != NULL)
+		if (icon->cDesktopFileName != NULL)
 		{
-			g_string_printf (sDesktopFilePath, "%s/%s", g_cCurrentLaunchersPath, icon->acDesktopFileName);
+			g_string_printf (sDesktopFilePath, "%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
 			cairo_dock_update_conf_file (sDesktopFilePath->str,
 				G_TYPE_DOUBLE, "Desktop Entry", "Order", icon->fOrder,
 				G_TYPE_INVALID);
@@ -526,7 +526,7 @@ void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconType iType
 
 void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2)
 {
-	//g_print ("%s (%s, %.2f, %x)\n", __func__, icon1->acName, icon1->fOrder, icon2);
+	//g_print ("%s (%s, %.2f, %x)\n", __func__, icon1->cName, icon1->fOrder, icon2);
 	///if ((icon2 != NULL) && (! ( (CAIRO_DOCK_IS_APPLI (icon1) && CAIRO_DOCK_IS_APPLI (icon2)) || (CAIRO_DOCK_IS_LAUNCHER (icon1) && CAIRO_DOCK_IS_LAUNCHER (icon2)) || (CAIRO_DOCK_IS_APPLET (icon1) && CAIRO_DOCK_IS_APPLET (icon2)) ) ))
 	if ((icon2 != NULL) && fabs (cairo_dock_get_icon_order (icon1) - cairo_dock_get_icon_order (icon2)) > 1)
 		return ;
@@ -555,9 +555,9 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 	//g_print ("icon1->fOrder:%.2f\n", icon1->fOrder);
 	
 	//\_________________ On change l'ordre dans le fichier du lanceur 1.
-	if ((CAIRO_DOCK_IS_LAUNCHER (icon1) || CAIRO_DOCK_IS_SEPARATOR (icon1)) && icon1->acDesktopFileName != NULL)
+	if ((CAIRO_DOCK_IS_LAUNCHER (icon1) || CAIRO_DOCK_IS_SEPARATOR (icon1)) && icon1->cDesktopFileName != NULL)
 	{
-		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon1->acDesktopFileName);
+		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon1->cDesktopFileName);
 		cairo_dock_update_conf_file (cDesktopFilePath,
 			G_TYPE_DOUBLE, "Desktop Entry", "Order", icon1->fOrder,
 			G_TYPE_INVALID);
@@ -578,7 +578,7 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 	
 	if (bForceUpdate)
 		cairo_dock_normalize_icons_order (pDock->icons, icon1->iType);
-	if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon1) || CAIRO_DOCK_IS_USER_SEPARATOR (icon1) || CAIRO_DOCK_IS_APPLET (icon1))
+	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon1) || CAIRO_DOCK_IS_USER_SEPARATOR (icon1) || CAIRO_DOCK_IS_APPLET (icon1))
 		cairo_dock_refresh_launcher_gui ();
 }
 
@@ -639,12 +639,12 @@ void cairo_dock_set_icon_name (cairo_t *pSourceContext, const gchar *cIconName, 
 	{
 		cUniqueName = cairo_dock_get_unique_dock_name (cIconName);
 		cIconName = cUniqueName;
-		cairo_dock_rename_dock (pIcon->acName, pIcon->pSubDock, cUniqueName);
+		cairo_dock_rename_dock (pIcon->cName, pIcon->pSubDock, cUniqueName);
 	}
-	if (pIcon->acName != cIconName)
+	if (pIcon->cName != cIconName)
 	{
-		g_free (pIcon->acName);
-		pIcon->acName = g_strdup (cIconName);
+		g_free (pIcon->cName);
+		pIcon->cName = g_strdup (cIconName);
 	}
 	
 	g_free (cUniqueName);

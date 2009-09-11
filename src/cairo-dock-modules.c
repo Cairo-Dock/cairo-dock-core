@@ -465,8 +465,14 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fT
 			if (cFileName == NULL)
 				break ;
 			
+			for (m = pNotFoundModules; m != NULL; m = m->next)
+			{
+				cModuleName = m->data;
+				if (strcmp (cModuleName, cFileName) == 0)
+					break ;
+			}
 			g_string_printf (sModulePath, "%s/%s", cModuleDirPath, cFileName);
-			gchar *cCommand = g_strdup_printf ("cd \"%s\" && ./\"%s\" register", sModulePath->str, cFileName);
+			gchar *cCommand = g_strdup_printf ("cd \"%s\" && ./\"%s\" %s", sModulePath->str, cFileName, m ? "start" : "register");
 			g_print ("on lance une applet distante : '%s'\n", cCommand);
 			cairo_dock_launch_command (cCommand);
 			g_free (cCommand);
@@ -474,21 +480,6 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fT
 		while (1);
 		g_string_free (sModulePath, TRUE);
 		g_dir_close (dir);
-	}
-	
-	//\_______________ On demarre celles qu'il faut.
-	for (m = pNotFoundModules; m != NULL; m = m->next)
-	{
-		cModuleName = m->data;
-		gchar *cDistantModulePath = g_strdup_printf ("%s/third-party/%s/%s", CAIRO_DOCK_MODULES_DIR, cModuleName, cModuleName);
-		if (g_file_test (cDistantModulePath, G_FILE_TEST_EXISTS))
-		{
-			gchar *cCommand = g_strdup_printf ("cd \"%s\" && ./\"%s\"", cDistantModulePath, cModuleName);
-			g_print ("on lance une applet distante : '%s'\n", cCommand);
-			cairo_dock_launch_command (cCommand);
-			g_free (cCommand);
-		}
-		g_free (cDistantModulePath);
 	}
 }
 
@@ -733,27 +724,27 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			//\______________ On recharge l'icone (nom, image).
 			if (pIcon != NULL)
 			{
-				if (pIcon->acName != NULL && pIcon->pSubDock != NULL && cairo_dock_strings_differ (pIcon->acName, pMinimalConfig->cLabel))
+				if (pIcon->cName != NULL && pIcon->pSubDock != NULL && cairo_dock_strings_differ (pIcon->cName, pMinimalConfig->cLabel))
 				{
 					gchar *cNewName = cairo_dock_get_unique_dock_name (pMinimalConfig->cLabel);
-					cd_debug ("* le sous-dock %s prend le nom '%s'", pIcon->acName, cNewName);
+					cd_debug ("* le sous-dock %s prend le nom '%s'", pIcon->cName, cNewName);
 					if (pMinimalConfig->cLabel == NULL)
-						cairo_dock_alter_dock_name (pIcon->acName, pIcon->pSubDock, cNewName);  // on change juste son enregistrement, le nom cParentDockName des icones sera change lorsqu'on mettra un nom a l'icone.
-					else if (strcmp (pIcon->acName, cNewName) != 0)
-						cairo_dock_rename_dock (pIcon->acName, NULL, cNewName);
+						cairo_dock_alter_dock_name (pIcon->cName, pIcon->pSubDock, cNewName);  // on change juste son enregistrement, le nom cParentDockName des icones sera change lorsqu'on mettra un nom a l'icone.
+					else if (strcmp (pIcon->cName, cNewName) != 0)
+						cairo_dock_rename_dock (pIcon->cName, NULL, cNewName);
 					g_free (pMinimalConfig->cLabel);
 					pMinimalConfig->cLabel = cNewName;
 					/**if (pMinimalConfig->cLabel == NULL)
-						cairo_dock_alter_dock_name (pIcon->acName, pIcon->pSubDock, pMinimalConfig->cLabel);  // on change juste son enregistrement, le nom cParentDockName des icones sera change lorsqu'on mettra un nom a l'icone.
-					else if (strcmp (pIcon->acName, pMinimalConfig->cLabel) != 0)
-						cairo_dock_rename_dock (pIcon->acName, NULL, pMinimalConfig->cLabel);*/
+						cairo_dock_alter_dock_name (pIcon->cName, pIcon->pSubDock, pMinimalConfig->cLabel);  // on change juste son enregistrement, le nom cParentDockName des icones sera change lorsqu'on mettra un nom a l'icone.
+					else if (strcmp (pIcon->cName, pMinimalConfig->cLabel) != 0)
+						cairo_dock_rename_dock (pIcon->cName, NULL, pMinimalConfig->cLabel);*/
 				}
 				
-				g_free (pIcon->acName);
-				pIcon->acName = pMinimalConfig->cLabel;
+				g_free (pIcon->cName);
+				pIcon->cName = pMinimalConfig->cLabel;
 				pMinimalConfig->cLabel = NULL;  // astuce.
-				g_free (pIcon->acFileName);
-				pIcon->acFileName = pMinimalConfig->cIconFileName;
+				g_free (pIcon->cFileName);
+				pIcon->cFileName = pMinimalConfig->cIconFileName;
 				pMinimalConfig->cIconFileName = NULL;
 			}
 			

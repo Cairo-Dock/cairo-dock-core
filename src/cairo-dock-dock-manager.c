@@ -213,7 +213,7 @@ static gboolean _cairo_dock_hide_dock_if_parent (gchar *cDockName, CairoDock *pD
 			if (pDock->iScrollOffset != 0)  // on remet systematiquement a 0 l'offset pour les containers.
 			{
 				pDock->iScrollOffset = 0;
-				pDock->iMouseX = pDock->iCurrentWidth / 2;  // utile ?
+				pDock->iMouseX = pDock->iWidth / 2;  // utile ?
 				pDock->iMouseY = 0;
 				cairo_dock_calculate_dock_icons (pDock);
 			}
@@ -249,7 +249,7 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 			}
 			else if (icon->pSubDock->iSidLeaveDemand == 0)  // si on sort du dock sans passer par le sous-dock, par exemple en sortant par le bas.
 			{
-				cd_message ("on cache %s par filiation", icon->acName);
+				cd_message ("on cache %s par filiation", icon->cName);
 				icon->pSubDock->iScrollOffset = 0;
 				icon->pSubDock->fFoldingFactor = 0;
 				gtk_widget_hide (icon->pSubDock->pWidget);
@@ -368,7 +368,7 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 	gchar *cConfFilePath = (pDock->bIsMainDock ? g_cConfFile : g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName));
 	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 	{
-		pDock->bHorizontalDock = g_pMainDock->bHorizontalDock;
+		pDock->bIsHorizontal = g_pMainDock->bIsHorizontal;
 		pDock->bDirectionUp = g_pMainDock->bDirectionUp;
 		pDock->fAlign = g_pMainDock->fAlign;
 		
@@ -397,19 +397,19 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 		{
 			case CAIRO_DOCK_BOTTOM :
 			default :
-				pDock->bHorizontalDock = CAIRO_DOCK_HORIZONTAL;
+				pDock->bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
 				pDock->bDirectionUp = TRUE;
 			break;
 			case CAIRO_DOCK_TOP :
-				pDock->bHorizontalDock = CAIRO_DOCK_HORIZONTAL;
+				pDock->bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
 				pDock->bDirectionUp = FALSE;
 			break;
 			case CAIRO_DOCK_RIGHT :
-				pDock->bHorizontalDock = CAIRO_DOCK_VERTICAL;
+				pDock->bIsHorizontal = CAIRO_DOCK_VERTICAL;
 				pDock->bDirectionUp = TRUE;
 			break;
 			case CAIRO_DOCK_LEFT :
-				pDock->bHorizontalDock = CAIRO_DOCK_VERTICAL;
+				pDock->bIsHorizontal = CAIRO_DOCK_VERTICAL;
 				pDock->bDirectionUp = FALSE;
 			break;
 		}
@@ -521,7 +521,7 @@ static void _cairo_dock_stop_quick_hide_one_root_dock (const gchar *cDockName, C
 			int iNewWidth, iNewHeight;
 			cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
 			
-			if (pDock->bHorizontalDock)
+			if (pDock->bIsHorizontal)
 				gdk_window_move_resize (pDock->pWidget->window,
 					pDock->iWindowPositionX,
 					pDock->iWindowPositionY,
@@ -582,7 +582,7 @@ gboolean cairo_dock_window_hovers_dock (GtkAllocation *pWindowGeometry, CairoDoc
 	if (pWindowGeometry->width != 0 && pWindowGeometry->height != 0)
 	{
 		int iDockX = pDock->iWindowPositionX, iDockY = pDock->iWindowPositionY;
-		int iDockWidth = pDock->iCurrentWidth, iDockHeight = pDock->iCurrentHeight;
+		int iDockWidth = pDock->iWidth, iDockHeight = pDock->iHeight;
 		cd_message ("dock : (%d;%d) %dx%d", iDockX, iDockY, iDockWidth, iDockHeight);
 		if ((pWindowGeometry->x < iDockX + iDockWidth && pWindowGeometry->x + pWindowGeometry->width > iDockX) || (pWindowGeometry->y > iDockY + iDockHeight && pWindowGeometry->y + pWindowGeometry->height > iDockY))
 		{
@@ -601,10 +601,10 @@ gboolean cairo_dock_window_hovers_dock (GtkAllocation *pWindowGeometry, CairoDoc
 
 void cairo_dock_synchronize_one_sub_dock_position (CairoDock *pSubDock, CairoDock *pDock, gboolean bReloadBuffersIfNecessary)
 {
-	if (pSubDock->bDirectionUp != pDock->bDirectionUp || (pSubDock->bHorizontalDock != ((!myViews.bSameHorizontality) ^ pDock->bHorizontalDock)))
+	if (pSubDock->bDirectionUp != pDock->bDirectionUp || (pSubDock->bIsHorizontal != ((!myViews.bSameHorizontality) ^ pDock->bIsHorizontal)))
 	{
 		pSubDock->bDirectionUp = pDock->bDirectionUp;
-		pSubDock->bHorizontalDock = (!myViews.bSameHorizontality) ^ pDock->bHorizontalDock;
+		pSubDock->bIsHorizontal = (!myViews.bSameHorizontality) ^ pDock->bIsHorizontal;
 		if (bReloadBuffersIfNecessary)
 			cairo_dock_reload_reflects_in_dock (pSubDock);
 		cairo_dock_update_dock_size (pSubDock);
@@ -646,7 +646,7 @@ static void _cairo_dock_pop_up_one_root_dock (gchar *cDockName, CairoDock *pDock
 		return ;
 	CairoDockPositionType iScreenBorder = GPOINTER_TO_INT (data);
 	
-	CairoDockPositionType iDockScreenBorder = (((! pDock->bHorizontalDock) << 1) | (! pDock->bDirectionUp));
+	CairoDockPositionType iDockScreenBorder = (((! pDock->bIsHorizontal) << 1) | (! pDock->bDirectionUp));
 	if (iDockScreenBorder == iScreenBorder)
 	{
 		cd_message ("%s passe en avant-plan", cDockName);
@@ -702,13 +702,13 @@ gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix)
 
 gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon)
 {
-	cd_debug ("%s (%s)", __func__, pIcon->acName);
-	gchar *cUniqueName = cairo_dock_get_unique_dock_name (pIcon->acName);
-	if (pIcon->acName == NULL || strcmp (pIcon->acName, cUniqueName) != 0)
+	cd_debug ("%s (%s)", __func__, pIcon->cName);
+	gchar *cUniqueName = cairo_dock_get_unique_dock_name (pIcon->cName);
+	if (pIcon->cName == NULL || strcmp (pIcon->cName, cUniqueName) != 0)
 	{
-		g_free (pIcon->acName);
-		pIcon->acName = cUniqueName;
-		cd_debug ("acName <- %s", cUniqueName);
+		g_free (pIcon->cName);
+		pIcon->cName = cUniqueName;
+		cd_debug ("cName <- %s", cUniqueName);
 		return TRUE;
 	}
 	return FALSE;

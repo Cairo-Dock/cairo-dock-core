@@ -64,10 +64,10 @@ void cairo_dock_add_reflection_to_icon (cairo_t *pSourceContext, Icon *pIcon, Ca
 *@param icon the icon.
 *@param pSourceContext a drawing context, not modified.
 *@param fMaxScale maximum zoom.
-*@param bHorizontalDock TRUE if the icon will be in a horizontal container (needed for the cairo reflect).
+*@param bIsHorizontal TRUE if the icon will be in a horizontal container (needed for the cairo reflect).
 *@param bDirectionUp TRUE if the icon will be in a up container (needed for the cairo reflect).
 */
-void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdouble fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp);
+void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdouble fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp);
 
 /**Cut an UTF-8 or ASCII string to n characters, and add '...' to the end in cas it was effectively cut. It manages correctly UTF-8 strings.
 *@param cString the string.
@@ -91,9 +91,9 @@ void cairo_dock_fill_one_text_buffer (Icon *icon, cairo_t* pSourceContext, Cairo
 */
 void cairo_dock_fill_one_quick_info_buffer (Icon *icon, cairo_t* pSourceContext, CairoDockLabelDescription *pTextDescription, double fMaxScale);
 
-void cairo_dock_fill_icon_buffers (Icon *icon, cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp);
+void cairo_dock_fill_icon_buffers (Icon *icon, cairo_t *pSourceContext, double fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp);
 #define cairo_dock_fill_icon_buffers_for_desklet(pIcon, pSourceContext) cairo_dock_fill_icon_buffers (pIcon, pSourceContext, 1, CAIRO_DOCK_HORIZONTAL, TRUE);
-#define cairo_dock_fill_icon_buffers_for_dock(pIcon, pSourceContext, pDock) cairo_dock_fill_icon_buffers (pIcon, pSourceContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, pDock->bDirectionUp);
+#define cairo_dock_fill_icon_buffers_for_dock(pIcon, pSourceContext, pDock) cairo_dock_fill_icon_buffers (pIcon, pSourceContext, 1 + myIcons.fAmplitude, pDock->bIsHorizontal, pDock->bDirectionUp);
 
 /** Fill all the buffers (surfaces & textures) of a given icon, according to its type. Set its size accordingly, and fills the reflection buffer for cairo. Label and quick-info are loaded with the current global text description.
 *@param pIcon the icon.
@@ -107,7 +107,7 @@ void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpoi
 #define cairo_dock_reload_one_icon_buffer_in_dock_full(icon, pDock, pCairoContext) do {\
 	icon->fWidth /= pDock->fRatio;\
 	icon->fHeight /= pDock->fRatio;\
-	cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pDock->bHorizontalDock, pDock->bDirectionUp);\
+	cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pDock->bIsHorizontal, pDock->bDirectionUp);\
 	icon->fWidth *= pDock->fRatio;\
 	icon->fHeight *= pDock->fRatio; } while (0)
 

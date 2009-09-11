@@ -66,17 +66,17 @@ typedef enum {
 struct _Icon {
 	//\____________ renseignes lors de la creation de the icon.
 	/// Nom (et non pas chemin) du fichier .desktop definissant the icon, ou NULL si the icon n'est pas definie pas un fichier.
-	gchar *acDesktopFileName;
+	gchar *cDesktopFileName;
 	/// URI.
 	gchar *cBaseURI;
 	/// ID d'un volume.
 	gint iVolumeID;
 	/// Nom (et non pas chemin) du fichier de l'image, ou NULL si son image n'est pas definie pas un fichier.
-	gchar *acFileName;
+	gchar *cFileName;
 	/// Nom de the icon tel qu'il apparaitra dans son etiquette. Donne le nom au sous-dock.
-	gchar *acName;
+	gchar *cName;
 	/// Commande a executer lors d'un clique gauche clique, ou NULL si aucune.
-	gchar *acCommand;
+	gchar *cCommand;
 	/// Repertoire ou s'executera la commande.
 	gchar *cWorkingDirectory;
 	/// Type de the icon.
@@ -209,10 +209,10 @@ struct _Icon {
 typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContainer, gpointer data);
 
 
-/** TRUE if the icon is a launcher.
+/** TRUE if the icon is a launcher (a real launcher with a command or an URI, or a container icon, or even a fake launcher).
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_LAUNCHER(icon) (icon != NULL && ((icon)->acCommand != NULL || ((icon)->pSubDock != NULL && (icon)->pModuleInstance == NULL && (icon)->Xid == 0)))
+#define CAIRO_DOCK_IS_LAUNCHER(icon) (icon != NULL && ((icon)->cCommand != NULL || (icon)->cBaseURI != NULL || ((icon)->pSubDock != NULL && (icon)->pModuleInstance == NULL/* && (icon)->Xid != 0*/)))
 
 /** TRUE if the icon is an icon of appli.
 *@param icon an icon.
@@ -227,12 +227,17 @@ typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContaine
 /** TRUE if the icon is an icon of separator.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_SEPARATOR(icon) (icon != NULL && ((icon)->acName == NULL && (icon)->pModuleInstance == NULL && (icon)->Xid == 0))  /* ((icon)->iType & 1) || */
+#define CAIRO_DOCK_IS_SEPARATOR(icon) (icon != NULL && (icon)->pModuleInstance == NULL && (icon)->Xid == 0 && (icon)->pSubDock == NULL && (icon)->cCommand == NULL && (icon)->cBaseURI == NULL)
+
+/** TRUE if the icon is an icon of launcher launching something.
+*@param icon an icon.
+*/
+#define CAIRO_DOCK_IS_NORMAL_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->cCommand != NULL)
 
 /** TRUE if the icon is an icon of launcher defined by a .desktop file.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_NORMAL_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->acDesktopFileName != NULL)
+#define CAIRO_DOCK_IS_STORED_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->cDesktopFileName != NULL)
 
 /** TRUE if the icon is an icon representing an URI.
 *@param icon an icon.
@@ -242,7 +247,12 @@ typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContaine
 /** TRUE if the icon is a fake icon (for class groupment).
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_FAKE_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->acCommand == NULL && (icon)->cClass != NULL)
+#define CAIRO_DOCK_IS_FAKE_LAUNCHER(icon) (icon != NULL && (icon)->cCommand == NULL && (icon)->cClass != NULL && (icon)->pModuleInstance == NULL && (icon)->pSubDock != NULL && (icon)->cDesktopFileName == NULL)
+
+/** TRUE if the icon is a container icon.
+*@param icon an icon.
+*/
+#define CAIRO_DOCK_IS_CONTAINER_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->cCommand == NULL && (icon)->cBaseURI == NULL)
 
 /** TRUE if the icon is an icon pointing on the sub-dock of a class.
 *@param icon an icon.
@@ -252,17 +262,17 @@ typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContaine
 /** TRUE if the icon is an icon of automatic separator.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR(icon) (CAIRO_DOCK_IS_SEPARATOR (icon) && (icon)->acDesktopFileName == NULL)
+#define CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR(icon) (CAIRO_DOCK_IS_SEPARATOR (icon) && (icon)->cDesktopFileName == NULL)
 
 /** TRUE if the icon is an icon of separator added by the user.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_USER_SEPARATOR(icon) (CAIRO_DOCK_IS_SEPARATOR (icon) && (icon)->acDesktopFileName != NULL)
+#define CAIRO_DOCK_IS_USER_SEPARATOR(icon) (CAIRO_DOCK_IS_SEPARATOR (icon) && (icon)->cDesktopFileName != NULL)
 /**
 *TRUE if the icon is an icon d'appli seulement.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_NORMAL_APPLI(icon) (CAIRO_DOCK_IS_APPLI (icon) && (icon)->acDesktopFileName == NULL && (icon)->pModuleInstance == NULL)
+#define CAIRO_DOCK_IS_NORMAL_APPLI(icon) (CAIRO_DOCK_IS_APPLI (icon) && (icon)->cDesktopFileName == NULL && (icon)->pModuleInstance == NULL)
 /**
 *TRUE if the icon is an icon d'applet detachable en desklet.
 *@param icon an icon.
@@ -417,7 +427,7 @@ Icon *cairo_dock_get_previous_icon (GList *pIconList, Icon *pIcon);
 /** Search an icon with a given command in a list of icons.
 *@param pIconList a list of icons.
 *@param cCommand the command.
-*@return the first icon whose field 'acCommand' is identical to the given command, or NULL if no icon matches.
+*@return the first icon whose field 'cCommand' is identical to the given command, or NULL if no icon matches.
 */
 Icon *cairo_dock_get_icon_with_command (GList *pIconList, const gchar *cCommand);
 
@@ -431,7 +441,7 @@ Icon *cairo_dock_get_icon_with_base_uri (GList *pIconList, const gchar *cBaseURI
 /** Search an icon with a given name in a list of icons.
 *@param pIconList a list of icons.
 *@param cName the name.
-*@return the first icon whose field 'acName' is identical to the given name, or NULL if no icon matches.
+*@return the first icon whose field 'cName' is identical to the given name, or NULL if no icon matches.
 */
 Icon *cairo_dock_get_icon_with_name (GList *pIconList, const gchar *cName);
 
@@ -505,7 +515,7 @@ void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParen
 
 /** Set the label of an icon. If it has a sub-dock, it is renamed (the name is possibly altered to stay unique). The label buffer is updated too.
 *@param pSourceContext a drawing context; is not altered by the function.
-*@param cIconName the new label of the icon. You can even pass pIcon->acName.
+*@param cIconName the new label of the icon. You can even pass pIcon->cName.
 *@param pIcon the icon.
 *@param pContainer the container of the icon.
 */

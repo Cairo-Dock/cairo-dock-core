@@ -71,25 +71,25 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 		cairo_dock_reposition_root_docks (TRUE);  // on replace tous les docks racines sauf le main dock.
 	}
 	
-	CairoDockTypeHorizontality bWasHorizontal = pDock->bHorizontalDock;
+	CairoDockTypeHorizontality bWasHorizontal = pDock->bIsHorizontal;
 	if (pPosition->iScreenBorder != pPrevPosition->iScreenBorder)
 	{
 		switch (pPosition->iScreenBorder)
 		{
 			case CAIRO_DOCK_BOTTOM :
-				pDock->bHorizontalDock = CAIRO_DOCK_HORIZONTAL;
+				pDock->bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
 				pDock->bDirectionUp = TRUE;
 			break;
 			case CAIRO_DOCK_TOP :
-				pDock->bHorizontalDock = CAIRO_DOCK_HORIZONTAL;
+				pDock->bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
 				pDock->bDirectionUp = FALSE;
 			break;
 			case CAIRO_DOCK_RIGHT :
-				pDock->bHorizontalDock = CAIRO_DOCK_VERTICAL;
+				pDock->bIsHorizontal = CAIRO_DOCK_VERTICAL;
 				pDock->bDirectionUp = TRUE;
 			break;
 			case CAIRO_DOCK_LEFT :
-				pDock->bHorizontalDock = CAIRO_DOCK_VERTICAL;
+				pDock->bIsHorizontal = CAIRO_DOCK_VERTICAL;
 				pDock->bDirectionUp = FALSE;
 			break;
 		}
@@ -105,8 +105,8 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 	pDock->fAlign = pPosition->fAlign;
 	cairo_dock_calculate_dock_icons (pDock);
 	cairo_dock_place_root_dock (pDock);
-	if (bWasHorizontal != pDock->bHorizontalDock)
-		pDock->iCurrentWidth --;  // la taille dans le referentiel du dock ne change pas meme si on change d'horizontalite, par contre la taille de la fenetre change. On introduit donc un biais ici pour forcer le configure-event a faire son travail, sinon ca fausse le redraw.
+	if (bWasHorizontal != pDock->bIsHorizontal)
+		pDock->iWidth --;  // la taille dans le referentiel du dock ne change pas meme si on change d'horizontalite, par contre la taille de la fenetre change. On introduit donc un biais ici pour forcer le configure-event a faire son travail, sinon ca fausse le redraw.
 	gtk_widget_queue_draw (pDock->pWidget);
 }
 

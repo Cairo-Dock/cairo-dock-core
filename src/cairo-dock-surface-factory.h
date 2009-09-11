@@ -216,12 +216,12 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, cairo_t 
 *@param pSourceContext a drawing context (not altered by the function).
 *@param fImageWidth the width of the surface.
 *@param fImageHeight the height of the surface.
-*@param bHorizontalDock TRUE if the surface is in an horizontal container.
+*@param bIsHorizontal TRUE if the surface is in an horizontal container.
 *@param fMaxScale maximum zoom of the surface.
 *@param bDirectionUp TRUE if the surface is in a container whose direction is towards.
 *@return the newly allocated surface.
 */
-cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, gboolean bHorizontalDock, double fMaxScale, gboolean bDirectionUp);
+cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, gboolean bIsHorizontal, double fMaxScale, gboolean bDirectionUp);
 
 /** Create a surface representing a text, according to a given text description.
 *@param cText the text.

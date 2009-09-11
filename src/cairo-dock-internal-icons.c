@@ -207,7 +207,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	{
 		pIcons->cBackgroundImagePath = cairo_dock_generate_file_path (cLauncherBackgroundImageName);
 		g_free (cLauncherBackgroundImageName);
-		pIcons->bBgForApplets = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "bg for applets", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+		///pIcons->bBgForApplets = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "bg for applets", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	}
 
 	//\___________________ Parametres des lanceurs.
@@ -348,10 +348,10 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		bIconBackgroundImagesChanged = TRUE;
 		cairo_dock_load_icons_background_surface (pIcons->cBackgroundImagePath, pCairoContext, fMaxScale);
 	}
-	if (pPrevIcons->bBgForApplets != pIcons->bBgForApplets && pIcons->cBackgroundImagePath != NULL)
+	/*if (pPrevIcons->bBgForApplets != pIcons->bBgForApplets && pIcons->cBackgroundImagePath != NULL)
 	{
 		bIconBackgroundImagesChanged = TRUE;  // on pourrait faire plus fin en ne rechargeant que les applets mais bon.
-	}
+	}*/
 	
 	if (pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] ||
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] ||

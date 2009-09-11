@@ -55,7 +55,7 @@ struct _CairoConfigIcons {
 	gchar *cSeparatorImage;
 	gboolean bRevolveSeparator;
 	gboolean bConstantSeparatorSize;
-	gboolean bBgForApplets;
+	///gboolean bBgForApplets;
 	gboolean bUseLocalIcons;
 	};
 

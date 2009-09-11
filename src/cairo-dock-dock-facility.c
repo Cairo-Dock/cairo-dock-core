@@ -135,9 +135,9 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 				pDock->fRatio = fMaxRatio;
 		}
 		
-		if (pDock->iMaxDockHeight > g_iScreenHeight[pDock->bHorizontalDock])
+		if (pDock->iMaxDockHeight > g_iScreenHeight[pDock->bIsHorizontal])
 		{
-			pDock->fRatio = MIN (pDock->fRatio, fPrevRatio * g_iScreenHeight[pDock->bHorizontalDock] / pDock->iMaxDockHeight);
+			pDock->fRatio = MIN (pDock->fRatio, fPrevRatio * g_iScreenHeight[pDock->bIsHorizontal] / pDock->iMaxDockHeight);
 		}
 		
 		if (fPrevRatio != pDock->fRatio)
@@ -159,7 +159,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		}
 		
 		n ++;
-	} while ((pDock->iMaxDockWidth > iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_iScreenHeight[pDock->bHorizontalDock]) && n < 4);
+	} while ((pDock->iMaxDockWidth > iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_iScreenHeight[pDock->bIsHorizontal]) && n < 4);
 	
 	if (! pDock->bInside && (pDock->bAutoHide && pDock->iRefCount == 0))
 		return;
@@ -169,9 +169,9 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		int iNewWidth, iNewHeight;
 		cairo_dock_get_window_position_and_geometry_at_balance (pDock, (pDock->bInside || pDock->bIsShrinkingDown || pDock->iMagnitudeIndex > 0 ? CAIRO_DOCK_MAX_SIZE : CAIRO_DOCK_NORMAL_SIZE), &iNewWidth, &iNewHeight);  // iMagnitudeIndex > 0 rajoute le 23/08/09, a priori ca doit corriger le probleme d'icones trop grande par rapport au dock.
 
-		if (pDock->bHorizontalDock)
+		if (pDock->bIsHorizontal)
 		{
-			if (pDock->iCurrentWidth != iNewWidth || pDock->iCurrentHeight != iNewHeight)
+			if (pDock->iWidth != iNewWidth || pDock->iHeight != iNewHeight)
 				gdk_window_move_resize (pDock->pWidget->window,
 					pDock->iWindowPositionX,
 					pDock->iWindowPositionY,
@@ -180,7 +180,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		}
 		else
 		{
-			if (pDock->iCurrentWidth != iNewHeight || pDock->iCurrentHeight != iNewWidth)
+			if (pDock->iWidth != iNewHeight || pDock->iHeight != iNewWidth)
 				gdk_window_move_resize (pDock->pWidget->window,
 					pDock->iWindowPositionY,
 					pDock->iWindowPositionX,
@@ -220,7 +220,7 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 		cairo_dock_get_window_position_and_geometry_at_balance (pDock, (pDock->bAutoHide ? CAIRO_DOCK_MIN_SIZE : CAIRO_DOCK_NORMAL_SIZE), &iWidth, &iHeight);
 		if (pDock->bDirectionUp)
 		{
-			if (pDock->bHorizontalDock)
+			if (pDock->bIsHorizontal)
 			{
 				bottom = iHeight + pDock->iGapY;
 				bottom_start_x = pDock->iWindowPositionX;
@@ -237,7 +237,7 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 		else
 		{
 
-			if (pDock->bHorizontalDock)
+			if (pDock->bIsHorizontal)
 			{
 				top = iHeight + pDock->iGapY;
 				top_start_x = pDock->iWindowPositionX;
@@ -281,7 +281,7 @@ void cairo_dock_place_root_dock (CairoDock *pDock)
 	}
 	
 	cd_debug (" move to (%d;%d)", pDock->iWindowPositionX, pDock->iWindowPositionY);
-	if (pDock->bHorizontalDock)
+	if (pDock->bIsHorizontal)
 		gdk_window_move_resize (pDock->pWidget->window,
 			pDock->iWindowPositionX,
 			pDock->iWindowPositionY,
@@ -298,31 +298,31 @@ void cairo_dock_place_root_dock (CairoDock *pDock)
 void cairo_dock_prevent_dock_from_out_of_screen (CairoDock *pDock)
 {
 	int x, y;  // position du point invariant du dock.
-	x = pDock->iWindowPositionX +  pDock->iCurrentWidth * pDock->fAlign;
-	y = (pDock->bDirectionUp ? pDock->iWindowPositionY + pDock->iCurrentHeight : pDock->iWindowPositionY);
+	x = pDock->iWindowPositionX +  pDock->iWidth * pDock->fAlign;
+	y = (pDock->bDirectionUp ? pDock->iWindowPositionY + pDock->iHeight : pDock->iWindowPositionY);
 	cd_debug ("%s (%d;%d)", __func__, x, y);
 	
-	pDock->iGapX = x - g_iScreenWidth[pDock->bHorizontalDock] * pDock->fAlign;
-	pDock->iGapY = (pDock->bDirectionUp ? g_iScreenHeight[pDock->bHorizontalDock] - y : y);
+	pDock->iGapX = x - g_iScreenWidth[pDock->bIsHorizontal] * pDock->fAlign;
+	pDock->iGapY = (pDock->bDirectionUp ? g_iScreenHeight[pDock->bIsHorizontal] - y : y);
 	cd_debug (" -> (%d;%d)", pDock->iGapX, pDock->iGapY);
 	
-	if (pDock->iGapX < - g_iScreenWidth[pDock->bHorizontalDock]/2)
-		pDock->iGapX = - g_iScreenWidth[pDock->bHorizontalDock]/2;
-	if (pDock->iGapX > g_iScreenWidth[pDock->bHorizontalDock]/2)
-		pDock->iGapX = g_iScreenWidth[pDock->bHorizontalDock]/2;
+	if (pDock->iGapX < - g_iScreenWidth[pDock->bIsHorizontal]/2)
+		pDock->iGapX = - g_iScreenWidth[pDock->bIsHorizontal]/2;
+	if (pDock->iGapX > g_iScreenWidth[pDock->bIsHorizontal]/2)
+		pDock->iGapX = g_iScreenWidth[pDock->bIsHorizontal]/2;
 	if (pDock->iGapY < 0)
 		pDock->iGapY = 0;
-	if (pDock->iGapY > g_iScreenHeight[pDock->bHorizontalDock])
-		pDock->iGapY = g_iScreenHeight[pDock->bHorizontalDock];
+	if (pDock->iGapY > g_iScreenHeight[pDock->bIsHorizontal])
+		pDock->iGapY = g_iScreenHeight[pDock->bIsHorizontal];
 }
 
 #define CD_VISIBILITY_MARGIN 20
 void cairo_dock_set_window_position_at_balance (CairoDock *pDock, int iNewWidth, int iNewHeight)
 {
-	pDock->iWindowPositionX = (g_iScreenWidth[pDock->bHorizontalDock] - iNewWidth) * pDock->fAlign + pDock->iGapX;
+	pDock->iWindowPositionX = (g_iScreenWidth[pDock->bIsHorizontal] - iNewWidth) * pDock->fAlign + pDock->iGapX;
 	if (pDock->iRefCount == 0 && pDock->fAlign != .5)
 		pDock->iWindowPositionX += (.5 - pDock->fAlign) * (pDock->iMaxDockWidth - iNewWidth);
-	pDock->iWindowPositionY = (pDock->bDirectionUp ? g_iScreenHeight[pDock->bHorizontalDock] - iNewHeight - pDock->iGapY : pDock->iGapY);
+	pDock->iWindowPositionY = (pDock->bDirectionUp ? g_iScreenHeight[pDock->bIsHorizontal] - iNewHeight - pDock->iGapY : pDock->iGapY);
 	//g_print ("pDock->iGapX : %d => iWindowPositionX <- %d\n", pDock->iGapX, pDock->iWindowPositionX);
 	//g_print ("iNewHeight : %d -> pDock->iWindowPositionY <- %d\n", iNewHeight, pDock->iWindowPositionY);
 	
@@ -330,20 +330,20 @@ void cairo_dock_set_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 	{
 		if (pDock->iWindowPositionX + iNewWidth < CD_VISIBILITY_MARGIN)
 			pDock->iWindowPositionX = CD_VISIBILITY_MARGIN - iNewWidth;
-		else if (pDock->iWindowPositionX > g_iScreenWidth[pDock->bHorizontalDock] - CD_VISIBILITY_MARGIN)
-			pDock->iWindowPositionX = g_iScreenWidth[pDock->bHorizontalDock] - CD_VISIBILITY_MARGIN;
+		else if (pDock->iWindowPositionX > g_iScreenWidth[pDock->bIsHorizontal] - CD_VISIBILITY_MARGIN)
+			pDock->iWindowPositionX = g_iScreenWidth[pDock->bIsHorizontal] - CD_VISIBILITY_MARGIN;
 	}
 	else
 	{
 		if (pDock->iWindowPositionX < - pDock->iLeftMargin)
 			pDock->iWindowPositionX = - pDock->iLeftMargin;
-		else if (pDock->iWindowPositionX > g_iScreenWidth[pDock->bHorizontalDock] - iNewWidth + pDock->iMinRightMargin)
-			pDock->iWindowPositionX = g_iScreenWidth[pDock->bHorizontalDock] - iNewWidth + pDock->iMinRightMargin;
+		else if (pDock->iWindowPositionX > g_iScreenWidth[pDock->bIsHorizontal] - iNewWidth + pDock->iMinRightMargin)
+			pDock->iWindowPositionX = g_iScreenWidth[pDock->bIsHorizontal] - iNewWidth + pDock->iMinRightMargin;
 	}
 	if (pDock->iWindowPositionY < - pDock->iMaxIconHeight)
 		pDock->iWindowPositionY = - pDock->iMaxIconHeight;
-	else if (pDock->iWindowPositionY > g_iScreenHeight[pDock->bHorizontalDock] - iNewHeight + pDock->iMaxIconHeight)
-		pDock->iWindowPositionY = g_iScreenHeight[pDock->bHorizontalDock] - iNewHeight + pDock->iMaxIconHeight;
+	else if (pDock->iWindowPositionY > g_iScreenHeight[pDock->bIsHorizontal] - iNewHeight + pDock->iMaxIconHeight)
+		pDock->iWindowPositionY = g_iScreenHeight[pDock->bIsHorizontal] - iNewHeight + pDock->iMaxIconHeight;
 	
 	pDock->iWindowPositionX += pDock->iScreenOffsetX;
 	pDock->iWindowPositionY += pDock->iScreenOffsetY;
@@ -382,10 +382,10 @@ void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pDoc
 {
 	CairoDock *pSubDock = pPointedIcon->pSubDock;
 	int iX = pPointedIcon->fXAtRest - (pDock->fFlatDockWidth - pDock->iMaxDockWidth) / 2 + pPointedIcon->fWidth / 2;
-	if (pSubDock->bHorizontalDock == pDock->bHorizontalDock)
+	if (pSubDock->bIsHorizontal == pDock->bIsHorizontal)
 	{
 		pSubDock->fAlign = 0.5;
-		pSubDock->iGapX = iX + pDock->iWindowPositionX - (pDock->bHorizontalDock ? pDock->iScreenOffsetX : pDock->iScreenOffsetY) - g_iScreenWidth[pDock->bHorizontalDock] / 2;  // ici les sous-dock ont un alignement egal a 0.5
+		pSubDock->iGapX = iX + pDock->iWindowPositionX - (pDock->bIsHorizontal ? pDock->iScreenOffsetX : pDock->iScreenOffsetY) - g_iScreenWidth[pDock->bIsHorizontal] / 2;  // ici les sous-dock ont un alignement egal a 0.5
 		pSubDock->iGapY = pDock->iGapY + pDock->iMaxDockHeight;
 	}
 	else
@@ -393,7 +393,7 @@ void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pDoc
 		pSubDock->fAlign = (pDock->bDirectionUp ? 1 : 0);
 		pSubDock->iGapX = (pDock->iGapY + pDock->iMaxDockHeight) * (pDock->bDirectionUp ? -1 : 1);
 		if (pDock->bDirectionUp)
-			pSubDock->iGapY = g_iScreenWidth[pDock->bHorizontalDock] - (iX + pDock->iWindowPositionX - (pDock->bHorizontalDock ? pDock->iScreenOffsetX : pDock->iScreenOffsetY)) - pSubDock->iMaxDockHeight / 2;  // les sous-dock ont un alignement egal a 1.
+			pSubDock->iGapY = g_iScreenWidth[pDock->bIsHorizontal] - (iX + pDock->iWindowPositionX - (pDock->bIsHorizontal ? pDock->iScreenOffsetX : pDock->iScreenOffsetY)) - pSubDock->iMaxDockHeight / 2;  // les sous-dock ont un alignement egal a 1.
 		else
 			pSubDock->iGapY = iX + pDock->iWindowPositionX - pSubDock->iMaxDockHeight / 2;  // les sous-dock ont un alignement egal a 0.
 	}
@@ -426,7 +426,7 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	if (pDock->pShapeBitmap != NULL)
 		g_object_unref ((gpointer) pDock->pShapeBitmap);
 	
-	if (pDock->inputArea.width == 0 || pDock->inputArea.height == 0 || pDock->iRefCount > 0 || pDock->bAutoHide || pDock->iMinDockWidth == 0 || pDock->iMinDockHeight == 0 || ! pDock->bHorizontalDock)  /// marche pas bien a la vertical ...
+	if (pDock->inputArea.width == 0 || pDock->inputArea.height == 0 || pDock->iRefCount > 0 || pDock->bAutoHide || pDock->iMinDockWidth == 0 || pDock->iMinDockHeight == 0 || ! pDock->bIsHorizontal)  /// marche pas bien a la vertical ...
 	{
 		if (pDock->pShapeBitmap != NULL)  // plus de shape, on la remet a 0.
 		{
@@ -440,8 +440,8 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	}
 
 	pDock->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
-		pDock->bHorizontalDock ? pDock->iMinDockWidth : pDock->iMinDockHeight,
-		pDock->bHorizontalDock ? pDock->iMinDockHeight : pDock->iMinDockWidth,
+		pDock->bIsHorizontal ? pDock->iMinDockWidth : pDock->iMinDockHeight,
+		pDock->bIsHorizontal ? pDock->iMinDockHeight : pDock->iMinDockWidth,
 		1);
 	//g_print ("%s (%d;%d ; %dx%d\n", __func__, pDock->inputArea.x, pDock->inputArea.y, pDock->inputArea.width, pDock->inputArea.height);
 	
@@ -450,7 +450,7 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 	cairo_paint (pCairoContext);
 	cairo_set_source_rgba (pCairoContext, 1, 1, 1, 1);
-	if (pDock->bHorizontalDock)
+	if (pDock->bIsHorizontal)
 	{
 		cairo_rectangle (pCairoContext,
 			pDock->inputArea.x,
@@ -497,7 +497,7 @@ GList *cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, do
 			fXMin = icon->fXAtRest;
 			pFirstDrawnElement = ic;
 		}
-		//g_print ("%s : fXAtRest = %.2f\n", icon->acName, icon->fXAtRest);
+		//g_print ("%s : fXAtRest = %.2f\n", icon->cName, icon->fXAtRest);
 
 		x_cumulated += icon->fWidth + myIcons.iIconGap;
 	}
@@ -567,7 +567,7 @@ double cairo_dock_calculate_max_dock_width (CairoDock *pDock, GList *pFirstDrawn
 		icon = ic->data;
 		icon->fXMin += fMaxDockWidth / 2;
 		icon->fXMax += fMaxDockWidth / 2;
-		//g_print ("%s : [%d;%d]\n", icon->acName, (int) icon->fXMin, (int) icon->fXMax);
+		//g_print ("%s : [%d;%d]\n", icon->cName, (int) icon->fXMin, (int) icon->fXMax);
 		icon->fX = icon->fXAtRest;
 		icon->fScale = 1;
 	}
@@ -642,7 +642,7 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 
 				if (icon->fX + icon->fWidth * icon->fScale > icon->fXMax - myIcons.fAmplitude * fMagnitude * (icon->fWidth + 1.5*myIcons.iIconGap) / 8 && iWidth != 0)
 				{
-					//g_print ("  on contraint %s (fXMax=%.2f , fX=%.2f\n", prev_icon->acName, prev_icon->fXMax, prev_icon->fX);
+					//g_print ("  on contraint %s (fXMax=%.2f , fX=%.2f\n", prev_icon->cName, prev_icon->fXMax, prev_icon->fX);
 					fDeltaExtremum = icon->fX + icon->fWidth * icon->fScale - (icon->fXMax - myIcons.fAmplitude * fMagnitude * (icon->fWidth + 1.5*myIcons.iIconGap) / 16);
 					if (myIcons.fAmplitude != 0)
 						icon->fX -= fDeltaExtremum * (1 - (icon->fScale - 1) / myIcons.fAmplitude) * fMagnitude;
@@ -693,7 +693,7 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 		//g_print ("fX <- %.2f; fXMin : %.2f\n", prev_icon->fX, prev_icon->fXMin);
 		if (prev_icon->fX < prev_icon->fXMin + myIcons.fAmplitude * fMagnitude * (prev_icon->fWidth + 1.5*myIcons.iIconGap) / 8 && iWidth != 0 && x_abs < iWidth && fMagnitude > 0)  /// && prev_icon->fPhase == 0   // on rajoute 'fMagnitude > 0' sinon il y'a un leger "saut" du aux contraintes a gauche de l'icone pointee.
 		{
-			//g_print ("  on contraint %s (fXMin=%.2f , fX=%.2f\n", prev_icon->acName, prev_icon->fXMin, prev_icon->fX);
+			//g_print ("  on contraint %s (fXMin=%.2f , fX=%.2f\n", prev_icon->cName, prev_icon->fXMin, prev_icon->fX);
 			fDeltaExtremum = prev_icon->fX - (prev_icon->fXMin + myIcons.fAmplitude * fMagnitude * (prev_icon->fWidth + 1.5*myIcons.iIconGap) / 16);
 			if (myIcons.fAmplitude != 0)
 				prev_icon->fX -= fDeltaExtremum * (1 - (prev_icon->fScale - 1) / myIcons.fAmplitude) * fMagnitude;
@@ -719,12 +719,12 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 Icon *cairo_dock_apply_wave_effect_linear (CairoDock *pDock)
 {
 	//\_______________ On calcule la position du curseur dans le referentiel du dock a plat.
-	int dx = pDock->iMouseX - pDock->iCurrentWidth / 2;  // ecart par rapport au milieu du dock a plat.
+	int dx = pDock->iMouseX - pDock->iWidth / 2;  // ecart par rapport au milieu du dock a plat.
 	int x_abs = dx + pDock->fFlatDockWidth / 2;  // ecart par rapport a la gauche du dock minimal  plat.
 
 	//\_______________ On calcule l'ensemble des parametres des icones.
 	double fMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex) * pDock->fMagnitudeMax;
-	Icon *pPointedIcon = cairo_dock_calculate_wave_with_position_linear (pDock->icons, pDock->pFirstDrawnElement, x_abs, fMagnitude, pDock->fFlatDockWidth, pDock->iCurrentWidth, pDock->iCurrentHeight, pDock->fAlign, pDock->fFoldingFactor, pDock->bDirectionUp);  // iMaxDockWidth
+	Icon *pPointedIcon = cairo_dock_calculate_wave_with_position_linear (pDock->icons, pDock->pFirstDrawnElement, x_abs, fMagnitude, pDock->fFlatDockWidth, pDock->iWidth, pDock->iHeight, pDock->fAlign, pDock->fFoldingFactor, pDock->bDirectionUp);  // iMaxDockWidth
 	return pPointedIcon;
 }
 
@@ -745,8 +745,8 @@ double cairo_dock_get_current_dock_width_linear (CairoDock *pDock)
 void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 {
 	CairoDockMousePositionType iMousePositionType;
-	int iWidth = pDock->iCurrentWidth;
-	int iHeight = pDock->iCurrentHeight;
+	int iWidth = pDock->iWidth;
+	int iHeight = pDock->iHeight;
 	///int iExtraHeight = (pDock->bAtBottom ? 0 : myLabels.iLabelSize);
 	int iExtraHeight = 0;  /// il faudrait voir si on a un sous-dock ou un dialogue au dessus :-/
 	int iMouseX = pDock->iMouseX;
@@ -789,7 +789,7 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 			{
 				//g_print ("on est dedans en x et en y et la taille des icones est non maximale bien qu'aucune icone  ne soit animee (%d;%d)\n", pDock->bAtBottom, pDock->bInside);
 				//pDock->bInside = TRUE;
-				if ((pDock->bAtBottom && pDock->iRefCount == 0 && ! pDock->bAutoHide) || (pDock->iCurrentWidth != pDock->iMaxDockWidth || pDock->iCurrentHeight != pDock->iMaxDockHeight) || (!pDock->bInside))  // on le fait pas avec l'auto-hide, car un signal d'entree est deja emis a cause des mouvements/redimensionnements de la fenetre, et en rajouter un ici fout le boxon.  // !pDock->bInside ajoute pour le bug du chgt de bureau.
+				if ((pDock->bAtBottom && pDock->iRefCount == 0 && ! pDock->bAutoHide) || (pDock->iWidth != pDock->iMaxDockWidth || pDock->iHeight != pDock->iMaxDockHeight) || (!pDock->bInside))  // on le fait pas avec l'auto-hide, car un signal d'entree est deja emis a cause des mouvements/redimensionnements de la fenetre, et en rajouter un ici fout le boxon.  // !pDock->bInside ajoute pour le bug du chgt de bureau.
 				{
 					//g_print ("  on emule une re-rentree (pDock->iMagnitudeIndex:%d)\n", pDock->iMagnitudeIndex);
 					g_signal_emit_by_name (pDock->pWidget, "enter-notify-event", NULL, &bReturn);
@@ -812,14 +812,14 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 		break ;
 
 		case CAIRO_DOCK_MOUSE_ON_THE_EDGE :
-			///pDock->fDecorationsOffsetX = - pDock->iCurrentWidth / 2;  // on fixe les decorations.
+			///pDock->fDecorationsOffsetX = - pDock->iWidth / 2;  // on fixe les decorations.
 			if (pDock->iMagnitudeIndex > 0 && ! pDock->bIsGrowingUp)
 				cairo_dock_start_shrinking (pDock);
 		break ;
 
 		case CAIRO_DOCK_MOUSE_OUTSIDE :
 			//g_print ("en dehors du dock (bIsShrinkingDown:%d;bIsGrowingUp:%d;iMagnitudeIndex:%d;bAtBottom:%d)\n", pDock->bIsShrinkingDown, pDock->bIsGrowingUp, pDock->iMagnitudeIndex, pDock->bAtBottom);
-			///pDock->fDecorationsOffsetX = - pDock->iCurrentWidth / 2;  // on fixe les decorations.
+			///pDock->fDecorationsOffsetX = - pDock->iWidth / 2;  // on fixe les decorations.
 			if (! pDock->bIsGrowingUp && ! pDock->bIsShrinkingDown && pDock->iSidLeaveDemand == 0 && ! pDock->bAtBottom)  // bAtBottom ajoute pour la 1.5.4
 			{
 				//g_print ("on force a quitter (iRefCount:%d)\n", pDock->iRefCount);
@@ -856,7 +856,7 @@ static gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, CairoDockIc
 				{
 					make_icon_avoid_mouse (icon);
 					make_icon_avoid_mouse (prev_icon);
-					//g_print ("%s> <%s\n", prev_icon->acName, icon->acName);
+					//g_print ("%s> <%s\n", prev_icon->cName, icon->cName);
 					bCanDrop = TRUE;
 				}
 			}
@@ -867,7 +867,7 @@ static gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, CairoDockIc
 				{
 					make_icon_avoid_mouse (icon);
 					make_icon_avoid_mouse (next_icon);
-					//g_print ("%s> <%s\n", icon->acName, next_icon->acName);
+					//g_print ("%s> <%s\n", icon->cName, next_icon->cName);
 					bCanDrop = TRUE;
 				}
 				ic = cairo_dock_get_next_element (ic, pDock->icons);  // on la saute.
@@ -995,7 +995,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboole
 
 		gtk_window_present (GTK_WINDOW (pSubDock->pWidget));
 
-		if (pSubDock->bHorizontalDock)
+		if (pSubDock->bIsHorizontal)
 			gdk_window_move_resize (pSubDock->pWidget->window,
 				pSubDock->iWindowPositionX,
 				pSubDock->iWindowPositionY,
@@ -1008,7 +1008,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboole
 				iNewHeight,
 				iNewWidth);
 
-		/*if (pSubDock->bHorizontalDock)
+		/*if (pSubDock->bIsHorizontal)
 			gtk_window_move (GTK_WINDOW (pSubDock->pWidget), pSubDock->iWindowPositionX, pSubDock->iWindowPositionY);
 		else
 			gtk_window_move (GTK_WINDOW (pSubDock->pWidget), pSubDock->iWindowPositionY, pSubDock->iWindowPositionX);
@@ -1023,7 +1023,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboole
 
 		gtk_window_present (GTK_WINDOW (pSubDock->pWidget));
 		///gtk_widget_show (GTK_WIDGET (pSubDock->pWidget));
-		if (pSubDock->bHorizontalDock)
+		if (pSubDock->bIsHorizontal)
 			gdk_window_move_resize (pSubDock->pWidget->window,
 				pSubDock->iWindowPositionX,
 				pSubDock->iWindowPositionY,
@@ -1039,7 +1039,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboole
 		cairo_dock_start_growing (pSubDock);  // on commence a faire grossir les icones.
 		pSubDock->calculate_icons (pSubDock);  // on recalcule les icones car sinon le 1er dessin se fait avec les parametres tels qu'ils etaient lorsque le dock s'est caché; or l'animation de pliage peut prendre plus de temps que celle de cachage.
 	}
-	//g_print ("  -> Gap %d;%d -> W(%d;%d) (%d)\n", pSubDock->iGapX, pSubDock->iGapY, pSubDock->iWindowPositionX, pSubDock->iWindowPositionY, pSubDock->bHorizontalDock);
+	//g_print ("  -> Gap %d;%d -> W(%d;%d) (%d)\n", pSubDock->iGapX, pSubDock->iGapY, pSubDock->iWindowPositionX, pSubDock->iWindowPositionY, pSubDock->bIsHorizontal);
 	
 	gtk_window_set_keep_above (GTK_WINDOW (pSubDock->pWidget), myAccessibility.bPopUp);
 	

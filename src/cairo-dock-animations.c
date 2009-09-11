@@ -59,13 +59,13 @@ extern CairoDock *g_pMainDock;
 gboolean cairo_dock_move_up (CairoDock *pDock)
 {
 	int deltaY_possible;
-	deltaY_possible = pDock->iWindowPositionY - (pDock->bDirectionUp ? g_iXScreenHeight[pDock->bHorizontalDock] - pDock->iMaxDockHeight - pDock->iGapY : pDock->iGapY);
+	deltaY_possible = pDock->iWindowPositionY - (pDock->bDirectionUp ? g_iXScreenHeight[pDock->bIsHorizontal] - pDock->iMaxDockHeight - pDock->iGapY : pDock->iGapY);
 	//g_print ("%s (%dx%d -> %d)\n", __func__, pDock->iWindowPositionX, pDock->iWindowPositionY, deltaY_possible);
 	if ((pDock->bDirectionUp && deltaY_possible > 0) || (! pDock->bDirectionUp && deltaY_possible < 0))  // alors on peut encore monter.
 	{
 		pDock->iWindowPositionY -= (int) (deltaY_possible * mySystem.fMoveUpSpeed) + (pDock->bDirectionUp ? 1 : -1);
 		//g_print ("  move to (%dx%d)\n", g_iWindowPositionX, g_iWindowPositionY);
-		if (pDock->bHorizontalDock)
+		if (pDock->bIsHorizontal)
 			gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionX, pDock->iWindowPositionY);
 		else
 			gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionY, pDock->iWindowPositionX);
@@ -85,13 +85,13 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 	//g_print ("%s ()\n", __func__);
 	if (pDock->iMagnitudeIndex > 0/** || (mySystem.bResetScrollOnLeave && pDock->iScrollOffset != 0)*/)  // on retarde le cachage du dock pour apercevoir les effets.
 		return TRUE;
-	int deltaY_possible = (pDock->bDirectionUp ? g_iXScreenHeight[pDock->bHorizontalDock] - pDock->iGapY - 0 : pDock->iGapY + 0 - pDock->iMaxDockHeight) - pDock->iWindowPositionY;  // 0 <-> g_iVisibleZoneHeight
+	int deltaY_possible = (pDock->bDirectionUp ? g_iXScreenHeight[pDock->bIsHorizontal] - pDock->iGapY - 0 : pDock->iGapY + 0 - pDock->iMaxDockHeight) - pDock->iWindowPositionY;  // 0 <-> g_iVisibleZoneHeight
 	//g_print ("%s (%d)\n", __func__, deltaY_possible);
 	if ((pDock->bDirectionUp && deltaY_possible > 8) || (! pDock->bDirectionUp && deltaY_possible < -8))  // alors on peut encore descendre.
 	{
 		pDock->iWindowPositionY += (int) (deltaY_possible * mySystem.fMoveDownSpeed) + (pDock->bDirectionUp ? 1 : -1);  // 0.33
 		//g_print ("pDock->iWindowPositionY <- %d\n", pDock->iWindowPositionY);
-		if (pDock->bHorizontalDock)
+		if (pDock->bIsHorizontal)
 			gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionX, pDock->iWindowPositionY);
 		else
 			gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionY, pDock->iWindowPositionX);
@@ -106,7 +106,7 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 		pDock->iSidMoveDown = 0;
 		int iNewWidth, iNewHeight;
 		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MIN_SIZE, &iNewWidth, &iNewHeight);
-		if (pDock->bHorizontalDock)
+		if (pDock->bIsHorizontal)
 			gdk_window_move_resize (pDock->pWidget->window,
 				pDock->iWindowPositionX,
 				pDock->iWindowPositionY,
@@ -226,7 +226,7 @@ static gboolean _cairo_dock_grow_up (CairoDock *pDock)
 			pDock->fFoldingFactor = 0;
 	}
 	
-	if (pDock->bHorizontalDock)
+	if (pDock->bIsHorizontal)
 		gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseX, &pDock->iMouseY, NULL);
 	else
 		gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseY, &pDock->iMouseX, NULL);
@@ -284,7 +284,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 		pDock->fDecorationsOffsetX = 0.;
 	
 	//\_________________ On recupere la position de la souris manuellement (car a priori on est hors du dock).
-	if (pDock->bHorizontalDock)  // ce n'est pas le motion_notify qui va nous donner des coordonnees en dehors du dock, et donc le fait d'etre dedans va nous faire interrompre le shrink_down et re-grossir, du coup il faut le faire ici. L'inconvenient, c'est que quand on sort par les cotes, il n'y a soudain plus d'icone pointee, et donc le dock devient tout plat subitement au lieu de le faire doucement. Heureusement j'ai trouve une astuce. ^_^
+	if (pDock->bIsHorizontal)  // ce n'est pas le motion_notify qui va nous donner des coordonnees en dehors du dock, et donc le fait d'etre dedans va nous faire interrompre le shrink_down et re-grossir, du coup il faut le faire ici. L'inconvenient, c'est que quand on sort par les cotes, il n'y a soudain plus d'icone pointee, et donc le dock devient tout plat subitement au lieu de le faire doucement. Heureusement j'ai trouve une astuce. ^_^
 		gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseX, &pDock->iMouseY, NULL);
 	else
 		gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseY, &pDock->iMouseX, NULL);
@@ -316,7 +316,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				{
 					int iNewWidth, iNewHeight;
 					cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
-					if (pDock->bHorizontalDock)
+					if (pDock->bIsHorizontal)
 						gdk_window_move_resize (pDock->pWidget->window,
 							pDock->iWindowPositionX,
 							pDock->iWindowPositionY,
@@ -333,7 +333,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				{
 					int iNewWidth, iNewHeight;
 					cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MIN_SIZE, &iNewWidth, &iNewHeight);
-					if (pDock->bHorizontalDock)
+					if (pDock->bIsHorizontal)
 						gdk_window_move_resize (pDock->pWidget->window,
 							pDock->iWindowPositionX,
 							pDock->iWindowPositionY,
@@ -388,15 +388,14 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 			gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);
 			if (bIsAppli && pIcon->iLastCheckTime != -1)  // c'est une icone d'appli non vieille qui disparait, elle s'est probablement cachee => on la detache juste.
 			{
-				cd_message ("cette (%s) appli est toujours valide, on la detache juste", pIcon->acName);
+				cd_message ("cette (%s) appli est toujours valide, on la detache juste", pIcon->cName);
 				cairo_dock_detach_appli (pIcon);
 				pIcon->fPersonnalScale = 0.;
 			}
 			else
 			{
-				cd_message (" - %s va etre supprimee", pIcon->acName);
-				gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);  // car apres avoir ete enleve du dock elle n'est plus rien.
-				cairo_dock_remove_icon_from_dock (pDock, pIcon);  // enleve le separateur automatique avec; supprime le .desktop des lanceurs et marque le theme.
+				cd_message (" - %s va etre supprimee", pIcon->cName);
+				cairo_dock_remove_icon_from_dock (pDock, pIcon);  // enleve le separateur automatique avec; supprime le .desktop et le sous-dock des lanceurs; stoppe les applets; marque le theme.
 				
 				if (pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass))
 				{
@@ -411,7 +410,7 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 		}
 		else if (pIcon->fPersonnalScale == -0.05)
 		{
-			pIcon->fPersonnalScale = 0;  // on n'arrete pas l'animation car elle peut se poursuivre meme apres que l'icone ait atteint sa taille maximale.
+			pIcon->fPersonnalScale = 0;  // cela n'arrete pas l'animation, qui peut se poursuivre meme apres que l'icone ait atteint sa taille maximale.
 			bRecalculateIcons = TRUE;
 		}
 		else if (pIcon->fPersonnalScale != 0)
@@ -657,7 +656,7 @@ void cairo_dock_start_growing (CairoDock *pDock)
 void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 {
 	g_return_if_fail (pIcon != NULL && pDock != NULL);
-	cd_message ("%s (%s, %d)", __func__, pIcon->acName, pIcon->iAnimationState);
+	cd_message ("%s (%s, %d)", __func__, pIcon->cName, pIcon->iAnimationState);
 	
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST &&
 		(pIcon->fPersonnalScale != 0 || cairo_dock_animation_will_be_visible (pDock)))

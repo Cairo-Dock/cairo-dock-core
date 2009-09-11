@@ -27,7 +27,7 @@
 G_BEGIN_DECLS
 
 
-cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, double fMaxScale, gboolean bHorizontalDock, gboolean bDirectionUp, double *fWidth, double *fHeight);
+cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, double fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp, double *fWidth, double *fHeight);
 
 /** Create an icon that will act as a separator.
 *@param pSourceContext a cairo context

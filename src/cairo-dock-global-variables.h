@@ -21,6 +21,7 @@
 #define __CAIRO_DOCK_GLOBAL_VARIABLES_H__
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-file-manager.h"  // pour g_iDesktopEnv
 G_BEGIN_DECLS
 
 /// Pointeur sur le dock principal.

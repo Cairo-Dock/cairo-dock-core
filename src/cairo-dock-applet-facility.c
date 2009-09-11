@@ -64,9 +64,9 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 	if (pIcon != NULL &&
 		pIcon->pIconBuffer != NULL &&
 		g_pIconBackgroundImageSurface != NULL &&
-		(CAIRO_DOCK_IS_NORMAL_LAUNCHER(pIcon) || CAIRO_DOCK_IS_APPLI(pIcon) || (myIcons.bBgForApplets && CAIRO_DOCK_IS_APPLET(pIcon))))
+		(! CAIRO_DOCK_IS_SEPARATOR (pIcon)/* && (myIcons.bBgForApplets || ! CAIRO_DOCK_IS_APPLET(pIcon))*/))
 	{
-		cd_message (">>> %s prendra un fond d'icone", pIcon->acName);
+		cd_message (">>> %s prendra un fond d'icone", pIcon->cName);
 
 		cairo_save (pIconContext);
 		cairo_scale(pIconContext,
@@ -119,10 +119,10 @@ void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surf
 
 void cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cImagePath, Icon *pIcon, CairoContainer *pContainer)
 {
-	if (cImagePath != pIcon->acFileName)
+	if (cImagePath != pIcon->cFileName)
 	{
-		g_free (pIcon->acFileName);
-		pIcon->acFileName = g_strdup (cImagePath);
+		g_free (pIcon->cFileName);
+		pIcon->cFileName = g_strdup (cImagePath);
 	}
 	int iWidth, iHeight;
 	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);

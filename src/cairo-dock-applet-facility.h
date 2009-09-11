@@ -521,7 +521,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 /** Apply the default icon on the applet's icon if there is no image yet.
 */
 #define CD_APPLET_SET_DEFAULT_IMAGE_ON_MY_ICON_IF_NONE do { \
-	if (myIcon->acFileName == NULL) { \
+	if (myIcon->cFileName == NULL) { \
 		CD_APPLET_SET_IMAGE_ON_MY_ICON (MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE); } } while (0)
 
 
@@ -701,20 +701,20 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_SET_STATIC_DESKLET cairo_dock_set_static_desklet (myDesklet)
 
 #define CD_APPLET_CREATE_MY_SUBDOCK(pIconsList, cRenderer) do { \
-	if (myIcon->acName == NULL) { \
+	if (myIcon->cName == NULL) { \
 		CD_APPLET_SET_NAME_FOR_MY_ICON (myApplet->pModule->pVisitCard->cModuleName); } \
 	if (cairo_dock_check_unique_subdock_name (myIcon)) { \
-		CD_APPLET_SET_NAME_FOR_MY_ICON (myIcon->acName); } \
-	myIcon->pSubDock = cairo_dock_create_subdock_from_scratch (pIconsList, myIcon->acName, myDock); \
+		CD_APPLET_SET_NAME_FOR_MY_ICON (myIcon->cName); } \
+	myIcon->pSubDock = cairo_dock_create_subdock_from_scratch (pIconsList, myIcon->cName, myDock); \
 	cairo_dock_set_renderer (myIcon->pSubDock, cRenderer); \
 	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)
 
 #define CD_APPLET_DESTROY_MY_SUBDOCK do { \
-	cairo_dock_destroy_dock (myIcon->pSubDock, myIcon->acName, NULL, NULL); \
+	cairo_dock_destroy_dock (myIcon->pSubDock, myIcon->cName, NULL, NULL); \
 	myIcon->pSubDock = NULL; } while (0)
 
 #define CD_APPLET_LOAD_ICONS_IN_MY_SUBDOCK(pIconsList) do { \
-	if (myIcon->acName == NULL) { \
+	if (myIcon->cName == NULL) { \
 		CD_APPLET_SET_NAME_FOR_MY_ICON (myIcon->pModuleInstance->pModule->pVisitCard->cModuleName); }\
 	else { \
 		Icon *icon;\
@@ -722,7 +722,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 		for (ic = pIconsList; ic != NULL; ic = ic->next) {\
 			icon = ic->data;\
 			if (icon->cParentDockName == NULL)\
-				icon->cParentDockName = g_strdup (myIcon->acName); } } \
+				icon->cParentDockName = g_strdup (myIcon->cName); } } \
 	myIcon->pSubDock->icons = pIconsList; \
 	myIcon->pSubDock->pFirstDrawnElement = pIconsList; \
 	cairo_dock_load_buffers_in_one_dock (myIcon->pSubDock); \

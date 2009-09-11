@@ -136,7 +136,7 @@ void cairo_dock_draw_emblem_from_surface (cairo_t *pIconContext, cairo_surface_t
 
 void cairo_dock_draw_emblem_classic (cairo_t *pIconContext, Icon *pIcon, CairoContainer *pContainer, CairoDockClassicEmblem iEmblemClassic, CairoDockEmblem iEmblemType, gboolean bPersistent)
 {
-	cd_debug ("%s (%s %d %d)", __func__, pIcon->acName, iEmblemClassic, iEmblemType);
+	cd_debug ("%s (%s %d %d)", __func__, pIcon->cName, iEmblemClassic, iEmblemType);
 	g_return_if_fail (pIcon != NULL); 
 	
 	gchar *cClassicEmblemPath = NULL;

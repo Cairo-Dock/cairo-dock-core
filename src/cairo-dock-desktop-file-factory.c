@@ -362,9 +362,9 @@ void cairo_dock_update_launcher_desktop_file (gchar *cDesktopFilePath, CairoDock
 
 void cairo_dock_write_container_name_in_conf_file (Icon *pIcon, const gchar *cParentDockName)
 {
-	if (pIcon->acDesktopFileName != NULL)  // lanceur ou separateur.
+	if (pIcon->cDesktopFileName != NULL)  // lanceur ou separateur.
 	{
-		gchar *cDesktopFilePath = *pIcon->acDesktopFileName == '/' ? g_strdup (pIcon->acDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->acDesktopFileName);
+		gchar *cDesktopFilePath = *pIcon->cDesktopFileName == '/' ? g_strdup (pIcon->cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName);
 		cairo_dock_update_conf_file (cDesktopFilePath,
 			G_TYPE_STRING, "Desktop Entry", "Container", cParentDockName,
 			G_TYPE_INVALID);

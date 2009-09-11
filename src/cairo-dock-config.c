@@ -535,19 +535,19 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	{
 		case CAIRO_DOCK_BOTTOM :
 		default :
-			pDock->bHorizontalDock = CAIRO_DOCK_HORIZONTAL;
+			pDock->bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
 			pDock->bDirectionUp = TRUE;
 		break;
 		case CAIRO_DOCK_TOP :
-			pDock->bHorizontalDock = CAIRO_DOCK_HORIZONTAL;
+			pDock->bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
 			pDock->bDirectionUp = FALSE;
 		break;
 		case CAIRO_DOCK_RIGHT :
-			pDock->bHorizontalDock = CAIRO_DOCK_VERTICAL;
+			pDock->bIsHorizontal = CAIRO_DOCK_VERTICAL;
 			pDock->bDirectionUp = TRUE;
 		break;
 		case CAIRO_DOCK_LEFT :
-			pDock->bHorizontalDock = CAIRO_DOCK_VERTICAL;
+			pDock->bIsHorizontal = CAIRO_DOCK_VERTICAL;
 			pDock->bDirectionUp = FALSE;
 		break;
 	}

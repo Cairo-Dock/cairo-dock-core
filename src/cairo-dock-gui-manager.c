@@ -694,11 +694,11 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	
 	gtk_window_resize (GTK_WINDOW (s_pMainWindow),
 		MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),
-		MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->bHorizontalDock ? g_pMainDock->iMaxDockHeight : 0)));
+		MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
 	
 	if (g_pMainDock != NULL && ! myAccessibility.bReserveSpace)  // evitons d'empieter sur le dock.
 	{
-		if (g_pMainDock->bHorizontalDock)
+		if (g_pMainDock->bIsHorizontal)
 		{
 			if (g_pMainDock->bDirectionUp)
 				gtk_window_move (GTK_WINDOW (s_pMainWindow), 0, 0);
@@ -1595,7 +1595,7 @@ static gboolean _search_icon_in_model (GtkWidget *pTreeView, Icon *pIcon, GtkTre
 {
 	if (pIcon == NULL)
 		return FALSE;
-	g_print ("%s (%s)\n", __func__, pIcon->acName);
+	g_print ("%s (%s)\n", __func__, pIcon->cName);
 	GtkTreeModel * model = gtk_tree_view_get_model (GTK_TREE_VIEW (pTreeView));
 	gpointer data[3] = {pIcon, iter, GINT_TO_POINTER (FALSE)};
 	gtk_tree_model_foreach (model,
@@ -1626,10 +1626,10 @@ static gboolean _cairo_dock_select_one_launcher_in_tree (GtkTreeSelection * sele
 		return TRUE;
 	
 	// on charge son .conf
-	if (pIcon->acDesktopFileName != NULL)
+	if (pIcon->cDesktopFileName != NULL)
 	{
-		g_print ("on presente %s...\n", pIcon->acDesktopFileName);
-		gchar *cConfFilePath = (*pIcon->acDesktopFileName == '/' ? g_strdup (pIcon->acDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->acDesktopFileName));
+		g_print ("on presente %s...\n", pIcon->cDesktopFileName);
+		gchar *cConfFilePath = (*pIcon->cDesktopFileName == '/' ? g_strdup (pIcon->cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName));
 		
 		CairoDockDesktopFileType iLauncherType;
 		if (CAIRO_DOCK_IS_URI_LAUNCHER (pIcon))
@@ -1699,9 +1699,9 @@ static void _cairo_dock_add_one_sub_dock_to_model (CairoDock *pDock, GtkTreeStor
 		if (pIcon->fPersonnalScale > 0)
 			continue;
 		
-		if (pIcon->acFileName != NULL)
+		if (pIcon->cFileName != NULL)
 		{
-			cImagePath = cairo_dock_search_icon_s_path (pIcon->acFileName);
+			cImagePath = cairo_dock_search_icon_s_path (pIcon->cFileName);
 		}
 		if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
 		{
@@ -1734,7 +1734,7 @@ static void _cairo_dock_add_one_sub_dock_to_model (CairoDock *pDock, GtkTreeStor
 		
 		gtk_tree_store_append (model, &iter, pParentIter);
 		gtk_tree_store_set (model, &iter,
-			0, CAIRO_DOCK_IS_USER_SEPARATOR (pIcon) ? "separator" : (pIcon->cInitialName ? pIcon->cInitialName : pIcon->acName),
+			0, CAIRO_DOCK_IS_USER_SEPARATOR (pIcon) ? "separator" : (pIcon->cInitialName ? pIcon->cInitialName : pIcon->cName),
 			1, pixbuf,
 			2, pIcon,
 			-1);

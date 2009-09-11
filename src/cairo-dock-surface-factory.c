@@ -717,9 +717,9 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_vertical (cairo_su
 	return pNewSurface;
 }
 
-cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, gboolean bHorizontalDock, double fMaxScale, gboolean bDirectionUp)
+cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, gboolean bIsHorizontal, double fMaxScale, gboolean bDirectionUp)
 {
-	if (bHorizontalDock)
+	if (bIsHorizontal)
 		return cairo_dock_create_reflection_surface_horizontal (pSurface, pSourceContext, fImageWidth, fImageHeight, fMaxScale, bDirectionUp);
 	else
 		return cairo_dock_create_reflection_surface_vertical (pSurface, pSourceContext, fImageWidth, fImageHeight, fMaxScale, bDirectionUp);

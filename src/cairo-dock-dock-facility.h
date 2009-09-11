@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 * @param pDock le dock.
 * @return la taille max.
 */
-#define cairo_dock_get_max_authorized_dock_width(pDock) (myAccessibility.iMaxAuthorizedWidth == 0 ? g_iScreenWidth[pDock->bHorizontalDock] : MIN (myAccessibility.iMaxAuthorizedWidth, g_iScreenWidth[pDock->bHorizontalDock]))
+#define cairo_dock_get_max_authorized_dock_width(pDock) (myAccessibility.iMaxAuthorizedWidth == 0 ? g_iScreenWidth[pDock->bIsHorizontal] : MIN (myAccessibility.iMaxAuthorizedWidth, g_iScreenWidth[pDock->bIsHorizontal]))
 
 /* Dis si un dock est etendu ou pas.
 * @param pDock le dock.

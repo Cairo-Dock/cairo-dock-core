@@ -182,53 +182,53 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	g_return_if_fail (keyfile != NULL);
 	
 	icon->iType = CAIRO_DOCK_LAUNCHER;
-	g_free (icon->acDesktopFileName);
-	icon->acDesktopFileName = g_strdup (cDesktopFileName);
+	g_free (icon->cDesktopFileName);
+	icon->cDesktopFileName = g_strdup (cDesktopFileName);
 
-	g_free (icon->acFileName);
-	icon->acFileName = g_key_file_get_string (keyfile, "Desktop Entry", "Icon", &erreur);
+	g_free (icon->cFileName);
+	icon->cFileName = g_key_file_get_string (keyfile, "Desktop Entry", "Icon", &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);
 		g_error_free (erreur);
 		erreur = NULL;
 	}
-	if (icon->acFileName != NULL && *icon->acFileName == '\0')
+	if (icon->cFileName != NULL && *icon->cFileName == '\0')
 	{
-		g_free (icon->acFileName);
-		icon->acFileName = NULL;
+		g_free (icon->cFileName);
+		icon->cFileName = NULL;
 	}
 
 
-	g_free (icon->acName);
-	icon->acName = g_key_file_get_locale_string (keyfile, "Desktop Entry", "Name", NULL, &erreur);
+	g_free (icon->cName);
+	icon->cName = g_key_file_get_locale_string (keyfile, "Desktop Entry", "Name", NULL, &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);
 		g_error_free (erreur);
 		erreur = NULL;
 	}
-	if (icon->acName != NULL && *icon->acName == '\0')
+	if (icon->cName != NULL && *icon->cName == '\0')
 	{
-		g_free (icon->acName);
-		icon->acName = NULL;
+		g_free (icon->cName);
+		icon->cName = NULL;
 	}
 
-	g_free (icon->acCommand);
-	icon->acCommand = g_key_file_get_string (keyfile, "Desktop Entry", "Exec", &erreur);
+	g_free (icon->cCommand);
+	icon->cCommand = g_key_file_get_string (keyfile, "Desktop Entry", "Exec", &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);
 		g_error_free (erreur);
 		erreur = NULL;
 	}
-	if (icon->acCommand != NULL && *icon->acCommand == '\0')
+	if (icon->cCommand != NULL && *icon->cCommand == '\0')
 	{
-		g_free (icon->acCommand);
-		icon->acCommand = NULL;
+		g_free (icon->cCommand);
+		icon->cCommand = NULL;
 	}
 	
-	if (icon->acCommand != NULL)
+	if (icon->cCommand != NULL)
 	{
 		g_free (icon->cWorkingDirectory);
 		icon->cWorkingDirectory = g_key_file_get_string (keyfile, "Desktop Entry", "Path", NULL);
@@ -269,15 +269,15 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	}
 	if (icon->iVolumeID)  // les infos dans le .desktop ne sont pas a jour.
 	{
-		g_free (icon->acName);
-		icon->acName = NULL;
-		g_free (icon->acCommand);
-		icon->acCommand = NULL;
-		g_free (icon->acFileName);
-		icon->acFileName = NULL;
+		g_free (icon->cName);
+		icon->cName = NULL;
+		g_free (icon->cCommand);
+		icon->cCommand = NULL;
+		g_free (icon->cFileName);
+		icon->cFileName = NULL;
 
 		gboolean bIsDirectory;  // on n'ecrase pas le fait que ce soit un container ou pas, car c'est l'utilisateur qui l'a decide.
-		cairo_dock_fm_get_file_info (icon->cBaseURI, &icon->acName, &icon->acCommand, &icon->acFileName, &bIsDirectory, &icon->iVolumeID, &icon->fOrder, mySystem.iFileSortType);
+		cairo_dock_fm_get_file_info (icon->cBaseURI, &icon->cName, &icon->cCommand, &icon->cFileName, &bIsDirectory, &icon->iVolumeID, &icon->fOrder, mySystem.iFileSortType);
 	}
 	
 	
@@ -311,15 +311,15 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		erreur = NULL;
 		bIsContainer = FALSE;
 	}
-	if (bIsContainer && icon->acName != NULL)
+	if (bIsContainer && icon->cName != NULL)
 	{
 		gchar *cRendererName = g_key_file_get_string (keyfile, "Desktop Entry", "Renderer", NULL);
-		CairoDock *pChildDock = cairo_dock_search_dock_from_name (icon->acName);
+		CairoDock *pChildDock = cairo_dock_search_dock_from_name (icon->cName);
 		if (pChildDock == NULL)
 		{
-			cd_message ("le dock fils (%s) n'existe pas, on le cree avec la vue %s", icon->acName, cRendererName);
+			cd_message ("le dock fils (%s) n'existe pas, on le cree avec la vue %s", icon->cName, cRendererName);
 			if (icon->cBaseURI == NULL)
-				icon->pSubDock = cairo_dock_create_subdock_from_scratch (NULL, icon->acName, pParentDock);
+				icon->pSubDock = cairo_dock_create_subdock_from_scratch (NULL, icon->cName, pParentDock);
 			else
 				cairo_dock_fm_create_dock_from_directory (icon, pParentDock);
 		}
@@ -327,7 +327,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		{
 			cairo_dock_reference_dock (pChildDock, pParentDock);
 			icon->pSubDock = pChildDock;
-			cd_message ("le dock devient un dock fils (%d, %d)", pChildDock->bHorizontalDock, pChildDock->bDirectionUp);
+			cd_message ("le dock devient un dock fils (%d, %d)", pChildDock->bIsHorizontal, pChildDock->bDirectionUp);
 		}
 		if (cRendererName != NULL && icon->pSubDock != NULL)
 			cairo_dock_set_renderer (icon->pSubDock, cRendererName);
@@ -339,7 +339,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	gboolean bPreventFromInhibating = g_key_file_get_boolean (keyfile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE si la cle n'existe pas.
 	
 	g_free (icon->cClass);
-	if (icon->acCommand != NULL && icon->cBaseURI == NULL)  /// ! bPreventFromInhibating && 
+	if (icon->cCommand != NULL && icon->cBaseURI == NULL)  /// ! bPreventFromInhibating && 
 	{
 		gchar *cStartupWMClass = g_key_file_get_string (keyfile, "Desktop Entry", "StartupWMClass", NULL);
 		if (cStartupWMClass == NULL || *cStartupWMClass == '\0')
@@ -351,7 +351,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 			// Exec=gksu toto
 			// Exec=gksu --description /usr/share/applications/synaptic.desktop /usr/sbin/synaptic
 			g_free (cStartupWMClass);
-			cStartupWMClass = g_ascii_strdown (icon->acCommand, -1);
+			cStartupWMClass = g_ascii_strdown (icon->cCommand, -1);
 			gchar *str, *cClass = cStartupWMClass;
 			
 			if (strncmp (cClass, "gksu", 4) == 0 || strncmp (cClass, "kdesu", 4) == 0)  // on prend la fin .
@@ -402,8 +402,8 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	gboolean bExecInTerminal = g_key_file_get_boolean (keyfile, "Desktop Entry", "Terminal", NULL);
 	if (bExecInTerminal)  // on le fait apres la classe puisqu'on change la commande.
 	{
-		gchar *cOldCommand = icon->acCommand;
-		icon->acCommand = g_strdup_printf ("xterm -e \"%s\"", cOldCommand);
+		gchar *cOldCommand = icon->cCommand;
+		icon->cCommand = g_strdup_printf ("xterm -e \"%s\"", cOldCommand);
 		g_free (cOldCommand);
 	}
 	
@@ -418,13 +418,13 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName, 
 	
 	Icon *icon = g_new0 (Icon, 1);
 	cairo_dock_load_icon_info_from_desktop_file (cDesktopFileName, icon);
-	g_return_val_if_fail (icon->acDesktopFileName != NULL, NULL);
+	g_return_val_if_fail (icon->cDesktopFileName != NULL, NULL);
 	
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pParentDock)
 	
-	cd_message ("+ %s/%s", icon->acName, icon->cClass);
-	if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon) && icon->acCommand != NULL && icon->cClass != NULL)  // pas un lanceur de sous-dock.
+	cd_message ("+ %s/%s", icon->cName, icon->cClass);
+	if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon) && icon->cClass != NULL)
 		cairo_dock_inhibate_class (icon->cClass, icon);
 	
 	return icon;
@@ -434,34 +434,60 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName, 
 
 void cairo_dock_reload_launcher (Icon *icon)
 {
-	if (icon->acDesktopFileName == NULL || strcmp (icon->acDesktopFileName, "none") == 0)
+	if (icon->cDesktopFileName == NULL || strcmp (icon->cDesktopFileName, "none") == 0)
 	{
-		cd_warning ("tried to reload a launcher whereas this icon (%s) is obviously not a launcher", icon->acName);
+		cd_warning ("tried to reload a launcher whereas this icon (%s) is obviously not a launcher", icon->cName);
 		return ;
 	}
 	GError *erreur = NULL;
 	
-	//\_____________ On on assure l'unicite du nom du sous-dock.
-	if (icon->pSubDock != NULL)  // on assure l'unicite du nom du dock ici, car cela n'est volontairement pas fait dans la fonction de creation de l'icone.
+	//\_____________ On assure la coherence du nouveau fichier de conf.
+	if (CAIRO_DOCK_IS_LAUNCHER (icon))
 	{
-		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->acDesktopFileName);
+		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
 		GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
 		g_return_if_fail (pKeyFile != NULL);
 		
-		gchar *cName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Name", NULL);
-		if (cName == NULL)
-			cName = g_strdup ("dock");
-		if (icon->acName == NULL || strcmp (icon->acName, cName) != 0)  // le nom a change.
+		if (icon->pSubDock != NULL)  // on assure l'unicite du nom du sous-dock ici, car cela n'est volontairement pas fait dans la fonction de creation de l'icone.
 		{
-			gchar *cUniqueName = cairo_dock_get_unique_dock_name (cName);
-			if (strcmp (cName, cUniqueName) != 0)
+			gchar *cName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Name", NULL);
+			if (cName == NULL || *cName == '\0')
+				cName = g_strdup ("dock");
+			if (icon->cName == NULL || strcmp (icon->cName, cName) != 0)  // le nom a change.
 			{
-				g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", cUniqueName);
+				gchar *cUniqueName = cairo_dock_get_unique_dock_name (cName);
+				if (strcmp (cName, cUniqueName) != 0)
+				{
+					g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", cUniqueName);
+					cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
+				}
+				g_free (cUniqueName);
+			}
+			g_free (cName);
+		}
+		if (icon->cCommand != NULL)  // on assure que ca reste un lanceur.
+		{
+			gchar *cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
+			if (cCommand == NULL || *cCommand == '\0')
+			{
+				cCommand = g_strdup ("no command");
+				g_key_file_set_string (pKeyFile, "Desktop Entry", "Exec", cCommand);
 				cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
 			}
-			g_free (cUniqueName);
+			g_free (cCommand);
 		}
-		g_free (cName);
+		if (icon->cBaseURI != NULL)  // on assure que ca reste un fichier.
+		{
+			gchar *cBaseURI = g_key_file_get_string (pKeyFile, "Desktop Entry", "Base URI", NULL);
+			if (cBaseURI == NULL || *cBaseURI == '\0')
+			{
+				cBaseURI = g_strdup (icon->cBaseURI);
+				g_key_file_set_string (pKeyFile, "Desktop Entry", "Base URI", cBaseURI);
+				cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
+			}
+			g_free (cBaseURI);
+		}
+		
 		g_key_file_free (pKeyFile);
 		g_free (cDesktopFilePath);
 	}
@@ -476,10 +502,10 @@ void cairo_dock_reload_launcher (Icon *icon)
 	icon->pSubDock = NULL;
 	gchar *cClass = icon->cClass;
 	icon->cClass = NULL;
-	gchar *cDesktopFileName = icon->acDesktopFileName;
-	icon->acDesktopFileName = NULL;
-	gchar *cName = icon->acName;
-	icon->acName = NULL;
+	gchar *cDesktopFileName = icon->cDesktopFileName;
+	icon->cDesktopFileName = NULL;
+	gchar *cName = icon->cName;
+	icon->cName = NULL;
 	gchar *cRendererName = NULL;
 	if (pSubDock != NULL)
 	{
@@ -490,13 +516,13 @@ void cairo_dock_reload_launcher (Icon *icon)
 	//\_____________ On recharge l'icone.
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 	cairo_dock_load_icon_info_from_desktop_file (cDesktopFileName, icon);
-	g_return_if_fail (icon->acDesktopFileName != NULL);
+	g_return_if_fail (icon->cDesktopFileName != NULL);
 	
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	cairo_dock_fill_icon_buffers_for_dock (icon, pCairoContext, pParentDock)
 	
-	if (cName && ! icon->acName)
-		icon->acName = g_strdup (" ");
+	if (cName && ! icon->cName)
+		icon->cName = g_strdup (" ");
 	
 	///icon->Xid = Xid;
 	
@@ -512,7 +538,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	{
 		if (pSubDock != icon->pSubDock)  // ca n'est plus le meme container, on transvase ou on detruit.
 		{
-			cairo_dock_destroy_dock (pSubDock, cName, icon->pSubDock, icon->acName);
+			cairo_dock_destroy_dock (pSubDock, cName, icon->pSubDock, icon->cName);
 		}
 	}
 

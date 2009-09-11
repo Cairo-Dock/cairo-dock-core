@@ -80,9 +80,11 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget,
 
 
 void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint t, CairoDock *pDock);
+gboolean cairo_dock_on_drag_drop (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint time, CairoDock *pDock);
+
 gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, CairoContainer *pContainer);
 
-void cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint t, CairoDock *pDock);
+gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint t, CairoDock *pDock);
 void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint time, CairoDock *pDock);
 
 
@@ -90,8 +92,6 @@ void cairo_dock_show_dock_at_mouse (CairoDock *pDock);
 void cairo_dock_raise_from_keyboard (const char *cKeyShortcut, gpointer data);
 
 void cairo_dock_hide_dock_like_a_menu (void);
-
-void cairo_dock_unregister_current_flying_container (void);
 
 G_END_DECLS
 #endif

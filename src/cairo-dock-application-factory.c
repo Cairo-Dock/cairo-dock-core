@@ -243,7 +243,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pS
 
 CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 {
-	cd_message ("%s (%s)", __func__, icon->acName);
+	cd_message ("%s (%s)", __func__, icon->cName);
 	CairoDock *pParentDock = pMainDock;
 	g_free (icon->cParentDockName);
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.bGroupAppliByClass && icon->cClass != NULL && ! cairo_dock_class_is_expanded (icon->cClass))
@@ -302,10 +302,10 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 							cairo_dock_redraw_icon (pSameClassIcon, CAIRO_CONTAINER (pRootDock));  // on la redessine car elle prend l'indicateur de classe.
 					}
 					else if (pSameClassIcon->pSubDock != pParentDock)
-						cd_warning ("this launcher (%s) already has a subdock, but it's not the class's subdock !", pSameClassIcon->acName);
+						cd_warning ("this launcher (%s) already has a subdock, but it's not the class's subdock !", pSameClassIcon->cName);
 					if (pInhibatedIcon != NULL)
 					{
-						cd_debug (" on insere %s dans le dock de la classe", pInhibatedIcon->acName);
+						cd_debug (" on insere %s dans le dock de la classe", pInhibatedIcon->cName);
 						g_free (pInhibatedIcon->cParentDockName);
 						pInhibatedIcon->cParentDockName = g_strdup (icon->cClass);
 						cairo_dock_insert_icon_in_dock_full (pInhibatedIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
@@ -320,7 +320,7 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 				cd_debug (" on cree un fake...");
 				CairoDock *pClassMateParentDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);  // c'est en fait le main dock.
 				Icon *pFakeClassIcon = g_new0 (Icon, 1);
-				pFakeClassIcon->acName = g_strdup (pSameClassIcon->cClass);
+				pFakeClassIcon->cName = g_strdup (pSameClassIcon->cClass);
 				pFakeClassIcon->cClass = g_strdup (pSameClassIcon->cClass);
 				pFakeClassIcon->iType = pSameClassIcon->iType;
 				pFakeClassIcon->fOrder = pSameClassIcon->fOrder;
@@ -336,7 +336,7 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 				cairo_dock_load_one_icon_from_scratch (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
 				
 				//\______________ On detache le classmate, on le place dans le sous-dock, et on lui substitue le faux.
-				cd_debug (" on detache %s pour la passer dans le sous-dock de sa classe", pSameClassIcon->acName);
+				cd_debug (" on detache %s pour la passer dans le sous-dock de sa classe", pSameClassIcon->cName);
 				cairo_dock_detach_icon_from_dock (pSameClassIcon, pClassMateParentDock, FALSE);
 				g_free (pSameClassIcon->cParentDockName);
 				pSameClassIcon->cParentDockName = g_strdup (pSameClassIcon->cClass);
@@ -461,7 +461,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 						Icon *pParentIcon = cairo_dock_get_icon_with_Xid (XMainAppliWindow);
 						if (pParentIcon != NULL)
 						{
-							cd_debug ("%s requiert votre attention indirectement !", pParentIcon->acName);
+							cd_debug ("%s requiert votre attention indirectement !", pParentIcon->cName);
 							cairo_dock_appli_demands_attention (pParentIcon);
 						}
 						else
@@ -495,7 +495,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 				Icon *pParentIcon = cairo_dock_get_icon_with_Xid (XMainAppliWindow);
 				if (pParentIcon != NULL)
 				{
-					cd_debug ("%s requiert votre attention indirectement !", pParentIcon->acName);
+					cd_debug ("%s requiert votre attention indirectement !", pParentIcon->cName);
 					cairo_dock_appli_demands_attention (pParentIcon);
 				}
 				else
@@ -550,7 +550,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	
 	//\__________________ On cree, on remplit l'icone, et on l'enregistre, par contre elle sera inseree plus tard.
 	Icon *icon = g_new0 (Icon, 1);
-	icon->acName = (pNameBuffer ? g_strdup ((gchar *)pNameBuffer) : g_strdup (cClass));
+	icon->cName = (pNameBuffer ? g_strdup ((gchar *)pNameBuffer) : g_strdup (cClass));
 	/**if (myTaskBar.bUniquePid)
 		icon->iPid = *pPidBuffer;*/
 	icon->Xid = Xid;
@@ -596,7 +596,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 
 void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, CairoDock *pDock)
 {
-	//g_print ("%s (%s, %s)\n", __func__, icon->acName, gdk_x11_get_xatom_name (aProperty));
+	//g_print ("%s (%s, %s)\n", __func__, icon->cName, gdk_x11_get_xatom_name (aProperty));
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
 	unsigned long iLeftBytes, iBufferNbElements=0;
@@ -610,23 +610,23 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 			XGetWindowProperty (s_XDisplay, icon->Xid, aProperty, 0, G_MAXULONG, False, s_aString, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, &pNameBuffer);
 		if (iBufferNbElements > 0)
 		{
-			if (icon->acName == NULL || strcmp (icon->acName, (gchar *)pNameBuffer) != 0)
+			if (icon->cName == NULL || strcmp (icon->cName, (gchar *)pNameBuffer) != 0)
 			{
-				g_free (icon->acName);
-				icon->acName = g_strdup ((gchar *)pNameBuffer);
+				g_free (icon->cName);
+				icon->cName = g_strdup ((gchar *)pNameBuffer);
 				XFree (pNameBuffer);
 
 				pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 				cairo_dock_fill_one_text_buffer (icon, pCairoContext, &myLabels.iconTextDescription);
 				cairo_destroy (pCairoContext);
 				
-				cairo_dock_update_name_on_inhibators (icon->cClass, icon->Xid, icon->acName);
+				cairo_dock_update_name_on_inhibators (icon->cClass, icon->Xid, icon->cName);
 			}
 		}
 	}
 	else if (iState == PropertyNewValue && aProperty == s_aNetWmIcon)
 	{
-		cd_debug ("%s change son icone (%d)", icon->acName, cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons);
+		cd_debug ("%s change son icone (%d)", icon->cName, cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons);
 		if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
 		{
 			cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
@@ -642,20 +642,20 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 			{
 				if (iState == PropertyNewValue)
 				{
-					cd_debug ("%s vous interpelle !", icon->acName);
+					cd_debug ("%s vous interpelle !", icon->cName);
 					cairo_dock_appli_demands_attention (icon);
 				}
 				else if (iState == PropertyDelete)
 				{
-					cd_debug ("%s arrette de vous interpeler.", icon->acName);
+					cd_debug ("%s arrette de vous interpeler.", icon->cName);
 					cairo_dock_appli_stops_demanding_attention (icon);
 				}
 				else
-					cd_warning ("  etat du changement d'urgence inconnu sur %s !", icon->acName);
+					cd_warning ("  etat du changement d'urgence inconnu sur %s !", icon->cName);
 			}
 			if (iState == PropertyNewValue && (pWMHints->flags & (IconPixmapHint | IconMaskHint | IconWindowHint)))
 			{
-				//g_print ("%s change son icone\n", icon->acName);
+				//g_print ("%s change son icone\n", icon->cName);
 				if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
 				{
 					cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
@@ -669,18 +669,18 @@ void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, Cairo
 
 static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, gboolean bForceDemand, Icon *pHiddenIcon)
 {
-	cd_debug ("%s (%s, force:%d)\n", __func__, icon->acName, bForceDemand);
+	cd_debug ("%s (%s, force:%d)\n", __func__, icon->cName, bForceDemand);
 	icon->bIsDemandingAttention = TRUE;
 	if (myTaskBar.bDemandsAttentionWithDialog)
 	{
 		CairoDialog *pDialog;
 		if (pHiddenIcon == NULL)
 		{
-			pDialog = cairo_dock_show_temporary_dialog_with_icon (icon->acName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration, "same icon");
+			pDialog = cairo_dock_show_temporary_dialog_with_icon (icon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration, "same icon");
 		}
 		else
 		{
-			pDialog = cairo_dock_show_temporary_dialog (pHiddenIcon->acName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration);
+			pDialog = cairo_dock_show_temporary_dialog (pHiddenIcon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration);
 			g_return_if_fail (pDialog != NULL);
 			cairo_dock_set_new_dialog_icon_surface (pDialog, pHiddenIcon->pIconBuffer, pDialog->iIconSize);
 		}
@@ -723,17 +723,17 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 }
 void cairo_dock_appli_demands_attention (Icon *icon)
 {
-	//g_print ("%s (%s)\n", __func__, icon->acName);
+	//g_print ("%s (%s)\n", __func__, icon->cName);
 	
 	if (icon->bIsDemandingAttention &&
 		cairo_dock_icon_has_dialog (icon) &&
-		((! icon->cLastAttentionDemand && ! icon->acName) ||
-		(icon->cLastAttentionDemand && icon->acName && strcmp (icon->cLastAttentionDemand, icon->acName) == 0)))  // la demande n'a pas change entre les 2 demandes.
+		((! icon->cLastAttentionDemand && ! icon->cName) ||
+		(icon->cLastAttentionDemand && icon->cName && strcmp (icon->cLastAttentionDemand, icon->cName) == 0)))  // la demande n'a pas change entre les 2 demandes.
 	{
 		return ;
 	}
 	g_free (icon->cLastAttentionDemand);
-	icon->cLastAttentionDemand = g_strdup (icon->acName);
+	icon->cLastAttentionDemand = g_strdup (icon->cName);
 	
 	gboolean bForceDemand = (myTaskBar.cForceDemandsAttention && icon->cClass && g_strstr_len (myTaskBar.cForceDemandsAttention, -1, icon->cClass));
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);

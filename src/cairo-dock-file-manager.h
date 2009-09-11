@@ -135,14 +135,14 @@ gboolean cairo_dock_fm_launch_uri (const gchar *cURI);
 gboolean cairo_dock_fm_add_monitor_full (const gchar *cURI, gboolean bDirectory, const gchar *cMountedURI, CairoDockFMMonitorCallback pCallback, gpointer data);
 /** Add a monitor on an icon representing an URI.
 */
-#define cairo_dock_fm_add_monitor(pIcon) cairo_dock_fm_add_monitor_full (pIcon->cBaseURI, (pIcon->pSubDock != NULL), (pIcon->iVolumeID != 0 ? pIcon->acCommand : NULL), (CairoDockFMMonitorCallback) cairo_dock_fm_action_on_file_event, (gpointer) pIcon)
+#define cairo_dock_fm_add_monitor(pIcon) cairo_dock_fm_add_monitor_full (pIcon->cBaseURI, (pIcon->pSubDock != NULL), (pIcon->iVolumeID != 0 ? pIcon->cCommand : NULL), (CairoDockFMMonitorCallback) cairo_dock_fm_action_on_file_event, (gpointer) pIcon)
 
 /** Remove a monitor on an URI.
 */
 gboolean cairo_dock_fm_remove_monitor_full (const gchar *cURI, gboolean bDirectory, const gchar *cMountedURI);
 /** Remove a monitor on an icon representing an URI.
 */
-#define cairo_dock_fm_remove_monitor(pIcon) cairo_dock_fm_remove_monitor_full (pIcon->cBaseURI, (pIcon->pSubDock != NULL), (pIcon->iVolumeID != 0 ? pIcon->acCommand : NULL))
+#define cairo_dock_fm_remove_monitor(pIcon) cairo_dock_fm_remove_monitor_full (pIcon->cBaseURI, (pIcon->pSubDock != NULL), (pIcon->iVolumeID != 0 ? pIcon->cCommand : NULL))
 
 
 /** Mount a point.

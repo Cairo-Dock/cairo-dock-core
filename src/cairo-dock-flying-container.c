@@ -46,7 +46,7 @@
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-flying-container.h"
 
-#define HAND_WIDTH 76
+#define HAND_WIDTH 80
 #define HAND_HEIGHT 50
 #define EXPLOSION_NB_FRAMES 10
 
@@ -298,10 +298,10 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	pFlyingIcon->fScale = 1.;
 	pFlyingContainer->iWidth = pFlyingIcon->fWidth * pFlyingIcon->fScale * 3.7;
 	pFlyingContainer->iHeight = pFlyingIcon->fHeight * pFlyingIcon->fScale + 1.*pFlyingContainer->iWidth / HAND_WIDTH * HAND_HEIGHT * .6;
-	pFlyingIcon->fDrawX = (pFlyingContainer->iWidth - pFlyingIcon->fWidth * pFlyingIcon->fScale) / 2;
+	pFlyingIcon->fDrawX = (pFlyingContainer->iWidth - pFlyingIcon->fWidth * pFlyingIcon->fScale) / 2 * .95;
 	pFlyingIcon->fDrawY = pFlyingContainer->iHeight - pFlyingIcon->fHeight * pFlyingIcon->fScale;
 	
-	if (pOriginDock->bHorizontalDock)
+	if (pOriginDock->bIsHorizontal)
 	{
 		pFlyingContainer->iPositionX = pOriginDock->iWindowPositionX + pOriginDock->iMouseX - pFlyingContainer->iWidth/2;
 		pFlyingContainer->iPositionY = pOriginDock->iWindowPositionY + pOriginDock->iMouseY - pFlyingContainer->iHeight/2;
@@ -343,7 +343,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 
 void cairo_dock_drag_flying_container (CairoFlyingContainer *pFlyingContainer, CairoDock *pOriginDock)
 {
-	if (pOriginDock->bHorizontalDock)
+	if (pOriginDock->bIsHorizontal)
 	{
 		pFlyingContainer->iPositionX = pOriginDock->iWindowPositionX + pOriginDock->iMouseX - pFlyingContainer->iWidth/2;
 		pFlyingContainer->iPositionY = pOriginDock->iWindowPositionY + pOriginDock->iMouseY - pFlyingContainer->iHeight/2;
@@ -374,7 +374,7 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 	pFlyingContainer->pIcon = NULL;
 	pFlyingContainer->iAnimationStep = EXPLOSION_NB_FRAMES+1;
 	
-	if (pIcon->acDesktopFileName != NULL)  // c'est un lanceur, ou un separateur manuel, ou un sous-dock.
+	if (pIcon->cDesktopFileName != NULL)  // c'est un lanceur, ou un separateur manuel, ou un sous-dock.
 	{
 		cairo_dock_remove_one_icon_from_dock (NULL, pIcon);
 		cairo_dock_free_icon (pIcon);
