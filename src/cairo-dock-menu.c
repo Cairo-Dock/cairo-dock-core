@@ -159,7 +159,7 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	GtkWidget *pDialog = gtk_message_dialog_new (GTK_WINDOW (pDock->pWidget),
+	GtkWidget *pDialog = gtk_message_dialog_new (GTK_WINDOW (pDock->container.pWidget),
 		GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_MESSAGE_INFO,
 		GTK_BUTTONS_CLOSE,
@@ -193,13 +193,13 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 <b>LaunchPad :</b>\n  Matttbe\n  Mav\n\
 <b>Suggestions/Comments/Bêta-Testers :</b>\n  AuraHxC\n  Chilperik\n  Cybergoll\n  Damster\n  Djoole\n  Glattering\n  Mav\n  Necropotame\n  Nochka85\n  Ppmt\n  RavanH\n  Rhinopierroce\n  Rom1\n  Sombrero\n  Vilraleur");
 	
-	cairo_dock_config_panel_created ();
+	cairo_dock_dialog_window_created ();
 	gtk_widget_show_all (pDialog);
 	gtk_window_set_position (GTK_WINDOW (pDialog), GTK_WIN_POS_CENTER_ALWAYS);  // un GTK_WIN_POS_CENTER simple ne marche pas, probablement parceque la fenetre n'est pas encore realisee. le 'always' ne pose pas de probleme, puisqu'on ne peut pas redimensionner le dialogue.
 	gtk_window_set_keep_above (GTK_WINDOW (pDialog), TRUE);
 	gtk_dialog_run (GTK_DIALOG (pDialog));
 	gtk_widget_destroy (pDialog);
-	cairo_dock_config_panel_destroyed ();
+	cairo_dock_dialog_window_destroyed ();
 }
 
 static void _launch_url (const gchar *cURL)
@@ -261,7 +261,7 @@ static void _cairo_dock_quit (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *pIcon = data[0];
 	CairoContainer *pContainer = data[1];
-	//cairo_dock_on_delete (pDock->pWidget, NULL, pDock);
+	//cairo_dock_on_delete (pDock->container.pWidget, NULL, pDock);
 	if (pIcon == NULL)
 	{
 		if (CAIRO_DOCK_IS_DOCK (pContainer))
@@ -316,7 +316,7 @@ static void _cairo_dock_create_launcher (Icon *icon, CairoDock *pDock, CairoDock
 	double fOrder;
 	if (CAIRO_DOCK_IS_LAUNCHER (icon))
 	{
-		if (pDock->iMouseX < icon->fDrawX + icon->fWidth * icon->fScale / 2)  // a gauche.
+		if (pDock->container.iMouseX < icon->fDrawX + icon->fWidth * icon->fScale / 2)  // a gauche.
 		{
 			Icon *prev_icon = cairo_dock_get_previous_icon (pDock->icons, icon);
 			fOrder = (prev_icon != NULL ? (icon->fOrder + prev_icon->fOrder) / 2 : icon->fOrder - 1);
@@ -481,10 +481,10 @@ static void _cairo_dock_modify_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 		
 		if (config_ok)
 			cairo_dock_reload_launcher (icon);
-		if (! pDock->bInside)
+		if (! pDock->container.bInside)
 		{
 			//g_print ("on force a quitter\n");
-			pDock->bInside = TRUE;
+			pDock->container.bInside = TRUE;
 			pDock->bAtBottom = FALSE;
 			cairo_dock_emit_leave_signal (pDock);
 		}
@@ -550,7 +550,7 @@ static void _cairo_dock_show_file_properties (GtkMenuItem *pMenuItem, gpointer *
 	int iUID=0, iGID=0, iPermissionsMask=0;
 	if (cairo_dock_fm_get_file_properties (icon->cCommand, &iSize, &iLastModificationTime, &cMimeType, &iUID, &iGID, &iPermissionsMask))
 	{
-		GtkWidget *pDialog = gtk_message_dialog_new (GTK_WINDOW (pDock->pWidget),
+		GtkWidget *pDialog = gtk_message_dialog_new (GTK_WINDOW (pDock->container.pWidget),
 			GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_MESSAGE_INFO,
 			GTK_BUTTONS_OK,
@@ -1106,10 +1106,10 @@ static void _cairo_dock_keep_on_widget_layer (GtkMenuItem *pMenuItem, gpointer *
 	g_print (" %s (%d)\n", __func__, bOnCompizWidgetLayer);
 	if (bOnCompizWidgetLayer)
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");
-		//gtk_window_set_type_hint(GTK_WINDOW(pDock->pWidget), GDK_WINDOW_TYPE_HINT_UTILITY);
+		//gtk_window_set_type_hint(GTK_WINDOW(pDock->container.pWidget), GDK_WINDOW_TYPE_HINT_UTILITY);
 	else
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
-		//gtk_window_set_type_hint(GTK_WINDOW(pDock->pWidget), GDK_WINDOW_TYPE_HINT_NORMAL);
+		//gtk_window_set_type_hint(GTK_WINDOW(pDock->container.pWidget), GDK_WINDOW_TYPE_HINT_NORMAL);
 	cairo_dock_show_desklet (pDesklet);
 	
 	if (CAIRO_DOCK_IS_APPLET (icon) && bOnCompizWidgetLayer)
@@ -1246,7 +1246,7 @@ static void _cairo_dock_configure_root_dock_position (GtkMenuItem *pMenuItem, gp
 	}
 	
 	gchar *cTitle = g_strdup_printf (_("Set position for the dock '%s'"), cDockName);
-	//gboolean config_ok = cairo_dock_edit_conf_file (GTK_WINDOW (pDock->pWidget), cConfFilePath, cTitle, CAIRO_DOCK_CONF_PANEL_WIDTH, CAIRO_DOCK_CONF_PANEL_HEIGHT, 0, NULL, NULL, NULL, NULL, CAIRO_DOCK_GETTEXT_PACKAGE);
+	//gboolean config_ok = cairo_dock_edit_conf_file (GTK_WINDOW (pDock->container.pWidget), cConfFilePath, cTitle, CAIRO_DOCK_CONF_PANEL_WIDTH, CAIRO_DOCK_CONF_PANEL_HEIGHT, 0, NULL, NULL, NULL, NULL, CAIRO_DOCK_GETTEXT_PACKAGE);
 	gboolean config_ok = cairo_dock_build_normal_gui (cConfFilePath, NULL, cTitle, CAIRO_DOCK_CONF_PANEL_WIDTH, CAIRO_DOCK_CONF_PANEL_HEIGHT, NULL, NULL, NULL, NULL);
 	g_free (cTitle);
 	
@@ -1261,7 +1261,7 @@ static void _cairo_dock_configure_root_dock_position (GtkMenuItem *pMenuItem, gp
 		cairo_dock_calculate_dock_icons (pDock);
 		
 		cairo_dock_place_root_dock (pDock);
-		gtk_widget_queue_draw (pDock->pWidget);
+		gtk_widget_queue_draw (pDock->container.pWidget);
 	}
 	
 	g_free (cConfFilePath);
@@ -1274,10 +1274,10 @@ void cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 	pDock->bMenuVisible = FALSE;
 	
 	cd_message ("on force a quitter");
-	pDock->bInside = TRUE;
+	pDock->container.bInside = TRUE;
 	pDock->bAtBottom = FALSE;
 	///cairo_dock_disable_entrance ();  // trop violent, il faudrait trouver un autre truc.
-	cairo_dock_on_leave_notify (pDock->pWidget,
+	cairo_dock_on_leave_notify (pDock->container.pWidget,
 		NULL,
 		pDock);
 }

@@ -99,7 +99,7 @@ GtkWidget *cairo_dock_create_container_window_full (gboolean bOpenGLWindow)
 	cairo_dock_set_colormap_for_window (pWindow);
 	if (g_bUseOpenGL && bOpenGLWindow)
 	{
-		GdkGLContext *pMainGlContext = gtk_widget_get_gl_context (g_pMainDock ? g_pMainDock->pWidget : NULL);  // NULL si on est en train de creer la fenetre du main dock, ce qui nous convient.
+		GdkGLContext *pMainGlContext = gtk_widget_get_gl_context (g_pMainDock ? g_pMainDock->container.pWidget : NULL);  // NULL si on est en train de creer la fenetre du main dock, ce qui nous convient.
 		gtk_widget_set_gl_capability (pWindow,
 			g_pGlConfig,
 			pMainGlContext,  // on partage les ressources entre les contextes.

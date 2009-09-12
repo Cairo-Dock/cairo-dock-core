@@ -459,7 +459,7 @@ void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, 
 void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRectangle *pArea)
 {
 	double fReflectSize = 0;
-	if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->bUseReflect)
+	if (pContainer->bUseReflect)
 	{
 		fReflectSize = myIcons.fReflectSize * icon->fScale * fabs (icon->fHeightFactor) + icon->fDeltaYReflection;
 	}

@@ -85,9 +85,9 @@ gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex);
 /** Say if it's usefull to launch an animation on a Dock (indeed, it's useless to launch it if it will be invisible).
 *@param pDock the dock to animate.
 */
-#define cairo_dock_animation_will_be_visible(pDock) (((pDock)->iRefCount != 0 && GTK_WIDGET_VISIBLE ((pDock)->pWidget)) || ((pDock)->iRefCount == 0 && (! (pDock)->bAutoHide || (pDock)->bInside || ! (pDock)->bAtBottom)))
+#define cairo_dock_animation_will_be_visible(pDock) ((pDock)->iRefCount != 0 && GTK_WIDGET_VISIBLE ((CAIRO_CONTAINER(pDock)->pWidget)) || ((pDock)->iRefCount == 0 && (! (pDock)->bAutoHide || CAIRO_CONTAINER(pDock)->bInside || ! (pDock)->bAtBottom)))
 
-#define cairo_dock_container_is_animating(pContainer) ((pContainer)->iSidGLAnimation != 0)
+#define cairo_dock_container_is_animating(pContainer) (CAIRO_CONTAINER(pContainer)->iSidGLAnimation != 0)
 
 /** Launch the animation of a Container.
 *@param pContainer the container to animate.
@@ -129,13 +129,13 @@ void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon);
 /** Get the interval of time between 2 iterations of the fast loop (in ms).
 *@param pContainer the container.
 */
-#define cairo_dock_get_animation_delta_t(pContainer) (pContainer)->iAnimationDeltaT
+#define cairo_dock_get_animation_delta_t(pContainer) CAIRO_CONTAINER(pContainer)->iAnimationDeltaT
 /** Get the interval of time between 2 iterations of the slow loop (in ms).
 *@param pContainer the container.
 */
-#define cairo_dock_get_slow_animation_delta_t(pContainer) ((int) ceil (1.*CAIRO_DOCK_MIN_SLOW_DELTA_T / (pContainer)->iAnimationDeltaT) * (pContainer)->iAnimationDeltaT)
+#define cairo_dock_get_slow_animation_delta_t(pContainer) ((int) ceil (1.*CAIRO_DOCK_MIN_SLOW_DELTA_T / CAIRO_CONTAINER(pContainer)->iAnimationDeltaT) * CAIRO_CONTAINER(pContainer)->iAnimationDeltaT)
 
-#define cairo_dock_set_default_animation_delta_t(pContainer) (pContainer)->iAnimationDeltaT = (g_bUseOpenGL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT)
+#define cairo_dock_set_default_animation_delta_t(pContainer) CAIRO_CONTAINER(pContainer)->iAnimationDeltaT = (g_bUseOpenGL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT)
 
 void cairo_dock_mark_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState);
 void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState);

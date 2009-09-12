@@ -237,30 +237,28 @@ void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 {
 	g_return_if_fail (pDock != NULL);
 	cd_message ("%s (%s)", __func__, cRendererName);
-	CairoDockRenderer *pRenderer = cairo_dock_get_renderer (cRendererName, (pDock->iRefCount == 0));
 	
-	pDock->calculate_max_dock_size = pRenderer->calculate_max_dock_size;
+	pDock->pRenderer = cairo_dock_get_renderer (cRendererName, (pDock->iRefCount == 0));
+	
 	pDock->fMagnitudeMax = 1.;
-	pDock->calculate_icons = pRenderer->calculate_icons;
-	pDock->render = pRenderer->render;
-	pDock->render_optimized = pRenderer->render_optimized;
-	pDock->render_opengl = pRenderer->render_opengl;
-	gtk_widget_set_double_buffered (pDock->pWidget, ! (g_bUseOpenGL && pDock->render_opengl != NULL));
-	pDock->set_subdock_position = pRenderer->set_subdock_position;
-	pDock->bUseReflect = pRenderer->bUseReflect;
-	pDock->bUseStencil = pRenderer->bUseStencil;
-	int iAnimationDeltaT = pDock->iAnimationDeltaT;
-	pDock->iAnimationDeltaT = (g_bUseOpenGL && pDock->render_opengl != NULL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT);
-	if (pDock->iAnimationDeltaT == 0)
-		pDock->iAnimationDeltaT = 30;  // le main dock est cree avant meme qu'on ait recuperer la valeur en conf. Lorsqu'une vue lui sera attribuee, la bonne valeur sera renseignee, en attendant on met un truc non nul.
-	if (iAnimationDeltaT != pDock->iAnimationDeltaT && pDock->iSidGLAnimation != 0)
+	pDock->container.bUseReflect = pDock->pRenderer->bUseReflect;
+	gtk_widget_set_double_buffered (pDock->container.pWidget, ! (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL));
+	
+	int iAnimationDeltaT = pDock->container.iAnimationDeltaT;
+	pDock->container.iAnimationDeltaT = (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT);
+	if (pDock->container.iAnimationDeltaT == 0)
+		pDock->container.iAnimationDeltaT = 30;  // le main dock est cree avant meme qu'on ait recuperer la valeur en conf. Lorsqu'une vue lui sera attribuee, la bonne valeur sera renseignee, en attendant on met un truc non nul.
+	if (iAnimationDeltaT != pDock->container.iAnimationDeltaT && pDock->container.iSidGLAnimation != 0)
 	{
-		g_source_remove (pDock->iSidGLAnimation);
-		pDock->iSidGLAnimation = 0;
+		g_source_remove (pDock->container.iSidGLAnimation);
+		pDock->container.iSidGLAnimation = 0;
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
 	if (cRendererName != NULL)  // NULL n'ecrase pas le nom de l'ancienne vue.
+	{
+		g_free (pDock->cRendererName);
 		pDock->cRendererName = g_strdup (cRendererName);
+	}
 }
 
 void cairo_dock_set_default_renderer (CairoDock *pDock)

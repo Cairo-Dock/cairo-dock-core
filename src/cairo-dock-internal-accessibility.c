@@ -207,7 +207,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		{
 			cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_keyboard);
 			cairo_dock_place_root_dock (pDock);
-			gtk_widget_show (pDock->pWidget);
+			gtk_widget_show (pDock->container.pWidget);
 		}
 	}
 	if (pAccessibility->cRaiseDockShortcut != NULL)
@@ -229,7 +229,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		pAccessibility->iVisibleZoneHeight != pPrevAccessibility->iVisibleZoneHeight)
 	{
 		cairo_dock_place_root_dock (pDock);
-		gtk_widget_queue_draw (pDock->pWidget);  // le 'gdk_window_move_resize' ci-dessus ne provoquera pas le redessin si la taille n'a pas change.
+		gtk_widget_queue_draw (pDock->container.pWidget);  // le 'gdk_window_move_resize' ci-dessus ne provoquera pas le redessin si la taille n'a pas change.
 	}
 	
 	//\_______________ Reserve Spave.
@@ -249,7 +249,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		cairo_dock_set_root_docks_on_top_layer ();
 	}
 	else if (pAccessibility->bPopUp && ! pPrevAccessibility->bPopUp)
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
 	
 	//\_______________ Auto-Hide
 	if (pDock)

@@ -118,7 +118,7 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pDataRenderer, Ico
 	pDataRenderer->interface.render (pDataRenderer, pCairoContext);
 	cairo_restore (pCairoContext);
 	
-	if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->bUseReflect)
+	if (pContainer->bUseReflect)
 	{
 		double fMaxScale = cairo_dock_get_max_scale (pContainer);
 		

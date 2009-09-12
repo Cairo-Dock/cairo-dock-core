@@ -535,20 +535,20 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	{
 		case CAIRO_DOCK_BOTTOM :
 		default :
-			pDock->bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
-			pDock->bDirectionUp = TRUE;
+			pDock->container.bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
+			pDock->container.bDirectionUp = TRUE;
 		break;
 		case CAIRO_DOCK_TOP :
-			pDock->bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
-			pDock->bDirectionUp = FALSE;
+			pDock->container.bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
+			pDock->container.bDirectionUp = FALSE;
 		break;
 		case CAIRO_DOCK_RIGHT :
-			pDock->bIsHorizontal = CAIRO_DOCK_VERTICAL;
-			pDock->bDirectionUp = TRUE;
+			pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
+			pDock->container.bDirectionUp = TRUE;
 		break;
 		case CAIRO_DOCK_LEFT :
-			pDock->bIsHorizontal = CAIRO_DOCK_VERTICAL;
-			pDock->bDirectionUp = FALSE;
+			pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
+			pDock->container.bDirectionUp = FALSE;
 		break;
 	}
 	
@@ -646,7 +646,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 		{
 			cd_keybinder_unbind (cRaiseDockShortcutOld, (CDBindkeyHandler) cairo_dock_raise_from_keyboard);
 			cairo_dock_place_root_dock (pDock);
-			gtk_widget_show (pDock->pWidget);
+			gtk_widget_show (pDock->container.pWidget);
 		}
 	}
 	g_free (cRaiseDockShortcutOld);
@@ -658,14 +658,14 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 
 	cairo_dock_place_root_dock (pDock);
 	if (mySystem.bUseFakeTransparency && ! bUseFakeTransparencyOld)
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
 	else if (! mySystem.bUseFakeTransparency && bUseFakeTransparencyOld)
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), FALSE);
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);
 	
-	pDock->iMouseX = 0;  // on se place hors du dock initialement.
-	pDock->iMouseY = 0;
+	pDock->container.iMouseX = 0;  // on se place hors du dock initialement.
+	pDock->container.iMouseY = 0;
 	cairo_dock_calculate_dock_icons (pDock);
-	gtk_widget_queue_draw (pDock->pWidget);  // le 'gdk_window_move_resize' ci-dessous ne provoquera pas le redessin si la taille n'a pas change.
+	gtk_widget_queue_draw (pDock->container.pWidget);  // le 'gdk_window_move_resize' ci-dessous ne provoquera pas le redessin si la taille n'a pas change.
 	
 	
 	if (cDeskletDecorationsNameOld == NULL && myDesklets.cDeskletDecorationsName != NULL)  // chargement initial, on charge juste ceux qui n'ont pas encore leur deco et qui ont atteint leur taille definitive.
@@ -696,7 +696,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	{
 		cairo_dock_start_polling_screen_edge (pDock);
 		if (! bPopUpOld)
-			gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
+			gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
 	}
 	else
 	{

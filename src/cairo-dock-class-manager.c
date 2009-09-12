@@ -110,7 +110,7 @@ static Window cairo_dock_detach_appli_of_class (const gchar *cClass, gboolean bD
 			{
 				/**cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pContainer));
 				cd_messge ("  on recharge l'icone de l'appli detachee %s", pIcon->cName);
-				cairo_dock_fill_one_icon_buffer (pIcon, pCairoContext, 1 + myIcons.fAmplitude, pParentDock->bIsHorizontal, TRUE, pParentDock->bDirectionUp);
+				cairo_dock_fill_one_icon_buffer (pIcon, pCairoContext, 1 + myIcons.fAmplitude, pParentDock->container.bIsHorizontal, TRUE, pParentDock->container.bDirectionUp);
 				cairo_destroy (pCairoContext);*/
 				bNeedsRedraw |= pParentDock->bIsMainDock;
 			}
@@ -120,7 +120,7 @@ static Window cairo_dock_detach_appli_of_class (const gchar *cClass, gboolean bD
 	{
 		cairo_dock_update_dock_size (g_pMainDock);
 		cairo_dock_calculate_dock_icons (g_pMainDock);
-		gtk_widget_queue_draw (g_pMainDock->pWidget);
+		gtk_widget_queue_draw (g_pMainDock->container.pWidget);
 	}
 	return XFirstFoundId;
 }
@@ -265,7 +265,7 @@ gboolean cairo_dock_set_class_use_xicon (const gchar *cClass, gboolean bUseXIcon
 		}
 		else
 		{
-			cairo_dock_fill_one_icon_buffer (pAppliIcon, pCairoContext, (1 + myIcons.fAmplitude), g_pMainDock->bIsHorizontal, g_pMainDock->bDirectionUp);
+			cairo_dock_fill_one_icon_buffer (pAppliIcon, pCairoContext, (1 + myIcons.fAmplitude), g_pMainDock->container.bIsHorizontal, g_pMainDock->container.bDirectionUp);
 		}
 	}
 	cairo_destroy (pCairoContext);
@@ -445,12 +445,12 @@ void cairo_dock_deinhibate_class (const gchar *cClass, Icon *pInhibatorIcon)
 			}
 			else
 			{
-				cairo_dock_fill_one_icon_buffer (pIcon, pCairoContext, (1 + myIcons.fAmplitude), g_pMainDock->bIsHorizontal, g_pMainDock->bDirectionUp);
+				cairo_dock_fill_one_icon_buffer (pIcon, pCairoContext, (1 + myIcons.fAmplitude), g_pMainDock->container.bIsHorizontal, g_pMainDock->container.bDirectionUp);
 			}
 		}
 		cairo_destroy (pCairoContext);
 		if (bNeedsRedraw)
-			gtk_widget_queue_draw (g_pMainDock->pWidget);  /// pDock->calculate_icons (pDock); ?...
+			gtk_widget_queue_draw (g_pMainDock->container.pWidget);  /// pDock->pRenderer->calculate_icons (pDock); ?...
 	}
 	if (pInhibatorIcon != NULL)
 	{

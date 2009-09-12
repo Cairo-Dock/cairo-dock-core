@@ -93,7 +93,7 @@ void cairo_dock_fill_one_quick_info_buffer (Icon *icon, cairo_t* pSourceContext,
 
 void cairo_dock_fill_icon_buffers (Icon *icon, cairo_t *pSourceContext, double fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp);
 #define cairo_dock_fill_icon_buffers_for_desklet(pIcon, pSourceContext) cairo_dock_fill_icon_buffers (pIcon, pSourceContext, 1, CAIRO_DOCK_HORIZONTAL, TRUE);
-#define cairo_dock_fill_icon_buffers_for_dock(pIcon, pSourceContext, pDock) cairo_dock_fill_icon_buffers (pIcon, pSourceContext, 1 + myIcons.fAmplitude, pDock->bIsHorizontal, pDock->bDirectionUp);
+#define cairo_dock_fill_icon_buffers_for_dock(pIcon, pSourceContext, pDock) cairo_dock_fill_icon_buffers (pIcon, pSourceContext, 1 + myIcons.fAmplitude, pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
 
 /** Fill all the buffers (surfaces & textures) of a given icon, according to its type. Set its size accordingly, and fills the reflection buffer for cairo. Label and quick-info are loaded with the current global text description.
 *@param pIcon the icon.
@@ -105,11 +105,11 @@ void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpoi
 #define cairo_dock_load_buffers_in_one_dock(pDock) cairo_dock_reload_buffers_in_dock (NULL, pDock, GINT_TO_POINTER (TRUE))
 
 #define cairo_dock_reload_one_icon_buffer_in_dock_full(icon, pDock, pCairoContext) do {\
-	icon->fWidth /= pDock->fRatio;\
-	icon->fHeight /= pDock->fRatio;\
-	cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pDock->bIsHorizontal, pDock->bDirectionUp);\
-	icon->fWidth *= pDock->fRatio;\
-	icon->fHeight *= pDock->fRatio; } while (0)
+	icon->fWidth /= pDock->container.fRatio;\
+	icon->fHeight /= pDock->container.fRatio;\
+	cairo_dock_fill_one_icon_buffer (icon, pCairoContext, 1 + myIcons.fAmplitude, pDock->container.bIsHorizontal, pDock->container.bDirectionUp);\
+	icon->fWidth *= pDock->container.fRatio;\
+	icon->fHeight *= pDock->container.fRatio; } while (0)
 
 void cairo_dock_reload_one_icon_buffer_in_dock (Icon *icon, CairoDock *pDock);
 

@@ -570,11 +570,11 @@ void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpoi
 		}
 		else
 		{
-			icon->fWidth /= pDock->fRatio;
-			icon->fHeight /= pDock->fRatio;
+			icon->fWidth /= pDock->container.fRatio;
+			icon->fHeight /= pDock->container.fRatio;
 			cairo_dock_fill_icon_buffers_for_dock (icon, pCairoContext, pDock);
-			icon->fWidth *= pDock->fRatio;
-			icon->fHeight *= pDock->fRatio;
+			icon->fWidth *= pDock->container.fRatio;
+			icon->fHeight *= pDock->container.fRatio;
 		}
 		
 		//g_print (" =size <- %.2fx%.2f\n", icon->fWidth, icon->fHeight);

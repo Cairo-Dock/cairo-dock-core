@@ -76,7 +76,7 @@ static void reload (CairoConfigHiddenDock *pPrevHiddenDock, CairoConfigHiddenDoc
 	
 	cairo_dock_place_root_dock (pDock);
 	
-	gtk_widget_queue_draw (pDock->pWidget);  // le 'gdk_window_move_resize' ci-dessus ne provoquera pas le redessin si la taille n'a pas change.
+	gtk_widget_queue_draw (pDock->container.pWidget);  // le 'gdk_window_move_resize' ci-dessus ne provoquera pas le redessin si la taille n'a pas change.
 }
 
 

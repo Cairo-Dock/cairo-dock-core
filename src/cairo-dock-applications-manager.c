@@ -327,7 +327,7 @@ static void _cairo_dock_hide_show_windows_on_other_desktops (Window *Xid, Icon *
 			pParentDock = cairo_dock_detach_appli (icon);
 		}
 		if (pParentDock != NULL)
-			gtk_widget_queue_draw (pParentDock->pWidget);
+			gtk_widget_queue_draw (pParentDock->container.pWidget);
 	}
 }
 gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
@@ -345,10 +345,10 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 	{
 		//g_print ("HACK ME\n");
 		bHackMeToo = FALSE;
-		if (pDock->bIsHorizontal)
-			gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseX, &pDock->iMouseY, NULL);
+		if (pDock->container.bIsHorizontal)
+			gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
 		else
-			gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseY, &pDock->iMouseX, NULL);
+			gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
 		cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
 	}
 	
@@ -446,15 +446,15 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					
 					if (! pDock->bIsShrinkingDown && ! pDock->bIsGrowingUp)
 					{
-						if (pDock->bIsHorizontal)
-							gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseX, &pDock->iMouseY, NULL);
+						if (pDock->container.bIsHorizontal)
+							gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
 						else
-							gdk_window_get_pointer (pDock->pWidget->window, &pDock->iMouseY, &pDock->iMouseX, NULL);
+							gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
 						//g_print ("on met a jour de force\n");
 						cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
-						if (pDock->bInside)
+						if (pDock->container.bInside)
 							bHackMeToo = TRUE;
-						//g_print (">>> %d;%d, %dx%d\n", pDock->iMouseX, pDock->iMouseY,pDock->iWidth,  pDock->iHeight);
+						//g_print (">>> %d;%d, %dx%d\n", pDock->container.iMouseX, pDock->container.iMouseY,pDock->container.iWidth,  pDock->container.iHeight);
 					}
 				}
 				else if (event.xproperty.atom == s_aNetNbDesktops)
@@ -478,9 +478,9 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						/*if (myPosition.bUseXinerama)
 							cairo_dock_get_screen_offsets (myPosition.iNumScreen);
 						cairo_dock_update_dock_size (pDock);  // la taille max du dock a change, on recalcule son ratio.
-						cairo_dock_set_window_position_at_balance (pDock, pDock->iWidth, pDock->iHeight);
-						g_print (" -> le dock se place en %d;%d", pDock->iWindowPositionX, pDock->iWindowPositionY);
-						gtk_window_move (GTK_WINDOW (pDock->pWidget), pDock->iWindowPositionX, pDock->iWindowPositionY);*/
+						cairo_dock_set_window_position_at_balance (pDock, pDock->container.iWidth, pDock->container.iHeight);
+						g_print (" -> le dock se place en %d;%d", pDock->container.iWindowPositionX, pDock->container.iWindowPositionY);
+						gtk_window_move (GTK_WINDOW (pDock->container.pWidget), pDock->container.iWindowPositionX, pDock->container.iWindowPositionY);*/
 					}
 					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED);  // , NULL
 				}
@@ -586,7 +586,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 									{
 										pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);  /// ! CAIRO_DOCK_ANIMATE_ICON
 										if (pParentDock != NULL)
-											gtk_widget_queue_draw (pParentDock->pWidget);
+											gtk_widget_queue_draw (pParentDock->container.pWidget);
 									}
 								}
 								else  // se montre => on detache l'icone.
@@ -594,7 +594,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 									cd_message (" => re-apparait");
 									///pParentDock = cairo_dock_detach_appli (icon);
 									///if (pParentDock != NULL)
-									///	gtk_widget_queue_draw (pParentDock->pWidget);
+									///	gtk_widget_queue_draw (pParentDock->container.pWidget);
 									cairo_dock_trigger_icon_removal_from_dock (icon);
 								}
 							}
@@ -667,7 +667,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					{
 						CairoDock *pParentDock = cairo_dock_detach_appli (icon);
 						if (pParentDock)
-							gtk_widget_queue_draw (pParentDock->pWidget);
+							gtk_widget_queue_draw (pParentDock->container.pWidget);
 					}
 					else  // elle est sur le bureau.
 					{
@@ -1073,12 +1073,12 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 void  cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock)
 {
 	int iX, iY, iWidth, iHeight;
-	iX = pDock->iWindowPositionX + icon->fXAtRest + (pDock->iWidth - pDock->fFlatDockWidth) / 2;
-	iY = pDock->iWindowPositionY + icon->fDrawY - icon->fHeight * myIcons.fAmplitude * pDock->fMagnitudeMax;  // il faudrait un fYAtRest ...
+	iX = pDock->container.iWindowPositionX + icon->fXAtRest + (pDock->container.iWidth - pDock->fFlatDockWidth) / 2;
+	iY = pDock->container.iWindowPositionY + icon->fDrawY - icon->fHeight * myIcons.fAmplitude * pDock->fMagnitudeMax;  // il faudrait un fYAtRest ...
 	iWidth = icon->fWidth;
 	iHeight = icon->fHeight * (1. + 2*myIcons.fAmplitude * pDock->fMagnitudeMax);  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
 
-	if (pDock->bIsHorizontal)
+	if (pDock->container.bIsHorizontal)
 		cairo_dock_set_xicon_geometry (icon->Xid, iX, iY, iWidth, iHeight);
 	else
 		cairo_dock_set_xicon_geometry (icon->Xid, iY, iX, iHeight, iWidth);

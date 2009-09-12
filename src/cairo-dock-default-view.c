@@ -113,7 +113,7 @@ void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 	double fDockOffsetX, fDockOffsetY;  // Offset du coin haut gauche du cadre.
 	if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
 	{
-		fDockWidth = pDock->iWidth - fExtraWidth;
+		fDockWidth = pDock->container.iWidth - fExtraWidth;
 		fDockOffsetX = fExtraWidth / 2;
 	}
 	else
@@ -123,13 +123,13 @@ void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 		fDockOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX - fMargin : fExtraWidth / 2);
 		if (fDockOffsetX < fExtraWidth / 2)
 			fDockOffsetX = fExtraWidth / 2;
-		if (fDockOffsetX + fDockWidth + fExtraWidth / 2 > pDock->iWidth)
-			fDockWidth = pDock->iWidth - fDockOffsetX - fExtraWidth / 2;
+		if (fDockOffsetX + fDockWidth + fExtraWidth / 2 > pDock->container.iWidth)
+			fDockWidth = pDock->container.iWidth - fDockOffsetX - fExtraWidth / 2;
 	}
-	if (pDock->bDirectionUp)
+	if (pDock->container.bDirectionUp)
 	{
 		sens = 1;
-		fDockOffsetY = pDock->iHeight - pDock->iDecorationsHeight - 1.5 * fLineWidth;
+		fDockOffsetY = pDock->container.iHeight - pDock->iDecorationsHeight - 1.5 * fLineWidth;
 	}
 	else
 	{
@@ -138,10 +138,10 @@ void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 	}
 
 	cairo_save (pCairoContext);
-	double fDeltaXTrapeze = cairo_dock_draw_frame (pCairoContext, fRadius, fLineWidth, fDockWidth, pDock->iDecorationsHeight, fDockOffsetX, fDockOffsetY, sens, 0., pDock->bIsHorizontal);
+	double fDeltaXTrapeze = cairo_dock_draw_frame (pCairoContext, fRadius, fLineWidth, fDockWidth, pDock->iDecorationsHeight, fDockOffsetX, fDockOffsetY, sens, 0., pDock->container.bIsHorizontal);
 
 	//\____________________ On dessine les decorations dedans.
-	fDockOffsetY = (pDock->bDirectionUp ? pDock->iHeight - pDock->iDecorationsHeight - fLineWidth : fLineWidth);
+	fDockOffsetY = (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - fLineWidth : fLineWidth);
 	cairo_dock_render_decorations_in_frame (pCairoContext, pDock, fDockOffsetY, fDockOffsetX - fDeltaXTrapeze, fDockWidth + 2*fDeltaXTrapeze);
 
 	//\____________________ On dessine le cadre.
@@ -167,33 +167,33 @@ void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 
 void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkRectangle *pArea)
 {
-	//g_print ("%s ((%d;%d) x (%d;%d) / (%dx%d))\n", __func__, pArea->x, pArea->y, pArea->width, pArea->height, pDock->iWidth, pDock->iHeight);
+	//g_print ("%s ((%d;%d) x (%d;%d) / (%dx%d))\n", __func__, pArea->x, pArea->y, pArea->width, pArea->height, pDock->container.iWidth, pDock->container.iHeight);
 	double fLineWidth = myBackground.iDockLineWidth;
 	double fMargin = myBackground.iFrameMargin;
-	int iWidth = pDock->iWidth;
-	int iHeight = pDock->iHeight;
+	int iWidth = pDock->container.iWidth;
+	int iHeight = pDock->container.iHeight;
 
 	//\____________________ On dessine les decorations du fond sur la portion de fenetre.
 	cairo_save (pCairoContext);
 
 	double fDockOffsetX, fDockOffsetY;
-	if (pDock->bIsHorizontal)
+	if (pDock->container.bIsHorizontal)
 	{
 		fDockOffsetX = pArea->x;
-		fDockOffsetY = (pDock->bDirectionUp ? iHeight - pDock->iDecorationsHeight - fLineWidth : fLineWidth);
+		fDockOffsetY = (pDock->container.bDirectionUp ? iHeight - pDock->iDecorationsHeight - fLineWidth : fLineWidth);
 	}
 	else
 	{
-		fDockOffsetX = (pDock->bDirectionUp ? iHeight - pDock->iDecorationsHeight - fLineWidth : fLineWidth);
+		fDockOffsetX = (pDock->container.bDirectionUp ? iHeight - pDock->iDecorationsHeight - fLineWidth : fLineWidth);
 		fDockOffsetY = pArea->y;
 	}
 
-	if (pDock->bIsHorizontal)
+	if (pDock->container.bIsHorizontal)
 		cairo_rectangle (pCairoContext, fDockOffsetX, fDockOffsetY, pArea->width, pDock->iDecorationsHeight);
 	else
 		cairo_rectangle (pCairoContext, fDockOffsetX, fDockOffsetY, pDock->iDecorationsHeight, pArea->height);
 
-	fDockOffsetY = (pDock->bDirectionUp ? pDock->iHeight - pDock->iDecorationsHeight - fLineWidth : fLineWidth);
+	fDockOffsetY = (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - fLineWidth : fLineWidth);
 	
 	double fRadius = MIN (myBackground.iDockRadius, (pDock->iDecorationsHeight + myBackground.iDockLineWidth) / 2 - 1);
 	double fOffsetX;
@@ -213,7 +213,7 @@ void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkR
 	//\____________________ On dessine la partie du cadre qui va bien.
 	cairo_new_path (pCairoContext);
 
-	if (pDock->bIsHorizontal)
+	if (pDock->container.bIsHorizontal)
 	{
 		cairo_move_to (pCairoContext, fDockOffsetX, fDockOffsetY - fLineWidth / 2);
 		cairo_rel_line_to (pCairoContext, pArea->width, 0);
@@ -222,7 +222,7 @@ void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkR
 		cairo_stroke (pCairoContext);
 
 		cairo_new_path (pCairoContext);
-		cairo_move_to (pCairoContext, fDockOffsetX, (pDock->bDirectionUp ? iHeight - fLineWidth / 2 : pDock->iDecorationsHeight + 1.5 * fLineWidth));
+		cairo_move_to (pCairoContext, fDockOffsetX, (pDock->container.bDirectionUp ? iHeight - fLineWidth / 2 : pDock->iDecorationsHeight + 1.5 * fLineWidth));
 		cairo_rel_line_to (pCairoContext, pArea->width, 0);
 		cairo_set_line_width (pCairoContext, fLineWidth);
 		cairo_set_source_rgba (pCairoContext, myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
@@ -236,7 +236,7 @@ void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkR
 		cairo_stroke (pCairoContext);
 
 		cairo_new_path (pCairoContext);
-		cairo_move_to (pCairoContext, (pDock->bDirectionUp ? iHeight - fLineWidth / 2 : pDock->iDecorationsHeight + 1.5 * fLineWidth), fDockOffsetY);
+		cairo_move_to (pCairoContext, (pDock->container.bDirectionUp ? iHeight - fLineWidth / 2 : pDock->iDecorationsHeight + 1.5 * fLineWidth), fDockOffsetY);
 		cairo_rel_line_to (pCairoContext, 0, pArea->height);
 		cairo_set_line_width (pCairoContext, fLineWidth);
 		cairo_set_source_rgba (pCairoContext, myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
@@ -251,9 +251,9 @@ void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkR
 	GList *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
 	if (pFirstDrawnElement != NULL)
 	{
-		double fXMin = (pDock->bIsHorizontal ? pArea->x : pArea->y), fXMax = (pDock->bIsHorizontal ? pArea->x + pArea->width : pArea->y + pArea->height);
+		double fXMin = (pDock->container.bIsHorizontal ? pArea->x : pArea->y), fXMax = (pDock->container.bIsHorizontal ? pArea->x + pArea->width : pArea->y + pArea->height);
 		double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
-		double fRatio = pDock->fRatio;
+		double fRatio = pDock->container.fRatio;
 		double fXLeft, fXRight;
 		
 		//g_print ("redraw [%d -> %d]\n", (int) fXMin, (int) fXMax);
@@ -271,7 +271,7 @@ void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkR
 				cairo_save (pCairoContext);
 				//g_print ("dessin optimise de %s [%.2f -> %.2f]\n", icon->cName, fXLeft, fXRight);
 				
-				if (icon->fDrawX >= 0 && icon->fDrawX + icon->fWidth * icon->fScale <= pDock->iWidth)
+				if (icon->fDrawX >= 0 && icon->fDrawX + icon->fWidth * icon->fScale <= pDock->container.iWidth)
 				{
 					icon->fAlpha = 1;
 				}
@@ -298,8 +298,8 @@ void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkR
 
 void cd_render_opengl_default (CairoDock *pDock)
 {
-	GLsizei w = pDock->iWidth;
-	GLsizei h = pDock->iHeight;
+	GLsizei w = pDock->container.iWidth;
+	GLsizei h = pDock->container.iHeight;
 	
 	//\_____________ On definit notre rectangle.
 	double fLineWidth = myBackground.iDockLineWidth;
@@ -316,7 +316,7 @@ void cd_render_opengl_default (CairoDock *pDock)
 		return ;
 	if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
 	{
-		fDockWidth = pDock->iWidth - fExtraWidth;
+		fDockWidth = pDock->container.iWidth - fExtraWidth;
 		fDockOffsetX = fRadius + fLineWidth / 2;
 	}
 	else
@@ -326,30 +326,30 @@ void cd_render_opengl_default (CairoDock *pDock)
 		fDockOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX + 0 - fMargin : fRadius + fLineWidth / 2);
 		if (fDockOffsetX - (fRadius + fLineWidth / 2) < 0)
 			fDockOffsetX = fRadius + fLineWidth / 2;
-		if (fDockOffsetX + fDockWidth + (fRadius + fLineWidth / 2) > pDock->iWidth)
-			fDockWidth = pDock->iWidth - fDockOffsetX - (fRadius + fLineWidth / 2);
+		if (fDockOffsetX + fDockWidth + (fRadius + fLineWidth / 2) > pDock->container.iWidth)
+			fDockWidth = pDock->container.iWidth - fDockOffsetX - (fRadius + fLineWidth / 2);
 	}
 	
-	if ((pDock->bIsHorizontal && ! pDock->bDirectionUp) || (! pDock->bIsHorizontal && pDock->bDirectionUp))
-		fDockOffsetY = pDock->iHeight - .5 * fLineWidth;
+	if ((pDock->container.bIsHorizontal && ! pDock->container.bDirectionUp) || (! pDock->container.bIsHorizontal && pDock->container.bDirectionUp))
+		fDockOffsetY = pDock->container.iHeight - .5 * fLineWidth;
 	else
 		fDockOffsetY = pDock->iDecorationsHeight + 1.5 * fLineWidth;
 	
 	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
-	double fRatio = pDock->fRatio;
+	double fRatio = pDock->container.fRatio;
 	
 	//\_____________ On genere les coordonnees du contour.
 	int iNbVertex;
 	const GLfloat *pVertexTab = cairo_dock_generate_rectangle_path (fDockWidth, fFrameHeight, fRadius, myBackground.bRoundedBottomCorner, &iNbVertex);
 	
-	if (! pDock->bIsHorizontal)
-		fDockOffsetX = pDock->iWidth - fDockOffsetX + fRadius;
+	if (! pDock->container.bIsHorizontal)
+		fDockOffsetX = pDock->container.iWidth - fDockOffsetX + fRadius;
 	else
 		fDockOffsetX = fDockOffsetX - fRadius;
 	
 	//\_____________ On trace le fond en texturant par des triangles.
 	glPushMatrix ();
-	cairo_dock_draw_frame_background_opengl (g_iBackgroundTexture, fDockWidth+2*fRadius, fFrameHeight, fDockOffsetX, fDockOffsetY, pVertexTab, iNbVertex, pDock->bIsHorizontal, pDock->bDirectionUp, pDock->fDecorationsOffsetX);
+	cairo_dock_draw_frame_background_opengl (g_iBackgroundTexture, fDockWidth+2*fRadius, fFrameHeight, fDockOffsetX, fDockOffsetY, pVertexTab, iNbVertex, pDock->container.bIsHorizontal, pDock->container.bDirectionUp, pDock->fDecorationsOffsetX);
 	
 	//\_____________ On trace le contour.
 	if (fLineWidth != 0)
@@ -407,7 +407,7 @@ static void _cd_calculate_construction_parameters_generic (Icon *icon, CairoDock
 	icon->fHeightFactor = 1.;
 	///icon->fDeltaYReflection = 0.;
 	icon->fOrientation = 0.;
-	if (icon->fDrawX >= 0 && icon->fDrawX + icon->fWidth * icon->fScale <= pDock->iWidth)
+	if (icon->fDrawX >= 0 && icon->fDrawX + icon->fWidth * icon->fScale <= pDock->container.iWidth)
 	{
 		icon->fAlpha = 1;
 	}
@@ -441,7 +441,7 @@ void cairo_dock_register_default_renderer (void)
 	CairoDockRenderer *pDefaultRenderer = g_new0 (CairoDockRenderer, 1);
 	pDefaultRenderer->cReadmeFilePath = g_strdup_printf ("%s/readme-default-view", CAIRO_DOCK_SHARE_DATA_DIR);
 	pDefaultRenderer->cPreviewFilePath = g_strdup_printf ("%s/preview-default.png", CAIRO_DOCK_SHARE_DATA_DIR);
-	pDefaultRenderer->calculate_max_dock_size = cd_calculate_max_dock_size_default;
+	pDefaultRenderer->compute_size = cd_calculate_max_dock_size_default;
 	pDefaultRenderer->calculate_icons = cd_calculate_icons_default;
 	pDefaultRenderer->render = cd_render_default;
 	pDefaultRenderer->render_optimized = cd_render_optimized_default;

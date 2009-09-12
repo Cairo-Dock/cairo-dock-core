@@ -59,7 +59,7 @@ typedef enum {
 #define CAIRO_DOCK_ANIMATE_ICON TRUE
 #define CAIRO_DOCK_INSERT_SEPARATOR TRUE
 
-typedef void (*CairoDockCalculateMaxDockSizeFunc) (CairoDock *pDock);
+typedef void (*CairoDockComputeSizeFunc) (CairoDock *pDock);
 typedef Icon * (*CairoDockCalculateIconsFunc) (CairoDock *pDock);
 typedef void (*CairoDockRenderFunc) (cairo_t *pCairoContext, CairoDock *pDock);
 typedef void (*CairoDockRenderOptimizedFunc) (cairo_t *pCairoContext, CairoDock *pDock, GdkRectangle *pArea);
@@ -68,28 +68,28 @@ typedef void (*CairoDockGLRenderFunc) (CairoDock *pDock);
 
 /// Dock's renderer, also known as 'view'.
 struct _CairoDockRenderer {
-	/// chemin d'un fichier readme destine a presenter de maniere succinte la vue.
-	gchar *cReadmeFilePath;
-	/// fonction calculant la taille max d'a dock.
-	CairoDockCalculateMaxDockSizeFunc calculate_max_dock_size;
-	/// fonction calculant l'ensemble des parametres des icones.
+	/// function that computes the sizes of a dock.
+	CairoDockComputeSizeFunc compute_size;
+	/// function that computes all the icons' parameters.
 	CairoDockCalculateIconsFunc calculate_icons;
-	/// fonction de rendu.
+	/// rendering function (cairo)
 	CairoDockRenderFunc render;
-	/// fonction de rendu optimise, ne dessinant qu'une seule icone.
+	/// optimized rendering function (cairo) that only redraw a part of the dock.
 	CairoDockRenderOptimizedFunc render_optimized;
-	/// fonction de rendu OpenGL (optionnelle).
+	/// rendering function (OpenGL, optionnal).
 	CairoDockGLRenderFunc render_opengl;
-	/// fonction calculant la position d'un sous-dock.
+	/// function that computes the position of the dock when it's a sub-dock.
 	CairoDockSetSubDockPositionFunc set_subdock_position;
-	/// TRUE ssi cette vue utilise les reflets.
-	gboolean bUseReflect;
-	/// chemin d'une image de previsualisation.
-	gchar *cPreviewFilePath;
-	/// TRUE ssi cette vue utilise le stencil buffer d'OpenGL.
+	/// TRUE if the view uses the OpenGL stencil buffer.
 	gboolean bUseStencil;
-	/// nom affiche dans la liste (traduit suivant la langue).
+	/// TRUE is the view uses reflects.
+	gboolean bUseReflect;
+	/// name displayed in the GUI (translated).
 	const gchar *cDisplayedName;
+	/// path to a readme file that gives a short description of the view.
+	gchar *cReadmeFilePath;
+	/// path to a preview image.
+	gchar *cPreviewFilePath;
 };
 
 typedef enum {
@@ -100,89 +100,34 @@ typedef enum {
 
 /// Definition of a Dock, which derives from a Container.
 struct _CairoDock {
-	/// type "dock".
-	CairoDockTypeContainer iType;
-	/// sa fenetre de dessin.
-	GtkWidget *pWidget;
-	/// largeur de la fenetre, _apres_ le redimensionnement par GTK.
-	gint iWidth;
-	/// hauteur de la fenetre, _apres_ le redimensionnement par GTK.
-	gint iHeight;
-	/// position courante en X du coin haut gauche de la fenetre sur l'ecran.
-	gint iWindowPositionX;
-	/// position courante en Y du coin haut gauche de la fenetre sur l'ecran.
-	gint iWindowPositionY;
-	/// lorsque la souris est dans the dock.
-	gboolean bInside;
-	/// dit si the dock est horizontal ou vertical.
-	CairoDockTypeHorizontality bIsHorizontal;
-	/// donne l'orientation du dock.
-	gboolean bDirectionUp;
-#ifdef HAVE_GLITZ
-	glitz_drawable_format_t *pDrawFormat;
-	glitz_drawable_t* pGlitzDrawable;
-	glitz_format_t* pGlitzFormat;
-#else
-	gpointer padding[3];
-#endif // HAVE_GLITZ
-	/// Donnees exterieures.
-	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
-	/// pour l'animation des docks.
-	gint iSidGLAnimation;
-	/// intervalle entre 2 etapes de l'animation.
-	gint iAnimationDeltaT;
-	/// derniere position en X du curseur dans le referentiel du dock.
-	gint iMouseX;
-	/// derniere position en Y du curseur dans le referentiel du dock.
-	gint iMouseY;
-	/// ratio applique aux icones.
-	gdouble fRatio;
-	/// dit si la vue courante utilise les reflets ou pas (utile pour les plug-ins).
-	gboolean bUseReflect;
-	/// contexte OpenGL associe a la fenetre.
-	GLXContext glContext;
-	/// TRUE <=> une animation lente est en cours.
-	gboolean bKeepSlowAnimation;
-	/// compteur pour l'animation.
-	gint iAnimationStep;
-	/// liste des notifications disponibles.
-	GPtrArray *pNotificationsTab;
-	/// la liste de ses icones.
+	/// container.
+	CairoContainer container;
+	/// the list of icons.
 	GList* icons;
-	/// si the dock est the dock racine.
+	/// Set to TRUE for the main dock (the first to be created, and the one containing the taskbar).
 	gboolean bIsMainDock;
-	/// le nombre d'icones pointant sur lui.
+	/// number of icons pointing on the dock (0 means it is a root dock, >0 a sub-dock).
 	gint iRefCount;
 
-	//\_______________ Les parametres de position et de geometrie de la fenetre du dock.
+	//\_______________ Config parameters.
 	/// ecart de la fenetre par rapport au bord de l'ecran.
 	gint iGapX;
 	/// decalage de la fenetre par rapport au point d'alignement sur le bord de l'ecran.
 	gint iGapY;
-	/// alignement, entre 0 et 1, du dock sur le bord de l'ecran.
+	/// alignment, between 0 and 1, on the screen's edge.
 	gdouble fAlign;
-	/// TRUE ssi the dock doit se cacher automatiquement.
+	/// whether the dock automatically hides itself or not.
 	gboolean bAutoHide;
+	/// Horizontal offset of the screen where the dock lives, according to Xinerama.
+	gint iScreenOffsetX;
+	/// Vertical offset of the screen where the dock lives, according to Xinerama.
+	gint iScreenOffsetY;
 	
-	/// magnitude maximale de la vague.
-	gdouble fMagnitudeMax;
-	/// max des hauteurs des icones.
+	/// maximum height of the icons.
 	gdouble iMaxIconHeight;
-	/// largeur du dock a plat, avec juste les icones.
+	/// width of the dock, only taking into account an alignment of the icons.
 	gdouble fFlatDockWidth;
-	/// largeur du dock au repos.
-	gint iMinDockWidth;
-	/// hauteur du dock au repos.
-	gint iMinDockHeight;
-	/// largeur du dock actif.
-	gint iMaxDockWidth;
-	/// hauteur du dock actif.
-	gint iMaxDockHeight;
-	/// largeur des decorations.
-	gint iDecorationsWidth;
-	/// hauteur des decorations.
-	gint iDecorationsHeight;
-
+	
 	gint iMaxLabelWidth;
 	gint iMinLeftMargin;
 	gint iMinRightMargin;
@@ -191,78 +136,82 @@ struct _CairoDock {
 	gint iLeftMargin;
 	gint iRightMargin;
 
-	//\_______________ Les parametres lies a une animation du dock.
+	//\_______________ current state
 	/// pour faire defiler les icones avec la molette.
 	gint iScrollOffset;
 	/// indice de calcul du coef multiplicateur de l'amplitude de la sinusoide (entre 0 et CAIRO_DOCK_NB_MAX_ITERATIONS).
 	gint iMagnitudeIndex;
-	/// un facteur d'acceleration lateral des icones lors du grossissement initial.
+	/// (un)folding factor, between 0(unfolded) to 1(folded). It's up to the renderer on how to make use of it.
 	gdouble fFoldingFactor;
 	/// type d'icone devant eviter la souris, -1 si aucun.
 	gint iAvoidingMouseIconType;
 	/// marge d'evitement de la souris, en fraction de la largeur d'an icon (entre 0 et 0.5)
 	gdouble fAvoidingMouseMargin;
-
 	/// pointeur sur le 1er element de la liste des icones a etre dessine, en partant de la gauche.
 	GList *pFirstDrawnElement;
 	/// decalage des decorations pour les faire suivre la souris.
 	gdouble fDecorationsOffsetX;
-
-	/// the dock est en bas au repos.
+	
+	/// TRUE if the dock is at rest.
 	gboolean bAtBottom;
-	/// the dock est en haut pret a etre utilise.
+	/// TRUE if the dock is in high position (maximum zoom).
 	gboolean bAtTop;
-	/// Whether the dock is in a popped up state or not
+	/// Whether the dock is in a popped up state or not.
 	gboolean bPopped;
-	/// lorsque le menu du clique droit est visible.
+	/// TRUE when the menu is visible, to keep the dock on high position.
 	gboolean bMenuVisible;
-	/// Est-on en train de survoler the dock avec quelque chose dans la souris ?
+	/// TRUE if the user is dragging something over the dock.
 	gboolean bIsDragging;
-	/// Valeur de l'auto-hide avant le cachage-rapide.
+	/// Backup of the auto-hide state before quick-hide.
 	gboolean bAutoHideInitialValue;
-	/// TRUE ssi on ne peut plus entrer dans a dock.
+	/// TRUE if mouse can't enter into the dock.
 	gboolean bEntranceDisabled;
+	/// TRUE is the dock is shrinking down.
+	gboolean bIsShrinkingDown;
+	/// TRUE is the dock is growing up.
+	gboolean bIsGrowingUp;
 	
-	//\_______________ Les ID des threads en cours sur the dock.
-	/// serial ID du thread de descente de la fenetre.
-	gint iSidMoveDown;
-	/// serial ID du thread de montee de la fenetre.
-	gint iSidMoveUp;
-	/// serial ID for window popping up to the top layer event.
-	gint iSidPopUp;
-	/// serial ID for window popping down to the bottom layer.
-	gint iSidPopDown;
-	/// serial ID du thread qui enverra le signal de sortie retarde.
-	gint iSidLeaveDemand;
-	/// serial ID du thread qui deplace les icones lateralement lors d'un glisse d'icone interne
-	gint iSidIconGlide;
+	//\_______________ Source ID of events running on the dock.
+	/// Source ID of the hiding movement.
+	guint iSidMoveDown;
+	/// Source ID of the showing movement.
+	guint iSidMoveUp;
+	/// Source ID for window popping up to the top layer.
+	guint iSidPopUp;
+	/// Source ID for window popping down to the bottom layer.
+	guint iSidPopDown;
+	/// Source ID of the timer that delays the "leave" event.
+	guint iSidLeaveDemand;
 	
-	//\_______________ Les fonctions de dessin du dock.
+	//\_______________ Renderer and fields set by it.
 	/// nom de la vue, utile pour (re)charger les fonctions de rendu posterieurement a la creation du dock.
 	gchar *cRendererName;
-	/// recalculer la taille maximale du dock.
-	CairoDockCalculateMaxDockSizeFunc calculate_max_dock_size;
-	/// calculer tous les parametres des icones.
-	CairoDockCalculateIconsFunc calculate_icons;
-	/// dessiner le tout.
-	CairoDockRenderFunc render;
-	/// dessiner une portion du dock de maniere optimisee.
-	CairoDockRenderOptimizedFunc render_optimized;
-	/// fonction de rendu OpenGL (optionnelle).
-	CairoDockGLRenderFunc render_opengl;
-	/// calculer la position d'un sous-dock.
-	CairoDockSetSubDockPositionFunc set_subdock_position;
-	/// TRUE ssi on peut dropper entre 2 icones.
+	/// current renderer, never NULL.
+	CairoDockRenderer *pRenderer;
+	/// data that can be used by the renderer.
+	gpointer pRendererData;
+	/// Set to TRUE by the renderer if one can drop between 2 icons.
 	gboolean bCanDrop;
-	gboolean bIsShrinkingDown;
-	gboolean bIsGrowingUp;
+	/// input zone set by the renderer when the dock is at rest.
 	GdkRectangle inputArea;
+	/// input shape of the window when the dock is at rest.
 	GdkBitmap* pShapeBitmap;
+	/// set by the view to say if the mouse is currently on icons, on the egde, or outside of icons.
 	CairoDockMousePositionType iMousePositionType;
-	/// TRUE ssi cette vue utilise le stencil buffer d'OpenGL.
-	gboolean bUseStencil;
-	gint iScreenOffsetX;
-	gint iScreenOffsetY;
+	/// minimum width of the dock.
+	gint iMinDockWidth;
+	/// minimum height of the dock.
+	gint iMinDockHeight;
+	/// maximum width of the dock.
+	gint iMaxDockWidth;
+	/// maximum height of the dock.
+	gint iMaxDockHeight;
+	/// width of background decorations.
+	gint iDecorationsWidth;
+	/// height of background decorations.
+	gint iDecorationsHeight;
+	/// maximal magnitude of the zoom, between 0 and 1.
+	gdouble fMagnitudeMax;
 };
 
 
@@ -270,13 +219,13 @@ struct _CairoDock {
 * @param pContainer the container.
 * @return TRUE if the container is a Dock.
 */
-#define CAIRO_DOCK_IS_DOCK(pContainer) (pContainer != NULL && (pContainer)->iType == CAIRO_DOCK_TYPE_DOCK)
+#define CAIRO_DOCK_IS_DOCK(pContainer) (pContainer != NULL && ((CairoContainer*)pContainer)->iType == CAIRO_DOCK_TYPE_DOCK)
 
 /** Cast a Container into a Dock.
 * @param pContainer the container.
 * @return the dock.
 */
-#define CAIRO_DOCK(pContainer) ((CairoDock *)pContainer)
+#define CAIRO_DOCK(pDock) ((CairoDock *)pDock)
 
 
 /** Create a new root dock.
@@ -329,7 +278,7 @@ void cairo_dock_free_all_docks (void);
 
 /** Insert an icon into a dock.
 * Do nothing if the icon already exists inside the dock.
-* @param icon the icon to be inserted.
+* @param icon the icon to be inserted. It should have been filled beforehand.
 * @param pDock the dock to insert inside.
 * @param bUpdateSize TRUE to update the size of the dock after the insertion.
 * @param bAnimated TRUE to arm the icon's animation for insertion.
@@ -340,7 +289,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 
 /** Insert an icon into a dock, at the position given by its 'fOrder' field.
 * Insert an automatic separator if needed. Do nothing if the icon already exists inside the dock.
-* @param icon the icon to be inserted.
+* @param icon the icon to be inserted. It should have been filled beforehand.
 * @param pDock the dock to insert inside.
 * @param bUpdateSize TRUE to update the size of the dock after the insertion.
 * @param bAnimated TRUE to arm the icon's animation for insertion.
@@ -357,18 +306,18 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 
 void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboolean bCheckUnusedSeparator);
 
-/** Remove an icon from its dock, that is to say detach the icon, and  remove all links with Cairo-Dock : its .desktop is deleted, its module is deactivated, and its Xid is removed from the Taskbar (its class is handled too).
+/** Completely remove an icon from the dock, that is to say detach the icon, and remove all links with Cairo-Dock : its .desktop is deleted, its module is deactivated, and its Xid is removed from the Taskbar (its class is handled too).
 * Unnecessary separators are not tested.
-* The icon is not yet destroyed, and keeps its sub-dock.
-*@param pDock the dock contenant the icon.
+* The icon is not yet destroyed, but looses its sub-dock in case of a container launcher.
+*@param pDock the dock containing the icon, or NULL if the icon is already detached.
 *@param icon the icon to be removed.
 */
 #define cairo_dock_remove_one_icon_from_dock(pDock, icon) cairo_dock_remove_icon_from_dock_full (pDock, icon, FALSE)
 
-/** Remove an icon from its dock, that is to say detach the icon, and  remove all links with Cairo-Dock : its .desktop is deleted, its module is deactivated, and its Xid is removed from the Taskbar (its class is handled too).
+/** Completely remove an icon from the dock, that is to say detach the icon, and  remove all links with Cairo-Dock : its .desktop is deleted, its module is deactivated, and its Xid is removed from the Taskbar (its class is handled too).
 * Unnecessary separators are removed as well.
-* The icon is not yet destroyed, and keeps its sub-dock.
-*@param pDock the dock contenant the icon.
+* The icon is not yet destroyed, but looses its sub-dock in case of a container launcher.
+*@param pDock the dock containing the icon, or NULL if the icon is already detached.
 *@param icon the icon to be removed.
 */
 #define cairo_dock_remove_icon_from_dock(pDock, icon) cairo_dock_remove_icon_from_dock_full (pDock, icon, TRUE)

@@ -75,23 +75,23 @@ struct _CairoContainer {
 #endif
 	/// External data.
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
-	/// ID of the timer of the animation.
-	gint iSidGLAnimation;
+	/// Source ID of the animation loop.
+	guint iSidGLAnimation;
 	/// interval of time between 2 animation steps.
 	gint iAnimationDeltaT;
 	/// X position of the mouse in the container's system of reference.
 	gint iMouseX;
 	/// Y position of the mouse in the container's system of reference.
 	gint iMouseY;
-	/// zoom applied to the container.
+	/// zoom applied to the container's elements.
 	gdouble fRatio;
 	/// TRUE if the container has a reflection power.
 	gboolean bUseReflect;
 	/// OpenGL context.
 	GLXContext glContext;
-	/// TRUE if an slow animation is running.
+	/// TRUE if a slow animation is running.
 	gboolean bKeepSlowAnimation;
-	/// counter for the animation.
+	/// counter for the animation loop.
 	gint iAnimationStep;
 	/// list of available notifications.
 	GPtrArray *pNotificationsTab;

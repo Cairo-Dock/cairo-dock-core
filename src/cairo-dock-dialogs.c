@@ -47,6 +47,7 @@
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-launcher-factory.h"
+#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-dialogs.h"
 
 extern CairoDock *g_pMainDock;
@@ -644,12 +645,30 @@ gboolean cairo_dock_dialog_reference (CairoDialog *pDialog)
 	return FALSE;
 }
 
-static void _cairo_dock_isolate_dialog (CairoDialog *pDialog)
+
+gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog)
 {
-	cd_debug ("");
+	//g_print ("%s (%d)\n", __func__, pDialog->iRefCount);
+	if (pDialog != NULL && pDialog->iRefCount > 0)
+	{
+		pDialog->iRefCount --;
+		if (pDialog->iRefCount == 0)  // devient nul.
+		{
+			cairo_dock_free_dialog (pDialog);
+			return TRUE;
+		}
+		else
+			return FALSE;  // il n'est pas mort.
+	}
+	return TRUE;
+}
+
+
+void cairo_dock_free_dialog (CairoDialog *pDialog)
+{
 	if (pDialog == NULL)
 		return ;
-
+	
 	if (pDialog->iSidTimer > 0)
 	{
 		g_source_remove (pDialog->iSidTimer);
@@ -665,41 +684,7 @@ static void _cairo_dock_isolate_dialog (CairoDialog *pDialog)
 		g_source_remove (pDialog->iSidAnimateText);
 		pDialog->iSidAnimateText = 0;
 	}
-
-	g_signal_handlers_disconnect_by_func (pDialog->pWidget, on_expose_dialog, NULL);
-	g_signal_handlers_disconnect_by_func (pDialog->pWidget, on_button_press_dialog, NULL);
-	g_signal_handlers_disconnect_by_func (pDialog->pWidget, on_configure_dialog, NULL);
-	g_signal_handlers_disconnect_by_func (pDialog->pWidget, on_enter_dialog, NULL);
-	g_signal_handlers_disconnect_by_func (pDialog->pWidget, on_leave_dialog, NULL);
-
-	pDialog->action_on_answer = NULL;
-
-	pDialog->pIcon = NULL;
-}
-gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog)
-{
-	//g_print ("%s (%d)\n", __func__, pDialog->iRefCount);
-	if (pDialog != NULL && pDialog->iRefCount > 0)
-	{
-		pDialog->iRefCount --;
-		if (pDialog->iRefCount == 0)  // devient nul.
-		{
-			_cairo_dock_isolate_dialog (pDialog);
-			cairo_dock_free_dialog (pDialog);
-			return TRUE;
-		}
-		else
-			return FALSE;  // il n'est pas mort.
-	}
-	return TRUE;
-}
-
-
-void cairo_dock_free_dialog (CairoDialog *pDialog)
-{
-	if (pDialog == NULL)
-		return ;
-
+	
 	cd_debug ("");
 	s_pDialogList = g_slist_remove (s_pDialogList, pDialog);
 
@@ -734,6 +719,8 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 	if (pDialog->pUserData != NULL && pDialog->pFreeUserDataFunc != NULL)
 		pDialog->pFreeUserDataFunc (pDialog->pUserData);
 	
+	if (pDialog->pIcon && pDialog->pIcon->cParentDockName != NULL)
+		cairo_dock_dialog_window_destroyed ();
 	g_free (pDialog);
 }
 
@@ -1112,7 +1099,9 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	
 	if (pAttribute->iTimeLength != 0)
 		pDialog->iSidTimer = g_timeout_add (pAttribute->iTimeLength, (GSourceFunc) _cairo_dock_dialog_auto_delete, (gpointer) pDialog);
-
+	
+	if (pIcon->cParentDockName != NULL)
+		cairo_dock_dialog_window_created ();
 	return pDialog;
 }
 
@@ -1126,33 +1115,33 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
 		if (pDock->iRefCount == 0 && pDock->bAtBottom)  // un dock principal au repos.
 		{
-			*bIsHorizontal = (pDock->bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
-			if (pDock->bIsHorizontal)
+			*bIsHorizontal = (pDock->container.bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
+			if (pDock->container.bIsHorizontal)
 			{
 				*bRight = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
-				*bDirectionUp = (pDock->iWindowPositionY > g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
-				*iY = (*bDirectionUp ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iHeight);
+				*bDirectionUp = (pDock->container.iWindowPositionY > g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
+				*iY = (*bDirectionUp ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight);
 			}
 			else
 			{
-				*bRight = (pDock->iWindowPositionY < g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
+				*bRight = (pDock->container.iWindowPositionY < g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
 				*bDirectionUp = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
-				*iY = (! (*bRight) ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iHeight);
+				*iY = (! (*bRight) ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight);
 			}
 	
 			if (pDock->bAutoHide)
 			{
-				*iX = pDock->iWindowPositionX +
+				*iX = pDock->container.iWindowPositionX +
 					(pIcon->fXAtRest + pIcon->fWidth * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign))) / pDock->fFlatDockWidth * myAccessibility.iVisibleZoneWidth;
 				cd_debug ("placement sur un dock cache -> %d", *iX);
 			}
 			else
 			{
-				*iX = pDock->iWindowPositionX +
+				*iX = pDock->container.iWindowPositionX +
 					pIcon->fDrawX + pIcon->fWidth * pIcon->fScale * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign));
 			}
 		}
-		else if (pDock->iRefCount > 0 && ! GTK_WIDGET_VISIBLE (pDock->pWidget))  // sous-dock invisible.  // pDock->bAtBottom
+		else if (pDock->iRefCount > 0 && ! GTK_WIDGET_VISIBLE (pDock->container.pWidget))  // sous-dock invisible.  // pDock->bAtBottom
 		{
 			CairoDock *pParentDock = NULL;
 			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
@@ -1160,20 +1149,20 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 		}
 		else  // dock actif.
 		{
-			*bIsHorizontal = (pDock->bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
-			if (pDock->bIsHorizontal)
+			*bIsHorizontal = (pDock->container.bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
+			if (pDock->container.bIsHorizontal)
 			{
 				*bRight = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
-				*bDirectionUp = (pDock->iWindowPositionY > g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
-				*iY = (*bDirectionUp ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iHeight);
+				*bDirectionUp = (pDock->container.iWindowPositionY > g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
+				*iY = (*bDirectionUp ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight);
 			}
 			else
 			{
-				*bRight = (pDock->iWindowPositionY < g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
+				*bRight = (pDock->container.iWindowPositionY < g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
 				*bDirectionUp = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
-				*iY = (! (*bRight) ? pDock->iWindowPositionY : pDock->iWindowPositionY + pDock->iHeight);
+				*iY = (! (*bRight) ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight);
 			}
-			*iX = pDock->iWindowPositionX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale * pIcon->fWidthFactor / 2 + pIcon->fWidth * (*bRight ? .2 : - .2);
+			*iX = pDock->container.iWindowPositionX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale * pIcon->fWidthFactor / 2 + pIcon->fWidth * (*bRight ? .2 : - .2);
 		}
 	}
 	else if (CAIRO_DOCK_IS_DESKLET (pContainer))
@@ -1559,13 +1548,13 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 		//g_print ("fin de boucle bloquante -> %d\n", iAnswer);
 		if (myAccessibility.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
 			cairo_dock_pop_down (CAIRO_DOCK (pContainer));
-		if (CAIRO_DOCK_IS_DOCK (pContainer)/* && ! pDock->bInside*/)
+		if (CAIRO_DOCK_IS_DOCK (pContainer)/* && ! pDock->container.bInside*/)
 		{
 			cd_message ("on force a quitter");
 			CairoDock *pDock = CAIRO_DOCK (pContainer);
-			pDock->bInside = TRUE;
+			pDock->container.bInside = TRUE;
 			pDock->bAtBottom = FALSE;
-			cairo_dock_on_leave_notify (pDock->pWidget,
+			cairo_dock_on_leave_notify (pDock->container.pWidget,
 				NULL,
 				pDock);
 		}
@@ -1685,6 +1674,8 @@ void cairo_dock_hide_dialog (CairoDialog *pDialog)
 		gtk_widget_hide (pDialog->pWidget);
 		pDialog->bInside = FALSE;
 		cairo_dock_replace_all_dialogs ();
+		if (pDialog->pIcon && pDialog->pIcon->cParentDockName != NULL)
+			cairo_dock_dialog_window_destroyed ();
 	}
 }
 
@@ -1699,6 +1690,8 @@ void cairo_dock_unhide_dialog (CairoDialog *pDialog)
 		{
 			CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
 			cairo_dock_place_dialog (pDialog, pContainer);
+			if (pIcon->cParentDockName != NULL)
+				cairo_dock_dialog_window_created ();
 		}
 	}
 	gtk_window_present (GTK_WINDOW (pDialog->pWidget));

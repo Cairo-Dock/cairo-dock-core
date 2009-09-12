@@ -100,11 +100,11 @@ static void reload (CairoConfigSystem *pPrevSystem, CairoConfigSystem *pSystem)
 	//\_______________ Fake Transparency.
 	if (pSystem->bUseFakeTransparency && ! pPrevSystem->bUseFakeTransparency)
 	{
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), TRUE);
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
 		cairo_dock_get_desktop_bg_surface ();
 	}
 	else if (! pSystem->bUseFakeTransparency && pPrevSystem->bUseFakeTransparency)
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->pWidget), FALSE);
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);
 	
 	if (pSystem->bTextAlwaysHorizontal != pPrevSystem->bTextAlwaysHorizontal)
 	{

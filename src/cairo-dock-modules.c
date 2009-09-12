@@ -846,8 +846,8 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		}
 		else
 		{
-			pIcon->fWidth *= CAIRO_DOCK (pActualContainer)->fRatio;
-			pIcon->fHeight *= CAIRO_DOCK (pActualContainer)->fRatio;
+			pIcon->fWidth *= pActualContainer->fRatio;
+			pIcon->fHeight *= pActualContainer->fRatio;
 			
 			if (bReloadAppletConf)
 			{
@@ -961,7 +961,7 @@ void cairo_dock_activate_module_and_load (const gchar *cModuleName)
 		if (pInstance->pDock)
 		{
 			cairo_dock_update_dock_size (pInstance->pDock);
-			gtk_widget_queue_draw (pInstance->pDock->pWidget);
+			gtk_widget_queue_draw (pInstance->pDock->container.pWidget);
 		}
 	}
 	
@@ -979,7 +979,7 @@ void cairo_dock_deactivate_module_instance_and_unload (CairoDockModuleInstance *
 	{
 		cairo_dock_remove_icon_from_dock (pDock, pInstance->pIcon);  // desinstancie le module et tout.
 		cairo_dock_update_dock_size (pDock);
-		gtk_widget_queue_draw (pDock->pWidget);
+		gtk_widget_queue_draw (pDock->container.pWidget);
 	}
 	else
 	{
@@ -1208,8 +1208,8 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	//\____________________ On initialise l'instance.
 	if (pDock)
 	{
-		pIcon->fWidth *= pDock->fRatio;
-		pIcon->fHeight *= pDock->fRatio;
+		pIcon->fWidth *= pDock->container.fRatio;
+		pIcon->fHeight *= pDock->container.fRatio;
 	}
 	
 	pInstance->pIcon = pIcon;
@@ -1246,8 +1246,8 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	
 	if (pDock)
 	{
-		pIcon->fWidth /= pDock->fRatio;
-		pIcon->fHeight /= pDock->fRatio;
+		pIcon->fWidth /= pDock->container.fRatio;
+		pIcon->fHeight /= pDock->container.fRatio;
 		cairo_dock_insert_icon_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 	}
 	else if (pDesklet && pDesklet->iDesiredWidth == 0 && pDesklet->iDesiredHeight == 0)  // peut arriver si le desklet a fini de se redimensionner avant l'init.

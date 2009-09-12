@@ -71,26 +71,26 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 		cairo_dock_reposition_root_docks (TRUE);  // on replace tous les docks racines sauf le main dock.
 	}
 	
-	CairoDockTypeHorizontality bWasHorizontal = pDock->bIsHorizontal;
+	CairoDockTypeHorizontality bWasHorizontal = pDock->container.bIsHorizontal;
 	if (pPosition->iScreenBorder != pPrevPosition->iScreenBorder)
 	{
 		switch (pPosition->iScreenBorder)
 		{
 			case CAIRO_DOCK_BOTTOM :
-				pDock->bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
-				pDock->bDirectionUp = TRUE;
+				pDock->container.bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
+				pDock->container.bDirectionUp = TRUE;
 			break;
 			case CAIRO_DOCK_TOP :
-				pDock->bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
-				pDock->bDirectionUp = FALSE;
+				pDock->container.bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
+				pDock->container.bDirectionUp = FALSE;
 			break;
 			case CAIRO_DOCK_RIGHT :
-				pDock->bIsHorizontal = CAIRO_DOCK_VERTICAL;
-				pDock->bDirectionUp = TRUE;
+				pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
+				pDock->container.bDirectionUp = TRUE;
 			break;
 			case CAIRO_DOCK_LEFT :
-				pDock->bIsHorizontal = CAIRO_DOCK_VERTICAL;
-				pDock->bDirectionUp = FALSE;
+				pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
+				pDock->container.bDirectionUp = FALSE;
 			break;
 		}
 		cairo_dock_update_dock_size (pDock);  // si bHorizonalDock a change, la taille max a change aussi.
@@ -105,9 +105,9 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 	pDock->fAlign = pPosition->fAlign;
 	cairo_dock_calculate_dock_icons (pDock);
 	cairo_dock_place_root_dock (pDock);
-	if (bWasHorizontal != pDock->bIsHorizontal)
-		pDock->iWidth --;  // la taille dans le referentiel du dock ne change pas meme si on change d'horizontalite, par contre la taille de la fenetre change. On introduit donc un biais ici pour forcer le configure-event a faire son travail, sinon ca fausse le redraw.
-	gtk_widget_queue_draw (pDock->pWidget);
+	if (bWasHorizontal != pDock->container.bIsHorizontal)
+		pDock->container.iWidth --;  // la taille dans le referentiel du dock ne change pas meme si on change d'horizontalite, par contre la taille de la fenetre change. On introduit donc un biais ici pour forcer le configure-event a faire son travail, sinon ca fausse le redraw.
+	gtk_widget_queue_draw (pDock->container.pWidget);
 }
 
 

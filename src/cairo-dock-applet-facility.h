@@ -439,7 +439,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@return the newly allocated surface.
 */
 #define CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET(cImagePath) \
-	cairo_dock_create_surface_from_image_simple (cImagePath, myDrawContext, myIcon->fWidth * (myDock ? (1 + g_fAmplitude) / myDock->fRatio : 1), myIcon->fHeight* (myDock ? (1 + g_fAmplitude) / myDock->fRatio : 1))
+	cairo_dock_create_surface_from_image_simple (cImagePath, myDrawContext, myIcon->fWidth * (myDock ? (1 + g_fAmplitude) / myDock->container.fRatio : 1), myIcon->fHeight* (myDock ? (1 + g_fAmplitude) / myDock->container.fRatio : 1))
 
 /** Load a user image into a surface, at the same size as the applet's icon, or a default image taken in the installed folder of the applet if the first one is NULL. If the user image is given by its sole name, it is searched inside the current theme root folder.
 *@param cUserImageName name or path of an user image.
@@ -665,7 +665,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 /** Say if the applet's container currently supports OpenGL.
 */
-#define CD_APPLET_MY_CONTAINER_IS_OPENGL (g_bUseOpenGL && ((myDock && myDock->render_opengl) || (myDesklet && myDesklet->pRenderer && myDesklet->pRenderer->render_opengl)))
+#define CD_APPLET_MY_CONTAINER_IS_OPENGL (g_bUseOpenGL && ((myDock && myDock->pRenderer->render_opengl) || (myDesklet && myDesklet->pRenderer && myDesklet->pRenderer->render_opengl)))
 
 #define CD_APPLET_SET_TRANSITION_ON_MY_ICON(render_step_cairo, render_step_opengl, bFastPace, iDuration, bRemoveWhenFinished) \
 	cairo_dock_set_transition_on_icon (myIcon, myContainer, myDrawContext,\

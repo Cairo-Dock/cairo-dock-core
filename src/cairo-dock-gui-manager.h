@@ -66,9 +66,9 @@ typedef struct _CairoDockCategoryWidgetTable CairoDockCategoryWidgetTable;
 typedef gboolean (* CairoDockApplyConfigFunc) (gpointer data);
 
 
-int cairo_dock_get_nb_config_panels (void);
-void cairo_dock_config_panel_destroyed (void);
-void cairo_dock_config_panel_created (void);
+int cairo_dock_get_nb_dialog_windows (void);
+void cairo_dock_dialog_window_destroyed (void);
+void cairo_dock_dialog_window_created (void);
 
 GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMaintenanceMode);
 

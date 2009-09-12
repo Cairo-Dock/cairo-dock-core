@@ -327,7 +327,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		{
 			cairo_dock_reference_dock (pChildDock, pParentDock);
 			icon->pSubDock = pChildDock;
-			cd_message ("le dock devient un dock fils (%d, %d)", pChildDock->bIsHorizontal, pChildDock->bDirectionUp);
+			cd_message ("le dock devient un dock fils (%d, %d)", pChildDock->container.bIsHorizontal, pChildDock->container.bDirectionUp);
 		}
 		if (cRendererName != NULL && icon->pSubDock != NULL)
 			cairo_dock_set_renderer (icon->pSubDock, cRendererName);
@@ -549,10 +549,10 @@ void cairo_dock_reload_launcher (Icon *icon)
 	}
 
 	//\_____________ On gere le changement de container ou d'ordre.
-	CairoDock *pNewContainer = cairo_dock_search_dock_from_name (icon->cParentDockName);
-	g_return_if_fail (pNewContainer != NULL);
+	CairoDock *pNewDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+	g_return_if_fail (pNewDock != NULL);
 	
-	if (pDock != pNewContainer)  // on la detache de son container actuel et on l'insere dans le nouveau.
+	if (pDock != pNewDock)  // on la detache de son container actuel et on l'insere dans le nouveau.
 	{
 		cairo_dock_detach_icon_from_dock (icon, pDock, TRUE);
 		if (pDock->icons == NULL && pDock->iRefCount == 0 && ! pDock->bIsMainDock)  // on supprime les docks principaux vides.
@@ -565,18 +565,18 @@ void cairo_dock_reload_launcher (Icon *icon)
 		{
 			cairo_dock_update_dock_size (pDock);
 			cairo_dock_calculate_dock_icons (pDock);
-			gtk_widget_queue_draw (pDock->pWidget);
+			gtk_widget_queue_draw (pDock->container.pWidget);
 		}
-		cairo_dock_insert_icon_in_dock (icon, pNewContainer, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 	}
 	else
 	{
 		cairo_dock_refresh_launcher_gui ();
 		if (icon->fOrder != fOrder)  // On gere le changement d'ordre.
 		{
-			pNewContainer->pFirstDrawnElement = NULL;
-			pNewContainer->icons = g_list_remove (pNewContainer->icons, icon);
-			pNewContainer->icons = g_list_insert_sorted (pNewContainer->icons,
+			pNewDock->pFirstDrawnElement = NULL;
+			pNewDock->icons = g_list_remove (pNewDock->icons, icon);
+			pNewDock->icons = g_list_insert_sorted (pNewDock->icons,
 				icon,
 				(GCompareFunc) cairo_dock_compare_icons_order);
 			cairo_dock_update_dock_size (pDock);  // la largeur max peut avoir ete influencee par le changement d'ordre.
@@ -596,10 +596,8 @@ void cairo_dock_reload_launcher (Icon *icon)
 		cairo_dock_inhibate_class (cNowClass, icon);
 
 	//\_____________ On redessine les docks impactes.
-	cairo_dock_calculate_dock_icons (pNewContainer);
-	gtk_widget_queue_draw (pNewContainer->pWidget);
-
-	
+	cairo_dock_calculate_dock_icons (pNewDock);
+	cairo_dock_redraw_container (CAIRO_CONTAINER (pNewDock));
 
 	g_free (cPrevDockName);
 	g_free (cClass);

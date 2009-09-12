@@ -138,7 +138,7 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 		pPrevTaskBar->bDrawIndicatorOnAppli != pTaskBar->bDrawIndicatorOnAppli)
 	{
 		cairo_dock_foreach_applis ((CairoDockForeachIconFunc) _set_indicator, FALSE, GINT_TO_POINTER (pTaskBar->bDrawIndicatorOnAppli));
-		gtk_widget_queue_draw (pDock->pWidget);
+		gtk_widget_queue_draw (pDock->container.pWidget);
 	}
 	
 	if (! cairo_dock_application_manager_is_running () && pTaskBar->bShowAppli)  // maintenant on veut voir les applis !
@@ -147,7 +147,7 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 		bUpdateSize = TRUE;
 	}
 	else
-		gtk_widget_queue_draw (pDock->pWidget);  // pour le fVisibleAlpha
+		gtk_widget_queue_draw (pDock->container.pWidget);  // pour le fVisibleAlpha
 	
 	if (pPrevTaskBar->bShowAppli != pTaskBar->bShowAppli ||
 		pPrevTaskBar->bGroupAppliByClass != pTaskBar->bGroupAppliByClass)
@@ -161,7 +161,7 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 	/**if (bUpdateSize)  // utile ?...
 	{
 		cairo_dock_calculate_dock_icons (pDock);
-		gtk_widget_queue_draw (pDock->pWidget);  // le 'gdk_window_move_resize' ci-dessous ne provoquera pas le redessin si la taille n'a pas change.
+		gtk_widget_queue_draw (pDock->container.pWidget);  // le 'gdk_window_move_resize' ci-dessous ne provoquera pas le redessin si la taille n'a pas change.
 
 		cairo_dock_place_root_dock (pDock);
 	}*/

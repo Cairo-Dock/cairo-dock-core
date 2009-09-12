@@ -101,11 +101,11 @@ const gchar *cCategoriesDescription[2*CAIRO_DOCK_NB_CATEGORY] = {
 
 
 static int iNbConfigDialogs = 0;
-int cairo_dock_get_nb_config_panels (void)
+int cairo_dock_get_nb_dialog_windows (void)
 {
 	return iNbConfigDialogs;
 }
-void cairo_dock_config_panel_destroyed (void)
+void cairo_dock_dialog_window_destroyed (void)
 {
 	iNbConfigDialogs --;
 	if (iNbConfigDialogs <= 0)
@@ -114,13 +114,13 @@ void cairo_dock_config_panel_destroyed (void)
 		if (g_pMainDock != NULL)  // peut arriver au 1er lancement.
 			cairo_dock_pop_down (g_pMainDock);
 	}
-	cd_debug ("iNbConfigDialogs <- %d", iNbConfigDialogs);
+	g_print ("iNbConfigDialogs <- %d\n", iNbConfigDialogs);
 	
 }
-void cairo_dock_config_panel_created (void)
+void cairo_dock_dialog_window_created (void)
 {
 	iNbConfigDialogs ++;
-	cd_debug ("iNbConfigDialogs <- %d", iNbConfigDialogs);
+	g_print ("iNbConfigDialogs <- %d\n", iNbConfigDialogs);
 	if (g_pMainDock != NULL)  // peut arriver au 1er lancement.
 		cairo_dock_pop_up (g_pMainDock);
 }
@@ -694,13 +694,13 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	
 	gtk_window_resize (GTK_WINDOW (s_pMainWindow),
 		MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),
-		MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
+		MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
 	
 	if (g_pMainDock != NULL && ! myAccessibility.bReserveSpace)  // evitons d'empieter sur le dock.
 	{
-		if (g_pMainDock->bIsHorizontal)
+		if (g_pMainDock->container.bIsHorizontal)
 		{
-			if (g_pMainDock->bDirectionUp)
+			if (g_pMainDock->container.bDirectionUp)
 				gtk_window_move (GTK_WINDOW (s_pMainWindow), 0, 0);
 			else
 				gtk_window_move (GTK_WINDOW (s_pMainWindow), 0, g_pMainDock->iMaxDockHeight);
@@ -713,7 +713,7 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	gtk_widget_hide (s_pGroupFrame);
 	gtk_widget_hide (s_pPreviewImage);
 	
-	cairo_dock_config_panel_created ();
+	cairo_dock_dialog_window_created ();
 	
 	if (bMaintenanceMode)
 	{
@@ -1198,7 +1198,6 @@ void cairo_dock_free_categories (void)
 	s_pCurrentGroupWidget = NULL;  // detruit en meme temps que la fenetre.
 	g_slist_free (s_path);
 	s_path = NULL;
-	cairo_dock_config_panel_destroyed ();
 }
 
 
@@ -1311,7 +1310,7 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 	gtk_window_resize (GTK_WINDOW (pMainWindow), iWidth, iHeight);
 	
 	gtk_widget_show_all (pMainWindow);
-	cairo_dock_config_panel_created ();
+	cairo_dock_dialog_window_created ();
 	
 	g_object_set_data (G_OBJECT (pMainWindow), "conf-file", g_strdup (cConfFilePath));
 	g_object_set_data (G_OBJECT (pMainWindow), "widget-list", pWidgetList);
@@ -1346,6 +1345,8 @@ gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettex
 		g_print ("fin de boucle bloquante\n");
 		
 		g_main_loop_unref (pBlockingLoop);
+		g_object_set_data (G_OBJECT (pMainWindow), "loop", NULL);
+		
 		iResult = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMainWindow), "result"));
 		cd_debug ("iResult : %d", iResult);
 		gtk_widget_destroy (pMainWindow);
@@ -1886,7 +1887,7 @@ GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon)
 	gtk_window_resize (GTK_WINDOW (s_pLauncherWindow), CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT);
 	
 	gtk_widget_show_all (s_pLauncherWindow);
-	cairo_dock_config_panel_created ();
+	cairo_dock_dialog_window_created ();
 	
 	g_signal_connect (G_OBJECT (s_pLauncherWindow),
 		"delete-event",

@@ -293,6 +293,9 @@ gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBl
 		g_source_remove (s_iSidShowGroupDialog);
 		s_iSidShowGroupDialog = 0;
 	}
+	
+	cairo_dock_dialog_window_destroyed ();
+	
 	return FALSE;
 }
 
@@ -368,7 +371,7 @@ void on_click_normal_apply (GtkButton *button, GtkWidget *pWindow)
 
 void on_click_normal_quit (GtkButton *button, GtkWidget *pWindow)
 {
-	//g_print ("%s ()\n", __func__);
+	g_print ("%s ()\n", __func__);
 	GMainLoop *pBlockingLoop = g_object_get_data (G_OBJECT (pWindow), "loop");
 	on_delete_normal_gui (pWindow, NULL, pBlockingLoop);
 	if (pBlockingLoop == NULL)
@@ -385,7 +388,7 @@ void on_click_normal_ok (GtkButton *button, GtkWidget *pWindow)
 
 gboolean on_delete_normal_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
 {
-	//g_print ("%s ()\n", __func__);
+	g_print ("%s ()\n", __func__);
 	if (pBlockingLoop != NULL && g_main_loop_is_running (pBlockingLoop))
 	{
 		g_main_loop_quit (pBlockingLoop);
@@ -405,13 +408,9 @@ gboolean on_delete_normal_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *p
 	gchar *cConfFilePath = g_object_get_data (G_OBJECT (pWidget), "conf-file");
 	g_free (cConfFilePath);
 	
-	cairo_dock_config_panel_destroyed ();
+	cairo_dock_dialog_window_destroyed ();
 	
-	GCallback pFreeFunc = g_object_get_data (G_OBJECT (pWidget), "reset-gui");
-	if (pFreeFunc != NULL)
-		pFreeFunc ();
-	
-	return FALSE;
+	return (pBlockingLoop != NULL);  // TRUE <=> ne pas detruire la fenetre.
 }
 
 
@@ -464,7 +463,7 @@ gboolean on_delete_launcher_gui (GtkWidget *pWidget, GdkEvent *event, gpointer d
 	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pWidget), "garbage");
 	/// nettoyer.
 	
-	cairo_dock_config_panel_destroyed ();
+	cairo_dock_dialog_window_destroyed ();
 	
 	cairo_dock_free_launcher_gui ();
 	

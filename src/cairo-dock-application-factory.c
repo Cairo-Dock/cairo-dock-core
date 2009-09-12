@@ -325,8 +325,8 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 				pFakeClassIcon->iType = pSameClassIcon->iType;
 				pFakeClassIcon->fOrder = pSameClassIcon->fOrder;
 				pFakeClassIcon->cParentDockName = g_strdup (pSameClassIcon->cParentDockName);
-				pFakeClassIcon->fWidth = pSameClassIcon->fWidth / pClassMateParentDock->fRatio;
-				pFakeClassIcon->fHeight = pSameClassIcon->fHeight / pClassMateParentDock->fRatio;
+				pFakeClassIcon->fWidth = pSameClassIcon->fWidth / pClassMateParentDock->container.fRatio;
+				pFakeClassIcon->fHeight = pSameClassIcon->fHeight / pClassMateParentDock->container.fRatio;
 				pFakeClassIcon->fXMax = pSameClassIcon->fXMax;
 				pFakeClassIcon->fXMin = pSameClassIcon->fXMin;
 				pFakeClassIcon->fXAtRest = pSameClassIcon->fXAtRest;
@@ -764,7 +764,7 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 	if (myTaskBar.bDemandsAttentionWithDialog)
 		cairo_dock_remove_dialog_if_any (icon);
 	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);  // arrete son animation quelqu'elle soit.
-	if (! pDock->bInside)
+	if (! pDock->container.bInside)
 	{
 		g_print ("pop down the dock\n");
 		cairo_dock_pop_down (pDock);
