@@ -660,15 +660,15 @@ void cairo_dock_pop_up_root_docks_on_screen_edge (CairoDockPositionType iScreenB
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_pop_up_one_root_dock, GINT_TO_POINTER (iScreenBorder));
 }
 
-static void _cairo_dock_set_one_root_dock_on_top_layer (gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _cairo_dock_set_one_dock_on_top_layer (gchar *cDockName, CairoDock *pDock, gpointer data)
 {
-	if (pDock->iRefCount > 0)
+	if (data && pDock->iRefCount > 0)
 		return ;
 	gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);
 }
-void cairo_dock_set_root_docks_on_top_layer (void)
+void cairo_dock_set_docks_on_top_layer (gboolean bRootDocksOnly)
 {
-	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_set_one_root_dock_on_top_layer, NULL);
+	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_set_one_dock_on_top_layer, GINT_TO_POINTER (bRootDocksOnly));
 }
 
 

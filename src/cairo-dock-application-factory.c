@@ -687,8 +687,8 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 		if (pDialog && bForceDemand)
 		{
 			g_print ("force dialog on top\n");
-			gtk_window_set_keep_above (GTK_WINDOW (pDialog->pWidget), TRUE);
-			Window Xid = GDK_WINDOW_XID (pDialog->pWidget->window);
+			gtk_window_set_keep_above (GTK_WINDOW (pDialog->container.pWidget), TRUE);
+			Window Xid = GDK_WINDOW_XID (pDialog->container.pWidget->window);
 			cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // pour passer devant les fenetres plein ecran; depend du WM.
 		}
 	}

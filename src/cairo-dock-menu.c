@@ -1052,7 +1052,7 @@ static void _cairo_dock_keep_below (GtkCheckMenuItem *pMenuItem, gpointer *data)
 	
 	gboolean bBelow = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem));
 	g_print (" %s (%d)\n", __func__, bBelow);
-	gtk_window_set_keep_below (GTK_WINDOW(pDesklet->pWidget), bBelow);
+	gtk_window_set_keep_below (GTK_WINDOW(pDesklet->container.pWidget), bBelow);
 	if (CAIRO_DOCK_IS_APPLET (icon) && bBelow)
 		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
 			G_TYPE_INT, "Desklet", "accessibility", CAIRO_DESKLET_KEEP_BELOW,
@@ -1083,7 +1083,7 @@ static void _cairo_dock_keep_above (GtkCheckMenuItem *pMenuItem, gpointer *data)
 	
 	gboolean bAbove = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem));
 	g_print (" %s (%d)\n", __func__, bAbove);
-	gtk_window_set_keep_above (GTK_WINDOW(pDesklet->pWidget), bAbove);
+	gtk_window_set_keep_above (GTK_WINDOW(pDesklet->container.pWidget), bAbove);
 	if (CAIRO_DOCK_IS_APPLET (icon) && bAbove)
 		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
 			G_TYPE_INT, "Desklet", "accessibility", CAIRO_DESKLET_KEEP_ABOVE,
@@ -1100,7 +1100,7 @@ static void _cairo_dock_keep_on_widget_layer (GtkMenuItem *pMenuItem, gpointer *
 		icon = pDesklet->pIcon;
 	
 	cairo_dock_hide_desklet (pDesklet);
-	Window Xid = GDK_WINDOW_XID (pDesklet->pWidget->window);
+	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
 
 	gboolean bOnCompizWidgetLayer = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem));
 	g_print (" %s (%d)\n", __func__, bOnCompizWidgetLayer);
@@ -1181,7 +1181,7 @@ static void _cairo_dock_keep_space (GtkCheckMenuItem *pMenuItem, gpointer *data)
 	gboolean bReserveSpace = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem));
 	g_print (" %s (%d)\n", __func__, bReserveSpace);
 	
-	Window Xid = GDK_WINDOW_XID (pDesklet->pWidget->window);
+	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
 	pDesklet->bSpaceReserved = bReserveSpace;
 	//cairo_dock_set_xwindow_type_hint (Xid, bReserveSpace ? "_NET_WM_WINDOW_TYPE_DOCK" : "_NET_WM_WINDOW_TYPE_NORMAL");
 	cairo_dock_reserve_space_for_desklet (pDesklet, bReserveSpace);
@@ -1202,9 +1202,9 @@ static void _cairo_dock_set_on_all_desktop (GtkCheckMenuItem *pMenuItem, gpointe
 	gboolean bSticky = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem));
 	g_print (" %s (%d)\n", __func__, bSticky);
 	if (bSticky)
-		gtk_window_stick (GTK_WINDOW (pDesklet->pWidget));
+		gtk_window_stick (GTK_WINDOW (pDesklet->container.pWidget));
 	else
-		gtk_window_unstick (GTK_WINDOW (pDesklet->pWidget));
+		gtk_window_unstick (GTK_WINDOW (pDesklet->container.pWidget));
 	
 	if (CAIRO_DOCK_IS_APPLET (icon))
 		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,

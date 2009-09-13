@@ -702,7 +702,7 @@ void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
 	{
 		cairo_dock_stop_polling_screen_edge ();
 		if (bPopUpOld)
-			cairo_dock_set_root_docks_on_top_layer ();
+			cairo_dock_set_docks_on_top_layer (FALSE);
 	}
 	
 	

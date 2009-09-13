@@ -246,7 +246,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		cairo_dock_stop_polling_screen_edge ();
 	if (! pAccessibility->bPopUp && pPrevAccessibility->bPopUp)
 	{
-		cairo_dock_set_root_docks_on_top_layer ();
+		cairo_dock_set_docks_on_top_layer (FALSE);  // FALSE <=> all docks.
 	}
 	else if (pAccessibility->bPopUp && ! pPrevAccessibility->bPopUp)
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.

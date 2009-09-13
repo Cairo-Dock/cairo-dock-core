@@ -52,6 +52,7 @@ extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cMainDockDefaultRendererName;
 extern gchar *g_cThemeServerAdress;
+extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
 extern CairoDock *g_pMainDock;
 extern gboolean g_bForceOpenGL;
@@ -377,11 +378,26 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 	gchar **cNetThemesList = g_strsplit (cContent, "\n", -1);
 	g_free (cContent);
 	
+	gchar *cHeader = cNetThemesList[0];
+	if (cHeader[4] != '\n')
+	{
+		int iMajorVersion=0, iMinorVersion=0, iMicroVersion=0;
+		cairo_dock_get_version_from_string (cHeader+4, &iMajorVersion, &iMinorVersion, &iMicroVersion);
+		g_print ("%d/%d/%d\n", iMajorVersion, iMinorVersion, iMicroVersion);
+		if (iMajorVersion > g_iMajorVersion ||
+			(iMajorVersion == g_iMajorVersion &&
+				(iMinorVersion > g_iMinorVersion ||
+					(iMinorVersion == g_iMinorVersion && iMicroVersion > g_iMicroVersion))))
+		{
+			g_print ("A new version is available !\n>>>\n%s\n<<<\n", cHeader+4);
+		}
+	}
+	
 	int i;
 	gboolean bFirstComment = FALSE;
 	gchar *cThemeName, *str, *str2;
 	CairoDockTheme *pTheme = NULL;
-	for (i = 0; cNetThemesList[i] != NULL; i ++)
+	for (i = 1; cNetThemesList[i] != NULL; i ++)
 	{
 		cThemeName = cNetThemesList[i];
 		if (*cThemeName == '\0')

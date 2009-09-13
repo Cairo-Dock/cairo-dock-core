@@ -254,7 +254,7 @@ void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 		pDock->container.iSidGLAnimation = 0;
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
-	if (cRendererName != NULL)  // NULL n'ecrase pas le nom de l'ancienne vue.
+	if (cRendererName != NULL && pDock->cRendererName != cRendererName)  // NULL n'ecrase pas le nom de l'ancienne vue.
 	{
 		g_free (pDock->cRendererName);
 		pDock->cRendererName = g_strdup (cRendererName);
@@ -280,8 +280,8 @@ void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRender
 	}
 	
 	pDesklet->pRenderer = pRenderer;
-	gtk_widget_set_double_buffered (pDesklet->pWidget, ! (g_bUseOpenGL && pRenderer != NULL && pRenderer->render_opengl != NULL));
-	pDesklet->iAnimationDeltaT = (g_bUseOpenGL && pRenderer != NULL && pRenderer->render_opengl != NULL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT);
+	gtk_widget_set_double_buffered (pDesklet->container.pWidget, ! (g_bUseOpenGL && pRenderer != NULL && pRenderer->render_opengl != NULL));
+	pDesklet->container.iAnimationDeltaT = (g_bUseOpenGL && pRenderer != NULL && pRenderer->render_opengl != NULL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT);
 	
 	if (pRenderer != NULL)
 	{
@@ -349,7 +349,7 @@ void cairo_dock_render_desklet_with_new_data (CairoDesklet *pDesklet, CairoDeskl
 	if (pDesklet->pRenderer != NULL && pDesklet->pRenderer->update != NULL)
 		pDesklet->pRenderer->update (pDesklet, pNewData);
 	
-	gtk_widget_queue_draw (pDesklet->pWidget);
+	gtk_widget_queue_draw (pDesklet->container.pWidget);
 }
 
 void cairo_dock_render_dialog_with_new_data (CairoDialog *pDialog, CairoDialogRendererDataPtr pNewData)
@@ -360,7 +360,7 @@ void cairo_dock_render_dialog_with_new_data (CairoDialog *pDialog, CairoDialogRe
 	if (pDialog->pInteractiveWidget != NULL)
 		cairo_dock_damage_interactive_widget_dialog (pDialog);
 	else
-		gtk_widget_queue_draw (pDialog->pWidget);
+		gtk_widget_queue_draw (pDialog->container.pWidget);
 }
 
 

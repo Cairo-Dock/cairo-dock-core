@@ -55,7 +55,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	gsize length=0;
 	
 	int iIconsTypesList[3] = {0,0,0};
-	int iDefaultValues[3] = {0,0,0};
 	cairo_dock_get_integer_list_key_value (pKeyFile, "Icons", "icon's type order", &bFlushConfFileNeeded, iIconsTypesList, 3, NULL, "Cairo Dock", NULL);
 	if (iIconsTypesList[0] == 0 && iIconsTypesList[1] == 0)  // old format.
 	{
@@ -89,7 +88,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 		bFlushConfFileNeeded = TRUE;
 	}
 	for (i = 0; i < 3; i ++)
-		pIcons->tIconTypeOrder[2*i] = 2*iIconsTypesList[i];
+		pIcons->tIconTypeOrder[2*iIconsTypesList[i]] = 2*i;
 	
 	pIcons->bMixAppletsAndLaunchers = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "mix applets with launchers", &bFlushConfFileNeeded, FALSE , NULL, NULL);
 	if (pIcons->bMixAppletsAndLaunchers)

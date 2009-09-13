@@ -571,6 +571,8 @@ void cairo_dock_reload_launcher (Icon *icon)
 	}
 	else
 	{
+		icon->fWidth *= pNewDock->container.fRatio;
+		icon->fHeight *= pNewDock->container.fRatio;
 		cairo_dock_refresh_launcher_gui ();
 		if (icon->fOrder != fOrder)  // On gere le changement d'ordre.
 		{

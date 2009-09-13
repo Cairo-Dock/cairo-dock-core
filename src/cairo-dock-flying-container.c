@@ -118,16 +118,16 @@ static void _cairo_dock_load_explosion_image (cairo_t *pCairoContext, int iWidth
 
 gboolean cairo_dock_update_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation)
 {
-	if (pFlyingContainer->iAnimationStep > 0)
+	if (pFlyingContainer->container.iAnimationStep > 0)
 	{
-		pFlyingContainer->iAnimationStep --;
-		if (pFlyingContainer->iAnimationStep == 0)
+		pFlyingContainer->container.iAnimationStep --;
+		if (pFlyingContainer->container.iAnimationStep == 0)
 		{
 			*bContinueAnimation = FALSE;
 			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 		}
 	}
-	gtk_widget_queue_draw (pFlyingContainer->pWidget);
+	gtk_widget_queue_draw (pFlyingContainer->container.pWidget);
 	
 	*bContinueAnimation = TRUE;
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -141,17 +141,17 @@ gboolean cairo_dock_render_flying_container_notification (gpointer pUserData, Ca
 		if (pIcon != NULL)
 		{
 			cairo_save (pCairoContext);
-			cairo_dock_render_one_icon (pIcon, pFlyingContainer, pCairoContext, 1., TRUE);
+			cairo_dock_render_one_icon (pIcon, CAIRO_CONTAINER (pFlyingContainer), pCairoContext, 1., TRUE);
 			cairo_restore (pCairoContext);
 			
 			cairo_set_source_surface (pCairoContext, s_pHandSurface, 0., 0.);
 			cairo_paint (pCairoContext);
 		}
-		else if (pFlyingContainer->iAnimationStep > 0)
+		else if (pFlyingContainer->container.iAnimationStep > 0)
 		{
 			int x = 0;
-			int y = (pFlyingContainer->iHeight - pFlyingContainer->iWidth) / 2;
-			int iCurrentFrame = EXPLOSION_NB_FRAMES - pFlyingContainer->iAnimationStep;
+			int y = (pFlyingContainer->container.iHeight - pFlyingContainer->container.iWidth) / 2;
+			int iCurrentFrame = EXPLOSION_NB_FRAMES - pFlyingContainer->container.iAnimationStep;
 			
 			cairo_rectangle (pCairoContext,
 				x,
@@ -172,23 +172,23 @@ gboolean cairo_dock_render_flying_container_notification (gpointer pUserData, Ca
 		if (pIcon != NULL)
 		{
 			glPushMatrix ();
-			glTranslatef (pFlyingContainer->iWidth / 2,
+			glTranslatef (pFlyingContainer->container.iWidth / 2,
 				pIcon->fHeight * pIcon->fScale/2,
-				- pFlyingContainer->iHeight);
-			cairo_dock_render_one_icon_opengl (pIcon, pFlyingContainer, 1., TRUE);
+				- pFlyingContainer->container.iHeight);
+			cairo_dock_render_one_icon_opengl (pIcon, CAIRO_CONTAINER (pFlyingContainer), 1., TRUE);
 			glPopMatrix ();
 			
-			glTranslatef (pFlyingContainer->iWidth / 2,
-				pFlyingContainer->iHeight - s_fHandHeight/2,
+			glTranslatef (pFlyingContainer->container.iWidth / 2,
+				pFlyingContainer->container.iHeight - s_fHandHeight/2,
 				- 3.);
 			cairo_dock_draw_texture (s_iHandTexture, s_fHandWidth, s_fHandHeight);
 		}
-		else if (pFlyingContainer->iAnimationStep > 0)
+		else if (pFlyingContainer->container.iAnimationStep > 0)
 		{
-			int iCurrentFrame = EXPLOSION_NB_FRAMES - pFlyingContainer->iAnimationStep;
+			int iCurrentFrame = EXPLOSION_NB_FRAMES - pFlyingContainer->container.iAnimationStep;
 			
-			glTranslatef (pFlyingContainer->iWidth/2,
-				pFlyingContainer->iHeight/2,
+			glTranslatef (pFlyingContainer->container.iWidth/2,
+				pFlyingContainer->container.iHeight/2,
 				-3.);
 			glBindTexture (GL_TEXTURE_2D, s_iExplosionTexture);
 			_cairo_dock_enable_texture ();
@@ -246,10 +246,10 @@ static gboolean on_configure_flying_icon (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoFlyingContainer *pFlyingContainer)
 {
-	if (pFlyingContainer->iWidth != pEvent->width || pFlyingContainer->iHeight != pEvent->height)
+	if (pFlyingContainer->container.iWidth != pEvent->width || pFlyingContainer->container.iHeight != pEvent->height)
 	{
-		pFlyingContainer->iWidth = pEvent->width;
-		pFlyingContainer->iHeight = pEvent->height;
+		pFlyingContainer->container.iWidth = pEvent->width;
+		pFlyingContainer->container.iHeight = pEvent->height;
 		
 		if (g_bUseOpenGL)
 		{
@@ -273,15 +273,15 @@ static gboolean on_configure_flying_icon (GtkWidget* pWidget,
 CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, CairoDock *pOriginDock, gboolean bDrawHand)
 {
 	CairoFlyingContainer * pFlyingContainer = g_new0 (CairoFlyingContainer, 1);
-	pFlyingContainer->iType = CAIRO_DOCK_TYPE_FLYING_CONTAINER;
+	pFlyingContainer->container.iType = CAIRO_DOCK_TYPE_FLYING_CONTAINER;
 	GtkWidget* pWindow = cairo_dock_create_container_window ();
 	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-flying-icon");
-	pFlyingContainer->pWidget = pWindow;
+	pFlyingContainer->container.pWidget = pWindow;
 	pFlyingContainer->pIcon = pFlyingIcon;
-	pFlyingContainer->bIsHorizontal = TRUE;
-	pFlyingContainer->bDirectionUp = TRUE;
-	pFlyingContainer->fRatio = 1.;
-	pFlyingContainer->bUseReflect = FALSE;
+	pFlyingContainer->container.bIsHorizontal = TRUE;
+	pFlyingContainer->container.bDirectionUp = TRUE;
+	pFlyingContainer->container.fRatio = 1.;
+	pFlyingContainer->container.bUseReflect = FALSE;
 	cairo_dock_set_default_animation_delta_t (pFlyingContainer);
 	
 	g_signal_connect (G_OBJECT (pWindow),
@@ -293,50 +293,50 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 		G_CALLBACK (on_configure_flying_icon),
 		pFlyingContainer);
 	
-	pFlyingContainer->bInside = TRUE;
+	pFlyingContainer->container.bInside = TRUE;
 	pFlyingIcon->bPointed = TRUE;
 	pFlyingIcon->fScale = 1.;
-	pFlyingContainer->iWidth = pFlyingIcon->fWidth * pFlyingIcon->fScale * 3.7;
-	pFlyingContainer->iHeight = pFlyingIcon->fHeight * pFlyingIcon->fScale + 1.*pFlyingContainer->iWidth / HAND_WIDTH * HAND_HEIGHT * .6;
-	pFlyingIcon->fDrawX = (pFlyingContainer->iWidth - pFlyingIcon->fWidth * pFlyingIcon->fScale) / 2 * .95;
-	pFlyingIcon->fDrawY = pFlyingContainer->iHeight - pFlyingIcon->fHeight * pFlyingIcon->fScale;
+	pFlyingContainer->container.iWidth = pFlyingIcon->fWidth * pFlyingIcon->fScale * 3.7;
+	pFlyingContainer->container.iHeight = pFlyingIcon->fHeight * pFlyingIcon->fScale + 1.*pFlyingContainer->container.iWidth / HAND_WIDTH * HAND_HEIGHT * .6;
+	pFlyingIcon->fDrawX = (pFlyingContainer->container.iWidth - pFlyingIcon->fWidth * pFlyingIcon->fScale) / 2 * .95;
+	pFlyingIcon->fDrawY = pFlyingContainer->container.iHeight - pFlyingIcon->fHeight * pFlyingIcon->fScale;
 	
 	if (pOriginDock->container.bIsHorizontal)
 	{
-		pFlyingContainer->iPositionX = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->iWidth/2;
-		pFlyingContainer->iPositionY = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->iHeight/2;
+		pFlyingContainer->container.iWindowPositionX = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->container.iWidth/2;
+		pFlyingContainer->container.iWindowPositionY = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->container.iHeight/2;
 	}
 	else
 	{
-		pFlyingContainer->iPositionY = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->iWidth/2;
-		pFlyingContainer->iPositionX = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->iHeight/2;
+		pFlyingContainer->container.iWindowPositionY = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->container.iWidth/2;
+		pFlyingContainer->container.iWindowPositionX = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->container.iHeight/2;
 	}
-	/*g_print ("%s (%d;%d %dx%d)\n", __func__ pFlyingContainer->iPositionX,
-		pFlyingContainer->iPositionY,
-		pFlyingContainer->iWidth,
-		pFlyingContainer->iHeight);*/
+	/*g_print ("%s (%d;%d %dx%d)\n", __func__ pFlyingContainer->container.iWindowPositionX,
+		pFlyingContainer->container.iWindowPositionY,
+		pFlyingContainer->container.iWidth,
+		pFlyingContainer->container.iHeight);*/
 	gdk_window_move_resize (pWindow->window,
-		pFlyingContainer->iPositionX,
-		pFlyingContainer->iPositionY,
-		pFlyingContainer->iWidth,
-		pFlyingContainer->iHeight);
+		pFlyingContainer->container.iWindowPositionX,
+		pFlyingContainer->container.iWindowPositionY,
+		pFlyingContainer->container.iWidth,
+		pFlyingContainer->container.iHeight);
 	/*gtk_window_resize (GTK_WINDOW (pWindow),
-		pFlyingContainer->iWidth,
-		pFlyingContainer->iHeight);
+		pFlyingContainer->container.iWidth,
+		pFlyingContainer->container.iHeight);
 	gtk_window_move (GTK_WINDOW (pWindow),
-		pFlyingContainer->iPositionX,
-		pFlyingContainer->iPositionY);*/
+		pFlyingContainer->container.iWindowPositionX,
+		pFlyingContainer->container.iWindowPositionY);*/
 	gtk_window_present (GTK_WINDOW (pWindow));
 	
 	cairo_t *pSourceContext = cairo_dock_create_context_from_container (CAIRO_CONTAINER (pFlyingContainer));
-	_cairo_dock_load_hand_image (pSourceContext, pFlyingContainer->iWidth);
-	_cairo_dock_load_explosion_image (pSourceContext, pFlyingContainer->iWidth);
+	_cairo_dock_load_hand_image (pSourceContext, pFlyingContainer->container.iWidth);
+	_cairo_dock_load_explosion_image (pSourceContext, pFlyingContainer->container.iWidth);
 	cairo_destroy (pSourceContext);
 	
 	pFlyingContainer->bDrawHand = bDrawHand;
 	if (bDrawHand)
-		cairo_dock_request_icon_animation (pFlyingIcon, pFlyingContainer, bDrawHand ? "pulse" : "bounce", 1e6);
-	cairo_dock_launch_animation (pFlyingContainer);  // au cas ou pas d'animation.
+		cairo_dock_request_icon_animation (pFlyingIcon, CAIRO_CONTAINER (pFlyingContainer), bDrawHand ? "pulse" : "bounce", 1e6);
+	cairo_dock_launch_animation (CAIRO_CONTAINER (pFlyingContainer));  // au cas ou pas d'animation.
 	
 	return pFlyingContainer;
 }
@@ -345,26 +345,26 @@ void cairo_dock_drag_flying_container (CairoFlyingContainer *pFlyingContainer, C
 {
 	if (pOriginDock->container.bIsHorizontal)
 	{
-		pFlyingContainer->iPositionX = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->iWidth/2;
-		pFlyingContainer->iPositionY = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->iHeight/2;
+		pFlyingContainer->container.iWindowPositionX = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->container.iWidth/2;
+		pFlyingContainer->container.iWindowPositionY = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->container.iHeight/2;
 	}
 	else
 	{
-		pFlyingContainer->iPositionY = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->iWidth/2;
-		pFlyingContainer->iPositionX = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->iHeight/2;
+		pFlyingContainer->container.iWindowPositionY = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->container.iWidth/2;
+		pFlyingContainer->container.iWindowPositionX = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->container.iHeight/2;
 	}
-	//g_print ("  on tire l'icone volante en (%d;%d)\n", pFlyingContainer->iPositionX, pFlyingContainer->iPositionY);
-	gtk_window_move (GTK_WINDOW (pFlyingContainer->pWidget),
-		pFlyingContainer->iPositionX,
-		pFlyingContainer->iPositionY);
+	//g_print ("  on tire l'icone volante en (%d;%d)\n", pFlyingContainer->container.iWindowPositionX, pFlyingContainer->container.iWindowPositionY);
+	gtk_window_move (GTK_WINDOW (pFlyingContainer->container.pWidget),
+		pFlyingContainer->container.iWindowPositionX,
+		pFlyingContainer->container.iWindowPositionY);
 }
 
 void cairo_dock_free_flying_container (CairoFlyingContainer *pFlyingContainer)
 {
 	cd_debug ("%s ()", __func__);
-	gtk_widget_destroy (pFlyingContainer->pWidget);  // enleve les signaux.
-	if (pFlyingContainer->iSidGLAnimation != 0)
-		g_source_remove (pFlyingContainer->iSidGLAnimation);
+	gtk_widget_destroy (pFlyingContainer->container.pWidget);  // enleve les signaux.
+	if (pFlyingContainer->container.iSidGLAnimation != 0)
+		g_source_remove (pFlyingContainer->container.iSidGLAnimation);
 	g_free (pFlyingContainer);
 }
 
@@ -372,7 +372,7 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 {
 	Icon *pIcon = pFlyingContainer->pIcon;
 	pFlyingContainer->pIcon = NULL;
-	pFlyingContainer->iAnimationStep = EXPLOSION_NB_FRAMES+1;
+	pFlyingContainer->container.iAnimationStep = EXPLOSION_NB_FRAMES+1;
 	
 	if (pIcon->cDesktopFileName != NULL)  // c'est un lanceur, ou un separateur manuel, ou un sous-dock.
 	{
@@ -392,8 +392,8 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 			int iDeskletWidth = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "width", NULL, 92, NULL, NULL);
 			int iDeskletHeight = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "height", NULL, 92, NULL, NULL);
 			
-			int iDeskletPositionX = pFlyingContainer->iPositionX + (pFlyingContainer->iWidth - iDeskletWidth)/2;
-			int iDeskletPositionY = pFlyingContainer->iPositionY + (pFlyingContainer->iHeight - iDeskletHeight)/2;
+			int iDeskletPositionX = pFlyingContainer->container.iWindowPositionX + (pFlyingContainer->container.iWidth - iDeskletWidth)/2;
+			int iDeskletPositionY = pFlyingContainer->container.iWindowPositionY + (pFlyingContainer->container.iHeight - iDeskletHeight)/2;
 			
 			int iRelativePositionX = (iDeskletPositionX + iDeskletWidth/2 <= g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionX : iDeskletPositionX - g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
 			int iRelativePositionY = (iDeskletPositionY + iDeskletHeight/2 <= g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionY : iDeskletPositionY - g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);

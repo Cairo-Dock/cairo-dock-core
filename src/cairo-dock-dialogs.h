@@ -119,73 +119,18 @@ struct _CairoDialogButton {
 
 /// Definition of a Dialog.
 struct _CairoDialog {
-	/// type of container.
-	CairoDockTypeContainer iType;
-	/// GTK window of the dialog.
-	GtkWidget *pWidget;
-	/// largeur de la fenetre GTK du dialog (pointe comprise).
-	gint iWidth;
-	/// hauteur de la fenetre GTK du dialog (pointe comprise).
-	gint iHeight;
-	/// position en X du coin haut gauche de la fenetre GTK du dialog.
-	gint iPositionX;
-	/// position en Y du coin haut gauche de la fenetre GTK du dialog.
-	gint iPositionY;
-	/// vrai ssi la souris est dans the dialog, auquel cas on le garde immobile.
-	gboolean bInside;
-	/// FALSE ssi the dialog est perpendiculaire au dock.
-	CairoDockTypeHorizontality bIsHorizontal;
-	/// TRUE ssi la pointe est orientée vers le bas.
-	gboolean bDirectionUp;
-#ifdef HAVE_GLITZ
-	glitz_drawable_format_t *pDrawFormat;
-	glitz_drawable_t* pGlitzDrawable;
-	glitz_format_t* pGlitzFormat;
-#else
-	gpointer padding[3];
-#endif // HAVE_GLITZ
-	/// Donnees exterieures.
-	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
-	/// pour l'animation des dialogs.
-	gint iSidGLAnimation;
-	/// intervalle de temps entre 2 etapes de l'animation.
-	gint iAnimationDeltaT;
-	/// derniere position en X du curseur dans le referentiel du dock.
-	gint iMouseX;
-	/// derniere position en Y du curseur dans le referentiel du dock.
-	gint iMouseY;
-	/// ratio des icons (non utilise).
-	gdouble fRatio;
-	/// transparence du reflet du dialog, 0 si le decorateur ne gere pas le reflet.
-	gdouble fReflectAlpha;
-	/// contexte OpenGL associe a la fenetre.
-	GLXContext glContext;
-	/// TRUE <=> une animation lente est en cours.
-	gboolean bKeepSlowAnimation;
-	/// compteur pour l'animation (inutilise pour les dialogs).
-	gint iAnimationStep;
-	/// liste des notifications disponibles.
-	GPtrArray *pNotificationsTab;
+	/// container.
+	CairoContainer container;
+	//\_____________________ position
 	/// icon sur laquelle pointe the dialog.
 	Icon *pIcon;
-	/// le moteur de rendu utilise pour dessiner the dialog.
-	CairoDialogRenderer *pRenderer;
-	/// donnees pouvant etre utilisees par le moteur de rendu.
-	gpointer pRendererData;
 	/// position en X visee par la pointe dans le référentiel de l'écran.
 	gint iAimedX;
 	/// position en Y visee par la pointe dans le référentiel de l'écran.
 	gint iAimedY;
 	/// TRUE ssi the dialog est a droite de l'écran; dialog a droite <=> pointe a gauche.
 	gboolean bRight;
-	/// dimension de la surface du texte.
-	gint iTextWidth, iTextHeight;
-	/// surface representant the message to display.
-	cairo_surface_t* pTextBuffer;
-	/// surface representant the icon dans la marge a gauche du texte.
-	cairo_surface_t* pIconBuffer;
-	/// dimension de the icon, sans les marges (0 si aucune icon).
-	gint iIconSize;
+	//\_____________________ dimensions et structure interne.
 	/// dimensions de la bulle (message + widget utilisateur + boutons).
 	gint iBubbleWidth, iBubbleHeight;
 	/// dimensions du message en comptant la marge du texte + vgap en bas si necessaire.
@@ -196,34 +141,52 @@ struct _CairoDialog {
 	gint iInteractiveWidth, iInteractiveHeight;
 	/// distance de la bulle au dock, donc hauteur totale de la pointe.
 	gint iDistanceToDock;
+	/// le widget d'interaction utilisateur (GtkEntry, GtkHScale, zone de dessin, etc).
+	GtkWidget *pInteractiveWidget;
+	/// la structure interne du widget.
+	GtkWidget *pLeftPaddingBox, *pRightPaddingBox, *pWidgetLayout;
 	/// le widget de remplissage ou l'on dessine le message.
 	GtkWidget *pMessageWidget;
 	/// le widget de remplissage ou l'on dessine les boutons.
 	GtkWidget *pButtonsWidget;
 	/// le widget de remplissage ou l'on dessine la pointe.
 	GtkWidget *pTipWidget;
-	/// le timer pour la destruction automatique du dialog.
-	gint iSidTimer;
-	/// conmpteur de reference.
-	gint iRefCount;
-	/// le widget d'interaction utilisateur (GtkEntry, GtkHScale, zone de dessin, etc).
-	GtkWidget *pInteractiveWidget;
+	
+	//\_____________________ surfaces
+	/// surface representant the message to display.
+	cairo_surface_t* pTextBuffer;
+	/// dimension de la surface du texte.
+	gint iTextWidth, iTextHeight;
+	/// dimension de the icon, sans les marges (0 si aucune icon).
+	gint iIconSize;
+	/// surface representant the icon dans la marge a gauche du texte.
+	cairo_surface_t* pIconBuffer;
+	//\_____________________ renderer
+	/// le moteur de rendu utilise pour dessiner the dialog.
+	CairoDialogRenderer *pRenderer;
+	/// donnees pouvant etre utilisees par le moteur de rendu.
+	gpointer pRendererData;
+	//\_____________________ decorateur
+	/// le decorateur de fenetre.
+	CairoDialogDecorator *pDecorator;
+	/// taille que s'est reserve le decorateur.
+	gint iLeftMargin, iRightMargin, iTopMargin, iBottomMargin, 	iMinFrameWidth, iMinBottomGap;
+	/// alignement de la pointe.
+	gdouble fAlign;
+	//\_____________________ actions
 	/// fonction appelee au clique sur l'un des boutons.
 	CairoDockActionOnAnswerFunc action_on_answer;
 	/// donnees transmises a la fonction.
 	gpointer pUserData;
 	/// fonction appelee pour liberer les donnees.
 	GFreeFunc pFreeUserDataFunc;
-	/// la structure interne du widget.
-	GtkWidget *pLeftPaddingBox, *pRightPaddingBox, *pWidgetLayout;
-	/// le decorateur de fenetre.
-	CairoDialogDecorator *pDecorator;
-	/// taille que s'est reserve le decorateur.
-	gint iLeftMargin, iRightMargin, iTopMargin, iBottomMargin, 	iMinFrameWidth, iMinBottomGap;
-	/// position relative du dialog par rapport a the icon, ou ce qui revient au meme, de sa pointe par rapport au bord d'alignement.
-	/// alignement de la pointe.
-	gdouble fAlign;
-	/// pour l'animation de the icon.
+	/// number of buttons.
+	int iNbButtons;
+	
+	/// le timer pour la destruction automatique du dialog.
+	gint iSidTimer;
+	/// conmpteur de reference.
+	gint iRefCount;/// pour l'animation de the icon.
 	gint iNbFrames, iCurrentFrame;
 	/// pour le defilement du texte.
 	gint iMaxTextWidth;
@@ -231,8 +194,6 @@ struct _CairoDialog {
 	gint iCurrentTextOffset;
 	/// timers these 2 animations.
 	gint iSidAnimateIcon, iSidAnimateText;
-	/// number of buttons.
-	int iNbButtons;
 	/// List of buttons.
 	CairoDialogButton *pButtons;
 	/// textures.

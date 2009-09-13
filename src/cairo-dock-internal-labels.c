@@ -47,7 +47,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	g_print ("font : %s => %d\n", cFontDescription, pLabels->iconTextDescription.iSize);
 	if (!pango_font_description_get_size_is_absolute (fd))
 		pLabels->iconTextDescription.iSize /= PANGO_SCALE;
-	g_print (" => %d\n", pLabels->iconTextDescription.iSize);
 	if (pLabels->iconTextDescription.iSize == 0)
 		pLabels->iconTextDescription.iSize = 14;
 	pLabels->iconTextDescription.iWeight = pango_font_description_get_weight (fd);
@@ -85,25 +84,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	}
 	
 	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text oulined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
-	
-	/*pLabels->iconTextDescription.iSize = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "size", &bFlushConfFileNeeded, 14, "Icons", NULL);
-	int iLabelWeight = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "weight", &bFlushConfFileNeeded, 5, "Icons", NULL);
-	pLabels->iconTextDescription.iWeight = cairo_dock_get_pango_weight_from_1_9 (iLabelWeight);  // on se ramene aux intervalles definit par Pango.
-	gboolean bLabelStyleItalic = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "italic", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
-	if (bLabelStyleItalic)
-		pLabels->iconTextDescription.iStyle = PANGO_STYLE_ITALIC;
-	else
-		pLabels->iconTextDescription.iStyle = PANGO_STYLE_NORMAL;
-	
-
-	if (pLabels->iconTextDescription.cFont == NULL)
-		pLabels->iconTextDescription.iSize = 0;
-
-	if (pLabels->iconTextDescription.iSize == 0)
-	{
-		g_free (pLabels->iconTextDescription.cFont);
-		pLabels->iconTextDescription.cFont = NULL;
-	}*/
 	
 	double couleur_label[3] = {1., 1., 1.};
 	cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text color start", &bFlushConfFileNeeded, pLabels->iconTextDescription.fColorStart, 3, couleur_label, "Icons", NULL);

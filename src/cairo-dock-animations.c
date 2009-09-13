@@ -502,12 +502,12 @@ static gboolean _cairo_desklet_animation_loop (CairoDesklet *pDesklet)
 	gboolean bContinue = FALSE;
 	
 	gboolean bUpdateSlowAnimation = FALSE;
-	pDesklet->iAnimationStep ++;
-	if (pDesklet->iAnimationStep * pDesklet->iAnimationDeltaT >= CAIRO_DOCK_MIN_SLOW_DELTA_T)
+	pDesklet->container.iAnimationStep ++;
+	if (pDesklet->container.iAnimationStep * pDesklet->container.iAnimationDeltaT >= CAIRO_DOCK_MIN_SLOW_DELTA_T)
 	{
 		bUpdateSlowAnimation = TRUE;
-		pDesklet->iAnimationStep = 0;
-		pDesklet->bKeepSlowAnimation = FALSE;
+		pDesklet->container.iAnimationStep = 0;
+		pDesklet->container.bKeepSlowAnimation = FALSE;
 	}
 	
 	if (pDesklet->pIcon != NULL)
@@ -517,7 +517,7 @@ static gboolean _cairo_desklet_animation_loop (CairoDesklet *pDesklet)
 		if (bUpdateSlowAnimation)
 		{
 			cairo_dock_notify_on_icon (pDesklet->pIcon, CAIRO_DOCK_UPDATE_ICON_SLOW, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
-			pDesklet->bKeepSlowAnimation |= bIconIsAnimating;
+			pDesklet->container.bKeepSlowAnimation |= bIconIsAnimating;
 		}
 		
 		cairo_dock_notify_on_icon (pDesklet->pIcon, CAIRO_DOCK_UPDATE_ICON, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
@@ -529,14 +529,14 @@ static gboolean _cairo_desklet_animation_loop (CairoDesklet *pDesklet)
 	
 	if (bUpdateSlowAnimation)
 	{
-		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_UPDATE_DESKLET_SLOW, pDesklet, &pDesklet->bKeepSlowAnimation);
+		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_UPDATE_DESKLET_SLOW, pDesklet, &pDesklet->container.bKeepSlowAnimation);
 	}
 	
 	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_UPDATE_DESKLET, pDesklet, &bContinue);
 	
-	if (! bContinue && ! pDesklet->bKeepSlowAnimation)
+	if (! bContinue && ! pDesklet->container.bKeepSlowAnimation)
 	{
-		pDesklet->iSidGLAnimation = 0;
+		pDesklet->container.iSidGLAnimation = 0;
 		return FALSE;
 	}
 	else

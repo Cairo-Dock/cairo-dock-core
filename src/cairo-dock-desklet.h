@@ -122,48 +122,8 @@ struct _CairoDeskletRenderer {
 
 /// Definition of a Desklet, which derives from a Container.
 struct _CairoDesklet {
-	/// type "desklet".
-	CairoDockTypeContainer iType;
-	/// window of the desklet.
-	GtkWidget *pWidget;
-	/// desklet's dimension.
-	gint iWidth, iHeight;
-	/// desklet's position on screen.
-	gint iWindowPositionX, iWindowPositionY;
-	/// Vrai ssi le pointeur est dans le desklet (widgets fils inclus).
-	gboolean bInside;
-	/// Toujours vrai pour un desklet.
-	CairoDockTypeHorizontality bIsHorizontal;
-	/// donne l'orientation du desket (toujours TRUE).
-	gboolean bDirectionUp;
-#ifdef HAVE_GLITZ
-	glitz_drawable_format_t *pDrawFormat;
-	glitz_drawable_t* pGlitzDrawable;
-	glitz_format_t* pGlitzFormat;
-#else
-	gpointer padding[3];
-#endif // HAVE_GLITZ
-	/// Donnees exterieures.
-	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
-	/// pour l'animation des desklets.
-	gint iSidGLAnimation;
-	/// intervalle de temps entre 2 etapes de l'animation.
-	gint iAnimationDeltaT;
-	/// derniere position en X du curseur dans le referentiel du dock.
-	gint iMouseX;
-	/// derniere position en Y du curseur dans le referentiel du dock.
-	gint iMouseY;
-	/// le facteur de zoom lors du detachage d'une applet.
-	gdouble fZoom;
-	gboolean bUseReflect_unused;
-	/// contexte OpenGL associe a la fenetre.
-	GLXContext glContext;
-	/// TRUE <=> une animation lente est en cours.
-	gboolean bKeepSlowAnimation;
-	/// compteur pour l'animation.
-	gint iAnimationStep;
-	/// liste des notifications disponibles.
-	GPtrArray *pNotificationsTab;
+	/// container
+	CairoContainer container;
 	/// Liste eventuelle d'icones placees sur le desklet, et susceptibles de recevoir des clics.
 	GList *icons;
 	/// le moteur de rendu utilise pour dessiner le desklet.
@@ -239,7 +199,7 @@ typedef gboolean (* CairoDockForeachDeskletFunc) (CairoDesklet *pDesklet, CairoD
 *@param pContainer the container.
 *@return TRUE if the container is a desklet.
 */
-#define CAIRO_DOCK_IS_DESKLET(pContainer) (pContainer != NULL && (pContainer)->iType == CAIRO_DOCK_TYPE_DESKLET)
+#define CAIRO_DOCK_IS_DESKLET(pContainer) (pContainer != NULL && CAIRO_CONTAINER(pContainer)->iType == CAIRO_DOCK_TYPE_DESKLET)
 /**
 * Cast a Container into a Desklet.
 *@param pContainer the container.
