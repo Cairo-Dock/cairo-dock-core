@@ -687,7 +687,7 @@ frame_launch =
 indicator image = 
 
 #b+ Display the indicator above the icon ?
-indicator above = false
+indicator above = true
 
 #e+[0.1;1.5] Indicator size ratio :
 #{You can choose to make the indicator smaller or bigger than the icons. The bigger the value is, the bigger the indicator is. 1 means the indicator will have the same size as the icons.}

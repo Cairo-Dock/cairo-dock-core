@@ -219,7 +219,7 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 		}
 	}
 	gchar *cResultPath;
-	gchar *cCommand = g_strdup_printf ("tar xfz \"%s\" -C \"%s\"", cArchivePath, cExtractTo);
+	gchar *cCommand = g_strdup_printf ("tar xf%c \"%s\" -C \"%s\"", (g_str_has_suffix (cArchivePath, "bz2") ? 'j' : 'z'), cArchivePath, cExtractTo);
 	int r = system (cCommand);
 	if (r != 0)
 	{
@@ -274,7 +274,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	int r = system (cCommand);
 	if (r != 0)
 	{
-		g_set_error (erreur, 1, 1, "an error occured while executing '%s'", cCommand);
+		cd_warning ("an error occured while executing '%s'", cCommand);
 		g_remove (cTmpFilePath);
 		g_free (cTmpFilePath);
 		cTmpFilePath = NULL;
@@ -476,6 +476,7 @@ GHashTable *cairo_dock_list_themes (const gchar *cShareThemesDir, const gchar *c
 	if (erreur != NULL)
 	{
 		cd_warning ("while loading distant themes in '%s/%s' : %s", g_cThemeServerAdress != NULL ? g_cThemeServerAdress : CAIRO_DOCK_THEME_SERVER, cDistantThemesDir, erreur->message);
+		g_print ("s_pThemeManager:%x\n", s_pThemeManager);
 		cairo_dock_set_status_message_printf (s_pThemeManager, _("couldn't get the list of themes for %s (no connection ?)"), cDistantThemesDir);
 		g_error_free (erreur);
 		erreur = NULL;

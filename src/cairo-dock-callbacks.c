@@ -1459,7 +1459,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		// only Compiz seems to respect the _NET_WM_SYNC_REQUEST window manager protocol. :-(
 		gtk_widget_queue_draw (pWidget);  // utile d'en rajouter un ?
 		gdk_window_process_updates (pWidget->window, FALSE);
-		
+		gtk_widget_queue_draw (pWidget);
 		/*gtk_widget_queue_draw (pWidget);  // il semble qu'il soit necessaire d'en rajouter un la pour eviter un "clignotement" a l'entree dans le dock.
 		//g_print ("debut du redessin\n");
 			while (gtk_events_pending ())  // on force un redessin immediat sinon on a quand meme un "flash".
