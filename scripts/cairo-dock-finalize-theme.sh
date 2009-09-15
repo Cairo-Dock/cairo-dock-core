@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if test "x$1" = "x"; then
-	t="~/.config/cairo-dock/current_theme/icons"
+	t="$HOME/.config/cairo-dock/current_theme/icons"
 else
 	t="$1"
 fi

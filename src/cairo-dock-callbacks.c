@@ -558,7 +558,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	
 	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked) || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)) && s_pFlyingContainer == NULL && ! g_bLocked && ! myAccessibility.bLockIcons)
 	{
-		//g_print ("on a sorti %s du dock (%d;%d) / %dx%d\n", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
+		g_print ("on a sorti %s du dock (%d;%d) / %dx%d\n", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
 		
 		//if (! cairo_dock_hide_child_docks (pDock))  // on quitte si on entre dans un sous-dock, pour rester en position "haute".
 		//	return ;
@@ -798,12 +798,15 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	if (s_pFlyingContainer != NULL)
 	{
 		Icon *pFlyingIcon = s_pFlyingContainer->pIcon;
-		cd_message ("on remet l'icone volante dans son dock d'origine (%s)", pFlyingIcon->cParentDockName);
-		cairo_dock_free_flying_container (s_pFlyingContainer);
-		cairo_dock_stop_icon_animation (pFlyingIcon);
-		cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
-		cairo_dock_start_icon_animation (pFlyingIcon, pDock);
-		s_pFlyingContainer = NULL;
+		if (pDock != pFlyingIcon->pSubDock)  // on evite les boucles.
+		{
+			cd_message ("on remet l'icone volante dans un dock (dock d'origine : %s)", pFlyingIcon->cParentDockName);
+			cairo_dock_free_flying_container (s_pFlyingContainer);
+			cairo_dock_stop_icon_animation (pFlyingIcon);
+			cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
+			cairo_dock_start_icon_animation (pFlyingIcon, pDock);
+			s_pFlyingContainer = NULL;
+		}
 	}
 	
 	int iNewWidth, iNewHeight;

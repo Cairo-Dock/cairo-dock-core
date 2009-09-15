@@ -220,6 +220,7 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 	}
 	gchar *cResultPath;
 	gchar *cCommand = g_strdup_printf ("tar xf%c \"%s\" -C \"%s\"", (g_str_has_suffix (cArchivePath, "bz2") ? 'j' : 'z'), cArchivePath, cExtractTo);
+	g_print ("tar : %s\n", cCommand);
 	int r = system (cCommand);
 	if (r != 0)
 	{
@@ -239,6 +240,10 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 		
 		if (g_str_has_suffix (cLocalFileName, ".tar.gz"))
 			cLocalFileName[strlen(cLocalFileName)-7] = '\0';
+		else if (g_str_has_suffix (cLocalFileName, ".tar.bz2"))
+			cLocalFileName[strlen(cLocalFileName)-8] = '\0';
+		else if (g_str_has_suffix (cLocalFileName, ".tgz"))
+			cLocalFileName[strlen(cLocalFileName)-4] = '\0';
 		
 		cResultPath = g_strdup_printf ("%s/%s", cExtractTo, cLocalFileName);
 		g_free (cLocalFileName);
@@ -810,14 +815,16 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		g_print ("cNewThemeName : '%s'\n", cNewThemeName);
 		gchar *cUserThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
 		gchar *cNewThemePath = NULL;
-		if (g_str_has_suffix (cNewThemeName, ".tar.gz"))  // c'est un paquet.
+		if (g_str_has_suffix (cNewThemeName, ".tar.gz") || g_str_has_suffix (cNewThemeName, ".tar.bz2") || g_str_has_suffix (cNewThemeName, ".tgz"))  // c'est un paquet.
 		{
 			g_print ("c'est un paquet\n");
 			if (*cNewThemeName == '/' || strncmp (cNewThemeName, "file://", 7) == 0)  // paquet en local.
 			{
 				g_print (" paquet local\n");
 				//cairo_dock_remove_html_spaces (cNewThemeName);
-				cNewThemePath = cairo_dock_uncompress_file (*cNewThemeName == '/' ? cNewThemeName : cNewThemeName+7, cUserThemesDir, NULL);
+				gchar *cFilePath = (*cNewThemeName == '/' ? g_strdup (cNewThemeName) : g_filename_from_uri (cNewThemeName, NULL, NULL));
+				cNewThemePath = cairo_dock_uncompress_file (cFilePath, cUserThemesDir, NULL);
+				g_free (cFilePath);
 			}
 			else  // paquet distant.
 			{
