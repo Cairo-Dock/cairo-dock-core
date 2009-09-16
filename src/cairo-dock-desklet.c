@@ -74,6 +74,7 @@ static GLuint s_iRetachButtonTexture = 0;
 static GLuint s_iDepthRotateButtonTexture = 0;
 
 #define CD_NB_ITER_FOR_GRADUATION 10
+#define _cairo_dock_desklet_is_free(pDesklet) (! (pDesklet->bPositionLocked || pDesklet->bFixedAttitude))
 
 void cairo_dock_load_desklet_buttons (cairo_t *pSourceContext)
 {
@@ -308,7 +309,7 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 			cairo_paint_with_alpha (pCairoContext, pDesklet->fForeGroundAlpha);
 	}
 	
-	if ((pDesklet->container.bInside || pDesklet->rotating) && ! pDesklet->bPositionLocked && ! pDesklet->bFixedAttitude)
+	if ((pDesklet->container.bInside || pDesklet->rotating) && _cairo_dock_desklet_is_free (pDesklet))
 	{
 		if (! pDesklet->rotating)
 			cairo_restore (pCairoContext);
@@ -394,7 +395,7 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 		_cairo_dock_apply_texture_at_size_with_alpha (pDesklet->iForeGroundTexture, pDesklet->container.iWidth, pDesklet->container.iHeight, pDesklet->fForeGroundAlpha);
 	}
 	
-	if (pDesklet->container.bInside && ! pDesklet->bPositionLocked && ! pDesklet->bFixedAttitude)
+	if (pDesklet->container.bInside && _cairo_dock_desklet_is_free (pDesklet))
 	{
 		if (! pDesklet->rotating && ! pDesklet->rotatingY && ! pDesklet->rotatingX)
 		{
@@ -404,7 +405,7 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 		}
 	}
 	
-	if ((pDesklet->container.bInside || pDesklet->rotating || pDesklet->rotatingY || pDesklet->rotatingX) && ! pDesklet->bPositionLocked && ! pDesklet->bFixedAttitude)
+	if ((pDesklet->container.bInside || pDesklet->rotating || pDesklet->rotatingY || pDesklet->rotatingX) && _cairo_dock_desklet_is_free (pDesklet))
 	{
 		_cairo_dock_set_alpha (1.);
 		if (s_iRotateButtonTexture != 0)
@@ -866,19 +867,22 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 	{
 		if (pButton->type == GDK_BUTTON_PRESS)
 		{
-			pDesklet->container.iMouseX = pButton->x;  // pour le deplacement manuel.
-			pDesklet->container.iMouseY = pButton->y;
-			
-			if (pButton->x < myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)
-				pDesklet->rotating = TRUE;
-			else if (pButton->x > pDesklet->container.iWidth - myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)
-				pDesklet->retaching = TRUE;
-			else if (pButton->x > (pDesklet->container.iWidth - myDesklets.iDeskletButtonSize)/2 && pButton->x < (pDesklet->container.iWidth + myDesklets.iDeskletButtonSize)/2 && pButton->y < myDesklets.iDeskletButtonSize)
-				pDesklet->rotatingY = TRUE;
-			else if (pButton->y > (pDesklet->container.iHeight - myDesklets.iDeskletButtonSize)/2 && pButton->y < (pDesklet->container.iHeight + myDesklets.iDeskletButtonSize)/2 && pButton->x < myDesklets.iDeskletButtonSize)
-				pDesklet->rotatingX = TRUE;
-			else
-				pDesklet->time = pButton->time;
+			if (_cairo_dock_desklet_is_free (pDesklet))
+			{
+				pDesklet->container.iMouseX = pButton->x;  // pour le deplacement manuel.
+				pDesklet->container.iMouseY = pButton->y;
+				
+				if (pButton->x < myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)
+					pDesklet->rotating = TRUE;
+				else if (pButton->x > pDesklet->container.iWidth - myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)
+					pDesklet->retaching = TRUE;
+				else if (pButton->x > (pDesklet->container.iWidth - myDesklets.iDeskletButtonSize)/2 && pButton->x < (pDesklet->container.iWidth + myDesklets.iDeskletButtonSize)/2 && pButton->y < myDesklets.iDeskletButtonSize)
+					pDesklet->rotatingY = TRUE;
+				else if (pButton->y > (pDesklet->container.iHeight - myDesklets.iDeskletButtonSize)/2 && pButton->y < (pDesklet->container.iHeight + myDesklets.iDeskletButtonSize)/2 && pButton->x < myDesklets.iDeskletButtonSize)
+					pDesklet->rotatingX = TRUE;
+				else
+					pDesklet->time = pButton->time;
+			}
 		}
 		else if (pButton->type == GDK_BUTTON_RELEASE)
 		{
@@ -898,7 +902,7 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 			else if (pDesklet->retaching)
 			{
 				pDesklet->retaching = FALSE;
-				if (! pDesklet->bPositionLocked && ! pDesklet->bFixedAttitude && pButton->x > pDesklet->container.iWidth - myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)
+				if (_cairo_dock_desklet_is_free (pDesklet) && pButton->x > pDesklet->container.iWidth - myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)
 				{
 					Icon *icon = pDesklet->pIcon;
 					g_return_val_if_fail (CAIRO_DOCK_IS_APPLET (icon), FALSE);
@@ -1008,7 +1012,7 @@ static gboolean on_motion_notify_desklet(GtkWidget *pWidget,
 	GdkEventMotion* pMotion,
 	CairoDesklet *pDesklet)
 {
-	if (pMotion->state & GDK_BUTTON1_MASK && ! pDesklet->bPositionLocked && ! pDesklet->bFixedAttitude)
+	if (pMotion->state & GDK_BUTTON1_MASK && _cairo_dock_desklet_is_free (pDesklet))
 	{
 		cd_debug ("root : %d;%d", (int) pMotion->x_root, (int) pMotion->y_root);
 		/*pDesklet->moving = TRUE;
@@ -1026,7 +1030,7 @@ static gboolean on_motion_notify_desklet(GtkWidget *pWidget,
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pDesklet));
 	}
 	
-	if (pDesklet->rotating && ! pDesklet->bPositionLocked && ! pDesklet->bFixedAttitude)
+	if (pDesklet->rotating && _cairo_dock_desklet_is_free (pDesklet))
 	{
 		double alpha = atan2 (pDesklet->container.iHeight, - pDesklet->container.iWidth);
 		pDesklet->fRotation = alpha - atan2 (.5*pDesklet->container.iHeight - pMotion->y, pMotion->x - .5*pDesklet->container.iWidth);
@@ -1036,17 +1040,17 @@ static gboolean on_motion_notify_desklet(GtkWidget *pWidget,
 			pDesklet->fRotation += 2 * G_PI;
 		gtk_widget_queue_draw(pDesklet->container.pWidget);
 	}
-	else if (pDesklet->rotatingY && ! pDesklet->bPositionLocked && ! pDesklet->bFixedAttitude)
+	else if (pDesklet->rotatingY && _cairo_dock_desklet_is_free (pDesklet))
 	{
 		pDesklet->fDepthRotationY = G_PI * (pMotion->x - .5*pDesklet->container.iWidth) / pDesklet->container.iWidth;
 		gtk_widget_queue_draw(pDesklet->container.pWidget);
 	}
-	else if (pDesklet->rotatingX && ! pDesklet->bPositionLocked && ! pDesklet->bFixedAttitude)
+	else if (pDesklet->rotatingX && _cairo_dock_desklet_is_free (pDesklet))
 	{
 		pDesklet->fDepthRotationX = G_PI * (pMotion->y - .5*pDesklet->container.iHeight) / pDesklet->container.iHeight;
 		gtk_widget_queue_draw(pDesklet->container.pWidget);
 	}
-	else if (pMotion->state & GDK_BUTTON1_MASK && ! pDesklet->bPositionLocked && ! pDesklet->bFixedAttitude && ! pDesklet->moving)
+	else if (pMotion->state & GDK_BUTTON1_MASK && _cairo_dock_desklet_is_free (pDesklet) && ! pDesklet->moving)
 	{
 		gtk_window_begin_move_drag (GTK_WINDOW (gtk_widget_get_toplevel (pWidget)),
 			1/*pButton->button*/,

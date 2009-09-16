@@ -1640,7 +1640,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 				_add_entry_in_menu (_("Launch another instance of this applet"), GTK_STOCK_ADD, _cairo_dock_add_module_instance, menu);
 			}
 			
-			if (CAIRO_DOCK_IS_DOCK (pContainer))
+			if (CAIRO_DOCK_IS_DOCK (pContainer) && pIconModule->cParentDockName != NULL)  // sinon bien sur ca n'est pas la peine de presenter l'option (Cairo-Penguin par exemple)
 			{
 				pMenuItem = _add_entry_in_menu (_("Move to another dock"), GTK_STOCK_JUMP_TO, NULL, menu);
 				GtkWidget *pSubMenuDocks = gtk_menu_new ();

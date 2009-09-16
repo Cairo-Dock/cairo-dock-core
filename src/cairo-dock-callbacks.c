@@ -88,6 +88,7 @@ extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
 
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bLocked;
+extern gboolean g_bEasterEggs;
 
 static gboolean s_bHideAfterShortcut = FALSE;
 static gboolean s_bFrozenDock = FALSE;
@@ -1460,14 +1461,19 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		cairo_dock_calculate_dock_icons (pDock);
 		
 		// only Compiz seems to respect the _NET_WM_SYNC_REQUEST window manager protocol. :-(
-		gtk_widget_queue_draw (pWidget);  // utile d'en rajouter un ?
-		gdk_window_process_updates (pWidget->window, FALSE);
-		gtk_widget_queue_draw (pWidget);
-		/*gtk_widget_queue_draw (pWidget);  // il semble qu'il soit necessaire d'en rajouter un la pour eviter un "clignotement" a l'entree dans le dock.
-		//g_print ("debut du redessin\n");
+		if (g_bEasterEggs)
+		{
+			gtk_widget_queue_draw (pWidget);
+			gdk_window_process_updates (pWidget->window, FALSE);
+		}
+		else
+		{
+			gtk_widget_queue_draw (pWidget);
+			//g_print ("debut du redessin\n");
 			while (gtk_events_pending ())  // on force un redessin immediat sinon on a quand meme un "flash".
 				gtk_main_iteration ();
-		//g_print ("fin du redessin\n");*/
+			//g_print ("fin du redessin\n");
+		}
 	}
 	
 	if (pDock->iSidMoveDown == 0 && pDock->iSidMoveUp == 0)  // ce n'est pas du a une animation. Donc en cas d'apparition due a l'auto-hide, ceci ne sera pas fait ici, mais a la fin de l'animation.
