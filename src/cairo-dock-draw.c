@@ -315,9 +315,9 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 		cairo_save (pCairoContext);
 		
 		if (pDock->container.bIsHorizontal)
-			cairo_translate (pCairoContext, pDock->fDecorationsOffsetX * mySystem.fStripesSpeedFactor - pDock->container.iWidth * 0.5, fOffsetY);
+			cairo_translate (pCairoContext, pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed - pDock->container.iWidth * 0.5, fOffsetY);
 		else
-			cairo_translate (pCairoContext, fOffsetY, pDock->fDecorationsOffsetX * mySystem.fStripesSpeedFactor - pDock->container.iWidth * 0.5);
+			cairo_translate (pCairoContext, fOffsetY, pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed - pDock->container.iWidth * 0.5);
 		
 		
 		cairo_surface_t *pSurface = g_pBackgroundSurfaceFull;
@@ -331,12 +331,12 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 		
 		if (pDock->container.bIsHorizontal)
 		{
-			cairo_translate (pCairoContext, pDock->fDecorationsOffsetX * mySystem.fStripesSpeedFactor + fOffsetX, fOffsetY);
+			cairo_translate (pCairoContext, pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed + fOffsetX, fOffsetY);
 			cairo_scale (pCairoContext, 1. * fWidth / g_fBackgroundImageWidth, 1. * pDock->iDecorationsHeight / g_fBackgroundImageHeight);  // pDock->container.iWidth
 		}
 		else
 		{
-			cairo_translate (pCairoContext, fOffsetY, pDock->fDecorationsOffsetX * mySystem.fStripesSpeedFactor + fOffsetX);
+			cairo_translate (pCairoContext, fOffsetY, pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed + fOffsetX);
 			cairo_scale (pCairoContext, 1. * pDock->iDecorationsHeight / g_fBackgroundImageHeight, 1. * fWidth / g_fBackgroundImageWidth);
 		}
 		

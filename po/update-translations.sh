@@ -22,7 +22,7 @@ do
 	esac
 done
 
-export CAIRO_DOCK_EXTRACT_MESSAGE=${CAIRO_DOCK_DIR}/utils/cairo-dock-extract-message
+export CAIRO_DOCK_EXTRACT_MESSAGE=${CAIRO_DOCK_DIR}/cairo-dock/utils/cairo-dock-extract-message
 export CAIRO_DOCK_GEN_TRANSLATION=${CAIRO_DOCK_DIR}/cairo-dock/cairo-dock-core/po/generate-translation.sh
 
 ###

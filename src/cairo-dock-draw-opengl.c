@@ -1286,7 +1286,7 @@ void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double 
 		glMatrixMode(GL_TEXTURE); // On selectionne la matrice des textures
 		glPushMatrix ();
 		glLoadIdentity(); // On la reset
-		glTranslatef(0.5f - fDecorationsOffsetX * mySystem.fStripesSpeedFactor / (fDockWidth), 0.5f, 0.);
+		glTranslatef(0.5f - fDecorationsOffsetX * myBackground.fDecorationSpeed / (fDockWidth), 0.5f, 0.);
 		glScalef (1., -1., 1.);
 		glMatrixMode(GL_MODELVIEW);
 	}

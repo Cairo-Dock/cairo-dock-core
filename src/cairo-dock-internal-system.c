@@ -67,10 +67,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 	
 	pSystem->bAnimateSubDock = cairo_dock_get_boolean_key_value (pKeyFile, "System", "animate subdocks", &bFlushConfFileNeeded, TRUE, "Sub-Docks", NULL);
 	
-	pSystem->fStripesSpeedFactor = cairo_dock_get_double_key_value (pKeyFile, "System", "scroll speed factor", &bFlushConfFileNeeded, 1.0, "Background", NULL);
-	pSystem->fStripesSpeedFactor = MIN (1., pSystem->fStripesSpeedFactor);
-	pSystem->bDecorationsFollowMouse = cairo_dock_get_boolean_key_value (pKeyFile, "System", "decorations enslaved", &bFlushConfFileNeeded, TRUE, "Background", NULL);
-	
 	pSystem->iFileSortType = cairo_dock_get_integer_key_value (pKeyFile, "System", "sort files", &bFlushConfFileNeeded, CAIRO_DOCK_FM_SORT_BY_NAME, NULL, NULL);
 	pSystem->bShowHiddenFiles = cairo_dock_get_boolean_key_value (pKeyFile, "System", "show hidden files", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 

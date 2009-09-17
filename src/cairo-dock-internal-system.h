@@ -45,8 +45,6 @@ struct _CairoConfigSystem {
 	gdouble fRefreshInterval;
 	gboolean bDynamicReflection;
 	gboolean bAnimateSubDock;
-	gdouble fStripesSpeedFactor;
-	gboolean bDecorationsFollowMouse;
 	gchar **cActiveModuleList;
 	gint iFileSortType;
 	gboolean bShowHiddenFiles;

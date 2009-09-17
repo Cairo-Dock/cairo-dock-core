@@ -21,6 +21,8 @@ do
 	fi
 	if test -e firefox.$suff; then
 		ln -s firefox.$suff firefox-3.0.$suff
+		ln -s firefox.$suff firefox-3.5.$suff
+		ln -s firefox.$suff firefox-4.0.$suff
 	fi
 	if test -e file-browser.$suff; then
 		echo "    towards file-browser.$suff"

@@ -221,17 +221,6 @@ move up speed = 0.35
 #f-[0.1;0.9] ...
 move down speed = 0.25
 
-#F-[Background movments;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-mouse.png]
-frame_mouse = 
-
-#e-[0;1] Scroll speed factor for background decorations :
-#{The smaller, the lower the decorations will move along with the cursor. At 0 they will be static.}
-scroll speed factor = 0.5
-
-#b- Should the decorations be enslaved to the cursor ?
-#{Otherwise the amount of movement of the decorations will only depend on the direction of the cursor's movement, as if the decorations were "gliding".}
-decorations enslaved = true
-
 #F-[CPU;gtk-execute]
 frame_cpu =
 
@@ -250,7 +239,6 @@ opengl anim freq = 33
 #i-[15;60] Animation frequency for the cairo backend :
 #{in Hz. This is to adjust regarding your CPU power.}
 cairo anim freq = 25
-
 
 #F-[Label readability;gtk-underline]
 frame_label =
@@ -338,7 +326,7 @@ stripes color bright = 0.933; 0.933; 0.925; 0.4
 stripes color dark = 0.827; 0.843; 0.811; 0.6
 
 #f+[-90;90] Angle of the stripes / gradation, in relation to the vertical (in degree) :
-stripes angle = 30.
+stripes angle = 90.
 
 #i+ Number of stripes, in each pattern, to draw in the background :
 #{The bigger, the more the stripes are close to each other; with 0 stripes, the background will be filled with a single gradation.}
@@ -348,6 +336,15 @@ number of stripes = 0
 #{1 pattern contains N stripes, so the width can be less or equal than 1/N.}
 stripes width = 0.03
 
+#X+[Background movement;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-mouse.png]
+frame_mouse = 
+
+#l+[No;Follow the mouse;Link with the mouse] Move the background image along with the cursor ?
+move bg = 0
+
+#e+[0.1;1] Speed :
+#{The smaller, the lower the decorations will move along with the cursor. At 0 they will be static.}
+decorations speed = 0.5
 
 #F[Hidden dock;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-hidden-dock.png]
 #{Configure the dock's appearence when hidden.}
@@ -445,10 +442,6 @@ default icon directory =
 #S+ Image's filename to use as a background for icons :
 #{Any format allowed; let this field empty if you don't want to use an image as background.}
 icons bg =
-
-#b+ Use this background for applets too ?
-#{Some applets may not use it, because they redraw periodically themselves.}
-bg for applets = true
 
 
 #F+[Reflections]

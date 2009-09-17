@@ -902,7 +902,7 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 			else if (pDesklet->retaching)
 			{
 				pDesklet->retaching = FALSE;
-				if (_cairo_dock_desklet_is_free (pDesklet) && pButton->x > pDesklet->container.iWidth - myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)
+				if (pButton->x > pDesklet->container.iWidth - myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)  // on verifie qu'on est encore dedans.
 				{
 					Icon *icon = pDesklet->pIcon;
 					g_return_val_if_fail (CAIRO_DOCK_IS_APPLET (icon), FALSE);

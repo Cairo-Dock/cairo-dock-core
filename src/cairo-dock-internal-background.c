@@ -79,7 +79,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackgrou
 		double couleur2[4] = {.7, .9, .7, .4};
 		cairo_dock_get_double_list_key_value (pKeyFile, "Background", "stripes color bright", &bFlushConfFileNeeded, pBackground->fStripesColorBright, 4, couleur2, NULL, NULL);
 		
-		pBackground->fStripesAngle = cairo_dock_get_double_key_value (pKeyFile, "Background", "stripes angle", &bFlushConfFileNeeded, 30., NULL, NULL);
+		pBackground->fStripesAngle = cairo_dock_get_double_key_value (pKeyFile, "Background", "stripes angle", &bFlushConfFileNeeded, 90., NULL, NULL);
 	}
 	
 	// zone de rappel.
@@ -87,6 +87,31 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackgrou
 	
 	pBackground->fVisibleZoneAlpha = cairo_dock_get_double_key_value (pKeyFile, "Background", "callback alpha", &bFlushConfFileNeeded, 0.5, "Hidden dock", "alpha");
 	pBackground->bReverseVisibleImage = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "callback reverse", &bFlushConfFileNeeded, TRUE, "Hidden dock", "reverse visible image");
+	
+	// mouvements.
+	int iMovementType;
+	if (! g_key_file_has_key (pKeyFile, "Background", "move bg", NULL))  // anciennes valeurs.
+	{
+		pBackground->fDecorationSpeed = g_key_file_get_double (pKeyFile, "System", "scroll speed factor", NULL);
+		if (pBackground->fDecorationSpeed != 0)
+		{
+			if (g_key_file_get_boolean (pKeyFile, "System", "decorations enslaved", NULL))
+				iMovementType = 2;
+			else
+				iMovementType = 1;
+			g_key_file_set_double (pKeyFile, "Background", "decorations speed", pBackground->fDecorationSpeed);
+		}
+		else
+			iMovementType = 0;
+		g_key_file_set_integer (pKeyFile, "Background", "move bg", iMovementType);
+		bFlushConfFileNeeded = TRUE;
+	}
+	iMovementType = cairo_dock_get_integer_key_value (pKeyFile, "Background", "move bg", &bFlushConfFileNeeded, 0, NULL, NULL);
+	if (iMovementType != 0)
+	{
+		pBackground->fDecorationSpeed = cairo_dock_get_double_key_value (pKeyFile, "Background", "decorations speed", &bFlushConfFileNeeded, 0.5, NULL, NULL);
+		pBackground->bDecorationsFollowMouse = (iMovementType == 2);
+	}
 	
 	return bFlushConfFileNeeded;
 }

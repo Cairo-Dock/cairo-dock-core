@@ -73,6 +73,7 @@
 #include "cairo-dock-callbacks.h"
 
 static Icon *s_pIconClicked = NULL;  // pour savoir quand on deplace une icone a la souris. Dangereux si l'icone se fait effacer en cours ...
+static int s_iClickX, s_iClickY;  // coordonnees du clic dans le dock, pour pouvoir initialiser le deplacement apres un seuil.
 static CairoDock *s_pLastPointedDock = NULL;  // pour savoir quand on passe d'un dock a un autre.
 static int s_iSidShowSubDockDemand = 0;
 static int s_iSidShowAppliForDrop = 0;
@@ -374,10 +375,10 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	int iLastMouseX = pDock->container.iMouseX;
 	//g_print ("%s (%.2f;%.2f)\n", __func__, pMotion->x, pMotion->y);
 	
-	//\_______________ On elague le flux des MotionNotify, sinon X en envoie autant que le permet le CPU !
 	if (pMotion != NULL)
 	{
 		//g_print ("%s (%d,%d) (%d, %.2fms, bAtBottom:%d; bIsShrinkingDown:%d)\n", __func__, (int) pMotion->x, (int) pMotion->y, pMotion->is_hint, pMotion->time - fLastTime, pDock->bAtBottom, pDock->bIsShrinkingDown);
+		//\_______________ On deplace le dock si ALT est enfoncee.
 		if ((pMotion->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && (pMotion->state & GDK_BUTTON1_MASK))
 		{
 			if (pDock->container.bIsHorizontal)
@@ -399,7 +400,8 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 			gdk_device_get_state (pMotion->device, pMotion->window, NULL, NULL);
 			return FALSE;
 		}
-
+		
+		//\_______________ On recupere la position de la souris.
 		if (pDock->container.bIsHorizontal)
 		{
 			pDock->container.iMouseX = (int) pMotion->x;
@@ -411,26 +413,27 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 			pDock->container.iMouseY = (int) pMotion->x;
 		}
 		
+		//\_______________ On tire l'icone volante.
 		if (s_pFlyingContainer != NULL && ! pDock->container.bInside)
 		{
 			cairo_dock_drag_flying_container (s_pFlyingContainer, pDock);
 		}
 		
-		if (pMotion->time != 0 && pMotion->time - fLastTime < mySystem.fRefreshInterval && s_pIconClicked == NULL)  // pDock->bIsShrinkingDown ||
+		//\_______________ On elague le flux des MotionNotify, sinon X en envoie autant que le permet le CPU !
+		if (pMotion->time != 0 && pMotion->time - fLastTime < mySystem.fRefreshInterval && s_pIconClicked == NULL)
 		{
 			gdk_device_get_state (pMotion->device, pMotion->window, NULL, NULL);
 			return FALSE;
 		}
 		
-		//\_______________ On recalcule toutes les icones.
+		//\_______________ On recalcule toutes les icones et on redessine.
 		pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
 		if (myIcons.fAmplitude != 0)
-		{
 			gtk_widget_queue_draw (pWidget);
-		}
 		fLastTime = pMotion->time;
-
-		if (s_pIconClicked != NULL && s_pIconClicked->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && ! g_bLocked && ! myAccessibility.bLockIcons)
+		
+		//\_______________ On tire l'icone cliquee.
+		if (s_pIconClicked != NULL && s_pIconClicked->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && ! g_bLocked && ! myAccessibility.bLockIcons && (fabs (pMotion->x - s_iClickX) > 5 || fabs (pMotion->y - s_iClickY) > 5))
 		{
 			s_pIconClicked->iAnimationState = CAIRO_DOCK_STATE_FOLLOW_MOUSE;
 			//pDock->fAvoidingMouseMargin = .5;
@@ -449,21 +452,24 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	else  // cas d'un drag and drop.
 	{
 		//g_print ("motion on drag\n");
+		//\_______________ On recupere la position de la souris.
 		if (pDock->container.bIsHorizontal)
  			gdk_window_get_pointer (pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
 		else
 			gdk_window_get_pointer (pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
-
+		
+		//\_______________ On recalcule toutes les icones et on redessine.
 		pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
 		gtk_widget_queue_draw (pWidget);
 		
-		pDock->iAvoidingMouseIconType = CAIRO_DOCK_LAUNCHER;
-		pDock->fAvoidingMouseMargin = .25;
+		pDock->fAvoidingMouseMargin = .25;  // on peut dropper entre 2 icones ...
+		pDock->iAvoidingMouseIconType = CAIRO_DOCK_LAUNCHER;  // ... seulement entre 2 lanceurs.
 	}
-
+	
+	//\_______________ On asservit les decorations au curseur.
 	if (pDock->container.bInside)
 	{
-		if (mySystem.bDecorationsFollowMouse)
+		if (myBackground.bDecorationsFollowMouse)
 		{
 			pDock->fDecorationsOffsetX = pDock->container.iMouseX - pDock->container.iWidth / 2;
 			//g_print ("fDecorationsOffsetX <- %.2f\n", pDock->fDecorationsOffsetX);
@@ -1294,11 +1300,13 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 				//g_print ("- apres clic : s_pIconClicked <- NULL\n");
 				s_pIconClicked = NULL;
 			break ;
-
+			
 			case GDK_BUTTON_PRESS :
 				if ( ! (pButton->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
 				{
 					//g_print ("+ clic sur %s (%.2f)!\n", icon ? icon->cName : "rien", icon ? icon->fPersonnalScale : 0.);
+					s_iClickX = pButton->x;
+					s_iClickY = pButton->y;
 					if (icon && icon->fPersonnalScale <= 0)
 						s_pIconClicked = icon;  // on ne definit pas l'animation FOLLOW_MOUSE ici , on le fera apres le 1er mouvement, pour eviter que l'icone soit dessinee comme tel quand on clique dessus alors que le dock est en train de jouer une animation (ca provoque un flash desagreable).
 					else
@@ -1308,7 +1316,8 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 
 			case GDK_2BUTTON_PRESS :
 				{
-					cairo_dock_notify (CAIRO_DOCK_DOUBLE_CLICK_ICON, icon, pDock);
+					if (icon && icon->fPersonnalScale <= 0)
+						cairo_dock_notify (CAIRO_DOCK_DOUBLE_CLICK_ICON, icon, pDock);
 				}
 			break ;
 
@@ -1324,7 +1333,8 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 	}
 	else if (pButton->button == 2 && pButton->type == GDK_BUTTON_PRESS)  // clique milieu.
 	{
-		cairo_dock_notify (CAIRO_DOCK_MIDDLE_CLICK_ICON, icon, pDock);
+		if (icon && icon->fPersonnalScale <= 0)
+			cairo_dock_notify (CAIRO_DOCK_MIDDLE_CLICK_ICON, icon, pDock);
 	}
 
 	return FALSE;
@@ -1564,7 +1574,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 
 gboolean cairo_dock_on_drag_drop (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint time, CairoDock *pDock)
 {
-	g_print ("%s (%dx%d, %d)\n", __func__, x, y, time);
+	cd_message ("%s (%dx%d, %d)", __func__, x, y, time);
 	GdkAtom target = gtk_drag_dest_find_target (pWidget, dc, NULL);
 	gtk_drag_get_data (pWidget, dc, target, time);
 	return TRUE;  // in a drop zone.
@@ -1686,7 +1696,7 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 
 void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint time, CairoDock *pDock)
 {
-	g_print ("stop dragging\n");
+	cd_message ("stop dragging");
 	s_bWaitForData = FALSE;
 	pDock->bIsDragging = FALSE;
 	pDock->bCanDrop = FALSE;
