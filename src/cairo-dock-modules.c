@@ -442,45 +442,6 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fT
 			cairo_dock_reload_module (pModule, FALSE);
 		}
 	}
-	
-	//\_______________ On enregistre les applets distantes.
-	if (! g_bEasterEggs)
-		return ;
-	GError *tmp_erreur = NULL;
-	const gchar *cModuleDirPath = CAIRO_DOCK_MODULES_DIR"/third-party";
-	GDir *dir = g_dir_open (cModuleDirPath, 0, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
-		erreur = NULL;
-	}
-	else
-	{
-		const gchar *cFileName;
-		GString *sModulePath = g_string_new ("");
-		do
-		{
-			cFileName = g_dir_read_name (dir);
-			if (cFileName == NULL)
-				break ;
-			
-			for (m = pNotFoundModules; m != NULL; m = m->next)
-			{
-				cModuleName = m->data;
-				if (strcmp (cModuleName, cFileName) == 0)
-					break ;
-			}
-			g_string_printf (sModulePath, "%s/%s", cModuleDirPath, cFileName);
-			gchar *cCommand = g_strdup_printf ("cd \"%s\" && ./\"%s\" %s", sModulePath->str, cFileName, m ? "start" : "register");
-			g_print ("on lance une applet distante : '%s'\n", cCommand);
-			cairo_dock_launch_command (cCommand);
-			g_free (cCommand);
-		}
-		while (1);
-		g_string_free (sModulePath, TRUE);
-		g_dir_close (dir);
-	}
 }
 
 static void _cairo_dock_deactivate_one_old_module (gchar *cModuleName, CairoDockModule *pModule, double *fTime)

@@ -805,8 +805,6 @@ static void _change_rating (GtkCellRendererText * cell, gchar * path_string, gch
 	} while (1);
 	//g_print ("iRating : %d\n", iRating);
 	
-	gtk_list_store_set (GTK_LIST_STORE (model), &it, CAIRO_DOCK_MODEL_ORDER, iRating, -1);
-	
 	gchar *cDisplayedName = NULL, *cThemeName = NULL;
 	gtk_tree_model_get (model, &it, CAIRO_DOCK_MODEL_NAME, &cDisplayedName, CAIRO_DOCK_MODEL_RESULT, &cThemeName, -1);
 	g_return_if_fail (cDisplayedName != NULL && cThemeName != NULL);
@@ -831,6 +829,8 @@ static void _change_rating (GtkCellRendererText * cell, gchar * path_string, gch
 			-1,
 			NULL);
 		g_free (cContent);
+		
+		gtk_list_store_set (GTK_LIST_STORE (model), &it, CAIRO_DOCK_MODEL_ORDER, iRating, -1);
 	}
 	else
 	{

@@ -51,7 +51,7 @@ for plugin in *
 do
 	if test -d $plugin; then
 		cd $plugin
-		if test -e Makefile -a -d po; then
+		if test -e Makefile; then
 			echo "  extracting sentences from $plugin ..."
 			if test -x $CAIRO_DOCK_EXTRACT_MESSAGE; then
 				rm -f data/messages

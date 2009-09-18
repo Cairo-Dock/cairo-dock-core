@@ -58,7 +58,7 @@ void cairo_dock_render_graph (CairoDockGraph *pGraph, cairo_t *pCairoContext)
 	double fWidth = pRenderer->iWidth - 2*fMargin;
 	double fHeight = pRenderer->iHeight - 2*fMargin;
 	fHeight /= iNbDrawings;
-	
+
 	double fValue;
 	cairo_pattern_t *pGradationPattern;
 	int i;
@@ -258,7 +258,7 @@ static cairo_pattern_t *_cairo_dock_create_graph_pattern (CairoDockGraph *pGraph
 		double fMargin = pGraph->fMargin;
 		double fWidth = pGraph->dataRenderer.iWidth - 2*fMargin;
 		double fHeight = pGraph->dataRenderer.iHeight - 2*fMargin;
-		fHeight /= pGraph->dataRenderer.data.iNbValues / pGraph->dataRenderer.iRank;
+		fHeight /= (pGraph->dataRenderer.data.iNbValues / pGraph->dataRenderer.iRank);
 		
 		if (pGraph->iType == CAIRO_DOCK_GRAPH2_CIRCLE || pGraph->iType == CAIRO_DOCK_GRAPH2_CIRCLE_PLAIN)
 		{
@@ -303,6 +303,7 @@ static void cairo_dock_load_graph (CairoDockGraph *pGraph, cairo_t *pSourceConte
 		return ;
 	
 	pGraph->iType = pAttribute->iType;
+	pGraph->bMixGraphs = pAttribute->bMixGraphs;
 	pGraph->dataRenderer.iRank = (pAttribute->bMixGraphs ? pData->iNbValues : 1);
 	
 	pGraph->fHighColor = g_new0 (double, 3 * pData->iNbValues);

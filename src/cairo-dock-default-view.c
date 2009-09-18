@@ -271,14 +271,14 @@ void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkR
 				cairo_save (pCairoContext);
 				//g_print ("dessin optimise de %s [%.2f -> %.2f]\n", icon->cName, fXLeft, fXRight);
 				
-				if (icon->fDrawX >= 0 && icon->fDrawX + icon->fWidth * icon->fScale <= pDock->container.iWidth)
+				//if (icon->fDrawX >= 0 && icon->fDrawX + icon->fWidth * icon->fScale <= pDock->container.iWidth)
 				{
 					icon->fAlpha = 1;
 				}
-				else
+				/*else
 				{
 					icon->fAlpha = .25;
-				}
+				}*/
 				
 				if (icon->iAnimationState == CAIRO_DOCK_STATE_AVOID_MOUSE)
 				{
@@ -407,14 +407,14 @@ static void _cd_calculate_construction_parameters_generic (Icon *icon, CairoDock
 	icon->fHeightFactor = 1.;
 	///icon->fDeltaYReflection = 0.;
 	icon->fOrientation = 0.;
-	if (icon->fDrawX >= 0 && icon->fDrawX + icon->fWidth * icon->fScale <= pDock->container.iWidth)
+	//if (icon->fDrawX >= 0 && icon->fDrawX + icon->fWidth * icon->fScale <= pDock->container.iWidth)
 	{
 		icon->fAlpha = 1;
 	}
-	else
+	/*else
 	{
 		icon->fAlpha = .25;
-	}
+	}*/
 }
 Icon *cd_calculate_icons_default (CairoDock *pDock)
 {
