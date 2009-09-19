@@ -327,7 +327,7 @@ static void _cairo_dock_make_icon_glide (Icon *pPointedIcon, Icon *pMovingicon, 
 		if (pMovingicon->fXAtRest < pPointedIcon->fXAtRest)  // on a deplace l'icone a droite.
 		{
 			//g_print ("%s : %.2f / %.2f ; %.2f / %d (%.2f)\n", icon->cName, icon->fXAtRest, s_pMovingicon->fXAtRest, icon->fDrawX, pDock->container.iMouseX, icon->fGlideOffset);
-			if (icon->fXAtRest > pMovingicon->fXAtRest && icon->fDrawX < pDock->container.iMouseX + 1 && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
+			if (icon->fXAtRest > pMovingicon->fXAtRest && icon->fDrawX < pDock->container.iMouseX + 5 && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
 			{
 				//g_print ("  %s glisse vers la gauche\n", icon->cName);
 				icon->iGlideDirection = -1;
@@ -433,7 +433,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		fLastTime = pMotion->time;
 		
 		//\_______________ On tire l'icone cliquee.
-		if (s_pIconClicked != NULL && s_pIconClicked->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && ! g_bLocked && ! myAccessibility.bLockIcons && (fabs (pMotion->x - s_iClickX) > 5 || fabs (pMotion->y - s_iClickY) > 5))
+		if (s_pIconClicked != NULL && s_pIconClicked->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && ! g_bLocked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll && (fabs (pMotion->x - s_iClickX) > 5 || fabs (pMotion->y - s_iClickY) > 5))
 		{
 			s_pIconClicked->iAnimationState = CAIRO_DOCK_STATE_FOLLOW_MOUSE;
 			//pDock->fAvoidingMouseMargin = .5;
@@ -507,8 +507,9 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	{
 		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
 		
-		if (pPointedIcon != NULL && s_pIconClicked != NULL && cairo_dock_get_icon_order (s_pIconClicked) == cairo_dock_get_icon_order (pPointedIcon) && ! g_bLocked && ! myAccessibility.bLockIcons)
+		if (pPointedIcon != NULL && s_pIconClicked != NULL && cairo_dock_get_icon_order (s_pIconClicked) == cairo_dock_get_icon_order (pPointedIcon) && ! g_bLocked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)
 		{
+			g_print ("on change d'icone\n");
 			_cairo_dock_make_icon_glide (pPointedIcon, s_pIconClicked, pDock);
 			bStartAnimation = TRUE;
 		}
@@ -563,7 +564,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	//s_pLastPointedDock = NULL;
 	//g_print ("s_pLastPointedDock <- NULL\n");
 	
-	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked) || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)) && s_pFlyingContainer == NULL && ! g_bLocked && ! myAccessibility.bLockIcons)
+	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked) || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)) && s_pFlyingContainer == NULL && ! g_bLocked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)
 	{
 		g_print ("on a sorti %s du dock (%d;%d) / %dx%d\n", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
 		
@@ -1130,6 +1131,13 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 		}
 		else if (icon->cCommand != NULL && strcmp (icon->cCommand, "none") != 0)  // finalement, on lance la commande.
 		{
+			if (pDock->iRefCount != 0)
+			{
+				Icon *pMainIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+				if (CAIRO_DOCK_IS_APPLET (pMainIcon))
+					return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+			}
+			
 			gboolean bSuccess = FALSE;
 			if (*icon->cCommand == '<')
 			{
@@ -1219,7 +1227,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						
 						cairo_dock_start_icon_animation (icon, pDock);
 					}
-					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked && ! g_bLocked && ! myAccessibility.bLockIcons)  //  && icon->iType == s_pIconClicked->iType
+					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked && ! g_bLocked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)  //  && icon->iType == s_pIconClicked->iType
 					{
 						//g_print ("deplacement de %s\n", s_pIconClicked->cName);
 						CairoDock *pOriginDock = CAIRO_DOCK (cairo_dock_search_container_from_icon (s_pIconClicked));
@@ -1359,7 +1367,7 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 {
 	if (pScroll->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
 	{
-		if (myAccessibility.bLockIcons)
+		if (myAccessibility.bLockIcons || myAccessibility.bLockAll)
 			return FALSE;
 		
 		int iScrollAmount = 0;

@@ -62,7 +62,8 @@
 #define CAIRO_DOCK_CONF_PANEL_HEIGHT 600
 #define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 600
 #define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 350
-#define CAIRO_DOCK_FILE_HOST_URL "https://developer.berlios.de/project/showfiles.php?group_id=8724"
+//#define CAIRO_DOCK_FILE_HOST_URL "https://developer.berlios.de/project/showfiles.php?group_id=8724"
+#define CAIRO_DOCK_FILE_HOST_URL "https://launchpad.net/cairo-dock"
 #define CAIRO_DOCK_HELP_URL "http://www.cairo-dock.org"
 
 //extern struct tm *localtime_r (time_t *timer, struct tm *tp);
@@ -81,6 +82,8 @@ extern gboolean g_bLocked;
 extern gboolean g_bForceCairo;
 extern gboolean g_bEasterEggs;
 
+#define cairo_dock_icons_are_locked(...) (myAccessibility.bLockIcons || myAccessibility.bLockAll || g_bLocked)
+#define cairo_dock_is_locked(...) (myAccessibility.bLockAll || g_bLocked)
 
 static void _present_help_from_dialog (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog)
 {
@@ -153,6 +156,13 @@ static void _cairo_dock_lock_icons (GtkMenuItem *pMenuItem, gpointer *data)
 	myAccessibility.bLockIcons = ! myAccessibility.bLockIcons;
 	cairo_dock_update_conf_file (g_cConfFile,
 		G_TYPE_BOOLEAN, "Accessibility", "lock icons", myAccessibility.bLockIcons,
+		G_TYPE_INVALID);
+}
+static void _cairo_dock_lock_all (GtkMenuItem *pMenuItem, gpointer *data)
+{
+	myAccessibility.bLockAll = ! myAccessibility.bLockAll;
+	cairo_dock_update_conf_file (g_cConfFile,
+		G_TYPE_BOOLEAN, "Accessibility", "lock all", myAccessibility.bLockAll,
 		G_TYPE_INVALID);
 }
 static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
@@ -1326,7 +1336,7 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 		GtkWidget *pSubMenu = gtk_menu_new ();
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);
 
-		if (! g_bLocked)
+		if (! cairo_dock_is_locked ())
 		{
 			_add_entry_in_menu (_("Configure"), GTK_STOCK_PREFERENCES, _cairo_dock_edit_and_reload_conf, pSubMenu);
 		
@@ -1338,15 +1348,20 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 				_add_entry_in_menu (_("Set up this dock"), GTK_STOCK_EXECUTE, _cairo_dock_configure_root_dock_position, pSubMenu);
 			}
 			_add_entry_in_menu (_("Manage themes"), GTK_STOCK_EXECUTE, _cairo_dock_initiate_theme_management, pSubMenu);
+			
+			pMenuItem = _add_entry_in_menu (myAccessibility.bLockIcons ? _("unlock icons") : _("lock icons"),
+				CAIRO_DOCK_SHARE_DATA_DIR"/icon-lock-icons.svg",
+				_cairo_dock_lock_icons,
+				pSubMenu);
+			gtk_widget_set_tooltip_text (pMenuItem, _("This will (un)lock the position of the icons."));
 		}
-		
-		pMenuItem = gtk_image_menu_item_new_with_label (myAccessibility.bLockIcons ? _("unlock icons") : _("lock icons"));
-		pixbuf = gdk_pixbuf_new_from_file_at_size (CAIRO_DOCK_SHARE_DATA_DIR"/icon-lock-icons.svg", 16, 16, NULL);
-		image = gtk_image_new_from_pixbuf (pixbuf);
-		g_object_unref (pixbuf);
-		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
-		gtk_menu_shell_append  (GTK_MENU_SHELL (pSubMenu), pMenuItem);
-		g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK(_cairo_dock_lock_icons), data);
+		if (! g_bLocked)
+		{
+			_add_entry_in_menu (myAccessibility.bLockAll ? _("unlock dock") : _("lock dock"),
+				CAIRO_DOCK_SHARE_DATA_DIR"/icon-lock-icons.svg",
+				_cairo_dock_lock_all,
+				pSubMenu);
+		}
 		
 		if (CAIRO_DOCK_IS_DOCK (pContainer) && ! CAIRO_DOCK (pContainer)->bAutoHide)
 		{
@@ -1443,22 +1458,23 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 	GtkWidget *pMenuItem, *image;
 
 	//\_________________________ Si pas d'icone dans un dock, on s'arrete la.
-	if (! g_bLocked && CAIRO_DOCK_IS_DOCK (pContainer) && (icon == NULL || CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon)))
+	if (CAIRO_DOCK_IS_DOCK (pContainer) && (icon == NULL || CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon)))
 	{
-		pMenuItem = gtk_separator_menu_item_new ();
-		gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
-		
-		
-		_add_entry_in_menu (_("Add a sub-dock"), GTK_STOCK_ADD, cairo_dock_add_container, menu);
-		
-		if (icon != NULL)
+		if (! cairo_dock_is_locked ())
 		{
-			_add_entry_in_menu (_("Add a separator"), GTK_STOCK_ADD, cairo_dock_add_separator, menu);
+			pMenuItem = gtk_separator_menu_item_new ();
+			gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
+			
+			_add_entry_in_menu (_("Add a sub-dock"), GTK_STOCK_ADD, cairo_dock_add_container, menu);
+			
+			if (icon != NULL)
+			{
+				_add_entry_in_menu (_("Add a separator"), GTK_STOCK_ADD, cairo_dock_add_separator, menu);
+			}
+			
+			pMenuItem = _add_entry_in_menu (_("Add a custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, menu);
+			gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it into the dock."));
 		}
-		
-		pMenuItem = _add_entry_in_menu (_("Add a custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, menu);
-		gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it into the dock."));
-		
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	}
 
@@ -1506,7 +1522,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		}
 		
 		//\_________________________ On rajoute des actions de modifications sur le dock.
-		if (! g_bLocked && CAIRO_DOCK_IS_DOCK (pContainer))
+		if (! cairo_dock_is_locked () && CAIRO_DOCK_IS_DOCK (pContainer))
 		{
 			pMenuItem = gtk_separator_menu_item_new ();
 			gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
@@ -1621,7 +1637,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 			pIconModule = NULL;
 		
 		//\_________________________ On rajoute les actions propres a un module.
-		if (! g_bLocked && CAIRO_DOCK_IS_APPLET (pIconModule))
+		if (! cairo_dock_is_locked () && CAIRO_DOCK_IS_APPLET (pIconModule))
 		{
 			pMenuItem = gtk_separator_menu_item_new ();
 			gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
@@ -1654,7 +1670,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 	}
 
 	//\_________________________ On rajoute les actions de positionnement d'un desklet.
-	if (! g_bLocked && CAIRO_DOCK_IS_DESKLET (pContainer))
+	if (! cairo_dock_is_locked () && CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		pMenuItem = gtk_separator_menu_item_new ();
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
@@ -1759,7 +1775,7 @@ GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, cons
 		GtkWidget *image = NULL;
 		if (*gtkStock == '/')
 		{
-			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (gtkStock, 24, 24, NULL);
+			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (gtkStock, 16, 16, NULL);
 			image = gtk_image_new_from_pixbuf (pixbuf);
 			g_object_unref (pixbuf);
 		}

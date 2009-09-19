@@ -155,7 +155,7 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, const gchar *cGro
 *@param cConfFilePath path to the main conf file.
 *@param pDock the main dock, created beforehand.
 */
-void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock);
+void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock);
 
 /** Say if Cairo-Dock is loading.
 *@return TRUE if the global config is being loaded (this happens when a theme is loaded).

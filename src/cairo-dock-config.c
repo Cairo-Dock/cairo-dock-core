@@ -462,7 +462,7 @@ void cairo_dock_get_size_key_value (GKeyFile *pKeyFile, const gchar *cGroupName,
 }
 
 
-void cairo_dock_read_conf_file (gchar *cConfFilePath, CairoDock *pDock)
+void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 {
 	//g_print ("%s (%s)\n", __func__, cConfFilePath);
 	GError *erreur = NULL;

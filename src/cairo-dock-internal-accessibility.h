@@ -45,9 +45,10 @@ struct _CairoConfigAccessibility {
 	gint iLeaveSubDockDelay;
 	gint iShowSubDockDelay;
 	gboolean bShowSubDockOnClick;
-	gboolean bLockIcons;
 	gboolean bExtendedMode;
 	gint iVisibleZoneWidth, iVisibleZoneHeight;
+	gboolean bLockIcons;
+	gboolean bLockAll;
 	} ;
 
 DEFINE_PRE_INIT (Accessibility);
