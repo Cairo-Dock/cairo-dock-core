@@ -1338,16 +1338,19 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 
 		if (! cairo_dock_is_locked ())
 		{
-			_add_entry_in_menu (_("Configure"), GTK_STOCK_PREFERENCES, _cairo_dock_edit_and_reload_conf, pSubMenu);
-		
+			pMenuItem = _add_entry_in_menu (_("Configure"), GTK_STOCK_PREFERENCES, _cairo_dock_edit_and_reload_conf, pSubMenu);
+			gtk_widget_set_tooltip_text (pMenuItem, _("Configure the behaviour, appearance, and applets."));
+			
 			pMenuItem = gtk_separator_menu_item_new ();
 			gtk_menu_shell_append (GTK_MENU_SHELL (pSubMenu), pMenuItem);
 		
 			if (CAIRO_DOCK_IS_DOCK (pContainer) && ! CAIRO_DOCK (pContainer)->bIsMainDock && CAIRO_DOCK (pContainer)->iRefCount == 0)
 			{
-				_add_entry_in_menu (_("Set up this dock"), GTK_STOCK_EXECUTE, _cairo_dock_configure_root_dock_position, pSubMenu);
+				pMenuItem = _add_entry_in_menu (_("Set up this dock"), GTK_STOCK_EXECUTE, _cairo_dock_configure_root_dock_position, pSubMenu);
+				gtk_widget_set_tooltip_text (pMenuItem, _("Set up the position of this main dock."));
 			}
-			_add_entry_in_menu (_("Manage themes"), GTK_STOCK_EXECUTE, _cairo_dock_initiate_theme_management, pSubMenu);
+			pMenuItem = _add_entry_in_menu (_("Manage themes"), GTK_STOCK_EXECUTE, _cairo_dock_initiate_theme_management, pSubMenu);
+			gtk_widget_set_tooltip_text (pMenuItem, _("Choose amongst many themes on the server, and save your current theme."));
 			
 			pMenuItem = _add_entry_in_menu (myAccessibility.bLockIcons ? _("unlock icons") : _("lock icons"),
 				CAIRO_DOCK_SHARE_DATA_DIR"/icon-lock-icons.svg",
@@ -1361,11 +1364,13 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 				CAIRO_DOCK_SHARE_DATA_DIR"/icon-lock-icons.svg",
 				_cairo_dock_lock_all,
 				pSubMenu);
+				gtk_widget_set_tooltip_text (pMenuItem, _("This will (un)lock the whole dock."));
 		}
 		
 		if (CAIRO_DOCK_IS_DOCK (pContainer) && ! CAIRO_DOCK (pContainer)->bAutoHide)
 		{
 			_add_entry_in_menu (_("Quick-Hide"), GTK_STOCK_GOTO_BOTTOM, _cairo_dock_quick_hide, pSubMenu);
+			gtk_widget_set_tooltip_text (pMenuItem, _("It will hide the dock until you enter inside with the mouse."));
 		}
 		
 		gchar *cCairoAutoStartDirPath = g_strdup_printf ("%s/.config/autostart", g_getenv ("HOME"));
@@ -1380,13 +1385,16 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 		g_free (cCairoAutoStartDirPath);
 		
 		_add_entry_in_menu (_("Development's site"), GTK_STOCK_DIALOG_WARNING, _cairo_dock_check_for_updates, pSubMenu);
+		gtk_widget_set_tooltip_text (pMenuItem, _("Find out the latest version of Cairo-Dock here !."));
 
 		_add_entry_in_menu (_("Community's site"), GTK_STOCK_DIALOG_INFO, _cairo_dock_help, pSubMenu);
-
+		gtk_widget_set_tooltip_text (pMenuItem, _("A problem ? A suggestion ? Want to talk to us ? You're welcome !"));
+		
 		_add_entry_in_menu (_("Help"), GTK_STOCK_HELP, _cairo_dock_present_help, pSubMenu);
-
+		gtk_widget_set_tooltip_text (pMenuItem, _("There is no problem, there is only solution (and a lot of useful hints !)."));
+		
 		_add_entry_in_menu (_("About"), GTK_STOCK_ABOUT, _cairo_dock_about, pSubMenu);
-
+		
 		if (! g_bLocked)
 		{
 			_add_entry_in_menu (_("Quit"), GTK_STOCK_QUIT, _cairo_dock_quit, pSubMenu);

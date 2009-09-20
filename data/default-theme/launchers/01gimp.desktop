@@ -5,10 +5,10 @@
 Name=Gimp
 #s Command to launch on click :
 #{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1 for the Applications Menu, <Ctrl>c or <Ctrl>v to copy or paste, etc}
-Exec=gimp-2.6 
+Exec=gimp
 #S Image's name or path :
 Icon=gimp
-#E[_MainDock_;Quimper, France;Blog;Documents;Vidéos]  Name of the container it belongs to:
+#d Name of the container it belongs to:
 #{If you write here a container's name that doesn't exist yet, a new one will be created, with this icon inside.}
 Container=_MainDock_
 
@@ -17,12 +17,16 @@ frame_extra=
 #f Order you want for this launcher among the others:
 Order=0.3638916015625
 #b Prevent this launcher from stealing appli from taskbar ?
-#{Use this option for exemple if the launcher launches a script in a terminal but you don't want it to steal normal terminal's icons from the TaskBar, or if you explicitely want to use the original icon of the TaskBar because it provides some info, for exemple Pidgin's icons represent the avatar of the contact.}
+#{If you choosed to mix launcher and applis, this option will deactivate this behaviour for this launcher only. It can be useful for instance for a launcher that launches a script in a terminal, but you don't want it to steal the Terminal's icon from the Taskbar.} 
 prevent inhibate=false
 
 #s Class of the program :
 #{The only reason you may want to modify this parameter is if you made this launcher by hands. If you dropped it into the dock from the menu, it is nearly sure that you shouldn't touch it. It defines the class of the program, which is useful to link the appli with its launcher.}
 StartupWMClass=
+
+#b Run in a terminal ?
+#{It will use 'xterm'.}
+Terminal=false
 
 Is container=false
 
@@ -132,7 +136,6 @@ Comment[zh_CN]=创建图像或编辑照片
 Comment[zh_HK]=建立圖像與編輯照片
 Comment[zh_TW]=建立圖像與編輯照片
 TryExec=gimp-2.6
-Terminal=false
 Categories=Graphics;2DGraphics;RasterGraphics;GTK;
 X-GNOME-Bugzilla-Bugzilla=GNOME
 X-GNOME-Bugzilla-Product=GIMP

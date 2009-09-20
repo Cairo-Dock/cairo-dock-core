@@ -42,7 +42,7 @@ G_BEGIN_DECLS
 * @param pDock le dock.
 * @return TRUE ssi le dock doit remplir l'ecran.
 */
-#define cairo_dock_is_extended_dock(pDock) (myAccessibility.bExtendedMode && pDock->iRefCount == 0)
+#define cairo_dock_is_extended_dock(pDock) (myAccessibility.bExtendedMode && (pDock->iRefCount == 0))
 
 /*
 * Recharge les reflets (cairo) d'un dock. Utile si le dock a changé de position.

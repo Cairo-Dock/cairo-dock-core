@@ -757,6 +757,7 @@ static void _cairo_dock_render_sobriety (GtkTreeViewColumn *tree_column, GtkCell
 }
 static void _cairo_dock_render_rating (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
 {
+	/// ignorer les themes "default"...
 	_render_rating (cell, model, iter, CAIRO_DOCK_MODEL_ORDER);
 }
 static GtkListStore *_make_note_list_store (void)
