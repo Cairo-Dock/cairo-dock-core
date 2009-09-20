@@ -7,13 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
+"POT-Creation-Date: 2009-09-17 00:54+0000\n"
 "PO-Revision-Date: 2009-08-24 12:55+0000\n"
 "Last-Translator: Cairo-Dock Team <cairo-dock-team@lists.launchpad.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-09-08 17:28+0000\n"
+"X-Launchpad-Export-Date: 2009-09-19 09:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-callbacks.c:1100
@@ -193,9 +194,8 @@ msgid "Do you want to activate it now ?"
 msgstr "Wilt u het nu activeren ?"
 
 #: ../src/cairo-dock-gui-manager.c:1796
-#, fuzzy
 msgid "Configuration of the launchers"
-msgstr "Indicator van actieve starter"
+msgstr ""
 
 #: ../src/cairo-dock-internal-accessibility.c:291
 #: ../src/cairo-dock-menu.c:1662 ../data/messages:39
@@ -515,17 +515,13 @@ msgid "Add a separator"
 msgstr "Voeg een scheiding toe"
 
 #: ../src/cairo-dock-menu.c:1459 ../src/cairo-dock-menu.c:1518
-#, fuzzy
 msgid "Add a custom launcher"
-msgstr "Voeg handmatig een starter toe"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1460 ../src/cairo-dock-menu.c:1519
-#, fuzzy
 msgid ""
 "Usually you would drag a launcher from the menu and drop it into the dock."
 msgstr ""
-"Vergeet niet dat u een starter vanuit het toepassingenmenu naar het dock "
-"kunt slepen !"
 
 #: ../src/cairo-dock-menu.c:1479
 msgid "Unmount"
@@ -569,9 +565,8 @@ msgid "Modify this separator"
 msgstr "Bewerk deze scheiding"
 
 #: ../src/cairo-dock-menu.c:1531 ../src/cairo-dock-menu.c:1645
-#, fuzzy
 msgid "Move to another dock"
-msgstr "Wissel naar weergave %d"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1535 ../src/cairo-dock-menu.c:1649
 msgid "A new main dock"
@@ -1096,7 +1091,8 @@ msgstr ""
 
 #: ../data/messages:105
 msgid "Should the applications with same class be grouped in a sub-dock ?"
-msgstr "Wilt u de toepassingen van dezelfde klasse groeperen in een sub-dock ?"
+msgstr ""
+"Wilt u de toepassingen van dezelfde klasse groeperen in een sub-dock ?"
 
 #: ../data/messages:107 ../data/messages:127
 msgid "enter the class of the applications, separated by a semi-colon ';'"
@@ -1136,9 +1132,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:121
-#, fuzzy
 msgid "Display an indicator on applis ?"
-msgstr "Indicator boven icoon tonen ?"
+msgstr ""
 
 #: ../data/messages:123
 msgid ""
@@ -1186,7 +1181,8 @@ msgid "Middle click on an icon closes its relative application ?"
 msgstr "Middelklikken op icoon om bijbehorende toepassing af te sluiten ?"
 
 #: ../data/messages:145
-msgid "Signal the applications demanding your attention with a dialog bubble ?"
+msgid ""
+"Signal the applications demanding your attention with a dialog bubble ?"
 msgstr ""
 
 #: ../data/messages:147
@@ -1247,8 +1243,8 @@ msgstr ""
 #: ../data/messages:167
 msgid "Transparency of icons whose window is or isn't minimized :"
 msgstr ""
-"Doorzichtigheid van iconen van vensters die wel of niet geminimaliseerd "
-"zijn :"
+"Doorzichtigheid van iconen van vensters die wel of niet geminimaliseerd zijn "
+":"
 
 #: ../data/messages:171
 msgid "Movement parameters"
@@ -1443,9 +1439,8 @@ msgid "Are the bottom left and right corners rounded ?"
 msgstr "Zijn de hoeken linksonder en rechtsonder rond ?"
 
 #: ../data/messages:265 ../data/messages:277
-#, fuzzy
 msgid "Use a background image or a color gradation."
-msgstr "Stel een achtergrond in voor uw dock."
+msgstr ""
 
 #: ../data/messages:267
 msgid "Background image..."
@@ -1513,9 +1508,8 @@ msgid "Width of the stripes, in percentage of the pattern size :"
 msgstr "Breedte van de strepen, in procenten van de patroongrootte :"
 
 #: ../data/messages:295
-#, fuzzy
 msgid "Background movement"
-msgstr "Achtergrondbewegingen"
+msgstr ""
 
 #: ../data/messages:297
 msgid "Move the background image along with the cursor ?"
@@ -1530,9 +1524,8 @@ msgid "Follow the mouse"
 msgstr ""
 
 #: ../data/messages:303
-#, fuzzy
 msgid "Link with the mouse"
-msgstr "Versleep ze met de muis."
+msgstr ""
 
 #: ../data/messages:305
 msgid ""
@@ -1587,28 +1580,24 @@ msgid "Configure the auto-hide behaviour."
 msgstr "Configureer het automatisch verbergen gedrag."
 
 #: ../data/messages:327
-#, fuzzy
 msgid "Font"
-msgstr "Aankoppelen"
+msgstr ""
 
 #: ../data/messages:329
-#, fuzzy
 msgid "Display labels on icons ?"
-msgstr "Lokale iconen gebruiken ?"
+msgstr ""
 
 #: ../data/messages:331
-#, fuzzy
 msgid "Font used for labels :"
-msgstr "Lettertype gebruikt voor de labels :"
+msgstr ""
 
 #: ../data/messages:333
 msgid "Should the text be oulined ?"
 msgstr "Wilt u de tekst omlijnen ?"
 
 #: ../data/messages:335
-#, fuzzy
 msgid "Color"
-msgstr "Afsluiten"
+msgstr ""
 
 #: ../data/messages:337
 msgid "It's the first color of the gradation."
@@ -1656,7 +1645,8 @@ msgstr "Kleur van labelachtergrond :"
 
 #: ../data/messages:355
 msgid "If false, only the quick-info will have this background color."
-msgstr "Indien nee, dan zal alleen de snel-info deze achtergrondkleur hebben."
+msgstr ""
+"Indien nee, dan zal alleen de snel-info deze achtergrondkleur hebben."
 
 #: ../data/messages:357
 msgid "Use background color for labels ?"
@@ -1710,9 +1700,9 @@ msgid ""
 "from the theme you choosed. If you use this option, the dock will search "
 "here first, and then in the icons theme."
 msgstr ""
-"Dit zijn iconen uit het thema dat u heeft gekozen, op de locatie ~/.config/"
-"cairo-dock/current_theme/icons. Wanneer u deze optie gebruikt, zal het dock "
-"eerst hier zoeken en daarna in het icoonthema.."
+"Dit zijn iconen uit het thema dat u heeft gekozen, op de locatie "
+"~/.config/cairo-dock/current_theme/icons. Wanneer u deze optie gebruikt, zal "
+"het dock eerst hier zoeken en daarna in het icoonthema.."
 
 #: ../data/messages:383
 msgid "Use local icons ?"
@@ -1735,7 +1725,8 @@ msgstr "Selecteer een icoonthema :"
 
 #: ../data/messages:391
 msgid "Image's filename to use as a background for icons :"
-msgstr "Bestandsnaam afbeelding om te gebruiken als achtergrond voor iconen :"
+msgstr ""
+"Bestandsnaam afbeelding om te gebruiken als achtergrond voor iconen :"
 
 #: ../data/messages:393
 msgid "Reflections"
@@ -1859,8 +1850,8 @@ msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right ?"
 msgstr ""
-"De afbeelding van de scheiding laten draaien wanneer het dock boven/links/"
-"rechts is ?"
+"De afbeelding van de scheiding laten draaien wanneer het dock "
+"boven/links/rechts is ?"
 
 #: ../data/messages:441
 msgid "Force separator's image size to stay constant ?"
@@ -2113,7 +2104,8 @@ msgstr "Indicator van het actieve venster"
 
 #: ../data/messages:567
 msgid "Set transparency to 0 if you don't want to use an indicator."
-msgstr "Stel doorzichtigheid in op 0 wanneer u geen indicator wilt gebruiken."
+msgstr ""
+"Stel doorzichtigheid in op 0 wanneer u geen indicator wilt gebruiken."
 
 #: ../data/messages:569
 msgid "Color of the frame (r,v,b,a) :"
@@ -2268,7 +2260,8 @@ msgstr "Naam van afbeelding om te gebruiken voor het ´Fout´ embleem :"
 
 #: ../data/messages:643
 msgid "Name of an image to use for the warning emblem :"
-msgstr "Naam van afbeelding om te gebruiken voor het ´Waarschuwing´ embleem :"
+msgstr ""
+"Naam van afbeelding om te gebruiken voor het ´Waarschuwing´ embleem :"
 
 #: ../data/messages:647
 msgid "Name of an image to use for the locked emblem :"
@@ -2307,14 +2300,12 @@ msgid "Name of the view used for the sub-dock :"
 msgstr "Naam van weergave gebruikt voor het sub-dock :"
 
 #: ../data/messages:665
-#, fuzzy
 msgid "URI of the file :"
-msgstr "Grootte van lettertype :"
+msgstr ""
 
 #: ../data/messages:667
-#, fuzzy
 msgid "Monitor the content of folder ?"
-msgstr "Wilt u de inhoud van deze map monitoren ?"
+msgstr ""
 
 #: ../data/messages:677
 msgid "Yes, like that :-)"
@@ -2333,7 +2324,8 @@ msgstr "Hoe kan ik mijn iconen herordenen ?"
 
 #: ../data/messages:683
 msgid "Hint : you can even re-order the icons of the current applications."
-msgstr "Hint : U kunt zelfs de iconen van de huidige toepassingen herordenen."
+msgstr ""
+"Hint : U kunt zelfs de iconen van de huidige toepassingen herordenen."
 
 #: ../data/messages:685
 msgid "Simply drag them with the mouse, and drop it where you want."
@@ -2401,8 +2393,8 @@ msgstr ""
 
 #: ../data/messages:703
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr "Sleep ze uit het dock en ze zullen verdwijnen in een explosie !"
 
 #: ../data/messages:705
@@ -2421,8 +2413,8 @@ msgstr ""
 
 #: ../data/messages:709
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, applis, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, applis, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 "In de 'Iconen' module, kunt u de standaardgrootte van uw iconen per soort "
@@ -2460,7 +2452,8 @@ msgstr ""
 
 #: ../data/messages:719
 msgid "How can I adjust the position of the dock above the gnome-panel ?"
-msgstr "Hoe kan ik de positie van het dock instellen boven het Gnome-paneel ?"
+msgstr ""
+"Hoe kan ik de positie van het dock instellen boven het Gnome-paneel ?"
 
 #: ../data/messages:721
 msgid ""
@@ -2553,7 +2546,8 @@ msgstr ""
 "verslepen met de muis."
 
 #: ../data/messages:745
-msgid "I don’t want to have a separator between launchers , applis and applets"
+msgid ""
+"I don’t want to have a separator between launchers , applis and applets"
 msgstr ""
 "Ik wil geen scheiding plaatsen tussen starters, toepassingen en applets"
 
@@ -2817,7 +2811,8 @@ msgstr ""
 "Ga naar de “Taakbalk” module, vink het eerste vakje aan en klik op toepassen."
 
 #: ../data/messages:825
-msgid "I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
+msgid ""
+"I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
 msgstr ""
 "Ik wil niet teveel iconen in het dock hebben wanneer ik Gimp/Pidgin/etc "
 "gebruik"
@@ -2954,8 +2949,8 @@ msgid ""
 "work anymore. This applet let you setup a shortcut to pop up the menu at the "
 "mouse’s location."
 msgstr ""
-"Hint : Als u het Gnome-paneel verwijderd heeft, dan werkt de sneltoets “alt"
-"+F1” niet meer. Dit applet laat u een sneltoets instellen voor een pop-"
+"Hint : Als u het Gnome-paneel verwijderd heeft, dan werkt de sneltoets "
+"“alt+F1” niet meer. Dit applet laat u een sneltoets instellen voor een pop-"
 "upmenu op de plaats van de muisaanwijzer ."
 
 #: ../data/messages:859
@@ -2972,9 +2967,9 @@ msgid ""
 "work anymore. This applet let you setup a shortcut to pop up the quick-"
 "launch dialog."
 msgstr ""
-"Hint : Als u het Gnome-paneel verwijderd heeft, dan werkt de sneltoets “alt"
-"+F2” niet meer. Dit applet laat u een sneltoets instellen voor het openen "
-"van de snelstartdialoog."
+"Hint : Als u het Gnome-paneel verwijderd heeft, dan werkt de sneltoets "
+"“alt+F2” niet meer. Dit applet laat u een sneltoets instellen voor het "
+"openen van de snelstartdialoog."
 
 #: ../data/messages:865
 msgid ""
@@ -3099,8 +3094,8 @@ msgstr ""
 
 #: ../data/messages:905
 msgid ""
-"How can I have an easy-to-access terminal with real transparence, like "
-"Tilda ?"
+"How can I have an easy-to-access terminal with real transparence, like Tilda "
+"?"
 msgstr ""
 "Hoe kan ik een makkelijk toegankelijke terminal krijgen met echte "
 "doorzichtigheid, zoals Tilda ?"
@@ -3129,12 +3124,13 @@ msgstr "Hoe kan ik het Gnome-paneel geheel verwijderen ?"
 
 #: ../data/messages:913
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/"
-"required_components_list, and erase its content (\"panel\").\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components_list, and erase its content "
+"(\"panel\").\n"
 "Restart your session : the gnome-panel has not been started."
 msgstr ""
-"Open gconf-editor, bewerk de sleutel /desktop/gnome/session/"
-"required_components_list, wis de inhoud (\"panel\").\n"
+"Open gconf-editor, bewerk de sleutel "
+"/desktop/gnome/session/required_components_list, wis de inhoud (\"panel\").\n"
 "Herstart uw sessie : het gnome-paneel is nu niet mee opgestart."
 
 #: ../data/messages:915
@@ -3180,8 +3176,8 @@ msgid ""
 "move the folder containing your gauge in ~/.config/cairo-dock/extras/gauges, "
 "you’re done !"
 msgstr ""
-"Verplaats de map met de 'Meter' erin naar ~/.config/cairo-dock/extras/"
-"gauges, klaar !"
+"Verplaats de map met de 'Meter' erin naar ~/.config/cairo-"
+"dock/extras/gauges, klaar !"
 
 #: ../data/messages:927
 msgid ""
@@ -3258,16 +3254,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3295,8 +3291,8 @@ msgid ""
 "If you’re under XFCE or KDE, you can just activate the compositing in the "
 "window manager’s options.\n"
 "If you're under Gnome, you can activate it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:961
@@ -3339,8 +3335,8 @@ msgstr "Ik heb al die mooie effecten niet, zoals vuur, kubusrotatie, etc."
 
 #: ../data/messages:971
 msgid ""
-"Hint : You can force the openGL by launching the dock with “cairo-dock –o”."
-"but you might get a lot of visual artifacts."
+"Hint : You can force the openGL by launching the dock with “cairo-dock "
+"–o”.but you might get a lot of visual artifacts."
 msgstr ""
 "Hint : U kunt openGL forceren door het dock te starten met “cairo-dock –o”, "
 "mogelijk krijgt u dan last van veel beeldfouten."
@@ -3409,8 +3405,8 @@ msgstr "Help ons !"
 msgid ""
 "We value your help ! If you see a bug, or if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3832,8 +3828,8 @@ msgstr ""
 #: ../data/messages:1133
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -3956,16 +3952,25 @@ msgid ""
 "documentation on http://doc.cairo-dock.org."
 msgstr ""
 
+#~ msgid ""
+#~ "The dock will automatically resize itself to fit this size. Set it to 0 to "
+#~ "make the dock fit the screen's size."
+#~ msgstr ""
+#~ "De grootte van het dock zal automatisch aangepast worden. Bij 0 wordt het "
+#~ "dock passend gemaakt aan het beeldscherm."
+
+#~ msgid "Size allowed for the dock :"
+#~ msgstr "Toegestane grootte voor het dock :"
+
 #~ msgid "Scroll speed factor for background decorations :"
 #~ msgstr "Factor scrollsnelheid voor achtergronddecoraties :"
 
 #~ msgid ""
-#~ "Otherwise the amount of movement of the decorations will only depend on "
-#~ "the direction of the cursor's movement, as if the decorations were "
-#~ "\"gliding\"."
+#~ "Otherwise the amount of movement of the decorations will only depend on the "
+#~ "direction of the cursor's movement, as if the decorations were \"gliding\"."
 #~ msgstr ""
-#~ "Anders zal de hoeveelheid beweging van de decoraties alleen afhangen van "
-#~ "de richting van de cursorbeweging, alsof de decoraties \"glijden\"."
+#~ "Anders zal de hoeveelheid beweging van de decoraties alleen afhangen van de "
+#~ "richting van de cursorbeweging, alsof de decoraties \"glijden\"."
 
 #~ msgid "Should the decorations be enslaved to the cursor ?"
 #~ msgstr "Wilt u de decoraties verbinden met de cursor ?"
@@ -3987,16 +3992,6 @@ msgstr ""
 
 #~ msgid "Use this background for applets too ?"
 #~ msgstr "Deze achtergrond ook voor applets gebruiken ?"
-
-#~ msgid ""
-#~ "The dock will automatically resize itself to fit this size. Set it to 0 "
-#~ "to make the dock fit the screen's size."
-#~ msgstr ""
-#~ "De grootte van het dock zal automatisch aangepast worden. Bij 0 wordt het "
-#~ "dock passend gemaakt aan het beeldscherm."
-
-#~ msgid "Size allowed for the dock :"
-#~ msgstr "Toegestane grootte voor het dock :"
 
 #~ msgid "Icons' lateral unfolding acceleration :"
 #~ msgstr "Laterale ontvouwacceleratie iconen :"
