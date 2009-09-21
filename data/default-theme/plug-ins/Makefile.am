@@ -1,5 +1,4 @@
 SUBDIRS = . Animated-icons\
-	Cairo-Penguin\
 	clock\
 	dialog-rendering\
 	dustbin\
@@ -10,5 +9,4 @@ SUBDIRS = . Animated-icons\
 	rendering\
 	shortcuts\
 	showDesktop\
-	switcher\
-	weather
+	switcher
