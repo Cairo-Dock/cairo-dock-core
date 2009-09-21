@@ -335,7 +335,7 @@ static void _cairo_dock_draw_inside_dialog (cairo_t *pCairoContext, CairoDialog 
 				pDialog->pTextBuffer,
 				x - pDialog->iCurrentTextOffset + pDialog->iTextWidth + 10,
 				y);
-			_paint_inside_dialog(pCairoContext, fAlpha);
+			_paint_inside_dialog (pCairoContext, fAlpha);
 			cairo_restore (pCairoContext);
 		}
 	}
@@ -522,7 +522,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 		cairo_dock_compute_dialog_sizes (pDialog);
 	}
 
-	if ((iWidth != pEvent->width || iHeight != pEvent->height))
+	if (iWidth != pEvent->width || iHeight != pEvent->height)
 	{
 		if ((pEvent->width != CAIRO_DIALOG_MIN_SIZE || pEvent->height != CAIRO_DIALOG_MIN_SIZE) && (pEvent->width < iWidth || pEvent->height < iHeight))
 		{
@@ -1006,6 +1006,10 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	//\________________ Maintenant qu'on connait tout, on calcule les tailles des divers elements.
 	cairo_dock_compute_dialog_sizes (pDialog);
 	
+	
+	cairo_dock_place_dialog (pDialog, pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.
+	
+	
 	//\________________ On reserve l'espace pour les decorations.
 	GtkWidget *pMainHBox = gtk_hbox_new (0, FALSE);
 	gtk_container_add (GTK_CONTAINER (pDialog->container.pWidget), pMainHBox);
@@ -1033,6 +1037,8 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 		0);
 	
 	//\________________ On reserve l'espace pour les elements.
+	if (! pDialog->container.bDirectionUp)
+		pDialog->pTipWidget = cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iMinBottomGap + pDialog->iBottomMargin, TRUE);
 	if (pDialog->iMessageWidth != 0 && pDialog->iMessageHeight != 0)
 	{
 		pDialog->pMessageWidget = cairo_dock_add_dialog_internal_box (pDialog, pDialog->iMessageWidth, pDialog->iMessageHeight, FALSE);
@@ -1052,7 +1058,8 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	{
 		pDialog->pButtonsWidget = cairo_dock_add_dialog_internal_box (pDialog, pDialog->iButtonsWidth, pDialog->iButtonsHeight, FALSE);
 	}
-	pDialog->pTipWidget = cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iMinBottomGap + pDialog->iBottomMargin, TRUE);
+	if (pDialog->container.bDirectionUp)
+		pDialog->pTipWidget = cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iMinBottomGap + pDialog->iBottomMargin, TRUE);
 	
 	gtk_widget_show_all (pDialog->container.pWidget);
 	
@@ -1092,8 +1099,8 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 		"unmap-event",
 		G_CALLBACK (on_unmap_dialog),
 		pDialog);
-
-	cairo_dock_place_dialog (pDialog, pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.
+	
+	///cairo_dock_place_dialog (pDialog, pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.
 	
 	cairo_destroy (pSourceContext);
 	

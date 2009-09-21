@@ -222,7 +222,7 @@ struct _CairoDock {
 #define CAIRO_DOCK_IS_DOCK(pContainer) (pContainer != NULL && ((CairoContainer*)pContainer)->iType == CAIRO_DOCK_TYPE_DOCK)
 
 /** Cast a Container into a Dock.
-* @param pContainer the container.
+* @param pDock the container to consider as a dock.
 * @return the dock.
 */
 #define CAIRO_DOCK(pDock) ((CairoDock *)pDock)

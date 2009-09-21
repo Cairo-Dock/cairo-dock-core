@@ -39,7 +39,7 @@ G_BEGIN_DECLS
 *@file cairo-dock-keybinder.h This class contains functions to easily bind a keyboard shortcut to an action. These shortcuts are defined globally in your session, that is to say they will be effective whatever window has the focus.
 * Shortcuts are of the form &lt;alt&gt;F1 or &lt;ctrl&gt;&lt;shift&gt;s.
 * 
-* You bind an action to a shortcut \ref with cd_keybinder_bind, and unbind it with \ref cd_keybinder_unbind.
+* You bind an action to a shortcut with \ref cd_keybinder_bind, and unbind it with \ref cd_keybinder_unbind.
 */
 
 /// Definition of a callback, called when a shortcut is pressed by the user.

@@ -690,8 +690,7 @@ int main (int argc, char** argv)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
 	
 	g_print ("\nVERIFIER LE CHANGEMENT DE CONTAINER POUR TERMINAL\n\nLES SEPARATEURS PHYSIQUES EN MODE VERTICAL\n\n");
-	g_print ("TESTER LA MINIATURE AU 1ER LANCEMENT D'UNE APPLIn\n");
-	g_print ("TESTER DOUBLE GRAPHE DANS NETSPEED ET SYSMONITOR\n\n");
+	
 	gtk_main ();
 
 	rsvg_term ();

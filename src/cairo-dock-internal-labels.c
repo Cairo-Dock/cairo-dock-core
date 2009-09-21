@@ -44,7 +44,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	PangoFontDescription *fd = pango_font_description_from_string (cFontDescription);
 	pLabels->iconTextDescription.cFont = g_strdup (pango_font_description_get_family (fd));
 	pLabels->iconTextDescription.iSize = pango_font_description_get_size (fd);
-	g_print ("font : %s => %d\n", cFontDescription, pLabels->iconTextDescription.iSize);
 	if (!pango_font_description_get_size_is_absolute (fd))
 		pLabels->iconTextDescription.iSize /= PANGO_SCALE;
 	if (pLabels->iconTextDescription.iSize == 0)

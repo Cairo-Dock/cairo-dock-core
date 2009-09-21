@@ -104,6 +104,7 @@ show delay = 300
 show on click = false
 
 lock icons = false
+lock all = false
 
 
 [TaskBar]
