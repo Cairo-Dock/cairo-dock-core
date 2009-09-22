@@ -172,12 +172,12 @@ void cairo_dock_add_data_renderer_on_icon (CairoDataRenderer *pRenderer, Icon *p
 	
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pRenderer->interface.render_opengl)
 	{
-		/*cairo_dock_register_notification_on_icon (pIcon, CAIRO_DOCK_UPDATE_ICON_SLOW,
-			(CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification,
-			CAIRO_DOCK_RUN_AFTER, NULL);*/
-		cairo_dock_register_notification (CAIRO_DOCK_UPDATE_ICON_SLOW,
+		cairo_dock_register_notification_on_icon (pIcon, CAIRO_DOCK_UPDATE_ICON_SLOW,
 			(CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification,
 			CAIRO_DOCK_RUN_AFTER, NULL);
+		/**cairo_dock_register_notification (CAIRO_DOCK_UPDATE_ICON_SLOW,
+			(CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification,
+			CAIRO_DOCK_RUN_AFTER, NULL);*/
 	}
 }
 
@@ -290,7 +290,7 @@ void cairo_dock_remove_data_renderer_on_icon (Icon *pIcon)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
 	
-	cairo_dock_remove_notification_func (CAIRO_DOCK_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification, NULL);
+	cairo_dock_remove_notification_func_on_icon (pIcon, CAIRO_DOCK_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification, NULL);
 	
 	cairo_dock_free_data_renderer (pRenderer);
 	cairo_dock_set_data_renderer_on_icon (pIcon, NULL);

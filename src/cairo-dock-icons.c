@@ -522,6 +522,7 @@ void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconType iType
 		}
 	}
 	g_string_free (sDesktopFilePath, TRUE);
+	cairo_dock_refresh_launcher_gui ();
 }
 
 void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2)
@@ -535,7 +536,7 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 	if (icon2 != NULL)
 	{
 		Icon *pNextIcon = cairo_dock_get_next_icon (pDock->icons, icon2);
-		if (pNextIcon != NULL && fabs (pNextIcon->fOrder - icon2->fOrder) < 1e-3)
+		if (pNextIcon != NULL && fabs (pNextIcon->fOrder - icon2->fOrder) < 1e-2)
 		{
 			bForceUpdate = TRUE;
 		}

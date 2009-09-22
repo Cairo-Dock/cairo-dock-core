@@ -551,7 +551,7 @@ static gboolean _cairo_flying_container_animation_loop (CairoFlyingContainer *pF
 	{
 		gboolean bIconIsAnimating = FALSE;
 		
-		cairo_dock_notify (CAIRO_DOCK_UPDATE_ICON, pFlyingContainer->pIcon, pFlyingContainer, &bIconIsAnimating);
+		cairo_dock_notify_on_icon (pFlyingContainer->pIcon, CAIRO_DOCK_UPDATE_ICON, pFlyingContainer->pIcon, pFlyingContainer, &bIconIsAnimating);
 		if (! bIconIsAnimating)
 			pFlyingContainer->pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
 		else

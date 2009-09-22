@@ -647,7 +647,10 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	//\______________ On effectue les actions demandees.
 	if (bAnimated)
 	{
-		icon->fPersonnalScale = - 0.95;
+		if (cairo_dock_animation_will_be_visible (pDock))
+			icon->fPersonnalScale = - 0.95;
+		else
+			icon->fPersonnalScale = - 0.05;
 		cairo_dock_notify (CAIRO_DOCK_INSERT_ICON, icon, pDock);
 	}
 	if (bUpdateSize)

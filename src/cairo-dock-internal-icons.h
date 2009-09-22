@@ -57,6 +57,7 @@ struct _CairoConfigIcons {
 	gboolean bConstantSeparatorSize;
 	///gboolean bBgForApplets;
 	gboolean bUseLocalIcons;
+	gboolean bMixApplisAndLaunchers;
 	};
 
 #define g_fAmplitude myIcons.fAmplitude
