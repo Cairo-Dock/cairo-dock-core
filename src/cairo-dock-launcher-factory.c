@@ -394,7 +394,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	
 	if (bPreventFromInhibating && icon->cClass != NULL)
 	{
-		cairo_dock_deinhibate_class (icon->cClass, icon);
+		///cairo_dock_deinhibate_class (icon->cClass, icon);  /// mis en commentaire le 21/09/2009
 		g_free (icon->cClass);
 		icon->cClass = NULL;
 	}

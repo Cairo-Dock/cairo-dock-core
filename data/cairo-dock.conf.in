@@ -494,7 +494,7 @@ config_illusion =
 #X+[Separators]
 frame_sep =
 
-#j+[10;128] Icon size at rest (width x height) :
+#j+[4;64] Icon size at rest (width x height) :
 separator size = 48;48
 
 #b+ Automatically add separators ?

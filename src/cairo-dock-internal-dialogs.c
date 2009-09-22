@@ -46,7 +46,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDialogs *pDialogs)
 	pDialogs->bHomogeneous = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "homogeneous text", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	if (! pDialogs->bHomogeneous)
 	{
-		gchar *cFontDescription = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "message police", &bFlushConfFileNeeded, "sans 12", "Icons", NULL);
+		gchar *cFontDescription = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "message police", &bFlushConfFileNeeded, "sans 14", "Icons", NULL);
 		
 		PangoFontDescription *fd = pango_font_description_from_string (cFontDescription);
 		pDialogs->dialogTextDescription.cFont = g_strdup (pango_font_description_get_family (fd));

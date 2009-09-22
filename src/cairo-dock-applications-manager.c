@@ -199,7 +199,9 @@ void cairo_dock_blacklist_appli (Window Xid)
 		cd_debug ("%s (%ld)\n", __func__, Xid);
 		Window *pXid = g_new (Window, 1);
 			*pXid = Xid;
-		g_hash_table_insert (s_hXWindowTable, pXid, g_new0 (Icon, 1));  // NULL
+		Icon *pNullIcon = g_new0 (Icon, 1);
+		pNullIcon->iLastCheckTime = s_iTime;
+		g_hash_table_insert (s_hXWindowTable, pXid, pNullIcon);  // NULL
 	}
 }
 
@@ -709,7 +711,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 		return FALSE;
 	gint iTime = GPOINTER_TO_INT (iTimePtr);
 	
-	//g_print ("%s (%s, %f / %f)\n", __func__, icon->cName, icon->fLastCheckTime, *fTime);
+	//g_print ("%s (%s(%ld) %d / %d)\n", __func__, icon->cName, icon->Xid, icon->iLastCheckTime, iTime);
 	if (icon->iLastCheckTime > 0 && icon->iLastCheckTime < iTime && icon->fPersonnalScale <= 0)
 	{
 		cd_message ("cette fenetre (%ld, %s) est trop vieille (%d / %d)", *Xid, icon->cName, icon->iLastCheckTime, iTime);
@@ -768,7 +770,7 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 	for (i = 0; i < iNbWindows; i ++)
 	{
 		Xid = pXWindowsList[i];
-
+		
 		bAppliAlreadyRegistered = g_hash_table_lookup_extended (s_hXWindowTable, &Xid, &pOriginalXid, (gpointer *) &icon);
 		if (! bAppliAlreadyRegistered)
 		{
@@ -867,6 +869,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 		if (pIcon != NULL)
 		{
 			pIcon->iStackOrder = iStackOrder ++;
+			pIcon->iLastCheckTime = s_iTime;
 			if (/*(pIcon->bIsHidden || ! myTaskBar.bHideVisibleApplis) && */(! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_xwindow_is_on_current_desktop (Xid)))
 			{
 				pParentDock = cairo_dock_insert_appli_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
@@ -1016,13 +1019,17 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	g_return_val_if_fail (pParentDock != NULL, NULL);
 
 	//\_________________ On l'insere dans son dock parent en animant ce dernier eventuellement.
+	if (myIcons.bMixApplisAndLaunchers && pParentDock->iRefCount == 0)
+	{
+		cairo_dock_set_class_order (icon);
+	}
+	else
+		icon->fOrder == CAIRO_DOCK_LAST_ORDER;  // en dernier.
 	cairo_dock_insert_icon_in_dock (icon, pParentDock, bUpdateSize, bAnimate);
 	cd_message (" insertion de %s complete (%.2f %.2fx%.2f) dans %s", icon->cName, icon->fPersonnalScale, icon->fWidth, icon->fHeight, icon->cParentDockName);
 
 	if (bAnimate && cairo_dock_animation_will_be_visible (pParentDock))
 	{
-		///cairo_dock_notify (CAIRO_DOCK_INSERT_ICON, icon, pParentDock);
-		//cairo_dock_start_icon_animation (icon, pParentDock);
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
 	}
 	else

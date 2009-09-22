@@ -32,6 +32,7 @@
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-class-manager.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-icons.h"
 
@@ -41,6 +42,7 @@ extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCurrentLaunchersPath;
 extern gboolean g_bUseOpenGL;
 extern double g_fBackgroundImageWidth, g_fBackgroundImageHeight;
+extern gboolean g_bEasterEggs;
 
 static const gchar * s_cIconTypeNames[(CAIRO_DOCK_NB_TYPES+1)/2] = {"launchers", "applications", "applets"};
 
@@ -93,6 +95,13 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	pIcons->bMixAppletsAndLaunchers = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "mix applets with launchers", &bFlushConfFileNeeded, FALSE , NULL, NULL);
 	if (pIcons->bMixAppletsAndLaunchers)
 		pIcons->tIconTypeOrder[CAIRO_DOCK_APPLET] = pIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER];
+	
+	if (g_bEasterEggs)
+	{
+		pIcons->bMixApplisAndLaunchers = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "mix applis with launchers", &bFlushConfFileNeeded, FALSE , NULL, NULL);
+		if (pIcons->bMixApplisAndLaunchers)
+			pIcons->tIconTypeOrder[CAIRO_DOCK_APPLI] = pIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER];
+	}
 	
 	//\___________________ Reflets.
 	pIcons->fFieldDepth = cairo_dock_get_double_key_value (pKeyFile, "Icons", "field depth", &bFlushConfFileNeeded, 0.7, NULL, NULL);
@@ -299,7 +308,8 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	if (pPrevIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER] != pIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER] ||
 		pPrevIcons->tIconTypeOrder[CAIRO_DOCK_APPLI] != pIcons->tIconTypeOrder[CAIRO_DOCK_APPLI] ||
 		pPrevIcons->tIconTypeOrder[CAIRO_DOCK_APPLET] != pIcons->tIconTypeOrder[CAIRO_DOCK_APPLET] ||
-		pPrevIcons->bMixAppletsAndLaunchers != pIcons->bMixAppletsAndLaunchers)
+		pPrevIcons->bMixAppletsAndLaunchers != pIcons->bMixAppletsAndLaunchers ||
+		pPrevIcons->bMixApplisAndLaunchers != pIcons->bMixApplisAndLaunchers)
 		bGroupOrderChanged = TRUE;
 	else
 		bGroupOrderChanged = FALSE;
@@ -308,6 +318,13 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	{
 		bInsertSeparators = TRUE;  // on enleve les separateurs avant de re-ordonner.
 		cairo_dock_remove_automatic_separators (pDock);
+		
+		if (! pPrevIcons->bMixApplisAndLaunchers && pIcons->bMixApplisAndLaunchers)
+		{
+			/// re-ordonner les applis a cote des lanceurs/applets...
+			cairo_dock_reorder_classes ();
+		}
+		
 		pDock->icons = g_list_sort (pDock->icons, (GCompareFunc) cairo_dock_compare_icons_order);
 	}
 	
@@ -358,6 +375,8 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLI] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLI] ||
 		pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLET] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLET] ||
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLET] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLET] ||
+		pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] ||
+		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] ||
 		pPrevIcons->fAmplitude != pIcons->fAmplitude ||
 		(!g_bUseOpenGL && pPrevIcons->fFieldDepth != pIcons->fFieldDepth) ||
 		(!g_bUseOpenGL && pPrevIcons->fAlbedo != pIcons->fAlbedo) ||

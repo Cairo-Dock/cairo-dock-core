@@ -842,6 +842,8 @@ static void _cairo_dock_reset_overwrite_exceptions (gchar *cClass, CairoDockClas
 void cairo_dock_set_overwrite_exceptions (const gchar *cExceptions)
 {
 	g_hash_table_foreach (s_hClassTable, (GHFunc) _cairo_dock_reset_overwrite_exceptions, NULL);
+	if (cExceptions == NULL)
+		return ;
 	
 	gchar **cClassList = g_strsplit (cExceptions, ";", -1);
 	if (cClassList == NULL || cClassList[0] == NULL || *cClassList[0] == '\0')
@@ -867,6 +869,8 @@ static void _cairo_dock_reset_group_exceptions (gchar *cClass, CairoDockClassApp
 void cairo_dock_set_group_exceptions (const gchar *cExceptions)
 {
 	g_hash_table_foreach (s_hClassTable, (GHFunc) _cairo_dock_reset_group_exceptions, NULL);
+	if (cExceptions == NULL)
+		return ;
 	
 	gchar **cClassList = g_strsplit (cExceptions, ";", -1);
 	if (cClassList == NULL || cClassList[0] == NULL || *cClassList[0] == '\0')
@@ -980,5 +984,133 @@ Icon *cairo_dock_get_inhibator (Icon *pIcon, gboolean bOnlyInDock)
 		}
 	}
 	return NULL;
+}
+
+void cairo_dock_set_class_order (Icon *pIcon)
+{
+	double fOrder = CAIRO_DOCK_LAST_ORDER;
+	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
+	if (pClassAppli != NULL)
+	{
+		Icon *pSameClassIcon = NULL;
+		CairoDock *pDock;
+		Icon *pInhibatorIcon;
+		GList *ic;
+		for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
+		{
+			pInhibatorIcon = ic->data;
+			if (CAIRO_DOCK_IS_APPLET (pInhibatorIcon) && ! myIcons.bMixAppletsAndLaunchers)
+				continue;
+			pDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);
+			if (!pDock->bIsMainDock)
+				pInhibatorIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+			pSameClassIcon = pInhibatorIcon;
+			if (CAIRO_DOCK_IS_LAUNCHER (pSameClassIcon))  // on prend les lanceurs de preference.
+				break ;
+		}
+		
+		if (pSameClassIcon == NULL)  // alors on se place par rapport a une autre appli.
+		{
+			Icon *pAppliIcon = NULL;
+			for (ic = pClassAppli->pAppliOfClass; ic != NULL; ic = ic->next)
+			{
+				pAppliIcon = ic->data;
+				if (pAppliIcon == pIcon)
+					continue;
+				pDock = cairo_dock_search_dock_from_name (pAppliIcon->cParentDockName);
+				if (pDock->bIsMainDock)
+				{
+					pSameClassIcon = pAppliIcon;
+					break ;
+				}
+			}
+		}
+		
+		if (pSameClassIcon != NULL)  // une icone de meme classe existe dans le main dock, on va se placer apres.
+		{
+			ic = g_list_find (g_pMainDock->icons, pSameClassIcon);
+			if (ic != NULL && ic->next != NULL)  // on remonte vers la droite toutes les icones de meme classe.
+			{
+				Icon *pNextIcon = NULL;
+				ic = ic->next;
+				for (;ic != NULL; ic = ic->next)
+				{
+					pNextIcon = ic->data;
+					if (!pNextIcon->cClass || strcmp (pNextIcon->cClass, pIcon->cClass) != 0)
+						break;
+					pSameClassIcon = pNextIcon;
+					pNextIcon = NULL;
+				}
+				fOrder = (pNextIcon ? (pNextIcon->fOrder + pSameClassIcon->fOrder) / 2 : pSameClassIcon->fOrder + 1);
+			}
+			else
+			{
+				fOrder = pSameClassIcon->fOrder + 1;
+			}
+		}
+	}
+	pIcon->fOrder = fOrder;
+}
+
+static void _cairo_dock_reorder_one_class (gchar *cClass, CairoDockClassAppli *pClassAppli, int *iMaxOrder)
+{
+	// on touve un inhibiteur par rapport auquel se placer.
+	Icon *pSameClassIcon = NULL;
+	Icon *pInhibatorIcon;
+	CairoDock *pDock;
+	GList *ic;
+	for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
+	{
+		pInhibatorIcon = ic->data;
+		if (CAIRO_DOCK_IS_APPLET (pInhibatorIcon) && ! myIcons.bMixAppletsAndLaunchers)
+			continue;
+		pDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);
+		if (!pDock->bIsMainDock)
+			pInhibatorIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+		pSameClassIcon = pInhibatorIcon;
+		if (CAIRO_DOCK_IS_LAUNCHER (pSameClassIcon))  // on prend les lanceurs de preference.
+			break ;
+	}
+	
+	if (pSameClassIcon == NULL)  // on met tout a la suite.
+	{
+		Icon *pAppliIcon = NULL;
+		for (ic = pClassAppli->pAppliOfClass; ic != NULL; ic = ic->next)
+		{
+			pAppliIcon = ic->data;
+			pDock = cairo_dock_search_dock_from_name (pAppliIcon->cParentDockName);
+			if (pDock->bIsMainDock)
+			{
+				*iMaxOrder ++;
+				pAppliIcon->fOrder = *iMaxOrder;
+				break ;
+			}
+		}
+	}
+	else
+	{
+		ic = g_list_find (g_pMainDock->icons, pSameClassIcon);
+		if (ic != NULL && ic->next != NULL)  // on remonte vers la droite jusqu'a trouver une icone de classe differente.
+		{
+			Icon *pNextIcon = NULL;
+			ic = ic->next;
+			for (;ic != NULL; ic = ic->next)
+			{
+				pNextIcon = ic->data;
+				if (!pNextIcon->cClass || strcmp (pNextIcon->cClass, pSameClassIcon->cClass) != 0)
+					break;
+				pSameClassIcon = pNextIcon;
+				pNextIcon = NULL;
+			}
+		}
+		else
+		{
+			
+		}
+	}
+}
+void cairo_dock_reorder_classes (void)
+{
+	g_hash_table_foreach (s_hClassTable, (GHFunc) _cairo_dock_reorder_one_class, NULL);
 }
 
