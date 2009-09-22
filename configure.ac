@@ -108,7 +108,6 @@ AC_CONFIG_FILES([Makefile
 		data/default-theme/icons/Makefile
 		data/default-theme/plug-ins/Makefile
 		data/default-theme/plug-ins/Animated-icons/Makefile
-		data/default-theme/plug-ins/Cairo-Penguin/Makefile
 		data/default-theme/plug-ins/clock/Makefile
 		data/default-theme/plug-ins/dialog-rendering/Makefile
 		data/default-theme/plug-ins/dustbin/Makefile
@@ -120,7 +119,6 @@ AC_CONFIG_FILES([Makefile
 		data/default-theme/plug-ins/shortcuts/Makefile
 		data/default-theme/plug-ins/showDesktop/Makefile
 		data/default-theme/plug-ins/switcher/Makefile
-		data/default-theme/plug-ins/weather/Makefile
 		data/gauges/Makefile
 		data/gauges/battery/Makefile
 		data/gauges/turbo-night-fuel/Makefile
