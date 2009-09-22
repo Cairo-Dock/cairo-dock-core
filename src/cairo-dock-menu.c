@@ -1360,7 +1360,7 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 		}
 		if (! g_bLocked)
 		{
-			_add_entry_in_menu (myAccessibility.bLockAll ? _("unlock dock") : _("lock dock"),
+			pMenuItem = _add_entry_in_menu (myAccessibility.bLockAll ? _("unlock dock") : _("lock dock"),
 				CAIRO_DOCK_SHARE_DATA_DIR"/icon-lock-icons.svg",
 				_cairo_dock_lock_all,
 				pSubMenu);
@@ -1369,7 +1369,7 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 		
 		if (CAIRO_DOCK_IS_DOCK (pContainer) && ! CAIRO_DOCK (pContainer)->bAutoHide)
 		{
-			_add_entry_in_menu (_("Quick-Hide"), GTK_STOCK_GOTO_BOTTOM, _cairo_dock_quick_hide, pSubMenu);
+			pMenuItem = _add_entry_in_menu (_("Quick-Hide"), GTK_STOCK_GOTO_BOTTOM, _cairo_dock_quick_hide, pSubMenu);
 			gtk_widget_set_tooltip_text (pMenuItem, _("It will hide the dock until you enter inside with the mouse."));
 		}
 		
@@ -1384,13 +1384,13 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 		g_free (cCairoAutoStartEntryPath2);
 		g_free (cCairoAutoStartDirPath);
 		
-		_add_entry_in_menu (_("Development's site"), GTK_STOCK_DIALOG_WARNING, _cairo_dock_check_for_updates, pSubMenu);
+		pMenuItem = _add_entry_in_menu (_("Development's site"), GTK_STOCK_DIALOG_WARNING, _cairo_dock_check_for_updates, pSubMenu);
 		gtk_widget_set_tooltip_text (pMenuItem, _("Find out the latest version of Cairo-Dock here !."));
 
-		_add_entry_in_menu (_("Community's site"), GTK_STOCK_DIALOG_INFO, _cairo_dock_help, pSubMenu);
+		pMenuItem = _add_entry_in_menu (_("Community's site"), GTK_STOCK_DIALOG_INFO, _cairo_dock_help, pSubMenu);
 		gtk_widget_set_tooltip_text (pMenuItem, _("A problem ? A suggestion ? Want to talk to us ? You're welcome !"));
 		
-		_add_entry_in_menu (_("Help"), GTK_STOCK_HELP, _cairo_dock_present_help, pSubMenu);
+		pMenuItem = _add_entry_in_menu (_("Help"), GTK_STOCK_HELP, _cairo_dock_present_help, pSubMenu);
 		gtk_widget_set_tooltip_text (pMenuItem, _("There is no problem, there is only solution (and a lot of useful hints !)."));
 		
 		_add_entry_in_menu (_("About"), GTK_STOCK_ABOUT, _cairo_dock_about, pSubMenu);
