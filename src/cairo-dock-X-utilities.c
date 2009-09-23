@@ -1109,7 +1109,7 @@ gboolean cairo_dock_xwindow_is_on_current_desktop (Window Xid)
 	cd_debug ("");
 	int iDesktopNumber, iDesktopViewportX, iDesktopViewportY;
 	iDesktopNumber = cairo_dock_get_current_desktop ();
-
+	
 	return cairo_dock_xwindow_is_on_this_desktop (Xid, iDesktopNumber);
 }
 

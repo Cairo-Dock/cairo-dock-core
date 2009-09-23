@@ -212,6 +212,8 @@ struct _CairoDock {
 	gint iDecorationsHeight;
 	/// maximal magnitude of the zoom, between 0 and 1.
 	gdouble fMagnitudeMax;
+	/// whether the position of icons for the WM is invalid.
+	gboolean bWMIconseedsUptade;
 };
 
 

@@ -118,7 +118,7 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 				pDock->container.iWindowPositionX,
 				iNewHeight,
 				iNewWidth);
-
+		
 		if (pDock->bAutoHide && pDock->iRefCount == 0)
 		{
 			//g_print ("on arrete les animations\n");
@@ -149,7 +149,7 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 
 			cairo_dock_allow_entrance (pDock);
 		}
-
+		
 		gtk_widget_queue_draw (pDock->container.pWidget);
 
 		return FALSE;
@@ -241,11 +241,17 @@ static gboolean _cairo_dock_grow_up (CairoDock *pDock)
 
 	if (pDock->iMagnitudeIndex == CAIRO_DOCK_NB_MAX_ITERATIONS && pDock->fFoldingFactor == 0)  // fin de grossissement et de depliage.
 	{
-		if (pDock->iRefCount == 0 && pDock->bAutoHide)  // on arrive en fin de l'animation qui montre le dock, les icones sont bien placees a partir de maintenant.
+		if (pDock->bWMIconseedsUptade)
 		{
 			cairo_dock_set_icons_geometry_for_window_manager (pDock);
-			cairo_dock_replace_all_dialogs ();
+			pDock->bWMIconseedsUptade = FALSE;
 		}
+		cairo_dock_replace_all_dialogs ();
+		/*if (pDock->iRefCount == 0 && pDock->bAutoHide)  // on arrive en fin de l'animation qui montre le dock, les icones sont bien placees a partir de maintenant.
+		{
+			cairo_dock_set_icons_geometry_for_window_manager (pDock);  // je pense que c'est redondant de le faire ici et dans le update_dock_size.
+			cairo_dock_replace_all_dialogs ();
+		}*/
 		return FALSE;
 	}
 	else
@@ -302,7 +308,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 	if (pDock->iMagnitudeIndex == 0)  // on est arrive en bas.
 	{
 		//g_print ("equilibre atteint (%d)\n", pDock->container.bInside);
-		if (iPrevMagnitudeIndex != 0 || (pDock->fDecorationsOffsetX == 0 && (pDock->fFoldingFactor == 0 || pDock->fFoldingFactor == 1)))  // on vient d'arriver en bas OU l'animation de shrink est finie.
+		if (iPrevMagnitudeIndex != 0 || (pDock->fDecorationsOffsetX == 0 && (pDock->fFoldingFactor == 0 || pDock->fFoldingFactor == 1)))  // on vient d'arriver en bas OU l'animation de depliage est finie.
 		{
 			if (! pDock->container.bInside)  // on peut etre hors des icones sans etre hors de la fenetre.
 			{

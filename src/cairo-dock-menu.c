@@ -284,6 +284,7 @@ static void _cairo_dock_quit (GtkMenuItem *pMenuItem, gpointer *data)
 	}
 	
 	int answer = cairo_dock_ask_question_and_wait (_("Quit Cairo-Dock ?"), pIcon, pContainer);
+	g_print ("quit : %d (yes:%d)\n", answer, GTK_RESPONSE_YES);
 	if (answer == GTK_RESPONSE_YES)
 		gtk_main_quit ();
 }
