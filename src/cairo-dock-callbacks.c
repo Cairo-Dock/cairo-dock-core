@@ -824,6 +824,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	
 	if (pDock->container.iWidth != iNewWidth || pDock->container.iHeight != iNewHeight)
 	{
+		g_print ("  resize on enter\n");
 		if (pDock->container.bIsHorizontal)
 			gdk_window_move_resize (pWidget->window,
 				pDock->container.iWindowPositionX,
@@ -883,8 +884,9 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	
 	cairo_dock_start_growing (pDock);
-
-	return FALSE;
+	
+	g_print (" fin du enter\n");
+	return TRUE;
 }
 
 
@@ -1481,23 +1483,28 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		// only Compiz seems to respect the _NET_WM_SYNC_REQUEST window manager protocol. :-(
 		if (g_bEasterEggs)
 		{
+			//g_print ("debut du redessin2\n");
 			gtk_widget_queue_draw (pWidget);
 			gdk_window_process_updates (pWidget->window, FALSE);
+			//g_print ("fin du redessin2\n");
 		}
 		else
 		{
-			gtk_widget_queue_draw (pWidget);
 			//g_print ("debut du redessin\n");
+			gtk_widget_queue_draw (pWidget);
 			while (gtk_events_pending ())  // on force un redessin immediat sinon on a quand meme un "flash".
 				gtk_main_iteration ();
 			//g_print ("fin du redessin\n");
 		}
 	}
+	else
+		gtk_widget_queue_draw (pWidget);
 	
-	if (pDock->iSidMoveDown == 0 && pDock->iSidMoveUp == 0)  // ce n'est pas du a une animation. Donc en cas d'apparition due a l'auto-hide, ceci ne sera pas fait ici, mais a la fin de l'animation.
+	if (pDock->iSidMoveDown == 0 && pDock->iSidMoveUp == 0)  // ce n'est pas du a une animation d'auto-hide. Donc en cas d'apparition due a l'auto-hide, ceci ne sera pas fait ici, mais a la fin de l'animation de grossissement/depliage.
 	{
-		cairo_dock_set_icons_geometry_for_window_manager (pDock);
-
+		//g_print ("configure\n");
+		cairo_dock_set_icons_geometry_for_window_manager (pDock);  // changement de position ou de taille du dock => on replace les icones.
+		
 		cairo_dock_replace_all_dialogs ();
 	}
 	
