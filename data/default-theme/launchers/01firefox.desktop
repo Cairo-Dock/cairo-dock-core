@@ -7,7 +7,7 @@ Name=Firefox Web Browser
 #{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1 for the Applications Menu, <Ctrl>c or <Ctrl>v to copy or paste, etc}
 Exec=firefox 
 #S Image's name or path :
-Icon=firefox-3.0
+Icon=firefox-3.5
 #d Name of the container it belongs to:
 #{If you write here a container's name that doesn't exist yet, a new one will be created, with this icon inside.}
 Container=_MainDock_
