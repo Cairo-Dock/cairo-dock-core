@@ -532,7 +532,12 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 			if (! CAIRO_DOCK_IS_APPLI (icon))  // appli blacklistee
 			{
 				/// choper les s_aNetWmState pour verifier qu'elle a toujours le skip taskbar...
-				
+				if (! cairo_dock_xwindow_skip_taskbar (Xid))
+				{
+					g_print ("Special case : this appli should not be ignored any more!\n");
+					g_hash_table_remove (s_hXWindowTable, &Xid);
+					g_free (icon);
+				}
 				continue;
 			}
 			else if (icon->fPersonnalScale > 0)  // pour une icone en cours de supression, on ne fait rien.
@@ -544,7 +549,16 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				if (event.xproperty.atom == s_aNetWmState)  // changement d'etat (hidden, maximized, fullscreen, demands attention)
 				{
 					gboolean bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention;
-					cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention);
+					if (! cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention))
+					{
+						g_print ("Special case : this appli should be ignored from now !\n");
+						CairoDock *pParentDock = cairo_dock_detach_appli (icon);
+						if (pParentDock != NULL)
+							gtk_widget_queue_draw (pParentDock->container.pWidget);
+						cairo_dock_free_icon (icon);
+						cairo_dock_blacklist_appli (Xid);
+						continue;
+					}
 					cd_debug ("changement d'etat de %d => {%d ; %d ; %d ; %d}", Xid, bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention);
 					
 					// demande d'attention.

@@ -991,21 +991,6 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 				}
 				cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, cConfFileName);  // chemin du .conf dans le theme courant.
 				
-				// on met a jour le .conf du nouveau theme.
-				/*GError *erreur = NULL;
-				GKeyFile *pKeyFile = cairo_dock_open_key_file (cInstanceConfFilePath);
-				if (pKeyFile == NULL)
-					return NULL;
-
-				gboolean bNeedsUpgrade = cairo_dock_conf_file_needs_update (pKeyFile, pModule->pVisitCard->cModuleVersion);
-				if (bNeedsUpgrade)
-				{
-					cairo_dock_flush_conf_file (pKeyFile, cInstanceConfFilePath, pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);
-					g_key_file_free (pKeyFile);
-					pKeyFile = cairo_dock_open_key_file (cInstanceConfFilePath);
-					if (pKeyFile == NULL)
-						return NULL;
-				}*/
 				// on fusionne les 2 .conf.
 				if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 				{
@@ -1027,6 +1012,11 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			g_dir_close (dir);
 			g_free (cNewPlugInsDir);
 		}
+		
+		// precaution probablement inutile.
+		gchar *command = g_strdup_printf ("chmod -R 777 '%s'", g_cCurrentThemePath);
+		r = system (command);
+		g_free (command);
 		
 		//\___________________ On charge le theme courant.
 		cairo_dock_set_status_message (s_pThemeManager, _("Now reloading theme ..."));

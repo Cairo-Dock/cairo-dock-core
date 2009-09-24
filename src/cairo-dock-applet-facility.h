@@ -163,7 +163,7 @@ void cairo_dock_open_module_config_on_demand (int iClickedButton, GtkWidget *pIn
 *@param fDefaultValue default value if the group/key is not found (typically if the key is new).
 *@return a double.
 */
-#define CD_CONFIG_GET_DOUBLE_WITH_DEFAULT(cGroupName, cKeyName, fDefaultValue) cairo_dock_get_double_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, 0., NULL, NULL)
+#define CD_CONFIG_GET_DOUBLE_WITH_DEFAULT(cGroupName, cKeyName, fDefaultValue) cairo_dock_get_double_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, fDefaultValue, NULL, NULL)
 /** Get the value of a 'double' from the conf file, with 0. as default value.
 *@param cGroupName name of the group in the conf file.
 *@param cKeyName name of the key in the conf file.
@@ -304,24 +304,6 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_CREATE_MY_SUB_MENU(...) CD_APPLET_ADD_SUB_MENU_WITH_IMAGE (myApplet->pModule->pVisitCard->cModuleName, CD_APPLET_MY_MENU, MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE)
 
-/** Create and add an entry to a menu.
-*@param cLabel name of the entry.
-*@param pFunction function called when the user selects this entry.
-*@param pMenu menu to add the entry to.
-*@param pData data passed as parameter of the callback.
-*/
-#define CD_APPLET_ADD_IN_MENU_WITH_DATA(cLabel, pFunction, pMenu, pData) do { \
-	pMenuItem = gtk_menu_item_new_with_label (cLabel); \
-	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem); \
-	g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK (pFunction), pData); } while (0)
-
-/** Create and add an entry to a menu. 'myApplet' will be passed to the callback.
-*@param cLabel name of the entry.
-*@param pFunction function called when the user selects this entry.
-*@param pMenu menu to add the entry to.
-*/
-#define CD_APPLET_ADD_IN_MENU(cLabel, pFunction, pMenu) CD_APPLET_ADD_IN_MENU_WITH_DATA(cLabel, pFunction, pMenu, myApplet)
-
 /** Create and add an entry to a menu, with an icon.
 *@param cLabel name of the entry.
 *@param gtkStock name of a GTK icon or path to an image.
@@ -329,7 +311,22 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param pSubMenu menu to add the entry to.
 *@param pData data passed as parameter of the callback.
 */
-#define CD_APPLET_ADD_IN_MENU_WITH_STOCK_AND_DATA(cLabel, gtkStock, pCallBack, pSubMenu, pData) cairo_dock_add_in_menu_with_stock_and_data (cLabel, gtkStock, (GFunc)pCallBack, pSubMenu, pData)
+#define CD_APPLET_ADD_IN_MENU_WITH_STOCK_AND_DATA(cLabel, gtkStock, pCallBack, pMenu, pData) cairo_dock_add_in_menu_with_stock_and_data (cLabel, gtkStock, (GFunc)pCallBack, pMenu, pData)
+
+/** Create and add an entry to a menu.
+*@param cLabel name of the entry.
+*@param pFunction function called when the user selects this entry.
+*@param pMenu menu to add the entry to.
+*@param pData data passed as parameter of the callback.
+*/
+#define CD_APPLET_ADD_IN_MENU_WITH_DATA(cLabel, pCallBack, pMenu, pData) CD_APPLET_ADD_IN_MENU_WITH_STOCK_AND_DATA (cLabel, NULL, pCallBack, pMenu, pData)
+
+/** Create and add an entry to a menu. 'myApplet' will be passed to the callback.
+*@param cLabel name of the entry.
+*@param pFunction function called when the user selects this entry.
+*@param pMenu menu to add the entry to.
+*/
+#define CD_APPLET_ADD_IN_MENU(cLabel, pCallBack, pMenu) CD_APPLET_ADD_IN_MENU_WITH_DATA(cLabel, pCallBack, pMenu, myApplet)
 
 /** Create and add an entry to a menu, with an icon. 'myApplet' will be passed to the callback.
 *@param cLabel name of the entry.

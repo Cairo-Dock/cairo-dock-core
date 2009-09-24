@@ -211,7 +211,7 @@ static void _accept_metacity_composition (int iClickedButton, GtkWidget *pIntera
 }
 
 #define _create_dir_or_die(cDirPath) do {\
-	if (g_mkdir (cDirPath, 7*8*8+7*8+5) != 0) {\
+	if (g_mkdir (cDirPath, 7*8*8+7*8+7) != 0) {\
 		cd_warning ("couldn't create directory %s", cDirPath);\
 		exit (1); } } while (0)
 

@@ -65,6 +65,7 @@ typedef void (*CairoDockRenderFunc) (cairo_t *pCairoContext, CairoDock *pDock);
 typedef void (*CairoDockRenderOptimizedFunc) (cairo_t *pCairoContext, CairoDock *pDock, GdkRectangle *pArea);
 typedef void (*CairoDockSetSubDockPositionFunc) (Icon *pPointedIcon, CairoDock *pParentDock);
 typedef void (*CairoDockGLRenderFunc) (CairoDock *pDock);
+typedef void (*CairoDockRenderFreeDataFunc) (CairoDock *pDock);
 
 /// Dock's renderer, also known as 'view'.
 struct _CairoDockRenderer {
@@ -90,6 +91,8 @@ struct _CairoDockRenderer {
 	gchar *cReadmeFilePath;
 	/// path to a preview image.
 	gchar *cPreviewFilePath;
+	/// function called when the renderer is unset from the dock.
+	CairoDockRenderFreeDataFunc free_data;
 };
 
 typedef enum {

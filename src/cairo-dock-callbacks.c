@@ -93,9 +93,10 @@ extern gboolean g_bEasterEggs;
 
 static gboolean s_bHideAfterShortcut = FALSE;
 static gboolean s_bFrozenDock = FALSE;
-
+static gboolean s_bIconDragged = FALSE;
 
 #define _mouse_is_really_outside(pDock) (pDock->container.iMouseX <= 0 || pDock->container.iMouseX >= pDock->container.iWidth || pDock->container.iMouseY <= 0 || pDock->container.iMouseY >= pDock->container.iHeight)
+#define CD_CLICK_ZONE 5
 
 void cairo_dock_freeze_docks (gboolean bFreeze)
 {
@@ -433,8 +434,9 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		fLastTime = pMotion->time;
 		
 		//\_______________ On tire l'icone cliquee.
-		if (s_pIconClicked != NULL && s_pIconClicked->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && ! g_bLocked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll && (fabs (pMotion->x - s_iClickX) > 5 || fabs (pMotion->y - s_iClickY) > 5))
+		if (s_pIconClicked != NULL && s_pIconClicked->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && ! g_bLocked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll && (fabs (pMotion->x - s_iClickX) > CD_CLICK_ZONE || fabs (pMotion->y - s_iClickY) > CD_CLICK_ZONE))
 		{
+			s_bIconDragged = TRUE;
 			s_pIconClicked->iAnimationState = CAIRO_DOCK_STATE_FOLLOW_MOUSE;
 			//pDock->fAvoidingMouseMargin = .5;
 			pDock->iAvoidingMouseIconType = s_pIconClicked->iType;  // on pourrait le faire lors du clic aussi.
@@ -824,7 +826,6 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	
 	if (pDock->container.iWidth != iNewWidth || pDock->container.iHeight != iNewHeight)
 	{
-		g_print ("  resize on enter\n");
 		if (pDock->container.bIsHorizontal)
 			gdk_window_move_resize (pWidget->window,
 				pDock->container.iWindowPositionX,
@@ -885,7 +886,6 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	
 	cairo_dock_start_growing (pDock);
 	
-	g_print (" fin du enter\n");
 	return TRUE;
 }
 
@@ -1084,7 +1084,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	//g_print ("+ %s (%s)\n", __func__, icon ? icon->cName : "no icon");
 	if (icon == NULL)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-	if (icon->pSubDock != NULL && myAccessibility.bShowSubDockOnClick && ! (iButtonState & GDK_SHIFT_MASK))  // icone de sous-dock a montrer au clic.
+	if (icon->pSubDock != NULL && (myAccessibility.bShowSubDockOnClick || !GTK_WIDGET_VISIBLE (pDock->container.pWidget)) && ! (iButtonState & GDK_SHIFT_MASK))  // icone de sous-dock a montrer au clic.
 	{
 		cairo_dock_show_subdock (icon, pDock, FALSE);
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
@@ -1223,11 +1223,14 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 					{
 						s_pIconClicked = NULL;  // il faut le faire ici au cas ou le clic induirait un dialogue bloquant qui nous ferait sortir du dock par exemple.
 						//g_print ("+ click on '%s' (%s)\n", icon->cName, icon->cCommand);
-						cairo_dock_notify (CAIRO_DOCK_CLICK_ICON, icon, pDock, pButton->state);
-						if (myAccessibility.cRaiseDockShortcut != NULL)
-							s_bHideAfterShortcut = TRUE;
-						
-						cairo_dock_start_icon_animation (icon, pDock);
+						if (! s_bIconDragged)  // on ignore le drag'n'drop sur elle-meme.
+						{
+							cairo_dock_notify (CAIRO_DOCK_CLICK_ICON, icon, pDock, pButton->state);
+							if (myAccessibility.cRaiseDockShortcut != NULL)
+								s_bHideAfterShortcut = TRUE;
+							
+							cairo_dock_start_icon_animation (icon, pDock);
+						}
 					}
 					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked && ! g_bLocked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)  //  && icon->iType == s_pIconClicked->iType
 					{
@@ -1309,6 +1312,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 				}
 				//g_print ("- apres clic : s_pIconClicked <- NULL\n");
 				s_pIconClicked = NULL;
+				s_bIconDragged = FALSE;
 			break ;
 			
 			case GDK_BUTTON_PRESS :

@@ -238,6 +238,11 @@ void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 	g_return_if_fail (pDock != NULL);
 	cd_message ("%s (%s)", __func__, cRendererName);
 	
+	if (pDock->pRenderer && pDock->pRenderer->free_data)
+	{
+		pDock->pRenderer->free_data (pDock);
+		pDock->pRendererData = NULL;
+	}
 	pDock->pRenderer = cairo_dock_get_renderer (cRendererName, (pDock->iRefCount == 0));
 	
 	pDock->fMagnitudeMax = 1.;

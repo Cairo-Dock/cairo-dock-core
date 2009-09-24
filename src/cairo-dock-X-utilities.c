@@ -72,6 +72,7 @@ static Atom s_aNetWmBelow;
 static Atom s_aNetWmAbove;
 static Atom s_aNetWmHidden;
 static Atom s_aNetWmFullScreen;
+static Atom s_aNetWmSkipTaskbar;
 static Atom s_aNetWmMaximizedHoriz;
 static Atom s_aNetWmMaximizedVert;
 static Atom s_aNetWmDemandsAttention;
@@ -111,6 +112,7 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 	s_aNetWmBelow				= XInternAtom (s_XDisplay, "_NET_WM_STATE_BELOW", False);
 	s_aNetWmSticky				= XInternAtom (s_XDisplay, "_NET_WM_STATE_STICKY", False);
 	s_aNetWmHidden				= XInternAtom (s_XDisplay, "_NET_WM_STATE_HIDDEN", False);
+	s_aNetWmSkipTaskbar 			= XInternAtom (s_XDisplay, "_NET_WM_STATE_SKIP_TASKBAR", False);
 	s_aNetWmMaximizedHoriz		= XInternAtom (s_XDisplay, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
 	s_aNetWmMaximizedVert		= XInternAtom (s_XDisplay, "_NET_WM_STATE_MAXIMIZED_VERT", False);
 	s_aNetWmDemandsAttention	= XInternAtom (s_XDisplay, "_NET_WM_STATE_DEMANDS_ATTENTION", False);
@@ -887,6 +889,10 @@ gboolean cairo_dock_xwindow_is_fullscreen (Window Xid)
 {
 	return _cairo_dock_window_is_in_state (Xid, s_aNetWmFullScreen);
 }
+gboolean cairo_dock_xwindow_skip_taskbar (Window Xid)
+{
+	return _cairo_dock_window_is_in_state (Xid, s_aNetWmSkipTaskbar);
+}
 void cairo_dock_xwindow_is_above_or_below (Window Xid, gboolean *bIsAbove, gboolean *bIsBelow)
 {
 	g_return_if_fail (Xid > 0);
@@ -921,16 +927,17 @@ void cairo_dock_xwindow_is_above_or_below (Window Xid, gboolean *bIsAbove, gbool
 	XFree (pXStateBuffer);
 }
 
-void cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gboolean *bIsFullScreen, gboolean *bIsHidden, gboolean *bIsMaximized, gboolean *bDemandsAttention)
+gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gboolean *bIsFullScreen, gboolean *bIsHidden, gboolean *bIsMaximized, gboolean *bDemandsAttention)
 {
-	g_return_if_fail (Xid > 0);
+	g_return_val_if_fail (Xid > 0, FALSE);
 	cd_debug ("%s (%d)", __func__, Xid);
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
 	unsigned long iLeftBytes, iBufferNbElements = 0;
 	gulong *pXStateBuffer = NULL;
 	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmState, 0, G_MAXULONG, False, XA_ATOM, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pXStateBuffer);
-
+	
+	gboolean bValid = TRUE;
 	*bIsFullScreen = FALSE;
 	*bIsHidden = FALSE;
 	*bIsMaximized = FALSE;
@@ -943,13 +950,13 @@ void cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gboole
 		{
 			if (pXStateBuffer[i] == s_aNetWmFullScreen)
 			{
-				cd_debug (  "s_aNetWmFullScreen");
+				cd_debug (" s_aNetWmFullScreen");
 				*bIsFullScreen = TRUE;
 				break ;
 			}
 			else if (pXStateBuffer[i] == s_aNetWmHidden)
 			{
-				cd_debug (  "s_aNetWmHidden");
+				cd_debug (" s_aNetWmHidden");
 				*bIsHidden = TRUE;
 			}
 			else if (pXStateBuffer[i] == s_aNetWmMaximizedVert)
@@ -969,10 +976,17 @@ void cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gboole
 				cd_debug (" cette fenetre demande notre attention !");
 				*bDemandsAttention = TRUE;
 			}
+			
+			else if (pXStateBuffer[i] == s_aNetWmSkipTaskbar)
+			{
+				cd_warning ("this appli should not be in taskbar anymore !");
+				bValid = FALSE;
+			}
 		}
 	}
 	
 	XFree (pXStateBuffer);
+	return bValid;
 }
 
 gboolean cairo_dock_xwindow_is_sticky (Window Xid)

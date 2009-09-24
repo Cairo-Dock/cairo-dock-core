@@ -338,7 +338,13 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 	
 	gtk_widget_destroy (pDock->container.pWidget);
 	pDock->container.pWidget = NULL;
-
+	
+	if (pDock->pRenderer != NULL && pDock->pRenderer->free_data != NULL)
+	{
+		pDock->pRenderer->free_data (pDock);
+		pDock->pRendererData = NULL;
+	}
+	
 	g_free (pDock->cRendererName);
 	pDock->cRendererName = NULL;
 }
