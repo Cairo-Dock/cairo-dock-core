@@ -1107,7 +1107,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	if (pAttribute->iTimeLength != 0)
 		pDialog->iSidTimer = g_timeout_add (pAttribute->iTimeLength, (GSourceFunc) _cairo_dock_dialog_auto_delete, (gpointer) pDialog);
 	
-	if (pIcon->cParentDockName != NULL)
+	if (pIcon && pIcon->cParentDockName != NULL)
 		cairo_dock_dialog_window_created ();
 	return pDialog;
 }

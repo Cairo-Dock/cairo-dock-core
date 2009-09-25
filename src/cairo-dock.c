@@ -602,26 +602,25 @@ int main (int argc, char** argv)
 		GdkScreen *pScreen = gdk_screen_get_default ();
 		if (! mySystem.bUseFakeTransparency && ! gdk_screen_is_composited (pScreen))
 		{
+			cd_warning ("no composite manager found");
 			// Si l'utilisateur utilise Metacity, on lui propose d'activer le composite.
-			gchar *cPsef = cairo_dock_launch_command_sync ("ps -ef | /bin/grep metacity");
+			gchar *cPsef = cairo_dock_launch_command_sync ("ps -e | /bin/grep metacity");
 			if (cPsef != NULL && *cPsef != '\0')  // "metacity" a ete trouve.
 			{
-				if (strchr (cPsef, '\n') != NULL || g_strstr_len (cPsef, -1, "grep") == NULL)  // au moins 2 resultats ou 1 seul sans compter le grep.
+				Icon *pIcon = cairo_dock_get_dialogless_icon ();
+				
+				int iAnswer= cairo_dock_ask_question_and_wait (_("To remove the black rectangle around the dock, you need to activate a composite manager.\nFor instance, it can be done by activating the desktop effects, launching Compiz, or activating the composition in Metacity.\nI can do this lattest operation for you, do you want to proceed ?"), pIcon, CAIRO_CONTAINER (g_pMainDock));
+				if (iAnswer == GTK_RESPONSE_YES)
 				{
-					Icon *pIcon = cairo_dock_get_dialogless_icon ();
-					
-					int iAnswer= cairo_dock_ask_question_and_wait (_("To remove the black rectangle around the dock, you need to activate a composite manager.\nFor instance, it can be done by activating the desktop effects, launching Compiz, or activating the composition in Metacity.\nI can do this lattest operation for you, do you want to proceed ?"), pIcon, CAIRO_CONTAINER (g_pMainDock));
-					if (iAnswer == GTK_RESPONSE_YES)
-					{
-						int r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true");
-						cairo_dock_show_dialog_with_question (_("Do you want to keep this setting ?"), pIcon, CAIRO_CONTAINER (g_pMainDock), NULL, (CairoDockActionOnAnswerFunc) _accept_metacity_composition, NULL, NULL);
-					}
+					int r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true");
+					cairo_dock_show_dialog_with_question (_("Do you want to keep this setting ?"), pIcon, CAIRO_CONTAINER (g_pMainDock), NULL, (CairoDockActionOnAnswerFunc) _accept_metacity_composition, NULL, NULL);
 				}
 			}
 			else  // sinon il a droit a un "message a caractere informatif".
 			{
 				cairo_dock_show_general_message (_("To remove the black rectangle around the dock, you need to activate a composite manager.\nFor instance, it can be done by activating the desktop effects, launching Compiz, or activating the composition in Metacity.\nIf your machine can't support composition, Cairo-Dock can emulate it; this option is in the 'System' module of the configuration, at the bottom of the page."), 0);
 			}
+			g_free (cPsef);
 		}
 	}
 	

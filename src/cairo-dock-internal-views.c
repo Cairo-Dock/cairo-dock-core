@@ -64,7 +64,7 @@ static void reload (CairoConfigViews *pPrevViews, CairoConfigViews *pViews)
 	
 	if (cairo_dock_strings_differ (pPrevViews->cMainDockDefaultRendererName, pViews->cMainDockDefaultRendererName))
 	{
-		cairo_dock_set_all_views_to_default (1);  // met a jour la taille des docks.
+		cairo_dock_set_all_views_to_default (1);  // met a jour la taille des docks principaux.
 		cairo_dock_redraw_root_docks (FALSE);  // FALSE <=> main dock inclus.
 		cairo_dock_reserve_space_for_all_root_docks (myAccessibility.bReserveSpace);
 	}
@@ -78,7 +78,7 @@ static void reload (CairoConfigViews *pPrevViews, CairoConfigViews *pViews)
 			cairo_dock_synchronize_sub_docks_position (pDock, FALSE);
 			cairo_dock_reload_buffers_in_all_docks (TRUE);  // y compris les applets.
 		}
-		cairo_dock_set_all_views_to_default (2);  // met a jour la taille des docks.
+		cairo_dock_set_all_views_to_default (2);  // met a jour la taille des sous-docks.
 	}
 }
 

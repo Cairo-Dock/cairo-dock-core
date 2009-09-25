@@ -71,7 +71,7 @@
 #include "cairo-dock-dock-facility.h"
 
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
-
+extern gboolean g_bEasterEggs;
 
 void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
 {
@@ -355,6 +355,8 @@ void cairo_dock_set_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, CairoDockSizeType iSizeType, int *iNewWidth, int *iNewHeight)
 {
 	//g_print ("%s (%d)\n", __func__, iSizeType);
+	//if (g_bEasterEggs)
+	//	iSizeType = CAIRO_DOCK_MAX_SIZE;
 	if (iSizeType == CAIRO_DOCK_MAX_SIZE)
 	{
 		*iNewWidth = pDock->iMaxDockWidth;

@@ -1485,7 +1485,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 	}
 
 	//\_________________________ On rajoute des actions suivant le type de l'icone.
-	if (CAIRO_DOCK_IS_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || (icon != NULL && icon->cDesktopFileName != NULL))  // le dernier cas est la pour les cas ou l'utilisateur aurait par megarde efface la commande du lanceur (cas qui ne devrait plus arriver).
+	///if (CAIRO_DOCK_IS_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || (icon != NULL && icon->cDesktopFileName != NULL))  // le dernier cas est la pour les cas ou l'utilisateur aurait par megarde efface la commande du lanceur (cas qui ne devrait plus arriver).
 	{
 		//\_________________________ On rajoute les actions sur les icones de fichiers.
 		if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))
@@ -1528,7 +1528,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		}
 		
 		//\_________________________ On rajoute des actions de modifications sur le dock.
-		if (! cairo_dock_is_locked () && CAIRO_DOCK_IS_DOCK (pContainer))
+		if (! cairo_dock_is_locked () && CAIRO_DOCK_IS_DOCK (pContainer) && icon && cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER))
 		{
 			pMenuItem = gtk_separator_menu_item_new ();
 			gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
@@ -1538,7 +1538,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 			_add_entry_in_menu (_("Add a separator"), GTK_STOCK_ADD, cairo_dock_add_separator, menu);
 			
 			pMenuItem = _add_entry_in_menu (_("Add a custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, menu);
-		gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it into the dock."));
+			gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it into the dock."));
 		
 			if (icon->cDesktopFileName != NULL)  // possede un .desktop.
 			{

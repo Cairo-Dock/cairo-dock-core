@@ -517,7 +517,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		}
 	}
 	
-	cairo_dock_notify (CAIRO_DOCK_MOUSE_MOVED, pDock, &bStartAnimation);
+	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_MOUSE_MOVED, pDock, &bStartAnimation);
 	if (bStartAnimation)
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	
