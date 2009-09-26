@@ -128,6 +128,12 @@ typedef enum {
 	CAIRO_DOCK_UPDATE_DEFAULT_CONTAINER_SLOW,
 	/// notification called when a default container is rendered.
 	CAIRO_DOCK_RENDER_DEFAULT_CONTAINER,
+	
+	/// notification called when the mouse leave a dock.
+	CAIRO_DOCK_LEAVE_DOCK,
+	/// notification called when the mouse leave a desklet.
+	CAIRO_DOCK_LEAVE_DESKLET,
+	
 	CAIRO_DOCK_NB_NOTIFICATIONS
 	} CairoDockNotificationType;
 
@@ -186,6 +192,8 @@ typedef gboolean (* CairoDockUpdateContainerFunc) (gpointer pUserData, CairoCont
 typedef gboolean (* CairoDockRenderContainerFunc) (gpointer pUserData, CairoContainer *pContainer, cairo_t *pCairoContext);
 /// prototype of the callback to the CAIRO_DOCK_STOP_DOCK and CAIRO_DOCK_STOP_DESKLET notifications.
 typedef gboolean (* CairoDockStopContainerFunc) (gpointer pUserData, CairoContainer *pContainer);
+/// prototype of the callback to the CAIRO_DOCK_LEAVE_DOCK and CAIRO_DOCK_LEAVE_DESKLET notifications.
+typedef gboolean (* CairoDockLeaveContainerFunc) (gpointer pUserData, CairoContainer *pContainer, gboolean *bStartAnimation);
 
 
 /// Use this in \ref cairo_dock_register_notification to be called before the dock.

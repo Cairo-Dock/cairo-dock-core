@@ -542,7 +542,7 @@ gboolean cairo_dock_emit_enter_signal (CairoDock *pDock)
 
 void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 {
-	//g_print ("%s (bMenuVisible:%d)\n", __func__, pDock->bMenuVisible);
+	g_print ("%s (bMenuVisible:%d)\n", __func__, pDock->bMenuVisible);
 	pDock->iAvoidingMouseIconType = -1;
 	pDock->fAvoidingMouseMargin = 0;
 	pDock->container.bInside = FALSE;
@@ -745,8 +745,41 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	if (pEvent && pDock->pShapeBitmap)  // XInputShape is broken. We manage ourself the entry.
 	{
 		int x = (pDock->container.bIsHorizontal ? pEvent->x : pDock->container.iWidth - pEvent->y);
-		if (x < pDock->inputArea.x || x > (pDock->inputArea.x + pDock->inputArea.width))
-			return FALSE;
+		int y = (pDock->container.bIsHorizontal ? pEvent->y : pDock->container.iHeight - pEvent->x);
+		if (g_bEasterEggs)
+		{
+			g_print ("enter (%d;%d)\n", x, y);
+			if (pDock->container.bDirectionUp)
+			{
+				if (y < pDock->container.iHeight - pDock->iMinDockHeight)
+				{
+					g_print ("entree refusee en y\n");
+					return FALSE;
+				}
+			}
+			else
+			{
+				if (y > pDock->iMinDockHeight)
+				{
+					g_print ("entree refusee en y\n");
+					return FALSE;
+				}
+			}
+			if (x < (pDock->container.iWidth - pDock->iMinDockWidth) / 2 || x > (pDock->container.iWidth + pDock->iMinDockWidth) / 2)
+			{
+				g_print ("entree refusee en x\n");
+				return FALSE;
+			}
+		}
+		else
+		{
+			if (x < pDock->inputArea.x || x > (pDock->inputArea.x + pDock->inputArea.width))
+				return FALSE;
+		}
+		gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+			NULL,
+			0,
+			0);
 	}
 	//g_print ("%s (bIsMainDock : %d; bAtTop:%d; bInside:%d; iSidMoveDown:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->bAtTop, pDock->container.bInside, pDock->iSidMoveDown, pDock->iMagnitudeIndex);
 	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
@@ -819,25 +852,28 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		}
 	}
 	
-	int iNewWidth, iNewHeight;
-	cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
-	if ((pDock->bAutoHide && pDock->iRefCount == 0) && pDock->bAtBottom)
-		pDock->container.iWindowPositionY = (pDock->container.bDirectionUp ? g_iXScreenHeight[pDock->container.bIsHorizontal] - myAccessibility.iVisibleZoneHeight - pDock->iGapY : myAccessibility.iVisibleZoneHeight + pDock->iGapY - pDock->iMaxDockHeight);
-	
-	if (pDock->container.iWidth != iNewWidth || pDock->container.iHeight != iNewHeight)
+	if (!g_bEasterEggs || (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->bAtBottom))
 	{
-		if (pDock->container.bIsHorizontal)
-			gdk_window_move_resize (pWidget->window,
-				pDock->container.iWindowPositionX,
-				pDock->container.iWindowPositionY,
-				iNewWidth,
-				iNewHeight);
-		else
-			gdk_window_move_resize (pWidget->window,
-				pDock->container.iWindowPositionY,
-				pDock->container.iWindowPositionX,
-				iNewHeight,
-				iNewWidth);
+		int iNewWidth, iNewHeight;
+		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
+		if ((pDock->bAutoHide && pDock->iRefCount == 0) && pDock->bAtBottom)
+			pDock->container.iWindowPositionY = (pDock->container.bDirectionUp ? g_iXScreenHeight[pDock->container.bIsHorizontal] - myAccessibility.iVisibleZoneHeight - pDock->iGapY : myAccessibility.iVisibleZoneHeight + pDock->iGapY - pDock->iMaxDockHeight);
+		
+		if (pDock->container.iWidth != iNewWidth || pDock->container.iHeight != iNewHeight)
+		{
+			if (pDock->container.bIsHorizontal)
+				gdk_window_move_resize (pWidget->window,
+					pDock->container.iWindowPositionX,
+					pDock->container.iWindowPositionY,
+					iNewWidth,
+					iNewHeight);
+			else
+				gdk_window_move_resize (pWidget->window,
+					pDock->container.iWindowPositionY,
+					pDock->container.iWindowPositionX,
+					iNewHeight,
+					iNewWidth);
+		}
 	}
 	
 	if (pDock->iSidMoveDown > 0)  // si on est en train de descendre, on arrete.

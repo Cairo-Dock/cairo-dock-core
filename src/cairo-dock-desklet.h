@@ -90,7 +90,7 @@ typedef struct {
 	gchar *cName;
 	CairoDeskletRendererConfigPtr pConfig;
 } CairoDeskletRendererPreDefinedConfig;
-typedef void (* CairoDeskletRenderFunc) (cairo_t *pCairoContext, CairoDesklet *pDesklet, gboolean bRenderOptimized);
+typedef void (* CairoDeskletRenderFunc) (cairo_t *pCairoContext, CairoDesklet *pDesklet);
 typedef void (*CairoDeskletGLRenderFunc) (CairoDesklet *pDesklet);
 typedef gpointer (* CairoDeskletConfigureRendererFunc) (CairoDesklet *pDesklet, cairo_t *pSourceContext, CairoDeskletRendererConfigPtr pConfig);
 typedef void (* CairoDeskletLoadRendererDataFunc) (CairoDesklet *pDesklet, cairo_t *pSourceContext);
@@ -211,7 +211,7 @@ void cairo_dock_load_desklet_buttons (cairo_t *pSourceContext);
 void cairo_dock_load_desklet_buttons_texture (void);
 void cairo_dock_unload_desklet_buttons_texture (void);
 
-gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDesklet *pDesklet);
+gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDesklet *pDesklet, cairo_t *pCairoContext);
 
 /** Create a simple desklet, without placing it nor defining a renderer.
 *@param pIcon the main icon.

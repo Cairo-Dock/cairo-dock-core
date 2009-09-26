@@ -48,6 +48,7 @@
 
 extern GLuint g_iBackgroundTexture;
 extern int g_iScreenWidth[2];
+extern gboolean g_bEasterEggs;
 
 void cd_calculate_max_dock_size_default (CairoDock *pDock)
 {
@@ -98,6 +99,11 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	pDock->inputArea.y = 0;
 	pDock->inputArea.width = pDock->fFlatDockWidth;
 	pDock->inputArea.height = pDock->iMinDockHeight;
+	
+	if (g_bEasterEggs)
+	{
+		pDock->iMinDockWidth = pDock->fFlatDockWidth;
+	}
 }
 
 

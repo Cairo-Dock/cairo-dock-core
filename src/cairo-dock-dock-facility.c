@@ -172,7 +172,10 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	{
 		//g_print ("%s (%d;%d => %s size)\n", __func__, pDock->container.bInside, pDock->bIsShrinkingDown, pDock->container.bInside || pDock->bIsShrinkingDown ? "max" : "normal");
 		int iNewWidth, iNewHeight;
-		cairo_dock_get_window_position_and_geometry_at_balance (pDock, (pDock->container.bInside || pDock->bIsShrinkingDown || pDock->iMagnitudeIndex > 0 ? CAIRO_DOCK_MAX_SIZE : CAIRO_DOCK_NORMAL_SIZE), &iNewWidth, &iNewHeight);  // iMagnitudeIndex > 0 rajoute le 23/08/09, a priori ca doit corriger le probleme d'icones trop grande par rapport au dock.
+		if (g_bEasterEggs)
+			cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
+		else
+			cairo_dock_get_window_position_and_geometry_at_balance (pDock, (pDock->container.bInside || pDock->bIsShrinkingDown || pDock->iMagnitudeIndex > 0 ? CAIRO_DOCK_MAX_SIZE : CAIRO_DOCK_NORMAL_SIZE), &iNewWidth, &iNewHeight);  // iMagnitudeIndex > 0 rajoute le 23/08/09, a priori ca doit corriger le probleme d'icones trop grande par rapport au dock.
 		
 		if (pDock->container.bIsHorizontal)
 		{
@@ -221,6 +224,10 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 	{
 		int iWindowPositionX = pDock->container.iWindowPositionX, iWindowPositionY = pDock->container.iWindowPositionY;
 		cairo_dock_get_window_position_and_geometry_at_balance (pDock, (pDock->bAutoHide ? CAIRO_DOCK_MIN_SIZE : CAIRO_DOCK_NORMAL_SIZE), &iWidth, &iHeight);
+		if (g_bEasterEggs)
+		{
+			
+		}
 		if (pDock->container.bDirectionUp)
 		{
 			if (pDock->container.bIsHorizontal)
@@ -280,7 +287,7 @@ void cairo_dock_place_root_dock (CairoDock *pDock)
 	else
 	{
 		pDock->fFoldingFactor = 0.;
-		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
+		cairo_dock_get_window_position_and_geometry_at_balance (pDock, g_bEasterEggs ? CAIRO_DOCK_MAX_SIZE : CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
 	}
 	
 	cd_debug (" move to (%d;%d)", pDock->container.iWindowPositionX, pDock->container.iWindowPositionY);
@@ -431,7 +438,24 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	if (pDock->pShapeBitmap != NULL)
 		g_object_unref ((gpointer) pDock->pShapeBitmap);
 	
-	if (pDock->inputArea.width == 0 || pDock->inputArea.height == 0 || pDock->iRefCount > 0 || pDock->bAutoHide || pDock->iMinDockWidth == 0 || pDock->iMinDockHeight == 0 || ! pDock->container.bIsHorizontal)  /// marche pas bien a la vertical ...
+	// on definit les tailles du bitmap (taille de la fenetre) et de la zone d'inupt.
+	int W, H;
+	if (g_bEasterEggs)
+	{
+		W = pDock->iMaxDockWidth;
+		H = pDock->iMaxDockHeight;
+	}
+	else
+	{
+		W = pDock->iMinDockWidth;
+		H = pDock->iMinDockHeight;
+	}
+	int w, h;
+	w = pDock->inputArea.width;
+	h = pDock->inputArea.height;
+	
+	// on cree ou on reset le bitmap.
+	if (w == 0 || h == 0 || pDock->iRefCount > 0 || pDock->bAutoHide || W == 0 || H == 0)
 	{
 		if (pDock->pShapeBitmap != NULL)  // plus de shape, on la remet a 0.
 		{
@@ -443,13 +467,13 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 		}
 		return ;
 	}
-
-	pDock->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
-		pDock->container.bIsHorizontal ? pDock->iMinDockWidth : pDock->iMinDockHeight,
-		pDock->container.bIsHorizontal ? pDock->iMinDockHeight : pDock->iMinDockWidth,
-		1);
-	//g_print ("%s (%d;%d ; %dx%d\n", __func__, pDock->inputArea.x, pDock->inputArea.y, pDock->inputArea.width, pDock->inputArea.height);
 	
+	pDock->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
+		pDock->container.bIsHorizontal ? W : H,
+		pDock->container.bIsHorizontal ? H : W,
+		1);
+	
+	// on definit la zone d'input.
 	cairo_t *pCairoContext = gdk_cairo_create (pDock->pShapeBitmap);
 	cairo_set_source_rgba (pCairoContext, 1.0f, 1.0f, 1.0f, 0.0f);
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
@@ -458,18 +482,18 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	if (pDock->container.bIsHorizontal)
 	{
 		cairo_rectangle (pCairoContext,
-			pDock->inputArea.x,
-			pDock->container.bDirectionUp ? pDock->inputArea.y : pDock->iMinDockHeight - pDock->inputArea.y - pDock->inputArea.height,
-			pDock->inputArea.width,
-			pDock->inputArea.height);
+			(W - w) / 2,  // centre en x.
+			pDock->container.bDirectionUp ? H - h : 0,
+			w,
+			h);
 	}
 	else
 	{
 		cairo_rectangle (pCairoContext,
-			pDock->container.bDirectionUp ? pDock->inputArea.y : pDock->iMinDockHeight - pDock->inputArea.y - pDock->inputArea.height,
-			pDock->iMinDockWidth - pDock->inputArea.x - pDock->inputArea.width,
-			pDock->inputArea.height,
-			pDock->inputArea.width);
+			pDock->container.bDirectionUp ? H - h : 0,
+			(W - w) / 2,  // centre en x.
+			h,
+			w);
 	}
 	cairo_fill (pCairoContext);
 	cairo_destroy (pCairoContext);
@@ -796,12 +820,12 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 				//pDock->container.bInside = TRUE;
 				if ((pDock->bAtBottom && pDock->iRefCount == 0 && ! pDock->bAutoHide) || (pDock->container.iWidth != pDock->iMaxDockWidth || pDock->container.iHeight != pDock->iMaxDockHeight) || (!pDock->container.bInside))  // on le fait pas avec l'auto-hide, car un signal d'entree est deja emis a cause des mouvements/redimensionnements de la fenetre, et en rajouter un ici fout le boxon.  // !pDock->container.bInside ajoute pour le bug du chgt de bureau.
 				{
-					//g_print ("  on emule une re-rentree (pDock->iMagnitudeIndex:%d)\n", pDock->iMagnitudeIndex);
+					g_print ("  on emule une re-rentree (pDock->iMagnitudeIndex:%d)\n", pDock->iMagnitudeIndex);
 					g_signal_emit_by_name (pDock->container.pWidget, "enter-notify-event", NULL, &bReturn);
 				}
 				else // on se contente de faire grossir les icones.
 				{
-					//g_print ("  on se contente de faire grossir les icones\n");
+					g_print ("  on se contente de faire grossir les icones\n");
 					pDock->bAtBottom = FALSE;
 					cairo_dock_start_growing (pDock);
 					

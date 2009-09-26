@@ -55,6 +55,7 @@
 extern int g_iXScreenHeight[2];
 extern gboolean g_bUseOpenGL;
 extern CairoDock *g_pMainDock;
+extern gboolean g_bEasterEggs;
 
 gboolean cairo_dock_move_up (CairoDock *pDock)
 {
@@ -321,7 +322,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				if (! (pDock->bAutoHide && pDock->iRefCount == 0) && ! pDock->bMenuVisible)
 				{
 					int iNewWidth, iNewHeight;
-					cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
+					cairo_dock_get_window_position_and_geometry_at_balance (pDock, g_bEasterEggs ? CAIRO_DOCK_MAX_SIZE : CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
 					if (pDock->container.bIsHorizontal)
 						gdk_window_move_resize (pDock->container.pWidget->window,
 							pDock->container.iWindowPositionX,

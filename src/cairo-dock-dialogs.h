@@ -151,6 +151,8 @@ struct _CairoDialog {
 	GtkWidget *pButtonsWidget;
 	/// le widget de remplissage ou l'on dessine la pointe.
 	GtkWidget *pTipWidget;
+	/// le widget de remplissage de la marge du haut.
+	GtkWidget *pTopWidget;
 	
 	//\_____________________ surfaces
 	/// surface representant the message to display.

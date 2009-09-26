@@ -62,6 +62,7 @@
 extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
+extern gboolean g_bEasterEggs;
 
 static GHashTable *s_hDocksTable = NULL;  // table des docks existant.
 static int s_iSidPollScreenEdge = 0;
@@ -519,7 +520,7 @@ static void _cairo_dock_stop_quick_hide_one_root_dock (const gchar *cDockName, C
 			pDock->fFoldingFactor = 0;
 			
 			int iNewWidth, iNewHeight;
-			cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
+			cairo_dock_get_window_position_and_geometry_at_balance (pDock, g_bEasterEggs ? CAIRO_DOCK_MAX_SIZE : CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
 			
 			if (pDock->container.bIsHorizontal)
 				gdk_window_move_resize (pDock->container.pWidget->window,

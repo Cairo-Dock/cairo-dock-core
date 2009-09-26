@@ -1037,7 +1037,9 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 		0);
 	
 	//\________________ On reserve l'espace pour les elements.
-	if (! pDialog->container.bDirectionUp)
+	if (pDialog->container.bDirectionUp)
+		pDialog->pTopWidget = cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iTopMargin, TRUE);
+	else
 		pDialog->pTipWidget = cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iMinBottomGap + pDialog->iBottomMargin, TRUE);
 	if (pDialog->iMessageWidth != 0 && pDialog->iMessageHeight != 0)
 	{
@@ -1060,7 +1062,8 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	}
 	if (pDialog->container.bDirectionUp)
 		pDialog->pTipWidget = cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iMinBottomGap + pDialog->iBottomMargin, TRUE);
-	
+	else
+		pDialog->pTopWidget = cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iTopMargin, TRUE);
 	gtk_widget_show_all (pDialog->container.pWidget);
 	
 	//\________________ On connecte les signaux utiles.

@@ -197,36 +197,15 @@ static inline double _compute_zoom_for_rotation (CairoDesklet *pDesklet)
 	return fZoom;
 }
 
-static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *area)
+static inline void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCairoContext)
 {
-	gint w = 0, h = 0;
-	cairo_t *pCairoContext;
+	// en attendant de trouver l'equivalent opengl.
+	#if 0
 	double fColor[4] = {1., 1., 1., 0.};
 	if (! gtk_window_is_active (GTK_WINDOW (pDesklet->container.pWidget)))
 		fColor[3] = 0.;
 	else
 		fColor[3] = 1.*pDesklet->iGradationCount / CD_NB_ITER_FOR_GRADUATION;
-	
-	gboolean bRenderOptimized = (area->x > 0 || area->y > 0);
-	/*if (bRenderOptimized)
-	{
-		//g_print ("Using optimized render\n");
-		pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDesklet), area, fColor);
-	}
-	else*/
-	{
-		//cd_debug ("Using normal render");
-		pCairoContext = cairo_dock_create_drawing_context (CAIRO_CONTAINER (pDesklet));
-	}
-	
-	if (pDesklet->container.fRatio != 1)
-	{
-		//g_print (" desklet zoom : %.2f (%dx%d)\n", pDesklet->container.fRatio, pDesklet->container.iWidth, pDesklet->container.iHeight);
-		cairo_translate (pCairoContext,
-			pDesklet->container.iWidth * (1 - pDesklet->container.fRatio)/2,
-			pDesklet->container.iHeight * (1 - pDesklet->container.fRatio)/2);
-		cairo_scale (pCairoContext, pDesklet->container.fRatio, pDesklet->container.fRatio);
-	}
 	
 	if (fColor[3] != 0)
 	{
@@ -250,8 +229,18 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 		cairo_pattern_destroy (pPattern);
 		cairo_restore (pCairoContext);
 	}
+	#endif
 	
 	cairo_save (pCairoContext);
+	
+	if (pDesklet->container.fRatio != 1)
+	{
+		//g_print (" desklet zoom : %.2f (%dx%d)\n", pDesklet->container.fRatio, pDesklet->container.iWidth, pDesklet->container.iHeight);
+		cairo_translate (pCairoContext,
+			pDesklet->container.iWidth * (1 - pDesklet->container.fRatio)/2,
+			pDesklet->container.iHeight * (1 - pDesklet->container.fRatio)/2);
+		cairo_scale (pCairoContext, pDesklet->container.fRatio, pDesklet->container.fRatio);
+	}
 	
 	if (pDesklet->fRotation != 0)
 	{
@@ -270,7 +259,6 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 			-.5*pDesklet->container.iHeight);
 	}
 	
-	cairo_save (pCairoContext);
 	if (pDesklet->pBackGroundSurface != NULL && pDesklet->fBackGroundAlpha != 0)
 	{
 		cairo_set_source_surface (pCairoContext,
@@ -283,6 +271,7 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 			cairo_paint_with_alpha (pCairoContext, pDesklet->fBackGroundAlpha);
 	}
 	
+	cairo_save (pCairoContext);
 	if (pDesklet->iLeftSurfaceOffset != 0 || pDesklet->iTopSurfaceOffset != 0 || pDesklet->iRightSurfaceOffset != 0 || pDesklet->iBottomSurfaceOffset != 0)
 	{
 		cairo_translate (pCairoContext, pDesklet->iLeftSurfaceOffset, pDesklet->iTopSurfaceOffset);
@@ -293,10 +282,10 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 	
 	if (pDesklet->pRenderer != NULL && pDesklet->pRenderer->render != NULL)  // un moteur de rendu specifique a ete fourni.
 	{
-		pDesklet->pRenderer->render (pCairoContext, pDesklet, bRenderOptimized);
+		pDesklet->pRenderer->render (pCairoContext, pDesklet);
 	}
-	
 	cairo_restore (pCairoContext);
+	
 	if (pDesklet->pForeGroundSurface != NULL && pDesklet->fForeGroundAlpha != 0)
 	{
 		cairo_set_source_surface (pCairoContext,
@@ -311,8 +300,11 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 	
 	if ((pDesklet->container.bInside || pDesklet->rotating) && _cairo_dock_desklet_is_free (pDesklet))
 	{
-		if (! pDesklet->rotating)
+		if (! pDesklet->rotating)  // si on est en train de tourner, les boutons suivent le mouvement, sinon ils sont dans les coins.
+		{
 			cairo_restore (pCairoContext);
+			cairo_save (pCairoContext);
+		}
 		if (s_pRotateButtonSurface != NULL)
 		{
 			cairo_set_source_surface (pCairoContext, s_pRotateButtonSurface, 0., 0.);
@@ -324,9 +316,9 @@ static void _cairo_dock_render_desklet (CairoDesklet *pDesklet, GdkRectangle *ar
 			cairo_paint (pCairoContext);
 		}
 	}
-
-	cairo_destroy (pCairoContext);
+	cairo_restore (pCairoContext);
 }
+
 static inline void _cairo_dock_set_desklet_matrix (CairoDesklet *pDesklet)
 {
 	glTranslatef (0., 0., -pDesklet->container.iHeight * sqrt(3)/2 - 
@@ -357,7 +349,7 @@ static inline void _cairo_dock_set_desklet_matrix (CairoDesklet *pDesklet)
 	}
 }
 
-gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDesklet *pDesklet)
+static inline void _render_desklet_opengl (CairoDesklet *pDesklet)
 {
 	glPushMatrix ();
 	///glTranslatef (0*pDesklet->container.iWidth/2, 0*pDesklet->container.iHeight/2, 0.);  // avec une perspective ortho.
@@ -446,30 +438,18 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 	}
 	
 	_cairo_dock_disable_texture ();
-	
 	glPopMatrix ();
+}
+
+gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDesklet *pDesklet, cairo_t *pCairoContext)
+{
+	if (pCairoContext != NULL)
+		_render_desklet_cairo (pDesklet, pCairoContext);
+	else
+		_render_desklet_opengl (pDesklet);
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
-static void _cairo_dock_render_desklet_opengl (CairoDesklet *pDesklet)
-{
-	GdkGLContext *pGlContext = gtk_widget_get_gl_context (pDesklet->container.pWidget);
-	GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pDesklet->container.pWidget);
-	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
-		return ;
-	
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity ();
-	
-	cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDesklet));
-	
-	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_RENDER_DESKLET, pDesklet);
-	
-	if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
-		gdk_gl_drawable_swap_buffers (pGlDrawable);
-	else
-		glFlush ();
-	gdk_gl_drawable_gl_end (pGlDrawable);
-}
+
 static gboolean on_expose_desklet(GtkWidget *pWidget,
 	GdkEventExpose *pExpose,
 	CairoDesklet *pDesklet)
@@ -491,14 +471,34 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 	
 	pDesklet->iDesiredWidth = 0;  /// ???
 	pDesklet->iDesiredHeight = 0;
-		
+	
 	if (g_bUseOpenGL && pDesklet->pRenderer && pDesklet->pRenderer->render_opengl)
 	{
-		_cairo_dock_render_desklet_opengl (pDesklet);
+		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pDesklet->container.pWidget);
+		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pDesklet->container.pWidget);
+		if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+			return FALSE;
+		
+		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glLoadIdentity ();
+		
+		cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDesklet));
+		
+		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_RENDER_DESKLET, pDesklet, NULL);
+		
+		if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
+			gdk_gl_drawable_swap_buffers (pGlDrawable);
+		else
+			glFlush ();
+		gdk_gl_drawable_gl_end (pGlDrawable);
 	}
 	else
 	{
-		_cairo_dock_render_desklet (pDesklet, &pExpose->area);
+		cairo_t *pCairoContext = cairo_dock_create_drawing_context (CAIRO_CONTAINER (pDesklet));
+		
+		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_RENDER_DESKLET, pDesklet, pCairoContext);
+		
+		cairo_destroy (pCairoContext);
 	}
 	
 	return FALSE;
@@ -1134,7 +1134,7 @@ static gboolean on_enter_desklet (GtkWidget* pWidget,
 		pDesklet->container.bInside = TRUE;
 		if (pDesklet->iSidGradationOnEnter == 0)
 		{
-			pDesklet->iSidGradationOnEnter = g_timeout_add (50, (GSourceFunc) _cairo_dock_desklet_gradation, (gpointer) pDesklet);
+			///pDesklet->iSidGradationOnEnter = g_timeout_add (50, (GSourceFunc) _cairo_dock_desklet_gradation, (gpointer) pDesklet);
 		}
 		
 		if (g_bUseOpenGL/* && pDesklet->pRenderer && pDesklet->pRenderer->render_opengl != NULL*/)
@@ -1162,8 +1162,14 @@ static gboolean on_leave_desklet (GtkWidget* pWidget,
 	pDesklet->container.bInside = FALSE;
 	if (pDesklet->iSidGradationOnEnter == 0)
 	{
-		pDesklet->iSidGradationOnEnter = g_timeout_add (50, (GSourceFunc) _cairo_dock_desklet_gradation, (gpointer) pDesklet);
+		///pDesklet->iSidGradationOnEnter = g_timeout_add (50, (GSourceFunc) _cairo_dock_desklet_gradation, (gpointer) pDesklet);
 	}
+	
+	gboolean bStartAnimation = FALSE;
+	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_LEAVE_DESKLET, pDesklet, &bStartAnimation);
+	if (bStartAnimation)
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pDesklet));
+	
 	return FALSE;
 }
 

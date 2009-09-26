@@ -1711,6 +1711,10 @@ static void _cairo_dock_add_one_sub_dock_to_model (CairoDock *pDock, GtkTreeStor
 			{
 				cImagePath = cairo_dock_generate_file_path (myIcons.cSeparatorImage);
 			}
+			else if (CAIRO_DOCK_IS_APPLET (pIcon))
+			{
+				cImagePath = g_strdup (pIcon->pModuleInstance->pModule->pVisitCard->cIconFilePath);
+			}
 			else
 			{
 				cImagePath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
@@ -1830,8 +1834,7 @@ GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon)
 	g_object_unref (model);
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (s_pLauncherTreeView), FALSE);
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (s_pLauncherTreeView), TRUE);
-    //g_signal_connect (s_pLauncherTreeView, "realize", G_CALLBACK (gtk_tree_view_expand_all), NULL);
-    
+	
 	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (s_pLauncherTreeView));
 	gtk_tree_selection_set_mode (pSelection, GTK_SELECTION_SINGLE);
 	gtk_tree_selection_set_select_function (pSelection,
