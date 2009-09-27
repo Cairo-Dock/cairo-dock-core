@@ -71,7 +71,7 @@ extern int g_iNbViewportX,g_iNbViewportY ;
 static GHashTable *s_hXWindowTable = NULL;  // table des fenetres X affichees dans le dock.
 static Display *s_XDisplay = NULL;
 static int s_iSidUpdateAppliList = 0;
-static int s_iTime = 0;  // on peut aller jusqu'a 2^31, soit 17 ans a 4Hz.
+static int s_iTime = 1;  // on peut aller jusqu'a 2^31, soit 17 ans a 4Hz.
 static Window s_iCurrentActiveWindow = 0;
 static Atom s_aNetClientList;
 static Atom s_aNetActiveWindow;
@@ -361,7 +361,6 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 	static gboolean bHackMeToo = FALSE;
 	g_return_val_if_fail (pDock != NULL, FALSE);
 	
-	s_iTime ++;
 	long event_mask = 0xFFFFFFFF;  // on les recupere tous, ca vide la pile au fur et a mesure plutot que tout a la fin.
 	Window Xid;
 	Window root = DefaultRootWindow (s_XDisplay);
@@ -390,6 +389,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 			{
 				if (event.xproperty.atom == s_aNetClientList)
 				{
+					s_iTime ++;
 					cairo_dock_update_applis_list (pDock, s_iTime);
 					cairo_dock_notify (CAIRO_DOCK_WINDOW_CONFIGURED, NULL);
 				}
@@ -531,12 +531,11 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 			icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
 			if (! CAIRO_DOCK_IS_APPLI (icon))  // appli blacklistee
 			{
-				/// choper les s_aNetWmState pour verifier qu'elle a toujours le skip taskbar...
 				if (! cairo_dock_xwindow_skip_taskbar (Xid))
 				{
 					g_print ("Special case : this appli should not be ignored any more!\n");
-					g_hash_table_remove (s_hXWindowTable, &Xid);
-					g_free (icon);
+					//g_hash_table_remove (s_hXWindowTable, &Xid);
+					//g_free (icon);
 				}
 				continue;
 			}
@@ -808,9 +807,9 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 	gint iTime = GPOINTER_TO_INT (iTimePtr);
 	
 	//g_print ("%s (%s(%ld) %d / %d)\n", __func__, icon->cName, icon->Xid, icon->iLastCheckTime, iTime);
-	if (icon->iLastCheckTime > 0 && icon->iLastCheckTime < iTime && icon->fPersonnalScale <= 0)
+	if (icon->iLastCheckTime >= 0 && icon->iLastCheckTime < iTime && icon->fPersonnalScale <= 0)
 	{
-		cd_message ("cette fenetre (%ld, %s) est trop vieille (%d / %d)", *Xid, icon->cName, icon->iLastCheckTime, iTime);
+		cd_message ("cette fenetre (%ld(%ld), %s) est trop vieille (%d / %d)", *Xid, icon->Xid, icon->cName, icon->iLastCheckTime, iTime);
 		if (CAIRO_DOCK_IS_APPLI (icon))
 		{
 			if (cairo_dock_quick_hide_is_activated () && ((icon->bIsFullScreen && myAccessibility.bAutoHideOnFullScreen) || (icon->bIsMaximized && myAccessibility.bAutoHideOnMaximized)))  // cette fenetre peut avoir gener.
@@ -825,6 +824,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 			CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 			if (pParentDock != NULL)
 			{
+				cd_message ("  va etre supprimee");
 				cairo_dock_trigger_icon_removal_from_dock (icon);
 				
 				icon->iLastCheckTime = -1;  // inutile de chercher a la desenregistrer par la suite, puisque ce sera fait ici. Cela sert aussi a bien supprimer l'icone en fin d'animation.
@@ -862,7 +862,6 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 	CairoDock *pParentDock;
 	cairo_t *pCairoContext = NULL;
 	
-	cd_debug ("%s (%d)", __func__, iNbWindows);
 	for (i = 0; i < iNbWindows; i ++)
 	{
 		Xid = pXWindowsList[i];
