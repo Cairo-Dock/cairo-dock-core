@@ -542,7 +542,7 @@ gboolean cairo_dock_emit_enter_signal (CairoDock *pDock)
 
 void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 {
-	g_print ("%s (bMenuVisible:%d)\n", __func__, pDock->bMenuVisible);
+	//g_print ("%s (bMenuVisible:%d)\n", __func__, pDock->bMenuVisible);
 	pDock->iAvoidingMouseIconType = -1;
 	pDock->fAvoidingMouseMargin = 0;
 	pDock->container.bInside = FALSE;

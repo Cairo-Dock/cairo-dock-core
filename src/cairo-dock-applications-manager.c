@@ -533,7 +533,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 			{
 				if (! cairo_dock_xwindow_skip_taskbar (Xid))
 				{
-					g_print ("Special case : this appli should not be ignored any more!\n");
+					g_print ("Special case : this appli (%ld) should not be ignored any more!\n", Xid);
 					//g_hash_table_remove (s_hXWindowTable, &Xid);
 					//g_free (icon);
 				}
@@ -550,7 +550,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					gboolean bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention;
 					if (! cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention))
 					{
-						g_print ("Special case : this appli should be ignored from now !\n");
+						g_print ("Special case : this appli (%s, %ld) should be ignored from now !\n", icon->cName, Xid);
 						CairoDock *pParentDock = cairo_dock_detach_appli (icon);
 						if (pParentDock != NULL)
 							gtk_widget_queue_draw (pParentDock->container.pWidget);
