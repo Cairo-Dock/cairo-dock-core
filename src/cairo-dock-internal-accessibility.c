@@ -151,12 +151,12 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 	{
 		if (pAccessibility->bAutoHideOnFullScreen)
 		{
-			cd_warning ("The option 'auto-hide on fullscreen window' is in conflict with the option 'reserve space for dock',\n it will be ignored");
+			_append_warning (_("The option 'auto-hide on fullscreen window' is in conflict with the option 'reserve space for dock',\n it will be ignored"));
 			pAccessibility->bAutoHideOnFullScreen = FALSE;
 		}
 		if (pAccessibility->bAutoHideOnMaximized)
 		{
-			cd_warning ("The option 'auto-hide on maximized window' is in conflict with the option 'reserve space for dock',\n it will be ignored");
+			_append_warning (_("The option 'auto-hide on maximized window' is in conflict with the option 'reserve space for dock',\n it will be ignored"));
 			pAccessibility->bAutoHideOnMaximized = FALSE;
 		}
 	}

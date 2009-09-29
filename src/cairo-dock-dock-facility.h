@@ -64,8 +64,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock);
 Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock);
 
 
-/*
-* Demande au WM d'empecher les autres fenetres d'empieter sur l'espace du dock.
+/* Demande au WM d'empecher les autres fenetres d'empieter sur l'espace du dock.
 * L'espace reserve est pris sur la taille minimale du dock, c'est-a-dire la taille de la zone de rappel si l'auto-hide est active,
 * ou la taille du dock au repos sinon.
 * @param pDock le dock.
@@ -73,13 +72,7 @@ Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock);
 */
 void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve);
 
-/*
-* Met un dock principal a sa taille et a sa place initiale.
-*@param pDock le dock.
-*/
-void cairo_dock_place_root_dock (CairoDock *pDock);
-/*
-* Borne la position d'un dock a l'interieur de l'ecran.
+/* Borne la position d'un dock a l'interieur de l'ecran.
 *@param pDock le dock.
 */
 void cairo_dock_prevent_dock_from_out_of_screen (CairoDock *pDock);
@@ -89,7 +82,13 @@ void cairo_dock_set_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 
 void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, CairoDockSizeType iSizeType, int *iNewWidth, int *iNewHeight);
 
-void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pParentDock);
+void cairo_dock_move_resize_dock (CairoDock *pDock, CairoDockSizeType iSizeType);
+/* Met un dock principal a sa taille et a sa place initiale.
+*@param pDock le dock.
+*/
+void cairo_dock_place_root_dock (CairoDock *pDock);
+
+void cairo_dock_update_input_shape (CairoDock *pDock);
 
 /** Pop up a sub-dock.
 *@param pPointedIcon icon pointing on the sub-dock.
@@ -98,8 +97,6 @@ void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pPar
 */
 void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboolean bUpdateBefore);
 
-
-void cairo_dock_update_input_shape (CairoDock *pDock);
 
 /** Calculate the position at rest (when the mouse is outside of the dock and its size is normal) of the icons of a linear dock. 
 *@param pIconList a list of icons.
@@ -139,6 +136,8 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock);
 void cairo_dock_check_can_drop_linear (CairoDock *pDock);
 
 void cairo_dock_stop_marking_icons (CairoDock *pDock);
+
+void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pParentDock);
 
 
 void cairo_dock_scroll_dock_icons (CairoDock *pDock, int iScrollAmount);

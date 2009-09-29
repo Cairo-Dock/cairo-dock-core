@@ -952,7 +952,6 @@ gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gb
 			{
 				cd_debug (" s_aNetWmFullScreen");
 				*bIsFullScreen = TRUE;
-				break ;
 			}
 			else if (pXStateBuffer[i] == s_aNetWmHidden)
 			{

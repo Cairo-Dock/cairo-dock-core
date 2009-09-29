@@ -306,11 +306,11 @@ gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon)
 
 static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, int *data)
 {
-	if (icon != NULL && cairo_dock_xwindow_is_on_this_desktop (*Xid, data[0]))
+	if (icon != NULL && cairo_dock_appli_is_on_this_desktop (icon, data[0])/*cairo_dock_xwindow_is_on_this_desktop (*Xid, data[0])*/)
 	{
 		///gboolean bIsFullScreen, bIsHidden, bIsMaximized;
 		///cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (*Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, NULL);
-		if ((data[1] && icon->bIsMaximized && ! icon->bIsHidden) || (data[2] && icon->bIsFullScreen))
+		if ((data[1] && icon->bIsMaximized && ! icon->bIsHidden) || (data[2] && icon->bIsFullScreen && ! icon->bIsHidden))
 		{
 			cd_debug ("%s est genante (%d, %d) (%d;%d %dx%d)", icon->cName, icon->bIsMaximized, icon->bIsFullScreen, icon->windowGeometry.x, icon->windowGeometry.y, icon->windowGeometry.width, icon->windowGeometry.height);
 			if (cairo_dock_window_hovers_dock (&icon->windowGeometry, g_pMainDock))
@@ -547,7 +547,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 			{
 				if (event.xproperty.atom == s_aNetWmState)  // changement d'etat (hidden, maximized, fullscreen, demands attention)
 				{
-					gboolean bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention;
+					gboolean bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention, bPrevHidden = icon->bIsHidden;
 					if (! cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention))
 					{
 						g_print ("Special case : this appli (%s, %ld) should be ignored from now !\n", icon->cName, Xid);
@@ -584,14 +584,15 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						{
 							icon->bIsMaximized = bIsMaximized;
 							icon->bIsFullScreen = bIsFullScreen;
+							icon->bIsHidden = bIsHidden;
 							
-							if ( ((bIsMaximized && ! bIsHidden && myAccessibility.bAutoHideOnMaximized) || (bIsFullScreen && myAccessibility.bAutoHideOnFullScreen)) && ! cairo_dock_quick_hide_is_activated ())
+							if ( ((bIsMaximized && ! bIsHidden && myAccessibility.bAutoHideOnMaximized) || (bIsFullScreen && ! bIsHidden && myAccessibility.bAutoHideOnFullScreen)) && ! cairo_dock_quick_hide_is_activated ())
 							{
 								cd_message (" => %s devient genante", CAIRO_DOCK_IS_APPLI (icon) ? icon->cName : "une fenetre");
 								if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_window_hovers_dock (&icon->windowGeometry, g_pMainDock))
 									cairo_dock_activate_temporary_auto_hide ();
 							}
-							else if ((! bIsMaximized || ! myAccessibility.bAutoHideOnMaximized || bIsHidden) && (! bIsFullScreen || ! myAccessibility.bAutoHideOnFullScreen) && cairo_dock_quick_hide_is_activated ())
+							else if ((! bIsMaximized || ! myAccessibility.bAutoHideOnMaximized || bIsHidden) && (! bIsFullScreen || ! myAccessibility.bAutoHideOnFullScreen || bIsHidden) && cairo_dock_quick_hide_is_activated ())
 							{
 								if (cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
 								{
@@ -606,7 +607,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					
 					// on gere le cachage/apparition de l'icone (transparence ou miniature, applis minimisees seulement).
 					CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-					if (bIsHidden != icon->bIsHidden)
+					if (bIsHidden != bPrevHidden)
 					{
 						cd_message ("  changement de visibilite -> %d", bIsHidden);
 						icon->bIsHidden = bIsHidden;
@@ -684,7 +685,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						if (! cairo_dock_quick_hide_is_activated () && (icon->iNumDesktop == -1 || icon->iNumDesktop == iDesktopNumber))  // l'appli arrive sur le bureau courant.
 						{
 							int data[3] = {iDesktopNumber, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen};
-							if (_cairo_dock_window_is_on_our_way (&Xid, icon,  data))  // on s'assure qu'en plus d'etre sur le bureau courant, elle est aussi sur le viewport courant.
+							if (_cairo_dock_window_is_on_our_way (&Xid, icon, data))  // on s'assure qu'en plus d'etre sur le bureau courant, elle est aussi sur le viewport courant.
 							{
 								cd_message (" => cela nous gene");
 								cairo_dock_activate_temporary_auto_hide ();

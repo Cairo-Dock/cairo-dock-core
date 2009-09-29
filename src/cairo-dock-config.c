@@ -513,7 +513,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	else
 		bGroupOrderChanged = FALSE;
 	
-	if (myDialogs.bHomogeneous)
+	/*if (myDialogs.bHomogeneous)
 	{
 		myDialogs.dialogTextDescription.iSize = myLabels.iconTextDescription.iSize;
 		if (myDialogs.dialogTextDescription.iSize == 0)
@@ -521,7 +521,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 		myDialogs.dialogTextDescription.cFont = g_strdup (myLabels.iconTextDescription.cFont);
 		myDialogs.dialogTextDescription.iWeight = myLabels.iconTextDescription.iWeight;
 		myDialogs.dialogTextDescription.iStyle = myLabels.iconTextDescription.iStyle;
-	}
+	}*/
 	
 	///cairo_dock_updated_emblem_conf_file (pKeyFile, &bFlushConfFileNeeded);
 	

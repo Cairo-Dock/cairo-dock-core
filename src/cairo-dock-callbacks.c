@@ -152,6 +152,12 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		}
 		glDisable (GL_SCISSOR_TEST);
 		
+		/**if (g_bEasterEggs)
+		{
+			glAccum (GL_LOAD, .5);
+			glAccum (GL_RETURN, 1.0);
+		}*/
+		
 		if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
 			gdk_gl_drawable_swap_buffers (pGlDrawable);
 		else
@@ -193,6 +199,18 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	{
 		pDock->pRenderer->render (pCairoContext, pDock);
 		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
+		
+		/**if (g_bEasterEggs)
+		{
+			cairo_rectangle (pCairoContext,
+				0,
+				0,
+				pDock->container.bIsHorizontal ? pDock->container.iWidth : pDock->container.iHeight, pDock->container.bIsHorizontal ? pDock->container.iHeight : pDock->container.iWidth);
+			cairo_set_line_width (pCairoContext, 0);
+			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_DEST_OUT);
+			cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, .5);
+			cairo_fill (pCairoContext);
+		}*/
 	}
 	
 	cairo_destroy (pCairoContext);
@@ -776,10 +794,6 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			if (x < pDock->inputArea.x || x > (pDock->inputArea.x + pDock->inputArea.width))
 				return FALSE;
 		}
-		gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-			NULL,
-			0,
-			0);
 	}
 	//g_print ("%s (bIsMainDock : %d; bAtTop:%d; bInside:%d; iSidMoveDown:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->bAtTop, pDock->container.bInside, pDock->iSidMoveDown, pDock->iMagnitudeIndex);
 	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
@@ -826,12 +840,12 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	pDock->fDecorationsOffsetX = 0;
 	if (pDock->iRefCount != 0)
 	{
-		gtk_window_present (GTK_WINDOW (pWidget));  /// utile ???
+		///gtk_window_present (GTK_WINDOW (pWidget));  /// utile ???
 	}
 	pDock->container.bInside = TRUE;
 	
 	cairo_dock_stop_quick_hide ();
-
+	
 	if (s_pIconClicked != NULL)  // on pourrait le faire a chaque motion aussi.
 	{
 		pDock->iAvoidingMouseIconType = s_pIconClicked->iType;
@@ -852,7 +866,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		}
 	}
 	
-	if (!g_bEasterEggs || (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->bAtBottom))
+	if (!g_bEasterEggs || (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->bAtBottom))  // on sort de l'etat auto-hide.
 	{
 		int iNewWidth, iNewHeight;
 		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
@@ -874,6 +888,13 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 					iNewHeight,
 					iNewWidth);
 		}
+	}
+	if (g_bEasterEggs && pDock->pShapeBitmap)
+	{
+		gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+			NULL,
+			0,
+			0);
 	}
 	
 	if (pDock->iSidMoveDown > 0)  // si on est en train de descendre, on arrete.

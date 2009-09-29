@@ -597,14 +597,14 @@ int main (int argc, char** argv)
 	//\___________________ On affiche un petit message de bienvenue.
 	if (bFirstLaunch)
 	{
-		cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Theme manager\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit : right-click -> Cairo-Dock -> Communauty site.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);
+		//cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Theme manager\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit : right-click -> Cairo-Dock -> Communauty site.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);
 		
 		GdkScreen *pScreen = gdk_screen_get_default ();
 		if (! mySystem.bUseFakeTransparency && ! gdk_screen_is_composited (pScreen))
 		{
 			cd_warning ("no composite manager found");
 			// Si l'utilisateur utilise Metacity, on lui propose d'activer le composite.
-			gchar *cPsef = cairo_dock_launch_command_sync ("ps -e | /bin/grep metacity");
+			gchar *cPsef = cairo_dock_launch_command_sync ("pgrep metacity");  // 'ps' ne marche pas, il faut le lancer dans un script :-/
 			if (cPsef != NULL && *cPsef != '\0')  // "metacity" a ete trouve.
 			{
 				Icon *pIcon = cairo_dock_get_dialogless_icon ();
@@ -624,7 +624,7 @@ int main (int argc, char** argv)
 		}
 	}
 	
-	if (cairo_dock_get_nb_modules () == 0)
+	if (cairo_dock_get_nb_modules () <= 1)  // le module Help est inclus de base.
 		cairo_dock_show_general_message (_("No plug-in were found.\nTo make the most of Cairo-Dock, please consider installing its plug-ins.\nThey provide a lot of interesting functionnalities, animations, etc,\n that you certainly don't want to miss !"), 0);
 	
 	//\___________________ On affiche le changelog en cas de nouvelle version.

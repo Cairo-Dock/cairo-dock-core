@@ -567,10 +567,6 @@ frame_text =
 #c+ Text color (r,g,b) :
 text color = 0.0; 0.0; 0.0
 
-#b+ Homogeneous with icons' label ?
-#{The messages will have the same style as the icons' labels. The beneath parameters are then unused.}
-homogeneous text = false
-
 #P+ Family of the font used for labels :
 #{for exemple Monospace, Purisa, ... Just write the font name wihtout any number or so.}
 message police = Sans

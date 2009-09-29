@@ -40,11 +40,10 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDialogs *pDialogs)
 
 	double couleur_bulle[4] = {1.0, 1.0, 1.0, 0.7};
 	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "background color", &bFlushConfFileNeeded, pDialogs->fDialogColor, 4, couleur_bulle, NULL, NULL);
-
 	pDialogs->iDialogIconSize = MAX (16, cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "icon size", &bFlushConfFileNeeded, 48, NULL, NULL));
 
-	pDialogs->bHomogeneous = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "homogeneous text", &bFlushConfFileNeeded, TRUE, NULL, NULL);
-	if (! pDialogs->bHomogeneous)
+	//pDialogs->bHomogeneous = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "homogeneous text", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	//if (! pDialogs->bHomogeneous)
 	{
 		gchar *cFontDescription = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "message police", &bFlushConfFileNeeded, "sans 14", "Icons", NULL);
 		
@@ -121,7 +120,7 @@ static void reload (CairoConfigDialogs *pPrevDialogs, CairoConfigDialogs *pDialo
 	{
 		cairo_dock_load_dialog_buttons (CAIRO_CONTAINER (pDock), pDialogs->cButtonOkImage, pDialogs->cButtonCancelImage);
 	}
-	if (pDialogs->bHomogeneous)
+	/*if (pDialogs->bHomogeneous)
 	{
 		pDialogs->dialogTextDescription.iSize = myLabels.iconTextDescription.iSize;
 		if (pDialogs->dialogTextDescription.iSize == 0)
@@ -129,7 +128,7 @@ static void reload (CairoConfigDialogs *pPrevDialogs, CairoConfigDialogs *pDialo
 		pDialogs->dialogTextDescription.cFont = g_strdup (myLabels.iconTextDescription.cFont);
 		pDialogs->dialogTextDescription.iWeight = myLabels.iconTextDescription.iWeight;
 		pDialogs->dialogTextDescription.iStyle = myLabels.iconTextDescription.iStyle;
-	}
+	}*/
 }
 
 

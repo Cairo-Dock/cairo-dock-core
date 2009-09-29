@@ -43,7 +43,7 @@ struct _CairoConfigDialogs {
 	gint iDialogIconSize;
 
 	CairoDockLabelDescription dialogTextDescription;
-	gboolean bHomogeneous;
+	gboolean bHomogeneous_deprecated;
 	
 	gchar *cDecoratorName;
 	gdouble fDialogColor[4];

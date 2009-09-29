@@ -105,7 +105,8 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 		cd_debug ("  on se fixe en bas");
 		pDock->bAtBottom = TRUE;
 		pDock->iSidMoveDown = 0;
-		int iNewWidth, iNewHeight;
+		cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MIN_SIZE);
+		/*int iNewWidth, iNewHeight;
 		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MIN_SIZE, &iNewWidth, &iNewHeight);
 		if (pDock->container.bIsHorizontal)
 			gdk_window_move_resize (pDock->container.pWidget->window,
@@ -118,7 +119,7 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 				pDock->container.iWindowPositionY,
 				pDock->container.iWindowPositionX,
 				iNewHeight,
-				iNewWidth);
+				iNewWidth);*/
 		
 		if (pDock->bAutoHide && pDock->iRefCount == 0)
 		{
@@ -319,10 +320,20 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 					cairo_dock_pop_down (pDock);
 				
 				//\__________________ On se redimensionne en taille normale.
-				if (! (pDock->bAutoHide && pDock->iRefCount == 0) && ! pDock->bMenuVisible)
+				if (! (pDock->bAutoHide && pDock->iRefCount == 0) && ! pDock->bMenuVisible)  // fin de shrink sans auto-hide => taille normale.
 				{
-					int iNewWidth, iNewHeight;
-					cairo_dock_get_window_position_and_geometry_at_balance (pDock, g_bEasterEggs ? CAIRO_DOCK_MAX_SIZE : CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
+					if (g_bEasterEggs)
+					{
+						if (pDock->pShapeBitmap)
+							gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+								pDock->pShapeBitmap,
+								0,
+								0);
+					}
+					else
+						cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_NORMAL_SIZE);
+					/*int iNewWidth, iNewHeight;
+					cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
 					if (pDock->container.bIsHorizontal)
 						gdk_window_move_resize (pDock->container.pWidget->window,
 							pDock->container.iWindowPositionX,
@@ -334,11 +345,12 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 							pDock->container.iWindowPositionY,
 							pDock->container.iWindowPositionX,
 							iNewHeight,
-							iNewWidth);
+							iNewWidth);*/
 				}
 				else if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->fFoldingFactor != 0)  // si le dock se replie, inutile de rester en taille grande avec une fenetre transparente, ca perturbe.
 				{
-					int iNewWidth, iNewHeight;
+					cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MIN_SIZE);
+					/*int iNewWidth, iNewHeight;
 					cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MIN_SIZE, &iNewWidth, &iNewHeight);
 					if (pDock->container.bIsHorizontal)
 						gdk_window_move_resize (pDock->container.pWidget->window,
@@ -351,7 +363,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 							pDock->container.iWindowPositionY,
 							pDock->container.iWindowPositionX,
 							iNewHeight,
-							iNewWidth);
+							iNewWidth);*/
 				}
 				
 				//\__________________ On se cache si sous-dock.

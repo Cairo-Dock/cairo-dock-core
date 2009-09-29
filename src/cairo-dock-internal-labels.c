@@ -107,7 +107,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	if (! bUseBackgroundForLabel)
 		pLabels->iconTextDescription.fBackgroundColor[3] = 0;  // ne sera pas dessine.
 	
-	if (myDialogs.bHomogeneous)
+	/*if (myDialogs.bHomogeneous)
 	{
 		myDialogs.dialogTextDescription.iSize = pLabels->iconTextDescription.iSize;
 		if (myDialogs.dialogTextDescription.iSize == 0)
@@ -117,7 +117,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 		myDialogs.dialogTextDescription.iWeight = pLabels->iconTextDescription.iWeight;
 		myDialogs.dialogTextDescription.iStyle = pLabels->iconTextDescription.iStyle;
 		myDialogs.dialogTextDescription.fBackgroundColor[3] = 0;
-	}
+	}*/
 	
 	pLabels->iLabelSize = (pLabels->iconTextDescription.iSize != 0 ?
 		pLabels->iconTextDescription.iSize +
