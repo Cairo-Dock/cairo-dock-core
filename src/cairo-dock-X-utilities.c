@@ -714,6 +714,75 @@ void cairo_dock_set_xicon_geometry (int Xid, int iX, int iY, int iWidth, int iHe
 
 
 
+void cairo_dock_close_xwindow (Window Xid)
+{
+	//g_print ("%s (%d)\n", __func__, Xid);
+	g_return_if_fail (Xid > 0);
+	
+	XEvent xClientMessage;
+	
+	xClientMessage.xclient.type = ClientMessage;
+	xClientMessage.xclient.serial = 0;
+	xClientMessage.xclient.send_event = True;
+	xClientMessage.xclient.display = s_XDisplay;
+	xClientMessage.xclient.window = Xid;
+	xClientMessage.xclient.message_type = XInternAtom (s_XDisplay, "_NET_CLOSE_WINDOW", False);
+	xClientMessage.xclient.format = 32;
+	xClientMessage.xclient.data.l[0] = cairo_dock_get_xwindow_timestamp (Xid);  // timestamp
+	xClientMessage.xclient.data.l[1] = 2;  // 2 <=> pagers and other Clients that represent direct user actions.
+	xClientMessage.xclient.data.l[2] = 0;
+	xClientMessage.xclient.data.l[3] = 0;
+	xClientMessage.xclient.data.l[4] = 0;
+
+	Window root = DefaultRootWindow (s_XDisplay);
+	XSendEvent (s_XDisplay,
+		root,
+		False,
+		SubstructureRedirectMask | SubstructureNotifyMask,
+		&xClientMessage);
+	//cairo_dock_set_xwindow_timestamp (Xid, cairo_dock_get_xwindow_timestamp (root));
+}
+
+void cairo_dock_kill_xwindow (Window Xid)
+{
+	g_return_if_fail (Xid > 0);
+	XKillClient (s_XDisplay, Xid);
+}
+
+void cairo_dock_show_xwindow (Window Xid)
+{
+	g_return_if_fail (Xid > 0);
+	XEvent xClientMessage;
+	Window root = DefaultRootWindow (s_XDisplay);
+
+	//\______________ On se deplace sur le bureau de la fenetre a afficher (autrement Metacity deplacera la fenetre sur le bureau actuel).
+	int iDesktopNumber = cairo_dock_get_xwindow_desktop (Xid);
+	cairo_dock_set_current_desktop (iDesktopNumber);
+
+	//\______________ On active la fenetre.
+	//XMapRaised (s_XDisplay, Xid);  // on la mappe, pour les cas ou elle etait en zone de notification. Malheuresement, la zone de notif de gnome est bugguee, et reduit la fenetre aussitot qu'on l'a mappee :-(
+	xClientMessage.xclient.type = ClientMessage;
+	xClientMessage.xclient.serial = 0;
+	xClientMessage.xclient.send_event = True;
+	xClientMessage.xclient.display = s_XDisplay;
+	xClientMessage.xclient.window = Xid;
+	xClientMessage.xclient.message_type = s_aNetActiveWindow;
+	xClientMessage.xclient.format = 32;
+	xClientMessage.xclient.data.l[0] = 2;  // source indication
+	xClientMessage.xclient.data.l[1] = 0;  // timestamp
+	xClientMessage.xclient.data.l[2] = 0;  // requestor's currently active window, 0 if none
+	xClientMessage.xclient.data.l[3] = 0;
+	xClientMessage.xclient.data.l[4] = 0;
+
+	XSendEvent (s_XDisplay,
+		root,
+		False,
+		SubstructureRedirectMask | SubstructureNotifyMask,
+		&xClientMessage);
+
+	//cairo_dock_set_xwindow_timestamp (Xid, cairo_dock_get_xwindow_timestamp (root));
+}
+
 void cairo_dock_minimize_xwindow (Window Xid)
 {
 	g_return_if_fail (Xid > 0);
@@ -721,6 +790,8 @@ void cairo_dock_minimize_xwindow (Window Xid)
 	//Window root = DefaultRootWindow (s_XDisplay);
 	//cairo_dock_set_xwindow_timestamp (Xid, cairo_dock_get_xwindow_timestamp (root));
 }
+
+
 
 static void _cairo_dock_change_window_state (Window Xid, gulong iNewValue, Atom iProperty1, Atom iProperty2)
 {

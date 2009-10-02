@@ -27,9 +27,12 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-data-renderer.h This class defines the data renderer structure and API.
-* Data renderer is a generic way to render onto an icon a set of values defined by : {yk = f(tk)} where k=0..n and yk is a vector.
-* 
+*@file cairo-dock-data-renderer.h This class defines the Data Renderer structure and API.
+* A CairoDataRenderer is a generic way to render onto an icon a set of values defined by : {yk = f(tk)}, k=0..n where yk is a vector.
+* Data Renderers are binded to an icon, and initialized with a set of attributes, that derives from a CairoDataRendererAttribute, with the function /ref cairo_dock_add_new_data_renderer_on_icon.
+* You update a Data Renderer with /ref cairo_dock_render_new_data_on_icon, providing it the correct number of values.
+* If you want to change any parameter of a Data Renderer, use /ref cairo_dock_reload_data_renderer_on_icon, which keeps the history.
+* To remove the Data Renderer from an icon, use /ref cairo_dock_remove_data_renderer_on_icon.
 */
 
 //
@@ -85,7 +88,7 @@ struct _CairoDataRenderer {
 	/// interface of the Data Renderer.
 	CairoDataRendererInterface interface;
 	// fill at load time independantly of the renderer type.
-	/// internal data to be drawn by the renderer.
+	/// internal data to be drawn by the renderer.it
 	CairoDataToRenderer data;
 	/// size of the drawing area.
 	gint iWidth, iHeight;  // taille du contexte de dessin.
@@ -117,9 +120,17 @@ struct _CairoDataRenderer {
 	gdouble fLatency;
 };
 
+
 ///
 /// Renderer manipulation
 ///
+/** Get the default GLX font for Data Renderer. It can render strings of digits from 0 to 9. Don't destroy it.
+*@return the default GLX font*/
+CairoDockGLFont *cairo_dock_get_default_data_renderer_font (void);
+
+void cairo_dock_unload_default_data_renderer_font (void);
+
+
 /**Add a Data Renderer on an icon (usually the icon of an applet). A Data Renderer is a view that will be used to display a set a values on the icon.
 *@param pIcon the icon
 *@param pContainer the icon's container
@@ -145,8 +156,16 @@ void cairo_dock_remove_data_renderer_on_icon (Icon *pIcon);
 *@param pAttribute new attributes defining the Renderer, or NULL to keep the current ones*/
 void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pSourceContext, CairoDataRendererAttribute *pAttribute);
 
+
+/** Resize the history of a DataRenderer of an icon, that is to say change the number of previous values that are remembered by the DataRenderer.
+*@param pIcon the icon
+*@param iNewMemorySize the new size of history*/
 void cairo_dock_resize_data_renderer_history (Icon *pIcon, int iNewMemorySize);
 
+/** Redraw the DataRenderer of an icon, with the current values.
+*@param pIcon the icon
+*@param pContainer the icon's container
+*@param pSourceContext a drawing context*/
 void cairo_dock_refresh_data_renderer (Icon *pIcon, CairoContainer *pContainer, cairo_t *pSourceContex);
 
 
@@ -233,7 +252,7 @@ void cairo_dock_refresh_data_renderer (Icon *pIcon, CairoContainer *pContainer, 
 	if (pRenderer->format_value != NULL)\
 		(pRenderer)->format_value (cairo_data_renderer_get_current_value (pRenderer, i), cBuffer, CAIRO_DOCK_DATA_FORMAT_MAX_LEN);\
 	else\
-		snprintf (cBuffer, CAIRO_DOCK_DATA_FORMAT_MAX_LEN, fValue < .1 ? "%.1f%%" : "%.0f%%", fValue * 100); } while (0)
+		snprintf (cBuffer, CAIRO_DOCK_DATA_FORMAT_MAX_LEN, fValue < .1 ? "%.1f" : "%.0f", fValue * 100.); } while (0)
 /**Write a value in a readable text format in the renderer text buffer.
 *@param pRenderer a data renderer
 *@param fValue the normalized value

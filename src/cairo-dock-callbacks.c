@@ -438,6 +438,29 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 			cairo_dock_drag_flying_container (s_pFlyingContainer, pDock);
 		}
 		
+		//\_______________ On gere la zone d'input.
+		if (g_bEasterEggs && !pDock->container.bInside)
+		{
+			int x = (pDock->container.bIsHorizontal ? pDock->container.iMouseX : pDock->container.iWidth - pDock->container.iMouseY);
+			int y = (pDock->container.bIsHorizontal ? pDock->container.iMouseY : pDock->container.iHeight - pDock->container.iMouseX);
+			if (pDock->container.bDirectionUp)
+			{
+				if (y < pDock->container.iHeight - pDock->iMinDockHeight)
+				{
+					g_print ("motion refuse en y\n");
+					return FALSE;
+				}
+			}
+			else
+			{
+				if (y > pDock->iMinDockHeight)
+				{
+					g_print ("motion refuse en y\n");
+					return FALSE;
+				}
+			}
+		}
+		
 		//\_______________ On elague le flux des MotionNotify, sinon X en envoie autant que le permet le CPU !
 		if (pMotion->time != 0 && pMotion->time - fLastTime < mySystem.fRefreshInterval && s_pIconClicked == NULL)
 		{
@@ -1007,37 +1030,49 @@ static gpointer _cairo_dock_launch_threaded (gchar *cCommand)
 	g_free (cCommand);
 	return NULL;
 }
-gboolean cairo_dock_launch_command_full (const gchar *cCommandFormat, gchar *cWorkingDirectory, ...)
+
+gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, gchar *cWorkingDirectory, ...)
 {
-	g_return_val_if_fail (cCommandFormat != NULL, FALSE);
-	
 	va_list args;
 	va_start (args, cWorkingDirectory);
 	gchar *cCommand = g_strdup_vprintf (cCommandFormat, args);
 	va_end (args);
+	
+	gboolean r = cairo_dock_launch_command_full (cCommand, cWorkingDirectory);
+	g_free (cCommand);
+	
+	return r;
+}
+
+gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingDirectory)
+{
+	g_return_val_if_fail (cCommand != NULL, FALSE);
 	cd_debug ("%s (%s , %s)", __func__, cCommand, cWorkingDirectory);
 	
-	gchar *cBGCommand;
+	gchar *cBGCommand = NULL;
 	if (cCommand[strlen (cCommand)-1] != '&')
-	{
 		cBGCommand = g_strconcat (cCommand, " &", NULL);
-		g_free (cCommand);
-	}
-	else
-		cBGCommand = cCommand;
+	
+	gchar *cCommandFull = NULL;
 	if (cWorkingDirectory != NULL)
 	{
-		cCommand = g_strdup_printf ("cd '%s' && %s", cWorkingDirectory, cBGCommand);
+		cCommandFull = g_strdup_printf ("cd '%s' && %s", cWorkingDirectory, cBGCommand ? cBGCommand : cCommand);
 		g_free (cBGCommand);
-		cBGCommand = cCommand;
+		cBGCommand = NULL;
 	}
+	else if (cBGCommand != NULL)
+	{
+		cCommandFull = cBGCommand;
+		cBGCommand = NULL;
+	}
+	
 	GError *erreur = NULL;
-	GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_launch_threaded, cBGCommand, FALSE, &erreur);
+	GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_launch_threaded, cCommandFull ? cCommandFull : cCommand, FALSE, &erreur);
 	if (erreur != NULL)
 	{
-		cd_warning ("couldn't launch this command (%s : %s)", cBGCommand, erreur->message);
+		cd_warning ("couldn't launch this command (%s : %s)", cCommandFull, erreur->message);
 		g_error_free (erreur);
-		g_free (cBGCommand);
+		g_free (cCommandFull);
 		return FALSE;
 	}
 	return TRUE;

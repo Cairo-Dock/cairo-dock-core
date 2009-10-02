@@ -269,6 +269,27 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 
 void cairo_dock_apply_desktop_background (CairoContainer *pContainer);
 
+  //////////
+ // TEXT //
+//////////
+
+
+struct _CairoDockGLFont {
+	GLuint iListBase;
+	gint iCharBase;
+	gint iNbChars;
+	gint iCharWidth;
+	gint iCharHeight;
+};
+
+CairoDockGLFont *cairo_dock_load_glx_font (const gchar *cFontDescription, int first, int count);
+
+void cairo_dock_free_glx_font (CairoDockGLFont *pFont);
+
+void cairo_dock_draw_glx_text (const gchar *cText, CairoDockGLFont *pFont);
+
+void cairo_dock_draw_glx_text_in_area (const gchar *cText, CairoDockGLFont *pFont, int iWidth, int iHeight);
+
 
 G_END_DECLS
 #endif

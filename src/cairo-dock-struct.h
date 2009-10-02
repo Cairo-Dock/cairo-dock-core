@@ -366,6 +366,7 @@ typedef struct _CairoDockTask CairoDockTask;
 
 typedef struct _CairoDockTheme CairoDockTheme;
 
+typedef struct _CairoDockGLFont CairoDockGLFont;
 
 #define CAIRO_DOCK_NB_DATA_SLOT 12
 

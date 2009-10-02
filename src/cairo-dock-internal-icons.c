@@ -42,7 +42,6 @@ extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCurrentLaunchersPath;
 extern gboolean g_bUseOpenGL;
 extern double g_fBackgroundImageWidth, g_fBackgroundImageHeight;
-extern gboolean g_bEasterEggs;
 
 static const gchar * s_cIconTypeNames[(CAIRO_DOCK_NB_TYPES+1)/2] = {"launchers", "applications", "applets"};
 
@@ -96,12 +95,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	if (pIcons->bMixAppletsAndLaunchers)
 		pIcons->tIconTypeOrder[CAIRO_DOCK_APPLET] = pIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER];
 	
-	if (g_bEasterEggs)
-	{
-		pIcons->bMixApplisAndLaunchers = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "mix applis with launchers", &bFlushConfFileNeeded, FALSE , NULL, NULL);
-		if (pIcons->bMixApplisAndLaunchers)
-			pIcons->tIconTypeOrder[CAIRO_DOCK_APPLI] = pIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER];
-	}
+	pIcons->bMixApplisAndLaunchers = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "mix applis with launchers", &bFlushConfFileNeeded, FALSE , NULL, NULL);
+	if (pIcons->bMixApplisAndLaunchers)
+		pIcons->tIconTypeOrder[CAIRO_DOCK_APPLI] = pIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER];
 	
 	//\___________________ Reflets.
 	pIcons->fFieldDepth = cairo_dock_get_double_key_value (pKeyFile, "Icons", "field depth", &bFlushConfFileNeeded, 0.7, NULL, NULL);

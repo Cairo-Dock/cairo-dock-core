@@ -59,8 +59,9 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 
 gchar *cairo_dock_launch_command_sync (const gchar *cCommand);
 
-gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingDirectory, ...);
-#define cairo_dock_launch_command(cCommand,...) cairo_dock_launch_command_full (cCommand, NULL, ##__VA_ARGS__)
+gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, gchar *cWorkingDirectory, ...);
+gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingDirectory);
+#define cairo_dock_launch_command(cCommand) cairo_dock_launch_command_full (cCommand, NULL)
 
 gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState);
 gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock);

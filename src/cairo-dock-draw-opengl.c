@@ -1908,3 +1908,84 @@ void cairo_dock_add_curved_subpath_opengl (CairoDockOpenglPath *pVertexPath, int
 		//vy(i) = Bezier (y0,y1,y2,y3,t);
 	}
 }
+
+
+static int s_iFontListBase = 0;
+static int s_iFontCharBase = 0;
+static int s_iFontCharWidth = 0;
+static int s_iFontCharHeight = 0;
+static int s_iFontNbChars = 0;
+CairoDockGLFont *cairo_dock_load_glx_font (const gchar *cFontDescription, int first, int count)
+{
+	g_return_val_if_fail (cFontDescription != NULL, NULL);
+	
+	GLuint iListBase = glGenLists (count);
+	g_return_val_if_fail (iListBase != 0, NULL);
+	
+	CairoDockGLFont *pFont = g_new0 (CairoDockGLFont, 1);
+	pFont->iListBase = iListBase;
+	pFont->iNbChars = count;
+	pFont->iCharBase = first;
+	
+	PangoFontDescription *fd = pango_font_description_from_string (cFontDescription);
+	PangoFont *font = gdk_gl_font_use_pango_font (fd,
+		first,
+		count,
+		iListBase);
+	g_return_val_if_fail (font != NULL, NULL);
+	
+	PangoFontMetrics* metrics = pango_font_get_metrics (font, NULL);
+	pFont->iCharWidth = pango_font_metrics_get_approximate_char_width (metrics) / PANGO_SCALE;
+	pFont->iCharHeight = (pango_font_metrics_get_ascent (metrics) + pango_font_metrics_get_descent (metrics)) / PANGO_SCALE;
+	pango_font_metrics_unref(metrics);
+	
+	pango_font_description_free (fd);
+	return pFont;
+}
+
+void cairo_dock_free_glx_font (CairoDockGLFont *pFont)
+{
+	if (pFont == NULL)
+		return ;
+	if (pFont->iListBase != 0)
+		glDeleteLists (pFont->iListBase, pFont->iNbChars);
+	g_free (pFont);
+}
+
+void cairo_dock_draw_glx_text (const gchar *cText, CairoDockGLFont *pFont)
+{
+	g_return_if_fail (pFont != NULL && pFont->iListBase != 0 && cText != NULL);
+	int n = strlen (cText);
+	if (pFont->iCharBase == 0)  // version optimisee ou on a charge tous les caracteres.
+	{
+		glListBase (pFont->iListBase);
+		glCallLists (n, GL_UNSIGNED_BYTE, (unsigned char *)cText);
+		glListBase (0);
+	}
+	else
+	{
+		int i;
+		for (i = 0; i < n; i ++)
+		{
+			if (cText[i] >= pFont->iCharBase)
+				glCallList (pFont->iListBase + (cText[i] - pFont->iCharBase));
+		}
+	}
+}
+
+void cairo_dock_draw_glx_text_in_area (const gchar *cText, CairoDockGLFont *pFont, int iWidth, int iHeight)
+{
+	g_return_if_fail (pFont != NULL && cText != NULL);
+	int n = strlen (cText);
+	double h = pFont->iCharHeight;
+	double w = n * pFont->iCharWidth;
+	
+	glPushMatrix ();
+	
+	//glScalef (iWidth/w, iHeight/h, 1.);
+	glScalef (10, 10, 1);
+	g_print ("text:%.2fx%.2f\n", w, h);
+	cairo_dock_draw_glx_text (cText, pFont);
+	
+	glPopMatrix ();
+}

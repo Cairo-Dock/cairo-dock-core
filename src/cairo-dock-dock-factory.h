@@ -217,6 +217,11 @@ struct _CairoDock {
 	gdouble fMagnitudeMax;
 	/// whether the position of icons for the WM is invalid.
 	gboolean bWMIconseedsUptade;
+	
+	/// counter for the fade out effect.
+	gint iFadeCounter;
+	/// direction of the fade out effect.
+	gboolean bFadeInOut;
 };
 
 

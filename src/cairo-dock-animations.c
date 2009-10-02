@@ -159,11 +159,78 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 }
 
 
+
+#define FADE_OUT_NB_STEPS 10
+static gboolean _render_fade_out_dock (gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext)
+{
+	double fAlpha = (double) pDock->iFadeCounter / FADE_OUT_NB_STEPS;
+	if (pCairoContext != NULL)
+	{
+		cairo_rectangle (pCairoContext,
+			0,
+			0,
+			pDock->container.bIsHorizontal ? pDock->container.iWidth : pDock->container.iHeight, pDock->container.bIsHorizontal ? pDock->container.iHeight : pDock->container.iWidth);
+		cairo_set_line_width (pCairoContext, 0);
+		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_DEST_OUT);
+		cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, fAlpha);
+		cairo_fill (pCairoContext);
+	}
+	else
+	{
+		glAccum (GL_LOAD, fAlpha);
+		glAccum (GL_RETURN, 1.0);
+	}
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gboolean *bContinueAnimation)
+{
+	pDock->iFadeCounter += (pDock->bFadeInOut ? -1 : 1);  // fade out, puis fade in.
+	
+	if (pDock->iFadeCounter == 0)
+	{
+		pDock->bFadeInOut = FALSE;
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
+		/// si fenetre maximisee, mettre direct iFadeCounter au max...
+		
+	}
+	
+	if (pDock->iFadeCounter < FADE_OUT_NB_STEPS)
+	{
+		*bContinueAnimation = TRUE;
+	}
+	else
+	{
+		cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
+			CAIRO_DOCK_RENDER_DOCK,
+			(CairoDockNotificationFunc) _render_fade_out_dock,
+			NULL);
+		cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
+			CAIRO_DOCK_UPDATE_DOCK,
+			(CairoDockNotificationFunc) _update_fade_out_dock,
+			NULL);
+	}
+	
+	cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
 void cairo_dock_pop_up (CairoDock *pDock)
 {
 	cd_debug ("%s (%d)", __func__, pDock->bPopped);
 	if (! pDock->bPopped && myAccessibility.bPopUp)
 	{
+		if (g_bEasterEggs)
+		{
+			cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
+				CAIRO_DOCK_RENDER_DOCK,
+				(CairoDockNotificationFunc) _render_fade_out_dock,
+				NULL);
+			cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
+				CAIRO_DOCK_UPDATE_DOCK,
+				(CairoDockNotificationFunc) _update_fade_out_dock,
+				NULL);
+			cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
+		}
 		gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), TRUE);
 		pDock->bPopped = TRUE;
 	}
@@ -176,7 +243,24 @@ gboolean cairo_dock_pop_down (CairoDock *pDock)
 		return FALSE;
 	if (pDock->bPopped && myAccessibility.bPopUp)
 	{
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
+		if (g_bEasterEggs && cairo_dock_search_window_on_our_way (TRUE, TRUE) != NULL)
+		{
+			pDock->iFadeCounter = FADE_OUT_NB_STEPS;
+			pDock->bFadeInOut = TRUE;
+			cairo_dock_register_notification_on_container (CAIRO_CONTAINER (pDock),
+				CAIRO_DOCK_RENDER_DOCK,
+				(CairoDockNotificationFunc) _render_fade_out_dock,
+				CAIRO_DOCK_RUN_AFTER, NULL);
+			cairo_dock_register_notification_on_container (CAIRO_CONTAINER (pDock),
+				CAIRO_DOCK_UPDATE_DOCK,
+				(CairoDockNotificationFunc) _update_fade_out_dock,
+				CAIRO_DOCK_RUN_FIRST, NULL);
+			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
+		}
+		else
+		{
+			gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
+		}
 		pDock->bPopped = FALSE;
 	}
 	pDock->iSidPopDown = 0;

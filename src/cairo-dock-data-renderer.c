@@ -39,10 +39,29 @@ extern gboolean g_bUseOpenGL;
 #define cairo_dock_get_icon_data_renderer(pIcon) (pIcon)->pDataRenderer
 
 
+static CairoDockGLFont *s_pFont = NULL;
+
+#define _init_data_renderer_font(...) s_pFont = cairo_dock_load_glx_font ("Sans 12", '0', 10)
+CairoDockGLFont *cairo_dock_get_default_data_renderer_font (void)
+{
+	if (s_pFont == NULL)
+		_init_data_renderer_font ();
+	return s_pFont;
+}
+
+void cairo_dock_unload_default_data_renderer_font (void)
+{
+	cairo_dock_free_glx_font (s_pFont);
+	s_pFont = NULL;
+}
+
+
 CairoDataRenderer *cairo_dock_new_data_renderer (const gchar *cRendererName)
 {
 	CairoDataRendererNewFunc init = cairo_dock_get_data_renderer_entry_point (cRendererName);
 	g_return_val_if_fail (init != NULL, NULL);
+	
+	_init_data_renderer_font ();
 	
 	return init ();
 }

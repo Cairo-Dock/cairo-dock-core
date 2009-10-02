@@ -438,8 +438,8 @@ static void cairo_dock_draw_one_gauge (cairo_t *pSourceContext, Gauge *pGauge, i
 		{
 			_draw_gauge_image (pSourceContext, pGauge, pIndicator, fValue);
 		}
-
-		if (pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
+		
+		if (pRenderer->bWriteValues && pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
 		{
 			cairo_data_renderer_format_value (pRenderer, fValue, i);
 			//g_print (" >>>%s\n", pRenderer->cFormatBuffer);
@@ -600,22 +600,14 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 		{
 			_draw_gauge_image_opengl (pGauge, pIndicator, fValue);
 		}
-
-		if (pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
+		
+		if (pRenderer->bWriteValues && pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
 		{
 			cairo_data_renderer_format_value (pRenderer, fValue, i);
-			//g_print (" >>>%s\n", pRenderer->cFormatBuffer);
-			/*cairo_save (pSourceContext);
-			cairo_set_source_rgb (pSourceContext, pIndicator->textColor[0], pIndicator->textColor[1], pIndicator->textColor[2]);
-			cairo_set_line_width (pSourceContext, 20.);
 			
-			cairo_text_extents_t textExtents;
-			cairo_text_extents (pSourceContext, pRenderer->cFormatBuffer, &textExtents);
-			cairo_move_to (pSourceContext,
-				pIndicator->textX * pRenderer->iWidth - textExtents.width / 2,
-				pIndicator->textY * pRenderer->iHeight + textExtents.height / 2);
-			cairo_show_text (pSourceContext, pRenderer->cFormatBuffer);
-			cairo_restore (pSourceContext);*/
+			CairoDockGLFont *pFont = cairo_dock_get_default_data_renderer_font ();
+			cairo_dock_draw_glx_text_in_area (pRenderer->cFormatBuffer, pFont, 24, 24/*pIndicator->textWidth, pIndicator->textHeight*/);
+			//g_print (" >>> '%s'\n", pRenderer->cFormatBuffer);
 		}
 	}
 	

@@ -522,6 +522,10 @@ icon's type order = 0;1;2
 #{This parameter will overwrite the previously defined order, to allow you to mix applets and launchers into the dock.}
 mix applets with launchers = false
 
+#b+ Allow applis to be placed amongst launchers ?
+#{This parameter will overwrite the previously defined order. If you didn't choose to group applis in sub-dock, applis will be placed next to their launcher.}
+mix applis with launchers = false
+
 
 [Views]
 
