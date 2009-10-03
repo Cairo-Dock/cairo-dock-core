@@ -689,6 +689,9 @@ int main (int argc, char** argv)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
 	
 	g_print ("\nVERIFIER LE CHANGEMENT DE CONTAINER POUR TERMINAL\n\n");
+	g_print ("\nPLANTAGE POWER-MANAGER\n\n");
+	g_print ("\nBERLIOS\n\n");
+	
 	
 	gtk_main ();
 

@@ -75,6 +75,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 			pSystem->bUseFakeTransparency = TRUE;
 	pSystem->bConfigPanelTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "config transparency", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
+	pSystem->iFadeOutNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "fade out nb steps", &bFlushConfFileNeeded, 15, NULL, NULL);
 	
 	gsize length=0;
 	pSystem->cActiveModuleList = cairo_dock_get_string_list_key_value (pKeyFile, "System", "modules", &bFlushConfFileNeeded, &length, NULL, "Applets", "modules_0");

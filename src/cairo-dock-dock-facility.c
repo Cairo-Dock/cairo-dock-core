@@ -457,7 +457,7 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	w = pDock->inputArea.width;
 	h = pDock->inputArea.height;
 	
-	// on cree ou on reset le bitmap.
+	// on verifie que les conditions sont toujours remplies.
 	if (w == 0 || h == 0 || pDock->iRefCount > 0 || pDock->bAutoHide || W == 0 || H == 0 || (!g_bEasterEggs && !pDock->container.bIsHorizontal))
 	{
 		if (pDock->pShapeBitmap != NULL)  // plus de shape, on la remet a 0.
@@ -467,16 +467,17 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 				NULL,
 				0,
 				0);
+			pDock->bActive = TRUE;
 		}
 		return ;
 	}
 	
+	// on cree l'input shape.
 	pDock->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
 		pDock->container.bIsHorizontal ? W : H,
 		pDock->container.bIsHorizontal ? H : W,
 		1);
 	
-	// on definit la zone d'input.
 	cairo_t *pCairoContext = gdk_cairo_create (pDock->pShapeBitmap);
 	cairo_set_source_rgba (pCairoContext, 1.0f, 1.0f, 1.0f, 0.0f);
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);

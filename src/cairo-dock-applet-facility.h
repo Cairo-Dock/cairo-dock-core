@@ -776,14 +776,14 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 //\_________________________________ TASKBAR
 /** Lets your applet control the window of an external program, instead of the Taskbar.
- *\param cApplicationClass the class of the application you wish to control.
- *\param bStealTaskBarIcon TRUE to manage the application, FALSE to stop managing it.
+ *\param cApplicationClass the class of the application you wish to control (in lower case), or NULL to stop controling any appli.
 */
-#define CD_APPLET_MANAGE_APPLICATION(cApplicationClass, bStealTaskBarIcon) do {\
-	if (myIcon->cClass != NULL && (cairo_dock_strings_differ (myIcon->cClass, cApplicationClass) || ! bStealTaskBarIcon))\
-		cairo_dock_deinhibate_class (cApplicationClass, myIcon);\
-	if (myIcon->cClass == NULL && bStealTaskBarIcon)\
-		cairo_dock_inhibate_class (cApplicationClass, myIcon); } while (0)
+#define CD_APPLET_MANAGE_APPLICATION(cApplicationClass) do {\
+	if (cairo_dock_strings_differ (myIcon->cClass, cApplicationClass)) {\
+		if (myIcon->cClass != NULL)\
+			cairo_dock_deinhibate_class (myIcon->cClass, myIcon);\
+		if (cApplicationClass != NULL)\
+			cairo_dock_inhibate_class (cApplicationClass, myIcon); } } while (0)
 
 //\_________________________________ INTERNATIONNALISATION
 /** Macro for gettext, similar to _() et N_(), but with the domain of the applet. Surround all your strings with this, so that 'xgettext' can find them and automatically include them in the translation files.

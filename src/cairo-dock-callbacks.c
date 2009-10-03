@@ -152,11 +152,13 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		}
 		glDisable (GL_SCISSOR_TEST);
 		
-		/**if (g_bEasterEggs)
+		if (g_bEasterEggs)
 		{
-			glAccum (GL_LOAD, .5);
-			glAccum (GL_RETURN, 1.0);
-		}*/
+			glColor3f (1.0, 1.0, 1.0);
+			glRasterPos2f (0., 0.);
+			CairoDockGLFont *pFont = cairo_dock_get_default_data_renderer_font ();
+			cairo_dock_draw_glx_text ("fabounet@cairo-dock.org", pFont);
+		}
 		
 		if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
 			gdk_gl_drawable_swap_buffers (pGlDrawable);
@@ -199,18 +201,6 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	{
 		pDock->pRenderer->render (pCairoContext, pDock);
 		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
-		
-		/**if (g_bEasterEggs)
-		{
-			cairo_rectangle (pCairoContext,
-				0,
-				0,
-				pDock->container.bIsHorizontal ? pDock->container.iWidth : pDock->container.iHeight, pDock->container.bIsHorizontal ? pDock->container.iHeight : pDock->container.iWidth);
-			cairo_set_line_width (pCairoContext, 0);
-			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_DEST_OUT);
-			cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, .5);
-			cairo_fill (pCairoContext);
-		}*/
 	}
 	
 	cairo_destroy (pCairoContext);
@@ -912,12 +902,13 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 					iNewWidth);
 		}
 	}
-	if (g_bEasterEggs && pDock->pShapeBitmap)
+	if (g_bEasterEggs && pDock->pShapeBitmap && !pDock->bActive)
 	{
 		gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 			NULL,
 			0,
 			0);
+		pDock->bActive = TRUE;
 	}
 	
 	if (pDock->iSidMoveDown > 0)  // si on est en train de descendre, on arrete.
@@ -1066,8 +1057,11 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingD
 		cBGCommand = NULL;
 	}
 	
+	if (cCommandFull == NULL)
+		cCommandFull = g_strdup (cCommand);
+	
 	GError *erreur = NULL;
-	GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_launch_threaded, cCommandFull ? cCommandFull : cCommand, FALSE, &erreur);
+	GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_launch_threaded, cCommandFull, FALSE, &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning ("couldn't launch this command (%s : %s)", cCommandFull, erreur->message);
@@ -1489,7 +1483,10 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 		cairo_dock_scroll_dock_icons (pDock, iScrollAmount);
 		return FALSE;
 	}
-	
+	if (pScroll->direction != GDK_SCROLL_UP && pScroll->direction != GDK_SCROLL_DOWN)  // on degage les scrolls horizontaux.
+	{
+		return FALSE;
+	}
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
 	if (icon != NULL)
 	{
@@ -1520,7 +1517,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		//g_print ("-> %dx%d\n", iNewWidth, iNewHeight);
 		pDock->container.iWidth = iNewWidth;
 		pDock->container.iHeight = iNewHeight;
-
+		
 		if (pDock->container.bIsHorizontal)
 			gdk_window_get_pointer (pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
 		else
@@ -1528,12 +1525,25 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		if (pDock->container.iMouseX < 0 || pDock->container.iMouseX > pDock->container.iWidth)  // utile ?
 			pDock->container.iMouseX = 0;
 		
-		if (pDock->pShapeBitmap != NULL)
+		if (pDock->pShapeBitmap != NULL)  // les dimensions ont change, il faut remettre l'input shape a la bonne place.
 		{
-			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-				(pDock->bAtBottom && pDock->iRefCount == 0 && ! pDock->bAutoHide ? pDock->pShapeBitmap : NULL),
-				0,
-				0);
+			if (g_bEasterEggs)
+			{
+				if (! pDock->bActive)
+				{
+					gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+						pDock->pShapeBitmap,
+						0,
+						0);
+				}
+			}
+			else
+			{
+				gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+					(pDock->bAtBottom && pDock->iRefCount == 0 && ! pDock->bAutoHide ? pDock->pShapeBitmap : NULL),
+					0,
+					0);
+			}
 		}
 		
 		if (g_bUseOpenGL)

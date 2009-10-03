@@ -216,6 +216,10 @@ grow nb steps = 10
 #i-[4;40] ...
 shrink nb steps = 8
 
+#i-[4;40] Number of steps in the fade out animation :
+#{This is the animation when the dock goes below a window; The greater, the slower it will be}
+fade out nb steps = 15
+
 #f-[0.1;0.9] Window's move acceleration (move up/move down) :
 #{the smaller, the faster the dock will hide.}
 move up speed = 0.35

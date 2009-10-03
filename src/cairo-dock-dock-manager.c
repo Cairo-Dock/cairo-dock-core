@@ -578,27 +578,6 @@ gboolean cairo_dock_quick_hide_is_activated (void)
 }
 
 
-gboolean cairo_dock_window_hovers_dock (GtkAllocation *pWindowGeometry, CairoDock *pDock)
-{
-	if (pWindowGeometry->width != 0 && pWindowGeometry->height != 0)
-	{
-		int iDockX = pDock->container.iWindowPositionX, iDockY = pDock->container.iWindowPositionY;
-		int iDockWidth = pDock->container.iWidth, iDockHeight = pDock->container.iHeight;
-		cd_message ("dock : (%d;%d) %dx%d", iDockX, iDockY, iDockWidth, iDockHeight);
-		if ((pWindowGeometry->x < iDockX + iDockWidth && pWindowGeometry->x + pWindowGeometry->width > iDockX) || (pWindowGeometry->y > iDockY + iDockHeight && pWindowGeometry->y + pWindowGeometry->height > iDockY))
-		{
-			cd_message (" empiete sur le dock");
-			return TRUE;
-		}
-	}
-	else
-	{
-		cd_warning (" on ne peut pas dire ou elle est sur l'ecran, on va supposer qu'elle recouvre le dock");
-		return TRUE;
-	}
-	return FALSE;
-}
-
 
 void cairo_dock_synchronize_one_sub_dock_position (CairoDock *pSubDock, CairoDock *pDock, gboolean bReloadBuffersIfNecessary)
 {
@@ -606,6 +585,8 @@ void cairo_dock_synchronize_one_sub_dock_position (CairoDock *pSubDock, CairoDoc
 	{
 		pSubDock->container.bDirectionUp = pDock->container.bDirectionUp;
 		pSubDock->container.bIsHorizontal = (!myViews.bSameHorizontality) ^ pDock->container.bIsHorizontal;
+		pSubDock->iScreenOffsetX = pDock->iScreenOffsetX;
+		pSubDock->iScreenOffsetY = pDock->iScreenOffsetY;
 		if (bReloadBuffersIfNecessary)
 			cairo_dock_reload_reflects_in_dock (pSubDock);
 		cairo_dock_update_dock_size (pSubDock);

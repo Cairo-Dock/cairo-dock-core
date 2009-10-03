@@ -162,7 +162,8 @@ CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRen
 	GtkWidget *pWindow = cairo_dock_create_container_window ();
 	gtk_container_set_border_width(GTK_CONTAINER(pWindow), 0);
 	pDock->container.pWidget = pWindow;
-
+	pDock->bActive = TRUE;  // no input shape.
+	
 	if (g_bKeepAbove)
 		gtk_window_set_keep_above (GTK_WINDOW (pWindow), g_bKeepAbove);
 	if (myAccessibility.bPopUp)
@@ -442,14 +443,16 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 		if (pParentDock == NULL)
 			pParentDock = g_pMainDock;
 		CairoDockPositionType iScreenBorder = ((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp);
-		cd_message ("position : %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
+		cd_debug ("sub-dock's position : %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
 		pDock->container.bIsHorizontal = (myViews.bSameHorizontality ? pParentDock->container.bIsHorizontal : ! pParentDock->container.bIsHorizontal);
 		pDock->container.bDirectionUp = pParentDock->container.bDirectionUp;
 		if (iScreenBorder != (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp)))
 		{
-			cd_message ("changement de position -> %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
+			cd_debug ("changement de position -> %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
 			cairo_dock_reload_reflects_in_dock (pDock);
 		}
+		pDock->iScreenOffsetX = pParentDock->iScreenOffsetX;
+		pDock->iScreenOffsetY = pParentDock->iScreenOffsetY;
 		if (g_bKeepAbove)
 			gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), FALSE);
 		if (myAccessibility.bPopUp)
@@ -459,7 +462,7 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 		pDock->bAutoHide = FALSE;
 		double fPrevRatio = pDock->container.fRatio;
 		pDock->container.fRatio = MIN (pDock->container.fRatio, myViews.fSubDockSizeRatio);
-
+		
 		Icon *icon;
 		GList *ic;
 		pDock->fFlatDockWidth = - myIcons.iIconGap;
@@ -473,7 +476,12 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 		pDock->iMaxIconHeight *= pDock->container.fRatio / fPrevRatio;
 
 		cairo_dock_set_default_renderer (pDock);
-
+		
+		if (pDock->pShapeBitmap != NULL)
+		{
+			g_object_unref ((gpointer) pDock->pShapeBitmap);
+			pDock->pShapeBitmap = NULL;
+		}
 		gtk_widget_hide (pDock->container.pWidget);
 		cairo_dock_update_dock_size (pDock);
 		

@@ -106,6 +106,14 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 		pDock->bAtBottom = TRUE;
 		pDock->iSidMoveDown = 0;
 		cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MIN_SIZE);
+		if (pDock->pShapeBitmap && ! pDock->bActive)
+		{
+			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+				NULL,
+				0,
+				0);
+			pDock->bActive = TRUE;
+		}
 		/*int iNewWidth, iNewHeight;
 		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MIN_SIZE, &iNewWidth, &iNewHeight);
 		if (pDock->container.bIsHorizontal)
@@ -160,10 +168,9 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 
 
 
-#define FADE_OUT_NB_STEPS 10
 static gboolean _render_fade_out_dock (gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext)
 {
-	double fAlpha = (double) pDock->iFadeCounter / FADE_OUT_NB_STEPS;
+	double fAlpha = (double) pDock->iFadeCounter / mySystem.iFadeOutNbSteps;
 	if (pCairoContext != NULL)
 	{
 		cairo_rectangle (pCairoContext,
@@ -172,7 +179,7 @@ static gboolean _render_fade_out_dock (gpointer pUserData, CairoDock *pDock, cai
 			pDock->container.bIsHorizontal ? pDock->container.iWidth : pDock->container.iHeight, pDock->container.bIsHorizontal ? pDock->container.iHeight : pDock->container.iWidth);
 		cairo_set_line_width (pCairoContext, 0);
 		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_DEST_OUT);
-		cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, fAlpha);
+		cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 1. - fAlpha);
 		cairo_fill (pCairoContext);
 	}
 	else
@@ -191,10 +198,11 @@ static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gbo
 		pDock->bFadeInOut = FALSE;
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
 		/// si fenetre maximisee, mettre direct iFadeCounter au max...
-		
+		if (cairo_dock_search_window_on_our_way (TRUE, TRUE) != NULL)
+			pDock->iFadeCounter = mySystem.iFadeOutNbSteps;
 	}
 	
-	if (pDock->iFadeCounter < FADE_OUT_NB_STEPS)
+	if (pDock->iFadeCounter < mySystem.iFadeOutNbSteps)
 	{
 		*bContinueAnimation = TRUE;
 	}
@@ -243,9 +251,9 @@ gboolean cairo_dock_pop_down (CairoDock *pDock)
 		return FALSE;
 	if (pDock->bPopped && myAccessibility.bPopUp)
 	{
-		if (g_bEasterEggs && cairo_dock_search_window_on_our_way (TRUE, TRUE) != NULL)
+		if (g_bEasterEggs && cairo_dock_search_window_on_our_way (FALSE, FALSE) != NULL)
 		{
-			pDock->iFadeCounter = FADE_OUT_NB_STEPS;
+			pDock->iFadeCounter = mySystem.iFadeOutNbSteps;
 			pDock->bFadeInOut = TRUE;
 			cairo_dock_register_notification_on_container (CAIRO_CONTAINER (pDock),
 				CAIRO_DOCK_RENDER_DOCK,
@@ -408,11 +416,14 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				{
 					if (g_bEasterEggs)
 					{
-						if (pDock->pShapeBitmap)
+						if (pDock->pShapeBitmap && pDock->bActive)
+						{
 							gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 								pDock->pShapeBitmap,
 								0,
 								0);
+							pDock->bActive = FALSE;
+						}
 					}
 					else
 						cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_NORMAL_SIZE);
@@ -433,7 +444,16 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				}
 				else if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->fFoldingFactor != 0)  // si le dock se replie, inutile de rester en taille grande avec une fenetre transparente, ca perturbe.
 				{
+					
 					cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MIN_SIZE);
+					if (pDock->pShapeBitmap && ! pDock->bActive)
+					{
+						gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+							NULL,
+							0,
+							0);
+						pDock->bActive = TRUE;
+					}
 					/*int iNewWidth, iNewHeight;
 					cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MIN_SIZE, &iNewWidth, &iNewHeight);
 					if (pDock->container.bIsHorizontal)

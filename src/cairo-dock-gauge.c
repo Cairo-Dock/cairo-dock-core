@@ -38,6 +38,7 @@
 
 extern gchar *g_cCairoDockDataDir;
 extern gboolean g_bUseOpenGL;
+extern gboolean g_bEasterEggs;
 
   ////////////////////////////////////////////
  /////////////// LOAD GAUGE /////////////////
@@ -601,12 +602,17 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 			_draw_gauge_image_opengl (pGauge, pIndicator, fValue);
 		}
 		
-		if (pRenderer->bWriteValues && pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
+		//if (pRenderer->bWriteValues && pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
+		if (g_bEasterEggs)
 		{
 			cairo_data_renderer_format_value (pRenderer, fValue, i);
 			
 			CairoDockGLFont *pFont = cairo_dock_get_default_data_renderer_font ();
-			cairo_dock_draw_glx_text_in_area (pRenderer->cFormatBuffer, pFont, 24, 24/*pIndicator->textWidth, pIndicator->textHeight*/);
+			glDisable (GL_TEXTURE_2D);
+			glColor3f (1.0, 1.0, 1.0);
+			cairo_dock_draw_glx_text_at_position_in_area (pRenderer->cFormatBuffer, pFont, 0, 0, 24, -24);  // pIndicator->textWidth, pIndicator->textHeight
+			glEnable (GL_TEXTURE_2D);
+			
 			//g_print (" >>> '%s'\n", pRenderer->cFormatBuffer);
 		}
 	}

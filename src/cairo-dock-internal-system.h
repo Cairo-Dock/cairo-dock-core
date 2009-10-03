@@ -51,6 +51,7 @@ struct _CairoConfigSystem {
 	gint iGLAnimationDeltaT;
 	gint iCairoAnimationDeltaT;
 	gboolean bConfigPanelTransparency;
+	gint iFadeOutNbSteps;
 	} ;
 
 DEFINE_PRE_INIT (System);

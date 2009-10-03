@@ -1979,13 +1979,33 @@ void cairo_dock_draw_glx_text_in_area (const gchar *cText, CairoDockGLFont *pFon
 	int n = strlen (cText);
 	double h = pFont->iCharHeight;
 	double w = n * pFont->iCharWidth;
+	double zx, zy;
+	if (fabs (iWidth/w) < fabs (iHeight/h))  // on autorise les dimensions negatives pour pouvoir retourner le texte.
+	{
+		zx = iWidth/w;
+		zy = (iWidth*iHeight > 0 ? zx : -zx);
+	}
+	else
+	{
+		zy = iHeight/h;
+		zx = (iWidth*iHeight > 0 ? zy : -zy);
+	}
 	
 	glPushMatrix ();
-	
-	//glScalef (iWidth/w, iHeight/h, 1.);
-	glScalef (10, 10, 1);
-	g_print ("text:%.2fx%.2f\n", w, h);
+	glScalef (1, -1, 1.);  // marche po sur du raster :-(
 	cairo_dock_draw_glx_text (cText, pFont);
 	
 	glPopMatrix ();
+}
+
+void cairo_dock_draw_glx_text_at_position (const gchar *cText, CairoDockGLFont *pFont, int x, int y)
+{
+	glRasterPos2f (x, y);
+	cairo_dock_draw_glx_text (cText, pFont);
+}
+
+void cairo_dock_draw_glx_text_at_position_in_area (const gchar *cText, CairoDockGLFont *pFont, int x, int y, int iWidth, int iHeight)
+{
+	glRasterPos2f (x, y);
+	cairo_dock_draw_glx_text_in_area (cText, pFont, iWidth, iHeight);
 }

@@ -1130,7 +1130,8 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 			{
 				*bRight = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
 				*bDirectionUp = (pDock->container.iWindowPositionY > g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
-				*iY = (*bDirectionUp ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight);
+				*iY = (*bDirectionUp ? pDock->container.iWindowPositionY + (pDock->bActive ? 0 : pDock->container.iHeight - pDock->iMinDockHeight) :
+					pDock->container.iWindowPositionY + pDock->container.iHeight - (pDock->bActive ? 0 : pDock->container.iHeight - pDock->iMinDockHeight));
 			}
 			else
 			{
@@ -1138,7 +1139,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 				*bDirectionUp = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
 				*iY = (! (*bRight) ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight);
 			}
-	
+			
 			if (pDock->bAutoHide)
 			{
 				*iX = pDock->container.iWindowPositionX +

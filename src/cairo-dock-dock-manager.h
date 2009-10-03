@@ -124,7 +124,6 @@ void cairo_dock_disable_entrance (CairoDock *pDock);
 gboolean cairo_dock_entrance_is_allowed (CairoDock *pDock);
 gboolean cairo_dock_quick_hide_is_activated (void);
 
-gboolean cairo_dock_window_hovers_dock (GtkAllocation *pWindowGeometry, CairoDock *pDock);
 
 void cairo_dock_synchronize_one_sub_dock_position (CairoDock *pSubDock, CairoDock *pDock, gboolean bReloadBuffersIfNecessary);
 void cairo_dock_synchronize_sub_docks_position (CairoDock *pDock, gboolean bReloadBuffersIfNecessary);

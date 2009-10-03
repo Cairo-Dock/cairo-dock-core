@@ -222,6 +222,8 @@ struct _CairoDock {
 	gint iFadeCounter;
 	/// direction of the fade out effect.
 	gboolean bFadeInOut;
+	/// whether the input shape is set or not.
+	gboolean bActive;  // TRUE <=> no input shape.
 };
 
 

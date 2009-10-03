@@ -34,6 +34,7 @@
 #include "cairo-dock-data-renderer.h"
 
 extern gboolean g_bUseOpenGL;
+extern CairoDock *g_pMainDock;
 
 #define cairo_dock_set_data_renderer_on_icon(pIcon, pRenderer) (pIcon)->pDataRenderer = pRenderer
 #define cairo_dock_get_icon_data_renderer(pIcon) (pIcon)->pDataRenderer
@@ -41,7 +42,8 @@ extern gboolean g_bUseOpenGL;
 
 static CairoDockGLFont *s_pFont = NULL;
 
-#define _init_data_renderer_font(...) s_pFont = cairo_dock_load_glx_font ("Sans 12", '0', 10)
+//#define _init_data_renderer_font(...) s_pFont = cairo_dock_load_glx_font ("Sans 12", '0', 10)
+#define _init_data_renderer_font(...) s_pFont = cairo_dock_load_glx_font ("Courier 12", 0, 256)
 CairoDockGLFont *cairo_dock_get_default_data_renderer_font (void)
 {
 	if (s_pFont == NULL)
@@ -61,7 +63,17 @@ CairoDataRenderer *cairo_dock_new_data_renderer (const gchar *cRendererName)
 	CairoDataRendererNewFunc init = cairo_dock_get_data_renderer_entry_point (cRendererName);
 	g_return_val_if_fail (init != NULL, NULL);
 	
-	_init_data_renderer_font ();
+	if (g_pMainDock && s_pFont == NULL)
+	{
+		GdkGLContext *pGlContext = gtk_widget_get_gl_context (g_pMainDock->container.pWidget);
+		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (g_pMainDock->container.pWidget);
+		if (gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+		{
+			_init_data_renderer_font ();
+			
+			gdk_gl_drawable_gl_end (pGlDrawable);
+		}
+	}
 	
 	return init ();
 }

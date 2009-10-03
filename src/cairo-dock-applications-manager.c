@@ -257,14 +257,48 @@ gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon)
 }
 
 
+static gboolean _cairo_dock_window_hovers_dock (GtkAllocation *pWindowGeometry, CairoDock *pDock)
+{
+	if (pWindowGeometry->width != 0 && pWindowGeometry->height != 0)
+	{
+		int iDockX, iDockY, iDockWidth, iDockHeight;
+		if (pDock->container.bIsHorizontal)
+		{
+			iDockX = pDock->container.iWindowPositionX;
+			iDockY = pDock->container.iWindowPositionY + (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iMinDockHeight : 0);
+			iDockWidth = pDock->iMinDockWidth;
+			iDockHeight = pDock->iMinDockHeight;
+		}
+		else
+		{
+			iDockX = pDock->container.iWindowPositionY + (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iMinDockHeight : 0);
+			iDockY = pDock->container.iWindowPositionX;
+			iDockWidth = pDock->iMinDockHeight;
+			iDockHeight = pDock->iMinDockWidth;
+		}
+		
+		cd_debug ("dock : (%d;%d) %dx%d", iDockX, iDockY, iDockWidth, iDockHeight);
+		if ((pWindowGeometry->x < iDockX + iDockWidth && pWindowGeometry->x + pWindowGeometry->width > iDockX) && (pWindowGeometry->y < iDockY + iDockHeight && pWindowGeometry->y + pWindowGeometry->height > iDockY))
+		{
+			return TRUE;
+		}
+	}
+	else
+	{
+		cd_warning (" on ne peut pas dire ou elle est sur l'ecran, on va supposer qu'elle recouvre le dock");
+		return TRUE;
+	}
+	return FALSE;
+}
+
 static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gboolean *data)
 {
 	if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_is_on_current_desktop (icon))
 	{
-		if ((data[0] && icon->bIsMaximized && ! icon->bIsHidden) || (data[1] && icon->bIsFullScreen && ! icon->bIsHidden))
+		if ((data[0] && icon->bIsMaximized && ! icon->bIsHidden) || (data[1] && icon->bIsFullScreen && ! icon->bIsHidden) || (!data[0] && ! data[1]))
 		{
 			cd_debug ("%s est genante (%d, %d) (%d;%d %dx%d)", icon->cName, icon->bIsMaximized, icon->bIsFullScreen, icon->windowGeometry.x, icon->windowGeometry.y, icon->windowGeometry.width, icon->windowGeometry.height);
-			if (cairo_dock_window_hovers_dock (&icon->windowGeometry, g_pMainDock))
+			if (_cairo_dock_window_hovers_dock (&icon->windowGeometry, g_pMainDock))
 			{
 				cd_debug (" et en plus elle empiete sur notre dock");
 				return TRUE;
@@ -276,8 +310,6 @@ static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gbool
 Icon * cairo_dock_search_window_on_our_way (gboolean bMaximizedWindow, gboolean bFullScreenWindow)
 {
 	cd_debug ("%s (%d, %d)", __func__, bMaximizedWindow, bFullScreenWindow);
-	if (! bMaximizedWindow && ! bFullScreenWindow)
-		return NULL;
 	gboolean data[2] = {bMaximizedWindow, bFullScreenWindow};
 	return g_hash_table_find (s_hXWindowTable, (GHRFunc) _cairo_dock_window_is_on_our_way, data);
 }
@@ -545,7 +577,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 							if ( ((bIsMaximized && ! bIsHidden && myAccessibility.bAutoHideOnMaximized) || (bIsFullScreen && ! bIsHidden && myAccessibility.bAutoHideOnFullScreen)) && ! cairo_dock_quick_hide_is_activated ())
 							{
 								cd_message (" => %s devient genante", CAIRO_DOCK_IS_APPLI (icon) ? icon->cName : "une fenetre");
-								if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_window_hovers_dock (&icon->windowGeometry, g_pMainDock))
+								if (CAIRO_DOCK_IS_APPLI (icon) && _cairo_dock_window_hovers_dock (&icon->windowGeometry, g_pMainDock))
 									cairo_dock_activate_temporary_auto_hide ();
 							}
 							else if ((! bIsMaximized || ! myAccessibility.bAutoHideOnMaximized || bIsHidden) && (! bIsFullScreen || ! myAccessibility.bAutoHideOnFullScreen || bIsHidden) && cairo_dock_quick_hide_is_activated ())
@@ -855,7 +887,7 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 				{
 					if (! cairo_dock_quick_hide_is_activated ())
 					{
-						if (cairo_dock_xwindow_is_on_this_desktop (Xid, s_iCurrentDesktop) && cairo_dock_window_hovers_dock (&icon->windowGeometry, pDock))
+						if (cairo_dock_xwindow_is_on_this_desktop (Xid, s_iCurrentDesktop) && _cairo_dock_window_hovers_dock (&icon->windowGeometry, pDock))
 						{
 							cd_message (" cette nouvelle fenetre empiete sur notre dock");
 							cairo_dock_activate_temporary_auto_hide ();
@@ -940,7 +972,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 			{
 				if (! cairo_dock_quick_hide_is_activated () && cairo_dock_appli_is_on_current_desktop (pIcon))
 				{
-					if (cairo_dock_window_hovers_dock (&pIcon->windowGeometry, pDock))
+					if (_cairo_dock_window_hovers_dock (&pIcon->windowGeometry, pDock))
 					{
 						cd_message (" elle empiete sur notre dock");
 						cairo_dock_activate_temporary_auto_hide ();

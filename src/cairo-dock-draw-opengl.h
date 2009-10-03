@@ -290,6 +290,10 @@ void cairo_dock_draw_glx_text (const gchar *cText, CairoDockGLFont *pFont);
 
 void cairo_dock_draw_glx_text_in_area (const gchar *cText, CairoDockGLFont *pFont, int iWidth, int iHeight);
 
+void cairo_dock_draw_glx_text_at_position (const gchar *cText, CairoDockGLFont *pFont, int x, int y);
+
+void cairo_dock_draw_glx_text_at_position_in_area (const gchar *cText, CairoDockGLFont *pFont, int x, int y, int iWidth, int iHeight);
+
 
 G_END_DECLS
 #endif
