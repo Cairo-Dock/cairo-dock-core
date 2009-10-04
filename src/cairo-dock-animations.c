@@ -423,6 +423,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 								0,
 								0);
 							pDock->bActive = FALSE;
+							cairo_dock_replace_all_dialogs ();
 						}
 					}
 					else

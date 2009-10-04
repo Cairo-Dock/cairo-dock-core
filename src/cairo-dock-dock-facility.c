@@ -824,8 +824,10 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 			{
 				if (g_bEasterEggs && !pDock->container.bInside)
 				{
-					int x = (pDock->container.bIsHorizontal ? pDock->container.iMouseX : pDock->container.iWidth - pDock->container.iMouseY);
-					int y = (pDock->container.bIsHorizontal ? pDock->container.iMouseY : pDock->container.iHeight - pDock->container.iMouseX);
+					//int x = (pDock->container.bIsHorizontal ? pDock->container.iMouseX : pDock->container.iMouseY);
+					//int y = (pDock->container.bIsHorizontal ? pDock->container.iMouseY : pDock->container.iMouseX);
+					int x = pDock->container.iMouseX;
+					int y = pDock->container.iMouseY;
 					if (pDock->container.bDirectionUp)
 					{
 						if (y < pDock->container.iHeight - pDock->iMinDockHeight)

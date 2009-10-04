@@ -727,7 +727,8 @@ cairo_surface_t *cairo_dock_load_stripes (cairo_t* pSourceContext, int iStripesW
 void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, int iNewDecorationsWidth, int iNewDecorationsHeight)
 {
 	//g_print ("%s (%dx%d) [%.2fx%.2f]\n", __func__, iNewDecorationsWidth, iNewDecorationsHeight, g_fBackgroundImageWidth, g_fBackgroundImageHeight);
-	if (2 * iNewDecorationsWidth > g_fBackgroundImageWidth || iNewDecorationsHeight > g_fBackgroundImageHeight)
+	int k = (myBackground.fDecorationSpeed || myBackground.bDecorationsFollowMouse ? 2 : 1);
+	if (k * iNewDecorationsWidth > g_fBackgroundImageWidth || iNewDecorationsHeight > g_fBackgroundImageHeight)
 	{
 		if (g_pBackgroundSurface != NULL)
 		{
@@ -745,7 +746,7 @@ void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, in
 		{
 			if (myBackground.bBackgroundImageRepeat)
 			{
-				g_fBackgroundImageWidth = MAX (g_fBackgroundImageWidth, 2 * iNewDecorationsWidth);
+				g_fBackgroundImageWidth = MAX (g_fBackgroundImageWidth, k * iNewDecorationsWidth);
 				g_fBackgroundImageHeight = MAX (g_fBackgroundImageHeight, iNewDecorationsHeight);
 				g_pBackgroundSurfaceFull = cairo_dock_load_image (pCairoContext,
 					myBackground.cBackgroundImageFile,
@@ -770,7 +771,7 @@ void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, in
 		}
 		else
 		{
-			g_fBackgroundImageWidth = MAX (g_fBackgroundImageWidth, 2 * iNewDecorationsWidth);
+			g_fBackgroundImageWidth = MAX (g_fBackgroundImageWidth, k * iNewDecorationsWidth);
 			g_fBackgroundImageHeight = MAX (g_fBackgroundImageHeight, iNewDecorationsHeight);
 			g_pBackgroundSurfaceFull = cairo_dock_load_stripes (pCairoContext,
 				g_fBackgroundImageWidth,

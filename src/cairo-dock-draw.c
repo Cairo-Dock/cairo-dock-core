@@ -314,10 +314,11 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 	{
 		cairo_save (pCairoContext);
 		
+		double f = (myBackground.fDecorationSpeed || myBackground.bDecorationsFollowMouse ? .5 : 0.);
 		if (pDock->container.bIsHorizontal)
-			cairo_translate (pCairoContext, pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed - pDock->container.iWidth * 0.5, fOffsetY);
+			cairo_translate (pCairoContext, pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed - pDock->container.iWidth * f, fOffsetY);
 		else
-			cairo_translate (pCairoContext, fOffsetY, pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed - pDock->container.iWidth * 0.5);
+			cairo_translate (pCairoContext, fOffsetY, pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed - pDock->container.iWidth * f);
 		
 		
 		cairo_surface_t *pSurface = g_pBackgroundSurfaceFull;

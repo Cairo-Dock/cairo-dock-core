@@ -429,15 +429,18 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		}
 		
 		//\_______________ On gere la zone d'input.
-		if (g_bEasterEggs && !pDock->container.bInside)
+		if (g_bEasterEggs && !/*pDock->container.bInside*/pDock->bActive)
 		{
-			int x = (pDock->container.bIsHorizontal ? pDock->container.iMouseX : pDock->container.iWidth - pDock->container.iMouseY);
-			int y = (pDock->container.bIsHorizontal ? pDock->container.iMouseY : pDock->container.iHeight - pDock->container.iMouseX);
+			//int x = (pDock->container.bIsHorizontal ? pDock->container.iMouseX : pDock->container.iMouseY);
+			//int y = (pDock->container.bIsHorizontal ? pDock->container.iMouseY : pDock->container.iMouseX);
+			int x = pDock->container.iMouseX;
+			int y = pDock->container.iMouseY;
+			g_print ("motion (%d;%d)\n", x, y);
 			if (pDock->container.bDirectionUp)
 			{
 				if (y < pDock->container.iHeight - pDock->iMinDockHeight)
 				{
-					g_print ("motion refuse en y\n");
+					g_print ("motion refusee en y\n");
 					return FALSE;
 				}
 			}
@@ -445,9 +448,14 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 			{
 				if (y > pDock->iMinDockHeight)
 				{
-					g_print ("motion refuse en y\n");
+					g_print ("motion refusee en y\n");
 					return FALSE;
 				}
+			}
+			if (x < (pDock->container.iWidth - pDock->iMinDockWidth) / 2 || x > (pDock->container.iWidth + pDock->iMinDockWidth) / 2)
+			{
+				g_print ("motion refusee en x\n");
+				return FALSE;
 			}
 		}
 		
@@ -775,8 +783,8 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 {
 	if (pEvent && pDock->pShapeBitmap)  // XInputShape is broken. We manage ourself the entry.
 	{
-		int x = (pDock->container.bIsHorizontal ? pEvent->x : pDock->container.iWidth - pEvent->y);
-		int y = (pDock->container.bIsHorizontal ? pEvent->y : pDock->container.iHeight - pEvent->x);
+		int x = (pDock->container.bIsHorizontal ? pEvent->x : pEvent->y);
+		int y = (pDock->container.bIsHorizontal ? pEvent->y : pEvent->x);
 		if (g_bEasterEggs)
 		{
 			g_print ("enter (%d;%d)\n", x, y);

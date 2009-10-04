@@ -1123,7 +1123,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
 	{
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
-		if (pDock->iRefCount == 0 && pDock->bAtBottom)  // un dock principal au repos.
+		if (pDock->iRefCount == 0/* && pDock->bAtBottom*/)  // un dock principal au repos.
 		{
 			*bIsHorizontal = (pDock->container.bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
 			if (pDock->container.bIsHorizontal)
@@ -1140,7 +1140,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 				*iY = (! (*bRight) ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight);
 			}
 			
-			if (pDock->bAutoHide)
+			if (pDock->bAutoHide && pDock->bAtBottom)
 			{
 				*iX = pDock->container.iWindowPositionX +
 					(pIcon->fXAtRest + pIcon->fWidth * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign))) / pDock->fFlatDockWidth * myAccessibility.iVisibleZoneWidth;
@@ -1158,7 +1158,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
 			cairo_dock_dialog_calculate_aimed_point (pPointingIcon, CAIRO_CONTAINER (pParentDock), iX, iY, bRight, bIsHorizontal, bDirectionUp, fAlign);
 		}
-		else  // dock actif.
+		/*else  // dock actif.
 		{
 			*bIsHorizontal = (pDock->container.bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
 			if (pDock->container.bIsHorizontal)
@@ -1174,7 +1174,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 				*iY = (! (*bRight) ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight);
 			}
 			*iX = pDock->container.iWindowPositionX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale * pIcon->fWidthFactor / 2 + pIcon->fWidth * (*bRight ? .2 : - .2);
-		}
+		}*/
 	}
 	else if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
