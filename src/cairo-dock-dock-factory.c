@@ -162,7 +162,7 @@ CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRen
 	GtkWidget *pWindow = cairo_dock_create_container_window ();
 	gtk_container_set_border_width(GTK_CONTAINER(pWindow), 0);
 	pDock->container.pWidget = pWindow;
-	pDock->bActive = TRUE;  // no input shape.
+	pDock->bActive = FALSE;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
 	
 	if (g_bKeepAbove)
 		gtk_window_set_keep_above (GTK_WINDOW (pWindow), g_bKeepAbove);

@@ -60,7 +60,6 @@ extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
 extern short g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
-extern gboolean g_bEasterEggs;
 
 static GHashTable *s_hModuleTable = NULL;
 static GHashTable *s_hInternalModuleTable = NULL;

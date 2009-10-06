@@ -56,7 +56,6 @@ extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
 extern CairoDock *g_pMainDock;
 extern gboolean g_bForceOpenGL;
-extern gboolean g_bEasterEggs;
 
 static GtkWidget *s_pThemeManager = NULL;
 

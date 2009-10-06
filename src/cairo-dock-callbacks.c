@@ -89,7 +89,6 @@ extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
 
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bLocked;
-extern gboolean g_bEasterEggs;
 
 static gboolean s_bHideAfterShortcut = FALSE;
 static gboolean s_bFrozenDock = FALSE;
@@ -151,14 +150,6 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 			cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_RENDER_DOCK, pDock, NULL);
 		}
 		glDisable (GL_SCISSOR_TEST);
-		
-		if (g_bEasterEggs)
-		{
-			glColor3f (1.0, 1.0, 1.0);
-			glRasterPos2f (0., 0.);
-			CairoDockGLFont *pFont = cairo_dock_get_default_data_renderer_font ();
-			cairo_dock_draw_glx_text ("fabounet@cairo-dock.org", pFont);
-		}
 		
 		if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
 			gdk_gl_drawable_swap_buffers (pGlDrawable);
@@ -426,37 +417,6 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		if (s_pFlyingContainer != NULL && ! pDock->container.bInside)
 		{
 			cairo_dock_drag_flying_container (s_pFlyingContainer, pDock);
-		}
-		
-		//\_______________ On gere la zone d'input.
-		if (g_bEasterEggs && !/*pDock->container.bInside*/pDock->bActive)
-		{
-			//int x = (pDock->container.bIsHorizontal ? pDock->container.iMouseX : pDock->container.iMouseY);
-			//int y = (pDock->container.bIsHorizontal ? pDock->container.iMouseY : pDock->container.iMouseX);
-			int x = pDock->container.iMouseX;
-			int y = pDock->container.iMouseY;
-			g_print ("motion (%d;%d)\n", x, y);
-			if (pDock->container.bDirectionUp)
-			{
-				if (y < pDock->container.iHeight - pDock->iMinDockHeight)
-				{
-					g_print ("motion refusee en y\n");
-					return FALSE;
-				}
-			}
-			else
-			{
-				if (y > pDock->iMinDockHeight)
-				{
-					g_print ("motion refusee en y\n");
-					return FALSE;
-				}
-			}
-			if (x < (pDock->container.iWidth - pDock->iMinDockWidth) / 2 || x > (pDock->container.iWidth + pDock->iMinDockWidth) / 2)
-			{
-				g_print ("motion refusee en x\n");
-				return FALSE;
-			}
 		}
 		
 		//\_______________ On elague le flux des MotionNotify, sinon X en envoie autant que le permet le CPU !
@@ -781,41 +741,6 @@ gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey fo
 
 gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	if (pEvent && pDock->pShapeBitmap)  // XInputShape is broken. We manage ourself the entry.
-	{
-		int x = (pDock->container.bIsHorizontal ? pEvent->x : pEvent->y);
-		int y = (pDock->container.bIsHorizontal ? pEvent->y : pEvent->x);
-		if (g_bEasterEggs)
-		{
-			g_print ("enter (%d;%d)\n", x, y);
-			if (pDock->container.bDirectionUp)
-			{
-				if (y < pDock->container.iHeight - pDock->iMinDockHeight)
-				{
-					g_print ("entree refusee en y\n");
-					return FALSE;
-				}
-			}
-			else
-			{
-				if (y > pDock->iMinDockHeight)
-				{
-					g_print ("entree refusee en y\n");
-					return FALSE;
-				}
-			}
-			if (x < (pDock->container.iWidth - pDock->iMinDockWidth) / 2 || x > (pDock->container.iWidth + pDock->iMinDockWidth) / 2)
-			{
-				g_print ("entree refusee en x\n");
-				return FALSE;
-			}
-		}
-		else
-		{
-			if (x < pDock->inputArea.x || x > (pDock->inputArea.x + pDock->inputArea.width))
-				return FALSE;
-		}
-	}
 	//g_print ("%s (bIsMainDock : %d; bAtTop:%d; bInside:%d; iSidMoveDown:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->bAtTop, pDock->container.bInside, pDock->iSidMoveDown, pDock->iMagnitudeIndex);
 	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
 	if (! cairo_dock_entrance_is_allowed (pDock))
@@ -887,7 +812,8 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		}
 	}
 	
-	if (!g_bEasterEggs || (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->bAtBottom))  // on sort de l'etat auto-hide.
+	g_print ("*** %d;%d;%d\n", pDock->bAutoHide, pDock->iRefCount, pDock->bAtBottom);
+	if ((pDock->bAutoHide || pDock->container.iHeight != pDock->iMaxDockHeight) && pDock->iRefCount == 0 && pDock->bAtBottom)  // on sort de l'etat auto-hide.
 	{
 		int iNewWidth, iNewHeight;
 		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
@@ -910,7 +836,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 					iNewWidth);
 		}
 	}
-	if (g_bEasterEggs && pDock->pShapeBitmap && !pDock->bActive)
+	if (pDock->pShapeBitmap && !pDock->bActive)
 	{
 		gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 			NULL,
@@ -1533,25 +1459,16 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		if (pDock->container.iMouseX < 0 || pDock->container.iMouseX > pDock->container.iWidth)  // utile ?
 			pDock->container.iMouseX = 0;
 		
-		if (pDock->pShapeBitmap != NULL)  // les dimensions ont change, il faut remettre l'input shape a la bonne place.
+		if (pDock->pShapeBitmap != NULL && !pDock->bActive)  // les dimensions ont change, il faut remettre l'input shape a la bonne place.
 		{
-			if (g_bEasterEggs)
-			{
-				if (! pDock->bActive)
-				{
-					gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-						pDock->pShapeBitmap,
-						0,
-						0);
-				}
-			}
-			else
-			{
-				gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-					(pDock->bAtBottom && pDock->iRefCount == 0 && ! pDock->bAutoHide ? pDock->pShapeBitmap : NULL),
-					0,
-					0);
-			}
+			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+				NULL,
+				0,
+				0);
+			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+				pDock->pShapeBitmap,
+				0,
+				0);
 		}
 		
 		if (g_bUseOpenGL)
@@ -1593,26 +1510,8 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		#endif
 		
 		cairo_dock_calculate_dock_icons (pDock);
-		
-		// only Compiz seems to respect the _NET_WM_SYNC_REQUEST window manager protocol. :-(
-		if (g_bEasterEggs)
-		{
-			//g_print ("debut du redessin2\n");
-			gtk_widget_queue_draw (pWidget);
-			gdk_window_process_updates (pWidget->window, FALSE);
-			//g_print ("fin du redessin2\n");
-		}
-		else
-		{
-			//g_print ("debut du redessin\n");
-			gtk_widget_queue_draw (pWidget);
-			while (gtk_events_pending ())  // on force un redessin immediat sinon on a quand meme un "flash".
-				gtk_main_iteration ();
-			//g_print ("fin du redessin\n");
-		}
 	}
-	else
-		gtk_widget_queue_draw (pWidget);
+	gtk_widget_queue_draw (pWidget);
 	
 	if (pDock->iSidMoveDown == 0 && pDock->iSidMoveUp == 0)  // ce n'est pas du a une animation d'auto-hide. Donc en cas d'apparition due a l'auto-hide, ceci ne sera pas fait ici, mais a la fin de l'animation de grossissement/depliage.
 	{

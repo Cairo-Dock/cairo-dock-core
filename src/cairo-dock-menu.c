@@ -366,7 +366,7 @@ static void _cairo_dock_create_launcher (Icon *icon, CairoDock *pDock, CairoDock
 		return ;
 	}
 	
-	if (g_bEasterEggs)
+	if (g_bEasterEggs)  // v2.1.2
 	{
 		//\___________________ On cree l'icone et on l'insere.
 		cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
@@ -480,7 +480,7 @@ static void _cairo_dock_modify_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 		return ;
 	}
 
-	if (g_bEasterEggs)
+	if (g_bEasterEggs)  // v2.1.2
 	{
 		cairo_dock_build_launcher_gui (icon);
 	}

@@ -48,7 +48,6 @@
 
 extern GLuint g_iBackgroundTexture;
 extern int g_iScreenWidth[2];
-extern gboolean g_bEasterEggs;
 
 void cd_calculate_max_dock_size_default (CairoDock *pDock)
 {
@@ -76,7 +75,7 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	pDock->iDecorationsWidth = pDock->iMaxDockWidth;
 	pDock->iMinDockHeight = pDock->iMaxIconHeight + 2 * myBackground.iFrameMargin + 2 * myBackground.iDockLineWidth;
 	
-	if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
+	/**if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
 	{
 		pDock->iMinDockWidth = cairo_dock_get_max_authorized_dock_width (pDock);
 	}
@@ -84,6 +83,13 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	{
 		pDock->iMinDockWidth = pDock->fFlatDockWidth + fExtraWidth;
 	}
+	
+	//g_print ("clic area : %.2f\n", fExtraWidth/2);
+	pDock->inputArea.x = (pDock->iMinDockWidth - pDock->fFlatDockWidth) / 2;
+	pDock->inputArea.y = 0;
+	pDock->inputArea.width = pDock->fFlatDockWidth;
+	pDock->inputArea.height = pDock->iMinDockHeight;*/
+	
 	pDock->iMinLeftMargin = fExtraWidth/2;
 	pDock->iMinRightMargin = fExtraWidth/2;
 	Icon *pFirstIcon = cairo_dock_get_first_icon (pDock->icons);
@@ -94,16 +100,7 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 		pDock->iMaxRightMargin = pDock->iMaxDockWidth - (pLastIcon->fXMin + pLastIcon->fWidth);
 	//g_print(" marges min: %d | %d\n marges max: %d | %d\n", pDock->iMinLeftMargin, pDock->iMinRightMargin, pDock->iMaxLeftMargin, pDock->iMaxRightMargin);
 	
-	//g_print ("clic area : %.2f\n", fExtraWidth/2);
-	pDock->inputArea.x = (pDock->iMinDockWidth - pDock->fFlatDockWidth) / 2;
-	pDock->inputArea.y = 0;
-	pDock->inputArea.width = pDock->fFlatDockWidth;
-	pDock->inputArea.height = pDock->iMinDockHeight;
-	
-	if (g_bEasterEggs)
-	{
-		pDock->iMinDockWidth = pDock->fFlatDockWidth;
-	}
+	pDock->iMinDockWidth = pDock->fFlatDockWidth;
 }
 
 

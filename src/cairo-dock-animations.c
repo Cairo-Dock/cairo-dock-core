@@ -227,7 +227,7 @@ void cairo_dock_pop_up (CairoDock *pDock)
 	cd_debug ("%s (%d)", __func__, pDock->bPopped);
 	if (! pDock->bPopped && myAccessibility.bPopUp)
 	{
-		if (g_bEasterEggs)
+		if (g_bEasterEggs)  // v2.1.2
 		{
 			cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
 				CAIRO_DOCK_RENDER_DOCK,
@@ -251,7 +251,7 @@ gboolean cairo_dock_pop_down (CairoDock *pDock)
 		return FALSE;
 	if (pDock->bPopped && myAccessibility.bPopUp)
 	{
-		if (g_bEasterEggs && cairo_dock_search_window_on_our_way (FALSE, FALSE) != NULL)
+		if (g_bEasterEggs && cairo_dock_search_window_on_our_way (FALSE, FALSE) != NULL)  // v2.1.2
 		{
 			pDock->iFadeCounter = mySystem.iFadeOutNbSteps;
 			pDock->bFadeInOut = TRUE;
@@ -414,34 +414,19 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				//\__________________ On se redimensionne en taille normale.
 				if (! (pDock->bAutoHide && pDock->iRefCount == 0) && ! pDock->bMenuVisible)  // fin de shrink sans auto-hide => taille normale.
 				{
-					if (g_bEasterEggs)
+					if (pDock->pShapeBitmap && pDock->bActive)
 					{
-						if (pDock->pShapeBitmap && pDock->bActive)
-						{
-							gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-								pDock->pShapeBitmap,
-								0,
-								0);
-							pDock->bActive = FALSE;
-							cairo_dock_replace_all_dialogs ();
-						}
+						gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+							NULL,
+							0,
+							0);
+						gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+							pDock->pShapeBitmap,
+							0,
+							0);
+						pDock->bActive = FALSE;
+						cairo_dock_replace_all_dialogs ();
 					}
-					else
-						cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_NORMAL_SIZE);
-					/*int iNewWidth, iNewHeight;
-					cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_NORMAL_SIZE, &iNewWidth, &iNewHeight);
-					if (pDock->container.bIsHorizontal)
-						gdk_window_move_resize (pDock->container.pWidget->window,
-							pDock->container.iWindowPositionX,
-							pDock->container.iWindowPositionY,
-							iNewWidth,
-							iNewHeight);
-					else
-						gdk_window_move_resize (pDock->container.pWidget->window,
-							pDock->container.iWindowPositionY,
-							pDock->container.iWindowPositionX,
-							iNewHeight,
-							iNewWidth);*/
 				}
 				else if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->fFoldingFactor != 0)  // si le dock se replie, inutile de rester en taille grande avec une fenetre transparente, ca perturbe.
 				{

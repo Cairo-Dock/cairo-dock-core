@@ -281,10 +281,10 @@ static inline CairoDockGroupDescription *_cairo_dock_add_group_button (const gch
 	return pGroupDescription;
 }
 
-static gboolean _cairo_dock_add_one_module_widget (/*gchar *cModuleName, */CairoDockModule *pModule, const gchar *cActiveModules)
+static gboolean _cairo_dock_add_one_module_widget (CairoDockModule *pModule, const gchar *cActiveModules)
 {
 	const gchar *cModuleName = pModule->pVisitCard->cModuleName;
-	if (pModule->cConfFilePath == NULL && ! g_bEasterEggs)
+	if (pModule->cConfFilePath == NULL && ! g_bEasterEggs)  // option perso : les plug-ins non utilises sont grises et ne rajoutent pas leur .conf au theme courant.
 		pModule->cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
 	int iActive;
 	if (! pModule->pInterface->stopModule)
