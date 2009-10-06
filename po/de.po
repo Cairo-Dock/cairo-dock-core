@@ -7,13 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
-"PO-Revision-Date: 2009-09-21 01:10+0000\n"
+"POT-Creation-Date: 2009-10-05 15:21+0000\n"
+"PO-Revision-Date: 2009-10-05 16:41+0000\n"
 "Last-Translator: Cairo-Dock Team <cairo-dock-team@lists.launchpad.net>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-09-23 09:37+0000\n"
+"X-Launchpad-Export-Date: 2009-10-06 06:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-applet-facility.h:259
@@ -22,6 +23,10 @@ msgid ""
 " You can change this by opening the configuration of this module; do you "
 "want to do it now ?"
 msgstr ""
+"Das Thema konnte leider nicht gefunden werden, also wird das Standardthema "
+"benutzt.\n"
+" Sie können das Thema ändern, indem Sie die Themenkonfiguration öffnen. "
+"Möchten Sie dies jetzt tun?"
 
 #: ../src/cairo-dock-applet-facility.h:274
 msgid ""
@@ -29,11 +34,14 @@ msgid ""
 " You can change this by opening the configuration of this module; do you "
 "want to do it now ?"
 msgstr ""
+"Die Einstellungen der Abmessungen konnten leider nicht gefunden werden, also "
+"wird der Standard benutzt.\n"
+" Sie können dies ändern, indem Sie die Themenkonfiguration öffnen. Möchten "
+"Sie dies jetzt tun?"
 
 #: ../src/cairo-dock-applet-facility.h:349
-#, fuzzy
 msgid "About this applet"
-msgstr "Minianwendung herauslösen"
+msgstr "Info zu dieser Minianwendung"
 
 #: ../src/cairo-dock-callbacks.c:1160
 msgid "Do you want to mount this point ?"
@@ -122,7 +130,7 @@ msgstr "Bewertung"
 
 #: ../src/cairo-dock-gui-factory.c:1817
 msgid "sobriety"
-msgstr ""
+msgstr "Ernsthaftigkeit"
 
 #: ../src/cairo-dock-gui-factory.c:1947
 msgid "grab"
@@ -220,6 +228,9 @@ msgid ""
 "'reserve space for dock',\n"
 " it will be ignored"
 msgstr ""
+"Die Option \"Ausblenden bei Vollbild\" steht im Konflikt mit der Option "
+"\"Platz für Dock reservieren\",\n"
+" sie wird ausgeschaltet."
 
 #: ../src/cairo-dock-internal-accessibility.c:159
 msgid ""
@@ -227,6 +238,9 @@ msgid ""
 "'reserve space for dock',\n"
 " it will be ignored"
 msgstr ""
+"Die Option \"Ausblenden wenn Maximiert\"steht im Konflikt mit der Option "
+"\"Platz für Dock reservieren\",\n"
+" sie wird ausgeschaltet."
 
 #: ../src/cairo-dock-internal-accessibility.c:294
 #: ../src/cairo-dock-menu.c:1685 ../data/messages:39
@@ -474,7 +488,7 @@ msgstr "Einstellungen"
 
 #: ../src/cairo-dock-menu.c:1340
 msgid "Configure the behaviour, appearance, and applets."
-msgstr ""
+msgstr "Einstellungen des Verhaltens, des Aussehen und von Minianwendungen."
 
 #: ../src/cairo-dock-menu.c:1347
 msgid "Set up this dock"
@@ -482,15 +496,18 @@ msgstr "Dieses Dock einstellen"
 
 #: ../src/cairo-dock-menu.c:1348
 msgid "Set up the position of this main dock."
-msgstr ""
+msgstr "Einstellungen der Position des Hauptdocks"
 
 #: ../src/cairo-dock-menu.c:1350
 msgid "Manage themes"
 msgstr "Themen verwalten"
 
 #: ../src/cairo-dock-menu.c:1351
-msgid "Choose amongst many themes on the server, and save your current theme."
+msgid ""
+"Choose amongst many themes on the server, and save your current theme."
 msgstr ""
+"Wählen Sie zwischen vielen Themen aus dem Internet und speichern Sie ihr "
+"jetziges Thema."
 
 #: ../src/cairo-dock-menu.c:1353
 msgid "unlock icons"
@@ -502,27 +519,27 @@ msgstr "Symbole sperren"
 
 #: ../src/cairo-dock-menu.c:1357
 msgid "This will (un)lock the position of the icons."
-msgstr ""
+msgstr "Dies wird die Position der Symbole sperren"
 
 #: ../src/cairo-dock-menu.c:1361
 msgid "unlock dock"
-msgstr ""
+msgstr "Dock entsperren"
 
 #: ../src/cairo-dock-menu.c:1361
 msgid "lock dock"
-msgstr ""
+msgstr "Dock sperren"
 
 #: ../src/cairo-dock-menu.c:1365
 msgid "This will (un)lock the whole dock."
-msgstr ""
+msgstr "Dies wird die Position des Docks sperren"
 
 #: ../src/cairo-dock-menu.c:1370
 msgid "Quick-Hide"
-msgstr "Schnell einklappen"
+msgstr "Schnell Ausblenden"
 
 #: ../src/cairo-dock-menu.c:1371
 msgid "It will hide the dock until you enter inside with the mouse."
-msgstr ""
+msgstr "Das Dock wird ausgeblendet wenn Sie mit der Maus darauf zeigen."
 
 #: ../src/cairo-dock-menu.c:1379
 msgid "Launch Cairo-Dock on startup"
@@ -534,7 +551,7 @@ msgstr "Entwicklungsseite"
 
 #: ../src/cairo-dock-menu.c:1386
 msgid "Find out the latest version of Cairo-Dock here !."
-msgstr ""
+msgstr "Hier finden Sie die aktuelle Version von Cairo-Dock!"
 
 #: ../src/cairo-dock-menu.c:1388
 msgid "Community's site"
@@ -543,6 +560,7 @@ msgstr "Communityseite"
 #: ../src/cairo-dock-menu.c:1389
 msgid "A problem ? A suggestion ? Want to talk to us ? You're welcome !"
 msgstr ""
+"Probleme? Vorschläge? Wollen Sie uns etwas fragen? Hier sind Sie richtig!"
 
 #: ../src/cairo-dock-menu.c:1391
 msgid "Help"
@@ -789,7 +807,7 @@ msgstr ""
 
 #: ../src/cairo-dock-struct.h:388
 msgid "default"
-msgstr ""
+msgstr "Standard"
 
 #: ../src/cairo-dock-themes-manager.c:257
 #, c-format
@@ -1155,7 +1173,6 @@ msgstr ""
 "Fensterleisten zu entfernen."
 
 #: ../data/messages:101
-#, fuzzy
 msgid "Show currently opened applications in the dock ?"
 msgstr "Geöffnete Anwendungen im Dock anzeigen?"
 
@@ -1262,7 +1279,8 @@ msgid "Middle click on an icon closes its relative application ?"
 msgstr "Bei Mittelklick auf ein Symbol dessen Anwendungen schließen?"
 
 #: ../data/messages:145
-msgid "Signal the applications demanding your attention with a dialog bubble ?"
+msgid ""
+"Signal the applications demanding your attention with a dialog bubble ?"
 msgstr ""
 "Mit einem Dialogfeld anzeigen, dass ein Fenster Ihre Aufmerksamkeit benötigt?"
 
@@ -1333,7 +1351,7 @@ msgid ""
 "The dock will unfold when it hides/shows itself. No effect if auto-hide is "
 "not activated or unfold acceleration is nul."
 msgstr ""
-"Das Dock wird beim Ein- oder Ausblenden entgefaltet. Wenn automatisches "
+"Das Dock wird beim Ein- oder Ausblenden ausgeklappt. Wenn automatisches "
 "Ausblenden deaktiviert ist oder die Beschleunigung auf 0 gesetzt ist, wird "
 "kein Effekt angezeigt."
 
@@ -1431,7 +1449,7 @@ msgstr "Umso höher, umso transparenter sind die Benachbarten Icons"
 
 #: ../data/messages:219
 msgid "label's visibility threshold :"
-msgstr ""
+msgstr "Sichtbarkeit der Beschriftungen"
 
 #: ../data/messages:221
 msgid "Configure labels appearence."
@@ -1489,7 +1507,7 @@ msgstr "Einstellungen transparent machen?"
 
 #: ../data/messages:247
 msgid "Extern Frame"
-msgstr ""
+msgstr "Äußerer Rahmen"
 
 #: ../data/messages:249 ../data/messages:253 ../data/messages:257
 #: ../data/messages:375 ../data/messages:497
@@ -1542,77 +1560,84 @@ msgstr "Transparenz des Bildes :"
 
 #: ../data/messages:275
 msgid "Repeat image as a pattern to fill background ?"
-msgstr ""
+msgstr "Bild mehrfach einfügen, um den gesamten Hintergrund auszufüllen?"
 
 #: ../data/messages:279
 msgid "...or Gradation"
-msgstr ""
+msgstr "... oder Farbverläufe"
 
 #: ../data/messages:281
 msgid "Bright color (red, green, blue, alpha) :"
-msgstr ""
+msgstr "Helle Farbe (rot, grün, blau, Alpha)"
 
 #: ../data/messages:283
 msgid "Dark color (red, green, blue, alpha) :"
-msgstr ""
+msgstr "Dunkle Farbe (rot, grün, blau, Alpha)"
 
 #: ../data/messages:285
 msgid ""
 "Angle of the stripes / gradation, in relation to the vertical (in degree) :"
 msgstr ""
+"Winkel der Streifen / Abstufung in Bezug auf die Vertikale (in Grad):"
 
 #: ../data/messages:287
 msgid ""
 "The bigger, the more the stripes are close to each other; with 0 stripes, "
 "the background will be filled with a single gradation."
 msgstr ""
+"Je größer, desto mehr Streifen; bei 0 Streifen, wird der Hintergrund mit nur "
+"einer Abstufung gefüllt."
 
 #: ../data/messages:289
 msgid "Number of stripes, in each pattern, to draw in the background :"
-msgstr ""
+msgstr "Anzahl der Streifen in jedem Muster im Hintergrund:"
 
 #: ../data/messages:291
 msgid ""
 "1 pattern contains N stripes, so the width can be less or equal than 1/N."
 msgstr ""
+"1 Muster enthält N Streifen, also kann die Breite kleiner oder gleich 1:N "
+"sein."
 
 #: ../data/messages:293
 msgid "Width of the stripes, in percentage of the pattern size :"
-msgstr ""
+msgstr "Breite der Streifen, in Prozent der Größe des Musters:"
 
 #: ../data/messages:295
 msgid "Background movement"
-msgstr ""
+msgstr "Bewegung des Hintergrunds"
 
 #: ../data/messages:297
 msgid "Move the background image along with the cursor ?"
-msgstr ""
+msgstr "Soll Hintergrundbild zusammen mit dem Cursor bewgt werden?"
 
 #: ../data/messages:299
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 #: ../data/messages:301
 msgid "Follow the mouse"
-msgstr ""
+msgstr "Dem Zeiger folgen"
 
 #: ../data/messages:303
 msgid "Link with the mouse"
-msgstr ""
+msgstr "Mit der Maus verbinden"
 
 #: ../data/messages:305
 msgid ""
 "The smaller, the lower the decorations will move along with the cursor. At 0 "
 "they will be static."
 msgstr ""
+"Umso kleiner, desto geringer bewegen sich die Symbole beim Zeigen auf sie. "
+"Bei 0 bewegen sie sich nicht."
 
 #: ../data/messages:307
 msgid "Speed :"
-msgstr ""
+msgstr "Geschwindigkeit:"
 
 #: ../data/messages:309
 msgid "Configure the dock's appearence when hidden."
-msgstr ""
+msgstr "Erscheinungsbild  des ausgeblendeten Docks konfigurieren."
 
 #: ../data/messages:311
 msgid "Hidden dock"
@@ -1623,10 +1648,12 @@ msgid ""
 "This is what you see when the dock hides itselfs. Any format is allowed. Let "
 "this field empty to have an invisible zone."
 msgstr ""
+"Dies wird angezeigt wenn das Dock ausgeblendet ist. Jedes Format ist "
+"erlaubt.(Leeres Feld = unsichtbar)"
 
 #: ../data/messages:315
 msgid "Filename of an image to put on :"
-msgstr ""
+msgstr "Angezeigtes Bild:"
 
 #: ../data/messages:317
 msgid "Transparency of the image :"
@@ -1637,34 +1664,37 @@ msgid ""
 "Use it when the image is an arrow pointing to the center of the screen for "
 "exemple."
 msgstr ""
+"Verwenden Sie diese Option, wenn das Bild etwas ist, das in die Mitte des "
+"Bild zeigt."
 
 #: ../data/messages:321
 msgid "Rotate the image when the dock is on top/left/right ?"
 msgstr ""
+"Soll das Bild gedreht werden, wenn das Dock oben, unten oder rechts ist?"
 
 #: ../data/messages:323
 msgid "Configure the auto-hide behaviour."
-msgstr ""
+msgstr "Konfigurieren Sie die Auto-Ausblenden Funktion."
 
 #: ../data/messages:327
 msgid "Font"
-msgstr ""
+msgstr "Schriftart"
 
 #: ../data/messages:329
 msgid "Display labels on icons ?"
-msgstr ""
+msgstr "Beschriftungen auf Symbolen anzeigen?"
 
 #: ../data/messages:331
 msgid "Font used for labels :"
-msgstr ""
+msgstr "Schriftart für Beschriftungen:"
 
 #: ../data/messages:333
 msgid "Should the text be oulined ?"
-msgstr ""
+msgstr "Soll fer Text umrandet werden?"
 
 #: ../data/messages:335
 msgid "Color"
-msgstr ""
+msgstr "Farbe"
 
 #: ../data/messages:337
 msgid "It's the first color of the gradation."
@@ -1691,36 +1721,40 @@ msgid ""
 "If checked, the pattern will go from top to bottom, otherwise from left to "
 "right."
 msgstr ""
+"Wenn diese Option aktiviert, wird das Muster von oben nach unten gehen, "
+"nicht von links nach rechts"
 
 #: ../data/messages:347
 msgid "Pattern should be vertical ?"
-msgstr ""
+msgstr "Soll das Muster senkrecht sein?"
 
 #: ../data/messages:351
 msgid ""
 "If you set it to fully transparent, there will be no background for the "
 "text, but the margin around the text will still be effective."
 msgstr ""
+"Wenn Sie volle Transparenz einstellen, gibt es keinen Hintergrund, aber der "
+"Rahmen um den Text bleibt eingeschaltet."
 
 #: ../data/messages:353
 msgid "Color of the label's background :"
-msgstr ""
+msgstr "Hintergrundfarbe der Beschriftungen:"
 
 #: ../data/messages:355
 msgid "If false, only the quick-info will have this background color."
-msgstr ""
+msgstr "Wenn nein, wird nur die Schnellhilfe  diese Hintergrundfarbe haben."
 
 #: ../data/messages:357
 msgid "Use background color for labels ?"
-msgstr ""
+msgstr "Soll eine Hintergrundfarbe für Bschriftungen verwendet werden?"
 
 #: ../data/messages:359
 msgid "Margin around the text (in pixels) :"
-msgstr ""
+msgstr "Größe des Rahmen (in Pixeln):"
 
 #: ../data/messages:361
 msgid "Configure the label readability."
-msgstr ""
+msgstr "Konfigurieren Sie die Lesbarkeit der Beschriftungen."
 
 #: ../data/messages:365
 msgid "Zoom effect"
@@ -1729,6 +1763,8 @@ msgstr "Zoom Effekt"
 #: ../data/messages:367
 msgid "set to 1 if you don't want the icons to zoom when you hover them."
 msgstr ""
+"Geben Sie 1 ein, wenn Sie wollen, dass die Symbole vergrößert werden, wenn "
+"Sie auf sie zeigen."
 
 #: ../data/messages:369
 msgid "Maximum zoom of the icons :"
@@ -1739,10 +1775,12 @@ msgid ""
 "in pixels. Outside of this interval (centered on the mouse), there is no "
 "zoom."
 msgstr ""
+"in Pixeln. Außerhalb dieses Bereichs (um die Maus herum), gibt es keinen "
+"Zoom."
 
 #: ../data/messages:373
 msgid "Width of the interval in which the zoom will be effective :"
-msgstr ""
+msgstr "Breite des Bereichs, in dem der Zoom aktiv ist:"
 
 #: ../data/messages:377
 msgid "Space between icons :"
@@ -1750,7 +1788,7 @@ msgstr "Abstand zwischen Icons :"
 
 #: ../data/messages:379
 msgid "Icons' themes"
-msgstr ""
+msgstr "Thema der Symbole:"
 
 #: ../data/messages:381
 msgid ""
@@ -1758,6 +1796,9 @@ msgid ""
 "from the theme you choosed. If you use this option, the dock will search "
 "here first, and then in the icons theme."
 msgstr ""
+"Diese Symbole sind in ~/.config/cairo-dock/current_theme/icons gespeichert. "
+"Wenn Sie diese Option verwenden, wird das Dock erst hier und dann in den "
+"Standardsymbolen suchen."
 
 #: ../data/messages:383
 msgid "Use local icons ?"
@@ -1769,6 +1810,9 @@ msgid ""
 "name of a theme that is installed on your system (like 'Gartoon' or "
 "'Human'), or even a path to a folder containing icons."
 msgstr ""
+"Lassen Sie das Feld leer, um das Symbolthema des Systems zu benutzen. Sie "
+"können den Namen eines Themas, welches auf ihrem System installiert ist (zB. "
+"\"Gartoon\" oder \"Oxygen\"), oder einen Ordner der die Symbole enthält."
 
 #: ../data/messages:387
 msgid "Choose a theme of icons :"
@@ -1776,21 +1820,23 @@ msgstr "Wähle ein Icon-Thema :"
 
 #: ../data/messages:391
 msgid "Image's filename to use as a background for icons :"
-msgstr ""
+msgstr "Hintergrundbild für Symbole:"
 
 #: ../data/messages:393
 msgid "Reflections"
-msgstr ""
+msgstr "Reflexionen"
 
 #: ../data/messages:395
 msgid ""
 "It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are "
 "not used."
 msgstr ""
+"Dies ist die Stärke der Reflexionen. 1 = volle Reflektion, 0 = keine "
+"Reflexion."
 
 #: ../data/messages:397
 msgid "Reflecting power of the plane :"
-msgstr ""
+msgstr "Stärke der Spiegelung des Bodens:"
 
 #: ../data/messages:399
 #, c-format
@@ -1802,7 +1848,7 @@ msgstr ""
 
 #: ../data/messages:401
 msgid "Fraction of the icon height that will reflect :"
-msgstr ""
+msgstr "Bruchteil des Symbolhöhe die reflektiert werden soll:"
 
 #: ../data/messages:403
 msgid ""
@@ -1813,19 +1859,21 @@ msgstr ""
 
 #: ../data/messages:405
 msgid "Icons' transparency at rest :"
-msgstr ""
+msgstr "Transparenz der Symbole in Ruhe"
 
 #: ../data/messages:407
 msgid "Link the icons with a string"
-msgstr ""
+msgstr "Symbole mit einer Zeichenkette verknüpfen"
 
 #: ../data/messages:409
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
 msgstr ""
+"Linienstärke der Zeichenkette, in Pixeln (0 um keine Zeichenkette zu "
+"benutzen)"
 
 #: ../data/messages:411
 msgid "Color of the string (red, blue, green, alpha) :"
-msgstr ""
+msgstr "Textfarbe (rot, blau, grün, Transparenz)"
 
 #: ../data/messages:413
 msgid "Icons size"
@@ -1861,7 +1909,7 @@ msgstr ""
 
 #: ../data/messages:427
 msgid "Separators"
-msgstr ""
+msgstr "Trenner"
 
 #: ../data/messages:429
 msgid "Icon size at rest (width x height) :"
@@ -1873,6 +1921,9 @@ msgid ""
 "icons. Cairo-dock can automatically add them between launchers, applis, and "
 "applets."
 msgstr ""
+"Trenner helfen verschiedene Typen von Symbolen voneinander abzugrenzen. "
+"Cairo-Dock kann sie automatisch zwischen Startern, Anwendungen und "
+"Minianwendungen platzieren."
 
 #: ../data/messages:433
 msgid "Automatically add separators ?"
@@ -1884,7 +1935,7 @@ msgstr ""
 
 #: ../data/messages:437
 msgid "Filename of an image to use for separators :"
-msgstr ""
+msgstr "Bilddatei für Trenner:"
 
 #: ../data/messages:439
 msgid ""
@@ -1894,7 +1945,7 @@ msgstr ""
 
 #: ../data/messages:441
 msgid "Force separator's image size to stay constant ?"
-msgstr ""
+msgstr "Größe des Trenners konstant lassen"
 
 #: ../data/messages:443
 msgid "Icons order"
@@ -1902,19 +1953,19 @@ msgstr "Reihenfolge der Icons"
 
 #: ../data/messages:445
 msgid "Order of the different types of icons :"
-msgstr ""
+msgstr "Reihenfolge der verschiedenen Symboltypen:"
 
 #: ../data/messages:447
 msgid "launchers"
-msgstr ""
+msgstr "Starter"
 
 #: ../data/messages:449
 msgid "applications"
-msgstr ""
+msgstr "Anwendungen"
 
 #: ../data/messages:451
 msgid "applets"
-msgstr ""
+msgstr "Minianwendungen"
 
 #: ../data/messages:453
 msgid ""
@@ -1924,7 +1975,7 @@ msgstr ""
 
 #: ../data/messages:455
 msgid "Allow applets to be placed amongst launchers ?"
-msgstr ""
+msgstr "Dürfen Minianwendungen und Starter vermischt werden?"
 
 #: ../data/messages:459
 msgid "Main Dock"
@@ -1932,7 +1983,7 @@ msgstr "Hauptdock"
 
 #: ../data/messages:461
 msgid "Choose the default view for root docks :"
-msgstr ""
+msgstr "Standardansicht für das Hauptdock auswählen:"
 
 #: ../data/messages:463
 msgid "Sub-Docks"
@@ -1940,11 +1991,11 @@ msgstr "Sub-Docks"
 
 #: ../data/messages:465
 msgid "You can overwrite this parameter for each sub-dock."
-msgstr ""
+msgstr "Sie können diese Einstellung für jedes Subdock eigens festlegen."
 
 #: ../data/messages:467
 msgid "Choose the default view for sub-docks :"
-msgstr ""
+msgstr "Standardansicht für Subdocks auswählen:"
 
 #: ../data/messages:469
 msgid "otherwise they will be perpendicular"
@@ -1952,7 +2003,7 @@ msgstr ""
 
 #: ../data/messages:471
 msgid "Are the sub-docks parallel to main docks ?"
-msgstr ""
+msgstr "Sind die Subdocks parallel zum Hauptdock?"
 
 #: ../data/messages:473
 msgid ""
@@ -1966,11 +2017,11 @@ msgstr ""
 
 #: ../data/messages:479
 msgid "Bubble"
-msgstr ""
+msgstr "Blasen"
 
 #: ../data/messages:481
 msgid "Background color of the bubble (r,v,b,a) :"
-msgstr ""
+msgstr "Hintergrundfarbe der Blase (r,g,b,a):"
 
 #: ../data/messages:483
 msgid "Choose a window decorator :"
@@ -1994,7 +2045,7 @@ msgstr ""
 
 #: ../data/messages:491
 msgid "Family of the font used for labels :"
-msgstr ""
+msgstr "Schriftart für Bezeichnungen:"
 
 #: ../data/messages:493
 msgid "Should be outlined ?"
@@ -2002,11 +2053,11 @@ msgstr ""
 
 #: ../data/messages:495
 msgid "Buttons"
-msgstr ""
+msgstr "Schaltflächen"
 
 #: ../data/messages:499
 msgid "Size of buttons in the info-bubbles (width x height) :"
-msgstr ""
+msgstr "Größe der Schaltflächen der Infofelder (Breite x Höhe):"
 
 #: ../data/messages:501 ../data/messages:505 ../data/messages:547
 #: ../data/messages:551 ../data/messages:555 ../data/messages:613
@@ -2018,11 +2069,11 @@ msgstr ""
 
 #: ../data/messages:503
 msgid "Name of an image to use for the yes/ok button :"
-msgstr ""
+msgstr "Bilddatei für Ja/Okay-Schaltfläche:"
 
 #: ../data/messages:507
 msgid "Name of an image to use for the no/cancel button :"
-msgstr ""
+msgstr "Bilddatei für Nein/Abbrechen-Schaltfläche:"
 
 #: ../data/messages:509
 msgid "Size of the icon displayed next to the text :"
@@ -2034,7 +2085,7 @@ msgstr ""
 
 #: ../data/messages:515
 msgid "Personnal decorations"
-msgstr ""
+msgstr "Benutzerdefinierte Dekoration"
 
 #: ../data/messages:517
 msgid ""
@@ -2098,7 +2149,7 @@ msgstr "Vordergrundtransparenz:"
 
 #: ../data/messages:545
 msgid "Buttons size :"
-msgstr ""
+msgstr "Größe der Schaltflächen:"
 
 #: ../data/messages:549
 msgid "Name of an image to use for the 'rotate' button :"
@@ -2376,8 +2427,8 @@ msgstr ""
 
 #: ../data/messages:699
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:701
@@ -2393,8 +2444,8 @@ msgstr ""
 
 #: ../data/messages:705
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, applis, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, applis, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -2492,7 +2543,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:741
-msgid "I don’t want to have a separator between launchers , applis and applets"
+msgid ""
+"I don’t want to have a separator between launchers , applis and applets"
 msgstr ""
 
 #: ../data/messages:743
@@ -2715,7 +2767,8 @@ msgid "go to the “Taskbar” module, then tick the first box, and apply."
 msgstr ""
 
 #: ../data/messages:821
-msgid "I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
+msgid ""
+"I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
 msgstr ""
 
 #: ../data/messages:823
@@ -2932,8 +2985,8 @@ msgstr ""
 
 #: ../data/messages:901
 msgid ""
-"How can I have an easy-to-access terminal with real transparence, like "
-"Tilda ?"
+"How can I have an easy-to-access terminal with real transparence, like Tilda "
+"?"
 msgstr ""
 
 #: ../data/messages:903
@@ -2954,8 +3007,9 @@ msgstr ""
 
 #: ../data/messages:909
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/"
-"required_components_list, and erase its content (\"panel\").\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components_list, and erase its content "
+"(\"panel\").\n"
 "Restart your session : the gnome-panel has not been started."
 msgstr ""
 
@@ -3062,16 +3116,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3097,8 +3151,8 @@ msgid ""
 "If you’re under XFCE or KDE, you can just activate the compositing in the "
 "window manager’s options.\n"
 "If you're under Gnome, you can activate it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:957
@@ -3132,8 +3186,8 @@ msgstr ""
 
 #: ../data/messages:967
 msgid ""
-"Hint : You can force the openGL by launching the dock with “cairo-dock –o”."
-"but you might get a lot of visual artifacts."
+"Hint : You can force the openGL by launching the dock with “cairo-dock "
+"–o”.but you might get a lot of visual artifacts."
 msgstr ""
 
 #: ../data/messages:969
@@ -3182,8 +3236,8 @@ msgstr "Hilf mit!"
 msgid ""
 "We value your help ! If you see a bug, or if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3482,8 +3536,8 @@ msgstr ""
 #: ../data/messages:1129
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -3576,14 +3630,29 @@ msgid ""
 "    You can even write an applet in bash with it !"
 msgstr ""
 
+#~ msgid "Size of the font :"
+#~ msgstr "Schriftgröße :"
+
+#~ msgid "Should be italic ?"
+#~ msgstr "Soll kursiv sein ?"
+
+#~ msgid "Use this background for applets too ?"
+#~ msgstr "Diesen Hintergrund auch für Applets verwenden ?"
+
+#~ msgid ""
+#~ "Don't forget you can drag a launcher from the menu and drop it in the dock !"
+#~ msgstr ""
+#~ "Starter können auch per Ziehen und Ablegen aus dem Anwendungsmenü erstellt "
+#~ "werden!"
+
 #~ msgid ""
 #~ "Welcome in Cairo-Dock2 !\n"
 #~ "A default and simple theme has been loaded.\n"
 #~ "You can either familiarize yourself with the dock or choose another theme "
 #~ "with right-click -> Cairo-Dock -> Theme manager\n"
 #~ "A useful help is available by right-click -> Cairo-Dock -> Help.\n"
-#~ "If you have any question/request/remark, please pay us a visit : right-"
-#~ "click -> Cairo-Dock -> Communauty site.\n"
+#~ "If you have any question/request/remark, please pay us a visit : right-click "
+#~ "-> Cairo-Dock -> Communauty site.\n"
 #~ "Hope you will enjoy this soft !\n"
 #~ "  (you can now click on this dialog to close it)"
 #~ msgstr ""
@@ -3596,19 +3665,3 @@ msgstr ""
 #~ "Cairo-Dock -> Communityseite.\n"
 #~ "Wir hoffen Ihnen gefällt diese Software!\n"
 #~ "  (Sie können nun auf dieses Feld klicken um es zu schließen.)"
-
-#~ msgid "Size of the font :"
-#~ msgstr "Schriftgröße :"
-
-#~ msgid "Should be italic ?"
-#~ msgstr "Soll kursiv sein ?"
-
-#~ msgid "Use this background for applets too ?"
-#~ msgstr "Diesen Hintergrund auch für Applets verwenden ?"
-
-#~ msgid ""
-#~ "Don't forget you can drag a launcher from the menu and drop it in the "
-#~ "dock !"
-#~ msgstr ""
-#~ "Starter können auch per Ziehen und Ablegen aus dem Anwendungsmenü "
-#~ "erstellt werden!"
