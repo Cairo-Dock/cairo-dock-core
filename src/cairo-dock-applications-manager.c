@@ -378,7 +378,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				}
 				else if (event.xproperty.atom == s_aNetActiveWindow)
 				{
-					Window XActiveWindow = cairo_dock_get_active_xwindow ();
+					Window XActiveWindow = cairo_dock_get_xwindow ();
 					//g_print ("%d devient active (%d)\n", XActiveWindow, root);
 					if (s_iCurrentActiveWindow != XActiveWindow)  // la fenetre courante a change.
 					{
@@ -1174,14 +1174,11 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 	g_return_if_fail (pParentDock != NULL);
 	if (icon->fPersonnalScale == 0)  // sinon on laisse l'animation actuelle.
 	{
+		cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));  // on le fait avant de changer d'animation, pour au cas ou l'icone ne serait plus placee au meme endroit (rebond). Si pas d'animation, on le fait pour redessiner l'indicateur.
 		if (myTaskBar.cAnimationOnActiveWindow)
 		{
 			if (cairo_dock_animation_will_be_visible (pParentDock) && icon->iAnimationState == CAIRO_DOCK_STATE_REST)
 				cairo_dock_request_icon_animation (icon, pParentDock, myTaskBar.cAnimationOnActiveWindow, 1);
-		}
-		else if (! pParentDock->bIsShrinkingDown)
-		{
-			cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
 		}
 	}
 }

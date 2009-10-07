@@ -262,9 +262,20 @@ static void _cairo_dock_quick_hide (GtkMenuItem *pMenuItem, gpointer *data)
 
 static void _cairo_dock_add_autostart (GtkMenuItem *pMenuItem, gpointer *data)
 {
-	gchar *cCommand = g_strdup_printf ("cp '/usr/share/applications/cairo-dock%s.desktop' '%s/.config/autostart'", (g_bForceCairo ? "-cairo" : ""), g_getenv ("HOME"));
+	gchar *cCairoAutoStartDirPath = g_strdup_printf ("%s/.config/autostart", g_getenv ("HOME"));
+	if (! g_file_test (cCairoAutoStartDirPath, G_FILE_TEST_IS_DIR))
+	{
+		if (g_mkdir (cCairoAutoStartDirPath, 7*8*8+5*8+5) != 0)
+		{
+			cd_warning ("couldn't create directory %s", cCairoAutoStartDirPath);
+			g_free (cCairoAutoStartDirPath);
+			return ;
+		}
+	}
+	gchar *cCommand = g_strdup_printf ("cp '/usr/share/applications/cairo-dock%s.desktop' '%s'", (g_bForceCairo ? "-cairo" : ""), cCairoAutoStartDirPath);
 	int r = system (cCommand);
 	g_free (cCommand);
+	g_free (cCairoAutoStartDirPath);
 }
 
 static void _cairo_dock_quit (GtkMenuItem *pMenuItem, gpointer *data)
