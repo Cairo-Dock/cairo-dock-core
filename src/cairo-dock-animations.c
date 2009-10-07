@@ -414,8 +414,10 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				//\__________________ On se redimensionne en taille normale.
 				if (! (pDock->bAutoHide && pDock->iRefCount == 0) && ! pDock->bMenuVisible)  // fin de shrink sans auto-hide => taille normale.
 				{
+					//g_print ("taille normale (%x; %d)\n", pDock->pShapeBitmap , pDock->bActive);
 					if (pDock->pShapeBitmap && pDock->bActive)
 					{
+						//g_print (" input shape\n");
 						gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 							NULL,
 							0,
@@ -777,6 +779,8 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 
 void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)
 {
+	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)  // on le fait avant de changer d'animation, pour le cas ou l'icone ne serait plus placee au meme endroit (rebond).
+		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 	cairo_dock_stop_icon_animation (pIcon);
 	
 	if (cAnimation == NULL || iNbRounds == 0 || pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)

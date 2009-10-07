@@ -1910,14 +1910,49 @@ void cairo_dock_add_curved_subpath_opengl (CairoDockOpenglPath *pVertexPath, int
 }
 
 
-static int s_iFontListBase = 0;
-static int s_iFontCharBase = 0;
-static int s_iFontCharWidth = 0;
-static int s_iFontCharHeight = 0;
-static int s_iFontNbChars = 0;
-CairoDockGLFont *cairo_dock_load_glx_font (const gchar *cFontDescription, int first, int count)
+
+GLuint cairo_dock_create_texture_from_text_simple (const gchar *cText, const gchar *cFontDescription, cairo_t* pSourceContext, int *iWidth, int *iHeight)
 {
-	g_return_val_if_fail (cFontDescription != NULL, NULL);
+	g_return_val_if_fail (cText != NULL && cFontDescription != NULL, 0);
+	
+	//\_________________ On ecrit le texte dans un calque Pango.
+	PangoLayout *pLayout = pango_cairo_create_layout (pSourceContext);
+	
+	PangoFontDescription *fd = pango_font_description_from_string (cFontDescription);
+	pango_layout_set_font_description (pLayout, fd);
+	pango_font_description_free (fd);
+	
+	pango_layout_set_text (pLayout, cText, -1);
+	
+	//\_________________ On cree une surface aux dimensions du texte.
+	PangoRectangle ink, log;
+	pango_layout_get_pixel_extents (pLayout, &ink, &log);
+	cairo_surface_t* pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+		ink.width,
+		ink.height);
+	*iWidth = ink.width;
+	*iHeight = ink.height;
+	
+	//\_________________ On dessine le texte.
+	cairo_t* pCairoContext = cairo_create (pNewSurface);
+	cairo_translate (pCairoContext, -ink.x, -ink.y);
+	cairo_set_source_rgb (pCairoContext, 1., 1., 1.);
+	cairo_move_to (pCairoContext, 0, 0);
+	pango_cairo_show_layout (pCairoContext, pLayout);
+	cairo_destroy (pCairoContext);
+	
+	g_object_unref (pLayout);
+	
+	//\_________________ On cree la texture.
+	GLuint iTexture = cairo_dock_create_texture_from_surface (pNewSurface);
+	cairo_surface_destroy (pNewSurface);
+	return iTexture;
+}
+
+
+CairoDockGLFont *cairo_dock_load_bitmap_font (const gchar *cFontDescription, int first, int count)
+{
+	g_return_val_if_fail (cFontDescription != NULL && count > 0, NULL);
 	
 	GLuint iListBase = glGenLists (count);
 	g_return_val_if_fail (iListBase != 0, NULL);
@@ -1943,33 +1978,99 @@ CairoDockGLFont *cairo_dock_load_glx_font (const gchar *cFontDescription, int fi
 	return pFont;
 }
 
+CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, int first, int count)
+{
+	g_return_val_if_fail (g_pMainDock != NULL && count > 0, NULL);
+	gchar *cPool = g_new0 (gchar, count + 1);
+	int i;
+	for (i = first; i < count; i ++)
+	{
+		cPool[i] = i;
+	}
+	
+	int iWidth, iHeight;
+	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (g_pMainDock));
+	GLuint iTexture = cairo_dock_create_texture_from_text_simple (cPool, cFontDescription, pCairoContext, &iWidth, &iHeight);
+	cairo_destroy (pCairoContext);
+	g_free (cPool);
+	
+	CairoDockGLFont *pFont = g_new0 (CairoDockGLFont, 1);
+	pFont->iTexture = iTexture;
+	pFont->iNbChars = count;
+	pFont->iCharBase = first;
+	pFont->iNbRows = 1;
+	pFont->iNbColumns = count;
+	pFont->iCharWidth = iWidth / count;
+	pFont->iCharHeight = iHeight;
+	
+	return pFont;
+}
+
+CairoDockGLFont *cairo_dock_load_textured_font_from_image (const gchar *cImagePath)
+{
+	double fImageWidth, fImageHeight;
+	GLuint iTexture = cairo_dock_create_texture_from_image_full (cImagePath, &fImageWidth, &fImageHeight);
+	g_return_val_if_fail (iTexture != 0, NULL);
+	
+	CairoDockGLFont *pFont = g_new0 (CairoDockGLFont, 1);
+	pFont->iTexture = iTexture;
+	pFont->iNbChars = 256;
+	pFont->iCharBase = 0;
+	pFont->iNbRows = 16;
+	pFont->iNbColumns = 16;
+	pFont->iCharWidth = fImageWidth / pFont->iNbColumns;
+	pFont->iCharHeight = fImageHeight / pFont->iNbRows;
+	return pFont;
+}
+
 void cairo_dock_free_glx_font (CairoDockGLFont *pFont)
 {
 	if (pFont == NULL)
 		return ;
 	if (pFont->iListBase != 0)
 		glDeleteLists (pFont->iListBase, pFont->iNbChars);
+	if (pFont->iTexture != 0)
+		_cairo_dock_delete_texture (pFont->iTexture);
 	g_free (pFont);
 }
+
 
 void cairo_dock_draw_glx_text (const gchar *cText, CairoDockGLFont *pFont)
 {
 	g_return_if_fail (pFont != NULL && pFont->iListBase != 0 && cText != NULL);
 	int n = strlen (cText);
-	if (pFont->iCharBase == 0)  // version optimisee ou on a charge tous les caracteres.
+	if (pFont->iListBase != 0)
 	{
-		glListBase (pFont->iListBase);
-		glCallLists (n, GL_UNSIGNED_BYTE, (unsigned char *)cText);
-		glListBase (0);
+		if (pFont->iCharBase == 0)  // version optimisee ou on a charge tous les caracteres.
+		{
+			glListBase (pFont->iListBase);
+			glCallLists (n, GL_UNSIGNED_BYTE, (unsigned char *)cText);
+			glListBase (0);
+		}
+		else
+		{
+			int i;
+			for (i = 0; i < n; i ++)
+			{
+				if (cText[i] < pFont->iCharBase || cText[i] >= pFont->iCharBase + pFont->iNbChars)
+					continue;
+				glCallList (pFont->iListBase + (cText[i] - pFont->iCharBase));
+			}
+		}
 	}
-	else
+	else if (pFont->iTexture != 0)
 	{
+		_cairo_dock_enable_texture ();
+		glBindTexture (GL_TEXTURE_2D, pFont->iTexture);
+		double u, v, du, dv, w, h, x, y;
 		int i;
 		for (i = 0; i < n; i ++)
 		{
-			if (cText[i] >= pFont->iCharBase)
-				glCallList (pFont->iListBase + (cText[i] - pFont->iCharBase));
+			if (cText[i] < pFont->iCharBase || cText[i] >= pFont->iCharBase + pFont->iNbChars)
+				continue;
+			_cairo_dock_apply_current_texture_portion_at_size_with_offset (u, v, du, dv, w, h, x, y);
 		}
+		_cairo_dock_disable_texture ();
 	}
 }
 

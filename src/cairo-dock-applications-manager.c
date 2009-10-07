@@ -113,7 +113,7 @@ void cairo_dock_register_appli (Icon *icon)
 {
 	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
-		cd_debug ("%s (%ld ; %s)\n", __func__, icon->Xid, icon->cName);
+		cd_debug ("%s (%ld ; %s)", __func__, icon->Xid, icon->cName);
 		Window *pXid = g_new (Window, 1);
 			*pXid = icon->Xid;
 		g_hash_table_insert (s_hXWindowTable, pXid, icon);
@@ -126,7 +126,7 @@ void cairo_dock_blacklist_appli (Window Xid)
 {
 	if (Xid > 0)
 	{
-		cd_debug ("%s (%ld)\n", __func__, Xid);
+		g_print ("%s (%ld)\n", __func__, Xid);
 		Window *pXid = g_new (Window, 1);
 			*pXid = Xid;
 		Icon *pNullIcon = g_new0 (Icon, 1);
@@ -285,8 +285,8 @@ static gboolean _cairo_dock_window_hovers_dock (GtkAllocation *pWindowGeometry, 
 	}
 	else
 	{
-		cd_warning (" on ne peut pas dire ou elle est sur l'ecran, on va supposer qu'elle recouvre le dock");
-		return TRUE;
+		cd_warning (" unknown window geometry");
+		return FALSE;
 	}
 	return FALSE;
 }
@@ -522,8 +522,8 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				if (! cairo_dock_xwindow_skip_taskbar (Xid))
 				{
 					g_print ("Special case : this appli (%ld) should not be ignored any more!\n", Xid);
-					//g_hash_table_remove (s_hXWindowTable, &Xid);
-					//g_free (icon);
+					g_hash_table_remove (s_hXWindowTable, &Xid);
+					g_free (icon);
 				}
 				continue;
 			}
@@ -1174,11 +1174,14 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 	g_return_if_fail (pParentDock != NULL);
 	if (icon->fPersonnalScale == 0)  // sinon on laisse l'animation actuelle.
 	{
-		cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));  // on le fait avant de changer d'animation, pour au cas ou l'icone ne serait plus placee au meme endroit (rebond). Si pas d'animation, on le fait pour redessiner l'indicateur.
 		if (myTaskBar.cAnimationOnActiveWindow)
 		{
 			if (cairo_dock_animation_will_be_visible (pParentDock) && icon->iAnimationState == CAIRO_DOCK_STATE_REST)
 				cairo_dock_request_icon_animation (icon, pParentDock, myTaskBar.cAnimationOnActiveWindow, 1);
+		}
+		else
+		{
+			cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));  // Si pas d'animation, on le fait pour redessiner l'indicateur.
 		}
 	}
 }

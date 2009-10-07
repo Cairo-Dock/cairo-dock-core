@@ -407,8 +407,8 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	// on definit les tailles du bitmap (taille de la fenetre) et de la zone d'inupt.
 	int W = pDock->iMaxDockWidth;
 	int H = pDock->iMaxDockHeight;
-	int w = pDock->inputArea.width;
-	int h = pDock->inputArea.height;
+	int w = pDock->iMinDockWidth;
+	int h = pDock->iMinDockHeight;
 	
 	// on verifie que les conditions sont toujours remplies.
 	if (w == 0 || h == 0 || pDock->iRefCount > 0 || pDock->bAutoHide || W == 0 || H == 0)

@@ -481,6 +481,14 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 		{
 			g_object_unref ((gpointer) pDock->pShapeBitmap);
 			pDock->pShapeBitmap = NULL;
+			if (!pDock->bActive)
+			{
+				gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+					NULL,
+					0,
+					0);
+				pDock->bActive = TRUE;
+			}
 		}
 		gtk_widget_hide (pDock->container.pWidget);
 		cairo_dock_update_dock_size (pDock);

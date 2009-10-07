@@ -60,6 +60,7 @@ extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
 extern short g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
+extern gboolean g_bEasterEggs;
 
 static GHashTable *s_hModuleTable = NULL;
 static GHashTable *s_hInternalModuleTable = NULL;
@@ -270,7 +271,7 @@ static void cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError **
 		pCairoDockModule->pVisitCard = NULL;
 		return ;
 	}
-	if (pVisitCard->cDockVersionOnCompilation != NULL && strcmp (pVisitCard->cDockVersionOnCompilation, CAIRO_DOCK_VERSION) != 0)
+	if (! g_bEasterEggs && pVisitCard->cDockVersionOnCompilation != NULL && strcmp (pVisitCard->cDockVersionOnCompilation, CAIRO_DOCK_VERSION) != 0)  // separation des versions en easter egg.
 	{
 		g_set_error (erreur, 1, 1, "this module ('%s') was compiled with Cairo-Dock v%s, but Cairo-Dock is in v%s\n  It will be ignored", pCairoDockModule->cSoFilePath, pVisitCard->cDockVersionOnCompilation, CAIRO_DOCK_VERSION);
 		cairo_dock_free_visit_card (pCairoDockModule->pVisitCard);

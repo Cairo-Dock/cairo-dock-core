@@ -1,4 +1,4 @@
-/**
+/*
 * This file is a part of the Cairo-Dock project
 *
 * Copyright : (C) see the 'copyright' file.
@@ -67,7 +67,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface);
 */
 GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWidth, int iHeight);
 
-/** Load an image on the dick into an OpenGL texture. The texture will have the same size as the image. The size is given as an output, if you need it for some reason.
+/** Load an image on the dock into an OpenGL texture. The texture will have the same size as the image. The size is given as an output, if you need it for some reason.
 *@param cImagePath path to an image.
 *@param fImageWidth pointer that will be filled with the width of the image.
 *@param fImageHeight pointer that will be filled with the height of the image.
@@ -75,7 +75,7 @@ GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWi
 */
 GLuint cairo_dock_create_texture_from_image_full (const gchar *cImagePath, double *fImageWidth, double *fImageHeight);
 
-/** Load an image on the dick into an OpenGL texture. The texture will have the same size as the image.
+/** Load an image on the dock into an OpenGL texture. The texture will have the same size as the image.
 *@param cImagePath path to an image.
 *@return the newly allocated texture, to be destroyed with _cairo_dock_delete_texture.
 */
@@ -215,9 +215,9 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 void cairo_dock_draw_frame_background_opengl (GLuint iBackgroundTexture, double fDockWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, const GLfloat *pVertexTab, int iNbVertex, CairoDockTypeHorizontality bHorizontal, gboolean bDirectionUp, double fDecorationsOffsetX);
 void cairo_dock_draw_current_path_opengl (double fLineWidth, double *fLineColor, int iNbVertex);
 
-/** Draw a rectangle with rounded corners. The rectangle will be centered at the current point.
+/** Draw a rectangle with rounded corners. The rectangle will be centered at the current point. The current matrix is altered.
 *@param fRadius radius if the corners.
-*@param fLineWidth width of the line. If set to 0, the background will be filled with the provided color, otherwise the path will be stroke.
+*@param fLineWidth width of the line. If set to 0, the background will be filled with the provided color, otherwise the path will be stroke with this color.
 *@param fFrameWidth width of the rectangle, without the corners.
 *@param fFrameHeight height of the rectangle, including the corners.
 *@param fDockOffsetX translation on X before drawing the rectangle.
@@ -274,25 +274,34 @@ void cairo_dock_apply_desktop_background (CairoContainer *pContainer);
 //////////
 
 
+GLuint cairo_dock_create_texture_from_text_simple (const gchar *cText, const gchar *cFontDescription, cairo_t* pSourceContext, int *iWidth, int *iHeight);
+
 struct _CairoDockGLFont {
 	GLuint iListBase;
+	GLuint iTexture;
+	gint iNbRows;
+	gint iNbColumns;
 	gint iCharBase;
 	gint iNbChars;
 	gint iCharWidth;
 	gint iCharHeight;
 };
 
-CairoDockGLFont *cairo_dock_load_glx_font (const gchar *cFontDescription, int first, int count);
+CairoDockGLFont *cairo_dock_load_bitmap_font (const gchar *cFontDescription, int first, int count);
 
-void cairo_dock_free_glx_font (CairoDockGLFont *pFont);
+CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, int first, int count);
 
-void cairo_dock_draw_glx_text (const gchar *cText, CairoDockGLFont *pFont);
+CairoDockGLFont *cairo_dock_load_textured_font_from_image (const gchar *cImagePath);
 
-void cairo_dock_draw_glx_text_in_area (const gchar *cText, CairoDockGLFont *pFont, int iWidth, int iHeight);
+void cairo_dock_free_gl_font (CairoDockGLFont *pFont);
 
-void cairo_dock_draw_glx_text_at_position (const gchar *cText, CairoDockGLFont *pFont, int x, int y);
+void cairo_dock_draw_gl_text (const gchar *cText, CairoDockGLFont *pFont);
 
-void cairo_dock_draw_glx_text_at_position_in_area (const gchar *cText, CairoDockGLFont *pFont, int x, int y, int iWidth, int iHeight);
+void cairo_dock_draw_gl_text_in_area (const gchar *cText, CairoDockGLFont *pFont, int iWidth, int iHeight);
+
+void cairo_dock_draw_gl_text_at_position (const gchar *cText, CairoDockGLFont *pFont, int x, int y);
+
+void cairo_dock_draw_gl_text_at_position_in_area (const gchar *cText, CairoDockGLFont *pFont, int x, int y, int iWidth, int iHeight);
 
 
 G_END_DECLS

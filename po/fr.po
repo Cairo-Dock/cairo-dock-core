@@ -44,7 +44,7 @@ msgstr ""
 
 #: ../src/cairo-dock-applet-facility.h:349
 msgid "About this applet"
-msgstr "À propos de cet applet"
+msgstr "À propos de cette applet"
 
 #: ../src/cairo-dock-callbacks.c:1160
 msgid "Do you want to mount this point ?"
