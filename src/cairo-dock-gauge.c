@@ -603,17 +603,16 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 		}
 		
 		//if (pRenderer->bWriteValues && pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
-		if (g_bEasterEggs)
+		if (g_bEasterEggs && i == iDataOffset)
 		{
 			cairo_data_renderer_format_value (pRenderer, fValue, i);
 			
 			CairoDockGLFont *pFont = cairo_dock_get_default_data_renderer_font ();
-			glDisable (GL_TEXTURE_2D);
+			glColor3f (1.0, 0.0, 0.0);
+			//cairo_dock_draw_gl_text_at_position_in_area (pRenderer->cFormatBuffer, pFont, 0, 0, 24, 24);  // pIndicator->textWidth, pIndicator->textHeight
+			cairo_dock_draw_gl_text (pRenderer->cFormatBuffer, pFont);
+			_cairo_dock_enable_texture ();
 			glColor3f (1.0, 1.0, 1.0);
-			cairo_dock_draw_glx_text_at_position_in_area (pRenderer->cFormatBuffer, pFont, 0, 0, 24, -24);  // pIndicator->textWidth, pIndicator->textHeight
-			glEnable (GL_TEXTURE_2D);
-			
-			//g_print (" >>> '%s'\n", pRenderer->cFormatBuffer);
 		}
 	}
 	

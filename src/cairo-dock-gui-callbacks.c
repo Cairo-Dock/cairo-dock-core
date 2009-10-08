@@ -362,8 +362,33 @@ void on_click_normal_apply (GtkButton *button, GtkWidget *pWindow)
 	if (pAction != NULL)
 	{
 		gboolean bKeepWindow = pAction (pUserData);
-		if (!bKeepWindow)
-			on_click_normal_quit (button, pWindow);
+		if (!bKeepWindow)  // on recharge la fenetre.
+		{
+			//on_click_normal_quit (button, pWindow);
+			cairo_dock_free_generated_widget_list (pWidgetList);
+			pWidgetList = NULL;
+			g_object_set_data (G_OBJECT (pWindow), "widget-list", NULL);
+			
+			GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pWindow), "garbage");
+			/// nettoyer...
+			g_object_set_data (G_OBJECT (pWindow), "garbage", NULL);
+			
+			GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (pWindow));
+			GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
+			g_return_if_fail (children != NULL);
+			GtkWidget *pNoteBook = children->data;
+			gtk_widget_destroy (pNoteBook);
+			
+			pNoteBook = cairo_dock_build_conf_file_widget (cConfFilePath, NULL, NULL, &pWidgetList, pDataGarbage, cConfFilePath);
+			gtk_box_pack_start (GTK_BOX (pMainVBox),
+				pNoteBook,
+				TRUE,
+				TRUE,
+				0);
+			gtk_widget_show_all (pNoteBook);
+			g_object_set_data (G_OBJECT (pWindow), "widget-list", pWidgetList);
+			g_object_set_data (G_OBJECT (pWindow), "garbage", pDataGarbage);
+		}
 	}
 	else
 		g_object_set_data (G_OBJECT (pWindow), "result", GINT_TO_POINTER (1));
@@ -545,6 +570,6 @@ void cairo_dock_clear_filter (GtkButton *pButton, GtkEntry *pEntry)
 	gpointer pCurrentPlace = cairo_dock_get_current_widget ();
 	//g_print ("pCurrentPlace : %x\n", pCurrentPlace);
 	//_show_group_or_category (pCurrentPlace);
-	gchar *keyword[2] = {"fabounetfabounetfabounet", NULL};
-	cairo_dock_apply_current_filter (keyword, FALSE, FALSE, FALSE, FALSE);
+	const gchar *keyword[2] = {"fabounetfabounetfabounet", NULL};
+	cairo_dock_apply_current_filter ((gchar **)keyword, FALSE, FALSE, FALSE, FALSE);
 }

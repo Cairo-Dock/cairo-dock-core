@@ -527,9 +527,14 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	
 	//\___________________ On (re)charge tout, car n'importe quel parametre peut avoir change.
 	if (myPosition.bUseXinerama)
+	{
+		pDock->iNumScreen = myPosition.iNumScreen;
 		cairo_dock_get_screen_offsets (myPosition.iNumScreen, &pDock->iScreenOffsetX, &pDock->iScreenOffsetY);
+	}
 	else
-		pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
+	{
+		pDock->iNumScreen = pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
+	}
 	
 	switch (myPosition.iScreenBorder)
 	{

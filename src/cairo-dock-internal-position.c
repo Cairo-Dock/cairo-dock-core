@@ -62,11 +62,16 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 	CairoDock *pDock = g_pMainDock;
 	
 	if (pPosition->bUseXinerama)
+	{
+		pDock->iNumScreen = pPosition->iNumScreen;
 		cairo_dock_get_screen_offsets (pPosition->iNumScreen, &pDock->iScreenOffsetX, &pDock->iScreenOffsetY);
+	}
 	else
-		pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
+	{
+		pDock->iNumScreen = pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
+	}
 	
-	if (pPosition->bUseXinerama != pPrevPosition->bUseXinerama)
+	if (pPosition->bUseXinerama != pPrevPosition->bUseXinerama || pPosition->iNumScreen != pPrevPosition->iNumScreen)
 	{
 		cairo_dock_reposition_root_docks (TRUE);  // on replace tous les docks racines sauf le main dock.
 	}

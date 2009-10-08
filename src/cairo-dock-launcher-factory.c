@@ -514,12 +514,13 @@ void cairo_dock_reload_launcher (Icon *icon)
 	}
 	
 	//\_____________ On recharge l'icone.
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 	cairo_dock_load_icon_info_from_desktop_file (cDesktopFileName, icon);
 	g_return_if_fail (icon->cDesktopFileName != NULL);
 	
-	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-	cairo_dock_fill_icon_buffers_for_dock (icon, pCairoContext, pParentDock)
+	CairoDock *pNewDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+	g_return_if_fail (pNewDock != NULL);
+	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pNewDock));
+	cairo_dock_fill_icon_buffers_for_dock (icon, pCairoContext, pNewDock)
 	
 	if (cName && ! icon->cName)
 		icon->cName = g_strdup (" ");
@@ -549,11 +550,10 @@ void cairo_dock_reload_launcher (Icon *icon)
 	}
 
 	//\_____________ On gere le changement de container ou d'ordre.
-	CairoDock *pNewDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-	g_return_if_fail (pNewDock != NULL);
-	
 	if (pDock != pNewDock)  // on la detache de son container actuel et on l'insere dans le nouveau.
 	{
+		gchar *tmp = icon->cParentDockName;  // le detach_icon remet a 0 ce champ, il faut le donc conserver avant.
+		icon->cParentDockName = NULL;
 		cairo_dock_detach_icon_from_dock (icon, pDock, TRUE);
 		if (pDock->icons == NULL && pDock->iRefCount == 0 && ! pDock->bIsMainDock)  // on supprime les docks principaux vides.
 		{
@@ -568,6 +568,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 			gtk_widget_queue_draw (pDock->container.pWidget);
 		}
 		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+		icon->cParentDockName = tmp;
 	}
 	else
 	{

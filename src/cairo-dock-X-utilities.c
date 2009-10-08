@@ -40,12 +40,15 @@
 #include "cairo-dock-application-factory.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-internal-position.h"
 #include "cairo-dock-X-utilities.h"
 
 extern int g_iNbDesktops;
 extern int g_iNbViewportX,g_iNbViewportY ;
 extern int g_iScreenWidth[2], g_iScreenHeight[2];  // dimension de l'ecran sur lequel est place le dock.
 extern int g_iXScreenWidth[2], g_iXScreenHeight[2];  // dimension de l'ecran logique compose eventuellement de plusieurs moniteurs.
+extern CairoDock *g_pMainDock;
+
 static gboolean s_bUseXComposite = TRUE;
 static gboolean s_bUseXTest = TRUE;
 static gboolean s_bUseXinerama = TRUE;
@@ -93,7 +96,7 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 	
 	cairo_dock_support_X_extension ();
 	
-	s_aNetWmWindowType			= XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE", False);
+	s_aNetWmWindowType		= XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE", False);
 	s_aNetWmWindowTypeNormal	= XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_NORMAL", False);
 	s_aNetWmWindowTypeUtility	= XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_UTILITY", False);
 	s_aNetWmWindowTypeDock		= XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_DOCK", False);
@@ -102,17 +105,17 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 	s_aNetDesktopViewport		= XInternAtom (s_XDisplay, "_NET_DESKTOP_VIEWPORT", False);
 	s_aNetDesktopGeometry		= XInternAtom (s_XDisplay, "_NET_DESKTOP_GEOMETRY", False);
 	s_aNetNbDesktops			= XInternAtom (s_XDisplay, "_NET_NUMBER_OF_DESKTOPS", False);
-	s_aRootMapID				= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
+	s_aRootMapID			= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
 	
-	s_aNetClientList		= XInternAtom (s_XDisplay, "_NET_CLIENT_LIST_STACKING", False);
+	s_aNetClientList			= XInternAtom (s_XDisplay, "_NET_CLIENT_LIST_STACKING", False);
 	s_aNetActiveWindow		= XInternAtom (s_XDisplay, "_NET_ACTIVE_WINDOW", False);
-	s_aNetWmState				= XInternAtom (s_XDisplay, "_NET_WM_STATE", False);
-	s_aNetWmFullScreen			= XInternAtom (s_XDisplay, "_NET_WM_STATE_FULLSCREEN", False);
-	s_aNetWmAbove				= XInternAtom (s_XDisplay, "_NET_WM_STATE_ABOVE", False);
-	s_aNetWmBelow				= XInternAtom (s_XDisplay, "_NET_WM_STATE_BELOW", False);
-	s_aNetWmSticky				= XInternAtom (s_XDisplay, "_NET_WM_STATE_STICKY", False);
-	s_aNetWmHidden				= XInternAtom (s_XDisplay, "_NET_WM_STATE_HIDDEN", False);
-	s_aNetWmSkipTaskbar 			= XInternAtom (s_XDisplay, "_NET_WM_STATE_SKIP_TASKBAR", False);
+	s_aNetWmState			= XInternAtom (s_XDisplay, "_NET_WM_STATE", False);
+	s_aNetWmFullScreen		= XInternAtom (s_XDisplay, "_NET_WM_STATE_FULLSCREEN", False);
+	s_aNetWmAbove			= XInternAtom (s_XDisplay, "_NET_WM_STATE_ABOVE", False);
+	s_aNetWmBelow			= XInternAtom (s_XDisplay, "_NET_WM_STATE_BELOW", False);
+	s_aNetWmSticky			= XInternAtom (s_XDisplay, "_NET_WM_STATE_STICKY", False);
+	s_aNetWmHidden			= XInternAtom (s_XDisplay, "_NET_WM_STATE_HIDDEN", False);
+	s_aNetWmSkipTaskbar 		= XInternAtom (s_XDisplay, "_NET_WM_STATE_SKIP_TASKBAR", False);
 	s_aNetWmMaximizedHoriz		= XInternAtom (s_XDisplay, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
 	s_aNetWmMaximizedVert		= XInternAtom (s_XDisplay, "_NET_WM_STATE_MAXIMIZED_VERT", False);
 	s_aNetWmDemandsAttention	= XInternAtom (s_XDisplay, "_NET_WM_STATE_DEMANDS_ATTENTION", False);
@@ -173,11 +176,18 @@ gboolean cairo_dock_update_screen_geometry (void)
 		g_iXScreenWidth[CAIRO_DOCK_VERTICAL] = g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
 		g_iXScreenHeight[CAIRO_DOCK_VERTICAL] = g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
 		
-		g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] = g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-		g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] = g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-		g_iScreenWidth[CAIRO_DOCK_VERTICAL] = g_iScreenHeight[CAIRO_DOCK_HORIZONTAL];
-		g_iScreenHeight[CAIRO_DOCK_VERTICAL] = g_iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-		
+		if (myPosition.bUseXinerama)
+		{
+			cairo_dock_get_screen_offsets (myPosition.iNumScreen, &g_pMainDock->iScreenOffsetX, &g_pMainDock->iScreenOffsetY);  // un peu bancal, il faudrait le faire pour tous les docks.
+		}
+		else
+		{
+			g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] = g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+			g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] = g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+			g_iScreenWidth[CAIRO_DOCK_VERTICAL] = g_iScreenHeight[CAIRO_DOCK_HORIZONTAL];
+			g_iScreenHeight[CAIRO_DOCK_VERTICAL] = g_iScreenWidth[CAIRO_DOCK_HORIZONTAL];
+		}
+		cd_message ("new screen size : %dx%d\n", g_iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		return TRUE;
 	}
 	else
@@ -246,7 +256,6 @@ void cairo_dock_get_current_viewport (int *iCurrentViewPortX, int *iCurrentViewP
 		&border_width_return, &depth_return);
 	*iCurrentViewPortX = x_return;
 	*iCurrentViewPortY = y_return;
-	
 	
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;

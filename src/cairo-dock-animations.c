@@ -55,7 +55,6 @@
 extern int g_iXScreenHeight[2];
 extern gboolean g_bUseOpenGL;
 extern CairoDock *g_pMainDock;
-extern gboolean g_bEasterEggs;
 
 gboolean cairo_dock_move_up (CairoDock *pDock)
 {
@@ -227,18 +226,15 @@ void cairo_dock_pop_up (CairoDock *pDock)
 	cd_debug ("%s (%d)", __func__, pDock->bPopped);
 	if (! pDock->bPopped && myAccessibility.bPopUp)
 	{
-		if (g_bEasterEggs)  // v2.1.2
-		{
-			cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
-				CAIRO_DOCK_RENDER_DOCK,
-				(CairoDockNotificationFunc) _render_fade_out_dock,
-				NULL);
-			cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
-				CAIRO_DOCK_UPDATE_DOCK,
-				(CairoDockNotificationFunc) _update_fade_out_dock,
-				NULL);
-			cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
-		}
+		cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
+			CAIRO_DOCK_RENDER_DOCK,
+			(CairoDockNotificationFunc) _render_fade_out_dock,
+			NULL);
+		cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
+			CAIRO_DOCK_UPDATE_DOCK,
+			(CairoDockNotificationFunc) _update_fade_out_dock,
+			NULL);
+		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 		gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), TRUE);
 		pDock->bPopped = TRUE;
 	}
@@ -251,7 +247,7 @@ gboolean cairo_dock_pop_down (CairoDock *pDock)
 		return FALSE;
 	if (pDock->bPopped && myAccessibility.bPopUp)
 	{
-		if (g_bEasterEggs && cairo_dock_search_window_on_our_way (FALSE, FALSE) != NULL)  // v2.1.2
+		if (cairo_dock_search_window_on_our_way (FALSE, FALSE) != NULL)
 		{
 			pDock->iFadeCounter = mySystem.iFadeOutNbSteps;
 			pDock->bFadeInOut = TRUE;

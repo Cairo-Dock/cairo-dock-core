@@ -224,6 +224,8 @@ struct _CairoDock {
 	gboolean bFadeInOut;
 	/// whether the input shape is set or not.
 	gboolean bActive;  // TRUE <=> no input shape.
+	/// number of the screen the dock is placed on (Xinerama).
+	gint iNumScreen;
 };
 
 

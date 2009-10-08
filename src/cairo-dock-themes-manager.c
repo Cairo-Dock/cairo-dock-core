@@ -707,14 +707,21 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		
 		g_free (cNewThemePath);
 		if (bThemeSaved)
+		{
 			cairo_dock_mark_theme_as_modified (FALSE);		
-
+			
+			g_key_file_set_string (pKeyFile, "Save", "theme name", "");
+			cairo_dock_write_keys_to_file (pKeyFile, cInitConfFile);
+		}
+		
 		g_free (cNewThemeName);
 		g_key_file_free (pKeyFile);
 		g_string_free (sCommand, TRUE);
+		
+		cairo_dock_set_status_message (s_pThemeManager, bThemeSaved ? _("The theme has been saved") :  _("The theme couldn't be saved"));
 		return ! bThemeSaved;
 	}
-
+	
 	
 	//\___________________ On efface les themes selectionnes.
 	gsize length = 0;
@@ -752,6 +759,15 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 				g_string_printf (sCommand, "rm -rf '%s/%s/%s'", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR, cThemeName);
 				r = system (sCommand->str);  // g_rmdir n'efface qu'un repertoire vide.
 			}
+		}
+		if (cThemesList[1] == NULL)
+			cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The theme has been deleted") :  _("The theme couldn't be deleted"));
+		else
+			cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The themes have been deleted") :  _("The themes couldn't be deleted"));
+		if (bThemeDeleted)
+		{
+			g_key_file_set_string (pKeyFile, "Delete", "deleted themes", "");
+			cairo_dock_write_keys_to_file (pKeyFile, cInitConfFile);
 		}
 		g_strfreev (cThemesList);
 		g_key_file_free (pKeyFile);

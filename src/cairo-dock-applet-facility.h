@@ -308,14 +308,14 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param cLabel name of the entry.
 *@param gtkStock name of a GTK icon or path to an image.
 *@param pCallBack function called when the user selects this entry.
-*@param pSubMenu menu to add the entry to.
+*@param pMenu menu to add the entry to.
 *@param pData data passed as parameter of the callback.
 */
 #define CD_APPLET_ADD_IN_MENU_WITH_STOCK_AND_DATA(cLabel, gtkStock, pCallBack, pMenu, pData) cairo_dock_add_in_menu_with_stock_and_data (cLabel, gtkStock, (GFunc)pCallBack, pMenu, pData)
 
 /** Create and add an entry to a menu.
 *@param cLabel name of the entry.
-*@param pFunction function called when the user selects this entry.
+*@param pCallBack function called when the user selects this entry.
 *@param pMenu menu to add the entry to.
 *@param pData data passed as parameter of the callback.
 */
@@ -323,7 +323,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 /** Create and add an entry to a menu. 'myApplet' will be passed to the callback.
 *@param cLabel name of the entry.
-*@param pFunction function called when the user selects this entry.
+*@param pCallBack function called when the user selects this entry.
 *@param pMenu menu to add the entry to.
 */
 #define CD_APPLET_ADD_IN_MENU(cLabel, pCallBack, pMenu) CD_APPLET_ADD_IN_MENU_WITH_DATA(cLabel, pCallBack, pMenu, myApplet)
@@ -331,10 +331,10 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 /** Create and add an entry to a menu, with an icon. 'myApplet' will be passed to the callback.
 *@param cLabel name of the entry.
 *@param gtkStock name of a GTK icon or path to an image.
-*@param pFunction function called when the user selects this entry.
+*@param pCallBack function called when the user selects this entry.
 *@param pMenu menu to add the entry to.
 */
-#define CD_APPLET_ADD_IN_MENU_WITH_STOCK(cLabel, gtkStock, pFunction, pMenu) CD_APPLET_ADD_IN_MENU_WITH_STOCK_AND_DATA(cLabel, gtkStock, pFunction, pMenu, myApplet)
+#define CD_APPLET_ADD_IN_MENU_WITH_STOCK(cLabel, gtkStock, pCallBack, pMenu) CD_APPLET_ADD_IN_MENU_WITH_STOCK_AND_DATA(cLabel, gtkStock, pCallBack, pMenu, myApplet)
 
 /** Create and add a separator to a menu.
  */

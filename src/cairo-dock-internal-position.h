@@ -25,6 +25,7 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-config.h"
+#include "cairo-dock-dock-factory.h"
 
 typedef struct _CairoConfigPosition CairoConfigPosition;
 

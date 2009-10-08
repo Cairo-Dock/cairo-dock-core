@@ -30,8 +30,8 @@ G_BEGIN_DECLS
  * - the asynchronous phase will be executed in another thread, while the dock continues to run on its own thread, in parallel. During this phase you will do all the heavy job (like downloading a file or computing something) but you can't interact on the dock.
  * - the synchronous phase will be executed after the first one has finished. There you will update your applet with the result of the first phase.
  * 
- * \attention A data buffer is used to communicate between the 2 phases. It is important that these datas are never accessed outside of the task, and vice versa that the asynchronous thread never accesses other data than these ones.\n
- * If you want to access these datas outside of the task, you have to copy them in a safe place during the 2nd phase, or to stop the task before (beware that stopping the task means waiting for the 1st phase to finish, which can take some time).
+ * \attention A data buffer is used to communicate between the 2 phases. It is important that these datas are never accessed outside the task, and vice versa that the asynchronous thread never accesses other data than this buffer.\n
+ * If you want to access these datas outside the task, you have to copy them in a safe place during the 2nd phase, or to stop the task before (beware that stopping the task means waiting for the 1st phase to finish, which can take some time).
  * 
  * You create a Task with \ref cairo_dock_new_task, launch it with \ref cairo_dock_launch_task, and destroy it with \ref cairo_dock_free_task.
  *

@@ -1981,12 +1981,15 @@ CairoDockGLFont *cairo_dock_load_bitmap_font (const gchar *cFontDescription, int
 CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, int first, int count)
 {
 	g_return_val_if_fail (g_pMainDock != NULL && count > 0, NULL);
+	if (first < ' ')
+	{
+		count -= (' ' - first);
+		first = ' ';
+	}
 	gchar *cPool = g_new0 (gchar, count + 1);
 	int i;
-	for (i = first; i < count; i ++)
-	{
-		cPool[i] = i;
-	}
+	for (i = 0; i < count; i ++)
+		cPool[i] = first + i;
 	
 	int iWidth, iHeight;
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (g_pMainDock));
@@ -2023,7 +2026,7 @@ CairoDockGLFont *cairo_dock_load_textured_font_from_image (const gchar *cImagePa
 	return pFont;
 }
 
-void cairo_dock_free_glx_font (CairoDockGLFont *pFont)
+void cairo_dock_free_gl_font (CairoDockGLFont *pFont)
 {
 	if (pFont == NULL)
 		return ;
@@ -2035,26 +2038,34 @@ void cairo_dock_free_glx_font (CairoDockGLFont *pFont)
 }
 
 
-void cairo_dock_draw_glx_text (const gchar *cText, CairoDockGLFont *pFont)
+void cairo_dock_draw_gl_text (const gchar *cText, CairoDockGLFont *pFont)
 {
-	g_return_if_fail (pFont != NULL && pFont->iListBase != 0 && cText != NULL);
 	int n = strlen (cText);
 	if (pFont->iListBase != 0)
 	{
-		if (pFont->iCharBase == 0)  // version optimisee ou on a charge tous les caracteres.
+		if (pFont->iCharBase == 0 && strchr (cText, '\n') == NULL)  // version optimisee ou on a charge tous les caracteres.
 		{
+			glDisable (GL_TEXTURE_2D);
 			glListBase (pFont->iListBase);
 			glCallLists (n, GL_UNSIGNED_BYTE, (unsigned char *)cText);
 			glListBase (0);
 		}
 		else
 		{
-			int i;
+			int i, j;
 			for (i = 0; i < n; i ++)
 			{
+				if (cText[i] == '\n')
+				{
+					GLfloat rpos[4];
+					glGetFloatv (GL_CURRENT_RASTER_POSITION, rpos);
+					glRasterPos2f (rpos[0], rpos[1] + pFont->iCharHeight + 1);
+					continue;
+				}
 				if (cText[i] < pFont->iCharBase || cText[i] >= pFont->iCharBase + pFont->iNbChars)
 					continue;
-				glCallList (pFont->iListBase + (cText[i] - pFont->iCharBase));
+				j = cText[i] - pFont->iCharBase;
+				glCallList (pFont->iListBase + j);
 			}
 		}
 	}
@@ -2062,51 +2073,81 @@ void cairo_dock_draw_glx_text (const gchar *cText, CairoDockGLFont *pFont)
 	{
 		_cairo_dock_enable_texture ();
 		glBindTexture (GL_TEXTURE_2D, pFont->iTexture);
-		double u, v, du, dv, w, h, x, y;
-		int i;
+		double u, v, du=1./pFont->iNbColumns, dv=1./pFont->iNbRows, w=pFont->iCharWidth, h=pFont->iCharHeight, x=.5*w, y=.5*h;
+		int i, j;
 		for (i = 0; i < n; i ++)
 		{
+			if (cText[i] == '\n')
+			{
+				x = .5*pFont->iCharWidth;
+				y += pFont->iCharHeight + 1;
+				continue;
+			}
 			if (cText[i] < pFont->iCharBase || cText[i] >= pFont->iCharBase + pFont->iNbChars)
 				continue;
+			
+			j = cText[i] - pFont->iCharBase;
+			u = (double) (j%pFont->iNbColumns) / pFont->iNbColumns;
+			v = (double) (j/pFont->iNbColumns) / pFont->iNbRows;
 			_cairo_dock_apply_current_texture_portion_at_size_with_offset (u, v, du, dv, w, h, x, y);
+			x += pFont->iCharWidth;
 		}
 		_cairo_dock_disable_texture ();
 	}
 }
 
-void cairo_dock_draw_glx_text_in_area (const gchar *cText, CairoDockGLFont *pFont, int iWidth, int iHeight)
+void cairo_dock_draw_gl_text_in_area (const gchar *cText, CairoDockGLFont *pFont, int iWidth, int iHeight)
 {
 	g_return_if_fail (pFont != NULL && cText != NULL);
-	int n = strlen (cText);
-	double h = pFont->iCharHeight;
-	double w = n * pFont->iCharWidth;
-	double zx, zy;
-	if (fabs (iWidth/w) < fabs (iHeight/h))  // on autorise les dimensions negatives pour pouvoir retourner le texte.
+	if (pFont->iListBase != 0)  // marche po sur du raster.
 	{
-		zx = iWidth/w;
-		zy = (iWidth*iHeight > 0 ? zx : -zx);
+		cd_warning ("can't resize raster ! use a textured font inside.");
 	}
 	else
 	{
-		zy = iHeight/h;
-		zx = (iWidth*iHeight > 0 ? zy : -zy);
+		int n = strlen (cText);
+		double h = pFont->iCharHeight;  /// tenir compte des \n ...
+		double w = n * pFont->iCharWidth;
+		double zx, zy;
+		if (fabs (iWidth/w) < fabs (iHeight/h))  // on autorise les dimensions negatives pour pouvoir retourner le texte.
+		{
+			zx = iWidth;
+			zy = (iWidth*iHeight > 0 ? zx : -zx);
+		}
+		else
+		{
+			zy = iHeight;
+			zx = (iWidth*iHeight > 0 ? zy : -zy);
+		}
+		
+		//glScalef (zx, zy, 1.);  // marche po sur du raster :-(
+		cairo_dock_draw_gl_text (cText, pFont);
 	}
-	
-	glPushMatrix ();
-	glScalef (1, -1, 1.);  // marche po sur du raster :-(
-	cairo_dock_draw_glx_text (cText, pFont);
-	
-	glPopMatrix ();
 }
 
-void cairo_dock_draw_glx_text_at_position (const gchar *cText, CairoDockGLFont *pFont, int x, int y)
+void cairo_dock_draw_gl_text_at_position (const gchar *cText, CairoDockGLFont *pFont, int x, int y)
 {
-	glRasterPos2f (x, y);
-	cairo_dock_draw_glx_text (cText, pFont);
+	g_return_if_fail (pFont != NULL && cText != NULL);
+	if (pFont->iListBase != 0)
+	{
+		glRasterPos2f (x, y);
+	}
+	else
+	{
+		glTranslatef (x, y, 0);
+	}
+	cairo_dock_draw_gl_text (cText, pFont);
 }
 
-void cairo_dock_draw_glx_text_at_position_in_area (const gchar *cText, CairoDockGLFont *pFont, int x, int y, int iWidth, int iHeight)
+void cairo_dock_draw_gl_text_at_position_in_area (const gchar *cText, CairoDockGLFont *pFont, int x, int y, int iWidth, int iHeight)
 {
-	glRasterPos2f (x, y);
-	cairo_dock_draw_glx_text_in_area (cText, pFont, iWidth, iHeight);
+	g_return_if_fail (pFont != NULL && cText != NULL);
+	if (pFont->iListBase != 0)  // marche po sur du raster.
+	{
+		cd_warning ("can't resize raster ! use a textured font inside.");
+	}
+	else
+	{
+		cairo_dock_draw_gl_text_in_area (cText, pFont, iWidth, iHeight);
+	}
 }
