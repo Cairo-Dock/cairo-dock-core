@@ -573,6 +573,11 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	if (bUseText && icon->iLabelTexture != 0 && icon->fScale > 1.01 && (! mySystem.bLabelForPointedIconOnly || icon->bPointed))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
 	{
 		glPushMatrix ();
+		glLoadIdentity ();
+		if (pDock->container.bIsHorizontal)
+			glTranslatef (floor (fX), floor (fY - icon->fHeight * icon->fScale * (1 - fGlideScale/2)), - icon->fHeight * (1+myIcons.fAmplitude));
+		else
+			glTranslatef (floor (fY + icon->fHeight * icon->fScale * (1 - fGlideScale/2)), floor (fX), - icon->fHeight * (1+myIcons.fAmplitude));
 		
 		double fOffsetX = 0.;
 		if (icon->fDrawX + icon->fWidth * icon->fScale/2 - icon->iTextWidth/2 < 0)
@@ -588,18 +593,18 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		
 		if (! pDock->container.bIsHorizontal && mySystem.bTextAlwaysHorizontal)
 		{
-			glTranslatef (-icon->fHeight * icon->fScale/2 - (pDock->container.bDirectionUp ? myLabels.iLabelSize : (pDock->container.bUseReflect ? myIcons.fReflectSize : 0.)) + icon->iTextWidth / 2 - myLabels.iconTextDescription.iMargin + 1,
-				(icon->fWidth * icon->fScale + icon->iTextHeight) / 2,
+			glTranslatef (floor (-icon->fHeight * icon->fScale/2 - (pDock->container.bDirectionUp ? myLabels.iLabelSize : (pDock->container.bUseReflect ? myIcons.fReflectSize : 0.)) + icon->iTextWidth / 2 - myLabels.iconTextDescription.iMargin + 1)+.5,
+				floor ((icon->fWidth * icon->fScale + icon->iTextHeight) / 2)+.5,
 				0.);
 		}
 		else if (pDock->container.bIsHorizontal)
 		{
-			glTranslatef (fOffsetX, (pDock->container.bDirectionUp ? 1:-1) * (icon->fHeight * icon->fScale/2 + myLabels.iLabelSize - icon->iTextHeight / 2), 0.);
+			glTranslatef (floor (fOffsetX)+.5, floor ((pDock->container.bDirectionUp ? 1:-1) * (icon->fHeight * icon->fScale/2 + myLabels.iLabelSize - icon->iTextHeight / 2))+.5, 0.);
 		}
 		else
 		{
-			glTranslatef ((pDock->container.bDirectionUp ? -.5:.5) * (icon->fHeight * icon->fScale + icon->iTextHeight),
-				fOffsetX,
+			glTranslatef (floor ((pDock->container.bDirectionUp ? -.5:.5) * (icon->fHeight * icon->fScale + icon->iTextHeight))+.5,
+				floor (fOffsetX)+.5,
 				0.);
 			glRotatef (pDock->container.bDirectionUp ? 90 : -90, 0., 0., 1.);
 		}

@@ -700,6 +700,13 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	if (bUseText && icon->pTextBuffer != NULL && icon->fScale > 1.01 && (! mySystem.bLabelForPointedIconOnly || icon->bPointed))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
 	{
 		cairo_save (pCairoContext);
+		
+		cairo_identity_matrix (pCairoContext);  // on positionne les etiquettes sur un pixels entier, sinon ca floute.
+		if (bIsHorizontal)
+			cairo_translate (pCairoContext, floor (icon->fDrawX + icon->fGlideOffset * icon->fWidth * icon->fScale * (icon->fGlideOffset < 0 ? fGlideScale : 1)), floor (icon->fDrawY));
+		else
+			cairo_translate (pCairoContext, floor (icon->fDrawY), floor (icon->fDrawX + icon->fGlideOffset * icon->fWidth * icon->fScale * (icon->fGlideOffset < 0 ? fGlideScale : 1)));
+		
 		double fOffsetX = (icon->fWidthFactor * icon->fWidth * icon->fScale - icon->iTextWidth) / 2;
 		if (fOffsetX < - icon->fDrawX)
 			fOffsetX = - icon->fDrawX;
@@ -713,19 +720,19 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		{
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
-				(pDock->container.bDirectionUp ? -myLabels.iLabelSize : - (pDock->container.bUseReflect ? myIcons.fReflectSize : 0.)) - myLabels.iconTextDescription.iMargin + 1,
-				0);
+				floor ((pDock->container.bDirectionUp ? -myLabels.iLabelSize : - (pDock->container.bUseReflect ? myIcons.fReflectSize : 0.)) - myLabels.iconTextDescription.iMargin + 1),
+				0.);
 		}
 		else if (bIsHorizontal)
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
-				fOffsetX,
-				bDirectionUp ? -myLabels.iLabelSize : icon->fHeight * icon->fScale - icon->fTextYOffset);
+				floor (fOffsetX),
+				floor (bDirectionUp ? -myLabels.iLabelSize : icon->fHeight * icon->fScale - icon->fTextYOffset));
 		else
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
-				bDirectionUp ? -myLabels.iLabelSize : icon->fHeight * icon->fScale - icon->fTextYOffset,
-				fOffsetX);
+				floor (bDirectionUp ? -myLabels.iLabelSize : icon->fHeight * icon->fScale - icon->fTextYOffset),
+				floor (fOffsetX));
 		
 		double fMagnitude;
 		if (mySystem.bLabelForPointedIconOnly)

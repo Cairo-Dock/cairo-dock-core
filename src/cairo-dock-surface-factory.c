@@ -785,9 +785,14 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, c
 		cairo_push_group (pCairoContext);
 		cairo_set_source_rgb (pCairoContext, 0.2, 0.2, 0.2);
 		int i;
-		for (i = 0; i < 4; i++)
+		for (i = 0; i < 2; i++)
 		{
-			cairo_move_to (pCairoContext, i&2-1, 2*(i&1)-1);
+			cairo_move_to (pCairoContext, 0, 2*i-1);
+			pango_cairo_show_layout (pCairoContext, pLayout);
+		}
+		for (i = 0; i < 2; i++)
+		{
+			cairo_move_to (pCairoContext, 2*i-1, 0);
 			pango_cairo_show_layout (pCairoContext, pLayout);
 		}
 		cairo_pop_group_to_source (pCairoContext);
