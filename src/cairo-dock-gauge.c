@@ -17,6 +17,57 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/** Exemple of a gauge with text inside :
+ * 
+ * <gauge>
+	<name>Screenlets Vista'ish Default</name>
+	<author>(conversion by Nochka85)</author>
+	<rank>2</rank>
+	<file key="background">back.svg</file>
+	<file key="foreground">dialdot.svg</file>
+	<indicator>
+		<posX>-0,35</posX>
+		<posY>-0,10</posY>
+		<posStart>-130</posStart>
+		<posStop>130</posStop>
+		<file key="needle">dial.svg</file>
+		<offset_x>0</offset_x>
+		<width>40</width>
+		<height>8</height>
+		<text_zone>
+			<textX>-0,23</textX>
+			<textY>-0,28</textY>
+			<textWidth>0,16</textWidth>
+			<textHeight>0,10</textHeight>
+			<textColorR>1.0</textColorR>
+			<textColorG>1,0</textColorG>
+			<textColorB>1,0</textColorB>
+		</text_zone>
+	</indicator>
+	<indicator>
+		<posX>0,48</posX>
+		<posY>0,27</posY>
+		<direction>1</direction>
+		<posStart>-128</posStart>
+		<posStop>128</posStop>
+		<file key="needle">dial2.svg</file>
+		<offset_x>0</offset_x>
+		<width>30</width>
+		<height>8</height>
+		<text_zone>
+			<textX>0,21</textX>
+			<textY>-0,04</textY>
+			<textWidth>0,15</textWidth>
+			<textHeight>0,07</textHeight>
+			<textColorR>1.0</textColorR>
+			<textColorG>1,0</textColorG>
+			<textColorB>1,0</textColorB>
+		</text_zone>
+	</indicator>
+</gauge>
+ * 
+ * */
+
 #include <string.h>
 #include <math.h>
 #include <libxml/tree.h>
