@@ -655,6 +655,7 @@ gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog)
 		if (pDialog->iRefCount == 0)  // devient nul.
 		{
 			cairo_dock_free_dialog (pDialog);
+			cairo_dock_replace_all_dialogs ();
 			return TRUE;
 		}
 		else
@@ -1123,13 +1124,20 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
 	{
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
-		if (pDock->iRefCount == 0/* && pDock->bAtBottom*/)  // un dock principal au repos.
+		if (pDock->iRefCount > 0 && ! GTK_WIDGET_VISIBLE (pDock->container.pWidget))  // sous-dock invisible.  // pDock->bAtBottom
+		{
+			CairoDock *pParentDock = NULL;
+			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
+			cairo_dock_dialog_calculate_aimed_point (pPointingIcon, CAIRO_CONTAINER (pParentDock), iX, iY, bRight, bIsHorizontal, bDirectionUp, fAlign);
+		}
+		else/* if (pDock->iRefCount == 0)*/  // un dock principal au repos.  // && pDock->bAtBottom
 		{
 			*bIsHorizontal = (pDock->container.bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
 			if (pDock->container.bIsHorizontal)
 			{
 				*bRight = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
-				*bDirectionUp = (pDock->container.iWindowPositionY > g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
+				*bDirectionUp = pDock->container.bDirectionUp;
+				///*bDirectionUp = (pDock->container.iWindowPositionY > g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
 				*iY = (*bDirectionUp ? pDock->container.iWindowPositionY + (pDock->bActive && ! (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->bAtBottom) ? 0 : pDock->container.iHeight - pDock->iMinDockHeight) :
 					pDock->container.iWindowPositionY + pDock->container.iHeight - (pDock->bActive && ! (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->bAtBottom) ? 0 : pDock->container.iHeight - pDock->iMinDockHeight));
 			}
@@ -1151,12 +1159,6 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 				*iX = pDock->container.iWindowPositionX +
 					pIcon->fDrawX + pIcon->fWidth * pIcon->fScale * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign));
 			}
-		}
-		else if (pDock->iRefCount > 0 && ! GTK_WIDGET_VISIBLE (pDock->container.pWidget))  // sous-dock invisible.  // pDock->bAtBottom
-		{
-			CairoDock *pParentDock = NULL;
-			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
-			cairo_dock_dialog_calculate_aimed_point (pPointingIcon, CAIRO_CONTAINER (pParentDock), iX, iY, bRight, bIsHorizontal, bDirectionUp, fAlign);
 		}
 		/*else  // dock actif.
 		{

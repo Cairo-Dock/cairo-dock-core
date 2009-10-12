@@ -2116,16 +2116,16 @@ void cairo_dock_draw_gl_text_in_area (const gchar *cText, CairoDockGLFont *pFont
 		double zx, zy;
 		if (fabs (iWidth/w) < fabs (iHeight/h))  // on autorise les dimensions negatives pour pouvoir retourner le texte.
 		{
-			zx = iWidth;
+			zx = iWidth/w;
 			zy = (iWidth*iHeight > 0 ? zx : -zx);
 		}
 		else
 		{
-			zy = iHeight;
+			zy = iHeight/h;
 			zx = (iWidth*iHeight > 0 ? zy : -zy);
 		}
 		
-		//glScalef (zx, zy, 1.);  // marche po sur du raster :-(
+		glScalef (zx, zy, 1.);
 		cairo_dock_draw_gl_text (cText, pFont);
 	}
 }
@@ -2153,6 +2153,7 @@ void cairo_dock_draw_gl_text_at_position_in_area (const gchar *cText, CairoDockG
 	}
 	else
 	{
+		glTranslatef (x, y, 0);
 		cairo_dock_draw_gl_text_in_area (cText, pFont, iWidth, iHeight);
 	}
 }

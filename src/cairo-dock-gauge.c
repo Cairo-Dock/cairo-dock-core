@@ -602,15 +602,23 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 			_draw_gauge_image_opengl (pGauge, pIndicator, fValue);
 		}
 		
-		//if (pRenderer->bWriteValues && pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
-		if (g_bEasterEggs && i == iDataOffset)
+		if (/*pRenderer->bWriteValues && */pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
 		{
 			cairo_data_renderer_format_value (pRenderer, fValue, i);
 			
 			CairoDockGLFont *pFont = cairo_dock_get_default_data_renderer_font ();
-			glColor3f (1.0, 0.0, 0.0);
-			//cairo_dock_draw_gl_text_at_position_in_area (pRenderer->cFormatBuffer, pFont, 0, 0, 24, 24);  // pIndicator->textWidth, pIndicator->textHeight
-			cairo_dock_draw_gl_text (pRenderer->cFormatBuffer, pFont);
+			glColor3f (pIndicator->textColor[0], pIndicator->textColor[1], pIndicator->textColor[2]);
+			glPushMatrix ();
+			
+			
+			cairo_dock_draw_gl_text_at_position_in_area (pRenderer->cFormatBuffer,
+				pFont,
+				pIndicator->textX * pRenderer->iWidth,
+				pIndicator->textY * pRenderer->iHeight,
+				pIndicator->textWidth * pRenderer->iWidth,
+				pIndicator->textHeight * pRenderer->iHeight);
+			
+			glPopMatrix ();
 			_cairo_dock_enable_texture ();
 			glColor3f (1.0, 1.0, 1.0);
 		}

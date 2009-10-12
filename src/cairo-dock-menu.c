@@ -1223,6 +1223,7 @@ void cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 	pDock->container.bInside = TRUE;
 	pDock->bAtBottom = FALSE;
 	///cairo_dock_disable_entrance ();  // trop violent, il faudrait trouver un autre truc.
+	//if (pDock->iRefCount == 0)
 	cairo_dock_on_leave_notify (pDock->container.pWidget,
 		NULL,
 		pDock);

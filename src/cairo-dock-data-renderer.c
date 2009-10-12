@@ -42,8 +42,8 @@ extern CairoDock *g_pMainDock;
 
 static CairoDockGLFont *s_pFont = NULL;
 
-//#define _init_data_renderer_font(...) s_pFont = cairo_dock_load_textured_font ("Sans 12", '0', 10)
-#define _init_data_renderer_font(...) s_pFont = cairo_dock_load_textured_font ("Monospace Bold 12", ',', '9' - ',' + 1)
+#define _init_data_renderer_font(...) s_pFont = cairo_dock_load_textured_font ("Monospace Bold 12", ',', '9' - ',' + 1)  // les 10 chiffres + les 2 virgules + l'espace.
+
 CairoDockGLFont *cairo_dock_get_default_data_renderer_font (void)
 {
 	if (s_pFont == NULL)
