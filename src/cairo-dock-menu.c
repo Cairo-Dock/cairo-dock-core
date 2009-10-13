@@ -396,7 +396,7 @@ static void _cairo_dock_create_launcher (Icon *icon, CairoDock *pDock, CairoDock
 	
 	//\___________________ On ouvre automatiquement l'IHM pour permettre de modifier ses champs.
 	if (iLauncherType != CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR)  // inutile pour un separateur.
-		cairo_dock_build_launcher_gui (icon);
+		cairo_dock_build_launcher_gui (pNewIcon);
 }
 
 static void cairo_dock_add_launcher (GtkMenuItem *pMenuItem, gpointer *data)
@@ -1641,8 +1641,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		pMenuItem = gtk_radio_menu_item_new_with_label(group, _("Normal"));
 		group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(pMenuItem));
 		gtk_menu_shell_append(GTK_MENU_SHELL(pSubMenuAccessibility), pMenuItem);
-		//if (bIsNormal)
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(pMenuItem), bIsNormal);
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(pMenuItem), bIsNormal);  // on coche celui-ci par defaut, il sera decoche par les suivants eventuellement.
 		g_signal_connect(G_OBJECT(pMenuItem), "toggled", G_CALLBACK(_cairo_dock_keep_normal), data);
 		
 		pMenuItem = gtk_radio_menu_item_new_with_label(group, _("Always on top"));

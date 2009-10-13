@@ -421,7 +421,7 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName, 
 	g_return_val_if_fail (icon->cDesktopFileName != NULL, NULL);
 	
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pParentDock)
+	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pParentDock);
 	
 	cd_message ("+ %s/%s", icon->cName, icon->cClass);
 	if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon) && icon->cClass != NULL)
@@ -497,7 +497,6 @@ void cairo_dock_reload_launcher (Icon *icon)
 	icon->cParentDockName = NULL;
 	CairoDock *pDock = cairo_dock_search_dock_from_name (cPrevDockName);  // changement de l'ordre ou du container.
 	double fOrder = icon->fOrder;
-	///Window Xid = icon->Xid;
 	CairoDock *pSubDock = icon->pSubDock;
 	icon->pSubDock = NULL;
 	gchar *cClass = icon->cClass;
@@ -519,15 +518,18 @@ void cairo_dock_reload_launcher (Icon *icon)
 	
 	CairoDock *pNewDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	g_return_if_fail (pNewDock != NULL);
+	
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pNewDock));
-	cairo_dock_fill_icon_buffers_for_dock (icon, pCairoContext, pNewDock)
+	icon->fWidth /= pDock->container.fRatio;
+	icon->fHeight /= pDock->container.fRatio;
+	cairo_dock_fill_icon_buffers_for_dock (icon, pCairoContext, pNewDock);
+	icon->fWidth *= pDock->container.fRatio;
+	icon->fHeight *= pDock->container.fRatio;
 	
 	if (cName && ! icon->cName)
 		icon->cName = g_strdup (" ");
 	
-	///icon->Xid = Xid;
-	
-	//\_____________ On gere le sous-dock.
+	//\_____________ On gere son sous-dock.
 	if (icon->Xid != 0)
 	{
 		if (icon->pSubDock == NULL)

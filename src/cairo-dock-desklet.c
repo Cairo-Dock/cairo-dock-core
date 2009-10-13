@@ -647,6 +647,9 @@ gboolean on_unmap_desklet (GtkWidget* pWidget,
 	CairoDesklet *pDesklet)
 {
 	//g_print ("unmap (%d)\n", pDesklet->bAllowMinimize);
+	Window Xid = GDK_WINDOW_XID (pWidget->window);
+	if (cairo_dock_window_is_utility (Xid))  // sur la couche des widgets, on ne fait rien.
+		return FALSE;
 	if (! pDesklet->bAllowMinimize)
 		gtk_window_present (GTK_WINDOW (pWidget));
 	else

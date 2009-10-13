@@ -691,6 +691,8 @@ int main (int argc, char** argv)
 	g_print ("\nVERIFIER LE CHANGEMENT DE CONTAINER POUR TERMINAL\n\n");
 	g_print ("\nPLANTAGE POWER-MANAGER\n\n");
 	g_print ("\nBERLIOS\n\n");
+	g_print ("\nSOUS-DOCKS ET CHGT DE BUREAU\n\n");
+	g_print ("\nPLANTAGE NETSPEED THEME ELEMENTARY\n\n");
 	
 	
 	gtk_main ();

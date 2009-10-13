@@ -700,7 +700,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	//\___________________ On desactive sa miniature.
 	if (icon->Xid != 0)
 	{
-		cd_debug ("on desactive la miniature de %s (Xid : %lx)", icon->cName, icon->Xid);
+		//cd_debug ("on desactive la miniature de %s (Xid : %lx)", icon->cName, icon->Xid);
 		cairo_dock_set_xicon_geometry (icon->Xid, 0, 0, 0, 0);
 	}
 	//\___________________ On l'enleve de la liste.
