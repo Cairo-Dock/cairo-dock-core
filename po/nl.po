@@ -1851,7 +1851,6 @@ msgid "Reflecting power of the plane :"
 msgstr "Reflecteringsvermogen van het hellend vlak :"
 
 #: ../data/messages:399
-#, c-format
 msgid ""
 "Setting it to 0.33 will mean that 33% of the icons will reflect on the "
 "ground. The icons will be placed at the right distance from the front border "
