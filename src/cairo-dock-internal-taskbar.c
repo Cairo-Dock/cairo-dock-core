@@ -51,7 +51,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	if (pTaskBar->cGroupException)
 	{
 		int i;
-		for (i = 0; pTaskBar->cGroupException[i] != '\0'; i ++)
+		for (i = 0; pTaskBar->cGroupException[i] != '\0'; i ++)  // on passe tout en minuscule.
 			pTaskBar->cGroupException[i] = g_ascii_tolower (pTaskBar->cGroupException[i]);
 	}
 	

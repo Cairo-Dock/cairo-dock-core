@@ -293,7 +293,7 @@ static gboolean _cairo_dock_window_hovers_dock (GtkAllocation *pWindowGeometry, 
 
 static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gboolean *data)
 {
-	if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_is_on_current_desktop (icon))
+	if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_is_on_current_desktop (icon) && icon->fPersonnalScale <= 0 && icon->iLastCheckTime != -1)
 	{
 		if ((data[0] && icon->bIsMaximized && ! icon->bIsHidden) || (data[1] && icon->bIsFullScreen && ! icon->bIsHidden) || (!data[0] && ! data[1]))
 		{
@@ -799,15 +799,6 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 		cd_message ("cette fenetre (%ld(%ld), %s) est trop vieille (%d / %d)", *Xid, icon->Xid, icon->cName, icon->iLastCheckTime, iTime);
 		if (CAIRO_DOCK_IS_APPLI (icon))
 		{
-			if (cairo_dock_quick_hide_is_activated () && ((icon->bIsFullScreen && myAccessibility.bAutoHideOnFullScreen) || (icon->bIsMaximized && myAccessibility.bAutoHideOnMaximized)))  // cette fenetre peut avoir gener.
-			{
-				if (cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)  // on regarde si une autre gene encore.
-				{
-					cd_message (" => plus aucune fenetre genante");
-					cairo_dock_deactivate_temporary_auto_hide ();
-				}
-			}
-			
 			CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 			if (pParentDock != NULL)
 			{
@@ -825,6 +816,15 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 				icon->iLastCheckTime = -1;  // pour ne pas la desenregistrer de la HashTable lors du 'free' puisqu'on est en train de parcourir la table.
 				cairo_dock_free_icon (icon);
 				/// redessiner les inhibiteurs ?...
+			}
+			
+			if (cairo_dock_quick_hide_is_activated () && ((icon->bIsFullScreen && myAccessibility.bAutoHideOnFullScreen) || (icon->bIsMaximized && myAccessibility.bAutoHideOnMaximized)))  // cette fenetre peut avoir gene.
+			{
+				if (cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)  // on regarde si une autre gene encore.
+				{
+					cd_message (" => plus aucune fenetre genante");
+					cairo_dock_deactivate_temporary_auto_hide ();
+				}
 			}
 		}
 		else

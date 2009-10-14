@@ -35,13 +35,13 @@
 		<width>40</width>
 		<height>8</height>
 		<text_zone>
-			<textX>-0,23</textX>
-			<textY>-0,28</textY>
-			<textWidth>0,16</textWidth>
-			<textHeight>0,10</textHeight>
-			<textColorR>1.0</textColorR>
-			<textColorG>1,0</textColorG>
-			<textColorB>1,0</textColorB>
+			<x_left>-0,46</x_left>
+			<y_bottom>-0,56</y_bottom>
+			<width>0,16</width>
+			<height>0,10</height>
+			<red>1.0</red>
+			<green>1,0</green>
+			<blue>1,0</blue>
 		</text_zone>
 	</indicator>
 	<indicator>
@@ -55,13 +55,13 @@
 		<width>30</width>
 		<height>8</height>
 		<text_zone>
-			<textX>0,21</textX>
-			<textY>-0,04</textY>
-			<textWidth>0,15</textWidth>
-			<textHeight>0,07</textHeight>
-			<textColorR>1.0</textColorR>
-			<textColorG>1,0</textColorG>
-			<textColorB>1,0</textColorB>
+			<x_left>0,40</x_left>
+			<y_bottom>-0,08</y_bottom>
+			<width>0,15</width>
+			<height>0,07</height>
+			<red>1.0</red>
+			<green>1,0</green>
+			<blue>1,0</blue>
 		</text_zone>
 	</indicator>
 </gauge>
@@ -299,25 +299,40 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 					xmlNodePtr pTextSubNode;
 					for (pTextSubNode = pGaugeSubNode->xmlChildrenNode; pTextSubNode != NULL; pTextSubNode = pTextSubNode->next)
 					{
-						if (xmlStrcmp (pTextSubNode->name, (const xmlChar *) "text") == 0)
-							continue;
-						//g_print ("  + %s\n", pTextSubNode->name);
 						cTextNodeContent = xmlNodeGetContent (pTextSubNode);
-						//g_print ("     -> '%s'\n", cTextNodeContent);
-						if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "textX") == 0)
+						if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "x_left") == 0)
 							pGaugeIndicator->textX = atof (cTextNodeContent);
-						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "textY") == 0)
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "y_bottom") == 0)
 							pGaugeIndicator->textY = atof (cTextNodeContent);
-						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "textWidth") == 0)
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "width") == 0)
 							pGaugeIndicator->textWidth = atof (cTextNodeContent);
-						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "textHeight") == 0)
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "height") == 0)
 							pGaugeIndicator->textHeight = atof (cTextNodeContent);
-						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "textColorR") == 0)
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "red") == 0)
 							pGaugeIndicator->textColor[0] = atof (cTextNodeContent);
-						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "textColorG") == 0)
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "green") == 0)
 							pGaugeIndicator->textColor[1] = atof (cTextNodeContent);
-						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "textColorB") == 0)
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "blue") == 0)
 							pGaugeIndicator->textColor[2] = atof (cTextNodeContent);
+					}
+					g_print ("pGaugeIndicator->textWidth:%.2f\n", pGaugeIndicator->textWidth);
+				}
+				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "logo_zone") == 0)
+				{
+					xmlNodePtr pLogoSubNode;
+					for (pLogoSubNode = pGaugeSubNode->xmlChildrenNode; pLogoSubNode != NULL; pLogoSubNode = pLogoSubNode->next)
+					{
+						cTextNodeContent = xmlNodeGetContent (pLogoSubNode);
+						if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "x_center") == 0)
+							pGaugeIndicator->logoX = atof (cTextNodeContent);
+						else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "y_center") == 0)
+							pGaugeIndicator->logoY = atof (cTextNodeContent);
+						else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "width") == 0)
+							pGaugeIndicator->logoWidth = atof (cTextNodeContent);
+						else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "height") == 0)
+							pGaugeIndicator->logoHeight = atof (cTextNodeContent);
+						else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "alpha") == 0)
+							pGaugeIndicator->logoAlpha = atof (cTextNodeContent);
 					}
 					g_print ("pGaugeIndicator->textWidth:%.2f\n", pGaugeIndicator->textWidth);
 				}
@@ -491,7 +506,7 @@ static void cairo_dock_draw_one_gauge (cairo_t *pSourceContext, Gauge *pGauge, i
 			_draw_gauge_image (pSourceContext, pGauge, pIndicator, fValue);
 		}
 		
-		if (pRenderer->bWriteValues && pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
+		if (/**pRenderer->bWriteValues && */pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
 		{
 			cairo_data_renderer_format_value (pRenderer, fValue, i);
 			//g_print (" >>>%s\n", pRenderer->cFormatBuffer);
@@ -503,7 +518,7 @@ static void cairo_dock_draw_one_gauge (cairo_t *pSourceContext, Gauge *pGauge, i
 			cairo_text_extents (pSourceContext, pRenderer->cFormatBuffer, &textExtents);
 			double fZoom = MIN (pIndicator->textWidth * pRenderer->iWidth / textExtents.width, pIndicator->textHeight * pRenderer->iHeight / textExtents.height);
 			cairo_move_to (pSourceContext,
-				(1. + pIndicator->textX) * pRenderer->iWidth/2 - textExtents.width / 2,
+				(1. + pIndicator->textX) * pRenderer->iWidth/2,
 				(1. - pIndicator->textY) * pRenderer->iHeight/2 + textExtents.height);
 			cairo_scale (pSourceContext,
 				fZoom,
@@ -653,7 +668,7 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 			_draw_gauge_image_opengl (pGauge, pIndicator, fValue);
 		}
 		
-		if (/*pRenderer->bWriteValues && */pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
+		if (/**pRenderer->bWriteValues && */pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
 		{
 			cairo_data_renderer_format_value (pRenderer, fValue, i);
 			
@@ -661,11 +676,10 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 			glColor3f (pIndicator->textColor[0], pIndicator->textColor[1], pIndicator->textColor[2]);
 			glPushMatrix ();
 			
-			
 			cairo_dock_draw_gl_text_at_position_in_area (pRenderer->cFormatBuffer,
 				pFont,
-				pIndicator->textX * pRenderer->iWidth,
-				pIndicator->textY * pRenderer->iHeight,
+				pIndicator->textX * pRenderer->iWidth/2,
+				pIndicator->textY * pRenderer->iHeight/2,
 				pIndicator->textWidth * pRenderer->iWidth,
 				pIndicator->textHeight * pRenderer->iHeight);
 			

@@ -157,8 +157,7 @@ struct _CairoDock {
 	
 	/// TRUE if the dock is at rest.
 	gboolean bAtBottom;
-	/// TRUE if the dock is in high position (maximum zoom).
-	gboolean bAtTop;
+	gboolean bAtTop_deprecated;
 	/// Whether the dock is in a popped up state or not.
 	gboolean bPopped;
 	/// TRUE when the menu is visible, to keep the dock on high position.

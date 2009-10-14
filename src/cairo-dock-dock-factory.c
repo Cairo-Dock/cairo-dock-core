@@ -247,7 +247,6 @@ CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRen
 	gtk_widget_show_all (pWindow);
 	gdk_window_set_back_pixmap (pWindow->window, NULL, FALSE);  // vraiment plus rapide ?
 	
-
 #ifdef HAVE_GLITZ
 	if (g_bUseGlitz && pDock->container.pDrawFormat != NULL)
 	{

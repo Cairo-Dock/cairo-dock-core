@@ -49,20 +49,22 @@ struct _CairoDataToRenderer {
 };
 
 #define CAIRO_DOCK_DATA_FORMAT_MAX_LEN 20
-typedef void (*CairoDockGetValueFormatFunc) (double fValue, gchar *cFormatBuffer, int iBufferLength);
+/// Prototype of a function used to format the values in a short readable format (to be displayed as quick-info).
+typedef void (*CairoDockGetValueFormatFunc) (double fValue, int iNumValue, gchar *cFormatBuffer, int iBufferLength, gpointer data);
 /// Generic DataRenderer attributes structure. The attributes of any implementation of a DataRenderer will derive from this class.
 struct _CairoDataRendererAttribute {
 	gchar *cModelName;
 	gint iNbValues;
 	gint iMemorySize;
-	gchar **cTitles;
-	gdouble fTextColor[3];
 	gdouble *pMinMaxValues;
 	gboolean bUpdateMinMax;
 	gboolean bWriteValues;
 	gint iLatencyTime;
 	CairoDockGetValueFormatFunc format_value;
+	gpointer pFormatData;
 	gchar **cEmblems;
+	gchar **cTitles;
+	gdouble fTextColor[3];
 };
 
 typedef CairoDataRenderer * (*CairoDataRendererNewFunc) (void);
@@ -96,16 +98,14 @@ struct _CairoDataRenderer {
 	CairoDockGetValueFormatFunc format_value;
 	/// buffer for the text.
 	gchar cFormatBuffer[CAIRO_DOCK_DATA_FORMAT_MAX_LEN+1];
+	/// data passed to the format fonction.
+	gpointer pFormatData;
 	/// TRUE <=> the Data Renderer should dynamically update the range of the values.
 	gboolean bUpdateMinMax;
 	/// TRUE <=> the Data Renderer should write the values as text itself.
 	gboolean bWriteValues;
 	/// the time it will take to update to the new value, with a smooth animation (require openGL capacity)
 	gint iLatencyTime;
-	/// an optionnal list of tiltes to be displayed on the Data Renderer next to each value. Same size as the set of values.
-	gchar **cTitles;
-	/// color of the titles.
-	gdouble fTextColor[3];
 	/// an optionnal range for values. Same size as the set of values.
 	gdouble *fMinMaxValues;
 	// fill at load time by the high level renderer.
@@ -118,6 +118,12 @@ struct _CairoDataRenderer {
 	gint iSmoothAnimationStep;
 	/// latency due to the smooth movement (0 means the displayed value is the current one, 1 the previous)
 	gdouble fLatency;
+	/// an optionnal list of emblems to be displayed on the Data Renderer next to each value. Same size as the set of values.
+	gchar **cEmblems;
+	/// an optionnal list of tiltes to be displayed on the Data Renderer next to each value. Same size as the set of values.
+	gchar **cTitles;
+	/// color of the titles.
+	gdouble fTextColor[3];
 };
 
 
@@ -250,7 +256,7 @@ void cairo_dock_refresh_data_renderer (Icon *pIcon, CairoContainer *pContainer, 
 *@param cBuffer a buffer where to write*/
 #define cairo_data_renderer_format_value_full(pRenderer, fValue, i, cBuffer) do {\
 	if (pRenderer->format_value != NULL)\
-		(pRenderer)->format_value (cairo_data_renderer_get_current_value (pRenderer, i), cBuffer, CAIRO_DOCK_DATA_FORMAT_MAX_LEN);\
+		(pRenderer)->format_value (fValue, i, cBuffer, CAIRO_DOCK_DATA_FORMAT_MAX_LEN, (pRenderer)->pFormatData);\
 	else\
 		snprintf (cBuffer, CAIRO_DOCK_DATA_FORMAT_MAX_LEN, fValue < .0995 ? "%.1f" : (fValue < 1 ? " %.0f" : "%.0f"), fValue * 100.); } while (0)
 /**Write a value in a readable text format in the renderer text buffer.

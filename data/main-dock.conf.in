@@ -25,7 +25,7 @@ frame2 =
 x gap = 0
 #i-[-20;2000] Distance to the screen's edge :
 #{in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.}
-y gap = 25
+y gap = 0
 
 #b- Activate auto-hide ?
 #{The dock will automatically hide itself outside of the scren when the mouse leaves it and will show a callback zone instead. Place the mouse into this zone will make the dock re-appear.}

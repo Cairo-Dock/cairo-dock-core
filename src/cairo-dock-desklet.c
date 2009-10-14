@@ -1138,6 +1138,7 @@ static gboolean on_enter_desklet (GtkWidget* pWidget,
 		if (pDesklet->iSidGradationOnEnter == 0)
 		{
 			///pDesklet->iSidGradationOnEnter = g_timeout_add (50, (GSourceFunc) _cairo_dock_desklet_gradation, (gpointer) pDesklet);
+			gtk_widget_queue_draw (pWidget);
 		}
 		
 		if (g_bUseOpenGL/* && pDesklet->pRenderer && pDesklet->pRenderer->render_opengl != NULL*/)

@@ -58,6 +58,10 @@ typedef struct {
 	gdouble textX, textY;
 	gdouble textWidth, textHeight;
 	gdouble textColor[3];
+	// logo zone
+	gdouble logoX, logoY;
+	gdouble logoWidth, logoHeight;
+	gdouble logoAlpha;
 } GaugeIndicator;
 
 typedef struct {

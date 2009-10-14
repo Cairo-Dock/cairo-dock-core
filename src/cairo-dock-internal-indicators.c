@@ -110,7 +110,7 @@ static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicator
 		pPrevIndicators->bLinkIndicatorWithIcon != pIndicators->bLinkIndicatorWithIcon ||
 		pPrevIndicators->fIndicatorRatio != pIndicators->fIndicatorRatio)
 	{
-		cairo_dock_load_task_indicator (myTaskBar.bShowAppli && myTaskBar.bMixLauncherAppli ? pIndicators->cIndicatorImagePath : NULL, pCairoContext, fMaxScale, pIndicators->fIndicatorRatio);
+		cairo_dock_load_task_indicator (myTaskBar.bShowAppli && (myTaskBar.bMixLauncherAppli || myTaskBar.bDrawIndicatorOnAppli) ? pIndicators->cIndicatorImagePath : NULL, pCairoContext, fMaxScale, pIndicators->fIndicatorRatio);
 	}
 	
 	if (cairo_dock_strings_differ (pPrevIndicators->cActiveIndicatorImagePath, pIndicators->cActiveIndicatorImagePath) ||

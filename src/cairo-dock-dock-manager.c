@@ -244,7 +244,7 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 			{
 				cd_message ("on est dans le sous-dock, donc on ne le cache pas");
 				pDock->container.bInside = FALSE;
-				pDock->bAtTop = FALSE;
+				//pDock->bAtTop = FALSE;
 				return FALSE;
 			}
 			else if (icon->pSubDock->iSidLeaveDemand == 0)  // si on sort du dock sans passer par le sous-dock, par exemple en sortant par le bas.
@@ -346,7 +346,7 @@ void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
 		gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
 		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 		{
-			gchar *cCommand = g_strdup_printf ("cp %s/%s %s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
+			gchar *cCommand = g_strdup_printf ("cp '%s/%s' '%s'", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
 			int r = system (cCommand);
 			g_free (cCommand);
 		}

@@ -545,7 +545,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	pDock->iAvoidingMouseIconType = -1;
 	pDock->fAvoidingMouseMargin = 0;
 	pDock->container.bInside = FALSE;
-	pDock->bAtTop = FALSE;
+	//pDock->bAtTop = FALSE;
 	
 	if (pDock->bMenuVisible)
 		return ;
@@ -624,12 +624,12 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 }
 gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	if (pDock->bAtBottom && pDock->iRefCount == 0)  /// je l'avais mis en commentaire, mais c'est utile maintenant pour le input shape. A valider ...
+	/**if (pDock->bAtBottom && pDock->iRefCount == 0)  /// je l'avais mis en commentaire, mais c'est utile maintenant pour le input shape. A valider ...
 	{
 		pDock->iSidLeaveDemand = 0;
 		if (! (pDock->bAutoHide && ! pDock->bAutoHideInitialValue))  // sauf quick hide, car cela pose probleme lors d'un quick-hide avec souris sur icone de sous-dock.
 			return FALSE;
-	}
+	}*/
 	//g_print ("%s (bInside:%d; bAtBottom:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->bAtBottom, pDock->iRefCount);
 	if (pEvent != NULL && (pEvent->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && (pEvent->state & GDK_BUTTON1_MASK))
 	{
@@ -690,6 +690,159 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	return TRUE;
 }
 
+gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
+{
+	//g_print ("%s (bIsMainDock : %d; bAtTop:%d; bInside:%d; iSidMoveDown:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->bAtTop, pDock->container.bInside, pDock->iSidMoveDown, pDock->iMagnitudeIndex);
+	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
+	if (! cairo_dock_entrance_is_allowed (pDock))
+	{
+		cd_message ("* entree non autorisee");
+		return FALSE;
+	}
+	
+	// stop les timers.
+	if (pDock->iSidLeaveDemand != 0)
+	{
+		g_source_remove (pDock->iSidLeaveDemand);
+		pDock->iSidLeaveDemand = 0;
+	}
+	if (s_iSidShowSubDockDemand != 0)  // gere un cas tordu mais bien reel.
+	{
+		g_source_remove (s_iSidShowSubDockDemand);
+		s_iSidShowSubDockDemand = 0;
+	}
+	
+	// si on etait deja dedans, ou qu'on etait cense l'etre, on relance juste le grossissement.
+	if (/*pDock->bAtTop || */pDock->container.bInside || pDock->iSidMoveDown != 0)  // le 'iSidMoveDown != 0' est la pour empecher le dock de "vibrer" si l'utilisateur sort par en bas avec l'auto-hide active.
+	{
+		pDock->container.bInside = TRUE;
+		if (pDock->iSidMoveDown != 0)  // si on est en train de descendre, on arrete.
+		{
+			//g_print ("  on est en train de descendre, on arrete\n");
+			g_source_remove (pDock->iSidMoveDown);
+			pDock->iSidMoveDown = 0;
+		}
+		cairo_dock_start_growing (pDock);
+		if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->iSidMoveUp == 0)  // on (re)monte.
+		{
+			g_print ("  on commence a monter en force\n");
+			pDock->iSidMoveUp = g_timeout_add (40, (GSourceFunc) cairo_dock_move_up, (gpointer) pDock);
+		}
+		return FALSE;
+	}
+	
+	pDock->container.bInside = TRUE;
+	
+	// animation d'entree.
+	gboolean bStartAnimation = FALSE;
+	cairo_dock_notify (CAIRO_DOCK_ENTER_DOCK, pDock, &bStartAnimation);
+	if (bStartAnimation)
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
+	
+	pDock->fDecorationsOffsetX = 0;
+	cairo_dock_stop_quick_hide ();
+	
+	if (s_pIconClicked != NULL)  // on pourrait le faire a chaque motion aussi.
+	{
+		pDock->iAvoidingMouseIconType = s_pIconClicked->iType;
+		pDock->fAvoidingMouseMargin = .5;  /// inutile il me semble ...
+	}
+	
+	// si on rentre avec une icone volante, on la met dedans.
+	if (s_pFlyingContainer != NULL)
+	{
+		Icon *pFlyingIcon = s_pFlyingContainer->pIcon;
+		if (pDock != pFlyingIcon->pSubDock)  // on evite les boucles.
+		{
+			cd_message ("on remet l'icone volante dans un dock (dock d'origine : %s)", pFlyingIcon->cParentDockName);
+			cairo_dock_free_flying_container (s_pFlyingContainer);
+			cairo_dock_stop_icon_animation (pFlyingIcon);
+			cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
+			cairo_dock_start_icon_animation (pFlyingIcon, pDock);
+			s_pFlyingContainer = NULL;
+		}
+	}
+	
+	// si l'auto-hide est active, on se redimensionne en taille normale.
+	if ((pDock->bAutoHide || pDock->container.iHeight != pDock->iMaxDockHeight) && pDock->iRefCount == 0 && pDock->bAtBottom)  // on sort de l'etat auto-hide.
+	{
+		int iNewWidth, iNewHeight;
+		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
+		if ((pDock->bAutoHide && pDock->iRefCount == 0) && pDock->bAtBottom)
+			pDock->container.iWindowPositionY = (pDock->container.bDirectionUp ? g_iXScreenHeight[pDock->container.bIsHorizontal] - myAccessibility.iVisibleZoneHeight - pDock->iGapY : myAccessibility.iVisibleZoneHeight + pDock->iGapY - pDock->iMaxDockHeight);
+		
+		if (pDock->container.iWidth != iNewWidth || pDock->container.iHeight != iNewHeight)
+		{
+			if (pDock->container.bIsHorizontal)
+				gdk_window_move_resize (pWidget->window,
+					pDock->container.iWindowPositionX,
+					pDock->container.iWindowPositionY,
+					iNewWidth,
+					iNewHeight);
+			else
+				gdk_window_move_resize (pWidget->window,
+					pDock->container.iWindowPositionY,
+					pDock->container.iWindowPositionX,
+					iNewHeight,
+					iNewWidth);
+		}
+	}
+	
+	// input shape desactivee, le dock devient actif.
+	if (pDock->pShapeBitmap && !pDock->bActive)
+	{
+		gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+			NULL,
+			0,
+			0);
+		pDock->bActive = TRUE;
+	}
+	
+	// on repasse au premier plan.
+	if (myAccessibility.bPopUp && pDock->iRefCount == 0)
+	{
+		cairo_dock_pop_up (pDock);
+		//If the dock window is entered, and there is a pending drop below event then it should be cancelled
+		if (pDock->iSidPopDown != 0)
+		{
+			g_source_remove(pDock->iSidPopDown);
+			pDock->iSidPopDown = 0;
+		}
+	}
+	
+	// si on etait en auto-hide, on commence a monter.
+	if (pDock->bAutoHide && pDock->iRefCount == 0)
+	{
+		//g_print ("  on commence a monter\n");
+		if (pDock->iSidMoveUp == 0)  // on commence a monter.
+			pDock->iSidMoveUp = g_timeout_add (40, (GSourceFunc) cairo_dock_move_up, (gpointer) pDock);
+	}
+	else
+	{
+		//if (pDock->iRefCount > 0)
+		//	pDock->bAtTop = TRUE;
+		pDock->bAtBottom = FALSE;
+	}
+	
+	// cas special.
+	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
+	if (icon != NULL)
+	{
+		//g_print (">>> we've just entered the dock, pointed icon becomes NULL\n");
+		//if (s_pIconClicked != NULL)
+		//	g_print (">>> on est rentre par un clic ! (KDE:%d)\n", g_iDesktopEnv == CAIRO_DOCK_KDE);
+		if (_mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
+			icon->bPointed = FALSE;  // sinon on ne detecte pas l'arrive sur l'icone, c'est genant si elle a un sous-dock.
+		//else
+		//	g_print (">>> we already are inside the dock, why does this stupid WM make us enter one more time ???\n");
+	}
+	
+	// on lance le grossissement.
+	cairo_dock_start_growing (pDock);
+	
+	return TRUE;
+}
+
 /// This function checks for the mouse cursor's position. If the mouse
 /// cursor touches the edge of the screen upon which the dock is resting,
 /// then the dock will pop up over other windows...
@@ -738,162 +891,6 @@ gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey fo
 	
 	return myAccessibility.bPopUp;
 }
-
-gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
-{
-	//g_print ("%s (bIsMainDock : %d; bAtTop:%d; bInside:%d; iSidMoveDown:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->bAtTop, pDock->container.bInside, pDock->iSidMoveDown, pDock->iMagnitudeIndex);
-	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
-	if (! cairo_dock_entrance_is_allowed (pDock))
-	{
-		cd_message ("* entree non autorisee");
-		return FALSE;
-	}
-
-	if (pDock->iSidLeaveDemand != 0)
-	{
-		g_source_remove (pDock->iSidLeaveDemand);
-		pDock->iSidLeaveDemand = 0;
-	}
-	
-	if (s_iSidShowSubDockDemand != 0)  // gere un cas tordu mais bien reel.
-	{
-		g_source_remove (s_iSidShowSubDockDemand);
-		s_iSidShowSubDockDemand = 0;
-	}
-	
-	if (pDock->iSidMoveDown == 0)
-	{
-		gboolean bStartAnimation = FALSE;
-		cairo_dock_notify (CAIRO_DOCK_ENTER_DOCK, pDock, &bStartAnimation);
-		if (bStartAnimation)
-			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
-	}
-	
-	if (pDock->bAtTop || pDock->container.bInside || (pDock->iSidMoveDown != 0))  // le 'iSidMoveDown != 0' est la pour empecher le dock de "vibrer" si l'utilisateur sort par en bas avec l'auto-hide active.
-	{
-		//g_print ("  %d;%d;%d\n", pDock->bAtTop,  pDock->container.bInside, pDock->iSidMoveDown);
-		pDock->container.bInside = TRUE;  /// ajoute pour les plug-ins opengl.
-		cairo_dock_start_growing (pDock);
-		if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->iSidMoveUp == 0)
-		{
-			g_print ("  on commence a monter en force\n");
-			pDock->iSidMoveUp = g_timeout_add (40, (GSourceFunc) cairo_dock_move_up, (gpointer) pDock);
-		}
-		return FALSE;
-	}
-	//g_print ("%s (main dock : %d ; %d)\n", __func__, pDock->bIsMainDock, pDock->container.bIsHorizontal);
-
-	pDock->fDecorationsOffsetX = 0;
-	if (pDock->iRefCount != 0)
-	{
-		///gtk_window_present (GTK_WINDOW (pWidget));  /// utile ???
-	}
-	pDock->container.bInside = TRUE;
-	
-	cairo_dock_stop_quick_hide ();
-	
-	if (s_pIconClicked != NULL)  // on pourrait le faire a chaque motion aussi.
-	{
-		pDock->iAvoidingMouseIconType = s_pIconClicked->iType;
-		pDock->fAvoidingMouseMargin = .5;  /// inutile il me semble ...
-	}
-	
-	if (s_pFlyingContainer != NULL)
-	{
-		Icon *pFlyingIcon = s_pFlyingContainer->pIcon;
-		if (pDock != pFlyingIcon->pSubDock)  // on evite les boucles.
-		{
-			cd_message ("on remet l'icone volante dans un dock (dock d'origine : %s)", pFlyingIcon->cParentDockName);
-			cairo_dock_free_flying_container (s_pFlyingContainer);
-			cairo_dock_stop_icon_animation (pFlyingIcon);
-			cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
-			cairo_dock_start_icon_animation (pFlyingIcon, pDock);
-			s_pFlyingContainer = NULL;
-		}
-	}
-	
-	g_print ("*** %d;%d;%d\n", pDock->bAutoHide, pDock->iRefCount, pDock->bAtBottom);
-	if ((pDock->bAutoHide || pDock->container.iHeight != pDock->iMaxDockHeight) && pDock->iRefCount == 0 && pDock->bAtBottom)  // on sort de l'etat auto-hide.
-	{
-		int iNewWidth, iNewHeight;
-		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
-		if ((pDock->bAutoHide && pDock->iRefCount == 0) && pDock->bAtBottom)
-			pDock->container.iWindowPositionY = (pDock->container.bDirectionUp ? g_iXScreenHeight[pDock->container.bIsHorizontal] - myAccessibility.iVisibleZoneHeight - pDock->iGapY : myAccessibility.iVisibleZoneHeight + pDock->iGapY - pDock->iMaxDockHeight);
-		
-		if (pDock->container.iWidth != iNewWidth || pDock->container.iHeight != iNewHeight)
-		{
-			if (pDock->container.bIsHorizontal)
-				gdk_window_move_resize (pWidget->window,
-					pDock->container.iWindowPositionX,
-					pDock->container.iWindowPositionY,
-					iNewWidth,
-					iNewHeight);
-			else
-				gdk_window_move_resize (pWidget->window,
-					pDock->container.iWindowPositionY,
-					pDock->container.iWindowPositionX,
-					iNewHeight,
-					iNewWidth);
-		}
-	}
-	if (pDock->pShapeBitmap && !pDock->bActive)
-	{
-		gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-			NULL,
-			0,
-			0);
-		pDock->bActive = TRUE;
-	}
-	
-	if (pDock->iSidMoveDown > 0)  // si on est en train de descendre, on arrete.
-	{
-		//g_print ("  on est en train de descendre, on arrete\n");
-		g_source_remove (pDock->iSidMoveDown);
-		pDock->iSidMoveDown = 0;
-	}
-	
-	if (myAccessibility.bPopUp && pDock->iRefCount == 0)
-	{
-		//This code will trigger a pop up
-		cairo_dock_pop_up (pDock);
-		//If the dock window is entered, and there is a pending drop below event then it should be cancelled
-		if (pDock->iSidPopDown != 0)
-		{
-			g_source_remove(pDock->iSidPopDown);
-			pDock->iSidPopDown = 0;
-		}
-	}
-	
-	if (pDock->bAutoHide && pDock->iRefCount == 0)
-	{
-		//g_print ("  on commence a monter\n");
-		if (pDock->iSidMoveUp == 0)  // on commence a monter.
-			pDock->iSidMoveUp = g_timeout_add (40, (GSourceFunc) cairo_dock_move_up, (gpointer) pDock);
-	}
-	else
-	{
-		if (pDock->iRefCount > 0)
-			pDock->bAtTop = TRUE;
-		pDock->bAtBottom = FALSE;
-	}
-	
-	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
-	if (icon != NULL)
-	{
-		//g_print (">>> we've just entered the dock, pointed icon becomes NULL\n");
-		//if (s_pIconClicked != NULL)
-		//	g_print (">>> on est rentre par un clic ! (KDE:%d)\n", g_iDesktopEnv == CAIRO_DOCK_KDE);
-		if (_mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
-			icon->bPointed = FALSE;  // sinon on ne detecte pas l'arrive sur l'icone, c'est genant si elle a un sous-dock.
-		//else
-		//	g_print (">>> we already are inside the dock, why does this stupid WM make us enter one more time ???\n");
-	}
-	
-	cairo_dock_start_growing (pDock);
-	
-	return TRUE;
-}
-
 
 gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	GdkEventKey *pKey,

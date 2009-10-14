@@ -442,14 +442,31 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 	Icon *pIcon = g_object_get_data (G_OBJECT (pMenuItem), "launcher");
 	
 	gchar *cValidDockName;
-	if (cDockName == NULL)  // new dock
+	if (cDockName == NULL)  // nouveau dock
 	{
 		cValidDockName = cairo_dock_get_unique_dock_name ("dock");
+		
+		// on cree le fichier de conf des maintenant pour pouvoir placer le nouveau dock a l'oppose du main dock.
+		gchar *cCommand = g_strdup_printf ("cp '%s/%s' '%s/%s.conf'", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, g_cCurrentThemePath, cValidDockName);
+		int r = system (cCommand);
+		g_free (cCommand);
+		
+		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName);
+		cairo_dock_update_conf_file (cDesktopFilePath,
+			G_TYPE_INT,
+			"Position",
+			"screen border",
+			(g_pMainDock->container.bIsHorizontal ?
+				(g_pMainDock->container.bDirectionUp ? 1 : 0) :
+				(g_pMainDock->container.bDirectionUp ? 3 : 2)),
+			G_TYPE_INVALID);
+		g_free (cDesktopFilePath);
 	}
 	else
 	{
 		cValidDockName = g_strdup (cDockName);
 	}
+	
 	if (CAIRO_DOCK_IS_STORED_LAUNCHER (pIcon))
 	{
 		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName);

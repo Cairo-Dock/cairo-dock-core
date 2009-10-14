@@ -44,6 +44,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-gui-manager.h"
@@ -59,7 +60,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 	g_return_val_if_fail (cFileName != NULL, NULL);
 	GString *sIconPath = g_string_new ("");
 	const gchar *cSuffixTab[4] = {".svg", ".png", ".xpm", NULL};
-	gboolean bAddSuffix, bFileFound;
+	gboolean bAddSuffix, bFileFound, bHasVersion;
 	GtkIconInfo* pIconInfo = NULL;
 	int i, j;
 
@@ -84,8 +85,9 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 			bAddSuffix = TRUE;*/
 		gchar *str = strrchr (cFileName, '.');
 		bAddSuffix = (str == NULL || ! g_ascii_isalpha (*(str+1)));
-
-		//\_______________________ On parcourt les repertoires disponibles, en testant tous les suffixes connus.
+		bHasVersion = (str != NULL && g_ascii_isdigit (*(str+1)) && g_ascii_isdigit (*(str-1)));
+		
+		//\_______________________ On parcourt les themes disponibles, en testant tous les suffixes connus.
 		i = 0;
 		bFileFound = FALSE;
 		if (myIcons.pDefaultIconDirectory != NULL)
@@ -134,7 +136,32 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 				i ++;
 			}
 		}
-
+		
+		//\_______________________ si rien trouve, on cherche sans le numero de version.
+		if (! bFileFound && bHasVersion)
+		{
+			cd_debug ("on cherche sans le numero de version...");
+			g_string_assign (sIconPath, cFileName);
+			gchar *str = strrchr (sIconPath->str, '.');
+			str --;  // on sait que c'est un digit.
+			str --;
+			while ((g_ascii_isdigit (*str) || *str == '.' || *str == '-') && (str != sIconPath->str))
+				str --;
+			if (str != sIconPath->str)
+			{
+				*(str+1) = '\0';
+				cd_debug (" on cherche '%s'...\n", sIconPath->str);
+				gchar *cPath = cairo_dock_search_icon_s_path (sIconPath->str);
+				if (cPath != NULL)
+				{
+					bFileFound = TRUE;
+					g_string_assign (sIconPath, cPath);
+					g_free (cPath);
+				}
+			}
+		}
+		
+		//\_______________________ si rien trouve, on cherche dans le theme par defaut.
 		if (! bFileFound)
 		{
 			g_string_assign (sIconPath, cFileName);
@@ -424,7 +451,7 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName, 
 	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pParentDock);
 	
 	cd_message ("+ %s/%s", icon->cName, icon->cClass);
-	if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon) && icon->cClass != NULL)
+	if (myTaskBar.bMixLauncherAppli && CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon) && icon->cClass != NULL)
 		cairo_dock_inhibate_class (icon->cClass, icon);
 	
 	return icon;
@@ -597,7 +624,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 		cClass = NULL;  // libere par la fonction precedente.
 		icon->cClass = cNowClass;
 	}
-	if (cNowClass != NULL && (cClass == NULL || strcmp (cNowClass, cClass) != 0))
+	if (myTaskBar.bMixLauncherAppli && cNowClass != NULL && (cClass == NULL || strcmp (cNowClass, cClass) != 0))
 		cairo_dock_inhibate_class (cNowClass, icon);
 
 	//\_____________ On redessine les docks impactes.

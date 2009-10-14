@@ -74,7 +74,7 @@ gboolean cairo_dock_move_up (CairoDock *pDock)
 	}
 	else
 	{
-		pDock->bAtTop = TRUE;
+		//pDock->bAtTop = TRUE;
 		pDock->iSidMoveUp = 0;
 		return FALSE;
 	}
@@ -95,7 +95,7 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 			gtk_window_move (GTK_WINDOW (pDock->container.pWidget), pDock->container.iWindowPositionX, pDock->container.iWindowPositionY);
 		else
 			gtk_window_move (GTK_WINDOW (pDock->container.pWidget), pDock->container.iWindowPositionY, pDock->container.iWindowPositionX);
-		pDock->bAtTop = FALSE;
+		//pDock->bAtTop = FALSE;
 		gtk_widget_queue_draw (pDock->container.pWidget);
 		return TRUE;
 	}

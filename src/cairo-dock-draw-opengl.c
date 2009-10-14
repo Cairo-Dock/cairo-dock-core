@@ -593,7 +593,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		
 		if (! pDock->container.bIsHorizontal && mySystem.bTextAlwaysHorizontal)
 		{
-			glTranslatef (floor (-icon->fHeight * icon->fScale/2 - (pDock->container.bDirectionUp ? myLabels.iLabelSize : (pDock->container.bUseReflect ? myIcons.fReflectSize : 0.)) + icon->iTextWidth / 2 - myLabels.iconTextDescription.iMargin + 1)+.5,
+			glTranslatef (ceil (-icon->fHeight * icon->fScale/2 - (pDock->container.bDirectionUp ? myLabels.iLabelSize : (pDock->container.bUseReflect ? myIcons.fReflectSize : 0.)) + icon->iTextWidth / 2 - myLabels.iconTextDescription.iMargin + 1)+.5,
 				floor ((icon->fWidth * icon->fScale + icon->iTextHeight) / 2)+.5,
 				0.);
 		}
@@ -1995,6 +1995,7 @@ CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, i
 	int i;
 	for (i = 0; i < count; i ++)
 		cPool[i] = first + i;
+	g_print ("%s (%s)\n", __func__, cPool);
 	
 	int iWidth, iHeight;
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (g_pMainDock));

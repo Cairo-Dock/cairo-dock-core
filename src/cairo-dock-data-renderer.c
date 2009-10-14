@@ -42,7 +42,7 @@ extern CairoDock *g_pMainDock;
 
 static CairoDockGLFont *s_pFont = NULL;
 
-#define _init_data_renderer_font(...) s_pFont = cairo_dock_load_textured_font ("Monospace Bold 12", ',', '9' - ',' + 1)  // les 10 chiffres + les 2 virgules + l'espace.
+#define _init_data_renderer_font(...) s_pFont = cairo_dock_load_textured_font ("Monospace Bold 16", 35, 125-35+1)
 
 CairoDockGLFont *cairo_dock_get_default_data_renderer_font (void)
 {
@@ -121,10 +121,12 @@ void cairo_dock_init_data_renderer (CairoDataRenderer *pRenderer, cairo_t *pSour
 	pRenderer->bUpdateMinMax = pAttribute->bUpdateMinMax;
 	pRenderer->bWriteValues = pAttribute->bWriteValues;
 	pRenderer->iLatencyTime = pAttribute->iLatencyTime;
-	pRenderer->cTitles = pAttribute->cTitles;
-	memcpy (pRenderer->fTextColor, pAttribute->fTextColor, sizeof (pRenderer->fTextColor));
 	pRenderer->iSmoothAnimationStep = 0;
 	pRenderer->format_value = pAttribute->format_value;
+	pRenderer->pFormatData = pAttribute->pFormatData;
+	pRenderer->cTitles = pAttribute->cTitles;
+	memcpy (pRenderer->fTextColor, pAttribute->fTextColor, sizeof (pRenderer->fTextColor));
+	pRenderer->cEmblems = pAttribute->cEmblems;
 }
 
 static void _cairo_dock_render_to_texture (CairoDataRenderer *pDataRenderer, Icon *pIcon, CairoContainer *pContainer)
