@@ -11,3 +11,8 @@ do
 	msgmerge ${lang}.po cairo-dock.pot -o ${lang}.po
 	sed -i "/POT-Creation-Date/d" ${lang}.po
 done;
+
+# For lp translation tool
+if test -e 'en.po' -a -e 'en_GB.po'; then
+	cp en.po en_GB.po
+fi
