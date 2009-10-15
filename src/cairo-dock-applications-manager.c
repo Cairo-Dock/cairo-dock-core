@@ -387,6 +387,9 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						if (CAIRO_DOCK_IS_APPLI (icon))
 						{
 							cd_message ("%s devient active", icon->cName);
+							if (icon->bIsDemandingAttention)  // on force ici, car il semble qu'on ne recoive pas toujours le retour a la normale.
+								cairo_dock_appli_stops_demanding_attention (icon);
+							
 							pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 							if (pParentDock == NULL)  // elle est inhibee.
 							{
@@ -396,8 +399,6 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 							{
 								cairo_dock_animate_icon_on_active (icon, pParentDock);
 							}
-							if (icon->bIsDemandingAttention)  // on force ici, car il semble qu'on ne recoive pas toujours le retour a la normale.
-								cairo_dock_appli_stops_demanding_attention (icon);
 						}
 						
 						gboolean bHackMe = FALSE;

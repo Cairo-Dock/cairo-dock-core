@@ -361,7 +361,10 @@ typedef struct _CairoDataRendererAttribute CairoDataRendererAttribute;
 typedef struct _CairoDataRendererInterface CairoDataRendererInterface;
 typedef struct _CairoDataToRenderer CairoDataToRenderer;
 
+typedef struct _CairoDockAnimationRecord CairoDockAnimationRecord;
+
 typedef struct _CairoDockTransition CairoDockTransition;
+
 typedef struct _CairoDockTask CairoDockTask;
 
 typedef struct _CairoDockTheme CairoDockTheme;

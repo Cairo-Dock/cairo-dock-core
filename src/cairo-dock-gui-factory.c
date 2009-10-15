@@ -36,6 +36,7 @@
 #include "cairo-dock-gauge.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
+#include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-gui-factory.h"
 
 #define CAIRO_DOCK_GUI_MARGIN 4
@@ -606,14 +607,13 @@ void cairo_dock_build_desklet_decorations_list_for_applet_gui (GHashTable *pHash
 {
 	_build_list_for_gui (s_pDecorationsListStore2, "default", pHashTable, _cairo_dock_add_one_decoration_item);
 }
-static void _cairo_dock_add_one_animation_item (const gchar *cName, gpointer data, GtkListStore *pModele)
+static void _cairo_dock_add_one_animation_item (const gchar *cName, CairoDockAnimationRecord *pRecord, GtkListStore *pModele)
 {
-	gint iAnimationID = GPOINTER_TO_INT (data);
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
 	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
-		CAIRO_DOCK_MODEL_NAME, (cName != NULL && *cName != '\0' ? gettext (cName) : cName),
+		CAIRO_DOCK_MODEL_NAME, (pRecord && pRecord->cDisplayedName != NULL && *pRecord->cDisplayedName != '\0' ? pRecord->cDisplayedName : cName),
 		CAIRO_DOCK_MODEL_RESULT, cName,
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
 		CAIRO_DOCK_MODEL_IMAGE, "none", -1);

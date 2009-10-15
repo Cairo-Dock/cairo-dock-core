@@ -30,6 +30,10 @@
 #include "cairo-dock-data-renderer.h"
 G_BEGIN_DECLS
 
+struct _CairoDockAnimationRecord {
+	gint id;
+	gchar *cDisplayedName;
+	};
 
 CairoDockRenderer *cairo_dock_get_renderer (const gchar *cRendererName, gboolean bForMainDock);
 void cairo_dock_register_renderer (const gchar *cRendererName, CairoDockRenderer *pRenderer);
@@ -83,8 +87,10 @@ void cairo_dock_update_animations_list_for_gui (void);
 void cairo_dock_update_dialog_decorator_list_for_gui (void);
 
 
-int cairo_dock_register_animation (const gchar *cAnimation);
+int cairo_dock_register_animation (const gchar *cAnimation, const gchar *cDisplayedName);
+void cairo_dock_free_animation_record (CairoDockAnimationRecord *pRecord);
 int cairo_dock_get_animation_id (const gchar *cAnimation);
+const gchar *cairo_dock_get_animation_displayed_name (const gchar *cAnimation);
 void cairo_dock_unregister_animation (const gchar *cAnimation);
 
 

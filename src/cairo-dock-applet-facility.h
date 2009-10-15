@@ -346,7 +346,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 /** Create and add an entry to a menu for the 'about' function.
 *@param pMenu menu to add the entry to.
 */
-#define CD_APPLET_ADD_ABOUT_IN_MENU(pMenu) CD_APPLET_ADD_IN_MENU_WITH_STOCK (_("About this applet"), GTK_STOCK_ABOUT, cairo_dock_pop_up_about_applet, pMenu)
+#define CD_APPLET_ADD_ABOUT_IN_MENU(pMenu) CD_APPLET_ADD_IN_MENU_WITH_STOCK (_("Applet's handbook"), GTK_STOCK_ABOUT, cairo_dock_pop_up_about_applet, pMenu)
 
 
   /////////////////////////

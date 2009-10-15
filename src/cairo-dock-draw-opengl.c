@@ -1933,14 +1933,14 @@ GLuint cairo_dock_create_texture_from_text_simple (const gchar *cText, const gch
 	PangoRectangle ink, log;
 	pango_layout_get_pixel_extents (pLayout, &ink, &log);
 	cairo_surface_t* pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
-		ink.width,
-		ink.height);
-	*iWidth = ink.width;
-	*iHeight = ink.height;
+		log.width,
+		log.height);
+	*iWidth = log.width;
+	*iHeight = log.height;
 	
 	//\_________________ On dessine le texte.
 	cairo_t* pCairoContext = cairo_create (pNewSurface);
-	cairo_translate (pCairoContext, -ink.x, -ink.y);
+	cairo_translate (pCairoContext, -log.x, -log.y);
 	cairo_set_source_rgb (pCairoContext, 1., 1., 1.);
 	cairo_move_to (pCairoContext, 0, 0);
 	pango_cairo_show_layout (pCairoContext, pLayout);
@@ -2009,9 +2009,10 @@ CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, i
 	pFont->iCharBase = first;
 	pFont->iNbRows = 1;
 	pFont->iNbColumns = count;
-	pFont->iCharWidth = iWidth / count;
+	pFont->iCharWidth = (double)iWidth / count;
 	pFont->iCharHeight = iHeight;
 	
+	g_print ("%d char / %d pixels => %.3f\n", count, iWidth, (double)iWidth / count);
 	return pFont;
 }
 

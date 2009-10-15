@@ -116,7 +116,7 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gch
 *@param pIcon the icon.
 */
 #define cairo_dock_stop_icon_animation(pIcon) do { \
-	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT) {\
+	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && pIcon->iAnimationState != CAIRO_DOCK_STATE_REST) {\
 		cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon); \
 		pIcon->iAnimationState = CAIRO_DOCK_STATE_REST; } } while (0)
 

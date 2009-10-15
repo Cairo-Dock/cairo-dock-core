@@ -217,7 +217,7 @@ void cairo_dock_initialize_renderer_manager (void)
 	s_hAnimationsTable = g_hash_table_new_full (g_str_hash,
 		g_str_equal,
 		g_free,
-		NULL);
+		(GFreeFunc) cairo_dock_free_animation_record);
 	
 	s_hDialogDecoratorTable = g_hash_table_new_full (g_str_hash,
 		g_str_equal,
@@ -429,18 +429,34 @@ void cairo_dock_update_dialog_decorator_list_for_gui (void)
 
 
 static int iNbAnimation = 0;
-int cairo_dock_register_animation (const gchar *cAnimation)
+int cairo_dock_register_animation (const gchar *cAnimation, const gchar *cDisplayedName)
 {
 	cd_message ("%s (%s)", __func__, cAnimation);
 	iNbAnimation ++;
-	g_hash_table_insert (s_hAnimationsTable, g_strdup (cAnimation), GINT_TO_POINTER (iNbAnimation));
+	CairoDockAnimationRecord *pRecord = g_new (CairoDockAnimationRecord, 1);
+	pRecord->id = iNbAnimation;
+	pRecord->cDisplayedName = cDisplayedName;
+	g_hash_table_insert (s_hAnimationsTable, g_strdup (cAnimation), pRecord);
 	return iNbAnimation;
+}
+
+void cairo_dock_free_animation_record (CairoDockAnimationRecord *pRecord)
+{
+	g_free (pRecord);
 }
 
 int cairo_dock_get_animation_id (const gchar *cAnimation)
 {
 	g_return_val_if_fail (cAnimation != NULL, 0);
-	return GPOINTER_TO_INT (g_hash_table_lookup (s_hAnimationsTable, cAnimation));
+	CairoDockAnimationRecord *pRecord = g_hash_table_lookup (s_hAnimationsTable, cAnimation);
+	return (pRecord ? pRecord->id : 0);
+}
+
+const gchar *cairo_dock_get_animation_displayed_name (const gchar *cAnimation)
+{
+	g_return_val_if_fail (cAnimation != NULL, NULL);
+	CairoDockAnimationRecord *pRecord = g_hash_table_lookup (s_hAnimationsTable, cAnimation);
+	return (pRecord ? pRecord->cDisplayedName : NULL);
 }
 
 void cairo_dock_unregister_animation (const gchar *cAnimation)

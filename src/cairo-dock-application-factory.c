@@ -723,7 +723,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 }
 void cairo_dock_appli_demands_attention (Icon *icon)
 {
-	g_print ("%s (%s / %s , %d)\n", __func__, icon->cName, icon->cLastAttentionDemand, icon->bIsDemandingAttention);
+	cd_message ("%s (%s / %s , %d)", __func__, icon->cName, icon->cLastAttentionDemand, icon->bIsDemandingAttention);
 	if (icon->bIsDemandingAttention &&
 		/*cairo_dock_icon_has_dialog (icon) &&*/
 		icon->cLastAttentionDemand && icon->cName && strcmp (icon->cLastAttentionDemand, icon->cName) == 0)  // le message n'a pas change entre les 2 demandes.
@@ -761,7 +761,11 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 	icon->bIsDemandingAttention = FALSE;
 	if (myTaskBar.bDemandsAttentionWithDialog)
 		cairo_dock_remove_dialog_if_any (icon);
-	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);  // arrete son animation quelqu'elle soit.
+	if (myTaskBar.cAnimationOnDemandsAttention)
+	{
+		cairo_dock_stop_icon_animation (icon);  // arrete l'animation precedemment lancee par la demande.
+		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));  // optimisation possible : ne redessiner que l'icone en tenant compte de la zone de sa derniere animation (pulse ou rebond).
+	}
 	if (! pDock->container.bInside)
 	{
 		g_print ("pop down the dock\n");

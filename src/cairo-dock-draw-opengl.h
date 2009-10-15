@@ -283,8 +283,8 @@ struct _CairoDockGLFont {
 	gint iNbColumns;
 	gint iCharBase;
 	gint iNbChars;
-	gint iCharWidth;
-	gint iCharHeight;
+	gdouble iCharWidth;
+	gdouble iCharHeight;
 };
 
 CairoDockGLFont *cairo_dock_load_bitmap_font (const gchar *cFontDescription, int first, int count);

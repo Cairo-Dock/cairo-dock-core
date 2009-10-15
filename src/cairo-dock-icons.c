@@ -79,7 +79,7 @@ void cairo_dock_free_icon (Icon *icon)
 		cairo_dock_deinhibate_class (icon->cClass, icon);
 	if (icon->pModuleInstance != NULL)
 		cairo_dock_deinstanciate_module (icon->pModuleInstance);
-	cairo_dock_stop_icon_animation (icon);
+	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);
 	
 	cairo_dock_free_notification_table (icon->pNotificationsTab);
 	cairo_dock_free_icon_buffers (icon);

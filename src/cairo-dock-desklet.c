@@ -1135,11 +1135,11 @@ static gboolean on_enter_desklet (GtkWidget* pWidget,
 	if (! pDesklet->container.bInside)  // avant on etait dehors, on redessine donc.
 	{
 		pDesklet->container.bInside = TRUE;
-		if (pDesklet->iSidGradationOnEnter == 0)
+		/**if (pDesklet->iSidGradationOnEnter == 0)
 		{
-			///pDesklet->iSidGradationOnEnter = g_timeout_add (50, (GSourceFunc) _cairo_dock_desklet_gradation, (gpointer) pDesklet);
-			gtk_widget_queue_draw (pWidget);
-		}
+			pDesklet->iSidGradationOnEnter = g_timeout_add (50, (GSourceFunc) _cairo_dock_desklet_gradation, (gpointer) pDesklet);
+		}*/
+		gtk_widget_queue_draw (pWidget);  // redessin des boutons.
 		
 		if (g_bUseOpenGL/* && pDesklet->pRenderer && pDesklet->pRenderer->render_opengl != NULL*/)
 		{
@@ -1164,10 +1164,11 @@ static gboolean on_leave_desklet (GtkWidget* pWidget,
 	}
 
 	pDesklet->container.bInside = FALSE;
-	if (pDesklet->iSidGradationOnEnter == 0)
+	/**if (pDesklet->iSidGradationOnEnter == 0)
 	{
-		///pDesklet->iSidGradationOnEnter = g_timeout_add (50, (GSourceFunc) _cairo_dock_desklet_gradation, (gpointer) pDesklet);
-	}
+		pDesklet->iSidGradationOnEnter = g_timeout_add (50, (GSourceFunc) _cairo_dock_desklet_gradation, (gpointer) pDesklet);
+	}*/
+	gtk_widget_queue_draw (pWidget);  // redessin des boutons.
 	
 	gboolean bStartAnimation = FALSE;
 	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_LEAVE_DESKLET, pDesklet, &bStartAnimation);
@@ -1448,7 +1449,10 @@ void cairo_dock_steal_interactive_widget_from_desklet (CairoDesklet *pDesklet)
 void cairo_dock_hide_desklet (CairoDesklet *pDesklet)
 {
 	if (pDesklet)
+	{
+		pDesklet->bAllowMinimize = TRUE;
 		gtk_widget_hide (pDesklet->container.pWidget);
+	}
 }
 
 void cairo_dock_show_desklet (CairoDesklet *pDesklet)

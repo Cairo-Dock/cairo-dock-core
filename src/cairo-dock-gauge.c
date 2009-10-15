@@ -35,7 +35,7 @@
 		<width>40</width>
 		<height>8</height>
 		<text_zone>
-			<x_left>-0,46</x_left>
+			<x_left>-0,48</x_left>
 			<y_bottom>-0,56</y_bottom>
 			<width>0,16</width>
 			<height>0,10</height>
@@ -55,8 +55,8 @@
 		<width>30</width>
 		<height>8</height>
 		<text_zone>
-			<x_left>0,40</x_left>
-			<y_bottom>-0,08</y_bottom>
+			<x_left>0,38</x_left>
+			<y_bottom>-0,07</y_bottom>
 			<width>0,15</width>
 			<height>0,07</height>
 			<red>1.0</red>
