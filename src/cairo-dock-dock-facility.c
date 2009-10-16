@@ -163,14 +163,15 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	cairo_dock_set_icons_geometry_for_window_manager (pDock);  // se fait sur le dock a plat, qu'on vient de calculer. Neanmoins ici ce sera probablement une approximation.
 	pDock->bWMIconseedsUptade = TRUE;
 	
-	if (! pDock->container.bInside && pDock->bAutoHide && pDock->iRefCount == 0)
+	if (! pDock->container.bInside && pDock->bAtBottom && pDock->bAutoHide && pDock->iRefCount == 0)
 	{
+		cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MIN_SIZE);
 		return;
 	}
 	if (GTK_WIDGET_VISIBLE (pDock->container.pWidget))
 	{
-		//g_print ("%s (%d;%d => %s size)\n", __func__, pDock->container.bInside, pDock->bIsShrinkingDown, pDock->container.bInside || pDock->bIsShrinkingDown ? "max" : "normal");
-		int iNewWidth, iNewHeight;
+		cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MAX_SIZE);
+		/*int iNewWidth, iNewHeight;
 		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
 		
 		if (pDock->container.bIsHorizontal)
@@ -190,7 +191,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 					pDock->container.iWindowPositionX,
 					iNewHeight,
 					iNewWidth);
-		}
+		}*/
 	}
 	
 	cairo_dock_update_background_decorations_if_necessary (pDock, pDock->iDecorationsWidth, pDock->iDecorationsHeight);
