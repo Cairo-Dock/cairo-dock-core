@@ -43,6 +43,13 @@
 			<green>1,0</green>
 			<blue>1,0</blue>
 		</text_zone>
+		<logo_zone>
+			<x_center>-0,32</x_center>
+			<y_center>0,00</y_center>
+			<width>0,10</width>
+			<height>0,10</height>
+			<alpha>1.0</alpha>
+		</logo_zone>
 	</indicator>
 	<indicator>
 		<posX>0,48</posX>
@@ -55,7 +62,7 @@
 		<width>30</width>
 		<height>8</height>
 		<text_zone>
-			<x_left>0,38</x_left>
+			<x_left>0,34</x_left>
 			<y_bottom>-0,07</y_bottom>
 			<width>0,15</width>
 			<height>0,07</height>
@@ -63,6 +70,13 @@
 			<green>1,0</green>
 			<blue>1,0</blue>
 		</text_zone>
+		<logo_zone>
+			<x_center>0,50</x_center>
+			<y_center>0,30</y_center>
+			<width>0,10</width>
+			<height>0,10</height>
+			<alpha>1.0</alpha>
+		</logo_zone>
 	</indicator>
 </gauge>
  * 
@@ -516,10 +530,11 @@ static void cairo_dock_draw_one_gauge (cairo_t *pSourceContext, Gauge *pGauge, i
 			
 			cairo_text_extents_t textExtents;
 			cairo_text_extents (pSourceContext, pRenderer->cFormatBuffer, &textExtents);
+			g_print ("%.2fx%.2f\n", textExtents.width, textExtents.height);
 			double fZoom = MIN (pIndicator->textWidth * pRenderer->iWidth / textExtents.width, pIndicator->textHeight * pRenderer->iHeight / textExtents.height);
 			cairo_move_to (pSourceContext,
-				(1. + pIndicator->textX) * pRenderer->iWidth/2,
-				(1. - pIndicator->textY) * pRenderer->iHeight/2 + textExtents.height);
+				floor ((1. + pIndicator->textX) * pRenderer->iWidth/2),
+				floor ((1. - pIndicator->textY) * pRenderer->iHeight/2 - textExtents.height/fZoom));
 			cairo_scale (pSourceContext,
 				fZoom,
 				fZoom);
@@ -678,8 +693,8 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 			
 			cairo_dock_draw_gl_text_at_position_in_area (pRenderer->cFormatBuffer,
 				pFont,
-				pIndicator->textX * pRenderer->iWidth/2,
-				pIndicator->textY * pRenderer->iHeight/2,
+				floor (pIndicator->textX * pRenderer->iWidth/2),
+				floor (pIndicator->textY * pRenderer->iHeight/2),
 				pIndicator->textWidth * pRenderer->iWidth,
 				pIndicator->textHeight * pRenderer->iHeight);
 			

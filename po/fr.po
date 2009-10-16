@@ -730,7 +730,7 @@ msgstr "Maximiser"
 
 #: ../src/cairo-dock-menu.c:1602
 msgid "Show"
-msgstr "Afficher"
+msgstr "Montrer"
 
 #: ../src/cairo-dock-menu.c:1605
 msgid "Minimize"

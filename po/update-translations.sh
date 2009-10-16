@@ -28,8 +28,8 @@ export CAIRO_DOCK_GEN_TRANSLATION=${CAIRO_DOCK_DIR}/cairo-dock/cairo-dock-core/p
 ###
 ### update cairo-dock.po
 ###
+echo "extracing the messages of the dock ..."
 cd $CAIRO_DOCK_DIR/cairo-dock/cairo-dock-core
-echo "generating translation files for the dock ..."
 if test -x $CAIRO_DOCK_EXTRACT_MESSAGE; then
 	rm -f data/messages
 	for c in data/*.conf
@@ -39,6 +39,7 @@ if test -x $CAIRO_DOCK_EXTRACT_MESSAGE; then
 	$CAIRO_DOCK_EXTRACT_MESSAGE data/ChangeLog.txt
 fi
 
+echo "generating translation files for the dock ..."
 cd po
 $CAIRO_DOCK_GEN_TRANSLATION
 
@@ -46,7 +47,7 @@ $CAIRO_DOCK_GEN_TRANSLATION
 ### update cairo-dock-plugins.po
 ###
 cd $CAIRO_DOCK_DIR/plug-ins/cairo-dock-plug-ins
-echo "generating translation files for plug-ins ..."
+echo "extracing the messages of the plug-ins ..."
 for plugin in *
 do
 	if test -d $plugin; then
@@ -65,6 +66,7 @@ do
 	fi
 done;
 
+echo "generating translation files for plug-ins ..."
 cd po
 $CAIRO_DOCK_GEN_TRANSLATION all
 cd ../..

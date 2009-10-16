@@ -451,7 +451,7 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 		int r = system (cCommand);
 		g_free (cCommand);
 		
-		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName);
+		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cValidDockName);
 		cairo_dock_update_conf_file (cDesktopFilePath,
 			G_TYPE_INT,
 			"Position",
@@ -1295,14 +1295,15 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 			pMenuItem = _add_entry_in_menu (_("Configure"), GTK_STOCK_PREFERENCES, _cairo_dock_edit_and_reload_conf, pSubMenu);
 			gtk_widget_set_tooltip_text (pMenuItem, _("Configure the behaviour, appearance, and applets."));
 			
-			pMenuItem = gtk_separator_menu_item_new ();
-			gtk_menu_shell_append (GTK_MENU_SHELL (pSubMenu), pMenuItem);
-		
 			if (CAIRO_DOCK_IS_DOCK (pContainer) && ! CAIRO_DOCK (pContainer)->bIsMainDock && CAIRO_DOCK (pContainer)->iRefCount == 0)
 			{
 				pMenuItem = _add_entry_in_menu (_("Set up this dock"), GTK_STOCK_EXECUTE, _cairo_dock_configure_root_dock_position, pSubMenu);
 				gtk_widget_set_tooltip_text (pMenuItem, _("Set up the position of this main dock."));
 			}
+			
+			pMenuItem = gtk_separator_menu_item_new ();
+			gtk_menu_shell_append (GTK_MENU_SHELL (pSubMenu), pMenuItem);
+			
 			pMenuItem = _add_entry_in_menu (_("Manage themes"), GTK_STOCK_EXECUTE, _cairo_dock_initiate_theme_management, pSubMenu);
 			gtk_widget_set_tooltip_text (pMenuItem, _("Choose amongst many themes on the server, and save your current theme."));
 			

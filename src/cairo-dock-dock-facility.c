@@ -339,8 +339,8 @@ void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, C
 	}
 	else
 	{
-		*iNewWidth = myAccessibility.iVisibleZoneWidth;
-		*iNewHeight = myAccessibility.iVisibleZoneHeight;
+		*iNewWidth = MAX (50, MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth));
+		*iNewHeight = MAX (1, MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight));
 		pDock->iLeftMargin = 0;
 		pDock->iRightMargin = 0;
 	}

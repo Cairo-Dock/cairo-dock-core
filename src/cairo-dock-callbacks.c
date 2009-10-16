@@ -141,7 +141,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		{
 			// on laisse transparent
 		}
-		else if (pDock->bAtBottom && pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->container.bInside && pDock->iSidMoveDown == 0)
+		else if (pDock->bAtBottom && pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->container.bInside && pDock->iSidMoveDown == 0 && pDock->iSidMoveUp == 0)
 		{
 			cairo_dock_render_hidden_dock_opengl (pDock);
 		}
@@ -184,7 +184,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	{
 		
 	}
-	else if (pDock->bAtBottom && pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->container.bInside && pDock->iSidMoveDown == 0)
+	else if (pDock->bAtBottom && pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->container.bInside && pDock->iSidMoveDown == 0 && pDock->iSidMoveUp == 0)
 	{
 		cairo_dock_render_hidden_dock (pCairoContext, pDock);
 	}
