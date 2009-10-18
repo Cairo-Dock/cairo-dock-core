@@ -266,7 +266,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		if (pAccessibility->bAutoHideOnFullScreen != pPrevAccessibility->bAutoHideOnFullScreen ||
 			pAccessibility->bAutoHideOnMaximized != pPrevAccessibility->bAutoHideOnMaximized)
 		{
-			if (cairo_dock_search_window_on_our_way (pAccessibility->bAutoHideOnMaximized, pAccessibility->bAutoHideOnFullScreen) == NULL)
+			if (cairo_dock_search_window_on_our_way (pDock, pAccessibility->bAutoHideOnMaximized, pAccessibility->bAutoHideOnFullScreen) == NULL)
 			{
 				if (cairo_dock_quick_hide_is_activated ())
 				{

@@ -21,6 +21,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <iconv.h>
 
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
@@ -1986,16 +1987,39 @@ CairoDockGLFont *cairo_dock_load_bitmap_font (const gchar *cFontDescription, int
 CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, int first, int count)
 {
 	g_return_val_if_fail (g_pMainDock != NULL && count > 0, NULL);
-	if (first < ' ')
+	if (first < 32)  // 32 = ' '
 	{
-		count -= (' ' - first);
-		first = ' ';
+		count -= (32 - first);
+		first = 32;
 	}
 	gchar *cPool = g_new0 (gchar, count + 1);
-	int i;
+	int i, j=0;
+	guchar c;
 	for (i = 0; i < count; i ++)
-		cPool[i] = first + i;
+	{
+		c = first + i;
+		if (c > 254)
+			break;
+		if (c > 126 && c < 126 + 34)
+			continue;
+		cPool[i] = c;
+		j ++;
+	}
+	count=j;
+	
 	g_print ("%s (%s)\n", __func__, cPool);
+	iconv_t cd = iconv_open("UTF-8", "ISO-8859-1");
+	gchar *outbuf = g_new0 (gchar, count*4+1);
+	gchar *outbuf0 = outbuf, *inbuf0 = cPool;
+	size_t inbytesleft = count;
+	size_t outbytesleft = count*4;
+	size_t size = iconv (cd,
+		&cPool, &inbytesleft,
+		&outbuf, &outbytesleft);
+	g_print ("%d bytes left, %d bytes written => '%s'\n", inbytesleft, outbytesleft, outbuf0);
+	g_free (inbuf0);
+	cPool = outbuf0;
+	iconv_close (cd);
 	
 	int iWidth, iHeight;
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (g_pMainDock));
@@ -2042,6 +2066,32 @@ void cairo_dock_free_gl_font (CairoDockGLFont *pFont)
 	if (pFont->iTexture != 0)
 		_cairo_dock_delete_texture (pFont->iTexture);
 	g_free (pFont);
+}
+
+
+void cairo_dock_get_gl_text_extent (const gchar *cText, CairoDockGLFont *pFont, int *iWidth, int *iHeight)
+{
+	if (pFont == NULL || cText == NULL)
+	{
+		*iWidth = 0;
+		*iHeight = 0;
+		return ;
+	}
+	int i, w=0, wmax=0, h=pFont->iCharHeight;
+	for (i = 0; cText[i] != '\0'; i ++)
+	{
+		if (cText[i] == '\n')
+		{
+			h += pFont->iCharHeight + 1;
+			wmax = MAX (wmax, w);
+			w = 0;
+		}
+		else
+			w += pFont->iCharWidth;
+	}
+	
+	*iWidth = MAX (wmax, w);
+	*iHeight = h;
 }
 
 
@@ -2103,7 +2153,7 @@ void cairo_dock_draw_gl_text (const gchar *cText, CairoDockGLFont *pFont)
 	}
 }
 
-void cairo_dock_draw_gl_text_in_area (const gchar *cText, CairoDockGLFont *pFont, int iWidth, int iHeight)
+void cairo_dock_draw_gl_text_in_area (const gchar *cText, CairoDockGLFont *pFont, int iWidth, int iHeight, gboolean bCentered)
 {
 	g_return_if_fail (pFont != NULL && cText != NULL);
 	if (pFont->iListBase != 0)  // marche po sur du raster.
@@ -2113,21 +2163,24 @@ void cairo_dock_draw_gl_text_in_area (const gchar *cText, CairoDockGLFont *pFont
 	else
 	{
 		int n = strlen (cText);
-		double h = pFont->iCharHeight;  /// tenir compte des \n ...
-		double w = n * pFont->iCharWidth;
+		int w, h;
+		cairo_dock_get_gl_text_extent (cText, pFont, &w, &h);
+		
 		double zx, zy;
-		if (fabs (iWidth/w) < fabs (iHeight/h))  // on autorise les dimensions negatives pour pouvoir retourner le texte.
+		if (fabs ((double)iWidth/w) < fabs ((double)iHeight/h))  // on autorise les dimensions negatives pour pouvoir retourner le texte.
 		{
-			zx = iWidth/w;
+			zx = (double)iWidth/w;
 			zy = (iWidth*iHeight > 0 ? zx : -zx);
 		}
 		else
 		{
-			zy = iHeight/h;
+			zy = (double)iHeight/h;
 			zx = (iWidth*iHeight > 0 ? zy : -zy);
 		}
 		
 		glScalef (zx, zy, 1.);
+		if (bCentered)
+			glTranslatef (-w/2, -h/2, 0.);
 		cairo_dock_draw_gl_text (cText, pFont);
 	}
 }
@@ -2146,7 +2199,7 @@ void cairo_dock_draw_gl_text_at_position (const gchar *cText, CairoDockGLFont *p
 	cairo_dock_draw_gl_text (cText, pFont);
 }
 
-void cairo_dock_draw_gl_text_at_position_in_area (const gchar *cText, CairoDockGLFont *pFont, int x, int y, int iWidth, int iHeight)
+void cairo_dock_draw_gl_text_at_position_in_area (const gchar *cText, CairoDockGLFont *pFont, int x, int y, int iWidth, int iHeight, gboolean bCentered)
 {
 	g_return_if_fail (pFont != NULL && cText != NULL);
 	if (pFont->iListBase != 0)  // marche po sur du raster.
@@ -2156,6 +2209,6 @@ void cairo_dock_draw_gl_text_at_position_in_area (const gchar *cText, CairoDockG
 	else
 	{
 		glTranslatef (x, y, 0);
-		cairo_dock_draw_gl_text_in_area (cText, pFont, iWidth, iHeight);
+		cairo_dock_draw_gl_text_in_area (cText, pFont, iWidth, iHeight, bCentered);
 	}
 }

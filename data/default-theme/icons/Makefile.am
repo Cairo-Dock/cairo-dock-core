@@ -1,7 +1,8 @@
 iconsdir = $(pkgdatadir)/themes/_default_/icons
 
 icons_DATA = \
-	logout.png
+	logout.png\
+	firefox.svg
 
 EXTRA_DIST = $(icons_DATA)
 

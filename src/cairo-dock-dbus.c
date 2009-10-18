@@ -210,7 +210,7 @@ gboolean cairo_dock_dbus_get_boolean (DBusGProxy *pDbusProxy, const gchar *cAcce
 int cairo_dock_dbus_get_integer (DBusGProxy *pDbusProxy, const gchar *cAccessor)
 {
 	GError *erreur = NULL;
-	int iValue = 0;
+	int iValue = -1;
 	dbus_g_proxy_call (pDbusProxy, cAccessor, &erreur,
 		G_TYPE_INVALID,
 		G_TYPE_INT, &iValue,
@@ -219,6 +219,7 @@ int cairo_dock_dbus_get_integer (DBusGProxy *pDbusProxy, const gchar *cAccessor)
 	{
 		cd_warning (erreur->message);
 		g_error_free (erreur);
+		iValue = -1;
 	}
 	return iValue;
 }

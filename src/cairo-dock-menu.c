@@ -219,7 +219,9 @@ static void _launch_url (const gchar *cURL)
 which xdg-open > /dev/null && xdg-open %s || \
 which firefox > /dev/null && firefox %s || \
 which konqueror > /dev/null && konqueror %s || \
+which iceweasel > /dev/null && konqueror %s || \
 which opera > /dev/null && opera %s ",
+			cURL,
 			cURL,
 			cURL,
 			cURL,

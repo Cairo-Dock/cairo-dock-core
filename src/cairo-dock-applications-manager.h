@@ -43,7 +43,7 @@ void cairo_dock_unregister_appli (Icon *icon);
 
 gboolean cairo_dock_appli_is_on_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY);
 gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon);
-Icon * cairo_dock_search_window_on_our_way (gboolean bMaximizedWindow, gboolean bFullScreenWindow);
+Icon * cairo_dock_search_window_on_our_way (CairoDock *pDock, gboolean bMaximizedWindow, gboolean bFullScreenWindow);
 gboolean cairo_dock_unstack_Xevents (CairoDock *pDock);
 void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime);
 void cairo_dock_start_application_manager (CairoDock *pDock);

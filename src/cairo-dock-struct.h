@@ -304,7 +304,7 @@ when defining your applet in the \ref CD_APPLET_DEFINE_BEGIN/\ref CD_APPLET_DEFI
  * \subsection data_renderer How can I render some numerical values on my icon ?
  * 
  * Cairo-Dock offers a powerful and versatile architecture for this case : \ref _CairoDataRenderer.
- * A DataRenderer is a generic way to render a set of values on an icon; there are several implementations of this class : #_Gauge, #_CairoDockGraph, Bar, and it is quite easy to implement a new kind of DataRenderer.
+ * A DataRenderer is a generic way to render a set of values on an icon; there are several implementations of this class : Gauge, CairoDockGraph, Bar, and it is quite easy to implement a new kind of DataRenderer.
  * 
  * Each kind of renderer has a set of attributes that you can use to customize it; you just need to call the \ref CD_APPLET_ADD_DATA_RENDERER_ON_MY_ICON macro with the attributes, and you're done !
  * Then, each time you want to render some new values, simply call \ref CD_APPLET_RENDER_NEW_DATA_ON_MY_ICON with the new values.

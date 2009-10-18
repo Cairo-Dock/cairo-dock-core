@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 struct _CairoDockAnimationRecord {
 	gint id;
-	gchar *cDisplayedName;
+	const gchar *cDisplayedName;
 	};
 
 CairoDockRenderer *cairo_dock_get_renderer (const gchar *cRendererName, gboolean bForMainDock);

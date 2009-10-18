@@ -35,9 +35,9 @@
 		<width>40</width>
 		<height>8</height>
 		<text_zone>
-			<x_left>-0,48</x_left>
-			<y_bottom>-0,56</y_bottom>
-			<width>0,16</width>
+			<x_center>-0,34</x_center>
+			<y_center>-0,47</y_center>
+			<width>0,18</width>
 			<height>0,10</height>
 			<red>1.0</red>
 			<green>1,0</green>
@@ -62,10 +62,10 @@
 		<width>30</width>
 		<height>8</height>
 		<text_zone>
-			<x_left>0,34</x_left>
-			<y_bottom>-0,07</y_bottom>
-			<width>0,15</width>
-			<height>0,07</height>
+			<x_center>0,50</x_center>
+			<y_center>-0,00</y_center>
+			<width>0,18</width>
+			<height>0,08</height>
 			<red>1.0</red>
 			<green>1,0</green>
 			<blue>1,0</blue>
@@ -314,9 +314,9 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 					for (pTextSubNode = pGaugeSubNode->xmlChildrenNode; pTextSubNode != NULL; pTextSubNode = pTextSubNode->next)
 					{
 						cTextNodeContent = xmlNodeGetContent (pTextSubNode);
-						if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "x_left") == 0)
+						if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "x_center") == 0)
 							pGaugeIndicator->textX = atof (cTextNodeContent);
-						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "y_bottom") == 0)
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "y_center") == 0)
 							pGaugeIndicator->textY = atof (cTextNodeContent);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "width") == 0)
 							pGaugeIndicator->textWidth = atof (cTextNodeContent);
@@ -532,9 +532,10 @@ static void cairo_dock_draw_one_gauge (cairo_t *pSourceContext, Gauge *pGauge, i
 			cairo_text_extents (pSourceContext, pRenderer->cFormatBuffer, &textExtents);
 			g_print ("%.2fx%.2f\n", textExtents.width, textExtents.height);
 			double fZoom = MIN (pIndicator->textWidth * pRenderer->iWidth / textExtents.width, pIndicator->textHeight * pRenderer->iHeight / textExtents.height);
+			
 			cairo_move_to (pSourceContext,
-				floor ((1. + pIndicator->textX) * pRenderer->iWidth/2),
-				floor ((1. - pIndicator->textY) * pRenderer->iHeight/2 - textExtents.height/fZoom));
+				floor ((1. + pIndicator->textX) * pRenderer->iWidth/2 - textExtents.width/2),
+				floor ((1. - pIndicator->textY) * pRenderer->iHeight/2 - textExtents.height/fZoom/2));
 			cairo_scale (pSourceContext,
 				fZoom,
 				fZoom);
@@ -696,7 +697,8 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 				floor (pIndicator->textX * pRenderer->iWidth/2),
 				floor (pIndicator->textY * pRenderer->iHeight/2),
 				pIndicator->textWidth * pRenderer->iWidth,
-				pIndicator->textHeight * pRenderer->iHeight);
+				pIndicator->textHeight * pRenderer->iHeight,
+				TRUE);
 			
 			glPopMatrix ();
 			_cairo_dock_enable_texture ();

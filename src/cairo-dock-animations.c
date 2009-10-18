@@ -193,7 +193,7 @@ static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gbo
 		pDock->bFadeInOut = FALSE;
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
 		/// si fenetre maximisee, mettre direct iFadeCounter au max...
-		if (cairo_dock_search_window_on_our_way (TRUE, TRUE) != NULL)
+		if (cairo_dock_search_window_on_our_way (pDock, TRUE, TRUE) != NULL)
 			pDock->iFadeCounter = mySystem.iFadeOutNbSteps;
 	}
 	
@@ -241,9 +241,9 @@ gboolean cairo_dock_pop_down (CairoDock *pDock)
 	cd_debug ("%s (%d)", __func__, pDock->bPopped);
 	if (pDock->bIsMainDock && cairo_dock_get_nb_dialog_windows () != 0)
 		return FALSE;
-	if (pDock->bPopped && myAccessibility.bPopUp)
+	if (pDock->bPopped && myAccessibility.bPopUp && ! pDock->container.bInside)
 	{
-		if (cairo_dock_search_window_on_our_way (FALSE, FALSE) != NULL)
+		if (cairo_dock_search_window_on_our_way (pDock, FALSE, FALSE) != NULL)
 		{
 			pDock->iFadeCounter = mySystem.iFadeOutNbSteps;
 			pDock->bFadeInOut = TRUE;

@@ -54,6 +54,7 @@ typedef enum {
 
 /// Decoration of a Desklet.
 struct _CairoDeskletDecoration {
+	const gchar *cDisplayedName;
 	gchar *cBackGroundImagePath;
 	gchar *cForeGroundImagePath;
 	CairoDockLoadImageModifier iLoadingModifier;

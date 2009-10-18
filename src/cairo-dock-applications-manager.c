@@ -291,14 +291,17 @@ static gboolean _cairo_dock_window_hovers_dock (GtkAllocation *pWindowGeometry, 
 	return FALSE;
 }
 
-static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gboolean *data)
+static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gpointer *data)
 {
+	gboolean bMaximizedWindow = GPOINTER_TO_INT (data[0]);
+	gboolean bFullScreenWindow = GPOINTER_TO_INT (data[1]);
+	CairoDock *pDock = data[2];
 	if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_is_on_current_desktop (icon) && icon->fPersonnalScale <= 0 && icon->iLastCheckTime != -1)
 	{
 		if ((data[0] && icon->bIsMaximized && ! icon->bIsHidden) || (data[1] && icon->bIsFullScreen && ! icon->bIsHidden) || (!data[0] && ! data[1]))
 		{
 			cd_debug ("%s est genante (%d, %d) (%d;%d %dx%d)", icon->cName, icon->bIsMaximized, icon->bIsFullScreen, icon->windowGeometry.x, icon->windowGeometry.y, icon->windowGeometry.width, icon->windowGeometry.height);
-			if (_cairo_dock_window_hovers_dock (&icon->windowGeometry, g_pMainDock))
+			if (_cairo_dock_window_hovers_dock (&icon->windowGeometry, pDock))
 			{
 				cd_debug (" et en plus elle empiete sur notre dock");
 				return TRUE;
@@ -307,10 +310,10 @@ static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gbool
 	}
 	return FALSE;
 }
-Icon * cairo_dock_search_window_on_our_way (gboolean bMaximizedWindow, gboolean bFullScreenWindow)
+Icon * cairo_dock_search_window_on_our_way (CairoDock *pDock, gboolean bMaximizedWindow, gboolean bFullScreenWindow)
 {
 	cd_debug ("%s (%d, %d)", __func__, bMaximizedWindow, bFullScreenWindow);
-	gboolean data[2] = {bMaximizedWindow, bFullScreenWindow};
+	gpointer data[3] = {GINT_TO_POINTER (bMaximizedWindow), GINT_TO_POINTER (bFullScreenWindow), pDock};
 	return g_hash_table_find (s_hXWindowTable, (GHRFunc) _cairo_dock_window_is_on_our_way, data);
 }
 
@@ -442,7 +445,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					{
 						if (cairo_dock_quick_hide_is_activated ())
 						{
-							if (cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
+							if (cairo_dock_search_window_on_our_way (pDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
 							{
 								cd_message (" => plus aucune fenetre genante");
 								cairo_dock_deactivate_temporary_auto_hide ();
@@ -450,7 +453,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						}
 						else
 						{
-							if (cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) != NULL)
+							if (cairo_dock_search_window_on_our_way (pDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) != NULL)
 							{
 								cd_message (" => une fenetre est genante");
 								cairo_dock_activate_temporary_auto_hide ();
@@ -583,7 +586,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 							}
 							else if ((! bIsMaximized || ! myAccessibility.bAutoHideOnMaximized || bIsHidden) && (! bIsFullScreen || ! myAccessibility.bAutoHideOnFullScreen || bIsHidden) && cairo_dock_quick_hide_is_activated ())
 							{
-								if (cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
+								if (cairo_dock_search_window_on_our_way (pDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
 								{
 									cd_message (" => plus aucune fenetre genante");
 									cairo_dock_deactivate_temporary_auto_hide ();
@@ -671,7 +674,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					{
 						if (! cairo_dock_quick_hide_is_activated () && (icon->iNumDesktop == -1 || icon->iNumDesktop == s_iCurrentDesktop))  // l'appli arrive sur le bureau courant.
 						{
-							int data[3] = {s_iCurrentDesktop, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen};
+							gpointer data[3] = {GINT_TO_POINTER (myAccessibility.bAutoHideOnMaximized), GINT_TO_POINTER (myAccessibility.bAutoHideOnFullScreen), pDock};
 							if (_cairo_dock_window_is_on_our_way (&Xid, icon, data))  // on s'assure qu'en plus d'etre sur le bureau courant, elle est aussi sur le viewport courant.
 							{
 								cd_message (" => cela nous gene");
@@ -680,7 +683,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						}
 						else if (cairo_dock_quick_hide_is_activated () && (icon->iNumDesktop != -1 && icon->iNumDesktop != s_iCurrentDesktop))  // l'appli quitte sur le bureau courant.
 						{
-							if (cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
+							if (cairo_dock_search_window_on_our_way (pDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
 							{
 								cd_message (" => plus aucune fenetre genante");
 								cairo_dock_deactivate_temporary_auto_hide ();
@@ -732,7 +735,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					{
 						if (cairo_dock_quick_hide_is_activated ())
 						{
-							if (cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
+							if (cairo_dock_search_window_on_our_way (pDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
 							{
 								cd_message (" chgt de viewport => plus aucune fenetre genante");
 								cairo_dock_deactivate_temporary_auto_hide ();
@@ -821,7 +824,8 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 			
 			if (cairo_dock_quick_hide_is_activated () && ((icon->bIsFullScreen && myAccessibility.bAutoHideOnFullScreen) || (icon->bIsMaximized && myAccessibility.bAutoHideOnMaximized)))  // cette fenetre peut avoir gene.
 			{
-				if (cairo_dock_search_window_on_our_way (myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)  // on regarde si une autre gene encore.
+				/// le faire pour tous les docks principaux ...
+				if (cairo_dock_search_window_on_our_way (g_pMainDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)  // on regarde si une autre gene encore.
 				{
 					cd_message (" => plus aucune fenetre genante");
 					cairo_dock_deactivate_temporary_auto_hide ();

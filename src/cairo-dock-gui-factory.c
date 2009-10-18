@@ -594,7 +594,7 @@ static void _cairo_dock_add_one_decoration_item (const gchar *cName, CairoDeskle
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
 	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
-		CAIRO_DOCK_MODEL_NAME, cName,
+		CAIRO_DOCK_MODEL_NAME, (pDecoration && pDecoration->cDisplayedName && *pDecoration->cDisplayedName != '\0' ? pDecoration->cDisplayedName : cName),
 		CAIRO_DOCK_MODEL_RESULT, cName,
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none"/*(pRenderer != NULL ? pRenderer->cReadmeFilePath : "none")*/,
 		CAIRO_DOCK_MODEL_IMAGE, "none"/*(pRenderer != NULL ? pRenderer->cPreviewFilePath : "none")*/, -1);
