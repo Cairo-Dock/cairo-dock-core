@@ -14,6 +14,7 @@ xgettext -L C -k_ -k_D -kD_ -kN_ --from-code=UTF-8 --copyright-holder="Cairo-Doc
 
 for lang in `cat LINGUAS`
 do
+	echo -n "${lang} :"
 	msgmerge ${lang}.po cairo-dock.pot -o ${lang}.po
 	sed -i "/POT-Creation-Date/d" ${lang}.po
 done;
