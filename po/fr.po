@@ -43,7 +43,7 @@ msgstr ""
 
 #: ../src/cairo-dock-applet-facility.h:349
 msgid "Applet's handbook"
-msgstr ""
+msgstr "Manuel de l'applet"
 
 #: ../src/cairo-dock-callbacks.c:1120
 msgid "Do you want to mount this point ?"

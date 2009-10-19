@@ -335,7 +335,7 @@ void cairo_dock_get_gl_text_extent (const gchar *cText, CairoDockGLFont *pFont, 
 *@param cText the text
 *@param pFont the font.
 */
-void cairo_dock_draw_gl_text (const gchar *cText, CairoDockGLFont *pFont);
+void cairo_dock_draw_gl_text (const guchar *cText, CairoDockGLFont *pFont);
 
 /** Like /ref cairo_dock_draw_gl_text but at a given position.
 *@param cText the text
@@ -343,7 +343,7 @@ void cairo_dock_draw_gl_text (const gchar *cText, CairoDockGLFont *pFont);
 *@param x x position of the left bottom corner of the text.
 *@param y y position of the left bottom corner of the text.
 */
-void cairo_dock_draw_gl_text_at_position (const gchar *cText, CairoDockGLFont *pFont, int x, int y);
+void cairo_dock_draw_gl_text_at_position (const guchar *cText, CairoDockGLFont *pFont, int x, int y);
 
 /** Like /ref cairo_dock_draw_gl_text but resize the text so that it fits into a given area. Only works for a texture font.
 *@param cText the text
@@ -352,7 +352,7 @@ void cairo_dock_draw_gl_text_at_position (const gchar *cText, CairoDockGLFont *p
 *@param iHeight iHeight of the area
 *@param bCentered whether the text is centered on the current position or not.
 */
-void cairo_dock_draw_gl_text_in_area (const gchar *cText, CairoDockGLFont *pFont, int iWidth, int iHeight, gboolean bCentered);
+void cairo_dock_draw_gl_text_in_area (const guchar *cText, CairoDockGLFont *pFont, int iWidth, int iHeight, gboolean bCentered);
 
 /** Like /ref cairo_dock_draw_gl_text_in_area and /ref cairo_dock_draw_gl_text_at_position.
 *@param cText the text
@@ -363,7 +363,7 @@ void cairo_dock_draw_gl_text_in_area (const gchar *cText, CairoDockGLFont *pFont
 *@param iHeight iHeight of the area
 *@param bCentered whether the text is centered on the given position or not.
 */
-void cairo_dock_draw_gl_text_at_position_in_area (const gchar *cText, CairoDockGLFont *pFont, int x, int y, int iWidth, int iHeight, gboolean bCentered);
+void cairo_dock_draw_gl_text_at_position_in_area (const guchar *cText, CairoDockGLFont *pFont, int x, int y, int iWidth, int iHeight, gboolean bCentered);
 
 
 G_END_DECLS

@@ -1992,23 +1992,28 @@ CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, i
 		count -= (32 - first);
 		first = 32;
 	}
-	gchar *cPool = g_new0 (gchar, count + 1);
+	gchar *cPool = g_new0 (gchar, 4*count + 1);
 	int i, j=0;
 	guchar c;
 	for (i = 0; i < count; i ++)
 	{
 		c = first + i;
 		if (c > 254)
+		{
+			count=i;
 			break;
-		if (c > 126 && c < 126 + 34)
-			continue;
-		cPool[i] = c;
-		j ++;
+		}
+		if ((c > 126 && c < 126 + 37) || (c == 173))  // le 173 est un caractere bizarre (sa taille est nulle).
+		{
+			cPool[j++] = ' ';
+		}
+		else
+		{
+			j += MAX (0, sprintf (cPool+j, "%lc", c));  // les caracteres ASCII >128 doivent etre convertis en multi-octets.
+		}
 	}
-	count=j;
-	
-	g_print ("%s (%s)\n", __func__, cPool);
-	iconv_t cd = iconv_open("UTF-8", "ISO-8859-1");
+	g_print ("%s (%d + %d -> '%s')\n", __func__, first, count, cPool);
+	/*iconv_t cd = iconv_open("UTF-8", "ISO-8859-1");
 	gchar *outbuf = g_new0 (gchar, count*4+1);
 	gchar *outbuf0 = outbuf, *inbuf0 = cPool;
 	size_t inbytesleft = count;
@@ -2019,7 +2024,7 @@ CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, i
 	g_print ("%d bytes left, %d bytes written => '%s'\n", inbytesleft, outbytesleft, outbuf0);
 	g_free (inbuf0);
 	cPool = outbuf0;
-	iconv_close (cd);
+	iconv_close (cd);*/
 	
 	int iWidth, iHeight;
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (g_pMainDock));
@@ -2095,7 +2100,7 @@ void cairo_dock_get_gl_text_extent (const gchar *cText, CairoDockGLFont *pFont, 
 }
 
 
-void cairo_dock_draw_gl_text (const gchar *cText, CairoDockGLFont *pFont)
+void cairo_dock_draw_gl_text (const guchar *cText, CairoDockGLFont *pFont)
 {
 	int n = strlen (cText);
 	if (pFont->iListBase != 0)
@@ -2153,7 +2158,7 @@ void cairo_dock_draw_gl_text (const gchar *cText, CairoDockGLFont *pFont)
 	}
 }
 
-void cairo_dock_draw_gl_text_in_area (const gchar *cText, CairoDockGLFont *pFont, int iWidth, int iHeight, gboolean bCentered)
+void cairo_dock_draw_gl_text_in_area (const guchar *cText, CairoDockGLFont *pFont, int iWidth, int iHeight, gboolean bCentered)
 {
 	g_return_if_fail (pFont != NULL && cText != NULL);
 	if (pFont->iListBase != 0)  // marche po sur du raster.
@@ -2185,7 +2190,7 @@ void cairo_dock_draw_gl_text_in_area (const gchar *cText, CairoDockGLFont *pFont
 	}
 }
 
-void cairo_dock_draw_gl_text_at_position (const gchar *cText, CairoDockGLFont *pFont, int x, int y)
+void cairo_dock_draw_gl_text_at_position (const guchar *cText, CairoDockGLFont *pFont, int x, int y)
 {
 	g_return_if_fail (pFont != NULL && cText != NULL);
 	if (pFont->iListBase != 0)
@@ -2199,7 +2204,7 @@ void cairo_dock_draw_gl_text_at_position (const gchar *cText, CairoDockGLFont *p
 	cairo_dock_draw_gl_text (cText, pFont);
 }
 
-void cairo_dock_draw_gl_text_at_position_in_area (const gchar *cText, CairoDockGLFont *pFont, int x, int y, int iWidth, int iHeight, gboolean bCentered)
+void cairo_dock_draw_gl_text_at_position_in_area (const guchar *cText, CairoDockGLFont *pFont, int x, int y, int iWidth, int iHeight, gboolean bCentered)
 {
 	g_return_if_fail (pFont != NULL && cText != NULL);
 	if (pFont->iListBase != 0)  // marche po sur du raster.

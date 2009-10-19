@@ -42,7 +42,7 @@ extern CairoDock *g_pMainDock;
 
 static CairoDockGLFont *s_pFont = NULL;
 
-#define _init_data_renderer_font(...) s_pFont = cairo_dock_load_textured_font ("Monospace Bold 12", 0, 127)
+#define _init_data_renderer_font(...) s_pFont = cairo_dock_load_textured_font ("Monospace Bold 12", 0, 184)  // on va jusqu'a ø
 
 CairoDockGLFont *cairo_dock_get_default_data_renderer_font (void)
 {

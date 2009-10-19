@@ -640,7 +640,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	if (pDock->iRefCount == 0)
 	{
 		Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
-		if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL)
+		if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && GTK_WIDGET_VISIBLE (pPointedIcon->pSubDock->container.pWidget))
 		{
 			if (pDock->iSidLeaveDemand == 0)
 			{
