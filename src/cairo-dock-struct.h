@@ -360,6 +360,8 @@ typedef struct _CairoDataRenderer CairoDataRenderer;
 typedef struct _CairoDataRendererAttribute CairoDataRendererAttribute;
 typedef struct _CairoDataRendererInterface CairoDataRendererInterface;
 typedef struct _CairoDataToRenderer CairoDataToRenderer;
+typedef struct _CairoDataRendererEmblem CairoDataRendererEmblem;
+typedef struct _CairoDataRendererTextZone CairoDataRendererTextZone;
 
 typedef struct _CairoDockAnimationRecord CairoDockAnimationRecord;
 

@@ -169,6 +169,7 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pDataRenderer, Ico
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer))
 		cairo_dock_update_icon_texture (pIcon);
 }
+
 static gboolean cairo_dock_update_icon_data_renderer_notification (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, gboolean *bContinueAnimation)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
@@ -192,8 +193,10 @@ static gboolean cairo_dock_update_icon_data_renderer_notification (gpointer pUse
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-void cairo_dock_add_data_renderer_on_icon (CairoDataRenderer *pRenderer, Icon *pIcon, CairoContainer *pContainer, cairo_t *pSourceContext, CairoDataRendererAttribute *pAttribute)
+void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pSourceContext, CairoDataRendererAttribute *pAttribute)
 {
+	CairoDataRenderer *pRenderer = cairo_dock_new_data_renderer (pAttribute->cModelName);
+	
 	cairo_dock_set_data_renderer_on_icon (pIcon, pRenderer);
 	if (pRenderer == NULL)
 		return ;
@@ -201,25 +204,46 @@ void cairo_dock_add_data_renderer_on_icon (CairoDataRenderer *pRenderer, Icon *p
 	cairo_dock_init_data_renderer (pRenderer, pSourceContext, pContainer, pAttribute);
 	
 	cairo_dock_get_icon_extent (pIcon, pContainer, &pRenderer->iWidth, &pRenderer->iHeight);
+	if (pAttribute->cEmblems != NULL)	
+		pRenderer->pEmblems = g_new0 (CairoDataRendererEmblem, pAttribute->iNbValues);
+	pRenderer->pTextZones = g_new0 (CairoDataRendererTextZone, pAttribute->iNbValues);
 	
 	pRenderer->interface.load (pRenderer, pSourceContext, pContainer, pAttribute);
 	
+	gboolean bLoadTextures = FALSE;
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pRenderer->interface.render_opengl)
 	{
+		bLoadTextures = TRUE;
 		cairo_dock_register_notification_on_icon (pIcon, CAIRO_DOCK_UPDATE_ICON_SLOW,
 			(CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification,
 			CAIRO_DOCK_RUN_AFTER, NULL);
-		/**cairo_dock_register_notification (CAIRO_DOCK_UPDATE_ICON_SLOW,
-			(CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification,
-			CAIRO_DOCK_RUN_AFTER, NULL);*/
 	}
-}
-
-void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pSourceContext, CairoDataRendererAttribute *pAttribute)
-{
-	CairoDataRenderer *pRenderer = cairo_dock_new_data_renderer (pAttribute->cModelName);
 	
-	cairo_dock_add_data_renderer_on_icon (pRenderer, pIcon, pContainer, pSourceContext, pAttribute);
+	if (pRenderer->pEmblems != NULL)
+	{
+		CairoDataRendererEmblem *pEmblem;
+		cairo_surface_t *pSurface;
+		int i;
+		for (i = 0; i < pAttribute->iNbValues; i ++)
+		{
+			pEmblem = &pRenderer->pEmblems[i];
+			if (pEmblem->fWidth != 0 && pEmblem->fHeight != 0)
+			{
+				pSurface = cairo_dock_create_surface_from_image_simple (pAttribute->cEmblems[i],
+					pSourceContext,
+					pEmblem->fWidth * pRenderer->iWidth,
+					pEmblem->fHeight * pRenderer->iHeight);
+				if (bLoadTextures)
+				{
+					pEmblem->iTexture = cairo_dock_create_texture_from_surface (pSurface);
+					cairo_surface_destroy (pSurface);
+				}
+				else
+					pEmblem->pSurface = pSurface;
+			}
+		}
+	}
+	
 }
 
 
@@ -308,14 +332,23 @@ void cairo_dock_free_data_renderer (CairoDataRenderer *pRenderer)
 	g_free (pRenderer->data.pTabValues);
 	g_free (pRenderer->data.pMinMaxValues);
 	
-	g_free (pRenderer->fMinMaxValues);
-	if (pRenderer->cTitles != NULL)
+	if (pRenderer->pEmblems != NULL)
 	{
+		CairoDataRendererEmblem *pEmblem;
 		int i;
 		for (i = 0; i < pRenderer->data.iNbValues; i ++)
-			g_free (pRenderer->cTitles[i]);
-		g_free (pRenderer->cTitles);
+		{
+			pEmblem = &pRenderer->pEmblems[i];
+			if (pEmblem->pSurface != NULL)
+				cairo_surface_destroy (pEmblem->pSurface);
+			if (pEmblem->iTexture != 0)
+				_cairo_dock_delete_texture (pEmblem->iTexture);
+		}
+		g_free (pRenderer->pEmblems);
 	}
+	
+	if (pRenderer->pTextZones != NULL)
+		g_free (pRenderer->pTextZones);
 	
 	pRenderer->interface.free (pRenderer);
 }

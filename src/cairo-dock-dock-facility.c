@@ -160,6 +160,8 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		n ++;
 	} while ((pDock->iMaxDockWidth > iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_iScreenHeight[pDock->container.bIsHorizontal]) && n < 4);
 	
+	cairo_dock_calculate_dock_icons (pDock);  // le calcul de max_dock_size a altere les fX et fY.
+	
 	cairo_dock_set_icons_geometry_for_window_manager (pDock);  // se fait sur le dock a plat, qu'on vient de calculer. Neanmoins ici ce sera probablement une approximation.
 	pDock->bWMIconseedsUptade = TRUE;
 	
@@ -171,27 +173,6 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	if (GTK_WIDGET_VISIBLE (pDock->container.pWidget))
 	{
 		cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MAX_SIZE);
-		/*int iNewWidth, iNewHeight;
-		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
-		
-		if (pDock->container.bIsHorizontal)
-		{
-			if (pDock->container.iWidth != iNewWidth || pDock->container.iHeight != iNewHeight)
-				gdk_window_move_resize (pDock->container.pWidget->window,
-					pDock->container.iWindowPositionX,
-					pDock->container.iWindowPositionY,
-					iNewWidth,
-					iNewHeight);
-		}
-		else
-		{
-			if (pDock->container.iWidth != iNewHeight || pDock->container.iHeight != iNewWidth)
-				gdk_window_move_resize (pDock->container.pWidget->window,
-					pDock->container.iWindowPositionY,
-					pDock->container.iWindowPositionX,
-					iNewHeight,
-					iNewWidth);
-		}*/
 	}
 	
 	cairo_dock_update_background_decorations_if_necessary (pDock, pDock->iDecorationsWidth, pDock->iDecorationsHeight);
@@ -376,7 +357,7 @@ void cairo_dock_place_root_dock (CairoDock *pDock)
 {
 	pDock->fFoldingFactor = (pDock->bAutoHide && pDock->iRefCount == 0 && mySystem.bAnimateOnAutoHide ? 1. : 0.);
 	cairo_dock_move_resize_dock (pDock,
-		(pDock->bAutoHide && pDock->iRefCount == 0 ? CAIRO_DOCK_MIN_SIZE : CAIRO_DOCK_MAX_SIZE));  // auto-hide => taille min.
+		(pDock->bAutoHide && pDock->iRefCount == 0 && pDock->bAtBottom ? CAIRO_DOCK_MIN_SIZE : CAIRO_DOCK_MAX_SIZE));  // auto-hide => taille min.
 }
 
 

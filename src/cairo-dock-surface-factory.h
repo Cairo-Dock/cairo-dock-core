@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 * 
 * If you just want to load an image at a given size, use \ref cairo_dock_create_surface_from_image_simple, or \ref cairo_dock_create_surface_from_icon.
 * 
-* To load a text, use \ref cairo_dock_create_surface_from_text.
+* To load a text into a surface, describe your text look with a \ref CairoDockLabelDescription, and pass it to \ref cairo_dock_create_surface_from_text.
 *
 */
 

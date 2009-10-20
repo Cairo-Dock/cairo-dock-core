@@ -231,8 +231,8 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 	if (pAccessibility->iVisibleZoneWidth != pPrevAccessibility->iVisibleZoneWidth ||
 		pAccessibility->iVisibleZoneHeight != pPrevAccessibility->iVisibleZoneHeight)
 	{
-		cairo_dock_place_root_dock (pDock);
-		gtk_widget_queue_draw (pDock->container.pWidget);  // le 'gdk_window_move_resize' ci-dessus ne provoquera pas le redessin si la taille n'a pas change.
+		// on replace tous les docks racines (c'est bourrin, on pourrait juste le faire pour ceux qui ont l'auto-hide).
+		cairo_dock_reposition_root_docks (FALSE);  // FALSE <=> main dock inclus.
 	}
 	
 	//\_______________ Reserve Spave.

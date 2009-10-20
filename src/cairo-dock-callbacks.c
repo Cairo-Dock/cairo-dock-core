@@ -1506,6 +1506,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		}
 		#endif
 		
+		g_print ("configure\n");
 		cairo_dock_calculate_dock_icons (pDock);
 	}
 	gtk_widget_queue_draw (pWidget);

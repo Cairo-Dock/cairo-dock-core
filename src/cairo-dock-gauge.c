@@ -232,6 +232,7 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
 	if (iWidth == 0 || iHeight == 0)
 		return FALSE;
+	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
 	
 	g_return_val_if_fail (cThemePath != NULL, FALSE);
 	xmlInitParser ();
@@ -248,7 +249,8 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 	GaugeImage *pGaugeImage;
 	GaugeIndicator *pGaugeIndicator = NULL;
 	xmlNodePtr pGaugeNode;
-	for (pGaugeNode = pGaugeMainNode->xmlChildrenNode; pGaugeNode != NULL; pGaugeNode = pGaugeNode->next)
+	int i;
+	for (pGaugeNode = pGaugeMainNode->xmlChildrenNode, i = 0; pGaugeNode != NULL; pGaugeNode = pGaugeNode->next, i ++)
 	{
 		if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "name") == 0)
 		{
@@ -292,7 +294,7 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 						CAIRO_DATA_RENDERER (pGauge)->iRank ++;
 				}
 			}
-
+			
 			pGaugeIndicator = g_new0 (GaugeIndicator, 1);
 			pGaugeIndicator->direction = 1;
 			
@@ -315,21 +317,20 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 					{
 						cTextNodeContent = xmlNodeGetContent (pTextSubNode);
 						if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "x_center") == 0)
-							pGaugeIndicator->textX = atof (cTextNodeContent);
+							pGaugeIndicator->textZone.fX = atof (cTextNodeContent);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "y_center") == 0)
-							pGaugeIndicator->textY = atof (cTextNodeContent);
+							pGaugeIndicator->textZone.fY = atof (cTextNodeContent);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "width") == 0)
-							pGaugeIndicator->textWidth = atof (cTextNodeContent);
+							pGaugeIndicator->textZone.fWidth = atof (cTextNodeContent);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "height") == 0)
-							pGaugeIndicator->textHeight = atof (cTextNodeContent);
+							pGaugeIndicator->textZone.fHeight = atof (cTextNodeContent);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "red") == 0)
-							pGaugeIndicator->textColor[0] = atof (cTextNodeContent);
+							pGaugeIndicator->textZone.pColor[0] = atof (cTextNodeContent);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "green") == 0)
-							pGaugeIndicator->textColor[1] = atof (cTextNodeContent);
+							pGaugeIndicator->textZone.pColor[1] = atof (cTextNodeContent);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "blue") == 0)
-							pGaugeIndicator->textColor[2] = atof (cTextNodeContent);
+							pGaugeIndicator->textZone.pColor[2] = atof (cTextNodeContent);
 					}
-					g_print ("pGaugeIndicator->textWidth:%.2f\n", pGaugeIndicator->textWidth);
 				}
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "logo_zone") == 0)
 				{
@@ -338,17 +339,16 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 					{
 						cTextNodeContent = xmlNodeGetContent (pLogoSubNode);
 						if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "x_center") == 0)
-							pGaugeIndicator->logoX = atof (cTextNodeContent);
+							pGaugeIndicator->emblem.fX = atof (cTextNodeContent);
 						else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "y_center") == 0)
-							pGaugeIndicator->logoY = atof (cTextNodeContent);
+							pGaugeIndicator->emblem.fY = atof (cTextNodeContent);
 						else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "width") == 0)
-							pGaugeIndicator->logoWidth = atof (cTextNodeContent);
+							pGaugeIndicator->emblem.fWidth = atof (cTextNodeContent);
 						else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "height") == 0)
-							pGaugeIndicator->logoHeight = atof (cTextNodeContent);
+							pGaugeIndicator->emblem.fHeight = atof (cTextNodeContent);
 						else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "alpha") == 0)
-							pGaugeIndicator->logoAlpha = atof (cTextNodeContent);
+							pGaugeIndicator->emblem.fAlpha = atof (cTextNodeContent);
 					}
-					g_print ("pGaugeIndicator->textWidth:%.2f\n", pGaugeIndicator->textWidth);
 				}
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "direction") == 0)
 					pGaugeIndicator->direction = atof (cNodeContent);
@@ -432,13 +432,16 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 	g_string_free (sImagePath, TRUE);
 	
 	g_return_val_if_fail (CAIRO_DATA_RENDERER (pGauge)->iRank != 0 && pGaugeIndicator != NULL, FALSE);
-	CAIRO_DATA_RENDERER (pGauge)->bCanRenderValueAsText = (pGaugeIndicator->textWidth != 0 && pGaugeIndicator->textHeight != 0);
+	CAIRO_DATA_RENDERER (pGauge)->bCanRenderValueAsText = (pGaugeIndicator->textZone.fWidth != 0 && pGaugeIndicator->textZone.fHeight != 0);
 	
 	return TRUE;
 }
 static void cairo_dock_load_gauge (Gauge *pGauge, cairo_t *pSourceContext, CairoContainer *pContainer, CairoGaugeAttribute *pAttribute)
 {
 	_cairo_dock_load_gauge_theme (pGauge, pSourceContext, pAttribute->cThemePath);
+	
+	/// charger les emblemes...
+	
 }
 
   ////////////////////////////////////////////
@@ -520,22 +523,20 @@ static void cairo_dock_draw_one_gauge (cairo_t *pSourceContext, Gauge *pGauge, i
 			_draw_gauge_image (pSourceContext, pGauge, pIndicator, fValue);
 		}
 		
-		if (/**pRenderer->bWriteValues && */pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
+		if (/**pRenderer->bWriteValues && */pIndicator->textZone.fWidth != 0 && pIndicator->textZone.fHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
 		{
 			cairo_data_renderer_format_value (pRenderer, fValue, i);
 			//g_print (" >>>%s\n", pRenderer->cFormatBuffer);
 			cairo_save (pSourceContext);
-			cairo_set_source_rgb (pSourceContext, pIndicator->textColor[0], pIndicator->textColor[1], pIndicator->textColor[2]);
-			cairo_set_line_width (pSourceContext, 20);
+			cairo_set_source_rgb (pSourceContext, pIndicator->textZone.pColor[0], pIndicator->textZone.pColor[1], pIndicator->textZone.pColor[2]);
 			
 			cairo_text_extents_t textExtents;
 			cairo_text_extents (pSourceContext, pRenderer->cFormatBuffer, &textExtents);
-			g_print ("%.2fx%.2f\n", textExtents.width, textExtents.height);
-			double fZoom = MIN (pIndicator->textWidth * pRenderer->iWidth / textExtents.width, pIndicator->textHeight * pRenderer->iHeight / textExtents.height);
+			double fZoom = MIN (pIndicator->textZone.fWidth * pRenderer->iWidth / textExtents.width, pIndicator->textZone.fHeight * pRenderer->iHeight / textExtents.height);
 			
 			cairo_move_to (pSourceContext,
-				floor ((1. + pIndicator->textX) * pRenderer->iWidth/2 - textExtents.width/2),
-				floor ((1. - pIndicator->textY) * pRenderer->iHeight/2 - textExtents.height/fZoom/2));
+				floor ((1. + pIndicator->textZone.fX) * pRenderer->iWidth/2 - textExtents.width*fZoom/2),
+				floor ((1. - pIndicator->textZone.fY) * pRenderer->iHeight/2 - textExtents.height*fZoom/2));
 			cairo_scale (pSourceContext,
 				fZoom,
 				fZoom);
@@ -684,20 +685,20 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 			_draw_gauge_image_opengl (pGauge, pIndicator, fValue);
 		}
 		
-		if (/**pRenderer->bWriteValues && */pIndicator->textWidth != 0 && pIndicator->textHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
+		if (/**pRenderer->bWriteValues && */pIndicator->textZone.fWidth != 0 && pIndicator->textZone.fHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
 		{
 			cairo_data_renderer_format_value (pRenderer, fValue, i);
 			
 			CairoDockGLFont *pFont = cairo_dock_get_default_data_renderer_font ();
-			glColor3f (pIndicator->textColor[0], pIndicator->textColor[1], pIndicator->textColor[2]);
+			glColor3f (pIndicator->textZone.pColor[0], pIndicator->textZone.pColor[1], pIndicator->textZone.pColor[2]);
 			glPushMatrix ();
 			
 			cairo_dock_draw_gl_text_at_position_in_area (pRenderer->cFormatBuffer,
 				pFont,
-				floor (pIndicator->textX * pRenderer->iWidth/2),
-				floor (pIndicator->textY * pRenderer->iHeight/2),
-				pIndicator->textWidth * pRenderer->iWidth,
-				pIndicator->textHeight * pRenderer->iHeight,
+				floor (pIndicator->textZone.fX * pRenderer->iWidth/2),
+				floor (pIndicator->textZone.fY * pRenderer->iHeight/2),
+				pIndicator->textZone.fWidth * pRenderer->iWidth,
+				pIndicator->textZone.fHeight * pRenderer->iHeight,
 				TRUE);
 			
 			glPopMatrix ();
@@ -788,7 +789,7 @@ static void cairo_dock_reload_gauge (Gauge *pGauge, cairo_t *pSourceContext)
 	
 	GaugeIndicator *pGaugeIndicator;
 	GaugeImage *pGaugeImage;
-	int i;
+	int i, j;
 	GList *pElement, *pElement2;
 	for (pElement = pGauge->pIndicatorList; pElement != NULL; pElement = pElement->next)
 	{
@@ -870,7 +871,7 @@ Gauge *cairo_dock_new_gauge (void)
 	pGauge->dataRenderer.interface.new				= (CairoDataRendererNewFunc) cairo_dock_new_gauge;
 	pGauge->dataRenderer.interface.load				= (CairoDataRendererLoadFunc) cairo_dock_load_gauge;
 	pGauge->dataRenderer.interface.render			= (CairoDataRendererRenderFunc) cairo_dock_render_gauge;
-	pGauge->dataRenderer.interface.render_opengl	= (CairoDataRendererRenderOpenGLFunc) cairo_dock_render_gauge_opengl;
+	pGauge->dataRenderer.interface.render_opengl		= (CairoDataRendererRenderOpenGLFunc) cairo_dock_render_gauge_opengl;
 	pGauge->dataRenderer.interface.reload			= (CairoDataRendererReloadFunc) cairo_dock_reload_gauge;
 	pGauge->dataRenderer.interface.free				= (CairoDataRendererFreeFunc) cairo_dock_free_gauge;
 	return pGauge;

@@ -452,7 +452,6 @@ static void _cairo_dock_redraw_one_root_dock (gchar *cDockName, CairoDock *pDock
 	if (pDock->iRefCount == 0 && ! (data && pDock->bIsMainDock))
 	{
 		gtk_widget_queue_draw (pDock->container.pWidget);
-		//g_print ("redessin de %s\n", cDockName);
 	}
 }
 void cairo_dock_redraw_root_docks (gboolean bExceptMainDock)
@@ -467,6 +466,7 @@ static void _cairo_dock_reposition_one_root_dock (gchar *cDockName, CairoDock *p
 		cairo_dock_get_root_dock_position (cDockName, pDock);  // relit toute la conf.
 		cairo_dock_update_dock_size (pDock);  // la taille max du dock depend de la taille de l'ecran, donc on recalcule son ratio.
 		cairo_dock_place_root_dock (pDock);
+		gtk_widget_queue_draw (pDock->container.pWidget);
 	}
 }
 void cairo_dock_reposition_root_docks (gboolean bExceptMainDock)

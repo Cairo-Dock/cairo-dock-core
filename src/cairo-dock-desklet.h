@@ -190,6 +190,7 @@ struct _CairoDesklet {
 	CairoDeskletGLRenderFunc render_bounding_box;
 	/// ID of the object that was picked thanks in case the previous function is not null.
 	GLuint iPickedObject;
+	gboolean bClicked;
 };
 
 /// Definition of a function that runs through all desklets.

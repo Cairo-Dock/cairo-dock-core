@@ -175,7 +175,7 @@ static gboolean on_button_press_dialog (GtkWidget* pWidget,
 		}
 	}
 
-	return FALSE;
+	return TRUE;
 }
 static gboolean on_key_press_dialog (GtkWidget *pWidget,
 	GdkEventKey *pKey,
@@ -1383,7 +1383,7 @@ void cairo_dock_replace_all_dialogs (void)
 		if (pIcon != NULL && GTK_WIDGET_VISIBLE (pDialog->container.pWidget)) // on ne replace pas les dialogues en cours de destruction ou caches.
 		{
 			pContainer = cairo_dock_search_container_from_icon (pIcon);
-			if (CAIRO_DOCK_IS_DOCK (pContainer))
+			//if (CAIRO_DOCK_IS_DOCK (pContainer))
 			{
 				int iPositionX = pDialog->container.iWindowPositionX;
 				int iPositionY = pDialog->container.iWindowPositionY;

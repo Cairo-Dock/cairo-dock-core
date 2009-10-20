@@ -83,8 +83,23 @@ struct _CairoDataRendererInterface {
 	CairoDataRendererFreeFunc free;
 };
 
-/// Generic DataRenderer. Any implementation of a DataRenderer will derive from this class.
 
+struct _CairoDataRendererEmblem {
+	gdouble fX, fY;
+	gdouble fWidth, fHeight;
+	gdouble fAlpha;
+	cairo_surface_t *pSurface;
+	GLuint iTexture;
+	};
+
+struct _CairoDataRendererTextZone {
+	gdouble fX, fY;
+	gdouble fWidth, fHeight;
+	gdouble pColor[3];
+	};
+
+
+/// Generic DataRenderer. Any implementation of a DataRenderer will derive from this class.
 struct _CairoDataRenderer {
 	// fill at init by the high level renderer.
 	/// interface of the Data Renderer.
@@ -106,8 +121,6 @@ struct _CairoDataRenderer {
 	gboolean bWriteValues;
 	/// the time it will take to update to the new value, with a smooth animation (require openGL capacity)
 	gint iLatencyTime;
-	/// an optionnal range for values. Same size as the set of values.
-	gdouble *fMinMaxValues;
 	// fill at load time by the high level renderer.
 	/// the rank of the renderer, eg the number of values it can display at once (for exemple, 1 for a bar, 2 for a dual-gauge)
 	gint iRank;  // nbre de valeurs que peut afficher 1 unite (en general : gauge:1/2, graph:1/2, bar:1)
@@ -118,12 +131,15 @@ struct _CairoDataRenderer {
 	gint iSmoothAnimationStep;
 	/// latency due to the smooth movement (0 means the displayed value is the current one, 1 the previous)
 	gdouble fLatency;
-	/// an optionnal list of emblems to be displayed on the Data Renderer next to each value. Same size as the set of values.
-	gchar **cEmblems;
 	/// an optionnal list of tiltes to be displayed on the Data Renderer next to each value. Same size as the set of values.
 	gchar **cTitles;
 	/// color of the titles.
 	gdouble fTextColor[3];
+	gchar *cEmblems;
+	/// an optionnal list of emblems to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
+	CairoDataRendererEmblem *pEmblems;
+	/// an optionnal list of titles to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
+	CairoDataRendererTextZone *pTextZones;
 };
 
 

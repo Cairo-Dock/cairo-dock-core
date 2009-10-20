@@ -567,6 +567,10 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 	{
 		cairo_dock_reserve_space_for_desklet (pDesklet, TRUE);
 	}
+	if (pDesklet->pIcon && cairo_dock_icon_has_dialog (pDesklet->pIcon))
+	{
+		cairo_dock_replace_all_dialogs ();
+	}
 	pDesklet->iSidWritePosition = 0;
 	return FALSE;
 }
@@ -870,6 +874,7 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 	{
 		if (pButton->type == GDK_BUTTON_PRESS)
 		{
+			pDesklet->bClicked = TRUE;
 			if (_cairo_dock_desklet_is_free (pDesklet))
 			{
 				pDesklet->container.iMouseX = pButton->x;  // pour le deplacement manuel.
@@ -889,6 +894,11 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 		}
 		else if (pButton->type == GDK_BUTTON_RELEASE)
 		{
+			if (!pDesklet->bClicked)  // on n'accepte le release que si on avait clique sur le desklet avant (on peut recevoir le release si on avat clique sur un dialogue qui chevauchait notre desklet et qui a disparu au clic).
+			{
+				return FALSE;
+			}
+			pDesklet->bClicked = FALSE;
 			cd_debug ("GDK_BUTTON_RELEASE");
 			if (pDesklet->moving)
 			{

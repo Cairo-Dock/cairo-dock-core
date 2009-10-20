@@ -55,13 +55,9 @@ typedef struct {
 	gint iNbImageLoaded;
 	GaugeImage *pImageList;
 	// text zone
-	gdouble textX, textY;
-	gdouble textWidth, textHeight;
-	gdouble textColor[3];
+	CairoDataRendererTextZone textZone;
 	// logo zone
-	gdouble logoX, logoY;
-	gdouble logoWidth, logoHeight;
-	gdouble logoAlpha;
+	CairoDataRendererEmblem emblem;
 } GaugeIndicator;
 
 typedef struct {
