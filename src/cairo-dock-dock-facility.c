@@ -112,6 +112,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	}
 	pDock->pRenderer->compute_size (pDock);
 	
+	double hmax = pDock->iMaxIconHeight;
 	int iMaxAuthorizedWidth = cairo_dock_get_max_authorized_dock_width (pDock);
 	int n = 0;
 	do
@@ -152,13 +153,14 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 				icon->fHeight *= pDock->container.fRatio / fPrevRatio;
 				pDock->fFlatDockWidth += icon->fWidth + myIcons.iIconGap;
 			}
-			pDock->iMaxIconHeight *= pDock->container.fRatio / fPrevRatio;
+			hmax *= pDock->container.fRatio / fPrevRatio;
 			
 			pDock->pRenderer->compute_size (pDock);
 		}
 		
 		n ++;
 	} while ((pDock->iMaxDockWidth > iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_iScreenHeight[pDock->container.bIsHorizontal]) && n < 4);
+	pDock->iMaxIconHeight = hmax;
 	
 	cairo_dock_calculate_dock_icons (pDock);  // le calcul de max_dock_size a altere les fX et fY.
 	
@@ -351,6 +353,18 @@ void cairo_dock_move_resize_dock (CairoDock *pDock, CairoDockSizeType iSizeType)
 			iNewHeight,
 			iNewWidth);
 	}
+	
+	if (iSizeType == CAIRO_DOCK_MIN_SIZE)
+	{
+		if (pDock->pShapeBitmap && ! pDock->bActive)
+		{
+			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+				NULL,
+				0,
+				0);
+		}
+		pDock->bActive = TRUE;
+	}
 }
 
 void cairo_dock_place_root_dock (CairoDock *pDock)
@@ -402,8 +416,8 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 				NULL,
 				0,
 				0);
-			pDock->bActive = TRUE;
 		}
+		pDock->bActive = TRUE;
 		return ;
 	}
 	

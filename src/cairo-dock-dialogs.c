@@ -157,8 +157,10 @@ static gboolean on_button_press_dialog (GtkWidget* pWidget,
 			if (pDialog->pButtons != NULL)
 			{
 				int iButton = _cairo_dock_find_clicked_button_in_dialog (pButton, pDialog);
+				cd_debug ("clic on button %d", iButton);
 				if (iButton >= 0 && iButton < pDialog->iNbButtons && pDialog->pButtons[iButton].iOffset != 0)
 				{
+					g_print (" -> action !\n");
 					pDialog->pButtons[iButton].iOffset = 0;
 					pDialog->action_on_answer (iButton, pDialog->pInteractiveWidget, pDialog->pUserData, pDialog);
 					gtk_widget_queue_draw (pDialog->container.pWidget);  // au cas ou le unref ci-dessous ne le detruirait pas.
@@ -1138,8 +1140,8 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 				*bRight = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
 				*bDirectionUp = pDock->container.bDirectionUp;
 				///*bDirectionUp = (pDock->container.iWindowPositionY > g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
-				*iY = (*bDirectionUp ? pDock->container.iWindowPositionY + (pDock->bActive && ! (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->bAtBottom) ? 0 : pDock->container.iHeight - pDock->iMinDockHeight) :
-					pDock->container.iWindowPositionY + pDock->container.iHeight - (pDock->bActive && ! (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->bAtBottom) ? 0 : pDock->container.iHeight - pDock->iMinDockHeight));
+				*iY = (*bDirectionUp ? pDock->container.iWindowPositionY + (pDock->bActive || (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->bAtBottom) ? 0 : pDock->container.iHeight - pDock->iMinDockHeight) :
+					pDock->container.iWindowPositionY + pDock->container.iHeight - (pDock->bActive || (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->bAtBottom) ? 0 : pDock->container.iHeight - pDock->iMinDockHeight));
 			}
 			else
 			{
@@ -1148,7 +1150,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 				*iY = (! (*bRight) ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight);
 			}
 			
-			if (pDock->bAutoHide && pDock->bAtBottom)
+			if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->bAtBottom)
 			{
 				*iX = pDock->container.iWindowPositionX +
 					(pIcon->fXAtRest + pIcon->fWidth * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign))) / pDock->fFlatDockWidth * myAccessibility.iVisibleZoneWidth;
@@ -1554,11 +1556,11 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 		
 		if (myAccessibility.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
 			cairo_dock_pop_up (CAIRO_DOCK (pContainer));
-		//g_print ("debut de boucle bloquante ...\n");
+		g_print ("debut de boucle bloquante ...\n");
 		GDK_THREADS_LEAVE ();
 		g_main_loop_run (pBlockingLoop);
 		GDK_THREADS_ENTER ();
-		//g_print ("fin de boucle bloquante -> %d\n", iAnswer);
+		g_print ("fin de boucle bloquante -> %d\n", iClickedButton);
 		if (myAccessibility.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
 			cairo_dock_pop_down (CAIRO_DOCK (pContainer));
 		if (CAIRO_DOCK_IS_DOCK (pContainer)/* && ! pDock->container.bInside*/)

@@ -1677,15 +1677,14 @@ msgstr "Lier avec le curseur"
 
 #: ../data/messages:309
 msgid ""
-"The smaller, the lower the decorations will move along with the cursor. At 0 "
-"they will be static."
+"The smaller, the slower the decorations will move along with the cursor."
 msgstr ""
 "Plus petite la valeur, plus les décorations se déplaceront lentement avec le "
 "curseur. Une valeur de 0 fixe les décorations."
 
 #: ../data/messages:311
 msgid "Speed :"
-msgstr "Vitesse :"
+msgstr "Vitesse :"
 
 #: ../data/messages:313
 msgid "Configure the dock's appearence when hidden."

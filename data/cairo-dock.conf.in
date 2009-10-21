@@ -1,5 +1,5 @@
 #@VERSION@
-######## This is the conf file of cairo-dock, released under the GPL.##########
+######## This is the conf file of Cairo-Dock, released under the GPL.##########
 ######## It is parsed by cairo-dock to automatically generate an appropriate GUI,##########
 ######## so don't mess into it, except if you know what you're doing ! ;-)##########
 
@@ -12,14 +12,14 @@ frame_pos =
 #{The icons will scroll according to the chosen placement type. Of course the dock can be placed anywhere on the screen, here we specify regarding to what.}
 screen border = 0
 
-#e-[0.;1.] Relative alignment :
+#e-[0.;1.;left;right] Relative alignment :
 #{At 0, the dock will place itself regarding the left corner if horizontal and the top corner if vertical, at 1 regarding the right corner if horizontal and the bottom corner if vertical, and at 0.5, regarding the middle of the screen's edge.}
 alignment = .5
 
 #F-[Position regarding the chosen screen's edge;gtk-leave-fullscreen]
 frame_scr =
 
-#I-[-1000;1000] Lateral gap :
+#I-[-1000;1000;left;right] Lateral gap :
 #{Gap from the absolute position on the screen's edge, in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.}
 x gap = 0
 #i-[-30;1000] Distance to the screen's edge :
@@ -206,7 +206,7 @@ animate on auto-hide = true
 #{Always true if sub-docks appear with mouse click.}
 animate subdocks = true
 
-#I-[100;600] Unfolding animation duration :
+#I-[100;600;fast;slow] Unfolding animation duration :
 #{The icons will appear folded on themselves, then will unfold untill they fill the whole dock. The smaller, the faster it will be.}
 unfold duration = 400
 
@@ -314,7 +314,7 @@ frame2 =
 #{Any format allowed; let this field empty if you don't want to use an image as background.}
 background image = 
 
-#e+[0;1] Image's transparency :
+#e+[0;1;transparent;opaque] Image's transparency :
 image alpha = 0.5
 
 #b+ Repeat image as a pattern to fill background ?
@@ -347,8 +347,8 @@ frame_mouse =
 #l+[No;Follow the mouse;Link with the mouse] Move the background image along with the cursor ?
 move bg = 0
 
-#e+[0.1;1] Speed :
-#{The smaller, the lower the decorations will move along with the cursor. At 0 they will be static.}
+#e+[0.1;1;slow;fast] Speed :
+#{The smaller, the slower the decorations will move along with the cursor.}
 decorations speed = 0.5
 
 #F[Hidden dock;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-hidden-dock.png]
@@ -359,7 +359,7 @@ hidden_dock =
 #{This is what you see when the dock hides itselfs. Any format is allowed. Let this field empty to have an invisible zone.}
 callback image = background-cairo-dock.svg
 
-#e+[0;1] Transparency of the image :
+#e+[0;1;transparent;opaque] Transparency of the image :
 callback alpha = 0.5
 
 #b+ Rotate the image when the dock is on top/left/right ?
@@ -452,15 +452,15 @@ icons bg =
 #F+[Reflections]
 frame_refl =
 
-#e+[0;1] Reflecting power of the plane :
+#e+[0;1;light;strong] Reflecting power of the plane :
 #{It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are not used.}
 albedo = .8
 
-#e+[0;1] Fraction of the icon height that will reflect :
+#e+[0;1;small;tall] Fraction of the icon height that will reflect :
 #{Setting it to 0.33 will mean that 33% of the icons will reflect on the ground. The icons will be placed at the right distance from the front border of the frame so that the reflect is fully visible.}
 field depth = 0.5
 
-#e+[0;1] Icons' transparency at rest :
+#e+[0;1;transparent;opaque] Icons' transparency at rest :
 #{It is their transparency when the dock is at rest; they will "materialize" progressively as the dock grows up. The closer to 0, the more transparent they will be.}
 alpha at rest = 1
 
@@ -550,7 +550,7 @@ sub-dock view = default
 #{otherwise they will be perpendicular}
 same horizontality = true
 
-#e+[0.1;1.] Ratio for the size of the sub-docks' icons :
+#e+[0.1;1.;smaller;same size] Ratio for the size of the sub-docks' icons :
 #{You can specify a ratio for the size of the sub-docks' icons, regarding the main docks' icons size}
 relative icon size = 1.
 
@@ -615,7 +615,7 @@ frame_perso =
 #S+ Background image :
 #{It's an image that will be displayed below the drawings, like a frame for exemple. Let empty to not use any.}
 bg desklet =
-#e+[0;1] Background tansparency :
+#e+[0;1;transparent;opaque] Background tansparency :
 bg alpha = 1
 #i+[0;256] Left offset :
 #{in pixels. Use this to adjust the left position of the drawings.}
@@ -632,7 +632,7 @@ bottom offset = 0
 #S+ Foreground image :
 #{It's an image that will be displayed above the drawings, like a reflect for exemple. Let empty to not use any.}
 fg desklet =
-#e+[0;1] Foreground tansparency :
+#e+[0;1;transparent;opaque] Foreground tansparency :
 fg alpha = 1
 
 #F+
@@ -687,7 +687,7 @@ indicator image =
 #b+ Display the indicator above the icon ?
 indicator above = true
 
-#e+[0.1;1.5] Indicator size ratio :
+#e+[0.1;1.5;smaller;bigger] Indicator size ratio :
 #{You can choose to make the indicator smaller or bigger than the icons. The bigger the value is, the bigger the indicator is. 1 means the indicator will have the same size as the icons.}
 indicator ratio = 1.
 

@@ -312,7 +312,16 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 		icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI];
 		icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI];
 		if (myTaskBar.bShowThumbnail && icon->bIsHidden && icon->iBackingPixmap != 0)
-			icon->pIconBuffer = cairo_dock_create_surface_from_xpixmap (icon->iBackingPixmap, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
+		{
+			if (g_bUseOpenGL)
+			{
+				icon->iIconTexture = cairo_dock_texture_from_pixmap (icon->Xid, icon->iBackingPixmap);
+			}
+			else
+			{
+				icon->pIconBuffer = cairo_dock_create_surface_from_xpixmap (icon->iBackingPixmap, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
+			}
+		}
 		if (icon->pIconBuffer == NULL && myTaskBar.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass))
 			icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
 		if (icon->pIconBuffer == NULL)
@@ -400,7 +409,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			bDirectionUp);
 	}
 	
-	if (g_bUseOpenGL && icon->pIconBuffer != NULL)
+	if (g_bUseOpenGL && icon->pIconBuffer != NULL && icon->iIconTexture == 0)
 	{
 		icon->iIconTexture = cairo_dock_create_texture_from_surface (icon->pIconBuffer);
 	}

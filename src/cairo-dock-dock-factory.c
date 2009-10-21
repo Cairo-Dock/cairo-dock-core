@@ -486,8 +486,8 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 					NULL,
 					0,
 					0);
-				pDock->bActive = TRUE;
 			}
+			pDock->bActive = TRUE;
 		}
 		gtk_widget_hide (pDock->container.pWidget);
 		cairo_dock_update_dock_size (pDock);

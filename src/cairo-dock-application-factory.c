@@ -573,7 +573,8 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	#ifdef HAVE_XEXTEND
 	if (myTaskBar.bShowThumbnail)
 	{
-		icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
+		Display *display = gdk_x11_get_default_xdisplay ();
+		icon->iBackingPixmap = XCompositeNameWindowPixmap (display, Xid);
 		/*icon->iDamageHandle = XDamageCreate (s_XDisplay, Xid, XDamageReportNonEmpty);  // XDamageReportRawRectangles
 		g_print ("backing pixmap : %d ; iDamageHandle : %d\n", icon->iBackingPixmap, icon->iDamageHandle);*/
 	}

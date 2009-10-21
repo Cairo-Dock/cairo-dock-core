@@ -111,8 +111,8 @@ gboolean cairo_dock_move_down (CairoDock *pDock)
 				NULL,
 				0,
 				0);
-			pDock->bActive = TRUE;
 		}
+		pDock->bActive = TRUE;
 		/*int iNewWidth, iNewHeight;
 		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MIN_SIZE, &iNewWidth, &iNewHeight);
 		if (pDock->container.bIsHorizontal)
@@ -418,9 +418,9 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 							pDock->pShapeBitmap,
 							0,
 							0);
-						pDock->bActive = FALSE;
 						cairo_dock_replace_all_dialogs ();
 					}
+					pDock->bActive = FALSE;
 				}
 				else if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->fFoldingFactor != 0)  // si le dock se replie, inutile de rester en taille grande avec une fenetre transparente, ca perturbe.
 				{
@@ -432,8 +432,8 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 							NULL,
 							0,
 							0);
-						pDock->bActive = TRUE;
 					}
+					pDock->bActive = TRUE;
 					/*int iNewWidth, iNewHeight;
 					cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MIN_SIZE, &iNewWidth, &iNewHeight);
 					if (pDock->container.bIsHorizontal)

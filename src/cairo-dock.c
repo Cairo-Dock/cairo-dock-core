@@ -692,10 +692,10 @@ int main (int argc, char** argv)
 	g_print ("\nPLANTAGE POWER-MANAGER\n\n");
 	g_print ("\nSOUS-DOCKS ET CHGT DE BUREAU\n\n");
 	g_print ("\nTESTER APPLET DBUS QUAND DOCK PLANTE\n\n");
-	g_print ("\nPOSITION DES DIALOGUES (TROP BAS, TROUVER DANS QUELLES CONDITIONS, ALSAMIXER ?)\n\n");
-	g_print ("\n2eme DOCK PRINCIPAL AVEC 1 ICONE : BORD TRONQUE.\n\n");
-	g_print ("\nFLASH A LA CREATION D'UNE ICONE (BACKGROUND MAL PLACE)\n\n");
-	g_print ("\nSUPPRIMER/MODIFIER UN SEPARATEUR\n\n");
+	g_print ("\n2eme DOCK PRINCIPAL AVEC 1 ICONE : BORD TRONQUE\n\n");
+	g_print ("\nTAILLE DES ICONES D'APPLIS QUAND PLEIN D'ICONES\n\n");
+	g_print ("\nPLAN 3D NE PREND PAS TOUT L'ECRAN !\n\n");
+	g_print ("\nHAUTEUR VUE DEFAULT AVEC RATIO\n\n");
 	
 	
 	gtk_main ();

@@ -135,6 +135,7 @@ struct _CairoDataRenderer {
 	gchar **cTitles;
 	/// color of the titles.
 	gdouble fTextColor[3];
+	/// an optionnal list of emblems to be displayed on the Data Renderer next to each value. Same size as the set of values.
 	gchar *cEmblems;
 	/// an optionnal list of emblems to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
 	CairoDataRendererEmblem *pEmblems;

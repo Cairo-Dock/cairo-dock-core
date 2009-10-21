@@ -1270,21 +1270,37 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						1,
 						MAX (1, (iMaxValue - iMinValue) / 20),
 						0);
-
+					
 					if (iElementType == CAIRO_DOCK_WIDGET_HSCALE_INTEGER)
 					{
 						pOneWidget = gtk_hscale_new (GTK_ADJUSTMENT (pAdjustment));
 						gtk_scale_set_digits (GTK_SCALE (pOneWidget), 0);
 						gtk_widget_set (pOneWidget, "width-request", 150, NULL);
+						
+						GtkWidget *pExtendedWidget;
+						if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL && pAuthorizedValuesList[1] != NULL && pAuthorizedValuesList[2] != NULL && pAuthorizedValuesList[3] != NULL)
+						{
+							pExtendedWidget = gtk_hbox_new (FALSE, 0);
+							GtkWidget *label = gtk_label_new (gettext (pAuthorizedValuesList[2]));
+							gtk_box_pack_start (GTK_BOX (pExtendedWidget), label, FALSE, FALSE, 0);
+							gtk_box_pack_start (GTK_BOX (pExtendedWidget), pOneWidget, FALSE, FALSE, 0);
+							label = gtk_label_new (gettext (pAuthorizedValuesList[3]));
+							gtk_box_pack_start (GTK_BOX (pExtendedWidget), label, FALSE, FALSE, 0);
+						}
+						else
+							pExtendedWidget = pOneWidget;
+						pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
+						_pack_in_widget_box (pExtendedWidget);
 					}
 					else
 					{
 						pOneWidget = gtk_spin_button_new (GTK_ADJUSTMENT (pAdjustment), 1., 0);
+						
+						_pack_subwidget (pOneWidget);
 					}
 					g_object_set (pAdjustment, "lower", (double) iMinValue, "upper", (double) iMaxValue, NULL); // le 'width-request' sur un GtkHScale avec 'fMinValue' non nul plante ! Donc on les met apres...
 					gtk_adjustment_set_value (GTK_ADJUSTMENT (pAdjustment), iValue);
-
-					_pack_subwidget (pOneWidget);
+					
 					if (iElementType == CAIRO_DOCK_WIDGET_SIZE_INTEGER && k+1 < iNbElements)  // on rajoute le separateur.
 					{
 						GtkWidget *pLabelX = gtk_label_new ("x");
@@ -1356,17 +1372,31 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						pOneWidget = gtk_hscale_new (GTK_ADJUSTMENT (pAdjustment));
 						gtk_scale_set_digits (GTK_SCALE (pOneWidget), 3);
 						gtk_widget_set (pOneWidget, "width-request", 150, NULL);
+						
+						GtkWidget *pExtendedWidget;
+						if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL && pAuthorizedValuesList[1] != NULL && pAuthorizedValuesList[2] != NULL && pAuthorizedValuesList[3] != NULL)
+						{
+							pExtendedWidget = gtk_hbox_new (FALSE, 0);
+							GtkWidget *label = gtk_label_new (gettext (pAuthorizedValuesList[2]));
+							gtk_box_pack_start (GTK_BOX (pExtendedWidget), label, FALSE, FALSE, 0);
+							gtk_box_pack_start (GTK_BOX (pExtendedWidget), pOneWidget, FALSE, FALSE, 0);
+							label = gtk_label_new (gettext (pAuthorizedValuesList[3]));
+							gtk_box_pack_start (GTK_BOX (pExtendedWidget), label, FALSE, FALSE, 0);
+						}
+						else
+							pExtendedWidget = pOneWidget;
+						pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
+						_pack_in_widget_box (pExtendedWidget);
 					}
 					else
 					{
 						pOneWidget = gtk_spin_button_new (GTK_ADJUSTMENT (pAdjustment),
 							1.,
 							3);
+						_pack_subwidget (pOneWidget);
 					}
 					g_object_set (pAdjustment, "lower", fMinValue, "upper", fMaxValue, NULL); // le 'width-request' sur un GtkHScale avec 'fMinValue' non nul plante ! Donc on les met apres...
 					gtk_adjustment_set_value (GTK_ADJUSTMENT (pAdjustment), fValue);
-
-					_pack_subwidget (pOneWidget);
 				}
 				if (iElementType == CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGB || iElementType == CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGBA)
 				{

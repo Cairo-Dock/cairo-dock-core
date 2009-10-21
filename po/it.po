@@ -1589,8 +1589,7 @@ msgstr ""
 
 #: ../data/messages:309
 msgid ""
-"The smaller, the lower the decorations will move along with the cursor. At 0 "
-"they will be static."
+"The smaller, the slower the decorations will move along with the cursor."
 msgstr ""
 "Più si avvicina a 0, più le decorazioni si svolgeranno lentamente con il "
 "cursore. A 0 saranno immobili."

@@ -1578,8 +1578,7 @@ msgstr "与鼠标联结"
 
 #: ../data/messages:309
 msgid ""
-"The smaller, the lower the decorations will move along with the cursor. At 0 "
-"they will be static."
+"The smaller, the slower the decorations will move along with the cursor."
 msgstr "取值越小，装饰随指针移动的距离越短。取值为0时静止。"
 
 #: ../data/messages:311

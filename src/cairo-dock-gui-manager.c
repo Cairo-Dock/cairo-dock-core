@@ -1554,8 +1554,10 @@ void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage)
 	//g_print ("%s (%s sur %x/%x)\n", __func__, cMessage, pWindow, pStatusBar);
 	gtk_statusbar_pop (GTK_STATUSBAR (pStatusBar), 0);  // clear any previous message, underflow is allowed.
 	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, cMessage);
+	g_print ("wait statusbar...\n");
 	while (gtk_events_pending ())
 		gtk_main_iteration ();
+	g_print ("statusbar ok.\n");
 }
 void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFormat, ...)
 {

@@ -795,8 +795,8 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			NULL,
 			0,
 			0);
-		pDock->bActive = TRUE;
 	}
+	pDock->bActive = TRUE;
 	
 	// on repasse au premier plan.
 	if (myAccessibility.bPopUp && pDock->iRefCount == 0)
@@ -1506,7 +1506,6 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		}
 		#endif
 		
-		g_print ("configure\n");
 		cairo_dock_calculate_dock_icons (pDock);
 	}
 	gtk_widget_queue_draw (pWidget);

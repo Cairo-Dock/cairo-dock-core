@@ -366,5 +366,8 @@ void cairo_dock_draw_gl_text_in_area (const guchar *cText, CairoDockGLFont *pFon
 void cairo_dock_draw_gl_text_at_position_in_area (const guchar *cText, CairoDockGLFont *pFont, int x, int y, int iWidth, int iHeight, gboolean bCentered);
 
 
+GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap);
+
+
 G_END_DECLS
 #endif

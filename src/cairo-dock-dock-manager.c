@@ -203,7 +203,7 @@ static gboolean _cairo_dock_hide_dock_if_parent (gchar *cDockName, CairoDock *pD
 
 	if (pPointedIcon != NULL)
 	{
-		cd_message (" il faut cacher ce dock parent");
+		g_print (" il faut cacher ce dock parent (%d)\n", pDock->iRefCount);
 		if (pDock->iRefCount == 0)
 		{
 			cairo_dock_leave_from_main_dock (pDock);
@@ -519,7 +519,16 @@ static void _cairo_dock_stop_quick_hide_one_root_dock (const gchar *cDockName, C
 		{
 			pDock->fFoldingFactor = 0;
 			
-			int iNewWidth, iNewHeight;
+			cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MIN_SIZE);
+			if (pDock->pShapeBitmap && ! pDock->bActive)
+			{
+				gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+					NULL,
+					0,
+					0);
+			}
+			pDock->bActive = TRUE;
+			/*int iNewWidth, iNewHeight;
 			cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
 			
 			if (pDock->container.bIsHorizontal)
@@ -533,7 +542,7 @@ static void _cairo_dock_stop_quick_hide_one_root_dock (const gchar *cDockName, C
 					pDock->container.iWindowPositionY,
 					pDock->container.iWindowPositionX,
 					iNewHeight,
-					iNewWidth);
+					iNewWidth);*/
 		}
 	}
 }

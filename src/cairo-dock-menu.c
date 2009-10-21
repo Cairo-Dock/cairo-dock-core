@@ -310,7 +310,7 @@ static void _cairo_dock_remove_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
 
-	gchar *question = g_strdup_printf (_("You're about removing this icon (%s) from the dock. Sure ?"), (icon->cInitialName != NULL ? icon->cInitialName : icon->cName));
+	gchar *question = g_strdup_printf (_("You're about removing this icon (%s) from the dock. Sure ?"), (icon->cInitialName != NULL ? icon->cInitialName : (icon->cName ? icon->cName : "no name")));
 	int answer = cairo_dock_ask_question_and_wait (question, icon, CAIRO_CONTAINER (pDock));
 	g_free (question);
 	if (answer != GTK_RESPONSE_YES)

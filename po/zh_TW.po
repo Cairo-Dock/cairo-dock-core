@@ -1589,8 +1589,7 @@ msgstr "與滑鼠連結"
 
 #: ../data/messages:309
 msgid ""
-"The smaller, the lower the decorations will move along with the cursor. At 0 "
-"they will be static."
+"The smaller, the slower the decorations will move along with the cursor."
 msgstr ""
 "數值愈小，則背景填充圖片跟隨滑鼠移動的速度愈慢。當設定為 0 時將會整個停止不"
 "動。"

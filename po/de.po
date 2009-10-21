@@ -1650,8 +1650,7 @@ msgstr "Mit der Maus verbinden"
 
 #: ../data/messages:309
 msgid ""
-"The smaller, the lower the decorations will move along with the cursor. At 0 "
-"they will be static."
+"The smaller, the slower the decorations will move along with the cursor."
 msgstr ""
 "Umso kleiner, desto geringer bewegen sich die Symbole beim Zeigen auf sie. "
 "Bei 0 bewegen sie sich nicht."

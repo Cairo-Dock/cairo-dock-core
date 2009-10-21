@@ -272,6 +272,7 @@ static gboolean on_configure_flying_icon (GtkWidget* pWidget,
 
 CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, CairoDock *pOriginDock, gboolean bDrawHand)
 {
+	g_return_val_if_fail (pFlyingIcon != NULL, NULL);
 	CairoFlyingContainer * pFlyingContainer = g_new0 (CairoFlyingContainer, 1);
 	pFlyingContainer->container.iType = CAIRO_DOCK_TYPE_FLYING_CONTAINER;
 	GtkWidget* pWindow = cairo_dock_create_container_window ();

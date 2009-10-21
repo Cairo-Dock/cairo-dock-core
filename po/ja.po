@@ -1595,8 +1595,7 @@ msgstr ""
 
 #: ../data/messages:309
 msgid ""
-"The smaller, the lower the decorations will move along with the cursor. At 0 "
-"they will be static."
+"The smaller, the slower the decorations will move along with the cursor."
 msgstr ""
 "小さい値ほど、カーソルの動きに合わせた装飾の移動量が少なくなります。0 を指定"
 "した場合は静止状態になります。"

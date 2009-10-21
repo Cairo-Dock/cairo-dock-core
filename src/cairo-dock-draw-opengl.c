@@ -1664,7 +1664,7 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 	
 	Display *XDisplay = gdk_x11_get_default_xdisplay ();
 	
-	GLXFBConfig *pFBConfigs; 
+	GLXFBConfig *pFBConfigs;
 	XRenderPictFormat *pPictFormat = NULL;
 	int doubleBufferAttributes[] = {
 		GLX_DRAWABLE_TYPE, 	GLX_WINDOW_BIT,
@@ -2216,4 +2216,111 @@ void cairo_dock_draw_gl_text_at_position_in_area (const guchar *cText, CairoDock
 		glTranslatef (x, y, 0);
 		cairo_dock_draw_gl_text_in_area (cText, pFont, iWidth, iHeight, bCentered);
 	}
+}
+
+
+
+
+// Bind redirected window to texture:
+GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
+{
+	return 0;  /// a tester...
+	Display *display = gdk_x11_get_default_xdisplay ();
+	XWindowAttributes attrib;
+	XGetWindowAttributes (display, Xid, &attrib);
+	
+	VisualID visualid = XVisualIDFromVisual (attrib.visual);
+	
+	int nfbconfigs;
+	int screen = 0;
+	GLXFBConfig *fbconfigs = glXGetFBConfigs (display, screen, &nfbconfigs);
+	
+	GLfloat top, bottom;
+	XVisualInfo *visinfo;
+	int value;
+	int i;
+	for (i = 0; i < nfbconfigs; i++)
+	{
+		visinfo = glXGetVisualFromFBConfig (display, fbconfigs[i]);
+		if (!visinfo || visinfo->visualid != visualid)
+			continue;
+	
+		glXGetFBConfigAttrib (display, fbconfigs[i], GLX_DRAWABLE_TYPE, &value);
+		if (!(value & GLX_PIXMAP_BIT))
+			continue;
+	
+		glXGetFBConfigAttrib (display, fbconfigs[i],
+			GLX_BIND_TO_TEXTURE_TARGETS_EXT,
+			&value);
+		if (!(value & GLX_TEXTURE_2D_BIT_EXT))
+			continue;
+	
+		glXGetFBConfigAttrib (display, fbconfigs[i],
+			GLX_BIND_TO_TEXTURE_RGBA_EXT,
+			&value);
+		if (value == FALSE)
+		{
+			glXGetFBConfigAttrib (display, fbconfigs[i],
+				GLX_BIND_TO_TEXTURE_RGB_EXT,
+				&value);
+			if (value == FALSE)
+				continue;
+		}
+	
+		glXGetFBConfigAttrib (display, fbconfigs[i],
+			GLX_Y_INVERTED_EXT,
+			&value);
+		if (value == TRUE)
+		{
+			top = 0.0f;
+			bottom = 1.0f;
+		}
+		else
+		{
+			top = 1.0f;
+			bottom = 0.0f;
+		}
+	
+		break;
+	}
+	
+	if (i == nfbconfigs)
+	{
+		cd_warning ("No FB Config found");
+		return 0;
+	}
+	
+	int pixmapAttribs[5] = { GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
+				GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGBA_EXT,
+				None };
+	GLXPixmap glxpixmap = glXCreatePixmap (display, fbconfigs[i], iBackingPixmap, pixmapAttribs);
+	
+	GLuint texture;
+	glGenTextures (1, &texture);
+	glBindTexture (GL_TEXTURE_2D, texture);
+	
+	glXBindTexImageEXT (display, glxpixmap, GLX_FRONT_LEFT_EXT, NULL);
+	
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	
+	// draw using iBackingPixmap as texture
+	glBegin (GL_QUADS);
+	
+	glTexCoord2d (0.0f, bottom);
+	glVertex2d (0.0f, 0.0f);
+	
+	glTexCoord2d (0.0f, top);
+	glVertex2d (0.0f, 1.0f);
+	
+	glTexCoord2d (1.0f, top);
+	glVertex2d (1.0f, 1.0f);
+	
+	glTexCoord2d (1.0f, bottom);
+	glVertex2d (1.0f, 0.0f);
+	
+	glEnd ();
+	
+	glXReleaseTexImageEXT (display, glxpixmap, GLX_FRONT_LEFT_EXT);
+	return texture;
 }
