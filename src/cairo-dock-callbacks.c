@@ -247,12 +247,12 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 	}
 	
 	//g_print ("%x/%x , %x, %x\n", pDock, s_pLastPointedDock, pLastPointedIcon, pLastPointedIcon?pLastPointedIcon->pSubDock:NULL);
-	if ((pDock == s_pLastPointedDock || s_pLastPointedDock == NULL) && pLastPointedIcon != NULL && pLastPointedIcon->pSubDock != NULL)
+	if ((pDock == s_pLastPointedDock || s_pLastPointedDock == NULL) && pLastPointedIcon != NULL && pLastPointedIcon->pSubDock != NULL)  // on a quitte une icone ayant un sous-dock.
 	{
 		CairoDock *pSubDock = pLastPointedIcon->pSubDock;
 		if (GTK_WIDGET_VISIBLE (pSubDock->container.pWidget))
 		{
-			//g_print ("on cache %s en changeant d'icône\n", pLastPointedIcon->cName);
+			//g_print ("on cache %s en changeant d'icone\n", pLastPointedIcon->cName);
 			if (pSubDock->iSidLeaveDemand == 0)
 			{
 				//g_print ("  on retarde le cachage du dock de %dms\n", MAX (myAccessibility.iLeaveSubDockDelay, 330));
@@ -262,7 +262,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		//else
 		//	cd_debug ("pas encore visible !\n");
 	}
-	if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && pPointedIcon->pSubDock != s_pLastPointedDock && (! myAccessibility.bShowSubDockOnClick || CAIRO_DOCK_IS_APPLI (pPointedIcon) || pDock->bIsDragging))
+	if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && pPointedIcon->pSubDock != s_pLastPointedDock && (! myAccessibility.bShowSubDockOnClick || CAIRO_DOCK_IS_APPLI (pPointedIcon) || pDock->bIsDragging))  // on entre sur une icone ayant un sous-dock.
 	{
 		//cd_debug ("il faut montrer un sous-dock");
 		if (pPointedIcon->pSubDock->iSidLeaveDemand != 0)
@@ -576,6 +576,8 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 		g_return_if_fail (pOriginDock != NULL);
 		if (pOriginDock == pDock && _mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 		{
+			g_print (" on detache l'icone\n");
+			pOriginDock->bIconIsFlyingAway = TRUE;
 			gchar *cParentDockName = s_pIconClicked->cParentDockName;
 			s_pIconClicked->cParentDockName = NULL;
 			cairo_dock_detach_icon_from_dock (s_pIconClicked, pOriginDock, TRUE);
@@ -586,14 +588,13 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 			s_pFlyingContainer = cairo_dock_create_flying_container (s_pIconClicked, pOriginDock, TRUE);
 			//g_print ("- s_pIconClicked <- NULL\n");
 			s_pIconClicked = NULL;
-			
 			if (pDock->iRefCount > 0 || pDock->bAutoHide)  // pour garder le dock visible.
 			{
 				return;
 			}
 		}
 	}
-	else if (s_pFlyingContainer != NULL && s_pFlyingContainer->pIcon != NULL && pDock->iRefCount > 0)
+	else if (s_pFlyingContainer != NULL && s_pFlyingContainer->pIcon != NULL && pDock->iRefCount > 0)  // on evite les bouclages.
 	{
 		CairoDock *pOriginDock = cairo_dock_search_dock_from_name (s_pFlyingContainer->pIcon->cParentDockName);
 		if (pOriginDock == pDock)
@@ -668,10 +669,10 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		return TRUE;
 	}*/
 	pDock->container.bInside = FALSE;
-	//cd_debug (" on attend...");
+	cd_debug (">>> on attend...");
 	while (gtk_events_pending ())  // on laisse le temps au signal d'entree dans le sous-dock d'etre traite.
 		gtk_main_iteration ();
-	//cd_debug (" ==> pDock->container.bInside : %d", pDock->container.bInside);
+	cd_debug (">>> pDock->container.bInside : %d", pDock->container.bInside);
 	
 	if (pDock->container.bInside)  // on est re-rentre dedans entre-temps.
 		return TRUE;
@@ -754,12 +755,13 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		Icon *pFlyingIcon = s_pFlyingContainer->pIcon;
 		if (pDock != pFlyingIcon->pSubDock)  // on evite les boucles.
 		{
-			cd_message ("on remet l'icone volante dans un dock (dock d'origine : %s)", pFlyingIcon->cParentDockName);
+			g_print ("on remet l'icone volante dans un dock (dock d'origine : %s)\n", pFlyingIcon->cParentDockName);
 			cairo_dock_free_flying_container (s_pFlyingContainer);
 			cairo_dock_stop_icon_animation (pFlyingIcon);
 			cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 			cairo_dock_start_icon_animation (pFlyingIcon, pDock);
 			s_pFlyingContainer = NULL;
+			pDock->bIconIsFlyingAway = FALSE;
 		}
 	}
 	
@@ -1303,7 +1305,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 					
 					if (s_pFlyingContainer != NULL)
 					{
-						//g_print ("on relache l'icone volante\n");
+						g_print ("on relache l'icone volante\n");
 						if (pDock->container.bInside)
 						{
 							//g_print ("  on la remet dans son dock d'origine\n");
@@ -1319,6 +1321,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							cairo_dock_terminate_flying_container (s_pFlyingContainer);  // supprime ou detache l'icone, l'animation se terminera toute seule.
 						}
 						s_pFlyingContainer = NULL;
+						pDock->bIconIsFlyingAway = FALSE;
 						cairo_dock_stop_icon_glide (pDock);
 					}
 				}
@@ -1721,7 +1724,7 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 
 void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint time, CairoDock *pDock)
 {
-	cd_message ("stop dragging");
+	g_print ("stop dragging\n");
 	s_bWaitForData = FALSE;
 	pDock->bIsDragging = FALSE;
 	pDock->bCanDrop = FALSE;

@@ -1060,7 +1060,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	GtkTreeIter iter;
 	GtkTreeSelection *selection;
 	GtkWidget *pBackButton;
-	gchar *cGroupComment, *cKeyName, *cKeyComment, *cUsefulComment, *cAuthorizedValuesChain, *pTipString, **pAuthorizedValuesList, *cSmallGroupIcon=NULL, *cDisplayedGroupName=NULL;
+	gchar *cGroupComment, *cKeyName, *cKeyComment, *cUsefulComment, *cAuthorizedValuesChain, *cTipString, **pAuthorizedValuesList, *cSmallGroupIcon=NULL, *cDisplayedGroupName=NULL;  // ne pas effacer 'cTipString' et 'cUsefulComment', ils pointent dans cKeyComment.
 	gpointer *pGroupKeyWidget;
 	int i, j;
 	guint k, iNbElements;
@@ -1107,8 +1107,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 		cKeyName = pKeyList[j];
 		
 		//\______________ On parse le commentaire.
+		pAuthorizedValuesList = NULL;
+		cTipString = NULL;
+		iNbElements = 0;
 		cKeyComment =  g_key_file_get_comment (pKeyFile, cGroupName, cKeyName, NULL);
-		cUsefulComment = cairo_dock_parse_key_comment (cKeyComment, &iElementType, &iNbElements, &pAuthorizedValuesList, &bIsAligned, &pTipString);
+		cUsefulComment = cairo_dock_parse_key_comment (cKeyComment, &iElementType, &iNbElements, &pAuthorizedValuesList, &bIsAligned, &cTipString);
 		if (cUsefulComment == NULL)
 		{
 			g_free (cKeyComment);
@@ -1181,9 +1184,9 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					FALSE,
 					0);
 			}
-			if (pTipString != NULL)
+			if (cTipString != NULL)
 			{
-				gtk_widget_set_tooltip_text (pKeyBox, dgettext (cGettextDomain, pTipString));
+				gtk_widget_set_tooltip_text (pKeyBox, dgettext (cGettextDomain, cTipString));
 			}
 			
 			//\______________ On cree le label descriptif et la boite du widget.
@@ -2125,8 +2128,9 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_pack_in_widget_box (pBackButton);
 			}
 		}
-
-		g_strfreev (pAuthorizedValuesList);
+		
+		if (pAuthorizedValuesList != NULL)
+			g_strfreev (pAuthorizedValuesList);
 		g_free (cKeyComment);
 	}
 	g_free (cGroupComment);  // cSmallGroupIcon et cDisplayedGroupName pointaient dessus.

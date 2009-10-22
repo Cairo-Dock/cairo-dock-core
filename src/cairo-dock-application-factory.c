@@ -129,7 +129,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, cairo_t *pS
 	GdkPixbuf *pPixbuf = cairo_dock_get_pixbuf_from_pixmap (Xid, TRUE);
 	if (pPixbuf == NULL)
 	{
-		cd_warning ("Can't have thumbnail for a window that is minimized when the dock is launched.");
+		cd_warning ("No thumbnail available.\nEither the WM doesn't support this functionnality, or the window was minimized when the dock has been launched.");
 		return NULL;
 	}
 	cd_debug ("window pixmap : %dx%d", gdk_pixbuf_get_width (pPixbuf), gdk_pixbuf_get_height (pPixbuf));

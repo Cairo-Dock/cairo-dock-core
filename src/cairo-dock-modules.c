@@ -661,44 +661,45 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	CairoDockModule *module = pInstance->pModule;
 	cd_message ("%s (%s, %d)", __func__, module->pVisitCard->cModuleName, bReloadAppletConf);
 	
-	///if (module->pInterface->reloadModule == NULL)
-	///	return ;
 	GError *erreur = NULL;
-	CairoContainer *pActualContainer = pInstance->pContainer;
+	CairoContainer *pCurrentContainer = pInstance->pContainer;
 	pInstance->pContainer = NULL;
+	CairoDock *pCurrentDock = pInstance->pDock;
+	pInstance->pDock = NULL;
+	CairoDesklet *pCurrentDesklet = pInstance->pDesklet;
+	pInstance->pDesklet = NULL;
+	gchar *cOldDockName = NULL;
+	
+	CairoContainer *pNewContainer = NULL;
+	CairoDock *pNewDock = NULL;
+	CairoDesklet *pNewDesklet = NULL;
 	
 	//\______________ On recharge la config minimale.
 	gboolean bModuleReloaded = FALSE;
 	Icon *pIcon = pInstance->pIcon;
 	GKeyFile *pKeyFile = NULL;
 	CairoDockMinimalAppletConfig *pMinimalConfig = NULL;
-	gboolean bToBeInserted = FALSE;
-	gboolean bNeedFreeDesklet = FALSE;
-	CairoContainer *pNewContainer = NULL;
 	if (bReloadAppletConf && pInstance->cConfFilePath != NULL)
 	{
 		pMinimalConfig = g_new0 (CairoDockMinimalAppletConfig, 1);
 		pKeyFile = cairo_dock_pre_read_module_instance_config (pInstance, pMinimalConfig);
-
+		
 		if (pMinimalConfig->iDesiredIconWidth > -1)  // c'est une applet.
 		{
-			//\______________ On recharge l'icone (nom, image).
+			//\______________ On met a jour les champs 'nom' et 'image' de l'icone.
 			if (pIcon != NULL)
 			{
+				// on gere le changement de nom de son sous-dock.
 				if (pIcon->cName != NULL && pIcon->pSubDock != NULL && cairo_dock_strings_differ (pIcon->cName, pMinimalConfig->cLabel))
 				{
 					gchar *cNewName = cairo_dock_get_unique_dock_name (pMinimalConfig->cLabel);
 					cd_debug ("* le sous-dock %s prend le nom '%s'", pIcon->cName, cNewName);
-					if (pMinimalConfig->cLabel == NULL)
+					/**if (pMinimalConfig->cLabel == NULL)
 						cairo_dock_alter_dock_name (pIcon->cName, pIcon->pSubDock, cNewName);  // on change juste son enregistrement, le nom cParentDockName des icones sera change lorsqu'on mettra un nom a l'icone.
-					else if (strcmp (pIcon->cName, cNewName) != 0)
+					else */if (strcmp (pIcon->cName, cNewName) != 0)
 						cairo_dock_rename_dock (pIcon->cName, NULL, cNewName);
 					g_free (pMinimalConfig->cLabel);
 					pMinimalConfig->cLabel = cNewName;
-					/**if (pMinimalConfig->cLabel == NULL)
-						cairo_dock_alter_dock_name (pIcon->cName, pIcon->pSubDock, pMinimalConfig->cLabel);  // on change juste son enregistrement, le nom cParentDockName des icones sera change lorsqu'on mettra un nom a l'icone.
-					else if (strcmp (pIcon->cName, pMinimalConfig->cLabel) != 0)
-						cairo_dock_rename_dock (pIcon->cName, NULL, pMinimalConfig->cLabel);*/
 				}
 				
 				g_free (pIcon->cName);
@@ -709,83 +710,52 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				pMinimalConfig->cIconFileName = NULL;
 			}
 			
-			//\______________ On gere le changement de container.
-			if (pMinimalConfig->bIsDetached)  // l'applet est maintenant dans un desklet.
-			{
-				CairoDesklet *pDesklet;
-				if (CAIRO_DOCK_IS_DOCK (pActualContainer))  // elle etait dans un dock.
-				{
-					cd_message ("le container a change (%s -> desklet)", pIcon->cParentDockName);
-					gchar *cOldDockName = g_strdup (pIcon->cParentDockName);
-					cairo_dock_detach_icon_from_dock (pIcon, CAIRO_DOCK (pActualContainer), myIcons.bUseSeparator);
-					if (CAIRO_DOCK (pActualContainer)->icons == NULL)
-						cairo_dock_destroy_dock (CAIRO_DOCK (pActualContainer), cOldDockName, NULL, NULL);
-					else
-						cairo_dock_update_dock_size (CAIRO_DOCK (pActualContainer));
-					g_free (cOldDockName);
-					pDesklet = cairo_dock_create_desklet (pIcon, NULL, pMinimalConfig->deskletAttribute.iAccessibility);
-				}
-				else
-				{
-					pDesklet = CAIRO_DESKLET (pActualContainer);
-				}
-				pNewContainer = CAIRO_CONTAINER (pDesklet);
-				cairo_dock_configure_desklet (pDesklet, &pMinimalConfig->deskletAttribute);
-			}
-			else  // l'applet est maintenant dans un dock.
+			// on recupere son dock (cree au besoin).
+			if (!pMinimalConfig->bIsDetached)  // elle est desormais dans un dock.
 			{
 				const gchar *cDockName = (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
-				CairoDock *pDock = cairo_dock_search_dock_from_name (cDockName);
-				if (pDock == NULL)  // c'est un nouveau dock.
+				pNewDock = cairo_dock_search_dock_from_name (cDockName);
+				if (pNewDock == NULL)  // c'est un nouveau dock.
 				{
-					pDock = cairo_dock_create_new_dock (cDockName, NULL);
-					///cairo_dock_place_root_dock (pDock);
+					pNewDock = cairo_dock_create_new_dock (cDockName, NULL);
 				}
-				
-				if (CAIRO_DOCK_IS_DESKLET (pActualContainer))  // elle etait dans un desklet.
-				{
-					bNeedFreeDesklet = TRUE;  // le desklet sera detruit apres le reload.
-					//cairo_dock_steal_interactive_widget_from_desklet (CAIRO_DESKLET (pActualContainer));
-					bToBeInserted = TRUE;  // l'icone sera inseree dans le dock avant le reload.
-				}
-				else  // elle etait deja dans un dock.
-				{
-					if (pActualContainer != CAIRO_CONTAINER (pDock))  // le dock a change.
-					{
-						cd_message ("le dock a change (%s -> %s)", pIcon->cParentDockName, cDockName);
-						gchar *cOldDockName = g_strdup (pIcon->cParentDockName);
-						cairo_dock_detach_icon_from_dock (pIcon, CAIRO_DOCK (pActualContainer), myIcons.bUseSeparator);
-						if (CAIRO_DOCK (pActualContainer)->icons == NULL)
-						{
-							cairo_dock_destroy_dock (CAIRO_DOCK (pActualContainer), cOldDockName, NULL, NULL);
-							pActualContainer = NULL;
-						}
-						else
-							cairo_dock_update_dock_size (CAIRO_DOCK (pActualContainer));
-						g_free (cOldDockName);
-						bToBeInserted = TRUE;  // l'icone sera inseree dans le dock avant le reload.
-					}
-				}
-				pNewContainer = CAIRO_CONTAINER (pDock);
+				pNewContainer = CAIRO_CONTAINER (pNewDock);
+			}
+			
+			// on la detache de son dock si son container a change.
+			if (pCurrentDock != NULL && (pMinimalConfig->bIsDetached || pNewDock != pCurrentDock))
+			{
+				cd_message ("le container a change (%s -> %s)", pIcon->cParentDockName, pMinimalConfig->bIsDetached ? "desklet" : pMinimalConfig->cDockName);
+				cOldDockName = g_strdup (pIcon->cParentDockName);
+				cairo_dock_detach_icon_from_dock (pIcon, pCurrentDock, myIcons.bUseSeparator);
+			}
+			
+			// on recupere son desklet (cree au besoin).
+			if (pMinimalConfig->bIsDetached)
+			{
+				if (pCurrentDesklet == NULL)  // c'est un nouveau desklet.
+					pNewDesklet = cairo_dock_create_desklet (pIcon, NULL, pMinimalConfig->deskletAttribute.iAccessibility);
+				else
+					pNewDesklet = pCurrentDesklet;
+				cairo_dock_configure_desklet (pNewDesklet, &pMinimalConfig->deskletAttribute);
+				pNewContainer = CAIRO_CONTAINER (pNewDesklet);
 			}
 		}
 	}
 	else
-		pNewContainer = pActualContainer;
-
+	{
+		pNewContainer = pCurrentContainer;
+		pNewDock = pCurrentDock;
+		pNewDesklet = pCurrentDesklet;
+	}
 	pInstance->pContainer = pNewContainer;
-	if (CAIRO_DOCK_IS_DOCK (pNewContainer))
+	pInstance->pDock = pNewDock;
+	pInstance->pDesklet = pNewDesklet;
+	
+	//\_______________________ On insere l'icone dans son nouveau dock, et on s'assure que sa taille respecte les tailles par defaut.
+	if (pNewDock != NULL && pIcon != NULL)  // l'icone est desormais dans un dock.
 	{
-		pInstance->pDock = CAIRO_DOCK (pNewContainer);
-		pInstance->pDesklet = NULL;
-	}
-	else
-	{
-		pInstance->pDock = NULL;
-		pInstance->pDesklet = CAIRO_DESKLET (pNewContainer);
-	}
-	if (CAIRO_DOCK_IS_DOCK (pNewContainer) && pIcon != NULL)
-	{
+		// on recupere la taille voulue.
 		if (pMinimalConfig == NULL)  // on recupere sa taille, car elle peut avoir change (si c'est la taille par defaut, ou si elle est devenue trop grande).
 		{
 			pMinimalConfig = g_new0 (CairoDockMinimalAppletConfig, 1);
@@ -796,24 +766,25 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		pIcon->fWidth = pMinimalConfig->iDesiredIconWidth;
 		pIcon->fHeight = pMinimalConfig->iDesiredIconHeight;
 		
+		// on charge l'icone a la bonne taille.
 		cairo_dock_load_one_icon_from_scratch (pIcon, pNewContainer);
-
-		if (bToBeInserted)
+		
+		// on insere l'icone dans le dock ou on met a jour celui-ci.
+		if (pNewDock != pCurrentDock)  // on l'insere dans son nouveau dock.
 		{
-			CairoDock *pDock = CAIRO_DOCK (pNewContainer);
-			cairo_dock_insert_icon_in_dock (pIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
+			cairo_dock_insert_icon_in_dock (pIcon, pNewDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 			pIcon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
-			cairo_dock_start_icon_animation (pIcon, pDock);
+			cairo_dock_start_icon_animation (pIcon, pNewDock);
 		}
-		else
+		else  // le dock n'a pas change, on le met a jour.
 		{
-			pIcon->fWidth *= pActualContainer->fRatio;
-			pIcon->fHeight *= pActualContainer->fRatio;
+			pIcon->fWidth *= pNewContainer->fRatio;
+			pIcon->fHeight *= pNewContainer->fRatio;
 			
 			if (bReloadAppletConf)
 			{
-				cairo_dock_update_dock_size (CAIRO_DOCK (pNewContainer));
-				cairo_dock_calculate_dock_icons (CAIRO_DOCK (pNewContainer));
+				cairo_dock_update_dock_size (pNewDock);
+				cairo_dock_calculate_dock_icons (pNewDock);
 				gtk_widget_queue_draw (pNewContainer->pWidget);
 			}
 		}
@@ -854,19 +825,34 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 
 	//\_______________________ On recharge l'instance.
 	if (bCanReload && module->pInterface->reloadModule != NULL)
-		bModuleReloaded = module->pInterface->reloadModule (pInstance, pActualContainer, pKeyFile);
+		bModuleReloaded = module->pInterface->reloadModule (pInstance, pCurrentContainer, pKeyFile);
 	
-	if (pNewContainer != pActualContainer && CAIRO_DOCK_IS_DOCK (pNewContainer) && CAIRO_DOCK_IS_DOCK (pActualContainer) && pIcon != NULL && pIcon->pSubDock != NULL)
+	if (pNewContainer != pCurrentContainer && pNewDock != NULL && pCurrentDock != NULL && pIcon != NULL && pIcon->pSubDock != NULL)
 	{
-		cairo_dock_synchronize_one_sub_dock_position (pIcon->pSubDock, CAIRO_DOCK (pNewContainer), TRUE);
+		cairo_dock_synchronize_one_sub_dock_position (pIcon->pSubDock, pNewDock, TRUE);
 	}
 	
+	//\_______________________ On nettoie derriere nous.
 	cairo_dock_free_minimal_config (pMinimalConfig);
 	if (pKeyFile != NULL)
 		g_key_file_free (pKeyFile);
 	
-	if (bNeedFreeDesklet)
-		cairo_dock_free_desklet (CAIRO_DESKLET (pActualContainer));
+	if (pCurrentDesklet != NULL && pCurrentDesklet != pNewDesklet)
+		cairo_dock_free_desklet (pCurrentDesklet);
+	if (pCurrentDock != NULL && pCurrentDock != pNewDock)
+	{
+		if (pCurrentDock->iRefCount == 0 && pCurrentDock->icons == NULL && !pCurrentDock->bIsMainDock)  // dock principal vide.
+		{
+			cairo_dock_destroy_dock (pCurrentDock, cOldDockName, NULL, NULL);
+		}
+		else
+		{
+			cairo_dock_update_dock_size (pCurrentDock);
+			cairo_dock_calculate_dock_icons (pCurrentDock);
+			gtk_widget_queue_draw (pCurrentContainer->pWidget);
+		}
+	}
+	g_free (cOldDockName);
 }
 
 void cairo_dock_reload_module (CairoDockModule *pModule, gboolean bReloadAppletConf)

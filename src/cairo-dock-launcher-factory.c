@@ -487,6 +487,8 @@ void cairo_dock_reload_launcher (Icon *icon)
 				{
 					g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", cUniqueName);
 					cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
+					g_print ("on renomme a l'avance le sous-dock en %s\n", cUniqueName);
+					cairo_dock_rename_dock (icon->cName, icon->pSubDock, cUniqueName);  // on le renomme ici pour eviter de transvaser dans un nouveau dock (ca marche aussi ceci dit).
 				}
 				g_free (cUniqueName);
 			}
@@ -568,10 +570,11 @@ void cairo_dock_reload_launcher (Icon *icon)
 	{
 		if (pSubDock != icon->pSubDock)  // ca n'est plus le meme container, on transvase ou on detruit.
 		{
+			g_print ("on transvase dans le nouveau sous-dock\n");
 			cairo_dock_destroy_dock (pSubDock, cName, icon->pSubDock, icon->cName);
 		}
 	}
-
+	
 	if (icon->pSubDock != NULL && pSubDock == icon->pSubDock)  // c'est le meme sous-dock, son rendu a pu changer.
 	{
 		if (cairo_dock_strings_differ (cRendererName, icon->pSubDock->cRendererName))

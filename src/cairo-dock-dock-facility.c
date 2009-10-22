@@ -94,7 +94,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	g_return_if_fail (pDock != NULL);
 	int iPrevMaxDockHeight = pDock->iMaxDockHeight;
 	
-	if (pDock->container.fRatio != 0 && pDock->container.fRatio != 1)  // on remet leur taille reelle aux icones, sinon le calcul de max_dock_size sera biaise.
+	if (pDock->container.fRatio != 0/* && pDock->container.fRatio != 1*/)  // on remet leur taille reelle aux icones, sinon le calcul de max_dock_size sera biaise.
 	{
 		GList *ic;
 		Icon *icon;
@@ -162,7 +162,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	} while ((pDock->iMaxDockWidth > iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_iScreenHeight[pDock->container.bIsHorizontal]) && n < 4);
 	pDock->iMaxIconHeight = hmax;
 	
-	cairo_dock_calculate_dock_icons (pDock);  // le calcul de max_dock_size a altere les fX et fY.
+	pDock->pRenderer->calculate_icons (pDock);  // le calcul de max_dock_size a altere les fX et fY.
 	
 	cairo_dock_set_icons_geometry_for_window_manager (pDock);  // se fait sur le dock a plat, qu'on vient de calculer. Neanmoins ici ce sera probablement une approximation.
 	pDock->bWMIconseedsUptade = TRUE;
@@ -804,9 +804,9 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 		case CAIRO_DOCK_MOUSE_OUTSIDE :
 			//g_print ("en dehors du dock (bIsShrinkingDown:%d;bIsGrowingUp:%d;iMagnitudeIndex:%d;bAtBottom:%d)\n", pDock->bIsShrinkingDown, pDock->bIsGrowingUp, pDock->iMagnitudeIndex, pDock->bAtBottom);
 			///pDock->fDecorationsOffsetX = - pDock->container.iWidth / 2;  // on fixe les decorations.
-			if (! pDock->bIsGrowingUp && ! pDock->bIsShrinkingDown && pDock->iSidLeaveDemand == 0 && ! pDock->bAtBottom)  // bAtBottom ajoute pour la 1.5.4
+			if (! pDock->bIsGrowingUp && ! pDock->bIsShrinkingDown && pDock->iSidLeaveDemand == 0 && ! pDock->bAtBottom && ! pDock->bIconIsFlyingAway)  // bAtBottom ajoute pour la 1.5.4
 			{
-				//g_print ("on force a quitter (iRefCount:%d)\n", pDock->iRefCount);
+				g_print ("on force a quitter (iRefCount:%d)\n", pDock->iRefCount);
 				if (pDock->iRefCount > 0 && myAccessibility.iLeaveSubDockDelay > 0)
 					pDock->iSidLeaveDemand = g_timeout_add (myAccessibility.iLeaveSubDockDelay, (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
 				else

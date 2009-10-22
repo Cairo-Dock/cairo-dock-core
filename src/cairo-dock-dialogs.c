@@ -1569,9 +1569,10 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 			CairoDock *pDock = CAIRO_DOCK (pContainer);
 			pDock->container.bInside = TRUE;
 			pDock->bAtBottom = FALSE;
-			cairo_dock_on_leave_notify (pDock->container.pWidget,
+			cairo_dock_emit_leave_signal (pDock);
+			/*cairo_dock_on_leave_notify (pDock->container.pWidget,
 				NULL,
-				pDock);
+				pDock);*/
 		}
 	}
 

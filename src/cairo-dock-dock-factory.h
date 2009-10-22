@@ -225,6 +225,8 @@ struct _CairoDock {
 	gboolean bActive;  // TRUE <=> no input shape.
 	/// number of the screen the dock is placed on (Xinerama).
 	gint iNumScreen;
+	/// whether an icon is being dragged away from the dock
+	gboolean bIconIsFlyingAway;
 };
 
 

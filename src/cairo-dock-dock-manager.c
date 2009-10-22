@@ -268,18 +268,15 @@ void cairo_dock_reload_buffers_in_all_docks (gboolean bReloadAppletsToo)
 
 CairoDock *cairo_dock_alter_dock_name (const gchar *cDockName, CairoDock *pDock, const gchar *cNewName)
 {
-	//g_return_val_if_fail (cDockName != NULL && cNewName != NULL, NULL);
+	g_return_val_if_fail (cDockName != NULL && cNewName != NULL, NULL);
 	if (pDock == NULL)
 	{
-		if (cDockName != NULL)
-			pDock = g_hash_table_lookup (s_hDocksTable, cDockName);
+		pDock = g_hash_table_lookup (s_hDocksTable, cDockName);
 		g_return_val_if_fail (pDock != NULL, NULL);
 	}
 	
-	if (cDockName != NULL)
-		g_hash_table_remove (s_hDocksTable, cDockName);  // libere la cle, mais pas la valeur puisque la GDestroyFunc est a NULL.
-	if (cNewName != NULL)
-		g_hash_table_insert (s_hDocksTable, g_strdup (cNewName), pDock);
+	g_hash_table_remove (s_hDocksTable, cDockName);  // libere la cle, mais pas la valeur puisque la GDestroyFunc est a NULL.
+	g_hash_table_insert (s_hDocksTable, g_strdup (cNewName), pDock);
 	
 	return pDock;
 }

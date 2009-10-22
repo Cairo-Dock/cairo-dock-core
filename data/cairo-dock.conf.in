@@ -42,7 +42,7 @@ num screen = 0
 #F-[Space;gtk-fullscreen]
 frame_size =
 
-max autorized width = 0
+max_authorized_width = 0
 
 #b- Extend the dock to always fill the screen ?
 extended = false

@@ -316,8 +316,9 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			if (g_bUseOpenGL)
 			{
 				icon->iIconTexture = cairo_dock_texture_from_pixmap (icon->Xid, icon->iBackingPixmap);
+				//g_print ("opengl thumbnail : %d\n", icon->iIconTexture);
 			}
-			else
+			if (icon->iIconTexture == 0)
 			{
 				icon->pIconBuffer = cairo_dock_create_surface_from_xpixmap (icon->iBackingPixmap, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
 			}

@@ -1241,11 +1241,10 @@ void cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 	cd_message ("on force a quitter");
 	pDock->container.bInside = TRUE;
 	pDock->bAtBottom = FALSE;
-	///cairo_dock_disable_entrance ();  // trop violent, il faudrait trouver un autre truc.
-	//if (pDock->iRefCount == 0)
-	cairo_dock_on_leave_notify (pDock->container.pWidget,
+	cairo_dock_emit_leave_signal (pDock);
+	/*cairo_dock_on_leave_notify (pDock->container.pWidget,
 		NULL,
-		pDock);
+		pDock);*/
 }
 
 #define _add_entry_in_menu(cLabel, gtkStock, pCallBack, pSubMenu) cairo_dock_add_in_menu_with_stock_and_data (cLabel, gtkStock, (GFunc) (pCallBack), pSubMenu, data)

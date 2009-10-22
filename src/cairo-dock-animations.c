@@ -419,8 +419,8 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 							0,
 							0);
 						cairo_dock_replace_all_dialogs ();
+						pDock->bActive = FALSE;
 					}
-					pDock->bActive = FALSE;
 				}
 				else if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->fFoldingFactor != 0)  // si le dock se replie, inutile de rester en taille grande avec une fenetre transparente, ca perturbe.
 				{

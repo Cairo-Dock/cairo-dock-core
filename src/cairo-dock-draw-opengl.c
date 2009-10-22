@@ -38,6 +38,8 @@
 #endif
 
 #include <X11/extensions/Xrender.h>
+#include <GL/glx.h>
+#include <GL/glxext.h>
 
 #include "cairo-dock-load.h"
 #include "cairo-dock-surface-factory.h"
@@ -2224,7 +2226,8 @@ void cairo_dock_draw_gl_text_at_position_in_area (const guchar *cText, CairoDock
 // Bind redirected window to texture:
 GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 {
-	return 0;  /// a tester...
+	return 0;  /// compil po :-(
+	#if 0
 	Display *display = gdk_x11_get_default_xdisplay ();
 	XWindowAttributes attrib;
 	XGetWindowAttributes (display, Xid, &attrib);
@@ -2323,4 +2326,5 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	
 	glXReleaseTexImageEXT (display, glxpixmap, GLX_FRONT_LEFT_EXT);
 	return texture;
+	#endif
 }

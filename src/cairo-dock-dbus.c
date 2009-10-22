@@ -227,7 +227,7 @@ int cairo_dock_dbus_get_integer (DBusGProxy *pDbusProxy, const gchar *cAccessor)
 guint cairo_dock_dbus_get_uinteger (DBusGProxy *pDbusProxy, const gchar *cAccessor)
 {
 	GError *erreur = NULL;
-	guint iValue = 0;
+	guint iValue = -1;
 	dbus_g_proxy_call (pDbusProxy, cAccessor, &erreur,
 		G_TYPE_INVALID,
 		G_TYPE_UINT, &iValue,
@@ -236,6 +236,7 @@ guint cairo_dock_dbus_get_uinteger (DBusGProxy *pDbusProxy, const gchar *cAccess
 	{
 		cd_warning (erreur->message);
 		g_error_free (erreur);
+		iValue = -1;
 	}
 	return iValue;
 }

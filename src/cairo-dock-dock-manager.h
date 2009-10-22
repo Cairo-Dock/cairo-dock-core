@@ -137,6 +137,7 @@ void cairo_dock_set_docks_on_top_layer (gboolean bRootDocksOnly);
 void cairo_dock_reserve_space_for_all_root_docks (gboolean bReserve);
 
 
+// renvoie un nom de dock unique; cPrefix peut etre NULL.
 gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix);
 gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon);
 
