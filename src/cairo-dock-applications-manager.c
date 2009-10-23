@@ -126,7 +126,7 @@ void cairo_dock_blacklist_appli (Window Xid)
 {
 	if (Xid > 0)
 	{
-		g_print ("%s (%ld)\n", __func__, Xid);
+		cd_debug ("%s (%ld)", __func__, Xid);
 		Window *pXid = g_new (Window, 1);
 			*pXid = Xid;
 		Icon *pNullIcon = g_new0 (Icon, 1);
@@ -298,7 +298,7 @@ static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gpoin
 	CairoDock *pDock = data[2];
 	if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_is_on_current_desktop (icon) && icon->fPersonnalScale <= 0 && icon->iLastCheckTime != -1)
 	{
-		if ((data[0] && icon->bIsMaximized && ! icon->bIsHidden) || (data[1] && icon->bIsFullScreen && ! icon->bIsHidden) || (!data[0] && ! data[1]))
+		if ((data[0] && icon->bIsMaximized && ! icon->bIsHidden) || (data[1] && icon->bIsFullScreen && ! icon->bIsHidden) || (!data[0] && ! data[1] && ! icon->bIsHidden))
 		{
 			cd_debug ("%s est genante (%d, %d) (%d;%d %dx%d)", icon->cName, icon->bIsMaximized, icon->bIsFullScreen, icon->windowGeometry.x, icon->windowGeometry.y, icon->windowGeometry.width, icon->windowGeometry.height);
 			if (_cairo_dock_window_hovers_dock (&icon->windowGeometry, pDock))
@@ -670,7 +670,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					}
 					
 					// auto-hide sur appli maximisee/plein-ecran
-					if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen))  // cette fenetre peut provoquer l'auto-hide.
+					if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized && ! icon->bIsHidden) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen && ! icon->bIsHidden))  // cette fenetre peut provoquer l'auto-hide.
 					{
 						if (! cairo_dock_quick_hide_is_activated () && (icon->iNumDesktop == -1 || icon->iNumDesktop == s_iCurrentDesktop))  // l'appli arrive sur le bureau courant.
 						{
@@ -731,7 +731,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					}
 					
 					// auto-hide sur appli maximisee/plein-ecran
-					if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen))  // cette fenetre peut provoquer l'auto-hide.
+					if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized && ! icon->bIsHidden) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen && ! icon->bIsHidden))  // cette fenetre peut provoquer l'auto-hide.
 					{
 						if (cairo_dock_quick_hide_is_activated ())
 						{
@@ -755,7 +755,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					}
 					
 					// auto-hide sur appli maximisee/plein-ecran
-					if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen))  // cette fenetre peut provoquer l'auto-hide.
+					if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized && ! icon->bIsHidden) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen && ! icon->bIsHidden))  // cette fenetre peut provoquer l'auto-hide.
 					{
 						if (! cairo_dock_quick_hide_is_activated ())
 						{
@@ -822,7 +822,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 				/// redessiner les inhibiteurs ?...
 			}
 			
-			if (cairo_dock_quick_hide_is_activated () && ((icon->bIsFullScreen && myAccessibility.bAutoHideOnFullScreen) || (icon->bIsMaximized && myAccessibility.bAutoHideOnMaximized)))  // cette fenetre peut avoir gene.
+			if (cairo_dock_quick_hide_is_activated () && ((icon->bIsFullScreen && ! icon->bIsHidden && myAccessibility.bAutoHideOnFullScreen) || (icon->bIsMaximized && ! icon->bIsHidden && myAccessibility.bAutoHideOnMaximized)))  // cette fenetre peut avoir gene.
 			{
 				/// le faire pour tous les docks principaux ...
 				if (cairo_dock_search_window_on_our_way (g_pMainDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)  // on regarde si une autre gene encore.
@@ -888,7 +888,7 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 				{
 					cairo_dock_prevent_inhibated_class (icon);
 				}
-				if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen))
+				if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized && ! icon->bIsHidden) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen && ! icon->bIsHidden))
 				{
 					if (! cairo_dock_quick_hide_is_activated ())
 					{

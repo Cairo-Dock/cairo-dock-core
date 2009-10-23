@@ -2014,7 +2014,7 @@ CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, i
 			j += MAX (0, sprintf (cPool+j, "%lc", c));  // les caracteres ASCII >128 doivent etre convertis en multi-octets.
 		}
 	}
-	g_print ("%s (%d + %d -> '%s')\n", __func__, first, count, cPool);
+	cd_debug ("%s (%d + %d -> '%s')", __func__, first, count, cPool);
 	/*iconv_t cd = iconv_open("UTF-8", "ISO-8859-1");
 	gchar *outbuf = g_new0 (gchar, count*4+1);
 	gchar *outbuf0 = outbuf, *inbuf0 = cPool;
@@ -2043,7 +2043,7 @@ CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, i
 	pFont->iCharWidth = (double)iWidth / count;
 	pFont->iCharHeight = iHeight;
 	
-	g_print ("%d char / %d pixels => %.3f\n", count, iWidth, (double)iWidth / count);
+	cd_debug ("%d char / %d pixels => %.3f", count, iWidth, (double)iWidth / count);
 	return pFont;
 }
 
@@ -2222,12 +2222,40 @@ void cairo_dock_draw_gl_text_at_position_in_area (const guchar *cText, CairoDock
 
 
 
+typedef void (*GLXBindTexImageProc) (Display *display, GLXDrawable drawable, int buffer, int *attribList);
+typedef void (*GLXReleaseTexImageProc) (Display *display, GLXDrawable drawable, int buffer);
 
 // Bind redirected window to texture:
 GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 {
-	return 0;  /// compil po :-(
-	#if 0
+	static gboolean s_bTextureFromPixmapAvailable = FALSE;
+	static gboolean s_bChecked = FALSE;
+	static GLXBindTexImageProc bindTexImage = NULL;
+	static GLXReleaseTexImageProc releaseTexImage = NULL;
+	
+	return 0;  /// ca ne marche pas. :-(
+	if (! s_bChecked)
+	{
+		s_bChecked = TRUE;
+		Display *display = gdk_x11_get_default_xdisplay ();
+		int screen = 0;
+		const gchar *glxExtensions = glXQueryExtensionsString (display, screen);
+		if (!strstr (glxExtensions, "GLX_EXT_texture_from_pixmap"))
+		{
+			cd_warning ("the extension GLX_EXT_texture_from_pixmap is missing");
+			return 0;
+		}
+		
+		bindTexImage = (GLXBindTexImageProc) glXGetProcAddress ("glXBindTexImageEXT");
+		releaseTexImage = (GLXReleaseTexImageProc) glXGetProcAddress ("glXReleaseTexImageEXT");
+		s_bTextureFromPixmapAvailable = (bindTexImage && releaseTexImage);
+		if (! s_bTextureFromPixmapAvailable)
+			cd_warning ("glXBindTexImageEXT and/or glXReleaseTexImageEXT is missing");
+	}
+	
+	if (! s_bTextureFromPixmapAvailable)
+		return 0;
+	
 	Display *display = gdk_x11_get_default_xdisplay ();
 	XWindowAttributes attrib;
 	XGetWindowAttributes (display, Xid, &attrib);
@@ -2238,7 +2266,7 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	int screen = 0;
 	GLXFBConfig *fbconfigs = glXGetFBConfigs (display, screen, &nfbconfigs);
 	
-	GLfloat top, bottom;
+	GLfloat top=0., bottom=0.;
 	XVisualInfo *visinfo;
 	int value;
 	int i;
@@ -2257,7 +2285,7 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 			&value);
 		if (!(value & GLX_TEXTURE_2D_BIT_EXT))
 			continue;
-	
+		
 		glXGetFBConfigAttrib (display, fbconfigs[i],
 			GLX_BIND_TO_TEXTURE_RGBA_EXT,
 			&value);
@@ -2269,7 +2297,7 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 			if (value == FALSE)
 				continue;
 		}
-	
+		
 		glXGetFBConfigAttrib (display, fbconfigs[i],
 			GLX_Y_INVERTED_EXT,
 			&value);
@@ -2283,7 +2311,7 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 			top = 1.0f;
 			bottom = 0.0f;
 		}
-	
+		
 		break;
 	}
 	
@@ -2294,15 +2322,16 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	}
 	
 	int pixmapAttribs[5] = { GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
-				GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGBA_EXT,
-				None };
+		GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGBA_EXT,
+		None };
 	GLXPixmap glxpixmap = glXCreatePixmap (display, fbconfigs[i], iBackingPixmap, pixmapAttribs);
+	g_return_val_if_fail (glxpixmap != 0, 0);
 	
 	GLuint texture;
 	glGenTextures (1, &texture);
 	glBindTexture (GL_TEXTURE_2D, texture);
 	
-	glXBindTexImageEXT (display, glxpixmap, GLX_FRONT_LEFT_EXT, NULL);
+	bindTexImage (display, glxpixmap, GLX_FRONT_LEFT_EXT, NULL);
 	
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -2324,7 +2353,7 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	
 	glEnd ();
 	
-	glXReleaseTexImageEXT (display, glxpixmap, GLX_FRONT_LEFT_EXT);
+	releaseTexImage (display, glxpixmap, GLX_FRONT_LEFT_EXT);
+	glXDestroyGLXPixmap (display, glxpixmap);
 	return texture;
-	#endif
 }

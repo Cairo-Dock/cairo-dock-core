@@ -405,7 +405,7 @@ msgstr "Quitter Cairo-Dock ?"
 #: ../src/cairo-dock-menu.c:313
 #, c-format
 msgid "You're about removing this icon (%s) from the dock. Sure ?"
-msgstr "Êtes-vous certain de vouloir retirer cette icône (%s) du dock ?"
+msgstr "Êtes-vous certain de vouloir enlever cette icône (%s) du dock ?"
 
 #: ../src/cairo-dock-menu.c:324
 msgid ""
@@ -460,7 +460,7 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:722
 #, c-format
 msgid "You're about removing this applet (%s) from the dock. Sure ?"
-msgstr "Êtes-vous certain de vouloir retirer cette applet (%s) ?"
+msgstr "Êtes-vous certain de vouloir enlever cette applet (%s) ?"
 
 #: ../src/cairo-dock-menu.c:833
 msgid ""
@@ -661,7 +661,7 @@ msgstr "Supprimer ce lanceur"
 #: ../src/cairo-dock-menu.c:1507
 msgid ""
 "You can remove a launcher by dragging it with the mouse out of the dock."
-msgstr "Vous pouvez retirer un lanceur en le glissant hors du dock."
+msgstr "Vous pouvez enlever un lanceur en le glissant hors du dock."
 
 #: ../src/cairo-dock-menu.c:1509
 msgid "Modify this separator"
@@ -765,7 +765,7 @@ msgstr "Retourner au dock"
 
 #: ../src/cairo-dock-menu.c:1617
 msgid "Remove this applet"
-msgstr "Retirer cet applet"
+msgstr "Enlever cet applet"
 
 #: ../src/cairo-dock-menu.c:1621
 msgid "Launch another instance of this applet"
@@ -1203,7 +1203,7 @@ msgid ""
 "Cairo-Dock will then replace your taskbar. It is recommanded to remove any "
 "other taskbar, and to not force the dock's type to normal."
 msgstr ""
-"Cairo-Dock remplacera votre barre des tâches. Il est recommandé de retirer "
+"Cairo-Dock remplacera votre barre des tâches. Il est recommandé d'enlever "
 "les autres barres des tâches et de ne pas forcer le type du dock à 'normal'."
 
 #: ../data/messages:101

@@ -554,12 +554,12 @@ gboolean on_unmap_dialog (GtkWidget* pWidget,
 	GdkEvent *pEvent,
 	CairoDialog *pDialog)
 {
-	//g_print ("unmap (bAllowMinimize:%d)\n", pDialog->bAllowMinimize);
+	g_print ("unmap (bAllowMinimize:%d)\n", pDialog->bAllowMinimize);
 	if (! pDialog->bAllowMinimize)
 		gtk_window_present (GTK_WINDOW (pWidget));
 	else
 		pDialog->bAllowMinimize = FALSE;
-	return TRUE;  // stops other handlers from being invoked for the event.
+	return FALSE;  // stops other handlers from being invoked for the event.
 }
 
 
