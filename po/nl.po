@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
 "POT-Creation-Date: 2009-10-22 00:54+0000\n"
-"PO-Revision-Date: 2009-10-21 01:45+0000\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"PO-Revision-Date: 2009-10-22 17:39+0000\n"
+"Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-10-22 07:22+0000\n"
+"X-Launchpad-Export-Date: 2009-10-23 07:25+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-applet-facility.h:259
@@ -41,7 +41,7 @@ msgstr ""
 
 #: ../src/cairo-dock-applet-facility.h:349
 msgid "Applet's handbook"
-msgstr ""
+msgstr "Applet's handleiding"
 
 #: ../src/cairo-dock-callbacks.c:1122
 msgid "Do you want to mount this point ?"
@@ -826,11 +826,11 @@ msgstr "Weet u zeker dat u het thema %s wilt overschrijven ?"
 
 #: ../src/cairo-dock-themes-manager.c:721
 msgid "The theme has been saved"
-msgstr ""
+msgstr "Het thema is opgeslagen"
 
 #: ../src/cairo-dock-themes-manager.c:721
 msgid "The theme couldn't be saved"
-msgstr ""
+msgstr "Het thema kon niet opgeslagen worden"
 
 #: ../src/cairo-dock-themes-manager.c:742
 #, c-format
@@ -843,19 +843,19 @@ msgstr "Weet u zeker dat u deze thema´s wilt verwijderen ?"
 
 #: ../src/cairo-dock-themes-manager.c:764
 msgid "The theme has been deleted"
-msgstr ""
+msgstr "Het thema is verwijderd"
 
 #: ../src/cairo-dock-themes-manager.c:764
 msgid "The theme couldn't be deleted"
-msgstr ""
+msgstr "Het thema kon niet verwijderd worden"
 
 #: ../src/cairo-dock-themes-manager.c:766
 msgid "The themes have been deleted"
-msgstr ""
+msgstr "De thema´s zijn verwijderd"
 
 #: ../src/cairo-dock-themes-manager.c:766
 msgid "The themes couldn't be deleted"
-msgstr ""
+msgstr "De thema´s konden niet verwijderd worden"
 
 #: ../src/cairo-dock-themes-manager.c:815
 msgid ""
@@ -1420,10 +1420,12 @@ msgid ""
 "This is the animation when the dock goes below a window; The greater, the "
 "slower it will be"
 msgstr ""
+"Dit is de animatie wanneer het dock onder een venster gaat. Hoe groter, hoe "
+"langzamer."
 
 #: ../data/messages:191
 msgid "Number of steps in the fade out animation :"
-msgstr ""
+msgstr "Aantal stappen voor de vervagingsanimatie :"
 
 #: ../data/messages:193
 msgid "the smaller, the faster the dock will hide."
@@ -2033,10 +2035,13 @@ msgid ""
 "choose to group applis in sub-dock, applis will be placed next to their "
 "launcher."
 msgstr ""
+"Deze optie zal de hiervoor aangegeven volgorde overschrijven. Wanneer u niet "
+"heeft gekozen om toepassingen te groeperen in een sub-dock, dan zullen de "
+"toepassingen naast hun starters geplaatst worden."
 
 #: ../data/messages:463
 msgid "Allow applis to be placed amongst launchers ?"
-msgstr ""
+msgstr "Toepassingen toestaan om tussen starters geplaatst te worden ?"
 
 #: ../data/messages:467
 msgid "Main Dock"
@@ -3642,6 +3647,8 @@ msgid ""
 "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard "
 "shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
+"Bijvoorbeeld : nautilus --no-desktop, gedit, etc. U kunt zelfs een sneltoets "
+"instellen, bijvoorbeeld <Alt>F1, <Ctrl>c, <Ctrl>v, etc"
 
 #: ../data/messages:999
 msgid "Command to launch on click :"
