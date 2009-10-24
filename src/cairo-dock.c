@@ -691,7 +691,6 @@ int main (int argc, char** argv)
 	g_print ("\nVERIFIER LE CHANGEMENT DE CONTAINER POUR TERMINAL\n\n");
 	g_print ("\nPLANTAGE POWER-MANAGER\n\n");
 	g_print ("\nSOUS-DOCKS ET CHGT DE BUREAU\n\n");
-	g_print ("\nTESTER APPLET DBUS QUAND DOCK PLANTE\n\n");
 	g_print ("\n2eme DOCK PRINCIPAL AVEC 1 ICONE : BORD TRONQUE EN VERTICAL\n\n");
 	g_print ("\nPLAN 3D NE PREND PAS TOUT L'ECRAN\n\n");
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");

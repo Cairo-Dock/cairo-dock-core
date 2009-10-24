@@ -203,7 +203,7 @@ static gboolean _cairo_dock_hide_dock_if_parent (gchar *cDockName, CairoDock *pD
 
 	if (pPointedIcon != NULL)
 	{
-		g_print (" il faut cacher ce dock parent (%d)\n", pDock->iRefCount);
+		//g_print (" il faut cacher ce dock parent (%d)\n", pDock->iRefCount);
 		if (pDock->iRefCount == 0)
 		{
 			cairo_dock_leave_from_main_dock (pDock);
@@ -218,7 +218,7 @@ static gboolean _cairo_dock_hide_dock_if_parent (gchar *cDockName, CairoDock *pD
 				cairo_dock_calculate_dock_icons (pDock);
 			}
 
-			cd_message ("on cache %s par parente", cDockName);
+			//cd_message ("on cache %s par parente", cDockName);
 			gtk_widget_hide (pDock->container.pWidget);
 			cairo_dock_hide_parent_dock (pDock);
 		}
@@ -242,14 +242,14 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 		{
 			if (icon->pSubDock->container.bInside)
 			{
-				cd_message ("on est dans le sous-dock, donc on ne le cache pas");
+				cd_debug ("on est dans le sous-dock, donc on ne le cache pas");
 				pDock->container.bInside = FALSE;
 				//pDock->bAtTop = FALSE;
 				return FALSE;
 			}
 			else if (icon->pSubDock->iSidLeaveDemand == 0)  // si on sort du dock sans passer par le sous-dock, par exemple en sortant par le bas.
 			{
-				cd_message ("on cache %s par filiation", icon->cName);
+				cd_debug ("on cache %s par filiation", icon->cName);
 				icon->pSubDock->iScrollOffset = 0;
 				icon->pSubDock->fFoldingFactor = 0;
 				gtk_widget_hide (icon->pSubDock->container.pWidget);
@@ -510,36 +510,14 @@ static void _cairo_dock_stop_quick_hide_one_root_dock (const gchar *cDockName, C
 	if (pDock->iRefCount == 0)
 	{
 		pDock->bAutoHide = pDock->bAutoHideInitialValue;
-		pDock->bAtBottom = TRUE;
 		
 		if (! pDock->container.bInside && ! pDock->bAutoHide)  // on le fait re-apparaitre.
 		{
 			pDock->fFoldingFactor = 0;
 			
-			cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MIN_SIZE);
-			if (pDock->pShapeBitmap && ! pDock->bActive)
-			{
-				gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-					NULL,
-					0,
-					0);
-			}
-			pDock->bActive = TRUE;
-			/*int iNewWidth, iNewHeight;
-			cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
-			
-			if (pDock->container.bIsHorizontal)
-				gdk_window_move_resize (pDock->container.pWidget->window,
-					pDock->container.iWindowPositionX,
-					pDock->container.iWindowPositionY,
-					iNewWidth,
-					iNewHeight);
-			else
-				gdk_window_move_resize (pDock->container.pWidget->window,
-					pDock->container.iWindowPositionY,
-					pDock->container.iWindowPositionX,
-					iNewHeight,
-					iNewWidth);*/
+			cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MAX_SIZE);
+			pDock->bActive = FALSE;  // l'input shape sera mise lors du configure.
+			pDock->bAtBottom = FALSE;
 		}
 	}
 }

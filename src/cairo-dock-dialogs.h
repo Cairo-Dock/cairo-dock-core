@@ -109,6 +109,9 @@ struct _CairoDialogAttribute {
 	gint iTimeLength;
 	/// name of a decorator, or NULL to use the default one.
 	gchar *cDecoratorName;
+	
+	/// whether the dialog should be transparent to mouse input.
+	gboolean bNoInput;
 };
 
 struct _CairoDialogButton {
@@ -200,9 +203,11 @@ struct _CairoDialog {
 	CairoDialogButton *pButtons;
 	/// textures.
 	GLuint iIconTexture, iTextTexture;
-	gboolean bFinalized;
+	/// whether the dialog is transparent to mouse input.
+	gboolean bNoInput;
 	/// TRUE to allow the dialog to be minimized once. The flag is reseted to FALSE after the desklet has minimized.
 	gboolean bAllowMinimize;
+	GdkBitmap* pShapeBitmap;
 };
 
 

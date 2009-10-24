@@ -163,9 +163,18 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 	if (pIcon == NULL || pIcon->cParentDockName == NULL || pIcon->fPersonnalScale > 0)
 		pIcon = cairo_dock_get_dialogless_icon ();
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
-	s_pDialog = cairo_dock_show_temporary_dialog_with_icon (dgettext (pGroupDescription->cGettextDomain, cDescription != NULL ? cDescription : pGroupDescription->cDescription), pIcon, CAIRO_CONTAINER (pDock), 0., pGroupDescription->cIcon);
+	
+	///s_pDialog = cairo_dock_show_temporary_dialog_with_icon (dgettext (pGroupDescription->cGettextDomain, cDescription != NULL ? cDescription : pGroupDescription->cDescription), pIcon, CAIRO_CONTAINER (pDock), 0., pGroupDescription->cIcon);
+	CairoDialogAttribute attr;
+	memset (&attr, 0, sizeof (CairoDialogAttribute));
+	attr.cText = dgettext (pGroupDescription->cGettextDomain, cDescription != NULL ? cDescription : pGroupDescription->cDescription);
+	attr.cImageFilePath = pGroupDescription->cIcon;
+	attr.bNoInput = TRUE;
+	s_pDialog = cairo_dock_build_dialog (&attr, pIcon, CAIRO_CONTAINER (pDock));
+	
 	cairo_dock_dialog_reference (s_pDialog);
 	
+	gtk_window_set_transient_for (GTK_WINDOW (s_pDialog->container.pWidget), GTK_WINDOW (cairo_dock_get_main_window ()));
 	g_free (cDescription);
 
 	s_iSidShowGroupDialog = 0;

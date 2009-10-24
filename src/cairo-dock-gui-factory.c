@@ -902,6 +902,23 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 #define _pack_subwidget(pSubWidget) do {\
 	pSubWidgetList = g_slist_append (pSubWidgetList, pSubWidget);\
 	_pack_in_widget_box (pSubWidget); } while (0)
+#define _pack_hscale(pSubWidget) do {\
+	GtkWidget *pExtendedWidget;\
+	if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL && pAuthorizedValuesList[1] != NULL && pAuthorizedValuesList[2] != NULL && pAuthorizedValuesList[3] != NULL) {\
+		pExtendedWidget = gtk_hbox_new (FALSE, 0);\
+		GtkWidget *label = gtk_label_new (dgettext (cGettextDomain, pAuthorizedValuesList[2]));\
+		GtkWidget *pAlign = gtk_alignment_new (1., 1., 0., 0.);\
+		gtk_container_add (GTK_CONTAINER (pAlign), label);\
+		gtk_box_pack_start (GTK_BOX (pExtendedWidget), pAlign, FALSE, FALSE, 0);\
+		gtk_box_pack_start (GTK_BOX (pExtendedWidget), pSubWidget, FALSE, FALSE, 0);\
+		label = gtk_label_new (dgettext (cGettextDomain, pAuthorizedValuesList[3]));\
+		pAlign = gtk_alignment_new (1., 1., 0., 0.);\
+		gtk_container_add (GTK_CONTAINER (pAlign), label);\
+		gtk_box_pack_start (GTK_BOX (pExtendedWidget), pAlign, FALSE, FALSE, 0); }\
+	else {\
+		pExtendedWidget = pOneWidget; }\
+	pSubWidgetList = g_slist_append (pSubWidgetList, pSubWidget);\
+	_pack_in_widget_box (pExtendedWidget); } while (0)
 #define _add_combo_from_modele(modele, bAddPreviewWidgets, bWithEntry) do {\
 	if (modele == NULL) { \
 		pOneWidget = gtk_combo_box_entry_new ();\
@@ -1280,20 +1297,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						gtk_scale_set_digits (GTK_SCALE (pOneWidget), 0);
 						gtk_widget_set (pOneWidget, "width-request", 150, NULL);
 						
-						GtkWidget *pExtendedWidget;
-						if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL && pAuthorizedValuesList[1] != NULL && pAuthorizedValuesList[2] != NULL && pAuthorizedValuesList[3] != NULL)
-						{
-							pExtendedWidget = gtk_hbox_new (FALSE, 0);
-							GtkWidget *label = gtk_label_new (gettext (pAuthorizedValuesList[2]));
-							gtk_box_pack_start (GTK_BOX (pExtendedWidget), label, FALSE, FALSE, 0);
-							gtk_box_pack_start (GTK_BOX (pExtendedWidget), pOneWidget, FALSE, FALSE, 0);
-							label = gtk_label_new (gettext (pAuthorizedValuesList[3]));
-							gtk_box_pack_start (GTK_BOX (pExtendedWidget), label, FALSE, FALSE, 0);
-						}
-						else
-							pExtendedWidget = pOneWidget;
-						pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
-						_pack_in_widget_box (pExtendedWidget);
+						_pack_hscale (pOneWidget);
 					}
 					else
 					{
@@ -1376,20 +1380,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						gtk_scale_set_digits (GTK_SCALE (pOneWidget), 3);
 						gtk_widget_set (pOneWidget, "width-request", 150, NULL);
 						
-						GtkWidget *pExtendedWidget;
-						if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL && pAuthorizedValuesList[1] != NULL && pAuthorizedValuesList[2] != NULL && pAuthorizedValuesList[3] != NULL)
-						{
-							pExtendedWidget = gtk_hbox_new (FALSE, 0);
-							GtkWidget *label = gtk_label_new (gettext (pAuthorizedValuesList[2]));
-							gtk_box_pack_start (GTK_BOX (pExtendedWidget), label, FALSE, FALSE, 0);
-							gtk_box_pack_start (GTK_BOX (pExtendedWidget), pOneWidget, FALSE, FALSE, 0);
-							label = gtk_label_new (gettext (pAuthorizedValuesList[3]));
-							gtk_box_pack_start (GTK_BOX (pExtendedWidget), label, FALSE, FALSE, 0);
-						}
-						else
-							pExtendedWidget = pOneWidget;
-						pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
-						_pack_in_widget_box (pExtendedWidget);
+						_pack_hscale (pOneWidget);
 					}
 					else
 					{

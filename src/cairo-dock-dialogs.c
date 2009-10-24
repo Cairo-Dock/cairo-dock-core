@@ -505,7 +505,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	CairoDialog *pDialog)
 {
 	//g_print ("%s (%dx%d)\n", __func__, pEvent->width, pEvent->height);
-	if (pEvent->width == CAIRO_DIALOG_MIN_SIZE && pEvent->height == CAIRO_DIALOG_MIN_SIZE)
+	if (pEvent->width == CAIRO_DIALOG_MIN_SIZE && pEvent->height == CAIRO_DIALOG_MIN_SIZE && ! pDialog->bNoInput)
 		return FALSE;
 	
 	int iWidth = pDialog->container.iWidth, iHeight = pDialog->container.iHeight;
@@ -542,6 +542,26 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 			CairoContainer *pContainer = cairo_dock_search_container_from_icon (pDialog->pIcon);
 			//g_print ("configure (%d) => place (%s, %s, %x)\n", pDialog->container.bInside, pDialog->pIcon->cName, pDialog->pIcon->cParentDockName, pContainer);
 			cairo_dock_place_dialog (pDialog, pContainer);
+		}
+		
+		if (pDialog->bNoInput)
+		{
+			if (pDialog->pShapeBitmap != NULL)
+				g_object_unref ((gpointer) pDialog->pShapeBitmap);
+			pDialog->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
+				pEvent->width,
+				pEvent->height,
+				1);
+			cairo_t *pCairoContext = gdk_cairo_create (pDialog->pShapeBitmap);
+			cairo_set_source_rgba (pCairoContext, 0.0f, 0.0f, 0.0f, 0.0f);
+			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
+			cairo_paint (pCairoContext);
+			cairo_destroy (pCairoContext);
+			
+			gtk_widget_input_shape_combine_mask (pDialog->container.pWidget,
+				pDialog->pShapeBitmap,
+				0,
+				0);
 		}
 	}
 	gtk_widget_queue_draw (pDialog->container.pWidget);  // les widgets internes peuvent avoir changer de taille sans que le dialogue n'en ait change, il faut donc redessiner tout le temps.
@@ -718,7 +738,10 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 	}
 	
 	gtk_widget_destroy (pDialog->container.pWidget);  // detruit aussi le widget interactif.
-
+	
+	if (pDialog->pShapeBitmap != NULL)
+		g_object_unref ((gpointer) pDialog->pShapeBitmap);
+	
 	if (pDialog->pUserData != NULL && pDialog->pFreeUserDataFunc != NULL)
 		pDialog->pFreeUserDataFunc (pDialog->pUserData);
 	
@@ -914,7 +937,8 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	
 	//\________________ On cree un nouveau dialogue.
 	CairoDialog *pDialog = _cairo_dock_create_new_dialog (pAttribute->pInteractiveWidget || pAttribute->pActionFunc);
-	
+	if (pContainer != NULL)
+		gtk_window_set_transient_for (GTK_WINDOW (pDialog->container.pWidget), GTK_WINDOW (pContainer->pWidget));
 	pDialog->pIcon = pIcon;
 	cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDialog));
 	
@@ -999,6 +1023,10 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 				pDialog->pButtons[i].iTexture = cairo_dock_create_texture_from_surface (pDialog->pButtons[i].pSurface);
 			}
 		}
+	}
+	else
+	{
+		pDialog->bNoInput = pAttribute->bNoInput;
 	}
 
 	//\________________ On lui affecte un decorateur.
@@ -1105,8 +1133,6 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 		"unmap-event",
 		G_CALLBACK (on_unmap_dialog),
 		pDialog);
-	
-	///cairo_dock_place_dialog (pDialog, pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.
 	
 	cairo_destroy (pSourceContext);
 	
@@ -1555,7 +1581,9 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 			pBlockingLoop);
 		
 		if (myAccessibility.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
+		{
 			cairo_dock_pop_up (CAIRO_DOCK (pContainer));
+		}
 		g_print ("debut de boucle bloquante ...\n");
 		GDK_THREADS_LEAVE ();
 		g_main_loop_run (pBlockingLoop);
