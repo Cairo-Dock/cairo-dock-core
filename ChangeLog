@@ -1,0 +1,110 @@
+Modifications made on the SVN and BZR : Rev 2.0.8.1 => 2.0.9
+
+/* A bugs fixed version */
+
+Fabounet :
+ * Miscellaneous :
+   * Added documentation in .h files
+   * Cleaning of Cairo-Dock API
+   * Fixed some of memory leaks
+   * Fixed a crash when a module stop
+   * set the Widget Layer rule automatically
+   * detection of composition
+   * metacity : automatically turn on composite
+   * proposed to see the help if it has never been done
+   * message when no plug-in
+   * removed some print messages
+ * Config pannel :
+   * changed the agencement of many options for a better ergonomy.
+   * enhancement of previews in config panels
+   * correction of the icon's order bug
+   * Using font selector to simplify the config panel
+   * small refresh of the config panel
+   * Improved the config panel for launchers
+ * Dock rendering :
+   * fixed extended panel mode
+ * Desklets :
+   * Fixed picking 3D bug.
+   * bug-fix on ratio 
+   * desklets can't be hidden
+ * Dialogs :
+   * fixed to don't have twice the same dialog on notification
+   * dialogs can't be hidden
+   * the dock doesn't go under windows when a dialog exists
+ * Gauges :
+   * graph :
+     * fixed the scale of graph to fit the icon's width
+     * fixed graph with mixed values
+ * OpenGL :
+   * Added a workaround for ATI xorg drivers (with KMS on kernel boot)
+   * try to start the OpenGL backend without Stencil if failed
+ * Task bar :
+   * correction of some icons doesn't appear
+   * correction of the discontinuity in icon disappearance animation
+   * solved the jump of icons when closing
+   * fixed the bug with quick-hide
+   * fixed the drawing of indicator on appli's icon
+   * integration of the icon glide movement into the animation loop
+   * added some tooltips to the menu
+   * lock dock option works now for all icons
+ * Themes :
+   * added versionning for distant themes
+   * Default : correction in some conf files
+   * fixed 1 crash when reloading theme
+   * Improved the theme selector
+   * TM handles .tar.bz2 and .tgz
+ * Subdocks
+   * fixed block bugs
+   * correction of the sub-sub-docks bug
+ * Xinerama : available for all root docks to take into account different screen sizes
+ * XShape : correction 1 bug on fullscreen mode
+
+
+
+Mav :
+ * Fix headers cairo-dock-dbus
+ * Updated LICENCE file.
+ * Updated default-theme.
+
+
+Matttbe :
+ * Updated translations
+ * Added licences in each file
+ * fixed a little bug in tips of the cairo-dock menu
+ 
+ ===========================
+ 
+ Modifications made on BZR : Rev 2.0.9.1 => 2.0.9.2
+
+/* A bugs fixed version */
+
+Fabounet :
+ * Miscellaneous :
+   * Fixed the fade out when the dock is below windows
+   * Fix window sizes (most WM didn't support well this feature)
+   * Correction of autostart when directory doesn't exist
+ * Taskbar :
+   * Workaround for some windows
+   * Correction of a refresh bug
+   * Fixed the mix between apps and launchers
+   * Fixed a crash when moving some apps on other subdock
+   * Small correction on auto-hide
+   * Opengl text now handles extended ASCII (no crash)
+   * fixed wrong background position on icon disappearance
+   * fixed the bug on maximized window
+ * Labels :
+   * Improvement of label's readability
+ * Dialogues :
+   * Better dialogues placement on dock
+   * fixed dialogs placement with desklet
+   * make the dialog transient for the dock
+ * Theme manager :
+   * theme manager panel can reload correctly
+ * Second docks :
+   * Small correction for the second main dock
+   
+
+
+Matttbe :
+ * Updated translations
+ * Rename en_GB => en

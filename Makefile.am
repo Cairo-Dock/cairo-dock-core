@@ -19,4 +19,5 @@ EXTRA_DIST = \
 	intltool-update.in\
 	LICENSE\
 	LGPL-2\
+	ChangeLog\
 	copyright
