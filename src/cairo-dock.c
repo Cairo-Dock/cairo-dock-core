@@ -707,6 +707,11 @@ int main (int argc, char** argv)
 	bzr merge ../2.1.1 ## => le merge, c'est si tu aimes bien ça :)
 	*/
 	
+	if (strcmp((cairo_dock_launch_command_sync ("date +%m%d")), "1028") == 0)
+	{
+		Icon *pFirstIcon = cairo_dock_get_first_icon (g_pMainDock->icons);
+		cairo_dock_show_temporary_dialog_with_default_icon ("Happy Birthday Fabounet! - Bon annif Fab !\n\nToday (28 October) it's the birthday of Fabounet (the main dev of Cairo-Dock).\nDon't hesitate to visit our forum (cairo-dock.org) and post a message to him ;)\nYou can also have a look to our IRC channel (#cairo-dock and #cairo-dock-fr on FreeNode).\n Maybe Fab will be unexpectedly there :)\n\n\t For our best dev,\n\t\tThe Cairo-Dock Team", pFirstIcon, CAIRO_CONTAINER (g_pMainDock), 0);
+	}
 	
 	gtk_main ();
 
