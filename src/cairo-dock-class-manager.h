@@ -60,6 +60,12 @@ void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli);
 const GList *cairo_dock_list_existing_appli_with_class (const gchar *cClass);
 
 /*
+* Enregistre une icone de lanceur/applet dans sa classe. N'inhinibe pas la classe.
+* @param pIcon l'inhibiteur.
+* @return TRUE si l'enregistrement s'est effectue correctement ou si l'icone etait deja enregistree, FALSE sinon.
+*/
+gboolean cairo_dock_add_inhibator_to_class (const gchar *cClass, Icon *pIcon);
+/*
 * Enregistre une icone d'appli dans sa classe. Ne fais rien aux inhibiteurs.
 * @param pIcon l'icone de l'appli.
 * @return TRUE si l'enregistrement s'est effectue correctement ou si l'appli etait deja enregistree, FALSE sinon.

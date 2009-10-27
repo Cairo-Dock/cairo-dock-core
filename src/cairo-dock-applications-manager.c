@@ -83,6 +83,7 @@ static Atom s_aNetDesktopViewport;
 static Atom s_aNetDesktopGeometry;
 static Atom s_aNetWmState;
 static Atom s_aNetWmDesktop;
+static Atom s_aNetShowingDesktop;
 static Atom s_aRootMapID;
 static Atom s_aNetNbDesktops;
 static Atom s_aXKlavierState;
@@ -104,6 +105,7 @@ void cairo_dock_initialize_application_manager (Display *pDisplay)
 	s_aNetDesktopGeometry	= XInternAtom (s_XDisplay, "_NET_DESKTOP_GEOMETRY", False);
 	s_aNetWmState			= XInternAtom (s_XDisplay, "_NET_WM_STATE", False);
 	s_aNetWmDesktop			= XInternAtom (s_XDisplay, "_NET_WM_DESKTOP", False);
+	s_aNetShowingDesktop 		= XInternAtom (s_XDisplay, "_NET_SHOWING_DESKTOP", False);
 	s_aRootMapID			= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
 	s_aNetNbDesktops		= XInternAtom (s_XDisplay, "_NET_NUMBER_OF_DESKTOPS", False);
 	s_aXKlavierState		= XInternAtom (s_XDisplay, "XKLAVIER_STATE", False);
@@ -511,6 +513,11 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 					else
 						cairo_dock_invalidate_desktop_bg_surface ();
 					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED);
+				}
+				else if (event.xproperty.atom == s_aNetShowingDesktop)
+				{
+					cd_message ("changement visibilite du bureau");
+					cairo_dock_notify (CAIRO_DOCK_DESKTOP_VISIBILITY_CHANGED);
 				}
 				else if (event.xproperty.atom == s_aXKlavierState)
 				{

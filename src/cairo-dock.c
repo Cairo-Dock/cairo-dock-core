@@ -694,6 +694,18 @@ int main (int argc, char** argv)
 	g_print ("\n2eme DOCK PRINCIPAL AVEC 1 ICONE : BORD TRONQUE EN VERTICAL\n\n");
 	g_print ("\nPLAN 3D NE PREND PAS TOUT L'ECRAN\n\n");
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
+	g_print ("\nPOCHETTES  (TESTER AVEC RB)!!!\n\n");
+	g_print ("\nPENGOUIN (CAIRO ET VERTICAL)\n\n");
+	g_print ("\nICONES DES LANCEURS SUR APPLIS\n\n");
+	
+	/*
+	mkdir 2.1.1
+	bzr checkout --lightweight lp:cairo-dock-plug-ins/2.1 2.1.1
+	geany # (...)
+	bzr commit --tag 2.1.1-2
+	cd ../cairo-dock-plug-ins
+	bzr merge ../2.1.1 ## => le merge, c'est si tu aimes bien ça :)
+	*/
 	
 	
 	gtk_main ();

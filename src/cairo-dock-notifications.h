@@ -134,6 +134,8 @@ typedef enum {
 	/// notification called when the mouse leave a desklet.
 	CAIRO_DOCK_LEAVE_DESKLET,
 	
+	/// notification called when the desktop is shown/hidden (data:NULL).
+	CAIRO_DOCK_DESKTOP_VISIBILITY_CHANGED,
 	CAIRO_DOCK_NB_NOTIFICATIONS
 	} CairoDockNotificationType;
 

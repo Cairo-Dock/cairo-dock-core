@@ -65,14 +65,6 @@ CairoDataRenderer *cairo_dock_new_data_renderer (const gchar *cRendererName)
 	
 	if (g_pMainDock && s_pFont == NULL)
 	{
-		/*GdkGLContext *pGlContext = gtk_widget_get_gl_context (g_pMainDock->container.pWidget);
-		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (g_pMainDock->container.pWidget);
-		if (gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
-		{
-			_init_data_renderer_font ();
-			
-			gdk_gl_drawable_gl_end (pGlDrawable);
-		}*/
 		_init_data_renderer_font ();
 	}
 	
@@ -140,7 +132,6 @@ static void _cairo_dock_render_to_texture (CairoDataRenderer *pDataRenderer, Ico
 }
 static void _cairo_dock_render_to_context (CairoDataRenderer *pDataRenderer, Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext)
 {
-	cairo_save (pCairoContext);
 	//\________________ On efface tout.
 	cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 0.0);
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);

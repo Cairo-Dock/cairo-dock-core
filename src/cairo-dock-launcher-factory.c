@@ -451,8 +451,13 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName, 
 	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pParentDock);
 	
 	cd_message ("+ %s/%s", icon->cName, icon->cClass);
-	if (myTaskBar.bMixLauncherAppli && CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon) && icon->cClass != NULL)
-		cairo_dock_inhibate_class (icon->cClass, icon);
+	if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon) && icon->cClass != NULL)
+	{
+		if (myTaskBar.bMixLauncherAppli)
+			cairo_dock_inhibate_class (icon->cClass, icon);
+		else  // on l'insere quand meme dans la classe pour pouvoir ecraser l'icone X avec la sienne.
+			cairo_dock_add_inhibator_to_class (icon->cClass, icon);
+	}
 	
 	return icon;
 }

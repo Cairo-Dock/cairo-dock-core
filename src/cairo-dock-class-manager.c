@@ -191,7 +191,7 @@ static CairoDockClassAppli *cairo_dock_get_class (const gchar *cClass)
 	return pClassAppli;
 }
 
-static gboolean cairo_dock_add_inhibator_to_class (const gchar *cClass, Icon *pIcon)
+gboolean cairo_dock_add_inhibator_to_class (const gchar *cClass, Icon *pIcon)
 {
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	g_return_val_if_fail (pClassAppli!= NULL, FALSE);
@@ -554,8 +554,8 @@ cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_t *pSou
 	
 	cairo_surface_t *pSurface = cairo_dock_duplicate_surface (pInhibatorIcon->pIconBuffer,
 		pSourceContext,
-		pInhibatorIcon->fWidth * fInhibatorMaxScale / pInhibhatorContainer->fRatio,
-		pInhibatorIcon->fHeight * fInhibatorMaxScale / pInhibhatorContainer->fRatio,
+		pInhibatorIcon->fWidth * fInhibatorMaxScale / (pInhibhatorContainer ? pInhibhatorContainer->fRatio : 1.),
+		pInhibatorIcon->fHeight * fInhibatorMaxScale / (pInhibhatorContainer ? pInhibhatorContainer->fRatio : 1.),
 		*fWidth * fMaxScale,
 		*fHeight * fMaxScale);
 	return pSurface;
