@@ -31,6 +31,8 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-emblem.h"
 
+extern gboolean g_bUseOpenGL;
+
 static CairoDockFullEmblem s_pFullEmblems[CAIRO_DOCK_EMBLEM_CLASSIC_NB];
 static gchar *s_cEmblemConfPath[CAIRO_DOCK_EMBLEM_CLASSIC_NB];
 
@@ -130,7 +132,10 @@ void cairo_dock_draw_emblem_from_surface (cairo_t *pIconContext, cairo_surface_t
 	
 	if (!bPersistent)
 		cairo_restore (pIconContext);
-		
+	
+	if (g_bUseOpenGL)
+		cairo_dock_update_icon_texture (pIcon);
+	
 	cairo_dock_redraw_icon (pIcon, pContainer); //Test 
 }
 

@@ -84,10 +84,10 @@ static gboolean on_leave_dialog (GtkWidget* pWidget,
 	GdkEventCrossing* pEvent,
 	CairoDialog *pDialog)
 {
-	cd_debug ("debut d'attente...");
-	/* while (gtk_events_pending ())
-		gtk_main_iteration (); */
-	cd_debug ("fin d'attente, bInside : %d\n", pDialog->container.bInside);
+	/*cd_debug ("debut d'attente...");
+	while (gtk_events_pending ())
+		gtk_main_iteration ();
+	cd_debug ("fin d'attente, bInside : %d\n", pDialog->container.bInside);*/
 	int iMouseX, iMouseY;
 	gdk_window_get_pointer (pDialog->container.pWidget->window, &iMouseX, &iMouseY, NULL);
 	if (iMouseX > 0 && iMouseX < pDialog->container.iWidth && iMouseY > 0 && iMouseY < pDialog->container.iHeight)

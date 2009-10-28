@@ -87,6 +87,7 @@ extern gboolean g_bUseOpenGL;
 extern gboolean g_bIndirectRendering;
 extern GdkGLConfig* g_pGlConfig;
 
+extern gboolean g_bEasterEggs;
 
 static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp)
 {
@@ -755,15 +756,24 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	glBindTexture (GL_TEXTURE_2D, iTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D (GL_TEXTURE_2D,
-		0,
-		4,  // GL_ALPHA / GL_BGRA
-		w,
-		h,
-		0,
-		GL_BGRA,  // GL_ALPHA / GL_BGRA
-		GL_UNSIGNED_BYTE,
-		cairo_image_surface_get_data (pPowerOfwoSurface));
+	if (g_bEasterEggs)
+		gluBuild2DMipmaps (GL_TEXTURE_2D,
+			4,
+			w,
+			h,
+			GL_BGRA,
+			GL_UNSIGNED_BYTE,
+			cairo_image_surface_get_data (pPowerOfwoSurface));
+	else
+		glTexImage2D (GL_TEXTURE_2D,
+			0,
+			4,  // GL_ALPHA / GL_BGRA
+			w,
+			h,
+			0,
+			GL_BGRA,  // GL_ALPHA / GL_BGRA
+			GL_UNSIGNED_BYTE,
+			cairo_image_surface_get_data (pPowerOfwoSurface));
 	if (pPowerOfwoSurface != pImageSurface)
 		cairo_surface_destroy (pPowerOfwoSurface);
 	glDisable(GL_TEXTURE_2D);

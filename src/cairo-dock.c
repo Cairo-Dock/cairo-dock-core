@@ -689,14 +689,18 @@ int main (int argc, char** argv)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
 	
 	g_print ("\nVERIFIER LE CHANGEMENT DE CONTAINER POUR TERMINAL\n\n");
-	g_print ("\nPLANTAGE POWER-MANAGER\n\n");
 	g_print ("\nSOUS-DOCKS ET CHGT DE BUREAU\n\n");
 	g_print ("\n2eme DOCK PRINCIPAL AVEC 1 ICONE : BORD TRONQUE EN VERTICAL\n\n");
 	g_print ("\nPLAN 3D NE PREND PAS TOUT L'ECRAN\n\n");
-	g_print ("\nTEXTURE FROM PIXMAP\n\n");
-	g_print ("\nPOCHETTES  (TESTER AVEC RB)!!!\n\n");
 	g_print ("\nPENGOUIN (CAIRO ET VERTICAL)\n\n");
-	g_print ("\nICONES DES LANCEURS SUR APPLIS\n\n");
+	g_print ("\nSWITCHER : MINIATURE DU BUREAU\n\n");
+	
+	g_print ("\nTEXTURE FROM PIXMAP\n\n");
+	g_print ("\nFIXER LES DESKLETS SUR UN BUREAU\n\n");
+	g_print ("\nBATTERIE VERS 100%\n\n");
+	g_print ("\nNOUVELLE INSTANCE COPIEE SUR LA 1ERE\n\n");
+	g_print ("\nJAUGES : LOGO\n\n");
+	
 	
 	/*
 	mkdir 2.1.1
