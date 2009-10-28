@@ -30,6 +30,8 @@
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-emblem.h"
+#include "cairo-dock-draw-opengl.h"
+
 
 extern gboolean g_bUseOpenGL;
 
