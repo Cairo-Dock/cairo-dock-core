@@ -1122,7 +1122,7 @@ static void _cairo_dock_reorder_one_class (gchar *cClass, CairoDockClassAppli *p
 		{
 			pAppliIcon = ic->data;
 			pDock = cairo_dock_search_dock_from_name (pAppliIcon->cParentDockName);
-			if (pDock->iRefCount == 0)
+			if (pDock && pDock->iRefCount == 0)
 			{
 				pAppliIcon->fOrder = *iMaxOrder;
 				*iMaxOrder ++;

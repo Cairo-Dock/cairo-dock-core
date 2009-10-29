@@ -694,22 +694,12 @@ int main (int argc, char** argv)
 	g_print ("\nPLAN 3D NE PREND PAS TOUT L'ECRAN\n\n");
 	g_print ("\nPENGOUIN (CAIRO ET VERTICAL)\n\n");
 	g_print ("\nSWITCHER : MINIATURE DU BUREAU\n\n");
+	g_print ("\nBATTERIE VERS 100%\n\n");
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
 	g_print ("\nFIXER LES DESKLETS SUR UN BUREAU\n\n");
-	g_print ("\nBATTERIE VERS 100%\n\n");
 	g_print ("\nNOUVELLE INSTANCE COPIEE SUR LA 1ERE\n\n");
 	g_print ("\nJAUGES : LOGO\n\n");
-	
-	
-	/*
-	mkdir 2.1.1
-	bzr checkout --lightweight lp:cairo-dock-plug-ins/2.1 2.1.1
-	geany # (...)
-	bzr commit --tag 2.1.1-2
-	cd ../cairo-dock-plug-ins
-	bzr merge ../2.1.1 ## => le merge, c'est si tu aimes bien ça :)
-	*/
 	
 	if (strcmp((cairo_dock_launch_command_sync ("date +%m%d")), "1028") == 0)
 	{

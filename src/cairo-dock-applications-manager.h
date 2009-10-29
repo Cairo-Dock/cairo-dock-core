@@ -105,6 +105,7 @@ CairoDock *cairo_dock_detach_appli (Icon *pIcon);
 void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock);
 
 void cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock);
+void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon *icon, CairoDock *pMainDock);
 void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock);
 
 

@@ -98,13 +98,14 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 
 static gboolean _cairo_dock_one_shot_timer (CairoDockTask *pTask)
 {
-	pTask->iSidTimerUpdate = 0;
+	pTask->iSidTimer = 0;
 	cairo_dock_launch_task (pTask);
 	return FALSE;
 }
 void cairo_dock_launch_task_delayed (CairoDockTask *pTask, double fDelay)
 {
-	pTask->iSidTimerUpdate = g_timeout_add (fDelay, (GSourceFunc) _cairo_dock_one_shot_timer, pTask);
+	cairo_dock_cancel_next_iteration (pTask);
+	pTask->iSidTimer = g_timeout_add (fDelay, (GSourceFunc) _cairo_dock_one_shot_timer, pTask);
 }
 
 
@@ -186,9 +187,8 @@ void cairo_dock_change_task_frequency (CairoDockTask *pTask, int iNewPeriod)
 void cairo_dock_relaunch_task_immediately (CairoDockTask *pTask, int iNewPeriod)
 {
 	cairo_dock_stop_task (pTask);  // on stoppe avant car on ne veut pas attendre la prochaine iteration.
-	if (iNewPeriod == -1)  // valeur inchangee.
-		iNewPeriod = pTask->iPeriod;
-	cairo_dock_change_task_frequency (pTask, iNewPeriod); // nouvelle frequence eventuelement.
+	if (iNewPeriod >= 0)  // sinon valeur inchangee.
+		cairo_dock_change_task_frequency (pTask, iNewPeriod); // nouvelle frequence.
 	cairo_dock_launch_task (pTask);  // mesure immediate.
 }
 

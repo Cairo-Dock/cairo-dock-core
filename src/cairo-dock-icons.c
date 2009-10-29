@@ -289,6 +289,25 @@ Icon* cairo_dock_get_last_icon_of_order (GList *pIconList, CairoDockIconType iTy
 	}
 	return NULL;
 }
+Icon* cairo_dock_get_last_icon_until_order (GList *pIconList, CairoDockIconType iType)
+{
+	CairoDockIconType iGroupOrder = cairo_dock_get_group_order (iType);
+	GList* ic;
+	Icon *icon = NULL;
+	for (ic = pIconList; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		if (cairo_dock_get_icon_order (icon) > iGroupOrder)
+		{
+			if (ic->prev != NULL)
+				icon = ic->prev->data;
+			else
+				icon = NULL;
+			break;
+		}
+	}
+	return icon;
+}
 
 Icon* cairo_dock_get_pointed_icon (GList *pIconList)
 {

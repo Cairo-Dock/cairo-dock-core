@@ -123,7 +123,7 @@ gboolean cairo_dock_task_is_running (CairoDockTask *pTask);
 void cairo_dock_change_task_frequency (CairoDockTask *pTask, int iNewPeriod);
 /** Change the frequency of a Task and relaunch it immediately. The next iteration is therefore immediately executed.
 *@param pTask the periodic Task.
-*@param iNewPeriod the new period between 2 iterations of the Task, in s.
+*@param iNewPeriod the new period between 2 iterations of the Task, in s, or -1 to let it unchanged.
 */
 void cairo_dock_relaunch_task_immediately (CairoDockTask *pTask, int iNewPeriod);
 

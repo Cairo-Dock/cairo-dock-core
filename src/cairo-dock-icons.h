@@ -390,6 +390,8 @@ Icon* cairo_dock_get_first_icon_of_order (GList *pIconList, CairoDockIconType iT
 */
 Icon* cairo_dock_get_last_icon_of_order (GList *pIconList, CairoDockIconType iType);
 
+Icon* cairo_dock_get_last_icon_until_order (GList *pIconList, CairoDockIconType iType);
+
 /** Get the currently pointed icon in a list of icons.
 *@param pIconList a list of icons.
 *@return the icon whose field 'bPointed' is TRUE, or NULL if none is pointed.
