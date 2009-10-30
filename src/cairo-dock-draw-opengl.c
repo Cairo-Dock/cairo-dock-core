@@ -66,8 +66,6 @@
 
 GLuint g_pGradationTexture[2];
 
-extern cairo_surface_t *g_pDesktopBgSurface;
-
 extern int g_iXScreenWidth[2];
 extern int g_iXScreenHeight[2];
 extern CairoDock *g_pMainDock;
@@ -77,7 +75,6 @@ extern GLuint g_iIndicatorTexture;
 extern GLuint g_iActiveIndicatorTexture;
 extern GLuint g_iClassIndicatorTexture;
 extern GLuint g_iVisibleZoneTexture;
-extern GLuint g_iDesktopBgTexture;
 extern cairo_surface_t *g_pIndicatorSurface;
 extern cairo_surface_t *g_pActiveIndicatorSurface;
 extern cairo_surface_t *g_pClassIndicatorSurface;
@@ -86,6 +83,7 @@ extern cairo_surface_t *g_pVisibleZoneSurface;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bIndirectRendering;
 extern GdkGLConfig* g_pGlConfig;
+extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 
 extern gboolean g_bEasterEggs;
 
@@ -1790,12 +1788,12 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 
 void cairo_dock_apply_desktop_background (CairoContainer *pContainer)
 {
-	if (! mySystem.bUseFakeTransparency || g_iDesktopBgTexture == 0)
+	if (! mySystem.bUseFakeTransparency || ! g_pFakeTransparencyDesktopBg || g_pFakeTransparencyDesktopBg->iTexture == 0)
 		return ;
 	
 	glPolygonMode (GL_FRONT, GL_FILL);
 	glEnable (GL_TEXTURE_2D);
-	glBindTexture (GL_TEXTURE_2D, g_iDesktopBgTexture);
+	glBindTexture (GL_TEXTURE_2D, g_pFakeTransparencyDesktopBg->iTexture);
 	glColor4f(1., 1., 1., 1.);
 	glEnable (GL_BLEND);
 	glBlendFunc (GL_ONE, GL_ZERO);  /// utile ?

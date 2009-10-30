@@ -83,7 +83,6 @@ extern double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
 extern cairo_surface_t *g_pIconBackgroundImageSurface;
 extern double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
 
-extern cairo_surface_t *g_pDesktopBgSurface;
 extern GLuint g_pGradationTexture[2];
 
 extern gboolean g_bUseOpenGL;
@@ -91,8 +90,9 @@ extern GLuint g_iBackgroundTexture;
 extern GLuint g_iVisibleZoneTexture;
 extern GLuint g_iIndicatorTexture;
 extern GLuint g_iActiveIndicatorTexture;
-extern GLuint g_iDesktopBgTexture;
 extern GLuint g_iClassIndicatorTexture;
+
+static CairoDockDesktopBackground *s_pDesktopBg = NULL;
 
 void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription)
 {
@@ -841,14 +841,12 @@ void cairo_dock_load_icons_background_surface (const gchar *cImagePath, cairo_t*
 }
 
 
-
-void cairo_dock_load_desktop_background_surface (void)  // attention : fonction lourde.
+static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // attention : fonction lourde.
 {
-	cairo_dock_invalidate_desktop_bg_surface ();
-	
 	Pixmap iRootPixmapID = cairo_dock_get_window_background_pixmap (cairo_dock_get_root_id ());
-	g_return_if_fail (iRootPixmapID != 0);
+	g_return_val_if_fail (iRootPixmapID != 0, NULL);
 	
+	cairo_surface_t *pDesktopBgSurface = NULL;
 	GdkPixbuf *pBgPixbuf = cairo_dock_get_pixbuf_from_pixmap (iRootPixmapID, FALSE);  // on n'y ajoute pas de transparence.
 	if (pBgPixbuf != NULL)
 	{
@@ -859,11 +857,11 @@ void cairo_dock_load_desktop_background_surface (void)  // attention : fonction 
 			guchar *pixels = gdk_pixbuf_get_pixels (pBgPixbuf);
 			cd_message ("c'est une couleur unie (%.2f, %.2f, %.2f)", (double) pixels[0] / 255, (double) pixels[1] / 255, (double) pixels[2] / 255);
 			
-			g_pDesktopBgSurface = _cairo_dock_create_blank_surface (pSourceContext,
+			pDesktopBgSurface = _cairo_dock_create_blank_surface (pSourceContext,
 				g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
 				g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 			
-			cairo_t *pCairoContext = cairo_create (g_pDesktopBgSurface);
+			cairo_t *pCairoContext = cairo_create (pDesktopBgSurface);
 			cairo_set_source_rgb (pCairoContext,
 				(double) pixels[0] / 255,
 				(double) pixels[1] / 255,
@@ -889,13 +887,13 @@ void cairo_dock_load_desktop_background_surface (void)  // attention : fonction 
 			if (fWidth < g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || fHeight < g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
 			{
 				cd_message ("c'est un degrade ou un motif (%dx%d)", (int) fWidth, (int) fHeight);
-				g_pDesktopBgSurface = _cairo_dock_create_blank_surface (pSourceContext,
+				pDesktopBgSurface = _cairo_dock_create_blank_surface (pSourceContext,
 					g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
 					g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-				cairo_t *pCairoContext = cairo_create (g_pDesktopBgSurface);
+				cairo_t *pCairoContext = cairo_create (pDesktopBgSurface);
 				
 				cairo_pattern_t *pPattern = cairo_pattern_create_for_surface (pBgSurface);
-				g_return_if_fail (cairo_pattern_status (pPattern) == CAIRO_STATUS_SUCCESS);
+				g_return_val_if_fail (cairo_pattern_status (pPattern) == CAIRO_STATUS_SUCCESS, NULL);
 				cairo_pattern_set_extend (pPattern, CAIRO_EXTEND_REPEAT);
 				
 				cairo_set_source (pCairoContext, pPattern);
@@ -908,7 +906,7 @@ void cairo_dock_load_desktop_background_surface (void)  // attention : fonction 
 			else
 			{
 				cd_message ("c'est un fond d'ecran de taille %dx%d", (int) fWidth, (int) fHeight);
-				g_pDesktopBgSurface = pBgSurface;
+				pDesktopBgSurface = pBgSurface;
 			}
 			
 			g_object_unref (pBgPixbuf);
@@ -916,33 +914,88 @@ void cairo_dock_load_desktop_background_surface (void)  // attention : fonction 
 		
 		cairo_destroy (pSourceContext);
 	}
-	if (g_pDesktopBgSurface != NULL && g_bUseOpenGL)
-	{
-		g_iDesktopBgTexture = cairo_dock_create_texture_from_surface (g_pDesktopBgSurface);
-	}
+	return pDesktopBgSurface;
 }
 
-void cairo_dock_invalidate_desktop_bg_surface (void)
+CairoDockDesktopBackground *cairo_dock_get_desktop_background (gboolean bWithTextureToo)
 {
-	if (g_pDesktopBgSurface != NULL)
+	if (s_pDesktopBg == NULL)
 	{
-		cairo_surface_destroy (g_pDesktopBgSurface);
-		g_pDesktopBgSurface = NULL;
+		s_pDesktopBg = g_new0 (CairoDockDesktopBackground, 1);
 	}
-	if (g_iDesktopBgTexture != 0)
+	if (s_pDesktopBg->iRefCount == 0)
 	{
-		_cairo_dock_delete_texture (g_iDesktopBgTexture);
-		g_iDesktopBgTexture = 0;
+		s_pDesktopBg->pSurface = _cairo_dock_create_surface_from_desktop_bg ();
 	}
+	if (s_pDesktopBg->iTexture == 0 && bWithTextureToo)
+	{
+		s_pDesktopBg->iTexture = cairo_dock_create_texture_from_surface (s_pDesktopBg->pSurface);
+	}
+	
+	s_pDesktopBg->iRefCount ++;
+	if (s_pDesktopBg->iSidDestroyBg != 0)
+	{
+		g_source_remove (s_pDesktopBg->iSidDestroyBg);
+		s_pDesktopBg->iSidDestroyBg = 0;
+	}
+	return s_pDesktopBg;
 }
 
-cairo_surface_t *cairo_dock_get_desktop_bg_surface (void)
+static gboolean _destroy_bg (CairoDockDesktopBackground *pDesktopBg)
 {
-	if (g_pDesktopBgSurface == NULL)
-		cairo_dock_load_desktop_background_surface ();
-	return g_pDesktopBgSurface;
+	g_return_val_if_fail (pDesktopBg != NULL, 0);
+	if (pDesktopBg->pSurface != NULL)
+	{
+		cairo_surface_destroy (pDesktopBg->pSurface);
+		pDesktopBg->pSurface = NULL;
+	}
+	if (pDesktopBg->iTexture != 0)
+	{
+		_cairo_dock_delete_texture (pDesktopBg->iTexture);
+		pDesktopBg->iTexture = 0;
+	}
+	pDesktopBg->iSidDestroyBg = 0;
+	return FALSE;
+}
+void cairo_dock_destroy_desktop_background (CairoDockDesktopBackground *pDesktopBg)
+{
+	g_return_if_fail (pDesktopBg != NULL);
+	pDesktopBg->iRefCount --;
+	if (pDesktopBg->iRefCount == 0 && pDesktopBg->iSidDestroyBg == 0)
+	{
+		pDesktopBg->iSidDestroyBg = g_timeout_add_seconds (3, (GSourceFunc)_destroy_bg, pDesktopBg);
+	}
 }
 
+cairo_surface_t *cairo_dock_get_desktop_bg_surface (CairoDockDesktopBackground *pDesktopBg)
+{
+	g_return_val_if_fail (pDesktopBg != NULL, NULL);
+	return pDesktopBg->pSurface;
+}
+
+GLuint cairo_dock_get_desktop_bg_texture (CairoDockDesktopBackground *pDesktopBg)
+{
+	g_return_val_if_fail (pDesktopBg != NULL, 0);
+	return pDesktopBg->iTexture;
+}
+
+void cairo_dock_reload_desktop_background (void)
+{
+	if (s_pDesktopBg == NULL)  // rien a recharger.
+		return ;
+	if (s_pDesktopBg->pSurface == NULL && s_pDesktopBg->iTexture == 0)  // rien a recharger.
+		return ;
+	
+	if (s_pDesktopBg->pSurface != NULL)
+		cairo_surface_destroy (s_pDesktopBg->pSurface);
+	s_pDesktopBg->pSurface = _cairo_dock_create_surface_from_desktop_bg ();
+	
+	if (s_pDesktopBg->iTexture != 0)
+	{
+		_cairo_dock_delete_texture (s_pDesktopBg->iTexture);
+		s_pDesktopBg->iTexture = cairo_dock_create_texture_from_surface (s_pDesktopBg->pSurface);
+	}
+}
 
 
 void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* pSourceContext, double fMaxScale, double fIndicatorRatio)
@@ -1103,7 +1156,11 @@ void cairo_dock_unload_additionnal_textures (void)
 		_cairo_dock_delete_texture (g_pGradationTexture[1]);
 		g_pGradationTexture[1] = 0;
 	}
-	cairo_dock_invalidate_desktop_bg_surface ();
+	if (s_pDesktopBg != NULL && s_pDesktopBg->iTexture != 0)
+	{
+		_cairo_dock_delete_texture (s_pDesktopBg->iTexture);
+		s_pDesktopBg->iTexture = 0;
+	}
 	cairo_dock_destroy_icon_pbuffer ();
 	cairo_dock_unload_default_data_renderer_font ();
 }

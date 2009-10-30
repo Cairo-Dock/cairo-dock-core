@@ -1165,15 +1165,25 @@ static void _cairo_dock_set_on_all_desktop (GtkCheckMenuItem *pMenuItem, gpointe
 		icon = pDesklet->pIcon;
 	
 	gboolean bSticky = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem));
-	g_print (" %s (%d)\n", __func__, bSticky);
+	g_print ("%s (%d)\n", __func__, bSticky);
+	int iNumDesktop;
 	if (bSticky)
+	{
 		gtk_window_stick (GTK_WINDOW (pDesklet->container.pWidget));
+		iNumDesktop = -1;
+	}
 	else
+	{
 		gtk_window_unstick (GTK_WINDOW (pDesklet->container.pWidget));
-	
+		int iCurrentDesktop, iCurrentViewportX, iCurrentViewportY;
+		cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
+		iNumDesktop = iCurrentDesktop * g_iNbViewportX * g_iNbViewportY + iCurrentViewportX * g_iNbViewportY + iCurrentViewportY;
+		g_print (">>> on colle ce desklet sur le bureau %d\n", iNumDesktop);
+	}
 	if (CAIRO_DOCK_IS_APPLET (icon))
 		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
 			G_TYPE_BOOLEAN, "Desklet", "sticky", bSticky,
+			G_TYPE_INT, "Desklet", "num desktop", iNumDesktop,
 			G_TYPE_INVALID);
 }
 

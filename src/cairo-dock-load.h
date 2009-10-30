@@ -30,6 +30,13 @@ G_BEGIN_DECLS
 *@file cairo-dock-load.h A collection of surfaces and textures loader functions.
 */
 
+struct _CairoDockDesktopBackground {
+	cairo_surface_t *pSurface;
+	GLuint iTexture;
+	guint iSidDestroyBg;
+	gint iRefCount;
+	} ;
+
 void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription);
 void cairo_dock_copy_label_description (CairoDockLabelDescription *pDestTextDescription, CairoDockLabelDescription *pOrigTextDescription);
 CairoDockLabelDescription *cairo_dock_duplicate_label_description (CairoDockLabelDescription *pOrigTextDescription);
@@ -125,9 +132,17 @@ void cairo_dock_load_background_decorations (CairoDock *pDock);
 
 void cairo_dock_load_icons_background_surface (const gchar *cImagePath, cairo_t* pSourceContext, double fMaxScale);
 
-void cairo_dock_load_desktop_background_surface (void);
-void cairo_dock_invalidate_desktop_bg_surface (void);
-cairo_surface_t *cairo_dock_get_desktop_bg_surface (void);
+
+CairoDockDesktopBackground *cairo_dock_get_desktop_background (gboolean bWithTextureToo);
+
+void cairo_dock_destroy_desktop_background (CairoDockDesktopBackground *pDesktopBg);
+
+cairo_surface_t *cairo_dock_get_desktop_bg_surface (CairoDockDesktopBackground *pDesktopBg);
+
+GLuint cairo_dock_get_desktop_bg_texture (CairoDockDesktopBackground *pDesktopBg);
+
+void cairo_dock_reload_desktop_background (void);
+
 
 void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* pSourceContext, double fMaxScale, double fIndicatorRatio);
 

@@ -846,6 +846,52 @@ void cairo_dock_set_xwindow_above (Window Xid, gboolean bAbove)
 }
 
 
+void cairo_dock_move_xwindow_to_absolute_position (Window Xid, int iDesktopNumber, int iPositionX, int iPositionY)
+{
+	g_return_if_fail (Xid > 0);
+	XEvent xClientMessage;
+
+	xClientMessage.xclient.type = ClientMessage;
+	xClientMessage.xclient.serial = 0;
+	xClientMessage.xclient.send_event = True;
+	xClientMessage.xclient.display = s_XDisplay;
+	xClientMessage.xclient.window = Xid;
+	xClientMessage.xclient.message_type = XInternAtom (s_XDisplay, "_NET_WM_DESKTOP", False);
+	xClientMessage.xclient.format = 32;
+	xClientMessage.xclient.data.l[0] = iDesktopNumber;
+	xClientMessage.xclient.data.l[1] = 2;
+	xClientMessage.xclient.data.l[2] = 0;
+	xClientMessage.xclient.data.l[3] = 0;
+	xClientMessage.xclient.data.l[4] = 0;
+
+	Window root = DefaultRootWindow (s_XDisplay);
+	XSendEvent (s_XDisplay,
+		root,
+		False,
+		SubstructureRedirectMask | SubstructureNotifyMask,
+		&xClientMessage);
+	
+	xClientMessage.xclient.type = ClientMessage;
+	xClientMessage.xclient.serial = 0;
+	xClientMessage.xclient.send_event = True;
+	xClientMessage.xclient.display = s_XDisplay;
+	xClientMessage.xclient.window = Xid;
+	xClientMessage.xclient.message_type = XInternAtom (s_XDisplay, "_NET_MOVERESIZE_WINDOW", False);
+	xClientMessage.xclient.format = 32;
+	xClientMessage.xclient.data.l[0] = StaticGravity | (1 << 8) | (1 << 9) | (0 << 10) | (0 << 11);
+	xClientMessage.xclient.data.l[1] =  iPositionX;  // coordonnees dans le referentiel du viewport desire.
+	xClientMessage.xclient.data.l[2] =  iPositionY;
+	xClientMessage.xclient.data.l[3] = 0;
+	xClientMessage.xclient.data.l[4] = 0;
+	XSendEvent (s_XDisplay,
+		root,
+		False,
+		SubstructureRedirectMask | SubstructureNotifyMask,
+		&xClientMessage);
+
+	//cairo_dock_set_xwindow_timestamp (Xid, cairo_dock_get_xwindow_timestamp (root));
+}
+
 void cairo_dock_move_xwindow_to_nth_desktop (Window Xid, int iDesktopNumber, int iDesktopViewportX, int iDesktopViewportY)
 {
 	g_return_if_fail (Xid > 0);
@@ -873,7 +919,9 @@ void cairo_dock_move_xwindow_to_nth_desktop (Window Xid, int iDesktopNumber, int
 	
 	int iRelativePositionX, iRelativePositionY;
 	cairo_dock_get_xwindow_position_on_its_viewport (Xid, &iRelativePositionX, &iRelativePositionY);
-
+	
+	g_print ("* move to %d+%d\n", iDesktopViewportX, iRelativePositionX);
+	
 	xClientMessage.xclient.type = ClientMessage;
 	xClientMessage.xclient.serial = 0;
 	xClientMessage.xclient.send_event = True;

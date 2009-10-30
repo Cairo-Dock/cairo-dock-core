@@ -508,10 +508,9 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				else if (event.xproperty.atom == s_aRootMapID)
 				{
 					cd_message ("changement du fond d'ecran");
-					if (mySystem.bUseFakeTransparency)
-						cairo_dock_load_desktop_background_surface ();
-					else
-						cairo_dock_invalidate_desktop_bg_surface ();
+					
+					cairo_dock_reload_desktop_background ();
+					
 					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED);
 				}
 				else if (event.xproperty.atom == s_aNetShowingDesktop)

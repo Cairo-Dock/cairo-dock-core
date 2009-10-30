@@ -81,7 +81,8 @@ extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cCurrentLaunchersPath;
 extern double g_fBackgroundImageWidth;
 extern double g_fBackgroundImageHeight;
-extern cairo_surface_t *g_pDesktopBgSurface;
+extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
+extern gboolean g_bUseOpenGL;
 
 static gboolean s_bLoading = FALSE;
 
@@ -560,9 +561,23 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
 	
-	if (mySystem.bUseFakeTransparency && g_pDesktopBgSurface == NULL)
-		cairo_dock_load_desktop_background_surface ();
-	
+	if (mySystem.bUseFakeTransparency)
+	{
+		if (g_pFakeTransparencyDesktopBg == NULL)
+		{
+			g_pFakeTransparencyDesktopBg = cairo_dock_get_desktop_background (g_bUseOpenGL);
+		}
+		else if (g_bUseOpenGL)
+		{
+			CairoDockDesktopBackground *dummy = cairo_dock_get_desktop_background (g_bUseOpenGL);  // pour recharger la texture.
+			cairo_dock_destroy_desktop_background (dummy);
+		}
+	}
+	else if (g_pFakeTransparencyDesktopBg != NULL)
+	{
+		cairo_dock_destroy_desktop_background (g_pFakeTransparencyDesktopBg);
+		g_pFakeTransparencyDesktopBg = NULL;
+	}
 	//cairo_dock_load_dialog_buttons (CAIRO_CONTAINER (pDock), myDialogs.cButtonOkImage, myDialogs.cButtonCancelImage);
 	cairo_dock_unload_dialog_buttons ();
 	
@@ -663,9 +678,13 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 
 	cairo_dock_place_root_dock (pDock);
 	if (mySystem.bUseFakeTransparency && ! bUseFakeTransparencyOld)
+	{
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
+	}
 	else if (! mySystem.bUseFakeTransparency && bUseFakeTransparencyOld)
+	{
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);
+	}
 	
 	pDock->container.iMouseX = 0;  // on se place hors du dock initialement.
 	pDock->container.iMouseY = 0;

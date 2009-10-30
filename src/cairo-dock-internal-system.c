@@ -29,6 +29,8 @@
 CairoConfigSystem mySystem;
 extern CairoDock *g_pMainDock;
 extern gboolean g_bForcedOpenGL;
+extern gboolean g_bUseOpenGL;
+extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 {
@@ -72,7 +74,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 
 	pSystem->bUseFakeTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "fake transparency", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	if (g_bForcedOpenGL)
-			pSystem->bUseFakeTransparency = TRUE;
+		pSystem->bUseFakeTransparency = TRUE;
 	pSystem->bConfigPanelTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "config transparency", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
 	pSystem->iFadeOutNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "fade out nb steps", &bFlushConfFileNeeded, 15, NULL, NULL);
@@ -98,10 +100,14 @@ static void reload (CairoConfigSystem *pPrevSystem, CairoConfigSystem *pSystem)
 	if (pSystem->bUseFakeTransparency && ! pPrevSystem->bUseFakeTransparency)
 	{
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
-		cairo_dock_get_desktop_bg_surface ();
+		g_pFakeTransparencyDesktopBg = cairo_dock_get_desktop_background (g_bUseOpenGL);
 	}
 	else if (! pSystem->bUseFakeTransparency && pPrevSystem->bUseFakeTransparency)
+	{
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);
+		cairo_dock_destroy_desktop_background (g_pFakeTransparencyDesktopBg);
+		g_pFakeTransparencyDesktopBg = NULL;
+	}
 	
 	if (pSystem->bTextAlwaysHorizontal != pPrevSystem->bTextAlwaysHorizontal)
 	{

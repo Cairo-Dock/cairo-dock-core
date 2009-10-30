@@ -160,7 +160,7 @@ double g_fIndicatorWidth, g_fIndicatorHeight;
 cairo_surface_t *g_pClassIndicatorSurface = NULL;
 double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
 
-cairo_surface_t *g_pDesktopBgSurface = NULL;  // image en fond d'ecran.
+CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
 //int g_iDamageEvent = 0;
 
 gchar *g_cThemeServerAdress = NULL;
@@ -179,7 +179,6 @@ GLuint g_iActiveIndicatorTexture=0;
 GLuint g_iClassIndicatorTexture=0;
 GLuint g_iVisibleZoneTexture=0;
 GLuint g_pGradationTexture[2]={0, 0};
-GLuint g_iDesktopBgTexture = 0;
 
 static gchar *cLaunchCommand = NULL;
 
@@ -689,7 +688,6 @@ int main (int argc, char** argv)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
 	
 	g_print ("\nVERIFIER LE CHANGEMENT DE CONTAINER POUR TERMINAL\n\n");
-	g_print ("\nSOUS-DOCKS ET CHGT DE BUREAU\n\n");
 	g_print ("\n2eme DOCK PRINCIPAL AVEC 1 ICONE : BORD TRONQUE EN VERTICAL\n\n");
 	g_print ("\nPLAN 3D NE PREND PAS TOUT L'ECRAN\n\n");
 	g_print ("\nPENGOUIN (CAIRO ET VERTICAL)\n\n");

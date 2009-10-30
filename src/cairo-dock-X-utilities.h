@@ -93,6 +93,7 @@ void cairo_dock_maximize_xwindow (Window Xid, gboolean bMaximize);
 void cairo_dock_set_xwindow_fullscreen (Window Xid, gboolean bFullScreen);
 void cairo_dock_set_xwindow_above (Window Xid, gboolean bAbove);
 void cairo_dock_move_xwindow_to_nth_desktop (Window Xid, int iDesktopNumber, int iDesktopViewportX, int iDesktopViewportY);
+void cairo_dock_move_xwindow_to_absolute_position (Window Xid, int iDesktopNumber, int iPositionX, int iPositionY);
 
 // GET //
 gulong cairo_dock_get_xwindow_timestamp (Window Xid);

@@ -81,6 +81,7 @@ struct _CairoDeskletAttribute {
 	CairoDeskletDecoration *pUserDecoration;
 	CairoDeskletAccessibility iAccessibility;
 	gboolean bOnAllDesktops;
+	gint iNumDesktop;
 } ;
 
 typedef gpointer CairoDeskletRendererDataParameter;

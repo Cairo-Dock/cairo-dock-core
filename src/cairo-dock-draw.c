@@ -47,6 +47,7 @@
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-load.h"
 #include "cairo-dock-draw.h"
 
 extern gint g_iScreenWidth[2];
@@ -68,7 +69,7 @@ extern double g_fActiveIndicatorWidth, g_fActiveIndicatorHeight;
 extern cairo_surface_t *g_pClassIndicatorSurface;
 extern double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
 
-extern cairo_surface_t *g_pDesktopBgSurface;
+extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
 
@@ -117,10 +118,12 @@ cairo_t *cairo_dock_create_drawing_context (CairoContainer *pContainer)
 	g_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, FALSE);
 	
 	if (mySystem.bUseFakeTransparency)
-		if (g_pDesktopBgSurface != NULL)
-			cairo_set_source_surface (pCairoContext, g_pDesktopBgSurface, - pContainer->iWindowPositionX, - pContainer->iWindowPositionY);
+	{
+		if (g_pFakeTransparencyDesktopBg && g_pFakeTransparencyDesktopBg->pSurface)
+			cairo_set_source_surface (pCairoContext, g_pFakeTransparencyDesktopBg->pSurface, - pContainer->iWindowPositionX, - pContainer->iWindowPositionY);
 		else
 			cairo_set_source_rgba (pCairoContext, 0.8, 0.8, 0.8, 0.0);
+	}
 	else
 		cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 0.0);
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
@@ -146,10 +149,12 @@ cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, 
 	}
 	
 	if (mySystem.bUseFakeTransparency)
-		if (g_pDesktopBgSurface != NULL)
-			cairo_set_source_surface (pCairoContext, g_pDesktopBgSurface, - pContainer->iWindowPositionX, - pContainer->iWindowPositionY);
+	{
+		if (g_pFakeTransparencyDesktopBg && g_pFakeTransparencyDesktopBg->pSurface)
+			cairo_set_source_surface (pCairoContext, g_pFakeTransparencyDesktopBg->pSurface, - pContainer->iWindowPositionX, - pContainer->iWindowPositionY);
 		else
 			cairo_set_source_rgba (pCairoContext, 0.8, 0.8, 0.8, 0.0);
+	}
 	else if (fBgColor != NULL)
 		cairo_set_source_rgba (pCairoContext, fBgColor[0], fBgColor[1], fBgColor[2], fBgColor[3]);
 	else
