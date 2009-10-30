@@ -44,7 +44,7 @@
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"
 #define CAIRO_DOCK_DEFAULT_THEME_LIST_NAME "liste.txt"
 #define CAIRO_DOCK_DL_NB_RETRY 2
-#define CAIRO_DOCK_DL_TIMEOUT 5
+#define CAIRO_DOCK_DL_TIMEOUT 20 // La nouvelle version de wget a du mal avec le timeout... (problème avec les 5sec alors qu'il y a un ping de 40ms)
 
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cConfFile;
