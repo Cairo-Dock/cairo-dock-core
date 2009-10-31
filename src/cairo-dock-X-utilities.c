@@ -846,7 +846,7 @@ void cairo_dock_set_xwindow_above (Window Xid, gboolean bAbove)
 }
 
 
-void cairo_dock_move_xwindow_to_absolute_position (Window Xid, int iDesktopNumber, int iPositionX, int iPositionY)
+void cairo_dock_move_xwindow_to_absolute_position (Window Xid, int iDesktopNumber, int iPositionX, int iPositionY)  // dans le referentiel du viewport courant.
 {
 	g_return_if_fail (Xid > 0);
 	XEvent xClientMessage;

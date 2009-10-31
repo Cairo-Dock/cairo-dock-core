@@ -919,6 +919,7 @@ static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // at
 
 CairoDockDesktopBackground *cairo_dock_get_desktop_background (gboolean bWithTextureToo)
 {
+	g_print ("%s (%d, %d)\n", __func__, bWithTextureToo, s_pDesktopBg?s_pDesktopBg->iRefCount:-1);
 	if (s_pDesktopBg == NULL)
 	{
 		s_pDesktopBg = g_new0 (CairoDockDesktopBackground, 1);
@@ -943,6 +944,7 @@ CairoDockDesktopBackground *cairo_dock_get_desktop_background (gboolean bWithTex
 
 static gboolean _destroy_bg (CairoDockDesktopBackground *pDesktopBg)
 {
+	g_print ("%s ()\n", __func__);
 	g_return_val_if_fail (pDesktopBg != NULL, 0);
 	if (pDesktopBg->pSurface != NULL)
 	{
@@ -981,6 +983,7 @@ GLuint cairo_dock_get_desktop_bg_texture (CairoDockDesktopBackground *pDesktopBg
 
 void cairo_dock_reload_desktop_background (void)
 {
+	g_print ("%s ()\n", __func__);
 	if (s_pDesktopBg == NULL)  // rien a recharger.
 		return ;
 	if (s_pDesktopBg->pSurface == NULL && s_pDesktopBg->iTexture == 0)  // rien a recharger.

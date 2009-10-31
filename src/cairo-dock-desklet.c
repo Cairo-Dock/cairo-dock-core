@@ -558,6 +558,10 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 			int iDesktop = cairo_dock_get_xwindow_desktop (Xid);
 			int iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;
 			cairo_dock_get_xwindow_geometry (Xid, &iGlobalPositionX, &iGlobalPositionY, &iWidthExtent, &iHeightExtent);
+			if (iGlobalPositionX < 0)
+				iGlobalPositionX += g_iNbViewportX * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+			if (iGlobalPositionY < 0)
+				iGlobalPositionY += g_iNbViewportY * g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
 			
 			int iViewportX = iGlobalPositionX / g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
 			int iViewportY = iGlobalPositionY / g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
@@ -602,7 +606,7 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDesklet *pDesklet)
 {
-	//g_print (" >>>>>>>>> %s (%dx%d)", __func__, pEvent->width, pEvent->height);
+	//g_print (" >>>>>>>>> %s (%dx%d, %d;%d)", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y);
 	if (pDesklet->container.iWidth != pEvent->width || pDesklet->container.iHeight != pEvent->height)
 	{
 		if ((pEvent->width < pDesklet->container.iWidth || pEvent->height < pDesklet->container.iHeight) && (pDesklet->iDesiredWidth != 0 && pDesklet->iDesiredHeight != 0))
@@ -639,6 +643,7 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 	}
 	
 	int x = pEvent->x, y = pEvent->y;
+	g_print ("new desklet position : (%d;%d)", x, y);
 	while (x < 0)  // on passe au referentiel du viewport de la fenetre; inutile de connaitre sa position, puisqu'ils ont tous la meme taille.
 		x += g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
 	while (x >= g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL])
@@ -647,7 +652,7 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 		y += g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
 	while (y >= g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
 		y -= g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-		
+	g_print (" => (%d;%d)\n", x, y);
 	if (pDesklet->container.iWindowPositionX != x || pDesklet->container.iWindowPositionY != y)
 	{
 		pDesklet->container.iWindowPositionX = x;
@@ -668,7 +673,7 @@ gboolean on_scroll_desklet (GtkWidget* pWidget,
 	GdkEventScroll* pScroll,
 	CairoDesklet *pDesklet)
 {
-	g_print ("scroll\n");
+	//g_print ("scroll\n");
 	if (! (pScroll->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)))
 	{
 		Icon *icon = cairo_dock_find_clicked_icon_in_desklet (pDesklet);
@@ -1328,7 +1333,7 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 		gdk_window_move(pDesklet->container.pWidget->window,
 			iAbsolutePositionX,
 			iAbsolutePositionY);
-	cd_debug (" -> (%d;%d)", iAbsolutePositionX, iAbsolutePositionY);
+	//g_print (" let's place the deklet at (%d;%d)", iAbsolutePositionX, iAbsolutePositionY);
 
 	gtk_window_set_keep_below (GTK_WINDOW (pDesklet->container.pWidget), pAttribute->iAccessibility == CAIRO_DESKLET_KEEP_BELOW);
 	gtk_window_set_keep_above (GTK_WINDOW (pDesklet->container.pWidget), pAttribute->iAccessibility == CAIRO_DESKLET_KEEP_ABOVE);
@@ -1359,7 +1364,15 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 			int index2 = pAttribute->iNumDesktop % (g_iNbViewportX * g_iNbViewportY);
 			iNumViewportX = index2 / g_iNbViewportY;
 			iNumViewportY = index2 % g_iNbViewportY;
-			g_print (">>> on fixe le desklet sur le bureau (%d,%d,%d)\n", iNumDesktop, iNumViewportX, iNumViewportY);
+			
+			int iCurrentDesktop, iCurrentViewportX, iCurrentViewportY;
+			cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
+			g_print (">>> on fixe le desklet sur le bureau (%d,%d,%d) (cur : %d,%d,%d)\n", iNumDesktop, iNumViewportX, iNumViewportY, iCurrentDesktop, iCurrentViewportX, iCurrentViewportY);
+			
+			iNumViewportX -= iCurrentViewportX;
+			iNumViewportY -= iCurrentViewportY;
+			
+			g_print ("on le place en %d + %d\n", iNumViewportX * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], iAbsolutePositionX);
 			cairo_dock_move_xwindow_to_absolute_position (Xid, iNumDesktop, iNumViewportX * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + iAbsolutePositionX, iNumViewportY * g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] + iAbsolutePositionY);
 		}
 	}
@@ -1375,7 +1388,7 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 	pDesklet->pUserDecoration = pAttribute->pUserDecoration;
 	pAttribute->pUserDecoration = NULL;
 	
-	cd_debug ("%s (%dx%d ; %d)", __func__, pDesklet->iDesiredWidth, pDesklet->iDesiredHeight, pDesklet->iSidWriteSize);
+	//cd_debug ("%s (%dx%d ; %d)", __func__, pDesklet->iDesiredWidth, pDesklet->iDesiredHeight, pDesklet->iSidWriteSize);
 	if (pDesklet->iDesiredWidth == 0 && pDesklet->iDesiredHeight == 0 && pDesklet->iSidWriteSize == 0)
 	{
 		cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDesklet));
