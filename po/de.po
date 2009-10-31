@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
-"POT-Creation-Date: 2009-10-22 00:54+0000\n"
-"PO-Revision-Date: 2009-10-22 11:04+0000\n"
+"POT-Creation-Date: 2009-10-24 12:20+0000\n"
+"PO-Revision-Date: 2009-10-24 13:40+0000\n"
 "Last-Translator: Cairo-Dock Team <cairo-dock-team@lists.launchpad.net>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-10-23 07:25+0000\n"
+"X-Launchpad-Export-Date: 2009-10-25 08:19+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-applet-facility.h:259
@@ -491,7 +491,8 @@ msgid "Manage themes"
 msgstr "Themen verwalten"
 
 #: ../src/cairo-dock-menu.c:1309
-msgid "Choose amongst many themes on the server, and save your current theme."
+msgid ""
+"Choose amongst many themes on the server, and save your current theme."
 msgstr ""
 "Wählen Sie zwischen vielen Themen aus dem Internet und speichern Sie ihr "
 "jetziges Thema."
@@ -1301,7 +1302,8 @@ msgid "Middle click on an icon closes its relative application ?"
 msgstr "Bei Mittelklick auf ein Symbol dessen Anwendungen schließen?"
 
 #: ../data/messages:155
-msgid "Signal the applications demanding your attention with a dialog bubble ?"
+msgid ""
+"Signal the applications demanding your attention with a dialog bubble ?"
 msgstr ""
 "Mit einem Dialogfeld anzeigen, dass ein Fenster Ihre Aufmerksamkeit benötigt?"
 
@@ -1603,9 +1605,8 @@ msgstr "Transparenz des Bildes :"
 
 #: ../data/messages:295 ../data/messages:347 ../data/messages:447
 #: ../data/messages:575 ../data/messages:601
-#, fuzzy
 msgid "transparent"
-msgstr "Transparenz des Bildes :"
+msgstr ""
 
 #: ../data/messages:297 ../data/messages:349 ../data/messages:449
 #: ../data/messages:577 ../data/messages:603
@@ -1631,7 +1632,8 @@ msgstr "Dunkle Farbe (rot, grün, blau, Alpha)"
 #: ../data/messages:309
 msgid ""
 "Angle of the stripes / gradation, in relation to the vertical (in degree) :"
-msgstr "Winkel der Streifen / Abstufung in Bezug auf die Vertikale (in Grad):"
+msgstr ""
+"Winkel der Streifen / Abstufung in Bezug auf die Vertikale (in Grad):"
 
 #: ../data/messages:311
 msgid ""
@@ -1700,8 +1702,8 @@ msgid ""
 "This is what you see when the dock hides itselfs. Any format is allowed. Let "
 "this field empty to have an invisible zone."
 msgstr ""
-"Dies wird angezeigt wenn das Dock ausgeblendet ist. Jedes Format ist erlaubt."
-"(Leeres Feld = unsichtbar)"
+"Dies wird angezeigt wenn das Dock ausgeblendet ist. Jedes Format ist "
+"erlaubt.(Leeres Feld = unsichtbar)"
 
 #: ../data/messages:343
 msgid "Filename of an image to put on :"
@@ -1891,16 +1893,14 @@ msgid "Reflecting power of the plane :"
 msgstr "Stärke der Spiegelung des Bodens:"
 
 #: ../data/messages:431
-#, fuzzy
 msgid "light"
-msgstr "Rechts"
+msgstr ""
 
 #: ../data/messages:433
 msgid "strong"
 msgstr ""
 
 #: ../data/messages:435
-#, c-format
 msgid ""
 "Setting it to 0.33 will mean that 33% of the icons will reflect on the "
 "ground. The icons will be placed at the right distance from the front border "
@@ -2100,9 +2100,8 @@ msgid "smaller"
 msgstr ""
 
 #: ../data/messages:527
-#, fuzzy
 msgid "same size"
-msgstr "Größe des Symbols"
+msgstr ""
 
 #: ../data/messages:531
 msgid "Bubble"
@@ -2520,8 +2519,8 @@ msgstr ""
 
 #: ../data/messages:763
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:765
@@ -2537,8 +2536,8 @@ msgstr ""
 
 #: ../data/messages:769
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, applis, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, applis, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -2636,7 +2635,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:805
-msgid "I don’t want to have a separator between launchers , applis and applets"
+msgid ""
+"I don’t want to have a separator between launchers , applis and applets"
 msgstr ""
 
 #: ../data/messages:807
@@ -2859,7 +2859,8 @@ msgid "go to the “Taskbar” module, then tick the first box, and apply."
 msgstr ""
 
 #: ../data/messages:885
-msgid "I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
+msgid ""
+"I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
 msgstr ""
 
 #: ../data/messages:887
@@ -3076,8 +3077,8 @@ msgstr ""
 
 #: ../data/messages:965
 msgid ""
-"How can I have an easy-to-access terminal with real transparence, like "
-"Tilda ?"
+"How can I have an easy-to-access terminal with real transparence, like Tilda "
+"?"
 msgstr ""
 
 #: ../data/messages:967
@@ -3098,8 +3099,9 @@ msgstr ""
 
 #: ../data/messages:973
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/"
-"required_components_list, and erase its content (\"panel\").\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components_list, and erase its content "
+"(\"panel\").\n"
 "Restart your session : the gnome-panel has not been started."
 msgstr ""
 
@@ -3206,16 +3208,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3241,8 +3243,8 @@ msgid ""
 "If you’re under XFCE or KDE, you can just activate the compositing in the "
 "window manager’s options.\n"
 "If you're under Gnome, you can activate it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1021
@@ -3276,8 +3278,8 @@ msgstr ""
 
 #: ../data/messages:1031
 msgid ""
-"Hint : You can force the openGL by launching the dock with “cairo-dock –o”."
-"but you might get a lot of visual artifacts."
+"Hint : You can force the openGL by launching the dock with “cairo-dock "
+"–o”.but you might get a lot of visual artifacts."
 msgstr ""
 
 #: ../data/messages:1033
@@ -3326,8 +3328,8 @@ msgstr "Hilf mit!"
 msgid ""
 "We value your help ! If you see a bug, or if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3625,8 +3627,8 @@ msgstr ""
 #: ../data/messages:1193
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -3707,8 +3709,8 @@ msgstr ""
 #: ../data/messages:1205
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -3732,11 +3734,10 @@ msgstr ""
 #~ msgstr "Diesen Hintergrund auch für Applets verwenden ?"
 
 #~ msgid ""
-#~ "Don't forget you can drag a launcher from the menu and drop it in the "
-#~ "dock !"
+#~ "Don't forget you can drag a launcher from the menu and drop it in the dock !"
 #~ msgstr ""
-#~ "Starter können auch per Ziehen und Ablegen aus dem Anwendungsmenü "
-#~ "erstellt werden!"
+#~ "Starter können auch per Ziehen und Ablegen aus dem Anwendungsmenü erstellt "
+#~ "werden!"
 
 #~ msgid ""
 #~ "Welcome in Cairo-Dock2 !\n"
@@ -3744,8 +3745,8 @@ msgstr ""
 #~ "You can either familiarize yourself with the dock or choose another theme "
 #~ "with right-click -> Cairo-Dock -> Theme manager\n"
 #~ "A useful help is available by right-click -> Cairo-Dock -> Help.\n"
-#~ "If you have any question/request/remark, please pay us a visit : right-"
-#~ "click -> Cairo-Dock -> Communauty site.\n"
+#~ "If you have any question/request/remark, please pay us a visit : right-click "
+#~ "-> Cairo-Dock -> Communauty site.\n"
 #~ "Hope you will enjoy this soft !\n"
 #~ "  (you can now click on this dialog to close it)"
 #~ msgstr ""

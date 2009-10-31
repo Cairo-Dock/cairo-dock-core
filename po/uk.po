@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-10-22 00:54+0000\n"
-"PO-Revision-Date: 2009-10-22 11:00+0000\n"
-"Last-Translator: Cairo-Dock Team <cairo-dock-team@lists.launchpad.net>\n"
+"POT-Creation-Date: 2009-10-24 12:20+0000\n"
+"PO-Revision-Date: 2009-10-28 23:00+0000\n"
+"Last-Translator: Evhen <Unknown>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-10-23 07:25+0000\n"
+"X-Launchpad-Export-Date: 2009-10-29 08:26+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-applet-facility.h:259
@@ -486,7 +486,8 @@ msgid "Manage themes"
 msgstr "Управління темами"
 
 #: ../src/cairo-dock-menu.c:1309
-msgid "Choose amongst many themes on the server, and save your current theme."
+msgid ""
+"Choose amongst many themes on the server, and save your current theme."
 msgstr "Виберіть серед багатьох на сервері тем, і збережіть власну."
 
 #: ../src/cairo-dock-menu.c:1311
@@ -805,7 +806,8 @@ msgstr "не вдалося отримати файл %s"
 #: ../src/cairo-dock-themes-manager.c:484
 #, c-format
 msgid "couldn't get the list of themes for %s (no connection ?)"
-msgstr "Не вдалося отримати список тем для %s (немає підключення до мережі ?)"
+msgstr ""
+"Не вдалося отримати список тем для %s (немає підключення до мережі ?)"
 
 #: ../src/cairo-dock-themes-manager.c:637
 #, c-format
@@ -1023,15 +1025,15 @@ msgstr "починаючи з 0"
 
 #: ../data/messages:47 ../data/messages:1115
 msgid "Number of the screen where the dock should be located :"
-msgstr ""
+msgstr "Номери екранів на яких показувати панель :"
 
 #: ../data/messages:51
 msgid "Space"
-msgstr ""
+msgstr "Простір"
 
 #: ../data/messages:53
 msgid "Extend the dock to always fill the screen ?"
-msgstr ""
+msgstr "Розтягувати панель на всю ширину екрану ?"
 
 #: ../data/messages:55
 msgid ""
@@ -1039,14 +1041,17 @@ msgid ""
 "if you defined the 'show/hide' shortcut below, cause then the dock behaves "
 "like a menu."
 msgstr ""
+"Це заборонить іншим вікнам перекривати панель. Не зпрацює, якщо ви задіяли "
+"режим авто-приховування нижче, так як в такому випадку панель буде себе "
+"вести як меню."
 
 #: ../data/messages:57
 msgid "Reserve space at the edge of the screen for the dock ?"
-msgstr ""
+msgstr "Зарезервувати місце на краю екрану для панелі ?"
 
 #: ../data/messages:59
 msgid "Auto-hide"
-msgstr ""
+msgstr "Авто-приховування"
 
 #: ../data/messages:61
 msgid ""
@@ -1054,42 +1059,50 @@ msgid ""
 "leaves it. Instead, it will show a zone where placing the mouse will trigger "
 "the dock and make it re-appear."
 msgstr ""
+"Панель автоматично приховує себе за екраном, коли курсор покидає її межі. "
+"Залишається лише зона реагування, панель з’явиться знову, якщо помістити в "
+"цю зону курсор."
 
 #: ../data/messages:63 ../data/messages:1111
 msgid "Activate auto-hide ?"
-msgstr ""
+msgstr "Активувати авто-приховування ?"
 
 #: ../data/messages:65
 msgid ""
 "This is only usefull if you don't already use the auto-hide, and if your WM "
 "let the dock in front of fullscreen windows (which is rare)."
 msgstr ""
+"Це корисно тільки якщо ви ще не задіяли режим авто-приховування і ваш "
+"віконний менеджер дозволяє панелі бути понад повноекранних вікон (що рідко)."
 
 #: ../data/messages:67
 msgid "Automatically quick-hide the dock when a window becomes fullscreen ?"
-msgstr ""
+msgstr "Автоматично приховувати панель коли вікна в повноекранному режимі ?"
 
 #: ../data/messages:69
 msgid ""
 "This is only usefull if don't already use the auto-hide, and if you don't "
 "want to reserve the space for your dock nor let it below the other windows."
 msgstr ""
+"Це корисно тільки якщо ви ще не задіяли авто-приховування і не хочете "
+"резервувати місце для панелі не дозволяючи їй бути позаду інших вікон."
 
 #: ../data/messages:71
 msgid "Automatically quick-hide the dock when a window becomes maximized ?"
 msgstr ""
+"Автоматично приховувати панель, якщо вікно буде в повноекранному режимі ?"
 
 #: ../data/messages:73
 msgid "Place the mouse into it will make the dock re-appear."
-msgstr ""
+msgstr "Якщо помістити панель в цю зону, панель одразу з’явиться."
 
 #: ../data/messages:75
 msgid "Size of the callback zone (width x height, in pixels) :"
-msgstr ""
+msgstr "Розмір зони реагування (ширина x висота, в пікселях) :"
 
 #: ../data/messages:77
 msgid "Pop-up"
-msgstr ""
+msgstr "Спливати"
 
 #: ../data/messages:79
 msgid ""
@@ -1097,18 +1110,21 @@ msgid ""
 "screen border. This option is only useful if you don't want to reserve space "
 "for the dock, nor to activate auto-hide."
 msgstr ""
+"Панель буде спливати, при наведенні курсору на кордон екрану. Цей режим "
+"корисний тільки якщо ви не зарезервували місце під панель і не активували "
+"авто-приховування."
 
 #: ../data/messages:81
 msgid "Keep the dock below other windows ?"
-msgstr ""
+msgstr "Тримати панель позаду інших вікон ?"
 
 #: ../data/messages:83
 msgid "Pop-up only if the mouse hits a screen corner ?"
-msgstr ""
+msgstr "Спливати тільки якщо курсор зачіпає кут екрану ?"
 
 #: ../data/messages:85
 msgid "Shortcut"
-msgstr ""
+msgstr "Комбінація клавіш"
 
 #: ../data/messages:87
 msgid ""
@@ -1116,49 +1132,57 @@ msgid ""
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
 "menu."
 msgstr ""
+"При натиску комбінації клавіш панель буде з’являтися в позиції курсора. "
+"Решту часу панель буде знаходитися в невидимому стані, таким чином діючи як "
+"меню."
 
 #: ../data/messages:89
 msgid "Keyboard shortcut to show/hide the dock :"
-msgstr ""
+msgstr "Комбінація клавіш для показу/приховування панелі :"
 
 #: ../data/messages:91
 msgid "Sub-docks' accessibility"
-msgstr ""
+msgstr "Доступність суб панелей"
 
 #: ../data/messages:93
 msgid "in ms."
-msgstr ""
+msgstr "в мс."
 
 #: ../data/messages:95
 msgid "Delay before you effectively leave from a sub-dock or to a sub-dock :"
-msgstr ""
+msgstr "Затримка перед фактичним входом або виходом в суб-панель :"
 
 #: ../data/messages:97
 msgid "in ms. Unused if you set up to click to show sub-docks."
 msgstr ""
+"в мс. Не використовуйте якщо задіяли відображення суб-панелі по кліку."
 
 #: ../data/messages:99
 msgid "Delay before displaying a sub-dock :"
-msgstr ""
+msgstr "Затримка появи суб-панелі :"
 
 #: ../data/messages:101
 msgid ""
 "Otherwise they will appear when you linger over the icon pointing on it."
 msgstr ""
+"В противному випадку, вона з’явиться тільки якщо ви затримаєте курсор на "
+"піктограмі деякий час."
 
 #: ../data/messages:103
 msgid "Click to show sub-docks ?"
-msgstr ""
+msgstr "Входити в суб-панель по кліку ?"
 
 #: ../data/messages:109
 msgid ""
 "Cairo-Dock will then replace your taskbar. It is recommanded to remove any "
 "other taskbar, and to not force the dock's type to normal."
 msgstr ""
+"Cairo-Dock замінить вашу панель задач. Рекомендується видалити всі інші "
+"панелі і не виставляти режим дока в нормальний."
 
 #: ../data/messages:111
 msgid "Show currently opened applications in the dock ?"
-msgstr ""
+msgstr "Показувати запущені програми на панелі ?"
 
 #: ../data/messages:113
 msgid ""
@@ -1166,26 +1190,29 @@ msgid ""
 "in the main dock.The 1st window will appear in the main dock, and the others "
 "will be placed in a container associated with this 1st icon."
 msgstr ""
+"Дозволить згрупувати програми, котрі мають багато вікон, наприклад Gimp, в "
+"один значок на панелі. Тільки перше вікно буде відображене на панелі, а інші "
+"будуть поміщені в контейнер асоційований з першим значком."
 
 #: ../data/messages:115
 msgid "Should the applications with same class be grouped in a sub-dock ?"
-msgstr ""
+msgstr "Групувати програми з одинаковим класом в суб-панель ?"
 
 #: ../data/messages:117 ../data/messages:137
 msgid "enter the class of the applications, separated by a semi-colon ';'"
-msgstr ""
+msgstr "введіть клас програм, розділячи їх знаком ';'"
 
 #: ../data/messages:119 ../data/messages:139
 msgid "\t\tExcept the following classes :"
-msgstr ""
+msgstr "\t\tОкрім слідуючих класів :"
 
 #: ../data/messages:121
 msgid "Only show icons whose window is minimized ?"
-msgstr ""
+msgstr "Показувати значки тільки мінімізованих вікон ?"
 
 #: ../data/messages:123
 msgid "Only show applis on current desktop ?"
-msgstr ""
+msgstr "Показувати програми тільки поточного робочого столу ?"
 
 #: ../data/messages:125
 msgid ""
@@ -1193,16 +1220,22 @@ msgid ""
 "displays an indicator on their icon to signal it. You can launch other "
 "occurences of the program with SHIFT+click."
 msgstr ""
+"Дозволити піктограмам програм реагувати як самі програми, якщо їх програми "
+"запущено, при цьому на піктограмі з’явиться сигнальний індикатор. Також ви "
+"можете запустити іншу копію програми за допомогою комбінації клавіш "
+"SHIFT+Клік"
 
 #: ../data/messages:127
 msgid "Mix launchers and applis ?"
-msgstr ""
+msgstr "Об’єднати піктограми запуску з їхніми програмами ?"
 
 #: ../data/messages:129
 msgid ""
 "The indicator is drawn on active launchers, but you may want to display it "
 "on applis too."
 msgstr ""
+"Індикатор відображається тільи на активних піктограмах, але ви можете "
+"налаштувати показ і на програмах."
 
 #: ../data/messages:131
 msgid "Display an indicator on applis ?"
@@ -1249,7 +1282,8 @@ msgid "Middle click on an icon closes its relative application ?"
 msgstr ""
 
 #: ../data/messages:155
-msgid "Signal the applications demanding your attention with a dialog bubble ?"
+msgid ""
+"Signal the applications demanding your attention with a dialog bubble ?"
 msgstr ""
 
 #: ../data/messages:157
@@ -1785,16 +1819,14 @@ msgid "Reflecting power of the plane :"
 msgstr ""
 
 #: ../data/messages:431
-#, fuzzy
 msgid "light"
-msgstr "праворуч"
+msgstr ""
 
 #: ../data/messages:433
 msgid "strong"
 msgstr ""
 
 #: ../data/messages:435
-#, c-format
 msgid ""
 "Setting it to 0.33 will mean that 33% of the icons will reflect on the "
 "ground. The icons will be placed at the right distance from the front border "
@@ -2403,8 +2435,8 @@ msgstr ""
 
 #: ../data/messages:763
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:765
@@ -2420,8 +2452,8 @@ msgstr ""
 
 #: ../data/messages:769
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, applis, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, applis, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -2519,7 +2551,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:805
-msgid "I don’t want to have a separator between launchers , applis and applets"
+msgid ""
+"I don’t want to have a separator between launchers , applis and applets"
 msgstr ""
 
 #: ../data/messages:807
@@ -2742,7 +2775,8 @@ msgid "go to the “Taskbar” module, then tick the first box, and apply."
 msgstr ""
 
 #: ../data/messages:885
-msgid "I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
+msgid ""
+"I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
 msgstr ""
 
 #: ../data/messages:887
@@ -2959,8 +2993,8 @@ msgstr ""
 
 #: ../data/messages:965
 msgid ""
-"How can I have an easy-to-access terminal with real transparence, like "
-"Tilda ?"
+"How can I have an easy-to-access terminal with real transparence, like Tilda "
+"?"
 msgstr ""
 
 #: ../data/messages:967
@@ -2981,8 +3015,9 @@ msgstr ""
 
 #: ../data/messages:973
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/"
-"required_components_list, and erase its content (\"panel\").\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components_list, and erase its content "
+"(\"panel\").\n"
 "Restart your session : the gnome-panel has not been started."
 msgstr ""
 
@@ -3089,16 +3124,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3124,8 +3159,8 @@ msgid ""
 "If you’re under XFCE or KDE, you can just activate the compositing in the "
 "window manager’s options.\n"
 "If you're under Gnome, you can activate it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1021
@@ -3159,8 +3194,8 @@ msgstr ""
 
 #: ../data/messages:1031
 msgid ""
-"Hint : You can force the openGL by launching the dock with “cairo-dock –o”."
-"but you might get a lot of visual artifacts."
+"Hint : You can force the openGL by launching the dock with “cairo-dock "
+"–o”.but you might get a lot of visual artifacts."
 msgstr ""
 
 #: ../data/messages:1033
@@ -3209,8 +3244,8 @@ msgstr ""
 msgid ""
 "We value your help ! If you see a bug, or if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3508,8 +3543,8 @@ msgstr ""
 #: ../data/messages:1193
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -3590,8 +3625,8 @@ msgstr ""
 #: ../data/messages:1205
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
