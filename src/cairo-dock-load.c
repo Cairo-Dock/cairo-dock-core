@@ -843,6 +843,7 @@ void cairo_dock_load_icons_background_surface (const gchar *cImagePath, cairo_t*
 
 static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // attention : fonction lourde.
 {
+	g_print ("%s ()\n", __func__);
 	Pixmap iRootPixmapID = cairo_dock_get_window_background_pixmap (cairo_dock_get_root_id ());
 	g_return_val_if_fail (iRootPixmapID != 0, NULL);
 	

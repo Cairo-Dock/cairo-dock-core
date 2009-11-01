@@ -643,7 +643,7 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 	}
 	
 	int x = pEvent->x, y = pEvent->y;
-	g_print ("new desklet position : (%d;%d)", x, y);
+	//g_print ("new desklet position : (%d;%d)", x, y);
 	while (x < 0)  // on passe au referentiel du viewport de la fenetre; inutile de connaitre sa position, puisqu'ils ont tous la meme taille.
 		x += g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
 	while (x >= g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL])
@@ -652,7 +652,7 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 		y += g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
 	while (y >= g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
 		y -= g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-	g_print (" => (%d;%d)\n", x, y);
+	//g_print (" => (%d;%d)\n", x, y);
 	if (pDesklet->container.iWindowPositionX != x || pDesklet->container.iWindowPositionY != y)
 	{
 		pDesklet->container.iWindowPositionX = x;
