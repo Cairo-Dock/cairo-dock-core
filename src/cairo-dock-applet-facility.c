@@ -286,7 +286,7 @@ GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, co
 		pMenuItem = gtk_image_menu_item_new_with_label (cLabel);
 		if (*cImage == '/')
 		{
-			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cImage, 32, 32, NULL);
+			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cImage, 24, 24, NULL);
 			image = gtk_image_new_from_pixbuf (pixbuf);
 			g_object_unref (pixbuf);
 		}

@@ -574,11 +574,26 @@ gboolean on_unmap_dialog (GtkWidget* pWidget,
 	GdkEvent *pEvent,
 	CairoDialog *pDialog)
 {
-	g_print ("unmap (bAllowMinimize:%d, visible:%d)\n", pDialog->bAllowMinimize, GTK_WIDGET_VISIBLE (pWidget));
+	g_print ("unmap dialog (bAllowMinimize:%d, visible:%d)\n", pDialog->bAllowMinimize, GTK_WIDGET_VISIBLE (pWidget));
 	if (! pDialog->bAllowMinimize)
+	{
+		if (pDialog->pUnmapTimer)
+		{
+			double fElapsedTime = g_timer_elapsed (pDialog->pUnmapTimer, NULL);
+			g_print ("fElapsedTime : %fns\n", fElapsedTime);
+			g_timer_destroy (pDialog->pUnmapTimer);
+			pDialog->pUnmapTimer = NULL;
+			if (fElapsedTime < .2)
+				return TRUE;
+		}
 		gtk_window_present (GTK_WINDOW (pWidget));
+	}
 	else
+	{
 		pDialog->bAllowMinimize = FALSE;
+		if (pDialog->pUnmapTimer == NULL)
+			pDialog->pUnmapTimer = g_timer_new ();  // starts the timer.
+	}
 	return TRUE;  // stops other handlers from being invoked for the event.
 }
 
@@ -738,6 +753,9 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 	}
 	
 	gtk_widget_destroy (pDialog->container.pWidget);  // detruit aussi le widget interactif.
+	
+	if (pDialog->pUnmapTimer != NULL)
+		g_timer_destroy (pDialog->pUnmapTimer);
 	
 	if (pDialog->pShapeBitmap != NULL)
 		g_object_unref ((gpointer) pDialog->pShapeBitmap);
