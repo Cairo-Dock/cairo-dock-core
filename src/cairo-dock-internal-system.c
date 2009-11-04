@@ -82,6 +82,10 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 	gsize length=0;
 	pSystem->cActiveModuleList = cairo_dock_get_string_list_key_value (pKeyFile, "System", "modules", &bFlushConfFileNeeded, &length, NULL, "Applets", "modules_0");
 	
+	pSystem->iConnectionTimeout = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn timeout", &bFlushConfFileNeeded, 5, NULL, NULL);
+	pSystem->iConnectiontMaxTime = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn max time", &bFlushConfFileNeeded, 120, NULL, NULL);
+	pSystem->iConnectiontNbRetries = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn retry", &bFlushConfFileNeeded, 0, NULL, NULL);
+	
 	return bFlushConfFileNeeded;
 }
 

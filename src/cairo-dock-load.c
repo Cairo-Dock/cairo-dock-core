@@ -843,7 +843,7 @@ void cairo_dock_load_icons_background_surface (const gchar *cImagePath, cairo_t*
 
 static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // attention : fonction lourde.
 {
-	g_print ("%s ()\n", __func__);
+	cd_debug ("%s ()", __func__);
 	Pixmap iRootPixmapID = cairo_dock_get_window_background_pixmap (cairo_dock_get_root_id ());
 	g_return_val_if_fail (iRootPixmapID != 0, NULL);
 	
@@ -856,7 +856,7 @@ static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // at
 		if (gdk_pixbuf_get_height (pBgPixbuf) == 1 && gdk_pixbuf_get_width(pBgPixbuf) == 1)  // couleur unie.
 		{
 			guchar *pixels = gdk_pixbuf_get_pixels (pBgPixbuf);
-			cd_message ("c'est une couleur unie (%.2f, %.2f, %.2f)", (double) pixels[0] / 255, (double) pixels[1] / 255, (double) pixels[2] / 255);
+			cd_debug ("c'est une couleur unie (%.2f, %.2f, %.2f)", (double) pixels[0] / 255, (double) pixels[1] / 255, (double) pixels[2] / 255);
 			
 			pDesktopBgSurface = _cairo_dock_create_blank_surface (pSourceContext,
 				g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
@@ -887,7 +887,7 @@ static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // at
 			
 			if (fWidth < g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || fHeight < g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
 			{
-				cd_message ("c'est un degrade ou un motif (%dx%d)", (int) fWidth, (int) fHeight);
+				cd_debug ("c'est un degrade ou un motif (%dx%d)", (int) fWidth, (int) fHeight);
 				pDesktopBgSurface = _cairo_dock_create_blank_surface (pSourceContext,
 					g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
 					g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
@@ -906,7 +906,7 @@ static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // at
 			}
 			else
 			{
-				cd_message ("c'est un fond d'ecran de taille %dx%d", (int) fWidth, (int) fHeight);
+				cd_debug ("c'est un fond d'ecran de taille %dx%d", (int) fWidth, (int) fHeight);
 				pDesktopBgSurface = pBgSurface;
 			}
 			
@@ -920,7 +920,7 @@ static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // at
 
 CairoDockDesktopBackground *cairo_dock_get_desktop_background (gboolean bWithTextureToo)
 {
-	g_print ("%s (%d, %d)\n", __func__, bWithTextureToo, s_pDesktopBg?s_pDesktopBg->iRefCount:-1);
+	cd_message ("%s (%d, %d)", __func__, bWithTextureToo, s_pDesktopBg?s_pDesktopBg->iRefCount:-1);
 	if (s_pDesktopBg == NULL)
 	{
 		s_pDesktopBg = g_new0 (CairoDockDesktopBackground, 1);
@@ -945,7 +945,7 @@ CairoDockDesktopBackground *cairo_dock_get_desktop_background (gboolean bWithTex
 
 static gboolean _destroy_bg (CairoDockDesktopBackground *pDesktopBg)
 {
-	g_print ("%s ()\n", __func__);
+	cd_message ("%s ()", __func__);
 	g_return_val_if_fail (pDesktopBg != NULL, 0);
 	if (pDesktopBg->pSurface != NULL)
 	{
@@ -984,7 +984,7 @@ GLuint cairo_dock_get_desktop_bg_texture (CairoDockDesktopBackground *pDesktopBg
 
 void cairo_dock_reload_desktop_background (void)
 {
-	g_print ("%s ()\n", __func__);
+	cd_message ("%s ()", __func__);
 	if (s_pDesktopBg == NULL)  // rien a recharger.
 		return ;
 	if (s_pDesktopBg->pSurface == NULL && s_pDesktopBg->iTexture == 0)  // rien a recharger.

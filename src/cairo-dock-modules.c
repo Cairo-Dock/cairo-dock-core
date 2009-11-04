@@ -132,7 +132,7 @@ void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 	pVisitCard->cUserDataDir = "help";
 	pVisitCard->cShareDataDir = CAIRO_DOCK_SHARE_DATA_DIR;
 	pVisitCard->cConfFileName = "help.conf";
-	pVisitCard->cModuleVersion = "0.0.6";
+	pVisitCard->cModuleVersion = "0.0.7";
 	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
 	pVisitCard->cIconFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/help.svg";
 	pVisitCard->iSizeOfConfig = 0;
@@ -266,7 +266,7 @@ static void cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError **
 	CairoDockVisitCard *pVisitCard = pCairoDockModule->pVisitCard;
 	if (pVisitCard->iMajorVersionNeeded > g_iMajorVersion || (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded > g_iMinorVersion) || (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded == g_iMinorVersion && pVisitCard->iMicroVersionNeeded > g_iMicroVersion))
 	{
-		g_set_error (erreur, 1, 1, "this module ('%s') needs at least Cairo-Dock v%d.%d.%d, but Cairo-Dock is in v%s\n  It will be ignored", pCairoDockModule->cSoFilePath, pVisitCard->iMajorVersionNeeded, pVisitCard->iMinorVersionNeeded, pVisitCard->iMicroVersionNeeded, CAIRO_DOCK_VERSION);
+		g_set_error (erreur, 1, 1, "this module ('%s') needs at least Cairo-Dock v%d.%d.%d, but Cairo-Dock is in v%d.%d.%d (%s)\n  It will be ignored", pCairoDockModule->cSoFilePath, pVisitCard->iMajorVersionNeeded, pVisitCard->iMinorVersionNeeded, pVisitCard->iMicroVersionNeeded, g_iMajorVersion, g_iMinorVersion, g_iMicroVersion, CAIRO_DOCK_VERSION);
 		cairo_dock_free_visit_card (pCairoDockModule->pVisitCard);
 		pCairoDockModule->pVisitCard = NULL;
 		return ;

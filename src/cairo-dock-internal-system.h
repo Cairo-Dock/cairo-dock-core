@@ -52,6 +52,9 @@ struct _CairoConfigSystem {
 	gint iCairoAnimationDeltaT;
 	gboolean bConfigPanelTransparency;
 	gint iFadeOutNbSteps;
+	gint iConnectionTimeout;
+	gint iConnectiontMaxTime;
+	gint iConnectiontNbRetries;
 	} ;
 
 DEFINE_PRE_INIT (System);

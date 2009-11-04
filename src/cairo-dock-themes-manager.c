@@ -35,6 +35,7 @@
 #include "cairo-dock-gauge.h"
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-gui-manager.h"
+#include "cairo-dock-internal-system.h"
 #include "cairo-dock-themes-manager.h"
 
 #define CAIRO_DOCK_MODIFIED_THEME_FILE ".cairo-dock-need-save"
@@ -43,8 +44,8 @@
 #define CAIRO_DOCK_THEME_SERVER "http://themes.cairo-dock.org"
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"
 #define CAIRO_DOCK_DEFAULT_THEME_LIST_NAME "liste.txt"
-#define CAIRO_DOCK_DL_NB_RETRY 2
-#define CAIRO_DOCK_DL_TIMEOUT 20 // La nouvelle version de wget a du mal avec le timeout... (problème avec les 5sec alors qu'il y a un ping de 40ms)
+#define CAIRO_DOCK_DL_NB_RETRY 0  // pas de retry
+#define CAIRO_DOCK_DL_TIMEOUT 5 // 5 secondes de timeout a la connexion (le transfert peut prendre son temps lui). Avec wget depuis la version de Karmic, cela pose probleme.
 
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cConfFile;
@@ -272,7 +273,13 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 		while (gtk_events_pending ())
 			gtk_main_iteration ();
 	}
-	gchar *cCommand = g_strdup_printf ("%s wget \"%s/%s/%s\" -O \"%s\" -t %d -T %d%s", (iShowActivity == 2 ? "$TERM -e '" : ""), cServerAdress, cDistantFilePath, cDistantFileName, cTmpFilePath, CAIRO_DOCK_DL_NB_RETRY, CAIRO_DOCK_DL_TIMEOUT, (iShowActivity == 2 ? "'" : ""));
+	///gchar *cCommand = g_strdup_printf ("%s wget \"%s/%s/%s\" -O \"%s\" -t %d -T %d%s", (iShowActivity == 2 ? "$TERM -e '" : ""), cServerAdress, cDistantFilePath, cDistantFileName, cTmpFilePath, CAIRO_DOCK_DL_NB_RETRY, CAIRO_DOCK_DL_TIMEOUT, (iShowActivity == 2 ? "'" : ""));
+	gchar *cCommand = g_strdup_printf ("%s curl \"%s/%s/%s\" --output \"%s\" --connect-timeout %d --max-time %d --retry %d%s",
+		(iShowActivity == 2 ? "$TERM -e '" : ""),
+		cServerAdress, cDistantFilePath, cDistantFileName,
+		cTmpFilePath,
+		mySystem.iConnectionTimeout, mySystem.iConnectiontMaxTime, mySystem.iConnectiontNbRetries,
+		(iShowActivity == 2 ? "'" : ""));
 	g_print ("%s\n", cCommand);
 	
 	int r = system (cCommand);

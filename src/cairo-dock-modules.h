@@ -59,11 +59,11 @@ struct _CairoDockVisitCard {
 	/// nom du module qui servira a l'identifier.
 	const gchar *cModuleName;
 	/// numero de version majeure de cairo-dock necessaire au bon fonctionnement du module.
-	short iMajorVersionNeeded;
+	gint iMajorVersionNeeded;
 	/// numero de version mineure de cairo-dock necessaire au bon fonctionnement du module.
-	short iMinorVersionNeeded;
+	gint iMinorVersionNeeded;
 	/// numero de version micro de cairo-dock necessaire au bon fonctionnement du module.
-	short iMicroVersionNeeded;
+	gint iMicroVersionNeeded;
 	/// chemin d'une image de previsualisation.
 	const gchar *cPreviewFilePath;
 	/// Nom du domaine pour la traduction du module par 'gettext'.

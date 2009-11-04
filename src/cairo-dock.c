@@ -690,9 +690,11 @@ int main (int argc, char** argv)
 	g_print ("\nVERIFIER LE CHANGEMENT DE CONTAINER POUR TERMINAL\n\n");
 	g_print ("\n2eme DOCK PRINCIPAL AVEC 1 ICONE : BORD TRONQUE EN VERTICAL\n\n");
 	g_print ("\nPLAN 3D NE PREND PAS TOUT L'ECRAN\n\n");
-	g_print ("\nPENGOUIN (CAIRO ET VERTICAL)\n\n");
+	g_print ("\nPENGOUIN (CAIRO ET VERTICAL A DROITE)\n\n");
 	g_print ("\nSWITCHER : MINIATURE DU BUREAU\n\n");
 	g_print ("\nBATTERIE VERS 100%\n\n");
+	g_print ("\nTESTER WGET\n\n");
+	g_print ("\nPB AFFICHAGE PM\n\n");
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
 	g_print ("\nFIXER LES DESKLETS SUR UN BUREAU\n\n");
