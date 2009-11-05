@@ -22,6 +22,8 @@
 #define  __CAIRO_DOCK_CONFIG__
 
 #include <glib.h>
+#include <libxml/tree.h>
+#include <libxml/parser.h>
 
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
@@ -198,6 +200,12 @@ void cairo_dock_decrypt_string( const guchar *cEncryptedString,  guchar **cDecry
 *@param cEncryptedString the encrypted string.
 */
 void cairo_dock_encrypt_string( const guchar *cDecryptedString,  guchar **cEncryptedString );
+
+
+xmlDocPtr cairo_dock_open_xml_file (const gchar *cDataFilePath, const gchar *cRootNodeName, xmlNodePtr *root_node, GError **erreur);
+
+void cairo_dock_close_xml_file (xmlDocPtr doc);
+
 
 #define DEFINE_PRE_INIT(cGroupName) \
 void cairo_dock_pre_init_##cGroupName (CairoDockInternalModule *pModule)

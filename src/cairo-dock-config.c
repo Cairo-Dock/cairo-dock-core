@@ -73,6 +73,7 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-dock-facility.h"
+#include "cairo-dock-file-manager.h"
 #include "cairo-dock-config.h"
 
 extern CairoDock *g_pMainDock;
@@ -970,4 +971,41 @@ void cairo_dock_encrypt_string( const guchar *cDecryptedString,  guchar **cEncry
 #else
 	*cEncryptedString = g_strdup( cDecryptedString );
 #endif
+}
+
+
+xmlDocPtr cairo_dock_open_xml_file (const gchar *cDataFilePath, const gchar *cRootNodeName, xmlNodePtr *root_node, GError **erreur)
+{
+	if (cairo_dock_get_file_size (cDataFilePath) == 0)
+	{
+		g_set_error (erreur, 1, 1, "file '%s' doesn't exist or is empty", cDataFilePath);
+		*root_node = NULL;
+		return NULL;
+	}
+	xmlInitParser ();
+	
+	xmlDocPtr doc = xmlParseFile (cDataFilePath);
+	if (doc == NULL)
+	{
+		g_set_error (erreur, 1, 1, "file '%s' is incorrect", cDataFilePath);
+		*root_node = NULL;
+		return NULL;
+	}
+	
+	xmlNodePtr noeud = xmlDocGetRootElement (doc);
+	if (noeud == NULL || xmlStrcmp (noeud->name, (const xmlChar *) cRootNodeName) != 0)
+	{
+		g_set_error (erreur, 1, 2, "xml file '%s' is not well formed", cDataFilePath);
+		*root_node = NULL;
+		return doc;
+	}
+	*root_node = noeud;
+	return doc;
+}
+
+void cairo_dock_close_xml_file (xmlDocPtr doc)
+{
+	xmlCleanupParser ();
+	if (doc)
+		xmlFreeDoc (doc);
 }
