@@ -58,7 +58,7 @@ _import_theme()
 	if test "x${theme}" != "; then
 		#\__________ On cherche si ce theme est un theme officiel ou non.
 		echo " un theme est present ($theme)"
-		wget "$THEME_SERVER/$3/liste.txt" -O "liste.tmp" -t 3 -T 5
+		wget "$THEME_SERVER/$3/liste.txt" -O "liste.tmp" -t 3 -T 30
 		if test -f "liste.tmp" ; then
 			grep "^${theme}" "liste.tmp"
 			if test "$?" != "0" -a  "$theme" != "Classic" -a "$theme" != "default"; then  # pas un theme officiel
