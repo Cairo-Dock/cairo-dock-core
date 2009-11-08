@@ -71,6 +71,7 @@ typedef struct _CairoParticleSystem {
 	double dt;
 	gboolean bDirectionUp;
 	gboolean bAddLuminance;
+	gboolean bAddLight;
 	} CairoParticleSystem;
 
 /// Function that re-initializes a particle when its life is over.

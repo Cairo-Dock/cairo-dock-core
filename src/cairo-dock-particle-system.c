@@ -46,6 +46,9 @@ void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int
 	GLfloat *vertices = pParticleSystem->pVertices;
 	GLfloat *coords = pParticleSystem->pCoords;
 	GLfloat *colors = pParticleSystem->pColors;
+	GLfloat *vertices2 = &pParticleSystem->pVertices[pParticleSystem->iNbParticles * 4 * 3];
+	GLfloat *coords2 = &pParticleSystem->pCoords[pParticleSystem->iNbParticles * 4 * 2];
+	GLfloat *colors2 = &pParticleSystem->pColors[pParticleSystem->iNbParticles * 4 * 4];
 	
 	GLfloat x,y,z;
 	GLfloat w, h;
@@ -101,6 +104,46 @@ void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int
 		memcpy (colors + 4, colors, 4*sizeof (GLfloat));
 		memcpy (colors + 8, colors, 8*sizeof (GLfloat));
 		colors += 16;
+		
+		if (pParticleSystem->bAddLight)
+		{
+			w/=1.5;
+			h/=1.5;
+			vertices2[0] = x - w;
+			vertices2[2] = z;
+			vertices2[3] = x - w;
+			vertices2[5] = z;
+			vertices2[6] = x + w;
+			vertices2[8] = z;
+			vertices2[9] = x + w;
+			vertices2[11] = z;
+			if (pParticleSystem->bDirectionUp)
+			{
+				vertices2[1] = y + h;
+				vertices2[4] = y - h;
+				vertices2[7] = y - h;
+				vertices2[10] = y + h;
+			}
+			else
+			{
+				vertices2[1] = fHeight - y + h;
+				vertices2[4] = fHeight - y - h;
+				vertices2[7] = fHeight - y - h;
+				vertices2[10] = fHeight - y + h;
+			}
+			vertices2 += 12;
+			
+			memcpy (coords2, s_pCornerCoords, sizeof (s_pCornerCoords));
+			coords2 += 8;
+
+			colors2[0] = 1;
+			colors2[1] = 1;
+			colors2[2] = 1;
+			colors2[3] = colors[3];
+			memcpy (colors2 + 4, colors2, 4*sizeof (GLfloat));
+			memcpy (colors2 + 8, colors2, 8*sizeof (GLfloat));
+			colors2 += 16;
+		}
 	}
 	
 	glEnableClientState(GL_COLOR_ARRAY);
@@ -111,7 +154,7 @@ void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int
 	glVertexPointer(3, GL_FLOAT, 3 * sizeof(GLfloat), pParticleSystem->pVertices);
 	glColorPointer(4, GL_FLOAT, 4 * sizeof(GLfloat), pParticleSystem->pColors);
 
-	glDrawArrays(GL_QUADS, 0, numActive);
+	glDrawArrays(GL_QUADS, 0, pParticleSystem->bAddLight ? numActive*2 : numActive);
 
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState (GL_TEXTURE_COORD_ARRAY);
@@ -133,9 +176,9 @@ CairoParticleSystem *cairo_dock_create_particle_system (int iNbParticles, GLuint
 	pParticleSystem->fHeight = fHeight;
 	pParticleSystem->bDirectionUp = TRUE;
 	
-	pParticleSystem->pVertices = malloc(iNbParticles * 4 * 3 * sizeof(GLfloat));
-	pParticleSystem->pCoords = malloc(iNbParticles * 4 * 2 * sizeof(GLfloat));
-	pParticleSystem->pColors = malloc(iNbParticles * 4 * 4 * sizeof(GLfloat));
+	pParticleSystem->pVertices = malloc(iNbParticles * 4 * 3 * sizeof(GLfloat)*2);
+	pParticleSystem->pCoords = malloc(iNbParticles * 4 * 2 * sizeof(GLfloat)*2);
+	pParticleSystem->pColors = malloc(iNbParticles * 4 * 4 * sizeof(GLfloat)*2);
 	return pParticleSystem;
 }
 
