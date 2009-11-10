@@ -417,7 +417,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 }
 
 
-gchar *cairo_dock_cut_string (const gchar *cString, guint iNbCaracters)  // gere l'UTF-8
+gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l'UTF-8
 {
 	g_return_val_if_fail (cString != NULL, NULL);
 	gchar *cTruncatedName = NULL;
@@ -438,14 +438,27 @@ gchar *cairo_dock_cut_string (const gchar *cString, guint iNbCaracters)  // gere
 		cUtf8Name = g_strdup (cString);
 	
 	const gchar *cEndValidChain = NULL;
+	int iStringLength;
 	if (g_utf8_validate (cUtf8Name, -1, &cEndValidChain))
 	{
-		if (g_utf8_strlen (cUtf8Name, -1) > iNbCaracters)
+		iStringLength = g_utf8_strlen (cUtf8Name, -1);
+		int iNbChars = -1;
+		if (iNbCaracters < 0)
 		{
-			cTruncatedName = g_new0 (gchar, 8 * (iNbCaracters + 4));  // 8 octets par caractere.
-			g_utf8_strncpy (cTruncatedName, cUtf8Name, iNbCaracters);
-
-			gchar *cTruncature = g_utf8_offset_to_pointer (cTruncatedName, iNbCaracters);
+			iNbChars = MAX (0, iStringLength + iNbCaracters);
+		}
+		else if (iStringLength > iNbCaracters)
+		{
+			iNbChars = iNbCaracters;
+		}
+		
+		if (iNbChars != -1)
+		{
+			cTruncatedName = g_new0 (gchar, 8 * (iNbChars + 4));  // 8 octets par caractere.
+			if (iNbChars != 0)
+				g_utf8_strncpy (cTruncatedName, cUtf8Name, iNbChars);
+			
+			gchar *cTruncature = g_utf8_offset_to_pointer (cTruncatedName, iNbChars);
 			*cTruncature = '.';
 			*(cTruncature+1) = '.';
 			*(cTruncature+2) = '.';
@@ -453,14 +466,26 @@ gchar *cairo_dock_cut_string (const gchar *cString, guint iNbCaracters)  // gere
 	}
 	else
 	{
-		if (strlen (cString) > iNbCaracters)
+		iStringLength = strlen (cString);
+		int iNbChars = -1;
+		if (iNbCaracters < 0)
+		{
+			iNbChars = MAX (0, iStringLength + iNbCaracters);
+		}
+		else if (iStringLength > iNbCaracters)
+		{
+			iNbChars = iNbCaracters;
+		}
+		
+		if (iNbChars != -1)
 		{
 			cTruncatedName = g_new0 (gchar, iNbCaracters + 4);
-			strncpy (cTruncatedName, cString, iNbCaracters);
-
-			cTruncatedName[iNbCaracters] = '.';
-			cTruncatedName[iNbCaracters+1] = '.';
-			cTruncatedName[iNbCaracters+2] = '.';
+			if (iNbChars != 0)
+				strncpy (cTruncatedName, cString, iNbChars);
+			
+			cTruncatedName[iNbChars] = '.';
+			cTruncatedName[iNbChars+1] = '.';
+			cTruncatedName[iNbChars+2] = '.';
 		}
 	}
 	if (cTruncatedName == NULL)

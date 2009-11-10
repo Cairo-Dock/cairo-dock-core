@@ -47,9 +47,15 @@ essentialdata_DATA = \
 	icon-system.png\
 	icon-lock-icons.svg\
 	icon-position.png\
+	icon-behavior.svg\
+	icon-appearance.svg\
+	icon-accessories.svg\
+	icon-desktop.svg\
+	icon-controler.svg\
+	icon-connection.svg\
 	cairo-dock-animated.xpm\
 	help.conf\
-	help.svg
+	icon-help.png
 	
 autostartdatadir = $(datadir)/applications
 autostartdata_DATA = \

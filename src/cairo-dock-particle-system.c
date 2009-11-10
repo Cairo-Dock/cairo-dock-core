@@ -107,8 +107,8 @@ void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int
 		
 		if (pParticleSystem->bAddLight)
 		{
-			w/=1.5;
-			h/=1.5;
+			w/=1.6;
+			h/=1.6;
 			vertices2[0] = x - w;
 			vertices2[2] = z;
 			vertices2[3] = x - w;

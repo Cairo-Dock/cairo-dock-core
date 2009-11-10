@@ -280,7 +280,7 @@ fake transparency = false
 #{You need to re-open the panel. It is deactivated by default on KDE.}
 config transparency = false
 
-#X-[Connection to the themes server;gtk-plug-in]
+#X-[Connection to the themes server;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-connection.svg]
 frame_conn =
 #i-[1;20] Connection timeout to the themes server :
 #{Maximum time in seconds that you allow the connection to the server to take. This only limits the connection phase,  once the dock has connected this option is of no more use.}

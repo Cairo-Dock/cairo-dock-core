@@ -76,12 +76,12 @@ void cairo_dock_add_reflection_to_icon (cairo_t *pSourceContext, Icon *pIcon, Ca
 */
 void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdouble fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp);
 
-/**Cut an UTF-8 or ASCII string to n characters, and add '...' to the end in cas it was effectively cut. It manages correctly UTF-8 strings.
+/**Cut an UTF-8 or ASCII string to n characters, and add '...' to the end in cas it was effectively cut. If n is negative, it will remove the last |n| characters. It manages correctly UTF-8 strings.
 *@param cString the string.
-*@param iNbCaracters the maximum number of characters wished.
+*@param iNbCaracters the maximum number of characters wished, or the number of characters to remove if negative.
 *@return the newly allocated string.
 */
-gchar *cairo_dock_cut_string (const gchar *cString, guint iNbCaracters);
+gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);
 
 /**Fill the label buffer (surface & texture) of a given icon, according to a text description.
 *@param icon the icon.

@@ -91,14 +91,20 @@ extern CairoDockDesktopEnv g_iDesktopEnv;
 extern gchar *g_cCurrentLaunchersPath;
 extern gboolean g_bEasterEggs;
 
-const gchar *cCategoriesDescription[2*CAIRO_DOCK_NB_CATEGORY] = {
+/*const gchar *cCategoriesDescription[2*CAIRO_DOCK_NB_CATEGORY] = {
 	N_("Behaviour"), "gtk-preferences",
 	N_("Appearance"), "gtk-color-picker",
 	N_("Accessories"), "gtk-dnd-multiple",
 	N_("Desktop"), "gtk-file",
 	N_("Controlers"), "gtk-zoom-fit",
+	N_("Plug-ins"), "gtk-disconnect" };*/
+const gchar *cCategoriesDescription[2*CAIRO_DOCK_NB_CATEGORY] = {
+	N_("Behaviour"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-behavior.svg",
+	N_("Appearance"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-appearance.svg",
+	N_("Accessories"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-accessories.svg",
+	N_("Desktop"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-desktop.svg",
+	N_("Controlers"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-controler.svg",
 	N_("Plug-ins"), "gtk-disconnect" };
-
 
 static int iNbConfigDialogs = 0;
 int cairo_dock_get_nb_dialog_windows (void)
