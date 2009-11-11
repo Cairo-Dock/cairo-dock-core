@@ -293,27 +293,35 @@ CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, Cairo
 *@param ... arguments to insert in the message, in a printf way.
 *@return the newly created dialog, visible, with a reference of 1.
 */
-CairoDialog *cairo_dock_show_temporary_dialog_with_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, ...);
+CairoDialog *cairo_dock_show_temporary_dialog_with_icon_printf (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, ...);
+
+/** Pop up a dialog with a message, and a limited duration, and an icon in the margin.
+*@param cText the message to display.
+*@param pIcon the icon that will hold the dialog.
+*@param pContainer the container of the icon.
+*@param fTimeLength the duration of the dialog (in ms), or 0 for an unlimited dialog.
+*@param cIconPath path to an icon.
+*@return the newly created dialog, visible, with a reference of 1.
+*/
+CairoDialog *cairo_dock_show_temporary_dialog_with_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath);
 
 /** Pop up a dialog with a message, and a limited duration, with no icon.
 *@param cText the message to display.
 *@param pIcon the icon that will hold the dialog.
 *@param pContainer the container of the icon.
 *@param fTimeLength the duration of the dialog (in ms), or 0 for an unlimited dialog.
-*@param ... arguments to insert in the message, in a printf way.
 *@return the newly created dialog, visible, with a reference of 1 et visible, avec une reference a 1.
 */
-CairoDialog *cairo_dock_show_temporary_dialog (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, ...);
+CairoDialog *cairo_dock_show_temporary_dialog (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength);
 
 /** Pop up a dialog with a message, and a limited duration, and a default icon.
 *@param cText the format of the message to display.
 *@param pIcon the icon that will hold the dialog.
 *@param pContainer the container of the icon.
 *@param fTimeLength the duration of the dialog (in ms), or 0 for an unlimited dialog.
-*@param ... arguments to insert in the message, in a printf way.
 *@return the newly created dialog, visible, with a reference of 1 et visible, avec une reference a 1.
 */
-CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, ...);
+CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength);
 
 /** Pop up a dialog with a question and 2 buttons ok/cancel.
 * When the user make its choice, the callback is called with the value "yes" if he clicked on "ok", and with "no" if he clicked on "cancel".

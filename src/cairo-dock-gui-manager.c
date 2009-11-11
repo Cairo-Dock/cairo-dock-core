@@ -1062,7 +1062,7 @@ GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, CairoDoc
 				if (pIcon == NULL)
 					pIcon = cairo_dock_get_dialogless_icon ();
 				CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
-				cairo_dock_show_temporary_dialog_with_icon (_("The module '%s' is not present. You need to install it or its dependencies to make the most of this module."), pIcon, CAIRO_CONTAINER (pDock), 10, "same icon");
+				cairo_dock_show_temporary_dialog_with_icon_printf (_("The module '%s' is not present. You need to install it or its dependencies to make the most of this module."), pIcon, CAIRO_CONTAINER (pDock), 10, "same icon", cModuleName);
 			}
 			else if (pDependencyModule != pModule)
 			{

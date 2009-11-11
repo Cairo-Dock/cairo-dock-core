@@ -1659,24 +1659,28 @@ void cairo_dock_load_desklet_decorations (CairoDesklet *pDesklet, cairo_t *pSour
 	if  (pDeskletDecorations->cBackGroundImagePath != NULL && pDeskletDecorations->fBackGroundAlpha > 0)
 	{
 		cd_debug ("bg : %s", pDeskletDecorations->cBackGroundImagePath);
-		pDesklet->pBackGroundSurface = cairo_dock_create_surface_from_image (pDeskletDecorations->cBackGroundImagePath,
+		gchar *cPath = cairo_dock_generate_file_path (pDeskletDecorations->cBackGroundImagePath);
+		pDesklet->pBackGroundSurface = cairo_dock_create_surface_from_image (cPath,
 			pSourceContext,
 			1.,  // cairo_dock_get_max_scale (pDesklet)
 			pDesklet->container.iWidth, pDesklet->container.iHeight,
 			pDeskletDecorations->iLoadingModifier,
 			&pDesklet->fImageWidth, &pDesklet->fImageHeight,
 			&fZoomX, &fZoomY);
+		g_free (cPath);
 	}
 	if (pDeskletDecorations->cForeGroundImagePath != NULL && pDeskletDecorations->fForeGroundAlpha > 0)
 	{
 		cd_debug ("fg : %s", pDeskletDecorations->cForeGroundImagePath);
-		pDesklet->pForeGroundSurface = cairo_dock_create_surface_from_image (pDeskletDecorations->cForeGroundImagePath,
+		gchar *cPath = cairo_dock_generate_file_path (pDeskletDecorations->cForeGroundImagePath);
+		pDesklet->pForeGroundSurface = cairo_dock_create_surface_from_image (cPath,
 			pSourceContext,
 			1.,  // cairo_dock_get_max_scale (pDesklet)
 			pDesklet->container.iWidth, pDesklet->container.iHeight,
 			pDeskletDecorations->iLoadingModifier,
 			&pDesklet->fImageWidth, &pDesklet->fImageHeight,
 			&fZoomX, &fZoomY);
+		g_free (cPath);
 	}
 	cd_debug ("image : %.2fx%.2f ; zoom : %.2fx%.2f", pDesklet->fImageWidth, pDesklet->fImageHeight, fZoomX, fZoomY);
 	pDesklet->iLeftSurfaceOffset = pDeskletDecorations->iLeftMargin * fZoomX;

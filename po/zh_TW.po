@@ -69,22 +69,22 @@ msgstr ""
 " (不再顯示此對話框，請從應用程式選單當中啟動Cairo-Dock 。\n"
 "  (也可以使用 -o 參數強制使用OpenGL ，或者使用 -c 參數使用無OpenGL模式)"
 
-#: ../src/cairo-dock-file-manager.c:501 ../src/cairo-dock-file-manager.c:546
+#: ../src/cairo-dock-file-manager.c:505 ../src/cairo-dock-file-manager.c:550
 #, c-format
 msgid "%s is now mounted"
 msgstr "%s 現在已掛載"
 
-#: ../src/cairo-dock-file-manager.c:501 ../src/cairo-dock-file-manager.c:546
+#: ../src/cairo-dock-file-manager.c:505 ../src/cairo-dock-file-manager.c:550
 #, c-format
 msgid "%s is now unmounted"
 msgstr "%s 現在已卸載"
 
-#: ../src/cairo-dock-file-manager.c:565
+#: ../src/cairo-dock-file-manager.c:569
 #, c-format
 msgid "failed to mount %s"
 msgstr "掛載 %s 時失敗"
 
-#: ../src/cairo-dock-file-manager.c:565
+#: ../src/cairo-dock-file-manager.c:569
 #, c-format
 msgid "failed to unmount %s"
 msgstr "卸載 %s 失敗"
@@ -128,87 +128,87 @@ msgstr "平均"
 msgid "grab"
 msgstr "抓取"
 
-#: ../src/cairo-dock-gui-manager.c:95 ../data/messages:105
+#: ../src/cairo-dock-gui-manager.c:102 ../data/messages:105
 msgid "Behaviour"
 msgstr "動作方式"
 
-#: ../src/cairo-dock-gui-manager.c:96
+#: ../src/cairo-dock-gui-manager.c:103
 msgid "Appearance"
 msgstr "界面外觀"
 
-#: ../src/cairo-dock-gui-manager.c:97
+#: ../src/cairo-dock-gui-manager.c:104
 msgid "Accessories"
 msgstr "附屬應用程式"
 
-#: ../src/cairo-dock-gui-manager.c:98
+#: ../src/cairo-dock-gui-manager.c:105
 msgid "Desktop"
 msgstr "桌面"
 
-#: ../src/cairo-dock-gui-manager.c:99
+#: ../src/cairo-dock-gui-manager.c:106
 msgid "Controlers"
 msgstr "控制台"
 
-#: ../src/cairo-dock-gui-manager.c:100
+#: ../src/cairo-dock-gui-manager.c:107
 msgid "Plug-ins"
 msgstr "外掛"
 
-#: ../src/cairo-dock-gui-manager.c:432
+#: ../src/cairo-dock-gui-manager.c:438
 msgid "Categories"
 msgstr "分類"
 
-#: ../src/cairo-dock-gui-manager.c:452
+#: ../src/cairo-dock-gui-manager.c:458
 msgid "All"
 msgstr "全部"
 
-#: ../src/cairo-dock-gui-manager.c:557
+#: ../src/cairo-dock-gui-manager.c:563
 msgid "Activate this module"
 msgstr "啟動這個模組"
 
-#: ../src/cairo-dock-gui-manager.c:575
+#: ../src/cairo-dock-gui-manager.c:581
 msgid "Filter"
 msgstr "篩選器"
 
-#: ../src/cairo-dock-gui-manager.c:615
+#: ../src/cairo-dock-gui-manager.c:621
 msgid "All words"
 msgstr "全部的文字"
 
-#: ../src/cairo-dock-gui-manager.c:622
+#: ../src/cairo-dock-gui-manager.c:628
 msgid "Highlight words"
 msgstr "高亮度的文字"
 
-#: ../src/cairo-dock-gui-manager.c:630
+#: ../src/cairo-dock-gui-manager.c:636
 msgid "Hide others"
 msgstr "隱藏其他的"
 
-#: ../src/cairo-dock-gui-manager.c:638
+#: ../src/cairo-dock-gui-manager.c:644
 msgid "Search in description"
 msgstr "搜尋解說文字"
 
-#: ../src/cairo-dock-gui-manager.c:720
+#: ../src/cairo-dock-gui-manager.c:726
 msgid "< Maintenance mode >"
 msgstr "< 維護模式 >"
 
-#: ../src/cairo-dock-gui-manager.c:738 ../src/cairo-dock-gui-manager.c:812
+#: ../src/cairo-dock-gui-manager.c:744 ../src/cairo-dock-gui-manager.c:818
 msgid "Configuration of Cairo-Dock"
 msgstr "配置Cairo-Dock"
 
-#: ../src/cairo-dock-gui-manager.c:1059
+#: ../src/cairo-dock-gui-manager.c:1065
 #, c-format
 msgid ""
 "The module '%s' is not present. You need to install it or its dependencies "
 "to make the most of this module."
 msgstr "這個 '%s' 模組不存在，你需要安裝它，或者是他依賴的模組。"
 
-#: ../src/cairo-dock-gui-manager.c:1065
+#: ../src/cairo-dock-gui-manager.c:1071
 #, c-format
 msgid "The module '%s' is not activated."
 msgstr "模組 '%s' 沒有啟用。"
 
-#: ../src/cairo-dock-gui-manager.c:1066
+#: ../src/cairo-dock-gui-manager.c:1072
 msgid "Do you want to activate it now ?"
 msgstr "您現在要啟用它嗎？"
 
-#: ../src/cairo-dock-gui-manager.c:1802
+#: ../src/cairo-dock-gui-manager.c:1808
 msgid "Configuration of the launchers"
 msgstr "快速啟動組態設定"
 
@@ -4065,6 +4065,16 @@ msgstr ""
 " - 剪貼簿現在有一個功能，就是可以一次拷貝全部的項目。\n"
 " - DBug外掛提供了一個很強大的API ，可以讓您從外部的應用程式來控制Dock。\n"
 "    您甚至可以用任何的程式語言來寫小程式給Dock！"
+
+#: ../data/messages:1225
+msgid ""
+"2.1.2 : \n"
+" - Desklets can be fixed on their current desktop, not only on the first "
+"one.\n"
+" - Welcome to the new  \"RSS-reader\" applet !\n"
+" - Light up your dock with the new \"firework\" icon effects !\n"
+" - A KDE-integration plug-in has been started."
+msgstr ""
 
 #~ msgid "About this applet"
 #~ msgstr "關於這個小程式(applet)"

@@ -1474,7 +1474,7 @@ CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, Cairo
 
 
 
-CairoDialog *cairo_dock_show_temporary_dialog_with_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, ...)
+CairoDialog *cairo_dock_show_temporary_dialog_with_icon_printf (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, ...)
 {
 	g_return_val_if_fail (cText != NULL, NULL);
 	va_list args;
@@ -1486,30 +1486,28 @@ CairoDialog *cairo_dock_show_temporary_dialog_with_icon (const gchar *cText, Ico
 	return pDialog;
 }
 
-CairoDialog *cairo_dock_show_temporary_dialog (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, ...)
+CairoDialog *cairo_dock_show_temporary_dialog_with_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath)
 {
 	g_return_val_if_fail (cText != NULL, NULL);
-	va_list args;
-	va_start (args, fTimeLength);
-	gchar *cFullText = g_strdup_vprintf (cText, args);
-	CairoDialog *pDialog = cairo_dock_show_dialog_full (cFullText, pIcon, pContainer, fTimeLength, NULL, NULL, NULL, NULL, NULL);
-	g_free (cFullText);
-	va_end (args);
-	return pDialog;
+	return cairo_dock_show_dialog_full (cText, pIcon, pContainer, fTimeLength, cIconPath, NULL, NULL, NULL, NULL);
 }
 
-CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, ...)
+CairoDialog *cairo_dock_show_temporary_dialog (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength)
 {
 	g_return_val_if_fail (cText != NULL, NULL);
-	va_list args;
-	va_start (args, fTimeLength);
-	gchar *cFullText = g_strdup_vprintf (cText, args);
+	return cairo_dock_show_dialog_full (cText, pIcon, pContainer, fTimeLength, NULL, NULL, NULL, NULL, NULL);
+}
+
+CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength)
+{
+	g_return_val_if_fail (cText != NULL, NULL);
+	
 	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
 	cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, "cairo-dock-animated.xpm");
 	
 	CairoDialogAttribute attr;
 	memset (&attr, 0, sizeof (CairoDialogAttribute));
-	attr.cText = cFullText;
+	attr.cText = cText;
 	attr.cImageFilePath = cIconPath;
 	attr.iNbFrames = 12;
 	attr.iIconSize = 32;
@@ -1517,8 +1515,6 @@ CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cT
 	CairoDialog *pDialog = cairo_dock_build_dialog (&attr, pIcon, pContainer);
 	
 	g_free (cIconPath);
-	g_free (cFullText);
-	va_end (args);
 	return pDialog;
 }
 

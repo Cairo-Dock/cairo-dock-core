@@ -101,6 +101,10 @@ gboolean cairo_dock_fm_launch_uri (const gchar *cURI)
 			cd_warning (erreur->message);
 			g_error_free (erreur);
 		}
+		
+		GtkRecentManager *rm = gtk_recent_manager_get_default () ;
+		gtk_recent_manager_add_item (rm, cURI);
+		
 		return TRUE;
 	}
 	else
@@ -498,7 +502,7 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 					g_free (cUri);
 					
 					cd_message (" c'est un volume, on considere qu'il vient de se faire (de)monter");
-					cairo_dock_show_temporary_dialog_with_icon (bIsMounted ? _("%s is now mounted") : _("%s is now unmounted"), pNewIcon, CAIRO_DOCK_IS_DOCK (pParentContainer) ? CAIRO_CONTAINER (pIcon->pSubDock) : pParentContainer, 4000, "same icon", pNewIcon->cName);
+					cairo_dock_show_temporary_dialog_with_icon_printf (bIsMounted ? _("%s is now mounted") : _("%s is now unmounted"), pNewIcon, CAIRO_DOCK_IS_DOCK (pParentContainer) ? CAIRO_CONTAINER (pIcon->pSubDock) : pParentContainer, 4000, "same icon", pNewIcon->cName);
 				}
 			}
 		}
@@ -543,7 +547,7 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 					gchar *cActivationURI = s_pEnvBackend->is_mounted (pNewIcon->cBaseURI, &bIsMounted);
 					g_free (cActivationURI);
 				}
-				cairo_dock_show_temporary_dialog_with_icon (bIsMounted ? _("%s is now mounted") : _("%s is now unmounted"), pNewIcon, pParentContainer, 4000, "same icon", pNewIcon->cName);
+				cairo_dock_show_temporary_dialog_with_icon_printf (bIsMounted ? _("%s is now mounted") : _("%s is now unmounted"), pNewIcon, pParentContainer, 4000, "same icon", pNewIcon->cName);
 			}
 		}
 		break ;
@@ -562,7 +566,7 @@ void cairo_dock_fm_action_after_mounting (gboolean bMounting, gboolean bSuccess,
 	if ((! bSuccess && pContainer != NULL) || icon == NULL)  // dans l'autre cas (succes), l'icone peut ne plus etre valide ! mais on s'en fout, puisqu'en cas de succes, il y'aura rechargement de l'icone, et donc on pourra balancer le message a ce moment-la.
 	{
 		///if (icon != NULL)
-			cairo_dock_show_temporary_dialog_with_icon (bMounting ? _("failed to mount %s") : _("failed to unmount %s"), icon, pContainer, 4000, "same icon", cName);
+			cairo_dock_show_temporary_dialog_with_icon_printf (bMounting ? _("failed to mount %s") : _("failed to unmount %s"), icon, pContainer, 4000, "same icon", cName);
 		///else
 		///	cairo_dock_show_general_message (cMessage, 4000);
 	}

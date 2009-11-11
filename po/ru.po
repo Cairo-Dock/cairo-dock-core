@@ -75,22 +75,22 @@ msgstr ""
 "  или с опцией -o для принудительного OpenGL, или с опцией -c для "
 "принудительного cairo.)"
 
-#: ../src/cairo-dock-file-manager.c:501 ../src/cairo-dock-file-manager.c:546
+#: ../src/cairo-dock-file-manager.c:505 ../src/cairo-dock-file-manager.c:550
 #, c-format
 msgid "%s is now mounted"
 msgstr "%s присоединён"
 
-#: ../src/cairo-dock-file-manager.c:501 ../src/cairo-dock-file-manager.c:546
+#: ../src/cairo-dock-file-manager.c:505 ../src/cairo-dock-file-manager.c:550
 #, c-format
 msgid "%s is now unmounted"
 msgstr "%s отсоединён"
 
-#: ../src/cairo-dock-file-manager.c:565
+#: ../src/cairo-dock-file-manager.c:569
 #, c-format
 msgid "failed to mount %s"
 msgstr "не удалось присоединить %s"
 
-#: ../src/cairo-dock-file-manager.c:565
+#: ../src/cairo-dock-file-manager.c:569
 #, c-format
 msgid "failed to unmount %s"
 msgstr "не удалось отсоединить %s"
@@ -135,71 +135,71 @@ msgstr "умеренность"
 msgid "grab"
 msgstr "захватить"
 
-#: ../src/cairo-dock-gui-manager.c:95 ../data/messages:105
+#: ../src/cairo-dock-gui-manager.c:102 ../data/messages:105
 msgid "Behaviour"
 msgstr "Поведение"
 
-#: ../src/cairo-dock-gui-manager.c:96
+#: ../src/cairo-dock-gui-manager.c:103
 msgid "Appearance"
 msgstr "Внешний вид"
 
-#: ../src/cairo-dock-gui-manager.c:97
+#: ../src/cairo-dock-gui-manager.c:104
 msgid "Accessories"
 msgstr "Аксессуары"
 
-#: ../src/cairo-dock-gui-manager.c:98
+#: ../src/cairo-dock-gui-manager.c:105
 msgid "Desktop"
 msgstr "Рабочий стол"
 
-#: ../src/cairo-dock-gui-manager.c:99
+#: ../src/cairo-dock-gui-manager.c:106
 msgid "Controlers"
 msgstr "Датчики"
 
-#: ../src/cairo-dock-gui-manager.c:100
+#: ../src/cairo-dock-gui-manager.c:107
 msgid "Plug-ins"
 msgstr "Модули"
 
-#: ../src/cairo-dock-gui-manager.c:432
+#: ../src/cairo-dock-gui-manager.c:438
 msgid "Categories"
 msgstr "Категории"
 
-#: ../src/cairo-dock-gui-manager.c:452
+#: ../src/cairo-dock-gui-manager.c:458
 msgid "All"
 msgstr "Всё"
 
-#: ../src/cairo-dock-gui-manager.c:557
+#: ../src/cairo-dock-gui-manager.c:563
 msgid "Activate this module"
 msgstr "Активировать этот модуль"
 
-#: ../src/cairo-dock-gui-manager.c:575
+#: ../src/cairo-dock-gui-manager.c:581
 msgid "Filter"
 msgstr "Фильтр"
 
-#: ../src/cairo-dock-gui-manager.c:615
+#: ../src/cairo-dock-gui-manager.c:621
 msgid "All words"
 msgstr "По всем словам"
 
-#: ../src/cairo-dock-gui-manager.c:622
+#: ../src/cairo-dock-gui-manager.c:628
 msgid "Highlight words"
 msgstr "Подсвечивать слова"
 
-#: ../src/cairo-dock-gui-manager.c:630
+#: ../src/cairo-dock-gui-manager.c:636
 msgid "Hide others"
 msgstr "Скрыть остальные"
 
-#: ../src/cairo-dock-gui-manager.c:638
+#: ../src/cairo-dock-gui-manager.c:644
 msgid "Search in description"
 msgstr "Искать в описаниях"
 
-#: ../src/cairo-dock-gui-manager.c:720
+#: ../src/cairo-dock-gui-manager.c:726
 msgid "< Maintenance mode >"
 msgstr "< Режим обслуживания >"
 
-#: ../src/cairo-dock-gui-manager.c:738 ../src/cairo-dock-gui-manager.c:812
+#: ../src/cairo-dock-gui-manager.c:744 ../src/cairo-dock-gui-manager.c:818
 msgid "Configuration of Cairo-Dock"
 msgstr "Настройка Cairo-Dock"
 
-#: ../src/cairo-dock-gui-manager.c:1059
+#: ../src/cairo-dock-gui-manager.c:1065
 #, c-format
 msgid ""
 "The module '%s' is not present. You need to install it or its dependencies "
@@ -208,16 +208,16 @@ msgstr ""
 "Модуль '%s' не установлен. Вам следует установить его или его зависимости, "
 "чтобы в полной мере его использовать."
 
-#: ../src/cairo-dock-gui-manager.c:1065
+#: ../src/cairo-dock-gui-manager.c:1071
 #, c-format
 msgid "The module '%s' is not activated."
 msgstr "Модуль '%s' не активирован."
 
-#: ../src/cairo-dock-gui-manager.c:1066
+#: ../src/cairo-dock-gui-manager.c:1072
 msgid "Do you want to activate it now ?"
 msgstr "Активировать его сейчас?"
 
-#: ../src/cairo-dock-gui-manager.c:1802
+#: ../src/cairo-dock-gui-manager.c:1808
 msgid "Configuration of the launchers"
 msgstr "Настройка значков запуска"
 
@@ -4256,6 +4256,16 @@ msgstr ""
 "вашей панелью из других приложений.\n"
 "   И с помощью него вы даже сможете написать свой собственный апплет на "
 "любом языке!"
+
+#: ../data/messages:1225
+msgid ""
+"2.1.2 : \n"
+" - Desklets can be fixed on their current desktop, not only on the first "
+"one.\n"
+" - Welcome to the new  \"RSS-reader\" applet !\n"
+" - Light up your dock with the new \"firework\" icon effects !\n"
+" - A KDE-integration plug-in has been started."
+msgstr ""
 
 #~ msgid ""
 #~ "The '%s' plug-in was not found.\n"

@@ -267,7 +267,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	CairoDialog *pDialog = NULL;
 	if (iShowActivity == 1)
 	{
-		pDialog = cairo_dock_show_temporary_dialog_with_default_icon ("downloading file %s on %s ...", NULL, NULL, 0, cDistantFileName, cServerAdress);
+		pDialog = cairo_dock_show_temporary_dialog_with_icon_printf ("downloading file %s on %s ...", NULL, NULL, 0, NULL, cDistantFileName, cServerAdress);
 		cairo_dock_dialog_reference (pDialog);
 		g_print ("downloading file ...\n");
 		while (gtk_events_pending ())
@@ -487,7 +487,7 @@ GHashTable *cairo_dock_list_themes (const gchar *cShareThemesDir, const gchar *c
 	if (erreur != NULL)
 	{
 		cd_warning ("while loading distant themes in '%s/%s' : %s", g_cThemeServerAdress != NULL ? g_cThemeServerAdress : CAIRO_DOCK_THEME_SERVER, cDistantThemesDir, erreur->message);
-		g_print ("s_pThemeManager:%x\n", s_pThemeManager);
+		//g_print ("s_pThemeManager:%x\n", s_pThemeManager);
 		cairo_dock_set_status_message_printf (s_pThemeManager, _("couldn't get the list of themes for %s (no connection ?)"), cDistantThemesDir);
 		g_error_free (erreur);
 		erreur = NULL;
@@ -858,7 +858,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 					cNewThemePath = cairo_dock_download_file (cNewThemeName, "", str+1, 2, cUserThemesDir, NULL);
 					if (cNewThemePath == NULL)
 					{
-						cairo_dock_show_temporary_dialog_with_default_icon (_("couldn't get distant file %s/%s, maybe the server is down.\nPlease retry later or contact us at cairo-dock.org."), NULL, NULL, 0, cNewThemeName, str+1);
+						cairo_dock_show_temporary_dialog_with_icon_printf (_("couldn't get distant file %s/%s, maybe the server is down.\nPlease retry later or contact us at cairo-dock.org."), NULL, NULL, 0, NULL, cNewThemeName, str+1);
 					}
 				}
 			}

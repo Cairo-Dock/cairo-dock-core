@@ -1029,6 +1029,9 @@ void cairo_dock_stop_application_manager (void)
 	cairo_dock_remove_all_applis_from_class_table ();  // enleve aussi les indicateurs.
 	
 	cairo_dock_reset_appli_table ();  // libere les icones des applis.
+	
+	if (cairo_dock_quick_hide_is_activated ())
+		cairo_dock_deactivate_temporary_auto_hide ();
 }
 
 gboolean cairo_dock_application_manager_is_running (void)

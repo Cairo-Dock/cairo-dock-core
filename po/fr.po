@@ -80,22 +80,22 @@ msgstr ""
 "Applications,\n"
 "  ou avec l'option -o pour forcer l'OpenGL et -c pour forcer cairo.)"
 
-#: ../src/cairo-dock-file-manager.c:501 ../src/cairo-dock-file-manager.c:546
+#: ../src/cairo-dock-file-manager.c:505 ../src/cairo-dock-file-manager.c:550
 #, c-format
 msgid "%s is now mounted"
 msgstr "%s est maintenant monté"
 
-#: ../src/cairo-dock-file-manager.c:501 ../src/cairo-dock-file-manager.c:546
+#: ../src/cairo-dock-file-manager.c:505 ../src/cairo-dock-file-manager.c:550
 #, c-format
 msgid "%s is now unmounted"
 msgstr "%s est maintenant démonté"
 
-#: ../src/cairo-dock-file-manager.c:565
+#: ../src/cairo-dock-file-manager.c:569
 #, c-format
 msgid "failed to mount %s"
 msgstr "échec pour monter %s"
 
-#: ../src/cairo-dock-file-manager.c:565
+#: ../src/cairo-dock-file-manager.c:569
 #, c-format
 msgid "failed to unmount %s"
 msgstr "échec au démontage de %s"
@@ -140,71 +140,71 @@ msgstr "sobriété"
 msgid "grab"
 msgstr "saisir"
 
-#: ../src/cairo-dock-gui-manager.c:95 ../data/messages:105
+#: ../src/cairo-dock-gui-manager.c:102 ../data/messages:105
 msgid "Behaviour"
 msgstr "Comportement"
 
-#: ../src/cairo-dock-gui-manager.c:96
+#: ../src/cairo-dock-gui-manager.c:103
 msgid "Appearance"
 msgstr "Apparence"
 
-#: ../src/cairo-dock-gui-manager.c:97
+#: ../src/cairo-dock-gui-manager.c:104
 msgid "Accessories"
 msgstr "Accessoires"
 
-#: ../src/cairo-dock-gui-manager.c:98
+#: ../src/cairo-dock-gui-manager.c:105
 msgid "Desktop"
 msgstr "Bureau"
 
-#: ../src/cairo-dock-gui-manager.c:99
+#: ../src/cairo-dock-gui-manager.c:106
 msgid "Controlers"
 msgstr "Contrôleurs"
 
-#: ../src/cairo-dock-gui-manager.c:100
+#: ../src/cairo-dock-gui-manager.c:107
 msgid "Plug-ins"
 msgstr "Plug-ins"
 
-#: ../src/cairo-dock-gui-manager.c:432
+#: ../src/cairo-dock-gui-manager.c:438
 msgid "Categories"
 msgstr "Catégories"
 
-#: ../src/cairo-dock-gui-manager.c:452
+#: ../src/cairo-dock-gui-manager.c:458
 msgid "All"
 msgstr "Tout"
 
-#: ../src/cairo-dock-gui-manager.c:557
+#: ../src/cairo-dock-gui-manager.c:563
 msgid "Activate this module"
 msgstr "Activer ce module"
 
-#: ../src/cairo-dock-gui-manager.c:575
+#: ../src/cairo-dock-gui-manager.c:581
 msgid "Filter"
 msgstr "Filtre"
 
-#: ../src/cairo-dock-gui-manager.c:615
+#: ../src/cairo-dock-gui-manager.c:621
 msgid "All words"
 msgstr "Tous les mots"
 
-#: ../src/cairo-dock-gui-manager.c:622
+#: ../src/cairo-dock-gui-manager.c:628
 msgid "Highlight words"
 msgstr "Surligner les mots"
 
-#: ../src/cairo-dock-gui-manager.c:630
+#: ../src/cairo-dock-gui-manager.c:636
 msgid "Hide others"
 msgstr "Masquer les autres"
 
-#: ../src/cairo-dock-gui-manager.c:638
+#: ../src/cairo-dock-gui-manager.c:644
 msgid "Search in description"
 msgstr "Chercher dans la description"
 
-#: ../src/cairo-dock-gui-manager.c:720
+#: ../src/cairo-dock-gui-manager.c:726
 msgid "< Maintenance mode >"
 msgstr "< Mode Maintenance >"
 
-#: ../src/cairo-dock-gui-manager.c:738 ../src/cairo-dock-gui-manager.c:812
+#: ../src/cairo-dock-gui-manager.c:744 ../src/cairo-dock-gui-manager.c:818
 msgid "Configuration of Cairo-Dock"
 msgstr "Configuration de Cairo-Dock"
 
-#: ../src/cairo-dock-gui-manager.c:1059
+#: ../src/cairo-dock-gui-manager.c:1065
 #, c-format
 msgid ""
 "The module '%s' is not present. You need to install it or its dependencies "
@@ -213,16 +213,16 @@ msgstr ""
 "Le module '%s' n'est pas présent. Vous devez l'installer, lui ou ses "
 "dépendances, pour en bénéficier."
 
-#: ../src/cairo-dock-gui-manager.c:1065
+#: ../src/cairo-dock-gui-manager.c:1071
 #, c-format
 msgid "The module '%s' is not activated."
 msgstr "Le module '%s' n'est pas actif."
 
-#: ../src/cairo-dock-gui-manager.c:1066
+#: ../src/cairo-dock-gui-manager.c:1072
 msgid "Do you want to activate it now ?"
 msgstr "Désirez-vous l'activer maintenant ?"
 
-#: ../src/cairo-dock-gui-manager.c:1802
+#: ../src/cairo-dock-gui-manager.c:1808
 msgid "Configuration of the launchers"
 msgstr "Configuration des lanceurs"
 
@@ -4385,3 +4385,13 @@ msgstr ""
 " - Le plug-in 'DBus' offre une nouvelle et puissante API permettant de "
 "contrôler votre dock d'une application externe.\n"
 "   Vous pouvez même écrire une applet dans le langage de votre choix avec !"
+
+#: ../data/messages:1225
+msgid ""
+"2.1.2 : \n"
+" - Desklets can be fixed on their current desktop, not only on the first "
+"one.\n"
+" - Welcome to the new  \"RSS-reader\" applet !\n"
+" - Light up your dock with the new \"firework\" icon effects !\n"
+" - A KDE-integration plug-in has been started."
+msgstr ""

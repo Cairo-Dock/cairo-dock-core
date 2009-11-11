@@ -672,7 +672,7 @@ static void _cairo_dock_rename_file (GtkMenuItem *pMenuItem, gpointer *data)
 		if (! bSuccess)
 		{
 			cd_warning ("couldn't rename this file.\nCheck that you have writing rights, and that the new name does not already exist.");
-			cairo_dock_show_temporary_dialog (_("Attention : couldn't rename %s.\nCheck that you have writing rights,\n and that the new name does not already exist."), icon, CAIRO_CONTAINER (pDock), 5000, icon->cCommand);
+			cairo_dock_show_temporary_dialog_with_icon_printf (_("Attention : couldn't rename %s.\nCheck that you have writing rights,\n and that the new name does not already exist."), icon, CAIRO_CONTAINER (pDock), 5000, NULL, icon->cCommand);
 		}
 	}
 	g_free (cNewName);
