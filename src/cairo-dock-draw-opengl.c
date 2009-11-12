@@ -754,7 +754,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	glBindTexture (GL_TEXTURE_2D, iTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	if (g_bEasterEggs)
+	/*if (g_bEasterEggs)
 		gluBuild2DMipmaps (GL_TEXTURE_2D,
 			4,
 			w,
@@ -762,7 +762,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 			GL_BGRA,
 			GL_UNSIGNED_BYTE,
 			cairo_image_surface_get_data (pPowerOfwoSurface));
-	else
+	else*/
 		glTexImage2D (GL_TEXTURE_2D,
 			0,
 			4,  // GL_ALPHA / GL_BGRA

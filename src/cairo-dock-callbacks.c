@@ -852,7 +852,6 @@ gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey fo
 {
 	static int iPrevPointerX = -1, iPrevPointerY = -1;
 	gint iMousePosX, iMousePosY;
-	///static gint iSidPopUp = 0;
 	
 	if (pDock->iSidPopUp == 0 && !pDock->bPopped)
 	{

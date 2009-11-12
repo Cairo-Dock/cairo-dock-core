@@ -236,7 +236,7 @@ void cairo_dock_initialize_renderer_manager (void)
 void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 {
 	g_return_if_fail (pDock != NULL);
-	cd_message ("%s (%s)", __func__, cRendererName);
+	cd_message ("%s (%x:%s)", __func__, pDock, cRendererName);
 	
 	if (pDock->pRenderer && pDock->pRenderer->free_data)
 	{
@@ -259,7 +259,7 @@ void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 		pDock->container.iSidGLAnimation = 0;
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
-	if (cRendererName != NULL && pDock->cRendererName != cRendererName)  // NULL n'ecrase pas le nom de l'ancienne vue.
+	if (/**cRendererName != NULL && */pDock->cRendererName != cRendererName)  // NULL ecrase le nom de l'ancienne vue depuis le 12/11/2009
 	{
 		g_free (pDock->cRendererName);
 		pDock->cRendererName = g_strdup (cRendererName);
