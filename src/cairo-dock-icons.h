@@ -461,10 +461,10 @@ Icon *cairo_dock_get_icon_with_subdock (GList *pIconList, CairoDock *pSubDock);
 */
 Icon *cairo_dock_get_icon_with_module (GList *pIconList, CairoDockModule *pModule);
 
-#define cairo_dock_get_first_launcher(pIconList) cairo_dock_get_first_icon_of_type (pIconList, CAIRO_DOCK_LAUNCHER)
-#define cairo_dock_get_last_launcher(pIconList) cairo_dock_get_last_icon_of_type (pIconList, CAIRO_DOCK_LAUNCHER)
-#define cairo_dock_get_first_appli(pIconList) cairo_dock_get_first_icon_of_type (pIconList, CAIRO_DOCK_APPLI)
-#define cairo_dock_get_last_appli(pIconList) cairo_dock_get_last_icon_of_type (pIconList, CAIRO_DOCK_APPLI)
+#define cairo_dock_get_first_launcher(pIconList) cairo_dock_get_first_icon_of_group (pIconList, CAIRO_DOCK_LAUNCHER)
+#define cairo_dock_get_last_launcher(pIconList) cairo_dock_get_last_icon_of_group (pIconList, CAIRO_DOCK_LAUNCHER)
+#define cairo_dock_get_first_appli(pIconList) cairo_dock_get_first_icon_of_group (pIconList, CAIRO_DOCK_APPLI)
+#define cairo_dock_get_last_appli(pIconList) cairo_dock_get_last_icon_of_group (pIconList, CAIRO_DOCK_APPLI)
 
 /** Get the dimension allocated to the surface/texture of an icon.
 @param pIcon the icon.

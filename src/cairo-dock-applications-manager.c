@@ -71,6 +71,7 @@ extern int g_iNbViewportX,g_iNbViewportY ;
 static GHashTable *s_hXWindowTable = NULL;  // table des fenetres X affichees dans le dock.
 static Display *s_XDisplay = NULL;
 static int s_iSidUpdateAppliList = 0;
+static int s_bAppliManagerIsRunning = FALSE;
 static int s_iTime = 1;  // on peut aller jusqu'a 2^31, soit 17 ans a 4Hz.
 static Window s_iCurrentActiveWindow = 0;
 static int s_iCurrentDesktop = 0;
@@ -375,7 +376,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 		{
 			if (event.type == PropertyNotify)  // PropertyNotify sur root
 			{
-				if (event.xproperty.atom == s_aNetClientList)
+				if (event.xproperty.atom == s_aNetClientList && myTaskBar.bShowAppli)
 				{
 					s_iTime ++;
 					cairo_dock_update_applis_list (pDock, s_iTime);
@@ -524,7 +525,7 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 				}
 			}  // fin de PropertyNotify sur root.
 		}
-		else  // evenement sur une fenetre.
+		else if (myTaskBar.bShowAppli)  // evenement sur une fenetre.
 		{
 			icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
 			if (! CAIRO_DOCK_IS_APPLI (icon))  // appli blacklistee
@@ -930,7 +931,7 @@ void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime)
 
 void cairo_dock_start_application_manager (CairoDock *pDock)
 {
-	g_return_if_fail (s_iSidUpdateAppliList == 0);
+	g_return_if_fail (!s_bAppliManagerIsRunning);
 	
 	cairo_dock_set_overwrite_exceptions (myTaskBar.cOverwriteException);
 	cairo_dock_set_group_exceptions (myTaskBar.cGroupException);
@@ -940,7 +941,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 	cairo_dock_set_xwindow_mask (root, PropertyChangeMask /*| StructureNotifyMask | SubstructureNotifyMask | ResizeRedirectMask | SubstructureRedirectMask*/);
 
 	gulong i, iNbWindows = 0;
-	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows);
+	Window *pXWindowsList = (myTaskBar.bShowAppli ? cairo_dock_get_windows_list (&iNbWindows) : NULL);
 
 	//\__________________ On recupere le bureau courant.
 	_cairo_dock_retrieve_current_desktop_and_viewport ();
@@ -1002,7 +1003,9 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 		cairo_dock_update_dock_size (pDock);
 	
 	//\__________________ On lance le gestionnaire d'evenements X.
-	s_iSidUpdateAppliList = g_timeout_add (CAIRO_DOCK_TASKBAR_CHECK_INTERVAL, (GSourceFunc) cairo_dock_unstack_Xevents, (gpointer) pDock);  // un g_idle_add () consomme 90% de CPU ! :-/
+	if (s_iSidUpdateAppliList == 0)
+		s_iSidUpdateAppliList = g_timeout_add (CAIRO_DOCK_TASKBAR_CHECK_INTERVAL, (GSourceFunc) cairo_dock_unstack_Xevents, (gpointer) pDock);  // un g_idle_add () consomme 90% de CPU ! :-/
+	s_bAppliManagerIsRunning = myTaskBar.bShowAppli;
 	
 	if (s_iCurrentActiveWindow == 0)
 		s_iCurrentActiveWindow = cairo_dock_get_active_xwindow ();
@@ -1010,7 +1013,8 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 
 void cairo_dock_pause_application_manager (void)
 {
-	if (s_iSidUpdateAppliList != 0)
+	s_bAppliManagerIsRunning = FALSE;
+	/**if (s_iSidUpdateAppliList != 0)
 	{
 		Window root = DefaultRootWindow (s_XDisplay);
 		cairo_dock_set_xwindow_mask (root, 0);
@@ -1019,7 +1023,7 @@ void cairo_dock_pause_application_manager (void)
 		
 		g_source_remove (s_iSidUpdateAppliList);
 		s_iSidUpdateAppliList = 0;
-	}
+	}*/
 }
 
 void cairo_dock_stop_application_manager (void)
@@ -1036,7 +1040,7 @@ void cairo_dock_stop_application_manager (void)
 
 gboolean cairo_dock_application_manager_is_running (void)
 {
-	return (s_iSidUpdateAppliList != 0);
+	return (s_bAppliManagerIsRunning);
 }
 
 
@@ -1269,7 +1273,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 }
 void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 {
-	if (s_iSidUpdateAppliList <= 0)
+	if (! s_bAppliManagerIsRunning)
 		return ;
 	cd_debug ("%s (main:%d)", __func__, pDock->bIsMainDock);
 

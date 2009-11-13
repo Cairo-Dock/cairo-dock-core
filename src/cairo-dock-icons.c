@@ -239,7 +239,7 @@ Icon *cairo_dock_get_last_drawn_icon (CairoDock *pDock)
 		return cairo_dock_get_last_icon (pDock->icons);;
 }
 
-Icon* cairo_dock_get_first_icon_of_type (GList *pIconList, CairoDockIconType iType)
+Icon* cairo_dock_get_first_icon_of_group (GList *pIconList, CairoDockIconType iType)
 {
 	GList* ic;
 	Icon *icon;
@@ -251,7 +251,7 @@ Icon* cairo_dock_get_first_icon_of_type (GList *pIconList, CairoDockIconType iTy
 	}
 	return NULL;
 }
-Icon* cairo_dock_get_last_icon_of_type (GList *pIconList, CairoDockIconType iType)
+Icon* cairo_dock_get_last_icon_of_group (GList *pIconList, CairoDockIconType iType)
 {
 	GList* ic;
 	Icon *icon;

@@ -627,7 +627,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	}
 
 
-	if (! cairo_dock_application_manager_is_running () && myTaskBar.bShowAppli)  // maintenant on veut voir les applis !
+	if (! cairo_dock_application_manager_is_running () /**&& myTaskBar.bShowAppli*/)  // maintenant on veut voir les applis !
 	{
 		cairo_dock_start_application_manager (pDock);  // va inserer le separateur si necessaire.
 	}

@@ -990,9 +990,9 @@ void cairo_dock_set_class_order (Icon *pIcon)
 {
 	double fOrder = CAIRO_DOCK_LAST_ORDER;
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
-	if (pClassAppli != NULL)
+	if (pClassAppli != NULL)  // on va cherche rune icone de meme classe dans le dock principal
 	{
-		// on charche une icone de meme classe dans le dock principal, de preference un inhibiteur, et de preference un lanceur.
+		// on cherche un inhibiteur de cette classe, de preference un lanceur.
 		Icon *pSameClassIcon = NULL;
 		CairoDock *pDock;
 		Icon *pInhibatorIcon;
@@ -1010,7 +1010,8 @@ void cairo_dock_set_class_order (Icon *pIcon)
 				break ;
 		}
 		
-		if (pSameClassIcon == NULL)  // alors on se place par rapport a une autre appli.
+		// si aucun trouve, on cherche une autre appli de cette classe.
+		if (pSameClassIcon == NULL)
 		{
 			Icon *pAppliIcon = NULL;
 			for (ic = pClassAppli->pAppliOfClass; ic != NULL; ic = ic->next)
@@ -1048,6 +1049,45 @@ void cairo_dock_set_class_order (Icon *pIcon)
 			else
 			{
 				fOrder = pSameClassIcon->fOrder + 1;
+			}
+		}
+	}
+	
+	if (fOrder == CAIRO_DOCK_LAST_ORDER)  // cette classe n'existe pas encore ou est vide ou n'a aucune icone dans le main dock => on va se positionner par rapport a la derniere appli.
+	{
+		GList* ic;
+		Icon *icon;
+		for (ic = g_list_last (g_pMainDock->icons); ic != NULL; ic = ic->prev)
+		{
+			icon = ic->data;
+			if (icon->iType == CAIRO_DOCK_APPLI)
+				break ;
+		}
+		if (ic != NULL)  // on a trouve une icone d'appli.
+		{
+			ic = ic->next;
+			Icon *next_icon = (ic ? ic->data : NULL);
+			if (next_icon != NULL)
+				fOrder = (icon->fOrder + next_icon->fOrder) / 2;
+			else
+				fOrder = icon->fOrder + 1;
+		}
+		else if (myTaskBar.bMixLauncherAppli)  // on decide de la placer apres le dernier lanceur dans le cas ou les lanceurs peuvent faire appli.
+		{
+			for (ic = g_list_last (g_pMainDock->icons); ic != NULL; ic = ic->prev)
+			{
+				icon = ic->data;
+				if (icon->iType == CAIRO_DOCK_LAUNCHER)
+					break;
+			}
+			if (ic != NULL)  // on a trouve une icone de lanceur.
+			{
+				ic = ic->next;
+				Icon *next_icon = (ic ? ic->data : NULL);
+				if (next_icon != NULL)
+					fOrder = (icon->fOrder + next_icon->fOrder) / 2;
+				else
+					fOrder = icon->fOrder + 1;
 			}
 		}
 	}
@@ -1109,7 +1149,7 @@ static void _cairo_dock_reorder_one_class (gchar *cClass, CairoDockClassAppli *p
 		{
 			pAppliIcon = ic->data;
 			pDock = cairo_dock_search_dock_from_name (pAppliIcon->cParentDockName);
-			if (pDock->iRefCount == 0)
+			if (pDock && pDock->iRefCount == 0)
 			{
 				pAppliIcon->fOrder = pSameClassIcon->fOrder + (pNextIcon->fOrder - pSameClassIcon->fOrder) * i / (iNbIcons + 1);
 				i ++;

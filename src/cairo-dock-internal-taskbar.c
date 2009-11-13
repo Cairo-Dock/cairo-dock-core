@@ -118,6 +118,7 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 	CairoDock *pDock = g_pMainDock;
 	
 	gboolean bUpdateSize = FALSE;
+	g_print ("TASKBAR: %d;%d\n", cairo_dock_application_manager_is_running () , pTaskBar->bShowAppli);
 	if (/**pPrevTaskBar->bUniquePid != pTaskBar->bUniquePid ||*/
 		pPrevTaskBar->bGroupAppliByClass != pTaskBar->bGroupAppliByClass ||
 		pPrevTaskBar->bHideVisibleApplis != pTaskBar->bHideVisibleApplis ||

@@ -2241,7 +2241,7 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	static GLXBindTexImageProc bindTexImage = NULL;
 	static GLXReleaseTexImageProc releaseTexImage = NULL;
 	
-	return 0;  /// ca ne marche pas. :-(
+	//return 0;  /// ca ne marche pas. :-(
 	if (! s_bChecked)
 	{
 		s_bChecked = TRUE;
@@ -2336,6 +2336,7 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	g_return_val_if_fail (glxpixmap != 0, 0);
 	
 	GLuint texture;
+	glEnable (GL_TEXTURE_2D);
 	glGenTextures (1, &texture);
 	glBindTexture (GL_TEXTURE_2D, texture);
 	
@@ -2360,6 +2361,7 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	glVertex2d (1.0f, 0.0f);
 	
 	glEnd ();
+	glDisable (GL_TEXTURE_2D);
 	
 	releaseTexImage (display, glxpixmap, GLX_FRONT_LEFT_EXT);
 	glXDestroyGLXPixmap (display, glxpixmap);
