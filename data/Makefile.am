@@ -34,9 +34,9 @@ essentialdata_DATA = \
 	icon-buttons.png\
 	icon-bubble.png\
 	icon-wave.png\
-	icon-icons.svg\
+	icon-icons.png\
 	icon-dialogs.svg\
-	icon-views.svg\
+	icon-views.png\
 	icon-accessibility.svg\
 	icon-labels.png\
 	icon-background.svg\
@@ -49,7 +49,7 @@ essentialdata_DATA = \
 	icon-position.png\
 	icon-behavior.svg\
 	icon-appearance.svg\
-	icon-accessories.svg\
+	icon-accessories.png\
 	icon-desktop.svg\
 	icon-controler.svg\
 	icon-connection.svg\
