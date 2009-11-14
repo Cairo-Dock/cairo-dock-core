@@ -89,7 +89,6 @@ static Atom s_aRootMapID;
 static Atom s_aNetNbDesktops;
 static Atom s_aXKlavierState;
 
-
 void cairo_dock_initialize_application_manager (Display *pDisplay)
 {
 	s_XDisplay = pDisplay;
@@ -442,7 +441,9 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 						int data[2] = {s_iCurrentDesktop, GPOINTER_TO_INT (pDock)};
 						g_hash_table_foreach (s_hXWindowTable, (GHFunc) _cairo_dock_hide_show_windows_on_other_desktops, pDock);
 					}
-					
+
+					cairo_dock_hide_show_launchers_on_other_desktops(pDock);
+
 					// auto-hide sur appli maximisee/plein-ecran
 					if (myAccessibility.bAutoHideOnFullScreen || myAccessibility.bAutoHideOnMaximized)
 					{

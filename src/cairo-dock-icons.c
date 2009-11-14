@@ -64,7 +64,9 @@
 
 extern gchar *g_cCurrentLaunchersPath;
 extern gboolean g_bUseOpenGL;
+extern int g_iNbViewportX;
 
+static GList *s_DetachedLaunchersList = NULL;
 
 void cairo_dock_free_icon (Icon *icon)
 {
@@ -708,4 +710,106 @@ void cairo_dock_set_quick_info_full (cairo_t *pSourceContext, Icon *pIcon, Cairo
 	cairo_dock_set_quick_info (pSourceContext, cFullText, pIcon, (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) / 1 : 1));
 	g_free (cFullText);
 	va_end (args);
+}
+
+
+static CairoDock *_cairo_dock_insert_launcher_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bUpdateSize, gboolean bAnimate)
+{
+	cd_message ("%s (%s)", __func__, icon->cName);
+	g_return_val_if_fail (pMainDock != NULL, NULL);
+	
+	cairo_dock_reserve_one_icon_geometry_for_window_manager (&icon->Xid, icon, pMainDock);
+	
+	//\_________________ On determine dans quel dock l'inserer.
+	CairoDock *pParentDock = pMainDock;
+	//icon->cParentDockName = g_strdup (CAIRO_DOCK_MAIN_DOCK_NAME);
+	//pParentDock = cairo_dock_manage_appli_class (icon, pMainDock);  // renseigne cParentDockName.
+	g_return_val_if_fail (pParentDock != NULL, NULL);
+
+	//\_________________ On l'insere dans son dock parent en animant ce dernier eventuellement.
+	/*
+	if (myIcons.bMixApplisAndLaunchers && pParentDock->iRefCount == 0)
+	{
+	cairo_dock_set_class_order (icon);
+	}
+	else
+		icon->fOrder == CAIRO_DOCK_LAST_ORDER;  // en dernier.
+	*/ 
+	cairo_dock_insert_icon_in_dock (icon, pParentDock, bUpdateSize, bAnimate);
+	cd_message (" insertion de %s complete (%.2f %.2fx%.2f) dans %s", icon->cName, icon->fPersonnalScale, icon->fWidth, icon->fHeight, icon->cParentDockName);
+
+	if (bAnimate && cairo_dock_animation_will_be_visible (pParentDock))
+	{
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
+	}
+	else
+	{
+		icon->fPersonnalScale = 0;
+		icon->fScale = 1.;
+	}
+
+	return pParentDock;
+}
+
+static CairoDock * _cairo_dock_detach_launcher(Icon *pIcon)
+{
+	cd_debug ("%s (%s, parent dock=%s)", __func__, pIcon->cName, pIcon->cParentDockName);
+	CairoDock *pParentDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+	if (pParentDock == NULL)
+		return NULL;
+
+	gchar *cParentDockName = g_strdup(pIcon->cParentDockName);
+	cairo_dock_detach_icon_from_dock (pIcon, pParentDock, TRUE); // this will set cParentDockName to NULL
+	
+	pIcon->cParentDockName = cParentDockName; // put it back !
+
+	cairo_dock_update_dock_size (pParentDock);
+	return pParentDock;
+}
+
+static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, CairoContainer *pContainer, CairoDock *pMainDock)
+{
+	if(icon && CAIRO_DOCK_IS_LAUNCHER(icon))
+	{
+		cd_debug ("%s (%s, iNumViewport=%d)", __func__, icon->cName, icon->iSpecificDesktop);
+		CairoDock *pParentDock = NULL;
+		// a specific desktop/viewport has been selected for this icon
+
+		int iCurrentDesktop = 0, iCurrentViewportX = 0, iCurrentViewportY = 0;
+		cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
+		
+		if( icon->iSpecificDesktop < 0 || icon->iSpecificDesktop == iCurrentViewportX + g_iNbViewportX*iCurrentViewportY )
+		{
+			cd_debug (" => est visible sur ce viewport (iSpecificDesktop = %d).",icon->iSpecificDesktop);
+			// check that it is in the detached list
+			if( g_list_find(s_DetachedLaunchersList, icon) != NULL )
+			{
+				pParentDock = _cairo_dock_insert_launcher_in_dock (icon, pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+				s_DetachedLaunchersList = g_list_remove(s_DetachedLaunchersList, icon);
+			}
+		}
+		else
+		{
+			if( icon->iSpecificDesktop != iCurrentViewportX + g_iNbViewportX*iCurrentViewportY )
+			{
+				cd_debug (" Viewport actuel = %d => n'est pas sur le viewport actuel.", iCurrentViewportX + g_iNbViewportX*iCurrentViewportY);
+				if( g_list_find(s_DetachedLaunchersList, icon) == NULL ) // only if not yet detached
+				{
+					cd_debug( "Detach launcher %s", icon->cName);
+					pParentDock = _cairo_dock_detach_launcher(icon);
+					s_DetachedLaunchersList = g_list_append(s_DetachedLaunchersList, icon);
+				}
+			}
+		}
+		if (pParentDock != NULL)
+			gtk_widget_queue_draw (pParentDock->container.pWidget);
+	}
+}
+
+void cairo_dock_hide_show_launchers_on_other_desktops (CairoDock *pDock)
+{
+	// first we detach what shouldn't be show on this viewport
+	cairo_dock_foreach_icons_of_type (pDock->icons, CAIRO_DOCK_LAUNCHER, _cairo_dock_hide_show_launchers_on_other_desktops, pDock);
+	// then we reattach what was eventually missing
+	cairo_dock_foreach_icons_of_type (s_DetachedLaunchersList, CAIRO_DOCK_LAUNCHER, _cairo_dock_hide_show_launchers_on_other_desktops, pDock);
 }

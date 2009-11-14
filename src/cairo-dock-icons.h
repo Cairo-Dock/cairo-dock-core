@@ -87,6 +87,8 @@ struct _Icon {
 	CairoDock *pSubDock;
 	/// Nom du dock contenant the icon (y compris lorsque the icon is dans un desklet).
 	gchar *cParentDockName;
+	/// Numero du bureau virtuel sur lequel restreindre the icon ( -1 ==> pas de restriction )
+	gint iSpecificDesktop;
 	//\____________ calcules lors du chargement de the icon.
 	/// Dimensions de la surface de the icon.
 	gdouble fWidth, fHeight;
@@ -554,6 +556,10 @@ void cairo_dock_set_quick_info_full (cairo_t *pSourceContext, Icon *pIcon, Cairo
 */
 #define cairo_dock_remove_quick_info(pIcon) cairo_dock_set_quick_info (NULL, NULL, pIcon, 1)
 
+/** Updates which launcher is attached/detached to/from the dock.
+*@param pDock the dock whose icons are to be considered.
+*/
+void cairo_dock_hide_show_launchers_on_other_desktops (CairoDock *pDock);
 
 G_END_DECLS
 #endif

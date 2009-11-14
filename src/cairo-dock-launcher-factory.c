@@ -433,6 +433,27 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		icon->cCommand = g_strdup_printf ("xterm -e \"%s\"", cOldCommand);
 		g_free (cOldCommand);
 	}
+
+	icon->iSpecificDesktop = -1;
+	gint iSpecificDesktop = g_key_file_get_integer (keyfile, "Desktop Entry", "ShowOnViewport", &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);
+		g_error_free (erreur);
+		erreur = NULL;
+		iSpecificDesktop = -1;
+	}
+	if( iSpecificDesktop < -1 )
+	{
+		iSpecificDesktop = -1; // prevent wrong values
+	}
+	else if( iSpecificDesktop >= 0 )
+	{
+		// to define as a global variable 
+		gint g_FoundNonStickyLaunchers = TRUE;
+	}
+		
+	icon->iSpecificDesktop = iSpecificDesktop;
 	
 	g_key_file_free (keyfile);
 }
