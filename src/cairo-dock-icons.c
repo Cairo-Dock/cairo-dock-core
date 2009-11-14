@@ -65,6 +65,7 @@
 extern gchar *g_cCurrentLaunchersPath;
 extern gboolean g_bUseOpenGL;
 extern int g_iNbViewportX;
+extern int g_iNbViewportY;
 
 static GList *s_DetachedLaunchersList = NULL;
 
