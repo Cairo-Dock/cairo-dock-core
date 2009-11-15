@@ -66,6 +66,7 @@ extern gchar *g_cCurrentLaunchersPath;
 extern gboolean g_bUseOpenGL;
 extern int g_iNbViewportX;
 extern int g_iNbViewportY;
+extern int g_iNbDesktops;
 
 static GList *s_DetachedLaunchersList = NULL;
 
@@ -780,8 +781,14 @@ static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, Cairo
 		cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
 		
 		if( icon->iSpecificDesktop <= 0 ||
-		    icon->iSpecificDesktop-1 == iCurrentViewportX + g_iNbViewportX*iCurrentViewportY ||
-		    icon->iSpecificDesktop >= g_iNbViewportX*g_iNbViewportY )
+		/* metacity case: metacity uses desktop instead of viewport. */
+		    (g_iNbViewportX*g_iNbViewportY==1 &&
+		    (icon->iSpecificDesktop-1 == iCurrentDesktop || 
+		     icon->iSpecificDesktop >= g_iNbDesktops)) ||
+		/* compiz case: viewports are used within a desktop */
+				(g_iNbViewportX*g_iNbViewportY>1 &&
+		    (icon->iSpecificDesktop-1 == iCurrentViewportX + g_iNbViewportX*iCurrentViewportY ||
+		     icon->iSpecificDesktop >= g_iNbViewportX*g_iNbViewportY)) )
 		{
 			cd_debug (" => est visible sur ce viewport (iSpecificDesktop = %d).",icon->iSpecificDesktop);
 			// check that it is in the detached list
@@ -793,7 +800,7 @@ static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, Cairo
 		}
 		else
 		{
-			if( icon->iSpecificDesktop-1 != iCurrentViewportX + g_iNbViewportX*iCurrentViewportY )
+			//if( icon->iSpecificDesktop-1 != iCurrentViewportX + g_iNbViewportX*iCurrentViewportY )
 			{
 				cd_debug (" Viewport actuel = %d => n'est pas sur le viewport actuel.", iCurrentViewportX + g_iNbViewportX*iCurrentViewportY);
 				if( g_list_find(s_DetachedLaunchersList, icon) == NULL ) // only if not yet detached
