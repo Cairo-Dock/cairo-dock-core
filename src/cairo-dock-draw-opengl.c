@@ -2241,7 +2241,7 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	static GLXBindTexImageProc bindTexImage = NULL;
 	static GLXReleaseTexImageProc releaseTexImage = NULL;
 	
-	//return 0;  /// ca ne marche pas. :-(
+	return 0;  /// ca ne marche pas. :-(
 	if (! s_bChecked)
 	{
 		s_bChecked = TRUE;
