@@ -84,6 +84,7 @@ extern double g_fBackgroundImageWidth;
 extern double g_fBackgroundImageHeight;
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 extern gboolean g_bUseOpenGL;
+extern CairoDockDesktopEnv g_iDesktopEnv;
 
 static gboolean s_bLoading = FALSE;
 
@@ -1008,4 +1009,19 @@ void cairo_dock_close_xml_file (xmlDocPtr doc)
 	xmlCleanupParser ();
 	if (doc)
 		xmlFreeDoc (doc);
+}
+
+
+
+gchar *cairo_dock_get_default_system_font (void)
+{
+	static gchar *s_cFontName = NULL;
+	if (s_cFontName == NULL)
+	{
+		if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
+			s_cFontName = cairo_dock_launch_command_sync ("gconftool-2 -g /desktop/gnome/interface/font_name");
+		else
+			s_cFontName = g_strdup ("Sans 10");
+	}
+	return g_strdup (s_cFontName);
 }

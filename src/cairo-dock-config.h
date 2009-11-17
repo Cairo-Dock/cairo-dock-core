@@ -152,7 +152,6 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, const gchar *cGro
 #define cairo_dock_get_pango_weight_from_1_9(iWeight) ((int) ((((PANGO_WEIGHT_HEAVY - PANGO_WEIGHT_ULTRALIGHT) * iWeight + 9 * PANGO_WEIGHT_ULTRALIGHT - PANGO_WEIGHT_HEAVY) / 8) / 100)) * 100
 
 
-
 /** Get the Cairo-Dock's config and reload everything.
 *@param cConfFilePath path to the main conf file.
 *@param pDock the main dock, created beforehand.
@@ -194,8 +193,7 @@ void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajo
 */
 void cairo_dock_decrypt_string( const guchar *cEncryptedString,  guchar **cDecryptedString );
 
-/**
-* Encrypt a string (uses DES-encryption from libcrypt).
+/** Encrypt a string (uses DES-encryption from libcrypt).
 *@param cDecryptedString the decrypted string.
 *@param cEncryptedString the encrypted string.
 */
@@ -205,6 +203,9 @@ void cairo_dock_encrypt_string( const guchar *cDecryptedString,  guchar **cEncry
 xmlDocPtr cairo_dock_open_xml_file (const gchar *cDataFilePath, const gchar *cRootNodeName, xmlNodePtr *root_node, GError **erreur);
 
 void cairo_dock_close_xml_file (xmlDocPtr doc);
+
+
+gchar *cairo_dock_get_default_system_font (void);
 
 
 #define DEFINE_PRE_INIT(cGroupName) \

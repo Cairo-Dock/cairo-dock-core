@@ -59,10 +59,10 @@ gboolean on_delete_launcher_gui (GtkWidget *pWidget, GdkEvent *event, gpointer d
 
 void cairo_dock_reset_filter_state (void);
 void cairo_dock_activate_filter (GtkEntry *pEntry, gpointer data);
-void cairo_dock_toggle_all_words (GtkToggleButton *pButton, gpointer data);
-void cairo_dock_toggle_search_in_tooltip (GtkToggleButton *pButton, gpointer data);
-void cairo_dock_toggle_highlight_words (GtkToggleButton *pButton, gpointer data);
-void cairo_dock_toggle_hide_others (GtkToggleButton *pButton, gpointer data);
+void cairo_dock_toggle_all_words (GtkCheckMenuItem *pMenuItem, gpointer data);
+void cairo_dock_toggle_search_in_tooltip (GtkCheckMenuItem *pMenuItem, gpointer data);
+void cairo_dock_toggle_highlight_words (GtkCheckMenuItem *pMenuItem, gpointer data);
+void cairo_dock_toggle_hide_others (GtkCheckMenuItem *pMenuItem, gpointer data);
 void cairo_dock_clear_filter (GtkButton *pButton, GtkEntry *pEntry);
 
 

@@ -549,28 +549,32 @@ void cairo_dock_activate_filter (GtkEntry *pEntry, gpointer data)
 	
 	g_strfreev (pKeyWords);
 }
-void cairo_dock_toggle_all_words (GtkToggleButton *pButton, gpointer data)
+void cairo_dock_toggle_all_words (GtkCheckMenuItem *pMenuItem/**GtkToggleButton *pButton*/, gpointer data)
 {
 	//g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
-	bAllWords = gtk_toggle_button_get_active (pButton);
+	///bAllWords = gtk_toggle_button_get_active (pButton);
+	bAllWords = gtk_check_menu_item_get_active (pMenuItem);
 	cairo_dock_trigger_current_filter ();
 }
-void cairo_dock_toggle_search_in_tooltip (GtkToggleButton *pButton, gpointer data)
+void cairo_dock_toggle_search_in_tooltip (GtkCheckMenuItem *pMenuItem/**GtkToggleButton *pButton*/, gpointer data)
 {
 	//g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
-	bSearchInToolTip = gtk_toggle_button_get_active (pButton);
+	///bSearchInToolTip = gtk_toggle_button_get_active (pButton);
+	bSearchInToolTip = gtk_check_menu_item_get_active (pMenuItem);
 	cairo_dock_trigger_current_filter ();
 }
-void cairo_dock_toggle_highlight_words (GtkToggleButton *pButton, gpointer data)
+void cairo_dock_toggle_highlight_words (GtkCheckMenuItem *pMenuItem/**GtkToggleButton *pButton*/, gpointer data)
 {
 	//g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
-	bHighLightText = gtk_toggle_button_get_active (pButton);
+	///bHighLightText = gtk_toggle_button_get_active (pButton);
+	bHighLightText = gtk_check_menu_item_get_active (pMenuItem);
 	cairo_dock_trigger_current_filter ();
 }
-void cairo_dock_toggle_hide_others (GtkToggleButton *pButton, gpointer data)
+void cairo_dock_toggle_hide_others (GtkCheckMenuItem *pMenuItem/**GtkToggleButton *pButton*/, gpointer data)
 {
 	//g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
-	bHideOther = gtk_toggle_button_get_active (pButton);
+	///bHideOther = gtk_toggle_button_get_active (pButton);
+	bHideOther = gtk_check_menu_item_get_active (pMenuItem);
 	cairo_dock_trigger_current_filter ();
 }
 void cairo_dock_clear_filter (GtkButton *pButton, GtkEntry *pEntry)

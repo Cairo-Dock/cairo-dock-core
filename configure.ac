@@ -64,7 +64,7 @@ AC_SUBST(xextend_required)
 AM_CONDITIONAL( [WITH_XEXTEND], [test "$XExt_detected" = "true"] )
 
 AC_ARG_ENABLE(glitz,
-	[  --enable-glitz  :  Turn on hardware acceleration through Glitz (quite deprecated now)],
+	[  --enable-glitz  :  Turn on hardware acceleration through Glitz (deprecated)],
 	[case "${enableval}" in
 		yes) useglitz=true ;;
 		no)  useglitz=false ;;
@@ -135,9 +135,7 @@ else
 	echo " * Use X Extensions : no"
 fi
 if test "$glitz_detected" = "true"; then
-	echo " * Glitz Hardware Acceleration : yes"
-else
-	echo " * Glitz Hardware Acceleration : no"
+	echo " * Glitz Hardware Acceleration : yes (warning : this is deprecated)"
 fi
 if test "$LIBCRYPT_LIBS" != ""; then
 	echo " * crypt passwords : yes"

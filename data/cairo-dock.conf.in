@@ -394,7 +394,8 @@ frame_font =
 show labels = true
 
 #P+ Font used for labels :
-police = Sans 14
+#{Let empty to use the default system font (Gnome only).}
+police = 
 
 #b+ Should the text be oulined ?
 text oulined = true
@@ -589,8 +590,8 @@ frame_text =
 text color = 0.0; 0.0; 0.0
 
 #P+ Family of the font used for labels :
-#{for exemple Monospace, Purisa, ... Just write the font name wihtout any number or so.}
-message police = Sans
+#{Let empty to use the default system font (Gnome only).}
+message police = 
 
 #b+ Should be outlined ?
 outlined = false

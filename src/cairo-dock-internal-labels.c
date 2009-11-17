@@ -39,7 +39,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
-	gchar *cFontDescription = cairo_dock_get_string_key_value (pKeyFile, "Labels", "police", &bFlushConfFileNeeded, "sans 12", "Icons", NULL);
+	gchar *cFontDescription = cairo_dock_get_string_key_value (pKeyFile, "Labels", "police", &bFlushConfFileNeeded, NULL, "Icons", NULL);
+	if (cFontDescription == NULL)
+		cFontDescription = cairo_dock_get_default_system_font ();
 	
 	PangoFontDescription *fd = pango_font_description_from_string (cFontDescription);
 	pLabels->iconTextDescription.cFont = g_strdup (pango_font_description_get_family (fd));
@@ -51,7 +53,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	pLabels->iconTextDescription.iWeight = pango_font_description_get_weight (fd);
 	pLabels->iconTextDescription.iStyle = pango_font_description_get_style (fd);
 	
-	if (g_key_file_has_key (pKeyFile, "Labels", "size", NULL))
+	if (g_key_file_has_key (pKeyFile, "Labels", "size", NULL))  // anciens parametres.
 	{
 		pLabels->iconTextDescription.iSize = g_key_file_get_integer (pKeyFile, "Labels", "size", NULL);
 		int iLabelWeight = g_key_file_get_integer (pKeyFile, "Labels", "weight", NULL);

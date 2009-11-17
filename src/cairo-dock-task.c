@@ -42,6 +42,11 @@
 		pTask->iFrequencyState = CAIRO_DOCK_FREQUENCY_NORMAL;\
 		cairo_dock_schedule_next_iteration (pTask); } } while (0)
 
+#define cairo_dock_set_elapsed_time(pTask) do {\
+	pTask->fElapsedTime = g_timer_elapsed (pTask->pClock, NULL);\
+	g_timer_start (pTask->pClock); } while (0)
+	
+
 static gboolean _cairo_dock_timer (CairoDockTask *pTask)
 {
 	cairo_dock_launch_task (pTask);
@@ -50,6 +55,7 @@ static gboolean _cairo_dock_timer (CairoDockTask *pTask)
 static gpointer _cairo_dock_threaded_calculation (CairoDockTask *pTask)
 {
 	//\_______________________ On obtient nos donnees.
+	cairo_dock_set_elapsed_time (pTask);
 	pTask->get_data (pTask->pSharedMemory);
 	
 	//\_______________________ On indique qu'on a fini.
@@ -74,6 +80,7 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 	g_return_if_fail (pTask != NULL);
 	if (pTask->get_data == NULL)  // pas de thread, tout est dans la fonction d'update.
 	{
+		cairo_dock_set_elapsed_time (pTask);
 		cairo_dock_perform_task_update (pTask);
 	}
 	else
@@ -116,6 +123,7 @@ CairoDockTask *cairo_dock_new_task (int iPeriod, CairoDockGetDataAsyncFunc get_d
 	pTask->get_data = get_data;
 	pTask->update = update;
 	pTask->pSharedMemory = pSharedMemory;
+	pTask->pClock = g_timer_new ();
 	return pTask;
 }
 
@@ -154,6 +162,7 @@ void cairo_dock_free_task (CairoDockTask *pTask)
 		return ;
 	cairo_dock_stop_task (pTask);
 	
+	g_timer_destroy (pTask->pClock);
 	g_free (pTask);
 }
 

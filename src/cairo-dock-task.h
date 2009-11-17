@@ -71,6 +71,10 @@ struct _CairoDockTask {
 	CairoDockFrequencyState iFrequencyState;
 	/// pSharedMemory structure passed as parameter of the 'get_data' and 'update' functions. Must not be accessed outside of these 2 functions !
 	gpointer pSharedMemory;
+	/// Timer to get the accurate amount of time since last update.
+	GTimer *pClock;
+	/// time elapsed since last update.
+	double fElapsedTime;
 } ;
 
 
@@ -136,6 +140,10 @@ void cairo_dock_downgrade_task_frequency (CairoDockTask *pTask);
 */
 void cairo_dock_set_normal_task_frequency (CairoDockTask *pTask);
 
+/** Get the time elapsed since the last time the Task has run.
+*@param pTask the periodic Task.
+*/
+#define cairo_dock_get_task_elapsed_time(pTask) (pTask->fElapsedTime)
 
 G_END_DECLS
 #endif

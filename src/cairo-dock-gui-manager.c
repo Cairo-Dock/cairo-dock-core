@@ -550,6 +550,88 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	g_free (cActiveModules);
 	g_key_file_free (pKeyFile);
 	
+	//\_____________ On ajoute le filtre.
+	// frame
+	GtkWidget *pFilterFrame = gtk_frame_new (NULL);
+	cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman 12\" color=\"#81728C\"><b><u>%s :</u></b></span>", _("Filter"));
+	GtkWidget *pFilterLabelContainer = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
+	gtk_container_add (GTK_CONTAINER (pFilterLabelContainer), pImage);
+	
+	pLabel = gtk_label_new (NULL);
+	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
+	g_free (cLabel);
+	gtk_container_add (GTK_CONTAINER (pFilterLabelContainer), pLabel);
+	
+	gtk_frame_set_label_widget (GTK_FRAME (pFilterFrame), pFilterLabelContainer);
+	gtk_container_set_border_width (GTK_CONTAINER (s_pGroupFrame), CAIRO_DOCK_GUI_MARGIN);
+	gtk_frame_set_shadow_type (GTK_FRAME (s_pGroupFrame), GTK_SHADOW_OUT);
+	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
+		pFilterFrame,
+		FALSE,
+		FALSE,
+		0);
+	
+	GtkWidget *pOptionVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	gtk_container_add (GTK_CONTAINER (pFilterFrame), pOptionVBox);
+	
+	// entree de texte
+	GtkWidget *pFilterBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	gtk_box_pack_start (GTK_BOX (pOptionVBox),
+		pFilterBox,
+		FALSE,
+		FALSE,
+		0);
+	s_pFilterEntry = gtk_entry_new ();
+	g_signal_connect (s_pFilterEntry, "activate", G_CALLBACK (cairo_dock_activate_filter), NULL);
+	gtk_box_pack_start (GTK_BOX (pFilterBox),
+		s_pFilterEntry,
+		FALSE,
+		FALSE,
+		0);
+	GtkWidget *pClearButton = gtk_button_new ();
+	_cairo_dock_add_image_on_button (pClearButton,
+		GTK_STOCK_CLEAR,
+		16);
+	g_signal_connect (pClearButton, "clicked", G_CALLBACK (cairo_dock_clear_filter), s_pFilterEntry);
+	gtk_box_pack_start (GTK_BOX (pFilterBox),
+		pClearButton,
+		FALSE,
+		FALSE,
+		0);
+	
+	// options
+	cairo_dock_reset_filter_state ();
+	
+	GtkWidget *pMenuBar = gtk_menu_bar_new ();
+	GtkWidget *pMenuItem = gtk_menu_item_new_with_label (_("Options"));
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenuBar), pMenuItem);
+	gtk_box_pack_start (GTK_BOX (pOptionVBox),
+		pMenuBar,
+		FALSE,
+		FALSE,
+		0);
+	GtkWidget *pMenu = gtk_menu_new ();
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pMenu);
+	
+	pMenuItem = gtk_check_menu_item_new_with_label (_("All words"));
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+	g_signal_connect (pMenuItem, "toggled", G_CALLBACK (cairo_dock_toggle_all_words), NULL);
+	
+	pMenuItem = gtk_check_menu_item_new_with_label (_("Highlight words"));
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (pMenuItem), TRUE);
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+	g_signal_connect (pMenuItem, "toggled", G_CALLBACK (cairo_dock_toggle_highlight_words), NULL);
+	
+	pMenuItem = gtk_check_menu_item_new_with_label (_("Hide others"));
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (pMenuItem), TRUE);
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+	g_signal_connect (pMenuItem, "toggled", G_CALLBACK (cairo_dock_toggle_hide_others), NULL);
+	
+	pMenuItem = gtk_check_menu_item_new_with_label (_("Search in description"));
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (pMenuItem), TRUE);
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+	g_signal_connect (pMenuItem, "toggled", G_CALLBACK (cairo_dock_toggle_search_in_tooltip), NULL);
 	
 	//\_____________ On ajoute le cadre d'activation du module.
 	s_pGroupFrame = gtk_frame_new ("pouet");
@@ -575,80 +657,6 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	
 	s_pPreviewImage = gtk_image_new_from_pixbuf (NULL);
 	gtk_container_add (GTK_CONTAINER (pInfoVBox), s_pPreviewImage);
-	
-	//\_____________ On ajoute le filtre.
-	GtkWidget *pFilterFrame = gtk_frame_new (NULL);
-	cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman 12\" color=\"#81728C\"><b><u>%s :</u></b></span>", _("Filter"));
-	pLabel = gtk_label_new (NULL);
-	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
-	g_free (cLabel);
-	gtk_frame_set_label_widget (GTK_FRAME (pFilterFrame), pLabel);
-	gtk_container_set_border_width (GTK_CONTAINER (s_pGroupFrame), CAIRO_DOCK_GUI_MARGIN);
-	gtk_frame_set_shadow_type (GTK_FRAME (s_pGroupFrame), GTK_SHADOW_OUT);
-	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
-		pFilterFrame,
-		FALSE,
-		FALSE,
-		0);
-	GtkWidget *pOptionVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
-	gtk_container_add (GTK_CONTAINER (pFilterFrame), pOptionVBox);
-	
-	GtkWidget *pFilterBox = gtk_hbox_new (FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (pOptionVBox),
-		pFilterBox,
-		FALSE,
-		FALSE,
-		0);
-	s_pFilterEntry = gtk_entry_new ();
-	g_signal_connect (s_pFilterEntry, "activate", G_CALLBACK (cairo_dock_activate_filter), NULL);
-	gtk_box_pack_start (GTK_BOX (pFilterBox),
-		s_pFilterEntry,
-		FALSE,
-		FALSE,
-		0);
-	GtkWidget *pClearButton = gtk_button_new ();
-	_cairo_dock_add_image_on_button (pClearButton,
-		GTK_STOCK_CLEAR,
-		16);
-	g_signal_connect (pClearButton, "clicked", G_CALLBACK (cairo_dock_clear_filter), s_pFilterEntry);
-	gtk_box_pack_start (GTK_BOX (pFilterBox),
-		pClearButton,
-		FALSE,
-		FALSE,
-		0);
-	
-	cairo_dock_reset_filter_state ();
-	GtkWidget *pOptionButton = gtk_check_button_new_with_label (_("All words"));
-	g_signal_connect (pOptionButton, "toggled", G_CALLBACK (cairo_dock_toggle_all_words), NULL);
-	gtk_box_pack_start (GTK_BOX (pOptionVBox),
-		pOptionButton,
-		FALSE,
-		FALSE,
-		0);
-	pOptionButton = gtk_check_button_new_with_label (_("Highlight words"));
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pOptionButton), TRUE);
-	g_signal_connect (pOptionButton, "toggled", G_CALLBACK (cairo_dock_toggle_highlight_words), NULL);
-	gtk_box_pack_start (GTK_BOX (pOptionVBox),
-		pOptionButton,
-		FALSE,
-		FALSE,
-		0);
-	pOptionButton = gtk_check_button_new_with_label (_("Hide others"));
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pOptionButton), TRUE);
-	g_signal_connect (pOptionButton, "toggled", G_CALLBACK (cairo_dock_toggle_hide_others), NULL);
-	gtk_box_pack_start (GTK_BOX (pOptionVBox),
-		pOptionButton,
-		FALSE,
-		FALSE,
-		0);
-	pOptionButton = gtk_check_button_new_with_label (_("Search in description"));
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pOptionButton), TRUE);
-	g_signal_connect (pOptionButton, "toggled", G_CALLBACK (cairo_dock_toggle_search_in_tooltip), NULL);
-	gtk_box_pack_start (GTK_BOX (pOptionVBox),
-		pOptionButton,
-		FALSE,
-		FALSE,
-		0);
 	
 	//\_____________ On ajoute les boutons.
 	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
