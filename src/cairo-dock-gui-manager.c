@@ -213,7 +213,7 @@ static GtkToolItem *_cairo_dock_make_toolbutton (const gchar *cLabel, const gcha
 	return pWidget;
 }
 
-static inline CairoDockGroupDescription *_cairo_dock_add_group_button (const gchar *cGroupName, const gchar *cIcon, int iCategory, const gchar *cDescription, const gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, const gchar *cOriginalConfFilePath, const gchar *cGettextDomain, const gchar **cDependencies, GList *pExternalModules, const gchar *cInternalModule)
+static inline CairoDockGroupDescription *_cairo_dock_add_group_button (const gchar *cGroupName, const gchar *cIcon, int iCategory, const gchar *cDescription, const gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, const gchar *cOriginalConfFilePath, const gchar *cGettextDomain, const gchar **cDependencies, GList *pExternalModules, const gchar *cInternalModule, const gchar *cTitle)
 {
 	//\____________ On garde une trace de ses caracteristiques.
 	CairoDockGroupDescription *pGroupDescription = g_new0 (CairoDockGroupDescription, 1);
@@ -227,6 +227,7 @@ static inline CairoDockGroupDescription *_cairo_dock_add_group_button (const gch
 	pGroupDescription->cDependencies = cDependencies;
 	pGroupDescription->pExternalModules = pExternalModules;
 	pGroupDescription->cInternalModule = cInternalModule;
+	pGroupDescription->cTitle = cTitle;
 	
 	s_pGroupDescriptionList = g_list_prepend (s_pGroupDescriptionList, pGroupDescription);
 	if (cInternalModule != NULL)
@@ -263,7 +264,7 @@ static inline CairoDockGroupDescription *_cairo_dock_add_group_button (const gch
 		FALSE,
 		0);
 
-	pGroupDescription->pLabel = gtk_label_new (dgettext (pGroupDescription->cGettextDomain, cGroupName));
+	pGroupDescription->pLabel = gtk_label_new (dgettext (pGroupDescription->cGettextDomain, cTitle ? cTitle : cGroupName));
 	gtk_box_pack_start (GTK_BOX (pGroupHBox),
 		pGroupDescription->pLabel,
 		FALSE,
@@ -316,7 +317,8 @@ static gboolean _cairo_dock_add_one_module_widget (CairoDockModule *pModule, con
 		pModule->pVisitCard->cGettextDomain,
 		NULL,
 		NULL,
-		pModule->pVisitCard->cInternalModule);
+		pModule->pVisitCard->cInternalModule,
+		NULL);
 	//g_print ("+ %s : %x;%x\n", cModuleName,pGroupDescription, pGroupDescription->pActivateButton);
 	pGroupDescription->cOriginalConfFilePath = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);  // petite optimisation, pour pas dupliquer la chaine 2 fois.
 	pGroupDescription->load_custom_widget = pModule->pInterface->load_custom_widget;
@@ -538,7 +540,8 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 			NULL,  // domaine de traduction : celui du dock.
 			pInternalModule->cDependencies,
 			pInternalModule->pExternalModules,
-			NULL);
+			NULL,
+			pInternalModule->cTitle);
 	}
 	g_free (cOriginalConfFilePath);
 	g_strfreev (pGroupList);

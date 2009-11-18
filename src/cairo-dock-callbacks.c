@@ -606,6 +606,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 		if (pDock->bAutoHide)
 		{
 			pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? 0.001 : 0.);
+			//g_print ("on commence a descendre.\n");
 			if (pDock->iSidMoveDown == 0)  // on commence a descendre.
 				pDock->iSidMoveDown = g_timeout_add (40, (GSourceFunc) cairo_dock_move_down, (gpointer) pDock);
 		}
@@ -693,7 +694,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 
 gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bIsMainDock : %d; bAtTop:%d; bInside:%d; iSidMoveDown:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->bAtTop, pDock->container.bInside, pDock->iSidMoveDown, pDock->iMagnitudeIndex);
+	//g_print ("%s (bIsMainDock : %d; bInside:%d; iSidMoveDown:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iSidMoveDown, pDock->iMagnitudeIndex);
 	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
 	if (! cairo_dock_entrance_is_allowed (pDock))
 	{

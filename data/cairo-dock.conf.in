@@ -39,54 +39,40 @@ num screen = 0
 
 [Accessibility]
 
-#F-[Space;gtk-fullscreen]
-frame_size =
+#F-[Visibility of the main dock;gtk-find]
+frame_visi =
+
+#l-[Keep the dock above windows;Prevent windows from overlapping the dock;Keep the dock below windows;Automatically hide the dock;Automatically hide when a window is maximized;Raise on shortcut] Visibility :
+#{Auto-hide : the dock will automatically hide itself outside of the scren when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.
+#Prevent windows from overlapping the dock : reserve space at the edge of the screen for the dock.
+#Keep the dock below windows : The dock will pop-up on the foreground when you place the mouse on its screen border.
+#Raise on shortcut : When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
+visibility = 1
+
+#b- Pop-up only if the mouse hits a screen corner ?
+pop in corner only = false;
+
+#j-[1;1600] Size of the callback zone (width x height, in pixels) :
+#{Place the mouse into it will make the dock re-appear.}
+zone size = 800;5
+
+#k- Keyboard shortcut to show/hide the dock :
+#{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
+raise shortcut = 
+
+
+#F-[Other parameters]
+frame_extra =
 
 max_authorized_width = 0
 
 #b- Extend the dock to always fill the screen ?
 extended = false
 
-#b- Reserve space at the edge of the screen for the dock ?
-#{This will prevent other windows from overlapping the dock. It has no effect if you defined the 'show/hide' shortcut below, cause then the dock behaves like a menu.}
-reserve space = false
-
-#F-[Auto-hide;gtk-go-down]
-frame_auto=
-
-#b- Activate auto-hide ?
-#{The dock will automatically hide itself outside of the scren when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.}
-auto-hide = false
-
-#b- Automatically quick-hide the dock when a window becomes maximized ?
-#{This is only usefull if don't already use the auto-hide, and if you don't want to reserve the space for your dock nor let it below the other windows.}
-auto quick hide on max = false
-
-#b- Automatically quick-hide the dock when a window becomes fullscreen ?
+#b- Automatically hide the dock when a window becomes fullscreen ?
 #{This is only usefull if you don't already use the auto-hide, and if your WM let the dock in front of fullscreen windows (which is rare).}
 auto quick hide = false
 
-#j-[1;1600] Size of the callback zone (width x height, in pixels) :
-#{Place the mouse into it will make the dock re-appear.}
-zone size = 800;5
-
-
-#F-[Pop-up;gtk-go-up]
-frame_pop =
-
-#b- Keep the dock below other windows ?
-#{The dock will pop-up on the foreground when you place the mouse on its screen border. This option is only useful if you don't want to reserve space for the dock, nor to activate auto-hide.}
-pop-up = false
-
-#b- Pop-up only if the mouse hits a screen corner ?
-pop in corner only = false;
-
-#F-[Shortcut;gtk-select-font]
-frame_sho =
-
-#k- Keyboard shortcut to show/hide the dock :
-#{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
-raise shortcut = 
 
 #F-[Sub-docks' accessibility;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-subdock.png]
 frame_sub =
@@ -116,14 +102,6 @@ frame1 =
 #{Cairo-Dock will then replace your taskbar. It is recommanded to remove any other taskbar, and to not force the dock's type to normal.}
 show applications = true
 
-#b- Should the applications with same class be grouped in a sub-dock ?
-#{This allows to group windows in some soft like Gimp, and to have only 1 icon in the main dock.The 1st window will appear in the main dock, and the others will be placed in a container associated with this 1st icon.}
-group by class = true
-
-#s- 		Except the following classes :
-#{enter the class of the applications, separated by a semi-colon ';'}
-group exception = pidgin;xchat;amsn
-
 #b- Only show icons whose window is minimized ?
 hide visible = false
 
@@ -137,9 +115,13 @@ sep_app =
 #{Allows launchers to act as applis when their program is running, and displays an indicator on their icon to signal it. You can launch other occurences of the program with SHIFT+click.}
 mix launcher appli = true
 
-#b- Display an indicator on applis ?
-#{The indicator is drawn on active launchers, but you may want to display it on applis too.}
-indic on appli = false
+#b- Should the applications with same class be grouped in a sub-dock ?
+#{This allows to group windows in some soft like Gimp, and to have only 1 icon in the main dock.The 1st window will appear in the main dock, and the others will be placed in a container associated with this 1st icon.}
+group by class = true
+
+#s- 		Except the following classes :
+#{enter the class of the applications, separated by a semi-colon ';'}
+group exception = pidgin;xchat;amsn
 
 #b- Overwrite X icons with launchers' one ?
 #{If not set, will use the icon provided by X for each appli. If set, the same icon as the corresponding launcher will be used for each appli.}
@@ -153,6 +135,10 @@ overwrite exception = pidgin;xchat;amsn;gimp-2.6
 #{You need a composite manager for it.}
 window thumbnail = true
 
+#b- Display an indicator even if the icon is not a launcher ?
+#{The indicator is drawn on active launchers, but you may want to display it on applis too.}
+indic on appli = false
+
 #F-[Interaction;gtk-refresh]
 frame2 =
 
@@ -163,6 +149,9 @@ minimize on click = true
 #b- Middle click on an icon closes its relative application ?
 #{In a Firefox's tabs manner.}
 close on middle click = true
+
+#v- 
+sep_att =
 
 #b- Signal the applications demanding your attention with a dialog bubble ?
 demands attention with dialog = true

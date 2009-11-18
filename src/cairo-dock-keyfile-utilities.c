@@ -84,7 +84,7 @@ void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, const gchar *cConfFile
 	}
 	else
 	{
-		gchar *cCommand = g_strdup_printf ("/bin/cp %s %s", cTemplateConfFilePath, cConfFilePath);
+		gchar *cCommand = g_strdup_printf ("/bin/cp \"%s\" \"%s\"", cTemplateConfFilePath, cConfFilePath);
 		int r = system (cCommand);
 		g_free (cCommand);
 		

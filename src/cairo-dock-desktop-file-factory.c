@@ -117,7 +117,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_launcher (const gchar *cDesk
 	}
 
 	//\___________________ On supprime a la main les '%20' qui foutent le boxon (rare).
-	cairo_dock_remove_html_spaces (cFilePath);
+	///cairo_dock_remove_html_spaces (cFilePath);
 
 	//\___________________ On ouvre le patron.
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cFilePath);

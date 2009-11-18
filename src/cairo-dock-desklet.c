@@ -1339,15 +1339,19 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 	gtk_window_set_keep_above (GTK_WINDOW (pDesklet->container.pWidget), pAttribute->iAccessibility == CAIRO_DESKLET_KEEP_ABOVE);
 
 	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
-	pDesklet->bSpaceReserved = FALSE;
 	if (pAttribute->iAccessibility == CAIRO_DESKLET_ON_WIDGET_LAYER)
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");  // le hide-show le fait deconner completement, il perd son skip_task_bar ! au moins sous KDE3.
-	else if (pAttribute->iAccessibility == CAIRO_DESKLET_RESERVE_SPACE)
-		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
 	else
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
-	cairo_dock_reserve_space_for_desklet (pDesklet, pAttribute->iAccessibility == CAIRO_DESKLET_RESERVE_SPACE);
-	pDesklet->bSpaceReserved = (pAttribute->iAccessibility == CAIRO_DESKLET_RESERVE_SPACE);
+	
+	if (pAttribute->iAccessibility == CAIRO_DESKLET_RESERVE_SPACE)
+	{
+		if (! pDesklet->bSpaceReserved)
+			cairo_dock_reserve_space_for_desklet (pDesklet, pAttribute->iAccessibility == CAIRO_DESKLET_RESERVE_SPACE);  // sinon inutile de le refaire maintenant, ce sera declenche par le changement de taille/position s'il y'en a.
+		pDesklet->bSpaceReserved = TRUE;
+	}
+	else
+		pDesklet->bSpaceReserved = FALSE;
 	
 	if (pAttribute->bOnAllDesktops)
 	{
@@ -1571,9 +1575,12 @@ static gboolean _cairo_dock_set_one_desklet_visibility_to_default (CairoDesklet 
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");
 	else if (pMinimalConfig->deskletAttribute.iAccessibility == CAIRO_DESKLET_RESERVE_SPACE)
 	{
-		pDesklet->bSpaceReserved = TRUE;
+		if (! pDesklet->bSpaceReserved)
+		{
+			cairo_dock_reserve_space_for_desklet (pDesklet, TRUE);
+			pDesklet->bSpaceReserved = TRUE;
+		}
 		//cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");
-		cairo_dock_reserve_space_for_desklet (pDesklet, TRUE);
 	}
 	else
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");

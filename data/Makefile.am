@@ -37,7 +37,7 @@ essentialdata_DATA = \
 	icon-icons.png\
 	icon-dialogs.svg\
 	icon-views.png\
-	icon-accessibility.svg\
+	icon-visibility.png\
 	icon-labels.png\
 	icon-background.svg\
 	icon-taskbar.png\

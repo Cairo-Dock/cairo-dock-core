@@ -369,7 +369,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	if (icon->cCommand != NULL && icon->cBaseURI == NULL)  /// ! bPreventFromInhibating && 
 	{
 		gchar *cStartupWMClass = g_key_file_get_string (keyfile, "Desktop Entry", "StartupWMClass", NULL);
-		if (cStartupWMClass == NULL || *cStartupWMClass == '\0')
+		if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || strcmp (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
 		{
 			// plusieurs cas sont possibles : 
 			// Exec=toto
@@ -377,6 +377,9 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 			// Exec=/path/to/toto -x -y
 			// Exec=gksu toto
 			// Exec=gksu --description /usr/share/applications/synaptic.desktop /usr/sbin/synaptic
+			// Exec=wine "C:\Program Files\Starcraft\Starcraft.exe"
+			// Exec=wine "/path/to/prog.exe"
+			// Exec=env WINEPREFIX="/home/fab/.wine" wine "C:\Program Files\Starcraft\Starcraft.exe"
 			g_free (cStartupWMClass);
 			cStartupWMClass = g_ascii_strdown (icon->cCommand, -1);
 			gchar *str, *cClass = cStartupWMClass;
@@ -391,6 +394,27 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 				str = strrchr (cClass, '/');  // on cherche le dernier '/'.
 				if (str != NULL)  // on prend apres.
 					cClass = str + 1;
+			}
+			else if ((str = g_strstr_len (cClass, -1, "wine ")) != NULL)
+			{
+				cClass = str;  // on met deja la classe a "wine", c'est mieux que rien.
+				*(str+4) = '\0';
+				str += 5;
+				gchar *exe = g_strstr_len (str, -1, ".exe");  // on cherche a isoler le nom de l'executable, puisque wine l'utilise dans le res_name.
+				if (exe)
+				{
+					*(exe+4) = '\0';
+					gchar *slash = strrchr (str, '\\');
+					if (slash)
+						cClass = slash+1;
+					else
+					{
+						slash = strrchr (str, '/');
+						if (slash)
+							cClass = slash+1;
+					}
+				}
+				g_print ("  special case : wine application => class = '%s'\n", cClass);
 			}
 			else
 			{

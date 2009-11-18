@@ -858,9 +858,15 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 void cairo_dock_add_new_launcher_by_uri (const gchar *cExternDesktopFileURI, CairoDock *pReceivingDock, double fOrder)
 {
 	//\_________________ On l'ajoute dans le repertoire des lanceurs du theme courant.
+	gchar *cPath = NULL;
+	if (cExternDesktopFileURI && strncmp (cExternDesktopFileURI, "file://", 7) == 0)
+	{
+		cPath = g_filename_from_uri (cExternDesktopFileURI, NULL, NULL);
+	}
 	GError *erreur = NULL;
 	const gchar *cDockName = cairo_dock_search_dock_name (pReceivingDock);
-	gchar *cNewDesktopFileName = cairo_dock_add_desktop_file_from_uri (cExternDesktopFileURI, cDockName, fOrder, pReceivingDock, &erreur);
+	gchar *cNewDesktopFileName = cairo_dock_add_desktop_file_from_uri (cPath ? cPath : cExternDesktopFileURI, cDockName, fOrder, pReceivingDock, &erreur);
+	g_free (cPath);
 	if (erreur != NULL)
 	{
 		cd_warning (erreur->message);

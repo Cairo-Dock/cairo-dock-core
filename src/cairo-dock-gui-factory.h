@@ -119,6 +119,8 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_LIST_WITH_ENTRY='E',
 	/// a combo where the number of the line is used for the choice.
 	CAIRO_DOCK_WIDGET_NUMBERED_LIST='l',
+	/// a combo where the number of the line is used for the choice, and for controling the sensitivity of the widgets below.
+	CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST='y',
 	/// a tree view, where lines are numbered and can be moved up and down.
 	CAIRO_DOCK_WIDGET_TREE_VIEW_SORT='T',
 	/// a tree view, where lines can be added, removed, and moved up and down.

@@ -529,7 +529,13 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	if (XGetClassHint (s_XDisplay, Xid, pClassHint) != 0)
 	{
 		cd_debug ("  res_name : %s(%x); res_class : %s(%x)", pClassHint->res_name, pClassHint->res_name, pClassHint->res_class, pClassHint->res_class);
-		cClass = g_ascii_strdown (pClassHint->res_class, -1);  // on la passe en minuscule, car certaines applis ont la bonne idee de donner des classes avec une majuscule ou non suivant les fenetres. Il reste le cas des applis telles que Glade2 ('Glade' et 'Glade-2' ...)
+		if (pClassHint->res_class && strcmp (pClassHint->res_class, "Wine") == 0 && pClassHint->res_name && g_str_has_suffix (pClassHint->res_name, ".exe"))
+		{
+			g_print ("  wine application detected, changing the class '%s' to '%s'\n", pClassHint->res_class, pClassHint->res_name);
+			cClass = g_ascii_strdown (pClassHint->res_name, -1);
+		}
+		else
+			cClass = g_ascii_strdown (pClassHint->res_class, -1);  // on la passe en minuscule, car certaines applis ont la bonne idee de donner des classes avec une majuscule ou non suivant les fenetres. Il reste le cas des applis telles que Glade2 ('Glade' et 'Glade-2' ...)
 		XFree (pClassHint->res_name);
 		XFree (pClassHint->res_class);
 		//g_print (".\n");

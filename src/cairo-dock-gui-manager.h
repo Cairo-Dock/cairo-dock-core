@@ -42,6 +42,7 @@ struct _CairoDockCategoryWidgetTable {
 
 struct _CairoDockGroupDescription {
 	gchar *cGroupName;
+	gchar *cTitle;
 	gint iCategory;
 	gchar *cDescription;
 	gchar *cPreviewFilePath;
