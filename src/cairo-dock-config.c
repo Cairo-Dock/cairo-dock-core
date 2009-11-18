@@ -637,6 +637,8 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	{
 		cairo_dock_insert_separators_in_dock (pDock);
 	}
+
+	cairo_dock_hide_show_launchers_on_other_desktops (pDock);
 	
 	cairo_dock_create_icon_pbuffer ();
 	
