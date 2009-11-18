@@ -6,14 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
-"Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
-"PO-Revision-Date: 2009-11-04 09:56+0000\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2009-11-08 13:00+0000\n"
+"PO-Revision-Date: 2009-11-08 14:28+0000\n"
 "Last-Translator: Oszkar Kovacs <kovosz@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-11-05 08:35+0000\n"
+"X-Launchpad-Export-Date: 2009-11-09 04:35+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-applet-facility.h:259
@@ -71,22 +72,22 @@ msgstr ""
 "dokkot az \"Alkalmazások\" menüből,\n"
 "  illetve a -o (OpenGL) vagy a -c kapcsolóval (cairo).)"
 
-#: ../src/cairo-dock-file-manager.c:505 ../src/cairo-dock-file-manager.c:550
+#: ../src/cairo-dock-file-manager.c:501 ../src/cairo-dock-file-manager.c:546
 #, c-format
 msgid "%s is now mounted"
 msgstr "%s csatolva."
 
-#: ../src/cairo-dock-file-manager.c:505 ../src/cairo-dock-file-manager.c:550
+#: ../src/cairo-dock-file-manager.c:501 ../src/cairo-dock-file-manager.c:546
 #, c-format
 msgid "%s is now unmounted"
 msgstr "%s leválasztva."
 
-#: ../src/cairo-dock-file-manager.c:569
+#: ../src/cairo-dock-file-manager.c:565
 #, c-format
 msgid "failed to mount %s"
 msgstr "%s csatolása sikertelen."
 
-#: ../src/cairo-dock-file-manager.c:569
+#: ../src/cairo-dock-file-manager.c:565
 #, c-format
 msgid "failed to unmount %s"
 msgstr "%s leválasztása sikertelen"
@@ -130,71 +131,71 @@ msgstr ""
 msgid "grab"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:102 ../data/messages:105
+#: ../src/cairo-dock-gui-manager.c:95 ../data/messages:105
 msgid "Behaviour"
 msgstr "Viselkedés"
 
-#: ../src/cairo-dock-gui-manager.c:103
+#: ../src/cairo-dock-gui-manager.c:96
 msgid "Appearance"
 msgstr "Megjelenés"
 
-#: ../src/cairo-dock-gui-manager.c:104
+#: ../src/cairo-dock-gui-manager.c:97
 msgid "Accessories"
 msgstr "Kellékek"
 
-#: ../src/cairo-dock-gui-manager.c:105
+#: ../src/cairo-dock-gui-manager.c:98
 msgid "Desktop"
 msgstr "Munkaasztal"
 
-#: ../src/cairo-dock-gui-manager.c:106
+#: ../src/cairo-dock-gui-manager.c:99
 msgid "Controlers"
 msgstr "Vezérlők"
 
-#: ../src/cairo-dock-gui-manager.c:107
+#: ../src/cairo-dock-gui-manager.c:100
 msgid "Plug-ins"
 msgstr "Bővítőmodulok"
 
-#: ../src/cairo-dock-gui-manager.c:438
+#: ../src/cairo-dock-gui-manager.c:432
 msgid "Categories"
 msgstr "Kategóriák"
 
-#: ../src/cairo-dock-gui-manager.c:458
+#: ../src/cairo-dock-gui-manager.c:452
 msgid "All"
 msgstr "Összes"
 
-#: ../src/cairo-dock-gui-manager.c:563
+#: ../src/cairo-dock-gui-manager.c:557
 msgid "Activate this module"
 msgstr "Modul aktiválása"
 
-#: ../src/cairo-dock-gui-manager.c:581
+#: ../src/cairo-dock-gui-manager.c:575
 msgid "Filter"
 msgstr "Szűrő"
 
-#: ../src/cairo-dock-gui-manager.c:621
+#: ../src/cairo-dock-gui-manager.c:615
 msgid "All words"
 msgstr "Minden szó"
 
-#: ../src/cairo-dock-gui-manager.c:628
+#: ../src/cairo-dock-gui-manager.c:622
 msgid "Highlight words"
 msgstr "Szavak kiemelése"
 
-#: ../src/cairo-dock-gui-manager.c:636
+#: ../src/cairo-dock-gui-manager.c:630
 msgid "Hide others"
 msgstr "Többi elrerjtése"
 
-#: ../src/cairo-dock-gui-manager.c:644
+#: ../src/cairo-dock-gui-manager.c:638
 msgid "Search in description"
 msgstr "Keresés a leírásban"
 
-#: ../src/cairo-dock-gui-manager.c:726
+#: ../src/cairo-dock-gui-manager.c:720
 msgid "< Maintenance mode >"
 msgstr "< Karbantartói üzemmód >"
 
-#: ../src/cairo-dock-gui-manager.c:744 ../src/cairo-dock-gui-manager.c:818
+#: ../src/cairo-dock-gui-manager.c:738 ../src/cairo-dock-gui-manager.c:812
 msgid "Configuration of Cairo-Dock"
 msgstr "Cairo-Dock beállítások"
 
-#: ../src/cairo-dock-gui-manager.c:1065
+#: ../src/cairo-dock-gui-manager.c:1059
 #, c-format
 msgid ""
 "The module '%s' is not present. You need to install it or its dependencies "
@@ -203,16 +204,16 @@ msgstr ""
 "A(z) '%s' modul nincs jelen. Telepítened kell a modult vagy függőségeit, "
 "hogy használatba vehesd."
 
-#: ../src/cairo-dock-gui-manager.c:1071
+#: ../src/cairo-dock-gui-manager.c:1065
 #, c-format
 msgid "The module '%s' is not activated."
 msgstr "A '%s' modul inaktív."
 
-#: ../src/cairo-dock-gui-manager.c:1072
+#: ../src/cairo-dock-gui-manager.c:1066
 msgid "Do you want to activate it now ?"
 msgstr "Szeretnéd aktiválni?"
 
-#: ../src/cairo-dock-gui-manager.c:1808
+#: ../src/cairo-dock-gui-manager.c:1802
 msgid "Configuration of the launchers"
 msgstr "Indítók beállításai"
 
@@ -484,7 +485,8 @@ msgid "Manage themes"
 msgstr "Témák kezelése"
 
 #: ../src/cairo-dock-menu.c:1319
-msgid "Choose amongst many themes on the server, and save your current theme."
+msgid ""
+"Choose amongst many themes on the server, and save your current theme."
 msgstr ""
 "Böngészés a kiszolgálón található témák között és a jelenlegi téma mentése."
 
@@ -1212,8 +1214,8 @@ msgid ""
 "occurences of the program with SHIFT+click."
 msgstr ""
 "Enegedélyezi az indítóikonok alkalmazásként való kezelését amikor a "
-"társított alkalmazás fut, ezt az ikonon jelezve. Új alkalmazás nyitása Shift"
-"+klikkel lehetséges."
+"társított alkalmazás fut, ezt az ikonon jelezve. Új alkalmazás nyitása "
+"Shift+klikkel lehetséges."
 
 #: ../data/messages:125
 msgid "Mix launchers and applis ?"
@@ -1274,7 +1276,8 @@ msgid "Middle click on an icon closes its relative application ?"
 msgstr "Középső gombbal bezárhatóak az alkalmazások"
 
 #: ../data/messages:153
-msgid "Signal the applications demanding your attention with a dialog bubble ?"
+msgid ""
+"Signal the applications demanding your attention with a dialog bubble ?"
 msgstr ""
 "Párbeszéd ablak megjelenítése ha egy alkalmazásnak a figyelmedre van szüksége"
 
@@ -1875,7 +1878,8 @@ msgstr "Tükröződések"
 msgid ""
 "It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are "
 "not used."
-msgstr "Ez az albedo; 1-nél az ikon teljesen tükröződik, 0-nál nincs tükörkép,"
+msgstr ""
+"Ez az albedo; 1-nél az ikon teljesen tükröződik, 0-nál nincs tükörkép,"
 
 #: ../data/messages:439
 msgid "Reflecting power of the plane :"
@@ -1890,7 +1894,6 @@ msgid "strong"
 msgstr "erős"
 
 #: ../data/messages:445
-#, fuzzy, c-format
 msgid ""
 "Setting it to 0.33 will mean that 33% of the icons will reflect on the "
 "ground. The icons will be placed at the right distance from the front border "
@@ -2556,8 +2559,8 @@ msgstr ""
 
 #: ../data/messages:775
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr "Csak fogd meg és húzd a dokkon kívülre, ahol látványosan felrobban!"
 
 #: ../data/messages:777
@@ -2576,8 +2579,8 @@ msgstr ""
 
 #: ../data/messages:781
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, applis, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, applis, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 "Az \"Ikonok\" modulban minden ikontípus méretét megadhatod: indítóikonokét, "
@@ -2691,7 +2694,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:817
-msgid "I don’t want to have a separator between launchers , applis and applets"
+msgid ""
+"I don’t want to have a separator between launchers , applis and applets"
 msgstr "Nem szeretnék elválasztókat az külömböző típusú ikonok közé."
 
 #: ../data/messages:819
@@ -2770,8 +2774,8 @@ msgid ""
 "for sub-docks."
 msgstr ""
 "Bármelyik dokknak megadhatsz bármilyen megjelenést.\n"
-"Menj a \"Megjelenés\" modulba és válaszd ki a neked tetsző nézete(ke)t a dokk"
-"(ok)nak és aldokk(ok)nak."
+"Menj a \"Megjelenés\" modulba és válaszd ki a neked tetsző nézete(ke)t a "
+"dokk(ok)nak és aldokk(ok)nak."
 
 #: ../data/messages:839
 msgid "How can I change the background of my docks ?"
@@ -2820,8 +2824,8 @@ msgid ""
 "this would be a shame ! ^_^"
 msgstr ""
 "Kikapcsolhatod az \"Ikon hatások\" beépülő modult,\n"
-" vagy az ikonok nagyítását amikor az egér föléjük mozog az \"Animált ikonok"
-"\" beépülőben.\n"
+" vagy az ikonok nagyítását amikor az egér föléjük mozog az \"Animált "
+"ikonok\" beépülőben.\n"
 "Csökkentheted a nagyítás mértékét és/vagy tükröződését az \"Ikon\" "
 "modulban,\n"
 " lecserélheted a hátterüket a \"Háttér\" modulban, vagy beállíthatod az "
@@ -2953,7 +2957,8 @@ msgid "go to the “Taskbar” module, then tick the first box, and apply."
 msgstr ""
 
 #: ../data/messages:897
-msgid "I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
+msgid ""
+"I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
 msgstr ""
 
 #: ../data/messages:899
@@ -3170,8 +3175,8 @@ msgstr ""
 
 #: ../data/messages:977
 msgid ""
-"How can I have an easy-to-access terminal with real transparence, like "
-"Tilda ?"
+"How can I have an easy-to-access terminal with real transparence, like Tilda "
+"?"
 msgstr ""
 
 #: ../data/messages:979
@@ -3192,8 +3197,9 @@ msgstr ""
 
 #: ../data/messages:985
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/"
-"required_components_list, and erase its content (\"panel\").\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components_list, and erase its content "
+"(\"panel\").\n"
 "Restart your session : the gnome-panel has not been started."
 msgstr ""
 
@@ -3300,16 +3306,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3335,8 +3341,8 @@ msgid ""
 "If you’re under XFCE or KDE, you can just activate the compositing in the "
 "window manager’s options.\n"
 "If you're under Gnome, you can activate it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1033
@@ -3370,8 +3376,8 @@ msgstr ""
 
 #: ../data/messages:1043
 msgid ""
-"Hint : You can force the openGL by launching the dock with “cairo-dock –o”."
-"but you might get a lot of visual artifacts."
+"Hint : You can force the openGL by launching the dock with “cairo-dock "
+"–o”.but you might get a lot of visual artifacts."
 msgstr ""
 
 #: ../data/messages:1045
@@ -3438,8 +3444,8 @@ msgstr ""
 msgid ""
 "We value your help ! If you see a bug, or if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3737,8 +3743,8 @@ msgstr ""
 #: ../data/messages:1211
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -3819,8 +3825,8 @@ msgstr ""
 #: ../data/messages:1223
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -3832,16 +3838,6 @@ msgid ""
 " - The DBus plug-in provides a new and powerful API that lets you control "
 "your dock from an extern application.\n"
 "    You can even write an applet in any language with it !"
-msgstr ""
-
-#: ../data/messages:1225
-msgid ""
-"2.1.2 : \n"
-" - Desklets can be fixed on their current desktop, not only on the first "
-"one.\n"
-" - Welcome to the new  \"RSS-reader\" applet !\n"
-" - Light up your dock with the new \"firework\" icon effects !\n"
-" - A KDE-integration plug-in has been started."
 msgstr ""
 
 #~ msgid "-1000"

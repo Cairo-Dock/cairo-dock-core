@@ -6,13 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.1.0-alpha\n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
-"PO-Revision-Date: 2009-10-22 11:02+0000\n"
-"Last-Translator: Fabio De Santi <fsanti@terra.com.br>\n"
+"POT-Creation-Date: 2009-11-10 02:09+0000\n"
+"PO-Revision-Date: 2009-11-09 01:55+0000\n"
+"Last-Translator: Eduardo Mucelli <edumucelli@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-10-23 07:25+0000\n"
+"X-Launchpad-Export-Date: 2009-11-10 11:28+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-applet-facility.h:259
@@ -20,7 +21,10 @@ msgid ""
 "the theme couldn't be found; the default theme will be used instead.\n"
 " You can change this by opening the configuration of this module; do you "
 "want to do it now ?"
-msgstr "o tema não pode ser encontrado; em seu lugar será usado o tema padrão."
+msgstr ""
+"o tema não pode ser encontrado; em seu lugar será usado o tema padrão.\n"
+" Você pode mudar isto abrindo o módulo de configuração; deseja fazer isto "
+"agora ?"
 
 #: ../src/cairo-dock-applet-facility.h:274
 msgid ""
@@ -31,7 +35,7 @@ msgstr ""
 
 #: ../src/cairo-dock-applet-facility.h:349
 msgid "Applet's handbook"
-msgstr ""
+msgstr "Manual de mini-aplicativos"
 
 #: ../src/cairo-dock-callbacks.c:1122
 msgid "Do you want to mount this point ?"
@@ -65,22 +69,22 @@ msgstr ""
 " (Para não mostrar esta mensagem, lançar o dock do menu Aplicativos,\n"
 "  ou com a opção -o para forçar o uso do OpenGL e -c para forçar o cairo.)"
 
-#: ../src/cairo-dock-file-manager.c:505 ../src/cairo-dock-file-manager.c:550
+#: ../src/cairo-dock-file-manager.c:501 ../src/cairo-dock-file-manager.c:546
 #, c-format
 msgid "%s is now mounted"
 msgstr "%s foi montado"
 
-#: ../src/cairo-dock-file-manager.c:505 ../src/cairo-dock-file-manager.c:550
+#: ../src/cairo-dock-file-manager.c:501 ../src/cairo-dock-file-manager.c:546
 #, c-format
 msgid "%s is now unmounted"
 msgstr "%s foi desmontado"
 
-#: ../src/cairo-dock-file-manager.c:569
+#: ../src/cairo-dock-file-manager.c:565
 #, c-format
 msgid "failed to mount %s"
 msgstr "falha ao montar %s"
 
-#: ../src/cairo-dock-file-manager.c:569
+#: ../src/cairo-dock-file-manager.c:565
 #, c-format
 msgid "failed to unmount %s"
 msgstr "falha ao desmontar %s"
@@ -125,71 +129,71 @@ msgstr "sobriedade"
 msgid "grab"
 msgstr "agarrar"
 
-#: ../src/cairo-dock-gui-manager.c:102 ../data/messages:105
+#: ../src/cairo-dock-gui-manager.c:95 ../data/messages:105
 msgid "Behaviour"
 msgstr "Comportamento"
 
-#: ../src/cairo-dock-gui-manager.c:103
+#: ../src/cairo-dock-gui-manager.c:96
 msgid "Appearance"
 msgstr "Aparência"
 
-#: ../src/cairo-dock-gui-manager.c:104
+#: ../src/cairo-dock-gui-manager.c:97
 msgid "Accessories"
 msgstr "Acessórios"
 
-#: ../src/cairo-dock-gui-manager.c:105
+#: ../src/cairo-dock-gui-manager.c:98
 msgid "Desktop"
 msgstr "Área de Trabalho"
 
-#: ../src/cairo-dock-gui-manager.c:106
+#: ../src/cairo-dock-gui-manager.c:99
 msgid "Controlers"
 msgstr "Controladores"
 
-#: ../src/cairo-dock-gui-manager.c:107
+#: ../src/cairo-dock-gui-manager.c:100
 msgid "Plug-ins"
 msgstr "Plug-ins"
 
-#: ../src/cairo-dock-gui-manager.c:438
+#: ../src/cairo-dock-gui-manager.c:432
 msgid "Categories"
 msgstr "Categorias"
 
-#: ../src/cairo-dock-gui-manager.c:458
+#: ../src/cairo-dock-gui-manager.c:452
 msgid "All"
 msgstr "Todas"
 
-#: ../src/cairo-dock-gui-manager.c:563
+#: ../src/cairo-dock-gui-manager.c:557
 msgid "Activate this module"
 msgstr "Ativar este módulo"
 
-#: ../src/cairo-dock-gui-manager.c:581
+#: ../src/cairo-dock-gui-manager.c:575
 msgid "Filter"
 msgstr "Filtro"
 
-#: ../src/cairo-dock-gui-manager.c:621
+#: ../src/cairo-dock-gui-manager.c:615
 msgid "All words"
 msgstr "Todas as palavras"
 
-#: ../src/cairo-dock-gui-manager.c:628
+#: ../src/cairo-dock-gui-manager.c:622
 msgid "Highlight words"
 msgstr "Destacar palavras"
 
-#: ../src/cairo-dock-gui-manager.c:636
+#: ../src/cairo-dock-gui-manager.c:630
 msgid "Hide others"
 msgstr "Ocultar outras"
 
-#: ../src/cairo-dock-gui-manager.c:644
+#: ../src/cairo-dock-gui-manager.c:638
 msgid "Search in description"
 msgstr "Procurar na descrição"
 
-#: ../src/cairo-dock-gui-manager.c:726
+#: ../src/cairo-dock-gui-manager.c:720
 msgid "< Maintenance mode >"
 msgstr "< Modo de manutenção >"
 
-#: ../src/cairo-dock-gui-manager.c:744 ../src/cairo-dock-gui-manager.c:818
+#: ../src/cairo-dock-gui-manager.c:738 ../src/cairo-dock-gui-manager.c:812
 msgid "Configuration of Cairo-Dock"
 msgstr "Configuração do Cairo-Dock"
 
-#: ../src/cairo-dock-gui-manager.c:1065
+#: ../src/cairo-dock-gui-manager.c:1059
 #, c-format
 msgid ""
 "The module '%s' is not present. You need to install it or its dependencies "
@@ -198,16 +202,16 @@ msgstr ""
 "O módulo '%s' não está presente. Você precisar instalá-lo ou suas "
 "dependências para aproveitar ao máximo este módulo."
 
-#: ../src/cairo-dock-gui-manager.c:1071
+#: ../src/cairo-dock-gui-manager.c:1065
 #, c-format
 msgid "The module '%s' is not activated."
 msgstr "O módulo '%s' não está ativo."
 
-#: ../src/cairo-dock-gui-manager.c:1072
+#: ../src/cairo-dock-gui-manager.c:1066
 msgid "Do you want to activate it now ?"
 msgstr "Deseja ativá-lo agora ?"
 
-#: ../src/cairo-dock-gui-manager.c:1808
+#: ../src/cairo-dock-gui-manager.c:1802
 msgid "Configuration of the launchers"
 msgstr "Configuração dos lançadores"
 
@@ -232,7 +236,7 @@ msgstr ""
 #: ../src/cairo-dock-internal-accessibility.c:294
 #: ../src/cairo-dock-menu.c:1653 ../data/messages:47
 msgid "Accessibility"
-msgstr "Accessibilidade"
+msgstr "Acessibilidade"
 
 #: ../src/cairo-dock-internal-accessibility.c:296
 msgid "How do you access to your docks ?"
@@ -253,7 +257,8 @@ msgstr "Desklets"
 
 #: ../src/cairo-dock-internal-desklets.c:103
 msgid "The applets can be set on your desktop as widgets."
-msgstr "Os applets podem ser definidos na sua área de trabalho como widgets."
+msgstr ""
+"Os mini-aplicativos podem ser definidos na sua área de trabalho como widgets."
 
 #: ../src/cairo-dock-internal-dialogs.c:137
 msgid ""
@@ -442,7 +447,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:722
 #, c-format
 msgid "You're about removing this applet (%s) from the dock. Sure ?"
-msgstr "Você está quase removendo este applet (%s) do dock. Tem certeza ?"
+msgstr ""
+"Você está quase removendo este mini-aplicativo (%s) do dock. Tem certeza ?"
 
 #: ../src/cairo-dock-menu.c:833
 msgid ""
@@ -463,7 +469,7 @@ msgstr "Configurar"
 
 #: ../src/cairo-dock-menu.c:1307
 msgid "Configure the behaviour, appearance, and applets."
-msgstr "Configurar o comportamento, aparência e applets."
+msgstr "Configurar o comportamento, aparência e  mini-aplicativos."
 
 #: ../src/cairo-dock-menu.c:1311
 msgid "Set up this dock"
@@ -478,7 +484,8 @@ msgid "Manage themes"
 msgstr "Administrar temas"
 
 #: ../src/cairo-dock-menu.c:1319
-msgid "Choose amongst many themes on the server, and save your current theme."
+msgid ""
+"Choose amongst many themes on the server, and save your current theme."
 msgstr "Escolha dentre vários temas no servidor e salve seu tema atual."
 
 #: ../src/cairo-dock-menu.c:1321
@@ -595,7 +602,8 @@ msgstr "Adicionar lançador personalizado"
 #: ../src/cairo-dock-menu.c:1450 ../src/cairo-dock-menu.c:1509
 msgid ""
 "Usually you would drag a launcher from the menu and drop it into the dock."
-msgstr "Usualmente você arrasta um lançador do menu e o solta dentro do dock."
+msgstr ""
+"Usualmente você arrasta um lançador do menu e o solta dentro do dock."
 
 #: ../src/cairo-dock-menu.c:1469
 msgid "Unmount"
@@ -725,11 +733,11 @@ msgstr "Fechar todos"
 
 #: ../src/cairo-dock-menu.c:1620
 msgid "Configure this applet"
-msgstr "Configurar este applet"
+msgstr "Configurar este mini-aplicativo"
 
 #: ../src/cairo-dock-menu.c:1624
 msgid "Detach this applet"
-msgstr "Separar este applet"
+msgstr "Separar este mini-aplicativo"
 
 #: ../src/cairo-dock-menu.c:1624
 msgid "Return to dock"
@@ -737,11 +745,11 @@ msgstr "Retornar ao dock"
 
 #: ../src/cairo-dock-menu.c:1627
 msgid "Remove this applet"
-msgstr "Remover este applet"
+msgstr "Remover este mini-aplicativo"
 
 #: ../src/cairo-dock-menu.c:1631
 msgid "Launch another instance of this applet"
-msgstr "Lançar nova instância deste applet"
+msgstr "Lançar nova instância deste mini-aplicativo"
 
 #: ../src/cairo-dock-menu.c:1670
 msgid "Normal"
@@ -757,7 +765,8 @@ msgstr "Sempre abaixo"
 
 #: ../src/cairo-dock-menu.c:1696
 msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
-msgstr "definir comportamento no Compiz para: (name=cairo-dock & type=utility)"
+msgstr ""
+"definir comportamento no Compiz para: (name=cairo-dock & type=utility)"
 
 #: ../src/cairo-dock-menu.c:1698
 msgid "Reserve space"
@@ -805,11 +814,11 @@ msgstr "Tem certeza que deseja sobrescrever o tema %s ?"
 
 #: ../src/cairo-dock-themes-manager.c:728
 msgid "The theme has been saved"
-msgstr ""
+msgstr "O tema foi salvo"
 
 #: ../src/cairo-dock-themes-manager.c:728
 msgid "The theme couldn't be saved"
-msgstr ""
+msgstr "O tema não pode ser salvo"
 
 #: ../src/cairo-dock-themes-manager.c:749
 #, c-format
@@ -822,19 +831,19 @@ msgstr "Tem certeza que quer deletar estes temas ?"
 
 #: ../src/cairo-dock-themes-manager.c:771
 msgid "The theme has been deleted"
-msgstr ""
+msgstr "O tema foi deletado"
 
 #: ../src/cairo-dock-themes-manager.c:771
 msgid "The theme couldn't be deleted"
-msgstr ""
+msgstr "O tema não pode ser deletado"
 
 #: ../src/cairo-dock-themes-manager.c:773
 msgid "The themes have been deleted"
-msgstr ""
+msgstr "Os temas foram deletados"
 
 #: ../src/cairo-dock-themes-manager.c:773
 msgid "The themes couldn't be deleted"
-msgstr ""
+msgstr "Os temas não puderam ser deletados"
 
 #: ../src/cairo-dock-themes-manager.c:822
 msgid ""
@@ -1242,7 +1251,8 @@ msgstr "Você precisa de um administrador de composição para isto."
 
 #: ../data/messages:141
 msgid "Show a window thumbnail when it's minimized ?"
-msgstr "Mostrar um pequena imagem (thumb) da tela quando ela está minimizada ?"
+msgstr ""
+"Mostrar um pequena imagem (thumb) da tela quando ela está minimizada ?"
 
 #: ../data/messages:143
 msgid "Interaction"
@@ -1270,7 +1280,8 @@ msgstr ""
 "Clicar com o botão do meio do mouse no ícone fecha a aplicação relativa ?"
 
 #: ../data/messages:153
-msgid "Signal the applications demanding your attention with a dialog bubble ?"
+msgid ""
+"Signal the applications demanding your attention with a dialog bubble ?"
 msgstr "As aplicações devem pedir a sua atenção com uma bolha de diálogo?"
 
 #: ../data/messages:155
@@ -1371,11 +1382,11 @@ msgstr "Duração da animação de desenrolar :"
 
 #: ../data/messages:193 ../data/messages:345
 msgid "fast"
-msgstr ""
+msgstr "rápido"
 
 #: ../data/messages:195 ../data/messages:343
 msgid "slow"
-msgstr ""
+msgstr "lento"
 
 #: ../data/messages:197
 msgid "The more there are, the slower it will be"
@@ -1390,10 +1401,12 @@ msgid ""
 "This is the animation when the dock goes below a window; The greater, the "
 "slower it will be"
 msgstr ""
+"Esta é a animação que ocorre quando o dock vai para baixo da janela; Quanto "
+"maior, mais devagar será"
 
 #: ../data/messages:203
 msgid "Number of steps in the fade out animation :"
-msgstr ""
+msgstr "Número de passos da animação de desvanecimento"
 
 #: ../data/messages:205
 msgid "the smaller, the faster the dock will hide."
@@ -1517,7 +1530,7 @@ msgstr "Tornar o painel de configuração transparente ?"
 
 #: ../data/messages:261
 msgid "Connection to the themes server"
-msgstr ""
+msgstr "Conexão com o servidor de temas"
 
 #: ../data/messages:263
 msgid ""
@@ -1525,30 +1538,37 @@ msgid ""
 "This only limits the connection phase,  once the dock has connected this "
 "option is of no more use."
 msgstr ""
+"Tempo máximo em segundos que você permite à conexão com o servidor durar. "
+"Isto limita apenas a fase de conexão, uma vez que o dock se conectou esta "
+"opção não será mais usada."
 
 #: ../data/messages:265
 msgid "Connection timeout to the themes server :"
-msgstr ""
+msgstr "Tempo limite de conexão com o servidor de temas :"
 
 #: ../data/messages:267
 msgid ""
 "Maximum time in seconds that you allow the whole operation to take. Some "
 "themes can take up to a few MB."
 msgstr ""
+"Tempo máximo, em segundos, que você permite à toda operação durar. Alguns "
+"temas podem consumir alguns MegaBytes."
 
 #: ../data/messages:269
 msgid "Maximum time to download a theme :"
-msgstr ""
+msgstr "Tempo máximo de download de um tema :"
 
 #: ../data/messages:271
 msgid ""
 "If an error occurs during downloading a theme, it will retry this number of "
 "times before giving up."
 msgstr ""
+"Se um erro ocorrer durante o download do tema, serão feitas esta quantidade "
+"de tentativas antes de desistir."
 
 #: ../data/messages:273
 msgid "Number of retries :"
-msgstr ""
+msgstr "Número de tentativas :"
 
 #: ../data/messages:277
 msgid "Extern Frame"
@@ -1605,14 +1625,13 @@ msgstr "Transparência da imagem :"
 
 #: ../data/messages:305 ../data/messages:357 ../data/messages:457
 #: ../data/messages:585 ../data/messages:611
-#, fuzzy
 msgid "transparent"
-msgstr "Transparência da imagem :"
+msgstr "transparente"
 
 #: ../data/messages:307 ../data/messages:359 ../data/messages:459
 #: ../data/messages:587 ../data/messages:613
 msgid "opaque"
-msgstr ""
+msgstr "opaco"
 
 #: ../data/messages:309
 msgid "Repeat image as a pattern to fill background ?"
@@ -1651,8 +1670,8 @@ msgstr "Número de listras, em cada padrão, para desenhar no fundo :"
 msgid ""
 "1 pattern contains N stripes, so the width can be less or equal than 1/N."
 msgstr ""
-"1 padrão contém N listras, então a largura pode ser menor ou igual do que 1/"
-"N."
+"1 padrão contém N listras, então a largura pode ser menor ou igual do que "
+"1/N."
 
 #: ../data/messages:327
 msgid "Width of the stripes, in percentage of the pattern size :"
@@ -1890,13 +1909,12 @@ msgid "Reflecting power of the plane :"
 msgstr "Poder de reflexão do plano :"
 
 #: ../data/messages:441
-#, fuzzy
 msgid "light"
-msgstr "direita"
+msgstr "luz"
 
 #: ../data/messages:443
 msgid "strong"
-msgstr ""
+msgstr "forte"
 
 #: ../data/messages:445
 #, c-format
@@ -1915,11 +1933,11 @@ msgstr "Fração da altura do ícone que refletirá :"
 
 #: ../data/messages:449
 msgid "small"
-msgstr ""
+msgstr "pequeno"
 
 #: ../data/messages:451
 msgid "tall"
-msgstr ""
+msgstr "alto"
 
 #: ../data/messages:453
 msgid ""
@@ -1963,7 +1981,7 @@ msgstr "Tamanho do aplicativo em repouso (largura x altura) :"
 
 #: ../data/messages:473
 msgid "Applet's size at rest (width x height) :"
-msgstr "Tamanho do applet em repouso (largura x altura) :"
+msgstr "Tamanho do mini-aplicativo em repouso (largura x altura) :"
 
 #: ../data/messages:475
 msgid "Configure icons animations."
@@ -1996,7 +2014,7 @@ msgid ""
 msgstr ""
 "Separadores são ícones usados para fazer a separação entre diferentes tipos "
 "de ícones. Cairo-Dock pode automaticamente adicioná-los entre lançadores, "
-"aplicativos e applets."
+"aplicativos e mini-aplicativos."
 
 #: ../data/messages:487
 msgid "Automatically add separators ?"
@@ -2015,8 +2033,8 @@ msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right ?"
 msgstr ""
-"Fazer a imagem do separador girar quando o dock está no topo/esquerda/"
-"direita ?"
+"Fazer a imagem do separador girar quando o dock está no "
+"topo/esquerda/direita ?"
 
 #: ../data/messages:495
 msgid "Force separator's image size to stay constant ?"
@@ -2040,7 +2058,7 @@ msgstr "aplicativos"
 
 #: ../data/messages:505
 msgid "applets"
-msgstr "miniaplicatiovs"
+msgstr "mini-aplicatiovs"
 
 #: ../data/messages:507
 msgid ""
@@ -2048,11 +2066,12 @@ msgid ""
 "mix applets and launchers into the dock."
 msgstr ""
 "Este parâmetro sobrescreverá a ordem previamente definida, para permitir "
-"misturar applets e lançadores no dock."
+"misturar mini-aplicativos e lançadores no dock."
 
 #: ../data/messages:509
 msgid "Allow applets to be placed amongst launchers ?"
-msgstr "Permitir applets serem posicionados no meio dos lançadores ?"
+msgstr ""
+"Permitir mini-aplicativos serem posicionados no meio dos lançadores ?"
 
 #: ../data/messages:511
 msgid ""
@@ -2060,10 +2079,13 @@ msgid ""
 "choose to group applis in sub-dock, applis will be placed next to their "
 "launcher."
 msgstr ""
+"Este parâmetro vai sobrescrever a ordem previamente definida. Se você não "
+"escolheu agrupar aplicativos em um sub-dock, os aplicativos serão colocados "
+"perto de seus lançadores."
 
 #: ../data/messages:513
 msgid "Allow applis to be placed amongst launchers ?"
-msgstr ""
+msgstr "Permitir aplicativos serem colocados junto à lançadores ?"
 
 #: ../data/messages:517
 msgid "Main Dock"
@@ -2107,12 +2129,11 @@ msgstr "Proporção para o tamanho dos ícones dos sub-docks :"
 
 #: ../data/messages:535 ../data/messages:661
 msgid "smaller"
-msgstr ""
+msgstr "menor"
 
 #: ../data/messages:537
-#, fuzzy
 msgid "same size"
-msgstr "Tamanho do ícone"
+msgstr "do mesmo tamanho"
 
 #: ../data/messages:541
 msgid "Bubble"
@@ -2337,7 +2358,7 @@ msgstr "Proporção do tamanho do indicador :"
 
 #: ../data/messages:663
 msgid "bigger"
-msgstr ""
+msgstr "maior"
 
 #: ../data/messages:665
 msgid ""
@@ -2504,16 +2525,16 @@ msgstr "Simplesmente arraste-os com o mouse e solte-o onde você desejar."
 msgid ""
 "How can I place the applets and taskbar icons at the beginning of the dock ?"
 msgstr ""
-"Como posso posicionar os ícones de applets e da Barra de tarefas no início "
-"do dock ?"
+"Como posso posicionar os ícones de mini-aplicativos e da Barra de tarefas no "
+"início do dock ?"
 
 #: ../data/messages:761
 msgid ""
 "Hint : you can also place applets amongst launchers, by ticking the box "
 "below."
 msgstr ""
-"Dica : você pode também posicionar applets entre lançadores, marcando a "
-"caixa abaixo."
+"Dica : você pode também posicionar mini-aplicativos entre lançadores, "
+"marcando a caixa abaixo."
 
 #: ../data/messages:763
 msgid ""
@@ -2521,7 +2542,7 @@ msgid ""
 "according to their type (launcher/appli/applet)."
 msgstr ""
 "No módulo \"ícones\", em baixo, você pode escolher a ordem dos ícones de "
-"acordo com seu tipo (lançador/aplicativo/applet)."
+"acordo com seu tipo (lançador/aplicativo/mini-aplicativo)."
 
 #: ../data/messages:765
 msgid "How can I change the image of an icon ?"
@@ -2568,9 +2589,10 @@ msgstr ""
 
 #: ../data/messages:775
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
-msgstr "Arraste e solte-os fora do dock, eles desaparecerão em uma explosão !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
+msgstr ""
+"Arraste e solte-os fora do dock, eles desaparecerão em uma explosão !"
 
 #: ../data/messages:777
 msgid "How can I resize my icons ?"
@@ -2582,18 +2604,18 @@ msgid ""
 "smaller or equal than the default size. Set it to 0x0 to use the default "
 "size."
 msgstr ""
-"Dica : Você pode definir o tamanho de cada applet independentemente, para "
-"qualquer tamanho menor ou igual ao tamanho padrão. Defina isto para 0x0 para "
-"usar o tamanho padrão."
+"Dica : Você pode definir o tamanho de cada mini-aplicativo "
+"independentemente, para qualquer tamanho menor ou igual ao tamanho padrão. "
+"Defina isto para 0x0 para usar o tamanho padrão."
 
 #: ../data/messages:781
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, applis, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, applis, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 "No módulo \"Ícones\", você pode definir o tamanho padrão dos seus ícones por "
-"tipo: lançadores, aplicativos, applets e separadores.\n"
+"tipo: lançadores, aplicativos, mini-aplicativos e separadores.\n"
 "Você pode também definir o fator de zoom."
 
 #: ../data/messages:783
@@ -2685,8 +2707,8 @@ msgid ""
 msgstr ""
 "Dica : você pode escolher que a dock apareça quando o mouse encostar apenas "
 "no canto da tela ao invés de toda a borda.\n"
-"Você também pode definir o tamanho da zona de ação no módulo \"Dock escondido"
-"\" e definir a imagem para a mesma."
+"Você também pode definir o tamanho da zona de ação no módulo \"Dock "
+"escondido\" e definir a imagem para a mesma."
 
 #: ../data/messages:811
 msgid ""
@@ -2719,8 +2741,10 @@ msgstr ""
 "tarefas) arrastando-o com o mouse."
 
 #: ../data/messages:817
-msgid "I don’t want to have a separator between launchers , applis and applets"
-msgstr "Eu não quero ter separadores entre lançadores, aplicativos e applets"
+msgid ""
+"I don’t want to have a separator between launchers , applis and applets"
+msgstr ""
+"Eu não quero ter separadores entre lançadores, aplicativos e mini-aplicativos"
 
 #: ../data/messages:819
 msgid ""
@@ -2742,7 +2766,7 @@ msgid ""
 msgstr ""
 "Dica : para mover um ícone para um sub-dock, edite sua configuração, e na "
 "lista de docks, escolhe aquele que você deseja. Você pode fazer o mesmo com "
-"applets, permitindo agrupar muitos applets em uma sub-dock !"
+"mini-aplicativos, permitindo agrupar muitos applets em uma sub-dock !"
 
 #: ../data/messages:825
 msgid ""
@@ -2774,8 +2798,9 @@ msgid ""
 "a name that doesn’t exist yet. A new dock will be created, with this icon "
 "inside."
 msgstr ""
-"Edite um lançador ou um applet e, na lista de docks disponíveis, entre com "
-"um nome que ainda não existe. Um novo dock será criado com este ícone dentro."
+"Edite um lançador ou um mini-aplicativo e, na lista de docks disponíveis, "
+"entre com um nome que ainda não existe. Um novo dock será criado com este "
+"ícone dentro."
 
 #: ../data/messages:833
 msgid "How do I get a 3D dock ?"
@@ -2852,8 +2877,8 @@ msgid ""
 msgstr ""
 "Quem pode mais, pode menos ! Você pode desativar o plug-in \"Efeitos de "
 "ícones'.\n"
-" ou desativar o efeito na sobreposição do mouse no plug-in \"Ícones animados"
-"\".\n"
+" ou desativar o efeito na sobreposição do mouse no plug-in \"Ícones "
+"animados\".\n"
 "Você também pode diminuir o efeito de zoom, ou diminuir a reflexão dos "
 "ícones no módulo \"Ícones\".\n"
 "Resumindo, você pode, facilmente, ter algo tão sóbrio como o Painél do "
@@ -2872,16 +2897,16 @@ msgid ""
 "Hint : to detach an applet, you can drag and drop its icon from the dock to "
 "the desktop"
 msgstr ""
-"Dica : para separar um applet, você pode arrastá-lo e soltá-lo do dock para "
-"a Área de Trabalho"
+"Dica : para separar um mini-aplicativo, você pode arrastá-lo e soltá-lo do "
+"dock para a Área de Trabalho"
 
 #: ../data/messages:857
 msgid ""
 "they are widgets that’s are displayed on your desktop. Each applet can be "
 "detached from the dock to act as a desklet."
 msgstr ""
-"eles são widgets que são mostrados em sua Área de Trabalho. Cada applet pode "
-"ser separado do dock para funcionar como um desklet."
+"eles são widgets que são mostrados em sua Área de Trabalho. Cada mini-"
+"aplicativo pode ser separado do dock para funcionar como um desklet."
 
 #: ../data/messages:859
 msgid "How do I setup their position ?"
@@ -2948,8 +2973,8 @@ msgstr ""
 "A decoração padrão é definida no módulo \"Desklets\".\n"
 "Você pode definir uma decoração diferente para cada Desklet. Para mudar a "
 "decoração de um Desklet,\n"
-" vá para a configuração de Applets, clique na aba \"Desklet\" e escolha a "
-"decoração que você deseja."
+" vá para a configuração de Mini-aplicativo, clique na aba \"Desklet\" e "
+"escolha a decoração que você deseja."
 
 #: ../data/messages:877
 msgid "How do I insert a desklet into the dock ?"
@@ -2984,8 +3009,8 @@ msgid ""
 msgstr ""
 "Na configuração do Compiz-Fusion, ative o plugin 'Widget Layer' e defina a "
 "regra (name=cairo-dock &amp; type=utility).\n"
-"Aí você pode trocar um applet para o Widget Layer clicando com o botão "
-"esquerdo no desklet e selecionando 'Compiz-Fusion Widget'."
+"Aí você pode trocar um mini-aplicativo para o Widget Layer clicando com o "
+"botão esquerdo no desklet e selecionando 'Compiz-Fusion Widget'."
 
 #: ../data/messages:889
 msgid "Taskbar"
@@ -3006,7 +3031,8 @@ msgstr ""
 "vá para o módulo \"Barra de tarefas\", marque a primeira caixa e aplique."
 
 #: ../data/messages:897
-msgid "I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
+msgid ""
+"I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
 msgstr "Eu não quero ter vários ícones no dock quando eu uso Gimp/Pidgin/etc"
 
 #: ../data/messages:899
@@ -3140,12 +3166,12 @@ msgid ""
 "mouse’s location."
 msgstr ""
 "Dica : se você removeu o painel do Gnome, o atalho \"ALT+F1\" não funcionará "
-"mais. Este applet deixa você definir um atalho para mostrar o menu na "
-"posição do mouse."
+"mais. Este mini-aplicativo deixa você definir um atalho para mostrar o menu "
+"na posição do mouse."
 
 #: ../data/messages:931
 msgid "activate the Gmenu applet."
-msgstr "ativar o applet Gmenu."
+msgstr "ativar o mini-aplicativo Gmenu."
 
 #: ../data/messages:933
 msgid "How can I have a simple “quick launch” window ?"
@@ -3158,16 +3184,16 @@ msgid ""
 "launch dialog."
 msgstr ""
 "Dica : se você removeu o painel do Gnome, então o atalho \"ALT+F2 não "
-"funcionará. Este applet permite você definir um atalho para mostrar a caixa "
-"de lançamento rápido."
+"funcionará. Este mini-aplicativo permite você definir um atalho para mostrar "
+"a caixa de lançamento rápido."
 
 #: ../data/messages:937
 msgid ""
 "activate the Gmenu applet, then you can have it by middle-clicking on its "
 "icon."
 msgstr ""
-"ative o applet Gmenu, assim você pode tê-lo clicando com o botão do meio em "
-"seu ícone."
+"ative o mini-aplicativo Gmenu, assim você pode tê-lo clicando com o botão do "
+"meio em seu ícone."
 
 #: ../data/messages:939
 msgid "How can I have a logout icon ?"
@@ -3182,12 +3208,13 @@ msgid ""
 msgstr ""
 "Dica : Na última versão do Gnome, existem dois painéis : um para finalizar "
 "sessão e outro para desligar o computador. O primeiro é chamado clicando-se "
-"no ícone, enquanto o segundo clicando-se no botão do meio, mas o applet "
-"deixa você inverter tal ordem, e ainda deixa você definir comandos próprios."
+"no ícone, enquanto o segundo clicando-se no botão do meio, mas o mini-"
+"aplicativo deixa você inverter tal ordem, e ainda deixa você definir "
+"comandos próprios."
 
 #: ../data/messages:943
 msgid "Simply activate the “logout” applet."
-msgstr "Simplesmente ative o applet \"finalizar sessão\"."
+msgstr "Simplesmente ative o mini-aplicativo \"finalizar sessão\"."
 
 #: ../data/messages:945
 msgid "How can I access the dustbin ?"
@@ -3203,7 +3230,7 @@ msgstr ""
 
 #: ../data/messages:949
 msgid "Simply activate the “dustbin” applet."
-msgstr "Simplesmente ative o applet \"Lixeira\"."
+msgstr "Simplesmente ative o mini-aplicativo \"Lixeira\"."
 
 #: ../data/messages:951
 msgid "How can I access to my mount points ?"
@@ -3220,7 +3247,7 @@ msgstr ""
 
 #: ../data/messages:955 ../data/messages:961
 msgid "Simply activate the “shortcuts” applet."
-msgstr "Simplesmente ative o applet \"atalhos\"."
+msgstr "Simplesmente ative o mini-aplicativo \"atalhos\"."
 
 #: ../data/messages:957
 msgid "How can I access to my Nautilus bookmarks ?"
@@ -3232,9 +3259,9 @@ msgid ""
 "its sub-dock. You can also rename and remove them. This will also take "
 "effect in Nautilus immediately, and vice versa."
 msgstr ""
-"Dica : você pode adicionar favoritos arrastando a pasta neste applet ou em "
-"seu sub-dock. Você pode também renomear ou removê-los. Isto também terá "
-"efeito no Nautilus imediatamente, e vice-versa."
+"Dica : você pode adicionar favoritos arrastando a pasta neste mini-"
+"aplicativo ou em seu sub-dock. Você pode também renomear ou removê-los. Isto "
+"também terá efeito no Nautilus imediatamente, e vice-versa."
 
 #: ../data/messages:963
 msgid "How can I access to my desktop ?"
@@ -3249,7 +3276,7 @@ msgstr ""
 
 #: ../data/messages:967
 msgid "Simply activate the “show desktop” applet."
-msgstr "Simplesmente ative o applet \"Mostrar Área de trabalho\"."
+msgstr "Simplesmente ative o mini-aplicativo \"Mostrar Área de trabalho\"."
 
 #: ../data/messages:969
 msgid "How can I have an easy-to-acces calendar ?"
@@ -3260,8 +3287,8 @@ msgid ""
 "activate the “clock” applet; clicking on it will display a calendar, "
 "clicking again will hide it."
 msgstr ""
-"ative o applet do \"relógio\"; clicando nele aparecerá um calendário, "
-"clicando de novo este desaparecerá."
+"ative o mini-aplicativo do \"relógio\"; clicando nele aparecerá um "
+"calendário, clicando de novo este desaparecerá."
 
 #: ../data/messages:973
 msgid "How can I have the notification area (also called systray) ?"
@@ -3278,17 +3305,17 @@ msgid ""
 "I recommend to detach this applet to make it a desklet, place it in a corner "
 "of your screen, and keep it above other windows."
 msgstr ""
-"ative o applet \"Bandeja do sistema\". No momento, ele não pode ser mostrado "
-"diretamente no dock,\n"
+"ative o mini-aplicativo \"Bandeja do sistema\". No momento, ele não pode ser "
+"mostrado diretamente no dock,\n"
 "desta forma, clicar no ícone fará aparecer uma caixa contendo a bandeja, "
 "clique com o botão do meio para ocultá-la.\n"
-"Recomendo separar este applet tornando-o desklet, posicione-o no canto da "
-"tela e mantenha-o sobre as outras janelas."
+"Recomendo separar este mini-aplicativo tornando-o desklet, posicione-o no "
+"canto da tela e mantenha-o sobre as outras janelas."
 
 #: ../data/messages:977
 msgid ""
-"How can I have an easy-to-access terminal with real transparence, like "
-"Tilda ?"
+"How can I have an easy-to-access terminal with real transparence, like Tilda "
+"?"
 msgstr ""
 "Como posso ter um terminal de fácil acesso com transparência real, como "
 "Tilda ?"
@@ -3306,8 +3333,8 @@ msgid ""
 "activate the “terminal” applet. You can detach it and place it on the Widget "
 "Layer for instance, or setup a shorkey to make it pop-up instantly."
 msgstr ""
-"ative o applet \"terminal\". Você pode separá-lo e aplicá-lo com o Widget "
-"Layer, ou definir um atalho para fazê-lo aparecer instantaneamente."
+"ative o mini-aplicativo \"terminal\". Você pode separá-lo e aplicá-lo com o "
+"Widget Layer, ou definir um atalho para fazê-lo aparecer instantaneamente."
 
 #: ../data/messages:983
 msgid "So then, how can I remove completely the gnome-panel ?"
@@ -3315,21 +3342,23 @@ msgstr "Então, como posso remover completamente o painel do Gnome ?"
 
 #: ../data/messages:985
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/"
-"required_components_list, and erase its content (\"panel\").\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components_list, and erase its content "
+"(\"panel\").\n"
 "Restart your session : the gnome-panel has not been started."
 msgstr ""
-"Abra gconf-editor, edite a chave /desktop/gnome/session/"
-"required_components_list, e apague de seu conteúdo (\"panel\").\n"
+"Abra gconf-editor, edite a chave "
+"/desktop/gnome/session/required_components_list, e apague de seu conteúdo "
+"(\"panel\").\n"
 "Reinicie sua sessão : o painel do Gnome não será iniciado."
 
 #: ../data/messages:987
 msgid "Other applets"
-msgstr "Outros applets"
+msgstr "Outros mini-aplicativos"
 
 #: ../data/messages:989
 msgid "How can I have a same applet many times ?"
-msgstr "Como posso ter o mesmo applet várias vezes ?"
+msgstr "Como posso ter o mesmo mini-aplicativo várias vezes ?"
 
 #: ../data/messages:991
 msgid ""
@@ -3348,11 +3377,12 @@ msgid ""
 "new instance of this applet appears in the main dock.\n"
 "You can configure this new one like any other applet."
 msgstr ""
-"Alguns applets pode rodar várias vezes ao mesmo tempo : Relógio, Cairo-"
-"Penguin, Clima, Netspeed, …\n"
-"Clique com o botão direito no ícone do applet e selecione \"lançar outra "
-"instância\". Uma nova instância deste applet aparecerá no dock principal.\n"
-"Você pode configurar este novo como outro applet."
+"Alguns mini-aplicativos pode rodar várias vezes ao mesmo tempo : Relógio, "
+"Cairo-Penguin, Clima, Netspeed, …\n"
+"Clique com o botão direito no ícone do mini-aplicativo e selecione \"lançar "
+"outra instância\". Uma nova instância deste mini-aplicativo aparecerá no "
+"dock principal.\n"
+"Você pode configurar este novo como outro mini-aplicativo."
 
 #: ../data/messages:995
 msgid ""
@@ -3374,16 +3404,16 @@ msgstr ""
 msgid ""
 "I have a personal Cairo-Clock theme that I want to use in the “clock” applet."
 msgstr ""
-"Tenho um tema pessoal para o relógio Cairo que eu quero usar no applet "
-"\"relógio\"."
+"Tenho um tema pessoal para o relógio Cairo que eu quero usar no mini-"
+"aplicativo \"relógio\"."
 
 #: ../data/messages:1001
 msgid ""
 "Hint : the same goes on for all the applets that propose a theme : dustbin, "
 "Cairo-Penguin, weather, etc."
 msgstr ""
-"Dica : o mesmo vale para todos os applets que propõem um tema : lixeira, "
-"Cairo-Penguim, clima, etc."
+"Dica : o mesmo vale para todos os mini-aplicativos que propõem um tema : "
+"lixeira, Cairo-Penguim, clima, etc."
 
 #: ../data/messages:1003
 msgid ""
@@ -3402,8 +3432,8 @@ msgid ""
 "Activate the Xgamma applet, then you can scroll up/down on the icon with the "
 "mouse."
 msgstr ""
-"Ative o applet Xgamma, desta forma, você pode rolar com o mouse para cima/"
-"baixo."
+"Ative o mini-aplicativo Xgamma, desta forma, você pode rolar com o mouse "
+"para cima/baixo."
 
 #: ../data/messages:1009
 msgid "How can I change quickly the speakers volume ?"
@@ -3414,8 +3444,8 @@ msgid ""
 "Activate the AlsaMixer applet, then you can scroll up/down on the icon with "
 "the mouse."
 msgstr ""
-"Ative o applet \"AlsaMixer\", desta forma, você pode rolar com o mouse para "
-"cima/baixo."
+"Ative o mini-aplicativo \"AlsaMixer\", desta forma, você pode rolar com o "
+"mouse para cima/baixo."
 
 #: ../data/messages:1013
 msgid "How can I quickly switch to another desktop ?"
@@ -3424,8 +3454,8 @@ msgstr "Como eu posso, rapidamente, trocar para outra Área de Trabalho ?"
 #: ../data/messages:1015
 msgid "Hint : this applet even lets you add/remove quickly a desktop !"
 msgstr ""
-"Dica: este applet deixa até você adicionar/remover rapidamente uma Área de "
-"Trabalho !"
+"Dica: este mini-aplicativo deixa até você adicionar/remover rapidamente uma "
+"Área de Trabalho !"
 
 #: ../data/messages:1017
 msgid ""
@@ -3433,8 +3463,8 @@ msgid ""
 "the mouse to go to the previous/next desktop,\n"
 " or click on the icon to select a desktop."
 msgstr ""
-"Ative o applet Switcher, então você pode, com o mouse, rolar para cima/baixo "
-"no ícone para ir à Área de Trabalho anterior/posterior."
+"Ative o mini-aplicativo Switcher, então você pode, com o mouse, rolar para "
+"cima/baixo no ícone para ir à Área de Trabalho anterior/posterior."
 
 #: ../data/messages:1019
 msgid "How can I control my dock with the keyboard ?"
@@ -3453,31 +3483,33 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
-"Vários applets tem eventos que podem ser acionados por atalhos do teclado:\n"
-"- o applet <i>AlsaMixer</i> permite mostrar o <b>botão de volume</b> que "
-"pode ser controlado com as setas para a esquerda/direita.\n"
-"- o applet <i>Terminal</i> permite mostrar a <b>janela do terminal</b> e "
-"diretamente escrever nele.\n"
-"- o applet <i>Systray</i> permite mostrar a <b>area de notificação</b>.\n"
-"- o applet <i>Navegador rápido</i> permite mostrar o <b>navegador do menu</"
-"b>, desta forma você pode navegar nele com as setas.\n"
-"- o applet <i>GMenu</i> permite mostrar o menu <b>Aplicativos</b>, e também "
-"uma caixa de diálogo <b>lançador rápido</b>.\n"
-"- o applet <i>Clipper</i> permite mostrar o menu <b>histórico da Área de "
-"transferência</b>.\n"
+"Vários mini-aplicativos tem eventos que podem ser acionados por atalhos do "
+"teclado:\n"
+"- o mini-aplicativo <i>AlsaMixer</i> permite mostrar o <b>botão de "
+"volume</b> que pode ser controlado com as setas para a esquerda/direita.\n"
+"- o mini-aplicativo <i>Terminal</i> permite mostrar a <b>janela do "
+"terminal</b> e diretamente escrever nele.\n"
+"- o mini-aplicativo <i>Systray</i> permite mostrar a <b>area de "
+"notificação</b>.\n"
+"- o mini-aplicativo <i>Navegador rápido</i> permite mostrar o <b>navegador "
+"do menu</b>, desta forma você pode navegar nele com as setas.\n"
+"- o mini-aplicativo <i>GMenu</i> permite mostrar o menu <b>Aplicativos</b>, "
+"e também uma caixa de diálogo <b>lançador rápido</b>.\n"
+"- o mini-aplicativo <i>Clipper</i> permite mostrar o menu <b>histórico da "
+"Área de transferência</b>.\n"
 "- e, é claro, o plug-in<i>Scooby-Do</i> permite a você <b>navegar dentro de "
 "seus docks</b> e rapidamente <b>encontrar e executar</b> aplicativos e "
 "arquivos !"
@@ -3505,16 +3537,16 @@ msgid ""
 "If you’re under XFCE or KDE, you can just activate the compositing in the "
 "window manager’s options.\n"
 "If you're under Gnome, you can activate it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Você tem que ligar a composição. Você pode rodar o Compiz ou xcompmgr.\n"
 "Se você estiver usando XFCE ou KDE, você pode ativar a composição nas opções "
 "de administração de janelas.\n"
 "Se você estiver usando Gnome, você pode ativá-lo no Metacity da seguinte "
 "maneira:\n"
-" Abra gconf-editor, edite a chave '/apps/metacity/general/"
-"compositing_manager' e defina como 'true'."
+" Abra gconf-editor, edite a chave "
+"'/apps/metacity/general/compositing_manager' e defina como 'true'."
 
 #: ../data/messages:1033
 msgid "My machine is too old to run a composite manager"
@@ -3557,8 +3589,8 @@ msgstr "Eu não tenho efeitos maravilhosos como fogo, rotação de cubo, etc"
 
 #: ../data/messages:1043
 msgid ""
-"Hint : You can force the openGL by launching the dock with “cairo-dock –o”."
-"but you might get a lot of visual artifacts."
+"Hint : You can force the openGL by launching the dock with “cairo-dock "
+"–o”.but you might get a lot of visual artifacts."
 msgstr ""
 "Dica : Você pode forçar o OpenGL executando o dock com \"cairo-dock -o\", "
 "com isto pode-se conseguir vários efeitos visuais."
@@ -3575,11 +3607,11 @@ msgstr ""
 
 #: ../data/messages:1047
 msgid "I don't have any themes in the Theme Manager, except the default one."
-msgstr ""
+msgstr "Eu não possuo temas no Administrador de Temas, exceto o padrão."
 
 #: ../data/messages:1049
 msgid "Hint : Until the version 2.1.1-2, wget was used."
-msgstr ""
+msgstr "Dica : Até a versão 2.1.1-2, wget era usado."
 
 #: ../data/messages:1051
 msgid ""
@@ -3593,14 +3625,15 @@ msgstr ""
 
 #: ../data/messages:1053
 msgid "The “netspeed” applet displays 0 even when I’m downloading something"
-msgstr "O applet \"netspeed\" mostra 0 quando estou baixando alguma coisa."
+msgstr ""
+"O mini-aplicativo \"netspeed\" mostra 0 quando estou baixando alguma coisa."
 
 #: ../data/messages:1055
 msgid ""
 "Hint : you can instantiate this applet many times if you want to monitor "
 "many interfaces."
 msgstr ""
-"Dica : Você pode instanciar este applet muitas vezes se você quiser "
+"Dica : Você pode instanciar este mini-aplicativo muitas vezes se você quiser "
 "monitorar interfaces."
 
 #: ../data/messages:1057
@@ -3630,9 +3663,9 @@ msgid ""
 msgstr ""
 "Se você estiver usando KDE, pode ser necessário informar o caminho da "
 "lixeira.\n"
-"Edita a configuração do applet e preencha no caminho da Lixeira; será "
-"provavelmente \"~/.locale/share/Trash/files\". Tome cuidado ao digitar o "
-"caminho !!! (não insira espaços ou caracteres invisíveis)."
+"Edita a configuração do mini-aplicativo e preencha no caminho da Lixeira; "
+"será provavelmente \"~/.locale/share/Trash/files\". Tome cuidado ao digitar "
+"o caminho !!! (não insira espaços ou caracteres invisíveis)."
 
 #: ../data/messages:1063
 msgid "Help us !"
@@ -3642,8 +3675,8 @@ msgstr "Ajude-nos !"
 msgid ""
 "We value your help ! If you see a bug, or if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3655,11 +3688,11 @@ msgstr ""
 "Nós apreciamos sua ajuda ! Se você encontrar um erro, ou se você acha que "
 "algo pode ser melhorado,\n"
 "ou você teve um sonho com o dock, faça-nos uma visita em cairo-dock.org.\n"
-"Pessoas de língua inglesa também são bem-vindos, então não seja "
-"tímido ! ;-)\n"
+"Pessoas de língua inglesa também são bem-vindos, então não seja tímido ! ;-"
+")\n"
 "\n"
-"Se você fez um tema ou um applet para o dock e quer compartilhar, ficaremos "
-"felizes em integrá-lo com outros temas !\n"
+"Se você fez um tema ou um mini-aplicativo para o dock e quer compartilhar, "
+"ficaremos felizes em integrá-lo com outros temas !\n"
 "Fabounet"
 
 #: ../data/messages:1069
@@ -3671,6 +3704,8 @@ msgid ""
 "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard "
 "shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
+"Exemplo : nautilus --no-desktop, gedit, etc. Você pode até definir um atalho "
+"de teclado, por exemplo <Alt>F1, <Ctrl>c, <Ctrl>v, etc"
 
 #: ../data/messages:1073
 msgid "Command to launch on click :"
@@ -3874,7 +3909,7 @@ msgstr ""
 "v1.5.0 : faz um mês desde a última versão, e trabalhamos duro para trazê-la "
 "a você :\n"
 " - Visão parabólica : perfeita para sub-docks com dezenas de ícones.\n"
-" - Um grande pacote de novos applets :\n"
+" - Um grande pacote de novos mini-aplicativos :\n"
 "   Cairo-Dock agora tem seu próprio terminal.\n"
 "   trata da bandeja do sistema ao invés do painel,\n"
 "   monitora a bateria do seu notebook,\n"
@@ -3886,7 +3921,8 @@ msgstr ""
 " - Separadores manuais, melhor acessibilidade aos sub-docks, funciona "
 "perfeitamente em 64 bits, etc\n"
 " - Ainda por cima, um novo tema (I, Cairo) !\n"
-"  Agora, porque você não tenta fazer um applet para o Cairo-Dock ? ;-)"
+"  Agora, porque você não tenta fazer um mini-aplicativo para o Cairo-Dock ? "
+";-)"
 
 #: ../data/messages:1197
 msgid ""
@@ -3906,7 +3942,7 @@ msgstr ""
 "trabalho !\n"
 " - Uma nova visualização apareceu: Rainbow\n"
 " - Cairo-Dock tornou-se um administrador de desklets !\n"
-"  a maioria dos applets agora podem se auto separar do dock\n"
+"  a maioria dos mini-aplicativos agora podem se auto separar do dock\n"
 " e funcionar como deklets reais."
 
 #: ../data/messages:1199
@@ -3918,7 +3954,7 @@ msgid ""
 msgstr ""
 "v1.5.2.1 :\n"
 " - muitas correções bugs, especialmente nos desklets.\n"
-" - Novo applet : clima !\n"
+" - Novo mini-aplicativo : clima !\n"
 " - Cairo-Dock agora está completamente traduzido em Japonês, obrigado a Jiro "
 "Kawada !"
 
@@ -3938,9 +3974,9 @@ msgstr ""
 "v1.5.3.2 :\n"
 " - Temas foram profundamente revistos\n"
 " para a troca completa de um para outro.\n"
-" - Novo applet : alsaMixer !\n"
+" - Novo mini-aplicativo : alsaMixer !\n"
 " - Melhoramento nos desklets com o applet 'mostrarDesklets'.\n"
-" - O applet de 'Atalhos' agora pode separar-se do dock.\n"
+" - O mini-aplicativo de 'Atalhos' agora pode separar-se do dock.\n"
 " - O dock agora pode se comportar como um menu direto no mouse\n"
 " - Atualizações nas traduções e correções usuais de bugs . ^_^\n"
 "  Aproveitando, a gente ainda está procurando por alguém\n"
@@ -3960,7 +3996,8 @@ msgid ""
 " - 3 more themes in Weather"
 msgstr ""
 "v1.5.4.2 : uma versão excelente !\n"
-" - adicione um lindo pingüim no seu dock com o novo applet Cairo-Penguin\n"
+" - adicione um lindo pingüim no seu dock com o novo mini-aplicativo Cairo-"
+"Penguin\n"
 " - monitore sua conexão com applet Wifi\n"
 " - controle o xmms, audacious, banshee e exaile com o applet Xmms\n"
 " - Cairo-Dock agora está completamente integrado com o ambiente XFCE !\n"
@@ -3987,18 +4024,18 @@ msgid ""
 msgstr ""
 "v1.5.5.4 :\n"
 " - Imensas melhorias na Barra de tarefas :\n"
-"  lançadores e applets agora podem funcionar como aplicativos.\n"
+"  lançadores e mini-aplicativos agora podem funcionar como aplicativos.\n"
 "  janelas podem aparecer durante o o processo de arrastar e soltar se o "
 "mouse ficar nelas\n"
 " - Ícones de lançadores com alta qualidade podem ser usados ao invés dos do "
 "X \n"
 " - Administração rápida do Compiz com o applet 'Compiz-Icon'\n"
 " - Controlar Cairo-Dock de programas externos com o plug-in Dbus.\n"
-" - Adicionado applet 'Mostrar Área de trabalho' por conveniência.\n"
+" - Adicionado mini-aplicativo 'Mostrar Área de trabalho' por conveniência.\n"
 " - Algumas correções no PowerManager (agora funciona !)\n"
 " - Habilidade de poder ter vários docks numa única instância do Cairo-Dock.\n"
-" - Cairo-Dock ainda não está bem integrado com o Gnome 2.22, mas estará "
-"logo ;-)"
+" - Cairo-Dock ainda não está bem integrado com o Gnome 2.22, mas estará logo "
+";-)"
 
 #: ../data/messages:1207
 msgid ""
@@ -4021,8 +4058,8 @@ msgstr ""
 " - Integração com o último Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - ainda "
 "experimental\n"
 " - Você agora pode ter muitos docks em uma instância do Cairo-Dock.\n"
-" Posicione um lançador ou applet no dock, dando a este dock um nome que não "
-"existia previamente e\n"
+" Posicione um lançador ou mini-aplicativo no dock, dando a este dock um nome "
+"que não existia previamente e\n"
 " um novo será criado.\n"
 " - SHIFT+'rodinha' do mouse no AlsaMixer, Xmms, Rhythmbox, etc.\n"
 " - Lançadores podem agora chamar atalhos do teclado.\n"
@@ -4053,7 +4090,7 @@ msgid ""
 msgstr ""
 "v1.6.0 :\n"
 " - Uma nova visualização aparaceu : Diapositive !\n"
-" - Um grande pacote de novos applets :\n"
+" - Um grande pacote de novos mini-aplicativos :\n"
 "   cpusage\n"
 "   ram-meter\n"
 "   netspeed\n"
@@ -4070,8 +4107,8 @@ msgstr ""
 #: ../data/messages:1211
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4083,7 +4120,7 @@ msgstr ""
 "Cairo-Dock tem um ano de vida ! Para celebrar este evento, estamos felizes "
 "em prover a você :\n"
 " - Mais uma vez uma nova visualização : Curve !\n"
-" - Um applet a muito esperado : Alternador de Área de trabalho.\n"
+" - Um mini-aplicativo a muito esperado : Alternador de Área de trabalho.\n"
 " - Um tema bem completo : Brit\n"
 " - Tradução para italiano e chinês.\n"
 " - E ainda estamos esperando por alguém para ajudar-nos a escrever um plug-"
@@ -4102,9 +4139,9 @@ msgid ""
 "plug-in ^_^"
 msgstr ""
 "v1.6.2 : versão integrada nos repositórios do Ubuntu !\n"
-" - 2 novos applets lançados :\n"
+" - 2 novos mini-aplicativos lançados :\n"
 "  Slider e Stack. Divirta-se !\n"
-" - Applets podem agora serem lançados várias vezes\n"
+" - Mini-aplicativos podem agora serem lançados várias vezes\n"
 " (Relógio, Cairo-Penguin, Slider, Stack), cada um com uma configuração "
 "diferente.\n"
 " - Cairo-Dock agora é capaz de carregar temas em seu próprio servidor,\n"
@@ -4137,9 +4174,9 @@ msgstr ""
 " e os ícones locais agora estão em uma sub-pasta dedicada 'icons'.\n"
 " Desde já, desculpe por possíveis inconvenientes ^_^\n"
 " - E agora as boas notícias !\n"
-" - 2 novos applets nasceram : Clipper e GMenu. \n"
+" - 2 novos mini-aplicativos nasceram : Clipper e GMenu. \n"
 " - Diversas melhorias para os Desklets : decorações, rotação, arrastar, etc\n"
-" - Cpusage e outros applets agora mostram lindos gráficos.\n"
+" - Cpusage e outros mini-aplicativos agora mostram lindos gráficos.\n"
 " - Você agora pode agora remover lançadores arrastando-os para fora do dock\n"
 "  e separá-los da mesma forma.\n"
 " - Movimentos suaves dos ícones quando arrastados para dentro do dock\n"
@@ -4164,7 +4201,7 @@ msgstr ""
 "effects, illusion, drop indicator, motion blur, dialog rendering\n"
 " - O painel de controle foi amplamente reescrito.\n"
 " - Desklets agora em 3D\n"
-" - Novos applets : mail, keyboard indicator, quick folder, Toons.\n"
+" - Novos mini-aplicativos : mail, keyboard indicator, quick folder, Toons.\n"
 " - Muitas correções de bugs e atualizações em todos os plugins."
 
 #: ../data/messages:1219
@@ -4176,7 +4213,7 @@ msgid ""
 msgstr ""
 "2.0.5 :\n"
 " - Esta é principalmente uma versão de correção de bugs\n"
-" - Melhoramento no applet RB\n"
+" - Melhoramento no mini-aplicativo RB\n"
 " - Funcionalidades adicionadas nos ícones de aplicativos agrupados."
 
 #: ../data/messages:1221
@@ -4199,8 +4236,8 @@ msgstr ""
 #: ../data/messages:1223
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4214,16 +4251,6 @@ msgid ""
 "    You can even write an applet in any language with it !"
 msgstr ""
 
-#: ../data/messages:1225
-msgid ""
-"2.1.2 : \n"
-" - Desklets can be fixed on their current desktop, not only on the first "
-"one.\n"
-" - Welcome to the new  \"RSS-reader\" applet !\n"
-" - Light up your dock with the new \"firework\" icon effects !\n"
-" - A KDE-integration plug-in has been started."
-msgstr ""
-
 #~ msgid "Fill this launcher"
 #~ msgstr "Preencha este lançador"
 
@@ -4233,8 +4260,8 @@ msgstr ""
 #~ "You can either familiarize yourself with the dock or choose another theme "
 #~ "with right-click -> Cairo-Dock -> Theme manager\n"
 #~ "A useful help is available by right-click -> Cairo-Dock -> Help.\n"
-#~ "If you have any question/request/remark, please pay us a visit : right-"
-#~ "click -> Cairo-Dock -> Communauty site.\n"
+#~ "If you have any question/request/remark, please pay us a visit : right-click "
+#~ "-> Cairo-Dock -> Communauty site.\n"
 #~ "Hope you will enjoy this soft !\n"
 #~ "  (you can now click on this dialog to close it)"
 #~ msgstr ""
@@ -4243,14 +4270,14 @@ msgstr ""
 #~ "Você pode se familiarizar com o dock ou escolher outro tema com botão-"
 #~ "direito -> Cairo-Dock -> Administrador de tema\n"
 #~ "Ajuda está disponível com botão-direito -> Cairo-Dock -> Ajuda.\n"
-#~ "Se você tem qualquer dúvida/pedido/observação, por favor faça-nos uma "
-#~ "visita : botão direito -> Cairo-Dock -> Site da comunidade.\n"
+#~ "Se você tem qualquer dúvida/pedido/observação, por favor faça-nos uma visita "
+#~ ": botão direito -> Cairo-Dock -> Site da comunidade.\n"
 #~ "Espero que você curta este aplicativo !\n"
 #~ "  (você pode clicar sobre esta caixa para fechá-la)"
 
 #~ msgid ""
-#~ "The dock will automatically resize itself to fit this size. Set it to 0 "
-#~ "to make the dock fit the screen's size."
+#~ "The dock will automatically resize itself to fit this size. Set it to 0 to "
+#~ "make the dock fit the screen's size."
 #~ msgstr ""
 #~ "O dock redimensionará a si mesmo automaticamente para se ajustar a este "
 #~ "tamanho. Defina 0 para fazer com que o dock se ajuste ao tamanho da tela."
@@ -4262,9 +4289,8 @@ msgstr ""
 #~ msgstr "Fator de velocidade para decoração de fundo :"
 
 #~ msgid ""
-#~ "Otherwise the amount of movement of the decorations will only depend on "
-#~ "the direction of the cursor's movement, as if the decorations were "
-#~ "\"gliding\"."
+#~ "Otherwise the amount of movement of the decorations will only depend on the "
+#~ "direction of the cursor's movement, as if the decorations were \"gliding\"."
 #~ msgstr ""
 #~ "Do contrário, a quantidade de movimento da decoração dependerá apenas da "
 #~ "direção do movimento do cursor, se as decorações forem \"deslizantes\"."
@@ -4285,8 +4311,7 @@ msgstr ""
 #~ msgid ""
 #~ "Some applets may not use it, because they redraw periodically themselves."
 #~ msgstr ""
-#~ "Alguns applets podem não usar isto, porque eles se redesenham "
-#~ "periodicamente."
+#~ "Alguns applets podem não usar isto, porque eles se redesenham periodicamente."
 
 #~ msgid "Use this background for applets too ?"
 #~ msgstr "Usar este fundo para os applets também ?"
