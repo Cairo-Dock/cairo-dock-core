@@ -99,11 +99,11 @@ extern gboolean g_bEasterEggs;
 	N_("Controlers"), "gtk-zoom-fit",
 	N_("Plug-ins"), "gtk-disconnect" };*/
 const gchar *cCategoriesDescription[2*CAIRO_DOCK_NB_CATEGORY] = {
-	N_("Behaviour"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-behavior.svg",
+	N_("Behaviour"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-behavior.png",
 	N_("Appearance"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-appearance.svg",
 	N_("Accessories"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-accessories.png",
-	N_("Desktop"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-desktop.svg",
-	N_("Controlers"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-controler.svg",
+	N_("Desktop"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-desktop.png",
+	N_("Controlers"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-controler.png",
 	N_("Plug-ins"), "gtk-disconnect" };
 
 static int iNbConfigDialogs = 0;

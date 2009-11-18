@@ -85,6 +85,15 @@ Files: 	src/texture-gradation.h
 Copyright: Copyright (C) 2007  Gimp dev.
 Licence: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete licence)
 
+Files: icon-help.png
+	data/icon-background.png
+	data/icon-desktop.png
+	data/icon-behavior.png
+	data/icon-controler.png
+	data/icon-desklets.png
+Copyright: Deviant Dark (from the theme Oxygen-Refit 2)
+Licence: LGPL
+
 Files: 	debian/*
 Copyright: Copyright (C) Julien Lavergne <julien.lavergne@gmail.com>
 Licence: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete licence)
