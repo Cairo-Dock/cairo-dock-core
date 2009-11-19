@@ -692,8 +692,7 @@ int main (int argc, char** argv)
 	g_print ("\nPLAN 3D NE PREND PAS TOUT L'ECRAN\n\n");
 	g_print ("\nBATTERIE VERS 100%\n\n");
 	g_print ("\nPB AFFICHAGE PM\n\n");
-	g_print ("MAIN DOCK SLIDE : SORTIR PAR LES COTES\n\n");
-	g_print ("\n\n");
+	g_print ("\nTESTER LE THEME HUMANITY\n\n");
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
 	g_print ("\nFIXER LES DESKLETS SUR UN BUREAU\n\n");

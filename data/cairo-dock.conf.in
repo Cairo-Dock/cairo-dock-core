@@ -16,15 +16,15 @@ screen border = 0
 #{At 0, the dock will place itself regarding the left corner if horizontal and the top corner if vertical, at 1 regarding the right corner if horizontal and the bottom corner if vertical, and at 0.5, regarding the middle of the screen's edge.}
 alignment = .5
 
-#F-[Position regarding the chosen screen's edge;gtk-leave-fullscreen]
+#F-[Offset to the screen's edge;gtk-leave-fullscreen]
 frame_scr =
 
-#I-[-1000;1000;left;right] Lateral gap :
+#I-[-1000;1000] Lateral offset :
 #{Gap from the absolute position on the screen's edge, in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.}
 x gap = 0
 #i-[-30;1000] Distance to the screen's edge :
 #{in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.}
-y gap = 25
+y gap = 0
 
 #F-[Multiple screens]
 frame_xin =
@@ -42,11 +42,11 @@ num screen = 0
 #F-[Visibility of the main dock;gtk-find]
 frame_visi =
 
-#l-[Keep the dock above windows;Prevent windows from overlapping the dock;Keep the dock below windows;Automatically hide the dock;Automatically hide when a window is maximized;Raise on shortcut] Visibility :
-#{Auto-hide : the dock will automatically hide itself outside of the scren when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.
-#Prevent windows from overlapping the dock : reserve space at the edge of the screen for the dock.
-#Keep the dock below windows : The dock will pop-up on the foreground when you place the mouse on its screen border.
-#Raise on shortcut : When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
+#l-[Always on top;Prevent windows from overlapping the dock;Keep the dock below windows;Automatically hide the dock;Automatically hide when a window is maximized;Pop-up on shortcut] Visibility :
+#{Prevent windows from overlapping the dock : reserve space at the edge of the screen for the dock.
+#Auto-hide : the dock will automatically hide itself outside of the scren when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.
+#Keep the dock below windows : the dock will pop-up on the foreground when you place the mouse on its screen border.
+#Pop-up on shortcut : When you press the shortcut, the dock will pop-up at the position of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 visibility = 1
 
 #b- Pop-up only if the mouse hits a screen corner ?
@@ -56,12 +56,12 @@ pop in corner only = false;
 #{Place the mouse into it will make the dock re-appear.}
 zone size = 800;5
 
-#k- Keyboard shortcut to show/hide the dock :
+#k- Keyboard shortcut to pop-up the dock :
 #{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 raise shortcut = 
 
 
-#F-[Other parameters]
+#F-[Additionnal parameters]
 frame_extra =
 
 max_authorized_width = 0
@@ -74,7 +74,7 @@ extended = false
 auto quick hide = false
 
 
-#F-[Sub-docks' accessibility;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-subdock.png]
+#F-[Sub-docks' visibility;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-subdock.png]
 frame_sub =
 
 #i- Delay before you effectively leave from a sub-dock or to a sub-dock :
@@ -289,33 +289,15 @@ modules=
 
 [Background]
 
-#F+[Extern Frame;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-frame.png]
-frame4 =
-#i+[0;30] Corner radius :
-#{in pixels.}
-corner radius = 10
+#y+[Image;Color gradation] Fill the background with :
+fill bg = 1
 
-#i+[0;20] Linewidth of the extern line :
-#{in pixels.}
-line width = 2
-
-#i+[0;20] Margin between the frame and the icons or their reflects :
-#{in pixels.}
-frame margin = 2
-
-#C+ Color of the extern line (r,v,b,a) :
-line color = 0.0; 0.0; 0.8; 0.4
-
-#b+ Are the bottom left and right corners rounded ?
-rounded bottom corner = true
-
-
-#F+[Background image...;gtk-orientation-portrait]
-#{Use a background image or a color gradation.}
+#F+[Image;gtk-orientation-portrait]
+#{Use a background image.}
 frame2 = 
 
 #S+ Image's filename to use as a background :
-#{Any format allowed; let this field empty if you don't want to use an image as background.}
+#{Any format allowed; if empty, the color gradation will be used as a fallback.}
 background image = 
 
 #e+[0;1;transparent;opaque] Image's transparency :
@@ -324,8 +306,8 @@ image alpha = 0.5
 #b+ Repeat image as a pattern to fill background ?
 repeat image = true
 
-#F+[...or Gradation;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-gradation.png]
-#{Use a background image or a color gradation.}
+#F+[Color gradation;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-gradation.png]
+#{Use a color gradation.}
 frame3 = 
 
 #C+ Bright color (red, green, blue, alpha) :
@@ -334,26 +316,39 @@ stripes color bright = 0.933; 0.933; 0.925; 0.4
 #C+ Dark color (red, green, blue, alpha) :
 stripes color dark = 0.827; 0.843; 0.811; 0.6
 
-#f+[-90;90] Angle of the stripes / gradation, in relation to the vertical (in degree) :
+#f+[-90;90] Angle of the gradation :
+#{In degrees, in relation to the vertical}
 stripes angle = 90.
 
-#i+ Number of stripes, in each pattern, to draw in the background :
-#{The bigger, the more the stripes are close to each other; with 0 stripes, the background will be filled with a single gradation.}
+#i+ Repeat the gradation this number of times :
+#{If not nul, it will form stripes.}
 number of stripes = 0
 
-#f+[0;1] Width of the stripes, in percentage of the pattern size :
-#{1 pattern contains N stripes, so the width can be less or equal than 1/N.}
-stripes width = 0.03
+#f+[0;1] Percentage of the bright color :
+stripes width = 0.2
 
-#X+[Background movement;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-mouse.png]
-frame_mouse = 
+#F+[Extern Frame;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-frame.png]
+frame_frame =
+#i+[0;30] Corner radius :
+#{in pixels.}
+corner radius = 10
 
-#l+[No;Follow the mouse;Link with the mouse] Move the background image along with the cursor ?
-move bg = 0
+#i+[0;20] Linewidth of the extern line :
+#{in pixels.}
+line width = 2
 
-#e+[0.1;1;slow;fast] Speed :
-#{The smaller, the slower the decorations will move along with the cursor.}
-decorations speed = 0.5
+#C+ Color of the extern line :
+line color = 0.0; 0.0; 0.8; 0.4
+
+#i+[0;20] Margin between the frame and the icons or their reflects :
+#{in pixels.}
+frame margin = 2
+
+#b+ Are the bottom left and right corners rounded ?
+rounded bottom corner = true
+
+#F+
+frame_frame_ =
 
 #F[Hidden dock;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-hidden-dock.png]
 #{Configure the dock's appearence when hidden.}
@@ -372,6 +367,16 @@ callback reverse = true
 
 #m[Accessibility] Configure the auto-hide behaviour.
 config_hidden = 
+
+#X+[Background movement;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-mouse.png]
+frame_mouse = 
+
+#l+[No;Follow the mouse;Link with the mouse] Move the background image along with the cursor ?
+move bg = 0
+
+#e+[0.1;1;slow;fast] Speed :
+#{The smaller, the slower the decorations will move along with the cursor.}
+decorations speed = 0.5
 
 
 [Labels]
@@ -409,7 +414,7 @@ frame_bg =
 
 #C+ Color of the label's background :
 #{If you set it to fully transparent, there will be no background for the text, but the margin around the text will still be effective.}
-text background color =0;0;0;.5
+text background color = 0;0;0;.5
 
 #b+ Use background color for labels ?
 #{If false, only the quick-info will have this background color.}
@@ -469,16 +474,6 @@ field depth = 0.5
 #{It is their transparency when the dock is at rest; they will "materialize" progressively as the dock grows up. The closer to 0, the more transparent they will be.}
 alpha at rest = 1
 
-
-#F+[Link the icons with a string]
-frame_string =
-
-#i+[0;20] Linewidth of the string, in pixels (0 to not use string) :
-string width = 0
-
-#C+ Color of the string (red, blue, green, alpha) :
-string color = 0.0; 0.0; 0.8; 0.4
-
 #X+[Icons size]
 frame_size =
 
@@ -536,6 +531,16 @@ mix applets with launchers = false
 mix applis with launchers = false
 
 
+#X+[Link the icons with a string]
+frame_string =
+
+#i+[0;20] Linewidth of the string, in pixels (0 to not use string) :
+string width = 0
+
+#C+ Color of the string (red, blue, green, alpha) :
+string color = 0.0; 0.0; 0.8; 0.4
+
+
 [Views]
 
 #F+[Main Dock]
@@ -555,7 +560,7 @@ same_horizontality = true
 
 #e+[0.1;1.;smaller;same size] Ratio for the size of the sub-docks' icons :
 #{You can specify a ratio for the size of the sub-docks' icons, regarding the main docks' icons size}
-relative icon size = 1.
+relative icon size = .8
 
 
 [Dialogs]
@@ -563,22 +568,22 @@ relative icon size = 1.
 #F+[Bubble;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-bubble.png]
 frame_bubble =
 
-#C+ Background color of the bubble (r,v,b,a) :
+#C+ Background color of the bubble :
 background color = 1.0; 1.0; 1.0; 0.8
 
 #v
 sep_bul=
 
-#t+ Choose a window decorator :
+#t+ Shape of the bubble :
 decorator = comics
 
 #F+[Text;gtk-select-font]
 frame_text =
 
-#c+ Text color (r,g,b) :
+#c+ Text color :
 text color = 0.0; 0.0; 0.0
 
-#P+ Family of the font used for labels :
+#P+ Text font :
 #{Let empty to use the default system font (Gnome only).}
 message police = 
 
@@ -610,6 +615,7 @@ icon size = 48
 [Desklets]
 
 #O+ Choose a default decoration for all desklets :
+#{This can be customized for each desklet separately.}
 decorations = clear
 
 #F+[Personnal decorations;gtk-paste]
@@ -661,9 +667,9 @@ depth rotate image =
 #F+[Indicator of the active window]
 frame_window =
 
-#C+ Color of the frame (r,v,b,a) :
+#C+ Color of the frame :
 #{Set transparency to 0 if you don't want to use an indicator.}
-active color = 0.; 0.4; 0.8; 0.25
+active color = 0.; 0.4; 0.8; 0.5
 
 #i+[0;20] Linewidth of the frame around the active window :
 #{Set 0 to fill the frame.}
@@ -694,17 +700,18 @@ indicator above = true
 #{You can choose to make the indicator smaller or bigger than the icons. The bigger the value is, the bigger the indicator is. 1 means the indicator will have the same size as the icons.}
 indicator ratio = 1.
 
-#b+ Link the indicator with its icon ?
-#{It will then be resized like the icon, move like the icon, etc. Otherwise it will be drawn directly on the dock.}
-link indicator = true
-
 #i+[-10;64] Vertical offset :
 #{in pixels. You can use this parameter to adjust the indicator's vertical position.}
 indicator deltaY = 2
 
+#b+ Link the indicator with its icon ?
+#{It will then be resized like the icon, move like the icon, etc. Otherwise it will be drawn directly on the dock.}
+link indicator = true
+
 #b+ Rotate the indicator with dock ?
 #{Use it to make the indicator rotate according to the position of the dock (top/bottom/right/left)}
 rotate indicator = true
+
 
 #F+[Indicator of class subdock]
 frame_class =

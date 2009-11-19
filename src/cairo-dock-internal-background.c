@@ -52,9 +52,25 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackgrou
 
 	pBackground->bRoundedBottomCorner = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "rounded bottom corner", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
+	
+	gchar *cBgImage = cairo_dock_get_string_key_value (pKeyFile, "Background", "background image", &bFlushConfFileNeeded, NULL, NULL, NULL);
+	int iFillBg = cairo_dock_get_integer_key_value (pKeyFile, "Background", "fill bg", &bFlushConfFileNeeded, -1, NULL, NULL);  // -1 pour intercepter le cas ou la cle n'existe pas.
+	if (iFillBg == -1)
+	{
+		iFillBg = (cBgImage != NULL ? 0 : 1);
+		g_key_file_set_integer (pKeyFile, "Background", "fill bg", iFillBg);
+	}
+	else
+	{
+		if (iFillBg != 0)
+		{
+			g_free (cBgImage);
+			cBgImage = NULL;
+		}
+	}
+	
 	// image de fond.
-	pBackground->cBackgroundImageFile = cairo_dock_get_string_key_value (pKeyFile, "Background", "background image", &bFlushConfFileNeeded, NULL, NULL, NULL);
-
+	pBackground->cBackgroundImageFile = cBgImage;
 	pBackground->fBackgroundImageAlpha = cairo_dock_get_double_key_value (pKeyFile, "Background", "image alpha", &bFlushConfFileNeeded, 0.5, NULL, NULL);
 
 	pBackground->bBackgroundImageRepeat = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "repeat image", &bFlushConfFileNeeded, FALSE, NULL, NULL);
@@ -66,12 +82,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackgrou
 		
 		if (pBackground->iNbStripes != 0)
 		{
-			pBackground->fStripesWidth = cairo_dock_get_double_key_value (pKeyFile, "Background", "stripes width", &bFlushConfFileNeeded, 0.02, NULL, NULL);
-			if (pBackground->fStripesWidth > 1. / pBackground->iNbStripes)
-			{
-				cd_warning ("the stripes' width is greater than the space between them. Consider reducing it.");
-				pBackground->fStripesWidth = 0.99 / pBackground->iNbStripes;
-			}
+			pBackground->fStripesWidth = MAX (.01, MIN (.99, cairo_dock_get_double_key_value (pKeyFile, "Background", "stripes width", &bFlushConfFileNeeded, 0.2, NULL, NULL))) / pBackground->iNbStripes;
 		}
 		double couleur3[4] = {.7, .7, 1., .7};
 		cairo_dock_get_double_list_key_value (pKeyFile, "Background", "stripes color dark", &bFlushConfFileNeeded, pBackground->fStripesColorDark, 4, couleur3, NULL, NULL);
@@ -144,7 +155,7 @@ DEFINE_PRE_INIT (Background)
 {
 	pModule->cModuleName = "Background";
 	pModule->cTitle = N_("Background");
-	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-background.png";
+	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-background.svg";
 	pModule->cDescription = N_("Set a background to your dock.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigBackground);

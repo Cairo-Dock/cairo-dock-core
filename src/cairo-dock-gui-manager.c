@@ -99,10 +99,10 @@ extern gboolean g_bEasterEggs;
 	N_("Controlers"), "gtk-zoom-fit",
 	N_("Plug-ins"), "gtk-disconnect" };*/
 const gchar *cCategoriesDescription[2*CAIRO_DOCK_NB_CATEGORY] = {
-	N_("Behaviour"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-behavior.png",
+	N_("Behaviour"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-behavior.svg",
 	N_("Appearance"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-appearance.svg",
 	N_("Accessories"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-accessories.png",
-	N_("Desktop"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-desktop.png",
+	N_("Desktop"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-desktop.svg",
 	N_("Controlers"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-controler.png",
 	N_("Plug-ins"), "gtk-disconnect" };
 
@@ -264,7 +264,7 @@ static inline CairoDockGroupDescription *_cairo_dock_add_group_button (const gch
 		FALSE,
 		0);
 
-	pGroupDescription->pLabel = gtk_label_new (dgettext (pGroupDescription->cGettextDomain, cTitle ? cTitle : cGroupName));
+	pGroupDescription->pLabel = gtk_label_new (dgettext (pGroupDescription->cGettextDomain, cTitle));
 	gtk_box_pack_start (GTK_BOX (pGroupHBox),
 		pGroupDescription->pLabel,
 		FALSE,
@@ -318,7 +318,7 @@ static gboolean _cairo_dock_add_one_module_widget (CairoDockModule *pModule, con
 		NULL,
 		NULL,
 		pModule->pVisitCard->cInternalModule,
-		NULL);
+		pModule->pVisitCard->cTitle);
 	//g_print ("+ %s : %x;%x\n", cModuleName,pGroupDescription, pGroupDescription->pActivateButton);
 	pGroupDescription->cOriginalConfFilePath = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);  // petite optimisation, pour pas dupliquer la chaine 2 fois.
 	pGroupDescription->load_custom_widget = pModule->pInterface->load_custom_widget;
@@ -974,7 +974,7 @@ GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, CairoDoc
 		// on rajoute la page du module interne en 1er dans le notebook.
 		if (pNoteBook != NULL)
 		{
-			GtkWidget *pLabel = gtk_label_new (dgettext (pGroupDescription->cGettextDomain, pGroupDescription->cGroupName));
+			GtkWidget *pLabel = gtk_label_new (dgettext (pGroupDescription->cGettextDomain, pGroupDescription->cTitle));
 			GtkWidget *pLabelContainer = NULL;
 			GtkWidget *pAlign = NULL;
 			if (pGroupDescription->cIcon != NULL && *pGroupDescription->cIcon != '\0')
@@ -1023,11 +1023,11 @@ GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, CairoDoc
 	
 	s_pCurrentGroup = pGroupDescription;
 	
-	gtk_window_set_title (GTK_WINDOW (cairo_dock_get_main_window ()), dgettext (pGroupDescription->cGettextDomain, pGroupDescription->cGroupName));
+	gtk_window_set_title (GTK_WINDOW (cairo_dock_get_main_window ()), dgettext (pGroupDescription->cGettextDomain, pGroupDescription->cTitle));
 	
 	//\_______________ On met a jour la frame du groupe (label + check-button).
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman 12\" color=\"#81728C\"><u><b>%s</b></u></span>", dgettext (pGroupDescription->cGettextDomain, pGroupDescription->cGroupName));
+	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman 12\" color=\"#81728C\"><u><b>%s</b></u></span>", dgettext (pGroupDescription->cGettextDomain, pGroupDescription->cTitle));
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 	g_free (cLabel);
 	gtk_frame_set_label_widget (GTK_FRAME (s_pGroupFrame), pLabel);

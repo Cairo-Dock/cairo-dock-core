@@ -39,7 +39,7 @@ essentialdata_DATA = \
 	icon-views.png\
 	icon-visibility.png\
 	icon-labels.png\
-	icon-background.png\
+	icon-background.svg\
 	icon-taskbar.png\
 	icon-desklets.png\
 	icon-hidden-dock.png\
@@ -47,10 +47,10 @@ essentialdata_DATA = \
 	icon-system.png\
 	icon-lock-icons.svg\
 	icon-position.png\
-	icon-behavior.png\
+	icon-behavior.svg\
 	icon-appearance.svg\
 	icon-accessories.png\
-	icon-desktop.png\
+	icon-desktop.svg\
 	icon-controler.png\
 	icon-connection.svg\
 	cairo-dock-animated.xpm\

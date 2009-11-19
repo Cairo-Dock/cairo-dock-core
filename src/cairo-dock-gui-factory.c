@@ -337,8 +337,8 @@ static void _cairo_dock_select_one_item_in_control_combo (GtkComboBox *widget, g
 	int iNumItem = gtk_combo_box_get_active (widget);
 	//gtk_tree_model_get (model, &iter, CAIRO_DOCK_MODEL_ORDER, &iNumItem, -1);
 	
-	GtkWidget *parent = data[0];
-	GtkWidget *pKeyBox = data[1];
+	GtkWidget *parent = data[1];
+	GtkWidget *pKeyBox = data[0];
 	int iNbWidgets = GPOINTER_TO_INT (data[2]);
 	GList *children = gtk_container_get_children (GTK_CONTAINER (parent));
 	GList *c = g_list_find (children, pKeyBox);
@@ -349,13 +349,50 @@ static void _cairo_dock_select_one_item_in_control_combo (GtkComboBox *widget, g
 	for (c = c->next, i = 0; c != NULL && i < iNbWidgets; c = c->next, i ++)
 	{
 		w = c->data;
-		g_print ("%d/%d -> %d\n", i, iNbWidgets, i == iNumItem);
-		gtk_widget_set_sensitive (w, i == iNumItem);
+		g_print (" %d/%d -> %d\n", i, iNbWidgets, i == iNumItem);
+		if (GTK_IS_EXPANDER (w))
+		{
+			gtk_expander_set_expanded (GTK_EXPANDER (w), i == iNumItem);
+		}
+		else
+		{
+			gtk_widget_set_sensitive (w, i == iNumItem);
+		}
 	}
 	
 	g_list_free (children);
 }
-
+static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox *widget, gpointer *data)
+{
+	GtkTreeModel *model = gtk_combo_box_get_model (widget);
+	g_return_if_fail (model != NULL);
+	
+	GtkTreeIter iter;
+	if (!gtk_combo_box_get_active_iter (widget, &iter))
+		return ;
+	
+	int iOrder1, iOrder2;
+	gtk_tree_model_get (model, &iter,
+		CAIRO_DOCK_MODEL_ORDER, &iOrder1,
+		CAIRO_DOCK_MODEL_ORDER2, &iOrder2, -1);
+	
+	GtkWidget *parent = data[1];
+	GtkWidget *pKeyBox = data[0];
+	int iNbWidgets = GPOINTER_TO_INT (data[2]);
+	GList *children = gtk_container_get_children (GTK_CONTAINER (parent));
+	GList *c = g_list_find (children, pKeyBox);
+	g_return_if_fail (c != NULL);
+	
+	GtkWidget *w;
+	int i;
+	for (c = c->next, i = 0; c != NULL && i < iNbWidgets; c = c->next, i ++)
+	{
+		w = c->data;
+		gtk_widget_set_sensitive (w, i > iOrder1 && i < iOrder1 + iOrder2);
+	}
+	
+	g_list_free (children);
+}
 
 static void _cairo_dock_show_image_preview (GtkFileChooser *pFileChooser, GtkImage *pPreviewImage)
 {
@@ -547,7 +584,7 @@ static void _cairo_dock_set_color (GtkColorButton *pColorButton, GSList *pWidget
 	if (gtk_color_button_get_use_alpha (pColorButton))
 	{
 		if (pList == NULL)
-		return;
+			return;
 		pSpinButton = pList->data;
 		gtk_spin_button_set_value (pSpinButton, 1. * gtk_color_button_get_alpha (pColorButton) / 65535);
 	}
@@ -589,6 +626,28 @@ void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data)
 	}
 }
 
+static void _cairo_dock_toggle_control_button (GtkCheckButton *pButton, gpointer *data)
+{
+	GtkWidget *parent = data[1];
+	GtkWidget *pKeyBox = data[0];
+	int iNbWidgets = GPOINTER_TO_INT (data[2]);
+	
+	GList *children = gtk_container_get_children (GTK_CONTAINER (parent));
+	GList *c = g_list_find (children, pKeyBox);
+	g_return_if_fail (c != NULL);
+	
+	gboolean bActive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pButton));
+	GtkWidget *w;
+	int i;
+	for (c = c->next, i = 0; c != NULL && i < iNbWidgets; c = c->next, i ++)
+	{
+		w = c->data;
+		g_print (" %d/%d -> %d\n", i, iNbWidgets, bActive);
+		gtk_widget_set_sensitive (w, bActive);
+	}
+	
+	g_list_free (children);
+}
 
 #define _build_list_for_gui(pListStore, cEmptyItem, pHashTable, pHFunction) do { \
 	if (pListStore != NULL)\
@@ -1089,7 +1148,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	GtkWidget *pOneWidget;
 	GSList * pSubWidgetList;
 	GtkWidget *pLabel=NULL, *pLabelContainer;
-	GtkWidget *pGroupBox, *pKeyBox=NULL, *pSmallVBox, *pWidgetBox=NULL, *pControlContainer = NULL;
+	GtkWidget *pGroupBox, *pKeyBox=NULL, *pSmallVBox, *pWidgetBox=NULL;
 	GtkWidget *pEntry;
 	GtkWidget *pTable;
 	GtkWidget *pButtonAdd, *pButtonRemove;
@@ -1107,6 +1166,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	GtkTreeIter iter;
 	GtkTreeSelection *selection;
 	GtkWidget *pBackButton;
+	GtkWidget *pControlContainer = NULL;
+	int iFirstSensitiveWidget = 0, iNbControlledWidgets = 0, iNbSensitiveWidgets = 0;
 	gchar *cGroupComment, *cKeyName, *cKeyComment, *cUsefulComment, *cAuthorizedValuesChain, *cTipString, **pAuthorizedValuesList, *cSmallGroupIcon=NULL, *cDisplayedGroupName=NULL;  // ne pas effacer 'cTipString' et 'cUsefulComment', ils pointent dans cKeyComment.
 	gpointer *pGroupKeyWidget;
 	int i, j;
@@ -1114,7 +1175,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	int iNumPage=0, iPresentedNumPage=0;
 	char iElementType;
 	gboolean bValue, *bValueList;
-	int iValue, iMinValue, iMaxValue, *iValueList, iNbControlledElement = 0, iNumControlledElement=0;
+	int iValue, iMinValue, iMaxValue, *iValueList;
 	double fValue, fMinValue, fMaxValue, *fValueList;
 	gchar *cValue, **cValueList, *cSmallIcon=NULL;
 	GdkColor gdkColor;
@@ -1128,7 +1189,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	pFrame = NULL;
 	pFrameVBox = NULL;
 	pControlContainer = NULL;
-	iNbControlledElement = 0;
+	iNbControlledWidgets = 0;
 	cGroupComment  = g_key_file_get_comment (pKeyFile, cGroupName, NULL, NULL);
 	if (cGroupComment != NULL)
 	{
@@ -1238,12 +1299,30 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			{
 				gtk_widget_set_tooltip_text (pKeyBox, dgettext (cGettextDomain, cTipString));
 			}
-			if (iNbControlledElement > 0 && pControlContainer != NULL)
+			if (iNbControlledWidgets > 0 && pControlContainer != NULL)
 			{
+				g_print ("ctrl\n");
 				if (pControlContainer == (pFrameVBox ? pFrameVBox : pGroupBox))
 				{
-					iNbControlledElement --;
-					gtk_widget_set_sensitive ((pAdditionalItemsVBox ? pAdditionalItemsVBox : pKeyBox), (iNbControlledElement == iNumControlledElement));
+					g_print ("ctrl (iNbControlledWidgets:%d, iFirstSensitiveWidget:%d, iNbSensitiveWidgets:%d)\n", iNbControlledWidgets, iFirstSensitiveWidget, iNbSensitiveWidgets);
+					iNbControlledWidgets --;
+					if (iFirstSensitiveWidget > 0)
+						iFirstSensitiveWidget --;
+					
+					GtkWidget *w = (pAdditionalItemsVBox ? pAdditionalItemsVBox : pKeyBox);
+					if (iFirstSensitiveWidget == 0 && iNbSensitiveWidgets > 0)
+					{
+						g_print (" => sensitive\n");
+						iNbSensitiveWidgets --;
+						if (GTK_IS_EXPANDER (w))
+							gtk_expander_set_expanded (GTK_EXPANDER (w), TRUE);
+					}
+					else
+					{
+						g_print (" => unsensitive\n");
+						if (!GTK_IS_EXPANDER (w))
+							gtk_widget_set_sensitive (w, FALSE);
+					}
 				}
 			}
 			
@@ -1272,6 +1351,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					0);
 			}
 		}
+		else if (iElementType != CAIRO_DOCK_WIDGET_SEPARATOR)
+		{
+			
+		}
 		
 		pSubWidgetList = NULL;
 		bAddBackButton = FALSE;
@@ -1280,15 +1363,37 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 		switch (iElementType)
 		{
 			case CAIRO_DOCK_WIDGET_CHECK_BUTTON :  // boolean
+			case CAIRO_DOCK_WIDGET_CHECK_CONTROL_BUTTON :  // boolean qui controle le widget suivant
 				length = 0;
 				bValueList = g_key_file_get_boolean_list (pKeyFile, cGroupName, cKeyName, &length, NULL);
-
+				
 				for (k = 0; k < iNbElements; k ++)
 				{
 					bValue =  (k < length ? bValueList[k] : FALSE);
 					pOneWidget = gtk_check_button_new ();
 					gtk_toggle_button_set_active  (GTK_TOGGLE_BUTTON (pOneWidget), bValue);
-
+					
+					if (iElementType == CAIRO_DOCK_WIDGET_CHECK_CONTROL_BUTTON)
+					{
+						_allocate_new_buffer;
+						data[0] = pKeyBox;
+						data[1] = pFrameVBox != NULL ? pFrameVBox : pGroupBox;
+						if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL)
+							iNbControlledWidgets = g_ascii_strtod (pAuthorizedValuesList[0], NULL);
+						else
+							iNbControlledWidgets = 1;
+						data[2] = GINT_TO_POINTER (iNbControlledWidgets);
+						g_signal_connect (G_OBJECT (pOneWidget), "toggled", G_CALLBACK(_cairo_dock_toggle_control_button), data);
+						if (! bValue)  // les widgets suivants seront inactifs.
+						{
+							iNbSensitiveWidgets = iNbControlledWidgets;
+							iFirstSensitiveWidget = 1;
+							pControlContainer = pFrameVBox != NULL ? pFrameVBox : pGroupBox;
+						}
+						else
+							iNbControlledWidgets = 0;
+					}
+					
 					_pack_subwidget (pOneWidget);
 				}
 				g_free (bValueList);
@@ -1452,7 +1557,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					}
 					else
 						gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (pColorButton), FALSE);
-
+					
 					_pack_in_widget_box (pColorButton);
 					g_signal_connect (G_OBJECT (pColorButton), "color-set", G_CALLBACK(_cairo_dock_set_color), pSubWidgetList);
 					g_signal_connect (G_OBJECT (pColorButton), "clicked", G_CALLBACK(_cairo_dock_get_current_color), pSubWidgetList);
@@ -1607,11 +1712,12 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_LIST :  // a list of strings.
 			case CAIRO_DOCK_WIDGET_NUMBERED_LIST :  // a list of numbered strings.
 			case CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST :  // a list of numbered strings whose current choice defines the sensitivity of the widgets below.
+			case CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE :  // a list of numbered strings whose current choice defines the sensitivity of the widgets below given in the list.
 			case CAIRO_DOCK_WIDGET_LIST_WITH_ENTRY :  // a list of strings with possibility to select a non-existing one.
-				if (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST && pAuthorizedValuesList == NULL)
+				if ((iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST || iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE) && pAuthorizedValuesList == NULL)
 				{
 					pControlContainer = NULL;
-					iNbControlledElement = 0;
+					iNbControlledWidgets = 0;
 					break;
 				}
 				cValue = g_key_file_get_locale_string (pKeyFile, cGroupName, cKeyName, NULL, NULL);  // nous permet de recuperer les ';' aussi.
@@ -1633,11 +1739,14 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				if (pAuthorizedValuesList != NULL)
 				{
 					k = 0;
-					int iSelectedItem = -1;
-					if (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_LIST || iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST)
+					int iSelectedItem = -1, iOrder1, iOrder2;
+					gboolean bNumberedList = (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_LIST || iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST || iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE);
+					if (bNumberedList)
 						iSelectedItem = atoi (cValue);
-					gchar *cResult = (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_LIST || iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST ? g_new0 (gchar , 10) : NULL);
-					for (k = 0; pAuthorizedValuesList[k] != NULL; k ++)  // on ajoute toutes les chaines possibles a la combo.
+					gchar *cResult = (bNumberedList ? g_new0 (gchar , 10) : NULL);
+					int dk = (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE ? 3 : 1);
+					iNbControlledWidgets = 0;
+					for (k = 0; pAuthorizedValuesList[k] != NULL; k += dk)  // on ajoute toutes les chaines possibles a la combo.
 					{
 						GtkTreeIter iter;
 						gtk_list_store_append (GTK_LIST_STORE (modele), &iter);
@@ -1646,10 +1755,27 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						
 						if (cResult != NULL)
 							snprintf (cResult, 9, "%d", k);
+						
+						if (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE)
+						{
+							iOrder1 = atoi (pAuthorizedValuesList[k+1]);
+							iOrder2 = atoi (pAuthorizedValuesList[k+2]);
+							iNbControlledWidgets = MAX (iNbControlledWidgets, iOrder1 + iOrder2);
+							if (iSelectedItem == k/dk)
+							{
+								iFirstSensitiveWidget = iOrder1;
+								iNbSensitiveWidgets = iOrder2;
+							}
+						}
+						else
+						{
+							iOrder1 = iOrder2 = k;
+						}
 						gtk_list_store_set (GTK_LIST_STORE (modele), &iter,
-							CAIRO_DOCK_MODEL_NAME, (iElementType == 'l' ? dgettext (cGettextDomain, pAuthorizedValuesList[k]) : pAuthorizedValuesList[k]),
+							CAIRO_DOCK_MODEL_NAME, (bNumberedList ? dgettext (cGettextDomain, pAuthorizedValuesList[k]) : pAuthorizedValuesList[k]),
 							CAIRO_DOCK_MODEL_RESULT, (cResult != NULL ? cResult : pAuthorizedValuesList[k]),
-							CAIRO_DOCK_MODEL_ORDER, k, -1);
+							CAIRO_DOCK_MODEL_ORDER, iOrder1,
+							CAIRO_DOCK_MODEL_ORDER2, iOrder2, -1);
 					}
 					g_free (cResult);
 					
@@ -1658,16 +1784,27 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						iSelectedItem = 0;
 					if (k != 0)  // rien dans le gtktree => plantage.
 						gtk_combo_box_set_active (GTK_COMBO_BOX (pOneWidget), iSelectedItem);
-					if (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST)
+					if (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST || iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE)
 					{
 						_allocate_new_buffer;
 						data[0] = pKeyBox;
 						data[1] = pFrameVBox != NULL ? pFrameVBox : pGroupBox;
-						data[2] = GINT_TO_POINTER (k);
-						g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_one_item_in_control_combo), data);
-						iNbControlledElement = k;
-						iNumControlledElement = k - iSelectedItem;  // on decroit.
-						pControlContainer = pFrameVBox != NULL ? pFrameVBox : pGroupBox;
+						if (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST)
+						{
+							data[2] = GINT_TO_POINTER (k);
+							g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_one_item_in_control_combo), data);
+							iNbControlledWidgets = k;
+							iFirstSensitiveWidget = iSelectedItem+1;  // on decroit jusqu'a 0.
+							iNbSensitiveWidgets = 1;
+							g_print ("CONTROL : %d,%d,%d\n", iNbControlledWidgets, iFirstSensitiveWidget, iNbSensitiveWidgets);
+						}
+						else
+						{
+							data[2] = GINT_TO_POINTER (k/dk);
+							g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_one_item_in_control_combo_selective), data);
+						}
+						pControlContainer = (pFrameVBox != NULL ? pFrameVBox : pGroupBox);
+						g_print (" pControlContainer:%x\n", pControlContainer);
 					}
 				}
 				_pack_subwidget (pOneWidget);
@@ -2138,6 +2275,34 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					
 					if (pAuthorizedValuesList[0] == NULL || *pAuthorizedValuesList[0] == '\0')
 						g_free (cValue);
+					
+					
+					if (iNbControlledWidgets > 0 && pControlContainer != NULL)
+					{
+						g_print ("ctrl\n");
+						if (pControlContainer == pGroupBox)
+						{
+							g_print ("ctrl (iNbControlledWidgets:%d, iFirstSensitiveWidget:%d, iNbSensitiveWidgets:%d)\n", iNbControlledWidgets, iFirstSensitiveWidget, iNbSensitiveWidgets);
+							iNbControlledWidgets --;
+							if (iFirstSensitiveWidget > 0)
+								iFirstSensitiveWidget --;
+							
+							GtkWidget *w = pExternFrame;
+							if (iFirstSensitiveWidget == 0 && iNbSensitiveWidgets > 0)
+							{
+								g_print (" => sensitive\n");
+								iNbSensitiveWidgets --;
+								if (GTK_IS_EXPANDER (w))
+									gtk_expander_set_expanded (GTK_EXPANDER (w), TRUE);
+							}
+							else
+							{
+								g_print (" => unsensitive\n");
+								if (!GTK_IS_EXPANDER (w))
+									gtk_widget_set_sensitive (w, FALSE);
+							}
+						}
+					}
 				}
 				break;
 
@@ -2186,7 +2351,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	g_free (cGroupComment);  // cSmallGroupIcon et cDisplayedGroupName pointaient dessus.
 	g_free (pKeyList);  // on libere juste la liste de chaines, pas les chaines a l'interieur.
 	
-	if (iNbControlledElement > 0)
+	if (iNbControlledWidgets > 0)
 		cd_warning ("this conf file has an invalid combo list somewhere !");
 	
 	return pGroupBox;

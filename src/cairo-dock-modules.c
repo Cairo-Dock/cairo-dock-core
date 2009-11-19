@@ -123,6 +123,7 @@ void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 	CairoDockVisitCard *pVisitCard = g_new0 (CairoDockVisitCard, 1);
 	pHelpModule->pVisitCard = pVisitCard;
 	pVisitCard->cModuleName = "Help";
+	pVisitCard->cTitle = _("Help");
 	pVisitCard->iMajorVersionNeeded = 2;
 	pVisitCard->iMinorVersionNeeded = 0;
 	pVisitCard->iMicroVersionNeeded = 0;
@@ -214,16 +215,6 @@ gchar *cairo_dock_check_module_conf_file (CairoDockVisitCard *pVisitCard)
 
 void cairo_dock_free_visit_card (CairoDockVisitCard *pVisitCard)
 {
-	/*g_free (pVisitCard->cReadmeFilePath);
-	g_free (pVisitCard->cPreviewFilePath);
-	g_free (pVisitCard->cGettextDomain);
-	g_free (pVisitCard->cDockVersionOnCompilation);
-	g_free (pVisitCard->cModuleName);
-	g_free (pVisitCard->cUserDataDir);
-	g_free (pVisitCard->cShareDataDir);
-	g_free (pVisitCard->cConfFileName);
-	g_free (pVisitCard->cModuleVersion);
-	g_free (pVisitCard->cIconFilePath);*/
 	g_free (pVisitCard);  // toutes les chaines sont statiques.
 }
 

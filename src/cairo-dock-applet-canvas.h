@@ -128,7 +128,7 @@ CD_APPLET_ON_UPDATE_ICON_PROTO;
 #define CD_APPLET_DEFINE_ALL_BEGIN(_cName, _iMajorVersion, _iMinorVersion, _iMicroVersion, _iAppletCategory, _cDescription, _cAuthor) \
 CD_APPLET_DEFINE_PROTO \
 { \
-	pVisitCard->cModuleName = g_strdup (_cName); \
+	pVisitCard->cModuleName = _cName; \
 	pVisitCard->iMajorVersionNeeded = _iMajorVersion; \
 	pVisitCard->iMinorVersionNeeded = _iMinorVersion; \
 	pVisitCard->iMicroVersionNeeded = _iMicroVersion; \
@@ -144,7 +144,8 @@ CD_APPLET_DEFINE_PROTO \
 	pVisitCard->iSizeOfConfig = sizeof (AppletConfig);\
 	pVisitCard->iSizeOfData = sizeof (AppletData);\
 	pVisitCard->cAuthor = _cAuthor;\
-	pVisitCard->cDescription = _cDescription;
+	pVisitCard->cDescription = _cDescription;\
+	pVisitCard->cTitle = _cName;
 
 #define CD_APPLET_DEFINE_COMMON_APPLET_INTERFACE \
 	pInterface->initModule = CD_APPLET_INIT_FUNC;\

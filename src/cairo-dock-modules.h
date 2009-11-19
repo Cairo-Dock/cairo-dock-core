@@ -94,8 +94,10 @@ struct _CairoDockVisitCard {
 	const gchar *cAuthor;
 	/// nom d'un module interne auquel ce module se rattache, ou NULL si aucun.
 	const gchar *cInternalModule;
+	/// nom du module tel qu'affiche a l'utilisateur.
+	const gchar *cTitle;
 	/// octets reserves pour preserver la compatibilite binaire lors de futurs ajouts sur l'interface entre plug-ins et dock.
-	char reserved[8];
+	char reserved[4];
 };
 
 /// Definition of the interface of a module.

@@ -56,6 +56,8 @@ G_BEGIN_DECLS
 typedef enum {
 	/// boolean in a button to tick.
 	CAIRO_DOCK_WIDGET_CHECK_BUTTON='b',
+	/// boolean in a button to tick, that will control the sensitivity of the next widget.
+	CAIRO_DOCK_WIDGET_CHECK_CONTROL_BUTTON='B',
 	/// integer in a spin button.
 	CAIRO_DOCK_WIDGET_SPIN_INTEGER='i',
 	/// integer in an horizontal scale.
@@ -119,8 +121,10 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_LIST_WITH_ENTRY='E',
 	/// a combo where the number of the line is used for the choice.
 	CAIRO_DOCK_WIDGET_NUMBERED_LIST='l',
-	/// a combo where the number of the line is used for the choice, and for controling the sensitivity of the widgets below.
+	/// a combo where the number of the line is used for the choice, and for controlling the sensitivity of the widgets below.
 	CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST='y',
+	/// a combo where the number of the line is used for the choice, and for controlling the sensitivity of the widgets below; controlled widgets are indicated in the list : {entry;index first widget;nb widgets}.
+	CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE='Y',
 	/// a tree view, where lines are numbered and can be moved up and down.
 	CAIRO_DOCK_WIDGET_TREE_VIEW_SORT='T',
 	/// a tree view, where lines can be added, removed, and moved up and down.
