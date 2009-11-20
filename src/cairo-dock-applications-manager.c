@@ -348,6 +348,9 @@ gboolean cairo_dock_unstack_Xevents (CairoDock *pDock)
 	static XEvent event;
 	static gboolean bHackMeToo = FALSE;
 	g_return_val_if_fail (pDock != NULL, FALSE);
+	pDock = g_pMainDock;  /// a fixer ...
+	if (!pDock)
+		return TRUE;
 	
 	long event_mask = 0xFFFFFFFF;  // on les recupere tous, ca vide la pile au fur et a mesure plutot que tout a la fin.
 	Window Xid;

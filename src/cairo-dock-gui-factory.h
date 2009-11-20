@@ -95,6 +95,8 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_GAUGE_LIST='g',
 	/// list of existing docks.
 	CAIRO_DOCK_WIDGET_DOCK_LIST='d',
+	/// list of installed icon themes.
+	CAIRO_DOCK_WIDGET_ICON_THEME_LIST='w',
 	/// a button to jump to another module inside the config panel.
 	CAIRO_DOCK_WIDGET_JUMP_TO_MODULE='m',
 	/// same but only if the module exists.

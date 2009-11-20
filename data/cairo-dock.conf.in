@@ -29,10 +29,10 @@ y gap = 0
 #F-[Multiple screens]
 frame_xin =
 
-#b Use Xinerama ?
+#B- Use Xinerama ?
 xinerama = false
 
-#i[0;12] Number of the screen where the dock should be located :
+#i-[0;12] Number of the screen where the dock should be located :
 #{starting from 0}
 num screen = 0
 
@@ -42,7 +42,7 @@ num screen = 0
 #F-[Visibility of the main dock;gtk-find]
 frame_visi =
 
-#l-[Always on top;Prevent windows from overlapping the dock;Keep the dock below windows;Automatically hide the dock;Automatically hide when a window is maximized;Pop-up on shortcut] Visibility :
+#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;1;1;Automatically hide the dock;0;0;Automatically hide when a window is maximized;0;0;Pop-up on shortcut;2;1] Visibility :
 #{Prevent windows from overlapping the dock : reserve space at the edge of the screen for the dock.
 #Auto-hide : the dock will automatically hide itself outside of the scren when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.
 #Keep the dock below windows : the dock will pop-up on the foreground when you place the mouse on its screen border.
@@ -52,14 +52,9 @@ visibility = 1
 #b- Pop-up only if the mouse hits a screen corner ?
 pop in corner only = false;
 
-#j-[1;1600] Size of the callback zone (width x height, in pixels) :
-#{Place the mouse into it will make the dock re-appear.}
-zone size = 800;5
-
 #k- Keyboard shortcut to pop-up the dock :
 #{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 raise shortcut = 
-
 
 #F-[Additionnal parameters]
 frame_extra =
@@ -68,6 +63,10 @@ max_authorized_width = 0
 
 #b- Extend the dock to always fill the screen ?
 extended = false
+
+#j-[1;1600] Size of the callback zone (width x height, in pixels) :
+#{Place the mouse into it will make the dock re-appear.}
+zone size = 800;5
 
 #b- Automatically hide the dock when a window becomes fullscreen ?
 #{This is only usefull if you don't already use the auto-hide, and if your WM let the dock in front of fullscreen windows (which is rare).}
@@ -115,8 +114,8 @@ sep_app =
 #{Allows launchers to act as applis when their program is running, and displays an indicator on their icon to signal it. You can launch other occurences of the program with SHIFT+click.}
 mix launcher appli = true
 
-#b- Should the applications with same class be grouped in a sub-dock ?
-#{This allows to group windows in some soft like Gimp, and to have only 1 icon in the main dock.The 1st window will appear in the main dock, and the others will be placed in a container associated with this 1st icon.}
+#b- Group windows of the same application in a sub-dock ?
+#{This allows to group all the windows of a given application into a unique sub-dock, and to act on all of the windows at the same time.}
 group by class = true
 
 #s- 		Except the following classes :
@@ -161,11 +160,14 @@ demands attention with dialog = true
 duration = 2
 
 #s- Force the following applications to demand your attention ?
-#{It will notify you even if, for instance, you're watching a video in fullscreen.}
+#{It will notify you even if, for instance, you are on another desktop.}
 force demands attention = pidgin;xchat;amsn
 
 #a- Signal the applications demanding your attention with an animation ?
 animation on demands attention = fire
+
+#v- 
+sep_act =
 
 #a- Play a short animation of the icon when its window becomes active ?
 animation on active window = wobbly
@@ -189,7 +191,7 @@ frame_mov =
 
 #b- Animate the dock when auto-hiding ?
 #{The dock will unfold when it hides/shows itself. No effect if auto-hide is not activated or unfold acceleration is nul.}
-animate on auto-hide = true
+animate on auto-hide = false
 
 #b- Animate sub-docks when they appear ?
 #{Always true if sub-docks appear with mouse click.}
@@ -198,6 +200,9 @@ animate subdocks = true
 #I-[100;600;fast;slow] Unfolding animation duration :
 #{The icons will appear folded on themselves, then will unfold untill they fill the whole dock. The smaller, the faster it will be.}
 unfold duration = 400
+
+#v
+sep_unfold =
 
 #i-[4;40] Number of steps in the zoom animation (grow up/shrink down) :
 #{The more there are, the slower it will be}
@@ -371,7 +376,7 @@ config_hidden =
 #X+[Background movement;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-mouse.png]
 frame_mouse = 
 
-#l+[No;Follow the mouse;Link with the mouse] Move the background image along with the cursor ?
+#Y+[No;0;0;Follow the mouse;1;1;Link with the mouse;1;1] Move the background image along with the cursor ?
 move bg = 0
 
 #e+[0.1;1;slow;fast] Speed :
@@ -387,11 +392,17 @@ frame_font =
 #b+ Display labels on icons ?
 show labels = true
 
+#v
+sep_lab =
+
+#B+ Use a custom font for labels ?
+#{Otherwise the default system one will be used.}
+custom = true
+
 #P+ Font used for labels :
-#{Let empty to use the default system font (Gnome only).}
 police = 
 
-#b+ Should the text be oulined ?
+#b+ Draw the outline of the text ?
 text oulined = true
 
 #F+[Color;gtk-select-color]
@@ -450,7 +461,7 @@ frame_theme=
 #{These are icons located in ~/.config/cairo-dock/current_theme/icons, coming from the theme you choosed. If you use this option, the dock will search here first, and then in the icons theme.}
 local icons = true
 
-#s+ Choose a theme of icons :
+#w+ Choose a theme of icons :
 #{Let empty to use the current icons theme of your system. You can enter the name of a theme that is installed on your system (like 'Gartoon' or 'Human'), or even a path to a folder containing icons.}
 default icon directory = 
 
@@ -466,8 +477,8 @@ frame_refl =
 #{It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are not used.}
 albedo = .8
 
-#e+[0;1;small;tall] Fraction of the icon height that will reflect :
-#{Setting it to 0.33 will mean that 33% of the icons will reflect on the ground. The icons will be placed at the right distance from the front border of the frame so that the reflect is fully visible.}
+#e+[0;1;small;tall] Height of the reflect :
+#{In percent of the icon's size. This parameter influence the total height of the dock.}
 field depth = 0.5
 
 #e+[0;1;transparent;opaque] Icons' transparency at rest :
@@ -580,15 +591,18 @@ decorator = comics
 #F+[Text;gtk-select-font]
 frame_text =
 
-#c+ Text color :
-text color = 0.0; 0.0; 0.0
+#B+ Use a custom font for the text ?
+#{Otherwise the default system one will be used.}
+custom = true
 
 #P+ Text font :
-#{Let empty to use the default system font (Gnome only).}
 message police = 
 
-#b+ Should be outlined ?
+#b+ Draw the outline of the text ?
 outlined = false
+
+#c+ Text color :
+text color = 0.0; 0.0; 0.0
 
 #F+[Buttons;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-buttons.png]
 frame_button =
@@ -667,6 +681,12 @@ depth rotate image =
 #F+[Indicator of the active window]
 frame_window =
 
+#Y+[Image;1;1;Frame;2;3] Type of indicator :
+active indic type = 1
+
+#S+ Image file :
+active indicator =
+
 #C+ Color of the frame :
 #{Set transparency to 0 if you don't want to use an indicator.}
 active color = 0.; 0.4; 0.8; 0.5
@@ -678,9 +698,8 @@ active line width = 3
 #i+[0;30] Corner radius of the frame around the active window :
 active corner radius = 6
 
-#S+ Alternatively you can set an image for the indicator :
-#{Let it empty to draw a simple frame.}
-active indicator =
+#v
+sep_ind =
 
 #b+ Draw indicator above the icon ?
 active frame position = true

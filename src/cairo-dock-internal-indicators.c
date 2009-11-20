@@ -59,7 +59,23 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 	pIndicators->bRotateWithDock = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "rotate indicator", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
 	//\__________________ On recupere l'indicateur de fenetre active.
+	int iIndicType = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active indic type", &bFlushConfFileNeeded, -1, NULL, NULL);  // -1 pou rpouvoir intercepter le cas ou la cle n'existe pas.
+	
 	cIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "active indicator", &bFlushConfFileNeeded, NULL, NULL, NULL);
+	if (iIndicType == -1)  // nouvelle cle.
+	{
+		iIndicType = (cIndicatorImageName != NULL ? 0 : 1);
+		g_key_file_set_integer (pKeyFile, "Indicators", "active indic type", iIndicType);
+	}
+	else
+	{
+		if (iIndicType != 0)
+		{
+			g_free (cIndicatorImageName);
+			cIndicatorImageName = NULL;
+		}
+	}
+	
 	if (cIndicatorImageName != NULL)
 	{
 		pIndicators->cActiveIndicatorImagePath = cairo_dock_generate_file_path (cIndicatorImageName);
@@ -68,7 +84,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 	else
 		pIndicators->cActiveIndicatorImagePath = NULL;
 	
-	double couleur_active[4] = {0., 0.4, 0.8, 0.25};
+	double couleur_active[4] = {0., 0.4, 0.8, 0.5};
 	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "active color", &bFlushConfFileNeeded, pIndicators->fActiveColor, 4, couleur_active, "Icons", NULL);
 	pIndicators->iActiveLineWidth = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active line width", &bFlushConfFileNeeded, 3, "Icons", NULL);
 	pIndicators->iActiveCornerRadius = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active corner radius", &bFlushConfFileNeeded, 6, "Icons", NULL);

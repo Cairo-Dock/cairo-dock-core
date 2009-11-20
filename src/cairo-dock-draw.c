@@ -734,11 +734,15 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 				floor (fOffsetX),
 				floor (bDirectionUp ? -myLabels.iLabelSize : icon->fHeight * icon->fScale - icon->fTextYOffset));
 		else
+		{
+			cairo_translate (pCairoContext, icon->iTextWidth/2, icon->iTextHeight/2);
+			cairo_rotate (pCairoContext, bDirectionUp ? - G_PI/2 : G_PI/2);
+			cairo_translate (pCairoContext, -icon->iTextWidth/2, -icon->iTextHeight/2);
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
 				floor (bDirectionUp ? -myLabels.iLabelSize : icon->fHeight * icon->fScale - icon->fTextYOffset),
 				floor (fOffsetX));
-		
+		}
 		double fMagnitude;
 		if (mySystem.bLabelForPointedIconOnly)
 		{

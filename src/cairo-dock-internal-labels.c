@@ -39,7 +39,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
-	gchar *cFontDescription = cairo_dock_get_string_key_value (pKeyFile, "Labels", "police", &bFlushConfFileNeeded, NULL, "Icons", NULL);
+	gboolean bCustomFont = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "custom", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	
+	gchar *cFontDescription = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Labels", "police", &bFlushConfFileNeeded, NULL, "Icons", NULL) : NULL);
 	if (cFontDescription == NULL)
 		cFontDescription = cairo_dock_get_default_system_font ();
 	

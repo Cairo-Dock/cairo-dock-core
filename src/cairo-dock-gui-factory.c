@@ -379,6 +379,7 @@ static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox 
 	GtkWidget *parent = data[1];
 	GtkWidget *pKeyBox = data[0];
 	int iNbWidgets = GPOINTER_TO_INT (data[2]);
+	g_print ("%s (%d, %d / %d)\n", __func__, iOrder1, iOrder2, iNbWidgets);
 	GList *children = gtk_container_get_children (GTK_CONTAINER (parent));
 	GList *c = g_list_find (children, pKeyBox);
 	g_return_if_fail (c != NULL);
@@ -388,7 +389,8 @@ static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox 
 	for (c = c->next, i = 0; c != NULL && i < iNbWidgets; c = c->next, i ++)
 	{
 		w = c->data;
-		gtk_widget_set_sensitive (w, i > iOrder1 && i < iOrder1 + iOrder2);
+		g_print ("%d in ]%d;%d[\n", i, iOrder1, iOrder1 + iOrder2);
+		gtk_widget_set_sensitive (w, i >= iOrder1 - 1 && i < iOrder1 + iOrder2 - 1);
 	}
 	
 	g_list_free (children);
@@ -542,75 +544,6 @@ static void _cairo_dock_key_grab_clicked (GtkButton *button, gpointer *data)
 	g_signal_connect (GTK_WIDGET(pParentWindow), "key-press-event", GTK_SIGNAL_FUNC(_cairo_dock_key_grab_cb), pEntry);
 }
 
-static void _cairo_dock_set_font (GtkFontButton *widget, GtkEntry *pEntry)
-{
-	const gchar *cFontName = gtk_font_button_get_font_name (GTK_FONT_BUTTON (widget));
-	cd_message (" -> %s\n", cFontName);
-	PangoFontDescription *fd = pango_font_description_from_string (cFontName);
-	g_print ("familly : %s\n", pango_font_description_get_family (fd));
-	g_print ("style : %d\n", pango_font_description_get_style (fd));
-	g_print ("weight : %d\n", pango_font_description_get_weight (fd));
-	g_print ("size : %d\n", pango_font_description_get_size (fd));
-	
-	if (cFontName != NULL)
-		gtk_entry_set_text (pEntry, cFontName);
-}
-
-static void _cairo_dock_set_color (GtkColorButton *pColorButton, GSList *pWidgetList)
-{
-	GdkColor gdkColor;
-	gtk_color_button_get_color (pColorButton, &gdkColor);
-
-	GtkSpinButton *pSpinButton;
-	GSList *pList = pWidgetList;
-	if (pList == NULL)
-		return;
-	pSpinButton = pList->data;
-	gtk_spin_button_set_value (pSpinButton, 1. * gdkColor.red / 65535);
-	pList = pList->next;
-
-	if (pList == NULL)
-		return;
-	pSpinButton = pList->data;
-	gtk_spin_button_set_value (pSpinButton, 1. * gdkColor.green / 65535);
-	pList = pList->next;
-
-	if (pList == NULL)
-		return;
-	pSpinButton = pList->data;
-	gtk_spin_button_set_value (pSpinButton, 1. * gdkColor.blue / 65535);
-	pList = pList->next;
-
-	if (gtk_color_button_get_use_alpha (pColorButton))
-	{
-		if (pList == NULL)
-			return;
-		pSpinButton = pList->data;
-		gtk_spin_button_set_value (pSpinButton, 1. * gtk_color_button_get_alpha (pColorButton) / 65535);
-	}
-}
-
-static void _cairo_dock_get_current_color (GtkColorButton *pColorButton, GSList *pWidgetList)
-{
-	GtkSpinButton *pSpinButton;
-	int i, color[4] = {0,0,0,0};
-	GSList *c;
-	for (c = pWidgetList, i = 0; c != NULL && i < 4; c = c->next, i ++)
-	{
-		pSpinButton = c->data;
-		color[i] = gtk_spin_button_get_value (pSpinButton) * 65535;
-	}
-	
-	GdkColor gdkColor;
-	gdkColor.red = color[0];
-	gdkColor.green = color[1];
-	gdkColor.blue = color[2];
-	gtk_color_button_set_color (pColorButton, &gdkColor);
-	
-	if (gtk_color_button_get_use_alpha (pColorButton))
-		gtk_color_button_set_alpha (pColorButton, color[3]);
-}
-
 void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data)
 {
 	GtkWidget *pPairSpinButton = data[0];
@@ -648,6 +581,72 @@ static void _cairo_dock_toggle_control_button (GtkCheckButton *pButton, gpointer
 	
 	g_list_free (children);
 }
+
+static void _list_icon_theme_in_dir (const gchar *cDirPath, GHashTable *pHashTable)
+{
+	GError *erreur = NULL;
+	GDir *dir = g_dir_open (cDirPath, 0, &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning ("%s\n", erreur->message);
+		g_error_free (erreur);
+		return ;
+	}
+	
+	const gchar *cFileName;
+	gchar *cContent;
+	gsize length;
+	GString *sIndexFile = g_string_new ("");
+	while ((cFileName = g_dir_read_name (dir)) != NULL)
+	{
+		g_string_printf (sIndexFile, "%s/%s/index.theme", cDirPath, cFileName);
+		if (! g_file_test (sIndexFile->str, G_FILE_TEST_EXISTS))
+			continue;
+			
+		GKeyFile *pKeyFile = cairo_dock_open_key_file (sIndexFile->str);
+		if (pKeyFile == NULL)
+			continue;
+		
+		if (! g_key_file_get_boolean (pKeyFile, "Icon Theme", "Hidden", NULL))
+		{
+			gchar *cName = g_key_file_get_string (pKeyFile, "Icon Theme", "Name", NULL);
+			if (cName != NULL)
+			{
+				g_hash_table_insert (pHashTable, cName, cName);  // on insere cName, juste histoire de pas avoir NULL, c'est plus pratique.
+			}
+		}
+		
+		g_key_file_free (pKeyFile);
+	}
+	g_string_free (sIndexFile, TRUE);
+	g_dir_close (dir);
+}
+
+static void _prepend_icon_theme_in_combo (const gchar *cName, gpointer data, GtkComboBox *pCombo)
+{
+	gtk_combo_box_prepend_text (pCombo, cName);
+}
+static GtkWidget *_cairo_dock_build_icon_themes_list (const gchar **cDirs)
+{
+	GtkWidget *pCombo = gtk_combo_box_entry_new_text ();
+	GHashTable *pHashTable = g_hash_table_new_full (g_str_hash,
+		g_str_equal,
+		g_free,
+		NULL);
+	
+	int i;
+	for (i = 0; cDirs[i] != NULL; i ++)
+	{
+		_list_icon_theme_in_dir (cDirs[i], pHashTable);
+	}
+	
+	g_hash_table_foreach (pHashTable, (GHFunc) _prepend_icon_theme_in_combo, pCombo);
+	
+	g_hash_table_destroy (pHashTable);
+	return pCombo;
+}
+
+
 
 #define _build_list_for_gui(pListStore, cEmptyItem, pHashTable, pHFunction) do { \
 	if (pListStore != NULL)\
@@ -1301,7 +1300,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			}
 			if (iNbControlledWidgets > 0 && pControlContainer != NULL)
 			{
-				g_print ("ctrl\n");
+				g_print ("ctrl (%d widgets)\n", iNbControlledWidgets);
 				if (pControlContainer == (pFrameVBox ? pFrameVBox : pGroupBox))
 				{
 					g_print ("ctrl (iNbControlledWidgets:%d, iFirstSensitiveWidget:%d, iNbSensitiveWidgets:%d)\n", iNbControlledWidgets, iFirstSensitiveWidget, iNbSensitiveWidgets);
@@ -1386,7 +1385,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						g_signal_connect (G_OBJECT (pOneWidget), "toggled", G_CALLBACK(_cairo_dock_toggle_control_button), data);
 						if (! bValue)  // les widgets suivants seront inactifs.
 						{
-							iNbSensitiveWidgets = iNbControlledWidgets;
+							iNbSensitiveWidgets = 0;
 							iFirstSensitiveWidget = 1;
 							pControlContainer = pFrameVBox != NULL ? pFrameVBox : pGroupBox;
 						}
@@ -1484,42 +1483,28 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			break;
 
 			case CAIRO_DOCK_WIDGET_SPIN_DOUBLE :  // float.
-			case CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGB :  // float x3 avec un bouton de choix de couleur.
-			case CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGBA :  // float x4 avec un bouton de choix de couleur.
 			case CAIRO_DOCK_WIDGET_HSCALE_DOUBLE :  // float dans un HScale.
-				if (iElementType == CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGB || iElementType == CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGBA)  // couleur
-				{
-					fMinValue = 0;
-					fMaxValue = 1;
-					if (iNbElements == 1)  // nbre d'elements non precise
-					{
-						iNbElements = (iElementType == CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGB ? 3 : 4);
-					}
-				}
+				if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL)
+					fMinValue = g_ascii_strtod (pAuthorizedValuesList[0], NULL);
 				else
-				{
-					if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL)
-						fMinValue = g_ascii_strtod (pAuthorizedValuesList[0], NULL);
-					else
-						fMinValue = 0;
-					if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[1] != NULL)
-						fMaxValue = g_ascii_strtod (pAuthorizedValuesList[1], NULL);
-					else
-						fMaxValue = 9999;
-				}
+					fMinValue = 0;
+				if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[1] != NULL)
+					fMaxValue = g_ascii_strtod (pAuthorizedValuesList[1], NULL);
+				else
+					fMaxValue = 9999;
 				length = 0;
 				fValueList = g_key_file_get_double_list (pKeyFile, cGroupName, cKeyName, &length, NULL);
 				for (k = 0; k < iNbElements; k ++)
 				{
 					fValue =  (k < length ? fValueList[k] : 0);
-
+					
 					GtkObject *pAdjustment = gtk_adjustment_new (fValue,
 						0,
 						1,
 						(fMaxValue - fMinValue) / 20.,
 						(fMaxValue - fMinValue) / 10.,
 						0);
-
+					
 					if (iElementType == CAIRO_DOCK_WIDGET_HSCALE_DOUBLE)
 					{
 						pOneWidget = gtk_hscale_new (GTK_ADJUSTMENT (pAdjustment));
@@ -1538,34 +1523,37 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					g_object_set (pAdjustment, "lower", fMinValue, "upper", fMaxValue, NULL); // le 'width-request' sur un GtkHScale avec 'fMinValue' non nul plante ! Donc on les met apres...
 					gtk_adjustment_set_value (GTK_ADJUSTMENT (pAdjustment), fValue);
 				}
-				if (iElementType == CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGB || iElementType == CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGBA)
-				{
-					if (length > 2)
-					{
-						gdkColor.red = fValueList[0] * 65535;
-						gdkColor.green = fValueList[1] * 65535;
-						gdkColor.blue = fValueList[2] * 65535;
-					}
-					pColorButton = gtk_color_button_new_with_color (&gdkColor);
-					if (iNbElements > 3)
-					{
-						gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (pColorButton), TRUE);
-						if (length > 3)
-							gtk_color_button_set_alpha (GTK_COLOR_BUTTON (pColorButton), fValueList[3] * 65535);
-						else
-							gtk_color_button_set_alpha (GTK_COLOR_BUTTON (pColorButton), 65535);
-					}
-					else
-						gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (pColorButton), FALSE);
-					
-					_pack_in_widget_box (pColorButton);
-					g_signal_connect (G_OBJECT (pColorButton), "color-set", G_CALLBACK(_cairo_dock_set_color), pSubWidgetList);
-					g_signal_connect (G_OBJECT (pColorButton), "clicked", G_CALLBACK(_cairo_dock_get_current_color), pSubWidgetList);
-				}
 				bAddBackButton = TRUE,
 				g_free (fValueList);
 			break;
-
+			
+			case CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGB :  // float x3 avec un bouton de choix de couleur.
+			case CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGBA :  // float x4 avec un bouton de choix de couleur.
+				iNbElements = (iElementType == CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGB ? 3 : 4);
+				length = 0;
+				fValueList = g_key_file_get_double_list (pKeyFile, cGroupName, cKeyName, &length, NULL);
+				if (length > 2)
+				{
+					gdkColor.red = fValueList[0] * 65535;
+					gdkColor.green = fValueList[1] * 65535;
+					gdkColor.blue = fValueList[2] * 65535;
+				}
+				pOneWidget = gtk_color_button_new_with_color (&gdkColor);
+				if (iElementType == CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGBA)
+				{
+					gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (pOneWidget), TRUE);
+					if (length > 3)
+						gtk_color_button_set_alpha (GTK_COLOR_BUTTON (pOneWidget), fValueList[3] * 65535);
+					else
+						gtk_color_button_set_alpha (GTK_COLOR_BUTTON (pOneWidget), 65535);
+				}
+				else
+					gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (pOneWidget), FALSE);
+				_pack_subwidget (pOneWidget);
+				bAddBackButton = TRUE,
+				g_free (fValueList);
+			break;
+			
 			case CAIRO_DOCK_WIDGET_VIEW_LIST :  // liste des vues.
 				_add_combo_from_modele (s_pRendererListStore, TRUE, FALSE);
 			break ;
@@ -1675,6 +1663,22 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_pack_subwidget (pOneWidget);
 			break ;
 			
+			case CAIRO_DOCK_WIDGET_ICON_THEME_LIST :
+			{
+				gchar *path[3];
+				path[0] = g_strdup_printf ("%s/.icons", g_getenv ("HOME"));
+				path[1] = "/usr/share/icons";
+				path[2] = NULL;
+				pOneWidget = _cairo_dock_build_icon_themes_list (path);
+				g_free (path[0]);
+				GtkEntry *pEntry = gtk_bin_get_child (GTK_BIN (pOneWidget));
+				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
+				gtk_entry_set_text (pEntry, cValue);  // on affiche la valeur meme s'elle n'existe pas dans la liste.
+				g_free (cValue);
+				_pack_subwidget (pOneWidget);
+			}
+			break ;
+			
 			case CAIRO_DOCK_WIDGET_JUMP_TO_MODULE :  // bouton raccourci vers un autre module
 			case CAIRO_DOCK_WIDGET_JUMP_TO_MODULE_IF_EXISTS :  // idem mais seulement affiche si le module existe.
 				if (pAuthorizedValuesList == NULL || pAuthorizedValuesList[0] == NULL || *pAuthorizedValuesList[0] == '\0')
@@ -1751,16 +1755,17 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						GtkTreeIter iter;
 						gtk_list_store_append (GTK_LIST_STORE (modele), &iter);
 						if (iSelectedItem == -1 && cValue && strcmp (cValue, pAuthorizedValuesList[k]) == 0)
-							iSelectedItem = k;
+							iSelectedItem = k/dk;
 						
 						if (cResult != NULL)
-							snprintf (cResult, 9, "%d", k);
+							snprintf (cResult, 9, "%d", k/dk);
 						
 						if (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE)
 						{
 							iOrder1 = atoi (pAuthorizedValuesList[k+1]);
 							iOrder2 = atoi (pAuthorizedValuesList[k+2]);
-							iNbControlledWidgets = MAX (iNbControlledWidgets, iOrder1 + iOrder2);
+							iNbControlledWidgets = MAX (iNbControlledWidgets, iOrder1 + iOrder2 - 1);
+							g_print ("iSelectedItem:%d ; k/dk:%d\n", iSelectedItem , k/dk);
 							if (iSelectedItem == k/dk)
 							{
 								iFirstSensitiveWidget = iOrder1;
@@ -1786,24 +1791,24 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						gtk_combo_box_set_active (GTK_COMBO_BOX (pOneWidget), iSelectedItem);
 					if (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST || iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE)
 					{
+						pControlContainer = (pFrameVBox != NULL ? pFrameVBox : pGroupBox);
 						_allocate_new_buffer;
 						data[0] = pKeyBox;
-						data[1] = pFrameVBox != NULL ? pFrameVBox : pGroupBox;
+						data[1] = pControlContainer;
 						if (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST)
 						{
-							data[2] = GINT_TO_POINTER (k);
-							g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_one_item_in_control_combo), data);
 							iNbControlledWidgets = k;
+							data[2] = GINT_TO_POINTER (iNbControlledWidgets);
+							g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_one_item_in_control_combo), data);
 							iFirstSensitiveWidget = iSelectedItem+1;  // on decroit jusqu'a 0.
 							iNbSensitiveWidgets = 1;
 							g_print ("CONTROL : %d,%d,%d\n", iNbControlledWidgets, iFirstSensitiveWidget, iNbSensitiveWidgets);
 						}
 						else
 						{
-							data[2] = GINT_TO_POINTER (k/dk);
+							data[2] = GINT_TO_POINTER (iNbControlledWidgets);
 							g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_one_item_in_control_combo_selective), data);
 						}
-						pControlContainer = (pFrameVBox != NULL ? pFrameVBox : pGroupBox);
 						g_print (" pControlContainer:%x\n", pControlContainer);
 					}
 				}
@@ -2096,10 +2101,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_font_button_set_show_size (GTK_FONT_BUTTON (pOneWidget), TRUE);
 				gtk_font_button_set_use_size (GTK_FONT_BUTTON (pOneWidget), TRUE);
 				gtk_font_button_set_use_font (GTK_FONT_BUTTON (pOneWidget), TRUE);
-				/*g_signal_connect (G_OBJECT (pFontButton),
-					"font-set",
-					G_CALLBACK (_cairo_dock_set_font),
-					pEntry);*/
 				_pack_in_widget_box (pOneWidget);
 				_pack_subwidget (pOneWidget);
 				g_free (cValue);
@@ -2149,23 +2150,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						_pack_in_widget_box (pButtonPlay);
 					}
 				}
-				/*else if (iElementType == CAIRO_DOCK_WIDGET_FONT_SELECTOR)  // on ajoute un selecteur de font.
-				{
-					pFontButton = gtk_font_button_new_with_font (gtk_entry_get_text (GTK_ENTRY (pEntry)));
-					gtk_font_button_set_show_style (GTK_FONT_BUTTON (pFontButton), TRUE);
-					gtk_font_button_set_show_size (GTK_FONT_BUTTON (pFontButton), TRUE);
-					gtk_font_button_set_use_size (GTK_FONT_BUTTON (pFontButton), TRUE);
-					gtk_font_button_set_use_font (GTK_FONT_BUTTON (pFontButton), TRUE);
-					g_signal_connect (G_OBJECT (pFontButton),
-						"font-set",
-						G_CALLBACK (_cairo_dock_set_font),
-						pEntry);
-					_pack_in_widget_box (pFontButton);
-				}*/
 				else if (iElementType == CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR)  // on ajoute un selecteur de touches.
 				{
 					GtkWidget *pGrabKeyButton = gtk_button_new_with_label(_("grab"));
-
+					
 					_allocate_new_buffer;
 					data[0] = pOneWidget;
 					data[1] = pMainWindow;
@@ -2587,6 +2575,26 @@ static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFil
 	{
 		const gchar *cFontName = gtk_font_button_get_font_name (GTK_FONT_BUTTON (pOneWidget));
 		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, cFontName);
+	}
+	else if (GTK_IS_COLOR_BUTTON (pOneWidget))
+	{
+		GdkColor gdkColor;
+		gtk_color_button_get_color (GTK_COLOR_BUTTON (pOneWidget), &gdkColor);
+		double col[4];
+		int iNbColors;
+		col[0] = (double) gdkColor.red / 65535.;
+		col[1] = (double) gdkColor.green / 65535.;
+		col[2] = (double) gdkColor.blue / 65535.;
+		if (gtk_color_button_get_use_alpha (GTK_COLOR_BUTTON (pOneWidget)))
+		{
+			iNbColors = 4;
+			col[3] = (double) gtk_color_button_get_alpha (GTK_COLOR_BUTTON (pOneWidget)) / 65535.;
+		}
+		else
+		{
+			iNbColors = 3;
+		}
+		g_key_file_set_double_list (pKeyFile, cGroupName, cKeyName, col, iNbColors);
 	}
 	else if (GTK_IS_ENTRY (pOneWidget))
 	{
