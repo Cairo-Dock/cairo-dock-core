@@ -669,12 +669,15 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	_cairo_dock_set_alpha (1.);
 	
 	glLoadIdentity ();
-	glTranslatef (pDock->container.iWidth/2, pDock->container.iHeight/2, 0.);
+	if (pDock->container.bIsHorizontal)
+		glTranslatef (pDock->container.iWidth/2, pDock->container.iHeight/2, 0.);
+	else
+		glTranslatef (pDock->container.iHeight/2, pDock->container.iWidth/2, 0.);
 	
+	if (! pDock->container.bIsHorizontal)
+		glRotatef (90., 0, 0, 1);
 	if (! pDock->container.bDirectionUp && myBackground.bReverseVisibleImage)
 		glScalef (1., -1., 1.);
-	if (! pDock->container.bIsHorizontal)
-		glRotatef (-90., 0, 0, 1);
 	
 	_cairo_dock_apply_texture_at_size (g_iVisibleZoneTexture, pDock->container.iWidth, pDock->container.iHeight);
 	

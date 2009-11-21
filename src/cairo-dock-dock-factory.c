@@ -318,10 +318,6 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 		g_source_remove (pDock->iSidPopUp);
 	if (pDock->iSidLeaveDemand != 0)
 		g_source_remove (pDock->iSidLeaveDemand);
-	if (pDock->bIsMainDock && cairo_dock_application_manager_is_running ())
-	{
-		cairo_dock_pause_application_manager ();  // precaution au cas ou.
-	}
 	cairo_dock_notify (CAIRO_DOCK_STOP_DOCK, pDock);
 	if (pDock->container.iSidGLAnimation != 0)
 		g_source_remove (pDock->container.iSidGLAnimation);

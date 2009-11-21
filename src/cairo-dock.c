@@ -487,6 +487,7 @@ int main (int argc, char** argv)
 	
 	//\___________________ On initialise le support de X.
 	cairo_dock_initialize_X_support ();
+	cairo_dock_start_listening_X_events ();
 	
 	//\___________________ On initialise le keybinder.
 	cd_keybinder_init();
@@ -693,7 +694,6 @@ int main (int argc, char** argv)
 	g_print ("\nBATTERIE VERS 100%\n\n");
 	g_print ("\nPB AFFICHAGE PM\n\n");
 	
-	g_print ("\nTESTER LE THEME HUMANITY\n\n");
 	g_print ("\nTESTER L'AUTO-HIDE\n\n");
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");

@@ -34,33 +34,37 @@ G_BEGIN_DECLS
 */
 
 
-void cairo_dock_initialize_application_manager (Display *pDisplay);
+// X listener : core
+void cairo_dock_start_listening_X_events (void);
+void cairo_dock_stop_listening_X_events (void);
 
-void cairo_dock_register_appli (Icon *icon);
-void cairo_dock_blacklist_appli (Window Xid);
-void cairo_dock_unregister_appli (Icon *icon);
-
-
-gboolean cairo_dock_appli_is_on_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY);
-gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon);
-Icon * cairo_dock_search_window_on_our_way (CairoDock *pDock, gboolean bMaximizedWindow, gboolean bFullScreenWindow);
-gboolean cairo_dock_unstack_Xevents (CairoDock *pDock);
-void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime);
-void cairo_dock_start_application_manager (CairoDock *pDock);
-void cairo_dock_pause_application_manager (void);
-void cairo_dock_stop_application_manager (void);
-
-/** Get the state of the applications manager.
-*@return TRUE if it is running (the X events are taken into account), FALSE otherwise.
-*/
-gboolean cairo_dock_application_manager_is_running (void);
-
+// X listener : access
 /** Get the current workspace (desktop and viewport).
 *@param iCurrentDesktop will be filled with the current desktop number
 *@param iCurrentViewportX will be filled with the current horizontal viewport number
 *@param iCurrentViewportY will be filled with the current vertical viewport number
 */
 void cairo_dock_get_current_desktop_and_viewport (int *iCurrentDesktop, int *iCurrentViewportX, int *iCurrentViewportY);
+
+
+// Applis manager : core
+void cairo_dock_initialize_application_manager (Display *pDisplay);
+
+void cairo_dock_register_appli (Icon *icon);
+void cairo_dock_blacklist_appli (Window Xid);
+void cairo_dock_unregister_appli (Icon *icon);
+
+void cairo_dock_start_application_manager (CairoDock *pDock);
+void cairo_dock_stop_application_manager (void);
+/** Get the state of the applications manager.
+*@return TRUE if it is running (taskbar is active), FALSE otherwise.
+*/
+gboolean cairo_dock_application_manager_is_running (void);
+
+void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime);
+
+// Applis manager : access
+Icon * cairo_dock_search_window_on_our_way (CairoDock *pDock, gboolean bMaximizedWindow, gboolean bFullScreenWindow);
 
 /** Get the list of appli's icons currently known by Cairo-Dock, including the icons not displayed in the dock. You can then order the list by z-order, name, etc.
 *@return a newly allocated list of applis's icons. You must free the list when you're finished with it, but not the icons.
@@ -97,6 +101,11 @@ void cairo_dock_foreach_applis (CairoDockForeachIconFunc pFunction, gboolean bOu
 */
 void cairo_dock_foreach_applis_on_viewport (CairoDockForeachIconFunc pFunction, int iNumDesktop, int iNumViewportX, int iNumViewportY, gpointer pUserData);
 
+
+// Applis facility
+gboolean cairo_dock_appli_is_on_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY);
+gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon);
+gboolean cairo_dock_appli_hovers_dock (Icon *pIcon, CairoDock *pDock);
 
 CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bUpdateSize, gboolean bAnimate);
 
