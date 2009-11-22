@@ -18,6 +18,7 @@
 */
 
 #include <math.h>
+#include <sys/time.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h> 
@@ -110,6 +111,7 @@ gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDo
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
 		cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDock));
 		
+		glTranslatef (0., - pDock->fHideOffset, 0.);
 		pDock->pRenderer->render_opengl (pDock);
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -756,13 +758,19 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		Icon *pFlyingIcon = s_pFlyingContainer->pIcon;
 		if (pDock != pFlyingIcon->pSubDock)  // on evite les boucles.
 		{
-			g_print ("on remet l'icone volante dans un dock (dock d'origine : %s)\n", pFlyingIcon->cParentDockName);
-			cairo_dock_free_flying_container (s_pFlyingContainer);
-			cairo_dock_stop_icon_animation (pFlyingIcon);
-			cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
-			cairo_dock_start_icon_animation (pFlyingIcon, pDock);
-			s_pFlyingContainer = NULL;
-			pDock->bIconIsFlyingAway = FALSE;
+			struct timeval tv;
+			int r = gettimeofday (&tv, NULL);
+			double t = tv.tv_sec + tv.tv_usec * 1e-6;
+			if (t - s_pFlyingContainer->fCreationTime > 1)  // on empeche le cas ou enlever l'icone fait augmenter le ratio du dock, et donc sa hauteur, et nous fait rentrer dedans des qu'on sort l'icone.
+			{
+				g_print ("on remet l'icone volante dans un dock (dock d'origine : %s)\n", pFlyingIcon->cParentDockName);
+				cairo_dock_free_flying_container (s_pFlyingContainer);
+				cairo_dock_stop_icon_animation (pFlyingIcon);
+				cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
+				cairo_dock_start_icon_animation (pFlyingIcon, pDock);
+				s_pFlyingContainer = NULL;
+				pDock->bIconIsFlyingAway = FALSE;
+			}
 		}
 	}
 	

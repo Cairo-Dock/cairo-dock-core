@@ -18,6 +18,7 @@
 */
 
 #include <stdlib.h>
+#include <sys/time.h>
 #include <cairo.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
@@ -172,9 +173,9 @@ gboolean cairo_dock_render_flying_container_notification (gpointer pUserData, Ca
 		if (pIcon != NULL)
 		{
 			glPushMatrix ();
-			glTranslatef (pFlyingContainer->container.iWidth / 2,
+			/*glTranslatef (pFlyingContainer->container.iWidth / 2,
 				pIcon->fHeight * pIcon->fScale/2,
-				- pFlyingContainer->container.iHeight);
+				- pFlyingContainer->container.iHeight);*/
 			cairo_dock_render_one_icon_opengl (pIcon, CAIRO_CONTAINER (pFlyingContainer), 1., TRUE);
 			glPopMatrix ();
 			
@@ -299,7 +300,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	pFlyingIcon->fScale = 1.;
 	pFlyingContainer->container.iWidth = pFlyingIcon->fWidth * pFlyingIcon->fScale * 3.7;
 	pFlyingContainer->container.iHeight = pFlyingIcon->fHeight * pFlyingIcon->fScale + 1.*pFlyingContainer->container.iWidth / HAND_WIDTH * HAND_HEIGHT * .6;
-	pFlyingIcon->fDrawX = (pFlyingContainer->container.iWidth - pFlyingIcon->fWidth * pFlyingIcon->fScale) / 2 * .95;
+	pFlyingIcon->fDrawX = (pFlyingContainer->container.iWidth - pFlyingIcon->fWidth * pFlyingIcon->fScale) / 2 * 1.2;
 	pFlyingIcon->fDrawY = pFlyingContainer->container.iHeight - pFlyingIcon->fHeight * pFlyingIcon->fScale;
 	
 	if (pOriginDock->container.bIsHorizontal)
@@ -338,6 +339,10 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	if (bDrawHand)
 		cairo_dock_request_icon_animation (pFlyingIcon, CAIRO_CONTAINER (pFlyingContainer), bDrawHand ? "pulse" : "bounce", 1e6);
 	cairo_dock_launch_animation (CAIRO_CONTAINER (pFlyingContainer));  // au cas ou pas d'animation.
+	
+	struct timeval tv;
+	int r = gettimeofday (&tv, NULL);
+	pFlyingContainer->fCreationTime = tv.tv_sec + tv.tv_usec * 1e-6;
 	
 	return pFlyingContainer;
 }

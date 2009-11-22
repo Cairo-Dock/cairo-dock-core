@@ -31,6 +31,8 @@ struct _CairoFlyingContainer {
 	Icon *pIcon;
 	/// Whether to draw the hand or not.
 	gboolean bDrawHand;
+	/// time the container was created.
+	double fCreationTime;
 };
 
 gboolean cairo_dock_update_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation);

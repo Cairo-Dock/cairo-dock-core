@@ -274,15 +274,7 @@ void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkR
 				cairo_save (pCairoContext);
 				//g_print ("dessin optimise de %s [%.2f -> %.2f]\n", icon->cName, fXLeft, fXRight);
 				
-				//if (icon->fDrawX >= 0 && icon->fDrawX + icon->fWidth * icon->fScale <= pDock->container.iWidth)
-				{
-					icon->fAlpha = 1;
-				}
-				/*else
-				{
-					icon->fAlpha = .25;
-				}*/
-				
+				icon->fAlpha = 1;
 				if (icon->iAnimationState == CAIRO_DOCK_STATE_AVOID_MOUSE)
 				{
 					icon->fAlpha = 0.7;
@@ -392,7 +384,9 @@ void cd_render_opengl_default (CairoDock *pDock)
 	{
 		icon = ic->data;
 		
+		glPushMatrix ();
 		cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
+		glPopMatrix ();
 		
 		ic = cairo_dock_get_next_element (ic, pDock->icons);
 	} while (ic != pFirstDrawnElement);

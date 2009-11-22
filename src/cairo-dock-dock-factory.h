@@ -227,6 +227,10 @@ struct _CairoDock {
 	gint iNumScreen;
 	/// whether an icon is being dragged away from the dock
 	gboolean bIconIsFlyingAway;
+	/// whether the dock is hidden
+	gboolean bIsHidden;
+	/// vertical offset for auto-hide.
+	double fHideOffset;
 };
 
 

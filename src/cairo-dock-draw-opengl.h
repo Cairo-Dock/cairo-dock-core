@@ -40,6 +40,8 @@ void cairo_dock_set_icon_scale (Icon *pIcon, CairoContainer *pContainer, double 
 
 gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext);
 
+void cairo_dock_translate_on_icon_opengl (Icon *icon, CairoContainer *pContainer, double fDockMagnitude);
+
 /** Draw an icon, according to its current parameters : position, transparency, reflect, rotation, stretching. Also draws its indicators, label, and quick-info. It generates a CAIRO_DOCK_RENDER_ICON notification.
 *@param icon the icon to draw.
 *@param pDock the dock containing the icon.
