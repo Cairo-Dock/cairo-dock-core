@@ -694,9 +694,24 @@ gboolean on_unmap_desklet (GtkWidget* pWidget,
 	if (cairo_dock_window_is_utility (Xid))  // sur la couche des widgets, on ne fait rien.
 		return FALSE;
 	if (! pDesklet->bAllowMinimize)
+	{
+		if (pDesklet->pUnmapTimer)
+		{
+			double fElapsedTime = g_timer_elapsed (pDesklet->pUnmapTimer, NULL);
+			g_print ("fElapsedTime : %fms\n", fElapsedTime);
+			g_timer_destroy (pDesklet->pUnmapTimer);
+			pDesklet->pUnmapTimer = NULL;
+			if (fElapsedTime < .2)
+				return TRUE;
+		}
 		gtk_window_present (GTK_WINDOW (pWidget));
+	}
 	else
+	{
 		pDesklet->bAllowMinimize = FALSE;
+		if (pDesklet->pUnmapTimer == NULL)
+			pDesklet->pUnmapTimer = g_timer_new ();  // starts the timer.
+	}
 	return TRUE;  // stops other handlers from being invoked for the event.
 }
 
@@ -1487,37 +1502,42 @@ void cairo_dock_set_desklet_margin (CairoDesklet *pDesklet, int iRightMargin)
 	g_return_if_fail (pDesklet != NULL && pDesklet->pInteractiveWidget != NULL);
 	
 	GtkWidget *pHBox = gtk_bin_get_child (GTK_BIN (pDesklet->container.pWidget));
-	if (pHBox != pDesklet->pInteractiveWidget)  // precaution.
+	if (pHBox && pHBox != pDesklet->pInteractiveWidget)  // precaution.
 	{
 		GList *pChildList = gtk_container_get_children (GTK_CONTAINER (pHBox));
-		if (pChildList != NULL && pChildList->next != NULL)
+		if (pChildList != NULL)
 		{
-			GtkWidget *pMarginBox = GTK_WIDGET (pChildList->next->data);
-			gtk_widget_set (pMarginBox, "width-request", iRightMargin, NULL);
-		}
-		else
-		{
-			GtkWidget *pMarginBox = gtk_vbox_new (FALSE, 0);
-			gtk_widget_set (pMarginBox, "width-request", iRightMargin, NULL);
-			gtk_box_pack_start (GTK_BOX (pHBox), pMarginBox, FALSE, FALSE, 0);
+			if (pChildList->next != NULL)
+			{
+				GtkWidget *pMarginBox = GTK_WIDGET (pChildList->next->data);
+				gtk_widget_set (pMarginBox, "width-request", iRightMargin, NULL);
+			}
+			else  // on rajoute le widget de la marge.
+			{
+				GtkWidget *pMarginBox = gtk_vbox_new (FALSE, 0);
+				gtk_widget_set (pMarginBox, "width-request", iRightMargin, NULL);
+				gtk_box_pack_start (GTK_BOX (pHBox), pMarginBox, FALSE, FALSE, 0);
+			}
+			g_list_free (pChildList);
 		}
 	}
 }
 
-void cairo_dock_steal_interactive_widget_from_desklet (CairoDesklet *pDesklet)
+GtkWidget *cairo_dock_steal_interactive_widget_from_desklet (CairoDesklet *pDesklet)
 {
 	if (pDesklet == NULL)
-		return;
+		return NULL;
 
 	GtkWidget *pInteractiveWidget = pDesklet->pInteractiveWidget;
 	if (pInteractiveWidget != NULL)
 	{
-		cairo_dock_steal_widget_from_its_container (pInteractiveWidget);
+		pInteractiveWidget = cairo_dock_steal_widget_from_its_container (pInteractiveWidget);
 		pDesklet->pInteractiveWidget = NULL;
 		GtkWidget *pBox = gtk_bin_get_child (GTK_BIN (pDesklet->container.pWidget));
 		if (pBox != NULL)
 			gtk_widget_destroy (pBox);
 	}
+	return pInteractiveWidget;
 }
 
 

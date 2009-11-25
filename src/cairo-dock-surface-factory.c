@@ -213,14 +213,16 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 	//\____________________ On pre-multiplie chaque composante par le alpha (necessaire pour libcairo).
 	int w = pXIconBuffer[iBestIndex];
 	int h = pXIconBuffer[iBestIndex+1];
+	iBestIndex += 2;
+	g_print ("%s (%dx%d)\n", __func__, w, h);
 	
-	int i;
+	int i, n = MIN (w * h, iBufferNbElements - iBestIndex);  // precaution au cas ou le nombre d'elements dans le buffer serait incorrect.
 	gint pixel, alpha, red, green, blue;
 	float fAlphaFactor;
-	gint *pPixelBuffer = (gint *) &pXIconBuffer[iBestIndex+2];  // on va ecrire le resultat du filtre directement dans le tableau fourni en entree. C'est ok car sizeof(gulong) >= sizeof(gint), donc le tableau de pixels est plus petit que le buffer fourni en entree. merci a Hannemann pour ses tests et ses screenshots ! :-)
-	for (i = 0; i < w * h; i ++)
+	gint *pPixelBuffer = (gint *) &pXIconBuffer[iBestIndex];  // on va ecrire le resultat du filtre directement dans le tableau fourni en entree. C'est ok car sizeof(gulong) >= sizeof(gint), donc le tableau de pixels est plus petit que le buffer fourni en entree. merci a Hannemann pour ses tests et ses screenshots ! :-)
+	for (i = 0; i < n; i ++)
 	{
-		pixel = (gint) pXIconBuffer[iBestIndex+2+i];
+		pixel = (gint) pXIconBuffer[iBestIndex+i];
 		alpha = (pixel & 0xFF000000) >> 24;
 		red   = (pixel & 0x00FF0000) >> 16;
 		green = (pixel & 0x0000FF00) >> 8;
@@ -255,8 +257,6 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 		ceil (*fWidth * fMaxScale),
 		ceil (*fHeight * fMaxScale));
 	cairo_t *pCairoContext = cairo_create (pNewSurface);
-	
-	
 	
 	double fUsefulWidth = w * fIconWidthSaturationFactor;  // a part dans le cas fill && keep ratio, c'est la meme chose que fImageWidth et fImageHeight.
 	double fUsefulHeight = h * fIconHeightSaturationFactor;

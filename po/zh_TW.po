@@ -7,7 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
-"POT-Creation-Date: 2009-11-01 04:36+0000\n"
 "PO-Revision-Date: 2009-10-31 14:53+0000\n"
 "Last-Translator: Cairo-Dock Team <cairo-dock-team@lists.launchpad.net>\n"
 "Language-Team: Traditional Chinese <zh_TW@li.org>\n"
@@ -39,7 +38,7 @@ msgstr ""
 msgid "Applet's handbook"
 msgstr "小程式的手冊"
 
-#: ../src/cairo-dock-callbacks.c:1122
+#: ../src/cairo-dock-callbacks.c:1163
 msgid "Do you want to mount this point ?"
 msgstr "您想要掛載此掛載點嗎？"
 
@@ -64,36 +63,37 @@ msgid ""
 msgstr ""
 "OpenGL能夠讓您使用顯示卡硬體加速，盡可能的降低CPU的使用率。\n"
 "而且還能夠提供類似Compiz那樣更漂亮的畫面效果。\n"
-"然而，有一些顯示卡的驅動程式並不能完全的支援OpenGL，因此沒有辦法正確的顯示Cairo-Dock。\n"
+"然而，有一些顯示卡的驅動程式並不能完全的支援OpenGL，因此沒有辦法正確的顯示"
+"Cairo-Dock。\n"
 "您確定要啟動OpenGL?\n"
 " (不再顯示此對話框，請從應用程式選單當中啟動Cairo-Dock 。\n"
 "  (也可以使用 -o 參數強制使用OpenGL ，或者使用 -c 參數使用無OpenGL模式)"
 
-#: ../src/cairo-dock-file-manager.c:501 ../src/cairo-dock-file-manager.c:546
+#: ../src/cairo-dock-file-manager.c:505 ../src/cairo-dock-file-manager.c:550
 #, c-format
 msgid "%s is now mounted"
 msgstr "%s 現在已掛載"
 
-#: ../src/cairo-dock-file-manager.c:501 ../src/cairo-dock-file-manager.c:546
+#: ../src/cairo-dock-file-manager.c:505 ../src/cairo-dock-file-manager.c:550
 #, c-format
 msgid "%s is now unmounted"
 msgstr "%s 現在已卸載"
 
-#: ../src/cairo-dock-file-manager.c:565
+#: ../src/cairo-dock-file-manager.c:569
 #, c-format
 msgid "failed to mount %s"
 msgstr "掛載 %s 時失敗"
 
-#: ../src/cairo-dock-file-manager.c:565
+#: ../src/cairo-dock-file-manager.c:569
 #, c-format
 msgid "failed to unmount %s"
 msgstr "卸載 %s 失敗"
 
-#: ../src/cairo-dock-gui-factory.c:843 ../src/cairo-dock-gui-factory.c:845
+#: ../src/cairo-dock-gui-factory.c:931 ../src/cairo-dock-gui-factory.c:933
 msgid "You have to try the theme before you can rate it."
 msgstr "在您想要評等一個主題之前，您必須先試用過它。"
 
-#: ../src/cairo-dock-gui-factory.c:867
+#: ../src/cairo-dock-gui-factory.c:955
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -103,7 +103,7 @@ msgstr ""
 "找不到模組「%s」。\n"
 "請確定您安裝的是和 Cairo-Dock 同一個版本來享受這些特殊功能。"
 
-#: ../src/cairo-dock-gui-factory.c:885
+#: ../src/cairo-dock-gui-factory.c:973
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -112,143 +112,133 @@ msgstr ""
 "這個 '%s' 外掛沒有啟用。\n"
 "請先啟用這個外掛來擁有這些功能。"
 
-#: ../src/cairo-dock-gui-factory.c:1822
+#: ../src/cairo-dock-gui-factory.c:2023
 msgid "theme"
 msgstr "主題"
 
-#: ../src/cairo-dock-gui-factory.c:1835
+#: ../src/cairo-dock-gui-factory.c:2036
 msgid "rating"
 msgstr "評分"
 
-#: ../src/cairo-dock-gui-factory.c:1841
+#: ../src/cairo-dock-gui-factory.c:2042
 msgid "sobriety"
 msgstr "平均"
 
-#: ../src/cairo-dock-gui-factory.c:1971
+#: ../src/cairo-dock-gui-factory.c:2155
 msgid "grab"
 msgstr "抓取"
 
-#: ../src/cairo-dock-gui-manager.c:95 ../data/messages:105
+#: ../src/cairo-dock-gui-manager.c:96 ../data/messages:97
 msgid "Behaviour"
 msgstr "動作方式"
 
-#: ../src/cairo-dock-gui-manager.c:96
+#: ../src/cairo-dock-gui-manager.c:97
 msgid "Appearance"
 msgstr "界面外觀"
 
-#: ../src/cairo-dock-gui-manager.c:97
+#: ../src/cairo-dock-gui-manager.c:98
 msgid "Accessories"
 msgstr "附屬應用程式"
 
-#: ../src/cairo-dock-gui-manager.c:98
+#: ../src/cairo-dock-gui-manager.c:99
 msgid "Desktop"
 msgstr "桌面"
 
-#: ../src/cairo-dock-gui-manager.c:99
+#: ../src/cairo-dock-gui-manager.c:100
 msgid "Controlers"
 msgstr "控制台"
 
-#: ../src/cairo-dock-gui-manager.c:100
+#: ../src/cairo-dock-gui-manager.c:101
 msgid "Plug-ins"
 msgstr "外掛"
 
-#: ../src/cairo-dock-gui-manager.c:432
+#: ../src/cairo-dock-gui-manager.c:428
 msgid "Categories"
 msgstr "分類"
 
-#: ../src/cairo-dock-gui-manager.c:452
+#: ../src/cairo-dock-gui-manager.c:448
 msgid "All"
 msgstr "全部"
 
-#: ../src/cairo-dock-gui-manager.c:557
-msgid "Activate this module"
-msgstr "啟動這個模組"
-
-#: ../src/cairo-dock-gui-manager.c:575
+#: ../src/cairo-dock-gui-manager.c:548
 msgid "Filter"
 msgstr "篩選器"
 
-#: ../src/cairo-dock-gui-manager.c:615
+#: ../src/cairo-dock-gui-manager.c:599
+#, fuzzy
+msgid "Options"
+msgstr "應用程式"
+
+#: ../src/cairo-dock-gui-manager.c:609
 msgid "All words"
 msgstr "全部的文字"
 
-#: ../src/cairo-dock-gui-manager.c:622
+#: ../src/cairo-dock-gui-manager.c:613
 msgid "Highlight words"
 msgstr "高亮度的文字"
 
-#: ../src/cairo-dock-gui-manager.c:630
+#: ../src/cairo-dock-gui-manager.c:618
 msgid "Hide others"
 msgstr "隱藏其他的"
 
-#: ../src/cairo-dock-gui-manager.c:638
+#: ../src/cairo-dock-gui-manager.c:623
 msgid "Search in description"
 msgstr "搜尋解說文字"
 
-#: ../src/cairo-dock-gui-manager.c:720
+#: ../src/cairo-dock-gui-manager.c:637
+msgid "Activate this module"
+msgstr "啟動這個模組"
+
+#: ../src/cairo-dock-gui-manager.c:726
 msgid "< Maintenance mode >"
 msgstr "< 維護模式 >"
 
-#: ../src/cairo-dock-gui-manager.c:738 ../src/cairo-dock-gui-manager.c:812
+#: ../src/cairo-dock-gui-manager.c:744 ../src/cairo-dock-gui-manager.c:818
 msgid "Configuration of Cairo-Dock"
 msgstr "配置Cairo-Dock"
 
-#: ../src/cairo-dock-gui-manager.c:1059
+#: ../src/cairo-dock-gui-manager.c:1065
 #, c-format
 msgid ""
 "The module '%s' is not present. You need to install it or its dependencies "
 "to make the most of this module."
 msgstr "這個 '%s' 模組不存在，你需要安裝它，或者是他依賴的模組。"
 
-#: ../src/cairo-dock-gui-manager.c:1065
+#: ../src/cairo-dock-gui-manager.c:1071
 #, c-format
 msgid "The module '%s' is not activated."
 msgstr "模組 '%s' 沒有啟用。"
 
-#: ../src/cairo-dock-gui-manager.c:1066
+#: ../src/cairo-dock-gui-manager.c:1072
 msgid "Do you want to activate it now ?"
 msgstr "您現在要啟用它嗎？"
 
-#: ../src/cairo-dock-gui-manager.c:1802
+#: ../src/cairo-dock-gui-manager.c:1808
 msgid "Configuration of the launchers"
 msgstr "快速啟動組態設定"
 
-#: ../src/cairo-dock-internal-accessibility.c:154
-msgid ""
-"The option 'auto-hide on fullscreen window' is in conflict with the option "
-"'reserve space for dock',\n"
-" it will be ignored"
-msgstr ""
-"這個 '在全螢幕視窗當中自動隱藏' 的選項與「為Dock保留螢幕邊緣的空間嗎？」 選項相衝突\n"
-" 它將會被忽略。"
-
-#: ../src/cairo-dock-internal-accessibility.c:159
-msgid ""
-"The option 'auto-hide on maximized window' is in conflict with the option "
-"'reserve space for dock',\n"
-" it will be ignored"
-msgstr ""
-"這個 '在最大化視窗當中自動隱藏' 的選項與 為Dock保留螢幕邊緣的空間嗎？」選項相衝突\n"
-" 它將會被忽略。"
-
-#: ../src/cairo-dock-internal-accessibility.c:294
-#: ../src/cairo-dock-menu.c:1653 ../data/messages:47
-msgid "Accessibility"
+#: ../src/cairo-dock-internal-accessibility.c:261
+#, fuzzy
+msgid "Visibility"
 msgstr "輔助工具"
 
-#: ../src/cairo-dock-internal-accessibility.c:296
-msgid "How do you access to your docks ?"
-msgstr "您要如何存取您的Cairo-Dock"
+#: ../src/cairo-dock-internal-accessibility.c:263
+msgid ""
+"Do you like your dock to be always visible,\n"
+" or on the contrary unobstrusive ?\n"
+"Configure the way you access to your docks and sub-docks !"
+msgstr ""
 
-#: ../src/cairo-dock-internal-background.c:146 ../data/messages:261
-#: ../data/messages:377
+#: ../src/cairo-dock-internal-background.c:157 ../data/messages:267
+#: ../data/messages:393
 msgid "Background"
 msgstr "背景"
 
-#: ../src/cairo-dock-internal-background.c:148
+#: ../src/cairo-dock-internal-background.c:159
 msgid "Set a background to your dock."
 msgstr "設定背景到您的Cairo-Dock上"
 
-#: ../src/cairo-dock-internal-desklets.c:101 ../data/messages:559
+#: ../src/cairo-dock-internal-desklets.c:101 ../data/messages:573
 msgid "Desklets"
 msgstr "桌面小工具"
 
@@ -256,17 +246,18 @@ msgstr "桌面小工具"
 msgid "The applets can be set on your desktop as widgets."
 msgstr "這些小程式能夠設定放在桌面上，就像是桌面小程式(widgets)一樣。"
 
-#: ../src/cairo-dock-internal-dialogs.c:137
+#: ../src/cairo-dock-internal-dialogs.c:128
 msgid ""
 "It provides different window decorators. Activate it first if you want to "
 "select a different decorator for your dialogs."
-msgstr "它能夠提供不同的視窗裝飾器，如果您想要不一樣的對話框視窗裝飾，請先啟用它。"
+msgstr ""
+"它能夠提供不同的視窗裝飾器，如果您想要不一樣的對話框視窗裝飾，請先啟用它。"
 
-#: ../src/cairo-dock-internal-dialogs.c:139 ../data/messages:525
+#: ../src/cairo-dock-internal-dialogs.c:130 ../data/messages:537
 msgid "Dialogs"
 msgstr "對話框"
 
-#: ../src/cairo-dock-internal-dialogs.c:141
+#: ../src/cairo-dock-internal-dialogs.c:132
 msgid "Configure the look of the dialog bubbles."
 msgstr "設定跳出對話框的外觀"
 
@@ -282,8 +273,8 @@ msgstr "設定當Cairo-Dock隱藏時的顯現外觀"
 msgid "It provides many animations to your icons."
 msgstr "它提供了很多圖示的動畫"
 
-#: ../src/cairo-dock-internal-icons.c:428 ../data/messages:391
-#: ../data/messages:733
+#: ../src/cairo-dock-internal-icons.c:428 ../data/messages:407
+#: ../data/messages:761
 msgid "Icons"
 msgstr "圖示"
 
@@ -295,24 +286,24 @@ msgstr ""
 "關於全部的圖示\n"
 " 尺寸、影子、圖示主題等等..."
 
-#: ../src/cairo-dock-internal-indicators.c:143 ../data/messages:615
+#: ../src/cairo-dock-internal-indicators.c:159 ../data/messages:631
 msgid "Indicators"
 msgstr "指示物"
 
-#: ../src/cairo-dock-internal-indicators.c:145
+#: ../src/cairo-dock-internal-indicators.c:161
 msgid "Indicators are extra indications on your icons."
 msgstr "您圖示上的額外指示物"
 
-#: ../src/cairo-dock-internal-labels.c:168 ../data/messages:353
+#: ../src/cairo-dock-internal-labels.c:172 ../data/messages:365
 msgid "Labels"
 msgstr "標籤"
 
-#: ../src/cairo-dock-internal-labels.c:170
+#: ../src/cairo-dock-internal-labels.c:174
 msgid "Define the style of the icons' labels and quick-info."
 msgstr "定義圖示標籤與快速訊息的風格"
 
 #: ../src/cairo-dock-internal-position.c:122 ../data/messages:1
-#: ../data/messages:1077
+#: ../data/messages:1115
 msgid "Position"
 msgstr "位置"
 
@@ -320,19 +311,19 @@ msgstr "位置"
 msgid "Set the position of the main dock."
 msgstr "設定主Dock上的位置"
 
-#: ../src/cairo-dock-internal-system.c:127 ../data/messages:177
+#: ../src/cairo-dock-internal-system.c:131 ../data/messages:169
 msgid "System"
 msgstr "系統設定"
 
-#: ../src/cairo-dock-internal-system.c:129
+#: ../src/cairo-dock-internal-system.c:133
 msgid "All the parameters you will never want to tweak."
 msgstr "您永遠不會想去調校的所有參數。"
 
-#: ../src/cairo-dock-internal-taskbar.c:174 ../data/messages:103
+#: ../src/cairo-dock-internal-taskbar.c:175 ../data/messages:95
 msgid "TaskBar"
 msgstr "工作列"
 
-#: ../src/cairo-dock-internal-taskbar.c:176
+#: ../src/cairo-dock-internal-taskbar.c:177
 msgid "Display and interact with the currently open windows."
 msgstr "顯示並與現在開著的窗口互動"
 
@@ -340,9 +331,10 @@ msgstr "顯示並與現在開著的窗口互動"
 msgid ""
 "It provides different views to Cairo-Dock. Activate it first if you want to "
 "select a different view for your docks."
-msgstr "它提供了不同的Cairo-Dock風貌，如果想要選擇不一樣的Docks風貌，請先啟用他。"
+msgstr ""
+"它提供了不同的Cairo-Dock風貌，如果想要選擇不一樣的Docks風貌，請先啟用他。"
 
-#: ../src/cairo-dock-internal-views.c:90 ../data/messages:501
+#: ../src/cairo-dock-internal-views.c:90 ../data/messages:517
 msgid "Views"
 msgstr "風貌"
 
@@ -444,7 +436,8 @@ msgid ""
 "Consider drag and dropping the launcher from the Applications Menu."
 msgstr ""
 "很抱歉，沒有辦法找到相對應的描述檔案。\n"
-"可考慮用滑鼠 [拖 - 放] 的功能從應用程式選單上，拉應用程式到Dock上，用以建立快速啟動。"
+"可考慮用滑鼠 [拖 - 放] 的功能從應用程式選單上，拉應用程式到Dock上，用以建立快"
+"速啟動。"
 
 #: ../src/cairo-dock-menu.c:1223
 #, c-format
@@ -472,8 +465,7 @@ msgid "Manage themes"
 msgstr "管理主題"
 
 #: ../src/cairo-dock-menu.c:1319
-msgid ""
-"Choose amongst many themes on the server, and save your current theme."
+msgid "Choose amongst many themes on the server, and save your current theme."
 msgstr "在伺服器之中有很多可以選擇的主題，同時會儲存您目前的主題。"
 
 #: ../src/cairo-dock-menu.c:1321
@@ -528,7 +520,7 @@ msgstr "社群的網站"
 msgid "A problem ? A suggestion ? Want to talk to us ? You're welcome !"
 msgstr "有問題嗎？有建議嗎？想要告訴我們？非常歡迎！"
 
-#: ../src/cairo-dock-menu.c:1359
+#: ../src/cairo-dock-menu.c:1359 ../src/cairo-dock-modules.c:126
 msgid "Help"
 msgstr "說明"
 
@@ -737,11 +729,15 @@ msgstr "移除這個小程式"
 msgid "Launch another instance of this applet"
 msgstr "快速複製與這個小程式相同的小程式"
 
+#: ../src/cairo-dock-menu.c:1653 ../data/messages:43
+msgid "Accessibility"
+msgstr "輔助工具"
+
 #: ../src/cairo-dock-menu.c:1670
 msgid "Normal"
 msgstr "普通"
 
-#: ../src/cairo-dock-menu.c:1676
+#: ../src/cairo-dock-menu.c:1676 ../data/messages:51
 msgid "Always on top"
 msgstr "永遠在最上層"
 
@@ -765,7 +761,7 @@ msgstr "放在所有桌面上"
 msgid "Lock position"
 msgstr "鎖定位置"
 
-#: ../src/cairo-dock-modules.c:140
+#: ../src/cairo-dock-modules.c:141
 msgid ""
 "A useful FAQ that contains also a lot of hints.\n"
 "Let the mouse over a sentence to make the hint dialog popups."
@@ -777,60 +773,60 @@ msgstr ""
 msgid "default"
 msgstr "預設值"
 
-#: ../src/cairo-dock-themes-manager.c:256
+#: ../src/cairo-dock-themes-manager.c:257
 #, c-format
 msgid "Downloading file %s ..."
 msgstr "下載檔案 %s ..."
 
-#: ../src/cairo-dock-themes-manager.c:297
+#: ../src/cairo-dock-themes-manager.c:304
 #, c-format
 msgid "couldn't get distant file %s"
 msgstr "無法取得遠方檔案 %s"
 
-#: ../src/cairo-dock-themes-manager.c:484
+#: ../src/cairo-dock-themes-manager.c:491
 #, c-format
 msgid "couldn't get the list of themes for %s (no connection ?)"
 msgstr "無法取得主題列表 %s (沒有網路連線嗎？)"
 
-#: ../src/cairo-dock-themes-manager.c:637
+#: ../src/cairo-dock-themes-manager.c:644
 #, c-format
 msgid "Are you sure you want to overwrite theme %s ?"
 msgstr "您確定要覆蓋 %s 這個主題嗎？"
 
-#: ../src/cairo-dock-themes-manager.c:721
+#: ../src/cairo-dock-themes-manager.c:728
 msgid "The theme has been saved"
 msgstr "主題已儲存"
 
-#: ../src/cairo-dock-themes-manager.c:721
+#: ../src/cairo-dock-themes-manager.c:728
 msgid "The theme couldn't be saved"
 msgstr "主題無法儲存"
 
-#: ../src/cairo-dock-themes-manager.c:742
+#: ../src/cairo-dock-themes-manager.c:749
 #, c-format
 msgid "Are you sure you want to delete theme %s ?"
 msgstr "您確定要刪除 %s 這個主題嗎？"
 
-#: ../src/cairo-dock-themes-manager.c:744
+#: ../src/cairo-dock-themes-manager.c:751
 msgid "Are you sure you want to delete these themes ?"
 msgstr "您確定要刪除這些主題嗎？"
 
-#: ../src/cairo-dock-themes-manager.c:764
+#: ../src/cairo-dock-themes-manager.c:771
 msgid "The theme has been deleted"
 msgstr "主題已經刪除"
 
-#: ../src/cairo-dock-themes-manager.c:764
+#: ../src/cairo-dock-themes-manager.c:771
 msgid "The theme couldn't be deleted"
 msgstr "主題無法刪除"
 
-#: ../src/cairo-dock-themes-manager.c:766
+#: ../src/cairo-dock-themes-manager.c:773
 msgid "The themes have been deleted"
 msgstr "多主題已經刪除"
 
-#: ../src/cairo-dock-themes-manager.c:766
+#: ../src/cairo-dock-themes-manager.c:773
 msgid "The themes couldn't be deleted"
 msgstr "多主題無法刪除"
 
-#: ../src/cairo-dock-themes-manager.c:815
+#: ../src/cairo-dock-themes-manager.c:822
 msgid ""
 "You made some modifications in the current theme.\n"
 "You will loose them if you don't save before choosing a new theme. Continue "
@@ -839,7 +835,7 @@ msgstr ""
 "您在目前的主題當中做了修改。\n"
 "如果您選擇了一個新的主題而沒有儲存，您將會失去這些設定。要繼續嗎？"
 
-#: ../src/cairo-dock-themes-manager.c:854
+#: ../src/cairo-dock-themes-manager.c:861
 #, c-format
 msgid ""
 "couldn't get distant file %s/%s, maybe the server is down.\n"
@@ -848,24 +844,24 @@ msgstr ""
 "無法取得遠方檔案 %s/%s ，也許是因為遠方的Server已經關閉。\n"
 "請等一下再重試，或者到 cairo-dock.org 連繫我們。"
 
-#: ../src/cairo-dock-themes-manager.c:876
+#: ../src/cairo-dock-themes-manager.c:883
 msgid "Applying changes ..."
 msgstr "使用這些改變中 ...."
 
-#: ../src/cairo-dock-themes-manager.c:1037
+#: ../src/cairo-dock-themes-manager.c:1044
 msgid "Now reloading theme ..."
 msgstr "現在正重新讀取主題中 ..."
 
-#: ../src/cairo-dock-themes-manager.c:1060
+#: ../src/cairo-dock-themes-manager.c:1067
 msgid "Manage Themes"
 msgstr "管理佈景主題"
 
-#: ../src/cairo-dock-themes-manager.c:1127
+#: ../src/cairo-dock-themes-manager.c:1134
 #, c-format
 msgid "couldn't retrieve distant theme %s"
 msgstr "無法取得遠方的主題 %s"
 
-#: ../src/cairo-dock.c:611
+#: ../src/cairo-dock.c:612
 msgid ""
 "To remove the black rectangle around the dock, you need to activate a "
 "composite manager.\n"
@@ -874,14 +870,15 @@ msgid ""
 "I can do this lattest operation for you, do you want to proceed ?"
 msgstr ""
 "要讓Dock周圍的黑色矩型消失，您需要啟用合成(composite)管理。\n"
-"例如，它可以在Compiz的桌面效果裏面啟用，或者在Metacity(Gnome的預設視窗管理程式)的組態編輯中啟用。\n"
+"例如，它可以在Compiz的桌面效果裏面啟用，或者在Metacity(Gnome的預設視窗管理程"
+"式)的組態編輯中啟用。\n"
 "我能幫您做這個小動作，您要讓我這麼做嗎？"
 
-#: ../src/cairo-dock.c:615
+#: ../src/cairo-dock.c:616
 msgid "Do you want to keep this setting ?"
 msgstr "您要保留這個設定嗎？"
 
-#: ../src/cairo-dock.c:620
+#: ../src/cairo-dock.c:621
 msgid ""
 "To remove the black rectangle around the dock, you need to activate a "
 "composite manager.\n"
@@ -892,10 +889,12 @@ msgid ""
 "page."
 msgstr ""
 "要讓Dock周圍的黑色矩型消失，您需要啟用合成(composite)管理。\n"
-"例如，它可以在Compiz的桌面效果裏面啟用，或者在Metacity(Gnome的預設視窗管理程式)的組態編輯中啟用。\n"
-"假如您的電腦無法支援合成，Cairo-Dock可以模擬它；這個選項在設置Cairo-Dock的「系統」模組裏面的最下方。"
+"例如，它可以在Compiz的桌面效果裏面啟用，或者在Metacity(Gnome的預設視窗管理程"
+"式)的組態編輯中啟用。\n"
+"假如您的電腦無法支援合成，Cairo-Dock可以模擬它；這個選項在設置Cairo-Dock的"
+"「系統」模組裏面的最下方。"
 
-#: ../src/cairo-dock.c:627
+#: ../src/cairo-dock.c:628
 msgid ""
 "No plug-in were found.\n"
 "To make the most of Cairo-Dock, please consider installing its plug-ins.\n"
@@ -907,1407 +906,1520 @@ msgstr ""
 "這可以提供更多有趣的功能、動畫等等。\n"
 " 您絕對不想要失去它！"
 
-#: ../data/messages:3 ../data/messages:1079
+#: ../data/messages:3 ../data/messages:1117
 msgid "Position on the screen"
 msgstr "螢幕上的位置"
 
-#: ../data/messages:5 ../data/messages:1081
+#: ../data/messages:5 ../data/messages:1119
 msgid ""
 "The icons will scroll according to the chosen placement type. Of course the "
 "dock can be placed anywhere on the screen, here we specify regarding to what."
-msgstr "圖示將會在您精選的放置類型內平穩捲動，而且只要我們指定它，Dock能夠被放置在螢幕上的任何位置，"
+msgstr ""
+"圖示將會在您精選的放置類型內平穩捲動，而且只要我們指定它，Dock能夠被放置在螢"
+"幕上的任何位置，"
 
 #: ../data/messages:7
 msgid "Choose which screen border the dock will placed on :"
 msgstr "選擇任何一個螢幕邊緣，Dock將會放在那邊："
 
-#: ../data/messages:9 ../data/messages:1085
+#: ../data/messages:9 ../data/messages:1123
 msgid "bottom"
 msgstr "底部"
 
-#: ../data/messages:11 ../data/messages:1087
+#: ../data/messages:11 ../data/messages:1125
 msgid "top"
 msgstr "頂端"
 
-#: ../data/messages:13 ../data/messages:23 ../data/messages:33
-#: ../data/messages:1089
+#: ../data/messages:13 ../data/messages:23 ../data/messages:1127
 msgid "right"
 msgstr "右邊"
 
-#: ../data/messages:15 ../data/messages:21 ../data/messages:31
-#: ../data/messages:1091
+#: ../data/messages:15 ../data/messages:21 ../data/messages:1129
 msgid "left"
 msgstr "左邊"
 
-#: ../data/messages:17 ../data/messages:1093
+#: ../data/messages:17 ../data/messages:1131
 msgid ""
 "At 0, the dock will place itself regarding the left corner if horizontal and "
 "the top corner if vertical, at 1 regarding the right corner if horizontal "
 "and the bottom corner if vertical, and at 0.5, regarding the middle of the "
 "screen's edge."
 msgstr ""
-"數值是0時，Dock如水平放置則會到左邊，垂直放置時則位於上方；數值是1時，水平放置時會位於右邊，垂直放置時會位於下方；數值0.5時，相對螢幕正中央定位。"
+"數值是0時，Dock如水平放置則會到左邊，垂直放置時則位於上方；數值是1時，水平放"
+"置時會位於右邊，垂直放置時會位於下方；數值0.5時，相對螢幕正中央定位。"
 
-#: ../data/messages:19 ../data/messages:1095
+#: ../data/messages:19 ../data/messages:1133
 msgid "Relative alignment :"
 msgstr "相對對齊"
 
-#: ../data/messages:25 ../data/messages:1097
-msgid "Position regarding the chosen screen's edge"
-msgstr "選擇對於螢幕邊緣的位置"
+#: ../data/messages:25
+#, fuzzy
+msgid "Offset to the screen's edge"
+msgstr "距離螢幕邊緣的距離："
 
-#: ../data/messages:27 ../data/messages:1099
+#: ../data/messages:27 ../data/messages:1137
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding ALT or CTRL key and left mouse button."
-msgstr "距離在螢幕邊緣絕對位置的間隔，以像數(pixels)為單位，您同時可以按住ALT或者是CTRL按鍵與滑鼠左鍵來移動Dock。"
+msgstr ""
+"距離在螢幕邊緣絕對位置的間隔，以像數(pixels)為單位，您同時可以按住ALT或者是"
+"CTRL按鍵與滑鼠左鍵來移動Dock。"
 
-#: ../data/messages:29 ../data/messages:1101
-msgid "Lateral gap :"
-msgstr "側邊間隔"
+#: ../data/messages:29
+#, fuzzy
+msgid "Lateral offset :"
+msgstr "垂直偏移量："
 
-#: ../data/messages:35 ../data/messages:1103
+#: ../data/messages:31 ../data/messages:1141
 msgid ""
 "in pixels. You can also move the dock by holding ALT or CTRL key and left "
 "mouse button."
 msgstr "以像素為單位，您可以按住ALT或者CTRL與滑鼠左鍵來移動Dock。"
 
-#: ../data/messages:37 ../data/messages:1105
+#: ../data/messages:33 ../data/messages:1143
 msgid "Distance to the screen's edge :"
 msgstr "距離螢幕邊緣的距離："
 
-#: ../data/messages:39
+#: ../data/messages:35
 msgid "Multiple screens"
 msgstr "多重螢幕"
 
-#: ../data/messages:41
+#: ../data/messages:37
 msgid "Use Xinerama ?"
 msgstr "使用Xinerama ？"
 
-#: ../data/messages:43 ../data/messages:1111
+#: ../data/messages:39 ../data/messages:1149
 msgid "starting from 0"
 msgstr "從 0 開始"
 
-#: ../data/messages:45 ../data/messages:1113
+#: ../data/messages:41 ../data/messages:1151
 msgid "Number of the screen where the dock should be located :"
 msgstr "放置Dock的螢幕編號"
 
-#: ../data/messages:49
-msgid "Space"
-msgstr "空間"
+#: ../data/messages:45
+#, fuzzy
+msgid "Visibility of the main dock"
+msgstr "設定主Dock上的位置"
 
-#: ../data/messages:51
-msgid "Extend the dock to always fill the screen ?"
-msgstr "延伸Dock與螢幕一樣寬。"
+#: ../data/messages:47
+msgid ""
+"Prevent windows from overlapping the dock : reserve space at the edge of the "
+"screen for the dock.\n"
+"Auto-hide : the dock will automatically hide itself outside of the scren "
+"when the mouse leaves it. Instead, it will show a zone where placing the "
+"mouse will trigger the dock and make it re-appear.\n"
+"Keep the dock below windows : the dock will pop-up on the foreground when "
+"you place the mouse on its screen border.\n"
+"Pop-up on shortcut : When you press the shortcut, the dock will pop-up at "
+"the position of your mouse. The rest of the time, it stays invisible, thus "
+"acting like a menu."
+msgstr ""
+
+#: ../data/messages:49
+#, fuzzy
+msgid "Visibility :"
+msgstr "輔助工具"
 
 #: ../data/messages:53
-msgid ""
-"This will prevent other windows from overlapping the dock. It has no effect "
-"if you defined the 'show/hide' shortcut below, cause then the dock behaves "
-"like a menu."
-msgstr "這將會防止其他視窗蓋住Dock，使得Dock就像是工作列選單一樣。但是一旦您使用了下面的「顯示/隱藏」選項，這個設定將會失效。"
+msgid "Prevent windows from overlapping the dock"
+msgstr ""
 
 #: ../data/messages:55
-msgid "Reserve space at the edge of the screen for the dock ?"
-msgstr "為Dock保留螢幕邊緣的空間嗎？"
-
-#: ../data/messages:57
-msgid "Auto-hide"
-msgstr "自動隱藏"
-
-#: ../data/messages:59
-msgid ""
-"The dock will automatically hide itself outside of the scren when the mouse "
-"leaves it. Instead, it will show a zone where placing the mouse will trigger "
-"the dock and make it re-appear."
-msgstr "Dock將會在滑鼠離開它自動隱藏，代替的是一個可以讓滑鼠靠過去觸發，來重新顯示Dock的區域。"
-
-#: ../data/messages:61 ../data/messages:1109
-msgid "Activate auto-hide ?"
-msgstr "啟用自動隱藏？"
-
-#: ../data/messages:63
-msgid ""
-"This is only usefull if you don't already use the auto-hide, and if your WM "
-"let the dock in front of fullscreen windows (which is rare)."
-msgstr "這選項只有在您沒有使用自動隱藏時，而且當您的視窗管理員將Dock放在全螢幕視窗的前面。(很罕見)"
-
-#: ../data/messages:65
-msgid "Automatically quick-hide the dock when a window becomes fullscreen ?"
-msgstr "當螢幕視窗放大為全螢幕時，Dock會自動隱藏嗎？"
-
-#: ../data/messages:67
-msgid ""
-"This is only usefull if don't already use the auto-hide, and if you don't "
-"want to reserve the space for your dock nor let it below the other windows."
-msgstr "這選項只有在您沒有使用自動隱藏時，也不想要保留Dock的桌面空間，也不想讓它位於其他視窗之下。"
-
-#: ../data/messages:69
-msgid "Automatically quick-hide the dock when a window becomes maximized ?"
-msgstr "當螢幕視窗放大為最大時，Dock會自動隱藏嗎？"
-
-#: ../data/messages:71
-msgid "Place the mouse into it will make the dock re-appear."
-msgstr "將滑鼠移動到這將會使Dock重現。"
-
-#: ../data/messages:73
-msgid "Size of the callback zone (width x height, in pixels) :"
-msgstr "喚回區的大小(寬 x 高，以像素表示)："
-
-#: ../data/messages:75
-msgid "Pop-up"
-msgstr "彈出框"
-
-#: ../data/messages:77
-msgid ""
-"The dock will pop-up on the foreground when you place the mouse on its "
-"screen border. This option is only useful if you don't want to reserve space "
-"for the dock, nor to activate auto-hide."
-msgstr "當您的滑鼠移動到螢幕邊緣時，Dock將會彈跳到前景。這個選想只能夠使用在您不想要保留螢幕空間給Dock ，也不啟用自動隱藏。"
-
-#: ../data/messages:79
-msgid "Keep the dock below other windows ?"
+#, fuzzy
+msgid "Keep the dock below windows"
 msgstr "保持Dock位於所有視窗的最下面。"
 
-#: ../data/messages:81
+#: ../data/messages:57
+#, fuzzy
+msgid "Automatically hide the dock"
+msgstr "是否自動增加分隔圖？"
+
+#: ../data/messages:59
+#, fuzzy
+msgid "Automatically hide when a window is maximized"
+msgstr "當螢幕視窗放大為最大時，Dock會自動隱藏嗎？"
+
+#: ../data/messages:61
+msgid "Pop-up on shortcut"
+msgstr ""
+
+#: ../data/messages:63
 msgid "Pop-up only if the mouse hits a screen corner ?"
 msgstr "只有在滑鼠到螢幕的邊緣並且點一下時才彈跳出Dock。"
 
-#: ../data/messages:83
-msgid "Shortcut"
-msgstr "快速鍵"
-
-#: ../data/messages:85
+#: ../data/messages:65
 msgid ""
 "When you press the shortcut, the dock will show itself at the potition of "
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
 "menu."
-msgstr "當您按下這個快速鍵，Dock將會在您滑鼠目前的位置上顯示出來。其餘的時間將會完全的隱藏起來。"
+msgstr ""
+"當您按下這個快速鍵，Dock將會在您滑鼠目前的位置上顯示出來。其餘的時間將會完全"
+"的隱藏起來。"
 
-#: ../data/messages:87
-msgid "Keyboard shortcut to show/hide the dock :"
+#: ../data/messages:67
+#, fuzzy
+msgid "Keyboard shortcut to pop-up the dock :"
 msgstr "顯示/隱藏 Dock 的鍵盤快速鍵"
 
-#: ../data/messages:89
-msgid "Sub-docks' accessibility"
+#: ../data/messages:69
+#, fuzzy
+msgid "Additionnal parameters"
+msgstr "額外的參數："
+
+#: ../data/messages:71
+msgid "Extend the dock to always fill the screen ?"
+msgstr "延伸Dock與螢幕一樣寬。"
+
+#: ../data/messages:73
+msgid "Place the mouse into it will make the dock re-appear."
+msgstr "將滑鼠移動到這將會使Dock重現。"
+
+#: ../data/messages:75
+msgid "Size of the callback zone (width x height, in pixels) :"
+msgstr "喚回區的大小(寬 x 高，以像素表示)："
+
+#: ../data/messages:77
+msgid ""
+"This is only usefull if you don't already use the auto-hide, and if your WM "
+"let the dock in front of fullscreen windows (which is rare)."
+msgstr ""
+"這選項只有在您沒有使用自動隱藏時，而且當您的視窗管理員將Dock放在全螢幕視窗的"
+"前面。(很罕見)"
+
+#: ../data/messages:79
+#, fuzzy
+msgid "Automatically hide the dock when a window becomes fullscreen ?"
+msgstr "當螢幕視窗放大為全螢幕時，Dock會自動隱藏嗎？"
+
+#: ../data/messages:81
+#, fuzzy
+msgid "Sub-docks' visibility"
 msgstr "子Dock的設置"
 
-#: ../data/messages:91
+#: ../data/messages:83
 msgid "in ms."
 msgstr "以毫秒(ms)為單位"
 
-#: ../data/messages:93
+#: ../data/messages:85
 msgid "Delay before you effectively leave from a sub-dock or to a sub-dock :"
 msgstr "當您滑鼠離開子Dock時延遲關閉的時間："
 
-#: ../data/messages:95
+#: ../data/messages:87
 msgid "in ms. Unused if you set up to click to show sub-docks."
 msgstr "以毫秒(ms)為單位。此外如果您設定為滑鼠點擊時才顯示子Dock，此功能無效。"
 
-#: ../data/messages:97
+#: ../data/messages:89
 msgid "Delay before displaying a sub-dock :"
 msgstr "延遲多少時間之後顯示子Dock："
 
-#: ../data/messages:99
+#: ../data/messages:91
 msgid ""
 "Otherwise they will appear when you linger over the icon pointing on it."
 msgstr "否則他們會在滑鼠掠過圖示時顯示出來。"
 
-#: ../data/messages:101
+#: ../data/messages:93
 msgid "Click to show sub-docks ?"
 msgstr "按一下以顯示子Dock？"
 
-#: ../data/messages:107
+#: ../data/messages:99
 msgid ""
 "Cairo-Dock will then replace your taskbar. It is recommanded to remove any "
 "other taskbar, and to not force the dock's type to normal."
-msgstr "Cairo-Dock可以替代您的工作列，最好是能夠移除其他的工作列，並且不要強制Dock使用普通模式。"
+msgstr ""
+"Cairo-Dock可以替代您的工作列，最好是能夠移除其他的工作列，並且不要強制Dock使"
+"用普通模式。"
 
-#: ../data/messages:109
+#: ../data/messages:101
 msgid "Show currently opened applications in the dock ?"
 msgstr "顯示在Dock上面目前已經開啟的應用程式嗎？"
 
-#: ../data/messages:111
-msgid ""
-"This allows to group windows in some soft like Gimp, and to have only 1 icon "
-"in the main dock.The 1st window will appear in the main dock, and the others "
-"will be placed in a container associated with this 1st icon."
-msgstr ""
-"這樣將會允許您的應用程式以群組的方式放在一起，比如說Gimp這個圖形處理軟體。它只會有一個圖示出現在主Dock上面，第一個視窗的圖像將會出現在主要的Doc"
-"k上面，而以Gimp開啟更多的視窗時，其他的視窗放置在這個圖像的裏面，就像是個容器一樣裝在一起。"
-
-#: ../data/messages:113
-msgid "Should the applications with same class be grouped in a sub-dock ?"
-msgstr "相同應用程式開啟的視窗，要放在一起成為一個子Dock嗎？"
-
-#: ../data/messages:115 ../data/messages:135
-msgid "enter the class of the applications, separated by a semi-colon ';'"
-msgstr "輸入應用程式的類型，以 ; 符號來分隔。"
-
-#: ../data/messages:117 ../data/messages:137
-msgid "\t\tExcept the following classes :"
-msgstr "\t\t除了下列的類型："
-
-#: ../data/messages:119
+#: ../data/messages:103
 msgid "Only show icons whose window is minimized ?"
 msgstr "只有顯示那些最小化的視窗"
 
-#: ../data/messages:121
+#: ../data/messages:105
 msgid "Only show applis on current desktop ?"
 msgstr "只有顯示目前桌面的應用程式"
 
-#: ../data/messages:123
+#: ../data/messages:107
 msgid ""
 "Allows launchers to act as applis when their program is running, and "
 "displays an indicator on their icon to signal it. You can launch other "
 "occurences of the program with SHIFT+click."
 msgstr ""
-"允許當快速啟動的程式已經執行時模仿小程式的樣子，并顯示圖形指標在圖像上面。您還可以在已經啟動的程式上，使用 [Shift + 滑鼠點擊] "
-"再開啟另一個相同的程式。"
+"允許當快速啟動的程式已經執行時模仿小程式的樣子，并顯示圖形指標在圖像上面。您"
+"還可以在已經啟動的程式上，使用 [Shift + 滑鼠點擊] 再開啟另一個相同的程式。"
 
-#: ../data/messages:125
+#: ../data/messages:109
 msgid "Mix launchers and applis ?"
 msgstr "將快速啟動與應用程式混合放在一起嗎？"
 
-#: ../data/messages:127
+#: ../data/messages:111
 msgid ""
-"The indicator is drawn on active launchers, but you may want to display it "
-"on applis too."
-msgstr "這個圖型指標會在已經執行的快速啟動圖形上顯示出來，但是您也許也想要讓這圖形指標在小程式上面顯示。"
+"This allows to group all the windows of a given application into a unique "
+"sub-dock, and to act on all of the windows at the same time."
+msgstr ""
 
-#: ../data/messages:129
-msgid "Display an indicator on applis ?"
-msgstr "顯示圖形指標在小程式的圖像上嗎？"
+#: ../data/messages:113
+msgid "Group windows of the same application in a sub-dock ?"
+msgstr ""
 
-#: ../data/messages:131
+#: ../data/messages:115 ../data/messages:123
+msgid "enter the class of the applications, separated by a semi-colon ';'"
+msgstr "輸入應用程式的類型，以 ; 符號來分隔。"
+
+#: ../data/messages:117 ../data/messages:125
+msgid "\t\tExcept the following classes :"
+msgstr "\t\t除了下列的類型："
+
+#: ../data/messages:119
 msgid ""
 "If not set, will use the icon provided by X for each appli. If set, the same "
 "icon as the corresponding launcher will be used for each appli."
-msgstr "如果沒有設定，將會使用X-window所提供的圖示。如果設定了，在可以應用的相同圖像就會對應在快速啟動的圖示上面。"
+msgstr ""
+"如果沒有設定，將會使用X-window所提供的圖示。如果設定了，在可以應用的相同圖像"
+"就會對應在快速啟動的圖示上面。"
 
-#: ../data/messages:133
+#: ../data/messages:121
 msgid "Overwrite X icons with launchers' one ?"
 msgstr "快速啟動的圖示與X-window的圖示一起複寫嗎？"
 
-#: ../data/messages:139
+#: ../data/messages:127
 msgid "You need a composite manager for it."
 msgstr "您需要啟用合成(composite)管理"
 
-#: ../data/messages:141
+#: ../data/messages:129
 msgid "Show a window thumbnail when it's minimized ?"
 msgstr "當視窗最小化之後顯示簡介"
 
-#: ../data/messages:143
+#: ../data/messages:131
+msgid ""
+"The indicator is drawn on active launchers, but you may want to display it "
+"on applis too."
+msgstr ""
+"這個圖型指標會在已經執行的快速啟動圖形上顯示出來，但是您也許也想要讓這圖形指"
+"標在小程式上面顯示。"
+
+#: ../data/messages:133
+#, fuzzy
+msgid "Display an indicator even if the icon is not a launcher ?"
+msgstr "顯示指標圖形在圖示之上嗎？"
+
+#: ../data/messages:135
 msgid "Interaction"
 msgstr "互動式"
 
-#: ../data/messages:145
+#: ../data/messages:137
 msgid "It is the default behaviour of most of taskbars."
 msgstr "這是多數工具列的預設動作方式"
 
-#: ../data/messages:147
+#: ../data/messages:139
 msgid ""
 "Minimize the window when its icon is clicked, if it was already the active "
 "window ?"
 msgstr "已經執行中的應用程式，點擊他的圖示時是否要最小化應用程式？"
 
-#: ../data/messages:149
+#: ../data/messages:141
 msgid "In a Firefox's tabs manner."
 msgstr "像FireFox的分頁方式一樣。"
 
-#: ../data/messages:151
+#: ../data/messages:143
 msgid "Middle click on an icon closes its relative application ?"
 msgstr "滑鼠中鍵點擊時關閉點擊的應用程式嗎？"
 
-#: ../data/messages:153
-msgid ""
-"Signal the applications demanding your attention with a dialog bubble ?"
+#: ../data/messages:145
+msgid "Signal the applications demanding your attention with a dialog bubble ?"
 msgstr "發出應用要求的彈跳式交談視窗讓您注意嗎？"
 
-#: ../data/messages:155
+#: ../data/messages:147
 msgid "in seconds"
 msgstr "以秒計算"
 
-#: ../data/messages:157
+#: ../data/messages:149
 msgid "Duration of the dialog :"
 msgstr "彈跳式交談視窗的時間長短"
 
-#: ../data/messages:159
-msgid ""
-"It will notify you even if, for instance, you're watching a video in "
-"fullscreen."
+#: ../data/messages:151
+#, fuzzy
+msgid "It will notify you even if, for instance, you are on another desktop."
 msgstr "比如說在全螢幕的影片欣賞當中。它也會通知您，"
 
-#: ../data/messages:161
+#: ../data/messages:153
 msgid "Force the following applications to demand your attention ?"
 msgstr "強制讓後面的應用程式需求引起您的注意？"
 
-#: ../data/messages:163
+#: ../data/messages:155
 msgid "Signal the applications demanding your attention with an animation ?"
 msgstr "發出應用要求的動畫讓您注意嗎？"
 
-#: ../data/messages:165
+#: ../data/messages:157
 msgid "Play a short animation of the icon when its window becomes active ?"
 msgstr "當圖示上的視窗即將啟動之前以動畫的方式表現嗎？"
 
-#: ../data/messages:167
+#: ../data/messages:159
 msgid "Representation"
 msgstr "表現方式"
 
-#: ../data/messages:169
+#: ../data/messages:161
 msgid "\"...\" will be added at the end if the name is too long."
 msgstr "名稱太長的尾端將會自動加上\"...\""
 
-#: ../data/messages:171
+#: ../data/messages:163
 msgid "Maximum number of caracters in application's name :"
 msgstr "應用程式名稱最多的字元數："
 
-#: ../data/messages:173
+#: ../data/messages:165
 msgid ""
 "To the right, you can control the transparency of minimized windows, to the "
 "left the transparency of visible windows. The more you go aside, the more "
 "the concerned icons will be transparent; on the middle, icons are always "
 "plain."
-msgstr "往右邊控制視窗透明度最小，往左邊控制視窗透明度最大，愈往旁邊，就愈多的圖示變得更透明；在中間時，圖示將會很清楚。"
+msgstr ""
+"往右邊控制視窗透明度最小，往左邊控制視窗透明度最大，愈往旁邊，就愈多的圖示變"
+"得更透明；在中間時，圖示將會很清楚。"
 
-#: ../data/messages:175
+#: ../data/messages:167
 msgid "Transparency of icons whose window is or isn't minimized :"
 msgstr "沒有最小化的視窗圖像透明度："
 
-#: ../data/messages:179
+#: ../data/messages:171
 msgid "Movement parameters"
 msgstr "動態參數"
 
-#: ../data/messages:181
+#: ../data/messages:173
 msgid ""
 "The dock will unfold when it hides/shows itself. No effect if auto-hide is "
 "not activated or unfold acceleration is nul."
-msgstr "當自動隱藏/顯示時Dock將會展開。假如自動隱藏沒有啟動或者沒有展開加速則會沒有效果。"
+msgstr ""
+"當自動隱藏/顯示時Dock將會展開。假如自動隱藏沒有啟動或者沒有展開加速則會沒有效"
+"果。"
 
-#: ../data/messages:183
+#: ../data/messages:175
 msgid "Animate the dock when auto-hiding ?"
 msgstr "當自動隱藏Dock時使用動畫？"
 
-#: ../data/messages:185
+#: ../data/messages:177
 msgid "Always true if sub-docks appear with mouse click."
 msgstr "假如出現滑鼠點擊子Dock時。"
 
-#: ../data/messages:187
+#: ../data/messages:179
 msgid "Animate sub-docks when they appear ?"
 msgstr "當顯現子Dock時使用動畫嗎？"
 
-#: ../data/messages:189
+#: ../data/messages:181
 msgid ""
 "The icons will appear folded on themselves, then will unfold untill they "
 "fill the whole dock. The smaller, the faster it will be."
-msgstr "圖示將會出現褶疊合併的動畫，當它們展開時將會回到Dock原本的位置上。調整數字變小將會是比較快的動作。"
+msgstr ""
+"圖示將會出現褶疊合併的動畫，當它們展開時將會回到Dock原本的位置上。調整數字變"
+"小將會是比較快的動作。"
 
-#: ../data/messages:191
+#: ../data/messages:183
 msgid "Unfolding animation duration :"
 msgstr "動畫持續時間："
 
-#: ../data/messages:193 ../data/messages:331
+#: ../data/messages:185 ../data/messages:363
 msgid "fast"
 msgstr "快速"
 
-#: ../data/messages:195 ../data/messages:329
+#: ../data/messages:187 ../data/messages:361
 msgid "slow"
 msgstr "慢速"
 
-#: ../data/messages:197
+#: ../data/messages:189
 msgid "The more there are, the slower it will be"
 msgstr "越多，將會越慢。"
 
-#: ../data/messages:199
+#: ../data/messages:191
 msgid "Number of steps in the zoom animation (grow up/shrink down) :"
 msgstr "縮放動畫時的Step數值(增加/減少)："
 
-#: ../data/messages:201
+#: ../data/messages:193
 msgid ""
 "This is the animation when the dock goes below a window; The greater, the "
 "slower it will be"
 msgstr "這個動畫是用來展現當Dock移動到視窗的下方，數字越大將會越慢。"
 
-#: ../data/messages:203
+#: ../data/messages:195
 msgid "Number of steps in the fade out animation :"
 msgstr "淡出動畫的階段數："
 
-#: ../data/messages:205
+#: ../data/messages:197
 msgid "the smaller, the faster the dock will hide."
 msgstr "愈小，Dock將會愈快速隱藏。"
 
-#: ../data/messages:207
+#: ../data/messages:199
 msgid "Window's move acceleration (move up/move down) :"
 msgstr "視窗移動加速(往上移動/往下移動)："
 
-#: ../data/messages:209
+#: ../data/messages:201
 msgid "CPU"
 msgstr "CPU"
 
-#: ../data/messages:211 ../data/messages:219 ../data/messages:223
+#: ../data/messages:203 ../data/messages:211 ../data/messages:215
 msgid "in Hz. This is to adjust regarding your CPU power."
 msgstr "以HZ為單位，這可以調整關於您的 CPU 资源。"
 
-#: ../data/messages:213
+#: ../data/messages:205
 msgid "Refresh frequency when mouving cursor into the dock :"
 msgstr "當滑鼠游標進入Dock時的刷新頻率："
 
-#: ../data/messages:215
+#: ../data/messages:207
 msgid ""
 "The transparency gradation pattern will then be re-calculated in real time. "
 "May needs more CPU power."
 msgstr "即時運算透明漸變，可能會需要更多的 CPU 運算資源。"
 
-#: ../data/messages:217
+#: ../data/messages:209
 msgid "Reflections should be calculated in real-time ?"
 msgstr "即時運算陰影？"
 
-#: ../data/messages:221
+#: ../data/messages:213
 msgid "Animation frequency for the opengl backend :"
 msgstr "ＯpenGL模式的動畫頻率："
 
-#: ../data/messages:225
+#: ../data/messages:217
 msgid "Animation frequency for the cairo backend :"
 msgstr "Cairo模式(無OpenGL)的動畫頻率："
 
-#: ../data/messages:227
+#: ../data/messages:219
 msgid "Label readability"
 msgstr "標籤的可讀性"
 
-#: ../data/messages:229
+#: ../data/messages:221
 msgid "Show label of the currently pointed icon only ?"
 msgstr "只有顯示目前滑鼠指標位置的標籤嗎？"
 
-#: ../data/messages:231
+#: ../data/messages:223
 msgid "Should the labels be always horizontal, even when dock is vertical ?"
 msgstr "即使Dock是直立的，也永遠顯示標籤為橫式格式。"
 
-#: ../data/messages:233
+#: ../data/messages:225
 msgid ""
 "the bigger, the more the labels next to the pointed icon will be transparent."
-msgstr "數字愈大，則目前滑鼠指標周圍的圖示標籤將會愈透明。(與「只有顯示目前滑鼠指標位置的標籤嗎？」功能相衝突)"
+msgstr ""
+"數字愈大，則目前滑鼠指標周圍的圖示標籤將會愈透明。(與「只有顯示目前滑鼠指標位"
+"置的標籤嗎？」功能相衝突)"
 
-#: ../data/messages:235
+#: ../data/messages:227
 msgid "label's visibility threshold :"
 msgstr "周圍標籤透明度調整："
 
-#: ../data/messages:237
+#: ../data/messages:229
 msgid "Configure labels appearence."
 msgstr "設置標籤外觀"
 
-#: ../data/messages:239
+#: ../data/messages:231
 msgid "Files"
 msgstr "檔案"
 
-#: ../data/messages:241
+#: ../data/messages:233
 msgid "Sort files by :"
 msgstr "檔案排序採用："
 
-#: ../data/messages:243
+#: ../data/messages:235
 msgid "Name"
 msgstr "名稱"
 
-#: ../data/messages:245
+#: ../data/messages:237
 msgid "Size"
 msgstr "檔案大小"
 
-#: ../data/messages:247
+#: ../data/messages:239
 msgid "Date"
 msgstr "日期"
 
-#: ../data/messages:249
+#: ../data/messages:241
 msgid "Show hidden files ?"
 msgstr "顯示隱藏檔案？"
 
-#: ../data/messages:251
+#: ../data/messages:243
 msgid "Composition"
 msgstr "合成"
 
-#: ../data/messages:253
+#: ../data/messages:245
 msgid ""
 "Only use this if you don't run a composite manager like Compiz, xcompmgr, "
 "etc and have a black background around your dock. For esthetic reason, the "
 "dock will be kept under other windows."
 msgstr ""
-"只有在您不使用合成(composite)管理的時候，比如說Compiz、xcompmgr等等使用。而同時您看到您的Dock周圍有著黑色的矩型框，為了美觀起"
-"見，Dock將會固定在所有視窗的最下方。"
+"只有在您不使用合成(composite)管理的時候，比如說Compiz、xcompmgr等等使用。而同"
+"時您看到您的Dock周圍有著黑色的矩型框，為了美觀起見，Dock將會固定在所有視窗的"
+"最下方。"
 
-#: ../data/messages:255
+#: ../data/messages:247
 msgid "Emulates composition with fake transparency ?"
 msgstr "用假的透明效果來模擬合成"
 
-#: ../data/messages:257
+#: ../data/messages:249
 msgid "You need to re-open the panel. It is deactivated by default on KDE."
 msgstr "您需要重新開啟面板，在KDE上面預設是停用的。"
 
-#: ../data/messages:259
+#: ../data/messages:251
 msgid "Make the config panel transparent ?"
 msgstr "讓設置面板透明化嗎？"
 
+#: ../data/messages:253
+msgid "Connection to the themes server"
+msgstr ""
+
+#: ../data/messages:255
+msgid ""
+"Maximum time in seconds that you allow the connection to the server to take. "
+"This only limits the connection phase,  once the dock has connected this "
+"option is of no more use."
+msgstr ""
+
+#: ../data/messages:257
+msgid "Connection timeout to the themes server :"
+msgstr ""
+
+#: ../data/messages:259
+msgid ""
+"Maximum time in seconds that you allow the whole operation to take. Some "
+"themes can take up to a few MB."
+msgstr ""
+
+#: ../data/messages:261
+msgid "Maximum time to download a theme :"
+msgstr ""
+
 #: ../data/messages:263
-msgid "Extern Frame"
-msgstr "外框"
+msgid ""
+"If an error occurs during downloading a theme, it will retry this number of "
+"times before giving up."
+msgstr ""
 
-#: ../data/messages:265 ../data/messages:269 ../data/messages:273
-#: ../data/messages:403 ../data/messages:545
-msgid "in pixels."
-msgstr "以像素為單位。"
+#: ../data/messages:265
+msgid "Number of retries :"
+msgstr ""
 
-#: ../data/messages:267
-msgid "Corner radius :"
-msgstr "圓角半徑："
+#: ../data/messages:269
+#, fuzzy
+msgid "Fill the background with :"
+msgstr "標籤背景顏色："
 
-#: ../data/messages:271
-msgid "Linewidth of the extern line :"
-msgstr "外框線的線寬："
+#: ../data/messages:271 ../data/messages:277 ../data/messages:637
+msgid "Image"
+msgstr ""
+
+#: ../data/messages:273 ../data/messages:293
+#, fuzzy
+msgid "Color gradation"
+msgstr "...或漸層"
 
 #: ../data/messages:275
-msgid "Margin between the frame and the icons or their reflects :"
-msgstr "外框的標示區域大小："
-
-#: ../data/messages:277
-msgid "Color of the extern line (r,v,b,a) :"
-msgstr "外框線的顏色(r,v,b,a)："
-
-#: ../data/messages:279
-msgid "Are the bottom left and right corners rounded ?"
-msgstr "左下角與右下角角落要用圓角嗎？"
-
-#: ../data/messages:281 ../data/messages:297
-msgid "Use a background image or a color gradation."
-msgstr "使用背景圖片或者是色彩漸層。"
-
-#: ../data/messages:283
-msgid "Background image..."
+#, fuzzy
+msgid "Use a background image."
 msgstr "背景圖片..."
 
-#: ../data/messages:285 ../data/messages:417
+#: ../data/messages:279
+#, fuzzy
 msgid ""
-"Any format allowed; let this field empty if you don't want to use an image "
-"as background."
+"Any format allowed; if empty, the color gradation will be used as a fallback."
 msgstr "任何可用的圖形格式；如果您不想要使用圖片背景，讓這個地方空白。"
 
-#: ../data/messages:287
+#: ../data/messages:281
 msgid "Image's filename to use as a background :"
 msgstr "背景圖片的檔案名稱："
 
-#: ../data/messages:289
+#: ../data/messages:283
 msgid "Image's transparency :"
 msgstr "圖片透明度："
 
-#: ../data/messages:291 ../data/messages:343 ../data/messages:443
-#: ../data/messages:571 ../data/messages:597
+#: ../data/messages:285 ../data/messages:337 ../data/messages:459
+#: ../data/messages:587 ../data/messages:613
 msgid "transparent"
 msgstr "透明"
 
-#: ../data/messages:293 ../data/messages:345 ../data/messages:445
-#: ../data/messages:573 ../data/messages:599
+#: ../data/messages:287 ../data/messages:339 ../data/messages:461
+#: ../data/messages:589 ../data/messages:615
 msgid "opaque"
 msgstr "不透明"
 
-#: ../data/messages:295
+#: ../data/messages:289
 msgid "Repeat image as a pattern to fill background ?"
 msgstr "以圖片做紋理材質填充背景？"
 
-#: ../data/messages:299
-msgid "...or Gradation"
-msgstr "...或漸層"
+#: ../data/messages:291
+#, fuzzy
+msgid "Use a color gradation."
+msgstr "使用背景圖片或者是色彩漸層。"
 
-#: ../data/messages:301
+#: ../data/messages:295
 msgid "Bright color (red, green, blue, alpha) :"
 msgstr "亮色系(紅、綠、藍、alpha)："
 
-#: ../data/messages:303
+#: ../data/messages:297
 msgid "Dark color (red, green, blue, alpha) :"
 msgstr "暗色系(紅、綠、藍、alpha)："
 
-#: ../data/messages:305
-msgid ""
-"Angle of the stripes / gradation, in relation to the vertical (in degree) :"
+#: ../data/messages:299
+#, fuzzy
+msgid "In degrees, in relation to the vertical"
 msgstr "條紋/漸層角度(以度為單位)："
 
+#: ../data/messages:301
+#, fuzzy
+msgid "Angle of the gradation :"
+msgstr "應用程式的級別："
+
+#: ../data/messages:303
+msgid "If not nul, it will form stripes."
+msgstr ""
+
+#: ../data/messages:305
+msgid "Repeat the gradation this number of times :"
+msgstr ""
+
 #: ../data/messages:307
-msgid ""
-"The bigger, the more the stripes are close to each other; with 0 stripes, "
-"the background will be filled with a single gradation."
-msgstr "數字越大，條紋之間會越接近；當數值為0時，背景將會以顏色漸層的方式表現。"
+msgid "Percentage of the bright color :"
+msgstr ""
 
 #: ../data/messages:309
-msgid "Number of stripes, in each pattern, to draw in the background :"
-msgstr "在背景上的每個紋理條紋的數量："
+msgid "Extern Frame"
+msgstr "外框"
 
-#: ../data/messages:311
-msgid ""
-"1 pattern contains N stripes, so the width can be less or equal than 1/N."
-msgstr "1個紋理材質包含N個條紋，所以寬度可以是\"小於\"或\"等於\" 1/N 。"
+#: ../data/messages:311 ../data/messages:315 ../data/messages:321
+#: ../data/messages:419 ../data/messages:559
+msgid "in pixels."
+msgstr "以像素為單位。"
 
 #: ../data/messages:313
-msgid "Width of the stripes, in percentage of the pattern size :"
-msgstr "條紋的寬度，以紋理材質的大小百分比："
-
-#: ../data/messages:315
-msgid "Background movement"
-msgstr "背景動態"
+msgid "Corner radius :"
+msgstr "圓角半徑："
 
 #: ../data/messages:317
-msgid "Move the background image along with the cursor ?"
-msgstr "跟隨著滑鼠指標移動背景？"
+msgid "Linewidth of the extern line :"
+msgstr "外框線的線寬："
 
 #: ../data/messages:319
-msgid "No"
-msgstr "不要"
-
-#: ../data/messages:321
-msgid "Follow the mouse"
-msgstr "跟隨滑鼠"
+#, fuzzy
+msgid "Color of the extern line :"
+msgstr "外框線的顏色(r,v,b,a)："
 
 #: ../data/messages:323
-msgid "Link with the mouse"
-msgstr "與滑鼠連結"
+msgid "Margin between the frame and the icons or their reflects :"
+msgstr "外框的標示區域大小："
 
 #: ../data/messages:325
-msgid ""
-"The smaller, the slower the decorations will move along with the cursor."
-msgstr "數值愈小，則背景填充圖片跟隨滑鼠移動的速度愈慢。當設定為 0 時將會整個停止不動。"
+msgid "Are the bottom left and right corners rounded ?"
+msgstr "左下角與右下角角落要用圓角嗎？"
 
 #: ../data/messages:327
-msgid "Speed :"
-msgstr "速度："
-
-#: ../data/messages:333
 msgid "Configure the dock's appearence when hidden."
 msgstr "設置當Dock隱藏時的外觀"
 
-#: ../data/messages:335
+#: ../data/messages:329
 msgid "Hidden dock"
 msgstr "隱藏Dock"
 
-#: ../data/messages:337
+#: ../data/messages:331
 msgid ""
 "This is what you see when the dock hides itselfs. Any format is allowed. Let "
 "this field empty to have an invisible zone."
-msgstr "這是當Dock隱藏時喚回區的顯示圖形，圖形則是任何一種可支援的圖檔格式都可以。如果要讓喚回區完全的看不到，就讓這個設定空白即可。"
+msgstr ""
+"這是當Dock隱藏時喚回區的顯示圖形，圖形則是任何一種可支援的圖檔格式都可以。如"
+"果要讓喚回區完全的看不到，就讓這個設定空白即可。"
 
-#: ../data/messages:339
+#: ../data/messages:333
 msgid "Filename of an image to put on :"
 msgstr "喚回區的顯示圖形："
 
-#: ../data/messages:341
+#: ../data/messages:335
 msgid "Transparency of the image :"
 msgstr "圖片的透明度："
 
-#: ../data/messages:347
+#: ../data/messages:341
 msgid ""
 "Use it when the image is an arrow pointing to the center of the screen for "
 "exemple."
-msgstr "例如，當您使用一個指向螢幕中間的箭頭圖形時，可以使用這個功能。不管Dock在什麼地方，轉動之後箭頭還是會指向中間。"
+msgstr ""
+"例如，當您使用一個指向螢幕中間的箭頭圖形時，可以使用這個功能。不管Dock在什麼"
+"地方，轉動之後箭頭還是會指向中間。"
 
-#: ../data/messages:349
+#: ../data/messages:343
 msgid "Rotate the image when the dock is on top/left/right ?"
 msgstr "當Dock在上方/左邊/右邊時旋轉圖形嗎？"
 
-#: ../data/messages:351
+#: ../data/messages:345
 msgid "Configure the auto-hide behaviour."
 msgstr "設置自動隱藏的動作方式"
 
+#: ../data/messages:347
+msgid "Background movement"
+msgstr "背景動態"
+
+#: ../data/messages:349
+msgid "Move the background image along with the cursor ?"
+msgstr "跟隨著滑鼠指標移動背景？"
+
+#: ../data/messages:351
+msgid "No"
+msgstr "不要"
+
+#: ../data/messages:353
+msgid "Follow the mouse"
+msgstr "跟隨滑鼠"
+
 #: ../data/messages:355
+msgid "Link with the mouse"
+msgstr "與滑鼠連結"
+
+#: ../data/messages:357
+msgid ""
+"The smaller, the slower the decorations will move along with the cursor."
+msgstr ""
+"數值愈小，則背景填充圖片跟隨滑鼠移動的速度愈慢。當設定為 0 時將會整個停止不"
+"動。"
+
+#: ../data/messages:359
+msgid "Speed :"
+msgstr "速度："
+
+#: ../data/messages:367
 msgid "Font"
 msgstr "字型"
 
-#: ../data/messages:357
+#: ../data/messages:369
 msgid "Display labels on icons ?"
 msgstr "顯示圖示的標籤"
 
-#: ../data/messages:359
+#: ../data/messages:371 ../data/messages:547
+msgid "Otherwise the default system one will be used."
+msgstr ""
+
+#: ../data/messages:373
+#, fuzzy
+msgid "Use a custom font for labels ?"
+msgstr "使用標籤的背景顏色嗎？"
+
+#: ../data/messages:375
 msgid "Font used for labels :"
 msgstr "標籤的字型："
 
-#: ../data/messages:361
-msgid "Should the text be oulined ?"
-msgstr "文字需要加外框嗎？"
+#: ../data/messages:377 ../data/messages:553
+msgid "Draw the outline of the text ?"
+msgstr ""
 
-#: ../data/messages:363
+#: ../data/messages:379
 msgid "Color"
 msgstr "顏色"
 
-#: ../data/messages:365
+#: ../data/messages:381
 msgid "It's the first color of the gradation."
 msgstr "這是漸層色彩的起始顏色。"
 
-#: ../data/messages:367
+#: ../data/messages:383
 msgid "Start color :"
 msgstr "起始顏色"
 
-#: ../data/messages:369
+#: ../data/messages:385
 msgid ""
 "It's the second color of the gradation. Set it to the same value as the "
 "first if you just don't want to have a gradation."
-msgstr "這是漸層顏色終止的設定。當您設定與起始顏色相同的顏色時，表示不想要使用漸層顏色的功能。"
+msgstr ""
+"這是漸層顏色終止的設定。當您設定與起始顏色相同的顏色時，表示不想要使用漸層顏"
+"色的功能。"
 
-#: ../data/messages:371
+#: ../data/messages:387
 msgid "Stop color :"
 msgstr "終止顏色"
 
-#: ../data/messages:373
+#: ../data/messages:389
 msgid ""
 "If checked, the pattern will go from top to bottom, otherwise from left to "
 "right."
 msgstr "打勾時，材質圖形將會從上往下，否則會從左到右。"
 
-#: ../data/messages:375
+#: ../data/messages:391
 msgid "Pattern should be vertical ?"
 msgstr "材質圖形要垂直顯示嗎？"
 
-#: ../data/messages:379
+#: ../data/messages:395
 msgid ""
 "If you set it to fully transparent, there will be no background for the "
 "text, but the margin around the text will still be effective."
 msgstr "假如您設定為全透明，字的後面將不會有背景，但是字的外框仍然會有效。"
 
-#: ../data/messages:381
+#: ../data/messages:397
 msgid "Color of the label's background :"
 msgstr "標籤背景顏色："
 
-#: ../data/messages:383
+#: ../data/messages:399
 msgid "If false, only the quick-info will have this background color."
 msgstr "如果沒有溝選，只有快速顯示資訊對話框會有背景顏色。"
 
-#: ../data/messages:385
+#: ../data/messages:401
 msgid "Use background color for labels ?"
 msgstr "使用標籤的背景顏色嗎？"
 
-#: ../data/messages:387
+#: ../data/messages:403
 msgid "Margin around the text (in pixels) :"
 msgstr "文字外框的寬度(以像素為單位)："
 
-#: ../data/messages:389
+#: ../data/messages:405
 msgid "Configure the label readability."
 msgstr "設置標籤的可讀性。"
 
-#: ../data/messages:393
+#: ../data/messages:409
 msgid "Zoom effect"
 msgstr "縮放效果"
 
-#: ../data/messages:395
+#: ../data/messages:411
 msgid "set to 1 if you don't want the icons to zoom when you hover them."
 msgstr "假如您不想要在滑鼠指標在圖示上移動時縮放圖示，請設定為 1"
 
-#: ../data/messages:397
+#: ../data/messages:413
 msgid "Maximum zoom of the icons :"
 msgstr "圖示的最大放大率："
 
-#: ../data/messages:399
+#: ../data/messages:415
 msgid ""
 "in pixels. Outside of this interval (centered on the mouse), there is no "
 "zoom."
 msgstr "在這個區間之外(以滑鼠為中心)，不做縮放動作。(以像素為單位。)"
 
-#: ../data/messages:401
+#: ../data/messages:417
 msgid "Width of the interval in which the zoom will be effective :"
 msgstr "多寬的有效區間縮放："
 
-#: ../data/messages:405
+#: ../data/messages:421
 msgid "Space between icons :"
 msgstr "圖示之間的空間："
 
-#: ../data/messages:407
+#: ../data/messages:423
 msgid "Icons' themes"
 msgstr "圖示主題"
 
-#: ../data/messages:409
+#: ../data/messages:425
 msgid ""
 "These are icons located in ~/.config/cairo-dock/current_theme/icons, coming "
 "from the theme you choosed. If you use this option, the dock will search "
 "here first, and then in the icons theme."
 msgstr ""
-"圖示會放在 ~/.config/cairo-dock/current_theme/icons "
-"裏面，讓您做主題的選擇。假如您使用這個選項，Dock將會首先搜尋這個目錄，接著就會加入目錄下的圖示主題。"
+"圖示會放在 ~/.config/cairo-dock/current_theme/icons 裏面，讓您做主題的選擇。"
+"假如您使用這個選項，Dock將會首先搜尋這個目錄，接著就會加入目錄下的圖示主題。"
 
-#: ../data/messages:411
+#: ../data/messages:427
 msgid "Use local icons ?"
 msgstr "使用本地端的圖示？"
 
-#: ../data/messages:413
+#: ../data/messages:429
 msgid ""
 "Let empty to use the current icons theme of your system. You can enter the "
 "name of a theme that is installed on your system (like 'Gartoon' or "
 "'Human'), or even a path to a folder containing icons."
 msgstr ""
-"使用系統的主題時，讓他空白。您可以輸入已經安裝在您系統上的主題名稱(例如 'Gartoon' 或者 'Human' ，或者是主題的目錄位置。"
+"使用系統的主題時，讓他空白。您可以輸入已經安裝在您系統上的主題名稱(例如 "
+"'Gartoon' 或者 'Human' ，或者是主題的目錄位置。"
 
-#: ../data/messages:415
+#: ../data/messages:431
 msgid "Choose a theme of icons :"
 msgstr "選擇一個圖示主題"
 
-#: ../data/messages:419
+#: ../data/messages:433
+msgid ""
+"Any format allowed; let this field empty if you don't want to use an image "
+"as background."
+msgstr "任何可用的圖形格式；如果您不想要使用圖片背景，讓這個地方空白。"
+
+#: ../data/messages:435
 msgid "Image's filename to use as a background for icons :"
 msgstr "圖示背景的圖片檔案名稱："
 
-#: ../data/messages:421
+#: ../data/messages:437
 msgid "Reflections"
 msgstr "反射"
 
-#: ../data/messages:423
+#: ../data/messages:439
 msgid ""
 "It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are "
 "not used."
 msgstr "反射率；當設定為 1 時圖示的反射率最大，設定為 0 時不使用反射。"
 
-#: ../data/messages:425
+#: ../data/messages:441
 msgid "Reflecting power of the plane :"
 msgstr "面板的反射力："
 
-#: ../data/messages:427
+#: ../data/messages:443
 msgid "light"
 msgstr "光源"
 
-#: ../data/messages:429
+#: ../data/messages:445
 msgid "strong"
 msgstr "強力"
 
-#: ../data/messages:431
-#, c-format
+#: ../data/messages:447
 msgid ""
-"Setting it to 0.33 will mean that 33% of the icons will reflect on the "
-"ground. The icons will be placed at the right distance from the front border "
-"of the frame so that the reflect is fully visible."
-msgstr "圖示與下層之間的反射，設定值為 0.33 將表示以 33% 的比例反射。圖示將會被放置在右前方框架的邊緣，讓它可以被看到。"
+"In percent of the icon's size. This parameter influence the total height of "
+"the dock."
+msgstr ""
 
-#: ../data/messages:433
-msgid "Fraction of the icon height that will reflect :"
-msgstr "分數高的圖示將會反射："
+#: ../data/messages:449
+#, fuzzy
+msgid "Height of the reflect :"
+msgstr "檔案的URI："
 
-#: ../data/messages:435
+#: ../data/messages:451
 msgid "small"
 msgstr "小"
 
-#: ../data/messages:437
+#: ../data/messages:453
 msgid "tall"
 msgstr "高"
 
-#: ../data/messages:439
+#: ../data/messages:455
 msgid ""
 "It is their transparency when the dock is at rest; they will \"materialize\" "
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
-msgstr "這是圖示放在Dock上面靜止時的透明度；它們會逐步的放大而實質化讓您看的到。當設定值為 0 時，透明度最高。"
+msgstr ""
+"這是圖示放在Dock上面靜止時的透明度；它們會逐步的放大而實質化讓您看的到。當設"
+"定值為 0 時，透明度最高。"
 
-#: ../data/messages:441
+#: ../data/messages:457
 msgid "Icons' transparency at rest :"
 msgstr "圖示靜止時的透明度："
 
-#: ../data/messages:447
-msgid "Link the icons with a string"
-msgstr "聯結所有圖示的線"
-
-#: ../data/messages:449
-msgid "Linewidth of the string, in pixels (0 to not use string) :"
-msgstr "線的寬度，以像素表示( 0 表示不使用)："
-
-#: ../data/messages:451
-msgid "Color of the string (red, blue, green, alpha) :"
-msgstr "線的顏色(紅、藍、綠、alpha)："
-
-#: ../data/messages:453
+#: ../data/messages:463
 msgid "Icons size"
 msgstr "圖示大小"
 
-#: ../data/messages:455
+#: ../data/messages:465
 msgid "Launcher's size at rest (width x height) :"
 msgstr "快速啟動圖示靜止時的大小(寬度 x 高度)："
 
-#: ../data/messages:457
+#: ../data/messages:467
 msgid "Appli's size at rest (width x height) :"
 msgstr "已經開啟的應用程式圖像靜止時的大小(寬度 x 高度)："
 
-#: ../data/messages:459
+#: ../data/messages:469
 msgid "Applet's size at rest (width x height) :"
 msgstr "小程式靜止時的大小(寬度 x 高度)："
 
-#: ../data/messages:461
+#: ../data/messages:471
 msgid "Configure icons animations."
 msgstr "設定圖示動畫"
 
-#: ../data/messages:463
+#: ../data/messages:473
 msgid "Configure icons special effects (require OpenGL capacity)."
 msgstr "設置圖示特別的效果(需要OpenGL的支援)。"
 
-#: ../data/messages:465
+#: ../data/messages:475
 msgid ""
 "Configure icons animations on appearing/disappearing (require OpenGL "
 "capacity)."
 msgstr "設置在 出現/消失 時的圖示動畫(需要OpenGL的支援)。"
 
-#: ../data/messages:467
+#: ../data/messages:477
 msgid "Separators"
 msgstr "分隔圖"
 
-#: ../data/messages:469
+#: ../data/messages:479
 msgid "Icon size at rest (width x height) :"
 msgstr "圖示靜止時的大小(寬度 x 高度)："
 
-#: ../data/messages:471
+#: ../data/messages:481
 msgid ""
 "Separators are icons used to make a separation between different types of "
 "icons. Cairo-dock can automatically add them between launchers, applis, and "
 "applets."
-msgstr "分隔圖是一個用來分隔不同區域的圖示。Cairo-Dock會自動的將他加在快速啟動區、已開啟的應用程式區和小程式之間。"
+msgstr ""
+"分隔圖是一個用來分隔不同區域的圖示。Cairo-Dock會自動的將他加在快速啟動區、已"
+"開啟的應用程式區和小程式之間。"
 
-#: ../data/messages:473
+#: ../data/messages:483
 msgid "Automatically add separators ?"
 msgstr "是否自動增加分隔圖？"
 
-#: ../data/messages:475
+#: ../data/messages:485
 msgid "If you don't provide one, blanks will be used."
 msgstr "假如您不指定任何一個圖形，將會用間隔取代。"
 
-#: ../data/messages:477
+#: ../data/messages:487
 msgid "Filename of an image to use for separators :"
 msgstr "分隔圖的影像檔案名稱："
 
-#: ../data/messages:479
+#: ../data/messages:489
 msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right ?"
 msgstr "要讓分隔圖隨著Dock位置改變而轉向嗎(如上方或者是左右邊時)？"
 
-#: ../data/messages:481
+#: ../data/messages:491
 msgid "Force separator's image size to stay constant ?"
 msgstr "強制固定住分隔圖的大小尺寸"
 
-#: ../data/messages:483
+#: ../data/messages:493
 msgid "Icons order"
 msgstr "圖示排序"
 
-#: ../data/messages:485
+#: ../data/messages:495
 msgid "Order of the different types of icons :"
 msgstr "不同類型圖示的排序方式："
 
-#: ../data/messages:487
+#: ../data/messages:497
 msgid "launchers"
 msgstr "快速啟動"
 
-#: ../data/messages:489
+#: ../data/messages:499
 msgid "applications"
 msgstr "應用程式"
 
-#: ../data/messages:491
+#: ../data/messages:501
 msgid "applets"
 msgstr "小程式"
 
-#: ../data/messages:493
+#: ../data/messages:503
 msgid ""
 "This parameter will overwrite the previously defined order, to allow you to "
 "mix applets and launchers into the dock."
-msgstr "這個設定將會覆蓋掉原本設定的順序，讓您在Dock上面混合顯示小程式與應用程式。"
+msgstr ""
+"這個設定將會覆蓋掉原本設定的順序，讓您在Dock上面混合顯示小程式與應用程式。"
 
-#: ../data/messages:495
+#: ../data/messages:505
 msgid "Allow applets to be placed amongst launchers ?"
 msgstr "允許在小程式之間放置快速啟動嗎？"
 
-#: ../data/messages:497
+#: ../data/messages:507
 msgid ""
 "This parameter will overwrite the previously defined order. If you didn't "
 "choose to group applis in sub-dock, applis will be placed next to their "
 "launcher."
-msgstr "此參數將覆蓋先前定義的順序。如果您沒有選擇子Dock上的群組應用程式，應用程式將會被放置到自己的快速啟動上面。"
+msgstr ""
+"此參數將覆蓋先前定義的順序。如果您沒有選擇子Dock上的群組應用程式，應用程式將"
+"會被放置到自己的快速啟動上面。"
 
-#: ../data/messages:499
+#: ../data/messages:509
 msgid "Allow applis to be placed amongst launchers ?"
 msgstr "允許應用程式之間放置快速啟動？"
 
-#: ../data/messages:503
+#: ../data/messages:511
+msgid "Link the icons with a string"
+msgstr "聯結所有圖示的線"
+
+#: ../data/messages:513
+msgid "Linewidth of the string, in pixels (0 to not use string) :"
+msgstr "線的寬度，以像素表示( 0 表示不使用)："
+
+#: ../data/messages:515
+msgid "Color of the string (red, blue, green, alpha) :"
+msgstr "線的顏色(紅、藍、綠、alpha)："
+
+#: ../data/messages:519
 msgid "Main Dock"
 msgstr "主要Dock"
 
-#: ../data/messages:505
+#: ../data/messages:521
 msgid "Choose the default view for root docks :"
 msgstr "選擇一個主Dock上的預設外觀："
 
-#: ../data/messages:507
+#: ../data/messages:523
 msgid "Sub-Docks"
 msgstr "子Dock"
 
-#: ../data/messages:509
+#: ../data/messages:525
 msgid "You can overwrite this parameter for each sub-dock."
 msgstr "您可以修改這個設定來讓每一個子Dock都適用。"
 
-#: ../data/messages:511
+#: ../data/messages:527
 msgid "Choose the default view for sub-docks :"
 msgstr "選擇子Dock的預設外觀："
 
-#: ../data/messages:513
-msgid "otherwise they will be perpendicular"
-msgstr "勾選時會與主Dock並行，沒有勾選擇會垂直於主Dock上。"
-
-#: ../data/messages:515
-msgid "Are the sub-docks parallel to main docks ?"
-msgstr "與主Dock方向並行的子Dock?"
-
-#: ../data/messages:517
+#: ../data/messages:529
 msgid ""
 "You can specify a ratio for the size of the sub-docks' icons, regarding the "
 "main docks' icons size"
-msgstr "您可以指定相對於主Dock上圖示的大小，子Dock上面顯示的圖示比例尺寸。(主Dock上圖示的大小為 1 )"
+msgstr ""
+"您可以指定相對於主Dock上圖示的大小，子Dock上面顯示的圖示比例尺寸。(主Dock上圖"
+"示的大小為 1 )"
 
-#: ../data/messages:519
+#: ../data/messages:531
 msgid "Ratio for the size of the sub-docks' icons :"
 msgstr "子Dock上的圖示比例尺寸："
 
-#: ../data/messages:521 ../data/messages:647
+#: ../data/messages:533 ../data/messages:667
 msgid "smaller"
 msgstr "小的"
 
-#: ../data/messages:523
+#: ../data/messages:535
 msgid "same size"
 msgstr "相同尺寸"
 
-#: ../data/messages:527
+#: ../data/messages:539
 msgid "Bubble"
 msgstr "對話框"
 
-#: ../data/messages:529
-msgid "Background color of the bubble (r,v,b,a) :"
+#: ../data/messages:541
+#, fuzzy
+msgid "Background color of the bubble :"
 msgstr "對話框的背景顏色(r,v,b,a)："
 
-#: ../data/messages:531
-msgid "Choose a window decorator :"
-msgstr "選擇視窗裝飾器："
+#: ../data/messages:543
+#, fuzzy
+msgid "Shape of the bubble :"
+msgstr "檔案的URI："
 
-#: ../data/messages:533
+#: ../data/messages:545
 msgid "Text"
 msgstr "文字"
 
-#: ../data/messages:535
-msgid "Text color (r,g,b) :"
-msgstr "文字色彩(R,G,B)："
+#: ../data/messages:549
+msgid "Use a custom font for the text ?"
+msgstr ""
 
-#: ../data/messages:537
-msgid ""
-"for exemple Monospace, Purisa, ... Just write the font name wihtout any "
-"number or so."
-msgstr "例如Monospace 、Purisa、文泉驛正黑.....等等，只要將字型名稱填入即可，不需要設定字型大小。"
+#: ../data/messages:551
+msgid "Text font :"
+msgstr ""
 
-#: ../data/messages:539
-msgid "Family of the font used for labels :"
-msgstr "使用在標籤上的字形："
+#: ../data/messages:555
+#, fuzzy
+msgid "Text color :"
+msgstr "終止顏色"
 
-#: ../data/messages:541
-msgid "Should be outlined ?"
-msgstr "要加上字型外框嗎？"
-
-#: ../data/messages:543
+#: ../data/messages:557
 msgid "Buttons"
 msgstr "按鈕"
 
-#: ../data/messages:547
+#: ../data/messages:561
 msgid "Size of buttons in the info-bubbles (width x height) :"
 msgstr "交談視窗上按鈕的尺寸大小(寬度 x 高度)："
 
-#: ../data/messages:549 ../data/messages:553 ../data/messages:603
-#: ../data/messages:607 ../data/messages:611 ../data/messages:673
-#: ../data/messages:677 ../data/messages:681 ../data/messages:685
-#: ../data/messages:689 ../data/messages:693 ../data/messages:697
-#: ../data/messages:701
+#: ../data/messages:563 ../data/messages:567 ../data/messages:619
+#: ../data/messages:623 ../data/messages:627 ../data/messages:693
+#: ../data/messages:697 ../data/messages:701 ../data/messages:705
+#: ../data/messages:709 ../data/messages:713 ../data/messages:717
+#: ../data/messages:721
 msgid "If you don't provide any, a default image will be used."
 msgstr "假如您沒有設定，那麼將會使用預設的圖形。"
 
-#: ../data/messages:551
+#: ../data/messages:565
 msgid "Name of an image to use for the yes/ok button :"
 msgstr "使用在 是/好 按鈕上的圖形："
 
-#: ../data/messages:555
+#: ../data/messages:569
 msgid "Name of an image to use for the no/cancel button :"
 msgstr "使用在 不/取消 按鈕上的圖形"
 
-#: ../data/messages:557
+#: ../data/messages:571
 msgid "Size of the icon displayed next to the text :"
 msgstr "交談視窗上面文字抬頭圖像的尺寸大小："
 
-#: ../data/messages:561
+#: ../data/messages:575
+msgid "This can be customized for each desklet separately."
+msgstr ""
+
+#: ../data/messages:577
 msgid "Choose a default decoration for all desklets :"
 msgstr "選擇預設的桌面小工具外型裝飾："
 
-#: ../data/messages:563
+#: ../data/messages:579
 msgid "Personnal decorations"
 msgstr "個性化裝飾"
 
-#: ../data/messages:565
+#: ../data/messages:581
 msgid ""
 "It's an image that will be displayed below the drawings, like a frame for "
 "exemple. Let empty to not use any."
 msgstr "這是顯示在桌面小程式下方的圖形，就像是相框一樣。不使用請空白。"
 
-#: ../data/messages:567
+#: ../data/messages:583
 msgid "Background image :"
 msgstr "背景圖片："
 
-#: ../data/messages:569
+#: ../data/messages:585
 msgid "Background tansparency :"
 msgstr "背景透明度："
 
-#: ../data/messages:575
+#: ../data/messages:591
 msgid "in pixels. Use this to adjust the left position of the drawings."
 msgstr "以像素為單位，可以調整位於左邊時的位置。"
 
-#: ../data/messages:577
+#: ../data/messages:593
 msgid "Left offset :"
 msgstr "左邊的位移量："
 
-#: ../data/messages:579
+#: ../data/messages:595
 msgid "in pixels. Use this to adjust the top position of the drawings."
 msgstr "以像素為單位，可以調整位於頂部時的位置。"
 
-#: ../data/messages:581
+#: ../data/messages:597
 msgid "Top offset :"
 msgstr "頂部位移量："
 
-#: ../data/messages:583
+#: ../data/messages:599
 msgid "in pixels. Use this to adjust the right position of the drawings."
 msgstr "以像素為單位，可以調整位於右邊時的位置。"
 
-#: ../data/messages:585
+#: ../data/messages:601
 msgid "Right offset :"
 msgstr "右邊偏移量："
 
-#: ../data/messages:587
+#: ../data/messages:603
 msgid "in pixels. Use this to adjust the bottom position of the drawings."
 msgstr "以像素為單位，可以調整位於底部時的位置。"
 
-#: ../data/messages:589
+#: ../data/messages:605
 msgid "Bottom offset :"
 msgstr "底部偏移量："
 
-#: ../data/messages:591
+#: ../data/messages:607
 msgid ""
 "It's an image that will be displayed above the drawings, like a reflect for "
 "exemple. Let empty to not use any."
 msgstr "這是顯示在桌面小程式之上的圖形，就像是反射一樣。不使用請空白。"
 
-#: ../data/messages:593
+#: ../data/messages:609
 msgid "Foreground image :"
 msgstr "前景圖片："
 
-#: ../data/messages:595
+#: ../data/messages:611
 msgid "Foreground tansparency :"
 msgstr "前景透明度："
 
-#: ../data/messages:601
+#: ../data/messages:617
 msgid "Buttons size :"
 msgstr "按鈕大小："
 
-#: ../data/messages:605
+#: ../data/messages:621
 msgid "Name of an image to use for the 'rotate' button :"
 msgstr "用於「旋轉」(rotate)按鈕上的圖檔名稱："
 
-#: ../data/messages:609
+#: ../data/messages:625
 msgid "Name of an image to use for the 'retach' button :"
 msgstr "用於「延伸」(retach)按鈕上的圖檔名稱："
 
-#: ../data/messages:613
+#: ../data/messages:629
 msgid "Name of an image to use for the 'depth rotate' button :"
 msgstr "用於「深度旋轉」(depth rotate)按鈕上的圖檔名稱："
 
-#: ../data/messages:617
+#: ../data/messages:633
 msgid "Indicator of the active window"
 msgstr "動作中視窗的圖形指標"
 
-#: ../data/messages:619
+#: ../data/messages:635
+msgid "Type of indicator :"
+msgstr ""
+
+#: ../data/messages:639
+#, fuzzy
+msgid "Frame"
+msgstr "名稱"
+
+#: ../data/messages:641
+#, fuzzy
+msgid "Image file :"
+msgstr "檔案的URI："
+
+#: ../data/messages:643
 msgid "Set transparency to 0 if you don't want to use an indicator."
 msgstr "設定為 0 時表示您不想要在圖形指標上面使用透明效果。"
 
-#: ../data/messages:621
-msgid "Color of the frame (r,v,b,a) :"
+#: ../data/messages:645
+#, fuzzy
+msgid "Color of the frame :"
 msgstr "框架的顏色(r,v,b,a)："
 
-#: ../data/messages:623
+#: ../data/messages:647
 msgid "Set 0 to fill the frame."
 msgstr "設定為 0 時填滿整個框架。"
 
-#: ../data/messages:625
+#: ../data/messages:649
 msgid "Linewidth of the frame around the active window :"
 msgstr "動作中的視窗框架外框線寬："
 
-#: ../data/messages:627
+#: ../data/messages:651
 msgid "Corner radius of the frame around the active window :"
 msgstr "動作中的視窗框架外框圓角角度："
 
-#: ../data/messages:629
-msgid "Let it empty to draw a simple frame."
-msgstr "要用基本的框架請讓他空白。"
-
-#: ../data/messages:631
-msgid "Alternatively you can set an image for the indicator :"
-msgstr "您可以選擇一個圖形作為圖形指標："
-
-#: ../data/messages:633
+#: ../data/messages:653
 msgid "Draw indicator above the icon ?"
 msgstr "圖形指標要放到圖示之上嗎？"
 
-#: ../data/messages:635
+#: ../data/messages:655
 msgid "Indicator of active launcher"
 msgstr "執行中的快速啟動上的指標圖形"
 
-#: ../data/messages:637
+#: ../data/messages:657
 msgid ""
 "Indicators are drawn on launchers icons to show that they have already been "
 "launched. Let blank to use the default one."
-msgstr "設定指標圖形的圖檔；指標圖形會在已經執行的快速啟動圖示上面顯示，表示它已經被執行了。空白則會使用預設的圖形。"
+msgstr ""
+"設定指標圖形的圖檔；指標圖形會在已經執行的快速啟動圖示上面顯示，表示它已經被"
+"執行了。空白則會使用預設的圖形。"
 
-#: ../data/messages:639
+#: ../data/messages:659
 msgid "Filename of an image to use for indicators :"
 msgstr "指標圖形的圖形檔案："
 
-#: ../data/messages:641
+#: ../data/messages:661
 msgid "Display the indicator above the icon ?"
 msgstr "顯示指標圖形在圖示之上嗎？"
 
-#: ../data/messages:643
+#: ../data/messages:663
 msgid ""
 "You can choose to make the indicator smaller or bigger than the icons. The "
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
 "have the same size as the icons."
-msgstr "您可以設定指標圖形大於或者是小於圖示，數字越大則表示指標圖形將會越大。數字 1 表示與圖示的大小相同。"
+msgstr ""
+"您可以設定指標圖形大於或者是小於圖示，數字越大則表示指標圖形將會越大。數字 1 "
+"表示與圖示的大小相同。"
 
-#: ../data/messages:645
+#: ../data/messages:665
 msgid "Indicator size ratio :"
 msgstr "指標圖形大小比例："
 
-#: ../data/messages:649
+#: ../data/messages:669
 msgid "bigger"
 msgstr "大的"
 
-#: ../data/messages:651
-msgid ""
-"It will then be resized like the icon, move like the icon, etc. Otherwise it "
-"will be drawn directly on the dock."
-msgstr "它將會像圖示一樣改變大小、移動等等。否則他將會直接顯示在Dock上面。"
-
-#: ../data/messages:653
-msgid "Link the indicator with its icon ?"
-msgstr "指標圖形與圖示連結同步？"
-
-#: ../data/messages:655
+#: ../data/messages:671
 msgid ""
 "in pixels. You can use this parameter to adjust the indicator's vertical "
 "position."
 msgstr "以像素為單位，你能夠使用這個參數去調整指標圖形的垂直位置。"
 
-#: ../data/messages:657
+#: ../data/messages:673
 msgid "Vertical offset :"
 msgstr "垂直偏移量："
 
-#: ../data/messages:659
+#: ../data/messages:675
+msgid ""
+"It will then be resized like the icon, move like the icon, etc. Otherwise it "
+"will be drawn directly on the dock."
+msgstr "它將會像圖示一樣改變大小、移動等等。否則他將會直接顯示在Dock上面。"
+
+#: ../data/messages:677
+msgid "Link the indicator with its icon ?"
+msgstr "指標圖形與圖示連結同步？"
+
+#: ../data/messages:679
 msgid ""
 "Use it to make the indicator rotate according to the position of the dock "
 "(top/bottom/right/left)"
-msgstr "這個選項讓指標圖形能夠隨著Dock改變方向而跟隨著改變。(Dock位於上面、下面、左邊、右邊時)"
+msgstr ""
+"這個選項讓指標圖形能夠隨著Dock改變方向而跟隨著改變。(Dock位於上面、下面、左"
+"邊、右邊時)"
 
-#: ../data/messages:661
+#: ../data/messages:681
 msgid "Rotate the indicator with dock ?"
 msgstr "跟隨著Dock旋轉指標圖形"
 
-#: ../data/messages:663
+#: ../data/messages:683
 msgid "Indicator of class subdock"
 msgstr "子dock類別的指標圖形"
 
-#: ../data/messages:665
+#: ../data/messages:685
 msgid ""
 "It only makes sense if you choosed to group the applis of the same class "
 "togather. Let blank to use the default one."
-msgstr "這很有道理，假如您選擇同一類別的應用程式在相同的群組中。空白則使用預設圖形。"
+msgstr ""
+"這很有道理，假如您選擇同一類別的應用程式在相同的群組中。空白則使用預設圖形。"
 
-#: ../data/messages:667
+#: ../data/messages:687
 msgid ""
 "Filename of an image to indicate that a class has been grouped in a subdock :"
 msgstr "圖形指標的檔案，給已被分組的子Dock"
 
-#: ../data/messages:669
+#: ../data/messages:689
 msgid "Zoom the indicator with its icon ?"
 msgstr "縮放這個圖形指標來跟隨圖示縮放？"
 
-#: ../data/messages:671
+#: ../data/messages:691
 msgid "Misc. Emblems"
 msgstr "其他標誌"
 
-#: ../data/messages:675
+#: ../data/messages:695
 msgid "Name of an image to use for the charge emblem :"
 msgstr "圖形檔案使用在充電標誌："
 
-#: ../data/messages:679
+#: ../data/messages:699
 msgid "Name of an image to use for the play emblem :"
 msgstr "圖形檔案使用在播放標誌(play emblem)："
 
-#: ../data/messages:683
+#: ../data/messages:703
 msgid "Name of an image to use for the pause emblem :"
 msgstr "圖形檔案使用在暫停標誌(pause emblem)："
 
-#: ../data/messages:687
+#: ../data/messages:707
 msgid "Name of an image to use for the stop emblem :"
 msgstr "圖形檔案使用在停止標誌(stop emblem)："
 
-#: ../data/messages:691
+#: ../data/messages:711
 msgid "Name of an image to use for the broken emblem :"
 msgstr "圖形檔案使用在毀損標誌(broken emblem)："
 
-#: ../data/messages:695
+#: ../data/messages:715
 msgid "Name of an image to use for the error emblem :"
 msgstr "圖形檔案使用在錯誤標誌(error emblem)："
 
-#: ../data/messages:699
+#: ../data/messages:719
 msgid "Name of an image to use for the warning emblem :"
 msgstr "圖形檔案使用在警告標誌(warning emblem)："
 
-#: ../data/messages:703
+#: ../data/messages:723
 msgid "Name of an image to use for the locked emblem :"
 msgstr "圖形檔案使用在鎖定標誌(locked emblem)："
 
-#: ../data/messages:705 ../data/messages:719 ../data/messages:1047
-#: ../data/messages:1115
+#: ../data/messages:725 ../data/messages:743 ../data/messages:1081
+#: ../data/messages:1153
 msgid "Desktop Entry"
 msgstr "桌面項目"
 
-#: ../data/messages:707
+#: ../data/messages:727
 msgid "Sub-dock's name :"
 msgstr "子dock的名稱："
 
-#: ../data/messages:709 ../data/messages:721 ../data/messages:1055
-#: ../data/messages:1117
+#: ../data/messages:729 ../data/messages:745 ../data/messages:1089
+#: ../data/messages:1155
 msgid "Image's name or path :"
 msgstr "圖片的名稱或路徑："
 
-#: ../data/messages:711 ../data/messages:727 ../data/messages:1061
-#: ../data/messages:1119
+#: ../data/messages:731 ../data/messages:751 ../data/messages:1095
+#: ../data/messages:1157
 msgid "Extra parameters"
 msgstr "額外的參數："
 
-#: ../data/messages:713 ../data/messages:729 ../data/messages:1063
-#: ../data/messages:1121
+#: ../data/messages:733 ../data/messages:753 ../data/messages:1097
+#: ../data/messages:1159
 msgid "Order you want for this launcher among the others:"
 msgstr "您想要這個快速啟動在什麼位置："
 
-#: ../data/messages:715 ../data/messages:731 ../data/messages:1059
-#: ../data/messages:1123
+#: ../data/messages:735 ../data/messages:755 ../data/messages:1093
+#: ../data/messages:1161
 msgid "Name of the container it belongs to:"
 msgstr "要放置在哪個Dock當中："
 
-#: ../data/messages:717
+#: ../data/messages:737
 msgid "Name of the view used for the sub-dock :"
 msgstr "要用列表當中那一個外觀："
 
-#: ../data/messages:723
+#: ../data/messages:739
+msgid "If '0' the container will be displayed on every viewport."
+msgstr ""
+
+#: ../data/messages:741 ../data/messages:759 ../data/messages:1113
+msgid "Only show in this specific viewport"
+msgstr ""
+
+#: ../data/messages:747
 msgid "URI of the file :"
 msgstr "檔案的URI："
 
-#: ../data/messages:725
+#: ../data/messages:749
 msgid "Monitor the content of folder ?"
 msgstr "是否要監控資料夾的內容？"
 
-#: ../data/messages:735
+#: ../data/messages:757 ../data/messages:1111
+msgid "If '0' the launcher will be displayed on every viewport."
+msgstr ""
+
+#: ../data/messages:763
 msgid "Yes, like that :-)"
 msgstr "是的!!就像這樣!  :-)"
 
-#: ../data/messages:737
+#: ../data/messages:765
 msgid ""
 "Note : many answers have an extra hint.\n"
 "To popup the hint, simply let the mouse over the sentence for 1 second, a "
@@ -2316,49 +2428,52 @@ msgstr ""
 "備註：很多地方都有延伸的提示。\n"
 "要看提示很簡單，只要將滑鼠移到字詞上面一秒鐘以上，就會出現工具提示。"
 
-#: ../data/messages:739
+#: ../data/messages:767
 msgid "How can I re-order my icons ?"
 msgstr "我該如何重新排列我的圖示？"
 
-#: ../data/messages:741
+#: ../data/messages:769
 msgid "Hint : you can even re-order the icons of the current applications."
 msgstr "提示：就算是當前正在執行的應用程式圖示也可以重新排列。"
 
-#: ../data/messages:743
+#: ../data/messages:771
 msgid "Simply drag them with the mouse, and drop it where you want."
 msgstr "很簡單，用滑鼠拉動圖示，並且放到你想要放的位置上就好。"
 
-#: ../data/messages:745
+#: ../data/messages:773
 msgid ""
 "How can I place the applets and taskbar icons at the beginning of the dock ?"
 msgstr "我要如何放置小程式與工作列圖示在我的Dock上面？"
 
-#: ../data/messages:747
+#: ../data/messages:775
 msgid ""
 "Hint : you can also place applets amongst launchers, by ticking the box "
 "below."
 msgstr "提示：您可以同時把小程式放在快速啟動中間，由下面的方塊打勾。"
 
-#: ../data/messages:749
+#: ../data/messages:777
 msgid ""
 "In the “icons” module, on the bottom, you can choose the order of icons "
 "according to their type (launcher/appli/applet)."
-msgstr "在「圖示」的模組當中，最下面有組設定，可以根據您自己喜好的順序設定圖示區域排序。(快速啟動 / 應用程式 / 小程式)"
+msgstr ""
+"在「圖示」的模組當中，最下面有組設定，可以根據您自己喜好的順序設定圖示區域排"
+"序。(快速啟動 / 應用程式 / 小程式)"
 
-#: ../data/messages:751
+#: ../data/messages:779
 msgid "How can I change the image of an icon ?"
 msgstr "如何更改圖示的圖片？"
 
-#: ../data/messages:753
+#: ../data/messages:781
 msgid ""
 "Hint : you can also directly edit a launcher’s configuration, and set a path "
 "for an image. If you don’t write a path, but simply the name of an image, "
 "don’t put the extension (.svg, .png, etc), to let the dock choose the best."
 msgstr ""
-"提示：您可以直接修改快速啟動的設置，並設定一個圖形檔的路徑。假如您沒有輸入完整的路徑，只有單純的影像檔的名稱，請不要輸入副檔名(如 .svg / "
-".png 等等)，讓Dock自己選擇比較好。"
+"提示：您可以直接修改快速啟動的設置，並設定一個圖形檔的路徑。假如您沒有輸入完"
+"整的路徑，只有單純的影像檔的名稱，請不要輸入副檔名(如 .svg / .png 等等)，讓"
+"Dock自己選擇比較好。"
 
-#: ../data/messages:755
+#: ../data/messages:783
 msgid ""
 "In the “Icons” module, you can choose a <b>icon theme</b>. Enter a name of a "
 "theme, for exemple : Human or Gartoon.\n"
@@ -2367,116 +2482,129 @@ msgid ""
 "them in the same order as you entered them.\n"
 "If you let it empty, the default icon theme of your system wil be used."
 msgstr ""
-"在「圖示」模組，您可以選擇一個 <b> 圖示主題 </b> 。只要輸入主題名稱，例如：Human 或者是 Gartoon。\n"
+"在「圖示」模組，您可以選擇一個 <b> 圖示主題 </b> 。只要輸入主題名稱，例如："
+"Human 或者是 Gartoon。\n"
 "您甚至可以輸入一個包含您個性化圖示的目錄資料夾。\n"
-"您可以輸入很多的個性化圖示的目錄資料夾，Dock將會自動搜尋您輸入的資料夾，與內建的順序相同。\n"
+"您可以輸入很多的個性化圖示的目錄資料夾，Dock將會自動搜尋您輸入的資料夾，與內"
+"建的順序相同。\n"
 "假如您讓他空白，將會使用您系統預設的圖示。"
 
-#: ../data/messages:757
+#: ../data/messages:785
 msgid "How can I quickly remove many icons ?"
 msgstr "我該如何快速的移除任何一個圖示？"
 
-#: ../data/messages:759
+#: ../data/messages:787
 msgid ""
 "Hint : if you delete an icon pointing on a sub-dock, you will be asked to "
 "delete the sub-dock’s icons as well, or to move them in the main dock."
-msgstr "提示：假如您刪除在子Dock上的圖示，您將會看到詢問是否要刪除子Dock圖示的訊息，或者將他移動到主Dock上面。"
+msgstr ""
+"提示：假如您刪除在子Dock上的圖示，您將會看到詢問是否要刪除子Dock圖示的訊息，"
+"或者將他移動到主Dock上面。"
 
-#: ../data/messages:761
+#: ../data/messages:789
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an explosion "
-"!"
+"Just drag and drop them out of the dock, they will disappear in an "
+"explosion !"
 msgstr "只要 拖-拉 離開Dock，就會爆炸消失不見！"
 
-#: ../data/messages:763
+#: ../data/messages:791
 msgid "How can I resize my icons ?"
 msgstr "我能夠改變圖示的大小嗎？"
 
-#: ../data/messages:765
+#: ../data/messages:793
 msgid ""
 "Hint : You can define the size of each applet independantely, to any size "
 "smaller or equal than the default size. Set it to 0x0 to use the default "
 "size."
-msgstr "提示：您可以單獨定義每一個小程式的圖示大小，看是要比較小還是與預設的大小相同。設定 0x0 則是使用預設的大小。"
+msgstr ""
+"提示：您可以單獨定義每一個小程式的圖示大小，看是要比較小還是與預設的大小相"
+"同。設定 0x0 則是使用預設的大小。"
 
-#: ../data/messages:767
+#: ../data/messages:795
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by type "
-": launchers, applis, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by "
+"type : launchers, applis, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
-"在「圖示」模組中，您可以設定圖示的預設大小，包含「快速啟動、應用程式、小程式」以及「分隔圖」。\n"
+"在「圖示」模組中，您可以設定圖示的預設大小，包含「快速啟動、應用程式、小程"
+"式」以及「分隔圖」。\n"
 "您同時可以設定縮放係數。"
 
-#: ../data/messages:769
+#: ../data/messages:797
 msgid "Dock"
 msgstr "Dock"
 
-#: ../data/messages:771
+#: ../data/messages:799
 msgid "How can I place my dock on the screen ?"
 msgstr "我該如何放置Dock在螢幕上面？"
 
-#: ../data/messages:773
+#: ../data/messages:801
 msgid ""
 "Hint : If you have a multi-screen managed by Xinerama, you can tick the "
 "option “Use Xinerama”, and choose the screen where you want your dock to be."
 msgstr ""
-"提示：假如您有使用Xinerama多重螢幕管理，您可以點選「使用Xinerama」選項，就可以選擇那一個螢幕要放置Dock了。(譯者註：Xinerama為"
-"xorg.conf裏面的一個設定選項，要怎麼用請Google，謝謝。)"
+"提示：假如您有使用Xinerama多重螢幕管理，您可以點選「使用Xinerama」選項，就可"
+"以選擇那一個螢幕要放置Dock了。(譯者註：Xinerama為xorg.conf裏面的一個設定選"
+"項，要怎麼用請Google，謝謝。)"
 
-#: ../data/messages:775
+#: ../data/messages:803
 msgid ""
 "All is in the “Position” module. You can choose to place it on the bottom, "
 "top, left or right side of your screen.\n"
 "Moreover, you can also place it on the beginning, center, or end of the "
 "screen border."
-msgstr "全部在「位置」模組當中。您可以選擇放置在螢幕的下面、上面、左邊、右邊。並且您可以放在螢幕邊界的起始、中間、終點處。"
+msgstr ""
+"全部在「位置」模組當中。您可以選擇放置在螢幕的下面、上面、左邊、右邊。並且您"
+"可以放在螢幕邊界的起始、中間、終點處。"
 
-#: ../data/messages:777
+#: ../data/messages:805
 msgid "How can I adjust the position of the dock above the gnome-panel ?"
 msgstr "我該如何調整Dock在gnome面板上的位置？"
 
-#: ../data/messages:779
+#: ../data/messages:807
 msgid ""
 "Hint : you can also just dragging your dock with the mouse, by pressing the "
 "ALT key at the same time."
 msgstr "提示：您可以按下 ALT 按鍵，並且同時用滑鼠拉動您的Dock。"
 
-#: ../data/messages:781
+#: ../data/messages:809
 msgid "In the “Position” module, you can add an offset to the screen border."
-msgstr "在「位置」模組中，您可以用「距離螢幕邊緣的距離」來增加Dock距離螢幕邊界的距離。"
+msgstr ""
+"在「位置」模組中，您可以用「距離螢幕邊緣的距離」來增加Dock距離螢幕邊界的距"
+"離。"
 
-#: ../data/messages:783
+#: ../data/messages:811
 msgid "The dock is hidden by the gnome-panel"
 msgstr "Dock被Gnome面板擋住了"
 
-#: ../data/messages:785
+#: ../data/messages:813
 msgid ""
 "it’s normal, because they both are “docks”. You can either move the dock out "
 "of the panel, or launch it wih the command “cairo-dock -–keep-above”."
 msgstr ""
-"這很正常，因為它們兩個都是Docks。您可以移動Dock或者面板其中一個讓它們不會遮到，或者在啟動Cairo-Dock時加入參數 cairo-dock -"
-"-keep-above 。"
+"這很正常，因為它們兩個都是Docks。您可以移動Dock或者面板其中一個讓它們不會遮"
+"到，或者在啟動Cairo-Dock時加入參數 cairo-dock --keep-above 。"
 
-#: ../data/messages:787
+#: ../data/messages:815
 msgid "I don’t want other windows to hover the dock"
 msgstr "我不想讓其他的視窗蓋住Dock"
 
-#: ../data/messages:789
+#: ../data/messages:817
 msgid ""
 "Hint : if you use it, you don’t need to use the “keep the dock below “option."
-msgstr "提示：假如您使用這個，您不再需要使用「保持Dock位於所有視窗的最下面」的選項。"
+msgstr ""
+"提示：假如您使用這個，您不再需要使用「保持Dock位於所有視窗的最下面」的選項。"
 
-#: ../data/messages:791
+#: ../data/messages:819
 msgid ""
 "Just use the option “reserve space for dock” in the “Accessibility” module."
 msgstr "只要到補助工具模組裏面使用「為Dock保留螢幕邊緣的空間嗎？」選項。"
 
-#: ../data/messages:793
+#: ../data/messages:821
 msgid "I don’t want that the dock hovers windows"
 msgstr "我不想要讓Dock蓋到視窗"
 
-#: ../data/messages:795
+#: ../data/messages:823
 msgid ""
 "Hint : you can choose to pop-up the dock only when the mouse hits the screen "
 "corner instead of the whole screen border.\n"
@@ -2484,9 +2612,10 @@ msgid ""
 "and even set an image to it."
 msgstr ""
 "提示：您可以選擇使用當滑鼠點擊螢幕角落而不是螢幕的邊緣時彈跳出來。\n"
-"您同時可以設定觸發區域的大小，在「隱藏Dock」的模組當中。也可以在裏面設定圖形。"
+"您同時可以設定觸發區域的大小，在「隱藏Dock」的模組當中。也可以在裏面設定圖"
+"形。"
 
-#: ../data/messages:797
+#: ../data/messages:825
 msgid ""
 "Two choices are available, in the “Accessibility” module :\n"
 " - either choose to “keep the dock below other windows”. The dock will then "
@@ -2495,57 +2624,62 @@ msgid ""
 "trigger zone."
 msgstr ""
 "有兩個選擇方式，在補助工具模組當中：\n"
-" - 「保持Dock位於所有視窗的最下面」，Dock將會在您的滑鼠移動到螢幕邊緣時才會彈出。\n"
+" - 「保持Dock位於所有視窗的最下面」，Dock將會在您的滑鼠移動到螢幕邊緣時才會彈"
+"出。\n"
 " - 或者啟用「自動隱藏」，Dock將會在您滑鼠進入觸發區的時候才會彈出。"
 
-#: ../data/messages:799
+#: ../data/messages:827
 msgid "How can I add a separator ?"
 msgstr "我要如何增加一個分隔圖？"
 
-#: ../data/messages:801
+#: ../data/messages:829
 msgid ""
 "Simply right-click on the dock where you want to add a separator, and select "
 "“add a separator”.\n"
 "You can place it wherever you want (except in amongst taskbar icons) by "
 "dragging it with the mouse."
 msgstr ""
-"很簡單，在任何您想要增加分隔圖的位置上按下滑鼠右鍵，選擇「增加一個分隔圖」。\n"
-"您可以放一個分隔圖在您想要放的位置上(除了在工具列圖像中間)，也可以用滑鼠 拖-放 來移動。"
+"很簡單，在任何您想要增加分隔圖的位置上按下滑鼠右鍵，選擇「增加一個分隔"
+"圖」。\n"
+"您可以放一個分隔圖在您想要放的位置上(除了在工具列圖像中間)，也可以用滑鼠 拖-"
+"放 來移動。"
 
-#: ../data/messages:803
-msgid ""
-"I don’t want to have a separator between launchers , applis and applets"
+#: ../data/messages:831
+msgid "I don’t want to have a separator between launchers , applis and applets"
 msgstr "我不想要有分隔圖放在快速啟動、應用程式與小程式中間"
 
-#: ../data/messages:805
+#: ../data/messages:833
 msgid ""
 "In the “Icons” module, under the “separator” part, untick the box that says "
 "to “add automatic separators”."
 msgstr "在「圖示」模組當中的「分隔圖」裏面，取消「是否自動增加分隔圖」。"
 
-#: ../data/messages:807
+#: ../data/messages:835
 msgid "How can I add a sub-dock ?"
 msgstr "我要如何增加一個子Dock？"
 
-#: ../data/messages:809
+#: ../data/messages:837
 msgid ""
 "Hint : to move an icon into a subdock, edit  its configuration, and in the "
 "list of the docks, choose the one you want. You can do the same with applets "
 "as well, allowing you to group many applets in a sub-dok !"
 msgstr ""
-"提示：移動一個圖示到子Dock，修改設置。並且在列表中選擇一個您想要的Dock。您能夠以相同的方式修改小程式，可以讓您將小程式群組放在一個子Dock上面。"
+"提示：移動一個圖示到子Dock，修改設置。並且在列表中選擇一個您想要的Dock。您能"
+"夠以相同的方式修改小程式，可以讓您將小程式群組放在一個子Dock上面。"
 
-#: ../data/messages:811
+#: ../data/messages:839
 msgid ""
 "Just right-click on the dock, then select “add a sub-dock”. Fill the config "
 "panel with some name and image, then validate."
-msgstr "只要在Dock上按下滑鼠右鍵，選擇「增加一個子Dock」，填入設定面板的相關資訊如名稱、圖形等，確定之後就能看到。"
+msgstr ""
+"只要在Dock上按下滑鼠右鍵，選擇「增加一個子Dock」，填入設定面板的相關資訊如名"
+"稱、圖形等，確定之後就能看到。"
 
-#: ../data/messages:813
+#: ../data/messages:841
 msgid "How can I have many main docks ?"
 msgstr "我要如何可以有很多個Dock？"
 
-#: ../data/messages:815
+#: ../data/messages:843
 msgid ""
 "Hint : you can then move icons inside this new dock by following the "
 "previous method.\n"
@@ -2555,44 +2689,51 @@ msgstr ""
 "提示：您可以依照之前的辦法移動圖示進入新的Dock。\n"
 "要放置一個新的Dock，在上面按下右鍵，選擇設置這個Dock。"
 
-#: ../data/messages:817
+#: ../data/messages:845
 msgid ""
 "Edit a launcher or an applet, and in the list of the available docks, enter "
 "a name that doesn’t exist yet. A new dock will be created, with this icon "
 "inside."
-msgstr "修改快速啟動或者是小程式，與可以使用的Dock列表，輸入一個沒有與其他Dock相同的名稱，一個新的Dock就會被建立在這個圖示裏面。"
+msgstr ""
+"修改快速啟動或者是小程式，與可以使用的Dock列表，輸入一個沒有與其他Dock相同的"
+"名稱，一個新的Dock就會被建立在這個圖示裏面。"
 
-#: ../data/messages:819
+#: ../data/messages:847
 msgid "How do I get a 3D dock ?"
 msgstr "我能夠使用3D的Dock嗎？"
 
-#: ../data/messages:821
+#: ../data/messages:849
 msgid ""
 "Hint : you can setup the view for each sub-dock; just edit the icon pointing "
 "on the sub-dock, and choose the view you want for it."
-msgstr "提示：您可以設定每個子Dock的風貌；只要修改子Dock的圖示，並選擇一個您想要用的風貌。"
+msgstr ""
+"提示：您可以設定每個子Dock的風貌；只要修改子Dock的圖示，並選擇一個您想要用的"
+"風貌。"
 
-#: ../data/messages:823
+#: ../data/messages:851
 msgid ""
 "Any dock can be displayed with one view, and many views are available (3D, "
 "Curve, etc).\n"
 "Go to the “Views” module, and choose the view you want for main dock, and "
 "for sub-docks."
 msgstr ""
-"任何一個Dock都可以顯示一種風貌，有很多種的風貌存在，例如 3D, 弧形(Curve)等等。\n"
+"任何一個Dock都可以顯示一種風貌，有很多種的風貌存在，例如 3D, 弧形(Curve)等"
+"等。\n"
 "到「風貌」模組當中，選擇一個您想要用的主Dock風貌，以及子Dock的風貌。"
 
-#: ../data/messages:825
+#: ../data/messages:853
 msgid "How can I change the background of my docks ?"
 msgstr "我該如何改變Dock的背景圖？"
 
-#: ../data/messages:827
+#: ../data/messages:855
 msgid ""
 "Hint : the Parabolic view doe not have a background, and the Slide and "
 "Rainbow views have their own background parameters."
-msgstr "提示：像拋物狀天線(Parabolic)風貌就沒有背景，幻燈片(Slide)與彩虹(Rainbow)這兩個風貌有他們自己的背景設定。"
+msgstr ""
+"提示：像拋物狀天線(Parabolic)風貌就沒有背景，幻燈片(Slide)與彩虹(Rainbow)這兩"
+"個風貌有他們自己的背景設定。"
 
-#: ../data/messages:829
+#: ../data/messages:857
 msgid ""
 "In the 'Background' module, you can either choose an image, or a color "
 "gradation.\n"
@@ -2602,17 +2743,19 @@ msgstr ""
 "在「背景」模組中您可以用圖形或者色彩兩者選擇其一。\n"
 "假如您設定一個圖形，他將會使用在背景上面。假如沒有，將會使用色彩漸層。"
 
-#: ../data/messages:831
+#: ../data/messages:859
 msgid "I find the dock too much flashy, can it be more sober ?"
 msgstr "我覺得Dock實在是太華麗了，可以比較平實一點嗎？"
 
-#: ../data/messages:833
+#: ../data/messages:861
 msgid ""
 "Hint : try different themes, some are already very sober, like Dust-Sand or "
 "Elementary."
-msgstr "提示，試著使用不同的主題，一些主題已經非常的平實，像是沙漠粉塵(Dust-Sand)或者初級(Elementary)。"
+msgstr ""
+"提示，試著使用不同的主題，一些主題已經非常的平實，像是沙漠粉塵(Dust-Sand)或者"
+"初級(Elementary)。"
 
-#: ../data/messages:835
+#: ../data/messages:863
 msgid ""
 "Who can do more can do less ! You can for instance deactivate the \"Icon "
 "effects\" plug-in,\n"
@@ -2627,76 +2770,87 @@ msgstr ""
 "可以做的更多也可以做的更少，例如可以停用「圖示效果」的外掛。\n"
 " 或者停用當滑鼠移動時的「動畫圖示」外掛。\n"
 "您能同時減少縮放笑過或者是在「圖示」模組中降低圖示反射。\n"
-" 在「背景」模組當中改變背景顏色，或者到「風貌」模組當中改變風貌成為預設的風貌。\n"
-"總之，您可以很容易的改變弄的像是gnome面板一樣，但是呢.....這將會是一種恥辱！ ^___^"
+" 在「背景」模組當中改變背景顏色，或者到「風貌」模組當中改變風貌成為預設的風"
+"貌。\n"
+"總之，您可以很容易的改變弄的像是gnome面板一樣，但是呢.....這將會是一種恥辱！ "
+"^___^"
 
-#: ../data/messages:837
+#: ../data/messages:865
 msgid "Desklet"
 msgstr "桌面小工具"
 
-#: ../data/messages:839
+#: ../data/messages:867
 msgid "What are these “desklets” ?"
 msgstr "「桌面小工具」是什麼？"
 
-#: ../data/messages:841
+#: ../data/messages:869
 msgid ""
 "Hint : to detach an applet, you can drag and drop its icon from the dock to "
 "the desktop"
 msgstr "提示：要分離一個小程式，您可以從Dock上 拖-放 小程式的圖示到桌面上。"
 
-#: ../data/messages:843
+#: ../data/messages:871
 msgid ""
 "they are widgets that’s are displayed on your desktop. Each applet can be "
 "detached from the dock to act as a desklet."
-msgstr "這些小程式顯示在桌面上就像是桌面小程式一樣 (Widgets) 。每個小程式 (applet) 都能夠從Dock上面分離放到桌面上。"
+msgstr ""
+"這些小程式顯示在桌面上就像是桌面小程式一樣 (Widgets) 。每個小程式 (applet) 都"
+"能夠從Dock上面分離放到桌面上。"
 
-#: ../data/messages:845
+#: ../data/messages:873
 msgid "How do I setup their position ?"
 msgstr "我要如何設定它們的位置？"
 
-#: ../data/messages:847
+#: ../data/messages:875
 msgid ""
 "Hint : If you don’t want to move it anymore, you can lock its position. "
 "Simply right click on the desklet, and select “lock position”. To unlock it, "
 "de-select this option."
 msgstr ""
-"提示：假如您不想要再移動它們，您可以鎖定目前的位置。簡單的在桌面小程式的圖像上面按下滑鼠右鍵，選擇「鎖定位置」就可以了。要解開位置的鎖定，只要將勾選取消。"
+"提示：假如您不想要再移動它們，您可以鎖定目前的位置。簡單的在桌面小程式的圖像"
+"上面按下滑鼠右鍵，選擇「鎖定位置」就可以了。要解開位置的鎖定，只要將勾選取"
+"消。"
 
-#: ../data/messages:849
+#: ../data/messages:877
 msgid "Simply drag them with the mouse."
 msgstr "只要用滑鼠簡單的拖動它們。"
 
-#: ../data/messages:851
+#: ../data/messages:879
 msgid "How do I set up their attitude ?"
 msgstr "我要如何設定它們的姿態？"
 
-#: ../data/messages:853
+#: ../data/messages:881
 msgid ""
 "Hint : if you locked the desklet, the buttons won’t appear. You can reset a "
 "rotation by middle-clicking on the appropriate button."
-msgstr "提示：假如您鎖定了桌面小工具(Desklet)，按鈕將不會再出現。您可以透過滑鼠中鍵在適當的按鈕上重置旋轉。"
+msgstr ""
+"提示：假如您鎖定了桌面小工具(Desklet)，按鈕將不會再出現。您可以透過滑鼠中鍵在"
+"適當的按鈕上重置旋轉。"
 
-#: ../data/messages:855
+#: ../data/messages:883
 msgid ""
 "There are small buttons on the top and left side of the desklet. They allow  "
 "you to rotate the desklet in 3D !"
-msgstr "在桌面小工具(Desklet)的上面與左邊有小按鈕，這可以讓您以3D的方式旋轉桌面小工具！"
+msgstr ""
+"在桌面小工具(Desklet)的上面與左邊有小按鈕，這可以讓您以3D的方式旋轉桌面小工"
+"具！"
 
-#: ../data/messages:857
+#: ../data/messages:885
 msgid "How can I change their decorations ?"
 msgstr "我要如何改變它們的外型裝飾？"
 
-#: ../data/messages:859
+#: ../data/messages:887
 msgid ""
 "Hint : you can add new decorations, by choosing the “personnal” decoration, "
 "and providing a background and/or foreground image. You can setup the "
 "offsets of these images to adjust the position of the drawings inside the "
 "decorations."
 msgstr ""
-"提示：您可以增加一個新的外型裝飾，選擇一個「個性化」的外型裝飾，並提供一個圖像在背景或者前景。您可以還可以設定這個圖像的偏移量，或調整它在外型裝飾裏面的位"
-"置。"
+"提示：您可以增加一個新的外型裝飾，選擇一個「個性化」的外型裝飾，並提供一個圖"
+"像在背景或者前景。您可以還可以設定這個圖像的偏移量，或調整它在外型裝飾裏面的"
+"位置。"
 
-#: ../data/messages:861
+#: ../data/messages:889
 msgid ""
 "The default decoration is defined in the “Desklets” module.\n"
 "You can setup a different decoration for each desklet. To change a desklet’s "
@@ -2708,80 +2862,82 @@ msgstr ""
 "您可以在每一個桌面小工具上面設定不一樣的外型裝飾。要改變這個，\n"
 " 可到小程式的設置當中，點選「桌面小工具」的分頁，並且選擇您想要的外型裝飾。"
 
-#: ../data/messages:863
+#: ../data/messages:891
 msgid "How do I insert a desklet into the dock ?"
 msgstr "我要如何安裝一個桌面小工具到Dock上面？"
 
-#: ../data/messages:865
+#: ../data/messages:893
 msgid "Hint :  if the desklet is locked, the button won’t appear."
 msgstr "提示：假如桌面小工具已經鎖定，滑鼠將不能夠 拖-放 它們。"
 
-#: ../data/messages:867
+#: ../data/messages:895
 msgid "Simply click on the top right button."
 msgstr "在右上方的按鈕簡單的點一下。"
 
-#: ../data/messages:869
+#: ../data/messages:897
 msgid "How can I place a desklet on the <i>Compiz Widget Layer</i> ?"
 msgstr "我要如何放置 桌面小工具到 <i>Compiz Widget Layer</i>上面？"
 
-#: ../data/messages:871
+#: ../data/messages:899
 msgid ""
 "Hint : you may have to switch one time to the Widget Layer so that Compiz "
 "takes into account the modification."
 msgstr "提示：您也許需要轉換一次Widget Layer ，Compiz才會考慮接受這個修改。"
 
-#: ../data/messages:873
+#: ../data/messages:901
 msgid ""
 "In the Compiz-Fusion config, activate the 'Widget Layer' plug-in, and set "
 "the rule (name=cairo-dock &amp; type=utility).\n"
 "You can then switch an applet to the Widget Layer by left-clicking on its "
 "desklet and selecting 'Compiz-Fusion Widget'."
 msgstr ""
-"在Compiz-Fusion設置裏面，啟動「Widget Layer」外掛，並設定這個規則 ( name=cairo-dock &amp; "
-"type=utility) 。\n"
-"您可以用在桌面小工具上面用滑鼠右鍵點擊並選擇 'Compiz-fusion Widget' ，切換一個桌面小工具到Widget Layer。"
+"在Compiz-Fusion設置裏面，啟動「Widget Layer」外掛，並設定這個規則 "
+"( name=cairo-dock &amp; type=utility) 。\n"
+"您可以用在桌面小工具上面用滑鼠右鍵點擊並選擇 'Compiz-fusion Widget' ，切換一"
+"個桌面小工具到Widget Layer。"
 
-#: ../data/messages:875
+#: ../data/messages:903
 msgid "Taskbar"
 msgstr "工作列"
 
-#: ../data/messages:877
+#: ../data/messages:905
 msgid "How do I activate the Taskbar ?"
 msgstr "我要如何啟用工具列？"
 
-#: ../data/messages:879
+#: ../data/messages:907
 msgid "Hint : All the Taskbar’s options are grouped together in this module."
 msgstr "提示：全部的工具列選項都在同一個模組當中。"
 
-#: ../data/messages:881
+#: ../data/messages:909
 msgid "go to the “Taskbar” module, then tick the first box, and apply."
 msgstr "到「工具列」模組當中，點選第一個選項即可。"
 
-#: ../data/messages:883
-msgid ""
-"I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
+#: ../data/messages:911
+msgid "I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
 msgstr "我不想要有太多的圖示在Dock上面，比如說我使用Gimp/Pidgin等等....."
 
-#: ../data/messages:885
+#: ../data/messages:913
 msgid ""
 "Hint : You can then scroll on this icon to switch from a window to another, "
 "in an ALT+TAB way."
-msgstr "提示：您可在這個圖示上捲動，切換這個視窗到另外一個視窗，用ALT + TAB按鍵。"
+msgstr ""
+"提示：您可在這個圖示上捲動，切換這個視窗到另外一個視窗，用ALT + TAB按鍵。"
 
-#: ../data/messages:887
+#: ../data/messages:915
 msgid ""
 "Use the “group applis by class” option. Only a single icon will appear in "
 "the dock. and if there are several windows, they will be grouped together in "
 "a sub-dock above this icon."
 msgstr ""
-"使用「相同應用程式開啟的視窗，要放在一起成為一個子Dock嗎？」選項，你將會只看到一個圖示在您的Dock上面，而他相同的群組應用程式，將會以這個圖示當作子"
-"Dock放在一起。"
+"使用「相同應用程式開啟的視窗，要放在一起成為一個子Dock嗎？」選項，你將會只看"
+"到一個圖示在您的Dock上面，而他相同的群組應用程式，將會以這個圖示當作子Dock放"
+"在一起。"
 
-#: ../data/messages:889
+#: ../data/messages:917
 msgid "I have ugly icons for some applis"
 msgstr "有一些應用程式的圖示好醜喔"
 
-#: ../data/messages:891
+#: ../data/messages:919
 msgid ""
 "Hint : This way, you can setup your personnal icon for any application. Just "
 "place an icon with the same name as the class of the application in a folder "
@@ -2789,31 +2945,33 @@ msgid ""
 "The class of an appli can be found by typing xprop in a terminal, then "
 "clicking on the window of the appli."
 msgstr ""
-"提示：您可以設定您的個性化圖示在任何的應用程式上面，只要將您要用的圖示更改名稱與預設的應用程式圖示相同，放到預設的目錄資料夾裏面。(預設的目錄資料夾位置在"
-" ~/.config/cairo-dock/current_theme/icons )\n"
-"可以在命令列當中輸入xprop這個指令，然後點選您想要了解的視窗或者是應用程式，就會顯示它們的屬性資料。"
+"提示：您可以設定您的個性化圖示在任何的應用程式上面，只要將您要用的圖示更改名"
+"稱與預設的應用程式圖示相同，放到預設的目錄資料夾裏面。(預設的目錄資料夾位置"
+"在 ~/.config/cairo-dock/current_theme/icons )\n"
+"可以在命令列當中輸入xprop這個指令，然後點選您想要了解的視窗或者是應用程式，就"
+"會顯示它們的屬性資料。"
 
-#: ../data/messages:893
+#: ../data/messages:921
 msgid ""
 "it’s because X provides small icons for applis, that don’t look nice when "
 "zoomed. Use the option “overwrite X icons”, to tell the dock to not use them."
 msgstr ""
-"這是因為 X-window 提供給應用程式的小型圖示，在放大之後看起來實在是不好看。使用「快速啟動的圖示與X-"
-"window的圖示一起複寫嗎？」告訴Dock不要使用它們。"
+"這是因為 X-window 提供給應用程式的小型圖示，在放大之後看起來實在是不好看。使"
+"用「快速啟動的圖示與X-window的圖示一起複寫嗎？」告訴Dock不要使用它們。"
 
-#: ../data/messages:895
+#: ../data/messages:923
 msgid ""
 "When I launch a program with its launcher, I don’t want an additional icon "
 "in the taskbar"
 msgstr "當我啟動一個快速啟動的程式，我不想要看到工具列上面又增加一個圖示"
 
-#: ../data/messages:897
+#: ../data/messages:925
 msgid ""
 "Hint : to launch another instance of the program, shift+click on the "
 "launcher."
 msgstr "提示：要啟動另一個相同的程式，可以在快速啟動上面按 shift + 點擊 。"
 
-#: ../data/messages:899
+#: ../data/messages:927
 msgid ""
 "Use the “Mix applis and launchers” option.\n"
 "When a program is launched, if it has a launcher in the dock, this one will "
@@ -2822,14 +2980,15 @@ msgid ""
 "You can then act on the window as if it was a taskbar icon."
 msgstr ""
 "使用 「將快速啟動與應用程式混合放在一起嗎？」選項。\n"
-"當有一個程式已經啟動，而同時您有個快速啟動的圖示在Dock上面，那麼這個圖示上面將會有一個指標圖形來表示這個應用程式已經在執行當中。\n"
+"當有一個程式已經啟動，而同時您有個快速啟動的圖示在Dock上面，那麼這個圖示上面"
+"將會有一個指標圖形來表示這個應用程式已經在執行當中。\n"
 "您可以隨意的在視窗上採取行動，就像是工具列圖示。"
 
-#: ../data/messages:901
+#: ../data/messages:929
 msgid "I’m using Pidgin, and I want to see my friends’ avatar"
 msgstr "我正在使用Pidgin，而且我想要看到我好友的頭像"
 
-#: ../data/messages:903
+#: ../data/messages:931
 msgid ""
 "If you choosed to overwrite X icons, you can add an exception for Pidgin "
 "just before this option.\n"
@@ -2838,152 +2997,164 @@ msgid ""
 " and in the “Extra parameters”, tick the box that says to not steal the icon "
 "for this appli."
 msgstr ""
-"假如您選擇「快速啟動的圖示與X-window的圖示一起複寫嗎？」，您可以增加例外的設定給Pidgin。\n"
-"假如您選擇「將快速啟動與應用程式混合放在一起嗎？」，您可以修改這個Pidgin快速啟動。\n"
+"假如您選擇「快速啟動的圖示與X-window的圖示一起複寫嗎？」，您可以增加例外的設"
+"定給Pidgin。\n"
+"假如您選擇「將快速啟動與應用程式混合放在一起嗎？」，您可以修改這個Pidgin快速"
+"啟動。\n"
 " 在「額外的參數」當中，不要勾選擷取這個應用程式的圖示。"
 
-#: ../data/messages:905
+#: ../data/messages:933
 msgid ""
 "How can I quickly navigate between many windows of the same application ?"
 msgstr "我要如何 快速瀏覽很多視窗與應用程式之間？"
 
-#: ../data/messages:907
+#: ../data/messages:935
 msgid ""
 "Hint : you can also close all the windows of this appli by middle-clicking "
 "on the icon pointing on the sub-dock."
 msgstr "提示：您可以在子Dock上面點擊滑鼠中鍵，來關並所有的應用程式視窗。"
 
-#: ../data/messages:909
+#: ../data/messages:937
 msgid ""
 "Scroll on the icon of one of the windows of this appli, or even on the icon "
 "pointing on the sub-dock if you group windows in a sub-dock."
 msgstr "於這個應用程式視窗的圖示上捲動，或者是視窗的子Dock上面。"
 
-#: ../data/messages:911
+#: ../data/messages:939
 msgid "Replacing the gnome-panel"
 msgstr "替代gnome面板"
 
-#: ../data/messages:913
+#: ../data/messages:941
 msgid "How can I have the main menu ?"
 msgstr "我要如何擁有一個主選單？"
 
-#: ../data/messages:915
+#: ../data/messages:943
 msgid ""
 "Hint : if you removed your gnome-panel, then the “alt+F1” shortkey does not "
 "work anymore. This applet let you setup a shortcut to pop up the menu at the "
 "mouse’s location."
 msgstr ""
-"提示：假如您移除掉您的gnome面板，那麼\"ALT+F1\"的熱鍵功能將不再存在。這個小程式讓您設定一個連結可以在您滑鼠游標的位置上彈出交談視窗。"
+"提示：假如您移除掉您的gnome面板，那麼\"ALT+F1\"的熱鍵功能將不再存在。這個小程"
+"式讓您設定一個連結可以在您滑鼠游標的位置上彈出交談視窗。"
 
-#: ../data/messages:917
+#: ../data/messages:945
 msgid "activate the Gmenu applet."
 msgstr "啟用Gmenu小程式。"
 
-#: ../data/messages:919
+#: ../data/messages:947
 msgid "How can I have a simple “quick launch” window ?"
 msgstr "我要如何簡單的擁有一個「快速啟動」視窗？"
 
-#: ../data/messages:921
+#: ../data/messages:949
 msgid ""
 "Hint : if you removed your gnome-panel, then the “alt+F2” shortkey does not "
 "work anymore. This applet let you setup a shortcut to pop up the quick-"
 "launch dialog."
 msgstr ""
-"提示：假如您移除掉您的gnome面板，那麼\"ALT+F2\"的熱鍵功能將不再存在。這個小程式讓您設定一個連結可以彈出快速啟動的交談視窗。"
+"提示：假如您移除掉您的gnome面板，那麼\"ALT+F2\"的熱鍵功能將不再存在。這個小程"
+"式讓您設定一個連結可以彈出快速啟動的交談視窗。"
 
-#: ../data/messages:923
+#: ../data/messages:951
 msgid ""
 "activate the Gmenu applet, then you can have it by middle-clicking on its "
 "icon."
 msgstr "啟用Gmenu小程式，這樣子您在這個圖示上面就可以用滑鼠中鍵。"
 
-#: ../data/messages:925
+#: ../data/messages:953
 msgid "How can I have a logout icon ?"
 msgstr "我可以有登出的圖示嗎？"
 
-#: ../data/messages:927
+#: ../data/messages:955
 msgid ""
 "Hint : In the last Gnome version, there are 2 panel : one to logout, and one "
 "to turn off computer. The first one is raised by a click on the icon, the "
 "second by a middle-click, but the applet let you invert this order, and even "
 "let you enter your own commands."
 msgstr ""
-"提示：在最後的Gnome版本，有兩個面板：一個是用來登出，另一個則是用來關機。第一個是凸起按鈕，第二個則是要按滑鼠中鍵，但是小程式讓你反轉這個順序，甚至讓"
-"您自己輸入指令。"
+"提示：在最後的Gnome版本，有兩個面板：一個是用來登出，另一個則是用來關機。第一"
+"個是凸起按鈕，第二個則是要按滑鼠中鍵，但是小程式讓你反轉這個順序，甚至讓您自"
+"己輸入指令。"
 
-#: ../data/messages:929
+#: ../data/messages:957
 msgid "Simply activate the “logout” applet."
 msgstr "簡單的啟動「登出」小程式"
 
-#: ../data/messages:931
+#: ../data/messages:959
 msgid "How can I access the dustbin ?"
 msgstr "我該如何打開我的回收桶？"
 
-#: ../data/messages:933
+#: ../data/messages:961
 msgid ""
 "Hint : you can delete a file by dragging it into the dustbin. You can even "
 "unmount a mount-point this way !"
-msgstr "提示：您可以用 拖-拉 的方式將一個檔案拉到回收桶丟掉，您甚至可以卸載這個裝載點 。"
+msgstr ""
+"提示：您可以用 拖-拉 的方式將一個檔案拉到回收桶丟掉，您甚至可以卸載這個裝載"
+"點 。"
 
-#: ../data/messages:935
+#: ../data/messages:963
 msgid "Simply activate the “dustbin” applet."
 msgstr "簡單的啟用「回收桶」小程式。"
 
-#: ../data/messages:937
+#: ../data/messages:965
 msgid "How can I access to my mount points ?"
 msgstr "我要如何存取我的裝載點？"
 
-#: ../data/messages:939
+#: ../data/messages:967
 msgid ""
 "Hint : you can mount a volume by clicking on its icon. To unmount it, middle-"
 "click on its icon, or right-click -> unmount."
-msgstr "提示：您可以在圖示名稱上面裝載。要卸載它，在這個圖示上面按下滑鼠中鍵，或者是滑鼠右鍵 --> 卸載。"
+msgstr ""
+"提示：您可以在圖示名稱上面裝載。要卸載它，在這個圖示上面按下滑鼠中鍵，或者是"
+"滑鼠右鍵 --> 卸載。"
 
-#: ../data/messages:941 ../data/messages:947
+#: ../data/messages:969 ../data/messages:975
 msgid "Simply activate the “shortcuts” applet."
 msgstr "簡單的啟用「捷徑」小程式。"
 
-#: ../data/messages:943
+#: ../data/messages:971
 msgid "How can I access to my Nautilus bookmarks ?"
 msgstr "我要如何存取我的Nautilus書籤？"
 
-#: ../data/messages:945
+#: ../data/messages:973
 msgid ""
 "Hint : you can add a bookmark by dragging the folder onto the applet or into "
 "its sub-dock. You can also rename and remove them. This will also take "
 "effect in Nautilus immediately, and vice versa."
 msgstr ""
-"提示：您可以增加一個書籤，利用滑鼠 拖-拉 "
-"的方式從資料夾拉到小程式或者子Dock上面，您同時可以更改名稱或者是刪除它們。這對Nautilus將會有立即的效果，反之亦然。"
+"提示：您可以增加一個書籤，利用滑鼠 拖-拉 的方式從資料夾拉到小程式或者子Dock上"
+"面，您同時可以更改名稱或者是刪除它們。這對Nautilus將會有立即的效果，反之亦"
+"然。"
 
-#: ../data/messages:949
+#: ../data/messages:977
 msgid "How can I access to my desktop ?"
 msgstr "我要如何存取我的桌面？"
 
-#: ../data/messages:951
+#: ../data/messages:979
 msgid ""
 "Hint : middle-clicking on it will hide all the windows, but not the desklets."
 msgstr "提示：在上面點擊滑鼠中鍵將會隱藏全部的視窗，除了桌面小工具以外。"
 
-#: ../data/messages:953
+#: ../data/messages:981
 msgid "Simply activate the “show desktop” applet."
 msgstr "簡單的啟用「顯示桌面」小工具。"
 
-#: ../data/messages:955
+#: ../data/messages:983
 msgid "How can I have an easy-to-acces calendar ?"
 msgstr "我能夠有一個「簡易日曆」嗎？"
 
-#: ../data/messages:957
+#: ../data/messages:985
 msgid ""
 "activate the “clock” applet; clicking on it will display a calendar, "
 "clicking again will hide it."
-msgstr "啟用「時鐘」小程式；然後在這個圖示上面點擊滑鼠，就會出現日曆。再點擊一下就會隱藏。"
+msgstr ""
+"啟用「時鐘」小程式；然後在這個圖示上面點擊滑鼠，就會出現日曆。再點擊一下就會"
+"隱藏。"
 
-#: ../data/messages:959
+#: ../data/messages:987
 msgid "How can I have the notification area (also called systray) ?"
 msgstr "我要如何擁有一個通知區域(同時呼叫系統程序資訊)？"
 
-#: ../data/messages:961
+#: ../data/messages:989
 msgid ""
 "activate the “systray” applet. For the moment it can’t be displayed directly "
 "into the dock,\n"
@@ -2993,58 +3164,65 @@ msgid ""
 "of your screen, and keep it above other windows."
 msgstr ""
 "啟用「系統程序資訊」小程式。它不能夠直接顯示到Dock上面，\n"
-"此時點擊圖示將會跳出交談式對話框出來，裏面就會有系統程序資訊的資訊，滑鼠中鍵則會隱藏它。\n"
-"我建議將這個小程式分離開來放到桌面上成為桌面小工具，讓它在螢幕的角落，並且讓它保持在所有視窗的最上面。"
+"此時點擊圖示將會跳出交談式對話框出來，裏面就會有系統程序資訊的資訊，滑鼠中鍵"
+"則會隱藏它。\n"
+"我建議將這個小程式分離開來放到桌面上成為桌面小工具，讓它在螢幕的角落，並且讓"
+"它保持在所有視窗的最上面。"
 
-#: ../data/messages:963
+#: ../data/messages:991
 msgid ""
-"How can I have an easy-to-access terminal with real transparence, like Tilda "
-"?"
+"How can I have an easy-to-access terminal with real transparence, like "
+"Tilda ?"
 msgstr "我可以擁有一個透明的「簡易終端機」，像是Tilda 嗎？"
 
-#: ../data/messages:965
+#: ../data/messages:993
 msgid ""
 "Hint : clicking next to the last tab will create a new tab. Double-clicking "
 "on a tab allows you to rename it. You can even change the color of a tab !"
-msgstr "提示：點擊旁邊最後一個分頁將會建立一個新的分頁。雙擊分頁您將可以為他更改名稱。您甚至可以改變這個分頁的顏色！"
+msgstr ""
+"提示：點擊旁邊最後一個分頁將會建立一個新的分頁。雙擊分頁您將可以為他更改名"
+"稱。您甚至可以改變這個分頁的顏色！"
 
-#: ../data/messages:967
+#: ../data/messages:995
 msgid ""
 "activate the “terminal” applet. You can detach it and place it on the Widget "
 "Layer for instance, or setup a shorkey to make it pop-up instantly."
-msgstr "啟動「終端機」小程式。您可以分離這個小程式將他放到Widget Layer上面，或者是設定一個熱鍵讓它可以快速彈跳出來。"
+msgstr ""
+"啟動「終端機」小程式。您可以分離這個小程式將他放到Widget Layer上面，或者是設"
+"定一個熱鍵讓它可以快速彈跳出來。"
 
-#: ../data/messages:969
+#: ../data/messages:997
 msgid "So then, how can I remove completely the gnome-panel ?"
 msgstr "然後，我該如何完整的移除gnome面板？"
 
-#: ../data/messages:971
+#: ../data/messages:999
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components_list, and erase its content "
-"(\"panel\").\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/"
+"required_components_list, and erase its content (\"panel\").\n"
 "Restart your session : the gnome-panel has not been started."
 msgstr ""
-"打開組態編輯器(gconf-editor)，編輯這個 /desktop/gnome/session/required_components_list "
-"，然後刪除掉panel這個資料。\n"
+"打開組態編輯器(gconf-editor)，編輯這個 /desktop/gnome/session/"
+"required_components_list ，然後刪除掉panel這個資料。\n"
 "重新啟動您的gnome：那麼gnome面板就不會被啟動了。"
 
-#: ../data/messages:973
+#: ../data/messages:1001
 msgid "Other applets"
 msgstr "其他小程式"
 
-#: ../data/messages:975
+#: ../data/messages:1003
 msgid "How can I have a same applet many times ?"
 msgstr "我要如何擁有一個相同的小程式但是有不同的時間？"
 
-#: ../data/messages:977
+#: ../data/messages:1005
 msgid ""
 "Hint : This allows you, for example, to have the time of different countries "
 "in your dock, or to have many animated caracters in your dock, or the "
 "weather of different cities."
-msgstr "提示：這是可以的，例如：在Dock上有不同的國家與時間，或者是很多動態字與不同城市的氣候在您的Dock上面。"
+msgstr ""
+"提示：這是可以的，例如：在Dock上有不同的國家與時間，或者是很多動態字與不同城"
+"市的氣候在您的Dock上面。"
 
-#: ../data/messages:979
+#: ../data/messages:1007
 msgid ""
 "Some applets can run several times at the same time : Clock, Cairo-Penguin, "
 "Weather, Netspeed, …\n"
@@ -3052,159 +3230,179 @@ msgid ""
 "new instance of this applet appears in the main dock.\n"
 "You can configure this new one like any other applet."
 msgstr ""
-"一些小程式能夠在同一個時間之內執行好幾次：時鐘、Cairo-企鵝(Cairo-Penguin)、氣候、網路速度....\n"
-"右鍵點擊小程式的圖示，並選擇「快速複製與這個小程式相同的小程式」，一個新的小程式就匯出現在您的主Dock上面。\n"
+"一些小程式能夠在同一個時間之內執行好幾次：時鐘、Cairo-企鵝(Cairo-Penguin)、氣"
+"候、網路速度....\n"
+"右鍵點擊小程式的圖示，並選擇「快速複製與這個小程式相同的小程式」，一個新的小"
+"程式就匯出現在您的主Dock上面。\n"
 "您可以設置這個新的小程式，如同其他的小程式一樣設定。"
 
-#: ../data/messages:981
+#: ../data/messages:1009
 msgid ""
 "I have a personal gauge that I want to use in the dock (for System-Monitor "
 "or others)"
 msgstr "我有一個自己的表頭，我想要使用在Dock上面(像是給系統監視或者其他用)"
 
-#: ../data/messages:983
+#: ../data/messages:1011
 msgid ""
 "move the folder containing your gauge in ~/.config/cairo-dock/extras/gauges, "
 "you’re done !"
-msgstr "將您的表頭移動到 ~/.config/cairo-dock/extras/gauges 這個目錄下就可以了！"
+msgstr ""
+"將您的表頭移動到 ~/.config/cairo-dock/extras/gauges 這個目錄下就可以了！"
 
-#: ../data/messages:985
+#: ../data/messages:1013
 msgid ""
 "I have a personal Cairo-Clock theme that I want to use in the “clock” applet."
-msgstr "我有一個自己的Cairo-時鐘(Cairo-Clock)主題，我想要使用在「時鐘」小程式上面。"
+msgstr ""
+"我有一個自己的Cairo-時鐘(Cairo-Clock)主題，我想要使用在「時鐘」小程式上面。"
 
-#: ../data/messages:987
+#: ../data/messages:1015
 msgid ""
 "Hint : the same goes on for all the applets that propose a theme : dustbin, "
 "Cairo-Penguin, weather, etc."
-msgstr "提示：全部的小程式設定主題方式都是一樣的：回收桶、Cairo-企鵝、氣候等等。"
+msgstr ""
+"提示：全部的小程式設定主題方式都是一樣的：回收桶、Cairo-企鵝、氣候等等。"
 
-#: ../data/messages:989
+#: ../data/messages:1017
 msgid ""
 "move the folder containing your theme in ~/.config/cairo-dock/extras/clock, "
 "now it will appear in the list of themes !"
-msgstr "將包含您自己主題的資料夾搬移到 ~/.config/cairo-dock/extras/clock ，這樣子就可以使用這個主題了！"
+msgstr ""
+"將包含您自己主題的資料夾搬移到 ~/.config/cairo-dock/extras/clock ，這樣子就可"
+"以使用這個主題了！"
 
-#: ../data/messages:991
+#: ../data/messages:1019
 msgid "How can I change quickly the luminosity of my screen ?"
 msgstr "我可以快速的更改我螢幕的亮度嗎？"
 
-#: ../data/messages:993
+#: ../data/messages:1021
 msgid ""
 "Activate the Xgamma applet, then you can scroll up/down on the icon with the "
 "mouse."
 msgstr "啟用 Xgamma 小程式，這樣子您就可以在這個圖示上面用滑鼠滾輪來調整。"
 
-#: ../data/messages:995
+#: ../data/messages:1023
 msgid "How can I change quickly the speakers volume ?"
 msgstr "我可以快速的更改喇叭音量嗎？"
 
-#: ../data/messages:997
+#: ../data/messages:1025
 msgid ""
 "Activate the AlsaMixer applet, then you can scroll up/down on the icon with "
 "the mouse."
-msgstr "啟用Alsa混合器(AlsaMixer)這個小程式，這樣子您就可以在這個圖示上面用滑鼠滾輪來調整。"
+msgstr ""
+"啟用Alsa混合器(AlsaMixer)這個小程式，這樣子您就可以在這個圖示上面用滑鼠滾輪來"
+"調整。"
 
-#: ../data/messages:999
+#: ../data/messages:1027
 msgid "How can I quickly switch to another desktop ?"
 msgstr "我可以快速的切換到其他的桌面嗎？"
 
-#: ../data/messages:1001
+#: ../data/messages:1029
 msgid "Hint : this applet even lets you add/remove quickly a desktop !"
 msgstr "提示：這個小程式甚至能讓您 增加/刪除 桌面！"
 
-#: ../data/messages:1003
+#: ../data/messages:1031
 msgid ""
 "Activate the Switcher applet, then you can scroll up/down on the icon with "
 "the mouse to go to the previous/next desktop,\n"
 " or click on the icon to select a desktop."
-msgstr "啟用「切換」小程式，這樣子您就可以在這個圖示上面用滑鼠滾輪到 上一個/下一個 桌面。。"
+msgstr ""
+"啟用「切換」小程式，這樣子您就可以在這個圖示上面用滑鼠滾輪到 上一個/下一個 桌"
+"面。。"
 
-#: ../data/messages:1005
+#: ../data/messages:1033
 msgid "How can I control my dock with the keyboard ?"
 msgstr "我可以用鍵盤來控制我的Dock嗎？"
 
-#: ../data/messages:1007
+#: ../data/messages:1035
 msgid ""
 "Hint : when you define a shorkey, try it before to be sure it's not already "
 "used by another application."
 msgstr "提示：當您定義一個熱鍵，試著在確定使用之前沒有其他的應用程式使用。"
 
-#: ../data/messages:1009
+#: ../data/messages:1037
 msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
-"window</b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
-"area</b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
-"browser</b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
+"b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
+"b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
+"b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
-"history</b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
+"b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
 "有很多的小程式有他們自己的熱鍵設定：\n"
-" - <i>Alsa混合器</i> 小程式能夠讓您快速彈跳出 <b>聲音控制按鈕</b> ，然後用 左/右 按鍵來控制。\n"
-" - <i>終端機</i> 小程式能夠快速彈跳出 <b>終端機視窗</b> ，已經直接寫在程式裏面了。\n"
+" - <i>Alsa混合器</i> 小程式能夠讓您快速彈跳出 <b>聲音控制按鈕</b> ，然後用 "
+"左/右 按鍵來控制。\n"
+" - <i>終端機</i> 小程式能夠快速彈跳出 <b>終端機視窗</b> ，已經直接寫在程式裏"
+"面了。\n"
 " - <i>系統程序資訊</i> 小程式能夠快速彈跳出 <b>通知區域</b> 。\n"
-" - <i>快速瀏覽</i> 小程式能夠快速彈跳出 <b>選單瀏覽</b>，您可以在裏面用方向鍵瀏覽。\n"
-" - <i>Gmenu</i>小程式能夠快速彈跳出<b>應用程式</b>與<b>快速啟動</b>交談視窗。\n"
+" - <i>快速瀏覽</i> 小程式能夠快速彈跳出 <b>選單瀏覽</b>，您可以在裏面用方向鍵"
+"瀏覽。\n"
+" - <i>Gmenu</i>小程式能夠快速彈跳出<b>應用程式</b>與<b>快速啟動</b>交談視"
+"窗。\n"
 " - <i>剪貼簿</i>小程式能夠快速彈跳出<b>剪貼紀錄</b>選單。\n"
-" - 與 course ，<i>Scooby-Do</i>外掛能夠讓您<b>瀏覽您的Dock裏面</b>與快速的<b>尋找與啟動</b>應用程式與檔案。"
+" - 與 course ，<i>Scooby-Do</i>外掛能夠讓您<b>瀏覽您的Dock裏面</b>與快速的<b>"
+"尋找與啟動</b>應用程式與檔案。"
 
-#: ../data/messages:1011
+#: ../data/messages:1039
 msgid "Troubleshooting"
 msgstr "疑難排解"
 
-#: ../data/messages:1013
+#: ../data/messages:1041
 msgid "I have a black background around my dock"
 msgstr "我有一個黑色的背景環繞在Dock的周圍"
 
-#: ../data/messages:1015
+#: ../data/messages:1043
 msgid ""
 "Hint : If yo have an ATI or an Intel, you should try without OpenGL first, "
 "because their drivers are not yet perfect."
-msgstr "提示：如果你的顯示卡是ATI或Intel，你應該要先嘗試不使用OpenGL，因為這些驅動程式尚未完整。"
+msgstr ""
+"提示：如果你的顯示卡是ATI或Intel，你應該要先嘗試不使用OpenGL，因為這些驅動程"
+"式尚未完整。"
 
-#: ../data/messages:1017
+#: ../data/messages:1045
 msgid ""
 "You have to turn on the compositing. For instance, you can run Compiz or "
 "xcompmgr. \n"
 "If you’re under XFCE or KDE, you can just activate the compositing in the "
 "window manager’s options.\n"
 "If you're under Gnome, you can activate it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
-"您必須要開啟合成模式(compsiting)，例如您可以執行Compiz或者是xcompmgr。如果沒有則如下：\n"
+"您必須要開啟合成模式(compsiting)，例如您可以執行Compiz或者是xcompmgr。如果沒"
+"有則如下：\n"
 "假如您在XFCE或者是KDE下，您可以用它們的視窗管理員當中的選項來開啟。\n"
 "假如您在Gnome，您可以依照下列的步驟開啟：\n"
-" 開啟組態編輯器(gconf-editor)，編輯這個地方的數值 /apps/metacity/general/compositing_manager "
-"讓他為 true 。"
+" 開啟組態編輯器(gconf-editor)，編輯這個地方的數值 /apps/metacity/general/"
+"compositing_manager 讓他為 true 。"
 
-#: ../data/messages:1019
+#: ../data/messages:1047
 msgid "My machine is too old to run a composite manager"
 msgstr "我的機器太老了，能夠執行合成模式嗎？"
 
-#: ../data/messages:1021
+#: ../data/messages:1049
 msgid ""
 "Don’t panic, Cairo-Dock can emulate the transparency.\n"
 "So to get rid of the black background, just activate the corresponding "
 "option, in the end of the “System” module"
 msgstr ""
 "別擔心，Cairo-Dock可以用透明化的方式來模擬。\n"
-"因此要擺脫這個黑色的背景，只要啟用相對應的選項就可以了，就在「系統」模組的最底下。"
+"因此要擺脫這個黑色的背景，只要啟用相對應的選項就可以了，就在「系統」模組的最"
+"底下。"
 
-#: ../data/messages:1023
+#: ../data/messages:1051
 msgid "The dock is horribly slow when I move the mouse into it"
 msgstr "當我把滑鼠移動到Dock上面時，Dock實在是慢的恐怖"
 
-#: ../data/messages:1025
+#: ../data/messages:1053
 msgid ""
 "If you have a GeForce8, you have to install the latest drivers, because the "
 "first ones were really buggy.\n"
@@ -3213,39 +3411,64 @@ msgid ""
 "If the dock is running with openGL, try to deactivate it by launching the "
 "dock with “cairo-dock –c”."
 msgstr ""
-"假如您用的是GeForce8，您必須要安裝最新的驅動程式。因為先前的驅動程式裏面有Bug。\n"
-"假如Dock是運作在沒有OpenGL的模式下面，試著減少在Dock上面的圖示，或者是縮小他們的大小。\n"
-"假如Dock是運作在OpenGL的模式下面，試著關閉它，在啟動Cairo-Dock的上面加上這個參數 \" cairo-dock -c \"。"
+"假如您用的是GeForce8，您必須要安裝最新的驅動程式。因為先前的驅動程式裏面有"
+"Bug。\n"
+"假如Dock是運作在沒有OpenGL的模式下面，試著減少在Dock上面的圖示，或者是縮小他"
+"們的大小。\n"
+"假如Dock是運作在OpenGL的模式下面，試著關閉它，在啟動Cairo-Dock的上面加上這個"
+"參數 \" cairo-dock -c \"。"
 
-#: ../data/messages:1027
+#: ../data/messages:1055
 msgid "I don’t have these wonderful effects like fire, cube rotating, etc"
 msgstr "我沒有很漂亮的效果，比如說火焰、立方體旋轉等等。"
 
-#: ../data/messages:1029
+#: ../data/messages:1057
 msgid ""
-"Hint : You can force the openGL by launching the dock with “cairo-dock "
-"–o”.but you might get a lot of visual artifacts."
-msgstr "提示：您可以強制OpenGL啟用，使用 \" cairo-dock -o \"參數。但是你也許會看到很多視覺效果上的問題。"
+"Hint : You can force the openGL by launching the dock with “cairo-dock –o”."
+"but you might get a lot of visual artifacts."
+msgstr ""
+"提示：您可以強制OpenGL啟用，使用 \" cairo-dock -o \"參數。但是你也許會看到很"
+"多視覺效果上的問題。"
 
-#: ../data/messages:1031
+#: ../data/messages:1059
 msgid ""
 "You need a graphic card with drivers that support openGL2.0. Most of Nvidia "
 "cards can do that, more and more Intel cards can do too. Most of ATI cards "
 "can’t do that."
 msgstr ""
-"您需要有一張支援OpenGL 2.0的顯示卡，大多數Nvidia的顯卡都可以做到，而越來越多的Intel顯卡也能夠做到了。然而大多數的ATI顯卡卻不行。"
+"您需要有一張支援OpenGL 2.0的顯示卡，大多數Nvidia的顯卡都可以做到，而越來越多"
+"的Intel顯卡也能夠做到了。然而大多數的ATI顯卡卻不行。"
 
-#: ../data/messages:1033
+#: ../data/messages:1061
+msgid "I don't have any themes in the Theme Manager, except the default one."
+msgstr ""
+
+#: ../data/messages:1063
+msgid "Hint : Until the version 2.1.1-2, wget was used."
+msgstr ""
+
+#: ../data/messages:1065
+msgid ""
+"Be sure that you are connected to the Net.\n"
+" If your connection is very slow, you can increase the connection timeout in "
+"the \"System\" module.\n"
+" If you're under a proxy, you'll have to configure \"curl\" to use it; "
+"search on the web how to do it (basically, you have to set up the "
+"\"http_proxy\" environment variable)."
+msgstr ""
+
+#: ../data/messages:1067
 msgid "The “netspeed” applet displays 0 even when I’m downloading something"
 msgstr "「網路速度」的小程式一直顯示 0 ，即使是我正在下載什麼東西"
 
-#: ../data/messages:1035
+#: ../data/messages:1069
 msgid ""
 "Hint : you can instantiate this applet many times if you want to monitor "
 "many interfaces."
-msgstr "提示：假如您有很多的網路卡，可以複製這個小程式很多個來監視每一個網路卡。"
+msgstr ""
+"提示：假如您有很多的網路卡，可以複製這個小程式很多個來監視每一個網路卡。"
 
-#: ../data/messages:1037
+#: ../data/messages:1071
 msgid ""
 "You have to tell it which interface you’re using to connect to the Net (by "
 "default, it’s “eth0”).\n"
@@ -3254,14 +3477,15 @@ msgid ""
 "probably something like “eth1”, “ath0”, or “wifi0”."
 msgstr ""
 "您必須要告訴它您用的是那一個網路卡連接到網路(預設值是 eth0 )。\n"
-"只要修改他的設置，並且輸入網路卡的名稱，就能找到他。可以用終端機輸入 ifconfig 來察看。跳過loop界面卡，這些界面卡名稱可能會是 eth1 "
-"、eth0 、或者 wifi0 。"
+"只要修改他的設置，並且輸入網路卡的名稱，就能找到他。可以用終端機輸入 "
+"ifconfig 來察看。跳過loop界面卡，這些界面卡名稱可能會是 eth1 、eth0 、或者 "
+"wifi0 。"
 
-#: ../data/messages:1039
+#: ../data/messages:1073
 msgid "The dustbin remains empty even when I delete a file"
 msgstr "資源回收桶一直是空的，即使我刪除了一個檔案"
 
-#: ../data/messages:1041
+#: ../data/messages:1075
 msgid ""
 "if you’re under KDE, you may have to tell it the path of the trash folder.\n"
 "Just edit the applet’s configuration, and fill in the Trash path; it is "
@@ -3269,19 +3493,19 @@ msgid ""
 "here !!! (do not insert spaces or some invisible caracters)."
 msgstr ""
 "假如您在KDE下，您也許要告訴回收桶小程式系統的回收桶路徑在哪裡。\n"
-"只要修改小程式的設置，並且填入回收桶路徑；這可能會在 ~/.locale/share/Trash/files "
-"。要非常小心的輸入路徑！！(不要輸入空白或者是一些看不見的字元)。"
+"只要修改小程式的設置，並且填入回收桶路徑；這可能會在 ~/.locale/share/Trash/"
+"files 。要非常小心的輸入路徑！！(不要輸入空白或者是一些看不見的字元)。"
 
-#: ../data/messages:1043
+#: ../data/messages:1077
 msgid "Help us !"
 msgstr "幫助我！"
 
-#: ../data/messages:1045
+#: ../data/messages:1079
 msgid ""
 "We value your help ! If you see a bug, or if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-"
-"dock.org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-dock."
+"org.\n"
 "English speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3292,173 +3516,198 @@ msgid ""
 msgstr ""
 "我們很重視您的求助！假如您有發現到Bug，或者您有一些可以讓它變得更好的做法，\n"
 "以及您有一些關於很棒的理想，請到 cairo-dock.org 這邊告訴我們。\n"
-"我們很歡迎英文的說明，所以不用感覺到不好意思。;-) (譯者註：Cairo-Dock源自法國)\n"
-"假如您設計了一個給Dock的主題或者是小程式，想要分享它，我們將會很高興的將它整合到Server上面！\n"
-"假如您想要開發一個小程式，那麼完整的說明文件會在 http://doc.cairo-dock.org 這裡。"
+"我們很歡迎英文的說明，所以不用感覺到不好意思。;-) (譯者註：Cairo-Dock源自法"
+"國)\n"
+"假如您設計了一個給Dock的主題或者是小程式，想要分享它，我們將會很高興的將它整"
+"合到Server上面！\n"
+"假如您想要開發一個小程式，那麼完整的說明文件會在 http://doc.cairo-dock.org 這"
+"裡。"
 
-#: ../data/messages:1049
+#: ../data/messages:1083
 msgid "Launcher's name :"
 msgstr "快速啟動的名稱："
 
-#: ../data/messages:1051
+#: ../data/messages:1085
 msgid ""
 "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard "
 "shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
-"例如：nautilus --no-desktop ，gedit 等等。您甚至可以輸入鍵盤快速鍵，例如 <Alt>F1 、<Ctrl>c 、<Ctrl>v "
-"等等。"
+"例如：nautilus --no-desktop ，gedit 等等。您甚至可以輸入鍵盤快速鍵，例如 "
+"<Alt>F1 、<Ctrl>c 、<Ctrl>v 等等。"
 
-#: ../data/messages:1053
+#: ../data/messages:1087
 msgid "Command to launch on click :"
 msgstr "點擊之後啟動的指令："
 
-#: ../data/messages:1057
+#: ../data/messages:1091
 msgid ""
 "If you write here a container's name that doesn't exist yet, a new one will "
 "be created, with this icon inside."
 msgstr "假如您輸入的名稱不存在，將會與圖示一起建立一個新的。"
 
-#: ../data/messages:1065
+#: ../data/messages:1099
 msgid ""
 "If you choosed to mix launcher and applis, this option will deactivate this "
 "behaviour for this launcher only. It can be useful for instance for a "
 "launcher that launches a script in a terminal, but you don't want it to "
 "steal the Terminal's icon from the Taskbar."
 msgstr ""
-"假如您想要將已經啟動的應用程式與快速啟動的圖示混合放在一起，請不要勾選。然而如果是打算在終端機裏面運行script命令的時候，勾選它讓他在將終端機的圖示放"
-"置在Dock上面，這樣對於容易辨識來說是很有用的。"
+"假如您想要將已經啟動的應用程式與快速啟動的圖示混合放在一起，請不要勾選。然而"
+"如果是打算在終端機裏面運行script命令的時候，勾選它讓他在將終端機的圖示放置在"
+"Dock上面，這樣對於容易辨識來說是很有用的。"
 
-#: ../data/messages:1067
+#: ../data/messages:1101
 msgid "Prevent this launcher from stealing appli from taskbar ?"
 msgstr "不要在快速啟動之後以這個圖示當作是已啟動的應用程式圖示？"
 
-#: ../data/messages:1069
+#: ../data/messages:1103
 msgid ""
 "The only reason you may want to modify this parameter is if you made this "
 "launcher by hands. If you dropped it into the dock from the menu, it is "
 "nearly sure that you shouldn't touch it. It defines the class of the "
 "program, which is useful to link the appli with its launcher."
 msgstr ""
-"只有一個理由您需要修改這個參數，就是您手動建立了一個快速啟動。假如您是用 拖-放 "
-"的方式將快速啟動放到Dock裏面，幾乎肯定您不用去修改他。他已經在這個快速啟動上面定義了應用程式的級別，與可用的應用程式連結。"
+"只有一個理由您需要修改這個參數，就是您手動建立了一個快速啟動。假如您是用 拖-"
+"放 的方式將快速啟動放到Dock裏面，幾乎肯定您不用去修改他。他已經在這個快速啟動"
+"上面定義了應用程式的級別，與可用的應用程式連結。"
 
-#: ../data/messages:1071
+#: ../data/messages:1105
 msgid "Class of the program :"
 msgstr "應用程式的級別："
 
-#: ../data/messages:1073
+#: ../data/messages:1107
 msgid "It will use 'xterm'."
 msgstr "他將會使用 xterm 。"
 
-#: ../data/messages:1075
+#: ../data/messages:1109
 msgid "Run in a terminal ?"
 msgstr "在終端機當中執行？"
 
-#: ../data/messages:1083
+#: ../data/messages:1121
 msgid ""
 "Choose the screen border regarding to which the dock will place itself :"
 msgstr "選擇Dock要把他自己放到螢幕的那一個邊緣："
 
-#: ../data/messages:1107
+#: ../data/messages:1135
+msgid "Position regarding the chosen screen's edge"
+msgstr "選擇對於螢幕邊緣的位置"
+
+#: ../data/messages:1139
+msgid "Lateral gap :"
+msgstr "側邊間隔"
+
+#: ../data/messages:1145
 msgid ""
 "The dock will automatically hide itself outside of the scren when the mouse "
 "leaves it and will show a callback zone instead. Place the mouse into this "
 "zone will make the dock re-appear."
-msgstr "當滑鼠的時候，Dock將會自動隱藏他自己到螢幕的外面，並顯示一個喚回區。當滑鼠移動到喚回區時Dock將會重新展現。"
+msgstr ""
+"當滑鼠的時候，Dock將會自動隱藏他自己到螢幕的外面，並顯示一個喚回區。當滑鼠移"
+"動到喚回區時Dock將會重新展現。"
 
-#: ../data/messages:1125
+#: ../data/messages:1147
+msgid "Activate auto-hide ?"
+msgstr "啟用自動隱藏？"
+
+#: ../data/messages:1163
 msgid "Themes"
 msgstr "主題"
 
-#: ../data/messages:1127
+#: ../data/messages:1165
 msgid "Choose a theme"
 msgstr "選擇主題"
 
-#: ../data/messages:1129
+#: ../data/messages:1167
 msgid "Choose one of the available themes :"
 msgstr "選擇一個已經存在的主題："
 
-#: ../data/messages:1131
+#: ../data/messages:1169
 msgid "You can even drop an internet URL."
 msgstr "您甚至可以輸入網路的 URL 位置。"
 
-#: ../data/messages:1133
+#: ../data/messages:1171
 msgid "... or drag and drop a theme package here :"
 msgstr "或者 拖-放 一個主題包到這裡："
 
-#: ../data/messages:1135
+#: ../data/messages:1173
 msgid ""
 "So if you check this box, your launchers will be deleted and replaced by the "
 "ones provided in the new theme. Otherwise the current launchers will be "
 "kept, only icons will be replaced."
-msgstr "所以，假如您點選了這個，您的快速啟動將會被刪除並更換成為那些已提供的新主題。否則將會保持目前的快速啟動，只有主題會被更換。"
+msgstr ""
+"所以，假如您點選了這個，您的快速啟動將會被刪除並更換成為那些已提供的新主題。"
+"否則將會保持目前的快速啟動，只有主題會被更換。"
 
-#: ../data/messages:1137
+#: ../data/messages:1175
 msgid "Use the new theme's launchers ?"
 msgstr "使用新快速啟動與主題？"
 
-#: ../data/messages:1139
+#: ../data/messages:1177
 msgid ""
 "Otherwise the current behaviour will be kept. It's all about the dock's "
 "position, behaviour parameters such as auto-hide, using taskbar or not, etc."
-msgstr "否則將會保持目前的動作方式，這是關於Dock的位置，動作方式的參數像是自動隱藏、使用工具列或者不要等等。"
+msgstr ""
+"否則將會保持目前的動作方式，這是關於Dock的位置，動作方式的參數像是自動隱藏、"
+"使用工具列或者不要等等。"
 
-#: ../data/messages:1141
+#: ../data/messages:1179
 msgid "Use the new theme's behaviour ?"
 msgstr "使用新的主題與動作方式？"
 
-#: ../data/messages:1143
+#: ../data/messages:1181
 msgid "Save"
 msgstr "儲存"
 
-#: ../data/messages:1145
+#: ../data/messages:1183
 msgid "Save current theme"
 msgstr "儲存當前的主題"
 
-#: ../data/messages:1147
+#: ../data/messages:1185
 msgid "You will then be able to re-open it at any time."
 msgstr "您可以在任何時候重新開啟它。"
 
-#: ../data/messages:1149
+#: ../data/messages:1187
 msgid "Save as :"
 msgstr "儲存為："
 
-#: ../data/messages:1151
+#: ../data/messages:1189
 msgid "Save current behaviour too ?"
 msgstr "儲存目前的動作方式嗎？"
 
-#: ../data/messages:1153
+#: ../data/messages:1191
 msgid "Save current launchers too ?"
 msgstr "儲存目前的快速啟動嗎？"
 
-#: ../data/messages:1155
+#: ../data/messages:1193
 msgid ""
 "The dock will build a complete tarball of your current theme, allowing you "
 "to exchange it easily with other people."
-msgstr "Dock將會以當前的主題建立一個完整的 tarball 壓縮檔，好讓您可以很方便的給其他的使用者。"
+msgstr ""
+"Dock將會以當前的主題建立一個完整的 tarball 壓縮檔，好讓您可以很方便的給其他的"
+"使用者。"
 
-#: ../data/messages:1157
+#: ../data/messages:1195
 msgid "Build a package of the theme ?"
 msgstr "建立一個主題的壓縮包？"
 
-#: ../data/messages:1159
+#: ../data/messages:1197
 msgid "Delete"
 msgstr "刪除"
 
-#: ../data/messages:1161
+#: ../data/messages:1199
 msgid "List of your personnal themes"
 msgstr "列出您個人的個性化主題"
 
-#: ../data/messages:1163
+#: ../data/messages:1201
 msgid "Delete from the list themes you don't want anymore :"
 msgstr "刪除您不再需要的主題："
 
-#: ../data/messages:1165
+#: ../data/messages:1203
 msgid "pouet"
 msgstr "pouet"
 
-#: ../data/messages:1167 ../data/messages:1169 ../data/messages:1171
-#: ../data/messages:1173
+#: ../data/messages:1205 ../data/messages:1207 ../data/messages:1209
+#: ../data/messages:1211
 msgid ""
 "v1.4.6.3 :\n"
 "Just to say :\n"
@@ -3470,7 +3719,7 @@ msgstr ""
 "*** 新年快樂 2008 ! ***\n"
 "the Cairo-Dock's team."
 
-#: ../data/messages:1175
+#: ../data/messages:1213
 msgid ""
 "v1.5.0 : it's been 1 month since previous release, and we worked hardly to "
 "bring you :\n"
@@ -3503,7 +3752,7 @@ msgstr ""
 " - 以及蛋糕上的櫻桃(cherry on the cake)，一個新的主題( I,Cairo )！\n"
 "  現在，為什麼不試試看這個給Cairo-Dock的小程式呢？ :-)"
 
-#: ../data/messages:1177
+#: ../data/messages:1215
 msgid ""
 "v1.5.1 :\n"
 " - The 1.5 branch is still young, so this version brings a lot of bug fixes\n"
@@ -3522,7 +3771,7 @@ msgstr ""
 "  更多的小程式可以從Dock上面分離，\n"
 " 就像是真正的桌面小工具一樣。"
 
-#: ../data/messages:1179
+#: ../data/messages:1217
 msgid ""
 "v1.5.2.1 :\n"
 " - a lot of bug fixes, especially on desklets.\n"
@@ -3534,7 +3783,7 @@ msgstr ""
 " - 一個新的小程式：氣候(weather)！\n"
 " - Cairo-Dock現在已經完整的翻譯成為日文，感謝 Jiro Kawada！"
 
-#: ../data/messages:1181
+#: ../data/messages:1219
 msgid ""
 "v1.5.3.2 :\n"
 " - Themes have been deeply reviewed\n"
@@ -3558,7 +3807,7 @@ msgstr ""
 "  對了，我們仍然在研發一些東西\n"
 "  誰能夠幫助Cairo-Dock完整的整合入 KDE 當中呢？ ;-)"
 
-#: ../data/messages:1183
+#: ../data/messages:1221
 msgid ""
 "v1.5.4.2 : a huge release !\n"
 " - add a cute pinguin in your dock with the new applet Cairo-Penguin\n"
@@ -3582,7 +3831,7 @@ msgstr ""
 " - 新鮮的Dock主題：木材(Wood)。\n"
 " - 氣候小程式有3個更多的主題。"
 
-#: ../data/messages:1185
+#: ../data/messages:1223
 msgid ""
 "v1.5.5.4 :\n"
 " - Huge enhancements in the TaskBar :\n"
@@ -3609,7 +3858,7 @@ msgstr ""
 " - 單獨的Cairo-Dock上面可以有很多的Dock的能力\n"
 " - Cairo-Dock現在還沒有完整的融入 Gnome 2.22 ，但是很快的將會完成。 :-)"
 
-#: ../data/messages:1187
+#: ../data/messages:1225
 msgid ""
 "v1.5.6 :\n"
 " - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still "
@@ -3639,7 +3888,7 @@ msgstr ""
 " - Bug Fixes XGamma/Weather 。\n"
 " - 歡迎任何可以幫助我們將 Dock 融入 KDE ！"
 
-#: ../data/messages:1189
+#: ../data/messages:1227
 msgid ""
 "v1.6.0 :\n"
 " - A new view has appeared : Diapositive !\n"
@@ -3671,11 +3920,11 @@ msgstr ""
 " - Crash時自動載入\n"
 " - 當視窗最小化時顯示視窗真實的縮圖"
 
-#: ../data/messages:1191
+#: ../data/messages:1229
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
-":\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
+"you :\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -3691,7 +3940,7 @@ msgstr ""
 " - 開始翻譯到義大利文與中文。\n"
 " - 我們仍然希望有什麼人能夠幫助我們撰寫「KDE-融合」的外掛 ^_^"
 
-#: ../data/messages:1193
+#: ../data/messages:1231
 msgid ""
 "v1.6.2 : the first version integrated in the Ubuntu repositories !\n"
 " - 2 new applets have been released :\n"
@@ -3712,7 +3961,7 @@ msgstr ""
 " 所以可以將您的主題傳送給我們，我們可以發佈他們！ :-)\n"
 " - 我們仍然希望有什麼人能夠幫助我們撰寫「KDE-融合」的外掛 ^_^"
 
-#: ../data/messages:1195
+#: ../data/messages:1233
 msgid ""
 "v1.6.3 : \n"
 " - first the bad news :\n"
@@ -3743,7 +3992,7 @@ msgstr ""
 " - 放圖示進入Dock更平穩順暢。\n"
 " - 現在Dock開始進行瑞典語以及希臘語的翻譯。"
 
-#: ../data/messages:1197
+#: ../data/messages:1235
 msgid ""
 "Cairo-Dock II\n"
 " - Cairo-Dock is now a full OpenGL dock ! (the cairo backend is still "
@@ -3756,15 +4005,16 @@ msgid ""
 " - Lot of bug fixes and upgrades in all plug-ins."
 msgstr ""
 "Cairo-Dock II\n"
-" - Cairo-Dock現在已經完整的支援OpenGL的Dock了! (沒有OpenGL的Cairo-"
-"Dock仍然存在，可以給舊的顯卡或者是ATI顯卡)\n"
-" - 新的外掛提供很多的虛擬特效：動畫圖示、圖示特效、幻象、拖動指標圖像、動態模糊、對話渲染\n"
+" - Cairo-Dock現在已經完整的支援OpenGL的Dock了! (沒有OpenGL的Cairo-Dock仍然存"
+"在，可以給舊的顯卡或者是ATI顯卡)\n"
+" - 新的外掛提供很多的虛擬特效：動畫圖示、圖示特效、幻象、拖動指標圖像、動態模"
+"糊、對話渲染\n"
 " - 設置面板已經大量的改寫。\n"
 " - 桌面小工具現在有了3D效果。\n"
 " - 新的小程式：信件、鍵盤指標、快速資料夾、卡通人物。\n"
 " - 很多的Bug被清理掉並且全部的外掛都有更新。"
 
-#: ../data/messages:1199
+#: ../data/messages:1237
 msgid ""
 "2.0.5 :\n"
 " - This is mainly a bug-fix version\n"
@@ -3776,7 +4026,7 @@ msgstr ""
 " - 現在有了RB小程式。\n"
 " - 增加了功能在nalities的群組應用程式圖示。"
 
-#: ../data/messages:1201
+#: ../data/messages:1239
 msgid ""
 "2.1.0 : A really heavy version !\n"
 " - Control any music player with the MusicPlayer applet\n"
@@ -3802,13 +4052,14 @@ msgstr ""
 " - 新的動畫在「Slide」風貌當中\n"
 " - 工具列、剪貼簿、電源管理、時鐘與Cairo-企鵝模組的Bug清理。\n"
 " - OpenGL模式可以工作在ATI與Intel的最新驅動程式上面！\n"
-" - 最後，Cairo-Dock已經有了自己的PPA在LaunchPad上面，而完整的文件放置在 http://doc.cairo-dock.org 。"
+" - 最後，Cairo-Dock已經有了自己的PPA在LaunchPad上面，而完整的文件放置在 "
+"http://doc.cairo-dock.org 。"
 
-#: ../data/messages:1203
+#: ../data/messages:1241
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
-"!)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
+"that !)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -3833,6 +4084,155 @@ msgstr ""
 " - 剪貼簿現在有一個功能，就是可以一次拷貝全部的項目。\n"
 " - DBug外掛提供了一個很強大的API ，可以讓您從外部的應用程式來控制Dock。\n"
 "    您甚至可以用任何的程式語言來寫小程式給Dock！"
+
+#: ../data/messages:1243
+msgid "(null)"
+msgstr ""
+
+#~ msgid ""
+#~ "The option 'auto-hide on fullscreen window' is in conflict with the "
+#~ "option 'reserve space for dock',\n"
+#~ " it will be ignored"
+#~ msgstr ""
+#~ "這個 '在全螢幕視窗當中自動隱藏' 的選項與「為Dock保留螢幕邊緣的空間嗎？」 "
+#~ "選項相衝突\n"
+#~ " 它將會被忽略。"
+
+#~ msgid ""
+#~ "The option 'auto-hide on maximized window' is in conflict with the option "
+#~ "'reserve space for dock',\n"
+#~ " it will be ignored"
+#~ msgstr ""
+#~ "這個 '在最大化視窗當中自動隱藏' 的選項與 為Dock保留螢幕邊緣的空間嗎？」選"
+#~ "項相衝突\n"
+#~ " 它將會被忽略。"
+
+#~ msgid "How do you access to your docks ?"
+#~ msgstr "您要如何存取您的Cairo-Dock"
+
+#~ msgid "Space"
+#~ msgstr "空間"
+
+#~ msgid ""
+#~ "This will prevent other windows from overlapping the dock. It has no "
+#~ "effect if you defined the 'show/hide' shortcut below, cause then the dock "
+#~ "behaves like a menu."
+#~ msgstr ""
+#~ "這將會防止其他視窗蓋住Dock，使得Dock就像是工作列選單一樣。但是一旦您使用了"
+#~ "下面的「顯示/隱藏」選項，這個設定將會失效。"
+
+#~ msgid "Reserve space at the edge of the screen for the dock ?"
+#~ msgstr "為Dock保留螢幕邊緣的空間嗎？"
+
+#~ msgid "Auto-hide"
+#~ msgstr "自動隱藏"
+
+#~ msgid ""
+#~ "The dock will automatically hide itself outside of the scren when the "
+#~ "mouse leaves it. Instead, it will show a zone where placing the mouse "
+#~ "will trigger the dock and make it re-appear."
+#~ msgstr ""
+#~ "Dock將會在滑鼠離開它自動隱藏，代替的是一個可以讓滑鼠靠過去觸發，來重新顯示"
+#~ "Dock的區域。"
+
+#~ msgid ""
+#~ "This is only usefull if don't already use the auto-hide, and if you don't "
+#~ "want to reserve the space for your dock nor let it below the other "
+#~ "windows."
+#~ msgstr ""
+#~ "這選項只有在您沒有使用自動隱藏時，也不想要保留Dock的桌面空間，也不想讓它位"
+#~ "於其他視窗之下。"
+
+#~ msgid "Pop-up"
+#~ msgstr "彈出框"
+
+#~ msgid ""
+#~ "The dock will pop-up on the foreground when you place the mouse on its "
+#~ "screen border. This option is only useful if you don't want to reserve "
+#~ "space for the dock, nor to activate auto-hide."
+#~ msgstr ""
+#~ "當您的滑鼠移動到螢幕邊緣時，Dock將會彈跳到前景。這個選想只能夠使用在您不想"
+#~ "要保留螢幕空間給Dock ，也不啟用自動隱藏。"
+
+#~ msgid "Shortcut"
+#~ msgstr "快速鍵"
+
+#~ msgid ""
+#~ "This allows to group windows in some soft like Gimp, and to have only 1 "
+#~ "icon in the main dock.The 1st window will appear in the main dock, and "
+#~ "the others will be placed in a container associated with this 1st icon."
+#~ msgstr ""
+#~ "這樣將會允許您的應用程式以群組的方式放在一起，比如說Gimp這個圖形處理軟體。"
+#~ "它只會有一個圖示出現在主Dock上面，第一個視窗的圖像將會出現在主要的Dock上"
+#~ "面，而以Gimp開啟更多的視窗時，其他的視窗放置在這個圖像的裏面，就像是個容器"
+#~ "一樣裝在一起。"
+
+#~ msgid "Should the applications with same class be grouped in a sub-dock ?"
+#~ msgstr "相同應用程式開啟的視窗，要放在一起成為一個子Dock嗎？"
+
+#~ msgid "Display an indicator on applis ?"
+#~ msgstr "顯示圖形指標在小程式的圖像上嗎？"
+
+#~ msgid ""
+#~ "The bigger, the more the stripes are close to each other; with 0 stripes, "
+#~ "the background will be filled with a single gradation."
+#~ msgstr ""
+#~ "數字越大，條紋之間會越接近；當數值為0時，背景將會以顏色漸層的方式表現。"
+
+#~ msgid "Number of stripes, in each pattern, to draw in the background :"
+#~ msgstr "在背景上的每個紋理條紋的數量："
+
+#~ msgid ""
+#~ "1 pattern contains N stripes, so the width can be less or equal than 1/N."
+#~ msgstr "1個紋理材質包含N個條紋，所以寬度可以是\"小於\"或\"等於\" 1/N 。"
+
+#~ msgid "Width of the stripes, in percentage of the pattern size :"
+#~ msgstr "條紋的寬度，以紋理材質的大小百分比："
+
+#~ msgid "Should the text be oulined ?"
+#~ msgstr "文字需要加外框嗎？"
+
+#~ msgid ""
+#~ "Setting it to 0.33 will mean that 33% of the icons will reflect on the "
+#~ "ground. The icons will be placed at the right distance from the front "
+#~ "border of the frame so that the reflect is fully visible."
+#~ msgstr ""
+#~ "圖示與下層之間的反射，設定值為 0.33 將表示以 33% 的比例反射。圖示將會被放"
+#~ "置在右前方框架的邊緣，讓它可以被看到。"
+
+#~ msgid "Fraction of the icon height that will reflect :"
+#~ msgstr "分數高的圖示將會反射："
+
+#~ msgid "otherwise they will be perpendicular"
+#~ msgstr "勾選時會與主Dock並行，沒有勾選擇會垂直於主Dock上。"
+
+#~ msgid "Are the sub-docks parallel to main docks ?"
+#~ msgstr "與主Dock方向並行的子Dock?"
+
+#~ msgid "Choose a window decorator :"
+#~ msgstr "選擇視窗裝飾器："
+
+#~ msgid "Text color (r,g,b) :"
+#~ msgstr "文字色彩(R,G,B)："
+
+#~ msgid ""
+#~ "for exemple Monospace, Purisa, ... Just write the font name wihtout any "
+#~ "number or so."
+#~ msgstr ""
+#~ "例如Monospace 、Purisa、文泉驛正黑.....等等，只要將字型名稱填入即可，不需"
+#~ "要設定字型大小。"
+
+#~ msgid "Family of the font used for labels :"
+#~ msgstr "使用在標籤上的字形："
+
+#~ msgid "Should be outlined ?"
+#~ msgstr "要加上字型外框嗎？"
+
+#~ msgid "Let it empty to draw a simple frame."
+#~ msgstr "要用基本的框架請讓他空白。"
+
+#~ msgid "Alternatively you can set an image for the indicator :"
+#~ msgstr "您可以選擇一個圖形作為圖形指標："
 
 #~ msgid "About this applet"
 #~ msgstr "關於這個小程式(applet)"

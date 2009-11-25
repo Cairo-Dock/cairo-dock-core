@@ -44,6 +44,9 @@ G_BEGIN_DECLS
 */
 #define cairo_dock_is_extended_dock(pDock) (myAccessibility.bExtendedMode && (pDock->iRefCount == 0))
 
+
+#define cairo_dock_is_hidden(pDock) ((pDock)->iRefCount == 0 && (pDock)->bAutoHide && (pDock)->fHideOffset == 1)
+
 /*
 * Recharge les reflets (cairo) d'un dock. Utile si le dock a changé de position.
 * @param pDock un dock.
@@ -77,12 +80,9 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve);
 */
 void cairo_dock_prevent_dock_from_out_of_screen (CairoDock *pDock);
 
+void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth, int iNewHeight, int *iNewPositionX, int *iNewPositionY);
 
-void cairo_dock_set_window_position_at_balance (CairoDock *pDock, int iNewWidth, int iNewHeight);
-
-void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, CairoDockSizeType iSizeType, int *iNewWidth, int *iNewHeight);
-
-void cairo_dock_move_resize_dock (CairoDock *pDock, CairoDockSizeType iSizeType);
+void cairo_dock_move_resize_dock (CairoDock *pDock);
 /* Met un dock principal a sa taille et a sa place initiale.
 *@param pDock le dock.
 */

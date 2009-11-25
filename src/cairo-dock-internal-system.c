@@ -129,7 +129,7 @@ DEFINE_PRE_INIT (System)
 {
 	pModule->cModuleName = "System";
 	pModule->cTitle = N_("System");
-	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-system.png";
+	pModule->cIcon = "icon-system.png";
 	pModule->cDescription = N_("All the parameters you will never want to tweak.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
 	pModule->iSizeOfConfig = sizeof (CairoConfigSystem);

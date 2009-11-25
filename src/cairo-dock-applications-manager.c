@@ -1263,6 +1263,11 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 			{
 				x = pClassmateDock->container.iWindowPositionX + pClassmate->fXAtRest + (pClassmateDock->container.iWidth - pClassmateDock->fFlatDockWidth) / 2;
 				y = pClassmateDock->container.iWindowPositionY + pClassmate->fDrawY - pClassmate->fHeight * myIcons.fAmplitude * pClassmateDock->fMagnitudeMax;  // il faudrait un fYAtRest ...
+				
+				if (pMainDock->bIsHidden)
+				{
+					
+				}
 			}
 			else if (myIcons.bMixApplisAndLaunchers && pClassmate != NULL && pClassmateDock != NULL)  // on va se placer a cote.
 			{

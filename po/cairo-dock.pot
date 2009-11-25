@@ -33,7 +33,7 @@ msgstr ""
 msgid "Applet's handbook"
 msgstr ""
 
-#: ../src/cairo-dock-callbacks.c:1122
+#: ../src/cairo-dock-callbacks.c:1163
 msgid "Do you want to mount this point ?"
 msgstr ""
 
@@ -112,99 +112,99 @@ msgstr ""
 msgid "grab"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:102 ../data/messages:97
+#: ../src/cairo-dock-gui-manager.c:96 ../data/messages:97
 msgid "Behaviour"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:103
+#: ../src/cairo-dock-gui-manager.c:97
 msgid "Appearance"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:104
+#: ../src/cairo-dock-gui-manager.c:98
 msgid "Accessories"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:105
+#: ../src/cairo-dock-gui-manager.c:99
 msgid "Desktop"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:106
+#: ../src/cairo-dock-gui-manager.c:100
 msgid "Controlers"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:107
+#: ../src/cairo-dock-gui-manager.c:101
 msgid "Plug-ins"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:440
+#: ../src/cairo-dock-gui-manager.c:428
 msgid "Categories"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:460
+#: ../src/cairo-dock-gui-manager.c:448
 msgid "All"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:559
+#: ../src/cairo-dock-gui-manager.c:548
 msgid "Filter"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:610
+#: ../src/cairo-dock-gui-manager.c:599
 msgid "Options"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:620
+#: ../src/cairo-dock-gui-manager.c:609
 msgid "All words"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:624
+#: ../src/cairo-dock-gui-manager.c:613
 msgid "Highlight words"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:629
+#: ../src/cairo-dock-gui-manager.c:618
 msgid "Hide others"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:634
+#: ../src/cairo-dock-gui-manager.c:623
 msgid "Search in description"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:648
+#: ../src/cairo-dock-gui-manager.c:637
 msgid "Activate this module"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:737
+#: ../src/cairo-dock-gui-manager.c:726
 msgid "< Maintenance mode >"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:755 ../src/cairo-dock-gui-manager.c:829
+#: ../src/cairo-dock-gui-manager.c:744 ../src/cairo-dock-gui-manager.c:818
 msgid "Configuration of Cairo-Dock"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:1076
+#: ../src/cairo-dock-gui-manager.c:1065
 #, c-format
 msgid ""
 "The module '%s' is not present. You need to install it or its dependencies "
 "to make the most of this module."
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:1082
+#: ../src/cairo-dock-gui-manager.c:1071
 #, c-format
 msgid "The module '%s' is not activated."
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:1083
+#: ../src/cairo-dock-gui-manager.c:1072
 msgid "Do you want to activate it now ?"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:1819
+#: ../src/cairo-dock-gui-manager.c:1808
 msgid "Configuration of the launchers"
 msgstr ""
 
-#: ../src/cairo-dock-internal-accessibility.c:350
+#: ../src/cairo-dock-internal-accessibility.c:261
 msgid "Visibility"
 msgstr ""
 
-#: ../src/cairo-dock-internal-accessibility.c:352
+#: ../src/cairo-dock-internal-accessibility.c:263
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobstrusive ?\n"

@@ -114,7 +114,7 @@ sep_app =
 #{Allows launchers to act as applis when their program is running, and displays an indicator on their icon to signal it. You can launch other occurences of the program with SHIFT+click.}
 mix launcher appli = true
 
-#b- Group windows of the same application in a sub-dock ?
+#B- Group windows of the same application in a sub-dock ?
 #{This allows to group all the windows of a given application into a unique sub-dock, and to act on all of the windows at the same time.}
 group by class = true
 
@@ -122,7 +122,7 @@ group by class = true
 #{enter the class of the applications, separated by a semi-colon ';'}
 group exception = pidgin;xchat;amsn
 
-#b- Overwrite X icons with launchers' one ?
+#B- Overwrite X icons with launchers' one ?
 #{If not set, will use the icon provided by X for each appli. If set, the same icon as the corresponding launcher will be used for each appli.}
 overwrite xicon = true
 

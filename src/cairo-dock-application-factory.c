@@ -802,4 +802,3 @@ void cairo_dock_appli_stops_demanding_attention (Icon *icon)
 	else
 		_cairo_dock_appli_stops_demanding_attention (icon, pParentDock);
 }
-

@@ -149,7 +149,6 @@ CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRen
 		return pInsertedDock;
 	}
 	
-	pDock->bAtBottom = TRUE;
 	pDock->iRefCount = 0;  // c'est un dock racine par defaut.
 	pDock->container.fRatio = 1.;
 	pDock->iAvoidingMouseIconType = -1;
@@ -308,10 +307,10 @@ static void _cairo_dock_fm_remove_monitor_on_one_icon (Icon *icon, gpointer data
 }
 void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 {
-	if (pDock->iSidMoveDown != 0)
+	/**if (pDock->iSidMoveDown != 0)
 		g_source_remove (pDock->iSidMoveDown);
 	if (pDock->iSidMoveUp != 0)
-		g_source_remove (pDock->iSidMoveUp);
+		g_source_remove (pDock->iSidMoveUp);*/
 	if (pDock->iSidPopDown != 0)
 		g_source_remove (pDock->iSidPopDown);
 	if (pDock->iSidPopUp != 0)

@@ -65,9 +65,9 @@ struct _CairoDockTransition {
 
 #define CAIRO_DOCK_MIN_SLOW_DELTA_T 90
 
-gboolean cairo_dock_move_up (CairoDock *pDock);
+/*gboolean cairo_dock_move_up (CairoDock *pDock);
 
-gboolean cairo_dock_move_down (CairoDock *pDock);
+gboolean cairo_dock_move_down (CairoDock *pDock);*/
 
 /** Pop up a Dock above other windows, if docks are in mode "keep below other windows"; otherwise do nothing.
 *@param pDock the dock.
@@ -85,7 +85,7 @@ gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex);
 /** Say if it's usefull to launch an animation on a Dock (indeed, it's useless to launch it if it will be invisible).
 *@param pDock the dock to animate.
 */
-#define cairo_dock_animation_will_be_visible(pDock) ((pDock)->iRefCount != 0 && GTK_WIDGET_VISIBLE ((CAIRO_CONTAINER(pDock)->pWidget)) || ((pDock)->iRefCount == 0 && (! (pDock)->bAutoHide || CAIRO_CONTAINER(pDock)->bInside || ! (pDock)->bAtBottom)))
+#define cairo_dock_animation_will_be_visible(pDock) ((pDock)->iRefCount != 0 && GTK_WIDGET_VISIBLE ((CAIRO_CONTAINER(pDock)->pWidget)) || ((pDock)->iRefCount == 0 && (! (pDock)->bAutoHide || CAIRO_CONTAINER(pDock)->bInside || ! (pDock)->bIsHidden)))
 
 #define cairo_dock_container_is_animating(pContainer) (CAIRO_CONTAINER(pContainer)->iSidGLAnimation != 0)
 
@@ -97,6 +97,10 @@ void cairo_dock_launch_animation (CairoContainer *pContainer);
 void cairo_dock_start_shrinking (CairoDock *pDock);
 
 void cairo_dock_start_growing (CairoDock *pDock);
+
+void cairo_dock_start_hiding (CairoDock *pDock);
+
+void cairo_dock_start_showing (CairoDock *pDock);
 
 /** Launch the animation of an Icon. Do nothing if the icon will not be animated or if the icon is at rest.
 *@param icon the icon to animate.

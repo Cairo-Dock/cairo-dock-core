@@ -49,12 +49,6 @@ typedef enum {
 	CAIRO_DOCK_NB_POSITIONS
 	} CairoDockPositionType;
 
-typedef enum {
-	CAIRO_DOCK_MAX_SIZE,
-	CAIRO_DOCK_NORMAL_SIZE,
-	CAIRO_DOCK_MIN_SIZE
-	} CairoDockSizeType;
-
 #define CAIRO_DOCK_UPDATE_DOCK_SIZE TRUE
 #define CAIRO_DOCK_ANIMATE_ICON TRUE
 #define CAIRO_DOCK_INSERT_SEPARATOR TRUE
@@ -155,8 +149,7 @@ struct _CairoDock {
 	/// decalage des decorations pour les faire suivre la souris.
 	gdouble fDecorationsOffsetX;
 	
-	/// TRUE if the dock is at rest.
-	gboolean bAtBottom;
+	gboolean bAtBottom_deprecated;
 	gboolean bAtTop_deprecated;
 	/// Whether the dock is in a popped up state or not.
 	gboolean bPopped;
@@ -227,10 +220,16 @@ struct _CairoDock {
 	gint iNumScreen;
 	/// whether an icon is being dragged away from the dock
 	gboolean bIconIsFlyingAway;
-	/// whether the dock is hidden
+	/// whether the dock is in hidden state.
 	gboolean bIsHidden;
 	/// vertical offset for auto-hide.
 	double fHideOffset;
+	/// input shape of the window when the dock is hidden.
+	GdkBitmap* pHiddenShapeBitmap;
+	/// whether the dock is hiding.
+	gboolean bIsHiding;
+	/// whether the dock is showing.
+	gboolean bIsShowing;
 };
 
 

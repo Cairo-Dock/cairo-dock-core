@@ -1250,7 +1250,7 @@ void cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 	
 	cd_message ("on force a quitter");
 	pDock->container.bInside = TRUE;
-	pDock->bAtBottom = FALSE;
+	///pDock->bAtBottom = FALSE;
 	cairo_dock_emit_leave_signal (pDock);
 	/*cairo_dock_on_leave_notify (pDock->container.pWidget,
 		NULL,

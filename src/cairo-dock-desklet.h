@@ -192,6 +192,7 @@ struct _CairoDesklet {
 	/// ID of the object that was picked thanks in case the previous function is not null.
 	GLuint iPickedObject;
 	gboolean bClicked;
+	GTimer *pUnmapTimer;
 };
 
 /// Definition of a function that runs through all desklets.
@@ -254,10 +255,11 @@ void cairo_dock_add_interactive_widget_to_desklet_full (GtkWidget *pInteractiveW
 */
 void cairo_dock_set_desklet_margin (CairoDesklet *pDesklet, int iRightMargin);
 
-/** Detach the interactive widget from a desklet. The widget can then be placed anywhere after that.
+/** Detach the interactive widget from a desklet. The widget can then be placed anywhere after that. You have to unref it after you placed it into a container, or to destroy it.
 *@param pDesklet the desklet with an interactive widget.
+*@return the widget.
 */
-void cairo_dock_steal_interactive_widget_from_desklet (CairoDesklet *pDesklet);
+GtkWidget *cairo_dock_steal_interactive_widget_from_desklet (CairoDesklet *pDesklet);
 
 
 /** Find the currently pointed icon in a desklet, taking into account the 3D rotations.

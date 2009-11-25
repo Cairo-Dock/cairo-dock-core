@@ -128,7 +128,7 @@ int g_iXScreenHeight[2];
 gchar *g_cCurrentThemePath = NULL;  // le chemin vers le repertoire du theme courant.
 gchar *g_cCurrentLaunchersPath = NULL;  // le chemin vers le repertoire des lanceurs/icones du theme courant.
 gchar *g_cConfFile = NULL;  // le chemin du fichier de conf.
-gchar *g_cCairoDockDataDir = NULL;  // le repertoire ou on va chercher les .desktop.
+gchar *g_cCairoDockDataDir = NULL;  // le repertoire ou on va chercher la config.
 
 cairo_surface_t *g_pVisibleZoneSurface = NULL;  // surface de la zone de rappel.
 double g_fBackgroundImageWidth = 0, g_fBackgroundImageHeight = 0;  // sa taille reelle.
@@ -694,7 +694,10 @@ int main (int argc, char** argv)
 	g_print ("\nBATTERIE VERS 100%\n\n");
 	g_print ("\nPB AFFICHAGE PM\n\n");
 	
+	g_print ("\nINDICATEURS EN HAUT (RETOURNES) ET CAIRO\n\n");
+	g_print ("\nCHANGER THEME WIFI OU AUTRE\n\n");
 	g_print ("\nTESTER L'AUTO-HIDE\n\n");
+	g_print ("\nCRASH DANS PANNEAU DE CONF\n\n");
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
 	g_print ("\nFIXER LES DESKLETS SUR UN BUREAU\n\n");

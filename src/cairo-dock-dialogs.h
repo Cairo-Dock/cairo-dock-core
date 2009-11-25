@@ -448,7 +448,11 @@ void cairo_dock_unhide_dialog (CairoDialog *pDialog);
 void cairo_dock_toggle_dialog_visibility (CairoDialog *pDialog);
 
 GtkWidget *cairo_dock_steal_widget_from_its_container (GtkWidget *pWidget);
-
+/** Detach the interactive widget from a dialog. The widget can then be placed anywhere after that. You have to unref it after you placed it into a container, or to destroy it.
+*@param pDesklet the desklet with an interactive widget.
+*@return the widget.
+*/
+GtkWidget *cairo_dock_steal_interactive_widget_from_dialog (CairoDialog *pDialog);
 
 void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface_t *pNewTextSurface, int iNewTextWidth, int iNewTextHeight);
 void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface_t *pNewIconSurface, int iNewIconSize);

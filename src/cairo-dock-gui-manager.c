@@ -89,21 +89,15 @@ extern CairoDock *g_pMainDock;
 extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
 extern CairoDockDesktopEnv g_iDesktopEnv;
 extern gchar *g_cCurrentLaunchersPath;
+extern gchar *g_cCairoDockDataDir;
 extern gboolean g_bEasterEggs;
 
-/*const gchar *cCategoriesDescription[2*CAIRO_DOCK_NB_CATEGORY] = {
-	N_("Behaviour"), "gtk-preferences",
-	N_("Appearance"), "gtk-color-picker",
-	N_("Accessories"), "gtk-dnd-multiple",
-	N_("Desktop"), "gtk-file",
-	N_("Controlers"), "gtk-zoom-fit",
-	N_("Plug-ins"), "gtk-disconnect" };*/
 const gchar *cCategoriesDescription[2*CAIRO_DOCK_NB_CATEGORY] = {
-	N_("Behaviour"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-behavior.svg",
-	N_("Appearance"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-appearance.svg",
-	N_("Accessories"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-accessories.png",
-	N_("Desktop"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-desktop.svg",
-	N_("Controlers"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-controler.png",
+	N_("Behaviour"), "icon-behavior.svg",
+	N_("Appearance"), "icon-appearance.svg",
+	N_("Accessories"), "icon-accessories.png",
+	N_("Desktop"), "icon-desktop.svg",
+	N_("Controlers"), "icon-controler.png",
 	N_("Plug-ins"), "gtk-disconnect" };
 
 static int iNbConfigDialogs = 0;
@@ -142,13 +136,10 @@ static void _cairo_dock_reset_current_widget_list (void)
 }
 
 
-static void _cairo_dock_add_image_on_button (GtkWidget *pButton, const gchar *cImage, int iSize)
+static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
 {
-	if (cImage == NULL)
-		return ;
-	
 	GtkWidget *pImage = NULL;
-	if (*cImage != '/')
+	if (strncmp (cImage, "gtk-", 4) == 0)
 	{
 		if (iSize >= 48)
 			iSize = GTK_ICON_SIZE_DIALOG;
@@ -160,13 +151,31 @@ static void _cairo_dock_add_image_on_button (GtkWidget *pButton, const gchar *cI
 	}
 	else
 	{
-		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cImage, iSize, iSize, NULL);
+		gchar *cPath = NULL;
+		if (*cImage != '/')
+		{
+			cPath = g_strconcat (g_cCairoDockDataDir, "/config-panel/", cImage, NULL);
+			if (!g_file_test (cPath, G_FILE_TEST_EXISTS))
+			{
+				g_free (cPath);
+				cPath = g_strconcat (CAIRO_DOCK_SHARE_DATA_DIR"/", cImage, NULL);
+			}
+		}
+		
+		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cPath ? cPath : cImage, iSize, iSize, NULL);
 		if (pixbuf != NULL)
 		{
 			pImage = gtk_image_new_from_pixbuf (pixbuf);
 			gdk_pixbuf_unref (pixbuf);
 		}
 	}
+	return pImage;
+}
+static void _cairo_dock_add_image_on_button (GtkWidget *pButton, const gchar *cImage, int iSize)
+{
+	if (cImage == NULL)
+		return ;
+	GtkWidget *pImage = _make_image (cImage, iSize);
 	if (pImage != NULL)
 		gtk_button_set_image (GTK_BUTTON (pButton), pImage);  /// unref l'image ?...
 }
@@ -175,28 +184,8 @@ static GtkToolItem *_cairo_dock_make_toolbutton (const gchar *cLabel, const gcha
 	if (cImage == NULL)
 		return gtk_tool_button_new (NULL, cLabel);
 	
-	GtkWidget *pImage = NULL;
-	if (*cImage != '/')
-	{
-		if (iSize >= 48)
-			iSize = GTK_ICON_SIZE_DIALOG;
-		else if (iSize >= 32)
-			iSize = GTK_ICON_SIZE_LARGE_TOOLBAR;
-		else
-			iSize = GTK_ICON_SIZE_BUTTON;
-		pImage = gtk_image_new_from_stock (cImage, iSize);
-	}
-	else
-	{
-		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cImage, iSize, iSize, NULL);
-		if (pixbuf != NULL)
-		{
-			pImage = gtk_image_new_from_pixbuf (pixbuf);
-			gdk_pixbuf_unref (pixbuf);
-		}
-	}
-	
-	GtkToolItem *pWidget = gtk_tool_button_new (pImage, NULL);
+	GtkWidget *pImage = _make_image (cImage, iSize);
+	GtkToolItem *pWidget = gtk_tool_button_new (pImage, "");  // il n'aime pas NULL ...
 	if (cLabel == NULL)
 		return pWidget;
 	
@@ -247,7 +236,6 @@ static inline CairoDockGroupDescription *_cairo_dock_add_group_button (const gch
 		FALSE,
 		0);
 	
-	/// Essayer de regrouper le label et l'icone dans le bouton, et mettre a jour la recherche dans le nom du groupe...
 	GtkWidget *pGroupButton = gtk_button_new ();
 	if (bConfigurable)
 		g_signal_connect (G_OBJECT (pGroupButton), "clicked", G_CALLBACK(on_click_group_button), pGroupDescription);
@@ -567,8 +555,8 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	gtk_container_add (GTK_CONTAINER (pFilterLabelContainer), pLabel);
 	
 	gtk_frame_set_label_widget (GTK_FRAME (pFilterFrame), pFilterLabelContainer);
-	gtk_container_set_border_width (GTK_CONTAINER (s_pGroupFrame), CAIRO_DOCK_GUI_MARGIN);
-	gtk_frame_set_shadow_type (GTK_FRAME (s_pGroupFrame), GTK_SHADOW_OUT);
+	gtk_container_set_border_width (GTK_CONTAINER (pFilterFrame), CAIRO_DOCK_GUI_MARGIN);
+	gtk_frame_set_shadow_type (GTK_FRAME (pFilterFrame), GTK_SHADOW_OUT);
 	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
 		pFilterFrame,
 		FALSE,

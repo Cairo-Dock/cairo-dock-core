@@ -480,7 +480,7 @@ static void _cairo_dock_quick_hide_one_root_dock (const gchar *cDockName, CairoD
 {
 	if (pDock->iRefCount == 0)
 	{
-		pDock->bAtBottom = FALSE;  // car on a deja quitte le dock lors de la fermeture du menu, donc le "leave-notify" serait ignore.
+		///pDock->bAtBottom = FALSE;  // car on a deja quitte le dock lors de la fermeture du menu, donc le "leave-notify" serait ignore.
 		pDock->bAutoHideInitialValue = pDock->bAutoHide;
 		pDock->bAutoHide = TRUE;
 		pDock->bEntranceDisabled = TRUE;
@@ -515,9 +515,10 @@ static void _cairo_dock_stop_quick_hide_one_root_dock (const gchar *cDockName, C
 		{
 			pDock->fFoldingFactor = 0;
 			
-			cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MAX_SIZE);
-			pDock->bActive = FALSE;  // l'input shape sera mise lors du configure.
-			pDock->bAtBottom = FALSE;
+			///cairo_dock_move_resize_dock (pDock);
+			cairo_dock_start_showing (pDock);
+			///pDock->bActive = FALSE;  // l'input shape sera mise lors du configure.
+			///pDock->bIsHidden = FALSE;
 		}
 	}
 }

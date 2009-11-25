@@ -57,135 +57,98 @@ extern gboolean g_bUseOpenGL;
 extern CairoDock *g_pMainDock;
 extern gboolean g_bEasterEggs;
 
-gboolean cairo_dock_move_up (CairoDock *pDock)
+/**gboolean cairo_dock_move_up (CairoDock *pDock)
 {
 	int deltaY_possible;
 	deltaY_possible = pDock->container.iWindowPositionY - (pDock->container.bDirectionUp ? g_iXScreenHeight[pDock->container.bIsHorizontal] - pDock->iMaxDockHeight - pDock->iGapY : pDock->iGapY);
 	//g_print ("%s (%dx%d -> %d)\n", __func__, pDock->container.iWindowPositionX, pDock->container.iWindowPositionY, deltaY_possible);
 	
-	if (g_bEasterEggs)
+	if ((pDock->container.bDirectionUp && deltaY_possible > 0) || (! pDock->container.bDirectionUp && deltaY_possible < 0))  // alors on peut encore monter.
 	{
-		pDock->fHideOffset -= (deltaY_possible - pDock->fHideOffset) * mySystem.fMoveUpSpeed;
-		gtk_widget_queue_draw (pDock->container.pWidget);
-		if (pDock->fHideOffset <= 0)
-		{
-			pDock->fHideOffset = 0;
-			pDock->bIsHidden = FALSE;
-			pDock->iSidMoveUp = 0;
-			return FALSE;
-		}
+		pDock->container.iWindowPositionY -= (int) (deltaY_possible * mySystem.fMoveUpSpeed) + (pDock->container.bDirectionUp ? 1 : -1);
+		//g_print ("  move to (%dx%d)\n", g_iWindowPositionX, g_iWindowPositionY);
+		if (pDock->container.bIsHorizontal)
+			gtk_window_move (GTK_WINDOW (pDock->container.pWidget), pDock->container.iWindowPositionX, pDock->container.iWindowPositionY);
 		else
-		{
-			return TRUE;
-		}
+			gtk_window_move (GTK_WINDOW (pDock->container.pWidget), pDock->container.iWindowPositionY, pDock->container.iWindowPositionX);
+		pDock->bAtBottom = FALSE;
+		return TRUE;
 	}
 	else
 	{
-		if ((pDock->container.bDirectionUp && deltaY_possible > 0) || (! pDock->container.bDirectionUp && deltaY_possible < 0))  // alors on peut encore monter.
-		{
-			pDock->container.iWindowPositionY -= (int) (deltaY_possible * mySystem.fMoveUpSpeed) + (pDock->container.bDirectionUp ? 1 : -1);
-			//g_print ("  move to (%dx%d)\n", g_iWindowPositionX, g_iWindowPositionY);
-			if (pDock->container.bIsHorizontal)
-				gtk_window_move (GTK_WINDOW (pDock->container.pWidget), pDock->container.iWindowPositionX, pDock->container.iWindowPositionY);
-			else
-				gtk_window_move (GTK_WINDOW (pDock->container.pWidget), pDock->container.iWindowPositionY, pDock->container.iWindowPositionX);
-			pDock->bAtBottom = FALSE;
-			return TRUE;
-		}
-		else
-		{
-			//pDock->bAtTop = TRUE;
-			pDock->iSidMoveUp = 0;
-			return FALSE;
-		}
+		//pDock->bAtTop = TRUE;
+		pDock->iSidMoveUp = 0;
+		return FALSE;
 	}
 }
 
 gboolean cairo_dock_move_down (CairoDock *pDock)
 {
 	//g_print ("%s ()\n", __func__);
-	if (pDock->iMagnitudeIndex > 0/** || (mySystem.bResetScrollOnLeave && pDock->iScrollOffset != 0)*/)  // on retarde le cachage du dock pour apercevoir les effets.
+	if (pDock->iMagnitudeIndex > 0)  // on retarde le cachage du dock pour apercevoir les effets.
 		return TRUE;
 	int deltaY_possible = (pDock->container.bDirectionUp ? g_iXScreenHeight[pDock->container.bIsHorizontal] - pDock->iGapY - 0 : pDock->iGapY + 0 - pDock->iMaxDockHeight) - pDock->container.iWindowPositionY;  // 0 <-> g_iVisibleZoneHeight
 	//g_print ("%s (%d)\n", __func__, deltaY_possible);
-	if (g_bEasterEggs)
+	
+	if ((pDock->container.bDirectionUp && deltaY_possible > 8) || (! pDock->container.bDirectionUp && deltaY_possible < -8))  // alors on peut encore descendre.
 	{
-		pDock->fHideOffset += (deltaY_possible - pDock->fHideOffset) * mySystem.fMoveUpSpeed;
-		gtk_widget_queue_draw (pDock->container.pWidget);
-		if (pDock->fHideOffset >= deltaY_possible)
-		{
-			pDock->fHideOffset = deltaY_possible;
-			pDock->bIsHidden = TRUE;
-			pDock->iSidMoveUp = 0;
-			return FALSE;
-		}
+		pDock->container.iWindowPositionY += (int) (deltaY_possible * mySystem.fMoveDownSpeed) + (pDock->container.bDirectionUp ? 1 : -1);  // 0.33
+		//g_print ("pDock->container.iWindowPositionY <- %d\n", pDock->container.iWindowPositionY);
+		if (pDock->container.bIsHorizontal)
+			gtk_window_move (GTK_WINDOW (pDock->container.pWidget), pDock->container.iWindowPositionX, pDock->container.iWindowPositionY);
 		else
-		{
-			return TRUE;
-		}
+			gtk_window_move (GTK_WINDOW (pDock->container.pWidget), pDock->container.iWindowPositionY, pDock->container.iWindowPositionX);
+		//pDock->bAtTop = FALSE;
+		gtk_widget_queue_draw (pDock->container.pWidget);
+		return TRUE;
 	}
-	else
+	else  // on se fixe en bas, et on montre la zone visible.
 	{
-		if ((pDock->container.bDirectionUp && deltaY_possible > 8) || (! pDock->container.bDirectionUp && deltaY_possible < -8))  // alors on peut encore descendre.
+		cd_debug ("  on se fixe en bas");
+		pDock->bAtBottom = TRUE;
+		pDock->iSidMoveDown = 0;
+		cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MIN_SIZE);
+		if (pDock->pShapeBitmap && ! pDock->bActive)
 		{
-			pDock->container.iWindowPositionY += (int) (deltaY_possible * mySystem.fMoveDownSpeed) + (pDock->container.bDirectionUp ? 1 : -1);  // 0.33
-			//g_print ("pDock->container.iWindowPositionY <- %d\n", pDock->container.iWindowPositionY);
-			if (pDock->container.bIsHorizontal)
-				gtk_window_move (GTK_WINDOW (pDock->container.pWidget), pDock->container.iWindowPositionX, pDock->container.iWindowPositionY);
-			else
-				gtk_window_move (GTK_WINDOW (pDock->container.pWidget), pDock->container.iWindowPositionY, pDock->container.iWindowPositionX);
-			//pDock->bAtTop = FALSE;
-			gtk_widget_queue_draw (pDock->container.pWidget);
-			return TRUE;
+			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+				NULL,
+				0,
+				0);
 		}
-		else  // on se fixe en bas, et on montre la zone visible.
+		pDock->bActive = TRUE;
+		
+		if (pDock->bAutoHide && pDock->iRefCount == 0)
 		{
-			cd_debug ("  on se fixe en bas");
-			pDock->bAtBottom = TRUE;
-			pDock->iSidMoveDown = 0;
-			cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MIN_SIZE);
-			if (pDock->pShapeBitmap && ! pDock->bActive)
+			//g_print ("on arrete les animations\n");
+			Icon *pIcon;
+			GList *ic;
+			for (ic = pDock->icons; ic != NULL; ic = ic->next)
 			{
-				gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-					NULL,
-					0,
-					0);
-			}
-			pDock->bActive = TRUE;
-			
-			if (pDock->bAutoHide && pDock->iRefCount == 0)
-			{
-				//g_print ("on arrete les animations\n");
-				Icon *pIcon;
-				GList *ic;
-				for (ic = pDock->icons; ic != NULL; ic = ic->next)
+				pIcon = ic->data;
+				if (pIcon->fPersonnalScale != 0)
 				{
-					pIcon = ic->data;
-					if (pIcon->fPersonnalScale != 0)
-					{
-						if (pIcon->fPersonnalScale > 0)
-							pIcon->fPersonnalScale = 0.05;
-						else
-							pIcon->fPersonnalScale = - 0.05;
-					}
-					
-					cairo_dock_stop_icon_animation (pIcon);  // s'il y'a une animation en cours, on l'arrete.
+					if (pIcon->fPersonnalScale > 0)
+						pIcon->fPersonnalScale = 0.05;
+					else
+						pIcon->fPersonnalScale = - 0.05;
 				}
-				///pDock->iScrollOffset = 0;
-
-				///pDock->pRenderer->compute_size (pDock);  // utilite ?...
-				pDock->pRenderer->calculate_icons (pDock);
-				pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? 1. : 0.);  // on arme le depliage.
-
-				cairo_dock_allow_entrance (pDock);
+				
+				cairo_dock_stop_icon_animation (pIcon);  // s'il y'a une animation en cours, on l'arrete.
 			}
-			
-			gtk_widget_queue_draw (pDock->container.pWidget);
+			///pDock->iScrollOffset = 0;
 
-			return FALSE;
+			///pDock->pRenderer->compute_size (pDock);  // utilite ?...
+			pDock->pRenderer->calculate_icons (pDock);
+			pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? 1. : 0.);  // on arme le depliage.
+
+			cairo_dock_allow_entrance (pDock);
 		}
+		
+		gtk_widget_queue_draw (pDock->container.pWidget);
+
+		return FALSE;
 	}
-}
+}*/
 
 
 
@@ -450,30 +413,16 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				}
 				else if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->fFoldingFactor != 0)  // si le dock se replie, inutile de rester en taille grande avec une fenetre transparente, ca perturbe.
 				{
-					
-					cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MIN_SIZE);
-					if (pDock->pShapeBitmap && ! pDock->bActive)
+					///cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MIN_SIZE);
+					if (pDock->pHiddenShapeBitmap && ! pDock->bIsHidden)
 					{
 						gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-							NULL,
+							pDock->pHiddenShapeBitmap,
 							0,
 							0);
 					}
-					pDock->bActive = TRUE;
-					/*int iNewWidth, iNewHeight;
-					cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MIN_SIZE, &iNewWidth, &iNewHeight);
-					if (pDock->container.bIsHorizontal)
-						gdk_window_move_resize (pDock->container.pWidget->window,
-							pDock->container.iWindowPositionX,
-							pDock->container.iWindowPositionY,
-							iNewWidth,
-							iNewHeight);
-					else
-						gdk_window_move_resize (pDock->container.pWidget->window,
-							pDock->container.iWindowPositionY,
-							pDock->container.iWindowPositionX,
-							iNewHeight,
-							iNewWidth);*/
+					pDock->bIsHidden = TRUE;
+					pDock->bActive = FALSE;
 				}
 				
 				//\__________________ On se cache si sous-dock.
@@ -483,15 +432,14 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 					gtk_widget_hide (pDock->container.pWidget);
 					cairo_dock_hide_parent_dock (pDock);
 				}
-
-				pDock->bAtBottom = TRUE;
+				///pDock->bAtBottom = TRUE;
 				cairo_dock_hide_dock_like_a_menu ();
 			}
 			else
 			{
 				cairo_dock_calculate_dock_icons (pDock);  // relance le grossissement si on est dedans.
-				if (! pDock->bIsGrowingUp)
-					pDock->bAtBottom = TRUE;
+				///if (! pDock->bIsGrowingUp)
+				///	pDock->bAtBottom = TRUE;
 			}
 		}
 		return (!pDock->bIsGrowingUp && (pDock->fDecorationsOffsetX != 0 || (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != 1)));
@@ -500,6 +448,59 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 	{
 		return (!pDock->bIsGrowingUp);
 	}
+}
+
+static gboolean _cairo_dock_hide (CairoDock *pDock)
+{
+	if (pDock->iMagnitudeIndex > 0)  // on retarde le cachage du dock pour apercevoir les effets.
+		return TRUE;
+	
+	pDock->fHideOffset += (1 - pDock->fHideOffset) * mySystem.fMoveDownSpeed;
+	if (pDock->fHideOffset > .99)
+	{
+		pDock->fHideOffset = 1;
+		pDock->bIsHidden = TRUE;
+		
+		//g_print ("on arrete les animations\n");
+		Icon *pIcon;
+		GList *ic;
+		for (ic = pDock->icons; ic != NULL; ic = ic->next)
+		{
+			pIcon = ic->data;
+			if (pIcon->fPersonnalScale != 0)  // on accelere l'animation d'apparition/disparition.
+			{
+				if (pIcon->fPersonnalScale > 0)
+					pIcon->fPersonnalScale = 0.05;
+				else
+					pIcon->fPersonnalScale = - 0.05;
+			}
+			
+			cairo_dock_stop_icon_animation (pIcon);  // s'il y'a une autre animation en cours, on l'arrete.
+		}
+		
+		pDock->pRenderer->calculate_icons (pDock);
+		pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? 1. : 0.);  // on arme le depliage.
+		
+		cairo_dock_allow_entrance (pDock);
+		
+		cairo_dock_replace_all_dialogs ();
+		
+		return FALSE;
+	}
+	return TRUE;
+}
+
+static gboolean _cairo_dock_show (CairoDock *pDock)
+{
+	pDock->fHideOffset -= pDock->fHideOffset * mySystem.fMoveUpSpeed;
+	pDock->bIsHidden = FALSE;
+	if (pDock->fHideOffset < 0.01)
+	{
+		pDock->fHideOffset = 0;
+		cairo_dock_allow_entrance (pDock);
+		return FALSE;
+	}
+	return TRUE;
 }
 
 
@@ -570,6 +571,18 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 		pDock->bIsGrowingUp = _cairo_dock_grow_up (pDock);
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 		bContinue |= pDock->bIsGrowingUp;
+	}
+	if (pDock->bIsHiding)
+	{
+		pDock->bIsHiding = _cairo_dock_hide (pDock);
+		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
+		bContinue |= pDock->bIsHiding;
+	}
+	if (pDock->bIsShowing)
+	{
+		pDock->bIsShowing = _cairo_dock_show (pDock);
+		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
+		bContinue |= pDock->bIsShowing;
 	}
 	//g_print (" => %d, %d\n", pDock->bIsShrinkingDown, pDock->bIsGrowingUp);
 	
@@ -773,6 +786,7 @@ void cairo_dock_start_shrinking (CairoDock *pDock)
 
 void cairo_dock_start_growing (CairoDock *pDock)
 {
+	//g_print ("%s (%d)\n", __func__, pDock->bIsGrowingUp);
 	if (! pDock->bIsGrowingUp)  // on lance l'animation.
 	{
 		pDock->bIsShrinkingDown = FALSE;
@@ -781,6 +795,46 @@ void cairo_dock_start_growing (CairoDock *pDock)
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
 }
+
+void cairo_dock_start_hiding (CairoDock *pDock)
+{
+	//g_print ("%s (%d)\n", __func__, pDock->container.bInside);
+	if (! pDock->bIsHiding && ! pDock->container.bInside)  // rien de plus desagreable que le dock qui se cache quand on est dedans.
+	{
+		pDock->bIsShowing = FALSE;
+		pDock->bIsHiding = TRUE;
+		
+		if (pDock->pHiddenShapeBitmap)
+		{
+			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+				pDock->pHiddenShapeBitmap,
+				0,
+				0);
+		}
+		pDock->bActive = FALSE;
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
+	}
+}
+
+void cairo_dock_start_showing (CairoDock *pDock)
+{
+	if (! pDock->bIsShowing)  // on lance l'animation.
+	{
+		pDock->bIsShowing = TRUE;
+		pDock->bIsHiding = FALSE;
+		
+		if (pDock->pShapeBitmap && ! pDock->bActive)
+		{
+			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+				NULL,
+				0,
+				0);
+		}
+		pDock->bActive = TRUE;
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
+	}
+}
+
 
 void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 {
