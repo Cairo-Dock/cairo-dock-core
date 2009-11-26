@@ -167,21 +167,11 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	cairo_dock_set_icons_geometry_for_window_manager (pDock);  // se fait sur le dock a plat, qu'on vient de calculer. Neanmoins ici ce sera probablement une approximation.
 	pDock->bWMIconseedsUptade = TRUE;
 	
-	/**if (! pDock->container.bInside && pDock->bIsHidden && pDock->bAutoHide && pDock->iRefCount == 0)
-	{
-		cairo_dock_move_resize_dock (pDock, CAIRO_DOCK_MIN_SIZE);
-		return;
-	}*/
+	cairo_dock_update_input_shape (pDock);
+	
 	if (GTK_WIDGET_VISIBLE (pDock->container.pWidget))
 	{
 		cairo_dock_move_resize_dock (pDock);
-	}
-	
-	cairo_dock_update_input_shape (pDock);
-	
-	if (! pDock->container.bInside && pDock->bIsHidden && pDock->bAutoHide && pDock->iRefCount == 0)
-	{
-		return;
 	}
 	
 	cairo_dock_update_background_decorations_if_necessary (pDock, pDock->iDecorationsWidth, pDock->iDecorationsHeight);
@@ -197,6 +187,11 @@ Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock)
 	return (pDock->iMousePositionType == CAIRO_DOCK_MOUSE_INSIDE ? pPointedIcon : NULL);
 }
 
+
+
+  ////////////////////////////////
+ /// WINDOW SIZE AND POSITION ///
+////////////////////////////////
 
 void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 {
@@ -255,8 +250,6 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_TOOLBAR");  // idem.*/
 }
 
-
-
 void cairo_dock_prevent_dock_from_out_of_screen (CairoDock *pDock)
 {
 	int x, y;  // position du point invariant du dock.
@@ -311,41 +304,8 @@ void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 	*iNewPositionY = iWindowPositionY + pDock->iScreenOffsetY;
 }
 
-/**void cairo_dock_get_window_position_and_geometry_at_balance (CairoDock *pDock, CairoDockSizeType iSizeType, int *iNewWidth, int *iNewHeight)
-{
-	//g_print ("%s (%d)\n", __func__, iSizeType);
-	if (iSizeType == CAIRO_DOCK_MAX_SIZE)
-	{
-		*iNewWidth = pDock->iMaxDockWidth;
-		*iNewHeight = pDock->iMaxDockHeight;
-		pDock->iLeftMargin = pDock->iMaxLeftMargin;
-		pDock->iRightMargin = pDock->iMaxRightMargin;
-	}
-	else if (iSizeType == CAIRO_DOCK_NORMAL_SIZE)
-	{
-		*iNewWidth = pDock->iMinDockWidth;
-		*iNewHeight = pDock->iMinDockHeight;
-		pDock->iLeftMargin = pDock->iMinLeftMargin;
-		pDock->iRightMargin = pDock->iMinRightMargin;
-	}
-	else
-	{
-		*iNewWidth = MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth);
-		*iNewHeight = MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight);
-		pDock->iLeftMargin = 0;
-		pDock->iRightMargin = 0;
-	}
-	
-	int iNewPositionX, iNewPositionY;
-	cairo_dock_get_window_position_at_balance (pDock, *iNewWidth, *iNewHeight, &iNewPositionX, &iNewPositionY);
-	pDock->container.iWindowPositionX = iNewPositionX;
-	pDock->container.iWindowPositionY = iNewPositionY;
-}*/
-
 void cairo_dock_move_resize_dock (CairoDock *pDock)
 {
-	///int iNewWidth, iNewHeight;
-	///cairo_dock_get_window_position_and_geometry_at_balance (pDock, iSizeType, &iNewWidth, &iNewHeight);  // iMagnitudeIndex > 0 rajoute le 23/08/09, a priori ca doit corriger le probleme d'icones trop grande par rapport au dock.
 	int iNewWidth = pDock->iMaxDockWidth;
 	int iNewHeight = pDock->iMaxDockHeight;
 	int iNewPositionX, iNewPositionY;
@@ -367,17 +327,6 @@ void cairo_dock_move_resize_dock (CairoDock *pDock)
 			iNewHeight,
 			iNewWidth);
 	}
-	/**if (iSizeType == CAIRO_DOCK_MIN_SIZE)
-	{
-		if (pDock->pShapeBitmap && ! pDock->bActive)
-		{
-			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-				NULL,
-				0,
-				0);
-		}
-		pDock->bActive = TRUE;
-	}*/
 }
 
 void cairo_dock_place_root_dock (CairoDock *pDock)
@@ -386,6 +335,10 @@ void cairo_dock_place_root_dock (CairoDock *pDock)
 	cairo_dock_move_resize_dock (pDock);
 }
 
+
+  ///////////////////
+ /// INPUT SHAPE ///
+///////////////////
 
 GdkBitmap *cairo_dock_create_input_shape (CairoDock *pDock, int w, int h)
 {
@@ -426,19 +379,19 @@ GdkBitmap *cairo_dock_create_input_shape (CairoDock *pDock, int w, int h)
 
 void cairo_dock_update_input_shape (CairoDock *pDock)
 {
+	//\_______________ On detruit les zones d'input actuelles.
 	if (pDock->pShapeBitmap != NULL)
 	{
 		g_object_unref ((gpointer) pDock->pShapeBitmap);
 		pDock->pShapeBitmap = NULL;
 	}
-	
 	if (pDock->pHiddenShapeBitmap != NULL)
 	{
 		g_object_unref ((gpointer) pDock->pHiddenShapeBitmap);
 		pDock->pHiddenShapeBitmap = NULL;
 	}
 	
-	// on definit les tailles du bitmap (taille de la fenetre) et de la zone d'inupt.
+	//\_______________ on definit les tailles des zones.
 	int W = pDock->iMaxDockWidth;
 	int H = pDock->iMaxDockHeight;
 	int w = pDock->iMinDockWidth;
@@ -446,34 +399,32 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	int w_ = MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth);
 	int h_ = MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight);
 	
-	// on verifie que les conditions sont toujours remplies.
+	//\_______________ on verifie que les conditions sont toujours remplies.
 	if (w == 0 || h == 0 || pDock->iRefCount > 0 || W == 0 || H == 0)
 	{
-		if (! pDock->bActive)
+		if (pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
 		{
 			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 				NULL,
 				0,
 				0);
+			pDock->iInputState = CAIRO_DOCK_INPUT_ACTIVE;
 		}
-		pDock->bActive = TRUE;
-		pDock->bIsHidden = FALSE;
 		return ;
 	}
 	
-	// on cree l'input shape.
-	///if (!pDock->bAutoHide)
-		pDock->pShapeBitmap = cairo_dock_create_input_shape (pDock, w, h);
+	//\_______________ on cree les zones.
+	pDock->pShapeBitmap = cairo_dock_create_input_shape (pDock, w, h);
 	
 	pDock->pHiddenShapeBitmap = cairo_dock_create_input_shape (pDock, w_, h_);
 }
 
 
 
-
   ///////////////////
  /// LINEAR DOCK ///
 ///////////////////
+
 GList *cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, double fFlatDockWidth, int iXOffset)
 {
 	//g_print ("%s (%d, +%d)\n", __func__, fFlatDockWidth, iXOffset);
@@ -766,9 +717,9 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 		else
 			iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;
 	}
-	else if ((pDock->container.bDirectionUp && iMouseY >= iExtraHeight && iMouseY <= iHeight) || (!pDock->container.bDirectionUp && iMouseY >= 0 && iMouseY <= iHeight - iExtraHeight))  // et en plus on est dedans en y.  //  && pPointedIcon != NULL
+	else if ((pDock->container.bDirectionUp && iMouseY >= iExtraHeight && iMouseY < iHeight) || (!pDock->container.bDirectionUp && iMouseY >= 0 && iMouseY < iHeight - iExtraHeight))  // et en plus on est dedans en y.  //  && pPointedIcon != NULL
 	{
-		//g_print ("on est dedans en x et en y (iMouseX=%d => x_abs=%d)\n", iMouseX, x_abs);
+		//g_print ("on est dedans en x et en y (iMouseX=%d => x_abs=%d ; iMouseY=%d/%d)\n", iMouseX, x_abs, iMouseY, iHeight);
 		//pDock->container.bInside = TRUE;
 		iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
 	}
@@ -787,29 +738,20 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 			//g_print ("INSIDE (%d;%d;%d;%d;%.2f)\n", cairo_dock_entrance_is_allowed (pDock), pDock->iMagnitudeIndex, pDock->bIsGrowingUp, pDock->bIsShrinkingDown, pDock->fFoldingFactor);
 			if (cairo_dock_entrance_is_allowed (pDock) && ((pDock->iMagnitudeIndex < CAIRO_DOCK_NB_MAX_ITERATIONS && ! pDock->bIsGrowingUp) || pDock->bIsShrinkingDown ))  // on est dedans et la taille des icones est non maximale bien que le dock ne soit pas en train de grossir.  ///  && pDock->iSidMoveDown == 0
 			{
-				//g_print ("on est dedans en x et en y et la taille des icones est non maximale bien qu'aucune icone  ne soit animee (%d;%d)\n", pDock->bAtBottom, pDock->container.bInside);
+				//g_print ("on est dedans en x et en y et la taille des icones est non maximale bien qu'aucune icone  ne soit animee (%d;%d)\n", pDock->iMagnitudeIndex, pDock->container.bInside);
 				//pDock->container.bInside = TRUE;
 				///if ((pDock->bAtBottom && pDock->iRefCount == 0 && ! pDock->bAutoHide) || (pDock->container.iWidth != pDock->iMaxDockWidth || pDock->container.iHeight != pDock->iMaxDockHeight) || (!pDock->container.bInside))  // on le fait pas avec l'auto-hide, car un signal d'entree est deja emis a cause des mouvements/redimensionnements de la fenetre, et en rajouter un ici fout le boxon.  // !pDock->container.bInside ajoute pour le bug du chgt de bureau.
-				if (pDock->iRefCount == 0 || !pDock->container.bInside)
+				if ((pDock->iMagnitudeIndex == 0 && pDock->iRefCount == 0 && ! pDock->bAutoHide) || !pDock->container.bInside)
 				{
-					//g_print ("  on emule une re-rentree (pDock->iMagnitudeIndex:%d)\n", pDock->iMagnitudeIndex);
+					g_print ("  on emule une re-rentree (pDock->iMagnitudeIndex:%d)\n", pDock->iMagnitudeIndex);
 					g_signal_emit_by_name (pDock->container.pWidget, "enter-notify-event", NULL, &bReturn);
 				}
 				else // on se contente de faire grossir les icones.
 				{
-					//g_print ("  on se contente de faire grossir les icones\n");
+					g_print ("  on se contente de faire grossir les icones\n");
 					cairo_dock_start_growing (pDock);
-					
-					cairo_dock_start_showing (pDock);
-					
-					/**pDock->bAtBottom = FALSE;
-					if (pDock->iSidMoveDown != 0)
-					{
-						g_source_remove (pDock->iSidMoveDown);
-						pDock->iSidMoveDown = 0;
-					}
-					if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->iSidMoveUp == 0)
-						pDock->iSidMoveUp = g_timeout_add (40, (GSourceFunc) cairo_dock_move_up, pDock);*/
+					if (pDock->bAutoHide && pDock->iRefCount == 0)
+						cairo_dock_start_showing (pDock);
 				}
 			}
 		break ;
@@ -823,7 +765,7 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 		case CAIRO_DOCK_MOUSE_OUTSIDE :
 			//g_print ("en dehors du dock (bIsShrinkingDown:%d;bIsGrowingUp:%d;iMagnitudeIndex:%d;bAtBottom:%d)\n", pDock->bIsShrinkingDown, pDock->bIsGrowingUp, pDock->iMagnitudeIndex, pDock->bAtBottom);
 			///pDock->fDecorationsOffsetX = - pDock->container.iWidth / 2;  // on fixe les decorations.
-			if (! pDock->bIsGrowingUp && ! pDock->bIsShrinkingDown && pDock->iSidLeaveDemand == 0 /**&& ! pDock->bAtBottom*/ && pDock->iMagnitudeIndex > 0 && ! pDock->bIconIsFlyingAway)  // bAtBottom ajoute pour la 1.5.4
+			if (! pDock->bIsGrowingUp && ! pDock->bIsShrinkingDown && pDock->iSidLeaveDemand == 0 && pDock->iMagnitudeIndex > 0 && ! pDock->bIconIsFlyingAway)
 			{
 				g_print ("on force a quitter (iRefCount:%d)\n", pDock->iRefCount);
 				if (pDock->iRefCount > 0 && myAccessibility.iLeaveSubDockDelay > 0)

@@ -1261,31 +1261,54 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 			CairoDock *pClassmateDock = (pClassmate ? cairo_dock_search_dock_from_name (pClassmate->cParentDockName) : NULL);
 			if (myTaskBar.bGroupAppliByClass && pClassmate != NULL && pClassmateDock != NULL)  // on va se grouper avec cette icone.
 			{
-				x = pClassmateDock->container.iWindowPositionX + pClassmate->fXAtRest + (pClassmateDock->container.iWidth - pClassmateDock->fFlatDockWidth) / 2;
-				y = pClassmateDock->container.iWindowPositionY + pClassmate->fDrawY - pClassmate->fHeight * myIcons.fAmplitude * pClassmateDock->fMagnitudeMax;  // il faudrait un fYAtRest ...
-				
-				if (pMainDock->bIsHidden)
+				x = x_icon_geometry (pClassmate, pClassmateDock);
+				if (cairo_dock_is_hidden (pMainDock))
 				{
-					
+					y = (pClassmateDock->container.bDirectionUp ? 0 : g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+				}
+				else
+				{
+					y = y_icon_geometry (pClassmate, pClassmateDock);
 				}
 			}
 			else if (myIcons.bMixApplisAndLaunchers && pClassmate != NULL && pClassmateDock != NULL)  // on va se placer a cote.
 			{
-				x = pClassmateDock->container.iWindowPositionX + pClassmate->fXAtRest + pClassmate->fWidth*1.5 + (pClassmateDock->container.iWidth - pClassmateDock->fFlatDockWidth) / 2;
-				y = pClassmateDock->container.iWindowPositionY + pClassmate->fDrawY - pClassmate->fHeight * myIcons.fAmplitude * pClassmateDock->fMagnitudeMax;  // il faudrait un fYAtRest ...
+				x = x_icon_geometry (pClassmate, pClassmateDock) + pClassmate->fWidth/2;
+				if (cairo_dock_is_hidden (pMainDock))
+				{
+					y = (pClassmateDock->container.bDirectionUp ? 0 : g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+				}
+				else
+				{
+					y = y_icon_geometry (pClassmate, pClassmateDock);
+				}
 			}
 			else  // on va se placer a la fin de la barre des taches.
 			{
 				Icon *pLastAppli = cairo_dock_get_last_icon_until_order (pMainDock->icons, CAIRO_DOCK_APPLI);
 				if (pLastAppli != NULL)  // on se placera juste apres.
 				{
-					x = pMainDock->container.iWindowPositionX + pLastAppli->fXAtRest + pLastAppli->fWidth*1.5 + (pMainDock->container.iWidth - pMainDock->fFlatDockWidth) / 2;
-					y = pMainDock->container.iWindowPositionY + pLastAppli->fDrawY - pLastAppli->fHeight * myIcons.fAmplitude * pMainDock->fMagnitudeMax;  // il faudrait un fYAtRest ...
+					x = x_icon_geometry (pLastAppli, pMainDock) + pLastAppli->fWidth/2;
+					if (cairo_dock_is_hidden (pMainDock))
+					{
+						y = (pMainDock->container.bDirectionUp ? 0 : g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+					}
+					else
+					{
+						y = y_icon_geometry (pLastAppli, pMainDock);
+					}
 				}
 				else  // aucune icone avant notre groupe, on sera insere en 1er.
 				{
 					x = pMainDock->container.iWindowPositionX + 0 + (pMainDock->container.iWidth - pMainDock->fFlatDockWidth) / 2;
-					y = pMainDock->container.iWindowPositionY;
+					if (cairo_dock_is_hidden (pMainDock))
+					{
+						y = (pMainDock->container.bDirectionUp ? 0 : g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+					}
+					else
+					{
+						y = pMainDock->container.iWindowPositionY;
+					}
 				}
 			}
 			//g_print (" - %s en (%d;%d)\n", icon->cName, x, y);
@@ -1301,6 +1324,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 		}
 	}
 }
+
 void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 {
 	if (! s_bAppliManagerIsRunning)

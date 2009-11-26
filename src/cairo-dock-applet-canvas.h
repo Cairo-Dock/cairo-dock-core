@@ -184,11 +184,13 @@ CD_APPLET_DEFINE_END
 #define CD_APPLET_INIT_ALL_BEGIN(pApplet) \
 CD_APPLET_INIT_PROTO (pApplet)\
 { \
+	g_pCurrentModule = pApplet;\
 	cd_message ("%s (%s)", __func__, pApplet->cConfFilePath);
 
 /** Fin de la fonction d'initialisation de l'applet.
 */
 #define CD_APPLET_INIT_END \
+	g_pCurrentModule = NULL;\
 }
 
 //\______________________ stop.
@@ -196,12 +198,14 @@ CD_APPLET_INIT_PROTO (pApplet)\
 */
 #define CD_APPLET_STOP_BEGIN \
 CD_APPLET_STOP_PROTO \
-{
+{\
+	g_pCurrentModule = myApplet;
 
 /** Fin de la fonction d'arret de l'applet.
 */
 #define CD_APPLET_STOP_END \
 	cairo_dock_release_data_slot (myApplet); \
+	g_pCurrentModule = NULL;\
 }
 
 //\______________________ reload.
@@ -210,11 +214,13 @@ CD_APPLET_STOP_PROTO \
 #define CD_APPLET_RELOAD_ALL_BEGIN \
 CD_APPLET_RELOAD_PROTO \
 { \
+	g_pCurrentModule = myApplet;\
 	cd_message ("%s (%s)\n", __func__, myApplet->cConfFilePath);
 
 /** Fin de la fonction de rechargement de l'applet.
 */
 #define CD_APPLET_RELOAD_END \
+	g_pCurrentModule = NULL;\
 	return TRUE; \
 }
 
@@ -225,11 +231,13 @@ CD_APPLET_RELOAD_PROTO \
 #define CD_APPLET_GET_CONFIG_ALL_BEGIN \
 CD_APPLET_READ_CONFIG_PROTO \
 { \
+	g_pCurrentModule = myApplet;\
 	gboolean bFlushConfFileNeeded = FALSE;
 
 /** Fin de la fonction de configuration de l'applet.
 */
 #define CD_APPLET_GET_CONFIG_END \
+	g_pCurrentModule = NULL;\
 	return bFlushConfFileNeeded; \
 }
 
@@ -238,10 +246,12 @@ CD_APPLET_READ_CONFIG_PROTO \
 */
 #define CD_APPLET_RESET_CONFIG_ALL_BEGIN \
 CD_APPLET_RESET_CONFIG_PROTO \
-{
+{\
+	g_pCurrentModule = myApplet;
 /** Fin de la fonction de liberation des donnees de la config.
 */
 #define CD_APPLET_RESET_CONFIG_ALL_END \
+	g_pCurrentModule = NULL;\
 }
 
 //\______________________ reset_data.
@@ -249,10 +259,12 @@ CD_APPLET_RESET_CONFIG_PROTO \
 */
 #define CD_APPLET_RESET_DATA_BEGIN \
 CD_APPLET_RESET_DATA_PROTO \
-{
+{\
+	g_pCurrentModule = myApplet;
 /** Fin de la fonction de liberation des donnees internes.
 */
 #define CD_APPLET_RESET_DATA_ALL_END \
+	g_pCurrentModule = NULL;\
 }
 
 //\______________________ on click.
@@ -261,13 +273,16 @@ CD_APPLET_RESET_DATA_PROTO \
 #define CD_APPLET_ON_CLICK_BEGIN \
 CD_APPLET_ON_CLICK_PROTO \
 { \
+	g_pCurrentModule = myApplet;\
 	if (pClickedIcon == myIcon || (myIcon != NULL && pClickedContainer == CAIRO_CONTAINER (myIcon->pSubDock)) || pClickedContainer == CAIRO_CONTAINER (myDesklet)) \
 	{
 /** Fin de la fonction de notification au clic gauche. Par defaut elle intercepte la notification si elle l'a recue.
 */
 #define CD_APPLET_ON_CLICK_END \
+		g_pCurrentModule = NULL;\
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \
 	} \
+	g_pCurrentModule = NULL;\
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
 }
 
@@ -277,6 +292,7 @@ CD_APPLET_ON_CLICK_PROTO \
 #define CD_APPLET_ON_BUILD_MENU_BEGIN \
 CD_APPLET_ON_BUILD_MENU_PROTO \
 { \
+	g_pCurrentModule = myApplet;\
 	if (pClickedIcon == myIcon || (myIcon != NULL && pClickedContainer == CAIRO_CONTAINER (myIcon->pSubDock)) || pClickedContainer == CAIRO_CONTAINER (myDesklet)) \
 	{ \
 		GtkWidget *pMenuItem, *image; \
@@ -286,6 +302,7 @@ CD_APPLET_ON_BUILD_MENU_PROTO \
 */
 #define CD_APPLET_ON_BUILD_MENU_END \
 	} \
+	g_pCurrentModule = NULL;\
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
 }
 
@@ -295,13 +312,16 @@ CD_APPLET_ON_BUILD_MENU_PROTO \
 #define CD_APPLET_ON_MIDDLE_CLICK_BEGIN \
 CD_APPLET_ON_MIDDLE_CLICK_PROTO \
 { \
+	g_pCurrentModule = myApplet;\
 	if (pClickedIcon == myIcon || (myIcon != NULL && pClickedContainer == CAIRO_CONTAINER (myIcon->pSubDock)) || pClickedContainer == CAIRO_CONTAINER (myDesklet)) \
 	{
 /** Fin de la fonction de notification du clic du milieu. Par defaut elle intercepte la notification si elle l'a recue.
 */
 #define CD_APPLET_ON_MIDDLE_CLICK_END \
+		g_pCurrentModule = NULL;\
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \
 	} \
+	g_pCurrentModule = NULL;\
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
 }
 
@@ -311,13 +331,16 @@ CD_APPLET_ON_MIDDLE_CLICK_PROTO \
 #define CD_APPLET_ON_DOUBLE_CLICK_BEGIN \
 CD_APPLET_ON_DOUBLE_CLICK_PROTO \
 { \
+	g_pCurrentModule = myApplet;\
 	if (pClickedIcon == myIcon || (myIcon != NULL && pClickedContainer == CAIRO_CONTAINER (myIcon->pSubDock)) || pClickedContainer == CAIRO_CONTAINER (myDesklet)) \
 	{
 /** Fin de la fonction de notification du clic du milieu. Par defaut elle intercepte la notification si elle l'a recue.
 */
 #define CD_APPLET_ON_DOUBLE_CLICK_END \
+		g_pCurrentModule = NULL;\
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \
 	} \
+	g_pCurrentModule = NULL;\
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
 }
 
@@ -327,14 +350,17 @@ CD_APPLET_ON_DOUBLE_CLICK_PROTO \
 #define CD_APPLET_ON_DROP_DATA_BEGIN \
 CD_APPLET_ON_DROP_DATA_PROTO \
 { \
+	g_pCurrentModule = myApplet;\
 	if (pClickedIcon == myIcon || (myIcon != NULL && pClickedContainer == CAIRO_CONTAINER (myIcon->pSubDock)) || pClickedContainer == CAIRO_CONTAINER (myDesklet)) \
 	{ \
 		g_return_val_if_fail (cReceivedData != NULL, CAIRO_DOCK_LET_PASS_NOTIFICATION);
 /** Fin de la fonction de notification du glisse-depose. Par defaut elle intercepte la notification si elle l'a recue.
 */
 #define CD_APPLET_ON_DROP_DATA_END \
+		g_pCurrentModule = NULL;\
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \
 	} \
+	g_pCurrentModule = NULL;\
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
 }
 
@@ -344,13 +370,16 @@ CD_APPLET_ON_DROP_DATA_PROTO \
 #define CD_APPLET_ON_SCROLL_BEGIN \
 CD_APPLET_ON_SCROLL_PROTO \
 { \
+	g_pCurrentModule = myApplet;\
 	if (pClickedIcon == myIcon || (myIcon != NULL && pClickedContainer == CAIRO_CONTAINER (myIcon->pSubDock)) || pClickedContainer == CAIRO_CONTAINER (myDesklet)) \
 	{
 /** Fin de la fonction de notification au scroll. Par defaut elle intercepte la notification si elle l'a recue.
 */
 #define CD_APPLET_ON_SCROLL_END \
+		g_pCurrentModule = NULL;\
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \
 	} \
+	g_pCurrentModule = NULL;\
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
 }
 
@@ -360,13 +389,15 @@ CD_APPLET_ON_SCROLL_PROTO \
 #define CD_APPLET_ON_UPDATE_ICON_BEGIN \
 CD_APPLET_ON_UPDATE_ICON_PROTO \
 { \
-	if (pIcon != myIcon) \
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	if (pIcon != myIcon)\
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;\
+	g_pCurrentModule = myApplet;
 /** Fin de la fonction de notification d'update icon.
 */
 #define CD_APPLET_ON_UPDATE_ICON_END \
 	*bContinueAnimation = TRUE;\
-	CD_APPLET_REDRAW_MY_ICON; \
+	CD_APPLET_REDRAW_MY_ICON;\
+	g_pCurrentModule = NULL;\
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
 }
 
@@ -374,17 +405,20 @@ CD_APPLET_ON_UPDATE_ICON_PROTO \
 */
 #define CD_APPLET_SKIP_UPDATE_ICON do { \
 	*bContinueAnimation = TRUE; \
+	g_pCurrentModule = NULL;\
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; } while (0)
 
 /** Quit the update function immediately with no more updates.
 */
 #define CD_APPLET_STOP_UPDATE_ICON \
+	g_pCurrentModule = NULL;\
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION
 
 /** Quit the update function immediately with no more updates after redrawing the icon.
 */
 #define CD_APPLET_PAUSE_UPDATE_ICON do { \
 	CD_APPLET_REDRAW_MY_ICON; \
+	g_pCurrentModule = NULL;\
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION; } while (0)
 
 

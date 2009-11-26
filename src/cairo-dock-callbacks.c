@@ -151,7 +151,6 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		{
 			// on laisse transparent
 		}
-		///else if (pDock->bAtBottom && pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->container.bInside && pDock->iSidMoveDown == 0 && pDock->iSidMoveUp == 0)
 		else if (cairo_dock_is_hidden (pDock))
 		{
 			cairo_dock_render_hidden_dock_opengl (pDock);
@@ -204,7 +203,6 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	{
 		
 	}
-	///else if (pDock->bAtBottom && pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->container.bInside && pDock->iSidMoveDown == 0 && pDock->iSidMoveUp == 0)
 	else if (cairo_dock_is_hidden (pDock))
 	{
 		cairo_dock_render_hidden_dock (pCairoContext, pDock);
@@ -531,7 +529,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		}
 	}
 	
-	//g_print ("%x -> %x\n", pLastPointedIcon, pPointedIcon);
+	//\_______________ On gere le changement d'icone.
 	gboolean bStartAnimation = FALSE;
 	if (pPointedIcon != pLastPointedIcon || s_pLastPointedDock == NULL)
 	{
@@ -545,6 +543,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		}
 	}
 	
+	//\_______________ On notifie tout le monde.
 	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_MOUSE_MOVED, pDock, &bStartAnimation);
 	if (bStartAnimation)
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
@@ -574,26 +573,12 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	pDock->iAvoidingMouseIconType = -1;
 	pDock->fAvoidingMouseMargin = 0;
 	pDock->container.bInside = FALSE;
-	//pDock->bAtTop = FALSE;
 	
+	//\_______________ On quitte si le menu est leve, pour rester en position haute.
 	if (pDock->bMenuVisible)
 		return ;
 	
-	/**if (pDock->iSidMoveUp != 0)  // si on est en train de monter, on arrete.
-	{
-		//g_print ("on arrete de monter\n");
-		g_source_remove (pDock->iSidMoveUp);
-		pDock->iSidMoveUp = 0;
-	}*/
-	if (pDock->bIsGrowingUp)  // si on est en train de faire grossir les icones, on arrete.
-	{
-		pDock->fFoldingFactor = 0;  /// utile ?...
-		pDock->bIsGrowingUp = FALSE;
-	}
-
-	//s_pLastPointedDock = NULL;
-	//g_print ("s_pLastPointedDock <- NULL\n");
-	
+	//\_______________ On gere le drag d'une icone hors du dock.
 	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked) || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)) && s_pFlyingContainer == NULL && ! g_bLocked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)
 	{
 		g_print ("on a sorti %s du dock (%d;%d) / %dx%d\n", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
@@ -630,61 +615,44 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 			return;
 	}
 	
+	//\_______________ On lance l'animation du dock.
 	if (pDock->iRefCount == 0)
 	{
 		if (pDock->bAutoHide)
 		{
 			pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? 0.001 : 0.);
-			//g_print ("on commence a descendre.\n");
 			cairo_dock_start_hiding (pDock);
-			/**if (pDock->iSidMoveDown == 0)  // on commence a descendre.
-				pDock->iSidMoveDown = g_timeout_add (40, (GSourceFunc) cairo_dock_move_down, (gpointer) pDock);*/
 		}
-		///else  // mis en commentaire le 28/12/2008 pour les anims telles que 'rain'.
-		///	pDock->bAtBottom = TRUE;
 	}
 	else
 	{
 		pDock->fFoldingFactor = (mySystem.bAnimateSubDock ? 0.001 : 0.);
-		///pDock->bAtBottom = TRUE;  // mis en commentaire le 12/11/07 pour permettre le quick-hide.
-		//cd_debug ("on force bAtBottom");
 	}
-	
-	//g_print ("start_shrinking\n");
-	///pDock->fDecorationsOffsetX = 0;
 	cairo_dock_start_shrinking (pDock);  // on commence a faire diminuer la taille des icones.
 }
 gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	/**if (pDock->bAtBottom && pDock->iRefCount == 0)  /// je l'avais mis en commentaire, mais c'est utile maintenant pour le input shape. A valider ...
-	{
-		pDock->iSidLeaveDemand = 0;
-		if (! (pDock->bAutoHide && ! pDock->bAutoHideInitialValue))  // sauf quick hide, car cela pose probleme lors d'un quick-hide avec souris sur icone de sous-dock.
-			return FALSE;
-	}*/
-	//g_print ("%s (bInside:%d; bAtBottom:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->bAtBottom, pDock->iRefCount);
+	//g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
+	//\_______________ On tire le dock => on ignore le signal.
 	if (pEvent != NULL && (pEvent->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && (pEvent->state & GDK_BUTTON1_MASK))
 	{
 		return FALSE;
 	}
-	//g_print ("%s (main dock : %d, autohide:%d)\n", __func__, pDock->bIsMainDock, pDock->bAutoHide);
-
-	if (pDock->iRefCount == 0)
+	
+	//\_______________ On retarde la sortie.
+	if (pDock->iSidLeaveDemand == 0 && pEvent != NULL)  // pas encore de demande de sortie et sortie naturelle.
 	{
-		Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
-		if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && GTK_WIDGET_VISIBLE (pPointedIcon->pSubDock->container.pWidget))
+		if (pDock->iRefCount == 0)  // cas du main dock : on retarde si on pointe sur un sous-dock, pour laisser le temps au signal d'entree dans le sous-dock d'etre traite
 		{
-			if (pDock->iSidLeaveDemand == 0)
+			Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
+			if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && GTK_WIDGET_VISIBLE (pPointedIcon->pSubDock->container.pWidget))
 			{
 				//g_print ("  on retarde la sortie du dock de %dms\n", MAX (myAccessibility.iLeaveSubDockDelay, 330));
 				pDock->iSidLeaveDemand = g_timeout_add (MAX (myAccessibility.iLeaveSubDockDelay, 330), (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
 				return TRUE;
 			}
 		}
-	}
-	else  // pEvent != NULL
-	{
-		if (pDock->iSidLeaveDemand == 0 && myAccessibility.iLeaveSubDockDelay != 0)
+		else if (myAccessibility.iLeaveSubDockDelay != 0)  // cas d'un sous-dock : on retarde le cachage.
 		{
 			//g_print ("  on retarde la sortie du sous-dock de %dms\n", myAccessibility.iLeaveSubDockDelay);
 			pDock->iSidLeaveDemand = g_timeout_add (myAccessibility.iLeaveSubDockDelay, (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
@@ -693,22 +661,17 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	pDock->iSidLeaveDemand = 0;
 	
-	/*if (! pDock->container.bInside)
-	{
-		g_print ("on n'etait deja pas dedans\n");
-		gtk_widget_hide (pDock->container.pWidget);
-		return TRUE;
-	}*/
+	//\_______________ Arrive ici, on est sorti du dock.
 	pDock->container.bInside = FALSE;
-	cd_debug (">>> on attend...");
+	/**cd_debug (">>> on attend...");
 	while (gtk_events_pending ())  // on laisse le temps au signal d'entree dans le sous-dock d'etre traite.
 		gtk_main_iteration ();
 	cd_debug (">>> pDock->container.bInside : %d", pDock->container.bInside);
-	
 	if (pDock->container.bInside)  // on est re-rentre dedans entre-temps.
-		return TRUE;
-
-	if (! cairo_dock_hide_child_docks (pDock))  // on quitte si on entre dans un sous-dock, pour rester en position "haute".
+		return TRUE;*/
+	
+	//\_______________ On cache ses sous-docks.
+	if (! cairo_dock_hide_child_docks (pDock))  // on quitte si l'un des sous-docks reste visible (on est entre dedans), pour rester en position "haute".
 		return TRUE;
 	
 	if (pEvent != NULL)
@@ -726,13 +689,13 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	
 	cairo_dock_leave_from_main_dock (pDock);
-
+	
 	return TRUE;
 }
 
 gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bIsMainDock : %d; bInside:%d; Hidden:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->bIsHidden, pDock->iMagnitudeIndex);
+	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex);
 	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
 	if (! cairo_dock_entrance_is_allowed (pDock))
 	{
@@ -753,24 +716,13 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	
 	// si on etait deja dedans, ou qu'on etait cense l'etre, on relance juste le grossissement.
-	if (/*pDock->bAtTop || */pDock->container.bInside || pDock->bIsHiding)  // le 'iSidMoveDown != 0' est la pour empecher le dock de "vibrer" si l'utilisateur sort par en bas avec l'auto-hide active.
+	if (pDock->container.bInside || pDock->bIsHiding)
 	{
 		pDock->container.bInside = TRUE;
-		/**if (pDock->iSidMoveDown != 0)  // si on est en train de descendre, on arrete.
-		{
-			//g_print ("  on est en train de descendre, on arrete\n");
-			g_source_remove (pDock->iSidMoveDown);
-			pDock->iSidMoveDown = 0;
-		}*/
 		cairo_dock_start_growing (pDock);
-		/**if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->iSidMoveUp == 0)  // on (re)monte.
+		if (pDock->bIsHiding || cairo_dock_is_hidden (pDock))  // on (re)monte.
 		{
-			g_print ("  on commence a monter en force\n");
-			pDock->iSidMoveUp = g_timeout_add (40, (GSourceFunc) cairo_dock_move_up, (gpointer) pDock);
-		}*/
-		if (pDock->bAutoHide && pDock->iRefCount == 0)  // on (re)monte.
-		{
-			g_print ("  on commence a monter en force\n");
+			g_print ("  on etait deja dedans\n");
 			cairo_dock_start_showing (pDock);
 		}
 		return FALSE;
@@ -815,42 +767,16 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		}
 	}
 	
-	// si l'auto-hide est active, on se redimensionne en taille normale.
-	/**if ((pDock->bAutoHide || pDock->container.iHeight != pDock->iMaxDockHeight) && pDock->iRefCount == 0 && pDock->bAtBottom)  // on sort de l'etat auto-hide.
-	{
-		int iNewWidth, iNewHeight;
-		cairo_dock_get_window_position_and_geometry_at_balance (pDock, CAIRO_DOCK_MAX_SIZE, &iNewWidth, &iNewHeight);
-		if ((pDock->bAutoHide && pDock->iRefCount == 0) && pDock->bAtBottom)
-			pDock->container.iWindowPositionY = (pDock->container.bDirectionUp ? g_iXScreenHeight[pDock->container.bIsHorizontal] - myAccessibility.iVisibleZoneHeight - pDock->iGapY : myAccessibility.iVisibleZoneHeight + pDock->iGapY - pDock->iMaxDockHeight);
-		
-		if (pDock->container.iWidth != iNewWidth || pDock->container.iHeight != iNewHeight)
-		{
-			if (pDock->container.bIsHorizontal)
-				gdk_window_move_resize (pWidget->window,
-					pDock->container.iWindowPositionX,
-					pDock->container.iWindowPositionY,
-					iNewWidth,
-					iNewHeight);
-			else
-				gdk_window_move_resize (pWidget->window,
-					pDock->container.iWindowPositionY,
-					pDock->container.iWindowPositionX,
-					iNewHeight,
-					iNewWidth);
-		}
-	}*/
-	
 	// input shape desactivee, le dock devient actif.
-	g_print ("enter (%d) \n", pDock->bActive);
-	if ((pDock->pShapeBitmap || pDock->pHiddenShapeBitmap) && !pDock->bActive)
+	//g_print ("enter (%d) \n", pDock->iInputState);
+	if ((pDock->pShapeBitmap || pDock->pHiddenShapeBitmap) && pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
 	{
-		g_print (" -> active\n");
 		gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 			NULL,
 			0,
 			0);
 	}
-	pDock->bActive = TRUE;
+	pDock->iInputState = CAIRO_DOCK_INPUT_ACTIVE;
 	
 	// on repasse au premier plan.
 	if (myAccessibility.bPopUp && pDock->iRefCount == 0)
@@ -868,14 +794,8 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	g_print ("pDock->bAutoHide : %d\n", pDock->bAutoHide);
 	if (pDock->fHideOffset != 0 && pDock->iRefCount == 0)
 	{
-		g_print ("  on commence a monter\n");
-		/**if (pDock->iSidMoveUp == 0)  // on commence a monter.
-			pDock->iSidMoveUp = g_timeout_add (40, (GSourceFunc) cairo_dock_move_up, (gpointer) pDock);*/
+		//g_print ("  on commence a monter\n");
 		cairo_dock_start_showing (pDock);
-	}
-	else
-	{
-		///pDock->bAtBottom = FALSE;
 	}
 	
 	// cas special.
@@ -1284,7 +1204,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 				{
 					if (s_pIconClicked != NULL)
 					{
-						//g_print ("release de %s (inside:%d)\n", s_pIconClicked->cName, pDock->container.bInside);
+						cd_debug ("activate %s (%s)", s_pIconClicked->cName, icon ? icon->cName : "none");
 						s_pIconClicked->iAnimationState = CAIRO_DOCK_STATE_REST;  // stoppe les animations de suivi du curseur.
 						pDock->iAvoidingMouseIconType = -1;
 						cairo_dock_stop_icon_glide (pDock);
@@ -1393,7 +1313,10 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 					s_iClickX = pButton->x;
 					s_iClickY = pButton->y;
 					if (icon && icon->fPersonnalScale <= 0)
+					{
 						s_pIconClicked = icon;  // on ne definit pas l'animation FOLLOW_MOUSE ici , on le fera apres le 1er mouvement, pour eviter que l'icone soit dessinee comme tel quand on clique dessus alors que le dock est en train de jouer une animation (ca provoque un flash desagreable).
+						cd_debug ("clicked on %s", icon->cName);
+					}
 					else
 						s_pIconClicked = NULL;
 				}
@@ -1516,8 +1439,8 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		if (pDock->container.iMouseX < 0 || pDock->container.iMouseX > pDock->container.iWidth)  // utile ?
 			pDock->container.iMouseX = 0;
 		
-		
-		if (pDock->pHiddenShapeBitmap != NULL && cairo_dock_is_hidden (pDock))
+		// les dimensions ont change, il faut remettre l'input shape a la bonne place.
+		if (pDock->pHiddenShapeBitmap != NULL && pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
 		{
 			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 				NULL,
@@ -1528,7 +1451,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 				0,
 				0);
 		}
-		else if (pDock->pShapeBitmap != NULL && !pDock->bActive)  // les dimensions ont change, il faut remettre l'input shape a la bonne place.
+		else if (pDock->pShapeBitmap != NULL && pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
 		{
 			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 				NULL,
@@ -1582,13 +1505,10 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 	}
 	gtk_widget_queue_draw (pWidget);
 	
-	///if (pDock->iSidMoveDown == 0 && pDock->iSidMoveUp == 0)  // ce n'est pas du a une animation d'auto-hide. Donc en cas d'apparition due a l'auto-hide, ceci ne sera pas fait ici, mais a la fin de l'animation de grossissement/depliage.
-	{
-		g_print ("configure\n");
-		cairo_dock_set_icons_geometry_for_window_manager (pDock);  // changement de position ou de taille du dock => on replace les icones.
-		
-		cairo_dock_replace_all_dialogs ();
-	}
+	g_print ("configure\n");
+	cairo_dock_set_icons_geometry_for_window_manager (pDock);  // changement de position ou de taille du dock => on replace les icones.
+	
+	cairo_dock_replace_all_dialogs ();
 	
 	return FALSE;
 }

@@ -95,6 +95,12 @@ typedef enum {
 	CAIRO_DOCK_MOUSE_OUTSIDE
 	} CairoDockMousePositionType;
 
+typedef enum {
+	CAIRO_DOCK_INPUT_ACTIVE,
+	CAIRO_DOCK_INPUT_AT_REST,
+	CAIRO_DOCK_INPUT_HIDDEN
+	} CairoDockInputState;
+
 /// Definition of a Dock, which derives from a Container.
 struct _CairoDock {
 	/// container.
@@ -119,6 +125,8 @@ struct _CairoDock {
 	gint iScreenOffsetX;
 	/// Vertical offset of the screen where the dock lives, according to Xinerama.
 	gint iScreenOffsetY;
+	/// number of the screen the dock is placed on (Xinerama).
+	gint iNumScreen;
 	
 	/// maximum height of the icons.
 	gdouble iMaxIconHeight;
@@ -133,7 +141,7 @@ struct _CairoDock {
 	gint iLeftMargin;
 	gint iRightMargin;
 
-	//\_______________ current state
+	//\_______________ current state of the dock.
 	/// pour faire defiler les icones avec la molette.
 	gint iScrollOffset;
 	/// indice de calcul du coef multiplicateur de l'amplitude de la sinusoide (entre 0 et CAIRO_DOCK_NB_MAX_ITERATIONS).
@@ -148,29 +156,36 @@ struct _CairoDock {
 	GList *pFirstDrawnElement;
 	/// decalage des decorations pour les faire suivre la souris.
 	gdouble fDecorationsOffsetX;
+	/// counter for the fade out effect.
+	gint iFadeCounter;
+	/// direction of the fade out effect.
+	gboolean bFadeInOut;
+	/// state of the input shape.
+	/// counter for auto-hide.
+	double fHideOffset;
 	
-	gboolean bAtBottom_deprecated;
-	gboolean bAtTop_deprecated;
 	/// Whether the dock is in a popped up state or not.
 	gboolean bPopped;
-	/// TRUE when the menu is visible, to keep the dock on high position.
+	/// whether the menu is visible (to keep the dock on high position).
 	gboolean bMenuVisible;
-	/// TRUE if the user is dragging something over the dock.
+	/// whether the user is dragging something over the dock.
 	gboolean bIsDragging;
 	/// Backup of the auto-hide state before quick-hide.
 	gboolean bAutoHideInitialValue;
-	/// TRUE if mouse can't enter into the dock.
+	/// whether mouse can't enter into the dock.
 	gboolean bEntranceDisabled;
-	/// TRUE is the dock is shrinking down.
+	/// whether the dock is shrinking down.
 	gboolean bIsShrinkingDown;
-	/// TRUE is the dock is growing up.
+	/// whether the dock is growing up.
 	gboolean bIsGrowingUp;
+	/// whether the dock is hiding.
+	gboolean bIsHiding;
+	/// whether the dock is showing.
+	gboolean bIsShowing;
+	/// whether an icon is being dragged away from the dock
+	gboolean bIconIsFlyingAway;
 	
 	//\_______________ Source ID of events running on the dock.
-	/// Source ID of the hiding movement.
-	guint iSidMoveDown;
-	/// Source ID of the showing movement.
-	guint iSidMoveUp;
 	/// Source ID for window popping up to the top layer.
 	guint iSidPopUp;
 	/// Source ID for window popping down to the bottom layer.
@@ -187,10 +202,6 @@ struct _CairoDock {
 	gpointer pRendererData;
 	/// Set to TRUE by the renderer if one can drop between 2 icons.
 	gboolean bCanDrop;
-	/// input zone set by the renderer when the dock is at rest.
-	GdkRectangle inputArea;
-	/// input shape of the window when the dock is at rest.
-	GdkBitmap* pShapeBitmap;
 	/// set by the view to say if the mouse is currently on icons, on the egde, or outside of icons.
 	CairoDockMousePositionType iMousePositionType;
 	/// minimum width of the dock.
@@ -210,26 +221,13 @@ struct _CairoDock {
 	/// whether the position of icons for the WM is invalid.
 	gboolean bWMIconseedsUptade;
 	
-	/// counter for the fade out effect.
-	gint iFadeCounter;
-	/// direction of the fade out effect.
-	gboolean bFadeInOut;
-	/// whether the input shape is set or not.
-	gboolean bActive;  // TRUE <=> no input shape.
-	/// number of the screen the dock is placed on (Xinerama).
-	gint iNumScreen;
-	/// whether an icon is being dragged away from the dock
-	gboolean bIconIsFlyingAway;
-	/// whether the dock is in hidden state.
-	gboolean bIsHidden;
-	/// vertical offset for auto-hide.
-	double fHideOffset;
+	//\_______________ input shape.
+	CairoDockInputState iInputState;  // no input shape (active), minimal input shape (at rest), hidden input shape (hidden).
+	/// input shape of the window when the dock is at rest.
+	GdkBitmap* pShapeBitmap;
 	/// input shape of the window when the dock is hidden.
 	GdkBitmap* pHiddenShapeBitmap;
-	/// whether the dock is hiding.
-	gboolean bIsHiding;
-	/// whether the dock is showing.
-	gboolean bIsShowing;
+	gchar reserved[16];
 };
 
 

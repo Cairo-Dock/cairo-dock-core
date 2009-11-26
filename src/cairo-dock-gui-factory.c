@@ -1665,15 +1665,16 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			
 			case CAIRO_DOCK_WIDGET_ICON_THEME_LIST :
 			{
-				gchar *path[3];
-				path[0] = g_strdup_printf ("%s/.icons", g_getenv ("HOME"));
+				gchar *cUserPath = g_strdup_printf ("%s/.icons", g_getenv ("HOME"));
+				const gchar *path[3];
+				path[0] = (const gchar *)cUserPath;
 				path[1] = "/usr/share/icons";
 				path[2] = NULL;
 				pOneWidget = _cairo_dock_build_icon_themes_list (path);
-				g_free (path[0]);
-				GtkEntry *pEntry = gtk_bin_get_child (GTK_BIN (pOneWidget));
+				g_free (cUserPath);
+				GtkWidget *pEntry = gtk_bin_get_child (GTK_BIN (pOneWidget));
 				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
-				gtk_entry_set_text (pEntry, cValue);  // on affiche la valeur meme s'elle n'existe pas dans la liste.
+				gtk_entry_set_text (GTK_ENTRY (pEntry), cValue);  // on affiche la valeur meme s'elle n'existe pas dans la liste.
 				g_free (cValue);
 				_pack_subwidget (pOneWidget);
 			}

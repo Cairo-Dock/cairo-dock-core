@@ -515,10 +515,7 @@ static void _cairo_dock_stop_quick_hide_one_root_dock (const gchar *cDockName, C
 		{
 			pDock->fFoldingFactor = 0;
 			
-			///cairo_dock_move_resize_dock (pDock);
-			cairo_dock_start_showing (pDock);
-			///pDock->bActive = FALSE;  // l'input shape sera mise lors du configure.
-			///pDock->bIsHidden = FALSE;
+			cairo_dock_start_showing (pDock);  // l'input shape sera mise lors du configure.
 		}
 	}
 }

@@ -1061,6 +1061,7 @@ void cairo_dock_draw_surface (cairo_t *pCairoContext, cairo_surface_t *pSurface,
 
 void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 {
+	//\_____________________ on dessine la zone de rappel.
 	if (g_pVisibleZoneSurface != NULL)
 	{
 		cairo_dock_draw_surface (pCairoContext, g_pVisibleZoneSurface,
@@ -1068,5 +1069,30 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 			(myBackground.bReverseVisibleImage ? pDock->container.bDirectionUp : TRUE),
 			pDock->container.bIsHorizontal,
 			1.);
+	}
+	
+	//\_____________________ on dessine les icones demandant l'attention.
+	if (myTaskBar.cAnimationOnDemandsAttention)
+	{
+		GList *pFirstDrawnElement = cairo_dock_get_first_drawn_element_linear (pDock->icons);
+		if (pFirstDrawnElement == NULL)
+			return;
+		double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
+		
+		Icon *icon;
+		GList *ic = pFirstDrawnElement;
+		do
+		{
+			icon = ic->data;
+			if (! icon->bIsDemandingAttention)
+				continue;
+			
+			icon->fDrawY = (pDock->container.bDirectionUp ? icon->fHeight * icon->fScale : 0.);
+			cairo_save (pCairoContext);
+			cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);
+			cairo_restore (pCairoContext);
+			
+			ic = cairo_dock_get_next_element (ic, pDock->icons);
+		} while (ic != pFirstDrawnElement);
 	}
 }

@@ -177,9 +177,8 @@ msgid "Filter"
 msgstr "Filtre"
 
 #: ../src/cairo-dock-gui-manager.c:599
-#, fuzzy
 msgid "Options"
-msgstr "applications"
+msgstr "Options"
 
 #: ../src/cairo-dock-gui-manager.c:609
 msgid "All words"
@@ -232,9 +231,8 @@ msgid "Configuration of the launchers"
 msgstr "Configuration des lanceurs"
 
 #: ../src/cairo-dock-internal-accessibility.c:261
-#, fuzzy
 msgid "Visibility"
-msgstr "Accessibilité"
+msgstr "Visibilité"
 
 #: ../src/cairo-dock-internal-accessibility.c:263
 msgid ""
@@ -997,9 +995,8 @@ msgid "Relative alignment :"
 msgstr "Alignement relatif :"
 
 #: ../data/messages:25
-#, fuzzy
 msgid "Offset to the screen's edge"
-msgstr "Distance du bord de l'écran :"
+msgstr "Décalage au bord de l'écran"
 
 #: ../data/messages:27 ../data/messages:1137
 msgid ""
@@ -1011,9 +1008,8 @@ msgstr ""
 "bouton gauche de la souris."
 
 #: ../data/messages:29
-#, fuzzy
 msgid "Lateral offset :"
-msgstr "Décalage vertical :"
+msgstr "Décalage latéral :"
 
 #: ../data/messages:31 ../data/messages:1141
 msgid ""
@@ -1025,7 +1021,7 @@ msgstr ""
 
 #: ../data/messages:33 ../data/messages:1143
 msgid "Distance to the screen's edge :"
-msgstr "Distance du bord de l'écran :"
+msgstr "Distance au bord de l'écran :"
 
 #: ../data/messages:35
 msgid "Multiple screens"
@@ -1044,9 +1040,8 @@ msgid "Number of the screen where the dock should be located :"
 msgstr "Numéro de l'écran où le dock doit se situer :"
 
 #: ../data/messages:45
-#, fuzzy
 msgid "Visibility of the main dock"
-msgstr "Régler la position du dock principal."
+msgstr "Visibilité du dock principal"
 
 #: ../data/messages:47
 msgid ""
@@ -1060,37 +1055,36 @@ msgid ""
 "Pop-up on shortcut : When you press the shortcut, the dock will pop-up at "
 "the position of your mouse. The rest of the time, it stays invisible, thus "
 "acting like a menu."
-msgstr ""
+msgstr "Empêcher les fenêtres de recouvrir le dock : réserve l'espace pour le dock au bord de l'écran.\n"
+"Masquer automatiquement : le dock se cachera automatiquement hors de l'écran lorsque la souris en sort. A la place, une zone de rappel sera visible, et rentrer la souris dedans le fera ré-apparaître.\n"
+"Garder le dock sous les fenêtres : le dock apparaîtra à l'avant-plan lorsque vous toucherez le bord de l'écran avec la souris.\n"
+"Apparaître au raccourci clavier : lorsque vous presserez le raccourci, le dock apparaîtra à la position de la souris. Le reste du temps, il restera invisible, agissant comme un menu."
 
 #: ../data/messages:49
-#, fuzzy
 msgid "Visibility :"
-msgstr "Accessibilité"
+msgstr "Visibilité :"
 
 #: ../data/messages:53
 msgid "Prevent windows from overlapping the dock"
-msgstr ""
+msgstr "Empêcher les fenêtres de recouvrir le dock"
 
 #: ../data/messages:55
-#, fuzzy
 msgid "Keep the dock below windows"
-msgstr "Garder le dock sous les autres fenêtres ?"
+msgstr "Garder le dock sous les fenêtres"
 
 #: ../data/messages:57
-#, fuzzy
 msgid "Automatically hide the dock"
-msgstr "Ajouter automatiquement des séparateurs ?"
+msgstr "Masquer automatiquement le dock"
 
 #: ../data/messages:59
-#, fuzzy
 msgid "Automatically hide when a window is maximized"
 msgstr ""
-"Activer le masquage rapide automatiquement lorsqu'une fenêtre devient "
-"maximisée ?"
+"Masquer automatiquement lorsqu'une fenêtre devient "
+"maximisée"
 
 #: ../data/messages:61
 msgid "Pop-up on shortcut"
-msgstr ""
+msgstr "Faire apparaître par un raccourci clavier"
 
 #: ../data/messages:63
 msgid "Pop-up only if the mouse hits a screen corner ?"
@@ -1107,14 +1101,12 @@ msgstr ""
 "comme un menu."
 
 #: ../data/messages:67
-#, fuzzy
 msgid "Keyboard shortcut to pop-up the dock :"
 msgstr "Raccourci clavier pour afficher/masquer le dock :"
 
 #: ../data/messages:69
-#, fuzzy
 msgid "Additionnal parameters"
-msgstr "Autres paramètres"
+msgstr "Paramètres additionnels"
 
 #: ../data/messages:71
 msgid "Extend the dock to always fill the screen ?"
@@ -1135,19 +1127,17 @@ msgid ""
 msgstr ""
 "Cela n'est utile que si vous n'utilisez pas le masquage automatique et que "
 "votre gestionnaire de fenêtres laisse le dock devant les fenêtres plein "
-"écran."
+"écran (ce qui est rare)."
 
 #: ../data/messages:79
-#, fuzzy
 msgid "Automatically hide the dock when a window becomes fullscreen ?"
 msgstr ""
-"Activer le masquage rapide automatiquement lorsqu'une fenêtre passe en mode "
+"Masquer le dock automatiquement lorsqu'une fenêtre passe en mode "
 "plein écran ?"
 
 #: ../data/messages:81
-#, fuzzy
 msgid "Sub-docks' visibility"
-msgstr "Accessibilité des sous-docks"
+msgstr "Visibilité des sous-docks"
 
 #: ../data/messages:83
 msgid "in ms."
@@ -1213,11 +1203,12 @@ msgstr "Mélanger les lanceurs et les applications ?"
 msgid ""
 "This allows to group all the windows of a given application into a unique "
 "sub-dock, and to act on all of the windows at the same time."
-msgstr ""
+msgstr "Cela permet de grouper toutes les fenêtres d'une application donnée dans un unique sous-dock, "
+"et d'agir sur toutes ces fenêtres en même temps."
 
 #: ../data/messages:113
 msgid "Group windows of the same application in a sub-dock ?"
-msgstr ""
+msgstr "Grouper les fenêtres de la même application dans un sous-dock ?"
 
 #: ../data/messages:115 ../data/messages:123
 msgid "enter the class of the applications, separated by a semi-colon ';'"
@@ -1257,9 +1248,8 @@ msgstr ""
 "également les afficher sur les applications."
 
 #: ../data/messages:133
-#, fuzzy
 msgid "Display an indicator even if the icon is not a launcher ?"
-msgstr "Afficher l'indicateur au-dessus des icônes ?"
+msgstr "Afficher un indicateur meme si l'icône n'est pas un lanceur ?"
 
 #: ../data/messages:135
 msgid "Interaction"
@@ -1299,11 +1289,9 @@ msgid "Duration of the dialog :"
 msgstr "Durée du dialogue :"
 
 #: ../data/messages:151
-#, fuzzy
 msgid "It will notify you even if, for instance, you are on another desktop."
 msgstr ""
-"Une notification apparaîtra même si par exemple vous regardez une vidéo en "
-"plein écran."
+"Une notification apparaîtra même si par exemple vous êtes sur un autre bureau."
 
 #: ../data/messages:153
 msgid "Force the following applications to demand your attention ?"
@@ -1550,20 +1538,20 @@ msgid ""
 "This only limits the connection phase,  once the dock has connected this "
 "option is of no more use."
 msgstr ""
-"Temps maximum, en secondes, permis pour se connecter au serveur. Ceci n'est "
-"qu'une limite de connexion, une fois le dock connecté, cette option n'est "
+"Temps maximum, en secondes, permis pour se connecter au serveur. Ceci "
+"ne limite que la phase de connexion, une fois le dock connecté, cette option n'est "
 "plus utilisée."
 
 #: ../data/messages:257
 msgid "Connection timeout to the themes server :"
-msgstr "Temps maximum de connexion au serveur de thèmes :"
+msgstr "Délai de connexion au serveur de thèmes :"
 
 #: ../data/messages:259
 msgid ""
 "Maximum time in seconds that you allow the whole operation to take. Some "
 "themes can take up to a few MB."
 msgstr ""
-"Temps maximum, en secondes, permis pour réaliser toutes les opérations. "
+"Temps maximum, en secondes, permis pour réaliser toute l'opération. "
 "Certains thèmes peuvent prendre plusieurs Mo."
 
 #: ../data/messages:261
@@ -1583,31 +1571,26 @@ msgid "Number of retries :"
 msgstr "Nombre de tentatives :"
 
 #: ../data/messages:269
-#, fuzzy
 msgid "Fill the background with :"
-msgstr "Couleur d'arrière-plan des étiquettes :"
+msgstr "Remplir le fond avec :"
 
 #: ../data/messages:271 ../data/messages:277 ../data/messages:637
 msgid "Image"
-msgstr ""
+msgstr "Image"
 
 #: ../data/messages:273 ../data/messages:293
-#, fuzzy
 msgid "Color gradation"
-msgstr "...ou dégradé"
+msgstr "Dégradé de couleur"
 
 #: ../data/messages:275
-#, fuzzy
 msgid "Use a background image."
-msgstr "Image d'arrière-plan..."
+msgstr "Utiliser une image en arrière-plan"
 
 #: ../data/messages:279
-#, fuzzy
 msgid ""
 "Any format allowed; if empty, the color gradation will be used as a fallback."
 msgstr ""
-"Tout format permis . Laisser ce champ vide si aucune image d'arrière-plan ne "
-"doit être appliquée."
+"Tout format accepté; si vide, le dégradé de couleur sera utilisé par défaut."
 
 #: ../data/messages:281
 msgid "Image's filename to use as a background :"
@@ -1632,41 +1615,36 @@ msgid "Repeat image as a pattern to fill background ?"
 msgstr "Répéter l'image comme motif pour remplir l'arrière-plan ?"
 
 #: ../data/messages:291
-#, fuzzy
 msgid "Use a color gradation."
-msgstr "Utiliser une image d'arrière-plan ou un dégradé de couleurs."
+msgstr "Utiliser un dégradé de couleurs."
 
 #: ../data/messages:295
-msgid "Bright color (red, green, blue, alpha) :"
-msgstr "Couleur claire (rouge, vert, bleu, alpha) :"
+msgid "Bright color :"
+msgstr "Couleur claire :"
 
 #: ../data/messages:297
-msgid "Dark color (red, green, blue, alpha) :"
-msgstr "Couleur foncée (rouge, vert, bleu, alpha) :"
+msgid "Dark color :"
+msgstr "Couleur foncée :"
 
 #: ../data/messages:299
-#, fuzzy
 msgid "In degrees, in relation to the vertical"
-msgstr ""
-"Angle d'inclinaison du dégradé ou des rayures par rapport à la verticale (en "
-"degrés) :"
+msgstr "En degrés, par rapport à la verticale."
 
 #: ../data/messages:301
-#, fuzzy
 msgid "Angle of the gradation :"
-msgstr "Classe du programme :"
+msgstr "Angle du dégradé :"
 
 #: ../data/messages:303
 msgid "If not nul, it will form stripes."
-msgstr ""
+msgstr "Si non nul, cela formera des rayures."
 
 #: ../data/messages:305
 msgid "Repeat the gradation this number of times :"
-msgstr ""
+msgstr "Répéter le dégradé ce nombre de fois :"
 
 #: ../data/messages:307
 msgid "Percentage of the bright color :"
-msgstr ""
+msgstr "Pourcentage de la couleur claire :"
 
 #: ../data/messages:309
 msgid "Extern Frame"
@@ -1686,9 +1664,8 @@ msgid "Linewidth of the extern line :"
 msgstr "Épaisseur de la ligne externe :"
 
 #: ../data/messages:319
-#, fuzzy
 msgid "Color of the extern line :"
-msgstr "Couleur de la ligne externe (r,v,b,a) :"
+msgstr "Couleur de la ligne externe :"
 
 #: ../data/messages:323
 msgid "Margin between the frame and the icons or their reflects :"
@@ -1779,12 +1756,11 @@ msgstr "Afficher les étiquettes sur les icônes ?"
 
 #: ../data/messages:371 ../data/messages:547
 msgid "Otherwise the default system one will be used."
-msgstr ""
+msgstr "Sinon la police système par défaut sera utilisée."
 
 #: ../data/messages:373
-#, fuzzy
 msgid "Use a custom font for labels ?"
-msgstr "Utiliser une couleur d'arrière-plan pour les étiquettes ?"
+msgstr "Utiliser une police personnalisée pour les étiquettes ?"
 
 #: ../data/messages:375
 msgid "Font used for labels :"
@@ -1792,7 +1768,7 @@ msgstr "Police utilisée pour les étiquettes :"
 
 #: ../data/messages:377 ../data/messages:553
 msgid "Draw the outline of the text ?"
-msgstr ""
+msgstr "Tracer le contour du texte ?"
 
 #: ../data/messages:379
 msgid "Color"
@@ -1896,7 +1872,7 @@ msgid ""
 "here first, and then in the icons theme."
 msgstr ""
 "Ce sont des icônes situées dans ~/.config/cairo-dock/current_theme/icons, "
-"qui proviennent du thème que vous avez choisi? Si vous utilisez cette "
+"qui proviennent du thème que vous avez choisi. Si vous utilisez cette "
 "option, le dock cherchera d'abord là, puis dans le thème d'icônes."
 
 #: ../data/messages:427
@@ -1958,12 +1934,11 @@ msgstr "fort"
 msgid ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
-msgstr ""
+msgstr "En pourcentage de la taille de l'icône. Ce paramètre influe sur la hauteur totale du dock."
 
 #: ../data/messages:449
-#, fuzzy
 msgid "Height of the reflect :"
-msgstr "URI du fichier :"
+msgstr "Hauteur du reflet :"
 
 #: ../data/messages:451
 msgid "small"
@@ -2165,14 +2140,12 @@ msgid "Bubble"
 msgstr "Bulle"
 
 #: ../data/messages:541
-#, fuzzy
 msgid "Background color of the bubble :"
-msgstr "Couleur de l'arrière-plan de la bulle (r,v,b,a) :"
+msgstr "Couleur d'arrière-plan de la bulle :"
 
 #: ../data/messages:543
-#, fuzzy
 msgid "Shape of the bubble :"
-msgstr "URI du fichier :"
+msgstr "Forme de la bulle :"
 
 #: ../data/messages:545
 msgid "Text"
@@ -2180,16 +2153,15 @@ msgstr "Texte"
 
 #: ../data/messages:549
 msgid "Use a custom font for the text ?"
-msgstr ""
+msgstr "Utiliser une police personnalisée pour le texte ?"
 
 #: ../data/messages:551
 msgid "Text font :"
-msgstr ""
+msgstr "Police du texte :"
 
 #: ../data/messages:555
-#, fuzzy
 msgid "Text color :"
-msgstr "Couleur de fin :"
+msgstr "Couleur du texte :"
 
 #: ../data/messages:557
 msgid "Buttons"
@@ -2221,7 +2193,7 @@ msgstr "Taille de l'icône affichée à côté du texte :"
 
 #: ../data/messages:575
 msgid "This can be customized for each desklet separately."
-msgstr ""
+msgstr "Cela peut être personnalisé pour chaque desklet séparément."
 
 #: ../data/messages:577
 msgid "Choose a default decoration for all desklets :"
@@ -2324,17 +2296,15 @@ msgstr "Indicateur de la fenêtre active"
 
 #: ../data/messages:635
 msgid "Type of indicator :"
-msgstr ""
+msgstr "Type d'indicateur :"
 
 #: ../data/messages:639
-#, fuzzy
 msgid "Frame"
-msgstr "Nom"
+msgstr "Cadre"
 
 #: ../data/messages:641
-#, fuzzy
 msgid "Image file :"
-msgstr "URI du fichier :"
+msgstr "Fichier image :"
 
 #: ../data/messages:643
 msgid "Set transparency to 0 if you don't want to use an indicator."
@@ -2342,9 +2312,8 @@ msgstr ""
 "Mettez la transparence à 0 si vous ne voulez pas utiliser d'indicateur."
 
 #: ../data/messages:645
-#, fuzzy
 msgid "Color of the frame :"
-msgstr "Couleur de la ligne externe (r,v,b,a) :"
+msgstr "Couleur du cadre :"
 
 #: ../data/messages:647
 msgid "Set 0 to fill the frame."
@@ -2529,11 +2498,11 @@ msgstr "Nom de la vue utilisée pour le sous-dock :"
 
 #: ../data/messages:739
 msgid "If '0' the container will be displayed on every viewport."
-msgstr ""
+msgstr "Si '0', il sera affiché sur tous les bureaux."
 
 #: ../data/messages:741 ../data/messages:759 ../data/messages:1113
 msgid "Only show in this specific viewport"
-msgstr ""
+msgstr "Montrer seulement sur ce bureau"
 
 #: ../data/messages:747
 msgid "URI of the file :"
@@ -2545,7 +2514,7 @@ msgstr "Contrôler le contenu du dossier ?"
 
 #: ../data/messages:757 ../data/messages:1111
 msgid "If '0' the launcher will be displayed on every viewport."
-msgstr ""
+msgstr "Si '0', il sera affiché sur tous les bureaux."
 
 #: ../data/messages:763
 msgid "Yes, like that :-)"

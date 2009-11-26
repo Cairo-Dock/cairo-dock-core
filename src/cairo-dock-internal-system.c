@@ -36,29 +36,37 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
+	// lisibilite des labels
 	pSystem->bLabelForPointedIconOnly = cairo_dock_get_boolean_key_value (pKeyFile, "System", "pointed icon only", &bFlushConfFileNeeded, FALSE, "Labels", NULL);
 	pSystem->fLabelAlphaThreshold = cairo_dock_get_double_key_value (pKeyFile, "System", "alpha threshold", &bFlushConfFileNeeded, 10., "Labels", NULL);
 	pSystem->fLabelAlphaThreshold = (pSystem->fLabelAlphaThreshold + 10.) / 10.;  // [0;50] -> [1;6]
 	pSystem->bTextAlwaysHorizontal = cairo_dock_get_boolean_key_value (pKeyFile, "System", "always horizontal", &bFlushConfFileNeeded, FALSE, "Labels", NULL);
 	
-	//double fUserValue = cairo_dock_get_double_key_value (pKeyFile, "System", "unfold factor", &bFlushConfFileNeeded, 8., "Cairo Dock", NULL);
-	//pSystem->fUnfoldAcceleration = 1 - pow (2, - fUserValue);
-	pSystem->iUnfoldingDuration = cairo_dock_get_integer_key_value (pKeyFile, "System", "unfold duration", &bFlushConfFileNeeded, 400, NULL, NULL);
-
+	// vitesse des animations.
 	pSystem->bAnimateOnAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, "System", "animate on auto-hide", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
-	int iNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "grow nb steps", &bFlushConfFileNeeded, 10, "Cairo Dock", NULL);
+	pSystem->bAnimateSubDock = cairo_dock_get_boolean_key_value (pKeyFile, "System", "animate subdocks", &bFlushConfFileNeeded, TRUE, "Sub-Docks", NULL);
+	
+	pSystem->iUnfoldingDuration = cairo_dock_get_integer_key_value (pKeyFile, "System", "unfold duration", &bFlushConfFileNeeded, 400, NULL, NULL);
+	
+	int iNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "grow nb steps", &bFlushConfFileNeeded, 10, NULL, NULL);
 	iNbSteps = MAX (iNbSteps, 1);
 	pSystem->iGrowUpInterval = MAX (1, CAIRO_DOCK_NB_MAX_ITERATIONS / iNbSteps);
-	iNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "shrink nb steps", &bFlushConfFileNeeded, 8, "Cairo Dock", NULL);
+	
+	iNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "shrink nb steps", &bFlushConfFileNeeded, 8, NULL, NULL);
 	iNbSteps = MAX (iNbSteps, 1);
 	pSystem->iShrinkDownInterval = MAX (1, CAIRO_DOCK_NB_MAX_ITERATIONS / iNbSteps);
-	pSystem->fMoveUpSpeed = cairo_dock_get_double_key_value (pKeyFile, "System", "move up speed", &bFlushConfFileNeeded, 0.35, "Cairo Dock", NULL);
-	pSystem->fMoveUpSpeed = MAX (0.01, MIN (pSystem->fMoveUpSpeed, 1));
-	pSystem->fMoveDownSpeed = cairo_dock_get_double_key_value (pKeyFile, "System", "move down speed", &bFlushConfFileNeeded, 0.35, "Cairo Dock", NULL);
-	pSystem->fMoveDownSpeed = MAX (0.01, MIN (pSystem->fMoveDownSpeed, 1));
 	
-	int iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "refresh frequency", &bFlushConfFileNeeded, 25, "Cairo Dock", NULL);
+	iNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "move up nb steps", &bFlushConfFileNeeded, 10, NULL, NULL);
+	iNbSteps = MAX (iNbSteps, 1);
+	pSystem->fMoveUpSpeed = 1. - pow (10., -2. / iNbSteps);
+	
+	iNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "move down nb steps", &bFlushConfFileNeeded, 12, NULL, NULL);
+	iNbSteps = MAX (iNbSteps, 1);
+	pSystem->fMoveDownSpeed = 1. - pow (10., -2. / iNbSteps);
+	
+	// frequence de rafraichissement.
+	int iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "refresh frequency", &bFlushConfFileNeeded, 25, NULL, NULL);
 	pSystem->fRefreshInterval = 1000. / iRefreshFrequency;
 	pSystem->bDynamicReflection = cairo_dock_get_boolean_key_value (pKeyFile, "System", "dynamic reflection", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	
@@ -66,8 +74,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 	pSystem->iGLAnimationDeltaT = 1000. / iRefreshFrequency;
 	iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "cairo anim freq", &bFlushConfFileNeeded, 25, NULL, NULL);
 	pSystem->iCairoAnimationDeltaT = 1000. / iRefreshFrequency;
-	
-	pSystem->bAnimateSubDock = cairo_dock_get_boolean_key_value (pKeyFile, "System", "animate subdocks", &bFlushConfFileNeeded, TRUE, "Sub-Docks", NULL);
 	
 	pSystem->iFileSortType = cairo_dock_get_integer_key_value (pKeyFile, "System", "sort files", &bFlushConfFileNeeded, CAIRO_DOCK_FM_SORT_BY_NAME, NULL, NULL);
 	pSystem->bShowHiddenFiles = cairo_dock_get_boolean_key_value (pKeyFile, "System", "show hidden files", &bFlushConfFileNeeded, FALSE, NULL, NULL);

@@ -67,5 +67,7 @@ extern GLuint g_pGradationTexture[2];
 extern GLuint g_iIndicatorTexture;
 extern double g_fIndicatorWidth, g_fIndicatorHeight;
 
+extern CairoDockModuleInstance *g_pCurrentModule;
+
 G_END_DECLS
 #endif

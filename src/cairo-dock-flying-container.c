@@ -277,6 +277,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	CairoFlyingContainer * pFlyingContainer = g_new0 (CairoFlyingContainer, 1);
 	pFlyingContainer->container.iType = CAIRO_DOCK_TYPE_FLYING_CONTAINER;
 	GtkWidget* pWindow = cairo_dock_create_container_window ();
+	gtk_window_set_keep_above (GTK_WINDOW (pWindow), TRUE);
 	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-flying-icon");
 	pFlyingContainer->container.pWidget = pWindow;
 	pFlyingContainer->pIcon = pFlyingIcon;

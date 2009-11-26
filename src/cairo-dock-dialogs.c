@@ -1186,7 +1186,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 				*bDirectionUp = pDock->container.bDirectionUp;
 				
 				int dy;
-				if (pDock->bActive)
+				if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
 					dy = 0;
 				else if (cairo_dock_is_hidden (pDock))
 					dy = pDock->container.iHeight - MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight);

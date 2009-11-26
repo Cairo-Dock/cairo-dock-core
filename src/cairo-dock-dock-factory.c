@@ -161,7 +161,7 @@ CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRen
 	GtkWidget *pWindow = cairo_dock_create_container_window ();
 	gtk_container_set_border_width(GTK_CONTAINER(pWindow), 0);
 	pDock->container.pWidget = pWindow;
-	pDock->bActive = FALSE;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
+	pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
 	
 	if (g_bKeepAbove)
 		gtk_window_set_keep_above (GTK_WINDOW (pWindow), g_bKeepAbove);
@@ -475,14 +475,14 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 		{
 			g_object_unref ((gpointer) pDock->pShapeBitmap);
 			pDock->pShapeBitmap = NULL;
-			if (!pDock->bActive)
+			if (pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
 			{
 				gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 					NULL,
 					0,
 					0);
+				pDock->iInputState = CAIRO_DOCK_INPUT_ACTIVE;
 			}
-			pDock->bActive = TRUE;
 		}
 		gtk_widget_hide (pDock->container.pWidget);
 		cairo_dock_update_dock_size (pDock);

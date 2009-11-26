@@ -186,7 +186,7 @@ visibility alpha = 0.35
 
 [System]
 
-#F-[Movement parameters;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-movment.png]
+#F-[Animations speed;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-movment.png]
 frame_mov =
 
 #b- Animate the dock when auto-hiding ?
@@ -194,7 +194,6 @@ frame_mov =
 animate on auto-hide = false
 
 #b- Animate sub-docks when they appear ?
-#{Always true if sub-docks appear with mouse click.}
 animate subdocks = true
 
 #I-[100;600;fast;slow] Unfolding animation duration :
@@ -204,40 +203,40 @@ unfold duration = 400
 #v
 sep_unfold =
 
-#i-[4;40] Number of steps in the zoom animation (grow up/shrink down) :
+#I-[4;40;fast;slow] Number of steps in the zoom animation (grow up/shrink down) :
 #{The more there are, the slower it will be}
 grow nb steps = 10
-#i-[4;40] ...
+#I-[4;40;fast;slow] ...
 shrink nb steps = 8
 
-#i-[4;40] Number of steps in the fade out animation :
+#I-[4;40;fast;slow] Number of steps in the fade out animation :
 #{This is the animation when the dock goes below a window; The greater, the slower it will be}
 fade out nb steps = 15
 
-#f-[0.1;0.9] Window's move acceleration (move up/move down) :
-#{the smaller, the faster the dock will hide.}
-move up speed = 0.35
-#f-[0.1;0.9] ...
-move down speed = 0.25
+#I-[4;40;fast;slow] Number of steps in the auto-hide animation (move up/move down) :
+#{The more there are, the slower it will be}
+move up nb steps = 10
+#I-[4;40;fast;slow] ...
+move down nb steps = 12
 
-#F-[CPU;gtk-execute]
+#F-[Refresh frequency;gtk-execute]
 frame_cpu =
 
 #i-[5;40] Refresh frequency when mouving cursor into the dock :
 #{in Hz. This is to adjust regarding your CPU power.}
 refresh frequency = 35
 
-#b- Reflections should be calculated in real-time ?
-#{The transparency gradation pattern will then be re-calculated in real time. May needs more CPU power.}
-dynamic reflection = false
-
 #i-[15;60] Animation frequency for the opengl backend :
 #{in Hz. This is to adjust regarding your CPU power.}
 opengl anim freq = 33
 
-#i-[15;60] Animation frequency for the cairo backend :
+#i-[15;50] Animation frequency for the cairo backend :
 #{in Hz. This is to adjust regarding your CPU power.}
 cairo anim freq = 25
+
+#b- Reflections should be calculated in real-time ?
+#{The transparency gradation pattern will then be re-calculated in real time. May needs more CPU power.}
+dynamic reflection = false
 
 #F-[Label readability;gtk-underline]
 frame_label =
@@ -315,10 +314,10 @@ repeat image = true
 #{Use a color gradation.}
 frame3 = 
 
-#C+ Bright color (red, green, blue, alpha) :
+#C+ Bright color :
 stripes color bright = 0.933; 0.933; 0.925; 0.4
 
-#C+ Dark color (red, green, blue, alpha) :
+#C+ Dark color :
 stripes color dark = 0.827; 0.843; 0.811; 0.6
 
 #f+[-90;90] Angle of the gradation :

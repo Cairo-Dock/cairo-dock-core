@@ -180,6 +180,8 @@ GLuint g_iClassIndicatorTexture=0;
 GLuint g_iVisibleZoneTexture=0;
 GLuint g_pGradationTexture[2]={0, 0};
 
+CairoDockModuleInstance *g_pCurrentModule = NULL;
+
 static gchar *cLaunchCommand = NULL;
 
 static gboolean _cairo_dock_successful_launch (gpointer data)
@@ -688,16 +690,14 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
 	
-	g_print ("\nVERIFIER LE CHANGEMENT DE CONTAINER POUR TERMINAL\n\n");
 	g_print ("\n2eme DOCK PRINCIPAL AVEC 1 ICONE : BORD TRONQUE EN VERTICAL\n\n");
 	g_print ("\nPLAN 3D NE PREND PAS TOUT L'ECRAN\n\n");
 	g_print ("\nBATTERIE VERS 100%\n\n");
 	g_print ("\nPB AFFICHAGE PM\n\n");
 	
 	g_print ("\nINDICATEURS EN HAUT (RETOURNES) ET CAIRO\n\n");
-	g_print ("\nCHANGER THEME WIFI OU AUTRE\n\n");
-	g_print ("\nTESTER L'AUTO-HIDE\n\n");
-	g_print ("\nCRASH DANS PANNEAU DE CONF\n\n");
+	g_print ("\n!!! CHANGER THEME NETSPEED OU MP !!!\n\n");
+	g_print ("\n!!! GARDER LE DOCK DERRIERE !!!\n\n");
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
 	g_print ("\nFIXER LES DESKLETS SUR UN BUREAU\n\n");

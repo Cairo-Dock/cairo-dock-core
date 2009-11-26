@@ -26,6 +26,7 @@
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dialogs.h"
+#include "cairo-dock-animations.h"
 #include "cairo-dock-applications-manager.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-accessibility.h"
@@ -226,9 +227,13 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 	{
 		pDock->bAutoHide = pAccessibility->bAutoHide;
 		if (! pAccessibility->bAutoHide && pPrevAccessibility->bAutoHide)
-			cairo_dock_deactivate_temporary_auto_hide ();
+		{
+			cairo_dock_start_showing (pDock);
+		}
 		else
-			cairo_dock_place_root_dock (pDock);
+		{
+			cairo_dock_start_hiding (pDock);
+		}
 		
 		if (pAccessibility->bAutoHideOnFullScreen != pPrevAccessibility->bAutoHideOnFullScreen ||
 			pAccessibility->bAutoHideOnMaximized != pPrevAccessibility->bAutoHideOnMaximized)

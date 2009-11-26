@@ -85,7 +85,7 @@ gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex);
 /** Say if it's usefull to launch an animation on a Dock (indeed, it's useless to launch it if it will be invisible).
 *@param pDock the dock to animate.
 */
-#define cairo_dock_animation_will_be_visible(pDock) ((pDock)->iRefCount != 0 && GTK_WIDGET_VISIBLE ((CAIRO_CONTAINER(pDock)->pWidget)) || ((pDock)->iRefCount == 0 && (! (pDock)->bAutoHide || CAIRO_CONTAINER(pDock)->bInside || ! (pDock)->bIsHidden)))
+#define cairo_dock_animation_will_be_visible(pDock) ((pDock)->iRefCount != 0 && GTK_WIDGET_VISIBLE ((CAIRO_CONTAINER(pDock)->pWidget)) || ((pDock)->iRefCount == 0 && (! (pDock)->bAutoHide || CAIRO_CONTAINER(pDock)->bInside || (pDock)->fHideOffset < 1)))
 
 #define cairo_dock_container_is_animating(pContainer) (CAIRO_CONTAINER(pContainer)->iSidGLAnimation != 0)
 

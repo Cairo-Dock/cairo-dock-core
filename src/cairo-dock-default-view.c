@@ -331,7 +331,6 @@ void cd_render_opengl_default (CairoDock *pDock)
 		fDockOffsetY = pDock->iDecorationsHeight + 1.5 * fLineWidth;
 	
 	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
-	double fRatio = pDock->container.fRatio;
 	
 	//\_____________ On genere les coordonnees du contour.
 	int iNbVertex;

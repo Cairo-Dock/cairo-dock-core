@@ -44,7 +44,6 @@ G_BEGIN_DECLS
 */
 #define cairo_dock_is_extended_dock(pDock) (myAccessibility.bExtendedMode && (pDock->iRefCount == 0))
 
-
 #define cairo_dock_is_hidden(pDock) ((pDock)->iRefCount == 0 && (pDock)->bAutoHide && (pDock)->fHideOffset == 1)
 
 /*
@@ -80,14 +79,25 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve);
 */
 void cairo_dock_prevent_dock_from_out_of_screen (CairoDock *pDock);
 
+/* Calcule la position d'un dock etant donne ses nouvelles dimensions.
+*/
 void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth, int iNewHeight, int *iNewPositionX, int *iNewPositionY);
 
+/* Deplace et redimensionne un dock a ses position et taille attitrees. Ne change pas la zone d'input (cela doit etre fait par ailleurs), et ne la replace pas (cela est fait lors du configure).
+*/
 void cairo_dock_move_resize_dock (CairoDock *pDock);
-/* Met un dock principal a sa taille et a sa place initiale.
+
+/* Met un dock principal a ses position et taille attitrees. Meme remarque qu'au-dessus sur la zone d'input.
 *@param pDock le dock.
 */
 void cairo_dock_place_root_dock (CairoDock *pDock);
 
+/* Cree une zone d'input d'une taille donnee pour un dock.
+*/
+GdkBitmap *cairo_dock_create_input_shape (CairoDock *pDock, int w, int h);
+
+/* Met a jour les zones d'input d'un dock.
+*/
 void cairo_dock_update_input_shape (CairoDock *pDock);
 
 /** Pop up a sub-dock.
@@ -98,7 +108,7 @@ void cairo_dock_update_input_shape (CairoDock *pDock);
 void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboolean bUpdateBefore);
 
 
-/** Calculate the position at rest (when the mouse is outside of the dock and its size is normal) of the icons of a linear dock. 
+/** Calculate the position at rest (when the mouse is outside of the dock and its size is normal) of the icons of a linear dock.
 *@param pIconList a list of icons.
 *@param fFlatDockWidth width of all the icons placed next to each other.
 *@param iXOffset an offset on the position of the first icon.

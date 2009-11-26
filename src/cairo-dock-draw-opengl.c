@@ -58,6 +58,8 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-dock-facility.h"
+#include "cairo-dock-animations.h"
 #include "cairo-dock-draw-opengl.h"
 
 #include "texture-gradation.h"
@@ -504,7 +506,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	
 	//\_____________________ On se place au centre de l'icone.
 	double fX=0, fY=0;
-	_compute_icon_coordinate (icon, pDock, fDockMagnitude, &fX, &fY);
+	_compute_icon_coordinate (icon, CAIRO_CONTAINER (pDock), fDockMagnitude, &fX, &fY);
 	
 	glPushMatrix ();
 	if (pDock->container.bIsHorizontal)
@@ -709,7 +711,8 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 		cd_debug ("g_iVisibleZoneTexture <- %d", g_iVisibleZoneTexture);
 	}
 	
-	glLoadIdentity ();
+	//\_____________________ on dessine la zone de rappel.
+	glLoadIdentity ();  // annule l'offset de cachage.
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
 	cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDock));
 	
@@ -733,6 +736,31 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	_cairo_dock_apply_texture_at_size (g_iVisibleZoneTexture, pDock->container.iWidth, pDock->container.iHeight);
 	
 	_cairo_dock_disable_texture ();
+	
+	//\_____________________ on dessine les icones demandant l'attention.
+	if (myTaskBar.cAnimationOnDemandsAttention)
+	{
+		GList *pFirstDrawnElement = cairo_dock_get_first_drawn_element_linear (pDock->icons);
+		if (pFirstDrawnElement == NULL)
+			return;
+		double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
+		
+		Icon *icon;
+		GList *ic = pFirstDrawnElement;
+		do
+		{
+			icon = ic->data;
+			if (! icon->bIsDemandingAttention)
+				continue;
+			
+			icon->fDrawY = (pDock->container.bDirectionUp ? icon->fHeight * icon->fScale : 0.);
+			glPushMatrix ();
+			cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
+			glPopMatrix ();
+			
+			ic = cairo_dock_get_next_element (ic, pDock->icons);
+		} while (ic != pFirstDrawnElement);
+	}
 }
 
 
