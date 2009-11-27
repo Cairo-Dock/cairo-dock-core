@@ -204,10 +204,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 	}
 	
 	//\_______________ Reserve Spave.
-	if (pAccessibility->bReserveSpace != pPrevAccessibility->bReserveSpace ||
-		pAccessibility->bReserveSpace &&
-			(pAccessibility->iVisibleZoneWidth != pPrevAccessibility->iVisibleZoneWidth ||
-			pAccessibility->iVisibleZoneHeight != pPrevAccessibility->iVisibleZoneHeight))
+	if (pAccessibility->bReserveSpace != pPrevAccessibility->bReserveSpace)
 		cairo_dock_reserve_space_for_all_root_docks (pAccessibility->bReserveSpace);
 	
 	//\_______________ Pop-up.

@@ -171,6 +171,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	
 	if (GTK_WIDGET_VISIBLE (pDock->container.pWidget))
 	{
+		g_print ("%s ()\n", __func__);
 		cairo_dock_move_resize_dock (pDock);
 	}
 	
@@ -306,6 +307,7 @@ void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 
 void cairo_dock_move_resize_dock (CairoDock *pDock)
 {
+	g_print ("%s ()\n", __func__);
 	int iNewWidth = pDock->iMaxDockWidth;
 	int iNewHeight = pDock->iMaxDockHeight;
 	int iNewPositionX, iNewPositionY;
@@ -331,6 +333,7 @@ void cairo_dock_move_resize_dock (CairoDock *pDock)
 
 void cairo_dock_place_root_dock (CairoDock *pDock)
 {
+	g_print ("%s ()\n", __func__);
 	pDock->fFoldingFactor = (pDock->bAutoHide && pDock->iRefCount == 0 && mySystem.bAnimateOnAutoHide ? 1. : 0.);
 	cairo_dock_move_resize_dock (pDock);
 }
@@ -961,6 +964,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboole
 	
 	gtk_window_present (GTK_WINDOW (pSubDock->container.pWidget));
 	
+	g_print ("%s ()\n", __func__);
 	if (pSubDock->container.bIsHorizontal)
 			gdk_window_move_resize (pSubDock->container.pWidget->window,
 			iNewPositionX,
@@ -977,7 +981,6 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboole
 	if (pSubDock->fFoldingFactor == 0.)
 	{
 		cd_debug ("  on montre le sous-dock sans animation");
-		///pSubDock->bAtBottom = TRUE;  // bAtBottom ajoute pour la 1.5.4
 	}
 	else
 	{

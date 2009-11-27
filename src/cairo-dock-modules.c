@@ -1110,7 +1110,6 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 			if (pDock == NULL)
 			{
 				pDock = cairo_dock_create_new_dock (cDockName, NULL);
-				///cairo_dock_place_root_dock (pDock);
 			}
 			pContainer = CAIRO_CONTAINER (pDock);
 		}

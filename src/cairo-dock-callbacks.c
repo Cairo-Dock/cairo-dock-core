@@ -791,7 +791,6 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	
 	// si on etait en auto-hide, on commence a monter.
-	g_print ("pDock->bAutoHide : %d\n", pDock->bAutoHide);
 	if (pDock->fHideOffset != 0 && pDock->iRefCount == 0)
 	{
 		//g_print ("  on commence a monter\n");

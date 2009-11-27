@@ -151,18 +151,18 @@ static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
 	}
 	else
 	{
-		gchar *cPath = NULL;
+		gchar *cIconPath = NULL;
 		if (*cImage != '/')
 		{
-			cPath = g_strconcat (g_cCairoDockDataDir, "/config-panel/", cImage, NULL);
-			if (!g_file_test (cPath, G_FILE_TEST_EXISTS))
+			cIconPath = g_strconcat (g_cCairoDockDataDir, "/config-panel/", cImage, NULL);
+			if (!g_file_test (cIconPath, G_FILE_TEST_EXISTS))
 			{
-				g_free (cPath);
-				cPath = g_strconcat (CAIRO_DOCK_SHARE_DATA_DIR"/", cImage, NULL);
+				g_free (cIconPath);
+				cIconPath = g_strconcat (CAIRO_DOCK_SHARE_DATA_DIR"/", cImage, NULL);
 			}
 		}
-		
-		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cPath ? cPath : cImage, iSize, iSize, NULL);
+		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cIconPath ? cIconPath : cImage, iSize, iSize, NULL);
+		g_free (cIconPath);
 		if (pixbuf != NULL)
 		{
 			pImage = gtk_image_new_from_pixbuf (pixbuf);
@@ -190,12 +190,12 @@ static GtkToolItem *_cairo_dock_make_toolbutton (const gchar *cLabel, const gcha
 		return pWidget;
 	
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gchar *cLabel2 = g_strdup_printf ("<span font_desc=\"Times New Roman 12\"><b>%s</b></span>", cLabel);  /// 16
+	gchar *cLabel2 = g_strdup_printf ("<span font_desc=\"Times New Roman 12\"><b>%s</b></span>", cLabel);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel2);
 	g_free (cLabel2);
 	
 	GtkWidget *pAlign = gtk_alignment_new (0., 0.5, 0., 1.);
-	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_GUI_MARGIN, 0);  /// *2
+	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_GUI_MARGIN, 0);
 	gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
 	gtk_tool_button_set_label_widget (GTK_TOOL_BUTTON (pWidget), pAlign);
 	
@@ -211,7 +211,24 @@ static inline CairoDockGroupDescription *_cairo_dock_add_group_button (const gch
 	pGroupDescription->iCategory = iCategory;
 	pGroupDescription->cPreviewFilePath = g_strdup (cPreviewFilePath);
 	pGroupDescription->cOriginalConfFilePath = g_strdup (cOriginalConfFilePath);
-	pGroupDescription->cIcon = g_strdup (cIcon);
+	gchar *cIconPath = NULL;
+	if (cIcon)
+	{
+		if (*cIcon == '/' || strncmp (cIcon, "gtk-", 4) == 0)
+		{
+			cIconPath = g_strdup (cIcon);
+		}
+		else
+		{
+			cIconPath = g_strconcat (g_cCairoDockDataDir, "/config-panel/", cIcon, NULL);
+			if (!g_file_test (cIconPath, G_FILE_TEST_EXISTS))
+			{
+				g_free (cIconPath);
+				cIconPath = g_strconcat (CAIRO_DOCK_SHARE_DATA_DIR"/", cIcon, NULL);
+			}
+		}
+	}
+	pGroupDescription->cIcon = cIconPath;
 	pGroupDescription->cGettextDomain = cGettextDomain;
 	pGroupDescription->cDependencies = cDependencies;
 	pGroupDescription->pExternalModules = pExternalModules;
@@ -244,7 +261,7 @@ static inline CairoDockGroupDescription *_cairo_dock_add_group_button (const gch
 	g_signal_connect (G_OBJECT (pGroupButton), "enter", G_CALLBACK(on_enter_group_button), pGroupDescription);
 	g_signal_connect (G_OBJECT (pGroupButton), "leave", G_CALLBACK(on_leave_group_button), NULL);
 	_cairo_dock_add_image_on_button (pGroupButton,
-		cIcon,
+		cIconPath,
 		CAIRO_DOCK_GROUP_ICON_SIZE);
 	gtk_box_pack_start (GTK_BOX (pGroupHBox),
 		pGroupButton,
@@ -587,7 +604,7 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	g_signal_connect (pClearButton, "clicked", G_CALLBACK (cairo_dock_clear_filter), s_pFilterEntry);
 	gtk_box_pack_start (GTK_BOX (pFilterBox),
 		pClearButton,
-		FALSE,
+		TRUE,  // sinon le bouton est repousse en-dehors de la marge.
 		FALSE,
 		0);
 	

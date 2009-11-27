@@ -216,7 +216,12 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 	iBestIndex += 2;
 	g_print ("%s (%dx%d)\n", __func__, w, h);
 	
-	int i, n = MIN (w * h, iBufferNbElements - iBestIndex);  // precaution au cas ou le nombre d'elements dans le buffer serait incorrect.
+	int i, n = w * h;
+	if (iBestIndex + n > iBufferNbElements)  // precaution au cas ou le nombre d'elements dans le buffer serait incorrect.
+	{
+		cd_warning ("This icon is broken !\nThis means that one of the current application has sent a buggy icon to X.");
+		return NULL;
+	}
 	gint pixel, alpha, red, green, blue;
 	float fAlphaFactor;
 	gint *pPixelBuffer = (gint *) &pXIconBuffer[iBestIndex];  // on va ecrire le resultat du filtre directement dans le tableau fourni en entree. C'est ok car sizeof(gulong) >= sizeof(gint), donc le tableau de pixels est plus petit que le buffer fourni en entree. merci a Hannemann pour ses tests et ses screenshots ! :-)
@@ -252,7 +257,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 		CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,
 		&fIconWidthSaturationFactor,
 		&fIconHeightSaturationFactor);
-
+	
 	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
 		ceil (*fWidth * fMaxScale),
 		ceil (*fHeight * fMaxScale));

@@ -192,6 +192,8 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 static void _cairo_dock_intercept_signal (int signal)
 {
 	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now.\nFeel free to report this bug on cairo-dock.org to help improving the dock !", signal);
+	if (g_pCurrentModule != NULL)
+		g_print ("The applet '%s' may be the culprit\n", g_pCurrentModule->pModule->pVisitCard->cModuleName);
 	execl ("/bin/sh", "/bin/sh", "-c", cLaunchCommand, NULL);  // on ne revient pas de cette fonction.
 	cd_warning ("Sorry, couldn't restart the dock");
 }
@@ -696,11 +698,13 @@ int main (int argc, char** argv)
 	g_print ("\nPB AFFICHAGE PM\n\n");
 	
 	g_print ("\nINDICATEURS EN HAUT (RETOURNES) ET CAIRO\n\n");
+	g_print ("\nPARABOLE UNFOLD\n\n");
+	g_print ("\nFLASH A LA SUPPRESSION D'UNE ICONE D'APPLI AU MILIEU DU DOCK\n\n");
 	g_print ("\n!!! CHANGER THEME NETSPEED OU MP !!!\n\n");
-	g_print ("\n!!! GARDER LE DOCK DERRIERE !!!\n\n");
+	g_print ("\nMETTRE A JOUR LE THEME PAR DEFAUT\n\n");
+	g_print ("\nTESTER ICONE OPERA 10.10\n\n");
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
-	g_print ("\nFIXER LES DESKLETS SUR UN BUREAU\n\n");
 	g_print ("\nNOUVELLE INSTANCE COPIEE SUR LA 1ERE\n\n");
 	g_print ("\nJAUGES : LOGO\n\n");
 	

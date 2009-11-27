@@ -746,9 +746,8 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	
 	g_key_file_free (pKeyFile);
 
-	cairo_dock_mark_theme_as_modified (TRUE);  // force a FALSE apres coup dans le cas d'un chargement de theme.
-	
 	s_bLoading = FALSE;
+	
 	cairo_dock_refresh_launcher_gui ();
 }
 

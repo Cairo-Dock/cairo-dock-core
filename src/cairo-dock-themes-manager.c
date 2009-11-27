@@ -543,11 +543,9 @@ void cairo_dock_load_current_theme (void)
 
 	//\___________________ On cree le dock principal.
 	g_pMainDock = cairo_dock_create_new_dock (CAIRO_DOCK_MAIN_DOCK_NAME, NULL);  // on ne lui assigne pas de vues, puisque la vue par defaut des docks principaux sera definie plus tard.
-	g_pMainDock->bIsMainDock = TRUE;
 
 	//\___________________ On lit son fichier de conf et on charge tout.
 	cairo_dock_read_conf_file (g_cConfFile, g_pMainDock);  // chargera des valeurs par defaut si le fichier de conf fourni est incorrect.
-	cairo_dock_mark_theme_as_modified (FALSE);  // le chargement du fichier de conf le marque a 'TRUE'.
 }
 
 

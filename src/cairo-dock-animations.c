@@ -346,6 +346,10 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				cairo_dock_calculate_dock_icons (pDock);  // relance le grossissement si on est dedans.
 			}
 		}
+		else if (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != 1)
+		{
+			cairo_dock_calculate_dock_icons (pDock);
+		}
 		return (!pDock->bIsGrowingUp && (pDock->fDecorationsOffsetX != 0 || (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != 1)));
 	}
 	else
