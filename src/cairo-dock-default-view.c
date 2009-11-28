@@ -105,7 +105,10 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 		pDock->iMaxRightMargin = pDock->iMaxDockWidth - (pLastIcon->fXMin + pLastIcon->fWidth);
 	//g_print(" marges min: %d | %d\n marges max: %d | %d\n", pDock->iMinLeftMargin, pDock->iMinRightMargin, pDock->iMaxLeftMargin, pDock->iMaxRightMargin);
 	
-	pDock->iMinDockWidth = pDock->fFlatDockWidth;
+	if (pDock->fAlign != .5 & cairo_dock_is_extended_dock (pDock))
+		pDock->iMinDockWidth = pDock->iMaxDockWidth;
+	else
+		pDock->iMinDockWidth = pDock->fFlatDockWidth;
 }
 
 

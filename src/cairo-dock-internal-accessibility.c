@@ -227,7 +227,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		{
 			cairo_dock_start_showing (pDock);
 		}
-		else
+		else if (pAccessibility->bAutoHide && ! pPrevAccessibility->bAutoHide)
 		{
 			cairo_dock_start_hiding (pDock);
 		}
