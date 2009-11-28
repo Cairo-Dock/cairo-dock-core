@@ -214,11 +214,20 @@ static inline CairoDockGroupDescription *_cairo_dock_add_group_button (const gch
 	gchar *cIconPath = NULL;
 	if (cIcon)
 	{
-		if (*cIcon == '/' || strncmp (cIcon, "gtk-", 4) == 0)
+		if (*cIcon == '/')  // on ecrase les chemins des icons d'applets.
+		{
+			cIconPath = g_strdup_printf ("%s/config-panel/%s.png", g_cCairoDockDataDir, cGroupName);
+			if (!g_file_test (cIconPath, G_FILE_TEST_EXISTS))
+			{
+				g_free (cIconPath);
+				cIconPath = g_strdup (cIcon);
+			}
+		}
+		else if (strncmp (cIcon, "gtk-", 4) == 0)
 		{
 			cIconPath = g_strdup (cIcon);
 		}
-		else
+		else  // categorie ou module interne.
 		{
 			cIconPath = g_strconcat (g_cCairoDockDataDir, "/config-panel/", cIcon, NULL);
 			if (!g_file_test (cIconPath, G_FILE_TEST_EXISTS))
@@ -377,9 +386,8 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	gtk_window_set_icon_from_file (GTK_WINDOW (s_pMainWindow), cIconPath, NULL);
 	g_free (cIconPath);
 	
-	GtkWidget *pMainHBox = gtk_hbox_new (FALSE, 0);  /// CAIRO_DOCK_GUI_MARGIN
+	GtkWidget *pMainHBox = gtk_hbox_new (FALSE, 0);
 	gtk_container_add (GTK_CONTAINER (s_pMainWindow), pMainHBox);
-	///gtk_container_set_border_width (GTK_CONTAINER (pMainHBox), CAIRO_DOCK_GUI_MARGIN);
 	
 	if (g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] > CAIRO_DOCK_CONF_PANEL_WIDTH)
 	{
@@ -525,6 +533,7 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	gsize length = 0;
 	gchar **pGroupList = g_key_file_get_groups (pKeyFile, &length);
 	gchar *cGroupName;
+	gint iActive;
 	CairoDockInternalModule *pInternalModule;
 	gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
 	for (i = 0; i < length; i ++)
@@ -534,12 +543,17 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 		if (pInternalModule == NULL)
 			continue;
 		
+		if (g_key_file_has_key (pKeyFile, cGroupName, "active", NULL))
+			iActive = g_key_file_get_boolean (pKeyFile, cGroupName, "active", NULL);
+		else
+			iActive = -1;  // <=> non desactivable
+		
 		_cairo_dock_add_group_button (cGroupName,
 			pInternalModule->cIcon,
 			pInternalModule->iCategory,
 			pInternalModule->cDescription,
 			NULL,  // pas de prevue
-			-1,  // <=> non desactivable
+			iActive,
 			TRUE,  // <=> configurable
 			cOriginalConfFilePath,
 			NULL,  // domaine de traduction : celui du dock.

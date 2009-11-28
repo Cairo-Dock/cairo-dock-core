@@ -410,9 +410,9 @@ CD_APPLET_ON_UPDATE_ICON_PROTO \
 
 /** Quit the update function immediately with no more updates.
 */
-#define CD_APPLET_STOP_UPDATE_ICON \
+#define CD_APPLET_STOP_UPDATE_ICON do { \
 	g_pCurrentModule = NULL;\
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION; } while (0)
 
 /** Quit the update function immediately with no more updates after redrawing the icon.
 */

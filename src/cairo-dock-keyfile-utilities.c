@@ -355,3 +355,25 @@ void cairo_dock_add_widget_to_conf_file (GKeyFile *pKeyFile, const gchar *cGroup
 	g_key_file_set_comment (pKeyFile, cGroupName, ckeyName, Comment, NULL);
 	g_free (Comment);
 }
+
+
+gboolean cairo_dock_rename_group_in_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cNewGroupName)
+{
+	if (g_key_file_has_group (pKeyFile, cNewGroupName))
+		return FALSE;
+	
+	gchar **pKeyList = g_key_file_get_keys (pKeyFile, cGroupName, NULL, NULL);
+	gchar *cValue;
+	int i;
+	for (i = 0; pKeyList[i] != NULL; i ++)
+	{
+		cValue = g_key_file_get_value (pKeyFile, cGroupName, pKeyList[i], NULL);
+		g_key_file_set_value (pKeyFile, cNewGroupName, pKeyList[i], cValue);
+		g_free (cValue);
+	}
+	g_strfreev (pKeyList);
+	
+	g_key_file_remove_group (pKeyFile, cGroupName, NULL);
+	
+	return TRUE;
+}

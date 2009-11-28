@@ -58,11 +58,16 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	double fRadius = MIN (myBackground.iDockRadius, (pDock->iDecorationsHeight + myBackground.iDockLineWidth) / 2 - 1);
 	double fExtraWidth = myBackground.iDockLineWidth + 2 * (fRadius + myBackground.iFrameMargin);
 	pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->pFirstDrawnElement, pDock->fFlatDockWidth, 1., fExtraWidth));
+	pDock->iOffsetForExtend = 0;
 	
 	if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
 	{
 		if (pDock->iMaxDockWidth < cairo_dock_get_max_authorized_dock_width (pDock))  // alors on etend.
 		{
+			if (pDock->fAlign != .5)
+			{
+				pDock->iOffsetForExtend = (cairo_dock_get_max_authorized_dock_width (pDock) - pDock->iMaxDockWidth) / 2 - fExtraWidth;
+			}
 			fExtraWidth += (cairo_dock_get_max_authorized_dock_width (pDock) - pDock->iMaxDockWidth);
 			pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->pFirstDrawnElement, pDock->fFlatDockWidth, 1., fExtraWidth));  // on pourra optimiser, ce qui nous interesse ici c'est les fXMin/fXMax.
 			g_print ("mode etendu : pDock->iMaxDockWidth : %d\n", pDock->iMaxDockWidth);
@@ -397,7 +402,7 @@ void cd_render_opengl_default (CairoDock *pDock)
 
 static void _cd_calculate_construction_parameters_generic (Icon *icon, CairoDock *pDock)
 {
-	icon->fDrawX = icon->fX;
+	icon->fDrawX = icon->fX + (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2);
 	icon->fDrawY = icon->fY;
 	icon->fWidthFactor = 1.;
 	icon->fHeightFactor = 1.;

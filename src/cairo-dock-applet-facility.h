@@ -278,6 +278,13 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 		g_free (_cQuestion); }\
 	_cThemePath; })
 
+/** Rename a group in the conf file, in case you had to change it. Do nothing if the old group no more exists in the conf file.
+*@param cGroupName name of the group.
+*@param cNewGroupName new name of the group.
+*/
+#define CD_CONFIG_RENAME_GROUP(cGroupName, cNewGroupName) do {\
+	if (cairo_dock_rename_group_in_conf_file (pKeyFile, cGroupName, cNewGroupName))\
+		bFlushConfFileNeeded = TRUE; } while (0)
 
   //////////
  // MENU //

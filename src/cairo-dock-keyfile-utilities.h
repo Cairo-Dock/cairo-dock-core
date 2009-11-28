@@ -65,5 +65,7 @@ void cairo_dock_add_remove_element_to_key (const gchar *cConfFilePath, const gch
 void cairo_dock_add_widget_to_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *ckeyName, const gchar *cInitialValue, gchar iWidgetType, const gchar *cDescription, const gchar *cTooltip);
 
 
+gboolean cairo_dock_rename_group_in_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cNewGroupName);
+
 G_END_DECLS
 #endif

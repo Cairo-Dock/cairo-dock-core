@@ -1650,7 +1650,7 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		pMenuItem = gtk_separator_menu_item_new ();
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
 		
-		pMenuItem = gtk_menu_item_new_with_label (_("Accessibility"));
+		pMenuItem = gtk_menu_item_new_with_label (_("Visibility"));
 		gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
 		GtkWidget *pSubMenuAccessibility = gtk_menu_new ();
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuAccessibility);

@@ -161,6 +161,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		n ++;
 	} while ((pDock->iMaxDockWidth > iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_iScreenHeight[pDock->container.bIsHorizontal]) && n < 4);
 	pDock->iMaxIconHeight = hmax;
+	g_print (">>> iMaxIconHeight : %d (%.2f)\n", (int) pDock->iMaxIconHeight, pDock->container.fRatio);
 	
 	pDock->pRenderer->calculate_icons (pDock);  // le calcul de max_dock_size a altere les fX et fY.
 	
@@ -673,7 +674,7 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 Icon *cairo_dock_apply_wave_effect_linear (CairoDock *pDock)
 {
 	//\_______________ On calcule la position du curseur dans le referentiel du dock a plat.
-	int dx = pDock->container.iMouseX - pDock->container.iWidth / 2;  // ecart par rapport au milieu du dock a plat.
+	int dx = pDock->container.iMouseX - (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2) - pDock->container.iWidth / 2;  // ecart par rapport au milieu du dock a plat.
 	int x_abs = dx + pDock->fFlatDockWidth / 2;  // ecart par rapport a la gauche du dock minimal  plat.
 
 	//\_______________ On calcule l'ensemble des parametres des icones.

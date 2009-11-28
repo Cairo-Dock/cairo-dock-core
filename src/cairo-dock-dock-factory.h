@@ -222,12 +222,14 @@ struct _CairoDock {
 	gboolean bWMIconseedsUptade;
 	
 	//\_______________ input shape.
-	CairoDockInputState iInputState;  // no input shape (active), minimal input shape (at rest), hidden input shape (hidden).
+	/// state of the input shape (active, at rest, hidden).
+	CairoDockInputState iInputState;
 	/// input shape of the window when the dock is at rest.
 	GdkBitmap* pShapeBitmap;
 	/// input shape of the window when the dock is hidden.
 	GdkBitmap* pHiddenShapeBitmap;
-	gchar reserved[16];
+	gint iOffsetForExtend;
+	gchar reserved[8];
 };
 
 
