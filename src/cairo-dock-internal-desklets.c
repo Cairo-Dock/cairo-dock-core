@@ -43,6 +43,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDesklets *pDesklets)
 	if (pUserDeskletDecorations == NULL)
 	{
 		pUserDeskletDecorations = g_new0 (CairoDeskletDecoration, 1);
+		pUserDeskletDecorations->cDisplayedName = _("_custom decoration_");
 		cairo_dock_register_desklet_decoration ("personnal", pUserDeskletDecorations);
 	}
 	if (pDesklets->cDeskletDecorationsName == NULL || strcmp (pDesklets->cDeskletDecorationsName, "personnal") == 0)

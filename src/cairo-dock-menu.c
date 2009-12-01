@@ -705,7 +705,7 @@ static void _cairo_dock_detach_module (GtkMenuItem *pMenuItem, gpointer *data)
 	cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
 		G_TYPE_BOOLEAN, "Desklet", "initially detached", CAIRO_DOCK_IS_DOCK (pContainer),
 		G_TYPE_INVALID);
-
+	cairo_dock_update_desklet_detached_state_in_gui (icon->pModuleInstance->pModule->pVisitCard->cModuleName, CAIRO_DOCK_IS_DOCK (pContainer));
 	cairo_dock_reload_module_instance (icon->pModuleInstance, TRUE);
 	if (icon->pModuleInstance->pDesklet)  // on a detache l'applet.
 		cairo_dock_zoom_out_desklet (icon->pModuleInstance->pDesklet);

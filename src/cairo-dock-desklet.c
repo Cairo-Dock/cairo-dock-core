@@ -976,6 +976,7 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 					cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
 						G_TYPE_BOOLEAN, "Desklet", "initially detached", FALSE,
 						G_TYPE_INVALID);
+					cairo_dock_update_desklet_detached_state_in_gui (icon->pModuleInstance->pModule->pVisitCard->cModuleName, FALSE);
 					cairo_dock_reload_module_instance (icon->pModuleInstance, TRUE);
 					return TRUE;  // interception du signal.
 				}

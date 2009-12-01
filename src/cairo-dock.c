@@ -698,11 +698,8 @@ int main (int argc, char** argv)
 	g_print ("\nPB AFFICHAGE PM\n\n");
 	
 	g_print ("\nINDICATEURS EN HAUT (RETOURNES) ET CAIRO\n\n");
-	g_print ("\nPARABOLE UNFOLD\n\n");
 	g_print ("\nFLASH A LA SUPPRESSION D'UNE ICONE D'APPLI AU MILIEU DU DOCK\n\n");
-	g_print ("\n!!! CHANGER THEME NETSPEED OU MP !!!\n\n");
 	g_print ("\nMETTRE A JOUR LE THEME PAR DEFAUT\n\n");
-	g_print ("\nCLOCK ET SLIDER !!!\n\n");
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
 	g_print ("\nNOUVELLE INSTANCE COPIEE SUR LA 1ERE\n\n");

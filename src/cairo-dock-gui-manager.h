@@ -35,6 +35,7 @@ G_BEGIN_DECLS
 
 struct _CairoDockCategoryWidgetTable {
 	GtkWidget *pFrame;
+	GtkWidget *pExpander;
 	GtkWidget *pTable;
 	gint iNbRows;
 	gint iNbItemsInCurrentRow;
@@ -130,6 +131,7 @@ void cairo_dock_trigger_current_filter (void);
 void cairo_dock_deactivate_module_in_gui (const gchar *cModuleName);
 void cairo_dock_update_desklet_size_in_gui (const gchar *cModuleName, int iWidth, int iHeight);
 void cairo_dock_update_desklet_position_in_gui (const gchar *cModuleName, int x, int y);
+void cairo_dock_update_desklet_detached_state_in_gui (const gchar *cModuleName, gboolean bIsDetached);
 
 void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage);
 void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFormat, ...);

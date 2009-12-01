@@ -36,6 +36,7 @@ G_BEGIN_DECLS
 struct _CairoConfigLabels {
 	CairoDockLabelDescription iconTextDescription;
 	CairoDockLabelDescription quickInfoTextDescription;
+	gboolean bLabelForPointedIconOnly;
 	gint iLabelSize;  // taille des etiquettes des icones, en prenant en compte le contour et la marge.
 	};
 

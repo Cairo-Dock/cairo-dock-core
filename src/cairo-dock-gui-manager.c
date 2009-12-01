@@ -496,12 +496,16 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 		pCategoryWidget->pFrame = gtk_frame_new (NULL);
 		gtk_container_set_border_width (GTK_CONTAINER (pCategoryWidget->pFrame), CAIRO_DOCK_GUI_MARGIN);
 		gtk_frame_set_shadow_type (GTK_FRAME (pCategoryWidget->pFrame), GTK_SHADOW_OUT);
+		pCategoryWidget->pExpander = gtk_expander_new (NULL);
+		gtk_expander_set_expanded (GTK_EXPANDER (pCategoryWidget->pExpander), TRUE);
+		gtk_container_add (GTK_CONTAINER (pCategoryWidget->pExpander), pCategoryWidget->pFrame);
 		
 		pLabel = gtk_label_new (NULL);
 		cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman 12\"><b>%s</b></span>", gettext (cCategoriesDescription[2*i]));
 		gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 		g_free (cLabel);
-		gtk_frame_set_label_widget (GTK_FRAME (pCategoryWidget->pFrame), pLabel);
+		///gtk_frame_set_label_widget (GTK_FRAME (pCategoryWidget->pFrame), pLabel);
+		gtk_expander_set_label_widget (GTK_EXPANDER (pCategoryWidget->pExpander), pLabel);
 		
 		pCategoryWidget->pTable = gtk_table_new (1,
 			s_iNbButtonsByRow,
@@ -511,7 +515,8 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 		gtk_container_add (GTK_CONTAINER (pCategoryWidget->pFrame),
 			pCategoryWidget->pTable);
 		gtk_box_pack_start (GTK_BOX (s_pGroupsVBox),
-			pCategoryWidget->pFrame,
+			///pCategoryWidget->pFrame,
+			pCategoryWidget->pExpander,
 			FALSE,
 			FALSE,
 			0);
@@ -810,7 +815,7 @@ void cairo_dock_hide_all_categories (void)
 	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
 	{
 		pCategoryWidget = &s_pCategoryWidgetTables[i];
-		gtk_widget_hide (pCategoryWidget->pFrame);
+		gtk_widget_hide (pCategoryWidget->pExpander/**pFrame*/);
 	}
 	
 	gtk_widget_show (s_pOkButton);
@@ -838,7 +843,9 @@ void cairo_dock_show_all_categories (void)
 	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
 	{
 		pCategoryWidget = &s_pCategoryWidgetTables[i];
-		gtk_widget_show_all (pCategoryWidget->pFrame);
+		///gtk_widget_show_all (pCategoryWidget->pFrame);
+		gtk_widget_show_all (pCategoryWidget->pExpander);
+		gtk_expander_set_expanded (GTK_EXPANDER (pCategoryWidget->pExpander), TRUE);
 	}
 	gtk_widget_hide (s_pOkButton);
 	gtk_widget_hide (s_pApplyButton);
@@ -873,10 +880,13 @@ void cairo_dock_show_one_category (int iCategory)
 	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
 	{
 		pCategoryWidget = &s_pCategoryWidgetTables[i];
+		gtk_widget_show_all (pCategoryWidget->pExpander);
 		if (i != iCategory)
-			gtk_widget_hide (pCategoryWidget->pFrame);
+			///gtk_widget_hide (pCategoryWidget->pFrame);
+			gtk_expander_set_expanded (GTK_EXPANDER (pCategoryWidget->pExpander), FALSE);
 		else
-			gtk_widget_show_all (pCategoryWidget->pFrame);
+			///gtk_widget_show_all (pCategoryWidget->pFrame);
+			gtk_expander_set_expanded (GTK_EXPANDER (pCategoryWidget->pExpander), TRUE);
 	}
 	gtk_widget_hide (s_pOkButton);
 	gtk_widget_hide (s_pApplyButton);
@@ -1577,6 +1587,21 @@ void cairo_dock_update_desklet_position_in_gui (const gchar *cModuleName, int x,
 			gtk_spin_button_set_value (GTK_SPIN_BUTTON (pOneWidget), y);
 	}
 }
+
+void cairo_dock_update_desklet_detached_state_in_gui (const gchar *cModuleName, gboolean bIsDetached)
+{
+	if (s_pMainWindow == NULL || cModuleName == NULL || s_pCurrentGroup == NULL || s_pCurrentGroup->cGroupName == NULL || s_pCurrentWidgetList == NULL)
+		return ;
+	
+	if (strcmp (cModuleName, s_pCurrentGroup->cGroupName) == 0)  // on est en train d'editer ce module dans le panneau de conf.
+	{
+		GtkWidget *pOneWidget = cairo_dock_get_widget_from_name ("Desklet", "initially detached");
+		if (pOneWidget != NULL)
+			gtk_toggle_button_set_active  (GTK_TOGGLE_BUTTON (pOneWidget), bIsDetached);
+	}
+}
+
+
 
 void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage)
 {

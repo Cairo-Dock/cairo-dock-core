@@ -45,6 +45,7 @@
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-flying-container.h"
 
 #define HAND_WIDTH 80
@@ -408,6 +409,9 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 			g_key_file_set_boolean (pKeyFile, "Desklet", "initially detached", TRUE);
 			g_key_file_set_double (pKeyFile, "Desklet", "x position", iDeskletPositionX);
 			g_key_file_set_double (pKeyFile, "Desklet", "y position", iDeskletPositionY);
+			
+			cairo_dock_update_desklet_detached_state_in_gui (pIcon->pModuleInstance->pModule->pVisitCard->cModuleName, TRUE);
+			cairo_dock_update_desklet_position_in_gui (pIcon->pModuleInstance->pModule->pVisitCard->cModuleName, iDeskletPositionX, iDeskletPositionY);
 			
 			cairo_dock_write_keys_to_file (pKeyFile, pIcon->pModuleInstance->cConfFilePath);
 			g_key_file_free (pKeyFile);

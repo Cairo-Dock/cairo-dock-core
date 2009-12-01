@@ -74,7 +74,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 		}
 		else
 			iAccessibility = 1;
-		g_key_file_set_integer (pKeyFile, "Accessibility", "accessibility", iAccessibility);
+		g_key_file_set_integer (pKeyFile, "Accessibility", "visibility", iAccessibility);
 	}
 	else
 	{

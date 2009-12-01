@@ -76,6 +76,10 @@ auto quick hide = false
 #F-[Sub-docks' visibility;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-subdock.png]
 frame_sub =
 
+#b- Click to show sub-docks ?
+#{Otherwise they will appear when you linger over the icon pointing on it.}
+show on click = false
+
 #i- Delay before you effectively leave from a sub-dock or to a sub-dock :
 #{in ms.}
 leaving delay = 250
@@ -83,10 +87,6 @@ leaving delay = 250
 #i- Delay before displaying a sub-dock :
 #{in ms. Unused if you set up to click to show sub-docks.}
 show delay = 300
-
-#b- Click to show sub-docks ?
-#{Otherwise they will appear when you linger over the icon pointing on it.}
-show on click = false
 
 lock icons = false
 lock all = false
@@ -152,7 +152,7 @@ close on middle click = true
 #v- 
 sep_att =
 
-#b- Signal the applications demanding your attention with a dialog bubble ?
+#B-[2] Signal the applications demanding your attention with a dialog bubble ?
 demands attention with dialog = true
 
 #i-[1;20] Duration of the dialog :
@@ -241,9 +241,6 @@ dynamic reflection = false
 #F-[Label readability;gtk-underline]
 frame_label =
 
-#b- Show label of the currently pointed icon only ?
-pointed icon only = false
-
 #b- Should the labels be always horizontal, even when dock is vertical ?
 always horizontal = true
 
@@ -305,7 +302,7 @@ frame2 =
 background image = 
 
 #e+[0;1;transparent;opaque] Image's transparency :
-image alpha = 0.5
+image alpha = 1
 
 #b+ Repeat image as a pattern to fill background ?
 repeat image = true
@@ -385,14 +382,11 @@ decorations speed = 0.5
 
 [Labels]
 
+#l+[No;On pointed icon;On all icons] Show labels :
+show_labels = 1
+
 #F+[Font;gtk-select-font]
 frame_font =
-
-#b+ Display labels on icons ?
-show labels = true
-
-#v
-sep_lab =
 
 #B+ Use a custom font for labels ?
 #{Otherwise the default system one will be used.}
@@ -432,9 +426,6 @@ background for label = false
 
 #i+[0;20] Margin around the text (in pixels) :
 text margin = 4
-
-#m[System] Configure the label readability.
-config_labels = 
 
 
 [Icons]
@@ -627,12 +618,16 @@ icon size = 48
 
 [Desklets]
 
+#F+[Decorations;gtk-paste]
+frame_deco =
+
 #O+ Choose a default decoration for all desklets :
-#{This can be customized for each desklet separately.}
+#{This can be customized for each desklet separately.
+#Choose 'Custom decoration' to define your own decorations below}
 decorations = clear
 
-#F+[Personnal decorations;gtk-paste]
-frame_perso =
+#v
+sep_deco =
 
 #S+ Background image :
 #{It's an image that will be displayed below the drawings, like a frame for exemple. Let empty to not use any.}
@@ -657,8 +652,8 @@ fg desklet =
 #e+[0;1;transparent;opaque] Foreground tansparency :
 fg alpha = 1
 
-#F+
-frame_perso_ =
+#F+[Buttons;gtk-close]
+frame_button =
 
 #i+[4;28] Buttons size :
 button size = 16
@@ -674,6 +669,7 @@ retach image =
 #S+ Name of an image to use for the 'depth rotate' button :
 #{If you don't provide any, a default image will be used.}
 depth rotate image = 
+
 
 [Indicators]
 

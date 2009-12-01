@@ -216,7 +216,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 	GtkLabel *pDescriptionLabel = data[0];
 	GtkImage *pPreviewImage = data[1];
 	GError *erreur = NULL;
-	gchar *cDescriptionFilePath = NULL, *cPreviewFilePath = NULL;
+	gchar *cDescriptionFilePath = NULL, *cPreviewFilePath = NULL, *cName = NULL;
 	//g_print ("iter:%d\n", iter);
 	gtk_tree_model_get (model, &iter,
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, &cDescriptionFilePath,
@@ -301,6 +301,39 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 	g_free (cPreviewFilePath);
 }
 
+static void _cairo_dock_select_custom_item_in_combo (GtkComboBox *widget, gpointer *data)
+{
+	GtkTreeModel *model = gtk_combo_box_get_model (widget);
+	g_return_if_fail (model != NULL);
+
+	GtkTreeIter iter;
+	if (!gtk_combo_box_get_active_iter (widget, &iter))
+		return ;
+	
+	GtkWidget *parent = data[1];
+	GtkWidget *pKeyBox = data[0];
+	int iNbWidgets = GPOINTER_TO_INT (data[2]);
+	GList *children = gtk_container_get_children (GTK_CONTAINER (parent));
+	GList *c = g_list_find (children, pKeyBox);
+	g_return_if_fail (c != NULL && c->next != NULL);
+	
+	gchar *cName = NULL;
+	gtk_tree_model_get (model, &iter,
+		CAIRO_DOCK_MODEL_RESULT, &cName, -1);
+	
+	gboolean bActive = (cName != NULL && strcmp (cName, "personnal") == 0);
+	GtkWidget *w;
+	int i;
+	for (c = c->next, i = 0; c != NULL && i < iNbWidgets; c = c->next, i ++)
+	{
+		w = c->data;
+		gtk_widget_set_sensitive (w, bActive);
+	}
+	
+	g_list_free (children);
+	g_free (cName);
+}
+
 static void _cairo_dock_select_one_item_in_combo (GtkComboBox *widget, gpointer *data)
 {
 	GtkTreeModel *model = gtk_combo_box_get_model (widget);
@@ -309,7 +342,7 @@ static void _cairo_dock_select_one_item_in_combo (GtkComboBox *widget, gpointer 
 	GtkTreeIter iter;
 	if (!gtk_combo_box_get_active_iter (widget, &iter))
 		return ;
-
+	
 	_cairo_dock_selection_changed (model, iter, data);
 }
 
@@ -1636,7 +1669,33 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			
 			case CAIRO_DOCK_WIDGET_DESKLET_DECORATION_LIST :  // liste des decorations de desklet.
 			case CAIRO_DOCK_WIDGET_DESKLET_DECORATION_LIST_WITH_DEFAULT :  // idem mais avec le choix "defaut" en plus.
+			{
 				_add_combo_from_modele ((iElementType == CAIRO_DOCK_WIDGET_DESKLET_DECORATION_LIST ? s_pDecorationsListStore : s_pDecorationsListStore2), FALSE, FALSE);
+				
+				_allocate_new_buffer;
+				data[0] = pKeyBox;
+				data[1] = pFrameVBox != NULL ? pFrameVBox : pGroupBox;
+				iNbControlledWidgets = 9;
+				data[2] = GINT_TO_POINTER (iNbControlledWidgets);
+				g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_custom_item_in_combo), data);
+				
+				GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));
+				GtkTreeIter iter;
+				if (pOneWidget && gtk_combo_box_get_active_iter (pOneWidget, &iter))
+				{
+					gchar *cName = NULL;
+					gtk_tree_model_get (model, &iter,
+						CAIRO_DOCK_MODEL_RESULT, &cName, -1);
+					if (! cName || strcmp (cName, "personnal") != 0)
+					{
+						iNbSensitiveWidgets = 0;
+						iFirstSensitiveWidget = 1;
+						pControlContainer = pFrameVBox != NULL ? pFrameVBox : pGroupBox;
+					}
+					else
+						iNbControlledWidgets = 0;
+				}
+			}
 			break ;
 			
 			case CAIRO_DOCK_WIDGET_GAUGE_LIST :  // liste des themes de jauge.

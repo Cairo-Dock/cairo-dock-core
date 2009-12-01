@@ -78,13 +78,31 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	pango_font_description_free (fd);
 	g_free (cFontDescription);
 	
-	gboolean bShow = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "show labels", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	int iShowLabel = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "show_labels", &bFlushConfFileNeeded, -1, NULL, NULL);
+	gboolean bShow, bLabelForPointedIconOnly;
+	if (iShowLabel == -1)  // nouveau parametre
+	{
+		if (g_key_file_has_key (pKeyFile, "Labels", "show labels", NULL))
+			bShow = g_key_file_get_boolean (pKeyFile, "Labels", "show labels", NULL);
+		else
+			bShow = TRUE;
+		bLabelForPointedIconOnly = g_key_file_get_boolean (pKeyFile, "System", "pointed icon only", NULL);
+		iShowLabel = (! bShow ? 0 : (bLabelForPointedIconOnly ? 1 : 2));
+		g_key_file_set_integer (pKeyFile, "Labels", "show_labels", iShowLabel);
+	}
+	else
+	{
+		bShow = (iShowLabel != 0);
+		bLabelForPointedIconOnly = (iShowLabel == 1);
+	}
+	g_print ("labels : %d;%d\n", bShow, bLabelForPointedIconOnly);
 	if (! bShow)
 	{
 		g_free (pLabels->iconTextDescription.cFont);
 		pLabels->iconTextDescription.cFont = NULL;
 		pLabels->iconTextDescription.iSize = 0;
 	}
+	pLabels->bLabelForPointedIconOnly = bLabelForPointedIconOnly;
 	
 	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text oulined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	

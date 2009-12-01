@@ -35,7 +35,6 @@ G_BEGIN_DECLS
 
 struct _CairoConfigSystem {
 	gboolean bUseFakeTransparency;
-	gboolean bLabelForPointedIconOnly;
 	gdouble fLabelAlphaThreshold;
 	gboolean bTextAlwaysHorizontal;
 	gint iUnfoldingDuration;
