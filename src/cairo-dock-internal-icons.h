@@ -44,8 +44,9 @@ struct _CairoConfigIcons {
 	gdouble fStringColor[4];
 	gdouble fAlphaAtRest;
 	gdouble fReflectSize;
-	gchar **pDirectoryList;
+	gchar *cIconTheme;
 	gpointer *pDefaultIconDirectory;
+	gint iNbIconPlaces;
 	gint tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
 	gint tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
 	CairoDockIconType tIconTypeOrder[CAIRO_DOCK_NB_TYPES];
@@ -55,7 +56,6 @@ struct _CairoConfigIcons {
 	gchar *cSeparatorImage;
 	gboolean bRevolveSeparator;
 	gboolean bConstantSeparatorSize;
-	///gboolean bBgForApplets;
 	gboolean bUseLocalIcons;
 	gboolean bMixApplisAndLaunchers;
 	};

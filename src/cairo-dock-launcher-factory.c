@@ -88,11 +88,10 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 		bHasVersion = (str != NULL && g_ascii_isdigit (*(str+1)) && g_ascii_isdigit (*(str-1)));
 		
 		//\_______________________ On parcourt les themes disponibles, en testant tous les suffixes connus.
-		i = 0;
 		bFileFound = FALSE;
 		if (myIcons.pDefaultIconDirectory != NULL)
 		{
-			while ((myIcons.pDefaultIconDirectory[2*i] != NULL || myIcons.pDefaultIconDirectory[2*i+1] != NULL) && ! bFileFound)
+			for (i = 0; i < myIcons.iNbIconPlaces && ! bFileFound; i ++)
 			{
 				if (myIcons.pDefaultIconDirectory[2*i] != NULL)
 				{
@@ -112,7 +111,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 							break;
 					}
 				}
-				else if (myIcons.pDefaultIconDirectory[2*i+1] != NULL)
+				else
 				{
 					g_string_assign (sIconPath, cFileName);
 					if (! bAddSuffix)  // on vire le suffixe pour chercher tous les formats dans le theme d'icones.
@@ -122,7 +121,12 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 							*str = '\0';
 					}
 					//g_print ("on recherche %s dans le theme d'icones\n", sIconPath->str);
-					pIconInfo = gtk_icon_theme_lookup_icon  (GTK_ICON_THEME (myIcons.pDefaultIconDirectory[2*i+1]),
+					GtkIconTheme *pIconTheme;
+					if (myIcons.pDefaultIconDirectory[2*i+1] != NULL)
+						pIconTheme = myIcons.pDefaultIconDirectory[2*i+1];
+					else
+						pIconTheme = gtk_icon_theme_get_default ();
+					pIconInfo = gtk_icon_theme_lookup_icon  (GTK_ICON_THEME (pIconTheme),
 						sIconPath->str,
 						64,
 						GTK_ICON_LOOKUP_FORCE_SVG);
@@ -133,7 +137,6 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 						gtk_icon_info_free (pIconInfo);
 					}
 				}
-				i ++;
 			}
 		}
 		
@@ -162,7 +165,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 		}
 		
 		//\_______________________ si rien trouve, on cherche dans le theme par defaut.
-		if (! bFileFound)
+		/**if (! bFileFound)
 		{
 			g_string_assign (sIconPath, cFileName);
 			if (! bAddSuffix)
@@ -184,9 +187,8 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 				gtk_icon_info_free (pIconInfo);
 			}
 			else
-				///g_string_printf (sIconPath, cFileName);
 				g_string_printf (sIconPath, "");
-		}
+		}*/
 	}
 
 	gchar *cIconPath = sIconPath->str;
@@ -604,6 +606,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	cairo_dock_fill_icon_buffers_for_dock (icon, pCairoContext, pNewDock);
 	icon->fWidth *= pDock->container.fRatio;
 	icon->fHeight *= pDock->container.fRatio;
+	//g_print ("icon : %.1fx%.1f", icon->fWidth, icon->fHeight);
 	
 	if (cName && ! icon->cName)
 		icon->cName = g_strdup (" ");
@@ -654,8 +657,8 @@ void cairo_dock_reload_launcher (Icon *icon)
 	}
 	else
 	{
-		icon->fWidth *= pNewDock->container.fRatio;
-		icon->fHeight *= pNewDock->container.fRatio;
+		icon->fWidth *= pNewDock->container.fRatio / pDock->container.fRatio;
+		icon->fHeight *= pNewDock->container.fRatio / pDock->container.fRatio;
 		cairo_dock_refresh_launcher_gui ();
 		if (icon->fOrder != fOrder)  // On gere le changement d'ordre.
 		{

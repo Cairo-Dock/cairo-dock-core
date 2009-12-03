@@ -64,7 +64,7 @@
 #define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 500
 #
 
-static CairoDockCategoryWidgetTable s_pCategoryWidgetTables[CAIRO_DOCK_NB_CATEGORY];
+static CairoDockCategoryWidgetTable s_pCategoryWidgetTables[CAIRO_DOCK_NB_CATEGORY+1];
 static GList *s_pGroupDescriptionList = NULL;
 static GtkWidget *s_pPreviewImage = NULL;
 static GtkWidget *s_pOkButton = NULL;
@@ -92,13 +92,14 @@ extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCairoDockDataDir;
 extern gboolean g_bEasterEggs;
 
-const gchar *cCategoriesDescription[2*CAIRO_DOCK_NB_CATEGORY] = {
+static const gchar *s_cCategoriesDescription[2*(CAIRO_DOCK_NB_CATEGORY+1)] = {
 	N_("Behaviour"), "icon-behavior.svg",
 	N_("Appearance"), "icon-appearance.svg",
 	N_("Accessories"), "icon-accessories.png",
 	N_("Desktop"), "icon-desktop.svg",
 	N_("Controlers"), "icon-controler.png",
-	N_("Plug-ins"), "gtk-disconnect" };
+	N_("Plug-ins"), "gtk-disconnect",
+	N_("All"), "gtk-file" };
 
 static int iNbConfigDialogs = 0;
 int cairo_dock_get_nb_dialog_windows (void)
@@ -182,10 +183,16 @@ static void _cairo_dock_add_image_on_button (GtkWidget *pButton, const gchar *cI
 static GtkToolItem *_cairo_dock_make_toolbutton (const gchar *cLabel, const gchar *cImage, int iSize)
 {
 	if (cImage == NULL)
-		return gtk_tool_button_new (NULL, cLabel);
-	
+	{
+		///return gtk_tool_button_new (NULL, cLabel);
+		GtkToolItem *pWidget = gtk_toggle_tool_button_new ();
+		gtk_tool_button_set_label (GTK_TOOL_BUTTON (pWidget), cLabel);
+		return pWidget;
+	}
 	GtkWidget *pImage = _make_image (cImage, iSize);
-	GtkToolItem *pWidget = gtk_tool_button_new (pImage, "");  // il n'aime pas NULL ...
+	///GtkToolItem *pWidget = gtk_tool_button_new (pImage, "");  // il n'aime pas NULL ...
+	GtkToolItem *pWidget = gtk_toggle_tool_button_new ();
+	gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (pWidget), pImage);
 	if (cLabel == NULL)
 		return pWidget;
 	
@@ -469,26 +476,29 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	gtk_toolbar_set_icon_size (GTK_TOOLBAR (s_pToolBar), GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_container_add (GTK_CONTAINER (pCategoriesFrame), s_pToolBar);
 	
+	CairoDockCategoryWidgetTable *pCategoryWidget;
 	GtkToolItem *pCategoryButton;
+	pCategoryWidget = &s_pCategoryWidgetTables[CAIRO_DOCK_NB_CATEGORY];
 	pCategoryButton = _cairo_dock_make_toolbutton (_("All"),
 		"gtk-file",
 		CAIRO_DOCK_CATEGORY_ICON_SIZE);
 	g_signal_connect (G_OBJECT (pCategoryButton), "clicked", G_CALLBACK(on_click_all_button), NULL);
-	gtk_toolbar_insert (GTK_TOOLBAR (s_pToolBar) , pCategoryButton,-1);
+	gtk_toolbar_insert (GTK_TOOLBAR (s_pToolBar) , pCategoryButton, -1);
+	pCategoryWidget->pCategoryButton = pCategoryButton;
 	
 	guint i;
 	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
 	{
-		pCategoryButton = _cairo_dock_make_toolbutton (gettext (cCategoriesDescription[2*i]),
-			cCategoriesDescription[2*i+1],
+		pCategoryButton = _cairo_dock_make_toolbutton (gettext (s_cCategoriesDescription[2*i]),
+			s_cCategoriesDescription[2*i+1],
 			CAIRO_DOCK_CATEGORY_ICON_SIZE);
 		g_signal_connect (G_OBJECT (pCategoryButton), "clicked", G_CALLBACK(on_click_category_button), GINT_TO_POINTER (i));
 		gtk_toolbar_insert (GTK_TOOLBAR (s_pToolBar) , pCategoryButton,-1);
+		pCategoryWidget = &s_pCategoryWidgetTables[i];
+		pCategoryWidget->pCategoryButton = pCategoryButton;
 	}
 	
-	
 	//\_____________ On construit les widgets table de chaque categorie.
-	CairoDockCategoryWidgetTable *pCategoryWidget;
 	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
 	{
 		pCategoryWidget = &s_pCategoryWidgetTables[i];
@@ -496,16 +506,16 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 		pCategoryWidget->pFrame = gtk_frame_new (NULL);
 		gtk_container_set_border_width (GTK_CONTAINER (pCategoryWidget->pFrame), CAIRO_DOCK_GUI_MARGIN);
 		gtk_frame_set_shadow_type (GTK_FRAME (pCategoryWidget->pFrame), GTK_SHADOW_OUT);
-		pCategoryWidget->pExpander = gtk_expander_new (NULL);
+		/**pCategoryWidget->pExpander = gtk_expander_new (NULL);
 		gtk_expander_set_expanded (GTK_EXPANDER (pCategoryWidget->pExpander), TRUE);
-		gtk_container_add (GTK_CONTAINER (pCategoryWidget->pExpander), pCategoryWidget->pFrame);
+		gtk_container_add (GTK_CONTAINER (pCategoryWidget->pExpander), pCategoryWidget->pFrame);*/
 		
 		pLabel = gtk_label_new (NULL);
-		cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman 12\"><b>%s</b></span>", gettext (cCategoriesDescription[2*i]));
+		cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman 12\"><b>%s</b></span>", gettext (s_cCategoriesDescription[2*i]));
 		gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 		g_free (cLabel);
-		///gtk_frame_set_label_widget (GTK_FRAME (pCategoryWidget->pFrame), pLabel);
-		gtk_expander_set_label_widget (GTK_EXPANDER (pCategoryWidget->pExpander), pLabel);
+		gtk_frame_set_label_widget (GTK_FRAME (pCategoryWidget->pFrame), pLabel);
+		///gtk_expander_set_label_widget (GTK_EXPANDER (pCategoryWidget->pExpander), pLabel);
 		
 		pCategoryWidget->pTable = gtk_table_new (1,
 			s_iNbButtonsByRow,
@@ -515,8 +525,8 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 		gtk_container_add (GTK_CONTAINER (pCategoryWidget->pFrame),
 			pCategoryWidget->pTable);
 		gtk_box_pack_start (GTK_BOX (s_pGroupsVBox),
-			///pCategoryWidget->pFrame,
-			pCategoryWidget->pExpander,
+			pCategoryWidget->pFrame,
+			///pCategoryWidget->pExpander,
 			FALSE,
 			FALSE,
 			0);
@@ -776,7 +786,8 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 	}
 	else
 	{
-		gtk_window_set_title (GTK_WINDOW (s_pMainWindow), _("Configuration of Cairo-Dock"));
+		//gtk_window_set_title (GTK_WINDOW (s_pMainWindow), _("Configuration of Cairo-Dock"));
+		cairo_dock_show_one_category (0);
 		g_signal_connect (G_OBJECT (s_pMainWindow),
 			"delete-event",
 			G_CALLBACK (on_delete_main_gui),
@@ -815,7 +826,7 @@ void cairo_dock_hide_all_categories (void)
 	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
 	{
 		pCategoryWidget = &s_pCategoryWidgetTables[i];
-		gtk_widget_hide (pCategoryWidget->pExpander/**pFrame*/);
+		gtk_widget_hide (pCategoryWidget->/**pExpander*/pFrame);
 	}
 	
 	gtk_widget_show (s_pOkButton);
@@ -843,10 +854,26 @@ void cairo_dock_show_all_categories (void)
 	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
 	{
 		pCategoryWidget = &s_pCategoryWidgetTables[i];
-		///gtk_widget_show_all (pCategoryWidget->pFrame);
-		gtk_widget_show_all (pCategoryWidget->pExpander);
-		gtk_expander_set_expanded (GTK_EXPANDER (pCategoryWidget->pExpander), TRUE);
+		gtk_widget_show_all (pCategoryWidget->pFrame);
+		///gtk_widget_show_all (pCategoryWidget->pExpander);
+		///gtk_expander_set_expanded (GTK_EXPANDER (pCategoryWidget->pExpander), TRUE);
+		g_signal_handlers_block_matched (pCategoryWidget->pCategoryButton,
+			(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+			0, 0, NULL, on_click_category_button, NULL);
+		gtk_toggle_tool_button_set_active (pCategoryWidget->pCategoryButton, FALSE);
+		g_signal_handlers_unblock_matched (pCategoryWidget->pCategoryButton,
+			(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+			0, 0, NULL, on_click_category_button, NULL);
 	}
+	pCategoryWidget = &s_pCategoryWidgetTables[i];
+	g_signal_handlers_block_matched (pCategoryWidget->pCategoryButton,
+		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+		0, 0, NULL, on_click_all_button, NULL);
+	gtk_toggle_tool_button_set_active (pCategoryWidget->pCategoryButton, TRUE);
+	g_signal_handlers_unblock_matched (pCategoryWidget->pCategoryButton,
+		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+		0, 0, NULL, on_click_all_button, NULL);
+	
 	gtk_widget_hide (s_pOkButton);
 	gtk_widget_hide (s_pApplyButton);
 	gtk_widget_hide (s_pGroupFrame);
@@ -880,20 +907,37 @@ void cairo_dock_show_one_category (int iCategory)
 	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
 	{
 		pCategoryWidget = &s_pCategoryWidgetTables[i];
-		gtk_widget_show_all (pCategoryWidget->pExpander);
+		///gtk_widget_show_all (pCategoryWidget->pExpander);
 		if (i != iCategory)
-			///gtk_widget_hide (pCategoryWidget->pFrame);
-			gtk_expander_set_expanded (GTK_EXPANDER (pCategoryWidget->pExpander), FALSE);
+			gtk_widget_hide (pCategoryWidget->pFrame);
+			///gtk_expander_set_expanded (GTK_EXPANDER (pCategoryWidget->pExpander), FALSE);
 		else
-			///gtk_widget_show_all (pCategoryWidget->pFrame);
-			gtk_expander_set_expanded (GTK_EXPANDER (pCategoryWidget->pExpander), TRUE);
+			gtk_widget_show_all (pCategoryWidget->pFrame);
+			///gtk_expander_set_expanded (GTK_EXPANDER (pCategoryWidget->pExpander), TRUE);
+		
+		g_signal_handlers_block_matched (pCategoryWidget->pCategoryButton,
+			(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+			0, 0, NULL, on_click_category_button, NULL);
+		gtk_toggle_tool_button_set_active (pCategoryWidget->pCategoryButton, (i == iCategory));
+		g_signal_handlers_unblock_matched (pCategoryWidget->pCategoryButton,
+			(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+			0, 0, NULL, on_click_category_button, NULL);
 	}
+	pCategoryWidget = &s_pCategoryWidgetTables[i];
+	g_signal_handlers_block_matched (pCategoryWidget->pCategoryButton,
+		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+		0, 0, NULL, on_click_all_button, NULL);
+	gtk_toggle_tool_button_set_active (pCategoryWidget->pCategoryButton, FALSE);
+	g_signal_handlers_unblock_matched (pCategoryWidget->pCategoryButton,
+		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+		0, 0, NULL, on_click_all_button, NULL);
+	
 	gtk_widget_hide (s_pOkButton);
 	gtk_widget_hide (s_pApplyButton);
 	gtk_widget_hide (s_pGroupFrame);
 	
 	//\_______________ On actualise le titre de la fenetre.
-	gtk_window_set_title (GTK_WINDOW (cairo_dock_get_main_window ()), gettext (cCategoriesDescription[2*iCategory]));
+	gtk_window_set_title (GTK_WINDOW (cairo_dock_get_main_window ()), gettext (s_cCategoriesDescription[2*iCategory]));
 	if (s_path == NULL || s_path->data != GINT_TO_POINTER (iCategory+1))
 		s_path = g_slist_prepend (s_path, GINT_TO_POINTER (iCategory+1));
 

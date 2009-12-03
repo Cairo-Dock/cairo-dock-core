@@ -640,7 +640,7 @@ static void _list_icon_theme_in_dir (const gchar *cDirPath, GHashTable *pHashTab
 		if (pKeyFile == NULL)
 			continue;
 		
-		if (! g_key_file_get_boolean (pKeyFile, "Icon Theme", "Hidden", NULL))
+		if (! g_key_file_get_boolean (pKeyFile, "Icon Theme", "Hidden", NULL) && g_key_file_has_key (pKeyFile, "Icon Theme", "Directories", NULL))
 		{
 			gchar *cName = g_key_file_get_string (pKeyFile, "Icon Theme", "Name", NULL);
 			if (cName != NULL)
@@ -673,6 +673,10 @@ static GtkWidget *_cairo_dock_build_icon_themes_list (const gchar **cDirs)
 		_list_icon_theme_in_dir (cDirs[i], pHashTable);
 	}
 	
+	gchar *cName = g_strdup ("");
+	g_hash_table_insert (pHashTable, cName, cName);
+	cName = g_strdup ("_Custom Icons_");
+	g_hash_table_insert (pHashTable, cName, cName);
 	g_hash_table_foreach (pHashTable, (GHFunc) _prepend_icon_theme_in_combo, pCombo);
 	
 	g_hash_table_destroy (pHashTable);
@@ -1238,7 +1242,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			{
 				*str = '\0';
 				cDisplayedGroupName = str + 1;
-			}	
+			}
 		}
 	}
 	
@@ -1255,6 +1259,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 		cKeyComment =  g_key_file_get_comment (pKeyFile, cGroupName, cKeyName, NULL);
 		cUsefulComment = cairo_dock_parse_key_comment (cKeyComment, &iElementType, &iNbElements, &pAuthorizedValuesList, &bIsAligned, &cTipString);
 		if (cUsefulComment == NULL)
+		{
+			g_free (cKeyComment);
+			continue;
+		}
+		if (iElementType == '[')  // on gere le bug de la Glib, qui rajoute les nouvelles cles apres le commentaire du groupe suivant !
 		{
 			g_free (cKeyComment);
 			continue;
@@ -1382,10 +1391,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					FALSE,
 					0);
 			}
-		}
-		else if (iElementType != CAIRO_DOCK_WIDGET_SEPARATOR)
-		{
-			
 		}
 		
 		pSubWidgetList = NULL;
@@ -1681,7 +1686,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));
 				GtkTreeIter iter;
-				if (pOneWidget && gtk_combo_box_get_active_iter (pOneWidget, &iter))
+				if (pOneWidget && gtk_combo_box_get_active_iter (GTK_COMBO_BOX (pOneWidget), &iter))
 				{
 					gchar *cName = NULL;
 					gtk_tree_model_get (model, &iter,
@@ -1733,7 +1738,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				g_free (cUserPath);
 				GtkWidget *pEntry = gtk_bin_get_child (GTK_BIN (pOneWidget));
 				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
-				gtk_entry_set_text (GTK_ENTRY (pEntry), cValue);  // on affiche la valeur meme s'elle n'existe pas dans la liste.
+				gtk_entry_set_text (GTK_ENTRY (pEntry), cValue);  // on affiche la valeur meme si elle n'existe pas dans la liste.
 				g_free (cValue);
 				_pack_subwidget (pOneWidget);
 			}

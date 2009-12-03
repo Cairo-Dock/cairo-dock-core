@@ -692,6 +692,7 @@ static void _cairo_dock_initiate_config_module (GtkMenuItem *pMenuItem, gpointer
 	
 	cairo_dock_build_main_ihm (g_cConfFile, FALSE);
 	cairo_dock_present_module_instance_gui (icon->pModuleInstance);
+	/// activer la categorie iCategory ...
 }
 
 static void _cairo_dock_detach_module (GtkMenuItem *pMenuItem, gpointer *data)

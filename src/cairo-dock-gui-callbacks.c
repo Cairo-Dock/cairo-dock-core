@@ -50,13 +50,13 @@ static int s_iSidShowGroupDialog = 0;
 void on_click_category_button (GtkButton *button, gpointer data)
 {
 	int iCategory = GPOINTER_TO_INT (data);
-	//g_print ("%s (%d)\n", __func__, iCategory);
+	g_print ("%s (%d)\n", __func__, iCategory);
 	cairo_dock_show_one_category (iCategory);
 }
 
 void on_click_all_button (GtkButton *button, gpointer data)
 {
-	//g_print ("%s ()\n", __func__);
+	g_print ("%s ()\n", __func__);
 	cairo_dock_show_all_categories ();
 }
 
@@ -164,7 +164,6 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 		pIcon = cairo_dock_get_dialogless_icon ();
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
 	
-	///s_pDialog = cairo_dock_show_temporary_dialog_with_icon (dgettext (pGroupDescription->cGettextDomain, cDescription != NULL ? cDescription : pGroupDescription->cDescription), pIcon, CAIRO_CONTAINER (pDock), 0., pGroupDescription->cIcon);
 	CairoDialogAttribute attr;
 	memset (&attr, 0, sizeof (CairoDialogAttribute));
 	attr.cText = dgettext (pGroupDescription->cGettextDomain, cDescription != NULL ? cDescription : pGroupDescription->cDescription);

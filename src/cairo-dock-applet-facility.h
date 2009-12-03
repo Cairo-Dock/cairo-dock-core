@@ -309,7 +309,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 /** Create and add the default sub-menu of an applet to the main menu. This sub-menu is named according to the name of the applet, and is represented by the default icon of the applet.
 *@return the sub-menu, newly created and attached to the main menu.
 */
-#define CD_APPLET_CREATE_MY_SUB_MENU(...) CD_APPLET_ADD_SUB_MENU_WITH_IMAGE (myApplet->pModule->pVisitCard->cModuleName, CD_APPLET_MY_MENU, MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE)
+#define CD_APPLET_CREATE_MY_SUB_MENU(...) CD_APPLET_ADD_SUB_MENU_WITH_IMAGE (myApplet->pModule->pVisitCard->cTitle, CD_APPLET_MY_MENU, MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE)
 
 /** Create and add an entry to a menu, with an icon.
 *@param cLabel name of the entry.

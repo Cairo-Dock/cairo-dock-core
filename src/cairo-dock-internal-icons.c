@@ -127,91 +127,79 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 
 	pIcons->fAlphaAtRest = cairo_dock_get_double_key_value (pKeyFile, "Icons", "alpha at rest", &bFlushConfFileNeeded, 1., NULL, NULL);
 	
-	//\___________________ Themes.
-	pIcons->bUseLocalIcons = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "local icons", &bFlushConfFileNeeded, TRUE , NULL, NULL);
-	pIcons->pDirectoryList = cairo_dock_get_string_list_key_value (pKeyFile, "Icons", "default icon directory", &bFlushConfFileNeeded, &length, NULL, "Launchers", NULL);
+	//\___________________ Theme d'icone.
+	pIcons->cIconTheme = cairo_dock_get_string_key_value (pKeyFile, "Icons", "default icon directory", &bFlushConfFileNeeded, NULL, "Launchers", NULL);
+	if (g_key_file_has_key (pKeyFile, "Icons", "local icons", NULL))  // anciens parametres.
+	{
+		bFlushConfFileNeeded = TRUE;
+		gboolean bUseLocalIcons = g_key_file_get_boolean (pKeyFile, "Icons", "local icons", NULL);
+		if (bUseLocalIcons)
+		{
+			g_free (pIcons->cIconTheme);
+			pIcons->cIconTheme = g_strdup ("_Custom Icons_");
+			g_key_file_set_string (pKeyFile, "Icons", "default icon directory", pIcons->cIconTheme);
+		}
+	}
+	/**pIcons->bUseLocalIcons = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "local icons", &bFlushConfFileNeeded, TRUE , NULL, NULL);
 	
-	pIcons->pDefaultIconDirectory = g_new0 (gpointer, 2 * length + 2 + 2);  // +2 pour le theme local et +2 pour les NULL final.
+	pIcons->cIconTheme = cairo_dock_get_string_key_value (pKeyFile, "Icons", "default icon directory", &bFlushConfFileNeeded, NULL, "Launchers", NULL);*/
+	
+	pIcons->pDefaultIconDirectory = g_new0 (gpointer, 2 * 4);  // theme d'icone + theme local + theme default + NULL final.
 	int j = 0;
+	gboolean bLocalIconsUsed = FALSE, bDefaultThemeUsed = FALSE;
 	
-	if (pIcons->bUseLocalIcons)
+	/**if (pIcons->bUseLocalIcons)
 	{
 		pIcons->pDefaultIconDirectory[j] = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 		cd_message (" utilisation du repertoire local %s", pIcons->pDefaultIconDirectory[j]);
 		j += 2;
+		bLocalIconsUsed = TRUE;
+	}*/
+	
+	if (pIcons->cIconTheme == NULL || *pIcons->cIconTheme == '\0')  // theme systeme.
+	{
+		j ++;
+		bDefaultThemeUsed = TRUE;
+	}
+	else if (pIcons->cIconTheme[0] == '~')
+	{
+		pIcons->pDefaultIconDirectory[2*j] = g_strdup_printf ("%s%s", getenv ("HOME"), pIcons->cIconTheme+1);
+		j ++;
+	}
+	else if (pIcons->cIconTheme[0] == '/')
+	{
+		pIcons->pDefaultIconDirectory[2*j] = g_strdup (pIcons->cIconTheme);
+		j ++;
+	}
+	else if (strncmp (pIcons->cIconTheme, "_LocalTheme_", 12) == 0 || strncmp (pIcons->cIconTheme, "_ThemeDirectory_", 16) == 0 || strncmp (pIcons->cIconTheme, "_Custom Icons_", 14) == 0)
+	{
+		pIcons->pDefaultIconDirectory[2*j] = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+		j ++;
+		bLocalIconsUsed = TRUE;
+	}
+	else
+	{
+		pIcons->pDefaultIconDirectory[2*j+1] = gtk_icon_theme_new ();
+		gtk_icon_theme_set_custom_theme (pIcons->pDefaultIconDirectory[2*j+1], pIcons->cIconTheme);
+		j ++;
 	}
 	
-	if (pIcons->pDirectoryList != NULL && pIcons->pDirectoryList[0] != NULL)
+	if (! bLocalIconsUsed)
 	{
-		for (i = 0; pIcons->pDirectoryList[i] != NULL; i ++)
-		{
-			if (pIcons->pDirectoryList[i][0] == '\0')
-				continue;
-			if (pIcons->pDirectoryList[i][0] == '~')
-			{
-				pIcons->pDefaultIconDirectory[j] = g_strdup_printf ("%s%s", getenv ("HOME"), pIcons->pDirectoryList[i]+1);
-				cd_message (" utilisation du repertoire %s", pIcons->pDefaultIconDirectory[j]);
-				j += 2;
-			}
-			else if (pIcons->pDirectoryList[i][0] == '/')
-			{
-				pIcons->pDefaultIconDirectory[j] = g_strdup (pIcons->pDirectoryList[i]);
-				cd_message (" utilisation du repertoire %s", pIcons->pDefaultIconDirectory[j]);
-				j += 2;
-			}
-			else if (strncmp (pIcons->pDirectoryList[i], "_LocalTheme_", 12) == 0)
-			{
-				if (bFlushConfFileNeeded)
-				{
-					g_key_file_set_string_list (pKeyFile,
-						"Icons",
-						"default icon directory",
-						pIcons->pDirectoryList,
-						length-1);
-				}
-				else
-				{
-					gchar *cCommand = g_strdup_printf ("sed -i \"s/_LocalTheme_;*//g\" '%s/%s'", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
-					cd_message ("%s", cCommand);
-					int r = system (cCommand);
-					g_free (cCommand);
-					g_free (pIcons->pDirectoryList[i]);
-					pIcons->pDirectoryList[i] = NULL;
-					if (pIcons->pDirectoryList[i+1] != NULL)
-					{
-						pIcons->pDirectoryList[i] = pIcons->pDirectoryList[i+1];
-						pIcons->pDirectoryList[i+1] = NULL;
-					}
-				}
-			}
-			else if (strncmp (pIcons->pDirectoryList[i], "_ThemeDirectory_", 16) == 0)
-			{
-				cd_warning ("Cairo-Dock's local icons are now located in the 'icons' folder, they will be moved there");
-				gchar *cCommand = g_strdup_printf ("cd '%s' && mv *.svg *.png *.xpm *.jpg *.bmp *.gif '%s/%s' > /dev/null", g_cCurrentLaunchersPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
-				cd_message ("%s", cCommand);
-				int r = system (cCommand);
-				g_free (cCommand);
-				cCommand = g_strdup_printf ("sed -i \"s/_ThemeDirectory_;*//g\" '%s/%s'", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
-				cd_message ("%s", cCommand);
-				r = system (cCommand);
-				g_free (cCommand);
-			}
-			else
-			{
-				cd_message (" utilisation du theme %s", pIcons->pDirectoryList[i]);
-				pIcons->pDefaultIconDirectory[j+1] = gtk_icon_theme_new ();
-				gtk_icon_theme_set_custom_theme (pIcons->pDefaultIconDirectory[j+1], pIcons->pDirectoryList[i]);
-				j += 2;
-			}
-		}
+		pIcons->pDefaultIconDirectory[2*j] = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+		j ++;
 	}
+	if (! bDefaultThemeUsed)
+	{
+		j ++;
+	}
+	pIcons->iNbIconPlaces = j;
 	
 	gchar *cLauncherBackgroundImageName = cairo_dock_get_string_key_value (pKeyFile, "Icons", "icons bg", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	if (cLauncherBackgroundImageName != NULL)
 	{
 		pIcons->cBackgroundImagePath = cairo_dock_generate_file_path (cLauncherBackgroundImageName);
 		g_free (cLauncherBackgroundImageName);
-		///pIcons->bBgForApplets = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "bg for applets", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	}
 
 	//\___________________ Parametres des lanceurs.
@@ -279,17 +267,18 @@ static void reset_config (CairoConfigIcons *pIcons)
 	{
 		gpointer data;
 		int i;
-		for (i = 0; (pIcons->pDefaultIconDirectory[2*i] != NULL || pIcons->pDefaultIconDirectory[2*i+1] != NULL); i ++)
+		for (i = 0; i < pIcons->iNbIconPlaces; i ++)
 		{
 			if (pIcons->pDefaultIconDirectory[2*i] != NULL)
 				g_free (pIcons->pDefaultIconDirectory[2*i]);
-			else
+			else if (pIcons->pDefaultIconDirectory[2*i+1] != NULL)
 				g_object_unref (pIcons->pDefaultIconDirectory[2*i+1]);
 		}
+		g_free (pIcons->pDefaultIconDirectory);
 	}
 	g_free (pIcons->cSeparatorImage);
 	g_free (pIcons->cBackgroundImagePath);
-	g_strfreev (pIcons->pDirectoryList);
+	g_free (pIcons->cIconTheme);
 }
 
 
@@ -317,8 +306,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		
 		if (! pPrevIcons->bMixApplisAndLaunchers && pIcons->bMixApplisAndLaunchers)
 		{
-			/// re-ordonner les applis a cote des lanceurs/applets...
-			cairo_dock_reorder_classes ();
+			cairo_dock_reorder_classes ();  // on re-ordonne les applis a cote des lanceurs/applets.
 		}
 		
 		pDock->icons = g_list_sort (pDock->icons, (GCompareFunc) cairo_dock_compare_icons_order);
@@ -335,21 +323,9 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	}
 	
 	gboolean bThemeChanged = (pPrevIcons->bUseLocalIcons != pIcons->bUseLocalIcons);
-	if ((pIcons->pDirectoryList == NULL && pPrevIcons->pDirectoryList != NULL) || (pIcons->pDirectoryList != NULL && pPrevIcons->pDirectoryList == NULL))
+	if (cairo_dock_strings_differ (pIcons->cIconTheme, pPrevIcons->cIconTheme))
 	{
 		bThemeChanged = TRUE;
-	}
-	else if (pIcons->pDirectoryList != NULL && pPrevIcons->pDirectoryList != NULL)
-	{
-		int i;
-		for (i = 0; pIcons->pDirectoryList[i] != NULL || pPrevIcons->pDirectoryList[i] != NULL; i ++)
-		{
-			if (cairo_dock_strings_differ (pIcons->pDirectoryList[i], pPrevIcons->pDirectoryList[i]))
-			{
-				bThemeChanged = TRUE;
-				break ;
-			}
-		}
 	}
 	
 	gboolean bIconBackgroundImagesChanged = FALSE;
@@ -360,10 +336,6 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		bIconBackgroundImagesChanged = TRUE;
 		cairo_dock_load_icons_background_surface (pIcons->cBackgroundImagePath, pCairoContext, fMaxScale);
 	}
-	/*if (pPrevIcons->bBgForApplets != pIcons->bBgForApplets && pIcons->cBackgroundImagePath != NULL)
-	{
-		bIconBackgroundImagesChanged = TRUE;  // on pourrait faire plus fin en ne rechargeant que les applets mais bon.
-	}*/
 	
 	if (pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] ||
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] ||

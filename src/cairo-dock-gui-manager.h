@@ -35,10 +35,11 @@ G_BEGIN_DECLS
 
 struct _CairoDockCategoryWidgetTable {
 	GtkWidget *pFrame;
-	GtkWidget *pExpander;
 	GtkWidget *pTable;
 	gint iNbRows;
 	gint iNbItemsInCurrentRow;
+	GtkToolItem *pCategoryButton;
+	///GtkWidget *pExpander;
 	} ;
 
 struct _CairoDockGroupDescription {
