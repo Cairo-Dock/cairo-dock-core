@@ -2331,9 +2331,9 @@ msgstr ""
 
 #: ../data/messages:769
 msgid ""
-"Hint : you can also directly edit a launcher’s configuration, and set a path "
-"for an image. If you don’t write a path, but simply the name of an image, "
-"don’t put the extension (.svg, .png, etc), to let the dock choose the best."
+"Hint : you can also directly edit a launcher's configuration, and set a path "
+"for an image. If you don't write a path, but simply the name of an image, "
+"don't put the extension (.svg, .png, etc), to let the dock choose the best."
 msgstr ""
 
 #: ../data/messages:771
@@ -2353,7 +2353,7 @@ msgstr ""
 #: ../data/messages:775
 msgid ""
 "Hint : if you delete an icon pointing on a sub-dock, you will be asked to "
-"delete the sub-dock’s icons as well, or to move them in the main dock."
+"delete the sub-dock's icons as well, or to move them in the main dock."
 msgstr ""
 
 #: ../data/messages:777
@@ -2422,17 +2422,17 @@ msgstr ""
 
 #: ../data/messages:801
 msgid ""
-"it’s normal, because they both are “docks”. You can either move the dock out "
+"it's normal, because they both are “docks”. You can either move the dock out "
 "of the panel, or launch it wih the command “cairo-dock -–keep-above”."
 msgstr ""
 
 #: ../data/messages:803
-msgid "I don’t want other windows to hover the dock"
+msgid "I don't want other windows to hover the dock"
 msgstr ""
 
 #: ../data/messages:805
 msgid ""
-"Hint : if you use it, you don’t need to use the “keep the dock below “option."
+"Hint : if you use it, you don't need to use the “keep the dock below “option."
 msgstr ""
 
 #: ../data/messages:807
@@ -2441,7 +2441,7 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:809
-msgid "I don’t want that the dock hovers windows"
+msgid "I don't want that the dock hovers windows"
 msgstr ""
 
 #: ../data/messages:811
@@ -2475,7 +2475,7 @@ msgstr ""
 
 #: ../data/messages:819
 msgid ""
-"I don’t want to have a separator between launchers , applis and applets"
+"I don't want to have a separator between launchers , applis and applets"
 msgstr ""
 
 #: ../data/messages:821
@@ -2516,7 +2516,7 @@ msgstr ""
 #: ../data/messages:833
 msgid ""
 "Edit a launcher or an applet, and in the list of the available docks, enter "
-"a name that doesn’t exist yet. A new dock will be created, with this icon "
+"a name that doesn't exist yet. A new dock will be created, with this icon "
 "inside."
 msgstr ""
 
@@ -2595,7 +2595,7 @@ msgstr ""
 
 #: ../data/messages:859
 msgid ""
-"they are widgets that’s are displayed on your desktop. Each applet can be "
+"they are widgets that's are displayed on your desktop. Each applet can be "
 "detached from the dock to act as a desklet."
 msgstr ""
 
@@ -2605,7 +2605,7 @@ msgstr ""
 
 #: ../data/messages:863
 msgid ""
-"Hint : If you don’t want to move it anymore, you can lock its position. "
+"Hint : If you don't want to move it anymore, you can lock its position. "
 "Simply right click on the desklet, and select “lock position”. To unlock it, "
 "de-select this option."
 msgstr ""
@@ -2620,7 +2620,7 @@ msgstr ""
 
 #: ../data/messages:869
 msgid ""
-"Hint : if you locked the desklet, the buttons won’t appear. You can reset a "
+"Hint : if you locked the desklet, the buttons won't appear. You can reset a "
 "rotation by middle-clicking on the appropriate button."
 msgstr ""
 
@@ -2645,9 +2645,9 @@ msgstr ""
 #: ../data/messages:877
 msgid ""
 "The default decoration is defined in the “Desklets” module.\n"
-"You can setup a different decoration for each desklet. To change a desklet’s "
+"You can setup a different decoration for each desklet. To change a desklet's "
 "decoration,\n"
-" go to the applet’s configuration, click on the “desklet” tab, and then "
+" go to the applet's configuration, click on the “desklet” tab, and then "
 "choose the decoration you want."
 msgstr ""
 
@@ -2656,7 +2656,7 @@ msgid "How do I insert a desklet into the dock ?"
 msgstr ""
 
 #: ../data/messages:881
-msgid "Hint :  if the desklet is locked, the button won’t appear."
+msgid "Hint :  if the desklet is locked, the button won't appear."
 msgstr ""
 
 #: ../data/messages:883
@@ -2690,7 +2690,7 @@ msgid "How do I activate the Taskbar ?"
 msgstr ""
 
 #: ../data/messages:895
-msgid "Hint : All the Taskbar’s options are grouped together in this module."
+msgid "Hint : All the Taskbar's options are grouped together in this module."
 msgstr ""
 
 #: ../data/messages:897
@@ -2699,7 +2699,7 @@ msgstr ""
 
 #: ../data/messages:899
 msgid ""
-"I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
+"I don't want to have many icons in the dock when I use Gimp/Pidgin/etc"
 msgstr ""
 
 #: ../data/messages:901
@@ -2730,13 +2730,13 @@ msgstr ""
 
 #: ../data/messages:909
 msgid ""
-"it’s because X provides small icons for applis, that don’t look nice when "
+"it's because X provides small icons for applis, that don't look nice when "
 "zoomed. Use the option “overwrite X icons”, to tell the dock to not use them."
 msgstr ""
 
 #: ../data/messages:911
 msgid ""
-"When I launch a program with its launcher, I don’t want an additional icon "
+"When I launch a program with its launcher, I don't want an additional icon "
 "in the taskbar"
 msgstr ""
 
@@ -2756,7 +2756,7 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:917
-msgid "I’m using Pidgin, and I want to see my friends’ avatar"
+msgid "I'm using Pidgin, and I want to see my friends' avatar"
 msgstr ""
 
 #: ../data/messages:919
@@ -2798,7 +2798,7 @@ msgstr ""
 msgid ""
 "Hint : if you removed your gnome-panel, then the “alt+F1” shortkey does not "
 "work anymore. This applet let you setup a shortcut to pop up the menu at the "
-"mouse’s location."
+"mouse's location."
 msgstr ""
 
 #: ../data/messages:933
@@ -2906,7 +2906,7 @@ msgstr ""
 
 #: ../data/messages:977
 msgid ""
-"activate the “systray” applet. For the moment it can’t be displayed directly "
+"activate the “systray” applet. For the moment it can't be displayed directly "
 "into the dock,\n"
 "so clicking on the icon will pop-up a dialog containing the systray, middle-"
 "click will hide it.\n"
@@ -2963,7 +2963,7 @@ msgstr ""
 msgid ""
 "Some applets can run several times at the same time : Clock, Cairo-Penguin, "
 "Weather, Netspeed, …\n"
-"Right click on the applet’s icon, and select “launch another instance”. A "
+"Right click on the applet's icon, and select “launch another instance”. A "
 "new instance of this applet appears in the main dock.\n"
 "You can configure this new one like any other applet."
 msgstr ""
@@ -2977,7 +2977,7 @@ msgstr ""
 #: ../data/messages:999
 msgid ""
 "move the folder containing your gauge in ~/.config/cairo-dock/extras/gauges, "
-"you’re done !"
+"you're done !"
 msgstr ""
 
 #: ../data/messages:1001
@@ -3079,8 +3079,8 @@ msgstr ""
 msgid ""
 "You have to turn on the compositing. For instance, you can run Compiz or "
 "xcompmgr. \n"
-"If you’re under XFCE or KDE, you can just activate the compositing in the "
-"window manager’s options.\n"
+"If you're under XFCE or KDE, you can just activate the compositing in the "
+"window manager's options.\n"
 "If you're under Gnome, you can activate it in Metacity in this way :\n"
 " Open gconf-editor, edit the key "
 "'/apps/metacity/general/compositing_manager' and set it to 'true'."
@@ -3092,7 +3092,7 @@ msgstr ""
 
 #: ../data/messages:1037
 msgid ""
-"Don’t panic, Cairo-Dock can emulate the transparency.\n"
+"Don't panic, Cairo-Dock can emulate the transparency.\n"
 "So to get rid of the black background, just activate the corresponding "
 "option, in the end of the “System” module"
 msgstr ""
@@ -3112,7 +3112,7 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1043
-msgid "I don’t have these wonderful effects like fire, cube rotating, etc"
+msgid "I don't have these wonderful effects like fire, cube rotating, etc"
 msgstr ""
 
 #: ../data/messages:1045
@@ -3125,7 +3125,7 @@ msgstr ""
 msgid ""
 "You need a graphic card with drivers that support openGL2.0. Most of Nvidia "
 "cards can do that, more and more Intel cards can do too. Most of ATI cards "
-"can’t do that."
+"can't do that."
 msgstr ""
 
 #: ../data/messages:1049
@@ -3147,7 +3147,7 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1055
-msgid "The “netspeed” applet displays 0 even when I’m downloading something"
+msgid "The “netspeed” applet displays 0 even when I'm downloading something"
 msgstr ""
 
 #: ../data/messages:1057
@@ -3158,10 +3158,10 @@ msgstr ""
 
 #: ../data/messages:1059
 msgid ""
-"You have to tell it which interface you’re using to connect to the Net (by "
-"default, it’s “eth0”).\n"
-"Just edit its configuration, and enter the interface’s name. To find it, "
-"type “ifconfig” in a terminal, and ignore the “loop” interface. It’s "
+"You have to tell it which interface you're using to connect to the Net (by "
+"default, it's “eth0”).\n"
+"Just edit its configuration, and enter the interface's name. To find it, "
+"type “ifconfig” in a terminal, and ignore the “loop” interface. It's "
 "probably something like “eth1”, “ath0”, or “wifi0”."
 msgstr ""
 
@@ -3171,8 +3171,8 @@ msgstr ""
 
 #: ../data/messages:1063
 msgid ""
-"if you’re under KDE, you may have to tell it the path of the trash folder.\n"
-"Just edit the applet’s configuration, and fill in the Trash path; it is "
+"if you're under KDE, you may have to tell it the path of the trash folder.\n"
+"Just edit the applet's configuration, and fill in the Trash path; it is "
 "probably “~/.locale/share/Trash/files”. Be very careful when typing a path "
 "here !!! (do not insert spaces or some invisible caracters)."
 msgstr ""
@@ -3187,10 +3187,10 @@ msgid ""
 "improved,\n"
 "or if you just made a dream about the dock, pay us a visit on cairo-"
 "dock.org.\n"
-"English speakers are welcome, so don’t be shy ! ;-)\n"
+"English speakers are welcome, so don't be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
-"we’ll be happy to integrate it on our server !\n"
+"we'll be happy to integrate it on our server !\n"
 "If you wish to develop an applet, a complete documentation is available at "
 "http://doc.cairo-dock.org.\n"
 "Fabounet"

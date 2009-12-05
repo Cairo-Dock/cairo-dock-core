@@ -74,6 +74,7 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-container.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-file-manager.h"
+#include "cairo-dock-animations.h"
 #include "cairo-dock-config.h"
 
 extern CairoDock *g_pMainDock;
@@ -637,7 +638,17 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	{
 		cairo_dock_insert_separators_in_dock (pDock);
 	}
-
+	
+	if (pDock->bAutoHide)
+	{
+		pDock->iInputState = CAIRO_DOCK_INPUT_HIDDEN;
+		pDock->fHideOffset = 1.;
+	}
+	else
+	{
+		cairo_dock_start_showing (pDock);
+	}
+	
 	cairo_dock_hide_show_launchers_on_other_desktops (pDock);
 	
 	cairo_dock_create_icon_pbuffer ();

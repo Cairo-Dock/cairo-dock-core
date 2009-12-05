@@ -161,7 +161,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		n ++;
 	} while ((pDock->iMaxDockWidth > iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_iScreenHeight[pDock->container.bIsHorizontal]) && n < 4);
 	pDock->iMaxIconHeight = hmax;
-	g_print (">>> iMaxIconHeight : %d (%.2f)\n", (int) pDock->iMaxIconHeight, pDock->container.fRatio);
+	//g_print (">>> iMaxIconHeight : %d (%.2f)\n", (int) pDock->iMaxIconHeight, pDock->container.fRatio);
 	
 	pDock->pRenderer->calculate_icons (pDock);  // le calcul de max_dock_size a altere les fX et fY.
 	
@@ -172,7 +172,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	
 	if (GTK_WIDGET_VISIBLE (pDock->container.pWidget))
 	{
-		g_print ("%s ()\n", __func__);
+		//g_print ("%s ()\n", __func__);
 		cairo_dock_move_resize_dock (pDock);
 	}
 	
@@ -664,6 +664,8 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 		for (ic = pIconList; ic != NULL; ic = ic->next)
 		{
 			icon = ic->data;
+			//if (ic == pIconList)
+			//	g_print ("fX : %.2f - %.2f\n", icon->fX, offset);
 			icon->fX -= offset;
 		}
 	}

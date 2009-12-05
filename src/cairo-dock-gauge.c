@@ -530,18 +530,35 @@ static void cairo_dock_draw_one_gauge (cairo_t *pSourceContext, Gauge *pGauge, i
 			cairo_save (pSourceContext);
 			cairo_set_source_rgb (pSourceContext, pIndicator->textZone.pColor[0], pIndicator->textZone.pColor[1], pIndicator->textZone.pColor[2]);
 			
-			cairo_text_extents_t textExtents;
+			PangoLayout *pLayout = pango_cairo_create_layout (pSourceContext);
+			PangoFontDescription *fd = pango_font_description_from_string ("Monospace 12");
+			pango_layout_set_font_description (pLayout, fd);
+			
+			PangoRectangle ink, log;
+			pango_layout_set_text (pLayout, pRenderer->cFormatBuffer, -1);
+			pango_layout_get_pixel_extents (pLayout, &ink, &log);
+			double fZoom = MIN (pIndicator->textZone.fWidth * pRenderer->iWidth / (log.width), pIndicator->textZone.fHeight * pRenderer->iHeight / log.height);
+			
+			cairo_move_to (pSourceContext,
+				floor ((1. + pIndicator->textZone.fX) * pRenderer->iWidth/2 - log.width*fZoom/2),
+				floor ((1. - pIndicator->textZone.fY) * pRenderer->iHeight/2 - log.height*fZoom/2));
+			cairo_scale (pSourceContext,
+				fZoom,
+				fZoom);
+			pango_cairo_show_layout (pSourceContext, pLayout);
+			cairo_restore (pSourceContext);
+			/**cairo_text_extents_t textExtents;
 			cairo_text_extents (pSourceContext, pRenderer->cFormatBuffer, &textExtents);
-			double fZoom = MIN (pIndicator->textZone.fWidth * pRenderer->iWidth / textExtents.width, pIndicator->textZone.fHeight * pRenderer->iHeight / textExtents.height);
+			double fZoom = MIN (pIndicator->textZone.fWidth * pRenderer->iWidth / (textExtents.width, pIndicator->textZone.fHeight * pRenderer->iHeight / textExtents.height);
 			
 			cairo_move_to (pSourceContext,
 				floor ((1. + pIndicator->textZone.fX) * pRenderer->iWidth/2 - textExtents.width*fZoom/2),
-				floor ((1. - pIndicator->textZone.fY) * pRenderer->iHeight/2 - textExtents.height*fZoom/2));
+				floor ((1. - pIndicator->textZone.fY) * pRenderer->iHeight/2 + textExtents.height*fZoom/2));
 			cairo_scale (pSourceContext,
 				fZoom,
 				fZoom);
 			cairo_show_text (pSourceContext, pRenderer->cFormatBuffer);
-			cairo_restore (pSourceContext);
+			cairo_restore (pSourceContext);*/
 		}
 	}
 	

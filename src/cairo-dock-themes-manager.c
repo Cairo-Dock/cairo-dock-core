@@ -700,7 +700,12 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			cd_message ("building theme package ...");
 			if (g_file_test (CAIRO_DOCK_SHARE_DATA_DIR"/../../bin/cairo-dock-package-theme", G_FILE_TEST_EXISTS))
 			{
-				gchar *cCommand = g_strdup_printf ("$TERM -e '%s \"%s\"'", "cairo-dock-package-theme", cNewThemeName);
+				gchar *cCommand;
+				const gchar *cTerm = g_getenv ("TERM");
+				if (cTerm == NULL || *cTerm == '\0')
+					cCommand = g_strdup_printf ("%s \"%s\"", "cairo-dock-package-theme", cNewThemeName);
+				else
+					cCommand = g_strdup_printf ("$TERM -e '%s \"%s\"'", "cairo-dock-package-theme", cNewThemeName);
 				r = system (cCommand);
 				g_free (cCommand);
 			}

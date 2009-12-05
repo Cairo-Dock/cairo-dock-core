@@ -729,7 +729,6 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	
 	pDock->container.bInside = TRUE;
-	
 	// animation d'entree.
 	gboolean bStartAnimation = FALSE;
 	cairo_dock_notify (CAIRO_DOCK_ENTER_DOCK, pDock, &bStartAnimation);
@@ -1407,29 +1406,31 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, CairoDock *pDock)
 {
 	//g_print ("%s (main dock : %d) : (%d;%d) (%dx%d)\n", __func__, pDock->bIsMainDock, pEvent->x, pEvent->y, pEvent->width, pEvent->height);
-	gint iNewWidth, iNewHeight;
+	gint iNewWidth, iNewHeight, iNewX, iNewY;
 	if (pDock->container.bIsHorizontal)
 	{
 		iNewWidth = pEvent->width;
 		iNewHeight = pEvent->height;
 		
-		pDock->container.iWindowPositionX = pEvent->x;
-		pDock->container.iWindowPositionY = pEvent->y;
+		iNewX = pEvent->x;
+		iNewY = pEvent->y;
 	}
 	else
 	{
 		iNewWidth = pEvent->height;
 		iNewHeight = pEvent->width;
 		
-		pDock->container.iWindowPositionX = pEvent->y;
-		pDock->container.iWindowPositionY = pEvent->x;
+		iNewX = pEvent->y;
+		iNewY = pEvent->x;
 	}
 	
-	if ((iNewWidth != pDock->container.iWidth || iNewHeight != pDock->container.iHeight) && iNewWidth > 1)
+	if ((iNewWidth != pDock->container.iWidth || iNewHeight != pDock->container.iHeight) && iNewWidth > 1)  // changement de taille
 	{
 		//g_print ("-> %dx%d\n", iNewWidth, iNewHeight);
 		pDock->container.iWidth = iNewWidth;
 		pDock->container.iHeight = iNewHeight;
+		pDock->container.iWindowPositionX = iNewX;
+		pDock->container.iWindowPositionY = iNewY;
 		
 		if (pDock->container.bIsHorizontal)
 			gdk_window_get_pointer (pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
@@ -1437,6 +1438,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 			gdk_window_get_pointer (pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
 		if (pDock->container.iMouseX < 0 || pDock->container.iMouseX > pDock->container.iWidth)  // utile ?
 			pDock->container.iMouseX = 0;
+		//g_print ("x,y : %d;%d\n", pDock->container.iMouseX, pDock->container.iMouseY);
 		
 		// les dimensions ont change, il faut remettre l'input shape a la bonne place.
 		if (pDock->pHiddenShapeBitmap != NULL && pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
@@ -1501,13 +1503,22 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		#endif
 		
 		cairo_dock_calculate_dock_icons (pDock);
+		g_print ("configure size\n");
+		cairo_dock_set_icons_geometry_for_window_manager (pDock);  // changement de position ou de taille du dock => on replace les icones.
+		
+		cairo_dock_replace_all_dialogs ();
 	}
+	else if (pDock->container.iWindowPositionX != iNewX || pDock->container.iWindowPositionY != iNewY)  // changement de position.
+	{
+		pDock->container.iWindowPositionX = iNewX;
+		pDock->container.iWindowPositionY = iNewY;
+		g_print ("configure x,y\n");
+		cairo_dock_set_icons_geometry_for_window_manager (pDock);  // changement de position ou de taille du dock => on replace les icones.
+		
+		cairo_dock_replace_all_dialogs ();
+	}
+	
 	gtk_widget_queue_draw (pWidget);
-	
-	g_print ("configure\n");
-	cairo_dock_set_icons_geometry_for_window_manager (pDock);  // changement de position ou de taille du dock => on replace les icones.
-	
-	cairo_dock_replace_all_dialogs ();
 	
 	return FALSE;
 }
@@ -1670,13 +1681,54 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
+
 gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint time, CairoDock *pDock)
 {
-	//g_print ("%s (%dx%d, %d)\n", __func__, x, y, time);
+	//g_print ("%s (%d;%d, %d)\n", __func__, x, y, time);
+	int X = x - pDock->container.iWidth/2;
+	int Y = y;
+	int w, h;
+	if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
+	{
+		w = pDock->iMinDockWidth;
+		h = pDock->iMinDockHeight;
+		
+		if (X <= -w/2 || X >= w/2)
+			return FALSE;  // on n'accepte pas le drop.
+		if (pDock->container.bDirectionUp)
+		{
+			if (Y <= pDock->container.iHeight - h || Y >= pDock->container.iHeight)
+				return FALSE;  // on n'accepte pas le drop.
+		}
+		else
+		{
+			if (Y < 0 || Y > h)
+				return FALSE;  // on n'accepte pas le drop.
+		}
+	}
+	else if (pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
+	{
+		w = MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth);
+		h = MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight);
+		
+		if (X <= -w/2 || X >= w/2)
+			return FALSE;  // on n'accepte pas le drop.
+		if (pDock->container.bDirectionUp)
+		{
+			if (Y <= pDock->container.iHeight - h || Y >= pDock->container.iHeight)
+				return FALSE;  // on n'accepte pas le drop.
+		}
+		else
+		{
+			if (Y < 0 || Y > h)
+				return FALSE;  // on n'accepte pas le drop.
+		}
+	}
+	
 	//\_________________ On simule les evenements souris habituels.
 	if (! pDock->bIsDragging)
 	{
-		cd_message ("start dragging");
+		g_print ("start dragging\n");
 		pDock->bIsDragging = TRUE;
 		
 		/*GdkAtom gdkAtom = gdk_drag_get_selection (dc);
@@ -1701,10 +1753,13 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 			g_print ("get-data envoye\n");
 		}*/
 		
-		cairo_dock_on_enter_notify (pWidget, NULL, pDock);  // ne sera effectif que la 1ere fois a chaque entree dans un dock.
+		///cairo_dock_on_enter_notify (pWidget, NULL, pDock);  // ne sera effectif que la 1ere fois a chaque entree dans un dock.
 	}
 	else
+	{
+		//g_print ("move dragging\n");
 		cairo_dock_on_motion_notify (pWidget, NULL, pDock);
+	}
 	
 	gdk_drag_status (dc, GDK_ACTION_COPY, time);
 	return TRUE;  // on accepte le drop.

@@ -860,7 +860,7 @@ void cairo_dock_show_all_categories (void)
 		g_signal_handlers_block_matched (pCategoryWidget->pCategoryButton,
 			(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
 			0, 0, NULL, on_click_category_button, NULL);
-		gtk_toggle_tool_button_set_active (pCategoryWidget->pCategoryButton, FALSE);
+		gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (pCategoryWidget->pCategoryButton), FALSE);
 		g_signal_handlers_unblock_matched (pCategoryWidget->pCategoryButton,
 			(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
 			0, 0, NULL, on_click_category_button, NULL);
@@ -869,7 +869,7 @@ void cairo_dock_show_all_categories (void)
 	g_signal_handlers_block_matched (pCategoryWidget->pCategoryButton,
 		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
 		0, 0, NULL, on_click_all_button, NULL);
-	gtk_toggle_tool_button_set_active (pCategoryWidget->pCategoryButton, TRUE);
+	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (pCategoryWidget->pCategoryButton), TRUE);
 	g_signal_handlers_unblock_matched (pCategoryWidget->pCategoryButton,
 		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
 		0, 0, NULL, on_click_all_button, NULL);
@@ -918,7 +918,7 @@ void cairo_dock_show_one_category (int iCategory)
 		g_signal_handlers_block_matched (pCategoryWidget->pCategoryButton,
 			(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
 			0, 0, NULL, on_click_category_button, NULL);
-		gtk_toggle_tool_button_set_active (pCategoryWidget->pCategoryButton, (i == iCategory));
+		gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (pCategoryWidget->pCategoryButton), (i == iCategory));
 		g_signal_handlers_unblock_matched (pCategoryWidget->pCategoryButton,
 			(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
 			0, 0, NULL, on_click_category_button, NULL);
@@ -927,7 +927,7 @@ void cairo_dock_show_one_category (int iCategory)
 	g_signal_handlers_block_matched (pCategoryWidget->pCategoryButton,
 		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
 		0, 0, NULL, on_click_all_button, NULL);
-	gtk_toggle_tool_button_set_active (pCategoryWidget->pCategoryButton, FALSE);
+	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (pCategoryWidget->pCategoryButton), FALSE);
 	g_signal_handlers_unblock_matched (pCategoryWidget->pCategoryButton,
 		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
 		0, 0, NULL, on_click_all_button, NULL);
@@ -943,6 +943,34 @@ void cairo_dock_show_one_category (int iCategory)
 
 	//\_______________ On declenche le filtre.
 	cairo_dock_trigger_current_filter ();
+}
+
+void cairo_dock_toggle_category_button (int iCategory)
+{
+	if (s_pMainWindow == NULL || s_pCurrentGroup == NULL || s_pCurrentGroup->cGroupName == NULL || s_pCurrentWidgetList == NULL)
+		return ;
+	
+	CairoDockCategoryWidgetTable *pCategoryWidget;
+	int i;
+	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
+	{
+		pCategoryWidget = &s_pCategoryWidgetTables[i];
+		g_signal_handlers_block_matched (pCategoryWidget->pCategoryButton,
+			(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+			0, 0, NULL, on_click_category_button, NULL);
+		gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (pCategoryWidget->pCategoryButton), (i == iCategory));
+		g_signal_handlers_unblock_matched (pCategoryWidget->pCategoryButton,
+			(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+			0, 0, NULL, on_click_category_button, NULL);
+	}
+	pCategoryWidget = &s_pCategoryWidgetTables[i];
+	g_signal_handlers_block_matched (pCategoryWidget->pCategoryButton,
+		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+		0, 0, NULL, on_click_all_button, NULL);
+	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (pCategoryWidget->pCategoryButton), FALSE);
+	g_signal_handlers_unblock_matched (pCategoryWidget->pCategoryButton,
+		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+		0, 0, NULL, on_click_all_button, NULL);
 }
 
 void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget)
@@ -1659,10 +1687,10 @@ void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage)
 	//g_print ("%s (%s sur %x/%x)\n", __func__, cMessage, pWindow, pStatusBar);
 	gtk_statusbar_pop (GTK_STATUSBAR (pStatusBar), 0);  // clear any previous message, underflow is allowed.
 	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, cMessage);
-	g_print ("wait statusbar...\n");
+	/**g_print ("wait statusbar...\n");
 	while (gtk_events_pending ())
 		gtk_main_iteration ();
-	g_print ("statusbar ok.\n");
+	g_print ("statusbar ok.\n");*/
 }
 void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFormat, ...)
 {

@@ -86,6 +86,7 @@ gpointer cairo_dock_get_current_widget (void);
 void cairo_dock_hide_all_categories (void);
 void cairo_dock_show_all_categories (void);
 void cairo_dock_show_one_category (int iCategory);
+void cairo_dock_toggle_category_button (int iCategory);
 void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget);
 GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance);
 CairoDockGroupDescription *cairo_dock_find_module_description (const gchar *cModuleName);

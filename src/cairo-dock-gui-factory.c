@@ -71,6 +71,7 @@ static GtkListStore *s_pAnimationsListStore = NULL;
 static GtkListStore *s_pDialogDecoratorListStore = NULL;
 static GtkListStore *s_pGaugeListStore = NULL;
 static GtkListStore *s_pDocksListStore = NULL;
+static GtkListStore *s_pIconThemeListStore = NULL;
 
 #define _allocate_new_model(...)\
 	gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF, G_TYPE_INT)
@@ -645,7 +646,7 @@ static void _list_icon_theme_in_dir (const gchar *cDirPath, GHashTable *pHashTab
 			gchar *cName = g_key_file_get_string (pKeyFile, "Icon Theme", "Name", NULL);
 			if (cName != NULL)
 			{
-				g_hash_table_insert (pHashTable, cName, cName);  // on insere cName, juste histoire de pas avoir NULL, c'est plus pratique.
+				g_hash_table_insert (pHashTable, cName, g_strdup (cName));
 			}
 		}
 		
@@ -655,32 +656,30 @@ static void _list_icon_theme_in_dir (const gchar *cDirPath, GHashTable *pHashTab
 	g_dir_close (dir);
 }
 
-static void _prepend_icon_theme_in_combo (const gchar *cName, gpointer data, GtkComboBox *pCombo)
+/**static void _prepend_icon_theme_in_combo (const gchar *cName, const gchar *cDisplayedName, GtkComboBox *pCombo)
 {
 	gtk_combo_box_prepend_text (pCombo, cName);
-}
-static GtkWidget *_cairo_dock_build_icon_themes_list (const gchar **cDirs)
+}*/
+static GHashTable *_cairo_dock_build_icon_themes_list (const gchar **cDirs)
 {
-	GtkWidget *pCombo = gtk_combo_box_entry_new_text ();
+	///GtkWidget *pCombo = gtk_combo_box_entry_new_text ();
 	GHashTable *pHashTable = g_hash_table_new_full (g_str_hash,
 		g_str_equal,
 		g_free,
-		NULL);
+		g_free);
+	gchar *cName = g_strdup (N_("_Custom Icons_"));
+	g_hash_table_insert (pHashTable, cName, g_strdup (gettext (cName)));
 	
 	int i;
 	for (i = 0; cDirs[i] != NULL; i ++)
 	{
 		_list_icon_theme_in_dir (cDirs[i], pHashTable);
 	}
+	return pHashTable;
+	///g_hash_table_foreach (pHashTable, (GHFunc) _prepend_icon_theme_in_combo, pCombo);
 	
-	gchar *cName = g_strdup ("");
-	g_hash_table_insert (pHashTable, cName, cName);
-	cName = g_strdup ("_Custom Icons_");
-	g_hash_table_insert (pHashTable, cName, cName);
-	g_hash_table_foreach (pHashTable, (GHFunc) _prepend_icon_theme_in_combo, pCombo);
-	
-	g_hash_table_destroy (pHashTable);
-	return pCombo;
+	///g_hash_table_destroy (pHashTable);
+	///return pCombo;
 }
 
 
@@ -804,6 +803,23 @@ static void cairo_dock_build_dock_list_for_gui (void)
 	s_pDocksListStore = _allocate_new_model ();
 	_cairo_dock_add_one_dock_item ("", NULL, s_pDocksListStore);
 	cairo_dock_foreach_docks ((GHFunc) _cairo_dock_add_one_dock_item, s_pDocksListStore);
+}
+
+static void _cairo_dock_add_one_icon_theme_item (const gchar *cName, const gchar *cDisplayedName, GtkListStore *pModele)
+{
+	GtkTreeIter iter;
+	memset (&iter, 0, sizeof (GtkTreeIter));
+	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
+	g_print ("+ %s (%s)\n", cName, cDisplayedName);
+	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
+		CAIRO_DOCK_MODEL_NAME, cDisplayedName,
+		CAIRO_DOCK_MODEL_RESULT, cName,
+		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
+		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
+}
+static void cairo_dock_build_icon_theme_list_for_gui (GHashTable *pHashTable)
+{
+	_build_list_for_gui (s_pIconThemeListStore, "", pHashTable, _cairo_dock_add_one_icon_theme_item);
 }
 
 static void _cairo_dock_fill_modele_with_themes (const gchar *cThemeName, CairoDockTheme *pTheme, GtkListStore *pModele)
@@ -1050,10 +1066,13 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 		_pack_subwidget (pOneWidget); }\
 	else {\
 		cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);\
-		pOneWidget = (bWithEntry ? gtk_combo_box_entry_new_with_model (GTK_TREE_MODEL (modele), CAIRO_DOCK_MODEL_NAME) : gtk_combo_box_new_with_model (GTK_TREE_MODEL (modele)));\
-		rend = gtk_cell_renderer_text_new ();\
-		gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);\
-		gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);\
+		if (bWithEntry) {\
+			pOneWidget = gtk_combo_box_entry_new_with_model (GTK_TREE_MODEL (modele), CAIRO_DOCK_MODEL_NAME); }\
+		else {\
+			pOneWidget = gtk_combo_box_new_with_model (GTK_TREE_MODEL (modele));\
+			rend = gtk_cell_renderer_text_new ();\
+			gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);\
+			gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);}\
 		if (bAddPreviewWidgets) {\
 			pDescriptionLabel = gtk_label_new (NULL);\
 			gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);\
@@ -1734,12 +1753,27 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				path[0] = (const gchar *)cUserPath;
 				path[1] = "/usr/share/icons";
 				path[2] = NULL;
-				pOneWidget = _cairo_dock_build_icon_themes_list (path);
+				///pOneWidget = _cairo_dock_build_icon_themes_list (path);
+				///g_free (cUserPath);
+				
+				if (s_pIconThemeListStore != NULL)
+				{
+					gtk_list_store_clear (s_pIconThemeListStore);
+					s_pIconThemeListStore = NULL;
+				}
+				
+				GHashTable *pHashTable = _cairo_dock_build_icon_themes_list (path);
 				g_free (cUserPath);
-				GtkWidget *pEntry = gtk_bin_get_child (GTK_BIN (pOneWidget));
+				
+				cairo_dock_build_icon_theme_list_for_gui (pHashTable);
+				
+				g_hash_table_destroy (pHashTable);
+				_add_combo_from_modele (s_pIconThemeListStore, FALSE, FALSE);
+				
+				/**GtkWidget *pEntry = gtk_bin_get_child (GTK_BIN (pOneWidget));
 				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
 				gtk_entry_set_text (GTK_ENTRY (pEntry), cValue);  // on affiche la valeur meme si elle n'existe pas dans la liste.
-				g_free (cValue);
+				g_free (cValue);*/
 				_pack_subwidget (pOneWidget);
 			}
 			break ;

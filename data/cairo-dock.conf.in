@@ -430,6 +430,17 @@ text margin = 4
 
 [Icons]
 
+#F+[Icons' themes;gtk-select-color]
+frame_theme=
+
+#w+ Choose a theme of icons :
+#{Let empty to use the current icons theme of your system. You can enter the name of a theme that is installed on your system (like 'Gartoon' or 'Human'), or even a path to a folder containing icons.}
+default icon directory = 
+
+#S+ Image's filename to use as a background for icons :
+#{Any format allowed; let this field empty if you don't want to use an image as background.}
+icons bg =
+
 #F+[Zoom effect;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-wave.png]
 frame_shape =
 #f+[1;5] Maximum zoom of the icons :
@@ -443,18 +454,6 @@ sinusoid width = 300
 #i+[0;50] Space between icons :
 #{in pixels.}
 icon gap = 0
-
-#F+[Icons' themes;gtk-select-color]
-frame_theme=
-
-#w+ Choose a theme of icons :
-#{Let empty to use the current icons theme of your system. You can enter the name of a theme that is installed on your system (like 'Gartoon' or 'Human'), or even a path to a folder containing icons.}
-default icon directory = 
-
-#S+ Image's filename to use as a background for icons :
-#{Any format allowed; let this field empty if you don't want to use an image as background.}
-icons bg =
-
 
 #F+[Reflections]
 frame_refl =
@@ -699,11 +698,11 @@ active frame position = true
 #F+[Indicator of active launcher]
 frame_launch =
 
-#S+ Filename of an image to use for indicators :
+#S+ Image file :
 #{Indicators are drawn on launchers icons to show that they have already been launched. Let blank to use the default one.}
 indicator image = 
 
-#b+ Display the indicator above the icon ?
+#b+ Draw indicator above the icon ?
 indicator above = true
 
 #e+[0.1;1.5;smaller;bigger] Indicator size ratio :
@@ -723,10 +722,10 @@ link indicator = true
 rotate indicator = true
 
 
-#F+[Indicator of class subdock]
+#F+[Indicator of grouped windows]
 frame_class =
 
-#S+ Filename of an image to indicate that a class has been grouped in a subdock :
+#S+ Image file :
 #{It only makes sense if you choosed to group the applis of the same class togather. Let blank to use the default one.}
 class indicator = 
 
