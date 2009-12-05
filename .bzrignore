@@ -27,6 +27,7 @@ missing
 src/cairo-dock
 data/themes.conf
 data/cairo-dock.conf
+data/main-dock.conf
 stamp-h1
 cairo-dock.pc
 compile*
