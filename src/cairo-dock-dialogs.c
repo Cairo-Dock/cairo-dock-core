@@ -1366,9 +1366,9 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 		if (pDialog->iDistanceToDock != iOldDistance)
 		{
 			//g_print ("  On change la taille de la pointe a : %d pixels ( -> %d)\n", pDialog->iDistanceToDock, pDialog->iMessageHeight + pDialog->iInteractiveHeight +pDialog->iButtonsHeight + pDialog->iDistanceToDock);
-			g_print ("pTipWidget1\n");
-			gtk_widget_set (pDialog->pTipWidget, "height-request", MAX (0, pDialog->iDistanceToDock + pDialog->iBottomMargin), NULL);
-			g_print ("pTipWidget2\n");
+			if (pDialog->pTipWidget)
+				gtk_widget_set (pDialog->pTipWidget, "height-request", MAX (0, pDialog->iDistanceToDock + pDialog->iBottomMargin), NULL);
+			//g_print ("pTipWidget set\n");
 			
 			if ((iOldDistance == 0) || (pDialog->iDistanceToDock < iOldDistance))
 			{

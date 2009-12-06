@@ -1685,8 +1685,17 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint time, CairoDock *pDock)
 {
 	//g_print ("%s (%d;%d, %d)\n", __func__, x, y, time);
-	int X = x - pDock->container.iWidth/2;
-	int Y = y;
+	int X, Y;
+	if (pDock->container.bIsHorizontal)
+	{
+		X = x - pDock->container.iWidth/2;
+		Y = y;
+	}
+	else
+	{
+		Y = x;
+		X = y - pDock->container.iWidth/2;
+	}
 	int w, h;
 	if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
 	{
