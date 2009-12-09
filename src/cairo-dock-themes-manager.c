@@ -22,6 +22,8 @@
 #define __USE_XOPEN_EXTENDED
 #include <stdlib.h>
 #include <sys/stat.h>
+#define __USE_POSIX
+#include <time.h>
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
@@ -44,8 +46,6 @@
 #define CAIRO_DOCK_THEME_SERVER "http://themes.cairo-dock.org"
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"
 #define CAIRO_DOCK_DEFAULT_THEME_LIST_NAME "liste.txt"
-#define CAIRO_DOCK_DL_NB_RETRY 0  // pas de retry
-#define CAIRO_DOCK_DL_TIMEOUT 5 // 5 secondes de timeout a la connexion (le transfert peut prendre son temps lui). Avec wget depuis la version de Karmic, cela pose probleme.
 
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cConfFile;
@@ -195,7 +195,7 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 		// on insere le theme dans la table.
 		pTheme = g_new0 (CairoDockTheme, 1);
 		pTheme->cThemePath = cThemePath;
-		pTheme->cDisplayedName = g_strdup_printf ("%s%s", (cPrefix != NULL ? cPrefix : ""), cThemeName);
+		pTheme->cDisplayedName = g_strdup (cThemeName);  /// g_strdup_printf ("%s%s", (cPrefix != NULL ? cPrefix : ""), cThemeName);
 		pTheme->iType = iType;
 		pTheme->iVersion = iVersion;
 		pTheme->iRating = _get_theme_rating (cThemesDir, cThemeName);
@@ -210,6 +210,7 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 
 gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtractTo, const gchar *cRealArchiveName)
 {
+	// on cree le repertoire d'extraction.
 	if (!g_file_test (cExtractTo, G_FILE_TEST_EXISTS))
 	{
 		if (g_mkdir (cExtractTo, 7*8*8+7*8+5) != 0)
@@ -218,35 +219,45 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 			return NULL;
 		}
 	}
-	gchar *cResultPath;
+	
+	// on construit le chemin local du dossier apres son extraction.
+	gchar *cLocalFileName;
+	if (cRealArchiveName == NULL)
+		cRealArchiveName = cArchivePath;
+	gchar *str = strrchr (cRealArchiveName, '/');
+	if (str != NULL)
+		cLocalFileName = g_strdup (str+1);
+	else
+		cLocalFileName = g_strdup (cRealArchiveName);
+	
+	if (g_str_has_suffix (cLocalFileName, ".tar.gz"))
+		cLocalFileName[strlen(cLocalFileName)-7] = '\0';
+	else if (g_str_has_suffix (cLocalFileName, ".tar.bz2"))
+		cLocalFileName[strlen(cLocalFileName)-8] = '\0';
+	else if (g_str_has_suffix (cLocalFileName, ".tgz"))
+		cLocalFileName[strlen(cLocalFileName)-4] = '\0';
+	g_return_val_if_fail (cLocalFileName != NULL && *cLocalFileName != '\0', NULL);
+	
+	gchar *cResultPath = g_strdup_printf ("%s/%s", cExtractTo, cLocalFileName);
+	g_free (cLocalFileName);
+	
+	// on efface un dossier identique prealable.
+	if (g_file_test (cResultPath, G_FILE_TEST_EXISTS))
+	{
+		gchar *cCommand = g_strdup_printf ("rm -rf \"%s\"", cResultPath);
+		int r = system (cCommand);
+		g_free (cCommand);
+	}
+	
+	// on decompresse l'archive.
 	gchar *cCommand = g_strdup_printf ("tar xf%c \"%s\" -C \"%s\"", (g_str_has_suffix (cArchivePath, "bz2") ? 'j' : 'z'), cArchivePath, cExtractTo);
 	g_print ("tar : %s\n", cCommand);
 	int r = system (cCommand);
 	if (r != 0)
 	{
 		cd_warning ("an error occured while executing '%s'", cCommand);
+		g_free (cResultPath);
 		cResultPath = NULL;
-	}
-	else
-	{
-		gchar *cLocalFileName;  // on construit le nom local du theme apres decompression.
-		if (cRealArchiveName == NULL)
-			cRealArchiveName = cArchivePath;
-		gchar *str = strrchr (cRealArchiveName, '/');
-		if (str != NULL)
-			cLocalFileName = g_strdup (str+1);
-		else
-			cLocalFileName = g_strdup (cRealArchiveName);
-		
-		if (g_str_has_suffix (cLocalFileName, ".tar.gz"))
-			cLocalFileName[strlen(cLocalFileName)-7] = '\0';
-		else if (g_str_has_suffix (cLocalFileName, ".tar.bz2"))
-			cLocalFileName[strlen(cLocalFileName)-8] = '\0';
-		else if (g_str_has_suffix (cLocalFileName, ".tgz"))
-			cLocalFileName[strlen(cLocalFileName)-4] = '\0';
-		
-		cResultPath = g_strdup_printf ("%s/%s", cExtractTo, cLocalFileName);
-		g_free (cLocalFileName);
 	}
 	g_free (cCommand);
 	return cResultPath;
@@ -363,6 +374,102 @@ gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gc
 	return cContent;
 }
 
+static void _cairo_dock_parse_theme_list (const gchar *cListfFile, const gchar *cServerAdress, const gchar *cDirectory, GHashTable *pThemeTable)
+{
+	// on ouvre la liste.
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cListfFile);
+	g_return_if_fail (pKeyFile != NULL);  // rien a charger dans la table, on quitte.
+	
+	// date courante.
+	time_t epoch = (time_t) time (NULL);
+	struct tm currentTime;
+	localtime_r (&epoch, &currentTime);
+	int now = currentTime.tm_mday + currentTime.tm_mon * 1e2 + currentTime.tm_year * 1e4;
+	
+	// on parcourt la liste.
+	gsize length=0;
+	gchar **pGroupList = g_key_file_get_groups (pKeyFile, &length);
+	g_return_if_fail (pGroupList != NULL);  // rien a charger dans la table, on quitte.
+	
+	gchar *cThemeName;
+	CairoDockTheme *pTheme;
+	CairoDockThemeType iType;
+	int iCreationDate, iLastModifDate, iLocalDate;
+	guint i;
+	for (i = 0; i < length; i ++)
+	{
+		cThemeName = pGroupList[i];
+		iCreationDate = g_key_file_get_integer (pKeyFile, cThemeName, "creation", NULL);
+		iLastModifDate = g_key_file_get_integer (pKeyFile, cThemeName, "last modif", NULL);
+		
+		// creation < 30j && pas sur le disque -> new
+		// sinon last modif < 30j && last use < last modif -> updated, raz last use.
+		// sinon -> net
+		
+		// on surcharge les themes locaux en cas de nouvelle version.
+		CairoDockTheme *pSameTheme = g_hash_table_lookup (pThemeTable, cThemeName);
+		if (pSameTheme != NULL)  // le theme existe en local.
+		{
+			// on regarde de quand date cette version locale.
+			gchar *cVersionFile = g_strdup_printf ("%s/last-modif", pSameTheme->cThemePath);
+			gsize length = 0;
+			gchar *cContent = NULL;
+			g_file_get_contents (cVersionFile,
+				&cContent,
+				&length,
+				NULL);
+			iLocalDate = (cContent ? atoi (cContent) : 0);
+			g_free (cContent);
+			
+			if (iLocalDate < iLastModifDate)  // elle est plus ancienne
+			{
+				iType = CAIRO_DOCK_UPDATED_THEME;
+				if (iLocalDate != 0)
+					g_file_set_contents (cVersionFile,
+						"0",
+						-1,
+						NULL);
+			}
+			else  // c'est deja la derniere version disponible, on en reste la.
+			{
+				g_free (cVersionFile);
+				g_free (cThemeName);
+				continue;
+			}
+			g_free (cVersionFile);
+			
+			pTheme = pSameTheme;
+			g_free (pTheme->cThemePath);
+			g_free (pTheme->cAuthor);
+			g_free (pTheme->cThemePath);
+		}
+		else  // theme encore jamais telecharge.
+		{
+			if (iCreationDate - now < 30)  // les themes restent nouveaux pendant 1 mois.
+				iType = CAIRO_DOCK_NEW_THEME;
+			else if (iLastModifDate - now < 30)  // les themes restent mis a jour pendant 1 mois.
+				iType = CAIRO_DOCK_UPDATED_THEME;
+			else
+				iType = CAIRO_DOCK_DISTANT_THEME;
+			
+			pTheme = g_new0 (CairoDockTheme, 1);
+			g_hash_table_insert (pThemeTable, cThemeName, pTheme);
+			pTheme->iRating = g_key_file_get_integer (pKeyFile, cThemeName, "rating", NULL);  // // par contre on affiche la note que l'utilisateur avait precedemment etablie.
+		}
+		
+		pTheme->cThemePath = g_strdup_printf ("%s/%s/%s", cServerAdress, cDirectory, cThemeName);
+		pTheme->fSize = g_key_file_get_double (pKeyFile, cThemeName, "size", NULL);
+		pTheme->cAuthor = g_key_file_get_string (pKeyFile, cThemeName, "author", NULL);
+		pTheme->iSobriety = g_key_file_get_integer (pKeyFile, cThemeName, "sobriety", NULL);
+		pTheme->iCreationDate = iCreationDate;
+		pTheme->iLastModifDate = iLastModifDate;
+		pTheme->cDisplayedName = g_strdup_printf ("%s by %s [%.2f MB]", cThemeName, (pTheme->cAuthor ? pTheme->cAuthor : "---"), pTheme->fSize);
+	}
+	g_free (pGroupList);  // les noms des themes sont desormais dans la hash-table.
+	
+	g_key_file_free (pKeyFile);
+}
+
 GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar *cDirectory, const gchar *cListFileName, GHashTable *hProvidedTable, GError **erreur)
 {
 	g_return_val_if_fail (cServerAdress != NULL && *cServerAdress != '\0', hProvidedTable);
@@ -465,7 +572,7 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 			pTheme = g_new0 (CairoDockTheme, 1);
 			pTheme->iType = CAIRO_DOCK_DISTANT_THEME;
 			pTheme->cThemePath = g_strdup_printf ("%s/%s/%s", cServerAdress, cDirectory, cThemeName);
-			pTheme->cDisplayedName = g_strconcat (CAIRO_DOCK_PREFIX_NET_THEME, cThemeName, NULL);
+			pTheme->cDisplayedName = g_strdup (cThemeName);  ///g_strconcat (CAIRO_DOCK_PREFIX_NET_THEME, cThemeName, NULL);
 			g_hash_table_insert (pThemeTable, g_strdup (cThemeName), pTheme);
 			bFirstComment = TRUE;
 		}
@@ -626,13 +733,13 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 
 	if (cNewThemeName != NULL)
 	{
-		if (strncmp (cNewThemeName, CAIRO_DOCK_PREFIX_USER_THEME, strlen (CAIRO_DOCK_PREFIX_USER_THEME)) == 0)
+		/**if (strncmp (cNewThemeName, CAIRO_DOCK_PREFIX_USER_THEME, strlen (CAIRO_DOCK_PREFIX_USER_THEME)) == 0)
 		{
 			gchar *tmp = cNewThemeName;
 			cNewThemeName = g_strdup (cNewThemeName+strlen (CAIRO_DOCK_PREFIX_USER_THEME));
 			g_free (tmp);
 			g_print (" => cNewThemeName : '%s'\n", cNewThemeName);
-		}
+		}*/
 		cd_message ("on sauvegarde dans %s", cNewThemeName);
 		gboolean bThemeSaved = FALSE;
 		gchar *cNewThemePath = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR, cNewThemeName);
@@ -1051,6 +1158,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		g_free (cNewThemePath);
 		g_string_free (sCommand, TRUE);
 		cairo_dock_set_status_message (s_pThemeManager, "");
+		return FALSE;
 	}
 	
 	return TRUE;
@@ -1109,7 +1217,7 @@ gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareTh
 				}
 			}
 			if (! bOutdated)
-			return cThemePath;
+				return cThemePath;
 		}
 		
 		g_free (cThemePath);

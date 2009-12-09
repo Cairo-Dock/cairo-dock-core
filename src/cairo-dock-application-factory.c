@@ -731,6 +731,11 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 void cairo_dock_appli_demands_attention (Icon *icon)
 {
 	cd_message ("%s (%s / %s , %d)", __func__, icon->cName, icon->cLastAttentionDemand, icon->bIsDemandingAttention);
+	if (icon->Xid == cairo_dock_get_current_active_window ())  // apparemment ce cas existe, et conduit a ne pas pouvoir stopper l'animation de demande d'attention facilement.
+	{
+		g_print ("cette fenetre a deja le focus, elle ne peut demander l'attention en plus.\n");
+		return ;
+	}
 	if (icon->bIsDemandingAttention &&
 		/*cairo_dock_icon_has_dialog (icon) &&*/
 		icon->cLastAttentionDemand && icon->cName && strcmp (icon->cLastAttentionDemand, icon->cName) == 0)  // le message n'a pas change entre les 2 demandes.

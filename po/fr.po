@@ -723,7 +723,7 @@ msgstr "Maximiser"
 
 #: ../src/cairo-dock-menu.c:1572
 msgid "Show"
-msgstr "Afficher"
+msgstr "Montrer"
 
 #: ../src/cairo-dock-menu.c:1575
 msgid "Minimize"
@@ -739,7 +739,7 @@ msgstr "Déplacer tout vers ce bureau"
 
 #: ../src/cairo-dock-menu.c:1599
 msgid "Show all"
-msgstr "Afficher tout"
+msgstr "Montrer tout"
 
 #: ../src/cairo-dock-menu.c:1601
 msgid "Minimize all"
@@ -784,7 +784,7 @@ msgstr "Toujours derrière"
 #: ../src/cairo-dock-menu.c:1698
 msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr ""
-"Régler le comportement de Compiz à : (name=cairo-dock & type=utility)"
+"Réglez le comportement de Compiz à : (name=cairo-dock & type=utility)"
 
 #: ../src/cairo-dock-menu.c:1700
 msgid "Reserve space"

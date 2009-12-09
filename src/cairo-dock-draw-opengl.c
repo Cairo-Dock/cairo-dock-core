@@ -170,7 +170,16 @@ static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDo
 	}
 	
 	cairo_dock_set_icon_scale (icon, CAIRO_CONTAINER (pDock), 1.);
-	cairo_dock_draw_texture_with_alpha (g_iActiveIndicatorTexture, 1., 1., .99);
+	///cairo_dock_draw_texture_with_alpha (g_iActiveIndicatorTexture, 1., 1., 1.);
+	
+	_cairo_dock_enable_texture ();
+	
+	_cairo_dock_set_blend_pbuffer ();  // rend mieux que les 2 autres.
+	
+	_cairo_dock_apply_texture_at_size_with_alpha (g_iActiveIndicatorTexture, 1., 1., 1.);
+	
+	_cairo_dock_disable_texture ();
+	
 }
 static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp)
 {

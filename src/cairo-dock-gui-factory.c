@@ -61,6 +61,7 @@ typedef enum {
 	CAIRO_DOCK_MODEL_IMAGE,
 	CAIRO_DOCK_MODEL_ICON,
 	CAIRO_DOCK_MODEL_ORDER2,
+	CAIRO_DOCK_MODEL_STATE,
 	CAIRO_DOCK_MODEL_NB_COLUMNS
 	} _CairoDockModelColumns;
 
@@ -74,7 +75,7 @@ static GtkListStore *s_pDocksListStore = NULL;
 static GtkListStore *s_pIconThemeListStore = NULL;
 
 #define _allocate_new_model(...)\
-	gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF, G_TYPE_INT)
+	gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF, G_TYPE_INT, G_TYPE_INT)
 
 static void _cairo_dock_activate_one_element (GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
 {
@@ -656,13 +657,8 @@ static void _list_icon_theme_in_dir (const gchar *cDirPath, GHashTable *pHashTab
 	g_dir_close (dir);
 }
 
-/**static void _prepend_icon_theme_in_combo (const gchar *cName, const gchar *cDisplayedName, GtkComboBox *pCombo)
-{
-	gtk_combo_box_prepend_text (pCombo, cName);
-}*/
 static GHashTable *_cairo_dock_build_icon_themes_list (const gchar **cDirs)
 {
-	///GtkWidget *pCombo = gtk_combo_box_entry_new_text ();
 	GHashTable *pHashTable = g_hash_table_new_full (g_str_hash,
 		g_str_equal,
 		g_free,
@@ -676,10 +672,6 @@ static GHashTable *_cairo_dock_build_icon_themes_list (const gchar **cDirs)
 		_list_icon_theme_in_dir (cDirs[i], pHashTable);
 	}
 	return pHashTable;
-	///g_hash_table_foreach (pHashTable, (GHFunc) _prepend_icon_theme_in_combo, pCombo);
-	
-	///g_hash_table_destroy (pHashTable);
-	///return pCombo;
 }
 
 
@@ -822,21 +814,54 @@ static void cairo_dock_build_icon_theme_list_for_gui (GHashTable *pHashTable)
 	_build_list_for_gui (s_pIconThemeListStore, "", pHashTable, _cairo_dock_add_one_icon_theme_item);
 }
 
-static void _cairo_dock_fill_modele_with_themes (const gchar *cThemeName, CairoDockTheme *pTheme, GtkListStore *pModele)
+static inline void _fill_modele_with_themes (const gchar *cThemeName, CairoDockTheme *pTheme, GtkListStore *pModele, gboolean bShowState)
 {
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
 	gchar *cReadmePath = g_strdup_printf ("%s/readme", pTheme->cThemePath);
 	gchar *cPreviewPath = g_strdup_printf ("%s/preview", pTheme->cThemePath);
+	///gchar *cResult = g_strdup ("%d/%s", pTheme->iType, cThemeName);
+	gchar *cDisplayedName;
+	if (bShowState)
+	{
+		const gchar *cType;
+		switch (pTheme->iType)
+		{
+			case CAIRO_DOCK_LOCAL_THEME: cType 		= "(Local)  "; break;
+			case CAIRO_DOCK_USER_THEME: cType 		= "(User)   "; break;
+			case CAIRO_DOCK_DISTANT_THEME: cType 	= "(Net)    "; break;
+			case CAIRO_DOCK_NEW_THEME: cType 		= "(New)    "; break;
+			case CAIRO_DOCK_UPDATED_THEME: cType 	= "(Updated)"; break;
+			default: cType = ""; break;
+		}
+		cDisplayedName = g_strconcat (cType, pTheme->cDisplayedName, NULL);
+	}
+	else
+		cDisplayedName = pTheme->cDisplayedName;
 	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
-		CAIRO_DOCK_MODEL_NAME, pTheme->cDisplayedName,
-		CAIRO_DOCK_MODEL_RESULT, cThemeName,
+		CAIRO_DOCK_MODEL_NAME, cDisplayedName,
+		CAIRO_DOCK_MODEL_RESULT, cThemeName/**cResult*/,
 		CAIRO_DOCK_MODEL_ACTIVE, FALSE,
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, cReadmePath,
 		CAIRO_DOCK_MODEL_IMAGE, cPreviewPath, 
 		CAIRO_DOCK_MODEL_ORDER, pTheme->iRating,
-		CAIRO_DOCK_MODEL_ORDER2, pTheme->iSobriety, -1);
+		CAIRO_DOCK_MODEL_ORDER2, pTheme->iSobriety,
+		CAIRO_DOCK_MODEL_STATE, pTheme->iType, -1);
+	g_free (cReadmePath);
+	g_free (cPreviewPath);
+	///g_free (cResult);
+	if (bShowState)
+		g_free (cDisplayedName);
+}
+static void _cairo_dock_fill_modele_with_themes (const gchar *cThemeName, CairoDockTheme *pTheme, GtkListStore *pModele)
+{
+	_fill_modele_with_themes (cThemeName, pTheme, pModele, FALSE);
+}
+
+static void _cairo_dock_fill_modele_with_short_themes (const gchar *cThemeName, CairoDockTheme *pTheme, GtkListStore *pModele)
+{
+	_fill_modele_with_themes (cThemeName, pTheme, pModele, TRUE);
 }
 static gboolean _cairo_dock_test_one_name (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
 {
@@ -901,6 +926,43 @@ static void _cairo_dock_render_rating (GtkTreeViewColumn *tree_column, GtkCellRe
 	/// ignorer les themes "default"...
 	_render_rating (cell, model, iter, CAIRO_DOCK_MODEL_ORDER);
 }
+static void _cairo_dock_render_state (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
+{
+	const gchar *cState=NULL;
+	gint iState = 0;
+	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_STATE, &iState, -1);
+	switch (iState)
+	{
+		case CAIRO_DOCK_LOCAL_THEME:
+			cState = _("Local");
+			g_object_set (cell, "foreground-set", FALSE, NULL);
+		break;
+		case CAIRO_DOCK_USER_THEME:
+			cState = _("User");
+			g_object_set (cell, "foreground-set", FALSE, NULL);
+		break;
+		case CAIRO_DOCK_DISTANT_THEME:
+			cState = _("Net");
+			g_object_set (cell, "foreground-set", FALSE, NULL);
+		break;
+		case CAIRO_DOCK_NEW_THEME:
+			cState = _("New");
+			g_object_set (cell, "foreground", "#FF0000", NULL);  // "red"
+			g_object_set (cell, "foreground-set", TRUE, NULL);
+		break;
+		case CAIRO_DOCK_UPDATED_THEME:
+			cState = _("Updated");
+			g_object_set (cell, "foreground", "#FF0000", NULL);  // "red"
+			g_object_set (cell, "foreground-set", TRUE, NULL);
+		break;
+		default:
+		break;
+	}
+	if (cState != NULL)
+	{
+		g_object_set (cell, "text", cState, NULL);
+	}
+}
 static GtkListStore *_make_note_list_store (void)
 {
 	GString *s = g_string_sized_new (CD_MAX_RATING*4+1);
@@ -947,15 +1009,19 @@ static void _change_rating (GtkCellRendererText * cell, gchar * path_string, gch
 	} while (1);
 	//g_print ("iRating : %d\n", iRating);
 	
-	gchar *cDisplayedName = NULL, *cThemeName = NULL;
-	gtk_tree_model_get (model, &it, CAIRO_DOCK_MODEL_NAME, &cDisplayedName, CAIRO_DOCK_MODEL_RESULT, &cThemeName, -1);
-	g_return_if_fail (cDisplayedName != NULL && cThemeName != NULL);
+	gchar /** *cDisplayedName = NULL, */*cThemeName = NULL;
+	gint iState;
+	gtk_tree_model_get (model, &it,
+		///CAIRO_DOCK_MODEL_NAME, &cDisplayedName,
+		CAIRO_DOCK_MODEL_RESULT, &cThemeName,
+		CAIRO_DOCK_MODEL_STATE, &iState, -1);
+	g_return_if_fail (/**cDisplayedName != NULL && */cThemeName != NULL);
 	//g_print ("theme : %s / %s\n", cThemeName, cDisplayedName);
 	
 	gchar *cRatingDir = g_strdup_printf ("%s/%s/.rating", g_cCairoDockDataDir, "themes");  // il y'a un probleme ici, on ne connait pas le repertoire utilisateur des themes. donc ce code ne marche que pour les themes du dock (et n'est utilise que pour ca)
 	gchar *cRatingFile = g_strdup_printf ("%s/%s", cRatingDir, cThemeName);
 	//g_print ("on ecrit dans %s\n", cRatingFile);
-	if (strncmp (cDisplayedName, CAIRO_DOCK_PREFIX_NET_THEME, strlen (CAIRO_DOCK_PREFIX_NET_THEME)) != 0 || g_file_test (cRatingFile, G_FILE_TEST_EXISTS))  // ca n'est pas un theme distant, ou l'utilisateur a deja vote auparavant pour ce theme.
+	if (iState == CAIRO_DOCK_USER_THEME || iState == CAIRO_DOCK_LOCAL_THEME/**strncmp (cDisplayedName, CAIRO_DOCK_PREFIX_NET_THEME, strlen (CAIRO_DOCK_PREFIX_NET_THEME)) != 0*/ || g_file_test (cRatingFile, G_FILE_TEST_EXISTS))  // ca n'est pas un theme distant, ou l'utilisateur a deja vote auparavant pour ce theme.
 	{
 		if (!g_file_test (cRatingDir, G_FILE_TEST_IS_DIR))
 		{
@@ -985,7 +1051,7 @@ static void _change_rating (GtkCellRendererText * cell, gchar * path_string, gch
 		else
 			cairo_dock_show_general_message (_("You have to try the theme before you can rate it."), 3000);
 	}
-	g_free (cDisplayedName);
+	///g_free (cDisplayedName);
 	g_free (cThemeName);
 	g_free (cRatingFile);
 	g_free (cRatingDir);
@@ -2106,7 +2172,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				}
 			break ;
 			
-			case CAIRO_DOCK_WIDGET_THEME_SELECTOR :  // tree view with 3 sortable columns.
+			case CAIRO_DOCK_WIDGET_THEME_SELECTOR :  // tree view with 4 sortable columns.
 				//\______________ On construit le treeview des themes.
 				modele = _allocate_new_model ();
 				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
@@ -2117,9 +2183,16 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pOneWidget));
 				gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
 				g_object_set_data (G_OBJECT (pOneWidget), "get-active-line-only", GINT_TO_POINTER (1));
+				GtkTreeViewColumn* col;
+				// etat
+				rend = gtk_cell_renderer_text_new ();
+				col = gtk_tree_view_column_new_with_attributes (_("state"), rend, "text", CAIRO_DOCK_MODEL_STATE, NULL);
+				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_STATE);
+				gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_state, NULL, NULL);
+				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
 				// nom du theme
 				rend = gtk_cell_renderer_text_new ();
-				GtkTreeViewColumn* col = gtk_tree_view_column_new_with_attributes (_("theme"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+				col = gtk_tree_view_column_new_with_attributes (_("theme"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
 				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_NAME);
 				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
 				// note
@@ -2152,7 +2225,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
 				_pack_in_widget_box (pScrolledWindow);
 				
-				//\______________ On construit le widget de prevue et on le rajoute a la suite. 
+				//\______________ On construit le widget de prevue et on le rajoute a la suite.
 				pDescriptionLabel = gtk_label_new (NULL);
 				gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
 				pPreviewImage = gtk_image_new_from_pixbuf (NULL);
@@ -2840,7 +2913,7 @@ void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pThemeTab
 {
 	GtkTreeModel *modele = gtk_combo_box_get_model (GTK_COMBO_BOX (pCombo));
 	g_return_if_fail (modele != NULL);
-	g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_modele_with_themes, modele);
+	g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_modele_with_short_themes, modele);
 	
 	GtkTreeIter iter;
 	if (_cairo_dock_find_iter_from_name (GTK_LIST_STORE (modele), cActiveTheme, &iter))

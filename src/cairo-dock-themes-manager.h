@@ -32,8 +32,8 @@ G_BEGIN_DECLS
 *   distant (located on the cairo-dock's server)
 */
 
-#define CAIRO_DOCK_PREFIX_NET_THEME "(Net)   "
-#define CAIRO_DOCK_PREFIX_USER_THEME "(User)  "
+#define CAIRO_DOCK_PREFIX_NET_THEME   "(Net)   "
+#define CAIRO_DOCK_PREFIX_USER_THEME  "(User)  "
 #define CAIRO_DOCK_PREFIX_LOCAL_THEME "(Local) "
 
 /// Types of themes.
@@ -41,6 +41,8 @@ typedef enum {
 	CAIRO_DOCK_LOCAL_THEME=0,
 	CAIRO_DOCK_USER_THEME,
 	CAIRO_DOCK_DISTANT_THEME,
+	CAIRO_DOCK_NEW_THEME,
+	CAIRO_DOCK_UPDATED_THEME,
 	CAIRO_DOCK_NB_TYPE_THEME
 } CairoDockThemeType;
 
@@ -62,6 +64,8 @@ struct _CairoDockTheme {
 	gint iSobriety;
 	/// version of the theme.
 	gint iVersion;
+	gint iCreationDate;
+	gint iLastModifDate;
 };
 
 /** Destroy a theme and free all its allocated memory.
