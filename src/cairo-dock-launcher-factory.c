@@ -368,12 +368,12 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	gboolean bPreventFromInhibating = g_key_file_get_boolean (keyfile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE si la cle n'existe pas.
 	
 	g_free (icon->cClass);
-	if (icon->cCommand != NULL && icon->cBaseURI == NULL)  /// ! bPreventFromInhibating && 
+	if (icon->cCommand != NULL && icon->cBaseURI == NULL && ! bPreventFromInhibating)
 	{
 		gchar *cStartupWMClass = g_key_file_get_string (keyfile, "Desktop Entry", "StartupWMClass", NULL);
 		if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || strcmp (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
 		{
-			// plusieurs cas sont possibles : 
+			// plusieurs cas sont possibles :
 			// Exec=toto
 			// Exec=toto -x -y
 			// Exec=/path/to/toto -x -y
@@ -444,13 +444,11 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	}
 	else
 		icon->cClass = NULL;
-	
-	if (bPreventFromInhibating && icon->cClass != NULL)
+	/**if (bPreventFromInhibating && icon->cClass != NULL)
 	{
-		///cairo_dock_deinhibate_class (icon->cClass, icon);  /// mis en commentaire le 21/09/2009
 		g_free (icon->cClass);
 		icon->cClass = NULL;
-	}
+	}*/
 	
 	gboolean bExecInTerminal = g_key_file_get_boolean (keyfile, "Desktop Entry", "Terminal", NULL);
 	if (bExecInTerminal)  // on le fait apres la classe puisqu'on change la commande.

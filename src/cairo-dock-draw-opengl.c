@@ -55,6 +55,7 @@
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-background.h"
+#include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-container.h"
@@ -725,26 +726,38 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
 	cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDock));
 	
-	if (g_iVisibleZoneTexture == 0)
-		return ;
-	
-	_cairo_dock_enable_texture ();
-	_cairo_dock_set_blend_over ();
-	_cairo_dock_set_alpha (1.);
-	
-	if (pDock->container.bIsHorizontal)
-		glTranslatef (pDock->container.iWidth/2, pDock->container.iHeight/2, 0.);
-	else
-		glTranslatef (pDock->container.iHeight/2, pDock->container.iWidth/2, 0.);
-	
-	if (! pDock->container.bIsHorizontal)
-		glRotatef (90., 0, 0, 1);
-	if (! pDock->container.bDirectionUp && myBackground.bReverseVisibleImage)
-		glScalef (1., -1., 1.);
-	
-	_cairo_dock_apply_texture_at_size (g_iVisibleZoneTexture, pDock->container.iWidth, pDock->container.iHeight);
-	
-	_cairo_dock_disable_texture ();
+	if (g_iVisibleZoneTexture != 0)
+	{
+		_cairo_dock_enable_texture ();
+		_cairo_dock_set_blend_over ();
+		_cairo_dock_set_alpha (1.);
+		int w = MIN (myAccessibility.iVisibleZoneWidth, pDock->container.iWidth);
+		int h = MIN (myAccessibility.iVisibleZoneHeight, pDock->container.iHeight);
+		
+		if (pDock->container.bIsHorizontal)
+		{
+			if (pDock->container.bDirectionUp)
+				glTranslatef ((pDock->container.iWidth)/2, h/2, 0.);
+			else
+				glTranslatef ((pDock->container.iWidth)/2, pDock->container.iHeight - h/2, 0.);
+		}
+		else
+		{
+			if (!pDock->container.bDirectionUp)
+				glTranslatef (h/2, (pDock->container.iWidth)/2, 0.);
+			else
+				glTranslatef (pDock->container.iHeight - h/2, (pDock->container.iWidth)/2, 0.);
+		}
+		
+		if (! pDock->container.bIsHorizontal)
+			glRotatef (90., 0, 0, 1);
+		if (! pDock->container.bDirectionUp && myBackground.bReverseVisibleImage)
+			glScalef (1., -1., 1.);
+		
+		_cairo_dock_apply_texture_at_size (g_iVisibleZoneTexture, w, h);
+		
+		_cairo_dock_disable_texture ();
+	}
 	
 	//\_____________________ on dessine les icones demandant l'attention.
 	if (myTaskBar.cAnimationOnDemandsAttention)
@@ -762,7 +775,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 			if (! icon->bIsDemandingAttention)
 				continue;
 			
-			icon->fDrawY = (pDock->container.bDirectionUp ? icon->fHeight * icon->fScale : 0.);
+			icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);
 			glPushMatrix ();
 			cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
 			glPopMatrix ();

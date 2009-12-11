@@ -949,7 +949,7 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingD
 	gchar *cCommandFull = NULL;
 	if (cWorkingDirectory != NULL)
 	{
-		cCommandFull = g_strdup_printf ("cd '%s' && %s", cWorkingDirectory, cBGCommand ? cBGCommand : cCommand);
+		cCommandFull = g_strdup_printf ("cd \"%s\" && %s", cWorkingDirectory, cBGCommand ? cBGCommand : cCommand);
 		g_free (cBGCommand);
 		cBGCommand = NULL;
 	}
@@ -1545,7 +1545,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 		gdk_drag_status (dc, GDK_ACTION_COPY, time);
 		g_print ("drag info : <%s>\n", cReceivedData);
 		pDock->iAvoidingMouseIconType = CAIRO_DOCK_LAUNCHER;
-		if (g_str_has_suffix (cReceivedData, ".desktop") || g_str_has_suffix (cReceivedData, ".sh"))
+		if (g_str_has_suffix (cReceivedData, ".desktop")/** || g_str_has_suffix (cReceivedData, ".sh")*/)
 			pDock->fAvoidingMouseMargin = .5;  // on ne sera jamais dessus.
 		else
 			pDock->fAvoidingMouseMargin = .25;
@@ -1572,7 +1572,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 			//g_print ("On pointe sur %s\n", icon->cName);
 			pPointedIcon = icon;
 			double fMargin;  /// deviendra obsolete si le drag-received fonctionne.
-			if (g_str_has_suffix (cReceivedData, ".desktop") || g_str_has_suffix (cReceivedData, ".sh"))  // si c'est un .desktop, on l'ajoute.
+			if (g_str_has_suffix (cReceivedData, ".desktop")/** || g_str_has_suffix (cReceivedData, ".sh")*/)  // si c'est un .desktop, on l'ajoute.
 				fMargin = 0.5;  // on ne sera jamais dessus.
 			else  // sinon on le lance si on est sur l'icone, et on l'ajoute autrement.
 				fMargin = 0.25;
@@ -1616,9 +1616,9 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 	if (icon == NULL || CAIRO_DOCK_IS_LAUNCHER (icon) || CAIRO_DOCK_IS_SEPARATOR (icon))
 	{
 		CairoDock *pReceivingDock = pDock;
-		if (g_str_has_suffix (cReceivedData, ".desktop") || g_str_has_suffix (cReceivedData, ".sh"))  // c'est un fichier .desktop ou un script, on choisit de l'ajouter quoiqu'il arrive.
+		if (g_str_has_suffix (cReceivedData, ".desktop") /**|| g_str_has_suffix (cReceivedData, ".sh")*/)  // c'est un fichier .desktop ou un script, on choisit de l'ajouter quoiqu'il arrive.
 		{
-			//if (fOrder == CAIRO_DOCK_LAST_ORDER)  // on a lache dessus.
+			if (fOrder == CAIRO_DOCK_LAST_ORDER)  // on a lache dessus.
 			{
 				if (icon && icon->pSubDock != NULL)  // on l'ajoutera au sous-dock.
 				{
@@ -1644,13 +1644,14 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 							return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 						}
 					}
-					else if (icon->pSubDock != NULL)  // on le lache sur un sous-dock de lanceurs.
+					else if (CAIRO_DOCK_IS_CONTAINER_LAUNCHER (icon))  // on le lache sur un sous-dock de lanceurs.
 					{
 						pReceivingDock = icon->pSubDock;
 					}
 					else  // on le lache sur un lanceur.
 					{
-						gchar *cCommand = g_strdup_printf ("%s '%s'", icon->cCommand, cReceivedData);
+						gchar *cCommand = g_strdup_printf ("%s \"%s\"", icon->cCommand, cReceivedData + (strncmp (cReceivedData, "file://", 7) == 0 ? 7 : 0));  // tous les programmes ne gerent pas les URI; pour parer au cas ou il ne le gererait pas, dans le cas d'un fichier local, on convertit en un chemin classique.
+						cd_message ("will open the file with the command '%s'...\n", cCommand);
 						g_spawn_command_line_async (cCommand, NULL);
 						g_free (cCommand);
 						cairo_dock_request_icon_animation (icon, pDock, "blink", 2);

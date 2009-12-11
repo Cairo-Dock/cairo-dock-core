@@ -118,6 +118,20 @@ static void _cairo_dock_load_explosion_image (cairo_t *pCairoContext, int iWidth
 }
 
 
+void cairo_dock_unload_flying_container_textures (void)
+{
+	if (s_iHandTexture != 0)
+	{
+		_cairo_dock_delete_texture (s_iHandTexture);
+		s_iHandTexture = 0;
+	}
+	if (s_iExplosionTexture != 0)
+	{
+		_cairo_dock_delete_texture (s_iExplosionTexture);
+		s_iExplosionTexture = 0;
+	}
+}
+
 gboolean cairo_dock_update_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation)
 {
 	if (pFlyingContainer->container.iAnimationStep > 0)

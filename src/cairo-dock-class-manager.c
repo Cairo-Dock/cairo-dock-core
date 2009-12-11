@@ -990,7 +990,7 @@ void cairo_dock_set_class_order (Icon *pIcon)
 {
 	double fOrder = CAIRO_DOCK_LAST_ORDER;
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
-	if (pClassAppli != NULL)  // on va cherche rune icone de meme classe dans le dock principal
+	if (pClassAppli != NULL)  // on va chercher une icone de meme classe dans le dock principal
 	{
 		// on cherche un inhibiteur de cette classe, de preference un lanceur.
 		Icon *pSameClassIcon = NULL;
@@ -1003,7 +1003,7 @@ void cairo_dock_set_class_order (Icon *pIcon)
 			if (CAIRO_DOCK_IS_APPLET (pInhibatorIcon) && ! myIcons.bMixAppletsAndLaunchers)
 				continue;
 			pDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);
-			if (!pDock->bIsMainDock)
+			if (!pDock || !pDock->bIsMainDock)
 				pInhibatorIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
 			pSameClassIcon = pInhibatorIcon;
 			if (CAIRO_DOCK_IS_LAUNCHER (pSameClassIcon))  // on prend les lanceurs de preference.
@@ -1020,7 +1020,7 @@ void cairo_dock_set_class_order (Icon *pIcon)
 				if (pAppliIcon == pIcon)
 					continue;
 				pDock = cairo_dock_search_dock_from_name (pAppliIcon->cParentDockName);
-				if (pDock->bIsMainDock)
+				if (pDock && pDock->bIsMainDock)
 				{
 					pSameClassIcon = pAppliIcon;
 					break ;
@@ -1028,13 +1028,13 @@ void cairo_dock_set_class_order (Icon *pIcon)
 			}
 		}
 		
-		// on se place entre l'icone trouvee et la suivante de clase differente.
+		// on se place entre l'icone trouvee et la suivante de classe differente.
 		if (pSameClassIcon != NULL)  // une icone de meme classe existe dans le main dock, on va se placer apres.
 		{
+			Icon *pNextIcon = NULL;
 			ic = g_list_find (g_pMainDock->icons, pSameClassIcon);
-			if (ic != NULL && ic->next != NULL)  // on remonte vers la droite toutes les icones de meme classe.
+			if (ic && ic->next != NULL)  // on remonte vers la droite toutes les icones de meme classe, et on cherche l'icone suivante.
 			{
-				Icon *pNextIcon = NULL;
 				ic = ic->next;
 				for (;ic != NULL; ic = ic->next)
 				{
@@ -1044,12 +1044,12 @@ void cairo_dock_set_class_order (Icon *pIcon)
 					pSameClassIcon = pNextIcon;
 					pNextIcon = NULL;
 				}
-				fOrder = (pNextIcon ? (pNextIcon->fOrder + pSameClassIcon->fOrder) / 2 : pSameClassIcon->fOrder + 1);
 			}
-			else
-			{
+			g_print ("on se place apres la derniere icone de cette classe\n");
+			if (pNextIcon != NULL && cairo_dock_get_icon_order (pNextIcon) == cairo_dock_get_icon_order (pSameClassIcon))  // l'icone suivante est dans le meme groupe que nous, on s'intercalle entre elle et pSameClassIcon.
+				fOrder = (pNextIcon->fOrder + pSameClassIcon->fOrder) / 2;
+			else  // aucune icone apres notre classe, ou alors dans un groupe different, on se place juste apres pSameClassIcon.
 				fOrder = pSameClassIcon->fOrder + 1;
-			}
 		}
 	}
 	
@@ -1065,9 +1065,10 @@ void cairo_dock_set_class_order (Icon *pIcon)
 		}
 		if (ic != NULL)  // on a trouve une icone d'appli.
 		{
+			g_print ("on se place apres la derniere appli\n");
 			ic = ic->next;
 			Icon *next_icon = (ic ? ic->data : NULL);
-			if (next_icon != NULL)
+			if (next_icon != NULL && cairo_dock_get_icon_order (next_icon) == cairo_dock_get_icon_order (icon))
 				fOrder = (icon->fOrder + next_icon->fOrder) / 2;
 			else
 				fOrder = icon->fOrder + 1;
@@ -1082,9 +1083,10 @@ void cairo_dock_set_class_order (Icon *pIcon)
 			}
 			if (ic != NULL)  // on a trouve une icone de lanceur.
 			{
+				g_print ("on se place apres le dernier lanceur\n");
 				ic = ic->next;
 				Icon *next_icon = (ic ? ic->data : NULL);
-				if (next_icon != NULL)
+				if (next_icon != NULL && cairo_dock_get_icon_order (next_icon) == cairo_dock_get_icon_order (icon))
 					fOrder = (icon->fOrder + next_icon->fOrder) / 2;
 				else
 					fOrder = icon->fOrder + 1;

@@ -551,7 +551,6 @@ void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconType iType
 void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2)
 {
 	//g_print ("%s (%s, %.2f, %x)\n", __func__, icon1->cName, icon1->fOrder, icon2);
-	///if ((icon2 != NULL) && (! ( (CAIRO_DOCK_IS_APPLI (icon1) && CAIRO_DOCK_IS_APPLI (icon2)) || (CAIRO_DOCK_IS_LAUNCHER (icon1) && CAIRO_DOCK_IS_LAUNCHER (icon2)) || (CAIRO_DOCK_IS_APPLET (icon1) && CAIRO_DOCK_IS_APPLET (icon2)) ) ))
 	if ((icon2 != NULL) && fabs (cairo_dock_get_icon_order (icon1) - cairo_dock_get_icon_order (icon2)) > 1)
 		return ;
 	//\_________________ On change l'ordre de l'icone.
@@ -678,6 +677,7 @@ void cairo_dock_set_icon_name (cairo_t *pSourceContext, const gchar *cIconName, 
 		pSourceContext,
 		&myLabels.iconTextDescription);
 }
+
 void cairo_dock_set_icon_name_full (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconNameFormat, ...)
 {
 	va_list args;
@@ -715,6 +715,7 @@ void cairo_dock_set_quick_info_full (cairo_t *pSourceContext, Icon *pIcon, Cairo
 }
 
 
+
 static CairoDock *_cairo_dock_insert_launcher_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bUpdateSize, gboolean bAnimate)
 {
 	cd_message ("%s (%s)", __func__, icon->cName);
@@ -724,19 +725,9 @@ static CairoDock *_cairo_dock_insert_launcher_in_dock (Icon *icon, CairoDock *pM
 	
 	//\_________________ On determine dans quel dock l'inserer.
 	CairoDock *pParentDock = pMainDock;
-	//icon->cParentDockName = g_strdup (CAIRO_DOCK_MAIN_DOCK_NAME);
-	//pParentDock = cairo_dock_manage_appli_class (icon, pMainDock);  // renseigne cParentDockName.
 	g_return_val_if_fail (pParentDock != NULL, NULL);
 
 	//\_________________ On l'insere dans son dock parent en animant ce dernier eventuellement.
-	/*
-	if (myIcons.bMixApplisAndLaunchers && pParentDock->iRefCount == 0)
-	{
-	cairo_dock_set_class_order (icon);
-	}
-	else
-		icon->fOrder == CAIRO_DOCK_LAST_ORDER;  // en dernier.
-	*/ 
 	cairo_dock_insert_icon_in_dock (icon, pParentDock, bUpdateSize, bAnimate);
 	cd_message (" insertion de %s complete (%.2f %.2fx%.2f) dans %s", icon->cName, icon->fPersonnalScale, icon->fWidth, icon->fHeight, icon->cParentDockName);
 
@@ -752,7 +743,6 @@ static CairoDock *_cairo_dock_insert_launcher_in_dock (Icon *icon, CairoDock *pM
 
 	return pParentDock;
 }
-
 static CairoDock * _cairo_dock_detach_launcher(Icon *pIcon)
 {
 	cd_debug ("%s (%s, parent dock=%s)", __func__, pIcon->cName, pIcon->cParentDockName);
@@ -768,7 +758,6 @@ static CairoDock * _cairo_dock_detach_launcher(Icon *pIcon)
 	cairo_dock_update_dock_size (pParentDock);
 	return pParentDock;
 }
-
 static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, CairoContainer *pContainer, CairoDock *pMainDock)
 {
 	if(icon && CAIRO_DOCK_IS_LAUNCHER(icon))
@@ -779,16 +768,18 @@ static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, Cairo
 
 		int iCurrentDesktop = 0, iCurrentViewportX = 0, iCurrentViewportY = 0;
 		cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
+		int index = iCurrentDesktop * g_iNbViewportX * g_iNbViewportY + iCurrentViewportX * g_iNbViewportY + iCurrentViewportY;
 		
-		if( icon->iSpecificDesktop <= 0 ||
-		/* metacity case: metacity uses desktop instead of viewport. */
+		if (icon->iSpecificDesktop < 0 || icon->iSpecificDesktop == index || icon->iSpecificDesktop >= g_iNbDesktops * g_iNbViewportX * g_iNbViewportY)
+		/**if( icon->iSpecificDesktop <= 0 ||
+		// metacity case: metacity uses desktop instead of viewport.
 		    (g_iNbViewportX*g_iNbViewportY==1 &&
 		    (icon->iSpecificDesktop-1 == iCurrentDesktop || 
 		     icon->iSpecificDesktop >= g_iNbDesktops)) ||
-		/* compiz case: viewports are used within a desktop */
+		// compiz case: viewports are used within a desktop
 				(g_iNbViewportX*g_iNbViewportY>1 &&
 		    (icon->iSpecificDesktop-1 == iCurrentViewportX + g_iNbViewportX*iCurrentViewportY ||
-		     icon->iSpecificDesktop >= g_iNbViewportX*g_iNbViewportY)) )
+		     icon->iSpecificDesktop >= g_iNbViewportX*g_iNbViewportY)) )*/
 		{
 			cd_debug (" => est visible sur ce viewport (iSpecificDesktop = %d).",icon->iSpecificDesktop);
 			// check that it is in the detached list
@@ -800,15 +791,12 @@ static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, Cairo
 		}
 		else
 		{
-			//if( icon->iSpecificDesktop-1 != iCurrentViewportX + g_iNbViewportX*iCurrentViewportY )
+			cd_debug (" Viewport actuel = %d => n'est pas sur le viewport actuel.", iCurrentViewportX + g_iNbViewportX*iCurrentViewportY);
+			if( g_list_find(s_DetachedLaunchersList, icon) == NULL ) // only if not yet detached
 			{
-				cd_debug (" Viewport actuel = %d => n'est pas sur le viewport actuel.", iCurrentViewportX + g_iNbViewportX*iCurrentViewportY);
-				if( g_list_find(s_DetachedLaunchersList, icon) == NULL ) // only if not yet detached
-				{
-					cd_debug( "Detach launcher %s", icon->cName);
-					pParentDock = _cairo_dock_detach_launcher(icon);
-					s_DetachedLaunchersList = g_list_append(s_DetachedLaunchersList, icon);
-				}
+				cd_debug( "Detach launcher %s", icon->cName);
+				pParentDock = _cairo_dock_detach_launcher(icon);
+				s_DetachedLaunchersList = g_list_append(s_DetachedLaunchersList, icon);
 			}
 		}
 		if (pParentDock != NULL)

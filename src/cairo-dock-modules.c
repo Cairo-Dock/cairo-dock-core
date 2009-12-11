@@ -1277,7 +1277,7 @@ void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance)
 			pOneInstance = pElement->data;
 			if (strcmp (pOneInstance->cConfFilePath, cLastInstanceFilePath) == 0)
 			{
-				gchar *cCommand = g_strdup_printf ("mv '%s' '%s'", cLastInstanceFilePath, cConfFilePath);
+				gchar *cCommand = g_strdup_printf ("mv \"%s\" \"%s\"", cLastInstanceFilePath, cConfFilePath);
 				int r = system (cCommand);
 				g_free (cCommand);
 				

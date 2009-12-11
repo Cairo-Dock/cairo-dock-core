@@ -754,7 +754,14 @@ GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMain
 			if (g_pMainDock->container.bDirectionUp)
 				gtk_window_move (GTK_WINDOW (s_pMainWindow), 0, 0);
 			else
-				gtk_window_move (GTK_WINDOW (s_pMainWindow), 0, g_pMainDock->iMaxDockHeight);
+				gtk_window_move (GTK_WINDOW (s_pMainWindow), 0, g_pMainDock->iMinDockHeight+10);
+		}
+		else
+		{
+			if (g_pMainDock->container.bDirectionUp)
+				gtk_window_move (GTK_WINDOW (s_pMainWindow), 0, 0);
+			else
+				gtk_window_move (GTK_WINDOW (s_pMainWindow), g_pMainDock->iMinDockHeight+10, 0);
 		}
 	}
 	

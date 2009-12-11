@@ -909,24 +909,32 @@ GHashTable *cairo_dock_list_available_gauges (void)
 	return pGaugeTable;
 }
 
-gchar *cairo_dock_get_gauge_theme_path (const gchar *cThemeName)
+
+gchar *cairo_dock_get_gauge_theme_path (const gchar *cThemeName, CairoDockThemeType iType)  // utile pour DBus aussi.
 {
-	if (cThemeName == NULL)
-		return g_strdup ("Turbo-night-fuel");
 	const gchar *cGaugeShareDir = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_GAUGES_DIR;
 	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR"/"CAIRO_DOCK_GAUGES_DIR);
-	gchar *cGaugePath = cairo_dock_get_theme_path (cThemeName, cGaugeShareDir, cGaugeUserDir, CAIRO_DOCK_GAUGES_DIR);
+	gchar *cGaugePath = cairo_dock_get_theme_path (cThemeName, cGaugeShareDir, cGaugeUserDir, CAIRO_DOCK_GAUGES_DIR, iType);
 	g_free (cGaugeUserDir);
 	return cGaugePath;
 }
 
-gchar *cairo_dock_get_gauge_key_value(gchar *cAppletConfFilePath, GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName)
+gchar *cairo_dock_get_theme_path_for_gauge (const gchar *cAppletConfFilePath, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultThemeName)
 {
 	gchar *cChosenThemeName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, cDefaultThemeName, NULL, NULL);
-	gchar *cGaugePath = cairo_dock_get_gauge_theme_path (cChosenThemeName);
-	g_free (cChosenThemeName);
+	if (cChosenThemeName == NULL)
+		return g_strdup ("Turbo-night-fuel");
 	
+	CairoDockThemeType iType = cairo_dock_extract_theme_type_from_name (cChosenThemeName);
+	gchar *cGaugePath = cairo_dock_get_gauge_theme_path (cChosenThemeName, iType);
+	
+	if (iType != CAIRO_DOCK_ANY_THEME)
+	{
+		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, cChosenThemeName);
+		cairo_dock_write_keys_to_file (pKeyFile, cAppletConfFilePath);
+	}
 	cd_debug ("Theme de la jauge : %s", cGaugePath);
+	g_free (cChosenThemeName);
 	return cGaugePath;
 }
 

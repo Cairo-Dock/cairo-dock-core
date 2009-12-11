@@ -45,7 +45,7 @@
 #define CAIRO_DOCK_THEME_PANEL_HEIGHT 530
 #define CAIRO_DOCK_THEME_SERVER "http://themes.cairo-dock.org"
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"
-#define CAIRO_DOCK_DEFAULT_THEME_LIST_NAME "liste.txt"
+#define CAIRO_DOCK_DEFAULT_THEME_LIST_NAME "list.conf"
 
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cConfFile;
@@ -102,31 +102,16 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 
 	GHashTable *pThemeTable = (hProvidedTable != NULL ? hProvidedTable : g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) cairo_dock_free_theme));
 	
-	int iType;
-	const gchar *cPrefix;
-	if (strncmp (cThemesDir, "/usr", 4) == 0)
-	{
-		iType = CAIRO_DOCK_LOCAL_THEME;
-		cPrefix = CAIRO_DOCK_PREFIX_LOCAL_THEME;
-	}
-	else
-	{
-		iType = CAIRO_DOCK_USER_THEME;
-		cPrefix = CAIRO_DOCK_PREFIX_USER_THEME;
-	}
-	
+	CairoDockThemeType iType = (strncmp (cThemesDir, "/usr", 4) == 0 ?
+		CAIRO_DOCK_LOCAL_THEME :
+		CAIRO_DOCK_USER_THEME);
 	GString *sRatingFile = g_string_new (cThemesDir);
 	gchar *cThemePath;
-	const gchar* cThemeName;
-	int iVersion;
-	gboolean bOutdated;
 	CairoDockTheme *pTheme;
-	do
+	const gchar *cThemeName;
+	while ((cThemeName = g_dir_read_name (dir)) != NULL)
 	{
-		cThemeName = g_dir_read_name (dir);
-		if (cThemeName == NULL)
-			break ;
-		
+		// on ecarte les fichiers caches.
 		if (*cThemeName == '.')
 			continue;
 		
@@ -138,72 +123,14 @@ GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *h
 			continue;
 		}
 		
-		// on recupere la version du theme.
-		//g_print (" referencement du theme local %s...\n", cThemeName);
-		bOutdated = FALSE;
-		iVersion = 0;
-		gchar *cVersionFile = g_strdup_printf ("%s/version", cThemePath);
-		if (g_file_test (cVersionFile, G_FILE_TEST_EXISTS))
-		{
-			gsize length = 0;
-			gchar *cContent = NULL;
-			g_file_get_contents (cVersionFile,
-				&cContent,
-				&length,
-				NULL);
-			if (cContent)
-			{
-				iVersion = atoi (cContent);
-				bOutdated = (iVersion == 0);
-				g_free (cContent);
-			}
-		}
-		
-		// on regarde si on n'ecrase pas un theme de meme nom de version superieure.
-		CairoDockTheme *pSameTheme = g_hash_table_lookup (pThemeTable, cThemeName);
-		if (pSameTheme != NULL)
-		{
-			//g_print (" le meme theme existe deja en version %d (<> %d)\n", pSameTheme->iVersion, iVersion);
-			if (pSameTheme->iVersion > iVersion)  // on saute ce theme, et on le marque comme obsolete.
-			{
-				g_file_set_contents (cVersionFile,
-					"0",
-					-1,
-					NULL);
-				g_free (cThemePath);
-				g_free (cVersionFile);
-				// par contre on affiche la note que l'utilisateur avait precedemment etablie.
-				int iRating = _get_theme_rating (cThemesDir, cThemeName);
-				if (iRating > 0)
-					pSameTheme->iRating = iRating;
-				continue;
-			}
-		}
-		
-		if (bOutdated && bUpdateThemeValidity)  // theme precedement marque obsolete, mais aucun theme ne l'ecrase => on le rehabilite.
-		{
-			g_print (" le theme n'est plus obsolete\n");
-			iVersion = 1;
-			g_file_set_contents (cVersionFile,
-				"1",
-				-1,
-				NULL);
-		}
-		
-		g_free (cVersionFile);
-		
 		// on insere le theme dans la table.
 		pTheme = g_new0 (CairoDockTheme, 1);
 		pTheme->cThemePath = cThemePath;
-		pTheme->cDisplayedName = g_strdup (cThemeName);  /// g_strdup_printf ("%s%s", (cPrefix != NULL ? cPrefix : ""), cThemeName);
+		pTheme->cDisplayedName = g_strdup (cThemeName);
 		pTheme->iType = iType;
-		pTheme->iVersion = iVersion;
 		pTheme->iRating = _get_theme_rating (cThemesDir, cThemeName);
-		if (pSameTheme != NULL)
-			pTheme->iSobriety = pSameTheme->iSobriety;
 		g_hash_table_insert (pThemeTable, g_strdup (cThemeName), pTheme);  // donc ecrase un theme installe ayant le meme nom.
 	}
-	while (1);
 	g_dir_close (dir);
 	return pThemeTable;
 }
@@ -284,7 +211,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 		while (gtk_events_pending ())
 			gtk_main_iteration ();
 	}
-	///gchar *cCommand = g_strdup_printf ("%s wget \"%s/%s/%s\" -O \"%s\" -t %d -T %d%s", (iShowActivity == 2 ? "$TERM -e '" : ""), cServerAdress, cDistantFilePath, cDistantFileName, cTmpFilePath, CAIRO_DOCK_DL_NB_RETRY, CAIRO_DOCK_DL_TIMEOUT, (iShowActivity == 2 ? "'" : ""));
+	//gchar *cCommand = g_strdup_printf ("%s wget \"%s/%s/%s\" -O \"%s\" -t %d -T %d%s", (iShowActivity == 2 ? "$TERM -e '" : ""), cServerAdress, cDistantFilePath, cDistantFileName, cTmpFilePath, CAIRO_DOCK_DL_NB_RETRY, CAIRO_DOCK_DL_TIMEOUT, (iShowActivity == 2 ? "'" : ""));
 	gchar *cCommand = g_strdup_printf ("%s curl \"%s/%s/%s\" --output \"%s\" --connect-timeout %d --max-time %d --retry %d%s",
 		(iShowActivity == 2 ? "$TERM -e '" : ""),
 		cServerAdress, cDistantFilePath, cDistantFileName,
@@ -303,7 +230,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	}
 	
 	gboolean bOk = (cTmpFilePath != NULL);
-	if (cTmpFilePath != NULL)
+	if (bOk)
 	{
 		struct stat buf;
 		stat (cTmpFilePath, &buf);
@@ -374,36 +301,46 @@ gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gc
 	return cContent;
 }
 
-static void _cairo_dock_parse_theme_list (const gchar *cListfFile, const gchar *cServerAdress, const gchar *cDirectory, GHashTable *pThemeTable)
+static inline int _convert_date (int iDate)
 {
-	// on ouvre la liste.
-	GKeyFile *pKeyFile = cairo_dock_open_key_file (cListfFile);
-	g_return_if_fail (pKeyFile != NULL);  // rien a charger dans la table, on quitte.
-	
+	int d, m, y;
+	y = iDate / 10000;
+	m = (iDate - y*10000) / 100;
+	d = iDate % 100;
+	return (d + m*30 + y*365);
+}
+static void _cairo_dock_parse_theme_list (GKeyFile *pKeyFile, const gchar *cServerAdress, const gchar *cDirectory, GHashTable *pThemeTable)
+{
 	// date courante.
 	time_t epoch = (time_t) time (NULL);
 	struct tm currentTime;
 	localtime_r (&epoch, &currentTime);
-	int now = currentTime.tm_mday + currentTime.tm_mon * 1e2 + currentTime.tm_year * 1e4;
+	int day = currentTime.tm_mday + 1;
+	int month = currentTime.tm_mon + 1;
+	int year = 1900 + currentTime.tm_year;  // tm_year = nombre d'annees écoulees depuis 1900.
+	int now = day + month * 30 + year * 365;
 	
-	// on parcourt la liste.
+	// liste des themes.
 	gsize length=0;
 	gchar **pGroupList = g_key_file_get_groups (pKeyFile, &length);
 	g_return_if_fail (pGroupList != NULL);  // rien a charger dans la table, on quitte.
 	
-	gchar *cThemeName;
+	// on parcourt la liste.
+	gchar *cThemeName, *cDate;
 	CairoDockTheme *pTheme;
 	CairoDockThemeType iType;
-	int iCreationDate, iLastModifDate, iLocalDate;
+	int iCreationDate, iLastModifDate, iLocalDate, iSobriety;
+	int last_modif, creation_date;
 	guint i;
 	for (i = 0; i < length; i ++)
 	{
 		cThemeName = pGroupList[i];
 		iCreationDate = g_key_file_get_integer (pKeyFile, cThemeName, "creation", NULL);
 		iLastModifDate = g_key_file_get_integer (pKeyFile, cThemeName, "last modif", NULL);
+		iSobriety = g_key_file_get_integer (pKeyFile, cThemeName, "sobriety", NULL);
 		
 		// creation < 30j && pas sur le disque -> new
-		// sinon last modif < 30j && last use < last modif -> updated, raz last use.
+		// sinon last modif < 30j && last use < last modif -> updated
 		// sinon -> net
 		
 		// on surcharge les themes locaux en cas de nouvelle version.
@@ -418,22 +355,35 @@ static void _cairo_dock_parse_theme_list (const gchar *cListfFile, const gchar *
 				&cContent,
 				&length,
 				NULL);
-			iLocalDate = (cContent ? atoi (cContent) : 0);
+			if (cContent == NULL)  // le theme n'a pas encore de fichier de date
+			{
+				// on ne peut pas savoir quand l'utilisateur a mis a jour le theme pour la derniere fois;
+				// on va supposer que l'on ne met pas a jour ses themes tres regulierement, donc il est probable qu'il l'ait fait il y'a au moins 1 mois.
+				// de cette facon, les themes mis a jour recemment (il y'a moins d'1 mois) apparaitront "updated".
+				if (month > 1)
+					iLocalDate = day + (month - 1) * 1e2 + year * 1e4;
+				else
+					iLocalDate = day + 12 * 1e2 + (year - 1) * 1e4;
+				cDate = g_strdup_printf ("%d", iLocalDate);
+				g_file_set_contents (cVersionFile,
+					cDate,
+					-1,
+					NULL);
+				g_free (cDate);
+			}
+			else
+				iLocalDate = atoi (cContent);
 			g_free (cContent);
 			
-			if (iLocalDate < iLastModifDate)  // elle est plus ancienne
+			if (iLocalDate < iLastModifDate)  // la copie locale est plus ancienne.
 			{
 				iType = CAIRO_DOCK_UPDATED_THEME;
-				if (iLocalDate != 0)
-					g_file_set_contents (cVersionFile,
-						"0",
-						-1,
-						NULL);
 			}
 			else  // c'est deja la derniere version disponible, on en reste la.
 			{
 				g_free (cVersionFile);
 				g_free (cThemeName);
+				pSameTheme->iSobriety = iSobriety;  // par contre on en profite pour renseigner la sobriete.
 				continue;
 			}
 			g_free (cVersionFile);
@@ -441,13 +391,16 @@ static void _cairo_dock_parse_theme_list (const gchar *cListfFile, const gchar *
 			pTheme = pSameTheme;
 			g_free (pTheme->cThemePath);
 			g_free (pTheme->cAuthor);
-			g_free (pTheme->cThemePath);
+			g_free (pTheme->cDisplayedName);
 		}
 		else  // theme encore jamais telecharge.
 		{
-			if (iCreationDate - now < 30)  // les themes restent nouveaux pendant 1 mois.
+			last_modif = _convert_date (iLastModifDate);
+			creation_date = _convert_date (iCreationDate);
+			
+			if (now - creation_date < 30)  // les themes restent nouveaux pendant 1 mois.
 				iType = CAIRO_DOCK_NEW_THEME;
-			else if (iLastModifDate - now < 30)  // les themes restent mis a jour pendant 1 mois.
+			else if (now - last_modif < 30)  // les themes restent mis a jour pendant 1 mois.
 				iType = CAIRO_DOCK_UPDATED_THEME;
 			else
 				iType = CAIRO_DOCK_DISTANT_THEME;
@@ -458,16 +411,20 @@ static void _cairo_dock_parse_theme_list (const gchar *cListfFile, const gchar *
 		}
 		
 		pTheme->cThemePath = g_strdup_printf ("%s/%s/%s", cServerAdress, cDirectory, cThemeName);
+		pTheme->iType = iType;
 		pTheme->fSize = g_key_file_get_double (pKeyFile, cThemeName, "size", NULL);
 		pTheme->cAuthor = g_key_file_get_string (pKeyFile, cThemeName, "author", NULL);
-		pTheme->iSobriety = g_key_file_get_integer (pKeyFile, cThemeName, "sobriety", NULL);
+		if (pTheme->cAuthor && *pTheme->cAuthor == '\0')
+		{
+			g_free (pTheme->cAuthor);
+			pTheme->cAuthor = NULL;
+		}
+		pTheme->iSobriety = iSobriety;
 		pTheme->iCreationDate = iCreationDate;
 		pTheme->iLastModifDate = iLastModifDate;
 		pTheme->cDisplayedName = g_strdup_printf ("%s by %s [%.2f MB]", cThemeName, (pTheme->cAuthor ? pTheme->cAuthor : "---"), pTheme->fSize);
 	}
 	g_free (pGroupList);  // les noms des themes sont desormais dans la hash-table.
-	
-	g_key_file_free (pKeyFile);
 }
 
 GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar *cDirectory, const gchar *cListFileName, GHashTable *hProvidedTable, GError **erreur)
@@ -475,6 +432,7 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 	g_return_val_if_fail (cServerAdress != NULL && *cServerAdress != '\0', hProvidedTable);
 	cd_message ("listing net themes on %s/%s ...", cServerAdress, cDirectory);
 	
+	// On recupere la liste des themes distants.
 	GError *tmp_erreur = NULL;
 	gchar *cContent = cairo_dock_get_distant_file_content (cServerAdress, cDirectory, cListFileName, 0, &tmp_erreur);
 	if (tmp_erreur != NULL)
@@ -483,6 +441,8 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 		g_propagate_error (erreur, tmp_erreur);
 		return hProvidedTable;
 	}
+	
+	// on verifie son integrite.
 	if (cContent == NULL || strncmp (cContent, "#!CD", 4) != 0)  // avec une connexion wifi etablie sur un operateur auquel on ne s'est pas logue, il peut nous renvoyer des messages au lieu de juste rien. On filtre ca par un entete dedie.
 	{
 		cd_warning ("empty themes list on %s (check that your connection is alive, or retry later)", cServerAdress);
@@ -491,94 +451,44 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 		return hProvidedTable;
 	}
 	
-	GHashTable *pThemeTable = (hProvidedTable != NULL ? hProvidedTable : g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) cairo_dock_free_theme));
-	
-	gchar **cNetThemesList = g_strsplit (cContent, "\n", -1);
-	g_free (cContent);
-	
-	gchar *cHeader = cNetThemesList[0];
-	if (cHeader[4] != '\n')
+	// petit bonus : on a la derniere version du dock sur la 1ere ligne.
+	if (cContent[4] != '\n')
 	{
 		int iMajorVersion=0, iMinorVersion=0, iMicroVersion=0;
-		cairo_dock_get_version_from_string (cHeader+4, &iMajorVersion, &iMinorVersion, &iMicroVersion);
+		cairo_dock_get_version_from_string (cContent+4, &iMajorVersion, &iMinorVersion, &iMicroVersion);
 		g_print ("%d/%d/%d\n", iMajorVersion, iMinorVersion, iMicroVersion);
 		if (iMajorVersion > g_iMajorVersion ||
 			(iMajorVersion == g_iMajorVersion &&
 				(iMinorVersion > g_iMinorVersion ||
 					(iMinorVersion == g_iMinorVersion && iMicroVersion > g_iMicroVersion))))
 		{
-			g_print ("A new version is available !\n>>>\n%s\n<<<\n", cHeader+4);
+			g_print ("A new version is available !\n>>>\n%d.%d.%d\n<<<\n", iMajorVersion, iMinorVersion, iMicroVersion);
 		}
 	}
 	
-	int i;
-	gboolean bFirstComment = FALSE;
-	gchar *cThemeName, *str, *str2;
-	CairoDockTheme *pTheme = NULL;
-	for (i = 1; cNetThemesList[i] != NULL; i ++)
+	// on charge la liste dans un fichier de cles.
+	GKeyFile *pKeyFile = g_key_file_new ();
+	g_key_file_load_from_data (pKeyFile,
+		cContent,
+		-1,
+		G_KEY_FILE_NONE,
+		&tmp_erreur);
+	g_free (cContent);
+	if (tmp_erreur != NULL)
 	{
-		cThemeName = cNetThemesList[i];
-		if (*cThemeName == '\0')
-			continue;
-		if (*cThemeName == '#')
-		{
-			if (bFirstComment && pTheme != NULL)  // 1er commentaire apres un theme.
-			{
-				str = cThemeName+1;  // on saute les #
-				while (*str == '#')
-					str ++;
-				if (*str == '\0')
-					continue;
-				cd_debug ("+ commentaire : %s", str);
-				
-				char **pValues = g_strsplit (str, ";", -1);
-				if (!pValues)
-					continue;
-				gchar *cValue;
-				int i;
-				for (i = 0; pValues[i] != NULL; i ++)
-				{
-					cValue = pValues[i];
-					switch (i)
-					{
-						case 0:
-							pTheme->fSize = g_ascii_strtod (cValue, NULL);
-						break ;
-						case 1:
-							pTheme->cAuthor = g_strdup (cValue);
-						break ;
-						case 2:
-							pTheme->iRating = atoi (cValue);
-						break ;
-						case 3:
-							pTheme->iSobriety = atoi (cValue);
-						break ;
-						case 4:
-							pTheme->iVersion = atoi (cValue);
-						break ;
-					}
-				}
-				g_strfreev (pValues);
-				
-				gchar *cDisplayedName = g_strdup_printf ("%s by %s [%.2f MB]", pTheme->cDisplayedName, (pTheme->cAuthor ? pTheme->cAuthor : "---"), pTheme->fSize);
-				g_free (pTheme->cDisplayedName);
-				pTheme->cDisplayedName = cDisplayedName;
-			}
-			bFirstComment = FALSE;
-		}
-		else
-		{
-			cd_debug ("+ theme : %s", cThemeName);
-			pTheme = g_new0 (CairoDockTheme, 1);
-			pTheme->iType = CAIRO_DOCK_DISTANT_THEME;
-			pTheme->cThemePath = g_strdup_printf ("%s/%s/%s", cServerAdress, cDirectory, cThemeName);
-			pTheme->cDisplayedName = g_strdup (cThemeName);  ///g_strconcat (CAIRO_DOCK_PREFIX_NET_THEME, cThemeName, NULL);
-			g_hash_table_insert (pThemeTable, g_strdup (cThemeName), pTheme);
-			bFirstComment = TRUE;
-		}
+		cd_warning ("invalid list of themes (%s)\n(check that your connection is alive, or retry later)", cServerAdress);
+		g_propagate_error (erreur, tmp_erreur);
+		g_key_file_free (pKeyFile);
+		return hProvidedTable;
 	}
 	
-	g_strfreev (cNetThemesList);
+	// on parse la liste dans une table de hashage.
+	GHashTable *pThemeTable = (hProvidedTable != NULL ? hProvidedTable : g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) cairo_dock_free_theme));
+	
+	_cairo_dock_parse_theme_list (pKeyFile, cServerAdress, cDirectory, pThemeTable);
+	
+	g_key_file_free (pKeyFile);
+	
 	return pThemeTable;
 }
 
@@ -588,7 +498,27 @@ GHashTable *cairo_dock_list_themes (const gchar *cShareThemesDir, const gchar *c
 	GError *erreur = NULL;
 	GHashTable *pThemeTable = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) cairo_dock_free_theme);
 	
-	//\______________ On recupere les themes distants.
+	//\______________ On recupere les themes pre-installes.
+	if (cShareThemesDir != NULL)
+		pThemeTable = cairo_dock_list_local_themes (cShareThemesDir, pThemeTable, cDistantThemesDir != NULL, &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning ("while loading pre-installed themes in '%s' : %s", cShareThemesDir, erreur->message);
+		g_error_free (erreur);
+		erreur = NULL;
+	}
+	
+	//\______________ On recupere les themes utilisateurs (qui ecrasent donc les precedents).
+	if (cUserThemesDir != NULL)
+		pThemeTable = cairo_dock_list_local_themes (cUserThemesDir, pThemeTable, cDistantThemesDir != NULL, &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning ("while loading user themes in '%s' : %s", cShareThemesDir, erreur->message);
+		g_error_free (erreur);
+		erreur = NULL;
+	}
+	
+	//\______________ On recupere les themes distants (qui surchargent tous les themes).
 	if (cDistantThemesDir != NULL)
 		pThemeTable = cairo_dock_list_net_themes (g_cThemeServerAdress != NULL ? g_cThemeServerAdress : CAIRO_DOCK_THEME_SERVER, cDistantThemesDir, CAIRO_DOCK_DEFAULT_THEME_LIST_NAME, pThemeTable, &erreur);
 	if (erreur != NULL)
@@ -599,20 +529,6 @@ GHashTable *cairo_dock_list_themes (const gchar *cShareThemesDir, const gchar *c
 		g_error_free (erreur);
 		erreur = NULL;
 	}
-	
-	//\______________ On recupere les themes pre-installes (qui ecrasent donc les precedents).
-	if (cShareThemesDir != NULL)
-		pThemeTable = cairo_dock_list_local_themes (cShareThemesDir, pThemeTable, cDistantThemesDir != NULL, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning ("while loading pre-installed themes in '%s' : %s", cShareThemesDir, erreur->message);
-		g_error_free (erreur);
-		erreur = NULL;
-	}
-	
-	//\______________ On recupere les themes utilisateurs (qui ecrasent donc tout le monde).
-	if (cUserThemesDir != NULL)
-		pThemeTable = cairo_dock_list_local_themes (cUserThemesDir, pThemeTable, cDistantThemesDir != NULL, NULL);
 	
 	return pThemeTable;
 }
@@ -633,7 +549,7 @@ gchar *cairo_dock_build_temporary_themes_conf_file (void)
 	}
 	
 	//\___________________ On copie le fichier de conf par defaut dedans.
-	gchar *cCommand = g_strdup_printf ("cp '%s' '%s'", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_THEME_CONF_FILE, cTmpConfFile);
+	gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_THEME_CONF_FILE, cTmpConfFile);
 	int r = system (cCommand);
 	g_free (cCommand);
 
@@ -697,6 +613,24 @@ static void on_theme_destroy (gchar *cInitConfFile)
 	s_pThemeManager = NULL;
 }
 
+CairoDockThemeType cairo_dock_extract_theme_type_from_name (const gchar *cThemeName)
+{
+	if (cThemeName == NULL)
+		return CAIRO_DOCK_ANY_THEME;
+	CairoDockThemeType iType = CAIRO_DOCK_ANY_THEME;
+	int l = strlen (cThemeName);
+	if (cThemeName[l-1] == ']')
+	{
+		gchar *str = strrchr (cThemeName, '[');
+		if (str != NULL && g_ascii_isdigit (*(str+1)))
+		{
+			iType = atoi (str+1);
+			*str = '\0';
+		}
+	}
+	return iType;
+}
+
 static gboolean _find_module_from_user_data_dir (gchar *cModuleName, CairoDockModule *pModule, const gchar *cUserDataDirName)
 {
 	if (pModule->pVisitCard->cUserDataDir && strcmp (cUserDataDirName, pModule->pVisitCard->cUserDataDir) == 0)
@@ -733,13 +667,8 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 
 	if (cNewThemeName != NULL)
 	{
-		/**if (strncmp (cNewThemeName, CAIRO_DOCK_PREFIX_USER_THEME, strlen (CAIRO_DOCK_PREFIX_USER_THEME)) == 0)
-		{
-			gchar *tmp = cNewThemeName;
-			cNewThemeName = g_strdup (cNewThemeName+strlen (CAIRO_DOCK_PREFIX_USER_THEME));
-			g_free (tmp);
-			g_print (" => cNewThemeName : '%s'\n", cNewThemeName);
-		}*/
+		cairo_dock_extract_theme_type_from_name (cNewThemeName);
+		
 		cd_message ("on sauvegarde dans %s", cNewThemeName);
 		gboolean bThemeSaved = FALSE;
 		gchar *cNewThemePath = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR, cNewThemeName);
@@ -755,7 +684,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 				gchar *cNewConfFilePath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_CONF_FILE);
 				if (g_key_file_get_boolean (pKeyFile, "Save", "save current behaviour", NULL))
 				{
-					g_string_printf (sCommand, "/bin/cp '%s' '%s'", g_cConfFile, cNewConfFilePath);
+					g_string_printf (sCommand, "/bin/cp \"%s\" \"%s\"", g_cConfFile, cNewConfFilePath);
 					cd_message ("%s", sCommand->str);
 					r = system (sCommand->str);
 				}
@@ -768,18 +697,18 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 				//\___________________ On traite les lanceurs.
 				if (g_key_file_get_boolean (pKeyFile, "Save", "save current launchers", NULL))
 				{
-					g_string_printf (sCommand, "rm -f '%s/%s'/*", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
+					g_string_printf (sCommand, "rm -f \"%s/%s\"/*", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
 					cd_message ("%s", sCommand->str);
 					r = system (sCommand->str);
 					
-					g_string_printf (sCommand, "cp '%s'/* '%s/%s'", g_cCurrentLaunchersPath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
+					g_string_printf (sCommand, "cp \"%s\"/* \"%s/%s\"", g_cCurrentLaunchersPath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
 					cd_message ("%s", sCommand->str);
 					r = system (sCommand->str);
 				}
 				
 				//\___________________ On traite tous le reste.
 				/// TODO : traiter les .conf des applets comme celui du dock...
-				g_string_printf (sCommand, "find '%s' -mindepth 1 -maxdepth 1  ! -name '*.conf' ! -name '%s' -exec /bin/cp -r '{}' '%s' \\;", g_cCurrentThemePath, CAIRO_DOCK_LAUNCHERS_DIR, cNewThemePath);
+				g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '*.conf' ! -name \"%s\" -exec /bin/cp -r '{}' \"%s\" \\;", g_cCurrentThemePath, CAIRO_DOCK_LAUNCHERS_DIR, cNewThemePath);
 				cd_message ("%s", sCommand->str);
 				r = system (sCommand->str);
 
@@ -792,7 +721,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 
 			if (g_mkdir (cNewThemePath, 7*8*8+7*8+5) == 0)
 			{
-				g_string_printf (sCommand, "cp -r '%s'/* '%s'", g_cCurrentThemePath, cNewThemePath);
+				g_string_printf (sCommand, "cp -r \"%s\"/* \"%s\"", g_cCurrentThemePath, cNewThemePath);
 				cd_message ("%s", sCommand->str);
 				r = system (sCommand->str);
 
@@ -820,7 +749,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			{
 				cd_warning ("the package builder script was not found !");
 			}
-		}	
+		}
 		
 		g_free (cNewThemePath);
 		if (bThemeSaved)
@@ -869,9 +798,8 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 				cThemeName = cThemesList[i];
 				if (*cThemeName == '\0')
 					continue;
-				if (cNewThemeName && strcmp (cNewThemeName, cThemeName) == 0)  // precaution probablement superflue.
-					continue;
-
+				cairo_dock_extract_theme_type_from_name (cThemeName);
+				
 				bThemeDeleted = TRUE;
 				g_string_printf (sCommand, "rm -rf '%s/%s/%s'", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR, cThemeName);
 				r = system (sCommand->str);  // g_rmdir n'efface qu'un repertoire vide.
@@ -976,13 +904,12 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			g_print (" => cNewThemePath = '%s'\n", cNewThemePath);
 			gchar *tmp = cNewThemeName;
 			cNewThemeName = g_path_get_basename (cNewThemePath);
-			//cNewThemeName[strlen (cNewThemeName) - 7] = '\0';
 			g_free (tmp);
 		}
 		else  // c'est un theme officiel.
 		{
 			g_print ("c'est un theme officiel\n");
-			cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, cUserThemesDir, CAIRO_DOCK_THEMES_DIR);
+			cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, cUserThemesDir, CAIRO_DOCK_THEMES_DIR, CAIRO_DOCK_ANY_THEME);
 		}
 		g_free (cUserThemesDir);
 		
@@ -993,7 +920,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		cairo_dock_set_status_message (s_pThemeManager, _("Applying changes ..."));
 		if (g_pMainDock == NULL || g_key_file_get_boolean (pKeyFile, "Themes", "use theme behaviour", NULL))
 		{
-			g_string_printf (sCommand, "/bin/cp '%s'/%s '%s'", cNewThemePath, CAIRO_DOCK_CONF_FILE, g_cCurrentThemePath);
+			g_string_printf (sCommand, "/bin/cp \"%s\"/%s \"%s\"", cNewThemePath, CAIRO_DOCK_CONF_FILE, g_cCurrentThemePath);
 			cd_message ("%s", sCommand->str);
 			r = system (sCommand->str);
 		}
@@ -1005,17 +932,17 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		}
 		
 		//\___________________ On charge les .conf des autres docks racines.
-		g_string_printf (sCommand, "find '%s' -mindepth 1 -maxdepth 1 -name '*.conf' ! -name '%s' -exec /bin/cp '{}' '%s' \\;", cNewThemePath, CAIRO_DOCK_CONF_FILE, g_cCurrentThemePath);
+		g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1 -name '*.conf' ! -name '%s' -exec /bin/cp '{}' \"%s\" \\;", cNewThemePath, CAIRO_DOCK_CONF_FILE, g_cCurrentThemePath);
 		cd_message ("%s", sCommand->str);
 		r = system (sCommand->str);
 		
 		//\___________________ On charge les lanceurs.
 		if (g_key_file_get_boolean (pKeyFile, "Themes", "use theme launchers", NULL))
 		{
-			g_string_printf (sCommand, "rm -f '%s/%s'/*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+			g_string_printf (sCommand, "rm -f \"%s/%s\"/*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 			cd_message ("%s", sCommand->str);
 			r = system (sCommand->str);
-			g_string_printf (sCommand, "rm -f '%s/%s'/.*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+			g_string_printf (sCommand, "rm -f \"%s/%s\"/.*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 			cd_message ("%s", sCommand->str);
 			r = system (sCommand->str);
 		}
@@ -1023,15 +950,15 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		gchar *cNewLocalIconsPath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 		if (! g_file_test (cNewLocalIconsPath, G_FILE_TEST_IS_DIR))  // c'est un ancien theme, on deplace les icones vers le repertoire 'icons'.
 		{			
-			g_string_printf (sCommand, "find '%s/%s' -mindepth 1 ! -name '*.desktop' -exec /bin/cp '{}' '%s/%s' \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+			g_string_printf (sCommand, "find \"%s/%s\" -mindepth 1 ! -name '*.desktop' -exec /bin/cp '{}' '%s/%s' \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 		}
 		else
 		{
-			g_string_printf (sCommand, "for f in '%s'/* ; do rm -f \"%s/%s/`basename \"${f%%.*}\"`\"*; done;", cNewLocalIconsPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);  // on efface les doublons car sinon on pourrait avoir x.png et x.svg ensemble et le dock ne saurait pas lequel choisir.
+			g_string_printf (sCommand, "for f in \"%s\"/* ; do rm -f \"%s/%s/`basename \"${f%%.*}\"`\"*; done;", cNewLocalIconsPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);  // on efface les doublons car sinon on pourrait avoir x.png et x.svg ensemble et le dock ne saurait pas lequel choisir.
 			cd_message ("%s", sCommand->str);
 			r = system (sCommand->str);
 			
-			g_string_printf (sCommand, "cp '%s'/* '%s/%s'", cNewLocalIconsPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+			g_string_printf (sCommand, "cp \"%s\"/* \"%s/%s\"", cNewLocalIconsPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 		}
 		cd_message ("%s", sCommand->str);
 		r = system (sCommand->str);
@@ -1041,7 +968,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		g_string_printf (sCommand, "%s/%s", cNewThemePath, CAIRO_DOCK_EXTRAS_DIR);
 		if (g_file_test (sCommand->str, G_FILE_TEST_IS_DIR))
 		{
-			g_string_printf (sCommand, "cp -r '%s/%s'/* '%s/%s'", cNewThemePath, CAIRO_DOCK_EXTRAS_DIR, g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR);
+			g_string_printf (sCommand, "cp -r \"%s/%s\"/* \"%s/%s\"", cNewThemePath, CAIRO_DOCK_EXTRAS_DIR, g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR);
 			cd_message ("%s", sCommand->str);
 			r = system (sCommand->str);
 		}
@@ -1049,36 +976,36 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		//\___________________ On charge les lanceurs si necessaire, en effacant ceux existants.
 		if (! g_file_test (g_cCurrentLaunchersPath, G_FILE_TEST_EXISTS))
 		{
-			gchar *command = g_strdup_printf ("mkdir -p '%s'", g_cCurrentLaunchersPath);
+			gchar *command = g_strdup_printf ("mkdir -p \"%s\"", g_cCurrentLaunchersPath);
 			r = system (command);
 			g_free (command);
 		}
 		if (g_pMainDock == NULL || g_key_file_get_boolean (pKeyFile, "Themes", "use theme launchers", NULL))
 		{
-			g_string_printf (sCommand, "rm -f '%s'/*.desktop", g_cCurrentLaunchersPath);
+			g_string_printf (sCommand, "rm -f \"%s\"/*.desktop", g_cCurrentLaunchersPath);
 			cd_message ("%s", sCommand->str);
 			r = system (sCommand->str);
 
-			g_string_printf (sCommand, "cp '%s/%s'/*.desktop '%s'", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentLaunchersPath);
+			g_string_printf (sCommand, "cp \"%s/%s\"/*.desktop \"%s\"", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentLaunchersPath);
 			cd_message ("%s", sCommand->str);
 			r = system (sCommand->str);
 		}
 		
 		//\___________________ On remplace tous les autres fichiers par les nouveaux.
-		g_string_printf (sCommand, "find '%s' -mindepth 1 -maxdepth 1  ! -name '*.conf' -type f -exec rm -f '{}' \\;", g_cCurrentThemePath);  // efface tous les fichiers du theme mais sans toucher aux lanceurs et aux plug-ins.
+		g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '*.conf' -type f -exec rm -f '{}' \\;", g_cCurrentThemePath);  // efface tous les fichiers du theme mais sans toucher aux lanceurs et aux plug-ins.
 		cd_message (sCommand->str);
 		r = system (sCommand->str);
 
 		if (g_pMainDock == NULL || g_key_file_get_boolean (pKeyFile, "Themes", "use theme behaviour", NULL))
 		{
-			g_string_printf (sCommand, "find '%s'/* -prune ! -name '*.conf' ! -name %s -exec /bin/cp -r '{}' '%s' \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // copie tous les fichiers du nouveau theme sauf les lanceurs et le .conf, dans le repertoire du theme courant. Ecrase les fichiers de memes noms.
+			g_string_printf (sCommand, "find \"%s\"/* -prune ! -name '*.conf' ! -name %s -exec /bin/cp -r '{}' \"%s\" \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // copie tous les fichiers du nouveau theme sauf les lanceurs et le .conf, dans le repertoire du theme courant. Ecrase les fichiers de memes noms.
 			cd_message (sCommand->str);
 			r = system (sCommand->str);
 		}
 		else
 		{
 			// on copie tous les fichiers du nouveau theme sauf les lanceurs et les .conf (dock et plug-ins).
-			g_string_printf (sCommand, "find '%s' -mindepth 1 ! -name '*.conf' ! -path '%s/%s*' ! -type d -exec cp -p {} '%s' \\;", cNewThemePath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);
+			g_string_printf (sCommand, "find \"%s\" -mindepth 1 ! -name '*.conf' ! -path '%s/%s*' ! -type d -exec cp -p {} \"%s\" \\;", cNewThemePath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);
 			cd_message (sCommand->str);
 			r = system (sCommand->str);
 			
@@ -1100,7 +1027,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 				{
 					cd_debug ("    directory %s doesn't exist, it will be created.", cUserDataDirPath);
 					
-					gchar *command = g_strdup_printf ("mkdir -p '%s'", cUserDataDirPath);
+					gchar *command = g_strdup_printf ("mkdir -p \"%s\"", cUserDataDirPath);
 					r = system (command);
 					g_free (command);
 				}
@@ -1127,7 +1054,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 				if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 				{
 					cd_debug ("    no conf file %s, we will take the theme's one", cConfFilePath);
-					gchar *command = g_strdup_printf ("cp '%s' '%s'", cNewConfFilePath, cConfFilePath);
+					gchar *command = g_strdup_printf ("cp \"%s\" \"%s\"", cNewConfFilePath, cConfFilePath);
 					r = system (command);
 					g_free (command);
 				}
@@ -1146,7 +1073,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		}
 		
 		// precaution probablement inutile.
-		gchar *command = g_strdup_printf ("chmod -R 777 '%s'", g_cCurrentThemePath);
+		gchar *command = g_strdup_printf ("chmod -R 777 \"%s\"", g_cCurrentThemePath);
 		r = system (command);
 		g_free (command);
 		
@@ -1186,45 +1113,31 @@ void cairo_dock_manage_themes (void)
 		&s_pThemeManager);
 }
 
-gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir)
+gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir, CairoDockThemeType iGivenType)
 {
 	cd_message ("%s (%s, %s, %s)", __func__, cShareThemesDir, cUserThemesDir, cDistantThemesDir);
 	if (cThemeName == NULL || *cThemeName == '\0')
 		return NULL;
+	CairoDockThemeType iType = cairo_dock_extract_theme_type_from_name (cThemeName);
+	if (iType == CAIRO_DOCK_ANY_THEME)
+		iType = iGivenType;
 	gchar *cThemePath = NULL;
 	
-	if (cUserThemesDir != NULL)
+	g_print ("iType : %d\n", iType);
+	if (cUserThemesDir != NULL && /*iType != CAIRO_DOCK_DISTANT_THEME && iType != CAIRO_DOCK_NEW_THEME && */iType != CAIRO_DOCK_UPDATED_THEME)
 	{
 		cThemePath = g_strdup_printf ("%s/%s", cUserThemesDir, cThemeName);
 		
 		if (g_file_test (cThemePath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
 		{
-			gboolean bOutdated = FALSE;
-			gchar *cVersionFile = g_strdup_printf ("%s/version", cThemePath);
-			if (g_file_test (cVersionFile, G_FILE_TEST_EXISTS))
-			{
-				gsize length = 0;
-				gchar *cContent = NULL;
-				g_file_get_contents (cVersionFile,
-					&cContent,
-					&length,
-					NULL);
-				if (cContent)
-				{
-					int iVersion = atoi (cContent);
-					bOutdated = (iVersion == 0);
-					g_free (cContent);
-				}
-			}
-			if (! bOutdated)
-				return cThemePath;
+			return cThemePath;
 		}
 		
 		g_free (cThemePath);
 		cThemePath = NULL;
 	}
 	
-	if (cShareThemesDir != NULL)
+	if (cShareThemesDir != NULL && /*iType != CAIRO_DOCK_DISTANT_THEME && iType != CAIRO_DOCK_NEW_THEME && */iType != CAIRO_DOCK_UPDATED_THEME)
 	{
 		cThemePath = g_strdup_printf ("%s/%s", cShareThemesDir, cThemeName);
 		if (g_file_test (cThemePath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
@@ -1244,6 +1157,21 @@ gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareTh
 			cd_warning ("couldn't retrieve distant theme %s : %s" , cThemeName, erreur->message);
 			cairo_dock_set_status_message_printf (s_pThemeManager, _("couldn't retrieve distant theme %s"), cThemeName);  // le message sera repris par une bulle de dialogue, mais on le met la aussi quand meme.
 			g_error_free (erreur);
+		}
+		else  // on se souvient de la date a laquelle on a mis a jour le theme pour la derniere fois.
+		{
+			gchar *cVersionFile = g_strdup_printf ("%s/last-modif", cThemePath);
+			time_t epoch = (time_t) time (NULL);
+			struct tm currentTime;
+			localtime_r (&epoch, &currentTime);
+			int now = (currentTime.tm_mday+1) + (currentTime.tm_mon+1) * 1e2 + (1900+currentTime.tm_year) * 1e4;
+			gchar *cDate = g_strdup_printf ("%d", now);
+			g_file_set_contents (cVersionFile,
+				cDate,
+				-1,
+				NULL);
+			g_free (cDate);
+			g_free (cVersionFile);
 		}
 	}
 	

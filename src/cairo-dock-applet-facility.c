@@ -261,13 +261,19 @@ void cairo_dock_set_size_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, Ca
 
 
 
-gchar *cairo_dock_get_theme_path_for_module (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName, const gchar *cShareThemesDir, const gchar *cExtraDirName)
+gchar *cairo_dock_get_theme_path_for_module (const gchar *cAppletConfFilePath, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultThemeName, const gchar *cShareThemesDir, const gchar *cExtraDirName)
 {
 	gchar *cThemeName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, cDefaultThemeName, NULL, NULL);
 	
 	gchar *cUserThemesDir = (cExtraDirName != NULL ? g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR, cExtraDirName) : NULL);
-	gchar *cThemePath = cairo_dock_get_theme_path (cThemeName, cShareThemesDir, cUserThemesDir, cExtraDirName);
+	CairoDockThemeType iType = cairo_dock_extract_theme_type_from_name (cThemeName);
+	gchar *cThemePath = cairo_dock_get_theme_path (cThemeName, cShareThemesDir, cUserThemesDir, cExtraDirName, iType);
 	
+	if (iType != CAIRO_DOCK_ANY_THEME)
+	{
+		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, cThemeName);
+		cairo_dock_write_keys_to_file (pKeyFile, cAppletConfFilePath);
+	}
 	g_free (cThemeName);
 	g_free (cUserThemesDir);
 	return cThemePath;

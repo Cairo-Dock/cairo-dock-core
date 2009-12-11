@@ -178,7 +178,7 @@ static gboolean on_button_press_dialog (GtkWidget* pWidget,
 		}
 	}
 
-	return TRUE;
+	return FALSE;
 }
 static gboolean on_key_press_dialog (GtkWidget *pWidget,
 	GdkEventKey *pKey,

@@ -1031,7 +1031,7 @@ gchar *cairo_dock_get_default_system_font (void)
 	if (s_cFontName == NULL)
 	{
 		if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
-			s_cFontName = cairo_dock_launch_command_sync ("gconftool-2 -g /desktop/gnome/interface/font_name");
+			s_cFontName = cairo_dock_launch_command_sync ("gconftool-2 -g /desktop/gnome/interface/font_name");  /// ou document_font_name ?...
 		else
 			s_cFontName = g_strdup ("Sans 10");
 	}

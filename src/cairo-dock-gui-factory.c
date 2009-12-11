@@ -814,14 +814,14 @@ static void cairo_dock_build_icon_theme_list_for_gui (GHashTable *pHashTable)
 	_build_list_for_gui (s_pIconThemeListStore, "", pHashTable, _cairo_dock_add_one_icon_theme_item);
 }
 
-static inline void _fill_modele_with_themes (const gchar *cThemeName, CairoDockTheme *pTheme, GtkListStore *pModele, gboolean bShowState)
+static inline void _fill_modele_with_themes (const gchar *cThemeName, CairoDockTheme *pTheme, GtkListStore *pModele, gboolean bShowState, gboolean bInsertState)
 {
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
 	gchar *cReadmePath = g_strdup_printf ("%s/readme", pTheme->cThemePath);
 	gchar *cPreviewPath = g_strdup_printf ("%s/preview", pTheme->cThemePath);
-	///gchar *cResult = g_strdup ("%d/%s", pTheme->iType, cThemeName);
+	gchar *cResult = (bInsertState ? g_strdup_printf ("%s[%d]", cThemeName, pTheme->iType) : cThemeName);
 	gchar *cDisplayedName;
 	if (bShowState)
 	{
@@ -841,7 +841,7 @@ static inline void _fill_modele_with_themes (const gchar *cThemeName, CairoDockT
 		cDisplayedName = pTheme->cDisplayedName;
 	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
 		CAIRO_DOCK_MODEL_NAME, cDisplayedName,
-		CAIRO_DOCK_MODEL_RESULT, cThemeName/**cResult*/,
+		CAIRO_DOCK_MODEL_RESULT, cResult,
 		CAIRO_DOCK_MODEL_ACTIVE, FALSE,
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, cReadmePath,
 		CAIRO_DOCK_MODEL_IMAGE, cPreviewPath, 
@@ -850,25 +850,28 @@ static inline void _fill_modele_with_themes (const gchar *cThemeName, CairoDockT
 		CAIRO_DOCK_MODEL_STATE, pTheme->iType, -1);
 	g_free (cReadmePath);
 	g_free (cPreviewPath);
-	///g_free (cResult);
+	if (bInsertState)
+		g_free (cResult);
 	if (bShowState)
 		g_free (cDisplayedName);
 }
 static void _cairo_dock_fill_modele_with_themes (const gchar *cThemeName, CairoDockTheme *pTheme, GtkListStore *pModele)
 {
-	_fill_modele_with_themes (cThemeName, pTheme, pModele, FALSE);
+	_fill_modele_with_themes (cThemeName, pTheme, pModele, FALSE, TRUE);
 }
-
 static void _cairo_dock_fill_modele_with_short_themes (const gchar *cThemeName, CairoDockTheme *pTheme, GtkListStore *pModele)
 {
-	_fill_modele_with_themes (cThemeName, pTheme, pModele, TRUE);
+	_fill_modele_with_themes (cThemeName, pTheme, pModele, TRUE, TRUE);
 }
+
 static gboolean _cairo_dock_test_one_name (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
 {
 	gchar *cName = NULL, *cResult = NULL;
 	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_RESULT, &cResult, -1);
 	if (cResult == NULL)
 		gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_NAME, &cName, -1);
+	else if (data[3])
+		cairo_dock_extract_theme_type_from_name (cResult);
 	if ((cResult && strcmp (data[0], cResult) == 0) || (cName && strcmp (data[0], cName) == 0))
 	{
 		GtkTreeIter *iter_to_fill = data[1];
@@ -883,13 +886,13 @@ static gboolean _cairo_dock_test_one_name (GtkTreeModel *model, GtkTreePath *pat
 	g_free (cResult);
 	return FALSE;
 }
-static gboolean _cairo_dock_find_iter_from_name (GtkListStore *pModele, const gchar *cName, GtkTreeIter *iter)
+static gboolean _cairo_dock_find_iter_from_name (GtkListStore *pModele, const gchar *cName, GtkTreeIter *iter, gboolean bIsTheme)
 {
 	//g_print ("%s (%s)\n", __func__, cName);
 	if (cName == NULL)
 		return FALSE;
 	gboolean bFound = FALSE;
-	gconstpointer data[3] = {cName, iter, &bFound};
+	gconstpointer data[4] = {cName, iter, &bFound, GINT_TO_POINTER (bIsTheme)};
 	gtk_tree_model_foreach (GTK_TREE_MODEL (pModele), (GtkTreeModelForeachFunc) _cairo_dock_test_one_name, data);
 	return bFound;
 }
@@ -1151,7 +1154,7 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 			gtk_box_pack_start (GTK_BOX (pAdditionalItemsVBox ? pAdditionalItemsVBox : pKeyBox), pPreviewBox, FALSE, FALSE, 0);\
 			gtk_box_pack_start (GTK_BOX (pPreviewBox), pPreviewImage, FALSE, FALSE, 0);\
 			gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionLabel, FALSE, FALSE, 0); }\
-		if (_cairo_dock_find_iter_from_name (modele, cValue, &iter))\
+		if (_cairo_dock_find_iter_from_name (modele, cValue, &iter, FALSE))\
 			gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);\
 		_pack_subwidget (pOneWidget);\
 		g_free (cValue); } } while (0)
@@ -1685,7 +1688,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY :  // idem mais avec une combo-entry.
 				//\______________ On construit le widget de visualisation de themes.
 				modele = _allocate_new_model ();
-				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
+				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_RESULT, GTK_SORT_ASCENDING);
 				
 				_add_combo_from_modele (modele, TRUE, iElementType == CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY);
 				
@@ -1765,7 +1768,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_allocate_new_buffer;
 				data[0] = pKeyBox;
 				data[1] = pFrameVBox != NULL ? pFrameVBox : pGroupBox;
-				iNbControlledWidgets = 9;
+				iNbControlledWidgets = 8;
 				data[2] = GINT_TO_POINTER (iNbControlledWidgets);
 				g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_custom_item_in_combo), data);
 				
@@ -1805,7 +1808,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
 				GtkTreeIter iter;
-				if (_cairo_dock_find_iter_from_name (modele, cValue, &iter))
+				if (_cairo_dock_find_iter_from_name (modele, cValue, &iter, FALSE))
 					gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);
 				g_free (cValue);
 				
@@ -2916,7 +2919,7 @@ void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pThemeTab
 	g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_modele_with_short_themes, modele);
 	
 	GtkTreeIter iter;
-	if (_cairo_dock_find_iter_from_name (GTK_LIST_STORE (modele), cActiveTheme, &iter))
+	if (_cairo_dock_find_iter_from_name (GTK_LIST_STORE (modele), cActiveTheme, &iter, TRUE))
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pCombo), &iter);
 }
 
@@ -2939,6 +2942,6 @@ void cairo_dock_fill_combo_with_list (GtkWidget *pCombo, GList *pElementList, co
 			CAIRO_DOCK_MODEL_IMAGE, "none", -1);
 	}
 	
-	if (cActiveElement != NULL && _cairo_dock_find_iter_from_name (GTK_LIST_STORE (pModele), cActiveElement, &iter))
+	if (cActiveElement != NULL && _cairo_dock_find_iter_from_name (GTK_LIST_STORE (pModele), cActiveElement, &iter, FALSE))
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pCombo), &iter);
 }

@@ -191,10 +191,14 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 }
 static void _cairo_dock_intercept_signal (int signal)
 {
-	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now.\nFeel free to report this bug on cairo-dock.org to help improving the dock !", signal);
+	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now (%s).\nFeel free to report this bug on cairo-dock.org to help improving the dock !", signal, cLaunchCommand);
 	if (g_pCurrentModule != NULL)
+	{
 		g_print ("The applet '%s' may be the culprit\n", g_pCurrentModule->pModule->pVisitCard->cModuleName);
-	execl ("/bin/sh", "/bin/sh", "-c", cLaunchCommand, NULL);  // on ne revient pas de cette fonction.
+		cLaunchCommand = g_strdup_printf ("%s -x \"%s\"", cLaunchCommand, g_pCurrentModule->pModule->pVisitCard->cModuleName);
+	}
+	execl ("/bin/sh", "/bin/sh", "-c", cLaunchCommand, (char *)NULL);  // on ne revient pas de cette fonction.
+	//execlp ("cairo-dock", "cairo-dock", cLaunchCommand, (char *)0);
 	cd_warning ("Sorry, couldn't restart the dock");
 }
 static void _cairo_dock_set_signal_interception (void)
@@ -238,7 +242,7 @@ int main (int argc, char** argv)
 	
 	//\___________________ On recupere quelques options.
 	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSkipPager = FALSE, bNoSkipTaskbar = FALSE, bNoSticky = FALSE, bToolBarHint = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bExpresso = FALSE, bCafeLatte = FALSE, bPrintVersion = FALSE, bTesting = FALSE;
-	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL;
+	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL;
 	GOptionEntry TableDesOptions[] =
 	{
 		{"log", 'l', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
@@ -285,9 +289,12 @@ int main (int argc, char** argv)
 		{"maintenance", 'm', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bMaintenance,
 			"allow to edit the config before the dock is started and show the config panel on start", NULL},
+		{"exclude", 'x', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
+			&cExcludeModule,
+			"exclude a given plug-in from activating (it is still loaded though)", NULL},
 		{"safe-mode", 'f', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bSafeMode,
-			"don't load any plug-ins and show the theme manager on start", NULL},
+			"don't load any plug-ins", NULL},
 		{"capuccino", 'C', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bCappuccino,
 			"Cairo-Dock makes anything, including coffee !", NULL},
@@ -416,17 +423,17 @@ int main (int argc, char** argv)
 			if (g_file_test (cOldDataDir, G_FILE_TEST_IS_DIR))  // l'ancien rep existe, on le deplace.
 			{
 				cd_warning ("Cairo-Dock's data dir is now located in ~/.config, it will be moved there");
-				gchar *cCommand = g_strdup_printf ("mkdir '%s/.config' > /dev/null", getenv("HOME"));
+				gchar *cCommand = g_strdup_printf ("mkdir \"%s/.config\" > /dev/null", getenv("HOME"));
 				cd_message (cCommand);
 				r = system (cCommand);
 				g_free (cCommand);
 					
-				cCommand = g_strdup_printf ("mv '%s' '%s'", cOldDataDir, g_cCairoDockDataDir);
+				cCommand = g_strdup_printf ("mv \"%s\" \"%s\"", cOldDataDir, g_cCairoDockDataDir);
 				cd_message (cCommand);
 				r = system (cCommand);
 				g_free (cCommand);
 				
-				cCommand = g_strdup_printf ("sed -i \"s/~\\/.cairo-dock/~\\/.config\\/%s/g\" '%s/%s/%s'", CAIRO_DOCK_DATA_DIR, g_cCairoDockDataDir, CAIRO_DOCK_CURRENT_THEME_NAME, CAIRO_DOCK_CONF_FILE);
+				cCommand = g_strdup_printf ("sed -i \"s/~\\/.cairo-dock/~\\/.config\\/%s/g\" \"%s/%s/%s\"", CAIRO_DOCK_DATA_DIR, g_cCairoDockDataDir, CAIRO_DOCK_CURRENT_THEME_NAME, CAIRO_DOCK_CONF_FILE);
 				cd_message (cCommand);
 				r = system (cCommand);
 				g_free (cCommand);
@@ -468,7 +475,7 @@ int main (int argc, char** argv)
 		if (! bFirstLaunch)
 		{
 			cd_warning ("Cairo-Dock's local icons are now located in the 'icons' folder, they will be moved there");
-			gchar *cCommand = g_strdup_printf ("cd '%s' && mv *.svg *.png *.xpm *.jpg *.bmp *.gif '%s' > /dev/null", g_cCurrentLaunchersPath, cLocalIconsPath);
+			gchar *cCommand = g_strdup_printf ("cd \"%s\" && mv *.svg *.png *.xpm *.jpg *.bmp *.gif \"%s\" > /dev/null", g_cCurrentLaunchersPath, cLocalIconsPath);
 			cd_message (cCommand);
 			r = system (cCommand);
 			g_free (cCommand);
@@ -587,7 +594,7 @@ int main (int argc, char** argv)
 	cd_message ("loading theme ...");
 	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS))
 	{
-		gchar *cCommand = g_strdup_printf ("/bin/cp -r '%s'/* '%s/%s'", CAIRO_DOCK_SHARE_DATA_DIR"/themes/_default_", g_cCairoDockDataDir, CAIRO_DOCK_CURRENT_THEME_NAME);
+		gchar *cCommand = g_strdup_printf ("/bin/cp -r \"%s\"/* \"%s/%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes/_default_", g_cCairoDockDataDir, CAIRO_DOCK_CURRENT_THEME_NAME);
 		cd_message (cCommand);
 		r = system (cCommand);
 		g_free (cCommand);
@@ -698,7 +705,9 @@ int main (int argc, char** argv)
 	g_print ("\nPB AFFICHAGE PM\n\n");
 	
 	g_print ("\nINDICATEURS EN HAUT (RETOURNES) ET CAIRO\n\n");
-	g_print ("\nMETTRE A JOUR LE THEME PAR DEFAUT\n\n");
+	g_print ("\nVALIDER AFFICHAGE ZONE DE RAPPEL CAIRO&OPENGL\n\n");
+	g_print ("\nDROPPER APPLI SUR LAUNCEUR\n\n");
+	g_print ("\nDROPPER SCRIPT QUI PREND UN ARGUMENT, PUIS DROPPER FICHIER DESSUS ET VERIFIER $1\n\n");
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
 	g_print ("\nNOUVELLE INSTANCE COPIEE SUR LA 1ERE\n\n");
@@ -711,7 +720,9 @@ int main (int argc, char** argv)
 	}*/
 	
 	gtk_main ();
-
+	
+	cairo_dock_free_all_docks ();
+	
 	rsvg_term ();
 	
 	cd_message ("Bye bye !");

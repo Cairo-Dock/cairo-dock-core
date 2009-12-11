@@ -30,11 +30,8 @@ G_BEGIN_DECLS
 *   local   (installed as root in a sub-folder of /usr/share/cairo-dock)
 *   user    (located in a sub-folder of ~/.config/cairo-dock)
 *   distant (located on the cairo-dock's server)
+* The class offers a high level of abstraction that allows to manipulate themes without having to care their location, version, etc/
 */
-
-#define CAIRO_DOCK_PREFIX_NET_THEME   "(Net)   "
-#define CAIRO_DOCK_PREFIX_USER_THEME  "(User)  "
-#define CAIRO_DOCK_PREFIX_LOCAL_THEME "(Local) "
 
 /// Types of themes.
 typedef enum {
@@ -43,6 +40,7 @@ typedef enum {
 	CAIRO_DOCK_DISTANT_THEME,
 	CAIRO_DOCK_NEW_THEME,
 	CAIRO_DOCK_UPDATED_THEME,
+	CAIRO_DOCK_ANY_THEME,
 	CAIRO_DOCK_NB_TYPE_THEME
 } CairoDockThemeType;
 
@@ -62,9 +60,9 @@ struct _CairoDockTheme {
 	gint iRating;
 	/// gint sobriety/simplicity of the theme, between 1 and 5.
 	gint iSobriety;
-	/// version of the theme.
-	gint iVersion;
+	/// date of creation of the theme.
 	gint iCreationDate;
+	/// date of latest changes in the theme.
 	gint iLastModifDate;
 };
 
@@ -84,7 +82,7 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 *@param cDistantFilePath path of the file on the server.
 *@param cDistantFileName name of the file.
 *@param iShowActivity 0 : don't show, 1 : show a dialog, 2 : do it in a terminal.
-*@param cExtractTo a local path where to extract the file, if this one is a .tar.gz archive, or NULL.
+*@param cExtractTo a local path where to extract the file, if this one is a .tar.gz/.tar.bz2/.tgz archive, or NULL.
 *@param erreur an error.
 *@return the local path of the downloaded file. If it was an archive, the path of the extracted file. Free the string after using it.
 */
@@ -111,8 +109,6 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 GHashTable *cairo_dock_list_themes (const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir);
 
 
-gchar *cairo_dock_edit_themes (GHashTable **hThemeTable, gboolean bSafeMode);
-
 
 /** Load the current theme. This will (re)load all the parameters of Cairo-Dock and all the plug-ins, as if you just started the dock.
 */
@@ -126,14 +122,18 @@ gboolean cairo_dock_theme_need_save (void);
  */
 void cairo_dock_manage_themes (void);
 
-/** Look for a theme with a given name into differente sources. It is faster than getting the list of themes and looking for the given one.
+
+CairoDockThemeType cairo_dock_extract_theme_type_from_name (const gchar *cThemeName);
+
+/** Look for a theme with a given name into differente sources. If the theme is found on the server and is not present on the disk, or is not up to date, then it is downloaded and the local path is returned.
 *@param cThemeName name of the theme.
 *@param cShareThemesDir path of a local folder containg themes or NULL.
 *@param cUserThemesDir path of a user folder containg themes or NULL.
 *@param cDistantThemesDir path of a distant folder containg themes or NULL.
-*@return a newly allocated string containing the complete local path of the theme. If the theme is distant, it is downloaded and extracted into the user folder.
+*@param iGivenType type of theme, or CAIRO_DOCK_ANY_THEME if any type of theme should be considered.
+*@return a newly allocated string containing the complete local path of the theme. If the theme is distant, it is downloaded and extracted into this folder.
 */
-gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir);
+gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir, CairoDockThemeType iGivenType);
 
 
 G_END_DECLS

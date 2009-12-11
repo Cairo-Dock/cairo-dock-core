@@ -35,6 +35,8 @@ struct _CairoFlyingContainer {
 	double fCreationTime;
 };
 
+void cairo_dock_unload_flying_container_textures (void);
+
 gboolean cairo_dock_update_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation);
 
 gboolean cairo_dock_render_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, cairo_t *pCairoContext);

@@ -85,7 +85,7 @@ struct _Icon {
 	gdouble fOrder;
 	/// Sous-dock sur lequel pointe the icon, ou NULL si aucun.
 	CairoDock *pSubDock;
-	/// Nom du dock contenant the icon (y compris lorsque the icon is dans un desklet).
+	/// Nom du dock contenant the icon (NULL if the icon is not inside a dock).
 	gchar *cParentDockName;
 	/// Numero du bureau virtuel sur lequel restreindre the icon ( -1 ==> pas de restriction )
 	gint iSpecificDesktop;
@@ -556,7 +556,7 @@ void cairo_dock_set_quick_info_full (cairo_t *pSourceContext, Icon *pIcon, Cairo
 */
 #define cairo_dock_remove_quick_info(pIcon) cairo_dock_set_quick_info (NULL, NULL, pIcon, 1)
 
-/** Updates which launcher is attached/detached to/from the dock.
+/** Updates which launcher is attached/detached to/from the dock, according to the current desktop.
 *@param pDock the dock whose icons are to be considered.
 */
 void cairo_dock_hide_show_launchers_on_other_desktops (CairoDock *pDock);

@@ -100,7 +100,7 @@ typedef enum {
 } CairoDockInfoDisplay;
 
 
-gchar *cairo_dock_get_theme_path_for_module (GKeyFile *pKeyFile, gchar *cGroupName, gchar *cKeyName, gboolean *bFlushConfFileNeeded, gchar *cDefaultThemeName, const gchar *cShareThemesDir, const gchar *cExtraDirName);
+gchar *cairo_dock_get_theme_path_for_module (const gchar *cAppletConfFilePath, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultThemeName, const gchar *cShareThemesDir, const gchar *cExtraDirName);
 
 GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, const gchar *cImage);
 
@@ -254,7 +254,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_CONFIG_GET_THEME_PATH(cGroupName, cKeyName, cThemeDirName, cDefaultThemeName) \
 	__extension__ ({\
-	gchar *_cThemePath = cairo_dock_get_theme_path_for_module (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, cDefaultThemeName, MY_APPLET_SHARE_DATA_DIR"/"cThemeDirName, MY_APPLET_USER_DATA_DIR);\
+	gchar *_cThemePath = cairo_dock_get_theme_path_for_module (CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, cDefaultThemeName, MY_APPLET_SHARE_DATA_DIR"/"cThemeDirName, MY_APPLET_USER_DATA_DIR);\
 	if (_cThemePath == NULL) {\
 		const gchar *_cMessage = _("the theme couldn't be found; the default theme will be used instead.\n You can change this by opening the configuration of this module; do you want to do it now ?");\
 		Icon *_pIcon = cairo_dock_get_dialogless_icon ();\
@@ -269,7 +269,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_CONFIG_GET_GAUGE_THEME(cGroupName, cKeyName) \
 	__extension__ ({\
-	gchar *_cThemePath = cairo_dock_get_gauge_key_value(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, "turbo-night-fuel");\
+	gchar *_cThemePath = cairo_dock_get_theme_path_for_gauge(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, "turbo-night-fuel");\
 	if (_cThemePath == NULL) {\
 		const gchar *_cMessage = _("the gauge theme couldn't be found; a default gauge will be used instead.\n You can change this by opening the configuration of this module; do you want to do it now ?");\
 		Icon *_pIcon = cairo_dock_get_dialogless_icon ();\

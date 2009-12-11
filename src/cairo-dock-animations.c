@@ -368,7 +368,7 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 	{
 		pDock->fHideOffset = 1;
 		
-		//g_print ("on arrete les animations\n");
+		//g_print ("on arrete le cachage\n");
 		Icon *pIcon;
 		GList *ic;
 		for (ic = pDock->icons; ic != NULL; ic = ic->next)
@@ -481,7 +481,8 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 	if (pDock->bIsHiding)
 	{
 		pDock->bIsHiding = _cairo_dock_hide (pDock);
-		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
+		///cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
+		gtk_widget_queue_draw (pDock->container.pWidget);
 		bContinue |= pDock->bIsHiding;
 	}
 	if (pDock->bIsShowing)

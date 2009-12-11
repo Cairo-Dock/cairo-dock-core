@@ -56,6 +56,7 @@
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-data-renderer.h"
+#include "cairo-dock-flying-container.h"
 #include "cairo-dock-load.h"
 
 extern CairoDock *g_pMainDock;
@@ -1192,4 +1193,5 @@ void cairo_dock_unload_additionnal_textures (void)
 	}
 	cairo_dock_destroy_icon_pbuffer ();
 	cairo_dock_unload_default_data_renderer_font ();
+	cairo_dock_unload_flying_container_textures ();
 }

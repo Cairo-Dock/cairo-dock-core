@@ -44,6 +44,7 @@
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-background.h"
+#include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-container.h"
@@ -1064,11 +1065,28 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 	//\_____________________ on dessine la zone de rappel.
 	if (g_pVisibleZoneSurface != NULL)
 	{
+		g_print ("%s ()\n", __func__);
+		cairo_save (pCairoContext);
+		int w = MIN (myAccessibility.iVisibleZoneWidth, pDock->container.iWidth);
+		int h = MIN (myAccessibility.iVisibleZoneHeight, pDock->container.iHeight);
+		
+		if (pDock->container.bIsHorizontal)
+		{
+			if (pDock->container.bDirectionUp)
+				cairo_translate (pCairoContext, (pDock->container.iWidth - w)/2, pDock->container.iHeight - h);
+		}
+		else
+		{
+			if (pDock->container.bDirectionUp)
+				cairo_translate (pCairoContext, pDock->container.iHeight - h, (pDock->container.iWidth - w)/2);
+		}
 		cairo_dock_draw_surface (pCairoContext, g_pVisibleZoneSurface,
-			pDock->container.iWidth, pDock->container.iHeight,
+			w,
+			h,
 			(myBackground.bReverseVisibleImage ? pDock->container.bDirectionUp : TRUE),
 			pDock->container.bIsHorizontal,
 			1.);
+		cairo_restore (pCairoContext);
 	}
 	
 	//\_____________________ on dessine les icones demandant l'attention.
@@ -1087,7 +1105,7 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 			if (! icon->bIsDemandingAttention)
 				continue;
 			
-			icon->fDrawY = (pDock->container.bDirectionUp ? icon->fHeight * icon->fScale : 0.);
+			icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);
 			cairo_save (pCairoContext);
 			cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);
 			cairo_restore (pCairoContext);
