@@ -53,7 +53,7 @@
 extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentLaunchersPath;
-
+extern int g_iNbNonStickyLaunchers;
 
 gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 {
@@ -457,26 +457,16 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		icon->cCommand = g_strdup_printf ("xterm -e \"%s\"", cOldCommand);
 		g_free (cOldCommand);
 	}
-
-	icon->iSpecificDesktop = -1;
-	gint iSpecificDesktop = g_key_file_get_integer (keyfile, "Desktop Entry", "ShowOnViewport", &erreur);
-	if (erreur != NULL)
+	
+	int iSpecificDesktop = g_key_file_get_integer (keyfile, "Desktop Entry", "ShowOnViewport", NULL);
+	if (iSpecificDesktop != 0 && icon->iSpecificDesktop == 0)
 	{
-		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);
-		g_error_free (erreur);
-		erreur = NULL;
-		iSpecificDesktop = -1;
+		g_iNbNonStickyLaunchers ++;
 	}
-	if( iSpecificDesktop < -1 )
+	else if (iSpecificDesktop == 0 && icon->iSpecificDesktop != 0)
 	{
-		iSpecificDesktop = -1; // prevent wrong values
+		g_iNbNonStickyLaunchers --;
 	}
-	else if( iSpecificDesktop >= 0 )
-	{
-		// to define as a global variable 
-		gint g_FoundNonStickyLaunchers = TRUE;
-	}
-		
 	icon->iSpecificDesktop = iSpecificDesktop;
 	
 	g_key_file_free (keyfile);

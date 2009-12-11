@@ -569,7 +569,7 @@ gboolean cairo_dock_emit_enter_signal (CairoDock *pDock)
 
 void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 {
-	//g_print ("%s (bMenuVisible:%d)\n", __func__, pDock->bMenuVisible);
+	//g_print ("%s (%d)\n", __func__, pDock->iRefCount);
 	pDock->iAvoidingMouseIconType = -1;
 	pDock->fAvoidingMouseMargin = 0;
 	pDock->container.bInside = FALSE;
@@ -673,6 +673,13 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	//\_______________ On cache ses sous-docks.
 	if (! cairo_dock_hide_child_docks (pDock))  // on quitte si l'un des sous-docks reste visible (on est entre dedans), pour rester en position "haute".
 		return TRUE;
+	
+	if (s_iSidShowSubDockDemand != 0)  // si l'un des sous-docks etait programme pour se montrer, on annule.
+	{
+		g_source_remove (s_iSidShowSubDockDemand);
+		s_iSidShowSubDockDemand = 0;
+		s_pDockShowingSubDock = NULL;
+	}
 	
 	if (pEvent != NULL)
 	{
@@ -1650,9 +1657,15 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 					}
 					else  // on le lache sur un lanceur.
 					{
-						gchar *cCommand = g_strdup_printf ("%s \"%s\"", icon->cCommand, cReceivedData + (strncmp (cReceivedData, "file://", 7) == 0 ? 7 : 0));  // tous les programmes ne gerent pas les URI; pour parer au cas ou il ne le gererait pas, dans le cas d'un fichier local, on convertit en un chemin classique.
+						gchar *cPath = NULL;
+						if (strncmp (cReceivedData, "file://", 7) == 0)  // tous les programmes ne gerent pas les URI; pour parer au cas ou il ne le gererait pas, dans le cas d'un fichier local, on convertit en un chemin
+						{
+							cPath = g_filename_from_uri (cReceivedData, NULL, NULL);
+						}
+						gchar *cCommand = g_strdup_printf ("%s \"%s\"", icon->cCommand, cPath ? cPath : cReceivedData);
 						cd_message ("will open the file with the command '%s'...\n", cCommand);
 						g_spawn_command_line_async (cCommand, NULL);
+						g_free (cPath);
 						g_free (cCommand);
 						cairo_dock_request_icon_animation (icon, pDock, "blink", 2);
 						return CAIRO_DOCK_INTERCEPT_NOTIFICATION;

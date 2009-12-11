@@ -67,6 +67,7 @@ extern gboolean g_bUseOpenGL;
 extern int g_iNbViewportX;
 extern int g_iNbViewportY;
 extern int g_iNbDesktops;
+extern int g_iNbNonStickyLaunchers;
 
 static GList *s_DetachedLaunchersList = NULL;
 
@@ -84,6 +85,12 @@ void cairo_dock_free_icon (Icon *icon)
 	if (icon->pModuleInstance != NULL)
 		cairo_dock_deinstanciate_module (icon->pModuleInstance);
 	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);
+	
+	if (icon->iSpecificDesktop != 0)
+	{
+		g_iNbNonStickyLaunchers --;
+		s_DetachedLaunchersList = g_list_remove(s_DetachedLaunchersList, icon);
+	}
 	
 	cairo_dock_free_notification_table (icon->pNotificationsTab);
 	cairo_dock_free_icon_buffers (icon);
@@ -768,9 +775,9 @@ static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, Cairo
 
 		int iCurrentDesktop = 0, iCurrentViewportX = 0, iCurrentViewportY = 0;
 		cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
-		int index = iCurrentDesktop * g_iNbViewportX * g_iNbViewportY + iCurrentViewportX * g_iNbViewportY + iCurrentViewportY;
+		int index = iCurrentDesktop * g_iNbViewportX * g_iNbViewportY + iCurrentViewportX * g_iNbViewportY + iCurrentViewportY + 1;  // +1 car on commence a compter a partir de 1.
 		
-		if (icon->iSpecificDesktop < 0 || icon->iSpecificDesktop == index || icon->iSpecificDesktop >= g_iNbDesktops * g_iNbViewportX * g_iNbViewportY)
+		if (icon->iSpecificDesktop == 0 || icon->iSpecificDesktop == index || icon->iSpecificDesktop > g_iNbDesktops * g_iNbViewportX * g_iNbViewportY)
 		/**if( icon->iSpecificDesktop <= 0 ||
 		// metacity case: metacity uses desktop instead of viewport.
 		    (g_iNbViewportX*g_iNbViewportY==1 &&
@@ -796,7 +803,7 @@ static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, Cairo
 			{
 				cd_debug( "Detach launcher %s", icon->cName);
 				pParentDock = _cairo_dock_detach_launcher(icon);
-				s_DetachedLaunchersList = g_list_append(s_DetachedLaunchersList, icon);
+				s_DetachedLaunchersList = g_list_prepend(s_DetachedLaunchersList, icon);
 			}
 		}
 		if (pParentDock != NULL)
@@ -806,6 +813,8 @@ static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, Cairo
 
 void cairo_dock_hide_show_launchers_on_other_desktops (CairoDock *pDock)
 {
+	if (g_iNbNonStickyLaunchers <= 0)
+		return ;
 	// first we detach what shouldn't be show on this viewport
 	cairo_dock_foreach_icons_of_type (pDock->icons, CAIRO_DOCK_LAUNCHER, _cairo_dock_hide_show_launchers_on_other_desktops, pDock);
 	// then we reattach what was eventually missing

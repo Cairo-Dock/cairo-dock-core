@@ -1065,7 +1065,6 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 	//\_____________________ on dessine la zone de rappel.
 	if (g_pVisibleZoneSurface != NULL)
 	{
-		g_print ("%s ()\n", __func__);
 		cairo_save (pCairoContext);
 		int w = MIN (myAccessibility.iVisibleZoneWidth, pDock->container.iWidth);
 		int h = MIN (myAccessibility.iVisibleZoneHeight, pDock->container.iHeight);
@@ -1074,11 +1073,15 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 		{
 			if (pDock->container.bDirectionUp)
 				cairo_translate (pCairoContext, (pDock->container.iWidth - w)/2, pDock->container.iHeight - h);
+			else
+				cairo_translate (pCairoContext, (pDock->container.iWidth - w)/2, 0.);
 		}
 		else
 		{
 			if (pDock->container.bDirectionUp)
 				cairo_translate (pCairoContext, pDock->container.iHeight - h, (pDock->container.iWidth - w)/2);
+			else
+				cairo_translate (pCairoContext, 0., (pDock->container.iWidth - w)/2);
 		}
 		cairo_dock_draw_surface (pCairoContext, g_pVisibleZoneSurface,
 			w,

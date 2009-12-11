@@ -238,7 +238,9 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		if (icon->pSubDock != NULL && GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget))
+		if (icon->pSubDock == NULL)
+			continue;
+		if (GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget))
 		{
 			if (icon->pSubDock->container.bInside)
 			{

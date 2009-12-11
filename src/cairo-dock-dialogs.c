@@ -1193,7 +1193,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 				else
 					dy = pDock->container.iHeight - pDock->iMinDockHeight;
 				
-				g_print ("y = %d + %d\n", pDock->container.iWindowPositionY, dy);
+				//g_print ("y = %d + %d\n", pDock->container.iWindowPositionY, dy);
 				
 				if (*bDirectionUp)
 					*iY = pDock->container.iWindowPositionY + dy;
@@ -1210,6 +1210,8 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 			if (cairo_dock_is_hidden (pDock))
 			{
 				*iX = pDock->container.iWindowPositionX +
+					pDock->iMaxDockWidth/2 -
+					MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth)/2 + 
 					(pIcon->fXAtRest + pIcon->fWidth * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign))) / pDock->fFlatDockWidth * MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth);
 				cd_debug ("placement sur un dock cache -> %d", *iX);
 			}
@@ -1261,7 +1263,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 
 static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 {
-	g_print ("%s (Ybulle:%d; width:%d)\n", __func__, pDialog->container.iWindowPositionY, pDialog->container.iWidth);
+	//g_print ("%s (Ybulle:%d; width:%d)\n", __func__, pDialog->container.iWindowPositionY, pDialog->container.iWidth);
 	g_return_if_fail (pDialog->container.iWindowPositionY > 0);
 
 	Icon *icon;

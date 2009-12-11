@@ -798,5 +798,9 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define D_(message) dgettext (MY_APPLET_GETTEXT_DOMAIN, message)
 #define _D D_
 
+//\_________________________________ DEBUG
+#define CD_APPLET_ENTER g_pCurrentModule = myApplet
+#define CD_APPLET_LEAVE g_pCurrentModule = NULL
+
 G_END_DECLS
 #endif

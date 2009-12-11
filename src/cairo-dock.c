@@ -137,6 +137,7 @@ cairo_surface_t *g_pBackgroundSurfaceFull = NULL;  // surface associee aux decor
 
 int g_iNbDesktops;  // nombre de bureaux.
 int g_iNbViewportX, g_iNbViewportY;  // nombre de "faces du cube".
+int g_iNbNonStickyLaunchers = 0;
 cairo_surface_t *g_pActiveIndicatorSurface = NULL;
 double g_fActiveIndicatorWidth, g_fActiveIndicatorHeight;
 
@@ -705,9 +706,6 @@ int main (int argc, char** argv)
 	g_print ("\nPB AFFICHAGE PM\n\n");
 	
 	g_print ("\nINDICATEURS EN HAUT (RETOURNES) ET CAIRO\n\n");
-	g_print ("\nVALIDER AFFICHAGE ZONE DE RAPPEL CAIRO&OPENGL\n\n");
-	g_print ("\nDROPPER APPLI SUR LAUNCEUR\n\n");
-	g_print ("\nDROPPER SCRIPT QUI PREND UN ARGUMENT, PUIS DROPPER FICHIER DESSUS ET VERIFIER $1\n\n");
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
 	g_print ("\nNOUVELLE INSTANCE COPIEE SUR LA 1ERE\n\n");
