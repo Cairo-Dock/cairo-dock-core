@@ -42,9 +42,12 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
+	// comportement
 	pTaskBar->bShowAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "show applications", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
 	
-	///pTaskBar->bUniquePid = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "unique PID", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
+	pTaskBar->bAppliOnCurrentDesktopOnly = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "current desktop only", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
+	
+	pTaskBar->bMixLauncherAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "mix launcher appli", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
 	pTaskBar->bGroupAppliByClass = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "group by class", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
 	pTaskBar->cGroupException = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "group exception", &bFlushConfFileNeeded, "pidgin;xchat", NULL, NULL);
@@ -55,20 +58,30 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 			pTaskBar->cGroupException[i] = g_ascii_tolower (pTaskBar->cGroupException[i]);
 	}
 	
-	pTaskBar->iAppliMaxNameLength = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "max name length", &bFlushConfFileNeeded, 15, "Applications", NULL);
+	pTaskBar->bHideVisibleApplis = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "hide visible", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
+	
+	
+	pTaskBar->bDrawIndicatorOnAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "indic on appli", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	
+	pTaskBar->bOverWriteXIcons = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "overwrite xicon", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	pTaskBar->cOverwriteException = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "overwrite exception", &bFlushConfFileNeeded, "pidgin;xchat", NULL, NULL);
+	if (pTaskBar->cOverwriteException)
+	{
+		int i;
+		for (i = 0; pTaskBar->cOverwriteException[i] != '\0'; i ++)
+			pTaskBar->cOverwriteException[i] = g_ascii_tolower (pTaskBar->cOverwriteException[i]);
+	}
+	
+	pTaskBar->bShowThumbnail = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "window thumbnail", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	if (pTaskBar->bShowThumbnail && ! cairo_dock_xcomposite_is_available ())
+	{
+		cd_warning ("Sorry but either your X server does not have the XComposite extension, or your version of Cairo-Dock was not built with the support of XComposite.\n You can't have window thumbnails in the dock");
+		pTaskBar->bShowThumbnail = FALSE;
+	}
 
+	// interaction
 	pTaskBar->bMinimizeOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "minimize on click", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
 	pTaskBar->bCloseAppliOnMiddleClick = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "close on middle click", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
-
-	pTaskBar->bHideVisibleApplis = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "hide visible", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
-	pTaskBar->fVisibleAppliAlpha = cairo_dock_get_double_key_value (pKeyFile, "TaskBar", "visibility alpha", &bFlushConfFileNeeded, .35, "Applications", NULL);  // >0 <=> les fenetres minimisees sont transparentes.
-	if (pTaskBar->bHideVisibleApplis && pTaskBar->fVisibleAppliAlpha < 0)
-		pTaskBar->fVisibleAppliAlpha = 0.;  // on inhibe ce parametre, puisqu'il ne sert alors a rien.
-	else if (pTaskBar->fVisibleAppliAlpha > .6)
-		pTaskBar->fVisibleAppliAlpha = .6;
-	else if (pTaskBar->fVisibleAppliAlpha < -.6)
-		pTaskBar->fVisibleAppliAlpha = -.6;
-	pTaskBar->bAppliOnCurrentDesktopOnly = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "current desktop only", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 	
 	pTaskBar->bDemandsAttentionWithDialog = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "demands attention with dialog", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
 	pTaskBar->iDialogDuration = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "duration", &bFlushConfFileNeeded, 2, NULL, NULL);
@@ -79,23 +92,17 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	
 	pTaskBar->cAnimationOnActiveWindow = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "animation on active window", &bFlushConfFileNeeded, "wobbly", NULL, NULL);
 	
-	pTaskBar->bMixLauncherAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "mix launcher appli", &bFlushConfFileNeeded, TRUE, NULL, NULL);
-	pTaskBar->bDrawIndicatorOnAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "indic on appli", &bFlushConfFileNeeded, FALSE, NULL, NULL);
-	pTaskBar->bOverWriteXIcons = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "overwrite xicon", &bFlushConfFileNeeded, TRUE, NULL, NULL);
-	pTaskBar->cOverwriteException = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "overwrite exception", &bFlushConfFileNeeded, "pidgin;xchat", NULL, NULL);
-	if (pTaskBar->cOverwriteException)
-	{
-		int i;
-		for (i = 0; pTaskBar->cOverwriteException[i] != '\0'; i ++)
-			pTaskBar->cOverwriteException[i] = g_ascii_tolower (pTaskBar->cOverwriteException[i]);
-	}
-	pTaskBar->bShowThumbnail = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "window thumbnail", &bFlushConfFileNeeded, TRUE, NULL, NULL);
-	if (pTaskBar->bShowThumbnail && ! cairo_dock_xcomposite_is_available ())
-	{
-		cd_warning ("Sorry but either your X server does not have the XComposite extension, or your version of Cairo-Dock was not built with the support of XComposite.\n You can't have window thumbnails in the dock");
-		pTaskBar->bShowThumbnail = FALSE;
-	}
-
+	// representation
+	pTaskBar->iAppliMaxNameLength = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "max name length", &bFlushConfFileNeeded, 15, "Applications", NULL);
+	
+	pTaskBar->fVisibleAppliAlpha = cairo_dock_get_double_key_value (pKeyFile, "TaskBar", "visibility alpha", &bFlushConfFileNeeded, .35, "Applications", NULL);  // >0 <=> les fenetres minimisees sont transparentes.
+	if (pTaskBar->bHideVisibleApplis && pTaskBar->fVisibleAppliAlpha < 0)
+		pTaskBar->fVisibleAppliAlpha = 0.;  // on inhibe ce parametre, puisqu'il ne sert alors a rien.
+	else if (pTaskBar->fVisibleAppliAlpha > .6)
+		pTaskBar->fVisibleAppliAlpha = .6;
+	else if (pTaskBar->fVisibleAppliAlpha < -.6)
+		pTaskBar->fVisibleAppliAlpha = -.6;
+	
 	return bFlushConfFileNeeded;
 }
 

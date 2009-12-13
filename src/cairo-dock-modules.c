@@ -1407,7 +1407,7 @@ void cairo_dock_preload_internal_modules (GHashTable *pModuleTable)
 	REGISTER_INTERNAL_MODULE (Desklets);
 }
 
-static void _cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, GKeyFile *pKeyFile)
+void cairo_dock_reload_internal_module_from_keyfile (CairoDockInternalModule *pModule, GKeyFile *pKeyFile)
 {
 	gpointer *pPrevConfig = g_memdup (pModule->pConfig, pModule->iSizeOfConfig);
 	memset (pModule->pConfig, 0, pModule->iSizeOfConfig);
@@ -1429,7 +1429,7 @@ void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, const 
 	if (pKeyFile == NULL)
 		return;
 	
-	_cairo_dock_reload_internal_module (pModule, pKeyFile);
+	cairo_dock_reload_internal_module_from_keyfile (pModule, pKeyFile);
 	
 	g_key_file_free (pKeyFile);
 }

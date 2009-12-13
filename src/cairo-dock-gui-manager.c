@@ -62,7 +62,6 @@
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
 #define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 1000
 #define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 500
-#
 
 static CairoDockCategoryWidgetTable s_pCategoryWidgetTables[CAIRO_DOCK_NB_CATEGORY+1];
 static GList *s_pGroupDescriptionList = NULL;
@@ -1360,7 +1359,7 @@ void cairo_dock_write_extra_group_conf_file (gchar *cConfFilePath, CairoDockModu
 
 
 
-gboolean cairo_dock_build_normal_gui (gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData, GtkWidget **pWindow)
+gboolean cairo_dock_build_normal_gui (const gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData, GtkWidget **pWindow)
 {
 	//\_____________ On construit la fenetre.
 	GtkWidget *pMainWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);

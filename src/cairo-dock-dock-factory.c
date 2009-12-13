@@ -126,7 +126,8 @@ static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)
 	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
 		return ;
 	
-	g_print ("OpenGL version: %s\nOpenGL vendor: %s\nOpenGL renderer: %s\n",
+	g_print ("Cairo-Dock version : \nOpenGL version: %s\nOpenGL vendor: %s\nOpenGL renderer: %s\n",
+		CAIRO_DOCK_VERSION,
 		glGetString (GL_VERSION),
 		glGetString (GL_VENDOR),
 		glGetString (GL_RENDERER));

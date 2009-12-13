@@ -193,6 +193,8 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 static void _cairo_dock_intercept_signal (int signal)
 {
 	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now (%s).\nFeel free to report this bug on cairo-dock.org to help improving the dock !", signal, cLaunchCommand);
+	g_print ("info on the system :\n");
+	int r = system ("uname -a");
 	if (g_pCurrentModule != NULL)
 	{
 		g_print ("The applet '%s' may be the culprit\n", g_pCurrentModule->pModule->pVisitCard->cModuleName);

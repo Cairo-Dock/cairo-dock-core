@@ -5,6 +5,7 @@ essentialdatadir = $(pkgdatadir)
 
 essentialdata_DATA = \
 	cairo-dock.conf\
+	cairo-dock-simple.conf\
 	launcher.conf\
 	container.conf\
 	separator.conf\

@@ -429,7 +429,7 @@ gboolean on_delete_normal_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *p
 	
 	gpointer pUserData = g_object_get_data (G_OBJECT (pWidget), "action-data");
 	GFreeFunc pFreeUserData = g_object_get_data (G_OBJECT (pWidget), "free-data");
-	if (pFreeUserData != NULL && pUserData != NULL)
+	if (pFreeUserData != NULL)
 		pFreeUserData (pUserData);
 	
 	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWidget), "widget-list");

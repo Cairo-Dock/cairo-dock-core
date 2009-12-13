@@ -315,8 +315,8 @@ static void _cairo_dock_parse_theme_list (GKeyFile *pKeyFile, const gchar *cServ
 	time_t epoch = (time_t) time (NULL);
 	struct tm currentTime;
 	localtime_r (&epoch, &currentTime);
-	int day = currentTime.tm_mday + 1;
-	int month = currentTime.tm_mon + 1;
+	int day = currentTime.tm_mday;  // dans l'intervalle 1 a 31.
+	int month = currentTime.tm_mon + 1;  // dans l'intervalle 0 a 11.
 	int year = 1900 + currentTime.tm_year;  // tm_year = nombre d'annees écoulees depuis 1900.
 	int now = day + month * 30 + year * 365;
 	

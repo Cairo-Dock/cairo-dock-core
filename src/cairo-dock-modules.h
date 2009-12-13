@@ -308,6 +308,7 @@ void cairo_dock_release_data_slot (CairoDockModuleInstance *pInstance);
 	(pContainer)->pDataSlot[pInstance->iSlotID] = pData
 
 
+void cairo_dock_reload_internal_module_from_keyfile (CairoDockInternalModule *pModule, GKeyFile *pKeyFile);
 void cairo_dock_preload_internal_modules (GHashTable *pModuleTable);
 
 void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, const gchar *cConfFilePath);

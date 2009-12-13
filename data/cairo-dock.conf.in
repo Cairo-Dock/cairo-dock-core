@@ -107,9 +107,6 @@ hide visible = false
 #b- Only show applis on current desktop ?
 current desktop only = false
 
-#v- 
-sep_app =
-
 #b- Mix launchers and applis ?
 #{Allows launchers to act as applis when their program is running, and displays an indicator on their icon to signal it. You can launch other occurences of the program with SHIFT+click.}
 mix launcher appli = true
@@ -121,6 +118,9 @@ group by class = true
 #s- 		Except the following classes :
 #{enter the class of the applications, separated by a semi-colon ';'}
 group exception = pidgin;xchat;amsn
+
+#v- 
+sep_app =
 
 #B- Overwrite X icons with launchers' one ?
 #{If not set, will use the icon provided by X for each appli. If set, the same icon as the corresponding launcher will be used for each appli.}

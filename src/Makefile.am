@@ -27,6 +27,7 @@ cairo_dock_CFLAGS = \
 	-DCAIRO_DOCK_SHARE_THEMES_DIR=\""$(pkgdatadir)/themes"\"\
 	-DCAIRO_DOCK_MODULES_DIR=\""$(libdir)/$(PACKAGE)"\"\
 	-DCAIRO_DOCK_CONF_FILE=\""cairo-dock.conf"\"\
+	-DCAIRO_DOCK_SIMPLE_CONF_FILE=\""cairo-dock-simple.conf"\"\
 	-DCAIRO_DOCK_LAUNCHER_CONF_FILE=\""launcher.conf"\"\
 	-DCAIRO_DOCK_FILE_CONF_FILE=\""file.conf"\"\
 	-DCAIRO_DOCK_CONTAINER_CONF_FILE=\""container.conf"\"\
@@ -147,6 +148,8 @@ cairo_dock_SOURCES = \
 	cairo-dock-gui-manager.h\
 	cairo-dock-gui-filter.c\
 	cairo-dock-gui-filter.h\
+	cairo-dock-gui-simple.c\
+	cairo-dock-gui-simple.h\
 	cairo-dock-internal-position.c\
 	cairo-dock-internal-position.h\
 	cairo-dock-internal-accessibility.c\
@@ -239,6 +242,7 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-gui-callbacks.h\
 	cairo-dock-gui-manager.h\
 	cairo-dock-gui-filter.h\
+	cairo-dock-gui-simple.h\
 	cairo-dock-internal-position.h\
 	cairo-dock-internal-accessibility.h\
 	cairo-dock-internal-system.h\

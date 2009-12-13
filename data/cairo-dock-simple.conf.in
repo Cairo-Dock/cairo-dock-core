@@ -1,0 +1,105 @@
+
+#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-behavior.svg]
+[Behavior]
+
+#F-[Position on the screen;gtk-fullscreen]
+frame_pos =
+
+#l-[bottom;top;right;left] Choose which screen border the dock will placed on :
+#{The icons will scroll according to the chosen placement type. Of course the dock can be placed anywhere on the screen, here we specify regarding to what.}
+screen border = 0
+
+
+#F-[Visibility of the main dock;gtk-find]
+frame_visi =
+
+#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;0;0;Automatically hide the dock;0;0;Automatically hide when a window is maximized;0;0;Pop-up on shortcut;1;1] Visibility :
+#{Prevent windows from overlapping the dock : reserve space at the edge of the screen for the dock.
+#Auto-hide : the dock will automatically hide itself outside of the scren when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.
+#Keep the dock below windows : the dock will pop-up on the foreground when you place the mouse on its screen border.
+#Pop-up on shortcut : When you press the shortcut, the dock will pop-up at the position of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
+visibility = 1
+
+#k- Keyboard shortcut to pop-up the dock :
+#{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
+raise shortcut = 
+
+#F-[Sub-docks' visibility;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-subdock.png]
+frame_sub =
+
+#b- Click to show sub-docks ?
+#{Otherwise they will appear when you linger over the icon pointing on it.}
+show on click = false
+
+
+#F-[Taskbar;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-taskbar.png]
+frame_task =
+
+#l-[None;MacOSX;Windows7;Gnome] Behaviour of the Taskbar :
+#{None     : Don't show opened windows in the dock.
+#MacOSX   : Mix applications with its launcher, show other windows only if they are minimized.
+#Windows7 : Mix applications with its launcher, show all others windows and group windows togather in sub-dock.
+#Gnome    : Separate the taskbar from the launchers and only show windows that are on the current desktop.}
+taskbar = 2
+
+
+#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-appearance.png]
+[Appearance]
+
+#F[Icons;icon-icons.svg]
+frame_theme=
+
+#w Choose a theme of icons :
+#{Let empty to use the current icons theme of your system. You can enter the name of a theme that is installed on your system (like 'Gartoon' or 'Human'), or even a path to a folder containing icons.}
+default icon directory = 
+
+#l[Very small;Small;Medium;Big;Very Big] Icons size :
+icon size = 2
+
+#v
+sev_order=
+
+#T[launchers;applications;applets] Order of the different types of icons :
+icon's type order = 0;1;2
+
+#b Allow applets to be placed amongst launchers ?
+#{This parameter will overwrite the previously defined order, to allow you to mix applets and launchers into the dock.}
+mix applets with launchers = false
+
+
+#F[Views]
+frame_view =
+
+#n Choose the default view for root docks :/
+main dock view = default =
+
+#v
+sev_view=
+
+#n Choose the default view for sub-docks :
+#{You can overwrite this parameter for each sub-dock.}/
+sub-dock view = default
+
+
+#[gtk-disconnect]
+[Add-ons]
+
+#X[Accessories]
+frame_acce =
+
+
+
+#X[Desktop]
+frame_desk =
+
+
+
+#X[Controlers]
+frame_ctrl =
+
+
+
+#X[Plug-ins]
+frame_plug =
+
+

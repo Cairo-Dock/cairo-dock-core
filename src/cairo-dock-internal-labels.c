@@ -50,6 +50,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	pLabels->iconTextDescription.iSize = pango_font_description_get_size (fd);
 	if (!pango_font_description_get_size_is_absolute (fd))
 		pLabels->iconTextDescription.iSize /= PANGO_SCALE;
+	if (!bCustomFont)
+		pLabels->iconTextDescription.iSize *= 1.33;  // c'est pas beau, mais ca evite de casser tous les themes.
 	if (pLabels->iconTextDescription.iSize == 0)
 		pLabels->iconTextDescription.iSize = 14;
 	pLabels->iconTextDescription.iWeight = pango_font_description_get_weight (fd);

@@ -54,6 +54,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDialogs *pDialogs)
 		pDialogs->dialogTextDescription.iSize /= PANGO_SCALE;
 	if (pDialogs->dialogTextDescription.iSize == 0)
 		pDialogs->dialogTextDescription.iSize = 14;
+	if (!bCustomFont)
+		pDialogs->dialogTextDescription.iSize *= 1.33;  // c'est pas beau, mais ca evite de casser tous les themes.
 	pDialogs->dialogTextDescription.iWeight = pango_font_description_get_weight (fd);
 	pDialogs->dialogTextDescription.iStyle = pango_font_description_get_style (fd);
 	

@@ -101,6 +101,7 @@ AC_CONFIG_FILES([Makefile
 		po/Makefile.in
 		data/Makefile
 		data/cairo-dock.conf
+		data/cairo-dock-simple.conf
 		data/main-dock.conf
 		data/themes.conf
 		data/default-theme/Makefile

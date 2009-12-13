@@ -55,9 +55,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 		pIcons->tIconTypeOrder[i] = i;
 	gsize length=0;
 	
-	int iIconsTypesList[3] = {0,0,0};
-	cairo_dock_get_integer_list_key_value (pKeyFile, "Icons", "icon's type order", &bFlushConfFileNeeded, iIconsTypesList, 3, NULL, "Cairo Dock", NULL);
-	if (iIconsTypesList[0] == 0 && iIconsTypesList[1] == 0)  // old format.
+	cairo_dock_get_integer_list_key_value (pKeyFile, "Icons", "icon's type order", &bFlushConfFileNeeded, pIcons->iIconsTypesList, 3, NULL, "Cairo Dock", NULL);
+	if (pIcons->iIconsTypesList[0] == 0 && pIcons->iIconsTypesList[1] == 0)  // old format.
 	{
 		g_print ("icon's type order : old format\n");
 		gchar **cIconsTypesList = cairo_dock_get_string_list_key_value (pKeyFile, "Icons", "icon's type order", &bFlushConfFileNeeded, &length, NULL, "Cairo Dock", NULL);
@@ -81,15 +80,15 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 		}
 		g_strfreev (cIconsTypesList);
 		
-		iIconsTypesList[0] = pIcons->tIconTypeOrder[2*0]/2;
-		iIconsTypesList[1] = pIcons->tIconTypeOrder[2*1]/2;
-		iIconsTypesList[2] = pIcons->tIconTypeOrder[2*2]/2;
-		g_print ("mise a jour avec {%d;%d;%d}\n", iIconsTypesList[0], iIconsTypesList[1], iIconsTypesList[2]);
-		g_key_file_set_integer_list (pKeyFile, "Icons", "icon's type order", iIconsTypesList, 3);
+		pIcons->iIconsTypesList[0] = pIcons->tIconTypeOrder[2*0]/2;
+		pIcons->iIconsTypesList[1] = pIcons->tIconTypeOrder[2*1]/2;
+		pIcons->iIconsTypesList[2] = pIcons->tIconTypeOrder[2*2]/2;
+		g_print ("mise a jour avec {%d;%d;%d}\n", pIcons->iIconsTypesList[0], pIcons->iIconsTypesList[1], pIcons->iIconsTypesList[2]);
+		g_key_file_set_integer_list (pKeyFile, "Icons", "icon's type order", pIcons->iIconsTypesList, 3);
 		bFlushConfFileNeeded = TRUE;
 	}
 	for (i = 0; i < 3; i ++)
-		pIcons->tIconTypeOrder[2*iIconsTypesList[i]] = 2*i;
+		pIcons->tIconTypeOrder[2*pIcons->iIconsTypesList[i]] = 2*i;
 	
 	pIcons->bMixAppletsAndLaunchers = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "mix applets with launchers", &bFlushConfFileNeeded, FALSE , NULL, NULL);
 	if (pIcons->bMixAppletsAndLaunchers)
