@@ -1180,18 +1180,17 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 		else/* if (pDock->iRefCount == 0)*/  // un dock principal au repos.  // && pDock->bAtBottom
 		{
 			*bIsHorizontal = (pDock->container.bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
+			int dy;
+			if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
+				dy = 0;
+			else if (cairo_dock_is_hidden (pDock))
+				dy = pDock->container.iHeight - MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight);
+			else
+				dy = pDock->container.iHeight - pDock->iMinDockHeight;
 			if (pDock->container.bIsHorizontal)
 			{
 				*bRight = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
 				*bDirectionUp = pDock->container.bDirectionUp;
-				
-				int dy;
-				if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
-					dy = 0;
-				else if (cairo_dock_is_hidden (pDock))
-					dy = pDock->container.iHeight - MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight);
-				else
-					dy = pDock->container.iHeight - pDock->iMinDockHeight;
 				
 				//g_print ("y = %d + %d\n", pDock->container.iWindowPositionY, dy);
 				
@@ -1204,7 +1203,7 @@ void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pCont
 			{
 				*bRight = (pDock->container.iWindowPositionY < g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
 				*bDirectionUp = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
-				*iY = (! (*bRight) ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight);
+				*iY = (! (*bRight) ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight) + (pDock->container.bDirectionUp ? dy : -dy);
 			}
 			
 			if (cairo_dock_is_hidden (pDock))

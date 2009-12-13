@@ -96,6 +96,7 @@ static gboolean s_bHideAfterShortcut = FALSE;
 static gboolean s_bFrozenDock = FALSE;
 static gboolean s_bIconDragged = FALSE;
 
+#define _xy_is_really_outside(x, y, pDock) (pDock->container.bIsHorizontal ? (x < 0 || x >= pDock->container.iWidth || y < 0 || y >= pDock->container.iHeight) : (y < 0 || y >= pDock->container.iWidth || x < 0 || x >= pDock->container.iHeight))
 #define _mouse_is_really_outside(pDock) (pDock->container.iMouseX <= 0 || pDock->container.iMouseX >= pDock->container.iWidth || pDock->container.iMouseY <= 0 || pDock->container.iMouseY >= pDock->container.iHeight)
 #define CD_CLICK_ZONE 5
 
@@ -639,15 +640,19 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		return FALSE;
 	}
 	
+	if (pEvent && !_xy_is_really_outside (pEvent->x, pEvent->y, pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
+		return FALSE;
+	
 	//\_______________ On retarde la sortie.
 	if (pDock->iSidLeaveDemand == 0 && pEvent != NULL)  // pas encore de demande de sortie et sortie naturelle.
 	{
 		if (pDock->iRefCount == 0)  // cas du main dock : on retarde si on pointe sur un sous-dock, pour laisser le temps au signal d'entree dans le sous-dock d'etre traite
 		{
+			//g_print (" leave event : %.1f;%.1f (%dx%d)\n", pEvent->x, pEvent->y, pDock->container.iWidth, pDock->container.iHeight);
 			Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
-			if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && GTK_WIDGET_VISIBLE (pPointedIcon->pSubDock->container.pWidget))
+			if ((pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && GTK_WIDGET_VISIBLE (pPointedIcon->pSubDock->container.pWidget))/* || !_xy_is_really_outside (pEvent->x, pEvent->y, pDock)*/)  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 			{
-				//g_print ("  on retarde la sortie du dock de %dms\n", MAX (myAccessibility.iLeaveSubDockDelay, 330));
+				g_print ("  on retarde la sortie du dock de %dms\n", MAX (myAccessibility.iLeaveSubDockDelay, 330));
 				pDock->iSidLeaveDemand = g_timeout_add (MAX (myAccessibility.iLeaveSubDockDelay, 330), (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
 				return TRUE;
 			}
@@ -1185,7 +1190,7 @@ gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *ic
 
 gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton, CairoDock *pDock)
 {
-	//g_print ("+ %s (%d/%d)\n", __func__, pButton->type, pButton->button);
+	//g_print ("+ %s (%d/%d, %x)\n", __func__, pButton->type, pButton->button, pWidget);
 	if (pDock->container.bIsHorizontal)  // utile ?
 	{
 		pDock->container.iMouseX = (int) pButton->x;
