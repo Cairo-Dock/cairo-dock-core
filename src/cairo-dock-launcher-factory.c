@@ -60,17 +60,19 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 	g_return_val_if_fail (cFileName != NULL, NULL);
 	GString *sIconPath = g_string_new ("");
 	const gchar *cSuffixTab[4] = {".svg", ".png", ".xpm", NULL};
-	gboolean bAddSuffix, bFileFound, bHasVersion;
+	gboolean bAddSuffix, bFileFound=FALSE, bHasVersion;
 	GtkIconInfo* pIconInfo = NULL;
 	int i, j;
 
 	//\_______________________ On construit le chemin de l'icone a afficher.
 	if (*cFileName == '~')
 	{
+		bFileFound = TRUE;
 		g_string_printf (sIconPath, "%s%s", g_getenv ("HOME"), cFileName+1);
 	}
 	else if (*cFileName == '/')
 	{
+		bFileFound = TRUE;
 		g_string_assign (sIconPath, cFileName);
 	}
 	else
@@ -88,7 +90,6 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 		bHasVersion = (str != NULL && g_ascii_isdigit (*(str+1)) && g_ascii_isdigit (*(str-1)));
 		
 		//\_______________________ On parcourt les themes disponibles, en testant tous les suffixes connus.
-		bFileFound = FALSE;
 		if (myIcons.pDefaultIconDirectory != NULL)
 		{
 			for (i = 0; i < myIcons.iNbIconPlaces && ! bFileFound; i ++)
@@ -163,37 +164,11 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 				}
 			}
 		}
-		
-		//\_______________________ si rien trouve, on cherche dans le theme par defaut.
-		/**if (! bFileFound)
-		{
-			g_string_assign (sIconPath, cFileName);
-			if (! bAddSuffix)
-			{
-				gchar *str = strrchr (sIconPath->str, '.');
-				if (str != NULL)
-					*str = '\0';
-			}
-			//g_print ("on recherche %s dans le theme par defaut.\n", sIconPath->str);
-			GtkIconTheme *pDefaultIconTheme = gtk_icon_theme_get_default ();
-			pIconInfo = gtk_icon_theme_lookup_icon  (pDefaultIconTheme,
-				sIconPath->str,
-				64,
-				GTK_ICON_LOOKUP_FORCE_SVG);
-
-			if (pIconInfo != NULL)
-			{
-				g_string_assign (sIconPath, gtk_icon_info_get_filename (pIconInfo));
-				gtk_icon_info_free (pIconInfo);
-			}
-			else
-				g_string_printf (sIconPath, "");
-		}*/
 	}
 
 	gchar *cIconPath = sIconPath->str;
 	g_string_free (sIconPath, FALSE);
-	if (cIconPath == NULL || *cIconPath == '\0')
+	if (!bFileFound || cIconPath == NULL || *cIconPath == '\0')
 	{
 		g_free (cIconPath);
 		cIconPath = NULL;

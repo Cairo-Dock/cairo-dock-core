@@ -452,7 +452,7 @@ void cairo_dock_register_default_renderer (void)
 	pDefaultRenderer->render_optimized = cd_render_optimized_default;
 	pDefaultRenderer->render_opengl = cd_render_opengl_default;
 	pDefaultRenderer->set_subdock_position = cairo_dock_set_subdock_position_linear;
-	pDefaultRenderer->bUseReflect = TRUE;
+	pDefaultRenderer->bUseReflect = FALSE;
 	pDefaultRenderer->cDisplayedName = gettext (CAIRO_DOCK_DEFAULT_RENDERER_NAME);
 
 	cairo_dock_register_renderer (CAIRO_DOCK_DEFAULT_RENDERER_NAME, pDefaultRenderer);

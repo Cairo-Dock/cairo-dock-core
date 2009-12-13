@@ -306,6 +306,7 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 		cairo_dock_free_icon (pNewIcon);
 		return NULL;
 	}
+	g_print ("%s -> %s\n", cURI, pNewIcon->cFileName);
 
 	if (bIsDirectory)
 	{
@@ -396,7 +397,8 @@ static Icon *cairo_dock_fm_alter_icon_if_necessary (Icon *pIcon, CairoContainer 
 		pNewIcon->fX = pIcon->fX;
 		pNewIcon->fXAtRest = pIcon->fXAtRest;
 		pNewIcon->fDrawX = pIcon->fDrawX;
-
+		pNewIcon->iType = pIcon->iType;
+		
 		if (CAIRO_DOCK_IS_DOCK (pContainer))
 			cairo_dock_insert_icon_in_dock_full (pNewIcon, CAIRO_DOCK (pContainer), CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);  // on met a jour la taille du dock pour le fXMin/fXMax, et eventuellement la taille de l'icone peut aussi avoir change.
 		else
