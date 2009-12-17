@@ -58,7 +58,7 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-emblem.h"
 #include "cairo-dock-gauge.h"
-#include "cairo-dock-gui-manager.h"
+#include "cairo-dock-gui-launcher.h"
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-internal-position.h"
 #include "cairo-dock-internal-accessibility.h"

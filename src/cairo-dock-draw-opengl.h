@@ -252,6 +252,8 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer);
 */
 void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);
 
+void cairo_dock_draw_emblem_on_icon_opengl (Icon *pIcon, CairoContainer *pContainer, GLuint iEmblemTexture);
+
 
   /////////////
  // CONTEXT //

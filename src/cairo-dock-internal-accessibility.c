@@ -237,7 +237,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		{
 			if ((!pAccessibility->bAutoHideOnMaximized && ! pAccessibility->bAutoHideOnFullScreen) || cairo_dock_search_window_on_our_way (pDock, pAccessibility->bAutoHideOnMaximized, pAccessibility->bAutoHideOnFullScreen) == NULL)
 			{
-				if (cairo_dock_quick_hide_is_activated ())
+				if (cairo_dock_quick_hide_is_activated () && !pDock->bAutoHide)
 				{
 					cd_message (" => aucune fenetre n'est desormais genante");
 					cairo_dock_deactivate_temporary_auto_hide ();

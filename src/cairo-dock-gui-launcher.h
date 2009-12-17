@@ -18,19 +18,21 @@
 */
 
 
-#ifndef __CAIRO_DOCK_GUI_CALLBACKS__
-#define  __CAIRO_DOCK_GUI_CALLBACKS__
+#ifndef __CAIRO_DOCK_GUI_LAUNCHER__
+#define  __CAIRO_DOCK_GUI_LAUNCHER__
 
 #include <gtk/gtk.h>
-#include "cairo-dock-gui-manager.h"
-
+#include <cairo-dock-struct.h>
 G_BEGIN_DECLS
 
 
-void on_click_normal_apply (GtkButton *button, GtkWidget *pWindow);
-void on_click_normal_ok (GtkButton *button, GtkWidget *pWindow);
-void on_click_normal_quit (GtkButton *button, GtkWidget *pWindow);
-gboolean on_delete_normal_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop);
+GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon);
+
+void cairo_dock_free_launcher_gui (void);
+
+void cairo_dock_delete_current_launcher_widget (void);
+
+void cairo_dock_refresh_launcher_gui (void);
 
 
 G_END_DECLS

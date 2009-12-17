@@ -97,6 +97,8 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_DOCK_LIST='d',
 	/// list of installed icon themes.
 	CAIRO_DOCK_WIDGET_ICON_THEME_LIST='w',
+	/// list of available modules.
+	CAIRO_DOCK_WIDGET_MODULE_LIST='N',
 	/// a button to jump to another module inside the config panel.
 	CAIRO_DOCK_WIDGET_JUMP_TO_MODULE='m',
 	/// same but only if the module exists.
@@ -147,6 +149,20 @@ typedef enum {
 	CAIRO_DOCK_NB_GUI_WIDGETS
 	} CairoDockGUIWidgetType;
 	
+
+typedef enum {
+	CAIRO_DOCK_MODEL_NAME = 0,
+	CAIRO_DOCK_MODEL_RESULT,
+	CAIRO_DOCK_MODEL_DESCRIPTION_FILE,
+	CAIRO_DOCK_MODEL_ACTIVE,
+	CAIRO_DOCK_MODEL_ORDER,
+	CAIRO_DOCK_MODEL_IMAGE,
+	CAIRO_DOCK_MODEL_ICON,
+	CAIRO_DOCK_MODEL_ORDER2,
+	CAIRO_DOCK_MODEL_STATE,
+	CAIRO_DOCK_MODEL_NB_COLUMNS
+	} CairoDockGUIModelColumns;
+
 
 void cairo_dock_build_renderer_list_for_gui (GHashTable *pHashTable);
 void cairo_dock_build_desklet_decorations_list_for_gui (GHashTable *pHashTable);

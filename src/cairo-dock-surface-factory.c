@@ -214,7 +214,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 	int w = pXIconBuffer[iBestIndex];
 	int h = pXIconBuffer[iBestIndex+1];
 	iBestIndex += 2;
-	g_print ("%s (%dx%d)\n", __func__, w, h);
+	//g_print ("%s (%dx%d)\n", __func__, w, h);
 	
 	int i, n = w * h;
 	if (iBestIndex + n > iBufferNbElements)  // precaution au cas ou le nombre d'elements dans le buffer serait incorrect.

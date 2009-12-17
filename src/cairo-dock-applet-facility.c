@@ -424,7 +424,8 @@ void cairo_dock_open_module_config_on_demand (int iClickedButton, GtkWidget *pIn
 {
 	if (iClickedButton == 0 || iClickedButton == -1)  // bouton OK ou touche Entree.
 	{
-		cairo_dock_build_main_ihm (g_cConfFile, FALSE);
-		cairo_dock_present_module_instance_gui (pModuleInstance);
+		/**cairo_dock_build_main_ihm (g_cConfFile, FALSE);
+		cairo_dock_present_module_instance_gui (pModuleInstance);*/
+		cairo_dock_show_module_instance_gui (pModuleInstance, -1);
 	}
 }

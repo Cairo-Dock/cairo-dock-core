@@ -68,7 +68,6 @@
 #include <cairo-dock/cairo-dock-gui-manager.h>
 #include <cairo-dock/cairo-dock-gui-factory.h>
 #include <cairo-dock/cairo-dock-gui-filter.h>
-#include <cairo-dock/cairo-dock-gui-callbacks.h>
 // donnees et modules internes.
 #include <cairo-dock/cairo-dock-internal-position.h>
 #include <cairo-dock/cairo-dock-internal-accessibility.h>

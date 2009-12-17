@@ -25,11 +25,8 @@
 #include <cairo-dock-struct.h>
 G_BEGIN_DECLS
 
-/** @file cairo-dock-gui-simple.h This file manages the simplified config panel of Cairo-Dock.
-*/
 
-
-GtkWidget *cairo_dock_build_simplified_ihm (void);
+void cairo_dock_register_simple_gui_backend (void);
 
 
 G_END_DECLS

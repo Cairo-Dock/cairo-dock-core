@@ -424,8 +424,8 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 			g_key_file_set_double (pKeyFile, "Desklet", "x position", iDeskletPositionX);
 			g_key_file_set_double (pKeyFile, "Desklet", "y position", iDeskletPositionY);
 			
-			cairo_dock_update_desklet_detached_state_in_gui (pIcon->pModuleInstance->pModule->pVisitCard->cModuleName, TRUE);
-			cairo_dock_update_desklet_position_in_gui (pIcon->pModuleInstance->pModule->pVisitCard->cModuleName, iDeskletPositionX, iDeskletPositionY);
+			cairo_dock_update_desklet_detached_state_in_gui (pIcon->pModuleInstance, TRUE);
+			cairo_dock_update_desklet_position_in_gui (pIcon->pModuleInstance, iDeskletPositionX, iDeskletPositionY);
 			
 			cairo_dock_write_keys_to_file (pKeyFile, pIcon->pModuleInstance->cConfFilePath);
 			g_key_file_free (pKeyFile);

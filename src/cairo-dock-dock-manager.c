@@ -482,7 +482,6 @@ static void _cairo_dock_quick_hide_one_root_dock (const gchar *cDockName, CairoD
 {
 	if (pDock->iRefCount == 0)
 	{
-		///pDock->bAtBottom = FALSE;  // car on a deja quitte le dock lors de la fermeture du menu, donc le "leave-notify" serait ignore.
 		pDock->bAutoHideInitialValue = pDock->bAutoHide;
 		pDock->bAutoHide = TRUE;
 		pDock->bEntranceDisabled = TRUE;
@@ -515,7 +514,12 @@ static void _cairo_dock_stop_quick_hide_one_root_dock (const gchar *cDockName, C
 		
 		if (! pDock->container.bInside && ! pDock->bAutoHide)  // on le fait re-apparaitre.
 		{
-			pDock->fFoldingFactor = 0;
+			g_print ("%s (%.2f)\n", __func__, pDock->fFoldingFactor);
+			if (pDock->fFoldingFactor != 0)  // le dock est plie, mais on ne le fait pas grossir, et donc il ne se deplie pas, donc on le deplie d'un coup ici.
+			{
+				pDock->fFoldingFactor = 0;
+				pDock->pRenderer->calculate_icons (pDock);
+			}
 			
 			cairo_dock_start_showing (pDock);  // l'input shape sera mise lors du configure.
 		}

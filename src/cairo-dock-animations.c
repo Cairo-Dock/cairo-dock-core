@@ -481,8 +481,7 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 	if (pDock->bIsHiding)
 	{
 		pDock->bIsHiding = _cairo_dock_hide (pDock);
-		///cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
-		gtk_widget_queue_draw (pDock->container.pWidget);
+		gtk_widget_queue_draw (pDock->container.pWidget);  // on n'utilise pas cairo_dock_redraw_container, sinon a la derniere iteration, le dock etant cache, la fonction ne le redessine pas.
 		bContinue |= pDock->bIsHiding;
 	}
 	if (pDock->bIsShowing)
@@ -705,10 +704,9 @@ void cairo_dock_start_growing (CairoDock *pDock)
 
 void cairo_dock_start_hiding (CairoDock *pDock)
 {
-	g_print ("%s (%d)\n", __func__, pDock->container.bInside);
+	//g_print ("%s (%d)\n", __func__, pDock->container.bInside);
 	if (! pDock->bIsHiding && ! pDock->container.bInside)  // rien de plus desagreable que le dock qui se cache quand on est dedans.
 	{
-		g_print ("on commence a cacher\n");
 		pDock->bIsShowing = FALSE;
 		pDock->bIsHiding = TRUE;
 		

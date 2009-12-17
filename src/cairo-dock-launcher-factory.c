@@ -47,7 +47,7 @@
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dock-facility.h"
-#include "cairo-dock-gui-manager.h"
+#include "cairo-dock-gui-launcher.h"
 #include "cairo-dock-launcher-factory.h"
 
 extern CairoDock *g_pMainDock;

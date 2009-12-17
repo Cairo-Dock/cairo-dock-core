@@ -511,7 +511,7 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 			G_TYPE_STRING, "Desklet", "size", cSize,
 			G_TYPE_INVALID);
 		g_free (cSize);
-		cairo_dock_update_desklet_size_in_gui (pDesklet->pIcon->pModuleInstance->pModule->pVisitCard->cModuleName,
+		cairo_dock_update_desklet_size_in_gui (pDesklet->pIcon->pModuleInstance,
 			pDesklet->container.iWidth,
 			pDesklet->container.iHeight);
 	}
@@ -586,7 +586,7 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 			G_TYPE_INT, "Desklet", "y position", iRelativePositionY,
 			G_TYPE_INT, "Desklet", "num desktop", iNumDesktop,
 			G_TYPE_INVALID);
-		cairo_dock_update_desklet_position_in_gui (pDesklet->pIcon->pModuleInstance->pModule->pVisitCard->cModuleName,
+		cairo_dock_update_desklet_position_in_gui (pDesklet->pIcon->pModuleInstance,
 			iRelativePositionX,
 			iRelativePositionY);
 	}
@@ -976,7 +976,7 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 					cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
 						G_TYPE_BOOLEAN, "Desklet", "initially detached", FALSE,
 						G_TYPE_INVALID);
-					cairo_dock_update_desklet_detached_state_in_gui (icon->pModuleInstance->pModule->pVisitCard->cModuleName, FALSE);
+					cairo_dock_update_desklet_detached_state_in_gui (icon->pModuleInstance, FALSE);
 					cairo_dock_reload_module_instance (icon->pModuleInstance, TRUE);
 					return TRUE;  // interception du signal.
 				}

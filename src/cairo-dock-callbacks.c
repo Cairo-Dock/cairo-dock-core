@@ -456,8 +456,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		
 		//\_______________ On recalcule toutes les icones et on redessine.
 		pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
-		if (myIcons.fAmplitude != 0)
-			gtk_widget_queue_draw (pWidget);
+		gtk_widget_queue_draw (pWidget);
 		fLastTime = pMotion->time;
 		
 		//\_______________ On tire l'icone cliquee.

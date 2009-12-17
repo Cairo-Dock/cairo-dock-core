@@ -733,6 +733,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 		_cairo_dock_set_alpha (1.);
 		int w = MIN (myAccessibility.iVisibleZoneWidth, pDock->container.iWidth);
 		int h = MIN (myAccessibility.iVisibleZoneHeight, pDock->container.iHeight);
+		cd_debug ("%s (%dx%d)", __func__, w, h);
 		
 		if (pDock->container.bIsHorizontal)
 		{
@@ -1707,7 +1708,27 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	}
 }
 
-
+void cairo_dock_draw_emblem_on_icon_opengl (Icon *pIcon, CairoContainer *pContainer, GLuint iEmblemTexture)
+{
+	double a = .5;
+	cairo_dock_begin_draw_icon (pIcon, pContainer);
+	
+	_cairo_dock_enable_texture ();
+	
+	_cairo_dock_set_blend_source ();
+	
+	int w, h;
+	cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
+	_cairo_dock_apply_texture_at_size (pIcon->iIconTexture, w, h);
+	
+	_cairo_dock_set_blend_alpha ();
+	glBindTexture (GL_TEXTURE_2D, iEmblemTexture);
+	_cairo_dock_apply_current_texture_at_size_with_offset (a*w, a*h, -w/2 * (1 - a), -h/2 * (1 - a));
+	
+	_cairo_dock_disable_texture ();
+	
+	cairo_dock_end_draw_icon (pIcon, pContainer);
+}
 
 void cairo_dock_set_perspective_view (int iWidth, int iHeight)
 {

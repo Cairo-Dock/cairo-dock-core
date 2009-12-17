@@ -535,6 +535,9 @@ int main (int argc, char** argv)
 	else
 		cairo_dock_initialize_module_manager (NULL);
 	
+	//\___________________ On definit le backend des GUI.
+	cairo_dock_load_user_gui_backend ();
+	
 	//\___________________ On enregistre nos notifications.
 	cairo_dock_register_notification (CAIRO_DOCK_BUILD_MENU,
 		(CairoDockNotificationFunc) cairo_dock_notification_build_menu,
@@ -591,7 +594,8 @@ int main (int argc, char** argv)
 	
 	if (bMaintenance)
 	{
-		cairo_dock_build_main_ihm (g_cConfFile, TRUE);
+		GtkWidget *pWindow = cairo_dock_show_main_gui ();
+		gtk_window_set_title (GTK_WINDOW (pWindow), _("< Maintenance mode >"));
 	}
 	
 	cd_message ("loading theme ...");
@@ -708,6 +712,12 @@ int main (int argc, char** argv)
 	g_print ("\nPB AFFICHAGE PM\n\n");
 	
 	g_print ("\nINDICATEURS EN HAUT (RETOURNES) ET CAIRO\n\n");
+	
+	g_print ("\n- open evince on the top-right workspace\n");
+	g_print ("- maximize evince\n");
+	g_print ("- use workspace switcher applet to switch to workspace on the left (top-left)\n");
+	g_print ("=> CD will block visible and with icon zoomed\n");
+	
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
 	g_print ("\nNOUVELLE INSTANCE COPIEE SUR LA 1ERE\n\n");

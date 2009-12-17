@@ -355,6 +355,13 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_ADD_ABOUT_IN_MENU(pMenu) CD_APPLET_ADD_IN_MENU_WITH_STOCK (_("Applet's handbook"), GTK_STOCK_ABOUT, cairo_dock_pop_up_about_applet, pMenu)
 
+/** Reload the config panel of the applet. This is useful if you have custom widgets inside your conf file, and need to reload them.
+*/
+#define CD_APPLET_RELOAD_CONFIG_PANEL cairo_dock_reload_current_group_widget (myApplet)
+/** Reload the config panel of the applet and jump to the given page. This is useful if you have custom widgets inside your conf file, and need to reload them.
+*/
+#define CD_APPLET_RELOAD_CONFIG_PANEL_WITH_PAGE(iNumPage) cairo_dock_reload_current_group_widget_full (myApplet, iNumPage)
+
 
   /////////////////////////
  // AVAILABLE VARIABLES //

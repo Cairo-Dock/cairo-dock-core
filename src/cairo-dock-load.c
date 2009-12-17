@@ -145,7 +145,6 @@ cairo_surface_t *cairo_dock_load_image (cairo_t *pSourceContext, const gchar *cI
 	if (cImageFile != NULL)
 	{
 		gchar *cImagePath = cairo_dock_generate_file_path (cImageFile);
-
 		int iDesiredWidth = (int) (*fImageWidth), iDesiredHeight = (int) (*fImageHeight);
 		pNewSurface = cairo_dock_create_surface_from_image (cImagePath,
 			pSourceContext,
@@ -156,6 +155,9 @@ cairo_surface_t *cairo_dock_load_image (cairo_t *pSourceContext, const gchar *cI
 			fImageWidth,
 			fImageHeight,
 			NULL, NULL);
+		g_free (cImagePath);
+		if (pNewSurface == NULL)
+			return NULL;
 		
 		if (bReapeatAsPattern)
 		{
@@ -204,8 +206,6 @@ cairo_surface_t *cairo_dock_load_image (cairo_t *pSourceContext, const gchar *cI
 			cairo_surface_destroy (pNewSurface);
 			pNewSurface = pNewSurfaceRotated;
 		}
-		
-		g_free (cImagePath);
 	}
 	
 	return pNewSurface;
@@ -235,16 +235,22 @@ void cairo_dock_add_reflection_to_icon (cairo_t *pSourceContext, Icon *pIcon, Ca
 void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdouble fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp)
 {
 	//g_print ("%s (%d, %.2f, %s)\n", __func__, icon->iType, fMaxScale, icon->cFileName);
-	if (icon->pIconBuffer != NULL)
+	if (icon->fPersonnalScale > 0)  // si la fenetre est en train de se faire degager du dock, pas la peine de mettre a jour son icone.
+		return;
+	cairo_surface_t *pPrevSurface = icon->pIconBuffer;
+	icon->pIconBuffer = NULL;
+	GLuint iPrevTexture = icon->iIconTexture;
+	icon->iIconTexture = 0;
+	/*if (icon->pIconBuffer != NULL)
 	{
 		cairo_surface_destroy (icon->pIconBuffer);
 		icon->pIconBuffer = NULL;
-	}
-	if (icon->iIconTexture != 0)
+	}*/
+	/*if (icon->iIconTexture != 0)
 	{
 		_cairo_dock_delete_texture (icon->iIconTexture);
 		icon->iIconTexture = 0;
-	}
+	}*/
 	if (icon->pReflectionBuffer != NULL)
 	{
 		cairo_surface_destroy (icon->pReflectionBuffer);
@@ -322,6 +328,16 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			if (icon->iIconTexture == 0)
 			{
 				icon->pIconBuffer = cairo_dock_create_surface_from_xpixmap (icon->iBackingPixmap, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
+				if (g_bUseOpenGL)
+					icon->iIconTexture = cairo_dock_create_texture_from_surface (icon->pIconBuffer);
+			}
+			if (icon->iIconTexture != 0 && iPrevTexture != 0)
+			{
+				cairo_dock_draw_emblem_on_icon_opengl (icon, NULL, iPrevTexture);
+			}
+			else if (icon->pIconBuffer != NULL && pPrevSurface != NULL)
+			{
+				cairo_dock_draw_emblem_on_icon (icon, NULL, pPrevSurface);
 			}
 		}
 		if (icon->pIconBuffer == NULL && myTaskBar.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass))
@@ -415,6 +431,10 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	{
 		icon->iIconTexture = cairo_dock_create_texture_from_surface (icon->pIconBuffer);
 	}
+	if (iPrevTexture != 0)
+		_cairo_dock_delete_texture (iPrevTexture);
+	if (pPrevSurface != NULL)
+		cairo_surface_destroy (pPrevSurface);
 }
 
 

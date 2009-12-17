@@ -59,7 +59,7 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-desktop-file-factory.h"
-#include "cairo-dock-gui-manager.h"
+#include "cairo-dock-gui-launcher.h"
 #include "cairo-dock-icons.h"
 
 extern gchar *g_cCurrentLaunchersPath;

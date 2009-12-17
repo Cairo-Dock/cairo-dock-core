@@ -117,6 +117,8 @@ void cairo_dock_render_icons_linear (cairo_t *pCairoContext, CairoDock *pDock);
 
 void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, gboolean bUseReflect, gboolean bUseText, int iWidth);
 
+void cairo_dock_draw_emblem_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_surface_t *pEmblemSurface);
+
 
 /** Draw a string linking the center of all the icons of a dock.
 *@param pCairoContext a context on the dock, not altered by the function.

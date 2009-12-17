@@ -379,27 +379,6 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 						// transparence sur les inhibiteurs.
 						cairo_dock_update_visibility_on_inhibators (icon->cClass, icon->Xid, icon->bIsHidden);
 						
-						// miniature
-						#ifdef HAVE_XEXTEND
-						if (myTaskBar.bShowThumbnail && (pParentDock != NULL || myTaskBar.bHideVisibleApplis))  // on recupere la miniature ou au contraire on remet l'icone.
-						{
-							if (! icon->bIsHidden)  // fenetre mappee => BackingPixmap disponible.
-							{
-								if (icon->iBackingPixmap != 0)
-									XFreePixmap (s_XDisplay, icon->iBackingPixmap);
-								if (myTaskBar.bShowThumbnail)
-									icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
-								else
-									icon->iBackingPixmap = 0;
-								cd_message ("new backing pixmap (bis) : %d", icon->iBackingPixmap);
-							}
-							// on redessine avec ou sans la miniature.
-							cairo_dock_reload_one_icon_buffer_in_dock (icon, pParentDock ? pParentDock : g_pMainDock);
-							if (pParentDock)
-								cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
-						}
-						#endif
-						
 						// applis minimisees seulement
 						if (myTaskBar.bHideVisibleApplis)  // on insere/detache l'icone selon la visibilite de la fenetre.
 						{
@@ -428,6 +407,27 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 							if (pParentDock != NULL)
 								cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
 						}
+						
+						// miniature
+						#ifdef HAVE_XEXTEND
+						if (myTaskBar.bShowThumbnail && (pParentDock != NULL || myTaskBar.bHideVisibleApplis))  // on recupere la miniature ou au contraire on remet l'icone.
+						{
+							if (! icon->bIsHidden)  // fenetre mappee => BackingPixmap disponible.
+							{
+								if (icon->iBackingPixmap != 0)
+									XFreePixmap (s_XDisplay, icon->iBackingPixmap);
+								if (myTaskBar.bShowThumbnail)
+									icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
+								else
+									icon->iBackingPixmap = 0;
+								cd_message ("new backing pixmap (bis) : %d", icon->iBackingPixmap);
+							}
+							// on redessine avec ou sans la miniature.
+							cairo_dock_reload_one_icon_buffer_in_dock (icon, pParentDock ? pParentDock : g_pMainDock);
+							if (pParentDock)
+								cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
+						}
+						#endif
 					}
 				}
 				else if (event.xproperty.atom == s_aNetWmDesktop)  // cela ne gere pas les changements de viewports, qui eux se font en changeant les coordonnees. Il faut donc recueillir les ConfigureNotify, qui donnent les redimensionnements et les deplacements.

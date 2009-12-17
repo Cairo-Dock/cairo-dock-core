@@ -52,19 +52,6 @@ extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 
-typedef enum {
-	CAIRO_DOCK_MODEL_NAME = 0,
-	CAIRO_DOCK_MODEL_RESULT,
-	CAIRO_DOCK_MODEL_DESCRIPTION_FILE,
-	CAIRO_DOCK_MODEL_ACTIVE,
-	CAIRO_DOCK_MODEL_ORDER,
-	CAIRO_DOCK_MODEL_IMAGE,
-	CAIRO_DOCK_MODEL_ICON,
-	CAIRO_DOCK_MODEL_ORDER2,
-	CAIRO_DOCK_MODEL_STATE,
-	CAIRO_DOCK_MODEL_NB_COLUMNS
-	} _CairoDockModelColumns;
-
 static GtkListStore *s_pRendererListStore = NULL;
 static GtkListStore *s_pDecorationsListStore = NULL;
 static GtkListStore *s_pDecorationsListStore2 = NULL;
@@ -239,7 +226,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 			*str = '\0';
 			cDescription = cairo_dock_get_distant_file_content (cDescriptionFilePath, "", str+1, 0, NULL);
 		}
-		else
+		else if (*cDescriptionFilePath == '/')
 		{
 			cd_debug ("fichier readme local (%s)", cDescriptionFilePath);
 			gsize length = 0;
@@ -247,6 +234,10 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 				&cDescription,
 				&length,
 				NULL);
+		}
+		else
+		{
+			cDescription = g_strdup (cDescriptionFilePath);
 		}
 		
 		gtk_label_set_markup (pDescriptionLabel, cDescription ? cDescription : "");
@@ -674,7 +665,55 @@ static GHashTable *_cairo_dock_build_icon_themes_list (const gchar **cDirs)
 	return pHashTable;
 }
 
+static gboolean _add_module_to_modele (gchar *cModuleName, CairoDockModule *pModule, gpointer *data)
+{
+	int iCategory = GPOINTER_TO_INT (data[0]);
+	if (pModule->pVisitCard->iCategory == iCategory || iCategory == -1)
+	{
+		g_print (" + %s\n",  cModuleName);
+		GtkListStore *pModele = data[1];
+		GtkTreeIter iter;
+		memset (&iter, 0, sizeof (GtkTreeIter));
+		gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
+		gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
+			CAIRO_DOCK_MODEL_NAME, dgettext (pModule->pVisitCard->cGettextDomain, pModule->pVisitCard->cTitle),
+			CAIRO_DOCK_MODEL_RESULT, cModuleName,
+			CAIRO_DOCK_MODEL_DESCRIPTION_FILE, pModule->pVisitCard->cDescription,
+			CAIRO_DOCK_MODEL_IMAGE, pModule->pVisitCard->cPreviewFilePath,
+			CAIRO_DOCK_MODEL_ACTIVE, (pModule->pInstancesList != NULL), -1);
+	}
+	return FALSE;
+}
 
+static void _cairo_dock_activate_one_module (GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
+{
+	GtkTreeIter iter;
+	if (! gtk_tree_model_get_iter_from_string (model, &iter, path))
+		return ;
+	gchar *cModuleName = NULL;
+	gboolean bState;
+	gtk_tree_model_get (model, &iter,
+		CAIRO_DOCK_MODEL_RESULT, &cModuleName,
+		CAIRO_DOCK_MODEL_ACTIVE, &bState, -1);
+	
+	bState = !bState;
+	gtk_list_store_set (GTK_LIST_STORE (model), &iter, CAIRO_DOCK_MODEL_ACTIVE, bState, -1);
+	
+	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
+	if (g_pMainDock == NULL)
+	{
+		cairo_dock_add_remove_element_to_key (g_cConfFile, "System", "modules", cModuleName, bState);
+	}
+	else if (pModule->pInstancesList == NULL)
+	{
+		cairo_dock_activate_module_and_load (cModuleName);
+	}
+	else
+	{
+		cairo_dock_deactivate_module_and_unload (cModuleName);
+	}
+	g_free (cModuleName);
+}
 
 #define _build_list_for_gui(pListStore, cEmptyItem, pHashTable, pHFunction) do { \
 	if (pListStore != NULL)\
@@ -802,7 +841,7 @@ static void _cairo_dock_add_one_icon_theme_item (const gchar *cName, const gchar
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
-	g_print ("+ %s (%s)\n", cName, cDisplayedName);
+	//g_print ("+ %s (%s)\n", cName, cDisplayedName);
 	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
 		CAIRO_DOCK_MODEL_NAME, cDisplayedName,
 		CAIRO_DOCK_MODEL_RESULT, cName,
@@ -1081,25 +1120,16 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 		else
 			cairo_dock_show_general_message (cMessage, iDuration);
 	}
+	else if (pModule != NULL && pModule->pInstancesList == NULL)
+	{
+		cMessage = g_strdup_printf (_("The '%s' plug-in is not active.\nBe sure to activate it to enjoy these features."), cModuleName);
+		int iDuration = 8e3;
+		if (pIcon != NULL && pDock != NULL)
+			cairo_dock_show_temporary_dialog_with_icon (cMessage, pIcon, CAIRO_CONTAINER (pDock), iDuration, "same icon");
+	}
 	else
 	{
-		CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (cModuleName);
-		if (pGroupDescription == NULL)
-		{
-			cairo_dock_build_main_ihm (g_cConfFile, FALSE);
-			pGroupDescription = cairo_dock_find_module_description (cModuleName);
-			g_return_if_fail (pGroupDescription != NULL);
-		}
-		if (pModule != NULL && pModule->pInstancesList == NULL)
-		{
-			cMessage = g_strdup_printf (_("The '%s' plug-in is not active.\nBe sure to activate it to enjoy these features."), cModuleName);
-			int iDuration = 8e3;
-			if (pIcon != NULL && pDock != NULL)
-				cairo_dock_show_temporary_dialog_with_icon (cMessage, pIcon, CAIRO_CONTAINER (pDock), iDuration, "same icon");
-			else
-				cairo_dock_show_general_message (cMessage, 8000);
-		}
-		cairo_dock_show_group (pGroupDescription);
+		cairo_dock_show_module_gui (cModuleName);
 	}
 	g_free (cMessage);
 }
@@ -1839,11 +1869,62 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				g_hash_table_destroy (pHashTable);
 				_add_combo_from_modele (s_pIconThemeListStore, FALSE, FALSE);
 				
-				/**GtkWidget *pEntry = gtk_bin_get_child (GTK_BIN (pOneWidget));
-				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
-				gtk_entry_set_text (GTK_ENTRY (pEntry), cValue);  // on affiche la valeur meme si elle n'existe pas dans la liste.
-				g_free (cValue);*/
 				_pack_subwidget (pOneWidget);
+			}
+			break ;
+			
+			case CAIRO_DOCK_WIDGET_MODULE_LIST :
+			{
+				//\______________ On remplit un modele avec les modules de la categorie.
+				int iCategory = -1;
+				if (pAuthorizedValuesList && pAuthorizedValuesList[0] != NULL)
+					iCategory = atoi (pAuthorizedValuesList[0]);
+				modele = _allocate_new_model ();
+				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
+				_allocate_new_buffer;
+				data[0] = GINT_TO_POINTER (iCategory);
+				data[1] = modele;
+				cairo_dock_foreach_module ((GHRFunc) _add_module_to_modele, data);
+				
+				//\______________ On construit le treeview des modules.
+				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
+				pOneWidget = gtk_tree_view_new ();
+				gtk_tree_view_set_model (GTK_TREE_VIEW (pOneWidget), GTK_TREE_MODEL (modele));
+				gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pOneWidget), FALSE);
+				
+				rend = gtk_cell_renderer_toggle_new ();
+				gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "active", CAIRO_DOCK_MODEL_ACTIVE, NULL);
+				g_signal_connect (G_OBJECT (rend), "toggled", (GCallback) _cairo_dock_activate_one_module, modele);
+
+				rend = gtk_cell_renderer_text_new ();
+				gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+				
+				selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pOneWidget));
+				gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
+				
+				pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
+				gtk_widget_set (pScrolledWindow, "height-request", 200, NULL);
+				gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+				gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
+				pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
+				_pack_in_widget_box (pScrolledWindow);
+				
+				//\______________ On construit le widget de prevue et on le rajoute a la suite.
+				pDescriptionLabel = gtk_label_new (NULL);
+				gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
+				pPreviewImage = gtk_image_new_from_pixbuf (NULL);
+				_allocate_new_buffer;
+				data[0] = pDescriptionLabel;
+				data[1] = pPreviewImage;
+				gtk_tree_selection_set_select_function (selection,
+					(GtkTreeSelectionFunc) _cairo_dock_select_one_item_in_tree,
+					data,
+					NULL);
+				pPreviewBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+				gtk_box_pack_start (GTK_BOX (pPreviewBox), pPreviewImage, FALSE, FALSE, 0);
+				gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionLabel, FALSE, FALSE, 0);
+				_pack_in_widget_box (pPreviewBox);
+				
 			}
 			break ;
 			
@@ -1866,7 +1947,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						if (iElementType == CAIRO_DOCK_WIDGET_JUMP_TO_MODULE_IF_EXISTS)
 							break ;
 						cd_warning ("module '%s' not found", pAuthorizedValuesList[0]);
-						cModuleName = g_strdup (pAuthorizedValuesList[0]);  // petite fuite memoire dans ce cas tres precis ...
+						cModuleName = g_strdup (pAuthorizedValuesList[0]);  // petite fuite memoire dans ce cas tres rare ...
 					}
 				}
 				pOneWidget = gtk_button_new_from_stock (GTK_STOCK_JUMP_TO);
