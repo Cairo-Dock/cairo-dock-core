@@ -44,6 +44,7 @@
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-desklet.h"
@@ -425,8 +426,10 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 			if (bIsAppli && pIcon->iLastCheckTime != -1)  // c'est une icone d'appli non vieille qui disparait, elle s'est probablement cachee => on la detache juste.
 			{
 				cd_message ("cette (%s) appli est toujours valide, on la detache juste", pIcon->cName);
+				pIcon->fPersonnalScale = 0.;  // on le fait avant le reload, sinon l'icone n'est pas rechargee.
+				if (!pIcon->bIsHidden && myTaskBar.bHideVisibleApplis)  // on lui remet l'image normale qui servira d'embleme lorsque l'icone sera inseree a nouveau dans le dock.
+					cairo_dock_reload_one_icon_buffer_in_dock (pIcon, pDock);
 				cairo_dock_detach_appli (pIcon);
-				pIcon->fPersonnalScale = 0.;
 			}
 			else
 			{

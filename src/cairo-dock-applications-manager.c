@@ -380,14 +380,14 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 						cairo_dock_update_visibility_on_inhibators (icon->cClass, icon->Xid, icon->bIsHidden);
 						
 						// applis minimisees seulement
-						if (myTaskBar.bHideVisibleApplis)  // on insere/detache l'icone selon la visibilite de la fenetre.
+						if (myTaskBar.bHideVisibleApplis)  // on insere/detache l'icone selon la visibilite de la fenetre, avec une animation.
 						{
 							if (bIsHidden)  // se cache => on insere son icone.
 							{
 								cd_message (" => se cache");
 								if (! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (icon))
 								{
-									pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);  /// ! CAIRO_DOCK_ANIMATE_ICON
+									pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 									if (pParentDock != NULL)
 										gtk_widget_queue_draw (pParentDock->container.pWidget);
 								}
@@ -395,9 +395,6 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 							else  // se montre => on detache l'icone.
 							{
 								cd_message (" => re-apparait");
-								///pParentDock = cairo_dock_detach_appli (icon);
-								///if (pParentDock != NULL)
-								///	gtk_widget_queue_draw (pParentDock->container.pWidget);
 								cairo_dock_trigger_icon_removal_from_dock (icon);
 							}
 						}
@@ -408,7 +405,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 								cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
 						}
 						
-						// miniature
+						// miniature (on le fait apres l'avoir inseree/detachee, car comme ça dans le cas ou on l'enleve du dock apres l'avoir deminimisee, l'icone est marquee comme en cours de suppression, et donc on ne recharge pas son icone. Sinon l'image change pendant la transition, ce qui est pas top. Comme ca ne change pas la taille de l'icone dans le dock, on peut faire ca apres l'avoir inseree.
 						#ifdef HAVE_XEXTEND
 						if (myTaskBar.bShowThumbnail && (pParentDock != NULL || myTaskBar.bHideVisibleApplis))  // on recupere la miniature ou au contraire on remet l'icone.
 						{

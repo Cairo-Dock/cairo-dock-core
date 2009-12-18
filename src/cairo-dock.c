@@ -712,22 +712,18 @@ int main (int argc, char** argv)
 	g_print ("\nPB AFFICHAGE PM\n\n");
 	
 	g_print ("\nINDICATEURS EN HAUT (RETOURNES) ET CAIRO\n\n");
-	
-	g_print ("\n- open evince on the top-right workspace\n");
-	g_print ("- maximize evince\n");
-	g_print ("- use workspace switcher applet to switch to workspace on the left (top-left)\n");
-	g_print ("=> CD will block visible and with icon zoomed\n");
+	g_print ("=> AUTO-HIDE WHEN SWITCHING DESKTOP IN CAIRO MODE\n");
 	
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
 	g_print ("\nNOUVELLE INSTANCE COPIEE SUR LA 1ERE\n\n");
 	g_print ("\nJAUGES : LOGO\n\n");
 	
-	/*if (strcmp((cairo_dock_launch_command_sync ("date +%m%d")), "1028") == 0)  // thanks Matttbe ^_^
+	if (strcmp((cairo_dock_launch_command_sync ("date +%m%d")), "0101") == 0)
 	{
 		Icon *pFirstIcon = cairo_dock_get_first_icon (g_pMainDock->icons);
-		cairo_dock_show_temporary_dialog_with_default_icon ("Happy Birthday Fabounet! - Bon annif Fab !\n\nToday (28 October) it's the birthday of Fabounet (the main dev of Cairo-Dock).\nDon't hesitate to visit our forum (cairo-dock.org) and post a message to him ;)\nYou can also have a look to our IRC channel (#cairo-dock and #cairo-dock-fr on FreeNode).\n Maybe Fab will be unexpectedly there :)\n\n\t For our best dev,\n\t\tThe Cairo-Dock Team", pFirstIcon, CAIRO_CONTAINER (g_pMainDock), 0);
-	}*/
+		cairo_dock_show_temporary_dialog_with_default_icon ("Happy New Year every body !\n\tThe Cairo-Dock Team", pFirstIcon, CAIRO_CONTAINER (g_pMainDock), 0);
+	}
 	
 	gtk_main ();
 	

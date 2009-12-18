@@ -1541,6 +1541,8 @@ static gboolean s_bWaitForData = FALSE;
 void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint time, CairoDock *pDock)
 {
 	g_print ("%s (%dx%d, %d)\n", __func__, x, y, time);
+	if (! pDock->bIsDragging)  // X ne semble pas tenir compte de la zone d'input pour dropper les trucs...
+		return ;
 	//\_________________ On recupere l'URI.
 	gchar *cReceivedData = (gchar *) selection_data->data;  // gtk_selection_data_get_text
 	g_return_if_fail (cReceivedData != NULL);
@@ -1584,17 +1586,34 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 			pPointedIcon = icon;
 			double fMargin;  /// deviendra obsolete si le drag-received fonctionne.
 			if (g_str_has_suffix (cReceivedData, ".desktop")/** || g_str_has_suffix (cReceivedData, ".sh")*/)  // si c'est un .desktop, on l'ajoute.
+			{
+				if (g_bLocked || myAccessibility.bLockIcons || myAccessibility.bLockAll)
+				{
+					gtk_drag_finish (dc, FALSE, FALSE, time);
+					return ;
+				}
 				fMargin = 0.5;  // on ne sera jamais dessus.
+			}
 			else  // sinon on le lance si on est sur l'icone, et on l'ajoute autrement.
 				fMargin = 0.25;
 
 			if (iDropX > icon->fX + icon->fWidth * icon->fScale * (1 - fMargin))  // on est apres.
 			{
+				if (g_bLocked || myAccessibility.bLockIcons || myAccessibility.bLockAll)
+				{
+					gtk_drag_finish (dc, FALSE, FALSE, time);
+					return ;
+				}
 				pNeighboorIcon = (ic->next != NULL ? ic->next->data : NULL);
 				fOrder = (pNeighboorIcon != NULL ? (icon->fOrder + pNeighboorIcon->fOrder) / 2 : icon->fOrder + 1);
 			}
 			else if (iDropX < icon->fX + icon->fWidth * icon->fScale * fMargin)  // on est avant.
 			{
+				if (g_bLocked || myAccessibility.bLockIcons || myAccessibility.bLockAll)
+				{
+					gtk_drag_finish (dc, FALSE, FALSE, time);
+					return ;
+				}
 				pNeighboorIcon = (ic->prev != NULL ? ic->prev->data : NULL);
 				fOrder = (pNeighboorIcon != NULL ? (icon->fOrder + pNeighboorIcon->fOrder) / 2 : icon->fOrder - 1);
 			}

@@ -316,10 +316,13 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 	else if (CAIRO_DOCK_IS_APPLI (icon))  // c'est l'icône d'une appli valide. Dans cet ordre on n'a pas besoin de verifier que c'est NORMAL_APPLI.
 	{
+		g_print ("appli\n");
 		icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI];
 		icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI];
 		if (myTaskBar.bShowThumbnail && icon->bIsHidden && icon->iBackingPixmap != 0)
 		{
+			g_print ("thumbnail\n");
+			// on cree la miniature.
 			if (g_bUseOpenGL)
 			{
 				icon->iIconTexture = cairo_dock_texture_from_pixmap (icon->Xid, icon->iBackingPixmap);
@@ -331,6 +334,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 				if (g_bUseOpenGL)
 					icon->iIconTexture = cairo_dock_create_texture_from_surface (icon->pIconBuffer);
 			}
+			// on affiche l'image precedente en embleme.
 			if (icon->iIconTexture != 0 && iPrevTexture != 0)
 			{
 				cairo_dock_draw_emblem_on_icon_opengl (icon, NULL, iPrevTexture);
