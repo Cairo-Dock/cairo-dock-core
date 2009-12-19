@@ -25,15 +25,16 @@
 #include <cairo-dock-struct.h>
 G_BEGIN_DECLS
 
-/** @file cairo-dock-gui-manager.h This file manages the GUIs of Cairo-Dock.
+/** @file cairo-dock-gui-manager.h This class manages the config panels of Cairo-Dock.
 * 
 * GUIs are built from a .conf file; .conf files are normal group/key files, but with some special indications in the comments. Each key will be represented by a pre-defined widget, that is defined by the first caracter of its comment. The comment also contains a description of the key, and an optionnal tooltip. See cairo-dock-gui-factory.h for the list of pre-defined widgets and a short explanation on how to use them inside a conf file. The file 'cairo-dock.conf' can be an useful example.
 * 
-* The class defines a backend for the main GUI of Cairo-Dock.
+* The class defines the interface that a backend to the main GUI of Cairo-Dock should implement.
+* It also provides a useful function to easily build a window from a conf file : \ref cairo_dock_build_normal_gui
 * 
 */
 
-/// Definition of the GUI backend.
+/// Definition of the GUI interface.
 struct _CairoDockGuiBackend {
 	/// display a message on the GUI.
 	void (*set_status_message_on_gui) (const gchar *cMessage);
@@ -68,9 +69,15 @@ void cairo_dock_dialog_window_created (void);
 @return the widget that match the group and key, or NULL if none was found.
 */
 GtkWidget *cairo_dock_get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName);
-
-void cairo_dock_reload_current_group_widget_full (CairoDockModuleInstance *pInstance, int iShowPage);
-#define cairo_dock_reload_current_group_widget(pInstance) cairo_dock_reload_current_group_widget_full (pInstance, -1)
+/**Reload the widget of a given module instance if it is currently opened. This is useful if the module has modified its conf file and wishes to display the changes.
+@param pInstance an instance of a module.
+@param iShowPage number of the page to display (it corresponds to the nth group in the conf file), or -1 to display the current page.
+*/
+void cairo_dock_reload_current_module_widget_full (CairoDockModuleInstance *pInstance, int iShowPage);
+/**Reload the widget of a given module instance if it is currently opened (the current page is displayed). This is useful if the module has modified its conf file and wishes to display the changes.
+@param pInstance an instance of a module.
+*/
+#define cairo_dock_reload_current_module_widget(pInstance) cairo_dock_reload_current_module_widget_full (pInstance, -1)
 
 void cairo_dock_deactivate_module_in_gui (const gchar *cModuleName);
 void cairo_dock_update_desklet_size_in_gui (CairoDockModuleInstance *pModuleInstance, int iWidth, int iHeight);

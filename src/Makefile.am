@@ -144,8 +144,6 @@ cairo_dock_SOURCES = \
 	cairo-dock-gui-factory.h\
 	cairo-dock-gui-manager.c\
 	cairo-dock-gui-manager.h\
-	cairo-dock-gui-filter.c\
-	cairo-dock-gui-filter.h\
 	cairo-dock-gui-main.c\
 	cairo-dock-gui-main.h\
 	cairo-dock-gui-simple.c\
@@ -242,7 +240,6 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-particle-system.h\
 	cairo-dock-gui-factory.h\
 	cairo-dock-gui-manager.h\
-	cairo-dock-gui-filter.h\
 	cairo-dock-gui-launcher.h\
 	cairo-dock-internal-position.h\
 	cairo-dock-internal-accessibility.h\

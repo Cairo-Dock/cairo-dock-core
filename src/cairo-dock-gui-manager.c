@@ -35,7 +35,6 @@
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-applications-manager.h"
-#include "cairo-dock-gui-filter.h"
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-internal-accessibility.h"
@@ -97,7 +96,7 @@ GtkWidget *cairo_dock_get_widget_from_name (const gchar *cGroupName, const gchar
 	return NULL;
 }
 
-void cairo_dock_reload_current_group_widget_full (CairoDockModuleInstance *pInstance, int iShowPage)
+void cairo_dock_reload_current_module_widget_full (CairoDockModuleInstance *pInstance, int iShowPage)
 {
 	g_return_if_fail (pInstance != NULL);
 	if (pInstance->pModule->pVisitCard->cInternalModule != NULL)

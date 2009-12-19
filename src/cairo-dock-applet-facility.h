@@ -357,10 +357,10 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 /** Reload the config panel of the applet. This is useful if you have custom widgets inside your conf file, and need to reload them.
 */
-#define CD_APPLET_RELOAD_CONFIG_PANEL cairo_dock_reload_current_group_widget (myApplet)
+#define CD_APPLET_RELOAD_CONFIG_PANEL cairo_dock_reload_current_module_widget (myApplet)
 /** Reload the config panel of the applet and jump to the given page. This is useful if you have custom widgets inside your conf file, and need to reload them.
 */
-#define CD_APPLET_RELOAD_CONFIG_PANEL_WITH_PAGE(iNumPage) cairo_dock_reload_current_group_widget_full (myApplet, iNumPage)
+#define CD_APPLET_RELOAD_CONFIG_PANEL_WITH_PAGE(iNumPage) cairo_dock_reload_current_module_widget_full (myApplet, iNumPage)
 
 
   /////////////////////////
@@ -807,7 +807,14 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 //\_________________________________ DEBUG
 #define CD_APPLET_ENTER g_pCurrentModule = myApplet
-#define CD_APPLET_LEAVE g_pCurrentModule = NULL
+#define CD_APPLET_LEAVE(...) do {\
+	g_pCurrentModule = NULL;\
+	return __VA_ARGS__;} while (0)
+#define CD_APPLET_LEAVE_IF_FAIL(condition, ...) do {\
+	if (! (condition)) {\
+		cd_warning ("condition "#condition" failed");\
+		g_pCurrentModule = NULL;\
+		return __VA_ARGS__;} } while (0)
 
 G_END_DECLS
 #endif

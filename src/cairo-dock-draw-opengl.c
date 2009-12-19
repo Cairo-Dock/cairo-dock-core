@@ -788,7 +788,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 
 
 
-static GLboolean _check_extension (const char *extName)
+static inline gboolean _check_extension (const char *extName, const gchar *cExtensions)
 {
 	/*
 	** Search for extName in the extensions string.  Use of strstr()
@@ -796,7 +796,7 @@ static GLboolean _check_extension (const char *extName)
 	** other extension names.  Could use strtok() but the constant
 	** string returned by glGetString can be in read-only memory.
 	*/
-	char *p = (char *) glGetString (GL_EXTENSIONS);
+	char *p = (char *) cExtensions;
 
 	char *end;
 	int extNameLen;
@@ -809,12 +809,25 @@ static GLboolean _check_extension (const char *extName)
 		int n = strcspn(p, " ");
 		if ((extNameLen == n) && (strncmp(extName, p, n) == 0))
 		{
-			return GL_TRUE;
+			return TRUE;
 		}
 		p += (n + 1);
 	}
-	return GL_FALSE;
+	return FALSE;
 }
+static gboolean _check_gl_extension (const char *extName)
+{
+	const gchar *glExtensions = glGetString (GL_EXTENSIONS);
+	return _check_extension (extName, glExtensions);
+}
+static gboolean _check_glx_extension (const char *extName)
+{
+	Display *display = gdk_x11_get_default_xdisplay ();
+	int screen = 0;
+	const gchar *glxExtensions = glXQueryExtensionsString (display, screen);
+	return _check_extension (extName, glxExtensions);
+}
+
 GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 {
 	static gint iNonPowerOfTwoAvailable = -1;
@@ -828,7 +841,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	
 	if (iNonPowerOfTwoAvailable == -1)
 	{
-		iNonPowerOfTwoAvailable = _check_extension ("GL_ARB_texture_non_power_of_two");
+		iNonPowerOfTwoAvailable = _check_gl_extension ("GL_ARB_texture_non_power_of_two");
 		cd_message ("non power of two available : %d", iNonPowerOfTwoAvailable);
 	}
 	int iMaxTextureWidth = 4096, iMaxTextureHeight = 4096;  // il faudrait le recuperer de glInfo ...
@@ -1515,9 +1528,20 @@ void cairo_dock_draw_rounded_rectangle_opengl (double fRadius, double fLineWidth
 
 GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pContext)
 {
+	static gboolean s_bPbufferAvailable = FALSE;
+	static gboolean s_bChecked = FALSE;
+	
+	if (! s_bChecked)
+	{
+		s_bChecked = TRUE;
+		s_bPbufferAvailable = _check_glx_extension ("GLX_SGIX_pbuffer");  // GLX >= 1.3
+	}
+	if (! s_bPbufferAvailable)
+		return 0;
+	
 	Display *XDisplay = gdk_x11_get_default_xdisplay ();
 	
-	GLXFBConfig *pFBConfigs; 
+	GLXFBConfig *pFBConfigs;
 	XRenderPictFormat *pPictFormat = NULL;
 	int visAttribs[] = {
 		GLX_DRAWABLE_TYPE, 	GLX_PBUFFER_BIT | GLX_WINDOW_BIT,
@@ -1537,7 +1561,7 @@ GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pCont
 		&iNumOfFBConfigs);
 	if (iNumOfFBConfigs == 0)
 	{
-		cd_warning ("No suitable visual could be found for pbuffer\n this might affect the drawing of applets that inside a dock");
+		cd_warning ("No suitable visual could be found for pbuffer\n this might affect the drawing of some applets which are inside a dock");
 		*pContext = 0;
 		return 0;
 	}
@@ -1711,7 +1735,8 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 void cairo_dock_draw_emblem_on_icon_opengl (Icon *pIcon, CairoContainer *pContainer, GLuint iEmblemTexture)
 {
 	double a = .5;
-	cairo_dock_begin_draw_icon (pIcon, pContainer);
+	if (! cairo_dock_begin_draw_icon (pIcon, pContainer))
+		return ;
 	
 	_cairo_dock_enable_texture ();
 	
@@ -1811,6 +1836,9 @@ GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHas
 		GLX_DEPTH_SIZE, 		1,
 		GLX_ALPHA_SIZE, 		1,
 		GLX_STENCIL_SIZE, 	1,
+		/// a tester ...
+		//GL_MULTISAMPLEBUFFERS, 	1,
+		//GL_MULTISAMPLESAMPLES, 	2,
 		None};
 	
 	
@@ -2370,10 +2398,7 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	if (! s_bChecked)
 	{
 		s_bChecked = TRUE;
-		Display *display = gdk_x11_get_default_xdisplay ();
-		int screen = 0;
-		const gchar *glxExtensions = glXQueryExtensionsString (display, screen);
-		if (!strstr (glxExtensions, "GLX_EXT_texture_from_pixmap"))
+		if (!_check_glx_extension ("GLX_EXT_texture_from_pixmap"))
 		{
 			cd_warning ("the extension GLX_EXT_texture_from_pixmap is missing");
 			return 0;

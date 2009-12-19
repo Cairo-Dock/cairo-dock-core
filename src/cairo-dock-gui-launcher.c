@@ -35,7 +35,6 @@
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-applications-manager.h"
-#include "cairo-dock-gui-filter.h"
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-internal-icons.h"

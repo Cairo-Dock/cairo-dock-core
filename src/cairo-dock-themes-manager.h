@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 *   local   (installed as root in a sub-folder of /usr/share/cairo-dock)
 *   user    (located in a sub-folder of ~/.config/cairo-dock)
 *   distant (located on the cairo-dock's server)
-* The class offers a high level of abstraction that allows to manipulate themes without having to care their location, version, etc/
+* The class offers a high level of abstraction that allows to manipulate themes without having to care their location, version, etc.
 */
 
 /// Types of themes.
