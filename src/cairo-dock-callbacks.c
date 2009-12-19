@@ -1540,8 +1540,8 @@ static gboolean s_bWaitForData = FALSE;
 
 void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint time, CairoDock *pDock)
 {
-	g_print ("%s (%dx%d, %d)\n", __func__, x, y, time);
-	if (! pDock->bIsDragging)  // X ne semble pas tenir compte de la zone d'input pour dropper les trucs...
+	g_print ("%s (%dx%d, %d, %d)\n", __func__, x, y, time, pDock->container.bInside);
+	if (cairo_dock_is_hidden (pDock))  // X ne semble pas tenir compte de la zone d'input pour dropper les trucs...
 		return ;
 	//\_________________ On recupere l'URI.
 	gchar *cReceivedData = (gchar *) selection_data->data;  // gtk_selection_data_get_text
