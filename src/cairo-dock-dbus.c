@@ -403,7 +403,6 @@ gchar *cairo_dock_dbus_get_property_as_string (DBusGProxy *pDbusProxy, const gch
 	if (G_VALUE_HOLDS_STRING (&v))
 	{
 		gchar *s = g_value_get_string (&v);
-		g_value_reset (&v);
 		return s;
 	}
 	else
@@ -417,7 +416,6 @@ gchar *cairo_dock_dbus_get_property_as_object_path (DBusGProxy *pDbusProxy, cons
 	if (G_VALUE_HOLDS (&v, DBUS_TYPE_G_OBJECT_PATH))
 	{
 		gchar *s = g_value_get_string (&v);
-		g_value_reset (&v);
 		return s;
 	}
 	else
@@ -431,7 +429,6 @@ gpointer cairo_dock_dbus_get_property_as_boxed (DBusGProxy *pDbusProxy, const gc
 	if (G_VALUE_HOLDS_BOXED (&v))
 	{
 		gpointer p = g_value_get_boxed (&v);
-		g_value_reset (&v);
 		return p;
 	}
 	else
