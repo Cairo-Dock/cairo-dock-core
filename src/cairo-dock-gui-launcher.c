@@ -28,7 +28,6 @@
 #include "cairo-dock-modules.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-factory.h"
-#include "cairo-dock-gui-callbacks.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-draw.h"

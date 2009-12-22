@@ -140,8 +140,6 @@ cairo_dock_SOURCES = \
 	cairo-dock-draw-opengl.h\
 	cairo-dock-particle-system.c\
 	cairo-dock-particle-system.h\
-	cairo-dock-gui-callbacks.c\
-	cairo-dock-gui-callbacks.h\
 	cairo-dock-gui-factory.c\
 	cairo-dock-gui-factory.h\
 	cairo-dock-gui-manager.c\
