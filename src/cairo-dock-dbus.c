@@ -328,16 +328,135 @@ void cairo_dock_dbus_get_properties (DBusGProxy *pDbusProxy, const gchar *cComma
 		G_TYPE_INVALID,
 		G_TYPE_VALUE, vProperties,
 		G_TYPE_INVALID);
-					
+	
 	if (erreur != NULL)
 	{
 		cd_warning (erreur->message);
 		g_error_free (erreur);
 	}
-	/*dbus_g_proxy_call(dbus_proxy_Device_temp, "Get", &erreur,
-		G_TYPE_STRING,"org.freedesktop.NetworkManager.Device",
-		G_TYPE_STRING,"Interface",
+}
+
+
+
+void cairo_dock_dbus_get_property_in_value (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, GValue *pProperty)
+{
+	GError *erreur=NULL;
+	
+	dbus_g_proxy_call(pDbusProxy, "Get", &erreur,
+		G_TYPE_STRING, cInterface,
+		G_TYPE_STRING, cProperty,
 		G_TYPE_INVALID,
-		G_TYPE_VALUE, &vInterface,
-		G_TYPE_INVALID);*/
+		G_TYPE_VALUE, pProperty,
+		G_TYPE_INVALID);
+	
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+	}
+}
+
+gint cairo_dock_dbus_get_property_as_int (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+{
+	GValue v = {0};
+	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	if (G_VALUE_HOLDS_INT (&v))
+		return g_value_get_int (&v);
+	else
+		return 0;
+}
+
+guint cairo_dock_dbus_get_property_as_uint (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+{
+	GValue v = {0};
+	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	if (G_VALUE_HOLDS_UINT (&v))
+		return g_value_get_uint (&v);
+	else
+		return 0;
+}
+
+guchar cairo_dock_dbus_get_property_as_uchar (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+{
+	GValue v = {0};
+	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	if (G_VALUE_HOLDS_UCHAR (&v))
+		return g_value_get_uchar (&v);
+	else
+		return 0;
+}
+
+gdouble cairo_dock_dbus_get_property_as_double (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+{
+	GValue v = {0};
+	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	if (G_VALUE_HOLDS_DOUBLE (&v))
+		return g_value_get_double (&v);
+	else
+		return 0.;
+}
+
+gchar *cairo_dock_dbus_get_property_as_string (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+{
+	GValue v = {0};
+	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	if (G_VALUE_HOLDS_STRING (&v))
+	{
+		gchar *s = g_value_get_string (&v);
+		g_value_reset (&v);
+		return s;
+	}
+	else
+		return NULL;
+}
+
+gchar *cairo_dock_dbus_get_property_as_object_path (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+{
+	GValue v = {0};
+	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	if (G_VALUE_HOLDS (&v, DBUS_TYPE_G_OBJECT_PATH))
+	{
+		gchar *s = g_value_get_string (&v);
+		g_value_reset (&v);
+		return s;
+	}
+	else
+		return NULL;
+}
+
+gpointer cairo_dock_dbus_get_property_as_boxed (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+{
+	GValue v = {0};
+	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	if (G_VALUE_HOLDS_BOXED (&v))
+	{
+		gpointer p = g_value_get_boxed (&v);
+		g_value_reset (&v);
+		return p;
+	}
+	else
+		return NULL;
+}
+
+GHashTable *cairo_dock_dbus_get_all_properties (DBusGProxy *pDbusProxy, const gchar *cInterface)
+{
+	GError *erreur=NULL;
+	GHashTable *hProperties = NULL;
+	
+	dbus_g_proxy_call(pDbusProxy, "GetAll", &erreur,
+		G_TYPE_STRING, cInterface,
+		G_TYPE_INVALID,
+		(dbus_g_type_get_map("GHashTable", G_TYPE_STRING, G_TYPE_VALUE)), &hProperties,
+		G_TYPE_INVALID);
+					
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+		return NULL;
+	}
+	else
+	{
+		return hProperties;
+	}
 }

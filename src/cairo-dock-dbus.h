@@ -134,7 +134,26 @@ gdouble cairo_dock_dbus_get_double (DBusGProxy *pDbusProxy, const gchar *cAccess
 void cairo_dock_dbus_call (DBusGProxy *pDbusProxy, const gchar *cCommand);
 
 
-void cairo_dock_dbus_get_properties (DBusGProxy *pDbusProxy, const gchar *cCommand, const gchar *cInterface, const gchar *cProperty, GValue *vProperties);
+void cairo_dock_dbus_get_properties (DBusGProxy *pDbusProxy, const gchar *cCommand, const gchar *cInterface, const gchar *cProperty, GValue *vProperties);  /// deprecated...
+
+void cairo_dock_dbus_get_property_in_value (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, GValue *pProperty);
+
+gint cairo_dock_dbus_get_property_as_int (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty);
+
+guint cairo_dock_dbus_get_property_as_uint (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty);
+
+guchar cairo_dock_dbus_get_property_as_uchar (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty);
+
+gdouble cairo_dock_dbus_get_property_as_double (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty);
+
+gchar *cairo_dock_dbus_get_property_as_string (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty);
+
+gchar *cairo_dock_dbus_get_property_as_object_path (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty);
+
+gpointer cairo_dock_dbus_get_property_as_boxed (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty);
+
+
+GHashTable *cairo_dock_dbus_get_all_properties (DBusGProxy *pDbusProxy, const gchar *cInterface);
 
 
 G_END_DECLS

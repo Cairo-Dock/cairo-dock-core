@@ -1528,18 +1528,24 @@ void cairo_dock_draw_rounded_rectangle_opengl (double fRadius, double fLineWidth
 
 GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pContext)
 {
-	static gboolean s_bPbufferAvailable = FALSE;
-	static gboolean s_bChecked = FALSE;
-	
-	if (! s_bChecked)
-	{
-		s_bChecked = TRUE;
-		s_bPbufferAvailable = _check_glx_extension ("GLX_SGIX_pbuffer");  // GLX >= 1.3
-	}
-	if (! s_bPbufferAvailable)
-		return 0;
-	
 	Display *XDisplay = gdk_x11_get_default_xdisplay ();
+	int major, minor;
+	if (glXQueryVersion(XDisplay, &major, &minor) == False)
+	{
+		cd_warning ("GLX not available !\nDon't even expect the dock to run in opengl mode.");
+		*pContext = 0;
+		return 0;
+	}
+	
+	if (major <= 1 && minor < 3)  // on a besoin de GLX >= 1.3 pour les pbuffers; mais si on a l'extension GLX_SGIX_pbuffer et un version inferieure, ca marche quand meme.
+	{
+		if (! _check_glx_extension ("GLX_SGIX_pbuffer"))
+		{
+			cd_warning ("No pbuffer extension in GLX.\n this might affect the drawing of some applets which are inside a dock");
+			*pContext = 0;
+			return 0;
+		}
+	}
 	
 	GLXFBConfig *pFBConfigs;
 	XRenderPictFormat *pPictFormat = NULL;

@@ -726,6 +726,10 @@ int main (int argc, char** argv)
 	
 	gtk_main ();
 	
+	signal (SIGSEGV, NULL);  // Segmentation violation
+	signal (SIGFPE, NULL);  // Floating-point exception
+	signal (SIGILL, NULL);  // Illegal instruction
+	signal (SIGABRT, NULL);
 	cairo_dock_free_all_docks ();
 	
 	rsvg_term ();

@@ -645,6 +645,10 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_REMOVE_MY_DATA_RENDERER cairo_dock_remove_data_renderer_on_icon (myIcon)
 
+/** Refresh the Data Renderer of the applet's icon, to redraw it when the applet's size has changed.
+*/
+#define CD_APPLET_REFRESH_MY_DATA_RENDERER cairo_dock_refresh_data_renderer (myIcon, myContainer, myDrawContext)
+
 
 /** Set the history size of the Data Renderer of the applet's icon to the maximum size, that is to say 1 value per pixel.
 */
