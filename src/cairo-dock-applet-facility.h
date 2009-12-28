@@ -625,6 +625,17 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_FINISH_DRAWING_MY_ICON cairo_dock_end_draw_icon (myIcon, myContainer)
 
+/** Make an emblem from an image. If the image is given by its sole name, it is looked up inside the root theme folder. Free it with cairo_dock_free_emblem.
+*@param cImageFile name of an image file.
+*@return a newly allocated CairoEmblem.
+*/
+#define CD_APPLET_MAKE_EMBLEM(cImageFile) cairo_dock_make_emblem (cImageFile, myIcon, myContainer, myDrawContext)
+
+/** Draw an emblem on the applet's icon. The emblem is drawn directly on the icon, and is erased if the icon is redrawn.
+*@param pEmblem an emblem.
+*/
+#define CD_APPLET_DRAW_EMBLEM_ON_MY_ICON(pEmblem) cairo_dock_draw_emblem_on_icon (pEmblem, myIcon, myContainer)
+
 
 /** Add a Data Renderer the applet's icon.
 *@param pAttr the attributes of the Data Renderer. They allow you to define its properties.

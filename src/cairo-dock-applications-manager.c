@@ -368,7 +368,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 					}
 					icon->bIsMaximized = bIsMaximized;  // on peut en avoir besoin plus tard.
 					icon->bIsFullScreen = bIsFullScreen;
-					
+					g_print ("icon->bIsMaximized : %d\n", icon->bIsMaximized);
 					// on gere le cachage/apparition de l'icone (transparence ou miniature, applis minimisees seulement).
 					CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 					if (bIsHidden != bPrevHidden)
@@ -1233,10 +1233,11 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 #define y_icon_geometry(icon, pDock) (pDock->container.iWindowPositionY + icon->fDrawY - icon->fHeight * myIcons.fAmplitude * pDock->fMagnitudeMax) 
 void  cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock)
 {
-	//g_print ("%s (%s)\n", __func__, icon->cName);
+	g_print ("%s (%s)\n", __func__, icon->cName);
 	int iX, iY, iWidth, iHeight;
 	iX = x_icon_geometry (icon, pDock);
 	iY = y_icon_geometry (icon, pDock);  // il faudrait un fYAtRest ...
+	g_print (" -> %d;%d (%.2f)\n", iX - pDock->container.iWindowPositionX, iY - pDock->container.iWindowPositionY, icon->fXAtRest);
 	iWidth = icon->fWidth;
 	iHeight = icon->fHeight * (1. + 2*myIcons.fAmplitude * pDock->fMagnitudeMax);  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
 	

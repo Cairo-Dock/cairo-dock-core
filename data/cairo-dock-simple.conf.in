@@ -44,7 +44,7 @@ frame_task =
 taskbar = 2
 
 
-#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-appearance.png]
+#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-appearance.svg]
 [Appearance]
 
 #F[Icons;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-icons.svg]
@@ -95,32 +95,12 @@ config_effect =
 config_illusion = 
 
 
-
 #[gtk-disconnect]
 [Add-ons]
 
-#X[Accessories;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-accessories.png]
-frame_acce =
+#F[Applets;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-accessories.png]
+frame_mod=
 
-#N[2] Add or remove any accessories :/
-accessories =
-
-#X[Desktop;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-desktop.svg]
-frame_desk =
-
-#N[3] Add or remove any desktop applet :/
-desktops =
-
-#X[Controlers;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-controler.png]
-frame_ctrl =
-
-#N[4] Add or remove any controler :/
-controlers =
-
-#X[Plug-ins;gtk-disconnect]
-frame_plug =
-
-#N[5] Add or remove any plug-in :/
-plug-ins =
-
-
+#N Add or remove any applet :
+#{Select a line to get a preview and a description of the applet. Click on the left checkbox to (de)activate an applet.}/
+modules=

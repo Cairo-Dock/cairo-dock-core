@@ -150,20 +150,44 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 	CairoDock *pDock = data[1];
 	GtkWidget *pDialog = gtk_message_dialog_new (GTK_WINDOW (pDock->container.pWidget),
 		GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_MESSAGE_INFO,
+		/*GTK_MESSAGE_INFO*/GTK_MESSAGE_OTHER,
 		GTK_BUTTONS_CLOSE,
-		"\nCairo-Dock (2007-2009)\n version "CAIRO_DOCK_VERSION);
+		NULL/*"\nCairo-Dock (2007-2010)\n version "CAIRO_DOCK_VERSION*/);
+	
+	GtkWidget *pContentBox = gtk_dialog_get_content_area (pDialog);
+	GtkWidget *pHBox = gtk_hbox_new (FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (pContentBox), pHBox, FALSE, FALSE, 0);
 	
 	gchar *cImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_LOGO);
 	GtkWidget *pImage = gtk_image_new_from_file (cImagePath);
 	g_free (cImagePath);
+	gtk_box_pack_start (GTK_BOX (pHBox), pImage, FALSE, FALSE, 0);
+	
+	GtkWidget *pVBox = gtk_vbox_new (FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (pHBox), pVBox, FALSE, FALSE, 0);
+	
+	GtkWidget *pLink = gtk_link_button_new_with_label ("http://www.cairo-dock.org", "Cairo-Dock (2007-2010)\n version "CAIRO_DOCK_VERSION);
+	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
+	
+	pLink = gtk_link_button_new_with_label ("http://forum.cairo-dock.org", _("Community's site"));
+	gtk_widget_set_tooltip_text (pLink, _("A problem ? A suggestion ? Want to talk to us ? You're welcome !"));
+	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
+	
+	pLink = gtk_link_button_new_with_label (CAIRO_DOCK_FILE_HOST_URL, _("Development's site"));
+	gtk_widget_set_tooltip_text (pLink, _("Find out the latest version of Cairo-Dock here !."));
+	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
+	
+	/*gchar *cImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_LOGO);
+	GtkWidget *pImage = gtk_image_new_from_file (cImagePath);
+	g_free (cImagePath);
 #if GTK_MINOR_VERSION >= 12
 	gtk_message_dialog_set_image (GTK_MESSAGE_DIALOG (pDialog), pImage);
-#endif
+#endif*/
 	GtkWidget *pNoteBook = gtk_notebook_new ();
 	gtk_notebook_set_scrollable (GTK_NOTEBOOK (pNoteBook), TRUE);
 	gtk_notebook_popup_enable (GTK_NOTEBOOK (pNoteBook));
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(pDialog)->vbox), pNoteBook);
+	//gtk_container_add (GTK_CONTAINER (GTK_DIALOG(pDialog)->vbox), pNoteBook);
+	gtk_box_pack_start (GTK_BOX (pContentBox), pNoteBook, TRUE, TRUE, 0);
 	
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Development"),
@@ -840,7 +864,6 @@ static void _cairo_dock_maximize_appli (GtkMenuItem *pMenuItem, gpointer *data)
 	CairoDock *pDock = data[1];
 	if (icon->Xid > 0)
 	{
-		///gboolean bIsMaximized = cairo_dock_xwindow_is_maximized (icon->Xid);
 		cairo_dock_maximize_xwindow (icon->Xid, ! icon->bIsMaximized);
 	}
 }
@@ -851,7 +874,6 @@ static void _cairo_dock_set_appli_fullscreen (GtkMenuItem *pMenuItem, gpointer *
 	CairoDock *pDock = data[1];
 	if (icon->Xid > 0)
 	{
-		///gboolean bIsFullScreen = cairo_dock_xwindow_is_fullscreen (icon->Xid);
 		cairo_dock_set_xwindow_fullscreen (icon->Xid, ! icon->bIsFullScreen);
 	}
 }
@@ -1310,11 +1332,11 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 				gtk_widget_set_tooltip_text (pMenuItem, _("Set up the position of this main dock."));
 			}
 			
+			pMenuItem = _add_entry_in_menu (_("Manage themes"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-appearance.svg", _cairo_dock_initiate_theme_management, pSubMenu);
+			gtk_widget_set_tooltip_text (pMenuItem, _("Choose amongst many themes on the server, and save your current theme."));
+			
 			pMenuItem = gtk_separator_menu_item_new ();
 			gtk_menu_shell_append (GTK_MENU_SHELL (pSubMenu), pMenuItem);
-			
-			pMenuItem = _add_entry_in_menu (_("Manage themes"), GTK_STOCK_EXECUTE, _cairo_dock_initiate_theme_management, pSubMenu);
-			gtk_widget_set_tooltip_text (pMenuItem, _("Choose amongst many themes on the server, and save your current theme."));
 			
 			pMenuItem = _add_entry_in_menu (myAccessibility.bLockIcons ? _("unlock icons") : _("lock icons"),
 				CAIRO_DOCK_SHARE_DATA_DIR"/icon-lock-icons.svg",
@@ -1348,11 +1370,11 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 		g_free (cCairoAutoStartEntryPath2);
 		g_free (cCairoAutoStartDirPath);
 		
-		pMenuItem = _add_entry_in_menu (_("Development's site"), GTK_STOCK_DIALOG_WARNING, _cairo_dock_check_for_updates, pSubMenu);
+		/*pMenuItem = _add_entry_in_menu (_("Development's site"), GTK_STOCK_DIALOG_WARNING, _cairo_dock_check_for_updates, pSubMenu);
 		gtk_widget_set_tooltip_text (pMenuItem, _("Find out the latest version of Cairo-Dock here !."));
 
 		pMenuItem = _add_entry_in_menu (_("Community's site"), GTK_STOCK_DIALOG_INFO, _cairo_dock_help, pSubMenu);
-		gtk_widget_set_tooltip_text (pMenuItem, _("A problem ? A suggestion ? Want to talk to us ? You're welcome !"));
+		gtk_widget_set_tooltip_text (pMenuItem, _("A problem ? A suggestion ? Want to talk to us ? You're welcome !"));*/
 		
 		pMenuItem = _add_entry_in_menu (_("Help"), GTK_STOCK_HELP, _cairo_dock_present_help, pSubMenu);
 		gtk_widget_set_tooltip_text (pMenuItem, _("There is no problem, there is only solution (and a lot of useful hints !)."));
@@ -1540,8 +1562,19 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		
 		_add_entry_in_menu (_("Move to this desktop"), GTK_STOCK_JUMP_TO, _cairo_dock_move_appli_to_current_desktop, pSubMenuOtherActions);
 		
-		gboolean bIsFullScreen = cairo_dock_xwindow_is_fullscreen (icon->Xid);
-		_add_entry_in_menu (bIsFullScreen ? _("Not Fullscreen") : _("Fullscreen"), bIsFullScreen ? GTK_STOCK_LEAVE_FULLSCREEN : GTK_STOCK_FULLSCREEN, _cairo_dock_set_appli_fullscreen, pSubMenuOtherActions);
+		Icon *pAppli = cairo_dock_get_icon_with_Xid (icon->Xid);
+		if (pAppli)
+		{
+			icon->bIsMaximized = pAppli->bIsMaximized;
+			icon->bIsFullScreen = pAppli->bIsFullScreen;
+		}
+		else
+		{
+			icon->bIsMaximized = cairo_dock_xwindow_is_maximized (icon->Xid);
+			icon->bIsFullScreen = cairo_dock_xwindow_is_fullscreen (icon->Xid);
+		}
+		
+		_add_entry_in_menu (icon->bIsFullScreen ? _("Not Fullscreen") : _("Fullscreen"), icon->bIsFullScreen ? GTK_STOCK_LEAVE_FULLSCREEN : GTK_STOCK_FULLSCREEN, _cairo_dock_set_appli_fullscreen, pSubMenuOtherActions);
 		
 		gboolean bIsAbove=FALSE, bIsBelow=FALSE;
 		cairo_dock_xwindow_is_above_or_below (icon->Xid, &bIsAbove, &bIsBelow);
@@ -1562,15 +1595,14 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 			_add_entry_in_menu (_("Make it a launcher"), GTK_STOCK_CONVERT, _cairo_dock_make_launcher_from_appli, menu);
 		}
 		
-		///gboolean bIsMaximized = cairo_dock_xwindow_is_maximized (icon->Xid);
-		_add_entry_in_menu (icon->bIsMaximized ? _("Unmaximize") : _("Maximize"), GTK_STOCK_GO_UP, _cairo_dock_maximize_appli, menu);
-		
 		_add_entry_in_menu (_("Show"), GTK_STOCK_FIND, _cairo_dock_show_appli, menu);
-
+		
+		_add_entry_in_menu (icon->bIsMaximized ? _("Unmaximize") : _("Maximize"), icon->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icon-restore.png" : CAIRO_DOCK_SHARE_DATA_DIR"/icon-maximize.png", _cairo_dock_maximize_appli, menu);
+		
 		if (! icon->bIsHidden)
-			_add_entry_in_menu (_("Minimize"), GTK_STOCK_GO_DOWN, _cairo_dock_minimize_appli, menu);
+			_add_entry_in_menu (_("Minimize"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-minimize.png", _cairo_dock_minimize_appli, menu);
 
-		_add_entry_in_menu (_("Close"), GTK_STOCK_CLOSE, _cairo_dock_close_appli, menu);
+		_add_entry_in_menu (_("Close"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-close.png", _cairo_dock_close_appli, menu);
 	}
 	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
 	{
@@ -1594,9 +1626,9 @@ gboolean cairo_dock_notification_build_menu (gpointer *pUserData, Icon *icon, Ca
 		
 		_add_entry_in_menu (_("Show all"), GTK_STOCK_FIND, _cairo_dock_show_class, menu);
 
-		_add_entry_in_menu (_("Minimize all"), GTK_STOCK_GO_DOWN, _cairo_dock_minimize_class, menu);
+		_add_entry_in_menu (_("Minimize all"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-minimize.png", _cairo_dock_minimize_class, menu);
 		
-		_add_entry_in_menu (_("Close all"), GTK_STOCK_CLOSE, _cairo_dock_close_class, menu);
+		_add_entry_in_menu (_("Close all"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-close.png", _cairo_dock_close_class, menu);
 	}
 	
 	if (g_pMainDock != NULL && (CAIRO_DOCK_IS_APPLET (icon) || CAIRO_DOCK_IS_DESKLET (pContainer)))

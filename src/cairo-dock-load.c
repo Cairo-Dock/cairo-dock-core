@@ -57,6 +57,7 @@
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-data-renderer.h"
 #include "cairo-dock-flying-container.h"
+#include "cairo-dock-emblem.h"
 #include "cairo-dock-load.h"
 
 extern CairoDock *g_pMainDock;
@@ -335,11 +336,19 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			// on affiche l'image precedente en embleme.
 			if (icon->iIconTexture != 0 && iPrevTexture != 0)
 			{
-				cairo_dock_draw_emblem_on_icon_opengl (icon, NULL, iPrevTexture);
+				CairoDock *pParentDock = NULL;  // cairo_dock_search_dock_from_name (icon->cParentDockName);
+				CairoEmblem *e = cairo_dock_make_emblem_from_texture (iPrevTexture,icon, CAIRO_CONTAINER (pParentDock));
+				cairo_dock_set_emblem_position (e, CAIRO_DOCK_EMBLEM_LOWER_LEFT);
+				cairo_dock_draw_emblem_on_icon (e, icon, CAIRO_CONTAINER (pParentDock));
+				g_free (e);  // on n'utilise pas cairo_dock_free_emblem pour ne pas detruire la texture avec.
 			}
 			else if (icon->pIconBuffer != NULL && pPrevSurface != NULL)
 			{
-				cairo_dock_draw_emblem_on_icon (icon, NULL, pPrevSurface);
+				CairoDock *pParentDock = NULL;  // cairo_dock_search_dock_from_name (icon->cParentDockName);
+				CairoEmblem *e = cairo_dock_make_emblem_from_surface (pPrevSurface, 0, 0, icon, CAIRO_CONTAINER (pParentDock));
+				cairo_dock_set_emblem_position (e, CAIRO_DOCK_EMBLEM_LOWER_LEFT);
+				cairo_dock_draw_emblem_on_icon (e, icon, CAIRO_CONTAINER (pParentDock));
+				g_free (e);  // meme remarque.
 			}
 		}
 		if (icon->pIconBuffer == NULL && myTaskBar.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass))

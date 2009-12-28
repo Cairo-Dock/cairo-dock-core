@@ -123,9 +123,9 @@ _import_theme()
 	if test "x${theme}" != "x"; then
 		#\__________ On cherche si ce theme est un theme officiel ou non.
 		echo "un theme est present ($theme)"
-		wget "$THEME_SERVER/$3/liste.txt" -O "liste.tmp" -t 3 -T 30
+		wget "$THEME_SERVER/$3/list.conf" -O "liste.tmp" -t 3 -T 30
 		if test -f "liste.tmp" ; then
-			grep "^${theme}" "liste.tmp"
+			grep "^\[${theme}\]" "liste.tmp"
 			if test "$?" != "0" -a  "$theme" != "Classic" -a "$theme" != "default"; then  # pas un theme officiel
 				echo "  ce n'est pas un theme officiel"
 				#\__________ On cherche le chemin de ce theme.
@@ -208,6 +208,7 @@ set_current_conf_file "plug-ins/clock/clock.conf"
 import_file "Desklet"		"bg desklet"	.
 import_file "Desklet"		"fg desklet"	.
 import_theme "Module"		"theme"			"clock"
+import_file "Module"		"numeric bg"	.
 
 set_current_conf_file "plug-ins/compiz-icon/compiz-icon.conf"
 import_file "Desklet"		"bg desklet"	.

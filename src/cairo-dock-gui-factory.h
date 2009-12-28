@@ -140,6 +140,8 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_EMPTY_WIDGET='_',
 	/// a simple text label.
 	CAIRO_DOCK_WIDGET_TEXT_LABEL='>',
+	/// a simple text label.
+	CAIRO_DOCK_WIDGET_LINK='W',
 	/// an horizontal separator.
 	CAIRO_DOCK_WIDGET_SEPARATOR='v',
 	/// a frame. The previous frame will be closed.

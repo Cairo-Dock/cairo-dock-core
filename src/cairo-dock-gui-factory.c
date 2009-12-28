@@ -668,9 +668,10 @@ static GHashTable *_cairo_dock_build_icon_themes_list (const gchar **cDirs)
 static gboolean _add_module_to_modele (gchar *cModuleName, CairoDockModule *pModule, gpointer *data)
 {
 	int iCategory = GPOINTER_TO_INT (data[0]);
-	if (pModule->pVisitCard->iCategory == iCategory || iCategory == -1)
+	if (pModule->pVisitCard->iCategory == iCategory || (iCategory == -1 && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_SYSTEM && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME))
 	{
-		g_print (" + %s\n",  cModuleName);
+		//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
+		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (pModule->pVisitCard->cIconFilePath, 32, 32, NULL);
 		GtkListStore *pModele = data[1];
 		GtkTreeIter iter;
 		memset (&iter, 0, sizeof (GtkTreeIter));
@@ -680,7 +681,10 @@ static gboolean _add_module_to_modele (gchar *cModuleName, CairoDockModule *pMod
 			CAIRO_DOCK_MODEL_RESULT, cModuleName,
 			CAIRO_DOCK_MODEL_DESCRIPTION_FILE, pModule->pVisitCard->cDescription,
 			CAIRO_DOCK_MODEL_IMAGE, pModule->pVisitCard->cPreviewFilePath,
+			CAIRO_DOCK_MODEL_ICON, pixbuf,
+			CAIRO_DOCK_MODEL_STATE, pModule->pVisitCard->iCategory,
 			CAIRO_DOCK_MODEL_ACTIVE, (pModule->pInstancesList != NULL), -1);
+		g_object_unref (pixbuf);
 	}
 	return FALSE;
 }
@@ -934,6 +938,40 @@ static gboolean _cairo_dock_find_iter_from_name (GtkListStore *pModele, const gc
 	gconstpointer data[4] = {cName, iter, &bFound, GINT_TO_POINTER (bIsTheme)};
 	gtk_tree_model_foreach (GTK_TREE_MODEL (pModele), (GtkTreeModelForeachFunc) _cairo_dock_test_one_name, data);
 	return bFound;
+}
+
+static void _cairo_dock_render_category (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
+{
+	const gchar *cCategory=NULL;
+	gint iCategory = 0;
+	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_STATE, &iCategory, -1);
+	switch (iCategory)
+	{
+		case CAIRO_DOCK_CATEGORY_APPLET_ACCESSORY:
+			cCategory = _("Accessory");
+			g_object_set (cell, "foreground", "#FF0000", NULL);  // "red"
+			g_object_set (cell, "foreground-set", TRUE, NULL);
+		break;
+		case CAIRO_DOCK_CATEGORY_APPLET_DESKTOP:
+			cCategory = _("Desktop");
+			g_object_set (cell, "foreground", "#00FF00", NULL);
+			g_object_set (cell, "foreground-set", TRUE, NULL);
+		break;
+		case CAIRO_DOCK_CATEGORY_APPLET_CONTROLER:
+			cCategory = _("Controler");
+			g_object_set (cell, "foreground", "#0000FF", NULL);
+			g_object_set (cell, "foreground-set", TRUE, NULL);
+		break;
+		case CAIRO_DOCK_CATEGORY_PLUG_IN:
+			cCategory = _("Plug-in");
+			g_object_set (cell, "foreground", "#FF00FF", NULL);
+			g_object_set (cell, "foreground-set", TRUE, NULL);
+		break;
+	}
+	if (cCategory != NULL)
+	{
+		g_object_set (cell, "text", cCategory, NULL);
+	}
 }
 
 #define CD_MAX_RATING 5
@@ -1890,20 +1928,35 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
 				pOneWidget = gtk_tree_view_new ();
 				gtk_tree_view_set_model (GTK_TREE_VIEW (pOneWidget), GTK_TREE_MODEL (modele));
-				gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pOneWidget), FALSE);
-				
+				gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pOneWidget), TRUE);
+				gtk_tree_view_set_headers_clickable (GTK_TREE_VIEW (pOneWidget), TRUE);
+				GtkTreeViewColumn* col;
+				// case a cocher
 				rend = gtk_cell_renderer_toggle_new ();
-				gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "active", CAIRO_DOCK_MODEL_ACTIVE, NULL);
+				col = gtk_tree_view_column_new_with_attributes (NULL, rend, "active", CAIRO_DOCK_MODEL_ACTIVE, NULL);
+				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_ACTIVE);
+				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
 				g_signal_connect (G_OBJECT (rend), "toggled", (GCallback) _cairo_dock_activate_one_module, modele);
-
+				// icone
+				rend = gtk_cell_renderer_pixbuf_new ();
+				gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "pixbuf", CAIRO_DOCK_MODEL_ICON, NULL);
+				// nom
 				rend = gtk_cell_renderer_text_new ();
-				gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+				col = gtk_tree_view_column_new_with_attributes (_("module"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_NAME);
+				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
+				// categorie
+				rend = gtk_cell_renderer_text_new ();
+				col = gtk_tree_view_column_new_with_attributes (_("category"), rend, "text", CAIRO_DOCK_MODEL_STATE, NULL);
+				gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_category, NULL, NULL);
+				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_STATE);
+				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
 				
 				selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pOneWidget));
 				gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
 				
 				pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-				gtk_widget_set (pScrolledWindow, "height-request", 200, NULL);
+				gtk_widget_set (pScrolledWindow, "height-request", 350, NULL);
 				gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 				gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
 				pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
@@ -2357,10 +2410,17 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_font_button_set_show_size (GTK_FONT_BUTTON (pOneWidget), TRUE);
 				gtk_font_button_set_use_size (GTK_FONT_BUTTON (pOneWidget), TRUE);
 				gtk_font_button_set_use_font (GTK_FONT_BUTTON (pOneWidget), TRUE);
-				_pack_in_widget_box (pOneWidget);
 				_pack_subwidget (pOneWidget);
 				g_free (cValue);
 			break;
+			
+			case CAIRO_DOCK_WIDGET_LINK :  // string avec un lien internet a cote.
+				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
+				pOneWidget = gtk_link_button_new_with_label (cValue, pAuthorizedValuesList && pAuthorizedValuesList[0] ? pAuthorizedValuesList[0] : _("link"));
+				_pack_subwidget (pOneWidget);
+				g_free (cValue);
+			break;
+			
 			
 			case CAIRO_DOCK_WIDGET_STRING_ENTRY :  // string
 			case CAIRO_DOCK_WIDGET_PASSWORD_ENTRY :  // string de type "password", crypte dans le .conf et cache dans l'UI (Merci Tofe !) :-)

@@ -547,18 +547,6 @@ static void cairo_dock_draw_one_gauge (cairo_t *pSourceContext, Gauge *pGauge, i
 				fZoom);
 			pango_cairo_show_layout (pSourceContext, pLayout);
 			cairo_restore (pSourceContext);
-			/**cairo_text_extents_t textExtents;
-			cairo_text_extents (pSourceContext, pRenderer->cFormatBuffer, &textExtents);
-			double fZoom = MIN (pIndicator->textZone.fWidth * pRenderer->iWidth / (textExtents.width, pIndicator->textZone.fHeight * pRenderer->iHeight / textExtents.height);
-			
-			cairo_move_to (pSourceContext,
-				floor ((1. + pIndicator->textZone.fX) * pRenderer->iWidth/2 - textExtents.width*fZoom/2),
-				floor ((1. - pIndicator->textZone.fY) * pRenderer->iHeight/2 + textExtents.height*fZoom/2));
-			cairo_scale (pSourceContext,
-				fZoom,
-				fZoom);
-			cairo_show_text (pSourceContext, pRenderer->cFormatBuffer);
-			cairo_restore (pSourceContext);*/
 		}
 	}
 	

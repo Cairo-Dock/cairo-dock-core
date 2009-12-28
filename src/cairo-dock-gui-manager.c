@@ -485,7 +485,7 @@ GtkWidget *cairo_dock_build_normal_gui_window (const gchar *cTitle, int iWidth, 
 		FALSE,
 		0);
 	
-	GtkWidget *pQuitButton = gtk_button_new_from_stock (GTK_STOCK_QUIT);
+	GtkWidget *pQuitButton = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
 	g_signal_connect (G_OBJECT (pQuitButton), "clicked", G_CALLBACK(on_click_normal_quit), pMainWindow);
 	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
 		pQuitButton,

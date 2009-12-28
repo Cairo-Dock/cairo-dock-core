@@ -908,22 +908,6 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, 
 }
 
 
-void cairo_dock_draw_emblem_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_surface_t *pEmblemSurface)
-{
-	double a = .5;
-	cairo_t *pCairoContext = cairo_create (pIcon->pIconBuffer);
-	g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
-	
-	int w, h;
-	cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
-	cairo_scale (pCairoContext, a, a);
-	cairo_set_source_surface (pCairoContext, pEmblemSurface, 0., h * (1 - a)/a);
-	cairo_paint (pCairoContext);
-	
-	cairo_destroy (pCairoContext);
-}
-
-
 
 void cairo_dock_draw_string (cairo_t *pCairoContext, CairoDock *pDock, double fStringLineWidth, gboolean bIsLoop, gboolean bForceConstantSeparator)
 {
@@ -1075,6 +1059,8 @@ void cairo_dock_draw_surface (cairo_t *pCairoContext, cairo_surface_t *pSurface,
 	else
 		cairo_paint (pCairoContext);
 }
+
+
 
 void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 {

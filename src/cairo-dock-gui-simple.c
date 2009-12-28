@@ -465,7 +465,7 @@ static void show_module_gui (const gchar *cModuleName)
 	
 	if (s_pSimpleConfigModuleWindow == NULL)
 	{
-		s_pSimpleConfigModuleWindow = cairo_dock_build_normal_gui_window ("Config Simple",
+		s_pSimpleConfigModuleWindow = cairo_dock_build_normal_gui_window (cModuleName,
 			CAIRO_DOCK_SIMPLE_PANEL_WIDTH, CAIRO_DOCK_SIMPLE_PANEL_HEIGHT,
 			(CairoDockApplyConfigFunc) on_apply_config_module_simple,
 			NULL,

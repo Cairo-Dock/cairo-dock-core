@@ -790,6 +790,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 
 static inline gboolean _check_extension (const char *extName, const gchar *cExtensions)
 {
+	g_return_val_if_fail (cExtensions != NULL, FALSE);
 	/*
 	** Search for extName in the extensions string.  Use of strstr()
 	** is not sufficient because extension names can be prefixes of
@@ -820,11 +821,12 @@ static gboolean _check_gl_extension (const char *extName)
 	const gchar *glExtensions = glGetString (GL_EXTENSIONS);
 	return _check_extension (extName, glExtensions);
 }
-static gboolean _check_glx_extension (const char *extName)
+static gboolean _check_client_glx_extension (const char *extName)
 {
 	Display *display = gdk_x11_get_default_xdisplay ();
 	int screen = 0;
-	const gchar *glxExtensions = glXQueryExtensionsString (display, screen);
+	//const gchar *glxExtensions = glXQueryExtensionsString (display, screen);
+	const gchar *glxExtensions = glXGetClientString (display,GLX_EXTENSIONS);
 	return _check_extension (extName, glxExtensions);
 }
 
@@ -1539,7 +1541,7 @@ GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pCont
 	
 	if (major <= 1 && minor < 3)  // on a besoin de GLX >= 1.3 pour les pbuffers; mais si on a l'extension GLX_SGIX_pbuffer et un version inferieure, ca marche quand meme.
 	{
-		if (! _check_glx_extension ("GLX_SGIX_pbuffer"))
+		if (! _check_client_glx_extension ("GLX_SGIX_pbuffer"))
 		{
 			cd_warning ("No pbuffer extension in GLX.\n this might affect the drawing of some applets which are inside a dock");
 			*pContext = 0;
@@ -1580,7 +1582,6 @@ GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pCont
 		GLX_LARGEST_PBUFFER, True,
 		None};
 	GLXPbuffer pbuffer = glXCreatePbuffer (XDisplay, pFBConfigs[0], pbufAttribs);
-	
 	
 	pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[0]);
 	
@@ -1738,28 +1739,7 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	}
 }
 
-void cairo_dock_draw_emblem_on_icon_opengl (Icon *pIcon, CairoContainer *pContainer, GLuint iEmblemTexture)
-{
-	double a = .5;
-	if (! cairo_dock_begin_draw_icon (pIcon, pContainer))
-		return ;
-	
-	_cairo_dock_enable_texture ();
-	
-	_cairo_dock_set_blend_source ();
-	
-	int w, h;
-	cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
-	_cairo_dock_apply_texture_at_size (pIcon->iIconTexture, w, h);
-	
-	_cairo_dock_set_blend_alpha ();
-	glBindTexture (GL_TEXTURE_2D, iEmblemTexture);
-	_cairo_dock_apply_current_texture_at_size_with_offset (a*w, a*h, -w/2 * (1 - a), -h/2 * (1 - a));
-	
-	_cairo_dock_disable_texture ();
-	
-	cairo_dock_end_draw_icon (pIcon, pContainer);
-}
+
 
 void cairo_dock_set_perspective_view (int iWidth, int iHeight)
 {
@@ -2404,7 +2384,7 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	if (! s_bChecked)
 	{
 		s_bChecked = TRUE;
-		if (!_check_glx_extension ("GLX_EXT_texture_from_pixmap"))
+		if (!_check_client_glx_extension ("GLX_EXT_texture_from_pixmap"))
 		{
 			cd_warning ("the extension GLX_EXT_texture_from_pixmap is missing");
 			return 0;

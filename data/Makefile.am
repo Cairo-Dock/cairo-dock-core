@@ -56,11 +56,16 @@ essentialdata_DATA = \
 	icon-connection.svg\
 	cairo-dock-animated.xpm\
 	help.conf\
-	icon-help.png
+	icon-help.png\
+	icon-close.png\
+	icon-restore.png\
+	icon-minimize.png\
+	icon-maximize.png
 	
 autostartdatadir = $(datadir)/applications
 autostartdata_DATA = \
 	cairo-dock.desktop\
+	cairo-dock-indirect.desktop\
 	cairo-dock-cairo.desktop
 
 icondatadir = $(datadir)/pixmaps

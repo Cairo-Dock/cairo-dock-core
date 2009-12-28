@@ -615,7 +615,7 @@ int main (int argc, char** argv)
 	//\___________________ On affiche un petit message de bienvenue.
 	if (bFirstLaunch)
 	{
-		//cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Theme manager\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit : right-click -> Cairo-Dock -> Communauty site.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);
+		cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Manage themes.\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit at http://cairo-dock.org.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);
 		
 		GdkScreen *pScreen = gdk_screen_get_default ();
 		if (! mySystem.bUseFakeTransparency && ! gdk_screen_is_composited (pScreen))
@@ -708,8 +708,7 @@ int main (int argc, char** argv)
 	
 	g_print ("\n2eme DOCK PRINCIPAL AVEC 1 ICONE : BORD TRONQUE EN VERTICAL\n\n");
 	g_print ("\nPLAN 3D NE PREND PAS TOUT L'ECRAN\n\n");
-	g_print ("\nBATTERIE VERS 100%\n\n");
-	g_print ("\nPB AFFICHAGE PM\n\n");
+	g_print ("\nBATTERIE VERS 100% (?)\n\n");
 	
 	g_print ("\nINDICATEURS EN HAUT (RETOURNES) ET CAIRO\n\n");
 	g_print ("=> AUTO-HIDE WHEN SWITCHING DESKTOP IN CAIRO MODE\n");

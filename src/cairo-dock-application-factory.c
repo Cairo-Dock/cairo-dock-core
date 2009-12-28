@@ -534,6 +534,16 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 			g_print ("  wine application detected, changing the class '%s' to '%s'\n", pClassHint->res_class, pClassHint->res_name);
 			cClass = g_ascii_strdown (pClassHint->res_name, -1);
 		}
+		else if (*pClassHint->res_class == '/' && g_str_has_suffix (pClassHint->res_class, ".exe"))  // cas des applications Mono telles que tomboy ...
+		{
+			gchar *str = strrchr (pClassHint->res_class, '/');
+			if (str)
+				str ++;
+			else
+				str = pClassHint->res_class;
+			cClass = g_ascii_strdown (str, -1);
+			cClass[strlen (cClass) - 4] = '\0';
+		}
 		else
 			cClass = g_ascii_strdown (pClassHint->res_class, -1);  // on la passe en minuscule, car certaines applis ont la bonne idee de donner des classes avec une majuscule ou non suivant les fenetres. Il reste le cas des applis telles que Glade2 ('Glade' et 'Glade-2' ...)
 		XFree (pClassHint->res_name);

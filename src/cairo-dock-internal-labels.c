@@ -97,7 +97,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 		bShow = (iShowLabel != 0);
 		bLabelForPointedIconOnly = (iShowLabel == 1);
 	}
-	g_print ("labels : %d;%d\n", bShow, bLabelForPointedIconOnly);
+	//g_print ("labels : %d;%d\n", bShow, bLabelForPointedIconOnly);
 	if (! bShow)
 	{
 		g_free (pLabels->iconTextDescription.cFont);

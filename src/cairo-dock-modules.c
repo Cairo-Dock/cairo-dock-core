@@ -133,7 +133,7 @@ void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 	pVisitCard->cUserDataDir = "help";
 	pVisitCard->cShareDataDir = CAIRO_DOCK_SHARE_DATA_DIR;
 	pVisitCard->cConfFileName = "help.conf";
-	pVisitCard->cModuleVersion = "0.0.7";
+	pVisitCard->cModuleVersion = "0.0.8";
 	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
 	pVisitCard->cIconFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/icon-help.png";
 	pVisitCard->iSizeOfConfig = 0;
@@ -1324,16 +1324,17 @@ void cairo_dock_read_module_config (GKeyFile *pKeyFile, CairoDockModuleInstance 
 	CairoDockModuleInterface *pInterface = pInstance->pModule->pInterface;
 	CairoDockVisitCard *pVisitCard = pInstance->pModule->pVisitCard;
 	
-	if (pInterface->read_conf_file == NULL)
-		return ;
-	
-	if (pInterface->reset_config != NULL)
-		pInterface->reset_config (pInstance);
-	if (pVisitCard->iSizeOfConfig != 0)
-		memset (((gpointer)pInstance)+sizeof(CairoDockModuleInstance), 0, pVisitCard->iSizeOfConfig);
-	
-	gboolean bFlushConfFileNeeded = g_key_file_has_group (pKeyFile, "Desklet") && ! g_key_file_has_key (pKeyFile, "Desklet", "accessibility", NULL);  // petit hack des familles ^_^
-	bFlushConfFileNeeded |= pInterface->read_conf_file (pInstance, pKeyFile);
+	gboolean bFlushConfFileNeeded = FALSE;
+	if (pInterface->read_conf_file != NULL)
+	{	
+		if (pInterface->reset_config != NULL)
+			pInterface->reset_config (pInstance);
+		if (pVisitCard->iSizeOfConfig != 0)
+			memset (((gpointer)pInstance)+sizeof(CairoDockModuleInstance), 0, pVisitCard->iSizeOfConfig);
+		
+		bFlushConfFileNeeded = g_key_file_has_group (pKeyFile, "Desklet") && ! g_key_file_has_key (pKeyFile, "Desklet", "accessibility", NULL);  // petit hack des familles ^_^
+		bFlushConfFileNeeded |= pInterface->read_conf_file (pInstance, pKeyFile);
+	}
 	if (! bFlushConfFileNeeded)
 		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, pVisitCard->cModuleVersion);
 	if (bFlushConfFileNeeded)

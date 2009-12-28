@@ -5,10 +5,11 @@ Exec=cairo-dock -o
 Icon=cairo-dock.svg
 #DocPath=
 Terminal=false
+Comment=Cairo-Dock with OpenGL (hardware acceleration)
 
 Name=GLX-Dock (Cairo-Dock with OpenGL)
 Name[fr]=GLX-Dock (Cairo-Dock avec OpenGL)
 
-GenericName=Multi-purpose Dock
-GenericName[fr]=Dock multi-usage
+GenericName=Multi-purpose Dock and Desklets
+GenericName[fr]=Dock et Desklets multi-usage
 Categories=System;

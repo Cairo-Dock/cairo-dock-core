@@ -1123,7 +1123,7 @@ gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareTh
 		iType = iGivenType;
 	gchar *cThemePath = NULL;
 	
-	g_print ("iType : %d\n", iType);
+	//g_print ("iType : %d\n", iType);
 	if (cUserThemesDir != NULL && /*iType != CAIRO_DOCK_DISTANT_THEME && iType != CAIRO_DOCK_NEW_THEME && */iType != CAIRO_DOCK_UPDATED_THEME)
 	{
 		cThemePath = g_strdup_printf ("%s/%s", cUserThemesDir, cThemeName);

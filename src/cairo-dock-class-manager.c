@@ -1060,8 +1060,10 @@ void cairo_dock_set_class_order (Icon *pIcon)
 		for (ic = g_list_last (g_pMainDock->icons); ic != NULL; ic = ic->prev)
 		{
 			icon = ic->data;
-			if (icon->iType == CAIRO_DOCK_APPLI)
+			if (icon->iType == CAIRO_DOCK_APPLI && ! cairo_dock_class_is_inhibated (icon->cClass))  // on verifie qu'elle n'est pas placé a cote de son lanceur, sinon cela cree des incoherences suivants que l'appli est lancee 2 fois ou pas.
+			{
 				break ;
+			}
 		}
 		if (ic != NULL)  // on a trouve une icone d'appli.
 		{
