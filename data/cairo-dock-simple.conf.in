@@ -102,5 +102,7 @@ config_illusion =
 frame_mod=
 
 #N Add or remove any applet :
-#{Select a line to get a preview and a description of the applet. Click on the left checkbox to (de)activate an applet.}/
+#{Select a line to get a preview and a description of the applet.
+#Click on the left checkbox to (de)activate an applet.
+#Once an applet is active, you can configure it by right clicking on its icon.}/
 modules=

@@ -1135,7 +1135,7 @@ static void _cairo_dock_reorder_one_class (gchar *cClass, CairoDockClassAppli *p
 			for (ic = ic->next; ic != NULL; ic = ic->next)
 			{
 				pNextIcon = ic->data;
-				if (!pNextIcon->cClass || strcmp (pNextIcon->cClass, pSameClassIcon->cClass) != 0)  // icone d'une autre classe.
+				if (!pNextIcon->cClass || strcmp (pNextIcon->cClass, cClass) != 0)  // icone d'une autre classe. (pSameClassIcon->cClass peut etre NULL dans le cas d'un inhibiteur place dans un sous-dock, car alors pSameClassIcon est l'icone pointant sur le sous-dock.)
 					break;
 				pSameClassIcon = pNextIcon;
 				pNextIcon = NULL;
