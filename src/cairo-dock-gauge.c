@@ -308,9 +308,9 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 				//g_print ("+ %s\n", pGaugeSubNode->name);
 				cNodeContent = xmlNodeGetContent (pGaugeSubNode);
 				if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posX") == 0)
-					pGaugeIndicator->posX = atof (cNodeContent);
+					pGaugeIndicator->posX = g_ascii_strtod (cNodeContent, NULL);
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posY") == 0)
-					pGaugeIndicator->posY = atof (cNodeContent);
+					pGaugeIndicator->posY = g_ascii_strtod (cNodeContent, NULL);
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "text_zone") == 0)
 				{
 					xmlNodePtr pTextSubNode;
@@ -318,19 +318,19 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 					{
 						cTextNodeContent = xmlNodeGetContent (pTextSubNode);
 						if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "x_center") == 0)
-							pGaugeIndicator->textZone.fX = atof (cTextNodeContent);
+							pGaugeIndicator->textZone.fX = g_ascii_strtod (cTextNodeContent, NULL);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "y_center") == 0)
-							pGaugeIndicator->textZone.fY = atof (cTextNodeContent);
+							pGaugeIndicator->textZone.fY = g_ascii_strtod (cTextNodeContent, NULL);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "width") == 0)
-							pGaugeIndicator->textZone.fWidth = atof (cTextNodeContent);
+							pGaugeIndicator->textZone.fWidth = g_ascii_strtod (cTextNodeContent, NULL);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "height") == 0)
-							pGaugeIndicator->textZone.fHeight = atof (cTextNodeContent);
+							pGaugeIndicator->textZone.fHeight = g_ascii_strtod (cTextNodeContent, NULL);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "red") == 0)
-							pGaugeIndicator->textZone.pColor[0] = atof (cTextNodeContent);
+							pGaugeIndicator->textZone.pColor[0] = g_ascii_strtod (cTextNodeContent, NULL);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "green") == 0)
-							pGaugeIndicator->textZone.pColor[1] = atof (cTextNodeContent);
+							pGaugeIndicator->textZone.pColor[1] = g_ascii_strtod (cTextNodeContent, NULL);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "blue") == 0)
-							pGaugeIndicator->textZone.pColor[2] = atof (cTextNodeContent);
+							pGaugeIndicator->textZone.pColor[2] = g_ascii_strtod (cTextNodeContent, NULL);
 					}
 				}
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "logo_zone") == 0)
@@ -340,23 +340,23 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 					{
 						cTextNodeContent = xmlNodeGetContent (pLogoSubNode);
 						if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "x_center") == 0)
-							pGaugeIndicator->emblem.fX = atof (cTextNodeContent);
+							pGaugeIndicator->emblem.fX = g_ascii_strtod (cTextNodeContent, NULL);
 						else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "y_center") == 0)
-							pGaugeIndicator->emblem.fY = atof (cTextNodeContent);
+							pGaugeIndicator->emblem.fY = g_ascii_strtod (cTextNodeContent, NULL);
 						else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "width") == 0)
-							pGaugeIndicator->emblem.fWidth = atof (cTextNodeContent);
+							pGaugeIndicator->emblem.fWidth = g_ascii_strtod (cTextNodeContent, NULL);
 						else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "height") == 0)
-							pGaugeIndicator->emblem.fHeight = atof (cTextNodeContent);
+							pGaugeIndicator->emblem.fHeight = g_ascii_strtod (cTextNodeContent, NULL);
 						else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "alpha") == 0)
-							pGaugeIndicator->emblem.fAlpha = atof (cTextNodeContent);
+							pGaugeIndicator->emblem.fAlpha = g_ascii_strtod (cTextNodeContent, NULL);
 					}
 				}
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "direction") == 0)
-					pGaugeIndicator->direction = atof (cNodeContent);
+					pGaugeIndicator->direction = g_ascii_strtod (cNodeContent, NULL);
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posStart") == 0)
-					pGaugeIndicator->posStart = atof (cNodeContent);
+					pGaugeIndicator->posStart = g_ascii_strtod (cNodeContent, NULL);
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posStop") == 0)
-					pGaugeIndicator->posStop = atof (cNodeContent);
+					pGaugeIndicator->posStop = g_ascii_strtod (cNodeContent, NULL);
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "nb images") == 0)
 					pGaugeIndicator->iNbImages = atoi (cNodeContent);
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "offset_x") == 0)

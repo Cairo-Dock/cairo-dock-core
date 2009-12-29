@@ -301,11 +301,14 @@ static void _cairo_dock_draw_inside_dialog (cairo_t *pCairoContext, CairoDialog 
 			cairo_clip (pCairoContext);
 		}
 		
+		g_print ("draw icon (%x) ...", pDialog->pIconBuffer);
 		cairo_set_source_surface (pCairoContext,
 			pDialog->pIconBuffer,
 			x - (pDialog->iCurrentFrame * pDialog->iIconSize),
 			y);
+		g_print (" paint ...");
 		_paint_inside_dialog(pCairoContext, fAlpha);
+		g_print (" ok\n");
 		if (pDialog->iNbFrames > 1)
 			cairo_restore (pCairoContext);
 	}
@@ -367,7 +370,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 	GdkEventExpose *pExpose,
 	CairoDialog *pDialog)
 {
-	//cd_message ("%s (%dx%d)", __func__, pDialog->container.iWidth, pDialog->container.iHeight);
+	g_print ("%s (%dx%d)\n", __func__, pDialog->container.iWidth, pDialog->container.iHeight);
 	int x, y;
 	if (0 && g_bUseOpenGL && (pDialog->pDecorator == NULL || pDialog->pDecorator->render_opengl != NULL) && (pDialog->pRenderer == NULL || pDialog->pRenderer->render_opengl != NULL))
 	{

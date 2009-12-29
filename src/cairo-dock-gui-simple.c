@@ -246,7 +246,7 @@ static GtkWidget * show_main_gui (void)
 	}
 	
 	// comportement
-	CairoDockPositionType iScreenBorder = ((! g_pMainDock->container.bIsHorizontal) << 1) | (! g_pMainDock->container.bDirectionUp);
+	CairoDockPositionType iScreenBorder = (g_pMainDock ? ((! g_pMainDock->container.bIsHorizontal) << 1) | (! g_pMainDock->container.bDirectionUp) : 0);
 	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "screen border", iScreenBorder);
 	
 	gboolean iVisibility;

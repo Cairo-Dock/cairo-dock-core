@@ -913,12 +913,12 @@ static void cairo_dock_free_categories (void)
 
 static gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
 {
-	cd_debug ("%s (%x)", __func__, pBlockingLoop);
+	g_print ("%s (%x)\n", __func__, pBlockingLoop);
 	if (pBlockingLoop != NULL)
 	{
 		cd_debug ("dialogue detruit, on sort de la boucle");
-		if (g_main_loop_is_running (pBlockingLoop))
-			g_main_loop_quit (pBlockingLoop);
+		//if (g_main_loop_is_running (pBlockingLoop))
+		//	g_main_loop_quit (pBlockingLoop);
 	}
 	cairo_dock_free_categories ();
 	if (s_iSidShowGroupDialog != 0)
@@ -1029,8 +1029,13 @@ static void on_click_quit (GtkButton *button, GtkWidget *pWindow)
 {
 	//g_print ("%s ()\n", __func__);
 	GMainLoop *pBlockingLoop = g_object_get_data (G_OBJECT (pWindow), "loop");
-	on_delete_main_gui (pWindow, NULL, pBlockingLoop);
-	gtk_widget_destroy (pWindow);
+	
+	gboolean bReturn;
+	g_signal_emit_by_name (pWindow, "delete-event", NULL, &bReturn);
+	///on_delete_main_gui (pWindow, NULL, pBlockingLoop);
+	
+	if (pBlockingLoop == NULL)
+		gtk_widget_destroy (pWindow);
 }
 
 static void on_click_ok (GtkButton *button, GtkWidget *pWindow)

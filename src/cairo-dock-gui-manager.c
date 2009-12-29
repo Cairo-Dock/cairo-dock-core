@@ -453,7 +453,11 @@ static void on_click_normal_quit (GtkButton *button, GtkWidget *pWindow)
 {
 	g_print ("%s ()\n", __func__);
 	GMainLoop *pBlockingLoop = g_object_get_data (G_OBJECT (pWindow), "loop");
-	on_delete_normal_gui (pWindow, NULL, pBlockingLoop);
+	
+	gboolean bReturn;
+	g_signal_emit_by_name (pWindow, "delete-event", NULL, &bReturn);
+	///on_delete_normal_gui (pWindow, NULL, pBlockingLoop);
+	
 	if (pBlockingLoop == NULL)
 		gtk_widget_destroy (pWindow);
 }

@@ -220,6 +220,16 @@ static void _accept_metacity_composition (int iClickedButton, GtkWidget *pIntera
 	}
 }
 
+static gboolean on_delete_maintenance_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
+{
+	g_print ("%s ()\n", __func__);
+	if (pBlockingLoop != NULL && g_main_loop_is_running (pBlockingLoop))
+	{
+		g_main_loop_quit (pBlockingLoop);
+	}
+	return FALSE;  // TRUE <=> ne pas detruire la fenetre.
+}
+
 #define _create_dir_or_die(cDirPath) do {\
 	if (g_mkdir (cDirPath, 7*8*8+7*8+7) != 0) {\
 		cd_warning ("couldn't create directory %s", cDirPath);\
@@ -596,6 +606,23 @@ int main (int argc, char** argv)
 	{
 		GtkWidget *pWindow = cairo_dock_show_main_gui ();
 		gtk_window_set_title (GTK_WINDOW (pWindow), _("< Maintenance mode >"));
+		
+		gtk_window_set_modal (GTK_WINDOW (pWindow), TRUE);
+		GMainLoop *pBlockingLoop = g_main_loop_new (NULL, FALSE);
+		///g_object_set_data (G_OBJECT (pWindow), "loop", pBlockingLoop);
+		g_signal_connect (G_OBJECT (pWindow),
+			"delete-event",
+			G_CALLBACK (on_delete_maintenance_gui),
+			pBlockingLoop);
+
+		g_print ("debut de boucle bloquante ...\n");
+		GDK_THREADS_LEAVE ();
+		g_main_loop_run (pBlockingLoop);
+		GDK_THREADS_ENTER ();
+		g_print ("fin de boucle bloquante\n");
+		
+		g_main_loop_unref (pBlockingLoop);
+		g_print ("plop\n");
 	}
 	
 	cd_message ("loading theme ...");
