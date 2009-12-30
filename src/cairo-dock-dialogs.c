@@ -301,14 +301,11 @@ static void _cairo_dock_draw_inside_dialog (cairo_t *pCairoContext, CairoDialog 
 			cairo_clip (pCairoContext);
 		}
 		
-		g_print ("draw icon (%x) ...", pDialog->pIconBuffer);
 		cairo_set_source_surface (pCairoContext,
 			pDialog->pIconBuffer,
 			x - (pDialog->iCurrentFrame * pDialog->iIconSize),
 			y);
-		g_print (" paint ...");
 		_paint_inside_dialog(pCairoContext, fAlpha);
-		g_print (" ok\n");
 		if (pDialog->iNbFrames > 1)
 			cairo_restore (pCairoContext);
 	}
@@ -370,7 +367,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 	GdkEventExpose *pExpose,
 	CairoDialog *pDialog)
 {
-	g_print ("%s (%dx%d)\n", __func__, pDialog->container.iWidth, pDialog->container.iHeight);
+	//g_print ("%s (%dx%d)\n", __func__, pDialog->container.iWidth, pDialog->container.iHeight);
 	int x, y;
 	if (0 && g_bUseOpenGL && (pDialog->pDecorator == NULL || pDialog->pDecorator->render_opengl != NULL) && (pDialog->pRenderer == NULL || pDialog->pRenderer->render_opengl != NULL))
 	{
@@ -1865,10 +1862,13 @@ void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface
 	int iPrevMessageHeight = pDialog->iMessageHeight;
 
 	cairo_surface_destroy (pDialog->pIconBuffer);
-	pDialog->pIconBuffer = pNewIconSurface;
+	
+	cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDialog));
+	pDialog->pIconBuffer = cairo_dock_duplicate_surface (pNewIconSurface, pSourceContext, iNewIconSize, iNewIconSize, iNewIconSize, iNewIconSize);
 	if (pDialog->iIconTexture != 0)
 		_cairo_dock_delete_texture (pDialog->iIconTexture);
-	pDialog->iIconTexture = cairo_dock_create_texture_from_surface (pDialog->pIconBuffer);
+	if (g_bUseOpenGL)
+		pDialog->iIconTexture = cairo_dock_create_texture_from_surface (pDialog->pIconBuffer);
 	
 	pDialog->iIconSize = iNewIconSize;
 	cairo_dock_compute_dialog_sizes (pDialog);
@@ -1893,7 +1893,7 @@ void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface
 void cairo_dock_set_dialog_message (CairoDialog *pDialog, const gchar *cMessage)
 {
 	cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDialog));
-
+	
 	int iNewTextWidth=0, iNewTextHeight=0;
 	cairo_surface_t *pNewTextSurface = _cairo_dock_create_dialog_text_surface (cMessage, NULL, pSourceContext, &iNewTextWidth, &iNewTextHeight);
 	
