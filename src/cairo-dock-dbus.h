@@ -138,6 +138,8 @@ void cairo_dock_dbus_get_properties (DBusGProxy *pDbusProxy, const gchar *cComma
 
 void cairo_dock_dbus_get_property_in_value (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, GValue *pProperty);
 
+gboolean cairo_dock_dbus_get_property_as_boolean (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty);
+
 gint cairo_dock_dbus_get_property_as_int (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty);
 
 guint cairo_dock_dbus_get_property_as_uint (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty);
@@ -154,6 +156,11 @@ gpointer cairo_dock_dbus_get_property_as_boxed (DBusGProxy *pDbusProxy, const gc
 
 
 GHashTable *cairo_dock_dbus_get_all_properties (DBusGProxy *pDbusProxy, const gchar *cInterface);
+
+
+void cairo_dock_dbus_set_property (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, GValue *pProperty);
+
+void cairo_dock_dbus_set_boolean_property (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, gboolean bValue);
 
 
 G_END_DECLS

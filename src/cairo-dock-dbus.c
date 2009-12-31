@@ -356,6 +356,16 @@ void cairo_dock_dbus_get_property_in_value (DBusGProxy *pDbusProxy, const gchar 
 	}
 }
 
+gboolean cairo_dock_dbus_get_property_as_boolean (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+{
+	GValue v = {0};
+	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	if (G_VALUE_HOLDS_BOOLEAN (&v))
+		return g_value_get_boolean (&v);
+	else
+		return FALSE;
+}
+
 gint cairo_dock_dbus_get_property_as_int (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
 {
 	GValue v = {0};
@@ -457,3 +467,31 @@ GHashTable *cairo_dock_dbus_get_all_properties (DBusGProxy *pDbusProxy, const gc
 		return hProperties;
 	}
 }
+
+
+void cairo_dock_dbus_set_property (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, GValue *pProperty)
+{
+	GError *erreur=NULL;
+	
+	dbus_g_proxy_call(pDbusProxy, "Set", &erreur,
+		G_TYPE_STRING, cInterface,
+		G_TYPE_STRING, cProperty,
+		G_TYPE_VALUE, pProperty,
+		G_TYPE_INVALID,
+		G_TYPE_INVALID);
+	
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+	}
+}
+
+void cairo_dock_dbus_set_boolean_property (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, gboolean bValue)
+{
+	GValue v = {0};
+	g_value_init (&v, G_TYPE_BOOLEAN);
+	g_value_set_boolean (&v, bValue);
+	cairo_dock_dbus_set_property (pDbusProxy, cInterface, cProperty, &v);
+}
+
