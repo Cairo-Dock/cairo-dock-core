@@ -711,6 +711,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 	}
 	if (myTaskBar.cAnimationOnDemandsAttention && ! pHiddenIcon)  // on ne l'anime pas si elle n'est pas dans un dock.
 	{
+		g_print ("on anime l'icone (%s)\n", myTaskBar.cAnimationOnDemandsAttention);
 		if (pDock->iRefCount == 0)
 		{
 			cairo_dock_pop_up (pDock);
@@ -734,7 +735,8 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 				cairo_dock_show_subdock (pPointedIcon, pParentDock, FALSE);
 		}
 		cairo_dock_request_icon_animation (icon, pDock, myTaskBar.cAnimationOnDemandsAttention, 10000);
-		if (bForceDemand)
+		g_print ("on lance l'animation\n");
+		///if (bForceDemand)
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));  // precaution au cas ou le dock ne serait pas encore visible.
 	}
 }

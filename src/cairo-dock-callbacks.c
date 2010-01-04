@@ -130,7 +130,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	GdkEventExpose *pExpose,
 	CairoDock *pDock)
 {
-	//g_print ("%s ((%d;%d) %dx%d) (%d)\n", __func__, pExpose->area.x, pExpose->area.y, pExpose->area.width, pExpose->area.height, pDock->bAtBottom);
+	//g_print ("%s ((%d;%d) %dx%d)\n", __func__, pExpose->area.x, pExpose->area.y, pExpose->area.width, pExpose->area.height);
 	if (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL)
 	{
 		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pDock->container.pWidget);

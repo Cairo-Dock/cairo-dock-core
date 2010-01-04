@@ -383,7 +383,8 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 					pIcon->fPersonnalScale = - 0.05;
 			}
 			
-			cairo_dock_stop_icon_animation (pIcon);  // s'il y'a une autre animation en cours, on l'arrete.
+			if (! pIcon->bIsDemandingAttention)
+				cairo_dock_stop_icon_animation (pIcon);  // s'il y'a une autre animation en cours, on l'arrete.
 		}
 		
 		pDock->pRenderer->calculate_icons (pDock);
@@ -483,6 +484,7 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 	}
 	if (pDock->bIsHiding)
 	{
+		//g_print ("le dock se cache\n");
 		pDock->bIsHiding = _cairo_dock_hide (pDock);
 		gtk_widget_queue_draw (pDock->container.pWidget);  // on n'utilise pas cairo_dock_redraw_container, sinon a la derniere iteration, le dock etant cache, la fonction ne le redessine pas.
 		bContinue |= pDock->bIsHiding;
@@ -525,6 +527,11 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 		bContinue |= bIconIsAnimating;
 		if (! bIconIsAnimating)
 			icon->iAnimationState = CAIRO_DOCK_STATE_REST;
+		if (icon->bIsDemandingAttention)
+		{
+			//g_print (" l'icone animee continue : %d\n", bIconIsAnimating);
+			gtk_widget_queue_draw (pDock->container.pWidget);
+		}
 	}
 	bContinue |= pDock->container.bKeepSlowAnimation;
 	
