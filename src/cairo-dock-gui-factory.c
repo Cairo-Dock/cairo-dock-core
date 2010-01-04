@@ -522,6 +522,23 @@ static void _cairo_dock_set_original_value (GtkButton *button, gpointer *data)
 		
 		g_free (fValuesList);
 	}
+	else if (GTK_IS_COLOR_BUTTON (pOneWidget))
+	{
+		double *fValuesList = g_key_file_get_double_list (pKeyFile, cGroupName, cKeyName, &length, &erreur);
+		
+		if (length > 2)
+		{
+			GdkColor gdkColor;
+			gdkColor.red = fValuesList[0] * 65535;
+			gdkColor.green = fValuesList[1] * 65535;
+			gdkColor.blue = fValuesList[2] * 65535;
+			gtk_color_button_set_color (GTK_COLOR_BUTTON (pOneWidget), &gdkColor);
+			
+			if (length > 3 && gtk_color_button_get_use_alpha (GTK_COLOR_BUTTON (pOneWidget)))
+				gtk_color_button_set_alpha (GTK_COLOR_BUTTON (pOneWidget), fValuesList[3] * 65535);
+		}
+		g_free (fValuesList);
+	}
 	g_key_file_free (pKeyFile);
 }
 

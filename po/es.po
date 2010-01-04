@@ -1190,7 +1190,7 @@ msgid "Allow applets to be placed amongst launchers ?"
 msgstr "¿Permitir a las mini-aplicaciones mezclarce entre los lanzadores?"
 
 #: ../data/messages:93 ../data/messages:653
-msgid "Choose the default view for root docks :"
+msgid "Choose the default view for main docks :"
 msgstr "Elegir la vista para las barras:"
 
 #: ../data/messages:95 ../data/messages:657

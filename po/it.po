@@ -1192,7 +1192,7 @@ msgid "Allow applets to be placed amongst launchers ?"
 msgstr "Permettere alle applets di essere piazzate tra i lanciatori ?"
 
 #: ../data/messages:93 ../data/messages:653
-msgid "Choose the default view for root docks :"
+msgid "Choose the default view for main docks :"
 msgstr "Scegliere la vista di default per la barra principale :"
 
 #: ../data/messages:95 ../data/messages:657

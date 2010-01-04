@@ -71,7 +71,7 @@ static void _cairo_dock_on_realize (GtkWidget* pWidget, gpointer data)
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	
 	/// a tester ...
-	//glEnable (GL_MULTISAMPLE_ARB);
+	glEnable (GL_MULTISAMPLE_ARB);
 	
 	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);  // GL_MODULATE / GL_DECAL /  GL_BLEND
 	

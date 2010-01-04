@@ -118,6 +118,8 @@ gchar *cairo_dock_dbus_get_string (DBusGProxy *pDbusProxy, const gchar *cAccesso
 */
 gchar **cairo_dock_dbus_get_string_list (DBusGProxy *pDbusProxy, const gchar *cAccessor);
 
+GPtrArray *cairo_dock_dbus_get_array (DBusGProxy *pDbusProxy, const gchar *cAccessor);
+
 /** Get the value of an 'unsigned char' parameter on the bus.
 *@param pDbusProxy proxy to the connection.
 *@param cAccessor name of the accessor.

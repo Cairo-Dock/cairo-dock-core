@@ -74,7 +74,7 @@ static gboolean on_delete_launcher_gui (GtkWidget *pWidget, GdkEvent *event, gpo
 
 static void on_click_launcher_apply (GtkButton *button, GtkWidget *pWindow)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	
 	Icon *pIcon = g_object_get_data (G_OBJECT (pWindow), "current-icon");
 	if (pIcon == NULL)  // ligne correspondante a un dock principal.
@@ -124,7 +124,7 @@ static gboolean _search_icon_in_line (GtkTreeModel *model, GtkTreePath *path, Gt
 		2, &pIcon, -1);
 	if (pIcon == data[0])
 	{
-		g_print (" found !\n");
+		//g_print (" found !\n");
 		memcpy (data[1], iter, sizeof (GtkTreeIter));
 		data[2] = GINT_TO_POINTER (TRUE);
 		return TRUE;  // stop iterating.
@@ -135,7 +135,7 @@ static gboolean _search_icon_in_model (GtkWidget *pTreeView, Icon *pIcon, GtkTre
 {
 	if (pIcon == NULL)
 		return FALSE;
-	g_print ("%s (%s)\n", __func__, pIcon->cName);
+	//g_print ("%s (%s)\n", __func__, pIcon->cName);
 	GtkTreeModel * model = gtk_tree_view_get_model (GTK_TREE_VIEW (pTreeView));
 	gpointer data[3] = {pIcon, iter, GINT_TO_POINTER (FALSE)};
 	gtk_tree_model_foreach (model,
@@ -146,7 +146,7 @@ static gboolean _search_icon_in_model (GtkWidget *pTreeView, Icon *pIcon, GtkTre
 
 static gboolean _cairo_dock_select_one_launcher_in_tree (GtkTreeSelection * selection, GtkTreeModel * model, GtkTreePath * path, gboolean path_currently_selected, gpointer data)
 {
-	g_print ("%s (path_currently_selected:%d)\n", __func__, path_currently_selected);
+	//g_print ("%s (path_currently_selected:%d)\n", __func__, path_currently_selected);
 	if (path_currently_selected)
 		return TRUE;
 	GtkTreeIter iter;
@@ -168,7 +168,7 @@ static gboolean _cairo_dock_select_one_launcher_in_tree (GtkTreeSelection * sele
 	// on charge son .conf
 	if (pIcon->cDesktopFileName != NULL)
 	{
-		g_print ("on presente %s...\n", pIcon->cDesktopFileName);
+		//g_print ("on presente %s...\n", pIcon->cDesktopFileName);
 		gchar *cConfFilePath = (*pIcon->cDesktopFileName == '/' ? g_strdup (pIcon->cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName));
 		
 		CairoDockDesktopFileType iLauncherType;
@@ -347,7 +347,7 @@ static inline void _select_item (Icon *pIcon)
 
 GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	//\_____________ On construit la fenetre.
 	if (s_pLauncherWindow != NULL)
 	{
@@ -486,7 +486,7 @@ void cairo_dock_refresh_launcher_gui (void)
 {
 	if (cairo_dock_is_loading ())
 		return;
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	if (s_pLauncherWindow == NULL)
 		return ;
 	Icon *pCurrentIcon = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-icon");

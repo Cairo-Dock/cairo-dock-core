@@ -542,7 +542,7 @@ string color = 0.0; 0.0; 0.8; 0.4
 #F+[Main Dock]
 frame_main =
 
-#n+ Choose the default view for root docks :/
+#n+ Choose the default view for main docks :/
 main dock view = default
 
 #F+[Sub-Docks]

@@ -1168,7 +1168,7 @@ msgid "Allow applets to be placed amongst launchers ?"
 msgstr "アプレットをランチャーの間に混ぜて配置"
 
 #: ../data/messages:93 ../data/messages:653
-msgid "Choose the default view for root docks :"
+msgid "Choose the default view for main docks :"
 msgstr "ルート・ドックのデフォルトのビューの選択 :"
 
 #: ../data/messages:95 ../data/messages:657

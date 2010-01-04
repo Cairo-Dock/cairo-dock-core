@@ -1883,7 +1883,7 @@ msgid "Main Dock"
 msgstr ""
 
 #: ../data/messages:537
-msgid "Choose the default view for root docks :"
+msgid "Choose the default view for main docks :"
 msgstr ""
 
 #: ../data/messages:539

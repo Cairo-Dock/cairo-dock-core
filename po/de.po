@@ -1182,7 +1182,7 @@ msgid "Allow applets to be placed amongst launchers ?"
 msgstr "Dürfen Minianwendungen und Starter vermischt werden?"
 
 #: ../data/messages:93 ../data/messages:653
-msgid "Choose the default view for root docks :"
+msgid "Choose the default view for main docks :"
 msgstr "Standardansicht für das Hauptdock auswählen:"
 
 #: ../data/messages:95 ../data/messages:657

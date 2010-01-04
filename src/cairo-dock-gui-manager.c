@@ -60,6 +60,7 @@ int cairo_dock_get_nb_dialog_windows (void)
 {
 	return iNbConfigDialogs;
 }
+
 void cairo_dock_dialog_window_destroyed (void)
 {
 	iNbConfigDialogs --;
@@ -70,8 +71,8 @@ void cairo_dock_dialog_window_destroyed (void)
 			cairo_dock_pop_down (g_pMainDock);
 	}
 	g_print ("iNbConfigDialogs <- %d\n", iNbConfigDialogs);
-	
 }
+
 void cairo_dock_dialog_window_created (void)
 {
 	iNbConfigDialogs ++;

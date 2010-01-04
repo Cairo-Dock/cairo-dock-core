@@ -1943,7 +1943,7 @@ msgid "Main Dock"
 msgstr "主要Dock"
 
 #: ../data/messages:537
-msgid "Choose the default view for root docks :"
+msgid "Choose the default view for main docks :"
 msgstr "選擇一個主Dock上的預設外觀："
 
 #: ../data/messages:539

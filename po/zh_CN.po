@@ -1147,7 +1147,7 @@ msgid "Allow applets to be placed amongst launchers ?"
 msgstr "允许小应用程序混入启动器放置"
 
 #: ../data/messages:93 ../data/messages:653
-msgid "Choose the default view for root docks :"
+msgid "Choose the default view for main docks :"
 msgstr "选择预设的主停靠栏外观："
 
 #: ../data/messages:95 ../data/messages:657

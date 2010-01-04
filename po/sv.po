@@ -1145,7 +1145,7 @@ msgid "Allow applets to be placed amongst launchers ?"
 msgstr "Tillåt applets bland startare?"
 
 #: ../data/messages:93 ../data/messages:653
-msgid "Choose the default view for root docks :"
+msgid "Choose the default view for main docks :"
 msgstr "Välj standardutseende på huvuddockan:"
 
 #: ../data/messages:95 ../data/messages:657

@@ -368,7 +368,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 					}
 					icon->bIsMaximized = bIsMaximized;  // on peut en avoir besoin plus tard.
 					icon->bIsFullScreen = bIsFullScreen;
-					g_print ("icon->bIsMaximized : %d\n", icon->bIsMaximized);
+					
 					// on gere le cachage/apparition de l'icone (transparence ou miniature, applis minimisees seulement).
 					CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 					if (bIsHidden != bPrevHidden)

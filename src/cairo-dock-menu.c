@@ -98,7 +98,7 @@ static void _present_help_from_dialog (int iClickedButton, GtkWidget *pInteracti
 		cairo_dock_show_module_gui ("Help");
 	}
 }
-static void _cairo_dock_edit_and_reload_conf (GtkMenuItem *pMenuItem, gpointer *data)
+static void _cairo_dock_edit_and_reload_conf (GtkMenuItem *pMenuItem, gpointer data)
 {
 	cairo_dock_show_main_gui ();
 }
@@ -130,14 +130,14 @@ static void _cairo_dock_add_about_page (GtkWidget *pNoteBook, const gchar *cPage
 		0);
 	gtk_label_set_markup (GTK_LABEL (pAboutLabel), cAboutText);
 }
-static void _cairo_dock_lock_icons (GtkMenuItem *pMenuItem, gpointer *data)
+static void _cairo_dock_lock_icons (GtkMenuItem *pMenuItem, gpointer data)
 {
 	myAccessibility.bLockIcons = ! myAccessibility.bLockIcons;
 	cairo_dock_update_conf_file (g_cConfFile,
 		G_TYPE_BOOLEAN, "Accessibility", "lock icons", myAccessibility.bLockIcons,
 		G_TYPE_INVALID);
 }
-static void _cairo_dock_lock_all (GtkMenuItem *pMenuItem, gpointer *data)
+static void _cairo_dock_lock_all (GtkMenuItem *pMenuItem, gpointer data)
 {
 	myAccessibility.bLockAll = ! myAccessibility.bLockAll;
 	cairo_dock_update_conf_file (g_cConfFile,
@@ -154,7 +154,11 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 		GTK_BUTTONS_CLOSE,
 		NULL/*"\nCairo-Dock (2007-2010)\n version "CAIRO_DOCK_VERSION*/);
 	
-	GtkWidget *pContentBox = gtk_dialog_get_content_area (pDialog);
+#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 14)
+	GtkWidget *pContentBox = gtk_dialog_get_content_area (GTK_DIALOG(pDialog));
+#else
+	GtkWidget *pContentBox =  GTK_DIALOG(pDialog)->vbox;
+#endif
 	GtkWidget *pHBox = gtk_hbox_new (FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (pContentBox), pHBox, FALSE, FALSE, 0);
 	

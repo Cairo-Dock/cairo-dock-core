@@ -1212,7 +1212,7 @@ msgid "Allow applets to be placed amongst launchers ?"
 msgstr "Permettre aux applets d'être placées parmi les lanceurs ?"
 
 #: ../data/messages:93 ../data/messages:653
-msgid "Choose the default view for root docks :"
+msgid "Choose the default view for main docks :"
 msgstr "Choisissez la vue par défaut à utiliser pour les docks racine :"
 
 #: ../data/messages:95 ../data/messages:657
@@ -1595,12 +1595,12 @@ msgid ""
 "This is the animation when the dock goes below a window; The greater, the "
 "slower it will be"
 msgstr ""
-"C'est l'animation produite lorsque le dock passe en dessous d'une fenêtre. "
+"C'est l'animation produite lorsque le dock passe derrière une fenêtre. "
 "Plus la valeur est grande, plus l'animation sera lente."
 
 #: ../data/messages:317
 msgid "Number of steps in the fade out animation :"
-msgstr "Nombre d'étapes dans l'animation de disparition :"
+msgstr "Nombre d'étapes dans l'animation de fondu :"
 
 #: ../data/messages:325
 msgid "Number of steps in the auto-hide animation (move up/move down) :"

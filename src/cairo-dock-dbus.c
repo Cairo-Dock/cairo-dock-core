@@ -309,6 +309,23 @@ gchar **cairo_dock_dbus_get_string_list (DBusGProxy *pDbusProxy, const gchar *cA
 	return cValues;
 }
 
+GPtrArray *cairo_dock_dbus_get_array (DBusGProxy *pDbusProxy, const gchar *cAccessor)
+{
+	GError *erreur = NULL;
+	GPtrArray *pArray = NULL;
+	dbus_g_proxy_call (pDbusProxy, cAccessor, &erreur,
+		G_TYPE_INVALID,
+		dbus_g_type_get_collection ("GPtrArray", DBUS_TYPE_G_OBJECT_PATH), &pArray,
+		G_TYPE_INVALID);
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+	}
+	return pArray;
+}
+
+
 
 void cairo_dock_dbus_call (DBusGProxy *pDbusProxy, const gchar *cCommand)
 {

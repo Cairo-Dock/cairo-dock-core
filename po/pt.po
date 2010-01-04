@@ -2004,7 +2004,7 @@ msgid "Main Dock"
 msgstr "Dock principal"
 
 #: ../data/messages:537
-msgid "Choose the default view for root docks :"
+msgid "Choose the default view for main docks :"
 msgstr "Escolhe a visualização padrão para a base do dock :"
 
 #: ../data/messages:539
