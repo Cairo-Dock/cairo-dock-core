@@ -773,14 +773,13 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 		do
 		{
 			icon = ic->data;
-			if (! icon->bIsDemandingAttention)
-				continue;
-			
-			icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);
-			glPushMatrix ();
-			cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
-			glPopMatrix ();
-			
+			if (icon->bIsDemandingAttention)
+			{
+				icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);
+				glPushMatrix ();
+				cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
+				glPopMatrix ();
+			}
 			ic = cairo_dock_get_next_element (ic, pDock->icons);
 		} while (ic != pFirstDrawnElement);
 	}
