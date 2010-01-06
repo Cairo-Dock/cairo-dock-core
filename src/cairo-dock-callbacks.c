@@ -667,12 +667,6 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	
 	//\_______________ Arrive ici, on est sorti du dock.
 	pDock->container.bInside = FALSE;
-	/**cd_debug (">>> on attend...");
-	while (gtk_events_pending ())  // on laisse le temps au signal d'entree dans le sous-dock d'etre traite.
-		gtk_main_iteration ();
-	cd_debug (">>> pDock->container.bInside : %d", pDock->container.bInside);
-	if (pDock->container.bInside)  // on est re-rentre dedans entre-temps.
-		return TRUE;*/
 	
 	//\_______________ On cache ses sous-docks.
 	if (! cairo_dock_hide_child_docks (pDock))  // on quitte si l'un des sous-docks reste visible (on est entre dedans), pour rester en position "haute".
@@ -1737,40 +1731,44 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 		X = y - pDock->container.iWidth/2;
 	}
 	int w, h;
-	if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
+	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
+	///if (!icon || !icon->pSubDock)
 	{
-		w = pDock->iMinDockWidth;
-		h = pDock->iMinDockHeight;
-		
-		if (X <= -w/2 || X >= w/2)
-			return FALSE;  // on n'accepte pas le drop.
-		if (pDock->container.bDirectionUp)
+		if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
 		{
-			if (Y <= pDock->container.iHeight - h || Y >= pDock->container.iHeight)
+			w = pDock->iMinDockWidth;
+			h = pDock->iMinDockHeight;
+			
+			if (X <= -w/2 || X >= w/2)
 				return FALSE;  // on n'accepte pas le drop.
+			if (pDock->container.bDirectionUp)
+			{
+				if (Y <= pDock->container.iHeight - h || Y >= pDock->container.iHeight)
+					return FALSE;  // on n'accepte pas le drop.
+			}
+			else
+			{
+				if (Y < 0 || Y > h)
+					return FALSE;  // on n'accepte pas le drop.
+			}
 		}
-		else
+		else if (pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
 		{
-			if (Y < 0 || Y > h)
+			w = MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth);
+			h = MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight);
+			
+			if (X <= -w/2 || X >= w/2)
 				return FALSE;  // on n'accepte pas le drop.
-		}
-	}
-	else if (pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
-	{
-		w = MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth);
-		h = MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight);
-		
-		if (X <= -w/2 || X >= w/2)
-			return FALSE;  // on n'accepte pas le drop.
-		if (pDock->container.bDirectionUp)
-		{
-			if (Y <= pDock->container.iHeight - h || Y >= pDock->container.iHeight)
-				return FALSE;  // on n'accepte pas le drop.
-		}
-		else
-		{
-			if (Y < 0 || Y > h)
-				return FALSE;  // on n'accepte pas le drop.
+			if (pDock->container.bDirectionUp)
+			{
+				if (Y <= pDock->container.iHeight - h || Y >= pDock->container.iHeight)
+					return FALSE;  // on n'accepte pas le drop.
+			}
+			else
+			{
+				if (Y < 0 || Y > h)
+					return FALSE;  // on n'accepte pas le drop.
+			}
 		}
 	}
 	
@@ -1816,7 +1814,16 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 
 void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint time, CairoDock *pDock)
 {
-	g_print ("stop dragging\n");
+	g_print ("stop dragging1\n");
+	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
+	if ((icon && icon->pSubDock) || pDock->iRefCount > 0)  // on retarde l'evenement, car il arrive avant le leave-event, et donc le sous-dock se cache avant qu'on puisse y entrer.
+	{
+		cd_debug (">>> on attend...");
+		while (gtk_events_pending ())  // on laisse le temps au signal d'entree dans le sous-dock d'etre traite, de facon a avoir un start-dragging avant de quitter cette fonction.
+			gtk_main_iteration ();
+		cd_debug (">>> pDock->container.bInside : %d", pDock->container.bInside);
+	}
+	g_print ("stop dragging2\n");
 	s_bWaitForData = FALSE;
 	pDock->bIsDragging = FALSE;
 	pDock->bCanDrop = FALSE;

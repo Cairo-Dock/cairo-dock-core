@@ -250,7 +250,17 @@ int main (int argc, char** argv)
 	cd_log_init(FALSE);
 	//No log
 	cd_log_set_level(0);
+	//\___________________ On initliase GTK.
 	gtk_init (&argc, &argv);
+	/*GtkSettings *pSettings = gtk_settings_get_default ();
+	GtkSettingsValue v = {0};
+	g_value_init (&v.value, G_TYPE_BOOLEAN);
+	g_value_set_boolean (&v.value, TRUE);
+	v.origin = "gtk-menu-images";
+	gtk_settings_set_property_value (pSettings, "gtk-menu-images", &v);
+	v.origin = "gtk-button-images";
+	gtk_settings_set_property_value (pSettings, "gtk-button-images", &v);*/
+	
 	GError *erreur = NULL;
 	
 	//\___________________ On recupere quelques options.
@@ -739,16 +749,19 @@ int main (int argc, char** argv)
 	
 	g_print ("\nINDICATEURS EN HAUT (RETOURNES) ET CAIRO\n\n");
 	g_print ("=> AUTO-HIDE WHEN SWITCHING DESKTOP IN CAIRO MODE\n");
+	g_print ("PREVUE EN VUE PARABOLIQUE\n");
+	g_print ("DROP DE FICHIER SUR SOUS-DOCK\n");
+	g_print ("$XTERM\n");
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
 	g_print ("\nNOUVELLE INSTANCE COPIEE SUR LA 1ERE\n\n");
 	g_print ("\nJAUGES : LOGO\n\n");
 	
-	if (strcmp((cairo_dock_launch_command_sync ("date +%m%d")), "0101") == 0)
+	/*if (strcmp((cairo_dock_launch_command_sync ("date +%m%d")), "0101") == 0)
 	{
 		Icon *pFirstIcon = cairo_dock_get_first_icon (g_pMainDock->icons);
 		cairo_dock_show_temporary_dialog_with_default_icon ("Happy New Year every body !\n\tThe Cairo-Dock Team", pFirstIcon, CAIRO_CONTAINER (g_pMainDock), 0);
-	}
+	}*/
 	
 	gtk_main ();
 	

@@ -688,6 +688,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 {
 	cd_debug ("%s (%s, force:%d)\n", __func__, icon->cName, bForceDemand);
 	icon->bIsDemandingAttention = TRUE;
+	//\____________________ On montre le dialogue.
 	if (myTaskBar.bDemandsAttentionWithDialog)
 	{
 		CairoDialog *pDialog;
@@ -709,9 +710,9 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 			cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // pour passer devant les fenetres plein ecran; depend du WM.
 		}
 	}
+	//\____________________ On montre l'icone avec une animation.
 	if (myTaskBar.cAnimationOnDemandsAttention && ! pHiddenIcon)  // on ne l'anime pas si elle n'est pas dans un dock.
 	{
-		g_print ("on anime l'icone (%s)\n", myTaskBar.cAnimationOnDemandsAttention);
 		if (pDock->iRefCount == 0)
 		{
 			cairo_dock_pop_up (pDock);
@@ -720,11 +721,11 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 				g_source_remove(pDock->iSidPopDown);
 				pDock->iSidPopDown = 0;
 			}
-			if (pDock->bAutoHide && bForceDemand)
+			/*if (pDock->bAutoHide && bForceDemand)
 			{
 				g_print ("force dock to raise\n");
 				cairo_dock_emit_enter_signal (pDock);
-			}
+			}*/
 		}
 		else if (bForceDemand)
 		{
@@ -735,9 +736,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 				cairo_dock_show_subdock (pPointedIcon, pParentDock, FALSE);
 		}
 		cairo_dock_request_icon_animation (icon, pDock, myTaskBar.cAnimationOnDemandsAttention, 10000);
-		g_print ("on lance l'animation\n");
-		///if (bForceDemand)
-			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));  // precaution au cas ou le dock ne serait pas encore visible.
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));  // dans le au cas ou le dock ne serait pas encore visible, la fonction precedente n'a pas lance l'animation.
 	}
 }
 void cairo_dock_appli_demands_attention (Icon *icon)
