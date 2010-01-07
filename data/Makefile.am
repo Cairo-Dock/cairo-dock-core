@@ -54,6 +54,7 @@ essentialdata_DATA = \
 	icon-desktop.svg\
 	icon-controler.png\
 	icon-connection.svg\
+	icon-plug-ins.png\
 	cairo-dock-animated.xpm\
 	help.conf\
 	icon-help.png\

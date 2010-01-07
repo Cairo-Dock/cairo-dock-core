@@ -118,7 +118,7 @@ static Window cairo_dock_detach_appli_of_class (const gchar *cClass, gboolean bD
 	}
 	if (! cairo_dock_is_loading () && bNeedsRedraw)
 	{
-		cairo_dock_update_dock_size (g_pMainDock);
+		cairo_dock_update_dock_size (g_pMainDock);  // cet appel fige le dock (mais il continue a tourner) quand on fait un lanceur a partir de l'appli ....
 		cairo_dock_calculate_dock_icons (g_pMainDock);
 		gtk_widget_queue_draw (g_pMainDock->container.pWidget);
 	}

@@ -455,7 +455,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 				Window XMainAppliWindow = _cairo_dock_get_parent_window (Xid);
 				if (XMainAppliWindow != 0)
 				{
-					cd_debug ("  dialogue 'transient for' => on ignore");
+					cd_debug ("  dialogue 'transient for %d' => on ignore", XMainAppliWindow);
 					if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
 					{
 						Icon *pParentIcon = cairo_dock_get_icon_with_Xid (XMainAppliWindow);

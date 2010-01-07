@@ -826,11 +826,11 @@ static void _cairo_dock_make_launcher_from_appli (GtkMenuItem *pMenuItem, gpoint
 	// on trouve le .desktop du programme.
 	g_print ("%s (%s)\n", __func__, icon->cClass);
 	gchar *cDesktopFilePath = g_strdup_printf ("/usr/share/applications/%s.desktop", icon->cClass);
-	if (! g_file_test (cDesktopFilePath, G_FILE_TEST_EXISTS))  // on n'a pas trouve la, on utilise locate.
+	if (! g_file_test (cDesktopFilePath, G_FILE_TEST_EXISTS))  // on n'a pas trouve la, on cherche chez KDE.
 	{
 		g_free (cDesktopFilePath);
 		cDesktopFilePath = g_strdup_printf ("/usr/share/applications/kde4/%s.desktop", icon->cClass);
-		if (! g_file_test (cDesktopFilePath, G_FILE_TEST_EXISTS))
+		if (! g_file_test (cDesktopFilePath, G_FILE_TEST_EXISTS))  // toujours rien, on utilise locate.
 		{
 			g_free (cDesktopFilePath);
 			cDesktopFilePath = NULL;
@@ -844,7 +844,7 @@ static void _cairo_dock_make_launcher_from_appli (GtkMenuItem *pMenuItem, gpoint
 				cDesktopFilePath = cResult;
 				cResult = NULL;
 			}
-			// else chercher un desktop qui contiennent StartupWMClass=class...
+			// else chercher un desktop qui contiennent command=class...
 			g_free (cResult);
 		}
 	}

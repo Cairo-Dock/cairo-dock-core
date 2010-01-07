@@ -444,8 +444,8 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 						return FALSE;
 				}
 				
-				cairo_dock_update_dock_size (pDock);
 				cairo_dock_free_icon (pIcon);
+				cairo_dock_update_dock_size (pDock);  // si on le fait avant le free, le dock se fige (mais continue a tourner)... 
 			}
 		}
 		else if (pIcon->fPersonnalScale == -0.05)
@@ -527,7 +527,7 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 		bContinue |= bIconIsAnimating;
 		if (! bIconIsAnimating)
 			icon->iAnimationState = CAIRO_DOCK_STATE_REST;
-		if (icon->bIsDemandingAttention)
+		if (icon->bIsDemandingAttention && cairo_dock_is_hidden (pDock))  // animation d'une icone demandant l'attention dans un dock cache => on force le dessin qui normalement ne se fait pas.
 		{
 			//g_print (" l'icone animee continue : %d\n", bIconIsAnimating);
 			gtk_widget_queue_draw (pDock->container.pWidget);

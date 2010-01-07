@@ -1272,7 +1272,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 			else if (myIcons.bMixApplisAndLaunchers && pClassmate != NULL && pClassmateDock != NULL)  // on va se placer a cote.
 			{
 				x = x_icon_geometry (pClassmate, pClassmateDock) + pClassmate->fWidth/2;
-				if (cairo_dock_is_hidden (pMainDock))
+				if (cairo_dock_is_hidden (pClassmateDock))
 				{
 					y = (pClassmateDock->container.bDirectionUp ? 0 : g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 				}

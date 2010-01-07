@@ -3,7 +3,7 @@
 #[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-behavior.svg]
 [Behavior]
 
-#F-[Position on the screen;gtk-fullscreen]
+#F-[Position on the screen;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-position.png]
 frame_pos =
 
 #l-[bottom;top;right;left] Choose which screen border the dock will placed on :
@@ -11,7 +11,7 @@ frame_pos =
 screen border = 0
 
 
-#F-[Visibility of the main dock;gtk-find]
+#F-[Visibility of the main dock;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-visibility.png]
 frame_visi =
 
 #Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;0;0;Automatically hide the dock;0;0;Automatically hide when a window is maximized;0;0;Pop-up on shortcut;1;1] Visibility :
@@ -44,10 +44,23 @@ frame_task =
 taskbar = 2
 
 
+#F[Animations;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-movment.png]
+frame_anim=
+
+#m[Animated icons] Configure icons animations.
+config_anim = 
+
+#M[icon effects] Configure icons special effects (require OpenGL capacity).
+config_effect = 
+
+#M[illusion] Configure icons animations on appearing/disappearing (require OpenGL capacity).
+config_illusion = 
+
+
 #[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-appearance.svg]
 [Appearance]
 
-#F[Icons;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-icons.svg]
+#F[Icons;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-icons.png]
 frame_icons=
 
 #w Choose a theme of icons :
@@ -82,20 +95,7 @@ sev_view=
 sub-dock view = default
 
 
-#F[Animations]
-frame_anim=
-
-#m[Animated icons] Configure icons animations.
-config_anim = 
-
-#M[icon effects] Configure icons special effects (require OpenGL capacity).
-config_effect = 
-
-#M[illusion] Configure icons animations on appearing/disappearing (require OpenGL capacity).
-config_illusion = 
-
-
-#[gtk-disconnect]
+#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-plug-ins.png]
 [Add-ons]
 
 #F[Applets;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-accessories.png]
@@ -106,3 +106,21 @@ frame_mod=
 #Click on the left checkbox to (de)activate an applet.
 #Once an applet is active, you can configure it by right clicking on its icon.}/
 modules=
+
+
+#[gtk-index]
+[Themes]
+
+#R[@prefix@/@DATADIRNAME@/@PACKAGE@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes] Choose one of the available themes :/
+chosen theme = 
+
+#F[Options]
+frame_opt=
+
+#b Use the new theme's launchers ?
+#{So if you check this box, your launchers will be deleted and replaced by the ones provided in the new theme. Otherwise the current launchers will be kept, only icons will be replaced.}
+use theme launchers = false
+
+#b Use the new theme's behaviour ?
+#{Otherwise the current behaviour will be kept. It's all about the dock's position, behaviour parameters such as auto-hide, using taskbar or not, etc.}
+use theme behaviour = false

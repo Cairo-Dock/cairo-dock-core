@@ -200,6 +200,10 @@ static void _cairo_dock_intercept_signal (int signal)
 		g_print ("The applet '%s' may be the culprit\n", g_pCurrentModule->pModule->pVisitCard->cModuleName);
 		cLaunchCommand = g_strdup_printf ("%s -x \"%s\"", cLaunchCommand, g_pCurrentModule->pModule->pVisitCard->cModuleName);
 	}
+	else
+	{
+		g_print ("Couldn't guess if it was an applet's fault or not. It may have crashed inside the core or inside a thread\n");
+	}
 	execl ("/bin/sh", "/bin/sh", "-c", cLaunchCommand, (char *)NULL);  // on ne revient pas de cette fonction.
 	//execlp ("cairo-dock", "cairo-dock", cLaunchCommand, (char *)0);
 	cd_warning ("Sorry, couldn't restart the dock");
@@ -341,7 +345,7 @@ int main (int argc, char** argv)
 			"for debugging purpose only. Some hidden and still unstable options will be activated.", NULL},
 		{"server", 'S', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&g_cThemeServerAdress,
-			"adress of a server containing additional themes. This will overwrite the default server adress.", NULL},
+			"address of a server containing additional themes. This will overwrite the default server address.", NULL},
 		{"locked", 'k', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bLocked,
 			"lock the dock so that any modification is impossible for users.", NULL},

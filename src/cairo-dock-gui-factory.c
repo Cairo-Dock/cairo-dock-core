@@ -694,7 +694,7 @@ static gboolean _add_module_to_modele (gchar *cModuleName, CairoDockModule *pMod
 		memset (&iter, 0, sizeof (GtkTreeIter));
 		gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
 		gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
-			CAIRO_DOCK_MODEL_NAME, dgettext (pModule->pVisitCard->cGettextDomain, pModule->pVisitCard->cTitle),
+			CAIRO_DOCK_MODEL_NAME, dgettext (pModule->pVisitCard->cGettextDomain, pModule->pVisitCard->cModuleName),  /// cTitle ?...
 			CAIRO_DOCK_MODEL_RESULT, cModuleName,
 			CAIRO_DOCK_MODEL_DESCRIPTION_FILE, pModule->pVisitCard->cDescription,
 			CAIRO_DOCK_MODEL_IMAGE, pModule->pVisitCard->cPreviewFilePath,
@@ -1995,6 +1995,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionLabel, FALSE, FALSE, 0);
 				_pack_in_widget_box (pPreviewBox);
 				
+				//\______________ On affiche un message par defaut.
+				gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Times New Roman 16\">%s</span></b>", _("Click on an applet\n in order to have a preview and a description of it."));
+				gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), cDefaultMessage);
+				g_free (cDefaultMessage);
 			}
 			break ;
 			
@@ -2015,7 +2019,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					else
 					{
 						if (iElementType == CAIRO_DOCK_WIDGET_JUMP_TO_MODULE_IF_EXISTS)
+						{
+							gtk_widget_set_sensitive (pLabel, FALSE);
 							break ;
+						}
 						cd_warning ("module '%s' not found", pAuthorizedValuesList[0]);
 						cModuleName = g_strdup (pAuthorizedValuesList[0]);  // petite fuite memoire dans ce cas tres rare ...
 					}
@@ -2161,7 +2168,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
 				
 				pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-				gtk_widget_set (pScrolledWindow, "height-request", 100, NULL);
+				gtk_widget_set (pScrolledWindow, "height-request", (iElementType == CAIRO_DOCK_WIDGET_TREE_VIEW_SORT_AND_MODIFY ? 100 : MIN (100, length * 25)), NULL);
 				gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 				gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
 				_pack_in_widget_box (pScrolledWindow);

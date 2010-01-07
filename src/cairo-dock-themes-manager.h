@@ -108,23 +108,6 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 */
 GHashTable *cairo_dock_list_themes (const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir);
 
-
-
-/** Load the current theme. This will (re)load all the parameters of Cairo-Dock and all the plug-ins, as if you just started the dock.
-*/
-void cairo_dock_load_current_theme (void);
-#define cairo_dock_load_theme(...) cairo_dock_load_current_theme ()
-
-void cairo_dock_mark_theme_as_modified (gboolean bModified);
-gboolean cairo_dock_theme_need_save (void);
-
-/** Build and show the Theme Manager window.
- */
-void cairo_dock_manage_themes (void);
-
-
-CairoDockThemeType cairo_dock_extract_theme_type_from_name (const gchar *cThemeName);
-
 /** Look for a theme with a given name into differente sources. If the theme is found on the server and is not present on the disk, or is not up to date, then it is downloaded and the local path is returned.
 *@param cThemeName name of the theme.
 *@param cShareThemesDir path of a local folder containg themes or NULL.
@@ -134,6 +117,44 @@ CairoDockThemeType cairo_dock_extract_theme_type_from_name (const gchar *cThemeN
 *@return a newly allocated string containing the complete local path of the theme. If the theme is distant, it is downloaded and extracted into this folder.
 */
 gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir, CairoDockThemeType iGivenType);
+
+
+void cairo_dock_mark_theme_as_modified (gboolean bModified);
+gboolean cairo_dock_theme_need_save (void);
+
+
+CairoDockThemeType cairo_dock_extract_theme_type_from_name (const gchar *cThemeName);
+
+/** Export the current theme to a given name. Exported themes can be imported directly from the Theme Manager.
+ */
+gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean bSaveBehavior, gboolean bSaveLaunchers);
+
+/** Create a package of the current theme. Packages can be distributed easily, and imported into the dock by a mere drag and drop into the Theme Manager. The package is placed in the Home.
+ */
+gboolean cairo_dock_package_current_theme (const gchar *cThemeName);
+
+/** Extract a package into the themes folder. Does not load it.
+ */
+gchar * cairo_dock_depackage_theme (const gchar *cPackagePath);
+
+/** Remove some exported themes from the hard-disk.
+ */
+gboolean cairo_dock_delete_themes (gchar **cThemesList);
+
+/** Import a theme, which can be : a local theme, a user theme, a distant theme, or even the path to a packaged theme.
+ */
+gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers);
+
+
+/** Build and show the Theme Manager window.
+ */
+void cairo_dock_manage_themes (void);
+
+
+/** Load the current theme. This will (re)load all the parameters of Cairo-Dock and all the plug-ins, as if you just started the dock.
+*/
+void cairo_dock_load_current_theme (void);
+#define cairo_dock_load_theme(...) cairo_dock_load_current_theme ()
 
 
 G_END_DECLS

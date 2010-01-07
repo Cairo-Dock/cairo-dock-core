@@ -533,586 +533,6 @@ GHashTable *cairo_dock_list_themes (const gchar *cShareThemesDir, const gchar *c
 	return pThemeTable;
 }
 
-
-
-gchar *cairo_dock_build_temporary_themes_conf_file (void)
-{
-	//\___________________ On cree un fichier de conf temporaire.
-	const gchar *cTmpDir = g_get_tmp_dir ();
-	gchar *cTmpConfFile = g_strdup_printf ("%s/cairo-dock-init.XXXXXX", cTmpDir);
-	int fds = mkstemp (cTmpConfFile);
-	if (fds == -1)
-	{
-		cd_warning ("can't create a temporary file in %s", cTmpDir);
-		g_free (cTmpConfFile);
-		return NULL;
-	}
-	
-	//\___________________ On copie le fichier de conf par defaut dedans.
-	gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_THEME_CONF_FILE, cTmpConfFile);
-	int r = system (cCommand);
-	g_free (cCommand);
-
-	close(fds);
-	return cTmpConfFile;
-}
-
-void cairo_dock_load_current_theme (void)
-{
-	cd_message ("%s ()", __func__);
-
-	//\___________________ On libere toute la memoire allouee pour les docks (stoppe aussi tous les timeout).
-	cairo_dock_free_all_docks ();
-
-	//\___________________ On cree le dock principal.
-	g_pMainDock = cairo_dock_create_new_dock (CAIRO_DOCK_MAIN_DOCK_NAME, NULL);  // on ne lui assigne pas de vues, puisque la vue par defaut des docks principaux sera definie plus tard.
-
-	//\___________________ On lit son fichier de conf et on charge tout.
-	cairo_dock_read_conf_file (g_cConfFile, g_pMainDock);  // chargera des valeurs par defaut si le fichier de conf fourni est incorrect.
-}
-
-
-void cairo_dock_mark_theme_as_modified (gboolean bModified)
-{
-	gchar *cModifiedFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_MODIFIED_THEME_FILE);
-
-	g_file_set_contents (cModifiedFile,
-		(bModified ? "1" : "0"),
-		-1,
-		NULL);
-
-	g_free (cModifiedFile);
-}
-
-gboolean cairo_dock_theme_need_save (void)
-{
-	gchar *cModifiedFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_MODIFIED_THEME_FILE);
-	gsize length = 0;
-	gchar *cContent = NULL;
-	g_file_get_contents (cModifiedFile,
-		&cContent,
-		&length,
-		NULL);
-	g_free (cModifiedFile);
-	gboolean bNeedSave;
-	if (length > 0)
-		bNeedSave = (*cContent == '1');
-	else
-		bNeedSave = FALSE;
-	g_free (cContent);
-	return bNeedSave;
-}
-
-
-
-static void on_theme_destroy (gchar *cInitConfFile)
-{
-	g_print ("%s ()\n", __func__);
-	g_remove (cInitConfFile);
-	g_free (cInitConfFile);
-	s_pThemeManager = NULL;
-}
-
-CairoDockThemeType cairo_dock_extract_theme_type_from_name (const gchar *cThemeName)
-{
-	if (cThemeName == NULL)
-		return CAIRO_DOCK_ANY_THEME;
-	CairoDockThemeType iType = CAIRO_DOCK_ANY_THEME;
-	int l = strlen (cThemeName);
-	if (cThemeName[l-1] == ']')
-	{
-		gchar *str = strrchr (cThemeName, '[');
-		if (str != NULL && g_ascii_isdigit (*(str+1)))
-		{
-			iType = atoi (str+1);
-			*str = '\0';
-		}
-	}
-	return iType;
-}
-
-static gboolean _find_module_from_user_data_dir (gchar *cModuleName, CairoDockModule *pModule, const gchar *cUserDataDirName)
-{
-	if (pModule->pVisitCard->cUserDataDir && strcmp (cUserDataDirName, pModule->pVisitCard->cUserDataDir) == 0)
-		return TRUE;
-	return FALSE;
-}
-static gboolean on_theme_apply (gchar *cInitConfFile)
-{
-	g_print ("%s (%s)\n", __func__, cInitConfFile);
-	GError *erreur = NULL;
-	int r;  // resultat de system().
-	gboolean bNeedSave = cairo_dock_theme_need_save ();
-
-	//\___________________ On recupere les donnees de l'IHM apres modification par l'utilisateur.
-	GKeyFile* pKeyFile = cairo_dock_open_key_file (cInitConfFile);
-	g_return_val_if_fail (pKeyFile != NULL, FALSE);
-
-
-	//\___________________ On sauvegarde le theme actuel.
-	GString *sCommand = g_string_new ("");
-	gchar *cNewThemeName = g_key_file_get_string (pKeyFile, "Save", "theme name", &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
-		erreur = NULL;
-	}
-	if (cNewThemeName != NULL && *cNewThemeName == '\0')
-	{
-		g_free (cNewThemeName);
-		cNewThemeName = NULL;
-	}
-	cd_message ("cNewThemeName : %s", cNewThemeName);
-
-	if (cNewThemeName != NULL)
-	{
-		cairo_dock_extract_theme_type_from_name (cNewThemeName);
-		
-		cd_message ("on sauvegarde dans %s", cNewThemeName);
-		gboolean bThemeSaved = FALSE;
-		gchar *cNewThemePath = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR, cNewThemeName);
-		if (g_file_test (cNewThemePath, G_FILE_TEST_EXISTS))  // on ecrase un theme existant.
-		{
-			cd_debug ("  le theme existant sera mis a jour");
-			gchar *cQuestion = g_strdup_printf (_("Are you sure you want to overwrite theme %s ?"), cNewThemeName);
-			int answer = cairo_dock_ask_general_question_and_wait (cQuestion);
-			g_free (cQuestion);
-			if (answer == GTK_RESPONSE_YES)
-			{
-				//\___________________ On traite le fichier de conf.
-				gchar *cNewConfFilePath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_CONF_FILE);
-				if (g_key_file_get_boolean (pKeyFile, "Save", "save current behaviour", NULL))
-				{
-					g_string_printf (sCommand, "/bin/cp \"%s\" \"%s\"", g_cConfFile, cNewConfFilePath);
-					cd_message ("%s", sCommand->str);
-					r = system (sCommand->str);
-				}
-				else
-				{
-					cairo_dock_replace_keys_by_identifier (cNewConfFilePath, g_cConfFile, '+');
-				}
-				g_free (cNewConfFilePath);
-				
-				//\___________________ On traite les lanceurs.
-				if (g_key_file_get_boolean (pKeyFile, "Save", "save current launchers", NULL))
-				{
-					g_string_printf (sCommand, "rm -f \"%s/%s\"/*", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
-					cd_message ("%s", sCommand->str);
-					r = system (sCommand->str);
-					
-					g_string_printf (sCommand, "cp \"%s\"/* \"%s/%s\"", g_cCurrentLaunchersPath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
-					cd_message ("%s", sCommand->str);
-					r = system (sCommand->str);
-				}
-				
-				//\___________________ On traite tous le reste.
-				/// TODO : traiter les .conf des applets comme celui du dock...
-				g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '*.conf' ! -name \"%s\" -exec /bin/cp -r '{}' \"%s\" \\;", g_cCurrentThemePath, CAIRO_DOCK_LAUNCHERS_DIR, cNewThemePath);
-				cd_message ("%s", sCommand->str);
-				r = system (sCommand->str);
-
-				bThemeSaved = TRUE;
-			}
-		}
-		else  // sinon on sauvegarde le repertoire courant tout simplement.
-		{
-			cd_debug ("  creation du nouveau theme (%s)", cNewThemePath);
-
-			if (g_mkdir (cNewThemePath, 7*8*8+7*8+5) == 0)
-			{
-				g_string_printf (sCommand, "cp -r \"%s\"/* \"%s\"", g_cCurrentThemePath, cNewThemePath);
-				cd_message ("%s", sCommand->str);
-				r = system (sCommand->str);
-
-				bThemeSaved = TRUE;
-			}
-			else
-				cd_warning ("couldn't create %s", cNewThemePath);
-		}
-		
-		if (g_key_file_get_boolean (pKeyFile, "Save", "package", NULL))
-		{
-			cd_message ("building theme package ...");
-			if (g_file_test (CAIRO_DOCK_SHARE_DATA_DIR"/../../bin/cairo-dock-package-theme", G_FILE_TEST_EXISTS))
-			{
-				gchar *cCommand;
-				const gchar *cTerm = g_getenv ("TERM");
-				if (cTerm == NULL || *cTerm == '\0')
-					cCommand = g_strdup_printf ("%s \"%s\"", "cairo-dock-package-theme", cNewThemeName);
-				else
-					cCommand = g_strdup_printf ("$TERM -e '%s \"%s\"'", "cairo-dock-package-theme", cNewThemeName);
-				r = system (cCommand);
-				g_free (cCommand);
-			}
-			else
-			{
-				cd_warning ("the package builder script was not found !");
-			}
-		}
-		
-		g_free (cNewThemePath);
-		if (bThemeSaved)
-		{
-			cairo_dock_mark_theme_as_modified (FALSE);		
-			
-			g_key_file_set_string (pKeyFile, "Save", "theme name", "");
-			cairo_dock_write_keys_to_file (pKeyFile, cInitConfFile);
-		}
-		
-		g_free (cNewThemeName);
-		g_key_file_free (pKeyFile);
-		g_string_free (sCommand, TRUE);
-		
-		cairo_dock_set_status_message (s_pThemeManager, bThemeSaved ? _("The theme has been saved") :  _("The theme couldn't be saved"));
-		return ! bThemeSaved;
-	}
-	
-	
-	//\___________________ On efface les themes selectionnes.
-	gsize length = 0;
-	gchar ** cThemesList = g_key_file_get_string_list (pKeyFile, "Delete", "deleted themes", &length, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
-		erreur = NULL;
-	}
-	else if (cThemesList != NULL && cThemesList[0] != NULL && *cThemesList[0] != '\0')
-	{
-		gboolean bThemeDeleted = FALSE;
-		int answer;
-		gchar *cQuestion;
-		int i;
-		if (cThemesList[1] == NULL)
-			cQuestion = g_strdup_printf (_("Are you sure you want to delete theme %s ?"), cThemesList[0]);
-		else
-			cQuestion = g_strdup (_("Are you sure you want to delete these themes ?"));
-		answer = cairo_dock_ask_general_question_and_wait (cQuestion);
-		g_free (cQuestion);
-		if (answer == GTK_RESPONSE_YES)
-		{
-			gchar *cThemeName;
-			for (i = 0; cThemesList[i] != NULL; i ++)
-			{
-				cThemeName = cThemesList[i];
-				if (*cThemeName == '\0')
-					continue;
-				cairo_dock_extract_theme_type_from_name (cThemeName);
-				
-				bThemeDeleted = TRUE;
-				g_string_printf (sCommand, "rm -rf '%s/%s/%s'", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR, cThemeName);
-				r = system (sCommand->str);  // g_rmdir n'efface qu'un repertoire vide.
-			}
-		}
-		if (cThemesList[1] == NULL)
-			cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The theme has been deleted") :  _("The theme couldn't be deleted"));
-		else
-			cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The themes have been deleted") :  _("The themes couldn't be deleted"));
-		if (bThemeDeleted)
-		{
-			g_key_file_set_string (pKeyFile, "Delete", "deleted themes", "");
-			cairo_dock_write_keys_to_file (pKeyFile, cInitConfFile);
-		}
-		g_strfreev (cThemesList);
-		g_key_file_free (pKeyFile);
-		g_string_free (sCommand, TRUE);
-		return ! bThemeDeleted;
-	}
-
-
-	//\___________________ On charge le theme selectionne.
-	cNewThemeName = g_key_file_get_string (pKeyFile, "Themes", "chosen theme", &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
-		erreur = NULL;
-	}
-	if (cNewThemeName != NULL && *cNewThemeName == '\0')
-	{
-		g_free (cNewThemeName);
-		cNewThemeName = NULL;
-	}
-	
-	if (cNewThemeName == NULL)
-	{
-		cNewThemeName = g_key_file_get_string (pKeyFile, "Themes", "package", &erreur);
-		if (erreur != NULL)
-		{
-			cd_warning (erreur->message);
-			g_error_free (erreur);
-			erreur = NULL;
-		}
-		if (cNewThemeName != NULL && *cNewThemeName == '\0')
-		{
-			g_free (cNewThemeName);
-			cNewThemeName = NULL;
-		}
-	}
-	
-	//\___________________ On charge le nouveau theme choisi.
-	if (cNewThemeName != NULL)
-	{
-		//\___________________ On regarde si le theme courant est modifie.
-		if (bNeedSave)
-		{
-			int iAnswer = cairo_dock_ask_general_question_and_wait (_("You made some modifications in the current theme.\nYou will loose them if you don't save before choosing a new theme. Continue anyway ?"));
-			if (iAnswer != GTK_RESPONSE_YES)
-			{
-				return TRUE;
-			}
-			else
-				cairo_dock_mark_theme_as_modified (FALSE);
-		}
-		
-		//\___________________ On obtient le chemin du nouveau theme (telecharge si necessaire).
-		int length = strlen (cNewThemeName);
-		if (cNewThemeName[length-1] == '\n')
-			cNewThemeName[--length] = '\0';  // on vire le retour chariot final.
-		if (cNewThemeName[length-1] == '\r')
-			cNewThemeName[--length] = '\0';
-		g_print ("cNewThemeName : '%s'\n", cNewThemeName);
-		gchar *cUserThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
-		gchar *cNewThemePath = NULL;
-		if (g_str_has_suffix (cNewThemeName, ".tar.gz") || g_str_has_suffix (cNewThemeName, ".tar.bz2") || g_str_has_suffix (cNewThemeName, ".tgz"))  // c'est un paquet.
-		{
-			g_print ("c'est un paquet\n");
-			if (*cNewThemeName == '/' || strncmp (cNewThemeName, "file://", 7) == 0)  // paquet en local.
-			{
-				g_print (" paquet local\n");
-				//cairo_dock_remove_html_spaces (cNewThemeName);
-				gchar *cFilePath = (*cNewThemeName == '/' ? g_strdup (cNewThemeName) : g_filename_from_uri (cNewThemeName, NULL, NULL));
-				cNewThemePath = cairo_dock_uncompress_file (cFilePath, cUserThemesDir, NULL);
-				g_free (cFilePath);
-			}
-			else  // paquet distant.
-			{
-				g_print (" paquet distant\n");
-				gchar *str = strrchr (cNewThemeName, '/');
-				if (str != NULL)
-				{
-					*str = '\0';
-					cNewThemePath = cairo_dock_download_file (cNewThemeName, "", str+1, 2, cUserThemesDir, NULL);
-					if (cNewThemePath == NULL)
-					{
-						cairo_dock_show_temporary_dialog_with_icon_printf (_("couldn't get distant file %s/%s, maybe the server is down.\nPlease retry later or contact us at cairo-dock.org."), NULL, NULL, 0, NULL, cNewThemeName, str+1);
-					}
-				}
-			}
-			g_return_val_if_fail (cNewThemePath != NULL, TRUE);
-			g_print (" => cNewThemePath = '%s'\n", cNewThemePath);
-			gchar *tmp = cNewThemeName;
-			cNewThemeName = g_path_get_basename (cNewThemePath);
-			g_free (tmp);
-		}
-		else  // c'est un theme officiel.
-		{
-			g_print ("c'est un theme officiel\n");
-			cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, cUserThemesDir, CAIRO_DOCK_THEMES_DIR, CAIRO_DOCK_ANY_THEME);
-		}
-		g_free (cUserThemesDir);
-		
-		g_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), TRUE);
-		g_print ("cNewThemePath : %s ; cNewThemeName : %s\n", cNewThemePath, cNewThemeName);
-		
-		//\___________________ On charge les parametres de comportement.
-		cairo_dock_set_status_message (s_pThemeManager, _("Applying changes ..."));
-		if (g_pMainDock == NULL || g_key_file_get_boolean (pKeyFile, "Themes", "use theme behaviour", NULL))
-		{
-			g_string_printf (sCommand, "/bin/cp \"%s\"/%s \"%s\"", cNewThemePath, CAIRO_DOCK_CONF_FILE, g_cCurrentThemePath);
-			cd_message ("%s", sCommand->str);
-			r = system (sCommand->str);
-		}
-		else
-		{
-			gchar *cNewConfFilePath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_CONF_FILE);
-			cairo_dock_replace_keys_by_identifier (g_cConfFile, cNewConfFilePath, '+');
-			g_free (cNewConfFilePath);
-		}
-		
-		//\___________________ On charge les .conf des autres docks racines.
-		g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1 -name '*.conf' ! -name '%s' -exec /bin/cp '{}' \"%s\" \\;", cNewThemePath, CAIRO_DOCK_CONF_FILE, g_cCurrentThemePath);
-		cd_message ("%s", sCommand->str);
-		r = system (sCommand->str);
-		
-		//\___________________ On charge les lanceurs.
-		if (g_key_file_get_boolean (pKeyFile, "Themes", "use theme launchers", NULL))
-		{
-			g_string_printf (sCommand, "rm -f \"%s/%s\"/*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
-			cd_message ("%s", sCommand->str);
-			r = system (sCommand->str);
-			g_string_printf (sCommand, "rm -f \"%s/%s\"/.*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
-			cd_message ("%s", sCommand->str);
-			r = system (sCommand->str);
-		}
-		//\___________________ On charge les icones.
-		gchar *cNewLocalIconsPath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
-		if (! g_file_test (cNewLocalIconsPath, G_FILE_TEST_IS_DIR))  // c'est un ancien theme, on deplace les icones vers le repertoire 'icons'.
-		{			
-			g_string_printf (sCommand, "find \"%s/%s\" -mindepth 1 ! -name '*.desktop' -exec /bin/cp '{}' '%s/%s' \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
-		}
-		else
-		{
-			g_string_printf (sCommand, "for f in \"%s\"/* ; do rm -f \"%s/%s/`basename \"${f%%.*}\"`\"*; done;", cNewLocalIconsPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);  // on efface les doublons car sinon on pourrait avoir x.png et x.svg ensemble et le dock ne saurait pas lequel choisir.
-			cd_message ("%s", sCommand->str);
-			r = system (sCommand->str);
-			
-			g_string_printf (sCommand, "cp \"%s\"/* \"%s/%s\"", cNewLocalIconsPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
-		}
-		cd_message ("%s", sCommand->str);
-		r = system (sCommand->str);
-		g_free (cNewLocalIconsPath);
-		
-		//\___________________ On charge les extras.
-		g_string_printf (sCommand, "%s/%s", cNewThemePath, CAIRO_DOCK_EXTRAS_DIR);
-		if (g_file_test (sCommand->str, G_FILE_TEST_IS_DIR))
-		{
-			g_string_printf (sCommand, "cp -r \"%s/%s\"/* \"%s/%s\"", cNewThemePath, CAIRO_DOCK_EXTRAS_DIR, g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR);
-			cd_message ("%s", sCommand->str);
-			r = system (sCommand->str);
-		}
-		
-		//\___________________ On charge les lanceurs si necessaire, en effacant ceux existants.
-		if (! g_file_test (g_cCurrentLaunchersPath, G_FILE_TEST_EXISTS))
-		{
-			gchar *command = g_strdup_printf ("mkdir -p \"%s\"", g_cCurrentLaunchersPath);
-			r = system (command);
-			g_free (command);
-		}
-		if (g_pMainDock == NULL || g_key_file_get_boolean (pKeyFile, "Themes", "use theme launchers", NULL))
-		{
-			g_string_printf (sCommand, "rm -f \"%s\"/*.desktop", g_cCurrentLaunchersPath);
-			cd_message ("%s", sCommand->str);
-			r = system (sCommand->str);
-
-			g_string_printf (sCommand, "cp \"%s/%s\"/*.desktop \"%s\"", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentLaunchersPath);
-			cd_message ("%s", sCommand->str);
-			r = system (sCommand->str);
-		}
-		
-		//\___________________ On remplace tous les autres fichiers par les nouveaux.
-		g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '*.conf' -type f -exec rm -f '{}' \\;", g_cCurrentThemePath);  // efface tous les fichiers du theme mais sans toucher aux lanceurs et aux plug-ins.
-		cd_message (sCommand->str);
-		r = system (sCommand->str);
-
-		if (g_pMainDock == NULL || g_key_file_get_boolean (pKeyFile, "Themes", "use theme behaviour", NULL))
-		{
-			g_string_printf (sCommand, "find \"%s\"/* -prune ! -name '*.conf' ! -name %s -exec /bin/cp -r '{}' \"%s\" \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // copie tous les fichiers du nouveau theme sauf les lanceurs et le .conf, dans le repertoire du theme courant. Ecrase les fichiers de memes noms.
-			cd_message (sCommand->str);
-			r = system (sCommand->str);
-		}
-		else
-		{
-			// on copie tous les fichiers du nouveau theme sauf les lanceurs et les .conf (dock et plug-ins).
-			g_string_printf (sCommand, "find \"%s\" -mindepth 1 ! -name '*.conf' ! -path '%s/%s*' ! -type d -exec cp -p {} \"%s\" \\;", cNewThemePath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);
-			cd_message (sCommand->str);
-			r = system (sCommand->str);
-			
-			// on parcours les .conf des plug-ins, on les met a jour, et on fusionne avec le theme courant.
-			gchar *cNewPlugInsDir = g_strdup_printf ("%s/%s", cNewThemePath, "plug-ins");  // repertoire des plug-ins du nouveau theme.
-			GDir *dir = g_dir_open (cNewPlugInsDir, 0, NULL);  // NULL si ce theme n'a pas de repertoire 'plug-ins'.
-			const gchar* cModuleDirName;
-			gchar *cConfFilePath, *cNewConfFilePath, *cUserDataDirPath, *cConfFileName;
-			do
-			{
-				cModuleDirName = g_dir_read_name (dir);  // nom du repertoire du theme (pas forcement egal au nom du theme)
-				if (cModuleDirName == NULL)
-					break ;
-				
-				// on cree le repertoire du plug-in dans le theme courant.
-				cd_debug ("  installing %s's config\n", cModuleDirName);
-				cUserDataDirPath = g_strdup_printf ("%s/plug-ins/%s", g_cCurrentThemePath, cModuleDirName);  // repertoire du plug-in dans le theme courant.
-				if (! g_file_test (cUserDataDirPath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
-				{
-					cd_debug ("    directory %s doesn't exist, it will be created.", cUserDataDirPath);
-					
-					gchar *command = g_strdup_printf ("mkdir -p \"%s\"", cUserDataDirPath);
-					r = system (command);
-					g_free (command);
-				}
-				
-				// on recupere le nom et le chemin du .conf du plug-in dans le nouveau theme.
-				cConfFileName = g_strdup_printf ("%s.conf", cModuleDirName);
-				cNewConfFilePath = g_strdup_printf ("%s/%s/%s", cNewPlugInsDir, cModuleDirName, cConfFileName);
-				if (! g_file_test (cNewConfFilePath, G_FILE_TEST_EXISTS))
-				{
-					g_free (cConfFileName);
-					g_free (cNewConfFilePath);
-					CairoDockModule *pModule = cairo_dock_foreach_module ((GHRFunc) _find_module_from_user_data_dir, (gpointer) cModuleDirName);
-					if (pModule == NULL)  // du coup, dans ce cas-la, on ne charge pas des plug-ins non utilises par l'utilisateur.
-					{
-						cd_warning ("couldn't find the module owning '%s', this file will be ignored.");
-						continue;
-					}
-					cConfFileName = g_strdup (pModule->pVisitCard->cConfFileName);
-					cNewConfFilePath = g_strdup_printf ("%s/%s/%s", cNewPlugInsDir, cModuleDirName, cConfFileName);
-				}
-				cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, cConfFileName);  // chemin du .conf dans le theme courant.
-				
-				// on fusionne les 2 .conf.
-				if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
-				{
-					cd_debug ("    no conf file %s, we will take the theme's one", cConfFilePath);
-					gchar *command = g_strdup_printf ("cp \"%s\" \"%s\"", cNewConfFilePath, cConfFilePath);
-					r = system (command);
-					g_free (command);
-				}
-				else
-				{
-					cairo_dock_replace_keys_by_identifier (cConfFilePath, cNewConfFilePath, '+');
-				}
-				g_free (cNewConfFilePath);
-				g_free (cConfFilePath);
-				g_free (cUserDataDirPath);
-				g_free (cConfFileName);
-			}
-			while (1);
-			g_dir_close (dir);
-			g_free (cNewPlugInsDir);
-		}
-		
-		// precaution probablement inutile.
-		gchar *command = g_strdup_printf ("chmod -R 777 \"%s\"", g_cCurrentThemePath);
-		r = system (command);
-		g_free (command);
-		
-		//\___________________ On charge le theme courant.
-		cairo_dock_set_status_message (s_pThemeManager, _("Now reloading theme ..."));
-		cairo_dock_load_current_theme ();
-
-		g_free (cNewThemeName);
-		g_free (cNewThemePath);
-		g_string_free (sCommand, TRUE);
-		cairo_dock_set_status_message (s_pThemeManager, "");
-		return FALSE;
-	}
-	
-	return TRUE;
-}
-void cairo_dock_manage_themes (void)
-{
-	if (s_pThemeManager != NULL)
-	{
-		gtk_window_present (GTK_WINDOW (s_pThemeManager));
-		return ;
-	}
-	
-	gchar *cInitConfFile = cairo_dock_build_temporary_themes_conf_file ();  // sera supprime a la destruction de la fenetre.
-	
-	//\___________________ On laisse l'utilisateur l'editer.
-	const gchar *cPresentedGroup = (cairo_dock_theme_need_save () ? "Save" : NULL);
-	const gchar *cTitle = _("Manage Themes");
-	
-	cairo_dock_build_normal_gui (cInitConfFile,
-		NULL, cTitle,
-		CAIRO_DOCK_THEME_PANEL_WIDTH, CAIRO_DOCK_THEME_PANEL_HEIGHT,
-		(CairoDockApplyConfigFunc) on_theme_apply,
-		cInitConfFile,
-		(GFreeFunc) on_theme_destroy,
-		&s_pThemeManager);
-}
-
 gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir, CairoDockThemeType iGivenType)
 {
 	cd_message ("%s (%s, %s, %s)", __func__, cShareThemesDir, cUserThemesDir, cDistantThemesDir);
@@ -1177,4 +597,645 @@ gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareTh
 	
 	g_print (" ====> cThemePath : %s\n", cThemePath);
 	return cThemePath;
+}
+
+
+
+void cairo_dock_mark_theme_as_modified (gboolean bModified)
+{
+	gchar *cModifiedFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_MODIFIED_THEME_FILE);
+
+	g_file_set_contents (cModifiedFile,
+		(bModified ? "1" : "0"),
+		-1,
+		NULL);
+
+	g_free (cModifiedFile);
+}
+
+gboolean cairo_dock_theme_need_save (void)
+{
+	gchar *cModifiedFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_MODIFIED_THEME_FILE);
+	gsize length = 0;
+	gchar *cContent = NULL;
+	g_file_get_contents (cModifiedFile,
+		&cContent,
+		&length,
+		NULL);
+	g_free (cModifiedFile);
+	gboolean bNeedSave;
+	if (length > 0)
+		bNeedSave = (*cContent == '1');
+	else
+		bNeedSave = FALSE;
+	g_free (cContent);
+	return bNeedSave;
+}
+
+
+
+static void on_theme_destroy (gchar *cInitConfFile)
+{
+	g_print ("%s ()\n", __func__);
+	g_remove (cInitConfFile);
+	g_free (cInitConfFile);
+	s_pThemeManager = NULL;
+}
+
+CairoDockThemeType cairo_dock_extract_theme_type_from_name (const gchar *cThemeName)
+{
+	if (cThemeName == NULL)
+		return CAIRO_DOCK_ANY_THEME;
+	CairoDockThemeType iType = CAIRO_DOCK_ANY_THEME;
+	int l = strlen (cThemeName);
+	if (cThemeName[l-1] == ']')
+	{
+		gchar *str = strrchr (cThemeName, '[');
+		if (str != NULL && g_ascii_isdigit (*(str+1)))
+		{
+			iType = atoi (str+1);
+			*str = '\0';
+		}
+	}
+	return iType;
+}
+
+gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean bSaveBehavior, gboolean bSaveLaunchers)
+{
+	g_return_val_if_fail (cNewThemeName != NULL, FALSE);
+	
+	cairo_dock_extract_theme_type_from_name (cNewThemeName);
+	
+	cd_message ("on sauvegarde dans %s", cNewThemeName);
+	GString *sCommand = g_string_new ("");
+	gboolean bThemeSaved = FALSE;
+	int r;
+	gchar *cNewThemePath = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR, cNewThemeName);
+	if (g_file_test (cNewThemePath, G_FILE_TEST_EXISTS))  // on ecrase un theme existant.
+	{
+		cd_debug ("  le theme existant sera mis a jour");
+		gchar *cQuestion = g_strdup_printf (_("Are you sure you want to overwrite theme %s ?"), cNewThemeName);
+		int answer = cairo_dock_ask_general_question_and_wait (cQuestion);
+		g_free (cQuestion);
+		if (answer == GTK_RESPONSE_YES)
+		{
+			//\___________________ On traite le fichier de conf.
+			gchar *cNewConfFilePath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_CONF_FILE);
+			if (bSaveBehavior)
+			{
+				g_string_printf (sCommand, "/bin/cp \"%s\" \"%s\"", g_cConfFile, cNewConfFilePath);
+				cd_message ("%s", sCommand->str);
+				r = system (sCommand->str);
+			}
+			else
+			{
+				cairo_dock_replace_keys_by_identifier (cNewConfFilePath, g_cConfFile, '+');
+			}
+			g_free (cNewConfFilePath);
+			
+			//\___________________ On traite les lanceurs.
+			if (bSaveLaunchers)
+			{
+				g_string_printf (sCommand, "rm -f \"%s/%s\"/*", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
+				cd_message ("%s", sCommand->str);
+				r = system (sCommand->str);
+				
+				g_string_printf (sCommand, "cp \"%s\"/* \"%s/%s\"", g_cCurrentLaunchersPath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
+				cd_message ("%s", sCommand->str);
+				r = system (sCommand->str);
+			}
+			
+			//\___________________ On traite tous le reste.
+			/// TODO : traiter les .conf des applets comme celui du dock...
+			g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '*.conf' ! -name \"%s\" -exec /bin/cp -r '{}' \"%s\" \\;", g_cCurrentThemePath, CAIRO_DOCK_LAUNCHERS_DIR, cNewThemePath);
+			cd_message ("%s", sCommand->str);
+			r = system (sCommand->str);
+
+			bThemeSaved = TRUE;
+		}
+	}
+	else  // sinon on sauvegarde le repertoire courant tout simplement.
+	{
+		cd_debug ("  creation du nouveau theme (%s)", cNewThemePath);
+
+		if (g_mkdir (cNewThemePath, 7*8*8+7*8+5) == 0)
+		{
+			g_string_printf (sCommand, "cp -r \"%s\"/* \"%s\"", g_cCurrentThemePath, cNewThemePath);
+			cd_message ("%s", sCommand->str);
+			r = system (sCommand->str);
+
+			bThemeSaved = TRUE;
+		}
+		else
+			cd_warning ("couldn't create %s", cNewThemePath);
+	}
+	
+	g_free (cNewThemePath);
+	if (bThemeSaved)
+	{
+		cairo_dock_mark_theme_as_modified (FALSE);
+	}
+	
+	g_string_free (sCommand, TRUE);
+	
+	cairo_dock_set_status_message (s_pThemeManager, bThemeSaved ? _("The theme has been saved") :  _("The theme couldn't be saved"));
+	return bThemeSaved;
+}
+
+gboolean cairo_dock_package_current_theme (const gchar *cThemeName)
+{
+	g_return_val_if_fail (cThemeName != NULL, FALSE);
+	
+	cairo_dock_extract_theme_type_from_name (cThemeName);
+	
+	cd_message ("building theme package ...");
+	int r;
+	if (g_file_test (CAIRO_DOCK_SHARE_DATA_DIR"/../../bin/cairo-dock-package-theme", G_FILE_TEST_EXISTS))
+	{
+		gchar *cCommand;
+		const gchar *cTerm = g_getenv ("TERM");
+		if (cTerm == NULL || *cTerm == '\0')
+			cCommand = g_strdup_printf ("%s \"%s\"", "cairo-dock-package-theme", cThemeName);
+		else
+			cCommand = g_strdup_printf ("$TERM -e '%s \"%s\"'", "cairo-dock-package-theme", cThemeName);
+		r = system (cCommand);
+		g_free (cCommand);
+		return TRUE;
+	}
+	else
+	{
+		cd_warning ("the package builder script was not found !");
+		return FALSE;
+	}
+}
+gchar *cairo_dock_depackage_theme (const gchar *cPackagePath)
+{
+	gchar *cUserThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
+	gchar *cNewThemePath = NULL;
+	if (*cPackagePath == '/' || strncmp (cPackagePath, "file://", 7) == 0)  // paquet en local.
+	{
+		g_print (" paquet local\n");
+		//cairo_dock_remove_html_spaces (cPackagePath);
+		gchar *cFilePath = (*cPackagePath == '/' ? g_strdup (cPackagePath) : g_filename_from_uri (cPackagePath, NULL, NULL));
+		cNewThemePath = cairo_dock_uncompress_file (cFilePath, cUserThemesDir, NULL);
+		g_free (cFilePath);
+	}
+	else  // paquet distant.
+	{
+		g_print (" paquet distant\n");
+		gchar *str = strrchr (cPackagePath, '/');
+		if (str != NULL)
+		{
+			*str = '\0';
+			cNewThemePath = cairo_dock_download_file (cPackagePath, "", str+1, 2, cUserThemesDir, NULL);
+			if (cNewThemePath == NULL)
+			{
+				cairo_dock_show_temporary_dialog_with_icon_printf (_("couldn't get distant file %s/%s, maybe the server is down.\nPlease retry later or contact us at cairo-dock.org."), NULL, NULL, 0, NULL, cPackagePath, str+1);
+			}
+		}
+	}
+	g_free (cUserThemesDir);
+	return cNewThemePath;
+}
+
+gboolean cairo_dock_delete_themes (gchar **cThemesList)
+{
+	g_return_val_if_fail (cThemesList != NULL && cThemesList[0] != NULL, FALSE);
+	
+	GString *sCommand = g_string_new ("");
+	gboolean bThemeDeleted = FALSE;
+	
+	if (cThemesList[1] == NULL)
+		g_string_printf (sCommand, _("Are you sure you want to delete theme %s ?"), cThemesList[0]);
+	else
+		g_string_printf (sCommand, _("Are you sure you want to delete these themes ?"));
+	int answer = cairo_dock_ask_general_question_and_wait (sCommand->str);
+	if (answer == GTK_RESPONSE_YES)
+	{
+		gchar *cThemeName;
+		int i, r;
+		for (i = 0; cThemesList[i] != NULL; i ++)
+		{
+			cThemeName = cThemesList[i];
+			if (*cThemeName == '\0')
+				continue;
+			cairo_dock_extract_theme_type_from_name (cThemeName);
+			
+			bThemeDeleted = TRUE;
+			g_string_printf (sCommand, "rm -rf \"%s/%s/%s\"", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR, cThemeName);
+			r = system (sCommand->str);  // g_rmdir n'efface qu'un repertoire vide.
+		}
+	}
+	if (cThemesList[1] == NULL)
+		cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The theme has been deleted") :  _("The theme couldn't be deleted"));
+	else
+		cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The themes have been deleted") :  _("The themes couldn't be deleted"));
+	
+	g_string_free (sCommand, TRUE);
+	return bThemeDeleted;
+}
+
+static gboolean _find_module_from_user_data_dir (gchar *cModuleName, CairoDockModule *pModule, const gchar *cUserDataDirName)
+{
+	if (pModule->pVisitCard->cUserDataDir && strcmp (cUserDataDirName, pModule->pVisitCard->cUserDataDir) == 0)
+		return TRUE;
+	return FALSE;
+}
+gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers)
+{
+	//\___________________ On regarde si le theme courant est modifie.
+	gboolean bNeedSave = cairo_dock_theme_need_save ();
+	if (bNeedSave)
+	{
+		int iAnswer = cairo_dock_ask_general_question_and_wait (_("You made some modifications in the current theme.\nYou will loose them if you don't save before choosing a new theme. Continue anyway ?"));
+		if (iAnswer != GTK_RESPONSE_YES)
+		{
+			return FALSE;
+		}
+		cairo_dock_mark_theme_as_modified (FALSE);
+	}
+	
+	//\___________________ On obtient le chemin du nouveau theme (telecharge ou decompresse si necessaire).
+	gchar *cNewThemeName = g_strdup (cThemeName);
+	gchar *cNewThemePath = NULL;
+	
+	int length = strlen (cNewThemeName);
+	if (cNewThemeName[length-1] == '\n')
+		cNewThemeName[--length] = '\0';  // on vire le retour chariot final.
+	if (cNewThemeName[length-1] == '\r')
+		cNewThemeName[--length] = '\0';
+	g_print ("cNewThemeName : '%s'\n", cNewThemeName);
+	
+	if (g_str_has_suffix (cNewThemeName, ".tar.gz") || g_str_has_suffix (cNewThemeName, ".tar.bz2") || g_str_has_suffix (cNewThemeName, ".tgz"))  // c'est un paquet.
+	{
+		g_print ("c'est un paquet\n");
+		cNewThemePath = cairo_dock_depackage_theme (cNewThemeName);
+		
+		g_return_val_if_fail (cNewThemePath != NULL, FALSE);
+		gchar *tmp = cNewThemeName;
+		cNewThemeName = g_path_get_basename (cNewThemePath);
+		g_free (tmp);
+	}
+	else  // c'est un theme officiel.
+	{
+		g_print ("c'est un theme officiel\n");
+		gchar *cUserThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
+		cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, cUserThemesDir, CAIRO_DOCK_THEMES_DIR, CAIRO_DOCK_ANY_THEME);
+		g_free (cUserThemesDir);
+	}
+	g_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), FALSE);
+	g_print ("cNewThemePath : %s ; cNewThemeName : %s\n", cNewThemePath, cNewThemeName);
+	
+	//\___________________ On charge les parametres de comportement.
+	GString *sCommand = g_string_new ("");
+	int r;
+	cairo_dock_set_status_message (s_pThemeManager, _("Applying changes ..."));
+	if (g_pMainDock == NULL || bLoadBehavior)
+	{
+		g_string_printf (sCommand, "/bin/cp \"%s\"/%s \"%s\"", cNewThemePath, CAIRO_DOCK_CONF_FILE, g_cCurrentThemePath);
+		cd_message ("%s", sCommand->str);
+		r = system (sCommand->str);
+	}
+	else
+	{
+		gchar *cNewConfFilePath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_CONF_FILE);
+		cairo_dock_replace_keys_by_identifier (g_cConfFile, cNewConfFilePath, '+');
+		g_free (cNewConfFilePath);
+	}
+	
+	//\___________________ On charge les .conf des autres docks racines.
+	g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1 -name '*.conf' ! -name '%s' -exec /bin/cp '{}' \"%s\" \\;", cNewThemePath, CAIRO_DOCK_CONF_FILE, g_cCurrentThemePath);
+	cd_message ("%s", sCommand->str);
+	r = system (sCommand->str);
+	
+	//\___________________ On charge les lanceurs.
+	if (bLoadLaunchers)
+	{
+		g_string_printf (sCommand, "rm -f \"%s/%s\"/*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+		cd_message ("%s", sCommand->str);
+		r = system (sCommand->str);
+		g_string_printf (sCommand, "rm -f \"%s/%s\"/.*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+		cd_message ("%s", sCommand->str);
+		r = system (sCommand->str);
+	}
+	
+	//\___________________ On charge les icones.
+	gchar *cNewLocalIconsPath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+	if (! g_file_test (cNewLocalIconsPath, G_FILE_TEST_IS_DIR))  // c'est un ancien theme, on deplace les icones vers le repertoire 'icons'.
+	{
+		g_string_printf (sCommand, "find \"%s/%s\" -mindepth 1 ! -name '*.desktop' -exec /bin/cp '{}' '%s/%s' \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+	}
+	else
+	{
+		g_string_printf (sCommand, "for f in \"%s\"/* ; do rm -f \"%s/%s/`basename \"${f%%.*}\"`\"*; done;", cNewLocalIconsPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);  // on efface les doublons car sinon on pourrait avoir x.png et x.svg ensemble et le dock ne saurait pas lequel choisir.
+		cd_message ("%s", sCommand->str);
+		r = system (sCommand->str);
+		
+		g_string_printf (sCommand, "cp \"%s\"/* \"%s/%s\"", cNewLocalIconsPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+	}
+	cd_message ("%s", sCommand->str);
+	r = system (sCommand->str);
+	g_free (cNewLocalIconsPath);
+	
+	//\___________________ On charge les extras.
+	g_string_printf (sCommand, "%s/%s", cNewThemePath, CAIRO_DOCK_EXTRAS_DIR);
+	if (g_file_test (sCommand->str, G_FILE_TEST_IS_DIR))
+	{
+		g_string_printf (sCommand, "cp -r \"%s/%s\"/* \"%s/%s\"", cNewThemePath, CAIRO_DOCK_EXTRAS_DIR, g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR);
+		cd_message ("%s", sCommand->str);
+		r = system (sCommand->str);
+	}
+	
+	//\___________________ On charge les lanceurs si necessaire, en effacant ceux existants.
+	if (! g_file_test (g_cCurrentLaunchersPath, G_FILE_TEST_EXISTS))
+	{
+		gchar *command = g_strdup_printf ("mkdir -p \"%s\"", g_cCurrentLaunchersPath);
+		r = system (command);
+		g_free (command);
+	}
+	if (g_pMainDock == NULL || bLoadLaunchers)
+	{
+		g_string_printf (sCommand, "rm -f \"%s\"/*.desktop", g_cCurrentLaunchersPath);
+		cd_message ("%s", sCommand->str);
+		r = system (sCommand->str);
+
+		g_string_printf (sCommand, "cp \"%s/%s\"/*.desktop \"%s\"", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentLaunchersPath);
+		cd_message ("%s", sCommand->str);
+		r = system (sCommand->str);
+	}
+	
+	//\___________________ On remplace tous les autres fichiers par les nouveaux.
+	g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '*.conf' -type f -exec rm -f '{}' \\;", g_cCurrentThemePath);  // efface tous les fichiers du theme mais sans toucher aux lanceurs et aux plug-ins.
+	cd_message (sCommand->str);
+	r = system (sCommand->str);
+
+	if (g_pMainDock == NULL || bLoadBehavior)
+	{
+		g_string_printf (sCommand, "find \"%s\"/* -prune ! -name '*.conf' ! -name %s -exec /bin/cp -r '{}' \"%s\" \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // copie tous les fichiers du nouveau theme sauf les lanceurs et le .conf, dans le repertoire du theme courant. Ecrase les fichiers de memes noms.
+		cd_message (sCommand->str);
+		r = system (sCommand->str);
+	}
+	else
+	{
+		// on copie tous les fichiers du nouveau theme sauf les lanceurs et les .conf (dock et plug-ins).
+		g_string_printf (sCommand, "find \"%s\" -mindepth 1 ! -name '*.conf' ! -path '%s/%s*' ! -type d -exec cp -p {} \"%s\" \\;", cNewThemePath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);
+		cd_message (sCommand->str);
+		r = system (sCommand->str);
+		
+		// on parcours les .conf des plug-ins, on les met a jour, et on fusionne avec le theme courant.
+		gchar *cNewPlugInsDir = g_strdup_printf ("%s/%s", cNewThemePath, "plug-ins");  // repertoire des plug-ins du nouveau theme.
+		GDir *dir = g_dir_open (cNewPlugInsDir, 0, NULL);  // NULL si ce theme n'a pas de repertoire 'plug-ins'.
+		const gchar* cModuleDirName;
+		gchar *cConfFilePath, *cNewConfFilePath, *cUserDataDirPath, *cConfFileName;
+		do
+		{
+			cModuleDirName = g_dir_read_name (dir);  // nom du repertoire du theme (pas forcement egal au nom du theme)
+			if (cModuleDirName == NULL)
+				break ;
+			
+			// on cree le repertoire du plug-in dans le theme courant.
+			cd_debug ("  installing %s's config\n", cModuleDirName);
+			cUserDataDirPath = g_strdup_printf ("%s/plug-ins/%s", g_cCurrentThemePath, cModuleDirName);  // repertoire du plug-in dans le theme courant.
+			if (! g_file_test (cUserDataDirPath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+			{
+				cd_debug ("    directory %s doesn't exist, it will be created.", cUserDataDirPath);
+				
+				g_string_printf (sCommand, "mkdir -p \"%s\"", cUserDataDirPath);
+				r = system (sCommand->str);
+			}
+			
+			// on recupere le nom et le chemin du .conf du plug-in dans le nouveau theme.
+			cConfFileName = g_strdup_printf ("%s.conf", cModuleDirName);
+			cNewConfFilePath = g_strdup_printf ("%s/%s/%s", cNewPlugInsDir, cModuleDirName, cConfFileName);
+			if (! g_file_test (cNewConfFilePath, G_FILE_TEST_EXISTS))
+			{
+				g_free (cConfFileName);
+				g_free (cNewConfFilePath);
+				CairoDockModule *pModule = cairo_dock_foreach_module ((GHRFunc) _find_module_from_user_data_dir, (gpointer) cModuleDirName);
+				if (pModule == NULL)  // du coup, dans ce cas-la, on ne charge pas des plug-ins non utilises par l'utilisateur.
+				{
+					cd_warning ("couldn't find the module owning '%s', this file will be ignored.");
+					continue;
+				}
+				cConfFileName = g_strdup (pModule->pVisitCard->cConfFileName);
+				cNewConfFilePath = g_strdup_printf ("%s/%s/%s", cNewPlugInsDir, cModuleDirName, cConfFileName);
+			}
+			cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, cConfFileName);  // chemin du .conf dans le theme courant.
+			
+			// on fusionne les 2 .conf.
+			if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
+			{
+				cd_debug ("    no conf file %s, we will take the theme's one", cConfFilePath);
+				g_string_printf (sCommand, "cp \"%s\" \"%s\"", cNewConfFilePath, cConfFilePath);
+				r = system (sCommand->str);
+			}
+			else
+			{
+				cairo_dock_replace_keys_by_identifier (cConfFilePath, cNewConfFilePath, '+');
+			}
+			g_free (cNewConfFilePath);
+			g_free (cConfFilePath);
+			g_free (cUserDataDirPath);
+			g_free (cConfFileName);
+		}
+		while (1);
+		g_dir_close (dir);
+		g_free (cNewPlugInsDir);
+	}
+	
+	// precaution probablement inutile.
+	g_string_printf (sCommand, "chmod -R 777 \"%s\"", g_cCurrentThemePath);
+	r = system (sCommand->str);
+	
+	g_string_free (sCommand, TRUE);
+	return TRUE;
+}
+
+
+
+static gchar *cairo_dock_build_temporary_themes_conf_file (void)
+{
+	//\___________________ On cree un fichier de conf temporaire.
+	const gchar *cTmpDir = g_get_tmp_dir ();
+	gchar *cTmpConfFile = g_strdup_printf ("%s/cairo-dock-init.XXXXXX", cTmpDir);
+	int fds = mkstemp (cTmpConfFile);
+	if (fds == -1)
+	{
+		cd_warning ("can't create a temporary file in %s", cTmpDir);
+		g_free (cTmpConfFile);
+		return NULL;
+	}
+	
+	//\___________________ On copie le fichier de conf par defaut dedans.
+	gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_THEME_CONF_FILE, cTmpConfFile);
+	int r = system (cCommand);
+	g_free (cCommand);
+
+	close(fds);
+	return cTmpConfFile;
+}
+
+static gboolean on_theme_apply (gchar *cInitConfFile)
+{
+	g_print ("%s (%s)\n", __func__, cInitConfFile);
+	GError *erreur = NULL;
+	int r;  // resultat de system().
+	
+	//\___________________ On recupere les donnees de l'IHM apres modification par l'utilisateur.
+	GKeyFile* pKeyFile = cairo_dock_open_key_file (cInitConfFile);
+	g_return_val_if_fail (pKeyFile != NULL, FALSE);
+	
+	//\___________________ On sauvegarde le theme actuel.
+	GString *sCommand = g_string_new ("");
+	gchar *cNewThemeName = g_key_file_get_string (pKeyFile, "Save", "theme name", &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+		erreur = NULL;
+	}
+	if (cNewThemeName != NULL && *cNewThemeName == '\0')
+	{
+		g_free (cNewThemeName);
+		cNewThemeName = NULL;
+	}
+	cd_message ("cNewThemeName : %s", cNewThemeName);
+
+	if (cNewThemeName != NULL)
+	{
+		cairo_dock_extract_theme_type_from_name (cNewThemeName);
+		
+		gboolean bSaveBehavior = g_key_file_get_boolean (pKeyFile, "Save", "save current behaviour", NULL);
+		gboolean bSaveLaunchers = g_key_file_get_boolean (pKeyFile, "Save", "save current launchers", NULL);
+		
+		gboolean bThemeSaved = cairo_dock_export_current_theme (cNewThemeName, bSaveBehavior, bSaveLaunchers);
+		
+		if (g_key_file_get_boolean (pKeyFile, "Save", "package", NULL))
+		{
+			bThemeSaved |= cairo_dock_package_current_theme (cNewThemeName);
+		}
+		
+		if (bThemeSaved)
+		{
+			g_key_file_set_string (pKeyFile, "Save", "theme name", "");
+			cairo_dock_write_keys_to_file (pKeyFile, cInitConfFile);
+		}
+		
+		g_free (cNewThemeName);
+		g_key_file_free (pKeyFile);
+		return TRUE;
+	}
+	
+	//\___________________ On efface les themes selectionnes.
+	gsize length = 0;
+	gchar ** cThemesList = g_key_file_get_string_list (pKeyFile, "Delete", "deleted themes", &length, &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+		erreur = NULL;
+	}
+	else if (cThemesList != NULL && cThemesList[0] != NULL && *cThemesList[0] != '\0')
+	{
+		gboolean bThemeDeleted = cairo_dock_delete_themes (cThemesList);
+		
+		if (bThemeDeleted)
+		{
+			g_key_file_set_string (pKeyFile, "Delete", "deleted themes", "");
+			cairo_dock_write_keys_to_file (pKeyFile, cInitConfFile);
+		}
+		
+		g_strfreev (cThemesList);
+		g_key_file_free (pKeyFile);
+		return TRUE;
+	}
+	
+	//\___________________ On charge le theme selectionne.
+	cNewThemeName = g_key_file_get_string (pKeyFile, "Themes", "chosen theme", &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+		erreur = NULL;
+	}
+	if (cNewThemeName != NULL && *cNewThemeName == '\0')
+	{
+		g_free (cNewThemeName);
+		cNewThemeName = NULL;
+	}
+	
+	if (cNewThemeName == NULL)
+	{
+		cNewThemeName = g_key_file_get_string (pKeyFile, "Themes", "package", &erreur);
+		if (erreur != NULL)
+		{
+			cd_warning (erreur->message);
+			g_error_free (erreur);
+			erreur = NULL;
+		}
+		if (cNewThemeName != NULL && *cNewThemeName == '\0')
+		{
+			g_free (cNewThemeName);
+			cNewThemeName = NULL;
+		}
+	}
+	
+	//\___________________ On charge le nouveau theme choisi.
+	if (cNewThemeName != NULL)
+	{
+		gboolean bLoadBehavior = g_key_file_get_boolean (pKeyFile, "Themes", "use theme behaviour", NULL);
+		gboolean bLoadLaunchers = g_key_file_get_boolean (pKeyFile, "Themes", "use theme launchers", NULL);
+		
+		gboolean bThemeImported = cairo_dock_import_theme (cNewThemeName, bLoadBehavior, bLoadLaunchers);
+		
+		//\___________________ On charge le theme courant.
+		if (bThemeImported)
+		{
+			cairo_dock_set_status_message (s_pThemeManager, _("Now reloading theme ..."));
+			cairo_dock_load_current_theme ();
+		}
+		
+		g_free (cNewThemeName);
+		cairo_dock_set_status_message (s_pThemeManager, "");
+		return FALSE;
+	}
+	
+	return TRUE;
+}
+void cairo_dock_manage_themes (void)
+{
+	if (s_pThemeManager != NULL)
+	{
+		gtk_window_present (GTK_WINDOW (s_pThemeManager));
+		return ;
+	}
+	
+	gchar *cInitConfFile = cairo_dock_build_temporary_themes_conf_file ();  // sera supprime a la destruction de la fenetre.
+	
+	//\___________________ On laisse l'utilisateur l'editer.
+	const gchar *cPresentedGroup = (cairo_dock_theme_need_save () ? "Save" : NULL);
+	const gchar *cTitle = _("Manage Themes");
+	
+	cairo_dock_build_normal_gui (cInitConfFile,
+		NULL, cTitle,
+		CAIRO_DOCK_THEME_PANEL_WIDTH, CAIRO_DOCK_THEME_PANEL_HEIGHT,
+		(CairoDockApplyConfigFunc) on_theme_apply,
+		cInitConfFile,
+		(GFreeFunc) on_theme_destroy,
+		&s_pThemeManager);
+}
+
+
+void cairo_dock_load_current_theme (void)
+{
+	cd_message ("%s ()", __func__);
+
+	//\___________________ On libere toute la memoire allouee pour les docks (stoppe aussi tous les timeout).
+	cairo_dock_free_all_docks ();
+
+	//\___________________ On cree le dock principal.
+	g_pMainDock = cairo_dock_create_new_dock (CAIRO_DOCK_MAIN_DOCK_NAME, NULL);  // on ne lui assigne pas de vues, puisque la vue par defaut des docks principaux sera definie plus tard.
+
+	//\___________________ On lit son fichier de conf et on charge tout.
+	cairo_dock_read_conf_file (g_cConfFile, g_pMainDock);  // chargera des valeurs par defaut si le fichier de conf fourni est incorrect.
 }

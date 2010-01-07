@@ -543,7 +543,7 @@ msgstr "Verrouiller les icônes"
 
 #: ../src/cairo-dock-menu.c:1322
 msgid "This will (un)lock the position of the icons."
-msgstr "La position des icônes de votre dock sera (dé)verrouillé."
+msgstr "La position des icônes de votre dock sera (dé)verrouillée."
 
 #: ../src/cairo-dock-menu.c:1326
 msgid "unlock dock"
@@ -654,7 +654,7 @@ msgstr "Ajouter un lanceur personnalisé"
 msgid ""
 "Usually you would drag a launcher from the menu and drop it into the dock."
 msgstr ""
-"Vous pouvez également glisser un lanceur depuis votre menu d'applications et "
+"En général il est plus simple de glisser un lanceur depuis le menu d'applications et "
 "le déposer dans le dock."
 
 #: ../src/cairo-dock-menu.c:1466

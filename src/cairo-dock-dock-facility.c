@@ -93,6 +93,8 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 {
 	g_return_if_fail (pDock != NULL);
 	int iPrevMaxDockHeight = pDock->iMaxDockHeight;
+	int iPrevMaxDockWidth = pDock->iMaxDockWidth;
+	
 	
 	if (pDock->container.fRatio != 0/* && pDock->container.fRatio != 1*/)  // on remet leur taille reelle aux icones, sinon le calcul de max_dock_size sera biaise.
 	{
@@ -161,7 +163,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		n ++;
 	} while ((pDock->iMaxDockWidth > iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_iScreenHeight[pDock->container.bIsHorizontal]) && n < 4);
 	pDock->iMaxIconHeight = hmax;
-	//g_print (">>> iMaxIconHeight : %d (%.2f)\n", (int) pDock->iMaxIconHeight, pDock->container.fRatio);
+	g_print (">>> iMaxIconHeight : %d (%.2f)\n", (int) pDock->iMaxIconHeight, pDock->container.fRatio);
 	
 	pDock->pRenderer->calculate_icons (pDock);  // le calcul de max_dock_size a altere les fX et fY.
 	
@@ -170,10 +172,10 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	
 	cairo_dock_update_input_shape (pDock);
 	
-	if (GTK_WIDGET_VISIBLE (pDock->container.pWidget))
+	if (GTK_WIDGET_VISIBLE (pDock->container.pWidget) && (iPrevMaxDockHeight != pDock->iMaxDockHeight || iPrevMaxDockWidth != pDock->iMaxDockWidth))
 	{
-		//g_print ("%s ()\n", __func__);
-		cairo_dock_move_resize_dock (pDock);
+		g_print ("*******%s ()\n", __func__);
+		cairo_dock_move_resize_dock (pDock);  /// gele le dock ?....
 	}
 	
 	cairo_dock_update_background_decorations_if_necessary (pDock, pDock->iDecorationsWidth, pDock->iDecorationsHeight);
@@ -308,7 +310,7 @@ void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 
 void cairo_dock_move_resize_dock (CairoDock *pDock)
 {
-	g_print ("%s ()\n", __func__);
+	g_print ("%s (%dx%d)\n", __func__, pDock->iMaxDockWidth, pDock->iMaxDockHeight);
 	int iNewWidth = pDock->iMaxDockWidth;
 	int iNewHeight = pDock->iMaxDockHeight;
 	int iNewPositionX, iNewPositionY;

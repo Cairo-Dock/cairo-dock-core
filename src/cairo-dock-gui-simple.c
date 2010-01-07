@@ -39,6 +39,7 @@
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-desktop-file-factory.h"
+#include "cairo-dock-themes-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gui-simple.h"
@@ -46,7 +47,7 @@
 #define CAIRO_DOCK_PREVIEW_WIDTH 200
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
 #define CAIRO_DOCK_SIMPLE_PANEL_WIDTH 1000
-#define CAIRO_DOCK_SIMPLE_PANEL_HEIGHT 800
+#define CAIRO_DOCK_SIMPLE_PANEL_HEIGHT 700
 
 static GtkWidget *s_pSimpleConfigWindow = NULL;
 static GtkWidget *s_pSimpleConfigModuleWindow = NULL;
@@ -67,8 +68,174 @@ extern gchar *g_cCairoDockDataDir;
 		cairo_dock_reload_internal_module_from_keyfile (pInternalModule, pKeyFile);\
 	} while (0)
 
+static gchar * _make_simple_conf_file (void)
+{
+	//\_____________ On actualise le fichier de conf simple.
+	// on cree le fichier au besoin, et on l'ouvre.
+	gchar *cConfFilePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_SIMPLE_CONF_FILE);
+	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
+	{
+		gchar *cCommand = g_strdup_printf ("cp \"%s/%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_SIMPLE_CONF_FILE, cConfFilePath);
+		int r = system (cCommand);
+		g_free (cCommand);
+	}
+	
+	GKeyFile* pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);
+	g_return_val_if_fail (pSimpleKeyFile != NULL, NULL);
+	
+	if (cairo_dock_conf_file_needs_update (pSimpleKeyFile, CAIRO_DOCK_VERSION))
+	{
+		cairo_dock_flush_conf_file (pSimpleKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_SIMPLE_CONF_FILE);
+		g_key_file_free (pSimpleKeyFile);
+		pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);
+		g_return_val_if_fail (pSimpleKeyFile != NULL, NULL);
+	}
+	
+	// comportement
+	CairoDockPositionType iScreenBorder = (g_pMainDock ? ((! g_pMainDock->container.bIsHorizontal) << 1) | (! g_pMainDock->container.bDirectionUp) : 0);
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "screen border", iScreenBorder);
+	
+	gboolean iVisibility;
+	if (myAccessibility.bReserveSpace)
+		iVisibility = 1;
+	else if (myAccessibility.bPopUp)
+		iVisibility = 2;
+	else if (myAccessibility.bAutoHide)
+		iVisibility = 3;
+	else if (myAccessibility.bAutoHideOnMaximized)
+		iVisibility = 4;
+	else if (myAccessibility.cRaiseDockShortcut)
+		iVisibility = 5;
+	else
+		iVisibility = 0;
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "visibility", iVisibility);
+	
+	g_key_file_set_boolean (pSimpleKeyFile, "Behavior", "show on click", myAccessibility.bShowSubDockOnClick);
+	
+	int iTaskbarType;
+	if (! myTaskBar.bShowAppli)
+		iTaskbarType = 0;
+	else if (myTaskBar.bHideVisibleApplis)
+		iTaskbarType = 1;
+	else if (myTaskBar.bGroupAppliByClass)
+		iTaskbarType = 2;
+	else
+		iTaskbarType = 3;
+	s_iTaskbarType = iTaskbarType;
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "taskbar", iTaskbarType);
+	
+	// apparence
+	g_key_file_set_string (pSimpleKeyFile, "Appearance", "default icon directory", myIcons.cIconTheme);
+	
+	int iIconSize;
+	if (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] <= 42)  // icones toutes petites.
+		iIconSize = 0;
+	else if (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] >= 54)  // icones tres grandes.
+		iIconSize = 4;
+	else if (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] <= 48)
+	{
+		if (myIcons.fAmplitude >= 2)  // icones petites.
+			iIconSize = 1;
+		else
+			iIconSize = 3;  // moyennes.
+	}
+	else  // grandes.
+		iIconSize = 4;
+	
+	g_key_file_set_integer (pSimpleKeyFile, "Appearance", "icon size", iIconSize);
+	s_iIconSize = iIconSize;
+	
+	g_key_file_set_integer_list (pSimpleKeyFile, "Appearance", "icon's type order", myIcons.iIconsTypesList, 3);
+	
+	g_key_file_set_boolean (pSimpleKeyFile, "Appearance", "mix applets with launchers", myIcons.bMixAppletsAndLaunchers);
+	
+	g_key_file_set_string (pSimpleKeyFile, "Appearance", "main dock view", myViews.cMainDockDefaultRendererName);
+	
+	g_key_file_set_string (pSimpleKeyFile, "Appearance", "sub-dock view", myViews.cSubDockDefaultRendererName);
+	
+	// themes
+	g_key_file_set_boolean (pSimpleKeyFile, "Themes", "use theme launchers", FALSE);
+	
+	g_key_file_set_boolean (pSimpleKeyFile, "Themes", "use theme behaviour", FALSE);
+	
+	cairo_dock_write_keys_to_file (pSimpleKeyFile, cConfFilePath);
+	
+	g_key_file_free (pSimpleKeyFile);
+	return cConfFilePath;
+}
+
+static gboolean on_apply_theme_simple (gpointer data)
+{
+	//\_______________ On recupere le choix de l'utilisateur.
+	gchar *cConfFilePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_SIMPLE_CONF_FILE);
+	GKeyFile* pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);
+	g_free (cConfFilePath);
+	g_return_val_if_fail (pSimpleKeyFile != NULL, TRUE);
+	
+	gchar *cNewThemeName = g_key_file_get_string (pSimpleKeyFile, "Themes", "chosen theme", NULL);
+	gboolean bLoadBehavior = g_key_file_get_boolean (pSimpleKeyFile, "Themes", "use theme behaviour", NULL);
+	gboolean bLoadLaunchers = g_key_file_get_boolean (pSimpleKeyFile, "Themes", "use theme launchers", NULL);
+	
+	g_key_file_free (pSimpleKeyFile);
+	if (cNewThemeName == NULL || *cNewThemeName == '\0')
+		return TRUE;
+	
+	//\_______________ On importe le theme.
+	gboolean bThemeImported = cairo_dock_import_theme (cNewThemeName, bLoadBehavior, bLoadLaunchers);
+	g_print ("bThemeImported : %d\n", bThemeImported);
+	
+	//\_______________ On le charge.
+	if (bThemeImported)
+	{
+		cairo_dock_set_status_message (s_pSimpleConfigWindow, _("Now reloading theme ..."));
+		cairo_dock_load_current_theme ();
+	}
+	
+	g_free (cNewThemeName);
+	cairo_dock_set_status_message (s_pSimpleConfigWindow, "");
+	
+	//\_______________ On recharge la fenetre.
+	g_print ("reolad\n");
+	GSList *pWidgetList = g_object_get_data (G_OBJECT (s_pSimpleConfigWindow), "widget-list");
+	g_return_val_if_fail (pWidgetList != NULL, TRUE);
+	cairo_dock_free_generated_widget_list (pWidgetList);
+	pWidgetList = NULL;
+	g_object_set_data (G_OBJECT (s_pSimpleConfigWindow), "widget-list", NULL);
+	
+	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (s_pSimpleConfigWindow), "garbage");
+	/// nettoyer...
+	g_object_set_data (G_OBJECT (s_pSimpleConfigWindow), "garbage", NULL);
+	
+	GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (s_pSimpleConfigWindow));
+	GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
+	g_return_val_if_fail (children != NULL, TRUE);
+	GtkWidget *pNoteBook = children->data;
+	gtk_widget_destroy (pNoteBook);
+	
+	cConfFilePath = _make_simple_conf_file ();
+	
+	pNoteBook = cairo_dock_build_conf_file_widget (cConfFilePath, NULL, NULL, &pWidgetList, pDataGarbage, cConfFilePath);
+	gtk_box_pack_start (GTK_BOX (pMainVBox),
+		pNoteBook,
+		TRUE,
+		TRUE,
+		0);
+	gtk_widget_show_all (pNoteBook);
+	g_object_set_data (G_OBJECT (s_pSimpleConfigWindow), "widget-list", pWidgetList);
+	g_object_set_data (G_OBJECT (s_pSimpleConfigWindow), "garbage", pDataGarbage);
+	return TRUE;
+}
+
 static gboolean on_apply_config_simple (gpointer data)
 {
+	GtkWidget * pMainVBox= gtk_bin_get_child (GTK_BIN (s_pSimpleConfigWindow));
+	GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
+	GtkWidget *pGroupWidget = children->data;
+	if (gtk_notebook_get_current_page (GTK_NOTEBOOK (pGroupWidget)) == 3)
+	{
+		return on_apply_theme_simple (data);
+	}
+	
 	//\_____________ On actualise le fichier de conf principal.
 	// on ouvre les 2 fichiers (l'un en lecture, l'autre en ecriture).
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_SIMPLE_CONF_FILE);
@@ -224,90 +391,8 @@ static GtkWidget * show_main_gui (void)
 		return s_pSimpleConfigWindow;
 	}
 	
-	//\_____________ On actualise le fichier de conf simple.
-	// on cree le fichier au besoin, et on l'ouvre.
-	gchar *cConfFilePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_SIMPLE_CONF_FILE);
-	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
-	{
-		gchar *cCommand = g_strdup_printf ("cp \"%s/%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_SIMPLE_CONF_FILE, cConfFilePath);
-		int r = system (cCommand);
-		g_free (cCommand);
-	}
-	
-	GKeyFile* pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	g_return_val_if_fail (pSimpleKeyFile != NULL, NULL);
-	
-	if (cairo_dock_conf_file_needs_update (pSimpleKeyFile, CAIRO_DOCK_VERSION))
-	{
-		cairo_dock_flush_conf_file (pSimpleKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_SIMPLE_CONF_FILE);
-		g_key_file_free (pSimpleKeyFile);
-		pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);
-		g_return_val_if_fail (pSimpleKeyFile != NULL, NULL);
-	}
-	
-	// comportement
-	CairoDockPositionType iScreenBorder = (g_pMainDock ? ((! g_pMainDock->container.bIsHorizontal) << 1) | (! g_pMainDock->container.bDirectionUp) : 0);
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "screen border", iScreenBorder);
-	
-	gboolean iVisibility;
-	if (myAccessibility.bReserveSpace)
-		iVisibility = 1;
-	else if (myAccessibility.bPopUp)
-		iVisibility = 2;
-	else if (myAccessibility.bAutoHide)
-		iVisibility = 3;
-	else if (myAccessibility.bAutoHideOnMaximized)
-		iVisibility = 4;
-	else if (myAccessibility.cRaiseDockShortcut)
-		iVisibility = 5;
-	else
-		iVisibility = 0;
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "visibility", iVisibility);
-	
-	g_key_file_set_boolean (pSimpleKeyFile, "Behavior", "show on click", myAccessibility.bShowSubDockOnClick);
-	
-	int iTaskbarType;
-	if (! myTaskBar.bShowAppli)
-		iTaskbarType = 0;
-	else if (myTaskBar.bHideVisibleApplis)
-		iTaskbarType = 1;
-	else if (myTaskBar.bGroupAppliByClass)
-		iTaskbarType = 2;
-	else
-		iTaskbarType = 3;
-	s_iTaskbarType = iTaskbarType;
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "taskbar", iTaskbarType);
-	
-	// apparence
-	g_key_file_set_string (pSimpleKeyFile, "Appearance", "default icon directory", myIcons.cIconTheme);
-	
-	int iIconSize;
-	if (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] <= 42)  // icones toutes petites.
-		iIconSize = 0;
-	else if (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] >= 54)  // icones tres grandes.
-		iIconSize = 4;
-	else if (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] <= 48)
-	{
-		if (myIcons.fAmplitude >= 2)  // icones petites.
-			iIconSize = 1;
-		else
-			iIconSize = 3;  // moyennes.
-	}
-	else  // grandes.
-		iIconSize = 4;
-	
-	g_key_file_set_integer (pSimpleKeyFile, "Appearance", "icon size", iIconSize);
-	s_iIconSize = iIconSize;	
-	
-	g_key_file_set_integer_list (pSimpleKeyFile, "Appearance", "icon's type order", myIcons.iIconsTypesList, 3);
-	
-	g_key_file_set_boolean (pSimpleKeyFile, "Appearance", "mix applets with launchers", myIcons.bMixAppletsAndLaunchers);
-	
-	g_key_file_set_string (pSimpleKeyFile, "Appearance", "main dock view", myViews.cMainDockDefaultRendererName);
-	
-	g_key_file_set_string (pSimpleKeyFile, "Appearance", "sub-dock view", myViews.cSubDockDefaultRendererName);
-	
-	cairo_dock_write_keys_to_file (pSimpleKeyFile, cConfFilePath);
+	//\_____________ On construit le fichier de conf simple a partir du .conf normal.
+	gchar *cConfFilePath = _make_simple_conf_file ();
 	
 	//\_____________ On construit la fenetre.
 	cairo_dock_build_normal_gui (cConfFilePath,
@@ -554,48 +639,29 @@ static void deactivate_module_in_gui (const gchar *cModuleName)
 	if (s_pSimpleConfigWindow == NULL || cModuleName == NULL)
 		return ;
 	
-	g_print ("TOTO\n");
-	/// desactiver la ligne qui va bien dans le gtk_list_store...
+	// desactive la ligne qui va bien dans le gtk_list_store...
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
 	g_return_if_fail (pModule != NULL);
 	
 	GSList *pCurrentWidgetList = g_object_get_data (G_OBJECT (s_pSimpleConfigWindow), "widget-list");
 	g_return_if_fail (pCurrentWidgetList != NULL);
 	
-	GSList *pWidgetList = NULL;
-	switch (pModule->pVisitCard->iCategory)
+	GSList *pWidgetList = cairo_dock_find_widgets_from_name (pCurrentWidgetList, "Add-ons", "modules");
+	g_return_if_fail (pWidgetList != NULL);
+	
+	GtkWidget *pTreeView = pWidgetList->data;
+	
+	GtkTreeModel *pModele = gtk_tree_view_get_model (GTK_TREE_VIEW (pTreeView));
+	gboolean bFound = FALSE;
+	GtkTreeIter iter;
+	memset (&iter, 0, sizeof (GtkTreeIter));
+	gconstpointer data[3] = {cModuleName, &iter, &bFound};
+	gtk_tree_model_foreach (GTK_TREE_MODEL (pModele), (GtkTreeModelForeachFunc) _test_one_module_name, data);
+	
+	if (bFound)
 	{
-		case CAIRO_DOCK_CATEGORY_APPLET_ACCESSORY:
-			pWidgetList = cairo_dock_find_widgets_from_name (pCurrentWidgetList, "Add-ons", "accessories");
-		break;
-		case CAIRO_DOCK_CATEGORY_APPLET_DESKTOP:
-			pWidgetList = cairo_dock_find_widgets_from_name (pCurrentWidgetList, "Add-ons", "desktops");
-		break;
-		case CAIRO_DOCK_CATEGORY_APPLET_CONTROLER:
-			pWidgetList = cairo_dock_find_widgets_from_name (pCurrentWidgetList, "Add-ons", "controlers");
-		break;
-		case CAIRO_DOCK_CATEGORY_PLUG_IN:
-			pWidgetList = cairo_dock_find_widgets_from_name (pCurrentWidgetList, "Add-ons", "plug-ins");
-		break;
-		default:
-		break;
-	}
-	if (pWidgetList != NULL)
-	{
-		GtkWidget *pTreeView = pWidgetList->data;
-		
-		GtkTreeModel *pModele = gtk_tree_view_get_model (GTK_TREE_VIEW (pTreeView));
-		gboolean bFound = FALSE;
-		GtkTreeIter iter;
-		memset (&iter, 0, sizeof (GtkTreeIter));
-		gconstpointer data[3] = {cModuleName, &iter, &bFound};
-		gtk_tree_model_foreach (GTK_TREE_MODEL (pModele), (GtkTreeModelForeachFunc) _test_one_module_name, data);
-		
-		if (bFound)
-		{
-			gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
-				CAIRO_DOCK_MODEL_ACTIVE, FALSE, -1);
-		}
+		gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
+			CAIRO_DOCK_MODEL_ACTIVE, FALSE, -1);
 	}
 }
 
