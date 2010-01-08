@@ -84,7 +84,7 @@ mix applets with launchers = false
 #F[Views;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-views.png]
 frame_view =
 
-#n Choose the default view for root docks :/
+#n Choose the default view for main docks :/
 main dock view = default =
 
 #v
@@ -108,7 +108,7 @@ frame_mod=
 modules=
 
 
-#[gtk-index]
+#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-controler.png]
 [Themes]
 
 #R[@prefix@/@DATADIRNAME@/@PACKAGE@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes] Choose one of the available themes :/

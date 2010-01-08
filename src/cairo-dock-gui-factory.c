@@ -203,6 +203,9 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 {
 	static gchar *s_cPrevPreview = NULL, *s_cPrevReadme = NULL;
 	GtkLabel *pDescriptionLabel = data[0];
+	gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_FILL);
+	gtk_widget_set (pDescriptionLabel, "width-request", 600, NULL);
+	gtk_label_set_line_wrap (pDescriptionLabel, TRUE);
 	GtkImage *pPreviewImage = data[1];
 	GError *erreur = NULL;
 	gchar *cDescriptionFilePath = NULL, *cPreviewFilePath = NULL, *cName = NULL;
@@ -685,7 +688,7 @@ static GHashTable *_cairo_dock_build_icon_themes_list (const gchar **cDirs)
 static gboolean _add_module_to_modele (gchar *cModuleName, CairoDockModule *pModule, gpointer *data)
 {
 	int iCategory = GPOINTER_TO_INT (data[0]);
-	if (pModule->pVisitCard->iCategory == iCategory || (iCategory == -1 && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_SYSTEM && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME))
+	if (pModule->pVisitCard->iCategory == iCategory || (iCategory == -1 && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_SYSTEM && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME && ! cairo_dock_module_is_auto_loaded (pModule)))
 	{
 		//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
 		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (pModule->pVisitCard->cIconFilePath, 32, 32, NULL);
@@ -696,7 +699,7 @@ static gboolean _add_module_to_modele (gchar *cModuleName, CairoDockModule *pMod
 		gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
 			CAIRO_DOCK_MODEL_NAME, dgettext (pModule->pVisitCard->cGettextDomain, pModule->pVisitCard->cModuleName),  /// cTitle ?...
 			CAIRO_DOCK_MODEL_RESULT, cModuleName,
-			CAIRO_DOCK_MODEL_DESCRIPTION_FILE, pModule->pVisitCard->cDescription,
+			CAIRO_DOCK_MODEL_DESCRIPTION_FILE, dgettext (pModule->pVisitCard->cGettextDomain, pModule->pVisitCard->cDescription),
 			CAIRO_DOCK_MODEL_IMAGE, pModule->pVisitCard->cPreviewFilePath,
 			CAIRO_DOCK_MODEL_ICON, pixbuf,
 			CAIRO_DOCK_MODEL_STATE, pModule->pVisitCard->iCategory,
@@ -1011,7 +1014,7 @@ static inline void _render_rating (GtkCellRenderer *cell, GtkTreeModel *model, G
 	}
 	else
 	{
-		g_object_set (cell, "text", iColumnIndex == CAIRO_DOCK_MODEL_ORDER ? "rate me" : "-", NULL);
+		g_object_set (cell, "text", iColumnIndex == CAIRO_DOCK_MODEL_ORDER ? _("rate me") : "-", NULL);
 	}
 }
 static void _cairo_dock_render_sobriety (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
@@ -1996,8 +1999,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_pack_in_widget_box (pPreviewBox);
 				
 				//\______________ On affiche un message par defaut.
-				gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Times New Roman 16\">%s</span></b>", _("Click on an applet\n in order to have a preview and a description of it."));
+				gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Times New Roman 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description of it."));
 				gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), cDefaultMessage);
+				gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_CENTER);
+				gtk_label_set_line_wrap (pDescriptionLabel, TRUE);
+				
 				g_free (cDefaultMessage);
 			}
 			break ;
