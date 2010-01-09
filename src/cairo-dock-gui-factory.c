@@ -199,12 +199,34 @@ static void _cairo_dock_remove (GtkButton *button, gpointer *data)
 	g_free (cValue);
 }
 
+static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *pPreviewImage)
+{
+	int iPreviewWidth, iPreviewHeight;
+	GdkPixbuf *pPreviewPixbuf = NULL;
+	if (gdk_pixbuf_get_file_info (cPreviewFilePath, &iPreviewWidth, &iPreviewHeight) != NULL)
+	{
+		iPreviewWidth = MIN (iPreviewWidth, CAIRO_DOCK_PREVIEW_WIDTH);
+		iPreviewHeight = MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT);
+		g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight);
+		pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
+	}
+	if (pPreviewPixbuf == NULL)
+	{
+		pPreviewPixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
+			TRUE,
+			8,
+			1,
+			1);
+	}
+	gtk_image_set_from_pixbuf (pPreviewImage, pPreviewPixbuf);
+	gdk_pixbuf_unref (pPreviewPixbuf);
+}
+
 static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter, gpointer *data)
 {
 	static gchar *s_cPrevPreview = NULL, *s_cPrevReadme = NULL;
 	GtkLabel *pDescriptionLabel = data[0];
 	gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_FILL);
-	gtk_widget_set (pDescriptionLabel, "width-request", 600, NULL);
 	gtk_label_set_line_wrap (pDescriptionLabel, TRUE);
 	GtkImage *pPreviewImage = data[1];
 	GError *erreur = NULL;
@@ -238,7 +260,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 				&length,
 				NULL);
 		}
-		else
+		else if (strcmp (cDescriptionFilePath, "none") != 0)
 		{
 			cDescription = g_strdup (cDescriptionFilePath);
 		}
@@ -267,25 +289,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 			bDistant = TRUE;
 		}
 		
-		int iPreviewWidth, iPreviewHeight;
-		GdkPixbuf *pPreviewPixbuf = NULL;
-		if (gdk_pixbuf_get_file_info (cPreviewFilePath, &iPreviewWidth, &iPreviewHeight) != NULL)
-		{
-			iPreviewWidth = MIN (iPreviewWidth, CAIRO_DOCK_PREVIEW_WIDTH);
-			iPreviewHeight = MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT);
-			g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight);
-			pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
-		}
-		if (pPreviewPixbuf == NULL)
-		{
-			pPreviewPixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
-				TRUE,
-				8,
-				1,
-				1);
-		}
-		gtk_image_set_from_pixbuf (pPreviewImage, pPreviewPixbuf);
-		gdk_pixbuf_unref (pPreviewPixbuf);
+		_set_preview_image (cPreviewFilePath, pPreviewImage);
 		
 		if (bDistant)
 		{
@@ -723,6 +727,8 @@ static void _cairo_dock_activate_one_module (GtkCellRendererToggle * cell_render
 	bState = !bState;
 	gtk_list_store_set (GTK_LIST_STORE (model), &iter, CAIRO_DOCK_MODEL_ACTIVE, bState, -1);
 	
+	/// passer en gras ?...
+	
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
 	if (g_pMainDock == NULL)
 	{
@@ -960,6 +966,17 @@ static gboolean _cairo_dock_find_iter_from_name (GtkListStore *pModele, const gc
 	return bFound;
 }
 
+static void _cairo_dock_render_module_name (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
+{
+	gboolean bActive = FALSE;
+	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_ACTIVE, &bActive, -1);
+	
+	if (bActive)
+		g_object_set (cell, "weight", 800, "weight-set", TRUE, NULL);
+	else
+		g_object_set (cell, "weight", 400, "weight-set", FALSE, NULL);
+}
+
 static void _cairo_dock_render_category (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
 {
 	const gchar *cCategory=NULL;
@@ -969,22 +986,22 @@ static void _cairo_dock_render_category (GtkTreeViewColumn *tree_column, GtkCell
 	{
 		case CAIRO_DOCK_CATEGORY_APPLET_ACCESSORY:
 			cCategory = _("Accessory");
-			g_object_set (cell, "foreground", "#FF0000", NULL);  // "red"
+			g_object_set (cell, "foreground", "#900009", NULL);  // rouge
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
 		case CAIRO_DOCK_CATEGORY_APPLET_DESKTOP:
 			cCategory = _("Desktop");
-			g_object_set (cell, "foreground", "#00FF00", NULL);
+			g_object_set (cell, "foreground", "#116E08", NULL);  // vert
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
 		case CAIRO_DOCK_CATEGORY_APPLET_CONTROLER:
 			cCategory = _("Controler");
-			g_object_set (cell, "foreground", "#0000FF", NULL);
+			g_object_set (cell, "foreground", "#004EA1", NULL);  // bleu
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
 		case CAIRO_DOCK_CATEGORY_PLUG_IN:
 			cCategory = _("Plug-in");
-			g_object_set (cell, "foreground", "#FF00FF", NULL);
+			g_object_set (cell, "foreground", "#A58B0D", NULL);  // jaune
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
 	}
@@ -1233,7 +1250,11 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 		if (bAddPreviewWidgets) {\
 			pDescriptionLabel = gtk_label_new (NULL);\
 			gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);\
+			gtk_widget_set_size_request (pDescriptionLabel, 500, CAIRO_DOCK_PREVIEW_HEIGHT);\
+			gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_LEFT);\
+			gtk_label_set_line_wrap (GTK_LABEL (pDescriptionLabel), TRUE);\
 			pPreviewImage = gtk_image_new_from_pixbuf (NULL);\
+			gtk_widget_set (pPreviewImage, "height-request", CAIRO_DOCK_PREVIEW_HEIGHT, "width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);\
 			_allocate_new_buffer;\
 			data[0] = pDescriptionLabel;\
 			data[1] = pPreviewImage;\
@@ -1963,6 +1984,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				// nom
 				rend = gtk_cell_renderer_text_new ();
 				col = gtk_tree_view_column_new_with_attributes (_("module"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+				gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_module_name, NULL, NULL);
 				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_NAME);
 				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
 				// categorie
@@ -1985,7 +2007,14 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				//\______________ On construit le widget de prevue et on le rajoute a la suite.
 				pDescriptionLabel = gtk_label_new (NULL);
 				gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
+				gtk_widget_set (pDescriptionLabel,
+					"width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
+				gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_LEFT);
+				gtk_label_set_line_wrap (GTK_LABEL (pDescriptionLabel), TRUE);
 				pPreviewImage = gtk_image_new_from_pixbuf (NULL);
+				gtk_widget_set (pPreviewImage,
+					"height-request", CAIRO_DOCK_PREVIEW_HEIGHT,
+					"width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
 				_allocate_new_buffer;
 				data[0] = pDescriptionLabel;
 				data[1] = pPreviewImage;
@@ -1999,12 +2028,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_pack_in_widget_box (pPreviewBox);
 				
 				//\______________ On affiche un message par defaut.
-				gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Times New Roman 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description of it."));
+				gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description of it."));
 				gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), cDefaultMessage);
-				gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_CENTER);
-				gtk_label_set_line_wrap (pDescriptionLabel, TRUE);
-				
 				g_free (cDefaultMessage);
+				_set_preview_image (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO, pPreviewImage);
 			}
 			break ;
 			
@@ -2395,7 +2422,14 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				//\______________ On construit le widget de prevue et on le rajoute a la suite.
 				pDescriptionLabel = gtk_label_new (NULL);
 				gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
+				gtk_widget_set (pDescriptionLabel,
+					"width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
+				gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_LEFT);
+				gtk_label_set_line_wrap (GTK_LABEL (pDescriptionLabel), TRUE);
 				pPreviewImage = gtk_image_new_from_pixbuf (NULL);
+				gtk_widget_set (pPreviewImage,
+					"height-request", CAIRO_DOCK_PREVIEW_HEIGHT,
+					"width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
 				_allocate_new_buffer;
 				data[0] = pDescriptionLabel;
 				data[1] = pPreviewImage;

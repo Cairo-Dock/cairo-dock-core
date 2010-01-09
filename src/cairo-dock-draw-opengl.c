@@ -523,47 +523,6 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glTranslatef (fX, fY - icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2), - icon->fHeight * (1+myIcons.fAmplitude));
 	else
 		glTranslatef (fY + icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2), fX, - icon->fHeight * (1+myIcons.fAmplitude));
-	/**double fX=0, fY=0;
-	double fGlideScale;
-	if (icon->fGlideOffset != 0)
-	{
-		double fPhase =  icon->fPhase + icon->fGlideOffset * icon->fWidth / fRatio / myIcons.iSinusoidWidth * G_PI;
-		if (fPhase < 0)
-		{
-			fPhase = 0;
-		}
-		else if (fPhase > G_PI)
-		{
-			fPhase = G_PI;
-		}
-		fGlideScale = (1 + fDockMagnitude * myIcons.fAmplitude * sin (fPhase)) / icon->fScale;  // c'est un peu hacky ... il faudrait passer l'icone precedente en parametre ...
-		if (! pDock->container.bDirectionUp)
-			if (pDock->container.bIsHorizontal)
-				fY = (1-fGlideScale)*icon->fHeight*icon->fScale;
-			else
-				fX = (1-fGlideScale)*icon->fHeight*icon->fScale;
-	}
-	else
-		fGlideScale = 1;
-	icon->fGlideScale = fGlideScale;
-	
-	if (pDock->container.bIsHorizontal)
-	{
-		fY += pDock->container.iHeight - icon->fDrawY;  // ordonnee du haut de l'icone.
-		fX += icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->fGlideOffset * icon->fWidth * icon->fScale * (icon->fGlideOffset < 0 ? fGlideScale : 1);  // abscisse du milieu de l'icone.
-	}
-	else
-	{
-		fY += icon->fDrawY;  // ordonnee du haut de l'icone.
-		fX +=  pDock->container.iWidth - (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->fGlideOffset * icon->fWidth * icon->fScale * (icon->fGlideOffset < 0 ? fGlideScale : 1));
-	}
-	
-	///glLoadIdentity ();
-	glPushMatrix ();
-	if (pDock->container.bIsHorizontal)
-		glTranslatef (fX, fY - icon->fHeight * icon->fScale * (1 - fGlideScale/2), - icon->fHeight * (1+myIcons.fAmplitude));
-	else
-		glTranslatef (fY + icon->fHeight * icon->fScale * (1 - fGlideScale/2), fX, - icon->fHeight * (1+myIcons.fAmplitude));*/
 	
 	//\_____________________ On dessine l'indicateur derriere.
 	if (icon->bHasIndicator && ! myIndicators.bIndicatorAbove /*&& g_iIndicatorTexture != 0*/)

@@ -58,121 +58,110 @@ extern int g_iNbNonStickyLaunchers;
 gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 {
 	g_return_val_if_fail (cFileName != NULL, NULL);
-	GString *sIconPath = g_string_new ("");
-	const gchar *cSuffixTab[4] = {".svg", ".png", ".xpm", NULL};
-	gboolean bAddSuffix, bFileFound=FALSE, bHasVersion;
-	GtkIconInfo* pIconInfo = NULL;
-	int i, j;
-
-	//\_______________________ On construit le chemin de l'icone a afficher.
+	
+	//\_______________________ cas faciles : l'entree est deja un chemin.
 	if (*cFileName == '~')
 	{
-		bFileFound = TRUE;
-		g_string_printf (sIconPath, "%s%s", g_getenv ("HOME"), cFileName+1);
+		return g_strdup_printf ("%s%s", g_getenv ("HOME"), cFileName+1);
 	}
-	else if (*cFileName == '/')
+	
+	if (*cFileName == '/')
 	{
-		bFileFound = TRUE;
-		g_string_assign (sIconPath, cFileName);
+		return g_strdup (cFileName);
 	}
-	else
+	
+	//\_______________________ On determine si le suffixe et une version sont presents ou non.
+	g_return_val_if_fail (myIcons.pDefaultIconDirectory != NULL, NULL);
+	
+	GString *sIconPath = g_string_new ("");
+	const gchar *cSuffixTab[4] = {".svg", ".png", ".xpm", NULL};
+	gboolean bAddSuffix=FALSE, bFileFound=FALSE, bHasVersion=FALSE;
+	GtkIconInfo* pIconInfo = NULL;
+	int i, j;
+	gchar *str = strrchr (cFileName, '.');
+	bAddSuffix = (str == NULL || ! g_ascii_isalpha (*(str+1)));  // exemple : firefox-3.0
+	bHasVersion = (str != NULL && g_ascii_isdigit (*(str+1)) && g_ascii_isdigit (*(str-1)) && str-1 != cFileName);  // doit finir par x.y, x et y ayant autant de chiffres que l'on veut.
+	
+	//\_______________________ On parcourt les themes disponibles, en testant tous les suffixes connus.
+	for (i = 0; i < myIcons.iNbIconPlaces && ! bFileFound; i ++)
 	{
-		//\_______________________ On determine si le suffixe est present ou non.
-		bAddSuffix = FALSE;
-		/*j = 0;
-		while (cSuffixTab[j] != NULL && ! g_str_has_suffix (cFileName, cSuffixTab[j]))
-			j ++;
-
-		if (cSuffixTab[j] == NULL)
-			bAddSuffix = TRUE;*/
-		gchar *str = strrchr (cFileName, '.');
-		bAddSuffix = (str == NULL || ! g_ascii_isalpha (*(str+1)));
-		bHasVersion = (str != NULL && g_ascii_isdigit (*(str+1)) && g_ascii_isdigit (*(str-1)));
-		
-		//\_______________________ On parcourt les themes disponibles, en testant tous les suffixes connus.
-		if (myIcons.pDefaultIconDirectory != NULL)
+		if (myIcons.pDefaultIconDirectory[2*i] != NULL)  // repertoire.
 		{
-			for (i = 0; i < myIcons.iNbIconPlaces && ! bFileFound; i ++)
+			//g_print ("on recherche %s dans le repertoire %s\n", sIconPath->str, myIcons.pDefaultIconDirectory[2*i]);
+			j = 0;
+			while (! bFileFound && (cSuffixTab[j] != NULL || ! bAddSuffix))
 			{
-				if (myIcons.pDefaultIconDirectory[2*i] != NULL)
-				{
-					//g_print ("on recherche %s dans le repertoire %s\n", sIconPath->str, myIcons.pDefaultIconDirectory[2*i]);
-					j = 0;
-					while (! bFileFound && (cSuffixTab[j] != NULL || ! bAddSuffix))
-					{
-						g_string_printf (sIconPath, "%s/%s", (gchar *)myIcons.pDefaultIconDirectory[2*i], cFileName);
-						if (bAddSuffix)
-							g_string_append_printf (sIconPath, "%s", cSuffixTab[j]);
-						//g_print ("  -> %s\n", sIconPath->str);
-						if ( g_file_test (sIconPath->str, G_FILE_TEST_EXISTS) )
-							bFileFound = TRUE;
-
-						j ++;
-						if (! bAddSuffix)
-							break;
-					}
-				}
-				else
-				{
-					g_string_assign (sIconPath, cFileName);
-					if (! bAddSuffix)  // on vire le suffixe pour chercher tous les formats dans le theme d'icones.
-					{
-						gchar *str = strrchr (sIconPath->str, '.');
-						if (str != NULL)
-							*str = '\0';
-					}
-					//g_print ("on recherche %s dans le theme d'icones\n", sIconPath->str);
-					GtkIconTheme *pIconTheme;
-					if (myIcons.pDefaultIconDirectory[2*i+1] != NULL)
-						pIconTheme = myIcons.pDefaultIconDirectory[2*i+1];
-					else
-						pIconTheme = gtk_icon_theme_get_default ();
-					pIconInfo = gtk_icon_theme_lookup_icon  (GTK_ICON_THEME (pIconTheme),
-						sIconPath->str,
-						64,
-						GTK_ICON_LOOKUP_FORCE_SVG);
-					if (pIconInfo != NULL)
-					{
-						g_string_assign (sIconPath, gtk_icon_info_get_filename (pIconInfo));
-						bFileFound = TRUE;
-						gtk_icon_info_free (pIconInfo);
-					}
-				}
-			}
-		}
-		
-		//\_______________________ si rien trouve, on cherche sans le numero de version.
-		if (! bFileFound && bHasVersion)
-		{
-			cd_debug ("on cherche sans le numero de version...");
-			g_string_assign (sIconPath, cFileName);
-			gchar *str = strrchr (sIconPath->str, '.');
-			str --;  // on sait que c'est un digit.
-			str --;
-			while ((g_ascii_isdigit (*str) || *str == '.' || *str == '-') && (str != sIconPath->str))
-				str --;
-			if (str != sIconPath->str)
-			{
-				*(str+1) = '\0';
-				cd_debug (" on cherche '%s'...\n", sIconPath->str);
-				gchar *cPath = cairo_dock_search_icon_s_path (sIconPath->str);
-				if (cPath != NULL)
-				{
+				g_string_printf (sIconPath, "%s/%s", (gchar *)myIcons.pDefaultIconDirectory[2*i], cFileName);
+				if (bAddSuffix)
+					g_string_append_printf (sIconPath, "%s", cSuffixTab[j]);
+				//g_print ("  -> %s\n", sIconPath->str);
+				if ( g_file_test (sIconPath->str, G_FILE_TEST_EXISTS) )
 					bFileFound = TRUE;
-					g_string_assign (sIconPath, cPath);
-					g_free (cPath);
-				}
+				j ++;
+				if (! bAddSuffix)
+					break;
+			}
+		}
+		else  // theme d'icones.
+		{
+			g_string_assign (sIconPath, cFileName);
+			if (! bAddSuffix)  // on vire le suffixe pour chercher tous les formats dans le theme d'icones.
+			{
+				gchar *str = strrchr (sIconPath->str, '.');
+				if (str != NULL)
+					*str = '\0';
+			}
+			//g_print ("on recherche %s dans le theme d'icones\n", sIconPath->str);
+			GtkIconTheme *pIconTheme;
+			if (myIcons.pDefaultIconDirectory[2*i+1] != NULL)
+				pIconTheme = myIcons.pDefaultIconDirectory[2*i+1];
+			else
+				pIconTheme = gtk_icon_theme_get_default ();
+			pIconInfo = gtk_icon_theme_lookup_icon  (GTK_ICON_THEME (pIconTheme),
+				sIconPath->str,
+				64,
+				GTK_ICON_LOOKUP_FORCE_SVG);
+			if (pIconInfo != NULL)
+			{
+				g_string_assign (sIconPath, gtk_icon_info_get_filename (pIconInfo));
+				bFileFound = TRUE;
+				gtk_icon_info_free (pIconInfo);
 			}
 		}
 	}
-
+	
+	//\_______________________ si rien trouve, on cherche sans le numero de version.
+	if (! bFileFound && bHasVersion)
+	{
+		cd_debug ("on cherche sans le numero de version...");
+		g_string_assign (sIconPath, cFileName);
+		gchar *str = strrchr (sIconPath->str, '.');
+		str --;  // on sait que c'est un digit.
+		str --;
+		while ((g_ascii_isdigit (*str) || *str == '.' || *str == '-') && (str != sIconPath->str))
+			str --;
+		if (str != sIconPath->str)
+		{
+			*(str+1) = '\0';
+			cd_debug (" on cherche '%s'...\n", sIconPath->str);
+			gchar *cPath = cairo_dock_search_icon_s_path (sIconPath->str);
+			if (cPath != NULL)
+			{
+				bFileFound = TRUE;
+				g_string_assign (sIconPath, cPath);
+				g_free (cPath);
+			}
+		}
+	}
+	
+	if (! bFileFound)
+	{
+		g_string_free (sIconPath, TRUE);
+		return NULL;
+	}
+	
 	gchar *cIconPath = sIconPath->str;
 	g_string_free (sIconPath, FALSE);
-	if (!bFileFound || cIconPath == NULL || *cIconPath == '\0')
-	{
-		g_free (cIconPath);
-		cIconPath = NULL;
-	}
 	return cIconPath;
 }
 
@@ -182,15 +171,15 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	GError *erreur = NULL;
 	gchar *cDesktopFilePath = (*cDesktopFileName == '/' ? g_strdup (cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cDesktopFileName));
 	//g_print ("%s (%s)\n", __func__, cDesktopFilePath);
-	GKeyFile* keyfile = cairo_dock_open_key_file (cDesktopFilePath);
-	g_return_if_fail (keyfile != NULL);
+	GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
+	g_return_if_fail (pKeyFile != NULL);
 	
 	icon->iType = CAIRO_DOCK_LAUNCHER;
 	g_free (icon->cDesktopFileName);
 	icon->cDesktopFileName = g_strdup (cDesktopFileName);
 
 	g_free (icon->cFileName);
-	icon->cFileName = g_key_file_get_string (keyfile, "Desktop Entry", "Icon", &erreur);
+	icon->cFileName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);
@@ -205,7 +194,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 
 
 	g_free (icon->cName);
-	icon->cName = g_key_file_get_locale_string (keyfile, "Desktop Entry", "Name", NULL, &erreur);
+	icon->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);
@@ -219,7 +208,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	}
 
 	g_free (icon->cCommand);
-	icon->cCommand = g_key_file_get_string (keyfile, "Desktop Entry", "Exec", &erreur);
+	icon->cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);
@@ -235,7 +224,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	if (icon->cCommand != NULL)
 	{
 		g_free (icon->cWorkingDirectory);
-		icon->cWorkingDirectory = g_key_file_get_string (keyfile, "Desktop Entry", "Path", NULL);
+		icon->cWorkingDirectory = g_key_file_get_string (pKeyFile, "Desktop Entry", "Path", NULL);
 		if (icon->cWorkingDirectory != NULL && *icon->cWorkingDirectory == '\0')
 		{
 			g_free (icon->cWorkingDirectory);
@@ -243,7 +232,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		}
 	}
 	
-	icon->fOrder = g_key_file_get_double (keyfile, "Desktop Entry", "Order", &erreur);
+	icon->fOrder = g_key_file_get_double (pKeyFile, "Desktop Entry", "Order", &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);
@@ -251,7 +240,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		erreur = NULL;
 	}
 
-	icon->cBaseURI = g_key_file_get_string (keyfile, "Desktop Entry", "Base URI", &erreur);
+	icon->cBaseURI = g_key_file_get_string (pKeyFile, "Desktop Entry", "Base URI", &erreur);
 	if (erreur != NULL)
 	{
 		icon->cBaseURI = NULL;
@@ -264,7 +253,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		icon->cBaseURI = NULL;
 	}
 
-	icon->iVolumeID = g_key_file_get_boolean (keyfile, "Desktop Entry", "Is mounting point", &erreur);
+	icon->iVolumeID = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Is mounting point", &erreur);
 	if (erreur != NULL)
 	{
 		icon->iVolumeID = FALSE;
@@ -286,7 +275,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	
 	
 	g_free (icon->cParentDockName);
-	icon->cParentDockName = g_key_file_get_string (keyfile, "Desktop Entry", "Container", &erreur);
+	icon->cParentDockName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Container", &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);
@@ -307,7 +296,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		pParentDock = cairo_dock_create_new_dock (icon->cParentDockName, NULL);
 	}
 	
-	gboolean bIsContainer = g_key_file_get_boolean (keyfile, "Desktop Entry", "Is container", &erreur);
+	gboolean bIsContainer = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Is container", &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);
@@ -317,7 +306,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	}
 	if (bIsContainer && icon->cName != NULL)
 	{
-		gchar *cRendererName = g_key_file_get_string (keyfile, "Desktop Entry", "Renderer", NULL);
+		gchar *cRendererName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Renderer", NULL);
 		CairoDock *pChildDock = cairo_dock_search_dock_from_name (icon->cName);
 		if (pChildDock == NULL)
 		{
@@ -340,12 +329,12 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	}
 
 	
-	gboolean bPreventFromInhibating = g_key_file_get_boolean (keyfile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE si la cle n'existe pas.
+	gboolean bPreventFromInhibating = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE si la cle n'existe pas.
 	
 	g_free (icon->cClass);
 	if (icon->cCommand != NULL && icon->cBaseURI == NULL && ! bPreventFromInhibating)
 	{
-		gchar *cStartupWMClass = g_key_file_get_string (keyfile, "Desktop Entry", "StartupWMClass", NULL);
+		gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
 		if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || strcmp (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
 		{
 			// plusieurs cas sont possibles :
@@ -419,13 +408,8 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	}
 	else
 		icon->cClass = NULL;
-	/**if (bPreventFromInhibating && icon->cClass != NULL)
-	{
-		g_free (icon->cClass);
-		icon->cClass = NULL;
-	}*/
 	
-	gboolean bExecInTerminal = g_key_file_get_boolean (keyfile, "Desktop Entry", "Terminal", NULL);
+	gboolean bExecInTerminal = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Terminal", NULL);
 	if (bExecInTerminal)  // on le fait apres la classe puisqu'on change la commande.
 	{
 		gchar *cOldCommand = icon->cCommand;
@@ -433,7 +417,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		g_free (cOldCommand);
 	}
 	
-	int iSpecificDesktop = g_key_file_get_integer (keyfile, "Desktop Entry", "ShowOnViewport", NULL);
+	int iSpecificDesktop = g_key_file_get_integer (pKeyFile, "Desktop Entry", "ShowOnViewport", NULL);
 	if (iSpecificDesktop != 0 && icon->iSpecificDesktop == 0)
 	{
 		g_iNbNonStickyLaunchers ++;
@@ -444,7 +428,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	}
 	icon->iSpecificDesktop = iSpecificDesktop;
 	
-	g_key_file_free (keyfile);
+	g_key_file_free (pKeyFile);
 }
 
 

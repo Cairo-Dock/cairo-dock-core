@@ -754,7 +754,7 @@ int main (int argc, char** argv)
 	g_print ("\nINDICATEURS EN HAUT (RETOURNES) ET CAIRO\n\n");
 	g_print ("=> AUTO-HIDE WHEN SWITCHING DESKTOP IN CAIRO MODE\n");
 	g_print ("PREVUE EN VUE PARABOLIQUE\n");
-	g_print ("DROP DE FICHIER SUR SOUS-DOCK\n");
+	g_print ("SWITCHER AU CHGT DE RESOLUTION\n");
 	g_print ("$XTERM\n");
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");

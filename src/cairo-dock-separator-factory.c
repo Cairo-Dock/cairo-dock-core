@@ -53,7 +53,7 @@ cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, d
 	else
 	{
 		gchar *cImagePath = cairo_dock_generate_file_path (myIcons.cSeparatorImage);
-		double fRotationAngle;
+		double fRotationAngle;  // on est obligé de faire la rotation maintenant plutot que pendant le dessin, a cause du reflet a charger en cairo.
 		if (! myIcons.bRevolveSeparator)
 			fRotationAngle = 0;
 		else if (bIsHorizontal)

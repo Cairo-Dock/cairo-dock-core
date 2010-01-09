@@ -57,6 +57,7 @@
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-keyfile-utilities.h"
+#include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-menu.h"
 
 #define CAIRO_DOCK_CONF_PANEL_WIDTH 800
@@ -162,9 +163,8 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, gpointer *data)
 	GtkWidget *pHBox = gtk_hbox_new (FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (pContentBox), pHBox, FALSE, FALSE, 0);
 	
-	gchar *cImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_LOGO);
+	const gchar *cImagePath = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO;
 	GtkWidget *pImage = gtk_image_new_from_file (cImagePath);
-	g_free (cImagePath);
 	gtk_box_pack_start (GTK_BOX (pHBox), pImage, FALSE, FALSE, 0);
 	
 	GtkWidget *pVBox = gtk_vbox_new (FALSE, 0);
@@ -1256,10 +1256,13 @@ static void _cairo_dock_configure_root_dock_position (GtkMenuItem *pMenuItem, gp
 		cairo_dock_load_buffers_in_one_dock (pDock);  // recharge les icones et les applets.
 		cairo_dock_synchronize_sub_docks_position (pDock, TRUE);
 		
+		cairo_dock_set_default_renderer (pDock);
 		cairo_dock_update_dock_size (pDock);
 		cairo_dock_calculate_dock_icons (pDock);
 		
 		cairo_dock_place_root_dock (pDock);
+		if (myAccessibility.bReserveSpace)
+			cairo_dock_reserve_space_for_dock (pDock, TRUE);
 		gtk_widget_queue_draw (pDock->container.pWidget);
 	}
 	

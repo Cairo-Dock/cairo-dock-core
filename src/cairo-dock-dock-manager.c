@@ -364,73 +364,70 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 		return TRUE;
 	
 	//g_print ("%s (%s)\n", __func__, cDockName);
-	gchar *cConfFilePath = (pDock->bIsMainDock ? g_cConfFile : g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName));
-	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
+	gchar *cConfFilePath = (pDock->bIsMainDock ? NULL : g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName));
+	if (! g_file_test (cConfFilePath ? cConfFilePath : g_cConfFile, G_FILE_TEST_EXISTS))
 	{
 		pDock->container.bIsHorizontal = g_pMainDock->container.bIsHorizontal;
 		pDock->container.bDirectionUp = g_pMainDock->container.bDirectionUp;
 		pDock->fAlign = g_pMainDock->fAlign;
 		
-		if (! pDock->bIsMainDock)
-			g_free (cConfFilePath);
+		g_free (cConfFilePath);
 		return FALSE;
 	}
 	
-	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath ? cConfFilePath : g_cConfFile);
 	if (pKeyFile == NULL)
 	{
 		cd_warning ("no conf file !");
-		if (! pDock->bIsMainDock)
-			g_free (cConfFilePath);
+		g_free (cConfFilePath);
 		return FALSE;
 	}
-	else
+	gboolean bFlushConfFileNeeded = FALSE;
+	pDock->iGapX = cairo_dock_get_integer_key_value (pKeyFile, "Position", "x gap", &bFlushConfFileNeeded, 0, NULL, NULL);
+	pDock->iGapY = cairo_dock_get_integer_key_value (pKeyFile, "Position", "y gap", &bFlushConfFileNeeded, 0, NULL, NULL);
+	
+	CairoDockPositionType iScreenBorder = cairo_dock_get_integer_key_value (pKeyFile, "Position", "screen border", &bFlushConfFileNeeded, 0, NULL, NULL);
+	
+	switch (iScreenBorder)
 	{
-		gboolean bFlushConfFileNeeded = FALSE;
-		pDock->iGapX = cairo_dock_get_integer_key_value (pKeyFile, "Position", "x gap", &bFlushConfFileNeeded, 0, NULL, NULL);
-		pDock->iGapY = cairo_dock_get_integer_key_value (pKeyFile, "Position", "y gap", &bFlushConfFileNeeded, 0, NULL, NULL);
-		
-		CairoDockPositionType iScreenBorder = cairo_dock_get_integer_key_value (pKeyFile, "Position", "screen border", &bFlushConfFileNeeded, 0, NULL, NULL);
-		
-		switch (iScreenBorder)
-		{
-			case CAIRO_DOCK_BOTTOM :
-			default :
-				pDock->container.bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
-				pDock->container.bDirectionUp = TRUE;
-			break;
-			case CAIRO_DOCK_TOP :
-				pDock->container.bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
-				pDock->container.bDirectionUp = FALSE;
-			break;
-			case CAIRO_DOCK_RIGHT :
-				pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
-				pDock->container.bDirectionUp = TRUE;
-			break;
-			case CAIRO_DOCK_LEFT :
-				pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
-				pDock->container.bDirectionUp = FALSE;
-			break;
-		}
-		
-		pDock->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Position", "alignment", &bFlushConfFileNeeded, 0.5, NULL, NULL);
-		
-		pDock->bAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, pDock->bIsMainDock ? "Accessibility" : "Position", "auto-hide", &bFlushConfFileNeeded, FALSE, "Auto-Hide", "auto-hide");
-		
-		if (myPosition.bUseXinerama)
-		{
-			int iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Position", "num screen", &bFlushConfFileNeeded, 0, NULL, NULL);
-			pDock->iNumScreen = iNumScreen;
-			cairo_dock_get_screen_offsets (iNumScreen, &pDock->iScreenOffsetX, &pDock->iScreenOffsetY);
-		}
-		else
-			pDock->iNumScreen = pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
-		
-		g_key_file_free (pKeyFile);
+		case CAIRO_DOCK_BOTTOM :
+		default :
+			pDock->container.bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
+			pDock->container.bDirectionUp = TRUE;
+		break;
+		case CAIRO_DOCK_TOP :
+			pDock->container.bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
+			pDock->container.bDirectionUp = FALSE;
+		break;
+		case CAIRO_DOCK_RIGHT :
+			pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
+			pDock->container.bDirectionUp = TRUE;
+		break;
+		case CAIRO_DOCK_LEFT :
+			pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
+			pDock->container.bDirectionUp = FALSE;
+		break;
 	}
 	
-	if (! pDock->bIsMainDock)
-		g_free (cConfFilePath);
+	pDock->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Position", "alignment", &bFlushConfFileNeeded, 0.5, NULL, NULL);
+	
+	pDock->bAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, pDock->bIsMainDock ? "Accessibility" : "Position", "auto-hide", &bFlushConfFileNeeded, FALSE, "Auto-Hide", "auto-hide");
+	
+	if (myPosition.bUseXinerama)
+	{
+		int iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Position", "num screen", &bFlushConfFileNeeded, 0, NULL, NULL);
+		pDock->iNumScreen = iNumScreen;
+		cairo_dock_get_screen_offsets (iNumScreen, &pDock->iScreenOffsetX, &pDock->iScreenOffsetY);
+	}
+	else
+		pDock->iNumScreen = pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
+	
+	g_free (pDock->cRendererName);
+	pDock->cRendererName = cairo_dock_get_string_key_value (pKeyFile, "Views", "main dock view", &bFlushConfFileNeeded, NULL, NULL, NULL);
+	
+	g_key_file_free (pKeyFile);
+	
+	g_free (cConfFilePath);
 	return TRUE;
 }
 

@@ -3,7 +3,7 @@
 ######## It is parsed by cairo-dock to automatically generate an appropriate GUI,##########
 ######## so don't mess into it, except if you know what you're doing ! ;-)##########
 
-#[gtk-fullscreen]
+#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-position.png]
 [Position]
 
 #F-[Position on the screen;gtk-fullscreen]
@@ -27,6 +27,9 @@ x gap = 0
 #{in pixels. You can also move the dock by holding ALT or CTRL key and left mouse button.}
 y gap = 0
 
+#v
+sep_other =
+
 #b- Activate auto-hide ?
 #{The dock will automatically hide itself outside of the scren when the mouse leaves it and will show a callback zone instead. Place the mouse into this zone will make the dock re-appear.}
 auto-hide = false
@@ -34,3 +37,11 @@ auto-hide = false
 #i[0;12] Number of the screen where the dock should be located :
 #{starting from 0}
 num screen = 0
+
+
+#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-views.png]
+[Views]
+
+#n Choose the view for this dock :/
+#{Let it empty to use the same view as the main dock.}
+main dock view = default

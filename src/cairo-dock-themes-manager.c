@@ -42,7 +42,7 @@
 
 #define CAIRO_DOCK_MODIFIED_THEME_FILE ".cairo-dock-need-save"
 #define CAIRO_DOCK_THEME_PANEL_WIDTH 1000
-#define CAIRO_DOCK_THEME_PANEL_HEIGHT 530
+#define CAIRO_DOCK_THEME_PANEL_HEIGHT 550
 ///#define CAIRO_DOCK_THEME_SERVER "http://themes.cairo-dock.org"
 #define CAIRO_DOCK_THEME_SERVER "http://themes.vef.fr"  // en attendant que le nom du domaine revienne.
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"

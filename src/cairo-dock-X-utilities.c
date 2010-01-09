@@ -178,7 +178,7 @@ gboolean cairo_dock_update_screen_geometry (void)
 		
 		if (myPosition.bUseXinerama)
 		{
-			cairo_dock_get_screen_offsets (myPosition.iNumScreen, &g_pMainDock->iScreenOffsetX, &g_pMainDock->iScreenOffsetY);  // un peu bancal, il faudrait le faire pour tous les docks.
+			cairo_dock_get_screen_offsets (myPosition.iNumScreen, &g_pMainDock->iScreenOffsetX, &g_pMainDock->iScreenOffsetY);  /// on le fait ici pour avoir g_iScreenWidth et g_iScreenHeight, mais il faudrait en faire un parametre par dock...
 		}
 		else
 		{
@@ -641,6 +641,10 @@ void cairo_dock_get_screen_offsets (int iNumScreen, int *iScreenOffsetX, int *iS
 	{
 		cd_warning ("No screen found from Xinerama, is it really active ?");
 		*iScreenOffsetX = *iScreenOffsetY = 0;
+		g_iScreenWidth[CAIRO_DOCK_HORIZONTAL] = g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+		g_iScreenHeight[CAIRO_DOCK_HORIZONTAL] = g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+		g_iScreenWidth[CAIRO_DOCK_VERTICAL] = g_iScreenHeight[CAIRO_DOCK_HORIZONTAL];
+		g_iScreenHeight[CAIRO_DOCK_VERTICAL] = g_iScreenWidth[CAIRO_DOCK_HORIZONTAL];
 	}
 #else
 	cd_warning ("The dock was not compiled with the support of Xinerama.");

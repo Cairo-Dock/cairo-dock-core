@@ -1240,7 +1240,7 @@ static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, 
 		return pWidget;
 	
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gchar *cLabel2 = g_strdup_printf ("<span font_desc=\"Times New Roman 12\"><b>%s</b></span>", cLabel);
+	gchar *cLabel2 = g_strdup_printf ("<span font_desc=\"Sans 12\"><b>%s</b></span>", cLabel);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel2);
 	g_free (cLabel2);
 	
@@ -1500,7 +1500,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	gtk_frame_set_shadow_type (GTK_FRAME (pCategoriesFrame), GTK_SHADOW_OUT);
 	
 	GtkWidget *pLabel;
-	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman 12\" color=\"#81728C\"><b><u>%s :</u></b></span>", _("Categories"));
+	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Sans 12\" color=\"#81728C\"><b><u>%s :</u></b></span>", _("Categories"));
 	pLabel = gtk_label_new (NULL);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 	g_free (cLabel);
@@ -1551,7 +1551,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		gtk_frame_set_shadow_type (GTK_FRAME (pCategoryWidget->pFrame), GTK_SHADOW_OUT);
 		
 		pLabel = gtk_label_new (NULL);
-		cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman 12\"><b>%s</b></span>", gettext (s_cCategoriesDescription[2*i]));
+		cLabel = g_strdup_printf ("<span font_desc=\"Sans 12\"><b>%s</b></span>", gettext (s_cCategoriesDescription[2*i]));
 		gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 		g_free (cLabel);
 		gtk_frame_set_label_widget (GTK_FRAME (pCategoryWidget->pFrame), pLabel);
@@ -1628,7 +1628,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	//\_____________ On ajoute le filtre.
 	// frame
 	GtkWidget *pFilterFrame = gtk_frame_new (NULL);
-	cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman 12\" color=\"#81728C\"><b><u>%s :</u></b></span>", _("Filter"));
+	cLabel = g_strdup_printf ("<span font_desc=\"Sans 12\" color=\"#81728C\"><b><u>%s :</u></b></span>", _("Filter"));
 	GtkWidget *pFilterLabelContainer = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
 	GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
 	gtk_container_add (GTK_CONTAINER (pFilterLabelContainer), pImage);
@@ -2168,7 +2168,7 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 	
 	//\_______________ On met a jour la frame du groupe (label + check-button).
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Times New Roman 12\" color=\"#81728C\"><u><b>%s</b></u></span>", dgettext (pGroupDescription->cGettextDomain, pGroupDescription->cTitle));
+	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Sans 12\" color=\"#81728C\"><u><b>%s</b></u></span>", dgettext (pGroupDescription->cGettextDomain, pGroupDescription->cTitle));
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 	g_free (cLabel);
 	gtk_frame_set_label_widget (GTK_FRAME (s_pGroupFrame), pLabel);

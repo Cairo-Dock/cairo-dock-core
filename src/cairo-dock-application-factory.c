@@ -106,7 +106,7 @@ void cairo_dock_initialize_application_factory (Display *pXDisplay)
 	s_aUtf8String = XInternAtom (s_XDisplay, "UTF8_STRING", False);
 	s_aWmName = XInternAtom (s_XDisplay, "WM_NAME", False);
 	s_aString = XInternAtom (s_XDisplay, "STRING", False);
-
+	
 	s_aWmHints = XInternAtom (s_XDisplay, "WM_HINTS", False);
 	
 	s_aNetWmFullScreen = XInternAtom (s_XDisplay, "_NET_WM_STATE_FULLSCREEN", False);
@@ -343,7 +343,7 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 				cairo_dock_insert_icon_in_dock_full (pSameClassIcon, pParentDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 				
 				cd_debug (" on lui substitue le fake");
-				cairo_dock_insert_icon_in_dock_full (pFakeClassIcon, pClassMateParentDock,  CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
+				cairo_dock_insert_icon_in_dock_full (pFakeClassIcon, pClassMateParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 				cairo_dock_calculate_dock_icons (pClassMateParentDock);
 				cairo_dock_redraw_icon (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
 			}
@@ -353,6 +353,25 @@ CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
 		icon->cParentDockName = g_strdup (CAIRO_DOCK_MAIN_DOCK_NAME);
 
 	return pParentDock;
+}
+
+gchar * cairo_dock_get_window_name (Window Xid, gboolean bSearchWmName)
+{
+	Atom aReturnedType = 0;
+	int aReturnedFormat = 0;
+	unsigned long iLeftBytes, iBufferNbElements=0;
+	guchar *pNameBuffer = NULL;
+	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmName, 0, G_MAXULONG, False, s_aUtf8String, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, &pNameBuffer);  // on cherche en priorite le nom en UTF8, car on est notifie des 2, mais il vaut mieux eviter le WM_NAME qui, ne l'etant pas, contient des caracteres bizarres qu'on ne peut pas convertir avec g_locale_to_utf8, puisque notre locale _est_ UTF8.
+	if (iBufferNbElements == 0 && bSearchWmName)
+		XGetWindowProperty (s_XDisplay, Xid, s_aWmName, 0, G_MAXULONG, False, s_aString, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, &pNameBuffer);
+	
+	gchar *cName = NULL;
+	if (iBufferNbElements > 0)
+	{
+		cName = g_strdup (pNameBuffer);
+		XFree (pNameBuffer);
+	}
+	return cName;
 }
 
 static Window _cairo_dock_get_parent_window (Window Xid)
@@ -509,18 +528,8 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	
 	
 	//\__________________ On recupere son nom.
-	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmName, 0, G_MAXULONG, False, s_aUtf8String, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, &pNameBuffer);
-	if (iBufferNbElements == 0)
-	{
-		XGetWindowProperty (s_XDisplay, Xid, s_aWmName, 0, G_MAXULONG, False, s_aString, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, &pNameBuffer);
-	}
-	if (iBufferNbElements == 0)
-	{
-		cd_debug ("pas de nom, on en mettra un par defaut.");
-		
-		//return NULL;
-	}
-	cd_debug ("recuperation de '%s' (bIsHidden : %d)", pNameBuffer, bIsHidden);
+	gchar *cName = cairo_dock_get_window_name (Xid, TRUE);
+	cd_debug ("recuperation de '%s' (bIsHidden : %d)", cName, bIsHidden);
 	
 	
 	//\__________________ On recupere la classe.
@@ -566,7 +575,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	
 	//\__________________ On cree, on remplit l'icone, et on l'enregistre, par contre elle sera inseree plus tard.
 	Icon *icon = g_new0 (Icon, 1);
-	icon->cName = (pNameBuffer ? g_strdup ((gchar *)pNameBuffer) : g_strdup (cClass));
+	icon->cName = (cName ? cName : g_strdup (cClass));
 	/**if (myTaskBar.bUniquePid)
 		icon->iPid = *pPidBuffer;*/
 	icon->Xid = Xid;
@@ -601,87 +610,12 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	/**if (myTaskBar.bUniquePid)
 		g_hash_table_insert (s_hAppliTable, pPidBuffer, icon);*/
 	cairo_dock_register_appli (icon);
-	if (pNameBuffer)
-		XFree (pNameBuffer);
 	
 	cairo_dock_set_xwindow_mask (Xid, PropertyChangeMask | StructureNotifyMask);
 
 	return icon;
 }
 
-
-
-void cairo_dock_Xproperty_changed (Icon *icon, Atom aProperty, int iState, CairoDock *pDock)
-{
-	//g_print ("%s (%s, %s)\n", __func__, icon->cName, gdk_x11_get_xatom_name (aProperty));
-	Atom aReturnedType = 0;
-	int aReturnedFormat = 0;
-	unsigned long iLeftBytes, iBufferNbElements=0;
-	cairo_t* pCairoContext;
-	if (iState == PropertyNewValue && (aProperty == s_aNetWmName || aProperty == s_aWmName))
-	{
-		//g_print ("chgt de nom (%d)\n", aProperty);
-		guchar *pNameBuffer = NULL;
-		XGetWindowProperty (s_XDisplay, icon->Xid, s_aNetWmName, 0, G_MAXULONG, False, s_aUtf8String, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, &pNameBuffer);  // on cherche en priorite le nom en UTF8, car on est notifie des 2, mais il vaut mieux eviter le WM_NAME qui, ne l'etant pas, contient des caracteres bizarres qu'on ne peut pas convertir avec g_locale_to_utf8, puisque notre locale _est_ UTF8.
-		if (iBufferNbElements == 0 && aProperty == s_aWmName)
-			XGetWindowProperty (s_XDisplay, icon->Xid, aProperty, 0, G_MAXULONG, False, s_aString, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, &pNameBuffer);
-		if (iBufferNbElements > 0)
-		{
-			if (icon->cName == NULL || strcmp (icon->cName, (gchar *)pNameBuffer) != 0)
-			{
-				g_free (icon->cName);
-				icon->cName = g_strdup ((gchar *)pNameBuffer);
-				XFree (pNameBuffer);
-
-				pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-				cairo_dock_fill_one_text_buffer (icon, pCairoContext, &myLabels.iconTextDescription);
-				cairo_destroy (pCairoContext);
-				
-				cairo_dock_update_name_on_inhibators (icon->cClass, icon->Xid, icon->cName);
-			}
-		}
-	}
-	else if (iState == PropertyNewValue && aProperty == s_aNetWmIcon)
-	{
-		cd_debug ("%s change son icone (%d)", icon->cName, cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons);
-		if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
-		{
-			cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
-			cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
-		}
-	}
-	else if (aProperty == s_aWmHints)
-	{
-		XWMHints *pWMHints = XGetWMHints (s_XDisplay, icon->Xid);
-		if (pWMHints != NULL)
-		{
-			if ((pWMHints->flags & XUrgencyHint) && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
-			{
-				if (iState == PropertyNewValue)
-				{
-					cd_debug ("%s vous interpelle !", icon->cName);
-					cairo_dock_appli_demands_attention (icon);
-				}
-				else if (iState == PropertyDelete)
-				{
-					cd_debug ("%s arrette de vous interpeler.", icon->cName);
-					cairo_dock_appli_stops_demanding_attention (icon);
-				}
-				else
-					cd_warning ("  etat du changement d'urgence inconnu sur %s !", icon->cName);
-			}
-			if (iState == PropertyNewValue && (pWMHints->flags & (IconPixmapHint | IconMaskHint | IconWindowHint)))
-			{
-				//g_print ("%s change son icone\n", icon->cName);
-				if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
-				{
-					cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
-					cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
-				}
-			}
-		}
-	}
-}
 
 
 static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, gboolean bForceDemand, Icon *pHiddenIcon)

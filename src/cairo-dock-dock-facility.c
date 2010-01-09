@@ -174,7 +174,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	
 	if (GTK_WIDGET_VISIBLE (pDock->container.pWidget) && (iPrevMaxDockHeight != pDock->iMaxDockHeight || iPrevMaxDockWidth != pDock->iMaxDockWidth))
 	{
-		g_print ("*******%s ()\n", __func__);
+		g_print ("*******%s (%dx%d -> %dx%d)\n", __func__, iPrevMaxDockWidth, iPrevMaxDockHeight, pDock->iMaxDockWidth, pDock->iMaxDockHeight);
 		cairo_dock_move_resize_dock (pDock);  /// gele le dock ?....
 	}
 	
@@ -282,8 +282,8 @@ void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 	if (pDock->iRefCount == 0 && pDock->fAlign != .5)
 		iWindowPositionX += (.5 - pDock->fAlign) * (pDock->iMaxDockWidth - iNewWidth);
 	int iWindowPositionY = (pDock->container.bDirectionUp ? g_iScreenHeight[pDock->container.bIsHorizontal] - iNewHeight - pDock->iGapY : pDock->iGapY);
-	//g_print ("pDock->iGapX : %d => iWindowPositionX <- %d\n", pDock->iGapX, pDock->container.iWindowPositionX);
-	//g_print ("iNewHeight : %d -> pDock->container.iWindowPositionY <- %d\n", iNewHeight, pDock->container.iWindowPositionY);
+	g_print ("pDock->iGapX : %d => iWindowPositionX <- %d\n", pDock->iGapX, iWindowPositionX);
+	//g_print ("iNewHeight : %d -> pDock->container.iWindowPositionY <- %d\n", iNewHeight, iWindowPositionY);
 	
 	if (pDock->iRefCount == 0)
 	{
@@ -310,27 +310,41 @@ void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 
 void cairo_dock_move_resize_dock (CairoDock *pDock)
 {
-	g_print ("%s (%dx%d)\n", __func__, pDock->iMaxDockWidth, pDock->iMaxDockHeight);
+	g_print ("*********%s (current : %dx%d, %d;%d)\n", __func__, pDock->container.iWidth, pDock->container.iHeight, pDock->container.iWindowPositionX, pDock->container.iWindowPositionY);
 	int iNewWidth = pDock->iMaxDockWidth;
 	int iNewHeight = pDock->iMaxDockHeight;
 	int iNewPositionX, iNewPositionY;
-	cairo_dock_get_window_position_at_balance (pDock, iNewWidth, iNewHeight, &iNewPositionX, &iNewPositionY);
+	cairo_dock_get_window_position_at_balance (pDock, iNewWidth, iNewHeight, &iNewPositionX, &iNewPositionY);  // on ne peut pas intercepter le cas ou les nouvelles dimensions sont egales aux dimensions courantes de la fenetre, car il se peut qu'il y'ait 2 redimensionnements d'affilee s'annulant mutuellement (remove + insert d'une icone). Il faut donc avoir les 2 configure, sinon la taille reste bloquee aux valeurs fournies par le 1er configure.
+	
+	g_print (" -> %dx%d, %d;%d\n", iNewWidth, iNewHeight, iNewPositionX, iNewPositionY);
 	
 	if (pDock->container.bIsHorizontal)
 	{
-		gdk_window_move_resize (pDock->container.pWidget->window,
+		gtk_window_resize (pDock->container.pWidget,
+			iNewWidth,
+			iNewHeight);
+		gtk_window_move (pDock->container.pWidget,
+			iNewPositionX,
+			iNewPositionY);
+		/*gdk_window_move_resize (pDock->container.pWidget->window,
 			iNewPositionX,
 			iNewPositionY,
 			iNewWidth,
-			iNewHeight);
+			iNewHeight);*/  // lorsqu'on a 2 gdk_window_move_resize d'affilee, Compiz deconne et bloque le dock (il est toujours actif mais n'est plus redessine). Compiz envoit un configure de trop par rapport a Metacity.
 	}
 	else
 	{
-		gdk_window_move_resize (pDock->container.pWidget->window,
+		gtk_window_resize (pDock->container.pWidget,
+			iNewHeight,
+			iNewWidth);
+		gtk_window_move (pDock->container.pWidget,
+			iNewPositionY,
+			iNewPositionX);
+		/*gdk_window_move_resize (pDock->container.pWidget->window,
 			iNewPositionY,
 			iNewPositionX,
 			iNewHeight,
-			iNewWidth);
+			iNewWidth);*/
 	}
 }
 

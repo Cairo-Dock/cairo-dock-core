@@ -54,14 +54,16 @@ void cairo_dock_register_appli (Icon *icon);
 void cairo_dock_blacklist_appli (Window Xid);
 void cairo_dock_unregister_appli (Icon *icon);
 
+/** Start the applications manager. It will load all the applis into the dock, and keep monitor them.
+*/
 void cairo_dock_start_application_manager (CairoDock *pDock);
+/** Stop the applications manager. It will delete all the applis icons and stop monitor applis.
+*/
 void cairo_dock_stop_application_manager (void);
 /** Get the state of the applications manager.
 *@return TRUE if it is running (taskbar is active), FALSE otherwise.
 */
 gboolean cairo_dock_application_manager_is_running (void);
-
-void cairo_dock_update_applis_list (CairoDock *pDock, gint iTime);
 
 // Applis manager : access
 Icon * cairo_dock_search_window_on_our_way (CairoDock *pDock, gboolean bMaximizedWindow, gboolean bFullScreenWindow);

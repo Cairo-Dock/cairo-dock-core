@@ -85,7 +85,7 @@ mix applets with launchers = false
 frame_view =
 
 #n Choose the default view for main docks :/
-main dock view = default =
+main dock view = default
 
 #v
 sev_view=

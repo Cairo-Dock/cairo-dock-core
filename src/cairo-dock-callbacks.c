@@ -1413,7 +1413,7 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 
 gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (main dock : %d) : (%d;%d) (%dx%d)\n", __func__, pDock->bIsMainDock, pEvent->x, pEvent->y, pEvent->width, pEvent->height);
+	g_print ("%s (main dock : %d) : (%d;%d) (%dx%d)\n", __func__, pDock->bIsMainDock, pEvent->x, pEvent->y, pEvent->width, pEvent->height);
 	gint iNewWidth, iNewHeight, iNewX, iNewY;
 	if (pDock->container.bIsHorizontal)
 	{
