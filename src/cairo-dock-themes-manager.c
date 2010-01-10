@@ -756,7 +756,7 @@ gboolean cairo_dock_package_current_theme (const gchar *cThemeName)
 		gchar *cCommand;
 		const gchar *cTerm = g_getenv ("TERM");
 		if (cTerm == NULL || *cTerm == '\0')
-			cCommand = g_strdup_printf ("%s \"%s\"", "cairo-dock-package-theme", cThemeName);
+			cCommand = g_strdup_printf ("xterm -e %s \"%s\"", "cairo-dock-package-theme", cThemeName);
 		else
 			cCommand = g_strdup_printf ("$TERM -e '%s \"%s\"'", "cairo-dock-package-theme", cThemeName);
 		r = system (cCommand);

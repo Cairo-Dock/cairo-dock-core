@@ -314,8 +314,8 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 		g_source_remove (pDock->iSidMoveUp);*/
 	if (pDock->iSidPopDown != 0)
 		g_source_remove (pDock->iSidPopDown);
-	if (pDock->iSidPopUp != 0)
-		g_source_remove (pDock->iSidPopUp);
+	if (pDock->iSidMoveResize != 0)
+		g_source_remove (pDock->iSidMoveResize);
 	if (pDock->iSidLeaveDemand != 0)
 		g_source_remove (pDock->iSidLeaveDemand);
 	cairo_dock_notify (CAIRO_DOCK_STOP_DOCK, pDock);

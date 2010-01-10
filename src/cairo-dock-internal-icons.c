@@ -139,21 +139,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 			g_key_file_set_string (pKeyFile, "Icons", "default icon directory", pIcons->cIconTheme);
 		}
 	}
-	/**pIcons->bUseLocalIcons = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "local icons", &bFlushConfFileNeeded, TRUE , NULL, NULL);
-	
-	pIcons->cIconTheme = cairo_dock_get_string_key_value (pKeyFile, "Icons", "default icon directory", &bFlushConfFileNeeded, NULL, "Launchers", NULL);*/
-	
 	pIcons->pDefaultIconDirectory = g_new0 (gpointer, 2 * 4);  // theme d'icone + theme local + theme default + NULL final.
 	int j = 0;
 	gboolean bLocalIconsUsed = FALSE, bDefaultThemeUsed = FALSE;
-	
-	/**if (pIcons->bUseLocalIcons)
-	{
-		pIcons->pDefaultIconDirectory[j] = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
-		cd_message (" utilisation du repertoire local %s", pIcons->pDefaultIconDirectory[j]);
-		j += 2;
-		bLocalIconsUsed = TRUE;
-	}*/
 	
 	if (pIcons->cIconTheme == NULL || *pIcons->cIconTheme == '\0')  // theme systeme.
 	{

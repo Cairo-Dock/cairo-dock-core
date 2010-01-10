@@ -413,7 +413,12 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	if (bExecInTerminal)  // on le fait apres la classe puisqu'on change la commande.
 	{
 		gchar *cOldCommand = icon->cCommand;
-		icon->cCommand = g_strdup_printf ("xterm -e \"%s\"", cOldCommand);
+		if (g_getenv ("COLORTERM") != NULL)
+			icon->cCommand = g_strdup_printf ("$COLORTERM -e \"%s\"", cOldCommand);
+		else if (g_getenv ("TERM") != NULL)
+			icon->cCommand = g_strdup_printf ("$TERM -e \"%s\"", cOldCommand);
+		else
+			icon->cCommand = g_strdup_printf ("xterm -e \"%s\"", cOldCommand);
 		g_free (cOldCommand);
 	}
 	

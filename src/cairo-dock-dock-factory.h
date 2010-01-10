@@ -186,8 +186,8 @@ struct _CairoDock {
 	gboolean bIconIsFlyingAway;
 	
 	//\_______________ Source ID of events running on the dock.
-	/// Source ID for window popping up to the top layer.
-	guint iSidPopUp;
+	/// Source ID for window resizing.
+	guint iSidMoveResize;
 	/// Source ID for window popping down to the bottom layer.
 	guint iSidPopDown;
 	/// Source ID of the timer that delays the "leave" event.
