@@ -144,7 +144,7 @@ void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 	pHelpModule->pInterface->load_custom_widget = _entered_help_once;
 	g_hash_table_insert (s_hModuleTable, (gpointer)pHelpModule->pVisitCard->cModuleName, pHelpModule);
 	cairo_dock_activate_module (pHelpModule, NULL);
-	pHelpModule->fLastLoadingTime = time (NULL) + 1e6;  // pour ne pas qu'il soit desactive lors d'un reload general, car il n'est pas dans la liste des modules actifs du fichier de conf.
+	pHelpModule->fLastLoadingTime = time (NULL) + 1e7;  // pour ne pas qu'il soit desactive lors d'un reload general, car il n'est pas dans la liste des modules actifs du fichier de conf.
 }
 
 
@@ -323,18 +323,20 @@ CairoDockModule * cairo_dock_load_module (gchar *cSoFilePath, GError **erreur)  
 	return pCairoDockModule;
 }
 
-void cairo_dock_load_manual_module (CairoDockModule *pModule)
+gboolean cairo_dock_register_module (CairoDockModule *pModule)
 {
-	g_return_if_fail (s_hModuleTable != NULL && pModule->pVisitCard != NULL && pModule->pVisitCard->cModuleName != NULL);
+	g_return_val_if_fail (s_hModuleTable != NULL && pModule->pVisitCard != NULL && pModule->pVisitCard->cModuleName != NULL, FALSE);
 	
 	if (g_hash_table_lookup (s_hModuleTable, pModule->pVisitCard->cModuleName) != NULL)
 	{
 		cd_warning ("a module with the name '%s' is already registered", pModule->pVisitCard->cModuleName);
-		return ;
+		return FALSE;
 	}
 	
-	pModule->pVisitCard->cDockVersionOnCompilation = CAIRO_DOCK_VERSION;
+	if (pModule->pVisitCard->cDockVersionOnCompilation == NULL)
+		pModule->pVisitCard->cDockVersionOnCompilation = CAIRO_DOCK_VERSION;
 	g_hash_table_insert (s_hModuleTable, (gpointer)pModule->pVisitCard->cModuleName, pModule);
+	return TRUE;
 }
 
 
@@ -639,7 +641,7 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 void cairo_dock_deactivate_module (CairoDockModule *module)
 {
 	g_return_if_fail (module != NULL);
-	cd_debug ("%s (%s, %s)", __func__, module->pVisitCard->cModuleName, module->cConfFilePath);
+	g_print ("%s (%s, %s)\n", __func__, module->pVisitCard->cModuleName, module->cConfFilePath);
 	g_list_foreach (module->pInstancesList, (GFunc) cairo_dock_stop_module_instance, NULL);
 	g_list_foreach (module->pInstancesList, (GFunc) cairo_dock_free_module_instance, NULL);
 	g_list_free (module->pInstancesList);
