@@ -2031,7 +2031,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description of it."));
 				gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), cDefaultMessage);
 				g_free (cDefaultMessage);
-				_set_preview_image (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO, pPreviewImage);
+				_set_preview_image (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO, GTK_IMAGE (pPreviewImage));
 			}
 			break ;
 			
@@ -3124,8 +3124,14 @@ void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pThemeTab
 	g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_modele_with_short_themes, modele);
 	
 	GtkTreeIter iter;
+	cairo_dock_extract_theme_type_from_name (cActiveTheme);
 	if (_cairo_dock_find_iter_from_name (GTK_LIST_STORE (modele), cActiveTheme, &iter, TRUE))
+	{
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pCombo), &iter);
+		gboolean bReturn;
+		g_signal_emit_by_name (pCombo, "changed", NULL, &bReturn);
+		g_print ("%s found \n", cActiveTheme);
+	}
 }
 
 void cairo_dock_fill_combo_with_list (GtkWidget *pCombo, GList *pElementList, const gchar *cActiveElement)

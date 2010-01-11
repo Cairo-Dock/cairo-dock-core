@@ -1549,12 +1549,12 @@ CairoDialog *cairo_dock_show_dialog_with_entry (const gchar *cText, Icon *pIcon,
 	return cairo_dock_show_dialog_full (cText, pIcon, pContainer, 0, cIconPath, pWidget, pActionFunc, data, pFreeDataFunc);
 }
 
-CairoDialog *cairo_dock_show_dialog_with_value (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconPath, double fValue, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
+CairoDialog *cairo_dock_show_dialog_with_value (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconPath, double fValue, double fMaxValue, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc)
 {
 	fValue = MAX (0., fValue);
-	fValue = MIN (1., fValue);
+	fValue = MIN (fMaxValue, fValue);
 	//GtkWidget *pWidget = cairo_dock_build_common_interactive_widget_for_dialog (NULL, fValue, 1.);
-	GtkWidget *pWidget = _cairo_dock_make_hscale_for_dialog (fValue, 1.);
+	GtkWidget *pWidget = _cairo_dock_make_hscale_for_dialog (fValue, fMaxValue);
 
 	return cairo_dock_show_dialog_full (cText, pIcon, pContainer, 0, cIconPath, pWidget, pActionFunc, data, pFreeDataFunc);
 }

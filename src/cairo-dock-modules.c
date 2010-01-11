@@ -414,7 +414,7 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fT
 		pModule = g_hash_table_lookup (s_hModuleTable, cModuleName);
 		if (pModule == NULL)
 		{
-			cd_message ("No such module (%s)", cModuleName);
+			cd_debug ("No such module (%s)", cModuleName);
 			pNotFoundModules = g_list_prepend (pNotFoundModules, cModuleName);
 			continue ;
 		}
