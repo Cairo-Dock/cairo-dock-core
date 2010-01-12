@@ -125,9 +125,10 @@ static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)
 	GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pWidget);
 	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
 		return ;
-	g_print ("\n ============================================================================ \n\tCairo-Dock version : %s\n\tCompiled date :  %s %s\n\tOpenGL version: %s\n\tOpenGL vendor: %s\n\tOpenGL renderer: %s\n ============================================================================\n\n",
+	g_print ("\n ============================================================================ \n\tCairo-Dock version: %s\n\tCompiled date:  %s %s\n\tRunning with OpenGL: %d\n\tOpenGL version: %s\n\tOpenGL vendor: %s\n\tOpenGL renderer: %s\n ============================================================================\n\n",
 		CAIRO_DOCK_VERSION,
 		__DATE__, __TIME__,
+		g_bUseOpenGL,
 		glGetString (GL_VERSION),
 		glGetString (GL_VENDOR),
 		glGetString (GL_RENDERER));

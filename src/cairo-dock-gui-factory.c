@@ -38,6 +38,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-gui-factory.h"
+#include "cairo-dock-callbacks.h" // cairo_dock_launch_command_sync
 
 #define CAIRO_DOCK_GUI_MARGIN 4
 #define CAIRO_DOCK_ICON_MARGIN 6
@@ -207,7 +208,7 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 	{
 		iPreviewWidth = MIN (iPreviewWidth, CAIRO_DOCK_PREVIEW_WIDTH);
 		iPreviewHeight = MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT);
-		g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight);
+		// g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight); // 
 		pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
 	}
 	if (pPreviewPixbuf == NULL)
@@ -592,6 +593,32 @@ static void _cairo_dock_key_grab_clicked (GtkButton *button, gpointer *data)
 	//  gtk_widget_set_sensitive (wizard_notebook, FALSE);
 
 	g_signal_connect (GTK_WIDGET(pParentWindow), "key-press-event", GTK_SIGNAL_FUNC(_cairo_dock_key_grab_cb), pEntry);
+}
+
+static void _cairo_dock_key_grab_class (GtkButton *button, gpointer *data)
+{
+	GtkEntry *pEntry = data[0];
+	GtkWindow *pParentWindow = data[1];
+
+	cd_message ("clicked\n");
+	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), FALSE); // locked (plus zoli :) )
+
+	gchar *cProp = cairo_dock_launch_command_sync ("xprop"); // avec "| grep CLASS | cut -d\\\" -f2", ca ne fonctionne pas et Fab n'aime pas les g_spawn_command_line_sync :)
+
+	gchar *str = g_strstr_len (cProp, -1, "WM_CLASS(STRING)"); // str pointant sur WM_
+	gchar *cResult = NULL; // NON CE N'EST PAS MA MOYENNE DE POINT !!!!
+	if (str != NULL)
+	{
+		str += 20;  // WM_CLASS(STRING) = "gnome-terminal", "Gnome-terminal"
+		gchar *max = g_strstr_len (str, -1, "\""); // on pointe le 2e "
+		if (max != NULL)
+			cResult = g_strndup (str, max - str); // on prend ce qui est entre ""
+	}
+
+	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), TRUE); // unlocked
+	gtk_entry_set_text (pEntry, cResult); // on ajoute le txt dans le box des accusés
+	g_free (cProp); // Ah, mnt C Propr' !
+	g_free (cResult); // Où qu'elle est la poulette ???
 }
 
 void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data)
@@ -1998,7 +2025,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
 				
 				pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-				gtk_widget_set (pScrolledWindow, "height-request", 350, NULL);
+				gtk_widget_set (pScrolledWindow, "height-request", 550, NULL);
 				gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 				gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
 				pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
@@ -2486,12 +2513,13 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			break;
 			
 			
-			case CAIRO_DOCK_WIDGET_STRING_ENTRY :  // string
+			case CAIRO_DOCK_WIDGET_STRING_ENTRY :  // string (Merci Fab !) :-P
 			case CAIRO_DOCK_WIDGET_PASSWORD_ENTRY :  // string de type "password", crypte dans le .conf et cache dans l'UI (Merci Tofe !) :-)
 			case CAIRO_DOCK_WIDGET_FILE_SELECTOR :  // string avec un selecteur de fichier a cote du GtkEntry.
 			case CAIRO_DOCK_WIDGET_FOLDER_SELECTOR :  // string avec un selecteur de repertoire a cote du GtkEntry.
 			case CAIRO_DOCK_WIDGET_SOUND_SELECTOR :  // string avec un selecteur de fichier a cote du GtkEntry et un boutton play.
 			case CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR :  // string avec un selecteur de touche clavier (Merci Ctaf !)
+			case CAIRO_DOCK_WIDGET_CLASS_SELECTOR :  // string avec un selecteur de class
 				// on construit l'entree de texte.
 				cValue = g_key_file_get_locale_string (pKeyFile, cGroupName, cKeyName, NULL, NULL);  // nous permet de recuperer les ';' aussi.
 				pOneWidget = gtk_entry_new ();
@@ -2530,7 +2558,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						_pack_in_widget_box (pButtonPlay);
 					}
 				}
-				else if (iElementType == CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR)  // on ajoute un selecteur de touches.
+				else if (iElementType == CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR || iElementType == CAIRO_DOCK_WIDGET_CLASS_SELECTOR)  // on ajoute un selecteur de touches.
 				{
 					GtkWidget *pGrabKeyButton = gtk_button_new_with_label(_("grab"));
 					
@@ -2538,10 +2566,20 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					data[0] = pOneWidget;
 					data[1] = pMainWindow;
 					gtk_widget_add_events(pMainWindow, GDK_KEY_PRESS_MASK);
+					if (iElementType == CAIRO_DOCK_WIDGET_CLASS_SELECTOR)
+					{
+					g_signal_connect (G_OBJECT (pGrabKeyButton),
+						"clicked",
+						G_CALLBACK (_cairo_dock_key_grab_class),
+						data);
+					}
+					else
+					{
 					g_signal_connect (G_OBJECT (pGrabKeyButton),
 						"clicked",
 						G_CALLBACK (_cairo_dock_key_grab_clicked),
 						data);
+					}
 					
 					_pack_in_widget_box (pGrabKeyButton);
 				}

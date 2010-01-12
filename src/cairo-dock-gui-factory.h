@@ -114,6 +114,8 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_SOUND_SELECTOR='u',
 	/// a text entry with a shortkey selector.
 	CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR='k',
+	/// a text entry with a class selector.
+	CAIRO_DOCK_WIDGET_CLASS_SELECTOR='K',
 	/// a text entry, where text is hidden and the result is encrypted in the .conf file.
 	CAIRO_DOCK_WIDGET_PASSWORD_ENTRY='p',
 	/// a font selector button.
