@@ -514,6 +514,7 @@ GtkWidget *cairo_dock_build_normal_gui_window (const gchar *cTitle, int iWidth, 
 	
 	//\_____________ On ajoute la barre d'etat a la fin.
 	GtkWidget *pStatusBar = gtk_statusbar_new ();
+	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (pStatusBar), FALSE);
 	gtk_box_pack_start (GTK_BOX (pButtonsHBox),  // pMainVBox
 		pStatusBar,
 		FALSE,

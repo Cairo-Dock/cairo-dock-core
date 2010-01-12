@@ -1782,6 +1782,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	
 	//\_____________ On ajoute la barre de status a la fin.
 	s_pStatusBar = gtk_statusbar_new ();
+	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (s_pStatusBar), FALSE);
 	gtk_box_pack_start (GTK_BOX (pButtonsHBox),
 		s_pStatusBar,
 		TRUE,
