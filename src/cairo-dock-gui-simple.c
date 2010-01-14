@@ -110,7 +110,7 @@ static gchar * _make_simple_conf_file (void)
 		iVisibility = 0;
 	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "visibility", iVisibility);
 	
-	g_key_file_set_boolean (pSimpleKeyFile, "Behavior", "show on click", myAccessibility.bShowSubDockOnClick);
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "show_on_click", (myAccessibility.bShowSubDockOnClick ? 1 : 0));
 	
 	int iTaskbarType;
 	if (! myTaskBar.bShowAppli)
@@ -145,9 +145,10 @@ static gchar * _make_simple_conf_file (void)
 	g_key_file_set_integer (pSimpleKeyFile, "Appearance", "icon size", iIconSize);
 	s_iIconSize = iIconSize;
 	
-	g_key_file_set_integer_list (pSimpleKeyFile, "Appearance", "icon's type order", myIcons.iIconsTypesList, 3);
 	
-	g_key_file_set_boolean (pSimpleKeyFile, "Appearance", "mix applets with launchers", myIcons.bMixAppletsAndLaunchers);
+	g_key_file_set_boolean (pSimpleKeyFile, "Appearance", "separate icons", myIcons.bSeparateIcons);
+	
+	g_key_file_set_integer_list (pSimpleKeyFile, "Appearance", "icon's type order", myIcons.iIconsTypesList, 3);
 	
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "main dock view", myViews.cMainDockDefaultRendererName);
 	
@@ -252,7 +253,7 @@ static gboolean on_apply_config_simple (gpointer data)
 	int iVisibility = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "visibility", NULL);
 	g_key_file_set_integer (pKeyFile, "Accessibility", "visibility", iVisibility);
 	
-	gboolean bShowOnClick = g_key_file_get_boolean (pSimpleKeyFile, "Behavior", "show on click", NULL);
+	gboolean bShowOnClick = (g_key_file_get_integer (pSimpleKeyFile, "Behavior", "show_on_click", NULL) == 1);
 	g_key_file_set_boolean (pKeyFile, "Accessibility", "show on click", bShowOnClick);
 	
 	int iTaskbarType = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "taskbar", NULL);
@@ -350,12 +351,12 @@ static gboolean on_apply_config_simple (gpointer data)
 		s_iIconSize = iIconSize;
 	}
 	
+	gboolean bSeparateIcons = g_key_file_get_boolean (pSimpleKeyFile, "Appearance", "separate icons", NULL);
+	g_key_file_set_boolean (pKeyFile, "Icons", "separate icons", bSeparateIcons);
+	
 	gchar *cIconOrder = g_key_file_get_string (pSimpleKeyFile, "Appearance", "icon's type order", NULL);
 	g_key_file_set_string (pKeyFile, "Icons", "icon's type order", cIconOrder);
 	g_free (cIconOrder);
-	
-	gboolean bMixAppletsAndLaunchers = g_key_file_get_boolean (pSimpleKeyFile, "Appearance", "mix applets with launchers", NULL);
-	g_key_file_set_boolean (pKeyFile, "Icons", "mix applets with launchers", bMixAppletsAndLaunchers);
 	
 	gchar *cMainDockDefaultRendererName = g_key_file_get_string (pSimpleKeyFile, "Appearance", "main dock view", NULL);
 	g_key_file_set_string (pKeyFile, "Views", "main dock view", cMainDockDefaultRendererName);

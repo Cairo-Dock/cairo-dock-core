@@ -494,8 +494,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	gboolean bShowThumbnailOld = myTaskBar.bShowThumbnail;
 	gchar *cDeskletDecorationsNameOld = myDesklets.cDeskletDecorationsName;
 	myDesklets.cDeskletDecorationsName = NULL;
-	gboolean bMixAppletsAndLaunchersOld = (myIcons.tIconTypeOrder[CAIRO_DOCK_APPLET] == myIcons.tIconTypeOrder[CAIRO_DOCK_LAUNCHER]);
-	gboolean bUseSeparatorOld = myIcons.bUseSeparator;  // TRUE initialement.
+	gboolean bSeparateIconsOld = myIcons.bSeparateIcons;  // TRUE initialement.
 	CairoDockIconType tIconTypeOrderOld[CAIRO_DOCK_NB_TYPES];
 	memcpy (tIconTypeOrderOld, myIcons.tIconTypeOrder, sizeof (tIconTypeOrderOld));
 	
@@ -516,18 +515,6 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 		bGroupOrderChanged = TRUE;
 	else
 		bGroupOrderChanged = FALSE;
-	
-	/*if (myDialogs.bHomogeneous)
-	{
-		myDialogs.dialogTextDescription.iSize = myLabels.iconTextDescription.iSize;
-		if (myDialogs.dialogTextDescription.iSize == 0)
-			myDialogs.dialogTextDescription.iSize = 14;
-		myDialogs.dialogTextDescription.cFont = g_strdup (myLabels.iconTextDescription.cFont);
-		myDialogs.dialogTextDescription.iWeight = myLabels.iconTextDescription.iWeight;
-		myDialogs.dialogTextDescription.iStyle = myLabels.iconTextDescription.iStyle;
-	}*/
-	
-	///cairo_dock_updated_emblem_conf_file (pKeyFile, &bFlushConfFileNeeded);
 	
 	//\___________________ On (re)charge tout, car n'importe quel parametre peut avoir change.
 	if (myPosition.bUseXinerama)
@@ -609,10 +596,10 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 		cairo_dock_stop_application_manager ();
 	}
 	
-	if (bGroupOrderChanged || myIcons.bMixAppletsAndLaunchers != bMixAppletsAndLaunchersOld)
+	if (bGroupOrderChanged || myIcons.bSeparateIcons != bSeparateIconsOld)
 		pDock->icons = g_list_sort (pDock->icons, (GCompareFunc) cairo_dock_compare_icons_order);
 
-	if ((bUseSeparatorOld && ! myIcons.bUseSeparator) || (! bMixAppletsAndLaunchersOld && myIcons.bMixAppletsAndLaunchers) || bGroupOrderChanged)
+	if ((bSeparateIconsOld && ! myIcons.bSeparateIcons) || bGroupOrderChanged)
 		cairo_dock_remove_automatic_separators (pDock);
 		
 	g_fBackgroundImageWidth = 1e4;  // inutile de mettre a jour les decorations maintenant.
@@ -634,7 +621,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 		cairo_dock_start_application_manager (pDock);  // va inserer le separateur si necessaire.
 	}
 
-	if ((myIcons.bUseSeparator && ! bUseSeparatorOld) || (bMixAppletsAndLaunchersOld != myIcons.bMixAppletsAndLaunchers) || bGroupOrderChanged)
+	if (myIcons.bSeparateIcons && (! bSeparateIconsOld || bGroupOrderChanged))
 	{
 		cairo_dock_insert_separators_in_dock (pDock);
 	}

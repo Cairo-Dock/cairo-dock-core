@@ -32,18 +32,20 @@ extern gboolean g_bUseOpenGL;
 
 static double a = .5;
 
-//merci a Nécropotame et ChAnGFu !
+//merci a Necropotame et ChAnGFu !
 
 CairoEmblem *cairo_dock_make_emblem (const gchar *cImageFile, Icon *pIcon, CairoContainer *pContainer, cairo_t *pSourceContext)
 {
 	CairoEmblem *pEmblem = g_new0 (CairoEmblem, 1);
 	
+	//\___________ On calcule les dimensions de l'embleme.
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
 	pEmblem->iWidth = a * w;
 	pEmblem->iHeight = a * h;
 	
-	cairo_surface_t *pEmblemSurface = cairo_dock_create_surface_from_image_simple (cImageFile, pSourceContext, pEmblem->iWidth, pEmblem->iHeight);	
+	//\___________ On cree la surface/texture a cette taille.
+	cairo_surface_t *pEmblemSurface = cairo_dock_create_surface_from_image_simple (cImageFile, pSourceContext, pEmblem->iWidth, pEmblem->iHeight);
 	
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pEmblemSurface)
 	{
@@ -72,7 +74,7 @@ CairoEmblem *cairo_dock_make_emblem_from_texture (GLuint iTexture, Icon *pIcon, 
 {
 	CairoEmblem *pEmblem = g_new0 (CairoEmblem, 1);
 	
-	pEmblem->iTexture = iTexture;
+	pEmblem->iTexture = iTexture;  // inutile de connaitre la taille de la texture.
 	return pEmblem;
 }
 
@@ -97,7 +99,7 @@ void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoCon
 	cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
 	
 	double x, y;
-	if (pIcon->iIconTexture != 0 && pEmblem->iTexture != 0)
+	if (pIcon->iIconTexture != 0 && pEmblem->iTexture != 0)  // dessin opengl : on dessine sur la texture de l'icone avec le mecanisme habituel.
 	{
 		if (! cairo_dock_begin_draw_icon (pIcon, pContainer))
 			return ;

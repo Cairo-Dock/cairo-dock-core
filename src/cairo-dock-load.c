@@ -236,22 +236,15 @@ void cairo_dock_add_reflection_to_icon (cairo_t *pSourceContext, Icon *pIcon, Ca
 void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdouble fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp)
 {
 	//g_print ("%s (%d, %.2f, %s)\n", __func__, icon->iType, fMaxScale, icon->cFileName);
-	if (icon->fPersonnalScale > 0)  // si la fenetre est en train de se faire degager du dock, pas la peine de mettre a jour son icone.
+	if (icon->fPersonnalScale > 0)  // si la fenetre est en train de se faire degager du dock, pas la peine de mettre a jour son icone. /// A voir pour les icones d'appli ...
 		return;
+	
+	// on garde la surface/texture actuelle pour les emblemes.
 	cairo_surface_t *pPrevSurface = icon->pIconBuffer;
 	icon->pIconBuffer = NULL;
 	GLuint iPrevTexture = icon->iIconTexture;
 	icon->iIconTexture = 0;
-	/*if (icon->pIconBuffer != NULL)
-	{
-		cairo_surface_destroy (icon->pIconBuffer);
-		icon->pIconBuffer = NULL;
-	}*/
-	/*if (icon->iIconTexture != 0)
-	{
-		_cairo_dock_delete_texture (icon->iIconTexture);
-		icon->iIconTexture = 0;
-	}*/
+	
 	if (icon->pReflectionBuffer != NULL)
 	{
 		cairo_surface_destroy (icon->pReflectionBuffer);
@@ -259,9 +252,15 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 	
 	if (icon->fWidth < 0 || icon->fHeight < 0)  // on ne veut pas de surface.
+	{
+		if (iPrevTexture != 0)
+			_cairo_dock_delete_texture (iPrevTexture);
+		if (pPrevSurface != NULL)
+			cairo_surface_destroy (pPrevSurface);
 		return;
+	}
 	
-	if (CAIRO_DOCK_IS_LAUNCHER (icon) || (CAIRO_DOCK_IS_USER_SEPARATOR (icon) && icon->cFileName != NULL))
+	if (CAIRO_DOCK_IS_LAUNCHER (icon)/** || (CAIRO_DOCK_IS_USER_SEPARATOR (icon) && icon->cFileName != NULL)*/)  // si c'est un lanceur /*ou un separateur avec une icone.*/
 	{
 		/// A FAIRE : verifier qu'on peut enlever le test sur fMaxScale ...
 		if (icon->fWidth == 0 || fMaxScale != 1.)
@@ -290,7 +289,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 				fMaxScale,
 				(bIsHorizontal ? &icon->fWidth : &icon->fHeight),
 				(bIsHorizontal ? &icon->fHeight : &icon->fWidth));
-			if (icon->pIconBuffer == NULL)
+			if (icon->pIconBuffer == NULL)  // aucun inhibiteur ou aucune image correspondant a cette classe, on cherche a copier une des icones d'appli de cette classe.
 			{
 				const GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
 				if (pApplis != NULL)
@@ -306,7 +305,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 		}
 		g_free (cIconPath);
 	}
-	else if (CAIRO_DOCK_IS_APPLET (icon))  // c'est l'icône d'une applet.
+	else if (CAIRO_DOCK_IS_APPLET (icon))  // c'est l'icone d'une applet.
 	{
 		//g_print ("  icon->cFileName : %s\n", icon->cFileName);
 		icon->pIconBuffer = cairo_dock_create_applet_surface (icon->cFileName,
@@ -315,7 +314,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			(bIsHorizontal ? &icon->fWidth : &icon->fHeight),
 			(bIsHorizontal ? &icon->fHeight : &icon->fWidth));
 	}
-	else if (CAIRO_DOCK_IS_APPLI (icon))  // c'est l'icône d'une appli valide. Dans cet ordre on n'a pas besoin de verifier que c'est NORMAL_APPLI.
+	else if (CAIRO_DOCK_IS_APPLI (icon))  // c'est l'icone d'une appli valide. Dans cet ordre on n'a pas besoin de verifier que c'est NORMAL_APPLI.
 	{
 		icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI];
 		icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI];
@@ -357,6 +356,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			icon->pIconBuffer = cairo_dock_create_surface_from_xwindow (icon->Xid, pSourceContext, fMaxScale, &icon->fWidth, &icon->fHeight);
 		if (icon->pIconBuffer == NULL)  // certaines applis comme xterm ne definissent pas d'icone, on en met une par defaut.
 		{
+			g_print ("%s (%ld) doesn't define any icon, we set the default one.\n", icon->cName, icon->Xid);
 			gchar *cIconPath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
 			if (cIconPath == NULL || ! g_file_test (cIconPath, G_FILE_TEST_EXISTS))
 			{
@@ -377,7 +377,33 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 	else  // c'est une icone de separation.
 	{
-		icon->pIconBuffer = cairo_dock_create_separator_surface (pSourceContext, fMaxScale, bIsHorizontal, bDirectionUp, &icon->fWidth, &icon->fHeight);
+		if (CAIRO_DOCK_IS_USER_SEPARATOR (icon) && icon->cFileName != NULL)
+		{
+			/// A FAIRE : verifier qu'on peut enlever le test sur fMaxScale ...
+			if (icon->fWidth == 0 || fMaxScale != 1.)
+				icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12];
+			if (icon->fHeight == 0 || fMaxScale != 1.)
+				icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12];
+			gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
+			
+			if (cIconPath != NULL && *cIconPath != '\0')
+			{
+				icon->pIconBuffer = cairo_dock_create_surface_from_image (cIconPath,
+					pSourceContext,
+					fMaxScale,
+					icon->fWidth,
+					icon->fHeight,
+					CAIRO_DOCK_FILL_SPACE,
+					(bIsHorizontal ? &icon->fWidth : &icon->fHeight),
+					(bIsHorizontal ? &icon->fHeight : &icon->fWidth),
+					NULL, NULL);
+			}
+			g_free (cIconPath);
+		}
+		else
+		{
+			icon->pIconBuffer = cairo_dock_create_separator_surface (pSourceContext, fMaxScale, bIsHorizontal, bDirectionUp, &icon->fWidth, &icon->fHeight);
+		}
 	}
 
 	if (icon->pIconBuffer == NULL)

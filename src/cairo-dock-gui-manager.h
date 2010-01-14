@@ -101,8 +101,8 @@ void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFor
 @param pBackend the new backend.
 */
 void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend);
+
 /** Show the main config panel.
-@param bMaintenanceMode TRUE if it should be in maintenance mode.
 */
 GtkWidget *cairo_dock_show_main_gui (void);
 /** Show the config panel of a given module instance. Reload the widgets if the panel was already opened.

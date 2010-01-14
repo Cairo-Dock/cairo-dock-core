@@ -721,7 +721,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			{
 				cd_message ("le container a change (%s -> %s)", pIcon->cParentDockName, pMinimalConfig->bIsDetached ? "desklet" : pMinimalConfig->cDockName);
 				cOldDockName = g_strdup (pIcon->cParentDockName);
-				cairo_dock_detach_icon_from_dock (pIcon, pCurrentDock, myIcons.bUseSeparator);
+				cairo_dock_detach_icon_from_dock (pIcon, pCurrentDock, myIcons.bSeparateIcons);
 			}
 			
 			// on recupere son desklet (cree au besoin).

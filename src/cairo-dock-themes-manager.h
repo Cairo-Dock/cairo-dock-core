@@ -126,22 +126,36 @@ gboolean cairo_dock_theme_need_save (void);
 CairoDockThemeType cairo_dock_extract_theme_type_from_name (const gchar *cThemeName);
 
 /** Export the current theme to a given name. Exported themes can be imported directly from the Theme Manager.
+ * @param cNewThemeName name to export the theme to.
+ * @param bSaveBehavior whether to save the behavior paremeters too.
+ * @param bSaveLaunchers whether to save the launchers too.
+ * @return TRUE if the theme could be exported succefuly.
  */
 gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean bSaveBehavior, gboolean bSaveLaunchers);
 
 /** Create a package of the current theme. Packages can be distributed easily, and imported into the dock by a mere drag and drop into the Theme Manager. The package is placed in the Home.
+ * @param cThemeName name of the package.
+ * @return TRUE if the theme could be packaged succefuly.
  */
 gboolean cairo_dock_package_current_theme (const gchar *cThemeName);
 
 /** Extract a package into the themes folder. Does not load it.
+ * @param cPackagePath path of a package. If the package is distant, it is first downoladed.
+ * @return the path of the theme folder, or NULL if anerror occured.
  */
 gchar * cairo_dock_depackage_theme (const gchar *cPackagePath);
 
 /** Remove some exported themes from the hard-disk.
+ * @param cThemesList a list of theme names, NULL-terminated.
+ * @return TRUE if the themes has been succefuly deleted.
  */
 gboolean cairo_dock_delete_themes (gchar **cThemesList);
 
 /** Import a theme, which can be : a local theme, a user theme, a distant theme, or even the path to a packaged theme.
+ * @param cThemeName name of the theme to import.
+ * @param bLoadBehavior whether to import the behavior parameters too.
+ * @param bLoadLaunchers whether to import the launchers too.
+ * @return TRUE if the theme could be imported succefuly.
  */
 gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers);
 

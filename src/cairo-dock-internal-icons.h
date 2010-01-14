@@ -49,15 +49,15 @@ struct _CairoConfigIcons {
 	gint iNbIconPlaces;
 	gint tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
 	gint tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
-	CairoDockIconType tIconTypeOrder[CAIRO_DOCK_NB_TYPES];
 	gchar *cBackgroundImagePath;
-	gboolean bMixAppletsAndLaunchers;
-	gboolean bUseSeparator;
 	gchar *cSeparatorImage;
 	gboolean bRevolveSeparator;
 	gboolean bConstantSeparatorSize;
-	gboolean bUseLocalIcons;
-	gboolean bMixApplisAndLaunchers;
+	gboolean bSeparateIcons;
+	/**gboolean bUseSeparator;
+	gboolean bMixAppletsAndLaunchers;
+	gboolean bMixApplisAndLaunchers;*/
+	CairoDockIconType tIconTypeOrder[CAIRO_DOCK_NB_TYPES];
 	gint iIconsTypesList[3];  // pour la conf simple.
 	};
 

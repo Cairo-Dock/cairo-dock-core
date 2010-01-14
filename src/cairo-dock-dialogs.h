@@ -360,6 +360,7 @@ CairoDialog *cairo_dock_show_dialog_with_entry (const gchar *cText, Icon *pIcon,
 *@param pContainer the container of the icon.
 *@param cIconPath path to an icon to display in the margin.
 *@param fValue initial value of the scale.
+*@param fMaxValue maximum value of the scale.
 *@param pActionFunc the callback.
 *@param data data passed as a parameter of the callback.
 *@param pFreeDataFunc function used to free the data.
@@ -449,7 +450,7 @@ void cairo_dock_toggle_dialog_visibility (CairoDialog *pDialog);
 
 GtkWidget *cairo_dock_steal_widget_from_its_container (GtkWidget *pWidget);
 /** Detach the interactive widget from a dialog. The widget can then be placed anywhere after that. You have to unref it after you placed it into a container, or to destroy it.
-*@param pDesklet the desklet with an interactive widget.
+*@param pDialog the desklet with an interactive widget.
 *@return the widget.
 */
 GtkWidget *cairo_dock_steal_interactive_widget_from_dialog (CairoDialog *pDialog);

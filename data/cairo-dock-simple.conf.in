@@ -25,12 +25,12 @@ visibility = 1
 #{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 raise shortcut = 
 
-#F-[Sub-docks' visibility;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-subdock.png]
+#F-[Visibility of the sub-docks;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-subdock.png]
 frame_sub =
 
-#b- Click to show sub-docks ?
-#{Otherwise they will appear when you linger over the icon pointing on it.}
-show on click = false
+#l-[Appear on mouse over;Appear on click] Visibility :
+#{they will appear either when you click or when you linger over the icon pointing on it.}
+show_on_click = 0
 
 
 #F-[Taskbar;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-taskbar.png]
@@ -73,12 +73,12 @@ icon size = 2
 #v
 sev_order=
 
+#B+ Separate the different types of icons ?
+#{This will separate launchers, applis, and applets. Separators will be automatically inserted then.}
+separate icons = true
+
 #T[launchers;applications;applets] Order of the different types of icons :
 icon's type order = 0;1;2
-
-#b Allow applets to be placed amongst launchers ?
-#{This parameter will overwrite the previously defined order, to allow you to mix applets and launchers into the dock.}
-mix applets with launchers = false
 
 
 #F[Views;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-views.png]

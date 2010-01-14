@@ -55,6 +55,7 @@ void cairo_dock_blacklist_appli (Window Xid);
 void cairo_dock_unregister_appli (Icon *icon);
 
 /** Start the applications manager. It will load all the applis into the dock, and keep monitor them.
+*@param pDock the main dock
 */
 void cairo_dock_start_application_manager (CairoDock *pDock);
 /** Stop the applications manager. It will delete all the applis icons and stop monitor applis.

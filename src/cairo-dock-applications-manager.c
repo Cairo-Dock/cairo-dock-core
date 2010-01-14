@@ -1017,7 +1017,7 @@ static gboolean _cairo_dock_reset_appli_table_iter (Window *pXid, Icon *pIcon, g
 	{
 		gchar *cParentDockName = pIcon->cParentDockName;
 		pIcon->cParentDockName = NULL;  // astuce.
-		cairo_dock_detach_icon_from_dock (pIcon, pDock, myIcons.bUseSeparator);
+		cairo_dock_detach_icon_from_dock (pIcon, pDock, myIcons.bSeparateIcons);
 		if (! pDock->bIsMainDock)  // la taille du main dock est mis a jour 1 fois a la fin.
 		{
 			if (pDock->icons == NULL)  // le dock degage, le fake aussi.
@@ -1028,7 +1028,7 @@ static gboolean _cairo_dock_reset_appli_table_iter (Window *pXid, Icon *pIcon, g
 				//if (pFakeClassIcon != NULL && ! CAIRO_DOCK_IS_APPLI (pFakeClassIcon) && ! CAIRO_DOCK_IS_APPLET (pFakeClassIcon) && ! CAIRO_DOCK_IS_NORMAL_LAUNCHER (pFakeClassIcon) && pFakeClassIcon->cClass != NULL && pFakeClassIcon->cName != NULL && strcmp (pFakeClassIcon->cClass, pFakeClassIcon->cName) == 0)  // stop la parano.
 				{
 					cd_debug ("on degage le fake qui pointe sur %s", cParentDockName);
-					cairo_dock_detach_icon_from_dock (pFakeClassIcon, pFakeClassParentDock, myIcons.bUseSeparator);
+					cairo_dock_detach_icon_from_dock (pFakeClassIcon, pFakeClassParentDock, myIcons.bSeparateIcons);
 					cairo_dock_free_icon (pFakeClassIcon);
 					if (! pFakeClassParentDock->bIsMainDock)
 						cairo_dock_update_dock_size (pFakeClassParentDock);
@@ -1300,7 +1300,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	g_return_val_if_fail (pParentDock != NULL, NULL);
 
 	//\_________________ On l'insere dans son dock parent en animant ce dernier eventuellement.
-	if (myIcons.bMixApplisAndLaunchers && pParentDock->iRefCount == 0)
+	if (!myIcons.bSeparateIcons && pParentDock->iRefCount == 0)
 	{
 		cairo_dock_set_class_order (icon);
 	}
@@ -1398,7 +1398,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 					y = y_icon_geometry (pClassmate, pClassmateDock);
 				}
 			}
-			else if (myIcons.bMixApplisAndLaunchers && pClassmate != NULL && pClassmateDock != NULL)  // on va se placer a cote.
+			else if (!myIcons.bSeparateIcons && pClassmate != NULL && pClassmateDock != NULL)  // on va se placer a cote.
 			{
 				x = x_icon_geometry (pClassmate, pClassmateDock) + pClassmate->fWidth/2;
 				if (cairo_dock_is_hidden (pClassmateDock))

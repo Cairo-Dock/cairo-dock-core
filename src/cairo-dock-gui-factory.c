@@ -603,18 +603,20 @@ static void _cairo_dock_key_grab_class (GtkButton *button, gpointer *data)
 	cd_message ("clicked\n");
 	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), FALSE); // locked (plus zoli :) )
 
-	gchar *cProp = cairo_dock_launch_command_sync ("xprop"); // avec "| grep CLASS | cut -d\\\" -f2", ca ne fonctionne pas et Fab n'aime pas les g_spawn_command_line_sync :)
+	gchar *cProp = cairo_dock_launch_command_sync ("xprop"); // avec "| grep CLASS | cut -d\\\" -f2", ca ne fonctionne pas et Fab n'aime pas les g_spawn_command_line_sync :) --> c'est surtout que c'est g_spawn_command_line_sync qui n'aime pas les grep.
 
 	gchar *str = g_strstr_len (cProp, -1, "WM_CLASS(STRING)"); // str pointant sur WM_
 	gchar *cResult = NULL; // NON CE N'EST PAS MA MOYENNE DE POINT !!!!
 	if (str != NULL)
 	{
 		str += 20;  // WM_CLASS(STRING) = "gnome-terminal", "Gnome-terminal"
-		gchar *max = g_strstr_len (str, -1, "\""); // on pointe le 2e "
+		gchar *max = strchr (str, '"'); // on pointe le 2e "
 		if (max != NULL)
 			cResult = g_strndup (str, max - str); // on prend ce qui est entre ""
 	}
-
+	if (cResult == NULL)
+		cd_warning ("couldn't find the class of this window.");
+	
 	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), TRUE); // unlocked
 	gtk_entry_set_text (pEntry, cResult); // on ajoute le txt dans le box des accusés
 	g_free (cProp); // Ah, mnt C Propr' !
@@ -2519,7 +2521,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_FOLDER_SELECTOR :  // string avec un selecteur de repertoire a cote du GtkEntry.
 			case CAIRO_DOCK_WIDGET_SOUND_SELECTOR :  // string avec un selecteur de fichier a cote du GtkEntry et un boutton play.
 			case CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR :  // string avec un selecteur de touche clavier (Merci Ctaf !)
-			case CAIRO_DOCK_WIDGET_CLASS_SELECTOR :  // string avec un selecteur de class
+			case CAIRO_DOCK_WIDGET_CLASS_SELECTOR :  // string avec un selecteur de class (Merci Matttbe !)
 				// on construit l'entree de texte.
 				cValue = g_key_file_get_locale_string (pKeyFile, cGroupName, cKeyName, NULL, NULL);  // nous permet de recuperer les ';' aussi.
 				pOneWidget = gtk_entry_new ();
@@ -2558,29 +2560,27 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						_pack_in_widget_box (pButtonPlay);
 					}
 				}
-				else if (iElementType == CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR || iElementType == CAIRO_DOCK_WIDGET_CLASS_SELECTOR)  // on ajoute un selecteur de touches.
+				else if (iElementType == CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR || iElementType == CAIRO_DOCK_WIDGET_CLASS_SELECTOR)  // on ajoute un selecteur de touches/classe.
 				{
 					GtkWidget *pGrabKeyButton = gtk_button_new_with_label(_("grab"));
-					
 					_allocate_new_buffer;
 					data[0] = pOneWidget;
 					data[1] = pMainWindow;
 					gtk_widget_add_events(pMainWindow, GDK_KEY_PRESS_MASK);
 					if (iElementType == CAIRO_DOCK_WIDGET_CLASS_SELECTOR)
 					{
-					g_signal_connect (G_OBJECT (pGrabKeyButton),
-						"clicked",
-						G_CALLBACK (_cairo_dock_key_grab_class),
-						data);
+						g_signal_connect (G_OBJECT (pGrabKeyButton),
+							"clicked",
+							G_CALLBACK (_cairo_dock_key_grab_class),
+							data);
 					}
 					else
 					{
-					g_signal_connect (G_OBJECT (pGrabKeyButton),
-						"clicked",
-						G_CALLBACK (_cairo_dock_key_grab_clicked),
-						data);
+						g_signal_connect (G_OBJECT (pGrabKeyButton),
+							"clicked",
+							G_CALLBACK (_cairo_dock_key_grab_clicked),
+							data);
 					}
-					
 					_pack_in_widget_box (pGrabKeyButton);
 				}
 				g_free (cValue);

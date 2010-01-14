@@ -497,10 +497,6 @@ frame_sep =
 #j+[4;64] Icon size at rest (width x height) :
 separator size = 48;48
 
-#b+ Automatically add separators ?
-#{Separators are icons used to make a separation between different types of icons. Cairo-dock can automatically add them between launchers, applis, and applets.}
-use separator = true
-
 #S+ Filename of an image to use for separators :
 #{If you don't provide one, blanks will be used.}
 separator image = separateur.svg
@@ -515,16 +511,12 @@ force size = false
 #X+[Icons order]
 frame_order =
 
+#B+ Separate the different types of icons ?
+#{This will separate launchers, applis, and applets. Separators will be automatically inserted then.}
+separate icons = true
+
 #T+[launchers;applications;applets] Order of the different types of icons :
 icon's type order = 0;1;2
-
-#b+ Allow applets to be placed amongst launchers ?
-#{This parameter will overwrite the previously defined order, to allow you to mix applets and launchers into the dock.}
-mix applets with launchers = false
-
-#b+ Allow applis to be placed amongst launchers ?
-#{This parameter will overwrite the previously defined order. If you didn't choose to group applis in sub-dock, applis will be placed next to their launcher.}
-mix applis with launchers = false
 
 
 #X+[Link the icons with a string]
