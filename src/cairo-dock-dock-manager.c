@@ -616,7 +616,7 @@ static void _cairo_dock_pop_up_one_root_dock (gchar *cDockName, CairoDock *pDock
 	CairoDockPositionType iDockScreenBorder = (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp));
 	if (iDockScreenBorder == iScreenBorder)
 	{
-		cd_message ("%s passe en avant-plan", cDockName);
+		g_print ("%s passe en avant-plan\n", cDockName);
 		cairo_dock_pop_up (pDock);
 		if (pDock->iSidPopDown == 0)
 			pDock->iSidPopDown = g_timeout_add (2000, (GSourceFunc) cairo_dock_pop_down, (gpointer) pDock);  // au cas ou on serait pas dedans.
@@ -631,6 +631,7 @@ static void _cairo_dock_set_one_dock_on_top_layer (gchar *cDockName, CairoDock *
 {
 	if (data && pDock->iRefCount > 0)
 		return ;
+	g_print ("set on top layer\n");
 	gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);
 }
 void cairo_dock_set_docks_on_top_layer (gboolean bRootDocksOnly)

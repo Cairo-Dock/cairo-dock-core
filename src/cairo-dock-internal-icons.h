@@ -63,7 +63,6 @@ struct _CairoConfigIcons {
 
 #define g_fAmplitude myIcons.fAmplitude
 #define g_fReflectSize myIcons.fReflectSize
-#define g_bSeparateIcons myIcons.bSeparateIcons
 
 DEFINE_PRE_INIT (Icons);
 

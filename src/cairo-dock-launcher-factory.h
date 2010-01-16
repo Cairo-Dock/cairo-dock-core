@@ -36,13 +36,18 @@ G_BEGIN_DECLS
  */
 gchar *cairo_dock_search_icon_s_path (const gchar *cFileName);
 
+/** Set the class of a launcher. You can safely free the paramater 'cStartupWMClass' after calling this function. This function is tobe called on a launcher well defined (all other parameters should be already filled).
+ * @param icon a launcher.
+ * @param cStartupWMClass the class of the launcher defined in its .desktop file, or NULL. You can't expect the resulting class to be the one you provide, because this function makes a lot of guesses.
+ */
+void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass);
+
 
 /** Read a desktop file and fetch all its data into an Icon.
  * @param cDesktopFileName name or path of a desktop file. If it's a simple name, it will be taken in the "launchers" folder of the current theme.
  * @param icon the Icon to fill.
 */
 void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName, Icon *icon);
-
 
 /** Create an Icon from a given desktop file, and fill its buffers. The resulting icon can directly be used inside a container. Class inhibating is handled.
  * @param cDesktopFileName name of the desktop file, present in the "launchers" folder of the current theme.

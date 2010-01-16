@@ -86,8 +86,9 @@ static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gbo
 	if (pDock->iFadeCounter == 0)
 	{
 		pDock->bFadeInOut = FALSE;
+		g_print ("set below\n");
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
-		/// si fenetre maximisee, mettre direct iFadeCounter au max...
+		// si fenetre maximisee, on met direct iFadeCounter au max.
 		if (cairo_dock_search_window_on_our_way (pDock, TRUE, TRUE) != NULL)
 			pDock->iFadeCounter = mySystem.iFadeOutNbSteps;
 	}
@@ -114,7 +115,7 @@ static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gbo
 
 void cairo_dock_pop_up (CairoDock *pDock)
 {
-	cd_debug ("%s (%d)", __func__, pDock->bPopped);
+	g_print ("%s (%d)\n", __func__, pDock->bPopped);
 	if (! pDock->bPopped && myAccessibility.bPopUp)
 	{
 		cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
@@ -126,6 +127,7 @@ void cairo_dock_pop_up (CairoDock *pDock)
 			(CairoDockNotificationFunc) _update_fade_out_dock,
 			NULL);
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
+		g_print ("set above\n");
 		gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), TRUE);
 		pDock->bPopped = TRUE;
 	}
@@ -133,7 +135,7 @@ void cairo_dock_pop_up (CairoDock *pDock)
 
 gboolean cairo_dock_pop_down (CairoDock *pDock)
 {
-	cd_debug ("%s (%d)", __func__, pDock->bPopped);
+	g_print ("%s (%d)\n", __func__, pDock->bPopped);
 	if (pDock->bIsMainDock && cairo_dock_get_nb_dialog_windows () != 0)
 		return FALSE;
 	if (pDock->bPopped && myAccessibility.bPopUp && ! pDock->container.bInside)
@@ -154,6 +156,7 @@ gboolean cairo_dock_pop_down (CairoDock *pDock)
 		}
 		else
 		{
+			g_print ("set below\n");
 			gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
 		}
 		pDock->bPopped = FALSE;

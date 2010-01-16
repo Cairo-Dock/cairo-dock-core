@@ -90,7 +90,9 @@ import_file_full()
 	fi
 	if test ${f:0:1} = "/" -o ${f:0:1} = "~"; then
 		echo " a importer"
-		/bin/cp "$f" "$3"
+		if test ${f:0:35} != "~/.config/cairo-dock/current_theme/"; then
+			/bin/cp "$f" "$3"
+		fi
 		local_file=${f##*/}
 		if test "$4" = "1"; then
 			if test "${local_file:(-4)}" = ".svg" -o "${local_file:(-4)}" = ".png" -o "${local_file:(-4)}" = ".xpm"; then

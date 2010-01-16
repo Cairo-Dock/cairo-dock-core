@@ -144,6 +144,8 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_TEXT_LABEL='>',
 	/// a simple text label.
 	CAIRO_DOCK_WIDGET_LINK='W',
+	/// a label containing the handbook of the applet.
+	CAIRO_DOCK_WIDGET_HANDBOOK='A',
 	/// an horizontal separator.
 	CAIRO_DOCK_WIDGET_SEPARATOR='v',
 	/// a frame. The previous frame will be closed.

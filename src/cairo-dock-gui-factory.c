@@ -1596,11 +1596,35 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			//\______________ On cree le label descriptif et la boite du widget.
 			if (iElementType != CAIRO_DOCK_WIDGET_EMPTY_WIDGET)
 			{
-				if (*cUsefulComment != '\0' && strcmp (cUsefulComment, "...") != 0)
+				pLabel = NULL;
+				if (iElementType == CAIRO_DOCK_WIDGET_HANDBOOK)
+				{
+					cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
+					CairoDockModule *pModule = cairo_dock_find_module_from_name (cValue);
+					if (pModule != NULL)
+					{
+						gchar *cDescription = g_strdup_printf ("%s (v%s) by %s\n%s",
+							pModule->pVisitCard->cModuleName,
+							pModule->pVisitCard->cModuleVersion,
+							pModule->pVisitCard->cAuthor,
+							dgettext (pModule->pVisitCard->cGettextDomain,
+								pModule->pVisitCard->cDescription));
+						pLabel = gtk_label_new (cDescription);
+						gtk_widget_set (pLabel, "width-request", 500, NULL);  // CAIRO_DOCK_PREVIEW_WIDTH
+						gtk_label_set_justify (GTK_LABEL (pLabel), GTK_JUSTIFY_LEFT);
+						gtk_label_set_line_wrap (GTK_LABEL (pLabel), TRUE);
+						g_free (cDescription);
+					}
+					g_free (cValue);
+				}
+				else if (*cUsefulComment != '\0' && strcmp (cUsefulComment, "...") != 0)
 				{
 					pLabel = gtk_label_new (NULL);
 					gtk_label_set_use_markup  (GTK_LABEL (pLabel), TRUE);
 					gtk_label_set_markup (GTK_LABEL (pLabel), dgettext (cGettextDomain, cUsefulComment));
+				}
+				if (pLabel != NULL)
+				{
 					GtkWidget *pAlign = gtk_alignment_new (0., 0.5, 0., 0.);
 					gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
 					gtk_box_pack_start (GTK_BOX (pKeyBox),
@@ -2597,6 +2621,38 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			break ;
 			
 			case CAIRO_DOCK_WIDGET_TEXT_LABEL :  // juste le label de texte.
+			break ;
+			
+			case CAIRO_DOCK_WIDGET_HANDBOOK :  // le label contenant le manuel de l'applet, il a ete place avant.
+				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
+				CairoDockModule *pModule = cairo_dock_find_module_from_name (cValue);
+				if (pModule == NULL)
+					break;	
+				
+				int iPreviewWidth, iPreviewHeight;
+				GdkPixbuf *pPreviewPixbuf = NULL;
+				int w=200, h=200;
+				if (gdk_pixbuf_get_file_info (pModule->pVisitCard->cPreviewFilePath, &iPreviewWidth, &iPreviewHeight) != NULL)  // The return value is owned by GdkPixbuf and should not be freed.
+				{
+					if (iPreviewWidth > w)
+					{
+						iPreviewHeight *= 1.*w/iPreviewWidth;
+						iPreviewWidth = w;
+					}
+					if (iPreviewHeight > h)
+					{
+						iPreviewWidth *= 1.*h/iPreviewHeight;
+						iPreviewHeight = h;
+					}
+					pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (pModule->pVisitCard->cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
+				}
+				if (pPreviewPixbuf != NULL)
+				{
+					pPreviewImage = gtk_image_new_from_pixbuf (NULL);
+					gtk_image_set_from_pixbuf (GTK_IMAGE (pPreviewImage), pPreviewPixbuf);
+					gdk_pixbuf_unref (pPreviewPixbuf);
+					_pack_in_widget_box (pPreviewImage);
+				}
 			break ;
 			
 			case CAIRO_DOCK_WIDGET_FRAME :  // frame.

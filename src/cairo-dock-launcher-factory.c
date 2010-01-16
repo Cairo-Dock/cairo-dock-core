@@ -165,6 +165,85 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 	return cIconPath;
 }
 
+void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
+{
+	// plusieurs cas sont possibles :
+	// Exec=toto
+	// Exec=toto -x -y
+	// Exec=/path/to/toto -x -y
+	// Exec=gksu toto
+	// Exec=gksu --description /usr/share/applications/synaptic.desktop /usr/sbin/synaptic
+	// Exec=wine "C:\Program Files\Starcraft\Starcraft.exe"
+	// Exec=wine "/path/to/prog.exe"
+	// Exec=env WINEPREFIX="/home/fab/.wine" wine "C:\Program Files\Starcraft\Starcraft.exe"
+	g_free (icon->cClass);
+	if (icon->cCommand != NULL && icon->cBaseURI == NULL)
+	{
+		if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || strcmp (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
+		{
+			gchar *cDefaultClass = g_ascii_strdown (icon->cCommand, -1);
+			gchar *str, *cClass = cDefaultClass;
+			
+			if (strncmp (cClass, "gksu", 4) == 0 || strncmp (cClass, "kdesu", 4) == 0)  // on prend la fin .
+			{
+				while (cClass[strlen(cClass)-1] == ' ')  // par securite on enleve les espaces en fin de ligne.
+					cClass[strlen(cClass)-1] = '\0';
+				str = strrchr (cClass, ' ');  // on cherche le dernier espace.
+				if (str != NULL)  // on prend apres.
+					cClass = str + 1;
+				str = strrchr (cClass, '/');  // on cherche le dernier '/'.
+				if (str != NULL)  // on prend apres.
+					cClass = str + 1;
+			}
+			else if ((str = g_strstr_len (cClass, -1, "wine ")) != NULL)
+			{
+				cClass = str;  // on met deja la classe a "wine", c'est mieux que rien.
+				*(str+4) = '\0';
+				str += 5;
+				gchar *exe = g_strstr_len (str, -1, ".exe");  // on cherche a isoler le nom de l'executable, puisque wine l'utilise dans le res_name.
+				if (exe)
+				{
+					*(exe+4) = '\0';
+					gchar *slash = strrchr (str, '\\');
+					if (slash)
+						cClass = slash+1;
+					else
+					{
+						slash = strrchr (str, '/');
+						if (slash)
+							cClass = slash+1;
+					}
+				}
+				g_print ("  special case : wine application => class = '%s'\n", cClass);
+			}
+			else
+			{
+				while (*cClass == ' ')  // par securite on enleve les espaces en debut de ligne.
+					cClass ++;
+				str = strchr (cClass, ' ');  // on cherche le premier espace.
+				if (str != NULL)  // on vire apres.
+					*str = '\0';
+				str = strrchr (cClass, '/');  // on cherche le dernier '/'.
+				if (str != NULL)  // on prend apres.
+					cClass = str + 1;
+			}
+			
+			if (*cClass != '\0')
+				icon->cClass = g_strdup (cClass);
+			else
+				icon->cClass = NULL;
+			cd_message ("no class defined for the launcher %s\n we will assume that its class is '%s'", icon->cName, icon->cClass);
+			g_free (cDefaultClass);
+		}
+		else
+		{
+			icon->cClass = g_ascii_strdown (cStartupWMClass, -1);
+		}
+	}
+	else
+		icon->cClass = NULL;
+}
+
 
 void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName, Icon *icon)
 {
@@ -330,84 +409,17 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 
 	
 	gboolean bPreventFromInhibating = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE si la cle n'existe pas.
-	
-	g_free (icon->cClass);
-	if (icon->cCommand != NULL && icon->cBaseURI == NULL && ! bPreventFromInhibating)
+	if (bPreventFromInhibating)
 	{
-		gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
-		if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || strcmp (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
-		{
-			// plusieurs cas sont possibles :
-			// Exec=toto
-			// Exec=toto -x -y
-			// Exec=/path/to/toto -x -y
-			// Exec=gksu toto
-			// Exec=gksu --description /usr/share/applications/synaptic.desktop /usr/sbin/synaptic
-			// Exec=wine "C:\Program Files\Starcraft\Starcraft.exe"
-			// Exec=wine "/path/to/prog.exe"
-			// Exec=env WINEPREFIX="/home/fab/.wine" wine "C:\Program Files\Starcraft\Starcraft.exe"
-			g_free (cStartupWMClass);
-			cStartupWMClass = g_ascii_strdown (icon->cCommand, -1);
-			gchar *str, *cClass = cStartupWMClass;
-			
-			if (strncmp (cClass, "gksu", 4) == 0 || strncmp (cClass, "kdesu", 4) == 0)  // on prend la fin .
-			{
-				while (cClass[strlen(cClass)-1] == ' ')  // par securite on enleve les espaces en fin de ligne.
-					cClass[strlen(cClass)-1] = '\0';
-				str = strrchr (cClass, ' ');  // on cherche le dernier espace.
-				if (str != NULL)  // on prend apres.
-					cClass = str + 1;
-				str = strrchr (cClass, '/');  // on cherche le dernier '/'.
-				if (str != NULL)  // on prend apres.
-					cClass = str + 1;
-			}
-			else if ((str = g_strstr_len (cClass, -1, "wine ")) != NULL)
-			{
-				cClass = str;  // on met deja la classe a "wine", c'est mieux que rien.
-				*(str+4) = '\0';
-				str += 5;
-				gchar *exe = g_strstr_len (str, -1, ".exe");  // on cherche a isoler le nom de l'executable, puisque wine l'utilise dans le res_name.
-				if (exe)
-				{
-					*(exe+4) = '\0';
-					gchar *slash = strrchr (str, '\\');
-					if (slash)
-						cClass = slash+1;
-					else
-					{
-						slash = strrchr (str, '/');
-						if (slash)
-							cClass = slash+1;
-					}
-				}
-				g_print ("  special case : wine application => class = '%s'\n", cClass);
-			}
-			else
-			{
-				while (*cClass == ' ')  // par securite on enleve les espaces en debut de ligne.
-					cClass ++;
-				str = strchr (cClass, ' ');  // on cherche le premier espace.
-				if (str != NULL)  // on vire apres.
-					*str = '\0';
-				str = strrchr (cClass, '/');  // on cherche le dernier '/'.
-				if (str != NULL)  // on prend apres.
-					cClass = str + 1;
-			}
-			
-			if (*cClass != '\0')
-				icon->cClass = g_strdup (cClass);
-			else
-				icon->cClass = NULL;
-			cd_message ("no class defined for the launcher %s\n we will assume that its class is '%s'", cDesktopFileName, icon->cClass);
-		}
-		else
-		{
-			icon->cClass = g_ascii_strdown (cStartupWMClass, -1);
-		}
-		g_free (cStartupWMClass);
+		g_free (icon->cClass);
+		icon->cClass = NULL;
 	}
 	else
-		icon->cClass = NULL;
+	{
+		gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
+		cairo_dock_set_launcher_class (icon, cStartupWMClass);
+		g_free (cStartupWMClass);
+	}
 	
 	gboolean bExecInTerminal = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Terminal", NULL);
 	if (bExecInTerminal)  // on le fait apres la classe puisqu'on change la commande.

@@ -565,6 +565,15 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 				0);
 		}
 	}
+	
+	/**if (pEvent->x != pDialog->container.iWindowPositionX || pEvent->y != pDialog->container.iWindowPositionY)
+	{
+		g_print (" => force move to (%d;%d) %dx%d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, pDialog->container.iWidth, pDialog->container.iHeight);
+		gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
+			pDialog->container.iWindowPositionX,
+			pDialog->container.iWindowPositionY);
+	}*/
+	
 	gtk_widget_queue_draw (pDialog->container.pWidget);  // les widgets internes peuvent avoir changer de taille sans que le dialogue n'en ait change, il faut donc redessiner tout le temps.
 
 	return FALSE;
@@ -956,8 +965,8 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	
 	//\________________ On cree un nouveau dialogue.
 	CairoDialog *pDialog = _cairo_dock_create_new_dialog (pAttribute->pInteractiveWidget || pAttribute->pActionFunc);
-	if (pContainer != NULL)
-		gtk_window_set_transient_for (GTK_WINDOW (pDialog->container.pWidget), GTK_WINDOW (pContainer->pWidget));
+	///if (pContainer != NULL)
+	///	gtk_window_set_transient_for (GTK_WINDOW (pDialog->container.pWidget), GTK_WINDOW (pContainer->pWidget));
 	pDialog->pIcon = pIcon;
 	cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDialog));
 	
@@ -1104,6 +1113,8 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 			FALSE,
 			0);
 		cd_debug (" pack -> ref = %d", pAttribute->pInteractiveWidget->object.parent_instance.ref_count);
+		g_print ("grab focus\n");
+		gtk_window_present (GTK_WINDOW (pDialog->container.pWidget));
 		gtk_widget_grab_focus (pDialog->pInteractiveWidget);
 	}
 	if (pDialog->pButtons != NULL)
@@ -1393,9 +1404,9 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 			pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin);
 	}
 
-	if (iPrevPositionX != pDialog->container.iWindowPositionX || iPrevPositionY != pDialog->container.iWindowPositionY)
+	///if (iPrevPositionX != pDialog->container.iWindowPositionX || iPrevPositionY != pDialog->container.iWindowPositionY)
 	{
-		//g_print (" => move to (%d;%d) %dx%d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, pDialog->container.iWidth, pDialog->container.iHeight);
+		g_print (" => move to (%d;%d) %dx%d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, pDialog->container.iWidth, pDialog->container.iHeight);
 		gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
 			pDialog->container.iWindowPositionX,
 			pDialog->container.iWindowPositionY);

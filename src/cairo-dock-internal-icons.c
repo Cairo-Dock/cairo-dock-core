@@ -58,8 +58,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	gboolean bSeparateIcons = FALSE;
 	if (! g_key_file_has_key (pKeyFile, "Icons", "separate icons", NULL))  // old parameters.
 	{
-		bSeparateIcons = ! g_key_file_get_boolean (pKeyFile, "Icons", "mix applets with launchers", NULL) && ! g_key_file_get_boolean (pKeyFile, "Icons", "use separator", NULL) && ! g_key_file_get_boolean (pKeyFile, "Icons", "mix applis with launchers", NULL);
-		
+		bSeparateIcons = ! g_key_file_get_boolean (pKeyFile, "Icons", "mix applets with launchers", NULL)
+			&& ! g_key_file_get_boolean (pKeyFile, "Icons", "mix applis with launchers", NULL)
+			&& g_key_file_get_boolean (pKeyFile, "Icons", "use separator", NULL);
 	}
 	pIcons->bSeparateIcons = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "separate icons", &bFlushConfFileNeeded, bSeparateIcons , NULL, NULL);
 	
