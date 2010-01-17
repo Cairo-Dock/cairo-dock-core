@@ -2254,7 +2254,13 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
 				
 				pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-				gtk_widget_set (pScrolledWindow, "height-request", (iElementType == CAIRO_DOCK_WIDGET_TREE_VIEW_SORT_AND_MODIFY ? 100 : MIN (100, length * 25)), NULL);
+				g_print ("length:%d\n", length);
+				int k;
+				if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL)
+					for (k = 0; pAuthorizedValuesList[k] != NULL; k++);
+				else
+					k = 1;
+				gtk_widget_set (pScrolledWindow, "height-request", (iElementType == CAIRO_DOCK_WIDGET_TREE_VIEW_SORT_AND_MODIFY ? 100 : MIN (100, k * 25)), NULL);
 				gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 				gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
 				_pack_in_widget_box (pScrolledWindow);
