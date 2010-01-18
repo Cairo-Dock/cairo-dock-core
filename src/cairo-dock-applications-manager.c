@@ -256,7 +256,7 @@ static void _on_change_active_window (void)
 				cairo_dock_appli_stops_demanding_attention (icon);
 			
 			pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-			if (pParentDock == NULL)  // elle est inhibee.
+			if (pParentDock == NULL)  // elle est soit inhibee, soit pas dans un dock.
 			{
 				cairo_dock_update_activity_on_inhibators (icon->cClass, icon->Xid);
 			}
@@ -271,17 +271,25 @@ static void _on_change_active_window (void)
 		if (CAIRO_DOCK_IS_APPLI (pLastActiveIcon))
 		{
 			CairoDock *pLastActiveParentDock = cairo_dock_search_dock_from_name (pLastActiveIcon->cParentDockName);
-			if (pLastActiveParentDock != NULL)
-			{
-				if (! pLastActiveParentDock->bIsShrinkingDown)
-					cairo_dock_redraw_icon (pLastActiveIcon, CAIRO_CONTAINER (pLastActiveParentDock));
-			}
-			else
+			if (pLastActiveParentDock == NULL)  // elle est soit inhibee, soit pas dans un dock.
 			{
 				cairo_dock_update_inactivity_on_inhibators (pLastActiveIcon->cClass, pLastActiveIcon->Xid);
 			}
+			else
+			{
+				cairo_dock_redraw_icon (pLastActiveIcon, CAIRO_CONTAINER (pLastActiveParentDock));
+				if (pLastActiveParentDock->iRefCount != 0)  // l'icone est dans un sous-dock, comme l'indicateur est aussi dessine sur l'icone pointant sur ce sous-dock, il faut la redessiner sans l'indicateur.
+				{
+					CairoDock *pMainDock = NULL;
+					Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pLastActiveParentDock, &pMainDock);
+					if (pPointingIcon && pMainDock)
+					{
+						cairo_dock_redraw_icon (pPointingIcon, CAIRO_CONTAINER (pMainDock));
+					}
+				}
+			}
 		}
-		else
+		else  // il n'y avait pas de fenetre active avant.
 			bForceKbdStateRefresh = TRUE;
 		s_iCurrentActiveWindow = XActiveWindow;
 		cairo_dock_notify (CAIRO_DOCK_WINDOW_ACTIVATED, &XActiveWindow);
@@ -1354,6 +1362,15 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 		else
 		{
 			cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));  // Si pas d'animation, on le fait pour redessiner l'indicateur.
+		}
+		if (pParentDock->iRefCount != 0)  // l'icone est dans un sous-dock, on veut que l'indicateur soit aussi dessine sur l'icone pointant sur ce sous-dock.
+		{
+			CairoDock *pMainDock = NULL;
+			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pParentDock, &pMainDock);
+			if (pPointingIcon && pMainDock)
+			{
+				cairo_dock_redraw_icon (pPointingIcon, CAIRO_CONTAINER (pMainDock));  // on se contente de redessiner cette icone sans l'animer. Une facon comme une autre de differencier ces 2 cas.
+			}
 		}
 	}
 }

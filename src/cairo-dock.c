@@ -187,7 +187,8 @@ static gchar *cLaunchCommand = NULL;
 
 static gboolean _cairo_dock_successful_launch (gpointer data)
 {
-	cLaunchCommand[strlen (cLaunchCommand)-3] = '\0';  // on enleve le mode maintenance.
+	if (g_str_has_suffix (cLaunchCommand, " -m"))
+		cLaunchCommand[strlen (cLaunchCommand)-3] = '\0';  // on enleve le mode maintenance.
 	return FALSE;
 }
 static void _cairo_dock_intercept_signal (int signal)
@@ -237,15 +238,25 @@ static gboolean on_delete_maintenance_gui (GtkWidget *pWidget, GdkEvent *event, 
 #define _create_dir_or_die(cDirPath) do {\
 	if (g_mkdir (cDirPath, 7*8*8+7*8+7) != 0) {\
 		cd_warning ("couldn't create directory %s", cDirPath);\
-		exit (1); } } while (0)
+		return 1; } } while (0)
 
 int main (int argc, char** argv)
 {
-	int i;
+	int i, iNbMaintenance=0;
 	GString *sCommandString = g_string_new (argv[0]);
+	gchar *cDisableApplet = NULL;
 	for (i = 1; i < argc; i ++)
 	{
+		g_print ("'%s'\n", argv[i]);
+		if (strcmp (argv[i], "-m") == 0)
+			iNbMaintenance ++;
+		
 		g_string_append_printf (sCommandString, " %s", argv[i]);
+	}
+	if (iNbMaintenance > 1)
+	{
+		g_print ("Sorry, Cairo-Dock has encoutered some problems, and will quit.\n");
+		return 1;
 	}
 	g_string_append (sCommandString, " -m");  // on relance avec le mode maintenance.
 	cLaunchCommand = sCommandString->str;
@@ -254,16 +265,8 @@ int main (int argc, char** argv)
 	cd_log_init(FALSE);
 	//No log
 	cd_log_set_level(0);
-	//\___________________ On initliase GTK.
+	
 	gtk_init (&argc, &argv);
-	/*GtkSettings *pSettings = gtk_settings_get_default ();
-	GtkSettingsValue v = {0};
-	g_value_init (&v.value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&v.value, TRUE);
-	v.origin = "gtk-menu-images";
-	gtk_settings_set_property_value (pSettings, "gtk-menu-images", &v);
-	v.origin = "gtk-button-images";
-	gtk_settings_set_property_value (pSettings, "gtk-button-images", &v);*/
 	
 	GError *erreur = NULL;
 	
@@ -357,8 +360,8 @@ int main (int argc, char** argv)
 	g_option_context_parse (context, &argc, &argv, &erreur);
 	if (erreur != NULL)
 	{
-		g_print ("ERREUR : %s\n", erreur->message);
-		exit (-1);
+		g_print ("ERROR in options : %s\n", erreur->message);
+		return 1;
 	}
 
 /* FIXME: utiliser l'option --enable-verbose du configure, l'idee etant que les fonctions de log sont non definies dans les versions officielles, histoire de pas faire le test tout le temps.
@@ -618,6 +621,14 @@ int main (int argc, char** argv)
 	
 	if (bMaintenance)
 	{
+		if (cExcludeModule != NULL)
+		{
+			cd_warning ("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, if it happens again thanks to report it at http://cairo-dock.org\n", cExcludeModule);
+			gchar *cCommand = g_strdup_printf ("sed -i \"/modules/ s/%s//g\" \"%s\"", cExcludeModule, g_cConfFile);
+			int r = system (cCommand);
+			g_free (cCommand);
+		}
+		
 		GtkWidget *pWindow = cairo_dock_show_main_gui ();
 		gtk_window_set_title (GTK_WINDOW (pWindow), _("< Maintenance mode >"));
 		
@@ -637,6 +648,22 @@ int main (int argc, char** argv)
 		
 		g_main_loop_unref (pBlockingLoop);
 		g_print ("plop\n");
+	}
+	
+	if (cExcludeModule != NULL)
+	{
+		g_print ("on enleve %s de '%s'\n", cExcludeModule, cLaunchCommand);
+		gchar *str = g_strstr_len (cLaunchCommand, -1, " -x ");
+		if (str)
+		{
+			*str = '\0';  // enleve le module de la ligne de commande, ainsi que le le -m courant.
+			g_print ("cLaunchCommand <- '%s'\n", cLaunchCommand);
+		}
+		else
+		{
+			g_free (cExcludeModule);
+			cExcludeModule = NULL;
+		}
 	}
 	
 	cd_message ("loading theme ...");
@@ -681,6 +708,12 @@ int main (int argc, char** argv)
 			}
 			g_free (cPsef);
 		}
+	}
+	else if (cExcludeModule != NULL && ! bMaintenance)
+	{
+		gchar *cMessage = g_strdup_printf (_("The module '%s' may have encountered a problem.\nIt has been restared successfully, but if it happens again, thanks to report it to us at http://cairo-dock.org"), cExcludeModule);
+		cairo_dock_show_general_message (cMessage, 10000);
+		g_free (cMessage);
 	}
 	
 	if (cairo_dock_get_nb_modules () <= 1)  // le module Help est inclus de base.
@@ -749,7 +782,7 @@ int main (int argc, char** argv)
 	
 	g_print ("\n2eme DOCK PRINCIPAL AVEC 1 ICONE : BORD TRONQUE EN VERTICAL\n\n");
 	g_print ("\nPLAN 3D NE PREND PAS TOUT L'ECRAN\n\n");
-	g_print ("\nBATTERIE VERS 100% (?)\n\n");
+	g_print ("\nBATTERIE VERS 100%% (?)\n\n");
 	
 	g_print ("\nINDICATEURS EN HAUT (RETOURNES) ET CAIRO\n\n");
 	g_print ("=> AUTO-HIDE WHEN SWITCHING DESKTOP IN CAIRO MODE\n");

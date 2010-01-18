@@ -673,7 +673,28 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	{
 		_cairo_dock_draw_appli_indicator (icon, pCairoContext, bIsHorizontal, fRatio, bDirectionUp);
 	}
-	if (icon->Xid != 0 && icon->Xid == cairo_dock_get_current_active_window () && ! myIndicators.bActiveIndicatorAbove && g_pActiveIndicatorSurface != NULL)
+	gboolean bIsActive = FALSE;
+	Window xActiveId = cairo_dock_get_current_active_window ();
+	if (xActiveId != 0 && g_pActiveIndicatorSurface != NULL)
+	{
+		bIsActive = (icon->Xid == xActiveId);
+		if (!bIsActive && icon->pSubDock != NULL)
+		{
+			Icon *subicon;
+			GList *ic;
+			for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+			{
+				subicon = ic->data;
+				if (subicon->Xid == xActiveId)
+				{
+					bIsActive = TRUE;
+					break;
+				}
+			}
+		}
+	}
+	///if (icon->Xid != 0 && icon->Xid == cairo_dock_get_current_active_window () && ! myIndicators.bActiveIndicatorAbove && g_pActiveIndicatorSurface != NULL)
+	if (bIsActive && ! myIndicators.bActiveIndicatorAbove)
 	{
 		_cairo_dock_draw_active_window_indicator (pCairoContext, icon);
 	}
@@ -689,7 +710,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).
 	
 	//\_____________________ On dessine l'indicateur devant.
-	if (icon->Xid != 0 && icon->Xid == cairo_dock_get_current_active_window () && myIndicators.bActiveIndicatorAbove && g_pActiveIndicatorSurface != NULL)
+	if (bIsActive && myIndicators.bActiveIndicatorAbove)
 	{
 		_cairo_dock_draw_active_window_indicator (pCairoContext, icon);
 	}
