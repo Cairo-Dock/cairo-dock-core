@@ -93,7 +93,7 @@ cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, d
 Icon *cairo_dock_create_separator_icon (cairo_t *pSourceContext, int iSeparatorType, CairoDock *pDock)
 {
 	//g_print ("%s ()\n", __func__);
-	if ((iSeparatorType & 1) && ! myIcons.bSeparateIcons)
+	if ((iSeparatorType & 1) && ! myIcons.iSeparateIcons)
 		return NULL;
 
 	Icon *icon = g_new0 (Icon, 1);

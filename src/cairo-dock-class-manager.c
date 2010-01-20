@@ -92,7 +92,7 @@ static Window cairo_dock_detach_appli_of_class (const gchar *cClass, gboolean bD
 			{
 				gchar *cParentDockName = pIcon->cParentDockName;
 				pIcon->cParentDockName = NULL;  // astuce.
-				bDetached = cairo_dock_detach_icon_from_dock (pIcon, pParentDock, myIcons.bSeparateIcons);  // on la garde, elle pourra servir car elle contient l'Xid.
+				bDetached = cairo_dock_detach_icon_from_dock (pIcon, pParentDock, myIcons.iSeparateIcons);  // on la garde, elle pourra servir car elle contient l'Xid.
 				if (! pParentDock->bIsMainDock)
 				{
 					if (pParentDock->icons == NULL)
@@ -500,7 +500,7 @@ void cairo_dock_update_Xid_on_inhibators (Window Xid, const gchar *cClass)
 						CairoDock *pClassSubDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
 						if (pClassSubDock != NULL)
 						{
-							cairo_dock_detach_icon_from_dock (pSameClassIcon, pClassSubDock, myIcons.bSeparateIcons);
+							cairo_dock_detach_icon_from_dock (pSameClassIcon, pClassSubDock, myIcons.iSeparateIcons);
 							if (pClassSubDock->icons == NULL && pClassSubDock == cairo_dock_search_dock_from_name (cClass))  // le sous-dock de la classe devient vide.
 								cairo_dock_destroy_dock (pClassSubDock, cClass, NULL, NULL);
 							else
@@ -1000,7 +1000,7 @@ void cairo_dock_set_class_order (Icon *pIcon)
 		for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
 		{
 			pInhibatorIcon = ic->data;
-			if (CAIRO_DOCK_IS_APPLET (pInhibatorIcon) && myIcons.bSeparateIcons)
+			if (CAIRO_DOCK_IS_APPLET (pInhibatorIcon) && myIcons.iSeparateIcons)
 				continue;
 			pDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);
 			if (!pDock || !pDock->bIsMainDock)
@@ -1108,7 +1108,7 @@ static void _cairo_dock_reorder_one_class (gchar *cClass, CairoDockClassAppli *p
 	for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
 	{
 		pInhibatorIcon = ic->data;
-		if (CAIRO_DOCK_IS_APPLET (pInhibatorIcon) && myIcons.bSeparateIcons)
+		if (CAIRO_DOCK_IS_APPLET (pInhibatorIcon) && myIcons.iSeparateIcons)
 			continue;
 		
 		pParentDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);

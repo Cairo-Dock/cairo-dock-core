@@ -48,6 +48,7 @@
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-gui-launcher.h"
+#include "cairo-dock-emblem.h"
 #include "cairo-dock-launcher-factory.h"
 
 extern CairoDock *g_pMainDock;
@@ -621,6 +622,21 @@ void cairo_dock_reload_launcher (Icon *icon)
 		}
 		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 		icon->cParentDockName = tmp;
+		
+		if (pDock && pDock->iRefCount != 0)
+		{
+			CairoDock *pParentDock = NULL;
+			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
+			if (pPointingIcon != NULL)
+				cairo_dock_draw_subdock_content_on_icon (pPointingIcon, pParentDock);
+		}
+		if (pNewDock->iRefCount != 0)
+		{
+			CairoDock *pParentDock = NULL;
+			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pNewDock, &pParentDock);
+			if (pPointingIcon != NULL)
+				cairo_dock_draw_subdock_content_on_icon (pPointingIcon, pParentDock);
+		}
 	}
 	else
 	{

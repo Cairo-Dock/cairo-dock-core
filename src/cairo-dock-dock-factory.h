@@ -312,7 +312,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 * @param bUpdateSize TRUE to update the size of the dock after the insertion.
 * @param bAnimated TRUE to arm the icon's animation for insertion.
 */
-#define cairo_dock_insert_icon_in_dock(icon, pDock, bUpdateSize, bAnimated) cairo_dock_insert_icon_in_dock_full (icon, pDock, bUpdateSize, bAnimated, myIcons.bSeparateIcons, NULL)
+#define cairo_dock_insert_icon_in_dock(icon, pDock, bUpdateSize, bAnimated) cairo_dock_insert_icon_in_dock_full (icon, pDock, bUpdateSize, bAnimated, myIcons.iSeparateIcons, NULL)
 
 /** Detach an icon from its dock, removing the unnecessary separators. The icon is not destroyed, and can be directly re-inserted in another container; it keeps its sub-dock, but loose its dialogs. Do nothing if the icon doesn't exist inside the dock.
 *@param icon the icon to detach.

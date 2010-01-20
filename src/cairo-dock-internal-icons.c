@@ -55,14 +55,20 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 		pIcons->tIconTypeOrder[i] = i;
 	gsize length=0;
 	
-	gboolean bSeparateIcons = FALSE;
-	if (! g_key_file_has_key (pKeyFile, "Icons", "separate icons", NULL))  // old parameters.
+	int iSeparateIcons = 0;
+	if (! g_key_file_has_key (pKeyFile, "Icons", "separate_icons", NULL))  // old parameters.
 	{
-		bSeparateIcons = ! g_key_file_get_boolean (pKeyFile, "Icons", "mix applets with launchers", NULL)
-			&& ! g_key_file_get_boolean (pKeyFile, "Icons", "mix applis with launchers", NULL)
-			&& g_key_file_get_boolean (pKeyFile, "Icons", "use separator", NULL);
+		if (!g_key_file_get_boolean (pKeyFile, "Icons", "mix applets with launchers", NULL))
+		{
+			if (!g_key_file_get_boolean (pKeyFile, "Icons", "mix applis with launchers", NULL))
+				iSeparateIcons = 3;
+			else
+				iSeparateIcons = 2;
+		}
+		else if (!g_key_file_get_boolean (pKeyFile, "Icons", "mix applis with launchers", NULL))
+			iSeparateIcons = 1;
 	}
-	pIcons->bSeparateIcons = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "separate icons", &bFlushConfFileNeeded, bSeparateIcons , NULL, NULL);
+	pIcons->iSeparateIcons = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "separate_icons", &bFlushConfFileNeeded, iSeparateIcons , NULL, NULL);
 	
 	cairo_dock_get_integer_list_key_value (pKeyFile, "Icons", "icon's type order", &bFlushConfFileNeeded, pIcons->iIconsTypesList, 3, NULL, "Cairo Dock", NULL);  // on le recupere meme si on ne separe pas les icones, pour le panneau de conf simple.
 	if (pIcons->iIconsTypesList[0] == 0 && pIcons->iIconsTypesList[1] == 0)  // old format.
@@ -97,16 +103,22 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 		bFlushConfFileNeeded = TRUE;
 	}
 	
-	if (pIcons->bSeparateIcons)
-	{
-		for (i = 0; i < 3; i ++)
-			pIcons->tIconTypeOrder[2*pIcons->iIconsTypesList[i]] = 2*i;
-	}
-	else
+	for (i = 0; i < 3; i ++)
+		pIcons->tIconTypeOrder[2*pIcons->iIconsTypesList[i]] = 2*i;
+	if (pIcons->iSeparateIcons == 0)
 	{
 		for (i = 0; i < 3; i ++)
 			pIcons->tIconTypeOrder[2*i] = 0;
 	}
+	else if (pIcons->iSeparateIcons == 1)
+	{
+		pIcons->tIconTypeOrder[CAIRO_DOCK_APPLET] = pIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER];
+	}
+	else if (pIcons->iSeparateIcons == 2)
+	{
+		pIcons->tIconTypeOrder[CAIRO_DOCK_APPLI] = pIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER];
+	}
+	
 	
 	//\___________________ Reflets.
 	pIcons->fFieldDepth = cairo_dock_get_double_key_value (pKeyFile, "Icons", "field depth", &bFlushConfFileNeeded, 0.7, NULL, NULL);
@@ -288,7 +300,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	if (pPrevIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER] != pIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER] ||
 		pPrevIcons->tIconTypeOrder[CAIRO_DOCK_APPLI] != pIcons->tIconTypeOrder[CAIRO_DOCK_APPLI] ||
 		pPrevIcons->tIconTypeOrder[CAIRO_DOCK_APPLET] != pIcons->tIconTypeOrder[CAIRO_DOCK_APPLET] ||
-		pPrevIcons->bSeparateIcons != pIcons->bSeparateIcons)
+		pPrevIcons->iSeparateIcons != pIcons->iSeparateIcons)
 		bGroupOrderChanged = TRUE;
 	else
 		bGroupOrderChanged = FALSE;
@@ -298,7 +310,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		bInsertSeparators = TRUE;  // on enleve les separateurs avant de re-ordonner.
 		cairo_dock_remove_automatic_separators (pDock);
 		
-		if (pPrevIcons->bSeparateIcons && ! pIcons->bSeparateIcons)
+		if (pPrevIcons->iSeparateIcons && ! pIcons->iSeparateIcons)
 		{
 			cairo_dock_reorder_classes ();  // on re-ordonne les applis a cote des lanceurs/applets.
 		}
@@ -306,7 +318,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		pDock->icons = g_list_sort (pDock->icons, (GCompareFunc) cairo_dock_compare_icons_order);
 	}
 	
-	if ((pPrevIcons->bSeparateIcons && ! pIcons->bSeparateIcons) ||
+	if ((pPrevIcons->iSeparateIcons && ! pIcons->iSeparateIcons) ||
 		pPrevIcons->cSeparatorImage != pIcons->cSeparatorImage ||
 		pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] ||
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] ||

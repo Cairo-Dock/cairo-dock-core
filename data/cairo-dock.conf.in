@@ -511,9 +511,10 @@ force size = false
 #X+[Icons order]
 frame_order =
 
-#B+ Separate the different types of icons ?
-#{This will separate launchers, applis, and applets. Separators will be automatically inserted then.}
-separate icons = true
+#Y+[No;0;0;Separate applications from others;1;1;Separate applets from others;1;1;Separate all;1;1] Separate the different types of icons ?
+#{If you separate a type of icons, the icons of this type will be placed togather, separated from the others by a separator.
+#If you don't separate the icons, you can place them wherever you want, and insert separators manually. Applications will then be placed next to their launcher if they have, or after the last launcher.}
+separate_icons = 0
 
 #T+[launchers;applications;applets] Order of the different types of icons :
 icon's type order = 0;1;2

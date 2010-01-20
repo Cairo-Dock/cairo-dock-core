@@ -56,6 +56,7 @@ static const  gchar *s_cCurrentModuleName = NULL;
 // GSList *s_pCurrentModuleWidgetList;  // liste des widgets du module courant.
 static int s_iIconSize;
 static int s_iTaskbarType;
+static gboolean s_bSeparateIcons;
 
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
@@ -145,8 +146,8 @@ static gchar * _make_simple_conf_file (void)
 	g_key_file_set_integer (pSimpleKeyFile, "Appearance", "icon size", iIconSize);
 	s_iIconSize = iIconSize;
 	
-	
-	g_key_file_set_boolean (pSimpleKeyFile, "Appearance", "separate icons", myIcons.bSeparateIcons);
+	g_key_file_set_boolean (pSimpleKeyFile, "Appearance", "separate icons", myIcons.iSeparateIcons);
+	s_bSeparateIcons = myIcons.iSeparateIcons;
 	
 	g_key_file_set_integer_list (pSimpleKeyFile, "Appearance", "icon's type order", myIcons.iIconsTypesList, 3);
 	
@@ -352,7 +353,10 @@ static gboolean on_apply_config_simple (gpointer data)
 	}
 	
 	gboolean bSeparateIcons = g_key_file_get_boolean (pSimpleKeyFile, "Appearance", "separate icons", NULL);
-	g_key_file_set_boolean (pKeyFile, "Icons", "separate icons", bSeparateIcons);
+	if (bSeparateIcons != s_bSeparateIcons)
+	{
+		g_key_file_set_integer (pKeyFile, "Icons", "separate_icons", (bSeparateIcons ? 3 : 0));
+	}
 	
 	gchar *cIconOrder = g_key_file_get_string (pSimpleKeyFile, "Appearance", "icon's type order", NULL);
 	g_key_file_set_string (pKeyFile, "Icons", "icon's type order", cIconOrder);

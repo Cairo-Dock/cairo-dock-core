@@ -28,7 +28,10 @@
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-emblem.h"
 
+extern cairo_surface_t *g_pIconBackgroundImageSurface;
+extern double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
 extern gboolean g_bUseOpenGL;
+extern GLuint g_iIconBackgroundTexture;
 
 static double a = .5;
 
@@ -91,6 +94,71 @@ void cairo_dock_free_emblem (CairoEmblem *pEmblem)
 	g_free (pEmblem);
 }
 
+
+static void _cairo_dock_apply_emblem_texture (CairoEmblem *pEmblem, int w, int h)
+{
+	double x, y;
+	switch (pEmblem->iPosition)
+	{
+		case CAIRO_DOCK_EMBLEM_UPPER_RIGHT:
+			x = w/2 * (1 - a);
+			y = h/2 * (1 - a);
+		break;
+		case CAIRO_DOCK_EMBLEM_LOWER_RIGHT:
+			x = w/2 * (1 - a);
+			y = -h/2 * (1 - a);
+		break;
+		case CAIRO_DOCK_EMBLEM_UPPER_LEFT:
+			x = -(double)w/2 * (1 - a);
+			y = (double)h/2 * (1 - a);
+		break;
+		case CAIRO_DOCK_EMBLEM_LOWER_LEFT:
+		default:
+			x = -w/2 * (1 - a);
+			y = -h/2 * (1 - a);
+		break;
+		case CAIRO_DOCK_EMBLEM_MIDDLE:
+			x = 0.;
+			y = 0.;
+		break;
+	}
+	glBindTexture (GL_TEXTURE_2D, pEmblem->iTexture);
+	_cairo_dock_apply_current_texture_at_size_with_offset (a*w, a*h, x, y);
+}
+static void _cairo_dock_apply_emblem_surface (CairoEmblem *pEmblem, int w, int h, cairo_t *pCairoContext)
+{
+	double zx = (double) a*w / pEmblem->iWidth;
+	double zy = (double) a*h / pEmblem->iHeight;
+	cairo_scale (pCairoContext, zx, zy);
+	
+	double x, y;
+	switch (pEmblem->iPosition)
+	{
+		case CAIRO_DOCK_EMBLEM_UPPER_RIGHT:
+			x = w * (1 - a);
+			y = 0.;
+		break;
+		case CAIRO_DOCK_EMBLEM_LOWER_RIGHT:
+			x = w * (1 - a);
+			y = h * (1 - a);
+		break;
+		case CAIRO_DOCK_EMBLEM_UPPER_LEFT:
+			x = 0.;
+			y = 0.;
+		break;
+		case CAIRO_DOCK_EMBLEM_LOWER_LEFT:
+		default:
+			x = 0.;
+			y = h * (1 - a);
+		break;
+		case CAIRO_DOCK_EMBLEM_MIDDLE:
+			x = w/2 * (1 - a);
+			y = h/2 * (1 - a);
+		break;
+	}
+	cairo_set_source_surface (pCairoContext, pEmblem->pSurface, x/zx, y/zy);
+	cairo_paint (pCairoContext);
+}
 void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoContainer *pContainer)
 {
 	g_return_if_fail (pEmblem != NULL);
@@ -98,7 +166,6 @@ void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoCon
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
 	
-	double x, y;
 	if (pIcon->iIconTexture != 0 && pEmblem->iTexture != 0)  // dessin opengl : on dessine sur la texture de l'icone avec le mecanisme habituel.
 	{
 		if (! cairo_dock_begin_draw_icon (pIcon, pContainer))
@@ -112,32 +179,7 @@ void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoCon
 		
 		_cairo_dock_set_blend_alpha ();
 		
-		switch (pEmblem->iPosition)
-		{
-			case CAIRO_DOCK_EMBLEM_UPPER_RIGHT:
-				x = w/2 * (1 - a);
-				y = h/2 * (1 - a);
-			break;
-			case CAIRO_DOCK_EMBLEM_LOWER_RIGHT:
-				x = w/2 * (1 - a);
-				y = -h/2 * (1 - a);
-			break;
-			case CAIRO_DOCK_EMBLEM_UPPER_LEFT:
-				x = -(double)w/2 * (1 - a);
-				y = (double)h/2 * (1 - a);
-			break;
-			case CAIRO_DOCK_EMBLEM_LOWER_LEFT:
-			default:
-				x = -w/2 * (1 - a);
-				y = -h/2 * (1 - a);
-			break;
-			case CAIRO_DOCK_EMBLEM_MIDDLE:
-				x = 0.;
-				y = 0.;
-			break;
-		}
-		glBindTexture (GL_TEXTURE_2D, pEmblem->iTexture);
-		_cairo_dock_apply_current_texture_at_size_with_offset (a*w, a*h, x, y);
+		_cairo_dock_apply_emblem_texture (pEmblem, w, h);
 		
 		_cairo_dock_disable_texture ();
 		
@@ -148,39 +190,115 @@ void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoCon
 		cairo_t *pCairoContext = cairo_create (pIcon->pIconBuffer);
 		g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
 		
-		int w, h;
-		cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
-		double zx = (double) a*w / pEmblem->iWidth;
-		double zy = (double) a*h / pEmblem->iHeight;
-		cairo_scale (pCairoContext, zx, zy);
+		_cairo_dock_apply_emblem_surface (pEmblem, w, h, pCairoContext);
 		
-		switch (pEmblem->iPosition)
-		{
-			case CAIRO_DOCK_EMBLEM_UPPER_RIGHT:
-				x = w * (1 - a);
-				y = 0.;
-			break;
-			case CAIRO_DOCK_EMBLEM_LOWER_RIGHT:
-				x = w * (1 - a);
-				y = h * (1 - a);
-			break;
-			case CAIRO_DOCK_EMBLEM_UPPER_LEFT:
-				x = 0.;
-				y = 0.;
-			break;
-			case CAIRO_DOCK_EMBLEM_LOWER_LEFT:
-			default:
-				x = 0.;
-				y = h * (1 - a);
-			break;
-			case CAIRO_DOCK_EMBLEM_MIDDLE:
-				x = w/2 * (1 - a);
-				y = h/2 * (1 - a);
-			break;
-		}
-		cairo_set_source_surface (pCairoContext, pEmblem->pSurface, x/zx, y/zy);
 		cairo_paint (pCairoContext);
 		
 		cairo_destroy (pCairoContext);
+	}
+}
+
+
+void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
+{
+	g_return_if_fail (pIcon != NULL && pIcon->pSubDock != NULL && (pIcon->pIconBuffer != NULL || pIcon->iIconTexture != 0));
+	g_print ("%s (%s)\n", __func__, pIcon->cName);
+	
+	int w, h;
+	cairo_dock_get_icon_extent (pIcon, CAIRO_CONTAINER (pDock), &w, &h);
+	
+	cairo_t *pCairoContext = NULL;
+	if (pIcon->iIconTexture != 0)
+	{
+		if (! cairo_dock_begin_draw_icon (pIcon, CAIRO_CONTAINER (pDock)))
+			return ;
+		
+		_cairo_dock_set_blend_source ();
+		if (g_iIconBackgroundTexture != 0)
+		{
+			_cairo_dock_enable_texture ();
+			_cairo_dock_apply_texture_at_size (g_iIconBackgroundTexture, w, h);
+		}
+		else
+		{
+			glPolygonMode (GL_FRONT, GL_FILL);
+			_cairo_dock_set_alpha (0.);
+			glBegin(GL_QUADS);
+			glVertex3f(-.5*w,  .5*h, 0.);
+			glVertex3f( .5*w,  .5*h, 0.);
+			glVertex3f( .5*w, -.5*h, 0.);
+			glVertex3f(-.5*w, -.5*h, 0.);
+			glEnd();
+			_cairo_dock_enable_texture ();
+			_cairo_dock_set_alpha (1.);
+		}
+		_cairo_dock_set_blend_alpha ();
+	}
+	else
+	{
+		pCairoContext = cairo_create (pIcon->pIconBuffer);
+		g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
+		
+		if (g_pIconBackgroundImageSurface != NULL)
+		{
+			cairo_save (pCairoContext);
+			cairo_scale(pCairoContext,
+				pIcon->fWidth / g_iIconBackgroundImageWidth,
+				pIcon->fHeight / g_iIconBackgroundImageHeight);
+			cairo_set_source_surface (pCairoContext,
+				g_pIconBackgroundImageSurface,
+				0.,
+				0.);
+			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
+			cairo_paint (pCairoContext);
+			cairo_restore (pCairoContext);
+		}
+		else
+		{
+			cairo_dock_erase_cairo_context (pCairoContext);
+		}
+		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
+	}
+	
+	CairoEmblem e;
+	memset (&e, 0, sizeof (CairoEmblem));
+	int i;
+	Icon *icon;
+	GList *ic;
+	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 4; ic = ic->next, i++)
+	{
+		icon = ic->data;
+		if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		{
+			i --;
+			continue;
+		}
+		e.iPosition = i;
+		if (pIcon->iIconTexture != 0)
+		{
+			e.iTexture = icon->iIconTexture;
+			_cairo_dock_apply_emblem_texture (&e, w, h);
+		}
+		else
+		{
+			e.pSurface = icon->pIconBuffer;
+			cairo_dock_get_icon_extent (icon, CAIRO_CONTAINER (pIcon->pSubDock), &e.iWidth, &e.iHeight);
+			
+			cairo_save (pCairoContext);
+			_cairo_dock_apply_emblem_surface (&e, w, h, pCairoContext);
+			cairo_restore (pCairoContext);
+		}
+	}
+	
+	if (pIcon->iIconTexture != 0)
+	{
+		_cairo_dock_disable_texture ();
+		cairo_dock_end_draw_icon (pIcon, CAIRO_CONTAINER (pDock));
+	}
+	else
+	{
+		cairo_destroy (pCairoContext);
+		if (g_bUseOpenGL)
+			cairo_dock_update_icon_texture (pIcon);
 	}
 }

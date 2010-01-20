@@ -41,10 +41,10 @@ G_BEGIN_DECLS
 
 /// Available position of the emblem on the icon.
 typedef enum {
-	CAIRO_DOCK_EMBLEM_UPPER_RIGHT = 0,
+	CAIRO_DOCK_EMBLEM_UPPER_LEFT = 0,
 	CAIRO_DOCK_EMBLEM_LOWER_RIGHT,
-	CAIRO_DOCK_EMBLEM_UPPER_LEFT,
 	CAIRO_DOCK_EMBLEM_LOWER_LEFT,
+	CAIRO_DOCK_EMBLEM_UPPER_RIGHT,
 	CAIRO_DOCK_EMBLEM_MIDDLE,
 	CAIRO_DOCK_EMBLEM_NB_POSITIONS,
 } CairoEmblemPosition;
@@ -104,6 +104,8 @@ void cairo_dock_free_emblem (CairoEmblem *pEmblem);
 */
 void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoContainer *pContainer);
 
+
+void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock);
 
 G_END_DECLS
 #endif

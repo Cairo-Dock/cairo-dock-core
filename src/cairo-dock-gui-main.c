@@ -1788,6 +1788,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		TRUE,
 		TRUE,
 		0);
+	g_object_set_data (G_OBJECT (s_pMainWindow), "status-bar", s_pStatusBar);
 	
 	gtk_window_resize (GTK_WINDOW (s_pMainWindow),
 		MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),

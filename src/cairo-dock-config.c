@@ -494,7 +494,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	gboolean bShowThumbnailOld = myTaskBar.bShowThumbnail;
 	gchar *cDeskletDecorationsNameOld = myDesklets.cDeskletDecorationsName;
 	myDesklets.cDeskletDecorationsName = NULL;
-	gboolean bSeparateIconsOld = myIcons.bSeparateIcons;  // TRUE initialement.
+	int iSeparateIconsOld = myIcons.iSeparateIcons;
 	CairoDockIconType tIconTypeOrderOld[CAIRO_DOCK_NB_TYPES];
 	memcpy (tIconTypeOrderOld, myIcons.tIconTypeOrder, sizeof (tIconTypeOrderOld));
 	
@@ -596,10 +596,10 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 		cairo_dock_stop_application_manager ();
 	}
 	
-	if (bGroupOrderChanged || myIcons.bSeparateIcons != bSeparateIconsOld)
+	if (bGroupOrderChanged || myIcons.iSeparateIcons != iSeparateIconsOld)
 		pDock->icons = g_list_sort (pDock->icons, (GCompareFunc) cairo_dock_compare_icons_order);
 
-	if ((bSeparateIconsOld && ! myIcons.bSeparateIcons) || bGroupOrderChanged)
+	if ((iSeparateIconsOld && ! myIcons.iSeparateIcons) || bGroupOrderChanged)
 		cairo_dock_remove_automatic_separators (pDock);
 		
 	g_fBackgroundImageWidth = 1e4;  // inutile de mettre a jour les decorations maintenant.
@@ -614,14 +614,14 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 		cairo_dock_synchronize_sub_docks_position (pDock, FALSE);
 		cairo_dock_reload_buffers_in_all_docks (FALSE);  // tout sauf les applets, qui seront rechargees en bloc juste apres.
 	}
-
-
+	
+	
 	if (! cairo_dock_application_manager_is_running () && myTaskBar.bShowAppli)  // maintenant on veut voir les applis !
 	{
 		cairo_dock_start_application_manager (pDock);  // va inserer le separateur si necessaire.
 	}
 
-	if (myIcons.bSeparateIcons && (! bSeparateIconsOld || bGroupOrderChanged))
+	if (myIcons.iSeparateIcons && (! iSeparateIconsOld || bGroupOrderChanged))
 	{
 		cairo_dock_insert_separators_in_dock (pDock);
 	}
@@ -645,7 +645,9 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	double fTime = time_val.tv_sec + time_val.tv_usec * 1e-6;
 	cairo_dock_activate_modules_from_list (mySystem.cActiveModuleList, fTime);
 	cairo_dock_deactivate_old_modules (fTime);
-
+	
+	cairo_dock_draw_subdock_icons ();
+	
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille de tous les docks, maintenant qu'ils sont tous remplis.
 	cairo_dock_redraw_root_docks (TRUE);  // TRUE <=> sauf le main dock.
 	

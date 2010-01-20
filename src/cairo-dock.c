@@ -178,6 +178,7 @@ GLuint g_iBackgroundTexture=0;
 GLuint g_iIndicatorTexture=0;
 GLuint g_iActiveIndicatorTexture=0;
 GLuint g_iClassIndicatorTexture=0;
+GLuint g_iIconBackgroundTexture=0;
 GLuint g_iVisibleZoneTexture=0;
 GLuint g_pGradationTexture[2]={0, 0};
 
@@ -198,7 +199,7 @@ static void _cairo_dock_intercept_signal (int signal)
 	int r = system ("uname -a");
 	if (g_pCurrentModule != NULL)
 	{
-		g_print ("The applet '%s' may be the culprit\n", g_pCurrentModule->pModule->pVisitCard->cModuleName);
+		g_print ("The applet '%s' may be the culprit", g_pCurrentModule->pModule->pVisitCard->cModuleName);
 		cLaunchCommand = g_strdup_printf ("%s -x \"%s\"", cLaunchCommand, g_pCurrentModule->pModule->pVisitCard->cModuleName);
 	}
 	else
@@ -631,7 +632,8 @@ int main (int argc, char** argv)
 		
 		GtkWidget *pWindow = cairo_dock_show_main_gui ();
 		gtk_window_set_title (GTK_WINDOW (pWindow), _("< Maintenance mode >"));
-		
+		if (cExcludeModule != NULL)
+			cairo_dock_set_status_message_printf (pWindow, "Something went wrong with the applet '%s'...", cExcludeModule);
 		gtk_window_set_modal (GTK_WINDOW (pWindow), TRUE);
 		GMainLoop *pBlockingLoop = g_main_loop_new (NULL, FALSE);
 		///g_object_set_data (G_OBJECT (pWindow), "loop", pBlockingLoop);
@@ -712,7 +714,10 @@ int main (int argc, char** argv)
 	else if (cExcludeModule != NULL && ! bMaintenance)
 	{
 		gchar *cMessage = g_strdup_printf (_("The module '%s' may have encountered a problem.\nIt has been restared successfully, but if it happens again, thanks to report it to us at http://cairo-dock.org"), cExcludeModule);
-		cairo_dock_show_general_message (cMessage, 10000);
+		
+		CairoDockModule *pModule = cairo_dock_find_module_from_name (cExcludeModule);
+		Icon *icon = cairo_dock_get_dialogless_icon ();
+		cairo_dock_show_temporary_dialog_with_icon (cMessage, icon, g_pMainDock, 15000., (pModule ? pModule->pVisitCard->cIconFilePath : NULL));
 		g_free (cMessage);
 	}
 	

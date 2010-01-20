@@ -93,6 +93,7 @@ extern GLuint g_iVisibleZoneTexture;
 extern GLuint g_iIndicatorTexture;
 extern GLuint g_iActiveIndicatorTexture;
 extern GLuint g_iClassIndicatorTexture;
+extern GLuint g_iIconBackgroundTexture;
 
 static CairoDockDesktopBackground *s_pDesktopBg = NULL;
 
@@ -903,7 +904,12 @@ void cairo_dock_load_icons_background_surface (const gchar *cImagePath, cairo_t*
 		cairo_surface_destroy (g_pIconBackgroundImageSurface);
 		g_pIconBackgroundImageSurface = NULL;
 	}
-
+	if (g_iIconBackgroundTexture != 0)
+	{
+		_cairo_dock_delete_texture (g_iIconBackgroundTexture);
+		g_iIconBackgroundTexture = 0;
+	}
+	
 	// On creait deux surfaces: une de la taille des launcher et une de la taille des appli.
 	if( cImagePath != NULL )
 	{
@@ -920,6 +926,11 @@ void cairo_dock_load_icons_background_surface (const gchar *cImagePath, cairo_t*
 			CAIRO_DOCK_FILL_SPACE,
 			&g_iIconBackgroundImageWidth, &g_iIconBackgroundImageHeight,  /* largeur et hauteur apres creation [OUT] */
 			NULL, NULL); /* zoom applique [OUT] */
+		
+		if (g_pIconBackgroundImageSurface && g_bUseOpenGL)
+		{
+			g_iIconBackgroundTexture = cairo_dock_create_texture_from_surface (g_pIconBackgroundImageSurface);
+		}
 	}
 }
 
@@ -1230,6 +1241,11 @@ void cairo_dock_unload_additionnal_textures (void)
 	{
 		_cairo_dock_delete_texture (g_iClassIndicatorTexture);
 		g_iClassIndicatorTexture = 0;
+	}
+	if (g_iIconBackgroundTexture != 0)
+	{
+		_cairo_dock_delete_texture (g_iIconBackgroundTexture);
+		g_iIconBackgroundTexture = 0;
 	}
 	cairo_dock_unload_desklet_buttons_texture ();
 	cairo_dock_unload_dialog_buttons ();

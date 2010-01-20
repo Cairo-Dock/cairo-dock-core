@@ -57,6 +57,7 @@
 #include "cairo-dock-internal-position.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-emblem.h"
 #include "cairo-dock-dock-manager.h"
 
 extern CairoDock *g_pMainDock;
@@ -265,6 +266,27 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 void cairo_dock_reload_buffers_in_all_docks (gboolean bReloadAppletsToo)
 {
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) cairo_dock_reload_buffers_in_dock, GINT_TO_POINTER (bReloadAppletsToo));
+}
+
+
+static void _cairo_dock_draw_one_subdock_icon (gchar *cDockName, CairoDock *pDock, gpointer *data)
+{
+	Icon *icon;
+	GList *ic;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		g_print ("%s\n", icon->cName);
+		if (icon->pSubDock && CAIRO_DOCK_IS_LAUNCHER (icon))
+		{
+			cairo_dock_draw_subdock_content_on_icon (icon, pDock);
+		}
+	}
+}
+void cairo_dock_draw_subdock_icons (void)
+{
+	g_print ("%s ()\n", __func__);
+	g_hash_table_foreach (s_hDocksTable, _cairo_dock_draw_one_subdock_icon, NULL);
 }
 
 
@@ -729,4 +751,3 @@ void cairo_dock_foreach_docks (GHFunc pFunction, gpointer data)
 {
 	g_hash_table_foreach (s_hDocksTable, pFunction, data);
 }
-
