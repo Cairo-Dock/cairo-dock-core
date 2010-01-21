@@ -48,7 +48,6 @@
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-gui-launcher.h"
-#include "cairo-dock-emblem.h"
 #include "cairo-dock-launcher-factory.h"
 
 extern CairoDock *g_pMainDock;
@@ -628,7 +627,6 @@ void cairo_dock_reload_launcher (Icon *icon)
 	{
 		icon->fWidth *= pNewDock->container.fRatio / pDock->container.fRatio;
 		icon->fHeight *= pNewDock->container.fRatio / pDock->container.fRatio;
-		cairo_dock_refresh_launcher_gui ();
 		if (icon->fOrder != fOrder)  // On gere le changement d'ordre.
 		{
 			pNewDock->pFirstDrawnElement = NULL;
@@ -641,14 +639,9 @@ void cairo_dock_reload_launcher (Icon *icon)
 		// on redessine l'icone pointant sur le sous-dock, pour le cas ou l'ordre et/ou l'image du lanceur aurait change.
 		if (myIcons.bDrawSubdockContent && pNewDock->iRefCount != 0)
 		{
-			CairoDock *pParentDock = NULL;
-			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pNewDock, &pParentDock);
-			if (pPointingIcon != NULL && pParentDock != NULL)
-			{
-				cairo_dock_draw_subdock_content_on_icon (pPointingIcon, pParentDock);
-				cairo_dock_redraw_icon (pPointingIcon, CAIRO_CONTAINER (pParentDock));
-			}
+			cairo_dock_redraw_subdock_content (pNewDock);
 		}
+		cairo_dock_refresh_launcher_gui ();
 	}
 	
 	//\_____________ On gere l'inhibition de sa classe.

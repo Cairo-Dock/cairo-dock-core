@@ -340,6 +340,8 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		cairo_dock_load_icons_background_surface (pIcons->cBackgroundImagePath, pCairoContext, fMaxScale);
 	}
 	
+	cairo_dock_create_icon_pbuffer ();
+	
 	if (pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] ||
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] ||
 		pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLI] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLI] ||
@@ -360,10 +362,15 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	}
 	else if (pPrevIcons->bDrawSubdockContent != pIcons->bDrawSubdockContent)
 	{
-		cairo_dock_draw_subdock_icons ();
+		if (pIcons->bDrawSubdockContent)
+		{
+			cairo_dock_draw_subdock_icons ();
+		}
+		else
+		{
+			cairo_dock_draw_subdock_icons_as_normal ();
+		}
 	}
-	
-	cairo_dock_create_icon_pbuffer ();
 	
 	if (bInsertSeparators)
 	{

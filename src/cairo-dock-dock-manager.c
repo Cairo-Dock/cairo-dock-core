@@ -273,7 +273,27 @@ void cairo_dock_reload_buffers_in_all_docks (gboolean bReloadAppletsToo)
 }
 
 
-static void _cairo_dock_draw_one_subdock_icon (gchar *cDockName, CairoDock *pDock, gpointer *data)
+static void _cairo_dock_draw_one_subdock_icon (const gchar *cDockName, CairoDock *pDock, gpointer data)
+{
+	Icon *icon;
+	GList *ic;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		g_print ("%s\n", icon->cName);
+		if (icon->pSubDock != NULL && CAIRO_DOCK_IS_LAUNCHER (icon) && icon->iSidRedrawSubdockContent == 0)  // icone de sous-dock ou de repertoire ou de classe.
+		{
+			cairo_dock_draw_subdock_content_on_icon (icon, pDock);
+		}
+	}
+}
+void cairo_dock_draw_subdock_icons (void)
+{
+	g_print ("%s ()\n", __func__);
+	g_hash_table_foreach (s_hDocksTable, (GHFunc)_cairo_dock_draw_one_subdock_icon, NULL);
+}
+
+static void _cairo_dock_draw_one_subdock_icon_as_normal (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	Icon *icon;
 	GList *ic;
@@ -283,14 +303,16 @@ static void _cairo_dock_draw_one_subdock_icon (gchar *cDockName, CairoDock *pDoc
 		g_print ("%s\n", icon->cName);
 		if (icon->pSubDock != NULL && CAIRO_DOCK_IS_LAUNCHER (icon))  // icone de sous-dock ou de repertoire ou de classe.
 		{
-			cairo_dock_draw_subdock_content_on_icon (icon, pDock);
+			cairo_t *ctx = cairo_dock_create_context_from_container (CAIRO_CONTAINER (pDock));
+			cairo_dock_fill_icon_buffers_for_dock (icon, ctx, pDock);
+			cairo_destroy (ctx);
 		}
 	}
 }
-void cairo_dock_draw_subdock_icons (void)
+void cairo_dock_draw_subdock_icons_as_normal (void)
 {
 	g_print ("%s ()\n", __func__);
-	g_hash_table_foreach (s_hDocksTable, _cairo_dock_draw_one_subdock_icon, NULL);
+	g_hash_table_foreach (s_hDocksTable, (GHFunc)_cairo_dock_draw_one_subdock_icon_as_normal, NULL);
 }
 
 
@@ -642,7 +664,7 @@ static void _cairo_dock_pop_up_one_root_dock (gchar *cDockName, CairoDock *pDock
 	CairoDockPositionType iDockScreenBorder = (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp));
 	if (iDockScreenBorder == iScreenBorder)
 	{
-		g_print ("%s passe en avant-plan\n", cDockName);
+		cd_debug ("%s passe en avant-plan", cDockName);
 		cairo_dock_pop_up (pDock);
 		if (pDock->iSidPopDown == 0)
 			pDock->iSidPopDown = g_timeout_add (2000, (GSourceFunc) cairo_dock_pop_down, (gpointer) pDock);  // au cas ou on serait pas dedans.
@@ -657,7 +679,7 @@ static void _cairo_dock_set_one_dock_on_top_layer (gchar *cDockName, CairoDock *
 {
 	if (data && pDock->iRefCount > 0)
 		return ;
-	g_print ("set on top layer\n");
+	cd_debug ("set on top layer");
 	gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);
 }
 void cairo_dock_set_docks_on_top_layer (gboolean bRootDocksOnly)

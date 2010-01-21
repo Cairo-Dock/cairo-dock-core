@@ -81,6 +81,7 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock);
 void cairo_dock_reload_buffers_in_all_docks (gboolean bReloadAppletsToo);
 
 void cairo_dock_draw_subdock_icons (void);
+void cairo_dock_draw_subdock_icons_as_normal (void);
 
 CairoDock *cairo_dock_alter_dock_name (const gchar *cDockName, CairoDock *pDock, const gchar *cNewName);
 

@@ -44,6 +44,7 @@
 // actions et comportement des containers.
 #include <cairo-dock/cairo-dock-draw-opengl.h>
 #include <cairo-dock/cairo-dock-draw.h>
+#include <cairo-dock/cairo-dock-emblem.h>
 #include <cairo-dock/cairo-dock-dock-facility.h>
 #include <cairo-dock/cairo-dock-animations.h>
 #include <cairo-dock/cairo-dock-callbacks.h>
@@ -62,7 +63,6 @@
 #include <cairo-dock/cairo-dock-dock-manager.h>
 #include <cairo-dock/cairo-dock-renderer-manager.h>
 #include <cairo-dock/cairo-dock-file-manager.h>
-#include <cairo-dock/cairo-dock-emblem.h>
 // GUI.
 #include <cairo-dock/cairo-dock-themes-manager.h>
 #include <cairo-dock/cairo-dock-gui-manager.h>

@@ -192,6 +192,8 @@ struct _CairoDock {
 	guint iSidPopDown;
 	/// Source ID of the timer that delays the "leave" event.
 	guint iSidLeaveDemand;
+	/// Source ID for pending update of WM icons geometry.
+	guint iSidUpdateWMIcons;
 	
 	//\_______________ Renderer and fields set by it.
 	/// nom de la vue, utile pour (re)charger les fonctions de rendu posterieurement a la creation du dock.
@@ -218,8 +220,6 @@ struct _CairoDock {
 	gint iDecorationsHeight;
 	/// maximal magnitude of the zoom, between 0 and 1.
 	gdouble fMagnitudeMax;
-	/// whether the position of icons for the WM is invalid.
-	gboolean bWMIconseedsUptade;
 	
 	//\_______________ input shape.
 	/// state of the input shape (active, at rest, hidden).
@@ -228,7 +228,9 @@ struct _CairoDock {
 	GdkBitmap* pShapeBitmap;
 	/// input shape of the window when the dock is hidden.
 	GdkBitmap* pHiddenShapeBitmap;
+	
 	gint iOffsetForExtend;
+	gboolean bWMIconsNeedUpdate;
 	gchar reserved[8];
 };
 

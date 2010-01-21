@@ -52,6 +52,7 @@ static GtkWidget *s_pCurrentLauncherWidget = NULL;
 static GtkWidget *s_pLauncherTreeView = NULL;
 static GtkWidget *s_pLauncherPane = NULL;
 static GtkWidget *s_pLauncherScrolledWindow = NULL;
+static guint s_iSidRefreshGUI = 0;
 
   ///////////////
  // CALLBACKS //
@@ -98,11 +99,9 @@ static void on_click_launcher_apply (GtkButton *button, GtkWidget *pWindow)
 	g_free (cConfFilePath);
 	
 	if (pIcon->cDesktopFileName != NULL)
-		cairo_dock_reload_launcher (pIcon);  // prend tout en compte, y compris le redessin.
+		cairo_dock_reload_launcher (pIcon);  // prend tout en compte, y compris le redessin et le rechargement de l'IHM.
 	else
 		cairo_dock_reload_module_instance (pIcon->pModuleInstance, TRUE);  // idem
-	
-	//cairo_dock_refresh_launcher_gui ();
 }
 
 static void on_click_launcher_quit (GtkButton *button, GtkWidget *pWindow)
@@ -149,6 +148,7 @@ static gboolean _cairo_dock_select_one_launcher_in_tree (GtkTreeSelection * sele
 	//g_print ("%s (path_currently_selected:%d)\n", __func__, path_currently_selected);
 	if (path_currently_selected)
 		return TRUE;
+	g_object_set_data (G_OBJECT (s_pLauncherWindow), "current-icon", NULL);
 	GtkTreeIter iter;
 	if (! gtk_tree_model_get_iter (model, &iter, path))
 		return FALSE;
@@ -321,7 +321,7 @@ static GtkTreeModel *_cairo_dock_build_tree_model (void)
 	return GTK_TREE_MODEL (model);
 }
 
-static inline void _select_item (Icon *pIcon)
+static inline gboolean _select_item (Icon *pIcon)
 {
 	GtkTreeIter iter;
 	if (_search_icon_in_model (s_pLauncherTreeView, pIcon, &iter))
@@ -333,10 +333,14 @@ static inline void _select_item (Icon *pIcon)
 		
 		GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (s_pLauncherTreeView));
 		gtk_tree_selection_select_iter (pSelection, &iter);
+		g_object_set_data (G_OBJECT (s_pLauncherWindow), "current-icon", pIcon);
+		return TRUE;
 	}
 	else
 	{
 		gtk_window_set_title (GTK_WINDOW (s_pLauncherWindow), _("Configuration of the launchers"));
+		g_object_set_data (G_OBJECT (s_pLauncherWindow), "current-icon", NULL);
+		return FALSE;
 	}
 }
 
@@ -482,13 +486,9 @@ void cairo_dock_delete_current_launcher_widget (void)
 	g_object_set_data (G_OBJECT (s_pLauncherWindow), "current-icon", NULL);
 }
 
-void cairo_dock_refresh_launcher_gui (void)
+
+static gboolean _refresh_launcher_gui (gpointer data)
 {
-	if (cairo_dock_is_loading ())
-		return;
-	//g_print ("%s ()\n", __func__);
-	if (s_pLauncherWindow == NULL)
-		return ;
 	Icon *pCurrentIcon = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-icon");
 	
 	cairo_dock_delete_current_launcher_widget ();
@@ -501,5 +501,20 @@ void cairo_dock_refresh_launcher_gui (void)
 	_select_item (pCurrentIcon);
 	
 	gtk_widget_show_all (s_pLauncherWindow);
-	g_object_set_data (G_OBJECT (s_pLauncherWindow), "current-icon", pCurrentIcon);
+	
+	s_iSidRefreshGUI = 0;
+	return FALSE;
+}
+void cairo_dock_refresh_launcher_gui (void)
+{
+	if (cairo_dock_is_loading ())
+		return;
+	//g_print ("%s ()\n", __func__);
+	if (s_pLauncherWindow == NULL)
+		return ;
+	
+	if (s_iSidRefreshGUI != 0)
+		return;
+	
+	s_iSidRefreshGUI = g_idle_add ((GSourceFunc) _refresh_launcher_gui, NULL);
 }

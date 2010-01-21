@@ -629,6 +629,8 @@ static void _on_change_window_icon (Icon *icon, CairoDock *pDock)
 	if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
 	{
 		cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
+		if (myIcons.bDrawSubdockContent && pDock->iRefCount != 0)
+			cairo_dock_trigger_redraw_subdock_content (pDock);
 		cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
 	}
 }
@@ -659,6 +661,8 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 			if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
 			{
 				cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
+				if (myIcons.bDrawSubdockContent && pDock->iRefCount != 0)
+					cairo_dock_trigger_redraw_subdock_content (pDock);
 				cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
 			}
 		}
@@ -668,7 +672,7 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 {
 	static XEvent event;
-	static gboolean bHackMeToo = FALSE;
+	static gboolean bCheckMouseIsOutside = FALSE;
 	
 	CairoDock *pDock = g_pMainDock;
 	if (!pDock)  // peut arriver en cours de chargement d'un theme.
@@ -678,10 +682,10 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 	Window Xid;
 	Window root = DefaultRootWindow (s_XDisplay);
 	Icon *icon;
-	if (bHackMeToo)
+	if (bCheckMouseIsOutside)
 	{
 		//g_print ("HACK ME\n");
-		bHackMeToo = FALSE;
+		bCheckMouseIsOutside = FALSE;
 		if (pDock->container.bIsHorizontal)
 			gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
 		else
@@ -712,7 +716,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 				}
 				else if (event.xproperty.atom == s_aNetCurrentDesktop || event.xproperty.atom == s_aNetDesktopViewport)
 				{
-					bHackMeToo = _on_change_current_desktop_viewport ();
+					bCheckMouseIsOutside = _on_change_current_desktop_viewport ();
 				}
 				else if (event.xproperty.atom == s_aNetNbDesktops)
 				{
@@ -1379,11 +1383,11 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 #define y_icon_geometry(icon, pDock) (pDock->container.iWindowPositionY + icon->fDrawY - icon->fHeight * myIcons.fAmplitude * pDock->fMagnitudeMax) 
 void  cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock)
 {
-	g_print ("%s (%s)\n", __func__, icon->cName);
+	//g_print ("%s (%s)\n", __func__, icon->cName);
 	int iX, iY, iWidth, iHeight;
 	iX = x_icon_geometry (icon, pDock);
 	iY = y_icon_geometry (icon, pDock);  // il faudrait un fYAtRest ...
-	g_print (" -> %d;%d (%.2f)\n", iX - pDock->container.iWindowPositionX, iY - pDock->container.iWindowPositionY, icon->fXAtRest);
+	//g_print (" -> %d;%d (%.2f)\n", iX - pDock->container.iWindowPositionX, iY - pDock->container.iWindowPositionY, icon->fXAtRest);
 	iWidth = icon->fWidth;
 	iHeight = icon->fHeight * (1. + 2*myIcons.fAmplitude * pDock->fMagnitudeMax);  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
 	

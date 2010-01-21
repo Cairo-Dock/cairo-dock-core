@@ -383,7 +383,7 @@ static void _cairo_dock_select_one_item_in_control_combo (GtkComboBox *widget, g
 	for (c = c->next, i = 0; c != NULL && i < iNbWidgets; c = c->next, i ++)
 	{
 		w = c->data;
-		g_print (" %d/%d -> %d\n", i, iNbWidgets, i == iNumItem);
+		//g_print (" %d/%d -> %d\n", i, iNbWidgets, i == iNumItem);
 		if (GTK_IS_EXPANDER (w))
 		{
 			gtk_expander_set_expanded (GTK_EXPANDER (w), i == iNumItem);
@@ -413,7 +413,7 @@ static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox 
 	GtkWidget *parent = data[1];
 	GtkWidget *pKeyBox = data[0];
 	int iNbWidgets = GPOINTER_TO_INT (data[2]);
-	g_print ("%s (%d, %d / %d)\n", __func__, iOrder1, iOrder2, iNbWidgets);
+	//g_print ("%s (%d, %d / %d)\n", __func__, iOrder1, iOrder2, iNbWidgets);
 	GList *children = gtk_container_get_children (GTK_CONTAINER (parent));
 	GList *c = g_list_find (children, pKeyBox);
 	g_return_if_fail (c != NULL);
@@ -423,7 +423,7 @@ static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox 
 	for (c = c->next, i = 0; c != NULL && i < iNbWidgets; c = c->next, i ++)
 	{
 		w = c->data;
-		g_print ("%d in ]%d;%d[\n", i, iOrder1, iOrder1 + iOrder2);
+		//g_print ("%d in ]%d;%d[\n", i, iOrder1, iOrder1 + iOrder2);
 		gtk_widget_set_sensitive (w, i >= iOrder1 - 1 && i < iOrder1 + iOrder2 - 1);
 	}
 	

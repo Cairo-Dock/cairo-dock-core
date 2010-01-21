@@ -86,7 +86,7 @@ static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gbo
 	if (pDock->iFadeCounter == 0)
 	{
 		pDock->bFadeInOut = FALSE;
-		g_print ("set below\n");
+		cd_debug ("set below");
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
 		// si fenetre maximisee, on met direct iFadeCounter au max.
 		if (cairo_dock_search_window_on_our_way (pDock, TRUE, TRUE) != NULL)
@@ -115,7 +115,7 @@ static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gbo
 
 void cairo_dock_pop_up (CairoDock *pDock)
 {
-	g_print ("%s (%d)\n", __func__, pDock->bPopped);
+	cd_debug ("%s (%d)", __func__, pDock->bPopped);
 	if (! pDock->bPopped && myAccessibility.bPopUp)
 	{
 		cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
@@ -127,7 +127,7 @@ void cairo_dock_pop_up (CairoDock *pDock)
 			(CairoDockNotificationFunc) _update_fade_out_dock,
 			NULL);
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
-		g_print ("set above\n");
+		cd_debug ("set above");
 		gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), TRUE);
 		pDock->bPopped = TRUE;
 	}
@@ -135,7 +135,7 @@ void cairo_dock_pop_up (CairoDock *pDock)
 
 gboolean cairo_dock_pop_down (CairoDock *pDock)
 {
-	g_print ("%s (%d)\n", __func__, pDock->bPopped);
+	cd_debug ("%s (%d)", __func__, pDock->bPopped);
 	if (pDock->bIsMainDock && cairo_dock_get_nb_dialog_windows () != 0)
 		return FALSE;
 	if (pDock->bPopped && myAccessibility.bPopUp && ! pDock->container.bInside)
@@ -156,7 +156,7 @@ gboolean cairo_dock_pop_down (CairoDock *pDock)
 		}
 		else
 		{
-			g_print ("set below\n");
+			cd_debug ("set below");
 			gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
 		}
 		pDock->bPopped = FALSE;
@@ -225,17 +225,13 @@ static gboolean _cairo_dock_grow_up (CairoDock *pDock)
 
 	if (pDock->iMagnitudeIndex == CAIRO_DOCK_NB_MAX_ITERATIONS && pDock->fFoldingFactor == 0)  // fin de grossissement et de depliage.
 	{
-		if (pDock->bWMIconseedsUptade)
+		if (pDock->bWMIconsNeedUpdate)
 		{
-			cairo_dock_set_icons_geometry_for_window_manager (pDock);
-			pDock->bWMIconseedsUptade = FALSE;
+			cairo_dock_trigger_set_WM_icons_geometry (pDock);
+			pDock->bWMIconsNeedUpdate = FALSE;
 		}
+		
 		cairo_dock_replace_all_dialogs ();
-		/*if (pDock->iRefCount == 0 && pDock->bAutoHide)  // on arrive en fin de l'animation qui montre le dock, les icones sont bien placees a partir de maintenant.
-		{
-			cairo_dock_set_icons_geometry_for_window_manager (pDock);  // je pense que c'est redondant de le faire ici et dans le update_dock_size.
-			cairo_dock_replace_all_dialogs ();
-		}*/
 		return FALSE;
 	}
 	else

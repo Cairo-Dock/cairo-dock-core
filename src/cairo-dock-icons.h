@@ -215,7 +215,7 @@ typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContaine
 /** TRUE if the icon is a launcher (a real launcher with a command or an URI, or a container icon, or even a fake launcher).
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_LAUNCHER(icon) (icon != NULL && ((icon)->cCommand != NULL || (icon)->cBaseURI != NULL || ((icon)->pSubDock != NULL && (icon)->pModuleInstance == NULL/* && (icon)->Xid != 0*/)))
+#define CAIRO_DOCK_IS_LAUNCHER(icon) (icon != NULL && ((icon)->cCommand != NULL || (icon)->cBaseURI != NULL || ((icon)->pSubDock != NULL && (icon)->pModuleInstance == NULL)))
 
 /** TRUE if the icon is an icon of appli.
 *@param icon an icon.

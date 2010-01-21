@@ -68,6 +68,7 @@
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-animations.h"
+#include "cairo-dock-emblem.h"
 #include "cairo-dock-dock-facility.h"
 
 extern int g_iScreenWidth[2], g_iScreenHeight[2];
@@ -168,8 +169,8 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	
 	pDock->pRenderer->calculate_icons (pDock);  // le calcul de max_dock_size a altere les fX et fY.
 	
-	cairo_dock_set_icons_geometry_for_window_manager (pDock);  // se fait sur le dock a plat, qu'on vient de calculer. Neanmoins ici ce sera probablement une approximation.
-	pDock->bWMIconseedsUptade = TRUE;
+	pDock->bWMIconsNeedUpdate = TRUE;
+	///cairo_dock_trigger_set_WM_icons_geometry (pDock);
 	
 	cairo_dock_update_input_shape (pDock);
 	
@@ -346,29 +347,6 @@ void cairo_dock_move_resize_dock (CairoDock *pDock)
 		pDock->iSidMoveResize = g_idle_add ((GSourceFunc)_move_resize_dock, pDock);
 	}
 	return ;
-	int iNewWidth = pDock->iMaxDockWidth;
-	int iNewHeight = pDock->iMaxDockHeight;
-	int iNewPositionX, iNewPositionY;
-	cairo_dock_get_window_position_at_balance (pDock, iNewWidth, iNewHeight, &iNewPositionX, &iNewPositionY);  // on ne peut pas intercepter le cas ou les nouvelles dimensions sont egales aux dimensions courantes de la fenetre, car il se peut qu'il y'ait 2 redimensionnements d'affilee s'annulant mutuellement (remove + insert d'une icone). Il faut donc avoir les 2 configure, sinon la taille reste bloquee aux valeurs fournies par le 1er configure.
-	
-	//g_print (" -> %dx%d, %d;%d\n", iNewWidth, iNewHeight, iNewPositionX, iNewPositionY);
-	
-	if (pDock->container.bIsHorizontal)
-	{
-		gdk_window_move_resize (pDock->container.pWidget->window,
-			iNewPositionX,
-			iNewPositionY,
-			iNewWidth,
-			iNewHeight);  // lorsqu'on a 2 gdk_window_move_resize d'affilee, Compiz deconne et bloque le dock (il est toujours actif mais n'est plus redessine). Compiz envoit un configure de trop par rapport a Metacity.
-	}
-	else
-	{
-		gdk_window_move_resize (pDock->container.pWidget->window,
-			iNewPositionY,
-			iNewPositionX,
-			iNewHeight,
-			iNewWidth);
-	}
 }
 
 void cairo_dock_place_root_dock (CairoDock *pDock)
@@ -938,7 +916,7 @@ void cairo_dock_scroll_dock_icons (CairoDock *pDock, int iScrollAmount)
 {
 	if (iScrollAmount == 0)  // fin de scroll
 	{
-		cairo_dock_set_icons_geometry_for_window_manager (pDock);
+		cairo_dock_trigger_set_WM_icons_geometry (pDock);
 		return ;
 	}
 	
@@ -1044,4 +1022,52 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboole
 	gtk_window_set_keep_above (GTK_WINDOW (pSubDock->container.pWidget), myAccessibility.bPopUp);
 	
 	cairo_dock_replace_all_dialogs ();
+}
+
+
+
+static gboolean _redraw_subdock_content (Icon *pIcon)
+{
+	if (pIcon->pSubDock != NULL)
+	{
+		CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+		if (pDock != NULL)
+		{
+			cairo_dock_draw_subdock_content_on_icon (pIcon, pDock);
+			cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));
+		}
+	}
+	pIcon->iSidRedrawSubdockContent = 0;
+	return FALSE;
+}
+void cairo_dock_trigger_redraw_subdock_content (CairoDock *pDock)
+{
+	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+	if (pPointingIcon != NULL && pPointingIcon->iSidRedrawSubdockContent == 0 && CAIRO_DOCK_IS_LAUNCHER (pPointingIcon))
+		pPointingIcon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content, pPointingIcon);
+}
+
+void cairo_dock_redraw_subdock_content (CairoDock *pDock)
+{
+	CairoDock *pParentDock = NULL;
+	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
+	if (pPointingIcon != NULL && pPointingIcon->iSidRedrawSubdockContent == 0 && pParentDock != NULL)
+	{
+		cairo_dock_draw_subdock_content_on_icon (pPointingIcon, pParentDock);
+		cairo_dock_redraw_icon (pPointingIcon, CAIRO_CONTAINER (pParentDock));
+	}
+}
+
+static gboolean _update_WM_icons (CairoDock *pDock)
+{
+	cairo_dock_set_icons_geometry_for_window_manager (pDock);
+	pDock->iSidUpdateWMIcons = 0;
+	return FALSE;
+}
+void cairo_dock_trigger_set_WM_icons_geometry (CairoDock *pDock)
+{
+	if (pDock->iSidUpdateWMIcons == 0)
+	{
+		pDock->iSidUpdateWMIcons = g_idle_add ((GSourceFunc) _update_WM_icons, pDock);
+	}
 }

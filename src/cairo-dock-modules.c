@@ -53,7 +53,7 @@
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-emblem.h"
+#include "cairo-dock-gui-launcher.h"
 #include "cairo-dock-modules.h"
 
 extern CairoDock *g_pMainDock;
@@ -829,14 +829,11 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	
 	if (pNewDock != NULL && pNewDock->iRefCount != 0)  // on redessine l'icone pointant sur le sous-dock contenant l'applet, au cas ou son image aurait change.
 	{
-		CairoDock *pParentDock = NULL;
-		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pNewDock, &pParentDock);
-		if (pPointingIcon != NULL && pPointingIcon->iSidRedrawSubdockContent == 0 && pParentDock != NULL)
-		{
-			cairo_dock_draw_subdock_content_on_icon (pPointingIcon, pParentDock);
-			cairo_dock_redraw_icon (pPointingIcon, CAIRO_CONTAINER (pParentDock));
-		}
+		cairo_dock_redraw_subdock_content (pNewDock);
 	}
+	
+	if (pNewDock || pCurrentDock)
+		cairo_dock_refresh_launcher_gui ();
 	
 	//\_______________________ On nettoie derriere nous.
 	cairo_dock_free_minimal_config (pMinimalConfig);

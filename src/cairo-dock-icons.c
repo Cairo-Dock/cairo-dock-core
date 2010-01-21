@@ -608,6 +608,11 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 	//\_________________ On recalcule la largeur max, qui peut avoir ete influencee par le changement d'ordre.
 	cairo_dock_update_dock_size (pDock);
 	
+	if (icon1->pSubDock != NULL && icon1->cClass != NULL)
+	{
+		cairo_dock_trigger_set_WM_icons_geometry (icon1->pSubDock);
+	}
+	
 	if (bForceUpdate)
 		cairo_dock_normalize_icons_order (pDock->icons, icon1->iType);
 	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon1) || CAIRO_DOCK_IS_USER_SEPARATOR (icon1) || CAIRO_DOCK_IS_APPLET (icon1))

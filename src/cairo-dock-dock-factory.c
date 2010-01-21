@@ -320,6 +320,8 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 		g_source_remove (pDock->iSidMoveResize);
 	if (pDock->iSidLeaveDemand != 0)
 		g_source_remove (pDock->iSidLeaveDemand);
+	if (pDock->iSidUpdateWMIcons != 0)
+		g_source_remove (pDock->iSidUpdateWMIcons);
 	cairo_dock_notify (CAIRO_DOCK_STOP_DOCK, pDock);
 	if (pDock->container.iSidGLAnimation != 0)
 		g_source_remove (pDock->container.iSidGLAnimation);
@@ -570,20 +572,6 @@ void cairo_dock_free_all_docks (void)
 }
 
 
-static gboolean _redraw_subdock_content (Icon *pIcon)
-{
-	if (pIcon->pSubDock != NULL)
-	{
-		CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
-		if (pDock != NULL)
-		{
-			cairo_dock_draw_subdock_content_on_icon (pIcon, pDock);
-			cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));
-		}
-	}
-	pIcon->iSidRedrawSubdockContent = 0;
-	return FALSE;
-}
 void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bInsertSeparator, GCompareFunc pCompareFunc)
 {
 	g_return_if_fail (icon != NULL);
@@ -692,15 +680,13 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	if (pDock->iRefCount == 0 && myAccessibility.bReserveSpace && bUpdateSize && ! pDock->bAutoHide && (pDock->fFlatDockWidth != iPreviousMinWidth || pDock->iMaxIconHeight != iPreviousMaxIconHeight))
 		cairo_dock_reserve_space_for_dock (pDock, TRUE);
 	
-	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_IS_APPLET (icon))
-		cairo_dock_refresh_launcher_gui ();
-	
 	if (myIcons.bDrawSubdockContent && pDock->iRefCount != 0 && ! CAIRO_DOCK_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
 	{
-		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-		if (pPointingIcon != NULL && pPointingIcon->iSidRedrawSubdockContent == 0 && CAIRO_DOCK_IS_LAUNCHER (pPointingIcon))
-			pPointingIcon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content, pPointingIcon);
+		cairo_dock_trigger_redraw_subdock_content (pDock);
 	}
+	
+	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_IS_APPLET (icon))
+		cairo_dock_refresh_launcher_gui ();
 }
 
 
@@ -762,7 +748,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 		{
 			Icon * pSeparatorIcon = NULL;
 			int iOrder = cairo_dock_get_icon_order (icon);
-			g_print ("plus d'icone de cet ordre : %d\n", iOrder);
+			//g_print ("plus d'icone de cet ordre : %d\n", iOrder);
 			if (iOrder > 1)
 				pSeparatorIcon = cairo_dock_get_first_icon_of_order (pDock->icons, iOrder - 1);
 			if (iOrder + 1 < CAIRO_DOCK_NB_TYPES && pSeparatorIcon == NULL)
@@ -770,7 +756,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 
 			if (pSeparatorIcon != NULL)
 			{
-				g_print (" -> on enleve un separateur\n");
+				//g_print (" -> on enleve un separateur\n");
 				cairo_dock_detach_icon_from_dock (pSeparatorIcon, pDock, FALSE);
 				cairo_dock_free_icon (pSeparatorIcon);
 			}
@@ -779,9 +765,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	
 	if (myIcons.bDrawSubdockContent && pDock->iRefCount != 0 && ! CAIRO_DOCK_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
 	{
-		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-		if (pPointingIcon != NULL && pPointingIcon->iSidRedrawSubdockContent == 0 && CAIRO_DOCK_IS_LAUNCHER (pPointingIcon))
-			pPointingIcon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content, pPointingIcon);
+		cairo_dock_trigger_redraw_subdock_content (pDock);
 	}
 	
 	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_IS_APPLET (icon))

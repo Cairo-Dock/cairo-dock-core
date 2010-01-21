@@ -1413,7 +1413,7 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 
 gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, CairoDock *pDock)
 {
-	g_print ("%s (main dock : %d) : (%d;%d) (%dx%d)\n", __func__, pDock->bIsMainDock, pEvent->x, pEvent->y, pEvent->width, pEvent->height);
+	//g_print ("%s (main dock : %d) : (%d;%d) (%dx%d)\n", __func__, pDock->bIsMainDock, pEvent->x, pEvent->y, pEvent->width, pEvent->height);
 	gint iNewWidth, iNewHeight, iNewX, iNewY;
 	if (pDock->container.bIsHorizontal)
 	{
@@ -1512,7 +1512,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		
 		cairo_dock_calculate_dock_icons (pDock);
 		//g_print ("configure size\n");
-		cairo_dock_set_icons_geometry_for_window_manager (pDock);  // changement de position ou de taille du dock => on replace les icones.
+		cairo_dock_trigger_set_WM_icons_geometry (pDock);  // changement de position ou de taille du dock => on replace les icones.
 		
 		cairo_dock_replace_all_dialogs ();
 	}
@@ -1521,7 +1521,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		pDock->container.iWindowPositionX = iNewX;
 		pDock->container.iWindowPositionY = iNewY;
 		//g_print ("configure x,y\n");
-		cairo_dock_set_icons_geometry_for_window_manager (pDock);  // changement de position ou de taille du dock => on replace les icones.
+		cairo_dock_trigger_set_WM_icons_geometry (pDock);  // changement de position de la fenetre du dock => on replace les icones.
 		
 		cairo_dock_replace_all_dialogs ();
 	}
