@@ -448,7 +448,7 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 				}
 				
 				cairo_dock_free_icon (pIcon);
-				cairo_dock_update_dock_size (pDock);  // si on le fait avant le free, le dock se fige (mais continue a tourner)... 
+				cairo_dock_update_dock_size (pDock);  // si on le fait avant le free, le dock se fige (mais continue a tourner)...
 			}
 		}
 		else if (pIcon->fPersonnalScale == -0.05)

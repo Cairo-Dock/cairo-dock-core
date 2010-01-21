@@ -1517,6 +1517,7 @@ GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pCont
 		return 0;
 	}
 	
+	gboolean bIndirect = g_bIndirectRendering;
 	if (major <= 1 && minor < 3)  // on a besoin de GLX >= 1.3 pour les pbuffers; mais si on a l'extension GLX_SGIX_pbuffer et un version inferieure, ca marche quand meme.
 	{
 		if (! _check_client_glx_extension ("GLX_SGIX_pbuffer"))
@@ -1525,6 +1526,7 @@ GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pCont
 			*pContext = 0;
 			return 0;
 		}
+		bIndirect = TRUE;
 	}
 	
 	GLXFBConfig *pFBConfigs;
@@ -1565,7 +1567,7 @@ GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pCont
 	
 	GdkGLContext *pGlContext = gtk_widget_get_gl_context (g_pMainDock->container.pWidget);
 	GLXContext mainContext = GDK_GL_CONTEXT_GLXCONTEXT (pGlContext);
-	*pContext = glXCreateContext (XDisplay, pVisInfo, mainContext, ! g_bIndirectRendering);
+	*pContext = glXCreateContext (XDisplay, pVisInfo, mainContext, ! bIndirect);
 	
 	XFree (pVisInfo);
 	XFree (pFBConfigs);

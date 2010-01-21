@@ -603,8 +603,9 @@ void cairo_dock_reload_launcher (Icon *icon)
 	}
 
 	//\_____________ On gere le changement de container ou d'ordre.
-	if (pDock != pNewDock)  // on la detache de son container actuel et on l'insere dans le nouveau.
+	if (pDock != pNewDock)  // changement de container.
 	{
+		// on la detache de son container actuel et on l'insere dans le nouveau.
 		gchar *tmp = icon->cParentDockName;  // le detach_icon remet a 0 ce champ, il faut le donc conserver avant.
 		icon->cParentDockName = NULL;
 		cairo_dock_detach_icon_from_dock (icon, pDock, TRUE);
@@ -620,25 +621,10 @@ void cairo_dock_reload_launcher (Icon *icon)
 			cairo_dock_calculate_dock_icons (pDock);
 			gtk_widget_queue_draw (pDock->container.pWidget);
 		}
-		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);  // le remove et le insert vont declencher le redessin de l'icone pointant sur l'ancien et le nouveau sous-dock le cas echeant.
 		icon->cParentDockName = tmp;
-		
-		if (pDock && pDock->iRefCount != 0)
-		{
-			CairoDock *pParentDock = NULL;
-			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
-			if (pPointingIcon != NULL)
-				cairo_dock_draw_subdock_content_on_icon (pPointingIcon, pParentDock);
-		}
-		if (pNewDock->iRefCount != 0)
-		{
-			CairoDock *pParentDock = NULL;
-			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pNewDock, &pParentDock);
-			if (pPointingIcon != NULL)
-				cairo_dock_draw_subdock_content_on_icon (pPointingIcon, pParentDock);
-		}
 	}
-	else
+	else  // le container est identique, on gere juste le changement d'ordre.
 	{
 		icon->fWidth *= pNewDock->container.fRatio / pDock->container.fRatio;
 		icon->fHeight *= pNewDock->container.fRatio / pDock->container.fRatio;
@@ -651,6 +637,17 @@ void cairo_dock_reload_launcher (Icon *icon)
 				icon,
 				(GCompareFunc) cairo_dock_compare_icons_order);
 			cairo_dock_update_dock_size (pDock);  // la largeur max peut avoir ete influencee par le changement d'ordre.
+		}
+		// on redessine l'icone pointant sur le sous-dock, pour le cas ou l'ordre et/ou l'image du lanceur aurait change.
+		if (myIcons.bDrawSubdockContent && pNewDock->iRefCount != 0)
+		{
+			CairoDock *pParentDock = NULL;
+			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pNewDock, &pParentDock);
+			if (pPointingIcon != NULL && pParentDock != NULL)
+			{
+				cairo_dock_draw_subdock_content_on_icon (pPointingIcon, pParentDock);
+				cairo_dock_redraw_icon (pPointingIcon, CAIRO_CONTAINER (pParentDock));
+			}
 		}
 	}
 	

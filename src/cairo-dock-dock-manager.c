@@ -56,6 +56,7 @@
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-position.h"
 #include "cairo-dock-internal-accessibility.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-emblem.h"
 #include "cairo-dock-dock-manager.h"
@@ -266,6 +267,9 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 void cairo_dock_reload_buffers_in_all_docks (gboolean bReloadAppletsToo)
 {
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) cairo_dock_reload_buffers_in_dock, GINT_TO_POINTER (bReloadAppletsToo));
+	
+	if (myIcons.bDrawSubdockContent)
+		cairo_dock_draw_subdock_icons ();
 }
 
 
@@ -277,7 +281,7 @@ static void _cairo_dock_draw_one_subdock_icon (gchar *cDockName, CairoDock *pDoc
 	{
 		icon = ic->data;
 		g_print ("%s\n", icon->cName);
-		if (icon->pSubDock && CAIRO_DOCK_IS_LAUNCHER (icon))
+		if (icon->pSubDock != NULL && CAIRO_DOCK_IS_LAUNCHER (icon))  // icone de sous-dock ou de repertoire ou de classe.
 		{
 			cairo_dock_draw_subdock_content_on_icon (icon, pDock);
 		}
@@ -618,7 +622,7 @@ void cairo_dock_synchronize_sub_docks_position (CairoDock *pDock, gboolean bRelo
 void cairo_dock_start_polling_screen_edge (CairoDock *pMainDock)
 {
 	if (s_iSidPollScreenEdge == 0)
-		s_iSidPollScreenEdge = g_timeout_add (500, (GSourceFunc) cairo_dock_poll_screen_edge, (gpointer) pMainDock);
+		s_iSidPollScreenEdge = g_timeout_add (333, (GSourceFunc) cairo_dock_poll_screen_edge, (gpointer) pMainDock);
 }
 void cairo_dock_stop_polling_screen_edge (void)
 {

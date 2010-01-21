@@ -199,67 +199,9 @@ void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoCon
 }
 
 
-void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
+static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, CairoDock *pDock, int w, int h, cairo_t *pCairoContext)
 {
-	g_return_if_fail (pIcon != NULL && pIcon->pSubDock != NULL && (pIcon->pIconBuffer != NULL || pIcon->iIconTexture != 0));
-	g_print ("%s (%s)\n", __func__, pIcon->cName);
-	
-	int w, h;
-	cairo_dock_get_icon_extent (pIcon, CAIRO_CONTAINER (pDock), &w, &h);
-	
-	cairo_t *pCairoContext = NULL;
-	if (pIcon->iIconTexture != 0)
-	{
-		if (! cairo_dock_begin_draw_icon (pIcon, CAIRO_CONTAINER (pDock)))
-			return ;
-		
-		_cairo_dock_set_blend_source ();
-		if (g_iIconBackgroundTexture != 0)
-		{
-			_cairo_dock_enable_texture ();
-			_cairo_dock_apply_texture_at_size (g_iIconBackgroundTexture, w, h);
-		}
-		else
-		{
-			glPolygonMode (GL_FRONT, GL_FILL);
-			_cairo_dock_set_alpha (0.);
-			glBegin(GL_QUADS);
-			glVertex3f(-.5*w,  .5*h, 0.);
-			glVertex3f( .5*w,  .5*h, 0.);
-			glVertex3f( .5*w, -.5*h, 0.);
-			glVertex3f(-.5*w, -.5*h, 0.);
-			glEnd();
-			_cairo_dock_enable_texture ();
-			_cairo_dock_set_alpha (1.);
-		}
-		_cairo_dock_set_blend_alpha ();
-	}
-	else
-	{
-		pCairoContext = cairo_create (pIcon->pIconBuffer);
-		g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
-		
-		if (g_pIconBackgroundImageSurface != NULL)
-		{
-			cairo_save (pCairoContext);
-			cairo_scale(pCairoContext,
-				pIcon->fWidth / g_iIconBackgroundImageWidth,
-				pIcon->fHeight / g_iIconBackgroundImageHeight);
-			cairo_set_source_surface (pCairoContext,
-				g_pIconBackgroundImageSurface,
-				0.,
-				0.);
-			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
-			cairo_paint (pCairoContext);
-			cairo_restore (pCairoContext);
-		}
-		else
-		{
-			cairo_dock_erase_cairo_context (pCairoContext);
-		}
-		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-	}
-	
+	//\______________ On dessine les 4 premieres icones du sous-dock en embleme.
 	CairoEmblem e;
 	memset (&e, 0, sizeof (CairoEmblem));
 	int i;
@@ -274,6 +216,59 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 			continue;
 		}
 		e.iPosition = i;
+		if (pCairoContext == NULL)
+		{
+			e.iTexture = icon->iIconTexture;
+			_cairo_dock_apply_emblem_texture (&e, w, h);
+		}
+		else
+		{
+			e.pSurface = icon->pIconBuffer;
+			cairo_dock_get_icon_extent (icon, CAIRO_CONTAINER (pIcon->pSubDock), &e.iWidth, &e.iHeight);
+			
+			cairo_save (pCairoContext);
+			_cairo_dock_apply_emblem_surface (&e, w, h, pCairoContext);
+			cairo_restore (pCairoContext);
+		}
+	}
+}
+
+
+
+static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, CairoDock *pDock, int w, int h, cairo_t *pCairoContext)
+{
+	//\______________ On dessine les 4 premieres icones du sous-dock en pile.
+	CairoEmblem e;
+	memset (&e, 0, sizeof (CairoEmblem));
+	double a_ = a;
+	a = .8;
+	int i;
+	Icon *icon;
+	GList *ic;
+	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next, i++)
+	{
+		icon = ic->data;
+		if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		{
+			i --;
+			continue;
+		}
+		switch (i)
+		{
+			case 0:
+				e.iPosition = CAIRO_DOCK_EMBLEM_UPPER_RIGHT;
+			break;
+			case 1:
+				if (ic->next == NULL)
+					e.iPosition = CAIRO_DOCK_EMBLEM_LOWER_LEFT;
+				else
+					e.iPosition = CAIRO_DOCK_EMBLEM_MIDDLE;
+			break;
+			case 2:
+				e.iPosition = CAIRO_DOCK_EMBLEM_LOWER_LEFT;
+			break;
+			default : break;
+		}
 		if (pIcon->iIconTexture != 0)
 		{
 			e.iTexture = icon->iIconTexture;
@@ -289,7 +284,87 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 			cairo_restore (pCairoContext);
 		}
 	}
+	a = a_;
+}
+
+
+void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
+{
+	g_return_if_fail (pIcon != NULL && pIcon->pSubDock != NULL && (pIcon->pIconBuffer != NULL || pIcon->iIconTexture != 0));
+	//g_print ("%s (%s)\n", __func__, pIcon->cName);
 	
+	int w, h;
+	cairo_dock_get_icon_extent (pIcon, CAIRO_CONTAINER (pDock), &w, &h);
+	
+	if (pIcon->pSubDock->icons == NULL)
+	{
+		/// dessiner une image "vide"...
+		
+		return;
+	}
+	
+	//\______________ On efface le dessin existant.
+	cairo_t *pCairoContext = NULL;
+	if (pIcon->iIconTexture != 0)  // dessin opengl
+	{
+		if (! cairo_dock_begin_draw_icon (pIcon, CAIRO_CONTAINER (pDock)))
+			return ;
+		
+		_cairo_dock_set_blend_source ();
+		if (g_iIconBackgroundTexture != 0)  // on ecrase le dessin existant avec l'image de fond des icones.
+		{
+			_cairo_dock_enable_texture ();
+			_cairo_dock_apply_texture_at_size (g_iIconBackgroundTexture, w, h);
+		}
+		else  // sinon on efface juste ce qu'il y'avait.
+		{
+			glPolygonMode (GL_FRONT, GL_FILL);
+			_cairo_dock_set_alpha (0.);
+			glBegin(GL_QUADS);
+			glVertex3f(-.5*w,  .5*h, 0.);
+			glVertex3f( .5*w,  .5*h, 0.);
+			glVertex3f( .5*w, -.5*h, 0.);
+			glVertex3f(-.5*w, -.5*h, 0.);
+			glEnd();
+			_cairo_dock_enable_texture ();
+			_cairo_dock_set_alpha (1.);
+		}
+		_cairo_dock_set_blend_alpha ();
+	}
+	else  // dessin cairo
+	{
+		pCairoContext = cairo_create (pIcon->pIconBuffer);
+		g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
+		
+		if (g_pIconBackgroundImageSurface != NULL)  // on ecrase le dessin existant avec l'image de fond des icones.
+		{
+			cairo_save (pCairoContext);
+			cairo_scale(pCairoContext,
+				pIcon->fWidth / g_iIconBackgroundImageWidth,
+				pIcon->fHeight / g_iIconBackgroundImageHeight);
+			cairo_set_source_surface (pCairoContext,
+				g_pIconBackgroundImageSurface,
+				0.,
+				0.);
+			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
+			cairo_paint (pCairoContext);
+			cairo_restore (pCairoContext);
+		}
+		else  // sinon on efface juste ce qu'il y'avait.
+		{
+			cairo_dock_erase_cairo_context (pCairoContext);
+		}
+		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
+	}
+	
+	//\______________ On dessine les 3 ou 4 premieres icones du sous-dock.
+	if (pIcon->cClass != NULL)
+		_cairo_dock_draw_subdock_content_as_stack (pIcon, pDock, w, h, pCairoContext);
+	else
+		_cairo_dock_draw_subdock_content_as_emblem (pIcon, pDock, w, h, pCairoContext);
+	
+	
+	//\______________ On finit le dessin.
 	if (pIcon->iIconTexture != 0)
 	{
 		_cairo_dock_disable_texture ();

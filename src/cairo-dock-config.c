@@ -646,7 +646,8 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_activate_modules_from_list (mySystem.cActiveModuleList, fTime);
 	cairo_dock_deactivate_old_modules (fTime);
 	
-	cairo_dock_draw_subdock_icons ();
+	if (myIcons.bDrawSubdockContent)
+		cairo_dock_draw_subdock_icons ();
 	
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille de tous les docks, maintenant qu'ils sont tous remplis.
 	cairo_dock_redraw_root_docks (TRUE);  // TRUE <=> sauf le main dock.

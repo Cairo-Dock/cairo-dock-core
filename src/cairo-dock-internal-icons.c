@@ -119,7 +119,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 		pIcons->tIconTypeOrder[CAIRO_DOCK_APPLI] = pIcons->tIconTypeOrder[CAIRO_DOCK_LAUNCHER];
 	}
 	
-	
 	//\___________________ Reflets.
 	pIcons->fFieldDepth = cairo_dock_get_double_key_value (pKeyFile, "Icons", "field depth", &bFlushConfFileNeeded, 0.7, NULL, NULL);
 
@@ -210,7 +209,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 		pIcons->cBackgroundImagePath = cairo_dock_generate_file_path (cLauncherBackgroundImageName);
 		g_free (cLauncherBackgroundImageName);
 	}
-
+	
+	pIcons->bDrawSubdockContent = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "subdock content", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	
 	//\___________________ Parametres des lanceurs.
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "launcher ", bFlushConfFileNeeded, pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER]);
 	if (pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] == 0)
@@ -356,6 +357,10 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		g_fBackgroundImageWidth = 0.;  // pour mettre a jour les decorations.
 		g_fBackgroundImageHeight = 0.;
 		cairo_dock_reload_buffers_in_all_docks (TRUE);  // TRUE <=> y compris les applets.
+	}
+	else if (pPrevIcons->bDrawSubdockContent != pIcons->bDrawSubdockContent)
+	{
+		cairo_dock_draw_subdock_icons ();
 	}
 	
 	cairo_dock_create_icon_pbuffer ();

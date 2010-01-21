@@ -72,6 +72,7 @@
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-gui-launcher.h"
 #include "cairo-dock-dock-facility.h"
+#include "cairo-dock-emblem.h"
 #include "cairo-dock-dock-factory.h"
 
 extern CairoDock *g_pMainDock;
@@ -569,6 +570,20 @@ void cairo_dock_free_all_docks (void)
 }
 
 
+static gboolean _redraw_subdock_content (Icon *pIcon)
+{
+	if (pIcon->pSubDock != NULL)
+	{
+		CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+		if (pDock != NULL)
+		{
+			cairo_dock_draw_subdock_content_on_icon (pIcon, pDock);
+			cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));
+		}
+	}
+	pIcon->iSidRedrawSubdockContent = 0;
+	return FALSE;
+}
 void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bInsertSeparator, GCompareFunc pCompareFunc)
 {
 	g_return_if_fail (icon != NULL);
@@ -679,6 +694,13 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	
 	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_IS_APPLET (icon))
 		cairo_dock_refresh_launcher_gui ();
+	
+	if (myIcons.bDrawSubdockContent && pDock->iRefCount != 0 && ! CAIRO_DOCK_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
+	{
+		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+		if (pPointingIcon != NULL && pPointingIcon->iSidRedrawSubdockContent == 0 && CAIRO_DOCK_IS_LAUNCHER (pPointingIcon))
+			pPointingIcon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content, pPointingIcon);
+	}
 }
 
 
@@ -753,6 +775,13 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 				cairo_dock_free_icon (pSeparatorIcon);
 			}
 		}
+	}
+	
+	if (myIcons.bDrawSubdockContent && pDock->iRefCount != 0 && ! CAIRO_DOCK_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
+	{
+		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+		if (pPointingIcon != NULL && pPointingIcon->iSidRedrawSubdockContent == 0 && CAIRO_DOCK_IS_LAUNCHER (pPointingIcon))
+			pPointingIcon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content, pPointingIcon);
 	}
 	
 	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_IS_APPLET (icon))

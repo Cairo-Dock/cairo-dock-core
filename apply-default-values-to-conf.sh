@@ -39,53 +39,64 @@ set_current_conf_file()
 cd "$CURRENT_THEME_DIR"
 
 set_current_conf_file "cairo-dock.conf"
-set_value "Position"		"x gap"					0
-set_value "Position"		"y gap"					0
-set_value "Position"		"xinerama"				false
-set_value "Accessibility"	"auto-hide"				false
-set_value "Accessibility"	"reserve space"			true
-set_value "Accessibility"	"max autorized width"	0
-set_value "Accessibility"	"pop-up"				false
-set_value "Accessibility"	"raise shortcut"		""
+set_value "Position"		"x gap"				0
+set_value "Position"		"y gap"				0
+set_value "Position"		"xinerama"			false
+set_value "Accessibility"	"max autorized width"		0
+set_value "Accessibility"	"pop in corner only"		false
 set_value "Accessibility"	"leaving delay"			250
 set_value "Accessibility"	"show delay"			300
 set_value "Accessibility"	"lock icons"			false
-set_value "TaskBar"			"show applications"		true
-set_value "TaskBar"			"unique PID"			false
-set_value "TaskBar"			"group by class"		false
-set_value "TaskBar"			"group exception"		""
-set_value "TaskBar"			"hide visible"			false
-set_value "TaskBar"			"current desktop only"	false
-set_value "TaskBar"			"mix launcher appli"	true
-set_value "TaskBar"			"overwrite xicon"		true
-set_value "TaskBar"			"overwrite exception"	"pidgin;xchat;amsn;gimp"
-set_value "TaskBar"			"window thumbnail"		true
-set_value "TaskBar"			"minimize on click"		true
-set_value "TaskBar"			"close on middle click"	true
-set_value "TaskBar"			"auto quick hide"		false
-set_value "TaskBar"			"auto quick hide on max" false
-set_value "TaskBar"			"demands attention with dialog" true
-set_value "TaskBar"			"animation on demands attention" "rotate"
-set_value "TaskBar"			"animation on active window" "wobbly"
-set_value "TaskBar"			"max name length"		15
-set_value "TaskBar"			"visibility alpha"		"0.4"
-set_value "TaskBar"			"animate subdocks"		true
-set_value "System"			"unfold factor"			8
-set_value "System"			"grow nb steps" 		10
-set_value "System"			"shrink nb steps"		8
-#set_value "System"			"move down speed"		"0.25"
-set_value "System"			"refresh frequency"		35
-set_value "System"			"dynamic reflection"	false
-set_value "System"			"opengl anim freq"		33
-set_value "System"			"cairo anim freq"		25
-set_value "System"			"always horizontal"		true
-set_value "System"			"show hidden files"		false
-set_value "System"			"fake transparency"		false
-#set_value "System"			"modules"				"dock rendering;dialog rendering;Animated icons;drop indicator;clock;logout;dustbin;stack;shortcuts;GMenu;switcher;icon effects;illusion"
+set_value "Accessibility"	"lock all"			false
+set_value "Accessibility"	"show on click"			false
+set_value "TaskBar"		"show applications"		true
+#set_value "TaskBar"		"hide visible"			false
+#set_value "TaskBar"		"current desktop only"		false
+#set_value "TaskBar"		"group by class"		true
+set_value "TaskBar"		"group exception"		""
+set_value "TaskBar"		"mix launcher appli"		true
+set_value "TaskBar"		"overwrite xicon"		true
+set_value "TaskBar"		"overwrite exception"		""
+set_value "TaskBar"		"window thumbnail"		true
+set_value "TaskBar"		"minimize on click"		true
+set_value "TaskBar"		"close on middle click"		true
+set_value "TaskBar"		"demands attention with dialog" true
+set_value "TaskBar"		"animation on demands attention" "rotate"
+set_value "TaskBar"		"animation on active window" 	"wobbly"
+set_value "TaskBar"		"max name length"		20
+set_value "TaskBar"		"visibility alpha"		"0.35"
+set_value "TaskBar"		"animate subdocks"		true
+set_value "System"		"unfold duration"		400
+set_value "System"		"fade out nb steps" 		15
+set_value "System"		"grow nb steps" 		10
+set_value "System"		"shrink nb steps"		8
+set_value "System"		"move up nb steps"		10
+set_value "System"		"move down nb steps"		12
+set_value "System"		"refresh frequency"		35
+set_value "System"		"dynamic reflection"		false
+set_value "System"		"opengl anim freq"		33
+set_value "System"		"cairo anim freq"		25
+set_value "System"		"always horizontal"		true
+set_value "System"		"show hidden files"		false
+set_value "System"		"fake transparency"		false
+set_value "System"		"conn timeout"			5
+set_value "System"		"conn retry"			0
+modules = get_value "System" "modules"
+echo $modules | grep "icon effects"
+if test $? == 1; then
+	modules = "${modules};icon effects"
+	set_value "System" "modules" "$modules"
+fi
+echo $modules | grep "illusion"
+if test $? == 1; then
+	modules = "${modules};illusion"
+	set_value "System" "modules" "$modules"
+fi
+#set_value "System"		"modules"				"dock rendering;dialog rendering;Animated icons;drop indicator;clock;logout;dustbin;stack;shortcuts;GMenu;switcher;icon effects;illusion"
 
 set_current_conf_file "plug-ins/mail/mail.conf"
-set_value_on_all_groups		"username"				"toto"
-set_value_on_all_groups		"password"				"***"
+set_value_on_all_groups		"username"				""
+set_value_on_all_groups		"password"				""
 
 set_current_conf_file "plug-ins/slider/slider.conf"
 set_value "Configuration"	"directory"				""
@@ -94,16 +105,23 @@ set_current_conf_file "plug-ins/stack/stack.conf"
 set_value "Configuration"	"stack dir"				""
 
 set_current_conf_file "plug-ins/Clipper/Clipper.conf"
-set_value "Configuration"	"persistent"			""
+set_value "Configuration"	"persistent"				""
+
+set_current_conf_file "plug-ins/dustbin/dustbin.conf"
+set_value "Module"		"additionnal directories"		""
+set_value "Module"		"alternative file browser"		""
+
+set_current_conf_file "plug-ins/Quick Browser/quick-browser.conf"
+set_value "Configuration"		"dir path"			"~"
 
 set_current_conf_file "plug-ins/shortcuts/shortcuts.conf"
 set_value "Module"			"list network"			false
 
 set_current_conf_file "plug-ins/Xgamma/Xgamma.conf"
-set_value "Configuration"	"initial gamma"			0
+set_value "Configuration"	"initial gamma"				0
 
 set_current_conf_file "plug-ins/weblets/weblets.conf"
-set_value "Configuration"	"weblet URI"			"http://www.google.com"
+set_value "Configuration"	"weblet URI"				"http://www.google.com"
 set_value "Configuration"	"uri list"				""
 
 echo ""

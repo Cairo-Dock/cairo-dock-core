@@ -78,6 +78,8 @@ void cairo_dock_free_icon (Icon *icon)
 	cd_debug ("%s (%s , %s)", __func__, icon->cName, icon->cClass);
 	
 	cairo_dock_remove_dialog_if_any (icon);
+	if (icon->iSidRedrawSubdockContent != 0)
+		g_source_remove (icon->iSidRedrawSubdockContent);
 	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
 		cairo_dock_unregister_appli (icon);
 	else if (icon->cClass != NULL)  // c'est un inhibiteur.

@@ -160,11 +160,12 @@ demands attention with dialog = true
 duration = 2
 
 #s- Force the following applications to demand your attention ?
-#{It will notify you even if, for instance, you are on another desktop.}
-force demands attention = pidgin;xchat;amsn
+#{It will notify you even if, for instance, you are watching a movie in fullscreen or you are on another desktop.
+#}
+force demands attention = 
 
 #a- Signal the applications demanding your attention with an animation ?
-animation on demands attention = fire
+animation on demands attention = rotate
 
 #v- 
 sep_act =
@@ -390,7 +391,7 @@ frame_font =
 
 #B+ Use a custom font for labels ?
 #{Otherwise the default system one will be used.}
-custom = true
+custom = false
 
 #P+ Font used for labels :
 police = 
@@ -440,6 +441,9 @@ default icon directory =
 #S+ Image's filename to use as a background for icons :
 #{Any format allowed; let this field empty if you don't want to use an image as background.}
 icons bg =
+
+#b+ Draw the content of sub-docks on the icon pointing on it ?
+subdock content = false
 
 #F+[Zoom effect;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-wave.png]
 frame_shape =
@@ -724,33 +728,3 @@ class indicator =
 
 #b+ Zoom the indicator with its icon ?
 zoom class = false
-
-
-#X+[Misc. Emblems]
-frame_img =
-#S+ Name of an image to use for the charge emblem :
-#{If you don't provide any, a default image will be used.}
-emblem_1 = 
-#S+ Name of an image to use for the play emblem :
-#{If you don't provide any, a default image will be used.}
-emblem_3 = 
-#S+ Name of an image to use for the pause emblem :
-#{If you don't provide any, a default image will be used.}
-emblem_4 = 
-#S+ Name of an image to use for the stop emblem :
-#{If you don't provide any, a default image will be used.}
-emblem_5 = 
-#S+ Name of an image to use for the broken emblem :
-#{If you don't provide any, a default image will be used.}
-emblem_6 = 
-#S+ Name of an image to use for the error emblem :
-#{If you don't provide any, a default image will be used.}
-emblem_7 = 
-#S+ Name of an image to use for the warning emblem :
-#{If you don't provide any, a default image will be used.}
-emblem_8 = 
-#S+ Name of an image to use for the locked emblem :
-#{If you don't provide any, a default image will be used.}
-emblem_9 = 
-
-emblem_2=

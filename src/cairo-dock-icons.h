@@ -205,6 +205,7 @@ struct _Icon {
 	CairoDockTransition *pTransition;
 	gdouble fReflectShading;
 	gchar *cLastAttentionDemand;
+	guint iSidRedrawSubdockContent;
 };
 
 /// Definition of a function that runs through all icons.
@@ -254,7 +255,7 @@ typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContaine
 /** TRUE if the icon is a container icon.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_CONTAINER_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->cCommand == NULL && (icon)->cBaseURI == NULL)
+#define CAIRO_DOCK_IS_CONTAINER_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->cCommand == NULL && (icon)->cBaseURI == NULL && icon->cClass == NULL)
 
 /** TRUE if the icon is an icon pointing on the sub-dock of a class.
 *@param icon an icon.

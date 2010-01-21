@@ -270,7 +270,11 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
 		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
 		
-		if (cIconPath != NULL && *cIconPath != '\0')  // c'est un lanceur classique.
+		if (myIcons.bDrawSubdockContent && icon->pSubDock != NULL)  // icone de sous-dock, on le redessinera lorsque les icones du sous-dock auront ete chargees.
+		{
+			icon->pIconBuffer = _cairo_dock_create_blank_surface (pSourceContext, icon->fWidth * fMaxScale, icon->fHeight * fMaxScale);
+		}
+		else if (cIconPath != NULL && *cIconPath != '\0')  // c'est un lanceur classique.
 		{
 			icon->pIconBuffer = cairo_dock_create_surface_from_image (cIconPath,
 				pSourceContext,
