@@ -189,7 +189,7 @@ struct _CairoDesklet {
 	gint iMouseY2d;
 	/// The following function outclasses the corresponding function of the renderer. This is useful if you don't want to pick icons but some elements that you draw yourself on the desklet.
 	CairoDeskletGLRenderFunc render_bounding_box;
-	/// ID of the object that was picked thanks in case the previous function is not null.
+	/// ID of the object that was picked in case the previous function is not null.
 	GLuint iPickedObject;
 	gboolean bClicked;
 	GTimer *pUnmapTimer;
@@ -213,7 +213,12 @@ typedef gboolean (* CairoDockForeachDeskletFunc) (CairoDesklet *pDesklet, CairoD
 
 void cairo_dock_load_desklet_buttons (cairo_t *pSourceContext);
 void cairo_dock_load_desklet_buttons_texture (void);
+void cairo_dock_unload_desklet_buttons (void);
 void cairo_dock_unload_desklet_buttons_texture (void);
+
+void cairo_dock_reload_desklets_decorations (gboolean bDefaultThemeOnly, cairo_t *pSourceContext);
+void cairo_dock_free_desklet_decoration (CairoDeskletDecoration *pDecoration);
+
 
 gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDesklet *pDesklet, cairo_t *pCairoContext);
 
@@ -297,13 +302,6 @@ CairoDesklet *cairo_dock_get_desklet_by_Xid (Window Xid);
 *@param pDesklet the desklet.
 */
 void cairo_dock_zoom_out_desklet (CairoDesklet *pDesklet);
-
-
-void cairo_dock_load_desklet_decorations (CairoDesklet *pDesklet, cairo_t *pSourceContext);
-
-void cairo_dock_reload_desklets_decorations (gboolean bDefaultThemeOnly, cairo_t *pSourceContext);
-
-void cairo_dock_free_desklet_decoration (CairoDeskletDecoration *pDecoration);
 
 
 #define cairo_dock_set_static_desklet(pDesklet) (pDesklet)->bFixedAttitude = TRUE

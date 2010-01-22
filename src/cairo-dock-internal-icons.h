@@ -48,7 +48,6 @@ struct _CairoConfigIcons {
 	gpointer *pDefaultIconDirectory;
 	gint iNbIconPlaces;
 	gchar *cBackgroundImagePath;
-	gboolean bDrawSubdockContent;
 	gint tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
 	gint tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
 	gchar *cSeparatorImage;

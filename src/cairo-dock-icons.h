@@ -205,6 +205,7 @@ struct _Icon {
 	CairoDockTransition *pTransition;
 	gdouble fReflectShading;
 	gchar *cLastAttentionDemand;
+	gint iSubdockViewType;
 	guint iSidRedrawSubdockContent;
 };
 

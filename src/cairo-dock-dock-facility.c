@@ -1043,7 +1043,7 @@ static gboolean _redraw_subdock_content (Icon *pIcon)
 void cairo_dock_trigger_redraw_subdock_content (CairoDock *pDock)
 {
 	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-	if (pPointingIcon != NULL && pPointingIcon->iSidRedrawSubdockContent == 0 && CAIRO_DOCK_IS_LAUNCHER (pPointingIcon))
+	if (pPointingIcon != NULL && (pPointingIcon->iSubdockViewType != 0 || pPointingIcon->cClass != NULL) && pPointingIcon->iSidRedrawSubdockContent == 0 && CAIRO_DOCK_IS_LAUNCHER (pPointingIcon))
 		pPointingIcon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content, pPointingIcon);
 }
 
@@ -1051,7 +1051,7 @@ void cairo_dock_redraw_subdock_content (CairoDock *pDock)
 {
 	CairoDock *pParentDock = NULL;
 	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
-	if (pPointingIcon != NULL && pPointingIcon->iSidRedrawSubdockContent == 0 && pParentDock != NULL)
+	if (pPointingIcon != NULL && pPointingIcon->iSubdockViewType != 0 && pPointingIcon->iSidRedrawSubdockContent == 0 && pParentDock != NULL)
 	{
 		cairo_dock_draw_subdock_content_on_icon (pPointingIcon, pParentDock);
 		cairo_dock_redraw_icon (pPointingIcon, CAIRO_CONTAINER (pParentDock));

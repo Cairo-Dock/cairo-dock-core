@@ -310,10 +310,6 @@ static void _cairo_dock_fm_remove_monitor_on_one_icon (Icon *icon, gpointer data
 }
 void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 {
-	/**if (pDock->iSidMoveDown != 0)
-		g_source_remove (pDock->iSidMoveDown);
-	if (pDock->iSidMoveUp != 0)
-		g_source_remove (pDock->iSidMoveUp);*/
 	if (pDock->iSidPopDown != 0)
 		g_source_remove (pDock->iSidPopDown);
 	if (pDock->iSidMoveResize != 0)
@@ -352,7 +348,7 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDock *pReceivingDock, const gchar *cReceivingDockName)
 {
 	g_return_if_fail (pDock != NULL);
-	g_print ("%s (%s, %d)\n", __func__, cDockName, pDock->iRefCount);
+	cd_debug ("%s (%s, %d)", __func__, cDockName, pDock->iRefCount);
 	if (pDock->bIsMainDock)  // utiliser cairo_dock_free_all_docks ().
 		return;
 	pDock->iRefCount --;
@@ -680,7 +676,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	if (pDock->iRefCount == 0 && myAccessibility.bReserveSpace && bUpdateSize && ! pDock->bAutoHide && (pDock->fFlatDockWidth != iPreviousMinWidth || pDock->iMaxIconHeight != iPreviousMaxIconHeight))
 		cairo_dock_reserve_space_for_dock (pDock, TRUE);
 	
-	if (myIcons.bDrawSubdockContent && pDock->iRefCount != 0 && ! CAIRO_DOCK_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
+	if (pDock->iRefCount != 0 && ! CAIRO_DOCK_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
 	{
 		cairo_dock_trigger_redraw_subdock_content (pDock);
 	}
@@ -763,7 +759,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 		}
 	}
 	
-	if (myIcons.bDrawSubdockContent && pDock->iRefCount != 0 && ! CAIRO_DOCK_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
+	if (pDock->iRefCount != 0 && ! CAIRO_DOCK_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
 	{
 		cairo_dock_trigger_redraw_subdock_content (pDock);
 	}

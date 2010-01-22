@@ -629,7 +629,7 @@ static void _on_change_window_icon (Icon *icon, CairoDock *pDock)
 	if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
 	{
 		cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
-		if (myIcons.bDrawSubdockContent && pDock->iRefCount != 0)
+		if (pDock->iRefCount != 0)
 			cairo_dock_trigger_redraw_subdock_content (pDock);
 		cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
 	}
@@ -661,7 +661,7 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 			if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
 			{
 				cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
-				if (myIcons.bDrawSubdockContent && pDock->iRefCount != 0)
+				if (pDock->iRefCount != 0)
 					cairo_dock_trigger_redraw_subdock_content (pDock);
 				cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
 			}

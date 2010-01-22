@@ -26,6 +26,7 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-log.h"
 #include "cairo-dock-emblem.h"
 
 extern cairo_surface_t *g_pIconBackgroundImageSurface;
@@ -291,7 +292,7 @@ static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, CairoDock *p
 void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 {
 	g_return_if_fail (pIcon != NULL && pIcon->pSubDock != NULL && (pIcon->pIconBuffer != NULL || pIcon->iIconTexture != 0));
-	//g_print ("%s (%s)\n", __func__, pIcon->cName);
+	g_print ("%s (%s)\n", __func__, pIcon->cName);
 	
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, CAIRO_CONTAINER (pDock), &w, &h);
@@ -314,6 +315,7 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		if (g_iIconBackgroundTexture != 0)  // on ecrase le dessin existant avec l'image de fond des icones.
 		{
 			_cairo_dock_enable_texture ();
+			_cairo_dock_set_alpha (1.);
 			_cairo_dock_apply_texture_at_size (g_iIconBackgroundTexture, w, h);
 		}
 		else  // sinon on efface juste ce qu'il y'avait.
@@ -361,8 +363,20 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 	if (pIcon->cClass != NULL)
 		_cairo_dock_draw_subdock_content_as_stack (pIcon, pDock, w, h, pCairoContext);
 	else
-		_cairo_dock_draw_subdock_content_as_emblem (pIcon, pDock, w, h, pCairoContext);
-	
+	{
+		switch (pIcon->iSubdockViewType)
+		{
+			case 1 :
+				_cairo_dock_draw_subdock_content_as_emblem (pIcon, pDock, w, h, pCairoContext);
+			break;
+			case 2:
+				_cairo_dock_draw_subdock_content_as_stack (pIcon, pDock, w, h, pCairoContext);
+			break;
+			default:
+				cd_warning ("invalid sub-dock content view");
+			break;
+		}
+	}
 	
 	//\______________ On finit le dessin.
 	if (pIcon->iIconTexture != 0)

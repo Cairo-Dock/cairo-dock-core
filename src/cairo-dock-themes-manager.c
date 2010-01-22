@@ -92,7 +92,7 @@ static inline int _get_theme_rating (const gchar *cThemesDir, const gchar *cThem
 
 GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *hProvidedTable, gboolean bUpdateThemeValidity, GError **erreur)
 {
-	g_print ("%s (%s)\n", __func__, cThemesDir);
+	cd_debug ("%s (%s)", __func__, cThemesDir);
 	GError *tmp_erreur = NULL;
 	GDir *dir = g_dir_open (cThemesDir, 0, &tmp_erreur);
 	if (tmp_erreur != NULL)
@@ -637,7 +637,7 @@ gboolean cairo_dock_theme_need_save (void)
 
 static void on_theme_destroy (gchar *cInitConfFile)
 {
-	g_print ("%s ()\n", __func__);
+	cd_debug ("");
 	g_remove (cInitConfFile);
 	g_free (cInitConfFile);
 	s_pThemeManager = NULL;
@@ -1078,7 +1078,7 @@ static gchar *cairo_dock_build_temporary_themes_conf_file (void)
 
 static gboolean on_theme_apply (gchar *cInitConfFile)
 {
-	g_print ("%s (%s)\n", __func__, cInitConfFile);
+	cd_debug ("%s (%s)", __func__, cInitConfFile);
 	GError *erreur = NULL;
 	int r;  // resultat de system().
 	

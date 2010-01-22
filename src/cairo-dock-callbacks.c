@@ -537,7 +537,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		
 		if (pPointedIcon != NULL && s_pIconClicked != NULL && cairo_dock_get_icon_order (s_pIconClicked) == cairo_dock_get_icon_order (pPointedIcon) && ! g_bLocked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)
 		{
-			g_print ("on change d'icone\n");
+			//g_print ("on change d'icone\n");
 			_cairo_dock_make_icon_glide (pPointedIcon, s_pIconClicked, pDock);
 			bStartAnimation = TRUE;
 		}

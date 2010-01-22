@@ -57,6 +57,7 @@
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-emblem.h"
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-gui-launcher.h"
@@ -611,6 +612,11 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 	if (icon1->pSubDock != NULL && icon1->cClass != NULL)
 	{
 		cairo_dock_trigger_set_WM_icons_geometry (icon1->pSubDock);
+	}
+	
+	if (pDock->iRefCount != 0)
+	{
+		cairo_dock_redraw_subdock_content (pDock);
 	}
 	
 	if (bForceUpdate)

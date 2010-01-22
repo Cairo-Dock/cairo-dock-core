@@ -649,11 +649,14 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 	{
 		if (pDock->iRefCount == 0)
 		{
-			cairo_dock_pop_up (pDock);
-			if (pDock->iSidPopDown != 0)
+			if (bForceDemand || cairo_dock_search_window_on_our_way (pDock, FALSE, TRUE) == NULL)
 			{
-				g_source_remove(pDock->iSidPopDown);
-				pDock->iSidPopDown = 0;
+				if (pDock->iSidPopDown != 0)
+				{
+					g_source_remove(pDock->iSidPopDown);
+					pDock->iSidPopDown = 0;
+				}
+				cairo_dock_pop_up (pDock);
 			}
 			/*if (pDock->bAutoHide && bForceDemand)
 			{
@@ -725,12 +728,12 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 	}
 	if (! pDock->container.bInside)
 	{
-		g_print ("pop down the dock\n");
+		//g_print ("pop down the dock\n");
 		cairo_dock_pop_down (pDock);
 		
 		if (pDock->bAutoHide)
 		{
-			g_print ("force dock to auto-hide\n");
+			//g_print ("force dock to auto-hide\n");
 			cairo_dock_emit_leave_signal (pDock);
 		}
 	}

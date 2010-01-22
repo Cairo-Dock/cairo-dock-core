@@ -268,8 +268,7 @@ void cairo_dock_reload_buffers_in_all_docks (gboolean bReloadAppletsToo)
 {
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) cairo_dock_reload_buffers_in_dock, GINT_TO_POINTER (bReloadAppletsToo));
 	
-	if (myIcons.bDrawSubdockContent)
-		cairo_dock_draw_subdock_icons ();
+	cairo_dock_draw_subdock_icons ();
 }
 
 
@@ -291,28 +290,6 @@ void cairo_dock_draw_subdock_icons (void)
 {
 	g_print ("%s ()\n", __func__);
 	g_hash_table_foreach (s_hDocksTable, (GHFunc)_cairo_dock_draw_one_subdock_icon, NULL);
-}
-
-static void _cairo_dock_draw_one_subdock_icon_as_normal (const gchar *cDockName, CairoDock *pDock, gpointer data)
-{
-	Icon *icon;
-	GList *ic;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		g_print ("%s\n", icon->cName);
-		if (icon->pSubDock != NULL && CAIRO_DOCK_IS_LAUNCHER (icon))  // icone de sous-dock ou de repertoire ou de classe.
-		{
-			cairo_t *ctx = cairo_dock_create_context_from_container (CAIRO_CONTAINER (pDock));
-			cairo_dock_fill_icon_buffers_for_dock (icon, ctx, pDock);
-			cairo_destroy (ctx);
-		}
-	}
-}
-void cairo_dock_draw_subdock_icons_as_normal (void)
-{
-	g_print ("%s ()\n", __func__);
-	g_hash_table_foreach (s_hDocksTable, (GHFunc)_cairo_dock_draw_one_subdock_icon_as_normal, NULL);
 }
 
 

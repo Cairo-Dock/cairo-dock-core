@@ -999,29 +999,25 @@ static void on_click_apply (GtkButton *button, GtkWidget *pWindow)
 	{
 		cairo_dock_write_current_group_conf_file (g_cConfFile, NULL);
 		CairoDockInternalModule *pInternalModule = cairo_dock_find_internal_module_from_name (pGroupDescription->cGroupName);
-		if (pInternalModule != NULL)
+		g_return_if_fail (pInternalModule != NULL);
+		//g_print ("found module %s\n", pInternalModule->cModuleName);
+		cairo_dock_reload_internal_module (pInternalModule, g_cConfFile);
+		if (pInternalModule->pExternalModules != NULL)  // comme on ne sait pas sur quel(s) module(s) on a fait des modif, on les met tous a jour.
 		{
-			//g_print ("found module %s\n", pInternalModule->cModuleName);
-			cairo_dock_reload_internal_module (pInternalModule, g_cConfFile);
-			if (pInternalModule->pExternalModules != NULL)  // comme on ne sait pas sur quel(s) module(s) on a fait des modif, on les met tous a jour.
+			CairoDockModuleInstance *pModuleInstance;
+			GList *m;
+			int i = 0;
+			for (m = pInternalModule->pExternalModules; m != NULL; m = m->next)
 			{
-				CairoDockModuleInstance *pModuleInstance;
-				GList *m;
-				int i = 0;
-				for (m = pInternalModule->pExternalModules; m != NULL; m = m->next)
-				{
-					pModule = cairo_dock_find_module_from_name (m->data);
-					if (pModule == NULL || pModule->pInstancesList == NULL)
-						continue;
-					pModuleInstance = pModule->pInstancesList->data;
-					cairo_dock_write_extra_group_conf_file (pModuleInstance->cConfFilePath, pModuleInstance, i);
-					cairo_dock_reload_module_instance (pModuleInstance, TRUE);
-					i ++;
-				}
+				pModule = cairo_dock_find_module_from_name (m->data);
+				if (pModule == NULL || pModule->pInstancesList == NULL)
+					continue;
+				pModuleInstance = pModule->pInstancesList->data;
+				cairo_dock_write_extra_group_conf_file (pModuleInstance->cConfFilePath, pModuleInstance, i);
+				cairo_dock_reload_module_instance (pModuleInstance, TRUE);
+				i ++;
 			}
 		}
-		else
-			cairo_dock_read_conf_file (g_cConfFile, g_pMainDock);
 	}
 }
 
@@ -2494,14 +2490,14 @@ void cairo_dock_register_main_gui_backend (void)
 {
 	CairoDockGuiBackend *pBackend = g_new0 (CairoDockGuiBackend, 1);
 	
-	pBackend->show_main_gui 			= show_main_gui;
+	pBackend->show_main_gui 		= show_main_gui;
 	pBackend->show_module_instance_gui 	= show_module_instance_gui;
-	pBackend->show_module_gui 			= show_module_gui;
+	pBackend->show_module_gui 		= show_module_gui;
 	pBackend->set_status_message_on_gui = set_status_message_on_gui;
-	pBackend->module_is_opened 			= module_is_opened;
+	pBackend->module_is_opened 		= module_is_opened;
 	pBackend->deactivate_module_in_gui 	= deactivate_module_in_gui;
 	pBackend->get_widgets_from_name 	= get_widgets_from_name;
-	pBackend->close_gui 				= close_gui;
+	pBackend->close_gui 			= close_gui;
 	
 	cairo_dock_register_gui_backend (pBackend);
 }

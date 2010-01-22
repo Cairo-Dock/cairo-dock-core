@@ -270,7 +270,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
 		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
 		
-		if (myIcons.bDrawSubdockContent && icon->pSubDock != NULL)  // icone de sous-dock, on le redessinera lorsque les icones du sous-dock auront ete chargees.
+		if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)  // icone de sous-dock, on le redessinera lorsque les icones du sous-dock auront ete chargees.
 		{
 			icon->pIconBuffer = _cairo_dock_create_blank_surface (pSourceContext, icon->fWidth * fMaxScale, icon->fHeight * fMaxScale);
 		}
@@ -719,7 +719,8 @@ void cairo_dock_load_visible_zone (CairoDock *pDock, gchar *cVisibleZoneImageFil
 		g_pVisibleZoneSurface = NULL;
 }
 
-cairo_surface_t *cairo_dock_load_stripes (cairo_t* pSourceContext, int iStripesWidth, int iStripesHeight, double fRotationAngle)
+
+static cairo_surface_t *_cairo_dock_make_stripes_background (cairo_t* pSourceContext, int iStripesWidth, int iStripesHeight, double fRotationAngle)
 {
 	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	cairo_pattern_t *pStripesPattern;
@@ -819,9 +820,6 @@ cairo_surface_t *cairo_dock_load_stripes (cairo_t* pSourceContext, int iStripesW
 
 	return pNewSurface;
 }
-
-
-
 void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, int iNewDecorationsWidth, int iNewDecorationsHeight)
 {
 	//g_print ("%s (%dx%d) [%.2fx%.2f]\n", __func__, iNewDecorationsWidth, iNewDecorationsHeight, g_fBackgroundImageWidth, g_fBackgroundImageHeight);
@@ -871,7 +869,7 @@ void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, in
 		{
 			g_fBackgroundImageWidth = MAX (g_fBackgroundImageWidth, k * iNewDecorationsWidth);
 			g_fBackgroundImageHeight = MAX (g_fBackgroundImageHeight, iNewDecorationsHeight);
-			g_pBackgroundSurfaceFull = cairo_dock_load_stripes (pCairoContext,
+			g_pBackgroundSurfaceFull = _cairo_dock_make_stripes_background (pCairoContext,
 				g_fBackgroundImageWidth,
 				g_fBackgroundImageHeight,
 				0.);
@@ -1253,7 +1251,7 @@ void cairo_dock_unload_additionnal_textures (void)
 	}
 	cairo_dock_unload_desklet_buttons_texture ();
 	cairo_dock_unload_dialog_buttons ();
-	if (g_pGradationTexture[0] != 0)
+	/**if (g_pGradationTexture[0] != 0)
 	{
 		_cairo_dock_delete_texture (g_pGradationTexture[0]);
 		g_pGradationTexture[0] = 0;
@@ -1262,7 +1260,7 @@ void cairo_dock_unload_additionnal_textures (void)
 	{
 		_cairo_dock_delete_texture (g_pGradationTexture[1]);
 		g_pGradationTexture[1] = 0;
-	}
+	}*/
 	if (s_pDesktopBg != NULL && s_pDesktopBg->iTexture != 0)
 	{
 		_cairo_dock_delete_texture (s_pDesktopBg->iTexture);

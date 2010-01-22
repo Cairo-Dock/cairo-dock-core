@@ -515,7 +515,7 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 	{
 		pMinimalConfig->fOrder = ++ s_iMaxOrder;
 		g_key_file_set_double (pKeyFile, "Icon", "order", pMinimalConfig->fOrder);
-		g_print ("set order\n");
+		//g_print ("set order\n");
 		cairo_dock_write_keys_to_file (pKeyFile, cInstanceConfFilePath);
 	}
 	else
@@ -642,7 +642,7 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 void cairo_dock_deactivate_module (CairoDockModule *module)
 {
 	g_return_if_fail (module != NULL);
-	g_print ("%s (%s, %s)\n", __func__, module->pVisitCard->cModuleName, module->cConfFilePath);
+	cd_debug ("%s (%s, %s)", __func__, module->pVisitCard->cModuleName, module->cConfFilePath);
 	g_list_foreach (module->pInstancesList, (GFunc) cairo_dock_stop_module_instance, NULL);
 	g_list_foreach (module->pInstancesList, (GFunc) cairo_dock_free_module_instance, NULL);
 	g_list_free (module->pInstancesList);

@@ -124,8 +124,6 @@ void cairo_dock_reload_one_icon_buffer_in_dock (Icon *icon, CairoDock *pDock);
 
 void cairo_dock_load_visible_zone (CairoDock *pDock, gchar *cVisibleZoneImageFile, int iVisibleZoneWidth, int iVisibleZoneHeight, double fVisibleZoneAlpha);
 
-cairo_surface_t *cairo_dock_load_stripes (cairo_t* pSourceContext, int iStripesWidth, int iStripesHeight, double fRotationAngle);
-
 void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, int iNewDecorationsWidth, int iNewDecorationsHeight);
 
 void cairo_dock_load_background_decorations (CairoDock *pDock);

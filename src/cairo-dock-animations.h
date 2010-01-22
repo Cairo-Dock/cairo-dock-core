@@ -65,9 +65,16 @@ struct _CairoDockTransition {
 
 #define CAIRO_DOCK_MIN_SLOW_DELTA_T 90
 
-/*gboolean cairo_dock_move_up (CairoDock *pDock);
+/** Say if a container is currently animated.
+*@param pContainer a Container
+*/
+#define cairo_dock_container_is_animating(pContainer) (CAIRO_CONTAINER(pContainer)->iSidGLAnimation != 0)
 
-gboolean cairo_dock_move_down (CairoDock *pDock);*/
+/** Say if it's usefull to launch an animation on a Dock (indeed, it's useless to launch it if it will be invisible).
+*@param pDock the Dock to animate.
+*/
+#define cairo_dock_animation_will_be_visible(pDock) ((pDock)->iRefCount != 0 && GTK_WIDGET_VISIBLE ((CAIRO_CONTAINER(pDock)->pWidget)) || ((pDock)->iRefCount == 0 && (! (pDock)->bAutoHide || CAIRO_CONTAINER(pDock)->bInside || (pDock)->fHideOffset < 1)))
+
 
 /** Pop up a Dock above other windows, if docks are in mode "keep below other windows"; otherwise do nothing.
 *@param pDock the dock.
@@ -81,13 +88,6 @@ gboolean cairo_dock_pop_down (CairoDock *pDock);
 
 
 gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex);
-
-/** Say if it's usefull to launch an animation on a Dock (indeed, it's useless to launch it if it will be invisible).
-*@param pDock the dock to animate.
-*/
-#define cairo_dock_animation_will_be_visible(pDock) ((pDock)->iRefCount != 0 && GTK_WIDGET_VISIBLE ((CAIRO_CONTAINER(pDock)->pWidget)) || ((pDock)->iRefCount == 0 && (! (pDock)->bAutoHide || CAIRO_CONTAINER(pDock)->bInside || (pDock)->fHideOffset < 1)))
-
-#define cairo_dock_container_is_animating(pContainer) (CAIRO_CONTAINER(pContainer)->iSidGLAnimation != 0)
 
 /** Launch the animation of a Container.
 *@param pContainer the container to animate.

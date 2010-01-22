@@ -652,7 +652,7 @@ void cairo_dock_load_dialog_buttons (CairoContainer *pContainer, gchar *cButtonO
 	
 	cairo_destroy (pCairoContext);
 	
-	if (g_bUseOpenGL)
+	if (0 && g_bUseOpenGL)
 	{
 		_load_button_texture (s_iButtonOkTexture, s_pButtonOkSurface);
 		_load_button_texture (s_iButtonCancelTexture, s_pButtonCancelSurface);
@@ -1406,7 +1406,7 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 
 	///if (iPrevPositionX != pDialog->container.iWindowPositionX || iPrevPositionY != pDialog->container.iWindowPositionY)
 	{
-		g_print (" => move to (%d;%d) %dx%d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, pDialog->container.iWidth, pDialog->container.iHeight);
+		//g_print (" => move to (%d;%d) %dx%d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, pDialog->container.iWidth, pDialog->container.iHeight);
 		gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
 			pDialog->container.iWindowPositionX,
 			pDialog->container.iWindowPositionY);
