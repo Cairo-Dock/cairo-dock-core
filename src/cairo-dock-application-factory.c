@@ -34,6 +34,7 @@
 #include "cairo-dock-load.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-draw.h"
+#include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-animations.h"
@@ -576,8 +577,6 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	//\__________________ On cree, on remplit l'icone, et on l'enregistre, par contre elle sera inseree plus tard.
 	Icon *icon = g_new0 (Icon, 1);
 	icon->cName = (cName ? cName : g_strdup (cClass));
-	/**if (myTaskBar.bUniquePid)
-		icon->iPid = *pPidBuffer;*/
 	icon->Xid = Xid;
 	icon->cClass = cClass;
 	Icon * pLastAppli = cairo_dock_get_last_appli (pDock->icons);
@@ -596,7 +595,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 		&icon->windowGeometry.height);
 	icon->iNumDesktop = cairo_dock_get_xwindow_desktop (Xid);
 	#ifdef HAVE_XEXTEND
-	if (myTaskBar.bShowThumbnail)
+	if (myTaskBar.iMinimizedWindowRenderType == 1)
 	{
 		Display *display = gdk_x11_get_default_xdisplay ();
 		icon->iBackingPixmap = XCompositeNameWindowPixmap (display, Xid);
@@ -607,8 +606,11 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	
 	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pDock);
 	
-	/**if (myTaskBar.bUniquePid)
-		g_hash_table_insert (s_hAppliTable, pPidBuffer, icon);*/
+	if (icon->bIsHidden && myTaskBar.iMinimizedWindowRenderType == 2)
+	{
+		cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pDock), FALSE);
+	}
+	
 	cairo_dock_register_appli (icon);
 	
 	cairo_dock_set_xwindow_mask (Xid, PropertyChangeMask | StructureNotifyMask);

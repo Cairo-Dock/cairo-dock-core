@@ -323,7 +323,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	{
 		icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI];
 		icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI];
-		if (myTaskBar.bShowThumbnail && icon->bIsHidden && icon->iBackingPixmap != 0)
+		if (myTaskBar.iMinimizedWindowRenderType == 1 && icon->bIsHidden && icon->iBackingPixmap != 0)
 		{
 			// on cree la miniature.
 			if (g_bUseOpenGL)

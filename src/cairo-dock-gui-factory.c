@@ -1568,10 +1568,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			}
 			if (iNbControlledWidgets > 0 && pControlContainer != NULL)
 			{
-				g_print ("ctrl (%d widgets)\n", iNbControlledWidgets);
+				//g_print ("ctrl (%d widgets)\n", iNbControlledWidgets);
 				if (pControlContainer == (pFrameVBox ? pFrameVBox : pGroupBox))
 				{
-					g_print ("ctrl (iNbControlledWidgets:%d, iFirstSensitiveWidget:%d, iNbSensitiveWidgets:%d)\n", iNbControlledWidgets, iFirstSensitiveWidget, iNbSensitiveWidgets);
+					//g_print ("ctrl (iNbControlledWidgets:%d, iFirstSensitiveWidget:%d, iNbSensitiveWidgets:%d)\n", iNbControlledWidgets, iFirstSensitiveWidget, iNbSensitiveWidgets);
 					iNbControlledWidgets --;
 					if (iFirstSensitiveWidget > 0)
 						iFirstSensitiveWidget --;
@@ -1579,14 +1579,14 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					GtkWidget *w = (pAdditionalItemsVBox ? pAdditionalItemsVBox : pKeyBox);
 					if (iFirstSensitiveWidget == 0 && iNbSensitiveWidgets > 0)
 					{
-						g_print (" => sensitive\n");
+						//g_print (" => sensitive\n");
 						iNbSensitiveWidgets --;
 						if (GTK_IS_EXPANDER (w))
 							gtk_expander_set_expanded (GTK_EXPANDER (w), TRUE);
 					}
 					else
 					{
-						g_print (" => unsensitive\n");
+						//g_print (" => unsensitive\n");
 						if (!GTK_IS_EXPANDER (w))
 							gtk_widget_set_sensitive (w, FALSE);
 					}
@@ -2177,7 +2177,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							iOrder1 = atoi (pAuthorizedValuesList[k+1]);
 							iOrder2 = atoi (pAuthorizedValuesList[k+2]);
 							iNbControlledWidgets = MAX (iNbControlledWidgets, iOrder1 + iOrder2 - 1);
-							g_print ("iSelectedItem:%d ; k/dk:%d\n", iSelectedItem , k/dk);
+							//g_print ("iSelectedItem:%d ; k/dk:%d\n", iSelectedItem , k/dk);
 							if (iSelectedItem == k/dk)
 							{
 								iFirstSensitiveWidget = iOrder1;
@@ -2214,14 +2214,14 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_one_item_in_control_combo), data);
 							iFirstSensitiveWidget = iSelectedItem+1;  // on decroit jusqu'a 0.
 							iNbSensitiveWidgets = 1;
-							g_print ("CONTROL : %d,%d,%d\n", iNbControlledWidgets, iFirstSensitiveWidget, iNbSensitiveWidgets);
+							//g_print ("CONTROL : %d,%d,%d\n", iNbControlledWidgets, iFirstSensitiveWidget, iNbSensitiveWidgets);
 						}
 						else
 						{
 							data[2] = GINT_TO_POINTER (iNbControlledWidgets);
 							g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_one_item_in_control_combo_selective), data);
 						}
-						g_print (" pControlContainer:%x\n", pControlContainer);
+						//g_print (" pControlContainer:%x\n", pControlContainer);
 					}
 				}
 				_pack_subwidget (pOneWidget);

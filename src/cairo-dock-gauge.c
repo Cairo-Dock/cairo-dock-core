@@ -208,11 +208,11 @@ static void _cairo_dock_load_gauge_needle (cairo_t *pSourceContext, GaugeIndicat
 	if (pGaugeImage->pSvgHandle != NULL)
 	{
 		int iSize = MIN (iWidth, iHeight);
-		g_print ("size : applet : %d, image : %d\n", iSize, pGaugeImage->sizeX);
+		//g_print ("size : applet : %d, image : %d\n", iSize, pGaugeImage->sizeX);
 		pGaugeIndicator->fNeedleScale = (double)iSize / (double) pGaugeImage->sizeX;  // car l'aiguille est a l'horizontale dans le fichier svg.
 		pGaugeIndicator->iNeedleWidth = (double) pGaugeIndicator->iNeedleRealWidth * pGaugeIndicator->fNeedleScale;
 		pGaugeIndicator->iNeedleHeight = (double) pGaugeIndicator->iNeedleRealHeight * pGaugeIndicator->fNeedleScale;
-		g_print (" + needle %dx%d\n", pGaugeIndicator->iNeedleWidth, pGaugeIndicator->iNeedleHeight);
+		//g_print (" + needle %dx%d\n", pGaugeIndicator->iNeedleWidth, pGaugeIndicator->iNeedleHeight);
 		
 		cairo_surface_t *pNeedleSurface = _cairo_dock_create_blank_surface (pSourceContext, pGaugeIndicator->iNeedleWidth, pGaugeIndicator->iNeedleHeight);
 		g_return_if_fail (cairo_surface_status (pNeedleSurface) == CAIRO_STATUS_SUCCESS);

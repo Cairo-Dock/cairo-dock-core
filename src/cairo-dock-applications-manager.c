@@ -50,6 +50,7 @@
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-dialogs.h"
+#include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
@@ -67,6 +68,7 @@ extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
 
 extern int g_iNbDesktops;
 extern int g_iNbViewportX,g_iNbViewportY ;
+extern gboolean g_bUseOpenGL;
 //extern int g_iDamageEvent;
 
 static GHashTable *s_hXWindowTable = NULL;  // table des fenetres X affichees dans le dock.
@@ -447,8 +449,20 @@ static void _on_change_window_state (Icon *icon)
 		cd_message ("  changement de visibilite -> %d", bIsHidden);
 		icon->bIsHidden = bIsHidden;
 		
-		// transparence sur les inhibiteurs.
-		cairo_dock_update_visibility_on_inhibators (icon->cClass, icon->Xid, icon->bIsHidden);
+		// affichage des applis minimisees.
+		if (g_bUseOpenGL && myTaskBar.iMinimizedWindowRenderType == 2)
+		{
+			CairoDock *pDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+			if (pDock != NULL)
+			{
+				cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pDock), TRUE);
+			}
+		}
+		else if (myTaskBar.iMinimizedWindowRenderType == 0)
+		{
+			// transparence sur les inhibiteurs.
+			cairo_dock_update_visibility_on_inhibators (icon->cClass, icon->Xid, icon->bIsHidden);
+		}
 		
 		// applis minimisees seulement
 		if (myTaskBar.bHideVisibleApplis)  // on insere/detache l'icone selon la visibilite de la fenetre, avec une animation.
@@ -478,13 +492,13 @@ static void _on_change_window_state (Icon *icon)
 		
 		// miniature (on le fait apres l'avoir inseree/detachee, car comme ça dans le cas ou on l'enleve du dock apres l'avoir deminimisee, l'icone est marquee comme en cours de suppression, et donc on ne recharge pas son icone. Sinon l'image change pendant la transition, ce qui est pas top. Comme ca ne change pas la taille de l'icone dans le dock, on peut faire ca apres l'avoir inseree.
 		#ifdef HAVE_XEXTEND
-		if (myTaskBar.bShowThumbnail && (pParentDock != NULL || myTaskBar.bHideVisibleApplis))  // on recupere la miniature ou au contraire on remet l'icone.
+		if (myTaskBar.iMinimizedWindowRenderType == 1 && (pParentDock != NULL || myTaskBar.bHideVisibleApplis))  // on recupere la miniature ou au contraire on remet l'icone.
 		{
 			if (! icon->bIsHidden)  // fenetre mappee => BackingPixmap disponible.
 			{
 				if (icon->iBackingPixmap != 0)
 					XFreePixmap (s_XDisplay, icon->iBackingPixmap);
-				if (myTaskBar.bShowThumbnail)
+				if (myTaskBar.iMinimizedWindowRenderType == 1)
 					icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
 				else
 					icon->iBackingPixmap = 0;
@@ -544,9 +558,13 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 	{
 		if (icon->iBackingPixmap != 0)
 			XFreePixmap (s_XDisplay, icon->iBackingPixmap);
-		if (myTaskBar.bShowThumbnail)
+		if (myTaskBar.iMinimizedWindowRenderType == 1)
+		{
 			icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
-		cd_message ("new backing pixmap : %d", icon->iBackingPixmap);
+			cd_message ("new backing pixmap : %d", icon->iBackingPixmap);
+		}
+		else
+			icon->iBackingPixmap = 0;
 	}
 	#endif
 	icon->windowGeometry.width = e->width;

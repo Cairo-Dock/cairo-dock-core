@@ -119,8 +119,9 @@ group by class = true
 #{enter the class of the applications, separated by a semi-colon ';'}
 group exception = pidgin;xchat;amsn
 
-#v- 
-sep_app =
+
+#F-[Representation;gtk-find]
+frame3 =
 
 #B- Overwrite X icons with launchers' one ?
 #{If not set, will use the icon provided by X for each appli. If set, the same icon as the corresponding launcher will be used for each appli.}
@@ -130,13 +131,24 @@ overwrite xicon = true
 #{enter the class of the applications, separated by a semi-colon ';'}
 overwrite exception = pidgin;xchat;amsn;gimp-2.6
 
-#b- Show a window thumbnail when it's minimized ?
-#{You need a composite manager for it.}
-window thumbnail = true
+#Y-[Make the icon transparent;1;1;Show the window thumbnail;0;0;Draw it bent backwards;0;0] How to draw minimized windows ?
+#{A composite manager is required to display the thumbnail.
+#OpenGL is required to draw the icon bent backwards.}
+minimized = 1
+
+#e-[0;.6;plain;transparent] Transparency of icons whose window is minimized :
+visibility alpha = 0.35
 
 #b- Display an indicator even if the icon is not a launcher ?
 #{The indicator is drawn on active launchers, but you may want to display it on applis too.}
 indic on appli = false
+
+#a- Play a short animation of the icon when its window becomes active ?
+animation on active window = wobbly
+
+#i- Maximum number of caracters in application's name :
+#{"..." will be added at the end if the name is too long.}
+max name length = 20
 
 #F-[Interaction;gtk-refresh]
 frame2 =
@@ -166,23 +178,6 @@ force demands attention =
 
 #a- Signal the applications demanding your attention with an animation ?
 animation on demands attention = rotate
-
-#v- 
-sep_act =
-
-#a- Play a short animation of the icon when its window becomes active ?
-animation on active window = wobbly
-
-#F-[Representation;gtk-find]
-frame3 =
-
-#i- Maximum number of caracters in application's name :
-#{"..." will be added at the end if the name is too long.}
-max name length = 20
-
-#e-[-.6;.6] Transparency of icons whose window is or isn't minimized :
-#{To the right, you can control the transparency of minimized windows, to the left the transparency of visible windows. The more you go aside, the more the concerned icons will be transparent; on the middle, icons are always plain.}
-visibility alpha = 0.35
 
 
 [System]

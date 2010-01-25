@@ -101,6 +101,8 @@ void cairo_dock_update_label_texture (Icon *pIcon);
 */
 void cairo_dock_update_quick_info_texture (Icon *pIcon);
 
+void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer, gboolean bStateChanged);
+
   //////////////////
  // DRAW TEXTURE //
 //////////////////

@@ -76,7 +76,7 @@ static GLuint s_iDepthRotateButtonTexture = 0;
 
 void cairo_dock_load_desklet_buttons (cairo_t *pSourceContext)
 {
-	
+	g_print ("%s ()\n", __func__);
 	if (myDesklets.cRotateButtonImage != NULL)
 	{
 		s_pRotateButtonSurface = cairo_dock_create_surface_from_image_simple (myDesklets.cRotateButtonImage,
@@ -150,6 +150,7 @@ void cairo_dock_load_desklet_buttons_texture (void)
 
 void cairo_dock_unload_desklet_buttons (void)
 {
+	//g_print ("%s ()\n", __func__);
 	if (s_pRotateButtonSurface != NULL)
 	{
 		cairo_surface_destroy (s_pRotateButtonSurface);
@@ -1005,7 +1006,7 @@ Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet)
 	int iMouseX = pDesklet->container.iMouseX, iMouseY = pDesklet->container.iMouseY;
 	if (pDesklet->fRotation != 0)
 	{
-		g_print (" clic en (%d;%d) rotations : %.2frad\n", iMouseX, iMouseY, pDesklet->fRotation);
+		//g_print (" clic en (%d;%d) rotations : %.2frad\n", iMouseX, iMouseY, pDesklet->fRotation);
 		double x, y;  // par rapport au centre du desklet.
 		x = iMouseX - pDesklet->container.iWidth/2;
 		y = pDesklet->container.iHeight/2 - iMouseY;
@@ -1022,7 +1023,7 @@ Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet)
 		
 		iMouseX = x + pDesklet->container.iWidth/2;
 		iMouseY = pDesklet->container.iHeight/2 - y;
-		g_print (" => (%d;%d)\n", iMouseX, iMouseY);
+		//g_print (" => (%d;%d)\n", iMouseX, iMouseY);
 	}
 	pDesklet->iMouseX2d = iMouseX;
 	pDesklet->iMouseY2d = iMouseY;
@@ -1450,6 +1451,8 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
 		cd_debug ("pack -> ref = %d", pInteractiveWidget->object.parent_instance.ref_count);
 	}
 	
+	gtk_widget_show_all(pWindow);
+	
 	if (s_pRotateButtonSurface == NULL)
 	{
 		cairo_t *ctx = cairo_dock_create_context_from_container (CAIRO_CONTAINER (pDesklet));
@@ -1457,8 +1460,6 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
 		cairo_destroy (ctx);
 	}
 	
-	gtk_widget_show_all(pWindow);
-
 	return pDesklet;
 }
 

@@ -60,6 +60,7 @@
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-dock-facility.h"
+#include "cairo-dock-dock-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-draw-opengl.h"
 
@@ -1076,6 +1077,102 @@ void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer)
 		pIcon->fAlpha);
 }
 
+static inline void  _draw_icon_bent_backwards (Icon *pIcon, CairoContainer *pContainer, GLuint iOriginalTexture, double f)
+{
+	int iWidth, iHeight;
+	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+	cairo_dock_set_perspective_view (iWidth, iHeight);
+	glScalef (1., -1., 1.);
+	glTranslatef (0., -iHeight/2, 0.);  // rotation de 50° sur l'axe des X a la base de l'icone.
+	glRotatef (-50.*f, 1., 0., 0.);
+	glTranslatef (0., iHeight/2, 0.);
+	
+	_cairo_dock_enable_texture ();
+	_cairo_dock_set_blend_source ();
+	glBindTexture (GL_TEXTURE_2D, iOriginalTexture);
+	_cairo_dock_apply_current_texture_at_size_with_offset (iWidth*(1+.1*f),
+		iHeight*(1+.25*f),
+		0.,
+		iHeight*(.25/2*f));  // on elargit un peu la texture, car avec l'effet de profondeur elle parait trop petite.
+	_cairo_dock_disable_texture ();
+	cairo_dock_set_ortho_view (iWidth, iHeight);
+}
+static gboolean _transition_step (Icon *pIcon, gpointer data)
+{
+	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+	if (pDock == NULL)
+		return FALSE;
+	
+	GLuint iOriginalTexture = GPOINTER_TO_INT (data);
+	double f = cairo_dock_get_transition_fraction (pIcon);
+	if (!pIcon->bIsHidden)
+		f = 1 - f;
+	
+	_draw_icon_bent_backwards (pIcon, CAIRO_CONTAINER (pDock), iOriginalTexture, f);
+	return TRUE;
+}
+static void _free_transition_data (gpointer data)
+{
+	GLuint iOriginalTexture = GPOINTER_TO_INT (data);
+	_cairo_dock_delete_texture (iOriginalTexture);
+}
+void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer, gboolean bStateChanged)
+{
+	if (bStateChanged)
+	{
+		cairo_dock_remove_transition_on_icon (pIcon);
+		
+		int iWidth, iHeight;
+		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+		
+		GLuint iOriginalTexture;
+		if (pIcon->bIsHidden)
+		{
+			iOriginalTexture = pIcon->iIconTexture;
+			pIcon->iIconTexture = cairo_dock_create_texture_from_surface (pIcon->pIconBuffer);
+			/// Using FBOs copies the texture data (pixels) within VRAM only:
+			/// - setup & bind FBO
+			/// - setup destination texture (using glTexImage() w/ pixels = 0)
+			/// - add (blank but sized) destination texture as color attachment
+			/// - bind source texture to texture target
+			/// - draw quad w/ glTexCoors describing src area, projection/modelview matrices & glVertexes describing dst area
+		}
+		else
+		{
+			iOriginalTexture = cairo_dock_create_texture_from_surface (pIcon->pIconBuffer);
+		}
+		
+		cairo_dock_set_transition_on_icon (pIcon, pContainer, NULL,
+			(CairoDockTransitionRenderFunc) NULL,
+			(CairoDockTransitionGLRenderFunc) _transition_step,
+			TRUE,  // slow
+			500,  // ms
+			TRUE,  // remove when finished
+			GINT_TO_POINTER (iOriginalTexture),
+			_free_transition_data);
+	}
+	else if (pIcon->bIsHidden)
+	{
+		if (!cairo_dock_begin_draw_icon (pIcon, pContainer))
+			return ;
+		_draw_icon_bent_backwards (pIcon, pContainer, pIcon->iIconTexture, 1.);
+		cairo_dock_end_draw_icon (pIcon, pContainer);
+	}
+}
+void cairo_dock_draw_icon_bent_backwards (Icon *pIcon, CairoContainer *pContainer)
+{
+	g_print ("%s (%s, %d)\n", __func__, pIcon->cName, pIcon->bIsHidden);
+	if (pIcon->bIsHidden)
+	{
+		
+	}
+	else
+	{
+		cairo_dock_update_icon_texture (pIcon);
+	}
+}
+
+
 /// PATH ///
 
 const GLfloat *cairo_dock_generate_rectangle_path (double fDockWidth, double fFrameHeight, double fRadius, gboolean bRoundedBottomCorner, int *iNbPoints)
@@ -1506,6 +1603,7 @@ void cairo_dock_draw_rounded_rectangle_opengl (double fRadius, double fLineWidth
 	}
 }
 
+
 GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pContext)
 {
 	Display *XDisplay = gdk_x11_get_default_xdisplay ();
@@ -1526,6 +1624,8 @@ GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pCont
 			*pContext = 0;
 			return 0;
 		}
+		else
+			cd_warning ("GLX version too old (%d.%d).\nCairo-Dock needs at least GLX 1.3. Indirect rendering will be used as a workaround.", major, minor);
 		bIndirect = TRUE;
 	}
 	

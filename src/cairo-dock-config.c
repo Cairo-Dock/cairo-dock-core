@@ -489,7 +489,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	gboolean bAppliOnCurrentDesktopOnlyOld = myTaskBar.bAppliOnCurrentDesktopOnly;
 	gboolean bMixLauncherAppliOld = myTaskBar.bMixLauncherAppli;
 	gboolean bOverWriteXIconsOld = myTaskBar.bOverWriteXIcons;  // TRUE initialement.
-	gboolean bShowThumbnailOld = myTaskBar.bShowThumbnail;
+	gint iMinimizedWindowRenderTypeOld = myTaskBar.iMinimizedWindowRenderType;
 	gchar *cDeskletDecorationsNameOld = myDesklets.cDeskletDecorationsName;
 	myDesklets.cDeskletDecorationsName = NULL;
 	int iSeparateIconsOld = myIcons.iSeparateIcons;
@@ -590,7 +590,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 		bAppliOnCurrentDesktopOnlyOld != myTaskBar.bAppliOnCurrentDesktopOnly ||
 		bMixLauncherAppliOld != myTaskBar.bMixLauncherAppli ||
 		bOverWriteXIconsOld != myTaskBar.bOverWriteXIcons ||
-		bShowThumbnailOld != myTaskBar.bShowThumbnail ||
+		iMinimizedWindowRenderTypeOld != myTaskBar.iMinimizedWindowRenderType ||
 		(cairo_dock_application_manager_is_running () && ! myTaskBar.bShowAppli))  // on ne veut plus voir les applis, il faut donc les enlever.
 	{
 		cairo_dock_stop_application_manager ();

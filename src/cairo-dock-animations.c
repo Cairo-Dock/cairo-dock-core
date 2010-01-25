@@ -905,20 +905,20 @@ static gboolean _cairo_dock_transition_step (gpointer pUserData, Icon *pIcon, Ca
 		{
 			if (! cairo_dock_begin_draw_icon (pIcon, pContainer))
 				return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-			bContinue = pTransition->render_opengl (pTransition->pUserData);
+			bContinue = pTransition->render_opengl (pIcon, pTransition->pUserData);
 			cairo_dock_end_draw_icon (pIcon, pContainer);
 		}
-		else
+		else if (pTransition->pIconContext != NULL)
 		{
 			cairo_dock_erase_cairo_context (pTransition->pIconContext);
-			bContinue = pTransition->render (pTransition->pUserData, pTransition->pIconContext);
+			bContinue = pTransition->render (pIcon, pTransition->pUserData, pTransition->pIconContext);
 			cairo_dock_update_icon_texture (pIcon);
 		}
 	}
 	else if (pTransition->render && pTransition->pIconContext != NULL)
 	{
 		cairo_dock_erase_cairo_context (pTransition->pIconContext);
-		bContinue = pTransition->render (pTransition->pUserData, pTransition->pIconContext);
+		bContinue = pTransition->render (pIcon, pTransition->pUserData, pTransition->pIconContext);
 		if (pContainer->bUseReflect)
 			cairo_dock_add_reflection_to_icon (pTransition->pIconContext, pIcon, pContainer);
 	}
@@ -941,7 +941,7 @@ static gboolean _cairo_dock_transition_step (gpointer pUserData, Icon *pIcon, Ca
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
-void cairo_dock_set_transition_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pIconContext, CairoDockTransitionRenderFunc render_step_cairo, CairoDockTransitionGLRenderFunc render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData)
+void cairo_dock_set_transition_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pIconContext, CairoDockTransitionRenderFunc render_step_cairo, CairoDockTransitionGLRenderFunc render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData, GFreeFunc pFreeUserDataFunc)
 {
 	cairo_dock_remove_transition_on_icon (pIcon);
 	
@@ -954,6 +954,7 @@ void cairo_dock_set_transition_on_icon (Icon *pIcon, CairoContainer *pContainer,
 	pTransition->pContainer = pContainer;
 	pTransition->pIconContext = pIconContext;
 	pTransition->pUserData = pUserData;
+	pTransition->pFreeUserDataFunc = pFreeUserDataFunc;
 	cairo_dock_set_transition (pIcon, pTransition);
 	
 	cairo_dock_register_notification_on_icon (pIcon, bFastPace ? CAIRO_DOCK_UPDATE_ICON : CAIRO_DOCK_UPDATE_ICON_SLOW,
@@ -971,7 +972,9 @@ void cairo_dock_remove_transition_on_icon (Icon *pIcon)
 	cairo_dock_remove_notification_func_on_icon (pIcon, pTransition->bFastPace ? CAIRO_DOCK_UPDATE_ICON : CAIRO_DOCK_UPDATE_ICON_SLOW,
 		(CairoDockNotificationFunc) _cairo_dock_transition_step,
 		pTransition->pUserData);
-
+	
+	if (pTransition->pFreeUserDataFunc != NULL)
+		pTransition->pFreeUserDataFunc (pTransition->pUserData);
 	g_free (pTransition);
 	cairo_dock_set_transition (pIcon, NULL);
 }

@@ -48,7 +48,7 @@ struct _CairoConfigTaskBar {
 	gchar *cAnimationOnDemandsAttention;
 	gchar *cAnimationOnActiveWindow;
 	gboolean bOverWriteXIcons;
-	gboolean bShowThumbnail;
+	gint iMinimizedWindowRenderType;
 	gboolean bMixLauncherAppli;
 	gchar *cOverwriteException;
 	gchar *cGroupException;

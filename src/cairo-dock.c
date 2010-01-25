@@ -717,7 +717,7 @@ int main (int argc, char** argv)
 		
 		CairoDockModule *pModule = cairo_dock_find_module_from_name (cExcludeModule);
 		Icon *icon = cairo_dock_get_dialogless_icon ();
-		cairo_dock_show_temporary_dialog_with_icon (cMessage, icon, g_pMainDock, 15000., (pModule ? pModule->pVisitCard->cIconFilePath : NULL));
+		cairo_dock_show_temporary_dialog_with_icon (cMessage, icon, CAIRO_CONTAINER (g_pMainDock), 15000., (pModule ? pModule->pVisitCard->cIconFilePath : NULL));
 		g_free (cMessage);
 	}
 	

@@ -506,6 +506,9 @@ static void _add_one_dock_to_menu (const gchar *cName, CairoDock *pDock, GtkWidg
 	Icon *pIcon = g_object_get_data (G_OBJECT (pMenu), "launcher");
 	if (strcmp (pIcon->cParentDockName, cName) == 0)
 		return;
+	// on elimine le sous-dock.
+	if (pIcon->pSubDock != NULL && pIcon->pSubDock == pDock)
+		return;
 	// on rajoute une entree pour le dock.
 	GtkWidget *pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (cName, NULL, (GFunc)_cairo_dock_move_launcher_to_dock, pMenu, (gpointer)cName);
 	g_object_set_data (G_OBJECT (pMenuItem), "launcher", pIcon);

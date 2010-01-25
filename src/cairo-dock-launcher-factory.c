@@ -215,7 +215,7 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 							cClass = slash+1;
 					}
 				}
-				g_print ("  special case : wine application => class = '%s'\n", cClass);
+				cd_debug ("  special case : wine application => class = '%s'", cClass);
 			}
 			else
 			{
@@ -233,7 +233,7 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 				icon->cClass = g_strdup (cClass);
 			else
 				icon->cClass = NULL;
-			cd_message ("no class defined for the launcher %s\n we will assume that its class is '%s'", icon->cName, icon->cClass);
+			cd_debug ("no class defined for the launcher %s\n we will assume that its class is '%s'", icon->cName, icon->cClass);
 			g_free (cDefaultClass);
 		}
 		else
@@ -570,15 +570,20 @@ void cairo_dock_reload_launcher (Icon *icon)
 	g_return_if_fail (pNewDock != NULL);
 	
 	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pNewDock));
-	icon->fWidth /= pDock->container.fRatio;
-	icon->fHeight /= pDock->container.fRatio;
-	if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)
-		cairo_dock_draw_subdock_content_on_icon (icon, pNewDock);
-	else
-		cairo_dock_fill_icon_buffers_for_dock (icon, pCairoContext, pNewDock);
 	
-	icon->fWidth *= pDock->container.fRatio;
-	icon->fHeight *= pDock->container.fRatio;
+	if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)
+	{
+		cairo_dock_draw_subdock_content_on_icon (icon, pNewDock);
+	}
+	else
+	{
+		icon->fWidth /= pDock->container.fRatio;
+		icon->fHeight /= pDock->container.fRatio;
+		cairo_dock_fill_icon_buffers_for_dock (icon, pCairoContext, pNewDock);
+		icon->fWidth *= pDock->container.fRatio;
+		icon->fHeight *= pDock->container.fRatio;
+	}
+	
 	//g_print ("icon : %.1fx%.1f", icon->fWidth, icon->fHeight);
 	
 	if (cName && ! icon->cName)

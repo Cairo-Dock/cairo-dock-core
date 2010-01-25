@@ -61,6 +61,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	pTaskBar->bHideVisibleApplis = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "hide visible", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 	
 	
+	// representation
 	pTaskBar->bDrawIndicatorOnAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "indic on appli", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	
 	pTaskBar->bOverWriteXIcons = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "overwrite xicon", &bFlushConfFileNeeded, TRUE, NULL, NULL);
@@ -72,13 +73,29 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 			pTaskBar->cOverwriteException[i] = g_ascii_tolower (pTaskBar->cOverwriteException[i]);
 	}
 	
-	pTaskBar->bShowThumbnail = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "window thumbnail", &bFlushConfFileNeeded, TRUE, NULL, NULL);
-	if (pTaskBar->bShowThumbnail && ! cairo_dock_xcomposite_is_available ())
+	///pTaskBar->bShowThumbnail = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "window thumbnail", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	pTaskBar->iMinimizedWindowRenderType = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "minimized", &bFlushConfFileNeeded, -1, NULL, NULL);
+	if (pTaskBar->iMinimizedWindowRenderType == -1)  // anciens parametres.
+	{
+		gboolean bShowThumbnail = g_key_file_get_boolean (pKeyFile, "TaskBar", "window thumbnail", NULL);
+		if (bShowThumbnail)
+			pTaskBar->iMinimizedWindowRenderType = 1;
+		else
+			pTaskBar->iMinimizedWindowRenderType = 0;
+		g_key_file_set_integer (pKeyFile, "TaskBar", "minimized", pTaskBar->iMinimizedWindowRenderType);
+	}
+	
+	if (pTaskBar->iMinimizedWindowRenderType == 1 && ! cairo_dock_xcomposite_is_available ())
 	{
 		cd_warning ("Sorry but either your X server does not have the XComposite extension, or your version of Cairo-Dock was not built with the support of XComposite.\n You can't have window thumbnails in the dock");
-		pTaskBar->bShowThumbnail = FALSE;
+		pTaskBar->iMinimizedWindowRenderType = 0;
 	}
-
+	if (pTaskBar->iMinimizedWindowRenderType == 0)
+		pTaskBar->fVisibleAppliAlpha = MIN (.6, cairo_dock_get_double_key_value (pKeyFile, "TaskBar", "visibility alpha", &bFlushConfFileNeeded, .35, "Applications", NULL));
+	
+	pTaskBar->iAppliMaxNameLength = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "max name length", &bFlushConfFileNeeded, 15, "Applications", NULL);
+	
+	
 	// interaction
 	pTaskBar->bMinimizeOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "minimize on click", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
 	pTaskBar->bCloseAppliOnMiddleClick = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "close on middle click", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
@@ -91,17 +108,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	g_free (cForceDemandsAttention);
 	
 	pTaskBar->cAnimationOnActiveWindow = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "animation on active window", &bFlushConfFileNeeded, "wobbly", NULL, NULL);
-	
-	// representation
-	pTaskBar->iAppliMaxNameLength = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "max name length", &bFlushConfFileNeeded, 15, "Applications", NULL);
-	
-	pTaskBar->fVisibleAppliAlpha = cairo_dock_get_double_key_value (pKeyFile, "TaskBar", "visibility alpha", &bFlushConfFileNeeded, .35, "Applications", NULL);  // >0 <=> les fenetres minimisees sont transparentes.
-	if (pTaskBar->bHideVisibleApplis && pTaskBar->fVisibleAppliAlpha < 0)
-		pTaskBar->fVisibleAppliAlpha = 0.;  // on inhibe ce parametre, puisqu'il ne sert alors a rien.
-	else if (pTaskBar->fVisibleAppliAlpha > .6)
-		pTaskBar->fVisibleAppliAlpha = .6;
-	else if (pTaskBar->fVisibleAppliAlpha < -.6)
-		pTaskBar->fVisibleAppliAlpha = -.6;
 	
 	return bFlushConfFileNeeded;
 }
@@ -132,7 +138,7 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 		pPrevTaskBar->bAppliOnCurrentDesktopOnly != pTaskBar->bAppliOnCurrentDesktopOnly ||
 		pPrevTaskBar->bMixLauncherAppli != pTaskBar->bMixLauncherAppli ||
 		pPrevTaskBar->bOverWriteXIcons != pTaskBar->bOverWriteXIcons ||
-		pPrevTaskBar->bShowThumbnail != pTaskBar->bShowThumbnail ||
+		pPrevTaskBar->iMinimizedWindowRenderType != pTaskBar->iMinimizedWindowRenderType ||
 		pPrevTaskBar->iAppliMaxNameLength != pTaskBar->iAppliMaxNameLength ||
 		cairo_dock_strings_differ (pPrevTaskBar->cGroupException, pTaskBar->cGroupException) ||
 		cairo_dock_strings_differ (pPrevTaskBar->cOverwriteException, pTaskBar->cOverwriteException) ||

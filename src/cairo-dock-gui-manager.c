@@ -77,7 +77,7 @@ void cairo_dock_dialog_window_created (void)
 {
 	iNbConfigDialogs ++;
 	g_print ("iNbConfigDialogs <- %d\n", iNbConfigDialogs);
-	if (g_pMainDock != NULL)  // peut arriver au 1er lancement.
+	if (g_pMainDock != NULL && cairo_dock_search_window_on_our_way (g_pMainDock, FALSE, TRUE) == NULL)  // peut arriver au 1er lancement.
 		cairo_dock_pop_up (g_pMainDock);
 }
 
