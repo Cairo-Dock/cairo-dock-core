@@ -29,7 +29,6 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-internal-views.h"
-#include "cairo-dock-internal-background.h"
 #include "cairo-dock-internal-desklets.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-animations.h"

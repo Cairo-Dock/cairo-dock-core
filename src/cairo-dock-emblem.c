@@ -26,6 +26,7 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-load.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-emblem.h"
 
@@ -386,8 +387,10 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 	}
 	else
 	{
-		cairo_destroy (pCairoContext);
 		if (g_bUseOpenGL)
 			cairo_dock_update_icon_texture (pIcon);
+		else
+			cairo_dock_add_reflection_to_icon (pCairoContext, pIcon, CAIRO_CONTAINER (pDock));
+		cairo_destroy (pCairoContext);
 	}
 }

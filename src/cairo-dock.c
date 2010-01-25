@@ -107,6 +107,7 @@
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-gui-manager.h"
+#include "cairo-dock-gui-launcher.h"
 #include "cairo-dock-dbus.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-internal-icons.h"
@@ -565,6 +566,7 @@ int main (int argc, char** argv)
 	
 	//\___________________ On definit le backend des GUI.
 	cairo_dock_load_user_gui_backend ();
+	cairo_dock_register_default_launcher_gui_backend ();
 	
 	//\___________________ On enregistre nos notifications.
 	cairo_dock_register_notification (CAIRO_DOCK_BUILD_MENU,
@@ -797,6 +799,8 @@ int main (int argc, char** argv)
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
 	g_print ("\nNOUVELLE INSTANCE COPIEE SUR LA 1ERE\n\n");
 	g_print ("\nJAUGES : LOGO\n\n");
+	
+	g_print ("\n*** NE PAS OUBLIER DE REMETTRE LE NOM DE DOMAINE ! ***\n\n");
 	
 	/*if (strcmp((cairo_dock_launch_command_sync ("date +%m%d")), "0101") == 0)
 	{

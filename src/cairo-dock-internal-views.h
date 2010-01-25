@@ -36,7 +36,6 @@ G_BEGIN_DECLS
 struct _CairoConfigViews {
 	gchar *cMainDockDefaultRendererName;
 	gchar *cSubDockDefaultRendererName;
-	gboolean bSameHorizontality;
 	gdouble fSubDockSizeRatio;
 	} ;
 

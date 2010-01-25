@@ -26,13 +26,7 @@
 G_BEGIN_DECLS
 
 
-GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon);
-
-void cairo_dock_free_launcher_gui (void);
-
-void cairo_dock_delete_current_launcher_widget (void);
-
-void cairo_dock_refresh_launcher_gui (void);
+void cairo_dock_register_default_launcher_gui_backend (void);
 
 
 G_END_DECLS

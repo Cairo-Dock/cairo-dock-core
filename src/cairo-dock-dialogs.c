@@ -41,9 +41,7 @@
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-dialogs.h"
-#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-system.h"
-#include "cairo-dock-internal-background.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-callbacks.h"
@@ -912,10 +910,11 @@ static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cIm
 	{
 		if (pContainer == NULL)
 			pContainer = cairo_dock_search_container_from_icon (pIcon);
-		double fMaxScale = (pContainer != NULL ? cairo_dock_get_max_scale (pContainer) / pContainer->fRatio : 1.);
+		int iWidth, iHeight;
+		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
 		pIconBuffer = cairo_dock_duplicate_surface (pIcon->pIconBuffer,
 			pSourceContext,
-			pIcon->fWidth * fMaxScale, pIcon->fHeight * fMaxScale,
+			iWidth, iHeight,
 			iDesiredSize, iDesiredSize);
 	}
 	else
@@ -1427,9 +1426,9 @@ void cairo_dock_compute_dialog_sizes (CairoDialog *pDialog)
 	pDialog->iBubbleWidth = MAX (pDialog->iInteractiveWidth, MAX (pDialog->iButtonsWidth, MAX (pDialog->iMessageWidth, pDialog->iMinFrameWidth)));
 	pDialog->iBubbleHeight = pDialog->iMessageHeight + pDialog->iInteractiveHeight + pDialog->iButtonsHeight;
 	if (pDialog->iBubbleWidth == 0)  // precaution.
-		pDialog->iBubbleWidth = 2 * myBackground.iDockRadius + myBackground.iDockLineWidth;
+		pDialog->iBubbleWidth = 20;
 	if (pDialog->iBubbleHeight == 0)
-		pDialog->iBubbleHeight = 2 * myBackground.iDockRadius + myBackground.iDockLineWidth;
+		pDialog->iBubbleHeight = 20;
 	
 	pDialog->container.iWidth = pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin;
 	pDialog->container.iHeight = pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iMinBottomGap;  // resultat temporaire, sans la pointe.

@@ -38,7 +38,6 @@
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-internal-accessibility.h"

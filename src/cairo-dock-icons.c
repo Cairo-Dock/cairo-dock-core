@@ -49,10 +49,8 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-class-manager.h"
-#include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-labels.h"
-#include "cairo-dock-internal-background.h"
 #include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-load.h"
@@ -60,7 +58,7 @@
 #include "cairo-dock-emblem.h"
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-desktop-file-factory.h"
-#include "cairo-dock-gui-launcher.h"
+#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-icons.h"
 
 extern gchar *g_cCurrentLaunchersPath;
@@ -708,7 +706,7 @@ void cairo_dock_set_icon_name_full (cairo_t *pSourceContext, Icon *pIcon, CairoC
 	va_end (args);
 }
 
-void cairo_dock_set_quick_info (cairo_t *pSourceContext, const gchar *cQuickInfo, Icon *pIcon, double fMaxScale)
+void cairo_dock_set_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfo)
 {
 	g_return_if_fail (pIcon != NULL);  // le contexte sera verifie plus loin.
 
@@ -718,6 +716,7 @@ void cairo_dock_set_quick_info (cairo_t *pSourceContext, const gchar *cQuickInfo
 		pIcon->cQuickInfo = g_strdup (cQuickInfo);
 	}
 	
+	double fMaxScale = cairo_dock_get_max_scale (pContainer);
 	cairo_dock_fill_one_quick_info_buffer (pIcon,
 		pSourceContext,
 		&myLabels.quickInfoTextDescription,
@@ -729,7 +728,7 @@ void cairo_dock_set_quick_info_full (cairo_t *pSourceContext, Icon *pIcon, Cairo
 	va_list args;
 	va_start (args, cQuickInfoFormat);
 	gchar *cFullText = g_strdup_vprintf (cQuickInfoFormat, args);
-	cairo_dock_set_quick_info (pSourceContext, cFullText, pIcon, (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) / 1 : 1));
+	cairo_dock_set_quick_info (pSourceContext, pIcon, pContainer, cFullText);
 	g_free (cFullText);
 	va_end (args);
 }

@@ -559,7 +559,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param cQuickInfo the quick-info. This is a small text (a few characters) that is superimposed on the icon.
 */
 #define CD_APPLET_SET_QUICK_INFO_ON_MY_ICON(cQuickInfo) \
-	cairo_dock_set_quick_info (myDrawContext, cQuickInfo, myIcon, myDock ? (1 + myIcons.fAmplitude) / 1 : 1)
+	cairo_dock_set_quick_info (myDrawContext, myIcon, myContainer, cQuickInfo)
 /** Set a quick-info on the applet's icon.
 *@param cQuickInfoFormat the label, in a 'printf'-like format.
 *@param ... values to be written in the string.

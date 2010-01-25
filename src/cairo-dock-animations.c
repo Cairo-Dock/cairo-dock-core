@@ -898,7 +898,7 @@ static gboolean _cairo_dock_transition_step (gpointer pUserData, Icon *pIcon, Ca
 	if (! pTransition->bRemoveWhenFinished && pTransition->iDuration != 0 && pTransition->iElapsedTime > pTransition->iDuration)  // skip
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
-	gboolean bContinue;
+	gboolean bContinue = FALSE;
 	if (CAIRO_CONTAINER_IS_OPENGL (pTransition->pContainer))
 	{
 		if (pTransition->render_opengl)
@@ -922,8 +922,6 @@ static gboolean _cairo_dock_transition_step (gpointer pUserData, Icon *pIcon, Ca
 		if (pContainer->bUseReflect)
 			cairo_dock_add_reflection_to_icon (pTransition->pIconContext, pIcon, pContainer);
 	}
-	else
-		bContinue = FALSE;
 	
 	cairo_dock_redraw_icon (pIcon, pContainer);
 	

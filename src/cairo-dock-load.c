@@ -45,13 +45,11 @@
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-views.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-dialogs.h"
@@ -85,7 +83,7 @@ extern double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
 extern cairo_surface_t *g_pIconBackgroundImageSurface;
 extern double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
 
-extern GLuint g_pGradationTexture[2];
+///extern GLuint g_pGradationTexture[2];
 
 extern gboolean g_bUseOpenGL;
 extern GLuint g_iBackgroundTexture;
@@ -228,8 +226,8 @@ void cairo_dock_add_reflection_to_icon (cairo_t *pSourceContext, Icon *pIcon, Ca
 		pSourceContext,
 		iWidth,
 		iHeight,
+		myIcons.fReflectSize * cairo_dock_get_max_scale (pContainer),
 		pContainer->bIsHorizontal,
-		cairo_dock_get_max_scale (pContainer),
 		pContainer->bDirectionUp);
 }
 
@@ -464,8 +462,8 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			pSourceContext,
 			(bIsHorizontal ? icon->fWidth : icon->fHeight) * fMaxScale,
 			(bIsHorizontal ? icon->fHeight : icon->fWidth) * fMaxScale,
+			myIcons.fReflectSize * fMaxScale,
 			bIsHorizontal,
-			fMaxScale,
 			bDirectionUp);
 	}
 	
@@ -720,7 +718,7 @@ void cairo_dock_load_visible_zone (CairoDock *pDock, gchar *cVisibleZoneImageFil
 }
 
 
-static cairo_surface_t *_cairo_dock_make_stripes_background (cairo_t* pSourceContext, int iStripesWidth, int iStripesHeight, double fRotationAngle)
+static cairo_surface_t *_cairo_dock_make_stripes_background (cairo_t* pSourceContext, int iStripesWidth, int iStripesHeight)
 {
 	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	cairo_pattern_t *pStripesPattern;
@@ -790,34 +788,7 @@ static cairo_surface_t *_cairo_dock_make_stripes_background (cairo_t* pSourceCon
 
 	cairo_pattern_destroy (pStripesPattern);
 	cairo_destroy (pImageContext);
-
-	if (fRotationAngle != 0)
-	{
-		cairo_surface_t *pNewSurfaceRotated = _cairo_dock_create_blank_surface (pSourceContext,
-			iStripesHeight,
-			iStripesWidth);
-		pImageContext = cairo_create (pNewSurfaceRotated);
-
-		if (fRotationAngle < 0)
-		{
-			cairo_move_to (pImageContext, iStripesWidth, 0);
-			cairo_rotate (pImageContext, fRotationAngle);
-			cairo_translate (pImageContext, - iStripesWidth, 0);
-		}
-		else
-		{
-			cairo_move_to (pImageContext, 0, 0);
-			cairo_rotate (pImageContext, fRotationAngle);
-			cairo_translate (pImageContext, 0, - iStripesHeight);
-		}
-		cairo_set_source_surface (pImageContext, pNewSurface, 0, 0);
-
-		cairo_paint (pImageContext);
-		cairo_surface_destroy (pNewSurface);
-		cairo_destroy (pImageContext);
-		pNewSurface = pNewSurfaceRotated;
-	}
-
+	
 	return pNewSurface;
 }
 void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, int iNewDecorationsWidth, int iNewDecorationsHeight)
@@ -871,8 +842,7 @@ void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, in
 			g_fBackgroundImageHeight = MAX (g_fBackgroundImageHeight, iNewDecorationsHeight);
 			g_pBackgroundSurfaceFull = _cairo_dock_make_stripes_background (pCairoContext,
 				g_fBackgroundImageWidth,
-				g_fBackgroundImageHeight,
-				0.);
+				g_fBackgroundImageHeight);
 		}
 		
 		if (g_bUseOpenGL)
@@ -886,7 +856,6 @@ void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, in
 		cd_debug ("  MaJ des decorations du fond -> %.2fx%.2f", g_fBackgroundImageWidth, g_fBackgroundImageHeight);
 	}
 }
-
 
 void cairo_dock_load_background_decorations (CairoDock *pDock)
 {
@@ -935,6 +904,7 @@ void cairo_dock_load_icons_background_surface (const gchar *cImagePath, cairo_t*
 		}
 	}
 }
+
 
 
 static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // attention : fonction lourde.
@@ -1096,6 +1066,7 @@ void cairo_dock_reload_desktop_background (void)
 		s_pDesktopBg->iTexture = cairo_dock_create_texture_from_surface (s_pDesktopBg->pSurface);
 	}
 }
+
 
 
 void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* pSourceContext, double fMaxScale, double fIndicatorRatio)

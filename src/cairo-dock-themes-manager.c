@@ -213,13 +213,13 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 			gtk_main_iteration ();
 	}
 	//gchar *cCommand = g_strdup_printf ("%s wget \"%s/%s/%s\" -O \"%s\" -t %d -T %d%s", (iShowActivity == 2 ? "$TERM -e '" : ""), cServerAdress, cDistantFilePath, cDistantFileName, cTmpFilePath, CAIRO_DOCK_DL_NB_RETRY, CAIRO_DOCK_DL_TIMEOUT, (iShowActivity == 2 ? "'" : ""));
-	gchar *cCommand = g_strdup_printf ("%s curl \"%s/%s/%s\" --output \"%s\" --connect-timeout %d --max-time %d --retry %d%s",
+	gchar *cCommand = g_strdup_printf ("%s curl -s \"%s/%s/%s\" --output \"%s\" --connect-timeout %d --max-time %d --retry %d%s",
 		(iShowActivity == 2 ? "$TERM -e '" : ""),
 		cServerAdress, cDistantFilePath, cDistantFileName,
 		cTmpFilePath,
 		mySystem.iConnectionTimeout, mySystem.iConnectiontMaxTime, mySystem.iConnectiontNbRetries,
 		(iShowActivity == 2 ? "'" : ""));
-	g_print ("%s\n", cCommand);
+	cd_debug ("download with '%s'", cCommand);
 	
 	int r = system (cCommand);
 	if (r != 0)

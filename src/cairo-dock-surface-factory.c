@@ -619,18 +619,17 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, cairo_t 
 }
 
 
-static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fMaxScale, gboolean bDirectionUp)
+static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fReflectSize, gboolean bDirectionUp)
 {
 	g_return_val_if_fail (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	//g_print ("%s (%d)\n", __func__, bDirectionUp);
 
 	//\_______________ On cree la surface d'une fraction hauteur de l'image originale.
-	double fReflectHeight = myIcons.fReflectSize * fMaxScale;
-	if (pSurface == NULL || fReflectHeight == 0 || myIcons.fAlbedo == 0)
+	if (pSurface == NULL || fReflectSize == 0 || myIcons.fAlbedo == 0)
 		return NULL;
 	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
 		fImageWidth,
-		fReflectHeight);
+		fReflectSize);
 	cairo_t *pCairoContext = cairo_create (pNewSurface);
 	
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
@@ -639,7 +638,7 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_
 	//\_______________ On dessine l'image originale inversee.
 	cairo_translate (pCairoContext, 0, fImageHeight);
 	cairo_scale (pCairoContext, 1., -1.);
-	cairo_set_source_surface (pCairoContext, pSurface, 0, (bDirectionUp ? 0 : fImageHeight - fReflectHeight));
+	cairo_set_source_surface (pCairoContext, pSurface, 0, (bDirectionUp ? 0 : fImageHeight - fReflectSize));
 	
 	//\_______________ On applique un degrade en transparence.
 	/**cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0.,
@@ -649,7 +648,7 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_
 	cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0.,
 		fImageHeight,
 		0.,
-		fImageHeight-fReflectHeight);  // de haut en bas.
+		fImageHeight - fReflectSize);  // de haut en bas.
 	g_return_val_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS, NULL);
 
 	cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
@@ -673,16 +672,15 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_
 	return pNewSurface;
 }
 
-static cairo_surface_t * cairo_dock_create_reflection_surface_vertical (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fMaxScale, gboolean bDirectionUp)
+static cairo_surface_t * cairo_dock_create_reflection_surface_vertical (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fReflectSize, gboolean bDirectionUp)
 {
 	g_return_val_if_fail (pSurface != NULL && pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 
 	//\_______________ On cree la surface d'une fraction hauteur de l'image originale.
-	double fReflectWidth = myIcons.fReflectSize * fMaxScale;
-	if (fReflectWidth == 0 || myIcons.fAlbedo == 0)
+	if (fReflectSize == 0 || myIcons.fAlbedo == 0)
 		return NULL;
 	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
-		fReflectWidth,
+		fReflectSize,
 		fImageHeight);
 	cairo_t *pCairoContext = cairo_create (pNewSurface);
 
@@ -692,12 +690,12 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_vertical (cairo_su
 	//\_______________ On dessine l'image originale inversee.
 	cairo_translate (pCairoContext, fImageWidth, 0);
 	cairo_scale (pCairoContext, -1., 1.);
-	cairo_set_source_surface (pCairoContext, pSurface, (bDirectionUp ? 0. : fImageHeight - fReflectWidth), 0.);
+	cairo_set_source_surface (pCairoContext, pSurface, (bDirectionUp ? 0. : fImageHeight - fReflectSize), 0.);
 	
 	//\_______________ On applique un degrade en transparence.
 	cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0,
 		0.,
-		fImageHeight-fReflectWidth,
+		fImageHeight - fReflectSize,
 		0.);  // de gauche a droite.
 	g_return_val_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS, NULL);
 
@@ -722,12 +720,12 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_vertical (cairo_su
 	return pNewSurface;
 }
 
-cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, gboolean bIsHorizontal, double fMaxScale, gboolean bDirectionUp)
+cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fReflectSize, gboolean bIsHorizontal, gboolean bDirectionUp)
 {
 	if (bIsHorizontal)
-		return cairo_dock_create_reflection_surface_horizontal (pSurface, pSourceContext, fImageWidth, fImageHeight, fMaxScale, bDirectionUp);
+		return cairo_dock_create_reflection_surface_horizontal (pSurface, pSourceContext, fImageWidth, fImageHeight, fReflectSize, bDirectionUp);
 	else
-		return cairo_dock_create_reflection_surface_vertical (pSurface, pSourceContext, fImageWidth, fImageHeight, fMaxScale, bDirectionUp);
+		return cairo_dock_create_reflection_surface_vertical (pSurface, pSourceContext, fImageWidth, fImageHeight, fReflectSize, bDirectionUp);
 }
 
 

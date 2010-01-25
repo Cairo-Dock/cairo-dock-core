@@ -65,7 +65,7 @@
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-views.h"
-#include "cairo-dock-internal-labels.h"
+///#include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-emblem.h"

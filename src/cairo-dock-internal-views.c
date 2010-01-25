@@ -43,8 +43,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigViews *pViews)
 	if (pViews->cSubDockDefaultRendererName == NULL)
 		pViews->cSubDockDefaultRendererName = g_strdup (CAIRO_DOCK_DEFAULT_RENDERER_NAME);
 
-	pViews->bSameHorizontality = cairo_dock_get_boolean_key_value (pKeyFile, "Views", "same_horizontality", &bFlushConfFileNeeded, TRUE, "Sub-Docks", NULL);
-
 	pViews->fSubDockSizeRatio = cairo_dock_get_double_key_value (pKeyFile, "Views", "relative icon size", &bFlushConfFileNeeded, 0.8, "Sub-Docks", NULL);
 
 	return bFlushConfFileNeeded;
@@ -70,10 +68,9 @@ static void reload (CairoConfigViews *pPrevViews, CairoConfigViews *pViews)
 	}
 	
 	if (cairo_dock_strings_differ (pPrevViews->cSubDockDefaultRendererName, pViews->cSubDockDefaultRendererName) ||
-		pPrevViews->bSameHorizontality != pViews->bSameHorizontality ||
 		pPrevViews->fSubDockSizeRatio != pViews->fSubDockSizeRatio)
 	{
-		if (pPrevViews->bSameHorizontality != pViews->bSameHorizontality || pPrevViews->fSubDockSizeRatio != pViews->fSubDockSizeRatio)
+		if (pPrevViews->fSubDockSizeRatio != pViews->fSubDockSizeRatio)
 		{
 			cairo_dock_synchronize_sub_docks_position (pDock, FALSE);
 			cairo_dock_reload_buffers_in_all_docks (TRUE);  // y compris les applets.

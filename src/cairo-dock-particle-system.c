@@ -22,7 +22,6 @@
 #include <stdlib.h>
 #include <cairo.h>
 
-#include "cairo-dock-log.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-particle-system.h"
 

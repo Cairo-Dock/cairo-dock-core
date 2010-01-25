@@ -50,6 +50,7 @@ extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
 extern gchar *g_cCairoDockDataDir;
 
 static CairoDockGuiBackend *s_pGuiBackend = NULL;
+static CairoDockLauncherGuiBackend *s_pLauncherGuiBackend = NULL;
 
   //////////////////////////
  // MAIN DOCK VISIBILITY //
@@ -309,7 +310,6 @@ void cairo_dock_show_module_gui (const gchar *cModuleName)
 
 void cairo_dock_close_gui (void)
 {
-	g_print ("%s ()\n", __func__);
 	if (s_pGuiBackend && s_pGuiBackend->close_gui)
 		s_pGuiBackend->close_gui ();
 }
@@ -615,4 +615,39 @@ gboolean cairo_dock_build_normal_gui (const gchar *cConfFilePath, const gchar *c
 	}
 	
 	return iResult;
+}
+
+
+
+  //////////////////////////
+ // LAUNCHER GUI BACKEND //
+//////////////////////////
+
+void cairo_dock_register_launcher_gui_backend (CairoDockLauncherGuiBackend *pBackend)
+{
+	g_free (s_pLauncherGuiBackend);
+	s_pLauncherGuiBackend = pBackend;
+}
+
+GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon)
+{
+	if (s_pLauncherGuiBackend && s_pLauncherGuiBackend->show_gui)
+		s_pLauncherGuiBackend->show_gui (pIcon);
+}
+
+static guint s_iSidRefreshGUI = 0;
+static gboolean _refresh_launcher_gui (gpointer data)
+{
+	if (s_pLauncherGuiBackend && s_pLauncherGuiBackend->refresh_gui)
+		s_pLauncherGuiBackend->refresh_gui ();
+	
+	s_iSidRefreshGUI = 0;
+	return FALSE;
+}
+void cairo_dock_refresh_launcher_gui (void)
+{
+	if (s_iSidRefreshGUI != 0)
+		return;
+	
+	s_iSidRefreshGUI = g_idle_add ((GSourceFunc) _refresh_launcher_gui, NULL);
 }

@@ -30,7 +30,7 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-icons.h"
-#include "cairo-dock-internal-icons.h"
+#include "cairo-dock-load.h"
 #include "cairo-dock-data-renderer.h"
 
 extern gboolean g_bUseOpenGL;
@@ -145,16 +145,7 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pDataRenderer, Ico
 	
 	if (pContainer->bUseReflect)
 	{
-		double fMaxScale = cairo_dock_get_max_scale (pContainer);
-		
-		cairo_surface_destroy (pIcon->pReflectionBuffer);
-		pIcon->pReflectionBuffer = cairo_dock_create_reflection_surface (pIcon->pIconBuffer,
-			pCairoContext,
-			(pContainer->bIsHorizontal ? pIcon->fWidth : pIcon->fHeight) * fMaxScale,
-			(pContainer->bIsHorizontal ? pIcon->fHeight : pIcon->fWidth) * fMaxScale,
-			pContainer->bIsHorizontal,
-			fMaxScale,
-			pContainer->bDirectionUp);
+		cairo_dock_add_reflection_to_icon (pCairoContext, pIcon, pContainer);
 	}
 	
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer))
@@ -304,8 +295,7 @@ void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer
 				str ++;
 			}
 		}
-		double fMaxScale = cairo_dock_get_max_scale (pContainer);
-		cairo_dock_set_quick_info (pCairoContext, cBuffer, pIcon, fMaxScale);
+		cairo_dock_set_quick_info (pCairoContext, pIcon, pContainer, cBuffer);
 		g_free (cBuffer);
 	}
 	

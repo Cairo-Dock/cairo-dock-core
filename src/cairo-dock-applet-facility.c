@@ -36,9 +36,6 @@
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-internal-system.h"
-#include "cairo-dock-internal-labels.h"
-#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-gui-manager.h"
@@ -254,8 +251,7 @@ gchar *cairo_dock_get_human_readable_size (long long int iSizeInBytes)
 void cairo_dock_set_size_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, long long int iSizeInBytes)
 {
 	gchar *cSize = cairo_dock_get_human_readable_size (iSizeInBytes);
-	double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	cairo_dock_set_quick_info (pSourceContext, cSize, pIcon, fMaxScale);
+	cairo_dock_set_quick_info (pSourceContext, pIcon, pContainer, cSize);
 	g_free (cSize);
 }
 

@@ -52,9 +52,7 @@
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-position.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-labels.h"
@@ -1398,7 +1396,7 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 }
 
 #define x_icon_geometry(icon, pDock) (pDock->container.iWindowPositionX + icon->fXAtRest + (pDock->container.iWidth - pDock->fFlatDockWidth) / 2 + (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2))
-#define y_icon_geometry(icon, pDock) (pDock->container.iWindowPositionY + icon->fDrawY - icon->fHeight * myIcons.fAmplitude * pDock->fMagnitudeMax) 
+#define y_icon_geometry(icon, pDock) (pDock->container.iWindowPositionY + icon->fDrawY - icon->fHeight * myIcons.fAmplitude * pDock->fMagnitudeMax)
 void  cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock)
 {
 	//g_print ("%s (%s)\n", __func__, icon->cName);

@@ -136,7 +136,7 @@ overwrite exception = pidgin;xchat;amsn;gimp-2.6
 #OpenGL is required to draw the icon bent backwards.}
 minimized = 1
 
-#e-[0;.6;plain;transparent] Transparency of icons whose window is minimized :
+#e-[0;.6;opaque;transparent] Transparency of icons whose window is minimized :
 visibility alpha = 0.35
 
 #b- Display an indicator even if the icon is not a launcher ?

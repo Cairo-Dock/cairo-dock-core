@@ -36,7 +36,6 @@
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-internal-system.h"
 #include "cairo-dock-desktop-file-factory.h"
 
 extern gchar *g_cCurrentThemePath;
@@ -214,7 +213,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_file (const gchar *cURI, con
 	gboolean bIsDirectory;
 	int iVolumeID;
 	double fUnusedOrder;
-	if (! cairo_dock_fm_get_file_info (cURI, &cName, &cRealURI, &cIconName, &bIsDirectory, &iVolumeID, &fUnusedOrder, mySystem.iFileSortType) || cIconName == NULL)
+	if (! cairo_dock_fm_get_file_info (cURI, &cName, &cRealURI, &cIconName, &bIsDirectory, &iVolumeID, &fUnusedOrder, 0) || cIconName == NULL)
 		return NULL;
 	cd_message (" -> cIconName : %s; bIsDirectory : %d; iVolumeID : %d\n", cIconName, bIsDirectory, iVolumeID);
 

@@ -65,8 +65,6 @@
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-views.h"
-#include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-class-manager.h"
@@ -1238,13 +1236,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							cairo_dock_update_dock_size (pOriginDock);
 							
 							cairo_dock_update_icon_s_container_name (s_pIconClicked, icon->cParentDockName);
-							if (pOriginDock->iRefCount > 0 && ! myViews.bSameHorizontality)
-							{
-								cairo_t* pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
-								cairo_dock_fill_one_text_buffer (s_pIconClicked, pSourceContext, &myLabels.iconTextDescription);
-								cairo_destroy (pSourceContext);
-							}
-
+							
 							cairo_dock_insert_icon_in_dock (s_pIconClicked, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 							cairo_dock_start_icon_animation (s_pIconClicked, pDock);
 						}

@@ -53,7 +53,6 @@
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-internal-views.h"
 #include "cairo-dock-internal-position.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-icons.h"
@@ -590,10 +589,10 @@ gboolean cairo_dock_quick_hide_is_activated (void)
 
 void cairo_dock_synchronize_one_sub_dock_position (CairoDock *pSubDock, CairoDock *pDock, gboolean bReloadBuffersIfNecessary)
 {
-	if (pSubDock->container.bDirectionUp != pDock->container.bDirectionUp || (pSubDock->container.bIsHorizontal != ((!myViews.bSameHorizontality) ^ pDock->container.bIsHorizontal)))
+	if (pSubDock->container.bDirectionUp != pDock->container.bDirectionUp || pSubDock->container.bIsHorizontal != pDock->container.bIsHorizontal)
 	{
 		pSubDock->container.bDirectionUp = pDock->container.bDirectionUp;
-		pSubDock->container.bIsHorizontal = (!myViews.bSameHorizontality) ^ pDock->container.bIsHorizontal;
+		pSubDock->container.bIsHorizontal = pDock->container.bIsHorizontal;
 		pSubDock->iScreenOffsetX = pDock->iScreenOffsetX;
 		pSubDock->iScreenOffsetY = pDock->iScreenOffsetY;
 		if (bReloadBuffersIfNecessary)

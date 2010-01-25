@@ -148,5 +148,21 @@ GtkWidget *cairo_dock_build_normal_gui_window (const gchar *cTitle, int iWidth, 
 gboolean cairo_dock_build_normal_gui (const gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData, GtkWidget **pWindow);
 
 
+/// Definition of the launcher GUI interface.
+struct _CairoDockLauncherGuiBackend {
+	/// Show the config panel on a given launcher, build or reload it if necessary.
+	GtkWidget * (*show_gui) (Icon *pIcon);
+	/// reload the gui and its content, for the case a launcher has changed (image, order, new container, etc).
+	void (*refresh_gui) (void);
+	} ;
+typedef struct _CairoDockLauncherGuiBackend CairoDockLauncherGuiBackend;
+
+void cairo_dock_register_launcher_gui_backend (CairoDockLauncherGuiBackend *pBackend);
+
+GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon);
+
+void cairo_dock_refresh_launcher_gui (void);
+
+
 G_END_DECLS
 #endif

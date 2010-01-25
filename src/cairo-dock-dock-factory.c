@@ -64,13 +64,12 @@
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-views.h"
-#include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-themes-manager.h"
-#include "cairo-dock-gui-launcher.h"
+#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-emblem.h"
 #include "cairo-dock-dock-factory.h"
@@ -439,7 +438,7 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 			pParentDock = g_pMainDock;
 		CairoDockPositionType iScreenBorder = ((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp);
 		cd_debug ("sub-dock's position : %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
-		pDock->container.bIsHorizontal = (myViews.bSameHorizontality ? pParentDock->container.bIsHorizontal : ! pParentDock->container.bIsHorizontal);
+		pDock->container.bIsHorizontal = pParentDock->container.bIsHorizontal;
 		pDock->container.bDirectionUp = pParentDock->container.bDirectionUp;
 		if (iScreenBorder != (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp)))
 		{

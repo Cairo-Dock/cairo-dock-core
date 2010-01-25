@@ -538,11 +538,11 @@ void cairo_dock_set_icon_name_full (cairo_t *pSourceContext, Icon *pIcon, CairoC
 
 /** Set the quick-info of an icon. This is a small text (a few characters) that is superimposed on the icon.
 *@param pSourceContext a drawing context; is not altered by the function.
-*@param cQuickInfo the text of the quick-info.
 *@param pIcon the icon.
-*@param fMaxScale maximum zoom factor of the icon.
+*@param pContainer the container of the icon.
+*@param cQuickInfo the text of the quick-info.
 */
-void cairo_dock_set_quick_info (cairo_t *pSourceContext, const gchar *cQuickInfo, Icon *pIcon, double fMaxScale);
+void cairo_dock_set_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfo);
 
 /** Same as above, but takes a printf-like format string.
 *@param pSourceContext a drawing context; is not altered by the function.
@@ -556,7 +556,7 @@ void cairo_dock_set_quick_info_full (cairo_t *pSourceContext, Icon *pIcon, Cairo
 /** Clear the quick-info of an icon.
 *@param pIcon the icon.
 */
-#define cairo_dock_remove_quick_info(pIcon) cairo_dock_set_quick_info (NULL, NULL, pIcon, 1)
+#define cairo_dock_remove_quick_info(pIcon) cairo_dock_set_quick_info (NULL, pIcon, NULL, NULL)
 
 /** Updates which launcher is attached/detached to/from the dock, according to the current desktop.
 *@param pDock the dock whose icons are to be considered.
