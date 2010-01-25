@@ -699,6 +699,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 		(CairoDockTransitionGLRenderFunc) render_step_opengl,\
 		bFastPace,\
 		iDuration,\
+		bRemoveWhenFinished,\
 		myApplet,\
 		NULL)
 #define CD_APPLET_GET_TRANSITION_FRACTION(...) \
