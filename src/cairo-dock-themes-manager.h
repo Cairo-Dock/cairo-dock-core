@@ -159,16 +159,15 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList);
  */
 gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers);
 
-
-/** Build and show the Theme Manager window.
- */
-void cairo_dock_manage_themes (void);
-
-
 /** Load the current theme. This will (re)load all the parameters of Cairo-Dock and all the plug-ins, as if you just started the dock.
 */
 void cairo_dock_load_current_theme (void);
 #define cairo_dock_load_theme(...) cairo_dock_load_current_theme ()
+
+
+/* Build and show the Theme Manager window.
+ */
+void cairo_dock_manage_themes (void);
 
 
 G_END_DECLS

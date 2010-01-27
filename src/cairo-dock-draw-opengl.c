@@ -68,10 +68,8 @@
 #define RADIAN (G_PI / 180.0)  // Conversion Radian/Degres
 #define DELTA_ROUND_DEGREE 3
 
-GLuint g_pGradationTexture[2];
+///GLuint g_pGradationTexture[2];
 
-extern int g_iXScreenWidth[2];
-extern int g_iXScreenHeight[2];
 extern CairoDock *g_pMainDock;
 
 extern double g_fIndicatorWidth, g_fIndicatorHeight;
@@ -85,9 +83,7 @@ extern cairo_surface_t *g_pClassIndicatorSurface;
 extern double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
 extern cairo_surface_t *g_pVisibleZoneSurface;
 extern gboolean g_bUseOpenGL;
-extern gboolean g_bIndirectRendering;
-extern GdkGLConfig* g_pGlConfig;
-extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
+extern CairoDockGLConfig g_openglConfig;
 
 extern gboolean g_bEasterEggs;
 
@@ -248,24 +244,23 @@ void cairo_dock_combine_argb_argb (void)  // taken from glitz 0.5.6
 	glTexEnvf (GL_TEXTURE_ENV, GL_SOURCE1_ALPHA, GL_PREVIOUS);
 	glTexEnvf (GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA);
 	glTexEnvf (GL_TEXTURE_ENV, GL_OPERAND1_ALPHA, GL_SRC_ALPHA);
-	
-	
-	
 }
-gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext)
+
+void cairo_dock_draw_icon_opengl (Icon *pIcon, CairoDock *pDock)
 {
-	if (pCairoContext != NULL)
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-	if (*bHasBeenRendered)
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-	if (pIcon->iIconTexture == 0)
-	{
-		*bHasBeenRendered = TRUE;
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-	}
+	//\_____________________ On dessine l'icone.
+	double fSizeX, fSizeY;
+	cairo_dock_get_current_icon_size (pIcon, CAIRO_CONTAINER (pDock), &fSizeX, &fSizeY);
 	
-	cairo_dock_draw_icon_texture (pIcon, CAIRO_CONTAINER (pDock));
+	_cairo_dock_enable_texture ();
+	if (pIcon->fAlpha == 1)
+		_cairo_dock_set_blend_over ();
+	else
+		_cairo_dock_set_blend_alpha ();
 	
+	_cairo_dock_apply_texture_at_size_with_alpha (pIcon->iIconTexture, fSizeX, fSizeY, pIcon->fAlpha);
+	
+	//\_____________________ On dessine son reflet.
 	if (pDock->container.bUseReflect)
 	{
 		if (pDock->pRenderer->bUseStencil)
@@ -322,15 +317,10 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 				y1 = 1.;
 			}
 		}
-		/**glActiveTexture (GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, g_pGradationTexture[pDock->container.bIsHorizontal]);
-		glActiveTexture (GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
-		cairo_dock_combine_argb_argb ();*/
+		
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
 		glEnable(GL_BLEND);
-		///glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		_cairo_dock_set_blend_alpha ();
 		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		
@@ -380,53 +370,6 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		}
 		glEnd();
 		
-		/**glActiveTexture(GL_TEXTURE0_ARB); // Go pour le multitexturing 1ere passe
-		glEnable(GL_TEXTURE_2D); // On active le texturing sur cette passe
-		glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
-		glColor4f(1., 1., 1., 1.);  // transparence du reflet.
-		glEnable(GL_BLEND);
-		glBlendFunc (1, 0);
-		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		
-		glActiveTexture(GL_TEXTURE1_ARB); // Go pour le texturing 2eme passe
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, g_pGradationTexture[pDock->container.bIsHorizontal]);
-		glColor4f(1., 1., 1., myIcons.fAlbedo * pIcon->fAlpha);  // transparence du reflet.
-		glEnable(GL_BLEND);
-		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // Le mode de combinaison des textures
-		//glTexEnvi (GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_MODULATE);  // multiplier les alpha.
-		
-		glBegin(GL_QUADS);
-		glNormal3f(0,0,1);
-		glMultiTexCoord2fARB (GL_TEXTURE0_ARB, x0, y0);
-		glMultiTexCoord2fARB (GL_TEXTURE1_ARB, 0., 0.);
-		glVertex3f (-0.5, .5, 0.);  // Bottom Left Of The Texture and Quad
-		
-		glMultiTexCoord2fARB (GL_TEXTURE0_ARB, x1, y0);
-		glMultiTexCoord2fARB (GL_TEXTURE1_ARB, 1., 0.);
-		glVertex3f ( 0.5, .5, 0.);  // Bottom Right Of The Texture and Quad
-		
-		glMultiTexCoord2fARB (GL_TEXTURE0_ARB, x1, y1);
-		glMultiTexCoord2fARB (GL_TEXTURE1_ARB, 1., 1.);
-		glVertex3f ( 0.5, -.5, 0.);  // Top Right Of The Texture and Quad
-		
-		glMultiTexCoord2fARB (GL_TEXTURE0_ARB, x0, y1);
-		glMultiTexCoord2fARB (GL_TEXTURE1_ARB, 0., 1.);
-		glVertex3f (-0.5, -.5, 0.);  // Top Left Of The Texture and Quad
-		glEnd();*/
-		
-		/*glActiveTexture(GL_TEXTURE1_ARB);
-		glDisable(GL_TEXTURE_2D);
-		glDisable(GL_TEXTURE_GEN_S);
-		glDisable(GL_TEXTURE_GEN_T);
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		glActiveTexture(GL_TEXTURE0_ARB);
-		glDisable(GL_TEXTURE_2D);
-		glDisable(GL_TEXTURE_GEN_S);
-		glDisable(GL_TEXTURE_GEN_T);
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);*/
-		
 		glPopMatrix ();
 		if (pDock->pRenderer->bUseStencil)
 		{
@@ -434,11 +377,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 		}
 	}
 	
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
-	
-	*bHasBeenRendered = TRUE;
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	_cairo_dock_disable_texture ();
 }
 
 
@@ -704,7 +643,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	//\_____________________ on dessine la zone de rappel.
 	glLoadIdentity ();  // annule l'offset de cachage.
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
-	cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDock));
+	cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDock));
 	
 	if (g_iVisibleZoneTexture != 0)
 	{
@@ -767,51 +706,8 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 
 
 
-static inline gboolean _check_extension (const char *extName, const gchar *cExtensions)
-{
-	g_return_val_if_fail (cExtensions != NULL, FALSE);
-	/*
-	** Search for extName in the extensions string.  Use of strstr()
-	** is not sufficient because extension names can be prefixes of
-	** other extension names.  Could use strtok() but the constant
-	** string returned by glGetString can be in read-only memory.
-	*/
-	char *p = (char *) cExtensions;
-
-	char *end;
-	int extNameLen;
-
-	extNameLen = strlen(extName);
-	end = p + strlen(p);
-
-	while (p < end)
-	{
-		int n = strcspn(p, " ");
-		if ((extNameLen == n) && (strncmp(extName, p, n) == 0))
-		{
-			return TRUE;
-		}
-		p += (n + 1);
-	}
-	return FALSE;
-}
-static gboolean _check_gl_extension (const char *extName)
-{
-	const gchar *glExtensions = glGetString (GL_EXTENSIONS);
-	return _check_extension (extName, glExtensions);
-}
-static gboolean _check_client_glx_extension (const char *extName)
-{
-	Display *display = gdk_x11_get_default_xdisplay ();
-	int screen = 0;
-	//const gchar *glxExtensions = glXQueryExtensionsString (display, screen);
-	const gchar *glxExtensions = glXGetClientString (display,GLX_EXTENSIONS);
-	return _check_extension (extName, glxExtensions);
-}
-
 GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 {
-	static gint iNonPowerOfTwoAvailable = -1;
 	if (! g_bUseOpenGL || pImageSurface == NULL)
 		return 0;
 	GLuint iTexture = 0;
@@ -820,13 +716,8 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	
 	cairo_surface_t *pPowerOfwoSurface = pImageSurface;
 	
-	if (iNonPowerOfTwoAvailable == -1)
-	{
-		iNonPowerOfTwoAvailable = _check_gl_extension ("GL_ARB_texture_non_power_of_two");
-		cd_message ("non power of two available : %d", iNonPowerOfTwoAvailable);
-	}
 	int iMaxTextureWidth = 4096, iMaxTextureHeight = 4096;  // il faudrait le recuperer de glInfo ...
-	if (! iNonPowerOfTwoAvailable)  // cas des vieilles cartes comme la GeForce5.
+	if (! g_openglConfig.bNonPowerOfTwoAvailable)  // cas des vieilles cartes comme la GeForce5.
 	{
 		double log2_w = log (w) / log (2);
 		double log2_h = log (h) / log (2);
@@ -899,9 +790,7 @@ GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWi
 		pPixelBuffer2[i] = (pixel & 0xFF000000) + (red << 16) + (green << 8) + (blue << 0);
 		g_print ("\\%o\\%o\\%o\\%o", red, green, blue, alpha);
 	}
-	pTextureRaw = pPixelBuffer2;
-	*/
-	
+	pTextureRaw = pPixelBuffer2;*/
 	GLuint iTexture = 0;
 	
 	glEnable (GL_TEXTURE_2D);
@@ -1604,442 +1493,6 @@ void cairo_dock_draw_rounded_rectangle_opengl (double fRadius, double fLineWidth
 }
 
 
-GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pContext)
-{
-	Display *XDisplay = gdk_x11_get_default_xdisplay ();
-	int major, minor;
-	if (glXQueryVersion(XDisplay, &major, &minor) == False)
-	{
-		cd_warning ("GLX not available !\nDon't even expect the dock to run in opengl mode.");
-		*pContext = 0;
-		return 0;
-	}
-	
-	gboolean bIndirect = g_bIndirectRendering;
-	if (major <= 1 && minor < 3)  // on a besoin de GLX >= 1.3 pour les pbuffers; mais si on a l'extension GLX_SGIX_pbuffer et un version inferieure, ca marche quand meme.
-	{
-		if (! _check_client_glx_extension ("GLX_SGIX_pbuffer"))
-		{
-			cd_warning ("No pbuffer extension in GLX.\n this might affect the drawing of some applets which are inside a dock");
-			*pContext = 0;
-			return 0;
-		}
-		else
-			cd_warning ("GLX version too old (%d.%d).\nCairo-Dock needs at least GLX 1.3. Indirect rendering will be used as a workaround.", major, minor);
-		bIndirect = TRUE;
-	}
-	
-	GLXFBConfig *pFBConfigs;
-	XRenderPictFormat *pPictFormat = NULL;
-	int visAttribs[] = {
-		GLX_DRAWABLE_TYPE, 	GLX_PBUFFER_BIT | GLX_WINDOW_BIT,
-		GLX_RENDER_TYPE, 		GLX_RGBA_BIT,
-		GLX_RED_SIZE, 		1,
-		GLX_GREEN_SIZE, 		1,
-		GLX_BLUE_SIZE, 		1,
-		GLX_ALPHA_SIZE, 		1,
-		GLX_DEPTH_SIZE, 		1,
-		None};
-	
-	XVisualInfo *pVisInfo = NULL;
-	int i, iNumOfFBConfigs = 0;
-	pFBConfigs = glXChooseFBConfig (XDisplay,
-		DefaultScreen (XDisplay),
-		visAttribs,
-		&iNumOfFBConfigs);
-	if (iNumOfFBConfigs == 0)
-	{
-		cd_warning ("No suitable visual could be found for pbuffer\n this might affect the drawing of some applets which are inside a dock");
-		*pContext = 0;
-		return 0;
-	}
-	cd_debug (" -> %d FBConfig(s) pour le pbuffer", iNumOfFBConfigs);
-	
-	
-	int pbufAttribs [] = {
-		GLX_PBUFFER_WIDTH, iWidth,
-		GLX_PBUFFER_HEIGHT, iHeight,
-		GLX_LARGEST_PBUFFER, True,
-		None};
-	GLXPbuffer pbuffer = glXCreatePbuffer (XDisplay, pFBConfigs[0], pbufAttribs);
-	
-	pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[0]);
-	
-	GdkGLContext *pGlContext = gtk_widget_get_gl_context (g_pMainDock->container.pWidget);
-	GLXContext mainContext = GDK_GL_CONTEXT_GLXCONTEXT (pGlContext);
-	*pContext = glXCreateContext (XDisplay, pVisInfo, mainContext, ! bIndirect);
-	
-	XFree (pVisInfo);
-	XFree (pFBConfigs);
-	
-	return pbuffer;
-}
-
-static GLXPbuffer s_iconPbuffer = 0;
-static GLXContext s_iconContext = 0;
-int s_iIconPbufferWidth = 0, s_iIconPbufferHeight = 0;
-void cairo_dock_create_icon_pbuffer (void)
-{
-	if (!g_bUseOpenGL)
-		return ;
-	int iWidth = 0, iHeight = 0;
-	int i;
-	for (i = 0; i < CAIRO_DOCK_NB_TYPES; i += 2)
-	{
-		iWidth = MAX (iWidth, myIcons.tIconAuthorizedWidth[i]);
-		iHeight = MAX (iHeight, myIcons.tIconAuthorizedHeight[i]);
-	}
-	if (iWidth == 0)
-		iWidth = 48;
-	if (iHeight == 0)
-		iHeight = 48;
-	iWidth *= (1 + myIcons.fAmplitude);
-	iHeight *= (1 + myIcons.fAmplitude);
-	
-	cd_debug ("%s (%dx%d)", __func__, iWidth, iHeight);
-	if (s_iIconPbufferWidth != iWidth || s_iIconPbufferHeight != iHeight)
-	{
-		Display *XDisplay = gdk_x11_get_default_xdisplay ();
-		if (s_iconPbuffer != 0)
-		{
-			glXDestroyPbuffer (XDisplay, s_iconPbuffer);
-			glXDestroyContext (XDisplay, s_iconContext);
-			s_iconContext = 0;
-		}
-		s_iconPbuffer = cairo_dock_create_pbuffer (iWidth, iHeight, &s_iconContext);
-		s_iIconPbufferWidth = iWidth;
-		s_iIconPbufferHeight = iHeight;
-		
-		g_print ("if your drivers are crappy, we'll know it immediately ...");
-		if (s_iconPbuffer != 0 && s_iconContext != 0 && glXMakeCurrent (XDisplay, s_iconPbuffer, s_iconContext))
-		{
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
-			glOrtho(0, iWidth, 0, iHeight, 0.0, 500.0);
-			glMatrixMode (GL_MODELVIEW);
-			
-			glLoadIdentity();
-			gluLookAt (0., 0., 3.,
-				0., 0., 0.,
-				0.0f, 1.0f, 0.0f);
-			
-			glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
-			glClearDepth (1.0f);
-		}
-		g_print (" ok, they seem fine enough.\n");
-	}
-}
-
-void cairo_dock_destroy_icon_pbuffer (void)
-{
-	Display *XDisplay = gdk_x11_get_default_xdisplay ();
-	if (s_iconPbuffer != 0)
-	{
-		glXDestroyPbuffer (XDisplay, s_iconPbuffer);
-		s_iconPbuffer = 0;
-	}
-	if (s_iconContext != 0)
-	{
-		glXDestroyContext (XDisplay, s_iconContext);
-		s_iconContext = 0;
-	}
-	s_iIconPbufferWidth = 0;
-	s_iIconPbufferHeight = 0;
-}
-
-gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
-{
-	if (CAIRO_DOCK_IS_DESKLET (pContainer))
-	{
-		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pContainer->pWidget);
-		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pContainer->pWidget);
-		if (! gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
-			return FALSE;
-		
-		cairo_dock_set_ortho_view (pContainer->iWidth, pContainer->iHeight);
-	}
-	else if (s_iconContext != 0)
-	{
-		Display *XDisplay = gdk_x11_get_default_xdisplay ();
-		if (! glXMakeCurrent (XDisplay, s_iconPbuffer, s_iconContext))
-			return FALSE;
-		glLoadIdentity ();
-		glTranslatef (s_iIconPbufferWidth/2, s_iIconPbufferHeight/2, - s_iIconPbufferHeight/2);
-	}
-	else
-		return FALSE;
-	
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	glColor4f(1., 1., 1., 1.);
-	
-	glScalef (1., -1., 1.);
-	
-	return TRUE;
-}
-
-void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
-{
-	g_return_if_fail (pIcon->iIconTexture != 0);
-	// taille de la texture
-	int iWidth, iHeight;
-	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
-	
-	// copie dans notre texture
-	glEnable (GL_TEXTURE_2D);
-	glBindTexture (GL_TEXTURE_2D, pIcon->iIconTexture);
-	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glEnable(GL_BLEND);
-	glBlendFunc (GL_ZERO, GL_ONE);
-	glColor4f(1., 1., 1., 1.);
-	
-	int x,y;
-	if (CAIRO_DOCK_IS_DESKLET (pContainer))
-	{
-		x = (pContainer->iWidth - iWidth)/2;
-		y = (pContainer->iHeight - iHeight)/2;
-	}
-	else
-	{
-		x = (s_iIconPbufferWidth - iWidth)/2;
-		y = (s_iIconPbufferHeight - iHeight)/2;
-	}
-	
-	glCopyTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, x, y, iWidth, iHeight, 0);  // target, num mipmap, format, x,y, w,h, border.
-	glDisable (GL_TEXTURE_2D);
-	glDisable (GL_BLEND);
-	
-	//end
-	if (CAIRO_DOCK_IS_DESKLET (pContainer))
-	{
-		cairo_dock_set_perspective_view (pContainer->iWidth, pContainer->iHeight);
-		
-		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pContainer->pWidget);
-		gdk_gl_drawable_gl_end (pGlDrawable);
-	}
-}
-
-
-
-void cairo_dock_set_perspective_view (int iWidth, int iHeight)
-{
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(60.0, 1.0*(GLfloat)iWidth/(GLfloat)iHeight, 1., 4*iHeight);
-	glMatrixMode (GL_MODELVIEW);
-	
-	glLoadIdentity ();
-	gluLookAt (0., 0., 3.,
-		0., 0., 0.,
-		0.0f, 1.0f, 0.0f);
-	glTranslatef (0., 0., -iHeight*(sqrt(3)/2) - 1);
-}
-
-void cairo_dock_set_ortho_view (int iWidth, int iHeight)
-{
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0, iWidth, 0, iHeight, 0.0, 500.0);
-	glMatrixMode (GL_MODELVIEW);
-	
-	glLoadIdentity ();
-	gluLookAt (0/2, 0/2, 3.,
-		0/2, 0/2, 0.,
-		0.0f, 1.0f, 0.0f);
-	glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
-}
-
-
-static inline XVisualInfo *_get_visual_from_fbconfigs (GLXFBConfig *pFBConfigs, int iNumOfFBConfigs, Display *XDisplay)
-{
-	XRenderPictFormat *pPictFormat;
-	XVisualInfo *pVisInfo = NULL;
-	int i;
-	for (i = 0; i < iNumOfFBConfigs; i++)
-	{
-		pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]);
-		if (!pVisInfo)
-		{
-			cd_warning ("this FBConfig has no visual.");
-			continue;
-		}
-		
-		pPictFormat = XRenderFindVisualFormat (XDisplay, pVisInfo->visual);
-		if (!pPictFormat)
-		{
-			cd_warning ("this visual has an unknown format.");
-			XFree (pVisInfo);
-			pVisInfo = NULL;
-			continue;
-		}
-		
-		if (pPictFormat->direct.alphaMask > 0)
-		{
-			cd_message ("Strike, found a GLX visual with alpha-support !");
-			break;
-		}
-
-		XFree (pVisInfo);
-		pVisInfo = NULL;
-	}
-	return pVisInfo;
-}
-GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHasBeenForced)  // taken from a MacSlow's exemple.
-{
-	GdkGLConfig *pGlConfig = NULL;
-	
-	Display *XDisplay = gdk_x11_get_default_xdisplay ();
-	
-	GLXFBConfig *pFBConfigs;
-	XRenderPictFormat *pPictFormat = NULL;
-	int doubleBufferAttributes[] = {
-		GLX_DRAWABLE_TYPE, 	GLX_WINDOW_BIT,
-		GLX_RENDER_TYPE, 		GLX_RGBA_BIT,
-		GLX_DOUBLEBUFFER, 	True,
-		GLX_RED_SIZE, 		1,
-		GLX_GREEN_SIZE, 		1,
-		GLX_BLUE_SIZE, 		1,
-		GLX_DEPTH_SIZE, 		1,
-		GLX_ALPHA_SIZE, 		1,
-		GLX_STENCIL_SIZE, 	1,
-		/// a tester ...
-		GLX_SAMPLE_BUFFERS_ARB, 1,
-		GLX_SAMPLES_ARB, 2,
-		/*GL_MULTISAMPLEBUFFERS, 	1,
-		GL_MULTISAMPLESAMPLES, 	2,*/
-		None};
-	
-	
-	XVisualInfo *pVisInfo = NULL;
-	int iNumOfFBConfigs = 0;
-	cd_debug ("cherchons les configs ...");
-	pFBConfigs = glXChooseFBConfig (XDisplay,
-		DefaultScreen (XDisplay),
-		doubleBufferAttributes,
-		&iNumOfFBConfigs);
-	
-	cd_debug (" -> %d FBConfig(s)", iNumOfFBConfigs);
-	*bHasBeenForced = FALSE;
-	
-	pVisInfo = _get_visual_from_fbconfigs (pFBConfigs, iNumOfFBConfigs, XDisplay);
-	if (pFBConfigs)
-		XFree (pFBConfigs);
-	
-	if (pVisInfo == NULL)
-	{
-		cd_warning ("couldn't find an appropriate visual, trying to get one without Stencil buffer\n(it may cause some little deterioration in the rendering) ...");
-		doubleBufferAttributes[16] = None;
-		pFBConfigs = glXChooseFBConfig (XDisplay,
-			DefaultScreen (XDisplay),
-			doubleBufferAttributes,
-			&iNumOfFBConfigs);
-		
-		pVisInfo = _get_visual_from_fbconfigs (pFBConfigs, iNumOfFBConfigs, XDisplay);
-		if (pFBConfigs)
-			XFree (pFBConfigs);
-	}
-	
-	if (pVisInfo == NULL)
-	{
-		cd_warning ("still couldn't find an appropriate visual ourself, trying something else, this may not work with some drivers ...");
-		pGlConfig = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
-			GDK_GL_MODE_ALPHA |
-			GDK_GL_MODE_DEPTH |
-			GDK_GL_MODE_DOUBLE |
-			GDK_GL_MODE_STENCIL);
-		
-		if (pGlConfig == NULL)
-		{
-			cd_warning ("no luck, trying without double-buffer and stencil ...");
-			pGlConfig = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
-				GDK_GL_MODE_ALPHA |
-				GDK_GL_MODE_DEPTH);
-		}
-		if (pGlConfig != NULL)
-			return pGlConfig;
-	}
-	
-	if (pVisInfo == NULL && bForceOpenGL)
-	{
-		cd_warning ("we could not get an ARGB-visual, trying to get an RGB one (fake transparency will be used in return) ...");
-		*bHasBeenForced = TRUE;
-		doubleBufferAttributes[14] = None;
-		int i, iNumOfFBConfigs;
-		pFBConfigs = glXChooseFBConfig (XDisplay,
-			DefaultScreen (XDisplay),
-			doubleBufferAttributes,
-			&iNumOfFBConfigs);
-		cd_message ("got %d FBConfig(s) this time", iNumOfFBConfigs);
-		for (i = 0; i < iNumOfFBConfigs; i++)
-		{
-			pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]);
-			if (!pVisInfo)
-			{
-				cd_warning ("this FBConfig has no visual.");
-				XFree (pVisInfo);
-				pVisInfo = NULL;
-			}
-			else
-				break;
-		}
-		if (pFBConfigs)
-			XFree (pFBConfigs);
-		
-		if (pVisInfo == NULL)
-		{
-			cd_warning ("still no visual, this is the last chance");
-			pVisInfo = glXChooseVisual (XDisplay,
-				DefaultScreen (XDisplay),
-				doubleBufferAttributes);
-		}
-	}
-	if (pVisInfo != NULL)
-	{
-		cd_message ("ok, got a visual");
-		pGlConfig = gdk_x11_gl_config_new_from_visualid (pVisInfo->visualid);
-		XFree (pVisInfo);
-	}
-	else
-	{
-		cd_warning ("couldn't find a suitable GLX Visual, OpenGL can't be used.\n (sorry to say that, but your graphic card and/or its driver is crappy)");
-	}
-	
-	return pGlConfig;
-}
-
-void cairo_dock_apply_desktop_background (CairoContainer *pContainer)
-{
-	if (! mySystem.bUseFakeTransparency || ! g_pFakeTransparencyDesktopBg || g_pFakeTransparencyDesktopBg->iTexture == 0)
-		return ;
-	
-	glPolygonMode (GL_FRONT, GL_FILL);
-	glEnable (GL_TEXTURE_2D);
-	glBindTexture (GL_TEXTURE_2D, g_pFakeTransparencyDesktopBg->iTexture);
-	glColor4f(1., 1., 1., 1.);
-	glEnable (GL_BLEND);
-	glBlendFunc (GL_ONE, GL_ZERO);  /// utile ?
-	
-	glBegin(GL_QUADS);
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
-	1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-	glVertex3f (0., pContainer->iHeight, 0.);  // Top Left.
-	
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-	glVertex3f (pContainer->iWidth, pContainer->iHeight, 0.);  // Top Right
-	
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-	glVertex3f (pContainer->iWidth, 0., 0.);  // Bottom Right
-	
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-	glVertex3f (0., 0., 0.);  // Bottom Left
-	glEnd();
-	
-	glDisable (GL_TEXTURE_2D);
-	glDisable (GL_BLEND);
-}
-
-
-
 // A utiliser un jour.
 
 typedef struct _CairoAnimatedImage {
@@ -2457,29 +1910,9 @@ typedef void (*GLXReleaseTexImageProc) (Display *display, GLXDrawable drawable, 
 // Bind redirected window to texture:
 GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 {
-	static gboolean s_bTextureFromPixmapAvailable = FALSE;
-	static gboolean s_bChecked = FALSE;
-	static GLXBindTexImageProc bindTexImage = NULL;
-	static GLXReleaseTexImageProc releaseTexImage = NULL;
-	
 	return 0;  /// ca ne marche pas. :-(
-	if (! s_bChecked)
-	{
-		s_bChecked = TRUE;
-		if (!_check_client_glx_extension ("GLX_EXT_texture_from_pixmap"))
-		{
-			cd_warning ("the extension GLX_EXT_texture_from_pixmap is missing");
-			return 0;
-		}
-		
-		bindTexImage = (GLXBindTexImageProc) glXGetProcAddress ("glXBindTexImageEXT");
-		releaseTexImage = (GLXReleaseTexImageProc) glXGetProcAddress ("glXReleaseTexImageEXT");
-		s_bTextureFromPixmapAvailable = (bindTexImage && releaseTexImage);
-		if (! s_bTextureFromPixmapAvailable)
-			cd_warning ("glXBindTexImageEXT and/or glXReleaseTexImageEXT is missing");
-	}
 	
-	if (! s_bTextureFromPixmapAvailable)
+	if (! g_openglConfig.bTextureFromPixmapAvailable)
 		return 0;
 	
 	Display *display = gdk_x11_get_default_xdisplay ();
@@ -2558,7 +1991,7 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	glGenTextures (1, &texture);
 	glBindTexture (GL_TEXTURE_2D, texture);
 	
-	bindTexImage (display, glxpixmap, GLX_FRONT_LEFT_EXT, NULL);
+	g_openglConfig.bindTexImage (display, glxpixmap, GLX_FRONT_LEFT_EXT, NULL);
 	
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -2581,7 +2014,7 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	glEnd ();
 	glDisable (GL_TEXTURE_2D);
 	
-	releaseTexImage (display, glxpixmap, GLX_FRONT_LEFT_EXT);
+	g_openglConfig.releaseTexImage (display, glxpixmap, GLX_FRONT_LEFT_EXT);
 	glXDestroyGLXPixmap (display, glxpixmap);
 	return texture;
 }

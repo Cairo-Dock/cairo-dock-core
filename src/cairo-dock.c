@@ -169,11 +169,9 @@ gchar *g_cThemeServerAdress = NULL;
 gboolean g_bEasterEggs = FALSE;
 gboolean g_bLocked = FALSE;
 
+CairoDockGLConfig g_openglConfig;
 gboolean g_bUseOpenGL = FALSE;
-gboolean g_bForceOpenGL = FALSE;
-gboolean g_bForcedOpenGL = FALSE;
 gboolean g_bForceCairo = FALSE;
-gboolean g_bIndirectRendering = FALSE;
 GdkGLConfig* g_pGlConfig = NULL;
 GLuint g_iBackgroundTexture=0;
 GLuint g_iIndicatorTexture=0;
@@ -273,7 +271,7 @@ int main (int argc, char** argv)
 	GError *erreur = NULL;
 	
 	//\___________________ On recupere quelques options.
-	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSkipPager = FALSE, bNoSkipTaskbar = FALSE, bNoSticky = FALSE, bToolBarHint = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bExpresso = FALSE, bCafeLatte = FALSE, bPrintVersion = FALSE, bTesting = FALSE;
+	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSkipPager = FALSE, bNoSkipTaskbar = FALSE, bNoSticky = FALSE, bToolBarHint = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bExpresso = FALSE, bCafeLatte = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL;
 	GOptionEntry TableDesOptions[] =
 	{
@@ -289,10 +287,10 @@ int main (int argc, char** argv)
 			&g_bForceCairo,
 			"force cairo backend", NULL},
 		{"opengl", 'o', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&g_bForceOpenGL,
+			&bForceOpenGL,
 			"force OpenGL backend", NULL},
 		{"indirect", 'i', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&g_bIndirectRendering,
+			&bForceIndirectRendering,
 			"use Indirect Rendering mode for OpenGL", NULL},
 		{"keep-above", 'a', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bKeepAbove,
@@ -542,8 +540,7 @@ int main (int argc, char** argv)
 	
 	//\___________________ On initialise le support d'OpenGL.
 	if (! g_bForceCairo && ! g_bUseGlitz)
-		g_pGlConfig = cairo_dock_get_opengl_config (g_bForceOpenGL, &g_bForcedOpenGL);
-	g_bUseOpenGL = (g_pGlConfig != NULL);
+		g_bUseOpenGL = cairo_dock_initialize_opengl_backend (bForceIndirectRendering, bForceOpenGL);
 	
 	//\___________________ On enregistre les rendus de donnees.
 	cairo_dock_register_data_renderer_entry_point ("gauge", (CairoDataRendererNewFunc) cairo_dock_new_gauge);
@@ -569,8 +566,12 @@ int main (int argc, char** argv)
 	cairo_dock_register_default_launcher_gui_backend ();
 	
 	//\___________________ On enregistre nos notifications.
-	cairo_dock_register_notification (CAIRO_DOCK_BUILD_MENU,
-		(CairoDockNotificationFunc) cairo_dock_notification_build_menu,
+	cairo_dock_register_notification (CAIRO_DOCK_BUILD_CONTAINER_MENU,
+		(CairoDockNotificationFunc) cairo_dock_notification_build_container_menu,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	
+	cairo_dock_register_notification (CAIRO_DOCK_BUILD_ICON_MENU,
+		(CairoDockNotificationFunc) cairo_dock_notification_build_icon_menu,
 		CAIRO_DOCK_RUN_AFTER, NULL);
 	cairo_dock_register_notification (CAIRO_DOCK_DROP_DATA,
 		(CairoDockNotificationFunc) cairo_dock_notification_drop_data,
@@ -589,9 +590,6 @@ int main (int argc, char** argv)
 		CAIRO_DOCK_RUN_FIRST, NULL);
 	cairo_dock_register_notification (CAIRO_DOCK_RENDER_ICON,
 		(CairoDockNotificationFunc) cairo_dock_render_icon_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_RENDER_ICON,
-		(CairoDockNotificationFunc) cairo_dock_render_icon_notification_cairo,
 		CAIRO_DOCK_RUN_FIRST, NULL);
 	cairo_dock_register_notification (CAIRO_DOCK_RENDER_DESKLET,
 		(CairoDockNotificationFunc) cairo_dock_render_desklet_notification,
@@ -794,7 +792,7 @@ int main (int argc, char** argv)
 	g_print ("\nINDICATEURS EN HAUT (RETOURNES) ET CAIRO\n\n");
 	g_print ("=> AUTO-HIDE WHEN SWITCHING DESKTOP IN CAIRO MODE\n");
 	g_print ("PREVUE EN VUE PARABOLIQUE\n");
-	g_print ("MP AVEC CERTAINS NOMS D'ALBUM/ARTISTE ?\n");
+	g_print ("MP AVEC CERTAINS NOMS D'ALBUM/ARTISTE (ACCENT?)\n");
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
 	g_print ("\nNOUVELLE INSTANCE COPIEE SUR LA 1ERE\n\n");

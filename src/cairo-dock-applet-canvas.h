@@ -434,10 +434,10 @@ CD_APPLET_ON_UPDATE_ICON_PROTO \
 */
 
 //\______________________ notification construction menu.
-#define CD_APPLET_REGISTER_FOR_BUILD_MENU_EVENT cairo_dock_register_notification (CAIRO_DOCK_BUILD_MENU, (CairoDockNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet);
+#define CD_APPLET_REGISTER_FOR_BUILD_MENU_EVENT cairo_dock_register_notification (CAIRO_DOCK_BUILD_ICON_MENU, (CairoDockNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet);
 /** Desabonne l'applet aux notifications de construction du menu. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_BUILD_MENU_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_BUILD_MENU, (CairoDockNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, myApplet);
+#define CD_APPLET_UNREGISTER_FOR_BUILD_MENU_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_BUILD_ICON_MENU, (CairoDockNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, myApplet);
 
 //\______________________ notification clic milieu.
 /** Abonne l'applet aux notifications du clic du milieu. A effectuer lors de l'init de l'applet.

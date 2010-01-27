@@ -136,64 +136,55 @@ static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDo
 {
 	int iOrientation = iLoadingModifier & CAIRO_DOCK_ORIENTATION_MASK;
 	
-	//if (iOrientation != 0)
+	cairo_translate (pCairoContext,
+		fImageWidth/2,
+		fImageHeight/2);
+	cairo_scale (pCairoContext,
+		fZoomX,
+		fZoomY);
+	switch (iOrientation)
 	{
-		cairo_translate (pCairoContext,
-			fImageWidth/2,
-			fImageHeight/2);
-		cairo_scale (pCairoContext,
-			fZoomX,
-			fZoomY);
-		switch (iOrientation)
-		{
-			case CAIRO_DOCK_ORIENTATION_HFLIP :
-				g_print ("orientation : HFLIP\n");
-				cairo_scale (pCairoContext, -1., 1.);
-			break ;
-			case CAIRO_DOCK_ORIENTATION_ROT_180 :
-				g_print ("orientation : ROT_180\n");
-				cairo_rotate (pCairoContext, G_PI);
-			break ;
-			case CAIRO_DOCK_ORIENTATION_VFLIP :
-				g_print ("orientation : VFLIP\n");
-				cairo_scale (pCairoContext, 1., -1.);
-			break ;
-			case CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP :
-				g_print ("orientation : ROT_90_HFLIP\n");
-				cairo_scale (pCairoContext, -1., 1.);
-				cairo_rotate (pCairoContext, + G_PI/2);
-			break ;
-			case CAIRO_DOCK_ORIENTATION_ROT_90 :
-				g_print ("orientation : ROT_90\n");
-				cairo_rotate (pCairoContext, + G_PI/2);
-			break ;
-			case CAIRO_DOCK_ORIENTATION_ROT_90_VFLIP :
-				g_print ("orientation : ROT_90_VFLIP\n");
-				cairo_scale (pCairoContext, 1., -1.);
-				cairo_rotate (pCairoContext, + G_PI/2);
-			break ;
-			case CAIRO_DOCK_ORIENTATION_ROT_270 :
-				g_print ("orientation : ROT_270\n");
-				cairo_rotate (pCairoContext, - G_PI/2);
-			break ;
-			default :
-			break ;
-		}
-		if (iOrientation < CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP)
-			cairo_translate (pCairoContext,
-				- fUsefulWidth/2/fZoomX,
-				- fUsefulheight/2/fZoomY);
-		else
-			cairo_translate (pCairoContext,
-				- fUsefulheight/2/fZoomY,
-				- fUsefulWidth/2/fZoomX);
+		case CAIRO_DOCK_ORIENTATION_HFLIP :
+			g_print ("orientation : HFLIP\n");
+			cairo_scale (pCairoContext, -1., 1.);
+		break ;
+		case CAIRO_DOCK_ORIENTATION_ROT_180 :
+			g_print ("orientation : ROT_180\n");
+			cairo_rotate (pCairoContext, G_PI);
+		break ;
+		case CAIRO_DOCK_ORIENTATION_VFLIP :
+			g_print ("orientation : VFLIP\n");
+			cairo_scale (pCairoContext, 1., -1.);
+		break ;
+		case CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP :
+			g_print ("orientation : ROT_90_HFLIP\n");
+			cairo_scale (pCairoContext, -1., 1.);
+			cairo_rotate (pCairoContext, + G_PI/2);
+		break ;
+		case CAIRO_DOCK_ORIENTATION_ROT_90 :
+			g_print ("orientation : ROT_90\n");
+			cairo_rotate (pCairoContext, + G_PI/2);
+		break ;
+		case CAIRO_DOCK_ORIENTATION_ROT_90_VFLIP :
+			g_print ("orientation : ROT_90_VFLIP\n");
+			cairo_scale (pCairoContext, 1., -1.);
+			cairo_rotate (pCairoContext, + G_PI/2);
+		break ;
+		case CAIRO_DOCK_ORIENTATION_ROT_270 :
+			g_print ("orientation : ROT_270\n");
+			cairo_rotate (pCairoContext, - G_PI/2);
+		break ;
+		default :
+		break ;
 	}
-	/*else
-	{
-		cairo_scale (pCairoContext,
-			fZoomX,
-			fZoomY);
-	}*/
+	if (iOrientation < CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP)
+		cairo_translate (pCairoContext,
+			- fUsefulWidth/2/fZoomX,
+			- fUsefulheight/2/fZoomY);
+	else
+		cairo_translate (pCairoContext,
+			- fUsefulheight/2/fZoomY,
+			- fUsefulWidth/2/fZoomX);
 }
 
 
@@ -219,7 +210,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 	int i, n = w * h;
 	if (iBestIndex + n > iBufferNbElements)  // precaution au cas ou le nombre d'elements dans le buffer serait incorrect.
 	{
-		cd_warning ("This icon is broken !\nThis means that one of the current application has sent a buggy icon to X.");
+		cd_warning ("This icon is broken !\nThis means that one of the current applications has sent a buggy icon to X.");
 		return NULL;
 	}
 	gint pixel, alpha, red, green, blue;
@@ -270,7 +261,6 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 		ceil ((*fWidth) * fMaxScale), ceil ((*fHeight) * fMaxScale),
 		fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor,
 		fUsefulWidth * fMaxScale, fUsefulHeight * fMaxScale);
-	/**cairo_scale (pCairoContext, fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor);*/
 	cairo_set_source_surface (pCairoContext, surface_ini, 0, 0);
 	cairo_paint (pCairoContext);
 

@@ -832,5 +832,10 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 		g_pCurrentModule = NULL;\
 		return __VA_ARGS__;} } while (0)
 
+#define CD_WARNING(s,...) cd_warning ("%s : "##s, myApplet->pModule->pVisitCard->cModuleName, ##__VA_ARGS__)
+#define CD_MESSAGE(s,...) cd_message ("%s : "##s, myApplet->pModule->pVisitCard->cModuleName, ##__VA_ARGS__)
+#define CD_DEBUG(s,...) cd_debug ("%s : "##s, myApplet->pModule->pVisitCard->cModuleName, ##__VA_ARGS__)
+
+
 G_END_DECLS
 #endif

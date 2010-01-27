@@ -377,7 +377,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glLoadIdentity ();
 		
-		cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDialog));
+		cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDialog));
 		
 		if (pDialog->pDecorator != NULL && pDialog->pDecorator->render_opengl != NULL)
 		{

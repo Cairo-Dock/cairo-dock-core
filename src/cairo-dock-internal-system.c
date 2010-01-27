@@ -20,6 +20,7 @@
 #include <math.h>
 #include "cairo-dock-modules.h"
 #include "cairo-dock-load.h"
+#include "cairo-dock-opengl.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-file-manager.h"
@@ -28,7 +29,7 @@
 
 CairoConfigSystem mySystem;
 extern CairoDock *g_pMainDock;
-extern gboolean g_bForcedOpenGL;
+extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 
@@ -78,7 +79,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 	pSystem->bShowHiddenFiles = cairo_dock_get_boolean_key_value (pKeyFile, "System", "show hidden files", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 
 	pSystem->bUseFakeTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "fake transparency", &bFlushConfFileNeeded, FALSE, NULL, NULL);
-	if (g_bForcedOpenGL)
+	if (g_bUseOpenGL && ! g_openglConfig.bAlphaAvailable)
 		pSystem->bUseFakeTransparency = TRUE;
 	pSystem->bConfigPanelTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "config transparency", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	

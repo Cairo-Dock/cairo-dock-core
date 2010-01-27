@@ -49,6 +49,7 @@
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-load.h"
+#include "cairo-dock-draw-opengl.h"  // pour cairo_dock_render_one_icon
 #include "cairo-dock-draw.h"
 
 extern gint g_iScreenWidth[2];
@@ -598,19 +599,24 @@ void cairo_dock_draw_icon_cairo (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	}
 }
 
-gboolean cairo_dock_render_icon_notification_cairo (gpointer pUserData, Icon *icon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext)
+gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *icon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext)
 {
-	if (pCairoContext == NULL)
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	if (*bHasBeenRendered)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-	if (icon->pIconBuffer == NULL)
+	if (pCairoContext != NULL)
 	{
-		*bHasBeenRendered = TRUE;
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		if (icon->pIconBuffer != NULL)
+		{
+			cairo_dock_draw_icon_cairo (icon, pDock, pCairoContext);
+		}
 	}
-	
-	cairo_dock_draw_icon_cairo (icon, pDock, pCairoContext);
+	else
+	{
+		if (icon->iIconTexture != 0)
+		{
+			cairo_dock_draw_icon_opengl (icon, pDock);
+		}
+	}
 	
 	*bHasBeenRendered = TRUE;
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;

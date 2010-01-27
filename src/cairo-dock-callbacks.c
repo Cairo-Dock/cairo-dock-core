@@ -109,7 +109,7 @@ gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDo
 	{
 		glLoadIdentity ();
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
-		cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDock));
+		cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDock));
 		
 		if (pDock->fHideOffset != 0)
 		{
@@ -1333,7 +1333,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 	}
 	else if (pButton->button == 3 && pButton->type == GDK_BUTTON_PRESS)  // clique droit.
 	{
-		GtkWidget *menu = cairo_dock_build_menu (icon, CAIRO_CONTAINER (pDock));  // genere un CAIRO_DOCK_BUILD_MENU.
+		GtkWidget *menu = cairo_dock_build_menu (icon, CAIRO_CONTAINER (pDock));  // genere un CAIRO_DOCK_BUILD_CONTAINER_MENU et CAIRO_DOCK_BUILD_ICON_MENU.
 		
 		cairo_dock_popup_menu_on_container (menu, CAIRO_CONTAINER (pDock));
 	}

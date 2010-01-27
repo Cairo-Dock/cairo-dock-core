@@ -28,6 +28,7 @@
 #include <GL/glu.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-opengl.h"
 #include "cairo-dock-container.h"
 
 G_BEGIN_DECLS
@@ -38,7 +39,7 @@ G_BEGIN_DECLS
 
 void cairo_dock_set_icon_scale (Icon *pIcon, CairoContainer *pContainer, double fZoomFactor);
 
-gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext);
+void cairo_dock_draw_icon_opengl (Icon *pIcon, CairoDock *pDock);
 
 void cairo_dock_translate_on_icon_opengl (Icon *icon, CairoContainer *pContainer, double fDockMagnitude);
 
@@ -234,49 +235,9 @@ GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsL
 void cairo_dock_draw_string_opengl (CairoDock *pDock, double fStringLineWidth, gboolean bIsLoop, gboolean bForceConstantSeparator);
 
 
-  ///////////////////////
- // RENDER TO TEXTURE //
-///////////////////////
-GLXPbuffer cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pContext);
-void cairo_dock_create_icon_pbuffer (void);
-void cairo_dock_destroy_icon_pbuffer (void);
-
-/** Initiate an OpenGL drawing session on an icon's texture.
-*@param pIcon the icon on which to draw.
-*@param pContainer its container.
-*@return TRUE if you can proceed to the drawing, FALSE if an error occured.
-*/
-gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer);
-/** Finish an OpenGL drawing session on an icon.
-*@param pIcon the icon on which to draw.
-*@param pContainer its container.
-*@return TRUE if you can proceed to the drawing, FALSE if an error occured.
-*/
-void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);
-
-
-  /////////////
- // CONTEXT //
-/////////////
-/** Set a perspective view to the current GL context. Perspective view accentuates the depth effect of the scene, but can distort it on the edges, and is difficult to manipulate because the size of objects depends on their position.
-*@param iWidth width of the container
-*@param iHeight height of the container
-*/
-void cairo_dock_set_perspective_view (int iWidth, int iHeight);
-/** Set an orthogonal view to the current GL context. Orthogonal view is convenient to draw classic 2D, because the objects are not zoomed according to their position. The drawback is a poor depth effect.
-*@param iWidth width of the container
-*@param iHeight height of the container
-*/
-void cairo_dock_set_ortho_view (int iWidth, int iHeight);
-
-GdkGLConfig *cairo_dock_get_opengl_config (gboolean bForceOpenGL, gboolean *bHasBeenForced);
-
-void cairo_dock_apply_desktop_background (CairoContainer *pContainer);
-
   //////////
  // TEXT //
 //////////
-
 
 /** Create a texture from a text. The text is drawn in white, so that you can later colorize it with a mere glColor.
 *@param cText the text

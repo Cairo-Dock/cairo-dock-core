@@ -1037,6 +1037,15 @@ static gboolean _redraw_subdock_content (Icon *pIcon)
 			cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));
 		}
 	}
+	else  // l'icone a pu perdre son sous-dock entre-temps (exemple : une classe d'appli contenant 2 icones, dont on enleve l'une des 2.
+	{
+		CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+		if (pDock != NULL)
+		{
+			cairo_dock_reload_one_icon_buffer_in_dock (pIcon, pDock);
+			cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));
+		}
+	}
 	pIcon->iSidRedrawSubdockContent = 0;
 	return FALSE;
 }

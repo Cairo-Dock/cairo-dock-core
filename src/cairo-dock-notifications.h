@@ -48,11 +48,11 @@ typedef enum {
 	CAIRO_DOCK_MIDDLE_CLICK_ICON,
 	/// notification called when the user scrolls on an icon. data : {Icon, CairoDock, int}
 	CAIRO_DOCK_SCROLL_ICON,
-	/// notification called when the menu is being built. data : {Icon, CairoDock, GtkMenu}
-	CAIRO_DOCK_BUILD_MENU,
-	/// notification called when something is dropped inside a container. data : {gchar*, Icon, double*, CairoDock}
+	/// notification called when the menu is being built on an icon (possibly NULL). data : {Icon, CairoContainer, GtkMenu}
+	CAIRO_DOCK_BUILD_ICON_MENU,
+	/// notification called when the mouse enters a dock while dragging an object.
 	CAIRO_DOCK_START_DRAG_DATA,
-	/// notification called when someone asks for an animation for a given icon.
+	/// notification called when something is dropped inside a container. data : {gchar*, Icon, double*, CairoDock}
 	CAIRO_DOCK_DROP_DATA,
 	/// notification called when the mouse has moved inside a container.
 	CAIRO_DOCK_MOUSE_MOVED,
@@ -74,7 +74,7 @@ typedef enum {
 	CAIRO_DOCK_INSERT_ICON,
 	/// notification called when an icon is going to be removed from a dock. data : {Icon, CairoDock}
 	CAIRO_DOCK_REMOVE_ICON,
-	/// notification called when the mouse enters a dock while dragging an object.
+	/// notification called when someone asks for an animation for a given icon.
 	CAIRO_DOCK_REQUEST_ICON_ANIMATION,
 	
 	/// notification called when the mouse enters an icon. data : {Icon, CairoDock, gboolean*}
@@ -136,6 +136,9 @@ typedef enum {
 	
 	/// notification called when the desktop is shown/hidden (data:NULL).
 	CAIRO_DOCK_DESKTOP_VISIBILITY_CHANGED,
+	/// notification called when the menu is being built on a container. data : {CairoContainer, GtkMenu}
+	CAIRO_DOCK_BUILD_CONTAINER_MENU,
+	
 	CAIRO_DOCK_NB_NOTIFICATIONS
 	} CairoDockNotificationType;
 
@@ -147,7 +150,7 @@ typedef gboolean (* CairoDockDoubleClickIconFunc) (gpointer pUserData, Icon *pIc
 typedef gboolean (* CairoDockMiddleClickIconFunc) (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer);
 /// prototype of the callback to the CAIRO_DOCK_SCROLL_ICON notification.
 typedef gboolean (* CairoDockScrollIconFunc) (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, int iDirection);
-/// prototype of the callback to the CAIRO_DOCK_BUILD_MENU notification.
+/// prototype of the callback to the CAIRO_DOCK_BUILD_ICON_MENU notification.
 typedef gboolean (* CairoDockBuildMenuFunc) (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, GtkMenu *pMenu);
 /// prototype of the callback to the CAIRO_DOCK_START_DRAG_DATA notification.
 typedef gboolean (* CairoDockStartDragDataFunc) (gpointer pUserData, CairoContainer *pContainer, gboolean *bStartAnimation);

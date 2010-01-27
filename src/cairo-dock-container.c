@@ -42,6 +42,7 @@
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-opengl.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-container.h"
 
@@ -51,8 +52,7 @@ extern gboolean g_bSticky;
 
 extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
-extern gboolean g_bIndirectRendering;
-extern GdkGLConfig* g_pGlConfig;
+extern CairoDockGLConfig g_openglConfig;
 
 
 static void _cairo_dock_on_realize (GtkWidget* pWidget, gpointer data)
@@ -102,11 +102,11 @@ GtkWidget *cairo_dock_create_container_window_full (gboolean bOpenGLWindow)
 	cairo_dock_set_colormap_for_window (pWindow);
 	if (g_bUseOpenGL && bOpenGLWindow)
 	{
-		GdkGLContext *pMainGlContext = gtk_widget_get_gl_context (g_pMainDock ? g_pMainDock->container.pWidget : NULL);  // NULL si on est en train de creer la fenetre du main dock, ce qui nous convient.
+		GdkGLContext *pMainGlContext = (g_pMainDock ? gtk_widget_get_gl_context (g_pMainDock->container.pWidget) : NULL);  // NULL si on est en train de creer la fenetre du main dock, ce qui nous convient.
 		gtk_widget_set_gl_capability (pWindow,
-			g_pGlConfig,
+			g_openglConfig.pGlConfig,
 			pMainGlContext,  // on partage les ressources entre les contextes.
-			! g_bIndirectRendering,  // TRUE <=> direct connection to the graphics system.
+			! g_openglConfig.bIndirectRendering,  // TRUE <=> direct connection to the graphics system.
 			GDK_GL_RGBA_TYPE);
 		g_signal_connect_after (G_OBJECT (pWindow),
 			"realize",

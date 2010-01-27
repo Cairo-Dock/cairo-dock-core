@@ -119,10 +119,6 @@ void cairo_dock_show_module_gui (const gchar *cModuleName);
 void cairo_dock_close_gui (void);
 
 
-void cairo_dock_load_user_gui_backend (void);
-GtkWidget *cairo_dock_make_switch_gui_button (void);
-
-
 /** Build a generic window, that contains 2 buttons apply and quit, and a taskbar.
 @param cTitle title to set to the window.
 @param iWidth width of the window.
@@ -157,11 +153,24 @@ struct _CairoDockLauncherGuiBackend {
 	} ;
 typedef struct _CairoDockLauncherGuiBackend CairoDockLauncherGuiBackend;
 
+/** Register a launcher GUI backend to be the current one.
+@param pBackend the new backend.
+*/
 void cairo_dock_register_launcher_gui_backend (CairoDockLauncherGuiBackend *pBackend);
 
+/** Build and show the launcher GUI for a given launcher.
+@param pIcon the launcher.
+@return the GUI window.
+*/
 GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon);
 
+/** Trigger the refresh of the launcher GUI. The refresh well happen when the main loop gets available.
+*/
 void cairo_dock_refresh_launcher_gui (void);
+
+
+void cairo_dock_load_user_gui_backend (void);
+GtkWidget *cairo_dock_make_switch_gui_button (void);
 
 
 G_END_DECLS

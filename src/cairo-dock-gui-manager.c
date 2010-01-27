@@ -315,63 +315,6 @@ void cairo_dock_close_gui (void)
 }
 
 
-static gboolean s_bAdvancedMode = FALSE;
-void cairo_dock_load_user_gui_backend (void)
-{
-	gchar *cModeFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, ".config-mode");
-	gsize length = 0;
-	gchar *cContent = NULL;
-	g_file_get_contents (cModeFile,
-		&cContent,
-		&length,
-		NULL);
-	
-	if (!cContent || atoi (cContent) == 0)
-	{
-		cairo_dock_register_simple_gui_backend ();
-		s_bAdvancedMode = FALSE;
-	}
-	else
-	{
-		cairo_dock_register_main_gui_backend ();
-		s_bAdvancedMode = TRUE;
-	}
-	g_free (cModeFile);
-}
-
-static void on_click_switch_mode (GtkButton *button, gpointer data)
-{
-	cairo_dock_close_gui ();
-	
-	s_bAdvancedMode = !s_bAdvancedMode;
-	gchar *cModeFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, ".config-mode");
-	gchar *cMode = g_strdup_printf ("%d", s_bAdvancedMode);
-	g_file_set_contents (cModeFile,
-		cMode,
-		-1,
-		NULL);
-	
-	if (s_bAdvancedMode)
-		cairo_dock_register_main_gui_backend ();
-	else
-		cairo_dock_register_simple_gui_backend ();
-	g_free (cMode);
-	g_free (cModeFile);
-	
-	cairo_dock_show_main_gui ();
-}
-GtkWidget *cairo_dock_make_switch_gui_button (void)
-{
-	GtkWidget *pSwitchButton = gtk_button_new_with_label (s_bAdvancedMode ? _("Simple Mode") : _("Advanced Mode"));
-	if (!s_bAdvancedMode)
-		gtk_widget_set_tooltip_text (pSwitchButton, _("The advanced mode lets you tweak every single parameter of the dock. It is a powerful tool to customize your current theme."));
-	
-	GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_JUMP_TO, GTK_ICON_SIZE_BUTTON);
-	gtk_button_set_image (GTK_BUTTON (pSwitchButton), pImage);
-	g_signal_connect (G_OBJECT (pSwitchButton), "clicked", G_CALLBACK(on_click_switch_mode), NULL);
-	return pSwitchButton;
-}
-
   ////////////////
  // NORMAL GUI //
 ////////////////
@@ -618,7 +561,6 @@ gboolean cairo_dock_build_normal_gui (const gchar *cConfFilePath, const gchar *c
 }
 
 
-
   //////////////////////////
  // LAUNCHER GUI BACKEND //
 //////////////////////////
@@ -650,4 +592,66 @@ void cairo_dock_refresh_launcher_gui (void)
 		return;
 	
 	s_iSidRefreshGUI = g_idle_add ((GSourceFunc) _refresh_launcher_gui, NULL);
+}
+
+
+  ////////////////////////
+ // CONFIG MODE SWITCH //
+////////////////////////
+
+static gboolean s_bAdvancedMode = FALSE;
+void cairo_dock_load_user_gui_backend (void)
+{
+	gchar *cModeFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, ".config-mode");
+	gsize length = 0;
+	gchar *cContent = NULL;
+	g_file_get_contents (cModeFile,
+		&cContent,
+		&length,
+		NULL);
+	
+	if (!cContent || atoi (cContent) == 0)
+	{
+		cairo_dock_register_simple_gui_backend ();
+		s_bAdvancedMode = FALSE;
+	}
+	else
+	{
+		cairo_dock_register_main_gui_backend ();
+		s_bAdvancedMode = TRUE;
+	}
+	g_free (cModeFile);
+}
+
+static void on_click_switch_mode (GtkButton *button, gpointer data)
+{
+	cairo_dock_close_gui ();
+	
+	s_bAdvancedMode = !s_bAdvancedMode;
+	gchar *cModeFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, ".config-mode");
+	gchar *cMode = g_strdup_printf ("%d", s_bAdvancedMode);
+	g_file_set_contents (cModeFile,
+		cMode,
+		-1,
+		NULL);
+	
+	if (s_bAdvancedMode)
+		cairo_dock_register_main_gui_backend ();
+	else
+		cairo_dock_register_simple_gui_backend ();
+	g_free (cMode);
+	g_free (cModeFile);
+	
+	cairo_dock_show_main_gui ();
+}
+GtkWidget *cairo_dock_make_switch_gui_button (void)
+{
+	GtkWidget *pSwitchButton = gtk_button_new_with_label (s_bAdvancedMode ? _("Simple Mode") : _("Advanced Mode"));
+	if (!s_bAdvancedMode)
+		gtk_widget_set_tooltip_text (pSwitchButton, _("The advanced mode lets you tweak every single parameter of the dock. It is a powerful tool to customize your current theme."));
+	
+	GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_JUMP_TO, GTK_ICON_SIZE_BUTTON);
+	gtk_button_set_image (GTK_BUTTON (pSwitchButton), pImage);
+	g_signal_connect (G_OBJECT (pSwitchButton), "clicked", G_CALLBACK(on_click_switch_mode), NULL);
+	return pSwitchButton;
 }

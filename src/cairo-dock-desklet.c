@@ -606,7 +606,7 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glLoadIdentity ();
 		
-		cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pDesklet));
+		cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDesklet));
 		
 		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_RENDER_DESKLET, pDesklet, NULL);
 		
@@ -1142,7 +1142,7 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 	else if (pButton->button == 3 && pButton->type == GDK_BUTTON_PRESS)  // clique droit.
 	{
 		Icon *pClickedIcon = cairo_dock_find_clicked_icon_in_desklet (pDesklet);
-		GtkWidget *menu = cairo_dock_build_menu (pClickedIcon, CAIRO_CONTAINER (pDesklet));  // genere un CAIRO_DOCK_BUILD_MENU.
+		GtkWidget *menu = cairo_dock_build_menu (pClickedIcon, CAIRO_CONTAINER (pDesklet));  // genere un CAIRO_DOCK_BUILD_ICON_MENU.
 		gtk_widget_show_all (menu);
 		gtk_menu_popup (GTK_MENU (menu),
 			NULL,

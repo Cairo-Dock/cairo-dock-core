@@ -136,6 +136,8 @@ cairo_dock_SOURCES = \
 	cairo-dock-flying-container.h\
 	cairo-dock-graph.c\
 	cairo-dock-graph.h\
+	cairo-dock-opengl.c\
+	cairo-dock-opengl.h\
 	cairo-dock-draw-opengl.c\
 	cairo-dock-draw-opengl.h\
 	cairo-dock-particle-system.c\
@@ -236,6 +238,7 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-applet-canvas.h\
 	cairo-dock-flying-container.h\
 	cairo-dock-graph.h\
+	cairo-dock-opengl.h\
 	cairo-dock-draw-opengl.h\
 	cairo-dock-particle-system.h\
 	cairo-dock-gui-factory.h\
@@ -258,20 +261,20 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-task.h\
 	cairo-dock-container.h
 
-
-lib_LTLIBRARIES = \
-	libcairo-dock.la
-
-libcairo_dock_la_SOURCES = \
-	cairo-dock-struct.h\
-	cairo-dock-icons.h\
-	cairo-dock-icons.c
-
-libcairo_dock_la_CFLAGS = \
-	$(cairo_dock_CFLAGS)
-
-libcairo_dock_la_LIBADD = \
-	$(PACKAGE_LIBS) -lm
-
-libcairo_dock_la_LDFLAGS =\
-	-avoid-version -module
+# 
+# lib_LTLIBRARIES = \
+# 	libcairo-dock.la
+# 
+# libcairo_dock_la_SOURCES = \
+# 	cairo-dock-struct.h\
+# 	cairo-dock-icons.h\
+# 	cairo-dock-icons.c
+# 
+# libcairo_dock_la_CFLAGS = \
+# 	$(cairo_dock_CFLAGS)
+# 
+# libcairo_dock_la_LIBADD = \
+# 	$(PACKAGE_LIBS) -lm
+# 
+# libcairo_dock_la_LDFLAGS =\
+# # 	-avoid-version -module

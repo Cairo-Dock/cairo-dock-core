@@ -72,6 +72,7 @@
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-emblem.h"
+#include "cairo-dock-opengl.h"
 #include "cairo-dock-dock-factory.h"
 
 extern CairoDock *g_pMainDock;
@@ -84,11 +85,9 @@ extern gboolean g_bSkipTaskbar;
 extern gboolean g_bSticky;
 extern GdkWindowTypeHint g_iWmHint;
 
+extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
-extern gboolean g_bForceOpenGL;
-extern gboolean g_bIndirectRendering;
-extern GdkGLConfig* g_pGlConfig;
 
 static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)
 {
@@ -96,7 +95,9 @@ static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)
 	if (! g_bUseOpenGL || bAsked)
 		return ;
 	
-	if (! g_bForceOpenGL)
+	cairo_dock_check_extensions ();
+	
+	if (! g_openglConfig.bHasBeenForced)
 	{
 		bAsked = TRUE;
 		GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Use OpenGL in Cairo-Dock ?"),
@@ -116,6 +117,7 @@ static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)
 		if (iAnswer == GTK_RESPONSE_NO)
 		{
 			g_bUseOpenGL = FALSE;
+			g_openglConfig.pGlConfig = NULL;
 			//gdk_window_unset_gl_capability (pWidget->window);
 			return ;
 		}

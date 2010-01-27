@@ -1053,6 +1053,21 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 }
 
 
+void cairo_dock_load_current_theme (void)
+{
+	cd_message ("%s ()", __func__);
+
+	//\___________________ On libere toute la memoire allouee pour les docks (stoppe aussi tous les timeout).
+	cairo_dock_free_all_docks ();
+
+	//\___________________ On cree le dock principal.
+	g_pMainDock = cairo_dock_create_new_dock (CAIRO_DOCK_MAIN_DOCK_NAME, NULL);  // on ne lui assigne pas de vues, puisque la vue par defaut des docks principaux sera definie plus tard.
+
+	//\___________________ On lit son fichier de conf et on charge tout.
+	cairo_dock_read_conf_file (g_cConfFile, g_pMainDock);  // chargera des valeurs par defaut si le fichier de conf fourni est incorrect.
+}
+
+
 
 static gchar *cairo_dock_build_temporary_themes_conf_file (void)
 {
@@ -1224,19 +1239,4 @@ void cairo_dock_manage_themes (void)
 		cInitConfFile,
 		(GFreeFunc) on_theme_destroy,
 		&s_pThemeManager);
-}
-
-
-void cairo_dock_load_current_theme (void)
-{
-	cd_message ("%s ()", __func__);
-
-	//\___________________ On libere toute la memoire allouee pour les docks (stoppe aussi tous les timeout).
-	cairo_dock_free_all_docks ();
-
-	//\___________________ On cree le dock principal.
-	g_pMainDock = cairo_dock_create_new_dock (CAIRO_DOCK_MAIN_DOCK_NAME, NULL);  // on ne lui assigne pas de vues, puisque la vue par defaut des docks principaux sera definie plus tard.
-
-	//\___________________ On lit son fichier de conf et on charge tout.
-	cairo_dock_read_conf_file (g_cConfFile, g_pMainDock);  // chargera des valeurs par defaut si le fichier de conf fourni est incorrect.
 }

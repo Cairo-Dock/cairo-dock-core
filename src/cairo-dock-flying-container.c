@@ -57,7 +57,6 @@ extern GdkGLConfig* g_pGlConfig;
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
-extern gboolean g_bIndirectRendering;
 extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
 
 static cairo_surface_t *s_pHandSurface = NULL;
@@ -236,7 +235,7 @@ static gboolean on_expose_flying_icon (GtkWidget *pWidget,
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glLoadIdentity ();
 		
-		cairo_dock_apply_desktop_background (CAIRO_CONTAINER (pFlyingContainer));
+		cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pFlyingContainer));
 		
 		cairo_dock_notify (CAIRO_DOCK_RENDER_FLYING_CONTAINER, pFlyingContainer, NULL);
 		

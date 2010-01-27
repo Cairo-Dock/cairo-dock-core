@@ -42,6 +42,7 @@
 #include <cairo-dock/cairo-dock-dock-factory.h>
 #include <cairo-dock/cairo-dock-container.h>
 // actions et comportement des containers.
+#include <cairo-dock/cairo-dock-opengl.h>
 #include <cairo-dock/cairo-dock-draw-opengl.h>
 #include <cairo-dock/cairo-dock-draw.h>
 #include <cairo-dock/cairo-dock-emblem.h>
