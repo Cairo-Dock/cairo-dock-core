@@ -53,7 +53,6 @@
 #define EXPLOSION_NB_FRAMES 10
 
 extern CairoDock *g_pMainDock;
-extern GdkGLConfig* g_pGlConfig;
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;

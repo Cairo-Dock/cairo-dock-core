@@ -37,6 +37,7 @@
 #include "cairo-dock-gauge.h"
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-gui-manager.h"
+#include "cairo-dock-task.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-themes-manager.h"
 
@@ -52,14 +53,13 @@ extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCurrentLaunchersPath;
-extern gchar *g_cMainDockDefaultRendererName;
 extern gchar *g_cThemeServerAdress;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
 extern CairoDock *g_pMainDock;
-extern gboolean g_bForceOpenGL;
 
 static GtkWidget *s_pThemeManager = NULL;
+static CairoDockTask *s_pTask = NULL;
 
 void cairo_dock_free_theme (CairoDockTheme *pTheme)
 {
@@ -1091,6 +1091,25 @@ static gchar *cairo_dock_build_temporary_themes_conf_file (void)
 	return cTmpConfFile;
 }
 
+
+static void _import_theme (gpointer *pSharedMemory)
+{
+	pSharedMemory[4] = GINT_TO_POINTER (cairo_dock_import_theme (pSharedMemory[0], GPOINTER_TO_INT (pSharedMemory[1]), GPOINTER_TO_INT (pSharedMemory[2])));
+	
+}
+static gboolean _load_theme (gpointer *pSharedMemory)
+{
+	g_main_loop_quit (pSharedMemory[3]);
+	if (pSharedMemory[4])
+	{
+		cairo_dock_set_status_message (s_pThemeManager, _("Now reloading theme ..."));
+		cairo_dock_load_current_theme ();
+	}
+	g_free (pSharedMemory[0]);
+	g_free (pSharedMemory);
+	cairo_dock_set_status_message (s_pThemeManager, "");
+	return FALSE;
+}
 static gboolean on_theme_apply (gchar *cInitConfFile)
 {
 	cd_debug ("%s (%s)", __func__, cInitConfFile);
@@ -1139,7 +1158,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		
 		g_free (cNewThemeName);
 		g_key_file_free (pKeyFile);
-		return TRUE;
+		return FALSE;
 	}
 	
 	//\___________________ On efface les themes selectionnes.
@@ -1163,7 +1182,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		
 		g_strfreev (cThemesList);
 		g_key_file_free (pKeyFile);
-		return TRUE;
+		return FALSE;
 	}
 	
 	//\___________________ On charge le theme selectionne.
@@ -1197,10 +1216,35 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 	}
 	
 	//\___________________ On charge le nouveau theme choisi.
-	if (cNewThemeName != NULL)
+	if (cNewThemeName != NULL && s_pTask == NULL)
 	{
 		gboolean bLoadBehavior = g_key_file_get_boolean (pKeyFile, "Themes", "use theme behaviour", NULL);
 		gboolean bLoadLaunchers = g_key_file_get_boolean (pKeyFile, "Themes", "use theme launchers", NULL);
+		
+		/*GMainLoop *pBlockingLoop = g_main_loop_new (NULL, FALSE);
+		
+		gpointer *pSharedMemory = g_new0 (gpointer, 5);
+		pSharedMemory[0] = cNewThemeName;
+		pSharedMemory[1] = GINT_TO_POINTER (bLoadBehavior);
+		pSharedMemory[2] = GINT_TO_POINTER (bLoadLaunchers);
+		pSharedMemory[3] = pBlockingLoop;
+		s_pTask = cairo_dock_new_task (0, (CairoDockGetDataAsyncFunc) _import_theme, (CairoDockUpdateSyncFunc) _load_theme, pSharedMemory);
+		cairo_dock_launch_task (s_pTask);
+		
+		Icon *pFirstIcon = cairo_dock_get_dialogless_icon ();
+		CairoDialog *pDialog = cairo_dock_show_temporary_dialog_with_default_icon (_("Downloading the theme ...\nThis may take some time, please wait."), pFirstIcon, CAIRO_CONTAINER (g_pMainDock), 0);
+		cairo_dock_set_status_message (s_pThemeManager, "Downloading the theme ...");
+		
+		g_print ("debut de boucle bloquante ...\n");
+		GDK_THREADS_LEAVE ();
+		g_main_loop_run (pBlockingLoop);
+		GDK_THREADS_ENTER ();
+		g_print ("fin de boucle bloquante\n");
+		
+		g_main_loop_unref (pBlockingLoop);
+		cairo_dock_free_task (s_pTask);
+		s_pTask = NULL;
+		cairo_dock_dialog_unreference (pDialog);*/
 		
 		gboolean bThemeImported = cairo_dock_import_theme (cNewThemeName, bLoadBehavior, bLoadLaunchers);
 		

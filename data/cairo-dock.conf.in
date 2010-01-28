@@ -493,6 +493,10 @@ frame_sep =
 #j+[4;64] Icon size at rest (width x height) :
 separator size = 48;48
 
+#Y+[Use an image;1;4;Flat separator;4;1;Physical separator;0;0] How to draw the separators :
+#{Only the default, 3D-plane and curve views support flat and physical separators.}
+separator type = 0
+
 #S+ Filename of an image to use for separators :
 #{If you don't provide one, blanks will be used.}
 separator image = separateur.svg
@@ -502,6 +506,9 @@ revolve separator image = true
 
 #b+ Force separator's image size to stay constant ?
 force size = false
+
+#C+ Color of flat separators :
+separator color = 0.9;0.9;0.9;1.0
 
 
 #X+[Icons order]

@@ -89,54 +89,6 @@ extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
 
-static void _cairo_dock_on_realize_main_dock (GtkWidget* pWidget, gpointer data)
-{
-	static gboolean bAsked = FALSE;
-	if (! g_bUseOpenGL || bAsked)
-		return ;
-	
-	cairo_dock_check_extensions ();
-	
-	if (! g_openglConfig.bHasBeenForced)
-	{
-		bAsked = TRUE;
-		GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Use OpenGL in Cairo-Dock ?"),
-			NULL,
-			GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-			GTK_STOCK_YES,
-			GTK_RESPONSE_YES,
-			GTK_STOCK_NO,
-			GTK_RESPONSE_NO,
-			NULL);
-		GtkWidget *label = gtk_label_new (_("OpenGL allows you to use the hardware acceleration, reducing the CPU load to the minimum.\nIt also allows some pretty visual effects similar to Compiz.\nHowever, some cards and/or their drivers don't fully support it, which may prevent the dock from running correctly.\nDo you want to activate OpenGL ?\n (To not show this dialog, launch the dock from the Application menu,\n  or with the -o option to force OpenGL and -c to force cairo.)"));
-		gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), label);
-		gtk_widget_show_all (dialog);
-
-		gint iAnswer = gtk_dialog_run (GTK_DIALOG (dialog));
-		gtk_widget_destroy (dialog);
-		if (iAnswer == GTK_RESPONSE_NO)
-		{
-			g_bUseOpenGL = FALSE;
-			g_openglConfig.pGlConfig = NULL;
-			//gdk_window_unset_gl_capability (pWidget->window);
-			return ;
-		}
-	}
-	
-	GdkGLContext* pGlContext = gtk_widget_get_gl_context (pWidget);
-	GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pWidget);
-	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
-		return ;
-	g_print ("\n ============================================================================ \n\tCairo-Dock version: %s\n\tCompiled date:  %s %s\n\tRunning with OpenGL: %d\n\tOpenGL version: %s\n\tOpenGL vendor: %s\n\tOpenGL renderer: %s\n ============================================================================\n\n",
-		CAIRO_DOCK_VERSION,
-		__DATE__, __TIME__,
-		g_bUseOpenGL,
-		glGetString (GL_VERSION),
-		glGetString (GL_VENDOR),
-		glGetString (GL_RENDERER));
-	
-	gdk_gl_drawable_gl_end (pGlDrawable);
-}
 
 CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRendererName)
 {
@@ -185,11 +137,6 @@ CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRen
 		GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
 		GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
 	
-	if (pDock->bIsMainDock)
-		g_signal_connect_after (G_OBJECT (pWindow),
-			"realize",
-			G_CALLBACK (_cairo_dock_on_realize_main_dock),
-			NULL);
 	g_signal_connect (G_OBJECT (pWindow),
 		"expose-event",
 		G_CALLBACK (cairo_dock_on_expose),

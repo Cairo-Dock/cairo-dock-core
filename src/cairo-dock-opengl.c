@@ -34,6 +34,7 @@
 #include "cairo-dock-load.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-system.h"
+#include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-opengl.h"
 
 extern CairoDockGLConfig g_openglConfig;
@@ -126,6 +127,7 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceIndirectRendering,
 {
 	memset (&g_openglConfig, 0, sizeof (CairoDockGLConfig));
 	g_openglConfig.bHasBeenForced = bForceOpenGL;
+	gboolean bStencilBufferAvailable, bAlphaAvailable;
 	Display *XDisplay = gdk_x11_get_default_xdisplay ();
 	
 	//\_________________ On cherche un visual qui reponde a tous les criteres.
@@ -150,12 +152,13 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceIndirectRendering,
 	
 	XVisualInfo *pVisInfo = NULL;
 	int iNumOfFBConfigs = 0;
-	cd_debug ("cherchons les configs ...");
 	pFBConfigs = glXChooseFBConfig (XDisplay,
 		DefaultScreen (XDisplay),
 		doubleBufferAttributes,
 		&iNumOfFBConfigs);
-	cd_debug (" -> %d FBConfig(s)", iNumOfFBConfigs);
+	cd_debug ("got %d FBConfig(s)", iNumOfFBConfigs);
+	bStencilBufferAvailable = TRUE;
+	bAlphaAvailable = TRUE;
 	
 	pVisInfo = _get_visual_from_fbconfigs (pFBConfigs, iNumOfFBConfigs, XDisplay);
 	if (pFBConfigs)
@@ -170,6 +173,9 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceIndirectRendering,
 			DefaultScreen (XDisplay),
 			doubleBufferAttributes,
 			&iNumOfFBConfigs);
+		cd_debug ("this time got %d FBConfig(s)", iNumOfFBConfigs);
+		bStencilBufferAvailable = FALSE;
+		bAlphaAvailable = TRUE;
 		
 		pVisInfo = _get_visual_from_fbconfigs (pFBConfigs, iNumOfFBConfigs, XDisplay);
 		if (pFBConfigs)
@@ -185,6 +191,8 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceIndirectRendering,
 			GDK_GL_MODE_DEPTH |
 			GDK_GL_MODE_DOUBLE |
 			GDK_GL_MODE_STENCIL);
+		bStencilBufferAvailable = TRUE;
+		bAlphaAvailable = TRUE;
 		
 		if (g_openglConfig.pGlConfig == NULL)
 		{
@@ -192,10 +200,12 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceIndirectRendering,
 			g_openglConfig.pGlConfig = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
 				GDK_GL_MODE_ALPHA |
 				GDK_GL_MODE_DEPTH);
+			bStencilBufferAvailable = FALSE;
+			bAlphaAvailable = TRUE;
 		}
 	}
 	
-	//\_________________ Si toujours rien et si l'utilisateur n'en démords pas, on en cherche un sans canal alpha.
+	//\_________________ Si toujours rien et si l'utilisateur n'en demord pas, on en cherche un sans canal alpha.
 	if (pVisInfo == NULL && g_openglConfig.pGlConfig == NULL && bForceOpenGL)
 	{
 		cd_warning ("we could not get an ARGB-visual, trying to get an RGB one (fake transparency will be used in return) ...");
@@ -206,7 +216,9 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceIndirectRendering,
 			DefaultScreen (XDisplay),
 			doubleBufferAttributes,
 			&iNumOfFBConfigs);
-		cd_message ("got %d FBConfig(s) this time", iNumOfFBConfigs);
+		bStencilBufferAvailable = FALSE;
+		bAlphaAvailable = FALSE;
+		cd_debug ("got %d FBConfig(s) without alpha channel", iNumOfFBConfigs);
 		for (i = 0; i < iNumOfFBConfigs; i++)
 		{
 			pVisInfo = glXGetVisualFromFBConfig (XDisplay, pFBConfigs[i]);
@@ -230,10 +242,8 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceIndirectRendering,
 				doubleBufferAttributes);
 		}
 	}
-	else
-	{
-		g_openglConfig.bAlphaAvailable = TRUE;
-	}
+	g_openglConfig.bStencilBufferAvailable = bStencilBufferAvailable;
+	g_openglConfig.bAlphaAvailable = bAlphaAvailable;
 	
 	//\_________________ Si rien de chez rien, on quitte.
 	if (pVisInfo == NULL && g_openglConfig.pGlConfig == NULL)
@@ -289,11 +299,6 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceIndirectRendering,
 	return TRUE;
 }
 
-void cairo_dock_check_extensions (void)  // il faut le faire apres avoir un contexte.
-{
-	g_openglConfig.bNonPowerOfTwoAvailable = _check_gl_extension ("GL_ARB_texture_non_power_of_two");
-	g_print ("OpenGL config summary :\n - bNonPowerOfTwoAvailable : %d\n - bPBufferAvailable : %d\n - direct rendering : %d\n - bTextureFromPixmapAvailable : %d\n - GLX version : %d.%d\n",g_openglConfig.bNonPowerOfTwoAvailable, g_openglConfig.bPBufferAvailable, !g_openglConfig.bIndirectRendering, g_openglConfig.bTextureFromPixmapAvailable, g_openglConfig.iGlxMajor, g_openglConfig.iGlxMinor);
-}
 
 
 static GLXPbuffer _cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pContext)
@@ -377,7 +382,7 @@ void cairo_dock_create_icon_pbuffer (void)
 		g_openglConfig.iIconPbufferWidth = iWidth;
 		g_openglConfig.iIconPbufferHeight = iHeight;
 		
-		g_print ("if your drivers are crappy, we'll know it immediately ...");
+		g_print ("activating pbuffer, usually buggy drivers will crash here ...");
 		if (g_openglConfig.iconPbuffer != 0 && g_openglConfig.iconContext != 0 && glXMakeCurrent (XDisplay, g_openglConfig.iconPbuffer, g_openglConfig.iconContext))
 		{
 			glMatrixMode(GL_PROJECTION);
@@ -393,7 +398,7 @@ void cairo_dock_create_icon_pbuffer (void)
 			glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
 			glClearDepth (1.0f);
 		}
-		g_print (" ok, they seem fine enough.\n");
+		g_print (" ok, they are fine enough.\n");
 	}
 }
 
@@ -523,12 +528,10 @@ void cairo_dock_apply_desktop_background_opengl (CairoContainer *pContainer)
 	if (! mySystem.bUseFakeTransparency || ! g_pFakeTransparencyDesktopBg || g_pFakeTransparencyDesktopBg->iTexture == 0)
 		return ;
 	
-	glPolygonMode (GL_FRONT, GL_FILL);
-	glEnable (GL_TEXTURE_2D);
+	_cairo_dock_enable_texture ();
+	_cairo_dock_set_blend_source ();
+	_cairo_dock_set_alpha (1.);
 	glBindTexture (GL_TEXTURE_2D, g_pFakeTransparencyDesktopBg->iTexture);
-	glColor4f(1., 1., 1., 1.);
-	glEnable (GL_BLEND);
-	glBlendFunc (GL_ONE, GL_ZERO);  /// utile ?
 	
 	glBegin(GL_QUADS);
 	glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
@@ -545,6 +548,85 @@ void cairo_dock_apply_desktop_background_opengl (CairoContainer *pContainer)
 	glVertex3f (0., 0., 0.);  // Bottom Left
 	glEnd();
 	
-	glDisable (GL_TEXTURE_2D);
-	glDisable (GL_BLEND);
+	_cairo_dock_disable_texture ();
+}
+
+
+
+
+static void _cairo_dock_post_initialize_opengl_backend (GtkWidget* pWidget, gpointer data)  // initialisation necessitant un contexte opengl.
+{
+	static gboolean bChecked=FALSE;
+	if (bChecked)
+		return;
+	GdkGLContext* pGlContext = gtk_widget_get_gl_context (pWidget);
+	GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pWidget);
+	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+		return ;
+	
+	bChecked = TRUE;
+	g_openglConfig.bNonPowerOfTwoAvailable = _check_gl_extension ("GL_ARB_texture_non_power_of_two");
+	
+	g_print ("OpenGL config summary :\n - bNonPowerOfTwoAvailable : %d\n - bPBufferAvailable : %d\n - direct rendering : %d\n - bTextureFromPixmapAvailable : %d\n - GLX version : %d.%d\n - OpenGL version: %s\n - OpenGL vendor: %s\n - OpenGL renderer: %s\n\n",
+		g_openglConfig.bNonPowerOfTwoAvailable,
+		g_openglConfig.bPBufferAvailable,
+		!g_openglConfig.bIndirectRendering,
+		g_openglConfig.bTextureFromPixmapAvailable,
+		g_openglConfig.iGlxMajor,
+		g_openglConfig.iGlxMinor,
+		glGetString (GL_VERSION),
+		glGetString (GL_VENDOR),
+		glGetString (GL_RENDERER));
+	
+	gdk_gl_drawable_gl_end (pGlDrawable);
+}
+
+
+static void _reset_opengl_context (GtkWidget* pWidget, gpointer data)
+{
+	if (! g_bUseOpenGL)
+		return ;
+	
+	GdkGLContext* pGlContext = gtk_widget_get_gl_context (pWidget);
+	GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pWidget);
+	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+		return ;
+	
+	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
+	glClearDepth (1.0f);
+	glClearStencil (0);
+	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
+	
+	/// a tester ...
+	glEnable (GL_MULTISAMPLE_ARB);
+	
+	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);  // GL_MODULATE / GL_DECAL /  GL_BLEND
+	
+	glTexParameteri (GL_TEXTURE_2D,
+		GL_TEXTURE_MIN_FILTER,
+		GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri (GL_TEXTURE_2D,
+		GL_TEXTURE_MAG_FILTER,
+		GL_LINEAR);
+	
+	gdk_gl_drawable_gl_end (pGlDrawable);
+}
+void cairo_dock_set_gl_capabilities (GtkWidget *pWindow)
+{
+	gboolean bFirstContainer = (! g_pMainDock || ! g_pMainDock->container.pWidget);
+	GdkGLContext *pMainGlContext = (bFirstContainer ? NULL : gtk_widget_get_gl_context (g_pMainDock->container.pWidget));  // NULL si on est en train de creer la fenetre du main dock, ce qui nous convient.
+	gtk_widget_set_gl_capability (pWindow,
+		g_openglConfig.pGlConfig,
+		pMainGlContext,  // on partage les ressources entre les contextes.
+		! g_openglConfig.bIndirectRendering,  // TRUE <=> direct connection to the graphics system.
+		GDK_GL_RGBA_TYPE);
+	if (bFirstContainer)  // c'est donc le 1er container cree, on finit l'initialisation du backend opengl.
+		g_signal_connect (G_OBJECT (pWindow),
+			"realize",
+			G_CALLBACK (_cairo_dock_post_initialize_opengl_backend),
+			NULL);
+	g_signal_connect_after (G_OBJECT (pWindow),
+		"realize",
+		G_CALLBACK (_reset_opengl_context),
+		NULL);
 }

@@ -83,7 +83,7 @@ extern double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
 extern cairo_surface_t *g_pIconBackgroundImageSurface;
 extern double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
 
-///extern GLuint g_pGradationTexture[2];
+extern GLuint g_pGradationTexture[2];
 
 extern gboolean g_bUseOpenGL;
 extern GLuint g_iBackgroundTexture;
@@ -1222,7 +1222,7 @@ void cairo_dock_unload_additionnal_textures (void)
 	}
 	cairo_dock_unload_desklet_buttons_texture ();
 	cairo_dock_unload_dialog_buttons ();
-	/**if (g_pGradationTexture[0] != 0)
+	if (g_pGradationTexture[0] != 0)
 	{
 		_cairo_dock_delete_texture (g_pGradationTexture[0]);
 		g_pGradationTexture[0] = 0;
@@ -1231,7 +1231,7 @@ void cairo_dock_unload_additionnal_textures (void)
 	{
 		_cairo_dock_delete_texture (g_pGradationTexture[1]);
 		g_pGradationTexture[1] = 0;
-	}*/
+	}
 	if (s_pDesktopBg != NULL && s_pDesktopBg->iTexture != 0)
 	{
 		_cairo_dock_delete_texture (s_pDesktopBg->iTexture);

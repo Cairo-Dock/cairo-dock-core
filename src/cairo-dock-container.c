@@ -55,36 +55,6 @@ extern gboolean g_bUseOpenGL;
 extern CairoDockGLConfig g_openglConfig;
 
 
-static void _cairo_dock_on_realize (GtkWidget* pWidget, gpointer data)
-{
-	if (! g_bUseOpenGL)
-		return ;
-	
-	GdkGLContext* pGlContext = gtk_widget_get_gl_context (pWidget);
-	GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pWidget);
-	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
-		return ;
-	
-	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
-	glClearDepth (1.0f);
-	glClearStencil (0);
-	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
-	
-	/// a tester ...
-	glEnable (GL_MULTISAMPLE_ARB);
-	
-	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);  // GL_MODULATE / GL_DECAL /  GL_BLEND
-	
-	glTexParameteri (GL_TEXTURE_2D,
-		GL_TEXTURE_MIN_FILTER,
-		GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri (GL_TEXTURE_2D,
-		GL_TEXTURE_MAG_FILTER,
-		GL_LINEAR);
-	
-	gdk_gl_drawable_gl_end (pGlDrawable);
-}
-
 static gboolean _cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, gpointer data)
 {
 	return TRUE;  // on empeche les ALT+F4 malheureux.
@@ -102,16 +72,7 @@ GtkWidget *cairo_dock_create_container_window_full (gboolean bOpenGLWindow)
 	cairo_dock_set_colormap_for_window (pWindow);
 	if (g_bUseOpenGL && bOpenGLWindow)
 	{
-		GdkGLContext *pMainGlContext = (g_pMainDock ? gtk_widget_get_gl_context (g_pMainDock->container.pWidget) : NULL);  // NULL si on est en train de creer la fenetre du main dock, ce qui nous convient.
-		gtk_widget_set_gl_capability (pWindow,
-			g_openglConfig.pGlConfig,
-			pMainGlContext,  // on partage les ressources entre les contextes.
-			! g_openglConfig.bIndirectRendering,  // TRUE <=> direct connection to the graphics system.
-			GDK_GL_RGBA_TYPE);
-		g_signal_connect_after (G_OBJECT (pWindow),
-			"realize",
-			G_CALLBACK (_cairo_dock_on_realize),
-			NULL);
+		cairo_dock_set_gl_capabilities (pWindow);
 	}
 	
 	g_signal_connect (G_OBJECT (pWindow),

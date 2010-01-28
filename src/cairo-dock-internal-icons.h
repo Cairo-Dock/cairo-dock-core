@@ -50,9 +50,11 @@ struct _CairoConfigIcons {
 	gchar *cBackgroundImagePath;
 	gint tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
 	gint tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
+	gint iSeparatorType;
 	gchar *cSeparatorImage;
 	gboolean bRevolveSeparator;
 	gboolean bConstantSeparatorSize;
+	gdouble fSeparatorColor[4];
 	gint iSeparateIcons;
 	CairoDockIconType tIconTypeOrder[CAIRO_DOCK_NB_TYPES];
 	gint iIconsTypesList[3];  // pour la conf simple.

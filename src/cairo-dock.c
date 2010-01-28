@@ -172,7 +172,6 @@ gboolean g_bLocked = FALSE;
 CairoDockGLConfig g_openglConfig;
 gboolean g_bUseOpenGL = FALSE;
 gboolean g_bForceCairo = FALSE;
-GdkGLConfig* g_pGlConfig = NULL;
 GLuint g_iBackgroundTexture=0;
 GLuint g_iIndicatorTexture=0;
 GLuint g_iActiveIndicatorTexture=0;
@@ -538,15 +537,41 @@ int main (int argc, char** argv)
 		g_iDesktopEnv = cairo_dock_guess_environment ();
 	cd_debug ("environnement de bureau : %d", g_iDesktopEnv);
 	
-	//\___________________ On initialise le support d'OpenGL.
-	if (! g_bForceCairo && ! g_bUseGlitz)
-		g_bUseOpenGL = cairo_dock_initialize_opengl_backend (bForceIndirectRendering, bForceOpenGL);
-	
 	//\___________________ On enregistre les rendus de donnees.
 	cairo_dock_register_data_renderer_entry_point ("gauge", (CairoDataRendererNewFunc) cairo_dock_new_gauge);
 	cairo_dock_register_data_renderer_entry_point ("graph", (CairoDataRendererNewFunc) cairo_dock_new_graph);
 	
-	//\___________________ On initialise le gestionnaire de modules et on pre-charge les modules existant.
+	//\___________________ On initialise le support d'OpenGL.
+	if (! g_bForceCairo && ! g_bUseGlitz)
+		g_bUseOpenGL = cairo_dock_initialize_opengl_backend (bForceIndirectRendering, bForceOpenGL);
+	if (g_bUseOpenGL && ! g_openglConfig.bHasBeenForced)  /// on pourrait peut-etre tester la config et ne demander confirmation que si des elements manquent...
+	{
+		GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Use OpenGL in Cairo-Dock ?"),
+			NULL,
+			GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_STOCK_YES,
+			GTK_RESPONSE_YES,
+			GTK_STOCK_NO,
+			GTK_RESPONSE_NO,
+			NULL);
+		GtkWidget *label = gtk_label_new (_("OpenGL allows you to use the hardware acceleration, reducing the CPU load to the minimum.\nIt also allows some pretty visual effects similar to Compiz.\nHowever, some cards and/or their drivers don't fully support it, which may prevent the dock from running correctly.\nDo you want to activate OpenGL ?\n (To not show this dialog, launch the dock from the Application menu,\n  or with the -o option to force OpenGL and -c to force cairo.)"));
+		gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), label);
+		gtk_widget_show_all (dialog);
+
+		gint iAnswer = gtk_dialog_run (GTK_DIALOG (dialog));  // lance sa propre main loop, c'est pourquoi on peut le faire avant le gtk_main().
+		gtk_widget_destroy (dialog);
+		if (iAnswer == GTK_RESPONSE_NO)
+		{
+			g_bUseOpenGL = FALSE;
+			g_openglConfig.pGlConfig = NULL;
+		}
+	}
+	g_print ("\n ============================================================================ \n\tCairo-Dock version: %s\n\tCompiled date:  %s %s\n\tRunning with OpenGL: %d\n ============================================================================\n\n",
+		CAIRO_DOCK_VERSION,
+		__DATE__, __TIME__,
+		g_bUseOpenGL);
+	
+	//\___________________ On initialise le gestionnaire de modules et on pre-charge les modules existant (il faut le faire apres savoir si on utilise l'OpenGL).
 	if (g_module_supported () && ! bSafeMode)
 	{
 		cairo_dock_initialize_module_manager (CAIRO_DOCK_MODULES_DIR);
@@ -643,13 +668,12 @@ int main (int argc, char** argv)
 			pBlockingLoop);
 
 		g_print ("debut de boucle bloquante ...\n");
-		GDK_THREADS_LEAVE ();
+		///GDK_THREADS_LEAVE ();
 		g_main_loop_run (pBlockingLoop);
-		GDK_THREADS_ENTER ();
+		///GDK_THREADS_ENTER ();
 		g_print ("fin de boucle bloquante\n");
 		
 		g_main_loop_unref (pBlockingLoop);
-		g_print ("plop\n");
 	}
 	
 	if (cExcludeModule != NULL)

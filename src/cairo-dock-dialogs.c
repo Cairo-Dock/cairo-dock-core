@@ -582,13 +582,13 @@ gboolean on_unmap_dialog (GtkWidget* pWidget,
 	GdkEvent *pEvent,
 	CairoDialog *pDialog)
 {
-	g_print ("unmap dialog (bAllowMinimize:%d, visible:%d)\n", pDialog->bAllowMinimize, GTK_WIDGET_VISIBLE (pWidget));
+	//g_print ("unmap dialog (bAllowMinimize:%d, visible:%d)\n", pDialog->bAllowMinimize, GTK_WIDGET_VISIBLE (pWidget));
 	if (! pDialog->bAllowMinimize)
 	{
 		if (pDialog->pUnmapTimer)
 		{
 			double fElapsedTime = g_timer_elapsed (pDialog->pUnmapTimer, NULL);
-			g_print ("fElapsedTime : %fms\n", fElapsedTime);
+			//g_print ("fElapsedTime : %fms\n", fElapsedTime);
 			g_timer_destroy (pDialog->pUnmapTimer);
 			pDialog->pUnmapTimer = NULL;
 			if (fElapsedTime < .2)
@@ -976,7 +976,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 		pDialog->pTextBuffer = _cairo_dock_create_dialog_text_surface (pAttribute->cText,
 			pAttribute->pTextDescription, pSourceContext,
 			&pDialog->iTextWidth, &pDialog->iTextHeight);
-		pDialog->iTextTexture = cairo_dock_create_texture_from_surface (pDialog->pTextBuffer);
+		///pDialog->iTextTexture = cairo_dock_create_texture_from_surface (pDialog->pTextBuffer);
 		if (pDialog->iMaxTextWidth > 0 && pDialog->pTextBuffer != NULL && pDialog->iTextWidth > pDialog->iMaxTextWidth)
 		{
 			pDialog->iSidAnimateText = g_timeout_add (200, (GSourceFunc) _cairo_dock_animate_dialog_text, (gpointer) pDialog);  // multiple du timeout de l'icone animee.
@@ -988,7 +988,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	{
 		pDialog->iNbFrames = (pAttribute->iNbFrames > 0 ? pAttribute->iNbFrames : 1);
 		pDialog->pIconBuffer = _cairo_dock_create_dialog_icon_surface (pAttribute->cImageFilePath, pDialog->iNbFrames, pSourceContext, pIcon, pContainer, pAttribute->iIconSize, &pDialog->iIconSize);
-		pDialog->iIconTexture = cairo_dock_create_texture_from_surface (pDialog->pIconBuffer);
+		///pDialog->iIconTexture = cairo_dock_create_texture_from_surface (pDialog->pIconBuffer);
 		if (pDialog->pIconBuffer != NULL && pDialog->iNbFrames > 1)
 		{
 			pDialog->iSidAnimateIcon = g_timeout_add (100, (GSourceFunc) _cairo_dock_animate_dialog_icon, (gpointer) pDialog);
@@ -1047,7 +1047,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 					myDialogs.iDialogButtonHeight);
 				if (cButtonPath != cButtonImage)
 					g_free (cButtonPath);
-				pDialog->pButtons[i].iTexture = cairo_dock_create_texture_from_surface (pDialog->pButtons[i].pSurface);
+				///pDialog->pButtons[i].iTexture = cairo_dock_create_texture_from_surface (pDialog->pButtons[i].pSurface);
 			}
 		}
 	}
@@ -1839,7 +1839,7 @@ void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface
 	pDialog->pTextBuffer = pNewTextSurface;
 	if (pDialog->iTextTexture != 0)
 		_cairo_dock_delete_texture (pDialog->iTextTexture);
-	pDialog->iTextTexture = cairo_dock_create_texture_from_surface (pNewTextSurface);
+	///pDialog->iTextTexture = cairo_dock_create_texture_from_surface (pNewTextSurface);
 	
 	pDialog->iTextWidth = iNewTextWidth;
 	pDialog->iTextHeight = iNewTextHeight;
@@ -1877,8 +1877,7 @@ void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface
 	pDialog->pIconBuffer = cairo_dock_duplicate_surface (pNewIconSurface, pSourceContext, iNewIconSize, iNewIconSize, iNewIconSize, iNewIconSize);
 	if (pDialog->iIconTexture != 0)
 		_cairo_dock_delete_texture (pDialog->iIconTexture);
-	if (g_bUseOpenGL)
-		pDialog->iIconTexture = cairo_dock_create_texture_from_surface (pDialog->pIconBuffer);
+	///	pDialog->iIconTexture = cairo_dock_create_texture_from_surface (pDialog->pIconBuffer);
 	
 	pDialog->iIconSize = iNewIconSize;
 	cairo_dock_compute_dialog_sizes (pDialog);

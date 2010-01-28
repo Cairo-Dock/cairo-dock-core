@@ -68,7 +68,7 @@
 #define RADIAN (G_PI / 180.0)  // Conversion Radian/Degres
 #define DELTA_ROUND_DEGREE 3
 
-///GLuint g_pGradationTexture[2];
+extern GLuint g_pGradationTexture[2];
 
 extern CairoDock *g_pMainDock;
 
@@ -439,14 +439,14 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		return ;
 	double fRatio = pDock->container.fRatio;
 	
-	/**if (g_pGradationTexture[pDock->container.bIsHorizontal] == 0)
+	if (g_pGradationTexture[pDock->container.bIsHorizontal] == 0)
 	{
 		//g_pGradationTexture[pDock->container.bIsHorizontal] = cairo_dock_load_local_texture (pDock->container.bIsHorizontal ? "texture-gradation-vert.png" : "texture-gradation-horiz.png", CAIRO_DOCK_SHARE_DATA_DIR);
 		g_pGradationTexture[pDock->container.bIsHorizontal] = cairo_dock_load_texture_from_raw_data (gradationTex,
 			pDock->container.bIsHorizontal ? 1:48,
 			pDock->container.bIsHorizontal ? 48:1);
 		cd_debug ("g_pGradationTexture(%d) <- %d", pDock->container.bIsHorizontal, g_pGradationTexture[pDock->container.bIsHorizontal]);
-	}*/
+	}
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.fVisibleAppliAlpha != 0 && ! CAIRO_DOCK_IS_APPLET (icon) && !(icon->iBackingPixmap != 0 && icon->bIsHidden))
 	{
 		double fAlpha = (icon->bIsHidden ? MIN (1 - myTaskBar.fVisibleAppliAlpha, 1) : MIN (myTaskBar.fVisibleAppliAlpha + 1, 1));

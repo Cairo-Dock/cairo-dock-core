@@ -104,8 +104,11 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	pTaskBar->iDialogDuration = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "duration", &bFlushConfFileNeeded, 2, NULL, NULL);
 	pTaskBar->cAnimationOnDemandsAttention = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "animation on demands attention", &bFlushConfFileNeeded, "fire", NULL, NULL);
 	gchar *cForceDemandsAttention = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "force demands attention", &bFlushConfFileNeeded, "pidgin;xchat", NULL, NULL);
-	pTaskBar->cForceDemandsAttention = g_ascii_strdown (cForceDemandsAttention, -1);
-	g_free (cForceDemandsAttention);
+	if (cForceDemandsAttention != NULL)
+	{
+		pTaskBar->cForceDemandsAttention = g_ascii_strdown (cForceDemandsAttention, -1);
+		g_free (cForceDemandsAttention);
+	}
 	
 	pTaskBar->cAnimationOnActiveWindow = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "animation on active window", &bFlushConfFileNeeded, "wobbly", NULL, NULL);
 	

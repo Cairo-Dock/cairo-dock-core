@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 *@file cairo-dock-opengl.h This class manages the OpenGL backend and context.
 */
 
-
+/// This strucure summarizes the available OpenGL configuration on the system.
 struct _CairoDockGLConfig {
 	GdkGLConfig *pGlConfig;
 	gboolean bHasBeenForced;
@@ -53,18 +53,25 @@ struct _CairoDockGLConfig {
 	} ;
 
 
-  /////////////
- // CONTEXT //
-/////////////
+  ///////////////////
+ // CONFIGURATION //
+///////////////////
+/** Initialize the OpenGL backend, by trying to get a suitable GLX configuration.
+*@param bForceIndirectRendering whether to force the indirect rendering mode (for cards like Intel GMA945).
+*@param bForceOpenGL whether to force the use of OpenGL, or let the function decide.
+*@return TRUE if OpenGL is usable.
+*/
 gboolean cairo_dock_initialize_opengl_backend (gboolean bForceIndirectRendering, gboolean bForceOpenGL);
-
-void cairo_dock_check_extensions (void);
 
 
   ///////////////////////
  // RENDER TO TEXTURE //
 ///////////////////////
+/** Create a pbuffer that will fit the icons of the docks. Do nothing it a pbuffer with the correct size already exists.
+*/
 void cairo_dock_create_icon_pbuffer (void);
+/** Destroy the icons pbuffer.
+*/
 void cairo_dock_destroy_icon_pbuffer (void);
 
 /** Initiate an OpenGL drawing session on an icon's texture.
@@ -81,6 +88,9 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer);
 void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);
 
 
+  /////////////
+ // CONTEXT //
+/////////////
 /** Set a perspective view to the current GL context. Perspective view accentuates the depth effect of the scene, but can distort it on the edges, and is difficult to manipulate because the size of objects depends on their position.
 *@param iWidth width of the container
 *@param iHeight height of the container
@@ -92,8 +102,15 @@ void cairo_dock_set_perspective_view (int iWidth, int iHeight);
 */
 void cairo_dock_set_ortho_view (int iWidth, int iHeight);
 
-
+/** Apply the desktop background onto a container, to emulate fake transparency.
+*@param pContainer the container
+*/
 void cairo_dock_apply_desktop_background_opengl (CairoContainer *pContainer);
+
+/** Set a shared default-initialized GL context on a window.
+*@param pWindow the window, not yet realized.
+*/
+void cairo_dock_set_gl_capabilities (GtkWidget *pWindow);
 
 
 #endif

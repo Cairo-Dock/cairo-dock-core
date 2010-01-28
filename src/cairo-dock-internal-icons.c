@@ -32,6 +32,7 @@
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-class-manager.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-icons.h"
@@ -235,7 +236,35 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "separator ", bFlushConfFileNeeded, pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12], pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12]);
 	pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR23] = pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12];
 	pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR23] = pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12];
-
+	
+	pIcons->iSeparatorType = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "separator type", &bFlushConfFileNeeded, -1, NULL, NULL);
+	if (pIcons->iSeparatorType == -1)  // nouveau parametre, avant il etait dans dock-rendering.
+	{
+		pIcons->iSeparatorType = 0;  // ce qui suit est tres moche, mais c'est pour eviter d'avoir a repasser derriere tous les themes.
+		gchar *cRenderingConfFile = g_strdup_printf ("%s/plug-ins/rendering/rendering.conf", g_cCurrentThemePath);
+		gchar *cMainDockDefaultRendererName = g_key_file_get_string (pKeyFile, "Views", "main dock view", NULL);
+		if (cMainDockDefaultRendererName && (strcmp (cMainDockDefaultRendererName, "3D plane") == 0 || strcmp (cMainDockDefaultRendererName, "curve") == 0))
+		{
+			GKeyFile *keyfile = cairo_dock_open_key_file (cRenderingConfFile);
+			g_free (cRenderingConfFile);
+			if (keyfile == NULL)
+				pIcons->iSeparatorType = 0;
+			else
+			{
+				gsize length=0;
+				pIcons->iSeparatorType = g_key_file_get_integer (keyfile, "Inclinated Plane", "draw separator", NULL);
+				double *color = g_key_file_get_double_list (keyfile, "Inclinated Plane", "separator color", &length, NULL);
+				memcpy (pIcons->fSeparatorColor, color, 4*sizeof (gdouble));
+				g_key_file_free (keyfile);
+			}
+		}
+		g_key_file_set_integer (pKeyFile, "Icons", "separator type", pIcons->iSeparatorType);
+	}
+	else
+	{
+		double couleur[4] = {0.9,0.9,1.0,1.0};
+		cairo_dock_get_double_list_key_value (pKeyFile, "Icons", "separator color", &bFlushConfFileNeeded, pIcons->fSeparatorColor, 4, couleur, NULL, NULL);
+	}
 	pIcons->cSeparatorImage = cairo_dock_get_string_key_value (pKeyFile, "Icons", "separator image", &bFlushConfFileNeeded, NULL, "Separators", NULL);
 
 	pIcons->bRevolveSeparator = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "revolve separator image", &bFlushConfFileNeeded, TRUE, "Separators", NULL);
@@ -362,6 +391,11 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	if (bInsertSeparators)
 	{
 		cairo_dock_insert_separators_in_dock (pDock);
+	}
+	
+	if (pPrevIcons->iSeparatorType != pIcons->iSeparatorType)
+	{
+		cairo_dock_update_dock_size (pDock);  // le chargement des separateurs plats se fait dans le calcul de max dock size.
 	}
 	
 	if (pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] ||
