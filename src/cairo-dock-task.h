@@ -67,14 +67,18 @@ struct _CairoDockTask {
 	CairoDockUpdateSyncFunc update;
 	/// interval of time in seconds, 0 to run the Task once.
 	gint iPeriod;
-	/// etat of the frequency of the Task.
+	/// state of the frequency of the Task.
 	CairoDockFrequencyState iFrequencyState;
-	/// pSharedMemory structure passed as parameter of the 'get_data' and 'update' functions. Must not be accessed outside of these 2 functions !
+	/// structure passed as parameter of the 'get_data' and 'update' functions. Must not be accessed outside of these 2 functions !
 	gpointer pSharedMemory;
-	/// Timer to get the accurate amount of time since last update.
+	/// timer to get the accurate amount of time since last update.
 	GTimer *pClock;
 	/// time elapsed since last update.
 	double fElapsedTime;
+	/// function called when the task is destroyed to free the shared memory (optionnal).
+	GFreeFunc free_data;
+	/// TRUE when the task has been discarded.
+	gboolean bDiscard;
 } ;
 
 
@@ -93,17 +97,32 @@ void cairo_dock_launch_task_delayed (CairoDockTask *pTask, double fDelay);
 *@param iPeriod time between 2 iterations, possibly nul for a Task to be executed once only.
 *@param get_data asynchonous function, which carries out the heavy job parallel to the dock; stores the results in the shared memory.
 *@param update synchonous function, which carries out the update of the dock from the result of the previous function. Returns TRUE to continue, FALSE to stop.
+*@param free_data function called when the Task is destroyed, to free the shared memory (optionnal).
 *@param pSharedMemory structure passed as a parameter of the get_data and update functions. Must not be accessed outside of these  functions !
 *@return the newly allocated Task, ready to be launched with #cairo_dock_launch_task. Free it with #cairo_dock_free_task.
 */
-CairoDockTask *cairo_dock_new_task (int iPeriod, CairoDockGetDataAsyncFunc get_data, CairoDockUpdateSyncFunc update, gpointer pSharedMemory);
+CairoDockTask *cairo_dock_new_task_full (int iPeriod, CairoDockGetDataAsyncFunc get_data, CairoDockUpdateSyncFunc update, GFreeFunc free_data, gpointer pSharedMemory);
+
+/** Create a periodic Task.
+*@param iPeriod time between 2 iterations, possibly nul for a Task to be executed once only.
+*@param get_data asynchonous function, which carries out the heavy job parallel to the dock; stores the results in the shared memory.
+*@param update synchonous function, which carries out the update of the dock from the result of the previous function. Returns TRUE to continue, FALSE to stop.
+*@param pSharedMemory structure passed as a parameter of the get_data and update functions. Must not be accessed outside of these  functions !
+*@return the newly allocated Task, ready to be launched with #cairo_dock_launch_task. Free it with #cairo_dock_free_task.
+*/
+#define cairo_dock_new_task(iPeriod, get_data, update, pSharedMemory) cairo_dock_new_task_full (iPeriod, get_data, update, NULL, pSharedMemory)
 
 /** Stop a periodic Task. If the Task is running, it will wait until the asynchronous thread has finished, and skip the update. The Task can be launched again with a call to #cairo_dock_launch_task.
 *@param pTask the periodic Task.
 */
 void cairo_dock_stop_task (CairoDockTask *pTask);
 
-/** Stop and destroy a periodic Task, freeing all the allocated ressources.
+/** Discard a periodic Task. The asynchronous thread will continue, and the Task will be freed when it ends. Use this function carefully, since you don't know when the free will occur (especially if you've set a free_data callback). The Task should be considered as destroyed after a call to this function.
+*@param pTask the periodic Task.
+*/
+void cairo_dock_discard_task (CairoDockTask *pTask);
+
+/** Stop and destroy a periodic Task, freeing all the allocated ressources. Unlike \ref cairo_dock_discard_task, the task is stopped before being freeed, so this is a blocking call.
 *@param pTask the periodic Task.
 */
 void cairo_dock_free_task (CairoDockTask *pTask);

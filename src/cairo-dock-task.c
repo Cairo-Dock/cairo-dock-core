@@ -45,7 +45,12 @@
 #define cairo_dock_set_elapsed_time(pTask) do {\
 	pTask->fElapsedTime = g_timer_elapsed (pTask->pClock, NULL);\
 	g_timer_start (pTask->pClock); } while (0)
-	
+
+#define _free_task(pTask) do {\
+	if (pTask->free_data)\
+		pTask->free_data (pTask->pSharedMemory);\
+	g_timer_destroy (pTask->pClock);\
+	g_free (pTask); } while (0)
 
 static gboolean _cairo_dock_timer (CairoDockTask *pTask)
 {
@@ -67,10 +72,18 @@ static gboolean _cairo_dock_check_for_update (CairoDockTask *pTask)
 	int iThreadIsRunning = g_atomic_int_get (&pTask->iThreadIsRunning);
 	if (! iThreadIsRunning)  // le thread a fini.
 	{
-		//\_______________________ On met a jour avec ces nouvelles donnees et on lance/arrete le timer.
+		if (pTask->bDiscard)  // la tache s'est faite abandonnee.
+		{
+			g_print ("free discared task...\n");
+			_free_task (pTask);
+			g_print ("done.\n");
+			return FALSE;
+		}
+		
+		// On met a jour avec ces nouvelles donnees et on lance/arrete le timer.
+		pTask->iSidTimerUpdate = 0;
 		cairo_dock_perform_task_update (pTask);
 		
-		pTask->iSidTimerUpdate = 0;
 		return FALSE;
 	}
 	return TRUE;
@@ -116,12 +129,13 @@ void cairo_dock_launch_task_delayed (CairoDockTask *pTask, double fDelay)
 }
 
 
-CairoDockTask *cairo_dock_new_task (int iPeriod, CairoDockGetDataAsyncFunc get_data, CairoDockUpdateSyncFunc update, gpointer pSharedMemory)
+CairoDockTask *cairo_dock_new_task_full (int iPeriod, CairoDockGetDataAsyncFunc get_data, CairoDockUpdateSyncFunc update, GFreeFunc free_data, gpointer pSharedMemory)
 {
 	CairoDockTask *pTask = g_new0 (CairoDockTask, 1);
 	pTask->iPeriod = iPeriod;
 	pTask->get_data = get_data;
 	pTask->update = update;
+	pTask->free_data = free_data;
 	pTask->pSharedMemory = pSharedMemory;
 	pTask->pClock = g_timer_new ();
 	return pTask;
@@ -156,14 +170,32 @@ void cairo_dock_stop_task (CairoDockTask *pTask)
 	cd_message ("***temine.");
 }
 
+
+static gboolean _free_discarded_task (CairoDockTask *pTask)
+{
+	g_print ("%s ()\n", __func__);
+	cairo_dock_free_task (pTask);
+	return FALSE;
+}
+void cairo_dock_discard_task (CairoDockTask *pTask)
+{
+	if (pTask == NULL)
+		return ;
+	
+	cairo_dock_cancel_next_iteration (pTask);
+	pTask->bDiscard = TRUE;
+	
+	if (pTask->iSidTimerUpdate == 0)
+		pTask->iSidTimerUpdate = g_idle_add ((GSourceFunc) _free_discarded_task, pTask);
+}
+
 void cairo_dock_free_task (CairoDockTask *pTask)
 {
 	if (pTask == NULL)
 		return ;
 	cairo_dock_stop_task (pTask);
 	
-	g_timer_destroy (pTask->pClock);
-	g_free (pTask);
+	_free_task (pTask);
 }
 
 gboolean cairo_dock_task_is_active (CairoDockTask *pTask)

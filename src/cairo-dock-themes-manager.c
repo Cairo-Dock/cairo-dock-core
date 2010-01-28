@@ -38,6 +38,7 @@
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-task.h"
+#include "cairo-dock-log.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-themes-manager.h"
 
@@ -71,70 +72,6 @@ void cairo_dock_free_theme (CairoDockTheme *pTheme)
 	g_free (pTheme);
 }
 
-static inline int _get_theme_rating (const gchar *cThemesDir, const gchar *cThemeName)
-{
-	gchar *cRatingFile = g_strdup_printf ("%s/.rating/%s", cThemesDir, cThemeName);
-	int iRating = 0;
-	gsize length = 0;
-	gchar *cContent = NULL;
-	g_file_get_contents (cRatingFile,
-		&cContent,
-		&length,
-		NULL);
-	if (cContent)
-	{
-		iRating = atoi (cContent);
-		g_free (cContent);
-	}
-	g_free (cRatingFile);
-	return iRating;	
-}
-
-GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *hProvidedTable, gboolean bUpdateThemeValidity, GError **erreur)
-{
-	cd_debug ("%s (%s)", __func__, cThemesDir);
-	GError *tmp_erreur = NULL;
-	GDir *dir = g_dir_open (cThemesDir, 0, &tmp_erreur);
-	if (tmp_erreur != NULL)
-	{
-		g_propagate_error (erreur, tmp_erreur);
-		return hProvidedTable;
-	}
-
-	GHashTable *pThemeTable = (hProvidedTable != NULL ? hProvidedTable : g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) cairo_dock_free_theme));
-	
-	CairoDockThemeType iType = (strncmp (cThemesDir, "/usr", 4) == 0 ?
-		CAIRO_DOCK_LOCAL_THEME :
-		CAIRO_DOCK_USER_THEME);
-	GString *sRatingFile = g_string_new (cThemesDir);
-	gchar *cThemePath;
-	CairoDockTheme *pTheme;
-	const gchar *cThemeName;
-	while ((cThemeName = g_dir_read_name (dir)) != NULL)
-	{
-		// on ecarte les fichiers caches.
-		if (*cThemeName == '.')
-			continue;
-		
-		// on ecarte les non repertoires.
-		cThemePath = g_strdup_printf ("%s/%s", cThemesDir, cThemeName);
-		if (! g_file_test (cThemePath, G_FILE_TEST_IS_DIR))
-		{
-			g_free (cThemePath);
-			continue;
-		}
-		
-		// on insere le theme dans la table.
-		pTheme = g_new0 (CairoDockTheme, 1);
-		pTheme->cThemePath = cThemePath;
-		pTheme->cDisplayedName = g_strdup (cThemeName);
-		pTheme->iType = iType;
-		pTheme->iRating = _get_theme_rating (cThemesDir, cThemeName);
-		g_hash_table_insert (pThemeTable, g_strdup (cThemeName), pTheme);  // donc ecrase un theme installe ayant le meme nom.
-	}
-	g_dir_close (dir);
-	return pThemeTable;
-}
 
 gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtractTo, const gchar *cRealArchiveName)
 {
@@ -193,7 +130,8 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 
 gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, gint iShowActivity, const gchar *cExtractTo, GError **erreur)
 {
-	cairo_dock_set_status_message_printf (s_pThemeManager, _("Downloading file %s ..."), cDistantFileName);
+	g_print ("%s (%s, %s, %s, %s)\n", __func__, cServerAdress, cDistantFilePath, cDistantFileName, cExtractTo);
+	//cairo_dock_set_status_message_printf (s_pThemeManager, _("Downloading file %s ..."), cDistantFileName);
 	gchar *cTmpFilePath = g_strdup ("/tmp/cairo-dock-net-file.XXXXXX");
 	int fds = mkstemp (cTmpFilePath);
 	if (fds == -1)
@@ -240,14 +178,14 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	if (! bOk)
 	{
 		g_set_error (erreur, 1, 1, "couldn't get distant file %s", cDistantFileName);
-		cairo_dock_set_status_message_printf (s_pThemeManager, _("couldn't get distant file %s"), cDistantFileName);
+		///cairo_dock_set_status_message_printf (s_pThemeManager, _("couldn't get distant file %s"), cDistantFileName);
 		g_remove (cTmpFilePath);
 		g_free (cTmpFilePath);
 		cTmpFilePath = NULL;
 	}
 	else
 	{
-		cairo_dock_set_status_message (s_pThemeManager, "");
+		///cairo_dock_set_status_message (s_pThemeManager, "");
 	}
 	close(fds);
 	g_free (cCommand);
@@ -256,7 +194,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	{
 		if (pDialog != NULL)
 		{
-			cairo_dock_set_dialog_message_printf (pDialog, "uncompressing %s", cTmpFilePath);
+			///cairo_dock_set_dialog_message_printf (pDialog, "uncompressing %s", cTmpFilePath);
 			g_print ("uncompressing ...\n");
 			while (gtk_events_pending ())
 				gtk_main_iteration ();
@@ -271,6 +209,52 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	if (! cairo_dock_dialog_unreference (pDialog))
 		cairo_dock_dialog_unreference (pDialog);
 	return cTmpFilePath;
+}
+
+static inline void _free_shared_memory (gpointer *pSharedMemory)
+{
+	g_free (pSharedMemory[0]);
+	g_free (pSharedMemory[1]);
+	g_free (pSharedMemory[2]);
+	g_free (pSharedMemory[3]);
+	g_free (pSharedMemory[6]);
+	g_free (pSharedMemory);
+}
+static void _dl_file (gpointer *pSharedMemory)
+{
+	GError *erreur = NULL;
+	pSharedMemory[6] = cairo_dock_download_file (pSharedMemory[0], pSharedMemory[1], pSharedMemory[2], 0, pSharedMemory[3], &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+	}
+}
+static gboolean _finish_dl (gpointer *pSharedMemory)
+{
+	GFunc pCallback = pSharedMemory[4];
+	pCallback (pSharedMemory[6], pSharedMemory[5]);
+	
+	//_free_shared_memory (pSharedMemory);
+	return FALSE;
+}
+static void _discard_dl (gpointer *pSharedMemory)
+{
+	_free_shared_memory (pSharedMemory);
+}
+CairoDockTask *cairo_dock_download_file_async (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, const gchar *cExtractTo, GFunc pCallback, gpointer data)
+{
+	cairo_dock_set_status_message_printf (s_pThemeManager, _("Downloading file %s ..."), cDistantFileName);
+	gpointer *pSharedMemory = g_new0 (gpointer, 7);
+	pSharedMemory[0] = g_strdup (cServerAdress);
+	pSharedMemory[1] = g_strdup (cDistantFilePath);
+	pSharedMemory[2] = g_strdup (cDistantFileName);
+	pSharedMemory[3] = g_strdup (cExtractTo);
+	pSharedMemory[4] = pCallback;
+	pSharedMemory[5] = data;
+	CairoDockTask *pTask = cairo_dock_new_task_full (0, (CairoDockGetDataAsyncFunc) _dl_file, (CairoDockUpdateSyncFunc) _finish_dl, (GFreeFunc) _discard_dl, pSharedMemory);
+	cairo_dock_launch_task (pTask);
+	return pTask;
 }
 
 gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, gint iShowActivity, GError **erreur)
@@ -300,6 +284,116 @@ gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gc
 	g_remove (cTmpFilePath);
 	g_free (cTmpFilePath);
 	return cContent;
+}
+
+static inline void _free_shared_memory_readme (gpointer *pSharedMemory)
+{
+	g_free (pSharedMemory[0]);
+	g_free (pSharedMemory[1]);
+	g_free (pSharedMemory[2]);
+	g_free (pSharedMemory[5]);
+	g_free (pSharedMemory);
+}
+static void _dl_file_readme (gpointer *pSharedMemory)
+{
+	sleep (3);
+	GError *erreur = NULL;
+	pSharedMemory[5] = cairo_dock_get_distant_file_content (pSharedMemory[0], pSharedMemory[1], pSharedMemory[2], 0, &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+	}
+}
+static gboolean _finish_dl_readme (gpointer *pSharedMemory)
+{
+	GFunc pCallback = pSharedMemory[3];
+	pCallback (pSharedMemory[5], pSharedMemory[4]);
+	
+	//_free_shared_memory_readme (pSharedMemory);
+	return FALSE;
+}
+static void _discard_dl_readme (gpointer *pSharedMemory)
+{
+	_free_shared_memory_readme (pSharedMemory);
+}
+CairoDockTask *cairo_dock_get_distant_file_content_async (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, GFunc pCallback, gpointer data)
+{
+	gpointer *pSharedMemory = g_new0 (gpointer, 6);
+	pSharedMemory[0] = g_strdup (cServerAdress);
+	pSharedMemory[1] = g_strdup (cDistantFilePath);
+	pSharedMemory[2] = g_strdup (cDistantFileName);
+	pSharedMemory[3] = pCallback;
+	pSharedMemory[4] = data;
+	CairoDockTask *pTask = cairo_dock_new_task_full (0, (CairoDockGetDataAsyncFunc) _dl_file_readme, (CairoDockUpdateSyncFunc) _finish_dl_readme, (GFreeFunc) _discard_dl_readme, pSharedMemory);
+	cairo_dock_launch_task (pTask);
+	return pTask;
+}
+
+
+
+static inline int _get_theme_rating (const gchar *cThemesDir, const gchar *cThemeName)
+{
+	gchar *cRatingFile = g_strdup_printf ("%s/.rating/%s", cThemesDir, cThemeName);
+	int iRating = 0;
+	gsize length = 0;
+	gchar *cContent = NULL;
+	g_file_get_contents (cRatingFile,
+		&cContent,
+		&length,
+		NULL);
+	if (cContent)
+	{
+		iRating = atoi (cContent);
+		g_free (cContent);
+	}
+	g_free (cRatingFile);
+	return iRating;	
+}
+GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *hProvidedTable, gboolean bUpdateThemeValidity, GError **erreur)
+{
+	cd_debug ("%s (%s)", __func__, cThemesDir);
+	GError *tmp_erreur = NULL;
+	GDir *dir = g_dir_open (cThemesDir, 0, &tmp_erreur);
+	if (tmp_erreur != NULL)
+	{
+		g_propagate_error (erreur, tmp_erreur);
+		return hProvidedTable;
+	}
+
+	GHashTable *pThemeTable = (hProvidedTable != NULL ? hProvidedTable : g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) cairo_dock_free_theme));
+	
+	CairoDockThemeType iType = (strncmp (cThemesDir, "/usr", 4) == 0 ?
+		CAIRO_DOCK_LOCAL_THEME :
+		CAIRO_DOCK_USER_THEME);
+	GString *sRatingFile = g_string_new (cThemesDir);
+	gchar *cThemePath;
+	CairoDockTheme *pTheme;
+	const gchar *cThemeName;
+	while ((cThemeName = g_dir_read_name (dir)) != NULL)
+	{
+		// on ecarte les fichiers caches.
+		if (*cThemeName == '.')
+			continue;
+		
+		// on ecarte les non repertoires.
+		cThemePath = g_strdup_printf ("%s/%s", cThemesDir, cThemeName);
+		if (! g_file_test (cThemePath, G_FILE_TEST_IS_DIR))
+		{
+			g_free (cThemePath);
+			continue;
+		}
+		
+		// on insere le theme dans la table.
+		pTheme = g_new0 (CairoDockTheme, 1);
+		pTheme->cThemePath = cThemePath;
+		pTheme->cDisplayedName = g_strdup (cThemeName);
+		pTheme->iType = iType;
+		pTheme->iRating = _get_theme_rating (cThemesDir, cThemeName);
+		g_hash_table_insert (pThemeTable, g_strdup (cThemeName), pTheme);  // donc ecrase un theme installe ayant le meme nom.
+	}
+	g_dir_close (dir);
+	return pThemeTable;
 }
 
 static inline int _convert_date (int iDate)
@@ -427,7 +521,6 @@ static void _cairo_dock_parse_theme_list (GKeyFile *pKeyFile, const gchar *cServ
 	}
 	g_free (pGroupList);  // les noms des themes sont desormais dans la hash-table.
 }
-
 GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar *cDirectory, const gchar *cListFileName, GHashTable *hProvidedTable, GError **erreur)
 {
 	g_return_val_if_fail (cServerAdress != NULL && *cServerAdress != '\0', hProvidedTable);
@@ -1053,6 +1146,47 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 }
 
 
+static inline void _free_shared_memory_import (gpointer *pSharedMemory)
+{
+	g_free (pSharedMemory[0]);
+	g_free (pSharedMemory);
+}
+static void _import_theme (gpointer *pSharedMemory)
+{
+	pSharedMemory[5] = GINT_TO_POINTER (cairo_dock_import_theme (pSharedMemory[0], GPOINTER_TO_INT (pSharedMemory[1]), GPOINTER_TO_INT (pSharedMemory[2])));
+}
+static gboolean _finish_import (gpointer *pSharedMemory)
+{
+	if (pSharedMemory[5])  // succes
+	{
+		GFunc pCallback = pSharedMemory[3];
+		pCallback (pSharedMemory[5], pSharedMemory[4]);
+	}
+	else
+	{
+		cairo_dock_set_status_message_printf (s_pThemeManager, _("Couldn't import the theme %s."), pSharedMemory[2]);
+	}
+	//_free_shared_memory_import (pSharedMemory);
+	return FALSE;
+}
+static void _discard_import (gpointer *pSharedMemory)
+{
+	_free_shared_memory_import (pSharedMemory);
+}
+CairoDockTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers, GFunc pCallback, gpointer data)
+{
+	gpointer *pSharedMemory = g_new0 (gpointer, 6);
+	pSharedMemory[0] = g_strdup (cThemeName);
+	pSharedMemory[1] = GINT_TO_POINTER (bLoadBehavior);
+	pSharedMemory[2] = GINT_TO_POINTER (bLoadLaunchers);
+	pSharedMemory[3] = pCallback;
+	pSharedMemory[4] = data;
+	CairoDockTask *pTask = cairo_dock_new_task_full (0, (CairoDockGetDataAsyncFunc) _import_theme, (CairoDockUpdateSyncFunc) _finish_import, (GFreeFunc) _discard_import, pSharedMemory);
+	cairo_dock_launch_task (pTask);
+	return pTask;
+}
+
+
 void cairo_dock_load_current_theme (void)
 {
 	cd_message ("%s ()", __func__);
@@ -1092,23 +1226,15 @@ static gchar *cairo_dock_build_temporary_themes_conf_file (void)
 }
 
 
-static void _import_theme (gpointer *pSharedMemory)
+static void _load_theme (gboolean bSuccess, gpointer *pSharedMemory)
 {
-	pSharedMemory[4] = GINT_TO_POINTER (cairo_dock_import_theme (pSharedMemory[0], GPOINTER_TO_INT (pSharedMemory[1]), GPOINTER_TO_INT (pSharedMemory[2])));
-	
-}
-static gboolean _load_theme (gpointer *pSharedMemory)
-{
-	g_main_loop_quit (pSharedMemory[3]);
-	if (pSharedMemory[4])
+	if (bSuccess)
 	{
 		cairo_dock_set_status_message (s_pThemeManager, _("Now reloading theme ..."));
 		cairo_dock_load_current_theme ();
 	}
-	g_free (pSharedMemory[0]);
-	g_free (pSharedMemory);
+	
 	cairo_dock_set_status_message (s_pThemeManager, "");
-	return FALSE;
 }
 static gboolean on_theme_apply (gchar *cInitConfFile)
 {
@@ -1221,32 +1347,9 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		gboolean bLoadBehavior = g_key_file_get_boolean (pKeyFile, "Themes", "use theme behaviour", NULL);
 		gboolean bLoadLaunchers = g_key_file_get_boolean (pKeyFile, "Themes", "use theme launchers", NULL);
 		
-		/*GMainLoop *pBlockingLoop = g_main_loop_new (NULL, FALSE);
+		cairo_dock_import_theme_async (cNewThemeName, bLoadBehavior, bLoadLaunchers, (GFunc)_load_theme, s_pThemeManager);
 		
-		gpointer *pSharedMemory = g_new0 (gpointer, 5);
-		pSharedMemory[0] = cNewThemeName;
-		pSharedMemory[1] = GINT_TO_POINTER (bLoadBehavior);
-		pSharedMemory[2] = GINT_TO_POINTER (bLoadLaunchers);
-		pSharedMemory[3] = pBlockingLoop;
-		s_pTask = cairo_dock_new_task (0, (CairoDockGetDataAsyncFunc) _import_theme, (CairoDockUpdateSyncFunc) _load_theme, pSharedMemory);
-		cairo_dock_launch_task (s_pTask);
-		
-		Icon *pFirstIcon = cairo_dock_get_dialogless_icon ();
-		CairoDialog *pDialog = cairo_dock_show_temporary_dialog_with_default_icon (_("Downloading the theme ...\nThis may take some time, please wait."), pFirstIcon, CAIRO_CONTAINER (g_pMainDock), 0);
-		cairo_dock_set_status_message (s_pThemeManager, "Downloading the theme ...");
-		
-		g_print ("debut de boucle bloquante ...\n");
-		GDK_THREADS_LEAVE ();
-		g_main_loop_run (pBlockingLoop);
-		GDK_THREADS_ENTER ();
-		g_print ("fin de boucle bloquante\n");
-		
-		g_main_loop_unref (pBlockingLoop);
-		cairo_dock_free_task (s_pTask);
-		s_pTask = NULL;
-		cairo_dock_dialog_unreference (pDialog);*/
-		
-		gboolean bThemeImported = cairo_dock_import_theme (cNewThemeName, bLoadBehavior, bLoadLaunchers);
+		/**gboolean bThemeImported = cairo_dock_import_theme (cNewThemeName, bLoadBehavior, bLoadLaunchers);
 		
 		//\___________________ On charge le theme courant.
 		if (bThemeImported)
@@ -1257,7 +1360,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		
 		g_free (cNewThemeName);
 		cairo_dock_set_status_message (s_pThemeManager, "");
-		return FALSE;
+		return FALSE;*/
 	}
 	
 	return TRUE;

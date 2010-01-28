@@ -38,6 +38,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-gui-factory.h"
+#include "cairo-dock-task.h"
 #include "cairo-dock-callbacks.h" // cairo_dock_launch_command_sync
 
 #define CAIRO_DOCK_GUI_MARGIN 4
@@ -200,6 +201,18 @@ static void _cairo_dock_remove (GtkButton *button, gpointer *data)
 	g_free (cValue);
 }
 
+static gboolean _on_image_preview_destroyed (GtkWidget *pMainWindow, GdkEvent *event, GtkWidget *pPreviewImage)
+{
+	g_print ("%s ()\n", __func__);
+	CairoDockTask *pTask = g_object_get_data (G_OBJECT (pPreviewImage), "cd-task");
+	if (pTask != NULL)
+	{
+		cairo_dock_discard_task (pTask);
+		g_object_set_data (G_OBJECT (pPreviewImage), "cd-task", NULL);
+	}
+	return FALSE;
+}
+
 static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *pPreviewImage)
 {
 	int iPreviewWidth, iPreviewHeight;
@@ -223,6 +236,33 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 	gdk_pixbuf_unref (pPreviewPixbuf);
 }
 
+static void _on_got_readme (const gchar *cDescription, GtkWidget *pDescriptionLabel)
+{
+	g_print ("%s ()\n", __func__);
+	gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), cDescription ? cDescription : "");
+	
+	CairoDockTask *pTask = g_object_get_data (G_OBJECT (pDescriptionLabel), "cd-task");
+	if (pTask != NULL)
+	{
+		g_print ("remove the task\n");
+		cairo_dock_discard_task (pTask);
+		g_object_set_data (G_OBJECT (pDescriptionLabel), "cd-task", NULL);
+	}
+}
+static void _on_got_preview_file (const gchar *cPreviewFilePath, GtkWidget *pPreviewImage)
+{
+	if (cPreviewFilePath != NULL)
+	{
+		_set_preview_image (cPreviewFilePath, GTK_IMAGE (pPreviewImage));
+		g_remove (cPreviewFilePath);
+	}
+	CairoDockTask *pTask = g_object_get_data (G_OBJECT (pPreviewImage), "cd-task");
+	if (pTask != NULL)
+	{
+		cairo_dock_discard_task (pTask);
+		g_object_set_data (G_OBJECT (pPreviewImage), "cd-task", NULL);
+	}
+}
 static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter, gpointer *data)
 {
 	static gchar *s_cPrevPreview = NULL, *s_cPrevReadme = NULL;
@@ -238,42 +278,59 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		CAIRO_DOCK_MODEL_IMAGE, &cPreviewFilePath, -1);
 	//g_print ("ok\n");
 	
-	if (cDescriptionFilePath != NULL && (!s_cPrevPreview || strcmp (s_cPrevPreview, cDescriptionFilePath) != 0))
+	if (cDescriptionFilePath != NULL && (!s_cPrevReadme || strcmp (s_cPrevReadme, cDescriptionFilePath) != 0))
 	{
-		g_free (s_cPrevPreview);
-		s_cPrevPreview = g_strdup (cDescriptionFilePath);
-		gchar *cDescription = NULL;
+		CairoDockTask *pTask = g_object_get_data (G_OBJECT (pDescriptionLabel), "cd-task");
+		g_print ("prev task : %x\n", pTask);
+		if (pTask != NULL)
+		{
+			cairo_dock_discard_task (pTask);
+			g_object_set_data (G_OBJECT (pDescriptionLabel), "cd-task", NULL);
+		}
+		g_free (s_cPrevReadme);
+		s_cPrevReadme = g_strdup (cDescriptionFilePath);
+		///gchar *cDescription = NULL;
 		if (strncmp (cDescriptionFilePath, "http://", 7) == 0)
 		{
 			cd_debug ("fichier readme distant (%s)", cDescriptionFilePath);
-
+			
 			gchar *str = strrchr (cDescriptionFilePath, '/');
 			g_return_if_fail (str != NULL);
 			*str = '\0';
-			cDescription = cairo_dock_get_distant_file_content (cDescriptionFilePath, "", str+1, 0, NULL);
+			///cDescription = cairo_dock_get_distant_file_content (cDescriptionFilePath, "", str+1, 0, NULL);
+			
+			gtk_label_set_markup (pDescriptionLabel, "...");
+			pTask = cairo_dock_get_distant_file_content_async (cDescriptionFilePath, "", str+1, (GFunc) _on_got_readme, pDescriptionLabel);
+			g_object_set_data (G_OBJECT (pDescriptionLabel), "cd-task", pTask);
+			g_print ("new task : %x\n", pTask);
 		}
 		else if (*cDescriptionFilePath == '/')
 		{
 			cd_debug ("fichier readme local (%s)", cDescriptionFilePath);
 			gsize length = 0;
-			g_file_get_contents  (cDescriptionFilePath,
+			gchar *cDescription = NULL;
+			g_file_get_contents (cDescriptionFilePath,
 				&cDescription,
 				&length,
 				NULL);
+			gtk_label_set_markup (pDescriptionLabel, cDescription ? cDescription : "");
+			g_free (cDescription);
 		}
 		else if (strcmp (cDescriptionFilePath, "none") != 0)
 		{
-			cDescription = g_strdup (cDescriptionFilePath);
+			///cDescription = g_strdup (cDescriptionFilePath);
+			gtk_label_set_markup (pDescriptionLabel, cDescriptionFilePath);
 		}
-		
-		gtk_label_set_markup (pDescriptionLabel, cDescription ? cDescription : "");
-		g_free (cDescription);
+		else
+			gtk_label_set_markup (pDescriptionLabel, "");
+		///gtk_label_set_markup (pDescriptionLabel, cDescription ? cDescription : "");
+		///g_free (cDescription);
 	}
 
-	if (cPreviewFilePath != NULL && (!s_cPrevReadme || strcmp (s_cPrevReadme, cPreviewFilePath) != 0))
+	if (cPreviewFilePath != NULL && (!s_cPrevPreview || strcmp (s_cPrevPreview, cPreviewFilePath) != 0))
 	{
-		g_free (s_cPrevReadme);
-		s_cPrevReadme = g_strdup (cPreviewFilePath);
+		g_free (s_cPrevPreview);
+		s_cPrevPreview = g_strdup (cPreviewFilePath);
 		
 		gboolean bDistant = FALSE;
 		if (strncmp (cPreviewFilePath, "http://", 7) == 0)
@@ -283,19 +340,27 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 			gchar *str = strrchr (cPreviewFilePath, '/');
 			g_return_if_fail (str != NULL);
 			*str = '\0';
-			gchar *cTmpFilePath = cairo_dock_download_file (cPreviewFilePath, "", str+1, 0, NULL, NULL);
+			/**gchar *cTmpFilePath = cairo_dock_download_file (cPreviewFilePath, "", str+1, 0, NULL, NULL);
 			
 			g_free (cPreviewFilePath);
 			cPreviewFilePath = cTmpFilePath;
-			bDistant = TRUE;
+			bDistant = TRUE;*/
+			
+			CairoDockTask *pTask = g_object_get_data (G_OBJECT (pPreviewImage), "cd-task");
+			if (pTask != NULL)
+				cairo_dock_discard_task (pTask);
+			
+			pTask = cairo_dock_download_file_async (cPreviewFilePath, "", str+1, NULL, (GFunc) _on_got_preview_file, pPreviewImage);
+			g_object_set_data (G_OBJECT (pPreviewImage), "cd-task", pTask);
 		}
-		
-		_set_preview_image (cPreviewFilePath, pPreviewImage);
+		else
+			_set_preview_image (cPreviewFilePath, pPreviewImage);
+		/**_set_preview_image (cPreviewFilePath, pPreviewImage);
 		
 		if (bDistant)
 		{
 			g_remove (cPreviewFilePath);
-		}
+		}*/
 	}
 
 	g_free (cDescriptionFilePath);
@@ -1278,11 +1343,13 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 			gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);}\
 		if (bAddPreviewWidgets) {\
 			pDescriptionLabel = gtk_label_new (NULL);\
+			g_signal_connect (pMainWindow, "destroy-event", G_CALLBACK (_on_image_preview_destroyed), pDescriptionLabel);\
 			gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);\
 			gtk_widget_set_size_request (pDescriptionLabel, 500, CAIRO_DOCK_PREVIEW_HEIGHT);\
 			gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_LEFT);\
 			gtk_label_set_line_wrap (GTK_LABEL (pDescriptionLabel), TRUE);\
 			pPreviewImage = gtk_image_new_from_pixbuf (NULL);\
+			g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (_on_image_preview_destroyed), pPreviewImage);\
 			gtk_widget_set (pPreviewImage, "height-request", CAIRO_DOCK_PREVIEW_HEIGHT, "width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);\
 			_allocate_new_buffer;\
 			data[0] = pDescriptionLabel;\
@@ -1984,8 +2051,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				path[0] = (const gchar *)cUserPath;
 				path[1] = "/usr/share/icons";
 				path[2] = NULL;
-				///pOneWidget = _cairo_dock_build_icon_themes_list (path);
-				///g_free (cUserPath);
 				
 				if (s_pIconThemeListStore != NULL)
 				{
@@ -2059,12 +2124,14 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				//\______________ On construit le widget de prevue et on le rajoute a la suite.
 				pDescriptionLabel = gtk_label_new (NULL);
+				g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (_on_image_preview_destroyed), pDescriptionLabel);
 				gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
 				gtk_widget_set (pDescriptionLabel,
 					"width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
 				gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_LEFT);
 				gtk_label_set_line_wrap (GTK_LABEL (pDescriptionLabel), TRUE);
 				pPreviewImage = gtk_image_new_from_pixbuf (NULL);
+				g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (_on_image_preview_destroyed), pPreviewImage);
 				gtk_widget_set (pPreviewImage,
 					"height-request", CAIRO_DOCK_PREVIEW_HEIGHT,
 					"width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
@@ -2480,12 +2547,14 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				//\______________ On construit le widget de prevue et on le rajoute a la suite.
 				pDescriptionLabel = gtk_label_new (NULL);
+				g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (_on_image_preview_destroyed), pDescriptionLabel);
 				gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
 				gtk_widget_set (pDescriptionLabel,
 					"width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
 				gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_LEFT);
 				gtk_label_set_line_wrap (GTK_LABEL (pDescriptionLabel), TRUE);
 				pPreviewImage = gtk_image_new_from_pixbuf (NULL);
+				g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (_on_image_preview_destroyed), pPreviewImage);
 				gtk_widget_set (pPreviewImage,
 					"height-request", CAIRO_DOCK_PREVIEW_HEIGHT,
 					"width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);

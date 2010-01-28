@@ -216,6 +216,7 @@ void cairo_dock_update_desklet_detached_state_in_gui (CairoDockModuleInstance *p
 
 void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage)
 {
+	g_print ("%s (%s)\n", __func__, cMessage);
 	GtkWidget *pStatusBar;
 	if (pWindow != NULL)
 	{
