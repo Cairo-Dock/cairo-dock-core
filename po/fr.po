@@ -123,7 +123,7 @@ msgstr "Plug-in"
 
 #: ../src/cairo-dock-gui-factory.c:1063
 msgid "rate me"
-msgstr "Évaluez-le !"
+msgstr "Notez-moi !"
 
 #: ../src/cairo-dock-gui-factory.c:1083
 msgid "Local"

@@ -702,10 +702,10 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 			iViewportY += iCurrentViewportY;
 			if (iViewportY >= g_iNbViewportY)
 				iViewportY -= g_iNbViewportY;
-			g_print ("position : %d,%d,%d / %d,%d,%d\n", iDesktop, iViewportX, iViewportY, iCurrentDesktop, iCurrentViewportX, iCurrentViewportY);
+			//g_print ("position : %d,%d,%d / %d,%d,%d\n", iDesktop, iViewportX, iViewportY, iCurrentDesktop, iCurrentViewportX, iCurrentViewportY);
 			
 			iNumDesktop = iDesktop * g_iNbViewportX * g_iNbViewportY + iViewportX * g_iNbViewportY + iViewportY;
-			g_print ("desormais on place le desklet sur le bureau (%d,%d,%d)\n", iDesktop, iViewportX, iViewportY);
+			//g_print ("desormais on place le desklet sur le bureau (%d,%d,%d)\n", iDesktop, iViewportX, iViewportY);
 		}
 		
 		cairo_dock_update_conf_file (pDesklet->pIcon->pModuleInstance->cConfFilePath,

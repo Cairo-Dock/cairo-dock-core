@@ -107,7 +107,7 @@ static void _cairo_dock_configure_root_dock_position (GtkMenuItem *pMenuItem, Ca
 	}
 	
 	gchar *cTitle = g_strdup_printf (_("Set position for the dock '%s'"), cDockName);
-	gboolean config_ok = cairo_dock_build_normal_gui (cConfFilePath, NULL, cTitle, CAIRO_DOCK_CONF_PANEL_WIDTH, CAIRO_DOCK_CONF_PANEL_HEIGHT, NULL, NULL, NULL, NULL);
+	gboolean config_ok = cairo_dock_build_generic_gui (cConfFilePath, NULL, cTitle, CAIRO_DOCK_CONF_PANEL_WIDTH, CAIRO_DOCK_CONF_PANEL_HEIGHT, NULL, NULL, NULL, NULL);
 	g_free (cTitle);
 	
 	if (config_ok)

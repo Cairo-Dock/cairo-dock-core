@@ -226,10 +226,6 @@ void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage)
 		//g_print ("%s (%s sur %x/%x)\n", __func__, cMessage, pWindow, pStatusBar);
 		gtk_statusbar_pop (GTK_STATUSBAR (pStatusBar), 0);  // clear any previous message, underflow is allowed.
 		gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, cMessage);
-		/**g_print ("wait statusbar...\n");
-		while (gtk_events_pending ())
-			gtk_main_iteration ();
-		g_print ("statusbar ok.\n");*/
 	}
 	else
 	{
@@ -320,7 +316,7 @@ void cairo_dock_close_gui (void)
  // NORMAL GUI //
 ////////////////
 
-static gboolean on_delete_normal_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
+static gboolean on_delete_generic_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
 {
 	g_print ("%s ()\n", __func__);
 	if (pBlockingLoop != NULL && g_main_loop_is_running (pBlockingLoop))
@@ -347,7 +343,7 @@ static gboolean on_delete_normal_gui (GtkWidget *pWidget, GdkEvent *event, GMain
 	return (pBlockingLoop != NULL);  // TRUE <=> ne pas detruire la fenetre.
 }
 
-static void on_click_normal_apply (GtkButton *button, GtkWidget *pWindow)
+static void on_click_generic_apply (GtkButton *button, GtkWidget *pWindow)
 {
 	//g_print ("%s ()\n", __func__);
 	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWindow), "widget-list");
@@ -367,58 +363,35 @@ static void on_click_normal_apply (GtkButton *button, GtkWidget *pWindow)
 		gboolean bKeepWindow = pAction (pUserData);
 		if (!bKeepWindow)  // on recharge la fenetre.
 		{
-			//on_click_normal_quit (button, pWindow);
-			cairo_dock_free_generated_widget_list (pWidgetList);
-			pWidgetList = NULL;
-			g_object_set_data (G_OBJECT (pWindow), "widget-list", NULL);
-			
-			GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pWindow), "garbage");
-			/// nettoyer...
-			g_object_set_data (G_OBJECT (pWindow), "garbage", NULL);
-			
-			GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (pWindow));
-			GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
-			g_return_if_fail (children != NULL);
-			GtkWidget *pNoteBook = children->data;
-			gtk_widget_destroy (pNoteBook);
-			
-			pNoteBook = cairo_dock_build_conf_file_widget (cConfFilePath, NULL, NULL, &pWidgetList, pDataGarbage, cConfFilePath);
-			gtk_box_pack_start (GTK_BOX (pMainVBox),
-				pNoteBook,
-				TRUE,
-				TRUE,
-				0);
-			gtk_widget_show_all (pNoteBook);
-			g_object_set_data (G_OBJECT (pWindow), "widget-list", pWidgetList);
-			g_object_set_data (G_OBJECT (pWindow), "garbage", pDataGarbage);
+			cairo_dock_reload_generic_gui (pWindow);
 		}
 	}
 	else
 		g_object_set_data (G_OBJECT (pWindow), "result", GINT_TO_POINTER (1));
 }
 
-static void on_click_normal_quit (GtkButton *button, GtkWidget *pWindow)
+static void on_click_generic_quit (GtkButton *button, GtkWidget *pWindow)
 {
 	g_print ("%s ()\n", __func__);
 	GMainLoop *pBlockingLoop = g_object_get_data (G_OBJECT (pWindow), "loop");
 	
 	gboolean bReturn;
 	g_signal_emit_by_name (pWindow, "delete-event", NULL, &bReturn);
-	///on_delete_normal_gui (pWindow, NULL, pBlockingLoop);
+	///on_delete_generic_gui (pWindow, NULL, pBlockingLoop);
 	
 	if (pBlockingLoop == NULL)
 		gtk_widget_destroy (pWindow);
 }
 
-static void on_click_normal_ok (GtkButton *button, GtkWidget *pWindow)
+static void on_click_generic_ok (GtkButton *button, GtkWidget *pWindow)
 {
 	//g_print ("%s ()\n", __func__);
 	
-	on_click_normal_apply (button, pWindow);
-	on_click_normal_quit (button, pWindow);
+	on_click_generic_apply (button, pWindow);
+	on_click_generic_quit (button, pWindow);
 }
 
-GtkWidget *cairo_dock_build_normal_gui_window (const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData)
+GtkWidget *cairo_dock_build_generic_gui_window (const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData)
 {
 	//\_____________ On construit la fenetre.
 	GtkWidget *pMainWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -438,7 +411,7 @@ GtkWidget *cairo_dock_build_normal_gui_window (const gchar *cTitle, int iWidth, 
 		0);
 	
 	GtkWidget *pQuitButton = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
-	g_signal_connect (G_OBJECT (pQuitButton), "clicked", G_CALLBACK(on_click_normal_quit), pMainWindow);
+	g_signal_connect (G_OBJECT (pQuitButton), "clicked", G_CALLBACK(on_click_generic_quit), pMainWindow);
 	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
 		pQuitButton,
 		FALSE,
@@ -448,7 +421,7 @@ GtkWidget *cairo_dock_build_normal_gui_window (const gchar *cTitle, int iWidth, 
 	if (pAction != NULL)
 	{
 		GtkWidget *pApplyButton = gtk_button_new_from_stock (GTK_STOCK_APPLY);
-		g_signal_connect (G_OBJECT (pApplyButton), "clicked", G_CALLBACK(on_click_normal_apply), pMainWindow);
+		g_signal_connect (G_OBJECT (pApplyButton), "clicked", G_CALLBACK(on_click_generic_apply), pMainWindow);
 		gtk_box_pack_end (GTK_BOX (pButtonsHBox),
 			pApplyButton,
 			FALSE,
@@ -479,16 +452,16 @@ GtkWidget *cairo_dock_build_normal_gui_window (const gchar *cTitle, int iWidth, 
 		g_object_set_data (G_OBJECT (pMainWindow), "free-data", pFreeUserData);
 		g_signal_connect (G_OBJECT (pMainWindow),
 			"delete-event",
-			G_CALLBACK (on_delete_normal_gui),
+			G_CALLBACK (on_delete_generic_gui),
 			NULL);
 	}
 	return pMainWindow;
 }
 
-gboolean cairo_dock_build_normal_gui (const gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData, GtkWidget **pWindow)
+gboolean cairo_dock_build_generic_gui (const gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData, GtkWidget **pWindow)
 {
 	//\_____________ On construit la fenetre.
-	GtkWidget *pMainWindow = cairo_dock_build_normal_gui_window (cTitle, iWidth, iHeight, pAction, pUserData, pFreeUserData);
+	GtkWidget *pMainWindow = cairo_dock_build_generic_gui_window (cTitle, iWidth, iHeight, pAction, pUserData, pFreeUserData);
 	
 	//\_____________ On construit l'IHM du fichier de conf.
 	GSList *pWidgetList = NULL;
@@ -527,7 +500,7 @@ gboolean cairo_dock_build_normal_gui (const gchar *cConfFilePath, const gchar *c
 		GtkWidget *pButtonsHBox = w->data;
 		
 		GtkWidget *pOkButton = gtk_button_new_from_stock (GTK_STOCK_OK);
-		g_signal_connect (G_OBJECT (pOkButton), "clicked", G_CALLBACK(on_click_normal_ok), pMainWindow);
+		g_signal_connect (G_OBJECT (pOkButton), "clicked", G_CALLBACK(on_click_generic_ok), pMainWindow);
 		gtk_box_pack_end (GTK_BOX (pButtonsHBox),
 			pOkButton,
 			FALSE,
@@ -539,7 +512,7 @@ gboolean cairo_dock_build_normal_gui (const gchar *cConfFilePath, const gchar *c
 		g_object_set_data (G_OBJECT (pMainWindow), "loop", pBlockingLoop);
 		g_signal_connect (G_OBJECT (pMainWindow),
 			"delete-event",
-			G_CALLBACK (on_delete_normal_gui),
+			G_CALLBACK (on_delete_generic_gui),
 			pBlockingLoop);
 
 		g_print ("debut de boucle bloquante ...\n");
@@ -559,6 +532,36 @@ gboolean cairo_dock_build_normal_gui (const gchar *cConfFilePath, const gchar *c
 	}
 	
 	return iResult;
+}
+
+void cairo_dock_reload_generic_gui (GtkWidget *pWindow)
+{
+	//g_print ("%s ()", __func__);
+	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWindow), "widget-list");
+	cairo_dock_free_generated_widget_list (pWidgetList);
+	pWidgetList = NULL;
+	g_object_set_data (G_OBJECT (pWindow), "widget-list", NULL);
+	
+	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pWindow), "garbage");
+	/// nettoyer...
+	g_object_set_data (G_OBJECT (pWindow), "garbage", NULL);
+	
+	GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (pWindow));
+	GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
+	g_return_if_fail (children != NULL);
+	GtkWidget *pNoteBook = children->data;
+	gtk_widget_destroy (pNoteBook);
+	
+	gchar *cConfFilePath = g_object_get_data (G_OBJECT (pWindow), "conf-file");
+	pNoteBook = cairo_dock_build_conf_file_widget (cConfFilePath, NULL, pWindow, &pWidgetList, pDataGarbage, cConfFilePath);
+	gtk_box_pack_start (GTK_BOX (pMainVBox),
+		pNoteBook,
+		TRUE,
+		TRUE,
+		0);
+	gtk_widget_show_all (pNoteBook);
+	g_object_set_data (G_OBJECT (pWindow), "widget-list", pWidgetList);
+	g_object_set_data (G_OBJECT (pWindow), "garbage", pDataGarbage);
 }
 
 

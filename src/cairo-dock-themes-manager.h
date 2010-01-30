@@ -83,7 +83,7 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 *@param erreur an error.
 *@return the local path of the downloaded file. If it was an archive, the path of the extracted file. Free the string after using it.
 */
-gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, gint iShowActivity, const gchar *cExtractTo, GError **erreur);
+gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, const gchar *cExtractTo, GError **erreur);
 
 /** Asynchronously download a distant file into a given folder, possibly extracting it. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get the path of the downloaded file as the first argument of the callback (the second being the data you passed to this function).
 *@param cServerAdress adress of the server.
@@ -91,8 +91,8 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 *@param cDistantFileName name of the file.
 *@param cExtractTo a local path where to extract the file, if this one is a .tar.gz/.tar.bz2/.tgz archive, or NULL.
 *@param pCallback function called when the download is finished. It takes the path of the downloaded file (it belongs to the task so don't free it) and the data you've set here.
-*@param data data to be passed to the callback. It should contain the Task so that you can free it when you're done.
-*@return the Task that is doing the job. Keep it and use \ref cairo_dock_discard_task whenever you want to discard the download (for instance if the user cancels it), or after your callback has been called.
+*@param data data to be passed to the callback.
+*@return the Task that is doing the job. Keep it and use \ref cairo_dock_discard_task whenever you want to discard the download (for instance if the user cancels it).
 */
 CairoDockTask *cairo_dock_download_file_async (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, const gchar *cExtractTo, GFunc pCallback, gpointer data);
 
@@ -104,15 +104,15 @@ CairoDockTask *cairo_dock_download_file_async (const gchar *cServerAdress, const
 *@param erreur an error.
 *@return the content of the file. Free the string after using it.
 */
-gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, gint iShowActivity, GError **erreur);
+gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, GError **erreur);
 
 /** Asynchronously retrieve the content of a distant text file. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get the content of the downloaded file as the first argument of the callback (the second being the data you passed to this function).
 *@param cServerAdress adress of the server.
 *@param cDistantFilePath path of the file on the server.
 *@param cDistantFileName name of the file.
 *@param pCallback function called when the download is finished. It takes the content of the downloaded file (it belongs to the task so don't free it) and the data you've set here.
-*@param data data to be passed to the callback. It should contain the Task so that you can free it when you're done.
-*@return the Task that is doing the job. Keep it and use \ref cairo_dock_discard_task whenever you want to discard the download (for instance if the user cancels it), or after your callback has been called.
+*@param data data to be passed to the callback.
+*@return the Task that is doing the job. Keep it and use \ref cairo_dock_discard_task whenever you want to discard the download (for instance if the user cancels it).
 */
 CairoDockTask *cairo_dock_get_distant_file_content_async (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, GFunc pCallback, gpointer data);
 
@@ -128,6 +128,16 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 *@return a hash table of (name, #_CairoDockTheme).
 */
 GHashTable *cairo_dock_list_themes (const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir);
+
+/** Asynchronously get a list of themes from differente sources. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get a hash-table of the themes as the first argument of the callback (the second being the data you passed to this function).
+*@param cShareThemesDir path of a local folder containg themes or NULL.
+*@param cUserThemesDir path of a user folder containg themes or NULL.
+*@param cDistantThemesDir path of a distant folder containg themes or NULL.
+*@param pCallback function called when the listing is finished. It takes the hash-table of the found themes (it belongs to the task so don't free it) and the data you've set here.
+*@param data data to be passed to the callback.
+*@return the Task that is doing the job. Keep it and use \ref cairo_dock_discard_task whenever you want to discard the download (for instance if the user cancels it).*/
+CairoDockTask *cairo_dock_list_themes_async (const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir, GFunc pCallback, gpointer data);
+
 
 /** Look for a theme with a given name into differente sources. If the theme is found on the server and is not present on the disk, or is not up to date, then it is downloaded and the local path is returned.
 *@param cThemeName name of the theme.
@@ -179,6 +189,17 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList);
  * @return TRUE if the theme could be imported succefuly.
  */
 gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers);
+
+/** Asynchronously import a theme, which can be : a local theme, a user theme, a distant theme, or even the path to a packaged theme. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get the result of the import as the first argument of the callback (the second being the data you passed to this function).
+ * @param cThemeName name of the theme to import.
+ * @param bLoadBehavior whether to import the behavior parameters too.
+ * @param bLoadLaunchers whether to import the launchers too.
+ * @param pCallback function called when the download is finished. It takes the result of the import (TRUE for a successful import) and the data you've set here.
+ * @param data data to be passed to the callback.
+ * @return the Task that is doing the job. Keep it and use \ref cairo_dock_discard_task whenever you want to discard the download (for instance if the user cancels it).
+
+ */
+CairoDockTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers, GFunc pCallback, gpointer data);
 
 /** Load the current theme. This will (re)load all the parameters of Cairo-Dock and all the plug-ins, as if you just started the dock.
 */

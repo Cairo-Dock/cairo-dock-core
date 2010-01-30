@@ -183,13 +183,13 @@ static gboolean on_apply_theme_simple (gpointer data)
 		return TRUE;
 	
 	//\_______________ On importe le theme.
+	cairo_dock_set_status_message_printf (NULL, _("Importing theme %s..."), cNewThemeName);
 	gboolean bThemeImported = cairo_dock_import_theme (cNewThemeName, bLoadBehavior, bLoadLaunchers);
 	g_print ("bThemeImported : %d\n", bThemeImported);
 	
 	//\_______________ On le charge.
 	if (bThemeImported)
 	{
-		cairo_dock_set_status_message (s_pSimpleConfigWindow, _("Now reloading theme ..."));
 		cairo_dock_load_current_theme ();
 	}
 	
@@ -197,8 +197,11 @@ static gboolean on_apply_theme_simple (gpointer data)
 	cairo_dock_set_status_message (s_pSimpleConfigWindow, "");
 	
 	//\_______________ On recharge la fenetre.
-	g_print ("reolad\n");
-	GSList *pWidgetList = g_object_get_data (G_OBJECT (s_pSimpleConfigWindow), "widget-list");
+	g_print ("reload\n");
+	cConfFilePath = _make_simple_conf_file ();
+	g_free (cConfFilePath);
+	cairo_dock_reload_generic_gui (s_pSimpleConfigWindow);
+	/*GSList *pWidgetList = g_object_get_data (G_OBJECT (s_pSimpleConfigWindow), "widget-list");
 	g_return_val_if_fail (pWidgetList != NULL, TRUE);
 	cairo_dock_free_generated_widget_list (pWidgetList);
 	pWidgetList = NULL;
@@ -214,9 +217,9 @@ static gboolean on_apply_theme_simple (gpointer data)
 	GtkWidget *pNoteBook = children->data;
 	gtk_widget_destroy (pNoteBook);
 	
-	cConfFilePath = _make_simple_conf_file ();
+	cConfFilePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_SIMPLE_CONF_FILE);
 	
-	pNoteBook = cairo_dock_build_conf_file_widget (cConfFilePath, NULL, NULL, &pWidgetList, pDataGarbage, cConfFilePath);
+	pNoteBook = cairo_dock_build_conf_file_widget (cConfFilePath, NULL, s_pSimpleConfigWindow, &pWidgetList, pDataGarbage, cConfFilePath);
 	gtk_box_pack_start (GTK_BOX (pMainVBox),
 		pNoteBook,
 		TRUE,
@@ -224,7 +227,7 @@ static gboolean on_apply_theme_simple (gpointer data)
 		0);
 	gtk_widget_show_all (pNoteBook);
 	g_object_set_data (G_OBJECT (s_pSimpleConfigWindow), "widget-list", pWidgetList);
-	g_object_set_data (G_OBJECT (s_pSimpleConfigWindow), "garbage", pDataGarbage);
+	g_object_set_data (G_OBJECT (s_pSimpleConfigWindow), "garbage", pDataGarbage);*/
 	return TRUE;
 }
 
@@ -400,7 +403,7 @@ static GtkWidget * show_main_gui (void)
 	gchar *cConfFilePath = _make_simple_conf_file ();
 	
 	//\_____________ On construit la fenetre.
-	cairo_dock_build_normal_gui (cConfFilePath,
+	cairo_dock_build_generic_gui (cConfFilePath,
 		NULL,
 		_("Configuration of Cairo-Dock"),
 		CAIRO_DOCK_SIMPLE_PANEL_WIDTH, CAIRO_DOCK_SIMPLE_PANEL_HEIGHT,
@@ -516,7 +519,7 @@ static void show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, 
 	int iNotebookPage = -1;
 	if (s_pSimpleConfigModuleWindow == NULL)
 	{
-		s_pSimpleConfigModuleWindow = cairo_dock_build_normal_gui_window (dgettext (pModuleInstance->pModule->pVisitCard->cGettextDomain, pModuleInstance->pModule->pVisitCard->cTitle),
+		s_pSimpleConfigModuleWindow = cairo_dock_build_generic_gui_window (dgettext (pModuleInstance->pModule->pVisitCard->cGettextDomain, pModuleInstance->pModule->pVisitCard->cTitle),
 			CAIRO_DOCK_SIMPLE_PANEL_WIDTH, CAIRO_DOCK_SIMPLE_PANEL_HEIGHT,
 			(CairoDockApplyConfigFunc) on_apply_config_module_simple,
 			NULL,
@@ -555,7 +558,7 @@ static void show_module_gui (const gchar *cModuleName)
 	
 	if (s_pSimpleConfigModuleWindow == NULL)
 	{
-		s_pSimpleConfigModuleWindow = cairo_dock_build_normal_gui_window (cModuleName,
+		s_pSimpleConfigModuleWindow = cairo_dock_build_generic_gui_window (cModuleName,
 			CAIRO_DOCK_SIMPLE_PANEL_WIDTH, CAIRO_DOCK_SIMPLE_PANEL_HEIGHT,
 			(CairoDockApplyConfigFunc) on_apply_config_module_simple,
 			NULL,

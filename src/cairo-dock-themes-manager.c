@@ -60,7 +60,7 @@ extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 extern CairoDock *g_pMainDock;
 
 static GtkWidget *s_pThemeManager = NULL;
-static CairoDockTask *s_pTask = NULL;
+static CairoDockTask *s_pImportTask = NULL;
 
 void cairo_dock_free_theme (CairoDockTheme *pTheme)
 {
@@ -75,7 +75,7 @@ void cairo_dock_free_theme (CairoDockTheme *pTheme)
 
 gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtractTo, const gchar *cRealArchiveName)
 {
-	// on cree le repertoire d'extraction.
+	//\_______________ on cree le repertoire d'extraction.
 	if (!g_file_test (cExtractTo, G_FILE_TEST_EXISTS))
 	{
 		if (g_mkdir (cExtractTo, 7*8*8+7*8+5) != 0)
@@ -85,7 +85,7 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 		}
 	}
 	
-	// on construit le chemin local du dossier apres son extraction.
+	//\_______________ on construit le chemin local du dossier apres son extraction.
 	gchar *cLocalFileName;
 	if (cRealArchiveName == NULL)
 		cRealArchiveName = cArchivePath;
@@ -106,7 +106,7 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 	gchar *cResultPath = g_strdup_printf ("%s/%s", cExtractTo, cLocalFileName);
 	g_free (cLocalFileName);
 	
-	// on efface un dossier identique prealable.
+	//\_______________ on efface un dossier identique prealable.
 	if (g_file_test (cResultPath, G_FILE_TEST_EXISTS))
 	{
 		gchar *cCommand = g_strdup_printf ("rm -rf \"%s\"", cResultPath);
@@ -114,7 +114,7 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 		g_free (cCommand);
 	}
 	
-	// on decompresse l'archive.
+	//\_______________ on decompresse l'archive.
 	gchar *cCommand = g_strdup_printf ("tar xf%c \"%s\" -C \"%s\"", (g_str_has_suffix (cArchivePath, "bz2") ? 'j' : 'z'), cArchivePath, cExtractTo);
 	g_print ("tar : %s\n", cCommand);
 	int r = system (cCommand);
@@ -128,10 +128,10 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 	return cResultPath;
 }
 
-gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, gint iShowActivity, const gchar *cExtractTo, GError **erreur)
+gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, const gchar *cExtractTo, GError **erreur)
 {
-	g_print ("%s (%s, %s, %s, %s)\n", __func__, cServerAdress, cDistantFilePath, cDistantFileName, cExtractTo);
-	//cairo_dock_set_status_message_printf (s_pThemeManager, _("Downloading file %s ..."), cDistantFileName);
+	//g_print ("%s (%s, %s, %s, %s)\n", __func__, cServerAdress, cDistantFilePath, cDistantFileName, cExtractTo);
+	//\_______________ On reserve un fichier temporaire.
 	gchar *cTmpFilePath = g_strdup ("/tmp/cairo-dock-net-file.XXXXXX");
 	int fds = mkstemp (cTmpFilePath);
 	if (fds == -1)
@@ -141,24 +141,13 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 		return NULL;
 	}
 	
-	CairoDialog *pDialog = NULL;
-	if (iShowActivity == 1)
-	{
-		pDialog = cairo_dock_show_temporary_dialog_with_icon_printf ("downloading file %s on %s ...", NULL, NULL, 0, NULL, cDistantFileName, cServerAdress);
-		cairo_dock_dialog_reference (pDialog);
-		g_print ("downloading file ...\n");
-		while (gtk_events_pending ())
-			gtk_main_iteration ();
-	}
+	//\_______________ On lance le download.
 	//gchar *cCommand = g_strdup_printf ("%s wget \"%s/%s/%s\" -O \"%s\" -t %d -T %d%s", (iShowActivity == 2 ? "$TERM -e '" : ""), cServerAdress, cDistantFilePath, cDistantFileName, cTmpFilePath, CAIRO_DOCK_DL_NB_RETRY, CAIRO_DOCK_DL_TIMEOUT, (iShowActivity == 2 ? "'" : ""));
-	gchar *cCommand = g_strdup_printf ("%s curl -s \"%s/%s/%s\" --output \"%s\" --connect-timeout %d --max-time %d --retry %d%s",
-		(iShowActivity == 2 ? "$TERM -e '" : ""),
+	gchar *cCommand = g_strdup_printf ("curl -s \"%s/%s/%s\" --output \"%s\" --connect-timeout %d --max-time %d --retry %d",
 		cServerAdress, cDistantFilePath, cDistantFileName,
 		cTmpFilePath,
-		mySystem.iConnectionTimeout, mySystem.iConnectiontMaxTime, mySystem.iConnectiontNbRetries,
-		(iShowActivity == 2 ? "'" : ""));
+		mySystem.iConnectionTimeout, mySystem.iConnectiontMaxTime, mySystem.iConnectiontNbRetries);
 	cd_debug ("download with '%s'", cCommand);
-	
 	int r = system (cCommand);
 	if (r != 0)
 	{
@@ -168,6 +157,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 		cTmpFilePath = NULL;
 	}
 	
+	//\_______________ On teste que le fichier est non vide.
 	gboolean bOk = (cTmpFilePath != NULL);
 	if (bOk)
 	{
@@ -178,52 +168,30 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	if (! bOk)
 	{
 		g_set_error (erreur, 1, 1, "couldn't get distant file %s", cDistantFileName);
-		///cairo_dock_set_status_message_printf (s_pThemeManager, _("couldn't get distant file %s"), cDistantFileName);
 		g_remove (cTmpFilePath);
 		g_free (cTmpFilePath);
 		cTmpFilePath = NULL;
 	}
-	else
-	{
-		///cairo_dock_set_status_message (s_pThemeManager, "");
-	}
 	close(fds);
 	g_free (cCommand);
 	
+	//\_______________ On l'extrait si c'est une archive.
 	if (cTmpFilePath != NULL && cExtractTo != NULL)
 	{
-		if (pDialog != NULL)
-		{
-			///cairo_dock_set_dialog_message_printf (pDialog, "uncompressing %s", cTmpFilePath);
-			g_print ("uncompressing ...\n");
-			while (gtk_events_pending ())
-				gtk_main_iteration ();
-		}
-		
+		g_print ("uncompressing ...\n");
 		gchar *cPath = cairo_dock_uncompress_file (cTmpFilePath, cExtractTo, cDistantFileName);
 		g_remove (cTmpFilePath);
 		g_free (cTmpFilePath);
 		cTmpFilePath = cPath;
 	}
 	
-	if (! cairo_dock_dialog_unreference (pDialog))
-		cairo_dock_dialog_unreference (pDialog);
 	return cTmpFilePath;
 }
 
-static inline void _free_shared_memory (gpointer *pSharedMemory)
-{
-	g_free (pSharedMemory[0]);
-	g_free (pSharedMemory[1]);
-	g_free (pSharedMemory[2]);
-	g_free (pSharedMemory[3]);
-	g_free (pSharedMemory[6]);
-	g_free (pSharedMemory);
-}
 static void _dl_file (gpointer *pSharedMemory)
 {
 	GError *erreur = NULL;
-	pSharedMemory[6] = cairo_dock_download_file (pSharedMemory[0], pSharedMemory[1], pSharedMemory[2], 0, pSharedMemory[3], &erreur);
+	pSharedMemory[6] = cairo_dock_download_file (pSharedMemory[0], pSharedMemory[1], pSharedMemory[2], pSharedMemory[3], &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning (erreur->message);
@@ -232,19 +200,24 @@ static void _dl_file (gpointer *pSharedMemory)
 }
 static gboolean _finish_dl (gpointer *pSharedMemory)
 {
+	if (pSharedMemory[6] == NULL)
+		cd_warning ("couldn't get distant file %s", pSharedMemory[2]);
+	
 	GFunc pCallback = pSharedMemory[4];
 	pCallback (pSharedMemory[6], pSharedMemory[5]);
-	
-	//_free_shared_memory (pSharedMemory);
 	return FALSE;
 }
 static void _discard_dl (gpointer *pSharedMemory)
 {
-	_free_shared_memory (pSharedMemory);
+	g_free (pSharedMemory[0]);
+	g_free (pSharedMemory[1]);
+	g_free (pSharedMemory[2]);
+	g_free (pSharedMemory[3]);
+	g_free (pSharedMemory[6]);
+	g_free (pSharedMemory);
 }
 CairoDockTask *cairo_dock_download_file_async (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, const gchar *cExtractTo, GFunc pCallback, gpointer data)
 {
-	cairo_dock_set_status_message_printf (s_pThemeManager, _("Downloading file %s ..."), cDistantFileName);
 	gpointer *pSharedMemory = g_new0 (gpointer, 7);
 	pSharedMemory[0] = g_strdup (cServerAdress);
 	pSharedMemory[1] = g_strdup (cDistantFilePath);
@@ -257,10 +230,10 @@ CairoDockTask *cairo_dock_download_file_async (const gchar *cServerAdress, const
 	return pTask;
 }
 
-gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, gint iShowActivity, GError **erreur)
+gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, GError **erreur)
 {
 	GError *tmp_erreur = NULL;
-	gchar *cTmpFilePath = cairo_dock_download_file (cServerAdress, cDistantFilePath, cDistantFileName, iShowActivity, NULL, &tmp_erreur);
+	gchar *cTmpFilePath = cairo_dock_download_file (cServerAdress, cDistantFilePath, cDistantFileName, NULL, &tmp_erreur);
 	if (tmp_erreur != NULL)
 	{
 		g_propagate_error (erreur, tmp_erreur);
@@ -286,19 +259,11 @@ gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gc
 	return cContent;
 }
 
-static inline void _free_shared_memory_readme (gpointer *pSharedMemory)
-{
-	g_free (pSharedMemory[0]);
-	g_free (pSharedMemory[1]);
-	g_free (pSharedMemory[2]);
-	g_free (pSharedMemory[5]);
-	g_free (pSharedMemory);
-}
+
 static void _dl_file_readme (gpointer *pSharedMemory)
 {
-	sleep (3);
 	GError *erreur = NULL;
-	pSharedMemory[5] = cairo_dock_get_distant_file_content (pSharedMemory[0], pSharedMemory[1], pSharedMemory[2], 0, &erreur);
+	pSharedMemory[5] = cairo_dock_get_distant_file_content (pSharedMemory[0], pSharedMemory[1], pSharedMemory[2], &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning (erreur->message);
@@ -307,15 +272,20 @@ static void _dl_file_readme (gpointer *pSharedMemory)
 }
 static gboolean _finish_dl_readme (gpointer *pSharedMemory)
 {
+	if (pSharedMemory[5] == NULL)
+		cd_warning ("couldn't get distant file %s", pSharedMemory[2]);
+	
 	GFunc pCallback = pSharedMemory[3];
 	pCallback (pSharedMemory[5], pSharedMemory[4]);
-	
-	//_free_shared_memory_readme (pSharedMemory);
 	return FALSE;
 }
 static void _discard_dl_readme (gpointer *pSharedMemory)
 {
-	_free_shared_memory_readme (pSharedMemory);
+	g_free (pSharedMemory[0]);
+	g_free (pSharedMemory[1]);
+	g_free (pSharedMemory[2]);
+	g_free (pSharedMemory[5]);
+	g_free (pSharedMemory);
 }
 CairoDockTask *cairo_dock_get_distant_file_content_async (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, GFunc pCallback, gpointer data)
 {
@@ -528,7 +498,7 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 	
 	// On recupere la liste des themes distants.
 	GError *tmp_erreur = NULL;
-	gchar *cContent = cairo_dock_get_distant_file_content (cServerAdress, cDirectory, cListFileName, 0, &tmp_erreur);
+	gchar *cContent = cairo_dock_get_distant_file_content (cServerAdress, cDirectory, cListFileName, &tmp_erreur);
 	if (tmp_erreur != NULL)
 	{
 		cd_warning ("couldn't retrieve themes on %s (check that your connection is alive, or retry later)", cServerAdress);
@@ -618,13 +588,46 @@ GHashTable *cairo_dock_list_themes (const gchar *cShareThemesDir, const gchar *c
 	if (erreur != NULL)
 	{
 		cd_warning ("while loading distant themes in '%s/%s' : %s", g_cThemeServerAdress != NULL ? g_cThemeServerAdress : CAIRO_DOCK_THEME_SERVER, cDistantThemesDir, erreur->message);
-		//g_print ("s_pThemeManager:%x\n", s_pThemeManager);
-		cairo_dock_set_status_message_printf (s_pThemeManager, _("couldn't get the list of themes for %s (no connection ?)"), cDistantThemesDir);
 		g_error_free (erreur);
 		erreur = NULL;
 	}
 	
 	return pThemeTable;
+}
+
+static void _list_themes (gpointer *pSharedMemory)
+{
+	pSharedMemory[5] = cairo_dock_list_themes (pSharedMemory[0], pSharedMemory[1], pSharedMemory[2]);
+}
+static gboolean _finish_list_themes (gpointer *pSharedMemory)
+{
+	if (pSharedMemory[5] == NULL)
+		cd_warning ("couldn't get distant themes in '%s'", pSharedMemory[2]);
+	
+	GFunc pCallback = pSharedMemory[3];
+	pCallback (pSharedMemory[5], pSharedMemory[4]);
+	
+	return FALSE;
+}
+static void _discard_list_themes (gpointer *pSharedMemory)
+{
+	g_free (pSharedMemory[0]);
+	g_free (pSharedMemory[1]);
+	g_free (pSharedMemory[2]);
+	g_hash_table_unref (pSharedMemory[5]);
+	g_free (pSharedMemory);
+}
+CairoDockTask *cairo_dock_list_themes_async (const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir, GFunc pCallback, gpointer data)
+{
+	gpointer *pSharedMemory = g_new0 (gpointer, 6);
+	pSharedMemory[0] = g_strdup (cShareThemesDir);
+	pSharedMemory[1] = g_strdup (cUserThemesDir);
+	pSharedMemory[2] = g_strdup (cDistantThemesDir);
+	pSharedMemory[3] = pCallback;
+	pSharedMemory[4] = data;
+	CairoDockTask *pTask = cairo_dock_new_task_full (0, (CairoDockGetDataAsyncFunc) _list_themes, (CairoDockUpdateSyncFunc) _finish_list_themes, (GFreeFunc) _discard_list_themes, pSharedMemory);
+	cairo_dock_launch_task (pTask);
+	return pTask;
 }
 
 gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir, CairoDockThemeType iGivenType)
@@ -664,12 +667,11 @@ gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareTh
 	{
 		gchar *cDistantFileName = g_strdup_printf ("%s/%s.tar.gz", cThemeName, cThemeName);
 		GError *erreur = NULL;
-		cThemePath = cairo_dock_download_file (g_cThemeServerAdress != NULL ? g_cThemeServerAdress : CAIRO_DOCK_THEME_SERVER, cDistantThemesDir, cDistantFileName, 0, cUserThemesDir, &erreur);
+		cThemePath = cairo_dock_download_file (g_cThemeServerAdress != NULL ? g_cThemeServerAdress : CAIRO_DOCK_THEME_SERVER, cDistantThemesDir, cDistantFileName, cUserThemesDir, &erreur);
 		g_free (cDistantFileName);
 		if (erreur != NULL)
 		{
 			cd_warning ("couldn't retrieve distant theme %s : %s" , cThemeName, erreur->message);
-			cairo_dock_set_status_message_printf (s_pThemeManager, _("couldn't retrieve distant theme %s"), cThemeName);  // le message sera repris par une bulle de dialogue, mais on le met la aussi quand meme.
 			g_error_free (erreur);
 		}
 		else  // on se souvient de la date a laquelle on a mis a jour le theme pour la derniere fois.
@@ -689,7 +691,7 @@ gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareTh
 		}
 	}
 	
-	g_print (" ====> cThemePath : %s\n", cThemePath);
+	cd_debug (" ====> cThemePath : %s", cThemePath);
 	return cThemePath;
 }
 
@@ -832,7 +834,6 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	
 	g_string_free (sCommand, TRUE);
 	
-	cairo_dock_set_status_message (s_pThemeManager, bThemeSaved ? _("The theme has been saved") :  _("The theme couldn't be saved"));
 	return bThemeSaved;
 }
 
@@ -881,7 +882,7 @@ gchar *cairo_dock_depackage_theme (const gchar *cPackagePath)
 		if (str != NULL)
 		{
 			*str = '\0';
-			cNewThemePath = cairo_dock_download_file (cPackagePath, "", str+1, 2, cUserThemesDir, NULL);
+			cNewThemePath = cairo_dock_download_file (cPackagePath, "", str+1, cUserThemesDir, NULL);
 			if (cNewThemePath == NULL)
 			{
 				cairo_dock_show_temporary_dialog_with_icon_printf (_("couldn't get distant file %s/%s, maybe the server is down.\nPlease retry later or contact us at cairo-dock.org."), NULL, NULL, 0, NULL, cPackagePath, str+1);
@@ -920,10 +921,6 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList)
 			r = system (sCommand->str);  // g_rmdir n'efface qu'un repertoire vide.
 		}
 	}
-	if (cThemesList[1] == NULL)
-		cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The theme has been deleted") :  _("The theme couldn't be deleted"));
-	else
-		cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The themes have been deleted") :  _("The themes couldn't be deleted"));
 	
 	g_string_free (sCommand, TRUE);
 	return bThemeDeleted;
@@ -958,11 +955,11 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 		cNewThemeName[--length] = '\0';  // on vire le retour chariot final.
 	if (cNewThemeName[length-1] == '\r')
 		cNewThemeName[--length] = '\0';
-	g_print ("cNewThemeName : '%s'\n", cNewThemeName);
+	cd_debug ("cNewThemeName : '%s'", cNewThemeName);
 	
 	if (g_str_has_suffix (cNewThemeName, ".tar.gz") || g_str_has_suffix (cNewThemeName, ".tar.bz2") || g_str_has_suffix (cNewThemeName, ".tgz"))  // c'est un paquet.
 	{
-		g_print ("c'est un paquet\n");
+		cd_debug ("c'est un paquet");
 		cNewThemePath = cairo_dock_depackage_theme (cNewThemeName);
 		
 		g_return_val_if_fail (cNewThemePath != NULL, FALSE);
@@ -972,18 +969,18 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	}
 	else  // c'est un theme officiel.
 	{
-		g_print ("c'est un theme officiel\n");
+		cd_debug ("c'est un theme officiel");
 		gchar *cUserThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
 		cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, cUserThemesDir, CAIRO_DOCK_THEMES_DIR, CAIRO_DOCK_ANY_THEME);
 		g_free (cUserThemesDir);
 	}
 	g_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), FALSE);
-	g_print ("cNewThemePath : %s ; cNewThemeName : %s\n", cNewThemePath, cNewThemeName);
+	//g_print ("cNewThemePath : %s ; cNewThemeName : %s\n", cNewThemePath, cNewThemeName);
 	
 	//\___________________ On charge les parametres de comportement.
 	GString *sCommand = g_string_new ("");
 	int r;
-	cairo_dock_set_status_message (s_pThemeManager, _("Applying changes ..."));
+	cd_message ("Applying changes ...");
 	if (g_pMainDock == NULL || bLoadBehavior)
 	{
 		g_string_printf (sCommand, "/bin/cp \"%s\"/%s \"%s\"", cNewThemePath, CAIRO_DOCK_CONF_FILE, g_cCurrentThemePath);
@@ -999,17 +996,17 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	
 	//\___________________ On charge les .conf des autres docks racines.
 	g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1 -name '*.conf' ! -name '%s' -exec /bin/cp '{}' \"%s\" \\;", cNewThemePath, CAIRO_DOCK_CONF_FILE, g_cCurrentThemePath);
-	cd_message ("%s", sCommand->str);
+	cd_debug ("%s", sCommand->str);
 	r = system (sCommand->str);
 	
 	//\___________________ On charge les lanceurs.
 	if (bLoadLaunchers)
 	{
 		g_string_printf (sCommand, "rm -f \"%s/%s\"/*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
-		cd_message ("%s", sCommand->str);
+		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
 		g_string_printf (sCommand, "rm -f \"%s/%s\"/.*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
-		cd_message ("%s", sCommand->str);
+		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
 	}
 	
@@ -1022,12 +1019,12 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	else
 	{
 		g_string_printf (sCommand, "for f in \"%s\"/* ; do rm -f \"%s/%s/`basename \"${f%%.*}\"`\"*; done;", cNewLocalIconsPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);  // on efface les doublons car sinon on pourrait avoir x.png et x.svg ensemble et le dock ne saurait pas lequel choisir.
-		cd_message ("%s", sCommand->str);
+		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
 		
 		g_string_printf (sCommand, "cp \"%s\"/* \"%s/%s\"", cNewLocalIconsPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 	}
-	cd_message ("%s", sCommand->str);
+	cd_debug ("%s", sCommand->str);
 	r = system (sCommand->str);
 	g_free (cNewLocalIconsPath);
 	
@@ -1036,7 +1033,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	if (g_file_test (sCommand->str, G_FILE_TEST_IS_DIR))
 	{
 		g_string_printf (sCommand, "cp -r \"%s/%s\"/* \"%s/%s\"", cNewThemePath, CAIRO_DOCK_EXTRAS_DIR, g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR);
-		cd_message ("%s", sCommand->str);
+		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
 	}
 	
@@ -1050,30 +1047,30 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	if (g_pMainDock == NULL || bLoadLaunchers)
 	{
 		g_string_printf (sCommand, "rm -f \"%s\"/*.desktop", g_cCurrentLaunchersPath);
-		cd_message ("%s", sCommand->str);
+		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
 
 		g_string_printf (sCommand, "cp \"%s/%s\"/*.desktop \"%s\"", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentLaunchersPath);
-		cd_message ("%s", sCommand->str);
+		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
 	}
 	
 	//\___________________ On remplace tous les autres fichiers par les nouveaux.
 	g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '*.conf' -type f -exec rm -f '{}' \\;", g_cCurrentThemePath);  // efface tous les fichiers du theme mais sans toucher aux lanceurs et aux plug-ins.
-	cd_message (sCommand->str);
+	cd_debug ("%s", sCommand->str);
 	r = system (sCommand->str);
 
 	if (g_pMainDock == NULL || bLoadBehavior)
 	{
 		g_string_printf (sCommand, "find \"%s\"/* -prune ! -name '*.conf' ! -name %s -exec /bin/cp -r '{}' \"%s\" \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // copie tous les fichiers du nouveau theme sauf les lanceurs et le .conf, dans le repertoire du theme courant. Ecrase les fichiers de memes noms.
-		cd_message (sCommand->str);
+		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
 	}
 	else
 	{
 		// on copie tous les fichiers du nouveau theme sauf les lanceurs et les .conf (dock et plug-ins).
 		g_string_printf (sCommand, "find \"%s\" -mindepth 1 ! -name '*.conf' ! -path '%s/%s*' ! -type d -exec cp -p {} \"%s\" \\;", cNewThemePath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);
-		cd_message (sCommand->str);
+		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
 		
 		// on parcours les .conf des plug-ins, on les met a jour, et on fusionne avec le theme courant.
@@ -1088,7 +1085,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 				break ;
 			
 			// on cree le repertoire du plug-in dans le theme courant.
-			cd_debug ("  installing %s's config\n", cModuleDirName);
+			cd_debug ("  installing %s's config", cModuleDirName);
 			cUserDataDirPath = g_strdup_printf ("%s/plug-ins/%s", g_cCurrentThemePath, cModuleDirName);  // repertoire du plug-in dans le theme courant.
 			if (! g_file_test (cUserDataDirPath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
 			{
@@ -1146,32 +1143,23 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 }
 
 
-static inline void _free_shared_memory_import (gpointer *pSharedMemory)
-{
-	g_free (pSharedMemory[0]);
-	g_free (pSharedMemory);
-}
 static void _import_theme (gpointer *pSharedMemory)
 {
 	pSharedMemory[5] = GINT_TO_POINTER (cairo_dock_import_theme (pSharedMemory[0], GPOINTER_TO_INT (pSharedMemory[1]), GPOINTER_TO_INT (pSharedMemory[2])));
 }
 static gboolean _finish_import (gpointer *pSharedMemory)
 {
-	if (pSharedMemory[5])  // succes
-	{
-		GFunc pCallback = pSharedMemory[3];
-		pCallback (pSharedMemory[5], pSharedMemory[4]);
-	}
-	else
-	{
-		cairo_dock_set_status_message_printf (s_pThemeManager, _("Couldn't import the theme %s."), pSharedMemory[2]);
-	}
-	//_free_shared_memory_import (pSharedMemory);
+	if (! pSharedMemory[5])
+		cd_warning ("Couldn't import the theme %s.", pSharedMemory[0]);
+	
+	GFunc pCallback = pSharedMemory[3];
+	pCallback (pSharedMemory[5], pSharedMemory[4]);
 	return FALSE;
 }
 static void _discard_import (gpointer *pSharedMemory)
 {
-	_free_shared_memory_import (pSharedMemory);
+	g_free (pSharedMemory[0]);
+	g_free (pSharedMemory);
 }
 CairoDockTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers, GFunc pCallback, gpointer data)
 {
@@ -1225,17 +1213,21 @@ static gchar *cairo_dock_build_temporary_themes_conf_file (void)
 	return cTmpConfFile;
 }
 
-
-static void _load_theme (gboolean bSuccess, gpointer *pSharedMemory)
+static void _load_theme (gboolean bSuccess, gpointer data)
 {
+	if (s_pThemeManager == NULL)  // si l'utilisateur a ferme la fenetre entre-temps, on considere qu'il a abandonne.
+		return ;
 	if (bSuccess)
 	{
-		cairo_dock_set_status_message (s_pThemeManager, _("Now reloading theme ..."));
 		cairo_dock_load_current_theme ();
+		
+		cairo_dock_set_status_message (s_pThemeManager, "");
+		cairo_dock_reload_generic_gui (s_pThemeManager);
 	}
-	
-	cairo_dock_set_status_message (s_pThemeManager, "");
+	else
+		cairo_dock_set_status_message (s_pThemeManager, _("Couldn't import the theme."));
 }
+
 static gboolean on_theme_apply (gchar *cInitConfFile)
 {
 	cd_debug ("%s (%s)", __func__, cInitConfFile);
@@ -1281,6 +1273,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			g_key_file_set_string (pKeyFile, "Save", "theme name", "");
 			cairo_dock_write_keys_to_file (pKeyFile, cInitConfFile);
 		}
+		cairo_dock_set_status_message (s_pThemeManager, bThemeSaved ? _("The theme has been saved") :  _("The theme couldn't be saved"));
 		
 		g_free (cNewThemeName);
 		g_key_file_free (pKeyFile);
@@ -1305,6 +1298,10 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			g_key_file_set_string (pKeyFile, "Delete", "deleted themes", "");
 			cairo_dock_write_keys_to_file (pKeyFile, cInitConfFile);
 		}
+		if (cThemesList[1] == NULL)
+			cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The theme has been deleted") :  _("The theme couldn't be deleted"));
+		else
+			cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The themes have been deleted") :  _("The themes couldn't be deleted"));
 		
 		g_strfreev (cThemesList);
 		g_key_file_free (pKeyFile);
@@ -1342,29 +1339,23 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 	}
 	
 	//\___________________ On charge le nouveau theme choisi.
-	if (cNewThemeName != NULL && s_pTask == NULL)
+	if (cNewThemeName != NULL)
 	{
 		gboolean bLoadBehavior = g_key_file_get_boolean (pKeyFile, "Themes", "use theme behaviour", NULL);
 		gboolean bLoadLaunchers = g_key_file_get_boolean (pKeyFile, "Themes", "use theme launchers", NULL);
 		
-		cairo_dock_import_theme_async (cNewThemeName, bLoadBehavior, bLoadLaunchers, (GFunc)_load_theme, s_pThemeManager);
+		if (s_pImportTask != NULL)
+			cairo_dock_discard_task (s_pImportTask);
 		
-		/**gboolean bThemeImported = cairo_dock_import_theme (cNewThemeName, bLoadBehavior, bLoadLaunchers);
-		
-		//\___________________ On charge le theme courant.
-		if (bThemeImported)
-		{
-			cairo_dock_set_status_message (s_pThemeManager, _("Now reloading theme ..."));
-			cairo_dock_load_current_theme ();
-		}
-		
+		cairo_dock_set_status_message_printf (s_pThemeManager, _("Importing theme %s ..."), cNewThemeName);
+		s_pImportTask = cairo_dock_import_theme_async (cNewThemeName, bLoadBehavior, bLoadLaunchers, (GFunc)_load_theme, NULL);
 		g_free (cNewThemeName);
-		cairo_dock_set_status_message (s_pThemeManager, "");
-		return FALSE;*/
+		return TRUE;  // ne recharge pas la fenetre, on le fera nous-memes apres l'import.
 	}
 	
 	return TRUE;
 }
+
 void cairo_dock_manage_themes (void)
 {
 	if (s_pThemeManager != NULL)
@@ -1379,7 +1370,7 @@ void cairo_dock_manage_themes (void)
 	const gchar *cPresentedGroup = (cairo_dock_theme_need_save () ? "Save" : NULL);
 	const gchar *cTitle = _("Manage Themes");
 	
-	cairo_dock_build_normal_gui (cInitConfFile,
+	cairo_dock_build_generic_gui (cInitConfFile,
 		NULL, cTitle,
 		CAIRO_DOCK_THEME_PANEL_WIDTH, CAIRO_DOCK_THEME_PANEL_HEIGHT,
 		(CairoDockApplyConfigFunc) on_theme_apply,

@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 * GUIs are built from a .conf file; .conf files are normal group/key files, but with some special indications in the comments. Each key will be represented by a pre-defined widget, that is defined by the first caracter of its comment. The comment also contains a description of the key, and an optionnal tooltip. See cairo-dock-gui-factory.h for the list of pre-defined widgets and a short explanation on how to use them inside a conf file. The file 'cairo-dock.conf' can be an useful example.
 * 
 * The class defines the interface that a backend to the main GUI of Cairo-Dock should implement.
-* It also provides a useful function to easily build a window from a conf file : \ref cairo_dock_build_normal_gui
+* It also provides a useful function to easily build a window from a conf file : \ref cairo_dock_build_generic_gui
 * 
 */
 
@@ -119,7 +119,7 @@ void cairo_dock_show_module_gui (const gchar *cModuleName);
 void cairo_dock_close_gui (void);
 
 
-/** Build a generic window, that contains 2 buttons apply and quit, and a taskbar.
+/** Build a generic GUI window, that contains 2 buttons apply and quit, and a statusbar.
 @param cTitle title to set to the window.
 @param iWidth width of the window.
 @param iHeight height of the window.
@@ -128,8 +128,8 @@ void cairo_dock_close_gui (void);
 @param pFreeUserData callback called when the window is destroyed, to free the previous data, or NULL.
 @return the new window.
 */
-GtkWidget *cairo_dock_build_normal_gui_window (const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData);
-/** Load a conf file into a generic window, that contains 2 buttons apply and quit, and a taskbar. If no callback is provided, the window is blocking, until the user press one of the button; in this case, TRUE is returned if ok was pressed.
+GtkWidget *cairo_dock_build_generic_gui_window (const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData);
+/** Load a conf file into a generic window, that contains 2 buttons apply and quit, and a statusbar. If no callback is provided, the window is blocking, until the user press one of the button; in this case, TRUE is returned if ok was pressed.
 @param cConfFilePath conf file to load into the window.
 @param cGettextDomain translation domain.
 @param cTitle title to set to the window.
@@ -141,7 +141,13 @@ GtkWidget *cairo_dock_build_normal_gui_window (const gchar *cTitle, int iWidth, 
 @param pWindow pointer to the newly created window.
 @return the new window.
 */
-gboolean cairo_dock_build_normal_gui (const gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData, GtkWidget **pWindow);
+gboolean cairo_dock_build_generic_gui (const gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData, GtkWidget **pWindow);
+
+/** Reload a generic window built upon a conf file, by parsing again the conf file.
+@param pWindow the window.
+*/
+void cairo_dock_reload_generic_gui (GtkWidget *pWindow);
+
 
 
 /// Definition of the launcher GUI interface.

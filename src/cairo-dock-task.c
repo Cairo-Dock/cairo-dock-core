@@ -74,9 +74,9 @@ static gboolean _cairo_dock_check_for_update (CairoDockTask *pTask)
 	{
 		if (pTask->bDiscard)  // la tache s'est faite abandonnee.
 		{
-			g_print ("free discared task...\n");
+			//g_print ("free discared task...\n");
 			_free_task (pTask);
-			g_print ("done.\n");
+			//g_print ("done.\n");
 			return FALSE;
 		}
 		
@@ -163,17 +163,17 @@ void cairo_dock_stop_task (CairoDockTask *pTask)
 	
 	_cairo_dock_pause_task (pTask);
 	
-	cd_message ("***on attend que le thread termine...(%d)", g_atomic_int_get (&pTask->iThreadIsRunning));
+	cd_message ("***waiting for thread's end...(%d)", g_atomic_int_get (&pTask->iThreadIsRunning));
 	while (g_atomic_int_get (&pTask->iThreadIsRunning))
 		g_usleep (10);
 		///gtk_main_iteration ();
-	cd_message ("***temine.");
+	cd_message ("***ended.");
 }
 
 
 static gboolean _free_discarded_task (CairoDockTask *pTask)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	cairo_dock_free_task (pTask);
 	return FALSE;
 }

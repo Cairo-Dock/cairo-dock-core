@@ -112,6 +112,70 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 }
 
 
+static void _draw_flat_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude)
+{
+	
+}
+
+static void _draw_physical_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude)
+{
+	double fSizeX = icon->fWidth * icon->fScale, fSizeY = icon->fHeight * icon->fScale;
+	cairo_set_line_width (pCairoContext, myBackground.iDockLineWidth);
+	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_DEST_OUT);
+	cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 1.0);
+	
+	if (pDock->container.bIsHorizontal)
+	{
+		cairo_translate (pCairoContext, icon->fDrawX, 0.);
+		cairo_rectangle (pCairoContext, 0., 0., fSizeX, pDock->container.iHeight);
+		cairo_fill (pCairoContext);
+		
+		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
+		cairo_set_source_rgba (pCairoContext, myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		
+		cairo_move_to (pCairoContext,
+			-.5*myBackground.iDockLineWidth,
+			pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - myBackground.iDockLineWidth : 0.);  // coin haut gauche.
+		cairo_rel_line_to (pCairoContext, 0., pDock->iDecorationsHeight + myBackground.iDockLineWidth);
+		cairo_stroke (pCairoContext);
+		
+		cairo_move_to (pCairoContext,
+			fSizeX + .5*myBackground.iDockLineWidth,
+			pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - myBackground.iDockLineWidth : 0.);  // coin haut droit.
+		cairo_rel_line_to (pCairoContext, 0., pDock->iDecorationsHeight + myBackground.iDockLineWidth);
+		cairo_stroke (pCairoContext);
+	}
+	else
+	{
+		cairo_translate (pCairoContext, 0., icon->fDrawX);
+		cairo_rectangle (pCairoContext, 0., 0., pDock->container.iHeight, fSizeX);
+		cairo_fill (pCairoContext);
+		
+		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
+		cairo_set_source_rgba (pCairoContext, myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		
+		cairo_move_to (pCairoContext,
+			pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - myBackground.iDockLineWidth : 0.,
+			-.5*myBackground.iDockLineWidth);  // coin haut gauche.
+		cairo_rel_line_to (pCairoContext, pDock->iDecorationsHeight + myBackground.iDockLineWidth, 0.);
+		cairo_stroke (pCairoContext);
+		
+		cairo_move_to (pCairoContext,
+			pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - myBackground.iDockLineWidth : 0.,
+			fSizeX + .5*myBackground.iDockLineWidth);  // coin haut droit.
+		cairo_rel_line_to (pCairoContext, pDock->iDecorationsHeight + myBackground.iDockLineWidth, 0.);
+		cairo_stroke (pCairoContext);
+	}
+}
+
+static void _cairo_dock_draw_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude)
+{
+	if (myIcons.iSeparatorType == 1)
+		_draw_flat_separator (icon, pDock, pCairoContext, fDockMagnitude);
+	else
+		_draw_physical_separator (icon, pDock, pCairoContext, fDockMagnitude);
+}
+
 void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 {
 	//\____________________ On trace le cadre.
@@ -171,7 +235,28 @@ void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 		cairo_dock_draw_string (pCairoContext, pDock, myIcons.iStringLineWidth, FALSE, FALSE);
 
 	//\____________________ On dessine les icones et les etiquettes, en tenant compte de l'ordre pour dessiner celles en arriere-plan avant celles en avant-plan.
-	cairo_dock_render_icons_linear (pCairoContext, pDock);
+	///cairo_dock_render_icons_linear (pCairoContext, pDock);
+	
+	GList *pFirstDrawnElement = cairo_dock_get_first_drawn_element_linear (pDock->icons);
+	if (pFirstDrawnElement == NULL)
+		return;
+	
+	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);  // * pDock->fMagnitudeMax
+	Icon *icon;
+	GList *ic = pFirstDrawnElement;
+	do
+	{
+		icon = ic->data;
+
+		cairo_save (pCairoContext);
+		if (myIcons.iSeparatorType != 0 && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
+			_cairo_dock_draw_separator (icon, pDock, pCairoContext, fDockMagnitude);
+		else
+			cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);
+		cairo_restore (pCairoContext);
+
+		ic = cairo_dock_get_next_element (ic, pDock->icons);
+	} while (ic != pFirstDrawnElement);
 }
 
 
@@ -288,7 +373,10 @@ void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkR
 					icon->fAlpha = 0.7;
 				}
 				
-				cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);
+				if (myIcons.iSeparatorType != 0 && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
+					_cairo_dock_draw_separator (icon, pDock, pCairoContext, fDockMagnitude);
+				else
+					cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);
 				cairo_restore (pCairoContext);
 			}
 
@@ -298,6 +386,88 @@ void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkR
 }
 
 
+
+
+
+static void _draw_flat_separator_opengl (Icon *icon, CairoDock *pDock, double fDockMagnitude)
+{
+	
+}
+
+static void _draw_physical_separator_opengl (Icon *icon, CairoDock *pDock, double fDockMagnitude)
+{
+	double fSizeX = icon->fWidth * icon->fScale, fSizeY = icon->fHeight * icon->fScale;
+	glEnable (GL_BLEND);
+	glBlendFunc (GL_ONE, GL_ZERO);
+	glColor4f (0., 0., 0., 0.);
+	
+	glPolygonMode (GL_FRONT, GL_FILL);
+	glLineWidth (myBackground.iDockLineWidth);
+	
+	if (pDock->container.bIsHorizontal)
+	{
+		glTranslatef (icon->fDrawX, 0., 0.);
+		glBegin(GL_QUADS);
+		glVertex3f(0., 0., 0.);
+		glVertex3f(fSizeX, 0., 0.);
+		glVertex3f(fSizeX, pDock->container.iHeight, 0.);
+		glVertex3f(0., pDock->container.iHeight, 0.);
+		glEnd();
+		
+		_cairo_dock_set_blend_alpha ();
+		glColor4f (myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		glPolygonMode(GL_FRONT, GL_LINE);
+		
+		if (! pDock->container.bDirectionUp)
+			glTranslatef (0., pDock->container.iHeight - pDock->iDecorationsHeight - myBackground.iDockLineWidth, 0.);
+		
+		glBegin(GL_LINES);
+		glVertex3f(-.5*myBackground.iDockLineWidth, 0., 0.);
+		glVertex3f(-.5*myBackground.iDockLineWidth, pDock->iDecorationsHeight + myBackground.iDockLineWidth, 0.);
+		glEnd();
+		
+		glBegin(GL_LINES);
+		glVertex3f(fSizeX + .5*myBackground.iDockLineWidth, 0., 0.);
+		glVertex3f(fSizeX + .5*myBackground.iDockLineWidth, pDock->iDecorationsHeight + myBackground.iDockLineWidth, 0.);
+		glEnd();
+	}
+	else
+	{
+		glTranslatef (0., pDock->container.iWidth - icon->fDrawX - fSizeX, 0.);
+		glBegin(GL_QUADS);
+		glVertex3f(0., 0., 0.);
+		glVertex3f(0., fSizeX, 0.);
+		glVertex3f(pDock->container.iHeight, fSizeX, 0.);
+		glVertex3f(pDock->container.iHeight, 0., 0.);
+		glEnd();
+		
+		_cairo_dock_set_blend_alpha ();
+		glColor4f (myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		glPolygonMode(GL_FRONT, GL_LINE);
+		
+		if (pDock->container.bDirectionUp)
+			glTranslatef (pDock->container.iHeight - pDock->iDecorationsHeight - myBackground.iDockLineWidth, 0., 0.);
+		
+		glBegin(GL_LINES);
+		glVertex3f(0., -.5*myBackground.iDockLineWidth, 0.);
+		glVertex3f(pDock->iDecorationsHeight + myBackground.iDockLineWidth, -.5*myBackground.iDockLineWidth, 0.);
+		glEnd();
+		
+		glBegin(GL_LINES);
+		glVertex3f(0., fSizeX + .5*myBackground.iDockLineWidth, 0.);
+		glVertex3f(pDock->iDecorationsHeight + myBackground.iDockLineWidth, fSizeX + .5*myBackground.iDockLineWidth, 0.);
+		glEnd();
+	}
+	glDisable (GL_BLEND);
+}
+
+static void _cairo_dock_draw_separator_opengl (Icon *icon, CairoDock *pDock, double fDockMagnitude)
+{
+	if (myIcons.iSeparatorType == 1)
+		_draw_flat_separator_opengl (icon, pDock, fDockMagnitude);
+	else
+		_draw_physical_separator_opengl (icon, pDock, fDockMagnitude);
+}
 
 void cd_render_opengl_default (CairoDock *pDock)
 {
@@ -392,7 +562,10 @@ void cd_render_opengl_default (CairoDock *pDock)
 		icon = ic->data;
 		
 		glPushMatrix ();
-		cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
+		if (myIcons.iSeparatorType != 0 && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
+			_cairo_dock_draw_separator_opengl (icon, pDock, fDockMagnitude);
+		else
+			cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
 		glPopMatrix ();
 		
 		ic = cairo_dock_get_next_element (ic, pDock->icons);
