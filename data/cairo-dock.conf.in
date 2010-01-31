@@ -494,7 +494,7 @@ frame_sep =
 separator size = 48;48
 
 #Y+[Use an image;1;4;Flat separator;4;1;Physical separator;0;0] How to draw the separators :
-#{Only the default, 3D-plane and curve views support flat and physical separators.}
+#{Only the default, 3D-plane and curve views support flat and physical separators. Flat separators are rendered differently according to the view.}
 separator type = 0
 
 #S+ Filename of an image to use for separators :

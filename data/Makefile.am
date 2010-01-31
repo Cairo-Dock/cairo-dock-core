@@ -66,7 +66,6 @@ essentialdata_DATA = \
 autostartdatadir = $(datadir)/applications
 autostartdata_DATA = \
 	cairo-dock.desktop\
-	cairo-dock-indirect.desktop\
 	cairo-dock-cairo.desktop
 
 icondatadir = $(datadir)/pixmaps

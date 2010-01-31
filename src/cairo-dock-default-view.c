@@ -109,12 +109,37 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 		pDock->iMinDockWidth = pDock->iMaxDockWidth;
 	else
 		pDock->iMinDockWidth = pDock->fFlatDockWidth;
+	
+	
 }
 
 
 static void _draw_flat_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude)
 {
+	double fSizeX = icon->fWidth * icon->fScale, fSizeY = icon->fHeight * icon->fScale;
+	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 	
+	cairo_translate (pCairoContext, icon->fDrawX + .25 * fSizeX, icon->fDrawY);
+	double rx = .25*fSizeX;
+	double ry = .5*fSizeY;
+	cairo_pattern_t *pPattern = cairo_pattern_create_radial (ry,
+		ry,
+		0.,
+		ry,
+		ry,
+		ry);
+	cairo_pattern_set_extend (pPattern, CAIRO_EXTEND_NONE);
+	
+	cairo_pattern_add_color_stop_rgba (pPattern,
+		0.,
+		myIcons.fSeparatorColor[0], myIcons.fSeparatorColor[1], myIcons.fSeparatorColor[2], myIcons.fSeparatorColor[3]);
+	cairo_pattern_add_color_stop_rgba (pPattern,
+		1.,
+		myIcons.fSeparatorColor[0], myIcons.fSeparatorColor[1], myIcons.fSeparatorColor[2], 0.);
+	cairo_scale (pCairoContext, rx/ry, 1.);
+	cairo_set_source (pCairoContext, pPattern);
+	cairo_paint (pCairoContext);
+	cairo_pattern_destroy (pPattern);
 }
 
 static void _draw_physical_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude)

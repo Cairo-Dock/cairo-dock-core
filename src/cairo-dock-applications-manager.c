@@ -472,7 +472,11 @@ static void _on_change_window_state (Icon *icon)
 				{
 					pParentDock = cairo_dock_insert_appli_in_dock (icon, g_pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 					if (pParentDock != NULL)
+					{
+						if (g_bUseOpenGL && myTaskBar.iMinimizedWindowRenderType == 2)  // quand on est passe dans ce cas tout a l'heure l'icone n'etait pas encore dans son dock.
+							cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pParentDock), TRUE);
 						gtk_widget_queue_draw (pParentDock->container.pWidget);
+					}
 				}
 			}
 			else  // se montre => on detache l'icone.

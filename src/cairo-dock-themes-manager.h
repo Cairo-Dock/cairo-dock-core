@@ -78,7 +78,6 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 *@param cServerAdress adress of the server.
 *@param cDistantFilePath path of the file on the server.
 *@param cDistantFileName name of the file.
-*@param iShowActivity 0 : don't show, 1 : show a dialog, 2 : do it in a terminal.
 *@param cExtractTo a local path where to extract the file, if this one is a .tar.gz/.tar.bz2/.tgz archive, or NULL.
 *@param erreur an error.
 *@return the local path of the downloaded file. If it was an archive, the path of the extracted file. Free the string after using it.
@@ -100,7 +99,6 @@ CairoDockTask *cairo_dock_download_file_async (const gchar *cServerAdress, const
 *@param cServerAdress adress of the server.
 *@param cDistantFilePath path of the file on the server.
 *@param cDistantFileName name of the file.
-*@param iShowActivity 0 : don't show, 1 : show a dialog, 2 : do it in a terminal.
 *@param erreur an error.
 *@return the content of the file. Free the string after using it.
 */

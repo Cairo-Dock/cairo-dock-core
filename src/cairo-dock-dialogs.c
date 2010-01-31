@@ -1586,9 +1586,10 @@ static void _cairo_dock_get_answer_from_dialog (int iClickedButton, GtkWidget *p
 	if (g_main_loop_is_running (pBlockingLoop))
 		g_main_loop_quit (pBlockingLoop);
 }
-static gboolean _cairo_dock_dialog_destroyed (GtkWidget *widget, GdkEvent *event, GMainLoop *pBlockingLoop)
+static gboolean _cairo_dock_dialog_destroyed (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
 {
 	g_print ("dialogue detruit, on sort de la boucle\n");
+	gtk_window_set_modal (GTK_WINDOW (pWidget), FALSE);
 	if (g_main_loop_is_running (pBlockingLoop))
 		g_main_loop_quit (pBlockingLoop);
 	return FALSE;

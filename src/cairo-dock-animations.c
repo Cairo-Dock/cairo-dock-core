@@ -115,7 +115,7 @@ static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gbo
 
 void cairo_dock_pop_up (CairoDock *pDock)
 {
-	cd_debug ("%s (%d)", __func__, pDock->bPopped);
+	//g_print ("%s (%d)\n", __func__, pDock->bPopped);
 	if (! pDock->bPopped && myAccessibility.bPopUp)
 	{
 		cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
@@ -135,7 +135,7 @@ void cairo_dock_pop_up (CairoDock *pDock)
 
 gboolean cairo_dock_pop_down (CairoDock *pDock)
 {
-	cd_debug ("%s (%d)", __func__, pDock->bPopped);
+	//g_print ("%s (%d)\n", __func__, pDock->bPopped);
 	if (pDock->bIsMainDock && cairo_dock_get_nb_dialog_windows () != 0)
 		return FALSE;
 	if (pDock->bPopped && myAccessibility.bPopUp && ! pDock->container.bInside)

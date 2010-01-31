@@ -179,6 +179,7 @@ gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserDat
 *@param iDuration duration if the transition, in ms. Can be 0 for an endless transition, in which case you can stop the transition with #cairo_dock_remove_transition_on_icon.
 *@param bRemoveWhenFinished TRUE to destroy and remove the transition when it is finished.
 *@param pUserData data passed to the rendering functions.
+*@param pFreeUserDataFunc function called to free the user data when the transition is destroyed (optionnal).
 */
 void cairo_dock_set_transition_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pIconContext, CairoDockTransitionRenderFunc render_step_cairo, CairoDockTransitionGLRenderFunc render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData, GFreeFunc pFreeUserDataFunc);
 
