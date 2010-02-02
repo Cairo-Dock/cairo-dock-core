@@ -24,7 +24,6 @@
 #include "cairo-dock-icons.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-default-view.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-factory.h"
@@ -227,8 +226,6 @@ void cairo_dock_initialize_renderer_manager (void)
 		g_str_equal,
 		g_free,
 		NULL);
-	
-	cairo_dock_register_default_renderer ();
 }
 
 

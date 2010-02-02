@@ -116,6 +116,7 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-gauge.h"
 #include "cairo-dock-graph.h"
+#include "cairo-dock-default-view.h"
 #include "cairo-dock-internal-system.h"
 
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
@@ -590,6 +591,9 @@ int main (int argc, char** argv)
 	cairo_dock_load_user_gui_backend ();
 	cairo_dock_register_default_launcher_gui_backend ();
 	
+	//\___________________ On enregistre la vue par defaut.
+	cairo_dock_register_default_renderer ();
+	
 	//\___________________ On enregistre nos notifications.
 	cairo_dock_register_notification (CAIRO_DOCK_BUILD_CONTAINER_MENU,
 		(CairoDockNotificationFunc) cairo_dock_notification_build_container_menu,
@@ -809,7 +813,7 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
 	
-	g_print ("\n2eme DOCK PRINCIPAL AVEC 1 ICONE : BORD TRONQUE EN VERTICAL\n\n");
+	/*g_print ("\n2eme DOCK PRINCIPAL AVEC 1 ICONE : BORD TRONQUE EN VERTICAL\n\n");
 	g_print ("\nPLAN 3D NE PREND PAS TOUT L'ECRAN\n\n");
 	g_print ("\nBATTERIE VERS 100%% (?)\n\n");
 	
@@ -820,7 +824,7 @@ int main (int argc, char** argv)
 	
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
 	g_print ("\nNOUVELLE INSTANCE COPIEE SUR LA 1ERE\n\n");
-	g_print ("\nJAUGES : LOGO\n\n");
+	g_print ("\nJAUGES : LOGO\n\n");*/
 	
 	g_print ("\n*** NE PAS OUBLIER DE REMETTRE LE NOM DE DOMAINE ! ***\n\n");
 	

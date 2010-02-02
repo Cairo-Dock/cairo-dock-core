@@ -184,7 +184,8 @@ cairo_dock_SOURCES = \
 	cairo-dock-container.h\
 	cairo-dock-task.c\
 	cairo-dock-task.h\
-	texture-gradation.h
+	texture-gradation.h\
+	texture-blur.h
 	
 
 cairo_dockincludedir =\

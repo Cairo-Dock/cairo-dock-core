@@ -43,12 +43,29 @@
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-dock-facility.h"
+#include "cairo-dock-notifications.h"
+#include "texture-blur.h"
 #include "cairo-dock-default-view.h"
 
 extern GLuint g_iBackgroundTexture;
 extern int g_iScreenWidth[2];
+extern gboolean g_bUseOpenGL;
+static GLuint s_iFlatSeparatorTexture = 0;
 
-void cd_calculate_max_dock_size_default (CairoDock *pDock)
+
+static gboolean cd_default_view_free_data (gpointer pUserData, CairoDock *pDock)  // si la vue 'default' etait dans un plug-in on n'aurait pas besoin de faire ca (on pourrait detruire nos donnees lors du stop_module), si elle etait dans la lib-core on pourrait le faire lors du unload_texture, mais elle est dans le main.
+{
+	if (pDock->bIsMainDock && s_iFlatSeparatorTexture != 0)
+	{
+		//g_print ("%s (%d)\n", __func__, s_iFlatSeparatorTexture);
+		_cairo_dock_delete_texture (s_iFlatSeparatorTexture);
+		s_iFlatSeparatorTexture = 0;
+	}
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
+
+static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 {
 	pDock->pFirstDrawnElement = cairo_dock_calculate_icons_positions_at_rest_linear (pDock->icons, pDock->fFlatDockWidth, pDock->iScrollOffset);
 
@@ -110,7 +127,8 @@ void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	else
 		pDock->iMinDockWidth = pDock->fFlatDockWidth;
 	
-	
+	if (g_bUseOpenGL && s_iFlatSeparatorTexture == 0 && myIcons.iSeparatorType == 1)
+		s_iFlatSeparatorTexture = cairo_dock_load_texture_from_raw_data (blurTex, 32, 32);
 }
 
 
@@ -201,7 +219,7 @@ static void _cairo_dock_draw_separator (Icon *icon, CairoDock *pDock, cairo_t *p
 		_draw_physical_separator (icon, pDock, pCairoContext, fDockMagnitude);
 }
 
-void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
+static void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 {
 	//\____________________ On trace le cadre.
 	double fLineWidth = myBackground.iDockLineWidth;
@@ -286,7 +304,7 @@ void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 
 
 
-void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkRectangle *pArea)
+static void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkRectangle *pArea)
 {
 	//g_print ("%s ((%d;%d) x (%d;%d) / (%dx%d))\n", __func__, pArea->x, pArea->y, pArea->width, pArea->height, pDock->container.iWidth, pDock->container.iHeight);
 	double fLineWidth = myBackground.iDockLineWidth;
@@ -412,11 +430,30 @@ void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkR
 
 
 
-
-
 static void _draw_flat_separator_opengl (Icon *icon, CairoDock *pDock, double fDockMagnitude)
 {
+	if (s_iFlatSeparatorTexture == 0)
+		return;
 	
+	double fSizeX = icon->fWidth * icon->fScale, fSizeY = icon->fHeight * icon->fScale;
+	double rx = .4*fSizeX;
+	double ry = .8*fSizeY;
+	
+	_cairo_dock_enable_texture ();
+	_cairo_dock_set_blend_alpha ();
+	glColor4f (myIcons.fSeparatorColor[0], myIcons.fSeparatorColor[1], myIcons.fSeparatorColor[2], myIcons.fSeparatorColor[3]);
+	
+	if (pDock->container.bIsHorizontal)
+	{
+		glTranslatef (icon->fDrawX + fSizeX/2, pDock->container.iHeight - icon->fDrawY - fSizeY/2, 0.);
+		_cairo_dock_apply_texture_at_size (s_iFlatSeparatorTexture, rx, ry);
+	}
+	else
+	{
+		glTranslatef (icon->fDrawY + fSizeY/2, pDock->container.iWidth - (icon->fDrawX + fSizeX/2), 0.);
+		_cairo_dock_apply_texture_at_size (s_iFlatSeparatorTexture, ry, rx);
+	}
+	_cairo_dock_disable_texture ();
 }
 
 static void _draw_physical_separator_opengl (Icon *icon, CairoDock *pDock, double fDockMagnitude)
@@ -494,7 +531,7 @@ static void _cairo_dock_draw_separator_opengl (Icon *icon, CairoDock *pDock, dou
 		_draw_physical_separator_opengl (icon, pDock, fDockMagnitude);
 }
 
-void cd_render_opengl_default (CairoDock *pDock)
+static void cd_render_opengl_default (CairoDock *pDock)
 {
 	GLsizei w = pDock->container.iWidth;
 	GLsizei h = pDock->container.iHeight;
@@ -609,16 +646,9 @@ static void _cd_calculate_construction_parameters_generic (Icon *icon, CairoDock
 	icon->fHeightFactor = 1.;
 	///icon->fDeltaYReflection = 0.;
 	icon->fOrientation = 0.;
-	//if (icon->fDrawX >= 0 && icon->fDrawX + icon->fWidth * icon->fScale <= pDock->container.iWidth)
-	{
-		icon->fAlpha = 1;
-	}
-	/*else
-	{
-		icon->fAlpha = .25;
-	}*/
+	icon->fAlpha = 1;
 }
-Icon *cd_calculate_icons_default (CairoDock *pDock)
+static Icon *cd_calculate_icons_default (CairoDock *pDock)
 {
 	Icon *pPointedIcon = cairo_dock_apply_wave_effect_linear (pDock);
 	
@@ -653,4 +683,7 @@ void cairo_dock_register_default_renderer (void)
 	pDefaultRenderer->cDisplayedName = gettext (CAIRO_DOCK_DEFAULT_RENDERER_NAME);
 
 	cairo_dock_register_renderer (CAIRO_DOCK_DEFAULT_RENDERER_NAME, pDefaultRenderer);
+	cairo_dock_register_notification (CAIRO_DOCK_STOP_DOCK,  // on ne fait cette fonction qu'une fois, donc on peut s'enregistrer ici.
+		(CairoDockNotificationFunc) cd_default_view_free_data,
+		CAIRO_DOCK_RUN_AFTER, NULL);
 }
