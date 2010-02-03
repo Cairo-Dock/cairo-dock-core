@@ -86,6 +86,7 @@ void cairo_dock_free_icon (Icon *icon)
 	if (icon->pModuleInstance != NULL)
 		cairo_dock_deinstanciate_module (icon->pModuleInstance);
 	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);
+	cairo_dock_remove_transition_on_icon (icon);
 	
 	if (icon->iSpecificDesktop != 0)
 	{

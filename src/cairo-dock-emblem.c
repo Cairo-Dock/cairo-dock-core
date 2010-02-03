@@ -334,7 +334,7 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		}
 		_cairo_dock_set_blend_alpha ();
 	}
-	else  // dessin cairo
+	else if (pIcon->pIconBuffer != NULL)  // dessin cairo
 	{
 		pCairoContext = cairo_create (pIcon->pIconBuffer);
 		g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
@@ -359,6 +359,8 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		}
 		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 	}
+	else
+		return ;
 	
 	//\______________ On dessine les 3 ou 4 premieres icones du sous-dock.
 	if (pIcon->cClass != NULL)

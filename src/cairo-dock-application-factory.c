@@ -492,7 +492,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 			}
 			else
 			{
-				cd_debug ("type indesirable");
+				cd_debug ("type indesirable (%d)", *pTypeBuffer);
 				XFree (pTypeBuffer);
 				/**if (myTaskBar.bUniquePid)
 					g_hash_table_insert (s_hAppliTable, pPidBuffer, NULL);  // On rajoute son PID meme si c'est une appli qu'on n'affichera pas.*/

@@ -63,9 +63,9 @@
 #define CAIRO_DOCK_CONF_PANEL_HEIGHT 600
 #define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 600
 #define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 350
-//#define CAIRO_DOCK_FILE_HOST_URL "https://developer.berlios.de/project/showfiles.php?group_id=8724"
-#define CAIRO_DOCK_FILE_HOST_URL "https://launchpad.net/cairo-dock"
-#define CAIRO_DOCK_HELP_URL "http://www.cairo-dock.org"
+#define CAIRO_DOCK_FILE_HOST_URL "https://launchpad.net/cairo-dock"  // https://developer.berlios.de/project/showfiles.php?group_id=8724
+#define CAIRO_DOCK_SITE_URL "http://cairo-dock.vef.fr"  // http://cairo-dock.org
+#define CAIRO_DOCK_FORUM_URL "http://cairo-dock.vef.fr/bg_forumlist.php"  // http://forum.cairo-dock.org
 
 extern CairoDock *g_pMainDock;
 
@@ -193,10 +193,10 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 	GtkWidget *pVBox = gtk_vbox_new (FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (pHBox), pVBox, FALSE, FALSE, 0);
 	
-	GtkWidget *pLink = gtk_link_button_new_with_label ("http://www.cairo-dock.org", "Cairo-Dock (2007-2010)\n version "CAIRO_DOCK_VERSION);
+	GtkWidget *pLink = gtk_link_button_new_with_label (CAIRO_DOCK_SITE_URL, "Cairo-Dock (2007-2010)\n version "CAIRO_DOCK_VERSION);
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
-	pLink = gtk_link_button_new_with_label ("http://forum.cairo-dock.org", _("Community's site"));
+	pLink = gtk_link_button_new_with_label (CAIRO_DOCK_FORUM_URL, _("Community's site"));
 	gtk_widget_set_tooltip_text (pLink, _("A problem ? A suggestion ? Want to talk to us ? You're welcome !"));
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
