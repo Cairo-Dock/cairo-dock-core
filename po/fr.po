@@ -119,7 +119,7 @@ msgstr "Mis à jour"
 
 #: ../src/cairo-dock-gui-factory.c:1272 ../src/cairo-dock-gui-factory.c:1274
 msgid "You have to try the theme before you can rate it."
-msgstr "Vous devez essayer le thème avant de pouvoir l'évaluer."
+msgstr "Vous devez essayer le thème avant de pouvoir le noter."
 
 #: ../src/cairo-dock-gui-factory.c:1296
 #, c-format
@@ -144,7 +144,7 @@ msgstr ""
 #: ../src/cairo-dock-gui-factory.c:1950
 #, c-format
 msgid "Listing themes in '%s' ..."
-msgstr ""
+msgstr "En cours de listage des themes dans '%s' ..."
 
 #: ../src/cairo-dock-gui-factory.c:2125
 msgid "module"
@@ -170,7 +170,7 @@ msgstr "Thème"
 
 #: ../src/cairo-dock-gui-factory.c:2551
 msgid "rating"
-msgstr "Évaluation"
+msgstr "Note"
 
 #: ../src/cairo-dock-gui-factory.c:2557
 msgid "sobriety"
@@ -313,11 +313,6 @@ msgstr ""
 "Le mode avancé vous permet d'ajuster chaque paramètre du dock. C'est un "
 "puissant outil pour personnaliser à souhait votre thème actuel."
 
-#: ../src/cairo-dock-gui-simple.c:186
-#, fuzzy, c-format
-msgid "Importing theme %s..."
-msgstr "Rechargement du thème en cours..."
-
 #: ../src/cairo-dock-internal-accessibility.c:263
 #: ../src/cairo-dock-menu.c:1614
 msgid "Visibility"
@@ -330,7 +325,7 @@ msgid ""
 "Configure the way you access to your docks and sub-docks !"
 msgstr ""
 "Vous aimeriez que votre dock soit toujours bien en vue,\n"
-" ou au contraire vous le trouvez trop imposant ?\n"
+" ou au contraire le plus discret possible ?\n"
 "Configurez donc la manière donc vous accéder a vos docks et sous-docks !"
 
 #: ../src/cairo-dock-internal-background.c:157 ../data/messages:415
@@ -393,7 +388,7 @@ msgid ""
 " size, reflection, icon theme, ..."
 msgstr ""
 "Tout sur les icônes :\n"
-" taille, réflexion, thème des icônes"
+" taille, reflets, thème des icônes, ..."
 
 #: ../src/cairo-dock-internal-indicators.c:159 ../data/messages:783
 msgid "Indicators"
@@ -499,7 +494,7 @@ msgstr "Configurer"
 
 #: ../src/cairo-dock-menu.c:336
 msgid "Configure the behaviour, appearance, and applets."
-msgstr "Configurer le comportement , l'apparence et les applets."
+msgstr "Configurer le comportement, l'apparence et les applets."
 
 #: ../src/cairo-dock-menu.c:340
 msgid "Set up this dock"
@@ -917,9 +912,8 @@ msgstr ""
 "Désirez-vous continuer?"
 
 #: ../src/cairo-dock-themes-manager.c:1228
-#, fuzzy
 msgid "Couldn't import the theme."
-msgstr "Impossible de récupérer le thème distant %s"
+msgstr "Impossible de récupérer le thème."
 
 #: ../src/cairo-dock-themes-manager.c:1276
 msgid "The theme has been saved"
@@ -946,9 +940,9 @@ msgid "The themes couldn't be deleted"
 msgstr "Les thèmes n'ont pas pu être effacés"
 
 #: ../src/cairo-dock-themes-manager.c:1350
-#, fuzzy, c-format
+#, c-format
 msgid "Importing theme %s ..."
-msgstr "Rechargement du thème en cours..."
+msgstr "Récupération du thème %s en cours..."
 
 #: ../src/cairo-dock-themes-manager.c:1371
 msgid "Manage Themes"
@@ -992,7 +986,15 @@ msgid ""
 "cairo-dock.org.\n"
 "Hope you will enjoy this soft !\n"
 "  (you can now click on this dialog to close it)"
-msgstr ""
+msgstr "Bienvenu dans Cairo-Dock2 !\n"
+"Un thème simple a été chargé par défaut.\n"
+"Vous pouvez soit vous familiariser avec le dock, soit choisir un autre thème "
+"par clic-droit -> Cairo-Dock -> Gérer les themes.\n"
+"Une aide utile est disponible par clic-droit -> Cairo-Dock -> Aide.\n"
+"Si vous avez des questions/requêtes/remarques, n'hésitez pas à passer sur http://"
+"cairo-dock.org.\n"
+"En espérant que vous apprécierez ce programme !\n"
+"  (vous pouvez maintenant fermer ce dialogue en cliquant dessus)"
 
 #: ../src/cairo-dock.c:728
 msgid ""
@@ -1040,7 +1042,7 @@ msgid ""
 "It has been restared successfully, but if it happens again, thanks to report "
 "it to us at http://cairo-dock.org"
 msgstr ""
-"Le module '%s' semble avoir encouru un problème.\n"
+"Le module '%s' semble avoir rencontré un problème.\n"
 "Il a été redémarré avec succès mais si ceci se reproduit à nouveau,\n"
 " merci de nous rapporter ce problème sur notre forum : http://cairo-dock.org."
 
@@ -1180,7 +1182,7 @@ msgstr "Apparait au passage de la souris"
 
 #: ../data/messages:47
 msgid "Appear on click"
-msgstr "Apparait au clique"
+msgstr "Apparait au clic"
 
 #: ../data/messages:49 ../data/messages:1025
 msgid "Taskbar"
@@ -1281,12 +1283,12 @@ msgid ""
 "This will separate launchers, applis, and applets. Separators will be "
 "automatically inserted then."
 msgstr ""
-"Ceci va séparer les lanceurs, les applications et les applets. Les "
+"Ceci va séparer les lanceurs, les applications et les applets. Des "
 "séparateurs seront automatiquement insérés entre."
 
 #: ../data/messages:93 ../data/messages:643
 msgid "Separate the different types of icons ?"
-msgstr "Séparer les différents types d'icônes?"
+msgstr "Séparer les différents types d'icônes ?"
 
 #: ../data/messages:95 ../data/messages:653
 msgid "Order of the different types of icons :"
@@ -1306,11 +1308,11 @@ msgstr "Applets"
 
 #: ../data/messages:105 ../data/messages:671
 msgid "Choose the default view for main docks :"
-msgstr "Choisissez la vue par défaut à utiliser pour les docks racine :"
+msgstr "Choisissez la vue par défaut à utiliser pour le dock principal :"
 
 #: ../data/messages:107 ../data/messages:675
 msgid "You can overwrite this parameter for each sub-dock."
-msgstr "Vous pouvez écraser cette valeur pour chaque sous-dock."
+msgstr "Vous pouvez régler ce paramètre pour chaque sous-dock."
 
 #: ../data/messages:109 ../data/messages:677
 msgid "Choose the default view for sub-docks :"
@@ -1428,7 +1430,7 @@ msgstr "Écrans multiples"
 
 #: ../data/messages:169
 msgid "Use Xinerama ?"
-msgstr "Utiliser Xinerama"
+msgstr "Utiliser Xinerama ?"
 
 #: ../data/messages:171 ../data/messages:1289
 msgid "starting from 0"
@@ -1444,7 +1446,7 @@ msgstr "Accessibilité"
 
 #: ../data/messages:195
 msgid "Pop-up only if the mouse hits a screen corner ?"
-msgstr "Afficher seulement si le curseur atteint le coin de l'écran ?"
+msgstr "Apparaitre seulement si le curseur atteint le coin de l'écran ?"
 
 #: ../data/messages:201
 msgid "Additionnal parameters"
@@ -1456,7 +1458,7 @@ msgstr "Étendre le dock à tout l'écran ?"
 
 #: ../data/messages:205
 msgid "Place the mouse into it will make the dock re-appear."
-msgstr "Placer le curseur à l'intérieur affichera à nouveau le dock."
+msgstr "Placer le curseur à l'intérieur fera ré-apparaître le dock."
 
 #: ../data/messages:207
 msgid "Size of the callback zone (width x height, in pixels) :"
@@ -4620,112 +4622,13 @@ msgid ""
 " - ShowDesktop can now quickly change the resolution of the screen.\n"
 " - Dnd2Share can now directly sends the clipboard's content.\n"
 " - This version also fixes a huge number of problems."
-msgstr ""
-
-#~ msgid "Downloading file %s ..."
-#~ msgstr "En cours de téléchargement de %s ..."
-
-#~ msgid "couldn't get distant file %s"
-#~ msgstr "Impossible de récupérer le fichier distant %s."
-
-#~ msgid "couldn't get the list of themes for %s (no connection ?)"
-#~ msgstr ""
-#~ "Impossible de récupérer la liste des thèmes pour %s (pas de connexion ?)"
-
-#~ msgid "Applying changes ..."
-#~ msgstr "Application des changements en cours..."
-
-#~ msgid "Automatically add separators ?"
-#~ msgstr "Ajouter automatiquement des séparateurs ?"
-
-#~ msgid ""
-#~ "This parameter will overwrite the previously defined order, to allow you "
-#~ "to mix applets and launchers into the dock."
-#~ msgstr ""
-#~ "Ce paramètre va surcharger l'ordre précédemment défini, pour permettre de "
-#~ "mélanger les applets et les lanceurs dans le dock."
-
-#~ msgid "Allow applets to be placed amongst launchers ?"
-#~ msgstr "Permettre aux applets d'être placées parmi les lanceurs ?"
-
-#~ msgid "Misc. Emblems"
-#~ msgstr "Emblèmes"
-
-#~ msgid "Name of an image to use for the charge emblem :"
-#~ msgstr "Nom d'une image pour l'emblem de charge :"
-
-#~ msgid "Name of an image to use for the play emblem :"
-#~ msgstr "Nom d'une image pour l'emblem 'jouer' :"
-
-#~ msgid "Name of an image to use for the pause emblem :"
-#~ msgstr "Nom d'une image pour l'emblem 'pause' :"
-
-#~ msgid "Name of an image to use for the stop emblem :"
-#~ msgstr "Nom d'une image pour l'emblem 'stop' :"
-
-#~ msgid "Name of an image to use for the broken emblem :"
-#~ msgstr "Nom d'une image pour l'emblem 'cassé/pas de signal' :"
-
-#~ msgid "Name of an image to use for the error emblem :"
-#~ msgstr "Nom d'une image pour l'emblem 'erreur' :"
-
-#~ msgid "Name of an image to use for the warning emblem :"
-#~ msgstr "Nom d'une image pour l'emblem 'attention' :"
-
-#~ msgid "Name of an image to use for the locked emblem :"
-#~ msgstr "Nom d'une image pour l'emblem 'verrouillé' :"
-
-#~ msgid ""
-#~ "Just use the option “reserve space for dock” in the “Accessibility” "
-#~ "module."
-#~ msgstr ""
-#~ "Utilisez simplement l'option 'réserver l'espace pour le dock' dans le "
-#~ "module 'Accessibilité'."
-
-#~ msgid "Help us !"
-#~ msgstr "Aidez-nous !"
-
-#~ msgid ""
-#~ "In the “Icons” module, you can choose a <b>icon theme</b>. Enter a name "
-#~ "of a theme, for exemple : Human or Gartoon.\n"
-#~ "You can even enter the path of a folder containing personnal icons.\n"
-#~ "You can enter many themes or folders, the dock will search for images in "
-#~ "them in the same order as you entered them.\n"
-#~ "If you let it empty, the default icon theme of your system wil be used."
-#~ msgstr ""
-#~ "Dans le module \"Icones\", vous pouvez choisir un <b>thème d'icônes</b>. "
-#~ "Entrez le nom d'un thème, par exemple : Human ou Gartoon.\n"
-#~ "Vous pouvez également entrer le nom d'un dossier contenant des icônes "
-#~ "personnelles.\n"
-#~ "Vous pouvez indiquer plusieurs thèmes ou dossiers, le dock cherchera les "
-#~ "icônes dedans dans l'ordre que vous avez sélectionné.\n"
-#~ "Si vous laisser ceci vide, le thème d'icônes par défaut de votre système "
-#~ "sera utilisé."
-
-#~ msgid ""
-#~ "Separators are icons used to make a separation between different types of "
-#~ "icons. Cairo-dock can automatically add them between launchers, applis, "
-#~ "and applets."
-#~ msgstr ""
-#~ "Les séparateurs permettent de distinguer visuellement les différents "
-#~ "types d'icônes. Cairo-Dock peut automatiquement en ajouter entre les "
-#~ "lanceurs, les applications et les applets."
-
-#~ msgid ""
-#~ "This parameter will overwrite the previously defined order. If you didn't "
-#~ "choose to group applis in sub-dock, applis will be placed next to their "
-#~ "launcher."
-#~ msgstr ""
-#~ "Ce paramètre va écraser l'ordre précédemment défini. Si vous n'avez pas "
-#~ "choisi de grouper les applis dans des sous-docks, les applis seront "
-#~ "placées à côté de leur lanceur."
-
-#~ msgid "Allow applis to be placed amongst launchers ?"
-#~ msgstr "Permettre aux applications d'être placées parmi les lanceurs ?"
-
-#~ msgid ""
-#~ "Hint : if you use it, you don't need to use the “keep the dock below "
-#~ "“option."
-#~ msgstr ""
-#~ "Astuce : si vous l'utilisez, vous n'avez plus besoin de l'option 'garder "
-#~ "le dock dessous'."
+msgstr "GLX-Dock 2.1.3\n"
+" - Un nouveau panneau de configuration simplifié a été écrit.\n"
+" - Les miniatures des fenêtres dans le dock ont maintenant un emblême.\n"
+" - Les icônes pointant sur un sous-dock peuvent afficher le contenu du sous-dock.\n"
+" - Quand une application demande votre attention, seule son icône apparaît si le dock est caché.\n"
+" - Le plug-in DBus permet maintenant de charger automatiquement des applets externes, "
+"écrites en n'importe quel langage.\n"
+" - ShowDesktop vous permet désormais de changer rapidement la resolution de l'écran.\n"
+" - Dnd2Share peut directement envoyer le contenu du presse-papier.\n"
+" - Cetet version corrige aussi un très grand nombre de problèmes divers."

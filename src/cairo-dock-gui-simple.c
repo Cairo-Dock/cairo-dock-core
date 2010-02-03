@@ -183,7 +183,7 @@ static gboolean on_apply_theme_simple (gpointer data)
 		return TRUE;
 	
 	//\_______________ On importe le theme.
-	cairo_dock_set_status_message_printf (NULL, _("Importing theme %s..."), cNewThemeName);
+	cairo_dock_set_status_message_printf (NULL, _("Importing theme %s ..."), cNewThemeName);
 	gboolean bThemeImported = cairo_dock_import_theme (cNewThemeName, bLoadBehavior, bLoadLaunchers);
 	g_print ("bThemeImported : %d\n", bThemeImported);
 	

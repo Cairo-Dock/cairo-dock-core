@@ -776,41 +776,29 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 	g_free (pDialog);
 }
 
-gboolean cairo_dock_remove_dialog_if_any (Icon *icon)
+gboolean cairo_dock_remove_dialog_if_any_full (Icon *icon, gboolean bAll)
 {
 	g_return_val_if_fail (icon != NULL, FALSE);
 	cd_debug ("%s (%s)", __func__, (icon?icon->cName : "nobody"));
 	CairoDialog *pDialog;
-	GSList *ic;
+	GSList *dl, *next_dl;
 	gboolean bDialogRemoved = FALSE;
 
 	if (s_pDialogList == NULL)
 		return FALSE;
 
-	ic = s_pDialogList;
+	dl = s_pDialogList;
 	do
 	{
-		if (ic->next == NULL)
-			break;
-
-		pDialog = ic->next->data;  // on ne peut pas enlever l'element courant, sinon on perd 'ic'.
-		if (pDialog->pIcon == icon)
+		next_dl = dl->next;  // si on enleve l'element courant, on perd 'dl'.
+		pDialog = dl->data;
+		if (pDialog->pIcon == icon && (bAll || pDialog->action_on_answer == NULL))
 		{
 			cairo_dock_dialog_unreference (pDialog);
 			bDialogRemoved = TRUE;
 		}
-		else
-		{
-			ic = ic->next;
-		}
-	} while (TRUE);
-
-	pDialog = s_pDialogList->data;
-	if (pDialog != NULL && pDialog->pIcon == icon)
-	{
-		cairo_dock_dialog_unreference (pDialog);
-		bDialogRemoved = TRUE;
-	}
+		dl = next_dl;
+	} while (dl != NULL);
 
 	return bDialogRemoved;
 }
@@ -1008,8 +996,8 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	
 	//\________________ On prend en compte les boutons.
 	pDialog->action_on_answer = pAttribute->pActionFunc;
-		pDialog->pUserData = pAttribute->pUserData;
-		pDialog->pFreeUserDataFunc = pAttribute->pFreeDataFunc;
+	pDialog->pUserData = pAttribute->pUserData;
+	pDialog->pFreeUserDataFunc = pAttribute->pFreeDataFunc;
 	if (pAttribute->cButtonsImage != NULL && pAttribute->pActionFunc != NULL)
 	{
 		if (s_pButtonOkSurface == NULL || s_pButtonCancelSurface == NULL)

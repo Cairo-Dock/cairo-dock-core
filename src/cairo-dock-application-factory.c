@@ -621,6 +621,8 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, gboolean bForceDemand, Icon *pHiddenIcon)
 {
 	cd_debug ("%s (%s, force:%d)\n", __func__, icon->cName, bForceDemand);
+	if (CAIRO_DOCK_IS_APPLET (icon))  // on considere qu'une applet prenant le controle d'une icone d'appli dispose de bien meilleurs moyens pour interagir avec l'appli que la barre des taches.
+		return ;
 	icon->bIsDemandingAttention = TRUE;
 	//\____________________ On montre le dialogue.
 	if (myTaskBar.bDemandsAttentionWithDialog)
@@ -718,6 +720,8 @@ void cairo_dock_appli_demands_attention (Icon *icon)
 
 static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *pDock)
 {
+	if (CAIRO_DOCK_IS_APPLET (icon))
+		return ;
 	icon->bIsDemandingAttention = FALSE;
 	if (myTaskBar.bDemandsAttentionWithDialog)
 		cairo_dock_remove_dialog_if_any (icon);

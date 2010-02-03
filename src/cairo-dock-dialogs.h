@@ -244,11 +244,19 @@ gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog);
 */
 void cairo_dock_free_dialog (CairoDialog *pDialog);
 
+/** Unreference the dialogs pointed by an icon.
+*@param icon the icon you want to delete all dialogs from.
+*@param bAll whether all dialogs should be removed or only the one that don't have interaction with the user.
+*@returns TRUE if at least one dialog has been unreferenced.
+*/
+gboolean cairo_dock_remove_dialog_if_any_full (Icon *icon, gboolean bAll);
+
 /** Unreference all the dialogs pointed by an icon.
 *@param icon the icon you want to delete all dialogs from.
 *@returns TRUE if at least one dialog has been unreferenced.
 */
-gboolean cairo_dock_remove_dialog_if_any (Icon *icon);
+#define cairo_dock_remove_dialog_if_any(icon) cairo_dock_remove_dialog_if_any_full (icon, TRUE)
+
 
 GtkWidget *cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int iWidth, int iHeight, gboolean bCanResize);
 
