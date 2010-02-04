@@ -826,7 +826,7 @@ int main (int argc, char** argv)
 	g_print ("\nNOUVELLE INSTANCE COPIEE SUR LA 1ERE\n\n");
 	g_print ("\nJAUGES : LOGO\n\n");*/
 	
-	g_print ("\n*** NE PAS OUBLIER DE REMETTRE LE NOM DE DOMAINE ! ***\n\n");
+	//g_print ("\n*** NE PAS OUBLIER DE REMETTRE LE NOM DE DOMAINE ! ***\n\n");
 	
 	/*if (strcmp((cairo_dock_launch_command_sync ("date +%m%d")), "0101") == 0)
 	{

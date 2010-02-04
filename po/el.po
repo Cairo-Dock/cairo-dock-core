@@ -8,13 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock_el\n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
-"PO-Revision-Date: 2010-01-04 02:59+0000\n"
+"POT-Creation-Date: 2010-01-22 22:36+0000\n"
+"PO-Revision-Date: 2010-01-25 12:16+0000\n"
 "Last-Translator: Yannis Kaskamanidis <ttnfy17@yahoo.gr>\n"
 "Language-Team: Greek\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-01-05 04:36+0000\n"
+"X-Launchpad-Export-Date: 2010-01-26 04:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Country: France\n"
 "X-Poedit-Language: French\n"
@@ -41,13 +42,29 @@ msgstr ""
 msgid "Applet's handbook"
 msgstr "Εγχειρίδιο μικροεφαρμογής"
 
-#: ../src/cairo-dock-callbacks.c:1097
+#: ../src/cairo-dock-callbacks.c:1099
 msgid "Do you want to mount this point ?"
 msgstr "Θέλετε να προσαρτήσετε αυτό το σημείο;"
 
-#: ../src/cairo-dock-desktop-file-factory.c:222
+#: ../src/cairo-dock-desktop-file-factory.c:223
 msgid "Do you want to monitor the content of the directory ?"
 msgstr "Επιθυμείτε την εποπτεία του περιεχομένου αυτού του φακέλου;"
+
+#: ../src/cairo-dock-dock-factory.c:103
+msgid "Use OpenGL in Cairo-Dock ?"
+msgstr "Χρήση του OpenGL στο Cairo-Dock;"
+
+#: ../src/cairo-dock-dock-factory.c:111
+msgid ""
+"OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
+"the minimum.\n"
+"It also allows some pretty visual effects similar to Compiz.\n"
+"However, some cards and/or their drivers don't fully support it, which may "
+"prevent the dock from running correctly.\n"
+"Do you want to activate OpenGL ?\n"
+" (To not show this dialog, launch the dock from the Application menu,\n"
+"  or with the -o option to force OpenGL and -c to force cairo.)"
+msgstr ""
 
 #: ../src/cairo-dock-file-manager.c:507 ../src/cairo-dock-file-manager.c:552
 #, c-format
@@ -69,56 +86,55 @@ msgstr ""
 msgid "failed to unmount %s"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:758
+#: ../src/cairo-dock-gui-factory.c:710
 msgid "_Custom Icons_"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1093
+#: ../src/cairo-dock-gui-factory.c:1017
 msgid "Accessory"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1098 ../src/cairo-dock-gui-main.c:128
+#: ../src/cairo-dock-gui-factory.c:1022 ../src/cairo-dock-gui-main.c:128
 msgid "Desktop"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1103
+#: ../src/cairo-dock-gui-factory.c:1027
 msgid "Controler"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1108
+#: ../src/cairo-dock-gui-factory.c:1032
 msgid "Plug-in"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1139
-#, fuzzy
+#: ../src/cairo-dock-gui-factory.c:1063
 msgid "rate me"
-msgstr "περιστροφή"
+msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1159
+#: ../src/cairo-dock-gui-factory.c:1083
 msgid "Local"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1163
+#: ../src/cairo-dock-gui-factory.c:1087
 msgid "User"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1167
+#: ../src/cairo-dock-gui-factory.c:1091
 msgid "Net"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1171
+#: ../src/cairo-dock-gui-factory.c:1095
 msgid "New"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1176
+#: ../src/cairo-dock-gui-factory.c:1100
 msgid "Updated"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1272 ../src/cairo-dock-gui-factory.c:1274
+#: ../src/cairo-dock-gui-factory.c:1196 ../src/cairo-dock-gui-factory.c:1198
 msgid "You have to try the theme before you can rate it."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1296
+#: ../src/cairo-dock-gui-factory.c:1220
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -126,55 +142,51 @@ msgid ""
 "features."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1305
+#: ../src/cairo-dock-gui-factory.c:1229
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
 "Be sure to activate it to enjoy these features."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1950
-#, c-format
-msgid "Listing themes in '%s' ..."
-msgstr ""
-
-#: ../src/cairo-dock-gui-factory.c:2125
+#: ../src/cairo-dock-gui-factory.c:2039
 msgid "module"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2131
+#: ../src/cairo-dock-gui-factory.c:2045
 msgid "category"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2174
-msgid "Click on an applet in order to have a preview and a description of it."
+#: ../src/cairo-dock-gui-factory.c:2084
+msgid ""
+"Click on an applet in order to have a preview and a description of it."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2532
+#: ../src/cairo-dock-gui-factory.c:2442
 msgid "state"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2538
+#: ../src/cairo-dock-gui-factory.c:2448
 msgid "theme"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2551
+#: ../src/cairo-dock-gui-factory.c:2461
 msgid "rating"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2557
+#: ../src/cairo-dock-gui-factory.c:2467
 msgid "sobriety"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2643
+#: ../src/cairo-dock-gui-factory.c:2542
 msgid "link"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2696
+#: ../src/cairo-dock-gui-factory.c:2595
 msgid "grab"
 msgstr "λήψη"
 
-#: ../src/cairo-dock-gui-launcher.c:376
+#: ../src/cairo-dock-gui-launcher.c:341
 msgid "Configuration of the launchers"
 msgstr ""
 
@@ -198,67 +210,67 @@ msgstr ""
 msgid "Plug-ins"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:131 ../src/cairo-dock-gui-main.c:1521
+#: ../src/cairo-dock-gui-main.c:131 ../src/cairo-dock-gui-main.c:1525
 msgid "All"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1499
+#: ../src/cairo-dock-gui-main.c:1503
 msgid "Categories"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1627
+#: ../src/cairo-dock-gui-main.c:1631
 msgid "Filter"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1678 ../data/messages:123
+#: ../src/cairo-dock-gui-main.c:1682 ../data/messages:123
 msgid "Options"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1688
+#: ../src/cairo-dock-gui-main.c:1692
 msgid "All words"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1692
+#: ../src/cairo-dock-gui-main.c:1696
 msgid "Highlight words"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1697
+#: ../src/cairo-dock-gui-main.c:1701
 msgid "Hide others"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1702
+#: ../src/cairo-dock-gui-main.c:1706
 msgid "Search in description"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1716
+#: ../src/cairo-dock-gui-main.c:1720
 msgid "Activate this module"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1804 ../src/cairo-dock.c:663
+#: ../src/cairo-dock-gui-main.c:1808 ../src/cairo-dock.c:634
 msgid "< Maintenance mode >"
 msgstr "< Λειτουργία συντήρησης >"
 
-#: ../src/cairo-dock-gui-main.c:1894 ../src/cairo-dock-gui-simple.c:408
+#: ../src/cairo-dock-gui-main.c:1898 ../src/cairo-dock-gui-simple.c:405
 msgid "Configuration of Cairo-Dock"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:2215
+#: ../src/cairo-dock-gui-main.c:2219
 #, c-format
 msgid ""
 "The module '%s' is not present. You need to install it or its dependencies "
 "to make the most of this module."
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:2221
+#: ../src/cairo-dock-gui-main.c:2225
 #, c-format
 msgid "The module '%s' is not activated."
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:2222
+#: ../src/cairo-dock-gui-main.c:2226
 msgid "Do you want to activate it now ?"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:2366
+#: ../src/cairo-dock-gui-main.c:2370
 msgid ""
 "It seems that you've never entered the help module yet.\n"
 "If you have some difficulty to configure the dock, or if you are willing to "
@@ -267,7 +279,7 @@ msgid ""
 "Do you want to take a look at it now ?"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:290
+#: ../src/cairo-dock-gui-manager.c:292
 msgid ""
 "This is the simple config panel of Cairo-Dock.\n"
 " After you got familiar with it, and if you want to customise your theme\n"
@@ -275,27 +287,26 @@ msgid ""
 " You can switch from a mode to another at any time."
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:653
+#: ../src/cairo-dock-gui-manager.c:365
 msgid "Simple Mode"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:653
+#: ../src/cairo-dock-gui-manager.c:365
 msgid "Advanced Mode"
 msgstr ""
 
-#: ../src/cairo-dock-gui-manager.c:655
+#: ../src/cairo-dock-gui-manager.c:367
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customize your current theme."
 msgstr ""
 
-#: ../src/cairo-dock-gui-simple.c:186
-#, c-format
-msgid "Importing theme %s..."
+#: ../src/cairo-dock-gui-simple.c:192 ../src/cairo-dock-themes-manager.c:1195
+msgid "Now reloading theme ..."
 msgstr ""
 
 #: ../src/cairo-dock-internal-accessibility.c:263
-#: ../src/cairo-dock-menu.c:1614
+#: ../src/cairo-dock-menu.c:1690
 msgid "Visibility"
 msgstr ""
 
@@ -319,11 +330,11 @@ msgstr ""
 msgid "_custom decoration_"
 msgstr ""
 
-#: ../src/cairo-dock-internal-desklets.c:101 ../data/messages:723
+#: ../src/cairo-dock-internal-desklets.c:102 ../data/messages:723
 msgid "Desklets"
 msgstr "Desklets"
 
-#: ../src/cairo-dock-internal-desklets.c:103
+#: ../src/cairo-dock-internal-desklets.c:104
 msgid "The applets can be set on your desktop as widgets."
 msgstr ""
 
@@ -349,16 +360,16 @@ msgstr ""
 msgid "Define the appearance of the dock when it's hidden."
 msgstr ""
 
-#: ../src/cairo-dock-internal-icons.c:433
+#: ../src/cairo-dock-internal-icons.c:412
 msgid "It provides many animations to your icons."
 msgstr ""
 
-#: ../src/cairo-dock-internal-icons.c:435 ../data/messages:73
+#: ../src/cairo-dock-internal-icons.c:414 ../data/messages:73
 #: ../data/messages:559 ../data/messages:881
 msgid "Icons"
 msgstr "Εικονίδια"
 
-#: ../src/cairo-dock-internal-icons.c:437
+#: ../src/cairo-dock-internal-icons.c:416
 msgid ""
 "All about icons :\n"
 " size, reflection, icon theme, ..."
@@ -392,67 +403,62 @@ msgstr "Θέση"
 msgid "Set the position of the main dock."
 msgstr ""
 
-#: ../src/cairo-dock-internal-system.c:137 ../data/messages:301
+#: ../src/cairo-dock-internal-system.c:136 ../data/messages:301
 msgid "System"
 msgstr "Σύστημα"
 
-#: ../src/cairo-dock-internal-system.c:139
+#: ../src/cairo-dock-internal-system.c:138
 msgid "All the parameters you will never want to tweak."
 msgstr ""
 
-#: ../src/cairo-dock-internal-taskbar.c:191 ../data/messages:227
+#: ../src/cairo-dock-internal-taskbar.c:182 ../data/messages:227
 msgid "TaskBar"
 msgstr "Γραμμή εργασιών"
 
-#: ../src/cairo-dock-internal-taskbar.c:193
+#: ../src/cairo-dock-internal-taskbar.c:184
 msgid "Display and interact with the currently open windows."
 msgstr ""
 
-#: ../src/cairo-dock-internal-views.c:85
+#: ../src/cairo-dock-internal-views.c:88
 msgid ""
 "It provides different views to Cairo-Dock. Activate it first if you want to "
 "select a different view for your docks."
 msgstr ""
 
-#: ../src/cairo-dock-internal-views.c:87 ../data/messages:103
+#: ../src/cairo-dock-internal-views.c:90 ../data/messages:103
 #: ../data/messages:667 ../data/messages:1293
 msgid "Views"
 msgstr "Εμφάνιση"
 
-#: ../src/cairo-dock-internal-views.c:89
+#: ../src/cairo-dock-internal-views.c:92
 msgid "Select a view for each of your docks."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:109
-#, c-format
-msgid "Set position for the dock '%s'"
-msgstr "Καθορίστε τη θέση του dock '%s'"
-
-#: ../src/cairo-dock-menu.c:199
+#: ../src/cairo-dock-menu.c:176
 msgid "Community's site"
 msgstr "Ιστότοπος κοινότητας"
 
-#: ../src/cairo-dock-menu.c:200
+#: ../src/cairo-dock-menu.c:177
 msgid "A problem ? A suggestion ? Want to talk to us ? You're welcome !"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:203
+#: ../src/cairo-dock-menu.c:180
 msgid "Development's site"
 msgstr "Ιστότοπος ανάπτυξης"
 
-#: ../src/cairo-dock-menu.c:204
+#: ../src/cairo-dock-menu.c:181
 msgid "Find out the latest version of Cairo-Dock here !."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:220
+#: ../src/cairo-dock-menu.c:197
 msgid "Development"
 msgstr "Ανάπτυξη"
 
-#: ../src/cairo-dock-menu.c:226
+#: ../src/cairo-dock-menu.c:203
 msgid "Artwork"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:230
+#: ../src/cairo-dock-menu.c:207
 msgid "Support"
 msgstr "Υποστήριξη"
 
@@ -460,90 +466,13 @@ msgstr "Υποστήριξη"
 msgid "Quit Cairo-Dock ?"
 msgstr "Έξοδος από το Cairo-Dock;"
 
-#: ../src/cairo-dock-menu.c:331
-msgid "Configure"
-msgstr "Ρυθμίσεις"
-
-#: ../src/cairo-dock-menu.c:336
-msgid "Configure the behaviour, appearance, and applets."
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:340
-msgid "Set up this dock"
-msgstr "Ρύθμιση αυτού του dock"
-
-#: ../src/cairo-dock-menu.c:345
-msgid "Set up the position of this main dock."
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:348
-msgid "Manage themes"
-msgstr "Διαχείριση θεμάτων"
-
-#: ../src/cairo-dock-menu.c:353
-msgid "Choose amongst many themes on the server, and save your current theme."
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:358
-msgid "unlock icons"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:358
-msgid "lock icons"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:362
-msgid "This will (un)lock the position of the icons."
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:366
-msgid "unlock dock"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:366
-msgid "lock dock"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:371
-msgid "This will (un)lock the whole dock."
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:376
-msgid "Quick-Hide"
-msgstr "Άμεση-Απόκρυψη"
-
-#: ../src/cairo-dock-menu.c:381
-msgid "It will hide the dock until you enter inside with the mouse."
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:389
-msgid "Launch Cairo-Dock on startup"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:399 ../src/cairo-dock-modules.c:128
-msgid "Help"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:404
-msgid ""
-"There is no problem, there is only solution (and a lot of useful hints !)."
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:406
-msgid "About"
-msgstr "Σχετικά"
-
-#: ../src/cairo-dock-menu.c:414
-msgid "Quit"
-msgstr "Έξοδος"
-
-#: ../src/cairo-dock-menu.c:434
+#: ../src/cairo-dock-menu.c:322
 #, c-format
 msgid "You're about removing this icon (%s) from the dock. Sure ?"
 msgstr ""
 "Πρόκειται να αφαιρέσετε αυτό το εικονίδιο (%s) από το dock. Είστε βέβαιος;"
 
-#: ../src/cairo-dock-menu.c:445
+#: ../src/cairo-dock-menu.c:333
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock ?\n"
@@ -553,15 +482,15 @@ msgstr ""
 "τη συσκευασία;\n"
 " (σε αντίθετη περίπτωση θα καταστραφούν)"
 
-#: ../src/cairo-dock-menu.c:510
+#: ../src/cairo-dock-menu.c:398
 msgid "Undefined"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:556
+#: ../src/cairo-dock-menu.c:444
 msgid "This icon doesn't have a desktop file."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:759
+#: ../src/cairo-dock-menu.c:644
 #, c-format
 msgid ""
 "You're about deleting this file\n"
@@ -572,7 +501,7 @@ msgstr ""
 "  (%s)\n"
 "από τον σκληρό σας δίσκο. Είστε βέβαιος;"
 
-#: ../src/cairo-dock-menu.c:768
+#: ../src/cairo-dock-menu.c:653
 msgid ""
 "Attention : couldn't delete this file.\n"
 "Check that you have writing rights on it."
@@ -580,11 +509,11 @@ msgstr ""
 "Προσοχή: δεν είναι δυνατή η διαγραφή αυτού του αρχείου.\n"
 "Ελέγξτε εάν έχετε δικαιώματα εγγραφής σε αυτό."
 
-#: ../src/cairo-dock-menu.c:792
+#: ../src/cairo-dock-menu.c:677
 msgid "Rename to :"
 msgstr "Μετονομασία σε:"
 
-#: ../src/cairo-dock-menu.c:799
+#: ../src/cairo-dock-menu.c:684
 #, c-format
 msgid ""
 "Attention : couldn't rename %s.\n"
@@ -595,272 +524,399 @@ msgstr ""
 "Ελέγξτε εάν έχετε δικαιώματα εγγραφής σε αυτό,\n"
 "και ότι το νέο όνομα δεν υπάρχει ήδη."
 
-#: ../src/cairo-dock-menu.c:847
+#: ../src/cairo-dock-menu.c:749
 #, c-format
 msgid "You're about removing this applet (%s) from the dock. Sure ?"
 msgstr ""
 "Πρόκειται να αφαιρέσετε αυτή τη μικροεφαρμογή (%s) από το dock. Είστε "
 "βέβαιος;"
 
-#: ../src/cairo-dock-menu.c:958
+#: ../src/cairo-dock-menu.c:860
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider drag and dropping the launcher from the Applications Menu."
 msgstr ""
 
+#: ../src/cairo-dock-menu.c:1248
+#, c-format
+msgid "Set position for the dock '%s'"
+msgstr "Καθορίστε τη θέση του dock '%s'"
+
+#: ../src/cairo-dock-menu.c:1333
+msgid "Configure"
+msgstr "Ρυθμίσεις"
+
+#: ../src/cairo-dock-menu.c:1334
+msgid "Configure the behaviour, appearance, and applets."
+msgstr ""
+
 #: ../src/cairo-dock-menu.c:1338
+msgid "Set up this dock"
+msgstr "Ρύθμιση αυτού του dock"
+
+#: ../src/cairo-dock-menu.c:1339
+msgid "Set up the position of this main dock."
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1342
+msgid "Manage themes"
+msgstr "Διαχείριση θεμάτων"
+
+#: ../src/cairo-dock-menu.c:1343
+msgid ""
+"Choose amongst many themes on the server, and save your current theme."
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1348
+msgid "unlock icons"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1348
+msgid "lock icons"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1352
+msgid "This will (un)lock the position of the icons."
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1356
+msgid "unlock dock"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1356
+msgid "lock dock"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1360
+msgid "This will (un)lock the whole dock."
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1365
+msgid "Quick-Hide"
+msgstr "Άμεση-Απόκρυψη"
+
+#: ../src/cairo-dock-menu.c:1366
+msgid "It will hide the dock until you enter inside with the mouse."
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1374
+msgid "Launch Cairo-Dock on startup"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1386 ../src/cairo-dock-modules.c:127
+msgid "Help"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1387
+msgid ""
+"There is no problem, there is only solution (and a lot of useful hints !)."
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1389
+msgid "About"
+msgstr "Σχετικά"
+
+#: ../src/cairo-dock-menu.c:1393
+msgid "Quit"
+msgstr "Έξοδος"
+
+#: ../src/cairo-dock-menu.c:1414
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1338
+#: ../src/cairo-dock-menu.c:1414
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Μετάβαση στην επιφάνεια εργασίας %d - όψη %d"
 
-#: ../src/cairo-dock-menu.c:1340
+#: ../src/cairo-dock-menu.c:1416
 #, c-format
 msgid "Move all to desktop %d"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1340
+#: ../src/cairo-dock-menu.c:1416
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Μετάβαση στην επιφάνεια εργασίας %d"
 
-#: ../src/cairo-dock-menu.c:1342
+#: ../src/cairo-dock-menu.c:1418
 #, c-format
 msgid "Move all to face %d"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1342
+#: ../src/cairo-dock-menu.c:1418
 #, c-format
 msgid "Move to face %d"
 msgstr "Μετάβαση στην όψη %d"
 
-#: ../src/cairo-dock-menu.c:1393 ../src/cairo-dock-menu.c:1455
+#: ../src/cairo-dock-menu.c:1469 ../src/cairo-dock-menu.c:1531
 msgid "Add a sub-dock"
 msgstr "Προσθήκη ενός sub-dock"
 
-#: ../src/cairo-dock-menu.c:1397 ../src/cairo-dock-menu.c:1457
+#: ../src/cairo-dock-menu.c:1473 ../src/cairo-dock-menu.c:1533
 msgid "Add a separator"
 msgstr "Προσθήκη ενός διαχωριστή"
 
-#: ../src/cairo-dock-menu.c:1400 ../src/cairo-dock-menu.c:1459
+#: ../src/cairo-dock-menu.c:1476 ../src/cairo-dock-menu.c:1535
 msgid "Add a custom launcher"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1401 ../src/cairo-dock-menu.c:1460
+#: ../src/cairo-dock-menu.c:1477 ../src/cairo-dock-menu.c:1536
 msgid ""
 "Usually you would drag a launcher from the menu and drop it into the dock."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1420
+#: ../src/cairo-dock-menu.c:1496
 msgid "Unmount"
 msgstr "Αποπροσάρτηση"
 
-#: ../src/cairo-dock-menu.c:1420
+#: ../src/cairo-dock-menu.c:1496
 msgid "Mount"
 msgstr "Προσάρτηση"
 
-#: ../src/cairo-dock-menu.c:1426
+#: ../src/cairo-dock-menu.c:1502
 msgid "Eject"
 msgstr "Αποβολή"
 
-#: ../src/cairo-dock-menu.c:1433
+#: ../src/cairo-dock-menu.c:1509
 msgid "Delete this file"
 msgstr "Διαγραφή αυτού του αρχείου"
 
-#: ../src/cairo-dock-menu.c:1437
+#: ../src/cairo-dock-menu.c:1513
 msgid "Rename this file"
 msgstr "Μετονομασία αυτού του αρχείου"
 
-#: ../src/cairo-dock-menu.c:1441
+#: ../src/cairo-dock-menu.c:1517
 msgid "Properties"
 msgstr "Ιδιότητες"
 
-#: ../src/cairo-dock-menu.c:1467
+#: ../src/cairo-dock-menu.c:1543
 msgid "Remove this separator"
 msgstr "Αφαίρεση αυτού του διαχωριστή"
 
-#: ../src/cairo-dock-menu.c:1467
+#: ../src/cairo-dock-menu.c:1543
 msgid "Remove this launcher"
 msgstr "Αφαίρεση αυτού του εκκινητή"
 
-#: ../src/cairo-dock-menu.c:1468
+#: ../src/cairo-dock-menu.c:1544
 msgid ""
 "You can remove a launcher by dragging it with the mouse out of the dock."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1470
+#: ../src/cairo-dock-menu.c:1546
 msgid "Modify this separator"
 msgstr "Μετατροπή αυτού του διαχωριστή"
 
-#: ../src/cairo-dock-menu.c:1470
+#: ../src/cairo-dock-menu.c:1546
 msgid "Modify this launcher"
 msgstr "Μετατροπή αυτού του εκκινητή;"
 
-#: ../src/cairo-dock-menu.c:1472 ../src/cairo-dock-menu.c:1597
+#: ../src/cairo-dock-menu.c:1548 ../src/cairo-dock-menu.c:1673
 msgid "Move to another dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1476 ../src/cairo-dock-menu.c:1601
+#: ../src/cairo-dock-menu.c:1552 ../src/cairo-dock-menu.c:1677
 msgid "A new main dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1489 ../src/cairo-dock-menu.c:1544
+#: ../src/cairo-dock-menu.c:1565 ../src/cairo-dock-menu.c:1620
 msgid "Other actions"
 msgstr "Άλλες ενέργειες"
 
-#: ../src/cairo-dock-menu.c:1494
+#: ../src/cairo-dock-menu.c:1570
 msgid "Move to this desktop"
 msgstr "Μετάβαση σε αυτή την επιφάνεια εργασίας"
 
-#: ../src/cairo-dock-menu.c:1508
+#: ../src/cairo-dock-menu.c:1584
 msgid "Not Fullscreen"
 msgstr "Όχι Πλήρης Οθόνη"
 
-#: ../src/cairo-dock-menu.c:1508
+#: ../src/cairo-dock-menu.c:1584
 msgid "Fullscreen"
 msgstr "Πλήρης Οθόνη"
 
-#: ../src/cairo-dock-menu.c:1512
+#: ../src/cairo-dock-menu.c:1588
 msgid "Don't keep above"
 msgstr "Όχι διατήρηση στο προσκήνιο"
 
-#: ../src/cairo-dock-menu.c:1512
+#: ../src/cairo-dock-menu.c:1588
 msgid "Keep above"
 msgstr "Διατήρηση στο προσκήνιο"
 
-#: ../src/cairo-dock-menu.c:1516
+#: ../src/cairo-dock-menu.c:1592
 msgid "Kill"
 msgstr "Σκότωμα"
 
-#: ../src/cairo-dock-menu.c:1521 ../src/cairo-dock-menu.c:1555
+#: ../src/cairo-dock-menu.c:1597 ../src/cairo-dock-menu.c:1631
 msgid "Launch new"
 msgstr "Φόρτωση νέου"
 
-#: ../src/cairo-dock-menu.c:1526
+#: ../src/cairo-dock-menu.c:1602
 msgid "Make it a launcher"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1529
+#: ../src/cairo-dock-menu.c:1605
 msgid "Show"
 msgstr "Εμφάνιση"
 
-#: ../src/cairo-dock-menu.c:1531
+#: ../src/cairo-dock-menu.c:1607
 msgid "Unmaximize"
 msgstr "Απομεγιστοποίηση"
 
-#: ../src/cairo-dock-menu.c:1531
+#: ../src/cairo-dock-menu.c:1607
 msgid "Maximize"
 msgstr "Μεγέθυνση"
 
-#: ../src/cairo-dock-menu.c:1534
+#: ../src/cairo-dock-menu.c:1610
 msgid "Minimize"
 msgstr "Σμίκρυνση"
 
-#: ../src/cairo-dock-menu.c:1536
+#: ../src/cairo-dock-menu.c:1612
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: ../src/cairo-dock-menu.c:1549
+#: ../src/cairo-dock-menu.c:1625
 msgid "Move all to this desktop"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1558
+#: ../src/cairo-dock-menu.c:1634
 msgid "Show all"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1560
+#: ../src/cairo-dock-menu.c:1636
 msgid "Minimize all"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1562
+#: ../src/cairo-dock-menu.c:1638
 msgid "Close all"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1581
+#: ../src/cairo-dock-menu.c:1657
 msgid "Configure this applet"
 msgstr "Ρύθμιση αυτής της μικροεφαρμογής"
 
-#: ../src/cairo-dock-menu.c:1585
+#: ../src/cairo-dock-menu.c:1661
 msgid "Detach this applet"
 msgstr "Αποσύνδεση αυτής της μικροεφαρμογής"
 
-#: ../src/cairo-dock-menu.c:1585
+#: ../src/cairo-dock-menu.c:1661
 msgid "Return to dock"
 msgstr "Επιστροφή στο dock"
 
-#: ../src/cairo-dock-menu.c:1588
+#: ../src/cairo-dock-menu.c:1664
 msgid "Remove this applet"
 msgstr "Αφαίρεση αυτής της μικροεφαρμογής"
 
-#: ../src/cairo-dock-menu.c:1592
+#: ../src/cairo-dock-menu.c:1668
 msgid "Launch another instance of this applet"
 msgstr "Φόρτωση άλλου στιγμιότυπου αυτής της μικροεφαρμογής"
 
-#: ../src/cairo-dock-menu.c:1631
+#: ../src/cairo-dock-menu.c:1707
 msgid "Normal"
 msgstr "Κανονικά"
 
-#: ../src/cairo-dock-menu.c:1637 ../data/messages:23 ../data/messages:183
+#: ../src/cairo-dock-menu.c:1713 ../data/messages:23 ../data/messages:183
 msgid "Always on top"
 msgstr "Πάντα επάνω"
 
-#: ../src/cairo-dock-menu.c:1644
+#: ../src/cairo-dock-menu.c:1720
 msgid "Always below"
 msgstr "Πάντα κάτω"
 
-#: ../src/cairo-dock-menu.c:1657
+#: ../src/cairo-dock-menu.c:1733
 msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr ""
 "καθορισμός συμπεριφοράς στο Compiz σε: (όνομα=cairo-dock & τύπος=βοήθημα)"
 
-#: ../src/cairo-dock-menu.c:1659
+#: ../src/cairo-dock-menu.c:1735
 msgid "Reserve space"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1666
+#: ../src/cairo-dock-menu.c:1742
 msgid "On all desktops"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1672
+#: ../src/cairo-dock-menu.c:1748
 msgid "Lock position"
 msgstr ""
 
-#: ../src/cairo-dock-modules.c:143
+#: ../src/cairo-dock-modules.c:142
 msgid ""
 "A useful FAQ that contains also a lot of hints.\n"
 "Let the mouse over a sentence to make the hint dialog popups."
 msgstr ""
 
-#: ../src/cairo-dock-struct.h:400
+#: ../src/cairo-dock-struct.h:399
 msgid "default"
 msgstr ""
 
-#: ../src/cairo-dock-themes-manager.c:773
+#: ../src/cairo-dock-themes-manager.c:196
+#, c-format
+msgid "Downloading file %s ..."
+msgstr ""
+
+#: ../src/cairo-dock-themes-manager.c:243
+#, c-format
+msgid "couldn't get distant file %s"
+msgstr ""
+
+#: ../src/cairo-dock-themes-manager.c:529
+#, c-format
+msgid "couldn't get the list of themes for %s (no connection ?)"
+msgstr ""
+
+#: ../src/cairo-dock-themes-manager.c:579
+#, c-format
+msgid "couldn't retrieve distant theme %s"
+msgstr ""
+
+#: ../src/cairo-dock-themes-manager.c:678
 #, c-format
 msgid "Are you sure you want to overwrite theme %s ?"
 msgstr "Είστε βέβαιος ότι θέλετε να αντικαταστήσετε αυτό το θέμα %s;"
 
-#: ../src/cairo-dock-themes-manager.c:888
+#: ../src/cairo-dock-themes-manager.c:742
+msgid "The theme has been saved"
+msgstr ""
+
+#: ../src/cairo-dock-themes-manager.c:742
+msgid "The theme couldn't be saved"
+msgstr ""
+
+#: ../src/cairo-dock-themes-manager.c:794
 #, c-format
 msgid ""
 "couldn't get distant file %s/%s, maybe the server is down.\n"
 "Please retry later or contact us at cairo-dock.org."
 msgstr ""
 
-#: ../src/cairo-dock-themes-manager.c:904
+#: ../src/cairo-dock-themes-manager.c:810
 #, c-format
 msgid "Are you sure you want to delete theme %s ?"
 msgstr "Είστε βέβαιος ότι θέλετε να διαγράψετε αυτό το θέμα %s;"
 
-#: ../src/cairo-dock-themes-manager.c:906
+#: ../src/cairo-dock-themes-manager.c:812
 msgid "Are you sure you want to delete these themes ?"
 msgstr ""
 
-#: ../src/cairo-dock-themes-manager.c:941
+#: ../src/cairo-dock-themes-manager.c:831
+msgid "The theme has been deleted"
+msgstr ""
+
+#: ../src/cairo-dock-themes-manager.c:831
+msgid "The theme couldn't be deleted"
+msgstr ""
+
+#: ../src/cairo-dock-themes-manager.c:833
+msgid "The themes have been deleted"
+msgstr ""
+
+#: ../src/cairo-dock-themes-manager.c:833
+msgid "The themes couldn't be deleted"
+msgstr ""
+
+#: ../src/cairo-dock-themes-manager.c:851
 msgid ""
 "You made some modifications in the current theme.\n"
 "You will loose them if you don't save before choosing a new theme. Continue "
@@ -870,73 +926,28 @@ msgstr ""
 "Θα τις χάσετε εάν δεν τις αποθηκεύσετε πριν επιλέξετε ένα νέο θέμα. Συνέχεια "
 "οπωσδήποτε;"
 
-#: ../src/cairo-dock-themes-manager.c:1228
-msgid "Couldn't import the theme."
+#: ../src/cairo-dock-themes-manager.c:893
+msgid "Applying changes ..."
 msgstr ""
 
-#: ../src/cairo-dock-themes-manager.c:1276
-msgid "The theme has been saved"
-msgstr ""
-
-#: ../src/cairo-dock-themes-manager.c:1276
-msgid "The theme couldn't be saved"
-msgstr ""
-
-#: ../src/cairo-dock-themes-manager.c:1302
-msgid "The theme has been deleted"
-msgstr ""
-
-#: ../src/cairo-dock-themes-manager.c:1302
-msgid "The theme couldn't be deleted"
-msgstr ""
-
-#: ../src/cairo-dock-themes-manager.c:1304
-msgid "The themes have been deleted"
-msgstr ""
-
-#: ../src/cairo-dock-themes-manager.c:1304
-msgid "The themes couldn't be deleted"
-msgstr ""
-
-#: ../src/cairo-dock-themes-manager.c:1350
-#, c-format
-msgid "Importing theme %s ..."
-msgstr ""
-
-#: ../src/cairo-dock-themes-manager.c:1371
+#: ../src/cairo-dock-themes-manager.c:1218
 msgid "Manage Themes"
 msgstr "Διαχείριση θεμάτων"
 
-#: ../src/cairo-dock.c:550
-msgid "Use OpenGL in Cairo-Dock ?"
-msgstr "Χρήση του OpenGL στο Cairo-Dock;"
-
-#: ../src/cairo-dock.c:558
-msgid ""
-"OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
-"the minimum.\n"
-"It also allows some pretty visual effects similar to Compiz.\n"
-"However, some cards and/or their drivers don't fully support it, which may "
-"prevent the dock from running correctly.\n"
-"Do you want to activate OpenGL ?\n"
-" (To not show this dialog, launch the dock from the Application menu,\n"
-"  or with the -o option to force OpenGL and -c to force cairo.)"
-msgstr ""
-
-#: ../src/cairo-dock.c:716
+#: ../src/cairo-dock.c:688
 msgid ""
 "Welcome in Cairo-Dock2 !\n"
 "A default and simple theme has been loaded.\n"
 "You can either familiarize yourself with the dock or choose another theme "
 "with right-click -> Cairo-Dock -> Manage themes.\n"
 "A useful help is available by right-click -> Cairo-Dock -> Help.\n"
-"If you have any question/request/remark, please pay us a visit at http://"
-"cairo-dock.org.\n"
+"If you have any question/request/remark, please pay us a visit at "
+"http://cairo-dock.org.\n"
 "Hope you will enjoy this soft !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
 
-#: ../src/cairo-dock.c:728
+#: ../src/cairo-dock.c:700
 msgid ""
 "To remove the black rectangle around the dock, you need to activate a "
 "composite manager.\n"
@@ -945,11 +956,11 @@ msgid ""
 "I can do this lattest operation for you, do you want to proceed ?"
 msgstr ""
 
-#: ../src/cairo-dock.c:732
+#: ../src/cairo-dock.c:704
 msgid "Do you want to keep this setting ?"
 msgstr ""
 
-#: ../src/cairo-dock.c:737
+#: ../src/cairo-dock.c:709
 msgid ""
 "To remove the black rectangle around the dock, you need to activate a "
 "composite manager.\n"
@@ -960,7 +971,7 @@ msgid ""
 "page."
 msgstr ""
 
-#: ../src/cairo-dock.c:744
+#: ../src/cairo-dock.c:716
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -968,7 +979,7 @@ msgid ""
 "it to us at http://cairo-dock.org"
 msgstr ""
 
-#: ../src/cairo-dock.c:753
+#: ../src/cairo-dock.c:725
 msgid ""
 "No plug-in were found.\n"
 "To make the most of Cairo-Dock, please consider installing its plug-ins.\n"
@@ -1073,17 +1084,14 @@ msgid "Keyboard shortcut to pop-up the dock :"
 msgstr ""
 
 #: ../data/messages:39
-#, fuzzy
 msgid "Visibility of the sub-docks"
-msgstr "Κλικ για την εμφάνιση των sub-docks;"
+msgstr ""
 
 #: ../data/messages:41
-#, fuzzy
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
 msgstr ""
-"Διαφορετικά, θα εμφανίζονται όταν δεικτοδοτείτε παρατεταμένα το εικονίδιο."
 
 #: ../data/messages:45
 msgid "Appear on mouse over"
@@ -1188,9 +1196,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:93 ../data/messages:643
-#, fuzzy
 msgid "Separate the different types of icons ?"
-msgstr "Διάταξη διαφορετικών ειδών εικονιδίων:"
+msgstr ""
 
 #: ../data/messages:95 ../data/messages:653
 msgid "Order of the different types of icons :"
@@ -1424,7 +1431,8 @@ msgstr ""
 
 #: ../data/messages:235
 msgid "Only show icons whose window is minimized ?"
-msgstr "Εμφάνιση μόνο των εικονιδίων των οποίων τα παράθυρα έχουν σμικρυνθεί;"
+msgstr ""
+"Εμφάνιση μόνο των εικονιδίων των οποίων τα παράθυρα έχουν σμικρυνθεί;"
 
 #: ../data/messages:237
 msgid "Only show applis on current desktop ?"
@@ -1438,8 +1446,8 @@ msgid ""
 msgstr ""
 "Επιτρέπει στους εκκινητές να ενεργούν ως εφαρμογές όταν το πρόγραμμά τους "
 "εκτελείται και εμφανίζει μια ένδειξη στο εικονίδιό τους για να το "
-"καταδείξει. Μπορείτε να εκκινήσετε άλλα συμβάντα του προγράμματος με Shift"
-"+κλικ."
+"καταδείξει. Μπορείτε να εκκινήσετε άλλα συμβάντα του προγράμματος με "
+"Shift+κλικ."
 
 #: ../data/messages:241
 msgid "Mix launchers and applis ?"
@@ -1522,7 +1530,8 @@ msgstr ""
 "εφαρμογή;"
 
 #: ../data/messages:277
-msgid "Signal the applications demanding your attention with a dialog bubble ?"
+msgid ""
+"Signal the applications demanding your attention with a dialog bubble ?"
 msgstr ""
 
 #: ../data/messages:279
@@ -2182,7 +2191,8 @@ msgstr "Εάν δεν προσθέσετε διαχωριστές, θα χρησ
 
 #: ../data/messages:633
 msgid "Filename of an image to use for separators :"
-msgstr "Όνομα αρχείου της εικόνας που θα χρησιμοποιηθεί για τους διαχωριστές:"
+msgstr ""
+"Όνομα αρχείου της εικόνας που θα χρησιμοποιηθεί για τους διαχωριστές:"
 
 #: ../data/messages:635
 msgid ""
@@ -2218,9 +2228,8 @@ msgid "Separate applets from others"
 msgstr ""
 
 #: ../data/messages:651
-#, fuzzy
 msgid "Separate all"
-msgstr "Διαχωριστές"
+msgstr ""
 
 #: ../data/messages:661
 msgid "Link the icons with a string"
@@ -2662,8 +2671,8 @@ msgstr ""
 
 #: ../data/messages:909
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:911
@@ -2679,8 +2688,8 @@ msgstr ""
 
 #: ../data/messages:915
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, applis, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, applis, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -2735,7 +2744,8 @@ msgid "I don’t want other windows to hover the dock"
 msgstr ""
 
 #: ../data/messages:937
-msgid "Hint : you can even do that with desklets, making a desklet's panel !."
+msgid ""
+"Hint : you can even do that with desklets, making a desklet's panel !."
 msgstr ""
 
 #: ../data/messages:939
@@ -2783,7 +2793,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:953
-msgid "I don’t want to have a separator between launchers , applis and applets"
+msgid ""
+"I don’t want to have a separator between launchers , applis and applets"
 msgstr ""
 
 #: ../data/messages:955
@@ -3002,7 +3013,8 @@ msgid "go to the “Taskbar” module, then tick the first box, and apply."
 msgstr ""
 
 #: ../data/messages:1033
-msgid "I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
+msgid ""
+"I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
 msgstr ""
 
 #: ../data/messages:1035
@@ -3230,8 +3242,8 @@ msgstr ""
 
 #: ../data/messages:1113
 msgid ""
-"How can I have an easy-to-access terminal with real transparence, like "
-"Tilda ?"
+"How can I have an easy-to-access terminal with real transparence, like Tilda "
+"?"
 msgstr ""
 
 #: ../data/messages:1115
@@ -3252,10 +3264,11 @@ msgstr ""
 
 #: ../data/messages:1121
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/"
-"required_components_list/panel, and replace its content with \"cairo-dock\". "
-"This will not launch the dock on start-up, but just prevent the gnome-panel "
-"from launching, so don't forget to add Cairo-Dock on startup.\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components_list/panel, and replace its "
+"content with \"cairo-dock\". This will not launch the dock on start-up, but "
+"just prevent the gnome-panel from launching, so don't forget to add Cairo-"
+"Dock on startup.\n"
 "Then restart your session : the gnome-panel has not been started."
 msgstr ""
 
@@ -3362,16 +3375,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3413,8 +3426,8 @@ msgid ""
 "If you’re under XFCE or KDE, you can just activate the compositing in the "
 "window manager’s options.\n"
 "If you're under Gnome, you can activate it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1177
@@ -3448,8 +3461,8 @@ msgstr ""
 
 #: ../data/messages:1187
 msgid ""
-"Hint : You can force the openGL by launching the dock with “cairo-dock –o”."
-"but you might get a lot of visual artifacts."
+"Hint : You can force the openGL by launching the dock with “cairo-dock "
+"–o”.but you might get a lot of visual artifacts."
 msgstr ""
 
 #: ../data/messages:1189
@@ -3516,8 +3529,8 @@ msgstr ""
 msgid ""
 "We value your help ! If you see a bug, or if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3638,9 +3651,8 @@ msgid "Let it empty to use the same view as the main dock."
 msgstr ""
 
 #: ../data/messages:1297
-#, fuzzy
 msgid "Choose the view for this dock :/"
-msgstr "Επιλέξτε προκαθορισμένη εμφάνιση για τα βασικά docks:"
+msgstr ""
 
 #: ../data/messages:1311
 msgid "Choose a theme"
@@ -3894,8 +3906,8 @@ msgid ""
 " - Any help would be welcome to integrate the dock into KDE !"
 msgstr ""
 "v1.5.6:\n"
-" - Ενσωμάτωση στην τελευταία έκδοση του Gnome 2.22 (Ubuntu 8.04, Fedora "
-"9, ...) - ακόμη σε πειραματικό στάδιο.\n"
+" - Ενσωμάτωση στην τελευταία έκδοση του Gnome 2.22 (Ubuntu 8.04, Fedora 9, "
+"...) - ακόμη σε πειραματικό στάδιο.\n"
 " - Τώρα μπορείτε να έχετε πολλά docks σε ένα μόνο στιγμιότυπο του Cairo-"
 "Dock.\n"
 " Απλά τοποθετήστε έναν εκκινητή ή μια μικροεφαρμογή στο dock, δώστε ένα "
@@ -3945,8 +3957,8 @@ msgstr ""
 #: ../data/messages:1375
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4047,8 +4059,8 @@ msgstr ""
 #: ../data/messages:1387
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4114,56 +4126,6 @@ msgid ""
 " - This version also fixes a huge number of problems."
 msgstr ""
 
-#~ msgid ""
-#~ "This parameter will overwrite the previously defined order, to allow you "
-#~ "to mix applets and launchers into the dock."
-#~ msgstr ""
-#~ "Αυτή η παράμετρος θα αντικαταστήσει την διάταξη που ορίστηκε "
-#~ "προηγουμένως, ώστε να σας επιτρέπει τη μίξη εφαρμογιδίων και εκκινητών "
-#~ "μέσα στο dock."
-
-#~ msgid "Allow applets to be placed amongst launchers ?"
-#~ msgstr "Να επιτρέπεται η τοποθέτηση εφαρμογιδίων ανάμεσα στους εκκινητές;"
-
-#~ msgid ""
-#~ "Separators are icons used to make a separation between different types of "
-#~ "icons. Cairo-dock can automatically add them between launchers, applis, "
-#~ "and applets."
-#~ msgstr ""
-#~ "Οι διαχωριστές είναι εικονίδια που χρησιμοποιούνται για να διαχωρίζουν "
-#~ "διαφορετικούς τύπους εικονιδίων. Το Cairo-Dock μπορεί αυτόματα να τα "
-#~ "προσθέτει μεταξύ εκκινητών, εφαρμογών και εφαρμογιδίων."
-
-#~ msgid "Automatically add separators ?"
-#~ msgstr "Αυτόματη προσθήκη διαχωριστών;"
-
-#~ msgid "Misc. Emblems"
-#~ msgstr "Ποικίλα σύμβολα"
-
-#~ msgid "Name of an image to use for the charge emblem :"
-#~ msgstr "Όνομα εικόνας για χρήση στο υποχρεωτικό σύμβολο:"
-
-#~ msgid "Name of an image to use for the play emblem :"
-#~ msgstr "Όνομα εικόνας για χρήση κατά την αναπαραγωγή του συμβόλου:"
-
-#~ msgid "Name of an image to use for the pause emblem :"
-#~ msgstr "Όνομα εικόνας για χρήση κατά την παύση του συμβόλου:"
-
-#~ msgid "Name of an image to use for the stop emblem :"
-#~ msgstr "Όνομα εικόνας για χρήση κατά το σταμάτημα του συμβόλου:"
-
-#~ msgid "Name of an image to use for the broken emblem :"
-#~ msgstr "Όνομα εικόνας για κατεστραμμένο σύμβολο:"
-
-#~ msgid "Name of an image to use for the error emblem :"
-#~ msgstr "Όνομα εικόνας για το σύμβολο σφάλματος:"
-
-#~ msgid "Name of an image to use for the warning emblem :"
-#~ msgstr "Όνομα εικόνας για το σύμβολο προειδοποίησης:"
-
-#~ msgid "Name of an image to use for the locked emblem :"
-#~ msgstr "Όνομα εικόνας για κλειδωμένο σύμβολο:"
-
 #~ msgid "%s is now %s"
 #~ msgstr "%s είναι τώρα %s"
 
@@ -4195,11 +4157,10 @@ msgstr ""
 #~ msgstr "Προσθήκη ενός χειροκίνητου εκκινητή"
 
 #~ msgid ""
-#~ "Don't forget you can drag a launcher from the menu and drop it in the "
-#~ "dock !"
+#~ "Don't forget you can drag a launcher from the menu and drop it in the dock !"
 #~ msgstr ""
-#~ "Μην ξεχνάτε ότι μπορείτε να τραβήξετε έναν εκκινητή από το μενού και να "
-#~ "τον αποθέσετε στο dock!"
+#~ "Μην ξεχνάτε ότι μπορείτε να τραβήξετε έναν εκκινητή από το μενού και να τον "
+#~ "αποθέσετε στο dock!"
 
 #~ msgid "Configuration of %s"
 #~ msgstr "Ρύθμιση του %s"
@@ -4211,8 +4172,8 @@ msgstr ""
 #~ "You are running Cairo-Dock in safe mode.\n"
 #~ "Why ? Probably because a plug-in has messed into your dock,\n"
 #~ " or maybe your theme has got corrupted.\n"
-#~ "So, no plug-in will be available, and you can now save your current theme "
-#~ "if you want\n"
+#~ "So, no plug-in will be available, and you can now save your current theme if "
+#~ "you want\n"
 #~ " before you start using the dock.\n"
 #~ "Try with your current theme, if it works, it means a plug-in is wrong.\n"
 #~ "Otherwise, try with another theme.\n"
@@ -4225,8 +4186,8 @@ msgstr ""
 #~ "Έτσι, κανένα plug-in δεν θα είναι διαθέσιμο και μπορείτε τώρα να "
 #~ "αποθηκεύσετε το τρέχον θέμα εάν το επιθυμείτε,\n"
 #~ "πριν ξεκινήσετε τη χρήση του dock.\n"
-#~ "Επιχειρήστε με το τρέχον θέμα σας. Εάν δουλεύει σωστά, σημαίνει ότι "
-#~ "κάποιο plug-in είναι ακατάλληλο.\n"
+#~ "Επιχειρήστε με το τρέχον θέμα σας. Εάν δουλεύει σωστά, σημαίνει ότι κάποιο "
+#~ "plug-in είναι ακατάλληλο.\n"
 #~ "Διαφορετικά, επιλέξτε κάποιο άλλο θέμα.\n"
 #~ "Αποθηκεύστε τη ρύθμιση που δουλεύει και κάντε επανεκκίνηση του dock σε "
 #~ "κανονική λειτουργία.\n"
@@ -4234,20 +4195,20 @@ msgstr ""
 #~ "ακατάλληλο."
 
 #~ msgid ""
-#~ "The dock will automatically resize itself to fit this size. Set it to 0 "
-#~ "to make the dock fit the screen's size."
+#~ "The dock will automatically resize itself to fit this size. Set it to 0 to "
+#~ "make the dock fit the screen's size."
 #~ msgstr ""
-#~ "Το dock αυτόματα θα προσαρμόσει το μέγεθός του για να ταιριάζει σε αυτό "
-#~ "το μέγεθος. Βάλτε την τιμή 0 για να κάνετε το dock να ταιριάξει στο "
-#~ "μέγεθος της οθόνης."
+#~ "Το dock αυτόματα θα προσαρμόσει το μέγεθός του για να ταιριάζει σε αυτό το "
+#~ "μέγεθος. Βάλτε την τιμή 0 για να κάνετε το dock να ταιριάξει στο μέγεθος της "
+#~ "οθόνης."
 
 #~ msgid "Size allowed for the dock :"
 #~ msgstr "Επιτρεπόμενο μέγεθος για το dock:"
 
 #~ msgid ""
-#~ "This will prevent other windows from overlapping the dock. It has no "
-#~ "effect if you defined the 'show/hide' shortcut below, cause then the dock "
-#~ "behaves like a menu."
+#~ "This will prevent other windows from overlapping the dock. It has no effect "
+#~ "if you defined the 'show/hide' shortcut below, cause then the dock behaves "
+#~ "like a menu."
 #~ msgstr ""
 #~ "Αυτό θα αποτρέψει την επικάλυψη του dock από άλλα παράθυρα. Δεν θα έχει "
 #~ "κανένα αποτέλεσμα εάν ορίσετε τη συντόμευση 'εμφάνιση/απόκρυψη' παρακάτω, "
@@ -4258,13 +4219,13 @@ msgstr ""
 
 #~ msgid ""
 #~ "The dock will pop-up on the foreground when you place the mouse on its "
-#~ "screen border. This option is only useful if you don't want to reserve "
-#~ "space for the dock, nor to activate auto-hide."
+#~ "screen border. This option is only useful if you don't want to reserve space "
+#~ "for the dock, nor to activate auto-hide."
 #~ msgstr ""
-#~ "Το dock θα αναδύεται στο προσκήνιο όταν θα τοποθετείτε το ποντίκι στο "
-#~ "όριο της οθόνης που έχει τοποθετηθεί. Αυτή η επιλογή είναι χρήσιμη μόνον "
-#~ "εάν δεν θέλετε να δεσμεύσετε κενό διάστημα για το dock ή να "
-#~ "ενεργοποιήσετε την αυτόματη απόκρυψη."
+#~ "Το dock θα αναδύεται στο προσκήνιο όταν θα τοποθετείτε το ποντίκι στο όριο "
+#~ "της οθόνης που έχει τοποθετηθεί. Αυτή η επιλογή είναι χρήσιμη μόνον εάν δεν "
+#~ "θέλετε να δεσμεύσετε κενό διάστημα για το dock ή να ενεργοποιήσετε την "
+#~ "αυτόματη απόκρυψη."
 
 #~ msgid "Keep the dock below other windows ?"
 #~ msgstr "Παραμονή του dock κάτω από άλλα παράθυρα;"
@@ -4280,14 +4241,14 @@ msgstr ""
 #~ "Είναι δυνατόν οι εφαρμογές με το ίδιο PID να εμφανίζονται μόνο μια φορά;"
 
 #~ msgid ""
-#~ "This allows to group windows in some soft like Gimp, and to have only 1 "
-#~ "icon in the main dock.The 1st window will appear in the main dock, and "
-#~ "the others will be placed in a container associated with this 1st icon."
+#~ "This allows to group windows in some soft like Gimp, and to have only 1 icon "
+#~ "in the main dock.The 1st window will appear in the main dock, and the others "
+#~ "will be placed in a container associated with this 1st icon."
 #~ msgstr ""
-#~ "Αυτό επιτρέπει την ομαδοποίηση παραθύρων παρόμοιων εφαρμογών, όπως το "
-#~ "Gimp, και την εμφάνιση ενός μόνο εικονιδίου στο κυρίως dock. Το πρώτο "
-#~ "παράθυρο θα εμφανίζεται στο κυρίως dock και τα υπόλοιπα θα τοποθετηθούν "
-#~ "σε έναν υποδοχέα σχετιζόμενο με το πρώτο εικονίδιο."
+#~ "Αυτό επιτρέπει την ομαδοποίηση παραθύρων παρόμοιων εφαρμογών, όπως το Gimp, "
+#~ "και την εμφάνιση ενός μόνο εικονιδίου στο κυρίως dock. Το πρώτο παράθυρο θα "
+#~ "εμφανίζεται στο κυρίως dock και τα υπόλοιπα θα τοποθετηθούν σε έναν υποδοχέα "
+#~ "σχετιζόμενο με το πρώτο εικονίδιο."
 
 #~ msgid "Should the applications with same class be grouped in a sub-dock ?"
 #~ msgstr ""
@@ -4296,17 +4257,15 @@ msgstr ""
 
 #~ msgid "Automatically quick-hide the dock when a window becomes fullscreen ?"
 #~ msgstr ""
-#~ "Γρήγορη αυτόματη απόκρυψη του dock όταν ένα παράθυρο γίνεται πλήρους "
-#~ "οθόνης;"
+#~ "Γρήγορη αυτόματη απόκρυψη του dock όταν ένα παράθυρο γίνεται πλήρους οθόνης;"
 
 #~ msgid ""
 #~ "This is only usefull if don't already use the auto-hide, and if you don't "
-#~ "want to reserve the space for your dock nor let it below the other "
-#~ "windows."
+#~ "want to reserve the space for your dock nor let it below the other windows."
 #~ msgstr ""
 #~ "Αυτό είναι χρήσιμο μόνο στην περίπτωση που δεν χρησιμοποιείτε ήδη την "
-#~ "αυτόματη απόκρυψη και εάν δεν επιθυμείτε να δεσμεύσετε κενό διάστημα για "
-#~ "το dock σας ή να το αφήσετε κάτω από άλλα παράθυρα."
+#~ "αυτόματη απόκρυψη και εάν δεν επιθυμείτε να δεσμεύσετε κενό διάστημα για το "
+#~ "dock σας ή να το αφήσετε κάτω από άλλα παράθυρα."
 
 #~ msgid "Automatically quick-hide the dock when a window becomes maximized ?"
 #~ msgstr "Γρήγορη αυτόματη απόκρυψη του dock όταν ένα παράθυρο μεγεθύνεται;"
@@ -4320,14 +4279,14 @@ msgstr ""
 #~ msgstr "Παράμετροι μετατόπισης"
 
 #~ msgid ""
-#~ "The icons will appear folded on themselves, regarding the alignement "
-#~ "point, then will unfold untill they fill the whole dock. Use 0 to not use "
+#~ "The icons will appear folded on themselves, regarding the alignement point, "
+#~ "then will unfold untill they fill the whole dock. Use 0 to not use "
 #~ "unfolding, the more it's close to 0, the faster it will be"
 #~ msgstr ""
-#~ "Τα εικονίδια θα εμφανίζονται διπλωμένα, σε σχέση με το σημείο "
-#~ "ευθυγράμμισης, έπειτα θα ξεδιπλώνονται μέχρι να γεμίσουν ολόκληρο το "
-#~ "dock. Καθορίστε μηδενική τιμή ώστε να μην ξεδιπλώνονται και όσο "
-#~ "πλησιέστερα στο 0, τόσο γρηγορότερα θα γίνεται."
+#~ "Τα εικονίδια θα εμφανίζονται διπλωμένα, σε σχέση με το σημείο ευθυγράμμισης, "
+#~ "έπειτα θα ξεδιπλώνονται μέχρι να γεμίσουν ολόκληρο το dock. Καθορίστε "
+#~ "μηδενική τιμή ώστε να μην ξεδιπλώνονται και όσο πλησιέστερα στο 0, τόσο "
+#~ "γρηγορότερα θα γίνεται."
 
 #~ msgid "Icons' lateral unfolding acceleration :"
 #~ msgstr "Επιτάχυνση πλευρικού ξεδιπλώματος του εικονιδίου:"
@@ -4337,8 +4296,8 @@ msgstr ""
 #~ "Αριθμός βημάτων της αλλαγής μεγέθους των εικονιδίων (ανάπτυξη/συρρίκνωση):"
 
 #~ msgid ""
-#~ "in percentage of the distance it can move at each step . After n steps, "
-#~ "the remaining distance will be reduced by (1-s)^n."
+#~ "in percentage of the distance it can move at each step . After n steps, the "
+#~ "remaining distance will be reduced by (1-s)^n."
 #~ msgstr ""
 #~ "Ως ποσοστό της απόστασης στην οποία μπορεί να μετακινείται σε κάθε βήμα. "
 #~ "Έπειτα από n βήματα, η εναπομείνασα απόσταση θα ελαττωθεί με (1-s)^n."
@@ -4353,28 +4312,27 @@ msgstr ""
 #~ msgstr "Ταχύτητα κύλισης για τις διακοσμήσεις παρασκηνίου:"
 
 #~ msgid ""
-#~ "Otherwise the amount of movement of the decorations will only depend on "
-#~ "the direction of the cursor's movement, as if the decorations were "
-#~ "\"gliding\"."
+#~ "Otherwise the amount of movement of the decorations will only depend on the "
+#~ "direction of the cursor's movement, as if the decorations were \"gliding\"."
 #~ msgstr ""
-#~ "Διαφορετικά, το πόσο θα μετακινούνται οι διακοσμήσεις θα εξαρτάται μόνον "
-#~ "από την κατεύθυνση της κίνησης του κέρσορα, σαν να ήταν οι διακοσμήσεις "
+#~ "Διαφορετικά, το πόσο θα μετακινούνται οι διακοσμήσεις θα εξαρτάται μόνον από "
+#~ "την κατεύθυνση της κίνησης του κέρσορα, σαν να ήταν οι διακοσμήσεις "
 #~ "\"gliding\"."
 
 #~ msgid "Should the decorations be enslaved to the cursor ?"
 #~ msgstr "Να δεσμεύονται οι διακοσμήσεις από τον κέρσορα;"
 
 #~ msgid ""
-#~ "If you put 0, this will make them scroll of exactly one icon each time. "
-#~ "If you put -1, the scroll wil be de-activated"
+#~ "If you put 0, this will make them scroll of exactly one icon each time. If "
+#~ "you put -1, the scroll wil be de-activated"
 #~ msgstr ""
-#~ "Εάν η τιμή είναι 0, αυτό θα επιτρέπει την κύλιση ενός εικονιδίου κάθε "
-#~ "φορά. Εάν είναι 1, η κύλιση θα απενεργοποιείται."
+#~ "Εάν η τιμή είναι 0, αυτό θα επιτρέπει την κύλιση ενός εικονιδίου κάθε φορά. "
+#~ "Εάν είναι 1, η κύλιση θα απενεργοποιείται."
 
 #~ msgid "Amount of pixels the icons will scroll at each wheel scroll :"
 #~ msgstr ""
-#~ "Ποσότητα των pixels που θα κυλούν τα εικονίδια σε κάθε κύλιση του τροχού "
-#~ "του ποντικιού."
+#~ "Ποσότητα των pixels που θα κυλούν τα εικονίδια σε κάθε κύλιση του τροχού του "
+#~ "ποντικιού."
 
 #~ msgid "Re-center the dock on leaving if it has been scrolled ?"
 #~ msgstr ""
@@ -4403,12 +4361,12 @@ msgstr ""
 #~ msgstr "Επιλέξτε μερικά χρήσιμα αξεσουάρ για το δικό σας dock!"
 
 #~ msgid ""
-#~ "Just check the box to activate a plug-in, or uncheck to deactivate it. "
-#~ "Once activated, you can use it and configure it."
+#~ "Just check the box to activate a plug-in, or uncheck to deactivate it. Once "
+#~ "activated, you can use it and configure it."
 #~ msgstr ""
 #~ "Απλά επιλέξτε το κουτί επιλογής για να ενεργοποιήσετε ένα plug-in, ή "
-#~ "αποεπιλέξτε για να το απενεργοποιήσετε. Μετά την ενεργοποίηση μπορείτε να "
-#~ "το χρησιμοποιήσετε και να το ρυθμίσετε."
+#~ "αποεπιλέξτε για να το απενεργοποιήσετε. Μετά την ενεργοποίηση μπορείτε να το "
+#~ "χρησιμοποιήσετε και να το ρυθμίσετε."
 
 #~ msgid "List of available accessories :"
 #~ msgstr "Κατάλογος διαθέσιμων αξεσουάρ:"
@@ -4434,12 +4392,12 @@ msgstr ""
 #~ "του dock."
 
 #~ msgid ""
-#~ "Any format allowed; let this field empty to have an invisible callback "
-#~ "zone. The callback zone is what you see when the dock hides itselfs."
+#~ "Any format allowed; let this field empty to have an invisible callback zone. "
+#~ "The callback zone is what you see when the dock hides itselfs."
 #~ msgstr ""
 #~ "Επιτρέπονται όλες οι μορφές εικόνων. Αφήστε κενό αυτό το πεδίο για να μην "
-#~ "εμφανίζεται η Ζώνη Επανάκκλησης. Η Ζώνη Επανάκκλησης είναι αυτό που "
-#~ "βλέπετε όταν το dock αποκρύπτεται."
+#~ "εμφανίζεται η Ζώνη Επανάκκλησης. Η Ζώνη Επανάκκλησης είναι αυτό που βλέπετε "
+#~ "όταν το dock αποκρύπτεται."
 
 #~ msgid "Filename of an image to put on the callback zone :"
 #~ msgstr "Όνομα αρχείου της εικόνας που θα τοποθετηθεί στη Ζώνη Επανάκκλησης:"
@@ -4447,8 +4405,7 @@ msgstr ""
 #~ msgid "Transparency of the callback zone :"
 #~ msgstr "Διαφάνεια της Ζώνης Επανάκκλησης:"
 
-#~ msgid ""
-#~ "Rotate the callback zone's image when the dock is on top/left/right ?"
+#~ msgid "Rotate the callback zone's image when the dock is on top/left/right ?"
 #~ msgstr ""
 #~ "Περιστροφή της εικόνας της Ζώνης Επανάκκλησης, όταν το dock βρίσκεται "
 #~ "επάνω/αριστερά/δεξιά;"
@@ -4469,8 +4426,7 @@ msgstr ""
 #~ msgstr "Σκοτεινό χρώμα (κόκκινο, πράσινο, μπλε, alpha):"
 
 #~ msgid ""
-#~ "Angle of the stripes / gradation, in relation to the vertical (in "
-#~ "degree) :"
+#~ "Angle of the stripes / gradation, in relation to the vertical (in degree) :"
 #~ msgstr ""
 #~ "Γωνία των ραβδώσεων / της διαβάθμισης, σε σχέση με το κάθετο (σε μοίρες):"
 
@@ -4478,9 +4434,8 @@ msgstr ""
 #~ "The bigger, the more the stripes are close to each other; with 0 stripes, "
 #~ "the background will be filled with a single gradation."
 #~ msgstr ""
-#~ "Όσο μεγαλύτερο, τόσο περισσότερο οι ραβδώσεις θα είναι κοντύτερα η μια "
-#~ "στην άλλη. Με 0 ραβδώσεις, το παρασκήνιο θα γεμίζει με μια απλή "
-#~ "διαβάθμιση."
+#~ "Όσο μεγαλύτερο, τόσο περισσότερο οι ραβδώσεις θα είναι κοντύτερα η μια στην "
+#~ "άλλη. Με 0 ραβδώσεις, το παρασκήνιο θα γεμίζει με μια απλή διαβάθμιση."
 
 #~ msgid "Number of stripes, in each pattern, to draw in the background :"
 #~ msgstr ""
@@ -4489,8 +4444,8 @@ msgstr ""
 #~ msgid ""
 #~ "1 pattern contains N stripes, so the width can be less or equal than 1/N."
 #~ msgstr ""
-#~ "Ένα πρότυπο περιέχει Ν ραβδώσεις, οπότε το πλάτος μπορεί να είναι "
-#~ "μικρότερο ή ίσο από το 1/Ν."
+#~ "Ένα πρότυπο περιέχει Ν ραβδώσεις, οπότε το πλάτος μπορεί να είναι μικρότερο "
+#~ "ή ίσο από το 1/Ν."
 
 #~ msgid "Width of the stripes, in percentage of the pattern size :"
 #~ msgstr "Το πλάτος των ραβδώσεων ως ποσοστό επί του μεγέθους του προτύπου:"
@@ -4525,17 +4480,16 @@ msgstr ""
 #~ "τόσο περισσότερο διαφανή θα γίνονται."
 
 #~ msgid ""
-#~ "More precisely, it is the fraction of the max icon height that will be "
-#~ "used to draw reflect. So setting it to 0.33 will mean that 33% of the "
-#~ "icons will reflect on the ground, and the icons will be placed at the "
-#~ "right distance from the front border of the frame so that the reflect is "
-#~ "fully visible."
+#~ "More precisely, it is the fraction of the max icon height that will be used "
+#~ "to draw reflect. So setting it to 0.33 will mean that 33% of the icons will "
+#~ "reflect on the ground, and the icons will be placed at the right distance "
+#~ "from the front border of the frame so that the reflect is fully visible."
 #~ msgstr ""
-#~ "Για την ακρίβεια, πρόκειται για ένα τμήμα του μέγιστου ύψους του "
-#~ "εικονιδίου που χρησιμοποιείται για τη σχεδίαση της ανάκλασης. Αν οριστεί "
-#~ "στο 0,33 αυτό θα σημαίνει ότι το 33% των εικονιδίων θα ανακλάται στην "
-#~ "επιφάνεια και τα εικονίδια θα τοποθετούνται στο δεξιό σημείο από το "
-#~ "εμπρόσθιο όριο του πλαισίου, οπότε η ανάκλαση θα είναι πλήρως ορατή."
+#~ "Για την ακρίβεια, πρόκειται για ένα τμήμα του μέγιστου ύψους του εικονιδίου "
+#~ "που χρησιμοποιείται για τη σχεδίαση της ανάκλασης. Αν οριστεί στο 0,33 αυτό "
+#~ "θα σημαίνει ότι το 33% των εικονιδίων θα ανακλάται στην επιφάνεια και τα "
+#~ "εικονίδια θα τοποθετούνται στο δεξιό σημείο από το εμπρόσθιο όριο του "
+#~ "πλαισίου, οπότε η ανάκλαση θα είναι πλήρως ορατή."
 
 #~ msgid "Field depth of the view:"
 #~ msgstr "Οπτικό πεδίο βάθους:"
@@ -4570,8 +4524,8 @@ msgstr ""
 #~ "If you set it to fully transparent, there will be no background for the "
 #~ "text, but the letters' outline will be thicker."
 #~ msgstr ""
-#~ "Εάν ορίσετε πλήρη διαφάνεια, δεν θα υπάρχει παρασκήνιο για το κείμενο, "
-#~ "αλλά το περίγραμμα των γραμμάτων θα είναι  λεπτότερο."
+#~ "Εάν ορίσετε πλήρη διαφάνεια, δεν θα υπάρχει παρασκήνιο για το κείμενο, αλλά "
+#~ "το περίγραμμα των γραμμάτων θα είναι  λεπτότερο."
 
 #~ msgid "List of icons themes or directories :"
 #~ msgstr "Κατάλογος θεμάτων εικονιδίων ή φακέλων:"
@@ -4587,6 +4541,9 @@ msgstr ""
 
 #~ msgid "bounce"
 #~ msgstr "αναπήδηση"
+
+#~ msgid "rotate"
+#~ msgstr "περιστροφή"
 
 #~ msgid "blink"
 #~ msgstr "αναβόσβημα"
@@ -4610,6 +4567,31 @@ msgstr ""
 
 #~ msgid "Applications"
 #~ msgstr "Εφαρμογές"
+
+#~ msgid ""
+#~ "Separators are icons used to make a separation between different types of "
+#~ "icons. Cairo-dock can automatically add them between launchers, applis, and "
+#~ "applets."
+#~ msgstr ""
+#~ "Οι διαχωριστές είναι εικονίδια που χρησιμοποιούνται για να διαχωρίζουν "
+#~ "διαφορετικούς τύπους εικονιδίων. Το Cairo-Dock μπορεί αυτόματα να τα "
+#~ "προσθέτει μεταξύ εκκινητών, εφαρμογών και εφαρμογιδίων."
+
+#~ msgid "Automatically add separators ?"
+#~ msgstr "Αυτόματη προσθήκη διαχωριστών;"
+
+#~ msgid ""
+#~ "This parameter will overwrite the previously defined order, to allow you to "
+#~ "mix applets and launchers into the dock."
+#~ msgstr ""
+#~ "Αυτή η παράμετρος θα αντικαταστήσει την διάταξη που ορίστηκε προηγουμένως, "
+#~ "ώστε να σας επιτρέπει τη μίξη εφαρμογιδίων και εκκινητών μέσα στο dock."
+
+#~ msgid "Allow applets to be placed amongst launchers ?"
+#~ msgstr "Να επιτρέπεται η τοποθέτηση εφαρμογιδίων ανάμεσα στους εκκινητές;"
+
+#~ msgid "Choose the default view for root docks :"
+#~ msgstr "Επιλέξτε προκαθορισμένη εμφάνιση για τα βασικά docks:"
 
 #~ msgid "otherwise they will be perpendicular"
 #~ msgstr "διαφορετικά θα είναι κατακόρυφα"
@@ -4645,9 +4627,8 @@ msgstr ""
 #~ "Typically an arrow, that will be displayed when you try to drop a new "
 #~ "launcher into the dock. Let empty to use the default one."
 #~ msgstr ""
-#~ "Συνήθως ένα βέλος που θα εμφανίζεται όταν προσπαθείτε να αποθέσετε έναν "
-#~ "νέο εκκινητή στο dock. Αφήστε το άδειο για να χρησιμοποιηθεί το "
-#~ "προκαθορισμένο."
+#~ "Συνήθως ένα βέλος που θα εμφανίζεται όταν προσπαθείτε να αποθέσετε έναν νέο "
+#~ "εκκινητή στο dock. Αφήστε το άδειο για να χρησιμοποιηθεί το προκαθορισμένο."
 
 #~ msgid "Image for the drag'n'drop animation :"
 #~ msgstr "Εικόνα για τη δημιουργία κίνησης του drag and drop:"
@@ -4660,12 +4641,12 @@ msgstr ""
 #~ "Εμφάνιση δείκτη απόθεσης στο εικονίδιο κατά τη διάρκεια του συρσίματος;"
 
 #~ msgid ""
-#~ "It's an image that will be displayed on the icon to indicate you can drop "
-#~ "on it. Let empty to use the default one."
+#~ "It's an image that will be displayed on the icon to indicate you can drop on "
+#~ "it. Let empty to use the default one."
 #~ msgstr ""
 #~ "Πρόκειται για μια εικόνα που θα εμφανίζεται πάνω στο εικονίδιο και θα σας "
-#~ "δείχνει ότι μπορείτε να το αποθέσετε. Αφήστε το κενό για να "
-#~ "χρησιμοποιηθεί η προκαθορισμένη εικόνα."
+#~ "δείχνει ότι μπορείτε να το αποθέσετε. Αφήστε το κενό για να χρησιμοποιηθεί η "
+#~ "προκαθορισμένη εικόνα."
 
 #~ msgid "Image for the indicator :"
 #~ msgstr "Εικόνα για τον δείκτη:"
@@ -4684,6 +4665,33 @@ msgstr ""
 
 #~ msgid "Display the indicator above the icon ?"
 #~ msgstr "Εμφάνιση δείκτη επάνω από το εικονίδιο;"
+
+#~ msgid "Misc. Emblems"
+#~ msgstr "Ποικίλα σύμβολα"
+
+#~ msgid "Name of an image to use for the charge emblem :"
+#~ msgstr "Όνομα εικόνας για χρήση στο υποχρεωτικό σύμβολο:"
+
+#~ msgid "Name of an image to use for the play emblem :"
+#~ msgstr "Όνομα εικόνας για χρήση κατά την αναπαραγωγή του συμβόλου:"
+
+#~ msgid "Name of an image to use for the pause emblem :"
+#~ msgstr "Όνομα εικόνας για χρήση κατά την παύση του συμβόλου:"
+
+#~ msgid "Name of an image to use for the stop emblem :"
+#~ msgstr "Όνομα εικόνας για χρήση κατά το σταμάτημα του συμβόλου:"
+
+#~ msgid "Name of an image to use for the broken emblem :"
+#~ msgstr "Όνομα εικόνας για κατεστραμμένο σύμβολο:"
+
+#~ msgid "Name of an image to use for the error emblem :"
+#~ msgstr "Όνομα εικόνας για το σύμβολο σφάλματος:"
+
+#~ msgid "Name of an image to use for the warning emblem :"
+#~ msgstr "Όνομα εικόνας για το σύμβολο προειδοποίησης:"
+
+#~ msgid "Name of an image to use for the locked emblem :"
+#~ msgstr "Όνομα εικόνας για κλειδωμένο σύμβολο:"
 
 #~ msgid "Auto-Hide"
 #~ msgstr "Αυτόματη Απόκρυψη"
@@ -4725,17 +4733,16 @@ msgstr ""
 #~ msgstr "Χρώμα εξωτερικής γραμμής (κόκκινο, πράσινο, μπλε, alpha):"
 
 #~ msgid ""
-#~ "Use this option for exemple if the launcher launches a script in a "
-#~ "terminal but you don't want it to steal normal terminal's icons from the "
-#~ "TaskBar, or if you explicitely want to use the original icon of the "
-#~ "TaskBar because it provides some info, for exemple Pidgin's icons "
-#~ "represent the avatar of the contact."
+#~ "Use this option for exemple if the launcher launches a script in a terminal "
+#~ "but you don't want it to steal normal terminal's icons from the TaskBar, or "
+#~ "if you explicitely want to use the original icon of the TaskBar because it "
+#~ "provides some info, for exemple Pidgin's icons represent the avatar of the "
+#~ "contact."
 #~ msgstr ""
 #~ "Χρησιμοποιήστε αυτή την επιλογή εάν ο εκκινητής εκτελεί ένα σενάριο σε "
-#~ "τερματικό, αλλά δεν θέλετε να 'αρπάζει' κανονικά εικονίδια τερματικού από "
-#~ "τη Γραμμή Εργασιών, γιατί αυτά παρέχουν κάποιες πληροφορίες, για "
-#~ "παράδειγμα τα εικονίδια του Pidgin αναπαριστούν το σύμβολο της "
-#~ "επικοινωνίας."
+#~ "τερματικό, αλλά δεν θέλετε να 'αρπάζει' κανονικά εικονίδια τερματικού από τη "
+#~ "Γραμμή Εργασιών, γιατί αυτά παρέχουν κάποιες πληροφορίες, για παράδειγμα τα "
+#~ "εικονίδια του Pidgin αναπαριστούν το σύμβολο της επικοινωνίας."
 
 #~ msgid "List of themes :"
 #~ msgstr "Κατάλογος θεμάτων:"
