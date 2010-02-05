@@ -657,7 +657,9 @@ static void _cairo_dock_key_grab_class (GtkButton *button, gpointer *data)
 	gchar *cResult = NULL; // NON CE N'EST PAS MA MOYENNE DE POINT !!!!
 	if (str != NULL)
 	{
-		str += 20;  // WM_CLASS(STRING) = "gnome-terminal", "Gnome-terminal"
+		// WM_CLASS(STRING) = "gnome-terminal", "Gnome-terminal" \\ => utiliser le 2è
+		str = strchr (str, ',');
+		str += 3;
 		gchar *max = strchr (str, '"'); // on pointe le 2e "
 		if (max != NULL)
 			cResult = g_strndup (str, max - str); // on prend ce qui est entre ""
