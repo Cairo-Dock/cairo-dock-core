@@ -668,9 +668,9 @@ static void _cairo_dock_key_grab_class (GtkButton *button, gpointer *data)
 		cd_warning ("couldn't find the class of this window.");
 	
 	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), TRUE); // unlocked
-	gtk_entry_set_text (pEntry, cResult); // on ajoute le txt dans le box des accusés
+	gtk_entry_set_text (pEntry, cResult); // on ajoute le txt dans le box des accuses
 	g_free (cProp); // Ah, mnt C Propr' !
-	g_free (cResult); // Où qu'elle est la poulette ???
+	g_free (cResult); // Ou qu'elle est la poulette ???
 }
 
 void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data)
@@ -1533,7 +1533,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	pFrame = NULL;
 	pFrameVBox = NULL;
 	pControlContainer = NULL;
-	iNbControlledWidgets = 0;
 	cGroupComment  = g_key_file_get_comment (pKeyFile, cGroupName, NULL, NULL);
 	if (cGroupComment != NULL)
 	{
@@ -2022,6 +2021,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				data[1] = pFrameVBox != NULL ? pFrameVBox : pGroupBox;
 				iNbControlledWidgets = 9;
 				data[2] = GINT_TO_POINTER (iNbControlledWidgets);
+				iNbControlledWidgets --;  // car dans cette fonction, on ne compte pas le separateur.
 				g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_custom_item_in_combo), data);
 				
 				GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));
@@ -2039,6 +2039,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					}
 					else
 						iNbControlledWidgets = 0;
+					g_free (cName);
 				}
 			}
 			break ;

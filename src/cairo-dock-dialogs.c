@@ -1708,14 +1708,15 @@ Icon *cairo_dock_get_dialogless_icon (void)
 		if (pIcon == NULL || cairo_dock_icon_has_dialog (pIcon) || pIcon->cParentDockName == NULL || pIcon->fPersonnalScale > 0)
 		{
 			pIcon = cairo_dock_get_pointed_icon (g_pMainDock->icons);
-			if (pIcon == NULL || CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) || cairo_dock_icon_has_dialog (pIcon) || pIcon->cParentDockName == NULL || pIcon->fPersonnalScale > 0)
+			if (pIcon == NULL || CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) || CAIRO_DOCK_IS_APPLET (pIcon) || cairo_dock_icon_has_dialog (pIcon) || pIcon->cParentDockName == NULL || pIcon->fPersonnalScale > 0)
 			{
 				GList *ic;
 				for (ic = g_pMainDock->icons; ic != NULL; ic = ic->next)
 				{
 					pIcon = ic->data;
-					if (! cairo_dock_icon_has_dialog (pIcon) && ! CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) && pIcon->cParentDockName != NULL && pIcon->fPersonnalScale > 0)
+					if (! cairo_dock_icon_has_dialog (pIcon) && ! CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) && ! CAIRO_DOCK_IS_APPLET (pIcon) && pIcon->cParentDockName != NULL && pIcon->fPersonnalScale > 0)
 						break;
+					pIcon = NULL;
 				}
 			}
 		}

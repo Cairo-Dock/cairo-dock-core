@@ -1145,6 +1145,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 			pMinimalConfig->cLabel,
 			pMinimalConfig->cIconFileName,
 			pInstance);
+		
 		pIcon->fOrder = pMinimalConfig->fOrder;
 		if (pDock)
 			pIcon->cParentDockName = g_strdup (cDockName);
