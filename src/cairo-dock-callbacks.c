@@ -615,6 +615,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	//\_______________ On lance l'animation du dock.
 	if (pDock->iRefCount == 0)
 	{
+		g_print ("%s (auto-hide:%d)\n", __func__, pDock->bAutoHide);
 		if (pDock->bAutoHide)
 		{
 			pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? 0.001 : 0.);

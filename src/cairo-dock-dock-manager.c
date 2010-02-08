@@ -434,7 +434,11 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 	
 	pDock->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Position", "alignment", &bFlushConfFileNeeded, 0.5, NULL, NULL);
 	
-	pDock->bAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, pDock->bIsMainDock ? "Accessibility" : "Position", "auto-hide", &bFlushConfFileNeeded, FALSE, "Auto-Hide", "auto-hide");
+	if (pDock->bIsMainDock)
+		pDock->bAutoHide = (cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "visibility", &bFlushConfFileNeeded, FALSE, NULL, NULL) == 3);
+	else
+		pDock->bAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, "Position", "auto-hide", &bFlushConfFileNeeded, FALSE, "Auto-Hide", "auto-hide");
+	g_print ("pDock->bAutoHide <- %d\n", pDock->bAutoHide);
 	
 	if (myPosition.bUseXinerama)
 	{
