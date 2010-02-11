@@ -720,6 +720,7 @@ void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboole
 {
 	g_return_if_fail (icon != NULL);
 	//\___________________ On effectue les taches de fermeture de l'icone suivant son type.
+	gboolean bNormalAppli = CAIRO_DOCK_IS_NORMAL_APPLI (icon);  // on le recupere la dans le cas d'une applet controlant une appli, car apres s'etre fait deinstanciee, elle n'est plus une applet, et est alors consideree comme une appli normale (on veut garder son Xid lors du detachement du dock).
 	if (icon->cDesktopFileName != NULL)
 	{
 		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
@@ -740,7 +741,7 @@ void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboole
 	}
 	else if (CAIRO_DOCK_IS_APPLET (icon))
 	{
-		cairo_dock_deinstanciate_module (icon->pModuleInstance);  // desactive l'instance du module.
+		cairo_dock_deinstanciate_module (icon->pModuleInstance);  // desactive l'instance du module -> n'est plus une applet.
 		cairo_dock_update_conf_file_with_active_modules ();
 		cairo_dock_mark_theme_as_modified (TRUE);
 	}  // rien a faire pour les separateurs automatiques.
@@ -749,10 +750,12 @@ void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboole
 	if (pDock != NULL)
 		cairo_dock_detach_icon_from_dock (icon, pDock, bCheckUnusedSeparator);
 	
-	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
+	if (bNormalAppli)
 	{
-		cairo_dock_unregister_appli (icon);
+		cairo_dock_unregister_appli (icon);  // -> n'est plus une appli.
 	}
+	else  // cas d'une applet controlant une appli, elle devient du coup une appli normale, ce qu'on ne veut pas.
+		icon->Xid = 0;
 }
 
 
