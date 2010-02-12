@@ -64,8 +64,8 @@
 #define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 600
 #define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 350
 #define CAIRO_DOCK_FILE_HOST_URL "https://launchpad.net/cairo-dock"  // https://developer.berlios.de/project/showfiles.php?group_id=8724
-#define CAIRO_DOCK_SITE_URL "http://cairo-dock.vef.fr"  // http://cairo-dock.org
-#define CAIRO_DOCK_FORUM_URL "http://cairo-dock.vef.fr/bg_forumlist.php"  // http://forum.cairo-dock.org
+#define CAIRO_DOCK_SITE_URL "http://cairo-dock.vef.fr"  // http://glx-dock.org
+#define CAIRO_DOCK_FORUM_URL "http://cairo-dock.vef.fr/bg_forumlist.php"  // http://forum.glx-dock.org
 
 extern CairoDock *g_pMainDock;
 
@@ -229,7 +229,7 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Support"),
 		"<b>Installation script and web hosting :</b>\n  Mav\n\
-<b>Site (cairo-dock.org) :</b>\n  Necropotame\n  Matttbe\n  Tdey\n\
+<b>Site (glx-dock.org) :</b>\n  Necropotame\n  Matttbe\n  Tdey\n\
 <b>LaunchPad :</b>\n  Matttbe\n  Mav\n\
 <b>Suggestions/Comments/Beta-Testers :</b>\n  AuraHxC\n  Chilperik\n  Cybergoll\n  Damster\n  Djoole\n  Glattering\n  Mav\n  Necropotame\n  Nochka85\n  Ppmt\n  RavanH\n  Rhinopierroce\n  Rom1\n  Sombrero\n  Vilraleur");
 	

@@ -862,10 +862,10 @@ msgstr "您确定要覆写主题 %s 么？"
 #, c-format
 msgid ""
 "couldn't get distant file %s/%s, maybe the server is down.\n"
-"Please retry later or contact us at cairo-dock.org."
+"Please retry later or contact us at glx-dock.org."
 msgstr ""
 "无法获取文件 %s/%s，可能服务器没有相应。\n"
-"请稍候尝试，或者在cairo-dock.org联系我们。"
+"请稍候尝试，或者在glx-dock.org联系我们。"
 
 #: ../src/cairo-dock-themes-manager.c:904
 #, c-format
@@ -952,7 +952,7 @@ msgid ""
 "with right-click -> Cairo-Dock -> Manage themes.\n"
 "A useful help is available by right-click -> Cairo-Dock -> Help.\n"
 "If you have any question/request/remark, please pay us a visit at "
-"http://cairo-dock.org.\n"
+"http://glx-dock.org.\n"
 "Hope you will enjoy this soft !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
@@ -992,7 +992,7 @@ msgstr ""
 msgid ""
 "The module '%s' may have encountered a problem.\n"
 "It has been restared successfully, but if it happens again, thanks to report "
-"it to us at http://cairo-dock.org"
+"it to us at http://glx-dock.org"
 msgstr ""
 
 #: ../src/cairo-dock.c:753
@@ -3893,7 +3893,7 @@ msgid ""
 "modules.\n"
 " - OpenGL mode works on ATI and Intel with the latest drivers !\n"
 " - Finally, Cairo-Dock has its own ppa on LaunchPad, and a complete "
-"documentation on http://doc.cairo-dock.org."
+"documentation on http://doc.glx-dock.org."
 msgstr ""
 
 #: ../data/messages:1387

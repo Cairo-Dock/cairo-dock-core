@@ -9,7 +9,7 @@ export THEME_NAME="$1"
 export CAIRO_DOCK_DIR="$HOME/.config/cairo-dock"
 export CURRENT_THEME_DIR="$CAIRO_DOCK_DIR/current_theme"
 export CURRENT_CONF_FILE=""
-export THEME_SERVER "http://themes.cairo-dock.org"
+export THEME_SERVER "http://themes.glx-dock.org"
 export INSTALL_DIR="/usr/share/cairo-dock"
 
 set_value()

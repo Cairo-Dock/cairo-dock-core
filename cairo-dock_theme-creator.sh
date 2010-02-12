@@ -18,7 +18,7 @@
 # http://www.gnu.org/licenses/licenses.html#GPL
 
 # Auteur : Nochka85
-# Contact : nochka85@cairo-dock.org
+# Contact : nochka85@glx-dock.org
 # Version : 05/07/08
 
 # Changelog
@@ -114,7 +114,7 @@ LINKS_SPECIFIC_VLC_ICON="vlc"
 SCRIPT="cairo-dock_theme-creator.sh"		#OK
 SCRIPT_SAVE="cairo-dock_theme-creator.sh.save"	#OK
 SCRIPT_NEW="cairo-dock_theme-creator.sh.new"	#OK
-HOST="http://theme_creator.cairo-dock.org"	#OK
+HOST="http://theme_creator.glx-dock.org"	#OK
 
 
 
@@ -593,7 +593,7 @@ case $1 in
 		echo ""
 		echo ""
 		echo -e "$NORMAL""Auteur : Nochka85"
-		echo -e "$NORMAL""Contact : nochka85@cairo-dock.org"
+		echo -e "$NORMAL""Contact : nochka85@glx-dock.org"
 		echo ""
 		exit
 	;;

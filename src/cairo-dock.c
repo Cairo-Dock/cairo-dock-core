@@ -193,7 +193,7 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 }
 static void _cairo_dock_intercept_signal (int signal)
 {
-	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now (%s).\nFeel free to report this bug on cairo-dock.org to help improving the dock !", signal, cLaunchCommand);
+	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now (%s).\nFeel free to report this bug on glx-dock.org to help improving the dock !", signal, cLaunchCommand);
 	g_print ("info on the system :\n");
 	int r = system ("uname -a");
 	if (g_pCurrentModule != NULL)
@@ -653,7 +653,7 @@ int main (int argc, char** argv)
 	{
 		if (cExcludeModule != NULL)
 		{
-			cd_warning ("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, if it happens again thanks to report it at http://cairo-dock.org\n", cExcludeModule);
+			cd_warning ("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, if it happens again thanks to report it at http://glx-dock.org\n", cExcludeModule);
 			gchar *cCommand = g_strdup_printf ("sed -i \"/modules/ s/%s//g\" \"%s\"", cExcludeModule, g_cConfFile);
 			int r = system (cCommand);
 			g_free (cCommand);
@@ -713,7 +713,7 @@ int main (int argc, char** argv)
 	//\___________________ On affiche un petit message de bienvenue.
 	if (bFirstLaunch)
 	{
-		cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Manage themes.\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit at http://cairo-dock.org.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);
+		cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Manage themes.\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit at http://glx-dock.org.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);
 		
 		GdkScreen *pScreen = gdk_screen_get_default ();
 		if (! mySystem.bUseFakeTransparency && ! gdk_screen_is_composited (pScreen))
@@ -741,7 +741,7 @@ int main (int argc, char** argv)
 	}
 	else if (cExcludeModule != NULL && ! bMaintenance)
 	{
-		gchar *cMessage = g_strdup_printf (_("The module '%s' may have encountered a problem.\nIt has been restared successfully, but if it happens again, thanks to report it to us at http://cairo-dock.org"), cExcludeModule);
+		gchar *cMessage = g_strdup_printf (_("The module '%s' may have encountered a problem.\nIt has been restared successfully, but if it happens again, thanks to report it to us at http://glx-dock.org"), cExcludeModule);
 		
 		CairoDockModule *pModule = cairo_dock_find_module_from_name (cExcludeModule);
 		Icon *icon = cairo_dock_get_dialogless_icon ();

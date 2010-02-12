@@ -45,7 +45,7 @@
 #define CAIRO_DOCK_MODIFIED_THEME_FILE ".cairo-dock-need-save"
 #define CAIRO_DOCK_THEME_PANEL_WIDTH 1000
 #define CAIRO_DOCK_THEME_PANEL_HEIGHT 550
-#define CAIRO_DOCK_THEME_SERVER "http://themes.cairo-dock.vef.fr"  // http://themes.cairo-dock.org
+#define CAIRO_DOCK_THEME_SERVER "http://themes.cairo-dock.vef.fr"  // http://themes.glx-dock.org
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"
 #define CAIRO_DOCK_DEFAULT_THEME_LIST_NAME "list.conf"
 
@@ -884,7 +884,7 @@ gchar *cairo_dock_depackage_theme (const gchar *cPackagePath)
 			cNewThemePath = cairo_dock_download_file (cPackagePath, "", str+1, cUserThemesDir, NULL);
 			if (cNewThemePath == NULL)
 			{
-				cairo_dock_show_temporary_dialog_with_icon_printf (_("couldn't get distant file %s/%s, maybe the server is down.\nPlease retry later or contact us at cairo-dock.org."), NULL, NULL, 0, NULL, cPackagePath, str+1);
+				cairo_dock_show_temporary_dialog_with_icon_printf (_("couldn't get distant file %s/%s, maybe the server is down.\nPlease retry later or contact us at glx-dock.org."), NULL, NULL, 0, NULL, cPackagePath, str+1);
 			}
 		}
 	}
