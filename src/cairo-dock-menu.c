@@ -64,8 +64,8 @@
 #define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 600
 #define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 350
 #define CAIRO_DOCK_FILE_HOST_URL "https://launchpad.net/cairo-dock"  // https://developer.berlios.de/project/showfiles.php?group_id=8724
-#define CAIRO_DOCK_SITE_URL "http://cairo-dock.vef.fr"  // http://glx-dock.org
-#define CAIRO_DOCK_FORUM_URL "http://cairo-dock.vef.fr/bg_forumlist.php"  // http://forum.glx-dock.org
+#define CAIRO_DOCK_SITE_URL "http://glx-dock.org"  // http://cairo-dock.vef.fr
+#define CAIRO_DOCK_FORUM_URL "http://forum.glx-dock.org"  // http://cairo-dock.vef.fr/bg_forumlist.php
 
 extern CairoDock *g_pMainDock;
 
