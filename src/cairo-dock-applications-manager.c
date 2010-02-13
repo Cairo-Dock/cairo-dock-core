@@ -251,7 +251,6 @@ static void _on_change_active_window (void)
 		CairoDock *pParentDock = NULL;
 		if (CAIRO_DOCK_IS_APPLI (icon))
 		{
-			cd_message ("%s devient active", icon->cName);
 			if (icon->bIsDemandingAttention)  // on force ici, car il semble qu'on ne recoive pas toujours le retour a la normale.
 				cairo_dock_appli_stops_demanding_attention (icon);
 			
@@ -300,7 +299,6 @@ static void _on_change_active_window (void)
 
 static gboolean _on_change_current_desktop_viewport (void)
 {
-	cd_debug ("");
 	CairoDock *pDock = g_pMainDock;
 	
 	_cairo_dock_retrieve_current_desktop_and_viewport ();
@@ -356,8 +354,6 @@ static gboolean _on_change_current_desktop_viewport (void)
 
 static void _on_change_nb_desktops (void)
 {
-	cd_debug ("");
-	
 	g_iNbDesktops = cairo_dock_get_nb_desktops ();
 	_cairo_dock_retrieve_current_desktop_and_viewport ();  // au cas ou on enleve le bureau courant.
 	
@@ -366,7 +362,6 @@ static void _on_change_nb_desktops (void)
 
 static void _on_change_desktop_geometry (void)
 {
-	cd_debug ("");
 	if (cairo_dock_update_screen_geometry ())  // modification de la resolution.
 	{
 		cd_message ("resolution alteree");
@@ -393,7 +388,6 @@ static void _on_change_window_state (Icon *icon)
 		cairo_dock_blacklist_appli (Xid);
 		return ;
 	}
-	cd_debug ("changement d'etat de %d => {%d ; %d ; %d ; %d}", Xid, bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention);
 	
 	// demande d'attention.
 	if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))  // elle peut demander l'attention plusieurs fois de suite.
@@ -518,7 +512,6 @@ static void _on_change_window_state (Icon *icon)
 static void _on_change_window_desktop (Icon *icon)
 {
 	Window Xid = icon->Xid;
-	cd_debug ("%s (%d)", __func__, Xid);
 	icon->iNumDesktop = cairo_dock_get_xwindow_desktop (Xid);
 	
 	// applis du bureau courant seulement.
@@ -553,7 +546,6 @@ static void _on_change_window_desktop (Icon *icon)
 static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 {
 	Window Xid = icon->Xid;
-	cd_debug ("%s (%d)", __func__, Xid);
 	
 	#ifdef HAVE_XEXTEND
 	if (e->width != icon->windowGeometry.width || e->height != icon->windowGeometry.height)

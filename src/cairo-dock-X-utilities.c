@@ -407,7 +407,7 @@ void cairo_dock_set_current_desktop (int iDesktopNumber)
 Pixmap cairo_dock_get_window_background_pixmap (Window Xid)
 {
 	g_return_val_if_fail (Xid > 0, None);
-	cd_debug ("%s (%d)", __func__, Xid);
+	//cd_debug ("%s (%d)", __func__, Xid);
 	
 	Pixmap iPixmapID;
 	Atom aReturnedType = 0;
@@ -1063,7 +1063,7 @@ void cairo_dock_xwindow_is_above_or_below (Window Xid, gboolean *bIsAbove, gbool
 gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gboolean *bIsFullScreen, gboolean *bIsHidden, gboolean *bIsMaximized, gboolean *bDemandsAttention)
 {
 	g_return_val_if_fail (Xid > 0, FALSE);
-	cd_debug ("%s (%d)", __func__, Xid);
+	//cd_debug ("%s (%d)", __func__, Xid);
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
 	unsigned long iLeftBytes, iBufferNbElements = 0;
@@ -1083,12 +1083,10 @@ gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gb
 		{
 			if (pXStateBuffer[i] == s_aNetWmFullScreen)
 			{
-				cd_debug (" s_aNetWmFullScreen");
 				*bIsFullScreen = TRUE;
 			}
 			else if (pXStateBuffer[i] == s_aNetWmHidden)
 			{
-				cd_debug (" s_aNetWmHidden");
 				*bIsHidden = TRUE;
 			}
 			else if (pXStateBuffer[i] == s_aNetWmMaximizedVert)
@@ -1105,7 +1103,6 @@ gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gb
 			}
 			else if (pXStateBuffer[i] == s_aNetWmDemandsAttention && bDemandsAttention != NULL)
 			{
-				cd_debug (" cette fenetre demande notre attention !");
 				*bDemandsAttention = TRUE;
 			}
 			
@@ -1162,7 +1159,6 @@ static inline gboolean _cairo_dock_window_has_type (int Xid, Atom iType)
 	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmWindowType, 0, G_MAXULONG, False, XA_ATOM, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pTypeBuffer);
 	if (iBufferNbElements != 0)
 	{
-		cd_debug ("%s (%d) -> %d (%d,%d)", __func__, Xid, *pTypeBuffer, s_aNetWmWindowTypeNormal, s_aNetWmWindowTypeUtility);
 		bIsType = (*pTypeBuffer == iType);
 		XFree (pTypeBuffer);
 	}
@@ -1231,18 +1227,17 @@ void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iRelative
 	
 	*iRelativePositionX = iGlobalPositionX;
 	*iRelativePositionY = iGlobalPositionY;
-	cd_debug ("position relative : (%d;%d) taille : %dx%d", *iRelativePositionX, *iRelativePositionY, iWidthExtent, iHeightExtent);
+	//cd_debug ("position relative : (%d;%d) taille : %dx%d", *iRelativePositionX, *iRelativePositionY, iWidthExtent, iHeightExtent);
 }
 
 
 gboolean cairo_dock_xwindow_is_on_this_desktop (Window Xid, int iDesktopNumber)
 {
-	cd_debug ("");
 	int iWindowDesktopNumber, iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;  // coordonnees du coin haut gauche dans le referentiel du viewport actuel.
 	iWindowDesktopNumber = cairo_dock_get_xwindow_desktop (Xid);
 	cairo_dock_get_xwindow_geometry (Xid, &iGlobalPositionX, &iGlobalPositionY, &iWidthExtent, &iHeightExtent);
 
-	cd_debug (" -> %d/%d ; (%d ; %d)", iWindowDesktopNumber, iDesktopNumber, iGlobalPositionX, iGlobalPositionY);
+	//cd_debug (" -> %d/%d ; (%d ; %d)", iWindowDesktopNumber, iDesktopNumber, iGlobalPositionX, iGlobalPositionY);
 	return ( (iWindowDesktopNumber == iDesktopNumber || iWindowDesktopNumber == -1) &&
 		iGlobalPositionX + iWidthExtent > 0 &&
 		iGlobalPositionX < g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
@@ -1252,7 +1247,6 @@ gboolean cairo_dock_xwindow_is_on_this_desktop (Window Xid, int iDesktopNumber)
 
 gboolean cairo_dock_xwindow_is_on_current_desktop (Window Xid)
 {
-	cd_debug ("");
 	int iDesktopNumber, iDesktopViewportX, iDesktopViewportY;
 	iDesktopNumber = cairo_dock_get_current_desktop ();
 	

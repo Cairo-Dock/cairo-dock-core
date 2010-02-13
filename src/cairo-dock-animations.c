@@ -766,7 +766,7 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 
 void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)
 {
-	cd_debug ("%s (%s, state:%d)", __func__, pIcon->cName, pIcon->iAnimationState);
+	//cd_debug ("%s (%s, state:%d)", __func__, pIcon->cName, pIcon->iAnimationState);
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)  // on le fait avant de changer d'animation, pour le cas ou l'icone ne serait plus placee au meme endroit (rebond).
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 	cairo_dock_stop_icon_animation (pIcon);

@@ -64,8 +64,8 @@
 #define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 600
 #define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 350
 #define CAIRO_DOCK_FILE_HOST_URL "https://launchpad.net/cairo-dock"  // https://developer.berlios.de/project/showfiles.php?group_id=8724
-#define CAIRO_DOCK_SITE_URL "http://cairo-dock.vef.fr"  // http://glx-dock.org
-#define CAIRO_DOCK_FORUM_URL "http://cairo-dock.vef.fr/bg_forumlist.php"  // http://forum.glx-dock.org
+#define CAIRO_DOCK_SITE_URL "http://glx-dock.org"  // http://cairo-dock.vef.fr
+#define CAIRO_DOCK_FORUM_URL "http://forum.glx-dock.org"  // http://cairo-dock.vef.fr/bg_forumlist.php
 
 extern CairoDock *g_pMainDock;
 
@@ -1620,9 +1620,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 
 		gboolean bIsAbove=FALSE, bIsBelow=FALSE;
 		Window Xid = GDK_WINDOW_XID (pContainer->pWidget->window);
-		//cd_debug ("Xid : %d", Xid);
 		cairo_dock_xwindow_is_above_or_below (Xid, &bIsAbove, &bIsBelow);  // gdk_window_get_state bugue.
-		//cd_debug (" -> %d;%d", bIsAbove, bIsBelow);
 		gboolean bIsUtility = cairo_dock_window_is_utility (Xid);  // gtk_window_get_type_hint me renvoie toujours 0 !
 		gboolean bIsDock = (/*cairo_dock_window_is_dock (Xid) || */CAIRO_DESKLET (pContainer)->bSpaceReserved);
 		gboolean bIsNormal = (!bIsAbove && !bIsBelow && !bIsUtility && !bIsDock);

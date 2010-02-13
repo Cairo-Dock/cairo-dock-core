@@ -96,14 +96,24 @@
  *
  * The installation is very easy. In a terminal, copy-paste the following commands :
  * \code
- *   ### grab the sources
- *   svn co http://svn.berlios.de/svnroot/repos/cairo-dock/trunk CD
- *   cd CD/cairo-dock
+ *   ### grab the sources of the core
+ *   mkdir CD && cd CD
+ *   mkdir core plug-ins
+ *   cd core
+ *   bzr checkout --lightweight lp:cairo-dock-core
  *   ### compil the dock and install it
+ *   cd cairo-dock
  *   autoreconf -isf && ./configure --prefix=/usr && make
  *   sudo make install
+ *   ### grab the sources of the plug-ins
+ *   cd ../../plug-ins
+ *   bzr checkout --lightweight lp:cairo-dock-plug-ins
  *   ### compil the stable plug-ins and install them
- *   cd ../plug-ins
+ *   cd cairo-dock-plug-ins
+ *   autoreconf -isf && ./configure --prefix=/usr && make
+ *   sudo make install
+ *   ### compile the unstable plug-ins : for each unstable plug-in, do:
+ *   cd name_of_the_plugin
  *   autoreconf -isf && ./configure --prefix=/usr && make
  *   sudo make install
  * \endcode

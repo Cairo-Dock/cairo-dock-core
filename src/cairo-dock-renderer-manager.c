@@ -146,7 +146,6 @@ void cairo_dock_remove_dialog_renderer (const gchar *cRendererName)
 
 CairoDeskletDecoration *cairo_dock_get_desklet_decoration (const gchar *cDecorationName)
 {
-	cd_debug ("%s (%s)", __func__, cDecorationName);
 	if (cDecorationName != NULL)
 		return g_hash_table_lookup (s_hDeskletDecorationsTable, cDecorationName);
 	else if (myDesklets.cDeskletDecorationsName != NULL)
@@ -169,7 +168,6 @@ void cairo_dock_remove_desklet_decoration (const gchar *cDecorationName)
 
 CairoDataRendererNewFunc cairo_dock_get_data_renderer_entry_point (const gchar *cRendererName)
 {
-	cd_debug ("%s (%s)", __func__, cRendererName);
 	if (cRendererName != NULL)
 		return g_hash_table_lookup (s_hDataRendererTable, cRendererName);
 	else
@@ -272,7 +270,6 @@ void cairo_dock_set_default_renderer (CairoDock *pDock)
 void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRenderer *pRenderer, cairo_t *pSourceContext, gboolean bLoadIcons, CairoDeskletRendererConfigPtr pConfig)
 {
 	g_return_if_fail (pDesklet != NULL);
-	cd_debug ("%s (%x)", __func__, pRenderer);
 	
 	if (pDesklet->pRenderer != NULL && pDesklet->pRenderer->free_data != NULL)  // meme si pDesklet->pRendererData == NULL.
 	{
@@ -314,7 +311,6 @@ void cairo_dock_set_desklet_renderer_by_name (CairoDesklet *pDesklet, const gcha
 void cairo_dock_set_dialog_renderer (CairoDialog *pDialog, CairoDialogRenderer *pRenderer, cairo_t *pSourceContext, CairoDialogRendererConfigPtr pConfig)
 {
 	g_return_if_fail (pDialog != NULL);
-	cd_debug ("%s (%x)", __func__, pRenderer);
 	
 	if (pDialog->pRenderer != NULL && pDialog->pRenderer->free_data != NULL)
 	{
@@ -367,7 +363,6 @@ void cairo_dock_render_dialog_with_new_data (CairoDialog *pDialog, CairoDialogRe
 
 CairoDialogDecorator *cairo_dock_get_dialog_decorator (const gchar *cDecoratorName)
 {
-	cd_debug ("%s (%s)", __func__, cDecoratorName);
 	CairoDialogDecorator *pDecorator = NULL;
 	if (cDecoratorName != NULL)
 		pDecorator = g_hash_table_lookup (s_hDialogDecoratorTable, cDecoratorName); 

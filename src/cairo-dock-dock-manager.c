@@ -245,14 +245,14 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 		{
 			if (icon->pSubDock->container.bInside)
 			{
-				cd_debug ("on est dans le sous-dock, donc on ne le cache pas");
+				//cd_debug ("on est dans le sous-dock, donc on ne le cache pas");
 				pDock->container.bInside = FALSE;
 				//pDock->bAtTop = FALSE;
 				return FALSE;
 			}
 			else if (icon->pSubDock->iSidLeaveDemand == 0)  // si on sort du dock sans passer par le sous-dock, par exemple en sortant par le bas.
 			{
-				cd_debug ("on cache %s par filiation", icon->cName);
+				//cd_debug ("on cache %s par filiation", icon->cName);
 				icon->pSubDock->iScrollOffset = 0;
 				icon->pSubDock->fFoldingFactor = 0;
 				gtk_widget_hide (icon->pSubDock->container.pWidget);
@@ -703,7 +703,7 @@ gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon)
 	{
 		g_free (pIcon->cName);
 		pIcon->cName = cUniqueName;
-		cd_debug ("cName <- %s", cUniqueName);
+		cd_debug (" cName <- %s", cUniqueName);
 		return TRUE;
 	}
 	return FALSE;

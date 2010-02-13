@@ -434,15 +434,13 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			NULL, NULL);
 		g_free (cIconPath);
 	}
-	cd_debug ("%s () -> %.2fx%.2f", __func__, icon->fWidth, icon->fHeight);
+	cd_debug ("%s (%s) -> %.2fx%.2f", __func__, icon->cName, icon->fWidth, icon->fHeight);
 	
 	//\_____________ On met le background de l'icone si necessaire
 	if (icon->pIconBuffer != NULL &&
 		g_pIconBackgroundImageSurface != NULL &&
 		(! CAIRO_DOCK_IS_SEPARATOR (icon)/* && (myIcons.bBgForApplets || ! CAIRO_DOCK_IS_APPLET(pIcon))*/))
 	{
-		cd_message (">>> %s prendra un fond d'icone", icon->cName);
-
 		cairo_t *pCairoIconBGContext = cairo_create (icon->pIconBuffer);
 		cairo_scale(pCairoIconBGContext,
 			icon->fWidth / g_iIconBackgroundImageWidth,
@@ -1097,7 +1095,6 @@ void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* 
 			&g_fIndicatorWidth,
 			&g_fIndicatorHeight,
 			NULL, NULL);
-		cd_debug ("g_pIndicatorSurface : %.2fx%.2f", g_fIndicatorWidth, g_fIndicatorHeight);
 	}
 }
 
@@ -1190,6 +1187,7 @@ void cairo_dock_load_class_indicator (const gchar *cIndicatorImagePath, cairo_t*
 
 void cairo_dock_unload_additionnal_textures (void)
 {
+	cd_debug ("");
 	if (g_iBackgroundTexture != 0)
 	{
 		_cairo_dock_delete_texture (g_iBackgroundTexture);

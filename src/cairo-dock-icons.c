@@ -80,10 +80,7 @@ void cairo_dock_free_icon (Icon *icon)
 	if (icon->iSidRedrawSubdockContent != 0)
 		g_source_remove (icon->iSidRedrawSubdockContent);
 	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
-	{
-		g_print ("NORMAL_APPLI\n");
 		cairo_dock_unregister_appli (icon);
-	}
 	else if (icon->cClass != NULL)  // c'est un inhibiteur.
 		cairo_dock_deinhibate_class (icon->cClass, icon);
 	if (icon->pModuleInstance != NULL)

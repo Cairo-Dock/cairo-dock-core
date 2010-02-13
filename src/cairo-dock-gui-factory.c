@@ -39,6 +39,7 @@
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-task.h"
+#include "cairo-dock-load.h"
 #include "cairo-dock-callbacks.h" // cairo_dock_launch_command_sync
 
 #define CAIRO_DOCK_GUI_MARGIN 4
@@ -303,7 +304,6 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		}
 		else if (*cDescriptionFilePath == '/')  // fichier local
 		{
-			cd_debug ("fichier readme local (%s)", cDescriptionFilePath);
 			gsize length = 0;
 			gchar *cDescription = NULL;
 			g_file_get_contents (cDescriptionFilePath,
@@ -853,7 +853,6 @@ void cairo_dock_build_renderer_list_for_gui (GHashTable *pHashTable)
 }
 static void _cairo_dock_add_one_decoration_item (const gchar *cName, CairoDeskletDecoration *pDecoration, GtkListStore *pModele)
 {
-	cd_debug ("%s (%s)", __func__, cName);
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
@@ -1941,7 +1940,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					gchar *cShareThemesDir = NULL, *cUserThemesDir = NULL, *cDistantThemesDir = NULL;
 					if (pAuthorizedValuesList[0] != NULL)
 					{
-						cShareThemesDir = (*pAuthorizedValuesList[0] != '\0' ? pAuthorizedValuesList[0] : NULL);
+						cShareThemesDir = (*pAuthorizedValuesList[0] != '\0' ? cairo_dock_generate_file_path (pAuthorizedValuesList[0]) : NULL);  // on autorise les ~/blabla.
 						if (pAuthorizedValuesList[1] != NULL)
 						{
 							cUserThemesDir = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR, pAuthorizedValuesList[1]);
@@ -1957,12 +1956,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					g_object_set_data (G_OBJECT (pOneWidget), "cd-task", pTask);
 					g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (on_delete_async_widget), pOneWidget);
 					g_object_ref (pOneWidget);  // on prend une reference pour que le widget reste en vie lorsqu'on recharge la fenetre (sinon le widget serait detruit sans que la fenetre ne le soit, et lors de la destruction de celle-ci, le signal delete-event serait emis, et la callback appelee avec un widget deja detruit).
-					/**GHashTable *pThemeTable = cairo_dock_list_themes (cShareThemesDir, cUserThemesDir, cDistantThemesDir);
-					cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
-					cairo_dock_fill_combo_with_themes (pOneWidget, pThemeTable, cValue);
-					g_hash_table_destroy (pThemeTable);
-					g_free (cValue);*/
 					g_free (cUserThemesDir);
+					g_free (cShareThemesDir);
 				}
 			break ;
 			

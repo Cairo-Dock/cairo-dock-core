@@ -153,7 +153,6 @@ static void _cairo_dock_init_gauge_image (const gchar *cImagePath, GaugeImage *p
 }
 static GaugeImage *_cairo_dock_new_gauge_image (const gchar *cImagePath)
 {
-	cd_debug ("%s (%s)", __func__, cImagePath);
 	GaugeImage *pGaugeImage = g_new0 (GaugeImage, 1);
 	
 	_cairo_dock_init_gauge_image (cImagePath, pGaugeImage);
@@ -264,7 +263,6 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 		if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "name") == 0)
 		{
 			pGauge->cThemeName = xmlNodeGetContent(pGaugeNode);
-			cd_debug("gauge : Nom du theme(%s)",pGauge->pIndicatorList);
 		}
 		else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "rank") == 0)
 		{
