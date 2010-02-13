@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
-"POT-Creation-Date: 2010-02-02 01:03+0000\n"
-"PO-Revision-Date: 2010-02-02 01:49+0000\n"
+"POT-Creation-Date: 2010-02-12 11:54+0000\n"
+"PO-Revision-Date: 2010-02-12 12:54+0000\n"
 "Last-Translator: Cairo-Dock Team <cairo-dock-team@lists.launchpad.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-02-03 04:44+0000\n"
+"X-Launchpad-Export-Date: 2010-02-13 04:55+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-applet-facility.h:259
@@ -72,7 +72,7 @@ msgstr "_自定义图标_"
 
 #: ../src/cairo-dock-gui-factory.c:1093
 msgid "Accessory"
-msgstr ""
+msgstr "附件"
 
 #: ../src/cairo-dock-gui-factory.c:1098 ../src/cairo-dock-gui-main.c:128
 msgid "Desktop"
@@ -80,15 +80,15 @@ msgstr "桌面"
 
 #: ../src/cairo-dock-gui-factory.c:1103
 msgid "Controler"
-msgstr ""
+msgstr "控制器"
 
 #: ../src/cairo-dock-gui-factory.c:1108
 msgid "Plug-in"
-msgstr ""
+msgstr "插件"
 
 #: ../src/cairo-dock-gui-factory.c:1139
 msgid "rate me"
-msgstr ""
+msgstr "评分"
 
 #: ../src/cairo-dock-gui-factory.c:1159
 msgid "Local"
@@ -100,7 +100,7 @@ msgstr "用户"
 
 #: ../src/cairo-dock-gui-factory.c:1167
 msgid "Net"
-msgstr ""
+msgstr "网络"
 
 #: ../src/cairo-dock-gui-factory.c:1171
 msgid "New"
@@ -136,7 +136,7 @@ msgstr ""
 #: ../src/cairo-dock-gui-factory.c:1950
 #, c-format
 msgid "Listing themes in '%s' ..."
-msgstr ""
+msgstr "列出 '%s' 中的主题"
 
 #: ../src/cairo-dock-gui-factory.c:2125
 msgid "module"
@@ -149,7 +149,7 @@ msgstr "分类"
 #: ../src/cairo-dock-gui-factory.c:2174
 msgid ""
 "Click on an applet in order to have a preview and a description of it."
-msgstr ""
+msgstr "点击一个小程序来获取预览及其介绍。"
 
 #: ../src/cairo-dock-gui-factory.c:2532
 msgid "state"
@@ -295,12 +295,12 @@ msgstr "高级模式"
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customize your current theme."
-msgstr ""
+msgstr "高级模式允许你调整Dock中的每一个参数。它是一个用来个性化您的主题的强大工具。"
 
 #: ../src/cairo-dock-gui-simple.c:186
 #, c-format
 msgid "Importing theme %s..."
-msgstr ""
+msgstr "导入主题 %s"
 
 #: ../src/cairo-dock-internal-accessibility.c:263
 #: ../src/cairo-dock-menu.c:1614
@@ -313,6 +313,9 @@ msgid ""
 " or on the contrary unobstrusive ?\n"
 "Configure the way you access to your docks and sub-docks !"
 msgstr ""
+"您喜欢您的Dock一直可见，\n"
+"还是相反？\n"
+"配置您访问您的Dock和子Dock的方式！"
 
 #: ../src/cairo-dock-internal-background.c:157 ../data/messages:415
 #: ../data/messages:547
@@ -481,7 +484,7 @@ msgstr "配置"
 
 #: ../src/cairo-dock-menu.c:336
 msgid "Configure the behaviour, appearance, and applets."
-msgstr ""
+msgstr "配置它的行为、外观、和 applets 小程序"
 
 #: ../src/cairo-dock-menu.c:340
 msgid "Set up this dock"
@@ -887,7 +890,7 @@ msgstr ""
 
 #: ../src/cairo-dock-themes-manager.c:1228
 msgid "Couldn't import the theme."
-msgstr ""
+msgstr "无法导入主题。"
 
 #: ../src/cairo-dock-themes-manager.c:1276
 msgid "The theme has been saved"
@@ -916,7 +919,7 @@ msgstr "该主题不能被删除。"
 #: ../src/cairo-dock-themes-manager.c:1350
 #, c-format
 msgid "Importing theme %s ..."
-msgstr ""
+msgstr "正在导入主题 %s ……"
 
 #: ../src/cairo-dock-themes-manager.c:1371
 msgid "Manage Themes"
@@ -951,8 +954,8 @@ msgid ""
 "You can either familiarize yourself with the dock or choose another theme "
 "with right-click -> Cairo-Dock -> Manage themes.\n"
 "A useful help is available by right-click -> Cairo-Dock -> Help.\n"
-"If you have any question/request/remark, please pay us a visit at "
-"http://glx-dock.org.\n"
+"If you have any question/request/remark, please pay us a visit at http://glx-"
+"dock.org.\n"
 "Hope you will enjoy this soft !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
@@ -1098,25 +1101,25 @@ msgstr "按下快捷键时，停靠栏将在您鼠标的位置显现。其余时
 
 #: ../data/messages:37 ../data/messages:199
 msgid "Keyboard shortcut to pop-up the dock :"
-msgstr ""
+msgstr "弹出该Dock的快捷键"
 
 #: ../data/messages:39
 msgid "Visibility of the sub-docks"
-msgstr ""
+msgstr "子Dock的是否可见"
 
 #: ../data/messages:41
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
-msgstr ""
+msgstr "它们将在您点击或是鼠标停留在图标上时出现。"
 
 #: ../data/messages:45
 msgid "Appear on mouse over"
-msgstr ""
+msgstr "当鼠标经过时出现"
 
 #: ../data/messages:47
 msgid "Appear on click"
-msgstr ""
+msgstr "当鼠标点击时出现"
 
 #: ../data/messages:49 ../data/messages:1025
 msgid "Taskbar"
@@ -1132,6 +1135,10 @@ msgid ""
 "Gnome    : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
+"无               ：在不Dock中显示打开的窗口。\n"
+"MacOSX   ：将程序和启动器混合在一起，其它没有启动器的则只有最小化时显示。\n"
+"Windows7：将程序和启动器混合在一起，显示所有其它窗口并在子Dock中以组显示。\n"
+"Gnome       : 将任务条和启动器分开，只显示在当前桌面打开的窗口。"
 
 #: ../data/messages:53
 msgid "Behaviour of the Taskbar :"
@@ -1210,11 +1217,11 @@ msgstr "很大"
 msgid ""
 "This will separate launchers, applis, and applets. Separators will be "
 "automatically inserted then."
-msgstr ""
+msgstr "这将分隔启动器、应用程序和小程序。分隔符将被自动插入其中。"
 
 #: ../data/messages:93 ../data/messages:643
 msgid "Separate the different types of icons ?"
-msgstr ""
+msgstr "是否分隔不同类型的图标？"
 
 #: ../data/messages:95 ../data/messages:653
 msgid "Order of the different types of icons :"
@@ -1258,10 +1265,13 @@ msgid ""
 "Click on the left checkbox to (de)activate an applet.\n"
 "Once an applet is active, you can configure it by right clicking on its icon."
 msgstr ""
+"选择一行来获取该小程序的预览和介绍。\n"
+"点击左边的选择框来使该小程序生（失）效。\n"
+"当一个小程序处于活动状态时，您可以通过右键单击其图标来配置它。"
 
 #: ../data/messages:117
 msgid "Add or remove any applet :"
-msgstr ""
+msgstr "添加或删除applet:"
 
 # #################################
 # ########### themes.conf #############
@@ -1383,7 +1393,7 @@ msgstr "窗口最大化时自动隐藏Dock？"
 
 #: ../data/messages:213
 msgid "Sub-docks' visibility"
-msgstr ""
+msgstr "子Dock的可见性"
 
 #: ../data/messages:215
 msgid ""
@@ -1445,7 +1455,7 @@ msgstr "混合启动器和应用程序？"
 msgid ""
 "This allows to group all the windows of a given application into a unique "
 "sub-dock, and to act on all of the windows at the same time."
-msgstr ""
+msgstr "将相同程序的所有窗口以组显示在子Dock中，同时操作所有的窗口。"
 
 #: ../data/messages:245
 msgid "Group windows of the same application in a sub-dock ?"
@@ -1526,7 +1536,7 @@ msgstr "对话框期间："
 msgid ""
 "It will notify you even if, for instance, you are watching a movie in "
 "fullscreen or you are on another desktop.\n"
-msgstr ""
+msgstr "它将提醒您，无论您在做什么，例如当您正以全屏模式欣赏电影或是在另一个桌面。\n"
 
 #: ../data/messages:285
 msgid "Force the following applications to demand your attention ?"
@@ -1748,7 +1758,7 @@ msgstr "连接主题服务器超时："
 msgid ""
 "Maximum time in seconds that you allow the whole operation to take. Some "
 "themes can take up to a few MB."
-msgstr ""
+msgstr "允许的最大秒数。有些主题可能有好几MB。"
 
 #: ../data/messages:409
 msgid "Maximum time to download a theme :"
@@ -2089,19 +2099,19 @@ msgstr "粗"
 msgid ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
-msgstr ""
+msgstr "以百分比来显示图标大小。这个参数将影响整个dock的总高度。"
 
 #: ../data/messages:599
 msgid "Height of the reflect :"
-msgstr ""
+msgstr "反射倒影的高度："
 
 #: ../data/messages:601
 msgid "small"
-msgstr ""
+msgstr "小"
 
 #: ../data/messages:603
 msgid "tall"
-msgstr ""
+msgstr "高"
 
 #: ../data/messages:605
 msgid ""
@@ -2168,18 +2178,21 @@ msgid ""
 "insert separators manually. Applications will then be placed next to their "
 "launcher if they have, or after the last launcher."
 msgstr ""
+"如果您分隔了某种类型的图标，那么这种类型的图标将被放置在一起，并通过分隔符与其它图标分隔开来。\n"
+"如果您不想分隔图标，您可以将它们放置在您想要的任何地方，并可以手动地插入分隔符。应用程序将被放置在其启动器的旁边（如果有的话），或者被放置在最后一个启动器"
+"之后。"
 
 #: ../data/messages:647
 msgid "Separate applications from others"
-msgstr ""
+msgstr "将应用程序与其它图标分隔开来"
 
 #: ../data/messages:649
 msgid "Separate applets from others"
-msgstr ""
+msgstr "将小程序与其它图标分隔开来"
 
 #: ../data/messages:651
 msgid "Separate all"
-msgstr ""
+msgstr "分隔所有类型的图标"
 
 #: ../data/messages:661
 msgid "Link the icons with a string"
@@ -2281,6 +2294,8 @@ msgid ""
 "This can be customized for each desklet separately.\n"
 "Choose 'Custom decoration' to define your own decorations below"
 msgstr ""
+"您可以独立地对每一个桌面小应用进行个性化设置。\n"
+"选择下面的“个性装饰”来定义您自己的装饰方式。"
 
 #: ../data/messages:729
 msgid "Choose a default decoration for all desklets :"
@@ -2372,7 +2387,7 @@ msgstr "指示器的类型:"
 
 #: ../data/messages:791
 msgid "Frame"
-msgstr ""
+msgstr "框架"
 
 #: ../data/messages:793 ../data/messages:811 ../data/messages:839
 msgid "Image file :"
@@ -2384,7 +2399,7 @@ msgstr "如果不想使用指示器，则设透明度为0"
 
 #: ../data/messages:797
 msgid "Color of the frame :"
-msgstr ""
+msgstr "框架的颜色"
 
 #: ../data/messages:799
 msgid "Set 0 to fill the frame."
@@ -2459,7 +2474,7 @@ msgstr "指示器在停靠栏上旋转？"
 
 #: ../data/messages:835
 msgid "Indicator of grouped windows"
-msgstr ""
+msgstr "层叠窗口的指示"
 
 #: ../data/messages:837
 msgid ""
@@ -2506,11 +2521,11 @@ msgstr "子dock使用的视图名称："
 
 #: ../data/messages:857
 msgid "If '0' the container will be displayed on every viewport."
-msgstr ""
+msgstr "如果为“0”则该容器将显示在每个视点上。"
 
 #: ../data/messages:859 ../data/messages:879 ../data/messages:1253
 msgid "Only show in this specific viewport"
-msgstr ""
+msgstr "仅在这个特殊的视点上显示。"
 
 # #################################
 # ########### launcher.conf #############
@@ -2521,15 +2536,15 @@ msgstr "启动器的名称："
 
 #: ../data/messages:867
 msgid "URI of the file :"
-msgstr ""
+msgstr "文件的URI（统一资源标志符）"
 
 #: ../data/messages:869
 msgid "Monitor the content of folder ?"
-msgstr ""
+msgstr "监视该文件夹内容？"
 
 #: ../data/messages:877 ../data/messages:1251
 msgid "If '0' the launcher will be displayed on every viewport."
-msgstr ""
+msgstr "如果为“0”则该启动器将显示在每个视点上。"
 
 #: ../data/messages:883
 msgid "Yes, like that :-)"
@@ -2596,6 +2611,10 @@ msgid ""
 "add personnal icons there.\n"
 "If you choose nothing, the default icon theme of your system will be used."
 msgstr ""
+"在“图标”模块中，您可以选择一个<b>图标主题</b>。只需选择一个主题，然后点击应用。\n"
+"您可以看到所有安装在您的系统上的主题，包括代表了由Cairo-Dock所提供的主题的“个性图标”主题。\n"
+" 它们位于 ~/.config/cairo-dock/curremt_theme/icons ，您可以在那里添加您个人的图标。\n"
+"如果您什么也不选，则您的系统默认的图标主题将被使用。"
 
 #: ../data/messages:905
 msgid "How can I quickly remove many icons ?"
@@ -2688,13 +2707,15 @@ msgstr "我不想窗口覆盖了停靠栏"
 #: ../data/messages:937
 msgid ""
 "Hint : you can even do that with desklets, making a desklet's panel !."
-msgstr ""
+msgstr "提示：您甚至可以将此应用在桌面小应用上，来创建一个桌面小应用面板！"
 
 #: ../data/messages:939
 msgid ""
 "Just choose the corresponding option in the “Visibility” module.\n"
 "This will reserve the space for the dock only."
 msgstr ""
+"只需在“可见度”模块中选择对应的选项即可。\n"
+"这样将只为Dock预留空间。"
 
 #: ../data/messages:941
 msgid "I don’t want that the dock hovers windows"
@@ -2706,6 +2727,8 @@ msgid ""
 "corner instead of the whole screen border.\n"
 "You can also setup the size of the trigger zone, and even set an image to it."
 msgstr ""
+"提示：您可以选择仅当鼠标点击屏幕角落时弹出Dock，而不是整个屏幕边缘。\n"
+"您也可以设置触发区域的大小，甚至为其设置一幅图像。"
 
 #: ../data/messages:945
 msgid ""
@@ -2715,16 +2738,19 @@ msgid ""
 " - or choose the auto-hide. The dock will then hide itself and reappear when "
 "you enter the trigger zone."
 msgstr ""
+"在“可见度”模块中提供了两种选择：\n"
+" -选择“保持Dock位于其它窗口下方”。这样Dock将只会在您将鼠标置于屏幕边缘时弹出显示。\n"
+" -或是选择 自动隐藏 。这样Dock将自动隐藏，而当您进入触发区域时弹出显示。"
 
 #: ../data/messages:947
 msgid "How can I add a separator ?"
-msgstr ""
+msgstr "我应该如何添加一个分隔符？"
 
 #: ../data/messages:949
 msgid ""
 "Hint : if you choose to mix applets and launchers in the 'Icons' module, you "
 "can also place separators between applets then."
-msgstr ""
+msgstr "提示：如果您在“图标”模块中选择了将小程序与启动器混在一起，您仍可以在小程序之间放置分隔符。"
 
 #: ../data/messages:951
 msgid ""
@@ -2733,21 +2759,23 @@ msgid ""
 "You can place it wherever you want (except in amongst taskbar icons) by "
 "dragging it with the mouse."
 msgstr ""
+"当您想要添加一个分隔符时只需在Dock上单击右键，然后选择“添加一个分隔符”。\n"
+"您可以通过用鼠标拖拽分隔符来将其放置在您想要的任何位置（除任务栏图标之间）。"
 
 #: ../data/messages:953
 msgid ""
 "I don’t want to have a separator between launchers , applis and applets"
-msgstr ""
+msgstr "我不想在启动器、应用程序和小程序之间放置分隔符。"
 
 #: ../data/messages:955
 msgid ""
 "In the “Icons” module, under the “separator” part, untick the box that says "
 "to “add automatic separators”."
-msgstr ""
+msgstr "在“图标”模块的“分隔符”区域里，去除“添加自动分隔符”前的勾。"
 
 #: ../data/messages:957
 msgid "How can I add a sub-dock ?"
-msgstr ""
+msgstr "我应该如何添加一个子Dock？"
 
 #: ../data/messages:959
 msgid ""
@@ -2756,16 +2784,18 @@ msgid ""
 "applets as well, allowing you to group many applets in a sub-dok. You can "
 "also create new main docks with this way."
 msgstr ""
+"提示：要将一个图标移动到另一个Dock中，请在它上面单击右键，找到“移动到”，然后在列表中选择您想要移动到的位置。您也可以对小程序这样做，使您能够在一个子"
+"Dock中组织很多小程序。您还可以通过这种方式来创建新的主Dock。"
 
 #: ../data/messages:961
 msgid ""
 "Just right-click on the dock, then select “add a sub-dock”. Fill the config "
 "panel with some name and image, then validate."
-msgstr ""
+msgstr "只需在Dock上单击右键，然后选择“添加一个子Dock”。填写配置面板中的名称和图像，然后确认即可。"
 
 #: ../data/messages:963
 msgid "How can I have many main docks ?"
-msgstr ""
+msgstr "我怎样才能有许多个主Dock？"
 
 #: ../data/messages:965
 msgid ""
@@ -2774,22 +2804,24 @@ msgid ""
 "To place this new dock, right click on it, and in the Cairo-dock sub-menu "
 "choose “configure this dock”."
 msgstr ""
+"提示：您可以通过按照之前的方法并选择您刚刚创建的Dock来移动新Dock中的图标。\n"
+"您可以在新Dock上单击右键，并在Cairo-dock子菜单中选择“配置这个Dock”来放置其位置。"
 
 #: ../data/messages:967
 msgid ""
 "Right-click on a launcher or an applet, go to 'Move to', and choose 'a new "
 "main dock'. A new dock will be created, with this icon inside."
-msgstr ""
+msgstr "在启动器或是小程序上单击右键，找到“移动到”，然后选择“创建一个新的主Dock”。这样一个包含该图标在内的新Dock将被创建。"
 
 #: ../data/messages:969
 msgid "How do I get a 3D dock ?"
-msgstr ""
+msgstr "我怎样得到一个3D Dock？"
 
 #: ../data/messages:971
 msgid ""
 "Hint : you can setup the view for each sub-dock; just edit the icon pointing "
 "on the sub-dock, and choose the view you want for it."
-msgstr ""
+msgstr "提示：您可以对每一个子Dock的视图进行设置；只需编辑指向该子Dock的图标，并选择您想要的视图。"
 
 #: ../data/messages:973
 msgid ""
@@ -2798,16 +2830,18 @@ msgid ""
 "Go to the “Views” module, and choose the view you want for main dock, and "
 "for sub-docks."
 msgstr ""
+"任何一个Dock都可以任一种视图方式来显示，而视图方式则有许多种（3D，曲线形以及更多）。\n"
+"进入“视图”模式，并选择您想要的主Dock和子Dock的视图方式。"
 
 #: ../data/messages:975
 msgid "How can I change the background of my docks ?"
-msgstr ""
+msgstr "我应该如何更改我的Dock的背景？"
 
 #: ../data/messages:977
 msgid ""
 "Hint : the Parabolic view doe not have a background, and the Slide and "
 "Rainbow views have their own background parameters."
-msgstr ""
+msgstr "提示：抛物线模式视图没有背景图，而幻灯片模式和彩虹模式则有各自的背景图参数。"
 
 #: ../data/messages:979
 msgid ""
@@ -2816,16 +2850,18 @@ msgid ""
 "If you set an image, it will be used as the background, if you don't, the "
 "gradatoin will be used."
 msgstr ""
+"在“背景”模块中，您可以选择一幅图像，或是一种颜色渐变。\n"
+"如果您设置了一幅图像，它将被用作背景图。否则，颜色渐变将被用作背景。"
 
 #: ../data/messages:981
 msgid "I find the dock too much flashy, can it be more sober ?"
-msgstr ""
+msgstr "我觉得我的Dock太华而不实了，能让它看上去稳重些么？"
 
 #: ../data/messages:983
 msgid ""
 "Hint : try different themes, some are already very sober, like Dust-Sand or "
 "Elementary."
-msgstr ""
+msgstr "提示：请尝试一些别的主题，有些已经是很稳重的，例如 Dust-Sand 或是 Elementary。"
 
 #: ../data/messages:985
 msgid ""
@@ -2839,61 +2875,66 @@ msgid ""
 "In brief, you can easily have something as much sober as a gnome-panel, but "
 "this would be a shame ! ^_^"
 msgstr ""
+"能做得多的自然也能做得少！例如您可以使“图标效果”插件无效，\n"
+" 或是在“动态图标”插件中使鼠标悬停效果无效。\n"
+"您也可以在“图标”模块中降低缩放效果或是图标的倒影效果，\n"
+" 在“背景”模块中改变背景色，或是在“视图”模块中改用“默认”视图。\n"
+"总之，您可以很容易地得到像 gnome-panel 一样的稳重感觉，但那必然将会是种遗憾哟！ ^_^"
 
 #: ../data/messages:987
 msgid "Desklet"
-msgstr ""
+msgstr "桌面小工具"
 
 #: ../data/messages:989
 msgid "What are these “desklets” ?"
-msgstr ""
+msgstr "这些“桌面小工具”是什么？"
 
 #: ../data/messages:991
 msgid ""
 "Hint : to detach an applet, you can drag and drop its icon from the dock to "
 "the desktop"
-msgstr ""
+msgstr "提示：您可以通过拖拽桌面小应用的图标来将其从Dock上分离开来并放置于桌面上。"
 
 #: ../data/messages:993
 msgid ""
 "they are widgets that’s are displayed on your desktop. Each applet can be "
 "detached from the dock to act as a desklet."
-msgstr ""
+msgstr "他们是显示在您的桌面上的小应用程序。每个小程序都可以从Dock上分离开来而成为一个桌面小应用。"
 
 #: ../data/messages:995
 msgid "How do I setup their position ?"
-msgstr ""
+msgstr "我应该如何设置它们的位置？"
 
 #: ../data/messages:997
 msgid ""
 "Hint : If you don’t want to move it anymore, you can lock its position. "
 "Simply right click on the desklet, and select “lock position”. To unlock it, "
 "de-select this option."
-msgstr ""
+msgstr "提示：如果您不想再移动它，那么您可以锁定它的位置。只需在桌面小应用上单击右键，并选择“锁定位置”。若要解锁，取消选择这个选项即可。"
 
 #: ../data/messages:999
 msgid "Simply drag them with the mouse."
-msgstr ""
+msgstr "只需用鼠标拖动它们即可。"
 
 #: ../data/messages:1001
 msgid "How do I set up their attitude ?"
-msgstr ""
+msgstr "我应该如何来设置它们的姿态？"
 
 #: ../data/messages:1003
 msgid ""
 "Hint : if you locked the desklet, the buttons won’t appear. You can reset a "
 "rotation by middle-clicking on the appropriate button."
-msgstr ""
+msgstr "提示：如果您锁定了该桌面小应用，则这些按钮将不会出现。您可以通过在对应的按钮上单击中键来重新设置旋转。"
 
 #: ../data/messages:1005
 msgid ""
 "There are small buttons on the top and left side of the desklet. They allow  "
 "you to rotate the desklet in 3D !"
-msgstr ""
+msgstr "在桌面小应用的顶部和左侧有一些小按钮。它们允许您立体地旋转桌面小应用！"
 
 #: ../data/messages:1007
 msgid "How can I change their decorations ?"
-msgstr ""
+msgstr "我应该如何改变它们的装饰？"
 
 #: ../data/messages:1009
 msgid ""
@@ -2902,6 +2943,7 @@ msgid ""
 "offsets of these images to adjust the position of the drawings inside the "
 "decorations."
 msgstr ""
+"提示：您可以通过选择“个性化的”装饰来添加新的装饰，并提供一幅背景和（或）前景图像。您可以通过设置这些图像的偏移量来调整图像在装饰中的位置。"
 
 #: ../data/messages:1011
 msgid ""
@@ -2911,22 +2953,25 @@ msgid ""
 " go to the applet’s configuration, click on the “desklet” tab, and then "
 "choose the decoration you want."
 msgstr ""
+"默认的装饰定义在“桌面小应用”模块中。\n"
+"您可以为每一个桌面小应用设置不同的装饰。若要更改某个桌面小应用的装饰，\n"
+" 进入该小程序的配置面板，点击“桌面小应用”标签，然后选择您想要装饰。"
 
 #: ../data/messages:1013
 msgid "How do I insert a desklet into the dock ?"
-msgstr ""
+msgstr "我应该如何在Dock中插入一个桌面小应用？"
 
 #: ../data/messages:1015
 msgid "Hint :  if the desklet is locked, the button won’t appear."
-msgstr ""
+msgstr "提示：如果该桌面小应用被锁定，则该按钮将不会出现。"
 
 #: ../data/messages:1017
 msgid "Simply click on the top right button."
-msgstr ""
+msgstr "只需点击右上角的按钮即可。"
 
 #: ../data/messages:1019
 msgid "How can I place a desklet on the <i>Compiz Widget Layer</i> ?"
-msgstr ""
+msgstr "我应该如何 将一个桌面小应用放置到<i>Compiz Widget Layer上</i>？"
 
 #: ../data/messages:1021
 msgid ""
@@ -2941,14 +2986,17 @@ msgid ""
 "You can then switch an applet to the Widget Layer by left-clicking on its "
 "desklet and selecting 'Compiz-Fusion Widget'."
 msgstr ""
+"在Compiz-Fusion的配置中，启用“Widget Layer”插件，并设置规则 (name=cairo-dock "
+"&amp);type=utility)。\n"
+"然后您便可以通过在一个桌面小工具上单击左键并选择 'Compiz-Fusion Widget' 来将一个小程序切换到Widget层上。"
 
 #: ../data/messages:1027
 msgid "How do I activate the Taskbar ?"
-msgstr ""
+msgstr "我应该如何启用任务栏？"
 
 #: ../data/messages:1029
 msgid "Hint : All the Taskbar’s options are grouped together in this module."
-msgstr ""
+msgstr "提示：所有的任务栏选项已包括在了这个模块中。"
 
 #: ../data/messages:1031
 msgid "go to the “Taskbar” module, then tick the first box, and apply."
@@ -3011,10 +3059,13 @@ msgid ""
 "running.\n"
 "You can then act on the window as if it was a taskbar icon."
 msgstr ""
+"使用“混合应用程序和启动器”选项。\n"
+"当一个程序启动时，如果它在Dock中有一个启动器，那么这个选项将给出一个指示器来告知你对应的应用程序正在运行。\n"
+"然后您便可以将这个窗口当做是一个任务栏图标一样操作。"
 
 #: ../data/messages:1051
 msgid "I’m using Pidgin, and I want to see my friends’ avatar"
-msgstr ""
+msgstr "我正在使用 Pidgin ，并且我想看看我的好友的头像"
 
 #: ../data/messages:1053
 msgid ""
@@ -3025,17 +3076,20 @@ msgid ""
 " and in the “Extra parameters”, tick the box that says to not steal the icon "
 "for this appli."
 msgstr ""
+"如果您选择了覆盖 X 图标，您可以在这个选项前为 Pidgin 添加一个例外。\n"
+"如果您选择了混合应用程序和启动器，您可以编辑 Pidgin的启动器，\n"
+" 并在“额外参数”中，勾选写有不从应用程序中获取图标的选项。"
 
 #: ../data/messages:1055
 msgid ""
 "How can I quickly navigate between many windows of the same application ?"
-msgstr ""
+msgstr "我应该如何 快速地在相同应用程序的许多不同窗口间切换？"
 
 #: ../data/messages:1057
 msgid ""
 "Hint : you can also close all the windows of this appli by middle-clicking "
 "on the icon pointing on the sub-dock."
-msgstr ""
+msgstr "提示：您也可以在指向子Dock的对应图标上单击中键来关闭该应用程序的所有窗口。"
 
 #: ../data/messages:1059
 msgid ""
