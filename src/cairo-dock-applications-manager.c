@@ -1116,7 +1116,7 @@ static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gpoin
 }
 Icon * cairo_dock_search_window_on_our_way (CairoDock *pDock, gboolean bMaximizedWindow, gboolean bFullScreenWindow)
 {
-	cd_debug ("%s (%d, %d)", __func__, bMaximizedWindow, bFullScreenWindow);
+	//cd_debug ("%s (%d, %d)", __func__, bMaximizedWindow, bFullScreenWindow);
 	gpointer data[3] = {GINT_TO_POINTER (bMaximizedWindow), GINT_TO_POINTER (bFullScreenWindow), pDock};
 	return g_hash_table_find (s_hXWindowTable, (GHRFunc) _cairo_dock_window_is_on_our_way, data);
 }

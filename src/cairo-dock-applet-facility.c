@@ -57,7 +57,7 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 	//\________________ On efface l'ancienne image.
 	cairo_dock_erase_cairo_context (pIconContext);
 	
-	//\_____________ On met le background de l'icone si necessaire
+	//\________________ On met le background de l'icone si necessaire
 	if (pIcon != NULL &&
 		pIcon->pIconBuffer != NULL &&
 		g_pIconBackgroundImageSurface != NULL &&
