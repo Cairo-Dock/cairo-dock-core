@@ -56,6 +56,7 @@
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-labels.h"
+#include "cairo-dock-application-facility.h"
 #include "cairo-dock-applications-manager.h"
 
 #define CAIRO_DOCK_TASKBAR_CHECK_INTERVAL 200
@@ -96,7 +97,6 @@ static Atom s_aString;
 static Atom s_aNetWmIcon;
 static Atom s_aWmHints;
 
-static void _cairo_dock_hide_show_windows_on_other_desktops (Window *Xid, Icon *icon, CairoDock *pMainDock);
 static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gpointer *data);
 
   ///////////////////////
@@ -109,6 +109,30 @@ static inline void _cairo_dock_retrieve_current_desktop_and_viewport (void)
 	cairo_dock_get_current_viewport (&s_iCurrentViewportX, &s_iCurrentViewportY);
 	s_iCurrentViewportX /= g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
 	s_iCurrentViewportY /= g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+}
+
+static void _cairo_dock_hide_show_windows_on_other_desktops (Window *Xid, Icon *icon, CairoDock *pMainDock)
+{
+	if (CAIRO_DOCK_IS_APPLI (icon) && (! myTaskBar.bHideVisibleApplis || icon->bIsHidden))
+	{
+		cd_debug ("%s (%d)", __func__, *Xid);
+		CairoDock *pParentDock = NULL;
+		if (cairo_dock_appli_is_on_current_desktop (icon))
+		{
+			cd_debug (" => est sur le bureau actuel.");
+			if (icon->cParentDockName == NULL)
+			{
+				pParentDock = cairo_dock_insert_appli_in_dock (icon, pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+			}
+		}
+		else
+		{
+			cd_debug (" => n'est pas sur le bureau actuel.");
+			pParentDock = cairo_dock_detach_appli (icon);
+		}
+		if (pParentDock != NULL)
+			gtk_widget_queue_draw (pParentDock->container.pWidget);
+	}
 }
 
 static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer iTimePtr)
@@ -617,7 +641,7 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 
 static void _on_change_window_name (Icon *icon, CairoDock *pDock, gboolean bSearchWmName)
 {
-	gchar *cName = cairo_dock_get_window_name (icon->Xid, bSearchWmName);
+	gchar *cName = cairo_dock_get_xwindow_name (icon->Xid, bSearchWmName);
 	if (cName != NULL)
 	{
 		if (icon->cName == NULL || strcmp (icon->cName, cName) != 0)
@@ -937,15 +961,13 @@ void cairo_dock_unregister_appli (Icon *icon)
 		if (icon->iLastCheckTime != -1)
 			g_hash_table_remove (s_hXWindowTable, &icon->Xid);
 		
-		//cairo_dock_unregister_pid (icon);  // on n'efface pas sa classe ici car on peut en avoir besoin encore.
-		
 		if (icon->iBackingPixmap != 0)
 		{
 			XFreePixmap (s_XDisplay, icon->iBackingPixmap);
 			icon->iBackingPixmap = 0;
 		}
 		
-		cairo_dock_remove_appli_from_class (icon);
+		cairo_dock_remove_appli_from_class (icon);  // n'efface pas sa classe (on peut en avoir besoin encore).
 		cairo_dock_update_Xid_on_inhibators (icon->Xid, icon->cClass);
 		
 		icon->Xid = 0;  // hop, elle n'est plus une appli.
@@ -1200,6 +1222,30 @@ void cairo_dock_foreach_applis_on_viewport (CairoDockForeachIconFunc pFunction, 
  // Applis facility //
 /////////////////////
 
+void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
+{
+	if (! s_bAppliManagerIsRunning)
+		return ;
+	cd_debug ("%s (main:%d)", __func__, pDock->bIsMainDock);
+
+	Icon *icon;
+	GList *ic;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		if (CAIRO_DOCK_IS_APPLI (icon))
+		{
+			cairo_dock_set_one_icon_geometry_for_window_manager (icon, pDock);
+		}
+	}
+	
+	if (pDock->bIsMainDock && myTaskBar.bHideVisibleApplis)  // on complete avec les applis pas dans le dock, pour que l'effet de minimisation pointe (a peu pres) au bon endroit quand on la minimisera.
+	{
+		g_hash_table_foreach (s_hXWindowTable, (GHFunc) cairo_dock_reserve_one_icon_geometry_for_window_manager, pDock);
+	}
+}
+
+
 gboolean cairo_dock_appli_is_on_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY)
 {
 	// On calcule les coordonnees en repere absolu.
@@ -1235,275 +1281,4 @@ gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon)
 		iGlobalPositionX < g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
 		iGlobalPositionY + iHeightExtent > 0 &&
 		iGlobalPositionY < g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] );  // -1 <=> 0xFFFFFFFF en unsigned.
-}
-
-static inline gboolean _cairo_dock_window_hovers_dock (GtkAllocation *pWindowGeometry, CairoDock *pDock)
-{
-	if (pWindowGeometry->width != 0 && pWindowGeometry->height != 0)
-	{
-		int iDockX, iDockY, iDockWidth, iDockHeight;
-		if (pDock->container.bIsHorizontal)
-		{
-			iDockX = pDock->container.iWindowPositionX;
-			iDockY = pDock->container.iWindowPositionY + (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iMinDockHeight : 0);
-			iDockWidth = pDock->iMinDockWidth;
-			iDockHeight = pDock->iMinDockHeight;
-		}
-		else
-		{
-			iDockX = pDock->container.iWindowPositionY + (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iMinDockHeight : 0);
-			iDockY = pDock->container.iWindowPositionX;
-			iDockWidth = pDock->iMinDockHeight;
-			iDockHeight = pDock->iMinDockWidth;
-		}
-		
-		cd_debug ("dock : (%d;%d) %dx%d", iDockX, iDockY, iDockWidth, iDockHeight);
-		if ((pWindowGeometry->x < iDockX + iDockWidth && pWindowGeometry->x + pWindowGeometry->width > iDockX) && (pWindowGeometry->y < iDockY + iDockHeight && pWindowGeometry->y + pWindowGeometry->height > iDockY))
-		{
-			return TRUE;
-		}
-	}
-	else
-	{
-		cd_warning (" unknown window geometry");
-	}
-	return FALSE;
-}
-gboolean cairo_dock_appli_hovers_dock (Icon *pIcon, CairoDock *pDock)
-{
-	return _cairo_dock_window_hovers_dock (&pIcon->windowGeometry, pDock);
-}
-
-
-
-static void _cairo_dock_hide_show_windows_on_other_desktops (Window *Xid, Icon *icon, CairoDock *pMainDock)
-{
-	if (CAIRO_DOCK_IS_APPLI (icon) && (! myTaskBar.bHideVisibleApplis || icon->bIsHidden))
-	{
-		cd_debug ("%s (%d)", __func__, *Xid);
-		CairoDock *pParentDock = NULL;
-		if (cairo_dock_appli_is_on_current_desktop (icon))
-		{
-			cd_debug (" => est sur le bureau actuel.");
-			if (icon->cParentDockName == NULL)
-			{
-				pParentDock = cairo_dock_insert_appli_in_dock (icon, pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
-			}
-		}
-		else
-		{
-			cd_debug (" => n'est pas sur le bureau actuel.");
-			pParentDock = cairo_dock_detach_appli (icon);
-		}
-		if (pParentDock != NULL)
-			gtk_widget_queue_draw (pParentDock->container.pWidget);
-	}
-}
-
-
-CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bUpdateSize, gboolean bAnimate)
-{
-	cd_message ("%s (%s, %d)", __func__, icon->cName, icon->Xid);
-	
-	//\_________________ On gere ses eventuels inhibiteurs.
-	if (myTaskBar.bMixLauncherAppli && cairo_dock_prevent_inhibated_class (icon))
-	{
-		cd_message (" -> se fait inhiber");
-		return NULL;
-	}
-	
-	//\_________________ On gere les filtres.
-	if (!icon->bIsHidden && myTaskBar.bHideVisibleApplis)
-	{
-		cairo_dock_reserve_one_icon_geometry_for_window_manager (&icon->Xid, icon, pMainDock);
-		return NULL;
-	}
-	
-	//\_________________ On determine dans quel dock l'inserer.
-	CairoDock *pParentDock = cairo_dock_manage_appli_class (icon, pMainDock);  // renseigne cParentDockName.
-	g_return_val_if_fail (pParentDock != NULL, NULL);
-
-	//\_________________ On l'insere dans son dock parent en animant ce dernier eventuellement.
-	if (!myIcons.iSeparateIcons && pParentDock->iRefCount == 0)
-	{
-		cairo_dock_set_class_order (icon);
-	}
-	else
-		icon->fOrder == CAIRO_DOCK_LAST_ORDER;  // en dernier.
-	cairo_dock_insert_icon_in_dock (icon, pParentDock, bUpdateSize, bAnimate);
-	cd_message (" insertion de %s complete (%.2f %.2fx%.2f) dans %s", icon->cName, icon->fPersonnalScale, icon->fWidth, icon->fHeight, icon->cParentDockName);
-
-	if (bAnimate && cairo_dock_animation_will_be_visible (pParentDock))
-	{
-		cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
-	}
-	else
-	{
-		icon->fPersonnalScale = 0;
-		icon->fScale = 1.;
-	}
-
-	return pParentDock;
-}
-
-CairoDock * cairo_dock_detach_appli (Icon *pIcon)
-{
-	cd_debug ("%s (%s)", __func__, pIcon->cName);
-	CairoDock *pParentDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
-	if (pParentDock == NULL)
-		return NULL;
-	
-	cairo_dock_detach_icon_from_dock (pIcon, pParentDock, TRUE);
-	
-	if (pIcon->cClass != NULL && pParentDock == cairo_dock_search_dock_from_name (pIcon->cClass))
-	{
-		gboolean bEmptyClassSubDock = cairo_dock_check_class_subdock_is_empty (pParentDock, pIcon->cClass);
-		if (bEmptyClassSubDock)
-			return NULL;
-	}
-	cairo_dock_update_dock_size (pParentDock);
-	return pParentDock;
-}
-
-void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
-{
-	g_return_if_fail (pParentDock != NULL);
-	if (icon->fPersonnalScale == 0)  // sinon on laisse l'animation actuelle.
-	{
-		if (myTaskBar.cAnimationOnActiveWindow)
-		{
-			if (cairo_dock_animation_will_be_visible (pParentDock) && icon->iAnimationState == CAIRO_DOCK_STATE_REST)
-				cairo_dock_request_icon_animation (icon, pParentDock, myTaskBar.cAnimationOnActiveWindow, 1);
-		}
-		else
-		{
-			cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));  // Si pas d'animation, on le fait pour redessiner l'indicateur.
-		}
-		if (pParentDock->iRefCount != 0)  // l'icone est dans un sous-dock, on veut que l'indicateur soit aussi dessine sur l'icone pointant sur ce sous-dock.
-		{
-			CairoDock *pMainDock = NULL;
-			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pParentDock, &pMainDock);
-			if (pPointingIcon && pMainDock)
-			{
-				cairo_dock_redraw_icon (pPointingIcon, CAIRO_CONTAINER (pMainDock));  // on se contente de redessiner cette icone sans l'animer. Une facon comme une autre de differencier ces 2 cas.
-			}
-		}
-	}
-}
-
-#define x_icon_geometry(icon, pDock) (pDock->container.iWindowPositionX + icon->fXAtRest + (pDock->container.iWidth - pDock->fFlatDockWidth) / 2 + (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2))
-#define y_icon_geometry(icon, pDock) (pDock->container.iWindowPositionY + icon->fDrawY - icon->fHeight * myIcons.fAmplitude * pDock->fMagnitudeMax)
-void  cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock)
-{
-	//g_print ("%s (%s)\n", __func__, icon->cName);
-	int iX, iY, iWidth, iHeight;
-	iX = x_icon_geometry (icon, pDock);
-	iY = y_icon_geometry (icon, pDock);  // il faudrait un fYAtRest ...
-	//g_print (" -> %d;%d (%.2f)\n", iX - pDock->container.iWindowPositionX, iY - pDock->container.iWindowPositionY, icon->fXAtRest);
-	iWidth = icon->fWidth;
-	iHeight = icon->fHeight * (1. + 2*myIcons.fAmplitude * pDock->fMagnitudeMax);  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
-	
-	if (pDock->container.bIsHorizontal)
-		cairo_dock_set_xicon_geometry (icon->Xid, iX, iY, iWidth, iHeight);
-	else
-		cairo_dock_set_xicon_geometry (icon->Xid, iY, iX, iHeight, iWidth);
-}
-
-void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon *icon, CairoDock *pMainDock)
-{
-	if (CAIRO_DOCK_IS_APPLI (icon) && icon->cParentDockName == NULL)
-	{
-		Icon *pInhibator = cairo_dock_get_inhibator (icon, FALSE);  // FALSE <=> meme en-dehors d'un dock
-		if (pInhibator == NULL)  // cette icone n'est pas inhinbee, donc se minimisera dans le dock en une nouvelle icone.
-		{
-			int x, y;
-			Icon *pClassmate = cairo_dock_get_classmate (icon);
-			CairoDock *pClassmateDock = (pClassmate ? cairo_dock_search_dock_from_name (pClassmate->cParentDockName) : NULL);
-			if (myTaskBar.bGroupAppliByClass && pClassmate != NULL && pClassmateDock != NULL)  // on va se grouper avec cette icone.
-			{
-				x = x_icon_geometry (pClassmate, pClassmateDock);
-				if (cairo_dock_is_hidden (pMainDock))
-				{
-					y = (pClassmateDock->container.bDirectionUp ? 0 : g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-				}
-				else
-				{
-					y = y_icon_geometry (pClassmate, pClassmateDock);
-				}
-			}
-			else if (!myIcons.iSeparateIcons && pClassmate != NULL && pClassmateDock != NULL)  // on va se placer a cote.
-			{
-				x = x_icon_geometry (pClassmate, pClassmateDock) + pClassmate->fWidth/2;
-				if (cairo_dock_is_hidden (pClassmateDock))
-				{
-					y = (pClassmateDock->container.bDirectionUp ? 0 : g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-				}
-				else
-				{
-					y = y_icon_geometry (pClassmate, pClassmateDock);
-				}
-			}
-			else  // on va se placer a la fin de la barre des taches.
-			{
-				Icon *pLastAppli = cairo_dock_get_last_icon_until_order (pMainDock->icons, CAIRO_DOCK_APPLI);
-				if (pLastAppli != NULL)  // on se placera juste apres.
-				{
-					x = x_icon_geometry (pLastAppli, pMainDock) + pLastAppli->fWidth/2;
-					if (cairo_dock_is_hidden (pMainDock))
-					{
-						y = (pMainDock->container.bDirectionUp ? 0 : g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-					}
-					else
-					{
-						y = y_icon_geometry (pLastAppli, pMainDock);
-					}
-				}
-				else  // aucune icone avant notre groupe, on sera insere en 1er.
-				{
-					x = pMainDock->container.iWindowPositionX + 0 + (pMainDock->container.iWidth - pMainDock->fFlatDockWidth) / 2;
-					if (cairo_dock_is_hidden (pMainDock))
-					{
-						y = (pMainDock->container.bDirectionUp ? 0 : g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-					}
-					else
-					{
-						y = pMainDock->container.iWindowPositionY;
-					}
-				}
-			}
-			//g_print (" - %s en (%d;%d)\n", icon->cName, x, y);
-			if (pMainDock->container.bIsHorizontal)
-				cairo_dock_set_xicon_geometry (icon->Xid, x, y, 1, 1);
-			else
-				cairo_dock_set_xicon_geometry (icon->Xid, y, x, 1, 1);
-		}
-		else
-		{
-			/// gerer les desklets...
-			
-		}
-	}
-}
-
-void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
-{
-	if (! s_bAppliManagerIsRunning)
-		return ;
-	cd_debug ("%s (main:%d)", __func__, pDock->bIsMainDock);
-
-	Icon *icon;
-	GList *ic;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		if (CAIRO_DOCK_IS_APPLI (icon))
-		{
-			cairo_dock_set_one_icon_geometry_for_window_manager (icon, pDock);
-		}
-	}
-	
-	if (pDock->bIsMainDock && myTaskBar.bHideVisibleApplis)  // on complete avec les applis pas dans le dock, pour que l'effet de minimisation pointe (a peu pres) au bon endroit quand on la minimisera.
-	{
-		g_hash_table_foreach (s_hXWindowTable, (GHFunc) cairo_dock_reserve_one_icon_geometry_for_window_manager, pDock);
-	}
 }

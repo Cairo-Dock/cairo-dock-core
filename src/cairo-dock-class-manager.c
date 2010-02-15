@@ -39,6 +39,7 @@
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-animations.h"
+#include "cairo-dock-application-facility.h"
 #include "cairo-dock-class-manager.h"
 
 extern CairoDock *g_pMainDock;
@@ -784,16 +785,17 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			pLastClassIcon->cParentDockName = g_strdup (pFakeClassIcon->cParentDockName);
 			pLastClassIcon->fOrder = pFakeClassIcon->fOrder;
 			
+			cd_debug ("on enleve l'icone de paille");
+			cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);  // a faire avant que l'icone n'ait plus de sous-dock, sinon elle est consideree comme un separateur auto, et du coup le separateur n'est pas enleve.
+			
 			cd_debug (" on detruit le sous-dock...");
 			cairo_dock_destroy_dock (pDock, cClass, NULL, NULL);
 			pFakeClassIcon->pSubDock = NULL;
 			
-			cd_debug (" et l'icone de paille");
-			cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
+			cd_debug ("on detruit l'icone de paille");
 			cairo_dock_free_icon (pFakeClassIcon);
 			
 			cd_debug (" puis on re-insere l'appli restante");
-			
 			if (pLastClassIcon->fPersonnalScale <= 0)
 			{
 				cairo_dock_insert_icon_in_dock_full (pLastClassIcon, pFakeParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
@@ -802,6 +804,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			}
 			else  // la derniere icone est en cours de suppression, inutile de la re-inserer. (c'est souvent lorsqu'on ferme toutes une classe d'un coup. donc les animations sont pratiquement dans le meme etat, donc la derniere icone en est aussi a la fin, donc on ne verrait de toute facon aucune animation.
 			{
+				g_print ("inutile de re-inserer l'icone restante\n");
 				cairo_dock_free_icon (pLastClassIcon);
 				cairo_dock_update_dock_size (pFakeParentDock);
 				cairo_dock_calculate_dock_icons (pFakeParentDock);

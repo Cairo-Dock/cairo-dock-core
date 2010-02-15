@@ -912,12 +912,12 @@ static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // at
 	g_return_val_if_fail (iRootPixmapID != 0, NULL);
 	
 	cairo_surface_t *pDesktopBgSurface = NULL;
-	GdkPixbuf *pBgPixbuf = cairo_dock_get_pixbuf_from_pixmap (iRootPixmapID, FALSE);  // on n'y ajoute pas de transparence.
+	GdkPixbuf *pBgPixbuf = cairo_dock_get_pixbuf_from_pixmap (iRootPixmapID, FALSE);  // FALSE <=> on n'y ajoute pas de transparence.
 	if (pBgPixbuf != NULL)
 	{
 		cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (g_pMainDock));
 		
-		if (gdk_pixbuf_get_height (pBgPixbuf) == 1 && gdk_pixbuf_get_width(pBgPixbuf) == 1)  // couleur unie.
+		if (gdk_pixbuf_get_height (pBgPixbuf) == 1 && gdk_pixbuf_get_width (pBgPixbuf) == 1)  // couleur unie.
 		{
 			guchar *pixels = gdk_pixbuf_get_pixels (pBgPixbuf);
 			cd_debug ("c'est une couleur unie (%.2f, %.2f, %.2f)", (double) pixels[0] / 255, (double) pixels[1] / 255, (double) pixels[2] / 255);
@@ -973,10 +973,9 @@ static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // at
 				cd_debug ("c'est un fond d'ecran de taille %dx%d", (int) fWidth, (int) fHeight);
 				pDesktopBgSurface = pBgSurface;
 			}
-			
-			g_object_unref (pBgPixbuf);
 		}
 		
+		g_object_unref (pBgPixbuf);
 		cairo_destroy (pSourceContext);
 	}
 	return pDesktopBgSurface;

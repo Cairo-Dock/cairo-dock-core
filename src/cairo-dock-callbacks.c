@@ -615,7 +615,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	//\_______________ On lance l'animation du dock.
 	if (pDock->iRefCount == 0)
 	{
-		g_print ("%s (auto-hide:%d)\n", __func__, pDock->bAutoHide);
+		//g_print ("%s (auto-hide:%d)\n", __func__, pDock->bAutoHide);
 		if (pDock->bAutoHide)
 		{
 			pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? 0.001 : 0.);
@@ -1632,78 +1632,77 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
-	if (icon == NULL || CAIRO_DOCK_IS_LAUNCHER (icon) || CAIRO_DOCK_IS_SEPARATOR (icon))
+	CairoDock *pReceivingDock = pDock;
+	if (g_str_has_suffix (cReceivedData, ".desktop"))  // ajout d'un nouveau lanceur si on a lache sur ou entre 2 lanceurs.
 	{
-		CairoDock *pReceivingDock = pDock;
-		if (g_str_has_suffix (cReceivedData, ".desktop") /**|| g_str_has_suffix (cReceivedData, ".sh")*/)  // c'est un fichier .desktop ou un script, on choisit de l'ajouter quoiqu'il arrive.
+		if ((myIcons.iSeparateIcons == 1 || myIcons.iSeparateIcons == 3) && CAIRO_DOCK_IS_NORMAL_APPLI (icon))
+			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		if ((myIcons.iSeparateIcons == 2 || myIcons.iSeparateIcons == 3) && CAIRO_DOCK_IS_APPLET (icon))
+			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		if (fOrder == CAIRO_DOCK_LAST_ORDER && icon && icon->pSubDock != NULL)  // on a lache sur une icone de sous-dock => on l'ajoute dans le sous-dock.
 		{
-			if (fOrder == CAIRO_DOCK_LAST_ORDER)  // on a lache dessus.
+			pReceivingDock = icon->pSubDock;
+		}
+	}
+	else  // c'est un fichier.
+	{
+		if (fOrder == CAIRO_DOCK_LAST_ORDER)  // on a lache dessus.
+		{
+			if (CAIRO_DOCK_IS_LAUNCHER (icon))
 			{
-				if (icon && icon->pSubDock != NULL)  // on l'ajoutera au sous-dock.
+				if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))
+				{
+					if (icon->pSubDock != NULL || icon->iVolumeID != 0)  // on le lache sur un repertoire ou un point de montage.
+					{
+						cairo_dock_fm_move_into_directory (cReceivedData, icon, pContainer);
+						return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+					}
+					else  // on le lache sur un fichier.
+					{
+						return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+					}
+				}
+				else if (CAIRO_DOCK_IS_CONTAINER_LAUNCHER (icon))  // on le lache sur un sous-dock de lanceurs.
 				{
 					pReceivingDock = icon->pSubDock;
 				}
-			}
-		}
-		else  // c'est un fichier.
-		{
-			if (fOrder == CAIRO_DOCK_LAST_ORDER)  // on a lache dessus.
-			{
-				if (CAIRO_DOCK_IS_LAUNCHER (icon))
+				else  // on le lache sur un lanceur.
 				{
-					if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))
+					gchar *cPath = NULL;
+					if (strncmp (cReceivedData, "file://", 7) == 0)  // tous les programmes ne gerent pas les URI; pour parer au cas ou il ne le gererait pas, dans le cas d'un fichier local, on convertit en un chemin
 					{
-						if (icon->pSubDock != NULL || icon->iVolumeID != 0)  // on le lache sur un repertoire ou un point de montage.
-						{
-							cairo_dock_fm_move_into_directory (cReceivedData, icon, pContainer);
-							return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-						}
-						else  // on le lache sur un fichier.
-						{
-							return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-						}
+						cPath = g_filename_from_uri (cReceivedData, NULL, NULL);
 					}
-					else if (CAIRO_DOCK_IS_CONTAINER_LAUNCHER (icon))  // on le lache sur un sous-dock de lanceurs.
-					{
-						pReceivingDock = icon->pSubDock;
-					}
-					else  // on le lache sur un lanceur.
-					{
-						gchar *cPath = NULL;
-						if (strncmp (cReceivedData, "file://", 7) == 0)  // tous les programmes ne gerent pas les URI; pour parer au cas ou il ne le gererait pas, dans le cas d'un fichier local, on convertit en un chemin
-						{
-							cPath = g_filename_from_uri (cReceivedData, NULL, NULL);
-						}
-						gchar *cCommand = g_strdup_printf ("%s \"%s\"", icon->cCommand, cPath ? cPath : cReceivedData);
-						cd_message ("will open the file with the command '%s'...\n", cCommand);
-						g_spawn_command_line_async (cCommand, NULL);
-						g_free (cPath);
-						g_free (cCommand);
-						cairo_dock_request_icon_animation (icon, pDock, "blink", 2);
-						return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-					}
-				}
-				else  // on le lache sur autre chose qu'un lanceur.
-				{
-					return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-				}
-			}
-			else  // on a lache a cote.
-			{
-				Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-				if (CAIRO_DOCK_IS_URI_LAUNCHER (pPointingIcon))  // on a lache dans un dock qui est un repertoire, on copie donc le fichier dedans.
-				{
-					cairo_dock_fm_move_into_directory (cReceivedData, icon, pContainer);
+					gchar *cCommand = g_strdup_printf ("%s \"%s\"", icon->cCommand, cPath ? cPath : cReceivedData);
+					cd_message ("will open the file with the command '%s'...\n", cCommand);
+					g_spawn_command_line_async (cCommand, NULL);
+					g_free (cPath);
+					g_free (cCommand);
+					cairo_dock_request_icon_animation (icon, pDock, "blink", 2);
 					return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 				}
 			}
+			else  // on le lache sur autre chose qu'un lanceur.
+			{
+				return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+			}
 		}
-
-		if (g_bLocked)
-			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-		
-		cairo_dock_add_new_launcher_by_uri (cReceivedData, pReceivingDock, fOrder);
+		else  // on a lache a cote.
+		{
+			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+			if (CAIRO_DOCK_IS_URI_LAUNCHER (pPointingIcon))  // on a lache dans un dock qui est un repertoire, on copie donc le fichier dedans.
+			{
+				cairo_dock_fm_move_into_directory (cReceivedData, icon, pContainer);
+				return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+			}
+		}
 	}
+
+	if (g_bLocked)
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	
+	cairo_dock_add_new_launcher_by_uri (cReceivedData, pReceivingDock, fOrder);
+	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 

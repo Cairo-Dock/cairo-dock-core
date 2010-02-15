@@ -52,24 +52,19 @@
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-callbacks.h"
+#include "cairo-dock-application-facility.h"
 #include "cairo-dock-application-factory.h"
 
 extern CairoDock *g_pMainDock;
 
-static GHashTable *s_hAppliTable = NULL;  // table des PID connus de cairo-dock (affichees ou non dans le dock).
 static Display *s_XDisplay = NULL;
 static Atom s_aNetWmIcon;
 static Atom s_aNetWmState;
 static Atom s_aNetWmSkipPager;
 static Atom s_aNetWmSkipTaskbar;
-///static Atom s_aNetWmPid;
 static Atom s_aNetWmWindowType;
 static Atom s_aNetWmWindowTypeNormal;
 static Atom s_aNetWmWindowTypeDialog;
-static Atom s_aNetWmName;
-static Atom s_aUtf8String;
-static Atom s_aWmName;
-static Atom s_aString;
 static Atom s_aWmHints;
 static Atom s_aNetWmHidden;
 static Atom s_aNetWmFullScreen;
@@ -83,11 +78,6 @@ void cairo_dock_initialize_application_factory (Display *pXDisplay)
 	s_XDisplay = pXDisplay;
 	g_return_if_fail (s_XDisplay != NULL);
 
-	s_hAppliTable = g_hash_table_new_full (g_int_hash,
-		g_int_equal,
-		g_free,
-		NULL);
-	
 	s_aNetWmIcon = XInternAtom (s_XDisplay, "_NET_WM_ICON", False);
 
 	s_aNetWmState = XInternAtom (s_XDisplay, "_NET_WM_STATE", False);
@@ -95,16 +85,9 @@ void cairo_dock_initialize_application_factory (Display *pXDisplay)
 	s_aNetWmSkipTaskbar = XInternAtom (s_XDisplay, "_NET_WM_STATE_SKIP_TASKBAR", False);
 	s_aNetWmHidden = XInternAtom (s_XDisplay, "_NET_WM_STATE_HIDDEN", False);
 
-	///s_aNetWmPid = XInternAtom (s_XDisplay, "_NET_WM_PID", False);
-
 	s_aNetWmWindowType = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE", False);
 	s_aNetWmWindowTypeNormal = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_NORMAL", False);
 	s_aNetWmWindowTypeDialog = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_DIALOG", False);
-	
-	s_aNetWmName = XInternAtom (s_XDisplay, "_NET_WM_NAME", False);
-	s_aUtf8String = XInternAtom (s_XDisplay, "UTF8_STRING", False);
-	s_aWmName = XInternAtom (s_XDisplay, "WM_NAME", False);
-	s_aString = XInternAtom (s_XDisplay, "STRING", False);
 	
 	s_aWmHints = XInternAtom (s_XDisplay, "WM_HINTS", False);
 	
@@ -112,14 +95,6 @@ void cairo_dock_initialize_application_factory (Display *pXDisplay)
 	s_aNetWmMaximizedHoriz = XInternAtom (s_XDisplay, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
 	s_aNetWmMaximizedVert = XInternAtom (s_XDisplay, "_NET_WM_STATE_MAXIMIZED_VERT", False);
 	s_aNetWmDemandsAttention = XInternAtom (s_XDisplay, "_NET_WM_STATE_DEMANDS_ATTENTION", False);
-}
-
-void cairo_dock_unregister_pid (Icon *icon)
-{
-	/**if (myTaskBar.bUniquePid && CAIRO_DOCK_IS_APPLI (icon) && icon->iPid != 0)
-	{
-		g_hash_table_remove (s_hAppliTable, &icon->iPid);
-	}*/
 }
 
 cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)
@@ -240,139 +215,6 @@ cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pS
 }
 
 
-CairoDock *cairo_dock_manage_appli_class (Icon *icon, CairoDock *pMainDock)
-{
-	cd_message ("%s (%s)", __func__, icon->cName);
-	CairoDock *pParentDock = pMainDock;
-	g_free (icon->cParentDockName);
-	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.bGroupAppliByClass && icon->cClass != NULL && ! cairo_dock_class_is_expanded (icon->cClass))
-	{
-		Icon *pSameClassIcon = cairo_dock_get_classmate (icon);  // un inhibiteur dans un dock OU une appli de meme classe dans le main dock.
-		if (pSameClassIcon == NULL)  // aucun classmate => elle va dans le main dock.
-		{
-			cd_message ("  classe %s encore vide", icon->cClass);
-			pParentDock = cairo_dock_search_dock_from_name (icon->cClass);
-			if (pParentDock == NULL)
-			{
-				pParentDock = pMainDock;
-				icon->cParentDockName = g_strdup (CAIRO_DOCK_MAIN_DOCK_NAME);
-			}
-			else
-			{
-				icon->cParentDockName = g_strdup (icon->cClass);
-			}
-		}
-		else  // on la met dans le sous-dock de sa classe.
-		{
-			icon->cParentDockName = g_strdup (icon->cClass);
-
-			//\____________ On cree ce sous-dock si necessaire.
-			pParentDock = cairo_dock_search_dock_from_name (icon->cClass);
-			if (pParentDock == NULL)  // alors il faut creer le sous-dock, qu'on associera soit a pSameClassIcon soit a un fake.
-			{
-				cd_message ("  creation du dock pour la classe %s", icon->cClass);
-				pParentDock = cairo_dock_create_subdock_from_scratch (NULL, icon->cClass, pMainDock);
-			}
-			else
-				cd_message ("  sous-dock de la classe %s existant", icon->cClass);
-			
-			if (CAIRO_DOCK_IS_LAUNCHER (pSameClassIcon) || CAIRO_DOCK_IS_APPLET (pSameClassIcon))  // c'est un inhibiteur.
-			{
-				if (pSameClassIcon->Xid != 0)  // actuellement l'inhibiteur inhibe 1 seule appli.
-				{
-					cd_debug ("actuellement l'inhibiteur inhibe 1 seule appli");
-					Icon *pInhibatedIcon = cairo_dock_get_icon_with_Xid (pSameClassIcon->Xid);
-					pSameClassIcon->Xid = 0;  // on lui laisse par contre l'indicateur.
-					if (pSameClassIcon->pSubDock == NULL)
-					{
-						if (pSameClassIcon->cInitialName != NULL)
-						{
-							CairoDock *pSameClassDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
-							if (pSameClassDock != NULL)
-							{
-								cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pSameClassDock));
-								cairo_dock_set_icon_name (pCairoContext, pSameClassIcon->cInitialName, pSameClassIcon, CAIRO_CONTAINER (pSameClassDock));  // on lui remet son nom de lanceur.
-								cairo_destroy (pCairoContext);
-							}
-						}
-						pSameClassIcon->pSubDock = pParentDock;
-						CairoDock *pRootDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
-						if (pRootDock != NULL)
-							cairo_dock_redraw_icon (pSameClassIcon, CAIRO_CONTAINER (pRootDock));  // on la redessine car elle prend l'indicateur de classe.
-					}
-					else if (pSameClassIcon->pSubDock != pParentDock)
-						cd_warning ("this launcher (%s) already has a subdock, but it's not the class's subdock !", pSameClassIcon->cName);
-					if (pInhibatedIcon != NULL)
-					{
-						cd_debug (" on insere %s dans le dock de la classe", pInhibatedIcon->cName);
-						g_free (pInhibatedIcon->cParentDockName);
-						pInhibatedIcon->cParentDockName = g_strdup (icon->cClass);
-						cairo_dock_insert_icon_in_dock_full (pInhibatedIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
-					}
-				}
-				else if (pSameClassIcon->pSubDock != pParentDock)
-					cd_warning ("this inhibator doesn't hold the class dock !");
-			}
-			else  // c'est donc une appli du main dock.
-			{
-				//\______________ On cree une icone de paille.
-				cd_debug (" on cree un fake...");
-				CairoDock *pClassMateParentDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);  // c'est en fait le main dock.
-				Icon *pFakeClassIcon = g_new0 (Icon, 1);
-				pFakeClassIcon->cName = g_strdup (pSameClassIcon->cClass);
-				pFakeClassIcon->cClass = g_strdup (pSameClassIcon->cClass);
-				pFakeClassIcon->iType = pSameClassIcon->iType;
-				pFakeClassIcon->fOrder = pSameClassIcon->fOrder;
-				pFakeClassIcon->cParentDockName = g_strdup (pSameClassIcon->cParentDockName);
-				pFakeClassIcon->fWidth = pSameClassIcon->fWidth / pClassMateParentDock->container.fRatio;
-				pFakeClassIcon->fHeight = pSameClassIcon->fHeight / pClassMateParentDock->container.fRatio;
-				pFakeClassIcon->fXMax = pSameClassIcon->fXMax;
-				pFakeClassIcon->fXMin = pSameClassIcon->fXMin;
-				pFakeClassIcon->fXAtRest = pSameClassIcon->fXAtRest;
-				pFakeClassIcon->pSubDock = pParentDock;  // grace a cela ce sera un lanceur.
-				
-				//\______________ On la charge.
-				cairo_dock_load_one_icon_from_scratch (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
-				
-				//\______________ On detache le classmate, on le place dans le sous-dock, et on lui substitue le faux.
-				cd_debug (" on detache %s pour la passer dans le sous-dock de sa classe", pSameClassIcon->cName);
-				cairo_dock_detach_icon_from_dock (pSameClassIcon, pClassMateParentDock, FALSE);
-				g_free (pSameClassIcon->cParentDockName);
-				pSameClassIcon->cParentDockName = g_strdup (pSameClassIcon->cClass);
-				cairo_dock_insert_icon_in_dock_full (pSameClassIcon, pParentDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
-				
-				cd_debug (" on lui substitue le fake");
-				cairo_dock_insert_icon_in_dock_full (pFakeClassIcon, pClassMateParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
-				cairo_dock_calculate_dock_icons (pClassMateParentDock);
-				cairo_dock_redraw_icon (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
-			}
-		}
-	}
-	else
-		icon->cParentDockName = g_strdup (CAIRO_DOCK_MAIN_DOCK_NAME);
-
-	return pParentDock;
-}
-
-gchar * cairo_dock_get_window_name (Window Xid, gboolean bSearchWmName)
-{
-	Atom aReturnedType = 0;
-	int aReturnedFormat = 0;
-	unsigned long iLeftBytes, iBufferNbElements=0;
-	guchar *pNameBuffer = NULL;
-	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmName, 0, G_MAXULONG, False, s_aUtf8String, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, &pNameBuffer);  // on cherche en priorite le nom en UTF8, car on est notifie des 2, mais il vaut mieux eviter le WM_NAME qui, ne l'etant pas, contient des caracteres bizarres qu'on ne peut pas convertir avec g_locale_to_utf8, puisque notre locale _est_ UTF8.
-	if (iBufferNbElements == 0 && bSearchWmName)
-		XGetWindowProperty (s_XDisplay, Xid, s_aWmName, 0, G_MAXULONG, False, s_aString, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, &pNameBuffer);
-	
-	gchar *cName = NULL;
-	if (iBufferNbElements > 0)
-	{
-		cName = g_strdup (pNameBuffer);
-		XFree (pNameBuffer);
-	}
-	return cName;
-}
-
 static Window _cairo_dock_get_parent_window (Window Xid)
 {
 	Atom aReturnedType = 0;
@@ -426,36 +268,11 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 		//g_print (" -------- bSkip : %d\n",  bSkip);
 		XFree (pXStateBuffer);
 	}
-	//else
-	//	cd_message ("pas d'etat defini, donc on continue\n");
 	if (bSkip)
 	{
 		cd_debug ("  cette fenetre est timide");
 		return NULL;
 	}
-
-	//\__________________ On recupere son PID si on est en mode "PID unique".
-	/**if (myTaskBar.bUniquePid)
-	{
-		iBufferNbElements = 0;
-		XGetWindowProperty (s_XDisplay, Xid, s_aNetWmPid, 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pPidBuffer);
-		if (iBufferNbElements > 0)
-		{
-			//g_print (" +++ PID %d\n", *pPidBuffer);
-
-			Icon *pIcon = g_hash_table_lookup (s_hAppliTable, pPidBuffer);
-			if (pIcon != NULL)  // si c'est une fenetre d'une appli deja referencee, on ne rajoute pas d'icones.
-			{
-				XFree (pPidBuffer);
-				return NULL;
-			}
-		}
-		else
-		{
-			//g_print ("pas de PID defini -> elle degage\n");
-			return NULL;
-		}
-	}*/
 
 	//\__________________ On regarde son type.
 	gulong *pTypeBuffer = NULL;
@@ -494,8 +311,6 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 			{
 				cd_debug ("type indesirable (%d)", *pTypeBuffer);
 				XFree (pTypeBuffer);
-				/**if (myTaskBar.bUniquePid)
-					g_hash_table_insert (s_hAppliTable, pPidBuffer, NULL);  // On rajoute son PID meme si c'est une appli qu'on n'affichera pas.*/
 				return NULL;
 			}
 		}
@@ -521,13 +336,11 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 			}
 			return NULL;  // meme remarque.
 		}
-		//else
-		//	cd_message (" pas de type defini -> on suppose que son type est 'normal'\n");
 	}
 	
 	
 	//\__________________ On recupere son nom.
-	gchar *cName = cairo_dock_get_window_name (Xid, TRUE);
+	gchar *cName = cairo_dock_get_xwindow_name (Xid, TRUE);
 	cd_debug ("recuperation de '%s' (bIsHidden : %d)", cName, bIsHidden);
 	
 	
@@ -539,7 +352,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 		cd_debug ("  res_name : %s(%x); res_class : %s(%x)", pClassHint->res_name, pClassHint->res_name, pClassHint->res_class, pClassHint->res_class);
 		if (pClassHint->res_class && strcmp (pClassHint->res_class, "Wine") == 0 && pClassHint->res_name && g_str_has_suffix (pClassHint->res_name, ".exe"))
 		{
-			g_print ("  wine application detected, changing the class '%s' to '%s'\n", pClassHint->res_class, pClassHint->res_name);
+			cd_debug ("  wine application detected, changing the class '%s' to '%s'", pClassHint->res_class, pClassHint->res_name);
 			cClass = g_ascii_strdown (pClassHint->res_name, -1);
 		}
 		else if (*pClassHint->res_class == '/' && g_str_has_suffix (pClassHint->res_class, ".exe"))  // cas des applications Mono telles que tomboy ...
@@ -553,10 +366,12 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 			cClass[strlen (cClass) - 4] = '\0';
 		}
 		else
-			cClass = g_ascii_strdown (pClassHint->res_class, -1);  // on la passe en minuscule, car certaines applis ont la bonne idee de donner des classes avec une majuscule ou non suivant les fenetres. Il reste le cas des applis telles que Glade2 ('Glade' et 'Glade-2' ...)
+			cClass = g_ascii_strdown (pClassHint->res_class, -1);  // on la passe en minuscule, car certaines applis ont la bonne idee de donner des classes avec une majuscule ou non suivant les fenetres.
+		
+		cairo_dock_remove_version_from_string (cClass);  // on enleve les numeros de version (Openoffice.org-3.1)
+		
 		XFree (pClassHint->res_name);
 		XFree (pClassHint->res_class);
-		//g_print (".\n");
 	}
 	else
 	{
@@ -564,13 +379,6 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	}
 	XFree (pClassHint);
 	
-	/*const XklEngine *eng = xkl_engine_get_instance (cairo_dock_get_Xdisplay ());
-	XklState state;
-	xkl_engine_get_state (eng, Xid, &state);
-	const gchar **names = xkl_engine_get_group_names (eng);
-	int n = xkl_engine_get_num_groups (eng);
-	for (i=0; i<n; i++)
-		g_print ("name %d : %s\n", i, names[i]);*/
 	
 	//\__________________ On cree, on remplit l'icone, et on l'enregistre, par contre elle sera inseree plus tard.
 	Icon *icon = g_new0 (Icon, 1);
@@ -614,148 +422,4 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	cairo_dock_set_xwindow_mask (Xid, PropertyChangeMask | StructureNotifyMask);
 
 	return icon;
-}
-
-
-
-static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, gboolean bForceDemand, Icon *pHiddenIcon)
-{
-	cd_debug ("%s (%s, force:%d)\n", __func__, icon->cName, bForceDemand);
-	if (CAIRO_DOCK_IS_APPLET (icon))  // on considere qu'une applet prenant le controle d'une icone d'appli dispose de bien meilleurs moyens pour interagir avec l'appli que la barre des taches.
-		return ;
-	icon->bIsDemandingAttention = TRUE;
-	//\____________________ On montre le dialogue.
-	if (myTaskBar.bDemandsAttentionWithDialog)
-	{
-		CairoDialog *pDialog;
-		if (pHiddenIcon == NULL)
-		{
-			pDialog = cairo_dock_show_temporary_dialog_with_icon (icon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration, "same icon");
-		}
-		else
-		{
-			pDialog = cairo_dock_show_temporary_dialog (pHiddenIcon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration);
-			g_return_if_fail (pDialog != NULL);
-			cairo_dock_set_new_dialog_icon_surface (pDialog, pHiddenIcon->pIconBuffer, pDialog->iIconSize);
-		}
-		if (pDialog && bForceDemand)
-		{
-			g_print ("force dialog on top\n");
-			gtk_window_set_keep_above (GTK_WINDOW (pDialog->container.pWidget), TRUE);
-			Window Xid = GDK_WINDOW_XID (pDialog->container.pWidget->window);
-			cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // pour passer devant les fenetres plein ecran; depend du WM.
-		}
-	}
-	//\____________________ On montre l'icone avec une animation.
-	if (myTaskBar.cAnimationOnDemandsAttention && ! pHiddenIcon)  // on ne l'anime pas si elle n'est pas dans un dock.
-	{
-		if (pDock->iRefCount == 0)
-		{
-			if (bForceDemand || cairo_dock_search_window_on_our_way (pDock, FALSE, TRUE) == NULL)
-			{
-				if (pDock->iSidPopDown != 0)
-				{
-					g_source_remove(pDock->iSidPopDown);
-					pDock->iSidPopDown = 0;
-				}
-				cairo_dock_pop_up (pDock);
-			}
-			/*if (pDock->bAutoHide && bForceDemand)
-			{
-				g_print ("force dock to raise\n");
-				cairo_dock_emit_enter_signal (pDock);
-			}*/
-		}
-		else if (bForceDemand)
-		{
-			g_print ("force sub-dock to raise\n");
-			CairoDock *pParentDock = NULL;
-			Icon *pPointedIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
-			if (pParentDock)
-				cairo_dock_show_subdock (pPointedIcon, pParentDock, FALSE);
-		}
-		cairo_dock_request_icon_animation (icon, pDock, myTaskBar.cAnimationOnDemandsAttention, 10000);
-		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));  // dans le au cas ou le dock ne serait pas encore visible, la fonction precedente n'a pas lance l'animation.
-	}
-}
-void cairo_dock_appli_demands_attention (Icon *icon)
-{
-	cd_message ("%s (%s / %s , %d)", __func__, icon->cName, icon->cLastAttentionDemand, icon->bIsDemandingAttention);
-	if (icon->Xid == cairo_dock_get_current_active_window ())  // apparemment ce cas existe, et conduit a ne pas pouvoir stopper l'animation de demande d'attention facilement.
-	{
-		g_print ("cette fenetre a deja le focus, elle ne peut demander l'attention en plus.\n");
-		return ;
-	}
-	if (icon->bIsDemandingAttention &&
-		/*cairo_dock_icon_has_dialog (icon) &&*/
-		icon->cLastAttentionDemand && icon->cName && strcmp (icon->cLastAttentionDemand, icon->cName) == 0)  // le message n'a pas change entre les 2 demandes.
-	{
-		return ;
-	}
-	g_free (icon->cLastAttentionDemand);
-	icon->cLastAttentionDemand = g_strdup (icon->cName);
-	
-	gboolean bForceDemand = (myTaskBar.cForceDemandsAttention && icon->cClass && g_strstr_len (myTaskBar.cForceDemandsAttention, -1, icon->cClass));
-	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-	if (pParentDock == NULL)  // appli inhibee ou non affichee.
-	{
-		icon->bIsDemandingAttention = TRUE;  // on met a TRUE meme si ce n'est pas reellement elle qui va prendre la demande.
-		Icon *pInhibitorIcon = cairo_dock_get_inhibator (icon, TRUE);  // on cherche son inhibiteur dans un dock.
-		if (pInhibitorIcon != NULL)  // appli inhibee.
-		{
-			pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
-			if (pParentDock != NULL)
-				_cairo_dock_appli_demands_attention (pInhibitorIcon, pParentDock, bForceDemand, NULL);
-		}
-		else if (bForceDemand)  // appli pas affichee, mais on veut tout de même etre notifie.
-		{
-			Icon *pOneIcon = cairo_dock_get_dialogless_icon ();
-			if (pOneIcon != NULL)
-				_cairo_dock_appli_demands_attention (pOneIcon, g_pMainDock, bForceDemand, icon);
-		}
-	}
-	else  // appli dans un dock.
-		_cairo_dock_appli_demands_attention (icon, pParentDock, bForceDemand, NULL);
-}
-
-static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *pDock)
-{
-	if (CAIRO_DOCK_IS_APPLET (icon))
-		return ;
-	icon->bIsDemandingAttention = FALSE;
-	if (myTaskBar.bDemandsAttentionWithDialog)
-		cairo_dock_remove_dialog_if_any (icon);
-	if (myTaskBar.cAnimationOnDemandsAttention)
-	{
-		cairo_dock_stop_icon_animation (icon);  // arrete l'animation precedemment lancee par la demande.
-		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));  // optimisation possible : ne redessiner que l'icone en tenant compte de la zone de sa derniere animation (pulse ou rebond).
-	}
-	if (! pDock->container.bInside)
-	{
-		//g_print ("pop down the dock\n");
-		cairo_dock_pop_down (pDock);
-		
-		if (pDock->bAutoHide)
-		{
-			//g_print ("force dock to auto-hide\n");
-			cairo_dock_emit_leave_signal (pDock);
-		}
-	}
-}
-void cairo_dock_appli_stops_demanding_attention (Icon *icon)
-{
-	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-	if (pParentDock == NULL)
-	{
-		icon->bIsDemandingAttention = FALSE;  // idem que plus haut.
-		Icon *pInhibitorIcon = cairo_dock_get_inhibator (icon, TRUE);
-		if (pInhibitorIcon != NULL)
-		{
-			pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
-			if (pParentDock != NULL)
-				_cairo_dock_appli_stops_demanding_attention (pInhibitorIcon, pParentDock);
-		}
-	}
-	else
-		_cairo_dock_appli_stops_demanding_attention (icon, pParentDock);
 }

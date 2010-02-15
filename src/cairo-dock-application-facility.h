@@ -17,8 +17,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CAIRO_DOCK_APPLICATION_FACTORY__
-#define  __CAIRO_DOCK_APPLICATION_FACTORY__
+#ifndef __CAIRO_DOCK_APPLICATION_FACILITY__
+#define  __CAIRO_DOCK_APPLICATION_FACILITY__
 
 #include <glib.h>
 #include <X11/Xlib.h>
@@ -27,15 +27,21 @@
 G_BEGIN_DECLS
 
 
-void cairo_dock_initialize_application_factory (Display *pXDisplay);
+void cairo_dock_appli_demands_attention (Icon *icon);
+void cairo_dock_appli_stops_demanding_attention (Icon *icon);
+
+void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock);
 
 
-cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);
-
-cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);
+gboolean cairo_dock_appli_hovers_dock (Icon *pIcon, CairoDock *pDock);
 
 
-Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid, CairoDock *pDock);
+CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bUpdateSize, gboolean bAnimate);
+CairoDock *cairo_dock_detach_appli (Icon *pIcon);
+
+
+void cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock);
+void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon *icon, CairoDock *pMainDock);
 
 
 G_END_DECLS

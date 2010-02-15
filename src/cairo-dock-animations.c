@@ -51,6 +51,7 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-load.h"
+#include "cairo-dock-application-facility.h"
 #include "cairo-dock-animations.h"
 
 extern int g_iXScreenHeight[2];

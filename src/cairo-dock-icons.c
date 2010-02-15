@@ -44,6 +44,7 @@
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-application-facility.h"
 #include "cairo-dock-separator-factory.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-log.h"

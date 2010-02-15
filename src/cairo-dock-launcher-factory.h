@@ -36,6 +36,9 @@ G_BEGIN_DECLS
  */
 gchar *cairo_dock_search_icon_s_path (const gchar *cFileName);
 
+gboolean cairo_dock_remove_version_from_string (gchar *cString);
+
+
 /** Set the class of a launcher. You can safely free the paramater 'cStartupWMClass' after calling this function. This function is tobe called on a launcher well defined (all other parameters should be already filled).
  * @param icon a launcher.
  * @param cStartupWMClass the class of the launcher defined in its .desktop file, or NULL. You can't expect the resulting class to be the one you provide, because this function makes a lot of guesses.

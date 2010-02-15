@@ -166,10 +166,30 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 	return cIconPath;
 }
 
+gboolean cairo_dock_remove_version_from_string (gchar *cString)
+{
+	int n = strlen (cString);
+	gchar *str = cString + n - 1;
+	do
+	{
+		if (!g_ascii_isdigit(*str) && *str != '.')
+			break;
+		if (*str == '-')
+		{
+			*str = '\0';
+			return TRUE;
+		}
+		str --;
+	}
+	while (str != cString);
+	return FALSE;
+}
+
 void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 {
 	// plusieurs cas sont possibles :
 	// Exec=toto
+	// Exec=toto-1.2
 	// Exec=toto -x -y
 	// Exec=/path/to/toto -x -y
 	// Exec=gksu toto
@@ -240,6 +260,7 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 		{
 			icon->cClass = g_ascii_strdown (cStartupWMClass, -1);
 		}
+		cairo_dock_remove_version_from_string (icon->cClass);
 	}
 	else
 		icon->cClass = NULL;

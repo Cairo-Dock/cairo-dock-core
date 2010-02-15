@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 * Classes are used to group the windows of a same program, and to bind a launcher to the launched application.
 */
 
+/// Definition of a Class of application.
 struct _CairoDockClassAppli {
 	/// TRUE if the appli must use the icon provided by X instead the one from the theme.
 	gboolean bUseXIcon;

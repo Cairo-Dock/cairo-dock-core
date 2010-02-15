@@ -223,7 +223,7 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 	{
 		iPreviewWidth = MIN (iPreviewWidth, CAIRO_DOCK_PREVIEW_WIDTH);
 		iPreviewHeight = MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT);
-		// g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight); // 
+		 g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight); // 
 		pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
 	}
 	if (pPreviewPixbuf == NULL)
@@ -278,7 +278,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, &cDescriptionFilePath,
 		CAIRO_DOCK_MODEL_IMAGE, &cPreviewFilePath, -1);
 	
-	if (cDescriptionFilePath != NULL && (!s_cPrevReadme || strcmp (s_cPrevReadme, cDescriptionFilePath) != 0))
+	if (cDescriptionFilePath != NULL && (1 || !s_cPrevReadme || strcmp (s_cPrevReadme, cDescriptionFilePath) != 0))
 	{
 		CairoDockTask *pTask = g_object_get_data (G_OBJECT (pDescriptionLabel), "cd-task");
 		//g_print ("prev task : %x\n", pTask);
@@ -321,7 +321,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 			gtk_label_set_markup (pDescriptionLabel, "");
 	}
 
-	if (cPreviewFilePath != NULL && (!s_cPrevPreview || strcmp (s_cPrevPreview, cPreviewFilePath) != 0))
+	if (cPreviewFilePath != NULL && (1 || !s_cPrevPreview || strcmp (s_cPrevPreview, cPreviewFilePath) != 0))
 	{
 		g_free (s_cPrevPreview);
 		s_cPrevPreview = g_strdup (cPreviewFilePath);

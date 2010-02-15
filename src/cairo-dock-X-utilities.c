@@ -80,7 +80,10 @@ static Atom s_aNetWmMaximizedHoriz;
 static Atom s_aNetWmMaximizedVert;
 static Atom s_aNetWmDemandsAttention;
 static Atom s_aNetWmDesktop;
-
+static Atom s_aNetWmName;
+static Atom s_aWmName;
+static Atom s_aUtf8String;
+static Atom s_aString;
 
 static int _cairo_dock_xerror_handler (Display * pDisplay, XErrorEvent *pXError)
 {
@@ -120,6 +123,10 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 	s_aNetWmMaximizedVert		= XInternAtom (s_XDisplay, "_NET_WM_STATE_MAXIMIZED_VERT", False);
 	s_aNetWmDemandsAttention	= XInternAtom (s_XDisplay, "_NET_WM_STATE_DEMANDS_ATTENTION", False);
 	s_aNetWmDesktop			= XInternAtom (s_XDisplay, "_NET_WM_DESKTOP", False);
+	s_aNetWmName 			= XInternAtom (s_XDisplay, "_NET_WM_NAME", False);
+	s_aWmName 				= XInternAtom (s_XDisplay, "WM_NAME", False);
+	s_aUtf8String 			= XInternAtom (s_XDisplay, "UTF8_STRING", False);
+	s_aString 				= XInternAtom (s_XDisplay, "STRING", False);
 	
 	Screen *XScreen = XDefaultScreenOfDisplay (s_XDisplay);
 	g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] = WidthOfScreen (XScreen);
@@ -963,6 +970,25 @@ gulong cairo_dock_get_xwindow_timestamp (Window Xid)
 		iTimeStamp = *pTimeBuffer;
 	XFree (pTimeBuffer);
 	return iTimeStamp;
+}
+
+gchar *cairo_dock_get_xwindow_name (Window Xid, gboolean bSearchWmName)
+{
+	Atom aReturnedType = 0;
+	int aReturnedFormat = 0;
+	unsigned long iLeftBytes, iBufferNbElements=0;
+	guchar *pNameBuffer = NULL;
+	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmName, 0, G_MAXULONG, False, s_aUtf8String, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, &pNameBuffer);  // on cherche en priorite le nom en UTF8, car on est notifie des 2, mais il vaut mieux eviter le WM_NAME qui, ne l'etant pas, contient des caracteres bizarres qu'on ne peut pas convertir avec g_locale_to_utf8, puisque notre locale _est_ UTF8.
+	if (iBufferNbElements == 0 && bSearchWmName)
+		XGetWindowProperty (s_XDisplay, Xid, s_aWmName, 0, G_MAXULONG, False, s_aString, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, &pNameBuffer);
+	
+	gchar *cName = NULL;
+	if (iBufferNbElements > 0)
+	{
+		cName = g_strdup (pNameBuffer);
+		XFree (pNameBuffer);
+	}
+	return cName;
 }
 
 gboolean cairo_dock_xwindow_is_maximized (Window Xid)

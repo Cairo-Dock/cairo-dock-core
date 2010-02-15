@@ -86,6 +86,8 @@ cairo_dock_SOURCES = \
 	cairo-dock-launcher-factory.h\
 	cairo-dock-application-factory.c\
 	cairo-dock-application-factory.h\
+	cairo-dock-application-facility.c\
+	cairo-dock-application-facility.h\
 	cairo-dock-applet-factory.c\
 	cairo-dock-applet-factory.h\
 	cairo-dock-separator-factory.c\

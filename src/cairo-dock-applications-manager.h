@@ -105,20 +105,10 @@ void cairo_dock_foreach_applis (CairoDockForeachIconFunc pFunction, gboolean bOu
 void cairo_dock_foreach_applis_on_viewport (CairoDockForeachIconFunc pFunction, int iNumDesktop, int iNumViewportX, int iNumViewportY, gpointer pUserData);
 
 
-// Applis facility
+void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock);
+
 gboolean cairo_dock_appli_is_on_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY);
 gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon);
-gboolean cairo_dock_appli_hovers_dock (Icon *pIcon, CairoDock *pDock);
-
-CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bUpdateSize, gboolean bAnimate);
-
-CairoDock *cairo_dock_detach_appli (Icon *pIcon);
-
-void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock);
-
-void cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock);
-void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon *icon, CairoDock *pMainDock);
-void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock);
 
 
 G_END_DECLS

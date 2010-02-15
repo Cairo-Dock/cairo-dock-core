@@ -52,6 +52,7 @@
 #include <cairo-dock/cairo-dock-menu.h>
 // chargeurs d'icone.
 #include <cairo-dock/cairo-dock-application-factory.h>
+#include <cairo-dock/cairo-dock-application-facility.h>
 #include <cairo-dock/cairo-dock-applet-factory.h>
 #include <cairo-dock/cairo-dock-launcher-factory.h>
 #include <cairo-dock/cairo-dock-separator-factory.h>

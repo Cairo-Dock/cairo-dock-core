@@ -685,14 +685,16 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	icon->fHeight /= pDock->container.fRatio;
 
 	//\___________________ On enleve le separateur si c'est la derniere icone de son type.
+	g_print ("bCheckUnusedSeparator : %d\n", bCheckUnusedSeparator);
 	if (bCheckUnusedSeparator && ! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon))
 	{
+		g_print ("on cherche une icone de ce groupe : %d (%d)\n", icon->iType, cairo_dock_get_icon_order (icon));
 		Icon *pSameTypeIcon = cairo_dock_get_first_icon_of_order (pDock->icons, icon->iType);
 		if (pSameTypeIcon == NULL)
 		{
 			Icon * pSeparatorIcon = NULL;
 			int iOrder = cairo_dock_get_icon_order (icon);
-			//g_print ("plus d'icone de cet ordre : %d\n", iOrder);
+			g_print ("plus d'icone de cet ordre : %d\n", iOrder);
 			if (iOrder > 1)
 				pSeparatorIcon = cairo_dock_get_first_icon_of_order (pDock->icons, iOrder - 1);
 			if (iOrder + 1 < CAIRO_DOCK_NB_TYPES && pSeparatorIcon == NULL)
@@ -700,11 +702,13 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 
 			if (pSeparatorIcon != NULL)
 			{
-				//g_print (" -> on enleve un separateur\n");
+				g_print (" -> on enleve un separateur\n");
 				cairo_dock_detach_icon_from_dock (pSeparatorIcon, pDock, FALSE);
 				cairo_dock_free_icon (pSeparatorIcon);
 			}
 		}
+		else
+			g_print ("il reste encore %s (%d, %d, %x)\n", pSameTypeIcon->cName, pSameTypeIcon->iType, cairo_dock_get_icon_order (pSameTypeIcon), pSameTypeIcon->pModuleInstance);
 	}
 	
 	if (pDock->iRefCount != 0 && ! CAIRO_DOCK_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
@@ -755,7 +759,7 @@ void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboole
 		cairo_dock_unregister_appli (icon);  // -> n'est plus une appli.
 	}
 	else  // cas d'une applet controlant une appli, elle devient du coup une appli normale, ce qu'on ne veut pas.
-		icon->Xid = 0;
+		icon->cDesktopFileName = g_strdup("");
 }
 
 
