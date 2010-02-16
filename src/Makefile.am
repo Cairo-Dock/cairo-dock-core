@@ -208,6 +208,7 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-load.h\
 	cairo-dock-icons.h\
 	cairo-dock-applications-manager.h\
+	cairo-dock-application-facility.h\
 	cairo-dock-menu.h\
 	cairo-dock-modules.h\
 	cairo-dock-global-variables.h\
