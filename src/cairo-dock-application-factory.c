@@ -382,17 +382,20 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	
 	//\__________________ On cree, on remplit l'icone, et on l'enregistre, par contre elle sera inseree plus tard.
 	Icon *icon = g_new0 (Icon, 1);
-	icon->cName = (cName ? cName : g_strdup (cClass));
-	icon->Xid = Xid;
-	icon->cClass = cClass;
-	Icon * pLastAppli = cairo_dock_get_last_appli (pDock->icons);
-	icon->fOrder = (pLastAppli != NULL ? pLastAppli->fOrder + 1 : 1);
 	icon->iType = CAIRO_DOCK_APPLI;
+	icon->Xid = Xid;
+	
+	//\__________________ On renseigne les infos en provenance de X.
+	icon->cName = (cName ? cName : g_strdup (cClass));
+	icon->cClass = cClass;
 	icon->bIsHidden = bIsHidden;
 	icon->bIsMaximized = bIsMaximized;
 	icon->bIsFullScreen = bIsFullScreen;
 	icon->bIsDemandingAttention = bDemandsAttention;
 	icon->bHasIndicator = myTaskBar.bDrawIndicatorOnAppli;
+	/**Icon * pLastAppli = cairo_dock_get_last_appli (pDock->icons);
+	icon->fOrder = (pLastAppli != NULL ? pLastAppli->fOrder + 1 : 1);*/
+	icon->fOrder = CAIRO_DOCK_LAST_ORDER;
 	
 	cairo_dock_get_xwindow_geometry (Xid,
 		&icon->windowGeometry.x,
@@ -410,6 +413,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	}
 	#endif
 	
+	//\____________ On remplit ses buffers.
 	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pDock);
 	
 	if (icon->bIsHidden && myTaskBar.iMinimizedWindowRenderType == 2)
@@ -417,6 +421,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 		cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pDock), FALSE);
 	}
 	
+	//\____________ On enregistre l'appli et on commence a la surveiller.
 	cairo_dock_register_appli (icon);
 	
 	cairo_dock_set_xwindow_mask (Xid, PropertyChangeMask | StructureNotifyMask);

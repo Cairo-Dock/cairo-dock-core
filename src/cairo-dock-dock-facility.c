@@ -588,14 +588,14 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 		
 		//\_______________ On en deduit l'amplitude de la sinusoide au niveau de cette icone, et donc son echelle.
 		icon->fScale = 1 + fMagnitude * myIcons.fAmplitude * sin (icon->fPhase);
-		if (iWidth > 0 && icon->fPersonnalScale != 0)
+		if (iWidth > 0 && icon->fInsertRemoveFactor != 0)
 		{
 			fScale = icon->fScale;
 			///offset += (icon->fWidth * icon->fScale) * (pointed_ic == NULL ? 1 : -1);
-			if (icon->fPersonnalScale > 0)
-				icon->fScale *= icon->fPersonnalScale;
+			if (icon->fInsertRemoveFactor > 0)
+				icon->fScale *= icon->fInsertRemoveFactor;
 			else
-				icon->fScale *= (1 + icon->fPersonnalScale);
+				icon->fScale *= (1 + icon->fInsertRemoveFactor);
 			///offset -= (icon->fWidth * icon->fScale) * (pointed_ic == NULL ? 1 : -1);
 		}
 		
@@ -639,7 +639,7 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 		else
 			icon->bPointed = FALSE;
 		
-		if (iWidth > 0 && icon->fPersonnalScale != 0)
+		if (iWidth > 0 && icon->fInsertRemoveFactor != 0)
 		{
 			if (!icon->bPointed)
 				offset += (icon->fWidth * (fScale - icon->fScale)) * (pointed_ic == NULL ? 1 : -1);

@@ -29,19 +29,19 @@ G_BEGIN_DECLS
 
 
 /**
-*@file cairo-dock-icons.h This class defines the elements contained in containers : Icons.
-* An icon is an union of 3 parts : a launcher, an appli, and an applet. It can be all of them at the same time.
+*@file cairo-dock-icons.h This class defines the items contained in containers : Icons.
+* An Icon is an union of 3 parts : a launcher, an appli, and an applet. It can be all of them at the same time.
 * - a launcher is any icon having a command or pointing to a sub-dock.
-* - an appli is an icon pointing to an X ID, that is to say a window.
+* - an appli is an icon representing an X window.
 * - an applet is an icon holding a module instance.
 * - an icon being none of them is a separator.
 *
 * The type of an icon is dynamic (for instance a launcher can become an application).
 *
-* To group icons togather, they define a group, which is also usually their initial type, and an order, which is the order inside a group.
+* Icons are sorted by the (group, order) pair; the group is also the initial type of the icon.
 */
 
-/// Types and groups of icons.
+/// Definition if the groups of icons.
 typedef enum {
 	CAIRO_DOCK_LAUNCHER = 0,
 	CAIRO_DOCK_SEPARATOR12,
@@ -64,148 +64,101 @@ typedef enum {
 
 /// Definition of an Icon.
 struct _Icon {
-	//\____________ renseignes lors de la creation de the icon.
-	/// Nom (et non pas chemin) du fichier .desktop definissant the icon, ou NULL si the icon n'est pas definie pas un fichier.
-	gchar *cDesktopFileName;
-	/// URI.
-	gchar *cBaseURI;
-	/// ID d'un volume.
-	gint iVolumeID;
-	/// Nom (et non pas chemin) du fichier de l'image, ou NULL si son image n'est pas definie pas un fichier.
-	gchar *cFileName;
-	/// Nom de the icon tel qu'il apparaitra dans son etiquette. Donne le nom au sous-dock.
-	gchar *cName;
-	/// Commande a executer lors d'un clique gauche clique, ou NULL si aucune.
-	gchar *cCommand;
-	/// Repertoire ou s'executera la commande.
-	gchar *cWorkingDirectory;
-	/// Type de the icon.
+	//\____________ Definition.
+	/// group of the icon.
 	CairoDockIconType iType;
-	/// Ordre de the icon dans son dock, parmi les icons de meme type.
-	gdouble fOrder;
-	/// Sous-dock sur lequel pointe the icon, ou NULL si aucun.
-	CairoDock *pSubDock;
-	/// Nom du dock contenant the icon (NULL if the icon is not inside a dock).
-	gchar *cParentDockName;
-	/// Numero du bureau virtuel sur lequel restreindre the icon ( -1 ==> pas de restriction )
-	gint iSpecificDesktop;
-	//\____________ calcules lors du chargement de the icon.
-	/// Dimensions de la surface de the icon.
-	gdouble fWidth, fHeight;
-	/// Surface cairo de l'image.
-	cairo_surface_t* pIconBuffer;
-	/// Surface cairo de l'etiquette.
-	cairo_surface_t* pTextBuffer;
-	/// Surface cairo du reflet.
-	cairo_surface_t* pReflectionBuffer;
-	/// dimensions de l'etiquette.
-	gint iTextWidth, iTextHeight;
-	/// Decalage en X et en Y de l'etiquette.
-	gdouble fTextXOffset, fTextYOffset;
-	/// Abscisse maximale (droite) que the icon atteindra (variable avec la vague).
-	gdouble fXMax;
-	/// Abscisse minimale (gauche) que the icon atteindra (variable avec la vague).
-	gdouble fXMin;
-	//\____________ calcules a chaque scroll et insertion/suppression d'an icon.
-	/// Abscisse de the icon au repos.
-	gdouble fXAtRest;
-	//\____________ calcules a chaque fois.
-	/// Phase de the icon (entre -pi et piconi).
-	gdouble fPhase;
-	/// Abscisse temporaire du bord gauche de l'image de the icon.
-	gdouble fX;
-	/// Ordonnee temporaire du bord haut de l'image de the icon.
-	gdouble fY;
-	/// Echelle courante de the icon (facteur de zoom, >= 1).
-	gdouble fScale;
-	/// Abscisse du bord gauche de l'image de the icon.
-	gdouble fDrawX;
-	/// Ordonnee du bord haut de l'image de the icon.
-	gdouble fDrawY;
-	/// Facteur de zoom sur la largeur de the icon.
-	gdouble fWidthFactor;
-	/// Facteur de zoom sur la hauteur de the icon.
-	gdouble fHeightFactor;
-	/// Transparence (<= 1).
-	gdouble fAlpha;
-	/// TRUE if the icon is couramment pointee.
-	gboolean bPointed;
-	/// Facteur de zoom personnel, utilise pour l'apparition et la suppression des icons.
-	gdouble fPersonnalScale;
-	/// Decalage en ordonnees de reflet (pour le rebond, >= 0).
-	gdouble fDeltaYReflection;
-	/// Orientation de the icon (angle par rapport a la verticale Oz).
-	gdouble fOrientation;
-	/// Rotation autour de l'axe Ox (animation upside-down).
-	gint iRotationX;
-	/// Rotation autour de l'axe Oy (animation rotate).
-	gint iRotationY;
-	//\____________ Pour les applis.
-	/// PID de l'application correspondante.
-	gint iPid;
-	/// ID de la fenetre X de l'application correspondante.
-	Window Xid;
-	/// Classe de l'application correspondante (ou NULL si aucune).
-	gchar *cClass;
-	/// Etiquette du lanceur a sa creation, ecrasee par le nom courant de l'appli.
-	gchar *cInitialName;
-	/// Heure de derniere verification de la presence de l'application dans la barre des taches.
-	gint iLastCheckTime;
-	/// TRUE if la fenetre de l'application correspondante is minimisee.
-	gboolean bIsHidden;
-	/// Position et taille de la fenetre.
-	GtkAllocation windowGeometry;
-	/// TRUE if la fenetre is en mode plein ecran.
-	gboolean bIsFullScreen;
-	/// TRUE if la fenetre is en mode maximisee.
-	gboolean bIsMaximized;
-	/// TRUE if la fenetre demande l'attention ou is en mode urgente.
-	gboolean bIsDemandingAttention;
-	/// TRUE if the icon a un indicateur (elle controle une appli).
-	gboolean bHasIndicator;
-	/// ID du pixmap de sauvegarde de la fenetre pour quand elle is cachee.
-	Pixmap iBackingPixmap;
-	//Damage iDamageHandle;
-	//\____________ Pour les modules.
-	/// Instance de module que represente the icon.
-	CairoDockModuleInstance *pModuleInstance;
-	/// Texte de l'info rapide.
-	gchar *cQuickInfo;
-	/// Surface cairo de l'info rapide.
-	cairo_surface_t* pQuickInfoBuffer;
-	/// Largeur de l'info rapide.
-	gint iQuickInfoWidth;
-	/// Heuteur de l'info rapide.
-	gint iQuickInfoHeight;
-	/// Decalage en X de la surface de l'info rapide.
-	gdouble fQuickInfoXOffset;
-	/// Decalage en Y de la surface de l'info rapide.
-	gdouble fQuickInfoYOffset;
-	/// decalage pour le glissement des icons.
-	gdouble fGlideOffset;
-	/// direction dans laquelle glisse the icon.
-	gint iGlideDirection;
-	/// echelle d'adaptation au glissement.
-	gdouble fGlideScale;
-	
-	GLuint iIconTexture;
-	GLuint iLabelTexture;
-	GLuint iQuickInfoTexture;
-	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
-	gboolean bStatic;
-	CairoDockAnimationState iAnimationState;
-	gboolean bBeingRemovedByCairo;
-	gpointer pbuffer;
-	/// liste des notifications disponibles.
 	GPtrArray *pNotificationsTab;
+	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
+	/// Name of the icon.
+	gchar *cName;
+	/// Short info displayed on the icon (few characters).
+	gchar *cQuickInfo;
+	/// name or path of an image displayed on the icon.
+	gchar *cFileName;
+	
+	/// Class of application the icon will be bound to.
+	gchar *cClass;
+	/// name of the dock the icon belongs to (NULL means it's not currently inside a dock).
+	gchar *cParentDockName;
+	/// Sub-dock the icon is pointing to.
+	CairoDock *pSubDock;
+	/// Order of the icon amongst the other icons of its group.
+	gdouble fOrder;
+	gint iSpecificDesktop;
+	gint iSubdockViewType;
+	gboolean bStatic;
+	
 	CairoDataRenderer *pDataRenderer;
+	CairoDockTransition *pTransition;
+	
+	CairoDockAnimationState iAnimationState;
+	/// Whether the icon is currently pointed or not.
+	gboolean bPointed;
+	gdouble fInsertRemoveFactor;
+	
+	//\____________ Launcher.
+	gchar *cDesktopFileName;  // nom (et non pas chemin) du fichier .desktop
+	gchar *cCommand;
+	gchar *cWorkingDirectory;
+	gchar *cBaseURI;
+	gint iVolumeID;
+	
+	//\____________ Appli.
+	Window Xid;
+	gboolean bIsHidden;
+	gboolean bIsFullScreen;
+	gboolean bIsMaximized;
+	gboolean bIsDemandingAttention;
+	gboolean bHasIndicator;
+	GtkAllocation windowGeometry;
 	gint iNumDesktop;
 	gint iViewPortX, iViewPortY;
 	gint iStackOrder;
-	CairoDockTransition *pTransition;
-	gdouble fReflectShading;
+	gint iLastCheckTime;
+	gchar *cInitialName;
 	gchar *cLastAttentionDemand;
-	gint iSubdockViewType;
+	Pixmap iBackingPixmap;
+	//Damage iDamageHandle;
+	
+	//\____________ Applet.
+	CairoDockModuleInstance *pModuleInstance;
+	
+	//\____________ Buffers.
+	gdouble fWidth, fHeight;
+	cairo_surface_t* pIconBuffer;
+	GLuint iIconTexture;
+	cairo_surface_t* pReflectionBuffer;
+	
+	gint iTextWidth, iTextHeight;
+	cairo_surface_t* pTextBuffer;
+	GLuint iLabelTexture;
+	
+	gint iQuickInfoWidth, iQuickInfoHeight;
+	cairo_surface_t* pQuickInfoBuffer;
+	GLuint iQuickInfoTexture;
+	
+	//\____________ Parametres de dessin, definis par la vue/les animations.
+	gdouble fXMin, fXMax;  // Abscisse extremale gauche/droite que the icon atteindra (variable avec la vague).
+	gdouble fXAtRest;  // Abscisse de the icon au repos.
+	gdouble fPhase;  // Phase de the icon (entre -pi et piconi).
+	gdouble fX, fY;  // Abscisse/Ordonnee temporaire du bord haut-gauche de l'image de the icon.
+	
+	gdouble fScale;
+	gdouble fDrawX, fDrawY;
+	gdouble fWidthFactor, fHeightFactor;
+	gdouble fAlpha;
+	gdouble fDeltaYReflection;  // Decalage en ordonnees du reflet (rebond).
+	gdouble fOrientation;  // par rapport a la verticale Oz
+	gint iRotationX;  // Rotation autour de l'axe Ox
+	gint iRotationY;  // Rotation autour de l'axe Oy
+	gdouble fReflectShading;
+	
+	gdouble fGlideOffset;  // decalage pour le glissement des icons.
+	gint iGlideDirection;  // direction dans laquelle glisse the icon.
+	gdouble fGlideScale;  // echelle d'adaptation au glissement.
+	
+	gboolean bBeingRemovedByCairo;  // devrait etre dans pDataSlot...
+	
 	guint iSidRedrawSubdockContent;
 };
 
@@ -288,11 +241,15 @@ typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContaine
 *@param icon the icon to free.
 */
 void cairo_dock_free_icon (Icon *icon);
-/*
-* Libere tous les buffers d'une icon.
-*@param icon the icon.
+
+
+/** Say whether an icon is currently being inserted.
 */
-void cairo_dock_free_icon_buffers (Icon *icon);
+#define cairo_dock_icon_is_being_inserted(icon) ((icon)->fInsertRemoveFactor < 0)
+/** Say whether an icon is currently being removed.
+*/
+#define cairo_dock_icon_is_being_removed(icon) ((icon)->fInsertRemoveFactor > 0)
+#define cairo_dock_icon_is_being_inserted_or_removed(icon) ((icon)->fInsertRemoveFactor != 0)
 
 
 #define cairo_dock_get_group_order(iType) (iType < CAIRO_DOCK_NB_TYPES ? myIcons.tIconTypeOrder[iType] : iType)

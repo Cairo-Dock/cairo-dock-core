@@ -95,14 +95,14 @@ Icon *cairo_dock_create_separator_icon (cairo_t *pSourceContext, int iSeparatorT
 	//g_print ("%s ()\n", __func__);
 	if ((iSeparatorType & 1) && ! myIcons.iSeparateIcons)
 		return NULL;
-
+	
+	//\____________ On cree l'icone.
 	Icon *icon = g_new0 (Icon, 1);
 	icon->iType = iSeparatorType;
-	cairo_dock_fill_one_icon_buffer (icon, pSourceContext, 1 + myIcons.fAmplitude, pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
-
-	icon->fWidth *= pDock->container.fRatio;
-	icon->fHeight *= pDock->container.fRatio;
-	//g_print ("1 separateur : %.2fx%.2f\n", icon->fWidth, icon->fHeight);
+	
+	//\____________ On remplit ses buffers.
+	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pDock);
+	///cairo_dock_fill_one_icon_buffer (icon, pSourceContext, 1 + myIcons.fAmplitude, pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
 
 	return icon;
 }

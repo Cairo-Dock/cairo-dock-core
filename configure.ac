@@ -34,6 +34,7 @@ AC_CHECK_HEADERS([math.h stdlib.h])
 
 # Checks for library functions.
 # AC_CHECK_FUNCS([sscanf])
+AC_CHECK_LIB(m,sin) 
 
 PKG_CHECK_MODULES(PACKAGE, "gtk+-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 gtkglext-1.0 xrender")
 

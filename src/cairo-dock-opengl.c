@@ -43,7 +43,7 @@ extern CairoDock *g_pMainDock;
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 extern int g_iXScreenWidth[2];
 extern int g_iXScreenHeight[2];
-
+extern gboolean g_bEasterEggs;
 
 static inline gboolean _check_extension (const char *extName, const gchar *cExtensions)
 {
@@ -123,7 +123,7 @@ static inline XVisualInfo *_get_visual_from_fbconfigs (GLXFBConfig *pFBConfigs, 
 	return pVisInfo;
 }
 
-gboolean cairo_dock_initialize_opengl_backend (gboolean bForceIndirectRendering, gboolean bForceOpenGL)  // taken from a MacSlow's exemple.
+gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering, gboolean bForceOpenGL)  // taken from a MacSlow's exemple.
 {
 	memset (&g_openglConfig, 0, sizeof (CairoDockGLConfig));
 	g_openglConfig.bHasBeenForced = bForceOpenGL;
@@ -144,7 +144,7 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceIndirectRendering,
 		GLX_ALPHA_SIZE, 		1,
 		GLX_STENCIL_SIZE, 	1,
 		/// a tester ...
-		GLX_SAMPLE_BUFFERS_ARB, 1,
+		(g_bEasterEggs ? GLX_SAMPLE_BUFFERS_ARB : None), 1,
 		GLX_SAMPLES_ARB, 2,
 		/*GL_MULTISAMPLEBUFFERS, 	1,
 		GL_MULTISAMPLESAMPLES, 	2,*/
@@ -261,7 +261,7 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceIndirectRendering,
 	}
 	
 	//\_________________ On regarde si le rendu doit etre indirect ou pas.
-	g_openglConfig.bIndirectRendering = bForceIndirectRendering;
+	g_openglConfig.bIndirectRendering = bToggleIndirectRendering;
 	if (glXQueryVersion(XDisplay, &g_openglConfig.iGlxMajor, &g_openglConfig.iGlxMinor) == False)
 	{
 		cd_warning ("GLX not available !\nFear the worst !");
@@ -276,9 +276,9 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceIndirectRendering,
 			}
 			else
 			{
-				cd_warning ("GLX version too old (%d.%d).\nCairo-Dock needs at least GLX 1.3. Indirect rendering will be used as a workaround.", g_openglConfig.iGlxMajor, g_openglConfig.iGlxMinor);
+				cd_warning ("GLX version too old (%d.%d).\nCairo-Dock needs at least GLX 1.3. Indirect rendering will be toggled on/off as a workaround.", g_openglConfig.iGlxMajor, g_openglConfig.iGlxMinor);
 				g_openglConfig.bPBufferAvailable = TRUE;
-				g_openglConfig.bIndirectRendering = TRUE;
+				g_openglConfig.bIndirectRendering = ! bToggleIndirectRendering;
 			}
 		}
 		else
@@ -598,7 +598,8 @@ static void _reset_opengl_context (GtkWidget* pWidget, gpointer data)
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	
 	/// a tester ...
-	glEnable (GL_MULTISAMPLE_ARB);
+	if (g_bEasterEggs)
+		glEnable (GL_MULTISAMPLE_ARB);
 	
 	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);  // GL_MODULATE / GL_DECAL /  GL_BLEND
 	

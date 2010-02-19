@@ -57,11 +57,11 @@ struct _CairoDockGLConfig {
  // CONFIGURATION //
 ///////////////////
 /** Initialize the OpenGL backend, by trying to get a suitable GLX configuration.
-*@param bForceIndirectRendering whether to force the indirect rendering mode (for cards like Intel GMA945).
+*@param bToggleIndirectRendering whether to toggle on/off the indirect rendering mode that have been detected by the function (for cards like Radeon 35xx).
 *@param bForceOpenGL whether to force the use of OpenGL, or let the function decide.
 *@return TRUE if OpenGL is usable.
 */
-gboolean cairo_dock_initialize_opengl_backend (gboolean bForceIndirectRendering, gboolean bForceOpenGL);
+gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering, gboolean bForceOpenGL);
 
 
   ///////////////////////

@@ -816,7 +816,7 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 		if (! cairo_dock_dialog_unreference (s_pDialog))
 			cairo_dock_dialog_unreference (s_pDialog);
 	Icon *pIcon = cairo_dock_get_current_active_icon ();
-	if (pIcon == NULL || pIcon->cParentDockName == NULL || pIcon->fPersonnalScale > 0)
+	if (pIcon == NULL || pIcon->cParentDockName == NULL || cairo_dock_icon_is_being_removed (pIcon))
 		pIcon = cairo_dock_get_dialogless_icon ();
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
 	

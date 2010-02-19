@@ -271,7 +271,7 @@ static void _add_one_sub_dock_to_model (CairoDock *pDock, GtkTreeStore *model, G
 		if (! CAIRO_DOCK_IS_LAUNCHER (pIcon) && ! CAIRO_DOCK_IS_USER_SEPARATOR (pIcon) && ! CAIRO_DOCK_IS_APPLET (pIcon))
 			continue;
 		
-		if (pIcon->fPersonnalScale > 0)
+		if (cairo_dock_icon_is_being_removed (pIcon))
 			continue;
 		
 		if (pIcon->cFileName != NULL)

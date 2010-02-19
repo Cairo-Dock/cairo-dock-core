@@ -54,6 +54,10 @@ typedef enum {
 struct _CairoContainer {
 	/// type of container.
 	CairoDockTypeContainer iType;
+	/// list of available notifications.
+	GPtrArray *pNotificationsTab;
+	/// External data.
+	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
 	/// window of the container.
 	GtkWidget *pWidget;
 	/// size of the container.
@@ -73,8 +77,6 @@ struct _CairoContainer {
 #else
 	gpointer padding[3];
 #endif
-	/// External data.
-	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
 	/// Source ID of the animation loop.
 	guint iSidGLAnimation;
 	/// interval of time between 2 animation steps.
@@ -93,8 +95,6 @@ struct _CairoContainer {
 	gboolean bKeepSlowAnimation;
 	/// counter for the animation loop.
 	gint iAnimationStep;
-	/// list of available notifications.
-	GPtrArray *pNotificationsTab;
 };
 
 /// Get the Container part of a pointer.

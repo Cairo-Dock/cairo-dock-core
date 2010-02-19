@@ -1307,10 +1307,10 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 			case GDK_BUTTON_PRESS :
 				if ( ! (pButton->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
 				{
-					//g_print ("+ clic sur %s (%.2f)!\n", icon ? icon->cName : "rien", icon ? icon->fPersonnalScale : 0.);
+					//g_print ("+ clic sur %s (%.2f)!\n", icon ? icon->cName : "rien", icon ? icon->fInsertRemoveFactor : 0.);
 					s_iClickX = pButton->x;
 					s_iClickY = pButton->y;
-					if (icon && icon->fPersonnalScale <= 0)
+					if (icon && ! cairo_dock_icon_is_being_removed (icon))
 					{
 						s_pIconClicked = icon;  // on ne definit pas l'animation FOLLOW_MOUSE ici , on le fera apres le 1er mouvement, pour eviter que l'icone soit dessinee comme tel quand on clique dessus alors que le dock est en train de jouer une animation (ca provoque un flash desagreable).
 						cd_debug ("clicked on %s", icon->cName);
@@ -1322,7 +1322,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 
 			case GDK_2BUTTON_PRESS :
 				{
-					if (icon && icon->fPersonnalScale <= 0)
+					if (icon && ! cairo_dock_icon_is_being_removed (icon))
 						cairo_dock_notify (CAIRO_DOCK_DOUBLE_CLICK_ICON, icon, pDock);
 				}
 			break ;
@@ -1339,7 +1339,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 	}
 	else if (pButton->button == 2 && pButton->type == GDK_BUTTON_PRESS)  // clique milieu.
 	{
-		if (icon && icon->fPersonnalScale <= 0)
+		if (icon && ! cairo_dock_icon_is_being_removed (icon))
 			cairo_dock_notify (CAIRO_DOCK_MIDDLE_CLICK_ICON, icon, pDock);
 	}
 

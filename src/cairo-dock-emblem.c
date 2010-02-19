@@ -30,10 +30,11 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-emblem.h"
 
-extern cairo_surface_t *g_pIconBackgroundImageSurface;
-extern double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
+extern CairoDockImageBuffer g_pIconBackgroundBuffer;
+///extern cairo_surface_t *g_pIconBackgroundImageSurface;
+///extern GLuint g_iIconBackgroundTexture;
+///extern double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
 extern gboolean g_bUseOpenGL;
-extern GLuint g_iIconBackgroundTexture;
 
 static double a = .5;
 
@@ -289,6 +290,85 @@ static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, CairoDock *p
 	a = a_;
 }
 
+/*extern cairo_surface_t *g_pBoxImageSurfaceBelow;
+extern GLuint g_iBoxImageTextureBelow;
+extern cairo_surface_t *g_pBoxImageSurfaceAbove;
+extern GLuint g_iBoxImageTextureAbove;
+extern int g_iBoxImageWidth, g_iBoxImageHeight;*/
+
+static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, CairoDock *pDock, int w, int h, cairo_t *pCairoContext)
+{
+	/*if (pCairoContext)
+	{
+		cairo_save (pCairoContext);
+		cairo_scale(pCairoContext,
+			(double) w / g_iBoxImageWidth,
+			(double) h / g_iBoxImageHeight);
+		cairo_set_source_surface (pCairoContext,
+			g_pBoxImageSurfaceBelow,
+			0.,
+			0.);
+		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
+		cairo_paint (pCairoContext);
+		cairo_restore (pCairoContext);
+		
+		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
+		cairo_save (pCairoContext);
+		cairo_scale(pCairoContext,
+			.8,
+			.8);
+		int i;
+		Icon *icon;
+		GList *ic;
+		for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next, i++)
+		{
+			icon = ic->data;
+			if (CAIRO_DOCK_IS_SEPARATOR (icon))
+			{
+				i --;
+				continue;
+			}
+			
+			cairo_set_source_surface (pCairoContext,
+				icon->pIconBuffer,
+				.1*w,
+				.1*i*h);
+		}
+		cairo_restore (pCairoContext);
+		
+		cairo_scale(pCairoContext,
+			(double) w / g_iBoxImageWidth,
+			(double) h / g_iBoxImageHeight);
+		cairo_set_source_surface (pCairoContext,
+			g_pBoxImageSurfaceAbove,
+			0.,
+			0.);
+		cairo_paint (pCairoContext);
+	}
+	else
+	{
+		_cairo_dock_set_blend_source ();
+		_cairo_dock_apply_texture_at_size (g_iBoxImageTextureBelow, w, h);
+		
+		_cairo_dock_set_blend_alpha ();
+		int i;
+		Icon *icon;
+		GList *ic;
+		for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next, i++)
+		{
+			icon = ic->data;
+			if (CAIRO_DOCK_IS_SEPARATOR (icon))
+			{
+				i --;
+				continue;
+			}
+			glBindTexture (GL_TEXTURE_2D, icon->iIconTexture);
+			_cairo_dock_apply_current_texture_at_size_with_offset (.8*w, .8*h, 0., .1*(i-1)*h);
+		}
+		
+		_cairo_dock_apply_texture_at_size (g_iBoxImageTextureAbove, w, h);
+	}*/
+}
 
 void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 {
@@ -313,11 +393,11 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 			return ;
 		
 		_cairo_dock_set_blend_source ();
-		if (g_iIconBackgroundTexture != 0)  // on ecrase le dessin existant avec l'image de fond des icones.
+		if (g_pIconBackgroundBuffer.iTexture != 0)  // on ecrase le dessin existant avec l'image de fond des icones.
 		{
 			_cairo_dock_enable_texture ();
 			_cairo_dock_set_alpha (1.);
-			_cairo_dock_apply_texture_at_size (g_iIconBackgroundTexture, w, h);
+			_cairo_dock_apply_texture_at_size (g_pIconBackgroundBuffer.iTexture, w, h);
 		}
 		else  // sinon on efface juste ce qu'il y'avait.
 		{
@@ -339,14 +419,14 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		pCairoContext = cairo_create (pIcon->pIconBuffer);
 		g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
 		
-		if (g_pIconBackgroundImageSurface != NULL)  // on ecrase le dessin existant avec l'image de fond des icones.
+		if (g_pIconBackgroundBuffer.pSurface != NULL)  // on ecrase le dessin existant avec l'image de fond des icones.
 		{
 			cairo_save (pCairoContext);
 			cairo_scale(pCairoContext,
-				pIcon->fWidth / g_iIconBackgroundImageWidth,
-				pIcon->fHeight / g_iIconBackgroundImageHeight);
+				pIcon->fWidth / g_pIconBackgroundBuffer.iWidth,
+				pIcon->fHeight / g_pIconBackgroundBuffer.iHeight);
 			cairo_set_source_surface (pCairoContext,
-				g_pIconBackgroundImageSurface,
+				g_pIconBackgroundBuffer.pSurface,
 				0.,
 				0.);
 			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
@@ -374,6 +454,9 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 			break;
 			case 2:
 				_cairo_dock_draw_subdock_content_as_stack (pIcon, pDock, w, h, pCairoContext);
+			break;
+			case 3:
+				_cairo_dock_draw_subdock_content_as_box (pIcon, pDock, w, h, pCairoContext);
 			break;
 			default:
 				cd_warning ("invalid sub-dock content view for %s", pIcon->cName);

@@ -428,6 +428,16 @@ GtkWidget *cairo_dock_build_generic_gui_window (const gchar *cTitle, int iWidth,
 			FALSE,
 			0);
 	}
+	else
+	{
+		GtkWidget *pApplyButton = gtk_button_new_from_stock (GTK_STOCK_OK);
+		g_signal_connect (G_OBJECT (pApplyButton), "clicked", G_CALLBACK(on_click_generic_ok), pMainWindow);
+		gtk_box_pack_end (GTK_BOX (pButtonsHBox),
+			pApplyButton,
+			FALSE,
+			FALSE,
+			0);
+	}
 	
 	//\_____________ On ajoute la barre d'etat a la fin.
 	GtkWidget *pStatusBar = gtk_statusbar_new ();

@@ -172,14 +172,18 @@ gboolean cairo_dock_remove_version_from_string (gchar *cString)
 	gchar *str = cString + n - 1;
 	do
 	{
-		if (!g_ascii_isdigit(*str) && *str != '.')
-			break;
-		if (*str == '-')
+		if (g_ascii_isdigit(*str) || *str == '.')
+		{
+			str --;
+			continue;
+		}
+		if (*str == '-' || *str == ' ')  // 'Glade-2', 'OpenOffice 3.1'
 		{
 			*str = '\0';
 			return TRUE;
 		}
-		str --;
+		else
+			return FALSE;
 	}
 	while (str != cString);
 	return FALSE;
@@ -275,7 +279,6 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
 	g_return_if_fail (pKeyFile != NULL);
 	
-	icon->iType = CAIRO_DOCK_LAUNCHER;
 	g_free (icon->cDesktopFileName);
 	icon->cDesktopFileName = g_strdup (cDesktopFileName);
 
@@ -480,10 +483,15 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName, 
 {
 	//g_print ("%s (%s)\n", __func__, cDesktopFileName);
 	
+	//\____________ On cree l'icone.
 	Icon *icon = g_new0 (Icon, 1);
+	icon->iType = CAIRO_DOCK_LAUNCHER;
+	
+	//\____________ On recupere les infos de son .desktop.
 	cairo_dock_load_icon_info_from_desktop_file (cDesktopFileName, icon);
 	g_return_val_if_fail (icon->cDesktopFileName != NULL, NULL);
 	
+	//\____________ On remplit ses buffers.
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pParentDock);
 	

@@ -385,6 +385,8 @@ typedef struct _CairoDockGLFont CairoDockGLFont;
 
 typedef struct _CairoDockDesktopBackground CairoDockDesktopBackground;
 
+typedef struct _CairoDockImageBuffer CairoDockImageBuffer;
+
 typedef struct _CairoEmblem CairoEmblem;
 
 typedef struct _CairoDockGLConfig CairoDockGLConfig;

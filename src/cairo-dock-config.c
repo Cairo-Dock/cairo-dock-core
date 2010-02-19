@@ -835,6 +835,7 @@ void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajo
 
 void cairo_dock_decrypt_string( const guchar *cEncryptedString,  guchar **cDecryptedString )
 {
+	g_return_if_fail (cDecryptedString != NULL);
 	if( !cEncryptedString || *cEncryptedString == '\0' )
 	{
 		*cDecryptedString = g_strdup( "" );
@@ -843,22 +844,12 @@ void cairo_dock_decrypt_string( const guchar *cEncryptedString,  guchar **cDecry
 #ifdef HAVE_LIBCRYPT
 	guchar *input = g_strdup(cEncryptedString);
 	guchar *shifted_input = input;
-	guchar **output = cDecryptedString; 
-
-  guchar *current_output = NULL;
-  if( output && input && strlen(input)>0 )
-  {
-    *output = g_malloc( (strlen(input)+1)/3+1 );
-    current_output = *output;
-  }
-  else
-  {
-  	if( input )
-  	{
-  		g_free(input);
-		}
-  	return;
-	}
+	guchar **output = cDecryptedString;
+	
+	guchar *current_output = NULL;
+	
+	*output = g_malloc( (strlen(input)+1)/3+1 );
+	current_output = *output;
 
   guchar *last_char_in_input = input + strlen(input);
 //  g_print( "Password (before decrypt): %s\n", input );
@@ -908,7 +899,8 @@ void cairo_dock_decrypt_string( const guchar *cEncryptedString,  guchar **cDecry
 
 void cairo_dock_encrypt_string( const guchar *cDecryptedString,  guchar **cEncryptedString )
 {
-	if( !cDecryptedString || strlen(cDecryptedString) == 0 )
+	g_return_if_fail (cEncryptedString != NULL);
+	if( !cDecryptedString || *cDecryptedString == '\0' )
 	{
 		*cEncryptedString = g_strdup( "" );
 		return;
@@ -918,20 +910,12 @@ void cairo_dock_encrypt_string( const guchar *cDecryptedString,  guchar **cEncry
 	const guchar *input = cDecryptedString;
 	guchar **output = cEncryptedString;
 	guint input_length = 0;
-
-  guchar *current_output = NULL;
-  if( output && input && strlen(input)>0 )
-  {
-  	// for each block of 8 characters, we need 24 bytes.
-  	guint nbBlocks = strlen(input)/8+1;
-  	
-    *output = g_malloc( nbBlocks*24+1 );
-    current_output = *output;
-  }
-  else
-  {
-  	return;
-	}
+	
+	guchar *current_output = NULL;
+	// for each block of 8 characters, we need 24 bytes.
+	guint nbBlocks = strlen(input)/8+1;
+	*output = g_malloc( nbBlocks*24+1 );
+	current_output = *output;
 
   const guchar *last_char_in_input = input + strlen(input);
 

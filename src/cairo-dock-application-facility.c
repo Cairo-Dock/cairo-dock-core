@@ -204,7 +204,7 @@ void cairo_dock_appli_stops_demanding_attention (Icon *icon)
 void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 {
 	g_return_if_fail (pParentDock != NULL);
-	if (icon->fPersonnalScale == 0)  // sinon on laisse l'animation actuelle.
+	if (! cairo_dock_icon_is_being_inserted_or_removed (icon))  // sinon on laisse l'animation actuelle.
 	{
 		if (myTaskBar.cAnimationOnActiveWindow)
 		{
@@ -413,7 +413,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	else
 		icon->fOrder == CAIRO_DOCK_LAST_ORDER;  // en dernier.
 	cairo_dock_insert_icon_in_dock (icon, pParentDock, bUpdateSize, bAnimate);
-	cd_message (" insertion de %s complete (%.2f %.2fx%.2f) dans %s", icon->cName, icon->fPersonnalScale, icon->fWidth, icon->fHeight, icon->cParentDockName);
+	cd_message (" insertion de %s complete (%.2f %.2fx%.2f) dans %s", icon->cName, icon->fInsertRemoveFactor, icon->fWidth, icon->fHeight, icon->cParentDockName);
 
 	if (bAnimate && cairo_dock_animation_will_be_visible (pParentDock))
 	{
@@ -421,7 +421,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	}
 	else
 	{
-		icon->fPersonnalScale = 0;
+		icon->fInsertRemoveFactor = 0;
 		icon->fScale = 1.;
 	}
 

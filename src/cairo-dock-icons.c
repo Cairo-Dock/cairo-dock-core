@@ -71,37 +71,8 @@ extern int g_iNbNonStickyLaunchers;
 
 static GList *s_DetachedLaunchersList = NULL;
 
-void cairo_dock_free_icon (Icon *icon)
-{
-	if (icon == NULL)
-		return ;
-	cd_debug ("%s (%s , %s)", __func__, icon->cName, icon->cClass);
-	
-	cairo_dock_remove_dialog_if_any (icon);
-	if (icon->iSidRedrawSubdockContent != 0)
-		g_source_remove (icon->iSidRedrawSubdockContent);
-	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
-		cairo_dock_unregister_appli (icon);
-	else if (icon->cClass != NULL)  // c'est un inhibiteur.
-		cairo_dock_deinhibate_class (icon->cClass, icon);
-	if (icon->pModuleInstance != NULL)
-		cairo_dock_deinstanciate_module (icon->pModuleInstance);
-	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);
-	cairo_dock_remove_transition_on_icon (icon);
-	
-	if (icon->iSpecificDesktop != 0)
-	{
-		g_iNbNonStickyLaunchers --;
-		s_DetachedLaunchersList = g_list_remove(s_DetachedLaunchersList, icon);
-	}
-	
-	cairo_dock_free_notification_table (icon->pNotificationsTab);
-	cairo_dock_free_icon_buffers (icon);
-	cd_debug ("icon freeed");
-	g_free (icon);
-}
 
-void cairo_dock_free_icon_buffers (Icon *icon)
+static void _cairo_dock_free_icon_buffers (Icon *icon)
 {
 	if (icon == NULL)
 		return ;
@@ -129,6 +100,35 @@ void cairo_dock_free_icon_buffers (Icon *icon)
 		_cairo_dock_delete_texture (icon->iLabelTexture);
 	if (icon->iQuickInfoTexture != 0)
 		_cairo_dock_delete_texture (icon->iQuickInfoTexture);
+}
+void cairo_dock_free_icon (Icon *icon)
+{
+	if (icon == NULL)
+		return ;
+	cd_debug ("%s (%s , %s)", __func__, icon->cName, icon->cClass);
+	
+	cairo_dock_remove_dialog_if_any (icon);
+	if (icon->iSidRedrawSubdockContent != 0)
+		g_source_remove (icon->iSidRedrawSubdockContent);
+	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
+		cairo_dock_unregister_appli (icon);
+	else if (icon->cClass != NULL)  // c'est un inhibiteur.
+		cairo_dock_deinhibate_class (icon->cClass, icon);
+	if (icon->pModuleInstance != NULL)
+		cairo_dock_deinstanciate_module (icon->pModuleInstance);
+	cairo_dock_notify (CAIRO_DOCK_STOP_ICON, icon);
+	cairo_dock_remove_transition_on_icon (icon);
+	
+	if (icon->iSpecificDesktop != 0)
+	{
+		g_iNbNonStickyLaunchers --;
+		s_DetachedLaunchersList = g_list_remove(s_DetachedLaunchersList, icon);
+	}
+	
+	cairo_dock_free_notification_table (icon->pNotificationsTab);
+	_cairo_dock_free_icon_buffers (icon);
+	cd_debug ("icon freeed");
+	g_free (icon);
 }
 
 CairoDockIconType cairo_dock_get_icon_type (Icon *icon)
@@ -750,7 +750,7 @@ static CairoDock *_cairo_dock_insert_launcher_in_dock (Icon *icon, CairoDock *pM
 
 	//\_________________ On l'insere dans son dock parent en animant ce dernier eventuellement.
 	cairo_dock_insert_icon_in_dock (icon, pParentDock, bUpdateSize, bAnimate);
-	cd_message (" insertion de %s complete (%.2f %.2fx%.2f) dans %s", icon->cName, icon->fPersonnalScale, icon->fWidth, icon->fHeight, icon->cParentDockName);
+	cd_message (" insertion de %s complete (%.2f %.2fx%.2f) dans %s", icon->cName, icon->fInsertRemoveFactor, icon->fWidth, icon->fHeight, icon->cParentDockName);
 
 	if (bAnimate && cairo_dock_animation_will_be_visible (pParentDock))
 	{
@@ -758,7 +758,7 @@ static CairoDock *_cairo_dock_insert_launcher_in_dock (Icon *icon, CairoDock *pM
 	}
 	else
 	{
-		icon->fPersonnalScale = 0;
+		icon->fInsertRemoveFactor = 0;
 		icon->fScale = 1.;
 	}
 

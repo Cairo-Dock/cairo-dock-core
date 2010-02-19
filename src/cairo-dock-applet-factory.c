@@ -66,24 +66,38 @@ cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFileName, c
 }
 
 
-Icon *cairo_dock_create_icon_for_applet (CairoContainer *pContainer, int iWidth, int iHeight, const gchar *cName, const gchar *cIconFileName, CairoDockModuleInstance *pModuleInstance)
+Icon *cairo_dock_create_icon_for_applet (CairoDockMinimalAppletConfig *pMinimalConfig, CairoDockModuleInstance *pModuleInstance, CairoContainer *pContainer)
 {
+	//\____________ On cree l'icone.
 	Icon *icon = g_new0 (Icon, 1);
 	icon->iType = CAIRO_DOCK_APPLET;
 	icon->pModuleInstance = pModuleInstance;
-
-	icon->cName = g_strdup (cName);
-	icon->cFileName = g_strdup (cIconFileName);  // NULL si cIconFileName = NULL.
-
+	
+	//\____________ On recupere les infos de sa config.
+	icon->cName = g_strdup (pMinimalConfig->cLabel);
+	icon->cFileName = g_strdup (pMinimalConfig->cIconFileName);
+	
+	icon->fOrder = pMinimalConfig->fOrder;
+	
+	if (! pMinimalConfig->bIsDetached)
+	{
+		icon->fWidth = pMinimalConfig->iDesiredIconWidth;
+		icon->fHeight = pMinimalConfig->iDesiredIconHeight;
+		icon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
+	}
+	else  // l'applet creera la surface elle-meme, car on ne sait ni la taille qu'elle voudra lui donner, ni meme si elle l'utilisera !
+	{
+		icon->fWidth = -1;
+		icon->fHeight = -1;
+	}
 	icon->fScale = 1;
 	icon->fGlideScale = 1;
-	icon->fWidth = iWidth;
-	icon->fHeight = iHeight;
 	icon->fWidthFactor = 1.;
 	icon->fHeightFactor = 1.;
+	
+	//\____________ On remplit ses buffers.
 	cairo_t *pSourceContext = cairo_dock_create_context_from_window (pContainer);
 	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, icon);
-
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
 	{
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
@@ -93,7 +107,6 @@ Icon *cairo_dock_create_icon_for_applet (CairoContainer *pContainer, int iWidth,
 	{
 		cairo_dock_fill_icon_buffers_for_desklet (icon, pSourceContext);  // ne cree rien si w ou h < 0.
 	}
-
 	cairo_destroy (pSourceContext);
 	return icon;
 }

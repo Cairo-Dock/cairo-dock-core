@@ -869,7 +869,6 @@ gchar *cairo_dock_depackage_theme (const gchar *cPackagePath)
 	if (*cPackagePath == '/' || strncmp (cPackagePath, "file://", 7) == 0)  // paquet en local.
 	{
 		g_print (" paquet local\n");
-		//cairo_dock_remove_html_spaces (cPackagePath);
 		gchar *cFilePath = (*cPackagePath == '/' ? g_strdup (cPackagePath) : g_filename_from_uri (cPackagePath, NULL, NULL));
 		cNewThemePath = cairo_dock_uncompress_file (cFilePath, cUserThemesDir, NULL);
 		g_free (cFilePath);

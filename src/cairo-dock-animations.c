@@ -375,12 +375,12 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 		for (ic = pDock->icons; ic != NULL; ic = ic->next)
 		{
 			pIcon = ic->data;
-			if (pIcon->fPersonnalScale != 0)  // on accelere l'animation d'apparition/disparition.
+			if (pIcon->fInsertRemoveFactor != 0)  // on accelere l'animation d'apparition/disparition.
 			{
-				if (pIcon->fPersonnalScale > 0)
-					pIcon->fPersonnalScale = 0.05;
+				if (pIcon->fInsertRemoveFactor > 0)
+					pIcon->fInsertRemoveFactor = 0.05;
 				else
-					pIcon->fPersonnalScale = - 0.05;
+					pIcon->fInsertRemoveFactor = - 0.05;
 			}
 			
 			if (! pIcon->bIsDemandingAttention)
@@ -421,13 +421,13 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 	{
 		pIcon = ic->data;
 		next_ic = ic->next;
-		if (pIcon->fPersonnalScale == 0.05)
+		if (pIcon->fInsertRemoveFactor == 0.05)
 		{
 			gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);
 			if (bIsAppli && pIcon->iLastCheckTime != -1)  // c'est une icone d'appli non vieille qui disparait, elle s'est probablement cachee => on la detache juste.
 			{
 				cd_message ("cette (%s) appli est toujours valide, on la detache juste", pIcon->cName);
-				pIcon->fPersonnalScale = 0.;  // on le fait avant le reload, sinon l'icone n'est pas rechargee.
+				pIcon->fInsertRemoveFactor = 0.;  // on le fait avant le reload, sinon l'icone n'est pas rechargee.
 				if (!pIcon->bIsHidden && myTaskBar.bHideVisibleApplis)  // on lui remet l'image normale qui servira d'embleme lorsque l'icone sera inseree a nouveau dans le dock.
 					cairo_dock_reload_one_icon_buffer_in_dock (pIcon, pDock);
 				cairo_dock_detach_appli (pIcon);
@@ -448,12 +448,12 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 				cairo_dock_update_dock_size (pDock);  // si on le fait avant le free, le dock se fige (mais continue a tourner)...
 			}
 		}
-		else if (pIcon->fPersonnalScale == -0.05)
+		else if (pIcon->fInsertRemoveFactor == -0.05)
 		{
-			pIcon->fPersonnalScale = 0;  // cela n'arrete pas l'animation, qui peut se poursuivre meme apres que l'icone ait atteint sa taille maximale.
+			pIcon->fInsertRemoveFactor = 0;  // cela n'arrete pas l'animation, qui peut se poursuivre meme apres que l'icone ait atteint sa taille maximale.
 			bRecalculateIcons = TRUE;
 		}
-		else if (pIcon->fPersonnalScale != 0)
+		else if (pIcon->fInsertRemoveFactor != 0)
 		{
 			bRecalculateIcons = TRUE;
 		}
@@ -758,7 +758,7 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 	cd_message ("%s (%s, %d)", __func__, pIcon->cName, pIcon->iAnimationState);
 	
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST &&
-		(pIcon->fPersonnalScale != 0 || cairo_dock_animation_will_be_visible (pDock)))
+		(cairo_dock_icon_is_being_inserted_or_removed (pIcon) || cairo_dock_animation_will_be_visible (pDock)))
 	{
 		//g_print ("  c'est parti\n");
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
@@ -786,9 +786,9 @@ void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon)
 	{
 		cairo_dock_stop_icon_animation (pIcon);
 		if (cairo_dock_animation_will_be_visible (pDock))  // sinon inutile de se taper toute l'animation.
-			pIcon->fPersonnalScale = 1.0;
+			pIcon->fInsertRemoveFactor = 1.0;
 		else
-			pIcon->fPersonnalScale = 0.05;
+			pIcon->fInsertRemoveFactor = 0.05;
 		cairo_dock_notify (CAIRO_DOCK_REMOVE_ICON, pIcon, pDock);
 		cairo_dock_start_icon_animation (pIcon, pDock);
 	}
@@ -813,16 +813,16 @@ void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationS
 
 void cairo_dock_update_removing_inserting_icon_size_default (Icon *icon)
 {
-	icon->fPersonnalScale *= .85;
-	if (icon->fPersonnalScale > 0)
+	icon->fInsertRemoveFactor *= .85;
+	if (icon->fInsertRemoveFactor > 0)
 	{
-		if (icon->fPersonnalScale < 0.05)
-			icon->fPersonnalScale = 0.05;
+		if (icon->fInsertRemoveFactor < 0.05)
+			icon->fInsertRemoveFactor = 0.05;
 	}
-	else if (icon->fPersonnalScale < 0)
+	else if (icon->fInsertRemoveFactor < 0)
 	{
-		if (icon->fPersonnalScale > -0.05)
-			icon->fPersonnalScale = -0.05;
+		if (icon->fInsertRemoveFactor > -0.05)
+			icon->fInsertRemoveFactor = -0.05;
 	}
 }
 
@@ -846,12 +846,12 @@ gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserD
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 	}
 	
-	if (pIcon->fPersonnalScale == 0 || ! pIcon->bBeingRemovedByCairo)
+	if (pIcon->fInsertRemoveFactor == 0 || ! pIcon->bBeingRemovedByCairo)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
 	cairo_dock_update_removing_inserting_icon_size_default (pIcon);
 	
-	if (fabs (pIcon->fPersonnalScale) > 0.05)
+	if (fabs (pIcon->fInsertRemoveFactor) > 0.05)
 	{
 		cairo_dock_mark_icon_as_inserting_removing (pIcon);
 		*bContinueAnimation = TRUE;

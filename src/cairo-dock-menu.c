@@ -1390,14 +1390,15 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 			pMenuItem = gtk_separator_menu_item_new ();
 			gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
 			
-			_add_entry_in_menu (_("Add a sub-dock"), GTK_STOCK_ADD, cairo_dock_add_container, menu);
+			pMenuItem = _add_entry_in_menu (_("Add"), GTK_STOCK_ADD, NULL, menu);
+			GtkWidget *pSubMenuAdd = gtk_menu_new ();
+			gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuAdd);
 			
-			if (icon != NULL)
-			{
-				_add_entry_in_menu (_("Add a separator"), GTK_STOCK_ADD, cairo_dock_add_separator, menu);
-			}
+			_add_entry_in_menu (_("Add a sub-dock"), GTK_STOCK_ADD, cairo_dock_add_container, pSubMenuAdd);
 			
-			pMenuItem = _add_entry_in_menu (_("Add a custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, menu);
+			_add_entry_in_menu (_("Add a separator"), GTK_STOCK_ADD, cairo_dock_add_separator, pSubMenuAdd);
+			
+			pMenuItem = _add_entry_in_menu (_("Add a custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, pSubMenuAdd);
 			gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it into the dock."));
 		}
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -1452,11 +1453,15 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 			pMenuItem = gtk_separator_menu_item_new ();
 			gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
 	
-			_add_entry_in_menu (_("Add a sub-dock"), GTK_STOCK_ADD, cairo_dock_add_container, menu);
+			pMenuItem = _add_entry_in_menu (_("Add"), GTK_STOCK_ADD, NULL, menu);
+			GtkWidget *pSubMenuAdd = gtk_menu_new ();
+			gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuAdd);
 			
-			_add_entry_in_menu (_("Add a separator"), GTK_STOCK_ADD, cairo_dock_add_separator, menu);
+			_add_entry_in_menu (_("Add a sub-dock"), GTK_STOCK_ADD, cairo_dock_add_container, pSubMenuAdd);
 			
-			pMenuItem = _add_entry_in_menu (_("Add a custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, menu);
+			_add_entry_in_menu (_("Add a separator"), GTK_STOCK_ADD, cairo_dock_add_separator, pSubMenuAdd);
+			
+			pMenuItem = _add_entry_in_menu (_("Add a custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, pSubMenuAdd);
 			gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it into the dock."));
 		
 			if (icon->cDesktopFileName != NULL && icon->cParentDockName != NULL)  // possede un .desktop.
@@ -1518,7 +1523,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		//\_________________________ On rajoute les actions courantes sur les icones d'applis.
 		if (icon->cDesktopFileName != NULL)  // c'est un lanceur inhibiteur.
 		{
-			_add_entry_in_menu (_("Launch new"), GTK_STOCK_ADD, _cairo_dock_launch_new, menu);
+			_add_entry_in_menu (_("Launch a new (Shift+clic)"), GTK_STOCK_ADD, _cairo_dock_launch_new, menu);
 		}
 		
 		if (! cairo_dock_class_is_inhibated (icon->cClass))

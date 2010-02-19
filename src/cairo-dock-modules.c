@@ -692,9 +692,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				{
 					gchar *cNewName = cairo_dock_get_unique_dock_name (pMinimalConfig->cLabel);
 					cd_debug ("* le sous-dock %s prend le nom '%s'", pIcon->cName, cNewName);
-					/**if (pMinimalConfig->cLabel == NULL)
-						cairo_dock_alter_dock_name (pIcon->cName, pIcon->pSubDock, cNewName);  // on change juste son enregistrement, le nom cParentDockName des icones sera change lorsqu'on mettra un nom a l'icone.
-					else */if (strcmp (pIcon->cName, cNewName) != 0)
+					if (strcmp (pIcon->cName, cNewName) != 0)
 						cairo_dock_rename_dock (pIcon->cName, NULL, cNewName);
 					g_free (pMinimalConfig->cLabel);
 					pMinimalConfig->cLabel = cNewName;
@@ -1107,8 +1105,8 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	{
 		pInstance->bCanDetach = pMinimalConfig->deskletAttribute.iDeskletWidth > 0;
 		pModule->bCanDetach = pInstance->bCanDetach;  // pas encore clair ...
-		const gchar *cDockName = (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
 		
+		// on trouve/cree son container.
 		if (pModule->bCanDetach && pMinimalConfig->bIsDetached)
 		{
 			pDesklet = cairo_dock_create_desklet (NULL, NULL, pMinimalConfig->deskletAttribute.iAccessibility);
@@ -1120,6 +1118,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 		}
 		else
 		{
+			const gchar *cDockName = (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
 			pDock = cairo_dock_search_dock_from_name (cDockName);
 			if (pDock == NULL)
 			{
@@ -1128,27 +1127,10 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 			pContainer = CAIRO_CONTAINER (pDock);
 		}
 		
-		int iIconWidth, iIconHeight;
-		if (pDock)
-		{
-			iIconWidth = pMinimalConfig->iDesiredIconWidth;
-			iIconHeight = pMinimalConfig->iDesiredIconHeight;
-		}
-		else  // l'applet creera la surface elle-meme, car on ne sait ni la taille qu'elle voudra lui donner, ni meme si elle l'utilisera !
-		{
-			iIconWidth = -1;
-			iIconHeight = -1;
-		}
-		pIcon = cairo_dock_create_icon_for_applet (pContainer,
-			iIconWidth,
-			iIconHeight,
-			pMinimalConfig->cLabel,
-			pMinimalConfig->cIconFileName,
-			pInstance);
-		
-		pIcon->fOrder = pMinimalConfig->fOrder;
-		if (pDock)
-			pIcon->cParentDockName = g_strdup (cDockName);
+		// on cree son icone.
+		pIcon = cairo_dock_create_icon_for_applet (pMinimalConfig,
+			pInstance,
+			pContainer);
 		if (pDesklet)
 		{
 			pDesklet->pIcon = pIcon;

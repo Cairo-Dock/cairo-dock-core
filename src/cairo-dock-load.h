@@ -37,6 +37,13 @@ struct _CairoDockDesktopBackground {
 	gint iRefCount;
 	} ;
 
+struct _CairoDockImageBuffer {
+	cairo_surface_t *pSurface;
+	GLuint iTexture;
+	gint iWidth;
+	gint iHeight;
+	} ;
+
 void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription);
 void cairo_dock_copy_label_description (CairoDockLabelDescription *pDestTextDescription, CairoDockLabelDescription *pOrigTextDescription);
 CairoDockLabelDescription *cairo_dock_duplicate_label_description (CairoDockLabelDescription *pOrigTextDescription);

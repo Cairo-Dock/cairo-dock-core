@@ -44,8 +44,9 @@
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cConfFile;
-extern cairo_surface_t *g_pIconBackgroundImageSurface;
-extern double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
+extern CairoDockImageBuffer g_pIconBackgroundBuffer;
+///extern cairo_surface_t *g_pIconBackgroundImageSurface;
+///extern double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
 
 extern gboolean g_bUseOpenGL;
 
@@ -60,17 +61,17 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 	//\________________ On met le background de l'icone si necessaire
 	if (pIcon != NULL &&
 		pIcon->pIconBuffer != NULL &&
-		g_pIconBackgroundImageSurface != NULL &&
+		g_pIconBackgroundBuffer.pSurface != NULL &&
 		(! CAIRO_DOCK_IS_SEPARATOR (pIcon)/* && (myIcons.bBgForApplets || ! CAIRO_DOCK_IS_APPLET(pIcon))*/))
 	{
 		cd_message (">>> %s prendra un fond d'icone", pIcon->cName);
 
 		cairo_save (pIconContext);
 		cairo_scale(pIconContext,
-			pIcon->fWidth / g_iIconBackgroundImageWidth,
-			pIcon->fHeight / g_iIconBackgroundImageHeight);
+			pIcon->fWidth / g_pIconBackgroundBuffer.iWidth,
+			pIcon->fHeight / g_pIconBackgroundBuffer.iHeight);
 		cairo_set_source_surface (pIconContext,
-			g_pIconBackgroundImageSurface,
+			g_pIconBackgroundBuffer.pSurface,
 			0.,
 			0.);
 		cairo_set_operator (pIconContext, CAIRO_OPERATOR_DEST_OVER);
@@ -213,6 +214,7 @@ void cairo_dock_set_minutes_secondes_as_quick_info (cairo_t *pSourceContext, Ico
 {
 	int minutes = iTimeInSeconds / 60;
 	int secondes = iTimeInSeconds % 60;
+	cd_debug ("%s (%d:%d)\n", __func__, minutes, secondes);
 	if (minutes != 0)
 		cairo_dock_set_quick_info_full (pSourceContext, pIcon, pContainer, "%d:%02d", minutes, abs (secondes));
 	else

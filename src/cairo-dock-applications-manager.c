@@ -142,7 +142,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 	gint iTime = GPOINTER_TO_INT (iTimePtr);
 	
 	//g_print ("%s (%s(%ld) %d / %d)\n", __func__, icon->cName, icon->Xid, icon->iLastCheckTime, iTime);
-	if (icon->iLastCheckTime >= 0 && icon->iLastCheckTime < iTime && icon->fPersonnalScale <= 0)
+	if (icon->iLastCheckTime >= 0 && icon->iLastCheckTime < iTime && ! cairo_dock_icon_is_being_removed (icon))
 	{
 		cd_message ("cette fenetre (%ld(%ld), %s) est trop vieille (%d / %d)", *Xid, icon->Xid, icon->cName, icon->iLastCheckTime, iTime);
 		if (CAIRO_DOCK_IS_APPLI (icon))
@@ -792,7 +792,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 				}
 				continue;
 			}
-			/**else if (icon->fPersonnalScale > 0)  // pour une icone en cours de supression, on ne fait rien.
+			/**else if (icon->fInsertRemoveFactor > 0)  // pour une icone en cours de supression, on ne fait rien.
 			{
 				continue;
 			}*/
@@ -831,7 +831,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 					}
 				}
 			}
-			else if (event.type == ConfigureNotify && icon->fPersonnalScale <= 0)  // ConfigureNotify sur une fenetre.
+			else if (event.type == ConfigureNotify && ! cairo_dock_icon_is_being_removed (icon))  // ConfigureNotify sur une fenetre.
 			{
 				//g_print ("  type : %d; (%d;%d) %dx%d window : %d\n", e->type, e->x, e->y, e->width, e->height, Xid);
 				// On met a jour la taille du backing pixmap.
@@ -1088,9 +1088,10 @@ static gboolean _cairo_dock_reset_appli_table_iter (Window *pXid, Icon *pIcon, g
 		g_free (cParentDockName);
 	}
 	
-	cairo_dock_free_icon_buffers (pIcon);  // on ne veut pas passer dans le 'unregister' ni la gestion de la classe.
-	//cairo_dock_unregister_pid (pIcon);
-	g_free (pIcon);
+	pIcon->Xid = 0;  // on ne veut pas passer dans le 'unregister'
+	g_free (pIcon->cClass);  // ni la gestion de la classe.
+	pIcon->cClass = NULL;
+	cairo_dock_free_icon (pIcon);
 	return TRUE;
 }
 void cairo_dock_stop_application_manager (void)
@@ -1122,7 +1123,7 @@ static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gpoin
 	gboolean bMaximizedWindow = GPOINTER_TO_INT (data[0]);
 	gboolean bFullScreenWindow = GPOINTER_TO_INT (data[1]);
 	CairoDock *pDock = data[2];
-	if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_is_on_current_desktop (icon) && icon->fPersonnalScale <= 0 && icon->iLastCheckTime != -1)
+	if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_is_on_current_desktop (icon) && ! cairo_dock_icon_is_being_removed (icon) && icon->iLastCheckTime != -1)
 	{
 		if ((data[0] && icon->bIsMaximized && ! icon->bIsHidden) || (data[1] && icon->bIsFullScreen && ! icon->bIsHidden) || (!data[0] && ! data[1] && ! icon->bIsHidden))
 		{
@@ -1175,7 +1176,7 @@ Icon *cairo_dock_get_icon_with_Xid (Window Xid)
 
 static void _cairo_dock_for_one_appli (Window *Xid, Icon *icon, gpointer *data)
 {
-	if (! CAIRO_DOCK_IS_APPLI (icon) || icon->fPersonnalScale > 0)
+	if (! CAIRO_DOCK_IS_APPLI (icon) || cairo_dock_icon_is_being_removed (icon))
 		return ;
 	CairoDockForeachIconFunc pFunction = data[0];
 	gpointer pUserData = data[1];

@@ -132,7 +132,6 @@ gchar *g_cCurrentLaunchersPath = NULL;  // le chemin vers le repertoire des lanc
 gchar *g_cConfFile = NULL;  // le chemin du fichier de conf.
 gchar *g_cCairoDockDataDir = NULL;  // le repertoire ou on va chercher la config.
 
-cairo_surface_t *g_pVisibleZoneSurface = NULL;  // surface de la zone de rappel.
 double g_fBackgroundImageWidth = 0, g_fBackgroundImageHeight = 0;  // sa taille reelle.
 cairo_surface_t *g_pBackgroundSurface = NULL;  // surface associee a l'image du fond, de la taille de l'image du fond.
 cairo_surface_t *g_pBackgroundSurfaceFull = NULL;  // surface associee aux decorations, de 2 fois la taille de la fenetre.
@@ -140,11 +139,31 @@ cairo_surface_t *g_pBackgroundSurfaceFull = NULL;  // surface associee aux decor
 int g_iNbDesktops;  // nombre de bureaux.
 int g_iNbViewportX, g_iNbViewportY;  // nombre de "faces du cube".
 int g_iNbNonStickyLaunchers = 0;
-cairo_surface_t *g_pActiveIndicatorSurface = NULL;
+
+/**cairo_surface_t *g_pActiveIndicatorSurface = NULL;
 double g_fActiveIndicatorWidth, g_fActiveIndicatorHeight;
 
-cairo_surface_t *g_pIconBackgroundImageSurface =  NULL;  // Surface cairo de l'image de fond pour les icones des launchers et applis.
+cairo_surface_t *g_pIconBackgroundImageSurface = NULL;  // Surface cairo de l'image de fond pour les icones des launchers et applis.
 double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
+
+cairo_surface_t *g_pVisibleZoneSurface = NULL;  // surface de la zone de rappel.
+
+cairo_surface_t *g_pIndicatorSurface = NULL;
+double g_fIndicatorWidth, g_fIndicatorHeight;
+
+cairo_surface_t *g_pClassIndicatorSurface = NULL;
+double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
+
+GLuint g_iIndicatorTexture=0;
+GLuint g_iActiveIndicatorTexture=0;
+GLuint g_iClassIndicatorTexture=0;
+GLuint g_iIconBackgroundTexture=0;
+GLuint g_iVisibleZoneTexture=0;*/
+CairoDockImageBuffer g_pIndicatorBuffer;
+CairoDockImageBuffer g_pActiveIndicatorBuffer;
+CairoDockImageBuffer g_pClassIndicatorBuffer;
+CairoDockImageBuffer g_pIconBackgroundBuffer;
+CairoDockImageBuffer g_pVisibleZoneBuffer;
 
 gboolean g_bKeepAbove = FALSE;
 gboolean g_bSkipPager = TRUE;
@@ -157,12 +176,6 @@ gboolean g_bVerbose = FALSE;
 int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 
-cairo_surface_t *g_pIndicatorSurface = NULL;
-double g_fIndicatorWidth, g_fIndicatorHeight;
-
-cairo_surface_t *g_pClassIndicatorSurface = NULL;
-double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
-
 CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
 //int g_iDamageEvent = 0;
 
@@ -174,11 +187,6 @@ CairoDockGLConfig g_openglConfig;
 gboolean g_bUseOpenGL = FALSE;
 gboolean g_bForceCairo = FALSE;
 GLuint g_iBackgroundTexture=0;
-GLuint g_iIndicatorTexture=0;
-GLuint g_iActiveIndicatorTexture=0;
-GLuint g_iClassIndicatorTexture=0;
-GLuint g_iIconBackgroundTexture=0;
-GLuint g_iVisibleZoneTexture=0;
 GLuint g_pGradationTexture[2]={0, 0};
 
 CairoDockModuleInstance *g_pCurrentModule = NULL;
@@ -268,10 +276,16 @@ int main (int argc, char** argv)
 	
 	gtk_init (&argc, &argv);
 	
+	memset (&g_pIndicatorBuffer, 0, sizeof (CairoDockImageBuffer));
+	memset (&g_pActiveIndicatorBuffer, 0, sizeof (CairoDockImageBuffer));
+	memset (&g_pClassIndicatorBuffer, 0, sizeof (CairoDockImageBuffer));
+	memset (&g_pIconBackgroundBuffer, 0, sizeof (CairoDockImageBuffer));
+	memset (&g_pVisibleZoneBuffer, 0, sizeof (CairoDockImageBuffer));
+	
 	GError *erreur = NULL;
 	
 	//\___________________ On recupere quelques options.
-	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSkipPager = FALSE, bNoSkipTaskbar = FALSE, bNoSticky = FALSE, bToolBarHint = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bExpresso = FALSE, bCafeLatte = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE;
+	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSkipPager = FALSE, bNoSkipTaskbar = FALSE, bNoSticky = FALSE, bToolBarHint = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bExpresso = FALSE, bCafeLatte = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL;
 	GOptionEntry TableDesOptions[] =
 	{
@@ -285,13 +299,16 @@ int main (int argc, char** argv)
 #endif
 		{"cairo", 'c', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bForceCairo,
-			"force cairo backend", NULL},
+			"use Cairo backend", NULL},
 		{"opengl", 'o', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bForceOpenGL,
-			"force OpenGL backend", NULL},
+			"use OpenGL backend", NULL},
+		{"indirect-opengl", 'O', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&bToggleIndirectRendering,
+			"use OpenGL backend and toggle On/Off indirect rendering. Use this instead of -o if you have some drawing artifacts, like invisible icons.", NULL},
 		{"indirect", 'i', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bForceIndirectRendering,
-			"use Indirect Rendering mode for OpenGL", NULL},
+			"deprecated - see -O", NULL},
 		{"keep-above", 'a', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bKeepAbove,
 			"keep the dock above other windows whatever", NULL},
@@ -544,7 +561,7 @@ int main (int argc, char** argv)
 	
 	//\___________________ On initialise le support d'OpenGL.
 	if (! g_bForceCairo && ! g_bUseGlitz)
-		g_bUseOpenGL = cairo_dock_initialize_opengl_backend (bForceIndirectRendering, bForceOpenGL);
+		g_bUseOpenGL = cairo_dock_initialize_opengl_backend (bToggleIndirectRendering, bForceOpenGL);
 	if (g_bUseOpenGL && ! g_openglConfig.bHasBeenForced)  /// on pourrait peut-etre tester la config et ne demander confirmation que si des elements manquent...
 	{
 		GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Use OpenGL in Cairo-Dock ?"),
