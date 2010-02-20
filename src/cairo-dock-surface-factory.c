@@ -25,10 +25,8 @@
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-draw.h"
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-load.h"
-#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-surface-factory.h"
 
 extern gboolean g_bUseOpenGL;
@@ -188,7 +186,7 @@ static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDo
 }
 
 
-cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)
+cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, double fConstraintWidth, double fConstraintHeight, double fMaxScale, double *fWidth, double *fHeight)
 {
 	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 
@@ -243,8 +241,8 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 	double fIconWidthSaturationFactor = 1., fIconHeightSaturationFactor = 1.;
 	cairo_dock_calculate_constrainted_size (fWidth,
 		fHeight,
-		myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-		myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
+		fConstraintWidth,
+		fConstraintHeight,
 		CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,
 		&fIconWidthSaturationFactor,
 		&fIconHeightSaturationFactor);
@@ -557,6 +555,48 @@ cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImageFile, c
 	return pSurface;
 }
 
+cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fAlpha)
+{
+	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
+	cairo_surface_t *pNewSurface = NULL;
+
+	if (cImageFile != NULL)
+	{
+		gchar *cImagePath = cairo_dock_generate_file_path (cImageFile);
+		double fImageWidth, fImageHeight;
+		cairo_surface_t *pPatternSurface = cairo_dock_create_surface_from_image (cImagePath,
+			pSourceContext,
+			1.,
+			0,  // pas de contrainte sur
+			0,  // la taille du motif initialement.
+			CAIRO_DOCK_FILL_SPACE,
+			&fImageWidth,
+			&fImageHeight,
+			NULL, NULL);
+		g_free (cImagePath);
+		if (pPatternSurface == NULL)
+			return NULL;
+		
+		pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+			fImageWidth,
+			fImageHeight);
+		cairo_t *pCairoContext = cairo_create (pNewSurface);
+
+		cairo_pattern_t* pPattern = cairo_pattern_create_for_surface (pPatternSurface);
+		g_return_val_if_fail (cairo_pattern_status (pPattern) == CAIRO_STATUS_SUCCESS, NULL);
+		cairo_pattern_set_extend (pPattern, CAIRO_EXTEND_REPEAT);
+
+		cairo_set_source (pCairoContext, pPattern);
+		cairo_paint_with_alpha (pCairoContext, fAlpha);
+		cairo_destroy (pCairoContext);
+		cairo_pattern_destroy (pPattern);
+		
+		cairo_surface_destroy (pPatternSurface);
+	}
+	
+	return pNewSurface;
+}
+
 
 
 cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fRotationAngle)
@@ -609,13 +649,13 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, cairo_t 
 }
 
 
-static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fReflectSize, gboolean bDirectionUp)
+static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bDirectionUp)
 {
 	g_return_val_if_fail (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	//g_print ("%s (%d)\n", __func__, bDirectionUp);
 
 	//\_______________ On cree la surface d'une fraction hauteur de l'image originale.
-	if (pSurface == NULL || fReflectSize == 0 || myIcons.fAlbedo == 0)
+	if (pSurface == NULL || fReflectSize == 0 || fAlbedo == 0)
 		return NULL;
 	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
 		fImageWidth,
@@ -647,13 +687,13 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_
 		0.,
 		0.,
 		0.,
-		(bDirectionUp ? myIcons.fAlbedo : 0.));
+		(bDirectionUp ? fAlbedo : 0.));
 	cairo_pattern_add_color_stop_rgba (pGradationPattern,
 		1.,
 		0.,
 		0.,
 		0.,
-		(bDirectionUp ? 0 : myIcons.fAlbedo));
+		(bDirectionUp ? 0 : fAlbedo));
 
 	cairo_mask (pCairoContext, pGradationPattern);
 
@@ -662,12 +702,12 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_
 	return pNewSurface;
 }
 
-static cairo_surface_t * cairo_dock_create_reflection_surface_vertical (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fReflectSize, gboolean bDirectionUp)
+static cairo_surface_t * cairo_dock_create_reflection_surface_vertical (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bDirectionUp)
 {
 	g_return_val_if_fail (pSurface != NULL && pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 
 	//\_______________ On cree la surface d'une fraction hauteur de l'image originale.
-	if (fReflectSize == 0 || myIcons.fAlbedo == 0)
+	if (fReflectSize == 0 || fAlbedo == 0)
 		return NULL;
 	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
 		fReflectSize,
@@ -695,13 +735,13 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_vertical (cairo_su
 		0.,
 		0.,
 		0.,
-		(bDirectionUp ? myIcons.fAlbedo : 0.));
+		(bDirectionUp ? fAlbedo : 0.));
 	cairo_pattern_add_color_stop_rgba (pGradationPattern,
 		1.,
 		0.,
 		0.,
 		0.,
-		(bDirectionUp ? 0. : myIcons.fAlbedo));
+		(bDirectionUp ? 0. : fAlbedo));
 
 	cairo_mask (pCairoContext, pGradationPattern);
 
@@ -710,12 +750,12 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_vertical (cairo_su
 	return pNewSurface;
 }
 
-cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fReflectSize, gboolean bIsHorizontal, gboolean bDirectionUp)
+cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bIsHorizontal, gboolean bDirectionUp)
 {
 	if (bIsHorizontal)
-		return cairo_dock_create_reflection_surface_horizontal (pSurface, pSourceContext, fImageWidth, fImageHeight, fReflectSize, bDirectionUp);
+		return cairo_dock_create_reflection_surface_horizontal (pSurface, pSourceContext, fImageWidth, fImageHeight, fReflectSize, fAlbedo, bDirectionUp);
 	else
-		return cairo_dock_create_reflection_surface_vertical (pSurface, pSourceContext, fImageWidth, fImageHeight, fReflectSize, bDirectionUp);
+		return cairo_dock_create_reflection_surface_vertical (pSurface, pSourceContext, fImageWidth, fImageHeight, fReflectSize, fAlbedo, bDirectionUp);
 }
 
 

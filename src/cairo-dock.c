@@ -122,43 +122,21 @@
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
 GdkWindowTypeHint g_iWmHint = GDK_WINDOW_TYPE_HINT_DOCK;  // hint pour la fenetre du dock principal.
 
-int g_iScreenWidth[2];  // dimensions de l'ecran physique sur lequel reside le dock
-int g_iScreenHeight[2];
-int g_iXScreenWidth[2];  // dimensions de l'ecran logique X.
-int g_iXScreenHeight[2];
-
 gchar *g_cCurrentThemePath = NULL;  // le chemin vers le repertoire du theme courant.
 gchar *g_cCurrentLaunchersPath = NULL;  // le chemin vers le repertoire des lanceurs/icones du theme courant.
 gchar *g_cConfFile = NULL;  // le chemin du fichier de conf.
 gchar *g_cCairoDockDataDir = NULL;  // le repertoire ou on va chercher la config.
+int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
-double g_fBackgroundImageWidth = 0, g_fBackgroundImageHeight = 0;  // sa taille reelle.
-cairo_surface_t *g_pBackgroundSurface = NULL;  // surface associee a l'image du fond, de la taille de l'image du fond.
-cairo_surface_t *g_pBackgroundSurfaceFull = NULL;  // surface associee aux decorations, de 2 fois la taille de la fenetre.
-
+int g_iScreenWidth[2];  // dimensions de l'ecran physique sur lequel reside le dock
+int g_iScreenHeight[2];
+int g_iXScreenWidth[2];  // dimensions de l'ecran logique X.
+int g_iXScreenHeight[2];
 int g_iNbDesktops;  // nombre de bureaux.
 int g_iNbViewportX, g_iNbViewportY;  // nombre de "faces du cube".
 int g_iNbNonStickyLaunchers = 0;
 
-/**cairo_surface_t *g_pActiveIndicatorSurface = NULL;
-double g_fActiveIndicatorWidth, g_fActiveIndicatorHeight;
-
-cairo_surface_t *g_pIconBackgroundImageSurface = NULL;  // Surface cairo de l'image de fond pour les icones des launchers et applis.
-double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
-
-cairo_surface_t *g_pVisibleZoneSurface = NULL;  // surface de la zone de rappel.
-
-cairo_surface_t *g_pIndicatorSurface = NULL;
-double g_fIndicatorWidth, g_fIndicatorHeight;
-
-cairo_surface_t *g_pClassIndicatorSurface = NULL;
-double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
-
-GLuint g_iIndicatorTexture=0;
-GLuint g_iActiveIndicatorTexture=0;
-GLuint g_iClassIndicatorTexture=0;
-GLuint g_iIconBackgroundTexture=0;
-GLuint g_iVisibleZoneTexture=0;*/
+CairoDockImageBuffer g_pDockBackgroundBuffer;
 CairoDockImageBuffer g_pIndicatorBuffer;
 CairoDockImageBuffer g_pActiveIndicatorBuffer;
 CairoDockImageBuffer g_pClassIndicatorBuffer;
@@ -173,7 +151,6 @@ gboolean g_bSticky = TRUE;
 gboolean g_bUseGlitz = FALSE;
 gboolean g_bVerbose = FALSE;
 
-int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 
 CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
@@ -191,30 +168,30 @@ GLuint g_pGradationTexture[2]={0, 0};
 
 CairoDockModuleInstance *g_pCurrentModule = NULL;
 
-static gchar *cLaunchCommand = NULL;
+static gchar *s_cLaunchCommand = NULL;
 
 static gboolean _cairo_dock_successful_launch (gpointer data)
 {
-	if (g_str_has_suffix (cLaunchCommand, " -m"))
-		cLaunchCommand[strlen (cLaunchCommand)-3] = '\0';  // on enleve le mode maintenance.
+	if (g_str_has_suffix (s_cLaunchCommand, " -m"))
+		s_cLaunchCommand[strlen (s_cLaunchCommand)-3] = '\0';  // on enleve le mode maintenance.
 	return FALSE;
 }
 static void _cairo_dock_intercept_signal (int signal)
 {
-	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now (%s).\nFeel free to report this bug on glx-dock.org to help improving the dock !", signal, cLaunchCommand);
+	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now (%s).\nFeel free to report this bug on glx-dock.org to help improving the dock !", signal, s_cLaunchCommand);
 	g_print ("info on the system :\n");
 	int r = system ("uname -a");
 	if (g_pCurrentModule != NULL)
 	{
 		g_print ("The applet '%s' may be the culprit", g_pCurrentModule->pModule->pVisitCard->cModuleName);
-		cLaunchCommand = g_strdup_printf ("%s -x \"%s\"", cLaunchCommand, g_pCurrentModule->pModule->pVisitCard->cModuleName);
+		s_cLaunchCommand = g_strdup_printf ("%s -x \"%s\"", s_cLaunchCommand, g_pCurrentModule->pModule->pVisitCard->cModuleName);
 	}
 	else
 	{
 		g_print ("Couldn't guess if it was an applet's fault or not. It may have crashed inside the core or inside a thread\n");
 	}
-	execl ("/bin/sh", "/bin/sh", "-c", cLaunchCommand, (char *)NULL);  // on ne revient pas de cette fonction.
-	//execlp ("cairo-dock", "cairo-dock", cLaunchCommand, (char *)0);
+	execl ("/bin/sh", "/bin/sh", "-c", s_cLaunchCommand, (char *)NULL);  // on ne revient pas de cette fonction.
+	//execlp ("cairo-dock", "cairo-dock", s_cLaunchCommand, (char *)0);
 	cd_warning ("Sorry, couldn't restart the dock");
 }
 static void _cairo_dock_set_signal_interception (void)
@@ -267,7 +244,7 @@ int main (int argc, char** argv)
 		return 1;
 	}
 	g_string_append (sCommandString, " -m");  // on relance avec le mode maintenance.
-	cLaunchCommand = sCommandString->str;
+	s_cLaunchCommand = sCommandString->str;
 	g_string_free (sCommandString, FALSE);
 	
 	cd_log_init(FALSE);
@@ -276,6 +253,7 @@ int main (int argc, char** argv)
 	
 	gtk_init (&argc, &argv);
 	
+	memset (&g_pDockBackgroundBuffer, 0, sizeof (CairoDockImageBuffer));
 	memset (&g_pIndicatorBuffer, 0, sizeof (CairoDockImageBuffer));
 	memset (&g_pActiveIndicatorBuffer, 0, sizeof (CairoDockImageBuffer));
 	memset (&g_pClassIndicatorBuffer, 0, sizeof (CairoDockImageBuffer));
@@ -699,12 +677,12 @@ int main (int argc, char** argv)
 	
 	if (cExcludeModule != NULL)
 	{
-		g_print ("on enleve %s de '%s'\n", cExcludeModule, cLaunchCommand);
-		gchar *str = g_strstr_len (cLaunchCommand, -1, " -x ");
+		g_print ("on enleve %s de '%s'\n", cExcludeModule, s_cLaunchCommand);
+		gchar *str = g_strstr_len (s_cLaunchCommand, -1, " -x ");
 		if (str)
 		{
 			*str = '\0';  // enleve le module de la ligne de commande, ainsi que le le -m courant.
-			g_print ("cLaunchCommand <- '%s'\n", cLaunchCommand);
+			g_print ("s_cLaunchCommand <- '%s'\n", s_cLaunchCommand);
 		}
 		else
 		{
@@ -842,8 +820,6 @@ int main (int argc, char** argv)
 	g_print ("\nTEXTURE FROM PIXMAP\n\n");
 	g_print ("\nNOUVELLE INSTANCE COPIEE SUR LA 1ERE\n\n");
 	g_print ("\nJAUGES : LOGO\n\n");*/
-	
-	g_print ("\n*** NE PAS OUBLIER DE REMETTRE LE NOM DE DOMAINE ! ***\n\nEt le dépôt :D");
 	
 	/*if (strcmp((cairo_dock_launch_command_sync ("date +%m%d")), "0101") == 0)
 	{

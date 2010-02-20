@@ -739,13 +739,17 @@ void cairo_dock_start_showing (CairoDock *pDock)
 		pDock->bIsShowing = TRUE;
 		pDock->bIsHiding = FALSE;
 		
-		if (pDock->pShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
+		if (pDock->pShapeBitmap && pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
 		{
 			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 				NULL,
 				0,
 				0);
-			pDock->iInputState = CAIRO_DOCK_INPUT_ACTIVE;
+			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+				pDock->pShapeBitmap,
+				0,
+				0);
+			pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;
 		}
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}

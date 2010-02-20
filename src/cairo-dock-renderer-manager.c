@@ -283,7 +283,7 @@ void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRender
 	
 	if (pRenderer != NULL)
 	{
-		cairo_t *pCairoContext = (pSourceContext != NULL ? pSourceContext : cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDesklet)));
+		cairo_t *pCairoContext = (pSourceContext != NULL ? pSourceContext : cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDesklet)));
 		
 		if (pRenderer->configure != NULL)
 			pDesklet->pRendererData = pRenderer->configure (pDesklet, pCairoContext, pConfig);
@@ -322,7 +322,7 @@ void cairo_dock_set_dialog_renderer (CairoDialog *pDialog, CairoDialogRenderer *
 	
 	if (pRenderer != NULL)
 	{
-		cairo_t *pCairoContext = (pSourceContext != NULL ? pSourceContext : cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDialog)));
+		cairo_t *pCairoContext = (pSourceContext != NULL ? pSourceContext : cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDialog)));
 		
 		if (pRenderer->configure != NULL)
 			pDialog->pRendererData = pRenderer->configure (pDialog, pCairoContext, pConfig);

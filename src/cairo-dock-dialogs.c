@@ -463,7 +463,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 				}
 			}
 		}
-		pCairoContext = cairo_dock_create_drawing_context (CAIRO_CONTAINER (pDialog));
+		pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pDialog));
 		//cd_debug ("redraw");
 		
 		if (pDialog->pDecorator != NULL)
@@ -638,7 +638,7 @@ static cairo_surface_t *_cairo_dock_load_button_icon (cairo_t *pCairoContext, co
 void cairo_dock_load_dialog_buttons (CairoContainer *pContainer, gchar *cButtonOkImage, gchar *cButtonCancelImage)
 {
 	//g_print ("%s (%s ; %s)\n", __func__, cButtonOkImage, cButtonCancelImage);
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (pContainer);
+	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (pContainer);
 	
 	if (s_pButtonOkSurface != NULL)
 		cairo_surface_destroy (s_pButtonOkSurface);
@@ -954,7 +954,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	///if (pContainer != NULL)
 	///	gtk_window_set_transient_for (GTK_WINDOW (pDialog->container.pWidget), GTK_WINDOW (pContainer->pWidget));
 	pDialog->pIcon = pIcon;
-	cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDialog));
+	cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDialog));
 	
 	//\________________ On cree la surface du message.
 	if (pAttribute->cText != NULL)
@@ -1861,7 +1861,7 @@ void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface
 
 	cairo_surface_destroy (pDialog->pIconBuffer);
 	
-	cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDialog));
+	cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDialog));
 	pDialog->pIconBuffer = cairo_dock_duplicate_surface (pNewIconSurface, pSourceContext, iNewIconSize, iNewIconSize, iNewIconSize, iNewIconSize);
 	if (pDialog->iIconTexture != 0)
 		_cairo_dock_delete_texture (pDialog->iIconTexture);
@@ -1889,7 +1889,7 @@ void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface
 
 void cairo_dock_set_dialog_message (CairoDialog *pDialog, const gchar *cMessage)
 {
-	cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDialog));
+	cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDialog));
 	
 	int iNewTextWidth=0, iNewTextHeight=0;
 	cairo_surface_t *pNewTextSurface = _cairo_dock_create_dialog_text_surface (cMessage, NULL, pSourceContext, &iNewTextWidth, &iNewTextHeight);
@@ -1911,7 +1911,7 @@ void cairo_dock_set_dialog_message_printf (CairoDialog *pDialog, const gchar *cM
 
 void cairo_dock_set_dialog_icon (CairoDialog *pDialog, const gchar *cImageFilePath)
 {
-	cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDialog));
+	cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDialog));
 
 	cairo_surface_t *pNewIconSurface = cairo_dock_create_surface_for_square_icon (cImageFilePath, pSourceContext, myDialogs.iDialogIconSize);
 	int iNewIconSize = (pNewIconSurface != NULL ? myDialogs.iDialogIconSize : 0);

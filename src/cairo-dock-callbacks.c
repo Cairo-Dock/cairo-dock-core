@@ -195,7 +195,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	}
 	
 	
-	cairo_t *pCairoContext = cairo_dock_create_drawing_context (CAIRO_CONTAINER (pDock));
+	cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pDock));
 	
 	if (cairo_dock_is_loading ())  // transparent pendant le chargement.
 	{
@@ -351,7 +351,7 @@ static void _cairo_dock_make_icon_glide (Icon *pPointedIcon, Icon *pMovingicon, 
 		//if (pDock->container.iMouseX > s_pMovingicon->fDrawXAtRest + s_pMovingicon->fWidth * s_pMovingicon->fScale /2)  // on a deplace l'icone a droite.  // fDrawXAtRest
 		if (pMovingicon->fXAtRest < pPointedIcon->fXAtRest)  // on a deplace l'icone a droite.
 		{
-			//g_print ("%s : %.2f / %.2f ; %.2f / %d (%.2f)\n", icon->cName, icon->fXAtRest, s_pMovingicon->fXAtRest, icon->fDrawX, pDock->container.iMouseX, icon->fGlideOffset);
+			g_print ("%s : %.2f / %.2f ; %.2f / %d (%.2f)\n", icon->cName, icon->fXAtRest, pMovingicon->fXAtRest, icon->fDrawX, pDock->container.iMouseX, icon->fGlideOffset);
 			if (icon->fXAtRest > pMovingicon->fXAtRest && icon->fDrawX < pDock->container.iMouseX + 5 && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
 			{
 				//g_print ("  %s glisse vers la gauche\n", icon->cName);
@@ -506,7 +506,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 				pDock->fDecorationsOffsetX += 10;
 				if (pDock->fDecorationsOffsetX > pDock->container.iWidth / 2)
 				{
-					if (g_pBackgroundSurfaceFull[0] != NULL)
+					if (myBackground.cBackgroundImageFile && !myBackground.bBackgroundImageRepeat)
 						pDock->fDecorationsOffsetX -= pDock->container.iWidth;
 					else
 						pDock->fDecorationsOffsetX = pDock->container.iWidth / 2;
@@ -517,7 +517,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 				pDock->fDecorationsOffsetX -= 10;
 				if (pDock->fDecorationsOffsetX < - pDock->container.iWidth / 2)
 				{
-					if (g_pBackgroundSurfaceFull[0] != NULL)
+					if (myBackground.cBackgroundImageFile && !myBackground.bBackgroundImageRepeat)
 						pDock->fDecorationsOffsetX += pDock->container.iWidth;
 					else
 						pDock->fDecorationsOffsetX = - pDock->container.iWidth / 2;
@@ -796,7 +796,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	if (pDock->fHideOffset != 0 && pDock->iRefCount == 0)
 	{
 		//g_print ("  on commence a monter\n");
-		cairo_dock_start_showing (pDock);
+		cairo_dock_start_showing (pDock);  // on a mis a jour la zone d'input avant, sinon la fonction le ferait, ce qui serait inutile.
 	}
 	
 	// cas special.

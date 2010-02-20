@@ -598,7 +598,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	CairoDock *pNewDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	g_return_if_fail (pNewDock != NULL);
 	
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pNewDock));
+	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pNewDock));
 	
 	if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)
 	{

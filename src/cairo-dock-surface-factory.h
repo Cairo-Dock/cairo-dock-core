@@ -127,12 +127,14 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 *@param pXIconBuffer raw data of the icon.
 *@param iBufferNbElements number of elements in the buffer.
 *@param pSourceContext a drawing context (not altered by the function).
+*@param fConstraintWidth desired width of the icon.
+*@param fConstraintHeight desired height of the icon.
 *@param fMaxScale maximum zoom of the icon.
 *@param fWidth will be filled with the resulting width of the surface.
 *@param fHeight will be filled with the resulting height of the surface.
 *@return the newly allocated surface.
 */
-cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);
+cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, double fConstraintWidth, double fConstraintHeight, double fMaxScale, double *fWidth, double *fHeight);
 
 /** Create a surface from a GdkPixbuf.
 *@param pixbuf the pixbuf.
@@ -201,6 +203,17 @@ cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImagePath, c
 #define cairo_dock_create_surface_for_square_icon(cImagePath, pSourceContext, fImageSize) cairo_dock_create_surface_for_icon (cImagePath, pSourceContext, fImageSize, fImageSize)
 
 
+/** Create a surface at a given size, and fill it with a pattern. If the pattern image is given by its sole name, it is searched inside the current theme root folder.
+*@param cImagePath path or name of an image that will be repeated to fill the surface.
+*@param pSourceContext a drawing context (not altered by the function).
+*@param fImageWidth the desired surface width.
+*@param fImageHeight the desired surface height.
+*@param fAlpha transparency of the pattern (1 means opaque).
+*@return the newly allocated surface.
+*/
+cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fAlpha);
+
+
 /** Create a surface by rotating another. Only works for 1/4 of rounds.
 *@param pSurface surface to rotate.
 *@param pSourceContext a drawing context (not altered by the function).
@@ -221,7 +234,7 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, cairo_t 
 *@param bDirectionUp TRUE if the surface is in a container whose direction is towards.
 *@return the newly allocated surface.
 */
-cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fReflectSize, gboolean bIsHorizontal, gboolean bDirectionUp);
+cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bIsHorizontal, gboolean bDirectionUp);
 
 /** Create a surface representing a text, according to a given text description.
 *@param cText the text.

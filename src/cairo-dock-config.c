@@ -80,8 +80,7 @@ extern CairoDock *g_pMainDock;
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cCurrentLaunchersPath;
-extern double g_fBackgroundImageWidth;
-extern double g_fBackgroundImageHeight;
+extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopEnv g_iDesktopEnv;
@@ -546,7 +545,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	}
 	
 	//\___________________ On (re)charge tout, car n'importe quel parametre peut avoir change.
-	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+	cairo_t* pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
 	
 	// fausse transparence.
@@ -572,13 +571,13 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_unload_dialog_buttons ();  // on se contente de remettre a zero ces buffers,
 	cairo_dock_unload_desklet_buttons ();  // qui seront charges lorsque necessaire.
 	
-	cairo_dock_load_task_indicator (myTaskBar.bShowAppli && (myTaskBar.bMixLauncherAppli || myTaskBar.bDrawIndicatorOnAppli) ? myIndicators.cIndicatorImagePath : NULL, pCairoContext, fMaxScale, myIndicators.fIndicatorRatio);
+	cairo_dock_load_task_indicator (myTaskBar.bShowAppli && (myTaskBar.bMixLauncherAppli || myTaskBar.bDrawIndicatorOnAppli) ? myIndicators.cIndicatorImagePath : NULL, fMaxScale, myIndicators.fIndicatorRatio);
 	
-	cairo_dock_load_icons_background_surface (myIcons.cBackgroundImagePath, pCairoContext, fMaxScale);
+	cairo_dock_load_icons_background_surface (myIcons.cBackgroundImagePath, fMaxScale);
 
-	cairo_dock_load_active_window_indicator (pCairoContext, myIndicators.cActiveIndicatorImagePath, fMaxScale, myIndicators.iActiveCornerRadius, myIndicators.iActiveLineWidth, myIndicators.fActiveColor);
+	cairo_dock_load_active_window_indicator (myIndicators.cActiveIndicatorImagePath, fMaxScale, myIndicators.iActiveCornerRadius, myIndicators.iActiveLineWidth, myIndicators.fActiveColor);
 	
-	cairo_dock_load_class_indicator (myTaskBar.bShowAppli && myTaskBar.bGroupAppliByClass ? myIndicators.cClassIndicatorImagePath : NULL, pCairoContext, fMaxScale);
+	cairo_dock_load_class_indicator (myTaskBar.bShowAppli && myTaskBar.bGroupAppliByClass ? myIndicators.cClassIndicatorImagePath : NULL, fMaxScale);
 	
 	cairo_dock_load_visible_zone (pDock, myBackground.cVisibleZoneImageFile, myAccessibility.iVisibleZoneWidth, myAccessibility.iVisibleZoneHeight, myBackground.fVisibleZoneAlpha);
 	
@@ -602,8 +601,8 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	if ((iSeparateIconsOld && ! myIcons.iSeparateIcons) || bGroupOrderChanged)
 		cairo_dock_remove_automatic_separators (pDock);
 		
-	g_fBackgroundImageWidth = 1e4;  // inutile de mettre a jour les decorations maintenant.
-	g_fBackgroundImageHeight = 1e4;
+	g_pDockBackgroundBuffer.iWidth = 1e4;  // inutile de mettre a jour les decorations maintenant.
+	g_pDockBackgroundBuffer.iHeight = 1e4;
 	if (pDock->icons == NULL)
 	{
 		pDock->fFlatDockWidth = - myIcons.iIconGap;  // car on ne le connaissait pas encore au moment de la creation du dock.
@@ -663,7 +662,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	//\___________________ On gere le changement dans la visibilite.
 	if (pDock->bAutoHide)
 	{
-		pDock->iInputState = CAIRO_DOCK_INPUT_HIDDEN;
+		pDock->iInputState = CAIRO_DOCK_INPUT_HIDDEN;  // le 'configure' mettra a jour la zone d'input.
 		pDock->fHideOffset = 1.;
 	}
 	else
@@ -692,7 +691,12 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	{
 		cairo_dock_start_polling_screen_edge (pDock);
 		if (! bPopUpOld)
-			gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
+		{
+			if (cairo_dock_get_nb_dialog_windows () == 0)
+				gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
+			else
+				pDock->bPopped == TRUE;  // pour que le pop-down marche quand on fermera la fenetre.
+		}
 	}
 	else
 	{

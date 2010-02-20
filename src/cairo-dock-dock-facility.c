@@ -75,7 +75,7 @@ extern int g_iScreenWidth[2], g_iScreenHeight[2];
 
 void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
 {
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 	Icon *icon;
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)

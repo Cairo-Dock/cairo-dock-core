@@ -34,20 +34,20 @@ G_BEGIN_DECLS
   ///////////////
  /// CONTEXT ///
 ///////////////
-/** Create a drawing context. It links it to a Glitz surface if this one is activated, or to an X surface representing the window of the container.
+/** Create a generic drawing context, to be used as a source context (for instance, for creating a surface).
 *@param pContainer a container.
 *@return the context on which to draw. Is never NULL, test it with cairo_status() before use it, and destroy it with cairo_destroy() when you're done with it.
 */
-cairo_t * cairo_dock_create_context_from_container (CairoContainer *pContainer);
-#define cairo_dock_create_context_from_window cairo_dock_create_context_from_container
-#define cairo_dock_create_drawing_context_generic cairo_dock_create_context_from_container
+cairo_t * cairo_dock_create_drawing_context_generic (CairoContainer *pContainer);
+#define cairo_dock_create_context_from_window cairo_dock_create_drawing_context_generic
+#define cairo_dock_create_context_from_container cairo_dock_create_drawing_context_generic
 
 /** Create a drawing context to draw on a container. It handles fake transparency.
 *@param pContainer the container on which you want to draw.
 *@return the newly allocated context, to be destroyed with 'cairo_destroy'.
 */
-cairo_t *cairo_dock_create_drawing_context (CairoContainer *pContainer);
-#define cairo_dock_create_drawing_context_on_container cairo_dock_create_drawing_context
+cairo_t *cairo_dock_create_drawing_context_on_container (CairoContainer *pContainer);
+#define cairo_dock_create_drawing_context cairo_dock_create_drawing_context_on_container
 
 /** Create a drawing context to draw on a part of a container. It handles fake transparency.
 *@param pContainer the container on which you want to draw

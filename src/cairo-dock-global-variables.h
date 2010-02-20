@@ -44,23 +44,19 @@ extern int g_iNbDesktops;
 /// Nombre de "faces" du cube en largeur et en hauteur.
 extern int g_iNbViewportX, g_iNbViewportY ;
 
-/// Largeur de la zone de rappel.
-extern int g_iVisibleZoneWidth;
-/// hauteur de la zone de rappel.
-extern int g_iVisibleZoneHeight;
-/// Surface de la zone de rappel.
-extern cairo_surface_t *g_pVisibleZoneSurface;
-extern double g_fVisibleZoneImageWidth, g_fVisibleZoneImageHeight;
+/// zone de rappel.
+extern CairoDockImageBuffer g_pVisibleZoneBuffer;
+/// background
+extern CairoDockImageBuffer g_pDockBackgroundBuffer;
+/// indicateur de tache
+extern CairoDockImageBuffer g_pIndicatorBuffer;
+
 
 /// Environnement de bureau detecte.
 extern CairoDockDesktopEnv g_iDesktopEnv;
 
-extern cairo_surface_t *g_pBackgroundSurfaceFull;
-extern cairo_surface_t *g_pBackgroundSurface;
-
 extern gboolean g_bEasterEggs;
 
-extern GLuint g_iBackgroundTexture;
 extern gboolean g_bUseOpenGL;
 
 extern GLuint g_pGradationTexture[2];

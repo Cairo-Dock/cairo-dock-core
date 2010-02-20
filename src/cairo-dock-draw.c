@@ -55,33 +55,23 @@
 extern gint g_iScreenWidth[2];
 extern gint g_iScreenHeight[2];
 
+extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 extern CairoDockImageBuffer g_pIndicatorBuffer;
 extern CairoDockImageBuffer g_pActiveIndicatorBuffer;
 extern CairoDockImageBuffer g_pClassIndicatorBuffer;
 extern CairoDockImageBuffer g_pIconBackgroundImageBuffer;
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;
 
-extern double g_fBackgroundImageWidth, g_fBackgroundImageHeight;
+/**extern double g_fBackgroundImageWidth, g_fBackgroundImageHeight;
 extern cairo_surface_t *g_pBackgroundSurface;
-extern cairo_surface_t *g_pBackgroundSurfaceFull;
-
-/**extern cairo_surface_t *g_pVisibleZoneSurface;
-
-extern cairo_surface_t *g_pIndicatorSurface;
-extern double g_fIndicatorWidth, g_fIndicatorHeight;
-
-extern cairo_surface_t *g_pActiveIndicatorSurface;
-extern double g_fActiveIndicatorWidth, g_fActiveIndicatorHeight;
-
-extern cairo_surface_t *g_pClassIndicatorSurface;
-extern double g_fClassIndicatorWidth, g_fClassIndicatorHeight;*/
+extern cairo_surface_t *g_pBackgroundSurfaceFull;*/
 
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
 
 
-cairo_t * cairo_dock_create_context_from_container (CairoContainer *pContainer)
+cairo_t * cairo_dock_create_drawing_context_generic (CairoContainer *pContainer)
 {
 #ifdef HAVE_GLITZ
 	if (pContainer->pGlitzDrawable)
@@ -119,9 +109,9 @@ cairo_t * cairo_dock_create_context_from_container (CairoContainer *pContainer)
 	return gdk_cairo_create (pContainer->pWidget->window);
 }
 
-cairo_t *cairo_dock_create_drawing_context (CairoContainer *pContainer)
+cairo_t *cairo_dock_create_drawing_context_on_container (CairoContainer *pContainer)
 {
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (pContainer);
+	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (pContainer);
 	g_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, FALSE);
 	
 	if (mySystem.bUseFakeTransparency)
@@ -142,7 +132,7 @@ cairo_t *cairo_dock_create_drawing_context (CairoContainer *pContainer)
 
 cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, GdkRectangle *pArea, double *fBgColor)
 {
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (pContainer);
+	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (pContainer);
 	g_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, pCairoContext);
 	
 	if (pArea != NULL && (pArea->x > 0 || pArea->y > 0))
@@ -322,42 +312,36 @@ double cairo_dock_draw_frame (cairo_t *pCairoContext, double fRadius, double fLi
 void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *pDock, double fOffsetY, double fOffsetX, double fWidth)
 {
 	//g_print ("%.2f\n", pDock->fDecorationsOffsetX);
-	if (g_pBackgroundSurfaceFull != NULL)
+	if (g_pDockBackgroundBuffer.pSurface == NULL)
+		return ;
+	cairo_save (pCairoContext);
+	
+	if (myBackground.cBackgroundImageFile && !myBackground.bBackgroundImageRepeat)  /// g_pBackgroundSurfaceFull != NULL
 	{
-		cairo_save (pCairoContext);
-		
 		double f = (myBackground.fDecorationSpeed || myBackground.bDecorationsFollowMouse ? .5 : 0.);
 		if (pDock->container.bIsHorizontal)
 			cairo_translate (pCairoContext, pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed - pDock->container.iWidth * f, fOffsetY);
 		else
 			cairo_translate (pCairoContext, fOffsetY, pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed - pDock->container.iWidth * f);
 		
-		
-		cairo_surface_t *pSurface = g_pBackgroundSurfaceFull;
-		cairo_dock_draw_surface (pCairoContext, pSurface, g_fBackgroundImageWidth, g_fBackgroundImageHeight, pDock->container.bDirectionUp, pDock->container.bIsHorizontal, -1.);  // -1 <=> fill_preserve
-		
-		cairo_restore (pCairoContext);
+		cairo_dock_draw_surface (pCairoContext, g_pDockBackgroundBuffer.pSurface, g_pDockBackgroundBuffer.iWidth, g_pDockBackgroundBuffer.iHeight, pDock->container.bDirectionUp, pDock->container.bIsHorizontal, -1.);  // -1 <=> fill_preserve
 	}
-	else if (g_pBackgroundSurface != NULL)
+	else
 	{
-		cairo_save (pCairoContext);
-		
 		if (pDock->container.bIsHorizontal)
 		{
 			cairo_translate (pCairoContext, pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed + fOffsetX, fOffsetY);
-			cairo_scale (pCairoContext, 1. * fWidth / g_fBackgroundImageWidth, 1. * pDock->iDecorationsHeight / g_fBackgroundImageHeight);  // pDock->container.iWidth
+			cairo_scale (pCairoContext, fWidth / g_pDockBackgroundBuffer.iWidth, 1. * pDock->iDecorationsHeight / g_pDockBackgroundBuffer.iHeight);  // pDock->container.iWidth
 		}
 		else
 		{
 			cairo_translate (pCairoContext, fOffsetY, pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed + fOffsetX);
-			cairo_scale (pCairoContext, 1. * pDock->iDecorationsHeight / g_fBackgroundImageHeight, 1. * fWidth / g_fBackgroundImageWidth);
+			cairo_scale (pCairoContext, 1. * pDock->iDecorationsHeight / g_pDockBackgroundBuffer.iHeight, 1. * fWidth / g_pDockBackgroundBuffer.iWidth);
 		}
 		
-		cairo_surface_t *pSurface = g_pBackgroundSurface;
-		cairo_dock_draw_surface (pCairoContext, pSurface, g_fBackgroundImageWidth, g_fBackgroundImageHeight, pDock->container.bDirectionUp, pDock->container.bIsHorizontal, -1.);  // -1 <=> fill_preserve
-		
-		cairo_restore (pCairoContext);
+		cairo_dock_draw_surface (pCairoContext, g_pDockBackgroundBuffer.pSurface, g_pDockBackgroundBuffer.iWidth, g_pDockBackgroundBuffer.iHeight, pDock->container.bDirectionUp, pDock->container.bIsHorizontal, -1.);  // -1 <=> fill_preserve
 	}
+	cairo_restore (pCairoContext);
 }
 
 

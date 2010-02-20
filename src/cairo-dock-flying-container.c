@@ -246,7 +246,7 @@ static gboolean on_expose_flying_icon (GtkWidget *pWidget,
 	}
 	else
 	{
-		cairo_t *pCairoContext = cairo_dock_create_drawing_context (CAIRO_CONTAINER (pFlyingContainer));
+		cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pFlyingContainer));
 		
 		cairo_dock_notify (CAIRO_DOCK_RENDER_FLYING_CONTAINER, pFlyingContainer, pCairoContext);
 		
@@ -344,7 +344,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 		pFlyingContainer->container.iWindowPositionY);*/
 	gtk_window_present (GTK_WINDOW (pWindow));
 	
-	cairo_t *pSourceContext = cairo_dock_create_context_from_container (CAIRO_CONTAINER (pFlyingContainer));
+	cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pFlyingContainer));
 	_cairo_dock_load_hand_image (pSourceContext, pFlyingContainer->container.iWidth);
 	_cairo_dock_load_explosion_image (pSourceContext, pFlyingContainer->container.iWidth);
 	cairo_destroy (pSourceContext);

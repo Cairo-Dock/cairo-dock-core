@@ -120,13 +120,13 @@ static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicator
 {
 	CairoDock *pDock = g_pMainDock;
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
-	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+	cairo_t* pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 	
 	if (cairo_dock_strings_differ (pPrevIndicators->cIndicatorImagePath, pIndicators->cIndicatorImagePath) ||
 		pPrevIndicators->bLinkIndicatorWithIcon != pIndicators->bLinkIndicatorWithIcon ||
 		pPrevIndicators->fIndicatorRatio != pIndicators->fIndicatorRatio)
 	{
-		cairo_dock_load_task_indicator (myTaskBar.bShowAppli && (myTaskBar.bMixLauncherAppli || myTaskBar.bDrawIndicatorOnAppli) ? pIndicators->cIndicatorImagePath : NULL, pCairoContext, fMaxScale, pIndicators->fIndicatorRatio);
+		cairo_dock_load_task_indicator (myTaskBar.bShowAppli && (myTaskBar.bMixLauncherAppli || myTaskBar.bDrawIndicatorOnAppli) ? pIndicators->cIndicatorImagePath : NULL, fMaxScale, pIndicators->fIndicatorRatio);
 	}
 	
 	if (cairo_dock_strings_differ (pPrevIndicators->cActiveIndicatorImagePath, pIndicators->cActiveIndicatorImagePath) ||
@@ -134,8 +134,7 @@ static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicator
 		pPrevIndicators->iActiveLineWidth != pIndicators->iActiveLineWidth ||
 		cairo_dock_colors_differ (pPrevIndicators->fActiveColor, pIndicators->fActiveColor))
 	{
-		cairo_dock_load_active_window_indicator (pCairoContext,
-			pIndicators->cActiveIndicatorImagePath,
+		cairo_dock_load_active_window_indicator (pIndicators->cActiveIndicatorImagePath,
 			fMaxScale,
 			pIndicators->iActiveCornerRadius,
 			pIndicators->iActiveLineWidth,
@@ -144,7 +143,7 @@ static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicator
 	
 	if (cairo_dock_strings_differ (pPrevIndicators->cClassIndicatorImagePath, pIndicators->cClassIndicatorImagePath))
 	{
-		cairo_dock_load_class_indicator (myTaskBar.bShowAppli && myTaskBar.bGroupAppliByClass ? pIndicators->cClassIndicatorImagePath : NULL, pCairoContext, fMaxScale);
+		cairo_dock_load_class_indicator (myTaskBar.bShowAppli && myTaskBar.bGroupAppliByClass ? pIndicators->cClassIndicatorImagePath : NULL, fMaxScale);
 	}
 	
 	cairo_destroy (pCairoContext);

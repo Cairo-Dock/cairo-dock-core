@@ -473,7 +473,7 @@ void cairo_dock_build_docks_tree_with_desktop_files (CairoDock *pMainDock, gchar
 	Icon* icon;
 	const gchar *cFileName;
 	CairoDock *pParentDock;
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pMainDock));
+	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pMainDock));
 
 	while ((cFileName = g_dir_read_name (dir)) != NULL)
 	{
@@ -571,7 +571,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 				int iSeparatorType = iOrder + 1;
 				cd_debug ("+ insertion de %s avant %s -> iSeparatorType : %d\n", icon->cName, pNextIcon->cName, iSeparatorType);
 
-				cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+				cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 				Icon *pSeparatorIcon = cairo_dock_create_separator_icon (pSourceContext, iSeparatorType, pDock);
 				if (pSeparatorIcon != NULL)
 				{
@@ -595,7 +595,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 				int iSeparatorType = iOrder - 1;
 				cd_debug ("+ insertion de %s (%d) apres %s -> iSeparatorType : %d\n", icon->cName, icon->pModuleInstance != NULL, pPrevIcon->cName, iSeparatorType);
 
-				cairo_t *pSourceContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+				cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 				Icon *pSeparatorIcon = cairo_dock_create_separator_icon (pSourceContext, iSeparatorType, pDock);
 				if (pSeparatorIcon != NULL)
 				{
@@ -803,7 +803,7 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 				{
 					int iSeparatorType = myIcons.tIconTypeOrder[next_icon->iType] - 1;
 					cd_debug ("+ un separateur entre %s et %s, dans le groupe %d (=%d)\n", icon->cName, next_icon->cName, iSeparatorType, myIcons.tIconTypeOrder[iSeparatorType]);
-					cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+					cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 					Icon *pSeparator = cairo_dock_create_separator_icon (pCairoContext, iSeparatorType, pDock);
 					cairo_destroy (pCairoContext);
 					if (pSeparator != NULL)
@@ -842,7 +842,7 @@ void cairo_dock_add_new_launcher_by_uri (const gchar *cExternDesktopFileURI, Cai
 	{
 		cairo_dock_mark_theme_as_modified (TRUE);
 
-		cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pReceivingDock));
+		cairo_t* pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pReceivingDock));
 		Icon *pNewIcon = cairo_dock_create_icon_from_desktop_file (cNewDesktopFileName, pCairoContext);
 		g_free (cNewDesktopFileName);
 		cairo_destroy (pCairoContext);

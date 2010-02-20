@@ -44,10 +44,11 @@
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-notifications.h"
+#include "cairo-dock-load.h"
 #include "texture-blur.h"
 #include "cairo-dock-default-view.h"
 
-extern GLuint g_iBackgroundTexture;
+extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 extern int g_iScreenWidth[2];
 extern gboolean g_bUseOpenGL;
 static GLuint s_iFlatSeparatorTexture = 0;
@@ -583,7 +584,7 @@ static void cd_render_opengl_default (CairoDock *pDock)
 	
 	//\_____________ On trace le fond en texturant par des triangles.
 	glPushMatrix ();
-	cairo_dock_draw_frame_background_opengl (g_iBackgroundTexture, fDockWidth+2*fRadius, fFrameHeight, fDockOffsetX, fDockOffsetY, pVertexTab, iNbVertex, pDock->container.bIsHorizontal, pDock->container.bDirectionUp, pDock->fDecorationsOffsetX);
+	cairo_dock_draw_frame_background_opengl (g_pDockBackgroundBuffer.iTexture, fDockWidth+2*fRadius, fFrameHeight, fDockOffsetX, fDockOffsetY, pVertexTab, iNbVertex, pDock->container.bIsHorizontal, pDock->container.bDirectionUp, pDock->fDecorationsOffsetX);
 	
 	//\_____________ On trace le contour.
 	if (fLineWidth != 0)

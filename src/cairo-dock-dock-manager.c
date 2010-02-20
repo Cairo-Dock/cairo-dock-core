@@ -438,7 +438,6 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 		pDock->bAutoHide = (cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "visibility", &bFlushConfFileNeeded, FALSE, NULL, NULL) == 3);
 	else
 		pDock->bAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, "Position", "auto-hide", &bFlushConfFileNeeded, FALSE, "Auto-Hide", "auto-hide");
-	g_print ("pDock->bAutoHide <- %d\n", pDock->bAutoHide);
 	
 	if (myPosition.bUseXinerama)
 	{
@@ -538,7 +537,7 @@ static void _cairo_dock_stop_quick_hide_one_root_dock (const gchar *cDockName, C
 		
 		if (! pDock->container.bInside && ! pDock->bAutoHide)  // on le fait re-apparaitre.
 		{
-			g_print ("%s (%.2f)\n", __func__, pDock->fFoldingFactor);
+			//g_print ("%s (%.2f)\n", __func__, pDock->fFoldingFactor);
 			if (pDock->fFoldingFactor != 0)  // le dock est plie, mais on ne le fait pas grossir, et donc il ne se deplie pas, donc on le deplie d'un coup ici.
 			{
 				pDock->fFoldingFactor = 0;

@@ -587,7 +587,7 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 		}
 		else
 		{
-			cairo_t *pCairoContext = cairo_dock_create_drawing_context (CAIRO_CONTAINER (pDesklet));
+			cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pDesklet));
 			cairo_destroy (pCairoContext);
 		}
 		return FALSE;
@@ -618,7 +618,7 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 	}
 	else
 	{
-		cairo_t *pCairoContext = cairo_dock_create_drawing_context (CAIRO_CONTAINER (pDesklet));
+		cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pDesklet));
 		
 		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_RENDER_DESKLET, pDesklet, pCairoContext);
 		
@@ -650,7 +650,7 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 		pDesklet->iDesiredWidth = 0;
 		pDesklet->iDesiredHeight = 0;
 		
-		cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDesklet));
+		cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDesklet));
 		_cairo_dock_load_desklet_decorations (pDesklet, pCairoContext);
 		cairo_destroy (pCairoContext);
 		
@@ -1452,7 +1452,7 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
 	
 	if (s_pRotateButtonSurface == NULL)
 	{
-		cairo_t *ctx = cairo_dock_create_context_from_container (CAIRO_CONTAINER (pDesklet));
+		cairo_t *ctx = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDesklet));
 		cairo_dock_load_desklet_buttons (ctx);
 		cairo_destroy (ctx);
 	}
@@ -1545,7 +1545,7 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 	//cd_debug ("%s (%dx%d ; %d)", __func__, pDesklet->iDesiredWidth, pDesklet->iDesiredHeight, pDesklet->iSidWriteSize);
 	if (pDesklet->iDesiredWidth == 0 && pDesklet->iDesiredHeight == 0 && pDesklet->iSidWriteSize == 0)
 	{
-		cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDesklet));
+		cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDesklet));
 		_cairo_dock_load_desklet_decorations (pDesklet, pCairoContext);
 		cairo_destroy (pCairoContext);
 	}

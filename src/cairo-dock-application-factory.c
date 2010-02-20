@@ -132,7 +132,13 @@ cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pS
 
 	if (iBufferNbElements > 2)
 	{
-		cairo_surface_t *pNewSurface = cairo_dock_create_surface_from_xicon_buffer (pXIconBuffer, iBufferNbElements, pSourceContext, fMaxScale, fWidth, fHeight);
+		cairo_surface_t *pNewSurface = cairo_dock_create_surface_from_xicon_buffer (pXIconBuffer,
+			iBufferNbElements,
+			pSourceContext,
+			myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
+			myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
+			fMaxScale,
+			fWidth, fHeight);
 		XFree (pXIconBuffer);
 		return pNewSurface;
 	}

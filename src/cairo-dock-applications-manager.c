@@ -207,7 +207,7 @@ static void on_update_applis_list (CairoDock *pDock, gint iTime)
 		{
 			cd_message (" cette fenetre (%ld) de la pile n'est pas dans la liste", Xid);
 			if (pCairoContext == NULL)
-				pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+				pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 			if (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS)
 				icon = cairo_dock_create_icon_from_xwindow (pCairoContext, Xid, pDock);
 			else
@@ -324,7 +324,7 @@ static void _on_change_active_window (void)
 static gboolean _on_change_current_desktop_viewport (void)
 {
 	CairoDock *pDock = g_pMainDock;
-	
+	g_print ("%s (%d)\n", __func__, cairo_dock_quick_hide_is_activated ());
 	_cairo_dock_retrieve_current_desktop_and_viewport ();
 	
 	// applis du bureau courant seulement.
@@ -349,7 +349,8 @@ static gboolean _on_change_current_desktop_viewport (void)
 		}
 		else
 		{
-			if (cairo_dock_search_window_on_our_way (pDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) != NULL)
+			g_print ("pDock->container.bInside:%d\n", pDock->container.bInside);
+			if (cairo_dock_search_window_on_our_way (pDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) != NULL && ! pDock->container.bInside)
 			{
 				cd_message (" => une fenetre est genante");
 				cairo_dock_activate_temporary_auto_hide ();
@@ -442,7 +443,7 @@ static void _on_change_window_state (Icon *icon)
 			if ( ((bIsMaximized && ! bIsHidden && myAccessibility.bAutoHideOnMaximized) || (bIsFullScreen && ! bIsHidden && myAccessibility.bAutoHideOnFullScreen)) && ! cairo_dock_quick_hide_is_activated ())
 			{
 				cd_message (" => %s devient genante", CAIRO_DOCK_IS_APPLI (icon) ? icon->cName : "une fenetre");
-				if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_hovers_dock (icon, g_pMainDock))
+				if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_hovers_dock (icon, g_pMainDock) && ! g_pMainDock->container.bInside)
 					cairo_dock_activate_temporary_auto_hide ();
 			}
 			else if ((! bIsMaximized || ! myAccessibility.bAutoHideOnMaximized || bIsHidden) && (! bIsFullScreen || ! myAccessibility.bAutoHideOnFullScreen || bIsHidden) && cairo_dock_quick_hide_is_activated ())
@@ -649,7 +650,7 @@ static void _on_change_window_name (Icon *icon, CairoDock *pDock, gboolean bSear
 			g_free (icon->cName);
 			icon->cName = cName;
 			
-			cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+			cairo_t* pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 			cairo_dock_fill_one_text_buffer (icon, pCairoContext, &myLabels.iconTextDescription);
 			cairo_destroy (pCairoContext);
 			
@@ -987,7 +988,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows);
 
 	//\__________________ On cree les icones de toutes ces applis.
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 	g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
 	
 	CairoDock *pParentDock;

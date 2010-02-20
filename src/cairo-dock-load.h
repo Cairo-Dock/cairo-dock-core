@@ -24,12 +24,15 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-surface-factory.h"
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-load.h A collection of surfaces and textures loader functions.
+*@file cairo-dock-load.h This class defines a simple image loader interface.
+* It also handles the main image buffers of the dock.
 */
 
+/// Definition of a Desktop Background Buffer. It has a reference count so that it can be shared across all the lib.
 struct _CairoDockDesktopBackground {
 	cairo_surface_t *pSurface;
 	GLuint iTexture;
@@ -37,6 +40,7 @@ struct _CairoDockDesktopBackground {
 	gint iRefCount;
 	} ;
 
+/// Definition of an Image Buffer. It provides an unified interface for a cairo/opengl image buffer.
 struct _CairoDockImageBuffer {
 	cairo_surface_t *pSurface;
 	GLuint iTexture;
@@ -63,6 +67,20 @@ CairoDockLabelDescription *cairo_dock_duplicate_label_description (CairoDockLabe
 *@return the path of the file.
 */
 gchar *cairo_dock_generate_file_path (const gchar *cImageFile);
+
+
+void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gchar *cImageFile, int iWidth, int iHeight, CairoDockLoadImageModifier iLoadModifier, double fAlpha);
+
+#define cairo_dock_load_image_buffer(pImage, cImageFile, iWidth, iHeight, iLoadModifier) cairo_dock_load_image_buffer_full (pImage, cImageFile, iWidth, iHeight, iLoadModifier, 1.)
+
+void cairo_dock_load_image_buffer_from_surface (CairoDockImageBuffer *pImage, cairo_surface_t *pSurface, int iWidth, int iHeight);
+
+CairoDockImageBuffer *cairo_dock_create_image_buffer (const gchar *cImageFile, int iWidth, int iHeight, CairoDockLoadImageModifier iLoadModifier);
+
+void cairo_dock_unload_image_buffer (CairoDockImageBuffer *pImage);
+
+void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage);
+
 
 cairo_surface_t *cairo_dock_load_image (cairo_t *pSourceContext, const gchar *cImageFile, double *fImageWidth, double *fImageHeight, double fRotationAngle, double fAlpha, gboolean bReapeatAsPattern);
 
@@ -135,7 +153,7 @@ void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, in
 
 void cairo_dock_load_background_decorations (CairoDock *pDock);
 
-void cairo_dock_load_icons_background_surface (const gchar *cImagePath, cairo_t* pSourceContext, double fMaxScale);
+void cairo_dock_load_icons_background_surface (const gchar *cImagePath, double fMaxScale);
 
 
 CairoDockDesktopBackground *cairo_dock_get_desktop_background (gboolean bWithTextureToo);
@@ -149,11 +167,11 @@ GLuint cairo_dock_get_desktop_bg_texture (CairoDockDesktopBackground *pDesktopBg
 void cairo_dock_reload_desktop_background (void);
 
 
-void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, cairo_t* pSourceContext, double fMaxScale, double fIndicatorRatio);
+void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, double fMaxScale, double fIndicatorRatio);
 
-void cairo_dock_load_active_window_indicator (cairo_t* pSourceContext, const gchar *cImagePath, double fMaxScale, double fCornerRadius, double fLineWidth, double *fActiveColor);
+void cairo_dock_load_active_window_indicator (const gchar *cImagePath, double fMaxScale, double fCornerRadius, double fLineWidth, double *fActiveColor);
 
-void cairo_dock_load_class_indicator (const gchar *cIndicatorImagePath, cairo_t* pSourceContext, double fMaxScale);
+void cairo_dock_load_class_indicator (const gchar *cIndicatorImagePath, double fMaxScale);
 
 
 void cairo_dock_unload_additionnal_textures (void);

@@ -500,7 +500,7 @@ static void _cairo_dock_create_launcher (Icon *icon, CairoDock *pDock, CairoDock
 	}
 	
 	//\___________________ On cree l'icone et on l'insere.
-	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+	cairo_t* pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 	Icon *pNewIcon = cairo_dock_create_icon_from_desktop_file (cNewDesktopFileName, pCairoContext);
 	cairo_destroy (pCairoContext);
 	

@@ -96,7 +96,7 @@ Icon *cairo_dock_create_icon_for_applet (CairoDockMinimalAppletConfig *pMinimalC
 	icon->fHeightFactor = 1.;
 	
 	//\____________ On remplit ses buffers.
-	cairo_t *pSourceContext = cairo_dock_create_context_from_window (pContainer);
+	cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (pContainer);
 	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, icon);
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
 	{

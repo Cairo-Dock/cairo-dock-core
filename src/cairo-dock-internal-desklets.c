@@ -80,7 +80,7 @@ static void reset_config (CairoConfigDesklets *pDesklets)
 static void reload (CairoConfigDesklets *pPrevDesklets, CairoConfigDesklets *pDesklets)
 {
 	CairoDock *pDock = g_pMainDock;
-	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+	cairo_t* pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 	if (cairo_dock_strings_differ (pPrevDesklets->cRotateButtonImage, pDesklets->cRotateButtonImage) ||
 		cairo_dock_strings_differ (pPrevDesklets->cRetachButtonImage, pDesklets->cRetachButtonImage) ||
 		cairo_dock_strings_differ (pPrevDesklets->cDepthRotateButtonImage, pDesklets->cDepthRotateButtonImage))

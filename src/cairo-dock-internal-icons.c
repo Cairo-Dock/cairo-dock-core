@@ -42,7 +42,8 @@ extern CairoDock *g_pMainDock;
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCurrentLaunchersPath;
 extern gboolean g_bUseOpenGL;
-extern double g_fBackgroundImageWidth, g_fBackgroundImageHeight;
+extern CairoDockImageBuffer g_pDockBackgroundBuffer;
+
 
 static const gchar * s_cIconTypeNames[(CAIRO_DOCK_NB_TYPES+1)/2] = {"launchers", "applications", "applets"};
 
@@ -321,7 +322,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 {
 	CairoDock *pDock = g_pMainDock;
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
-	cairo_t* pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pDock));
+	cairo_t* pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 	gboolean bInsertSeparators = FALSE;
 	
 	gboolean bGroupOrderChanged;
@@ -364,7 +365,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		pPrevIcons->fAmplitude != pIcons->fAmplitude)
 	{
 		bIconBackgroundImagesChanged = TRUE;
-		cairo_dock_load_icons_background_surface (pIcons->cBackgroundImagePath, pCairoContext, fMaxScale);
+		cairo_dock_load_icons_background_surface (pIcons->cBackgroundImagePath, fMaxScale);
 	}
 	
 	cairo_dock_create_icon_pbuffer ();
@@ -383,8 +384,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		bThemeChanged ||
 		bIconBackgroundImagesChanged)  // oui on ne fait pas dans la finesse.
 	{
-		g_fBackgroundImageWidth = 0.;  // pour mettre a jour les decorations.
-		g_fBackgroundImageHeight = 0.;
+		g_pDockBackgroundBuffer.iWidth = g_pDockBackgroundBuffer.iHeight = 0.;  // pour mettre a jour les decorations.
 		cairo_dock_reload_buffers_in_all_docks (TRUE);  // TRUE <=> y compris les applets.
 	}
 	
@@ -402,24 +402,21 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] ||
 		pPrevIcons->fAmplitude != pIcons->fAmplitude)
 	{
-		cairo_dock_load_active_window_indicator (pCairoContext,
-			myIndicators.cActiveIndicatorImagePath,
+		cairo_dock_load_active_window_indicator (myIndicators.cActiveIndicatorImagePath,
 			fMaxScale,
 			myIndicators.iActiveCornerRadius,
 			myIndicators.iActiveLineWidth,
 			myIndicators.fActiveColor);
 		if (myTaskBar.bShowAppli && myTaskBar.bGroupAppliByClass)
 			cairo_dock_load_class_indicator (myIndicators.cClassIndicatorImagePath,
-				pCairoContext,
 				fMaxScale);
 		if (myTaskBar.bShowAppli && myTaskBar.bMixLauncherAppli)
 			cairo_dock_load_task_indicator (myIndicators.cIndicatorImagePath,
-				pCairoContext,
 				fMaxScale,
 				myIndicators.fIndicatorRatio);
 	}
 	
-	g_fBackgroundImageWidth = g_fBackgroundImageHeight = 0.;
+	g_pDockBackgroundBuffer.iWidth = g_pDockBackgroundBuffer.iHeight = 0.;
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks.
 	cairo_dock_calculate_dock_icons (pDock);
 	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.

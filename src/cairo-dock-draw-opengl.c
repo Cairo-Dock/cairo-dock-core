@@ -78,16 +78,6 @@ extern CairoDockImageBuffer g_pClassIndicatorBuffer;
 extern CairoDockImageBuffer g_pIconBackgroundImageBuffer;
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;
 
-/**extern double g_fIndicatorWidth, g_fIndicatorHeight;
-extern GLuint g_iIndicatorTexture;
-extern GLuint g_iActiveIndicatorTexture;
-extern GLuint g_iClassIndicatorTexture;
-extern GLuint g_iVisibleZoneTexture;
-extern cairo_surface_t *g_pIndicatorSurface;
-extern cairo_surface_t *g_pActiveIndicatorSurface;
-extern cairo_surface_t *g_pClassIndicatorSurface;
-extern double g_fClassIndicatorWidth, g_fClassIndicatorHeight;
-extern cairo_surface_t *g_pVisibleZoneSurface;*/
 extern gboolean g_bUseOpenGL;
 extern CairoDockGLConfig g_openglConfig;
 
@@ -808,7 +798,7 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImageFile, doubl
 	else
 		cImagePath = cairo_dock_generate_file_path (cImageFile);
 	
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (g_pMainDock));
+	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (g_pMainDock));
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cImagePath,
 		pCairoContext,
 		1.,
@@ -1689,7 +1679,7 @@ CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, i
 	iconv_close (cd);*/
 	
 	int iWidth, iHeight;
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (g_pMainDock));
+	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (g_pMainDock));
 	GLuint iTexture = cairo_dock_create_texture_from_text_simple (cPool, cFontDescription, pCairoContext, &iWidth, &iHeight);
 	cairo_destroy (pCairoContext);
 	g_free (cPool);

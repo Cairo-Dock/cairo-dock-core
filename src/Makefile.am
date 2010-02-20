@@ -207,14 +207,13 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-config.h\
 	cairo-dock-load.h\
 	cairo-dock-icons.h\
-	cairo-dock-applications-manager.h\
-	cairo-dock-application-facility.h\
 	cairo-dock-menu.h\
 	cairo-dock-modules.h\
 	cairo-dock-global-variables.h\
-	cairo-dock-launcher-factory.h\
+	cairo-dock-applications-manager.h\
 	cairo-dock-application-factory.h\
 	cairo-dock-application-facility.h\
+	cairo-dock-launcher-factory.h\
 	cairo-dock-applet-factory.h\
 	cairo-dock-separator-factory.h\
 	cairo-dock-desktop-file-factory.h\

@@ -34,7 +34,7 @@
 
 CairoConfigBackground myBackground;
 extern CairoDock *g_pMainDock;
-extern double g_fBackgroundImageWidth, g_fBackgroundImageHeight;
+extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackground)
 {
@@ -144,7 +144,7 @@ static void reload (CairoConfigBackground *pPrevBackground, CairoConfigBackgroun
 		cairo_dock_load_visible_zone (pDock, pBackground->cVisibleZoneImageFile, myAccessibility.iVisibleZoneWidth, myAccessibility.iVisibleZoneHeight, pBackground->fVisibleZoneAlpha);
 	}
 	
-	g_fBackgroundImageWidth = g_fBackgroundImageHeight = 0.;
+	g_pDockBackgroundBuffer.iWidth = g_pDockBackgroundBuffer.iHeight = 0.;
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks.
 	cairo_dock_calculate_dock_icons (pDock);
 	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.

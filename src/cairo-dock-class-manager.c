@@ -191,7 +191,7 @@ gboolean cairo_dock_set_class_use_xicon (const gchar *cClass, gboolean bUseXIcon
 	CairoDock *pDock;
 	GList *pElement;
 	Icon *pAppliIcon;
-	cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (g_pMainDock));
+	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (g_pMainDock));
 	for (pElement = pClassAppli->pAppliOfClass; pElement != NULL; pElement = pElement->next)
 	{
 		pAppliIcon = pElement->data;
@@ -382,7 +382,7 @@ gboolean cairo_dock_prevent_inhibated_class (Icon *pIcon)
 						else
 							g_free (pInhibatorIcon->cName);
 						pInhibatorIcon->cName = NULL;
-						cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pInhibhatorDock));
+						cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pInhibhatorDock));
 						cairo_dock_set_icon_name (pCairoContext, pIcon->cName, pInhibatorIcon, CAIRO_CONTAINER (pInhibhatorDock));
 						cairo_destroy (pCairoContext);
 					}
@@ -426,7 +426,7 @@ void cairo_dock_deinhibate_class (const gchar *cClass, Icon *pInhibatorIcon)
 	
 	if (pInhibatorIcon == NULL || pInhibatorIcon->Xid != 0)
 	{
-		cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (g_pMainDock));
+		cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (g_pMainDock));
 		const GList *pList = cairo_dock_list_existing_appli_with_class (cClass);
 		Icon *pIcon;
 		gboolean bNeedsRedraw = FALSE;
@@ -714,7 +714,7 @@ void cairo_dock_update_name_on_inhibators (const gchar *cClass, Window Xid, gcha
 							g_free (pInhibatorIcon->cName);
 						pInhibatorIcon->cName = NULL;
 						
-						cairo_t *pCairoContext = cairo_dock_create_context_from_window (CAIRO_CONTAINER (pParentDock));
+						cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pParentDock));
 						cairo_dock_set_icon_name (pCairoContext, (cNewName != NULL ? cNewName : pInhibatorIcon->cInitialName), pInhibatorIcon, CAIRO_CONTAINER (pParentDock));
 						cairo_destroy (pCairoContext);
 					}
