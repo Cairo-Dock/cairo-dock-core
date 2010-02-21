@@ -41,7 +41,7 @@ DBusGProxy *cairo_dock_get_main_proxy (void);
 
 DBusGProxy *cairo_dock_get_main_system_proxy (void);
 
-/**Register a new service on the bus.
+/**Register a new service on the session bus.
 *@param cServiceName name of the service.
 */
 void cairo_dock_register_service_name (const gchar *cServiceName);

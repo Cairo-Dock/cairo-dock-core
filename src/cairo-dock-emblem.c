@@ -294,6 +294,7 @@ static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, CairoDock *pDo
 {
 	if (pCairoContext)
 	{
+		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 		cairo_save (pCairoContext);
 		cairo_scale(pCairoContext,
 			(double) w / g_pBoxBelowBuffer.iWidth,
@@ -302,11 +303,9 @@ static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, CairoDock *pDo
 			g_pBoxBelowBuffer.pSurface,
 			0.,
 			0.);
-		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
 		cairo_paint (pCairoContext);
 		cairo_restore (pCairoContext);
 		
-		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 		cairo_save (pCairoContext);
 		cairo_scale(pCairoContext,
 			.8,
@@ -418,8 +417,8 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		{
 			cairo_save (pCairoContext);
 			cairo_scale(pCairoContext,
-				pIcon->fWidth / g_pIconBackgroundBuffer.iWidth,
-				pIcon->fHeight / g_pIconBackgroundBuffer.iHeight);
+				(double) w / g_pIconBackgroundBuffer.iWidth,
+				(double) h / g_pIconBackgroundBuffer.iHeight);
 			cairo_set_source_surface (pCairoContext,
 				g_pIconBackgroundBuffer.pSurface,
 				0.,

@@ -529,8 +529,8 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	{
 		cairo_t *pCairoIconBGContext = cairo_create (icon->pIconBuffer);
 		cairo_scale(pCairoIconBGContext,
-			icon->fWidth / g_pIconBackgroundBuffer.iWidth,
-			icon->fHeight / g_pIconBackgroundBuffer.iHeight);
+			icon->fWidth / (g_pIconBackgroundBuffer.iWidth / fMaxScale),
+			icon->fHeight / (g_pIconBackgroundBuffer.iHeight / fMaxScale));
 		cairo_set_source_surface (pCairoIconBGContext,
 			g_pIconBackgroundBuffer.pSurface,
 			0.,

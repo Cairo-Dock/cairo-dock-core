@@ -352,7 +352,7 @@ void cairo_dock_move_resize_dock (CairoDock *pDock)
 void cairo_dock_place_root_dock (CairoDock *pDock)
 {
 	//g_print ("%s ()\n", __func__);
-	pDock->fFoldingFactor = (pDock->bAutoHide && pDock->iRefCount == 0 && mySystem.bAnimateOnAutoHide ? 1. : 0.);
+	pDock->fFoldingFactor = (pDock->bAutoHide && pDock->iRefCount == 0 && mySystem.bAnimateOnAutoHide ? .99 : 0.);
 	cairo_dock_move_resize_dock (pDock);
 }
 
@@ -912,36 +912,6 @@ void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pDoc
 }
 
 
-void cairo_dock_scroll_dock_icons (CairoDock *pDock, int iScrollAmount)
-{
-	if (iScrollAmount == 0)  // fin de scroll
-	{
-		cairo_dock_trigger_set_WM_icons_geometry (pDock);
-		return ;
-	}
-	
-	//\_______________ On fait tourner les icones.
-	pDock->iScrollOffset += iScrollAmount;
-	if (pDock->iScrollOffset >= pDock->fFlatDockWidth)
-		pDock->iScrollOffset -= pDock->fFlatDockWidth;
-	if (pDock->iScrollOffset < 0)
-		pDock->iScrollOffset += pDock->fFlatDockWidth;
-	
-	pDock->pRenderer->compute_size (pDock);  // recalcule le pFirstDrawnElement.
-	
-	//\_______________ On recalcule toutes les icones.
-	Icon *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
-	Icon *pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
-	gtk_widget_queue_draw (pDock->container.pWidget);
-	
-	//\_______________ On gere le changement d'icone.
-	if (pPointedIcon != pLastPointedIcon)
-	{
-		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
-	}
-}
-
-
 GList *cairo_dock_get_first_drawn_element_linear (GList *icons)
 {
 	Icon *icon;
@@ -984,8 +954,8 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboole
 	
 	pSubDock->pRenderer->set_subdock_position (pPointedIcon, pParentDock);
 	
-	pSubDock->fFoldingFactor = (mySystem.bAnimateSubDock ? 1. : 0.);
-	///pSubDock->bAtBottom = FALSE;
+	pSubDock->fFoldingFactor = (mySystem.bAnimateSubDock ? .99 : 0.);
+	cairo_dock_notify_on_icon (pPointedIcon, CAIRO_DOCK_UNFOLD_SUBDOCK, pPointedIcon);
 	
 	int iNewWidth = pSubDock->iMaxDockWidth;
 	int iNewHeight = pSubDock->iMaxDockHeight;

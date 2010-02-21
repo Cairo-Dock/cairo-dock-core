@@ -50,6 +50,11 @@ extern CairoDockImageBuffer g_pVisibleZoneBuffer;
 extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 /// indicateur de tache
 extern CairoDockImageBuffer g_pIndicatorBuffer;
+/// boite
+extern CairoDockImageBuffer g_pBoxAboveBuffer;
+extern CairoDockImageBuffer g_pBoxBelowBuffer;
+/// icon bg
+extern CairoDockImageBuffer g_pIconBackgroundBuffer;
 
 
 /// Environnement de bureau detecte.

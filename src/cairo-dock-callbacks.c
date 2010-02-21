@@ -231,10 +231,10 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 
 static gboolean _cairo_dock_show_sub_dock_delayed (CairoDock *pDock)
 {
-	cd_debug ("");
 	s_iSidShowSubDockDemand = 0;
 	s_pDockShowingSubDock = NULL;
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
+	//g_print ("%s (%x, %x)", __func__, icon, icon ? icon->pSubDock:0);
 	if (icon != NULL && icon->pSubDock != NULL)
 		cairo_dock_show_subdock (icon, pDock, FALSE);
 
@@ -302,7 +302,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 				g_source_remove (s_iSidShowSubDockDemand);
 			s_iSidShowSubDockDemand = g_timeout_add (myAccessibility.iShowSubDockDelay, (GSourceFunc) _cairo_dock_show_sub_dock_delayed, pDock);
 			s_pDockShowingSubDock = pDock;
-			//cd_debug ("s_iSidShowSubDockDemand <- %d\n", s_iSidShowSubDockDemand);
+			//g_print ("s_iSidShowSubDockDemand <- %d\n", s_iSidShowSubDockDemand);
 		}
 		else
 			cairo_dock_show_subdock (pPointedIcon, pDock, FALSE);
@@ -625,6 +625,8 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	else
 	{
 		pDock->fFoldingFactor = (mySystem.bAnimateSubDock ? 0.001 : 0.);
+		Icon *pIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+		cairo_dock_notify_on_icon (pIcon, CAIRO_DOCK_UNFOLD_SUBDOCK, pIcon);
 	}
 	cairo_dock_start_shrinking (pDock);  // on commence a faire diminuer la taille des icones.
 }
@@ -670,7 +672,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	if (! cairo_dock_hide_child_docks (pDock))  // on quitte si l'un des sous-docks reste visible (on est entre dedans), pour rester en position "haute".
 		return TRUE;
 	
-	if (s_iSidShowSubDockDemand != 0)  // si l'un des sous-docks etait programme pour se montrer, on annule.
+	if (s_iSidShowSubDockDemand != 0 && pDock->iRefCount == 0)  // si l'un des sous-docks etait programme pour se montrer, on annule.
 	{
 		g_source_remove (s_iSidShowSubDockDemand);
 		s_iSidShowSubDockDemand = 0;
@@ -1363,32 +1365,6 @@ gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, Ca
 }
 gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, CairoDock *pDock)
 {
-	if (pScroll->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
-	{
-		if (myAccessibility.bLockIcons || myAccessibility.bLockAll)
-			return FALSE;
-		
-		int iScrollAmount = 0;
-		Icon *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
-		Icon *pNeighborIcon;
-		if (pScroll->direction == GDK_SCROLL_UP)
-		{
-			pNeighborIcon = cairo_dock_get_previous_icon (pDock->icons, pLastPointedIcon);
-			if (pNeighborIcon == NULL)
-				pNeighborIcon = cairo_dock_get_last_icon (pDock->icons);
-			iScrollAmount = (pNeighborIcon->fWidth + (pLastPointedIcon != NULL ? pLastPointedIcon->fWidth : 0)) / 2;
-		}
-		else if (pScroll->direction == GDK_SCROLL_DOWN)
-		{
-			pNeighborIcon = cairo_dock_get_next_icon (pDock->icons, pLastPointedIcon);
-			if (pNeighborIcon == NULL)
-				pNeighborIcon = cairo_dock_get_first_icon (pDock->icons);
-			iScrollAmount = - (pNeighborIcon->fWidth + (pLastPointedIcon != NULL ? pLastPointedIcon->fWidth : 0)) / 2;
-		}
-		
-		cairo_dock_scroll_dock_icons (pDock, iScrollAmount);
-		return FALSE;
-	}
 	if (pScroll->direction != GDK_SCROLL_UP && pScroll->direction != GDK_SCROLL_DOWN)  // on degage les scrolls horizontaux.
 	{
 		return FALSE;

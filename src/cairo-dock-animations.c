@@ -388,8 +388,12 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 		}
 		
 		pDock->pRenderer->calculate_icons (pDock);
-		pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? 1. : 0.);  // on arme le depliage.
-		
+		pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? .99 : 0.);  // on arme le depliage.
+		if (pDock->iRefCount != 0)
+		{
+			pIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+			cairo_dock_notify_on_icon (pIcon, CAIRO_DOCK_UNFOLD_SUBDOCK, pIcon);
+		}
 		cairo_dock_allow_entrance (pDock);
 		
 		cairo_dock_replace_all_dialogs ();

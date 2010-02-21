@@ -150,8 +150,6 @@ void cairo_dock_stop_marking_icons (CairoDock *pDock);
 void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pParentDock);
 
 
-void cairo_dock_scroll_dock_icons (CairoDock *pDock, int iScrollAmount);
-
 /** Get the first icon to be drawn inside a linear dock, so that if you draw from left to right, the pointed icon will be drawn at last.
 *@param icons a list of icons of a linear dock.
 *@return the element of the list that contains the first icon to draw.

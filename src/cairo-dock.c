@@ -749,7 +749,11 @@ int main (int argc, char** argv)
 	}
 	
 	if (cairo_dock_get_nb_modules () <= 1)  // le module Help est inclus de base.
-		cairo_dock_show_general_message (_("No plug-in were found.\nTo make the most of Cairo-Dock, please consider installing its plug-ins.\nThey provide a lot of interesting functionnalities, animations, etc,\n that you certainly don't want to miss !"), 0);
+	{
+		Icon *pIcon = cairo_dock_get_dialogless_icon ();
+		cairo_dock_ask_question_and_wait (("No plug-in were found.\nPlug-ins provide most of the functionnalities of Cairo-Dock (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nSince there is almost no meaning in running the dock without them, the application will quit now."), pIcon, CAIRO_CONTAINER (g_pMainDock));
+		exit (0);
+	}
 	
 	//\___________________ On affiche le changelog en cas de nouvelle version.
 	gchar *cLastVersionFilePath = g_strdup_printf ("%s/.cairo-dock-last-version", g_cCairoDockDataDir);
