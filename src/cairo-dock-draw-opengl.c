@@ -673,7 +673,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 			icon = ic->data;
 			if (icon->bIsDemandingAttention)
 			{
-				g_print ("%s : %d (%d)\n", icon->cName, icon->bIsDemandingAttention, icon->Xid);
+				//g_print ("%s : %d (%d)\n", icon->cName, icon->bIsDemandingAttention, icon->Xid);
 				icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);
 				glPushMatrix ();
 				cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);

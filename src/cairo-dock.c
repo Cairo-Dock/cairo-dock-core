@@ -142,6 +142,8 @@ CairoDockImageBuffer g_pActiveIndicatorBuffer;
 CairoDockImageBuffer g_pClassIndicatorBuffer;
 CairoDockImageBuffer g_pIconBackgroundBuffer;
 CairoDockImageBuffer g_pVisibleZoneBuffer;
+CairoDockImageBuffer g_pBoxAboveBuffer;
+CairoDockImageBuffer g_pBoxBelowBuffer;
 
 gboolean g_bKeepAbove = FALSE;
 gboolean g_bSkipPager = TRUE;
@@ -259,6 +261,8 @@ int main (int argc, char** argv)
 	memset (&g_pClassIndicatorBuffer, 0, sizeof (CairoDockImageBuffer));
 	memset (&g_pIconBackgroundBuffer, 0, sizeof (CairoDockImageBuffer));
 	memset (&g_pVisibleZoneBuffer, 0, sizeof (CairoDockImageBuffer));
+	memset (&g_pBoxAboveBuffer, 0, sizeof (CairoDockImageBuffer));
+	memset (&g_pBoxBelowBuffer, 0, sizeof (CairoDockImageBuffer));
 	
 	GError *erreur = NULL;
 	

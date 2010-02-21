@@ -1538,7 +1538,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		if (! icon->bIsHidden)
 			_add_entry_in_menu (_("Minimize"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-minimize.png", _cairo_dock_minimize_appli, menu);
 
-		_add_entry_in_menu (_("Close"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-close.png", _cairo_dock_close_appli, menu);
+		_add_entry_in_menu (_("Close (middle-click)"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-close.png", _cairo_dock_close_appli, menu);
 	}
 	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
 	{

@@ -60,17 +60,18 @@ extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
 
 static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, gboolean bForceDemand, Icon *pHiddenIcon)
 {
-	cd_debug ("%s (%s, force:%d)\n", __func__, icon->cName, bForceDemand);
+	cd_debug ("%s (%s, force:%d)", __func__, icon->cName, bForceDemand);
 	if (CAIRO_DOCK_IS_APPLET (icon))  // on considere qu'une applet prenant le controle d'une icone d'appli dispose de bien meilleurs moyens pour interagir avec l'appli que la barre des taches.
 		return ;
-	icon->bIsDemandingAttention = TRUE;
+	if (! pHiddenIcon)
+		icon->bIsDemandingAttention = TRUE;
 	//\____________________ On montre le dialogue.
 	if (myTaskBar.bDemandsAttentionWithDialog)
 	{
 		CairoDialog *pDialog;
 		if (pHiddenIcon == NULL)
 		{
-			pDialog = cairo_dock_show_temporary_dialog_with_icon (icon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration, "same icon");
+			pDialog = cairo_dock_show_temporary_dialog (icon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration);  // mieux vaut ne pas montrer d'icone dans le dialogue que de montrer une icone qui n'a pas de rapport avec l'appli demandant l'attention.
 		}
 		else
 		{
@@ -80,7 +81,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 		}
 		if (pDialog && bForceDemand)
 		{
-			g_print ("force dialog on top\n");
+			cd_debug ("force dialog on top");
 			gtk_window_set_keep_above (GTK_WINDOW (pDialog->container.pWidget), TRUE);
 			Window Xid = GDK_WINDOW_XID (pDialog->container.pWidget->window);
 			cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // pour passer devant les fenetres plein ecran; depend du WM.
@@ -108,7 +109,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 		}
 		else if (bForceDemand)
 		{
-			g_print ("force sub-dock to raise\n");
+			cd_debug ("force sub-dock to raise\n");
 			CairoDock *pParentDock = NULL;
 			Icon *pPointedIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
 			if (pParentDock)
@@ -120,10 +121,10 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 }
 void cairo_dock_appli_demands_attention (Icon *icon)
 {
-	cd_message ("%s (%s / %s , %d)", __func__, icon->cName, icon->cLastAttentionDemand, icon->bIsDemandingAttention);
+	cd_debug ("%s (%s / %s , %d)", __func__, icon->cName, icon->cLastAttentionDemand, icon->bIsDemandingAttention);
 	if (icon->Xid == cairo_dock_get_current_active_window ())  // apparemment ce cas existe, et conduit a ne pas pouvoir stopper l'animation de demande d'attention facilement.
 	{
-		g_print ("cette fenetre a deja le focus, elle ne peut demander l'attention en plus.\n");
+		cd_message ("cette fenetre a deja le focus, elle ne peut demander l'attention en plus.");
 		return ;
 	}
 	if (icon->bIsDemandingAttention &&

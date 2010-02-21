@@ -31,9 +31,8 @@
 #include "cairo-dock-emblem.h"
 
 extern CairoDockImageBuffer g_pIconBackgroundBuffer;
-///extern cairo_surface_t *g_pIconBackgroundImageSurface;
-///extern GLuint g_iIconBackgroundTexture;
-///extern double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
+extern CairoDockImageBuffer g_pBoxAboveBuffer;
+extern CairoDockImageBuffer g_pBoxBelowBuffer;
 extern gboolean g_bUseOpenGL;
 
 static double a = .5;
@@ -290,22 +289,17 @@ static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, CairoDock *p
 	a = a_;
 }
 
-/*extern cairo_surface_t *g_pBoxImageSurfaceBelow;
-extern GLuint g_iBoxImageTextureBelow;
-extern cairo_surface_t *g_pBoxImageSurfaceAbove;
-extern GLuint g_iBoxImageTextureAbove;
-extern int g_iBoxImageWidth, g_iBoxImageHeight;*/
 
 static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, CairoDock *pDock, int w, int h, cairo_t *pCairoContext)
 {
-	/*if (pCairoContext)
+	if (pCairoContext)
 	{
 		cairo_save (pCairoContext);
 		cairo_scale(pCairoContext,
-			(double) w / g_iBoxImageWidth,
-			(double) h / g_iBoxImageHeight);
+			(double) w / g_pBoxBelowBuffer.iWidth,
+			(double) h / g_pBoxBelowBuffer.iHeight);
 		cairo_set_source_surface (pCairoContext,
-			g_pBoxImageSurfaceBelow,
+			g_pBoxBelowBuffer.pSurface,
 			0.,
 			0.);
 		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
@@ -333,14 +327,15 @@ static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, CairoDock *pDo
 				icon->pIconBuffer,
 				.1*w,
 				.1*i*h);
+			cairo_paint (pCairoContext);
 		}
 		cairo_restore (pCairoContext);
 		
 		cairo_scale(pCairoContext,
-			(double) w / g_iBoxImageWidth,
-			(double) h / g_iBoxImageHeight);
+			(double) w / g_pBoxAboveBuffer.iWidth,
+			(double) h / g_pBoxAboveBuffer.iHeight);
 		cairo_set_source_surface (pCairoContext,
-			g_pBoxImageSurfaceAbove,
+			g_pBoxAboveBuffer.pSurface,
 			0.,
 			0.);
 		cairo_paint (pCairoContext);
@@ -348,7 +343,7 @@ static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, CairoDock *pDo
 	else
 	{
 		_cairo_dock_set_blend_source ();
-		_cairo_dock_apply_texture_at_size (g_iBoxImageTextureBelow, w, h);
+		_cairo_dock_apply_texture_at_size (g_pBoxBelowBuffer.iTexture, w, h);
 		
 		_cairo_dock_set_blend_alpha ();
 		int i;
@@ -363,11 +358,11 @@ static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, CairoDock *pDo
 				continue;
 			}
 			glBindTexture (GL_TEXTURE_2D, icon->iIconTexture);
-			_cairo_dock_apply_current_texture_at_size_with_offset (.8*w, .8*h, 0., .1*(i-1)*h);
+			_cairo_dock_apply_current_texture_at_size_with_offset (.8*w, .8*h, 0., .1*(1-i)*h);
 		}
 		
-		_cairo_dock_apply_texture_at_size (g_iBoxImageTextureAbove, w, h);
-	}*/
+		_cairo_dock_apply_texture_at_size (g_pBoxAboveBuffer.iTexture, w, h);
+	}
 }
 
 void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)

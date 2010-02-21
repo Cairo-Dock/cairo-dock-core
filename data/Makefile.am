@@ -61,7 +61,9 @@ essentialdata_DATA = \
 	icon-close.png\
 	icon-restore.png\
 	icon-minimize.png\
-	icon-maximize.png
+	icon-maximize.png\
+	box-front.png\
+	box-back.png
 	
 autostartdatadir = $(datadir)/applications
 autostartdata_DATA = \

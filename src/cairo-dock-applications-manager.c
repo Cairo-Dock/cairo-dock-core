@@ -324,7 +324,7 @@ static void _on_change_active_window (void)
 static gboolean _on_change_current_desktop_viewport (void)
 {
 	CairoDock *pDock = g_pMainDock;
-	g_print ("%s (%d)\n", __func__, cairo_dock_quick_hide_is_activated ());
+	
 	_cairo_dock_retrieve_current_desktop_and_viewport ();
 	
 	// applis du bureau courant seulement.
@@ -339,6 +339,7 @@ static gboolean _on_change_current_desktop_viewport (void)
 	// auto-hide sur appli maximisee/plein-ecran
 	if (myAccessibility.bAutoHideOnFullScreen || myAccessibility.bAutoHideOnMaximized)
 	{
+		//g_print ("%s (%d)\n", __func__, cairo_dock_quick_hide_is_activated ());
 		if (cairo_dock_quick_hide_is_activated ())
 		{
 			if (cairo_dock_search_window_on_our_way (pDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
@@ -349,8 +350,7 @@ static gboolean _on_change_current_desktop_viewport (void)
 		}
 		else
 		{
-			g_print ("pDock->container.bInside:%d\n", pDock->container.bInside);
-			if (cairo_dock_search_window_on_our_way (pDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) != NULL && ! pDock->container.bInside)
+			if (cairo_dock_search_window_on_our_way (pDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) != NULL)
 			{
 				cd_message (" => une fenetre est genante");
 				cairo_dock_activate_temporary_auto_hide ();
@@ -443,7 +443,7 @@ static void _on_change_window_state (Icon *icon)
 			if ( ((bIsMaximized && ! bIsHidden && myAccessibility.bAutoHideOnMaximized) || (bIsFullScreen && ! bIsHidden && myAccessibility.bAutoHideOnFullScreen)) && ! cairo_dock_quick_hide_is_activated ())
 			{
 				cd_message (" => %s devient genante", CAIRO_DOCK_IS_APPLI (icon) ? icon->cName : "une fenetre");
-				if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_hovers_dock (icon, g_pMainDock) && ! g_pMainDock->container.bInside)
+				if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_hovers_dock (icon, g_pMainDock))
 					cairo_dock_activate_temporary_auto_hide ();
 			}
 			else if ((! bIsMaximized || ! myAccessibility.bAutoHideOnMaximized || bIsHidden) && (! bIsFullScreen || ! myAccessibility.bAutoHideOnFullScreen || bIsHidden) && cairo_dock_quick_hide_is_activated ())
@@ -721,7 +721,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 	Icon *icon;
 	if (bCheckMouseIsOutside)
 	{
-		//g_print ("HACK ME\n");
+		//g_print ("bCheckMouseIsOutside\n");
 		bCheckMouseIsOutside = FALSE;
 		if (pDock->container.bIsHorizontal)
 			gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);

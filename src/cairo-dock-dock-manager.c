@@ -508,11 +508,13 @@ static void _cairo_dock_quick_hide_one_root_dock (const gchar *cDockName, CairoD
 		pDock->bAutoHideInitialValue = pDock->bAutoHide;
 		pDock->bAutoHide = TRUE;
 		pDock->bEntranceDisabled = TRUE;
-		cairo_dock_emit_leave_signal (pDock);
+		if (!pDock->container.bInside)  // on ne cache pas le dock si l'on change par exemple de bureau via e switcher ou un clic sur une appli.
+			cairo_dock_emit_leave_signal (pDock);
 	}
 }
 void cairo_dock_activate_temporary_auto_hide (void)
 {
+	//g_print ("%s (%d)\n", __func__, s_bTemporaryAutoHide);
 	if (! s_bTemporaryAutoHide)
 	{
 		s_bTemporaryAutoHide = TRUE;
@@ -550,7 +552,7 @@ static void _cairo_dock_stop_quick_hide_one_root_dock (const gchar *cDockName, C
 }
 void cairo_dock_deactivate_temporary_auto_hide (void)
 {
-	cd_message ("");
+	//g_print ("%s (%d)\n", __func__, s_bTemporaryAutoHide);
 	if (s_bTemporaryAutoHide)
 	{
 		s_bTemporaryAutoHide = FALSE;

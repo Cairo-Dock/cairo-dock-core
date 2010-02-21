@@ -139,6 +139,9 @@ typedef enum {
 	/// notification called when the menu is being built on a container. data : {CairoContainer, GtkMenu}
 	CAIRO_DOCK_BUILD_CONTAINER_MENU,
 	
+	/// notification called when an icon's sub-dock is starting to (un)fold. data : {Icon}
+	CAIRO_DOCK_UNFOLD_SUBDOCK,
+	
 	CAIRO_DOCK_NB_NOTIFICATIONS
 	} CairoDockNotificationType;
 

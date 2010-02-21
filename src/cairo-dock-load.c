@@ -71,6 +71,8 @@ extern CairoDockImageBuffer g_pIndicatorBuffer;
 extern CairoDockImageBuffer g_pActiveIndicatorBuffer;
 extern CairoDockImageBuffer g_pClassIndicatorBuffer;
 extern CairoDockImageBuffer g_pIconBackgroundBuffer;
+extern CairoDockImageBuffer g_pBoxAboveBuffer;
+extern CairoDockImageBuffer g_pBoxBelowBuffer;
 
 extern GLuint g_pGradationTexture[2];
 
@@ -977,41 +979,30 @@ void cairo_dock_load_icons_background_surface (const gchar *cImagePath, double f
 		iSize,
 		iSize,
 		CAIRO_DOCK_FILL_SPACE);
-	
-	/**if (g_pIconBackgroundImageSurface != NULL)
-	{
-		cairo_surface_destroy (g_pIconBackgroundImageSurface);
-		g_pIconBackgroundImageSurface = NULL;
-	}
-	if (g_iIconBackgroundTexture != 0)
-	{
-		_cairo_dock_delete_texture (g_iIconBackgroundTexture);
-		g_iIconBackgroundTexture = 0;
-	}
-	
-	// On creait deux surfaces: une de la taille des launcher et une de la taille des appli.
-	if( cImagePath != NULL )
-	{
-		int iSize = MAX (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI]);
-		if (iSize == 0)
-			iSize = 48;
-		g_iIconBackgroundImageWidth = g_iIconBackgroundImageHeight = 0;
-
-		g_pIconBackgroundImageSurface = cairo_dock_create_surface_from_image (cImagePath,
-			pSourceContext,
-			fMaxScale,
-			iSize,   // largeur avant creation [IN] 
-			iSize, // hauteur avant creation [IN] 
-			CAIRO_DOCK_FILL_SPACE,
-			&g_iIconBackgroundImageWidth, &g_iIconBackgroundImageHeight,  // largeur et hauteur apres creation [OUT]
-			NULL, NULL); // zoom applique [OUT]
-		
-		if (g_pIconBackgroundImageSurface && g_bUseOpenGL)
-		{
-			g_iIconBackgroundTexture = cairo_dock_create_texture_from_surface (g_pIconBackgroundImageSurface);
-		}
-	}*/
 }
+
+
+void cairo_dock_load_box_surface (double fMaxScale)
+{
+	cairo_dock_unload_image_buffer (&g_pBoxAboveBuffer);
+	cairo_dock_unload_image_buffer (&g_pBoxBelowBuffer);
+	
+	int iSize = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
+	if (iSize == 0)
+		iSize = 48;
+	iSize *= fMaxScale;
+	cairo_dock_load_image_buffer (&g_pBoxAboveBuffer,
+		CAIRO_DOCK_SHARE_DATA_DIR"/box-front.png",
+		iSize,
+		iSize,
+		CAIRO_DOCK_FILL_SPACE);
+	cairo_dock_load_image_buffer (&g_pBoxBelowBuffer,
+		CAIRO_DOCK_SHARE_DATA_DIR"/box-back.png",
+		iSize,
+		iSize,
+		CAIRO_DOCK_FILL_SPACE);
+}
+
 
 
   //////////////////
@@ -1270,17 +1261,14 @@ void cairo_dock_load_class_indicator (const gchar *cIndicatorImagePath, double f
 void cairo_dock_unload_additionnal_textures (void)
 {
 	cd_debug ("");
-	/**if (g_iBackgroundTexture != 0)
-	{
-		_cairo_dock_delete_texture (g_iBackgroundTexture);
-		g_iBackgroundTexture = 0;
-	}*/
 	cairo_dock_unload_image_buffer (&g_pDockBackgroundBuffer);
 	cairo_dock_unload_image_buffer (&g_pVisibleZoneBuffer);
 	cairo_dock_unload_image_buffer (&g_pIconBackgroundBuffer);
 	cairo_dock_unload_image_buffer (&g_pIndicatorBuffer);
 	cairo_dock_unload_image_buffer (&g_pActiveIndicatorBuffer);
 	cairo_dock_unload_image_buffer (&g_pClassIndicatorBuffer);
+	cairo_dock_unload_image_buffer (&g_pBoxAboveBuffer);
+	cairo_dock_unload_image_buffer (&g_pBoxBelowBuffer);
 	cairo_dock_unload_desklet_buttons_texture ();
 	cairo_dock_unload_dialog_buttons ();
 	if (g_pGradationTexture[0] != 0)

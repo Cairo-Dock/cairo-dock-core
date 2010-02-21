@@ -155,6 +155,8 @@ void cairo_dock_load_background_decorations (CairoDock *pDock);
 
 void cairo_dock_load_icons_background_surface (const gchar *cImagePath, double fMaxScale);
 
+void cairo_dock_load_box_surface (double fMaxScale);
+
 
 CairoDockDesktopBackground *cairo_dock_get_desktop_background (gboolean bWithTextureToo);
 

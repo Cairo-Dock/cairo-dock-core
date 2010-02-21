@@ -1740,7 +1740,7 @@ int cairo_dock_ask_general_question_and_wait (const gchar *cQuestion)
 
 void cairo_dock_hide_dialog (CairoDialog *pDialog)
 {
-	g_print ("%s ()\n", __func__);
+	cd_debug ("%s ()", __func__);
 	if (GTK_WIDGET_VISIBLE (pDialog->container.pWidget))
 	{
 		pDialog->bAllowMinimize = TRUE;
