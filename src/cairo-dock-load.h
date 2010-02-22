@@ -30,6 +30,8 @@ G_BEGIN_DECLS
 /**
 *@file cairo-dock-load.h This class defines a simple image loader interface.
 * It also handles the main image buffers of the dock.
+* Use \ref cairo_dock_create_image_buffer to create an immage buffer from a file, or \ref cairo_dock_load_image_buffer to load an image into an existing immage buffer.
+* Use \ref cairo_dock_free_image_buffer to destroy it or \ref cairo_dock_unload_image_buffer to unload and reset it to 0.
 */
 
 /// Definition of a Desktop Background Buffer. It has a reference count so that it can be shared across all the lib.
@@ -81,11 +83,7 @@ void cairo_dock_unload_image_buffer (CairoDockImageBuffer *pImage);
 
 void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage);
 
-
-cairo_surface_t *cairo_dock_load_image (cairo_t *pSourceContext, const gchar *cImageFile, double *fImageWidth, double *fImageHeight, double fRotationAngle, double fAlpha, gboolean bReapeatAsPattern);
-
-/*
-*Cree la surface de reflection d'une icone (pour cairo).
+/* Cree la surface de reflection d'une icone (pour cairo).
 *@param pSourceContext le contexte de dessin lie a la surface de l'icone; n'est pas altere par la fonction.
 *@param pIcon l'icone.
 *@param pContainer le container de l'icone.

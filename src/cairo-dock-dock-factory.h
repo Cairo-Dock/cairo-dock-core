@@ -162,7 +162,7 @@ struct _CairoDock {
 	gboolean bFadeInOut;
 	/// state of the input shape.
 	/// counter for auto-hide.
-	double fHideOffset;
+	gdouble fHideOffset;
 	
 	/// Whether the dock is in a popped up state or not.
 	gboolean bPopped;

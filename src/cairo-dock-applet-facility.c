@@ -68,8 +68,8 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 
 		cairo_save (pIconContext);
 		cairo_scale(pIconContext,
-			pIcon->fWidth / g_pIconBackgroundBuffer.iWidth,
-			pIcon->fHeight / g_pIconBackgroundBuffer.iHeight);
+			pIcon->fWidth / (g_pIconBackgroundBuffer.iWidth / fScale),
+			pIcon->fHeight / (g_pIconBackgroundBuffer.iHeight / fScale));
 		cairo_set_source_surface (pIconContext,
 			g_pIconBackgroundBuffer.pSurface,
 			0.,

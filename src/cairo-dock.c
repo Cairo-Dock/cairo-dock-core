@@ -122,11 +122,12 @@
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
 GdkWindowTypeHint g_iWmHint = GDK_WINDOW_TYPE_HINT_DOCK;  // hint pour la fenetre du dock principal.
 
+gchar *g_cCairoDockDataDir = NULL;  // le repertoire racine contenant tout.
 gchar *g_cCurrentThemePath = NULL;  // le chemin vers le repertoire du theme courant.
-gchar *g_cCurrentLaunchersPath = NULL;  // le chemin vers le repertoire des lanceurs/icones du theme courant.
+gchar *g_cCurrentLaunchersPath = NULL;  // le chemin vers le repertoire des lanceurs du theme courant.
+gchar *g_cCurrentIconsPath = NULL;  // le chemin vers le repertoire des icones du theme courant.
 gchar *g_cConfFile = NULL;  // le chemin du fichier de conf.
-gchar *g_cCairoDockDataDir = NULL;  // le repertoire ou on va chercher la config.
-int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
+int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
 
 int g_iScreenWidth[2];  // dimensions de l'ecran physique sur lequel reside le dock
 int g_iScreenHeight[2];
@@ -497,20 +498,19 @@ int main (int argc, char** argv)
 	{
 		_create_dir_or_die (g_cCurrentLaunchersPath);
 	}
-	gchar *cLocalIconsPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
-	if (! g_file_test (cLocalIconsPath, G_FILE_TEST_IS_DIR))
+	g_cCurrentIconsPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+	if (! g_file_test (g_cCurrentIconsPath, G_FILE_TEST_IS_DIR))
 	{
-		_create_dir_or_die (cLocalIconsPath);
+		_create_dir_or_die (g_cCurrentIconsPath);
 		if (! bFirstLaunch)
 		{
 			cd_warning ("Cairo-Dock's local icons are now located in the 'icons' folder, they will be moved there");
-			gchar *cCommand = g_strdup_printf ("cd \"%s\" && mv *.svg *.png *.xpm *.jpg *.bmp *.gif \"%s\" > /dev/null", g_cCurrentLaunchersPath, cLocalIconsPath);
+			gchar *cCommand = g_strdup_printf ("cd \"%s\" && mv *.svg *.png *.xpm *.jpg *.bmp *.gif \"%s\" > /dev/null", g_cCurrentLaunchersPath, g_cCurrentIconsPath);
 			cd_message (cCommand);
 			r = system (cCommand);
 			g_free (cCommand);
 		}
 	}
-	g_free (cLocalIconsPath);
 	
 	//\___________________ On initialise les numeros de version.
 	cairo_dock_get_version_from_string (CAIRO_DOCK_VERSION, &g_iMajorVersion, &g_iMinorVersion, &g_iMicroVersion);
@@ -542,9 +542,10 @@ int main (int argc, char** argv)
 	cairo_dock_register_data_renderer_entry_point ("graph", (CairoDataRendererNewFunc) cairo_dock_new_graph);
 	
 	//\___________________ On initialise le support d'OpenGL.
-	if (! g_bForceCairo && ! g_bUseGlitz)
-		g_bUseOpenGL = cairo_dock_initialize_opengl_backend (bToggleIndirectRendering, bForceOpenGL);
-	if (g_bUseOpenGL && ! g_openglConfig.bHasBeenForced)  /// on pourrait peut-etre tester la config et ne demander confirmation que si des elements manquent...
+	gboolean bOpenGLok = FALSE;
+	if (bForceOpenGL || (! g_bForceCairo && ! g_bUseGlitz))
+		bOpenGLok = cairo_dock_initialize_opengl_backend (bToggleIndirectRendering, bForceOpenGL);
+	if (bOpenGLok && ! bForceOpenGL && ! cairo_dock_opengl_is_safe ())  // opengl disponible sans l'avoir force mais pas safe => on demande confirmation.
 	{
 		GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Use OpenGL in Cairo-Dock ?"),
 			NULL,
@@ -557,13 +558,12 @@ int main (int argc, char** argv)
 		GtkWidget *label = gtk_label_new (_("OpenGL allows you to use the hardware acceleration, reducing the CPU load to the minimum.\nIt also allows some pretty visual effects similar to Compiz.\nHowever, some cards and/or their drivers don't fully support it, which may prevent the dock from running correctly.\nDo you want to activate OpenGL ?\n (To not show this dialog, launch the dock from the Application menu,\n  or with the -o option to force OpenGL and -c to force cairo.)"));
 		gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), label);
 		gtk_widget_show_all (dialog);
-
+		
 		gint iAnswer = gtk_dialog_run (GTK_DIALOG (dialog));  // lance sa propre main loop, c'est pourquoi on peut le faire avant le gtk_main().
 		gtk_widget_destroy (dialog);
 		if (iAnswer == GTK_RESPONSE_NO)
 		{
-			g_bUseOpenGL = FALSE;
-			g_openglConfig.pGlConfig = NULL;
+			cairo_dock_deactivate_opengl ();
 		}
 	}
 	g_print ("\n ============================================================================ \n\tCairo-Dock version: %s\n\tCompiled date:  %s %s\n\tRunning with OpenGL: %d\n ============================================================================\n\n",
@@ -664,17 +664,14 @@ int main (int argc, char** argv)
 			cairo_dock_set_status_message_printf (pWindow, "Something went wrong with the applet '%s'...", cExcludeModule);
 		gtk_window_set_modal (GTK_WINDOW (pWindow), TRUE);
 		GMainLoop *pBlockingLoop = g_main_loop_new (NULL, FALSE);
-		///g_object_set_data (G_OBJECT (pWindow), "loop", pBlockingLoop);
 		g_signal_connect (G_OBJECT (pWindow),
 			"delete-event",
 			G_CALLBACK (on_delete_maintenance_gui),
 			pBlockingLoop);
 
-		g_print ("debut de boucle bloquante ...\n");
-		///GDK_THREADS_LEAVE ();
-		g_main_loop_run (pBlockingLoop);
-		///GDK_THREADS_ENTER ();
-		g_print ("fin de boucle bloquante\n");
+		g_print ("showing the maintenance mode ...\n");
+		g_main_loop_run (pBlockingLoop);  // pas besoin de GDK_THREADS_LEAVE/ENTER vu qu'on est pas encore dans la main loop de GTK. En fait cette boucle va jouer le role de la main loop GTK.
+		g_print ("end of the maintenance mode.\n");
 		
 		g_main_loop_unref (pBlockingLoop);
 	}

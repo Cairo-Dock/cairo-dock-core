@@ -63,6 +63,11 @@ struct _CairoDockGLConfig {
 */
 gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering, gboolean bForceOpenGL);
 
+#define cairo_dock_opengl_is_safe(...) (g_openglConfig.pGlConfig != NULL && ! g_openglConfig.bIndirectRendering && g_openglConfig.bAlphaAvailable && g_openglConfig.bStencilBufferAvailable && g_openglConfig.bPBufferAvailable && g_openglConfig.bNonPowerOfTwoAvailable)
+
+#define cairo_dock_deactivate_opengl(...) do {\
+	g_bUseOpenGL = FALSE;\
+	g_openglConfig.pGlConfig = NULL; } while (0)
 
   ///////////////////////
  // RENDER TO TEXTURE //

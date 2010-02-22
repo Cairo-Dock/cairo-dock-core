@@ -865,6 +865,7 @@ static CairoDialog *_cairo_dock_create_new_dialog (gboolean bInteractive)
 	
 	gtk_widget_add_events (pWindow, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 	gtk_window_resize (GTK_WINDOW (pWindow), CAIRO_DIALOG_MIN_SIZE, CAIRO_DIALOG_MIN_SIZE);
+	gtk_window_set_keep_above (GTK_WINDOW (pWindow), TRUE);
 	gtk_widget_show_all (pWindow);
 	
 	return pDialog;

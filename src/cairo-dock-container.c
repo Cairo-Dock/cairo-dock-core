@@ -52,7 +52,6 @@ extern gboolean g_bSticky;
 
 extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
-extern CairoDockGLConfig g_openglConfig;
 
 
 static gboolean _cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, gpointer data)

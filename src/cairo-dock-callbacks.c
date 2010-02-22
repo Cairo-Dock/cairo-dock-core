@@ -566,7 +566,7 @@ gboolean cairo_dock_emit_enter_signal (CairoDock *pDock)
 
 void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 {
-	//g_print ("%s (%d)\n", __func__, pDock->iRefCount);
+	g_print ("%s (%d, %d)\n", __func__, pDock->iRefCount, pDock->bMenuVisible);
 	pDock->iAvoidingMouseIconType = -1;
 	pDock->fAvoidingMouseMargin = 0;
 	pDock->container.bInside = FALSE;
@@ -626,13 +626,14 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	{
 		pDock->fFoldingFactor = (mySystem.bAnimateSubDock ? 0.001 : 0.);
 		Icon *pIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+		g_print ("'%s' se replie\n", pIcon?pIcon->cName:"none");
 		cairo_dock_notify_on_icon (pIcon, CAIRO_DOCK_UNFOLD_SUBDOCK, pIcon);
 	}
 	cairo_dock_start_shrinking (pDock);  // on commence a faire diminuer la taille des icones.
 }
 gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
+	g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
 	//\_______________ On tire le dock => on ignore le signal.
 	if (pEvent != NULL && (pEvent->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && (pEvent->state & GDK_BUTTON1_MASK))
 	{
@@ -640,7 +641,10 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	
 	if (pEvent && !_xy_is_really_outside (pEvent->x, pEvent->y, pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
+	{
+		g_print ("not really outside (%d;%d)\n", (int)pEvent->x, (int)pEvent->y);
 		return FALSE;
+	}
 	
 	//\_______________ On retarde la sortie.
 	if (pDock->iSidLeaveDemand == 0 && pEvent != NULL)  // pas encore de demande de sortie et sortie naturelle.
@@ -700,7 +704,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 
 gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex);
+	g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex);
 	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
 	if (! cairo_dock_entrance_is_allowed (pDock))
 	{
@@ -719,6 +723,17 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		g_source_remove (s_iSidShowSubDockDemand);
 		s_iSidShowSubDockDemand = 0;
 	}
+	
+	// input shape desactivee, le dock devient actif.
+	if ((pDock->pShapeBitmap || pDock->pHiddenShapeBitmap) && pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
+	{
+		//g_print ("+++ input shape active on enter\n");
+		gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+			NULL,
+			0,
+			0);
+	}
+	pDock->iInputState = CAIRO_DOCK_INPUT_ACTIVE;
 	
 	// si on etait deja dedans, ou qu'on etait cense l'etre, on relance juste le grossissement.
 	if (pDock->container.bInside || pDock->bIsHiding)
@@ -770,17 +785,6 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			}
 		}
 	}
-	
-	// input shape desactivee, le dock devient actif.
-	//g_print ("enter (%d) \n", pDock->iInputState);
-	if ((pDock->pShapeBitmap || pDock->pHiddenShapeBitmap) && pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
-	{
-		gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-			NULL,
-			0,
-			0);
-	}
-	pDock->iInputState = CAIRO_DOCK_INPUT_ACTIVE;
 	
 	// on repasse au premier plan.
 	if (myAccessibility.bPopUp && pDock->iRefCount == 0)
@@ -1419,6 +1423,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		// les dimensions ont change, il faut remettre l'input shape a la bonne place.
 		if (pDock->pHiddenShapeBitmap != NULL && pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
 		{
+			//g_print ("+++ input shape hidden on configure\n");
 			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 				NULL,
 				0,
@@ -1430,6 +1435,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		}
 		else if (pDock->pShapeBitmap != NULL && pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
 		{
+			//g_print ("+++ input shape at rest on configure\n");
 			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 				NULL,
 				0,

@@ -28,7 +28,7 @@ export CAIRO_DOCK_GEN_TRANSLATION=${CAIRO_DOCK_DIR}/cairo-dock/cairo-dock-core/p
 ###
 ### update cairo-dock.po
 ###
-echo "extracing the messages of the dock ..."
+echo "extracting the messages of the dock ..."
 cd $CAIRO_DOCK_DIR/cairo-dock/cairo-dock-core
 if test -x $CAIRO_DOCK_EXTRACT_MESSAGE; then
 	rm -f data/messages

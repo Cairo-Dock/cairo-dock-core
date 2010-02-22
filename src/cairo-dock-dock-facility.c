@@ -425,6 +425,7 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	{
 		if (pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
 		{
+			//g_print ("+++ input shape active on update input shape\n");
 			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 				NULL,
 				0,

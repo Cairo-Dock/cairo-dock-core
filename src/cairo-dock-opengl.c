@@ -126,6 +126,7 @@ static inline XVisualInfo *_get_visual_from_fbconfigs (GLXFBConfig *pFBConfigs, 
 gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering, gboolean bForceOpenGL)  // taken from a MacSlow's exemple.
 {
 	memset (&g_openglConfig, 0, sizeof (CairoDockGLConfig));
+	g_bUseOpenGL = FALSE;
 	g_openglConfig.bHasBeenForced = bForceOpenGL;
 	gboolean bStencilBufferAvailable, bAlphaAvailable;
 	Display *XDisplay = gdk_x11_get_default_xdisplay ();
@@ -259,6 +260,8 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering
 		g_openglConfig.pGlConfig = gdk_x11_gl_config_new_from_visualid (pVisInfo->visualid);
 		XFree (pVisInfo);
 	}
+	g_return_val_if_fail (g_openglConfig.pGlConfig != NULL, FALSE);
+	g_bUseOpenGL = TRUE;
 	
 	//\_________________ On regarde si le rendu doit etre indirect ou pas.
 	g_openglConfig.bIndirectRendering = bToggleIndirectRendering;

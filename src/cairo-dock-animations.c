@@ -304,7 +304,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 					//g_print ("taille normale (%x; %d)\n", pDock->pShapeBitmap , pDock->iInputState);
 					if (pDock->pShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_AT_REST)
 					{
-						//g_print (" input shape\n");
+						//g_print ("+++ input shape at rest on end shrinking\n");
 						gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 							NULL,
 							0,
@@ -321,6 +321,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				{
 					if (pDock->pHiddenShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN)
 					{
+						//g_print ("+++ input shape hidden on end shrinking\n");
 						gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 							NULL,
 							0,
@@ -336,7 +337,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				//\__________________ On se cache si sous-dock.
 				if (pDock->iRefCount > 0)
 				{
-					//g_print ("on cache ce sous-dock en sortant par lui\n");
+					g_print ("on cache ce sous-dock en sortant par lui\n");
 					gtk_widget_hide (pDock->container.pWidget);
 					cairo_dock_hide_parent_dock (pDock);
 				}
@@ -389,11 +390,6 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 		
 		pDock->pRenderer->calculate_icons (pDock);
 		pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? .99 : 0.);  // on arme le depliage.
-		if (pDock->iRefCount != 0)
-		{
-			pIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-			cairo_dock_notify_on_icon (pIcon, CAIRO_DOCK_UNFOLD_SUBDOCK, pIcon);
-		}
 		cairo_dock_allow_entrance (pDock);
 		
 		cairo_dock_replace_all_dialogs ();
@@ -726,6 +722,7 @@ void cairo_dock_start_hiding (CairoDock *pDock)
 		
 		if (pDock->pHiddenShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN)
 		{
+			//g_print ("+++ input shape hidden on start hiding\n");
 			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 				pDock->pHiddenShapeBitmap,
 				0,
@@ -745,6 +742,7 @@ void cairo_dock_start_showing (CairoDock *pDock)
 		
 		if (pDock->pShapeBitmap && pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
 		{
+			//g_print ("+++ input shape at rest on start showing\n");
 			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 				NULL,
 				0,
