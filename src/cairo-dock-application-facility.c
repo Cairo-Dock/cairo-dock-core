@@ -71,11 +71,11 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 		CairoDialog *pDialog;
 		if (pHiddenIcon == NULL)
 		{
-			pDialog = cairo_dock_show_temporary_dialog (icon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration);  // mieux vaut ne pas montrer d'icone dans le dialogue que de montrer une icone qui n'a pas de rapport avec l'appli demandant l'attention.
+			pDialog = cairo_dock_show_temporary_dialog_with_icon (icon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration, "same icon"); // avec l'icône associée
 		}
 		else
 		{
-			pDialog = cairo_dock_show_temporary_dialog (pHiddenIcon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration);
+			pDialog = cairo_dock_show_temporary_dialog (pHiddenIcon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration); // mieux vaut montrer d'icone dans le dialogue que de montrer une icone qui n'a pas de rapport avec l'appli demandant l'attention.
 			g_return_if_fail (pDialog != NULL);
 			cairo_dock_set_new_dialog_icon_surface (pDialog, pHiddenIcon->pIconBuffer, pDialog->iIconSize);
 		}

@@ -66,6 +66,7 @@
 #define CAIRO_DOCK_FILE_HOST_URL "https://launchpad.net/cairo-dock"  // https://developer.berlios.de/project/showfiles.php?group_id=8724
 #define CAIRO_DOCK_SITE_URL "http://glx-dock.org"  // http://cairo-dock.vef.fr
 #define CAIRO_DOCK_FORUM_URL "http://forum.glx-dock.org"  // http://cairo-dock.vef.fr/bg_forumlist.php
+#define CAIRO_DOCK_PLUGINS_EXTRAS_URL "http://www.glx-dock.org/mc_album.php?a=4"
 
 extern CairoDock *g_pMainDock;
 
@@ -202,6 +203,10 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 	
 	pLink = gtk_link_button_new_with_label (CAIRO_DOCK_FILE_HOST_URL, _("Development's site"));
 	gtk_widget_set_tooltip_text (pLink, _("Find out the latest version of Cairo-Dock here !."));
+	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
+	
+	pLink = gtk_link_button_new_with_label (CAIRO_DOCK_PLUGINS_EXTRAS_URL, _("Cairo-Dock-Plug-ins-Extras"));
+	gtk_widget_set_tooltip_text (pLink, _("External Applets"));
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
 	/*gchar *cImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_LOGO);
