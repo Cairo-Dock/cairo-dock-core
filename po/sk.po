@@ -7,13 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
-"PO-Revision-Date: 2010-02-09 05:16+0000\n"
+"POT-Creation-Date: 2010-02-15 23:36+0000\n"
+"PO-Revision-Date: 2010-02-17 07:37+0000\n"
 "Last-Translator: milboy <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-02-10 04:40+0000\n"
+"X-Launchpad-Export-Date: 2010-02-18 04:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-applet-facility.h:259
@@ -45,7 +46,7 @@ msgstr "Príručka appletov"
 msgid "Do you want to mount this point ?"
 msgstr "Chcete pripojiť tento bod ?"
 
-#: ../src/cairo-dock-desktop-file-factory.c:219
+#: ../src/cairo-dock-desktop-file-factory.c:222
 msgid "Do you want to monitor the content of the directory ?"
 msgstr "Chcete sledovať obsah adresára ?"
 
@@ -150,7 +151,8 @@ msgid "category"
 msgstr "kategória"
 
 #: ../src/cairo-dock-gui-factory.c:2172
-msgid "Click on an applet in order to have a preview and a description of it."
+msgid ""
+"Click on an applet in order to have a preview and a description of it."
 msgstr "Kliknite na applet, a získate náhľad a jeho popis."
 
 #: ../src/cairo-dock-gui-factory.c:2530
@@ -237,7 +239,7 @@ msgstr "Vyhľadať v opise"
 msgid "Activate this module"
 msgstr "Aktivovať tento modul"
 
-#: ../src/cairo-dock-gui-main.c:1804 ../src/cairo-dock.c:658
+#: ../src/cairo-dock-gui-main.c:1804 ../src/cairo-dock.c:663
 msgid "< Maintenance mode >"
 msgstr "< Režim údržby >"
 
@@ -287,15 +289,15 @@ msgstr ""
 ", môžete prepnúť do rozšíreného režimu.\n"
 " Kedykoľvek môžete prepnúť z režimu na iný."
 
-#: ../src/cairo-dock-gui-manager.c:663
+#: ../src/cairo-dock-gui-manager.c:653
 msgid "Simple Mode"
 msgstr "Jednoduchý režim"
 
-#: ../src/cairo-dock-gui-manager.c:663
+#: ../src/cairo-dock-gui-manager.c:653
 msgid "Advanced Mode"
 msgstr "Rozšírený režim"
 
-#: ../src/cairo-dock-gui-manager.c:665
+#: ../src/cairo-dock-gui-manager.c:655
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customize your current theme."
@@ -303,13 +305,13 @@ msgstr ""
 "Pokročilý režim vám umožňuje vyladiť každý parameter na paneli. Je to mocný "
 "nástroj na prispôsobenie aktuálnej témy."
 
-#: ../src/cairo-dock-gui-simple.c:186 ../src/cairo-dock-themes-manager.c:1348
+#: ../src/cairo-dock-gui-simple.c:186 ../src/cairo-dock-themes-manager.c:1349
 #, c-format
 msgid "Importing theme %s ..."
 msgstr "Importujem tému %s ..."
 
 #: ../src/cairo-dock-internal-accessibility.c:263
-#: ../src/cairo-dock-menu.c:1619
+#: ../src/cairo-dock-menu.c:1614
 msgid "Visibility"
 msgstr "Viditeľnosť"
 
@@ -365,16 +367,16 @@ msgstr "Skrytý Dock"
 msgid "Define the appearance of the dock when it's hidden."
 msgstr "Definovať vzhľad doku, keď je skrytý."
 
-#: ../src/cairo-dock-internal-icons.c:430
+#: ../src/cairo-dock-internal-icons.c:433
 msgid "It provides many animations to your icons."
 msgstr "Prináša množstvo animácií pre vaše ikony."
 
-#: ../src/cairo-dock-internal-icons.c:432 ../data/messages:73
+#: ../src/cairo-dock-internal-icons.c:435 ../data/messages:73
 #: ../data/messages:559 ../data/messages:881
 msgid "Icons"
 msgstr "Ikony"
 
-#: ../src/cairo-dock-internal-icons.c:434
+#: ../src/cairo-dock-internal-icons.c:437
 msgid ""
 "All about icons :\n"
 " size, reflection, icon theme, ..."
@@ -382,11 +384,11 @@ msgstr ""
 "Všetko o ikonách :\n"
 " veľkosť, odrazy, vzhľady ikôn, ..."
 
-#: ../src/cairo-dock-internal-indicators.c:158 ../data/messages:783
+#: ../src/cairo-dock-internal-indicators.c:159 ../data/messages:783
 msgid "Indicators"
 msgstr "Indikátory"
 
-#: ../src/cairo-dock-internal-indicators.c:160
+#: ../src/cairo-dock-internal-indicators.c:161
 msgid "Indicators are extra indications on your icons."
 msgstr "Ukazovatele sú ďaľšie údaje o vašich ikonách."
 
@@ -415,11 +417,11 @@ msgstr "Systém"
 msgid "All the parameters you will never want to tweak."
 msgstr "Všetky parametre už nikdy nebudete chcieť vyladiť."
 
-#: ../src/cairo-dock-internal-taskbar.c:189 ../data/messages:227
+#: ../src/cairo-dock-internal-taskbar.c:191 ../data/messages:227
 msgid "TaskBar"
 msgstr "Panel s úlohami"
 
-#: ../src/cairo-dock-internal-taskbar.c:191
+#: ../src/cairo-dock-internal-taskbar.c:193
 msgid "Display and interact with the currently open windows."
 msgstr "Zobraziť a pracovať s aktuálne otvorenými oknami."
 
@@ -498,7 +500,8 @@ msgid "Manage themes"
 msgstr "Spravovať témy"
 
 #: ../src/cairo-dock-menu.c:353
-msgid "Choose amongst many themes on the server, and save your current theme."
+msgid ""
+"Choose amongst many themes on the server, and save your current theme."
 msgstr "Vyberte si z mnohých tém na serveri, a uložte svoju aktuálnu tému."
 
 #: ../src/cairo-dock-menu.c:358
@@ -652,201 +655,193 @@ msgstr "Premiestniť všetko na plochu %d"
 msgid "Move to face %d"
 msgstr "Premiestniť na plochu %d"
 
-#: ../src/cairo-dock-menu.c:1393 ../src/cairo-dock-menu.c:1456
-msgid "Add"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1397 ../src/cairo-dock-menu.c:1460
+#: ../src/cairo-dock-menu.c:1393 ../src/cairo-dock-menu.c:1455
 msgid "Add a sub-dock"
 msgstr "Pridať do sub-docku"
 
-#: ../src/cairo-dock-menu.c:1399 ../src/cairo-dock-menu.c:1462
+#: ../src/cairo-dock-menu.c:1397 ../src/cairo-dock-menu.c:1457
 msgid "Add a separator"
 msgstr "Pridať oddeľovač"
 
-#: ../src/cairo-dock-menu.c:1401 ../src/cairo-dock-menu.c:1464
+#: ../src/cairo-dock-menu.c:1400 ../src/cairo-dock-menu.c:1459
 msgid "Add a custom launcher"
 msgstr "Pridať vlastný spúšťač"
 
-#: ../src/cairo-dock-menu.c:1402 ../src/cairo-dock-menu.c:1465
+#: ../src/cairo-dock-menu.c:1401 ../src/cairo-dock-menu.c:1460
 msgid ""
 "Usually you would drag a launcher from the menu and drop it into the dock."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1421
+#: ../src/cairo-dock-menu.c:1420
 msgid "Unmount"
 msgstr "Odpojiť"
 
-#: ../src/cairo-dock-menu.c:1421
+#: ../src/cairo-dock-menu.c:1420
 msgid "Mount"
 msgstr "Pripojiť"
 
-#: ../src/cairo-dock-menu.c:1427
+#: ../src/cairo-dock-menu.c:1426
 msgid "Eject"
 msgstr "Vysunúť"
 
-#: ../src/cairo-dock-menu.c:1434
+#: ../src/cairo-dock-menu.c:1433
 msgid "Delete this file"
 msgstr "Odstrániť tento súbor"
 
-#: ../src/cairo-dock-menu.c:1438
+#: ../src/cairo-dock-menu.c:1437
 msgid "Rename this file"
 msgstr "Premenovať tento súbor"
 
-#: ../src/cairo-dock-menu.c:1442
+#: ../src/cairo-dock-menu.c:1441
 msgid "Properties"
 msgstr "Vlastnosti"
 
-#: ../src/cairo-dock-menu.c:1472
+#: ../src/cairo-dock-menu.c:1467
 msgid "Remove this separator"
 msgstr "Odstrániť tento oddeľovač"
 
-#: ../src/cairo-dock-menu.c:1472
+#: ../src/cairo-dock-menu.c:1467
 msgid "Remove this launcher"
 msgstr "Odstrániť tento spúšťač"
 
-#: ../src/cairo-dock-menu.c:1473
+#: ../src/cairo-dock-menu.c:1468
 msgid ""
 "You can remove a launcher by dragging it with the mouse out of the dock."
 msgstr "Môžete odstrániť spúšťač chytením myšou a preneste ho mimo dock."
 
-#: ../src/cairo-dock-menu.c:1475
+#: ../src/cairo-dock-menu.c:1470
 msgid "Modify this separator"
 msgstr "Upraviť tento oddeľovač"
 
-#: ../src/cairo-dock-menu.c:1475
+#: ../src/cairo-dock-menu.c:1470
 msgid "Modify this launcher"
 msgstr "Upraviť tento spúšťač"
 
-#: ../src/cairo-dock-menu.c:1477 ../src/cairo-dock-menu.c:1602
+#: ../src/cairo-dock-menu.c:1472 ../src/cairo-dock-menu.c:1597
 msgid "Move to another dock"
 msgstr "Premiestniť na iný dock"
 
-#: ../src/cairo-dock-menu.c:1481 ../src/cairo-dock-menu.c:1606
+#: ../src/cairo-dock-menu.c:1476 ../src/cairo-dock-menu.c:1601
 msgid "A new main dock"
 msgstr "Nový hlavný panel"
 
-#: ../src/cairo-dock-menu.c:1494 ../src/cairo-dock-menu.c:1549
+#: ../src/cairo-dock-menu.c:1489 ../src/cairo-dock-menu.c:1544
 msgid "Other actions"
 msgstr "Ďaľšie akcie"
 
-#: ../src/cairo-dock-menu.c:1499
+#: ../src/cairo-dock-menu.c:1494
 msgid "Move to this desktop"
 msgstr "Premiestniť na túto plochu"
 
-#: ../src/cairo-dock-menu.c:1513
+#: ../src/cairo-dock-menu.c:1508
 msgid "Not Fullscreen"
 msgstr "Nie na celú obrazovku"
 
-#: ../src/cairo-dock-menu.c:1513
+#: ../src/cairo-dock-menu.c:1508
 msgid "Fullscreen"
 msgstr "Celá obrazovka"
 
-#: ../src/cairo-dock-menu.c:1517
+#: ../src/cairo-dock-menu.c:1512
 msgid "Don't keep above"
 msgstr "Neponechať v popredí"
 
-#: ../src/cairo-dock-menu.c:1517
+#: ../src/cairo-dock-menu.c:1512
 msgid "Keep above"
 msgstr "Ponechať v popredí"
 
-#: ../src/cairo-dock-menu.c:1521
+#: ../src/cairo-dock-menu.c:1516
 msgid "Kill"
 msgstr "Násilne ukončiť"
 
-#: ../src/cairo-dock-menu.c:1526
-msgid "Launch a new (Shift+clic)"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1531
-msgid "Make it a launcher"
-msgstr "Vytvoriť spúšťač"
-
-#: ../src/cairo-dock-menu.c:1534
-msgid "Show"
-msgstr "Zobraziť"
-
-#: ../src/cairo-dock-menu.c:1536
-msgid "Unmaximize"
-msgstr "Nemaximalizovať"
-
-#: ../src/cairo-dock-menu.c:1536
-msgid "Maximize"
-msgstr "Maximalizovať"
-
-#: ../src/cairo-dock-menu.c:1539
-msgid "Minimize"
-msgstr "Minimalizovať"
-
-#: ../src/cairo-dock-menu.c:1541
-msgid "Close (middle-click)"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1554
-msgid "Move all to this desktop"
-msgstr "Premiestniť všetko na túto plochu"
-
-#: ../src/cairo-dock-menu.c:1560
+#: ../src/cairo-dock-menu.c:1521 ../src/cairo-dock-menu.c:1555
 msgid "Launch new"
 msgstr "Spustiť nový"
 
-#: ../src/cairo-dock-menu.c:1563
+#: ../src/cairo-dock-menu.c:1526
+msgid "Make it a launcher"
+msgstr "Vytvoriť spúšťač"
+
+#: ../src/cairo-dock-menu.c:1529
+msgid "Show"
+msgstr "Zobraziť"
+
+#: ../src/cairo-dock-menu.c:1531
+msgid "Unmaximize"
+msgstr "Nemaximalizovať"
+
+#: ../src/cairo-dock-menu.c:1531
+msgid "Maximize"
+msgstr "Maximalizovať"
+
+#: ../src/cairo-dock-menu.c:1534
+msgid "Minimize"
+msgstr "Minimalizovať"
+
+#: ../src/cairo-dock-menu.c:1536
+msgid "Close"
+msgstr "Zatvoriť"
+
+#: ../src/cairo-dock-menu.c:1549
+msgid "Move all to this desktop"
+msgstr "Premiestniť všetko na túto plochu"
+
+#: ../src/cairo-dock-menu.c:1558
 msgid "Show all"
 msgstr "Zobraziť všetko"
 
-#: ../src/cairo-dock-menu.c:1565
+#: ../src/cairo-dock-menu.c:1560
 msgid "Minimize all"
 msgstr "Minimalizovať všetko"
 
-#: ../src/cairo-dock-menu.c:1567
+#: ../src/cairo-dock-menu.c:1562
 msgid "Close all"
 msgstr "Zatvoriť všetko"
 
-#: ../src/cairo-dock-menu.c:1586
+#: ../src/cairo-dock-menu.c:1581
 msgid "Configure this applet"
 msgstr "Konfigurovať tento applet"
 
-#: ../src/cairo-dock-menu.c:1590
+#: ../src/cairo-dock-menu.c:1585
 msgid "Detach this applet"
 msgstr "Odpojiť tento applet"
 
-#: ../src/cairo-dock-menu.c:1590
+#: ../src/cairo-dock-menu.c:1585
 msgid "Return to dock"
 msgstr "Vrátiť do docku"
 
-#: ../src/cairo-dock-menu.c:1593
+#: ../src/cairo-dock-menu.c:1588
 msgid "Remove this applet"
 msgstr "Odstrániť tento applet"
 
-#: ../src/cairo-dock-menu.c:1597
+#: ../src/cairo-dock-menu.c:1592
 msgid "Launch another instance of this applet"
 msgstr "Spustiť ďalšie inštancie tohto apletu"
 
-#: ../src/cairo-dock-menu.c:1634
+#: ../src/cairo-dock-menu.c:1629
 msgid "Normal"
 msgstr "Normálne"
 
-#: ../src/cairo-dock-menu.c:1640 ../data/messages:23 ../data/messages:183
+#: ../src/cairo-dock-menu.c:1635 ../data/messages:23 ../data/messages:183
 msgid "Always on top"
 msgstr "Vždy navrchu"
 
-#: ../src/cairo-dock-menu.c:1647
+#: ../src/cairo-dock-menu.c:1642
 msgid "Always below"
 msgstr "Vždy naspodu"
 
-#: ../src/cairo-dock-menu.c:1660
+#: ../src/cairo-dock-menu.c:1655
 msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "nastaviť správanie Compizu na: (name = cairo-dock & type = utility)"
 
-#: ../src/cairo-dock-menu.c:1662
+#: ../src/cairo-dock-menu.c:1657
 msgid "Reserve space"
 msgstr "Vyhradiť miesto"
 
-#: ../src/cairo-dock-menu.c:1669
+#: ../src/cairo-dock-menu.c:1664
 msgid "On all desktops"
 msgstr "Na všetky plochy"
 
-#: ../src/cairo-dock-menu.c:1675
+#: ../src/cairo-dock-menu.c:1670
 msgid "Lock position"
 msgstr "Zamknúť pozíciu"
 
@@ -858,7 +853,7 @@ msgstr ""
 "Užitočný FAQ, ktorý obsahuje aj veľa rád.\n"
 "Umiestnite myš nad, aby sa automaticky otvárali okná s náznakom dialógu."
 
-#: ../src/cairo-dock-struct.h:412
+#: ../src/cairo-dock-struct.h:410
 msgid "default"
 msgstr "predvolené"
 
@@ -867,7 +862,7 @@ msgstr "predvolené"
 msgid "Are you sure you want to overwrite theme %s ?"
 msgstr "Ste si istý, že chcete prepísať tému %s ?"
 
-#: ../src/cairo-dock-themes-manager.c:886
+#: ../src/cairo-dock-themes-manager.c:887
 #, c-format
 msgid ""
 "couldn't get distant file %s/%s, maybe the server is down.\n"
@@ -876,16 +871,16 @@ msgstr ""
 "nemôžem získať vzdialený súbor %s/%s, možno je spadnutý server.\n"
 "Prosím, skúste to neskôr alebo nás kontaktujte na glx-dock.org."
 
-#: ../src/cairo-dock-themes-manager.c:902
+#: ../src/cairo-dock-themes-manager.c:903
 #, c-format
 msgid "Are you sure you want to delete theme %s ?"
 msgstr "Ste si istý, že chcete odstrániť tému %s ?"
 
-#: ../src/cairo-dock-themes-manager.c:904
+#: ../src/cairo-dock-themes-manager.c:905
 msgid "Are you sure you want to delete these themes ?"
 msgstr "Ste si istý, že chcete odstrániť tieto témy ?"
 
-#: ../src/cairo-dock-themes-manager.c:939
+#: ../src/cairo-dock-themes-manager.c:940
 msgid ""
 "You made some modifications in the current theme.\n"
 "You will loose them if you don't save before choosing a new theme. Continue "
@@ -895,43 +890,43 @@ msgstr ""
 "Budete stratená, ak ju neuložíte pred voľbou novej tému. Chcete napriek tomu "
 "pokračovať?"
 
-#: ../src/cairo-dock-themes-manager.c:1226
+#: ../src/cairo-dock-themes-manager.c:1227
 msgid "Couldn't import the theme."
 msgstr "Nedá sa importovať téma."
 
-#: ../src/cairo-dock-themes-manager.c:1274
+#: ../src/cairo-dock-themes-manager.c:1275
 msgid "The theme has been saved"
 msgstr "Téma bola uložená"
 
-#: ../src/cairo-dock-themes-manager.c:1274
+#: ../src/cairo-dock-themes-manager.c:1275
 msgid "The theme couldn't be saved"
 msgstr "Téma sa nedá uložiť"
 
-#: ../src/cairo-dock-themes-manager.c:1300
+#: ../src/cairo-dock-themes-manager.c:1301
 msgid "The theme has been deleted"
 msgstr "Téma bola odstránená"
 
-#: ../src/cairo-dock-themes-manager.c:1300
+#: ../src/cairo-dock-themes-manager.c:1301
 msgid "The theme couldn't be deleted"
 msgstr "Téma sa nedá odstrániť"
 
-#: ../src/cairo-dock-themes-manager.c:1302
+#: ../src/cairo-dock-themes-manager.c:1303
 msgid "The themes have been deleted"
 msgstr "Témy boli odstránené"
 
-#: ../src/cairo-dock-themes-manager.c:1302
+#: ../src/cairo-dock-themes-manager.c:1303
 msgid "The themes couldn't be deleted"
 msgstr "Témy sa nedajú odstrániť"
 
-#: ../src/cairo-dock-themes-manager.c:1369
+#: ../src/cairo-dock-themes-manager.c:1370
 msgid "Manage Themes"
 msgstr "Spravovať témy"
 
-#: ../src/cairo-dock.c:545
+#: ../src/cairo-dock.c:550
 msgid "Use OpenGL in Cairo-Dock ?"
 msgstr "Použiť OpenGL v Cairo-Docku ?"
 
-#: ../src/cairo-dock.c:553
+#: ../src/cairo-dock.c:558
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -943,7 +938,7 @@ msgid ""
 "  or with the -o option to force OpenGL and -c to force cairo.)"
 msgstr ""
 
-#: ../src/cairo-dock.c:711
+#: ../src/cairo-dock.c:716
 msgid ""
 "Welcome in Cairo-Dock2 !\n"
 "A default and simple theme has been loaded.\n"
@@ -956,7 +951,7 @@ msgid ""
 "  (you can now click on this dialog to close it)"
 msgstr ""
 
-#: ../src/cairo-dock.c:723
+#: ../src/cairo-dock.c:728
 msgid ""
 "To remove the black rectangle around the dock, you need to activate a "
 "composite manager.\n"
@@ -965,11 +960,11 @@ msgid ""
 "I can do this lattest operation for you, do you want to proceed ?"
 msgstr ""
 
-#: ../src/cairo-dock.c:727
+#: ../src/cairo-dock.c:732
 msgid "Do you want to keep this setting ?"
 msgstr "Chcete ponechať tieto nastavenia ?"
 
-#: ../src/cairo-dock.c:732
+#: ../src/cairo-dock.c:737
 msgid ""
 "To remove the black rectangle around the dock, you need to activate a "
 "composite manager.\n"
@@ -980,7 +975,7 @@ msgid ""
 "page."
 msgstr ""
 
-#: ../src/cairo-dock.c:739
+#: ../src/cairo-dock.c:744
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -991,7 +986,7 @@ msgstr ""
 "Bol úspešne reštartovaný, ale keď sa to stane znova, pošlite nám o tom "
 "správu na http://glx-dock.org"
 
-#: ../src/cairo-dock.c:748
+#: ../src/cairo-dock.c:753
 msgid ""
 "No plug-in were found.\n"
 "To make the most of Cairo-Dock, please consider installing its plug-ins.\n"
@@ -1507,7 +1502,8 @@ msgid "Middle click on an icon closes its relative application ?"
 msgstr ""
 
 #: ../data/messages:277
-msgid "Signal the applications demanding your attention with a dialog bubble ?"
+msgid ""
+"Signal the applications demanding your attention with a dialog bubble ?"
 msgstr "Signálu aplikácie vyžadujúci vašu pozornosť s dialógom v bubline ?"
 
 #: ../data/messages:279
@@ -1620,7 +1616,7 @@ msgstr "Počet krokov pri animácii stišenie:"
 
 #: ../data/messages:341
 msgid "Number of steps in the auto-hide animation (move up/move down) :"
-msgstr ""
+msgstr "Počet krokov v animácii auto-skrývanie (pohyb hore/dole) :"
 
 #: ../data/messages:351
 msgid "Refresh frequency"
@@ -2607,8 +2603,8 @@ msgstr ""
 
 #: ../data/messages:909
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:911
@@ -2624,8 +2620,8 @@ msgstr ""
 
 #: ../data/messages:915
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, applis, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, applis, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -2685,7 +2681,8 @@ msgid "I don’t want other windows to hover the dock"
 msgstr ""
 
 #: ../data/messages:937
-msgid "Hint : you can even do that with desklets, making a desklet's panel !."
+msgid ""
+"Hint : you can even do that with desklets, making a desklet's panel !."
 msgstr ""
 
 #: ../data/messages:939
@@ -2737,7 +2734,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:953
-msgid "I don’t want to have a separator between launchers , applis and applets"
+msgid ""
+"I don’t want to have a separator between launchers , applis and applets"
 msgstr ""
 
 #: ../data/messages:955
@@ -2972,7 +2970,8 @@ msgstr ""
 "prejdite na modul \"Hlavný panel\", potom začiarknite prvé políčko a použiť."
 
 #: ../data/messages:1033
-msgid "I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
+msgid ""
+"I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
 msgstr "Nechcem mať veľa ikon v doku, keď používam Gimp / Pidgin / atď"
 
 #: ../data/messages:1035
@@ -3021,7 +3020,8 @@ msgstr ""
 msgid ""
 "Hint : to launch another instance of the program, shift+click on the "
 "launcher."
-msgstr "Tip: na spustenie ďalšej inštancie programu, shift + klik na spúšťač."
+msgstr ""
+"Tip: na spustenie ďalšej inštancie programu, shift + klik na spúšťač."
 
 #: ../data/messages:1049
 msgid ""
@@ -3211,8 +3211,8 @@ msgstr ""
 
 #: ../data/messages:1113
 msgid ""
-"How can I have an easy-to-access terminal with real transparence, like "
-"Tilda ?"
+"How can I have an easy-to-access terminal with real transparence, like Tilda "
+"?"
 msgstr ""
 
 #: ../data/messages:1115
@@ -3233,10 +3233,11 @@ msgstr ""
 
 #: ../data/messages:1121
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/"
-"required_components_list/panel, and replace its content with \"cairo-dock\". "
-"This will not launch the dock on start-up, but just prevent the gnome-panel "
-"from launching, so don't forget to add Cairo-Dock on startup.\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components_list/panel, and replace its "
+"content with \"cairo-dock\". This will not launch the dock on start-up, but "
+"just prevent the gnome-panel from launching, so don't forget to add Cairo-"
+"Dock on startup.\n"
 "Then restart your session : the gnome-panel has not been started."
 msgstr ""
 
@@ -3277,8 +3278,8 @@ msgid ""
 "move the folder containing your gauge in ~/.config/cairo-dock/extras/gauges, "
 "you’re done !"
 msgstr ""
-"presuňte zložky obsahujúce vaše ukazovatele v ~ /.config/cairo-dock/extras/"
-"meradiel, a máte hotovo !"
+"presuňte zložky obsahujúce vaše ukazovatele v ~ /.config/cairo-"
+"dock/extras/meradiel, a máte hotovo !"
 
 #: ../data/messages:1135
 msgid ""
@@ -3347,16 +3348,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3401,8 +3402,8 @@ msgid ""
 "If you’re under XFCE or KDE, you can just activate the compositing in the "
 "window manager’s options.\n"
 "If you're under Gnome, you can activate it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1177
@@ -3445,8 +3446,8 @@ msgstr "Nemám tieto úžasné efekty, ako oheň, otáčajúcu kocku, atď"
 
 #: ../data/messages:1187
 msgid ""
-"Hint : You can force the openGL by launching the dock with “cairo-dock –o”."
-"but you might get a lot of visual artifacts."
+"Hint : You can force the openGL by launching the dock with “cairo-dock "
+"–o”.but you might get a lot of visual artifacts."
 msgstr ""
 "Tip: Môžete uplatniť OpenGL spustením doku s \"cairo-dock-o.\" Tak môžete "
 "získať veľa vizuálnych artefaktov."
@@ -3523,8 +3524,8 @@ msgstr "Zapojte sa do projektu !"
 msgid ""
 "We value your help ! If you see a bug, or if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3855,8 +3856,8 @@ msgstr ""
 #: ../data/messages:1375
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -3937,8 +3938,8 @@ msgstr ""
 #: ../data/messages:1387
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -3985,8 +3986,6 @@ msgid ""
 " - This version also fixes a huge number of problems."
 msgstr ""
 
-#~ msgid "Close"
-#~ msgstr "Zatvoriť"
-
+#, c-format
 #~ msgid "Importing theme %s..."
 #~ msgstr "Importujem tému %s..."

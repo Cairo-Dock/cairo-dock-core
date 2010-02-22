@@ -7,13 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
-"PO-Revision-Date: 2010-02-12 13:19+0000\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"POT-Creation-Date: 2010-02-21 03:01+0000\n"
+"PO-Revision-Date: 2010-02-20 12:07+0000\n"
+"Last-Translator: chaeMil <chaemil72@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-02-13 04:54+0000\n"
+"X-Launchpad-Export-Date: 2010-02-21 04:53+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-applet-facility.h:259
@@ -74,7 +75,7 @@ msgstr "_Vlastní ikony_"
 
 #: ../src/cairo-dock-gui-factory.c:1094
 msgid "Accessory"
-msgstr ""
+msgstr "Příslušenství"
 
 #: ../src/cairo-dock-gui-factory.c:1099 ../src/cairo-dock-gui-main.c:128
 msgid "Desktop"
@@ -86,11 +87,11 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-factory.c:1109
 msgid "Plug-in"
-msgstr ""
+msgstr "Zásuvný modul"
 
 #: ../src/cairo-dock-gui-factory.c:1140
 msgid "rate me"
-msgstr ""
+msgstr "ohodnoť"
 
 #: ../src/cairo-dock-gui-factory.c:1160
 msgid "Local"
@@ -139,7 +140,7 @@ msgstr ""
 #: ../src/cairo-dock-gui-factory.c:1950
 #, c-format
 msgid "Listing themes in '%s' ..."
-msgstr ""
+msgstr "Prohlížení motivů v %s"
 
 #: ../src/cairo-dock-gui-factory.c:2123
 msgid "module"
@@ -150,8 +151,9 @@ msgid "category"
 msgstr "kategorie"
 
 #: ../src/cairo-dock-gui-factory.c:2172
-msgid "Click on an applet in order to have a preview and a description of it."
-msgstr ""
+msgid ""
+"Click on an applet in order to have a preview and a description of it."
+msgstr "Klikněte na applet pro zobrazení jeho náhledu a popisu."
 
 #: ../src/cairo-dock-gui-factory.c:2530
 msgid "state"
@@ -281,6 +283,10 @@ msgid ""
 ", you can switch to an advanced mode.\n"
 " You can switch from a mode to another at any time."
 msgstr ""
+"Toto je jednoduchý panel nastavení Cairo-Dock.\n"
+"     Až se s ním seznámíte nebo si budete chtít upravit motiv \n"
+"     docku, přepněte se do pokročilého zobrazení.\n"
+"     Můžete přepínat mezi režimy kdy chcete."
 
 #: ../src/cairo-dock-gui-manager.c:663
 msgid "Simple Mode"
@@ -295,11 +301,13 @@ msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customize your current theme."
 msgstr ""
+"Pokročilý režim vám umožňuje upravit každou jednotlivost v docku. Je to "
+"mocný nástroj k upravení vlastního motivu."
 
 #: ../src/cairo-dock-gui-simple.c:186 ../src/cairo-dock-themes-manager.c:1348
 #, c-format
 msgid "Importing theme %s ..."
-msgstr ""
+msgstr "Importování motivu %s"
 
 #: ../src/cairo-dock-internal-accessibility.c:263
 #: ../src/cairo-dock-menu.c:1619
@@ -439,11 +447,11 @@ msgstr "Vyberte zobrazení pro každý dock."
 #: ../src/cairo-dock-menu.c:109
 #, c-format
 msgid "Set position for the dock '%s'"
-msgstr ""
+msgstr "Nastavit pozici docku %s"
 
 #: ../src/cairo-dock-menu.c:199
 msgid "Community's site"
-msgstr ""
+msgstr "Web komunity"
 
 #: ../src/cairo-dock-menu.c:200
 msgid "A problem ? A suggestion ? Want to talk to us ? You're welcome !"
@@ -453,11 +461,11 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:203
 msgid "Development's site"
-msgstr ""
+msgstr "Web vývojářů"
 
 #: ../src/cairo-dock-menu.c:204
 msgid "Find out the latest version of Cairo-Dock here !."
-msgstr ""
+msgstr "Zde naleznete nejnovější verzi Cairo-Dock."
 
 #: ../src/cairo-dock-menu.c:220
 msgid "Development"
@@ -485,19 +493,20 @@ msgstr "Konfigurovat umístění, vzhled, a applety."
 
 #: ../src/cairo-dock-menu.c:340
 msgid "Set up this dock"
-msgstr ""
+msgstr "Nastavit tento dock."
 
 #: ../src/cairo-dock-menu.c:345
 msgid "Set up the position of this main dock."
-msgstr ""
+msgstr "Nastavit pozici hlavního docku."
 
 #: ../src/cairo-dock-menu.c:348
 msgid "Manage themes"
 msgstr "Spravovat motivy"
 
 #: ../src/cairo-dock-menu.c:353
-msgid "Choose amongst many themes on the server, and save your current theme."
-msgstr ""
+msgid ""
+"Choose amongst many themes on the server, and save your current theme."
+msgstr "Umožňuje vybrat spoustu motivů ze serveru nebo uložit vaše vlastní."
 
 #: ../src/cairo-dock-menu.c:358
 msgid "unlock icons"
@@ -513,27 +522,27 @@ msgstr "Uzamkne či odemkne umístění ikon."
 
 #: ../src/cairo-dock-menu.c:366
 msgid "unlock dock"
-msgstr ""
+msgstr "odemknout dock"
 
 #: ../src/cairo-dock-menu.c:366
 msgid "lock dock"
-msgstr ""
+msgstr "uzamknout dock"
 
 #: ../src/cairo-dock-menu.c:371
 msgid "This will (un)lock the whole dock."
-msgstr ""
+msgstr "Toto odemkne/zamkne celý dock."
 
 #: ../src/cairo-dock-menu.c:376
 msgid "Quick-Hide"
-msgstr ""
+msgstr "Rychlé-schování"
 
 #: ../src/cairo-dock-menu.c:381
 msgid "It will hide the dock until you enter inside with the mouse."
-msgstr ""
+msgstr "Schová dock dokud na něj nenajedete myší"
 
 #: ../src/cairo-dock-menu.c:389
 msgid "Launch Cairo-Dock on startup"
-msgstr ""
+msgstr "Spustit Cairo-Dock při startu systému"
 
 #: ../src/cairo-dock-menu.c:399 ../src/cairo-dock-modules.c:128
 msgid "Help"
@@ -542,7 +551,8 @@ msgstr "Nápověda"
 #: ../src/cairo-dock-menu.c:404
 msgid ""
 "There is no problem, there is only solution (and a lot of useful hints !)."
-msgstr "Není tu žádný problém, jsou zde jen řešení (a spoustu užitečných rad.)"
+msgstr ""
+"Není tu žádný problém, jsou zde jen řešení (a spoustu užitečných rad.)"
 
 #: ../src/cairo-dock-menu.c:406
 msgid "About"
@@ -563,6 +573,8 @@ msgid ""
 "the dock ?\n"
 " (otherwise they will be destroyed)"
 msgstr ""
+"Opravdu chcete přesunout ikony uvnitř tohoto kontejneru do docku?\n"
+" (ostatní budou odstraněny)"
 
 #: ../src/cairo-dock-menu.c:510
 msgid "Undefined"
@@ -616,16 +628,18 @@ msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider drag and dropping the launcher from the Applications Menu."
 msgstr ""
+"Nebyl nalezen odpovídající soubor.\n"
+"Zvažte přetáhnutí ikon z menu do docku."
 
 #: ../src/cairo-dock-menu.c:1338
 #, c-format
 msgid "Move all to desktop %d - face %d"
-msgstr ""
+msgstr "Přesunout vše z plochy %d na plochu %d"
 
 #: ../src/cairo-dock-menu.c:1338
 #, c-format
 msgid "Move to desktop %d - face %d"
-msgstr ""
+msgstr "Přesunout z plochy %d na plochu %d"
 
 #: ../src/cairo-dock-menu.c:1340
 #, c-format
@@ -640,17 +654,16 @@ msgstr "Přesunout na plochu %d"
 #: ../src/cairo-dock-menu.c:1342
 #, c-format
 msgid "Move all to face %d"
-msgstr ""
+msgstr "Přesunout vše na plochu %d"
 
 #: ../src/cairo-dock-menu.c:1342
 #, c-format
 msgid "Move to face %d"
-msgstr ""
+msgstr "Přesunout na plochu %d"
 
 #: ../src/cairo-dock-menu.c:1393 ../src/cairo-dock-menu.c:1456
-#, fuzzy
 msgid "Add"
-msgstr "Doplňky"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1397 ../src/cairo-dock-menu.c:1460
 msgid "Add a sub-dock"
@@ -892,7 +905,7 @@ msgstr ""
 
 #: ../src/cairo-dock-themes-manager.c:1226
 msgid "Couldn't import the theme."
-msgstr ""
+msgstr "Motiv nemohl být naimportován."
 
 #: ../src/cairo-dock-themes-manager.c:1274
 msgid "The theme has been saved"
@@ -1006,7 +1019,7 @@ msgstr ""
 
 #: ../data/messages:1
 msgid "Behavior"
-msgstr ""
+msgstr "Chování"
 
 #: ../data/messages:3 ../data/messages:135 ../data/messages:1257
 msgid "Position on the screen"
@@ -1024,7 +1037,7 @@ msgstr ""
 
 #: ../data/messages:9 ../data/messages:141 ../data/messages:1263
 msgid "bottom"
-msgstr ""
+msgstr "dole"
 
 #: ../data/messages:11 ../data/messages:143 ../data/messages:1265
 msgid "top"
@@ -1042,7 +1055,7 @@ msgstr "levá"
 
 #: ../data/messages:17 ../data/messages:177
 msgid "Visibility of the main dock"
-msgstr ""
+msgstr "Viditelnost hlavního docku"
 
 #: ../data/messages:19 ../data/messages:179
 msgid ""
@@ -1060,27 +1073,27 @@ msgstr ""
 
 #: ../data/messages:21 ../data/messages:43 ../data/messages:181
 msgid "Visibility :"
-msgstr ""
+msgstr "Viditelnost:"
 
 #: ../data/messages:25 ../data/messages:185
 msgid "Prevent windows from overlapping the dock"
-msgstr ""
+msgstr "Zabránit oknům překrývání docku"
 
 #: ../data/messages:27 ../data/messages:187
 msgid "Keep the dock below windows"
-msgstr ""
+msgstr "Držet dock pod okny."
 
 #: ../data/messages:29 ../data/messages:189
 msgid "Automatically hide the dock"
-msgstr ""
+msgstr "Automaticky schováváat dock."
 
 #: ../data/messages:31 ../data/messages:191
 msgid "Automatically hide when a window is maximized"
-msgstr ""
+msgstr "Automaticky schovat pokud je okno maximalizováno"
 
 #: ../data/messages:33 ../data/messages:193
 msgid "Pop-up on shortcut"
-msgstr ""
+msgstr "Vyskošit při zkratce"
 
 #: ../data/messages:35 ../data/messages:197
 msgid ""
@@ -1088,32 +1101,34 @@ msgid ""
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
 "menu."
 msgstr ""
+"POkud stisknete klávesovou zkratku, dock se zobrazí na místě kde máte myš. "
+"Po zbytek času bude dock neviditelný."
 
 #: ../data/messages:37 ../data/messages:199
 msgid "Keyboard shortcut to pop-up the dock :"
-msgstr ""
+msgstr "Klávesová zkratka pro vyskočení docku"
 
 #: ../data/messages:39
 msgid "Visibility of the sub-docks"
-msgstr ""
+msgstr "Viditelnost pod-docků."
 
 #: ../data/messages:41
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
-msgstr ""
+msgstr "zobrazí se po kliknutí nebo po najetí ikony která na ně odkazuje."
 
 #: ../data/messages:45
 msgid "Appear on mouse over"
-msgstr ""
+msgstr "Zobrazit při přejetí"
 
 #: ../data/messages:47
 msgid "Appear on click"
-msgstr ""
+msgstr "Zobrazit při kliknutí"
 
 #: ../data/messages:49 ../data/messages:1025
 msgid "Taskbar"
-msgstr ""
+msgstr "Lišta úloh"
 
 #: ../data/messages:51
 msgid ""
@@ -1125,10 +1140,17 @@ msgid ""
 "Gnome    : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
+"Žádný: Neukazuje otevřená okna v docku.\n"
+"MacOSX: Zobrazuje aplikace a spouštěče najednou, ostatní okna jsou vidět jen "
+"když jsou minimalizována.\n"
+"Windows7: Zobrazuje aplikace s jejich spouštěči, ukazuje všechny ostatní "
+"okna a skupiny oken společně v pod-docku.\n"
+"Gnome: Odděluje lištu úloh od spouštěčů a ukazuje jen okna která jsou na "
+"aktuální ploše."
 
 #: ../data/messages:53
 msgid "Behaviour of the Taskbar :"
-msgstr ""
+msgstr "Chování lišty úloh:"
 
 #: ../data/messages:55
 msgid "None"
@@ -1152,17 +1174,17 @@ msgstr "Animace"
 
 #: ../data/messages:65 ../data/messages:621
 msgid "Configure icons animations."
-msgstr ""
+msgstr "Nastavení animací ikon"
 
 #: ../data/messages:67 ../data/messages:623
 msgid "Configure icons special effects (require OpenGL capacity)."
-msgstr ""
+msgstr "Nastavení speciálních efektů ikon (vyžaduje zapnutý OpenGL)."
 
 #: ../data/messages:69 ../data/messages:625
 msgid ""
 "Configure icons animations on appearing/disappearing (require OpenGL "
 "capacity)."
-msgstr ""
+msgstr "Nastavení ikon při otevření/zavření (vyžaduje zapnutý OpenGL)."
 
 #: ../data/messages:75 ../data/messages:563
 msgid ""
@@ -1204,18 +1226,20 @@ msgid ""
 "This will separate launchers, applis, and applets. Separators will be "
 "automatically inserted then."
 msgstr ""
+"Odděluje spouštěče, aplikace a applety. Oddělovač bude automaticky vložen "
+"mezi ně."
 
 #: ../data/messages:93 ../data/messages:643
 msgid "Separate the different types of icons ?"
-msgstr ""
+msgstr "Oddělit odlišné typy ikon?"
 
 #: ../data/messages:95 ../data/messages:653
 msgid "Order of the different types of icons :"
-msgstr ""
+msgstr "Pořadí odlišných typů ikon:"
 
 #: ../data/messages:97 ../data/messages:655
 msgid "launchers"
-msgstr ""
+msgstr "spouštěče"
 
 #: ../data/messages:99 ../data/messages:657
 msgid "applications"
@@ -1227,15 +1251,15 @@ msgstr "applety"
 
 #: ../data/messages:105 ../data/messages:671
 msgid "Choose the default view for main docks :"
-msgstr ""
+msgstr "Vybrat výchozí režim pro hlavní dock."
 
 #: ../data/messages:107 ../data/messages:675
 msgid "You can overwrite this parameter for each sub-dock."
-msgstr ""
+msgstr "Můžete přepsat tento parametr pro každý pod-dock."
 
 #: ../data/messages:109 ../data/messages:677
 msgid "Choose the default view for sub-docks :"
-msgstr ""
+msgstr "Vybrat výchozí režim pro pod-dock."
 
 #: ../data/messages:111
 msgid "Add-ons"
@@ -1254,15 +1278,15 @@ msgstr ""
 
 #: ../data/messages:117
 msgid "Add or remove any applet :"
-msgstr ""
+msgstr "Přidat nebo odstranit applet"
 
 #: ../data/messages:119 ../data/messages:1309
 msgid "Themes"
-msgstr ""
+msgstr "Motivy"
 
 #: ../data/messages:121 ../data/messages:1313
 msgid "Choose one of the available themes :"
-msgstr ""
+msgstr "Vyberte jeden z dostupných motivů :"
 
 #: ../data/messages:125 ../data/messages:1319
 msgid ""
@@ -1273,7 +1297,7 @@ msgstr ""
 
 #: ../data/messages:127 ../data/messages:1321
 msgid "Use the new theme's launchers ?"
-msgstr ""
+msgstr "Použít spouštěče z nového motivu?"
 
 #: ../data/messages:129 ../data/messages:1323
 msgid ""
@@ -1283,7 +1307,7 @@ msgstr ""
 
 #: ../data/messages:131 ../data/messages:1325
 msgid "Use the new theme's behaviour ?"
-msgstr ""
+msgstr "Použít chování z nového motivu?"
 
 #: ../data/messages:149 ../data/messages:1271
 msgid ""
@@ -1295,11 +1319,11 @@ msgstr ""
 
 #: ../data/messages:151 ../data/messages:1273
 msgid "Relative alignment :"
-msgstr ""
+msgstr "Absolutní umístění."
 
 #: ../data/messages:157
 msgid "Offset to the screen's edge"
-msgstr ""
+msgstr "Odsazení od hrany obrazovky."
 
 #: ../data/messages:159 ../data/messages:1277
 msgid ""
@@ -1309,7 +1333,7 @@ msgstr ""
 
 #: ../data/messages:161
 msgid "Lateral offset :"
-msgstr ""
+msgstr "Odsazení"
 
 #: ../data/messages:163 ../data/messages:1281
 msgid ""
@@ -1319,11 +1343,11 @@ msgstr ""
 
 #: ../data/messages:165 ../data/messages:1283
 msgid "Distance to the screen's edge :"
-msgstr ""
+msgstr "Vzdálenost od hrany obrazovky :"
 
 #: ../data/messages:167
 msgid "Multiple screens"
-msgstr ""
+msgstr "Vícenásobná plocha"
 
 #: ../data/messages:169
 msgid "Use Xinerama ?"
@@ -1331,11 +1355,11 @@ msgstr "Použít Xinerama ?"
 
 #: ../data/messages:171 ../data/messages:1289
 msgid "starting from 0"
-msgstr ""
+msgstr "začínající od 0"
 
 #: ../data/messages:173 ../data/messages:1291
 msgid "Number of the screen where the dock should be located :"
-msgstr ""
+msgstr "Číslo plochu kde se bude dock zobrazovat :"
 
 #: ../data/messages:175
 msgid "Accessibility"
@@ -1343,15 +1367,15 @@ msgstr "Přístupnost"
 
 #: ../data/messages:195
 msgid "Pop-up only if the mouse hits a screen corner ?"
-msgstr ""
+msgstr "Vyskočit jen když se myš \"dotkne\" hrany obrazovky ?"
 
 #: ../data/messages:201
 msgid "Additionnal parameters"
-msgstr ""
+msgstr "Rozšiřující parametry"
 
 #: ../data/messages:203
 msgid "Extend the dock to always fill the screen ?"
-msgstr ""
+msgstr "Roztáhnout dock aby vždy vyplňoval obrazovku?"
 
 #: ../data/messages:205
 msgid "Place the mouse into it will make the dock re-appear."
@@ -1359,7 +1383,7 @@ msgstr ""
 
 #: ../data/messages:207
 msgid "Size of the callback zone (width x height, in pixels) :"
-msgstr ""
+msgstr "Velikost vyvolávací plochy (šířka x výška, v pixlech):"
 
 #: ../data/messages:209
 msgid ""
@@ -1369,11 +1393,11 @@ msgstr ""
 
 #: ../data/messages:211
 msgid "Automatically hide the dock when a window becomes fullscreen ?"
-msgstr ""
+msgstr "Automaticky schovat okno pokud je maximalizováno?"
 
 #: ../data/messages:213
 msgid "Sub-docks' visibility"
-msgstr ""
+msgstr "Viditelnost pod-docků"
 
 #: ../data/messages:215
 msgid ""
@@ -1382,23 +1406,23 @@ msgstr ""
 
 #: ../data/messages:217
 msgid "Click to show sub-docks ?"
-msgstr ""
+msgstr "Zobrazit pod-docky po kliknutí ?"
 
 #: ../data/messages:219
 msgid "in ms."
-msgstr ""
+msgstr "v milisekundách"
 
 #: ../data/messages:221
 msgid "Delay before you effectively leave from a sub-dock or to a sub-dock :"
-msgstr ""
+msgstr "Zpoždění než opustíte sub-dock nebo najedete do sub-docku :"
 
 #: ../data/messages:223
 msgid "in ms. Unused if you set up to click to show sub-docks."
-msgstr ""
+msgstr "v milisekundách. Nepoužitelné pokud nastavíte zobrazení po kliknutí."
 
 #: ../data/messages:225
 msgid "Delay before displaying a sub-dock :"
-msgstr ""
+msgstr "Zpoždění před zobrazením pod-docku :"
 
 #: ../data/messages:231
 msgid ""
@@ -1498,7 +1522,8 @@ msgid "Middle click on an icon closes its relative application ?"
 msgstr ""
 
 #: ../data/messages:277
-msgid "Signal the applications demanding your attention with a dialog bubble ?"
+msgid ""
+"Signal the applications demanding your attention with a dialog bubble ?"
 msgstr ""
 
 #: ../data/messages:279
@@ -2584,8 +2609,8 @@ msgstr ""
 
 #: ../data/messages:909
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:911
@@ -2601,8 +2626,8 @@ msgstr ""
 
 #: ../data/messages:915
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, applis, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, applis, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -2657,7 +2682,8 @@ msgid "I don’t want other windows to hover the dock"
 msgstr ""
 
 #: ../data/messages:937
-msgid "Hint : you can even do that with desklets, making a desklet's panel !."
+msgid ""
+"Hint : you can even do that with desklets, making a desklet's panel !."
 msgstr ""
 
 #: ../data/messages:939
@@ -2705,7 +2731,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:953
-msgid "I don’t want to have a separator between launchers , applis and applets"
+msgid ""
+"I don’t want to have a separator between launchers , applis and applets"
 msgstr ""
 
 #: ../data/messages:955
@@ -2924,7 +2951,8 @@ msgid "go to the “Taskbar” module, then tick the first box, and apply."
 msgstr ""
 
 #: ../data/messages:1033
-msgid "I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
+msgid ""
+"I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
 msgstr ""
 
 #: ../data/messages:1035
@@ -3141,8 +3169,8 @@ msgstr ""
 
 #: ../data/messages:1113
 msgid ""
-"How can I have an easy-to-access terminal with real transparence, like "
-"Tilda ?"
+"How can I have an easy-to-access terminal with real transparence, like Tilda "
+"?"
 msgstr ""
 
 #: ../data/messages:1115
@@ -3163,10 +3191,11 @@ msgstr ""
 
 #: ../data/messages:1121
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/"
-"required_components_list/panel, and replace its content with \"cairo-dock\". "
-"This will not launch the dock on start-up, but just prevent the gnome-panel "
-"from launching, so don't forget to add Cairo-Dock on startup.\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components_list/panel, and replace its "
+"content with \"cairo-dock\". This will not launch the dock on start-up, but "
+"just prevent the gnome-panel from launching, so don't forget to add Cairo-"
+"Dock on startup.\n"
 "Then restart your session : the gnome-panel has not been started."
 msgstr ""
 
@@ -3273,16 +3302,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3324,8 +3353,8 @@ msgid ""
 "If you’re under XFCE or KDE, you can just activate the compositing in the "
 "window manager’s options.\n"
 "If you're under Gnome, you can activate it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1177
@@ -3359,8 +3388,8 @@ msgstr ""
 
 #: ../data/messages:1187
 msgid ""
-"Hint : You can force the openGL by launching the dock with “cairo-dock –o”."
-"but you might get a lot of visual artifacts."
+"Hint : You can force the openGL by launching the dock with “cairo-dock "
+"–o”.but you might get a lot of visual artifacts."
 msgstr ""
 
 #: ../data/messages:1189
@@ -3427,8 +3456,8 @@ msgstr ""
 msgid ""
 "We value your help ! If you see a bug, or if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3736,8 +3765,8 @@ msgstr ""
 #: ../data/messages:1375
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -3818,8 +3847,8 @@ msgstr ""
 #: ../data/messages:1387
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -3869,15 +3898,19 @@ msgstr ""
 #~ msgid "Close"
 #~ msgstr "Zavřít"
 
+#, c-format
 #~ msgid "Downloading file %s ..."
 #~ msgstr "Stahování souboru %s ..."
 
+#, c-format
 #~ msgid "couldn't get the list of themes for %s (no connection ?)"
 #~ msgstr "nelze stáhnout seznam témat pro %s (žádné připojení ?)"
 
+#, c-format
 #~ msgid "couldn't get distant file %s"
 #~ msgstr "nelze stáhnout vzdálený soubor %s"
 
+#, c-format
 #~ msgid "couldn't retrieve distant theme %s"
 #~ msgstr "nelze stáhnout téma %s"
 

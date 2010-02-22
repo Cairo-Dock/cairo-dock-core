@@ -839,7 +839,7 @@ msgstr ""
 #, c-format
 msgid ""
 "couldn't get distant file %s/%s, maybe the server is down.\n"
-"Please retry later or contact us at glx-dock.org."
+"Please retry later or contact us at cairo-dock.org."
 msgstr ""
 
 #: ../src/cairo-dock-themes-manager.c:920
@@ -3280,7 +3280,7 @@ msgid ""
 "If you made a theme for the dock or one of the applet, and want to share it, "
 "we’ll be happy to integrate it on our server !\n"
 "If you wish to develop an applet, a complete documentation is available at "
-"http://doc.glx-dock.org.\n"
+"http://doc.cairo-dock.org.\n"
 "Fabounet"
 msgstr ""
 
@@ -3656,7 +3656,7 @@ msgid ""
 "modules.\n"
 " - OpenGL mode works on ATI and Intel with the latest drivers !\n"
 " - Finally, Cairo-Dock has its own ppa on LaunchPad, and a complete "
-"documentation on http://doc.glx-dock.org."
+"documentation on http://doc.cairo-dock.org."
 msgstr ""
 
 #: ../data/messages:1379

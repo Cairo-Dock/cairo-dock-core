@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-02-12 11:54+0000\n"
-"PO-Revision-Date: 2010-02-12 23:10+0000\n"
-"Last-Translator: Serdar KAHYA <Unknown>\n"
+"PO-Revision-Date: 2010-02-14 11:09+0000\n"
+"Last-Translator: Fatih Ekin <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-02-13 04:55+0000\n"
+"X-Launchpad-Export-Date: 2010-02-15 04:46+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-applet-facility.h:259
@@ -122,6 +122,9 @@ msgid ""
 "Be sure to install it in the same version as the dock to enjoy these "
 "features."
 msgstr ""
+"'%s' modülü bulunamadı.\n"
+"Dock'un bu özelliklerinden yararlanmak için aynı sürümün yüklendiğinden emin "
+"ol."
 
 #: ../src/cairo-dock-gui-factory.c:1305
 #, c-format
@@ -148,7 +151,7 @@ msgstr "kategori"
 #: ../src/cairo-dock-gui-factory.c:2174
 msgid ""
 "Click on an applet in order to have a preview and a description of it."
-msgstr ""
+msgstr "Önizleme ve açıklamalar için uygulamacığın üzerine tıklayın."
 
 #: ../src/cairo-dock-gui-factory.c:2532
 msgid "state"
@@ -316,6 +319,9 @@ msgid ""
 " or on the contrary unobstrusive ?\n"
 "Configure the way you access to your docks and sub-docks !"
 msgstr ""
+"Dock'unuzun her zaman görünür olmasını ister misiniz,\n"
+"veya aksine gizlemek ?\n"
+"Dock'larınız ve alt dock'larınız için erişim yolunu ayarlayın !"
 
 #: ../src/cairo-dock-internal-background.c:157 ../data/messages:415
 #: ../data/messages:547
@@ -343,6 +349,8 @@ msgid ""
 "It provides different window decorators. Activate it first if you want to "
 "select a different decorator for your dialogs."
 msgstr ""
+"Farklı pencere dekoratörleri sağlayıcı.Eğer diyaloglarınız için farklı bir "
+"dekoratör seçmek isterseniz ilk önce onları aktif hale getirin."
 
 #: ../src/cairo-dock-internal-dialogs.c:132 ../data/messages:687
 msgid "Dialogs"
@@ -358,7 +366,7 @@ msgstr "Dock gizle"
 
 #: ../src/cairo-dock-internal-hidden-dock.c:88
 msgid "Define the appearance of the dock when it's hidden."
-msgstr ""
+msgstr "Dock'un ne zaman belirip gizleneceğini tanımlayın."
 
 #: ../src/cairo-dock-internal-icons.c:433
 msgid "It provides many animations to your icons."
@@ -374,6 +382,8 @@ msgid ""
 "All about icons :\n"
 " size, reflection, icon theme, ..."
 msgstr ""
+"Simgeler hakkında herşey :\n"
+"boyut,yansıma,simge teması, ..."
 
 #: ../src/cairo-dock-internal-indicators.c:159 ../data/messages:783
 msgid "Indicators"
@@ -389,7 +399,7 @@ msgstr "Etiketler"
 
 #: ../src/cairo-dock-internal-labels.c:194
 msgid "Define the style of the icons' labels and quick-info."
-msgstr ""
+msgstr "Simgelere stil etiket ve hızlı-bilgi tanımlayın."
 
 #: ../src/cairo-dock-internal-position.c:122 ../data/messages:133
 #: ../data/messages:1255
@@ -398,7 +408,7 @@ msgstr "Pozisyon"
 
 #: ../src/cairo-dock-internal-position.c:124
 msgid "Set the position of the main dock."
-msgstr ""
+msgstr "Ana dock'un konumunu ayarla."
 
 #: ../src/cairo-dock-internal-system.c:137 ../data/messages:301
 msgid "System"
@@ -410,7 +420,7 @@ msgstr ""
 
 #: ../src/cairo-dock-internal-taskbar.c:191 ../data/messages:227
 msgid "TaskBar"
-msgstr ""
+msgstr "Görev Çubuğu"
 
 #: ../src/cairo-dock-internal-taskbar.c:193
 msgid "Display and interact with the currently open windows."
@@ -425,28 +435,29 @@ msgstr ""
 #: ../src/cairo-dock-internal-views.c:87 ../data/messages:103
 #: ../data/messages:667 ../data/messages:1293
 msgid "Views"
-msgstr ""
+msgstr "Görüş alanları"
 
 #: ../src/cairo-dock-internal-views.c:89
 msgid "Select a view for each of your docks."
-msgstr ""
+msgstr "Dock'larınızın her biri için ayrı bir görünüm seçin."
 
 #: ../src/cairo-dock-menu.c:109
 #, c-format
 msgid "Set position for the dock '%s'"
-msgstr ""
+msgstr "Dock için konum ayarlama '%s'"
 
 #: ../src/cairo-dock-menu.c:199
 msgid "Community's site"
-msgstr ""
+msgstr "Topluluk sitesi"
 
 #: ../src/cairo-dock-menu.c:200
 msgid "A problem ? A suggestion ? Want to talk to us ? You're welcome !"
 msgstr ""
+"Bir sorun mu var ? Bir öneri ? Bizimle konuşmak mı istiyor sun ? Hoş geldin !"
 
 #: ../src/cairo-dock-menu.c:203
 msgid "Development's site"
-msgstr ""
+msgstr "Geliştirme sitesi"
 
 #: ../src/cairo-dock-menu.c:204
 msgid "Find out the latest version of Cairo-Dock here !."
@@ -454,19 +465,19 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:220
 msgid "Development"
-msgstr ""
+msgstr "Geliştiriciler"
 
 #: ../src/cairo-dock-menu.c:226
 msgid "Artwork"
-msgstr ""
+msgstr "Çizimler"
 
 #: ../src/cairo-dock-menu.c:230
 msgid "Support"
-msgstr ""
+msgstr "Destekleyenler"
 
 #: ../src/cairo-dock-menu.c:307
 msgid "Quit Cairo-Dock ?"
-msgstr ""
+msgstr "Cairo-Dock'tan çık ?"
 
 #: ../src/cairo-dock-menu.c:331
 msgid "Configure"
@@ -478,7 +489,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:340
 msgid "Set up this dock"
-msgstr ""
+msgstr "Bu docku kur"
 
 #: ../src/cairo-dock-menu.c:345
 msgid "Set up the position of this main dock."
@@ -486,7 +497,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:348
 msgid "Manage themes"
-msgstr ""
+msgstr "Temaları yönet"
 
 #: ../src/cairo-dock-menu.c:353
 msgid ""
@@ -495,11 +506,11 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:358
 msgid "unlock icons"
-msgstr ""
+msgstr "simgelerin kilidini aç"
 
 #: ../src/cairo-dock-menu.c:358
 msgid "lock icons"
-msgstr ""
+msgstr "simgeleri kilitle"
 
 #: ../src/cairo-dock-menu.c:362
 msgid "This will (un)lock the position of the icons."
@@ -507,11 +518,11 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:366
 msgid "unlock dock"
-msgstr ""
+msgstr "dock kilidini aç"
 
 #: ../src/cairo-dock-menu.c:366
 msgid "lock dock"
-msgstr ""
+msgstr "dock kilitle"
 
 #: ../src/cairo-dock-menu.c:371
 msgid "This will (un)lock the whole dock."
@@ -519,7 +530,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:376
 msgid "Quick-Hide"
-msgstr ""
+msgstr "Hızlı-Gizle"
 
 #: ../src/cairo-dock-menu.c:381
 msgid "It will hide the dock until you enter inside with the mouse."
@@ -540,11 +551,11 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:406
 msgid "About"
-msgstr ""
+msgstr "Hakkında"
 
 #: ../src/cairo-dock-menu.c:414
 msgid "Quit"
-msgstr ""
+msgstr "Çık"
 
 #: ../src/cairo-dock-menu.c:434
 #, c-format
@@ -560,7 +571,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:510
 msgid "Undefined"
-msgstr ""
+msgstr "Tanımlanmamış"
 
 #: ../src/cairo-dock-menu.c:556
 msgid "This icon doesn't have a desktop file."
