@@ -347,7 +347,7 @@ rounded bottom corner = true
 #F+
 frame_frame_ =
 
-#F[Hidden dock;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-hidden-dock.png]
+#F[Hidden dock;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-hidden-dock.svg]
 #{Configure the dock's appearence when hidden.}
 hidden_dock = 
 
@@ -365,7 +365,7 @@ callback reverse = true
 #m[Accessibility] Configure the auto-hide behaviour.
 config_hidden = 
 
-#X+[Background movement;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-mouse.png]
+#X+[Background movement;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-mouse.svg]
 frame_mouse = 
 
 #Y+[No;0;0;Follow the mouse;1;1;Link with the mouse;1;1] Move the background image along with the cursor ?
