@@ -195,9 +195,6 @@ static gboolean _cairo_dock_grow_up (CairoDock *pDock)
 	if (pDock->iMagnitudeIndex > CAIRO_DOCK_NB_MAX_ITERATIONS)
 		pDock->iMagnitudeIndex = CAIRO_DOCK_NB_MAX_ITERATIONS;
 
-	//pDock->fFoldingFactor *= sqrt (pDock->fFoldingFactor);
-	//if (pDock->fFoldingFactor < 0.03)
-	//	pDock->fFoldingFactor = 0;
 	if (pDock->fFoldingFactor != 0)
 	{
 		int iAnimationDeltaT = cairo_dock_get_animation_delta_t (pDock);
@@ -251,9 +248,6 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 	//\_________________ On replie le dock.
 	if (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != 1)
 	{
-		//pDock->fFoldingFactor = pow (pDock->fFoldingFactor, 2./3);
-		//if (pDock->fFoldingFactor > mySystem.fUnfoldAcceleration)
-		//	pDock->fFoldingFactor = mySystem.fUnfoldAcceleration;
 		int iAnimationDeltaT = cairo_dock_get_animation_delta_t (pDock);
 		if (iAnimationDeltaT == 0)  // precaution.
 		{
@@ -277,7 +271,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
 	
 	//\_________________ On recalcule les icones.
-	if (iPrevMagnitudeIndex != 0)
+	///if (iPrevMagnitudeIndex != 0)
 	{
 		cairo_dock_calculate_dock_icons (pDock);
 		if (! pDock->bIsShrinkingDown)
@@ -286,11 +280,11 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 		cairo_dock_replace_all_dialogs ();
 	}
 
-	if (pDock->iMagnitudeIndex == 0)  // on est arrive en bas.
+	if (pDock->iMagnitudeIndex == 0 && (pDock->fFoldingFactor == 0 || pDock->fFoldingFactor == 1))  // on est arrive en bas.
 	{
 		//g_print ("equilibre atteint (%d)\n", pDock->container.bInside);
-		if (iPrevMagnitudeIndex != 0 || (pDock->fDecorationsOffsetX == 0 && (pDock->fFoldingFactor == 0 || pDock->fFoldingFactor == 1)))  // on vient d'arriver en bas OU l'animation de depliage est finie.
-		{
+		///if (iPrevMagnitudeIndex != 0 || (pDock->fDecorationsOffsetX == 0 && (pDock->fFoldingFactor == 0 || pDock->fFoldingFactor == 1)))  // on vient d'arriver en bas OU l'animation de depliage est finie.
+		///{
 			if (! pDock->container.bInside)  // on peut etre hors des icones sans etre hors de la fenetre.
 			{
 				//g_print ("rideau !\n");
@@ -347,11 +341,11 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 			{
 				cairo_dock_calculate_dock_icons (pDock);  // relance le grossissement si on est dedans.
 			}
-		}
+		/**}
 		else if (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != 1)
 		{
 			cairo_dock_calculate_dock_icons (pDock);
-		}
+		}*/
 		return (!pDock->bIsGrowingUp && (pDock->fDecorationsOffsetX != 0 || (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != 1)));
 	}
 	else

@@ -67,7 +67,8 @@ static Atom s_aNetDesktopGeometry;
 static Atom s_aNetNbDesktops;
 static Atom s_aRootMapID;
 // Atoms pour les fenetres
-static Atom s_aNetClientList;
+static Atom s_aNetClientList;  // z-order
+static Atom s_aNetClientListStacking;  // age-order
 static Atom s_aNetActiveWindow;
 static Atom s_aNetWmState;
 static Atom s_aNetWmSticky;
@@ -110,7 +111,8 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 	s_aNetNbDesktops			= XInternAtom (s_XDisplay, "_NET_NUMBER_OF_DESKTOPS", False);
 	s_aRootMapID			= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
 	
-	s_aNetClientList			= XInternAtom (s_XDisplay, "_NET_CLIENT_LIST_STACKING", False);
+	s_aNetClientListStacking	= XInternAtom (s_XDisplay, "_NET_CLIENT_LIST_STACKING", False);
+	s_aNetClientList			= XInternAtom (s_XDisplay, "_NET_CLIENT_LIST", False);
 	s_aNetActiveWindow		= XInternAtom (s_XDisplay, "_NET_ACTIVE_WINDOW", False);
 	s_aNetWmState			= XInternAtom (s_XDisplay, "_NET_WM_STATE", False);
 	s_aNetWmFullScreen		= XInternAtom (s_XDisplay, "_NET_WM_STATE_FULLSCREEN", False);
@@ -1280,7 +1282,7 @@ gboolean cairo_dock_xwindow_is_on_current_desktop (Window Xid)
 }
 
 
-Window *cairo_dock_get_windows_list (gulong *iNbWindows)
+Window *cairo_dock_get_windows_list (gulong *iNbWindows, gboolean bStackOrder)
 {
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
@@ -1288,7 +1290,7 @@ Window *cairo_dock_get_windows_list (gulong *iNbWindows)
 
 	Window root = DefaultRootWindow (s_XDisplay);
 	gulong iLeftBytes;
-	XGetWindowProperty (s_XDisplay, root, s_aNetClientList, 0, G_MAXLONG, False, XA_WINDOW, &aReturnedType, &aReturnedFormat, iNbWindows, &iLeftBytes, (guchar **)&XidList);
+	XGetWindowProperty (s_XDisplay, root, (bStackOrder ? s_aNetClientListStacking : s_aNetClientList), 0, G_MAXLONG, False, XA_WINDOW, &aReturnedType, &aReturnedFormat, iNbWindows, &iLeftBytes, (guchar **)&XidList);
 	return XidList;
 }
 

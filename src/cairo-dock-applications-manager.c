@@ -187,7 +187,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 static void on_update_applis_list (CairoDock *pDock, gint iTime)
 {
 	gulong i, iNbWindows = 0;
-	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows);
+	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows, TRUE);
 	
 	Window Xid;
 	Icon *icon;
@@ -985,7 +985,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 	
 	//\__________________ On recupere l'ensemble des fenetres presentes.
 	gulong i, iNbWindows = 0;
-	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows);
+	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows, FALSE);  // on recupere les fenetres par ordre de creation, de facon a ce que si on redemarre la barre des taches, les lanceurs soient lies aux memes fenetres. Au prochain update, la liste sera recuperee par z-order, ce qui remettra le z-order de chaque icone a jour.
 
 	//\__________________ On cree les icones de toutes ces applis.
 	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
@@ -993,7 +993,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 	
 	CairoDock *pParentDock;
 	gboolean bUpdateMainDockSize = FALSE;
-	int iStackOrder = 0;
+	///int iStackOrder = 0;
 	Window Xid;
 	Icon *pIcon;
 	for (i = 0; i < iNbWindows; i ++)
@@ -1003,7 +1003,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 		
 		if (pIcon != NULL)
 		{
-			pIcon->iStackOrder = iStackOrder ++;
+			///pIcon->iStackOrder = iStackOrder ++;
 			pIcon->iLastCheckTime = s_iTime;
 			if (/*(pIcon->bIsHidden || ! myTaskBar.bHideVisibleApplis) && */(! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (pIcon)))
 			{

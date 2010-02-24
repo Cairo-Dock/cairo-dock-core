@@ -56,6 +56,7 @@
 #include "cairo-dock-internal-position.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-internal-system.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-emblem.h"
 #include "cairo-dock-dock-manager.h"
@@ -254,7 +255,7 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 			{
 				//cd_debug ("on cache %s par filiation", icon->cName);
 				icon->pSubDock->iScrollOffset = 0;
-				icon->pSubDock->fFoldingFactor = 0;
+				icon->pSubDock->fFoldingFactor = (mySystem.bAnimateSubDock ? 1 : 0);  /// 0
 				gtk_widget_hide (icon->pSubDock->container.pWidget);
 			}
 		}

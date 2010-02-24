@@ -64,6 +64,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDesklets *pDesklets)
 	pDesklets->cRotateButtonImage = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "rotate image", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	pDesklets->cRetachButtonImage = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "retach image", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	pDesklets->cDepthRotateButtonImage = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "depth rotate image", &bFlushConfFileNeeded, NULL, NULL, NULL);
+	pDesklets->cNoInputButtonImage = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "no input image", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	return bFlushConfFileNeeded;
 }
 
@@ -74,6 +75,7 @@ static void reset_config (CairoConfigDesklets *pDesklets)
 	g_free (pDesklets->cRotateButtonImage);
 	g_free (pDesklets->cRetachButtonImage);
 	g_free (pDesklets->cDepthRotateButtonImage);
+	g_free (pDesklets->cNoInputButtonImage);
 }
 
 
@@ -83,9 +85,10 @@ static void reload (CairoConfigDesklets *pPrevDesklets, CairoConfigDesklets *pDe
 	cairo_t* pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 	if (cairo_dock_strings_differ (pPrevDesklets->cRotateButtonImage, pDesklets->cRotateButtonImage) ||
 		cairo_dock_strings_differ (pPrevDesklets->cRetachButtonImage, pDesklets->cRetachButtonImage) ||
-		cairo_dock_strings_differ (pPrevDesklets->cDepthRotateButtonImage, pDesklets->cDepthRotateButtonImage))
+		cairo_dock_strings_differ (pPrevDesklets->cDepthRotateButtonImage, pDesklets->cDepthRotateButtonImage) ||
+		cairo_dock_strings_differ (pPrevDesklets->cNoInputButtonImage, pDesklets->cNoInputButtonImage))
 	{
-		cairo_dock_load_desklet_buttons (pCairoContext);
+		cairo_dock_load_desklet_buttons ();
 	}
 	if (cairo_dock_strings_differ (pPrevDesklets->cDeskletDecorationsName, pDesklets->cDeskletDecorationsName))
 	{

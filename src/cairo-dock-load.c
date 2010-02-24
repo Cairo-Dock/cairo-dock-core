@@ -1158,7 +1158,7 @@ void cairo_dock_unload_additionnal_textures (void)
 	cairo_dock_unload_image_buffer (&g_pClassIndicatorBuffer);
 	cairo_dock_unload_image_buffer (&g_pBoxAboveBuffer);
 	cairo_dock_unload_image_buffer (&g_pBoxBelowBuffer);
-	cairo_dock_unload_desklet_buttons_texture ();
+	cairo_dock_unload_desklet_buttons ();
 	cairo_dock_unload_dialog_buttons ();
 	if (g_pGradationTexture[0] != 0)
 	{

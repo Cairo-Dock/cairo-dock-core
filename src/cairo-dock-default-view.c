@@ -92,11 +92,11 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 		}
 	}
 	
-	pDock->iMaxDockHeight = (int) ((1 + myIcons.fAmplitude) * pDock->iMaxIconHeight) + myLabels.iLabelSize + myBackground.iDockLineWidth + myBackground.iFrameMargin;
+	pDock->iMaxDockHeight = (int) ((1 + myIcons.fAmplitude) * pDock->iMaxIconHeight * pDock->container.fRatio) + myLabels.iLabelSize + myBackground.iDockLineWidth + myBackground.iFrameMargin;
 	//g_print ("myLabels.iLabelSize : %d => %d\n", myLabels.iLabelSize, (int)pDock->iMaxDockHeight);
 
 	pDock->iDecorationsWidth = pDock->iMaxDockWidth;
-	pDock->iMinDockHeight = pDock->iMaxIconHeight + 2 * myBackground.iFrameMargin + 2 * myBackground.iDockLineWidth;
+	pDock->iMinDockHeight = pDock->iMaxIconHeight * pDock->container.fRatio + 2 * myBackground.iFrameMargin + 2 * myBackground.iDockLineWidth;
 	
 	/**if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
 	{

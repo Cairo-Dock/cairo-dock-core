@@ -85,6 +85,7 @@ gboolean cairo_dock_fm_get_file_properties (const gchar *cURI, guint64 *iSize, t
 
 static gpointer _cairo_dock_fm_launch_uri_threaded (gchar *cURI)
 {
+	cd_debug ("%s (%s)", cURI);
 	s_pEnvBackend->launch_uri (cURI);
 	g_free (cURI);
 }

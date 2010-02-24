@@ -372,13 +372,6 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, CAIRO_CONTAINER (pDock), &w, &h);
 	
-	if (pIcon->pSubDock->icons == NULL)
-	{
-		/// dessiner une image "vide"...
-		
-		return;
-	}
-	
 	//\______________ On efface le dessin existant.
 	cairo_t *pCairoContext = NULL;
 	if (pIcon->iIconTexture != 0)  // dessin opengl

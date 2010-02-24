@@ -194,7 +194,7 @@ animate subdocks = true
 
 #I-[100;600;fast;slow] Unfolding animation duration :
 #{The icons will appear folded on themselves, then will unfold untill they fill the whole dock. The smaller, the faster it will be.}
-unfold duration = 400
+unfold duration = 300
 
 #v
 sep_unfold =
@@ -660,6 +660,10 @@ retach image =
 #S+ Name of an image to use for the 'depth rotate' button :
 #{If you don't provide any, a default image will be used.}
 depth rotate image = 
+
+#S+ Name of an image to use for the 'no input' button :
+#{If you don't provide any, a default image will be used.}
+no input image = 
 
 
 [Indicators]

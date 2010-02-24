@@ -955,8 +955,11 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboole
 	
 	pSubDock->pRenderer->set_subdock_position (pPointedIcon, pParentDock);
 	
-	pSubDock->fFoldingFactor = (mySystem.bAnimateSubDock ? .99 : 0.);
-	cairo_dock_notify_on_icon (pPointedIcon, CAIRO_DOCK_UNFOLD_SUBDOCK, pPointedIcon);
+	if (pSubDock->icons != NULL)
+	{
+		pSubDock->fFoldingFactor = (mySystem.bAnimateSubDock ? .99 : 0.);
+		cairo_dock_notify_on_icon (pPointedIcon, CAIRO_DOCK_UNFOLD_SUBDOCK, pPointedIcon);
+	}
 	
 	int iNewWidth = pSubDock->iMaxDockWidth;
 	int iNewHeight = pSubDock->iMaxDockHeight;

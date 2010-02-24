@@ -28,6 +28,7 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-surface-factory.h"
+#include "cairo-dock-load.h"
 #include "cairo-dock-container.h"
 G_BEGIN_DECLS
 
@@ -82,6 +83,7 @@ struct _CairoDeskletAttribute {
 	CairoDeskletAccessibility iAccessibility;
 	gboolean bOnAllDesktops;
 	gint iNumDesktop;
+	gboolean bNoInput;
 } ;
 
 typedef gpointer CairoDeskletRendererDataParameter;
@@ -124,75 +126,72 @@ struct _CairoDeskletRenderer {
 
 /// Definition of a Desklet, which derives from a Container.
 struct _CairoDesklet {
-	/// container
+	//\________________ Core
+	// container
 	CairoContainer container;
-	/// Liste eventuelle d'icones placees sur le desklet, et susceptibles de recevoir des clics.
-	GList *icons;
-	/// le moteur de rendu utilise pour dessiner le desklet.
-	CairoDeskletRenderer *pRenderer;
-	/// donnees pouvant etre utilisees par le moteur de rendu.
-	gpointer pRendererData;
-	/// pour le deplacement manuel de la fenetre.
-	gboolean moving;
-	/// L'icone de l'applet.
+	// L'icone de l'applet.
 	Icon *pIcon;
-	/// un timer pour retarder l'ecriture dans le fichier lors des deplacements.
-	gint iSidWritePosition;
-	/// un timer pour retarder l'ecriture dans le fichier lors des redimensionnements.
-	gint iSidWriteSize;
-	/// compteur pour le fondu lors de l'entree dans le desklet.
-	gint iGradationCount;
-	/// timer associe.
-	gint iSidGradationOnEnter;
-	/// TRUE ssi on ne peut pas deplacer le widget a l'aide du simple clic gauche.
-	gboolean bPositionLocked;
-	/// un timer pour faire apparaitre le desklet avec un effet de zoom lors du detachage d'une applet.
-	gint iSidGrowUp;
-	/// taille a atteindre (fixee par l'utilisateur dans le.conf)
-	gint iDesiredWidth, iDesiredHeight;
-	/// taille connue par l'applet associee.
-	gint iKnownWidth, iKnownHeight;
-	/// les decorations.
+	// Liste eventuelle d'icones placees sur le desklet, et susceptibles de recevoir des clics.
+	GList *icons;
+	// le moteur de rendu utilise pour dessiner le desklet.
+	CairoDeskletRenderer *pRenderer;
+	// donnees pouvant etre utilisees par le moteur de rendu.
+	gpointer pRendererData;
+	// The following function outclasses the corresponding function of the renderer. This is useful if you don't want to pick icons but some elements that you draw yourself on the desklet.
+	CairoDeskletGLRenderFunc render_bounding_box;
+	// ID of the object that was picked in case the previous function is not null.
+	GLuint iPickedObject;
+	
+	//\________________ decorations
 	gchar *cDecorationTheme;
 	CairoDeskletDecoration *pUserDecoration;
 	gint iLeftSurfaceOffset;
 	gint iTopSurfaceOffset;
 	gint iRightSurfaceOffset;
 	gint iBottomSurfaceOffset;
+	CairoDockImageBuffer backGroundImageBuffer;
+	CairoDockImageBuffer foreGroundImageBuffer;
 	cairo_surface_t *pBackGroundSurface;
 	cairo_surface_t *pForeGroundSurface;
+	GLuint iBackGroundTexture;
+	GLuint iForeGroundTexture;
 	gdouble fImageWidth;
 	gdouble fImageHeight;
 	gdouble fBackGroundAlpha;
 	gdouble fForeGroundAlpha;
-	/// rotation.
-	gdouble fRotation;
+	
+	//\________________ properties.
+	gdouble fRotation;  // rotation.
 	gdouble fDepthRotationY;
 	gdouble fDepthRotationX;
+	gboolean bFixedAttitude;
+	gboolean bNoInput;
+	GtkWidget *pInteractiveWidget;
+	gboolean bPositionLocked;  // TRUE ssi on ne peut pas deplacer le widget a l'aide du simple clic gauche.
+	
+	//\________________ internal
+	gint iSidWritePosition;  // un timer pour retarder l'ecriture dans le fichier lors des deplacements.
+	gint iSidWriteSize;  // un timer pour retarder l'ecriture dans le fichier lors des redimensionnements.
+	gint iGradationCount;  // compteur pour le fondu lors de l'entree dans le desklet.
+	gint iSidGradationOnEnter;  // timer associe.
+	gint iSidGrowUp;  // un timer pour faire apparaitre le desklet avec un effet de zoom lors du detachage d'une applet.
+	gint iDesiredWidth, iDesiredHeight;  // taille a atteindre (fixee par l'utilisateur dans le.conf)
+	gint iKnownWidth, iKnownHeight;  // taille connue par l'applet associee.
+	gboolean bSpaceReserved;  // l'espace est actuellement reserve.
+	gboolean bAllowMinimize;  // TRUE to allow the desklet to be minimized once. The flag is reseted to FALSE after the desklet has minimized.
+	gint iMouseX2d;  // X position of the pointer taking into account the 2D transformations on the desklet (for an opengl renderer, you'll have to use the picking).
+	gint iMouseY2d;  // Y position of the pointer taking into account the 2D transformations on the desklet (for an opengl renderer, you'll have to use the picking).
+	GTimer *pUnmapTimer;
+	
+	//\________________ current state
 	gboolean rotatingY;
 	gboolean rotatingX;
 	gboolean rotating;
-	/// rattachement au dock.
-	gboolean retaching;
-	/// date du clic.
-	guint time;
-	GLuint iBackGroundTexture;
-	GLuint iForeGroundTexture;
-	gboolean bFixedAttitude;
-	GtkWidget *pInteractiveWidget;
-	gboolean bSpaceReserved;
-	/// TRUE to allow the desklet to be minimized once. The flag is reseted to FALSE after the desklet has minimized.
-	gboolean bAllowMinimize;
-	/// X position of the pointer taking into account the 2D transformations on the desklet (for an opengl renderer, you'll have to use the picking).
-	gint iMouseX2d;
-	/// Y position of the pointer taking into account the 2D transformations on the desklet (for an opengl renderer, you'll have to use the picking).
-	gint iMouseY2d;
-	/// The following function outclasses the corresponding function of the renderer. This is useful if you don't want to pick icons but some elements that you draw yourself on the desklet.
-	CairoDeskletGLRenderFunc render_bounding_box;
-	/// ID of the object that was picked in case the previous function is not null.
-	GLuint iPickedObject;
+	gboolean retaching;  // rattachement au dock.
+	gboolean making_transparent;  // no input.
+	gboolean moving;  // pour le deplacement manuel de la fenetre.
 	gboolean bClicked;
-	GTimer *pUnmapTimer;
+	guint time;  // date du clic.
 };
 
 /// Definition of a function that runs through all desklets.
@@ -211,10 +210,9 @@ typedef gboolean (* CairoDockForeachDeskletFunc) (CairoDesklet *pDesklet, CairoD
 */
 #define CAIRO_DESKLET(pContainer) ((CairoDesklet *)pContainer)
 
-void cairo_dock_load_desklet_buttons (cairo_t *pSourceContext);
-void cairo_dock_load_desklet_buttons_texture (void);
+void cairo_dock_init_desklet_manager (void);
+void cairo_dock_load_desklet_buttons (void);
 void cairo_dock_unload_desklet_buttons (void);
-void cairo_dock_unload_desklet_buttons_texture (void);
 
 void cairo_dock_reload_desklets_decorations (gboolean bDefaultThemeOnly, cairo_t *pSourceContext);
 void cairo_dock_free_desklet_decoration (CairoDeskletDecoration *pDecoration);

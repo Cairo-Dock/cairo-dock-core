@@ -235,7 +235,7 @@ int main (int argc, char** argv)
 	gchar *cDisableApplet = NULL;
 	for (i = 1; i < argc; i ++)
 	{
-		g_print ("'%s'\n", argv[i]);
+		//g_print ("'%s'\n", argv[i]);
 		if (strcmp (argv[i], "-m") == 0)
 			iNbMaintenance ++;
 		
@@ -449,31 +449,8 @@ int main (int argc, char** argv)
 		g_cCairoDockDataDir = g_strdup_printf ("%s/.config/%s", getenv("HOME"), CAIRO_DOCK_DATA_DIR);
 		if (! g_file_test (g_cCairoDockDataDir, G_FILE_TEST_IS_DIR))
 		{
-			gchar *cOldDataDir = g_strdup_printf ("%s/.cairo-dock", getenv("HOME"));
-			if (g_file_test (cOldDataDir, G_FILE_TEST_IS_DIR))  // l'ancien rep existe, on le deplace.
-			{
-				cd_warning ("Cairo-Dock's data dir is now located in ~/.config, it will be moved there");
-				gchar *cCommand = g_strdup_printf ("mkdir \"%s/.config\" > /dev/null", getenv("HOME"));
-				cd_message (cCommand);
-				r = system (cCommand);
-				g_free (cCommand);
-					
-				cCommand = g_strdup_printf ("mv \"%s\" \"%s\"", cOldDataDir, g_cCairoDockDataDir);
-				cd_message (cCommand);
-				r = system (cCommand);
-				g_free (cCommand);
-				
-				cCommand = g_strdup_printf ("sed -i \"s/~\\/.cairo-dock/~\\/.config\\/%s/g\" \"%s/%s/%s\"", CAIRO_DOCK_DATA_DIR, g_cCairoDockDataDir, CAIRO_DOCK_CURRENT_THEME_NAME, CAIRO_DOCK_CONF_FILE);
-				cd_message (cCommand);
-				r = system (cCommand);
-				g_free (cCommand);
-			}
-			else
-			{
-				_create_dir_or_die (g_cCairoDockDataDir);
-				bFirstLaunch = TRUE;
-			}
-			g_free (cOldDataDir);
+			_create_dir_or_die (g_cCairoDockDataDir);
+			bFirstLaunch = TRUE;
 		}
 	}
 	gchar *cThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
@@ -493,6 +470,7 @@ int main (int argc, char** argv)
 	{
 		_create_dir_or_die (g_cCurrentThemePath);
 	}
+	
 	g_cCurrentLaunchersPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
 	if (! g_file_test (g_cCurrentLaunchersPath, G_FILE_TEST_IS_DIR))
 	{
@@ -517,6 +495,9 @@ int main (int argc, char** argv)
 
 	//\___________________ On initialise le gestionnaire de docks (a faire en 1er).
 	cairo_dock_initialize_dock_manager ();
+	
+	//\___________________ On initialise le gestionnaire de desklets.
+	cairo_dock_init_desklet_manager ();
 	
 	//\___________________ On initialise le gestionnaire de vues.
 	cairo_dock_initialize_renderer_manager ();
