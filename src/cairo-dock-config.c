@@ -995,9 +995,8 @@ xmlDocPtr cairo_dock_open_xml_file (const gchar *cDataFilePath, const gchar *cRo
 
 void cairo_dock_close_xml_file (xmlDocPtr doc)
 {
-	xmlCleanupParser ();
 	if (doc)
-		xmlFreeDoc (doc);
+		xmlFreeDoc (doc);  // ne pas utiliser xmlCleanupParser(), cela peut affecter les autres threads utilisant libxml !
 }
 
 

@@ -542,7 +542,7 @@ int main (int argc, char** argv)
 	gboolean bOpenGLok = FALSE;
 	if (bForceOpenGL || (! g_bForceCairo && ! g_bUseGlitz))
 		bOpenGLok = cairo_dock_initialize_opengl_backend (bToggleIndirectRendering, bForceOpenGL);
-	if (bOpenGLok && ! bForceOpenGL && ! cairo_dock_opengl_is_safe ())  // opengl disponible sans l'avoir force mais pas safe => on demande confirmation.
+	if (bOpenGLok && ! bForceOpenGL && ! bToggleIndirectRendering && ! cairo_dock_opengl_is_safe ())  // opengl disponible sans l'avoir force mais pas safe => on demande confirmation.
 	{
 		GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Use OpenGL in Cairo-Dock ?"),
 			NULL,
@@ -795,6 +795,7 @@ int main (int argc, char** argv)
 	cairo_dock_free_all_docks ();
 	
 	rsvg_term ();
+	xmlCleanupParser ();
 	
 	cd_message ("Bye bye !");
 	g_print ("\033[0m\n");
