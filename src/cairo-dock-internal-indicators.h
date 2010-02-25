@@ -50,6 +50,7 @@ struct _CairoConfigIndicators {
 	// grouped indicator.
 	gchar *cClassIndicatorImagePath;
 	gboolean bZoomClassIndicator;
+	gboolean bUseClassIndic;
 	};
 
 

@@ -281,8 +281,6 @@ CairoDockModule *cairo_dock_foreach_module_in_alphabetical_order (GCompareFunc p
 gchar *cairo_dock_list_active_modules (void);
 void cairo_dock_update_conf_file_with_active_modules (void);
 
-void cairo_dock_update_module_instance_order (CairoDockModuleInstance *pModuleInstance, double fOrder);
-
 
 CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule, gchar *cConfFilePah);
 void cairo_dock_free_module_instance (CairoDockModuleInstance *pInstance);

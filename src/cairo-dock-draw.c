@@ -62,10 +62,6 @@ extern CairoDockImageBuffer g_pClassIndicatorBuffer;
 extern CairoDockImageBuffer g_pIconBackgroundImageBuffer;
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;
 
-/**extern double g_fBackgroundImageWidth, g_fBackgroundImageHeight;
-extern cairo_surface_t *g_pBackgroundSurface;
-extern cairo_surface_t *g_pBackgroundSurfaceFull;*/
-
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;

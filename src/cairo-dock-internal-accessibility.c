@@ -150,7 +150,7 @@ static void reset_config (CairoConfigAccessibility *pAccessibility)
 
 
 #define _bind_key(cShortcut) \
-	do { if (! cd_keybinder_bind (cShortcut, (CDBindkeyHandler) cairo_dock_raise_from_keyboard, NULL)) { \
+	do { if (! cd_keybinder_bind (cShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL)) { \
 		g_free (cShortcut); \
 		cShortcut = NULL; } } while (0)
 
@@ -164,8 +164,8 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		if (pPrevAccessibility->cRaiseDockShortcut == NULL || strcmp (pAccessibility->cRaiseDockShortcut, pPrevAccessibility->cRaiseDockShortcut) != 0)
 		{
 			if (pPrevAccessibility->cRaiseDockShortcut != NULL)
-				cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_keyboard);
-			if (! cd_keybinder_bind (pAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_keyboard, NULL))
+				cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
+			if (! cd_keybinder_bind (pAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL))
 			{
 				g_free (pAccessibility->cRaiseDockShortcut);
 				pAccessibility->cRaiseDockShortcut = NULL;
@@ -176,7 +176,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 	{
 		if (pPrevAccessibility->cRaiseDockShortcut != NULL)
 		{
-			cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_keyboard);
+			cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
 			cairo_dock_place_root_dock (pDock);
 			gtk_widget_show (pDock->container.pWidget);
 		}

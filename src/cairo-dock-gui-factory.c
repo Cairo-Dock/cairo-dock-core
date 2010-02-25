@@ -40,7 +40,7 @@
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-load.h"
-#include "cairo-dock-callbacks.h" // cairo_dock_launch_command_sync
+#include "cairo-dock-launcher-factory.h" // cairo_dock_launch_command_sync
 
 #define CAIRO_DOCK_GUI_MARGIN 4
 #define CAIRO_DOCK_ICON_MARGIN 6
@@ -2652,7 +2652,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR :  // string avec un selecteur de touche clavier (Merci Ctaf !)
 			case CAIRO_DOCK_WIDGET_CLASS_SELECTOR :  // string avec un selecteur de class (Merci Matttbe !)
 				// on construit l'entree de texte.
-				cValue = g_key_file_get_locale_string (pKeyFile, cGroupName, cKeyName, NULL, NULL);  // nous permet de recuperer les ';' aussi.
+				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
 				pOneWidget = gtk_entry_new ();
 				pEntry = pOneWidget;
 				if( iElementType == CAIRO_DOCK_WIDGET_PASSWORD_ENTRY )  // on cache le texte entre et on decrypte 'cValue'.
@@ -3197,10 +3197,10 @@ static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFil
 			cTranslatedValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyNameFull, NULL);
 			g_free (cKeyNameFull);
 			if (cTranslatedValue != NULL && strcmp (cTranslatedValue, "") != 0)
-				{
+			{
 				g_free (cTranslatedValue);
 				break;
-				}
+			}
 			g_free (cTranslatedValue);
 		}
 		if (cPossibleLocales[i] != NULL)

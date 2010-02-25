@@ -108,6 +108,7 @@
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-launcher.h"
+#include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-dbus.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-internal-icons.h"
@@ -124,8 +125,11 @@ GdkWindowTypeHint g_iWmHint = GDK_WINDOW_TYPE_HINT_DOCK;  // hint pour la fenetr
 
 gchar *g_cCairoDockDataDir = NULL;  // le repertoire racine contenant tout.
 gchar *g_cCurrentThemePath = NULL;  // le chemin vers le repertoire du theme courant.
+gchar *g_cExtrasDirPath = NULL;  // le chemin vers le repertoire des extra.
+gchar *g_cThemesDirPath = NULL;  // le chemin vers le repertoire des themes.
 gchar *g_cCurrentLaunchersPath = NULL;  // le chemin vers le repertoire des lanceurs du theme courant.
 gchar *g_cCurrentIconsPath = NULL;  // le chemin vers le repertoire des icones du theme courant.
+gchar *g_cCurrentPlugInsPath = NULL;  // le chemin vers le repertoire des plug-ins du theme courant.
 gchar *g_cConfFile = NULL;  // le chemin du fichier de conf.
 int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
 
@@ -432,63 +436,27 @@ int main (int argc, char** argv)
 	bind_textdomain_codeset (CAIRO_DOCK_GETTEXT_PACKAGE, "UTF-8");
 	textdomain (CAIRO_DOCK_GETTEXT_PACKAGE);
 
-	//\___________________ On teste l'existence du repertoire des donnees ~/.config/cairo-dock.
-	gboolean bFirstLaunch = FALSE;
-	int r;
+	//\___________________ On definit les repertoires des donnees.
+	gchar *cRootDataDirPath;
 	if (cUserDefinedDataDir != NULL)
 	{
-		g_cCairoDockDataDir = cUserDefinedDataDir;
+		cRootDataDirPath = cUserDefinedDataDir;
 		cUserDefinedDataDir = NULL;
-		if (! g_file_test (g_cCairoDockDataDir, G_FILE_TEST_IS_DIR))
-		{
-			_create_dir_or_die (g_cCairoDockDataDir);
-		}
 	}
 	else
 	{
-		g_cCairoDockDataDir = g_strdup_printf ("%s/.config/%s", getenv("HOME"), CAIRO_DOCK_DATA_DIR);
-		if (! g_file_test (g_cCairoDockDataDir, G_FILE_TEST_IS_DIR))
-		{
-			_create_dir_or_die (g_cCairoDockDataDir);
-			bFirstLaunch = TRUE;
-		}
+		cRootDataDirPath = g_strdup_printf ("%s/.config/%s", getenv("HOME"), CAIRO_DOCK_DATA_DIR);
 	}
-	gchar *cThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
-	if (! g_file_test (cThemesDir, G_FILE_TEST_IS_DIR))
-	{
-		_create_dir_or_die (cThemesDir);
-	}
-	g_free (cThemesDir);
-	gchar *cExtrasDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR);
-	if (! g_file_test (cExtrasDir, G_FILE_TEST_IS_DIR))
-	{
-		_create_dir_or_die (cExtrasDir);
-	}
-	g_free (cExtrasDir);
-	g_cCurrentThemePath = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_CURRENT_THEME_NAME);
-	if (! g_file_test (g_cCurrentThemePath, G_FILE_TEST_IS_DIR))
-	{
-		_create_dir_or_die (g_cCurrentThemePath);
-	}
+	gboolean bFirstLaunch = ! g_file_test (cRootDataDirPath, G_FILE_TEST_IS_DIR);
 	
-	g_cCurrentLaunchersPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
-	if (! g_file_test (g_cCurrentLaunchersPath, G_FILE_TEST_IS_DIR))
-	{
-		_create_dir_or_die (g_cCurrentLaunchersPath);
-	}
-	g_cCurrentIconsPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
-	if (! g_file_test (g_cCurrentIconsPath, G_FILE_TEST_IS_DIR))
-	{
-		_create_dir_or_die (g_cCurrentIconsPath);
-		if (! bFirstLaunch)
-		{
-			cd_warning ("Cairo-Dock's local icons are now located in the 'icons' folder, they will be moved there");
-			gchar *cCommand = g_strdup_printf ("cd \"%s\" && mv *.svg *.png *.xpm *.jpg *.bmp *.gif \"%s\" > /dev/null", g_cCurrentLaunchersPath, g_cCurrentIconsPath);
-			cd_message (cCommand);
-			r = system (cCommand);
-			g_free (cCommand);
-		}
-	}
+	gchar *cExtraDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_EXTRAS_DIR, NULL);
+	gchar *cThemesDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_THEMES_DIR, NULL);
+	gchar *cCurrentThemeDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_CURRENT_THEME_NAME, NULL);
+	cairo_dock_set_paths (cRootDataDirPath, cExtraDirPath, cThemesDirPath, cCurrentThemeDirPath);
+	
+	  /////////////
+	 //// LIB ////
+	/////////////
 	
 	//\___________________ On initialise les numeros de version.
 	cairo_dock_get_version_from_string (CAIRO_DOCK_VERSION, &g_iMajorVersion, &g_iMinorVersion, &g_iMicroVersion);
@@ -521,6 +489,54 @@ int main (int argc, char** argv)
 	//\___________________ On enregistre les rendus de donnees.
 	cairo_dock_register_data_renderer_entry_point ("gauge", (CairoDataRendererNewFunc) cairo_dock_new_gauge);
 	cairo_dock_register_data_renderer_entry_point ("graph", (CairoDataRendererNewFunc) cairo_dock_new_graph);
+	
+	//\___________________ On enregistre les notifications de base.
+	cairo_dock_register_notification (CAIRO_DOCK_BUILD_ICON_MENU,
+		(CairoDockNotificationFunc) cairo_dock_notification_build_icon_menu,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_DROP_DATA,
+		(CairoDockNotificationFunc) cairo_dock_notification_drop_data,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_CLICK_ICON,
+		(CairoDockNotificationFunc) cairo_dock_notification_click_icon,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_MIDDLE_CLICK_ICON,
+		(CairoDockNotificationFunc) cairo_dock_notification_middle_click_icon,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_SCROLL_ICON,
+		(CairoDockNotificationFunc) cairo_dock_notification_scroll_icon,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_RENDER_DOCK,
+		(CairoDockNotificationFunc) cairo_dock_render_dock_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_RENDER_ICON,
+		(CairoDockNotificationFunc) cairo_dock_render_icon_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_RENDER_DESKLET,
+		(CairoDockNotificationFunc) cairo_dock_render_desklet_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_INSERT_ICON,
+		(CairoDockNotificationFunc) cairo_dock_on_insert_remove_icon_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_REMOVE_ICON,
+		(CairoDockNotificationFunc) cairo_dock_on_insert_remove_icon_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_UPDATE_ICON,
+		(CairoDockNotificationFunc) cairo_dock_update_inserting_removing_icon_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_STOP_ICON,
+		(CairoDockNotificationFunc) cairo_dock_stop_inserting_removing_icon_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_UPDATE_FLYING_CONTAINER,
+		(CairoDockNotificationFunc) cairo_dock_update_flying_container_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_RENDER_FLYING_CONTAINER,
+		(CairoDockNotificationFunc) cairo_dock_render_flying_container_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	
+	  /////////////
+	 //// APP ////
+	/////////////
 	
 	//\___________________ On initialise le support d'OpenGL.
 	gboolean bOpenGLok = FALSE;
@@ -579,49 +595,6 @@ int main (int argc, char** argv)
 		(CairoDockNotificationFunc) cairo_dock_notification_build_container_menu,
 		CAIRO_DOCK_RUN_FIRST, NULL);
 	
-	cairo_dock_register_notification (CAIRO_DOCK_BUILD_ICON_MENU,
-		(CairoDockNotificationFunc) cairo_dock_notification_build_icon_menu,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_DROP_DATA,
-		(CairoDockNotificationFunc) cairo_dock_notification_drop_data,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_CLICK_ICON,
-		(CairoDockNotificationFunc) cairo_dock_notification_click_icon,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_MIDDLE_CLICK_ICON,
-		(CairoDockNotificationFunc) cairo_dock_notification_middle_click_icon,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_SCROLL_ICON,
-		(CairoDockNotificationFunc) cairo_dock_notification_scroll_icon,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_RENDER_DOCK,
-		(CairoDockNotificationFunc) cairo_dock_render_dock_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_RENDER_ICON,
-		(CairoDockNotificationFunc) cairo_dock_render_icon_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_RENDER_DESKLET,
-		(CairoDockNotificationFunc) cairo_dock_render_desklet_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_INSERT_ICON,
-		(CairoDockNotificationFunc) cairo_dock_on_insert_remove_icon_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_REMOVE_ICON,
-		(CairoDockNotificationFunc) cairo_dock_on_insert_remove_icon_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_UPDATE_ICON,
-		(CairoDockNotificationFunc) cairo_dock_update_inserting_removing_icon_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_STOP_ICON,
-		(CairoDockNotificationFunc) cairo_dock_stop_inserting_removing_icon_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_UPDATE_FLYING_CONTAINER,
-		(CairoDockNotificationFunc) cairo_dock_update_flying_container_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_RENDER_FLYING_CONTAINER,
-		(CairoDockNotificationFunc) cairo_dock_render_flying_container_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	
 	//\___________________ On initialise la gestion des crash.
 	if (! bTesting)
 		_cairo_dock_set_signal_interception ();
@@ -678,7 +651,7 @@ int main (int argc, char** argv)
 	{
 		gchar *cCommand = g_strdup_printf ("/bin/cp -r \"%s\"/* \"%s/%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes/_default_", g_cCairoDockDataDir, CAIRO_DOCK_CURRENT_THEME_NAME);
 		cd_message (cCommand);
-		r = system (cCommand);
+		int r = system (cCommand);
 		g_free (cCommand);
 		
 		cairo_dock_mark_theme_as_modified (FALSE);  // on ne proposera pas de sauvegarder ce theme.

@@ -208,7 +208,7 @@ static gboolean _cairo_dock_hide_dock_if_parent (gchar *cDockName, CairoDock *pD
 		//g_print (" il faut cacher ce dock parent (%d)\n", pDock->iRefCount);
 		if (pDock->iRefCount == 0)
 		{
-			cairo_dock_leave_from_main_dock (pDock);
+			cairo_dock_emit_leave_signal (pDock);
 		}
 		else
 		{

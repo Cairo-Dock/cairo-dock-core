@@ -588,17 +588,8 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 	//g_print ("icon1->fOrder:%.2f\n", icon1->fOrder);
 	
 	//\_________________ On change l'ordre dans le fichier du lanceur 1.
-	if ((CAIRO_DOCK_IS_LAUNCHER (icon1) || CAIRO_DOCK_IS_SEPARATOR (icon1)) && icon1->cDesktopFileName != NULL)
-	{
-		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon1->cDesktopFileName);
-		cairo_dock_update_conf_file (cDesktopFilePath,
-			G_TYPE_DOUBLE, "Desktop Entry", "Order", icon1->fOrder,
-			G_TYPE_INVALID);
-		g_free (cDesktopFilePath);
-	}
-	else if (CAIRO_DOCK_IS_APPLET (icon1))
-		cairo_dock_update_module_instance_order (icon1->pModuleInstance, icon1->fOrder);
-
+	cairo_dock_write_order_in_conf_file (icon1, icon1->fOrder);
+	
 	//\_________________ On change sa place dans la liste.
 	pDock->pFirstDrawnElement = NULL;
 	pDock->icons = g_list_remove (pDock->icons, icon1);

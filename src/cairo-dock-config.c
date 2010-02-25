@@ -74,6 +74,7 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-animations.h"
+#include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-config.h"
 
 extern CairoDock *g_pMainDock;
@@ -642,8 +643,8 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 		if (cRaiseDockShortcutOld == NULL || strcmp (myAccessibility.cRaiseDockShortcut, cRaiseDockShortcutOld) != 0)
 		{
 			if (cRaiseDockShortcutOld != NULL)
-				cd_keybinder_unbind (cRaiseDockShortcutOld, (CDBindkeyHandler) cairo_dock_raise_from_keyboard);
-			if (! cd_keybinder_bind (myAccessibility.cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_keyboard, NULL))
+				cd_keybinder_unbind (cRaiseDockShortcutOld, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
+			if (! cd_keybinder_bind (myAccessibility.cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL))
 			{
 				g_free (myAccessibility.cRaiseDockShortcut);
 				myAccessibility.cRaiseDockShortcut = NULL;
@@ -654,7 +655,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	{
 		if (cRaiseDockShortcutOld != NULL)
 		{
-			cd_keybinder_unbind (cRaiseDockShortcutOld, (CDBindkeyHandler) cairo_dock_raise_from_keyboard);
+			cd_keybinder_unbind (cRaiseDockShortcutOld, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
 			cairo_dock_place_root_dock (pDock);
 			gtk_widget_show (pDock->container.pWidget);
 		}

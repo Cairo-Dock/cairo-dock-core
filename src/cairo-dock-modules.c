@@ -1064,15 +1064,6 @@ void cairo_dock_update_conf_file_with_active_modules (void)
 }
 
 
-void cairo_dock_update_module_instance_order (CairoDockModuleInstance *pModuleInstance, double fOrder)
-{
-	cd_message ("%s <- %.2f", pModuleInstance->pModule->pVisitCard->cModuleName, fOrder);
-	cairo_dock_update_conf_file (pModuleInstance->cConfFilePath,
-		G_TYPE_DOUBLE, "Icon", "order", fOrder,
-		G_TYPE_INVALID);
-}
-
-
 /*
 * Cree une nouvelle instance d'un module. Cree l'icone et le container associe, et les place ou il faut.
 */

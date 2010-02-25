@@ -725,6 +725,9 @@ rotate indicator = true
 #F+[Indicator of grouped windows]
 frame_class =
 
+#Y[Use an indicator;1;2;Draw the sub-dock's icons as a stack;0;0] How to show that several icons are grouped :
+use class indic = 0 
+
 #S+ Image file :
 #{It only makes sense if you choosed to group the applis of the same class togather. Let blank to use the default one.}
 class indicator = 
