@@ -2,13 +2,51 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.0"
    width="48"
    height="48"
-   id="svg3581">
+   id="svg3581"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="icon-dialogs.svg">
+  <metadata
+     id="metadata31">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="491"
+     id="namedview29"
+     showgrid="false"
+     inkscape:zoom="4.9166667"
+     inkscape:cx="25.884805"
+     inkscape:cy="22.143264"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg3581" />
   <defs
      id="defs3583">
     <linearGradient
@@ -109,13 +147,15 @@
        id="path8836"
        style="opacity:0.3;fill:url(#radialGradient3534);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.99999988;marker:none;visibility:visible;display:inline;overflow:visible" />
     <path
-       d="M 24.000002,5.5018088 C 13.241573,5.5018088 4.5018088,14.24157 4.5018088,25 c 0,10.75843 8.7397642,19.498195 19.4981932,19.498192 10.758425,0 19.498199,-8.739762 19.498189,-19.498192 0,-10.75843 -8.739764,-19.4981912 -19.498189,-19.4981912 z"
+       d="M 24.000002,5.5018088 C 13.241573,5.5018088 4.5018088,14.24157 4.5018088,25 c 0,3.47906 0.913957,6.747019 2.5145814,9.576587 0.9944884,1.758047 -5.9832375,7.719744 -4.5131156,9.084813 1.2521189,1.162644 10.8942684,-2.209901 12.4181914,-1.405554 2.712317,1.431598 5.801796,2.242346 9.078536,2.242346 C 34.758427,44.498191 43.498201,35.75843 43.498191,25 c 0,-10.75843 -8.739764,-19.4981912 -19.498189,-19.4981912 z"
        id="path2555"
-       style="fill:url(#radialGradient3529);fill-opacity:1;stroke:url(#linearGradient3531);stroke-width:1.003654;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+       style="fill:url(#radialGradient3529);fill-opacity:1;stroke:url(#linearGradient3531);stroke-width:1.003654;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       sodipodi:nodetypes="cssssssc" />
     <path
-       d="M 42.500002,24.999344 C 42.500002,35.216942 34.21666,43.5 24.000235,43.5 13.782875,43.5 5.5000003,35.216848 5.5000003,24.999344 c 0,-10.217125 8.2828747,-18.4993439 18.5002347,-18.4993439 10.216425,0 18.499767,8.2822189 18.499767,18.4993439 l 0,0 z"
+       d="M 42.500002,24.999344 C 42.500002,35.216942 34.21666,43.5 24.000235,43.5 c -1.869755,0.02807 -2.898279,-0.01258 -4.117108,-0.414007 -1.709649,-0.563079 -4.326491,-2.467525 -7.825664,-1.767344 -2.8607109,0.572426 -5.3779769,1.589846 -8.7548913,1.444226 8.3581473,-10.518437 2.9194642,-6.098027 2.1974286,-17.763531 0,-10.217125 8.2828747,-18.4993439 18.5002347,-18.4993439 10.216425,0 18.499767,8.2822189 18.499767,18.4993439 l 0,0 z"
        id="path8655"
-       style="opacity:0.4;fill:none;stroke:url(#linearGradient3526);stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+       style="opacity:0.4;fill:none;stroke:url(#linearGradient3526);stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       sodipodi:nodetypes="ccssccscc" />
     <g
        transform="translate(-2.507855,0)"
        id="g3538">
