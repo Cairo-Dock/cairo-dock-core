@@ -374,7 +374,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		icon->cFileName = NULL;
 
 		gboolean bIsDirectory;  // on n'ecrase pas le fait que ce soit un container ou pas, car c'est l'utilisateur qui l'a decide.
-		cairo_dock_fm_get_file_info (icon->cBaseURI, &icon->cName, &icon->cCommand, &icon->cFileName, &bIsDirectory, &icon->iVolumeID, &icon->fOrder, mySystem.iFileSortType);
+		cairo_dock_fm_get_file_info (icon->cBaseURI, &icon->cName, &icon->cCommand, &icon->cFileName, &bIsDirectory, &icon->iVolumeID, &icon->fOrder, CAIRO_DOCK_FM_SORT_BY_NAME);  // son ordre nous importe peu ici, puisqu'il est definie par le champ 'Order'.
 	}
 	
 	
@@ -400,16 +400,31 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		pParentDock = cairo_dock_create_new_dock (icon->cParentDockName, NULL);
 	}
 	
-	gboolean bIsContainer = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Is container", &erreur);
+	gint iNbSubIcons = g_key_file_get_integer (pKeyFile, "Desktop Entry", "Nb subicons", &erreur);
 	if (erreur != NULL)
 	{
-		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);
+		gboolean bIsContainer = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Is container", NULL);
+		g_print ("%s : bIsContainer:%d\n", icon->cName, bIsContainer);
+		if (bIsContainer)
+			iNbSubIcons = 3;
 		g_error_free (erreur);
 		erreur = NULL;
-		bIsContainer = FALSE;
 	}
-	if (bIsContainer && icon->cName != NULL)
+	switch (iNbSubIcons)
 	{
+		case 1 : icon->iNbSubIcons = 5; break;
+		case 2 : icon->iNbSubIcons = 10; break;
+		case 3 : icon->iNbSubIcons = 20; break;
+		case 4 : icon->iNbSubIcons = 30; break;
+		case 5 : icon->iNbSubIcons = 1e4; break;
+		default : icon->iNbSubIcons = 0; break;
+	}
+	
+	if (icon->iNbSubIcons != 0 && icon->cName != NULL)
+	{
+		if (icon->cBaseURI != NULL)
+			icon->iSortSubIcons = g_key_file_get_integer (pKeyFile, "Desktop Entry", "Sort files", NULL);
+		
 		gchar *cRendererName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Renderer", NULL);
 		CairoDock *pChildDock = cairo_dock_search_dock_from_name (icon->cName);
 		if (pChildDock == NULL)
@@ -431,12 +446,11 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 
 		g_free (cRendererName);
 	}
-	if (bIsContainer)
+	if (icon->iNbSubIcons != 0)
 	{
 		icon->iSubdockViewType = g_key_file_get_integer (pKeyFile, "Desktop Entry", "render", NULL);
 	}
 
-	
 	gboolean bPreventFromInhibating = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE si la cle n'existe pas.
 	if (bPreventFromInhibating)
 	{
@@ -576,6 +590,13 @@ void cairo_dock_reload_launcher (Icon *icon)
 	icon->cParentDockName = NULL;
 	CairoDock *pDock = cairo_dock_search_dock_from_name (cPrevDockName);  // changement de l'ordre ou du container.
 	double fOrder = icon->fOrder;
+	
+	if (CAIRO_DOCK_IS_URI_LAUNCHER (icon) && icon->pSubDock != NULL)  // dans le cas d'un repertoire, beaucoup de parametres peuvent affecter le contenu du sous-dock : nombre de fichiers max, ordre, et meme l'URI. Donc on s'embete pas trop, on le recree.
+	{
+		cairo_dock_destroy_dock (icon->pSubDock, icon->cName, NULL, NULL);
+		icon->pSubDock = NULL;
+	}
+	
 	CairoDock *pSubDock = icon->pSubDock;
 	icon->pSubDock = NULL;
 	gchar *cClass = icon->cClass;
@@ -585,6 +606,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	gchar *cName = icon->cName;
 	icon->cName = NULL;
 	gchar *cRendererName = NULL;
+	int iNbSubIcons = icon->iNbSubIcons;
 	if (pSubDock != NULL)
 	{
 		cRendererName = pSubDock->cRendererName;
@@ -628,13 +650,14 @@ void cairo_dock_reload_launcher (Icon *icon)
 	}
 	else
 	{
-		if (pSubDock != icon->pSubDock)  // ca n'est plus le meme container, on transvase ou on detruit.
+		if (pSubDock != NULL && pSubDock != icon->pSubDock)  // ca n'est plus le meme container, on transvase ou on detruit.
 		{
 			g_print ("on transvase dans le nouveau sous-dock\n");
 			if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))  // dans ce cas on ne transvase pas puisque le sous-dock est cree a partir du contenu du repertoire.
 				cairo_dock_destroy_dock (pSubDock, cName, NULL, NULL);
 			else
 				cairo_dock_destroy_dock (pSubDock, cName, icon->pSubDock, icon->cName);
+			pSubDock = NULL;
 		}
 	}
 	

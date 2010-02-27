@@ -45,7 +45,7 @@ struct _CairoConfigSystem {
 	gboolean bDynamicReflection;
 	gboolean bAnimateSubDock;
 	gchar **cActiveModuleList;
-	gint iFileSortType;
+	gint iFileSortType_deprecated;
 	gboolean bShowHiddenFiles;
 	gint iGLAnimationDeltaT;
 	gint iCairoAnimationDeltaT;

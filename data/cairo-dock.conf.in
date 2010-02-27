@@ -250,9 +250,6 @@ config_labels =
 #F-[Files;gtk-file]
 frame_file =
 
-#l-[Name;Size;Date] Sort files by :
-sort files = 0
-
 #b- Show hidden files ?
 show hidden files = false
 

@@ -21,8 +21,8 @@
 #ifndef __CAIRO_DOCK_FILE_MANAGER__
 #define  __CAIRO_DOCK_FILE_MANAGER__
 
-#include "cairo-dock-struct.h"
 #include "cairo-dock-icons.h"
+#include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
 /**
@@ -47,15 +47,6 @@ typedef enum {
 	CAIRO_DOCK_NB_EVENT_ON_FILES
 	} CairoDockFMEventType;
 
-/// Type of sorting available on files.
-typedef enum {
-	CAIRO_DOCK_FM_SORT_BY_NAME=0,
-	CAIRO_DOCK_FM_SORT_BY_DATE,
-	CAIRO_DOCK_FM_SORT_BY_SIZE,
-	CAIRO_DOCK_FM_SORT_BY_TYPE,
-	CAIRO_DOCK_NB_SORT_ON_FILE
-	} CairoDockFMSortType;
-
 #define CAIRO_DOCK_FM_VFS_ROOT "_vfsroot_"
 #define CAIRO_DOCK_FM_NETWORK "_network_"
 #define CAIRO_DOCK_FM_TRASH "_trash_"
@@ -63,7 +54,7 @@ typedef enum {
 
 typedef void (*CairoDockFMGetFileInfoFunc) (const gchar *cBaseURI, gchar **cName, gchar **cURI, gchar **cIconName, gboolean *bIsDirectory, int *iVolumeID, double *fOrder, CairoDockFMSortType iSortType);
 typedef void (*CairoDockFMFilePropertiesFunc) (const gchar *cURI, guint64 *iSize, time_t *iLastModificationTime, gchar **cMimeType, int *iUID, int *iGID, int *iPermissionsMask);
-typedef GList * (*CairoDockFMListDirectoryFunc) (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, gchar **cFullURI);
+typedef GList * (*CairoDockFMListDirectoryFunc) (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, int iNbMaxFiles, gchar **cFullURI);
 typedef void (*CairoDockFMLaunchUriFunc) (const gchar *cURI);
 
 typedef gchar * (*CairoDockFMIsMountedFunc) (const gchar *cURI, gboolean *bIsMounted);
@@ -116,7 +107,7 @@ void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend
 
 /** List the content of a directory and turn it into a list of icons.
 */
-GList * cairo_dock_fm_list_directory (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, gchar **cFullURI);
+GList * cairo_dock_fm_list_directory (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, int iNbMaxFiles, gchar **cFullURI);
 
 /** Get the main info to represent a file.
 */
@@ -207,7 +198,7 @@ gboolean cairo_dock_fm_show_system_monitor (void);
 
 /** Create an Icon representing a given URI.
 */
-Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pContainer);
+Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pContainer, CairoDockFMSortType iFileSortType);
 
 /** Create a Dock with the list of icons representing a folder.
 */

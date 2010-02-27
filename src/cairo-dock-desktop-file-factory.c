@@ -253,7 +253,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_file (const gchar *cURI, con
 	g_free (cIconName);
 
 	g_key_file_set_boolean (pKeyFile, "Desktop Entry", "Is mounting point", (iVolumeID > 0));
-	g_key_file_set_boolean (pKeyFile, "Desktop Entry", "Is container", bIsDirectory);
+	g_key_file_set_integer (pKeyFile, "Desktop Entry", "Nb subicons", (bIsDirectory ? 3 : 0));
 
 	//\___________________ On lui choisit un nom de fichier tel qu'il n'y ait pas de collision.
 	gchar *cNewDesktopFileName = _cairo_dock_generate_desktop_filename ("file-launcher.desktop", g_cCurrentLaunchersPath);

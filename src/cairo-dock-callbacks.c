@@ -653,7 +653,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		//	return ;
 		
 		CairoDock *pOriginDock = cairo_dock_search_dock_from_name (s_pIconClicked->cParentDockName);
-		g_return_if_fail (pOriginDock != NULL);
+		g_return_val_if_fail (pOriginDock != NULL, TRUE);
 		if (pOriginDock == pDock && _mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 		{
 			g_print (" on detache l'icone\n");

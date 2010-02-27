@@ -32,6 +32,7 @@ G_BEGIN_DECLS
 * It also handles the main image buffers of the dock.
 * Use \ref cairo_dock_create_image_buffer to create an immage buffer from a file, or \ref cairo_dock_load_image_buffer to load an image into an existing immage buffer.
 * Use \ref cairo_dock_free_image_buffer to destroy it or \ref cairo_dock_unload_image_buffer to unload and reset it to 0.
+* If you just want to load an image into a mere cairo_surface, use the functions of the surface-factory.
 */
 
 /// Definition of a Desktop Background Buffer. It has a reference count so that it can be shared across all the lib.

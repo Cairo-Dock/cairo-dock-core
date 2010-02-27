@@ -512,9 +512,6 @@ int main (int argc, char** argv)
 	cairo_dock_register_notification (CAIRO_DOCK_RENDER_ICON,
 		(CairoDockNotificationFunc) cairo_dock_render_icon_notification,
 		CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_RENDER_DESKLET,
-		(CairoDockNotificationFunc) cairo_dock_render_desklet_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
 	cairo_dock_register_notification (CAIRO_DOCK_INSERT_ICON,
 		(CairoDockNotificationFunc) cairo_dock_on_insert_remove_icon_notification,
 		CAIRO_DOCK_RUN_AFTER, NULL);

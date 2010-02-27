@@ -113,11 +113,11 @@ struct _CairoDock {
 	gint iRefCount;
 
 	//\_______________ Config parameters.
-	/// ecart de la fenetre par rapport au bord de l'ecran.
+	// ecart de la fenetre par rapport au bord de l'ecran.
 	gint iGapX;
-	/// decalage de la fenetre par rapport au point d'alignement sur le bord de l'ecran.
+	// decalage de la fenetre par rapport au point d'alignement sur le bord de l'ecran.
 	gint iGapY;
-	/// alignment, between 0 and 1, on the screen's edge.
+	// alignment, between 0 and 1, on the screen's edge.
 	gdouble fAlign;
 	/// whether the dock automatically hides itself or not.
 	gboolean bAutoHide;
@@ -142,19 +142,19 @@ struct _CairoDock {
 	gint iRightMargin;
 
 	//\_______________ current state of the dock.
-	/// pour faire defiler les icones avec la molette.
+	// pour faire defiler les icones avec la molette.
 	gint iScrollOffset;
-	/// indice de calcul du coef multiplicateur de l'amplitude de la sinusoide (entre 0 et CAIRO_DOCK_NB_MAX_ITERATIONS).
+	// indice de calcul du coef multiplicateur de l'amplitude de la sinusoide (entre 0 et CAIRO_DOCK_NB_MAX_ITERATIONS).
 	gint iMagnitudeIndex;
 	/// (un)folding factor, between 0(unfolded) to 1(folded). It's up to the renderer on how to make use of it.
 	gdouble fFoldingFactor;
-	/// type d'icone devant eviter la souris, -1 si aucun.
+	// type d'icone devant eviter la souris, -1 si aucun.
 	gint iAvoidingMouseIconType;
-	/// marge d'evitement de la souris, en fraction de la largeur d'an icon (entre 0 et 0.5)
+	// marge d'evitement de la souris, en fraction de la largeur d'an icon (entre 0 et 0.5)
 	gdouble fAvoidingMouseMargin;
-	/// pointeur sur le 1er element de la liste des icones a etre dessine, en partant de la gauche.
+	// pointeur sur le 1er element de la liste des icones a etre dessine, en partant de la gauche.
 	GList *pFirstDrawnElement;
-	/// decalage des decorations pour les faire suivre la souris.
+	// decalage des decorations pour les faire suivre la souris.
 	gdouble fDecorationsOffsetX;
 	/// counter for the fade out effect.
 	gint iFadeCounter;
@@ -196,7 +196,7 @@ struct _CairoDock {
 	guint iSidUpdateWMIcons;
 	
 	//\_______________ Renderer and fields set by it.
-	/// nom de la vue, utile pour (re)charger les fonctions de rendu posterieurement a la creation du dock.
+	// nom de la vue, utile pour (re)charger les fonctions de rendu posterieurement a la creation du dock.
 	gchar *cRendererName;
 	/// current renderer, never NULL.
 	CairoDockRenderer *pRenderer;
