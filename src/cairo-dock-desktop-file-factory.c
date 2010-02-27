@@ -154,6 +154,17 @@ static gchar *_cairo_dock_generate_desktop_file_for_launcher (const gchar *cDesk
 		g_key_file_set_string (pKeyFile, "Desktop Entry", "Icon", cIconName);
 	}
 	g_free (cIconName);
+	
+	gchar **pKeyList = g_key_file_get_keys (pKeyFile, "Desktop Entry", NULL, NULL);  // on enleve les cles 'Icon' traduites !
+	gchar *cKeyName;
+	int i;
+	for (i = 0; pKeyList[i] != NULL; i ++)
+	{
+		cKeyName = pKeyList[i];
+		if (strncmp (cKeyName, "Icon[", 5) == 0)
+			g_key_file_remove_key (pKeyFile, "Desktop Entry", cKeyName, NULL);
+	}
+	g_strfreev (pKeyList);
 
 	//\___________________ On lui choisit un nom de fichier tel qu'il n'y ait pas de collision.
 	gchar *cBaseName = g_path_get_basename (cFilePath);
@@ -370,6 +381,24 @@ void cairo_dock_write_container_name_in_conf_file (Icon *pIcon, const gchar *cPa
 	{
 		cairo_dock_update_conf_file (pIcon->pModuleInstance->cConfFilePath,
 			G_TYPE_STRING, "Icon", "dock name", cParentDockName,
+			G_TYPE_INVALID);
+	}
+}
+
+void cairo_dock_write_order_in_conf_file (Icon *pIcon, double fOrder)
+{
+	if (pIcon->cDesktopFileName != NULL)  // lanceur ou separateur.
+	{
+		gchar *cDesktopFilePath = *pIcon->cDesktopFileName == '/' ? g_strdup (pIcon->cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName);
+		cairo_dock_update_conf_file (cDesktopFilePath,
+			G_TYPE_DOUBLE, "Desktop Entry", "Order", fOrder,
+			G_TYPE_INVALID);
+		g_free (cDesktopFilePath);
+	}
+	else if (CAIRO_DOCK_IS_APPLET (pIcon))
+	{
+		cairo_dock_update_conf_file (pIcon->pModuleInstance->cConfFilePath,
+			G_TYPE_DOUBLE, "Icon", "order", fOrder,
 			G_TYPE_INVALID);
 	}
 }

@@ -50,10 +50,14 @@
 #define CAIRO_DOCK_DEFAULT_THEME_LIST_NAME "list.conf"
 
 extern gchar *g_cCairoDockDataDir;
-extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
+extern gchar *g_cExtrasDirPath;
+extern gchar *g_cThemesDirPath;
 extern gchar *g_cCurrentLaunchersPath;
+extern gchar *g_cCurrentIconsPath;
+extern gchar *g_cCurrentPlugInsPath;
 extern gchar *g_cThemeServerAdress;
+extern gchar *g_cConfFile;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
 extern CairoDock *g_pMainDock;
@@ -1000,10 +1004,10 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	//\___________________ On charge les lanceurs.
 	if (bLoadLaunchers)
 	{
-		g_string_printf (sCommand, "rm -f \"%s/%s\"/*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+		g_string_printf (sCommand, "rm -f \"%s\"/*", g_cCurrentIconsPath);
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
-		g_string_printf (sCommand, "rm -f \"%s/%s\"/.*", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+		g_string_printf (sCommand, "rm -f \"%s\"/.*", g_cCurrentIconsPath);
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
 	}
@@ -1012,25 +1016,25 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	gchar *cNewLocalIconsPath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 	if (! g_file_test (cNewLocalIconsPath, G_FILE_TEST_IS_DIR))  // c'est un ancien theme, on deplace les icones vers le repertoire 'icons'.
 	{
-		g_string_printf (sCommand, "find \"%s/%s\" -mindepth 1 ! -name '*.desktop' -exec /bin/cp '{}' '%s/%s' \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+		g_string_printf (sCommand, "find \"%s/%s\" -mindepth 1 ! -name '*.desktop' -exec /bin/cp '{}' '%s' \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentIconsPath);
 	}
 	else
 	{
-		g_string_printf (sCommand, "for f in \"%s\"/* ; do rm -f \"%s/%s/`basename \"${f%%.*}\"`\"*; done;", cNewLocalIconsPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);  // on efface les doublons car sinon on pourrait avoir x.png et x.svg ensemble et le dock ne saurait pas lequel choisir.
+		g_string_printf (sCommand, "for f in \"%s\"/* ; do rm -f \"%s/`basename \"${f%%.*}\"`\"*; done;", cNewLocalIconsPath, g_cCurrentIconsPath);  // on efface les doublons car sinon on pourrait avoir x.png et x.svg ensemble et le dock ne saurait pas lequel choisir.
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
 		
-		g_string_printf (sCommand, "cp \"%s\"/* \"%s/%s\"", cNewLocalIconsPath, g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+		g_string_printf (sCommand, "cp \"%s\"/* \"%s\"", cNewLocalIconsPath, g_cCurrentIconsPath);
 	}
 	cd_debug ("%s", sCommand->str);
 	r = system (sCommand->str);
 	g_free (cNewLocalIconsPath);
 	
 	//\___________________ On charge les extras.
-	g_string_printf (sCommand, "%s/%s", cNewThemePath, CAIRO_DOCK_EXTRAS_DIR);
+	g_string_printf (sCommand, "%s/%s", cNewThemePath, "extras");
 	if (g_file_test (sCommand->str, G_FILE_TEST_IS_DIR))
 	{
-		g_string_printf (sCommand, "cp -r \"%s/%s\"/* \"%s/%s\"", cNewThemePath, CAIRO_DOCK_EXTRAS_DIR, g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR);
+		g_string_printf (sCommand, "cp -r \"%s/%s\"/* \"%s\"", cNewThemePath, "extras", g_cExtrasDirPath);
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
 	}
@@ -1072,7 +1076,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 		r = system (sCommand->str);
 		
 		// on parcours les .conf des plug-ins, on les met a jour, et on fusionne avec le theme courant.
-		gchar *cNewPlugInsDir = g_strdup_printf ("%s/%s", cNewThemePath, "plug-ins");  // repertoire des plug-ins du nouveau theme.
+		gchar *cNewPlugInsDir = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_PLUG_INS_DIR);  // repertoire des plug-ins du nouveau theme.
 		GDir *dir = g_dir_open (cNewPlugInsDir, 0, NULL);  // NULL si ce theme n'a pas de repertoire 'plug-ins'.
 		const gchar* cModuleDirName;
 		gchar *cConfFilePath, *cNewConfFilePath, *cUserDataDirPath, *cConfFileName;
@@ -1084,7 +1088,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 			
 			// on cree le repertoire du plug-in dans le theme courant.
 			cd_debug ("  installing %s's config", cModuleDirName);
-			cUserDataDirPath = g_strdup_printf ("%s/plug-ins/%s", g_cCurrentThemePath, cModuleDirName);  // repertoire du plug-in dans le theme courant.
+			cUserDataDirPath = g_strdup_printf ("%s/%s", g_cCurrentPlugInsPath, cModuleDirName);  // repertoire du plug-in dans le theme courant.
 			if (! g_file_test (cUserDataDirPath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
 			{
 				cd_debug ("    directory %s doesn't exist, it will be created.", cUserDataDirPath);
@@ -1187,6 +1191,32 @@ void cairo_dock_load_current_theme (void)
 	cairo_dock_read_conf_file (g_cConfFile, g_pMainDock);  // chargera des valeurs par defaut si le fichier de conf fourni est incorrect.
 }
 
+
+#define _check_dir(cDirPath) \
+	if (! g_file_test (cDirPath, G_FILE_TEST_IS_DIR)) {\
+		if (g_mkdir (cDirPath, 7*8*8+7*8+7) != 0) {\
+			cd_warning ("couldn't create directory %s", cDirPath);\
+			g_free (cDirPath);\
+			cDirPath = NULL; } }
+
+void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar *cThemesDirPath, gchar *cCurrentThemeDirPath)
+{
+	g_cCairoDockDataDir = cRootDataDirPath;  // le repertoire racine contenant tout.
+	_check_dir (g_cCairoDockDataDir);
+	g_cCurrentThemePath = cCurrentThemeDirPath;  // le chemin vers le repertoire du theme courant.
+	_check_dir (g_cCurrentThemePath);
+	g_cExtrasDirPath = cExtraDirPath;  // le chemin vers le repertoire des extra.
+	_check_dir (g_cExtrasDirPath);
+	g_cThemesDirPath = cThemesDirPath;  // le chemin vers le repertoire des themes.
+	_check_dir (g_cThemesDirPath);
+	
+	g_cCurrentLaunchersPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
+	_check_dir (g_cCurrentLaunchersPath);
+	g_cCurrentIconsPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+	_check_dir (g_cCurrentIconsPath);
+	g_cCurrentPlugInsPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_PLUG_INS_DIR);
+	_check_dir (g_cCurrentPlugInsPath);
+}
 
 
 static gchar *cairo_dock_build_temporary_themes_conf_file (void)

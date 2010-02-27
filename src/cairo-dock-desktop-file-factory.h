@@ -85,6 +85,8 @@ void cairo_dock_update_launcher_desktop_file (gchar *cDesktopFilePath, CairoDock
 
 void cairo_dock_write_container_name_in_conf_file (Icon *pIcon, const gchar *cParentDockName);
 
+void cairo_dock_write_order_in_conf_file (Icon *pIcon, double fOrder);
+
 
 G_END_DECLS
 #endif

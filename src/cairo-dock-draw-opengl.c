@@ -530,7 +530,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		_cairo_dock_draw_active_window_indicator_opengl (icon, pDock, fRatio);
 		glPopMatrix ();
 	}
-	if (icon->pSubDock != NULL && icon->cClass != NULL && g_pClassIndicatorBuffer.pSurface != NULL && icon->Xid == 0)  // le dernier test est de la paranoia.
+	if (icon->pSubDock != NULL && icon->cClass != NULL && g_pClassIndicatorBuffer.iTexture != 0 && icon->Xid == 0)  // le dernier test est de la paranoia.
 	{
 		glPushMatrix ();
 		glTranslatef (0., 0., icon->fHeight * (1+myIcons.fAmplitude) -1);  // avant-plan

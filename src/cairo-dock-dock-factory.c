@@ -533,7 +533,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		if (pSameTypeIcon == NULL && pDock->icons != NULL)
 		{
 			bSeparatorNeeded = TRUE;
-			g_print ("separateur necessaire\n");
+			//g_print ("separateur necessaire\n");
 		}
 	}
 

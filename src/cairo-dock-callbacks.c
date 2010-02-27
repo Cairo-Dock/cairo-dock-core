@@ -564,16 +564,85 @@ gboolean cairo_dock_emit_enter_signal (CairoDock *pDock)
 }
 
 
-void cairo_dock_leave_from_main_dock (CairoDock *pDock)
+gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (%d, %d)\n", __func__, pDock->iRefCount, pDock->bMenuVisible);
+	//g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
+	//\_______________ On tire le dock => on ignore le signal.
+	if (pEvent != NULL && (pEvent->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && (pEvent->state & GDK_BUTTON1_MASK))
+	{
+		return FALSE;
+	}
+	
+	//\_______________ On ignore les signaux errones venant d'un WM buggue (Kwin).
+	if (pEvent && !_xy_is_really_outside (pEvent->x, pEvent->y, pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
+	{
+		g_print ("not really outside (%d;%d)\n", (int)pEvent->x, (int)pEvent->y);
+		return FALSE;
+	}
+	
+	//\_______________ On retarde la sortie.
+	if (pDock->iSidLeaveDemand == 0 && pEvent != NULL)  // pas encore de demande de sortie et sortie naturelle.
+	{
+		if (pDock->iRefCount == 0)  // cas du main dock : on retarde si on pointe sur un sous-dock (pour laisser le temps au signal d'entree dans le sous-dock d'etre traite) ou si l'on a l'auto-hide.
+		{
+			//g_print (" leave event : %.1f;%.1f (%dx%d)\n", pEvent->x, pEvent->y, pDock->container.iWidth, pDock->container.iHeight);
+			Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
+			if ((pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && GTK_WIDGET_VISIBLE (pPointedIcon->pSubDock->container.pWidget)) || (pDock->bAutoHide))
+			{
+				//g_print ("  on retarde la sortie du dock de %dms\n", MAX (myAccessibility.iLeaveSubDockDelay, 330));
+				pDock->iSidLeaveDemand = g_timeout_add (MAX (myAccessibility.iLeaveSubDockDelay, 330), (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
+				return TRUE;
+			}
+		}
+		else if (myAccessibility.iLeaveSubDockDelay != 0)  // cas d'un sous-dock : on retarde le cachage.
+		{
+			//g_print ("  on retarde la sortie du sous-dock de %dms\n", myAccessibility.iLeaveSubDockDelay);
+			pDock->iSidLeaveDemand = g_timeout_add (myAccessibility.iLeaveSubDockDelay, (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
+			return TRUE;
+		}
+	}
+	else if (pDock->iSidLeaveDemand != 0 && pEvent != NULL)  // sortie naturelle et deja une sortie en attente.
+	{
+		g_print ("une sortie est deja programmee\n");
+		return TRUE;
+	}
+	pDock->iSidLeaveDemand = 0;
+	
+	//\_______________ Arrive ici, on est sorti du dock.
+	pDock->container.bInside = FALSE;
 	pDock->iAvoidingMouseIconType = -1;
 	pDock->fAvoidingMouseMargin = 0;
-	pDock->container.bInside = FALSE;
+	
+	//\_______________ On cache ses sous-docks.
+	if (! cairo_dock_hide_child_docks (pDock))  // on quitte si l'un des sous-docks reste visible (on est entre dedans), pour rester en position "haute".
+		return TRUE;
+	
+	if (s_iSidShowSubDockDemand != 0 && pDock->iRefCount == 0)  // si l'un des sous-docks etait programme pour se montrer, on annule.
+	{
+		g_source_remove (s_iSidShowSubDockDemand);
+		s_iSidShowSubDockDemand = 0;
+		s_pDockShowingSubDock = NULL;
+	}
+	
+	//\_______________ On enregistre la position de la souris.
+	if (pEvent != NULL)
+	{
+		if (pDock->container.bIsHorizontal)
+		{
+			pDock->container.iMouseX = pEvent->x;
+			pDock->container.iMouseY = pEvent->y;
+		}
+		else
+		{
+			pDock->container.iMouseX = pEvent->y;
+			pDock->container.iMouseY = pEvent->x;
+		}
+	}
+	//g_print ("%s (%d, %d)\n", __func__, pDock->iRefCount, pDock->bMenuVisible);
 	
 	//\_______________ On quitte si le menu est leve, pour rester en position haute.
 	if (pDock->bMenuVisible)
-		return ;
+		return TRUE;
 	
 	//\_______________ On gere le drag d'une icone hors du dock.
 	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked) || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)) && s_pFlyingContainer == NULL && ! g_bLocked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)
@@ -601,7 +670,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 			s_pIconClicked = NULL;
 			if (pDock->iRefCount > 0 || pDock->bAutoHide)  // pour garder le dock visible.
 			{
-				return;
+				return TRUE;
 			}
 		}
 	}
@@ -609,7 +678,7 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 	{
 		CairoDock *pOriginDock = cairo_dock_search_dock_from_name (s_pFlyingContainer->pIcon->cParentDockName);
 		if (pOriginDock == pDock)
-			return;
+			return TRUE;
 	}
 	
 	//\_______________ On lance l'animation du dock.
@@ -630,74 +699,6 @@ void cairo_dock_leave_from_main_dock (CairoDock *pDock)
 		cairo_dock_notify_on_icon (pIcon, CAIRO_DOCK_UNFOLD_SUBDOCK, pIcon);
 	}
 	cairo_dock_start_shrinking (pDock);  // on commence a faire diminuer la taille des icones.
-}
-gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
-{
-	//g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
-	//\_______________ On tire le dock => on ignore le signal.
-	if (pEvent != NULL && (pEvent->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && (pEvent->state & GDK_BUTTON1_MASK))
-	{
-		return FALSE;
-	}
-	
-	if (pEvent && !_xy_is_really_outside (pEvent->x, pEvent->y, pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
-	{
-		g_print ("not really outside (%d;%d)\n", (int)pEvent->x, (int)pEvent->y);
-		return FALSE;
-	}
-	
-	//\_______________ On retarde la sortie.
-	if (pDock->iSidLeaveDemand == 0 && pEvent != NULL)  // pas encore de demande de sortie et sortie naturelle.
-	{
-		if (pDock->iRefCount == 0)  // cas du main dock : on retarde si on pointe sur un sous-dock, pour laisser le temps au signal d'entree dans le sous-dock d'etre traite
-		{
-			//g_print (" leave event : %.1f;%.1f (%dx%d)\n", pEvent->x, pEvent->y, pDock->container.iWidth, pDock->container.iHeight);
-			Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
-			if ((pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && GTK_WIDGET_VISIBLE (pPointedIcon->pSubDock->container.pWidget)) || (pDock->bAutoHide)/* || !_xy_is_really_outside (pEvent->x, pEvent->y, pDock)*/)  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
-			{
-				//g_print ("  on retarde la sortie du dock de %dms\n", MAX (myAccessibility.iLeaveSubDockDelay, 330));
-				pDock->iSidLeaveDemand = g_timeout_add (MAX (myAccessibility.iLeaveSubDockDelay, 330), (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
-				return TRUE;
-			}
-		}
-		else if (myAccessibility.iLeaveSubDockDelay != 0)  // cas d'un sous-dock : on retarde le cachage.
-		{
-			//g_print ("  on retarde la sortie du sous-dock de %dms\n", myAccessibility.iLeaveSubDockDelay);
-			pDock->iSidLeaveDemand = g_timeout_add (myAccessibility.iLeaveSubDockDelay, (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
-			return TRUE;
-		}
-	}
-	pDock->iSidLeaveDemand = 0;
-	
-	//\_______________ Arrive ici, on est sorti du dock.
-	pDock->container.bInside = FALSE;
-	
-	//\_______________ On cache ses sous-docks.
-	if (! cairo_dock_hide_child_docks (pDock))  // on quitte si l'un des sous-docks reste visible (on est entre dedans), pour rester en position "haute".
-		return TRUE;
-	
-	if (s_iSidShowSubDockDemand != 0 && pDock->iRefCount == 0)  // si l'un des sous-docks etait programme pour se montrer, on annule.
-	{
-		g_source_remove (s_iSidShowSubDockDemand);
-		s_iSidShowSubDockDemand = 0;
-		s_pDockShowingSubDock = NULL;
-	}
-	
-	if (pEvent != NULL)
-	{
-		if (pDock->container.bIsHorizontal)
-		{
-			pDock->container.iMouseX = pEvent->x;
-			pDock->container.iMouseY = pEvent->y;
-		}
-		else
-		{
-			pDock->container.iMouseX = pEvent->y;
-			pDock->container.iMouseY = pEvent->x;
-		}
-	}
-	
-	cairo_dock_leave_from_main_dock (pDock);
 	
 	return TRUE;
 }
@@ -896,95 +897,6 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	return TRUE;
 }
 
-gchar *cairo_dock_launch_command_sync (const gchar *cCommand)
-{
-	gchar *standard_output=NULL, *standard_error=NULL;
-	gint exit_status=0;
-	GError *erreur = NULL;
-	gboolean r = g_spawn_command_line_sync (cCommand,
-		&standard_output,
-		&standard_error,
-		&exit_status,
-		&erreur);
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
-		g_free (standard_error);
-		return NULL;
-	}
-	if (standard_error != NULL && *standard_error != '\0')
-	{
-		cd_warning (standard_error);
-	}
-	g_free (standard_error);
-	if (standard_output != NULL && *standard_output == '\0')
-	{
-		g_free (standard_output);
-		return NULL;
-	}
-	if (standard_output[strlen (standard_output) - 1] == '\n')
-		standard_output[strlen (standard_output) - 1] ='\0';
-	return standard_output;
-}
-
-static gpointer _cairo_dock_launch_threaded (gchar *cCommand)
-{
-	int r;
-	r = system (cCommand);
-	g_free (cCommand);
-	return NULL;
-}
-
-gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, gchar *cWorkingDirectory, ...)
-{
-	va_list args;
-	va_start (args, cWorkingDirectory);
-	gchar *cCommand = g_strdup_vprintf (cCommandFormat, args);
-	va_end (args);
-	
-	gboolean r = cairo_dock_launch_command_full (cCommand, cWorkingDirectory);
-	g_free (cCommand);
-	
-	return r;
-}
-
-gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingDirectory)
-{
-	g_return_val_if_fail (cCommand != NULL, FALSE);
-	cd_debug ("%s (%s , %s)", __func__, cCommand, cWorkingDirectory);
-	
-	gchar *cBGCommand = NULL;
-	if (cCommand[strlen (cCommand)-1] != '&')
-		cBGCommand = g_strconcat (cCommand, " &", NULL);
-	
-	gchar *cCommandFull = NULL;
-	if (cWorkingDirectory != NULL)
-	{
-		cCommandFull = g_strdup_printf ("cd \"%s\" && %s", cWorkingDirectory, cBGCommand ? cBGCommand : cCommand);
-		g_free (cBGCommand);
-		cBGCommand = NULL;
-	}
-	else if (cBGCommand != NULL)
-	{
-		cCommandFull = cBGCommand;
-		cBGCommand = NULL;
-	}
-	
-	if (cCommandFull == NULL)
-		cCommandFull = g_strdup (cCommand);
-	
-	GError *erreur = NULL;
-	GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_launch_threaded, cCommandFull, FALSE, &erreur);
-	if (erreur != NULL)
-	{
-		cd_warning ("couldn't launch this command (%s : %s)", cCommandFull, erreur->message);
-		g_error_free (erreur);
-		g_free (cCommandFull);
-		return FALSE;
-	}
-	return TRUE;
-}
 
 static int _compare_zorder (Icon *icon1, Icon *icon2)  // classe par z-order decroissant.
 {
@@ -1806,8 +1718,7 @@ void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint tim
 }
 
 
-
-void cairo_dock_show_dock_at_mouse (CairoDock *pDock)
+static void _cairo_dock_show_dock_at_mouse (CairoDock *pDock)
 {
 	g_return_if_fail (pDock != NULL);
 	int iMouseX, iMouseY;
@@ -1831,8 +1742,7 @@ void cairo_dock_show_dock_at_mouse (CairoDock *pDock)
 		(pDock->container.bIsHorizontal ? iNewPositionY : iNewPositionX));
 	gtk_widget_show (pDock->container.pWidget);
 }
-
-void cairo_dock_raise_from_keyboard (const char *cKeyShortcut, gpointer data)
+void cairo_dock_raise_from_shortcut (const char *cKeyShortcut, gpointer data)
 {
 	if (GTK_WIDGET_VISIBLE (g_pMainDock->container.pWidget))
 	{
@@ -1840,12 +1750,12 @@ void cairo_dock_raise_from_keyboard (const char *cKeyShortcut, gpointer data)
 	}
 	else
 	{
-		cairo_dock_show_dock_at_mouse (g_pMainDock);
+		_cairo_dock_show_dock_at_mouse (g_pMainDock);
 	}
 	s_bHideAfterShortcut = FALSE;
 }
 
-void cairo_dock_hide_dock_like_a_menu (void)
+void cairo_dock_hide_after_shortcut (void)
 {
 	if (s_bHideAfterShortcut && GTK_WIDGET_VISIBLE (g_pMainDock->container.pWidget))
 	{

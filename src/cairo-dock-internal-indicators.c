@@ -92,18 +92,21 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 	pIndicators->bActiveIndicatorAbove = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "active frame position", &bFlushConfFileNeeded, TRUE, "Icons", NULL);
 	
 	//\__________________ On recupere l'indicateur de classe groupee.
-	cIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "class indicator", &bFlushConfFileNeeded, NULL, NULL, NULL);
-	if (cIndicatorImageName != NULL)
+	pIndicators->bUseClassIndic = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "use class indic", &bFlushConfFileNeeded, 0, NULL, NULL);
+	if (pIndicators->bUseClassIndic == 0)
 	{
-		pIndicators->cClassIndicatorImagePath = cairo_dock_generate_file_path (cIndicatorImageName);
-		g_free (cIndicatorImageName);
+		cIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "class indicator", &bFlushConfFileNeeded, NULL, NULL, NULL);
+		if (cIndicatorImageName != NULL)
+		{
+			pIndicators->cClassIndicatorImagePath = cairo_dock_generate_file_path (cIndicatorImageName);
+			g_free (cIndicatorImageName);
+		}
+		else
+		{
+			pIndicators->cClassIndicatorImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_DEFAULT_CLASS_INDICATOR_NAME);
+		}
+		pIndicators->bZoomClassIndicator = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "zoom class", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	}
-	else
-	{
-		pIndicators->cClassIndicatorImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_DEFAULT_CLASS_INDICATOR_NAME);
-	}
-	pIndicators->bZoomClassIndicator = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "zoom class", &bFlushConfFileNeeded, FALSE, NULL, NULL);
-	
 	return bFlushConfFileNeeded;
 }
 
@@ -141,7 +144,8 @@ static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicator
 			pIndicators->fActiveColor);
 	}
 	
-	if (cairo_dock_strings_differ (pPrevIndicators->cClassIndicatorImagePath, pIndicators->cClassIndicatorImagePath))
+	if (cairo_dock_strings_differ (pPrevIndicators->cClassIndicatorImagePath, pIndicators->cClassIndicatorImagePath) ||
+		pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic)
 	{
 		cairo_dock_load_class_indicator (myTaskBar.bShowAppli && myTaskBar.bGroupAppliByClass ? pIndicators->cClassIndicatorImagePath : NULL, fMaxScale);
 	}

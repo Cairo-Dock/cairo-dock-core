@@ -394,16 +394,12 @@ typedef struct _CairoDockGLConfig CairoDockGLConfig;
 #define CAIRO_DOCK_NB_DATA_SLOT 12
 
 
-/// Nom du repertoire de travail de cairo-dock.
-#define CAIRO_DOCK_DATA_DIR "cairo-dock"
-/// Nom du repertoire des themes additionnels (jauges, clock, weather, etc).
-#define CAIRO_DOCK_EXTRAS_DIR "extras"
 /// Nom du repertoire des jauges utilisateur/themes.
 #define CAIRO_DOCK_GAUGES_DIR "gauges"
-/// Nom du repertoire du theme courant.
-#define CAIRO_DOCK_CURRENT_THEME_NAME "current_theme"
 /// Nom du repertoire des lanceurs.
 #define CAIRO_DOCK_LAUNCHERS_DIR "launchers"
+/// Nom du repertoire des plug-ins.
+#define CAIRO_DOCK_PLUG_INS_DIR "plug-ins"
 /// Nom du repertoire des icones locales.
 #define CAIRO_DOCK_LOCAL_ICONS_DIR "icons"
 /// Nom du dock principal (le 1er cree).

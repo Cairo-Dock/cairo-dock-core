@@ -40,7 +40,6 @@
 CairoConfigIcons myIcons;
 extern CairoDock *g_pMainDock;
 extern gchar *g_cCurrentThemePath;
-extern gchar *g_cCurrentLaunchersPath;
 extern gboolean g_bUseOpenGL;
 extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 

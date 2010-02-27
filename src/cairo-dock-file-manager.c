@@ -32,7 +32,7 @@
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-internal-system.h"
-#include "cairo-dock-callbacks.h"  // cairo_dock_launch_command_sync
+#include "cairo-dock-launcher-factory.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-X-utilities.h"  // cairo_dock_property_is_present_on_root
 #include "cairo-dock-file-manager.h"
 
@@ -85,7 +85,7 @@ gboolean cairo_dock_fm_get_file_properties (const gchar *cURI, guint64 *iSize, t
 
 static gpointer _cairo_dock_fm_launch_uri_threaded (gchar *cURI)
 {
-	cd_debug ("%s (%s)", cURI);
+	cd_debug ("%s (%s)", __func__, cURI);
 	s_pEnvBackend->launch_uri (cURI);
 	g_free (cURI);
 }

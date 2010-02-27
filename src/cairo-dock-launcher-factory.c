@@ -689,14 +689,14 @@ void cairo_dock_reload_launcher (Icon *icon)
 	
 	//\_____________ On gere l'inhibition de sa classe.
 	gchar *cNowClass = icon->cClass;
-	if (cClass != NULL && (cNowClass == NULL || strcmp (cNowClass, cClass) != 0))
+	if (cClass != NULL && (cNowClass == NULL || strcmp (cNowClass, cClass) != 0))  // la classe a change, on desinhibe l'ancienne.
 	{
 		icon->cClass = cClass;
 		cairo_dock_deinhibate_class (cClass, icon);
 		cClass = NULL;  // libere par la fonction precedente.
 		icon->cClass = cNowClass;
 	}
-	if (myTaskBar.bMixLauncherAppli && cNowClass != NULL && (cClass == NULL || strcmp (cNowClass, cClass) != 0))
+	if (myTaskBar.bMixLauncherAppli && cNowClass != NULL && (cClass == NULL || strcmp (cNowClass, cClass) != 0))  // la classe a change, on inhibe la nouvelle.
 		cairo_dock_inhibate_class (cNowClass, icon);
 
 	//\_____________ On redessine les docks impactes.
@@ -710,4 +710,95 @@ void cairo_dock_reload_launcher (Icon *icon)
 	g_free (cRendererName);
 	cairo_destroy (pCairoContext);
 	cairo_dock_mark_theme_as_modified (TRUE);
+}
+
+
+
+gchar *cairo_dock_launch_command_sync (const gchar *cCommand)
+{
+	gchar *standard_output=NULL, *standard_error=NULL;
+	gint exit_status=0;
+	GError *erreur = NULL;
+	gboolean r = g_spawn_command_line_sync (cCommand,
+		&standard_output,
+		&standard_error,
+		&exit_status,
+		&erreur);
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+		g_free (standard_error);
+		return NULL;
+	}
+	if (standard_error != NULL && *standard_error != '\0')
+	{
+		cd_warning (standard_error);
+	}
+	g_free (standard_error);
+	if (standard_output != NULL && *standard_output == '\0')
+	{
+		g_free (standard_output);
+		return NULL;
+	}
+	if (standard_output[strlen (standard_output) - 1] == '\n')
+		standard_output[strlen (standard_output) - 1] ='\0';
+	return standard_output;
+}
+
+gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, gchar *cWorkingDirectory, ...)
+{
+	va_list args;
+	va_start (args, cWorkingDirectory);
+	gchar *cCommand = g_strdup_vprintf (cCommandFormat, args);
+	va_end (args);
+	
+	gboolean r = cairo_dock_launch_command_full (cCommand, cWorkingDirectory);
+	g_free (cCommand);
+	
+	return r;
+}
+
+static gpointer _cairo_dock_launch_threaded (gchar *cCommand)
+{
+	int r;
+	r = system (cCommand);
+	g_free (cCommand);
+	return NULL;
+}
+gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingDirectory)
+{
+	g_return_val_if_fail (cCommand != NULL, FALSE);
+	cd_debug ("%s (%s , %s)", __func__, cCommand, cWorkingDirectory);
+	
+	gchar *cBGCommand = NULL;
+	if (cCommand[strlen (cCommand)-1] != '&')
+		cBGCommand = g_strconcat (cCommand, " &", NULL);
+	
+	gchar *cCommandFull = NULL;
+	if (cWorkingDirectory != NULL)
+	{
+		cCommandFull = g_strdup_printf ("cd \"%s\" && %s", cWorkingDirectory, cBGCommand ? cBGCommand : cCommand);
+		g_free (cBGCommand);
+		cBGCommand = NULL;
+	}
+	else if (cBGCommand != NULL)
+	{
+		cCommandFull = cBGCommand;
+		cBGCommand = NULL;
+	}
+	
+	if (cCommandFull == NULL)
+		cCommandFull = g_strdup (cCommand);
+	
+	GError *erreur = NULL;
+	GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_launch_threaded, cCommandFull, FALSE, &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning ("couldn't launch this command (%s : %s)", cCommandFull, erreur->message);
+		g_error_free (erreur);
+		g_free (cCommandFull);
+		return FALSE;
+	}
+	return TRUE;
 }

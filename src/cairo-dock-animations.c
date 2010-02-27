@@ -335,7 +335,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 					gtk_widget_hide (pDock->container.pWidget);
 					cairo_dock_hide_parent_dock (pDock);
 				}
-				cairo_dock_hide_dock_like_a_menu ();
+				cairo_dock_hide_after_shortcut ();
 			}
 			else
 			{
