@@ -48,11 +48,11 @@ void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend
 
 
 
-GList * cairo_dock_fm_list_directory (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, gchar **cFullURI)
+GList * cairo_dock_fm_list_directory (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, int iNbMaxFiles, gchar **cFullURI)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->list_directory != NULL)
 	{
-		return s_pEnvBackend->list_directory (cURI, g_fm_iSortType, iNewIconsType, bListHiddenFiles, cFullURI);
+		return s_pEnvBackend->list_directory (cURI, g_fm_iSortType, iNewIconsType, bListHiddenFiles, iNbMaxFiles, cFullURI);
 	}
 	else
 	{
@@ -293,7 +293,7 @@ gboolean cairo_dock_fm_show_system_monitor (void)
 		return FALSE;
 }
 
-Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pContainer)
+Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pContainer, CairoDockFMSortType iFileSortType)
 {
 	if (s_pEnvBackend == NULL || s_pEnvBackend->get_file_info == NULL)
 		return NULL;
@@ -301,7 +301,7 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 	pNewIcon->iType = CAIRO_DOCK_LAUNCHER;
 	pNewIcon->cBaseURI = g_strdup (cURI);
 	gboolean bIsDirectory;
-	s_pEnvBackend->get_file_info (cURI, &pNewIcon->cName, &pNewIcon->cCommand, &pNewIcon->cFileName, &bIsDirectory, &pNewIcon->iVolumeID, &pNewIcon->fOrder, mySystem.iFileSortType);
+	s_pEnvBackend->get_file_info (cURI, &pNewIcon->cName, &pNewIcon->cCommand, &pNewIcon->cFileName, &bIsDirectory, &pNewIcon->iVolumeID, &pNewIcon->fOrder, iFileSortType);
 	if (pNewIcon->cName == NULL)
 	{
 		cairo_dock_free_icon (pNewIcon);
@@ -314,7 +314,7 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 		cd_message ("  c'est un sous-repertoire");
 	}
 
-	if (mySystem.iFileSortType == CAIRO_DOCK_FM_SORT_BY_NAME)
+	if (iFileSortType == CAIRO_DOCK_FM_SORT_BY_NAME)
 	{
 		GList *pList = (CAIRO_DOCK_IS_DOCK (pContainer) ? CAIRO_DOCK (pContainer)->icons : CAIRO_DESKLET (pContainer)->icons);
 		GList *ic;
@@ -350,7 +350,8 @@ void cairo_dock_fm_create_dock_from_directory (Icon *pIcon, CairoDock *pParentDo
 		return;
 	cd_message ("");
 	g_free (pIcon->cCommand);
-	GList *pIconList = cairo_dock_fm_list_directory (pIcon->cBaseURI, mySystem.iFileSortType, CAIRO_DOCK_LAUNCHER, mySystem.bShowHiddenFiles, &pIcon->cCommand);
+	pIcon->cCommand = NULL;
+	GList *pIconList = cairo_dock_fm_list_directory (pIcon->cBaseURI, pIcon->iSortSubIcons, CAIRO_DOCK_LAUNCHER, mySystem.bShowHiddenFiles, pIcon->iNbSubIcons, &pIcon->cCommand);
 	pIcon->pSubDock = cairo_dock_create_subdock_from_scratch (pIconList, pIcon->cName, pParentDock);
 
 	cairo_dock_update_dock_size (pIcon->pSubDock);  // le 'load_buffer' ne le fait pas.
@@ -365,7 +366,7 @@ static Icon *cairo_dock_fm_alter_icon_if_necessary (Icon *pIcon, CairoContainer 
 	if (s_pEnvBackend == NULL)
 		return NULL;
 	cd_debug ("%s (%s)", __func__, pIcon->cBaseURI);
-	Icon *pNewIcon = cairo_dock_fm_create_icon_from_URI (pIcon->cBaseURI, pContainer);
+	Icon *pNewIcon = cairo_dock_fm_create_icon_from_URI (pIcon->cBaseURI, pContainer, 0);  /// voir comment remonter a l'info iFileSortType ...
 	g_return_val_if_fail (pNewIcon != NULL && pNewIcon->cName != NULL, NULL);
 
 	//g_print ("%s <-> %s (%s <-> <%s)\n", pIcon->cName, pNewIcon->cName, pIcon->cFileName, pNewIcon->cFileName);
@@ -485,7 +486,7 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 						//cairo_dock_free_icon (pSameIcon);
 					}
 				}
-				Icon *pNewIcon = cairo_dock_fm_create_icon_from_URI (cURI, (CAIRO_DOCK_IS_DOCK (pParentContainer) ? CAIRO_CONTAINER (pIcon->pSubDock) : pParentContainer));
+				Icon *pNewIcon = cairo_dock_fm_create_icon_from_URI (cURI, (CAIRO_DOCK_IS_DOCK (pParentContainer) ? CAIRO_CONTAINER (pIcon->pSubDock) : pParentContainer), 0);  /// voir comment remonter a l'info iFileSortType ...
 				if (pNewIcon == NULL)
 					return ;
 				pNewIcon->iType = iTypeOnCreation;

@@ -151,14 +151,8 @@ struct _CairoDesklet {
 	gint iBottomSurfaceOffset;
 	CairoDockImageBuffer backGroundImageBuffer;
 	CairoDockImageBuffer foreGroundImageBuffer;
-	cairo_surface_t *pBackGroundSurface;
-	cairo_surface_t *pForeGroundSurface;
-	GLuint iBackGroundTexture;
-	GLuint iForeGroundTexture;
-	gdouble fImageWidth;
-	gdouble fImageHeight;
-	gdouble fBackGroundAlpha;
-	gdouble fForeGroundAlpha;
+	///gdouble fBackGroundAlpha;
+	///gdouble fForeGroundAlpha;
 	
 	//\________________ properties.
 	gdouble fRotation;  // rotation.
@@ -172,9 +166,6 @@ struct _CairoDesklet {
 	//\________________ internal
 	gint iSidWritePosition;  // un timer pour retarder l'ecriture dans le fichier lors des deplacements.
 	gint iSidWriteSize;  // un timer pour retarder l'ecriture dans le fichier lors des redimensionnements.
-	gint iGradationCount;  // compteur pour le fondu lors de l'entree dans le desklet.
-	gint iSidGradationOnEnter;  // timer associe.
-	gint iSidGrowUp;  // un timer pour faire apparaitre le desklet avec un effet de zoom lors du detachage d'une applet.
 	gint iDesiredWidth, iDesiredHeight;  // taille a atteindre (fixee par l'utilisateur dans le.conf)
 	gint iKnownWidth, iKnownHeight;  // taille connue par l'applet associee.
 	gboolean bSpaceReserved;  // l'espace est actuellement reserve.
@@ -182,6 +173,9 @@ struct _CairoDesklet {
 	gint iMouseX2d;  // X position of the pointer taking into account the 2D transformations on the desklet (for an opengl renderer, you'll have to use the picking).
 	gint iMouseY2d;  // Y position of the pointer taking into account the 2D transformations on the desklet (for an opengl renderer, you'll have to use the picking).
 	GTimer *pUnmapTimer;
+	gdouble fButtonsAlpha;  // pour le fondu des boutons lors de l'entree dans le desklet.
+	gboolean bButtonsApparition;  // si les boutons sont en train d'apparaitre ou de disparaitre.
+	gboolean bGrowingUp;  // pour le zoom initial.
 	
 	//\________________ current state
 	gboolean rotatingY;
@@ -218,7 +212,20 @@ void cairo_dock_reload_desklets_decorations (gboolean bDefaultThemeOnly, cairo_t
 void cairo_dock_free_desklet_decoration (CairoDeskletDecoration *pDecoration);
 
 
-gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDesklet *pDesklet, cairo_t *pCairoContext);
+/** Make all desklets visible. Their accessibility is set to #CAIRO_DESKLET_NORMAL. 
+*@param bOnWidgetLayerToo TRUE if you want to act on the desklet that are on the WidgetLayer as well.
+*/
+void cairo_dock_set_all_desklets_visible (gboolean bOnWidgetLayerToo);
+/** Reset the desklets accessibility to the state defined in their conf file.
+*/
+void cairo_dock_set_desklets_visibility_to_default (void);
+
+/** Get the desklet whose X ID matches the given one.
+*@param Xid an X ID.
+*@return the desklet that matches, or NULL if none match.
+*/
+CairoDesklet *cairo_dock_get_desklet_by_Xid (Window Xid);
+
 
 /** Create a simple desklet, without placing it nor defining a renderer.
 *@param pIcon the main icon.
@@ -228,6 +235,11 @@ gboolean cairo_dock_render_desklet_notification (gpointer pUserData, CairoDeskle
 */
 CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWidget, CairoDeskletAccessibility iAccessibility);
 
+/** Destroy a desklet, and free all the allocated ressources. The interactive widget is removed before, and can be inserted anywhere after that.
+*@param pDesklet the desklet to destroy.
+*/
+void cairo_dock_free_desklet (CairoDesklet *pDesklet);
+
 /** Configure a un desklet.
 * It places it, resizes it, sets up its accessibility, locks its position, and sets up its decorations.
 *@param pDesklet the desklet.
@@ -235,10 +247,9 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWid
 */
 void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute *pAttribute);
 
-/** Destroy a desklet, and free all the allocated ressources. The interactive widget is removed before, and can be inserted anywhere after that.
-*@param pDesklet the desklet to destroy.
-*/
-void cairo_dock_free_desklet (CairoDesklet *pDesklet);
+void cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gboolean bReserve);
+
+#define cairo_dock_set_static_desklet(pDesklet) (pDesklet)->bFixedAttitude = TRUE
 
 
 /** Add a GtkWidget to a desklet. Only 1 widget is allowed per desklet, if you need more, you can just use a GtkContainer, and place as many widget as you want inside.
@@ -282,30 +293,12 @@ void cairo_dock_hide_desklet (CairoDesklet *pDesklet);
 */
 void cairo_dock_show_desklet (CairoDesklet *pDesklet);
 
-/** Make all desklets visible. Their accessibility is set to #CAIRO_DESKLET_NORMAL. 
-*@param bOnWidgetLayerToo TRUE if you want to act on the desklet that are on the WidgetLayer as well.
-*/
-void cairo_dock_set_all_desklets_visible (gboolean bOnWidgetLayerToo);
-/** Reset the desklets accessibility to the state defined in their conf file.
-*/
-void cairo_dock_set_desklets_visibility_to_default (void);
-
-/** Get the desklet whose X ID matches the given one.
-*@param Xid an X ID.
-*@return the desklet that matches, or NULL if none match.
-*/
-CairoDesklet *cairo_dock_get_desklet_by_Xid (Window Xid);
 
 /** Launch a "zoom out" animation on a desklet.
 *@param pDesklet the desklet.
 */
 void cairo_dock_zoom_out_desklet (CairoDesklet *pDesklet);
 
-
-#define cairo_dock_set_static_desklet(pDesklet) (pDesklet)->bFixedAttitude = TRUE
-
-
-void cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gboolean bReserve);
 
 
 G_END_DECLS

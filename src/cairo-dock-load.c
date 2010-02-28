@@ -482,6 +482,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	{
 		icon->iIconTexture = cairo_dock_create_texture_from_surface (icon->pIconBuffer);
 	}
+	//g_print ("%s (%s, %x, %.2fx%.2f) ->%d\n", __func__, icon->cName, icon->pIconBuffer, icon->fWidth, icon->fHeight, icon->iIconTexture);
 	if (iPrevTexture != 0)
 		_cairo_dock_delete_texture (iPrevTexture);
 	if (pPrevSurface != NULL)

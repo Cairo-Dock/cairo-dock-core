@@ -853,6 +853,8 @@ void cairo_dock_add_new_launcher_by_uri (const gchar *cExternDesktopFileURI, Cai
 			if (CAIRO_DOCK_IS_URI_LAUNCHER (pNewIcon))
 			{
 				cairo_dock_fm_add_monitor (pNewIcon);
+				if (pNewIcon->pSubDock != NULL)
+					cairo_dock_trigger_redraw_subdock_content (pNewIcon->pSubDock);
 			}
 			
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pReceivingDock));

@@ -405,7 +405,6 @@ static gboolean _cairo_dock_show (CairoDock *pDock)
 	return TRUE;
 }
 
-
 static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 {
 	gboolean bRecalculateIcons = FALSE;
@@ -458,7 +457,6 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 		cairo_dock_calculate_dock_icons (pDock);
 	return TRUE;
 }
-
 
 static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 {

@@ -63,6 +63,7 @@
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-views.h"
 ///#include "cairo-dock-internal-labels.h"
@@ -1026,7 +1027,7 @@ static gboolean _redraw_subdock_content (Icon *pIcon)
 void cairo_dock_trigger_redraw_subdock_content (CairoDock *pDock)
 {
 	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-	if (pPointingIcon != NULL && (pPointingIcon->iSubdockViewType != 0 || pPointingIcon->cClass != NULL) && pPointingIcon->iSidRedrawSubdockContent == 0 && CAIRO_DOCK_IS_LAUNCHER (pPointingIcon))
+	if (pPointingIcon != NULL && (pPointingIcon->iSubdockViewType != 0 || (pPointingIcon->cClass != NULL && ! myIndicators.bUseClassIndic)) && pPointingIcon->iSidRedrawSubdockContent == 0 && CAIRO_DOCK_IS_LAUNCHER (pPointingIcon))
 		pPointingIcon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content, pPointingIcon);
 }
 

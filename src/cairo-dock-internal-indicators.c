@@ -92,8 +92,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 	pIndicators->bActiveIndicatorAbove = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "active frame position", &bFlushConfFileNeeded, TRUE, "Icons", NULL);
 	
 	//\__________________ On recupere l'indicateur de classe groupee.
-	pIndicators->bUseClassIndic = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "use class indic", &bFlushConfFileNeeded, 0, NULL, NULL);
-	if (pIndicators->bUseClassIndic == 0)
+	pIndicators->bUseClassIndic = (cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "use class indic", &bFlushConfFileNeeded, 0, NULL, NULL) == 0);
+	if (pIndicators->bUseClassIndic)
 	{
 		cIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "class indicator", &bFlushConfFileNeeded, NULL, NULL, NULL);
 		if (cIndicatorImageName != NULL)
