@@ -584,7 +584,8 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	
 	cairo_dock_load_visible_zone (pDock, myBackground.cVisibleZoneImageFile, myAccessibility.iVisibleZoneWidth, myAccessibility.iVisibleZoneHeight, myBackground.fVisibleZoneAlpha);
 	
-	cairo_dock_create_icon_pbuffer ();
+	///cairo_dock_create_icon_pbuffer ();
+	cairo_dock_create_icon_fbo ();
 	
 	//\___________________ On recharge les lanceurs, les applis, et les applets.
 	if (bGroupAppliByClassOld != myTaskBar.bGroupAppliByClass ||

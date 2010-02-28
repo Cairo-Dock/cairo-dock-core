@@ -398,7 +398,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		return FALSE;
 	Icon *pPointedIcon=NULL, *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 	int iLastMouseX = pDock->container.iMouseX;
-	//g_print ("%s (%.2f;%.2f)\n", __func__, pMotion->x, pMotion->y);
+	//g_print ("%s (%.2f;%.2f, %d)\n", __func__, pMotion->x, pMotion->y, pDock->iInputState);
 	
 	if (pMotion != NULL)
 	{
@@ -534,7 +534,6 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		
 		if (pPointedIcon != NULL && s_pIconClicked != NULL && cairo_dock_get_icon_order (s_pIconClicked) == cairo_dock_get_icon_order (pPointedIcon) && ! g_bLocked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)
 		{
-			//g_print ("on change d'icone\n");
 			_cairo_dock_make_icon_glide (pPointedIcon, s_pIconClicked, pDock);
 			bStartAnimation = TRUE;
 		}
@@ -705,7 +704,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 
 gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex);
+	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%d)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->iInputState);
 	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
 	if (! cairo_dock_entrance_is_allowed (pDock))
 	{

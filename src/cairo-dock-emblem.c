@@ -201,7 +201,7 @@ void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoCon
 }
 
 
-static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, CairoDock *pDock, int w, int h, cairo_t *pCairoContext)
+static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, int w, int h, cairo_t *pCairoContext)
 {
 	//\______________ On dessine les 4 premieres icones du sous-dock en embleme.
 	CairoEmblem e;
@@ -237,7 +237,7 @@ static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, CairoDock *
 
 
 
-static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, CairoDock *pDock, int w, int h, cairo_t *pCairoContext)
+static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, int w, int h, cairo_t *pCairoContext)
 {
 	//\______________ On dessine les 4 premieres icones du sous-dock en pile.
 	CairoEmblem e;
@@ -290,7 +290,7 @@ static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, CairoDock *p
 }
 
 
-static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, CairoDock *pDock, int w, int h, cairo_t *pCairoContext)
+static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, int w, int h, cairo_t *pCairoContext)
 {
 	if (pCairoContext)
 	{
@@ -431,19 +431,19 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 	
 	//\______________ On dessine les 3 ou 4 premieres icones du sous-dock.
 	if (pIcon->cClass != NULL)
-		_cairo_dock_draw_subdock_content_as_stack (pIcon, pDock, w, h, pCairoContext);
+		_cairo_dock_draw_subdock_content_as_stack (pIcon, w, h, pCairoContext);
 	else
 	{
 		switch (pIcon->iSubdockViewType)
 		{
 			case 1 :
-				_cairo_dock_draw_subdock_content_as_emblem (pIcon, pDock, w, h, pCairoContext);
+				_cairo_dock_draw_subdock_content_as_emblem (pIcon, w, h, pCairoContext);
 			break;
 			case 2:
-				_cairo_dock_draw_subdock_content_as_stack (pIcon, pDock, w, h, pCairoContext);
+				_cairo_dock_draw_subdock_content_as_stack (pIcon, w, h, pCairoContext);
 			break;
 			case 3:
-				_cairo_dock_draw_subdock_content_as_box (pIcon, pDock, w, h, pCairoContext);
+				_cairo_dock_draw_subdock_content_as_box (pIcon, w, h, pCairoContext);
 			break;
 			default:
 				cd_warning ("invalid sub-dock content view for %s", pIcon->cName);

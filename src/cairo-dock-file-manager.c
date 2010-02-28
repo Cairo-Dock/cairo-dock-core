@@ -47,7 +47,6 @@ void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend
 }
 
 
-
 GList * cairo_dock_fm_list_directory (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, int iNbMaxFiles, gchar **cFullURI)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->list_directory != NULL)

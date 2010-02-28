@@ -151,14 +151,13 @@ struct _CairoDesklet {
 	gint iBottomSurfaceOffset;
 	CairoDockImageBuffer backGroundImageBuffer;
 	CairoDockImageBuffer foreGroundImageBuffer;
-	///gdouble fBackGroundAlpha;
-	///gdouble fForeGroundAlpha;
 	
 	//\________________ properties.
 	gdouble fRotation;  // rotation.
 	gdouble fDepthRotationY;
 	gdouble fDepthRotationX;
 	gboolean bFixedAttitude;
+	gboolean bAllowNoClickable;
 	gboolean bNoInput;
 	GtkWidget *pInteractiveWidget;
 	gboolean bPositionLocked;  // TRUE ssi on ne peut pas deplacer le widget a l'aide du simple clic gauche.
@@ -247,9 +246,12 @@ void cairo_dock_free_desklet (CairoDesklet *pDesklet);
 */
 void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute *pAttribute);
 
-void cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gboolean bReserve);
-
 #define cairo_dock_set_static_desklet(pDesklet) (pDesklet)->bFixedAttitude = TRUE
+
+#define cairo_dock_allow_no_clickable_desklet(pDesklet) (pDesklet)->bAllowNoClickable = TRUE
+
+
+void cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gboolean bReserve);
 
 
 /** Add a GtkWidget to a desklet. Only 1 widget is allowed per desklet, if you need more, you can just use a GtkContainer, and place as many widget as you want inside.

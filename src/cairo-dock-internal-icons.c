@@ -367,7 +367,8 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		cairo_dock_load_icons_background_surface (pIcons->cBackgroundImagePath, fMaxScale);
 	}
 	
-	cairo_dock_create_icon_pbuffer ();
+	///cairo_dock_create_icon_pbuffer ();
+	cairo_dock_create_icon_fbo ();
 	
 	if (pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] ||
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] ||

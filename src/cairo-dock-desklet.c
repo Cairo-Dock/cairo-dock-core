@@ -439,7 +439,7 @@ static inline void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCair
 			cairo_paint_with_alpha (pCairoContext, pDesklet->fButtonsAlpha);
 		}
 	}
-	if ((pDesklet->container.bInside || pDesklet->bNoInput || pDesklet->fButtonsAlpha) && s_pNoInputButtonBuffer.pSurface != NULL)
+	if ((pDesklet->container.bInside || pDesklet->bNoInput || pDesklet->fButtonsAlpha) && s_pNoInputButtonBuffer.pSurface != NULL && pDesklet->bAllowNoClickable)
 	{
 		cairo_set_source_surface (pCairoContext, s_pNoInputButtonBuffer.pSurface, pDesklet->container.iWidth - myDesklets.iDeskletButtonSize, pDesklet->container.iHeight - myDesklets.iDeskletButtonSize);
 		cairo_paint_with_alpha (pCairoContext, _no_input_button_alpha (pDesklet));
@@ -565,7 +565,7 @@ static inline void _render_desklet_opengl (CairoDesklet *pDesklet)
 			glPopMatrix ();
 		}
 	}
-	if ((pDesklet->container.bInside || pDesklet->fButtonsAlpha != 0 || pDesklet->bNoInput) && s_pNoInputButtonBuffer.iTexture != 0)
+	if ((pDesklet->container.bInside || pDesklet->fButtonsAlpha != 0 || pDesklet->bNoInput) && s_pNoInputButtonBuffer.iTexture != 0 && pDesklet->bAllowNoClickable)
 	{
 		_cairo_dock_set_alpha (_no_input_button_alpha(pDesklet));
 		glPushMatrix ();
@@ -728,7 +728,7 @@ static void _cairo_dock_set_desklet_input_shape (CairoDesklet *pDesklet)
 			0,
 			0);
 		g_object_unref (pShapeBitmap);
-		g_print ("input shape : %dx%d", pDesklet->container.iWidth, pDesklet->container.iHeight);
+		//g_print ("input shape : %dx%d\n", pDesklet->container.iWidth, pDesklet->container.iHeight);
 	}
 }
 
@@ -1178,7 +1178,7 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 				else
 					pDesklet->time = pButton->time;
 			}
-			if (pButton->x > pDesklet->container.iWidth - myDesklets.iDeskletButtonSize && pButton->y > pDesklet->container.iHeight - myDesklets.iDeskletButtonSize)
+			if (pDesklet->bAllowNoClickable && pButton->x > pDesklet->container.iWidth - myDesklets.iDeskletButtonSize && pButton->y > pDesklet->container.iHeight - myDesklets.iDeskletButtonSize)
 				pDesklet->making_transparent = TRUE;
 		}
 		else if (pButton->type == GDK_BUTTON_RELEASE)
