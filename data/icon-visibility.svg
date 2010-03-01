@@ -42,13 +42,13 @@
      inkscape:window-height="879"
      id="namedview66"
      showgrid="false"
-     inkscape:zoom="4.59"
-     inkscape:cx="109.339"
-     inkscape:cy="2.7304117"
+     inkscape:zoom="1.6228101"
+     inkscape:cx="60.688751"
+     inkscape:cy="-21.271086"
      inkscape:window-x="433"
      inkscape:window-y="61"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer6" />
+     inkscape:current-layer="layer1" />
   <defs
      id="defs3878">
     <linearGradient
@@ -82,7 +82,7 @@
        fx="0.99999994"
        fy="5.5642838"
        id="radialGradient2901-8"
-       xlink:href="#linearGradient6602-0"
+       xlink:href="#linearGradient6732-7"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.9555509,0,0,0.6971467,1.1654508,8.316252)" />
     <linearGradient
@@ -419,6 +419,17 @@
        y1="45.114193"
        x2="65.340263"
        y2="15.943953" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6732-7"
+       id="radialGradient3685"
+       cx="2.1210017"
+       cy="9.4671688"
+       fx="2.1210017"
+       fy="9.4671688"
+       r="22"
+       gradientTransform="matrix(1,0,0,0.72727273,0,5.3101604)"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <g
      inkscape:groupmode="layer"
@@ -455,7 +466,7 @@
        x="2.598814"
        y="3.9707291"
        id="rect4642"
-       style="fill:none;stroke:url(#radialGradient2901-8);stroke-width:1.00028228999999991;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0.50000001000000005;display:inline;enable-background:new" />
+       style="fill:url(#radialGradient3685);stroke:url(#radialGradient2901-8);stroke-width:1.00028228999999991;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0.50000001000000005;display:inline;enable-background:new;fill-opacity:1" />
     <path
        d="m 5.0986718,6.5018912 0,17.9686958 C 6.9081968,24.041158 42.504477,13.997776 43.098663,13.467108 l 9e-6,-6.9965203 -38.0000002,0.031303 z"
        id="path2516"

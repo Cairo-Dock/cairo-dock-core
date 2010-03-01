@@ -127,8 +127,8 @@ static const gchar *s_cCategoriesDescription[2*(CAIRO_DOCK_NB_CATEGORY+1)] = {
 	N_("Accessories"), "icon-accessories.svg",
 	N_("Desktop"), "icon-desktop.svg",
 	N_("Controlers"), "icon-controler.svg",
-	N_("Plug-ins"), "gtk-disconnect",
-	N_("All"), "gtk-file" };
+	N_("Plug-ins"), "icon-extentions.svg",
+	N_("All"), "icon-all.svg" };
 
 static void cairo_dock_hide_all_categories (void);
 static void cairo_dock_show_all_categories (void);
