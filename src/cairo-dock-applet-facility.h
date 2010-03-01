@@ -727,6 +727,11 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_SET_STATIC_DESKLET cairo_dock_set_static_desklet (myDesklet)
 
+/** Prevent the desklet from being transparent to click. Use it if your desklet has no meaning in being unclickable.
+*/
+#define CD_APPLET_ALLOW_NO_CLICKABLE_DESKLET cairo_dock_allow_no_clickable_desklet (myDesklet)
+
+
 #define CD_APPLET_CREATE_MY_SUBDOCK(pIconsList, cRenderer) do { \
 	if (myIcon->cName == NULL) { \
 		CD_APPLET_SET_NAME_FOR_MY_ICON (myApplet->pModule->pVisitCard->cModuleName); } \

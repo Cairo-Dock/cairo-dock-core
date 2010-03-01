@@ -265,7 +265,7 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering
 	
 	//\_________________ On regarde si le rendu doit etre indirect ou pas.
 	g_openglConfig.bIndirectRendering = bToggleIndirectRendering;
-	if (glXQueryVersion(XDisplay, &g_openglConfig.iGlxMajor, &g_openglConfig.iGlxMinor) == False)
+	/**if (glXQueryVersion(XDisplay, &g_openglConfig.iGlxMajor, &g_openglConfig.iGlxMinor) == False)
 	{
 		cd_warning ("GLX not available !\nFear the worst !");
 	}
@@ -288,7 +288,7 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering
 		{
 			g_openglConfig.bPBufferAvailable = TRUE;
 		}
-	}
+	}*/
 	
 	//\_________________ on verifier les capacites des textures.
 	g_openglConfig.bTextureFromPixmapAvailable = _check_client_glx_extension ("GLX_EXT_texture_from_pixmap");
@@ -303,6 +303,25 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering
 }
 
 
+
+void cairo_dock_create_icon_fbo (void)
+{
+	g_return_if_fail (g_openglConfig.iFboId == 0);
+	if (! g_openglConfig.bFboAvailable)
+	{
+		cd_warning ("No FBO support, applets can't draw themselves inside the dock.");
+		return;
+	}
+	glGenFramebuffersEXT(1, &g_openglConfig.iFboId);
+}
+
+void cairo_dock_destroy_icon_fbo (void)
+{
+	if (g_openglConfig.iFboId == 0)
+		return;
+	glDeleteFramebuffersEXT (1, &g_openglConfig.iFboId);
+	g_openglConfig.iFboId = 0;
+}
 
 static GLXPbuffer _cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pContext)
 {
@@ -433,6 +452,28 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 		
 		cairo_dock_set_ortho_view (pContainer->iWidth, pContainer->iHeight);
 	}
+	else if (g_openglConfig.iFboId != 0)
+	{
+		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pContainer->pWidget);
+		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pContainer->pWidget);
+		if (! gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+			return FALSE;
+		glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, g_openglConfig.iFboId);  // on redirige sur notre FBO.
+		glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, pIcon->iIconTexture, 0);  // attach the texture to FBO color attachment point.
+		GLenum status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
+		if (status != GL_FRAMEBUFFER_COMPLETE_EXT)
+		{
+			cd_warning ("FBO not ready");
+			return FALSE;
+		}
+		int iWidth, iHeight;
+		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear buffers
+		glPushMatrix ();
+		cairo_dock_set_ortho_view (pContainer->iWidth, pContainer->iHeight);
+		glLoadIdentity ();
+		glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
+	}
 	else if (g_openglConfig.iconContext != 0)
 	{
 		Display *XDisplay = gdk_x11_get_default_xdisplay ();
@@ -473,6 +514,16 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	{
 		x = (pContainer->iWidth - iWidth)/2;
 		y = (pContainer->iHeight - iHeight)/2;
+	}
+	else if (g_openglConfig.iFboId != 0)
+	{
+		glPopMatrix ();
+		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);  // switch back to window-system-provided framebuffer
+		glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
+        glGenerateMipmapEXT(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, 0);
+		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pContainer->pWidget);
+		gdk_gl_drawable_gl_end (pGlDrawable);
 	}
 	else
 	{
@@ -569,6 +620,7 @@ static void _cairo_dock_post_initialize_opengl_backend (GtkWidget* pWidget, gpoi
 	
 	bChecked = TRUE;
 	g_openglConfig.bNonPowerOfTwoAvailable = _check_gl_extension ("GL_ARB_texture_non_power_of_two");
+	g_openglConfig.bFboAvailable = _check_gl_extension ("GL_EXT_framebuffer_object");
 	
 	g_print ("OpenGL config summary :\n - bNonPowerOfTwoAvailable : %d\n - bPBufferAvailable : %d\n - direct rendering : %d\n - bTextureFromPixmapAvailable : %d\n - GLX version : %d.%d\n - OpenGL version: %s\n - OpenGL vendor: %s\n - OpenGL renderer: %s\n\n",
 		g_openglConfig.bNonPowerOfTwoAvailable,

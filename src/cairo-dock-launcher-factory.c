@@ -120,7 +120,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 				pIconTheme = gtk_icon_theme_get_default ();
 			pIconInfo = gtk_icon_theme_lookup_icon  (GTK_ICON_THEME (pIconTheme),
 				sIconPath->str,
-				64,
+				128,
 				GTK_ICON_LOOKUP_FORCE_SVG);
 			if (pIconInfo != NULL)
 			{
@@ -404,7 +404,6 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	if (erreur != NULL)
 	{
 		gboolean bIsContainer = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Is container", NULL);
-		g_print ("%s : bIsContainer:%d\n", icon->cName, bIsContainer);
 		if (bIsContainer)
 			iNbSubIcons = 3;
 		g_error_free (erreur);

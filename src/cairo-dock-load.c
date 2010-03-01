@@ -881,11 +881,25 @@ void cairo_dock_load_box_surface (double fMaxScale)
 	if (iSize == 0)
 		iSize = 48;
 	iSize *= fMaxScale;
+	
+	gchar *cUserPath = cairo_dock_generate_file_path ("box-front.png");
+	if (! g_file_test (cUserPath, G_FILE_TEST_EXISTS))
+	{
+		g_free (cUserPath);
+		cUserPath = NULL;
+	}
 	cairo_dock_load_image_buffer (&g_pBoxAboveBuffer,
-		CAIRO_DOCK_SHARE_DATA_DIR"/box-front.png",
+		cUserPath ? cUserPath : CAIRO_DOCK_SHARE_DATA_DIR"/box-front.png",
 		iSize,
 		iSize,
 		CAIRO_DOCK_FILL_SPACE);
+	
+	cUserPath = cairo_dock_generate_file_path ("box-front.png");
+	if (! g_file_test (cUserPath, G_FILE_TEST_EXISTS))
+	{
+		g_free (cUserPath);
+		cUserPath = NULL;
+	}
 	cairo_dock_load_image_buffer (&g_pBoxBelowBuffer,
 		CAIRO_DOCK_SHARE_DATA_DIR"/box-back.png",
 		iSize,
@@ -1177,6 +1191,7 @@ void cairo_dock_unload_additionnal_textures (void)
 		s_pDesktopBg->iTexture = 0;
 	}
 	cairo_dock_destroy_icon_pbuffer ();
+	cairo_dock_destroy_icon_fbo ();
 	cairo_dock_unload_default_data_renderer_font ();
 	cairo_dock_unload_flying_container_textures ();
 	_destroy_source_context ();

@@ -771,19 +771,19 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 	{
 		case CAIRO_DOCK_MOUSE_INSIDE :
 			//g_print ("INSIDE (%d;%d;%d;%d;%.2f)\n", cairo_dock_entrance_is_allowed (pDock), pDock->iMagnitudeIndex, pDock->bIsGrowingUp, pDock->bIsShrinkingDown, pDock->fFoldingFactor);
-			if (cairo_dock_entrance_is_allowed (pDock) && ((pDock->iMagnitudeIndex < CAIRO_DOCK_NB_MAX_ITERATIONS && ! pDock->bIsGrowingUp) || pDock->bIsShrinkingDown ) && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN)  // on est dedans et la taille des icones est non maximale bien que le dock ne soit pas en train de grossir, cependant on respecte l'etat 'cache'.
+			if (cairo_dock_entrance_is_allowed (pDock) && ((pDock->iMagnitudeIndex < CAIRO_DOCK_NB_MAX_ITERATIONS && ! pDock->bIsGrowingUp) || pDock->bIsShrinkingDown) && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN && (pDock->iInputState != CAIRO_DOCK_INPUT_AT_REST || pDock->bIsDragging))  // on est dedans et la taille des icones est non maximale bien que le dock ne soit pas en train de grossir, cependant on respecte l'etat 'cache', et l'etat repos.
 			{
 				//g_print ("on est dedans en x et en y et la taille des icones est non maximale bien qu'aucune icone  ne soit animee (%d;%d)\n", pDock->iMagnitudeIndex, pDock->container.bInside);
 				//pDock->container.bInside = TRUE;
 				///if ((pDock->bAtBottom && pDock->iRefCount == 0 && ! pDock->bAutoHide) || (pDock->container.iWidth != pDock->iMaxDockWidth || pDock->container.iHeight != pDock->iMaxDockHeight) || (!pDock->container.bInside))  // on le fait pas avec l'auto-hide, car un signal d'entree est deja emis a cause des mouvements/redimensionnements de la fenetre, et en rajouter un ici fout le boxon.  // !pDock->container.bInside ajoute pour le bug du chgt de bureau.
 				if ((pDock->iMagnitudeIndex == 0 && pDock->iRefCount == 0 && ! pDock->bAutoHide) || !pDock->container.bInside)
 				{
-					g_print ("  on emule une re-rentree (pDock->iMagnitudeIndex:%d)\n", pDock->iMagnitudeIndex);
+					//g_print ("  on emule une re-rentree (pDock->iMagnitudeIndex:%d)\n", pDock->iMagnitudeIndex);
 					g_signal_emit_by_name (pDock->container.pWidget, "enter-notify-event", NULL, &bReturn);
 				}
 				else // on se contente de faire grossir les icones.
 				{
-					g_print ("  on se contente de faire grossir les icones\n");
+					//g_print ("  on se contente de faire grossir les icones\n");
 					cairo_dock_start_growing (pDock);
 					if (pDock->bAutoHide && pDock->iRefCount == 0)
 						cairo_dock_start_showing (pDock);
