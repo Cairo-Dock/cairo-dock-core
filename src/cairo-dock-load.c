@@ -151,7 +151,8 @@ void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gcha
 		iLoadModifier,
 		&w,
 		&h,
-		NULL, NULL);
+		&pImage->fZoomX,
+		&pImage->fZoomY);
 	pImage->iWidth = w;
 	pImage->iHeight = h;
 	
@@ -181,6 +182,8 @@ void cairo_dock_load_image_buffer_from_surface (CairoDockImageBuffer *pImage, ca
 	pImage->pSurface = pSurface;
 	pImage->iWidth = iWidth;
 	pImage->iHeight = iHeight;
+	pImage->fZoomX = 1.;
+	pImage->fZoomY = 1.;
 	if (g_bUseOpenGL)
 		pImage->iTexture = cairo_dock_create_texture_from_surface (pImage->pSurface);
 }
