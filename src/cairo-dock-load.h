@@ -49,6 +49,8 @@ struct _CairoDockImageBuffer {
 	GLuint iTexture;
 	gint iWidth;
 	gint iHeight;
+	gdouble fZoomX;
+	gdouble fZoomY;
 	} ;
 
 void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription);

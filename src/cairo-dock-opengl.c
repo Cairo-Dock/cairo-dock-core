@@ -469,9 +469,14 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 		int iWidth, iHeight;
 		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear buffers
-		glPushMatrix ();
-		cairo_dock_set_ortho_view (pContainer->iWidth, pContainer->iHeight);
-		glLoadIdentity ();
+		if (pContainer->bIsHorizontal)
+		{
+			cairo_dock_set_ortho_view (pContainer->iWidth, pContainer->iHeight);
+		}
+		else
+		{
+			cairo_dock_set_ortho_view (pContainer->iHeight, pContainer->iWidth);
+		}
 		glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
 	}
 	else if (g_openglConfig.iconContext != 0)
@@ -517,7 +522,6 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	}
 	else if (g_openglConfig.iFboId != 0)
 	{
-		glPopMatrix ();
 		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);  // switch back to window-system-provided framebuffer
 		glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
         glGenerateMipmapEXT(GL_TEXTURE_2D);

@@ -207,6 +207,8 @@ static void _cairo_dock_load_desklet_decorations (CairoDesklet *pDesklet, cairo_
 			pDesklet->container.iHeight,
 			pDeskletDecorations->iLoadingModifier,
 			pDeskletDecorations->fBackGroundAlpha);
+		fZoomX = pDesklet->backGroundImageBuffer.fZoomX;
+		fZoomY = pDesklet->backGroundImageBuffer.fZoomY;
 	}
 	if (pDeskletDecorations->cForeGroundImagePath != NULL && pDeskletDecorations->fForeGroundAlpha > 0)
 	{
@@ -217,6 +219,8 @@ static void _cairo_dock_load_desklet_decorations (CairoDesklet *pDesklet, cairo_
 			pDesklet->container.iHeight,
 			pDeskletDecorations->iLoadingModifier,
 			pDeskletDecorations->fForeGroundAlpha);
+		fZoomX = pDesklet->backGroundImageBuffer.fZoomX;
+		fZoomY = pDesklet->backGroundImageBuffer.fZoomY;
 	}
 	pDesklet->iLeftSurfaceOffset = pDeskletDecorations->iLeftMargin * fZoomX;
 	pDesklet->iTopSurfaceOffset = pDeskletDecorations->iTopMargin * fZoomY;
@@ -382,16 +386,13 @@ static inline void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCair
 			-.5*pDesklet->container.iHeight);
 	}
 	
-	if (pDesklet->backGroundImageBuffer.pSurface != NULL/** && pDesklet->fBackGroundAlpha != 0*/)
+	if (pDesklet->backGroundImageBuffer.pSurface != NULL)
 	{
 		cairo_set_source_surface (pCairoContext,
 			pDesklet->backGroundImageBuffer.pSurface,
 			0.,
 			0.);
-		///if (pDesklet->fBackGroundAlpha == 1)
 			cairo_paint (pCairoContext);
-		///else
-		///	cairo_paint_with_alpha (pCairoContext, pDesklet->fBackGroundAlpha);
 	}
 	
 	cairo_save (pCairoContext);
@@ -409,16 +410,13 @@ static inline void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCair
 	}
 	cairo_restore (pCairoContext);
 	
-	if (pDesklet->foreGroundImageBuffer.pSurface != NULL/** && pDesklet->fForeGroundAlpha != 0*/)
+	if (pDesklet->foreGroundImageBuffer.pSurface != NULL)
 	{
 		cairo_set_source_surface (pCairoContext,
 			pDesklet->foreGroundImageBuffer.pSurface,
 			0.,
 			0.);
-		///if (pDesklet->fForeGroundAlpha == 1)
 			cairo_paint (pCairoContext);
-		///else
-		///	cairo_paint_with_alpha (pCairoContext, pDesklet->fForeGroundAlpha);
 	}
 	
 	if (! pDesklet->rotating)  // si on est en train de tourner, les boutons suivent le mouvement, sinon ils sont dans les coins.
