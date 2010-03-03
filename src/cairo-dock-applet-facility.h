@@ -612,13 +612,13 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 /** Initiate an OpenGL drawing session on the applet's icon.
 */
-#define CD_APPLET_START_DRAWING_MY_ICON cairo_dock_begin_draw_icon (myIcon, myContainer)
+#define CD_APPLET_START_DRAWING_MY_ICON cairo_dock_begin_draw_icon (myIcon, myContainer, 0)
 
 /** Initiate an OpenGL drawing session on the applet's icon, or quit the function if failed.
 *@param ... value to return in case of failure.
 */
 #define CD_APPLET_START_DRAWING_MY_ICON_OR_RETURN(...) \
-	if (! cairo_dock_begin_draw_icon (myIcon, myContainer)) \
+	if (! cairo_dock_begin_draw_icon (myIcon, myContainer, 0)) \
 		return __VA_ARGS__
 
 /** Terminate an OpenGL drawing session on the applet's icon. Does not trigger the icon's redraw.

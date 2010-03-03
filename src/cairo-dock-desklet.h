@@ -207,7 +207,7 @@ void cairo_dock_init_desklet_manager (void);
 void cairo_dock_load_desklet_buttons (void);
 void cairo_dock_unload_desklet_buttons (void);
 
-void cairo_dock_reload_desklets_decorations (gboolean bDefaultThemeOnly, cairo_t *pSourceContext);
+void cairo_dock_reload_desklets_decorations (gboolean bDefaultThemeOnly);
 void cairo_dock_free_desklet_decoration (CairoDeskletDecoration *pDecoration);
 
 
@@ -251,8 +251,6 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 #define cairo_dock_allow_no_clickable_desklet(pDesklet) (pDesklet)->bAllowNoClickable = TRUE
 
 
-void cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gboolean bReserve);
-
 
 /** Add a GtkWidget to a desklet. Only 1 widget is allowed per desklet, if you need more, you can just use a GtkContainer, and place as many widget as you want inside.
 *@param pInteractiveWidget the widget to add.
@@ -289,23 +287,35 @@ Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet);
 *@param pDesklet the desklet.
 */
 void cairo_dock_hide_desklet (CairoDesklet *pDesklet);
-/**
-* Show a desklet, and give it the focus.
+/** * Show a desklet, and give it the focus.
 *@param pDesklet the desklet.
 */
 void cairo_dock_show_desklet (CairoDesklet *pDesklet);
-
-/**
-* Set a desklet on the Widget Layer. The correct rule must be set up in the WM (for instance for Compiz : class=Cairo-dock & type=utility). The function sets up the rule for Compiz.
-*@param pDesklet the desklet.
-*/
-void cairo_dock_set_desklet_on_widget_layer (CairoDesklet *pDesklet, gboolean bOnWidgetLayer);
 
 /** Launch a "zoom out" animation on a desklet.
 *@param pDesklet the desklet.
 */
 void cairo_dock_zoom_out_desklet (CairoDesklet *pDesklet);
 
+
+/** Set a desklet's accessibility. For Widget Layer, the WM must support it and the correct rule must be set up in the WM (for instance for Compiz : class=Cairo-dock & type=utility). The function automatically sets up the rule for Compiz (if Dbus is activated).
+*@param pDesklet the desklet.
+*@param iAccessibility the new accessibility.
+*@param bSaveState whether to save the new state in the conf file.
+*/
+void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletAccessibility iAccessibility, gboolean bSaveState);
+
+/** Set a desklet sticky (i.e. visible on all desktops), or not. In case the desklet is set unsticky, its current desktop/viewport is saved.
+*@param pDesklet the desklet.
+*@param bSticky whether the desklet should be sticky or not.
+*/
+void cairo_dock_set_desklet_sticky (CairoDesklet *pDesklet, gboolean bSticky);
+
+/** Lock the position of a desklet. This makes the desklet impossible to rotate, drag with the mouse, or retach to the dock. The new state is saved in conf.
+*@param pDesklet the desklet.
+*@param bPositionLocked whether the position should be locked or not.
+*/
+void cairo_dock_lock_desklet_position (CairoDesklet *pDesklet, gboolean bPositionLocked);
 
 
 G_END_DECLS

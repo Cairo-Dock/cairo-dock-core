@@ -105,6 +105,21 @@ void cairo_dock_free_emblem (CairoEmblem *pEmblem);
 void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoContainer *pContainer);
 
 
+
+typedef void (*CairoIconContainerLoadFunc) (void);
+typedef void (*CairoIconContainerUnloadFunc) (void);
+typedef void (*CairoIconContainerRenderFunc) (Icon *pIcon, int w, int h, cairo_t *pCairoContext);
+typedef void (*CairoIconContainerRenderOpenGLFunc) (Icon *pIcon, int w, int h);
+
+struct _CairoIconContainerRendererInterface {
+	CairoIconContainerLoadFunc load;
+	CairoIconContainerUnloadFunc unload;
+	CairoIconContainerRenderFunc render;
+	CairoIconContainerRenderOpenGLFunc render_opengl;
+};
+
+
+
 void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock);
 
 G_END_DECLS

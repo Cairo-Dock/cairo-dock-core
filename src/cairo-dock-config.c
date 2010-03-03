@@ -717,19 +717,19 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	//\___________________ On recharge les decorations des desklets.
 	if (cDeskletDecorationsNameOld == NULL && myDesklets.cDeskletDecorationsName != NULL)  // chargement initial, on charge juste ceux qui n'ont pas encore leur deco et qui ont atteint leur taille definitive.
 	{
-		cairo_dock_reload_desklets_decorations (FALSE, pCairoContext);
+		cairo_dock_reload_desklets_decorations (FALSE);
 	}
 	else if (cDeskletDecorationsNameOld != NULL && (myDesklets.cDeskletDecorationsName == NULL || strcmp (cDeskletDecorationsNameOld, myDesklets.cDeskletDecorationsName) != 0))  // le theme par defaut a change, on recharge les desklets qui utilisent le theme "default".
 	{
-		cairo_dock_reload_desklets_decorations (TRUE, pCairoContext);
+		cairo_dock_reload_desklets_decorations (TRUE);
 	}
 	else if (myDesklets.cDeskletDecorationsName != NULL && strcmp (myDesklets.cDeskletDecorationsName, "personnal") == 0)  // on a configure le theme personnel, il peut avoir change.
 	{
-		cairo_dock_reload_desklets_decorations (TRUE, pCairoContext);
+		cairo_dock_reload_desklets_decorations (TRUE);
 	}
 	else  // on charge juste ceux qui n'ont pas encore leur deco et qui ont atteint leur taille definitive.
 	{
-		cairo_dock_reload_desklets_decorations (FALSE, pCairoContext);
+		cairo_dock_reload_desklets_decorations (FALSE);
 	}
 	g_free (cDeskletDecorationsNameOld);
 	

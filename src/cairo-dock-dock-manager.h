@@ -107,6 +107,8 @@ void cairo_dock_write_root_dock_gaps (CairoDock *pDock);
 */
 gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *pDock);
 
+void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock);
+
 /*
 * Supprime le fichier de conf d'un dock racine.
 *@param cDockName le nom du dock.

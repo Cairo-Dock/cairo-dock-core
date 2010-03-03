@@ -948,11 +948,10 @@ void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer)
 
 static inline void  _draw_icon_bent_backwards (Icon *pIcon, CairoContainer *pContainer, GLuint iOriginalTexture, double f)
 {
+	cairo_dock_set_perspective_view_for_icon (pIcon, pContainer);
+	
 	int iWidth, iHeight;
 	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
-	///cairo_dock_set_perspective_view (iWidth, iHeight);
-	cairo_dock_set_perspective_view (pContainer);
-	glTranslatef (-pContainer->iWidth/2, +pContainer->iHeight/2, 0.);
 	glScalef (1., -1., 1.);
 	glTranslatef (0., -iHeight/2, 0.);  // rotation de 50° sur l'axe des X a la base de l'icone.
 	glRotatef (-50.*f, 1., 0., 0.);
@@ -961,12 +960,17 @@ static inline void  _draw_icon_bent_backwards (Icon *pIcon, CairoContainer *pCon
 	_cairo_dock_enable_texture ();
 	_cairo_dock_set_blend_source ();
 	glBindTexture (GL_TEXTURE_2D, iOriginalTexture);
-	_cairo_dock_apply_current_texture_at_size_with_offset (iWidth*(1+.1*f),
-		iHeight*(1+.25*f),
+	double a=.25, b=.1;
+	//double a=.0, b=.0;
+	_cairo_dock_apply_current_texture_at_size_with_offset (iWidth*(1+b*f),
+		iHeight*(1+a*f),
 		0.,
-		iHeight*(.25/2*f));  // on elargit un peu la texture, car avec l'effet de profondeur elle parait trop petite.
+		iHeight*(a/2*f));  // on elargit un peu la texture, car avec l'effet de profondeur elle parait trop petite.
 	_cairo_dock_disable_texture ();
-	///cairo_dock_set_ortho_view (iWidth, iHeight);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glViewport(0, 0, pContainer->iWidth, pContainer->iHeight);
+	glMatrixMode(GL_MODELVIEW);
 	cairo_dock_set_ortho_view (pContainer);
 }
 static gboolean _transition_step (Icon *pIcon, gpointer data)
@@ -1025,7 +1029,7 @@ void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer,
 	}
 	else if (pIcon->bIsHidden)
 	{
-		if (!cairo_dock_begin_draw_icon (pIcon, pContainer))
+		if (!cairo_dock_begin_draw_icon (pIcon, pContainer, 2))
 			return ;
 		_draw_icon_bent_backwards (pIcon, pContainer, pIcon->iIconTexture, 1.);
 		cairo_dock_end_draw_icon (pIcon, pContainer);

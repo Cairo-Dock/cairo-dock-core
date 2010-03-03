@@ -304,7 +304,7 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering
 
 
 
-void cairo_dock_create_icon_fbo (void)
+void cairo_dock_create_icon_fbo (void)  // it has been found that you get a speed boost if your textures is the same size and you use 1 FBO for them. => c'est le cas general dans le dock. Du coup on est gagnant a ne faire qu'un seul FBO pour toutes les icones.
 {
 	g_return_if_fail (g_openglConfig.iFboId == 0);
 	if (! g_openglConfig.bFboAvailable)
@@ -313,6 +313,21 @@ void cairo_dock_create_icon_fbo (void)
 		return;
 	}
 	glGenFramebuffersEXT(1, &g_openglConfig.iFboId);
+	
+	int iWidth = 0, iHeight = 0;
+	int i;
+	for (i = 0; i < CAIRO_DOCK_NB_TYPES; i += 2)
+	{
+		iWidth = MAX (iWidth, myIcons.tIconAuthorizedWidth[i]);
+		iHeight = MAX (iHeight, myIcons.tIconAuthorizedHeight[i]);
+	}
+	if (iWidth == 0)
+		iWidth = 48;
+	if (iHeight == 0)
+		iHeight = 48;
+	iWidth *= (1 + myIcons.fAmplitude);
+	iHeight *= (1 + myIcons.fAmplitude);
+	g_openglConfig.iRedirectedTexture = cairo_dock_load_texture_from_raw_data (NULL, iWidth, iHeight);
 }
 
 void cairo_dock_destroy_icon_fbo (void)
@@ -321,6 +336,9 @@ void cairo_dock_destroy_icon_fbo (void)
 		return;
 	glDeleteFramebuffersEXT (1, &g_openglConfig.iFboId);
 	g_openglConfig.iFboId = 0;
+	
+	_cairo_dock_delete_texture (g_openglConfig.iRedirectedTexture);
+	g_openglConfig.iRedirectedTexture = 0;
 }
 
 /**static GLXPbuffer _cairo_dock_create_pbuffer (int iWidth, int iHeight, GLXContext *pContext)
@@ -441,7 +459,7 @@ void cairo_dock_destroy_icon_pbuffer (void)
 	g_openglConfig.iIconPbufferHeight = 0;
 }*/
 
-gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
+gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gint iRenderingMode)
 {
 	g_return_val_if_fail (pContainer != NULL, FALSE);
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
@@ -452,9 +470,11 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 			return FALSE;
 		
 		cairo_dock_set_ortho_view (pContainer);
+		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 	else if (g_openglConfig.iFboId != 0)
 	{
+		// on attache la texture au FBO.
 		if (pContainer == NULL)
 			pContainer = g_pMainDock;
 		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pContainer->pWidget);
@@ -462,7 +482,13 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 		if (! gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
 			return FALSE;
 		glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, g_openglConfig.iFboId);  // on redirige sur notre FBO.
-		glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, pIcon->iIconTexture, 0);  // attach the texture to FBO color attachment point.
+		g_openglConfig.bRedirected = (iRenderingMode == 2);
+		glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
+			GL_COLOR_ATTACHMENT0_EXT,
+			GL_TEXTURE_2D,
+			g_openglConfig.bRedirected ? g_openglConfig.iRedirectedTexture : pIcon->iIconTexture,
+			0);  // attach the texture to FBO color attachment point.
+		
 		GLenum status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
 		if (status != GL_FRAMEBUFFER_COMPLETE_EXT)
 		{
@@ -470,12 +496,16 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 			return FALSE;
 		}
 		
+		// on se positionne au milieu.
 		int iWidth, iHeight;
 		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
-		glViewport(0,0,pContainer->iWidth, pContainer->iHeight);
+		//glViewport ((pContainer->iWidth - iWidth)/2, (pContainer->iHeight - iHeight)/2, iWidth, iHeight);
 		cairo_dock_set_ortho_view (pContainer);
 		glLoadIdentity ();
 		glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
+		
+		if (iRenderingMode != 1)
+			glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 	/**else if (g_openglConfig.iconContext != 0)
 	{
@@ -487,8 +517,6 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	}*/
 	else
 		return FALSE;
-	
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glColor4f(1., 1., 1., 1.);
 	
@@ -523,7 +551,27 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	else if (g_openglConfig.iFboId != 0)
 	{
 		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);  // switch back to window-system-provided framebuffer
-		glBindTexture (GL_TEXTURE_2D, 0);
+		// copie dans notre texture
+		if (g_openglConfig.bRedirected)
+		{
+			glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
+				GL_COLOR_ATTACHMENT0_EXT,
+				GL_TEXTURE_2D,
+				pIcon->iIconTexture,
+				0);  // maintenant on dessine dans la texture de l'icone.
+			_cairo_dock_enable_texture ();
+			_cairo_dock_set_blend_source ();
+			
+			int iWidth, iHeight;  // taille de la texture
+			cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+			
+			glLoadIdentity ();
+			glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
+			_cairo_dock_apply_texture_at_size_with_alpha (g_openglConfig.iRedirectedTexture, iWidth, iHeight, 1.);
+			
+			_cairo_dock_disable_texture ();
+			g_openglConfig.bRedirected = FALSE;
+		}
 		//glGenerateMipmapEXT(GL_TEXTURE_2D);  // si on utilise les mipmaps, il faut les generer explicitement avec les FBO.
 	}
 	/**else
@@ -551,13 +599,14 @@ static inline void _cairo_dock_set_perspective_view (int iWidth, int iHeight)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0, 1.0*(GLfloat)iWidth/(GLfloat)iHeight, 1., 4*iHeight);
+	glViewport(0, 0, iWidth, iHeight);
 	glMatrixMode (GL_MODELVIEW);
 	
 	glLoadIdentity ();
-	gluLookAt (0., 0., 3.,
-		0., 0., 0.,
-		0.0f, 1.0f, 0.0f);
+	gluLookAt (0, 0, 3., 0, 0, 0., 0.0f, 1.0f, 0.0f);
+	//gluLookAt (0/2, 0/2, 3., 0/2, 0/2, 0., 0.0f, 1.0f, 0.0f);
 	glTranslatef (0., 0., -iHeight*(sqrt(3)/2) - 1);
+	//glTranslatef (iWidth/2, iHeight/2, -iHeight*(sqrt(3)/2) - 1);
 }
 void cairo_dock_set_perspective_view (CairoContainer *pContainer)
 {
@@ -575,11 +624,19 @@ void cairo_dock_set_perspective_view (CairoContainer *pContainer)
 	_cairo_dock_set_perspective_view (w, h);
 }
 
+void cairo_dock_set_perspective_view_for_icon (Icon *pIcon, CairoContainer *pContainer)
+{
+	int w, h;
+	cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
+	_cairo_dock_set_perspective_view (w, h);
+}
+
 static inline void _cairo_dock_set_ortho_view (int iWidth, int iHeight)
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, iWidth, 0, iHeight, 0.0, 500.0);
+	glViewport(0, 0, iWidth, iHeight);
 	glMatrixMode (GL_MODELVIEW);
 	
 	glLoadIdentity ();
@@ -601,6 +658,13 @@ void cairo_dock_set_ortho_view (CairoContainer *pContainer)
 		w = pContainer->iHeight;
 		h = pContainer->iWidth;
 	}
+	_cairo_dock_set_ortho_view (w, h);
+}
+
+void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, CairoContainer *pContainer)
+{
+	int w, h;
+	cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
 	_cairo_dock_set_ortho_view (w, h);
 }
 

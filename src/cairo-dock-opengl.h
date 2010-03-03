@@ -45,6 +45,9 @@ struct _CairoDockGLConfig {
 	gboolean bNonPowerOfTwoAvailable;
 	gboolean bTextureFromPixmapAvailable;
 	GLuint iFboId;
+	GLuint iRedirectedTexture;
+	gint iRedirectWidth, iRedirectHeight;
+	gboolean bRedirected;
 	/**gboolean bPBufferAvailable;
 	gint iGlxMajor, iGlxMinor;
 	GLXPbuffer iconPbuffer;
@@ -93,7 +96,7 @@ void cairo_dock_destroy_icon_fbo (void);
 *@param pContainer its container.
 *@return TRUE if you can proceed to the drawing, FALSE if an error occured.
 */
-gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer);
+gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gint iRenderingMode);
 /** Finish an OpenGL drawing session on an icon.
 *@param pIcon the icon on which to draw.
 *@param pContainer its container.
@@ -109,10 +112,16 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);
 *@param pContainer the container
 */
 void cairo_dock_set_perspective_view (CairoContainer *pContainer);
+
+void cairo_dock_set_perspective_view_for_icon (Icon *pIcon, CairoContainer *pContainer);
+
 /** Set an orthogonal view to the current GL context to fit a given ontainer. Orthogonal view is convenient to draw classic 2D, because the objects are not zoomed according to their position. The drawback is a poor depth effect.
 *@param pContainer the container
 */
 void cairo_dock_set_ortho_view (CairoContainer *pContainer);
+
+void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, CairoContainer *pContainer);
+
 
 /** Apply the desktop background onto a container, to emulate fake transparency.
 *@param pContainer the container

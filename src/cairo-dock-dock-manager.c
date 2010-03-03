@@ -495,7 +495,24 @@ gchar *cairo_dock_add_root_dock_config (const gchar *cDockName)
 	return cValidDockName;
 }
 
-static void _cairo_dock_redraw_one_root_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
+void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock)
+{
+	cairo_dock_get_root_dock_position (cDockName, pDock);
+		
+	cairo_dock_load_buffers_in_one_dock (pDock);  // recharge les icones et les applets.
+	cairo_dock_synchronize_sub_docks_position (pDock, TRUE);
+	
+	cairo_dock_set_default_renderer (pDock);
+	cairo_dock_update_dock_size (pDock);
+	cairo_dock_calculate_dock_icons (pDock);
+	
+	cairo_dock_place_root_dock (pDock);
+	if (myAccessibility.bReserveSpace)
+		cairo_dock_reserve_space_for_dock (pDock, TRUE);
+	gtk_widget_queue_draw (pDock->container.pWidget);
+}
+
+static void _cairo_dock_redraw_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	if (pDock->iRefCount == 0 && ! (data && pDock->bIsMainDock))
 	{
@@ -507,7 +524,7 @@ void cairo_dock_redraw_root_docks (gboolean bExceptMainDock)
 	g_hash_table_foreach (s_hDocksTable, (GHFunc)_cairo_dock_redraw_one_root_dock, GINT_TO_POINTER (bExceptMainDock));
 }
 
-static void _cairo_dock_reposition_one_root_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _cairo_dock_reposition_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	if (pDock->iRefCount == 0 && ! (data && pDock->bIsMainDock))
 	{
