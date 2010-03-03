@@ -54,6 +54,7 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-internal-desklets.h"
 #include "cairo-dock-gui-manager.h"
+#include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-desklet.h"
 
 extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
@@ -837,6 +838,16 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 	//g_print (" >>>>>>>>> %s (%dx%d, %d;%d)", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y);
 	if (pDesklet->container.iWidth != pEvent->width || pDesklet->container.iHeight != pEvent->height)
 	{
+		if ((pEvent->width < pDesklet->container.iWidth || pEvent->height < pDesklet->container.iHeight) && (pDesklet->iDesiredWidth != 0 && pDesklet->iDesiredHeight != 0))
+		{
+			gdk_window_resize (pDesklet->container.pWidget->window,
+				pDesklet->iDesiredWidth,
+				pDesklet->iDesiredHeight);
+		}
+		
+		pDesklet->container.iWidth = pEvent->width;
+		pDesklet->container.iHeight = pEvent->height;
+		
 		if (g_bUseOpenGL)
 		{
 			GdkGLContext* pGlContext = gtk_widget_get_gl_context (pWidget);
@@ -848,21 +859,11 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 			
 			glViewport(0, 0, w, h);
 			
-			cairo_dock_set_perspective_view (w, h);
+			cairo_dock_set_perspective_view (CAIRO_CONTAINER (pDesklet));
 			
 			gdk_gl_drawable_gl_end (pGlDrawable);
 		}
 		
-		if ((pEvent->width < pDesklet->container.iWidth || pEvent->height < pDesklet->container.iHeight) && (pDesklet->iDesiredWidth != 0 && pDesklet->iDesiredHeight != 0))
-		{
-			gdk_window_resize (pDesklet->container.pWidget->window,
-				pDesklet->iDesiredWidth,
-				pDesklet->iDesiredHeight);
-		}
-		
-		pDesklet->container.iWidth = pEvent->width;
-		pDesklet->container.iHeight = pEvent->height;
-				
 		if (pDesklet->bNoInput)
 			_cairo_dock_set_desklet_input_shape (pDesklet);
 		
@@ -1785,6 +1786,78 @@ void cairo_dock_show_desklet (CairoDesklet *pDesklet)
 	if (pDesklet)
 		gtk_window_present(GTK_WINDOW(pDesklet->container.pWidget));
 }
+
+//for compiz fusion "widget layer"
+//set behaviour in compiz to: (class=Cairo-dock & type=utility)
+void cairo_dock_set_desklet_on_widget_layer (CairoDesklet *pDesklet, gboolean bOnWidgetLayer)
+{
+	//\_________________ On verifie que la regle de Compiz est correcte.
+	if (bOnWidgetLayer)
+	{
+		// pour activer le plug-in, recuperer la liste, y rajouter widget-layer, puis envoyer :
+		//dbus-send --print-reply --type=method_call  --dest=org.freedesktop.compiz  /org/freedesktop/compiz/core/allscreens/active_plugins  org.freedesktop.compiz.get
+		// dbus-send --print-reply --type=method_call  --dest=org.freedesktop.compiz  /org/freedesktop/compiz/core/allscreens/active_plugins  org.freedesktop.compiz.set array:string:"foo",string:"fum"
+		
+		// on recupere la regle
+		gchar *cDbusAnswer = cairo_dock_launch_command_sync ("dbus-send --print-reply --type=method_call --dest=org.freedesktop.compiz /org/freedesktop/compiz/widget/screen0/match org.freedesktop.compiz.get");
+		g_print ("cDbusAnswer : '%s'\n", cDbusAnswer);
+		gchar *cRule = NULL;
+		gchar *str = (cDbusAnswer ? strchr (cDbusAnswer, '\n') : NULL);
+		if (str)
+		{
+			str ++;
+			while (*str == ' ')
+				str ++;
+			if (strncmp (str, "string", 6) == 0)
+			{
+				str += 6;
+				while (*str == ' ')
+					str ++;
+				if (*str == '"')
+				{
+					str ++;
+					gchar *ptr = strrchr (str, '"');
+					if (ptr)
+					{
+						*ptr = '\0';
+						cRule = g_strdup (str);
+					}
+				}
+			}
+		}
+		g_free (cDbusAnswer);
+		g_print ("got rule : '%s'\n", cRule);
+		
+		if (cRule == NULL)  /// on ne sait pas le distinguer d'une regle vide...
+		{
+			cd_warning ("couldn't get Widget Layer rule from Compiz");
+		}
+		
+		// on complete la regle si necessaire.
+		if (cRule == NULL || *cRule == '\0' || (g_strstr_len (cRule, -1, "class=Cairo-dock & type=utility") == NULL && g_strstr_len (cRule, -1, "(class=Cairo-dock) & (type=utility)") == NULL && g_strstr_len (cRule, -1, "name=cairo-dock & type=utility") == NULL))
+		{
+			gchar *cNewRule = (cRule == NULL || *cRule == '\0' ?
+				g_strdup ("(class=Cairo-dock & type=utility)") :
+				g_strdup_printf ("(%s) | (class=Cairo-dock & type=utility)", cRule));
+			g_print ("set rule : %s\n", cNewRule);
+			gchar *cCommand = g_strdup_printf ("dbus-send --print-reply --type=method_call --dest=org.freedesktop.compiz /org/freedesktop/compiz/widget/screen0/match org.freedesktop.compiz.set string:\"%s\"", cNewRule);
+			cairo_dock_launch_command_sync (cCommand);
+			g_free (cCommand);
+			g_free (cNewRule);
+		}
+		g_free (cRule);
+	}
+	
+	//\_________________ On change le type de fenetre du desklet et on declenche un refresh pour le WM.
+	cairo_dock_hide_desklet (pDesklet);
+	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
+	if (bOnWidgetLayer)
+		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");  // gtk_window_set_type_hint ne marche pas bien.
+	else
+		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
+	cairo_dock_show_desklet (pDesklet);
+}
+
 
 void cairo_dock_zoom_out_desklet (CairoDesklet *pDesklet)
 {

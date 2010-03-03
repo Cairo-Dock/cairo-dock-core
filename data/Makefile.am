@@ -6,10 +6,10 @@ essentialdatadir = $(pkgdatadir)
 essentialdata_DATA = \
 	cairo-dock.conf\
 	cairo-dock-simple.conf\
-	launcher.conf\
-	container.conf\
-	separator.conf\
-	file.conf\
+	launcher.desktop\
+	container.desktop\
+	separator.desktop\
+	file.desktop\
 	themes.conf\
 	main-dock.conf\
 	default-icon.svg\

@@ -295,6 +295,11 @@ void cairo_dock_hide_desklet (CairoDesklet *pDesklet);
 */
 void cairo_dock_show_desklet (CairoDesklet *pDesklet);
 
+/**
+* Set a desklet on the Widget Layer. The correct rule must be set up in the WM (for instance for Compiz : class=Cairo-dock & type=utility). The function sets up the rule for Compiz.
+*@param pDesklet the desklet.
+*/
+void cairo_dock_set_desklet_on_widget_layer (CairoDesklet *pDesklet, gboolean bOnWidgetLayer);
 
 /** Launch a "zoom out" animation on a desklet.
 *@param pDesklet the desklet.

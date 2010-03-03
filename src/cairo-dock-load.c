@@ -353,7 +353,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 			// on affiche l'image precedente en embleme.
 			if (icon->iIconTexture != 0 && iPrevTexture != 0)
 			{
-				CairoDock *pParentDock = NULL;  // cairo_dock_search_dock_from_name (icon->cParentDockName);
+				CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 				CairoEmblem *e = cairo_dock_make_emblem_from_texture (iPrevTexture,icon, CAIRO_CONTAINER (pParentDock));
 				cairo_dock_set_emblem_position (e, CAIRO_DOCK_EMBLEM_LOWER_LEFT);
 				cairo_dock_draw_emblem_on_icon (e, icon, CAIRO_CONTAINER (pParentDock));
@@ -897,7 +897,7 @@ void cairo_dock_load_box_surface (double fMaxScale)
 		iSize,
 		CAIRO_DOCK_FILL_SPACE);
 	
-	cUserPath = cairo_dock_generate_file_path ("box-front.png");
+	cUserPath = cairo_dock_generate_file_path ("box-back.png");
 	if (! g_file_test (cUserPath, G_FILE_TEST_EXISTS))
 	{
 		g_free (cUserPath);
@@ -1193,7 +1193,7 @@ void cairo_dock_unload_additionnal_textures (void)
 		_cairo_dock_delete_texture (s_pDesktopBg->iTexture);
 		s_pDesktopBg->iTexture = 0;
 	}
-	cairo_dock_destroy_icon_pbuffer ();
+	///cairo_dock_destroy_icon_pbuffer ();
 	cairo_dock_destroy_icon_fbo ();
 	cairo_dock_unload_default_data_renderer_font ();
 	cairo_dock_unload_flying_container_textures ();

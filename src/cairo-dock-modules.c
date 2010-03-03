@@ -1307,6 +1307,18 @@ void cairo_dock_add_module_instance (CairoDockModule *pModule)
 	}
 }
 
+void cairo_dock_detach_module_instance (CairoDockModuleInstance *pInstance)
+{
+	gboolean bIsInDock = (pInstance->pDock != NULL);
+	cairo_dock_update_conf_file (pInstance->cConfFilePath,
+		G_TYPE_BOOLEAN, "Desklet", "initially detached", bIsInDock,
+		G_TYPE_INVALID);
+	cairo_dock_update_desklet_detached_state_in_gui (pInstance, bIsInDock);
+	cairo_dock_reload_module_instance (pInstance, TRUE);
+	if (pInstance->pDesklet)  // on a detache l'applet.
+		cairo_dock_zoom_out_desklet (pInstance->pDesklet);
+}
+
 
 void cairo_dock_read_module_config (GKeyFile *pKeyFile, CairoDockModuleInstance *pInstance)
 {

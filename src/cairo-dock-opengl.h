@@ -42,14 +42,14 @@ struct _CairoDockGLConfig {
 	gboolean bAlphaAvailable;
 	gboolean bStencilBufferAvailable;
 	gboolean bFboAvailable;
-	gboolean bPBufferAvailable;
 	gboolean bNonPowerOfTwoAvailable;
 	gboolean bTextureFromPixmapAvailable;
+	GLuint iFboId;
+	/**gboolean bPBufferAvailable;
 	gint iGlxMajor, iGlxMinor;
 	GLXPbuffer iconPbuffer;
 	GLXContext iconContext;
-	GLuint iFboId;
-	gint iIconPbufferWidth, iIconPbufferHeight;
+	gint iIconPbufferWidth, iIconPbufferHeight;*/
 	void (*bindTexImage) (Display *display, GLXDrawable drawable, int buffer, int *attribList);
 	void (*releaseTexImage) (Display *display, GLXDrawable drawable, int buffer);
 	} ;
@@ -65,7 +65,7 @@ struct _CairoDockGLConfig {
 */
 gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering, gboolean bForceOpenGL);
 
-#define cairo_dock_opengl_is_safe(...) (g_openglConfig.pGlConfig != NULL && ! g_openglConfig.bIndirectRendering && g_openglConfig.bAlphaAvailable && g_openglConfig.bStencilBufferAvailable/** && g_openglConfig.bPBufferAvailable*/)  // bNonPowerOfTwoAvailable est detecte une fois qu'on a un contexte OpenGL, on ne peut donc pas l'inclure ici.
+#define cairo_dock_opengl_is_safe(...) (g_openglConfig.pGlConfig != NULL && ! g_openglConfig.bIndirectRendering && g_openglConfig.bAlphaAvailable && g_openglConfig.bStencilBufferAvailable)  // bNonPowerOfTwoAvailable est detecte une fois qu'on a un contexte OpenGL, on ne peut donc pas l'inclure ici.
 
 #define cairo_dock_deactivate_opengl(...) do {\
 	g_bUseOpenGL = FALSE;\
@@ -77,15 +77,16 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering
 /** Create an FBO to render the icons inside a dock.
 */
 void cairo_dock_create_icon_fbo (void);
-
+/** Destroy the icons FBO.
+*/
 void cairo_dock_destroy_icon_fbo (void);
 
 /** Create a pbuffer that will fit the icons of the docks. Do nothing it a pbuffer with the correct size already exists.
 */
-void cairo_dock_create_icon_pbuffer (void);
+///void cairo_dock_create_icon_pbuffer (void);
 /** Destroy the icons pbuffer.
 */
-void cairo_dock_destroy_icon_pbuffer (void);
+///void cairo_dock_destroy_icon_pbuffer (void);
 
 /** Initiate an OpenGL drawing session on an icon's texture.
 *@param pIcon the icon on which to draw.
@@ -104,16 +105,14 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);
   /////////////
  // CONTEXT //
 /////////////
-/** Set a perspective view to the current GL context. Perspective view accentuates the depth effect of the scene, but can distort it on the edges, and is difficult to manipulate because the size of objects depends on their position.
-*@param iWidth width of the container
-*@param iHeight height of the container
+/** Set a perspective view to the current GL context to fit a given ontainer. Perspective view accentuates the depth effect of the scene, but can distort it on the edges, and is difficult to manipulate because the size of objects depends on their position.
+*@param pContainer the container
 */
-void cairo_dock_set_perspective_view (int iWidth, int iHeight);
-/** Set an orthogonal view to the current GL context. Orthogonal view is convenient to draw classic 2D, because the objects are not zoomed according to their position. The drawback is a poor depth effect.
-*@param iWidth width of the container
-*@param iHeight height of the container
+void cairo_dock_set_perspective_view (CairoContainer *pContainer);
+/** Set an orthogonal view to the current GL context to fit a given ontainer. Orthogonal view is convenient to draw classic 2D, because the objects are not zoomed according to their position. The drawback is a poor depth effect.
+*@param pContainer the container
 */
-void cairo_dock_set_ortho_view (int iWidth, int iHeight);
+void cairo_dock_set_ortho_view (CairoContainer *pContainer);
 
 /** Apply the desktop background onto a container, to emulate fake transparency.
 *@param pContainer the container
