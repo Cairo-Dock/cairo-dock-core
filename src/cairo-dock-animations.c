@@ -902,7 +902,7 @@ static gboolean _cairo_dock_transition_step (gpointer pUserData, Icon *pIcon, Ca
 	{
 		if (pTransition->render_opengl)
 		{
-			if (! cairo_dock_begin_draw_icon (pIcon, pContainer))
+			if (! cairo_dock_begin_draw_icon (pIcon, pContainer, 0))
 				return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 			bContinue = pTransition->render_opengl (pIcon, pTransition->pUserData);
 			cairo_dock_end_draw_icon (pIcon, pContainer);

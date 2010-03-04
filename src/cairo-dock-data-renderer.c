@@ -123,7 +123,7 @@ void cairo_dock_init_data_renderer (CairoDataRenderer *pRenderer, cairo_t *pSour
 
 static void _cairo_dock_render_to_texture (CairoDataRenderer *pDataRenderer, Icon *pIcon, CairoContainer *pContainer)
 {
-	if (! cairo_dock_begin_draw_icon (pIcon, pContainer))
+	if (! cairo_dock_begin_draw_icon (pIcon, pContainer, 0))
 		return ;
 	
 	pDataRenderer->interface.render_opengl (pDataRenderer);

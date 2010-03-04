@@ -26,10 +26,10 @@ cairo_dock_CFLAGS = \
 	-DCAIRO_DOCK_SHARE_DATA_DIR=\""$(pkgdatadir)"\"\
 	-DCAIRO_DOCK_SHARE_THEMES_DIR=\""$(pkgdatadir)/themes"\"\
 	-DCAIRO_DOCK_CONF_FILE=\""cairo-dock.conf"\"\
-	-DCAIRO_DOCK_LAUNCHER_CONF_FILE=\""launcher.conf"\"\
-	-DCAIRO_DOCK_FILE_CONF_FILE=\""file.conf"\"\
-	-DCAIRO_DOCK_CONTAINER_CONF_FILE=\""container.conf"\"\
-	-DCAIRO_DOCK_SEPARATOR_CONF_FILE=\""separator.conf"\"\
+	-DCAIRO_DOCK_LAUNCHER_CONF_FILE=\""launcher.desktop"\"\
+	-DCAIRO_DOCK_FILE_CONF_FILE=\""file.desktop"\"\
+	-DCAIRO_DOCK_CONTAINER_CONF_FILE=\""container.desktop"\"\
+	-DCAIRO_DOCK_SEPARATOR_CONF_FILE=\""separator.desktop"\"\
 	-DCAIRO_DOCK_MAIN_DOCK_CONF_FILE=\""main-dock.conf"\"\
 	-DCAIRO_DOCK_DEFAULT_ICON_NAME=\""default-icon.svg"\"\
 	-DCAIRO_DOCK_DEFAULT_APPLI_ICON_NAME=\""default-icon-appli.svg"\"\
@@ -68,7 +68,6 @@ cairo_dock_SOURCES = \
 	cairo-dock-global-variables.h \
 	cairo-dock-callbacks.c \
 	cairo-dock-callbacks.h \
-	cairo-dock.c \
 	cairo-dock-dbus.c \
 	cairo-dock-dbus.h \
 	cairo-dock-draw.c \
@@ -151,12 +150,6 @@ cairo_dock_SOURCES = \
 	cairo-dock-gui-factory.h\
 	cairo-dock-gui-manager.c\
 	cairo-dock-gui-manager.h\
-	cairo-dock-gui-main.c\
-	cairo-dock-gui-main.h\
-	cairo-dock-gui-simple.c\
-	cairo-dock-gui-simple.h\
-	cairo-dock-gui-launcher.c\
-	cairo-dock-gui-launcher.h\
 	cairo-dock-internal-position.c\
 	cairo-dock-internal-position.h\
 	cairo-dock-internal-accessibility.c\
@@ -190,7 +183,17 @@ cairo_dock_SOURCES = \
 	cairo-dock-task.c\
 	cairo-dock-task.h\
 	texture-gradation.h\
-	texture-blur.h
+	texture-blur.h\
+	cairo-dock.c\
+	cairo-dock-gui-main.c\
+	cairo-dock-gui-main.h\
+	cairo-dock-gui-simple.c\
+	cairo-dock-gui-simple.h\
+	cairo-dock-gui-launcher.c\
+	cairo-dock-gui-launcher.h\
+	cairo-dock-gui-themes.c\
+	cairo-dock-gui-themes.h
+	
 	
 
 cairo_dockincludedir =\
@@ -250,7 +253,6 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-particle-system.h\
 	cairo-dock-gui-factory.h\
 	cairo-dock-gui-manager.h\
-	cairo-dock-gui-launcher.h\
 	cairo-dock-internal-position.h\
 	cairo-dock-internal-accessibility.h\
 	cairo-dock-internal-system.h\

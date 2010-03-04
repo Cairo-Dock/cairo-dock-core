@@ -1284,3 +1284,19 @@ gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon)
 		iGlobalPositionY + iHeightExtent > 0 &&
 		iGlobalPositionY < g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] );  // -1 <=> 0xFFFFFFFF en unsigned.
 }
+
+void cairo_dock_move_window_to_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY)
+{
+	cairo_dock_move_xwindow_to_nth_desktop (pIcon->Xid,
+		iNumDesktop,
+		(iNumViewportX - s_iCurrentViewportX) * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
+		(iNumViewportY - s_iCurrentViewportY) * g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+}
+
+void cairo_dock_move_window_to_current_desktop (Icon *pIcon)
+{
+	cairo_dock_move_xwindow_to_nth_desktop (pIcon->Xid,
+		s_iCurrentDesktop,
+		0,
+		0);  // on ne veut pas decaler son viewport par rapport a nous.
+}

@@ -1378,7 +1378,8 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 				w/2, h/2, 0.,
 				0.0f, 1.0f, 0.0f);
 			glTranslatef (0.0f, 0.0f, -3.);*/
-			cairo_dock_set_ortho_view (w, h);
+			///cairo_dock_set_ortho_view (w, h);
+			cairo_dock_set_ortho_view (CAIRO_CONTAINER (pDock));
 			
 			glClearAccum (0., 0., 0., 0.);
 			glClear (GL_ACCUM_BUFFER_BIT);
@@ -1684,7 +1685,7 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 			g_print ("get-data envoye\n");
 		}*/
 		
-		///cairo_dock_on_enter_notify (pWidget, NULL, pDock);  // ne sera effectif que la 1ere fois a chaque entree dans un dock.
+		cairo_dock_on_enter_notify (pWidget, NULL, pDock);  // ne sera effectif que la 1ere fois a chaque entree dans un dock.
 	}
 	else
 	{

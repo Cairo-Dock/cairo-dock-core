@@ -207,10 +207,6 @@ void cairo_dock_load_current_theme (void);
 
 void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar *cThemesDirPath, gchar *cCurrentThemeDirPath);
 
-/* Build and show the Theme Manager window.
- */
-void cairo_dock_manage_themes (void);
-
 
 G_END_DECLS
 #endif

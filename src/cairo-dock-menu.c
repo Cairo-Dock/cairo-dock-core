@@ -42,6 +42,7 @@
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-themes-manager.h"
+#include "cairo-dock-gui-themes.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-file-manager.h"
@@ -113,19 +114,7 @@ static void _cairo_dock_configure_root_dock_position (GtkMenuItem *pMenuItem, Ca
 	
 	if (config_ok)
 	{
-		cairo_dock_get_root_dock_position (cDockName, pDock);
-		
-		cairo_dock_load_buffers_in_one_dock (pDock);  // recharge les icones et les applets.
-		cairo_dock_synchronize_sub_docks_position (pDock, TRUE);
-		
-		cairo_dock_set_default_renderer (pDock);
-		cairo_dock_update_dock_size (pDock);
-		cairo_dock_calculate_dock_icons (pDock);
-		
-		cairo_dock_place_root_dock (pDock);
-		if (myAccessibility.bReserveSpace)
-			cairo_dock_reserve_space_for_dock (pDock, TRUE);
-		gtk_widget_queue_draw (pDock->container.pWidget);
+		cairo_dock_reload_one_root_dock (cDockName, pDock);
 	}
 	
 	g_free (cConfFilePath);
@@ -209,16 +198,9 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 	gtk_widget_set_tooltip_text (pLink, _("Get more applets !"));
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
-	/*gchar *cImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_LOGO);
-	GtkWidget *pImage = gtk_image_new_from_file (cImagePath);
-	g_free (cImagePath);
-#if GTK_MINOR_VERSION >= 12
-	gtk_message_dialog_set_image (GTK_MESSAGE_DIALOG (pDialog), pImage);
-#endif*/
 	GtkWidget *pNoteBook = gtk_notebook_new ();
 	gtk_notebook_set_scrollable (GTK_NOTEBOOK (pNoteBook), TRUE);
 	gtk_notebook_popup_enable (GTK_NOTEBOOK (pNoteBook));
-	//gtk_container_add (GTK_CONTAINER (GTK_DIALOG(pDialog)->vbox), pNoteBook);
 	gtk_box_pack_start (GTK_BOX (pContentBox), pNoteBook, TRUE, TRUE, 0);
 	
 	_cairo_dock_add_about_page (pNoteBook,
@@ -478,7 +460,30 @@ static void _cairo_dock_create_launcher (Icon *icon, CairoDock *pDock, CairoDock
 	}
 	else
 		fOrder = CAIRO_DOCK_LAST_ORDER;
-
+	
+	//\___________________ On cree et on charge l'icone a partir d'un des templates.
+	const gchar *cTemplate;
+	switch (iLauncherType)
+	{
+		case CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER :
+			cTemplate = CAIRO_DOCK_CONTAINER_CONF_FILE;
+		break ;
+		case CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER :
+			cTemplate = CAIRO_DOCK_LAUNCHER_CONF_FILE;
+		break ;
+		case CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR :
+			cTemplate = CAIRO_DOCK_SEPARATOR_CONF_FILE;
+		break ;
+		default :
+		return ;
+	}
+	Icon *pNewIcon = cairo_dock_add_new_launcher_by_uri (cTemplate, pDock, fOrder);
+	if (pNewIcon == NULL)
+	{
+		cd_warning ("Couldn't create create the icon.\nCheck that you have writing permissions on ~/.config/cairo-dock and its sub-folders");
+		return ;
+	}
+	/**
 	//\___________________ On cree un fichier de lanceur avec des valeurs par defaut.
 	GError *erreur = NULL;
 	const gchar *cDockName = cairo_dock_search_dock_name (pDock);
@@ -520,7 +525,7 @@ static void _cairo_dock_create_launcher (Icon *icon, CairoDock *pDock, CairoDock
 	cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
 	cairo_dock_mark_theme_as_modified (TRUE);
 	
-	g_free (cNewDesktopFileName);
+	g_free (cNewDesktopFileName);*/
 	
 	//\___________________ On ouvre automatiquement l'IHM pour permettre de modifier ses champs.
 	if (iLauncherType != CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR)  // inutile pour un separateur.
@@ -531,7 +536,6 @@ static void cairo_dock_add_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	
 	_cairo_dock_create_launcher (icon, pDock, CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER);
 }
 
@@ -539,7 +543,6 @@ static void cairo_dock_add_container (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-
 	_cairo_dock_create_launcher (icon, pDock, CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER);
 }
 
@@ -547,8 +550,7 @@ static void cairo_dock_add_separator (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	if (icon != NULL)
-		_cairo_dock_create_launcher (icon, pDock, CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR);
+	_cairo_dock_create_launcher (icon, pDock, CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR);
 }
 
 static void _cairo_dock_modify_launcher (GtkMenuItem *pMenuItem, gpointer *data)
@@ -569,50 +571,32 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 {
 	Icon *pIcon = g_object_get_data (G_OBJECT (pMenuItem), "launcher");
 	
+	//\_________________________ on cree si besoin le fichier de conf d'un nouveau dock racine.
 	gchar *cValidDockName;
 	if (cDockName == NULL)  // nouveau dock
 	{
-		cValidDockName = cairo_dock_get_unique_dock_name ("dock");
-		
-		// on cree le fichier de conf des maintenant pour pouvoir placer le nouveau dock a l'oppose du main dock.
-		gchar *cCommand = g_strdup_printf ("cp '%s/%s' '%s/%s.conf'", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, g_cCurrentThemePath, cValidDockName);
-		int r = system (cCommand);
-		g_free (cCommand);
-		
-		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cValidDockName);
-		cairo_dock_update_conf_file (cDesktopFilePath,
-			G_TYPE_INT,
-			"Position",
-			"screen border",
-			(g_pMainDock->container.bIsHorizontal ?
-				(g_pMainDock->container.bDirectionUp ? 1 : 0) :
-				(g_pMainDock->container.bDirectionUp ? 3 : 2)),
-			G_TYPE_INVALID);
-		g_free (cDesktopFilePath);
+		cValidDockName = cairo_dock_add_root_dock_config ("dock");
 	}
 	else
 	{
 		cValidDockName = g_strdup (cDockName);
 	}
 	
+	//\_________________________ on met a jour le fichier de conf de l'icone.
+	cairo_dock_update_icon_s_container_name (pIcon, cValidDockName);
+	
+	//\_________________________ on recharge l'icone.
 	if (CAIRO_DOCK_IS_STORED_LAUNCHER (pIcon))
 	{
-		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName);
-		cairo_dock_update_conf_file (cDesktopFilePath,
-			G_TYPE_STRING, "Desktop Entry", "Container", cValidDockName,
-			G_TYPE_INVALID);
-		g_free (cDesktopFilePath);
 		cairo_dock_reload_launcher (pIcon);
 	}
 	else if (CAIRO_DOCK_IS_APPLET (pIcon))
 	{
-		cairo_dock_update_conf_file (pIcon->pModuleInstance->cConfFilePath,
-			G_TYPE_STRING, "Icon", "dock name", cValidDockName,
-			G_TYPE_INVALID);
 		cairo_dock_reload_module_instance (pIcon->pModuleInstance, TRUE);  // TRUE <=> reload config.
 	}
 	g_free (cValidDockName);
 }
+
 static void _add_one_dock_to_menu (const gchar *cName, CairoDock *pDock, GtkWidget *pMenu)
 {
 	// on elimine les sous-dock d'appli, d'applets, ou de repertoire.
@@ -774,17 +758,12 @@ static void _cairo_dock_delete_file (GtkMenuItem *pMenuItem, gpointer *data)
 			cairo_dock_show_temporary_dialog_with_default_icon (cMessage, icon, CAIRO_CONTAINER (pDock), 4000);
 			g_free (cMessage);
 		}
-		///cairo_dock_remove_icon_from_dock (pDock, icon);
-		///cairo_dock_update_dock_size (pDock);
-
 		if (icon->cDesktopFileName != NULL)
 		{
 			gchar *icon_path = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
 			g_remove (icon_path);
 			g_free (icon_path);
 		}
-
-		///cairo_dock_free_icon (icon);
 	}
 }
 
@@ -811,7 +790,6 @@ static void _cairo_dock_rename_file (GtkMenuItem *pMenuItem, gpointer *data)
  /////////// LES OPERATIONS SUR LES APPLETS ///////////////////////
 //////////////////////////////////////////////////////////////////
 
-
 static void _cairo_dock_initiate_config_module (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	g_print ("%s ()\n", __func__);
@@ -832,13 +810,7 @@ static void _cairo_dock_detach_module (GtkMenuItem *pMenuItem, gpointer *data)
 		icon = (CAIRO_DESKLET (pContainer))->pIcon;  // l'icone cliquee du desklet n'est pas forcement celle qui contient le module !
 	g_return_if_fail (CAIRO_DOCK_IS_APPLET (icon));
 	
-	cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
-		G_TYPE_BOOLEAN, "Desklet", "initially detached", CAIRO_DOCK_IS_DOCK (pContainer),
-		G_TYPE_INVALID);
-	cairo_dock_update_desklet_detached_state_in_gui (icon->pModuleInstance, CAIRO_DOCK_IS_DOCK (pContainer));
-	cairo_dock_reload_module_instance (icon->pModuleInstance, TRUE);
-	if (icon->pModuleInstance->pDesklet)  // on a detache l'applet.
-		cairo_dock_zoom_out_desklet (icon->pModuleInstance->pDesklet);
+	cairo_dock_detach_module_instance (icon->pModuleInstance);
 }
 
 static void _cairo_dock_remove_module_instance (GtkMenuItem *pMenuItem, gpointer *data)
@@ -894,7 +866,7 @@ static void _cairo_dock_minimize_appli (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	if (icon->Xid > 0)
+	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
 		cairo_dock_minimize_xwindow (icon->Xid);
 	}
@@ -904,7 +876,7 @@ static void _cairo_dock_show_appli (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	if (icon->Xid > 0)
+	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
 		cairo_dock_show_xwindow (icon->Xid);
 	}
@@ -955,7 +927,7 @@ static void _cairo_dock_make_launcher_from_appli (GtkMenuItem *pMenuItem, gpoint
 	// on cree un nouveau lanceur a partir de la classe.
 	if (cDesktopFilePath != NULL)
 	{
-		g_print ("cDesktopFilePath : %s\n", cDesktopFilePath);
+		cd_message ("found desktop file : %s\n", cDesktopFilePath);
 		cairo_dock_add_new_launcher_by_uri (cDesktopFilePath, g_pMainDock, CAIRO_DOCK_LAST_ORDER);
 	}
 	else
@@ -969,7 +941,7 @@ static void _cairo_dock_maximize_appli (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	if (icon->Xid > 0)
+	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
 		cairo_dock_maximize_xwindow (icon->Xid, ! icon->bIsMaximized);
 	}
@@ -979,7 +951,7 @@ static void _cairo_dock_set_appli_fullscreen (GtkMenuItem *pMenuItem, gpointer *
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	if (icon->Xid > 0)
+	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
 		cairo_dock_set_xwindow_fullscreen (icon->Xid, ! icon->bIsFullScreen);
 	}
@@ -990,10 +962,9 @@ static void _cairo_dock_move_appli_to_current_desktop (GtkMenuItem *pMenuItem, g
 	//g_print ("%s ()\n", __func__);
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	if (icon->Xid > 0)
+	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
-		int iCurrentDesktop = cairo_dock_get_current_desktop ();
-		cairo_dock_move_xwindow_to_nth_desktop (icon->Xid, iCurrentDesktop, 0, 0);  // on ne veut pas decaler son viewport par rapport a nous.
+		cairo_dock_move_window_to_current_desktop (icon);
 	}
 }
 
@@ -1006,13 +977,9 @@ static void _cairo_dock_move_appli_to_desktop (GtkMenuItem *pMenuItem, gpointer 
 	int iViewPortNumberY = GPOINTER_TO_INT (user_data[2]);
 	int iViewPortNumberX = GPOINTER_TO_INT (user_data[3]);
 	cd_message ("%s (%d;%d;%d)", __func__, iDesktopNumber, iViewPortNumberX, iViewPortNumberY);
-	if (icon->Xid > 0)
+	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
-		int iCurrentViewPortX, iCurrentViewPortY;
-		cairo_dock_get_current_viewport (&iCurrentViewPortX, &iCurrentViewPortY);
-		cd_debug (" current_viewport : %d;%d", iCurrentViewPortX, iCurrentViewPortY);
-		
-		cairo_dock_move_xwindow_to_nth_desktop (icon->Xid, iDesktopNumber, iViewPortNumberX * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - iCurrentViewPortX, iViewPortNumberY * g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - iCurrentViewPortY);
+		cairo_dock_move_window_to_desktop (icon, iDesktopNumber, iViewPortNumberX, iViewPortNumberY);
 	}
 }
 
@@ -1020,7 +987,7 @@ static void _cairo_dock_change_window_above (GtkMenuItem *pMenuItem, gpointer *d
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	if (icon->Xid > 0)
+	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
 		gboolean bIsAbove=FALSE, bIsBelow=FALSE;
 		cairo_dock_xwindow_is_above_or_below (icon->Xid, &bIsAbove, &bIsBelow);
@@ -1029,7 +996,7 @@ static void _cairo_dock_change_window_above (GtkMenuItem *pMenuItem, gpointer *d
 }
 
   //////////////////////////////////////////////////////////////////
- /////////// LES OPERATIONS SUR LES CLASSES ///////////////////////
+ ///////////// LES OPERATIONS SUR LES CLASSES /////////////////////
 //////////////////////////////////////////////////////////////////
 
 static void _cairo_dock_show_class (GtkMenuItem *pMenuItem, gpointer *data)
@@ -1043,7 +1010,7 @@ static void _cairo_dock_show_class (GtkMenuItem *pMenuItem, gpointer *data)
 	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (pIcon->Xid != 0)
+		if (CAIRO_DOCK_IS_APPLI (pIcon))
 		{
 			cairo_dock_show_xwindow (pIcon->Xid);
 		}
@@ -1061,7 +1028,7 @@ static void _cairo_dock_minimize_class (GtkMenuItem *pMenuItem, gpointer *data)
 	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (pIcon->Xid != 0)
+		if (CAIRO_DOCK_IS_APPLI (pIcon))
 		{
 			cairo_dock_minimize_xwindow (pIcon->Xid);
 		}
@@ -1079,7 +1046,7 @@ static void _cairo_dock_close_class (GtkMenuItem *pMenuItem, gpointer *data)
 	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (pIcon->Xid != 0)
+		if (CAIRO_DOCK_IS_APPLI (pIcon))
 		{
 			cairo_dock_close_xwindow (pIcon->Xid);
 		}
@@ -1102,13 +1069,9 @@ static void _cairo_dock_move_class_to_desktop (GtkMenuItem *pMenuItem, gpointer 
 	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (pIcon->Xid != 0)
+		if (CAIRO_DOCK_IS_APPLI (pIcon))
 		{
-			int iCurrentViewPortX, iCurrentViewPortY;
-			cairo_dock_get_current_viewport (&iCurrentViewPortX, &iCurrentViewPortY);
-			cd_debug (" current_viewport : %d;%d", iCurrentViewPortX, iCurrentViewPortY);
-			
-			cairo_dock_move_xwindow_to_nth_desktop (pIcon->Xid, iDesktopNumber, iViewPortNumberX * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - iCurrentViewPortX, iViewPortNumberY * g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - iCurrentViewPortY);
+			cairo_dock_move_window_to_desktop (pIcon, iDesktopNumber, iViewPortNumberX, iViewPortNumberY);
 		}
 	}
 }
@@ -1119,15 +1082,14 @@ static void _cairo_dock_move_class_to_current_desktop (GtkMenuItem *pMenuItem, g
 	CairoDock *pDock = data[1];
 	g_return_if_fail (icon->pSubDock != NULL);
 	
-	int iCurrentDesktop = cairo_dock_get_current_desktop ();
 	Icon *pIcon;
 	GList *ic;
 	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (pIcon->Xid != 0)
+		if (CAIRO_DOCK_IS_APPLI (pIcon))
 		{
-			cairo_dock_move_xwindow_to_nth_desktop (pIcon->Xid, iCurrentDesktop, 0, 0);  // on ne veut pas decaler son viewport par rapport a nous.
+			cairo_dock_move_window_to_current_desktop (pIcon);
 		}
 	}
 }
@@ -1136,197 +1098,57 @@ static void _cairo_dock_move_class_to_current_desktop (GtkMenuItem *pMenuItem, g
  ///////////////// LES OPERATIONS SUR LES DESKLETS /////////////////
 ///////////////////////////////////////////////////////////////////
 
+static inline void _cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletAccessibility iAccessibility)
+{
+	cairo_dock_set_desklet_accessibility (pDesklet, iAccessibility, TRUE);  // TRUE <=> save state in conf.
+}
 static void _cairo_dock_keep_below (GtkCheckMenuItem *pMenuItem, gpointer *data)
 {
-	Icon *icon = data[0];
 	CairoDesklet *pDesklet = data[1];
-	if (icon == NULL)  // cas de l'applet Terminal par exemple.
-		icon = pDesklet->pIcon;
-	
-	gboolean bBelow = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem));
-	g_print (" %s (%d)\n", __func__, bBelow);
-	gtk_window_set_keep_below (GTK_WINDOW(pDesklet->container.pWidget), bBelow);
-	if (CAIRO_DOCK_IS_APPLET (icon) && bBelow)
-		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
-			G_TYPE_INT, "Desklet", "accessibility", CAIRO_DESKLET_KEEP_BELOW,
-			G_TYPE_INVALID);
+	if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem)))
+		_cairo_dock_set_desklet_accessibility (pDesklet, CAIRO_DESKLET_KEEP_BELOW);
 }
 
 static void _cairo_dock_keep_normal (GtkCheckMenuItem *pMenuItem, gpointer *data)
 {
-	Icon *icon = data[0];
 	CairoDesklet *pDesklet = data[1];
-	if (icon == NULL)  // cas de l'applet Terminal par exemple.
-		icon = pDesklet->pIcon;
-	
-	gboolean bNormal = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem));
-	g_print (" %s (%d)\n", __func__, bNormal);
-	if (CAIRO_DOCK_IS_APPLET (icon) && bNormal)
-		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
-			G_TYPE_INT, "Desklet", "accessibility", CAIRO_DESKLET_NORMAL,
-			G_TYPE_INVALID);
+	if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem)))
+		_cairo_dock_set_desklet_accessibility (pDesklet, CAIRO_DESKLET_NORMAL);
 }
 
 static void _cairo_dock_keep_above (GtkCheckMenuItem *pMenuItem, gpointer *data)
 {
-	Icon *icon = data[0];
 	CairoDesklet *pDesklet = data[1];
-	if (icon == NULL)  // cas de l'applet Terminal par exemple.
-		icon = pDesklet->pIcon;
-	
-	gboolean bAbove = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem));
-	g_print (" %s (%d)\n", __func__, bAbove);
-	gtk_window_set_keep_above (GTK_WINDOW(pDesklet->container.pWidget), bAbove);
-	if (CAIRO_DOCK_IS_APPLET (icon) && bAbove)
-		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
-			G_TYPE_INT, "Desklet", "accessibility", CAIRO_DESKLET_KEEP_ABOVE,
-			G_TYPE_INVALID);
+	if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem)))
+		_cairo_dock_set_desklet_accessibility (pDesklet, CAIRO_DESKLET_KEEP_ABOVE);
 }
 
-//for compiz fusion "widget layer"
-//set behaviour in compiz to: (class=Cairo-dock & type=utility)
 static void _cairo_dock_keep_on_widget_layer (GtkMenuItem *pMenuItem, gpointer *data)
 {
-	Icon *icon = data[0];
 	CairoDesklet *pDesklet = data[1];
-	if (icon == NULL)  // cas de l'applet Terminal par exemple.
-		icon = pDesklet->pIcon;
-	
-	cairo_dock_hide_desklet (pDesklet);
-	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
-
-	gboolean bOnCompizWidgetLayer = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem));
-	g_print (" %s (%d)\n", __func__, bOnCompizWidgetLayer);
-	if (bOnCompizWidgetLayer)
-		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");
-		//gtk_window_set_type_hint(GTK_WINDOW(pDock->container.pWidget), GDK_WINDOW_TYPE_HINT_UTILITY);
-	else
-		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
-		//gtk_window_set_type_hint(GTK_WINDOW(pDock->container.pWidget), GDK_WINDOW_TYPE_HINT_NORMAL);
-	cairo_dock_show_desklet (pDesklet);
-	
-	if (CAIRO_DOCK_IS_APPLET (icon) && bOnCompizWidgetLayer)
-		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
-			G_TYPE_INT, "Desklet", "accessibility", CAIRO_DESKLET_ON_WIDGET_LAYER,
-			G_TYPE_INVALID);
-	
-	if (bOnCompizWidgetLayer)  // on verifie que la regle de Compiz est correcte.
-	{
-		// on recupere la regle
-		gchar *cDbusAnswer = cairo_dock_launch_command_sync ("dbus-send --print-reply --type=method_call --dest=org.freedesktop.compiz /org/freedesktop/compiz/widget/screen0/match org.freedesktop.compiz.get");
-		g_print ("cDbusAnswer : '%s'\n", cDbusAnswer);
-		gchar *cRule = NULL;
-		gchar *str = strchr (cDbusAnswer, '\n');
-		if (str)
-		{
-			str ++;
-			while (*str == ' ')
-				str ++;
-			if (strncmp (str, "string", 6) == 0)
-			{
-				str += 6;
-				while (*str == ' ')
-					str ++;
-				if (*str == '"')
-				{
-					str ++;
-					gchar *ptr = strrchr (str, '"');
-					if (ptr)
-					{
-						*ptr = '\0';
-						cRule = g_strdup (str);
-					}
-				}
-			}
-		}
-		g_free (cDbusAnswer);
-		g_print ("got rule : '%s'\n", cRule);
-		
-		/// gerer le cas ou Compiz n'est pas lance : comment le distinguer d'une regle vide ?...
-		if (cRule == NULL)
-		{
-			cd_warning ("couldn't get Widget Layer rule from Compiz");
-		}
-		
-		// on complete la regle si necessaire.
-		if (cRule == NULL || *cRule == '\0' || (g_strstr_len (cRule, -1, "class=Cairo-dock & type=utility") == NULL && g_strstr_len (cRule, -1, "(class=Cairo-dock) & (type=utility)") == NULL && g_strstr_len (cRule, -1, "name=cairo-dock & type=utility") == NULL))
-		{
-			gchar *cNewRule = (cRule == NULL || *cRule == '\0' ?
-				g_strdup ("(class=Cairo-dock & type=utility)") :
-				g_strdup_printf ("(%s) | (class=Cairo-dock & type=utility)", cRule));
-			g_print ("set rule : %s\n", cNewRule);
-			gchar *cCommand = g_strdup_printf ("dbus-send --print-reply --type=method_call --dest=org.freedesktop.compiz /org/freedesktop/compiz/widget/screen0/match org.freedesktop.compiz.set string:\"%s\"", cNewRule);
-			cairo_dock_launch_command_sync (cCommand);
-			g_free (cCommand);
-			g_free (cNewRule);
-		}
-		g_free (cRule);
-	}
+	if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem)))
+		_cairo_dock_set_desklet_accessibility (pDesklet, CAIRO_DESKLET_ON_WIDGET_LAYER);
 }
 
 static void _cairo_dock_keep_space (GtkCheckMenuItem *pMenuItem, gpointer *data)
 {
-	Icon *icon = data[0];
 	CairoDesklet *pDesklet = data[1];
-	if (icon == NULL)  // cas de l'applet Terminal par exemple.
-		icon = pDesklet->pIcon;
-	
-	gboolean bReserveSpace = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem));
-	g_print (" %s (%d)\n", __func__, bReserveSpace);
-	
-	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
-	pDesklet->bSpaceReserved = bReserveSpace;
-	//cairo_dock_set_xwindow_type_hint (Xid, bReserveSpace ? "_NET_WM_WINDOW_TYPE_DOCK" : "_NET_WM_WINDOW_TYPE_NORMAL");
-	cairo_dock_reserve_space_for_desklet (pDesklet, bReserveSpace);
-	
-	if (CAIRO_DOCK_IS_APPLET (icon) && bReserveSpace)
-		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
-			G_TYPE_INT, "Desklet", "accessibility", CAIRO_DESKLET_RESERVE_SPACE,
-			G_TYPE_INVALID);
+	if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem)))
+		_cairo_dock_set_desklet_accessibility (pDesklet, CAIRO_DESKLET_RESERVE_SPACE);
 }
 
 static void _cairo_dock_set_on_all_desktop (GtkCheckMenuItem *pMenuItem, gpointer *data)
 {
-	Icon *icon = data[0];
 	CairoDesklet *pDesklet = data[1];
-	if (icon == NULL)  // cas de l'applet Terminal par exemple.
-		icon = pDesklet->pIcon;
-	
 	gboolean bSticky = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem));
-	g_print ("%s (%d)\n", __func__, bSticky);
-	int iNumDesktop;
-	if (bSticky)
-	{
-		gtk_window_stick (GTK_WINDOW (pDesklet->container.pWidget));
-		iNumDesktop = -1;
-	}
-	else
-	{
-		gtk_window_unstick (GTK_WINDOW (pDesklet->container.pWidget));
-		int iCurrentDesktop, iCurrentViewportX, iCurrentViewportY;
-		cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
-		iNumDesktop = iCurrentDesktop * g_iNbViewportX * g_iNbViewportY + iCurrentViewportX * g_iNbViewportY + iCurrentViewportY;
-		g_print (">>> on colle ce desklet sur le bureau %d\n", iNumDesktop);
-	}
-	if (CAIRO_DOCK_IS_APPLET (icon))
-		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
-			G_TYPE_BOOLEAN, "Desklet", "sticky", bSticky,
-			G_TYPE_INT, "Desklet", "num desktop", iNumDesktop,
-			G_TYPE_INVALID);
+	cairo_dock_set_desklet_sticky (pDesklet, bSticky);
 }
 
 static void _cairo_dock_lock_position (GtkMenuItem *pMenuItem, gpointer *data)
 {
-	Icon *icon = data[0];
 	CairoDesklet *pDesklet = data[1];
-	if (icon == NULL)  // cas de l'applet Terminal par exemple.
-		icon = pDesklet->pIcon;
-	
-	pDesklet->bPositionLocked = ! pDesklet->bPositionLocked;
-	if (CAIRO_DOCK_IS_APPLET (icon))
-		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
-			G_TYPE_BOOLEAN, "Desklet", "locked", pDesklet->bPositionLocked,
-			G_TYPE_INVALID);
+	gboolean bLocked = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem));
+	cairo_dock_lock_desklet_position (pDesklet, bLocked);
 }
 
 
@@ -1685,98 +1507,4 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 	}
 
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-}
-
-
-
-static void _cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
-{
-	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));
-	pDock->bMenuVisible = FALSE;
-	
-	cd_message ("on force a quitter");
-	pDock->container.bInside = TRUE;
-	///pDock->bAtBottom = FALSE;
-	cairo_dock_emit_leave_signal (pDock);
-	/*cairo_dock_on_leave_notify (pDock->container.pWidget,
-		NULL,
-		pDock);*/
-}
-void cairo_dock_popup_menu_on_container (GtkWidget *menu, CairoContainer *pContainer)
-{
-	if (CAIRO_DOCK_IS_DOCK (pContainer))
-	{
-		if (g_signal_handler_find (menu,
-			G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
-			0,
-			0,
-			NULL,
-			_cairo_dock_delete_menu,
-			pContainer) == 0)  // on evite de connecter 2 fois ce signal, donc la fonction est appelable plusieurs fois.
-		{
-			g_signal_connect (G_OBJECT (menu),
-				"deactivate",
-				G_CALLBACK (_cairo_dock_delete_menu),
-				pContainer);
-		}
-		CAIRO_DOCK (pContainer)->bMenuVisible = TRUE;
-	}
-	
-	gtk_widget_show_all (menu);
-
-	gtk_menu_popup (GTK_MENU (menu),
-		NULL,
-		NULL,
-		NULL,
-		NULL,
-		1,
-		gtk_get_current_event_time ());
-}
-
-
-GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GFunc pFunction, GtkWidget *pMenu, gpointer pData)
-{
-	GtkWidget *pMenuItem = gtk_image_menu_item_new_with_label (cLabel);
-	if (gtkStock)
-	{
-		GtkWidget *image = NULL;
-		if (*gtkStock == '/')
-		{
-			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (gtkStock, 16, 16, NULL);
-			image = gtk_image_new_from_pixbuf (pixbuf);
-			g_object_unref (pixbuf);
-		}
-		else
-		{
-			image = gtk_image_new_from_stock (gtkStock, GTK_ICON_SIZE_MENU);
-		}
-		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
-	}
-	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem);
-	if (pFunction)
-		g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK (pFunction), pData);
-	return pMenuItem;
-}
-
-
-GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
-{
-	static GtkWidget *s_pMenu = NULL;
-	if (s_pMenu != NULL)
-	{
-		gtk_widget_destroy (s_pMenu);
-		s_pMenu = NULL;
-	}
-	g_return_val_if_fail (pContainer != NULL, NULL);
-	
-	//\_________________________ On construit le menu.
-	GtkWidget *menu = gtk_menu_new ();
-	s_pMenu = menu;
-	
-	//\_________________________ On passe la main a ceux qui veulent y rajouter des choses.
-	cairo_dock_notify (CAIRO_DOCK_BUILD_CONTAINER_MENU, pContainer, menu);
-	
-	cairo_dock_notify (CAIRO_DOCK_BUILD_ICON_MENU, icon, pContainer, menu);
-	
-	return menu;
 }

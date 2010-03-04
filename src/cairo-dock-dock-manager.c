@@ -470,7 +470,49 @@ void cairo_dock_remove_root_dock_config (const gchar *cDockName)
 	g_free (cConfFilePath);
 }
 
-static void _cairo_dock_redraw_one_root_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
+gchar *cairo_dock_add_root_dock_config (const gchar *cDockName)
+{
+	// on genere un nom unique.
+	gchar *cValidDockName = cairo_dock_get_unique_dock_name (cDockName ? cDockName : "dock");
+	
+	// on cree le fichier de conf a partir du template.
+	gchar *cCommand = g_strdup_printf ("cp '%s/%s' '%s/%s.conf'", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, g_cCurrentThemePath, cValidDockName);
+	int r = system (cCommand);
+	g_free (cCommand);
+	
+	// on placera le nouveau dock a l'oppose du main dock.
+	gchar *cDesktopFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cValidDockName);
+	cairo_dock_update_conf_file (cDesktopFilePath,
+		G_TYPE_INT,
+		"Position",
+		"screen border",
+		(g_pMainDock->container.bIsHorizontal ?
+			(g_pMainDock->container.bDirectionUp ? 1 : 0) :
+			(g_pMainDock->container.bDirectionUp ? 3 : 2)),
+		G_TYPE_INVALID);
+	g_free (cDesktopFilePath);
+	
+	return cValidDockName;
+}
+
+void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock)
+{
+	cairo_dock_get_root_dock_position (cDockName, pDock);
+		
+	cairo_dock_load_buffers_in_one_dock (pDock);  // recharge les icones et les applets.
+	cairo_dock_synchronize_sub_docks_position (pDock, TRUE);
+	
+	cairo_dock_set_default_renderer (pDock);
+	cairo_dock_update_dock_size (pDock);
+	cairo_dock_calculate_dock_icons (pDock);
+	
+	cairo_dock_place_root_dock (pDock);
+	if (myAccessibility.bReserveSpace)
+		cairo_dock_reserve_space_for_dock (pDock, TRUE);
+	gtk_widget_queue_draw (pDock->container.pWidget);
+}
+
+static void _cairo_dock_redraw_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	if (pDock->iRefCount == 0 && ! (data && pDock->bIsMainDock))
 	{
@@ -482,7 +524,7 @@ void cairo_dock_redraw_root_docks (gboolean bExceptMainDock)
 	g_hash_table_foreach (s_hDocksTable, (GHFunc)_cairo_dock_redraw_one_root_dock, GINT_TO_POINTER (bExceptMainDock));
 }
 
-static void _cairo_dock_reposition_one_root_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _cairo_dock_reposition_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	if (pDock->iRefCount == 0 && ! (data && pDock->bIsMainDock))
 	{

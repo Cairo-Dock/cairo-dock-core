@@ -44,6 +44,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-notifications.h"
+#include "cairo-dock-callbacks.h"
 #include "cairo-dock-container.h"
 
 extern CairoDock *g_pMainDock;
@@ -244,17 +245,6 @@ CairoContainer *cairo_dock_search_container_from_icon (Icon *icon)
 }
 
 
-void cairo_dock_show_hide_container (CairoContainer *pContainer)
-{
-	if (pContainer == NULL)
-		return;
-	if (! GTK_WIDGET_VISIBLE (pContainer->pWidget))
-		gtk_window_present (GTK_WINDOW (pContainer->pWidget));
-	else
-		gtk_widget_hide (pContainer->pWidget);
-}
-
-
 void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCallBack, gpointer data)
 {
 	/*GtkTargetEntry pTargetEntry[6] = {0};
@@ -349,4 +339,98 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 	
 	g_strfreev (cStringList);
 	g_string_free (sArg, TRUE);
+}
+
+
+
+static void _cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
+{
+	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));
+	pDock->bMenuVisible = FALSE;
+	
+	cd_message ("on force a quitter");
+	pDock->container.bInside = TRUE;
+	///pDock->bAtBottom = FALSE;
+	cairo_dock_emit_leave_signal (pDock);
+	/*cairo_dock_on_leave_notify (pDock->container.pWidget,
+		NULL,
+		pDock);*/
+}
+void cairo_dock_popup_menu_on_container (GtkWidget *menu, CairoContainer *pContainer)
+{
+	if (CAIRO_DOCK_IS_DOCK (pContainer))
+	{
+		if (g_signal_handler_find (menu,
+			G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
+			0,
+			0,
+			NULL,
+			_cairo_dock_delete_menu,
+			pContainer) == 0)  // on evite de connecter 2 fois ce signal, donc la fonction est appelable plusieurs fois.
+		{
+			g_signal_connect (G_OBJECT (menu),
+				"deactivate",
+				G_CALLBACK (_cairo_dock_delete_menu),
+				pContainer);
+		}
+		CAIRO_DOCK (pContainer)->bMenuVisible = TRUE;
+	}
+	
+	gtk_widget_show_all (menu);
+
+	gtk_menu_popup (GTK_MENU (menu),
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		1,
+		gtk_get_current_event_time ());
+}
+
+
+GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GFunc pFunction, GtkWidget *pMenu, gpointer pData)
+{
+	GtkWidget *pMenuItem = gtk_image_menu_item_new_with_label (cLabel);
+	if (gtkStock)
+	{
+		GtkWidget *image = NULL;
+		if (*gtkStock == '/')
+		{
+			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (gtkStock, 16, 16, NULL);
+			image = gtk_image_new_from_pixbuf (pixbuf);
+			g_object_unref (pixbuf);
+		}
+		else
+		{
+			image = gtk_image_new_from_stock (gtkStock, GTK_ICON_SIZE_MENU);
+		}
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
+	}
+	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem);
+	if (pFunction)
+		g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK (pFunction), pData);
+	return pMenuItem;
+}
+
+
+GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
+{
+	static GtkWidget *s_pMenu = NULL;
+	if (s_pMenu != NULL)
+	{
+		gtk_widget_destroy (s_pMenu);
+		s_pMenu = NULL;
+	}
+	g_return_val_if_fail (pContainer != NULL, NULL);
+	
+	//\_________________________ On construit le menu.
+	GtkWidget *menu = gtk_menu_new ();
+	s_pMenu = menu;
+	
+	//\_________________________ On passe la main a ceux qui veulent y rajouter des choses.
+	cairo_dock_notify (CAIRO_DOCK_BUILD_CONTAINER_MENU, pContainer, menu);
+	
+	cairo_dock_notify (CAIRO_DOCK_BUILD_ICON_MENU, icon, pContainer, menu);
+	
+	return menu;
 }

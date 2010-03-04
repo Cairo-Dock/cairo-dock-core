@@ -817,7 +817,7 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 }
 
 
-void cairo_dock_add_new_launcher_by_uri (const gchar *cExternDesktopFileURI, CairoDock *pReceivingDock, double fOrder)
+Icon *cairo_dock_add_new_launcher_by_uri (const gchar *cExternDesktopFileURI, CairoDock *pReceivingDock, double fOrder)
 {
 	//\_________________ On l'ajoute dans le repertoire des lanceurs du theme courant.
 	gchar *cPath = NULL;
@@ -833,16 +833,17 @@ void cairo_dock_add_new_launcher_by_uri (const gchar *cExternDesktopFileURI, Cai
 	{
 		cd_warning (erreur->message);
 		g_error_free (erreur);
-		return ;
+		return NULL;
 	}
 
 	//\_________________ On charge ce nouveau lanceur.
+	Icon *pNewIcon = NULL;
 	if (cNewDesktopFileName != NULL)
 	{
 		cairo_dock_mark_theme_as_modified (TRUE);
 
 		cairo_t* pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pReceivingDock));
-		Icon *pNewIcon = cairo_dock_create_icon_from_desktop_file (cNewDesktopFileName, pCairoContext);
+		pNewIcon = cairo_dock_create_icon_from_desktop_file (cNewDesktopFileName, pCairoContext);
 		g_free (cNewDesktopFileName);
 		cairo_destroy (pCairoContext);
 
@@ -860,4 +861,5 @@ void cairo_dock_add_new_launcher_by_uri (const gchar *cExternDesktopFileURI, Cai
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pReceivingDock));
 		}
 	}
+	return pNewIcon;
 }

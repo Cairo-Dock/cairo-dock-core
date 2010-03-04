@@ -28,9 +28,9 @@ G_BEGIN_DECLS
 
 
 /**
-*@file cairo-dock-container.h This class defines the basis of containers, that are classic or hardware accelerated animated windows.
+*@file cairo-dock-container.h This class defines the Containers, that are classic or hardware accelerated animated windows.
 *
-* A container is a rectangular located surface, has the notion of orientation, can hold external datas, monitors the mouse position, and has its own animation loop.
+* A Container is a rectangular on-screen located surface, has the notion of orientation, can hold external datas, monitors the mouse position, and has its own animation loop.
 *
 * Docks, Desklets, Dialogs, and Flying-containers all derive from Containers.
 */
@@ -153,9 +153,6 @@ void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer);
 CairoContainer *cairo_dock_search_container_from_icon (Icon *icon);
 
 
-void cairo_dock_show_hide_container (CairoContainer *pContainer);
-
-
 /** Let a widget accepts drag-and-drops.
 * @param pWidget a widget.
 * @param pCallBack the function that will be called when some data is received.
@@ -182,6 +179,29 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 * @return the maximum scale factor.
 */
 #define cairo_dock_get_max_scale(pContainer) (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) : 1)
+
+
+
+/** Pop-up a menu on a container. In the case of a dock, it prevents this one from shrinking down.
+*@param menu the menu.
+*@param pContainer the container that was clicked.
+*/
+void cairo_dock_popup_menu_on_container (GtkWidget *menu, CairoContainer *pContainer);
+
+/** Add an entry to a given menu.
+*@param cLabel label of the entry
+*@param gtkStock a GTK stock or a path to an image
+*@param pFunction callback
+*@param pMenu the menu to insert the entry in
+*@param pData data to feed the callback with
+*/
+GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GFunc pFunction, GtkWidget *pMenu, gpointer pData);
+
+/** Build the main menu of a Container.
+*@param icon the icon that was left-clicked, or NULL if none.
+*@param pContainer the container that was left-clicked.
+*/
+GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer);
 
 
 G_END_DECLS

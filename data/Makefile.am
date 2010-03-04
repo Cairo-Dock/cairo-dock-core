@@ -6,10 +6,10 @@ essentialdatadir = $(pkgdatadir)
 essentialdata_DATA = \
 	cairo-dock.conf\
 	cairo-dock-simple.conf\
-	launcher.conf\
-	container.conf\
-	separator.conf\
-	file.conf\
+	launcher.desktop\
+	container.desktop\
+	separator.desktop\
+	file.desktop\
 	themes.conf\
 	main-dock.conf\
 	default-icon.svg\
@@ -66,7 +66,7 @@ essentialdata_DATA = \
 	icon-maximize.png\
 	box-front.png\
 	box-back.png\
-	no-input-desklet.svg
+	no-input-desklet.png
 	
 autostartdatadir = $(datadir)/applications
 autostartdata_DATA = \

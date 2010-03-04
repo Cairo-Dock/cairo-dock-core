@@ -282,7 +282,7 @@ static gboolean on_configure_flying_icon (GtkWidget* pWidget,
 			
 			glViewport(0, 0, w, h);
 			
-			cairo_dock_set_ortho_view (w, h);
+			cairo_dock_set_ortho_view (CAIRO_CONTAINER (pFlyingContainer));
 			
 			gdk_gl_drawable_gl_end (pGlDrawable);
 		}

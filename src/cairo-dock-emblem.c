@@ -170,7 +170,7 @@ void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoCon
 	
 	if (pIcon->iIconTexture != 0 && pEmblem->iTexture != 0)  // dessin opengl : on dessine sur la texture de l'icone avec le mecanisme habituel.
 	{
-		if (! cairo_dock_begin_draw_icon (pIcon, pContainer))
+		if (! cairo_dock_begin_draw_icon (pIcon, pContainer, 1))
 			return ;
 		
 		_cairo_dock_enable_texture ();
@@ -199,6 +199,7 @@ void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoCon
 		cairo_destroy (pCairoContext);
 	}
 }
+
 
 
 static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, int w, int h, cairo_t *pCairoContext)
@@ -234,8 +235,6 @@ static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, int w, int 
 		}
 	}
 }
-
-
 
 static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, int w, int h, cairo_t *pCairoContext)
 {
@@ -288,7 +287,6 @@ static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, int w, int h
 	}
 	a = a_;
 }
-
 
 static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, int w, int h, cairo_t *pCairoContext)
 {
@@ -376,7 +374,7 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 	cairo_t *pCairoContext = NULL;
 	if (pIcon->iIconTexture != 0)  // dessin opengl
 	{
-		if (! cairo_dock_begin_draw_icon (pIcon, CAIRO_CONTAINER (pDock)))
+		if (! cairo_dock_begin_draw_icon (pIcon, CAIRO_CONTAINER (pDock), 0))
 			return ;
 		
 		_cairo_dock_set_blend_source ();

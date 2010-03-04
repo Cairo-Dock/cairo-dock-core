@@ -290,6 +290,7 @@ void cairo_dock_deinstanciate_module (CairoDockModuleInstance *pInstance);
 
 void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance);
 void cairo_dock_add_module_instance (CairoDockModule *pModule);
+void cairo_dock_detach_module_instance (CairoDockModuleInstance *pInstance);
 
 void cairo_dock_read_module_config (GKeyFile *pKeyFile, CairoDockModuleInstance *pInstance);
 

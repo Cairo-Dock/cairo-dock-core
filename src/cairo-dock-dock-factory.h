@@ -357,7 +357,7 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock);
 *@param pReceivingDock the dock that will hold the new launcher.
 *@param fOrder the order of the icon inside the dock.
 */
-void cairo_dock_add_new_launcher_by_uri (const gchar *cExternDesktopFileURI, CairoDock *pReceivingDock, double fOrder);
+Icon *cairo_dock_add_new_launcher_by_uri (const gchar *cExternDesktopFileURI, CairoDock *pReceivingDock, double fOrder);
 
 
 G_END_DECLS

@@ -18,18 +18,17 @@
 */
 
 
-#ifndef __CAIRO_DOCK_MENU__
-#define  __CAIRO_DOCK_MENU__
+#ifndef __CAIRO_DOCK_GUI_THEMES__
+#define  __CAIRO_DOCK_GUI_THEMES__
 
+#include <glib.h>
 #include <gtk/gtk.h>
-
-#include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
 
-gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, CairoContainer *pContainer, GtkWidget *menu);
-
-gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *icon, CairoContainer *pContainer, GtkWidget *menu);
+/* Build and show the Theme Manager window.
+ */
+void cairo_dock_manage_themes (void);
 
 
 G_END_DECLS
