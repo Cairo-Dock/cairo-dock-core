@@ -124,11 +124,11 @@ extern gboolean g_bEasterEggs;
 static const gchar *s_cCategoriesDescription[2*(CAIRO_DOCK_NB_CATEGORY+1)] = {
 	N_("Behaviour"), "icon-behavior.svg",
 	N_("Appearance"), "icon-appearance.svg",
-	N_("Accessories"), "icon-accessories.png",
+	N_("Accessories"), "icon-accessories.svg",
 	N_("Desktop"), "icon-desktop.svg",
-	N_("Controlers"), "icon-controler.png",
-	N_("Plug-ins"), "gtk-disconnect",
-	N_("All"), "gtk-file" };
+	N_("Controlers"), "icon-controler.svg",
+	N_("Plug-ins"), "icon-extensions.svg",
+	N_("All"), "icon-all.svg" };
 
 static void cairo_dock_hide_all_categories (void);
 static void cairo_dock_show_all_categories (void);
@@ -1519,7 +1519,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	GtkToolItem *pCategoryButton;
 	pCategoryWidget = &s_pCategoryWidgetTables[CAIRO_DOCK_NB_CATEGORY];
 	pCategoryButton = _make_toolbutton (_("All"),
-		"gtk-file",
+		"icon-all.svg",
 		CAIRO_DOCK_CATEGORY_ICON_SIZE);
 	g_signal_connect (G_OBJECT (pCategoryButton), "clicked", G_CALLBACK(on_click_all_button), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (s_pToolBar) , pCategoryButton, -1);

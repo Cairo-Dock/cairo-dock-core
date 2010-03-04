@@ -29,35 +29,37 @@ essentialdata_DATA = \
 	ChangeLog.txt\
 	icon-gradation.png\
 	icon-movment.png\
-	icon-mouse.png\
+	icon-mouse.svg\
 	icon-subdock.png\
 	icon-frame.png\
 	icon-buttons.png\
 	icon-bubble.png\
 	icon-wave.png\
-	icon-icons.png\
+	icon-icons.svg\
 	icon-dialogs.svg\
-	icon-views.png\
-	icon-visibility.png\
-	icon-labels.png\
+	icon-views.svg\
+	icon-visibility.svg\
+	icon-labels.svg\
 	icon-background.svg\
 	icon-taskbar.png\
 	icon-desklets.png\
-	icon-hidden-dock.png\
-	icon-indicators.png\
-	icon-system.png\
+	icon-hidden-dock.svg\
+	icon-indicators.svg\
+	icon-system.svg\
 	icon-lock-icons.svg\
-	icon-position.png\
+	icon-position.svg\
 	icon-behavior.svg\
 	icon-appearance.svg\
-	icon-accessories.png\
+	icon-accessories.svg\
 	icon-desktop.svg\
-	icon-controler.png\
+	icon-controler.svg\
 	icon-connection.svg\
-	icon-plug-ins.png\
+	icon-plug-ins.svg\
+	icon-all.svg\
+	icon-extensions.svg\
 	cairo-dock-animated.xpm\
 	help.conf\
-	icon-help.png\
+	icon-help.svg\
 	icon-close.png\
 	icon-restore.png\
 	icon-minimize.png\

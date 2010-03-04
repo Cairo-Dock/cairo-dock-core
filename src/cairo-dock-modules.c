@@ -137,7 +137,7 @@ void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 	pVisitCard->cConfFileName = "help.conf";
 	pVisitCard->cModuleVersion = "0.0.8";
 	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
-	pVisitCard->cIconFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/icon-help.png";
+	pVisitCard->cIconFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/icon-help.svg";
 	pVisitCard->iSizeOfConfig = 0;
 	pVisitCard->iSizeOfData = 0;
 	pVisitCard->cDescription = N_("A useful FAQ that contains also a lot of hints.\nLet the mouse over a sentence to make the hint dialog popups.");

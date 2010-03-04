@@ -84,7 +84,7 @@ DEFINE_PRE_INIT (HiddenDock)
 {
 	pModule->cModuleName = "Hidden dock";
 	pModule->cTitle = N_("Hidden Dock");
-	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-hidden-dock.png";
+	pModule->cIcon = CAIRO_DOCK_SHARE_DATA_DIR"/icon-hidden-dock.svg";
 	pModule->cDescription = N_("Define the appearance of the dock when it's hidden.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigHiddenDock);

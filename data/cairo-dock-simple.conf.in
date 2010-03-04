@@ -3,7 +3,7 @@
 #[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-behavior.svg]
 [Behavior]
 
-#F-[Position on the screen;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-position.png]
+#F-[Position on the screen;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-position.svg]
 frame_pos =
 
 #l-[bottom;top;right;left] Choose which screen border the dock will placed on :
@@ -11,7 +11,7 @@ frame_pos =
 screen border = 0
 
 
-#F-[Visibility of the main dock;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-visibility.png]
+#F-[Visibility of the main dock;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-visibility.svg]
 frame_visi =
 
 #Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;0;0;Automatically hide the dock;0;0;Automatically hide when a window is maximized;0;0;Pop-up on shortcut;1;1] Visibility :
@@ -60,7 +60,7 @@ config_illusion =
 #[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-appearance.svg]
 [Appearance]
 
-#F[Icons;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-icons.png]
+#F[Icons;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-icons.svg]
 frame_icons=
 
 #w Choose a theme of icons :
@@ -81,7 +81,7 @@ separate icons = true
 icon's type order = 0;1;2
 
 
-#F[Views;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-views.png]
+#F[Views;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-views.svg]
 frame_view =
 
 #n Choose the default view for main docks :/
@@ -95,10 +95,10 @@ sev_view=
 sub-dock view = default
 
 
-#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-plug-ins.png]
+#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-plug-ins.svg]
 [Add-ons]
 
-#F[Applets;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-accessories.png]
+#F[Applets;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-accessories.svg]
 frame_mod=
 
 #N Add or remove any applet :
@@ -108,7 +108,7 @@ frame_mod=
 modules=
 
 
-#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-controler.png]
+#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-controler.svg]
 [Themes]
 
 #R[@prefix@/@DATADIRNAME@/@PACKAGE@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes] Choose one of the available themes :/

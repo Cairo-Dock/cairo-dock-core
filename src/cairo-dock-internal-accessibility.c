@@ -261,7 +261,7 @@ DEFINE_PRE_INIT (Accessibility)
 {
 	pModule->cModuleName = "Accessibility";
 	pModule->cTitle = N_("Visibility");
-	pModule->cIcon = "icon-visibility.png";
+	pModule->cIcon = "icon-visibility.svg";
 	pModule->cDescription = N_("Do you like your dock to be always visible,\n or on the contrary unobstrusive ?\nConfigure the way you access to your docks and sub-docks !");  // How do you access to your docks ?
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
 	pModule->iSizeOfConfig = sizeof (CairoConfigAccessibility);

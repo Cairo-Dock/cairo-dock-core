@@ -190,7 +190,7 @@ DEFINE_PRE_INIT (Labels)
 {
 	pModule->cModuleName = "Labels";
 	pModule->cTitle = N_("Labels");
-	pModule->cIcon = "icon-labels.png";
+	pModule->cIcon = "icon-labels.svg";
 	pModule->cDescription = N_("Define the style of the icons' labels and quick-info.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigLabels);
