@@ -1947,7 +1947,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							cDistantThemesDir = pAuthorizedValuesList[2];
 						}
 					}
-					cairo_dock_set_status_message_printf (pMainWindow, _("Listing themes in '%s' ..."), cDistantThemesDir);
+					if (cDistantThemesDir != NULL)
+						cairo_dock_set_status_message_printf (pMainWindow, _("Listing themes in '%s' ..."), cDistantThemesDir);
 					_allocate_new_buffer;
 					data[0] = pOneWidget;
 					data[1] = pMainWindow;
