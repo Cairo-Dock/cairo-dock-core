@@ -53,9 +53,11 @@
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-application-facility.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-application-factory.h"
 
 extern CairoDock *g_pMainDock;
+extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static Display *s_XDisplay = NULL;
 static Atom s_aNetWmIcon;
@@ -399,16 +401,22 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	icon->bIsFullScreen = bIsFullScreen;
 	icon->bIsDemandingAttention = bDemandsAttention;
 	icon->bHasIndicator = myTaskBar.bDrawIndicatorOnAppli;
-	/**Icon * pLastAppli = cairo_dock_get_last_appli (pDock->icons);
-	icon->fOrder = (pLastAppli != NULL ? pLastAppli->fOrder + 1 : 1);*/
 	icon->fOrder = CAIRO_DOCK_LAST_ORDER;
 	
-	cairo_dock_get_xwindow_geometry (Xid,
-		&icon->windowGeometry.x,
-		&icon->windowGeometry.y,
-		&icon->windowGeometry.width,
-		&icon->windowGeometry.height);
 	icon->iNumDesktop = cairo_dock_get_xwindow_desktop (Xid);
+	
+	int iLocalPositionX, iLocalPositionY, iWidthExtent, iHeightExtent;
+	cairo_dock_get_xwindow_geometry (Xid, &iLocalPositionX, &iLocalPositionY, &iWidthExtent, &iHeightExtent);
+	
+	icon->iViewPortX = iLocalPositionX / g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + g_desktopGeometry.iCurrentViewportX;
+	icon->iViewPortY = iLocalPositionY / g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] + g_desktopGeometry.iCurrentViewportY;
+	
+	icon->windowGeometry.x = iLocalPositionX;
+	icon->windowGeometry.y = iLocalPositionY;
+	icon->windowGeometry.width = iWidthExtent;
+	icon->windowGeometry.height = iHeightExtent;
+	
+	//\____________ On remplit ses buffers.
 	#ifdef HAVE_XEXTEND
 	if (myTaskBar.iMinimizedWindowRenderType == 1)
 	{
@@ -419,7 +427,6 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	}
 	#endif
 	
-	//\____________ On remplit ses buffers.
 	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pDock);
 	
 	if (icon->bIsHidden && myTaskBar.iMinimizedWindowRenderType == 2)
@@ -429,8 +436,6 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	
 	//\____________ On enregistre l'appli et on commence a la surveiller.
 	cairo_dock_register_appli (icon);
-	
-	cairo_dock_set_xwindow_mask (Xid, PropertyChangeMask | StructureNotifyMask);
 
 	return icon;
 }

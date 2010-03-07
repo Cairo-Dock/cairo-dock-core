@@ -3,7 +3,6 @@ Encoding=UTF-8
 Type=Application
 Exec=cairo-dock -o
 Icon=cairo-dock.svg
-#DocPath=
 Terminal=false
 Comment=Cairo-Dock with OpenGL (hardware acceleration)
 

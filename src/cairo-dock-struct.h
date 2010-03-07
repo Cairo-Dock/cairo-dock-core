@@ -391,6 +391,8 @@ typedef struct _CairoEmblem CairoEmblem;
 
 typedef struct _CairoDockGLConfig CairoDockGLConfig;
 
+typedef struct _CairoDockDesktopGeometry CairoDockDesktopGeometry;
+
 #define CAIRO_DOCK_NB_DATA_SLOT 12
 
 

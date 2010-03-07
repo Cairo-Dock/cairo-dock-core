@@ -28,30 +28,15 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-applications-manager.h This class manages the taskbar and the interactions with X.
-* Most of the internal functions make request to X, so you shouldn't use them directly, for performance considerations. Instead, use the data exposed by Cairo-Dock or available in the icon structure.
-* Only the functions that don't make request to X are documented above.
+*@file cairo-dock-applications-manager.h This class manages the list of known windows, ie the Taskbar.
+* It also provides convenient functions to act on all the applis icons at once.
 */
-
-
-// X listener : core
-void cairo_dock_start_listening_X_events (void);
-void cairo_dock_stop_listening_X_events (void);
-
-// X listener : access
-/** Get the current workspace (desktop and viewport).
-*@param iCurrentDesktop will be filled with the current desktop number
-*@param iCurrentViewportX will be filled with the current horizontal viewport number
-*@param iCurrentViewportY will be filled with the current vertical viewport number
-*/
-void cairo_dock_get_current_desktop_and_viewport (int *iCurrentDesktop, int *iCurrentViewportX, int *iCurrentViewportY);
 
 
 // Applis manager : core
 void cairo_dock_initialize_application_manager (Display *pDisplay);
 
 void cairo_dock_register_appli (Icon *icon);
-void cairo_dock_blacklist_appli (Window Xid);
 void cairo_dock_unregister_appli (Icon *icon);
 
 /** Start the applications manager. It will load all the applis into the dock, and keep monitor them.
@@ -66,8 +51,14 @@ void cairo_dock_stop_application_manager (void);
 */
 gboolean cairo_dock_application_manager_is_running (void);
 
+
 // Applis manager : access
-Icon * cairo_dock_search_window_on_our_way (CairoDock *pDock, gboolean bMaximizedWindow, gboolean bFullScreenWindow);
+/** Get the icon of an application whose window covers a dock, or NULL if none. If both parameters are FALSE, check for all windows.
+* @param pDock the dock to test.
+* @param bMaximizedWindow check for maximized windows only.
+* @param bFullScreenWindow check for full screen windows only.
+*@return the icon representing the window, or NULL if none has been found.
+*/Icon * cairo_dock_search_window_on_our_way (CairoDock *pDock, gboolean bMaximizedWindow, gboolean bFullScreenWindow);
 
 /** Get the list of appli's icons currently known by Cairo-Dock, including the icons not displayed in the dock. You can then order the list by z-order, name, etc.
 *@return a newly allocated list of applis's icons. You must free the list when you're finished with it, but not the icons.
@@ -104,14 +95,8 @@ void cairo_dock_foreach_applis (CairoDockForeachIconFunc pFunction, gboolean bOu
 */
 void cairo_dock_foreach_applis_on_viewport (CairoDockForeachIconFunc pFunction, int iNumDesktop, int iNumViewportX, int iNumViewportY, gpointer pUserData);
 
-
 void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock);
 
-gboolean cairo_dock_appli_is_on_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY);
-gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon);
-
-void cairo_dock_move_window_to_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY);
-void cairo_dock_move_window_to_current_desktop (Icon *pIcon);
 
 G_END_DECLS
 #endif

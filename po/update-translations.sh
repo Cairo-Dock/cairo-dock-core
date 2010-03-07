@@ -34,7 +34,9 @@ if test -x $CAIRO_DOCK_EXTRACT_MESSAGE; then
 	rm -f data/messages
 	for c in data/*.conf data/*.desktop
 	do
-		$CAIRO_DOCK_EXTRACT_MESSAGE $c
+		if test ${c:0:10} != "cairo-dock"; then  # on exclut les cairo-dock*.desktop
+			$CAIRO_DOCK_EXTRACT_MESSAGE $c
+		fi
 	done;
 	$CAIRO_DOCK_EXTRACT_MESSAGE data/ChangeLog.txt
 fi

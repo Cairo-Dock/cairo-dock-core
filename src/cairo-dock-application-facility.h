@@ -44,5 +44,12 @@ void cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock 
 void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon *icon, CairoDock *pMainDock);
 
 
+gboolean cairo_dock_appli_is_on_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY);
+gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon);
+
+void cairo_dock_move_window_to_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY);
+void cairo_dock_move_window_to_current_desktop (Icon *pIcon);
+
+
 G_END_DECLS
 #endif

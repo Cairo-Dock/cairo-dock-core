@@ -42,6 +42,7 @@
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-main.h"
 
@@ -59,6 +60,8 @@
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
 #define CAIRO_DOCK_ICON_MARGIN 6
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
+
+extern CairoDockDesktopGeometry g_desktopGeometry;
 
 struct _CairoDockCategoryWidgetTable {
 	GtkWidget *pFrame;
@@ -115,7 +118,6 @@ static int s_iSidShowGroupDialog = 0;
 
 extern gchar *g_cConfFile;
 extern CairoDock *g_pMainDock;
-extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
 extern CairoDockDesktopEnv g_iDesktopEnv;
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCairoDockDataDir;
@@ -433,7 +435,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 		cGettextDomain = pGroupDescription->cGettextDomain;
 		bFound = FALSE;
 		
-		cDescription = dgettext (cGettextDomain, pGroupDescription->cGroupName);
+		cDescription = dgettext (cGettextDomain, pGroupDescription->cTitle);
 		if (bSearchInToolTip)
 			cToolTip = dgettext (cGettextDomain, pGroupDescription->cDescription);
 		//g_print ("cDescription : %s (%s)(%x,%x)\n", cDescription, cToolTip, cModifiedText, str);
@@ -844,7 +846,7 @@ static void on_enter_group_button (GtkButton *button, CairoDockGroupDescription 
 	if (s_iSidShowGroupDialog != 0)
 		g_source_remove (s_iSidShowGroupDialog);
 	
-	s_iSidShowGroupDialog = g_timeout_add (500, (GSourceFunc)_show_group_dialog, (gpointer) pGroupDescription);
+	s_iSidShowGroupDialog = g_timeout_add (330, (GSourceFunc)_show_group_dialog, (gpointer) pGroupDescription);
 }
 static void on_leave_group_button (GtkButton *button, gpointer *data)
 {
@@ -1309,24 +1311,26 @@ static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupN
 		0);
 	
 	GtkWidget *pGroupButton = gtk_button_new ();
+	gtk_button_set_relief (GTK_BUTTON (pGroupButton), GTK_RELIEF_NONE);
 	if (bConfigurable)
 		g_signal_connect (G_OBJECT (pGroupButton), "clicked", G_CALLBACK(on_click_group_button), pGroupDescription);
 	else
 		gtk_widget_set_sensitive (pGroupButton, FALSE);
 	g_signal_connect (G_OBJECT (pGroupButton), "enter", G_CALLBACK(on_enter_group_button), pGroupDescription);
 	g_signal_connect (G_OBJECT (pGroupButton), "leave", G_CALLBACK(on_leave_group_button), NULL);
-	_add_image_on_button (pGroupButton,
-		cIconPath,
-		CAIRO_DOCK_GROUP_ICON_SIZE);
-	gtk_box_pack_start (GTK_BOX (pGroupHBox),
-		pGroupButton,
+	
+	GtkWidget *pButtonHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pImage = _make_image (cIconPath, CAIRO_DOCK_GROUP_ICON_SIZE);
+	gtk_box_pack_start (GTK_BOX (pButtonHBox), pImage, FALSE, FALSE, 0);
+	pGroupDescription->pLabel = gtk_label_new (dgettext (pGroupDescription->cGettextDomain, cTitle));
+	gtk_box_pack_start (GTK_BOX (pButtonHBox),
+		pGroupDescription->pLabel,
 		FALSE,
 		FALSE,
 		0);
-
-	pGroupDescription->pLabel = gtk_label_new (dgettext (pGroupDescription->cGettextDomain, cTitle));
+	gtk_container_add (GTK_CONTAINER (pGroupButton), pButtonHBox);
 	gtk_box_pack_start (GTK_BOX (pGroupHBox),
-		pGroupDescription->pLabel,
+		pGroupButton,
 		FALSE,
 		FALSE,
 		0);
@@ -1435,16 +1439,16 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	GtkWidget *pMainHBox = gtk_hbox_new (FALSE, 0);
 	gtk_container_add (GTK_CONTAINER (s_pMainWindow), pMainHBox);
 	
-	if (g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] > CAIRO_DOCK_CONF_PANEL_WIDTH)
+	if (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] > CAIRO_DOCK_CONF_PANEL_WIDTH)
 	{
 		s_iPreviewWidth = CAIRO_DOCK_PREVIEW_WIDTH;
 		s_iNbButtonsByRow = CAIRO_DOCK_NB_BUTTONS_BY_ROW;
 	}
-	else if (g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] > CAIRO_DOCK_CONF_PANEL_WIDTH_MIN)
+	else if (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] > CAIRO_DOCK_CONF_PANEL_WIDTH_MIN)
 	{
 		double a = 1.*(CAIRO_DOCK_PREVIEW_WIDTH - CAIRO_DOCK_PREVIEW_WIDTH_MIN) / (CAIRO_DOCK_CONF_PANEL_WIDTH - CAIRO_DOCK_CONF_PANEL_WIDTH_MIN);
 		double b = CAIRO_DOCK_PREVIEW_WIDTH_MIN - CAIRO_DOCK_CONF_PANEL_WIDTH_MIN * a;
-		s_iPreviewWidth = a * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + b;
+		s_iPreviewWidth = a * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + b;
 		s_iNbButtonsByRow = CAIRO_DOCK_NB_BUTTONS_BY_ROW - 1;
 	}
 	else
@@ -1787,8 +1791,8 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	g_object_set_data (G_OBJECT (s_pMainWindow), "status-bar", s_pStatusBar);
 	
 	gtk_window_resize (GTK_WINDOW (s_pMainWindow),
-		MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),
-		MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
+		MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),
+		MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
 	
 	
 	gtk_widget_show_all (s_pMainWindow);

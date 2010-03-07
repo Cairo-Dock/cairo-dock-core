@@ -54,7 +54,6 @@
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-animations.h"
 
-extern int g_iXScreenHeight[2];
 extern gboolean g_bUseOpenGL;
 extern CairoDock *g_pMainDock;
 

@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 * @param pDock le dock.
 * @return la taille max.
 */
-#define cairo_dock_get_max_authorized_dock_width(pDock) (myAccessibility.iMaxAuthorizedWidth == 0 ? g_iScreenWidth[pDock->container.bIsHorizontal] : MIN (myAccessibility.iMaxAuthorizedWidth, g_iScreenWidth[pDock->container.bIsHorizontal]))
+#define cairo_dock_get_max_authorized_dock_width(pDock) (myAccessibility.iMaxAuthorizedWidth == 0 ? g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] : MIN (myAccessibility.iMaxAuthorizedWidth, g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal]))
 
 /* Dis si un dock est etendu ou pas.
 * @param pDock le dock.
@@ -103,9 +103,8 @@ void cairo_dock_update_input_shape (CairoDock *pDock);
 /** Pop up a sub-dock.
 *@param pPointedIcon icon pointing on the sub-dock.
 *@param pParentDock dock containing the icon.
-*@param bUpdateBefore TRUE to re-calculate the parent dock before.
 */
-void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock, gboolean bUpdateBefore);
+void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock);
 
 
 /** Calculate the position at rest (when the mouse is outside of the dock and its size is normal) of the icons of a linear dock.

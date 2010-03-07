@@ -275,6 +275,11 @@ void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCal
 		data);
 }
 
+void cairo_dock_disallow_widget_to_receive_data (GtkWidget *pWidget)
+{
+	gtk_drag_dest_set_target_list (pWidget, NULL);
+}
+
 gboolean cairo_dock_string_is_adress (const gchar *cString)
 {
 	gchar *protocole = g_strstr_len (cString, -1, "://");

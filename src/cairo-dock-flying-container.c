@@ -46,6 +46,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-gui-manager.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-flying-container.h"
 
 #define HAND_WIDTH 80
@@ -53,9 +54,9 @@
 #define EXPLOSION_NB_FRAMES 10
 
 extern CairoDock *g_pMainDock;
+extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
-extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
 
 static cairo_surface_t *s_pHandSurface = NULL;
 static GLuint s_iHandTexture = 0;
@@ -421,8 +422,8 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 			int iDeskletPositionX = pFlyingContainer->container.iWindowPositionX + (pFlyingContainer->container.iWidth - iDeskletWidth)/2;
 			int iDeskletPositionY = pFlyingContainer->container.iWindowPositionY + (pFlyingContainer->container.iHeight - iDeskletHeight)/2;
 			
-			int iRelativePositionX = (iDeskletPositionX + iDeskletWidth/2 <= g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionX : iDeskletPositionX - g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
-			int iRelativePositionY = (iDeskletPositionY + iDeskletHeight/2 <= g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionY : iDeskletPositionY - g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+			int iRelativePositionX = (iDeskletPositionX + iDeskletWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionX : iDeskletPositionX - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
+			int iRelativePositionY = (iDeskletPositionY + iDeskletHeight/2 <= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionY : iDeskletPositionY - g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 			
 			g_key_file_set_boolean (pKeyFile, "Desklet", "initially detached", TRUE);
 			g_key_file_set_double (pKeyFile, "Desklet", "x position", iDeskletPositionX);

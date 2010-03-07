@@ -39,14 +39,13 @@
 #include "cairo-dock-icons.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-gui-manager.h"
+#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-applet-facility.h"
 
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cConfFile;
 extern CairoDockImageBuffer g_pIconBackgroundBuffer;
-///extern cairo_surface_t *g_pIconBackgroundImageSurface;
-///extern double g_iIconBackgroundImageWidth, g_iIconBackgroundImageHeight;
 
 extern gboolean g_bUseOpenGL;
 
@@ -67,9 +66,10 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 		cd_message (">>> %s prendra un fond d'icone", pIcon->cName);
 
 		cairo_save (pIconContext);
+		double fMaxScale = cairo_dock_get_max_scale (pContainer);
 		cairo_scale(pIconContext,
-			pIcon->fWidth / (g_pIconBackgroundBuffer.iWidth / fScale),
-			pIcon->fHeight / (g_pIconBackgroundBuffer.iHeight / fScale));
+			pIcon->fWidth * fMaxScale / g_pIconBackgroundBuffer.iWidth,
+			pIcon->fHeight * fMaxScale / g_pIconBackgroundBuffer.iHeight);
 		cairo_set_source_surface (pIconContext,
 			g_pIconBackgroundBuffer.pSurface,
 			0.,

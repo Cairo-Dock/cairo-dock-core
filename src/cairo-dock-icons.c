@@ -60,13 +60,12 @@
 #include "cairo-dock-desklet.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-gui-manager.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-icons.h"
 
+extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gchar *g_cCurrentLaunchersPath;
 extern gboolean g_bUseOpenGL;
-extern int g_iNbViewportX;
-extern int g_iNbViewportY;
-extern int g_iNbDesktops;
 extern int g_iNbNonStickyLaunchers;
 
 static GList *s_DetachedLaunchersList = NULL;
@@ -780,18 +779,18 @@ static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, Cairo
 
 		int iCurrentDesktop = 0, iCurrentViewportX = 0, iCurrentViewportY = 0;
 		cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
-		int index = iCurrentDesktop * g_iNbViewportX * g_iNbViewportY + iCurrentViewportX * g_iNbViewportY + iCurrentViewportY + 1;  // +1 car on commence a compter a partir de 1.
+		int index = iCurrentDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportY + 1;  // +1 car on commence a compter a partir de 1.
 		
-		if (icon->iSpecificDesktop == 0 || icon->iSpecificDesktop == index || icon->iSpecificDesktop > g_iNbDesktops * g_iNbViewportX * g_iNbViewportY)
+		if (icon->iSpecificDesktop == 0 || icon->iSpecificDesktop == index || icon->iSpecificDesktop > g_desktopGeometry.iNbDesktops * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY)
 		/**if( icon->iSpecificDesktop <= 0 ||
 		// metacity case: metacity uses desktop instead of viewport.
-		    (g_iNbViewportX*g_iNbViewportY==1 &&
+		    (g_desktopGeometry.iNbViewportX*g_desktopGeometry.iNbViewportY==1 &&
 		    (icon->iSpecificDesktop-1 == iCurrentDesktop || 
-		     icon->iSpecificDesktop >= g_iNbDesktops)) ||
+		     icon->iSpecificDesktop >= g_desktopGeometry.iNbDesktops)) ||
 		// compiz case: viewports are used within a desktop
-				(g_iNbViewportX*g_iNbViewportY>1 &&
-		    (icon->iSpecificDesktop-1 == iCurrentViewportX + g_iNbViewportX*iCurrentViewportY ||
-		     icon->iSpecificDesktop >= g_iNbViewportX*g_iNbViewportY)) )*/
+				(g_desktopGeometry.iNbViewportX*g_desktopGeometry.iNbViewportY>1 &&
+		    (icon->iSpecificDesktop-1 == iCurrentViewportX + g_desktopGeometry.iNbViewportX*iCurrentViewportY ||
+		     icon->iSpecificDesktop >= g_desktopGeometry.iNbViewportX*g_desktopGeometry.iNbViewportY)) )*/
 		{
 			cd_debug (" => est visible sur ce viewport (iSpecificDesktop = %d).",icon->iSpecificDesktop);
 			// check that it is in the detached list
@@ -803,7 +802,7 @@ static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, Cairo
 		}
 		else
 		{
-			cd_debug (" Viewport actuel = %d => n'est pas sur le viewport actuel.", iCurrentViewportX + g_iNbViewportX*iCurrentViewportY);
+			cd_debug (" Viewport actuel = %d => n'est pas sur le viewport actuel.", iCurrentViewportX + g_desktopGeometry.iNbViewportX*iCurrentViewportY);
 			if( g_list_find(s_DetachedLaunchersList, icon) == NULL ) // only if not yet detached
 			{
 				cd_debug( "Detach launcher %s", icon->cName);

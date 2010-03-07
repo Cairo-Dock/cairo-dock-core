@@ -52,8 +52,6 @@
 #include "cairo-dock-draw-opengl.h"  // pour cairo_dock_render_one_icon
 #include "cairo-dock-draw.h"
 
-extern gint g_iScreenWidth[2];
-extern gint g_iScreenHeight[2];
 
 extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 extern CairoDockImageBuffer g_pIndicatorBuffer;

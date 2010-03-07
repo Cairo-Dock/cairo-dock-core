@@ -61,7 +61,7 @@ typedef enum {
 	
 	/// notification called when the user switches to another desktop/viewport. data : NULL
 	CAIRO_DOCK_DESKTOP_CHANGED,
-	/// notification called when a window is resized or moved, or when the z-order of windows has changed. data : XConfigureEvent or NULL.
+	/// notification called when a window is resized or moved, or when the z-order of windows has changed. data : {Xid, XConfigureEvent or NULL}.
 	CAIRO_DOCK_WINDOW_CONFIGURED,
 	/// notification called when the geometry of the desktop has changed (number of viewports/desktops, dimensions). data : NULL
 	CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED,
@@ -134,13 +134,16 @@ typedef enum {
 	/// notification called when the mouse leave a desklet.
 	CAIRO_DOCK_LEAVE_DESKLET,
 	
-	/// notification called when the desktop is shown/hidden (data:NULL).
+	/// notification called when the desktop is shown/hidden. data:NULL.
 	CAIRO_DOCK_DESKTOP_VISIBILITY_CHANGED,
 	/// notification called when the menu is being built on a container. data : {CairoContainer, GtkMenu}
 	CAIRO_DOCK_BUILD_CONTAINER_MENU,
 	
 	/// notification called when an icon's sub-dock is starting to (un)fold. data : {Icon}
 	CAIRO_DOCK_UNFOLD_SUBDOCK,
+	
+	/// notification called when a window's property has changed. data : {Window, Atom, int}
+	CAIRO_DOCK_WINDOW_PROPERTY_CHANGED,
 	
 	CAIRO_DOCK_NB_NOTIFICATIONS
 	} CairoDockNotificationType;

@@ -59,6 +59,7 @@
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-emblem.h"
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-dock-manager.h"
 
 extern CairoDock *g_pMainDock;
@@ -72,10 +73,16 @@ void cairo_dock_initialize_dock_manager (void)
 {
 	cd_message ("");
 	if (s_hDocksTable == NULL)
+	{
 		s_hDocksTable = g_hash_table_new_full (g_str_hash,
 			g_str_equal,
 			g_free,
 			NULL);  // donc on peut utiliser g_hash_table_remove plutot que g_hash_table_steal.
+	
+		cairo_dock_register_notification (CAIRO_DOCK_RENDER_DOCK,
+			(CairoDockNotificationFunc) cairo_dock_render_dock_notification,
+			CAIRO_DOCK_RUN_FIRST, NULL);
+		}
 }
 
 CairoDock *cairo_dock_register_dock (const gchar *cDockName, CairoDock *pDock)

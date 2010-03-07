@@ -160,6 +160,8 @@ CairoContainer *cairo_dock_search_container_from_icon (Icon *icon);
 */
 void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCallBack, gpointer data);
 
+void cairo_dock_disallow_widget_to_receive_data (GtkWidget *pWidget);
+
 /** Say if a string is an adress (file://xxx, http://xxx, ftp://xxx, etc).
 * @param cString a string.
 */

@@ -68,8 +68,12 @@
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-class-manager.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-X-utilities.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-callbacks.h"
+
+extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static Icon *s_pIconClicked = NULL;  // pour savoir quand on deplace une icone a la souris. Dangereux si l'icone se fait effacer en cours ...
 static int s_iClickX, s_iClickY;  // coordonnees du clic dans le dock, pour pouvoir initialiser le deplacement apres un seuil.
@@ -82,8 +86,6 @@ static CairoFlyingContainer *s_pFlyingContainer = NULL;
 extern CairoDock *g_pMainDock;
 extern gboolean g_bKeepAbove;
 
-extern gint g_iXScreenWidth[2];
-extern gint g_iXScreenHeight[2];
 extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
 
 extern gboolean g_bUseOpenGL;
@@ -236,7 +238,7 @@ static gboolean _cairo_dock_show_sub_dock_delayed (CairoDock *pDock)
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
 	//g_print ("%s (%x, %x)", __func__, icon, icon ? icon->pSubDock:0);
 	if (icon != NULL && icon->pSubDock != NULL)
-		cairo_dock_show_subdock (icon, pDock, FALSE);
+		cairo_dock_show_subdock (icon, pDock);
 
 	return FALSE;
 }
@@ -305,7 +307,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 			//g_print ("s_iSidShowSubDockDemand <- %d\n", s_iSidShowSubDockDemand);
 		}
 		else
-			cairo_dock_show_subdock (pPointedIcon, pDock, FALSE);
+			cairo_dock_show_subdock (pPointedIcon, pDock);
 		s_pLastPointedDock = pDock;
 	}
 
@@ -846,7 +848,7 @@ gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey fo
 		{
 			iScreenBorder1 = CAIRO_DOCK_TOP;
 		}
-		else if (iMousePosY + 1 == g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
+		else if (iMousePosY + 1 == g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
 		{
 			iScreenBorder1 = CAIRO_DOCK_BOTTOM;
 		}
@@ -854,7 +856,7 @@ gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey fo
 		{
 			iScreenBorder2 = CAIRO_DOCK_LEFT;
 		}
-		else if (iMousePosX + 1 == g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL])
+		else if (iMousePosX + 1 == g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL])
 		{
 			iScreenBorder2 = CAIRO_DOCK_RIGHT;
 		}
@@ -997,7 +999,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	if (icon->pSubDock != NULL && (myAccessibility.bShowSubDockOnClick || !GTK_WIDGET_VISIBLE (pDock->container.pWidget)) && ! (iButtonState & GDK_SHIFT_MASK))  // icone de sous-dock a montrer au clic.
 	{
-		cairo_dock_show_subdock (icon, pDock, FALSE);
+		cairo_dock_show_subdock (icon, pDock);
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	}
 	else if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))  // URI : on lance ou on monte.
@@ -1728,8 +1730,10 @@ static void _cairo_dock_show_dock_at_mouse (CairoDock *pDock)
 		gdk_window_get_pointer (pDock->container.pWidget->window, &iMouseY, &iMouseX, NULL);
 	//g_print (" %d;%d\n", iMouseX, iMouseY);
 	
-	pDock->iGapX = pDock->container.iWindowPositionX + iMouseX - g_iXScreenWidth[pDock->container.bIsHorizontal] * pDock->fAlign;
-	pDock->iGapY = (pDock->container.bDirectionUp ? g_iXScreenHeight[pDock->container.bIsHorizontal] - (pDock->container.iWindowPositionY + iMouseY) : pDock->container.iWindowPositionY + iMouseY);
+	///pDock->iGapX = pDock->container.iWindowPositionX + iMouseX - g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] * pDock->fAlign;
+	///pDock->iGapY = (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - (pDock->container.iWindowPositionY + iMouseY) : pDock->container.iWindowPositionY + iMouseY);
+	pDock->iGapX = iMouseX - (g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - pDock->container.iWidth) * pDock->fAlign - pDock->iScreenOffsetX;
+	pDock->iGapY = iMouseY - (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - pDock->container.iHeight : 0) - pDock->iScreenOffsetY;
 	//g_print (" => %d;%d\n", g_pMainDock->iGapX, g_pMainDock->iGapY);
 	
 	int iNewPositionX, iNewPositionY;

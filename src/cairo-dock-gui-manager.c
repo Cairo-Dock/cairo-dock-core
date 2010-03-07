@@ -46,7 +46,6 @@
 #define CAIRO_DOCK_GUI_MARGIN 6
 
 extern CairoDock *g_pMainDock;
-extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
 extern gchar *g_cCairoDockDataDir;
 
 static CairoDockGuiBackend *s_pGuiBackend = NULL;

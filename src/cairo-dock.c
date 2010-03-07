@@ -118,10 +118,10 @@
 #include "cairo-dock-gauge.h"
 #include "cairo-dock-graph.h"
 #include "cairo-dock-default-view.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-internal-system.h"
 
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
-GdkWindowTypeHint g_iWmHint = GDK_WINDOW_TYPE_HINT_DOCK;  // hint pour la fenetre du dock principal.
 
 gchar *g_cCairoDockDataDir = NULL;  // le repertoire racine contenant tout.
 gchar *g_cCurrentThemePath = NULL;  // le chemin vers le repertoire du theme courant.
@@ -131,14 +131,11 @@ gchar *g_cCurrentLaunchersPath = NULL;  // le chemin vers le repertoire des lanc
 gchar *g_cCurrentIconsPath = NULL;  // le chemin vers le repertoire des icones du theme courant.
 gchar *g_cCurrentPlugInsPath = NULL;  // le chemin vers le repertoire des plug-ins du theme courant.
 gchar *g_cConfFile = NULL;  // le chemin du fichier de conf.
+gchar *g_cThemeServerAdress = NULL;
 int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
 
-int g_iScreenWidth[2];  // dimensions de l'ecran physique sur lequel reside le dock
-int g_iScreenHeight[2];
-int g_iXScreenWidth[2];  // dimensions de l'ecran logique X.
-int g_iXScreenHeight[2];
-int g_iNbDesktops;  // nombre de bureaux.
-int g_iNbViewportX, g_iNbViewportY;  // nombre de "faces du cube".
+CairoDockDesktopGeometry g_desktopGeometry;
+
 int g_iNbNonStickyLaunchers = 0;
 
 CairoDockImageBuffer g_pDockBackgroundBuffer;
@@ -151,8 +148,6 @@ CairoDockImageBuffer g_pBoxAboveBuffer;
 CairoDockImageBuffer g_pBoxBelowBuffer;
 
 gboolean g_bKeepAbove = FALSE;
-gboolean g_bSkipPager = TRUE;
-gboolean g_bSkipTaskbar = TRUE;
 gboolean g_bSticky = TRUE;
 
 gboolean g_bUseGlitz = FALSE;
@@ -163,14 +158,12 @@ CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
 //int g_iDamageEvent = 0;
 
-gchar *g_cThemeServerAdress = NULL;
 gboolean g_bEasterEggs = FALSE;
 gboolean g_bLocked = FALSE;
 
 CairoDockGLConfig g_openglConfig;
 gboolean g_bUseOpenGL = FALSE;
 gboolean g_bForceCairo = FALSE;
-GLuint g_iBackgroundTexture=0;
 GLuint g_pGradationTexture[2]={0, 0};
 
 CairoDockModuleInstance *g_pCurrentModule = NULL;
@@ -272,13 +265,13 @@ int main (int argc, char** argv)
 	GError *erreur = NULL;
 	
 	//\___________________ On recupere quelques options.
-	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSkipPager = FALSE, bNoSkipTaskbar = FALSE, bNoSticky = FALSE, bToolBarHint = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bExpresso = FALSE, bCafeLatte = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE;
+	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL;
 	GOptionEntry TableDesOptions[] =
 	{
 		{"log", 'l', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cVerbosity,
-			"log verbosity (debug,message,warning,critical,error) default is warning", NULL},
+			"log verbosity (debug,message,warning,critical,error); default is warning", NULL},
 #ifdef HAVE_GLITZ
 		{"glitz", 'g', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bUseGlitz,
@@ -292,34 +285,22 @@ int main (int argc, char** argv)
 			"use OpenGL backend", NULL},
 		{"indirect-opengl", 'O', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bToggleIndirectRendering,
-			"use OpenGL backend and toggle On/Off indirect rendering. Use this instead of -o if you have some drawing artifacts, like invisible icons.", NULL},
+			"use OpenGL backend with indirect rendering. There are very few case where this option should be used.", NULL},
 		{"indirect", 'i', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bForceIndirectRendering,
 			"deprecated - see -O", NULL},
 		{"keep-above", 'a', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bKeepAbove,
 			"keep the dock above other windows whatever", NULL},
-		{"no-skip-pager", 'p', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&bNoSkipPager,
-			"show the dock in pager", NULL},
-		{"no-skip-taskbar", 'b', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&bNoSkipTaskbar,
-			"show the dock in taskbar", NULL},
 		{"no-sticky", 's', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bNoSticky,
 			"don't make the dock appear on all desktops", NULL},
-		{"toolbar-hint", 't', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&bToolBarHint,
-			"force the window manager to consider cairo-dock as a toolbar instead of a dock", NULL},
-		{"normal-hint", 'n', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&bNormalHint,
-			"force the window manager to consider cairo-dock as a normal appli instead of a dock", NULL},
 		{"env", 'e', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cEnvironment,
-			"force the dock to consider this environnement - it may crash the dock if not set properly.", NULL},
+			"force the dock to consider this environnement - use it with care.", NULL},
 		{"dir", 'd', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cUserDefinedDataDir,
-			"force the dock to load this directory, instead of ~/.config/cairo-dock.", NULL},
+			"force the dock to load from this directory, instead of ~/.config/cairo-dock.", NULL},
 		{"maintenance", 'm', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bMaintenance,
 			"allow to edit the config before the dock is started and show the config panel on start", NULL},
@@ -331,12 +312,6 @@ int main (int argc, char** argv)
 			"don't load any plug-ins", NULL},
 		{"capuccino", 'C', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bCappuccino,
-			"Cairo-Dock makes anything, including coffee !", NULL},
-		{"expresso", 'X', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&bExpresso,
-			"Cairo-Dock makes anything, including coffee !", NULL},
-		{"cafe-latte", 'L', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&bCafeLatte,
 			"Cairo-Dock makes anything, including coffee !", NULL},
 		{"version", 'v', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bPrintVersion,
@@ -389,14 +364,8 @@ int main (int argc, char** argv)
 	cd_log_set_level_from_name (cVerbosity);
 	g_free (cVerbosity);
 
-	g_bSkipPager = ! bNoSkipPager;
-	g_bSkipTaskbar = ! bNoSkipTaskbar;
 	g_bSticky = ! bNoSticky;
 
-	if (bToolBarHint)
-		g_iWmHint = GDK_WINDOW_TYPE_HINT_TOOLBAR;
-	if (bNormalHint)
-		g_iWmHint = GDK_WINDOW_TYPE_HINT_NORMAL;
 	if (cEnvironment != NULL)
 	{
 		if (strcmp (cEnvironment, "gnome") == 0)
@@ -417,17 +386,7 @@ int main (int argc, char** argv)
 	
 	if (bCappuccino)
 	{
-		g_print ("Please insert one coin into your PC.\n");
-		return 0;
-	}
-	if (bExpresso)
-	{
-		g_print ("Sorry, no more sugar; please try again later.\n");
-		return 0;
-	}
-	if (bCafeLatte)
-	{
-		g_print ("Honestly, you trust someone who includes such options in his code ?\n");
+		g_print ("Cairo-Dock does anything, including coffee !.\n");
 		return 0;
 	}
 	
@@ -474,14 +433,13 @@ int main (int argc, char** argv)
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
 	
-	//\___________________ On initialise le support de X.
-	cairo_dock_initialize_X_support ();
-	cairo_dock_start_listening_X_events ();
+	//\___________________ On demarre le support de X.
+	cairo_dock_start_X_manager ();
 	
 	//\___________________ On initialise le keybinder.
 	cd_keybinder_init();
 	
-	//\___________________ On detecte l'environnement de bureau (apres les applis et avant les modules).
+	//\___________________ On detecte l'environnement de bureau (apres X et avant les modules).
 	if (g_iDesktopEnv == CAIRO_DOCK_UNKNOWN_ENV)
 		g_iDesktopEnv = cairo_dock_guess_environment ();
 	cd_debug ("environnement de bureau : %d", g_iDesktopEnv);
@@ -491,24 +449,19 @@ int main (int argc, char** argv)
 	cairo_dock_register_data_renderer_entry_point ("graph", (CairoDataRendererNewFunc) cairo_dock_new_graph);
 	
 	//\___________________ On enregistre les notifications de base.
-	cairo_dock_register_notification (CAIRO_DOCK_BUILD_ICON_MENU,
-		(CairoDockNotificationFunc) cairo_dock_notification_build_icon_menu,
-		CAIRO_DOCK_RUN_AFTER, NULL);
 	cairo_dock_register_notification (CAIRO_DOCK_DROP_DATA,
 		(CairoDockNotificationFunc) cairo_dock_notification_drop_data,
-		CAIRO_DOCK_RUN_AFTER, NULL);
+		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
 	cairo_dock_register_notification (CAIRO_DOCK_CLICK_ICON,
 		(CairoDockNotificationFunc) cairo_dock_notification_click_icon,
-		CAIRO_DOCK_RUN_AFTER, NULL);
+		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
 	cairo_dock_register_notification (CAIRO_DOCK_MIDDLE_CLICK_ICON,
 		(CairoDockNotificationFunc) cairo_dock_notification_middle_click_icon,
-		CAIRO_DOCK_RUN_AFTER, NULL);
+		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
 	cairo_dock_register_notification (CAIRO_DOCK_SCROLL_ICON,
 		(CairoDockNotificationFunc) cairo_dock_notification_scroll_icon,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_RENDER_DOCK,
-		(CairoDockNotificationFunc) cairo_dock_render_dock_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
+		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
+	
 	cairo_dock_register_notification (CAIRO_DOCK_RENDER_ICON,
 		(CairoDockNotificationFunc) cairo_dock_render_icon_notification,
 		CAIRO_DOCK_RUN_FIRST, NULL);
@@ -591,6 +544,9 @@ int main (int argc, char** argv)
 	cairo_dock_register_notification (CAIRO_DOCK_BUILD_CONTAINER_MENU,
 		(CairoDockNotificationFunc) cairo_dock_notification_build_container_menu,
 		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_BUILD_ICON_MENU,
+		(CairoDockNotificationFunc) cairo_dock_notification_build_icon_menu,
+		CAIRO_DOCK_RUN_AFTER, NULL);
 	
 	//\___________________ On initialise la gestion des crash.
 	if (! bTesting)

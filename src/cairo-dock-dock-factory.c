@@ -80,10 +80,6 @@ extern CairoDock *g_pMainDock;
 extern gchar *g_cCurrentLaunchersPath;
 
 extern gboolean g_bKeepAbove;
-extern gboolean g_bSkipPager;
-extern gboolean g_bSkipTaskbar;
-extern gboolean g_bSticky;
-extern GdkWindowTypeHint g_iWmHint;
 
 extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseGlitz;
@@ -126,7 +122,7 @@ CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRen
 	if (mySystem.bUseFakeTransparency)
 		gtk_window_set_keep_below (GTK_WINDOW (pWindow), TRUE);
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
-	gtk_window_set_type_hint (GTK_WINDOW (pWindow), g_iWmHint);
+	gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_DOCK);
 
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock");
 	

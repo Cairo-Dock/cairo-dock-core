@@ -46,10 +46,11 @@
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-load.h"
 #include "texture-blur.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-default-view.h"
 
 extern CairoDockImageBuffer g_pDockBackgroundBuffer;
-extern int g_iScreenWidth[2];
+extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bUseOpenGL;
 static GLuint s_iFlatSeparatorTexture = 0;
 

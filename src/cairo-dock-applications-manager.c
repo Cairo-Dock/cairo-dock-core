@@ -57,39 +57,28 @@
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-application-facility.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-applications-manager.h"
 
 #define CAIRO_DOCK_TASKBAR_CHECK_INTERVAL 200
 
 extern CairoDock *g_pMainDock;
 
-extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
+extern CairoDockDesktopGeometry g_desktopGeometry;
 
-extern int g_iNbDesktops;
-extern int g_iNbViewportX,g_iNbViewportY ;
 extern gboolean g_bUseOpenGL;
 //extern int g_iDamageEvent;
 
-static GHashTable *s_hXWindowTable = NULL;  // table des fenetres X affichees dans le dock.
 static Display *s_XDisplay = NULL;
-static int s_iSidUpdateAppliList = 0;
+static GHashTable *s_hXWindowTable = NULL;  // table des fenetres X affichees dans le dock.
 static int s_bAppliManagerIsRunning = FALSE;
 static int s_iTime = 1;  // on peut aller jusqu'a 2^31, soit 17 ans a 4Hz.
 static Window s_iCurrentActiveWindow = 0;
-static int s_iCurrentDesktop = 0;
-static int s_iCurrentViewportX = 0;
-static int s_iCurrentViewportY = 0;
-static Atom s_aNetClientList;
-static Atom s_aNetActiveWindow;
-static Atom s_aNetCurrentDesktop;
-static Atom s_aNetDesktopViewport;
-static Atom s_aNetDesktopGeometry;
 static Atom s_aNetWmState;
 static Atom s_aNetWmDesktop;
 static Atom s_aNetShowingDesktop;
 static Atom s_aRootMapID;
 static Atom s_aNetNbDesktops;
-static Atom s_aXKlavierState;
 static Atom s_aNetWmName;
 static Atom s_aUtf8String;
 static Atom s_aWmName;
@@ -97,19 +86,12 @@ static Atom s_aString;
 static Atom s_aNetWmIcon;
 static Atom s_aWmHints;
 
+static void cairo_dock_blacklist_appli (Window Xid);
 static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gpointer *data);
 
-  ///////////////////////
- // X listener : core //
-///////////////////////
-
-static inline void _cairo_dock_retrieve_current_desktop_and_viewport (void)
-{
-	s_iCurrentDesktop = cairo_dock_get_current_desktop ();
-	cairo_dock_get_current_viewport (&s_iCurrentViewportX, &s_iCurrentViewportY);
-	s_iCurrentViewportX /= g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-	s_iCurrentViewportY /= g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-}
+  //////////////////////////
+ // Appli manager : core //
+//////////////////////////
 
 static void _cairo_dock_hide_show_windows_on_other_desktops (Window *Xid, Icon *icon, CairoDock *pMainDock)
 {
@@ -184,8 +166,11 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 	}
 	return FALSE;
 }
-static void on_update_applis_list (CairoDock *pDock, gint iTime)
+static void _on_update_applis_list (CairoDock *pDock)
 {
+	if (pDock == NULL)
+		return;
+	s_iTime ++;
 	gulong i, iNbWindows = 0;
 	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows, TRUE);
 	
@@ -214,9 +199,9 @@ static void on_update_applis_list (CairoDock *pDock, gint iTime)
 				cd_warning ("couldn't create a cairo context => this window (%ld) will not have an icon", Xid);
 			if (icon != NULL)
 			{
-				icon->iLastCheckTime = iTime;
+				icon->iLastCheckTime = s_iTime;
 				icon->iStackOrder = iStackOrder ++;
-				if (/*(icon->bIsHidden || ! myTaskBar.bHideVisibleApplis) && */(! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_xwindow_is_on_current_desktop (Xid)))
+				if ((! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_xwindow_is_on_current_desktop (Xid)))  // bHideVisibleApplis est gere lors de l'insertion.
 				{
 					cd_message (" insertion de %s ... (%d)", icon->cName, icon->iLastCheckTime);
 					pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
@@ -236,7 +221,7 @@ static void on_update_applis_list (CairoDock *pDock, gint iTime)
 				{
 					if (! cairo_dock_quick_hide_is_activated ())
 					{
-						if (cairo_dock_xwindow_is_on_this_desktop (Xid, s_iCurrentDesktop) && cairo_dock_appli_hovers_dock (icon, pDock))
+						if (cairo_dock_xwindow_is_on_current_desktop (Xid) && cairo_dock_appli_hovers_dock (icon, pDock))
 						{
 							cd_message (" cette nouvelle fenetre empiete sur notre dock");
 							cairo_dock_activate_temporary_auto_hide ();
@@ -249,7 +234,7 @@ static void on_update_applis_list (CairoDock *pDock, gint iTime)
 		}
 		else if (icon != NULL)
 		{
-			icon->iLastCheckTime = iTime;
+			icon->iLastCheckTime = s_iTime;
 			if (CAIRO_DOCK_IS_APPLI (icon))
 				icon->iStackOrder = iStackOrder ++;
 		}
@@ -257,7 +242,7 @@ static void on_update_applis_list (CairoDock *pDock, gint iTime)
 	if (pCairoContext != NULL)
 		cairo_destroy (pCairoContext);
 	
-	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_remove_old_applis, GINT_TO_POINTER (iTime));
+	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_remove_old_applis, GINT_TO_POINTER (s_iTime));
 	
 	if (bUpdateMainDockSize)
 		cairo_dock_update_dock_size (pDock);
@@ -265,10 +250,10 @@ static void on_update_applis_list (CairoDock *pDock, gint iTime)
 	XFree (pXWindowsList);
 }
 
-static void _on_change_active_window (void)
+static gboolean _on_change_active_window_notification (gpointer data, Window *Xid)
 {
-	Window XActiveWindow = cairo_dock_get_active_xwindow ();
-	//g_print ("%d devient active (%d)\n", XActiveWindow, root);
+	Window XActiveWindow = *Xid;
+	g_print ("%d devient active (%d)\n", XActiveWindow, s_iCurrentActiveWindow);
 	if (s_iCurrentActiveWindow != XActiveWindow)  // la fenetre courante a change.
 	{
 		Icon *icon = g_hash_table_lookup (s_hXWindowTable, &XActiveWindow);
@@ -315,22 +300,21 @@ static void _on_change_active_window (void)
 		else  // il n'y avait pas de fenetre active avant.
 			bForceKbdStateRefresh = TRUE;
 		s_iCurrentActiveWindow = XActiveWindow;
-		cairo_dock_notify (CAIRO_DOCK_WINDOW_ACTIVATED, &XActiveWindow);
+		
 		if (bForceKbdStateRefresh)  // si on active une fenetre n'ayant pas de focus clavier, on n'aura pas d'evenement kbd_changed, pourtant en interne le clavier changera. du coup si apres on revient sur une fenetre qui a un focus clavier, il risque de ne pas y avoir de changement de clavier, et donc encore une fois pas d'evenement ! pour palier a ce, on considere que les fenetres avec focus clavier sont celles presentes en barre des taches. On decide de generer un evenement lorsqu'on revient sur une fenetre avec focus, a partir d'une fenetre sans focus (mettre a jour le clavier pour une fenetre sans focus n'a pas grand interet, autant le laisser inchange).
 			cairo_dock_notify (CAIRO_DOCK_KBD_STATE_CHANGED, &XActiveWindow);
 	}
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-static gboolean _on_change_current_desktop_viewport (void)
+static gboolean _on_change_current_desktop_viewport_notification (gpointer data)
 {
 	CairoDock *pDock = g_pMainDock;
-	
-	_cairo_dock_retrieve_current_desktop_and_viewport ();
 	
 	// applis du bureau courant seulement.
 	if (myTaskBar.bAppliOnCurrentDesktopOnly)
 	{
-		int data[2] = {s_iCurrentDesktop, GPOINTER_TO_INT (pDock)};
+		int data[2] = {g_desktopGeometry.iCurrentDesktop, GPOINTER_TO_INT (pDock)};
 		g_hash_table_foreach (s_hXWindowTable, (GHFunc) _cairo_dock_hide_show_windows_on_other_desktops, pDock);
 	}
 
@@ -357,46 +341,7 @@ static gboolean _on_change_current_desktop_viewport (void)
 			}
 		}
 	}
-	
-	// on propage la notification.
-	cairo_dock_notify (CAIRO_DOCK_DESKTOP_CHANGED);
-	
-	// on gere le cas delicat de X qui nous fait sortir du dock.
-	if (! pDock->bIsShrinkingDown && ! pDock->bIsGrowingUp)
-	{
-		if (pDock->container.bIsHorizontal)
-			gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
-		else
-			gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
-		//g_print ("on met a jour de force\n");
-		cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
-		if (pDock->container.bInside)
-			return TRUE;
-		//g_print (">>> %d;%d, %dx%d\n", pDock->container.iMouseX, pDock->container.iMouseY,pDock->container.iWidth,  pDock->container.iHeight);
-	}
-	return FALSE;
-}
-
-static void _on_change_nb_desktops (void)
-{
-	g_iNbDesktops = cairo_dock_get_nb_desktops ();
-	_cairo_dock_retrieve_current_desktop_and_viewport ();  // au cas ou on enleve le bureau courant.
-	
-	cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED);
-}
-
-static void _on_change_desktop_geometry (void)
-{
-	if (cairo_dock_update_screen_geometry ())  // modification de la resolution.
-	{
-		cd_message ("resolution alteree");
-		cairo_dock_reposition_root_docks (FALSE);  // main dock compris.
-	}
-	
-	cairo_dock_get_nb_viewports (&g_iNbViewportX, &g_iNbViewportY);
-	_cairo_dock_retrieve_current_desktop_and_viewport ();  // au cas ou on enleve le viewport courant.
-	
-	cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED);
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
 static void _on_change_window_state (Icon *icon)
@@ -548,7 +493,7 @@ static void _on_change_window_desktop (Icon *icon)
 	// auto-hide sur appli maximisee/plein-ecran
 	if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized && ! icon->bIsHidden) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen && ! icon->bIsHidden))  // cette fenetre peut provoquer l'auto-hide.
 	{
-		if (! cairo_dock_quick_hide_is_activated () && (icon->iNumDesktop == -1 || icon->iNumDesktop == s_iCurrentDesktop))  // l'appli arrive sur le bureau courant.
+		if (! cairo_dock_quick_hide_is_activated () && (icon->iNumDesktop == -1 || icon->iNumDesktop == g_desktopGeometry.iCurrentDesktop))  // l'appli arrive sur le bureau courant.
 		{
 			gpointer data[3] = {GINT_TO_POINTER (myAccessibility.bAutoHideOnMaximized), GINT_TO_POINTER (myAccessibility.bAutoHideOnFullScreen), g_pMainDock};
 			if (_cairo_dock_window_is_on_our_way (&Xid, icon, data))  // on s'assure qu'en plus d'etre sur le bureau courant, elle est aussi sur le viewport courant.
@@ -557,7 +502,7 @@ static void _on_change_window_desktop (Icon *icon)
 				cairo_dock_activate_temporary_auto_hide ();
 			}
 		}
-		else if (cairo_dock_quick_hide_is_activated () && (icon->iNumDesktop != -1 && icon->iNumDesktop != s_iCurrentDesktop))  // l'appli quitte sur le bureau courant.
+		else if (cairo_dock_quick_hide_is_activated () && (icon->iNumDesktop != -1 && icon->iNumDesktop != g_desktopGeometry.iCurrentDesktop))  // l'appli quitte sur le bureau courant.
 		{
 			if (cairo_dock_search_window_on_our_way (g_pMainDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
 			{
@@ -590,9 +535,11 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 	icon->windowGeometry.height = e->height;
 	icon->windowGeometry.x = e->x;
 	icon->windowGeometry.y = e->y;
+	icon->iViewPortX = e->x / g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + g_desktopGeometry.iCurrentViewportX;
+	icon->iViewPortY = e->y / g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] + g_desktopGeometry.iCurrentViewportY;
 	
-	// on regarde si l'appli a change de viewport.
-	if (e->x + e->width <= 0 || e->x >= g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || e->y + e->height <= 0 || e->y >= g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // en fait il faudrait faire ca modulo le nombre de viewports * la largeur d'un bureau, car avec une fenetre a droite, elle peut revenir sur le bureau par la gauche si elle est tres large...
+	// on regarde si l'appli est sur le viewport courant.
+	if (e->x + e->width <= 0 || e->x >= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || e->y + e->height <= 0 || e->y >= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // en fait il faudrait faire ca modulo le nombre de viewports * la largeur d'un bureau, car avec une fenetre a droite, elle peut revenir sur le bureau par la gauche si elle est tres large...
 	{
 		// applis du bureau courant seulement.
 		if (myTaskBar.bAppliOnCurrentDesktopOnly && icon->cParentDockName != NULL)
@@ -636,8 +583,20 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 			}
 		}
 	}
-	
-	cairo_dock_notify (CAIRO_DOCK_WINDOW_CONFIGURED, e);
+}
+
+static gboolean _on_window_configured_notification (gpointer data, Window Xid, XConfigureEvent *e)
+{
+	if (e != NULL)  // a window
+	{
+		Icon *icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
+		if (! CAIRO_DOCK_IS_APPLI (icon) || cairo_dock_icon_is_being_removed (icon))
+			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+		_on_change_window_size_position (icon, e);
+	}
+	else  // root window
+		_on_update_applis_list (g_pMainDock);
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
 static void _on_change_window_name (Icon *icon, CairoDock *pDock, gboolean bSearchWmName)
@@ -706,195 +665,48 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 	}
 }
 
-static gboolean _cairo_dock_unstack_Xevents (gpointer data)
+static void _on_property_changed_notification (gpointer data, Window Xid, Atom aProperty, int iState)
 {
-	static XEvent event;
-	static gboolean bCheckMouseIsOutside = FALSE;
-	
-	CairoDock *pDock = g_pMainDock;
-	if (!pDock)  // peut arriver en cours de chargement d'un theme.
-		return TRUE;
-	
-	long event_mask = 0xFFFFFFFF;  // on les recupere tous, ca vide la pile au fur et a mesure plutot que tout a la fin.
-	Window Xid;
-	Window root = DefaultRootWindow (s_XDisplay);
-	Icon *icon;
-	if (bCheckMouseIsOutside)
+	Icon *icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
+	if (! CAIRO_DOCK_IS_APPLI (icon))  // appli blacklistee
 	{
-		//g_print ("bCheckMouseIsOutside\n");
-		bCheckMouseIsOutside = FALSE;
-		if (pDock->container.bIsHorizontal)
-			gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
-		else
-			gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
-		cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
-	}
-	
-	while (XCheckMaskEvent (s_XDisplay, event_mask, &event))
-	{
-		icon = NULL;
-		Xid = event.xany.window;
-		//g_print ("  type : %d; atom : %s; window : %d\n", event.type, gdk_x11_get_xatom_name (event.xproperty.atom), Xid);
-		//if (event.type == ClientMessage)
-		//cd_message ("\n\n\n >>>>>>>>>>>< event.type : %d\n\n", event.type);
-		if (Xid == root)
+		if (! cairo_dock_xwindow_skip_taskbar (Xid))
 		{
-			if (event.type == PropertyNotify)  // PropertyNotify sur root
-			{
-				if (event.xproperty.atom == s_aNetClientList && myTaskBar.bShowAppli)
-				{
-					s_iTime ++;
-					on_update_applis_list (pDock, s_iTime);
-					cairo_dock_notify (CAIRO_DOCK_WINDOW_CONFIGURED, NULL);
-				}
-				else if (event.xproperty.atom == s_aNetActiveWindow)
-				{
-					_on_change_active_window ();
-				}
-				else if (event.xproperty.atom == s_aNetCurrentDesktop || event.xproperty.atom == s_aNetDesktopViewport)
-				{
-					bCheckMouseIsOutside = _on_change_current_desktop_viewport ();
-				}
-				else if (event.xproperty.atom == s_aNetNbDesktops)
-				{
-					_on_change_nb_desktops ();
-				}
-				else if (event.xproperty.atom == s_aNetDesktopGeometry)
-				{
-					_on_change_desktop_geometry ();
-				}
-				else if (event.xproperty.atom == s_aRootMapID)
-				{
-					cd_debug ("change wallpaper");
-					cairo_dock_reload_desktop_background ();
-					cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED);
-				}
-				else if (event.xproperty.atom == s_aNetShowingDesktop)
-				{
-					cd_debug ("change desktop visibility");
-					cairo_dock_notify (CAIRO_DOCK_DESKTOP_VISIBILITY_CHANGED);
-				}
-				else if (event.xproperty.atom == s_aXKlavierState)
-				{
-					cairo_dock_notify (CAIRO_DOCK_KBD_STATE_CHANGED, NULL);
-				}
-			}  // fin de PropertyNotify sur root.
+			g_print ("Special case : this appli (%ld) should not be ignored any more!\n", Xid);
+			g_hash_table_remove (s_hXWindowTable, &Xid);
+			g_free (icon);
 		}
-		else if (myTaskBar.bShowAppli)  // evenement sur une fenetre.
-		{
-			icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
-			if (! CAIRO_DOCK_IS_APPLI (icon))  // appli blacklistee
-			{
-				if (! cairo_dock_xwindow_skip_taskbar (Xid))
-				{
-					g_print ("Special case : this appli (%ld) should not be ignored any more!\n", Xid);
-					g_hash_table_remove (s_hXWindowTable, &Xid);
-					g_free (icon);
-				}
-				continue;
-			}
-			/**else if (icon->fInsertRemoveFactor > 0)  // pour une icone en cours de supression, on ne fait rien.
-			{
-				continue;
-			}*/
-			if (event.type == PropertyNotify)  // PropertyNotify sur une fenetre
-			{
-				if (event.xproperty.atom == s_aNetWmState)  // changement d'etat (hidden, maximized, fullscreen, demands attention)
-				{
-					_on_change_window_state (icon);
-				}
-				else if (event.xproperty.atom == s_aNetWmDesktop)  // cela ne gere pas les changements de viewports, qui eux se font en changeant les coordonnees. Il faut donc recueillir les ConfigureNotify, qui donnent les redimensionnements et les deplacements.
-				{
-					_on_change_window_desktop (icon);
-				}
-				else if (event.xproperty.atom == s_aXKlavierState)
-				{
-					cairo_dock_notify (CAIRO_DOCK_KBD_STATE_CHANGED, &Xid);
-				}
-				else
-				{
-					CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-					if (pParentDock == NULL)
-						pParentDock = pDock;
-					int iState = event.xproperty.state;
-					Atom aProperty = event.xproperty.atom;
-					if (iState == PropertyNewValue && (aProperty == s_aNetWmName || aProperty == s_aWmName))
-					{
-						_on_change_window_name (icon, pParentDock, aProperty == s_aWmName);
-					}
-					else if (iState == PropertyNewValue && aProperty == s_aNetWmIcon)
-					{
-						_on_change_window_icon (icon, pParentDock);
-					}
-					else if (aProperty == s_aWmHints)
-					{
-						_on_change_window_hints (icon, pParentDock, iState);
-					}
-				}
-			}
-			else if (event.type == ConfigureNotify && ! cairo_dock_icon_is_being_removed (icon))  // ConfigureNotify sur une fenetre.
-			{
-				//g_print ("  type : %d; (%d;%d) %dx%d window : %d\n", e->type, e->x, e->y, e->width, e->height, Xid);
-				// On met a jour la taille du backing pixmap.
-				_on_change_window_size_position (icon, &event.xconfigure);
-			}
-			/*else if (event.type == g_iDamageEvent + XDamageNotify)
-			{
-				XDamageNotifyEvent *e = (XDamageNotifyEvent *) &event;
-				g_print ("window %s has been damaged (%d;%d %dx%d)\n", e->drawable, e->area.x, e->area.y, e->area.width, e->area.height);
-				// e->drawable is the window ID of the damaged window
-				// e->geometry is the geometry of the damaged window	
-				// e->area     is the bounding rect for the damaged area	
-				// e->damage   is the damage handle returned by XDamageCreate()
-				// Subtract all the damage, repairing the window.
-				XDamageSubtract (s_XDisplay, e->damage, None, None);
-			}
-			else
-				g_print ("  type : %d (%d); window : %d\n", event.type, XDamageNotify, Xid);*/
-		}  // fin d'evenement sur une fenetre.
+		return;
 	}
-	if (XEventsQueued (s_XDisplay, QueuedAlready) != 0)
-		XSync (s_XDisplay, True);  // True <=> discard.
-	//g_print ("XEventsQueued : %d\n", XEventsQueued (s_XDisplay, QueuedAfterFlush));  // QueuedAlready, QueuedAfterReading, QueuedAfterFlush
 	
-	return TRUE;
+	if (aProperty == s_aNetWmState)  // changement d'etat (hidden, maximized, fullscreen, demands attention)
+	{
+		_on_change_window_state (icon);
+	}
+	else if (aProperty == s_aNetWmDesktop)  // cela ne gere pas les changements de viewports, qui eux se font en changeant les coordonnees. Il faut donc recueillir les ConfigureNotify, qui donnent les redimensionnements et les deplacements.
+	{
+		_on_change_window_desktop (icon);
+	}
+	else
+	{
+		CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+		if (pParentDock == NULL)
+			pParentDock = g_pMainDock;  /// bof ...
+		if (iState == PropertyNewValue && (aProperty == s_aNetWmName || aProperty == s_aWmName))
+		{
+			_on_change_window_name (icon, pParentDock, aProperty == s_aWmName);
+		}
+		else if (iState == PropertyNewValue && aProperty == s_aNetWmIcon)
+		{
+			_on_change_window_icon (icon, pParentDock);
+		}
+		else if (aProperty == s_aWmHints)
+		{
+			_on_change_window_hints (icon, pParentDock, iState);
+		}
+	}
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
-
-void cairo_dock_start_listening_X_events (void)
-{
-	g_return_if_fail (s_iSidUpdateAppliList == 0);
-	
-	//\__________________ On recupere le bureau courant.
-	_cairo_dock_retrieve_current_desktop_and_viewport ();
-	
-	//\__________________ On se met a l'ecoute des evenements X.
-	Window root = DefaultRootWindow (s_XDisplay);
-	cairo_dock_set_xwindow_mask (root, PropertyChangeMask /*| StructureNotifyMask | SubstructureNotifyMask | ResizeRedirectMask | SubstructureRedirectMask*/);
-	
-	//\__________________ On lance l'ecoute.
-	s_iSidUpdateAppliList = g_timeout_add (CAIRO_DOCK_TASKBAR_CHECK_INTERVAL, (GSourceFunc) _cairo_dock_unstack_Xevents, (gpointer) NULL);  // un g_idle_add () consomme 90% de CPU ! :-/
-}
-
-void cairo_dock_stop_listening_X_events (void)  // le met seulement en pause.
-{
-	g_return_if_fail (s_iSidUpdateAppliList != 0);
-	
-	//\__________________ On arrete l'ecoute.
-	g_source_remove (s_iSidUpdateAppliList);
-	s_iSidUpdateAppliList = 0;
-}
-
-  /////////////////////////
- // X listener : access //
-/////////////////////////
-
-void cairo_dock_get_current_desktop_and_viewport (int *iCurrentDesktop, int *iCurrentViewportX, int *iCurrentViewportY)
-{
-	*iCurrentDesktop = s_iCurrentDesktop;
-	*iCurrentViewportX = s_iCurrentViewportX;
-	*iCurrentViewportY = s_iCurrentViewportY;
-}
-
 
   ///////////////////////////
  // Applis manager : core //
@@ -909,11 +721,6 @@ void cairo_dock_initialize_application_manager (Display *pDisplay)
 		g_free,
 		NULL);
 	
-	s_aNetClientList		= XInternAtom (s_XDisplay, "_NET_CLIENT_LIST_STACKING", False);
-	s_aNetActiveWindow		= XInternAtom (s_XDisplay, "_NET_ACTIVE_WINDOW", False);
-	s_aNetCurrentDesktop	= XInternAtom (s_XDisplay, "_NET_CURRENT_DESKTOP", False);
-	s_aNetDesktopViewport	= XInternAtom (s_XDisplay, "_NET_DESKTOP_VIEWPORT", False);
-	s_aNetDesktopGeometry	= XInternAtom (s_XDisplay, "_NET_DESKTOP_GEOMETRY", False);
 	s_aNetWmState			= XInternAtom (s_XDisplay, "_NET_WM_STATE", False);
 	s_aNetWmName 			= XInternAtom (s_XDisplay, "_NET_WM_NAME", False);
 	s_aUtf8String 			= XInternAtom (s_XDisplay, "UTF8_STRING", False);
@@ -925,7 +732,6 @@ void cairo_dock_initialize_application_manager (Display *pDisplay)
 	s_aNetShowingDesktop 	= XInternAtom (s_XDisplay, "_NET_SHOWING_DESKTOP", False);
 	s_aRootMapID			= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
 	s_aNetNbDesktops		= XInternAtom (s_XDisplay, "_NET_NUMBER_OF_DESKTOPS", False);
-	s_aXKlavierState		= XInternAtom (s_XDisplay, "XKLAVIER_STATE", False);
 }
 
 void cairo_dock_register_appli (Icon *icon)
@@ -937,11 +743,13 @@ void cairo_dock_register_appli (Icon *icon)
 			*pXid = icon->Xid;
 		g_hash_table_insert (s_hXWindowTable, pXid, icon);
 		
+		cairo_dock_set_xwindow_mask (icon->Xid, PropertyChangeMask | StructureNotifyMask);
+		
 		cairo_dock_add_appli_to_class (icon);
 	}
 }
 
-void cairo_dock_blacklist_appli (Window Xid)
+static void cairo_dock_blacklist_appli (Window Xid)
 {
 	if (Xid > 0)
 	{
@@ -961,6 +769,8 @@ void cairo_dock_unregister_appli (Icon *icon)
 		cd_message ("%s (%ld ; %s)", __func__, icon->Xid, icon->cName);
 		if (icon->iLastCheckTime != -1)
 			g_hash_table_remove (s_hXWindowTable, &icon->Xid);
+		
+		cairo_dock_set_xwindow_mask (icon->Xid, None);
 		
 		if (icon->iBackingPixmap != 0)
 		{
@@ -983,6 +793,20 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 	cairo_dock_set_overwrite_exceptions (myTaskBar.cOverwriteException);
 	cairo_dock_set_group_exceptions (myTaskBar.cGroupException);
 	
+	//\__________________ On s'enregistre aux signaux
+	cairo_dock_register_notification (CAIRO_DOCK_WINDOW_ACTIVATED,
+		(CairoDockNotificationFunc) _on_change_active_window_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_WINDOW_CONFIGURED,
+		(CairoDockNotificationFunc) _on_window_configured_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_WINDOW_PROPERTY_CHANGED,
+		(CairoDockNotificationFunc) _on_property_changed_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification (CAIRO_DOCK_DESKTOP_CHANGED,
+		(CairoDockNotificationFunc) _on_change_current_desktop_viewport_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	
 	//\__________________ On recupere l'ensemble des fenetres presentes.
 	gulong i, iNbWindows = 0;
 	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows, FALSE);  // on recupere les fenetres par ordre de creation, de facon a ce que si on redemarre la barre des taches, les lanceurs soient lies aux memes fenetres. Au prochain update, la liste sera recuperee par z-order, ce qui remettra le z-order de chaque icone a jour.
@@ -993,7 +817,9 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 	
 	CairoDock *pParentDock;
 	gboolean bUpdateMainDockSize = FALSE;
-	///int iStackOrder = 0;
+	
+	/*Icon * pLastAppli = cairo_dock_get_last_appli (pDock->icons);
+	int iOrder = (pLastAppli != NULL ? pLastAppli->fOrder + 1 : 1);*/
 	Window Xid;
 	Icon *pIcon;
 	for (i = 0; i < iNbWindows; i ++)
@@ -1003,9 +829,9 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 		
 		if (pIcon != NULL)
 		{
-			///pIcon->iStackOrder = iStackOrder ++;
+			//pIcon->fOrder = iOrder++;
 			pIcon->iLastCheckTime = s_iTime;
-			if (/*(pIcon->bIsHidden || ! myTaskBar.bHideVisibleApplis) && */(! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (pIcon)))
+			if (! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (pIcon))  // le filtre 'bHideVisibleApplis' est gere dans la fonction d'insertion.
 			{
 				pParentDock = cairo_dock_insert_appli_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 				//g_print (">>>>>>>>>>>> Xid : %d\n", Xid);
@@ -1099,6 +925,19 @@ void cairo_dock_stop_application_manager (void)
 {
 	s_bAppliManagerIsRunning = FALSE;
 	
+	cairo_dock_remove_notification_func (CAIRO_DOCK_WINDOW_ACTIVATED,
+		(CairoDockNotificationFunc) _on_change_active_window_notification,
+		NULL);
+	cairo_dock_remove_notification_func (CAIRO_DOCK_WINDOW_CONFIGURED,
+		(CairoDockNotificationFunc) _on_window_configured_notification,
+		NULL);
+	cairo_dock_remove_notification_func (CAIRO_DOCK_WINDOW_PROPERTY_CHANGED,
+		(CairoDockNotificationFunc) _on_property_changed_notification,
+		NULL);
+	cairo_dock_remove_notification_func (CAIRO_DOCK_DESKTOP_CHANGED,
+		(CairoDockNotificationFunc) _on_change_current_desktop_viewport_notification,
+		NULL);
+	
 	cairo_dock_remove_all_applis_from_class_table ();  // enleve aussi les indicateurs.
 	
 	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_reset_appli_table_iter, NULL);  // libere toutes les icones d'appli.
@@ -1124,9 +963,9 @@ static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gpoin
 	gboolean bMaximizedWindow = GPOINTER_TO_INT (data[0]);
 	gboolean bFullScreenWindow = GPOINTER_TO_INT (data[1]);
 	CairoDock *pDock = data[2];
-	if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_is_on_current_desktop (icon) && ! cairo_dock_icon_is_being_removed (icon) && icon->iLastCheckTime != -1)
+	if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_is_on_current_desktop (icon) && ! icon->bIsHidden && ! cairo_dock_icon_is_being_removed (icon) && icon->iLastCheckTime != -1)
 	{
-		if ((data[0] && icon->bIsMaximized && ! icon->bIsHidden) || (data[1] && icon->bIsFullScreen && ! icon->bIsHidden) || (!data[0] && ! data[1] && ! icon->bIsHidden))
+		if ((data[0] && icon->bIsMaximized) || (data[1] && icon->bIsFullScreen) || (!data[0] && ! data[1]))
 		{
 			cd_debug ("%s est genante (%d, %d) (%d;%d %dx%d)", icon->cName, icon->bIsMaximized, icon->bIsFullScreen, icon->windowGeometry.x, icon->windowGeometry.y, icon->windowGeometry.width, icon->windowGeometry.height);
 			if (cairo_dock_appli_hovers_dock (icon, pDock))
@@ -1220,10 +1059,6 @@ void cairo_dock_foreach_applis_on_viewport (CairoDockForeachIconFunc pFunction, 
 }
 
 
-  /////////////////////
- // Applis facility //
-/////////////////////
-
 void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 {
 	if (! s_bAppliManagerIsRunning)
@@ -1245,58 +1080,4 @@ void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 	{
 		g_hash_table_foreach (s_hXWindowTable, (GHFunc) cairo_dock_reserve_one_icon_geometry_for_window_manager, pDock);
 	}
-}
-
-
-gboolean cairo_dock_appli_is_on_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY)
-{
-	// On calcule les coordonnees en repere absolu.
-	int x = pIcon->windowGeometry.x;  // par rapport au viewport courant.
-	x += s_iCurrentViewportX * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];  // repere absolu
-	if (x < 0)
-		x += g_iNbViewportX * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-	int y = pIcon->windowGeometry.y;
-	y += s_iCurrentViewportY * g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-	if (y < 0)
-		y += g_iNbViewportY * g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-	int w = pIcon->windowGeometry.width, h = pIcon->windowGeometry.height;
-	
-	// test d'intersection avec le viewport donne.
-	return ((pIcon->iNumDesktop == -1 || pIcon->iNumDesktop == iNumDesktop) &&
-		x + w > iNumViewportX * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
-		x < (iNumViewportX + 1) * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
-		y + h > iNumViewportY * g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] &&
-		y < (iNumViewportY + 1) * g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-}
-
-gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon)
-{
-	int iWindowDesktopNumber, iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;  // coordonnees du coin haut gauche dans le referentiel du viewport actuel.
-	iWindowDesktopNumber = pIcon->iNumDesktop;
-	iGlobalPositionX = pIcon->windowGeometry.x;
-	iGlobalPositionY = pIcon->windowGeometry.y;
-	iWidthExtent = pIcon->windowGeometry.width;
-	iHeightExtent = pIcon->windowGeometry.height;
-
-	return ( (iWindowDesktopNumber == s_iCurrentDesktop || iWindowDesktopNumber == -1) &&
-		iGlobalPositionX + iWidthExtent > 0 &&
-		iGlobalPositionX < g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
-		iGlobalPositionY + iHeightExtent > 0 &&
-		iGlobalPositionY < g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL] );  // -1 <=> 0xFFFFFFFF en unsigned.
-}
-
-void cairo_dock_move_window_to_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY)
-{
-	cairo_dock_move_xwindow_to_nth_desktop (pIcon->Xid,
-		iNumDesktop,
-		(iNumViewportX - s_iCurrentViewportX) * g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
-		(iNumViewportY - s_iCurrentViewportY) * g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-}
-
-void cairo_dock_move_window_to_current_desktop (Icon *pIcon)
-{
-	cairo_dock_move_xwindow_to_nth_desktop (pIcon->Xid,
-		s_iCurrentDesktop,
-		0,
-		0);  // on ne veut pas decaler son viewport par rapport a nous.
 }

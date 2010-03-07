@@ -112,8 +112,6 @@ cairo_dock_SOURCES = \
 	cairo-dock-surface-factory.h\
 	cairo-dock-renderer-manager.c\
 	cairo-dock-renderer-manager.h\
-	cairo-dock-default-view.c\
-	cairo-dock-default-view.h\
 	cairo-dock-applet-facility.c\
 	cairo-dock-applet-facility.h\
 	cairo-dock-file-manager.c\
@@ -128,6 +126,8 @@ cairo_dock_SOURCES = \
 	cairo-dock-log.h\
 	cairo-dock-X-utilities.c\
 	cairo-dock-X-utilities.h\
+	cairo-dock-X-manager.c\
+	cairo-dock-X-manager.h\
 	cairo-dock-gauge.c\
 	cairo-dock-gauge.h\
 	cairo-dock-dock-manager.c\
@@ -185,6 +185,8 @@ cairo_dock_SOURCES = \
 	texture-gradation.h\
 	texture-blur.h\
 	cairo-dock.c\
+	cairo-dock-default-view.c\
+	cairo-dock-default-view.h\
 	cairo-dock-gui-main.c\
 	cairo-dock-gui-main.h\
 	cairo-dock-gui-simple.c\

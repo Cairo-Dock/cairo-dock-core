@@ -56,12 +56,11 @@
 #include "cairo-dock-data-renderer.h"
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-emblem.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-load.h"
 
 extern CairoDock *g_pMainDock;
-
-extern gint g_iXScreenWidth[2];  // change tous les g_iScreen par g_iXScreen le 28/07/2009
-extern gint g_iXScreenHeight[2];
+extern CairoDockDesktopGeometry g_desktopGeometry;
 
 extern gchar *g_cCurrentThemePath;
 
@@ -458,8 +457,8 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	{
 		cairo_t *pCairoIconBGContext = cairo_create (icon->pIconBuffer);
 		cairo_scale(pCairoIconBGContext,
-			icon->fWidth / (g_pIconBackgroundBuffer.iWidth / fMaxScale),
-			icon->fHeight / (g_pIconBackgroundBuffer.iHeight / fMaxScale));
+			icon->fWidth * fMaxScale / g_pIconBackgroundBuffer.iWidth,
+			icon->fHeight * fMaxScale / g_pIconBackgroundBuffer.iHeight);
 		cairo_set_source_surface (pCairoIconBGContext,
 			g_pIconBackgroundBuffer.pSurface,
 			0.,
@@ -934,8 +933,8 @@ static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // at
 			cd_debug ("c'est une couleur unie (%.2f, %.2f, %.2f)", (double) pixels[0] / 255, (double) pixels[1] / 255, (double) pixels[2] / 255);
 			
 			pDesktopBgSurface = _cairo_dock_create_blank_surface (pSourceContext,
-				g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
-				g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+				g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
+				g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 			
 			cairo_t *pCairoContext = cairo_create (pDesktopBgSurface);
 			cairo_set_source_rgb (pCairoContext,
@@ -960,12 +959,12 @@ static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // at
 				&fHeight,
 				NULL, NULL);
 			
-			if (fWidth < g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || fHeight < g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
+			if (fWidth < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || fHeight < g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
 			{
 				cd_debug ("c'est un degrade ou un motif (%dx%d)", (int) fWidth, (int) fHeight);
 				pDesktopBgSurface = _cairo_dock_create_blank_surface (pSourceContext,
-					g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
-					g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+					g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
+					g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 				cairo_t *pCairoContext = cairo_create (pDesktopBgSurface);
 				
 				cairo_pattern_t *pPattern = cairo_pattern_create_for_surface (pBgSurface);

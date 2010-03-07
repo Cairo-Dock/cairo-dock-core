@@ -36,6 +36,7 @@
 #include "cairo-dock-icons.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-application-facility.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-modules.h"
@@ -58,6 +59,7 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-menu.h"
 
 #define CAIRO_DOCK_CONF_PANEL_WIDTH 800
@@ -70,15 +72,13 @@
 #define CAIRO_DOCK_PLUGINS_EXTRAS_URL "http://www.glx-dock.org/mc_album.php?a=4"
 
 extern CairoDock *g_pMainDock;
+extern CairoDockDesktopGeometry g_desktopGeometry;
 
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
 
-extern int g_iNbDesktops;
-extern int g_iNbViewportX,g_iNbViewportY ;
-extern int g_iXScreenWidth[2], g_iXScreenHeight[2];  // change tous les g_iScreen par g_iXScreen le 28/07/2009
 extern gboolean g_bLocked;
 extern gboolean g_bForceCairo;
 extern gboolean g_bEasterEggs;
@@ -965,6 +965,8 @@ static void _cairo_dock_move_appli_to_current_desktop (GtkMenuItem *pMenuItem, g
 	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
 		cairo_dock_move_window_to_current_desktop (icon);
+		if (!icon->bIsHidden)
+			cairo_dock_show_xwindow (icon->Xid);
 	}
 }
 
@@ -1157,34 +1159,34 @@ static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, gpointer data)
 	static gpointer *s_pDesktopData = NULL;
 	GtkWidget *pMenuItem, *image;
 	
-	if (g_iNbDesktops > 1 || g_iNbViewportX > 1 || g_iNbViewportY > 1)
+	if (g_desktopGeometry.iNbDesktops > 1 || g_desktopGeometry.iNbViewportX > 1 || g_desktopGeometry.iNbViewportY > 1)
 	{
 		int i, j, k, iDesktopCode;
 		const gchar *cLabel;
-		if (g_iNbDesktops > 1 && (g_iNbViewportX > 1 || g_iNbViewportY > 1))
+		if (g_desktopGeometry.iNbDesktops > 1 && (g_desktopGeometry.iNbViewportX > 1 || g_desktopGeometry.iNbViewportY > 1))
 			cLabel = bAll ? _("Move all to desktop %d - face %d") : _("Move to desktop %d - face %d");
-		else if (g_iNbDesktops > 1)
+		else if (g_desktopGeometry.iNbDesktops > 1)
 			cLabel = bAll ? _("Move all to desktop %d") : _("Move to desktop %d");
 		else
 			cLabel = bAll ? _("Move all to face %d") : _("Move to face %d");
 		GString *sDesktop = g_string_new ("");
 		g_free (s_pDesktopData);
-		s_pDesktopData = g_new0 (gpointer, 4 * g_iNbDesktops * g_iNbViewportX * g_iNbViewportY);
+		s_pDesktopData = g_new0 (gpointer, 4 * g_desktopGeometry.iNbDesktops * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY);
 		gpointer *user_data;
 		
-		for (i = 0; i < g_iNbDesktops; i ++)  // on range par bureau.
+		for (i = 0; i < g_desktopGeometry.iNbDesktops; i ++)  // on range par bureau.
 		{
-			for (j = 0; j < g_iNbViewportY; j ++)  // puis par rangee.
+			for (j = 0; j < g_desktopGeometry.iNbViewportY; j ++)  // puis par rangee.
 			{
-				for (k = 0; k < g_iNbViewportX; k ++)
+				for (k = 0; k < g_desktopGeometry.iNbViewportX; k ++)
 				{
-					if (g_iNbDesktops > 1 && (g_iNbViewportX > 1 || g_iNbViewportY > 1))
-						g_string_printf (sDesktop, cLabel, i+1, j*g_iNbViewportX+k+1);
-					else if (g_iNbDesktops > 1)
+					if (g_desktopGeometry.iNbDesktops > 1 && (g_desktopGeometry.iNbViewportX > 1 || g_desktopGeometry.iNbViewportY > 1))
+						g_string_printf (sDesktop, cLabel, i+1, j*g_desktopGeometry.iNbViewportX+k+1);
+					else if (g_desktopGeometry.iNbDesktops > 1)
 						g_string_printf (sDesktop, cLabel, i+1);
 					else
-						g_string_printf (sDesktop, cLabel, j*g_iNbViewportX+k+1);
-					iDesktopCode = i * g_iNbViewportY * g_iNbViewportX + j * g_iNbViewportY + k;
+						g_string_printf (sDesktop, cLabel, j*g_desktopGeometry.iNbViewportX+k+1);
+					iDesktopCode = i * g_desktopGeometry.iNbViewportY * g_desktopGeometry.iNbViewportX + j * g_desktopGeometry.iNbViewportY + k;
 					user_data = &s_pDesktopData[4*iDesktopCode];
 					user_data[0] = data;
 					user_data[1] = GINT_TO_POINTER (i);

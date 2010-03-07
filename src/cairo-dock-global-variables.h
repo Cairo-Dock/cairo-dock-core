@@ -30,19 +30,6 @@ extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 /// Le chemin vers le repertoire racine.
 extern gchar *g_cCairoDockDataDir;
-/// Le chemin vers le repertoire du theme courant.
-extern gchar *g_cCurrentThemePath;
-/// Le chemin vers le repertoire des lanceurs/icones du theme courant.
-extern gchar *g_cCurrentLaunchersPath;
-
-/// Dimensions de l'ecran en mode horizontal/vertical.
-extern int g_iScreenWidth[2], g_iScreenHeight[2];
-/// Dimensions de l'ecran logique en mode horizontal/vertical.
-extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
-/// Nombre de bureaux virtuels.
-extern int g_iNbDesktops;
-/// Nombre de "faces" du cube en largeur et en hauteur.
-extern int g_iNbViewportX, g_iNbViewportY ;
 
 /// zone de rappel.
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;
@@ -56,6 +43,8 @@ extern CairoDockImageBuffer g_pBoxBelowBuffer;
 /// icon bg
 extern CairoDockImageBuffer g_pIconBackgroundBuffer;
 
+/// ecran
+extern CairoDockDesktopGeometry g_desktopGeometry;
 
 /// Environnement de bureau detecte.
 extern CairoDockDesktopEnv g_iDesktopEnv;
@@ -65,8 +54,6 @@ extern gboolean g_bEasterEggs;
 extern gboolean g_bUseOpenGL;
 
 extern GLuint g_pGradationTexture[2];
-extern GLuint g_iIndicatorTexture;
-extern double g_fIndicatorWidth, g_fIndicatorHeight;
 
 extern CairoDockModuleInstance *g_pCurrentModule;
 

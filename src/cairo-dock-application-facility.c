@@ -52,10 +52,11 @@
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-callbacks.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-application-facility.h"
 
 extern CairoDock *g_pMainDock;
-extern int g_iXScreenWidth[2], g_iXScreenHeight[2];
+extern CairoDockDesktopGeometry g_desktopGeometry;
 
 
 static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, gboolean bForceDemand, Icon *pHiddenIcon)
@@ -113,7 +114,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 			CairoDock *pParentDock = NULL;
 			Icon *pPointedIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
 			if (pParentDock)
-				cairo_dock_show_subdock (pPointedIcon, pParentDock, FALSE);
+				cairo_dock_show_subdock (pPointedIcon, pParentDock);
 		}
 		cairo_dock_request_icon_animation (icon, pDock, myTaskBar.cAnimationOnDemandsAttention, 10000);
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));  // dans le au cas ou le dock ne serait pas encore visible, la fonction precedente n'a pas lance l'animation.
@@ -407,7 +408,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	g_return_val_if_fail (pParentDock != NULL, NULL);
 
 	//\_________________ On l'insere dans son dock parent en animant ce dernier eventuellement.
-	if (!myIcons.iSeparateIcons && pParentDock->iRefCount == 0)
+	if ((myIcons.iSeparateIcons == 0 || myIcons.iSeparateIcons == 2) && pParentDock->iRefCount == 0)
 	{
 		cairo_dock_set_class_order (icon);
 	}
@@ -481,7 +482,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 				x = x_icon_geometry (pClassmate, pClassmateDock);
 				if (cairo_dock_is_hidden (pMainDock))
 				{
-					y = (pClassmateDock->container.bDirectionUp ? 0 : g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+					y = (pClassmateDock->container.bDirectionUp ? 0 : g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 				}
 				else
 				{
@@ -493,7 +494,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 				x = x_icon_geometry (pClassmate, pClassmateDock) + pClassmate->fWidth/2;
 				if (cairo_dock_is_hidden (pClassmateDock))
 				{
-					y = (pClassmateDock->container.bDirectionUp ? 0 : g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+					y = (pClassmateDock->container.bDirectionUp ? 0 : g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 				}
 				else
 				{
@@ -508,7 +509,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 					x = x_icon_geometry (pLastAppli, pMainDock) + pLastAppli->fWidth/2;
 					if (cairo_dock_is_hidden (pMainDock))
 					{
-						y = (pMainDock->container.bDirectionUp ? 0 : g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+						y = (pMainDock->container.bDirectionUp ? 0 : g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 					}
 					else
 					{
@@ -520,7 +521,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 					x = pMainDock->container.iWindowPositionX + 0 + (pMainDock->container.iWidth - pMainDock->fFlatDockWidth) / 2;
 					if (cairo_dock_is_hidden (pMainDock))
 					{
-						y = (pMainDock->container.bDirectionUp ? 0 : g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+						y = (pMainDock->container.bDirectionUp ? 0 : g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 					}
 					else
 					{
@@ -540,4 +541,59 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 			
 		}
 	}
+}
+
+
+
+gboolean cairo_dock_appli_is_on_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY)
+{
+	// On calcule les coordonnees en repere absolu.
+	int x = pIcon->windowGeometry.x;  // par rapport au viewport courant.
+	x += g_desktopGeometry.iCurrentViewportX * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];  // repere absolu
+	if (x < 0)
+		x += g_desktopGeometry.iNbViewportX * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+	int y = pIcon->windowGeometry.y;
+	y += g_desktopGeometry.iCurrentViewportY * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+	if (y < 0)
+		y += g_desktopGeometry.iNbViewportY * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+	int w = pIcon->windowGeometry.width, h = pIcon->windowGeometry.height;
+	
+	// test d'intersection avec le viewport donne.
+	return ((pIcon->iNumDesktop == -1 || pIcon->iNumDesktop == iNumDesktop) &&
+		x + w > iNumViewportX * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
+		x < (iNumViewportX + 1) * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
+		y + h > iNumViewportY * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] &&
+		y < (iNumViewportY + 1) * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+}
+
+gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon)
+{
+	int iWindowDesktopNumber, iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;  // coordonnees du coin haut gauche dans le referentiel du viewport actuel.
+	iWindowDesktopNumber = pIcon->iNumDesktop;
+	iGlobalPositionX = pIcon->windowGeometry.x;
+	iGlobalPositionY = pIcon->windowGeometry.y;
+	iWidthExtent = pIcon->windowGeometry.width;
+	iHeightExtent = pIcon->windowGeometry.height;
+
+	return ( (iWindowDesktopNumber == g_desktopGeometry.iCurrentDesktop || iWindowDesktopNumber == -1) &&
+		iGlobalPositionX + iWidthExtent > 0 &&
+		iGlobalPositionX < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
+		iGlobalPositionY + iHeightExtent > 0 &&
+		iGlobalPositionY < g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] );  // -1 <=> 0xFFFFFFFF en unsigned.
+}
+
+void cairo_dock_move_window_to_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY)
+{
+	cairo_dock_move_xwindow_to_nth_desktop (pIcon->Xid,
+		iNumDesktop,
+		(iNumViewportX - g_desktopGeometry.iCurrentViewportX) * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
+		(iNumViewportY - g_desktopGeometry.iCurrentViewportY) * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+}
+
+void cairo_dock_move_window_to_current_desktop (Icon *pIcon)
+{
+	cairo_dock_move_xwindow_to_nth_desktop (pIcon->Xid,
+		g_desktopGeometry.iCurrentDesktop,
+		0,
+		0);  // on ne veut pas decaler son viewport par rapport a nous.
 }

@@ -35,14 +35,14 @@
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-draw-opengl.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-opengl.h"
 
 extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseOpenGL;
 extern CairoDock *g_pMainDock;
+extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
-extern int g_iXScreenWidth[2];
-extern int g_iXScreenHeight[2];
 extern gboolean g_bEasterEggs;
 
 static inline gboolean _check_extension (const char *extName, const gchar *cExtensions)
@@ -680,17 +680,17 @@ void cairo_dock_apply_desktop_background_opengl (CairoContainer *pContainer)
 	glBindTexture (GL_TEXTURE_2D, g_pFakeTransparencyDesktopBg->iTexture);
 	
 	glBegin(GL_QUADS);
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
-	1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
+	1.*(pContainer->iWindowPositionY + 0.)/g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 	glVertex3f (0., pContainer->iHeight, 0.);  // Top Left.
 	
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + 0.)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + 0.)/g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 	glVertex3f (pContainer->iWidth, pContainer->iHeight, 0.);  // Top Right
 	
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 	glVertex3f (pContainer->iWidth, 0., 0.);  // Bottom Right
 	
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 	glVertex3f (0., 0., 0.);  // Bottom Left
 	glEnd();
 	
