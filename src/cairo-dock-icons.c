@@ -656,7 +656,7 @@ void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParen
 {
 	g_free (icon->cParentDockName);
 	icon->cParentDockName = g_strdup (cNewParentDockName);
-
+	
 	cairo_dock_write_container_name_in_conf_file (icon, cNewParentDockName);
 }
 

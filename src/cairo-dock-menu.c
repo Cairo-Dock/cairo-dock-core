@@ -568,7 +568,11 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 	}
 	
 	//\_________________________ on met a jour le fichier de conf de l'icone.
+	gchar *cCurrentDockName = pIcon->cParentDockName;
+	pIcon->cParentDockName = NULL;
 	cairo_dock_update_icon_s_container_name (pIcon, cValidDockName);
+	g_free (pIcon->cParentDockName);
+	pIcon->cParentDockName = cCurrentDockName;
 	
 	//\_________________________ on recharge l'icone.
 	if (CAIRO_DOCK_IS_STORED_LAUNCHER (pIcon))

@@ -394,6 +394,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	}
 
 	//\_____________ On gere le changement de container ou d'ordre.
+	g_print ("%x -> %x\n", pDock, pNewDock);
 	if (pDock != pNewDock)  // changement de container.
 	{
 		// on la detache de son container actuel et on l'insere dans le nouveau.
