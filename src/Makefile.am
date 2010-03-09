@@ -62,88 +62,94 @@ cairo_dock_LDADD = \
 	$(PACKAGE_LIBS)
 
 cairo_dock_SOURCES = \
-		cairo-dock-struct.h\
+	cairo-dock-struct.h\
 	cairo-dock-global-variables.h \
-	cairo-dock-callbacks.c \
-	cairo-dock-callbacks.h \
-	cairo-dock-dbus.c \
-	cairo-dock-dbus.h \
-	cairo-dock-draw.c \
-	cairo-dock-draw.h \
-	cairo-dock-config.c \
-	cairo-dock-config.h \
-	cairo-dock-load.c \
-	cairo-dock-load.h \
 	cairo-dock-icons.h \
 	cairo-dock-icons.c \
 	cairo-dock-applications-manager.c \
 	cairo-dock-applications-manager.h \
+	cairo-dock-application-facility.c\
+	cairo-dock-application-facility.h\
 	cairo-dock-launcher-manager.c\
 	cairo-dock-launcher-manager.h\
 	cairo-dock-applet-manager.c\
 	cairo-dock-applet-manager.h\
-	cairo-dock-separator-manager.c\
-	cairo-dock-separator-manager.h\
-	cairo-dock-menu.c \
-	cairo-dock-menu.h \
-	cairo-dock-modules.c \
-	cairo-dock-modules.h\
-	cairo-dock-application-facility.c\
-	cairo-dock-application-facility.h\
-	cairo-dock-keyfile-utilities.c\
-	cairo-dock-keyfile-utilities.h\
-	cairo-dock-dock-factory.c\
-	cairo-dock-dock-factory.h\
-	cairo-dock-animations.c\
-	cairo-dock-animations.h\
-	cairo-dock-themes-manager.c\
-	cairo-dock-themes-manager.h\
-	cairo-dock-notifications.c\
-	cairo-dock-notifications.h\
-	cairo-dock-dialogs.c\
-	cairo-dock-dialogs.h\
-	cairo-dock-surface-factory.c\
-	cairo-dock-surface-factory.h\
-	cairo-dock-renderer-manager.c\
-	cairo-dock-renderer-manager.h\
 	cairo-dock-applet-facility.c\
 	cairo-dock-applet-facility.h\
+	cairo-dock-separator-manager.c\
+	cairo-dock-separator-manager.h\
+	cairo-dock-modules.c \
+	cairo-dock-modules.h\
+	cairo-dock-container.c\
+	cairo-dock-container.h\
+	cairo-dock-desklet-manager.c\
+	cairo-dock-desklet-manager.h\
+	cairo-dock-desklet-factory.c\
+	cairo-dock-desklet-factory.h\
+	cairo-dock-dialogs.c\
+	cairo-dock-dialogs.h\
+	cairo-dock-flying-container.c\
+	cairo-dock-flying-container.h\
+	cairo-dock-dock-manager.c\
+	cairo-dock-dock-manager.h\
+	cairo-dock-dock-factory.c\
+	cairo-dock-dock-factory.h\
+	cairo-dock-callbacks.c \
+	cairo-dock-callbacks.h \
+	cairo-dock-animations.c\
+	cairo-dock-animations.h\
+	cairo-dock-notifications.c\
+	cairo-dock-notifications.h\
+	cairo-dock-renderer-manager.c\
+	cairo-dock-renderer-manager.h\
+	cairo-dock-data-renderer.c\
+	cairo-dock-data-renderer.h\
 	cairo-dock-file-manager.c\
 	cairo-dock-file-manager.h\
+	cairo-dock-themes-manager.c\
+	cairo-dock-themes-manager.h\
+	cairo-dock-class-manager.c\
+	cairo-dock-class-manager.h\
+	cairo-dock-X-manager.c\
+	cairo-dock-X-manager.h\
+	cairo-dock-opengl.c\
+	cairo-dock-opengl.h\
+	cairo-dock-gui-manager.c\
+	cairo-dock-gui-manager.h\
+	cairo-dock-gui-factory.c\
+	cairo-dock-gui-factory.h\
+	cairo-dock-load.c \
+	cairo-dock-load.h \
 	eggaccelerators.c\
 	eggaccelerators.h\
 	cairo-dock-keybinder.c\
 	cairo-dock-keybinder.h\
-	cairo-dock-desklet.c\
-	cairo-dock-desklet.h\
+	cairo-dock-surface-factory.c\
+	cairo-dock-surface-factory.h\
+	cairo-dock-dbus.c \
+	cairo-dock-dbus.h \
+	cairo-dock-draw.c \
+	cairo-dock-draw.h \
+	cairo-dock-draw-opengl.c\
+	cairo-dock-draw-opengl.h\
 	cairo-dock-log.c\
 	cairo-dock-log.h\
 	cairo-dock-X-utilities.c\
 	cairo-dock-X-utilities.h\
-	cairo-dock-X-manager.c\
-	cairo-dock-X-manager.h\
-	cairo-dock-gauge.c\
-	cairo-dock-gauge.h\
-	cairo-dock-dock-manager.c\
-	cairo-dock-dock-manager.h\
-	cairo-dock-class-manager.c\
-	cairo-dock-class-manager.h\
-	cairo-dock-emblem.c\
-	cairo-dock-emblem.h\
-	cairo-dock-flying-container.c\
-	cairo-dock-flying-container.h\
-	cairo-dock-graph.c\
-	cairo-dock-graph.h\
-	cairo-dock-opengl.c\
-	cairo-dock-opengl.h\
-	cairo-dock-draw-opengl.c\
-	cairo-dock-draw-opengl.h\
+	cairo-dock-keyfile-utilities.c\
+	cairo-dock-keyfile-utilities.h\
 	cairo-dock-particle-system.c\
 	cairo-dock-particle-system.h\
-	cairo-dock-gui-factory.c\
-	cairo-dock-gui-factory.h\
-	cairo-dock-gui-manager.c\
-	cairo-dock-gui-manager.h\
+	cairo-dock-emblem.c\
+	cairo-dock-emblem.h\
+	cairo-dock-task.c\
+	cairo-dock-task.h\
+	cairo-dock-dock-facility.c\
+	cairo-dock-dock-facility.h\
+	cairo-dock-gauge.c\
+	cairo-dock-gauge.h\
+	cairo-dock-graph.c\
+	cairo-dock-graph.h\
 	cairo-dock-internal-position.c\
 	cairo-dock-internal-position.h\
 	cairo-dock-internal-accessibility.c\
@@ -168,19 +174,15 @@ cairo_dock_SOURCES = \
 	cairo-dock-internal-background.h\
 	cairo-dock-internal-icons.c\
 	cairo-dock-internal-icons.h\
-	cairo-dock-data-renderer.c\
-	cairo-dock-data-renderer.h\
-	cairo-dock-dock-facility.c\
-	cairo-dock-dock-facility.h\
-	cairo-dock-container.c\
-	cairo-dock-container.h\
-	cairo-dock-task.c\
-	cairo-dock-task.h\
+	cairo-dock-config.c \
+	cairo-dock-config.h \
 	texture-gradation.h\
 	texture-blur.h\
 	cairo-dock.c\
 	cairo-dock-default-view.c\
 	cairo-dock-default-view.h\
+	cairo-dock-menu.c \
+	cairo-dock-menu.h \
 	cairo-dock-gui-main.c\
 	cairo-dock-gui-main.h\
 	cairo-dock-gui-simple.c\
@@ -208,7 +210,6 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-config.h\
 	cairo-dock-load.h\
 	cairo-dock-icons.h\
-	cairo-dock-menu.h\
 	cairo-dock-modules.h\
 	cairo-dock-global-variables.h\
 	cairo-dock-applications-manager.h\
@@ -229,7 +230,8 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-applet-facility.h\
 	cairo-dock-file-manager.h\
 	cairo-dock-keybinder.h\
-	cairo-dock-desklet.h\
+	cairo-dock-desklet-manager.h\
+	cairo-dock-desklet-factory.h\
 	cairo-dock-log.h\
 	cairo-dock-X-utilities.h\
 	cairo-dock-X-manager.h\

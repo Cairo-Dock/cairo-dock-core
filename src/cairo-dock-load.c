@@ -50,7 +50,7 @@
 #include "cairo-dock-internal-background.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-desklet.h"
+#include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-data-renderer.h"
 #include "cairo-dock-flying-container.h"

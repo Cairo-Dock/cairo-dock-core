@@ -45,11 +45,13 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass);
 /** Read a desktop file and fetch all its data into an Icon.
  * @param cDesktopFileName name or path of a desktop file. If it's a simple name, it will be taken in the "launchers" folder of the current theme.
  * @param icon the Icon to fill.
+ * @param cSubDockRendererName filled with the renderer name of the sub-dock, if the icon will hold one.
  */
 void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName, Icon *icon, gchar **cSubDockRendererName);
 
 /** Create an Icon from a given desktop file. The resulting icon can directly be used inside a container. Class inhibating is handled.
  * @param cDesktopFileName name of the desktop file, present in the "launchers" folder of the current theme.
+ * @param cSubDockRendererName filled with the renderer name of the sub-dock, if the icon will hold one.
  * @return the newly created icon.
  */
 Icon * cairo_dock_new_launcher_icon (const gchar *cDesktopFileName, gchar **cSubDockRendererName);

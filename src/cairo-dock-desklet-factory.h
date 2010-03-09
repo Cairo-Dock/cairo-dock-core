@@ -23,8 +23,8 @@
 ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __CAIRO_DESKLET_H__
-#define  __CAIRO_DESKLET_H__
+#ifndef __CAIRO_DESKLET_FACTORY_H__
+#define  __CAIRO_DESKLET_FACTORY_H__
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-surface-factory.h"
@@ -187,10 +187,6 @@ struct _CairoDesklet {
 	guint time;  // date du clic.
 };
 
-/// Definition of a function that runs through all desklets.
-typedef gboolean (* CairoDockForeachDeskletFunc) (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, gpointer data);
-
-
 /** Say if a Container is a desklet.
 *@param pContainer the container.
 *@return TRUE if the container is a desklet.
@@ -203,36 +199,13 @@ typedef gboolean (* CairoDockForeachDeskletFunc) (CairoDesklet *pDesklet, CairoD
 */
 #define CAIRO_DESKLET(pContainer) ((CairoDesklet *)pContainer)
 
-void cairo_dock_init_desklet_manager (void);
-void cairo_dock_load_desklet_buttons (void);
-void cairo_dock_unload_desklet_buttons (void);
-
-void cairo_dock_reload_desklets_decorations (gboolean bDefaultThemeOnly);
-void cairo_dock_free_desklet_decoration (CairoDeskletDecoration *pDecoration);
+#define cairo_dock_desklet_is_free(pDesklet) (! (pDesklet->bPositionLocked || pDesklet->bFixedAttitude))
 
 
-/** Make all desklets visible. Their accessibility is set to #CAIRO_DESKLET_NORMAL. 
-*@param bOnWidgetLayerToo TRUE if you want to act on the desklet that are on the WidgetLayer as well.
-*/
-void cairo_dock_set_all_desklets_visible (gboolean bOnWidgetLayerToo);
-/** Reset the desklets accessibility to the state defined in their conf file.
-*/
-void cairo_dock_set_desklets_visibility_to_default (void);
-
-/** Get the desklet whose X ID matches the given one.
-*@param Xid an X ID.
-*@return the desklet that matches, or NULL if none match.
-*/
-CairoDesklet *cairo_dock_get_desklet_by_Xid (Window Xid);
-
-
-/** Create a simple desklet, without placing it nor defining a renderer.
-*@param pIcon the main icon.
-*@param pInteractiveWidget an optionnal GTK widget, or NULL if none.
-*@param iAccessibility accessibility of the desklet, needed to know if it should be placed on the WidgetLayer or if it should reserve its space.
+/** Create a simple desklet container.
 *@return the newly allocated desklet.
 */
-CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, GtkWidget *pInteractiveWidget, CairoDeskletAccessibility iAccessibility);
+CairoDesklet *cairo_dock_new_desklet (void);
 
 /** Destroy a desklet, and free all the allocated ressources. The interactive widget is removed before, and can be inserted anywhere after that.
 *@param pDesklet the desklet to destroy.
@@ -250,6 +223,9 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 
 #define cairo_dock_allow_no_clickable_desklet(pDesklet) (pDesklet)->bAllowNoClickable = TRUE
 
+void cairo_dock_load_desklet_decorations (CairoDesklet *pDesklet);
+
+void cairo_dock_free_desklet_decoration (CairoDeskletDecoration *pDecoration);
 
 
 /** Add a GtkWidget to a desklet. Only 1 widget is allowed per desklet, if you need more, you can just use a GtkContainer, and place as many widget as you want inside.
@@ -268,19 +244,11 @@ void cairo_dock_add_interactive_widget_to_desklet_full (GtkWidget *pInteractiveW
 *@param iRightMargin right margin, in pixels.
 */
 void cairo_dock_set_desklet_margin (CairoDesklet *pDesklet, int iRightMargin);
-
 /** Detach the interactive widget from a desklet. The widget can then be placed anywhere after that. You have to unref it after you placed it into a container, or to destroy it.
 *@param pDesklet the desklet with an interactive widget.
 *@return the widget.
 */
 GtkWidget *cairo_dock_steal_interactive_widget_from_desklet (CairoDesklet *pDesklet);
-
-
-/** Find the currently pointed icon in a desklet, taking into account the 3D rotations.
-*@param pDesklet the desklet.
-*@return the pointed icon, or NULL if none.
-*/
-Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet);
 
 
 /** Hide a desklet.

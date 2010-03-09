@@ -34,7 +34,7 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-desklet.h"
+#include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-renderer-manager.h"

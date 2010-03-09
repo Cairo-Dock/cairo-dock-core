@@ -24,7 +24,7 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-desklet.h"
+#include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-data-renderer.h"

@@ -36,7 +36,7 @@
 #include "cairo-dock-modules.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-desklet.h"
+#include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-callbacks.h"
@@ -406,7 +406,7 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 		cairo_dock_remove_one_icon_from_dock (NULL, pIcon);
 		cairo_dock_free_icon (pIcon);
 	}
-	else if (CAIRO_DOCK_IS_APPLET(pIcon))
+	else if (CAIRO_DOCK_IS_APPLET(pIcon))  /// faire une fonction dans la factory ...
 	{
 		cd_debug ("le module %s devient un desklet", pIcon->pModuleInstance->cConfFilePath);
 		

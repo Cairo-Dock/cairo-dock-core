@@ -204,7 +204,7 @@ cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImagePath, c
 
 
 /** Create a surface at a given size, and fill it with a pattern. If the pattern image is given by its sole name, it is searched inside the current theme root folder.
-*@param cImagePath path or name of an image that will be repeated to fill the surface.
+*@param cImageFile path or name of an image that will be repeated to fill the surface.
 *@param pSourceContext a drawing context (not altered by the function).
 *@param fImageWidth the desired surface width.
 *@param fImageHeight the desired surface height.
@@ -230,6 +230,7 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, cairo_t 
 *@param fImageWidth the width of the surface.
 *@param fImageHeight the height of the surface.
 *@param fReflectSize size of the reflection.
+*@param fAlbedo power of the reflection (1 : strong, 0 : transparent)
 *@param bIsHorizontal TRUE if the surface is in an horizontal container.
 *@param bDirectionUp TRUE if the surface is in a container whose direction is towards.
 *@return the newly allocated surface.

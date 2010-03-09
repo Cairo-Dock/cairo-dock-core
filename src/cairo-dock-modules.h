@@ -24,7 +24,8 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-desklet.h"
+#include "cairo-dock-desklet-factory.h"
+#include "cairo-dock-desklet-manager.h"
 G_BEGIN_DECLS
 
 

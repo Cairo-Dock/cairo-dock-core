@@ -57,7 +57,6 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-keybinder.h"
-#include "cairo-dock-desklet.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-animations.h"

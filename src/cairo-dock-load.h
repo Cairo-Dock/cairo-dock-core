@@ -73,17 +73,46 @@ CairoDockLabelDescription *cairo_dock_duplicate_label_description (CairoDockLabe
 */
 gchar *cairo_dock_generate_file_path (const gchar *cImageFile);
 
-
+/** Load an image into an ImageBuffer with a given transparency. If the image is given by its sole name, it is taken in the root folder of the current theme.
+*@param pImage an ImageBuffer.
+*@param cImageFile name of a file
+*@param iWidth width it should be loaded.
+*@param iHeight height it should be loaded.
+*@param iLoadModifier modifier
+*@param fAlpha transparency (1:fully opaque)
+*/
 void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gchar *cImageFile, int iWidth, int iHeight, CairoDockLoadImageModifier iLoadModifier, double fAlpha);
-
+/** Load an image into an ImageBuffer. If the image is given by its sole name, it is taken in the root folder of the current theme.
+*@param pImage an ImageBuffer.
+*@param cImageFile name of a file
+*@param iWidth width it should be loaded. The resulting width can be different depending on the modifier.
+*@param iHeight height it should be loaded. The resulting width can be different depending on the modifier.
+*@param iLoadModifier modifier
+*/
 #define cairo_dock_load_image_buffer(pImage, cImageFile, iWidth, iHeight, iLoadModifier) cairo_dock_load_image_buffer_full (pImage, cImageFile, iWidth, iHeight, iLoadModifier, 1.)
-
+/** Load a surface into an ImageBuffer.
+*@param pImage an ImageBuffer.
+*@param pSurface a cairo surface
+*@param iWidth width of the surface
+*@param iHeight height of the surface
+*/
 void cairo_dock_load_image_buffer_from_surface (CairoDockImageBuffer *pImage, cairo_surface_t *pSurface, int iWidth, int iHeight);
-
+/** Create and load an image into an ImageBuffer. If the image is given by its sole name, it is taken in the root folder of the current theme.
+*@param cImageFile name of a file
+*@param iWidth width it should be loaded.
+*@param iHeight height it should be loaded.
+*@param iLoadModifier modifier
+*@return a newly allocated ImageBuffer.
+*/
 CairoDockImageBuffer *cairo_dock_create_image_buffer (const gchar *cImageFile, int iWidth, int iHeight, CairoDockLoadImageModifier iLoadModifier);
 
+/** Reset an ImageBuffer's ressources. It can be used to load another image then.
+*@param pImage an ImageBuffer.
+*/
 void cairo_dock_unload_image_buffer (CairoDockImageBuffer *pImage);
-
+/** Reset and free an ImageBuffer.
+*@param pImage an ImageBuffer.
+*/
 void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage);
 
 /* Cree la surface de reflection d'une icone (pour cairo).

@@ -28,7 +28,6 @@
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-desklet.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-internal-system.h"
@@ -539,6 +538,8 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 			}
 			cd_message ("  %s est modifiee", pConcernedIcon->cName);
 			
+			if (pConcernedIcon->iVolumeID > 0)
+				cairo_dock_remove_dialog_if_any (pConcernedIcon);  // on empeche la multiplication des dialogues de (de)montage.
 			Icon *pNewIcon = cairo_dock_fm_alter_icon_if_necessary (pConcernedIcon, pParentContainer);  // pConcernedIcon a ete remplacee et n'est donc peut-etre plus valide.
 			
 			if (pNewIcon != NULL && pNewIcon->iVolumeID > 0)

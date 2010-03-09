@@ -25,9 +25,9 @@
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-file-manager.h"
+///#include "cairo-dock-file-manager.h"
 #include "cairo-dock-renderer-manager.h"
-#include "cairo-dock-desklet.h"
+#include "cairo-dock-desklet-factory.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-desklets.h"
 

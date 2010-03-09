@@ -47,7 +47,7 @@
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-class-manager.h"
-#include "cairo-dock-desklet.h"
+#include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-load.h"

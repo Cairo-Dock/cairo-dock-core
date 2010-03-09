@@ -36,7 +36,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-applet-manager.h"
-#include "cairo-dock-desklet.h"
+#include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-dialogs.h"
@@ -731,10 +731,14 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			if (pMinimalConfig->bIsDetached)
 			{
 				if (pCurrentDesklet == NULL)  // c'est un nouveau desklet.
-					pNewDesklet = cairo_dock_create_desklet (pIcon, NULL, pMinimalConfig->deskletAttribute.iAccessibility);
-				else
+				{
+					pNewDesklet = cairo_dock_create_desklet (pIcon, &pMinimalConfig->deskletAttribute);
+				}
+				else  // on reconfigure le desklet courant.
+				{
 					pNewDesklet = pCurrentDesklet;
-				cairo_dock_configure_desklet (pNewDesklet, &pMinimalConfig->deskletAttribute);
+					cairo_dock_configure_desklet (pNewDesklet, &pMinimalConfig->deskletAttribute);
+				}
 				pNewContainer = CAIRO_CONTAINER (pNewDesklet);
 			}
 		}
@@ -1101,8 +1105,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 		// on trouve/cree son container.
 		if (pModule->bCanDetach && pMinimalConfig->bIsDetached)
 		{
-			pDesklet = cairo_dock_create_desklet (NULL, NULL, pMinimalConfig->deskletAttribute.iAccessibility);
-			cairo_dock_configure_desklet (pDesklet, &pMinimalConfig->deskletAttribute);
+			pDesklet = cairo_dock_create_desklet (NULL, &pMinimalConfig->deskletAttribute);
 			/*g_print ("transparence du desklet...\n");
 			while (gtk_events_pending ())  // pour la transparence initiale.
 				gtk_main_iteration ();*/

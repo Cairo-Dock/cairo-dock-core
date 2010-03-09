@@ -112,7 +112,7 @@
 #include "cairo-dock-dbus.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-internal-icons.h"
-#include "cairo-dock-desklet.h"
+#include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-gauge.h"

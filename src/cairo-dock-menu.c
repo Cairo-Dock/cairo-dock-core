@@ -48,7 +48,7 @@
 #include "cairo-dock-dialogs.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-desklet.h"
+#include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-class-manager.h"
