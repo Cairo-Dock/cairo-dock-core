@@ -46,7 +46,7 @@
 #include "cairo-dock-icons.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-desktop-file-factory.h"
-#include "cairo-dock-launcher-factory.h"
+#include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-dock-facility.h"
@@ -567,7 +567,7 @@ gboolean cairo_dock_emit_enter_signal (CairoDock *pDock)
 
 gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
+	g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
 	//\_______________ On tire le dock => on ignore le signal.
 	if (pEvent != NULL && (pEvent->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && (pEvent->state & GDK_BUTTON1_MASK))
 	{

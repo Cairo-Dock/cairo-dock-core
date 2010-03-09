@@ -45,7 +45,7 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-callbacks.h"
-#include "cairo-dock-launcher-factory.h"
+#include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-X-manager.h"

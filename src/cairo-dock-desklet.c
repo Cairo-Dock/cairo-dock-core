@@ -54,7 +54,7 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-internal-desklets.h"
 #include "cairo-dock-gui-manager.h"
-#include "cairo-dock-launcher-factory.h"
+#include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-desklet.h"
 
 extern gboolean g_bUseOpenGL;

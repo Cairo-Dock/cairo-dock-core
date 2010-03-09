@@ -18,16 +18,15 @@
 */
 
 
-#ifndef __CAIRO_DOCK_LAUNCHER_FACTORY__
-#define  __CAIRO_DOCK_LAUNCHER_FACTORY__
+#ifndef __CAIRO_DOCK_LAUNCHER_MANAGER__
+#define  __CAIRO_DOCK_LAUNCHER_MANAGER__
 
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
-/**
-*@file cairo-dock-launcher-factory.h This class handles the creation and reload of launcher icons, from the desktop files contained inside the 'launchers' folder. The files holding the information are common desktop files, with additionnal keys added by the dock on the launcher creation.
+/** *@file cairo-dock-launcher-manager.h This class handles the creation, load and reload of launcher icons, from the desktop files contained inside the 'launchers' folder. The files holding the information are common desktop files, with additionnal keys added by the dock on the launcher creation.
 */
 
 /** Search the path of an icon into the defined icons themes. It also handles the '~' caracter in paths.
@@ -36,35 +35,12 @@ G_BEGIN_DECLS
  */
 gchar *cairo_dock_search_icon_s_path (const gchar *cFileName);
 
-gboolean cairo_dock_remove_version_from_string (gchar *cString);
-
-
-/** Set the class of a launcher. You can safely free the paramater 'cStartupWMClass' after calling this function. This function is tobe called on a launcher well defined (all other parameters should be already filled).
- * @param icon a launcher.
- * @param cStartupWMClass the class of the launcher defined in its .desktop file, or NULL. You can't expect the resulting class to be the one you provide, because this function makes a lot of guesses.
- */
-void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass);
-
-
-/** Read a desktop file and fetch all its data into an Icon.
- * @param cDesktopFileName name or path of a desktop file. If it's a simple name, it will be taken in the "launchers" folder of the current theme.
- * @param icon the Icon to fill.
-*/
-void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName, Icon *icon);
-
 /** Create an Icon from a given desktop file, and fill its buffers. The resulting icon can directly be used inside a container. Class inhibating is handled.
  * @param cDesktopFileName name of the desktop file, present in the "launchers" folder of the current theme.
  * @param pSourceContext a drawing context, not altered.
  * @return the newly created icon.
 */
 Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName, cairo_t *pSourceContext);
-
-/** Reload an Icon from a given desktop file, and fill its buffers. It doesn't handle the side-effects like modifying the class, the sub-dock's view, the container, etc.
- * @param cDesktopFileName nameof the desktop file, taken in the "launchers" folder of the current theme.
- * @param pSourceContext a drawing context, not altered.
- * @param icon the Icon to reload.
-*/
-void cairo_dock_reload_icon_from_desktop_file (const gchar *cDesktopFileName, cairo_t *pSourceContext, Icon *icon);
 
 
 /** Reload completely a launcher. It handles all the side-effects like modifying the class, the sub-dock's view, the container, etc.

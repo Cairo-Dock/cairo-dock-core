@@ -75,7 +75,7 @@ void cairo_dock_write_keys_to_file (GKeyFile *pKeyFile, const gchar *cConfFilePa
 
 void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, const gchar *cConfFilePath, const gchar *cShareDataDirPath, gboolean bUseFileKeys, const gchar *cTemplateFileName)
 {
-	gchar *cTemplateConfFilePath = g_strdup_printf ("%s/%s", cShareDataDirPath, cTemplateFileName);
+	gchar *cTemplateConfFilePath = (*cTemplateFileName == '/' ? g_strdup (cTemplateFileName) : g_strdup_printf ("%s/%s", cShareDataDirPath, cTemplateFileName));
 	cd_message ("%s (%s)", __func__, cTemplateConfFilePath);
 	
 	if (! g_file_test (cTemplateConfFilePath, G_FILE_TEST_EXISTS))

@@ -26,32 +26,12 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 #include <gdk/gdkx.h>
-#ifdef HAVE_XEXTEND
-#include <X11/extensions/Xcomposite.h>
-//#include <X11/extensions/Xdamage.h>
-#endif
 
-#include "cairo-dock-load.h"
 #include "cairo-dock-icons.h"
-#include "cairo-dock-draw.h"
-#include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-dock-factory.h"
-#include "cairo-dock-dialogs.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-surface-factory.h"
-#include "cairo-dock-applications-manager.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-dock-manager.h"
-#include "cairo-dock-class-manager.h"
 #include "cairo-dock-X-utilities.h"
-#include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-icons.h"
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-launcher-factory.h"
-#include "cairo-dock-container.h"
-#include "cairo-dock-dock-factory.h"
-#include "cairo-dock-dock-facility.h"
-#include "cairo-dock-callbacks.h"
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-application-factory.h"
@@ -99,130 +79,6 @@ void cairo_dock_initialize_application_factory (Display *pXDisplay)
 	s_aNetWmDemandsAttention = XInternAtom (s_XDisplay, "_NET_WM_STATE_DEMANDS_ATTENTION", False);
 }
 
-cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)
-{
-	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS && Xid > 0, NULL);
-	GdkPixbuf *pPixbuf = cairo_dock_get_pixbuf_from_pixmap (Xid, TRUE);
-	if (pPixbuf == NULL)
-	{
-		cd_warning ("No thumbnail available.\nEither the WM doesn't support this functionnality, or the window was minimized when the dock has been launched.");
-		return NULL;
-	}
-	cd_debug ("window pixmap : %dx%d", gdk_pixbuf_get_width (pPixbuf), gdk_pixbuf_get_height (pPixbuf));
-	cairo_surface_t *pSurface = cairo_dock_create_surface_from_pixbuf (pPixbuf,
-		pSourceContext,
-		fMaxScale,
-		myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-		myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
-		CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,  // on conserve le ratio de la fenetre, tout en gardant la taille habituelle des icones d'appli.
-		fWidth,
-		fHeight,
-		NULL, NULL);
-	g_object_unref (pPixbuf);
-	return pSurface;
-}
-
-cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)
-{
-	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
-	
-	Atom aReturnedType = 0;
-	int aReturnedFormat = 0;
-	unsigned long iLeftBytes, iBufferNbElements = 0;
-	gulong *pXIconBuffer = NULL;
-	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmIcon, 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pXIconBuffer);
-
-	if (iBufferNbElements > 2)
-	{
-		cairo_surface_t *pNewSurface = cairo_dock_create_surface_from_xicon_buffer (pXIconBuffer,
-			iBufferNbElements,
-			pSourceContext,
-			myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-			myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
-			fMaxScale,
-			fWidth, fHeight);
-		XFree (pXIconBuffer);
-		return pNewSurface;
-	}
-	else  // sinon on tente avec l'icone eventuellement presente dans les WMHints.
-	{
-		XWMHints *pWMHints = XGetWMHints (s_XDisplay, Xid);
-		if (pWMHints == NULL)
-		{
-			cd_debug ("  aucun WMHints");
-			return NULL;
-		}
-		//\__________________ On recupere les donnees dans un  pixbuf.
-		GdkPixbuf *pIconPixbuf = NULL;
-		if (pWMHints->flags & IconWindowHint)
-		{
-			Window XIconID = pWMHints->icon_window;
-			cd_debug ("  pas de _NET_WM_ICON, mais une fenetre (ID:%d)", XIconID);
-			Pixmap iPixmap = cairo_dock_get_window_background_pixmap (XIconID);
-			pIconPixbuf = cairo_dock_get_pixbuf_from_pixmap (iPixmap, TRUE);  /// A valider ...
-		}
-		else if (pWMHints->flags & IconPixmapHint)
-		{
-			cd_debug ("  pas de _NET_WM_ICON, mais un pixmap");
-			Pixmap XPixmapID = pWMHints->icon_pixmap;
-			pIconPixbuf = cairo_dock_get_pixbuf_from_pixmap (XPixmapID, TRUE);
-
-			//\____________________ On lui applique le masque de transparence s'il existe.
-			if (pWMHints->flags & IconMaskHint)
-			{
-				Pixmap XPixmapMaskID = pWMHints->icon_mask;
-				GdkPixbuf *pMaskPixbuf = cairo_dock_get_pixbuf_from_pixmap (XPixmapMaskID, FALSE);
-
-				int iNbChannels = gdk_pixbuf_get_n_channels (pIconPixbuf);
-				int iRowstride = gdk_pixbuf_get_rowstride (pIconPixbuf);
-				guchar *p, *pixels = gdk_pixbuf_get_pixels (pIconPixbuf);
-
-				int iNbChannelsMask = gdk_pixbuf_get_n_channels (pMaskPixbuf);
-				int iRowstrideMask = gdk_pixbuf_get_rowstride (pMaskPixbuf);
-				guchar *q, *pixelsMask = gdk_pixbuf_get_pixels (pMaskPixbuf);
-
-				int w = MIN (gdk_pixbuf_get_width (pIconPixbuf), gdk_pixbuf_get_width (pMaskPixbuf));
-				int h = MIN (gdk_pixbuf_get_height (pIconPixbuf), gdk_pixbuf_get_height (pMaskPixbuf));
-				int x, y;
-				for (y = 0; y < h; y ++)
-				{
-					for (x = 0; x < w; x ++)
-					{
-						p = pixels + y * iRowstride + x * iNbChannels;
-						q = pixelsMask + y * iRowstrideMask + x * iNbChannelsMask;
-						if (q[0] == 0)
-							p[3] = 0;
-						else
-							p[3] = 255;
-					}
-				}
-
-				g_object_unref (pMaskPixbuf);
-			}
-		}
-		XFree (pWMHints);
-
-		//\____________________ On cree la surface.
-		if (pIconPixbuf != NULL)
-		{
-			cairo_surface_t *pNewSurface = cairo_dock_create_surface_from_pixbuf (pIconPixbuf,
-				pSourceContext,
-				fMaxScale,
-				myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-				myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
-				CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,
-				fWidth,
-				fHeight,
-				NULL, NULL);
-
-			g_object_unref (pIconPixbuf);
-			return pNewSurface;
-		}
-		return NULL;
-	}
-}
-
-
 static Window _cairo_dock_get_parent_window (Window Xid)
 {
 	Atom aReturnedType = 0;
@@ -236,11 +92,10 @@ static Window _cairo_dock_get_parent_window (Window Xid)
 		XFree (pXBuffer);
 	return xParentWindow;
 }
-Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid, CairoDock *pDock)
+Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 {
 	//g_print ("%s (%d)\n", __func__, Xid);
 	guchar *pNameBuffer = NULL;
-	///gulong *pPidBuffer = NULL;
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
 	unsigned long iLeftBytes, iBufferNbElements;
@@ -288,9 +143,9 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmWindowType, 0, G_MAXULONG, False, XA_ATOM, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pTypeBuffer);
 	if (iBufferNbElements != 0)
 	{
-		if (*pTypeBuffer != s_aNetWmWindowTypeNormal)
+		if (*pTypeBuffer != s_aNetWmWindowTypeNormal)  // pas une fenetre normale.
 		{
-			if (*pTypeBuffer == s_aNetWmWindowTypeDialog)
+			if (*pTypeBuffer == s_aNetWmWindowTypeDialog)  // on saute si c'est un dialogue modal.
 			{
 				/*Window iPropWindow;
 				XGetTransientForHint (s_XDisplay, Xid, &iPropWindow);
@@ -299,23 +154,13 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 				if (XMainAppliWindow != 0)
 				{
 					cd_debug ("  dialogue 'transient for %d' => on ignore", XMainAppliWindow);
-					if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
-					{
-						Icon *pParentIcon = cairo_dock_get_icon_with_Xid (XMainAppliWindow);
-						if (pParentIcon != NULL)
-						{
-							cd_debug ("%s requiert votre attention indirectement !", pParentIcon->cName);
-							cairo_dock_appli_demands_attention (pParentIcon);
-						}
-						else
-							cd_debug ("ce dialogue est bien bruyant ! (%d)", XMainAppliWindow);
-					}
+					if (bDemandsAttention)
+						*XParentWindow = XMainAppliWindow;
 					XFree (pTypeBuffer);
-					return NULL;  // inutile de rajouter le PID ici, c'est le meme que la fenetre principale.
+					return NULL;
 				}
-				//g_print ("dialogue autorise\n");
 			}
-			else
+			else  // autre type : on saute.
 			{
 				cd_debug ("type indesirable (%d)", *pTypeBuffer);
 				XFree (pTypeBuffer);
@@ -324,33 +169,22 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 		}
 		XFree (pTypeBuffer);
 	}
-	else
+	else  // pas de type defini.
 	{
 		Window XMainAppliWindow = 0;
 		XGetTransientForHint (s_XDisplay, Xid, &XMainAppliWindow);
 		if (XMainAppliWindow != 0)
 		{
 			cd_debug ("  fenetre modale => on saute.");
-			if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
-			{
-				Icon *pParentIcon = cairo_dock_get_icon_with_Xid (XMainAppliWindow);
-				if (pParentIcon != NULL)
-				{
-					cd_debug ("%s requiert votre attention indirectement !", pParentIcon->cName);
-					cairo_dock_appli_demands_attention (pParentIcon);
-				}
-				else
-					cd_debug ("ce dialogue est bien bruyant ! (%d)", XMainAppliWindow);
-			}
-			return NULL;  // meme remarque.
+			if (bDemandsAttention)
+				*XParentWindow = XMainAppliWindow;
+			return NULL;
 		}
 	}
-	
 	
 	//\__________________ On recupere son nom.
 	gchar *cName = cairo_dock_get_xwindow_name (Xid, TRUE);
 	cd_debug ("recuperation de '%s' (bIsHidden : %d)", cName, bIsHidden);
-	
 	
 	//\__________________ On recupere la classe.
 	XClassHint *pClassHint = XAllocClassHint ();
@@ -388,7 +222,7 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	XFree (pClassHint);
 	
 	
-	//\__________________ On cree, on remplit l'icone, et on l'enregistre, par contre elle sera inseree plus tard.
+	//\__________________ On cree l'icone.
 	Icon *icon = g_new0 (Icon, 1);
 	icon->iType = CAIRO_DOCK_APPLI;
 	icon->Xid = Xid;
@@ -400,7 +234,6 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	icon->bIsMaximized = bIsMaximized;
 	icon->bIsFullScreen = bIsFullScreen;
 	icon->bIsDemandingAttention = bDemandsAttention;
-	icon->bHasIndicator = myTaskBar.bDrawIndicatorOnAppli;
 	icon->fOrder = CAIRO_DOCK_LAST_ORDER;
 	
 	icon->iNumDesktop = cairo_dock_get_xwindow_desktop (Xid);
@@ -415,27 +248,8 @@ Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid,
 	icon->windowGeometry.y = iLocalPositionY;
 	icon->windowGeometry.width = iWidthExtent;
 	icon->windowGeometry.height = iHeightExtent;
-	
-	//\____________ On remplit ses buffers.
-	#ifdef HAVE_XEXTEND
-	if (myTaskBar.iMinimizedWindowRenderType == 1)
-	{
-		Display *display = gdk_x11_get_default_xdisplay ();
-		icon->iBackingPixmap = XCompositeNameWindowPixmap (display, Xid);
-		/*icon->iDamageHandle = XDamageCreate (s_XDisplay, Xid, XDamageReportNonEmpty);  // XDamageReportRawRectangles
-		g_print ("backing pixmap : %d ; iDamageHandle : %d\n", icon->iBackingPixmap, icon->iDamageHandle);*/
-	}
-	#endif
-	
-	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pDock);
-	
-	if (icon->bIsHidden && myTaskBar.iMinimizedWindowRenderType == 2)
-	{
-		cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pDock), FALSE);
-	}
-	
-	//\____________ On enregistre l'appli et on commence a la surveiller.
-	cairo_dock_register_appli (icon);
+		
+	cairo_dock_set_xwindow_mask (Xid, PropertyChangeMask | StructureNotifyMask);
 
 	return icon;
 }

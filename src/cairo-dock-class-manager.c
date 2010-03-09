@@ -34,7 +34,7 @@
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-load.h"
-#include "cairo-dock-launcher-factory.h"
+#include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-container.h"

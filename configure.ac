@@ -5,6 +5,7 @@ AC_PREREQ(2.59)
 AC_INIT([cairo-dock], [2.1.4-0alpha1], [Fabrice Rey (fabounet@users.berlios.de)])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
+#AC_CONFIG_SUBDIRS([icon-factory])
 
 AM_INIT_AUTOMAKE([foreign])
 AC_PROG_LIBTOOL
@@ -21,6 +22,9 @@ AC_SUBST(CAIRO_DOCK_THEMES_DIR)
 
 # Checks for programs.
 AC_PROG_CC
+
+AC_PROG_INSTALL
+AC_PROG_RANLIB
 
 # Checks for libraries.
 
@@ -99,6 +103,7 @@ AC_SUBST(LIBCRYPT_LIBS)
 AC_CONFIG_FILES([Makefile
 		cairo-dock.pc
 		src/Makefile
+		src/icon-factory/Makefile
 		po/Makefile.in
 		data/Makefile
 		data/cairo-dock.conf

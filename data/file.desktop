@@ -13,7 +13,7 @@ render = 3
 Icon=
 
 #s URI of the file :
-Base URI = 
+Base URI = /home
 
 #l[None;5;10;20;30;All] Number of files to list in the sub-dock :
 Nb subicons = 3

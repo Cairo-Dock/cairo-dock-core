@@ -34,11 +34,8 @@
 #endif
 
 #include "cairo-dock-icons.h"
-#include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-load.h"
-#include "cairo-dock-application-factory.h"
-#include "cairo-dock-separator-factory.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-container.h"
@@ -50,7 +47,6 @@
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-dialogs.h"
-#include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-icons.h"
@@ -133,7 +129,13 @@ static void _on_change_desktop_geometry (void)
 	if (cairo_dock_update_screen_geometry ())  // modification de la resolution.
 	{
 		cd_message ("resolution alteree");
-		cairo_dock_reposition_root_docks (FALSE);  // main dock compris.
+		
+		/*if (myPosition.bUseXinerama)
+		{
+			cairo_dock_get_screen_offsets (myPosition.iNumScreen, &g_pMainDock->iScreenOffsetX, &g_pMainDock->iScreenOffsetY);  /// on le fait ici pour avoir g_desktopGeometry.iScreenWidth et g_desktopGeometry.iScreenHeight, mais il faudrait en faire un parametre par dock...
+		}*/
+		
+		cairo_dock_reposition_root_docks (FALSE);  // main dock compris. Se charge de Xinerama.
 	}
 	
 	cairo_dock_get_nb_viewports (&g_desktopGeometry.iNbViewportX, &g_desktopGeometry.iNbViewportY);
@@ -177,7 +179,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 		{
 			if (event.type == PropertyNotify)  // PropertyNotify sur root
 			{
-				if (event.xproperty.atom == s_aNetClientList/** && myTaskBar.bShowAppli*/)
+				if (event.xproperty.atom == s_aNetClientList)
 				{
 					cairo_dock_notify (CAIRO_DOCK_WINDOW_CONFIGURED, Xid, NULL);
 				}
@@ -214,7 +216,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 				}
 			}  // fin de PropertyNotify sur root.
 		}
-		else if (myTaskBar.bShowAppli)  // evenement sur une fenetre.
+		else  // evenement sur une fenetre.
 		{
 			if (event.type == PropertyNotify)  // PropertyNotify sur une fenetre
 			{
@@ -276,7 +278,6 @@ void cairo_dock_start_X_manager (void)
 	Display *pDisplay = cairo_dock_initialize_X_desktop_support ();  // renseigne la taille de l'ecran.
 	cairo_dock_initialize_class_manager ();
 	cairo_dock_initialize_application_manager (pDisplay);
-	cairo_dock_initialize_application_factory (pDisplay);
 	cairo_dock_initialize_X_manager (pDisplay);
 	
 	//\__________________ On recupere le bureau courant.

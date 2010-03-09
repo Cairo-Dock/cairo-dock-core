@@ -1,5 +1,5 @@
 
-SUBDIRS = .
+SUBDIRS = icon-factory
 
 bin_PROGRAMS = \
 	cairo-dock
@@ -19,6 +19,7 @@ endif
 cairo_dock_CFLAGS = \
 	$(PACKAGE_CFLAGS) \
 	$(GLITZ_CFLAGS) \
+	-Iicon-factory \
 	$(have_glitz)\
 	$(XEXTEND_CFLAGS) \
 	$(have_xextend)\
@@ -26,10 +27,6 @@ cairo_dock_CFLAGS = \
 	-DCAIRO_DOCK_SHARE_DATA_DIR=\""$(pkgdatadir)"\"\
 	-DCAIRO_DOCK_SHARE_THEMES_DIR=\""$(pkgdatadir)/themes"\"\
 	-DCAIRO_DOCK_CONF_FILE=\""cairo-dock.conf"\"\
-	-DCAIRO_DOCK_LAUNCHER_CONF_FILE=\""launcher.desktop"\"\
-	-DCAIRO_DOCK_FILE_CONF_FILE=\""file.desktop"\"\
-	-DCAIRO_DOCK_CONTAINER_CONF_FILE=\""container.desktop"\"\
-	-DCAIRO_DOCK_SEPARATOR_CONF_FILE=\""separator.desktop"\"\
 	-DCAIRO_DOCK_MAIN_DOCK_CONF_FILE=\""main-dock.conf"\"\
 	-DCAIRO_DOCK_DEFAULT_ICON_NAME=\""default-icon.svg"\"\
 	-DCAIRO_DOCK_DEFAULT_APPLI_ICON_NAME=\""default-icon-appli.svg"\"\
@@ -58,13 +55,14 @@ cairo_dock_LDFLAGS = \
 	-Wl,--export-dynamic
 
 cairo_dock_LDADD = \
+	icon-factory/libicon.a\
 	$(GLITZ_LIBS) \
 	$(XEXTEND_LIBS) \
 	$(LIBCRYPT_LIBS) \
 	$(PACKAGE_LIBS)
 
 cairo_dock_SOURCES = \
-	cairo-dock-struct.h\
+		cairo-dock-struct.h\
 	cairo-dock-global-variables.h \
 	cairo-dock-callbacks.c \
 	cairo-dock-callbacks.h \
@@ -80,22 +78,18 @@ cairo_dock_SOURCES = \
 	cairo-dock-icons.c \
 	cairo-dock-applications-manager.c \
 	cairo-dock-applications-manager.h \
+	cairo-dock-launcher-manager.c\
+	cairo-dock-launcher-manager.h\
+	cairo-dock-applet-manager.c\
+	cairo-dock-applet-manager.h\
+	cairo-dock-separator-manager.c\
+	cairo-dock-separator-manager.h\
 	cairo-dock-menu.c \
 	cairo-dock-menu.h \
 	cairo-dock-modules.c \
 	cairo-dock-modules.h\
-	cairo-dock-launcher-factory.c\
-	cairo-dock-launcher-factory.h\
-	cairo-dock-application-factory.c\
-	cairo-dock-application-factory.h\
 	cairo-dock-application-facility.c\
 	cairo-dock-application-facility.h\
-	cairo-dock-applet-factory.c\
-	cairo-dock-applet-factory.h\
-	cairo-dock-separator-factory.c\
-	cairo-dock-separator-factory.h\
-	cairo-dock-desktop-file-factory.c\
-	cairo-dock-desktop-file-factory.h\
 	cairo-dock-keyfile-utilities.c\
 	cairo-dock-keyfile-utilities.h\
 	cairo-dock-dock-factory.c\
@@ -196,7 +190,6 @@ cairo_dock_SOURCES = \
 	cairo-dock-gui-themes.c\
 	cairo-dock-gui-themes.h
 	
-	
 
 cairo_dockincludedir =\
 	$(includedir)/cairo-dock
@@ -219,12 +212,10 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-modules.h\
 	cairo-dock-global-variables.h\
 	cairo-dock-applications-manager.h\
-	cairo-dock-application-factory.h\
+	cairo-dock-launcher-manager.h\
+	cairo-dock-separator-manager.h\
+	cairo-dock-applet-manager.h\
 	cairo-dock-application-facility.h\
-	cairo-dock-launcher-factory.h\
-	cairo-dock-applet-factory.h\
-	cairo-dock-separator-factory.h\
-	cairo-dock-desktop-file-factory.h\
 	cairo-dock-keyfile-utilities.h\
 	cairo-dock-dock-factory.h\
 	cairo-dock-themes-manager.h\
@@ -241,6 +232,7 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-desklet.h\
 	cairo-dock-log.h\
 	cairo-dock-X-utilities.h\
+	cairo-dock-X-manager.h\
 	cairo-dock-gauge.h\
 	cairo-dock-dock-manager.h\
 	cairo-dock-class-manager.h\

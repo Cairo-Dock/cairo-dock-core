@@ -38,7 +38,7 @@
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-desktop-file-factory.h"
-#include "cairo-dock-launcher-factory.h"
+#include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-modules.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
@@ -462,22 +462,7 @@ static void _cairo_dock_create_launcher (Icon *icon, CairoDock *pDock, CairoDock
 		fOrder = CAIRO_DOCK_LAST_ORDER;
 	
 	//\___________________ On cree et on charge l'icone a partir d'un des templates.
-	const gchar *cTemplate;
-	switch (iLauncherType)
-	{
-		case CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER :
-			cTemplate = CAIRO_DOCK_CONTAINER_CONF_FILE;
-		break ;
-		case CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER :
-			cTemplate = CAIRO_DOCK_LAUNCHER_CONF_FILE;
-		break ;
-		case CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR :
-			cTemplate = CAIRO_DOCK_SEPARATOR_CONF_FILE;
-		break ;
-		default :
-		return ;
-	}
-	Icon *pNewIcon = cairo_dock_add_new_launcher_by_uri (cTemplate, pDock, fOrder);
+	Icon *pNewIcon = cairo_dock_add_new_launcher_by_type (iLauncherType, pDock, fOrder);
 	if (pNewIcon == NULL)
 	{
 		cd_warning ("Couldn't create create the icon.\nCheck that you have writing permissions on ~/.config/cairo-dock and its sub-folders");

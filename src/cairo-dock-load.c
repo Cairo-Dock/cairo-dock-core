@@ -34,10 +34,9 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-launcher-factory.h"
-#include "cairo-dock-application-factory.h"
-#include "cairo-dock-separator-factory.h"
-#include "cairo-dock-applet-factory.h"
+#include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-separator-manager.h"
+#include "cairo-dock-applet-manager.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-modules.h"
 #include "cairo-dock-log.h"
@@ -57,6 +56,7 @@
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-emblem.h"
 #include "cairo-dock-X-manager.h"
+#include "cairo-dock-applications-manager.h"
 #include "cairo-dock-load.h"
 
 extern CairoDock *g_pMainDock;

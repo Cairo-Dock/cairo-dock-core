@@ -40,7 +40,7 @@
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-load.h"
-#include "cairo-dock-launcher-factory.h" // cairo_dock_launch_command_sync
+#include "cairo-dock-launcher-manager.h" // cairo_dock_launch_command_sync
 
 #define CAIRO_DOCK_GUI_MARGIN 4
 #define CAIRO_DOCK_ICON_MARGIN 6

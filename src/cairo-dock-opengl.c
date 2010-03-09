@@ -306,12 +306,10 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering
 
 void cairo_dock_create_icon_fbo (void)  // it has been found that you get a speed boost if your textures is the same size and you use 1 FBO for them. => c'est le cas general dans le dock. Du coup on est gagnant a ne faire qu'un seul FBO pour toutes les icones.
 {
-	g_return_if_fail (g_openglConfig.iFboId == 0);
 	if (! g_openglConfig.bFboAvailable)
-	{
-		cd_warning ("No FBO support, applets can't draw themselves inside the dock.");
-		return;
-	}
+		return ;
+	g_return_if_fail (g_openglConfig.iFboId == 0);
+	
 	glGenFramebuffersEXT(1, &g_openglConfig.iFboId);
 	
 	int iWidth = 0, iHeight = 0;
@@ -713,6 +711,8 @@ static void _cairo_dock_post_initialize_opengl_backend (GtkWidget* pWidget, gpoi
 	bChecked = TRUE;
 	g_openglConfig.bNonPowerOfTwoAvailable = _check_gl_extension ("GL_ARB_texture_non_power_of_two");
 	g_openglConfig.bFboAvailable = _check_gl_extension ("GL_EXT_framebuffer_object");
+	if (!g_openglConfig.bFboAvailable)
+		cd_warning ("No FBO support, some applets will be invisible if placed inside the dock.");
 	
 	g_print ("OpenGL config summary :\n - bNonPowerOfTwoAvailable : %d\n - bFboAvailable : %d\n - direct rendering : %d\n - bTextureFromPixmapAvailable : %d\n - OpenGL version: %s\n - OpenGL vendor: %s\n - OpenGL renderer: %s\n\n",
 		g_openglConfig.bNonPowerOfTwoAvailable,

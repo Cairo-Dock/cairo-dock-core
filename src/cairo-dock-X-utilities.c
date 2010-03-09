@@ -35,12 +35,8 @@
 #include <X11/extensions/shape.h>
 #endif
 
-#include "cairo-dock-container.h"
-#include "cairo-dock-X-manager.h"
-#include "cairo-dock-application-factory.h"
-#include "cairo-dock-class-manager.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-internal-position.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-X-utilities.h"
 
 extern CairoDockDesktopGeometry g_desktopGeometry;
@@ -172,17 +168,11 @@ gboolean cairo_dock_update_screen_geometry (void)
 		g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
 		g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
 		
-		if (myPosition.bUseXinerama)
-		{
-			cairo_dock_get_screen_offsets (myPosition.iNumScreen, &g_pMainDock->iScreenOffsetX, &g_pMainDock->iScreenOffsetY);  /// on le fait ici pour avoir g_desktopGeometry.iScreenWidth et g_desktopGeometry.iScreenHeight, mais il faudrait en faire un parametre par dock...
-		}
-		else
-		{
-			g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-			g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-			g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
-			g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-		}
+		g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+		g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+		g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
+		g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];  // si on utilise Xinerama, on mettra les valeurs correctes plus tard.
+		
 		cd_message ("new screen size : %dx%d\n", g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		return TRUE;
 	}

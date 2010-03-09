@@ -51,6 +51,8 @@ void cairo_dock_stop_application_manager (void);
 */
 gboolean cairo_dock_application_manager_is_running (void);
 
+Icon * cairo_dock_create_icon_from_xwindow (Window Xid, cairo_t *pSourceContext, CairoDock *pDock);
+
 
 // Applis manager : access
 /** Get the icon of an application whose window covers a dock, or NULL if none. If both parameters are FALSE, check for all windows.
@@ -96,6 +98,12 @@ void cairo_dock_foreach_applis (CairoDockForeachIconFunc pFunction, gboolean bOu
 void cairo_dock_foreach_applis_on_viewport (CairoDockForeachIconFunc pFunction, int iNumDesktop, int iNumViewportX, int iNumViewportY, gpointer pUserData);
 
 void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock);
+
+
+
+cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);
+
+cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);
 
 
 G_END_DECLS

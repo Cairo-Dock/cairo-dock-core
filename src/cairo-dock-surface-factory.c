@@ -25,7 +25,7 @@
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-launcher-factory.h"
+#include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-surface-factory.h"
 

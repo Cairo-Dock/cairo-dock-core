@@ -17,26 +17,23 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CAIRO_DOCK_APPLICATION_FACTORY__
-#define  __CAIRO_DOCK_APPLICATION_FACTORY__
+
+#ifndef __CAIRO_DOCK_SEPARATOR_FACTORY__
+#define  __CAIRO_DOCK_SEPARATOR_FACTORY__
 
 #include <glib.h>
-#include <X11/Xlib.h>
 
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
 
-void cairo_dock_initialize_application_factory (Display *pXDisplay);
-
-
-cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);
-
-cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);
-
-
-Icon * cairo_dock_create_icon_from_xwindow (cairo_t *pSourceContext, Window Xid, CairoDock *pDock);
+/** Create an icon that will act as a separator.
+*@param iSeparatorType the type of separator (CAIRO_DOCK_SEPARATOR12, CAIRO_DOCK_SEPARATOR23 or any other odd number)
+*@return the newly allocated icon.
+*/
+Icon *cairo_dock_new_separator_icon (int iSeparatorType);
 
 
 G_END_DECLS
 #endif
+

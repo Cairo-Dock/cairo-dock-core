@@ -30,7 +30,6 @@ G_BEGIN_DECLS
 *@file cairo-dock-desktop-file-factory.h This class handles the creation of desktop files, which are group/key pair files used by Cairo-Dock to store information about icons : launchers and files, separators, sub-docks.
 */
 
-
 typedef enum {
 	CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER = 0,
 	CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER,
@@ -44,40 +43,21 @@ typedef enum {
 */
 void cairo_dock_remove_html_spaces (gchar *cString);
 
-gchar *cairo_dock_add_desktop_file_from_uri_full (const gchar *cURI, const gchar *cDockName, double fOrder, CairoDockDesktopFileType iNewLauncherType, CairoDock *pDock, GError **erreur);
-
-/** Create, add and fill a desktop file for a given URI. The URI can be either a common desktop file, a script, or a fule/folder/mounting point.
+/** Create, add and fill a desktop file for a given URI. The URI can be either a common desktop file, a script, or a file/folder/mounting point.
 *@param cURI URI of a file defining the launcher.
 *@param cDockName name of the dock the separator will be added.
 *@param fOrder order of the icon inside the dock.
-*@param pDock the dock that will hold the icon.
 *@param erreur an error filled if something went wrong.
 */
-#define cairo_dock_add_desktop_file_from_uri(cURI, cDockName, fOrder, pDock, erreur) cairo_dock_add_desktop_file_from_uri_full (cURI, cDockName, fOrder, CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER, pDock, erreur)
+gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDockName, double fOrder, GError **erreur);
 
-/** Create and add a desktop file for a launcher.
-*@param cDockName name of the dock the launcher will be added.
-*@param fOrder order of the icon inside the dock.
-*@param pDock the dock that will hold the icon.
-*@param erreur an error filled if something went wrong.
-*/
-#define cairo_dock_add_desktop_file_for_launcher(cDockName, fOrder, pDock, erreur) cairo_dock_add_desktop_file_from_uri_full (NULL, cDockName, fOrder, CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER, pDock, erreur)
-
-/** Create and add a desktop file for a sub-dock.
+/** Create and add an empty default desktop file for a given type.
+*@param iType type of a launcher.
 *@param cDockName name of the dock the separator will be added.
 *@param fOrder order of the icon inside the dock.
-*@param pDock the dock that will hold the icon.
 *@param erreur an error filled if something went wrong.
 */
-#define cairo_dock_add_desktop_file_for_container(cDockName, fOrder, pDock, erreur) cairo_dock_add_desktop_file_from_uri_full (NULL, cDockName, fOrder, CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER, pDock, erreur)
-
-/** Create and add a desktop file for a separator.
-*@param cDockName name of the dock the separator will be added.
-*@param fOrder order of the icon inside the dock.
-*@param pDock the dock that will hold the icon.
-*@param erreur an error filled if something went wrong.
-*/
-#define cairo_dock_add_desktop_file_for_separator(cDockName, fOrder, pDock, erreur) cairo_dock_add_desktop_file_from_uri_full (NULL, cDockName, fOrder, CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR, pDock, erreur)
+gchar *cairo_dock_add_desktop_file_from_type (CairoDockDesktopFileType iLauncherType, const gchar *cDockName, double fOrder, GError **erreur);
 
 
 void cairo_dock_update_launcher_desktop_file (gchar *cDesktopFilePath, CairoDockDesktopFileType iLauncherType);

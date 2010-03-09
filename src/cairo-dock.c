@@ -108,7 +108,7 @@
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-launcher.h"
-#include "cairo-dock-launcher-factory.h"
+#include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-dbus.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-internal-icons.h"
