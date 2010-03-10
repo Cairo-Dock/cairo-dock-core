@@ -494,7 +494,7 @@ int main (int argc, char** argv)
 		bOpenGLok = cairo_dock_initialize_opengl_backend (bToggleIndirectRendering, bForceOpenGL);
 	if (bOpenGLok && ! bForceOpenGL && ! bToggleIndirectRendering && ! cairo_dock_opengl_is_safe ())  // opengl disponible sans l'avoir force mais pas safe => on demande confirmation.
 	{
-		GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Use OpenGL in Cairo-Dock ?"),
+		GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Use OpenGL in Cairo-Dock"),
 			NULL,
 			GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_STOCK_YES,
@@ -632,7 +632,7 @@ int main (int argc, char** argv)
 				if (iAnswer == GTK_RESPONSE_YES)
 				{
 					int r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true");
-					cairo_dock_show_dialog_with_question (_("Do you want to keep this setting ?"), pIcon, CAIRO_CONTAINER (g_pMainDock), NULL, (CairoDockActionOnAnswerFunc) _accept_metacity_composition, NULL, NULL);
+					cairo_dock_show_dialog_with_question (_("Do you want to keep this setting?"), pIcon, CAIRO_CONTAINER (g_pMainDock), NULL, (CairoDockActionOnAnswerFunc) _accept_metacity_composition, NULL, NULL);
 				}
 			}
 			else  // sinon il a droit a un "message a caractere informatif".

@@ -405,7 +405,7 @@ static GtkWidget * show_main_gui (void)
 	//\_____________ On construit la fenetre.
 	cairo_dock_build_generic_gui (cConfFilePath,
 		NULL,
-		_("Configuration of Cairo-Dock"),
+		_("Cairo-Dock configuration"),
 		CAIRO_DOCK_SIMPLE_PANEL_WIDTH, CAIRO_DOCK_SIMPLE_PANEL_HEIGHT,
 		(CairoDockApplyConfigFunc) on_apply_config_simple,
 		NULL,

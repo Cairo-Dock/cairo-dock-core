@@ -82,7 +82,7 @@ static void reload (CairoConfigViews *pPrevViews, CairoConfigViews *pViews)
 
 DEFINE_PRE_INIT (Views)
 {
-	static const gchar *cDependencies[3] = {"dock rendering", N_("It provides different views to Cairo-Dock. Activate it first if you want to select a different view for your docks."), NULL};
+	static const gchar *cDependencies[3] = {"dock rendering", N_("Provides different views for Cairo-Dock. Enable this first if you want to select a different view for your docks."), NULL};
 	pModule->cModuleName = "Views";
 	pModule->cTitle = N_("Views");
 	pModule->cIcon = "icon-views.svg";

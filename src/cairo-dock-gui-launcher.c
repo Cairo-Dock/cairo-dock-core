@@ -373,7 +373,7 @@ static inline gboolean _select_item (Icon *pIcon)
 	}
 	else
 	{
-		gtk_window_set_title (GTK_WINDOW (s_pLauncherWindow), _("Configuration of the launchers"));
+		gtk_window_set_title (GTK_WINDOW (s_pLauncherWindow), _("Launcher configuration"));
 		g_object_set_data (G_OBJECT (s_pLauncherWindow), "current-icon", NULL);
 		return FALSE;
 	}

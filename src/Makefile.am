@@ -70,14 +70,8 @@ cairo_dock_SOURCES = \
 	cairo-dock-applications-manager.h \
 	cairo-dock-application-facility.c\
 	cairo-dock-application-facility.h\
-	cairo-dock-launcher-manager.c\
-	cairo-dock-launcher-manager.h\
-	cairo-dock-applet-manager.c\
-	cairo-dock-applet-manager.h\
 	cairo-dock-applet-facility.c\
 	cairo-dock-applet-facility.h\
-	cairo-dock-separator-manager.c\
-	cairo-dock-separator-manager.h\
 	cairo-dock-modules.c \
 	cairo-dock-modules.h\
 	cairo-dock-container.c\

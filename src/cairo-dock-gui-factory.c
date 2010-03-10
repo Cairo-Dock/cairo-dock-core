@@ -1101,7 +1101,7 @@ static void _cairo_dock_render_category (GtkTreeViewColumn *tree_column, GtkCell
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
 		case CAIRO_DOCK_CATEGORY_APPLET_CONTROLER:
-			cCategory = _("Controler");
+			cCategory = _("Controller");
 			g_object_set (cell, "foreground", "#004EA1", NULL);  // bleu
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
@@ -1270,9 +1270,9 @@ static void _change_rating (GtkCellRendererText * cell, gchar * path_string, gch
 		if (pIcon != NULL)
 			pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
 		if (pDock != NULL)
-			cairo_dock_show_temporary_dialog_with_icon (_("You have to try the theme before you can rate it."), pIcon, CAIRO_CONTAINER (pDock), 3000, "same icon");
+			cairo_dock_show_temporary_dialog_with_icon (_("You must try the theme before you can rate it."), pIcon, CAIRO_CONTAINER (pDock), 3000, "same icon");
 		else
-			cairo_dock_show_general_message (_("You have to try the theme before you can rate it."), 3000);
+			cairo_dock_show_general_message (_("You must try the theme before you can rate it."), 3000);
 	}
 	///g_free (cDisplayedName);
 	g_free (cThemeName);
@@ -2170,7 +2170,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_pack_in_widget_box (pPreviewBox);
 				
 				//\______________ On affiche un message par defaut.
-				gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description of it."));
+				gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description for it."));
 				gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), cDefaultMessage);
 				g_free (cDefaultMessage);
 				_set_preview_image (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO, GTK_IMAGE (pPreviewImage));
@@ -2534,7 +2534,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
 				// nom du theme
 				rend = gtk_cell_renderer_text_new ();
-				col = gtk_tree_view_column_new_with_attributes (_("theme"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+				col = gtk_tree_view_column_new_with_attributes (_("Theme"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
 				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_NAME);
 				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
 				// note
@@ -2547,13 +2547,13 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					"editable", TRUE,
 					NULL);
 				g_signal_connect (G_OBJECT (rend), "edited", (GCallback) _change_rating, modele);
-				col = gtk_tree_view_column_new_with_attributes (_("rating"), rend, "text", CAIRO_DOCK_MODEL_ORDER, NULL);
+				col = gtk_tree_view_column_new_with_attributes (_("Rating"), rend, "text", CAIRO_DOCK_MODEL_ORDER, NULL);
 				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_ORDER);
 				gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_rating, NULL, NULL);
 				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
 				// sobriete
 				rend = gtk_cell_renderer_text_new ();
-				col = gtk_tree_view_column_new_with_attributes (_("sobriety"), rend, "text", CAIRO_DOCK_MODEL_ORDER2, NULL);
+				col = gtk_tree_view_column_new_with_attributes (_("Sobriety"), rend, "text", CAIRO_DOCK_MODEL_ORDER2, NULL);
 				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_ORDER2);
 				gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_sobriety, NULL, NULL);
 				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
@@ -2692,7 +2692,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				}
 				else if (iElementType == CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR || iElementType == CAIRO_DOCK_WIDGET_CLASS_SELECTOR)  // on ajoute un selecteur de touches/classe.
 				{
-					GtkWidget *pGrabKeyButton = gtk_button_new_with_label(_("grab"));
+					GtkWidget *pGrabKeyButton = gtk_button_new_with_label(_("Grab"));
 					_allocate_new_buffer;
 					data[0] = pOneWidget;
 					data[1] = pMainWindow;

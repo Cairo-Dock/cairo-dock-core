@@ -161,7 +161,7 @@ DEFINE_PRE_INIT (Indicators)
 	pModule->cModuleName = "Indicators";
 	pModule->cTitle = N_("Indicators");
 	pModule->cIcon = "icon-indicators.svg";
-	pModule->cDescription = N_("Indicators are extra indications on your icons.");
+	pModule->cDescription = N_("Indicators are additional markers for your icons.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigIndicators);
 	pModule->iSizeOfData = 0;

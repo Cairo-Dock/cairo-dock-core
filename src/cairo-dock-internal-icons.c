@@ -427,7 +427,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 
 DEFINE_PRE_INIT (Icons)
 {
-	static const gchar *cDependencies[3] = {"Animated icons", N_("It provides many animations to your icons."), NULL};
+	static const gchar *cDependencies[3] = {"Animated icons", N_("Provides various animations for your icons."), NULL};
 	pModule->cModuleName = "Icons";
 	pModule->cTitle = N_("Icons");
 	pModule->cIcon = "icon-icons.svg";
