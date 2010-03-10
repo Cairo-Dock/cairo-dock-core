@@ -507,7 +507,22 @@ void cairo_dock_destroy_desklet (CairoDesklet *pDesklet)
 }
 
 
-static gboolean _cairo_dock_reload_one_desklet_decorations (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, gpointer data)
+CairoDesklet *cairo_dock_foreach_desklet (CairoDockForeachDeskletFunc pCallback, gpointer user_data)
+{
+	gpointer data[3] = {pCallback, user_data, NULL};
+	CairoDesklet *pDesklet;
+	GList *dl;
+	for (dl = s_pDeskletList; dl != NULL; dl = dl->next)
+	{
+		pDesklet = dl->data;
+		if (pCallback (pDesklet, user_data))
+			return pDesklet;
+	}
+	
+	return NULL;
+}
+
+static gboolean _cairo_dock_reload_one_desklet_decorations (CairoDesklet *pDesklet, gpointer data)
 {
 	gboolean bDefaultThemeOnly = GPOINTER_TO_INT (data);
 	
@@ -532,11 +547,16 @@ static gboolean _cairo_dock_reload_one_desklet_decorations (CairoDesklet *pDeskl
 void cairo_dock_reload_desklets_decorations (gboolean bDefaultThemeOnly)  // tous ou bien seulement ceux avec "default".
 {
 	cd_message ("%s (%d)", __func__, bDefaultThemeOnly);
-	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc)_cairo_dock_reload_one_desklet_decorations, GINT_TO_POINTER (bDefaultThemeOnly));
+	CairoDesklet *pDesklet;
+	GList *dl;
+	for (dl = s_pDeskletList; dl != NULL; dl = dl->next)
+	{
+		pDesklet = dl->data;
+		_cairo_dock_reload_one_desklet_decorations (pDesklet, GINT_TO_POINTER (bDefaultThemeOnly));
+	}
 }
 
-
-static gboolean _cairo_dock_set_one_desklet_visible (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, gpointer data)
+static void _cairo_dock_set_one_desklet_visible (CairoDesklet *pDesklet, gpointer data)
 {
 	gboolean bOnWidgetLayerToo = GPOINTER_TO_INT (data);
 	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
@@ -544,7 +564,6 @@ static gboolean _cairo_dock_set_one_desklet_visible (CairoDesklet *pDesklet, Cai
 	if (bOnWidgetLayerToo || ! bIsOnWidgetLayer)
 	{
 		cd_debug ("%s (%d)", __func__, Xid);
-		
 		if (bIsOnWidgetLayer)  // on le passe sur la couche visible.
 			cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
 		
@@ -552,39 +571,54 @@ static gboolean _cairo_dock_set_one_desklet_visible (CairoDesklet *pDesklet, Cai
 		
 		cairo_dock_show_desklet (pDesklet);
 	}
-	return FALSE;
 }
 void cairo_dock_set_all_desklets_visible (gboolean bOnWidgetLayerToo)
 {
 	cd_debug ("%s (%d)", __func__, bOnWidgetLayerToo);
-	cairo_dock_foreach_desklet (_cairo_dock_set_one_desklet_visible, GINT_TO_POINTER (bOnWidgetLayerToo));
+	CairoDesklet *pDesklet;
+	GList *dl;
+	for (dl = s_pDeskletList; dl != NULL; dl = dl->next)
+	{
+		pDesklet = dl->data;
+		_cairo_dock_set_one_desklet_visible (pDesklet, GINT_TO_POINTER (bOnWidgetLayerToo));
+	}
 }
 
-static gboolean _cairo_dock_set_one_desklet_visibility_to_default (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, CairoDockMinimalAppletConfig *pMinimalConfig)
+static void _cairo_dock_set_one_desklet_visibility_to_default (CairoDesklet *pDesklet, CairoDockMinimalAppletConfig *pMinimalConfig)
 {
-	GKeyFile *pKeyFile = cairo_dock_pre_read_module_instance_config (pInstance, pMinimalConfig);
-	g_key_file_free (pKeyFile);
-	
-	cairo_dock_set_desklet_accessibility (pDesklet, pMinimalConfig->deskletAttribute.iAccessibility, FALSE);
-	
+	if (pDesklet->pIcon != NULL)
+	{
+		CairoDockModuleInstance *pInstance = pDesklet->pIcon->pModuleInstance;
+		GKeyFile *pKeyFile = cairo_dock_pre_read_module_instance_config (pInstance, pMinimalConfig);
+		g_key_file_free (pKeyFile);
+		
+		cairo_dock_set_desklet_accessibility (pDesklet, pMinimalConfig->deskletAttribute.iAccessibility, FALSE);
+	}
 	pDesklet->bAllowMinimize = FALSE;  /// utile ?...
-	
-	return FALSE;
 }
 void cairo_dock_set_desklets_visibility_to_default (void)
 {
 	CairoDockMinimalAppletConfig minimalConfig;
-	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _cairo_dock_set_one_desklet_visibility_to_default, &minimalConfig);
+	CairoDesklet *pDesklet;
+	GList *dl;
+	for (dl = s_pDeskletList; dl != NULL; dl = dl->next)
+	{
+		pDesklet = dl->data;
+		_cairo_dock_set_one_desklet_visibility_to_default (pDesklet, &minimalConfig);
+	}
 }
 
-static gboolean _cairo_dock_test_one_desklet_Xid (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, Window *pXid)
-{
-	return (GDK_WINDOW_XID (pDesklet->container.pWidget->window) == *pXid);
-}
 CairoDesklet *cairo_dock_get_desklet_by_Xid (Window Xid)
 {
-	CairoDockModuleInstance *pInstance = cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _cairo_dock_test_one_desklet_Xid, &Xid);
-	return (pInstance != NULL ? pInstance->pDesklet : NULL);
+	CairoDesklet *pDesklet;
+	GList *dl;
+	for (dl = s_pDeskletList; dl != NULL; dl = dl->next)
+	{
+		pDesklet = dl->data;
+		if (GDK_WINDOW_XID (pDesklet->container.pWidget->window) == Xid)
+			return pDesklet;
+	}
+	return NULL;
 }
 
 

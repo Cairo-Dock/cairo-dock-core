@@ -210,7 +210,7 @@ void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer)
 
 
 
-static gboolean _cairo_dock_search_icon_in_desklet (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, Icon *icon)
+static gboolean _cairo_dock_search_icon_in_desklet (CairoDesklet *pDesklet, Icon *icon)
 {
 	if (pDesklet->icons != NULL)
 	{
@@ -238,9 +238,8 @@ CairoContainer *cairo_dock_search_container_from_icon (Icon *icon)
 	}
 	else
 	{
-		CairoDockModuleInstance *pApplet = cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc)_cairo_dock_search_icon_in_desklet, icon);
-		if (pApplet != NULL)
-			return pApplet->pContainer;
+		CairoDesklet *pDesklet = cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc)_cairo_dock_search_icon_in_desklet, icon);
+		return CAIRO_CONTAINER (pDesklet);
 	}
 }
 

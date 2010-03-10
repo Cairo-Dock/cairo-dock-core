@@ -274,7 +274,6 @@ void cairo_dock_configure_module (GtkWindow *pParentWindow, const gchar *cModule
 */
 CairoDockModule *cairo_dock_find_module_from_name (const gchar *cModuleName);
 
-CairoDockModuleInstance *cairo_dock_foreach_desklet (CairoDockForeachDeskletFunc pCallback, gpointer user_data);
 CairoDockModule *cairo_dock_foreach_module (GHRFunc pCallback, gpointer user_data);
 CairoDockModule *cairo_dock_foreach_module_in_alphabetical_order (GCompareFunc pCallback, gpointer user_data);
 
@@ -292,6 +291,7 @@ void cairo_dock_deinstanciate_module (CairoDockModuleInstance *pInstance);
 void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance);
 void cairo_dock_add_module_instance (CairoDockModule *pModule);
 void cairo_dock_detach_module_instance (CairoDockModuleInstance *pInstance);
+void cairo_dock_detach_module_instance_at_position (CairoDockModuleInstance *pInstance, int iCenterX, int iCenterY);
 
 void cairo_dock_read_module_config (GKeyFile *pKeyFile, CairoDockModuleInstance *pInstance);
 

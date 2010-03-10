@@ -36,6 +36,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-applet-manager.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-internal-icons.h"
@@ -62,6 +63,7 @@ extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
+extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bEasterEggs;
 
 static GHashTable *s_hModuleTable = NULL;
@@ -978,36 +980,6 @@ CairoDockModule *cairo_dock_find_module_from_name (const gchar *cModuleName)
 
 
 
-static gboolean _cairo_dock_for_one_desklet (gchar *cModuleName, CairoDockModule *pModule, gpointer *data)
-{
-	GList *pElement;
-	CairoDockModuleInstance *pInstance;
-	for (pElement = pModule->pInstancesList; pElement != NULL; pElement = pElement->next)
-	{
-		pInstance = pElement->data;
-		if (pInstance->pDesklet)
-		{
-			CairoDockForeachDeskletFunc pCallback = data[0];
-			gpointer user_data = data[1];
-			
-			if (pCallback (pInstance->pDesklet, pInstance, user_data))
-			{
-				data[2] = pInstance;
-				return TRUE;
-			}
-		}
-		
-	}
-	
-	return FALSE;
-}
-CairoDockModuleInstance *cairo_dock_foreach_desklet (CairoDockForeachDeskletFunc pCallback, gpointer user_data)
-{
-	gpointer data[3] = {pCallback, user_data, NULL};
-	g_hash_table_find (s_hModuleTable, (GHRFunc) _cairo_dock_for_one_desklet, data);
-	return data[2];
-}
-
 CairoDockModule *cairo_dock_foreach_module (GHRFunc pCallback, gpointer user_data)
 {
 	return g_hash_table_find (s_hModuleTable, (GHRFunc) pCallback, user_data);
@@ -1312,16 +1284,52 @@ void cairo_dock_add_module_instance (CairoDockModule *pModule)
 
 void cairo_dock_detach_module_instance (CairoDockModuleInstance *pInstance)
 {
-	gboolean bIsInDock = (pInstance->pDock != NULL);
+	g_return_if_fail (pInstance->pDesklet == NULL);
+	//\__________________ On enregistre l'etat 'detache'.
 	cairo_dock_update_conf_file (pInstance->cConfFilePath,
-		G_TYPE_BOOLEAN, "Desklet", "initially detached", bIsInDock,
+		G_TYPE_BOOLEAN, "Desklet", "initially detached", TRUE,
 		G_TYPE_INVALID);
-	cairo_dock_update_desklet_detached_state_in_gui (pInstance, bIsInDock);
+	//\__________________ On met a jour le panneau de conf s'il etait ouvert sur cette applet.
+	cairo_dock_update_desklet_detached_state_in_gui (pInstance, TRUE);
+	//\__________________ On detache l'applet.
 	cairo_dock_reload_module_instance (pInstance, TRUE);
-	if (pInstance->pDesklet)  // on a detache l'applet.
+	if (pInstance->pDesklet)  // on a bien detache l'applet.
 		cairo_dock_zoom_out_desklet (pInstance->pDesklet);
 }
 
+void cairo_dock_detach_module_instance_at_position (CairoDockModuleInstance *pInstance, int iCenterX, int iCenterY)
+{
+	g_return_if_fail (pInstance->pDesklet == NULL);
+	//\__________________ On enregistre les nouvelles coordonnees qu'aura le desklet, ainsi que l'etat 'detache'.
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (pInstance->cConfFilePath);
+	if (pKeyFile != NULL)
+	{
+		int iDeskletWidth = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "width", NULL, 92, NULL, NULL);
+		int iDeskletHeight = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "height", NULL, 92, NULL, NULL);
+		
+		int iDeskletPositionX = iCenterX - iDeskletWidth/2;
+		int iDeskletPositionY = iCenterY - iDeskletHeight/2;
+		
+		int iRelativePositionX = (iDeskletPositionX + iDeskletWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionX : iDeskletPositionX - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
+		int iRelativePositionY = (iDeskletPositionY + iDeskletHeight/2 <= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionY : iDeskletPositionY - g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+		
+		g_key_file_set_double (pKeyFile, "Desklet", "x position", iDeskletPositionX);
+		g_key_file_set_double (pKeyFile, "Desklet", "y position", iDeskletPositionY);
+		g_key_file_set_boolean (pKeyFile, "Desklet", "initially detached", TRUE);
+		
+		cairo_dock_write_keys_to_file (pKeyFile, pInstance->cConfFilePath);
+		g_key_file_free (pKeyFile);
+		
+		//\__________________ On met a jour le panneau de conf s'il etait ouvert sur cette applet.
+		cairo_dock_update_desklet_position_in_gui (pInstance, iDeskletPositionX, iDeskletPositionY);
+		cairo_dock_update_desklet_detached_state_in_gui (pInstance, TRUE);
+	}
+	
+	//\__________________ On detache l'applet.
+	cairo_dock_reload_module_instance (pInstance, TRUE);
+	if (pInstance->pDesklet)  // on a bien detache l'applet.
+		cairo_dock_zoom_out_desklet (pInstance->pDesklet);
+}
 
 void cairo_dock_read_module_config (GKeyFile *pKeyFile, CairoDockModuleInstance *pInstance)
 {

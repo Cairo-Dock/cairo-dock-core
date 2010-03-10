@@ -87,6 +87,7 @@ static void reload (CairoConfigDesklets *pPrevDesklets, CairoConfigDesklets *pDe
 		cairo_dock_strings_differ (pPrevDesklets->cDepthRotateButtonImage, pDesklets->cDepthRotateButtonImage) ||
 		cairo_dock_strings_differ (pPrevDesklets->cNoInputButtonImage, pDesklets->cNoInputButtonImage))
 	{
+		cairo_dock_unload_desklet_buttons ();
 		cairo_dock_load_desklet_buttons ();
 	}
 	if (cairo_dock_strings_differ (pPrevDesklets->cDeskletDecorationsName, pDesklets->cDeskletDecorationsName))

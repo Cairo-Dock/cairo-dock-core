@@ -84,10 +84,6 @@ static gboolean on_leave_dialog (GtkWidget* pWidget,
 	GdkEventCrossing* pEvent,
 	CairoDialog *pDialog)
 {
-	/*cd_debug ("debut d'attente...");
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
-	cd_debug ("fin d'attente, bInside : %d\n", pDialog->container.bInside);*/
 	int iMouseX, iMouseY;
 	gdk_window_get_pointer (pDialog->container.pWidget->window, &iMouseX, &iMouseY, NULL);
 	if (iMouseX > 0 && iMouseX < pDialog->container.iWidth && iMouseY > 0 && iMouseY < pDialog->container.iHeight)
@@ -95,14 +91,15 @@ static gboolean on_leave_dialog (GtkWidget* pWidget,
 		cd_debug ("en fait on est dedans");
 		return FALSE;
 	}
-
+	
+	g_print ("leave\n");
 	//cd_debug ("outside (%d;%d / %dx%d)", iMouseX, iMouseY, pDialog->container.iWidth, pDialog->container.iHeight);
 	pDialog->container.bInside = FALSE;
 	Icon *pIcon = pDialog->pIcon;
 	if (pIcon != NULL /*&& (pEvent->state & GDK_BUTTON1_MASK) == 0*/)
 	{
-		pDialog->container.iWindowPositionX = pEvent->x_root;
-		pDialog->container.iWindowPositionY = pEvent->y_root;
+		pDialog->container.iMouseX = pEvent->x_root;
+		pDialog->container.iMouseY = pEvent->y_root;
 		CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
 		cairo_dock_place_dialog (pDialog, pContainer);
 		///gtk_widget_queue_draw (pDialog->container.pWidget);
@@ -504,7 +501,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDialog *pDialog)
 {
-	//g_print ("%s (%dx%d)\n", __func__, pEvent->width, pEvent->height);
+	g_print ("%s (%dx%d, %d;%d)\n", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y);
 	if (pEvent->width == CAIRO_DIALOG_MIN_SIZE && pEvent->height == CAIRO_DIALOG_MIN_SIZE && ! pDialog->bNoInput)
 		return FALSE;
 	
@@ -537,12 +534,12 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 		pDialog->container.iWidth = pEvent->width;
 		pDialog->container.iHeight = pEvent->height;
 
-		if (pDialog->pIcon != NULL && (! pDialog->container.bInside || pDialog->bNoInput))
+		/**if (pDialog->pIcon != NULL && (! pDialog->container.bInside || pDialog->bNoInput))
 		{
 			CairoContainer *pContainer = cairo_dock_search_container_from_icon (pDialog->pIcon);
 			//g_print ("configure (%d) => place (%s, %s, %x)\n", pDialog->container.bInside, pDialog->pIcon->cName, pDialog->pIcon->cParentDockName, pContainer);
 			cairo_dock_place_dialog (pDialog, pContainer);
-		}
+		}*/
 		
 		if (pDialog->bNoInput)
 		{
@@ -962,6 +959,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	///	gtk_window_set_transient_for (GTK_WINDOW (pDialog->container.pWidget), GTK_WINDOW (pContainer->pWidget));
 	pDialog->pIcon = pIcon;
 	cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDialog));
+	//cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (g_pMainDock?g_pMainDock:pDialog));
 	
 	//\________________ On cree la surface du message.
 	if (pAttribute->cText != NULL)
@@ -1171,18 +1169,20 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pContainer, int *iX, int *iY, gboolean *bRight, CairoDockTypeHorizontality *bIsHorizontal, gboolean *bDirectionUp, double fAlign)
 {
 	g_return_if_fail (pIcon != NULL && pContainer != NULL);
-	//g_print ("%s (%.2f, %.2f)\n", __func__, pIcon->fXAtRest, pIcon->fDrawX);
+	g_print ("%s (%.2f, %.2f)\n", __func__, pIcon->fXAtRest, pIcon->fDrawX);
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
 	{
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
 		if (pDock->iRefCount > 0 && ! GTK_WIDGET_VISIBLE (pDock->container.pWidget))  // sous-dock invisible.  // pDock->bAtBottom
 		{
+			g_print ("sous-dock invisible\n");
 			CairoDock *pParentDock = NULL;
 			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
 			cairo_dock_dialog_calculate_aimed_point (pPointingIcon, CAIRO_CONTAINER (pParentDock), iX, iY, bRight, bIsHorizontal, bDirectionUp, fAlign);
 		}
 		else/* if (pDock->iRefCount == 0)*/  // un dock principal au repos.  // && pDock->bAtBottom
 		{
+			g_print ("dock %d\n", pDock->iRefCount);
 			*bIsHorizontal = (pDock->container.bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
 			int dy;
 			if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
@@ -1334,7 +1334,8 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 
 void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 {
-	//g_print ("%s (%x;%d)\n", __func__, pDialog->pIcon, pContainer);
+	//g_print ("%s (%x;%d, %s)\n", __func__, pDialog->pIcon, pContainer, pDialog->pIcon?pDialog->pIcon->cParentDockName:"none");
+	int w, h;
 	int iPrevPositionX = pDialog->container.iWindowPositionX, iPrevPositionY = pDialog->container.iWindowPositionY;
 	if (pContainer != NULL && pDialog->pIcon != NULL)
 	{
@@ -1378,9 +1379,9 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 			if ((iOldDistance == 0) || (pDialog->iDistanceToDock < iOldDistance))
 			{
 				//g_print ("    cela reduit la fenetre a %dx%d\n", pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin, pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock);
-				gtk_window_resize (GTK_WINDOW (pDialog->container.pWidget),
+				/**gtk_window_resize (GTK_WINDOW (pDialog->container.pWidget),
 					pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin,
-					pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock);
+					pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock);*/
 			}
 		}
 	}
@@ -1391,18 +1392,50 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 		pDialog->container.iWindowPositionY = (g_pMainDock ? g_pMainDock->iScreenOffsetY : 0) + (g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] - pDialog->container.iHeight) / 2;
 		pDialog->container.iHeight = pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin;
 		//g_print (" au milieu de l'ecran (%d;%d) %dx%d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, pDialog->container.iWidth, pDialog->container.iHeight);
+		pDialog->iDistanceToDock = 0;
 		
-		gtk_window_resize (GTK_WINDOW (pDialog->container.pWidget),
+		/**gtk_window_resize (GTK_WINDOW (pDialog->container.pWidget),
 			pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin,
-			pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin);
+			pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin);*/
 	}
-
-	///if (iPrevPositionX != pDialog->container.iWindowPositionX || iPrevPositionY != pDialog->container.iWindowPositionY)
+	
+	w = pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin;
+	h = pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock;
+	//if (iPrevPositionX != pDialog->container.iWindowPositionX || iPrevPositionY != pDialog->container.iWindowPositionY)
 	{
-		//g_print (" => move to (%d;%d) %dx%d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, pDialog->container.iWidth, pDialog->container.iHeight);
-		gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
+		g_print (" => move to (%d;%d) %dx%d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, w, h);
+		if (pDialog->bRight)
+		{
+			if (pDialog->container.bDirectionUp)
+			{
+				g_print ("SOUTH_WEST\n");
+				gtk_window_set_gravity (GTK_WINDOW (pDialog->container.pWidget), GDK_GRAVITY_SOUTH_WEST);
+			}
+			else
+			{
+				g_print ("NORTH_WEST\n");
+				gtk_window_set_gravity (GTK_WINDOW (pDialog->container.pWidget), GDK_GRAVITY_NORTH_WEST);
+				
+			}
+		}
+		else
+		{
+			if (pDialog->container.bDirectionUp)
+			{
+				g_print ("SOUTH_EAST\n");
+				gtk_window_set_gravity (GTK_WINDOW (pDialog->container.pWidget), GDK_GRAVITY_SOUTH_EAST);
+			}
+			else
+			{
+				g_print ("NORTH_EAST\n");
+				gtk_window_set_gravity (GTK_WINDOW (pDialog->container.pWidget), GDK_GRAVITY_NORTH_EAST);
+			}
+		}
+		gdk_window_move_resize (GDK_WINDOW (pDialog->container.pWidget->window),
 			pDialog->container.iWindowPositionX,
-			pDialog->container.iWindowPositionY);
+			pDialog->container.iWindowPositionY,
+			w,
+			h);
 	}
 }
 
@@ -1432,7 +1465,7 @@ void cairo_dock_compute_dialog_sizes (CairoDialog *pDialog)
 
 void cairo_dock_replace_all_dialogs (void)
 {
-	//g_print ("%s ()\n", __func__);
+	g_print ("%s ()\n", __func__);
 	GSList *ic;
 	CairoDialog *pDialog;
 	CairoContainer *pContainer;

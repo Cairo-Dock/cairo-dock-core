@@ -305,7 +305,7 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 		cairo_dock_free_icon (pNewIcon);
 		return NULL;
 	}
-	g_print ("%s -> %s\n", cURI, pNewIcon->cFileName);
+	//g_print ("%s -> %s\n", cURI, pNewIcon->cFileName);
 
 	if (bIsDirectory)
 	{
@@ -490,7 +490,10 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 				pNewIcon->iType = iTypeOnCreation;
 
 				if (CAIRO_DOCK_IS_DOCK (pParentContainer))
+				{
 					cairo_dock_insert_icon_in_dock_full (pNewIcon, pIcon->pSubDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
+					pNewIcon->cParentDockName = g_strdup (pIcon->cName);
+				}
 				else
 					CAIRO_DESKLET (pParentContainer)->icons = g_list_insert_sorted (CAIRO_DESKLET (pParentContainer)->icons,
 						pIcon,

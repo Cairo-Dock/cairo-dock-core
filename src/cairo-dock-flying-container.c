@@ -411,44 +411,9 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 		cd_debug ("le module %s devient un desklet", pIcon->pModuleInstance->cConfFilePath);
 		
 		cairo_dock_stop_icon_animation (pIcon);
-		GError *erreur = NULL;
-		GKeyFile *pKeyFile = cairo_dock_open_key_file (pIcon->pModuleInstance->cConfFilePath);
-		if (pKeyFile != NULL)
-		{
-			//\______________ On centre le desklet sur l'icone volante.
-			int iDeskletWidth = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "width", NULL, 92, NULL, NULL);
-			int iDeskletHeight = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "height", NULL, 92, NULL, NULL);
-			
-			int iDeskletPositionX = pFlyingContainer->container.iWindowPositionX + (pFlyingContainer->container.iWidth - iDeskletWidth)/2;
-			int iDeskletPositionY = pFlyingContainer->container.iWindowPositionY + (pFlyingContainer->container.iHeight - iDeskletHeight)/2;
-			
-			int iRelativePositionX = (iDeskletPositionX + iDeskletWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionX : iDeskletPositionX - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
-			int iRelativePositionY = (iDeskletPositionY + iDeskletHeight/2 <= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionY : iDeskletPositionY - g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-			
-			g_key_file_set_boolean (pKeyFile, "Desklet", "initially detached", TRUE);
-			g_key_file_set_double (pKeyFile, "Desklet", "x position", iDeskletPositionX);
-			g_key_file_set_double (pKeyFile, "Desklet", "y position", iDeskletPositionY);
-			
-			cairo_dock_update_desklet_detached_state_in_gui (pIcon->pModuleInstance, TRUE);
-			cairo_dock_update_desklet_position_in_gui (pIcon->pModuleInstance, iDeskletPositionX, iDeskletPositionY);
-			
-			cairo_dock_write_keys_to_file (pKeyFile, pIcon->pModuleInstance->cConfFilePath);
-			g_key_file_free (pKeyFile);
-			
-			//\______________ On detache le module.
-			cairo_dock_reload_module_instance (pIcon->pModuleInstance, TRUE);
-			
-			//\______________ On fait apparaitre le desklet avec un effet de zoom.
-			if (pIcon->pModuleInstance->pDesklet)  // normalement toujours vrai.
-			{
-				while (pIcon->pModuleInstance->pDesklet->iDesiredWidth != 0 && pIcon->pModuleInstance->pDesklet->iDesiredHeight != 0 && (pIcon->pModuleInstance->pDesklet->iKnownWidth != pIcon->pModuleInstance->pDesklet->iDesiredWidth || pIcon->pModuleInstance->pDesklet->iKnownHeight != pIcon->pModuleInstance->pDesklet->iDesiredHeight))
-				{
-					gtk_main_iteration ();  // on le laisse se charger en plein.
-					if (! pIcon->pModuleInstance->pDesklet)  // ne devrait pas arriver.
-						break ;
-				}
-				cairo_dock_zoom_out_desklet (pIcon->pModuleInstance->pDesklet);
-			}
-		}
+		
+		cairo_dock_detach_module_instance_at_position (pIcon->pModuleInstance,
+			pFlyingContainer->container.iWindowPositionX + pFlyingContainer->container.iWidth/2,
+			pFlyingContainer->container.iWindowPositionY + pFlyingContainer->container.iHeight/2);
 	}
 }

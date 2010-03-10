@@ -771,7 +771,7 @@ static void _cairo_dock_foreach_icons_in_dock (gchar *cDockName, CairoDock *pDoc
 		pFunction ((Icon*)ic->data, CAIRO_CONTAINER (pDock), pUserData);
 	}
 }
-static gboolean _cairo_dock_foreach_icons_in_desklet (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, gpointer *data)
+static gboolean _cairo_dock_foreach_icons_in_desklet (CairoDesklet *pDesklet, gpointer *data)
 {
 	CairoDockForeachIconFunc pFunction = data[0];
 	gpointer pUserData = data[1];
@@ -783,7 +783,7 @@ static gboolean _cairo_dock_foreach_icons_in_desklet (CairoDesklet *pDesklet, Ca
 	{
 		pFunction ((Icon*)ic->data, CAIRO_CONTAINER (pDesklet), pUserData);
 	}
-	return FALSE;  /// j'ai un doute la ...
+	return FALSE;
 }
 void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUserData)
 {

@@ -111,6 +111,7 @@ static void reload (CairoConfigDialogs *pPrevDialogs, CairoConfigDialogs *pDialo
 		cairo_dock_strings_differ (pPrevDialogs->cButtonCancelImage, pDialogs->cButtonCancelImage) ||
 		pPrevDialogs->iDialogIconSize != pDialogs->iDialogIconSize)
 	{
+		cairo_dock_unload_dialog_buttons ();
 		cairo_dock_load_dialog_buttons (CAIRO_CONTAINER (pDock), pDialogs->cButtonOkImage, pDialogs->cButtonCancelImage);
 	}
 	/*if (pDialogs->bHomogeneous)

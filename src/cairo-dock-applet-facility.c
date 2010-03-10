@@ -66,10 +66,11 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 		cd_message (">>> %s prendra un fond d'icone", pIcon->cName);
 
 		cairo_save (pIconContext);
-		double fMaxScale = cairo_dock_get_max_scale (pContainer);
+		int iWidth, iHeight;
+		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
 		cairo_scale(pIconContext,
-			pIcon->fWidth * fMaxScale / g_pIconBackgroundBuffer.iWidth,
-			pIcon->fHeight * fMaxScale / g_pIconBackgroundBuffer.iHeight);
+			iWidth / g_pIconBackgroundBuffer.iWidth,
+			iHeight / g_pIconBackgroundBuffer.iHeight);
 		cairo_set_source_surface (pIconContext,
 			g_pIconBackgroundBuffer.pSurface,
 			0.,

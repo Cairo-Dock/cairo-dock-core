@@ -85,9 +85,6 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 		return FALSE;
 	}
 	
-	pDesklet->iDesiredWidth = 0;  /// ???
-	pDesklet->iDesiredHeight = 0;
-	
 	if (g_bUseOpenGL && pDesklet->pRenderer && pDesklet->pRenderer->render_opengl)
 	{
 		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pDesklet->container.pWidget);

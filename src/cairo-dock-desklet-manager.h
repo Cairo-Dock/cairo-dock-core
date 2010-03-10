@@ -40,7 +40,7 @@ G_BEGIN_DECLS
 */
 
 /// Definition of a function that runs through all desklets.
-typedef gboolean (* CairoDockForeachDeskletFunc) (CairoDesklet *pDesklet, CairoDockModuleInstance *pInstance, gpointer data);
+typedef gboolean (* CairoDockForeachDeskletFunc) (CairoDesklet *pDesklet, gpointer data);
 
 
 void cairo_dock_init_desklet_manager (void);
@@ -61,16 +61,23 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, CairoDeskletAttribute *pAt
 void cairo_dock_destroy_desklet (CairoDesklet *pDesklet);
 
 
+/** Run a function through all the desklets. If the callback returns TRUE, then the loop ends and the function returns the current desklet.
+*@param pCallback function to be called on eash desklet. If it returns TRUE, the loop ends and the function returns the current desklet.
+*@param user_data data to be passed to the callback.
+*@return the found desklet, or NULL.
+*/
+CairoDesklet *cairo_dock_foreach_desklet (CairoDockForeachDeskletFunc pCallback, gpointer user_data);
+
 /** Reload the decorations of all the desklets. 
 *@param bDefaultThemeOnly whether to reload only the desklet that have the default decoration theme.
 */
 void cairo_dock_reload_desklets_decorations (gboolean bDefaultThemeOnly);
 
-
 /** Make all desklets visible. Their accessibility is set to #CAIRO_DESKLET_NORMAL. 
 *@param bOnWidgetLayerToo TRUE if you want to act on the desklet that are on the WidgetLayer as well.
 */
 void cairo_dock_set_all_desklets_visible (gboolean bOnWidgetLayerToo);
+
 /** Reset the desklets accessibility to the state defined in their conf file.
 */
 void cairo_dock_set_desklets_visibility_to_default (void);
