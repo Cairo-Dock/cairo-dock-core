@@ -573,7 +573,7 @@ void cairo_dock_fm_action_after_mounting (gboolean bMounting, gboolean bSuccess,
 	if ((! bSuccess && pContainer != NULL) || icon == NULL)  // dans l'autre cas (succes), l'icone peut ne plus etre valide ! mais on s'en fout, puisqu'en cas de succes, il y'aura rechargement de l'icone, et donc on pourra balancer le message a ce moment-la.
 	{
 		///if (icon != NULL)
-			cairo_dock_show_temporary_dialog_with_icon_printf (bMounting ? _("failed to mount %s") : _("Failed to unmount %s"), icon, pContainer, 4000, "same icon", cName);
+			cairo_dock_show_temporary_dialog_with_icon_printf (bMounting ? _("Failed to mount %s") : _("Failed to unmount %s"), icon, pContainer, 4000, "same icon", cName);
 		///else
 		///	cairo_dock_show_general_message (cMessage, 4000);
 	}

@@ -1475,7 +1475,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		if (bIsUtility)
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(pMenuItem), TRUE);
 		g_signal_connect(G_OBJECT(pMenuItem), "toggled", G_CALLBACK(_cairo_dock_keep_on_widget_layer), data);
-		gtk_widget_set_tooltip_text (pMenuItem, _("Set behaviour in Compiz to: (name=cairo-dock _("set behaviour in Compiz to: (name=cairo-dock & type=utility) type=utility)"));
+		gtk_widget_set_tooltip_text (pMenuItem, _("Set behaviour in Compiz to: (name=cairo-dock & type=utility)"));
 		
 		pMenuItem = gtk_radio_menu_item_new_with_label(group, _("Reserve space"));
 		group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(pMenuItem));

@@ -51,7 +51,7 @@ msgstr "%s 現在已卸載"
 
 #: ../src/cairo-dock-file-manager.c:572
 #, c-format
-msgid "failed to mount %s"
+msgid "Failed to mount %s"
 msgstr "掛載 %s 時失敗"
 
 #: ../src/cairo-dock-file-manager.c:572
@@ -824,7 +824,7 @@ msgid "Always below"
 msgstr "永遠在最下層"
 
 #: ../src/cairo-dock-menu.c:1487
-msgid "Set behaviour in Compiz to: (name=cairo-dock "set behaviour in Compiz to: (name=cairo-dock & type=utility)" type=utility)"
+msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "設定動作方式在Compiz到(name=cairo-dock & type=utility)"
 
 #: ../src/cairo-dock-menu.c:1489

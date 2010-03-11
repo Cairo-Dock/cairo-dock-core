@@ -54,7 +54,7 @@ msgstr "%s は現在 アンマウント済み"
 
 #: ../src/cairo-dock-file-manager.c:572
 #, c-format
-msgid "failed to mount %s"
+msgid "Failed to mount %s"
 msgstr "%s のマウントに失敗"
 
 #: ../src/cairo-dock-file-manager.c:572
@@ -842,7 +842,7 @@ msgid "Always below"
 msgstr "常に最後面に表示"
 
 #: ../src/cairo-dock-menu.c:1487
-msgid "Set behaviour in Compiz to: (name=cairo-dock "set behaviour in Compiz to: (name=cairo-dock & type=utility)" type=utility)"
+msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "Compiz の動作設定での指定法: (name=cairo-dock & type=utility)"
 
 #: ../src/cairo-dock-menu.c:1489

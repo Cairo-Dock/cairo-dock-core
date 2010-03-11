@@ -53,7 +53,7 @@ msgstr "%s är nu avmonterad"
 
 #: ../src/cairo-dock-file-manager.c:572
 #, c-format
-msgid "failed to mount %s"
+msgid "Failed to mount %s"
 msgstr "misslyckades med att montera %s"
 
 #: ../src/cairo-dock-file-manager.c:572
@@ -824,7 +824,7 @@ msgid "Always below"
 msgstr "Alltid under"
 
 #: ../src/cairo-dock-menu.c:1487
-msgid "Set behaviour in Compiz to: (name=cairo-dock "set behaviour in Compiz to: (name=cairo-dock & type=utility)" type=utility)"
+msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "Ange beteendet i Compiz med: (name=cairo-dock & type=utility)"
 
 #: ../src/cairo-dock-menu.c:1489

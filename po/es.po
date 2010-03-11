@@ -47,7 +47,7 @@ msgstr "%s se ha desmontado"
 
 #: ../src/cairo-dock-file-manager.c:572
 #, c-format
-msgid "failed to mount %s"
+msgid "Failed to mount %s"
 msgstr "No se pudo montar %s"
 
 #: ../src/cairo-dock-file-manager.c:572
@@ -826,7 +826,7 @@ msgid "Always below"
 msgstr "Siempre atrás"
 
 #: ../src/cairo-dock-menu.c:1487
-msgid "Set behaviour in Compiz to: (name=cairo-dock "set behaviour in Compiz to: (name=cairo-dock & type=utility)" type=utility)"
+msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "asignar comportamiento en Compiz a: (name=cairo-dock & type=utility)"
 
 #: ../src/cairo-dock-menu.c:1489

@@ -51,7 +51,7 @@ msgstr "%s wurde ausgehängt"
 
 #: ../src/cairo-dock-file-manager.c:572
 #, c-format
-msgid "failed to mount %s"
+msgid "Failed to mount %s"
 msgstr "Einhängen von %s fehlgeschlagen"
 
 #: ../src/cairo-dock-file-manager.c:572
@@ -824,7 +824,7 @@ msgid "Always below"
 msgstr "Immer im Hintergrund"
 
 #: ../src/cairo-dock-menu.c:1487
-msgid "Set behaviour in Compiz to: (name=cairo-dock "set behaviour in Compiz to: (name=cairo-dock & type=utility)" type=utility)"
+msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "Verhalten in Compiz auf (name=cairo-dock & type=utility) festlegen"
 
 #: ../src/cairo-dock-menu.c:1489

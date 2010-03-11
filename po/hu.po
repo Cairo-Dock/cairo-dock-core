@@ -51,7 +51,7 @@ msgstr "%s leválasztva"
 
 #: ../src/cairo-dock-file-manager.c:572
 #, c-format
-msgid "failed to mount %s"
+msgid "Failed to mount %s"
 msgstr "%s csatolása sikertelen"
 
 #: ../src/cairo-dock-file-manager.c:572
@@ -825,7 +825,7 @@ msgid "Always below"
 msgstr "Mindig alul"
 
 #: ../src/cairo-dock-menu.c:1487
-msgid "Set behaviour in Compiz to: (name=cairo-dock "set behaviour in Compiz to: (name=cairo-dock & type=utility)" type=utility)"
+msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "Viselkedés beállítása a Compizban erre: (name=cairo-dock & type=utility)"
 
 #: ../src/cairo-dock-menu.c:1489

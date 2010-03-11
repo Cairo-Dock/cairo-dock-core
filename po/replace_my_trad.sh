@@ -49,6 +49,8 @@ if [ "$DATA_MODIF" != "" ]; then
 		sed -i "s/+ $ph1/+ $ph2/g" "$i"
 		sed -i "s/- $ph1/- $ph2/g" "$i"
 		sed -i "s/> $ph1/> $ph2/g" "$i"
+		sed -i "s/;$ph1;/;$ph2;/g" "$i"
+		sed -i "s/;$ph1]/;$ph2]/g" "$i"
 		if test $? -ge 1;then
 			echo "Phrase <$ph1>, donne une erreur ($i)" >> transfert_translations_log_errors_2.txt
 		fi

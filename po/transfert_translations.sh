@@ -9,6 +9,7 @@ sed -i 's/msgstr//g' en_temp
 sed -i 's/  / /g' en_temp # les doubles espaces
 sed -i 's/^ //g' en_temp # les espaces au début
 sed -i 's/\%/\\\%/g' en_temp # les %
+sed -i 's/&/\\&/g' en_temp # les &
 sed -i 's/\//\\\//g' en_temp # les /
 sed -i 's/\\/\\\\/g' en_temp # les \
 # sed -i 's/\:/\\\:/g' en_temp # les :

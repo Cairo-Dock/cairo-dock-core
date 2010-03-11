@@ -52,7 +52,7 @@ msgstr "%s şimdi bağlı değil"
 
 #: ../src/cairo-dock-file-manager.c:571
 #, c-format
-msgid "failed to mount %s"
+msgid "Failed to mount %s"
 msgstr "bağlanamadı %s"
 
 #: ../src/cairo-dock-file-manager.c:571
@@ -772,7 +772,7 @@ msgid "Always below"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:1657
-msgid "Set behaviour in Compiz to: (name=cairo-dock "set behaviour in Compiz to: (name=cairo-dock & type=utility)" type=utility)"
+msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:1659
