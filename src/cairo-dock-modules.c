@@ -849,7 +849,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		g_key_file_free (pKeyFile);
 	
 	if (pCurrentDesklet != NULL && pCurrentDesklet != pNewDesklet)
-		cairo_dock_free_desklet (pCurrentDesklet);
+		cairo_dock_destroy_desklet (pCurrentDesklet);
 	if (pCurrentDock != NULL && pCurrentDock != pNewDock)
 	{
 		if (pCurrentDock->iRefCount == 0 && pCurrentDock->icons == NULL && !pCurrentDock->bIsMainDock)  // dock principal vide.
@@ -1185,7 +1185,7 @@ void cairo_dock_stop_module_instance (CairoDockModuleInstance *pInstance)
 		pInstance->pModule->pInterface->reset_config (pInstance);
 	
 	if (pInstance->pDesklet)
-		cairo_dock_free_desklet (pInstance->pDesklet);
+		cairo_dock_destroy_desklet (pInstance->pDesklet);
 	if (pInstance->pDrawContext != NULL)
 		cairo_destroy (pInstance->pDrawContext);
 	

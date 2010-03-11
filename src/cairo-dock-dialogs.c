@@ -1465,7 +1465,7 @@ void cairo_dock_compute_dialog_sizes (CairoDialog *pDialog)
 
 void cairo_dock_replace_all_dialogs (void)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	GSList *ic;
 	CairoDialog *pDialog;
 	CairoContainer *pContainer;
