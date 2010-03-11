@@ -4,7 +4,7 @@
 # Eduardo Mucelli <edumucelli@gmail.com>, 2009.
 msgid ""
 msgstr "Project-Id-Version: 2.1.0-alpha\n"
-"Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
+"Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "PO-Revision-Date: 2010-02-13 12:24+0000\n"
 "Last-Translator: Eduardo Mucelli <edumucelli@gmail.com>\n"
 "Language-Team: \n"

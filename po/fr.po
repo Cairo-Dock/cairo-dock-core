@@ -1,11 +1,11 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2007-2008 Cairo-Dock project
 # This file is distributed under the same license as the Cairo-Dock package.
-# Fabrice Rey <fabounet@users.berlios.de>, 2007-2008.
+# Fabrice Rey <fabounet@glx-dock.org>, 2007-2008.
 #
 msgid ""
 msgstr "Project-Id-Version: 2.1.0\n"
-"Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
+"Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "PO-Revision-Date: 2010-02-21 12:44+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Cairo-Dock <LL@li.org>\n"

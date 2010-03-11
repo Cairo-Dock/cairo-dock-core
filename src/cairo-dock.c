@@ -59,7 +59,7 @@
 *********************** VERSION 0.1.0 and above (2007-2009)*********************
 **
 ** author(s) :
-**     Fabrice Rey <fabounet@users.berlios.de>
+**     Fabrice Rey <fabounet@glx-dock.org>
 **
 ** notes :
 **     I've completely rewritten the calculation part, and the callback system.

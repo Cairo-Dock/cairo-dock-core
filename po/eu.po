@@ -6,7 +6,7 @@
 # Ander Elortondo <ander.elor@gmail.com>, 2010.
 msgid ""
 msgstr "Project-Id-Version: cairo-dock-core\n"
-"Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
+"Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "PO-Revision-Date: 2010-02-21 03:56+0000\n"
 "Last-Translator: Ander Elortondo <ander.elor@gmail.com>\n"
 "Language-Team: librezale.org\n"

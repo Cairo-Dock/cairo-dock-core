@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr "Project-Id-Version: cairo-dock-core\n"
-"Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
+"Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "PO-Revision-Date: 2010-02-21 03:54+0000\n"
 "Last-Translator: MixCool <lars.thoms@mixcool.de>\n"
 "Language-Team: German <de@li.org>\n"

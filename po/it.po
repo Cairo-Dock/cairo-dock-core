@@ -1,11 +1,11 @@
 # Copyright (C) 2007 Cairo-Dock project
 # This file is distributed under the same license as the Cairo-Dock package.
-# Fabrice Rey <fabounet@users.berlios.de>, 2007.
+# Fabrice Rey <fabounet@glx-dock.org>, 2007.
 # Translated on the version 1514 (svn)- Thu, 03 Feb 2009 19:01:32 +0200.
 # Luca Vercelli <ororo@email.it>, 2009.
 msgid ""
 msgstr "Project-Id-Version: 1.4.5\n"
-"Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
+"Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "PO-Revision-Date: 2010-02-21 09:33+0000\n"
 "Last-Translator: Mattia Tavernini <maathias@interfree.it>\n"
 "Language-Team: Italian <kde-i18n-it@lists.kde.org>\n"

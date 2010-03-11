@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: fabounet@users.berlios.de\n"
+"Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "PO-Revision-Date: 2010-02-20 12:22+0000\n"
 "Last-Translator: Saturn <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -488,7 +488,7 @@ msgstr "退出Cairo-Dock？"
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2007 Cairo-Dock project
 # This file is distributed under the same license as the Cairo-Dock package.
-# Fabrice Rey <fabounet@users.berlios.de>, 2007.
+# Fabrice Rey <fabounet@glx-dock.org>, 2007.
 #
 #: ../src/cairo-dock-menu.c:318
 msgid "Configure"
