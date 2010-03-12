@@ -14,6 +14,7 @@ sed -i 's/\//\\\//g' en_temp # les /
 sed -i 's/\\/\\\\/g' en_temp # les \
 # sed -i 's/\:/\\\:/g' en_temp # les :
 sed -i "s/'/\\'/g" en_temp # les '
+sed -i "s/\./\\./g" en_temp # les .
 sed -i '/^[<space><tab>]*$/d' en_temp # lignes vides
 
 # les .po
