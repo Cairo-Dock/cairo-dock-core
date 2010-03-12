@@ -255,7 +255,7 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDesklet *pDesklet)
 {
-	//g_print (" >>>>>>>>> %s (%dx%d, %d;%d)", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y);
+	g_print (" >>>>>>>>> %s (%dx%d, %d;%d)", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y);
 	if (pDesklet->container.iWidth != pEvent->width || pDesklet->container.iHeight != pEvent->height)
 	{
 		if ((pEvent->width < pDesklet->container.iWidth || pEvent->height < pDesklet->container.iHeight) && (pDesklet->iDesiredWidth != 0 && pDesklet->iDesiredHeight != 0))
@@ -806,7 +806,7 @@ void cairo_dock_free_desklet (CairoDesklet *pDesklet)
 
 void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute *pAttribute)
 {
-	cd_debug ("%s (%dx%d ; (%d,%d) ; %d)", __func__, pAttribute->iDeskletWidth, pAttribute->iDeskletHeight, pAttribute->iDeskletPositionX, pAttribute->iDeskletPositionY, pAttribute->iAccessibility);
+	//g_print ("%s (%dx%d ; (%d,%d) ; %d)\n", __func__, pAttribute->iDeskletWidth, pAttribute->iDeskletHeight, pAttribute->iDeskletPositionX, pAttribute->iDeskletPositionY, pAttribute->iAccessibility);
 	if (pAttribute->bDeskletUseSize && (pAttribute->iDeskletWidth != pDesklet->container.iWidth || pAttribute->iDeskletHeight != pDesklet->container.iHeight))
 	{
 		pDesklet->iDesiredWidth = pAttribute->iDeskletWidth;
@@ -1027,7 +1027,10 @@ void cairo_dock_hide_desklet (CairoDesklet *pDesklet)
 void cairo_dock_show_desklet (CairoDesklet *pDesklet)
 {
 	if (pDesklet)
+	{
 		gtk_window_present(GTK_WINDOW(pDesklet->container.pWidget));
+		gtk_window_move (GTK_WINDOW(pDesklet->container.pWidget), pDesklet->container.iWindowPositionX, pDesklet->container.iWindowPositionY);  // sinon le WM le place n'importe ou.
+	}
 }
 
 void cairo_dock_zoom_out_desklet (CairoDesklet *pDesklet)
