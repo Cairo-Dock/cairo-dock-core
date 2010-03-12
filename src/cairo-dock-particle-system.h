@@ -101,7 +101,7 @@ CairoParticleSystem *cairo_dock_create_particle_system (int iNbParticles, GLuint
 */
 void cairo_dock_free_particle_system (CairoParticleSystem *pParticleSystem);
 
-/** Update a particle system to the next step with a generic particle behavior model.
+/** Update a particle system to the next step with a generic particle behavior model. You can write your own model depending on your needs.
 *@param pParticleSystem the particle system.
 *@param pRewindParticle function called on a particle when its life is over.
 *@return TRUE if some particles are still alive.

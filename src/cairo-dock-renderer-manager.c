@@ -31,7 +31,7 @@
 #include "cairo-dock-internal-desklets.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-renderer-manager.h"
 

@@ -26,7 +26,7 @@
 #include "cairo-dock-struct.h"
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-dock-factory.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-factory.h"
 #include "cairo-dock-data-renderer.h"
 G_BEGIN_DECLS
 

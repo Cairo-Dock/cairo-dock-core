@@ -45,7 +45,7 @@
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-gui-themes.h"
 #include "cairo-dock-notifications.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-desklet-factory.h"
@@ -434,7 +434,9 @@ static void _cairo_dock_remove_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 			if (answer == GTK_RESPONSE_YES)
 				bDestroyIcons = FALSE;
 		}
-		cairo_dock_destroy_dock (icon->pSubDock, (CAIRO_DOCK_IS_APPLI (icon) && icon->cClass != NULL ? icon->cClass : icon->cName), (bDestroyIcons ? NULL : g_pMainDock), (bDestroyIcons ? NULL : CAIRO_DOCK_MAIN_DOCK_NAME));
+		if (!bDestroyIcons)
+			cairo_dock_remove_icons_from_dock (icon->pSubDock, g_pMainDock, CAIRO_DOCK_MAIN_DOCK_NAME);
+		cairo_dock_destroy_dock (icon->pSubDock, (CAIRO_DOCK_IS_APPLI (icon) && icon->cClass != NULL ? icon->cClass : icon->cName));
 		icon->pSubDock = NULL;
 	}
 	

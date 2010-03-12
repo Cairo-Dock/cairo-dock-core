@@ -40,7 +40,7 @@
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-internal-icons.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-container.h"
@@ -516,11 +516,11 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 	pMinimalConfig->cLabel = cairo_dock_get_string_key_value (pKeyFile, "Icon", "name", NULL, NULL, NULL, NULL);
 	pMinimalConfig->cIconFileName = cairo_dock_get_string_key_value (pKeyFile, "Icon", "icon", NULL, NULL, NULL, NULL);
 	pMinimalConfig->fOrder = cairo_dock_get_double_key_value (pKeyFile, "Icon", "order", NULL, CAIRO_DOCK_LAST_ORDER, NULL, NULL);
-	if (pMinimalConfig->fOrder == 0 || pMinimalConfig->fOrder == CAIRO_DOCK_LAST_ORDER)
+	if (/**pMinimalConfig->fOrder == 0 || */pMinimalConfig->fOrder == CAIRO_DOCK_LAST_ORDER)
 	{
 		pMinimalConfig->fOrder = ++ s_iMaxOrder;
 		g_key_file_set_double (pKeyFile, "Icon", "order", pMinimalConfig->fOrder);
-		//g_print ("set order\n");
+		g_print ("set order to %.1f\n", pMinimalConfig->fOrder);
 		cairo_dock_write_keys_to_file (pKeyFile, cInstanceConfFilePath);
 	}
 	else
@@ -716,7 +716,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				pNewDock = cairo_dock_search_dock_from_name (cDockName);
 				if (pNewDock == NULL)  // c'est un nouveau dock.
 				{
-					pNewDock = cairo_dock_create_new_dock (cDockName, NULL);
+					pNewDock = cairo_dock_create_dock (cDockName, NULL);
 				}
 				pNewContainer = CAIRO_CONTAINER (pNewDock);
 			}
@@ -841,7 +841,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	}
 	
 	if (pNewDock || pCurrentDock)
-		cairo_dock_refresh_launcher_gui ();
+		cairo_dock_trigger_refresh_launcher_gui ();
 	
 	//\_______________________ On nettoie derriere nous.
 	cairo_dock_free_minimal_config (pMinimalConfig);
@@ -854,7 +854,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	{
 		if (pCurrentDock->iRefCount == 0 && pCurrentDock->icons == NULL && !pCurrentDock->bIsMainDock)  // dock principal vide.
 		{
-			cairo_dock_destroy_dock (pCurrentDock, cOldDockName, NULL, NULL);
+			cairo_dock_destroy_dock (pCurrentDock, cOldDockName);
 		}
 		else
 		{
@@ -1089,7 +1089,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 			pDock = cairo_dock_search_dock_from_name (cDockName);
 			if (pDock == NULL)
 			{
-				pDock = cairo_dock_create_new_dock (cDockName, NULL);
+				pDock = cairo_dock_create_dock (cDockName, NULL);
 			}
 			pContainer = CAIRO_CONTAINER (pDock);
 		}

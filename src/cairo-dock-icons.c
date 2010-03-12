@@ -41,7 +41,7 @@
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-separator-factory.h"
@@ -107,6 +107,8 @@ void cairo_dock_free_icon (Icon *icon)
 	cairo_dock_remove_dialog_if_any (icon);
 	if (icon->iSidRedrawSubdockContent != 0)
 		g_source_remove (icon->iSidRedrawSubdockContent);
+	if (icon->cBaseURI != NULL)
+		cairo_dock_fm_remove_monitor (icon);
 	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
 		cairo_dock_unregister_appli (icon);
 	else if (icon->cClass != NULL)  // c'est un inhibiteur.
@@ -552,7 +554,7 @@ void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconType iType
 		}
 	}
 	g_string_free (sDesktopFilePath, TRUE);
-	cairo_dock_refresh_launcher_gui ();
+	cairo_dock_trigger_refresh_launcher_gui ();
 }
 
 void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2)
@@ -610,7 +612,7 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 	if (bForceUpdate)
 		cairo_dock_normalize_icons_order (pDock->icons, icon1->iType);
 	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon1) || CAIRO_DOCK_IS_USER_SEPARATOR (icon1) || CAIRO_DOCK_IS_APPLET (icon1))
-		cairo_dock_refresh_launcher_gui ();
+		cairo_dock_trigger_refresh_launcher_gui ();
 }
 
 

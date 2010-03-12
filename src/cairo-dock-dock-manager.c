@@ -37,6 +37,7 @@
 #endif
 
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-class-manager.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-modules.h"
@@ -59,6 +60,7 @@
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-emblem.h"
+#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-dock-manager.h"
 
@@ -69,7 +71,8 @@ extern gchar *g_cCurrentThemePath;
 static GHashTable *s_hDocksTable = NULL;  // table des docks existant.
 static int s_iSidPollScreenEdge = 0;
 
-void cairo_dock_initialize_dock_manager (void)
+
+void cairo_dock_init_dock_manager (void)
 {
 	cd_message ("");
 	if (s_hDocksTable == NULL)
@@ -85,46 +88,117 @@ void cairo_dock_initialize_dock_manager (void)
 		}
 }
 
-CairoDock *cairo_dock_register_dock (const gchar *cDockName, CairoDock *pDock)
+
+CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendererName)
 {
+	cd_message ("%s (%s)", __func__, cDockName);
 	g_return_val_if_fail (cDockName != NULL, NULL);
 	
+	//\__________________ On verifie qu'il n'existe pas deja.
 	CairoDock *pExistingDock = g_hash_table_lookup (s_hDocksTable, cDockName);
 	if (pExistingDock != NULL)
 	{
 		return pExistingDock;
 	}
 	
-	if (g_hash_table_size (s_hDocksTable) == 0)  // c'est le 1er. On pourrait aussi se baser sur son nom ...
+	//\__________________ On cree un nouveau dock.
+	CairoDock *pDock = cairo_dock_new_dock (cRendererName);
+	
+	//\__________________ On l'enregistre.
+	if (g_hash_table_size (s_hDocksTable) == 0)  // c'est le 1er (on pourrait aussi se baser sur son nom).
 	{
 		pDock->bIsMainDock = TRUE;
 		g_pMainDock = pDock;
 	}
-	
 	g_hash_table_insert (s_hDocksTable, g_strdup (cDockName), pDock);
+	
+	//\__________________ On le positionne si ce n'est pas le main dock.
+	if (! pDock->bIsMainDock)
+	{
+		if (cairo_dock_get_root_dock_position (cDockName, pDock))
+			cairo_dock_place_root_dock (pDock);
+	}
 	return pDock;
 }
 
-void cairo_dock_unregister_dock (const gchar *cDockName)
+CairoDock *cairo_dock_create_subdock_from_scratch (GList *pIconList, gchar *cDockName, CairoDock *pParentDock)
 {
-	if (cDockName != NULL)
-		g_hash_table_remove (s_hDocksTable, cDockName);
+	CairoDock *pSubDock = cairo_dock_create_dock (cDockName, NULL);
+	g_return_val_if_fail (pSubDock != NULL, NULL);
+	
+	cairo_dock_reference_dock (pSubDock, pParentDock);  // on le fait tout de suite pour avoir la bonne reference avant le 'load'.
+
+	pSubDock->icons = pIconList;
+	if (pIconList != NULL)
+	{
+		Icon *icon;
+		GList *ic;
+		for (ic = pIconList; ic != NULL; ic = ic->next)
+		{
+			icon = ic->data;
+			if (icon->cParentDockName == NULL)
+				icon->cParentDockName = g_strdup (cDockName);
+		}
+		cairo_dock_load_buffers_in_one_dock (pSubDock);
+	}
+	return pSubDock;
+}
+
+void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName)
+{
+	if (pDock == NULL)
+		return;
+	cd_debug ("%s (%s, %d)", __func__, cDockName, pDock->iRefCount);
+	if (pDock->bIsMainDock)  // utiliser cairo_dock_free_all_docks ().
+		return;
+	pDock->iRefCount --;
+	if (pDock->iRefCount > 0)
+		return ;
+	if (cairo_dock_search_dock_from_name (cDockName) != pDock)
+	{
+		cDockName = cairo_dock_search_dock_name (pDock);
+		cd_warning ("dock's name mismatch !\nThe real name is %s", cDockName);
+	}
+	
+	Icon *pPointedIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+	if (pPointedIcon != NULL)
+		pPointedIcon->pSubDock = NULL;
+	
+	if (pDock->iRefCount == -1 && ! pDock->bIsMainDock)  // c'etait un dock racine.
+		cairo_dock_remove_root_dock_config (cDockName);
+	
+	g_hash_table_remove (s_hDocksTable, cDockName);
+	
+	cairo_dock_free_dock (pDock);
+	
+	cairo_dock_trigger_refresh_launcher_gui ();
 }
 
 static gboolean _cairo_dock_free_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
 {
-	cairo_dock_deactivate_one_dock (pDock);
-
-	g_list_foreach (pDock->icons, (GFunc) cairo_dock_free_icon, NULL);
-	g_list_free (pDock->icons);
-
-	g_free (pDock);
+	cairo_dock_free_dock (pDock);
 	return TRUE;
 }
 void cairo_dock_reset_docks_table (void)
 {
-	g_hash_table_foreach_remove (s_hDocksTable, (GHRFunc) _cairo_dock_free_one_dock, NULL);
+	g_hash_table_foreach_remove (s_hDocksTable, (GHRFunc) _cairo_dock_free_one_dock, NULL);  // pour pouvoir enlever les elements tout en parcourant la table.
 	g_pMainDock = NULL;
+}
+
+void cairo_dock_free_all_docks (void)
+{
+	if (g_pMainDock == NULL)
+		return ;
+
+	cairo_dock_deactivate_all_modules ();  // y compris les modules qui n'ont pas d'icone.
+	
+	cairo_dock_reset_class_table ();  // enleve aussi les inhibiteurs.
+	cairo_dock_stop_application_manager ();
+	cairo_dock_stop_polling_screen_edge ();
+
+	cairo_dock_reset_docks_table ();  // detruit tous les docks, vide la table, et met le main-dock a NULL.
+	
+	cairo_dock_unload_additionnal_textures ();
 }
 
 

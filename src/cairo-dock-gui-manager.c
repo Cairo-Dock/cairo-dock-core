@@ -31,7 +31,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-applications-manager.h"
@@ -599,7 +599,7 @@ static gboolean _refresh_launcher_gui (gpointer data)
 	s_iSidRefreshGUI = 0;
 	return FALSE;
 }
-void cairo_dock_refresh_launcher_gui (void)
+void cairo_dock_trigger_refresh_launcher_gui (void)
 {
 	if (s_iSidRefreshGUI != 0)
 		return;

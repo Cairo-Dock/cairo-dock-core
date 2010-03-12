@@ -49,7 +49,7 @@
 #include "cairo-dock-config.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-class-manager.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-internal-taskbar.h"
@@ -734,7 +734,7 @@ void cairo_dock_initialize_application_manager (Display *pDisplay)
 	cairo_dock_initialize_application_factory (pDisplay);
 }
 
-void cairo_dock_register_appli (Icon *icon)
+static void cairo_dock_register_appli (Icon *icon)
 {
 	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
@@ -907,7 +907,7 @@ static gboolean _cairo_dock_reset_appli_table_iter (Window *pXid, Icon *pIcon, g
 						cairo_dock_update_dock_size (pFakeClassParentDock);
 				}
 				
-				cairo_dock_destroy_dock (pDock, cParentDockName, NULL, NULL);
+				cairo_dock_destroy_dock (pDock, cParentDockName);
 			}
 			else
 				cairo_dock_update_dock_size (pDock);

@@ -30,7 +30,7 @@
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-launcher-factory.h"

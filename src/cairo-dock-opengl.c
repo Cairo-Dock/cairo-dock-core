@@ -497,7 +497,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 		// on se positionne au milieu.
 		int iWidth, iHeight;
 		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
-		g_print ("draw %dx%d texture on a %dx%d viewport\n", iWidth, iHeight, pContainer->iWidth, pContainer->iHeight);
+		///g_print ("draw %dx%d texture on a %dx%d viewport\n", iWidth, iHeight, pContainer->iWidth, pContainer->iHeight);
 		//glViewport ((pContainer->iWidth - iWidth)/2, (pContainer->iHeight - iHeight)/2, iWidth, iHeight);
 		cairo_dock_set_ortho_view (pContainer);
 		glLoadIdentity ();
@@ -550,6 +550,11 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	else if (g_openglConfig.iFboId != 0)
 	{
 		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);  // switch back to window-system-provided framebuffer
+		glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
+			GL_COLOR_ATTACHMENT0_EXT,
+			GL_TEXTURE_2D,
+			0,
+			0);  // on detache la texture (precaution).
 		// copie dans notre texture
 		if (g_openglConfig.bRedirected)
 		{

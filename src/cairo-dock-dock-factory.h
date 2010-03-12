@@ -114,12 +114,9 @@ struct _CairoDock {
 	gint iRefCount;
 
 	//\_______________ Config parameters.
-	// ecart de la fenetre par rapport au bord de l'ecran.
-	gint iGapX;
-	// decalage de la fenetre par rapport au point d'alignement sur le bord de l'ecran.
-	gint iGapY;
-	// alignment, between 0 and 1, on the screen's edge.
-	gdouble fAlign;
+	gint iGapX;  // ecart de la fenetre par rapport au bord de l'ecran.
+	gint iGapY;  // decalage de la fenetre par rapport au point d'alignement sur le bord de l'ecran.
+	gdouble fAlign;  // alignment, between 0 and 1, on the screen's edge.
 	/// whether the dock automatically hides itself or not.
 	gboolean bAutoHide;
 	/// Horizontal offset of the screen where the dock lives, according to Xinerama.
@@ -143,20 +140,14 @@ struct _CairoDock {
 	gint iRightMargin;
 
 	//\_______________ current state of the dock.
-	// pour faire defiler les icones avec la molette.
-	gint iScrollOffset;
-	// indice de calcul du coef multiplicateur de l'amplitude de la sinusoide (entre 0 et CAIRO_DOCK_NB_MAX_ITERATIONS).
-	gint iMagnitudeIndex;
+	gint iScrollOffset;  // pour faire defiler les icones avec la molette.
+	gint iMagnitudeIndex;  // indice de calcul du coef multiplicateur de l'amplitude de la sinusoide (entre 0 et CAIRO_DOCK_NB_MAX_ITERATIONS).
 	/// (un)folding factor, between 0(unfolded) to 1(folded). It's up to the renderer on how to make use of it.
 	gdouble fFoldingFactor;
-	// type d'icone devant eviter la souris, -1 si aucun.
-	gint iAvoidingMouseIconType;
-	// marge d'evitement de la souris, en fraction de la largeur d'an icon (entre 0 et 0.5)
-	gdouble fAvoidingMouseMargin;
-	// pointeur sur le 1er element de la liste des icones a etre dessine, en partant de la gauche.
-	GList *pFirstDrawnElement;
-	// decalage des decorations pour les faire suivre la souris.
-	gdouble fDecorationsOffsetX;
+	gint iAvoidingMouseIconType;// type d'icone devant eviter la souris, -1 si aucun.
+	gdouble fAvoidingMouseMargin;// marge d'evitement de la souris, en fraction de la largeur d'an icon (entre 0 et 0.5)
+	GList *pFirstDrawnElement;// pointeur sur le 1er element de la liste des icones a etre dessine, en partant de la gauche.
+	gdouble fDecorationsOffsetX;// decalage des decorations pour les faire suivre la souris.
 	/// counter for the fade out effect.
 	gint iFadeCounter;
 	/// direction of the fade out effect.
@@ -195,6 +186,8 @@ struct _CairoDock {
 	guint iSidLeaveDemand;
 	/// Source ID for pending update of WM icons geometry.
 	guint iSidUpdateWMIcons;
+	/// Source ID of the timer that delays the "event" event with auto-hide.
+	guint iSidUnhideDemand;
 	
 	//\_______________ Renderer and fields set by it.
 	// nom de la vue, utile pour (re)charger les fonctions de rendu posterieurement a la creation du dock.
@@ -249,26 +242,9 @@ struct _CairoDock {
 #define CAIRO_DOCK(pDock) ((CairoDock *)pDock)
 
 
-/** Create a new root dock.
-* @param cDockName name of the dock, used to identify it quickly. If the name is already used, the corresponding dock is returned.
-* @param cRendererName name of a renderer. If NULL, the default renderer will be applied.
-* @return the newly allocated dock, to destroy with #cairo_dock_destroy_dock
-*/
-CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRendererName);
+CairoDock *cairo_dock_new_dock (const gchar *cRendererName);
 
-/*
-* Desactive a dock : le rend inoperant, en detruisant tout ce qu'il contient, sauf sa liste d'icones.
-* @param pDock the dock.
-*/
-void cairo_dock_deactivate_one_dock (CairoDock *pDock);
-
-/** Decrease the number of pointing icons, and destroy the dock if no more icons point on it. Also destroy all of its sub-docks, and free any allocated ressources. Do nothing for the main dock, use #cairo_dock_free_all_docks for it.
-* @param pDock the dock to be destroyed.
-* @param cDockName its name.
-* @param ReceivingDock a dock that will get its icons, or NULL to also destroy its icons.
-* @param cReceivingDockName the name of the dock that will get its icons, or NULL if none is provided.
-*/
-void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDock *ReceivingDock, const gchar *cReceivingDockName);
+void cairo_dock_free_dock (CairoDock *pDock);
 
 /** Increase by 1 the number of pointing icons. If the dock was a root dock, it becomes a sub-dock.
 * @param pDock a dock.
@@ -276,13 +252,6 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDoc
 */
 void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock);
 
-/** Create a new dock of type "sub-dock", and load a given list of icons inside. The list then belongs to the dock, so it must not be freeed after that. The buffers of each icon are loaded, so they just need to have an image filename and a name.
-* @param pIconList a list of icons that will be loaded and inserted into the new dock.
-* @param cDockName desired name for the new dock.
-* @param pParentDock the parent dock.
-* @return the newly allocated dock.
-*/
-CairoDock *cairo_dock_create_subdock_from_scratch (GList *pIconList, gchar *cDockName, CairoDock *pParentDock);
 
 /** Load a set of .desktop files that define icons, and build the corresponding tree of docks.
 * All the icons are created and placed inside their dock, which is created if necessary.
@@ -291,10 +260,6 @@ CairoDock *cairo_dock_create_subdock_from_scratch (GList *pIconList, gchar *cDoc
 * @param cDirectory a folder containing some .desktop files.
 */
 void cairo_dock_build_docks_tree_with_desktop_files (CairoDock *pMainDock, gchar *cDirectory);
-
-/** Destroy all docks and all icons contained inside, and free all allocated ressources. Applets and Taskbar are stopped beforehand.
-*/
-void cairo_dock_free_all_docks (void);
 
 
 /** Insert an icon into a dock.
@@ -370,6 +335,13 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 *@return the newly created Icon corresponding to the type, or NULL if an error occured.
 */
 #define cairo_dock_add_new_launcher_by_type(iType, pReceivingDock, fOrder) cairo_dock_add_new_launcher_by_uri_or_type (NULL, iType, pReceivingDock, fOrder);
+
+/** Remove all icons from a dock (and its sub-docks). If the receiving dock is NULL, the icons are destroyed and removed from the current theme itself.
+*@param pDock a dock.
+*@param pReceivingDock the dock that will receive the icons, or NULL to destroy and remove the icons.
+*@param cReceivingDockName name of the receiving dock.
+*/
+void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingDock, const gchar *cReceivingDockName);
 
 
 G_END_DECLS

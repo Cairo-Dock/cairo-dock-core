@@ -172,7 +172,7 @@ GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon);
 
 /** Trigger the refresh of the launcher GUI. The refresh well happen when the main loop gets available.
 */
-void cairo_dock_refresh_launcher_gui (void);
+void cairo_dock_trigger_refresh_launcher_gui (void);
 
 
 void cairo_dock_load_user_gui_backend (void);

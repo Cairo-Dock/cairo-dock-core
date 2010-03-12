@@ -49,7 +49,7 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-menu.h"
 #include "cairo-dock-callbacks.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keybinder.h"
@@ -753,7 +753,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 
 	s_bLoading = FALSE;
 	
-	cairo_dock_refresh_launcher_gui ();
+	cairo_dock_trigger_refresh_launcher_gui ();
 }
 
 gboolean cairo_dock_is_loading (void)

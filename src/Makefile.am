@@ -86,8 +86,10 @@ cairo_dock_SOURCES = \
 	cairo-dock-desklet-manager.h\
 	cairo-dock-desklet-factory.c\
 	cairo-dock-desklet-factory.h\
-	cairo-dock-dialogs.c\
-	cairo-dock-dialogs.h\
+	cairo-dock-dialog-factory.c\
+	cairo-dock-dialog-factory.h\
+	cairo-dock-dialog-manager.c\
+	cairo-dock-dialog-manager.h\
 	cairo-dock-flying-container.c\
 	cairo-dock-flying-container.h\
 	cairo-dock-dock-manager.c\
@@ -222,7 +224,8 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-themes-manager.h\
 	cairo-dock-animations.h\
 	cairo-dock-notifications.h\
-	cairo-dock-dialogs.h\
+	cairo-dock-dialog-factory.h\
+	cairo-dock-dialog-manager.h\
 	cairo-dock-surface-factory.h\
 	cairo-dock-renderer-manager.h\
 	cairo-dock-data-renderer.h\

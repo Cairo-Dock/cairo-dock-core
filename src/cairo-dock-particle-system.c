@@ -43,10 +43,10 @@ void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int
 	glBindTexture(GL_TEXTURE_2D, pParticleSystem->iTexture);
 	
 	GLfloat *vertices = pParticleSystem->pVertices;
-	GLfloat *coords = pParticleSystem->pCoords;
+	///GLfloat *coords = pParticleSystem->pCoords;
 	GLfloat *colors = pParticleSystem->pColors;
 	GLfloat *vertices2 = &pParticleSystem->pVertices[pParticleSystem->iNbParticles * 4 * 3];
-	GLfloat *coords2 = &pParticleSystem->pCoords[pParticleSystem->iNbParticles * 4 * 2];
+	///GLfloat *coords2 = &pParticleSystem->pCoords[pParticleSystem->iNbParticles * 4 * 2];
 	GLfloat *colors2 = &pParticleSystem->pColors[pParticleSystem->iNbParticles * 4 * 4];
 	
 	GLfloat x,y,z;
@@ -93,8 +93,8 @@ void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int
 		}
 		vertices += 12;
 		
-		memcpy (coords, s_pCornerCoords, sizeof (s_pCornerCoords));
-		coords += 8;
+		///memcpy (coords, s_pCornerCoords, sizeof (s_pCornerCoords));
+		///coords += 8;
 
 		colors[0] = p->color[0];
 		colors[1] = p->color[1];
@@ -132,9 +132,9 @@ void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int
 			}
 			vertices2 += 12;
 			
-			memcpy (coords2, s_pCornerCoords, sizeof (s_pCornerCoords));
-			coords2 += 8;
-
+			///memcpy (coords2, s_pCornerCoords, sizeof (s_pCornerCoords));
+			///coords2 += 8;
+			
 			colors2[0] = 1;
 			colors2[1] = 1;
 			colors2[2] = 1;
@@ -178,6 +178,17 @@ CairoParticleSystem *cairo_dock_create_particle_system (int iNbParticles, GLuint
 	pParticleSystem->pVertices = malloc(iNbParticles * 4 * 3 * sizeof(GLfloat)*2);
 	pParticleSystem->pCoords = malloc(iNbParticles * 4 * 2 * sizeof(GLfloat)*2);
 	pParticleSystem->pColors = malloc(iNbParticles * 4 * 4 * sizeof(GLfloat)*2);
+	
+	GLfloat *coords = pParticleSystem->pCoords;  // on prerempli les coordonnees de la texture.
+	CairoParticle *p;
+	int i;
+	for (i = 0; i < 2*iNbParticles; i ++)
+	{
+		p = &pParticleSystem->pParticles[i];
+		memcpy (coords, s_pCornerCoords, sizeof (s_pCornerCoords));
+		coords += 8;
+	}
+	
 	return pParticleSystem;
 }
 

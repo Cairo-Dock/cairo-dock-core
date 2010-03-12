@@ -29,7 +29,7 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-applet-facility.h"  // play_sound
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-themes-manager.h"

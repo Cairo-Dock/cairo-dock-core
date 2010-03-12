@@ -25,7 +25,7 @@
 #include "cairo-dock-icons.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-desktop-file-factory.h"

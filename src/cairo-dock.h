@@ -44,7 +44,7 @@
 #include <cairo-dock/cairo-dock-container.h>
 #include <cairo-dock/cairo-dock-modules.h>
 #include <cairo-dock/cairo-dock-flying-container.h>
-#include <cairo-dock/cairo-dock-dialogs.h>
+#include <cairo-dock/cairo-dock-dialog-factory.h>
 #include <cairo-dock/cairo-dock-desklet-factory.h>
 #include <cairo-dock/cairo-dock-dock-factory.h>
 // actions et comportement des containers.
@@ -61,6 +61,7 @@
 #include <cairo-dock/cairo-dock-launcher-manager.h>
 #include <cairo-dock/cairo-dock-separator-manager.h>
 #include <cairo-dock/cairo-dock-application-facility.h>
+#include <cairo-dock/cairo-dock-dialog-manager.h>
 #include <cairo-dock/cairo-dock-load.h>
 #include <cairo-dock/cairo-dock-config.h>
 // managers.

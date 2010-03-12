@@ -20,7 +20,7 @@
 #include <string.h>
 #include "cairo-dock-modules.h"
 #include "cairo-dock-config.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-background.h"
 #define _INTERNAL_MODULE_
