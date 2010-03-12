@@ -52,7 +52,7 @@
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-themes-manager.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
@@ -580,6 +580,12 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		return FALSE;
 	}
 	
+	if (pDock->iSidUnhideDemand != 0)
+	{
+		g_source_remove (pDock->iSidUnhideDemand);
+		pDock->iSidUnhideDemand = 0;
+	}
+	
 	//\_______________ On retarde la sortie.
 	if (pDock->iSidLeaveDemand == 0 && pEvent != NULL)  // pas encore de demande de sortie et sortie naturelle.
 	{
@@ -712,6 +718,15 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		cd_message ("* entree non autorisee");
 		return FALSE;
 	}
+	
+	// o nretarde l'entree en auto-hide.
+	if (myAccessibility.iUnhideDockDelay != 0 && pDock->iRefCount == 0 && pDock->bAutoHide && pEvent != NULL)  // vraie rentree dans un main dock en auto-hide => on retarde.
+	{
+		if (pDock->iSidUnhideDemand == 0)
+			pDock->iSidUnhideDemand = g_timeout_add (myAccessibility.iUnhideDockDelay, (GSourceFunc) cairo_dock_emit_enter_signal, pDock);
+		return FALSE;
+	}
+	pDock->iSidUnhideDemand = 0;
 	
 	// stop les timers.
 	if (pDock->iSidLeaveDemand != 0)

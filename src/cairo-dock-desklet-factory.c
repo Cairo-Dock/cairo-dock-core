@@ -37,7 +37,7 @@
 #include <gdk/gdkx.h>
 #include "cairo-dock-draw.h"
 #include "cairo-dock-modules.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-X-manager.h"
@@ -792,7 +792,6 @@ void cairo_dock_free_desklet (CairoDesklet *pDesklet)
 	{
 		g_list_foreach (pDesklet->icons, (GFunc) cairo_dock_free_icon, NULL);
 		g_list_free (pDesklet->icons);
-		pDesklet->icons = NULL;
 	}
 	
 	g_free (pDesklet->cDecorationTheme);

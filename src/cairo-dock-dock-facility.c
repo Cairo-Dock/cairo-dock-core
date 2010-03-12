@@ -59,6 +59,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-manager.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-internal-accessibility.h"

@@ -550,6 +550,11 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	else if (g_openglConfig.iFboId != 0)
 	{
 		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);  // switch back to window-system-provided framebuffer
+		glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
+			GL_COLOR_ATTACHMENT0_EXT,
+			GL_TEXTURE_2D,
+			0,
+			0);  // on detache la texture (precaution).
 		// copie dans notre texture
 		if (g_openglConfig.bRedirected)
 		{

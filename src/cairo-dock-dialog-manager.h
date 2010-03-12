@@ -18,23 +18,18 @@
 */
 
 
-#ifndef __CAIRO_DIALOGS__
-#define  __CAIRO_DIALOGS__
+#ifndef __CAIRO_DIALOG_MANAGER__
+#define  __CAIRO_DIALOG_MANAGER__
 
 #include "cairo-dock-container.h"
+#include "cairo-dock-dialog-factory.h"
 G_BEGIN_DECLS
 
-/** @file cairo-dock-dialogs.h This class defines the dialog container, that are useful to bring interaction with the user.
+/** @file cairo-dock-dialog-manager.h This class manages the Dialogs, that are useful to bring interaction with the user.
 * 
 * With dialogs, you can pop-up messages, ask for question, etc. Any GTK widget can be embedded inside a dialog, giving you any possible interaction with the user.
 * 
-* Dialogs are constructed with a set of attributes grouped inside a _CairoDialogAttribute. A dialog contains the following optionnal components :
-* - a message
-* - an image on its left
-* - a interaction widget below it
-* - some buttons at the bottom.
-* 
-* To add buttons, you specify a list of images in the attributes. "ok" and "cancel" are key words for the default ok/cancel buttons. You also has to provide a callback function that will be called on click. When the user clicks on a button, the function is called with the number of the clicked button, counted from 0. -1 and -2 are set if the user pushed the Return or Escape keys. The dialog is unreferenced after the user's answer, so <i>you have to reference the dialog in the callback if you want to keep the dialog alive</i>.
+* Dialogs are constructed with a set of attributes grouped inside a _CairoDialogAttribute. See \ref cairo-dock-dialog-factory.h for the list of available attributes.
 * 
 * The most generic way to build a Dialog is to fill a _CairoDialogAttribute and pass it to \ref cairo_dock_build_dialog.
 * 
@@ -45,185 +40,7 @@ G_BEGIN_DECLS
 * - if you want to pop up only 1 dialog at once on a given icon, use \ref cairo_dock_remove_dialog_if_any before you pop up your dialog.
 */
 
-typedef gpointer CairoDialogRendererDataParameter;
-typedef CairoDialogRendererDataParameter* CairoDialogRendererDataPtr;
-typedef gpointer CairoDialogRendererConfigParameter;
-typedef CairoDialogRendererConfigParameter* CairoDialogRendererConfigPtr;
-
-typedef void (* CairoDialogRenderFunc) (cairo_t *pCairoContext, CairoDialog *pDialog, double fAlpha);
-typedef void (* CairoDialogGLRenderFunc) (CairoDialog *pDialog, double fAlpha);
-typedef gpointer (* CairoDialogConfigureRendererFunc) (CairoDialog *pDialog, cairo_t *pSourceContext, CairoDialogRendererConfigPtr pConfig);
-typedef void (* CairoDialogUpdateRendererDataFunc) (CairoDialog *pDialog, CairoDialogRendererDataPtr pNewData);
-typedef void (* CairoDialogFreeRendererDataFunc) (CairoDialog *pDialog);
-/// Definition of a Dialog renderer. It draws the inside of the Dialog.
-struct _CairoDialogRenderer {
-	CairoDialogRenderFunc 				render;
-	CairoDialogConfigureRendererFunc 	configure;
-	CairoDialogFreeRendererDataFunc 	free_data;
-	CairoDialogUpdateRendererDataFunc 	update;
-	CairoDialogGLRenderFunc 			render_opengl;
-};
-
-typedef void (* CairoDialogSetDecorationSizeFunc) (CairoDialog *pDialog);
-typedef void (* CairoDialogRenderDecorationFunc) (cairo_t *pCairoContext, CairoDialog *pDialog);
-typedef void (* CairoDialogGLRenderDecorationFunc) (CairoDialog *pDialog);
-/// Definition of a Dialog decorator. It draws the frame of the Dialog.
-struct _CairoDialogDecorator {
-	CairoDialogSetDecorationSizeFunc 		set_size;
-	CairoDialogRenderDecorationFunc 		render;
-	CairoDialogGLRenderDecorationFunc 		render_opengl;
-	const gchar *cDisplayedName;
-};
-
-/// Definition of a generic callback of a dialog, called when the user clicks on a button. Buttons unmber starts wito 0, -1 means 'Return' and -2 means 'Escape'.
-typedef void (* CairoDockActionOnAnswerFunc) (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog);
-
-/// Configuration attributes of a Dialog, which derives from a Container.
-struct _CairoDialogAttribute {
-	/// path to an image to display in the left margin, or NULL.
-	gchar *cImageFilePath;
-	/// size of the icon in the left margin, or 0 to use the default one.
-	gint iIconSize;
-	
-	/// number of frames of the image, if it's an animated image, otherwise 0.
-	gint iNbFrames;  // 0 <=> 1.
-	/// text of the message, or NULL.
-	gchar *cText;
-	/// maximum authorized width of the message; it will scroll if it is too large. Set 0 to not limit it.
-	gint iMaxTextWidth;  // 0 => pas de limite.
-	/// A text rendering description of the message, or NULL to use the default one.
-	CairoDockLabelDescription *pTextDescription;  // NULL => &myDialogs.dialogTextDescription
-	
-	/// a widget to interact with the user, or NULL.
-	GtkWidget *pInteractiveWidget;
-	/// a NULL-terminated list of images for buttons, or NULL. "ok" and "cancel" are key word to load the default "ok" and "cancel" buttons.
-	gchar **cButtonsImage;
-	/// function that will be called when the user click on a button, or NULL.
-	CairoDockActionOnAnswerFunc pActionFunc;
-	/// data passed as a parameter of the callback, or NULL.
-	gpointer pUserData;
-	/// a function to free the data when the dialog is destroyed, or NULL.
-	GFreeFunc pFreeDataFunc;
-	
-	/// life time of the dialog, or 0 for an unlimited dialog.
-	gint iTimeLength;
-	/// name of a decorator, or NULL to use the default one.
-	gchar *cDecoratorName;
-	
-	/// whether the dialog should be transparent to mouse input.
-	gboolean bNoInput;
-};
-
-struct _CairoDialogButton {
-	cairo_surface_t *pSurface;
-	GLuint iTexture;
-	int iOffset;  // offset courant du au clic.
-};
-
-/// Definition of a Dialog.
-struct _CairoDialog {
-	/// container.
-	CairoContainer container;
-	//\_____________________ position
-	/// icon sur laquelle pointe the dialog.
-	Icon *pIcon;
-	/// position en X visee par la pointe dans le référentiel de l'écran.
-	gint iAimedX;
-	/// position en Y visee par la pointe dans le référentiel de l'écran.
-	gint iAimedY;
-	/// TRUE ssi the dialog est a droite de l'écran; dialog a droite <=> pointe a gauche.
-	gboolean bRight;
-	//\_____________________ dimensions et structure interne.
-	/// dimensions de la bulle (message + widget utilisateur + boutons).
-	gint iBubbleWidth, iBubbleHeight;
-	/// dimensions du message en comptant la marge du texte + vgap en bas si necessaire.
-	gint iMessageWidth, iMessageHeight;
-	/// dimensions des boutons + vgap en haut.
-	gint iButtonsWidth, iButtonsHeight;
-	/// dimensions du widget interactif.
-	gint iInteractiveWidth, iInteractiveHeight;
-	/// distance de la bulle au dock, donc hauteur totale de la pointe.
-	gint iDistanceToDock;
-	/// le widget d'interaction utilisateur (GtkEntry, GtkHScale, zone de dessin, etc).
-	GtkWidget *pInteractiveWidget;
-	/// la structure interne du widget.
-	GtkWidget *pLeftPaddingBox, *pRightPaddingBox, *pWidgetLayout;
-	/// le widget de remplissage ou l'on dessine le message.
-	GtkWidget *pMessageWidget;
-	/// le widget de remplissage ou l'on dessine les boutons.
-	GtkWidget *pButtonsWidget;
-	/// le widget de remplissage ou l'on dessine la pointe.
-	GtkWidget *pTipWidget;
-	/// le widget de remplissage de la marge du haut.
-	GtkWidget *pTopWidget;
-	
-	//\_____________________ surfaces
-	/// surface representant the message to display.
-	cairo_surface_t* pTextBuffer;
-	/// dimension de la surface du texte.
-	gint iTextWidth, iTextHeight;
-	/// dimension de the icon, sans les marges (0 si aucune icon).
-	gint iIconSize;
-	/// surface representant the icon dans la marge a gauche du texte.
-	cairo_surface_t* pIconBuffer;
-	//\_____________________ renderer
-	/// le moteur de rendu utilise pour dessiner the dialog.
-	CairoDialogRenderer *pRenderer;
-	/// donnees pouvant etre utilisees par le moteur de rendu.
-	gpointer pRendererData;
-	//\_____________________ decorateur
-	/// le decorateur de fenetre.
-	CairoDialogDecorator *pDecorator;
-	/// taille que s'est reserve le decorateur.
-	gint iLeftMargin, iRightMargin, iTopMargin, iBottomMargin, 	iMinFrameWidth, iMinBottomGap;
-	/// alignement de la pointe.
-	gdouble fAlign;
-	//\_____________________ actions
-	/// fonction appelee au clique sur l'un des boutons.
-	CairoDockActionOnAnswerFunc action_on_answer;
-	/// donnees transmises a la fonction.
-	gpointer pUserData;
-	/// fonction appelee pour liberer les donnees.
-	GFreeFunc pFreeUserDataFunc;
-	/// number of buttons.
-	int iNbButtons;
-	
-	/// le timer pour la destruction automatique du dialog.
-	gint iSidTimer;
-	/// conmpteur de reference.
-	gint iRefCount;/// pour l'animation de the icon.
-	gint iNbFrames, iCurrentFrame;
-	/// pour le defilement du texte.
-	gint iMaxTextWidth;
-	/// offset for text scrolling.
-	gint iCurrentTextOffset;
-	/// timers these 2 animations.
-	gint iSidAnimateIcon, iSidAnimateText;
-	/// List of buttons.
-	CairoDialogButton *pButtons;
-	/// textures.
-	GLuint iIconTexture, iTextTexture;
-	/// whether the dialog is transparent to mouse input.
-	gboolean bNoInput;
-	/// TRUE to allow the dialog to be minimized once. The flag is reseted to FALSE after the desklet has minimized.
-	gboolean bAllowMinimize;
-	GdkBitmap* pShapeBitmap;
-	GTimer *pUnmapTimer;
-};
-
-
-/** Say if a Container is a Dialog.
-*@param pContainer the container.
-*@return TRUE if the container is a dialog.
-*/
-#define CAIRO_DOCK_IS_DIALOG(pContainer) (pContainer != NULL && (pContainer)->iType == CAIRO_DOCK_TYPE_DIALOG)
-
-/** Cast a Container into a Dialog.
-*@param pContainer the container.
-*@return the dialog.
-*/
-#define CAIRO_DIALOG(pContainer) ((CairoDialog *)pContainer)
-
+void cairo_dock_init_dialog_manager (void);
 void cairo_dock_load_dialog_buttons (CairoContainer *pContainer, gchar *cButtonOkImage, gchar *cButtonCancelImage);
 void cairo_dock_unload_dialog_buttons (void);
 
@@ -233,16 +50,11 @@ void cairo_dock_unload_dialog_buttons (void);
 */
 gboolean cairo_dock_dialog_reference (CairoDialog *pDialog);
 
-/** Decrease by 1 the reference of a dialog. If the reference becomes nul, the disalog is destroyed.
+/** Decrease by 1 the reference of a dialog. If the reference becomes nul, the dialog is destroyed.
 *@param pDialog the dialog.
 *@return TRUE if the reference became nul, in which case the dialog must not be used anymore.
 */
 gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog);
-
-/** Free a dialog and all its allocated ressources, and remove it from the list of dialogs. Should never be used, use #cairo_dock_dialog_unreference instead.
-*@param pDialog the dialog.
-*/
-void cairo_dock_free_dialog (CairoDialog *pDialog);
 
 /** Unreference the dialogs pointed by an icon.
 *@param icon the icon you want to delete all dialogs from.
@@ -258,8 +70,6 @@ gboolean cairo_dock_remove_dialog_if_any_full (Icon *icon, gboolean bAll);
 #define cairo_dock_remove_dialog_if_any(icon) cairo_dock_remove_dialog_if_any_full (icon, TRUE)
 
 
-GtkWidget *cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int iWidth, int iHeight, gboolean bCanResize);
-
 
 /** Generic function to pop up a dialog.
 *@param pAttribute attributes of the dialog.
@@ -270,13 +80,9 @@ GtkWidget *cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int iWidth,
 CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer);
 
 
-void cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pContainer, int *iX, int *iY, gboolean *bRight, CairoDockTypeHorizontality *bIsHorizontal, gboolean *bDirectionUp, double fAlign);
-
 void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer);
 
 void cairo_dock_replace_all_dialogs (void);
-
-void cairo_dock_compute_dialog_sizes (CairoDialog *pDialog);
 
 /** Pop up a dialog with a message, a widget, 2 buttons ok/cancel and an icon, all optionnal.
 *@param cText the message to display.
@@ -436,9 +242,9 @@ Icon *cairo_dock_get_dialogless_icon (void);
 */
 CairoDialog * cairo_dock_show_general_message (const gchar *cMessage, double fTimeLength);
 
-/* Pop up a blocking dialog with a question, pointing on "the best icon possible". This allows to ask a general question and freeze the application until the user answers.
-*@param cQuestion the question to ask.
-*@return same #cairo_dock_ask_question_and_wait.
+/** Pop up a dialog, pointing on "the best icon possible", and wait. This allows to display a general message.
+*@param cQuestion the message.
+*@return GTK_RESPONSE_YES ou GTK_RESPONSE_NO according to the user's choice, or GTK_RESPONSE_NONE if the dialog has been destroyed before.
 */
 int cairo_dock_ask_general_question_and_wait (const gchar *cQuestion);
 
@@ -455,24 +261,6 @@ void cairo_dock_unhide_dialog (CairoDialog *pDialog);
 *@param pDialog the dialog.
 */
 void cairo_dock_toggle_dialog_visibility (CairoDialog *pDialog);
-
-GtkWidget *cairo_dock_steal_widget_from_its_container (GtkWidget *pWidget);
-/** Detach the interactive widget from a dialog. The widget can then be placed anywhere after that. You have to unref it after you placed it into a container, or to destroy it.
-*@param pDialog the desklet with an interactive widget.
-*@return the widget.
-*/
-GtkWidget *cairo_dock_steal_interactive_widget_from_dialog (CairoDialog *pDialog);
-
-void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface_t *pNewTextSurface, int iNewTextWidth, int iNewTextHeight);
-void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface_t *pNewIconSurface, int iNewIconSize);
-
-void cairo_dock_set_dialog_message (CairoDialog *pDialog, const gchar *cMessage);
-void cairo_dock_set_dialog_message_printf (CairoDialog *pDialog, const gchar *cMessageFormat, ...);
-void cairo_dock_set_dialog_icon (CairoDialog *pDialog, const gchar *cImageFilePath);
-
-void cairo_dock_damage_icon_dialog (CairoDialog *pDialog);
-void cairo_dock_damage_text_dialog (CairoDialog *pDialog);
-void cairo_dock_damage_interactive_widget_dialog (CairoDialog *pDialog);
 
 
 G_END_DECLS

@@ -42,6 +42,7 @@ struct _CairoConfigAccessibility {
 	gboolean bPopUpOnScreenBorder;
 	gint iMaxAuthorizedWidth;
 	gchar *cRaiseDockShortcut;
+	gint iUnhideDockDelay;
 	gint iLeaveSubDockDelay;
 	gint iShowSubDockDelay;
 	gboolean bShowSubDockOnClick;

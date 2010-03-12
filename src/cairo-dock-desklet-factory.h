@@ -34,9 +34,10 @@ G_BEGIN_DECLS
 
 
 /**
-*@file cairo-dock-desklet.h This class defines the Desklets, that are Widgets placed directly on your desktop.
+*@file cairo-dock-desklet-factory.h This class defines the Desklets, that are Widgets placed directly on your desktop.
 * A Desklet is a container that holds 1 applet's icon plus an optionnal list of other icons and an optionnal GTK widget, has a decoration, suports several accessibility types (like Compiz Widget Layer), and has a renderer.
 * Desklets can be resized or moved directly with the mouse, and can be rotated in the 3 directions of space.
+* To actually create or destroy a Desklet, use the Desklet Manager's functoins in \ref cairo-dock-desklet-manager.h.
 */
 
 /// Type of accessibility of a Desklet.
@@ -202,12 +203,12 @@ struct _CairoDesklet {
 #define cairo_dock_desklet_is_free(pDesklet) (! (pDesklet->bPositionLocked || pDesklet->bFixedAttitude))
 
 
-/** Create a simple desklet container.
+/** Create a simple desklet container. This function should NOT be used directly.
 *@return the newly allocated desklet.
 */
 CairoDesklet *cairo_dock_new_desklet (void);
 
-/** Destroy a desklet, and free all the allocated ressources. The interactive widget is removed before, and can be inserted anywhere after that.
+/** Destroy a desklet, and free all the allocated ressources. The interactive widget is removed before, and can be inserted anywhere after that. This function should NOT be used directly.
 *@param pDesklet the desklet to destroy.
 */
 void cairo_dock_free_desklet (CairoDesklet *pDesklet);

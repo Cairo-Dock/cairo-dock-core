@@ -36,7 +36,6 @@ G_BEGIN_DECLS
 // Applis manager : core
 void cairo_dock_initialize_application_manager (Display *pDisplay);
 
-void cairo_dock_register_appli (Icon *icon);
 void cairo_dock_unregister_appli (Icon *icon);
 
 /** Start the applications manager. It will load all the applis into the dock, and keep monitor them.

@@ -35,7 +35,7 @@
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-log.h"

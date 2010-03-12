@@ -176,7 +176,7 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 	if (pParentDock == NULL)
 	{
 		cd_message ("le dock parent (%s) n'existe pas, on le cree", icon->cParentDockName);
-		pParentDock = cairo_dock_create_new_dock (icon->cParentDockName, NULL);
+		pParentDock = cairo_dock_create_dock (icon->cParentDockName, NULL);
 	}
 	
 	//\____________ On cree son sous-dock si necessaire.
@@ -317,7 +317,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	
 	if (CAIRO_DOCK_IS_URI_LAUNCHER (icon) && icon->pSubDock != NULL)  // dans le cas d'un repertoire, beaucoup de parametres peuvent affecter le contenu du sous-dock : nombre de fichiers max, ordre, et meme l'URI. Donc on s'embete pas trop, on le recree.
 	{
-		cairo_dock_destroy_dock (icon->pSubDock, icon->cName, NULL, NULL);
+		cairo_dock_destroy_dock (icon->pSubDock, icon->cName);
 		icon->pSubDock = NULL;
 	}
 	
@@ -372,7 +372,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 		if (icon->pSubDock == NULL)
 			icon->pSubDock = pSubDock;
 		else  // ne devrait pas arriver (une icone de container n'est pas un lanceur pouvant prendre un Xid).
-			cairo_dock_destroy_dock (pSubDock, cName, g_pMainDock, CAIRO_DOCK_MAIN_DOCK_NAME);
+			cairo_dock_destroy_dock (pSubDock, cName);
 	}
 	else
 	{
@@ -380,9 +380,12 @@ void cairo_dock_reload_launcher (Icon *icon)
 		{
 			g_print ("on transvase dans le nouveau sous-dock\n");
 			if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))  // dans ce cas on ne transvase pas puisque le sous-dock est cree a partir du contenu du repertoire.
-				cairo_dock_destroy_dock (pSubDock, cName, NULL, NULL);
+				cairo_dock_destroy_dock (pSubDock, cName);
 			else
-				cairo_dock_destroy_dock (pSubDock, cName, icon->pSubDock, icon->cName);
+			{
+				cairo_dock_remove_icons_from_dock (pSubDock, icon->pSubDock, icon->cName);
+				cairo_dock_destroy_dock (pSubDock, cName);
+			}
 			pSubDock = NULL;
 		}
 	}
@@ -404,7 +407,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 		if (pDock->icons == NULL && pDock->iRefCount == 0 && ! pDock->bIsMainDock)  // on supprime les docks principaux vides.
 		{
 			cd_message ("dock %s vide => a la poubelle", cPrevDockName);
-			cairo_dock_destroy_dock (pDock, cPrevDockName, NULL, NULL);
+			cairo_dock_destroy_dock (pDock, cPrevDockName);
 			pDock = NULL;
 		}
 		else
@@ -434,7 +437,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 		{
 			cairo_dock_redraw_subdock_content (pNewDock);
 		}
-		cairo_dock_refresh_launcher_gui ();
+		cairo_dock_trigger_refresh_launcher_gui ();
 	}
 	
 	//\_____________ On gere l'inhibition de sa classe.

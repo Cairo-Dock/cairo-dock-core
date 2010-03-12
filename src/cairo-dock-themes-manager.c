@@ -29,13 +29,13 @@
 
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-manager.h"
 #include "cairo-dock-modules.h"
 #include "cairo-dock-renderer-manager.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-gauge.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-log.h"
@@ -1172,7 +1172,7 @@ void cairo_dock_load_current_theme (void)
 	cairo_dock_free_all_docks ();
 
 	//\___________________ On cree le dock principal.
-	g_pMainDock = cairo_dock_create_new_dock (CAIRO_DOCK_MAIN_DOCK_NAME, NULL);  // on ne lui assigne pas de vues, puisque la vue par defaut des docks principaux sera definie plus tard.
+	g_pMainDock = cairo_dock_create_dock (CAIRO_DOCK_MAIN_DOCK_NAME, NULL);  // on ne lui assigne pas de vues, puisque la vue par defaut des docks principaux sera definie plus tard.
 
 	//\___________________ On lit son fichier de conf et on charge tout.
 	cairo_dock_read_conf_file (g_cConfFile, g_pMainDock);  // chargera des valeurs par defaut si le fichier de conf fourni est incorrect.

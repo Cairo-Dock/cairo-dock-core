@@ -258,7 +258,7 @@ static Window _cairo_dock_detach_appli_of_class (const gchar *cClass, gboolean b
 							cairo_dock_free_icon (pPointingIcon);
 						}
 					}
-					cairo_dock_destroy_dock (pParentDock, cParentDockName, NULL, NULL);
+					cairo_dock_destroy_dock (pParentDock, cParentDockName);
 				}
 				else  // non vide => on le met a jour.
 					cairo_dock_update_dock_size (pParentDock);
@@ -510,7 +510,7 @@ void cairo_dock_update_Xid_on_inhibators (Window Xid, const gchar *cClass)
 						{
 							cairo_dock_detach_icon_from_dock (pSameClassIcon, pClassSubDock, myIcons.iSeparateIcons);
 							if (pClassSubDock->icons == NULL && pClassSubDock == cairo_dock_search_dock_from_name (cClass))  // le sous-dock de la classe devient vide.
-								cairo_dock_destroy_dock (pClassSubDock, cClass, NULL, NULL);
+								cairo_dock_destroy_dock (pClassSubDock, cClass);
 							else
 								cairo_dock_update_dock_size (pClassSubDock);
 						}
@@ -768,7 +768,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 		cd_warning ("the %s class sub-dock has no element, which is probably an error !\nit will be destroyed.", cClass);
 		CairoDock *pFakeParentDock = NULL;
 		Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
-		cairo_dock_destroy_dock (pDock, cClass, NULL, NULL);
+		cairo_dock_destroy_dock (pDock, cClass);
 		pFakeClassIcon->pSubDock = NULL;
 		cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
 		cairo_dock_free_icon (pFakeClassIcon);
@@ -796,7 +796,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);  // a faire avant que l'icone n'ait plus de sous-dock, sinon elle est consideree comme un separateur auto, et du coup le separateur n'est pas enleve.
 			
 			cd_debug (" on detruit le sous-dock...");
-			cairo_dock_destroy_dock (pDock, cClass, NULL, NULL);
+			cairo_dock_destroy_dock (pDock, cClass);
 			pFakeClassIcon->pSubDock = NULL;
 			
 			cd_debug ("on detruit l'icone de paille");
@@ -824,7 +824,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			g_free (pLastClassIcon->cParentDockName);
 			pLastClassIcon->cParentDockName = NULL;
 			
-			cairo_dock_destroy_dock (pDock, cClass, NULL, NULL);
+			cairo_dock_destroy_dock (pDock, cClass);
 			pFakeClassIcon->pSubDock = NULL;
 			cd_debug ("sanity check : pFakeClassIcon->Xid : %d", pFakeClassIcon->Xid);
 			if (! cairo_dock_icon_is_being_removed (pLastClassIcon))

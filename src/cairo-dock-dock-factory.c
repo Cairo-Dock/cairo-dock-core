@@ -87,20 +87,11 @@ extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
 
 
-CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRendererName)
+CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
 {
-	cd_message ("%s (%s)", __func__, cDockName);
-	g_return_val_if_fail (cDockName != NULL, NULL);
-	
-	//\__________________ On enregistre un nouveau dock.
+	//\__________________ On cree un dock.
 	CairoDock *pDock = g_new0 (CairoDock, 1);
 	pDock->container.iType = CAIRO_DOCK_TYPE_DOCK;
-	CairoDock *pInsertedDock = cairo_dock_register_dock (cDockName, pDock);  // determine au passage si c'est le MainDock.
-	if (pInsertedDock != pDock)  // un autre dock de ce nom existe deja.
-	{
-		g_free (pDock);
-		return pInsertedDock;
-	}
 	
 	pDock->iRefCount = 0;  // c'est un dock racine par defaut.
 	pDock->container.fRatio = 1.;
@@ -109,12 +100,12 @@ CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRen
 	pDock->container.iMouseX = -1; // utile ?
 	pDock->container.iMouseY = -1;
 	pDock->fMagnitudeMax = 1.;
-
+	pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
+	
 	//\__________________ On cree la fenetre GTK.
 	GtkWidget *pWindow = cairo_dock_create_container_window ();
 	gtk_container_set_border_width(GTK_CONTAINER(pWindow), 0);
 	pDock->container.pWidget = pWindow;
-	pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
 	
 	if (g_bKeepAbove)
 		gtk_window_set_keep_above (GTK_WINDOW (pWindow), g_bKeepAbove);
@@ -124,11 +115,11 @@ CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRen
 		gtk_window_set_keep_below (GTK_WINDOW (pWindow), TRUE);
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
 	gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_DOCK);
-
+	
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock");
 	
 	cairo_dock_set_renderer (pDock, cRendererName);
-
+	
 	//\__________________ On connecte les evenements a la fenetre.
 	gtk_widget_add_events (pWindow,
 		GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
@@ -235,25 +226,10 @@ CairoDock *cairo_dock_create_new_dock (const gchar *cDockName, const gchar *cRen
 	}
 #endif
 	
-	if (! pDock->bIsMainDock)
-	{
-		if (cairo_dock_get_root_dock_position (cDockName, pDock))
-			cairo_dock_place_root_dock (pDock);
-	}
-	/*g_print ("redessin force ...\n");
-		while (gtk_events_pending ())  // on force le redessin pour eviter les carres gris.
-			gtk_main_iteration ();
-	g_print ("done.\n");*/
-	
 	return pDock;
 }
 
-static void _cairo_dock_fm_remove_monitor_on_one_icon (Icon *icon, gpointer data)
-{
-	if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))
-		cairo_dock_fm_remove_monitor (icon);
-}
-void cairo_dock_deactivate_one_dock (CairoDock *pDock)
+void cairo_dock_free_dock (CairoDock *pDock)
 {
 	if (pDock->iSidPopDown != 0)
 		g_source_remove (pDock->iSidPopDown);
@@ -261,119 +237,32 @@ void cairo_dock_deactivate_one_dock (CairoDock *pDock)
 		g_source_remove (pDock->iSidMoveResize);
 	if (pDock->iSidLeaveDemand != 0)
 		g_source_remove (pDock->iSidLeaveDemand);
+	if (pDock->iSidUnhideDemand != 0)
+		g_source_remove (pDock->iSidUnhideDemand);
 	if (pDock->iSidUpdateWMIcons != 0)
 		g_source_remove (pDock->iSidUpdateWMIcons);
 	cairo_dock_notify (CAIRO_DOCK_STOP_DOCK, pDock);
 	if (pDock->container.iSidGLAnimation != 0)
 		g_source_remove (pDock->container.iSidGLAnimation);
 
-	g_list_foreach (pDock->icons, (GFunc) _cairo_dock_fm_remove_monitor_on_one_icon, NULL);
-
-	Icon *pPointedIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-	if (pPointedIcon != NULL)
-		pPointedIcon->pSubDock = NULL;
+	g_list_foreach (pDock->icons, (GFunc) cairo_dock_free_icon, NULL);
+	g_list_free (pDock->icons);
+	pDock->icons = NULL;
+	
+	gtk_widget_destroy (pDock->container.pWidget);
 	
 	if (pDock->pShapeBitmap != NULL)
 		g_object_unref ((gpointer) pDock->pShapeBitmap);
-	pDock->pShapeBitmap = NULL;
-	
-	gtk_widget_destroy (pDock->container.pWidget);
-	pDock->container.pWidget = NULL;
 	
 	if (pDock->pRenderer != NULL && pDock->pRenderer->free_data != NULL)
 	{
 		pDock->pRenderer->free_data (pDock);
-		pDock->pRendererData = NULL;
 	}
 	
 	g_free (pDock->cRendererName);
-	pDock->cRendererName = NULL;
-}
-
-void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName, CairoDock *pReceivingDock, const gchar *cReceivingDockName)
-{
-	g_return_if_fail (pDock != NULL);
-	cd_debug ("%s (%s, %d)", __func__, cDockName, pDock->iRefCount);
-	if (pDock->bIsMainDock)  // utiliser cairo_dock_free_all_docks ().
-		return;
-	pDock->iRefCount --;
-	if (pDock->iRefCount > 0)
-		return ;
-	if (cairo_dock_search_dock_from_name (cDockName) != pDock)
-	{
-		cDockName = cairo_dock_search_dock_name (pDock);
-		cd_warning ("dock's name mismatch !\nThe real name is %s", cDockName);
-	}
-	
-	cairo_dock_deactivate_one_dock (pDock);
-
-	gboolean bModuleWasRemoved = FALSE;
-	GList *pIconsList = pDock->icons;
-	pDock->icons = NULL;
-	Icon *icon;
-	GList *ic;
-	gchar *cDesktopFilePath;
-	for (ic = pIconsList; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-
-		if (icon->pSubDock != NULL && pReceivingDock == NULL)
-		{
-			cairo_dock_destroy_dock (icon->pSubDock, icon->cClass != NULL ? icon->cClass : icon->cName, NULL, NULL);
-			icon->pSubDock = NULL;
-		}
-
-		if (pReceivingDock == NULL || cReceivingDockName == NULL)  // alors on les jete.
-		{
-			if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon))
-			{
-				cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
-				g_remove (cDesktopFilePath);
-				g_free (cDesktopFilePath);
-			}
-			else if (CAIRO_DOCK_IS_APPLET (icon))  // on decide de les remettre dans le dock principal la prochaine fois qu'ils seront actives.
-			{
-				cairo_dock_update_icon_s_container_name (icon, CAIRO_DOCK_MAIN_DOCK_NAME);
-				bModuleWasRemoved = TRUE;
-			}
-			cairo_dock_free_icon (icon);  // de-instancie l'applet.
-		}
-		else  // on les re-attribue au dock receveur.
-		{
-			cairo_dock_update_icon_s_container_name (icon, cReceivingDockName);
-
-			icon->fWidth /= pDock->container.fRatio;
-			icon->fHeight /= pDock->container.fRatio;
-			
-			cd_debug (" on re-attribue %s au dock %s", icon->cName, icon->cParentDockName);
-			cairo_dock_insert_icon_in_dock (icon, pReceivingDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
-			
-			if (CAIRO_DOCK_IS_APPLET (icon))
-			{
-				icon->pModuleInstance->pContainer = CAIRO_CONTAINER (pReceivingDock);  // astuce pour ne pas avoir a recharger le fichier de conf ^_^
-				icon->pModuleInstance->pDock = pReceivingDock;
-				cairo_dock_reload_module_instance (icon->pModuleInstance, FALSE);
-			}
-			cairo_dock_launch_animation (CAIRO_CONTAINER (pReceivingDock));
-		}
-	}
-	if (pReceivingDock != NULL)
-		cairo_dock_update_dock_size (pReceivingDock);
-
-	g_list_free (pIconsList);
-
-	cairo_dock_unregister_dock (cDockName);
-	
-	if (bModuleWasRemoved)
-		cairo_dock_update_conf_file_with_active_modules ();
-	
-	if (pDock->iRefCount == -1)  // c'etait un dock racine.
-		cairo_dock_remove_root_dock_config (cDockName);
 	
 	g_free (pDock);
-	cairo_dock_refresh_launcher_gui ();
 }
-
 
 void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 {
@@ -438,28 +327,6 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 	}
 }
 
-CairoDock *cairo_dock_create_subdock_from_scratch (GList *pIconList, gchar *cDockName, CairoDock *pParentDock)
-{
-	CairoDock *pSubDock = cairo_dock_create_new_dock (cDockName, NULL);
-	g_return_val_if_fail (pSubDock != NULL, NULL);
-	
-	cairo_dock_reference_dock (pSubDock, pParentDock);  // on le fait tout de suite pour avoir la bonne reference avant le 'load'.
-
-	pSubDock->icons = pIconList;
-	if (pIconList != NULL)
-	{
-		Icon *icon;
-		GList *ic;
-		for (ic = pIconList; ic != NULL; ic = ic->next)
-		{
-			icon = ic->data;
-			if (icon->cParentDockName == NULL)
-				icon->cParentDockName = g_strdup (cDockName);
-		}
-		cairo_dock_load_buffers_in_one_dock (pSubDock);
-	}
-	return pSubDock;
-}
 
 void cairo_dock_build_docks_tree_with_desktop_files (CairoDock *pMainDock, gchar *cDirectory)
 {
@@ -494,22 +361,6 @@ void cairo_dock_build_docks_tree_with_desktop_files (CairoDock *pMainDock, gchar
 	}
 	g_dir_close (dir);
 	cairo_destroy (pCairoContext);
-}
-
-void cairo_dock_free_all_docks (void)
-{
-	if (g_pMainDock == NULL)
-		return ;
-
-	cairo_dock_deactivate_all_modules ();  // y compris les modules qui n'ont pas d'icone.
-	
-	cairo_dock_reset_class_table ();  // enleve aussi les inhibiteurs.
-	cairo_dock_stop_application_manager ();
-	cairo_dock_stop_polling_screen_edge ();
-
-	cairo_dock_reset_docks_table ();  // detruit tous les docks, vide la table, et met le main-dock a NULL.
-	
-	cairo_dock_unload_additionnal_textures ();
 }
 
 
@@ -631,7 +482,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	}
 	
 	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_IS_APPLET (icon))
-		cairo_dock_refresh_launcher_gui ();
+		cairo_dock_trigger_refresh_launcher_gui ();
 }
 
 
@@ -717,7 +568,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	}
 	
 	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_IS_APPLET (icon))
-		cairo_dock_refresh_launcher_gui ();
+		cairo_dock_trigger_refresh_launcher_gui ();
 	return TRUE;
 }
 void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboolean bCheckUnusedSeparator)
@@ -739,7 +590,7 @@ void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboole
 		
 		if (icon->pSubDock != NULL && icon->cClass == NULL)
 		{
-			cairo_dock_destroy_dock (icon->pSubDock, icon->cName, NULL, NULL);
+			cairo_dock_destroy_dock (icon->pSubDock, icon->cName);
 			icon->pSubDock = NULL;
 		}
 	}
@@ -873,4 +724,65 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 		}
 	}
 	return pNewIcon;
+}
+
+
+void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingDock, const gchar *cReceivingDockName)
+{
+	gboolean bModuleWasRemoved = FALSE;
+	GList *pIconsList = pDock->icons;
+	pDock->icons = NULL;
+	Icon *icon;
+	GList *ic;
+	gchar *cDesktopFilePath;
+	for (ic = pIconsList; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+
+		if (icon->pSubDock != NULL)
+		{
+			cairo_dock_remove_icons_from_dock (icon->pSubDock, pReceivingDock, cReceivingDockName);
+		}
+
+		if (pReceivingDock == NULL || cReceivingDockName == NULL)  // alors on les jete.
+		{
+			if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon))
+			{
+				cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
+				g_remove (cDesktopFilePath);
+				g_free (cDesktopFilePath);
+			}
+			else if (CAIRO_DOCK_IS_APPLET (icon))
+			{
+				cairo_dock_update_icon_s_container_name (icon, CAIRO_DOCK_MAIN_DOCK_NAME);  // on decide de les remettre dans le dock principal la prochaine fois qu'ils seront actives.
+				bModuleWasRemoved = TRUE;
+			}
+			cairo_dock_free_icon (icon);  // de-instancie l'applet.
+		}
+		else  // on les re-attribue au dock receveur.
+		{
+			cairo_dock_update_icon_s_container_name (icon, cReceivingDockName);
+
+			icon->fWidth /= pDock->container.fRatio;
+			icon->fHeight /= pDock->container.fRatio;
+			
+			cd_debug (" on re-attribue %s au dock %s", icon->cName, icon->cParentDockName);
+			cairo_dock_insert_icon_in_dock (icon, pReceivingDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
+			
+			if (CAIRO_DOCK_IS_APPLET (icon))
+			{
+				icon->pModuleInstance->pContainer = CAIRO_CONTAINER (pReceivingDock);  // astuce pour ne pas avoir a recharger le fichier de conf ^_^
+				icon->pModuleInstance->pDock = pReceivingDock;
+				cairo_dock_reload_module_instance (icon->pModuleInstance, FALSE);
+			}
+			cairo_dock_launch_animation (CAIRO_CONTAINER (pReceivingDock));
+		}
+	}
+	if (pReceivingDock != NULL)
+		cairo_dock_update_dock_size (pReceivingDock);
+
+	g_list_free (pIconsList);
+	
+	if (bModuleWasRemoved)
+		cairo_dock_update_conf_file_with_active_modules ();
 }

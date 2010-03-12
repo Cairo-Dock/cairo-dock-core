@@ -34,13 +34,36 @@ G_BEGIN_DECLS
 * Each Dock has a name that is unique. A Dock can be a sub-dock or a root-dock, whether there exists an icon that points on it or not, but there is no fundamental difference between both.
 */
 
-void cairo_dock_initialize_dock_manager (void);
+void cairo_dock_init_dock_manager (void);
 
-CairoDock *cairo_dock_register_dock (const gchar *cDockName, CairoDock *pDock);
 
-void cairo_dock_unregister_dock (const gchar *cDockName);
+/** Create a new root dock.
+* @param cDockName name of the dock, used to identify it quickly. If the name is already used, the corresponding dock is returned.
+* @param cRendererName name of a renderer. If NULL, the default renderer will be applied.
+* @return the newly allocated dock, to destroy with #cairo_dock_destroy_dock
+*/
+CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendererName);
+
+/** Create a new dock of type "sub-dock", and load a given list of icons inside. The list then belongs to the dock, so it must not be freeed after that. The buffers of each icon are loaded, so they just need to have an image filename and a name.
+* @param pIconList a list of icons that will be loaded and inserted into the new dock.
+* @param cDockName desired name for the new dock.
+* @param pParentDock the parent dock.
+* @return the newly allocated dock.
+*/
+CairoDock *cairo_dock_create_subdock_from_scratch (GList *pIconList, gchar *cDockName, CairoDock *pParentDock);
+
+/** Destroy a dock and its icons.
+* @param pDock the dock.
+* @param cDockName name for the dock.
+*/
+void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName);
+
 
 void cairo_dock_reset_docks_table (void);
+
+/** Destroy all docks and all icons contained inside, and free all allocated ressources. Applets and Taskbar are stopped beforehand.
+*/
+void cairo_dock_free_all_docks (void);
 
 
 /** Search the name of a Dock. It does a linear search in the table of Docks.
@@ -109,8 +132,7 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 
 void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock);
 
-/*
-* Supprime le fichier de conf d'un dock racine.
+/* Supprime le fichier de conf d'un dock racine.
 *@param cDockName le nom du dock.
 */
 void cairo_dock_remove_root_dock_config (const gchar *cDockName);

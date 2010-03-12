@@ -95,7 +95,7 @@
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-menu.h"
 #include "cairo-dock-themes-manager.h"
-#include "cairo-dock-dialogs.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-config.h"
@@ -421,10 +421,13 @@ int main (int argc, char** argv)
 	cairo_dock_get_version_from_string (CAIRO_DOCK_VERSION, &g_iMajorVersion, &g_iMinorVersion, &g_iMicroVersion);
 
 	//\___________________ On initialise le gestionnaire de docks (a faire en 1er).
-	cairo_dock_initialize_dock_manager ();
+	cairo_dock_init_dock_manager ();
 	
 	//\___________________ On initialise le gestionnaire de desklets.
 	cairo_dock_init_desklet_manager ();
+	
+	//\___________________ On initialise le gestionnaire de dialogues.
+	cairo_dock_init_dialog_manager ();
 	
 	//\___________________ On initialise le gestionnaire de vues.
 	cairo_dock_initialize_renderer_manager ();

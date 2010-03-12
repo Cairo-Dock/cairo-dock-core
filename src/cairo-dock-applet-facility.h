@@ -742,7 +742,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)
 
 #define CD_APPLET_DESTROY_MY_SUBDOCK do { \
-	cairo_dock_destroy_dock (myIcon->pSubDock, myIcon->cName, NULL, NULL); \
+	cairo_dock_destroy_dock (myIcon->pSubDock, myIcon->cName); \
 	myIcon->pSubDock = NULL; } while (0)
 
 #define CD_APPLET_LOAD_ICONS_IN_MY_SUBDOCK(pIconsList) do { \
