@@ -131,7 +131,7 @@ overwrite xicon = true
 #{Enter the class of the applications, separated by a semi-colon ';'}
 overwrite exception = pidgin;xchat;amsn;gimp-2.6
 
-#Y-[Make the config panel transparent?;1;1;Show the window thumbnail;0;0;Draw it bent backwards;0;0] How to draw minimized windows ?
+#Y-[Make the config panel transparent?;1;1;Show thumbnails for minimsed windows;0;0;Draw it bent backwards;0;0] How to draw minimized windows ?
 #{A composite manager is required to display the thumbnail.
 #OpenGL is required to draw the icon bent backwards.}
 minimized = 1
@@ -283,7 +283,7 @@ modules=
 
 [Background]
 
-#y+[Image;Color gradation] Fill the background with:
+#y+[Image;Colour gradation] Fill the background with:
 fill bg = 1
 
 #F+[Image;gtk-orientation-portrait]
@@ -490,7 +490,7 @@ frame_sep =
 #j+[4;64] Icon size at rest (width x height) :
 separator size = 48;48
 
-#Y+[Use a background image.;1;4;Flat separator;4;1;Physical separator;0;0] How can I add a separator?
+#Y+[Use a background image.;1;4;Add a separator;4;1;Add a separator;0;0] How can I add a separator?
 #{Only the default, 3D-plane and curve views support flat and physical separators. Flat separators are rendered differently according to the view.}
 separator type = 0
 

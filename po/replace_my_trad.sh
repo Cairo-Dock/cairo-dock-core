@@ -32,8 +32,8 @@ if [ "$FILES_MODIF" != "" ]; then
 fi
 
 # CONF : retours à la ligne avec des '\n# '
-ph1=`echo $PH1 | sed ':z;N;s/\n/\n#/;bz'`
-ph2=`echo $PH2 | sed ':z;N;s/\n/\n#/;bz'`
+ph1=`echo $1 | sed ':z;N;s/\n/\n#/;bz'`
+ph2=`echo $2 | sed ':z;N;s/\n/\n#/;bz'`
 if test $PG_check -eq 0; then 
 	DATA_MODIF=`grep -s -r "$PH1" ../data/ -l | grep "conf" | grep -v "sh$" | grep -v "~" | grep -v "svg$" | grep -v "png$" | grep -v "jpg"`
 else
@@ -51,6 +51,23 @@ if [ "$DATA_MODIF" != "" ]; then
 		sed -i "s/> $ph1/> $ph2/g" "$i"
 		sed -i "s/;$ph1;/;$ph2;/g" "$i"
 		sed -i "s/;$ph1]/;$ph2]/g" "$i"
+		sed -i "s/#b $ph1/#b $ph2/g" "$i"
+		sed -i "s/#B $ph1/#B $ph2/g" "$i"
+		sed -i "s/#c $ph1/#c $ph2/g" "$i"
+		sed -i "s/#C $ph1/#C $ph2/g" "$i"
+		sed -i "s/#k $ph1/#k $ph2/g" "$i"
+		sed -i "s/#s $ph1/#s $ph2/g" "$i"
+		sed -i "s/#s99 $ph1/#s99 $ph2/g" "$i"
+		sed -i "s/#S $ph1/#S $ph2/g" "$i"
+		sed -i "s/#d $ph1/#d $ph2/g" "$i"
+		sed -i "s/#D $ph1/#D $ph2/g" "$i"
+		sed -i "s/#D99 $ph1/#D99 $ph2/g" "$i"
+		sed -i "s/#K $ph1/#K $ph2/g" "$i"
+		sed -i "s/#_ $ph1/#_ $ph2/g" "$i"
+		sed -i "s/#u $ph1/#u $ph2/g" "$i"
+		sed -i "s/#U $ph1/#U $ph2/g" "$i"
+		sed -i "s/#a $ph1/#a $ph2/g" "$i"
+		sed -i "s/#p $ph1/#p $ph2/g" "$i"
 		if test $? -ge 1;then
 			echo "Phrase <$ph1>, donne une erreur ($i)" >> transfert_translations_log_errors_2.txt
 		fi

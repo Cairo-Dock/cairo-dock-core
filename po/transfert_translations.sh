@@ -1,6 +1,6 @@
 #!/bin/sh
 
-tail -n +19 en_GB.po | grep -v \# > en_temp1 # on vire les lignes et commentaires inutiles
+tail -n +18 en_GB.po | grep -v \# > en_temp1 # on vire les lignes et commentaires inutiles
 sed -i '/^[<space><tab>]*$/d' en_temp1 # lignes vides
 tr -d "\n" <en_temp1 >en_temp # on vire tous les \n
 sed -i 's/""//g' en_temp # on vire les ""
