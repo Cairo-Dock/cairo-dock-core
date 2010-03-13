@@ -102,7 +102,7 @@ DEFINE_PRE_INIT (Desklets)
 	pModule->cModuleName = "Desklets";
 	pModule->cTitle = N_("Desklets");
 	pModule->cIcon = "icon-desklets.png";
-	pModule->cDescription = N_("The applets can be set on your desktop as widgets.");
+	pModule->cDescription = N_("Applets can be displayed on your desktop as widgets.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigDesklets);
 	pModule->iSizeOfData = 0;

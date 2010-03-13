@@ -407,7 +407,7 @@ typedef struct _CairoDockDesktopGeometry CairoDockDesktopGeometry;
 /// Nom du dock principal (le 1er cree).
 #define CAIRO_DOCK_MAIN_DOCK_NAME "_MainDock_"
 /// Nom de la vue par defaut.
-#define CAIRO_DOCK_DEFAULT_RENDERER_NAME N_("default")
+#define CAIRO_DOCK_DEFAULT_RENDERER_NAME N_("Default")
 
 
 #define CAIRO_DOCK_LAST_ORDER -1e9

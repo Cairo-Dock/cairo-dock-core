@@ -5,7 +5,7 @@
 ###
 
 export CD_ALL="0"
-export CAIRO_DOCK_DIR=`pwd`/../../..
+export CAIRO_DOCK_DIR=`pwd`/../..
 
 while getopts "a" flag
 do
@@ -22,21 +22,23 @@ do
 	esac
 done
 
-export CAIRO_DOCK_EXTRACT_MESSAGE=${CAIRO_DOCK_DIR}/cairo-dock/utils/cairo-dock-extract-message
-export CAIRO_DOCK_GEN_TRANSLATION=${CAIRO_DOCK_DIR}/cairo-dock/cairo-dock-core/po/generate-translation.sh
+export CAIRO_DOCK_EXTRACT_MESSAGE=${CAIRO_DOCK_DIR}/cairo-dock-core/po/cairo-dock-extract-message
+export CAIRO_DOCK_GEN_TRANSLATION=${CAIRO_DOCK_DIR}/cairo-dock-core/po/generate-translation.sh
+
+gcc `pkg-config --libs --cflags glib-2.0 cairo-dock` $CAIRO_DOCK_EXTRACT_MESSAGE.c -o $CAIRO_DOCK_EXTRACT_MESSAGE
 
 ###
 ### update cairo-dock.po
 ###
 echo "extracting the messages of the dock ..."
-cd $CAIRO_DOCK_DIR/cairo-dock/cairo-dock-core
+cd $CAIRO_DOCK_DIR/cairo-dock-core
 if test -x $CAIRO_DOCK_EXTRACT_MESSAGE; then
 	rm -f data/messages
 	for c in data/*.conf data/*.desktop
 	do
-		if test ${c:0:10} != "cairo-dock"; then  # on exclut les cairo-dock*.desktop
+		#if test ${c:0:10} != "cairo-dock"; then  # on exclut les cairo-dock*.desktop
 			$CAIRO_DOCK_EXTRACT_MESSAGE $c
-		fi
+		#fi
 	done;
 	$CAIRO_DOCK_EXTRACT_MESSAGE data/ChangeLog.txt
 fi
@@ -48,7 +50,7 @@ $CAIRO_DOCK_GEN_TRANSLATION
 ###
 ### update cairo-dock-plugins.po
 ###
-cd $CAIRO_DOCK_DIR/plug-ins/cairo-dock-plug-ins
+cd $CAIRO_DOCK_DIR/cairo-dock-plug-ins
 echo "extracing the messages of the plug-ins ..."
 for plugin in *
 do

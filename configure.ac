@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([cairo-dock], [2.1.4-0beta0], [Fabrice Rey (fabounet@users.berlios.de)])
+AC_INIT([cairo-dock], [2.1.4-0beta0], [Fabrice Rey (fabounet@glx-dock.org)])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 #AC_CONFIG_SUBDIRS([icon-factory])

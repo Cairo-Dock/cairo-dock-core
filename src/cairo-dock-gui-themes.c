@@ -83,7 +83,7 @@ static void _load_theme (gboolean bSuccess, gpointer data)
 		cairo_dock_reload_generic_gui (s_pThemeManager);
 	}
 	else
-		cairo_dock_set_status_message (s_pThemeManager, _("Couldn't import the theme."));
+		cairo_dock_set_status_message (s_pThemeManager, _("Could not import the theme."));
 }
 
 static void on_theme_destroy (gchar *cInitConfFile)
@@ -139,7 +139,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			g_key_file_set_string (pKeyFile, "Save", "theme name", "");
 			cairo_dock_write_keys_to_file (pKeyFile, cInitConfFile);
 		}
-		cairo_dock_set_status_message (s_pThemeManager, bThemeSaved ? _("The theme has been saved") :  _("The theme couldn't be saved"));
+		cairo_dock_set_status_message (s_pThemeManager, bThemeSaved ? _("The theme has been saved") :  _("The theme could not be saved"));
 		
 		g_free (cNewThemeName);
 		g_key_file_free (pKeyFile);
@@ -165,9 +165,9 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			cairo_dock_write_keys_to_file (pKeyFile, cInitConfFile);
 		}
 		if (cThemesList[1] == NULL)
-			cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The theme has been deleted") :  _("The theme couldn't be deleted"));
+			cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The theme has been deleted") :  _("The theme could not be deleted"));
 		else
-			cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The themes have been deleted") :  _("The themes couldn't be deleted"));
+			cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The themes have been deleted") :  _("The themes could not be deleted"));
 		
 		g_strfreev (cThemesList);
 		g_key_file_free (pKeyFile);

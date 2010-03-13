@@ -135,7 +135,7 @@ DEFINE_PRE_INIT (System)
 	pModule->cModuleName = "System";
 	pModule->cTitle = N_("System");
 	pModule->cIcon = "icon-system.svg";
-	pModule->cDescription = N_("All the parameters you will never want to tweak.");
+	pModule->cDescription = N_("All of the parameters you will never want to tweak.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
 	pModule->iSizeOfConfig = sizeof (CairoConfigSystem);
 	pModule->iSizeOfData = 0;

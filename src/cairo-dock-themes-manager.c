@@ -760,7 +760,7 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	if (g_file_test (cNewThemePath, G_FILE_TEST_EXISTS))  // on ecrase un theme existant.
 	{
 		cd_debug ("  le theme existant sera mis a jour");
-		gchar *cQuestion = g_strdup_printf (_("Are you sure you want to overwrite theme %s ?"), cNewThemeName);
+		gchar *cQuestion = g_strdup_printf (_("Are you sure you want to overwrite theme %s?"), cNewThemeName);
 		int answer = cairo_dock_ask_general_question_and_wait (cQuestion);
 		g_free (cQuestion);
 		if (answer == GTK_RESPONSE_YES)
@@ -874,7 +874,7 @@ gchar *cairo_dock_depackage_theme (const gchar *cPackagePath)
 			cNewThemePath = cairo_dock_download_file (cPackagePath, "", str+1, cUserThemesDir, NULL);
 			if (cNewThemePath == NULL)
 			{
-				cairo_dock_show_temporary_dialog_with_icon_printf (_("couldn't get distant file %s/%s, maybe the server is down.\nPlease retry later or contact us at glx-dock.org."), NULL, NULL, 0, NULL, cPackagePath, str+1);
+				cairo_dock_show_temporary_dialog_with_icon_printf (_("Could not access remote file %s/%s. Maybe the server is down.\nPlease retry later or contact us at glx-dock.org."), NULL, NULL, 0, NULL, cPackagePath, str+1);
 			}
 		}
 	}
@@ -890,9 +890,9 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList)
 	gboolean bThemeDeleted = FALSE;
 	
 	if (cThemesList[1] == NULL)
-		g_string_printf (sCommand, _("Are you sure you want to delete theme %s ?"), cThemesList[0]);
+		g_string_printf (sCommand, _("Are you sure you want to delete theme %s?"), cThemesList[0]);
 	else
-		g_string_printf (sCommand, _("Are you sure you want to delete these themes ?"));
+		g_string_printf (sCommand, _("Are you sure you want to delete these themes?"));
 	int answer = cairo_dock_ask_general_question_and_wait (sCommand->str);
 	if (answer == GTK_RESPONSE_YES)
 	{
@@ -927,7 +927,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	gboolean bNeedSave = cairo_dock_theme_need_save ();
 	if (bNeedSave)
 	{
-		int iAnswer = cairo_dock_ask_general_question_and_wait (_("You made some modifications in the current theme.\nYou will loose them if you don't save before choosing a new theme. Continue anyway ?"));
+		int iAnswer = cairo_dock_ask_general_question_and_wait (_("You have made some changes to the current theme.\nYou will lose them if you don't save before choosing a new theme. Continue anyway?"));
 		if (iAnswer != GTK_RESPONSE_YES)
 		{
 			return FALSE;

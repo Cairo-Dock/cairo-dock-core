@@ -156,7 +156,7 @@ DEFINE_PRE_INIT (Background)
 	pModule->cModuleName = "Background";
 	pModule->cTitle = N_("Background");
 	pModule->cIcon = "icon-background.svg";
-	pModule->cDescription = N_("Set a background to your dock.");
+	pModule->cDescription = N_("Set a background for your dock.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigBackground);
 	pModule->iSizeOfData = 0;

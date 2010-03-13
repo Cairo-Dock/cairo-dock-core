@@ -1,5 +1,5 @@
 X-Source-Downloaded-From: http://developer.berlios.de/projects/cairo-dock/
-X-Upstream-Author: Fabrice Rey <fabounet@users.berlios.de>.
+X-Upstream-Author: Fabrice Rey <fabounet@glx-dock.org>.
 
 Files: 	src/cairo-dock.*, 
 	src/cairo-dock-animations-*,
@@ -38,7 +38,7 @@ Files: 	src/cairo-dock.*,
 	src/cairo-dock-task.*,
 	src/cairo-dock-themes-manager.*,
 	src/cairo-dock-X-utilities.*
-Copyright: Fabrice Rey <fabounet@users.berlios.de>
+Copyright: Fabrice Rey <fabounet@glx-dock.org>
 Licence: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete licence)
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

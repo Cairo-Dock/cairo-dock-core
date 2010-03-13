@@ -128,7 +128,7 @@ static const gchar *s_cCategoriesDescription[2*(CAIRO_DOCK_NB_CATEGORY+1)] = {
 	N_("Appearance"), "icon-appearance.svg",
 	N_("Accessories"), "icon-accessories.svg",
 	N_("Desktop"), "icon-desktop.svg",
-	N_("Controlers"), "icon-controler.svg",
+	N_("Controllers"), "icon-controler.svg",
 	N_("Plug-ins"), "icon-extensions.svg",
 	N_("All"), "icon-all.svg" };
 
@@ -1693,7 +1693,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
 	g_signal_connect (pMenuItem, "toggled", G_CALLBACK (on_toggle_all_words), NULL);
 	
-	pMenuItem = gtk_check_menu_item_new_with_label (_("Highlight words"));
+	pMenuItem = gtk_check_menu_item_new_with_label (_("Highlighted words"));
 	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (pMenuItem), TRUE);
 	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
 	g_signal_connect (pMenuItem, "toggled", G_CALLBACK (on_toggle_highlight_words), NULL);
@@ -1717,7 +1717,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		FALSE,
 		FALSE,
 		0);
-	s_pActivateButton = gtk_check_button_new_with_label (_("Activate this module"));
+	s_pActivateButton = gtk_check_button_new_with_label (_("Enable this module"));
 	g_signal_connect (G_OBJECT (s_pActivateButton), "clicked", G_CALLBACK(on_click_activate_current_group), NULL);
 	gtk_container_add (GTK_CONTAINER (s_pGroupFrame), s_pActivateButton);
 	gtk_widget_show_all (s_pActivateButton);
@@ -1823,7 +1823,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	}
 	else
 	{
-		//gtk_window_set_title (GTK_WINDOW (s_pMainWindow), _("Configuration of Cairo-Dock"));
+		//gtk_window_set_title (GTK_WINDOW (s_pMainWindow), _("Cairo-Dock configuration"));
 		///cairo_dock_show_one_category (0);
 		g_signal_connect (G_OBJECT (s_pMainWindow),
 			"delete-event",
@@ -1895,7 +1895,7 @@ static void cairo_dock_show_all_categories (void)
 	gtk_widget_hide (s_pGroupFrame);
 	
 	//\_______________ On actualise le titre de la fenetre.
-	gtk_window_set_title (GTK_WINDOW (s_pMainWindow), _("Configuration of Cairo-Dock"));
+	gtk_window_set_title (GTK_WINDOW (s_pMainWindow), _("Cairo-Dock configuration"));
 	if (s_path == NULL || s_path->data != GINT_TO_POINTER (0))
 		s_path = g_slist_prepend (s_path, GINT_TO_POINTER (0));
 
@@ -2216,14 +2216,14 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 				if (pIcon == NULL)
 					pIcon = cairo_dock_get_dialogless_icon ();
 				CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
-				cairo_dock_show_temporary_dialog_with_icon_printf (_("The module '%s' is not present. You need to install it or its dependencies to make the most of this module."), pIcon, CAIRO_CONTAINER (pDock), 10, "same icon", cModuleName);
+				cairo_dock_show_temporary_dialog_with_icon_printf (_("The '%s' module is not present. You need to install it and all its dependencies in order to use this module."), pIcon, CAIRO_CONTAINER (pDock), 10, "same icon", cModuleName);
 			}
 			else if (pDependencyModule != pModule)
 			{
 				if (pDependencyModule->pInstancesList == NULL && pDependencyModule->pInterface->initModule != NULL)
 				{
-					gchar *cWarning = g_strdup_printf (_("The module '%s' is not activated."), cModuleName);
-					gchar *cQuestion = g_strdup_printf ("%s\n%s\n%s", cWarning, gettext (cMessage), _("Do you want to activate it now ?"));
+					gchar *cWarning = g_strdup_printf (_("The '%s' module is not enabled."), cModuleName);
+					gchar *cQuestion = g_strdup_printf ("%s\n%s\n%s", cWarning, gettext (cMessage), _("Do you want to enable it now?"));
 					int iAnswer = cairo_dock_ask_general_question_and_wait (cQuestion);
 					g_free (cQuestion);
 					g_free (cWarning);
@@ -2367,7 +2367,7 @@ static GtkWidget * show_main_gui (void)
 		if (! g_file_test (cHelpHistory, G_FILE_TEST_EXISTS))
 		{
 			Icon *pIcon = cairo_dock_get_dialogless_icon ();
-			cairo_dock_show_dialog_full (_("It seems that you've never entered the help module yet.\nIf you have some difficulty to configure the dock, or if you are willing to customize it,\nthe Help module is here for you !\nDo you want to take a look at it now ?"),
+			cairo_dock_show_dialog_full (_("It appears that you've never entered the help module before.\nIf you are having difficulty configuring the dock, or if you want to customise it,\nthe Help module is here for you!\nWould you like to take a look at it now?"),
 				pIcon,
 				CAIRO_CONTAINER (g_pMainDock),
 				10e3,

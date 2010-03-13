@@ -34,7 +34,7 @@ COPYRIGHT_HOLDER = glx-dock.org
 # It can be your email address, or a mailing list address where translators
 # can write to without being subscribed, or the URL of a web page through
 # which the translators can contact you.
-MSGID_BUGS_ADDRESS = fabounet@users.berlios.de
+MSGID_BUGS_ADDRESS = fabounet@glx-dock.org
 
 
 # This is the list of locale categories, beyond LC_MESSAGES, for which the

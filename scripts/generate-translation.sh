@@ -3,7 +3,7 @@
 
 sed -i 's/\"More precisely/\/\* xgettext:no-c-format \*\/ \"More precisely/g' ../data/messages
 
-xgettext -L C -k_ -k_D -kD_ -kN_ --from-code=UTF-8 --copyright-holder="Cairo-Dock project" --msgid-bugs-address="fabounet@users.berlios.de" -p . ../src/*.c ../data/messages -o cairo-dock.pot
+xgettext -L C -k_ -k_D -kD_ -kN_ --from-code=UTF-8 --copyright-holder="Cairo-Dock project" --msgid-bugs-address="fabounet@glx-dock.org" -p . ../src/*.c ../data/messages -o cairo-dock.pot
 #--omit-header
 
 for lang in `cat LINGUAS`

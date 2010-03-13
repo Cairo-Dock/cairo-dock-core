@@ -256,7 +256,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	__extension__ ({\
 	gchar *_cThemePath = cairo_dock_get_theme_path_for_module (CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, cDefaultThemeName, MY_APPLET_SHARE_DATA_DIR"/"cThemeDirName, MY_APPLET_USER_DATA_DIR);\
 	if (_cThemePath == NULL) {\
-		const gchar *_cMessage = _("the theme couldn't be found; the default theme will be used instead.\n You can change this by opening the configuration of this module; do you want to do it now ?");\
+		const gchar *_cMessage = _("The theme could not be found; the default theme will be used instead.\n You can change this by opening the configuration of this module. Do you want to do it now?");\
 		Icon *_pIcon = cairo_dock_get_dialogless_icon ();\
 		gchar *_cQuestion = g_strdup_printf ("%s : %s", myApplet->pModule->pVisitCard->cModuleName, _cMessage);\
 		cairo_dock_show_dialog_with_question (_cQuestion, _pIcon, CAIRO_CONTAINER (g_pMainDock), MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, (CairoDockActionOnAnswerFunc) cairo_dock_open_module_config_on_demand, myApplet, NULL);\
@@ -271,7 +271,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	__extension__ ({\
 	gchar *_cThemePath = cairo_dock_get_theme_path_for_gauge(CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, "turbo-night-fuel");\
 	if (_cThemePath == NULL) {\
-		const gchar *_cMessage = _("the gauge theme couldn't be found; a default gauge will be used instead.\n You can change this by opening the configuration of this module; do you want to do it now ?");\
+		const gchar *_cMessage = _("The gauge theme could not be found; a default gauge will be used instead.\nYou can change this by opening the configuration of this module. Do you want to do it now?");\
 		Icon *_pIcon = cairo_dock_get_dialogless_icon ();\
 		gchar *_cQuestion = g_strdup_printf ("%s : %s", myApplet->pModule->pVisitCard->cModuleName, _cMessage);\
 		cairo_dock_show_dialog_with_question (_cQuestion, _pIcon, CAIRO_CONTAINER (g_pMainDock), MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, (CairoDockActionOnAnswerFunc) cairo_dock_open_module_config_on_demand, myApplet, NULL);\

@@ -188,7 +188,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_file (const gchar *cURI, con
 
 	/**if (bIsDirectory)
 	{
-		int answer = cairo_dock_ask_general_question_and_wait (_("Do you want to monitor the content of the directory ?"));
+		int answer = cairo_dock_ask_general_question_and_wait (_("Do you want to monitor the content of this directory?"));
 		if (answer != GTK_RESPONSE_YES)
 			bIsDirectory = FALSE;
 	}*/

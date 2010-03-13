@@ -427,11 +427,11 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 
 DEFINE_PRE_INIT (Icons)
 {
-	static const gchar *cDependencies[3] = {"Animated icons", N_("It provides many animations to your icons."), NULL};
+	static const gchar *cDependencies[3] = {"Animated icons", N_("Provides various animations for your icons."), NULL};
 	pModule->cModuleName = "Icons";
 	pModule->cTitle = N_("Icons");
 	pModule->cIcon = "icon-icons.svg";
-	pModule->cDescription = N_("All about icons :\n size, reflection, icon theme, ...");
+	pModule->cDescription = N_("All about icons:\n size, reflection, icon theme,...");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigIcons);
 	pModule->iSizeOfData = 0;

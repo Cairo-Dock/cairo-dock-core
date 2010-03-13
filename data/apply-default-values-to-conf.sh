@@ -3,7 +3,7 @@
 # Compiz check for Cairo-Dock
 #
 # Copyright : (C) 2009 by Fabounet
-# E-mail    : fabounet@users.berlios.de
+# E-mail    : fabounet@glx-dock.org
 #
 #
 # This program is free software; you can redistribute it and/or

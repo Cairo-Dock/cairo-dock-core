@@ -286,7 +286,7 @@ GtkWidget *cairo_dock_show_main_gui (void)
 			-1,
 			NULL);
 		Icon *pIcon = cairo_dock_get_dialogless_icon ();
-		cairo_dock_show_temporary_dialog_with_default_icon (_("This is the simple config panel of Cairo-Dock.\n After you got familiar with it, and if you want to customise your theme\n, you can switch to an advanced mode.\n You can switch from a mode to another at any time."), pIcon, CAIRO_CONTAINER (g_pMainDock), 15000);
+		cairo_dock_show_temporary_dialog_with_default_icon (_("This is the simple configuration panel of Cairo-Dock.\n After you get familiar with it, and if you want to customise your theme\n, you can switch to an advanced mode.\n You can switch from a mode to another at any time."), pIcon, CAIRO_CONTAINER (g_pMainDock), 15000);
 	}
 	g_free (cModeFile);
 	return pWindow;
@@ -661,7 +661,7 @@ GtkWidget *cairo_dock_make_switch_gui_button (void)
 {
 	GtkWidget *pSwitchButton = gtk_button_new_with_label (s_bAdvancedMode ? _("Simple Mode") : _("Advanced Mode"));
 	if (!s_bAdvancedMode)
-		gtk_widget_set_tooltip_text (pSwitchButton, _("The advanced mode lets you tweak every single parameter of the dock. It is a powerful tool to customize your current theme."));
+		gtk_widget_set_tooltip_text (pSwitchButton, _("The advanced mode lets you tweak every single parameter of the dock. It is a powerful tool to customise your current theme."));
 	
 	GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_JUMP_TO, GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image (GTK_BUTTON (pSwitchButton), pImage);
