@@ -46,6 +46,15 @@ if (${HAVE_LIBCRYPT})
 	set (LIBCRYPT_LIBS "-lcrypt")
 endif()
 
+pkg_check_modules ("LIBGIO" "gio-2.0")
+if (${LIBGIO_FOUND})
+	set (HAVE_LIBGIO 1)
+	set (gio_detected 1)
+	set (libgio_required "gio-2.0")  # pour le .pc
+else()
+	set (gio_detected 0)
+endif()
+
 check_include_files ("math.h" HAVE_MATH_H)
 check_symbol_exists (LC_MESSAGES "locale.h" HAVE_LC_MESSAGES)
 CHECK_LIBRARY_EXISTS (m sin "" HAVE_LIBM)
@@ -82,6 +91,7 @@ set (CAIRO_DOCK_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 ########### file generation ###############
 
 configure_file (config.h.cmake config.h)
+configure_file (src/cairo-dock-gio-vfs.h.in src/cairo-dock-gio-vfs.h)
 configure_file (data/cairo-dock.conf.in data/cairo-dock.conf)
 configure_file (data/cairo-dock-simple.conf.in data/cairo-dock-simple.conf)
 configure_file (data/main-dock.conf.in data/main-dock.conf)

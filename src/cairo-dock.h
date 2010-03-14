@@ -72,6 +72,7 @@
 #include <cairo-dock/cairo-dock-desklet-manager.h>
 #include <cairo-dock/cairo-dock-renderer-manager.h>
 #include <cairo-dock/cairo-dock-file-manager.h>
+#include <cairo-dock/cairo-dock-gio-vfs.h>
 // GUI.
 #include <cairo-dock/cairo-dock-themes-manager.h>
 #include <cairo-dock/cairo-dock-gui-manager.h>

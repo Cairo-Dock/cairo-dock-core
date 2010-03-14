@@ -99,6 +99,13 @@ AC_CHECK_LIB(crypt, crypt, LIBCRYPT_LIBS="-lcrypt")
 AM_CONDITIONAL( [HAVE_LIBCRYPT], [test "$LIBCRYPT_LIBS" != ""] )
 AC_SUBST(LIBCRYPT_LIBS)
 
+# If Gio is there, then compile the corresponding code in Cairo-Dock
+PKG_CHECK_MODULES(LIBGIO, gio-2.0, [gio_detected=true], [ gio_detected=false; AC_MSG_WARN(Could not find Gio; Cairo-Dock won't be built with Gio VFS capabilities.) ])
+AC_SUBST(LIBGIO_CFLAGS)
+AC_SUBST(LIBGIO_LIBS)
+
+AM_CONDITIONAL( [HAVE_GLIB_GIO], [test "$gio_detected" = "true"] )
+
 AC_CONFIG_FILES([Makefile
 		cairo-dock.pc
 		src/Makefile
@@ -142,6 +149,9 @@ else
 fi
 if test "$glitz_detected" = "true"; then
 	echo " * Glitz Hardware Acceleration : yes (warning : this is deprecated)"
+fi
+if test "$gio_detected" = "true"; then
+	echo " * Use GIO/GVFS instead of GnomeVFS and Thunar-VFS: yes"
 fi
 if test "$LIBCRYPT_LIBS" != ""; then
 	echo " * crypt passwords : yes"

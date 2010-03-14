@@ -16,6 +16,10 @@ if HAVE_LIBCRYPT
 have_libcrypt=-DHAVE_LIBCRYPT=1
 endif
 
+if HAVE_GLIB_GIO
+have_libgio=-DHAVE_GLIB_GIO=1
+endif
+
 cairo_dock_CFLAGS = \
 	$(PACKAGE_CFLAGS) \
 	$(GLITZ_CFLAGS) \
@@ -24,6 +28,8 @@ cairo_dock_CFLAGS = \
 	$(XEXTEND_CFLAGS) \
 	$(have_xextend)\
 	$(have_libcrypt) \
+	$(LIBGIO_CFLAGS) \
+	$(have_libgio) \
 	-DCAIRO_DOCK_SHARE_DATA_DIR=\""$(pkgdatadir)"\"\
 	-DCAIRO_DOCK_SHARE_THEMES_DIR=\""$(pkgdatadir)/themes"\"\
 	-DCAIRO_DOCK_CONF_FILE=\""cairo-dock.conf"\"\
@@ -59,6 +65,7 @@ cairo_dock_LDADD = \
 	$(GLITZ_LIBS) \
 	$(XEXTEND_LIBS) \
 	$(LIBCRYPT_LIBS) \
+	$(LIBGIO_LIBS) \
 	$(PACKAGE_LIBS)
 
 cairo_dock_SOURCES = \
@@ -108,6 +115,8 @@ cairo_dock_SOURCES = \
 	cairo-dock-data-renderer.h\
 	cairo-dock-file-manager.c\
 	cairo-dock-file-manager.h\
+	cairo-dock-gio-vfs.c\
+	cairo-dock-gio-vfs.h\
 	cairo-dock-themes-manager.c\
 	cairo-dock-themes-manager.h\
 	cairo-dock-class-manager.c\
@@ -232,6 +241,7 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-default-view.h\
 	cairo-dock-applet-facility.h\
 	cairo-dock-file-manager.h\
+	cairo-dock-gio-vfs.h\
 	cairo-dock-keybinder.h\
 	cairo-dock-desklet-manager.h\
 	cairo-dock-desklet-factory.h\
