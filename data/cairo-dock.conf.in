@@ -52,6 +52,11 @@ visibility = 1
 #b- Pop-up only if the mouse hits a screen corner
 pop in corner only = false;
 
+#i-[0;1000] Delay before the dock unhide itself?
+#{in ms. 0 means no delay.}
+unhide delay = 0
+
+
 #k- Keyboard shortcut to pop-up the dock:
 #{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 raise shortcut = 

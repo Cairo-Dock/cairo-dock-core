@@ -21,6 +21,7 @@ sed -i '/^[<space><tab>]*$/d' en_temp # lignes vides
 po_pot=`ls *.po`
 po_pot=`echo "cairo-dock.pot $po_pot"`
 for i in $po_pot; do
+	echo $i
 	sed -i ':z;N;s/ ""\n"/ "/;bz' $i # on vire tous les \n => msgid ""\n"longue ph..."
 	sed -i ':z;N;s/ "\n"/ /;bz' $i # on vire toutes les phrases coupées
 	sed -i ':z;N;s/\\n"\n"/\\n/;bz' $i # on veut une seule ligne => \\n"\n" -> \\n
@@ -35,6 +36,7 @@ done
 
 
 # le fichier est lit ligne par ligne et les arguments sont envoyés dans le script ci-dessus.
+#total_ph=`wc -l en_temp`
 while [ "`head -n 1 'en_temp'`" != "" ];do
 	head -n 1 en_temp | xargs sh replace_my_trad.sh
 	tail -n+2 en_temp > en_temp0
@@ -44,6 +46,13 @@ done
 
 rm en_temp en_temp1
 #find . -name "*.*" -type f -print | grep -v bzr | xargs sed -i 's/cairo-dock.org/glx-dock.org/g'
+
+for i in `ls *.po`; do
+	msguniq $i > "temp"
+	mv "temp" $i
+done
+# 2 fois pour les erreurs
+for i in `ls *.po`; do msguniq $i > "temp"; mv "temp" $i; done
 
 ##### Prob #####
 #sed -e 'N;s/{$ph1/AAAAAAAAAAAA/P;D; # => n'accepte que 2 lignes :/

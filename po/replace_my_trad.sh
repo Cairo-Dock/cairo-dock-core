@@ -4,6 +4,7 @@
 COUNT=0
 if [ "$1" = "" ]; then exit; fi
 if [ "$2" = "" ]; then exit; fi
+if [ "$2" = "$1" ]; then exit; fi
 PH1=`echo $1 | sed 's/\\\n/\\\\\\\n/g' | sed 's/\\%/%/g'`
 PH2=`echo $2 | sed 's/\\\n/\\\\\\\n/g' | sed 's/\\%/%/g'`
 PG_check=`pwd | grep -c "plug-ins"` # 0 = core
