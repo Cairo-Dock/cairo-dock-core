@@ -430,7 +430,7 @@ static void _cairo_dock_remove_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 		gboolean bDestroyIcons = ! CAIRO_DOCK_IS_APPLI (icon);
 		if (icon->pSubDock->icons != NULL && ! CAIRO_DOCK_IS_URI_LAUNCHER (icon) && icon->cClass == NULL)  // alors on propose de repartir les icones de son sous-dock dans le dock principal.
 		{
-			int answer = cairo_dock_ask_question_and_wait (_("Do you want to re-dispatch the icons contained inside this container into the dock ?\n (otherwise they will be destroyed)"), icon, CAIRO_CONTAINER (pDock));
+			int answer = cairo_dock_ask_question_and_wait (_("Do you want to re-dispatch the icons contained inside this container into the dock?\n(otherwise they will be destroyed)"), icon, CAIRO_CONTAINER (pDock));
 			g_return_if_fail (answer != GTK_RESPONSE_NONE);
 			if (answer == GTK_RESPONSE_YES)
 				bDestroyIcons = FALSE;
@@ -746,7 +746,7 @@ static void _cairo_dock_delete_file (GtkMenuItem *pMenuItem, gpointer *data)
 		if (! bSuccess)
 		{
 			cd_warning ("couldn't delete this file.\nCheck that you have writing rights on this file.\n");
-			gchar *cMessage = g_strdup_printf (_("Attention : couldn't delete this file.\nCheck that you have writing rights on it."));
+			gchar *cMessage = g_strdup_printf (_("Warning: could not delete this file.\nPlease check file permissions."));
 			cairo_dock_show_temporary_dialog_with_default_icon (cMessage, icon, CAIRO_CONTAINER (pDock), 4000);
 			g_free (cMessage);
 		}
@@ -772,7 +772,7 @@ static void _cairo_dock_rename_file (GtkMenuItem *pMenuItem, gpointer *data)
 		if (! bSuccess)
 		{
 			cd_warning ("couldn't rename this file.\nCheck that you have writing rights, and that the new name does not already exist.");
-			cairo_dock_show_temporary_dialog_with_icon_printf (_("Attention : couldn't rename %s.\nCheck that you have writing rights,\n and that the new name does not already exist."), icon, CAIRO_CONTAINER (pDock), 5000, NULL, icon->cCommand);
+			cairo_dock_show_temporary_dialog_with_icon_printf (_("Warning: could not rename %s.\nCheck file permissions \nand that the new name does not already exist."), icon, CAIRO_CONTAINER (pDock), 5000, NULL, icon->cCommand);
 		}
 	}
 	g_free (cNewName);
@@ -924,7 +924,7 @@ static void _cairo_dock_make_launcher_from_appli (GtkMenuItem *pMenuItem, gpoint
 	}
 	else
 	{
-		cairo_dock_show_temporary_dialog_with_default_icon (_("Sorry, couldn't find the corresponding description file.\nConsider drag and dropping the launcher from the Applications Menu."), icon, CAIRO_CONTAINER (pDock), 8000);
+		cairo_dock_show_temporary_dialog_with_default_icon (_("Sorry, couldn't find the corresponding description file.\nConsider dragging and dropping the launcher from the Applications Menu."), icon, CAIRO_CONTAINER (pDock), 8000);
 	}
 	g_free (cDesktopFilePath);
 }

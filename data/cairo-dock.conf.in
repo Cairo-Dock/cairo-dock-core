@@ -42,19 +42,20 @@ num screen = 0
 #F-[Visibility of the main dock;gtk-find]
 frame_visi =
 
-#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;1;1;Automatically hide the dock;2;1;Automatically hide when a window is maximized;2;1;Pop-up on shortcut;3;1] Visibility:
-#{Prevent windows from overlapping the dock : reserve space at the edge of the screen for the dock.
-#Auto-hide : the dock will automatically hide itself outside of the scren when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.
-#Keep the dock below windows : the dock will pop-up on the foreground when you place the mouse on its screen border.
+#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;1;1;Automatically hide the dock;0;0;Automatically hide when a window is maximized;0;0;Pop-up on shortcut;2;1] Visibility:
+#{Prevent windows from overlapping the dock: reserve space at the edge of the screen for the dock.
+#Auto-hide: the dock will automatically hide itself outside of the screen when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.
+#Keep the dock below windows: the dock will pop-up on the foreground when you place the mouse on its screen border.
 #Pop-up on shortcut : When you press the shortcut, the dock will pop-up at the position of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 visibility = 1
 
 #b- Pop-up only if the mouse hits a screen corner
 pop in corner only = false;
 
-#i-[0;1000] Delay before the dock unhide itself ?
+#i-[0;1000] Delay before the dock unhide itself?
 #{in ms. 0 means no delay.}
 unhide delay = 0
+
 
 #k- Keyboard shortcut to pop-up the dock:
 #{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
@@ -96,7 +97,7 @@ lock icons = false
 lock all = false
 
 
-[Taskbar]
+[TaskBar]
 
 #F-[Behaviour;gtk-properties]
 frame1 =
@@ -119,7 +120,7 @@ mix launcher appli = true
 #{This allows you to group all the windows of a given application into a unique sub-dock, and to act on all of the windows at the same time.}
 group by class = true
 
-#s- 		Except the following classes :
+#s- 		Except the following classes:
 #{Enter the class of the applications, separated by a semi-colon ';'}
 group exception = pidgin;xchat;amsn
 
@@ -131,7 +132,7 @@ frame3 =
 #{If not set, the icon provided by X for each application will be used. If set, the same icon as the corresponding launcher will be used for each application.}
 overwrite xicon = true
 
-#s- 		Except the following classes :
+#s- 		Except the following classes:
 #{Enter the class of the applications, separated by a semi-colon ';'}
 overwrite exception = pidgin;xchat;amsn;gimp-2.6
 
@@ -176,7 +177,7 @@ demands attention with dialog = true
 duration = 2
 
 #s- Force the following applications to demand your attention
-#{It will notify you even if, for instance, you are watching a movie in fullscreen or you are on another desktop.
+#{It will notify you even if, for instance, you are watching a movie in full screen or you are on another desktop.
 #}
 force demands attention = 
 
@@ -399,7 +400,7 @@ same_horizontality = true
 relative icon size = .8
 
 
-[Dialog boxes]
+[Dialogs]
 
 #F+[Bubble;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-bubble.png]
 frame_bubble =
@@ -601,8 +602,8 @@ separator color = 0.9;0.9;0.9;1.0
 frame_order =
 
 #Y+[No;0;0;Separate applications from others;1;1;Separate applets from others;1;1;Separate all;1;1] Separate the different types of icons?
-#{If you separate a type of icons, the icons of this type will be placed togather, separated from the others by a separator.
-#If you don't separate the icons, you can place them wherever you want, and insert separators manually. Applications will then be placed next to their launcher if they have, or after the last launcher.}
+#{If you separate a type of icons, the icons of this type will be placed together, separated from the others by a separator.
+#If you don't separate the icons, you can place them wherever you want, and insert separators manually. Applications will then be placed next to their launcher if they have one, or after the last launcher.}
 separate_icons = 0
 
 #T+[launchers;applications;applets] Order of the different types of icons :
@@ -617,6 +618,7 @@ string width = 0
 
 #C+ Colour of the string (red, blue, green, alpha) :
 string color = 0.0; 0.0; 0.8; 0.4
+
 
 [Indicators]
 
@@ -688,7 +690,7 @@ class indicator =
 zoom class = false
 
 
-[Captions]
+[Labels]
 
 #l+[No;On pointed icon;On all icons] Show labels:
 show_labels = 1

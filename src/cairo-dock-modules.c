@@ -143,7 +143,7 @@ void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 	pVisitCard->cIconFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/icon-help.svg";
 	pVisitCard->iSizeOfConfig = 0;
 	pVisitCard->iSizeOfData = 0;
-	pVisitCard->cDescription = N_("A useful FAQ that contains also a lot of hints.\nLet the mouse over a sentence to make the hint dialog popups.");
+	pVisitCard->cDescription = N_("A useful FAQ which also contains a lot of hints.\nRoll your mouse over a sentence to make helpful popups appear.");
 	pVisitCard->cAuthor = "Fabounet";
 	pHelpModule->pInterface = g_new0 (CairoDockModuleInterface, 1);
 	pHelpModule->pInterface->load_custom_widget = _entered_help_once;

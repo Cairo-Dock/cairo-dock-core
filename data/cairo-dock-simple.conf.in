@@ -15,9 +15,9 @@ screen border = 0
 frame_visi =
 
 #Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;0;0;Automatically hide the dock;0;0;Automatically hide when a window is maximized;0;0;Pop-up on shortcut;1;1] Visibility:
-#{Prevent windows from overlapping the dock : reserve space at the edge of the screen for the dock.
-#Auto-hide : the dock will automatically hide itself outside of the scren when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.
-#Keep the dock below windows : the dock will pop-up on the foreground when you place the mouse on its screen border.
+#{Prevent windows from overlapping the dock: reserve space at the edge of the screen for the dock.
+#Auto-hide: the dock will automatically hide itself outside of the screen when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.
+#Keep the dock below windows: the dock will pop-up on the foreground when you place the mouse on its screen border.
 #Pop-up on shortcut : When you press the shortcut, the dock will pop-up at the position of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 visibility = 1
 
@@ -103,7 +103,7 @@ frame_mod=
 
 #N Add or remove any applet :
 #{Select a line to get a preview and a description of the applet.
-#Click on the left checkbox to (de)activate an applet.
+#Click on the left check-box to (de)activate an applet.
 #Once an applet is active, you can configure it by right clicking on its icon.}/
 modules=
 

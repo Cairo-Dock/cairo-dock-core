@@ -2367,7 +2367,7 @@ static GtkWidget * show_main_gui (void)
 		if (! g_file_test (cHelpHistory, G_FILE_TEST_EXISTS))
 		{
 			Icon *pIcon = cairo_dock_get_dialogless_icon ();
-			cairo_dock_show_dialog_full (_("It seems that you've never entered the help module yet.\nIf you have some difficulty to configure the dock, or if you are willing to customize it,\nthe Help module is here for you !\nDo you want to take a look at it now ?"),
+			cairo_dock_show_dialog_full (_("It appears that you've never entered the help module before.\nIf you are having difficulty configuring the dock, or if you want to customise it,\nthe Help module is here for you!\nWould you like to take a look at it now?"),
 				pIcon,
 				CAIRO_CONTAINER (g_pMainDock),
 				10e3,

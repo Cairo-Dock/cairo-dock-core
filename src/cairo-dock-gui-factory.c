@@ -1295,7 +1295,7 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 	
 	if (pModule == NULL && pInternalModule == NULL)
 	{
-		cMessage = g_strdup_printf (_("The '%s' module was not found.\nBe sure to install it in the same version as the dock to enjoy these features."), cModuleName);
+		cMessage = g_strdup_printf (_("The '%s' module was not found.\nBe sure to install it with the same version as the dock to enjoy these features."), cModuleName);
 		int iDuration = 10e3;
 		if (pIcon != NULL && pDock != NULL)
 			cairo_dock_show_temporary_dialog_with_icon (cMessage, pIcon, CAIRO_CONTAINER (pDock), iDuration, "same icon");

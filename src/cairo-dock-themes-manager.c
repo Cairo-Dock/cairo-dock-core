@@ -875,7 +875,7 @@ gchar *cairo_dock_depackage_theme (const gchar *cPackagePath)
 			cNewThemePath = cairo_dock_download_file (cPackagePath, "", str+1, cUserThemesDir, NULL);
 			if (cNewThemePath == NULL)
 			{
-				cairo_dock_show_temporary_dialog_with_icon_printf (_("couldn't get distant file %s/%s, maybe the server is down.\nPlease retry later or contact us at glx-dock.org."), NULL, NULL, 0, NULL, cPackagePath, str+1);
+				cairo_dock_show_temporary_dialog_with_icon_printf (_("Could not access remote file %s/%s. Maybe the server is down.\nPlease retry later or contact us at glx-dock.org."), NULL, NULL, 0, NULL, cPackagePath, str+1);
 			}
 		}
 	}
@@ -928,7 +928,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	gboolean bNeedSave = cairo_dock_theme_need_save ();
 	if (bNeedSave)
 	{
-		int iAnswer = cairo_dock_ask_general_question_and_wait (_("You made some modifications in the current theme.\nYou will loose them if you don't save before choosing a new theme. Continue anyway ?"));
+		int iAnswer = cairo_dock_ask_general_question_and_wait (_("You have made some changes to the current theme.\nYou will lose them if you don't save before choosing a new theme. Continue anyway?"));
 		if (iAnswer != GTK_RESPONSE_YES)
 		{
 			return FALSE;

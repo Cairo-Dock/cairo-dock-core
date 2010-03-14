@@ -632,7 +632,7 @@ int main (int argc, char** argv)
 			{
 				Icon *pIcon = cairo_dock_get_dialogless_icon ();
 				
-				int iAnswer= cairo_dock_ask_question_and_wait (_("To remove the black rectangle around the dock, you need to activate a composite manager.\nFor instance, it can be done by activating the desktop effects, launching Compiz, or activating the composition in Metacity.\nI can do this lattest operation for you, do you want to proceed ?"), pIcon, CAIRO_CONTAINER (g_pMainDock));
+				int iAnswer= cairo_dock_ask_question_and_wait (_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nI can perform this last operation for you. Do you want to proceed ?"), pIcon, CAIRO_CONTAINER (g_pMainDock));
 				if (iAnswer == GTK_RESPONSE_YES)
 				{
 					int r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true");
@@ -641,14 +641,14 @@ int main (int argc, char** argv)
 			}
 			else  // sinon il a droit a un "message a caractere informatif".
 			{
-				cairo_dock_show_general_message (_("To remove the black rectangle around the dock, you need to activate a composite manager.\nFor instance, it can be done by activating the desktop effects, launching Compiz, or activating the composition in Metacity.\nIf your machine can't support composition, Cairo-Dock can emulate it; this option is in the 'System' module of the configuration, at the bottom of the page."), 0);
+				cairo_dock_show_general_message (_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nIf your machine can't support composition, Cairo-Dock can emulate it. This option is in the 'System' module of the configuration, at the bottom of the page."), 0);
 			}
 			g_free (cPsef);
 		}
 	}
 	else if (cExcludeModule != NULL && ! bMaintenance)
 	{
-		gchar *cMessage = g_strdup_printf (_("The module '%s' may have encountered a problem.\nIt has been restared successfully, but if it happens again, thanks to report it to us at http://glx-dock.org"), cExcludeModule);
+		gchar *cMessage = g_strdup_printf (_("The module '%s' may have encountered a problem.\nIt has been restored successfully, but if it happens again, please report it at http://glx-dock.org"), cExcludeModule);
 		
 		CairoDockModule *pModule = cairo_dock_find_module_from_name (cExcludeModule);
 		Icon *icon = cairo_dock_get_dialogless_icon ();
