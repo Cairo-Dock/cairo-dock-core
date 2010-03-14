@@ -27,6 +27,7 @@
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
+#include "../config.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-factory.h"
@@ -63,7 +64,7 @@ static gchar *cairo_dock_build_temporary_themes_conf_file (void)
 	}
 	
 	//\___________________ On copie le fichier de conf par defaut dedans.
-	gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_THEME_CONF_FILE, cTmpConfFile);
+	gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes.conf", cTmpConfFile);
 	int r = system (cCommand);
 	g_free (cCommand);
 
@@ -83,7 +84,7 @@ static void _load_theme (gboolean bSuccess, gpointer data)
 		cairo_dock_reload_generic_gui (s_pThemeManager);
 	}
 	else
-		cairo_dock_set_status_message (s_pThemeManager, _("Couldn't import the theme."));
+		cairo_dock_set_status_message (s_pThemeManager, _("Could not import the theme."));
 }
 
 static void on_theme_destroy (gchar *cInitConfFile)
@@ -139,7 +140,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			g_key_file_set_string (pKeyFile, "Save", "theme name", "");
 			cairo_dock_write_keys_to_file (pKeyFile, cInitConfFile);
 		}
-		cairo_dock_set_status_message (s_pThemeManager, bThemeSaved ? _("The theme has been saved") :  _("The theme couldn't be saved"));
+		cairo_dock_set_status_message (s_pThemeManager, bThemeSaved ? _("The theme has been saved") :  _("The theme could not be saved"));
 		
 		g_free (cNewThemeName);
 		g_key_file_free (pKeyFile);
@@ -165,9 +166,9 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			cairo_dock_write_keys_to_file (pKeyFile, cInitConfFile);
 		}
 		if (cThemesList[1] == NULL)
-			cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The theme has been deleted") :  _("The theme couldn't be deleted"));
+			cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The theme has been deleted") :  _("The theme could not be deleted"));
 		else
-			cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The themes have been deleted") :  _("The themes couldn't be deleted"));
+			cairo_dock_set_status_message (s_pThemeManager, bThemeDeleted ? _("The themes have been deleted") :  _("The themes could not be deleted"));
 		
 		g_strfreev (cThemesList);
 		g_key_file_free (pKeyFile);

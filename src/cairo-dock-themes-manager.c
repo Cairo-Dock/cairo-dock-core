@@ -27,6 +27,7 @@
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
+#include "../config.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-manager.h"
@@ -760,7 +761,7 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	if (g_file_test (cNewThemePath, G_FILE_TEST_EXISTS))  // on ecrase un theme existant.
 	{
 		cd_debug ("  le theme existant sera mis a jour");
-		gchar *cQuestion = g_strdup_printf (_("Are you sure you want to overwrite theme %s ?"), cNewThemeName);
+		gchar *cQuestion = g_strdup_printf (_("Are you sure you want to overwrite theme %s?"), cNewThemeName);
 		int answer = cairo_dock_ask_general_question_and_wait (cQuestion);
 		g_free (cQuestion);
 		if (answer == GTK_RESPONSE_YES)
@@ -890,9 +891,9 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList)
 	gboolean bThemeDeleted = FALSE;
 	
 	if (cThemesList[1] == NULL)
-		g_string_printf (sCommand, _("Are you sure you want to delete theme %s ?"), cThemesList[0]);
+		g_string_printf (sCommand, _("Are you sure you want to delete theme %s?"), cThemesList[0]);
 	else
-		g_string_printf (sCommand, _("Are you sure you want to delete these themes ?"));
+		g_string_printf (sCommand, _("Are you sure you want to delete these themes?"));
 	int answer = cairo_dock_ask_general_question_and_wait (sCommand->str);
 	if (answer == GTK_RESPONSE_YES)
 	{

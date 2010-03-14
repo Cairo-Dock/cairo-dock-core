@@ -1,0 +1,43 @@
+
+#ifndef __CAIRO_DOCK_BUILD_CONFIG_H__
+#define __CAIRO_DOCK_BUILD_CONFIG_H__
+
+/* always defined to indicate that i18n is enabled */
+#define ENABLE_NLS 1
+
+/* Gettext package. */
+#define GETTEXT_PACKAGE @GETTEXT_PACKAGE@
+
+/* Define to 1 if you have the `bind_textdomain_codeset' function. */
+#define HAVE_BIND_TEXTDOMAIN_CODESET 1
+
+/* Define to 1 if you have the `dcgettext' function. */
+#define HAVE_DCGETTEXT 1
+
+/* Define if the GNU gettext() function is already present or preinstalled. */
+#define HAVE_GETTEXT 1
+
+/* Define if your <locale.h> file defines LC_MESSAGES. */
+#cmakedefine HAVE_LC_MESSAGES @HAVE_LC_MESSAGES@
+
+/* Define to 1 if you have the `m' library (-lm). */
+#cmakedefine HAVE_LIBM @HAVE_LIBM@
+
+/* Define to 1 if you have the <math.h> header file. */
+#cmakedefine HAVE_MATH_H @HAVE_MATH_H@
+
+/* Defined if we can use X Extensions. */
+#cmakedefine HAVE_XEXTEND @HAVE_XEXTEND@
+
+/* Defined if we can crypt passwords. */
+#cmakedefine HAVE_LIBCRYPT @HAVE_LIBCRYPT@
+
+#define CAIRO_DOCK_VERSION "@VERSION@"
+#define CAIRO_DOCK_GETTEXT_PACKAGE "@CAIRO_DOCK_GETTEXT_PACKAGE@"
+#define CAIRO_DOCK_SHARE_DATA_DIR "@CAIRO_DOCK_SHARE_DATA_DIR@"
+#define CAIRO_DOCK_SHARE_THEMES_DIR "@CAIRO_DOCK_SHARE_THEMES_DIR@"
+#define CAIRO_DOCK_MODULES_DIR "@CAIRO_DOCK_MODULES_DIR@"
+#define CAIRO_DOCK_LOCALE_DIR "@CAIRO_DOCK_LOCALE_DIR@"
+#define CAIRO_DOCK_THEMES_DIR "@CAIRO_DOCK_THEMES_DIR@"
+
+#endif

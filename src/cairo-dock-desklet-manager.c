@@ -34,8 +34,9 @@
 #include <GL/glu.h> 
 #include <GL/glx.h> 
 #include <gdk/x11/gdkglx.h>
-
 #include <gdk/gdkx.h>
+
+#include "../config.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-modules.h"
 #include "cairo-dock-dialog-manager.h"

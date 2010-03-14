@@ -1,34 +1,34 @@
 #!en;#@VERSION@
 
 #[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-behavior.svg]
-[Behavior]
+[Behaviour]
 
 #F-[Position on the screen;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-position.svg]
 frame_pos =
 
-#l-[bottom;top;right;left] Choose which screen border the dock will placed on :
-#{The icons will scroll according to the chosen placement type. Of course the dock can be placed anywhere on the screen, here we specify regarding to what.}
+#l-[bottom;top;right;left] Choose which border of the screen the dock will be placed on:
+#{Icons will scroll according to what positioning model is selected. The dock can of course can be positioned anywhere on the screen. Here we specify this relative position.}
 screen border = 0
 
 
 #F-[Visibility of the main dock;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-visibility.svg]
 frame_visi =
 
-#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;0;0;Automatically hide the dock;0;0;Automatically hide when a window is maximized;0;0;Pop-up on shortcut;1;1] Visibility :
+#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;0;0;Automatically hide the dock;0;0;Automatically hide when a window is maximized;0;0;Pop-up on shortcut;1;1] Visibility:
 #{Prevent windows from overlapping the dock : reserve space at the edge of the screen for the dock.
 #Auto-hide : the dock will automatically hide itself outside of the scren when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.
 #Keep the dock below windows : the dock will pop-up on the foreground when you place the mouse on its screen border.
 #Pop-up on shortcut : When you press the shortcut, the dock will pop-up at the position of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 visibility = 1
 
-#k- Keyboard shortcut to pop-up the dock :
+#k- Keyboard shortcut to pop-up the dock:
 #{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 raise shortcut = 
 
-#F-[Visibility of the sub-docks;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-subdock.png]
+#F-[Visibility of sub-docks;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-subdock.png]
 frame_sub =
 
-#l-[Appear on mouse over;Appear on click] Visibility :
+#l-[Appear on mouse over;Appear on click] Visibility:
 #{they will appear either when you click or when you linger over the icon pointing on it.}
 show_on_click = 0
 
@@ -36,7 +36,7 @@ show_on_click = 0
 #F-[Taskbar;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-taskbar.png]
 frame_task =
 
-#l-[None;MacOSX;Windows7;Gnome] Behaviour of the Taskbar :
+#l-[None;MacOSX;Windows7;Gnome] Behaviour of the Taskbar:
 #{None     : Don't show opened windows in the dock.
 #MacOSX   : Mix applications with its launcher, show other windows only if they are minimized.
 #Windows7 : Mix applications with its launcher, show all others windows and group windows togather in sub-dock.
@@ -47,13 +47,13 @@ taskbar = 2
 #F[Animations;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-movment.png]
 frame_anim=
 
-#m[Animated icons] Configure icons animations.
+#m[Animated icons] Configure icons' animations.
 config_anim = 
 
-#M[icon effects] Configure icons special effects (require OpenGL capacity).
+#M[icon effects] Configure icons' special effects (requires OpenGL).
 config_effect = 
 
-#M[illusion] Configure icons animations on appearing/disappearing (require OpenGL capacity).
+#M[illusion] Configure icons' animations.on appearing/disappearing (require OpenGL capacity).
 config_illusion = 
 
 
@@ -64,17 +64,17 @@ config_illusion =
 frame_icons=
 
 #w Choose a theme of icons :
-#{Let empty to use the current icons theme of your system. You can enter the name of a theme that is installed on your system (like 'Gartoon' or 'Human'), or even a path to a folder containing icons.}
+#{Leave empty to use the current icon theme of your system. You can enter the name of a theme that is installed on your system (like 'Gartoon' or 'Human'), or even a path to a folder containing icons.}
 default icon directory = 
 
-#l[Very small;Small;Medium;Big;Very Big] Icons size :
+#l[Very small;Small;Medium;Big;Very Big] Icons size:
 icon size = 2
 
 #v
 sev_order=
 
-#B+ Separate the different types of icons ?
-#{This will separate launchers, applis, and applets. Separators will be automatically inserted then.}
+#B+ Separate the different types of icons?
+#{This will separate launchers, application, and applets from each others. Separators will be automatically inserted then.}
 separate icons = true
 
 #T[launchers;applications;applets] Order of the different types of icons :
@@ -111,16 +111,16 @@ modules=
 #[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-controler.svg]
 [Themes]
 
-#R[@prefix@/@DATADIRNAME@/@PACKAGE@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes] Choose one of the available themes :/
+#R[@prefix@/@DATADIRNAME@/@PACKAGE@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes] Choose one of the available themes:/
 chosen theme = 
 
 #F[Options]
 frame_opt=
 
-#b Use the new theme's launchers ?
-#{So if you check this box, your launchers will be deleted and replaced by the ones provided in the new theme. Otherwise the current launchers will be kept, only icons will be replaced.}
+#b Use the new theme's launchers?
+#{If you tick this box, your launchers will be deleted and replaced by the ones provided in the new theme. Otherwise the current launchers will be kept, only icons will be replaced.}
 use theme launchers = false
 
-#b Use the new theme's behaviour ?
-#{Otherwise the current behaviour will be kept. It's all about the dock's position, behaviour parameters such as auto-hide, using taskbar or not, etc.}
+#b Use the new theme's behaviour?
+#{Otherwise the current behaviour will be kept. This defines the dock's position, behavioural settings such as auto-hide, using taskbar or not, etc.}
 use theme behaviour = false

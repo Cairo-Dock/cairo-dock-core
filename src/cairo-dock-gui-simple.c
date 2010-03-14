@@ -24,7 +24,7 @@
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
-#include "cairo-dock-struct.h"
+#include "../config.h"
 #include "cairo-dock-modules.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-factory.h"
@@ -48,6 +48,7 @@
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
 #define CAIRO_DOCK_SIMPLE_PANEL_WIDTH 1024
 #define CAIRO_DOCK_SIMPLE_PANEL_HEIGHT 700
+#define CAIRO_DOCK_SIMPLE_CONF_FILE "cairo-dock-simple.conf"
 
 static GtkWidget *s_pSimpleConfigWindow = NULL;
 static GtkWidget *s_pSimpleConfigModuleWindow = NULL;
@@ -405,7 +406,7 @@ static GtkWidget * show_main_gui (void)
 	//\_____________ On construit la fenetre.
 	cairo_dock_build_generic_gui (cConfFilePath,
 		NULL,
-		_("Configuration of Cairo-Dock"),
+		_("Cairo-Dock configuration"),
 		CAIRO_DOCK_SIMPLE_PANEL_WIDTH, CAIRO_DOCK_SIMPLE_PANEL_HEIGHT,
 		(CairoDockApplyConfigFunc) on_apply_config_simple,
 		NULL,

@@ -26,6 +26,7 @@
 
 #include <cairo.h>
 
+#include "../config.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-load.h"

@@ -22,7 +22,7 @@
 #define  __CAIRO_DOCK_GUI_LAUNCHER__
 
 #include <gtk/gtk.h>
-#include <cairo-dock-struct.h>
+#include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
 

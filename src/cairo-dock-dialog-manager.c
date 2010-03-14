@@ -28,6 +28,7 @@
 #include <GL/glx.h>
 #include <gdk/x11/gdkglx.h>
 
+#include "../config.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-load.h"
@@ -714,7 +715,7 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 		
 		if (pDialog->iDistanceToDock != iOldDistance && pDialog->pTipWidget != NULL)
 		{
-			//g_print ("  On change la taille de la pointe a : %d pixels ( -> %d)\n", pDialog->iDistanceToDock, pDialog->iMessageHeight + pDialog->iInteractiveHeight +pDialog->iButtonsHeight + pDialog->iDistanceToDock);
+			g_print ("  On change la taille de la pointe a : %d pixels ( -> %d)\n", pDialog->iDistanceToDock, pDialog->iMessageHeight + pDialog->iInteractiveHeight +pDialog->iButtonsHeight + pDialog->iDistanceToDock);
 			gtk_widget_set (pDialog->pTipWidget, "height-request", MAX (0, pDialog->iDistanceToDock + pDialog->iBottomMargin), NULL);
 		}
 		if (pDialog->bRight)
@@ -746,8 +747,9 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 	w = pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin;
 	h = pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock;
 	
+	pDialog->bPositionForced = FALSE;
 	gtk_window_set_gravity (GTK_WINDOW (pDialog->container.pWidget), iGravity);
-	//g_print (" => move to (%d;%d) %dx%d , %g\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, w, h, iGravity);
+	g_print (" => move to (%d;%d) %dx%d , %g\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, w, h, iGravity);
 	gdk_window_move_resize (GDK_WINDOW (pDialog->container.pWidget->window),
 		pDialog->container.iWindowPositionX,
 		pDialog->container.iWindowPositionY,
@@ -1119,6 +1121,7 @@ void cairo_dock_unhide_dialog (CairoDialog *pDialog)
 				cairo_dock_dialog_window_created ();
 		}
 	}
+	pDialog->bPositionForced = FALSE;
 	gtk_window_present (GTK_WINDOW (pDialog->container.pWidget));
 }
 

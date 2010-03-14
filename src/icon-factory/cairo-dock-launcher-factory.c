@@ -18,17 +18,8 @@
 */
 
 #include <math.h>
-#include <string.h>
-#include <cairo.h>
-#include <gtk/gtk.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef HAVE_GLITZ
-#include <gdk/gdkx.h>
-#include <glitz-glx.h>
-#include <cairo-glitz.h>
-#endif
 
 #include "cairo-dock-icons.h"
 #include "cairo-dock-log.h"

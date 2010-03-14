@@ -1,9 +1,18 @@
 To compile the dock or any plug-in, you just copy-paste these lines into a terminal (assuming you are in the sources directory of the dock/plug-in) :
-autoreconf -isvf && ./configure && make
-sudo make install
-Note: you have to install the dock before compiling any plug-in.
+(Note: you have to install the dock before compiling any plug-in.)
 
-you can provide directory installation by adding --prefix=/path/of/the/directory after the 'configure'. If you do that, then you must specify the same prefix for both core and plug-ins.
+CMAKE
+-----
+cmake CMakeLists.txt  -DCMAKE_INSTALL_PREFIX=/usr
+make
+sudo make install
+
+AUTOMAKE
+--------
+autoreconf -isvf && ./configure --prefix=/usr && make
+sudo make install
+
+If you choose to install in another folder than /usr, you must specify the same prefix for both core and plug-ins.
 
 <deprecated>
 If your libcairo is compiled with glitz support (that is, with --enable-glitz option), you can benefit from glitz hardware acceleration in cairo-dock too.

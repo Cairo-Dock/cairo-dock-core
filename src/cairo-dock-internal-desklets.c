@@ -19,13 +19,13 @@
 
 #include <string.h>
 
+#include "../config.h"
 #include "cairo-dock-modules.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-internal-taskbar.h"
-///#include "cairo-dock-file-manager.h"
 #include "cairo-dock-renderer-manager.h"
 #include "cairo-dock-desklet-factory.h"
 #define _INTERNAL_MODULE_
@@ -102,7 +102,7 @@ DEFINE_PRE_INIT (Desklets)
 	pModule->cModuleName = "Desklets";
 	pModule->cTitle = N_("Desklets");
 	pModule->cIcon = "icon-desklets.png";
-	pModule->cDescription = N_("The applets can be set on your desktop as widgets.");
+	pModule->cDescription = N_("Applets can be displayed on your desktop as widgets.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigDesklets);
 	pModule->iSizeOfData = 0;

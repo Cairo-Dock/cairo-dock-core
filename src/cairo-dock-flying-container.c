@@ -29,6 +29,7 @@
 #include <cairo-glitz.h>
 #endif
 
+#include "../config.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-icons.h"

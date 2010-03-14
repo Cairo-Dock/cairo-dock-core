@@ -28,12 +28,18 @@
 #include <cairo-glitz.h>
 #endif
 
+#include "../config.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-desktop-file-factory.h"
+
+#define CAIRO_DOCK_LAUNCHER_CONF_FILE "launcher.desktop"
+#define CAIRO_DOCK_FILE_CONF_FILE "file.desktop"
+#define CAIRO_DOCK_CONTAINER_CONF_FILE "container.desktop"
+#define CAIRO_DOCK_SEPARATOR_CONF_FILE "separator.desktop"
 
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCurrentLaunchersPath;
@@ -188,7 +194,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_file (const gchar *cURI, con
 
 	/**if (bIsDirectory)
 	{
-		int answer = cairo_dock_ask_general_question_and_wait (_("Do you want to monitor the content of the directory ?"));
+		int answer = cairo_dock_ask_general_question_and_wait (_("Do you want to monitor the content of this directory?"));
 		if (answer != GTK_RESPONSE_YES)
 			bIsDirectory = FALSE;
 	}*/

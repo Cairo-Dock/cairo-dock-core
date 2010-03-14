@@ -36,6 +36,7 @@
 #include <cairo-glitz.h>
 #endif
 
+#include "../config.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-load.h"

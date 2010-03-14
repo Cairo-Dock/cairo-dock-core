@@ -27,6 +27,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
+#include "cairo-dock-struct.h"
 #ifdef HAVE_XEXTEND
 #include <X11/extensions/Xcomposite.h>
 //#include <X11/extensions/Xdamage.h>

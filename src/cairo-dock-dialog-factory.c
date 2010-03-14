@@ -145,7 +145,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDialog *pDialog)
 {
-	g_print ("%s (%dx%d, %d;%d)\n", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y);
+	g_print ("%s (%dx%d, %d;%d) [%d]\n", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y, pDialog->bPositionForced);
 	if (pEvent->width == CAIRO_DIALOG_MIN_SIZE && pEvent->height == CAIRO_DIALOG_MIN_SIZE && ! pDialog->bNoInput)
 		return FALSE;
 	
@@ -198,7 +198,11 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 				0);
 		}
 	}
-	
+	else if (pEvent->y != pDialog->container.iWindowPositionY && !pDialog->bPositionForced)
+	{
+		gtk_window_move (pDialog->container.pWidget, pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY);
+		pDialog->bPositionForced = TRUE;
+	}
 	gtk_widget_queue_draw (pDialog->container.pWidget);  // les widgets internes peuvent avoir changer de taille sans que le dialogue n'en ait change, il faut donc redessiner tout le temps.
 
 	return FALSE;
@@ -264,7 +268,7 @@ static CairoDialog *_cairo_dock_create_empty_dialog (gboolean bInteractive)
 	pDialog->container.pWidget = pWindow;
 
 	//gtk_window_set_keep_above (GTK_WINDOW (pWindow), g_bKeepAbove || myAccessibility.bPopUp);
-	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
+	///gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
 
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock-dialog");
 	if (! bInteractive)
@@ -480,7 +484,7 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	
 	//\________________ On reserve l'espace pour les elements.
 	if (pDialog->container.bDirectionUp)
-		pDialog->pTopWidget = _cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iTopMargin, TRUE);
+		pDialog->pTopWidget = _cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iTopMargin, FALSE);
 	else
 		pDialog->pTipWidget = _cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iMinBottomGap + pDialog->iBottomMargin, TRUE);
 	if (pDialog->iMessageWidth != 0 && pDialog->iMessageHeight != 0)

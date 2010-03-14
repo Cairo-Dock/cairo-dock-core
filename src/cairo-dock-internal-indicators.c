@@ -19,6 +19,7 @@
 
 #include <string.h>
 
+#include "../config.h"
 #include "cairo-dock-modules.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-draw.h"
@@ -46,7 +47,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 		g_free (cIndicatorImageName);
 	}
 	else
-		pIndicators->cIndicatorImagePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_INDICATOR_NAME);
+		pIndicators->cIndicatorImagePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/default-indicator.png");
 	
 	pIndicators->bIndicatorAbove = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "indicator above", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
 	
@@ -103,7 +104,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 		}
 		else
 		{
-			pIndicators->cClassIndicatorImagePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_DEFAULT_CLASS_INDICATOR_NAME);
+			pIndicators->cClassIndicatorImagePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/default-indicator.png");
 		}
 		pIndicators->bZoomClassIndicator = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "zoom class", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	}
@@ -161,7 +162,7 @@ DEFINE_PRE_INIT (Indicators)
 	pModule->cModuleName = "Indicators";
 	pModule->cTitle = N_("Indicators");
 	pModule->cIcon = "icon-indicators.svg";
-	pModule->cDescription = N_("Indicators are extra indications on your icons.");
+	pModule->cDescription = N_("Indicators are additional markers for your icons.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigIndicators);
 	pModule->iSizeOfData = 0;

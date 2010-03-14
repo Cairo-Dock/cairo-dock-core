@@ -22,7 +22,6 @@
 
 #include <glib.h>
 
-#include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
 /** Create an icon for an applet.

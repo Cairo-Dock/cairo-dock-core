@@ -31,6 +31,7 @@
 
 #include <gtk/gtkgl.h>
 
+#include "../config.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-surface-factory.h"
@@ -58,6 +59,8 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-load.h"
+
+#define CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME "default-icon-appli.svg"
 
 extern CairoDock *g_pMainDock;
 extern CairoDockDesktopGeometry g_desktopGeometry;

@@ -87,7 +87,7 @@
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 
-//#include <cairo-dock-struct.h>
+#include "../config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"

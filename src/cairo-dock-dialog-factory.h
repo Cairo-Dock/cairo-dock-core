@@ -168,6 +168,7 @@ struct _CairoDialog {
 	gboolean bAllowMinimize;// TRUE to allow the dialog to be minimized once. The flag is reseted to FALSE after the desklet has minimized.
 	GdkBitmap* pShapeBitmap;
 	GTimer *pUnmapTimer;
+	gboolean bPositionForced;
 };
 
 #define CAIRO_DIALOG_MIN_SIZE 20

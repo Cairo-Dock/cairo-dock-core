@@ -19,6 +19,7 @@
 
 #include <gdk/gdkx.h>
 
+#include "../config.h"
 #include "cairo-dock-modules.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-log.h"
@@ -186,9 +187,9 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 DEFINE_PRE_INIT (TaskBar)
 {
 	pModule->cModuleName = "TaskBar";
-	pModule->cTitle = N_("TaskBar");
+	pModule->cTitle = N_("Taskbar");
 	pModule->cIcon = "icon-taskbar.png";
-	pModule->cDescription = N_("Display and interact with the currently open windows.");
+	pModule->cDescription = N_("Display and interact with currently open windows.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
 	pModule->iSizeOfConfig = sizeof (CairoConfigTaskBar);
 	pModule->iSizeOfData = 0;

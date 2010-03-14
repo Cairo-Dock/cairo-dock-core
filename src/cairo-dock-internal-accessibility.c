@@ -18,6 +18,7 @@
 */
 
 #include <string.h>
+#include "../config.h"
 #include "cairo-dock-modules.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-dock-manager.h"

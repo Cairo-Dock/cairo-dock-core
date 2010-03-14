@@ -1027,7 +1027,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 		}
 		if (icon->iVolumeID > 0 && ! bIsMounted)
 		{
-			int answer = cairo_dock_ask_question_and_wait (_("Do you want to mount this point ?"), icon, CAIRO_CONTAINER (pDock));
+			int answer = cairo_dock_ask_question_and_wait (_("Do you want to mount this device?"), icon, CAIRO_CONTAINER (pDock));
 			if (answer != GTK_RESPONSE_YES)
 			{
 				return CAIRO_DOCK_LET_PASS_NOTIFICATION;

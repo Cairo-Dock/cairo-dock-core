@@ -404,10 +404,19 @@ typedef struct _CairoDockDesktopGeometry CairoDockDesktopGeometry;
 #define CAIRO_DOCK_PLUG_INS_DIR "plug-ins"
 /// Nom du repertoire des icones locales.
 #define CAIRO_DOCK_LOCAL_ICONS_DIR "icons"
+/// Nom du repertoire racine du theme courant.
+#define CAIRO_DOCK_CURRENT_THEME_NAME "current_theme"
+/// Nom du repertoire des themes extras.
+#define CAIRO_DOCK_EXTRAS_DIR "extras"
+/// Nom du fichier de conf principal du theme.
+#define CAIRO_DOCK_CONF_FILE "cairo-dock.conf"
+/// Nom du fichier de conf d'un dock racine.
+#define CAIRO_DOCK_MAIN_DOCK_CONF_FILE "main-dock.conf"
+
 /// Nom du dock principal (le 1er cree).
 #define CAIRO_DOCK_MAIN_DOCK_NAME "_MainDock_"
 /// Nom de la vue par defaut.
-#define CAIRO_DOCK_DEFAULT_RENDERER_NAME N_("default")
+#define CAIRO_DOCK_DEFAULT_RENDERER_NAME N_("Default")
 
 
 #define CAIRO_DOCK_LAST_ORDER -1e9

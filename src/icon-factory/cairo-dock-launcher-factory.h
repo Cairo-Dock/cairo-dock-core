@@ -23,7 +23,6 @@
 
 #include <glib.h>
 
-#include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
 /** *@file cairo-dock-launcher-factory.h This class handles the creation launcher icons, from the desktop files contained inside the 'launchers' folder. The files holding the information are common desktop files, with additionnal keys added by the dock on the launcher creation.

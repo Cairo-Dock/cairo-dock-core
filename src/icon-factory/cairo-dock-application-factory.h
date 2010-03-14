@@ -23,7 +23,6 @@
 #include <glib.h>
 #include <X11/Xlib.h>
 
-#include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
 

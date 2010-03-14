@@ -6,22 +6,22 @@
 #F[Choose a theme]
 frame1=
 
-#R[@prefix@/@DATADIRNAME@/@PACKAGE@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes] Choose one of the available themes :/
+#R[@pkgdatadir@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes] Choose one of the available themes:/
 chosen theme = 
 
-#S ... or drag and drop a theme package here :
-#{You can even drop an internet URL.}
+#S ...or drag and drop a theme package here :
+#{You can even paste an internet URL.}
 package =
 
 #F
 frame1_=
 
-#b Use the new theme's launchers ?
-#{So if you check this box, your launchers will be deleted and replaced by the ones provided in the new theme. Otherwise the current launchers will be kept, only icons will be replaced.}
+#b Use the new theme's launchers?
+#{If you tick this box, your launchers will be deleted and replaced by the ones provided in the new theme. Otherwise the current launchers will be kept, only icons will be replaced.}
 use theme launchers = false
 
-#b Use the new theme's behaviour ?
-#{Otherwise the current behaviour will be kept. It's all about the dock's position, behaviour parameters such as auto-hide, using taskbar or not, etc.}
+#b Use the new theme's behaviour?
+#{Otherwise the current behaviour will be kept. This defines the dock's position, behavioural settings such as auto-hide, using taskbar or not, etc.}
 use theme behaviour = false
 
 
@@ -31,32 +31,32 @@ use theme behaviour = false
 #F[Save current theme]
 frame1=
 
-#H[;../@CAIRO_DOCK_THEMES_DIR@] Save as :
+#H[;../@CAIRO_DOCK_THEMES_DIR@] Save as:
 #{You will then be able to re-open it at any time.}
 theme name = 
 
 #F
 frame1_=
 
-#b Save current behaviour too ?
+#b Save current behaviour also?
 save current behaviour = true
 
-#b Save current launchers too ?
+#b Save current launchers also?
 save current launchers = true
 
 #v
 sep=
 
-#b Build a package of the theme ?
-#{The dock will build a complete tarball of your current theme, allowing you to exchange it easily with other people.}
+#b Build a package of the theme?
+#{The dock will build a complete tarball of your current theme, allowing you to easily exchange it with other people.}
 package = false
 
 
 #[gtk-delete]
 [Delete]
 
-#F[List of your personnal themes]
+#F[List of your personal themes]
 frame1=
 
-#x[../@CAIRO_DOCK_THEMES_DIR@] Delete from the list themes you don't want anymore :
+#x[../@CAIRO_DOCK_THEMES_DIR@] Delete from the list themes that you don't need anymore :
 deleted themes = 

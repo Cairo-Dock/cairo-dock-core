@@ -18,6 +18,7 @@
 */
 
 #include <string.h>
+#include "../config.h"
 #include "cairo-dock-modules.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-dialog-manager.h"
@@ -128,11 +129,11 @@ static void reload (CairoConfigDialogs *pPrevDialogs, CairoConfigDialogs *pDialo
 
 DEFINE_PRE_INIT (Dialogs)
 {
-	static const gchar *cDependencies[3] = {"dialog rendering", N_("It provides different window decorators. Activate it first if you want to select a different decorator for your dialogs."), NULL};
+	static const gchar *cDependencies[3] = {"dialog rendering", N_("This provides different window decorators. Enable this first if you want to select a different decorator for your dialog boxes."), NULL};
 	pModule->cModuleName = "Dialogs";
-	pModule->cTitle = N_("Dialogs");
+	pModule->cTitle = N_("Dialog boxes");
 	pModule->cIcon = "icon-dialogs.svg";
-	pModule->cDescription = N_("Configure the look of the dialog bubbles.");
+	pModule->cDescription = N_("Configure text bubble appearance.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigDialogs);
 	pModule->iSizeOfData = 0;

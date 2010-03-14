@@ -19,6 +19,7 @@
 
 #include <string.h>
 
+#include "../config.h"
 #include "cairo-dock-modules.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-config.h"
@@ -189,9 +190,9 @@ static void reload (CairoConfigLabels *pPrevLabels, CairoConfigLabels *pLabels)
 DEFINE_PRE_INIT (Labels)
 {
 	pModule->cModuleName = "Labels";
-	pModule->cTitle = N_("Labels");
+	pModule->cTitle = N_("Captions");
 	pModule->cIcon = "icon-labels.svg";
-	pModule->cDescription = N_("Define the style of the icons' labels and quick-info.");
+	pModule->cDescription = N_("Define icon caption and quick-info style.");
 	pModule->iCategory = CAIRO_DOCK_CATEGORY_THEME;
 	pModule->iSizeOfConfig = sizeof (CairoConfigLabels);
 	pModule->iSizeOfData = 0;
