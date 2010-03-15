@@ -1222,7 +1222,7 @@ msgstr "Az ikonok különleges hatésainak beállítása (OpenGL szükséges hoz
 #: ../data/messages:69 ../data/messages:697
 #, fuzzy
 msgid ""
-"Configure icons' animations.on appearing/disappearing (require OpenGL "
+"Configure icons' animations on appearing/disappearing (require OpenGL "
 "capacity)."
 msgstr ""
 "A megjelenő/eltűnő ikonok animációinak beállítása (OpenGL szükséges hozzá)."

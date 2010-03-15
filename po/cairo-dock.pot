@@ -1047,7 +1047,7 @@ msgid "Configure icons' special effects (requires OpenGL)."
 msgstr ""
 
 #: ../data/messages:69 ../data/messages:697
-msgid "Configure icons' animations.on appearing/disappearing (require OpenGL capacity)."
+msgid "Configure icons' animations on appearing/disappearing (require OpenGL capacity)."
 msgstr ""
 
 #: ../data/messages:75 ../data/messages:637

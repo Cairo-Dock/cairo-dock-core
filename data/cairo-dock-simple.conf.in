@@ -53,7 +53,7 @@ config_anim =
 #M[icon effects] Configure icons' special effects (requires OpenGL).
 config_effect = 
 
-#M[illusion] Configure icons' animations.on appearing/disappearing (require OpenGL capacity).
+#M[illusion] Configure icons' animations on appearing/disappearing (require OpenGL capacity).
 config_illusion = 
 
 

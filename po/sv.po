@@ -1151,7 +1151,7 @@ msgstr ""
 
 #: ../data/messages:69 ../data/messages:697
 msgid ""
-"Configure icons' animations.on appearing/disappearing (require OpenGL "
+"Configure icons' animations on appearing/disappearing (require OpenGL "
 "capacity)."
 msgstr ""
 

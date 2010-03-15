@@ -1176,7 +1176,7 @@ msgstr "Nastavení speciálních efektů ikon (vyžaduje zapnutý OpenGL)."
 #: ../data/messages:69 ../data/messages:697
 #, fuzzy
 msgid ""
-"Configure icons' animations.on appearing/disappearing (require OpenGL "
+"Configure icons' animations on appearing/disappearing (require OpenGL "
 "capacity)."
 msgstr "Nastavení ikon při otevření/zavření (vyžaduje zapnutý OpenGL)."
 

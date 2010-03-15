@@ -1209,7 +1209,7 @@ msgstr ""
 #: ../data/messages:69 ../data/messages:697
 #, fuzzy
 msgid ""
-"Configure icons' animations.on appearing/disappearing (require OpenGL "
+"Configure icons' animations on appearing/disappearing (require OpenGL "
 "capacity)."
 msgstr ""
 "Configurar animaciones de los iconos al aparecer/desaparecer (requiere "
