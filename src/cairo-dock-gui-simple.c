@@ -95,7 +95,7 @@ static gchar * _make_simple_conf_file (void)
 	
 	// comportement
 	CairoDockPositionType iScreenBorder = (g_pMainDock ? ((! g_pMainDock->container.bIsHorizontal) << 1) | (! g_pMainDock->container.bDirectionUp) : 0);
-	g_key_file_set_integer (pSimpleKeyFile, "Behaviour", "screen border", iScreenBorder);
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "screen border", iScreenBorder);
 	
 	gboolean iVisibility;
 	if (myAccessibility.bReserveSpace)
@@ -110,9 +110,9 @@ static gchar * _make_simple_conf_file (void)
 		iVisibility = 5;
 	else
 		iVisibility = 0;
-	g_key_file_set_integer (pSimpleKeyFile, "Behaviour", "visibility", iVisibility);
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "visibility", iVisibility);
 	
-	g_key_file_set_integer (pSimpleKeyFile, "Behaviour", "show_on_click", (myAccessibility.bShowSubDockOnClick ? 1 : 0));
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "show_on_click", (myAccessibility.bShowSubDockOnClick ? 1 : 0));
 	
 	int iTaskbarType;
 	if (! myTaskBar.bShowAppli)
@@ -124,7 +124,7 @@ static gchar * _make_simple_conf_file (void)
 	else
 		iTaskbarType = 3;
 	s_iTaskbarType = iTaskbarType;
-	g_key_file_set_integer (pSimpleKeyFile, "Behaviour", "taskbar", iTaskbarType);
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "taskbar", iTaskbarType);
 	
 	// apparence
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "default icon directory", myIcons.cIconTheme);
@@ -252,16 +252,16 @@ static gboolean on_apply_config_simple (gpointer data)
 	g_return_val_if_fail (pKeyFile != NULL, TRUE);
 	
 	// comportement
-	CairoDockPositionType iScreenBorder = g_key_file_get_integer (pSimpleKeyFile, "Behaviour", "screen border", NULL);
+	CairoDockPositionType iScreenBorder = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "screen border", NULL);
 	g_key_file_set_integer (pKeyFile, "Position", "screen border", iScreenBorder);
 	
-	int iVisibility = g_key_file_get_integer (pSimpleKeyFile, "Behaviour", "visibility", NULL);
+	int iVisibility = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "visibility", NULL);
 	g_key_file_set_integer (pKeyFile, "Accessibility", "visibility", iVisibility);
 	
-	gboolean bShowOnClick = (g_key_file_get_integer (pSimpleKeyFile, "Behaviour", "show_on_click", NULL) == 1);
+	gboolean bShowOnClick = (g_key_file_get_integer (pSimpleKeyFile, "Behavior", "show_on_click", NULL) == 1);
 	g_key_file_set_boolean (pKeyFile, "Accessibility", "show on click", bShowOnClick);
 	
-	int iTaskbarType = g_key_file_get_integer (pSimpleKeyFile, "Behaviour", "taskbar", NULL);
+	int iTaskbarType = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "taskbar", NULL);
 	if (iTaskbarType != s_iTaskbarType)
 	{
 		gboolean bShowAppli = TRUE, bHideVisible, bCurrentDesktopOnly, bMixLauncherAppli, bGroupAppliByClass;

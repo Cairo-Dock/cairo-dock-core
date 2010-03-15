@@ -1,7 +1,7 @@
 #!en;#@VERSION@
 
 #[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-behavior.svg]
-[Behaviour]
+[Behavior]
 
 #F-[Position on the screen;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-position.svg]
 frame_pos =
