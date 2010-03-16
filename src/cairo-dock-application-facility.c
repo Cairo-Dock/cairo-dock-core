@@ -26,10 +26,6 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 #include <gdk/gdkx.h>
-#ifdef HAVE_XEXTEND
-#include <X11/extensions/Xcomposite.h>
-//#include <X11/extensions/Xdamage.h>
-#endif
 
 #include "cairo-dock-load.h"
 #include "cairo-dock-icons.h"

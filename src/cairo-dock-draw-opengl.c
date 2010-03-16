@@ -724,7 +724,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	glBindTexture (GL_TEXTURE_2D, iTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	/*if (g_bEasterEggs)
+	if (g_bEasterEggs)
 		gluBuild2DMipmaps (GL_TEXTURE_2D,
 			4,
 			w,
@@ -732,7 +732,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 			GL_BGRA,
 			GL_UNSIGNED_BYTE,
 			cairo_image_surface_get_data (pPowerOfwoSurface));
-	else*/
+	else
 		glTexImage2D (GL_TEXTURE_2D,
 			0,
 			4,  // GL_ALPHA / GL_BGRA
@@ -1885,7 +1885,8 @@ typedef void (*GLXReleaseTexImageProc) (Display *display, GLXDrawable drawable, 
 // Bind redirected window to texture:
 GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 {
-	return 0;  /// ca ne marche pas. :-(
+	if (!g_bEasterEggs)
+		return 0;  /// ca ne marche pas. :-(
 	
 	if (! g_openglConfig.bTextureFromPixmapAvailable)
 		return 0;
@@ -1978,13 +1979,13 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	glVertex2d (0.0f, 0.0f);
 	
 	glTexCoord2d (0.0f, top);
-	glVertex2d (0.0f, 1.0f);
+	glVertex2d (0.0f, attrib.height);
 	
 	glTexCoord2d (1.0f, top);
-	glVertex2d (1.0f, 1.0f);
+	glVertex2d (attrib.width, attrib.height);
 	
 	glTexCoord2d (1.0f, bottom);
-	glVertex2d (1.0f, 0.0f);
+	glVertex2d (attrib.width, 0.0f);
 	
 	glEnd ();
 	glDisable (GL_TEXTURE_2D);

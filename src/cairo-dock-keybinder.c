@@ -33,6 +33,7 @@
 #include <gdk/gdkwindow.h>
 #include <gdk/gdkx.h>
 #include <X11/Xlib.h>
+#include "../config.h"
 #ifdef HAVE_XEXTEND
 #include <X11/extensions/XTest.h>
 #endif

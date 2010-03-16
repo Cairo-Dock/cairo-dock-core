@@ -147,7 +147,7 @@ void cairo_dock_remove_all_applis_from_class_table (void);
 void cairo_dock_reset_class_table (void);
 
 
-cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_t *pSourceContext, Icon *pInhibatorIcon, double fMaxScale, double *fWidth, double *fHeight);
+cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_t *pSourceContext, Icon *pInhibatorIcon, int iWidth, int ifHeight);
 /*
 * Cree la surface d'une appli en utilisant le lanceur correspondant, si la classe n'utilise pas les icones X.
 * @param cClass la classe.
@@ -157,7 +157,7 @@ cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_t *pSou
 * @param fHeight hauteur de la surface, renseignee.
 * @return la surface nouvellement creee, ou NULL si aucun lanceur n'a pu etre trouve ou si l'on veut explicitement les icones X pour cette classe.
 */
-cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);
+cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, cairo_t *pSourceContext, int iWidth, int ifHeight);
 
 /*
 * Met a jour les inhibiteurs controlant une appli donnee pour les faire reagir au changement de visibilite de la fenetre, de la meme maniere que si l'icone etait dans la barre des taches.

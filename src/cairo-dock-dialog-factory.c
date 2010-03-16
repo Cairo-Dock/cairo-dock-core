@@ -200,7 +200,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	}
 	else if (pEvent->y != pDialog->container.iWindowPositionY && !pDialog->bPositionForced)
 	{
-		gtk_window_move (pDialog->container.pWidget, pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY);
+		gtk_window_move (GTK_WINDOW (pDialog->container.pWidget), pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY);
 		pDialog->bPositionForced = TRUE;
 	}
 	gtk_widget_queue_draw (pDialog->container.pWidget);  // les widgets internes peuvent avoir changer de taille sans que le dialogue n'en ait change, il faut donc redessiner tout le temps.
@@ -262,13 +262,10 @@ static CairoDialog *_cairo_dock_create_empty_dialog (gboolean bInteractive)
 	pDialog->container.iAnimationDeltaT = mySystem.iCairoAnimationDeltaT;
 
 	//\________________ On construit la fenetre du dialogue.
-	//GtkWidget* pWindow = gtk_window_new (bInteractiveWindow ? GTK_WINDOW_TOPLEVEL : GTK_WINDOW_POPUP);  // les popus ne prennent pas le focus. En fait, ils ne sont meme pas controles par le WM.
+	//GtkWidget* pWindow = gtk_window_new (bInteractiveWindow ? GTK_WINDOW_TOPLEVEL : GTK_WINDOW_POPUP);  // les popups ne prennent pas le focus. En fait, ils ne sont meme pas controles par le WM.
 	GtkWidget* pWindow = cairo_dock_create_container_window_no_opengl ();
 	
 	pDialog->container.pWidget = pWindow;
-
-	//gtk_window_set_keep_above (GTK_WINDOW (pWindow), g_bKeepAbove || myAccessibility.bPopUp);
-	///gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
 
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock-dialog");
 	if (! bInteractive)

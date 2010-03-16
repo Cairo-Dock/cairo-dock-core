@@ -29,7 +29,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 
-#include "cairo-dock-struct.h"  // place avant pour avoir la macro
+#include "../config.h"
 #ifdef HAVE_XEXTEND
 #include <X11/extensions/Xcomposite.h>
 //#include <X11/extensions/Xdamage.h>
@@ -457,7 +457,7 @@ static void _on_change_window_state (Icon *icon)
 				cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
 		}
 		
-		// miniature (on le fait apres l'avoir inseree/detachee, car comme ça dans le cas ou on l'enleve du dock apres l'avoir deminimisee, l'icone est marquee comme en cours de suppression, et donc on ne recharge pas son icone. Sinon l'image change pendant la transition, ce qui est pas top. Comme ca ne change pas la taille de l'icone dans le dock, on peut faire ca apres l'avoir inseree.
+		// miniature (on le fait apres l'avoir inseree/detachee, car comme ï¿½a dans le cas ou on l'enleve du dock apres l'avoir deminimisee, l'icone est marquee comme en cours de suppression, et donc on ne recharge pas son icone. Sinon l'image change pendant la transition, ce qui est pas top. Comme ca ne change pas la taille de l'icone dans le dock, on peut faire ca apres l'avoir inseree.
 		#ifdef HAVE_XEXTEND
 		if (myTaskBar.iMinimizedWindowRenderType == 1 && (pParentDock != NULL || myTaskBar.bHideVisibleApplis))  // on recupere la miniature ou au contraire on remet l'icone.
 		{
@@ -1132,7 +1132,7 @@ void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 
 
 
-cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)
+cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, cairo_t *pSourceContext, int iWidth, int iHeight)
 {
 	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS && Xid > 0, NULL);
 	GdkPixbuf *pPixbuf = cairo_dock_get_pixbuf_from_pixmap (Xid, TRUE);
@@ -1142,20 +1142,19 @@ cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, cairo_t *pS
 		return NULL;
 	}
 	cd_debug ("window pixmap : %dx%d", gdk_pixbuf_get_width (pPixbuf), gdk_pixbuf_get_height (pPixbuf));
+	double fWidth, fHeight;
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_pixbuf (pPixbuf,
 		pSourceContext,
-		fMaxScale,
-		myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-		myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
+		1.,
+		iWidth, iHeight,
 		CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,  // on conserve le ratio de la fenetre, tout en gardant la taille habituelle des icones d'appli.
-		fWidth,
-		fHeight,
+		&fWidth, &fHeight,
 		NULL, NULL);
 	g_object_unref (pPixbuf);
 	return pSurface;
 }
 
-cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)
+cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pSourceContext, int iWidth, int iHeight)
 {
 	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	
@@ -1170,10 +1169,8 @@ cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pS
 		cairo_surface_t *pNewSurface = cairo_dock_create_surface_from_xicon_buffer (pXIconBuffer,
 			iBufferNbElements,
 			pSourceContext,
-			myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-			myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
-			fMaxScale,
-			fWidth, fHeight);
+			iWidth,
+			iHeight);
 		XFree (pXIconBuffer);
 		return pNewSurface;
 	}
@@ -1238,14 +1235,15 @@ cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pS
 		//\____________________ On cree la surface.
 		if (pIconPixbuf != NULL)
 		{
+			double fWidth, fHeight;
 			cairo_surface_t *pNewSurface = cairo_dock_create_surface_from_pixbuf (pIconPixbuf,
 				pSourceContext,
-				fMaxScale,
-				myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-				myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
+				1.,
+				iWidth,
+				iHeight,
 				CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,
-				fWidth,
-				fHeight,
+				&fWidth,
+				&fHeight,
 				NULL, NULL);
 
 			g_object_unref (pIconPixbuf);

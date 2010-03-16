@@ -820,7 +820,7 @@ void cairo_dock_hide_show_launchers_on_other_desktops (CairoDock *pDock)
 	if (g_iNbNonStickyLaunchers <= 0)
 		return ;
 	// first we detach what shouldn't be show on this viewport
-	cairo_dock_foreach_icons_of_type (pDock->icons, CAIRO_DOCK_LAUNCHER, _cairo_dock_hide_show_launchers_on_other_desktops, pDock);
+	cairo_dock_foreach_icons_of_type (pDock->icons, CAIRO_DOCK_LAUNCHER, (CairoDockForeachIconFunc)_cairo_dock_hide_show_launchers_on_other_desktops, pDock);
 	// then we reattach what was eventually missing
-	cairo_dock_foreach_icons_of_type (s_DetachedLaunchersList, CAIRO_DOCK_LAUNCHER, _cairo_dock_hide_show_launchers_on_other_desktops, pDock);
+	cairo_dock_foreach_icons_of_type (s_DetachedLaunchersList, CAIRO_DOCK_LAUNCHER, (CairoDockForeachIconFunc)_cairo_dock_hide_show_launchers_on_other_desktops, pDock);
 }

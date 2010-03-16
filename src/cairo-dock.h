@@ -63,6 +63,7 @@
 #include <cairo-dock/cairo-dock-application-facility.h>
 #include <cairo-dock/cairo-dock-dialog-manager.h>
 #include <cairo-dock/cairo-dock-load.h>
+#include <cairo-dock/cairo-dock-icon-loader.h>
 #include <cairo-dock/cairo-dock-config.h>
 // managers.
 #include <cairo-dock/cairo-dock-X-manager.h>

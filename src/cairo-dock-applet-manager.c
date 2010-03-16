@@ -35,32 +35,23 @@
 #include "cairo-dock-applet-manager.h"
 
 
-cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFileName, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)
+cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFileName, cairo_t *pSourceContext, int iWidth, int iHeight)
 {
 	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
-	if (*fWidth == 0)
-		*fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLET];
-	if (*fHeight == 0)
-		*fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLET];
 	cairo_surface_t *pNewSurface;
 	if (cIconFileName == NULL)
 	{
 		pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
-			ceil (*fWidth * fMaxScale),
-			ceil (*fHeight * fMaxScale));
+			iWidth,
+			iHeight);
 	}
 	else
 	{
 		gchar *cIconPath = cairo_dock_search_icon_s_path (cIconFileName);
-		pNewSurface = cairo_dock_create_surface_from_image (cIconPath,
+		pNewSurface = cairo_dock_create_surface_from_image_simple (cIconPath,
 			pSourceContext,
-			fMaxScale,
-			*fWidth,
-			*fHeight,
-			CAIRO_DOCK_FILL_SPACE,
-			fWidth,
-			fHeight,
-			NULL, NULL);
+			iWidth,
+			iHeight);
 		g_free (cIconPath);
 	}
 	return pNewSurface;
