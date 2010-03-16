@@ -1,9 +1,9 @@
 #!en;#@VERSION@
 
-#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-behavior.svg]
-[Behavior]
+#[@pkgdatadir@/icon-behavior.svg]
+[Behaviour]
 
-#F-[Position on the screen;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-position.svg]
+#F-[Position on the screen;@pkgdatadir@/icon-position.svg]
 frame_pos =
 
 #l-[bottom;top;right;left] Choose which border of the screen the dock will be placed on:
@@ -11,7 +11,7 @@ frame_pos =
 screen border = 0
 
 
-#F-[Visibility of the main dock;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-visibility.svg]
+#F-[Visibility of the main dock;@pkgdatadir@/icon-visibility.svg]
 frame_visi =
 
 #Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;0;0;Automatically hide the dock;0;0;Automatically hide when a window is maximized;0;0;Pop-up on shortcut;1;1] Visibility:
@@ -25,7 +25,7 @@ visibility = 1
 #{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 raise shortcut = 
 
-#F-[Visibility of sub-docks;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-subdock.png]
+#F-[Visibility of sub-docks;@pkgdatadir@/icon-subdock.png]
 frame_sub =
 
 #l-[Appear on mouse over;Appear on click] Visibility:
@@ -33,7 +33,7 @@ frame_sub =
 show_on_click = 0
 
 
-#F-[Taskbar;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-taskbar.png]
+#F-[Taskbar;@pkgdatadir@/icon-taskbar.png]
 frame_task =
 
 #l-[None;MacOSX;Windows7;Gnome] Behaviour of the Taskbar:
@@ -44,7 +44,7 @@ frame_task =
 taskbar = 2
 
 
-#F[Animations;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-movment.png]
+#F[Animations;@pkgdatadir@/icon-movment.png]
 frame_anim=
 
 #m[Animated icons] Configure icons' animations.
@@ -57,10 +57,10 @@ config_effect =
 config_illusion = 
 
 
-#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-appearance.svg]
+#[@pkgdatadir@/icon-appearance.svg]
 [Appearance]
 
-#F[Icons;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-icons.svg]
+#F[Icons;@pkgdatadir@/icon-icons.svg]
 frame_icons=
 
 #w Choose a theme of icons :
@@ -81,7 +81,7 @@ separate icons = true
 icon's type order = 0;1;2
 
 
-#F[Views;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-views.svg]
+#F[Views;@pkgdatadir@/icon-views.svg]
 frame_view =
 
 #n Choose the default view for main docks :/
@@ -95,10 +95,10 @@ sev_view=
 sub-dock view = default
 
 
-#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-plug-ins.svg]
+#[@pkgdatadir@/icon-plug-ins.svg]
 [Add-ons]
 
-#F[Applets;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-accessories.svg]
+#F[Applets;@pkgdatadir@/icon-accessories.svg]
 frame_mod=
 
 #N Add or remove any applet :
@@ -108,10 +108,10 @@ frame_mod=
 modules=
 
 
-#[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-controler.svg]
+#[@pkgdatadir@/icon-controler.svg]
 [Themes]
 
-#R[@prefix@/@DATADIRNAME@/@PACKAGE@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes] Choose one of the available themes:/
+#R[@pkgdatadir@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes] Choose one of the available themes:/
 chosen theme = 
 
 #F[Options]
