@@ -107,12 +107,6 @@ CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
 	gtk_container_set_border_width(GTK_CONTAINER(pWindow), 0);
 	pDock->container.pWidget = pWindow;
 	
-	if (g_bKeepAbove)
-		gtk_window_set_keep_above (GTK_WINDOW (pWindow), g_bKeepAbove);
-	if (myAccessibility.bPopUp)
-		gtk_window_set_keep_below (GTK_WINDOW (pWindow), TRUE);
-	if (mySystem.bUseFakeTransparency)
-		gtk_window_set_keep_below (GTK_WINDOW (pWindow), TRUE);
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
 	gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_DOCK);
 	

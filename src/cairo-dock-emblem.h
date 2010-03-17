@@ -56,6 +56,7 @@ struct _CairoEmblem {
 	int iWidth;
 	int iHeight;
 	CairoEmblemPosition iPosition;
+	double fScale;
 };
 
 /** Create an emblem from an image, that suits the given icon and container. If the image is given by its sole name, it is searched inside the current theme root folder.
@@ -97,6 +98,9 @@ CairoEmblem *cairo_dock_make_emblem_from_texture (GLuint iTexture, Icon *pIcon, 
 void cairo_dock_free_emblem (CairoEmblem *pEmblem);
 
 
+void _cairo_dock_apply_emblem_texture (CairoEmblem *pEmblem, int w, int h);
+void _cairo_dock_apply_emblem_surface (CairoEmblem *pEmblem, int w, int h, cairo_t *pCairoContext);
+
 /** Permanently draw an emblem on an icon.
 *@param pEmblem the emblem
 *@param pIcon an icon
@@ -104,8 +108,6 @@ void cairo_dock_free_emblem (CairoEmblem *pEmblem);
 */
 void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoContainer *pContainer);
 
-
-void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock);
 
 G_END_DECLS
 #endif

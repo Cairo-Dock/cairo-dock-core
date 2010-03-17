@@ -751,11 +751,11 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	else { \
 		Icon *icon;\
 		GList *ic;\
-		for (ic = pIconsList; ic != NULL; ic = ic->next) {\
+		for (ic = (pIconsList); ic != NULL; ic = ic->next) {\
 			icon = ic->data;\
 			if (icon->cParentDockName == NULL)\
 				icon->cParentDockName = g_strdup (myIcon->cName); } } \
-	myIcon->pSubDock->icons = pIconsList; \
+	myIcon->pSubDock->icons = (pIconsList); \
 	myIcon->pSubDock->pFirstDrawnElement = pIconsList; \
 	cairo_dock_load_buffers_in_one_dock (myIcon->pSubDock); \
 	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)
@@ -814,11 +814,11 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
  *\param cApplicationClass the class of the application you wish to control (in lower case), or NULL to stop controling any appli.
 */
 #define CD_APPLET_MANAGE_APPLICATION(cApplicationClass) do {\
-	if (cairo_dock_strings_differ (myIcon->cClass, cApplicationClass)) {\
+	if (cairo_dock_strings_differ (myIcon->cClass, (cApplicationClass))) {\
 		if (myIcon->cClass != NULL)\
 			cairo_dock_deinhibate_class (myIcon->cClass, myIcon);\
-		if (cApplicationClass != NULL)\
-			cairo_dock_inhibate_class (cApplicationClass, myIcon); } } while (0)
+		if ((cApplicationClass) != NULL)\
+			cairo_dock_inhibate_class ((cApplicationClass), myIcon); } } while (0)
 
 //\_________________________________ INTERNATIONNALISATION
 /** Macro for gettext, similar to _() et N_(), but with the domain of the applet. Surround all your strings with this, so that 'xgettext' can find them and automatically include them in the translation files.

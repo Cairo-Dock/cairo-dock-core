@@ -449,6 +449,31 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	else
 		glTranslatef (fY + icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2), fX, - icon->fHeight * (1+myIcons.fAmplitude));
 	
+	//\_____________________ On positionne l'icone.
+	glPushMatrix ();
+	if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (icon))
+	{
+		if (pDock->container.bIsHorizontal)
+		{
+			glTranslatef (0., (pDock->container.bDirectionUp ? icon->fHeight * (- icon->fScale + 1)/2 : icon->fHeight * (icon->fScale - 1)/2), 0.);
+		}
+		else
+		{
+			glTranslatef ((!pDock->container.bDirectionUp ? icon->fHeight * (- icon->fScale + 1)/2 : icon->fHeight * (icon->fScale - 1)/2), 0., 0.);
+		}
+	}
+	glTranslatef (0., 0., - icon->fHeight * (1+myIcons.fAmplitude));
+	if (icon->fOrientation != 0)
+	{
+		glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
+		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
+		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
+	}
+	if (icon->iRotationX != 0)
+		glRotatef (icon->iRotationX, 1., 0., 0.);
+	if (icon->iRotationY != 0)
+		glRotatef (icon->iRotationY, 0., 1., 0.);
+	
 	//\_____________________ On dessine les indicateur derriere.
 	if (icon->bHasIndicator && ! myIndicators.bIndicatorAbove /*&& g_iIndicatorTexture != 0*/)
 	{
@@ -483,37 +508,10 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glPopMatrix ();
 	}
 	
-	//\_____________________ On positionne l'icone.
-	glPushMatrix ();
-	if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (icon))
-	{
-		if (pDock->container.bIsHorizontal)
-		{
-			glTranslatef (0., (pDock->container.bDirectionUp ? icon->fHeight * (- icon->fScale + 1)/2 : icon->fHeight * (icon->fScale - 1)/2), 0.);
-		}
-		else
-		{
-			glTranslatef ((!pDock->container.bDirectionUp ? icon->fHeight * (- icon->fScale + 1)/2 : icon->fHeight * (icon->fScale - 1)/2), 0., 0.);
-		}
-	}
-	glTranslatef (0., 0., - icon->fHeight * (1+myIcons.fAmplitude));
-	if (icon->fOrientation != 0)
-	{
-		glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
-		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
-		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
-	}
-	if (icon->iRotationX != 0)
-		glRotatef (icon->iRotationX, 1., 0., 0.);
-	if (icon->iRotationY != 0)
-		glRotatef (icon->iRotationY, 0., 1., 0.);
-	
 	//\_____________________ On dessine l'icone.
 	gboolean bIconHasBeenDrawn = FALSE;
 	cairo_dock_notify (CAIRO_DOCK_PRE_RENDER_ICON, icon, pDock);
 	cairo_dock_notify (CAIRO_DOCK_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn, NULL);
-	
-	glPopMatrix ();  // retour juste apres la translation au milieu de l'icone.
 	
 	//\_____________________ On dessine les indicateurs devant.
 	if (icon->bHasIndicator && myIndicators.bIndicatorAbove/* && g_iIndicatorTexture != 0*/)
@@ -537,6 +535,8 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		_cairo_dock_draw_class_indicator_opengl (icon, pDock->container.bIsHorizontal, fRatio, pDock->container.bDirectionUp);
 		glPopMatrix ();
 	}
+	
+	glPopMatrix ();  // retour juste apres la translation au milieu de l'icone.
 	
 	//\_____________________ On dessine les infos additionnelles.
 	if (icon->iQuickInfoTexture != 0)

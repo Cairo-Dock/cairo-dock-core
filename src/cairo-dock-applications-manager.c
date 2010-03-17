@@ -855,7 +855,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 				{
 					if (cairo_dock_appli_hovers_dock (pIcon, pDock))
 					{
-						cd_message (" elle empiete sur notre dock");
+						g_print ("\n une fenetre empiete sur notre dock\n\n");
 						cairo_dock_activate_temporary_auto_hide ();
 					}
 				}
