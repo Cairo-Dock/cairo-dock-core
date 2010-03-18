@@ -1207,7 +1207,7 @@ msgstr "Наладзіць спецыяльныя эфекты значкоў (�
 #: ../data/messages:69 ../data/messages:697
 #, fuzzy
 msgid ""
-"Configure icons' animations.on appearing/disappearing (require OpenGL "
+"Configure icons' animations on appearing/disappearing (require OpenGL "
 "capacity)."
 msgstr ""
 "Наладзіць анімацыю значкоў пры з'яўленні/зьнікненьні (патрабуецца падтрымка "

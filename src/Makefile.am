@@ -73,6 +73,8 @@ cairo_dock_SOURCES = \
 	cairo-dock-global-variables.h \
 	cairo-dock-icons.h \
 	cairo-dock-icons.c \
+	cairo-dock-icon-loader.c \
+	cairo-dock-icon-loader.h \
 	cairo-dock-applications-manager.c \
 	cairo-dock-applications-manager.h \
 	cairo-dock-application-facility.c\

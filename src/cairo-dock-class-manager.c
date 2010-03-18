@@ -552,23 +552,20 @@ void cairo_dock_reset_class_table (void)
 
 
 
-cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_t *pSourceContext, Icon *pInhibatorIcon, double fMaxScale, double *fWidth, double *fHeight)
+cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_t *pSourceContext, Icon *pInhibatorIcon, int iWidth, int iHeight)
 {
-	*fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI];
-	*fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI];
-	
 	CairoContainer *pInhibhatorContainer = cairo_dock_search_container_from_icon (pInhibatorIcon);
-	double fInhibatorMaxScale = (CAIRO_DOCK_IS_DOCK (pInhibhatorContainer) ? fMaxScale : 1);
+	int w, h;
+	cairo_dock_get_icon_extent (pInhibatorIcon, pInhibhatorContainer, &w, &h);
 	
-	cairo_surface_t *pSurface = cairo_dock_duplicate_surface (pInhibatorIcon->pIconBuffer,
+	return cairo_dock_duplicate_surface (pInhibatorIcon->pIconBuffer,
 		pSourceContext,
-		pInhibatorIcon->fWidth * fInhibatorMaxScale / (pInhibhatorContainer ? pInhibhatorContainer->fRatio : 1.),
-		pInhibatorIcon->fHeight * fInhibatorMaxScale / (pInhibhatorContainer ? pInhibhatorContainer->fRatio : 1.),
-		*fWidth * fMaxScale,
-		*fHeight * fMaxScale);
-	return pSurface;
+		w,
+		h,
+		iWidth,
+		iHeight);
 }
-cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight)
+cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, cairo_t *pSourceContext, int iWidth, int iHeight)
 {
 	cd_debug ("%s (%s)", __func__, cClass);
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
@@ -587,7 +584,7 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, cair
 			if (! CAIRO_DOCK_IS_APPLET (pInhibatorIcon))
 			{
 				cd_message ("%s va fournir genereusement sa surface", pInhibatorIcon->cName);
-				return cairo_dock_duplicate_inhibator_surface_for_appli (pSourceContext, pInhibatorIcon, fMaxScale, fWidth, fHeight);
+				return cairo_dock_duplicate_inhibator_surface_for_appli (pSourceContext, pInhibatorIcon, iWidth, iHeight);
 			}
 		}
 	}
@@ -596,14 +593,10 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, cair
 	if (cIconFilePath != NULL)
 	{
 		cd_debug ("on remplace l'icone X par %s", cIconFilePath);
-		cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cIconFilePath,
+		cairo_surface_t *pSurface = cairo_dock_create_surface_from_image_simple (cIconFilePath,
 			pSourceContext,
-			1 + myIcons.fAmplitude,
-			myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI],
-			myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI],
-			CAIRO_DOCK_FILL_SPACE,
-			fWidth, fHeight,
-			NULL, NULL);
+			iWidth,
+			iHeight);
 		g_free (cIconFilePath);
 		return pSurface;
 	}

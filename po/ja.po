@@ -1213,7 +1213,7 @@ msgstr "アイコンの特殊効果（要 OpenGL 対応）に関わる設定"
 #: ../data/messages:69 ../data/messages:697
 #, fuzzy
 msgid ""
-"Configure icons' animations.on appearing/disappearing (require OpenGL "
+"Configure icons' animations on appearing/disappearing (require OpenGL "
 "capacity)."
 msgstr "アイコンの出現/消失時のアニメーション（要 OpenGL 対応）に関わる設定"
 

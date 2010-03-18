@@ -1176,7 +1176,7 @@ msgstr "Διαμόρφωση ειδικών εφφέ εικονιδίων (πρ�
 #: ../data/messages:69 ../data/messages:697
 #, fuzzy
 msgid ""
-"Configure icons' animations.on appearing/disappearing (require OpenGL "
+"Configure icons' animations on appearing/disappearing (require OpenGL "
 "capacity)."
 msgstr ""
 "Διαμόρφωση κινούμενων γραφικών των εικονιδίων κατά την εμφάνιση/απόκρυψη "

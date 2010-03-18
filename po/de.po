@@ -1207,7 +1207,7 @@ msgstr "Spezialeffekte der Symbole konfigurieren (benötigt OpenGL)"
 #: ../data/messages:69 ../data/messages:697
 #, fuzzy
 msgid ""
-"Configure icons' animations.on appearing/disappearing (require OpenGL "
+"Configure icons' animations on appearing/disappearing (require OpenGL "
 "capacity)."
 msgstr ""
 "Animationen der Symbole bei Erscheinen/Verschwinden konfigurieren (benötigt "

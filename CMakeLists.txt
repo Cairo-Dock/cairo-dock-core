@@ -11,7 +11,15 @@ include (CheckSymbolExists)
 
 project ("cairo-dock")
 set (VERSION "2.1.4-0beta0")
-add_definitions (-std=c99 -O3 -g -ggdb -Wstrict-prototypes -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration) #-Wunreachable-code -Wno-unused-parameter -Wall
+set (CPACK_SOURCE_GENERATOR "TBZ2")
+set (CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION}")
+set (CPACK_SOURCE_IGNORE_FILES "/build/;/.bzr/;~$;${CPACK_SOURCE_IGNORE_FILES}")
+include (CPack)  # a inclure apres les set.
+add_custom_target( dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)  # pour pouvoir l'appeler avec "make dist"
+add_definitions (-std=c99 -Wstrict-prototypes -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration) #-Wunreachable-code -Wno-unused-parameter -Wall 
+if (NOT ${CMAKE_BUILD_TYPE})
+	add_definitions (-O3)
+endif()
 add_definitions (-DGL_GLEXT_PROTOTYPES="1")
 add_definitions (-DCAIRO_DOCK_DEFAULT_ICON_NAME="default-icon.svg")
 add_definitions (-DCAIRO_DOCK_ICON="cairo-dock.svg")
@@ -20,7 +28,7 @@ add_definitions (-DCAIRO_DOCK_DATA_DIR="cairo-dock")
 
 ########### global variables ###############
 
-set (PACKAGE ${PROJECT_NAME})
+set (PACKAGE ${CMAKE_PROJECT_NAME})
 set (GETTEXT_PACKAGE ${PACKAGE})
 set (prefix ${CMAKE_INSTALL_PREFIX})
 set (exec_prefix ${prefix})
@@ -100,8 +108,8 @@ configure_file (cairo-dock.pc.in cairo-dock.pc)
 
 ########### install files ###############
 
-install(FILES  cairo-dock-package-theme launch-cairo-dock-after-compiz DESTINATION ${bindir})
-install(FILES  cairo-dock.pc DESTINATION ${libdir}/pkgconfig)
+install (FILES  cairo-dock-package-theme launch-cairo-dock-after-compiz DESTINATION ${bindir})
+install (FILES  cairo-dock.pc DESTINATION ${libdir}/pkgconfig)
 
 #original Makefile.am contents follow:
 

@@ -78,13 +78,15 @@ struct _Icon {
 	CairoDockIconType iType;
 	GPtrArray *pNotificationsTab;
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
+	
+	//\____________ properties.
+	// generic.
 	/// Name of the icon.
 	gchar *cName;
 	/// Short info displayed on the icon (few characters).
 	gchar *cQuickInfo;
 	/// name or path of an image displayed on the icon.
 	gchar *cFileName;
-	
 	/// Class of application the icon will be bound to.
 	gchar *cClass;
 	/// name of the dock the icon belongs to (NULL means it's not currently inside a dock).
@@ -95,6 +97,7 @@ struct _Icon {
 	gdouble fOrder;
 	gint iSpecificDesktop;
 	gint iSubdockViewType;
+	/// a hint to indicate the icon should be kept static (no animation like bouncing).
 	gboolean bStatic;
 	
 	CairoDataRenderer *pDataRenderer;
@@ -105,7 +108,7 @@ struct _Icon {
 	gboolean bPointed;
 	gdouble fInsertRemoveFactor;
 	
-	//\____________ Launcher.
+	// Launcher.
 	gchar *cDesktopFileName;  // nom (et non pas chemin) du fichier .desktop
 	gchar *cCommand;
 	gchar *cWorkingDirectory;
@@ -114,7 +117,7 @@ struct _Icon {
 	gint iNbSubIcons;  // nombre de fichiers max dans le cas d'un repertoire.
 	CairoDockFMSortType iSortSubIcons;  // ordre des icones dans le cas d'un repertoire.
 	
-	//\____________ Appli.
+	// Appli.
 	Window Xid;
 	gboolean bIsHidden;
 	gboolean bIsFullScreen;
@@ -131,7 +134,7 @@ struct _Icon {
 	Pixmap iBackingPixmap;
 	//Damage iDamageHandle;
 	
-	//\____________ Applet.
+	// Applet.
 	CairoDockModuleInstance *pModuleInstance;
 	
 	//\____________ Buffers.

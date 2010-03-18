@@ -68,6 +68,7 @@
 extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
+extern gboolean g_bKeepAbove;
 
 static GHashTable *s_hDocksTable = NULL;  // table des docks existant.
 static int s_iSidPollScreenEdge = 0;
@@ -104,6 +105,13 @@ CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendere
 	
 	//\__________________ On cree un nouveau dock.
 	CairoDock *pDock = cairo_dock_new_dock (cRendererName);
+	
+	if (g_bKeepAbove)
+		gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), g_bKeepAbove);
+	if (myAccessibility.bPopUp)
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
+	if (mySystem.bUseFakeTransparency)
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
 	
 	//\__________________ On l'enregistre.
 	if (g_hash_table_size (s_hDocksTable) == 0)  // c'est le 1er (on pourrait aussi se baser sur son nom).
@@ -633,7 +641,7 @@ static void _cairo_dock_quick_hide_one_root_dock (const gchar *cDockName, CairoD
 		pDock->bAutoHideInitialValue = pDock->bAutoHide;
 		pDock->bAutoHide = TRUE;
 		pDock->bEntranceDisabled = TRUE;
-		if (!pDock->container.bInside)  // on ne cache pas le dock si l'on change par exemple de bureau via e switcher ou un clic sur une appli.
+		if (!pDock->container.bInside)  // on ne cache pas le dock si l'on change par exemple de bureau via le switcher ou un clic sur une appli.
 			cairo_dock_emit_leave_signal (pDock);
 	}
 }

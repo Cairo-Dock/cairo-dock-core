@@ -403,18 +403,8 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] ||
 		pPrevIcons->fAmplitude != pIcons->fAmplitude)
 	{
-		cairo_dock_load_active_window_indicator (myIndicators.cActiveIndicatorImagePath,
-			fMaxScale,
-			myIndicators.iActiveCornerRadius,
-			myIndicators.iActiveLineWidth,
-			myIndicators.fActiveColor);
-		if (myTaskBar.bShowAppli && myTaskBar.bGroupAppliByClass)
-			cairo_dock_load_class_indicator (myIndicators.cClassIndicatorImagePath,
-				fMaxScale);
-		if (myTaskBar.bShowAppli && myTaskBar.bMixLauncherAppli)
-			cairo_dock_load_task_indicator (myIndicators.cIndicatorImagePath,
-				fMaxScale,
-				myIndicators.fIndicatorRatio);
+		cairo_dock_unload_icon_textures ();
+		cairo_dock_load_icon_textures ();
 	}
 	
 	g_pDockBackgroundBuffer.iWidth = g_pDockBackgroundBuffer.iHeight = 0.;

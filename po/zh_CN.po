@@ -1186,7 +1186,7 @@ msgstr "配置图标特殊效果（需要OpenGL支持）。"
 #: ../data/messages:69 ../data/messages:697
 #, fuzzy
 msgid ""
-"Configure icons' animations.on appearing/disappearing (require OpenGL "
+"Configure icons' animations on appearing/disappearing (require OpenGL "
 "capacity)."
 msgstr "配置图标显示/消失时的动画效果（需要OpenGL支持）。"
 

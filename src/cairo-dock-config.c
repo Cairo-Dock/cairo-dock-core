@@ -573,15 +573,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_unload_dialog_buttons ();  // on se contente de remettre a zero ces buffers,
 	cairo_dock_unload_desklet_buttons ();  // qui seront charges lorsque necessaire.
 	
-	cairo_dock_load_icons_background_surface (myIcons.cBackgroundImagePath, fMaxScale);
-
-	cairo_dock_load_box_surface (fMaxScale);
-
-	cairo_dock_load_task_indicator (myTaskBar.bShowAppli && (myTaskBar.bMixLauncherAppli || myTaskBar.bDrawIndicatorOnAppli) ? myIndicators.cIndicatorImagePath : NULL, fMaxScale, myIndicators.fIndicatorRatio);
-	
-	cairo_dock_load_active_window_indicator (myIndicators.cActiveIndicatorImagePath, fMaxScale, myIndicators.iActiveCornerRadius, myIndicators.iActiveLineWidth, myIndicators.fActiveColor);
-	
-	cairo_dock_load_class_indicator (myTaskBar.bShowAppli && myTaskBar.bGroupAppliByClass ? myIndicators.cClassIndicatorImagePath : NULL, fMaxScale);
+	cairo_dock_load_icon_textures ();
 	
 	cairo_dock_load_visible_zone (pDock, myBackground.cVisibleZoneImageFile, myAccessibility.iVisibleZoneWidth, myAccessibility.iVisibleZoneHeight, myBackground.fVisibleZoneAlpha);
 	
@@ -602,7 +594,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	
 	if (bGroupOrderChanged || myIcons.iSeparateIcons != iSeparateIconsOld)
 		pDock->icons = g_list_sort (pDock->icons, (GCompareFunc) cairo_dock_compare_icons_order);
-
+	
 	if ((iSeparateIconsOld && ! myIcons.iSeparateIcons) || bGroupOrderChanged)
 		cairo_dock_remove_automatic_separators (pDock);
 		

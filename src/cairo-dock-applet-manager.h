@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 *@param fHeight hauteur de la surface obtenue.
 *@return la surface nouvellement generee.
 */
-cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFileName, cairo_t *pSourceContext, double fMaxScale, double *fWidth, double *fHeight);
+cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFileName, cairo_t *pSourceContext, int iWidth, int iHeight);
 
 
 /* Cree une icone destinee a une applet.
