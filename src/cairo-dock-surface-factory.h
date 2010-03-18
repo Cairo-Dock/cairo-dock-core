@@ -134,7 +134,7 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 *@param fHeight will be filled with the resulting height of the surface.
 *@return the newly allocated surface.
 */
-cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, double fConstraintWidth, double fConstraintHeight, double fMaxScale, double *fWidth, double *fHeight);
+cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, int iWidth, int iHeight);
 
 /** Create a surface from a GdkPixbuf.
 *@param pixbuf the pixbuf.

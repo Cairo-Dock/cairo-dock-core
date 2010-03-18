@@ -720,11 +720,19 @@ static void _cairo_dock_post_initialize_opengl_backend (GtkWidget* pWidget, gpoi
 	if (!g_openglConfig.bFboAvailable)
 		cd_warning ("No FBO support, some applets will be invisible if placed inside the dock.");
 	
-	g_print ("OpenGL config summary :\n - bNonPowerOfTwoAvailable : %d\n - bFboAvailable : %d\n - direct rendering : %d\n - bTextureFromPixmapAvailable : %d\n - OpenGL version: %s\n - OpenGL vendor: %s\n - OpenGL renderer: %s\n\n",
+	GLfloat fMaximumAnistropy = 0.;
+	if (_check_gl_extension ("GL_EXT_texture_filter_anisotropic"))
+	{
+		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &fMaximumAnistropy);
+		glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, fMaximumAnistropy);
+	}
+	
+	g_print ("OpenGL config summary :\n - bNonPowerOfTwoAvailable : %d\n - bFboAvailable : %d\n - direct rendering : %d\n - bTextureFromPixmapAvailable : %d\n - Anisotroy filtering level max : %.1f\n - OpenGL version: %s\n - OpenGL vendor: %s\n - OpenGL renderer: %s\n\n",
 		g_openglConfig.bNonPowerOfTwoAvailable,
 		g_openglConfig.bFboAvailable,
 		!g_openglConfig.bIndirectRendering,
 		g_openglConfig.bTextureFromPixmapAvailable,
+		fMaximumAnistropy,
 		glGetString (GL_VERSION),
 		glGetString (GL_VENDOR),
 		glGetString (GL_RENDERER));

@@ -186,7 +186,7 @@ static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDo
 }
 
 
-cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, double fConstraintWidth, double fConstraintHeight, double fMaxScale, double *fWidth, double *fHeight)
+cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, int iWidth, int iHeight)
 {
 	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 
@@ -236,29 +236,28 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 		h,
 		iStride);
 	
-	*fWidth = (double) w;
-	*fHeight = (double) h;
+	double fWidth = iWidth, fHeight = iHeight;
 	double fIconWidthSaturationFactor = 1., fIconHeightSaturationFactor = 1.;
-	cairo_dock_calculate_constrainted_size (fWidth,
-		fHeight,
-		fConstraintWidth,
-		fConstraintHeight,
+	cairo_dock_calculate_constrainted_size (&fWidth,
+		&fHeight,
+		iWidth,
+		iHeight,
 		CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,
 		&fIconWidthSaturationFactor,
 		&fIconHeightSaturationFactor);
 	
 	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
-		ceil (*fWidth * fMaxScale),
-		ceil (*fHeight * fMaxScale));
+		ceil (iWidth),
+		ceil (iHeight));
 	cairo_t *pCairoContext = cairo_create (pNewSurface);
 	
 	double fUsefulWidth = w * fIconWidthSaturationFactor;  // a part dans le cas fill && keep ratio, c'est la meme chose que fImageWidth et fImageHeight.
 	double fUsefulHeight = h * fIconHeightSaturationFactor;
 	_apply_orientation_and_scale (pCairoContext,
 		CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,
-		ceil ((*fWidth) * fMaxScale), ceil ((*fHeight) * fMaxScale),
-		fMaxScale * fIconWidthSaturationFactor, fMaxScale * fIconHeightSaturationFactor,
-		fUsefulWidth * fMaxScale, fUsefulHeight * fMaxScale);
+		iWidth, iHeight,
+		fIconWidthSaturationFactor, fIconHeightSaturationFactor,
+		fUsefulWidth, fUsefulHeight);
 	cairo_set_source_surface (pCairoContext, surface_ini, 0, 0);
 	cairo_paint (pCairoContext);
 
