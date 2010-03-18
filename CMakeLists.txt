@@ -79,6 +79,11 @@ if (${HAVE_LIBCRYPT})
 else()
 	MESSAGE (STATUS " * crypt passwords : no")
 endif()
+if (${HAVE_LIBGIO})
+	MESSAGE (STATUS " * Gio/Gvfs : yes")
+else()
+	MESSAGE (STATUS " * Gio/Gvfs : no")
+endif()
 MESSAGE (STATUS)
 
 ########### next steps ###############
@@ -99,7 +104,6 @@ set (CAIRO_DOCK_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 ########### file generation ###############
 
 configure_file (config.h.cmake config.h)
-configure_file (src/cairo-dock-gio-vfs.h.in src/cairo-dock-gio-vfs.h)
 configure_file (data/cairo-dock.conf.in data/cairo-dock.conf)
 configure_file (data/cairo-dock-simple.conf.in data/cairo-dock-simple.conf)
 configure_file (data/main-dock.conf.in data/main-dock.conf)

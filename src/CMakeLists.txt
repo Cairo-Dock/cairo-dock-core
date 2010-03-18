@@ -27,6 +27,7 @@ SET(cairo-dock_SRCS
 	cairo-dock-renderer-manager.c 		cairo-dock-renderer-manager.h
 	cairo-dock-data-renderer.c 			cairo-dock-data-renderer.h
 	cairo-dock-file-manager.c 			cairo-dock-file-manager.h
+	cairo-dock-gio-vfs.c 			cairo-dock-gio-vfs.h
 	cairo-dock-themes-manager.c 		cairo-dock-themes-manager.h
 	cairo-dock-class-manager.c 			cairo-dock-class-manager.h
 	cairo-dock-X-manager.c 				cairo-dock-X-manager.h
