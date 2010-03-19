@@ -4,42 +4,49 @@
 #s Launcher's name :
 Name=Firefox Web Browser
 #s Command to launch on click :
-#{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1 for the Applications Menu, <Ctrl>c or <Ctrl>v to copy or paste, etc}
+#{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc}
 Exec=firefox 
 #S Image's name or path :
-Icon=firefox-3.5
+Icon=firefox
 #d Name of the container it belongs to:
 #{If you write here a container's name that doesn't exist yet, a new one will be created, with this icon inside.}
 Container=_MainDock_
 
 #X[Extra parameters]
 frame_extra=
-#f Order you want for this launcher among the others:
-Order=2.790283203125
+#f[0;100] Order you want for this launcher among the others:
+Order=0.2274322509765625
 #b Prevent this launcher from stealing appli from taskbar ?
-#{Use this option for exemple if the launcher launches a script in a terminal but you don't want it to steal normal terminal's icons from the TaskBar, or if you explicitely want to use the original icon of the TaskBar because it provides some info, for exemple Pidgin's icons represent the avatar of the contact.}
+#{If you choosed to mix launcher and applis, this option will deactivate this behaviour for this launcher only. It can be useful for instance for a launcher that launches a script in a terminal, but you don't want it to steal the Terminal's icon from the Taskbar.} 
 prevent inhibate=false
 
-#s Class of the program :
+#K Class of the program :
 #{The only reason you may want to modify this parameter is if you made this launcher by hands. If you dropped it into the dock from the menu, it is nearly sure that you shouldn't touch it. It defines the class of the program, which is useful to link the appli with its launcher.}
 StartupWMClass=Firefox
 
 #b Run in a terminal ?
+#{It will use 'xterm'.}
 Terminal=false
 
-Is container=false
+#i-[0;16] Only show in this specific viewport
+#{If '0' the launcher will be displayed on every viewport.}
+ShowOnViewport=0
+
+Nb subicons=0
 
 Renderer=
 
 Base URI=
 Is mounting point=false
+
+Is container=false
 Version=1.0
 Name[ca]=Navegador web Firefox
 Name[cs]=Firefox Webový prohlížeč
 Name[es]=Navegador web Firefox
 Name[fa]=مرورگر اینترنتی Firefox
 Name[fi]=Firefox-selain
-Name[fr]=Navigateur Web Firefox
+Name[fr]=Firefox Web Browser
 Name[hu]=Firefox webböngésző
 Name[it]=Firefox Browser Web
 Name[ja]=Firefox ウェブ・ブラウザ

@@ -36,3 +36,5 @@ compile*
 CMakeFiles/
 install_manifest.txt
 CMakeCache.txt
+cairo-dock-extract-message
+_CPack_Packages/

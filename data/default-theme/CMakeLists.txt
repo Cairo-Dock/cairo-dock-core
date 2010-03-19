@@ -1,11 +1,10 @@
 add_subdirectory(launchers)
-add_subdirectory(icons)
 add_subdirectory(plug-ins)
 
 
 ########### install files ###############
 
-install(FILES  cairo-dock.conf 	active.png 	bg.png 	cairo-dock-cancel.svg 	cairo-dock-ok.svg 	indicator.png 	separator.png DESTINATION ${pkgdatadir}/themes/_default_ )
+install(FILES  cairo-dock.conf 	active.png 	indicator.png 	 DESTINATION ${pkgdatadir}/themes/_default_ )
 
 
 

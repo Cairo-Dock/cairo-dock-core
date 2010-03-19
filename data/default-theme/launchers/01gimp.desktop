@@ -4,23 +4,23 @@
 #s Launcher's name :
 Name=Gimp
 #s Command to launch on click :
-#{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1 for the Applications Menu, <Ctrl>c or <Ctrl>v to copy or paste, etc}
+#{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc}
 Exec=gimp
 #S Image's name or path :
 Icon=gimp
 #d Name of the container it belongs to:
 #{If you write here a container's name that doesn't exist yet, a new one will be created, with this icon inside.}
-Container=_MainDock_
+Container=Graphics
 
 #X[Extra parameters]
 frame_extra=
-#f Order you want for this launcher among the others:
+#f[0;100] Order you want for this launcher among the others:
 Order=0.3638916015625
 #b Prevent this launcher from stealing appli from taskbar ?
 #{If you choosed to mix launcher and applis, this option will deactivate this behaviour for this launcher only. It can be useful for instance for a launcher that launches a script in a terminal, but you don't want it to steal the Terminal's icon from the Taskbar.} 
 prevent inhibate=false
 
-#s Class of the program :
+#K Class of the program :
 #{The only reason you may want to modify this parameter is if you made this launcher by hands. If you dropped it into the dock from the menu, it is nearly sure that you shouldn't touch it. It defines the class of the program, which is useful to link the appli with its launcher.}
 StartupWMClass=
 
@@ -28,12 +28,18 @@ StartupWMClass=
 #{It will use 'xterm'.}
 Terminal=false
 
-Is container=false
+#i-[0;16] Only show in this specific viewport
+#{If '0' the launcher will be displayed on every viewport.}
+ShowOnViewport=0
+
+Nb subicons=0
 
 Renderer=
 
 Base URI=
 Is mounting point=false
+
+Is container=false
 Version=1.0
 Type=Application
 GenericName=Image Editor

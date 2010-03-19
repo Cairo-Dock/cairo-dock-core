@@ -118,19 +118,22 @@ AC_CONFIG_FILES([Makefile
 		data/themes.conf
 		data/default-theme/Makefile
 		data/default-theme/launchers/Makefile
-		data/default-theme/icons/Makefile
 		data/default-theme/plug-ins/Makefile
 		data/default-theme/plug-ins/Animated-icons/Makefile
-		data/default-theme/plug-ins/clock/Makefile
+		data/default-theme/plug-ins/Clipper/Makefile
+		data/default-theme/plug-ins/Dbus/Makefile
 		data/default-theme/plug-ins/dialog-rendering/Makefile
-		data/default-theme/plug-ins/dustbin/Makefile
+		data/default-theme/plug-ins/dnd2share/Makefile
 		data/default-theme/plug-ins/GMenu/Makefile
 		data/default-theme/plug-ins/icon-effect/Makefile
 		data/default-theme/plug-ins/illusion/Makefile
 		data/default-theme/plug-ins/logout/Makefile
+		data/default-theme/plug-ins/musicPlayer/Makefile
+		data/default-theme/plug-ins/quick-browser/Makefile
 		data/default-theme/plug-ins/rendering/Makefile
 		data/default-theme/plug-ins/shortcuts/Makefile
 		data/default-theme/plug-ins/showDesktop/Makefile
+		data/default-theme/plug-ins/stack/Makefile
 		data/default-theme/plug-ins/switcher/Makefile
 		data/gauges/Makefile
 		data/gauges/battery/Makefile

@@ -11,7 +11,7 @@ include (CheckSymbolExists)
 
 project ("cairo-dock")
 set (VERSION "2.1.4-0beta0")
-set (CPACK_SOURCE_GENERATOR "TBZ2")
+set (CPACK_SOURCE_GENERATOR "TGZ")
 set (CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION}")
 set (CPACK_SOURCE_IGNORE_FILES "/build/;/.bzr/;~$;${CPACK_SOURCE_IGNORE_FILES}")
 include (CPack)  # a inclure apres les set.

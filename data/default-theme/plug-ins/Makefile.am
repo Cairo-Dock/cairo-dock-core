@@ -1,12 +1,16 @@
 SUBDIRS = . Animated-icons\
-	clock\
-	dialog-rendering\
-	dustbin\
-	GMenu\
-	icon-effect\
-	illusion\
-	logout\
-	rendering\
-	shortcuts\
-	showDesktop\
-	switcher
+	 Clipper\
+	 Dbus\
+	 dialog-rendering\
+	 dnd2share\
+	 GMenu\
+	 icon-effect\
+	 illusion\
+	 logout\
+	 musicPlayer\
+	 quick-browser\
+	 rendering\
+	 shortcuts\
+	 showDesktop\
+	 stack\
+	 switcher
