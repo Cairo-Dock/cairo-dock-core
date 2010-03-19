@@ -248,7 +248,6 @@ static inline gboolean _cairo_dock_window_hovers_dock (GtkAllocation *pWindowGeo
 			iDockHeight = pDock->iMinDockWidth;
 		}
 		
-		cd_debug ("dock : (%d;%d) %dx%d", iDockX, iDockY, iDockWidth, iDockHeight);
 		if ((pWindowGeometry->x < iDockX + iDockWidth && pWindowGeometry->x + pWindowGeometry->width > iDockX) && (pWindowGeometry->y < iDockY + iDockHeight && pWindowGeometry->y + pWindowGeometry->height > iDockY))
 		{
 			return TRUE;
@@ -571,7 +570,9 @@ gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon)
 	iGlobalPositionY = pIcon->windowGeometry.y;
 	iWidthExtent = pIcon->windowGeometry.width;
 	iHeightExtent = pIcon->windowGeometry.height;
-
+	
+	g_print ("%d;%d;%d; %dx%d\n", iWindowDesktopNumber, iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent);
+	g_print ("%d;%dx%d\n", g_desktopGeometry.iCurrentDesktop, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 	return ( (iWindowDesktopNumber == g_desktopGeometry.iCurrentDesktop || iWindowDesktopNumber == -1) &&
 		iGlobalPositionX + iWidthExtent > 0 &&
 		iGlobalPositionX < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&

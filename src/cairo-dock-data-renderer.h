@@ -53,7 +53,7 @@ struct _CairoDataToRenderer {
 typedef void (*CairoDockGetValueFormatFunc) (double fValue, int iNumValue, gchar *cFormatBuffer, int iBufferLength, gpointer data);
 /// Generic DataRenderer attributes structure. The attributes of any implementation of a DataRenderer will derive from this class.
 struct _CairoDataRendererAttribute {
-	gchar *cModelName;
+	const gchar *cModelName;
 	gint iNbValues;
 	gint iMemorySize;
 	gdouble *pMinMaxValues;

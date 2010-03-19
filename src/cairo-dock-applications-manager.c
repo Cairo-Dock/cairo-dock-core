@@ -812,7 +812,10 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 	//\__________________ On recupere l'ensemble des fenetres presentes.
 	gulong i, iNbWindows = 0;
 	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows, FALSE);  // on recupere les fenetres par ordre de creation, de facon a ce que si on redemarre la barre des taches, les lanceurs soient lies aux memes fenetres. Au prochain update, la liste sera recuperee par z-order, ce qui remettra le z-order de chaque icone a jour.
-
+	
+	if (s_iCurrentActiveWindow == 0)
+		s_iCurrentActiveWindow = cairo_dock_get_active_xwindow ();
+	
 	//\__________________ On cree les icones de toutes ces applis.
 	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 	g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
@@ -849,13 +852,13 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 			{
 				cairo_dock_prevent_inhibated_class (pIcon);
 			}
+			
 			if ((myAccessibility.bAutoHideOnMaximized && pIcon->bIsMaximized) || (myAccessibility.bAutoHideOnFullScreen && pIcon->bIsFullScreen))
 			{
 				if (! cairo_dock_quick_hide_is_activated () && cairo_dock_appli_is_on_current_desktop (pIcon))
 				{
 					if (cairo_dock_appli_hovers_dock (pIcon, pDock))
 					{
-						g_print ("\n une fenetre empiete sur notre dock\n\n");
 						cairo_dock_activate_temporary_auto_hide ();
 					}
 				}
@@ -872,9 +875,6 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 		cairo_dock_update_dock_size (pDock);
 	
 	s_bAppliManagerIsRunning = TRUE;
-	
-	if (s_iCurrentActiveWindow == 0)
-		s_iCurrentActiveWindow = cairo_dock_get_active_xwindow ();
 }
 
 static gboolean _cairo_dock_reset_appli_table_iter (Window *pXid, Icon *pIcon, gpointer data)

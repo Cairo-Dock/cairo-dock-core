@@ -89,12 +89,12 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bIsHor
 		bDirectionUp = bIsHorizontal = TRUE;
 	
 	//\__________________ On place l'indicateur.
-	if (icon->fOrientation != 0)
+	/**if (icon->fOrientation != 0)
 	{
 		glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
 		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
 		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
-	}
+	}*/
 	double z = 1 + myIcons.fAmplitude;
 	double w = g_pIndicatorBuffer.iWidth;
 	double h = g_pIndicatorBuffer.iHeight;
@@ -150,13 +150,12 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bIsHor
 }
 static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDock *pDock, double fRatio)
 {
-	if (icon->fOrientation != 0)
+	/**if (icon->fOrientation != 0)
 	{
 		glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
 		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
 		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
-	}
-	
+	}*/
 	cairo_dock_set_icon_scale (icon, CAIRO_CONTAINER (pDock), 1.);
 	
 	_cairo_dock_enable_texture ();
@@ -170,13 +169,12 @@ static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDo
 }
 static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp)
 {
-	if (icon->fOrientation != 0)
+	/**if (icon->fOrientation != 0)
 	{
 		glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
 		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
 		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
-	}
-	
+	}*/
 	if (myIndicators.bZoomClassIndicator)
 		fRatio *= icon->fScale;
 	double w = g_pClassIndicatorBuffer.iWidth;

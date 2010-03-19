@@ -66,7 +66,7 @@ static GLuint s_iButtonOkTexture = 0;
 static GLuint s_iButtonCancelTexture = 0;
 
 static gboolean _cairo_dock_render_dialog_notification (gpointer data, CairoDialog *pDialog, cairo_t *pCairoContext);
-
+static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer);
 
 void cairo_dock_init_dialog_manager (void)
 {
@@ -676,7 +676,7 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 	}
 }
 
-void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
+static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 {
 	//g_print ("%s (%x;%d, %s)\n", __func__, pDialog->pIcon, pContainer, pDialog->pIcon?pDialog->pIcon->cParentDockName:"none");
 	int w, h;
@@ -749,7 +749,7 @@ void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 	
 	pDialog->bPositionForced = FALSE;
 	gtk_window_set_gravity (GTK_WINDOW (pDialog->container.pWidget), iGravity);
-	g_print (" => move to (%d;%d) %dx%d , %g\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, w, h, iGravity);
+	//g_print (" => move to (%d;%d) %dx%d , %d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, w, h, iGravity);
 	gdk_window_move_resize (GDK_WINDOW (pDialog->container.pWidget->window),
 		pDialog->container.iWindowPositionX,
 		pDialog->container.iWindowPositionY,

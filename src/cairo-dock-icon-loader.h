@@ -113,53 +113,6 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock);
 
 
 
-typedef gpointer CairoDockManagerConfigPtr;
-typedef gpointer CairoDockManagerDataPtr;
-typedef void (*CairoDockManagerInitFunc) (void);
-typedef void (*CairoDockManagerLoadFunc) (void);
-typedef void (*CairoDockManagerUnloadFunc) (CairoDockManagerDataPtr *pData);
-typedef void (* CairoDockManagerReloadFunc) (CairoDockManagerConfigPtr pPrevConfig, CairoDockManagerConfigPtr pNewConfig);
-typedef gboolean (* CairoDockManagerGetConfigFunc) (GKeyFile *pKeyFile, CairoDockManagerConfigPtr *pConfig);
-typedef void (* CairoDockManagerResetConfigFunc) (CairoDockManagerConfigPtr *pConfig);
-struct _CairoDockManager {
-	//\_____________ Carte de visite.
-	const gchar *cModuleName;
-	const gchar *cDescription;
-	const gchar *cIcon;
-	const gchar *cTitle;
-	gint iCategory;
-	gint iSizeOfConfig;
-	gint iSizeOfData;
-	//\_____________ Interface.
-	CairoDockManagerInitFunc init;
-	CairoDockManagerLoadFunc load;
-	CairoDockManagerUnloadFunc unload;
-	CairoDockManagerReloadFunc reload;
-	CairoDockManagerGetConfigFunc get_config;
-	CairoDockManagerResetConfigFunc reset_config;
-	//\_____________ Instance.
-	CairoDockManagerConfigPtr pConfig;
-	CairoDockManagerDataPtr pData;
-};
-
-typedef struct _CairoDockManager CairoDockManager;
-
-
-typedef void (*CairoIconLoadFunc) (Icon *pIcon, int w, int h, cairo_t *pCairoContext);
-
-struct _CairoIconManager {
-	CairoDockManager mgr;
-	CairoIconLoadFunc load_launcher;
-	CairoIconLoadFunc load_appli;
-	CairoIconLoadFunc load_applet;
-	CairoIconLoadFunc load_separator;
-	};
-
-typedef struct _CairoManager CairoManager;
-
-
-
-
 typedef void (*CairoIconContainerLoadFunc) (void);
 typedef void (*CairoIconContainerUnloadFunc) (void);
 typedef void (*CairoIconContainerRenderFunc) (Icon *pIcon, int w, int h, cairo_t *pCairoContext);

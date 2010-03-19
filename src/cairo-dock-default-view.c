@@ -128,7 +128,7 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	if (pDock->fAlign != .5 & cairo_dock_is_extended_dock (pDock))
 		pDock->iMinDockWidth = pDock->iMaxDockWidth;
 	else
-		pDock->iMinDockWidth = pDock->fFlatDockWidth;
+		pDock->iMinDockWidth = MAX (1, pDock->fFlatDockWidth);  // fFlatDockWidth peut etre meme negatif avec un dock vide.
 	
 	if (g_bUseOpenGL && s_iFlatSeparatorTexture == 0 && myIcons.iSeparatorType == 1)
 		s_iFlatSeparatorTexture = cairo_dock_load_texture_from_raw_data (blurTex, 32, 32);

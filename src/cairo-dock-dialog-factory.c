@@ -618,7 +618,7 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 			if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
 				dy = 0;
 			else if (cairo_dock_is_hidden (pDock))
-				dy = pDock->container.iHeight - MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight);
+					dy = pDock->container.iHeight - MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight);
 			else
 				dy = pDock->container.iHeight - pDock->iMinDockHeight;
 			if (pDock->container.bIsHorizontal)
@@ -654,23 +654,6 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 					pIcon->fDrawX + pIcon->fWidth * pIcon->fScale * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign));
 			}
 		}
-		/*else  // dock actif.
-		{
-			*bIsHorizontal = (pDock->container.bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
-			if (pDock->container.bIsHorizontal)
-			{
-				*bRight = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
-				*bDirectionUp = (pDock->container.iWindowPositionY > g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
-				*iY = (*bDirectionUp ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight);
-			}
-			else
-			{
-				*bRight = (pDock->container.iWindowPositionY < g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
-				*bDirectionUp = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
-				*iY = (! (*bRight) ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight);
-			}
-			*iX = pDock->container.iWindowPositionX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale * pIcon->fWidthFactor / 2 + pIcon->fWidth * (*bRight ? .2 : - .2);
-		}*/
 	}
 	else if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{

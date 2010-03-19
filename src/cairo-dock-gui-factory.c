@@ -772,7 +772,7 @@ static GHashTable *_cairo_dock_build_icon_themes_list (const gchar **cDirs)
 static gboolean _add_module_to_modele (gchar *cModuleName, CairoDockModule *pModule, gpointer *data)
 {
 	int iCategory = GPOINTER_TO_INT (data[0]);
-	if (pModule->pVisitCard->iCategory == iCategory || (iCategory == -1 && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_SYSTEM && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME && ! cairo_dock_module_is_auto_loaded (pModule)))
+	if (pModule->pVisitCard->iCategory == (CairoDockModuleCategory)iCategory || (iCategory == -1 && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_SYSTEM && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME && ! cairo_dock_module_is_auto_loaded (pModule)))
 	{
 		//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
 		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (pModule->pVisitCard->cIconFilePath, 32, 32, NULL);
@@ -1019,7 +1019,7 @@ static void _got_themes_list (GHashTable *pThemeTable, gpointer *data)
 	else
 		cairo_dock_set_status_message (data[1], "");
 	GtkWidget *pTreeView = data[0];
-	GtkListStore *modele = gtk_tree_view_get_model (GTK_TREE_VIEW (pTreeView));
+	GtkListStore *modele = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (pTreeView)));
 	g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_modele_with_themes, modele);
 }
 
@@ -1290,6 +1290,8 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
 	CairoDockInternalModule *pInternalModule = cairo_dock_find_internal_module_from_name (cModuleName);
 	Icon *pIcon = cairo_dock_get_current_active_icon ();
+	if (pIcon == NULL)
+		pIcon = cairo_dock_get_dialogless_icon ();
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
 	gchar *cMessage = NULL;
 	
@@ -1304,10 +1306,13 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 	}
 	else if (pModule != NULL && pModule->pInstancesList == NULL)
 	{
-		cMessage = g_strdup_printf (_("The '%s' plug-in is not active.\nBe sure to activate it to enjoy these features."), cModuleName);
-		int iDuration = 8e3;
-		if (pIcon != NULL && pDock != NULL)
-			cairo_dock_show_temporary_dialog_with_icon (cMessage, pIcon, CAIRO_CONTAINER (pDock), iDuration, "same icon");
+		cMessage = g_strdup_printf (_("The '%s' plug-in is not active.\nActivate it now?"), cModuleName);
+		int iAnswer = cairo_dock_ask_question_and_wait (cMessage, pIcon, CAIRO_CONTAINER (pDock));
+		if (iAnswer == GTK_RESPONSE_YES)
+		{
+			cairo_dock_activate_module (pModule, NULL);
+			cairo_dock_show_module_gui (cModuleName);
+		}
 	}
 	else
 	{
@@ -2086,8 +2091,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				g_hash_table_destroy (pHashTable);
 				_add_combo_from_modele (s_pIconThemeListStore, FALSE, FALSE);
-				
-				_pack_subwidget (pOneWidget);
 			}
 			break ;
 			
@@ -2268,7 +2271,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							iOrder2 = atoi (pAuthorizedValuesList[k+2]);
 							iNbControlledWidgets = MAX (iNbControlledWidgets, iOrder1 + iOrder2 - 1);
 							//g_print ("iSelectedItem:%d ; k/dk:%d\n", iSelectedItem , k/dk);
-							if (iSelectedItem == k/dk)
+							if (iSelectedItem == (int)k/dk)
 							{
 								iFirstSensitiveWidget = iOrder1;
 								iNbSensitiveWidgets = iOrder2;
@@ -2344,8 +2347,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
 				
 				pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-				g_print ("length:%d\n", length);
-				int k;
+				//g_print ("length:%d\n", length);
+				
 				if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL)
 					for (k = 0; pAuthorizedValuesList[k] != NULL; k++);
 				else
@@ -2495,7 +2498,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							for (l = 0; l < length; l ++)
 							{
 								iValue = atoi (cValueList[l]);
-								if (iValue == k)  // a deja ete inseree.
+								if (iValue == (int)k)  // a deja ete inseree.
 									break;
 							}
 							

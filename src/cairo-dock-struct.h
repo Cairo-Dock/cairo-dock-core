@@ -393,8 +393,43 @@ typedef struct _CairoDockGLConfig CairoDockGLConfig;
 
 typedef struct _CairoDockDesktopGeometry CairoDockDesktopGeometry;
 
-#define CAIRO_DOCK_NB_DATA_SLOT 12
 
+
+typedef gpointer CairoDockManagerConfigPtr;
+typedef gpointer CairoDockManagerDataPtr;
+typedef void (*CairoDockManagerInitFunc) (void);
+typedef void (*CairoDockManagerLoadFunc) (void);
+typedef void (*CairoDockManagerUnloadFunc) (void);
+typedef void (* CairoDockManagerReloadFunc) (CairoDockManagerConfigPtr *pPrevConfig, CairoDockManagerConfigPtr *pNewConfig);
+typedef gboolean (* CairoDockManagerGetConfigFunc) (GKeyFile *pKeyFile, CairoDockManagerConfigPtr *pConfig);
+typedef void (* CairoDockManagerResetConfigFunc) (CairoDockManagerConfigPtr *pConfig);
+typedef void (* CairoDockManagerResetDataFunc) (CairoDockManagerDataPtr *pData);
+struct _CairoDockManager {
+	//\_____________ Carte de visite.
+	const gchar *cModuleName;
+	const gchar *cDescription;
+	const gchar *cIcon;
+	const gchar *cTitle;
+	gint iCategory;
+	gint iSizeOfConfig;
+	gint iSizeOfData;
+	//\_____________ Interface.
+	CairoDockManagerInitFunc init;
+	CairoDockManagerLoadFunc load;
+	CairoDockManagerUnloadFunc unload;
+	CairoDockManagerReloadFunc reload;
+	CairoDockManagerGetConfigFunc get_config;
+	CairoDockManagerResetConfigFunc reset_config;
+	//\_____________ Instance.
+	CairoDockManagerConfigPtr pConfig;
+	CairoDockManagerDataPtr pData;
+};
+
+typedef struct _CairoDockManager CairoDockManager;
+
+
+
+#define CAIRO_DOCK_NB_DATA_SLOT 12
 
 /// Nom du repertoire des jauges utilisateur/themes.
 #define CAIRO_DOCK_GAUGES_DIR "gauges"

@@ -214,7 +214,7 @@ GtkWidget *cairo_dock_steal_widget_from_its_container (GtkWidget *pWidget);
 */
 GtkWidget *cairo_dock_steal_interactive_widget_from_dialog (CairoDialog *pDialog);
 
-void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface_t *pNewTextSurface, int iNewTextWidth, int iNewTextHeight);
+//void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface_t *pNewTextSurface, int iNewTextWidth, int iNewTextHeight);
 void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface_t *pNewIconSurface, int iNewIconSize);
 
 void cairo_dock_set_dialog_message (CairoDialog *pDialog, const gchar *cMessage);

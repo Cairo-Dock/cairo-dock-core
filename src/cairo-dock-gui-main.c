@@ -73,7 +73,7 @@ struct _CairoDockCategoryWidgetTable {
 
 struct _CairoDockGroupDescription {
 	gchar *cGroupName;
-	gchar *cTitle;
+	const gchar *cTitle;
 	gint iCategory;
 	gchar *cDescription;
 	gchar *cPreviewFilePath;
@@ -533,7 +533,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 				
 				gchar *cUsefulComment;
 				gchar iElementType;
-				int iNbElements;
+				guint iNbElements;
 				gchar **pAuthorizedValuesList;
 				gchar *cTipString;
 				gboolean bIsAligned;
@@ -915,7 +915,7 @@ static void cairo_dock_free_categories (void)
 
 static gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
 {
-	g_print ("%s (%x)\n", __func__, pBlockingLoop);
+	cd_debug ("%s (%ld)\n", __func__, pBlockingLoop);
 	if (pBlockingLoop != NULL)
 	{
 		cd_debug ("dialogue detruit, on sort de la boucle");
@@ -2297,6 +2297,7 @@ static void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription)
 	gchar *cConfFilePath;
 	CairoDockModuleInstance *pModuleInstance = NULL;
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
+	g_print ("module '%s' -> %ld\n", pGroupDescription->cGroupName, pModule);
 	if (pModule == NULL)  // c'est un groupe du fichier de conf principal.
 	{
 		cConfFilePath = g_cConfFile;

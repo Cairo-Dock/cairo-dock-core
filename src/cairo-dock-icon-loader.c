@@ -92,7 +92,7 @@ static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, int w, int 
 
 void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdouble fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp)
 {
-	//g_print ("%s (%d, %.2f, %s)\n", __func__, icon->iType, fMaxScale, icon->cFileName);
+	//g_print ("%s (%s, %d, %.2f, %s)\n", __func__, icon->cName, icon->iType, fMaxScale, icon->cFileName);
 	if (cairo_dock_icon_is_being_removed (icon))  // si la fenetre est en train de se faire degager du dock, pas la peine de mettre a jour son icone. /// A voir pour les icones d'appli ...
 	{
 		cd_debug ("skip icon reload for %s", icon->cName);
@@ -123,13 +123,10 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	int w, h;
 	
 	//\______________ on charge la surface/texture de l'icone.
-	if (CAIRO_DOCK_IS_LAUNCHER (icon)/** || (CAIRO_DOCK_IS_USER_SEPARATOR (icon) && icon->cFileName != NULL)*/)  // si c'est un lanceur /*ou un separateur avec une icone.*/
+	if (CAIRO_DOCK_IS_LAUNCHER (icon))  // c'est un lanceur.
 	{
-		/// A FAIRE : verifier qu'on peut enlever le test sur fMaxScale ...
-		if (icon->fWidth == 0 || fMaxScale != 1.)
-			icon->fWidth = myIcons.tIconAuthorizedWidth[icon->iType];
-		if (icon->fHeight == 0 || fMaxScale != 1.)
-			icon->fHeight = myIcons.tIconAuthorizedHeight[icon->iType];
+		icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
+		icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
 		
 		w = (bIsHorizontal ? icon->fWidth : icon->fHeight) * fMaxScale;
 		h = (bIsHorizontal ? icon->fHeight : icon->fWidth) * fMaxScale;
@@ -139,9 +136,9 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	{
 		//g_print ("  icon->cFileName : %s\n", icon->cFileName);
 		if (icon->fWidth == 0)
-			icon->fWidth = myIcons.tIconAuthorizedWidth[icon->iType];
+			icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLET];
 		if (icon->fHeight == 0)
-			icon->fHeight = myIcons.tIconAuthorizedHeight[icon->iType];
+			icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLET];
 		
 		w = (bIsHorizontal ? icon->fWidth : icon->fHeight) * fMaxScale;
 		h = (bIsHorizontal ? icon->fHeight : icon->fWidth) * fMaxScale;
@@ -149,8 +146,8 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 	else if (CAIRO_DOCK_IS_APPLI (icon))  // c'est l'icone d'une appli valide. Dans cet ordre on n'a pas besoin de verifier que c'est NORMAL_APPLI.
 	{
-		icon->fWidth = myIcons.tIconAuthorizedWidth[icon->iType];
-		icon->fHeight = myIcons.tIconAuthorizedHeight[icon->iType];
+		icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI];
+		icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI];
 		
 		w = (bIsHorizontal ? icon->fWidth : icon->fHeight) * fMaxScale;
 		h = (bIsHorizontal ? icon->fHeight : icon->fWidth) * fMaxScale;
@@ -158,11 +155,8 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 	else  // c'est une icone de separation.
 	{
-		/// A FAIRE : verifier qu'on peut enlever le test sur fMaxScale ...
-		if (icon->fWidth == 0 || fMaxScale != 1.)
-			icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12];
-		if (icon->fHeight == 0 || fMaxScale != 1.)
-			icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12];
+		icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12];
+		icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12];
 		
 		w = (bIsHorizontal ? icon->fWidth : icon->fHeight) * fMaxScale;
 		h = (bIsHorizontal ? icon->fHeight : icon->fWidth) * fMaxScale;
@@ -170,7 +164,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 
 	//\______________ Si rien charge, on met une image par defaut.
-	if (icon->pIconBuffer == pPrevSurface)
+	if (icon->pIconBuffer == pPrevSurface || icon->pIconBuffer == NULL)
 	{
 		gchar *cIconPath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
 		if (cIconPath == NULL || ! g_file_test (cIconPath, G_FILE_TEST_EXISTS))
@@ -224,7 +218,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, cairo_t* pSourceContext, gdoub
 	}
 	
 	//\______________ on charge la texture si elle ne l'a pas ete.
-	if (g_bUseOpenGL && icon->iIconTexture == iPrevTexture)
+	if (g_bUseOpenGL && (icon->iIconTexture == iPrevTexture || icon->iIconTexture == 0))
 	{
 		icon->iIconTexture = cairo_dock_create_texture_from_surface (icon->pIconBuffer);
 	}
@@ -749,18 +743,19 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 
 static void cairo_dock_load_launcher (Icon *icon, int iWidth, int iHeight, cairo_t* pSourceContext)
 {
-	gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
-	
 	if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
 	{
 		icon->pIconBuffer = cairo_dock_create_blank_surface (iWidth, iHeight);
 	}
-	else if (cIconPath != NULL && *cIconPath != '\0')  // icone possedant une image, on affiche celle-ci.
+	else if (icon->cFileName)  // icone possedant une image, on affiche celle-ci.
 	{
+		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
+		if (cIconPath != NULL && *cIconPath != '\0')
 		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
 			pSourceContext,
 			iWidth,
 			iHeight);
+		g_free (cIconPath);
 	}
 	else if (icon->pSubDock != NULL && icon->cClass != NULL && icon->cDesktopFileName == NULL)  // icone pointant sur une classe (epouvantail).
 	{
@@ -782,16 +777,16 @@ static void cairo_dock_load_launcher (Icon *icon, int iWidth, int iHeight, cairo
 			}
 		}
 	}
-	g_free (cIconPath);
 }
 
 static void cairo_dock_load_appli (Icon *icon, int iWidth, int iHeight, cairo_t* pSourceContext)
 {
+	cairo_surface_t *pPrevSurface = icon->pIconBuffer;
+	GLuint iPrevTexture = icon->iIconTexture;
+	icon->pIconBuffer = NULL;
+	icon->iIconTexture = 0;
 	if (myTaskBar.iMinimizedWindowRenderType == 1 && icon->bIsHidden && icon->iBackingPixmap != 0)
 	{
-		cairo_surface_t *pPrevSurface = icon->pIconBuffer;
-		GLuint iPrevTexture = icon->iIconTexture;
-		
 		// on cree la miniature.
 		if (g_bUseOpenGL)
 		{
