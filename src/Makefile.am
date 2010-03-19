@@ -280,7 +280,8 @@ cairo_docksubinclude_HEADERS =\
 	cairo-dock-dock-facility.h\
 	cairo-dock-task.h\
 	cairo-dock-container.h\
-	cairo-dock-menu.h
+	cairo-dock-menu.h\
+	cairo-dock-icon-loader.h
 
 # 
 # lib_LTLIBRARIES = \
