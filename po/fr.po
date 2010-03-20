@@ -1209,7 +1209,7 @@ msgstr "Laissez vide pour utiliser le thème d'icônes courant de votre système
 
 #: ../data/messages:77
 msgid "Choose a theme of icons :"
-msgstr "Choisissez un thème"
+msgstr "Choisissez un thème d'icônes :"
 
 #: ../data/messages:79
 msgid "Icons size:"
@@ -1281,7 +1281,7 @@ msgstr "Choisissez la vue par défaut à utiliser pour les sous-docks :"
 
 #: ../data/messages:111
 msgid "Add-ons"
-msgstr "Plug-ins"
+msgstr "Greffons"
 
 #: ../data/messages:113
 msgid "Applets"
@@ -2257,7 +2257,7 @@ msgstr "Forcer l'image du séparateur à rester de taille constante ?"
 
 #: ../data/messages:721
 msgid "Colour of flat separators :"
-msgstr "Couleur du cadre :"
+msgstr "Couleur des séparateurs :"
 
 #: ../data/messages:723
 msgid "Icons order"
@@ -2747,7 +2747,7 @@ msgstr ""
 
 #: ../data/messages:969
 msgid "Desklet"
-msgstr "Desklets"
+msgstr "Desklet"
 
 #: ../data/messages:971
 msgid "What are «desklets»?"
@@ -3498,7 +3498,7 @@ msgstr "URI du fichier :"
 
 #: ../data/messages:1337
 msgid "Number of files to list in the sub-dock :"
-msgstr "Nom de la vue utilisée pour le sous-dock :"
+msgstr "Nombre de fichier à afficher dans le sous-dock :"
 
 #: ../data/messages:1341
 msgid "5"
@@ -3535,7 +3535,7 @@ msgstr "Date"
 #: ../data/messages:1365
 #: ../data/messages:1399
 msgid "If '0' the launcher will be displayed on every viewport."
-msgstr "Si '0', il sera affiché sur tous les bureaux."
+msgstr "Si '0', le lanceur sera affiché sur tous les bureaux."
 
 #: ../data/messages:1373
 msgid "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
@@ -3563,7 +3563,7 @@ msgstr "La seule raison pour laquelle vous pouvez vouloir modifier de paramètre
 
 #: ../data/messages:1393
 msgid "Class of the program :"
-msgstr "Couleur du cadre :"
+msgstr "Class du programme :"
 
 #: ../data/messages:1395
 msgid "It will use 'xterm'."

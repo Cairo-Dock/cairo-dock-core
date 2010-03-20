@@ -13,7 +13,7 @@ project ("cairo-dock")
 set (VERSION "2.1.4-0beta0")
 set (CPACK_SOURCE_GENERATOR "TGZ")
 set (CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION}")
-set (CPACK_SOURCE_IGNORE_FILES "/build/;/.bzr/;~$;${CPACK_SOURCE_IGNORE_FILES}")
+set (CPACK_SOURCE_IGNORE_FILES "/build/;/.bzr/;/.deps/;/CMakeFiles/;/_CPack_Packages/;.o$;cairo-dock$;/scripts/;/doc/;~$;${CPACK_SOURCE_IGNORE_FILES}")
 include (CPack)  # a inclure apres les set.
 add_custom_target( dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)  # pour pouvoir l'appeler avec "make dist"
 add_definitions (-std=c99 -Wstrict-prototypes -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration) #-Wunreachable-code -Wno-unused-parameter -Wall 
