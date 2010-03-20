@@ -20,8 +20,9 @@
 // If Gio is not detected, do not try to compile this file.
 // Note: Gio is present from GLib >= 2.16
 #include "cairo-dock-gio-vfs.h"
+#include "../config.h"
 
-#ifdef HAVE_GLIB_GIO
+#ifdef HAVE_LIBGIO
 #include <string.h>
 
 #include <glib.h>

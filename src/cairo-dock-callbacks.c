@@ -1620,6 +1620,43 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint time, CairoDock *pDock)
 {
 	//g_print ("%s (%d;%d, %d)\n", __func__, x, y, time);
+	
+	//\_________________ On simule les evenements souris habituels.
+	if (! pDock->bIsDragging)
+	{
+		g_print ("start dragging\n");
+		pDock->bIsDragging = TRUE;
+		
+		/*GdkAtom gdkAtom = gdk_drag_get_selection (dc);
+		Atom xAtom = gdk_x11_atom_to_xatom (gdkAtom);
+		Window Xid = GDK_WINDOW_XID (dc->source_window);
+		g_print (" <%s>\n", cairo_dock_get_property_name_on_xwindow (Xid, xAtom));*/
+		
+		gboolean bStartAnimation = FALSE;
+		cairo_dock_notify (CAIRO_DOCK_START_DRAG_DATA, pDock, &bStartAnimation);
+		if (bStartAnimation)
+			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
+		
+		/*pDock->iAvoidingMouseIconType = -1;
+		
+		GdkAtom target = gtk_drag_dest_find_target (pWidget, dc, NULL);
+		if (target == GDK_NONE)
+			gdk_drag_status (dc, 0, time);
+		else
+		{
+			gtk_drag_get_data (pWidget, dc, target, time);
+			s_bWaitForData = TRUE;
+			g_print ("get-data envoye\n");
+		}*/
+		
+		cairo_dock_on_enter_notify (pWidget, NULL, pDock);  // ne sera effectif que la 1ere fois a chaque entree dans un dock.
+	}
+	else
+	{
+		//g_print ("move dragging\n");
+		cairo_dock_on_motion_notify (pWidget, NULL, pDock);
+	}
+	
 	int X, Y;
 	if (pDock->container.bIsHorizontal)
 	{
@@ -1671,42 +1708,6 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 					return FALSE;  // on n'accepte pas le drop.
 			}
 		}
-	}
-	
-	//\_________________ On simule les evenements souris habituels.
-	if (! pDock->bIsDragging)
-	{
-		g_print ("start dragging\n");
-		pDock->bIsDragging = TRUE;
-		
-		/*GdkAtom gdkAtom = gdk_drag_get_selection (dc);
-		Atom xAtom = gdk_x11_atom_to_xatom (gdkAtom);
-		Window Xid = GDK_WINDOW_XID (dc->source_window);
-		g_print (" <%s>\n", cairo_dock_get_property_name_on_xwindow (Xid, xAtom));*/
-		
-		gboolean bStartAnimation = FALSE;
-		cairo_dock_notify (CAIRO_DOCK_START_DRAG_DATA, pDock, &bStartAnimation);
-		if (bStartAnimation)
-			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
-		
-		/*pDock->iAvoidingMouseIconType = -1;
-		
-		GdkAtom target = gtk_drag_dest_find_target (pWidget, dc, NULL);
-		if (target == GDK_NONE)
-			gdk_drag_status (dc, 0, time);
-		else
-		{
-			gtk_drag_get_data (pWidget, dc, target, time);
-			s_bWaitForData = TRUE;
-			g_print ("get-data envoye\n");
-		}*/
-		
-		cairo_dock_on_enter_notify (pWidget, NULL, pDock);  // ne sera effectif que la 1ere fois a chaque entree dans un dock.
-	}
-	else
-	{
-		//g_print ("move dragging\n");
-		cairo_dock_on_motion_notify (pWidget, NULL, pDock);
 	}
 	
 	gdk_drag_status (dc, GDK_ACTION_COPY, time);

@@ -57,10 +57,7 @@ endif()
 pkg_check_modules ("LIBGIO" "gio-2.0")
 if (${LIBGIO_FOUND})
 	set (HAVE_LIBGIO 1)
-	set (gio_detected 1)
 	set (libgio_required "gio-2.0")  # pour le .pc
-else()
-	set (gio_detected 0)
 endif()
 
 check_include_files ("math.h" HAVE_MATH_H)

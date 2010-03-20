@@ -474,7 +474,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 	{
 		// on attache la texture au FBO.
 		if (pContainer == NULL)
-			pContainer = g_pMainDock;
+			pContainer = CAIRO_CONTAINER (g_pMainDock);
 		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pContainer->pWidget);
 		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pContainer->pWidget);
 		if (! gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
