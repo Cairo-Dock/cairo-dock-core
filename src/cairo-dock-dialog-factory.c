@@ -145,7 +145,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDialog *pDialog)
 {
-	g_print ("%s (%dx%d, %d;%d) [%d]\n", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y, pDialog->bPositionForced);
+	//g_print ("%s (%dx%d, %d;%d) [%d]\n", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y, pDialog->bPositionForced);
 	if (pEvent->width == CAIRO_DIALOG_MIN_SIZE && pEvent->height == CAIRO_DIALOG_MIN_SIZE && ! pDialog->bNoInput)
 		return FALSE;
 	

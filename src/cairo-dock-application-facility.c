@@ -571,8 +571,6 @@ gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon)
 	iWidthExtent = pIcon->windowGeometry.width;
 	iHeightExtent = pIcon->windowGeometry.height;
 	
-	g_print ("%d;%d;%d; %dx%d\n", iWindowDesktopNumber, iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent);
-	g_print ("%d;%dx%d\n", g_desktopGeometry.iCurrentDesktop, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 	return ( (iWindowDesktopNumber == g_desktopGeometry.iCurrentDesktop || iWindowDesktopNumber == -1) &&
 		iGlobalPositionX + iWidthExtent > 0 &&
 		iGlobalPositionX < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&

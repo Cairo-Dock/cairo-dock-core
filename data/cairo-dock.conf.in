@@ -42,7 +42,7 @@ num screen = 0
 #F-[Visibility of the main dock;gtk-find]
 frame_visi =
 
-#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;1;1;Automatically hide the dock;0;0;Automatically hide when a window is maximized;0;0;Pop-up on shortcut;2;1] Visibility:
+#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;1;1;Automatically hide the dock;2;1;Automatically hide when a window is maximized;2;1;Pop-up on shortcut;3;1] Visibility:
 #{Prevent windows from overlapping the dock: reserve space at the edge of the screen for the dock.
 #Auto-hide: the dock will automatically hide itself outside of the screen when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.
 #Keep the dock below windows: the dock will pop-up on the foreground when you place the mouse on its screen border.
@@ -55,7 +55,6 @@ pop in corner only = false;
 #i-[0;1000] Delay before the dock unhide itself?
 #{in ms. 0 means no delay.}
 unhide delay = 0
-
 
 #k- Keyboard shortcut to pop-up the dock:
 #{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}

@@ -573,17 +573,17 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		return FALSE;
 	}
 	
+	if (pDock->iSidUnhideDemand != 0)
+	{
+		g_source_remove (pDock->iSidUnhideDemand);
+		pDock->iSidUnhideDemand = 0;
+	}
+	
 	//\_______________ On ignore les signaux errones venant d'un WM buggue (Kwin).
 	if (pEvent && !_xy_is_really_outside (pEvent->x, pEvent->y, pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 	{
 		g_print ("not really outside (%d;%d)\n", (int)pEvent->x, (int)pEvent->y);
 		return FALSE;
-	}
-	
-	if (pDock->iSidUnhideDemand != 0)
-	{
-		g_source_remove (pDock->iSidUnhideDemand);
-		pDock->iSidUnhideDemand = 0;
 	}
 	
 	//\_______________ On retarde la sortie.
@@ -711,7 +711,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 
 gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%d)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->iInputState);
+	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%d; event:%ld)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->iInputState, pEvent);
 	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
 	if (! cairo_dock_entrance_is_allowed (pDock))
 	{
@@ -719,7 +719,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		return FALSE;
 	}
 	
-	// o nretarde l'entree en auto-hide.
+	// on retarde l'entree en auto-hide.
 	if (myAccessibility.iUnhideDockDelay != 0 && pDock->iRefCount == 0 && pDock->bAutoHide && pEvent != NULL)  // vraie rentree dans un main dock en auto-hide => on retarde.
 	{
 		if (pDock->iSidUnhideDemand == 0)

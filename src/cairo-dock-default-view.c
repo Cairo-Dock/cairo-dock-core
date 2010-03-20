@@ -90,7 +90,7 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 			}
 			fExtraWidth += (cairo_dock_get_max_authorized_dock_width (pDock) - pDock->iMaxDockWidth);
 			pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->pFirstDrawnElement, pDock->fFlatDockWidth, 1., fExtraWidth));  // on pourra optimiser, ce qui nous interesse ici c'est les fXMin/fXMax.
-			g_print ("mode etendu : pDock->iMaxDockWidth : %d\n", pDock->iMaxDockWidth);
+			//g_print ("mode etendu : pDock->iMaxDockWidth : %d\n", pDock->iMaxDockWidth);
 		}
 	}
 	
