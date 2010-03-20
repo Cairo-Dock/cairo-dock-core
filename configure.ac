@@ -92,6 +92,8 @@ else
 fi
 AC_SUBST(glitz_required)
 
+AC_SUBST(libgio_required)
+
 AM_CONDITIONAL( [WITH_GLITZ], [test "$glitz_detected" = "true"] )
 
 # We use crypt(3) which may be in libc, or in libcrypt (eg FreeBSD)
