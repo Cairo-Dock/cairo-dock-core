@@ -1285,13 +1285,14 @@ void cairo_dock_add_module_instance (CairoDockModule *pModule)
 
 void cairo_dock_detach_module_instance (CairoDockModuleInstance *pInstance)
 {
-	g_return_if_fail (pInstance->pDesklet == NULL);
+	//g_return_if_fail (pInstance->pDesklet == NULL);
 	//\__________________ On enregistre l'etat 'detache'.
+	gboolean bIsDetached = (pInstance->pDesklet != NULL);
 	cairo_dock_update_conf_file (pInstance->cConfFilePath,
-		G_TYPE_BOOLEAN, "Desklet", "initially detached", TRUE,
+		G_TYPE_BOOLEAN, "Desklet", "initially detached", !bIsDetached,
 		G_TYPE_INVALID);
 	//\__________________ On met a jour le panneau de conf s'il etait ouvert sur cette applet.
-	cairo_dock_update_desklet_detached_state_in_gui (pInstance, TRUE);
+	cairo_dock_update_desklet_detached_state_in_gui (pInstance, !bIsDetached);
 	//\__________________ On detache l'applet.
 	cairo_dock_reload_module_instance (pInstance, TRUE);
 	if (pInstance->pDesklet)  // on a bien detache l'applet.

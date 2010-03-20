@@ -269,6 +269,17 @@ gboolean cairo_dock_fm_shutdown (void)
 		return FALSE;
 }
 
+gboolean cairo_dock_fm_lock_screen (void)
+{
+	if (s_pEnvBackend != NULL && s_pEnvBackend->lock_screen != NULL)
+	{
+		s_pEnvBackend->lock_screen ();
+		return TRUE;
+	}
+	else
+		return FALSE;
+}
+
 gboolean cairo_dock_fm_setup_time (void)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->setup_time!= NULL)

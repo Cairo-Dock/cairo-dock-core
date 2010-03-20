@@ -96,6 +96,7 @@ struct _CairoDockDesktopEnvBackend {
 	CairoDockFMGetTrashFunc 		get_trash_path;
 	CairoDockFMGetDesktopFunc 	get_desktop_path;
 	CairoDockFMUserActionFunc		logout;
+	CairoDockFMUserActionFunc		lock_screen;
 	CairoDockFMUserActionFunc		shutdown;
 	CairoDockFMUserActionFunc		setup_time;
 	CairoDockFMUserActionFunc		show_system_monitor;
@@ -187,6 +188,10 @@ gboolean cairo_dock_fm_logout (void);
 /** Raise the shutdown panel.
 */
 gboolean cairo_dock_fm_shutdown (void);
+
+/** Lock the screen.
+*/
+gboolean cairo_dock_fm_lock_screen (void);
 
 /** Raise the panel to configure the time.
 */
