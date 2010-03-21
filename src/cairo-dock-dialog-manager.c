@@ -154,7 +154,7 @@ static gboolean on_enter_dialog (GtkWidget* pWidget,
 	GdkEventCrossing* pEvent,
 	CairoDialog *pDialog)
 {
-	cd_debug ("inside");
+	//cd_debug ("inside");
 	pDialog->container.bInside = TRUE;
 	return FALSE;
 }
@@ -470,7 +470,7 @@ static gboolean _cairo_dock_render_dialog_notification (gpointer data, CairoDial
 				pDialog->iTopMargin + pDialog->iBubbleHeight,
 				pDialog->iBubbleWidth,
 				pDialog->iBottomMargin);
-			g_print( "pDialog->iBottomMargin:%d\n", pDialog->iBottomMargin);
+			//g_print( "pDialog->iBottomMargin:%d\n", pDialog->iBottomMargin);
 			cairo_clip (pCairoContext);
 	
 			cairo_translate (pCairoContext,
@@ -715,7 +715,7 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 		
 		if (pDialog->iDistanceToDock != iOldDistance && pDialog->pTipWidget != NULL)
 		{
-			g_print ("  On change la taille de la pointe a : %d pixels ( -> %d)\n", pDialog->iDistanceToDock, pDialog->iMessageHeight + pDialog->iInteractiveHeight +pDialog->iButtonsHeight + pDialog->iDistanceToDock);
+			//g_print ("  On change la taille de la pointe a : %d pixels ( -> %d)\n", pDialog->iDistanceToDock, pDialog->iMessageHeight + pDialog->iInteractiveHeight +pDialog->iButtonsHeight + pDialog->iDistanceToDock);
 			gtk_widget_set (pDialog->pTipWidget, "height-request", MAX (0, pDialog->iDistanceToDock + pDialog->iBottomMargin), NULL);
 		}
 		if (pDialog->bRight)

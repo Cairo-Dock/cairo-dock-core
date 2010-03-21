@@ -130,7 +130,7 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	else
 		pDock->iMinDockWidth = MAX (1, pDock->fFlatDockWidth);  // fFlatDockWidth peut etre meme negatif avec un dock vide.
 	
-	if (g_bUseOpenGL && s_iFlatSeparatorTexture == 0 && myIcons.iSeparatorType == 1)
+	if (g_bUseOpenGL && s_iFlatSeparatorTexture == 0 && myIcons.iSeparatorType == CAIRO_DOCK_FLAT_SEPARATOR)
 		s_iFlatSeparatorTexture = cairo_dock_load_texture_from_raw_data (blurTex, 32, 32);
 }
 
@@ -216,7 +216,7 @@ static void _draw_physical_separator (Icon *icon, CairoDock *pDock, cairo_t *pCa
 
 static void _cairo_dock_draw_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude)
 {
-	if (myIcons.iSeparatorType == 1)
+	if (myIcons.iSeparatorType == CAIRO_DOCK_FLAT_SEPARATOR)
 		_draw_flat_separator (icon, pDock, pCairoContext, fDockMagnitude);
 	else
 		_draw_physical_separator (icon, pDock, pCairoContext, fDockMagnitude);
@@ -295,7 +295,7 @@ static void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 		icon = ic->data;
 
 		cairo_save (pCairoContext);
-		if (myIcons.iSeparatorType != 0 && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (myIcons.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
 			_cairo_dock_draw_separator (icon, pDock, pCairoContext, fDockMagnitude);
 		else
 			cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);
@@ -419,7 +419,7 @@ static void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDoc
 					icon->fAlpha = 0.7;
 				}
 				
-				if (myIcons.iSeparatorType != 0 && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
+				if (myIcons.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
 					_cairo_dock_draw_separator (icon, pDock, pCairoContext, fDockMagnitude);
 				else
 					cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);
@@ -528,7 +528,7 @@ static void _draw_physical_separator_opengl (Icon *icon, CairoDock *pDock, doubl
 
 static void _cairo_dock_draw_separator_opengl (Icon *icon, CairoDock *pDock, double fDockMagnitude)
 {
-	if (myIcons.iSeparatorType == 1)
+	if (myIcons.iSeparatorType == CAIRO_DOCK_FLAT_SEPARATOR)
 		_draw_flat_separator_opengl (icon, pDock, fDockMagnitude);
 	else
 		_draw_physical_separator_opengl (icon, pDock, fDockMagnitude);
@@ -627,7 +627,7 @@ static void cd_render_opengl_default (CairoDock *pDock)
 		icon = ic->data;
 		
 		glPushMatrix ();
-		if (myIcons.iSeparatorType != 0 && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (myIcons.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
 			_cairo_dock_draw_separator_opengl (icon, pDock, fDockMagnitude);
 		else
 			cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);

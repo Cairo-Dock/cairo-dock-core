@@ -34,6 +34,13 @@ extern CairoConfigIcons myIcons;
 #endif
 G_BEGIN_DECLS
 
+typedef enum {
+	CAIRO_DOCK_NORMAL_SEPARATOR = 0,
+	CAIRO_DOCK_FLAT_SEPARATOR,
+	CAIRO_DOCK_PHYSICAL_SEPARATOR,
+	CAIRO_DOCK_NB_SEPARATOR_TYPES
+	} CairoDockSpeparatorType;
+
 struct _CairoConfigIcons {
 	gdouble fFieldDepth;
 	gdouble fAlbedo;
@@ -50,7 +57,7 @@ struct _CairoConfigIcons {
 	gchar *cBackgroundImagePath;
 	gint tIconAuthorizedWidth[CAIRO_DOCK_NB_TYPES];
 	gint tIconAuthorizedHeight[CAIRO_DOCK_NB_TYPES];
-	gint iSeparatorType;
+	CairoDockSpeparatorType iSeparatorType;
 	gchar *cSeparatorImage;
 	gboolean bRevolveSeparator;
 	gboolean bConstantSeparatorSize;

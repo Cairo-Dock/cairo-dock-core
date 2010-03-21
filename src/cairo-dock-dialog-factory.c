@@ -599,20 +599,20 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pContainer, int *iX, int *iY, gboolean *bRight, CairoDockTypeHorizontality *bIsHorizontal, gboolean *bDirectionUp, double fAlign)
 {
 	g_return_if_fail (pIcon != NULL && pContainer != NULL);
-	g_print ("%s (%.2f, %.2f)\n", __func__, pIcon->fXAtRest, pIcon->fDrawX);
+	//g_print ("%s (%.2f, %.2f)\n", __func__, pIcon->fXAtRest, pIcon->fDrawX);
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
 	{
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
 		if (pDock->iRefCount > 0 && ! GTK_WIDGET_VISIBLE (pDock->container.pWidget))  // sous-dock invisible.  // pDock->bAtBottom
 		{
-			g_print ("sous-dock invisible\n");
+			//g_print ("sous-dock invisible\n");
 			CairoDock *pParentDock = NULL;
 			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
 			_cairo_dock_dialog_calculate_aimed_point (pPointingIcon, CAIRO_CONTAINER (pParentDock), iX, iY, bRight, bIsHorizontal, bDirectionUp, fAlign);
 		}
 		else/* if (pDock->iRefCount == 0)*/  // un dock principal au repos.  // && pDock->bAtBottom
 		{
-			g_print ("dock %d\n", pDock->iRefCount);
+			//g_print ("dock %d\n", pDock->iRefCount);
 			*bIsHorizontal = (pDock->container.bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
 			int dy;
 			if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
@@ -646,7 +646,7 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 					pDock->iMaxDockWidth/2 -
 					MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth)/2 + 
 					(pIcon->fXAtRest + pIcon->fWidth * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign))) / pDock->fFlatDockWidth * MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth);
-				cd_debug ("placement sur un dock cache -> %d", *iX);
+				//cd_debug ("placement sur un dock cache -> %d", *iX);
 			}
 			else
 			{
