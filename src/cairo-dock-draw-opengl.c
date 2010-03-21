@@ -604,10 +604,13 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			///fMagnitude *= (fMagnitude * mySystem.fLabelAlphaThreshold + 1) / (mySystem.fLabelAlphaThreshold + 1);
 		}
 		
-		cairo_dock_draw_texture_with_alpha (icon->iLabelTexture,
+		_cairo_dock_enable_texture ();
+		_cairo_dock_set_blend_alpha ();
+		_cairo_dock_apply_texture_at_size_with_alpha (icon->iLabelTexture,
 			icon->iTextWidth,
 			icon->iTextHeight,
 			fMagnitude);
+		_cairo_dock_disable_texture ();
 		
 		glPopMatrix ();
 	}

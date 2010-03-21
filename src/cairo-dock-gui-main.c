@@ -2297,7 +2297,6 @@ static void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription)
 	gchar *cConfFilePath;
 	CairoDockModuleInstance *pModuleInstance = NULL;
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
-	g_print ("module '%s' -> %ld\n", pGroupDescription->cGroupName, pModule);
 	if (pModule == NULL)  // c'est un groupe du fichier de conf principal.
 	{
 		cConfFilePath = g_cConfFile;

@@ -1091,7 +1091,7 @@ static void _cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gbool
 //set behaviour in compiz to: (class=Cairo-dock & type=utility)
 void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletAccessibility iAccessibility, gboolean bSaveState)
 {
-	g_print ("%s (%d)\n", __func__, iAccessibility);
+	//g_print ("%s (%d)\n", __func__, iAccessibility);
 	
 	//\_________________ On applique la nouvelle accessibilite.
 	gtk_window_set_keep_below (GTK_WINDOW (pDesklet->container.pWidget), iAccessibility == CAIRO_DESKLET_KEEP_BELOW);
@@ -1129,7 +1129,7 @@ void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletA
 		
 		// on recupere la regle
 		gchar *cDbusAnswer = cairo_dock_launch_command_sync ("dbus-send --print-reply --type=method_call --dest=org.freedesktop.compiz /org/freedesktop/compiz/widget/screen0/match org.freedesktop.compiz.get");
-		g_print ("cDbusAnswer : '%s'\n", cDbusAnswer);
+		cd_debug ("cDbusAnswer : '%s'", cDbusAnswer);
 		gchar *cRule = NULL;
 		gchar *str = (cDbusAnswer ? strchr (cDbusAnswer, '\n') : NULL);
 		if (str)
@@ -1155,7 +1155,7 @@ void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletA
 			}
 		}
 		g_free (cDbusAnswer);
-		g_print ("got rule : '%s'\n", cRule);
+		cd_debug ("got rule : '%s'", cRule);
 		
 		if (cRule == NULL)  /// on ne sait pas le distinguer d'une regle vide...
 		{
@@ -1168,7 +1168,7 @@ void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletA
 			gchar *cNewRule = (cRule == NULL || *cRule == '\0' ?
 				g_strdup ("(class=Cairo-dock & type=utility)") :
 				g_strdup_printf ("(%s) | (class=Cairo-dock & type=utility)", cRule));
-			g_print ("set rule : %s\n", cNewRule);
+			cd_debug ("set rule : %s", cNewRule);
 			gchar *cCommand = g_strdup_printf ("dbus-send --print-reply --type=method_call --dest=org.freedesktop.compiz /org/freedesktop/compiz/widget/screen0/match org.freedesktop.compiz.set string:\"%s\"", cNewRule);
 			cairo_dock_launch_command_sync (cCommand);
 			g_free (cCommand);
@@ -1180,7 +1180,7 @@ void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletA
 
 void cairo_dock_set_desklet_sticky (CairoDesklet *pDesklet, gboolean bSticky)
 {
-	g_print ("%s (%d)\n", __func__, bSticky);
+	//g_print ("%s (%d)\n", __func__, bSticky);
 	int iNumDesktop;
 	if (bSticky)
 	{
@@ -1207,7 +1207,7 @@ void cairo_dock_set_desklet_sticky (CairoDesklet *pDesklet, gboolean bSticky)
 
 void cairo_dock_lock_desklet_position (CairoDesklet *pDesklet, gboolean bPositionLocked)
 {
-	g_print ("%s (%d)\n", __func__, bPositionLocked);
+	//g_print ("%s (%d)\n", __func__, bPositionLocked);
 	pDesklet->bPositionLocked = bPositionLocked;
 	
 	//\_________________ On enregistre le nouvel etat.
