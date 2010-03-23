@@ -103,12 +103,12 @@ set (CAIRO_DOCK_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 
 ########### file generation ###############
 
-configure_file (config.h.cmake.in config.h)
-configure_file (data/cairo-dock.conf.in data/cairo-dock.conf)
-configure_file (data/cairo-dock-simple.conf.in data/cairo-dock-simple.conf)
-configure_file (data/main-dock.conf.in data/main-dock.conf)
-configure_file (data/themes.conf.in data/themes.conf)
-configure_file (cairo-dock.pc.in cairo-dock.pc)
+configure_file (config.h.cmake.in ${CMAKE_CURRENT_SOURCE_DIR}/config.h)
+configure_file (data/cairo-dock.conf.in ${CMAKE_CURRENT_SOURCE_DIR}/data/cairo-dock.conf)
+configure_file (data/cairo-dock-simple.conf.in ${CMAKE_CURRENT_SOURCE_DIR}/data/cairo-dock-simple.conf)
+configure_file (data/main-dock.conf.in ${CMAKE_CURRENT_SOURCE_DIR}/data/main-dock.conf)
+configure_file (data/themes.conf.in ${CMAKE_CURRENT_SOURCE_DIR}/data/themes.conf)
+configure_file (cairo-dock.pc.in ${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock.pc)
 
 ########### install files ###############
 
