@@ -7,13 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2010-02-20 12:07+0000\n"
+"POT-Creation-Date: 2010-03-14 15:27+0000\n"
+"PO-Revision-Date: 2010-03-14 15:30+0000\n"
 "Last-Translator: chaeMil <chaemil72@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-02-21 04:53+0000\n"
+"X-Launchpad-Export-Date: 2010-03-15 04:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-applet-facility.h:259
@@ -146,7 +147,8 @@ msgid "category"
 msgstr "kategorie"
 
 #: ../src/cairo-dock-gui-factory.c:2173
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Klikněte na applet pro zobrazení jeho náhledu a popisu."
 
 #: ../src/cairo-dock-gui-factory.c:2531
@@ -448,13 +450,8 @@ msgstr "Parametry, které nikdy nebudete chtít upravovat."
 
 #: ../src/cairo-dock-internal-taskbar.c:189 ../data/messages:49
 #: ../data/messages:227 ../data/messages:1007
-#, fuzzy
 msgid "Taskbar"
-msgstr ""
-"#-#-#-#-#  cs.po (cairo-dock-core)  #-#-#-#-#\n"
-"Lišta aplikací\n"
-"#-#-#-#-#  cs.po (cairo-dock-core)  #-#-#-#-#\n"
-"Lišta úloh"
+msgstr "Lišta úloh"
 
 #: ../src/cairo-dock-internal-taskbar.c:191
 msgid "Display and interact with currently open windows."
@@ -505,12 +502,8 @@ msgid "Cairo-Dock-Plug-ins-Extras"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:198 ../data/messages:1105
-#, fuzzy
 msgid "Other applets"
 msgstr ""
-"#-#-#-#-#  cs.po (cairo-dock-core)  #-#-#-#-#\n"
-"Odstranit applet\n"
-"#-#-#-#-#  cs.po (cairo-dock-core)  #-#-#-#-#\n"
 
 #: ../src/cairo-dock-menu.c:207
 msgid "Development"
@@ -595,7 +588,8 @@ msgstr "Nápověda"
 
 #: ../src/cairo-dock-menu.c:391
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
-msgstr "Není tu žádný problém, jsou zde jen řešení (a spoustu užitečných rad.)"
+msgstr ""
+"Není tu žádný problém, jsou zde jen řešení (a spoustu užitečných rad.)"
 
 #: ../src/cairo-dock-menu.c:393
 msgid "About"
@@ -702,7 +696,7 @@ msgstr "Přesunout na plochu %d"
 
 #: ../src/cairo-dock-menu.c:1213 ../src/cairo-dock-menu.c:1276
 msgid "Add"
-msgstr ""
+msgstr "Přidat"
 
 #: ../src/cairo-dock-menu.c:1217 ../src/cairo-dock-menu.c:1280
 msgid "Add a sub-dock"
@@ -752,7 +746,7 @@ msgstr "Odstranit  oddělovač"
 
 #: ../src/cairo-dock-menu.c:1292
 msgid "Remove this launcher"
-msgstr "Odstranis spsuštěč"
+msgstr "Odstranit spouštěč"
 
 #: ../src/cairo-dock-menu.c:1293
 msgid ""
@@ -805,7 +799,7 @@ msgstr "Zabít"
 
 #: ../src/cairo-dock-menu.c:1346
 msgid "Launch a new (Shift+clic)"
-msgstr ""
+msgstr "Spustit nový (Shift + Kliknutí)"
 
 #: ../src/cairo-dock-menu.c:1351
 msgid "Make it a launcher"
@@ -829,7 +823,7 @@ msgstr "Minimalizovat"
 
 #: ../src/cairo-dock-menu.c:1361
 msgid "Close (middle-click)"
-msgstr ""
+msgstr "Zavřít (Kolečko myši)"
 
 #: ../src/cairo-dock-menu.c:1374
 msgid "Move all to this desktop"
@@ -979,6 +973,15 @@ msgid ""
 "Hope you will enjoy this soft !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
+"Vítejte v Cairo-Docku 2!\n"
+"Výchozí a jednoduchý motiv byl nahrán.\n"
+"Můžete se blíže seznámit s nastavením docku nebo nahrát jiný motiv (pravé "
+"myšítko > Cairo-Dock > Správce motivů)\n"
+"Užitečná nápověda je dostupná (pravé myšítko > Cairo-Dock > Nápověda)\n"
+"Pokud máte jakékoliv otázky/požadavky/hodnocení, prosím navštivte nás na "
+"http://glx-dock.org\n"
+"Doufáme že si tuto aplikaci užijete!\n"
+"          (Můžete kliknout na dialog pro jeho zavření)"
 
 #: ../src/cairo-dock.c:634
 msgid ""
@@ -1174,11 +1177,10 @@ msgid "Configure icons' special effects (requires OpenGL)."
 msgstr "Nastavení speciálních efektů ikon (vyžaduje zapnutý OpenGL)."
 
 #: ../data/messages:69 ../data/messages:697
-#, fuzzy
 msgid ""
-"Configure icons' animations on appearing/disappearing (require OpenGL "
+"Configure icons' animations.on appearing/disappearing (require OpenGL "
 "capacity)."
-msgstr "Nastavení ikon při otevření/zavření (vyžaduje zapnutý OpenGL)."
+msgstr ""
 
 #: ../data/messages:75 ../data/messages:637
 msgid ""
@@ -1188,7 +1190,6 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:77
-#, fuzzy
 msgid "Choose a theme of icons :"
 msgstr "Vyberte téma ikon :"
 
@@ -1272,7 +1273,6 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:117
-#, fuzzy
 msgid "Add or remove any applet :"
 msgstr "Přidat nebo odstranit applet"
 
@@ -1397,7 +1397,8 @@ msgid "Sub-docks' visibility"
 msgstr "Viditelnost pod-docků"
 
 #: ../data/messages:215
-msgid "Otherwise they will appear when you hover over the icon pointing to it."
+msgid ""
+"Otherwise they will appear when you hover over the icon pointing to it."
 msgstr ""
 
 #: ../data/messages:217
@@ -1542,7 +1543,7 @@ msgstr ""
 
 #: ../data/messages:287
 msgid "Interaction"
-msgstr ""
+msgstr "Interakce"
 
 #: ../data/messages:289
 msgid "This is the default behaviour of most taskbars."
@@ -2125,7 +2126,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:647
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:649
@@ -2227,12 +2229,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:705 ../data/messages:929
-#, fuzzy
 msgid "How can I add a separator?"
 msgstr ""
-"#-#-#-#-#  cs.po (cairo-dock-core)  #-#-#-#-#\n"
-"Upravit oddělovač\n"
-"#-#-#-#-#  cs.po (cairo-dock-core)  #-#-#-#-#\n"
 
 #: ../data/messages:713
 msgid "If you don't provide one, blanks will be used."
@@ -2298,12 +2296,8 @@ msgid "Indicator of the active window"
 msgstr ""
 
 #: ../data/messages:755 ../data/messages:807
-#, fuzzy
 msgid "Type of indicator:"
 msgstr ""
-"#-#-#-#-#  cs.po (cairo-dock-core)  #-#-#-#-#\n"
-"#-#-#-#-#  cs.po (cairo-dock-core)  #-#-#-#-#\n"
-"Indikátory"
 
 #: ../data/messages:759
 msgid "Frame"
@@ -2318,9 +2312,8 @@ msgid "Set transparency to 0 if you don't want to use an indicator."
 msgstr ""
 
 #: ../data/messages:765
-#, fuzzy
 msgid "Colour of the frame :"
-msgstr "Vyberte téma ikon :"
+msgstr ""
 
 #: ../data/messages:767
 msgid "Set 0 to fill the frame."
@@ -2568,8 +2561,8 @@ msgstr ""
 
 #: ../data/messages:891
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:893
@@ -2584,8 +2577,8 @@ msgstr ""
 
 #: ../data/messages:897
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -2932,8 +2925,8 @@ msgstr ""
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -3006,9 +2999,9 @@ msgstr ""
 
 #: ../data/messages:1047
 msgid ""
-"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will no "
-"longer work. This applet lets you configure a shortcut to pop up the menu at "
-"the mouse's location."
+"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will "
+"no longer work. This applet lets you configure a shortcut to pop up the menu "
+"at the mouse's location."
 msgstr ""
 
 #: ../data/messages:1049
@@ -3146,10 +3139,11 @@ msgstr ""
 
 #: ../data/messages:1103
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/"
-"required_components_list/panel, and replace its content with \"cairo-dock\". "
-"This will not launch the dock on start-up, but just prevent the gnome-panel "
-"from launching, so don't forget to add Cairo-Dock on startup.\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components_list/panel, and replace its "
+"content with \"cairo-dock\". This will not launch the dock on start-up, but "
+"just prevent the gnome-panel from launching, so don't forget to add Cairo-"
+"Dock on startup.\n"
 "Then restart your session : the gnome-panel has not been started."
 msgstr ""
 
@@ -3168,8 +3162,8 @@ msgstr ""
 msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Cairo-Penguin, Weather, Netspeed, ...\n"
-"Right click on the applet's icon, and select «launch another instance». A new "
-"instance of this applet appears in the main dock.\n"
+"Right click on the applet's icon, and select «launch another instance». A "
+"new instance of this applet appears in the main dock.\n"
 "You can configure this new applet just like any other."
 msgstr ""
 
@@ -3250,16 +3244,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3301,8 +3295,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1159
@@ -3404,8 +3398,8 @@ msgstr ""
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3439,7 +3433,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1209
-msgid "Choose the screen border relative to which the dock will be positioned:"
+msgid ""
+"Choose the screen border relative to which the dock will be positioned:"
 msgstr ""
 
 #: ../data/messages:1223
@@ -3589,9 +3584,8 @@ msgid "Only show in this specific viewport"
 msgstr ""
 
 #: ../data/messages:1321 ../data/messages:1371
-#, fuzzy
 msgid "Launcher's name :"
-msgstr "Spusti nový"
+msgstr ""
 
 #: ../data/messages:1335
 msgid "URI of the file :"
@@ -3822,8 +3816,8 @@ msgstr ""
 #: ../data/messages:1439
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -3904,8 +3898,8 @@ msgstr ""
 #: ../data/messages:1451
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -3967,24 +3961,25 @@ msgid ""
 "on any desktop."
 msgstr ""
 
-#~ msgid "Do you want to monitor the content of this directory?"
-#~ msgstr "Chcete sledovat obsah tohoto adresáře ?"
-
 #~ msgid "Undefined"
 #~ msgstr "Nedefinovaný"
 
 #~ msgid "Close"
 #~ msgstr "Zavřít"
 
+#, c-format
 #~ msgid "Downloading file %s ..."
 #~ msgstr "Stahování souboru %s ..."
 
+#, c-format
 #~ msgid "couldn't get the list of themes for %s (no connection ?)"
 #~ msgstr "nelze stáhnout seznam témat pro %s (žádné připojení ?)"
 
+#, c-format
 #~ msgid "couldn't get distant file %s"
 #~ msgstr "nelze stáhnout vzdálený soubor %s"
 
+#, c-format
 #~ msgid "couldn't retrieve distant theme %s"
 #~ msgstr "nelze stáhnout téma %s"
 
@@ -3993,3 +3988,6 @@ msgstr ""
 
 #~ msgid "Applying changes ..."
 #~ msgstr "Provádím změny..."
+
+#~ msgid "Do you want to monitor the content of this directory?"
+#~ msgstr "Chcete sledovat obsah tohoto adresáře ?"
