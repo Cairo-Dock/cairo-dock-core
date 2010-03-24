@@ -19,7 +19,7 @@ include_directories(
 ########### install files ###############
 
 #install(FILES  DESTINATION /include/cairo-dock)
-install(FILES  cairo-dock-application-factory.h 	cairo-dock-launcher-factory.h 	cairo-dock-separator-factory.h 	cairo-dock-applet-factory.h 	cairo-dock-desktop-file-factory.h DESTINATION ${includedir}/cairo-dock/cairo-dock)
+install(FILES  cairo-dock-application-factory.h 	cairo-dock-launcher-factory.h 	cairo-dock-separator-factory.h 	cairo-dock-applet-factory.h 	cairo-dock-desktop-file-factory.h DESTINATION ${includedir}/cairo-dock/icon-factory)
 
 
 
