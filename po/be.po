@@ -1423,7 +1423,7 @@ msgid "in ms. 0 means no delay."
 msgstr ""
 
 #: ../data/messages:199
-msgid "Delay before the dock unhide itself?"
+msgid "Delay before the dock unhides itself:"
 msgstr ""
 
 #: ../data/messages:205

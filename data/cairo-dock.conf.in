@@ -52,7 +52,7 @@ visibility = 1
 #b- Pop-up only if the mouse hits a screen corner
 pop in corner only = false;
 
-#i-[0;1000] Delay before the dock unhide itself?
+#i-[0;1000] Delay before the dock unhides itself:
 #{in ms. 0 means no delay.}
 unhide delay = 0
 
