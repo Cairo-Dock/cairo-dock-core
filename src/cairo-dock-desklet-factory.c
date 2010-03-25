@@ -422,11 +422,7 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 				{
 					Icon *icon = pDesklet->pIcon;
 					g_return_val_if_fail (CAIRO_DOCK_IS_APPLET (icon), FALSE);
-					cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
-						G_TYPE_BOOLEAN, "Desklet", "initially detached", FALSE,
-						G_TYPE_INVALID);
-					cairo_dock_update_desklet_detached_state_in_gui (icon->pModuleInstance, FALSE);
-					cairo_dock_reload_module_instance (icon->pModuleInstance, TRUE);
+					cairo_dock_detach_module_instance (icon->pModuleInstance);
 					return TRUE;  // interception du signal.
 				}
 			}
@@ -921,14 +917,14 @@ void cairo_dock_load_desklet_decorations (CairoDesklet *pDesklet)
 			pDesklet->container.iHeight,
 			pDeskletDecorations->iLoadingModifier,
 			pDeskletDecorations->fForeGroundAlpha);
-		fZoomX = pDesklet->backGroundImageBuffer.fZoomX;
-		fZoomY = pDesklet->backGroundImageBuffer.fZoomY;
+		fZoomX = pDesklet->foreGroundImageBuffer.fZoomX;
+		fZoomY = pDesklet->foreGroundImageBuffer.fZoomY;
 	}
 	pDesklet->iLeftSurfaceOffset = pDeskletDecorations->iLeftMargin * fZoomX;
 	pDesklet->iTopSurfaceOffset = pDeskletDecorations->iTopMargin * fZoomY;
 	pDesklet->iRightSurfaceOffset = pDeskletDecorations->iRightMargin * fZoomX;
 	pDesklet->iBottomSurfaceOffset = pDeskletDecorations->iBottomMargin * fZoomY;
-	//cd_debug ("%d;%d;%d;%d ; %.2f;%.2f", pDesklet->iLeftSurfaceOffset, pDesklet->iTopSurfaceOffset, pDesklet->iRightSurfaceOffset, pDesklet->iBottomSurfaceOffset, pDesklet->fBackGroundAlpha, pDesklet->fForeGroundAlpha);
+	//g_print ("%d;%d;%d;%d ; %.2f;%.2f\n", pDesklet->iLeftSurfaceOffset, pDesklet->iTopSurfaceOffset, pDesklet->iRightSurfaceOffset, pDesklet->iBottomSurfaceOffset, fZoomX, fZoomY);
 }
 
 void cairo_dock_free_desklet_decoration (CairoDeskletDecoration *pDecoration)

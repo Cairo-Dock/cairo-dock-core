@@ -126,7 +126,6 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 /** Create a surface from raw data of an X icon. The biggest icon possible is taken. The ratio is kept, and the surface will fill the space with transparency if necessary.
 *@param pXIconBuffer raw data of the icon.
 *@param iBufferNbElements number of elements in the buffer.
-*@param pSourceContext a drawing context (not altered by the function).
 *@param fConstraintWidth desired width of the icon.
 *@param fConstraintHeight desired height of the icon.
 *@param fMaxScale maximum zoom of the icon.
@@ -134,11 +133,10 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 *@param fHeight will be filled with the resulting height of the surface.
 *@return the newly allocated surface.
 */
-cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, int iWidth, int iHeight);
+cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, int iWidth, int iHeight);
 
 /** Create a surface from a GdkPixbuf.
 *@param pixbuf the pixbuf.
-*@param pSourceContext a drawing context (not altered by the function).
 *@param fMaxScale maximum zoom of the icon.
 *@param iWidthConstraint constraint on the width, or 0 to not constraint it.
 *@param iHeightConstraint constraint on the height, or 0 to not constraint it.
@@ -149,20 +147,20 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 *@param fZoomY if non NULL, will be filled with the zoom that has been applied on width.
 *@return the newly allocated surface.
 */
-cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, cairo_t *pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY);
+cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY);
 
+
+void cairo_dock_reset_source_context (void);
 
 /** Create an empty surface (transparent) of a given size. In OpenGL mode, this surface can act as a buffer to generate a texture.
-*@param pSourceContext un contexte cairo, ou NULL pour creer une surface tampon.
 *@param iWidth width of the surface.
 *@param iHeight height of the surface.
 *@return the newly allocated surface.
 */
-cairo_surface_t *_cairo_dock_create_blank_surface (cairo_t *pSourceContext, int iWidth, int iHeight);
+cairo_surface_t *cairo_dock_create_blank_surface (int iWidth, int iHeight);
 
 /** Create a surface from any image.
 *@param cImagePath complete path to the image.
-*@param pSourceContext a drawing context (not altered by the function).
 *@param fMaxScale maximum zoom of the icon.
 *@param iWidthConstraint constraint on the width, or 0 to not constraint it.
 *@param iHeightConstraint constraint on the height, or 0 to not constraint it.
@@ -173,60 +171,54 @@ cairo_surface_t *_cairo_dock_create_blank_surface (cairo_t *pSourceContext, int 
 *@param fZoomY if non NULL, will be filled with the zoom that has been applied on width.
 *@return the newly allocated surface.
 */
-cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, cairo_t* pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY);
+cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY);
 
 /** Create a surface from any image, at a given size. If the image is given by its sole name, it is searched inside the current theme root folder.
 *@param cImageFile path or name of an image.
-*@param pSourceContext a drawing context (not altered by the function).
 *@param fImageWidth the desired surface width.
 *@param fImageHeight the desired surface height.
 *@return the newly allocated surface.
 */
-cairo_surface_t *cairo_dock_create_surface_from_image_simple (const gchar *cImageFile, cairo_t* pSourceContext, double fImageWidth, double fImageHeight);
+cairo_surface_t *cairo_dock_create_surface_from_image_simple (const gchar *cImageFile, double fImageWidth, double fImageHeight);
 
 /** Create a surface from any image, at a given size. If the image is given by its sole name, it is searched inside the icons themes known by Cairo-Dock. 
 *@param cImagePath path or name of an image.
-*@param pSourceContext a drawing context (not altered by the function).
 *@param fImageWidth the desired surface width.
 *@param fImageHeight the desired surface height.
 *@return the newly allocated surface.
 */
-cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImagePath, cairo_t* pSourceContext, double fImageWidth, double fImageHeight);
+cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImagePath, double fImageWidth, double fImageHeight);
 #define cairo_dock_create_surface_for_icon cairo_dock_create_surface_from_icon
 
 /** Create a square surface from any image, at a given size. If the image is given by its sole name, it is searched inside the icons themes known by Cairo-Dock.
 *@param cImagePath path or name of an image.
-*@param pSourceContext a drawing context (not altered by the function).
 *@param fImageSize the desired surface size.
 *@return the newly allocated surface.
 */
-#define cairo_dock_create_surface_for_square_icon(cImagePath, pSourceContext, fImageSize) cairo_dock_create_surface_for_icon (cImagePath, pSourceContext, fImageSize, fImageSize)
+#define cairo_dock_create_surface_for_square_icon(cImagePath, fImageSize) cairo_dock_create_surface_for_icon (cImagePath, fImageSize, fImageSize)
 
 
 /** Create a surface at a given size, and fill it with a pattern. If the pattern image is given by its sole name, it is searched inside the current theme root folder.
 *@param cImageFile path or name of an image that will be repeated to fill the surface.
-*@param pSourceContext a drawing context (not altered by the function).
 *@param fImageWidth the desired surface width.
 *@param fImageHeight the desired surface height.
 *@param fAlpha transparency of the pattern (1 means opaque).
 *@return the newly allocated surface.
 */
-cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fAlpha);
+cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile, double fImageWidth, double fImageHeight, double fAlpha);
 
 
 /** Create a surface by rotating another. Only works for 1/4 of rounds.
 *@param pSurface surface to rotate.
-*@param pSourceContext a drawing context (not altered by the function).
 *@param fImageWidth the width of the surface.
 *@param fImageHeight the height of the surface.
 *@param fRotationAngle rotation angle to apply, in radians.
 *@return the newly allocated surface.
 */
-cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fRotationAngle);
+cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, double fImageWidth, double fImageHeight, double fRotationAngle);
 
 /** Create a surface by reflection of another. Apply a transparency gradation. The size of the reflect is given by the global config,and its position if given by the orientation of the icon; if this changes, the reflect needs to be re-created.
 *@param pSurface surface to reflect.
-*@param pSourceContext a drawing context (not altered by the function).
 *@param fImageWidth the width of the surface.
 *@param fImageHeight the height of the surface.
 *@param fReflectSize size of the reflection.
@@ -235,11 +227,10 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, cairo_t 
 *@param bDirectionUp TRUE if the surface is in a container whose direction is towards.
 *@return the newly allocated surface.
 */
-cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bIsHorizontal, gboolean bDirectionUp);
+cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bIsHorizontal, gboolean bDirectionUp);
 
 /** Create a surface representing a text, according to a given text description.
 *@param cText the text.
-*@param pSourceContext a drawing context (not altered by the function).
 *@param pLabelDescription description of the text rendering.
 *@param fMaxScale maximum zoom of the text.
 *@param iMaxWidth maximum authorized width for the surface; it will be zoomed in to fits this limit. 0 for no limit.
@@ -249,28 +240,26 @@ cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurfac
 *@param fTextYOffset if non NULL, will be filled the vertical offset to apply to center the text vertically.
 *@return the newly allocated surface.
 */
-cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, cairo_t *pSourceContext, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight, double *fTextXOffset, double *fTextYOffset);
+cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight, double *fTextXOffset, double *fTextYOffset);
 
 /** Create a surface representing a text, according to a given text description.
 *@param cText the text.
-*@param pSourceContext a drawing context (not altered by the function).
 *@param pLabelDescription description of the text rendering.
 *@param iTextWidthPtr will be filled the width of the resulting surface.
 *@param iTextHeightPtr will be filled the height of the resulting surface.
 *@return the newly allocated surface.
 */
-#define cairo_dock_create_surface_from_text(cText, pSourceContext, pLabelDescription, iTextWidthPtr, iTextHeightPtr) cairo_dock_create_surface_from_text_full (cText, pSourceContext, pLabelDescription, 1., 0, iTextWidthPtr, iTextHeightPtr, NULL, NULL) 
+#define cairo_dock_create_surface_from_text(cText, pLabelDescription, iTextWidthPtr, iTextHeightPtr) cairo_dock_create_surface_from_text_full (cText, pLabelDescription, 1., 0, iTextWidthPtr, iTextHeightPtr, NULL, NULL) 
 
 /** Create a surface identical to another, possibly resizing it.
 *@param pSurface surface to duplicate.
-*@param pSourceContext a drawing context (not altered by the function).
 *@param fWidth the width of the surface.
 *@param fHeight the height of the surface.
 *@param fDesiredWidth desired width of the copy (0 to keep the same size).
 *@param fDesiredHeight desired height of the copy (0 to keep the same size).
 *@return the newly allocated surface.
 */
-cairo_surface_t * cairo_dock_duplicate_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fWidth, double fHeight, double fDesiredWidth, double fDesiredHeight);
+cairo_surface_t * cairo_dock_duplicate_surface (cairo_surface_t *pSurface, double fWidth, double fHeight, double fDesiredWidth, double fDesiredHeight);
 
 
 G_END_DECLS

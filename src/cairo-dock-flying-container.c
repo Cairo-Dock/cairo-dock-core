@@ -66,13 +66,12 @@ static cairo_surface_t *s_pExplosionSurface = NULL;
 static GLuint s_iExplosionTexture = 0;
 static double s_fExplosionWidth, s_fExplosionHeight;
 
-static void _cairo_dock_load_hand_image (cairo_t *pCairoContext, int iWidth)
+static void _cairo_dock_load_hand_image (int iWidth)
 {
 	if (s_pHandSurface != NULL || s_iHandTexture != 0)
 		return ;
 	
 	s_pHandSurface = cairo_dock_create_surface_from_image (CAIRO_DOCK_SHARE_DATA_DIR"/hand.svg",
-		pCairoContext,
 		1.,
 		iWidth, 0.,
 		CAIRO_DOCK_KEEP_RATIO,
@@ -85,7 +84,7 @@ static void _cairo_dock_load_hand_image (cairo_t *pCairoContext, int iWidth)
 		s_pHandSurface = NULL;
 	}
 }
-static void _cairo_dock_load_explosion_image (cairo_t *pCairoContext, int iWidth)
+static void _cairo_dock_load_explosion_image (int iWidth)
 {
 	if (s_pExplosionSurface != NULL || s_iExplosionTexture != 0)
 		return ;
@@ -94,14 +93,12 @@ static void _cairo_dock_load_explosion_image (cairo_t *pCairoContext, int iWidth
 	if (g_file_test (cExplosionFile, G_FILE_TEST_EXISTS))
 	{
 		s_pExplosionSurface = cairo_dock_create_surface_for_icon (cExplosionFile,
-			pCairoContext,
 			iWidth * EXPLOSION_NB_FRAMES,
 			iWidth);
 	}
 	else
 	{
 		s_pExplosionSurface = cairo_dock_create_surface_for_icon (CAIRO_DOCK_SHARE_DATA_DIR"/explosion/explosion.png",
-			pCairoContext,
 			iWidth * EXPLOSION_NB_FRAMES,
 			iWidth);
 	}
@@ -352,10 +349,8 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 		pFlyingContainer->container.iWindowPositionY);*/
 	gtk_window_present (GTK_WINDOW (pWindow));
 	
-	cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pFlyingContainer));
-	_cairo_dock_load_hand_image (pSourceContext, pFlyingContainer->container.iWidth);
-	_cairo_dock_load_explosion_image (pSourceContext, pFlyingContainer->container.iWidth);
-	cairo_destroy (pSourceContext);
+	_cairo_dock_load_hand_image (pFlyingContainer->container.iWidth);
+	_cairo_dock_load_explosion_image (pFlyingContainer->container.iWidth);
 	
 	pFlyingContainer->bDrawHand = bDrawHand;
 	if (bDrawHand)

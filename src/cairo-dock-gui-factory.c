@@ -52,7 +52,8 @@
 #define CAIRO_DOCK_FRAME_ICON_SIZE 24
 
 extern CairoDock *g_pMainDock;
-extern gchar *g_cCairoDockDataDir;
+extern gchar *g_cExtrasDirPath;
+extern gchar *g_cThemesDirPath;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 
@@ -1242,7 +1243,7 @@ static void _change_rating (GtkCellRendererText * cell, gchar * path_string, gch
 	g_return_if_fail (/**cDisplayedName != NULL && */cThemeName != NULL);
 	//g_print ("theme : %s / %s\n", cThemeName, cDisplayedName);
 	
-	gchar *cRatingDir = g_strdup_printf ("%s/%s/.rating", g_cCairoDockDataDir, "themes");  // il y'a un probleme ici, on ne connait pas le repertoire utilisateur des themes. donc ce code ne marche que pour les themes du dock (et n'est utilise que pour ca)
+	gchar *cRatingDir = g_strdup_printf ("%s/.rating", g_cThemesDirPath);  // il y'a un probleme ici, on ne connait pas le repertoire utilisateur des themes. donc ce code ne marche que pour les themes du dock (et n'est utilise que pour ca)
 	gchar *cRatingFile = g_strdup_printf ("%s/%s", cRatingDir, cThemeName);
 	//g_print ("on ecrit dans %s\n", cRatingFile);
 	if (iState == CAIRO_DOCK_USER_THEME || iState == CAIRO_DOCK_LOCAL_THEME/**strncmp (cDisplayedName, CAIRO_DOCK_PREFIX_NET_THEME, strlen (CAIRO_DOCK_PREFIX_NET_THEME)) != 0*/ || g_file_test (cRatingFile, G_FILE_TEST_EXISTS))  // ca n'est pas un theme distant, ou l'utilisateur a deja vote auparavant pour ce theme.
@@ -1949,7 +1950,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						cShareThemesDir = (*pAuthorizedValuesList[0] != '\0' ? cairo_dock_generate_file_path (pAuthorizedValuesList[0]) : NULL);  // on autorise les ~/blabla.
 						if (pAuthorizedValuesList[1] != NULL)
 						{
-							cUserThemesDir = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR, pAuthorizedValuesList[1]);
+							cUserThemesDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, pAuthorizedValuesList[1]);
 							cDistantThemesDir = pAuthorizedValuesList[2];
 						}
 					}
@@ -1996,7 +1997,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				//\______________ On recupere les themes utilisateurs.
 				if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL && *pAuthorizedValuesList[0] != '\0')
 				{
-					gchar *cUserThemesDir = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR, pAuthorizedValuesList[0]);
+					gchar *cUserThemesDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, pAuthorizedValuesList[0]);
 					GHashTable *pThemeTable = cairo_dock_list_themes (NULL, cUserThemesDir, NULL);
 					g_free (cUserThemesDir);
 
@@ -2607,7 +2608,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						cShareThemesDir = (*pAuthorizedValuesList[0] != '\0' ? pAuthorizedValuesList[0] : NULL);
 						if (pAuthorizedValuesList[1] != NULL)
 						{
-							cUserThemesDir = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR, pAuthorizedValuesList[1]);
+							cUserThemesDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, pAuthorizedValuesList[1]);
 							cDistantThemesDir = pAuthorizedValuesList[2];
 						}
 					}

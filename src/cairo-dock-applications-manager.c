@@ -183,7 +183,6 @@ static void _on_update_applis_list (CairoDock *pDock)
 	gboolean bAppliAlreadyRegistered;
 	gboolean bUpdateMainDockSize = FALSE;
 	CairoDock *pParentDock;
-	cairo_t *pCairoContext = NULL;
 	
 	for (i = 0; i < iNbWindows; i ++)
 	{
@@ -193,12 +192,7 @@ static void _on_update_applis_list (CairoDock *pDock)
 		if (! bAppliAlreadyRegistered)
 		{
 			cd_message (" cette fenetre (%ld) de la pile n'est pas dans la liste", Xid);
-			if (pCairoContext == NULL)
-				pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
-			if (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS)
-				icon = cairo_dock_create_icon_from_xwindow (Xid, pCairoContext, pDock);
-			else
-				cd_warning ("couldn't create a cairo context => this window (%ld) will not have an icon", Xid);
+			icon = cairo_dock_create_icon_from_xwindow (Xid, pDock);
 			if (icon != NULL)
 			{
 				icon->iLastCheckTime = s_iTime;
@@ -241,8 +235,6 @@ static void _on_update_applis_list (CairoDock *pDock)
 				icon->iStackOrder = iStackOrder ++;
 		}
 	}
-	if (pCairoContext != NULL)
-		cairo_destroy (pCairoContext);
 	
 	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_remove_old_applis, GINT_TO_POINTER (s_iTime));
 	
@@ -610,9 +602,7 @@ static void _on_change_window_name (Icon *icon, CairoDock *pDock, gboolean bSear
 			g_free (icon->cName);
 			icon->cName = cName;
 			
-			cairo_t* pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
-			cairo_dock_fill_one_text_buffer (icon, pCairoContext, &myLabels.iconTextDescription);
-			cairo_destroy (pCairoContext);
+			cairo_dock_fill_one_text_buffer (icon, &myLabels.iconTextDescription);
 			
 			cairo_dock_update_name_on_inhibators (icon->cClass, icon->Xid, icon->cName);
 		}
@@ -817,9 +807,6 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 		s_iCurrentActiveWindow = cairo_dock_get_active_xwindow ();
 	
 	//\__________________ On cree les icones de toutes ces applis.
-	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
-	g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
-	
 	CairoDock *pParentDock;
 	gboolean bUpdateMainDockSize = FALSE;
 	
@@ -830,7 +817,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 	for (i = 0; i < iNbWindows; i ++)
 	{
 		Xid = pXWindowsList[i];
-		pIcon = cairo_dock_create_icon_from_xwindow (Xid, pCairoContext, pDock);
+		pIcon = cairo_dock_create_icon_from_xwindow (Xid, pDock);
 		
 		if (pIcon != NULL)
 		{
@@ -867,7 +854,6 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 		else
 			cairo_dock_blacklist_appli (Xid);
 	}
-	cairo_destroy (pCairoContext);
 	if (pXWindowsList != NULL)
 		XFree (pXWindowsList);
 	
@@ -955,7 +941,7 @@ gboolean cairo_dock_application_manager_is_running (void)
 }
 
 
-Icon * cairo_dock_create_icon_from_xwindow (Window Xid, cairo_t *pSourceContext, CairoDock *pDock)
+Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 {
 	//\__________________ On cree l'icone.
 	Window XParentWindow = 0;
@@ -987,7 +973,7 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, cairo_t *pSourceContext,
 	}
 	#endif
 	
-	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pDock);
+	cairo_dock_fill_icon_buffers_for_dock (icon, pDock);
 	
 	if (icon->bIsHidden && myTaskBar.iMinimizedWindowRenderType == 2)
 	{
@@ -1132,9 +1118,9 @@ void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 
 
 
-cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, cairo_t *pSourceContext, int iWidth, int iHeight)
+cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, int iWidth, int iHeight)
 {
-	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS && Xid > 0, NULL);
+	g_return_val_if_fail (Xid > 0, NULL);
 	GdkPixbuf *pPixbuf = cairo_dock_get_pixbuf_from_pixmap (Xid, TRUE);
 	if (pPixbuf == NULL)
 	{
@@ -1144,7 +1130,6 @@ cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, cairo_t *pS
 	cd_debug ("window pixmap : %dx%d", gdk_pixbuf_get_width (pPixbuf), gdk_pixbuf_get_height (pPixbuf));
 	double fWidth, fHeight;
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_pixbuf (pPixbuf,
-		pSourceContext,
 		1.,
 		iWidth, iHeight,
 		CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,  // on conserve le ratio de la fenetre, tout en gardant la taille habituelle des icones d'appli.
@@ -1154,10 +1139,8 @@ cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, cairo_t *pS
 	return pSurface;
 }
 
-cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pSourceContext, int iWidth, int iHeight)
+cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, int iWidth, int iHeight)
 {
-	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
-	
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
 	unsigned long iLeftBytes, iBufferNbElements = 0;
@@ -1168,7 +1151,6 @@ cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pS
 	{
 		cairo_surface_t *pNewSurface = cairo_dock_create_surface_from_xicon_buffer (pXIconBuffer,
 			iBufferNbElements,
-			pSourceContext,
 			iWidth,
 			iHeight);
 		XFree (pXIconBuffer);
@@ -1237,7 +1219,6 @@ cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, cairo_t *pS
 		{
 			double fWidth, fHeight;
 			cairo_surface_t *pNewSurface = cairo_dock_create_surface_from_pixbuf (pIconPixbuf,
-				pSourceContext,
 				1.,
 				iWidth,
 				iHeight,

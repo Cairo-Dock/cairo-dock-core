@@ -38,8 +38,8 @@ extern gboolean g_bUseOpenGL;
 
 void cairo_dock_render_graph (CairoDockGraph *pGraph, cairo_t *pCairoContext)
 {
-	g_return_if_fail (pGraph != NULL && pCairoContext != NULL);
-	g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
+	g_return_if_fail (pGraph != NULL);
+	g_return_if_fail (pCairoContext != NULL && cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
@@ -158,7 +158,6 @@ void cairo_dock_render_graph (CairoDockGraph *pGraph, cairo_t *pCairoContext)
 	}
 }
 
-
 static void cairo_dock_render_graph_opengl (CairoDockGraph *pGraph)
 {
 	g_return_if_fail (pGraph != NULL);
@@ -179,11 +178,10 @@ static void cairo_dock_render_graph_opengl (CairoDockGraph *pGraph)
 }
 
 
-static inline cairo_surface_t *_cairo_dock_create_graph_background (cairo_t *pSourceContext, double fWidth, double fHeight, int iRadius, double fMargin, gdouble *pBackGroundColor, CairoDockTypeGraph iType, int iNbDrawings)
+static inline cairo_surface_t *_cairo_dock_create_graph_background (double fWidth, double fHeight, int iRadius, double fMargin, gdouble *pBackGroundColor, CairoDockTypeGraph iType, int iNbDrawings)
 {
 	// on cree la surface.
-	cairo_surface_t *pBackgroundSurface = cairo_surface_create_similar (cairo_get_target (pSourceContext),
-		CAIRO_CONTENT_COLOR_ALPHA,
+	cairo_surface_t *pBackgroundSurface = cairo_dock_create_blank_surface (
 		fWidth,
 		fHeight);
 	cairo_t *pCairoContext = cairo_create (pBackgroundSurface);
@@ -293,7 +291,7 @@ static cairo_pattern_t *_cairo_dock_create_graph_pattern (CairoDockGraph *pGraph
 	}
 	return pGradationPattern;
 }
-static void cairo_dock_load_graph (CairoDockGraph *pGraph, cairo_t *pSourceContext, CairoContainer *pContainer, CairoGraphAttribute *pAttribute)
+static void cairo_dock_load_graph (CairoDockGraph *pGraph, CairoContainer *pContainer, CairoGraphAttribute *pAttribute)
 {
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
@@ -327,7 +325,7 @@ static void cairo_dock_load_graph (CairoDockGraph *pGraph, cairo_t *pSourceConte
 	pGraph->fMargin = pGraph->iRadius * (1. - sqrt(2)/2);
 	if (pAttribute->fBackGroundColor != NULL)
 		memcpy (pGraph->fBackGroundColor, pAttribute->fBackGroundColor, 4 * sizeof (double));
-	pGraph->pBackgroundSurface = _cairo_dock_create_graph_background (pSourceContext,
+	pGraph->pBackgroundSurface = _cairo_dock_create_graph_background (
 		iWidth,
 		iHeight,
 		pGraph->iRadius,
@@ -340,14 +338,14 @@ static void cairo_dock_load_graph (CairoDockGraph *pGraph, cairo_t *pSourceConte
 }
 
 
-static void cairo_dock_reload_graph (CairoDockGraph *pGraph, cairo_t *pSourceContext)
+static void cairo_dock_reload_graph (CairoDockGraph *pGraph)
 {
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
 	int iWidth = pRenderer->iWidth, iHeight = pRenderer->iHeight;
 	if (pGraph->pBackgroundSurface != NULL)
 		cairo_surface_destroy (pGraph->pBackgroundSurface);
-	pGraph->pBackgroundSurface = _cairo_dock_create_graph_background (pSourceContext, iWidth, iHeight, pGraph->iRadius, pGraph->fMargin, pGraph->fBackGroundColor, pGraph->iType, pData->iNbValues / pRenderer->iRank);
+	pGraph->pBackgroundSurface = _cairo_dock_create_graph_background (iWidth, iHeight, pGraph->iRadius, pGraph->fMargin, pGraph->fBackGroundColor, pGraph->iType, pData->iNbValues / pRenderer->iRank);
 	if (pGraph->iBackgroundTexture != 0)
 		_cairo_dock_delete_texture (pGraph->iBackgroundTexture);
 	if (g_bUseOpenGL)

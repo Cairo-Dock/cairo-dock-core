@@ -26,6 +26,7 @@
 #include <time.h>
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
+#include <curl/curl.h>
 
 #include "../config.h"
 #include "cairo-dock-config.h"
@@ -60,6 +61,7 @@ extern gchar *g_cConfFile;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
 extern CairoDock *g_pMainDock;
+extern gboolean g_bEasterEggs;
 
 void cairo_dock_free_theme (CairoDockTheme *pTheme)
 {
@@ -127,6 +129,11 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 	return cResultPath;
 }
 
+static size_t write_data (gpointer buffer, size_t size, size_t nmemb, FILE *fd)
+{
+	return fwrite (buffer, size, nmemb, fd);
+}
+
 gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, const gchar *cExtractTo, GError **erreur)
 {
 	//g_print ("%s (%s, %s, %s, %s)\n", __func__, cServerAdress, cDistantFilePath, cDistantFileName, cExtractTo);
@@ -141,8 +148,36 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	}
 	
 	//\_______________ On lance le download.
-	//gchar *cCommand = g_strdup_printf ("%s wget \"%s/%s/%s\" -O \"%s\" -t %d -T %d%s", (iShowActivity == 2 ? "$TERM -e '" : ""), cServerAdress, cDistantFilePath, cDistantFileName, cTmpFilePath, CAIRO_DOCK_DL_NB_RETRY, CAIRO_DOCK_DL_TIMEOUT, (iShowActivity == 2 ? "'" : ""));
-	gchar *cCommand = g_strdup_printf ("curl -s \"%s/%s/%s\" --output \"%s\" --connect-timeout %d --max-time %d --retry %d",
+	CURL *handle = curl_easy_init( );
+	
+	gchar *cURL = g_strdup_printf ("%s/%s/%s", cServerAdress, cDistantFilePath, cDistantFileName);
+	g_print ("cURL : %s\n", cURL);
+	FILE *f = fopen (cTmpFilePath, "wb");
+	g_return_val_if_fail (f, NULL);
+	curl_easy_setopt (handle, CURLOPT_URL, cURL);
+	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_data);
+	curl_easy_setopt(handle, CURLOPT_WRITEDATA, f);
+	//curl_easy_setopt (handle, CURLOPT_PROXY, "proxyname");
+	//curl_easy_setopt (handle, CURLOPT_PROXYPORT, 123);
+	//curl_easy_setopt (handle, CURLOPT_PROXYUSERNAME, "username");
+	//curl_easy_setopt (handle, CURLOPT_PROXYPASSWORD, "password");
+	curl_easy_setopt (handle, CURLOPT_TIMEOUT, mySystem.iConnectiontMaxTime);
+	curl_easy_setopt (handle, CURLOPT_CONNECTTIMEOUT, mySystem.iConnectionTimeout);
+	
+	CURLcode r = curl_easy_perform (handle);
+	
+	if (r != CURLE_OK)
+	{
+		cd_warning ("an error occured while downloading '%s'", cURL);
+		g_remove (cTmpFilePath);
+		g_free (cTmpFilePath);
+		cTmpFilePath = NULL;
+	}
+	
+	curl_easy_cleanup (handle);
+	g_free (cURL);
+	fclose (f);
+	/**gchar *cCommand = g_strdup_printf ("curl -s \"%s/%s/%s\" --output \"%s\" --connect-timeout %d --max-time %d --retry %d",
 		cServerAdress, cDistantFilePath, cDistantFileName,
 		cTmpFilePath,
 		mySystem.iConnectionTimeout, mySystem.iConnectiontMaxTime, mySystem.iConnectiontNbRetries);
@@ -155,6 +190,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 		g_free (cTmpFilePath);
 		cTmpFilePath = NULL;
 	}
+	g_free (cCommand);*/
 	
 	//\_______________ On teste que le fichier est non vide.
 	gboolean bOk = (cTmpFilePath != NULL);
@@ -172,7 +208,6 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 		cTmpFilePath = NULL;
 	}
 	close(fds);
-	g_free (cCommand);
 	
 	//\_______________ On l'extrait si c'est une archive.
 	if (cTmpFilePath != NULL && cExtractTo != NULL)
@@ -757,7 +792,7 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	GString *sCommand = g_string_new ("");
 	gboolean bThemeSaved = FALSE;
 	int r;
-	gchar *cNewThemePath = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR, cNewThemeName);
+	gchar *cNewThemePath = g_strdup_printf ("%s/%s", g_cThemesDirPath, cNewThemeName);
 	if (g_file_test (cNewThemePath, G_FILE_TEST_EXISTS))  // on ecrase un theme existant.
 	{
 		cd_debug ("  le theme existant sera mis a jour");
@@ -856,13 +891,12 @@ gboolean cairo_dock_package_current_theme (const gchar *cThemeName)
 }
 gchar *cairo_dock_depackage_theme (const gchar *cPackagePath)
 {
-	gchar *cUserThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
 	gchar *cNewThemePath = NULL;
 	if (*cPackagePath == '/' || strncmp (cPackagePath, "file://", 7) == 0)  // paquet en local.
 	{
 		g_print (" paquet local\n");
 		gchar *cFilePath = (*cPackagePath == '/' ? g_strdup (cPackagePath) : g_filename_from_uri (cPackagePath, NULL, NULL));
-		cNewThemePath = cairo_dock_uncompress_file (cFilePath, cUserThemesDir, NULL);
+		cNewThemePath = cairo_dock_uncompress_file (cFilePath, g_cThemesDirPath, NULL);
 		g_free (cFilePath);
 	}
 	else  // paquet distant.
@@ -872,14 +906,13 @@ gchar *cairo_dock_depackage_theme (const gchar *cPackagePath)
 		if (str != NULL)
 		{
 			*str = '\0';
-			cNewThemePath = cairo_dock_download_file (cPackagePath, "", str+1, cUserThemesDir, NULL);
+			cNewThemePath = cairo_dock_download_file (cPackagePath, "", str+1, g_cThemesDirPath, NULL);
 			if (cNewThemePath == NULL)
 			{
 				cairo_dock_show_temporary_dialog_with_icon_printf (_("Could not access remote file %s/%s. Maybe the server is down.\nPlease retry later or contact us at glx-dock.org."), NULL, NULL, 0, NULL, cPackagePath, str+1);
 			}
 		}
 	}
-	g_free (cUserThemesDir);
 	return cNewThemePath;
 }
 
@@ -924,18 +957,6 @@ static gboolean _find_module_from_user_data_dir (gchar *cModuleName, CairoDockMo
 }
 gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers)
 {
-	//\___________________ On regarde si le theme courant est modifie.
-	gboolean bNeedSave = cairo_dock_theme_need_save ();
-	if (bNeedSave)
-	{
-		int iAnswer = cairo_dock_ask_general_question_and_wait (_("You have made some changes to the current theme.\nYou will lose them if you don't save before choosing a new theme. Continue anyway?"));
-		if (iAnswer != GTK_RESPONSE_YES)
-		{
-			return FALSE;
-		}
-		cairo_dock_mark_theme_as_modified (FALSE);
-	}
-	
 	//\___________________ On obtient le chemin du nouveau theme (telecharge ou decompresse si necessaire).
 	gchar *cNewThemeName = g_strdup (cThemeName);
 	gchar *cNewThemePath = NULL;
@@ -960,9 +981,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	else  // c'est un theme officiel.
 	{
 		cd_debug ("c'est un theme officiel");
-		gchar *cUserThemesDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR);
-		cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, cUserThemesDir, CAIRO_DOCK_THEMES_DIR, CAIRO_DOCK_ANY_THEME);
-		g_free (cUserThemesDir);
+		cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, g_cThemesDirPath, CAIRO_DOCK_THEMES_DIR, CAIRO_DOCK_ANY_THEME);
 	}
 	g_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), FALSE);
 	//g_print ("cNewThemePath : %s ; cNewThemeName : %s\n", cNewThemePath, cNewThemeName);
@@ -1019,10 +1038,10 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	g_free (cNewLocalIconsPath);
 	
 	//\___________________ On charge les extras.
-	g_string_printf (sCommand, "%s/%s", cNewThemePath, "extras");
+	g_string_printf (sCommand, "%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_EXTRAS_DIR);
 	if (g_file_test (sCommand->str, G_FILE_TEST_IS_DIR))
 	{
-		g_string_printf (sCommand, "cp -r \"%s/%s\"/* \"%s\"", cNewThemePath, "extras", g_cExtrasDirPath);
+		g_string_printf (sCommand, "cp -r \"%s/%s\"/* \"%s\"", cNewThemePath, CAIRO_DOCK_LOCAL_EXTRAS_DIR, g_cExtrasDirPath);
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
 	}
@@ -1204,4 +1223,7 @@ void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar 
 	_check_dir (g_cCurrentIconsPath);
 	g_cCurrentPlugInsPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_PLUG_INS_DIR);
 	_check_dir (g_cCurrentPlugInsPath);
+	g_cConfFile = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
+	
+	curl_global_init (CURL_GLOBAL_DEFAULT);
 }

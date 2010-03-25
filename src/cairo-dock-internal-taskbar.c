@@ -167,12 +167,12 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 	else
 		gtk_widget_queue_draw (pDock->container.pWidget);  // pour le fVisibleAlpha
 	
-	if (pPrevTaskBar->bShowAppli != pTaskBar->bShowAppli ||
+	/**if (pPrevTaskBar->bShowAppli != pTaskBar->bShowAppli ||
 		pPrevTaskBar->bGroupAppliByClass != pTaskBar->bGroupAppliByClass)
 	{
 		double fMaxScale = cairo_dock_get_max_scale (pDock);
 		cairo_dock_load_class_indicator (pTaskBar->bShowAppli && pTaskBar->bGroupAppliByClass ? myIndicators.cClassIndicatorImagePath : NULL, fMaxScale);
-	}
+	}*/
 	
 	if (bUpdateSize)
 	{

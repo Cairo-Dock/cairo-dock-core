@@ -58,16 +58,16 @@ void cairo_dock_register_data_renderer_entry_point (const gchar *cRendererName, 
 void cairo_dock_remove_data_renderer_entry_point (const gchar *cRendererName);
 
 
-void cairo_dock_initialize_renderer_manager (void);
+void cairo_dock_init_renderer_manager (void);
 
 void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName);
 void cairo_dock_set_default_renderer (CairoDock *pDock);
 
-void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRenderer *pRenderer, cairo_t *pSourceContext, gboolean bLoadIcons, CairoDeskletRendererConfigPtr pConfig);
-void cairo_dock_set_desklet_renderer_by_name (CairoDesklet *pDesklet, const gchar *cRendererName, cairo_t *pSourceContext, gboolean bLoadIcons, CairoDeskletRendererConfigPtr pConfig);
+void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRenderer *pRenderer, gboolean bLoadIcons, CairoDeskletRendererConfigPtr pConfig);
+void cairo_dock_set_desklet_renderer_by_name (CairoDesklet *pDesklet, const gchar *cRendererName, gboolean bLoadIcons, CairoDeskletRendererConfigPtr pConfig);
 
-void cairo_dock_set_dialog_renderer (CairoDialog *pDialog, CairoDialogRenderer *pRenderer, cairo_t *pSourceContext, CairoDialogRendererConfigPtr pConfig);
-void cairo_dock_set_dialog_renderer_by_name (CairoDialog *pDialog, const gchar *cRendererName, cairo_t *pSourceContext, CairoDialogRendererConfigPtr pConfig);
+void cairo_dock_set_dialog_renderer (CairoDialog *pDialog, CairoDialogRenderer *pRenderer, CairoDialogRendererConfigPtr pConfig);
+void cairo_dock_set_dialog_renderer_by_name (CairoDialog *pDialog, const gchar *cRendererName, CairoDialogRendererConfigPtr pConfig);
 
 CairoDialogDecorator *cairo_dock_get_dialog_decorator (const gchar *cDecoratorName);
 void cairo_dock_register_dialog_decorator (const gchar *cDecoratorName, CairoDialogDecorator *pDecorator);

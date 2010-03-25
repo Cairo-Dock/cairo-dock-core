@@ -97,11 +97,11 @@ typedef struct {
 } CairoDeskletRendererPreDefinedConfig;
 typedef void (* CairoDeskletRenderFunc) (cairo_t *pCairoContext, CairoDesklet *pDesklet);
 typedef void (*CairoDeskletGLRenderFunc) (CairoDesklet *pDesklet);
-typedef gpointer (* CairoDeskletConfigureRendererFunc) (CairoDesklet *pDesklet, cairo_t *pSourceContext, CairoDeskletRendererConfigPtr pConfig);
-typedef void (* CairoDeskletLoadRendererDataFunc) (CairoDesklet *pDesklet, cairo_t *pSourceContext);
+typedef gpointer (* CairoDeskletConfigureRendererFunc) (CairoDesklet *pDesklet, CairoDeskletRendererConfigPtr pConfig);
+typedef void (* CairoDeskletLoadRendererDataFunc) (CairoDesklet *pDesklet);
 typedef void (* CairoDeskletUpdateRendererDataFunc) (CairoDesklet *pDesklet, CairoDeskletRendererDataPtr pNewData);
 typedef void (* CairoDeskletFreeRendererDataFunc) (CairoDesklet *pDesklet);
-typedef void (* CairoDeskletLoadIconsFunc) (CairoDesklet *pDesklet, cairo_t *pSourceContext);
+typedef void (* CairoDeskletLoadIconsFunc) (CairoDesklet *pDesklet);
 /// Definition of a Desklet's renderer.
 struct _CairoDeskletRenderer {
 	/// rendering function with libcairo.

@@ -18,28 +18,28 @@
 */
 
 
-#ifndef __CAIRO_DOCK_SEPARATOR_MANAGER__
-#define  __CAIRO_DOCK_SEPARATOR_MANAGER__
+#ifndef __CAIRO_DOCK_INDICATOR_MANAGER__
+#define  __CAIRO_DOCK_INDICATOR_MANAGER__
 
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-surface-factory.h"
+#include "cairo-dock-internal-indicators.h"
 G_BEGIN_DECLS
 
-
-cairo_surface_t *cairo_dock_create_separator_surface (int iWidth, int iHeight);
-
-/** Create an icon that will act as a separator.
-*@param iSeparatorType the type of separator (CAIRO_DOCK_SEPARATOR12, CAIRO_DOCK_SEPARATOR23 or any other odd number)
-*@param pDock the dock it will belong to
-*@return the newly allocated icon, with all buffers filled.
+/**
+*@file cairo-dock-indicator-manager.h This class loads the indicators and manages the associated ressources.
 */
-Icon *cairo_dock_create_separator_icon (int iSeparatorType, CairoDock *pDock);
 
+void cairo_dock_init_indicator_manager (void);
 
-void cairo_dock_insert_automatic_separator_in_dock (int iSeparatorType, const gchar *cParentDockName, CairoDock *pDock);
+void cairo_dock_load_indicator_textures (void);
+
+void cairo_dock_unload_indicator_textures (void);
+
+void cairo_dock_reload_indicators (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicators *pIndicators);
 
 
 G_END_DECLS
 #endif
-

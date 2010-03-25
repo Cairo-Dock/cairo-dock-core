@@ -76,6 +76,7 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-indicator-manager.h"
 #include "cairo-dock-config.h"
 
 extern CairoDock *g_pMainDock;
@@ -547,9 +548,6 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	}
 	
 	//\___________________ On (re)charge tout, car n'importe quel parametre peut avoir change.
-	cairo_t* pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
-	double fMaxScale = cairo_dock_get_max_scale (pDock);
-	
 	// fausse transparence.
 	if (mySystem.bUseFakeTransparency)
 	{
@@ -574,6 +572,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_unload_desklet_buttons ();  // qui seront charges lorsque necessaire.
 	
 	cairo_dock_load_icon_textures ();
+	cairo_dock_load_indicator_textures ();
 	
 	cairo_dock_load_visible_zone (pDock, myBackground.cVisibleZoneImageFile, myAccessibility.iVisibleZoneWidth, myAccessibility.iVisibleZoneHeight, myBackground.fVisibleZoneAlpha);
 	
@@ -740,8 +739,6 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
 	}
 	
-	cairo_destroy (pCairoContext);
-	
 	g_key_file_free (pKeyFile);
 
 	s_bLoading = FALSE;
@@ -834,7 +831,7 @@ void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajo
 }
 
 
-void cairo_dock_decrypt_string( const guchar *cEncryptedString,  guchar **cDecryptedString )
+void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecryptedString )
 {
 	g_return_if_fail (cDecryptedString != NULL);
 	if( !cEncryptedString || *cEncryptedString == '\0' )
@@ -845,7 +842,7 @@ void cairo_dock_decrypt_string( const guchar *cEncryptedString,  guchar **cDecry
 #ifdef HAVE_LIBCRYPT
 	guchar *input = g_strdup(cEncryptedString);
 	guchar *shifted_input = input;
-	guchar **output = cDecryptedString;
+	guchar **output = (guchar **)cDecryptedString;
 	
 	guchar *current_output = NULL;
 	
@@ -898,7 +895,7 @@ void cairo_dock_decrypt_string( const guchar *cEncryptedString,  guchar **cDecry
 #endif
 }
 
-void cairo_dock_encrypt_string( const guchar *cDecryptedString,  guchar **cEncryptedString )
+void cairo_dock_encrypt_string( const gchar *cDecryptedString,  gchar **cEncryptedString )
 {
 	g_return_if_fail (cEncryptedString != NULL);
 	if( !cDecryptedString || *cDecryptedString == '\0' )
@@ -908,8 +905,8 @@ void cairo_dock_encrypt_string( const guchar *cDecryptedString,  guchar **cEncry
 	}
 	
 #ifdef HAVE_LIBCRYPT
-	const guchar *input = cDecryptedString;
-	guchar **output = cEncryptedString;
+	const guchar *input = (guchar *)cDecryptedString;
+	guchar **output = (guchar **)cEncryptedString;
 	guint input_length = 0;
 	
 	guchar *current_output = NULL;

@@ -63,10 +63,9 @@ struct _CairoEmblem {
 *@param cImageFile an image.
 *@param pIcon an icon.
 *@param pContainer its container.
-*@param pSourceContext a cairo context, not altered by the function.
 *@return the newly allocated emblem.
 */
-CairoEmblem *cairo_dock_make_emblem (const gchar *cImageFile, Icon *pIcon, CairoContainer *pContainer, cairo_t *pSourceContext);
+CairoEmblem *cairo_dock_make_emblem (const gchar *cImageFile, Icon *pIcon, CairoContainer *pContainer);
 
 /** Create an emblem from an existing surface. The surface is appropriated by the emblem, so if you free it with \ref cairo_dock_free_emblem, it will also free the surface. Use g_free to destroy the emblem if you don't want the surface to be destroyed with.
 *@param pSurface a surface.

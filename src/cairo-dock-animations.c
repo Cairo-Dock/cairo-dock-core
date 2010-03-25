@@ -330,7 +330,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				//\__________________ On se cache si sous-dock.
 				if (pDock->iRefCount > 0)
 				{
-					g_print ("on cache ce sous-dock en sortant par lui\n");
+					//g_print ("on cache ce sous-dock en sortant par lui\n");
 					gtk_widget_hide (pDock->container.pWidget);
 					cairo_dock_hide_parent_dock (pDock);
 				}
@@ -918,7 +918,7 @@ static gboolean _cairo_dock_transition_step (gpointer pUserData, Icon *pIcon, Ca
 		cairo_dock_erase_cairo_context (pTransition->pIconContext);
 		bContinue = pTransition->render (pIcon, pTransition->pUserData, pTransition->pIconContext);
 		if (pContainer->bUseReflect)
-			cairo_dock_add_reflection_to_icon (pTransition->pIconContext, pIcon, pContainer);
+			cairo_dock_add_reflection_to_icon (pIcon, pContainer);
 	}
 	
 	cairo_dock_redraw_icon (pIcon, pContainer);

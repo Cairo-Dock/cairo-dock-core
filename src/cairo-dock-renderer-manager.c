@@ -185,7 +185,7 @@ void cairo_dock_remove_data_renderer_entry_point (const gchar *cRendererName)
 	g_hash_table_remove (s_hDataRendererTable, cRendererName);
 }
 
-void cairo_dock_initialize_renderer_manager (void)
+void cairo_dock_init_renderer_manager (void)
 {
 	g_return_if_fail (s_hRendererTable == NULL);
 	cd_message ("");
@@ -267,7 +267,7 @@ void cairo_dock_set_default_renderer (CairoDock *pDock)
 }
 
 
-void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRenderer *pRenderer, cairo_t *pSourceContext, gboolean bLoadIcons, CairoDeskletRendererConfigPtr pConfig)
+void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRenderer *pRenderer, gboolean bLoadIcons, CairoDeskletRendererConfigPtr pConfig)
 {
 	g_return_if_fail (pDesklet != NULL);
 	
@@ -283,32 +283,27 @@ void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRender
 	
 	if (pRenderer != NULL)
 	{
-		cairo_t *pCairoContext = (pSourceContext != NULL ? pSourceContext : cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDesklet)));
-		
 		if (pRenderer->configure != NULL)
-			pDesklet->pRendererData = pRenderer->configure (pDesklet, pCairoContext, pConfig);
+			pDesklet->pRendererData = pRenderer->configure (pDesklet, pConfig);
 		
 		if (bLoadIcons && pRenderer->load_icons != NULL)
-			pRenderer->load_icons (pDesklet, pCairoContext);
+			pRenderer->load_icons (pDesklet);
 		
 		if (pRenderer->load_data != NULL)
-			pRenderer->load_data (pDesklet, pCairoContext);
-		
-		if (pSourceContext == NULL)
-			cairo_destroy (pCairoContext);
+			pRenderer->load_data (pDesklet);
 	}
 }
 
-void cairo_dock_set_desklet_renderer_by_name (CairoDesklet *pDesklet, const gchar *cRendererName, cairo_t *pSourceContext, gboolean bLoadIcons, CairoDeskletRendererConfigPtr pConfig)
+void cairo_dock_set_desklet_renderer_by_name (CairoDesklet *pDesklet, const gchar *cRendererName, gboolean bLoadIcons, CairoDeskletRendererConfigPtr pConfig)
 {
 	cd_message ("%s (%s, %d)", __func__, cRendererName, bLoadIcons);
 	CairoDeskletRenderer *pRenderer = (cRendererName != NULL ? cairo_dock_get_desklet_renderer (cRendererName) : NULL);
 	
-	cairo_dock_set_desklet_renderer (pDesklet, pRenderer, pSourceContext, bLoadIcons, pConfig);
+	cairo_dock_set_desklet_renderer (pDesklet, pRenderer, bLoadIcons, pConfig);
 }
 
 
-void cairo_dock_set_dialog_renderer (CairoDialog *pDialog, CairoDialogRenderer *pRenderer, cairo_t *pSourceContext, CairoDialogRendererConfigPtr pConfig)
+void cairo_dock_set_dialog_renderer (CairoDialog *pDialog, CairoDialogRenderer *pRenderer, CairoDialogRendererConfigPtr pConfig)
 {
 	g_return_if_fail (pDialog != NULL);
 	
@@ -322,22 +317,17 @@ void cairo_dock_set_dialog_renderer (CairoDialog *pDialog, CairoDialogRenderer *
 	
 	if (pRenderer != NULL)
 	{
-		cairo_t *pCairoContext = (pSourceContext != NULL ? pSourceContext : cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDialog)));
-		
 		if (pRenderer->configure != NULL)
-			pDialog->pRendererData = pRenderer->configure (pDialog, pCairoContext, pConfig);
-		
-		if (pSourceContext == NULL)
-			cairo_destroy (pCairoContext);
+			pDialog->pRendererData = pRenderer->configure (pDialog, pConfig);
 	}
 }
 
-void cairo_dock_set_dialog_renderer_by_name (CairoDialog *pDialog, const gchar *cRendererName, cairo_t *pSourceContext, CairoDialogRendererConfigPtr pConfig)
+void cairo_dock_set_dialog_renderer_by_name (CairoDialog *pDialog, const gchar *cRendererName, CairoDialogRendererConfigPtr pConfig)
 {
 	cd_message ("%s (%s)", __func__, cRendererName);
 	CairoDialogRenderer *pRenderer = (cRendererName != NULL ? cairo_dock_get_dialog_renderer (cRendererName) : NULL);
 	
-	cairo_dock_set_dialog_renderer (pDialog, pRenderer, pSourceContext, pConfig);
+	cairo_dock_set_dialog_renderer (pDialog, pRenderer, pConfig);
 }
 
 

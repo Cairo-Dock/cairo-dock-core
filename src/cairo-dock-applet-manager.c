@@ -35,13 +35,12 @@
 #include "cairo-dock-applet-manager.h"
 
 
-cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFileName, cairo_t *pSourceContext, int iWidth, int iHeight)
+cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFileName, int iWidth, int iHeight)
 {
-	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	cairo_surface_t *pNewSurface;
 	if (cIconFileName == NULL)
 	{
-		pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+		pNewSurface = cairo_dock_create_blank_surface (
 			iWidth,
 			iHeight);
 	}
@@ -49,7 +48,6 @@ cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFileName, c
 	{
 		gchar *cIconPath = cairo_dock_search_icon_s_path (cIconFileName);
 		pNewSurface = cairo_dock_create_surface_from_image_simple (cIconPath,
-			pSourceContext,
 			iWidth,
 			iHeight);
 		g_free (cIconPath);
@@ -64,17 +62,14 @@ Icon *cairo_dock_create_icon_for_applet (CairoDockMinimalAppletConfig *pMinimalC
 	Icon *icon = cairo_dock_new_applet_icon (pMinimalConfig, pModuleInstance);
 	
 	//\____________ On remplit ses buffers.
-	cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (pContainer);
-	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, icon);
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
 	{
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
-		cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pDock);
+		cairo_dock_fill_icon_buffers_for_dock (icon, pDock);
 	}
 	else
 	{
-		cairo_dock_fill_icon_buffers_for_desklet (icon, pSourceContext);  // ne cree rien si w ou h < 0.
+		cairo_dock_fill_icon_buffers_for_desklet (icon);  // ne cree rien si w ou h < 0.
 	}
-	cairo_destroy (pSourceContext);
 	return icon;
 }

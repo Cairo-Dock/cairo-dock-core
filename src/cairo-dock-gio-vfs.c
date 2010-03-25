@@ -381,9 +381,9 @@ static void cairo_dock_gio_vfs_get_file_info (const gchar *cBaseURI, gchar **cNa
 		NULL,
 		&erreur);
 	//g_object_unref (pFile);
-	if (erreur != NULL)
+	if (erreur != NULL)  // peut arriver si l'emplacement n'est pas monte.
 	{
-		cd_warning ("gnome_integration : %s", erreur->message);
+		cd_debug ("gnome_integration : %s", erreur->message);  // inutile d'en faire un warning.
 		g_error_free (erreur);
 		return ;
 	}

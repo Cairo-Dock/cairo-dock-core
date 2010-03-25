@@ -78,15 +78,15 @@ void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surf
 void cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cImagePath, Icon *pIcon, CairoContainer *pContainer);
 
 
-void cairo_dock_set_hours_minutes_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds);
-void cairo_dock_set_minutes_secondes_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds);
+void cairo_dock_set_hours_minutes_as_quick_info (Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds);
+void cairo_dock_set_minutes_secondes_as_quick_info (Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds);
 
 /** Convert a size in bytes into a readable format.
 *@param iSizeInBytes size in bytes.
 *@return a newly allocated string.
 */
 gchar *cairo_dock_get_human_readable_size (long long int iSizeInBytes);
-void cairo_dock_set_size_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, long long int iSizeInBytes);
+void cairo_dock_set_size_as_quick_info (Icon *pIcon, CairoContainer *pContainer, long long int iSizeInBytes);
 
 /// type of possible display on a Icon.
 typedef enum {
@@ -443,14 +443,14 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 /** Reload the reflect of the applet's icon (do nothing in OpenGL mode).
 */
 #define CD_APPLET_UPDATE_REFLECT_ON_MY_ICON \
-	if (myContainer->bUseReflect) cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer)
+	if (myContainer->bUseReflect) cairo_dock_add_reflection_to_icon (myIcon, myContainer)
 
 /** Load an image into a surface, at the same size as the applet's icon. If the image is given by its sole name, it is searched inside the current theme root folder. 
 *@param cImagePath path or name of an image.
 *@return the newly allocated surface.
 */
 #define CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET(cImagePath) \
-	cairo_dock_create_surface_from_image_simple (cImagePath, myDrawContext, myIcon->fWidth * (myDock ? (1 + g_fAmplitude) / myDock->container.fRatio : 1), myIcon->fHeight* (myDock ? (1 + g_fAmplitude) / myDock->container.fRatio : 1))
+	cairo_dock_create_surface_from_image_simple (cImagePath, myIcon->fWidth * (myDock ? (1 + g_fAmplitude) / myDock->container.fRatio : 1), myIcon->fHeight* (myDock ? (1 + g_fAmplitude) / myDock->container.fRatio : 1))
 
 /** Load a user image into a surface, at the same size as the applet's icon, or a default image taken in the installed folder of the applet if the first one is NULL. If the user image is given by its sole name, it is searched inside the current theme root folder.
 *@param cUserImageName name or path of an user image.
@@ -481,7 +481,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_ZOOM(pSurface, fScale) do { \
 	cairo_dock_set_icon_surface_full (myDrawContext, pSurface, fScale, 1., myIcon, myContainer); \
-	cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer); \
+	cairo_dock_add_reflection_to_icon (myIcon, myContainer); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
 
 /** Apply a surface on the applet's icon with a transparency factor, and redraw it.
@@ -490,7 +490,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_ALPHA(pSurface, fAlpha) do { \
 	cairo_dock_set_icon_surface_full (myDrawContext, pSurface, 1., fAlpha, myIcon, myContainer); \
-	cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer); \
+	cairo_dock_add_reflection_to_icon (myIcon, myContainer); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
 
 /** Apply a surface on the applet's icon with add a bar at the bottom, and redraw it. The bar is drawn at the bottom of the icon with a gradation from red to green and a given length.
@@ -499,7 +499,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_BAR(pSurface, fValue) do { \
 	cairo_dock_set_icon_surface_with_bar (myDrawContext, pSurface, fValue, myIcon, myContainer); \
-	cairo_dock_add_reflection_to_icon (myDrawContext, myIcon, myContainer); \
+	cairo_dock_add_reflection_to_icon (myIcon, myContainer); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
 
 /** Apply an image on the applet's icon. The image is resized at the same size as the icon. Does not trigger the icon refresh.
@@ -543,13 +543,13 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param cIconName the label.
 */
 #define CD_APPLET_SET_NAME_FOR_MY_ICON(cIconName) \
-	cairo_dock_set_icon_name (myDrawContext, cIconName, myIcon, myContainer)
+	cairo_dock_set_icon_name (cIconName, myIcon, myContainer)
 /** Set a new label on the applet's icon.
 *@param cIconNameFormat the label, in a 'printf'-like format.
 *@param ... values to be written in the string.
 */
 #define CD_APPLET_SET_NAME_FOR_MY_ICON_PRINTF(cIconNameFormat, ...) \
-	cairo_dock_set_icon_name_full (myDrawContext, myIcon, myContainer, cIconNameFormat, ##__VA_ARGS__)
+	cairo_dock_set_icon_name_printf (myIcon, myContainer, cIconNameFormat, ##__VA_ARGS__)
 
 
   ///////////////
@@ -559,29 +559,29 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param cQuickInfo the quick-info. This is a small text (a few characters) that is superimposed on the icon.
 */
 #define CD_APPLET_SET_QUICK_INFO_ON_MY_ICON(cQuickInfo) \
-	cairo_dock_set_quick_info (myDrawContext, myIcon, myContainer, cQuickInfo)
+	cairo_dock_set_quick_info (myIcon, myContainer, cQuickInfo)
 /** Set a quick-info on the applet's icon.
 *@param cQuickInfoFormat the label, in a 'printf'-like format.
 *@param ... values to be written in the string.
 */
 #define CD_APPLET_SET_QUICK_INFO_ON_MY_ICON_PRINTF(cQuickInfoFormat, ...) \
-	cairo_dock_set_quick_info_full (myDrawContext, myIcon, myContainer, cQuickInfoFormat, ##__VA_ARGS__)
+	cairo_dock_set_quick_info_full (myIcon, myContainer, cQuickInfoFormat, ##__VA_ARGS__)
 
 /** Write the time in hours-minutes as a quick-info on the applet's icon.
 *@param iTimeInSeconds the time in seconds.
 */
 #define CD_APPLET_SET_HOURS_MINUTES_AS_QUICK_INFO(iTimeInSeconds) \
-	cairo_dock_set_hours_minutes_as_quick_info (myDrawContext, myIcon, myContainer, iTimeInSeconds)
+	cairo_dock_set_hours_minutes_as_quick_info (myIcon, myContainer, iTimeInSeconds)
 /** Write the time in minutes-secondes as a quick-info on the applet's icon.
 *@param iTimeInSeconds the time in seconds.
 */
 #define CD_APPLET_SET_MINUTES_SECONDES_AS_QUICK_INFO(iTimeInSeconds) \
-	cairo_dock_set_minutes_secondes_as_quick_info (myDrawContext, myIcon, myContainer, iTimeInSeconds)
+	cairo_dock_set_minutes_secondes_as_quick_info (myIcon, myContainer, iTimeInSeconds)
 /** Write a size in bytes as a quick-info on the applet's icon.
 *@param iSizeInBytes the size in bytes, converted into a readable format.
 */
 #define CD_APPLET_SET_SIZE_AS_QUICK_INFO(iSizeInBytes) \
-	cairo_dock_set_size_as_quick_info (myDrawContext, myIcon, myContainer, iSizeInBytes)
+	cairo_dock_set_size_as_quick_info (myIcon, myContainer, iSizeInBytes)
 
 
   ///////////////
@@ -629,7 +629,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param cImageFile name of an image file.
 *@return a newly allocated CairoEmblem.
 */
-#define CD_APPLET_MAKE_EMBLEM(cImageFile) cairo_dock_make_emblem (cImageFile, myIcon, myContainer, myDrawContext)
+#define CD_APPLET_MAKE_EMBLEM(cImageFile) cairo_dock_make_emblem (cImageFile, myIcon, myContainer)
 
 /** Draw an emblem on the applet's icon. The emblem is drawn directly on the icon, and is erased if the icon is redrawn.
 *@param pEmblem an emblem.
@@ -640,12 +640,12 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 /** Add a Data Renderer the applet's icon.
 *@param pAttr the attributes of the Data Renderer. They allow you to define its properties.
 */
-#define CD_APPLET_ADD_DATA_RENDERER_ON_MY_ICON(pAttr) cairo_dock_add_new_data_renderer_on_icon (myIcon, myContainer, myDrawContext, pAttr)
+#define CD_APPLET_ADD_DATA_RENDERER_ON_MY_ICON(pAttr) cairo_dock_add_new_data_renderer_on_icon (myIcon, myContainer, pAttr)
 
 /** Reload the Data Renderer of the applet's icon. Pass NULL as the attributes to simply reload the current data renderer without changing any of its parameters. Previous values are kept.
 *@param pAttr the attributes of the Data Renderer, or NULL to simply reload the Data Renderer as it it.
 */
-#define CD_APPLET_RELOAD_MY_DATA_RENDERER(pAttr) cairo_dock_reload_data_renderer_on_icon (myIcon, myContainer, myDrawContext, pAttr)
+#define CD_APPLET_RELOAD_MY_DATA_RENDERER(pAttr) cairo_dock_reload_data_renderer_on_icon (myIcon, myContainer, pAttr)
 
 /** Add new values to the Data Renderer of the applet's icon. Values are a table of 'double', having the same size as defined when the data renderer was created (1 by default). It also triggers the redraw of the icon.
 *@param pValues the values, a table of double of the correct size.
@@ -715,8 +715,9 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param pConfig configuration data for the renderer, or NULL.
 */
 #define CD_APPLET_SET_DESKLET_RENDERER_WITH_DATA(cRendererName, pConfig) do { \
-	cairo_dock_set_desklet_renderer_by_name (myDesklet, cRendererName, NULL, CAIRO_DOCK_LOAD_ICONS_FOR_DESKLET, (CairoDeskletRendererConfigPtr) pConfig); \
-	myDrawContext = cairo_create (myIcon->pIconBuffer); } while (0)
+	cairo_dock_set_desklet_renderer_by_name (myDesklet, cRendererName, CAIRO_DOCK_LOAD_ICONS_FOR_DESKLET, (CairoDeskletRendererConfigPtr) pConfig); \
+	if (myIcon->pIconBuffer != NULL)\
+		myDrawContext = cairo_create (myIcon->pIconBuffer); } while (0)
 
 /** Set a renderer to the applet's desklet and create myDrawContext. Call it at the beginning of init and also reload, to take into account the desklet's resizing.
 *@param cRendererName name of the renderer.

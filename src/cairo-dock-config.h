@@ -191,13 +191,13 @@ void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajo
 *@param cEncryptedString the encrypted string.
 *@param cDecryptedString the decrypted string.
 */
-void cairo_dock_decrypt_string( const guchar *cEncryptedString,  guchar **cDecryptedString );
+void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecryptedString );
 
 /** Encrypt a string (uses DES-encryption from libcrypt).
 *@param cDecryptedString the decrypted string.
 *@param cEncryptedString the encrypted string.
 */
-void cairo_dock_encrypt_string( const guchar *cDecryptedString,  guchar **cEncryptedString );
+void cairo_dock_encrypt_string( const gchar *cDecryptedString,  gchar **cEncryptedString );
 
 
 xmlDocPtr cairo_dock_open_xml_file (const gchar *cDataFilePath, const gchar *cRootNodeName, xmlNodePtr *root_node, GError **erreur);

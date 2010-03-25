@@ -217,7 +217,7 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 	return pParentDock;
 }
 
-Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName, cairo_t *pSourceContext)
+Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 {
 	//g_print ("%s (%s)\n", __func__, cDesktopFileName);
 	
@@ -231,7 +231,7 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName, 
 	g_free (cRendererName);
 	
 	//\____________ On remplit ses buffers.
-	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pParentDock);
+	cairo_dock_fill_icon_buffers_for_dock (icon, pParentDock);
 	
 	cd_message ("+ %s/%s", icon->cName, icon->cClass);
 	if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon) && icon->cClass != NULL)
@@ -346,19 +346,13 @@ void cairo_dock_reload_launcher (Icon *icon)
 	g_free (cSubDockRendererName);
 	g_return_if_fail (pNewDock != NULL);
 	
-	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pNewDock));
-	
 	if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)
 	{
 		cairo_dock_draw_subdock_content_on_icon (icon, pNewDock);
 	}
 	else
 	{
-		icon->fWidth /= pDock->container.fRatio;
-		icon->fHeight /= pDock->container.fRatio;
-		cairo_dock_fill_icon_buffers_for_dock (icon, pCairoContext, pNewDock);
-		icon->fWidth *= pDock->container.fRatio;
-		icon->fHeight *= pDock->container.fRatio;
+		cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
 	}
 	
 	//g_print ("icon : %.1fx%.1f", icon->fWidth, icon->fHeight);
@@ -397,7 +391,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	}
 
 	//\_____________ On gere le changement de container ou d'ordre.
-	g_print ("%x -> %x\n", pDock, pNewDock);
+	//g_print ("%x -> %x\n", pDock, pNewDock);
 	if (pDock != pNewDock)  // changement de container.
 	{
 		// on la detache de son container actuel et on l'insere dans le nouveau.
@@ -461,7 +455,6 @@ void cairo_dock_reload_launcher (Icon *icon)
 	g_free (cDesktopFileName);
 	g_free (cName);
 	g_free (cRendererName);
-	cairo_destroy (pCairoContext);
 	cairo_dock_mark_theme_as_modified (TRUE);
 }
 

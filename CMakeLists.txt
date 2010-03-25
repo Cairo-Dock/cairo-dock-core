@@ -43,7 +43,7 @@ set (bindir ${prefix}/bin)
 
 ########### dependencies ###############
 
-pkg_check_modules ("PACKAGE" REQUIRED "gtk+-2.0" "gthread-2.0" "cairo" "librsvg-2.0" "dbus-1" "dbus-glib-1" "libxml-2.0" "gtkglext-1.0" "xrender")
+pkg_check_modules ("PACKAGE" REQUIRED "gtk+-2.0" "gthread-2.0" "cairo" "librsvg-2.0" "dbus-1" "dbus-glib-1" "libxml-2.0" "gtkglext-1.0" "xrender" "libcurl")
 
 pkg_check_modules ("XEXTEND" "xtst" "xcomposite" "xinerama")
 if (${XEXTEND_FOUND})

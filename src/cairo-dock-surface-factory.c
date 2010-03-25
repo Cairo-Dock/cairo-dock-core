@@ -26,10 +26,14 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-surface-factory.h"
 
+extern CairoDock *g_pMainDock;
 extern gboolean g_bUseOpenGL;
+
+static cairo_t *s_pSourceContext = NULL;
 
 
 void cairo_dock_calculate_size_fill (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoomWidth, double *fZoomHeight)
@@ -117,8 +121,26 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 	}
 }
 
-cairo_surface_t *_cairo_dock_create_blank_surface (cairo_t *pSourceContext, int iWidth, int iHeight)
+
+#define _get_source_context(...) \
+	__extension__ ({\
+	if (s_pSourceContext == NULL) {\
+		if (g_pMainDock != NULL)\
+			s_pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (g_pMainDock)); }\
+	s_pSourceContext; })
+#define _destroy_source_context(...) do {\
+	if (s_pSourceContext != NULL) {\
+		cairo_destroy (s_pSourceContext);\
+		s_pSourceContext = NULL; } } while (0)
+
+void cairo_dock_reset_source_context (void)
 {
+	_destroy_source_context ();
+}
+
+cairo_surface_t *cairo_dock_create_blank_surface (int iWidth, int iHeight)
+{
+	cairo_t *pSourceContext = _get_source_context ();
 	if (pSourceContext != NULL && ! g_bUseOpenGL)
 		return cairo_surface_create_similar (cairo_get_target (pSourceContext),
 			CAIRO_CONTENT_COLOR_ALPHA,
@@ -186,8 +208,9 @@ static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDo
 }
 
 
-cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, cairo_t *pSourceContext, int iWidth, int iHeight)
+cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, int iWidth, int iHeight)
 {
+	cairo_t *pSourceContext = _get_source_context ();
 	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 
 	//\____________________ On recupere la plus grosse des icones presentes dans le tampon (meilleur rendu).
@@ -246,7 +269,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 		&fIconWidthSaturationFactor,
 		&fIconHeightSaturationFactor);
 	
-	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+	cairo_surface_t *pNewSurface = cairo_dock_create_blank_surface (
 		ceil (iWidth),
 		ceil (iHeight));
 	cairo_t *pCairoContext = cairo_create (pNewSurface);
@@ -268,7 +291,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 }
 
 
-cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, cairo_t *pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)
+cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)
 {
 	*fImageWidth = gdk_pixbuf_get_width (pixbuf);
 	*fImageHeight = gdk_pixbuf_get_height (pixbuf);
@@ -318,7 +341,7 @@ cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, cairo
 		h,
 		iRowstride);
 
-	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+	cairo_surface_t *pNewSurface = cairo_dock_create_blank_surface (
 		ceil ((*fImageWidth) * fMaxScale),
 		ceil ((*fImageHeight) * fMaxScale));
 	cairo_t *pCairoContext = cairo_create (pNewSurface);
@@ -348,10 +371,12 @@ cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, cairo
 }
 
 
-cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, cairo_t* pSourceContext, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)
+cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)
 {
 	//g_print ("%s (%s, %dx%dx%.2f, %d)\n", __func__, cImagePath, iWidthConstraint, iHeightConstraint, fMaxScale, iLoadingModifier);
-	g_return_val_if_fail (cImagePath != NULL && pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
+	g_return_val_if_fail (cImagePath != NULL, NULL);
+	cairo_t *pSourceContext = _get_source_context ();
+	g_return_val_if_fail (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	GError *erreur = NULL;
 	RsvgDimensionData rsvg_dimension_data;
 	RsvgHandle *rsvg_handle = NULL;
@@ -415,7 +440,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 				&fIconWidthSaturationFactor,
 				&fIconHeightSaturationFactor);
 			
-			pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+			pNewSurface = cairo_dock_create_blank_surface (
 				ceil ((*fImageWidth) * fMaxScale),
 				ceil ((*fImageHeight) * fMaxScale));
 
@@ -450,7 +475,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 				&fIconWidthSaturationFactor,
 				&fIconHeightSaturationFactor);
 			
-			pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+			pNewSurface = cairo_dock_create_blank_surface (
 				ceil ((*fImageWidth) * fMaxScale),
 				ceil ((*fImageHeight) * fMaxScale));
 			pCairoContext = cairo_create (pNewSurface);
@@ -483,7 +508,6 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 			return NULL;
 		}
 		pNewSurface = cairo_dock_create_surface_from_pixbuf (pixbuf,
-			pSourceContext,
 			fMaxScale,
 			iWidthConstraint,
 			iHeightConstraint,
@@ -504,7 +528,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 	return pNewSurface;
 }
 
-cairo_surface_t *cairo_dock_create_surface_from_image_simple (const gchar *cImageFile, cairo_t* pSourceContext, double fImageWidth, double fImageHeight)
+cairo_surface_t *cairo_dock_create_surface_from_image_simple (const gchar *cImageFile, double fImageWidth, double fImageHeight)
 {
 	g_return_val_if_fail (cImageFile != NULL, NULL);
 	double fImageWidth_ = fImageWidth, fImageHeight_ = fImageHeight;
@@ -515,7 +539,6 @@ cairo_surface_t *cairo_dock_create_surface_from_image_simple (const gchar *cImag
 		cImagePath = cairo_dock_generate_file_path (cImageFile);
 		
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cImagePath,
-		pSourceContext,
 		1.,
 		fImageWidth,
 		fImageHeight,
@@ -529,7 +552,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image_simple (const gchar *cImag
 	return pSurface;
 }
 
-cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImageFile, cairo_t* pSourceContext, double fImageWidth, double fImageHeight)
+cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImageFile, double fImageWidth, double fImageHeight)
 {
 	g_return_val_if_fail (cImageFile != NULL, NULL);
 	double fImageWidth_ = fImageWidth, fImageHeight_ = fImageHeight;
@@ -540,7 +563,6 @@ cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImageFile, c
 		cIconPath = cairo_dock_search_icon_s_path (cImageFile);
 		
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cIconPath,
-		pSourceContext,
 		1.,
 		fImageWidth,
 		fImageHeight,
@@ -554,9 +576,8 @@ cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImageFile, c
 	return pSurface;
 }
 
-cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fAlpha)
+cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile, double fImageWidth, double fImageHeight, double fAlpha)
 {
-	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	cairo_surface_t *pNewSurface = NULL;
 
 	if (cImageFile != NULL)
@@ -564,7 +585,6 @@ cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile
 		gchar *cImagePath = cairo_dock_generate_file_path (cImageFile);
 		double fImageWidth, fImageHeight;
 		cairo_surface_t *pPatternSurface = cairo_dock_create_surface_from_image (cImagePath,
-			pSourceContext,
 			1.,
 			0,  // pas de contrainte sur
 			0,  // la taille du motif initialement.
@@ -576,7 +596,7 @@ cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile
 		if (pPatternSurface == NULL)
 			return NULL;
 		
-		pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+		pNewSurface = cairo_dock_create_blank_surface (
 			fImageWidth,
 			fImageHeight);
 		cairo_t *pCairoContext = cairo_create (pNewSurface);
@@ -598,16 +618,16 @@ cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile
 
 
 
-cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fRotationAngle)
+cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, double fImageWidth, double fImageHeight, double fRotationAngle)
 {
-	g_return_val_if_fail (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS && pSurface != NULL, NULL);
+	g_return_val_if_fail (pSurface != NULL, NULL);
 	if (fRotationAngle != 0)
 	{
 		cairo_surface_t *pNewSurfaceRotated;
 		cairo_t *pCairoContext;
 		if (fabs (fRotationAngle) > G_PI / 2)
 		{
-			pNewSurfaceRotated = _cairo_dock_create_blank_surface (pSourceContext,
+			pNewSurfaceRotated = cairo_dock_create_blank_surface (
 				fImageWidth,
 				fImageHeight);
 			pCairoContext = cairo_create (pNewSurfaceRotated);
@@ -617,7 +637,7 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, cairo_t 
 		}
 		else
 		{
-			pNewSurfaceRotated = _cairo_dock_create_blank_surface (pSourceContext,
+			pNewSurfaceRotated = cairo_dock_create_blank_surface (
 				fImageHeight,
 				fImageWidth);
 			pCairoContext = cairo_create (pNewSurfaceRotated);
@@ -648,15 +668,14 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, cairo_t 
 }
 
 
-static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bDirectionUp)
+static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_surface_t *pSurface, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bDirectionUp)
 {
-	g_return_val_if_fail (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	//g_print ("%s (%d)\n", __func__, bDirectionUp);
 
 	//\_______________ On cree la surface d'une fraction hauteur de l'image originale.
 	if (pSurface == NULL || fReflectSize == 0 || fAlbedo == 0)
 		return NULL;
-	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+	cairo_surface_t *pNewSurface = cairo_dock_create_blank_surface (
 		fImageWidth,
 		fReflectSize);
 	cairo_t *pCairoContext = cairo_create (pNewSurface);
@@ -670,10 +689,6 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_
 	cairo_set_source_surface (pCairoContext, pSurface, 0, (bDirectionUp ? 0 : fImageHeight - fReflectSize));
 	
 	//\_______________ On applique un degrade en transparence.
-	/**cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0.,
-		2*fReflectHeight,
-		0.,
-		fReflectHeight);  // de haut en bas.*/
 	cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0.,
 		fImageHeight,
 		0.,
@@ -701,14 +716,14 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_
 	return pNewSurface;
 }
 
-static cairo_surface_t * cairo_dock_create_reflection_surface_vertical (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bDirectionUp)
+static cairo_surface_t * cairo_dock_create_reflection_surface_vertical (cairo_surface_t *pSurface, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bDirectionUp)
 {
-	g_return_val_if_fail (pSurface != NULL && pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
+	g_return_val_if_fail (pSurface != NULL, NULL);
 
 	//\_______________ On cree la surface d'une fraction hauteur de l'image originale.
 	if (fReflectSize == 0 || fAlbedo == 0)
 		return NULL;
-	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+	cairo_surface_t *pNewSurface = cairo_dock_create_blank_surface (
 		fReflectSize,
 		fImageHeight);
 	cairo_t *pCairoContext = cairo_create (pNewSurface);
@@ -749,18 +764,20 @@ static cairo_surface_t * cairo_dock_create_reflection_surface_vertical (cairo_su
 	return pNewSurface;
 }
 
-cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bIsHorizontal, gboolean bDirectionUp)
+cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bIsHorizontal, gboolean bDirectionUp)
 {
 	if (bIsHorizontal)
-		return cairo_dock_create_reflection_surface_horizontal (pSurface, pSourceContext, fImageWidth, fImageHeight, fReflectSize, fAlbedo, bDirectionUp);
+		return cairo_dock_create_reflection_surface_horizontal (pSurface, fImageWidth, fImageHeight, fReflectSize, fAlbedo, bDirectionUp);
 	else
-		return cairo_dock_create_reflection_surface_vertical (pSurface, pSourceContext, fImageWidth, fImageHeight, fReflectSize, fAlbedo, bDirectionUp);
+		return cairo_dock_create_reflection_surface_vertical (pSurface, fImageWidth, fImageHeight, fReflectSize, fAlbedo, bDirectionUp);
 }
 
 
-cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, cairo_t* pSourceContext, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight, double *fTextXOffset, double *fTextYOffset)
+cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight, double *fTextXOffset, double *fTextYOffset)
 {
-	g_return_val_if_fail (cText != NULL && pLabelDescription != NULL && pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
+	g_return_val_if_fail (cText != NULL && pLabelDescription != NULL, NULL);
+	cairo_t *pSourceContext = _get_source_context ();
+	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	
 	//\_________________ On ecrit le texte dans un calque Pango.
 	PangoLayout *pLayout = pango_cairo_create_layout (pSourceContext);
@@ -786,7 +803,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, c
 	*iTextHeight = ink.height + iOutlineMargin + 0; // +1 car certaines polices "debordent".
 	//Test du zoom en W ET H *iTextHeight = (ink.height + 2 + 1) * fZoom; 
 	
-	cairo_surface_t* pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+	cairo_surface_t* pNewSurface = cairo_dock_create_blank_surface (
 		*iTextWidth,
 		*iTextHeight);
 	cairo_t* pCairoContext = cairo_create (pNewSurface);
@@ -893,9 +910,9 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, c
 }
 
 
-cairo_surface_t * cairo_dock_duplicate_surface (cairo_surface_t *pSurface, cairo_t *pSourceContext, double fWidth, double fHeight, double fDesiredWidth, double fDesiredHeight)
+cairo_surface_t * cairo_dock_duplicate_surface (cairo_surface_t *pSurface, double fWidth, double fHeight, double fDesiredWidth, double fDesiredHeight)
 {
-	g_return_val_if_fail (pSurface != NULL && pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
+	g_return_val_if_fail (pSurface != NULL, NULL);
 
 	//\_______________ On cree la surface de la taille desiree.
 	if (fDesiredWidth == 0)
@@ -904,7 +921,7 @@ cairo_surface_t * cairo_dock_duplicate_surface (cairo_surface_t *pSurface, cairo
 		fDesiredHeight = fHeight;
 	
 	//g_print ("%s (%.2fx%.2f -> %.2fx%.2f)\n", __func__, fWidth, fHeight, fDesiredWidth, fDesiredHeight);
-	cairo_surface_t *pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+	cairo_surface_t *pNewSurface = cairo_dock_create_blank_surface (
 		fDesiredWidth,
 		fDesiredHeight);
 	cairo_t *pCairoContext = cairo_create (pNewSurface);

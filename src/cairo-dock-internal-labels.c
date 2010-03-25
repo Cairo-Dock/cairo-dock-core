@@ -160,13 +160,11 @@ static void reset_config (CairoConfigLabels *pLabels)
 }
 
 
-static void _reload_one_label (Icon *pIcon, CairoContainer *pContainer, gpointer *data)
+static void _reload_one_label (Icon *pIcon, CairoContainer *pContainer, CairoConfigLabels *pLabels)
 {
-	CairoConfigLabels *pLabels = data[0];
-	cairo_t* pSourceContext = data[1];
-	cairo_dock_fill_one_text_buffer (pIcon, pSourceContext, &pLabels->iconTextDescription);
+	cairo_dock_fill_one_text_buffer (pIcon, &pLabels->iconTextDescription);
 	double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	cairo_dock_fill_one_quick_info_buffer (pIcon, pSourceContext, &pLabels->quickInfoTextDescription, fMaxScale);
+	cairo_dock_fill_one_quick_info_buffer (pIcon, &pLabels->quickInfoTextDescription, fMaxScale);
 }
 static void _cairo_dock_resize_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
 {
@@ -175,10 +173,7 @@ static void _cairo_dock_resize_one_dock (gchar *cDockName, CairoDock *pDock, gpo
 static void reload (CairoConfigLabels *pPrevLabels, CairoConfigLabels *pLabels)
 {
 	CairoDock *pDock = g_pMainDock;
-	cairo_t* pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
-	gpointer data[2] = {pLabels, pCairoContext};
-	cairo_dock_foreach_icons ((CairoDockForeachIconFunc) _reload_one_label, data);
-	cairo_destroy (pCairoContext);
+	cairo_dock_foreach_icons ((CairoDockForeachIconFunc) _reload_one_label, pLabels);
 	
 	if (pPrevLabels->iLabelSize != pLabels->iLabelSize)
 	{

@@ -25,9 +25,8 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-indicator-manager.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-indicators.h"
 
@@ -60,7 +59,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 	pIndicators->bRotateWithDock = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "rotate indicator", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
 	//\__________________ On recupere l'indicateur de fenetre active.
-	int iIndicType = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active indic type", &bFlushConfFileNeeded, -1, NULL, NULL);  // -1 pou rpouvoir intercepter le cas ou la cle n'existe pas.
+	int iIndicType = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active indic type", &bFlushConfFileNeeded, -1, NULL, NULL);  // -1 pour pouvoir intercepter le cas ou la cle n'existe pas.
 	
 	cIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "active indicator", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	if (iIndicType == -1)  // nouvelle cle.
@@ -104,7 +103,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 		}
 		else
 		{
-			pIndicators->cClassIndicatorImagePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/default-indicator.png");
+			pIndicators->cClassIndicatorImagePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/default-class-indicator.svg");
 		}
 		pIndicators->bZoomClassIndicator = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "zoom class", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	}
@@ -122,15 +121,15 @@ static void reset_config (CairoConfigIndicators *pIndicators)
 
 static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicators *pIndicators)
 {
-	CairoDock *pDock = g_pMainDock;
+	cairo_dock_reload_indicators (pPrevIndicators, pIndicators);
+	/**CairoDock *pDock = g_pMainDock;
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
-	cairo_t* pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 	
 	if (cairo_dock_strings_differ (pPrevIndicators->cIndicatorImagePath, pIndicators->cIndicatorImagePath) ||
 		pPrevIndicators->bLinkIndicatorWithIcon != pIndicators->bLinkIndicatorWithIcon ||
 		pPrevIndicators->fIndicatorRatio != pIndicators->fIndicatorRatio)
 	{
-		cairo_dock_load_task_indicator (myTaskBar.bShowAppli && (myTaskBar.bMixLauncherAppli || myTaskBar.bDrawIndicatorOnAppli) ? pIndicators->cIndicatorImagePath : NULL, fMaxScale, pIndicators->fIndicatorRatio);
+		cairo_dock_load_task_indicator (pIndicators->cIndicatorImagePath, fMaxScale, pIndicators->fIndicatorRatio);
 	}
 	
 	if (cairo_dock_strings_differ (pPrevIndicators->cActiveIndicatorImagePath, pIndicators->cActiveIndicatorImagePath) ||
@@ -148,12 +147,10 @@ static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicator
 	if (cairo_dock_strings_differ (pPrevIndicators->cClassIndicatorImagePath, pIndicators->cClassIndicatorImagePath) ||
 		pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic)
 	{
-		cairo_dock_load_class_indicator (myTaskBar.bShowAppli && myTaskBar.bGroupAppliByClass ? pIndicators->cClassIndicatorImagePath : NULL, fMaxScale);
+		cairo_dock_load_class_indicator (pIndicators->cClassIndicatorImagePath, fMaxScale);
 	}
 	
-	cairo_destroy (pCairoContext);
-	
-	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.
+	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.*/
 }
 
 

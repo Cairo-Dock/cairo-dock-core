@@ -35,23 +35,23 @@ extern CairoDockImageBuffer g_pBoxAboveBuffer;
 extern CairoDockImageBuffer g_pBoxBelowBuffer;
 extern gboolean g_bUseOpenGL;
 
-static double a = .5;
+static double f = .5;
 
 //merci a Necropotame et ChAnGFu !
 
-CairoEmblem *cairo_dock_make_emblem (const gchar *cImageFile, Icon *pIcon, CairoContainer *pContainer, cairo_t *pSourceContext)
+CairoEmblem *cairo_dock_make_emblem (const gchar *cImageFile, Icon *pIcon, CairoContainer *pContainer)
 {
 	CairoEmblem *pEmblem = g_new0 (CairoEmblem, 1);
-	pEmblem->fScale = a;
+	pEmblem->fScale = f;
 	
 	//\___________ On calcule les dimensions de l'embleme.
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
-	pEmblem->iWidth = a * w;
-	pEmblem->iHeight = a * h;
+	pEmblem->iWidth = f * w;
+	pEmblem->iHeight = f * h;
 	
 	//\___________ On cree la surface/texture a cette taille.
-	cairo_surface_t *pEmblemSurface = cairo_dock_create_surface_from_image_simple (cImageFile, pSourceContext, pEmblem->iWidth, pEmblem->iHeight);
+	cairo_surface_t *pEmblemSurface = cairo_dock_create_surface_from_image_simple (cImageFile, pEmblem->iWidth, pEmblem->iHeight);
 	
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pEmblemSurface)
 	{
@@ -67,7 +67,7 @@ CairoEmblem *cairo_dock_make_emblem (const gchar *cImageFile, Icon *pIcon, Cairo
 CairoEmblem *cairo_dock_make_emblem_from_surface (cairo_surface_t *pSurface, int iSurfaceWidth, int iSurfaceHeight, Icon *pIcon, CairoContainer *pContainer)
 {
 	CairoEmblem *pEmblem = g_new0 (CairoEmblem, 1);
-	pEmblem->fScale = a;
+	pEmblem->fScale = f;
 	
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
@@ -80,7 +80,7 @@ CairoEmblem *cairo_dock_make_emblem_from_surface (cairo_surface_t *pSurface, int
 CairoEmblem *cairo_dock_make_emblem_from_texture (GLuint iTexture, Icon *pIcon, CairoContainer *pContainer)
 {
 	CairoEmblem *pEmblem = g_new0 (CairoEmblem, 1);
-	pEmblem->fScale = a;
+	pEmblem->fScale = f;
 	
 	pEmblem->iTexture = iTexture;  // inutile de connaitre la taille de la texture.
 	return pEmblem;

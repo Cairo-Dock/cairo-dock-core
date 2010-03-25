@@ -42,9 +42,7 @@
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-applet-facility.h"
 
-extern gchar *g_cCurrentThemePath;
-extern gchar *g_cCairoDockDataDir;
-extern gchar *g_cConfFile;
+extern gchar *g_cExtrasDirPath;
 extern CairoDockImageBuffer g_pIconBackgroundBuffer;
 
 extern gboolean g_bUseOpenGL;
@@ -113,7 +111,7 @@ void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surf
 {
 	cairo_dock_set_icon_surface_full (pIconContext, pSurface, 1., 1., pIcon, pContainer);
 	
-	cairo_dock_add_reflection_to_icon (pIconContext, pIcon, pContainer);
+	cairo_dock_add_reflection_to_icon (pIcon, pContainer);
 }
 
 void cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cImagePath, Icon *pIcon, CairoContainer *pContainer)
@@ -126,7 +124,6 @@ void cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cImagePat
 	int iWidth, iHeight;
 	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
 	cairo_surface_t *pImageSurface = cairo_dock_create_surface_for_icon (cImagePath,
-		pIconContext,
 		iWidth,
 		iHeight);
 	
@@ -201,25 +198,25 @@ void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pI
 	cairo_restore (pIconContext);
 }
 
-void cairo_dock_set_hours_minutes_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds)
+void cairo_dock_set_hours_minutes_as_quick_info (Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds)
 {
 	int hours = iTimeInSeconds / 3600;
 	int minutes = (iTimeInSeconds % 3600) / 60;
 	if (hours != 0)
-		cairo_dock_set_quick_info_full (pSourceContext, pIcon, pContainer, "%dh%02d", hours, abs (minutes));
+		cairo_dock_set_quick_info_full (pIcon, pContainer, "%dh%02d", hours, abs (minutes));
 	else
-		cairo_dock_set_quick_info_full (pSourceContext, pIcon, pContainer, "%dmn", minutes);
+		cairo_dock_set_quick_info_full (pIcon, pContainer, "%dmn", minutes);
 }
 
-void cairo_dock_set_minutes_secondes_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds)
+void cairo_dock_set_minutes_secondes_as_quick_info (Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds)
 {
 	int minutes = iTimeInSeconds / 60;
 	int secondes = iTimeInSeconds % 60;
 	cd_debug ("%s (%d:%d)\n", __func__, minutes, secondes);
 	if (minutes != 0)
-		cairo_dock_set_quick_info_full (pSourceContext, pIcon, pContainer, "%d:%02d", minutes, abs (secondes));
+		cairo_dock_set_quick_info_full (pIcon, pContainer, "%d:%02d", minutes, abs (secondes));
 	else
-		cairo_dock_set_quick_info_full (pSourceContext, pIcon, pContainer, "%s0:%02d", (secondes < 0 ? "-" : ""), abs (secondes));
+		cairo_dock_set_quick_info_full (pIcon, pContainer, "%s0:%02d", (secondes < 0 ? "-" : ""), abs (secondes));
 }
 
 gchar *cairo_dock_get_human_readable_size (long long int iSizeInBytes)
@@ -251,10 +248,10 @@ gchar *cairo_dock_get_human_readable_size (long long int iSizeInBytes)
 	}
 }
 
-void cairo_dock_set_size_as_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, long long int iSizeInBytes)
+void cairo_dock_set_size_as_quick_info (Icon *pIcon, CairoContainer *pContainer, long long int iSizeInBytes)
 {
 	gchar *cSize = cairo_dock_get_human_readable_size (iSizeInBytes);
-	cairo_dock_set_quick_info (pSourceContext, pIcon, pContainer, cSize);
+	cairo_dock_set_quick_info (pIcon, pContainer, cSize);
 	g_free (cSize);
 }
 
@@ -264,7 +261,7 @@ gchar *cairo_dock_get_theme_path_for_module (const gchar *cAppletConfFilePath, G
 {
 	gchar *cThemeName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, cDefaultThemeName, NULL, NULL);
 	
-	gchar *cUserThemesDir = (cExtraDirName != NULL ? g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR, cExtraDirName) : NULL);
+	gchar *cUserThemesDir = (cExtraDirName != NULL ? g_strdup_printf ("%s/%s", g_cExtrasDirPath, cExtraDirName) : NULL);
 	CairoDockThemeType iType = cairo_dock_extract_theme_type_from_name (cThemeName);
 	gchar *cThemePath = cairo_dock_get_theme_path (cThemeName, cShareThemesDir, cUserThemesDir, cExtraDirName, iType);
 	
@@ -423,8 +420,6 @@ void cairo_dock_open_module_config_on_demand (int iClickedButton, GtkWidget *pIn
 {
 	if (iClickedButton == 0 || iClickedButton == -1)  // bouton OK ou touche Entree.
 	{
-		/**cairo_dock_build_main_ihm (g_cConfFile, FALSE);
-		cairo_dock_present_module_instance_gui (pModuleInstance);*/
 		cairo_dock_show_module_instance_gui (pModuleInstance, -1);
 	}
 }

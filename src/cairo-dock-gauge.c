@@ -101,7 +101,9 @@
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gauge.h"
 
-extern gchar *g_cCairoDockDataDir;
+#define CAIRO_DOCK_GAUGES_DIR "gauges"
+
+extern gchar *g_cExtrasDirPath;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bEasterEggs;
 
@@ -159,7 +161,7 @@ static GaugeImage *_cairo_dock_new_gauge_image (const gchar *cImagePath)
 	
 	return pGaugeImage;
 }
-static void _cairo_dock_load_gauge_image (cairo_t *pSourceContext, GaugeImage *pGaugeImage, int iWidth, int iHeight)
+static void _cairo_dock_load_gauge_image (GaugeImage *pGaugeImage, int iWidth, int iHeight)
 {
 	cd_message ("%s (%dx%d)", __func__, iWidth, iHeight);
 	if (pGaugeImage->pSurface != NULL)
@@ -169,7 +171,7 @@ static void _cairo_dock_load_gauge_image (cairo_t *pSourceContext, GaugeImage *p
 	
 	if (pGaugeImage->pSvgHandle != NULL)
 	{
-		pGaugeImage->pSurface = _cairo_dock_create_blank_surface (pSourceContext,
+		pGaugeImage->pSurface = cairo_dock_create_blank_surface (
 			iWidth,
 			iHeight);
 		
@@ -193,7 +195,7 @@ static void _cairo_dock_load_gauge_image (cairo_t *pSourceContext, GaugeImage *p
 		pGaugeImage->iTexture = 0;
 	}
 }
-static void _cairo_dock_load_gauge_needle (cairo_t *pSourceContext, GaugeIndicator *pGaugeIndicator, int iWidth, int iHeight)
+static void _cairo_dock_load_gauge_needle (GaugeIndicator *pGaugeIndicator, int iWidth, int iHeight)
 {
 	cd_message ("%s (%dx%d)", __func__, iWidth, iHeight);
 	GaugeImage *pGaugeImage = pGaugeIndicator->pImageNeedle;
@@ -213,7 +215,7 @@ static void _cairo_dock_load_gauge_needle (cairo_t *pSourceContext, GaugeIndicat
 		pGaugeIndicator->iNeedleHeight = (double) pGaugeIndicator->iNeedleRealHeight * pGaugeIndicator->fNeedleScale;
 		//g_print (" + needle %dx%d\n", pGaugeIndicator->iNeedleWidth, pGaugeIndicator->iNeedleHeight);
 		
-		cairo_surface_t *pNeedleSurface = _cairo_dock_create_blank_surface (pSourceContext, pGaugeIndicator->iNeedleWidth, pGaugeIndicator->iNeedleHeight);
+		cairo_surface_t *pNeedleSurface = cairo_dock_create_blank_surface ( pGaugeIndicator->iNeedleWidth, pGaugeIndicator->iNeedleHeight);
 		g_return_if_fail (cairo_surface_status (pNeedleSurface) == CAIRO_STATUS_SUCCESS);
 		
 		cairo_t* pDrawingContext = cairo_create (pNeedleSurface);
@@ -233,7 +235,7 @@ static void _cairo_dock_load_gauge_needle (cairo_t *pSourceContext, GaugeIndicat
 		pGaugeImage->iTexture = 0;
 	}
 }
-static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceContext, const gchar *cThemePath)
+static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cThemePath)
 {
 	cd_debug ("%s (%s)", __func__, cThemePath);
 	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
@@ -279,12 +281,12 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 			if (xmlStrcmp (cAttribute, "background") == 0)
 			{
 				pGauge->pImageBackground = _cairo_dock_new_gauge_image (sImagePath->str);
-				_cairo_dock_load_gauge_image (pSourceContext, pGauge->pImageBackground, iWidth, iHeight);
+				_cairo_dock_load_gauge_image (pGauge->pImageBackground, iWidth, iHeight);
 			}
 			else if (xmlStrcmp (cAttribute, "foreground") == 0)
 			{
 				pGauge->pImageForeground = _cairo_dock_new_gauge_image (sImagePath->str);
-				_cairo_dock_load_gauge_image (pSourceContext, pGauge->pImageForeground, iWidth, iHeight);
+				_cairo_dock_load_gauge_image (pGauge->pImageForeground, iWidth, iHeight);
 			}
 			xmlFree (cNodeContent);
 			xmlFree (cAttribute);
@@ -408,7 +410,7 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 							g_string_printf (sImagePath, "%s/%s", cThemePath, cNodeContent);
 							_cairo_dock_init_gauge_image (sImagePath->str, &pGaugeIndicator->pImageList[pGaugeIndicator->iNbImageLoaded]);
 							if (g_bUseOpenGL)  // il faut les charger maintenant, car on ne peut pas le faire durant le dessin sur le pbuffer (le chargement n'est pas effectif tout de suite et ca donne des textures blanches).
-								_cairo_dock_load_gauge_image (pSourceContext, &pGaugeIndicator->pImageList[pGaugeIndicator->iNbImageLoaded], iWidth, iHeight);
+								_cairo_dock_load_gauge_image (&pGaugeIndicator->pImageList[pGaugeIndicator->iNbImageLoaded], iWidth, iHeight);
 							pGaugeIndicator->iNbImageLoaded ++;
 						}
 					}
@@ -429,7 +431,7 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 					pGaugeIndicator->iNeedleOffsetX = 10;
 				}
 				if (g_bUseOpenGL)  // meme remarque.
-					_cairo_dock_load_gauge_needle (pSourceContext, pGaugeIndicator, iWidth, iHeight);
+					_cairo_dock_load_gauge_needle (pGaugeIndicator, iWidth, iHeight);
 			}
 			pGauge->pIndicatorList = g_list_append (pGauge->pIndicatorList, pGaugeIndicator);
 		}
@@ -442,9 +444,9 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, cairo_t *pSourceCon
 	
 	return TRUE;
 }
-static void cairo_dock_load_gauge (Gauge *pGauge, cairo_t *pSourceContext, CairoContainer *pContainer, CairoGaugeAttribute *pAttribute)
+static void cairo_dock_load_gauge (Gauge *pGauge, CairoContainer *pContainer, CairoGaugeAttribute *pAttribute)
 {
-	_cairo_dock_load_gauge_theme (pGauge, pSourceContext, pAttribute->cThemePath);
+	_cairo_dock_load_gauge_theme (pGauge, pAttribute->cThemePath);
 	
 	/// charger les emblemes...
 	
@@ -453,7 +455,7 @@ static void cairo_dock_load_gauge (Gauge *pGauge, cairo_t *pSourceContext, Cairo
   ////////////////////////////////////////////
  ////////////// RENDER GAUGE ////////////////
 ////////////////////////////////////////////
-static void _draw_gauge_needle (cairo_t *pSourceContext, Gauge *pGauge, GaugeIndicator *pGaugeIndicator, double fValue)
+static void _draw_gauge_needle (cairo_t *pCairoContext, Gauge *pGauge, GaugeIndicator *pGaugeIndicator, double fValue)
 {
 	GaugeImage *pGaugeImage = pGaugeIndicator->pImageNeedle;
 	if(pGaugeImage != NULL)
@@ -465,20 +467,20 @@ static void _draw_gauge_needle (cairo_t *pSourceContext, Gauge *pGauge, GaugeInd
 		double fHalfX = pGauge->pImageBackground->sizeX / 2.0f * (1 + pGaugeIndicator->posX);
 		double fHalfY = pGauge->pImageBackground->sizeY / 2.0f * (1 - pGaugeIndicator->posY);
 		
-		cairo_save (pSourceContext);
+		cairo_save (pCairoContext);
 		
-		cairo_scale (pSourceContext,
+		cairo_scale (pCairoContext,
 			(double) CAIRO_DATA_RENDERER (pGauge)->iWidth / (double) pGaugeImage->sizeX,
 			(double) CAIRO_DATA_RENDERER (pGauge)->iHeight / (double) pGaugeImage->sizeY);
-		cairo_translate (pSourceContext, fHalfX, fHalfY);
-		cairo_rotate (pSourceContext, -G_PI/2 + fAngle);
+		cairo_translate (pCairoContext, fHalfX, fHalfY);
+		cairo_rotate (pCairoContext, -G_PI/2 + fAngle);
 		
-		rsvg_handle_render_cairo (pGaugeImage->pSvgHandle, pSourceContext);
+		rsvg_handle_render_cairo (pGaugeImage->pSvgHandle, pCairoContext);
 		
-		cairo_restore (pSourceContext);
+		cairo_restore (pCairoContext);
 	}
 }
-static void _draw_gauge_image (cairo_t *pSourceContext, Gauge *pGauge, GaugeIndicator *pGaugeIndicator, double fValue)
+static void _draw_gauge_image (cairo_t *pCairoContext, Gauge *pGauge, GaugeIndicator *pGaugeIndicator, double fValue)
 {
 	int iNumImage = fValue * (pGaugeIndicator->iNbImages - 1) + 0.5;
 	g_return_if_fail (iNumImage < pGaugeIndicator->iNbImages);
@@ -487,24 +489,24 @@ static void _draw_gauge_image (cairo_t *pSourceContext, Gauge *pGauge, GaugeIndi
 	if (pGaugeImage->pSurface == NULL)
 	{
 		int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
-		_cairo_dock_load_gauge_image (pSourceContext, pGaugeImage, iWidth, iHeight);
+		_cairo_dock_load_gauge_image (pGaugeImage, iWidth, iHeight);
 	}
 	
 	if (pGaugeImage->pSurface != NULL)
 	{
-		cairo_set_source_surface (pSourceContext, pGaugeImage->pSurface, 0.0f, 0.0f);
-		cairo_paint (pSourceContext);
+		cairo_set_source_surface (pCairoContext, pGaugeImage->pSurface, 0.0f, 0.0f);
+		cairo_paint (pCairoContext);
 	}
 }
-static void cairo_dock_draw_one_gauge (cairo_t *pSourceContext, Gauge *pGauge, int iDataOffset)
+static void cairo_dock_draw_one_gauge (cairo_t *pCairoContext, Gauge *pGauge, int iDataOffset)
 {
 	GaugeImage *pGaugeImage;
 	//\________________ On affiche le fond.
 	if(pGauge->pImageBackground != NULL)
 	{
 		pGaugeImage = pGauge->pImageBackground;
-		cairo_set_source_surface (pSourceContext, pGaugeImage->pSurface, 0.0f, 0.0f);
-		cairo_paint (pSourceContext);
+		cairo_set_source_surface (pCairoContext, pGaugeImage->pSurface, 0.0f, 0.0f);
+		cairo_paint (pCairoContext);
 	}
 	
 	//\________________ On represente l'indicateur de chaque valeur.
@@ -522,21 +524,21 @@ static void cairo_dock_draw_one_gauge (cairo_t *pSourceContext, Gauge *pGauge, i
 		
 		if (pIndicator->pImageNeedle != NULL)  // c'est une aiguille.
 		{
-			_draw_gauge_needle (pSourceContext, pGauge, pIndicator, fValue);
+			_draw_gauge_needle (pCairoContext, pGauge, pIndicator, fValue);
 		}
 		else  // c'est une image.
 		{
-			_draw_gauge_image (pSourceContext, pGauge, pIndicator, fValue);
+			_draw_gauge_image (pCairoContext, pGauge, pIndicator, fValue);
 		}
 		
 		if (/**pRenderer->bWriteValues && */pIndicator->textZone.fWidth != 0 && pIndicator->textZone.fHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
 		{
 			cairo_data_renderer_format_value (pRenderer, fValue, i);
 			//g_print (" >>>%s\n", pRenderer->cFormatBuffer);
-			cairo_save (pSourceContext);
-			cairo_set_source_rgb (pSourceContext, pIndicator->textZone.pColor[0], pIndicator->textZone.pColor[1], pIndicator->textZone.pColor[2]);
+			cairo_save (pCairoContext);
+			cairo_set_source_rgb (pCairoContext, pIndicator->textZone.pColor[0], pIndicator->textZone.pColor[1], pIndicator->textZone.pColor[2]);
 			
-			PangoLayout *pLayout = pango_cairo_create_layout (pSourceContext);
+			PangoLayout *pLayout = pango_cairo_create_layout (pCairoContext);
 			PangoFontDescription *fd = pango_font_description_from_string ("Monospace 12");
 			pango_layout_set_font_description (pLayout, fd);
 			
@@ -545,14 +547,14 @@ static void cairo_dock_draw_one_gauge (cairo_t *pSourceContext, Gauge *pGauge, i
 			pango_layout_get_pixel_extents (pLayout, &ink, &log);
 			double fZoom = MIN (pIndicator->textZone.fWidth * pRenderer->iWidth / (log.width), pIndicator->textZone.fHeight * pRenderer->iHeight / log.height);
 			
-			cairo_move_to (pSourceContext,
+			cairo_move_to (pCairoContext,
 				floor ((1. + pIndicator->textZone.fX) * pRenderer->iWidth/2 - log.width*fZoom/2),
 				floor ((1. - pIndicator->textZone.fY) * pRenderer->iHeight/2 - log.height*fZoom/2));
-			cairo_scale (pSourceContext,
+			cairo_scale (pCairoContext,
 				fZoom,
 				fZoom);
-			pango_cairo_show_layout (pSourceContext, pLayout);
-			cairo_restore (pSourceContext);
+			pango_cairo_show_layout (pCairoContext, pLayout);
+			cairo_restore (pCairoContext);
 		}
 	}
 	
@@ -560,14 +562,14 @@ static void cairo_dock_draw_one_gauge (cairo_t *pSourceContext, Gauge *pGauge, i
 	if(pGauge->pImageForeground != NULL)
 	{
 		pGaugeImage = pGauge->pImageForeground;
-		cairo_set_source_surface (pSourceContext, pGaugeImage->pSurface, 0.0f, 0.0f);
-		cairo_paint (pSourceContext);
+		cairo_set_source_surface (pCairoContext, pGaugeImage->pSurface, 0.0f, 0.0f);
+		cairo_paint (pCairoContext);
 	}
 }
 void cairo_dock_render_gauge (Gauge *pGauge, cairo_t *pCairoContext)
 {
-	g_return_if_fail (pGauge != NULL && pGauge->pIndicatorList != NULL && pCairoContext != NULL);
-	g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
+	g_return_if_fail (pGauge != NULL && pGauge->pIndicatorList != NULL);
+	g_return_if_fail (pCairoContext != NULL && cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
@@ -781,7 +783,7 @@ static void cairo_dock_render_gauge_opengl (Gauge *pGauge)
   //////////////////////////////////////////////
  /////////////// RELOAD GAUGE /////////////////
 //////////////////////////////////////////////
-static void cairo_dock_reload_gauge (Gauge *pGauge, cairo_t *pSourceContext)
+static void cairo_dock_reload_gauge (Gauge *pGauge)
 {
 	//g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
 	g_return_if_fail (pGauge != NULL);
@@ -790,12 +792,12 @@ static void cairo_dock_reload_gauge (Gauge *pGauge, cairo_t *pSourceContext)
 	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
 	if (pGauge->pImageBackground != NULL)
 	{
-		_cairo_dock_load_gauge_image (pSourceContext, pGauge->pImageBackground, iWidth, iHeight);
+		_cairo_dock_load_gauge_image (pGauge->pImageBackground, iWidth, iHeight);
 	}
 	
 	if (pGauge->pImageForeground != NULL)
 	{
-		_cairo_dock_load_gauge_image (pSourceContext, pGauge->pImageForeground, iWidth, iHeight);
+		_cairo_dock_load_gauge_image (pGauge->pImageForeground, iWidth, iHeight);
 	}
 	
 	GaugeIndicator *pGaugeIndicator;
@@ -808,11 +810,11 @@ static void cairo_dock_reload_gauge (Gauge *pGauge, cairo_t *pSourceContext)
 		for (i = 0; i < pGaugeIndicator->iNbImages; i ++)
 		{
 			pGaugeImage = &pGaugeIndicator->pImageList[i];
-			_cairo_dock_load_gauge_image (pSourceContext, pGaugeImage, iWidth, iHeight);
+			_cairo_dock_load_gauge_image (pGaugeImage, iWidth, iHeight);
 		}
 		if (g_bUseOpenGL && pGaugeIndicator->pImageNeedle)
 		{
-			_cairo_dock_load_gauge_needle (pSourceContext, pGaugeIndicator, iWidth, iHeight);
+			_cairo_dock_load_gauge_needle (pGaugeIndicator, iWidth, iHeight);
 		}
 	}
 }
@@ -894,8 +896,8 @@ Gauge *cairo_dock_new_gauge (void)
 /////////////////////////////////////////////////
 GHashTable *cairo_dock_list_available_gauges (void)
 {
-	gchar *cGaugeShareDir = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_GAUGES_DIR);
-	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR, CAIRO_DOCK_GAUGES_DIR);
+	gchar *cGaugeShareDir = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_GAUGES_DIR);
+	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, CAIRO_DOCK_GAUGES_DIR);
 	GHashTable *pGaugeTable = cairo_dock_list_themes (cGaugeShareDir, cGaugeUserDir, CAIRO_DOCK_GAUGES_DIR);
 	
 	g_free (cGaugeShareDir);
@@ -907,7 +909,7 @@ GHashTable *cairo_dock_list_available_gauges (void)
 gchar *cairo_dock_get_gauge_theme_path (const gchar *cThemeName, CairoDockThemeType iType)  // utile pour DBus aussi.
 {
 	const gchar *cGaugeShareDir = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_GAUGES_DIR;
-	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_EXTRAS_DIR"/"CAIRO_DOCK_GAUGES_DIR);
+	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, CAIRO_DOCK_GAUGES_DIR);
 	gchar *cGaugePath = cairo_dock_get_theme_path (cThemeName, cGaugeShareDir, cGaugeUserDir, CAIRO_DOCK_GAUGES_DIR, iType);
 	g_free (cGaugeUserDir);
 	return cGaugePath;
@@ -934,12 +936,12 @@ gchar *cairo_dock_get_theme_path_for_gauge (const gchar *cAppletConfFilePath, GK
 
 
 /// deprecated ... to be added in the DataRenderer API.
-void cairo_dock_add_watermark_on_gauge (cairo_t *pSourceContext, Gauge *pGauge, gchar *cImagePath, double fAlpha)
+void cairo_dock_add_watermark_on_gauge (Gauge *pGauge, gchar *cImagePath, double fAlpha)
 {
 	g_return_if_fail (pGauge != NULL && cImagePath != NULL);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
-	cairo_surface_t *pWatermarkSurface = cairo_dock_create_surface_for_icon (cImagePath, pSourceContext, pRenderer->iWidth/2, pRenderer->iHeight/2);
+	cairo_surface_t *pWatermarkSurface = cairo_dock_create_surface_for_icon (cImagePath, pRenderer->iWidth/2, pRenderer->iHeight/2);
 	
 	if (pGauge->pImageBackground == NULL)
 	{
@@ -947,8 +949,7 @@ void cairo_dock_add_watermark_on_gauge (cairo_t *pSourceContext, Gauge *pGauge, 
 		pGauge->pImageBackground->sizeX = pRenderer->iWidth;
 		pGauge->pImageBackground->sizeY = pRenderer->iHeight;
 		
-		pGauge->pImageBackground->pSurface = cairo_surface_create_similar (cairo_get_target (pSourceContext),
-			CAIRO_CONTENT_COLOR_ALPHA,
+		pGauge->pImageBackground->pSurface = cairo_dock_create_blank_surface (
 			pRenderer->iWidth,
 			pRenderer->iHeight);
 	}

@@ -78,7 +78,6 @@ extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCurrentThemePath;
-extern gchar *g_cCairoDockDataDir;
 
 extern gboolean g_bLocked;
 extern gboolean g_bForceCairo;

@@ -191,7 +191,6 @@ gboolean cairo_dock_set_class_use_xicon (const gchar *cClass, gboolean bUseXIcon
 	CairoDock *pDock;
 	GList *pElement;
 	Icon *pAppliIcon;
-	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (g_pMainDock));
 	for (pElement = pClassAppli->pAppliOfClass; pElement != NULL; pElement = pElement->next)
 	{
 		pAppliIcon = pElement->data;
@@ -207,14 +206,13 @@ gboolean cairo_dock_set_class_use_xicon (const gchar *cClass, gboolean bUseXIcon
 		pDock = cairo_dock_search_dock_from_name (pAppliIcon->cParentDockName);
 		if (pDock != NULL)
 		{
-			cairo_dock_reload_one_icon_buffer_in_dock_full (pAppliIcon, pDock, pCairoContext);
+			cairo_dock_reload_one_icon_buffer_in_dock (pAppliIcon, pDock);
 		}
 		else
 		{
-			cairo_dock_fill_one_icon_buffer (pAppliIcon, pCairoContext, (1 + myIcons.fAmplitude), g_pMainDock->container.bIsHorizontal, g_pMainDock->container.bDirectionUp);
+			cairo_dock_fill_one_icon_buffer (pAppliIcon, (1 + myIcons.fAmplitude), g_pMainDock->container.bIsHorizontal, g_pMainDock->container.bDirectionUp);
 		}
 	}
-	cairo_destroy (pCairoContext);
 	
 	return TRUE;
 }
@@ -382,9 +380,7 @@ gboolean cairo_dock_prevent_inhibated_class (Icon *pIcon)
 						else
 							g_free (pInhibatorIcon->cName);
 						pInhibatorIcon->cName = NULL;
-						cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pInhibhatorDock));
-						cairo_dock_set_icon_name (pCairoContext, pIcon->cName, pInhibatorIcon, CAIRO_CONTAINER (pInhibhatorDock));
-						cairo_destroy (pCairoContext);
+						cairo_dock_set_icon_name (pIcon->cName, pInhibatorIcon, CAIRO_CONTAINER (pInhibhatorDock));
 					}
 				}
 			}
@@ -426,7 +422,6 @@ void cairo_dock_deinhibate_class (const gchar *cClass, Icon *pInhibatorIcon)
 	
 	if (pInhibatorIcon == NULL || pInhibatorIcon->Xid != 0)
 	{
-		cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (g_pMainDock));
 		const GList *pList = cairo_dock_list_existing_appli_with_class (cClass);
 		Icon *pIcon;
 		gboolean bNeedsRedraw = FALSE;
@@ -449,14 +444,13 @@ void cairo_dock_deinhibate_class (const gchar *cClass, Icon *pInhibatorIcon)
 			if (pParentDock != NULL)
 			{
 				cd_message ("on recharge l'icone de l'appli %s", pIcon->cName);
-				cairo_dock_reload_one_icon_buffer_in_dock_full (pIcon, pParentDock, pCairoContext);
+				cairo_dock_reload_one_icon_buffer_in_dock (pIcon, pParentDock);
 			}
 			else
 			{
-				cairo_dock_reload_one_icon_buffer_in_dock_full (pIcon, g_pMainDock, pCairoContext);
+				cairo_dock_reload_one_icon_buffer_in_dock (pIcon, g_pMainDock);
 			}
 		}
-		cairo_destroy (pCairoContext);
 		if (bNeedsRedraw)
 			gtk_widget_queue_draw (g_pMainDock->container.pWidget);  /// pDock->pRenderer->calculate_icons (pDock); ?...
 	}
@@ -552,20 +546,19 @@ void cairo_dock_reset_class_table (void)
 
 
 
-cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (cairo_t *pSourceContext, Icon *pInhibatorIcon, int iWidth, int iHeight)
+cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (Icon *pInhibatorIcon, int iWidth, int iHeight)
 {
 	CairoContainer *pInhibhatorContainer = cairo_dock_search_container_from_icon (pInhibatorIcon);
 	int w, h;
 	cairo_dock_get_icon_extent (pInhibatorIcon, pInhibhatorContainer, &w, &h);
 	
 	return cairo_dock_duplicate_surface (pInhibatorIcon->pIconBuffer,
-		pSourceContext,
 		w,
 		h,
 		iWidth,
 		iHeight);
 }
-cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, cairo_t *pSourceContext, int iWidth, int iHeight)
+cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int iWidth, int iHeight)
 {
 	cd_debug ("%s (%s)", __func__, cClass);
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
@@ -584,7 +577,7 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, cair
 			if (! CAIRO_DOCK_IS_APPLET (pInhibatorIcon))
 			{
 				cd_message ("%s va fournir genereusement sa surface", pInhibatorIcon->cName);
-				return cairo_dock_duplicate_inhibator_surface_for_appli (pSourceContext, pInhibatorIcon, iWidth, iHeight);
+				return cairo_dock_duplicate_inhibator_surface_for_appli (pInhibatorIcon, iWidth, iHeight);
 			}
 		}
 	}
@@ -594,7 +587,6 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, cair
 	{
 		cd_debug ("on remplace l'icone X par %s", cIconFilePath);
 		cairo_surface_t *pSurface = cairo_dock_create_surface_from_image_simple (cIconFilePath,
-			pSourceContext,
 			iWidth,
 			iHeight);
 		g_free (cIconFilePath);
@@ -707,9 +699,7 @@ void cairo_dock_update_name_on_inhibators (const gchar *cClass, Window Xid, gcha
 							g_free (pInhibatorIcon->cName);
 						pInhibatorIcon->cName = NULL;
 						
-						cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pParentDock));
-						cairo_dock_set_icon_name (pCairoContext, (cNewName != NULL ? cNewName : pInhibatorIcon->cInitialName), pInhibatorIcon, CAIRO_CONTAINER (pParentDock));
-						cairo_destroy (pCairoContext);
+						cairo_dock_set_icon_name ((cNewName != NULL ? cNewName : pInhibatorIcon->cInitialName), pInhibatorIcon, CAIRO_CONTAINER (pParentDock));
 					}
 					if (! pParentDock->bIsShrinkingDown)
 						cairo_dock_redraw_icon (pInhibatorIcon, CAIRO_CONTAINER (pParentDock));

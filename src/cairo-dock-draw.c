@@ -54,9 +54,9 @@
 
 
 extern CairoDockImageBuffer g_pDockBackgroundBuffer;
-extern CairoDockImageBuffer g_pIndicatorBuffer;
+/**extern CairoDockImageBuffer g_pIndicatorBuffer;
 extern CairoDockImageBuffer g_pActiveIndicatorBuffer;
-extern CairoDockImageBuffer g_pClassIndicatorBuffer;
+extern CairoDockImageBuffer g_pClassIndicatorBuffer;*/
 extern CairoDockImageBuffer g_pIconBackgroundImageBuffer;
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;
 
@@ -339,7 +339,7 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 }
 
 
-static void _cairo_dock_draw_appli_indicator (Icon *icon, cairo_t *pCairoContext, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp)
+/**static void _cairo_dock_draw_appli_indicator (Icon *icon, cairo_t *pCairoContext, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp)
 {
 	cairo_save (pCairoContext);
 	///if (icon->fOrientation != 0)
@@ -448,7 +448,7 @@ static void _cairo_dock_draw_class_indicator (cairo_t *pCairoContext, Icon *icon
 	cairo_scale (pCairoContext, fRatio, fRatio);
 	cairo_dock_draw_surface (pCairoContext, g_pClassIndicatorBuffer.pSurface, w, h, bDirectionUp, bIsHorizontal, 1.);
 	cairo_restore (pCairoContext);
-}
+}*/
 
 void cairo_dock_set_icon_scale_on_context (cairo_t *pCairoContext, Icon *icon, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp)
 {
@@ -671,7 +671,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	if (icon->fOrientation != 0)
 		cairo_rotate (pCairoContext, icon->fOrientation);
 	
-	//\_____________________ On dessine l'indicateur derriere.
+	/** //\_____________________ On dessine l'indicateur derriere.
 	if (icon->bHasIndicator && ! myIndicators.bIndicatorAbove && g_pIndicatorBuffer.pSurface != NULL)
 	{
 		_cairo_dock_draw_appli_indicator (icon, pCairoContext, bIsHorizontal, fRatio, bDirectionUp);
@@ -700,13 +700,14 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	if (bIsActive && ! myIndicators.bActiveIndicatorAbove)
 	{
 		_cairo_dock_draw_active_window_indicator (pCairoContext, icon);
-	}
+	}*/
 	
 	//\_____________________ On dessine l'icone.
 	gboolean bIconHasBeenDrawn = FALSE;
+	cairo_dock_notify (CAIRO_DOCK_PRE_RENDER_ICON, icon, pDock, pCairoContext);
 	cairo_dock_notify (CAIRO_DOCK_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn, pCairoContext);
 	
-	//\_____________________ On dessine l'indicateur devant.
+	/** //\_____________________ On dessine l'indicateur devant.
 	if (bIsActive && myIndicators.bActiveIndicatorAbove)
 	{
 		_cairo_dock_draw_active_window_indicator (pCairoContext, icon);
@@ -718,7 +719,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	if (icon->pSubDock != NULL && icon->cClass != NULL && g_pClassIndicatorBuffer.pSurface != NULL && icon->Xid == 0)  // le dernier test est de la paranoia.
 	{
 		_cairo_dock_draw_class_indicator (pCairoContext, icon, bIsHorizontal, fRatio, bDirectionUp);
-	}
+	}*/
 	
 	cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).
 	
@@ -903,8 +904,8 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, 
 		cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).
 	}
 	
-	if (icon->bHasIndicator)
-		_cairo_dock_draw_appli_indicator (icon, pCairoContext, TRUE, 1., TRUE);
+	///if (icon->bHasIndicator)
+	///	_cairo_dock_draw_appli_indicator (icon, pCairoContext, TRUE, 1., TRUE);
 	
 	//\_____________________ On dessine les infos additionnelles.
 	if (icon->pQuickInfoBuffer != NULL)

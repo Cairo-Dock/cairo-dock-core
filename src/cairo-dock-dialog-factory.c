@@ -279,13 +279,12 @@ static CairoDialog *_cairo_dock_create_empty_dialog (gboolean bInteractive)
 	return pDialog;
 }
 
-static cairo_surface_t *_cairo_dock_create_dialog_text_surface (const gchar *cText, CairoDockLabelDescription *pTextDescription, cairo_t *pSourceContext, int *iTextWidth, int *iTextHeight)
+static cairo_surface_t *_cairo_dock_create_dialog_text_surface (const gchar *cText, CairoDockLabelDescription *pTextDescription, int *iTextWidth, int *iTextHeight)
 {
 	if (cText == NULL)
 		return NULL;
 	//g_print ("%x;%x\n", pTextDescription, pSourceContext);
 	cairo_surface_t *pTextBuffer = cairo_dock_create_surface_from_text_full (cText,
-		pSourceContext,
 		(pTextDescription ? pTextDescription : &myDialogs.dialogTextDescription),
 		1.,
 		0,
@@ -296,7 +295,7 @@ static cairo_surface_t *_cairo_dock_create_dialog_text_surface (const gchar *cTe
 	return pTextBuffer;
 }
 
-static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cImageFilePath, int iNbFrames, cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, int iDesiredSize, int *iIconSize)
+static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cImageFilePath, int iNbFrames, Icon *pIcon, CairoContainer *pContainer, int iDesiredSize, int *iIconSize)
 {
 	if (cImageFilePath == NULL)
 		return NULL;
@@ -310,7 +309,6 @@ static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cIm
 		int iWidth, iHeight;
 		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
 		pIconBuffer = cairo_dock_duplicate_surface (pIcon->pIconBuffer,
-			pSourceContext,
 			iWidth, iHeight,
 			iDesiredSize, iDesiredSize);
 	}
@@ -318,7 +316,6 @@ static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cIm
 	{
 		double fImageWidth = iNbFrames * iDesiredSize, fImageHeight = iDesiredSize;
 		pIconBuffer = cairo_dock_create_surface_from_image_simple (cImageFilePath,
-			pSourceContext,
 			fImageWidth,
 			fImageHeight);
 	}
@@ -357,15 +354,13 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	//\________________ On cree un nouveau dialogue.
 	CairoDialog *pDialog = _cairo_dock_create_empty_dialog (pAttribute->pInteractiveWidget || pAttribute->pActionFunc);
 	pDialog->pIcon = pIcon;
-	cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDialog));
-	//cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (g_pMainDock?g_pMainDock:pDialog));
 	
 	//\________________ On cree la surface du message.
 	if (pAttribute->cText != NULL)
 	{
 		pDialog->iMaxTextWidth = pAttribute->iMaxTextWidth;
 		pDialog->pTextBuffer = _cairo_dock_create_dialog_text_surface (pAttribute->cText,
-			pAttribute->pTextDescription, pSourceContext,
+			pAttribute->pTextDescription,
 			&pDialog->iTextWidth, &pDialog->iTextHeight);
 		///pDialog->iTextTexture = cairo_dock_create_texture_from_surface (pDialog->pTextBuffer);
 		if (pDialog->iMaxTextWidth > 0 && pDialog->pTextBuffer != NULL && pDialog->iTextWidth > pDialog->iMaxTextWidth)
@@ -378,7 +373,7 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	if (pAttribute->cImageFilePath != NULL)
 	{
 		pDialog->iNbFrames = (pAttribute->iNbFrames > 0 ? pAttribute->iNbFrames : 1);
-		pDialog->pIconBuffer = _cairo_dock_create_dialog_icon_surface (pAttribute->cImageFilePath, pDialog->iNbFrames, pSourceContext, pIcon, pContainer, pAttribute->iIconSize, &pDialog->iIconSize);
+		pDialog->pIconBuffer = _cairo_dock_create_dialog_icon_surface (pAttribute->cImageFilePath, pDialog->iNbFrames, pIcon, pContainer, pAttribute->iIconSize, &pDialog->iIconSize);
 		///pDialog->iIconTexture = cairo_dock_create_texture_from_surface (pDialog->pIconBuffer);
 		if (pDialog->pIconBuffer != NULL && pDialog->iNbFrames > 1)
 		{
@@ -408,7 +403,7 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 		pDialog->iNbButtons = i;
 		
 		pDialog->pButtons = g_new0 (CairoDialogButton, pDialog->iNbButtons);
-		gchar *cButtonImage;
+		const gchar *cButtonImage;
 		for (i = 0; i < pDialog->iNbButtons; i++)
 		{
 			cButtonImage = pAttribute->cButtonsImage[i];
@@ -426,9 +421,8 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 				if (*cButtonImage != '/')
 					cButtonPath = cairo_dock_search_icon_s_path (cButtonImage);
 				else
-					cButtonPath = cButtonImage;
+					cButtonPath = (gchar*)cButtonImage;
 				pDialog->pButtons[i].pSurface = cairo_dock_create_surface_from_image_simple (cButtonPath,
-					pSourceContext,
 					myDialogs.iDialogButtonWidth,
 					myDialogs.iDialogButtonHeight);
 				if (cButtonPath != cButtonImage)
@@ -524,8 +518,6 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 		"unmap-event",
 		G_CALLBACK (on_unmap_dialog),
 		pDialog);
-	
-	cairo_destroy (pSourceContext);
 	
 	return pDialog;
 }
@@ -758,8 +750,7 @@ void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface
 
 	cairo_surface_destroy (pDialog->pIconBuffer);
 	
-	cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDialog));
-	pDialog->pIconBuffer = cairo_dock_duplicate_surface (pNewIconSurface, pSourceContext, iNewIconSize, iNewIconSize, iNewIconSize, iNewIconSize);
+	pDialog->pIconBuffer = cairo_dock_duplicate_surface (pNewIconSurface, iNewIconSize, iNewIconSize, iNewIconSize, iNewIconSize);
 	if (pDialog->iIconTexture != 0)
 		_cairo_dock_delete_texture (pDialog->iIconTexture);
 	///	pDialog->iIconTexture = cairo_dock_create_texture_from_surface (pDialog->pIconBuffer);
@@ -782,14 +773,10 @@ void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface
 
 void cairo_dock_set_dialog_message (CairoDialog *pDialog, const gchar *cMessage)
 {
-	cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDialog));
-	
 	int iNewTextWidth=0, iNewTextHeight=0;
-	cairo_surface_t *pNewTextSurface = _cairo_dock_create_dialog_text_surface (cMessage, NULL, pSourceContext, &iNewTextWidth, &iNewTextHeight);
+	cairo_surface_t *pNewTextSurface = _cairo_dock_create_dialog_text_surface (cMessage, NULL, &iNewTextWidth, &iNewTextHeight);
 	
 	cairo_dock_set_new_dialog_text_surface (pDialog, pNewTextSurface, iNewTextWidth, iNewTextHeight);
-
-	cairo_destroy (pSourceContext);
 }
 void cairo_dock_set_dialog_message_printf (CairoDialog *pDialog, const gchar *cMessageFormat, ...)
 {
@@ -804,14 +791,10 @@ void cairo_dock_set_dialog_message_printf (CairoDialog *pDialog, const gchar *cM
 
 void cairo_dock_set_dialog_icon (CairoDialog *pDialog, const gchar *cImageFilePath)
 {
-	cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDialog));
-
-	cairo_surface_t *pNewIconSurface = cairo_dock_create_surface_for_square_icon (cImageFilePath, pSourceContext, myDialogs.iDialogIconSize);
+	cairo_surface_t *pNewIconSurface = cairo_dock_create_surface_for_square_icon (cImageFilePath, myDialogs.iDialogIconSize);
 	int iNewIconSize = (pNewIconSurface != NULL ? myDialogs.iDialogIconSize : 0);
-			
+	
 	cairo_dock_set_new_dialog_icon_surface (pDialog, pNewIconSurface, iNewIconSize);
-
-	cairo_destroy (pSourceContext);
 }
 
 

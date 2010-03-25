@@ -18,8 +18,8 @@
 */
 
 
-#ifndef __CAIRO_DOCK_GAUGE2__
-#define  __CAIRO_DOCK_GAUGE2__
+#ifndef __CAIRO_DOCK_GAUGE__
+#define  __CAIRO_DOCK_GAUGE__
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-data-renderer.h"
@@ -75,7 +75,7 @@ struct _CairoGaugeAttribute {
 	/// General attributes of any DataRenderer.
 	CairoDataRendererAttribute rendererAttribute;
 	/// path to a gauge theme.
-	gchar *cThemePath;
+	const gchar *cThemePath;
 };
 
 

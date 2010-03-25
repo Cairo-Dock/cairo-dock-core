@@ -74,8 +74,6 @@ CairoDockLabelDescription *cairo_dock_duplicate_label_description (CairoDockLabe
 */
 gchar *cairo_dock_generate_file_path (const gchar *cImageFile);
 
-cairo_surface_t *cairo_dock_create_blank_surface (int iWidth, int iHeight);
-
 
 /** Load an image into an ImageBuffer with a given transparency. If the image is given by its sole name, it is taken in the root folder of the current theme.
 *@param pImage an ImageBuffer.

@@ -72,9 +72,9 @@ extern GLuint g_pGradationTexture[2];
 
 extern CairoDock *g_pMainDock;
 
-extern CairoDockImageBuffer g_pIndicatorBuffer;
+/**extern CairoDockImageBuffer g_pIndicatorBuffer;
 extern CairoDockImageBuffer g_pActiveIndicatorBuffer;
-extern CairoDockImageBuffer g_pClassIndicatorBuffer;
+extern CairoDockImageBuffer g_pClassIndicatorBuffer;*/
 extern CairoDockImageBuffer g_pIconBackgroundImageBuffer;
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;
 
@@ -83,18 +83,12 @@ extern CairoDockGLConfig g_openglConfig;
 
 extern gboolean g_bEasterEggs;
 
-static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp)
+/**static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp)
 {
 	if (! myIndicators.bRotateWithDock)
 		bDirectionUp = bIsHorizontal = TRUE;
 	
 	//\__________________ On place l'indicateur.
-	/**if (icon->fOrientation != 0)
-	{
-		glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
-		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
-		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
-	}*/
 	double z = 1 + myIcons.fAmplitude;
 	double w = g_pIndicatorBuffer.iWidth;
 	double h = g_pIndicatorBuffer.iHeight;
@@ -150,12 +144,6 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bIsHor
 }
 static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDock *pDock, double fRatio)
 {
-	/**if (icon->fOrientation != 0)
-	{
-		glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
-		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
-		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
-	}*/
 	cairo_dock_set_icon_scale (icon, CAIRO_CONTAINER (pDock), 1.);
 	
 	_cairo_dock_enable_texture ();
@@ -169,12 +157,6 @@ static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDo
 }
 static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp)
 {
-	/**if (icon->fOrientation != 0)
-	{
-		glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
-		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
-		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
-	}*/
 	if (myIndicators.bZoomClassIndicator)
 		fRatio *= icon->fScale;
 	double w = g_pClassIndicatorBuffer.iWidth;
@@ -192,7 +174,7 @@ static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bIsHor
 		w * fRatio,
 		h * fRatio,
 		1.);
-}
+}*/
 
 void cairo_dock_set_icon_scale (Icon *pIcon, CairoContainer *pContainer, double fZoomFactor)
 {
@@ -472,8 +454,8 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	if (icon->iRotationY != 0)
 		glRotatef (icon->iRotationY, 0., 1., 0.);
 	
-	//\_____________________ On dessine les indicateur derriere.
-	if (icon->bHasIndicator && ! myIndicators.bIndicatorAbove /*&& g_iIndicatorTexture != 0*/)
+	/** //\_____________________ On dessine les indicateur derriere.
+	if (icon->bHasIndicator && ! myIndicators.bIndicatorAbove)
 	{
 		glPushMatrix ();
 		_cairo_dock_draw_appli_indicator_opengl (icon, pDock->container.bIsHorizontal, fRatio, pDock->container.bDirectionUp);
@@ -504,15 +486,15 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glPushMatrix ();
 		_cairo_dock_draw_active_window_indicator_opengl (icon, pDock, fRatio);
 		glPopMatrix ();
-	}
+	}*/
 	
 	//\_____________________ On dessine l'icone.
 	gboolean bIconHasBeenDrawn = FALSE;
-	cairo_dock_notify (CAIRO_DOCK_PRE_RENDER_ICON, icon, pDock);
+	cairo_dock_notify (CAIRO_DOCK_PRE_RENDER_ICON, icon, pDock, NULL);
 	cairo_dock_notify (CAIRO_DOCK_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn, NULL);
 	
-	//\_____________________ On dessine les indicateurs devant.
-	if (icon->bHasIndicator && myIndicators.bIndicatorAbove/* && g_iIndicatorTexture != 0*/)
+	/** //\_____________________ On dessine les indicateurs devant.
+	if (icon->bHasIndicator && myIndicators.bIndicatorAbove)
 	{
 		glPushMatrix ();
 		glTranslatef (0., 0., icon->fHeight * (1+myIcons.fAmplitude) -1);  // avant-plan
@@ -532,7 +514,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glTranslatef (0., 0., icon->fHeight * (1+myIcons.fAmplitude) -1);  // avant-plan
 		_cairo_dock_draw_class_indicator_opengl (icon, pDock->container.bIsHorizontal, fRatio, pDock->container.bDirectionUp);
 		glPopMatrix ();
-	}
+	}*/
 	
 	glPopMatrix ();  // retour juste apres la translation au milieu de l'icone.
 	
@@ -708,7 +690,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 		
 		if (w != w_ || h != h_)
 		{
-			pPowerOfwoSurface = _cairo_dock_create_blank_surface (NULL, w_, h_);
+			pPowerOfwoSurface = cairo_dock_create_blank_surface (w_, h_);
 			cairo_t *pCairoContext = cairo_create (pPowerOfwoSurface);
 			cairo_scale (pCairoContext, (double) w_ / w, (double) h_ / h);
 			cairo_set_source_surface (pCairoContext, pImageSurface, 0., 0.);
@@ -801,7 +783,6 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImageFile, doubl
 	
 	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (g_pMainDock));
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cImagePath,
-		pCairoContext,
 		1.,
 		0., 0.,
 		CAIRO_DOCK_KEEP_RATIO,
@@ -1487,7 +1468,6 @@ void cairo_dock_load_animated_image (const gchar *cImageFile, int iNbFrames, int
 	pAnimatedImage->iFrameWidth = iFrameWidth * iNbFrames;
 	pAnimatedImage->iFrameHeight = iFrameHeight;
 	pAnimatedImage->pSurface = cairo_dock_create_surface_from_image_simple (cImageFile,
-			pSourceContext,
 			pAnimatedImage->iFrameWidth,
 			pAnimatedImage->iFrameHeight);
 	
@@ -1593,7 +1573,7 @@ GLuint cairo_dock_create_texture_from_text_simple (const gchar *cText, const gch
 	//\_________________ On cree une surface aux dimensions du texte.
 	PangoRectangle ink, log;
 	pango_layout_get_pixel_extents (pLayout, &ink, &log);
-	cairo_surface_t* pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+	cairo_surface_t* pNewSurface = cairo_dock_create_blank_surface (
 		log.width,
 		log.height);
 	*iWidth = log.width;

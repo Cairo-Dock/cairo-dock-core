@@ -491,43 +491,39 @@ void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParen
 #define cairo_dock_set_icon_static(icon) ((icon)->bStatic = TRUE)
 
 /** Set the label of an icon. If it has a sub-dock, it is renamed (the name is possibly altered to stay unique). The label buffer is updated too.
-*@param pSourceContext a drawing context; is not altered by the function.
 *@param cIconName the new label of the icon. You can even pass pIcon->cName.
 *@param pIcon the icon.
 *@param pContainer the container of the icon.
 */
-void cairo_dock_set_icon_name (cairo_t *pSourceContext, const gchar *cIconName, Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, CairoContainer *pContainer);
 
 /** Same as above, but takes a printf-like format string.
-*@param pSourceContext a drawing context; is not altered by the function.
 *@param pIcon the icon.
 *@param pContainer the container of the icon.
 *@param cIconNameFormat the new label of the icon, in a 'printf' way.
 *@param ... data to be inserted into the string.
 */
-void cairo_dock_set_icon_name_full (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconNameFormat, ...);
+void cairo_dock_set_icon_name_printf (Icon *pIcon, CairoContainer *pContainer, const gchar *cIconNameFormat, ...);
 
 /** Set the quick-info of an icon. This is a small text (a few characters) that is superimposed on the icon.
-*@param pSourceContext a drawing context; is not altered by the function.
 *@param pIcon the icon.
 *@param pContainer the container of the icon.
 *@param cQuickInfo the text of the quick-info.
 */
-void cairo_dock_set_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfo);
+void cairo_dock_set_quick_info (Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfo);
 
 /** Same as above, but takes a printf-like format string.
-*@param pSourceContext a drawing context; is not altered by the function.
 *@param pIcon the icon.
 *@param pContainer the container of the icon.
 *@param cQuickInfoFormat the text of the quick-info, in a 'printf' way.
 *@param ... data to be inserted into the string.
 */
-void cairo_dock_set_quick_info_full (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfoFormat, ...);
+void cairo_dock_set_quick_info_full (Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfoFormat, ...);
 
 /** Clear the quick-info of an icon.
 *@param pIcon the icon.
 */
-#define cairo_dock_remove_quick_info(pIcon) cairo_dock_set_quick_info (NULL, pIcon, NULL, NULL)
+#define cairo_dock_remove_quick_info(pIcon) cairo_dock_set_quick_info (pIcon, NULL, NULL)
 
 /** Updates which launcher is attached/detached to/from the dock, according to the current desktop.
 *@param pDock the dock whose icons are to be considered.

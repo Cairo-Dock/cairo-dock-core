@@ -39,14 +39,12 @@
 #include "cairo-dock-separator-manager.h"
 
 
-cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, int iWidth, int iHeight)
+cairo_surface_t *cairo_dock_create_separator_surface (int iWidth, int iHeight)
 {
-	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
-	
 	cairo_surface_t *pNewSurface = NULL;
 	if (myIcons.cSeparatorImage == NULL)
 	{
-		pNewSurface = _cairo_dock_create_blank_surface (pSourceContext,
+		pNewSurface = cairo_dock_create_blank_surface (
 			iWidth,
 			iHeight);
 	}
@@ -68,7 +66,6 @@ cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, i
 				fRotationAngle = G_PI/2;*/
 		
 		pNewSurface = cairo_dock_create_surface_from_image_simple (cImagePath,
-			pSourceContext,
 			iWidth,
 			iHeight);
 		/**if (fRotationAngle != 0)  /// le faire pendant le dessin ...
@@ -87,7 +84,7 @@ cairo_surface_t *cairo_dock_create_separator_surface (cairo_t *pSourceContext, i
 }
 
 
-Icon *cairo_dock_create_separator_icon (int iSeparatorType, cairo_t *pSourceContext, CairoDock *pDock)
+Icon *cairo_dock_create_separator_icon (int iSeparatorType, CairoDock *pDock)
 {
 	//g_print ("%s ()\n", __func__);
 	if ((iSeparatorType & 1) && ! myIcons.iSeparateIcons)
@@ -97,7 +94,7 @@ Icon *cairo_dock_create_separator_icon (int iSeparatorType, cairo_t *pSourceCont
 	Icon *icon = cairo_dock_new_separator_icon (iSeparatorType);
 	
 	//\____________ On remplit ses buffers.
-	cairo_dock_fill_icon_buffers_for_dock (icon, pSourceContext, pDock);
+	cairo_dock_fill_icon_buffers_for_dock (icon, pDock);
 
 	return icon;
 }
@@ -105,8 +102,7 @@ Icon *cairo_dock_create_separator_icon (int iSeparatorType, cairo_t *pSourceCont
 
 void cairo_dock_insert_automatic_separator_in_dock (int iSeparatorType, const gchar *cParentDockName, CairoDock *pDock)
 {
-	cairo_t *pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
-	Icon *pSeparatorIcon = cairo_dock_create_separator_icon (iSeparatorType, pSourceContext, pDock);
+	Icon *pSeparatorIcon = cairo_dock_create_separator_icon (iSeparatorType, pDock);
 	if (pSeparatorIcon != NULL)
 	{
 		pSeparatorIcon->cParentDockName = g_strdup (cParentDockName);
@@ -118,5 +114,4 @@ void cairo_dock_insert_automatic_separator_in_dock (int iSeparatorType, const gc
 		pDock->fFlatDockWidth += myIcons.iIconGap + pSeparatorIcon->fWidth;
 		pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, pSeparatorIcon->fHeight);
 	}
-	cairo_destroy (pSourceContext);
 }

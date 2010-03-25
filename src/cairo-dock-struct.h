@@ -431,22 +431,17 @@ typedef struct _CairoDockManager CairoDockManager;
 
 #define CAIRO_DOCK_NB_DATA_SLOT 12
 
-/// Nom du repertoire des jauges utilisateur/themes.
-#define CAIRO_DOCK_GAUGES_DIR "gauges"
-/// Nom du repertoire des lanceurs.
-#define CAIRO_DOCK_LAUNCHERS_DIR "launchers"
-/// Nom du repertoire des plug-ins.
-#define CAIRO_DOCK_PLUG_INS_DIR "plug-ins"
-/// Nom du repertoire des icones locales.
-#define CAIRO_DOCK_LOCAL_ICONS_DIR "icons"
-/// Nom du repertoire racine du theme courant.
-#define CAIRO_DOCK_CURRENT_THEME_NAME "current_theme"
-/// Nom du repertoire des themes extras.
-#define CAIRO_DOCK_EXTRAS_DIR "extras"
 /// Nom du fichier de conf principal du theme.
 #define CAIRO_DOCK_CONF_FILE "cairo-dock.conf"
 /// Nom du fichier de conf d'un dock racine.
 #define CAIRO_DOCK_MAIN_DOCK_CONF_FILE "main-dock.conf"
+
+/// Nom du repertoire racine du theme courant.
+#define CAIRO_DOCK_CURRENT_THEME_NAME "current_theme"
+/// Nom du repertoire des themes extras.
+#define CAIRO_DOCK_EXTRAS_DIR "extras"
+/// Nom du repertoire des themes de dock.
+#define CAIRO_DOCK_THEMES_DIR "themes"
 
 /// Nom du dock principal (le 1er cree).
 #define CAIRO_DOCK_MAIN_DOCK_NAME "_MainDock_"

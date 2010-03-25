@@ -46,7 +46,7 @@ typedef CairoDialogRendererConfigParameter* CairoDialogRendererConfigPtr;
 
 typedef void (* CairoDialogRenderFunc) (cairo_t *pCairoContext, CairoDialog *pDialog, double fAlpha);
 typedef void (* CairoDialogGLRenderFunc) (CairoDialog *pDialog, double fAlpha);
-typedef gpointer (* CairoDialogConfigureRendererFunc) (CairoDialog *pDialog, cairo_t *pSourceContext, CairoDialogRendererConfigPtr pConfig);
+typedef gpointer (* CairoDialogConfigureRendererFunc) (CairoDialog *pDialog, CairoDialogRendererConfigPtr pConfig);
 typedef void (* CairoDialogUpdateRendererDataFunc) (CairoDialog *pDialog, CairoDialogRendererDataPtr pNewData);
 typedef void (* CairoDialogFreeRendererDataFunc) (CairoDialog *pDialog);
 /// Definition of a Dialog renderer. It draws the inside of the Dialog.
@@ -75,14 +75,14 @@ typedef void (* CairoDockActionOnAnswerFunc) (int iClickedButton, GtkWidget *pIn
 /// Configuration attributes of a Dialog, which derives from a Container.
 struct _CairoDialogAttribute {
 	/// path to an image to display in the left margin, or NULL.
-	gchar *cImageFilePath;
+	const gchar *cImageFilePath;
 	/// size of the icon in the left margin, or 0 to use the default one.
 	gint iIconSize;
 	
 	/// number of frames of the image, if it's an animated image, otherwise 0.
 	gint iNbFrames;  // 0 <=> 1.
 	/// text of the message, or NULL.
-	gchar *cText;
+	const gchar *cText;
 	/// maximum authorized width of the message; it will scroll if it is too large. Set 0 to not limit it.
 	gint iMaxTextWidth;  // 0 => pas de limite.
 	/// A text rendering description of the message, or NULL to use the default one.
@@ -91,7 +91,7 @@ struct _CairoDialogAttribute {
 	/// a widget to interact with the user, or NULL.
 	GtkWidget *pInteractiveWidget;
 	/// a NULL-terminated list of images for buttons, or NULL. "ok" and "cancel" are key word to load the default "ok" and "cancel" buttons.
-	gchar **cButtonsImage;
+	const gchar **cButtonsImage;
 	/// function that will be called when the user click on a button, or NULL.
 	CairoDockActionOnAnswerFunc pActionFunc;
 	/// data passed as a parameter of the callback, or NULL.
@@ -102,7 +102,7 @@ struct _CairoDialogAttribute {
 	/// life time of the dialog, or 0 for an unlimited dialog.
 	gint iTimeLength;
 	/// name of a decorator, or NULL to use the default one.
-	gchar *cDecoratorName;
+	const gchar *cDecoratorName;
 	
 	/// whether the dialog should be transparent to mouse input.
 	gboolean bNoInput;

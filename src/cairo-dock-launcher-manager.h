@@ -37,10 +37,9 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName);
 
 /** Create an Icon from a given desktop file, and fill its buffers. The resulting icon can directly be used inside a container. Class inhibating is handled.
  * @param cDesktopFileName name of the desktop file, present in the "launchers" folder of the current theme.
- * @param pSourceContext a drawing context, not altered.
  * @return the newly created icon.
 */
-Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName, cairo_t *pSourceContext);
+Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName);
 
 
 /** Reload completely a launcher. It handles all the side-effects like modifying the class, the sub-dock's view, the container, etc.

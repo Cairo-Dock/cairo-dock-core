@@ -33,6 +33,11 @@ G_BEGIN_DECLS
 * The class offers a high level of abstraction that allows to manipulate themes without having to care their location, version, etc.
 */
 
+#define CAIRO_DOCK_LOCAL_EXTRAS_DIR "extras"
+#define CAIRO_DOCK_LAUNCHERS_DIR "launchers"
+#define CAIRO_DOCK_PLUG_INS_DIR "plug-ins"
+#define CAIRO_DOCK_LOCAL_ICONS_DIR "icons"
+
 /// Types of themes.
 typedef enum {
 	CAIRO_DOCK_LOCAL_THEME=0,

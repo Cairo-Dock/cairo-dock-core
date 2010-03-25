@@ -663,7 +663,7 @@ void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParen
 }
 
 
-void cairo_dock_set_icon_name (cairo_t *pSourceContext, const gchar *cIconName, Icon *pIcon, CairoContainer *pContainer)  // fonction proposee par Necropotame.
+void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, CairoContainer *pContainer)  // fonction proposee par Necropotame.
 {
 	g_return_if_fail (pIcon != NULL && pContainer != NULL);  // le contexte sera verifie plus loin.
 	gchar *cUniqueName = NULL;
@@ -684,21 +684,20 @@ void cairo_dock_set_icon_name (cairo_t *pSourceContext, const gchar *cIconName, 
 	
 	cairo_dock_fill_one_text_buffer(
 		pIcon,
-		pSourceContext,
 		&myLabels.iconTextDescription);
 }
 
-void cairo_dock_set_icon_name_full (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconNameFormat, ...)
+void cairo_dock_set_icon_name_printf (Icon *pIcon, CairoContainer *pContainer, const gchar *cIconNameFormat, ...)
 {
 	va_list args;
 	va_start (args, cIconNameFormat);
 	gchar *cFullText = g_strdup_vprintf (cIconNameFormat, args);
-	cairo_dock_set_icon_name (pSourceContext, cFullText, pIcon, pContainer);
+	cairo_dock_set_icon_name (cFullText, pIcon, pContainer);
 	g_free (cFullText);
 	va_end (args);
 }
 
-void cairo_dock_set_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfo)
+void cairo_dock_set_quick_info (Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfo)
 {
 	g_return_if_fail (pIcon != NULL);  // le contexte sera verifie plus loin.
 
@@ -710,17 +709,16 @@ void cairo_dock_set_quick_info (cairo_t *pSourceContext, Icon *pIcon, CairoConta
 	
 	double fMaxScale = cairo_dock_get_max_scale (pContainer);
 	cairo_dock_fill_one_quick_info_buffer (pIcon,
-		pSourceContext,
 		&myLabels.quickInfoTextDescription,
 		fMaxScale);
 }
 
-void cairo_dock_set_quick_info_full (cairo_t *pSourceContext, Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfoFormat, ...)
+void cairo_dock_set_quick_info_full (Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfoFormat, ...)
 {
 	va_list args;
 	va_start (args, cQuickInfoFormat);
 	gchar *cFullText = g_strdup_vprintf (cQuickInfoFormat, args);
-	cairo_dock_set_quick_info (pSourceContext, pIcon, pContainer, cFullText);
+	cairo_dock_set_quick_info (pIcon, pContainer, cFullText);
 	g_free (cFullText);
 	va_end (args);
 }

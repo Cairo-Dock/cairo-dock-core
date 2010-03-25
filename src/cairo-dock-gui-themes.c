@@ -214,6 +214,18 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 		if (s_pImportTask != NULL)
 			cairo_dock_discard_task (s_pImportTask);
 		
+		//\___________________ On regarde si le theme courant est modifie.
+		gboolean bNeedSave = cairo_dock_theme_need_save ();
+		if (bNeedSave)
+		{
+			int iAnswer = cairo_dock_ask_general_question_and_wait (_("You have made some changes to the current theme.\nYou will lose them if you don't save before choosing a new theme. Continue anyway?"));
+			if (iAnswer != GTK_RESPONSE_YES)
+			{
+				return FALSE;
+			}
+			cairo_dock_mark_theme_as_modified (FALSE);
+		}
+		
 		cairo_dock_set_status_message_printf (s_pThemeManager, _("Importing theme %s ..."), cNewThemeName);
 		s_pImportTask = cairo_dock_import_theme_async (cNewThemeName, bLoadBehavior, bLoadLaunchers, (GFunc)_load_theme, NULL);
 		g_free (cNewThemeName);

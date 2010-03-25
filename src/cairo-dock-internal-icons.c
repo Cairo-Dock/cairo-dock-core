@@ -35,6 +35,7 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-class-manager.h"
+#include "cairo-dock-themes-manager.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-icons.h"
 
@@ -322,7 +323,6 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 {
 	CairoDock *pDock = g_pMainDock;
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
-	cairo_t* pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 	gboolean bInsertSeparators = FALSE;
 	
 	gboolean bGroupOrderChanged;
@@ -412,8 +412,6 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks.
 	cairo_dock_calculate_dock_icons (pDock);
 	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.
-	
-	cairo_destroy (pCairoContext);
 }
 
 

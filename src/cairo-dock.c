@@ -121,6 +121,7 @@
 #include "cairo-dock-default-view.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-internal-system.h"
+#include "cairo-dock-indicator-manager.h"
 
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
 
@@ -431,7 +432,10 @@ int main (int argc, char** argv)
 	cairo_dock_init_dialog_manager ();
 	
 	//\___________________ On initialise le gestionnaire de vues.
-	cairo_dock_initialize_renderer_manager ();
+	cairo_dock_init_renderer_manager ();
+	
+	//\___________________ On initialise le gestionnaire des indicateurs.
+	cairo_dock_init_indicator_manager ();
 	
 	//\___________________ On initialise le multi-threading.
 	if (!g_thread_supported ())
@@ -557,8 +561,6 @@ int main (int argc, char** argv)
 		_cairo_dock_set_signal_interception ();
 	
 	//\___________________ On charge le dernier theme ou on demande a l'utilisateur d'en choisir un.
-	g_cConfFile = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
-	
 	if (bMaintenance)
 	{
 		if (cExcludeModule != NULL)

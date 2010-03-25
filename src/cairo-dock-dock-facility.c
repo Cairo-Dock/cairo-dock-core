@@ -85,7 +85,7 @@ void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
 		icon = ic->data;
 		if (icon->pReflectionBuffer != NULL)
 		{
-			cairo_dock_add_reflection_to_icon (pCairoContext, icon, CAIRO_CONTAINER (pDock));
+			cairo_dock_add_reflection_to_icon (icon, CAIRO_CONTAINER (pDock));
 		}
 	}
 	cairo_destroy (pCairoContext);

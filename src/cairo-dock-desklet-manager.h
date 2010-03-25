@@ -42,6 +42,21 @@ G_BEGIN_DECLS
 /// Definition of a function that runs through all desklets.
 typedef gboolean (* CairoDockForeachDeskletFunc) (CairoDesklet *pDesklet, gpointer data);
 
+struct _CairoDialogManager {
+	CairoDockManager mgr;
+	CairoDesklet* (*create_desklet) (Icon *pIcon, CairoDeskletAttribute *pAttributes);
+	void (*destroy_desklet) (CairoDesklet *pDesklet);
+	
+	void (*place_dialog) (CairoDialog *pDialog);
+	void (*set_icon) (CairoDialog *pDialog, const gchar *cImageFilePath);
+	void (*set_icon_surface) (CairoDialog *pDialog, cairo_surface_t *pNewIconSurface, int iNewIconSize);
+	void (*free) (CairoDialog *pDialog);
+	GList *pDialogList;  // sinon il faut les fonctions ci-dessous.
+	void (*replace_all) (void);
+	void (*unreference) (CairoDialog *pDialog);  // a ce moment-la, free() n'est plus utile.
+	void (*icon_has_dialog) (Icon *pIcon);
+	gboolean (*remove_dialog_if_any_full) (Icon *icon, gboolean bAll);
+	} ;
 
 void cairo_dock_init_desklet_manager (void);
 void cairo_dock_load_desklet_buttons (void);
