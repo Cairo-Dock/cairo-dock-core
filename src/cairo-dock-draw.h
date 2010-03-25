@@ -82,7 +82,7 @@ void cairo_dock_draw_rounded_rectangle (cairo_t *pCairoContext, double fRadius, 
 *@param fInclination tangente de l'angle d'inclinaison des cotes du trapeze par rapport a la vertical. 0 pour tracer un rectangle.
 *@param bHorizontal CAIRO_DOCK_HORIZONTAL ou CAIRO_DOCK_VERTICAL suivant l'horizontalité du dock.
 */
-double cairo_dock_draw_frame (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination, gboolean bHorizontal);
+double cairo_dock_draw_frame (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination, gboolean bHorizontal, gboolean bRoundedBottomCorner);
 
 /* Dessine les decorations d'un dock a l'interieur d'un cadre prealablement trace sur the context.
 *@param pCairoContext the context du dessin, est laisse intact par la fonction.

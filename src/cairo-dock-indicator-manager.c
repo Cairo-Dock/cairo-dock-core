@@ -134,7 +134,7 @@ static inline void cairo_dock_load_active_window_indicator (const gchar *cImageP
 		double fFrameHeight = iHeight - 2 * fLineWidth;
 		double fDockOffsetX = fCornerRadius + fLineWidth/2;
 		double fDockOffsetY = fLineWidth/2;
-		cairo_dock_draw_frame (pCairoContext, fCornerRadius, fLineWidth, fFrameWidth, fFrameHeight, fDockOffsetX, fDockOffsetY, 1, 0., CAIRO_DOCK_HORIZONTAL);
+		cairo_dock_draw_frame (pCairoContext, fCornerRadius, fLineWidth, fFrameWidth, fFrameHeight, fDockOffsetX, fDockOffsetY, 1, 0., CAIRO_DOCK_HORIZONTAL, TRUE);
 		
 		cairo_set_source_rgba (pCairoContext, fActiveColor[0], fActiveColor[1], fActiveColor[2], fActiveColor[3]);
 		if (fLineWidth > 0)

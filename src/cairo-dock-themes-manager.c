@@ -163,6 +163,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	//curl_easy_setopt (handle, CURLOPT_PROXYPASSWORD, "password");
 	curl_easy_setopt (handle, CURLOPT_TIMEOUT, mySystem.iConnectiontMaxTime);
 	curl_easy_setopt (handle, CURLOPT_CONNECTTIMEOUT, mySystem.iConnectionTimeout);
+	curl_easy_setopt (handle, CURLOPT_NOSIGNAL, 1);  // With CURLOPT_NOSIGNAL set non-zero, curl will not use any signals; sinon curl se vautre apres le timeout, meme si le download s'est bien passe !
 	
 	CURLcode r = curl_easy_perform (handle);
 	

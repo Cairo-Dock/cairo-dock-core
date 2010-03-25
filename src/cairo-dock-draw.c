@@ -211,11 +211,11 @@ void cairo_dock_draw_rounded_rectangle (cairo_t *pCairoContext, double fRadius, 
 		cairo_close_path (pCairoContext);
 }
 
-static double cairo_dock_draw_frame_horizontal (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination)  // la largeur est donnee par rapport "au fond".
+static double cairo_dock_draw_frame_horizontal (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination, gboolean bRoundedBottomCorner)  // la largeur est donnee par rapport "au fond".
 {
 	if (2*fRadius > fFrameHeight + fLineWidth)
 		fRadius = (fFrameHeight + fLineWidth) / 2 - 1;
-	double fDeltaXForLoop = fInclination * (fFrameHeight + fLineWidth - (myBackground.bRoundedBottomCorner ? 2 : 1) * fRadius);
+	double fDeltaXForLoop = fInclination * (fFrameHeight + fLineWidth - (bRoundedBottomCorner ? 2 : 1) * fRadius);
 	double cosa = 1. / sqrt (1 + fInclination * fInclination);
 	double sina = cosa * fInclination;
 
@@ -227,22 +227,22 @@ static double cairo_dock_draw_frame_horizontal (cairo_t *pCairoContext, double f
 		0, 0,
 		fRadius * (1. / cosa - fInclination), 0,
 		fRadius * cosa, sens * fRadius * (1 - sina));
-	cairo_rel_line_to (pCairoContext, fDeltaXForLoop, sens * (fFrameHeight + fLineWidth - fRadius * (myBackground.bRoundedBottomCorner ? 2 : 1 - sina)));
+	cairo_rel_line_to (pCairoContext, fDeltaXForLoop, sens * (fFrameHeight + fLineWidth - fRadius * (bRoundedBottomCorner ? 2 : 1 - sina)));
 	//\_________________ Coin bas droit.
-	if (myBackground.bRoundedBottomCorner)
+	if (bRoundedBottomCorner)
 		cairo_rel_curve_to (pCairoContext,
 			0, 0,
 			fRadius * (1 + sina) * fInclination, sens * fRadius * (1 + sina),
 			-fRadius * cosa, sens * fRadius * (1 + sina));
 
-	cairo_rel_line_to (pCairoContext, - fFrameWidth -  2 * fDeltaXForLoop - (myBackground.bRoundedBottomCorner ? 0 : 2 * fRadius * cosa), 0);
+	cairo_rel_line_to (pCairoContext, - fFrameWidth -  2 * fDeltaXForLoop - (bRoundedBottomCorner ? 0 : 2 * fRadius * cosa), 0);
 	//\_________________ Coin bas gauche.
-	if (myBackground.bRoundedBottomCorner)
+	if (bRoundedBottomCorner)
 		cairo_rel_curve_to (pCairoContext,
 			0, 0,
 			-fRadius * (fInclination + 1. / cosa), 0,
 			-fRadius * cosa, -sens * fRadius * (1 + sina));
-	cairo_rel_line_to (pCairoContext, fDeltaXForLoop, sens * (- fFrameHeight - fLineWidth + fRadius * (myBackground.bRoundedBottomCorner ? 2 : 1 - sina)));
+	cairo_rel_line_to (pCairoContext, fDeltaXForLoop, sens * (- fFrameHeight - fLineWidth + fRadius * (bRoundedBottomCorner ? 2 : 1 - sina)));
 	//\_________________ Coin haut gauche.
 	cairo_rel_curve_to (pCairoContext,
 		0, 0,
@@ -253,11 +253,11 @@ static double cairo_dock_draw_frame_horizontal (cairo_t *pCairoContext, double f
 	//return fDeltaXForLoop + fRadius * cosa;
 	return fInclination * (fFrameHeight - (FALSE ? 2 : 1-sina) * fRadius) + fRadius * (FALSE ? 1 : cosa);
 }
-static double cairo_dock_draw_frame_vertical (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination)
+static double cairo_dock_draw_frame_vertical (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination, gboolean bRoundedBottomCorner)
 {
 	if (2*fRadius > fFrameHeight + fLineWidth)
 		fRadius = (fFrameHeight + fLineWidth) / 2 - 1;
-	double fDeltaXForLoop = fInclination * (fFrameHeight + fLineWidth - (myBackground.bRoundedBottomCorner ? 2 : 1) * fRadius);
+	double fDeltaXForLoop = fInclination * (fFrameHeight + fLineWidth - (bRoundedBottomCorner ? 2 : 1) * fRadius);
 	double cosa = 1. / sqrt (1 + fInclination * fInclination);
 	double sina = cosa * fInclination;
 
@@ -269,22 +269,22 @@ static double cairo_dock_draw_frame_vertical (cairo_t *pCairoContext, double fRa
 		0, 0,
 		0, fRadius * (1. / cosa - fInclination),
 		sens * fRadius * (1 - sina), fRadius * cosa);
-	cairo_rel_line_to (pCairoContext, sens * (fFrameHeight + fLineWidth - fRadius * (myBackground.bRoundedBottomCorner ? 2 : 1 - sina)), fDeltaXForLoop);
+	cairo_rel_line_to (pCairoContext, sens * (fFrameHeight + fLineWidth - fRadius * (bRoundedBottomCorner ? 2 : 1 - sina)), fDeltaXForLoop);
 	//\_________________ Coin bas droit.
-	if (myBackground.bRoundedBottomCorner)
+	if (bRoundedBottomCorner)
 		cairo_rel_curve_to (pCairoContext,
 			0, 0,
 			sens * fRadius * (1 + sina), fRadius * (1 + sina) * fInclination,
 			sens * fRadius * (1 + sina), -fRadius * cosa);
 
-	cairo_rel_line_to (pCairoContext, 0, - fFrameWidth -  2 * fDeltaXForLoop - (myBackground.bRoundedBottomCorner ? 0 : 2 * fRadius * cosa));
+	cairo_rel_line_to (pCairoContext, 0, - fFrameWidth -  2 * fDeltaXForLoop - (bRoundedBottomCorner ? 0 : 2 * fRadius * cosa));
 	//\_________________ Coin bas gauche.
-	if (myBackground.bRoundedBottomCorner)
+	if (bRoundedBottomCorner)
 		cairo_rel_curve_to (pCairoContext,
 			0, 0,
 			0, -fRadius * (fInclination + 1. / cosa),
 			-sens * fRadius * (1 + sina), -fRadius * cosa);
-	cairo_rel_line_to (pCairoContext, sens * (- fFrameHeight - fLineWidth + fRadius * (myBackground.bRoundedBottomCorner ? 2 : 1)), fDeltaXForLoop);
+	cairo_rel_line_to (pCairoContext, sens * (- fFrameHeight - fLineWidth + fRadius * (bRoundedBottomCorner ? 2 : 1)), fDeltaXForLoop);
 	//\_________________ Coin haut gauche.
 	cairo_rel_curve_to (pCairoContext,
 		0, 0,
@@ -295,12 +295,12 @@ static double cairo_dock_draw_frame_vertical (cairo_t *pCairoContext, double fRa
 	//return fDeltaXForLoop + fRadius * cosa;
 	return fInclination * (fFrameHeight - (FALSE ? 2 : 1-sina) * fRadius) + fRadius * (FALSE ? 1 : cosa);
 }
-double cairo_dock_draw_frame (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination, gboolean bHorizontal)
+double cairo_dock_draw_frame (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight, double fDockOffsetX, double fDockOffsetY, int sens, double fInclination, gboolean bHorizontal, gboolean bRoundedBottomCorner)
 {
 	if (bHorizontal)
-		return cairo_dock_draw_frame_horizontal (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight, fDockOffsetX, fDockOffsetY, sens, fInclination);
+		return cairo_dock_draw_frame_horizontal (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight, fDockOffsetX, fDockOffsetY, sens, fInclination, bRoundedBottomCorner);
 	else
-		return cairo_dock_draw_frame_vertical (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight, fDockOffsetX, fDockOffsetY, sens, fInclination);
+		return cairo_dock_draw_frame_vertical (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight, fDockOffsetX, fDockOffsetY, sens, fInclination, bRoundedBottomCorner);
 }
 
 void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *pDock, double fOffsetY, double fOffsetX, double fWidth)
