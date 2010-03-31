@@ -28,6 +28,8 @@ add_definitions (-DCAIRO_DOCK_DEFAULT_ICON_NAME="default-icon.svg")
 add_definitions (-DCAIRO_DOCK_ICON="cairo-dock.svg")
 add_definitions (-DCAIRO_DOCK_LOGO="cairo-dock-logo.png")
 add_definitions (-DCAIRO_DOCK_DATA_DIR="cairo-dock")
+add_custom_target(uninstall "${CMAKE_COMMAND}" -P "cmake_uninstall.cmake")
+
 
 ########### global variables ###############
 
@@ -109,6 +111,7 @@ configure_file (data/cairo-dock-simple.conf.in ${CMAKE_CURRENT_SOURCE_DIR}/data/
 configure_file (data/main-dock.conf.in ${CMAKE_CURRENT_SOURCE_DIR}/data/main-dock.conf)
 configure_file (data/themes.conf.in ${CMAKE_CURRENT_SOURCE_DIR}/data/themes.conf)
 configure_file (cairo-dock.pc.in ${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock.pc)
+configure_file ("cmake_uninstall.cmake.in" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake" IMMEDIATE @ONLY)
 
 ########### install files ###############
 
@@ -140,3 +143,5 @@ install (FILES  cairo-dock.pc DESTINATION ${libdir}/pkgconfig)
 #	LGPL-2\
 #	ChangeLog\
 #	copyright
+
+# ${CMAKE_CURRENT_BIN_DIR} or ${CMAKE_CURRENT_SOURCE_DIR}
