@@ -7,13 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2010-03-14 16:08+0000\n"
-"Last-Translator: Kjetil Birkeland Moe <kjetilbi@stud.ntnu.no>\n"
+"POT-Creation-Date: 2010-03-25 15:22+0000\n"
+"PO-Revision-Date: 2010-03-27 16:06+0000\n"
+"Last-Translator: Peder Bergan <Unknown>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-15 04:46+0000\n"
+"X-Launchpad-Export-Date: 2010-03-28 03:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-applet-facility.h:259
@@ -32,6 +33,9 @@ msgid ""
 "You can change this by opening the configuration of this module. Do you want "
 "to do it now?"
 msgstr ""
+"Kalibreringsdrakten ble ikke funnet. Standarddrakten vil brukes istedet.\n"
+" Du kan endre dette ved å åpne konfigurasjonen av denne modulen. Ønsker du å "
+"gjøre dette nå?"
 
 #: ../src/cairo-dock-applet-facility.h:356
 msgid "Applet's handbook"
@@ -59,7 +63,7 @@ msgstr "kunne ikke montere %s"
 #: ../src/cairo-dock-file-manager.c:587
 #, c-format
 msgid "Failed to unmount %s"
-msgstr "avmontering av %s mislyktes"
+msgstr "Avmontering av %s mislyktes"
 
 #: ../src/cairo-dock-gui-factory.c:761
 msgid "_Custom Icons_"
@@ -67,7 +71,7 @@ msgstr "_Egendefinerte ikoner_"
 
 #: ../src/cairo-dock-gui-factory.c:1095
 msgid "Accessory"
-msgstr ""
+msgstr "Tilbehør"
 
 #: ../src/cairo-dock-gui-factory.c:1100 ../src/cairo-dock-gui-main.c:130
 msgid "Desktop"
@@ -75,11 +79,11 @@ msgstr "Skrivebord"
 
 #: ../src/cairo-dock-gui-factory.c:1105
 msgid "Controller"
-msgstr ""
+msgstr "Kontroller"
 
 #: ../src/cairo-dock-gui-factory.c:1110
 msgid "Plug-in"
-msgstr ""
+msgstr "Programtillegg"
 
 #: ../src/cairo-dock-gui-factory.c:1141
 msgid "rate me"
@@ -87,7 +91,7 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-factory.c:1161
 msgid "Local"
-msgstr ""
+msgstr "Lokal"
 
 #: ../src/cairo-dock-gui-factory.c:1165
 msgid "User"
@@ -95,7 +99,7 @@ msgstr "Bruker"
 
 #: ../src/cairo-dock-gui-factory.c:1169
 msgid "Net"
-msgstr ""
+msgstr "Nett"
 
 #: ../src/cairo-dock-gui-factory.c:1173
 msgid "New"
@@ -121,34 +125,36 @@ msgstr ""
 "kunne bruke alle funksjonene."
 
 #: ../src/cairo-dock-gui-factory.c:1309
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
 "Activate it now?"
 msgstr ""
-"Utvidelsen '%s' er ikke aktivert.\n"
-"Denne må aktiveres for å kunne bruke disse funksjonene."
+"Programtillegget '%s' er ikke aktivt.\n"
+"Ønsker du å aktivere det nå?"
 
 #: ../src/cairo-dock-gui-factory.c:1957
 #, c-format
 msgid "Listing themes in '%s' ..."
-msgstr ""
+msgstr "Viser drakter i '%s' ..."
 
 #: ../src/cairo-dock-gui-factory.c:2128
 msgid "module"
-msgstr ""
+msgstr "modul"
 
 #: ../src/cairo-dock-gui-factory.c:2134
 msgid "category"
-msgstr ""
+msgstr "kategori"
 
 #: ../src/cairo-dock-gui-factory.c:2177
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
+"Klikk på et av de små programmene for å få en forhåndsvisning og beskrivelse."
 
 #: ../src/cairo-dock-gui-factory.c:2535
 msgid "state"
-msgstr ""
+msgstr "tilstand"
 
 #: ../src/cairo-dock-gui-factory.c:2541
 msgid "Theme"
@@ -156,19 +162,19 @@ msgstr "drakt"
 
 #: ../src/cairo-dock-gui-factory.c:2554
 msgid "Rating"
-msgstr "vurdering"
+msgstr "Vurdering"
 
 #: ../src/cairo-dock-gui-factory.c:2560
 msgid "Sobriety"
-msgstr ""
+msgstr "Edruelighet"
 
 #: ../src/cairo-dock-gui-factory.c:2646
 msgid "link"
-msgstr ""
+msgstr "lenke"
 
 #: ../src/cairo-dock-gui-factory.c:2699
 msgid "Grab"
-msgstr ""
+msgstr "Grip"
 
 #: ../src/cairo-dock-gui-launcher.c:376
 msgid "Launcher configuration"
@@ -188,7 +194,7 @@ msgstr "Tilbehør"
 
 #: ../src/cairo-dock-gui-main.c:131
 msgid "Controllers"
-msgstr ""
+msgstr "Kontrollører"
 
 #: ../src/cairo-dock-gui-main.c:132
 msgid "Plug-ins"
@@ -245,6 +251,8 @@ msgid ""
 "The '%s' module is not present. You need to install it and all its "
 "dependencies in order to use this module."
 msgstr ""
+"Modulen '%s' ble ikke funnet. Du må installere modulen og alle dens "
+"avhengigheter for å kunne bruke den."
 
 #: ../src/cairo-dock-gui-main.c:2225
 #, c-format
@@ -263,6 +271,11 @@ msgid ""
 "the Help module is here for you!\n"
 "Would you like to take a look at it now?"
 msgstr ""
+"Det ser ut til at du ikke har benyttet modulen for hjelp tidligere.\n"
+"Hvis du har vanskeligheter med å konfigurere Cairo-Dock, eller du vil "
+"tilpasse den,\n"
+"så er hjelpemodulen det du trenger!\n"
+"Ønsker du se på den nå?"
 
 #: ../src/cairo-dock-gui-manager.c:290
 msgid ""
@@ -271,6 +284,10 @@ msgid ""
 ", you can switch to an advanced mode.\n"
 " You can switch from a mode to another at any time."
 msgstr ""
+"Dette er det enkle konfigurasjonspanelet for Cairo-Dock.\n"
+" Etter du blir vant med det, og hvis du ønsker å tilpasse drakten din,\n"
+"kan du bytte til den avanserte modus.\n"
+" Du kan bytte fra en modus til en annen når som helst."
 
 #: ../src/cairo-dock-gui-manager.c:663
 msgid "Simple Mode"
@@ -285,19 +302,21 @@ msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
 msgstr ""
+"Den avanserte modus lar det justere alle enkeltparametere for dokken. Det er "
+"et kraftfullt verktøy for å tilpasse din nåværende drakt."
 
 #: ../src/cairo-dock-gui-simple.c:187 ../src/cairo-dock-gui-themes.c:217
 #, c-format
 msgid "Importing theme %s ..."
-msgstr ""
+msgstr "Importer drakt %s ..."
 
 #: ../src/cairo-dock-gui-themes.c:87
 msgid "Could not import the theme."
-msgstr ""
+msgstr "Kunne ikke importere drakten."
 
 #: ../src/cairo-dock-gui-themes.c:143
 msgid "The theme has been saved"
-msgstr "Drakten er lagret"
+msgstr "Drakten ble lagret"
 
 #: ../src/cairo-dock-gui-themes.c:143
 msgid "The theme could not be saved"
@@ -309,15 +328,15 @@ msgstr "Drakten har blitt slettet"
 
 #: ../src/cairo-dock-gui-themes.c:169
 msgid "The theme could not be deleted"
-msgstr ""
+msgstr "Drakten kunne ikke slettes"
 
 #: ../src/cairo-dock-gui-themes.c:171
 msgid "The themes have been deleted"
-msgstr ""
+msgstr "Drakten ble slettet"
 
 #: ../src/cairo-dock-gui-themes.c:171
 msgid "The themes could not be deleted"
-msgstr ""
+msgstr "Draktene kunne ikke slettes"
 
 #: ../src/cairo-dock-gui-themes.c:238
 msgid "Manage Themes"
@@ -346,11 +365,11 @@ msgstr "Velg en bakgrunn for samlevinduet."
 
 #: ../src/cairo-dock-internal-desklets.c:46
 msgid "_custom decoration_"
-msgstr ""
+msgstr "_tilpasset dekorasjon_"
 
 #: ../src/cairo-dock-internal-desklets.c:103 ../data/messages:573
 msgid "Desklets"
-msgstr ""
+msgstr "Skrivebordsprogrammer"
 
 #: ../src/cairo-dock-internal-desklets.c:105
 msgid "Applets can be displayed on your desktop as widgets."
@@ -361,6 +380,8 @@ msgid ""
 "This provides different window decorators. Enable this first if you want to "
 "select a different decorator for your dialog boxes."
 msgstr ""
+"Dette gir forskjellige vindudekorasjoner. Skru på dette hvis du ønsker velge "
+"en annen dekoratør for dine dialogvinduer."
 
 #: ../src/cairo-dock-internal-dialogs.c:134
 msgid "Dialog boxes"
@@ -376,7 +397,7 @@ msgstr "Skjult samlevindu"
 
 #: ../src/cairo-dock-internal-hidden-dock.c:89
 msgid "Define the appearance of the dock when it's hidden."
-msgstr ""
+msgstr "Definer utseendet på samlevinduet når det er skjult."
 
 #: ../src/cairo-dock-internal-icons.c:422
 msgid "Provides various animations for your icons."
@@ -435,13 +456,15 @@ msgstr "Oppgavelinje"
 
 #: ../src/cairo-dock-internal-taskbar.c:192
 msgid "Display and interact with currently open windows."
-msgstr ""
+msgstr "Vis og påvirk vinduene som er åpne."
 
 #: ../src/cairo-dock-internal-views.c:86
 msgid ""
 "Provides different views for Cairo-Dock. Enable this first if you want to "
 "select a different view for your docks."
 msgstr ""
+"Tilbyr forskjellige visninger for Cairo-Dock. Skru på dette hvis du ønsker "
+"velge en annen visning for ditt samlevindu."
 
 #: ../src/cairo-dock-internal-views.c:88 ../data/messages:103
 #: ../data/messages:517 ../data/messages:1245
@@ -450,20 +473,21 @@ msgstr "Visninger"
 
 #: ../src/cairo-dock-internal-views.c:90
 msgid "Select a view for each of your docks."
-msgstr ""
+msgstr "Velg en visning for hver av dine samlevinduer."
 
 #: ../src/cairo-dock-menu.c:112
 #, c-format
 msgid "Set position for the '%s' dock"
-msgstr ""
+msgstr "Angi posisjon for samlevinduet '%s'"
 
 #: ../src/cairo-dock-menu.c:190
 msgid "Community site"
-msgstr ""
+msgstr "Fellesskapets nettside"
 
 #: ../src/cairo-dock-menu.c:191
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
-msgstr "Et problem? Et forslag? Noen å snakke med? Du er hjertelig velkommen."
+msgstr ""
+"Et problem? Et forslag? Noen å snakke med? Du er hjertelig velkommen."
 
 #: ../src/cairo-dock-menu.c:194
 msgid "Development site"
@@ -479,7 +503,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:199 ../data/messages:1109
 msgid "Other applets"
-msgstr ""
+msgstr "Andre miniprogrammer"
 
 #: ../src/cairo-dock-menu.c:208
 msgid "Development"
@@ -499,7 +523,7 @@ msgstr "Avslutte Cairo-Dock?"
 
 #: ../src/cairo-dock-menu.c:319
 msgid "Configure"
-msgstr "Sett opp"
+msgstr "Konfigurer"
 
 #: ../src/cairo-dock-menu.c:324
 msgid "Configure behaviour, appearance, and applets."
@@ -521,14 +545,15 @@ msgstr "Behandle drakter."
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr ""
+"Velg fra de mange draktene på serveren eller lagre din nåværende drakt."
 
 #: ../src/cairo-dock-menu.c:346
 msgid "Unlock icons"
-msgstr "lås opp ikoner"
+msgstr "Lås opp ikoner"
 
 #: ../src/cairo-dock-menu.c:346
 msgid "Lock icons"
-msgstr "lås ikoner"
+msgstr "Lås ikoner"
 
 #: ../src/cairo-dock-menu.c:350
 msgid "This will (un)lock the position of the icons."
@@ -536,11 +561,11 @@ msgstr "Dette vil låse (opp) ikonenes plassering."
 
 #: ../src/cairo-dock-menu.c:354
 msgid "Unlock dock"
-msgstr "lås opp samlevindu"
+msgstr "Lås opp samlevindu"
 
 #: ../src/cairo-dock-menu.c:354
 msgid "Lock dock"
-msgstr "lås samlevindu"
+msgstr "Lås samlevindu"
 
 #: ../src/cairo-dock-menu.c:359
 msgid "This will (un)lock the whole dock."
@@ -552,7 +577,7 @@ msgstr "Hurtigskjul"
 
 #: ../src/cairo-dock-menu.c:369
 msgid "This will hide the dock until you hover over it with the mouse."
-msgstr ""
+msgstr "Dette vil skjule samlevinduet inntil du holder musepekeren over det."
 
 #: ../src/cairo-dock-menu.c:377
 msgid "Launch Cairo-Dock on startup"
@@ -588,6 +613,8 @@ msgid ""
 "the dock?\n"
 "(otherwise they will be destroyed)"
 msgstr ""
+"Ønsker du å re-sende ikonene i denne beholderen til samlevinduet?\n"
+"(Ikonene vil ellers bli tapt)"
 
 #: ../src/cairo-dock-menu.c:551
 msgid "This icon doesn't have a desktop file."
@@ -609,6 +636,8 @@ msgid ""
 "Warning: could not delete this file.\n"
 "Please check file permissions."
 msgstr ""
+"Advarsel: kunne ikke slette denne filen.\n"
+"Vennligst kontroller filens rettigheter."
 
 #: ../src/cairo-dock-menu.c:768
 msgid "Rename to:"
@@ -621,27 +650,34 @@ msgid ""
 "Check file permissions \n"
 "and that the new name does not already exist."
 msgstr ""
+"Advarsel: kunne ikke gi nytt til %s.\n"
+"Vennligst kontroller filens rettigheter \n"
+"og at det nye navnet ikke allerede finnes."
 
 #: ../src/cairo-dock-menu.c:816
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr ""
+"Du er i ferd med å fjerne dette miniprogrammet (%s) fra samlevinduet. Er du "
+"sikker?"
 
 #: ../src/cairo-dock-menu.c:927
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
 msgstr ""
+"Beklager, den tilhørende beskrivelsesfilen ble ikke funnet.\n"
+"Vurder å dra og slippe starteren fra applikasjonsmenyen."
 
 #: ../src/cairo-dock-menu.c:1159
 #, c-format
 msgid "Move all to desktop %d - face %d"
-msgstr ""
+msgstr "Flytt alle til skrivebord %d - flate %d"
 
 #: ../src/cairo-dock-menu.c:1159
 #, c-format
 msgid "Move to desktop %d - face %d"
-msgstr ""
+msgstr "Flytt til skrivebord %d - flate %d"
 
 #: ../src/cairo-dock-menu.c:1161
 #, c-format
@@ -656,16 +692,16 @@ msgstr "Flytt til skrivebord %d"
 #: ../src/cairo-dock-menu.c:1163
 #, c-format
 msgid "Move all to face %d"
-msgstr ""
+msgstr "Flytt alle til flate %d"
 
 #: ../src/cairo-dock-menu.c:1163
 #, c-format
 msgid "Move to face %d"
-msgstr ""
+msgstr "Flytt til flate %d"
 
 #: ../src/cairo-dock-menu.c:1214 ../src/cairo-dock-menu.c:1277
 msgid "Add"
-msgstr ""
+msgstr "Legg til"
 
 #: ../src/cairo-dock-menu.c:1218 ../src/cairo-dock-menu.c:1281
 msgid "Add a sub-dock"
@@ -684,6 +720,8 @@ msgstr "Legg til egendefinert oppstarter"
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr ""
+"Vanligvis vil du trekke en oppstarter fra menyen og slippe den på "
+"samlevinduet."
 
 #: ../src/cairo-dock-menu.c:1242
 msgid "Unmount"
@@ -721,10 +759,11 @@ msgstr "Fjern denne oppstarteren"
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr ""
+"Du kan fjerne en oppstarter ved å trekke den ut av samlevinduet med musen."
 
 #: ../src/cairo-dock-menu.c:1296
 msgid "Modify this separator"
-msgstr ""
+msgstr "Endre denne seperatoren"
 
 #: ../src/cairo-dock-menu.c:1296
 msgid "Modify this launcher"
@@ -756,11 +795,11 @@ msgstr "Fullskjerm"
 
 #: ../src/cairo-dock-menu.c:1338
 msgid "Don't keep above"
-msgstr ""
+msgstr "Ikke behold ovenpå"
 
 #: ../src/cairo-dock-menu.c:1338
 msgid "Keep above"
-msgstr ""
+msgstr "Behold ovenpå"
 
 #: ../src/cairo-dock-menu.c:1342
 msgid "Kill"
@@ -792,11 +831,11 @@ msgstr "Minimer"
 
 #: ../src/cairo-dock-menu.c:1362
 msgid "Close (middle-click)"
-msgstr ""
+msgstr "Lukk (midt-klikk)"
 
 #: ../src/cairo-dock-menu.c:1375
 msgid "Move all to this desktop"
-msgstr ""
+msgstr "Flytt alle til dette skrivebordet"
 
 #: ../src/cairo-dock-menu.c:1381
 msgid "Launch new"
@@ -808,7 +847,7 @@ msgstr "Vis alt"
 
 #: ../src/cairo-dock-menu.c:1386
 msgid "Minimise all"
-msgstr ""
+msgstr "Minimaliser alle"
 
 #: ../src/cairo-dock-menu.c:1388
 msgid "Close all"
@@ -816,11 +855,11 @@ msgstr "Lukk alle"
 
 #: ../src/cairo-dock-menu.c:1407
 msgid "Configure this applet"
-msgstr ""
+msgstr "Konfigurer dette miniprogrammet"
 
 #: ../src/cairo-dock-menu.c:1411
 msgid "Detach this applet"
-msgstr ""
+msgstr "Løsne dette miniprogrammet"
 
 #: ../src/cairo-dock-menu.c:1411
 msgid "Return to the dock"
@@ -828,11 +867,11 @@ msgstr "Returner til samlevindu"
 
 #: ../src/cairo-dock-menu.c:1414
 msgid "Remove this applet"
-msgstr ""
+msgstr "Fjern dette miniprogrammet"
 
 #: ../src/cairo-dock-menu.c:1418
 msgid "Launch another instance of this applet"
-msgstr ""
+msgstr "Start en ny instans av dette miniprogrammet"
 
 #: ../src/cairo-dock-menu.c:1455
 msgid "Normal"
@@ -848,11 +887,11 @@ msgstr "Alltid under"
 
 #: ../src/cairo-dock-menu.c:1481
 msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
-msgstr ""
+msgstr "Sett oppførsel i Compiz til: (name=cairo-dock & type=utility)"
 
 #: ../src/cairo-dock-menu.c:1483
 msgid "Reserve space"
-msgstr ""
+msgstr "Reserver plass"
 
 #: ../src/cairo-dock-menu.c:1490
 msgid "On all desktops"
@@ -867,6 +906,8 @@ msgid ""
 "A useful FAQ which also contains a lot of hints.\n"
 "Roll your mouse over a sentence to make helpful popups appear."
 msgstr ""
+"En nyttig FAQ som også inneholder mange hint.\n"
+"Hold musen over en setning for å se hjelpsomme ledetekster."
 
 #: ../src/cairo-dock-struct.h:454
 msgid "Default"
@@ -883,11 +924,13 @@ msgid ""
 "Could not access remote file %s/%s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
+"Kunne ikke åpne den eksterne filen %s/%s. Kanskje serveren har problemer.\n"
+"Vennligst prøv igjen senere eller kontakt oss på glx-dock.org"
 
 #: ../src/cairo-dock-themes-manager.c:894
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
-msgstr ""
+msgstr "Er du sikker på at du vil slette drakten %s?"
 
 #: ../src/cairo-dock-themes-manager.c:896
 msgid "Are you sure you want to delete these themes?"
@@ -899,6 +942,9 @@ msgid ""
 "You will lose them if you don't save before choosing a new theme. Continue "
 "anyway?"
 msgstr ""
+"Du har gjort endringer i den nåværende drakten.\n"
+"Du vil miste endringer hvis du ikke lagrer før du velger ny drakt. Fortsett "
+"uansett?"
 
 #: ../src/cairo-dock.c:501
 msgid "Use OpenGL in Cairo-Dock"
@@ -915,6 +961,15 @@ msgid ""
 " (To not show this dialog, launch the dock from the Application menu,\n"
 "  or with the -o option to force OpenGL and -c to force cairo.)"
 msgstr ""
+"OpenGL lar deg bruke maskinvareakselerasjon som reduserer CPU belastningen "
+"til minimum.\n"
+"Det gir også fine visuelle effekter lignende Compiz.\n"
+"Men enkelte grafikkort (eller deres drivere) støtter ikke dette fullt ut, "
+"noe som kan gjøre at samlevinduet ikke fungerer korrekt.\n"
+"Vil du aktivere OpenGL?\n"
+" (For å ikke vise denne dialogen, start samlevinduet fra "
+"applikasjonsmenyen,\n"
+"  eller med -o valget for å tvinge OpenGL og -c for å tvinge cairo.)"
 
 #: ../src/cairo-dock.c:623
 msgid ""
@@ -960,9 +1015,11 @@ msgid ""
 "It has been restored successfully, but if it happens again, please report it "
 "at http://glx-dock.org"
 msgstr ""
+"Modulen '%s' kan ha feilet.\n"
+"Den har blitt gjenopprettet, men hvis feilen skjer igjen vennligst rapporter "
+"det på http://glx-dock.org"
 
 #: ../data/messages:1
-#, fuzzy
 msgid "Behavior"
 msgstr "Oppførsel"
 
@@ -979,7 +1036,7 @@ msgstr ""
 
 #: ../data/messages:7 ../data/messages:139
 msgid "Choose which border of the screen the dock will be placed on:"
-msgstr ""
+msgstr "Velg hvilken kant av skjermen samlevinduet skal plasseres på:"
 
 #: ../data/messages:9 ../data/messages:141 ../data/messages:1215
 msgid "bottom"
@@ -1039,7 +1096,7 @@ msgstr "Skjul automatisk når vinduer maksimeres"
 
 #: ../data/messages:33 ../data/messages:193
 msgid "Pop-up on shortcut"
-msgstr ""
+msgstr "Popup vindu ved snarvei"
 
 #: ../data/messages:35 ../data/messages:201
 msgid ""
@@ -1047,28 +1104,32 @@ msgid ""
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
 "menu."
 msgstr ""
+"Når du benytter snarveien vil samlevinduet vises ved muses posisjon. Resten "
+"av tiden holder det seg skjult og oppfører seg som en meny."
 
 #: ../data/messages:37 ../data/messages:203
 msgid "Keyboard shortcut to pop-up the dock:"
-msgstr ""
+msgstr "Tastatursnarvei for å vise samlevinduet:"
 
 #: ../data/messages:39
 msgid "Visibility of sub-docks"
-msgstr ""
+msgstr "Synlighet av under-samlevinduer"
 
 #: ../data/messages:41
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
 msgstr ""
+"de vil vises enten når du klikker eller når du holder musen over ikonet som "
+"peker til det."
 
 #: ../data/messages:45
 msgid "Appear on mouse over"
-msgstr ""
+msgstr "Vis når musen holdes over"
 
 #: ../data/messages:47
 msgid "Appear on click"
-msgstr ""
+msgstr "Vis ved klikk"
 
 #: ../data/messages:51
 msgid ""
@@ -1083,41 +1144,43 @@ msgstr ""
 
 #: ../data/messages:53
 msgid "Behaviour of the Taskbar:"
-msgstr ""
+msgstr "Oppførselen til oppgavelinjen:"
 
 #: ../data/messages:55 ../data/messages:1343
 msgid "None"
-msgstr ""
+msgstr "Ingen"
 
 #: ../data/messages:57
 msgid "MacOSX"
-msgstr ""
+msgstr "MacOSX"
 
 #: ../data/messages:59
 msgid "Windows7"
-msgstr ""
+msgstr "Windows7"
 
 #: ../data/messages:61
 msgid "Gnome"
-msgstr ""
+msgstr "Gnome"
 
 #: ../data/messages:63
 msgid "Animations"
-msgstr ""
+msgstr "Animasjoner"
 
 #: ../data/messages:65 ../data/messages:697
 msgid "Configure icons' animations."
-msgstr ""
+msgstr "Konfigurer ikoners animasjoner."
 
 #: ../data/messages:67 ../data/messages:699
 msgid "Configure icons' special effects (requires OpenGL)."
-msgstr ""
+msgstr "Konfigurer ikoners spesialeffekter (krever OpenGL)."
 
 #: ../data/messages:69 ../data/messages:701
 msgid ""
 "Configure icons' animations on appearing/disappearing (require OpenGL "
 "capacity)."
 msgstr ""
+"Konfigurer ikoners animasjoner ved visning/skjuling (krever OpenGL "
+"kapasitet)."
 
 #: ../data/messages:75 ../data/messages:641
 msgid ""
@@ -1125,80 +1188,85 @@ msgid ""
 "name of a theme that is installed on your system (like 'Gartoon' or "
 "'Human'), or even a path to a folder containing icons."
 msgstr ""
+"La stå tom for å bruke det nåværende ikonsettet til ditt system. Du kan "
+"oppgi navnet på en drakt installert på systemet (f.eks. 'Human'), eller en "
+"sti til en mappe som inneholder ikoner."
 
 #: ../data/messages:77
 msgid "Choose a theme of icons :"
-msgstr ""
+msgstr "Velg et sett av ikoner:"
 
 #: ../data/messages:79
 msgid "Icons size:"
-msgstr ""
+msgstr "Ikoners størrelse:"
 
 #: ../data/messages:81
 msgid "Very small"
-msgstr ""
+msgstr "Veldig liten"
 
 #: ../data/messages:83
 msgid "Small"
-msgstr ""
+msgstr "Liten"
 
 #: ../data/messages:85
 msgid "Medium"
-msgstr ""
+msgstr "Middels"
 
 #: ../data/messages:87
 msgid "Big"
-msgstr ""
+msgstr "Stor"
 
 #: ../data/messages:89
 msgid "Very Big"
-msgstr ""
+msgstr "Veldig stor"
 
 #: ../data/messages:91
 msgid ""
 "This will separate launchers, application, and applets from each others. "
 "Separators will be automatically inserted then."
 msgstr ""
+"Dette vil separere oppstartere, applikasjoner, og miniprogrammer fra "
+"hverandre. Separatorer vil bli automatisk satt inn."
 
 #: ../data/messages:93 ../data/messages:731
 msgid "Separate the different types of icons?"
-msgstr ""
+msgstr "Separer de forskjellige typer ikoner?"
 
 #: ../data/messages:95 ../data/messages:741
 msgid "Order of the different types of icons :"
-msgstr ""
+msgstr "Ordningen av de forskjellige typer ikoner:"
 
 #: ../data/messages:97 ../data/messages:743
 msgid "launchers"
-msgstr ""
+msgstr "oppstarter"
 
 #: ../data/messages:99 ../data/messages:745
 msgid "applications"
-msgstr ""
+msgstr "applikasjoner"
 
 #: ../data/messages:101 ../data/messages:747
 msgid "applets"
-msgstr ""
+msgstr "miniprogrammer"
 
 #: ../data/messages:105 ../data/messages:521
 msgid "Choose the default view for main docks :"
-msgstr ""
+msgstr "Velg standardvisningen for samlevindueer:"
 
 #: ../data/messages:107 ../data/messages:525
 msgid "You can overwrite this parameter for each sub-dock."
-msgstr ""
+msgstr "Du kan overskrive dette parameteret for hver under-samlevindu."
 
 #: ../data/messages:109 ../data/messages:527
 msgid "Choose the default view for sub-docks :"
-msgstr ""
+msgstr "Velg standardvisningen for under-samlevinduer:"
 
 #: ../data/messages:111
 msgid "Add-ons"
-msgstr ""
+msgstr "Tillegg"
 
 #: ../data/messages:113
 msgid "Applets"
-msgstr ""
+msgstr "Miniprogrammer"
 
 #: ../data/messages:115
 msgid ""
@@ -1209,15 +1277,15 @@ msgstr ""
 
 #: ../data/messages:117
 msgid "Add or remove any applet :"
-msgstr ""
+msgstr "Legg til eller fjern et miniprogram:"
 
 #: ../data/messages:119 ../data/messages:1251
 msgid "Themes"
-msgstr ""
+msgstr "Drakt"
 
 #: ../data/messages:121 ../data/messages:1255
 msgid "Choose one of the available themes:"
-msgstr ""
+msgstr "Velg en av de tilgjengelige draktene:"
 
 #: ../data/messages:125 ../data/messages:1261
 msgid ""
@@ -1225,20 +1293,26 @@ msgid ""
 "ones provided in the new theme. Otherwise the current launchers will be "
 "kept, only icons will be replaced."
 msgstr ""
+"Hvis du huker av denne boksen vil oppstartere bli slettet og erstattet av de "
+"i den nye drakten. Ellers vil de nåværende oppstartere bli behold, kun "
+"ikonene erstattes."
 
 #: ../data/messages:127 ../data/messages:1263
 msgid "Use the new theme's launchers?"
-msgstr ""
+msgstr "Bruk den nye draktens oppstarere?"
 
 #: ../data/messages:129 ../data/messages:1265
 msgid ""
 "Otherwise the current behaviour will be kept. This defines the dock's "
 "position, behavioural settings such as auto-hide, using taskbar or not, etc."
 msgstr ""
+"Ellers vil den nåværende adferd beholdes. Dette definerer samlevindets "
+"posisjon, adferdsinnstillinger som auto-skjul, bruk av oppgavelinjer eller "
+"ikke, osv."
 
 #: ../data/messages:131 ../data/messages:1267
 msgid "Use the new theme's behaviour?"
-msgstr ""
+msgstr "Bruk den nye draktens adferd?"
 
 #: ../data/messages:149 ../data/messages:1223
 msgid ""
@@ -1248,6 +1322,11 @@ msgid ""
 "vertical. When set to 0.5, it will position itself relative to the middle of "
 "the screen's edge."
 msgstr ""
+"Når satt til 0 vil samlevinduet posisjonere seg relativt til venstre hjørne "
+"hvis horisontal og øverste hjørne hvis vertikal. Når satt til 1 vil det "
+"posisjonere seg relativt til høyre hjørne hvis horisontal eller nederste "
+"hjørne hvis vertikalt. Når satt til 0.5 vil posisjonen selv være relativ til "
+"midten av skjermens kanter."
 
 #: ../data/messages:151 ../data/messages:1225
 msgid "Relative alignment:"
@@ -1255,23 +1334,28 @@ msgstr "Relativ plassering:"
 
 #: ../data/messages:157
 msgid "Offset from the screen's edge"
-msgstr ""
+msgstr "Avstand fra skjermens kant"
 
 #: ../data/messages:159 ../data/messages:1229
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
 msgstr ""
+"Mellomrom fra den absolutte posisjon ved skjermens kant, i piksler. Du kan "
+"også bevege samlevinduet ved å holdet ALT eller CTRL tastene og venstre "
+"musetast."
 
 #: ../data/messages:161
 msgid "Lateral offset:"
-msgstr ""
+msgstr "Sidelengs avstand:"
 
 #: ../data/messages:163 ../data/messages:1233
 msgid ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
 msgstr ""
+"i piksler. Du kan også bevege samlevinduet ved å holdet ALT eller CTRL "
+"tastene og venstre musetast."
 
 #: ../data/messages:165 ../data/messages:1235
 msgid "Distance to the screen edge:"
@@ -1279,7 +1363,7 @@ msgstr "Avstand fra skjermkant:"
 
 #: ../data/messages:167
 msgid "Multiple screens"
-msgstr ""
+msgstr "Flere skjermer"
 
 #: ../data/messages:169
 msgid "Use Xinerama?"
@@ -1287,11 +1371,11 @@ msgstr "Bruke Xinerama?"
 
 #: ../data/messages:171 ../data/messages:1241
 msgid "starting from 0"
-msgstr ""
+msgstr "starter fra 0"
 
 #: ../data/messages:173 ../data/messages:1243
 msgid "Number of the screen where the dock should be located:"
-msgstr ""
+msgstr "Antall skjermer samlevinduet skal finnes:"
 
 #: ../data/messages:175
 msgid "Accessibility"
@@ -1299,31 +1383,31 @@ msgstr "Tilgjengelighet"
 
 #: ../data/messages:195
 msgid "Pop-up only if the mouse hits a screen corner"
-msgstr ""
+msgstr "Popup bare hvis musen treffer et av skjermens hjørner"
 
 #: ../data/messages:197
 msgid "in ms. 0 means no delay."
-msgstr ""
+msgstr "i ms. 0 betyr ingen forsinkelse"
 
 #: ../data/messages:199
 msgid "Delay before the dock unhides itself:"
-msgstr ""
+msgstr "Forsinkelse før samlevinduet viser seg:"
 
 #: ../data/messages:205
 msgid "Additional parameters"
-msgstr ""
+msgstr "Tilleggsparametere"
 
 #: ../data/messages:207
 msgid "Stretch the dock to always fill the screen"
-msgstr ""
+msgstr "Strekk samlevinduet til å alltid fylle skjermen"
 
 #: ../data/messages:209
 msgid "Placing the mouse into it will make the dock re-appear."
-msgstr ""
+msgstr "Å plassere musen inn i det vil vise samlevinduet."
 
 #: ../data/messages:211
 msgid "Size of the callback zone (width x height, in pixels):"
-msgstr ""
+msgstr "Størrelse på tilbakekallingssonen (bredde x høyde, i piksler):"
 
 #: ../data/messages:213
 msgid ""
@@ -1333,38 +1417,39 @@ msgstr ""
 
 #: ../data/messages:215
 msgid "Automatically hide the dock when a window becomes full screen?"
-msgstr ""
+msgstr "Automatisk skjul samlevinduet når et vindu maksimeres?"
 
 #: ../data/messages:217
 msgid "Sub-docks' visibility"
-msgstr ""
+msgstr "Under-samlevinduers synlighet"
 
 #: ../data/messages:219
-msgid "Otherwise they will appear when you hover over the icon pointing to it."
-msgstr ""
+msgid ""
+"Otherwise they will appear when you hover over the icon pointing to it."
+msgstr "Ellers vil de vises når du holder musen over ikonet det peker til."
 
 #: ../data/messages:221
 msgid "Click to show sub-docks"
-msgstr ""
+msgstr "Klikk for å vise under-samlevinduer"
 
 #: ../data/messages:223
 msgid "in ms."
-msgstr ""
+msgstr "i ms."
 
 #: ../data/messages:225
 msgid "Delay before leaving or entering a sub-dock takes effect:"
 msgstr ""
+"Forsinkelse før effekt av å gå inn i eller ut av et under-samlevindu:"
 
 #: ../data/messages:227
 msgid "in ms. Unused if you activate the click to show sub-docks."
-msgstr ""
+msgstr "i ms. Ubrukt hvis du aktiverer klikk for å vise under-samlevindu."
 
 #: ../data/messages:229
 msgid "Delay before displaying a sub-dock:"
-msgstr ""
+msgstr "Forsinkelse før visning av under-samlevindu:"
 
 #: ../data/messages:231
-#, fuzzy
 msgid "TaskBar"
 msgstr "Oppgavelinje"
 
@@ -1904,7 +1989,6 @@ msgid "same size"
 msgstr ""
 
 #: ../data/messages:537
-#, fuzzy
 msgid "Dialogs"
 msgstr "Dialogvinduer"
 
@@ -2082,7 +2166,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:651
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:653
@@ -2365,7 +2450,7 @@ msgstr ""
 
 #: ../data/messages:821
 msgid "Labels"
-msgstr ""
+msgstr "Etiketter"
 
 #: ../data/messages:823
 msgid "Show labels:"
@@ -2520,8 +2605,8 @@ msgstr ""
 
 #: ../data/messages:895
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:897
@@ -2536,8 +2621,8 @@ msgstr ""
 
 #: ../data/messages:901
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -2884,8 +2969,8 @@ msgstr ""
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -2958,9 +3043,9 @@ msgstr ""
 
 #: ../data/messages:1051
 msgid ""
-"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will no "
-"longer work. This applet lets you configure a shortcut to pop up the menu at "
-"the mouse's location."
+"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will "
+"no longer work. This applet lets you configure a shortcut to pop up the menu "
+"at the mouse's location."
 msgstr ""
 
 #: ../data/messages:1053
@@ -3098,10 +3183,11 @@ msgstr ""
 
 #: ../data/messages:1107
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/"
-"required_components_list/panel, and replace its content with \"cairo-dock\". "
-"This will not launch the dock on start-up, but just prevent the gnome-panel "
-"from launching, so don't forget to add Cairo-Dock on startup.\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components_list/panel, and replace its "
+"content with \"cairo-dock\". This will not launch the dock on start-up, but "
+"just prevent the gnome-panel from launching, so don't forget to add Cairo-"
+"Dock on startup.\n"
 "Then restart your session : the gnome-panel has not been started."
 msgstr ""
 
@@ -3120,8 +3206,8 @@ msgstr ""
 msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Cairo-Penguin, Weather, Netspeed, ...\n"
-"Right click on the applet's icon, and select «launch another instance». A new "
-"instance of this applet appears in the main dock.\n"
+"Right click on the applet's icon, and select «launch another instance». A "
+"new instance of this applet appears in the main dock.\n"
 "You can configure this new applet just like any other."
 msgstr ""
 
@@ -3202,16 +3288,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3253,8 +3339,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1163
@@ -3356,8 +3442,8 @@ msgstr ""
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3391,7 +3477,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1213
-msgid "Choose the screen border relative to which the dock will be positioned:"
+msgid ""
+"Choose the screen border relative to which the dock will be positioned:"
 msgstr ""
 
 #: ../data/messages:1227
@@ -3773,8 +3860,8 @@ msgstr ""
 #: ../data/messages:1443
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -3855,8 +3942,8 @@ msgstr ""
 #: ../data/messages:1455
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -3925,6 +4012,7 @@ msgstr ""
 #~ msgid "Close"
 #~ msgstr "Lukk"
 
+#, c-format
 #~ msgid "Downloading file %s ..."
 #~ msgstr "Laster ned fil %s ..."
 
