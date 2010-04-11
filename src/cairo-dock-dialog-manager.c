@@ -229,7 +229,7 @@ static gboolean on_button_press_dialog (GtkWidget* pWidget,
 				cd_debug ("clic on button %d", iButton);
 				if (iButton >= 0 && iButton < pDialog->iNbButtons && pDialog->pButtons[iButton].iOffset != 0)
 				{
-					g_print (" -> action !\n");
+					cd_debug (" -> action !");
 					pDialog->pButtons[iButton].iOffset = 0;
 					pDialog->action_on_answer (iButton, pDialog->pInteractiveWidget, pDialog->pUserData, pDialog);
 					gtk_widget_queue_draw (pDialog->container.pWidget);  // au cas ou le unref ci-dessous ne le detruirait pas.

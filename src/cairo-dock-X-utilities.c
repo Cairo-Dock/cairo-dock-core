@@ -162,7 +162,7 @@ gboolean cairo_dock_update_screen_geometry (void)
 		&x_return, &y_return,
 		&width_return, &height_return,
 		&border_width_return, &depth_return);
-	if (width_return != g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || height_return != g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // on n'utilise pas WidthOfScreen() et HeightOfScreen() car leurs valeurs ne sont pas mises a jour immediatement apres les changements de resolution.
+	if ((int)width_return != g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || (int)height_return != g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // on n'utilise pas WidthOfScreen() et HeightOfScreen() car leurs valeurs ne sont pas mises a jour immediatement apres les changements de resolution.
 	{
 		g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] = width_return;
 		g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] = height_return;

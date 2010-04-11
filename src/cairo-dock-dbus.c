@@ -375,7 +375,7 @@ void cairo_dock_dbus_get_property_in_value (DBusGProxy *pDbusProxy, const gchar 
 
 gboolean cairo_dock_dbus_get_property_as_boolean (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
 {
-	GValue v = {0};
+	GValue v = G_VALUE_INIT;
 	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
 	if (G_VALUE_HOLDS_BOOLEAN (&v))
 		return g_value_get_boolean (&v);
@@ -385,7 +385,7 @@ gboolean cairo_dock_dbus_get_property_as_boolean (DBusGProxy *pDbusProxy, const 
 
 gint cairo_dock_dbus_get_property_as_int (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
 {
-	GValue v = {0};
+	GValue v = G_VALUE_INIT;
 	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
 	if (G_VALUE_HOLDS_INT (&v))
 		return g_value_get_int (&v);
@@ -395,7 +395,7 @@ gint cairo_dock_dbus_get_property_as_int (DBusGProxy *pDbusProxy, const gchar *c
 
 guint cairo_dock_dbus_get_property_as_uint (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
 {
-	GValue v = {0};
+	GValue v = G_VALUE_INIT;
 	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
 	if (G_VALUE_HOLDS_UINT (&v))
 		return g_value_get_uint (&v);
@@ -405,7 +405,7 @@ guint cairo_dock_dbus_get_property_as_uint (DBusGProxy *pDbusProxy, const gchar 
 
 guchar cairo_dock_dbus_get_property_as_uchar (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
 {
-	GValue v = {0};
+	GValue v = G_VALUE_INIT;
 	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
 	if (G_VALUE_HOLDS_UCHAR (&v))
 		return g_value_get_uchar (&v);
@@ -415,7 +415,7 @@ guchar cairo_dock_dbus_get_property_as_uchar (DBusGProxy *pDbusProxy, const gcha
 
 gdouble cairo_dock_dbus_get_property_as_double (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
 {
-	GValue v = {0};
+	GValue v = G_VALUE_INIT;
 	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
 	if (G_VALUE_HOLDS_DOUBLE (&v))
 		return g_value_get_double (&v);
@@ -425,11 +425,11 @@ gdouble cairo_dock_dbus_get_property_as_double (DBusGProxy *pDbusProxy, const gc
 
 gchar *cairo_dock_dbus_get_property_as_string (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
 {
-	GValue v = {0};
+	GValue v = G_VALUE_INIT;
 	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
 	if (G_VALUE_HOLDS_STRING (&v))
 	{
-		gchar *s = g_value_get_string (&v);
+		gchar *s = (gchar*)g_value_get_string (&v);  // on recupere directement le contenu de la GValue. Comme on ne libere pas la GValue, la chaine est a liberer soi-meme quand on en n'a plus besoin.
 		return s;
 	}
 	else
@@ -438,11 +438,11 @@ gchar *cairo_dock_dbus_get_property_as_string (DBusGProxy *pDbusProxy, const gch
 
 gchar *cairo_dock_dbus_get_property_as_object_path (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
 {
-	GValue v = {0};
+	GValue v = G_VALUE_INIT;
 	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
 	if (G_VALUE_HOLDS (&v, DBUS_TYPE_G_OBJECT_PATH))
 	{
-		gchar *s = g_value_get_string (&v);
+		gchar *s = (gchar*)g_value_get_string (&v);  // meme remarque.
 		return s;
 	}
 	else
@@ -451,7 +451,7 @@ gchar *cairo_dock_dbus_get_property_as_object_path (DBusGProxy *pDbusProxy, cons
 
 gpointer cairo_dock_dbus_get_property_as_boxed (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
 {
-	GValue v = {0};
+	GValue v = G_VALUE_INIT;
 	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
 	if (G_VALUE_HOLDS_BOXED (&v))
 	{
@@ -472,7 +472,7 @@ GHashTable *cairo_dock_dbus_get_all_properties (DBusGProxy *pDbusProxy, const gc
 		G_TYPE_INVALID,
 		(dbus_g_type_get_map("GHashTable", G_TYPE_STRING, G_TYPE_VALUE)), &hProperties,
 		G_TYPE_INVALID);
-					
+	
 	if (erreur != NULL)
 	{
 		cd_warning (erreur->message);
@@ -506,7 +506,7 @@ void cairo_dock_dbus_set_property (DBusGProxy *pDbusProxy, const gchar *cInterfa
 
 void cairo_dock_dbus_set_boolean_property (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, gboolean bValue)
 {
-	GValue v = {0};
+	GValue v = G_VALUE_INIT;
 	g_value_init (&v, G_TYPE_BOOLEAN);
 	g_value_set_boolean (&v, bValue);
 	cairo_dock_dbus_set_property (pDbusProxy, cInterface, cProperty, &v);

@@ -24,6 +24,7 @@
 
 #ifdef HAVE_LIBGIO
 #include <string.h>
+#include <stdlib.h>
 
 #include <glib.h>
 #include <gio/gio.h>
@@ -228,6 +229,10 @@ static GDrive *_cd_find_drive_from_name (const gchar *cName)
 	GVolumeMonitor *pVolumeMonitor = g_volume_monitor_get ();
 	GDrive *pFoundDrive = NULL;
 	
+	gchar *str = strrchr (cName, '-');
+	if (str)
+		*str = '\0';
+	
 	//\___________________ On chope les disques connectes (lecteur de CD/disquette/etc) et on liste leurs volumes.
 	GList *pDrivesList = g_volume_monitor_get_connected_drives (pVolumeMonitor);
 	GList *dl;
@@ -244,12 +249,14 @@ static GDrive *_cd_find_drive_from_name (const gchar *cName)
 				pFoundDrive = pDrive;
 			else
 				g_object_unref (pDrive);
-			//g_free (cDriveName);
+			g_free (cDriveName);
 		}
 		else
 			g_object_unref (pDrive);
 	}
 	g_list_free (pDrivesList);
+	if (str)
+		*str = '-';
 	return pFoundDrive;
 }
 static gchar *_cd_find_volume_name_from_drive_name (const gchar *cName)
@@ -261,36 +268,36 @@ static gchar *_cd_find_volume_name_from_drive_name (const gchar *cName)
 	
 	gchar *cVolumeName = NULL;
 	GList *pAssociatedVolumes = g_drive_get_volumes (pDrive);
-	if (pAssociatedVolumes != NULL)
+	if (pAssociatedVolumes == NULL)
+		return NULL;
+	
+	int iNumVolume;
+	gchar *str = strrchr (cName, '-');
+	if (str)
 	{
-		GVolume *pVolume;
-		GList *av;
-		if (pAssociatedVolumes->next != NULL)
-		{
-			cd_message ("ce disque contient plus d'un volume, on garde le nom du disque plutot que de selectionner le nom d'un volume");
-			cd_message ("Pour info, la liste des volumes disponibles sur ce disque est :");
-			for (av = pAssociatedVolumes; av != NULL; av = av->next)
-			{
-				pVolume = av->data;
-				cd_message ("  - %s", g_volume_get_name  (pVolume));
-				/*if (cVolumeName == NULL)
-					cVolumeName = g_volume_get_name  (pVolume);
-				else
-					cd_warning ("gnome-integration : this drive (%s) has more than 1 volume but we only consider the first one (%s), ignoring %s", cName, cVolumeName, g_volume_get_name  (pVolume));*/
-				g_object_unref (pVolume);
-			}
-		}
-		else
-		{
-			return g_strdup ("discard");
-			pVolume = pAssociatedVolumes->data;
-			cVolumeName = g_volume_get_name  (pVolume);
-			g_object_unref (pVolume);
-			cd_message ("ce disque contient 1 seul volume (%s), on prend son nom", cVolumeName);
-		}
-		g_list_free (pAssociatedVolumes);
+		iNumVolume = atoi (str+1);
 	}
-	//g_object_unref (pDrive);
+	else
+		iNumVolume = 0;
+	
+	GVolume *pVolume = g_list_nth_data (pAssociatedVolumes, iNumVolume);
+	if (pVolume != NULL)
+	{
+		cVolumeName = g_volume_get_name (pVolume);
+	}
+	cd_debug ("%dth volume -> cVolumeName : %s\n", iNumVolume, cVolumeName);
+	
+	cd_debug ("Pour info, la liste des volumes disponibles sur ce disque est :");
+	GList *av;
+	for (av = pAssociatedVolumes; av != NULL; av = av->next)
+	{
+		pVolume = av->data;
+		cd_debug ("  - %s", g_volume_get_name  (pVolume));
+	}
+	
+	g_list_foreach (pAssociatedVolumes, (GFunc)g_object_unref, NULL);
+	g_list_free (pAssociatedVolumes);
+	
 	return cVolumeName;
 }
 static gboolean _cd_find_can_eject_from_drive_name (const gchar *cName)
@@ -767,8 +774,9 @@ static GList *cairo_dock_gio_vfs_list_directory (const gchar *cBaseURI, CairoDoc
 							if (cVolumeName != NULL)
 							{
 								g_free (cName);
-								g_free (cVolumeName);
-								continue;  /// apparemment il n'est plus necessaire d'afficher les .drives qui ont 1 (ou plusieurs ?) volumes, car ces derniers sont dans la liste, donc ca fait redondant.
+								cName = cVolumeName;
+								//g_free (cVolumeName);
+								//continue;  /// apparemment il n'est plus necessaire d'afficher les .drives qui ont 1 (ou plusieurs ?) volumes, car ces derniers sont dans la liste, donc ca fait redondant.
 								/**if (strcmp (cVolumeName, "discard") == 0)
 									continue;
 								g_free (cName);
@@ -877,7 +885,7 @@ static gchar *_cd_find_target_uri (const gchar *cBaseURI)
 	g_object_unref (pFile);
 	if (erreur != NULL)
 	{
-		cd_warning ("gnome-integration (%s) : %s", cBaseURI, erreur->message);
+		cd_debug ("%s (%s) : %s", __func__, cBaseURI, erreur->message);  // peut arriver avec un .mount, donc pas de warning.
 		g_error_free (erreur);
 		return NULL;
 	}
@@ -1056,7 +1064,7 @@ static void cairo_dock_gio_vfs_mount (const gchar *cURI, int iVolumeID, CairoDoc
 	gpointer *data2 = g_new (gpointer, 5);
 	data2[0] = pCallback;
 	data2[1] = GINT_TO_POINTER (1);
-	data2[2] = g_path_get_basename (cTargetURI);
+	data2[2] = (cTargetURI ? g_path_get_basename (cTargetURI) : g_strdup (cURI));
 	data2[3] = icon;
 	data2[4] = pContainer;
 	g_file_mount_mountable  (pFile,

@@ -31,6 +31,8 @@ G_BEGIN_DECLS
 * DBus is used to communicate and interact with other running applications.
 */ 
 
+#define G_VALUE_INIT {0,{{0}}}  // bonne idée d'un dev de GTK, pour eviter les warnings de gcc.
+
 /** Get the connection to the 'session' Bus.
 *@return the connection to the bus.
 */
