@@ -2070,7 +2070,7 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 	if (pGroupDescription->pExternalModules != NULL)
 	{
 		// on cree les widgets de tous les modules externes dans un meme notebook.
-		g_print ("on cree les widgets de tous les modules externes\n");
+		//g_print ("on cree les widgets de tous les modules externes\n");
 		GtkWidget *pNoteBook = NULL;
 		GKeyFile* pExtraKeyFile;
 		CairoDockModule *pModule;

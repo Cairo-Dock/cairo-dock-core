@@ -138,7 +138,7 @@ void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 	pVisitCard->cUserDataDir = "help";
 	pVisitCard->cShareDataDir = CAIRO_DOCK_SHARE_DATA_DIR;
 	pVisitCard->cConfFileName = "help.conf";
-	pVisitCard->cModuleVersion = "0.0.8";
+	pVisitCard->cModuleVersion = "0.0.9";
 	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
 	pVisitCard->cIconFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/icon-help.svg";
 	pVisitCard->iSizeOfConfig = 0;

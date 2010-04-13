@@ -343,7 +343,7 @@ static void _on_change_window_state (Icon *icon)
 	gboolean bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention, bPrevHidden = icon->bIsHidden;
 	if (! cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention))
 	{
-		g_print ("Special case : this appli (%s, %ld) should be ignored from now !\n", icon->cName, Xid);
+		//g_print ("Special case : this appli (%s, %ld) should be ignored from now !\n", icon->cName, Xid);
 		CairoDock *pParentDock = cairo_dock_detach_appli (icon);
 		if (pParentDock != NULL)
 			gtk_widget_queue_draw (pParentDock->container.pWidget);
@@ -663,7 +663,7 @@ static gboolean _on_property_changed_notification (gpointer data, Window Xid, At
 	{
 		if (! cairo_dock_xwindow_skip_taskbar (Xid))
 		{
-			g_print ("Special case : this appli (%ld) should not be ignored any more!\n", Xid);
+			//g_print ("Special case : this appli (%ld) should not be ignored any more!\n", Xid);
 			g_hash_table_remove (s_hXWindowTable, &Xid);
 			g_free (icon);
 		}
@@ -747,7 +747,9 @@ static void cairo_dock_blacklist_appli (Window Xid)
 	{
 		cd_debug ("%s (%ld)", __func__, Xid);
 		Window *pXid = g_new (Window, 1);
-			*pXid = Xid;
+		*pXid = Xid;
+		cairo_dock_set_xwindow_mask (Xid, PropertyChangeMask | StructureNotifyMask);  // on veut pouvoir etre notifie de ses changements d'etat (si "skip taskbar" disparait, elle reviendra dans la barre des taches).
+		
 		Icon *pNullIcon = g_new0 (Icon, 1);
 		pNullIcon->iLastCheckTime = s_iTime;
 		g_hash_table_insert (s_hXWindowTable, pXid, pNullIcon);  // NULL

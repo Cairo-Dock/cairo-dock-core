@@ -288,6 +288,8 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bIsHor
 }
 static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDock *pDock, double fRatio)
 {
+	if (s_activeIndicatorBuffer.iTexture == 0)
+		return ;
 	glPushMatrix ();
 	cairo_dock_set_icon_scale (icon, CAIRO_CONTAINER (pDock), 1.);
 	

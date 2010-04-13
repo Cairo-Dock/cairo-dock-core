@@ -1072,7 +1072,7 @@ gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gb
 			
 			else if (pXStateBuffer[i] == s_aNetWmSkipTaskbar)
 			{
-				cd_warning ("this appli should not be in taskbar anymore !");
+				cd_debug ("this appli should not be in taskbar anymore");
 				bValid = FALSE;
 			}
 		}
