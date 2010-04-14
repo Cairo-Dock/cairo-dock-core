@@ -964,7 +964,7 @@ static void _cairo_dock_hide_show_in_class_subdock (Icon *icon)
 	}
 }
 
-static void _cairo_dock_show_prev_next_in_class_subdock (Icon *icon, gboolean bNext)
+/**static void _cairo_dock_show_prev_next_in_class_subdock (Icon *icon, gboolean bNext)
 {
 	Icon *pActiveIcon = cairo_dock_get_current_active_icon ();
 	Icon *pNextIcon;
@@ -989,6 +989,32 @@ static void _cairo_dock_show_prev_next_in_class_subdock (Icon *icon, gboolean bN
 	}
 	if (pNextIcon != NULL)
 		cairo_dock_show_xwindow (pNextIcon->Xid);
+}*/
+static void _cairo_dock_show_prev_next_in_subdock (Icon *icon, gboolean bNext)
+{
+	Window xActiveId = cairo_dock_get_current_active_window ();
+	GList *ic;
+	Icon *pIcon;
+	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+	{
+		pIcon = ic->data;
+		if (pIcon->Xid == xActiveId)
+			break;
+	}
+	if (ic == NULL)
+		ic = icon->pSubDock->icons;
+	
+	GList *ic2 = ic;
+	do
+	{
+		ic2 = (bNext ? cairo_dock_get_next_element (ic2, icon->pSubDock->icons) : cairo_dock_get_previous_element (ic2, icon->pSubDock->icons));
+		pIcon = ic2->data;
+		if (CAIRO_DOCK_IS_APPLI (pIcon))
+		{
+			cairo_dock_show_xwindow (pIcon->Xid);
+			break;
+		}
+	} while (ic2 != ic);
 }
 
 static void _cairo_dock_close_all_in_class_subdock (Icon *icon)
@@ -1282,9 +1308,9 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 
 gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, int iDirection)
 {
-	if (CAIRO_DOCK_IS_MULTI_APPLI (icon))  // on emule un alt+tab sur la liste des applis du sous-dock.
+	if (CAIRO_DOCK_IS_MULTI_APPLI (icon) || CAIRO_DOCK_IS_CONTAINER_LAUNCHER (icon))  // on emule un alt+tab sur la liste des applis du sous-dock.
 	{
-		_cairo_dock_show_prev_next_in_class_subdock (icon, iDirection == GDK_SCROLL_DOWN);
+		_cairo_dock_show_prev_next_in_subdock (icon, iDirection == GDK_SCROLL_DOWN);
 	}
 	else if (CAIRO_DOCK_IS_APPLI (icon) && icon->cClass != NULL)
 	{
