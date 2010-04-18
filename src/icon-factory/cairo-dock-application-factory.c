@@ -143,9 +143,16 @@ Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmWindowType, 0, G_MAXULONG, False, XA_ATOM, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pTypeBuffer);
 	if (iBufferNbElements != 0)
 	{
-		if (*pTypeBuffer != s_aNetWmWindowTypeNormal)  // pas une fenetre normale.
+		gboolean bKeep = FALSE;
+		guint i;
+		for (i = 0; i < iBufferNbElements; i ++)  // The Client SHOULD specify window types in order of preference (the first being most preferable) but MUST include at least one of the basic window type atoms.
 		{
-			if (*pTypeBuffer == s_aNetWmWindowTypeDialog)  // on saute si c'est un dialogue modal.
+			if (pTypeBuffer[i] == s_aNetWmWindowTypeNormal)  // une fenetre normale, on prend.
+			{
+				bKeep = TRUE;
+				break;
+			}
+			if (*pTypeBuffer == s_aNetWmWindowTypeDialog)  // on saute si c'est un dialogue modal, sinon on garde.
 			{
 				/*Window iPropWindow;
 				XGetTransientForHint (s_XDisplay, Xid, &iPropWindow);
@@ -156,18 +163,18 @@ Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 					cd_debug ("  dialogue 'transient for %d' => on ignore", XMainAppliWindow);
 					if (bDemandsAttention)
 						*XParentWindow = XMainAppliWindow;
-					XFree (pTypeBuffer);
-					return NULL;
+					break;
 				}
-			}
-			else  // autre type : on saute.
-			{
-				cd_debug ("type indesirable (%d)", *pTypeBuffer);
-				XFree (pTypeBuffer);
-				return NULL;
-			}
+				bKeep = TRUE;
+				break;
+			}  // autre type : on saute.
 		}
 		XFree (pTypeBuffer);
+		if (! bKeep)
+		{
+			cd_debug ("type indesirable (%d)\n", *pTypeBuffer);
+			return NULL;
+		}
 	}
 	else  // pas de type defini.
 	{
