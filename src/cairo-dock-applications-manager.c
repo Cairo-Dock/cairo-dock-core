@@ -150,7 +150,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 				/// redessiner les inhibiteurs ?...
 			}
 			
-			if (cairo_dock_quick_hide_is_activated () && ((icon->bIsFullScreen && ! icon->bIsHidden && myAccessibility.bAutoHideOnFullScreen) || (icon->bIsMaximized && ! icon->bIsHidden && myAccessibility.bAutoHideOnMaximized)))  // cette fenetre peut avoir gene.
+			/**if (cairo_dock_quick_hide_is_activated () && ((icon->bIsFullScreen && ! icon->bIsHidden && myAccessibility.bAutoHideOnFullScreen) || (icon->bIsMaximized && ! icon->bIsHidden && myAccessibility.bAutoHideOnMaximized)))  // cette fenetre peut avoir gene.
 			{
 				/// le faire pour tous les docks principaux ...
 				if (cairo_dock_search_window_on_our_way (g_pMainDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)  // on regarde si une autre gene encore.
@@ -158,7 +158,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 					cd_message (" => plus aucune fenetre genante");
 					cairo_dock_deactivate_temporary_auto_hide ();
 				}
-			}
+			}*/
 		}
 		else
 		{
@@ -213,7 +213,7 @@ static void _on_update_applis_list (CairoDock *pDock)
 				{
 					cairo_dock_prevent_inhibated_class (icon);
 				}
-				if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized && ! icon->bIsHidden) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen && ! icon->bIsHidden))
+				/**if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized && ! icon->bIsHidden) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen && ! icon->bIsHidden))
 				{
 					if (! cairo_dock_quick_hide_is_activated ())
 					{
@@ -223,7 +223,7 @@ static void _on_update_applis_list (CairoDock *pDock)
 							cairo_dock_activate_temporary_auto_hide ();
 						}
 					}
-				}
+				}*/
 			}
 			else
 				cairo_dock_blacklist_appli (Xid);
@@ -249,6 +249,7 @@ static gboolean _on_change_active_window_notification (gpointer data, Window *Xi
 	Window XActiveWindow = *Xid;
 	if (s_iCurrentActiveWindow != XActiveWindow)  // la fenetre courante a change.
 	{
+		// on gere son animation et son indicateur.
 		Icon *icon = g_hash_table_lookup (s_hXWindowTable, &XActiveWindow);
 		CairoDock *pParentDock = NULL;
 		if (CAIRO_DOCK_IS_APPLI (icon))
@@ -267,6 +268,7 @@ static gboolean _on_change_active_window_notification (gpointer data, Window *Xi
 			}
 		}
 		
+		// on enleve l'indicateur sur la precedente appli active.
 		gboolean bForceKbdStateRefresh = FALSE;
 		Icon *pLastActiveIcon = g_hash_table_lookup (s_hXWindowTable, &s_iCurrentActiveWindow);
 		if (CAIRO_DOCK_IS_APPLI (pLastActiveIcon))
@@ -294,6 +296,22 @@ static gboolean _on_change_active_window_notification (gpointer data, Window *Xi
 			bForceKbdStateRefresh = TRUE;
 		s_iCurrentActiveWindow = XActiveWindow;
 		
+		// on gere le masquage du dock.
+		if (myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
+		{
+			if (_cairo_dock_appli_is_on_our_way (icon, g_pMainDock))  // la nouvelle fenetre active nous gene.
+			{
+				if (!cairo_dock_quick_hide_is_activated ())
+					cairo_dock_activate_temporary_auto_hide ();
+			}
+			else
+			{
+				if (cairo_dock_quick_hide_is_activated ())
+					cairo_dock_deactivate_temporary_auto_hide ();
+			}
+		}
+		
+		// notification xklavier.
 		if (bForceKbdStateRefresh)  // si on active une fenetre n'ayant pas de focus clavier, on n'aura pas d'evenement kbd_changed, pourtant en interne le clavier changera. du coup si apres on revient sur une fenetre qui a un focus clavier, il risque de ne pas y avoir de changement de clavier, et donc encore une fois pas d'evenement ! pour palier a ce, on considere que les fenetres avec focus clavier sont celles presentes en barre des taches. On decide de generer un evenement lorsqu'on revient sur une fenetre avec focus, a partir d'une fenetre sans focus (mettre a jour le clavier pour une fenetre sans focus n'a pas grand interet, autant le laisser inchange).
 			cairo_dock_notify (CAIRO_DOCK_KBD_STATE_CHANGED, &XActiveWindow);
 	}
@@ -307,19 +325,28 @@ static gboolean _on_change_current_desktop_viewport_notification (gpointer data)
 	// applis du bureau courant seulement.
 	if (myTaskBar.bAppliOnCurrentDesktopOnly)
 	{
-		int data[2] = {g_desktopGeometry.iCurrentDesktop, GPOINTER_TO_INT (pDock)};
 		g_hash_table_foreach (s_hXWindowTable, (GHFunc) _cairo_dock_hide_show_windows_on_other_desktops, pDock);
 	}
-
+	
 	cairo_dock_hide_show_launchers_on_other_desktops(pDock);
-
-	// auto-hide sur appli maximisee/plein-ecran
-	if (myAccessibility.bAutoHideOnFullScreen || myAccessibility.bAutoHideOnMaximized)
+	
+	// masquage du dock.
+	if (myAccessibility.bAutoHideOnFullScreen || myAccessibility.bAutoHideOnOverlap)
 	{
-		//g_print ("%s (%d)\n", __func__, cairo_dock_quick_hide_is_activated ());
-		if (cairo_dock_quick_hide_is_activated ())
+		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
+		if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
 		{
-			if (cairo_dock_search_window_on_our_way (pDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
+			if (!cairo_dock_quick_hide_is_activated ())
+				cairo_dock_activate_temporary_auto_hide ();
+		}
+		else
+		{
+			if (cairo_dock_quick_hide_is_activated ())
+				cairo_dock_deactivate_temporary_auto_hide ();
+		}
+		/**if (cairo_dock_quick_hide_is_activated ())
+		{
+			if (cairo_dock_search_window_overlapping_dock (pDock) == NULL)
 			{
 				cd_message (" => plus aucune fenetre genante");
 				cairo_dock_deactivate_temporary_auto_hide ();
@@ -327,12 +354,12 @@ static gboolean _on_change_current_desktop_viewport_notification (gpointer data)
 		}
 		else
 		{
-			if (cairo_dock_search_window_on_our_way (pDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) != NULL)
+			if (cairo_dock_search_window_overlapping_dock (pDock) != NULL)
 			{
 				cd_message (" => une fenetre est genante");
 				cairo_dock_activate_temporary_auto_hide ();
 			}
-		}
+		}*/
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -367,8 +394,29 @@ static void _on_change_window_state (Icon *icon)
 		}
 	}
 	
-	// auto-hide on maximised/fullscreen windows.
-	if (myAccessibility.bAutoHideOnMaximized || myAccessibility.bAutoHideOnFullScreen)
+	// masquage du dock.
+	if (myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
+	{
+		if (Xid == s_iCurrentActiveWindow)  // c'est la fenetre courante qui a change d'etat.
+		{
+			if ((bIsHidden != icon->bIsHidden) || (bIsFullScreen != icon->bIsFullScreen))  // si c'est l'etat maximise qui a change, on le verra au changement de dimensions.
+			{
+				icon->bIsFullScreen = bIsFullScreen;
+				icon->bIsHidden = bIsHidden;
+				if (_cairo_dock_appli_is_on_our_way (icon, g_pMainDock))  // la fenetre active nous gene.
+				{
+					if (!cairo_dock_quick_hide_is_activated ())
+						cairo_dock_activate_temporary_auto_hide ();
+				}
+				else
+				{
+					if (cairo_dock_quick_hide_is_activated ())
+						cairo_dock_deactivate_temporary_auto_hide ();
+				}
+			}
+		}
+	}
+	/**if (myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
 	{
 		if ((bIsMaximized != icon->bIsMaximized) ||
 			((bIsMaximized || bIsFullScreen) && bIsHidden != icon->bIsHidden) ||
@@ -393,9 +441,10 @@ static void _on_change_window_state (Icon *icon)
 				}
 			}
 		}
-	}
+	}*/
 	icon->bIsMaximized = bIsMaximized;
 	icon->bIsFullScreen = bIsFullScreen;
+	icon->bIsHidden = bIsHidden;
 	
 	// on gere le cachage/apparition de l'icone (transparence ou miniature, applis minimisees seulement).
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
@@ -483,8 +532,24 @@ static void _on_change_window_desktop (Icon *icon)
 		_cairo_dock_hide_show_windows_on_other_desktops (&Xid, icon, g_pMainDock);  // si elle vient sur notre bureau, elle n'est pas forcement sur le meme viewport, donc il faut le verifier.
 	}
 	
-	// auto-hide sur appli maximisee/plein-ecran
-	if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized && ! icon->bIsHidden) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen && ! icon->bIsHidden))  // cette fenetre peut provoquer l'auto-hide.
+	// masquage du dock.
+	if (myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
+	{
+		if (Xid == s_iCurrentActiveWindow)  // c'est la fenetre courante qui a change de bureau.
+		{
+			if (_cairo_dock_appli_is_on_our_way (icon, g_pMainDock))  // la fenetre active nous gene.
+			{
+				if (!cairo_dock_quick_hide_is_activated ())
+					cairo_dock_activate_temporary_auto_hide ();
+			}
+			else
+			{
+				if (cairo_dock_quick_hide_is_activated ())
+					cairo_dock_deactivate_temporary_auto_hide ();
+			}
+		}
+	}
+	/**if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized && ! icon->bIsHidden) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen && ! icon->bIsHidden))  // cette fenetre peut provoquer l'auto-hide.
 	{
 		if (! cairo_dock_quick_hide_is_activated () && (icon->iNumDesktop == -1 || icon->iNumDesktop == g_desktopGeometry.iCurrentDesktop))  // l'appli arrive sur le bureau courant.
 		{
@@ -503,7 +568,7 @@ static void _on_change_window_desktop (Icon *icon)
 				cairo_dock_deactivate_temporary_auto_hide ();
 			}
 		}
-	}
+	}*/
 }
 
 static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
@@ -542,7 +607,7 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 				gtk_widget_queue_draw (pParentDock->container.pWidget);
 		}
 		
-		// auto-hide sur appli maximisee/plein-ecran
+		/** // auto-hide sur appli maximisee/plein-ecran
 		if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized && ! icon->bIsHidden) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen && ! icon->bIsHidden))  // cette fenetre peut provoquer l'auto-hide.
 		{
 			if (cairo_dock_quick_hide_is_activated ())
@@ -553,7 +618,7 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 					cairo_dock_deactivate_temporary_auto_hide ();
 				}
 			}
-		}
+		}*/
 	}
 	else  // elle est sur le bureau.
 	{
@@ -566,13 +631,31 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 				cairo_dock_insert_appli_in_dock (icon, g_pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 		}
 		
-		// auto-hide sur appli maximisee/plein-ecran
+		/** // auto-hide sur appli maximisee/plein-ecran
 		if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized && ! icon->bIsHidden) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen && ! icon->bIsHidden))  // cette fenetre peut provoquer l'auto-hide.
 		{
 			if (! cairo_dock_quick_hide_is_activated ())
 			{
 				cd_message (" sur le viewport courant => cela nous gene");
 				cairo_dock_activate_temporary_auto_hide ();
+			}
+		}*/
+	}
+	
+	// masquage du dock.
+	if (myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
+	{
+		if (Xid == s_iCurrentActiveWindow)  // c'est la fenetre courante qui a change de bureau.
+		{
+			if (_cairo_dock_appli_is_on_our_way (icon, g_pMainDock))  // la fenetre active nous gene.
+			{
+				if (!cairo_dock_quick_hide_is_activated ())
+					cairo_dock_activate_temporary_auto_hide ();
+			}
+			else
+			{
+				if (cairo_dock_quick_hide_is_activated ())
+					cairo_dock_deactivate_temporary_auto_hide ();
 			}
 		}
 	}
@@ -842,7 +925,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 				cairo_dock_prevent_inhibated_class (pIcon);
 			}
 			
-			if ((myAccessibility.bAutoHideOnMaximized && pIcon->bIsMaximized) || (myAccessibility.bAutoHideOnFullScreen && pIcon->bIsFullScreen))
+			/**if ((myAccessibility.bAutoHideOnMaximized && pIcon->bIsMaximized) || (myAccessibility.bAutoHideOnFullScreen && pIcon->bIsFullScreen))
 			{
 				if (! cairo_dock_quick_hide_is_activated () && cairo_dock_appli_is_on_current_desktop (pIcon))
 				{
@@ -851,7 +934,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 						cairo_dock_activate_temporary_auto_hide ();
 					}
 				}
-			}
+			}*/
 		}
 		else
 			cairo_dock_blacklist_appli (Xid);
@@ -861,6 +944,22 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 	
 	if (bUpdateMainDockSize)
 		cairo_dock_update_dock_size (pDock);
+	
+	// masquage du dock.
+	if (myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
+	{
+		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
+		if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
+		{
+			if (!cairo_dock_quick_hide_is_activated ())
+				cairo_dock_activate_temporary_auto_hide ();
+		}
+		else
+		{
+			if (cairo_dock_quick_hide_is_activated ())
+				cairo_dock_deactivate_temporary_auto_hide ();
+		}
+	}
 	
 	s_bAppliManagerIsRunning = TRUE;
 }
@@ -993,7 +1092,7 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
  // Applis manager : access //
 /////////////////////////////
 
-static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gpointer *data)
+static gboolean _cairo_dock_window_is_covering_dock (Window *Xid, Icon *icon, gpointer *data)
 {
 	gboolean bMaximizedWindow = GPOINTER_TO_INT (data[0]);
 	gboolean bFullScreenWindow = GPOINTER_TO_INT (data[1]);
@@ -1003,7 +1102,7 @@ static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gpoin
 		if ((data[0] && icon->bIsMaximized) || (data[1] && icon->bIsFullScreen) || (!data[0] && ! data[1]))
 		{
 			cd_debug ("%s est genante (%d, %d) (%d;%d %dx%d)", icon->cName, icon->bIsMaximized, icon->bIsFullScreen, icon->windowGeometry.x, icon->windowGeometry.y, icon->windowGeometry.width, icon->windowGeometry.height);
-			if (cairo_dock_appli_hovers_dock (icon, pDock))
+			if (cairo_dock_appli_covers_dock (icon, pDock))
 			{
 				cd_debug (" et en plus elle empiete sur notre dock");
 				return TRUE;
@@ -1012,12 +1111,29 @@ static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gpoin
 	}
 	return FALSE;
 }
-Icon * cairo_dock_search_window_on_our_way (CairoDock *pDock, gboolean bMaximizedWindow, gboolean bFullScreenWindow)
+Icon *cairo_dock_search_window_covering_dock (CairoDock *pDock, gboolean bMaximizedWindow, gboolean bFullScreenWindow)
 {
 	//cd_debug ("%s (%d, %d)", __func__, bMaximizedWindow, bFullScreenWindow);
 	gpointer data[3] = {GINT_TO_POINTER (bMaximizedWindow), GINT_TO_POINTER (bFullScreenWindow), pDock};
-	return g_hash_table_find (s_hXWindowTable, (GHRFunc) _cairo_dock_window_is_on_our_way, data);
+	return g_hash_table_find (s_hXWindowTable, (GHRFunc) _cairo_dock_window_is_covering_dock, data);
 }
+
+static gboolean _cairo_dock_window_is_overlapping_dock (Window *Xid, Icon *icon, CairoDock *pDock)
+{
+	if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_is_on_current_desktop (icon) && ! icon->bIsHidden && ! cairo_dock_icon_is_being_removed (icon) && icon->iLastCheckTime != -1)
+	{
+		if (cairo_dock_appli_overlaps_dock (icon, pDock))
+		{
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+Icon *cairo_dock_search_window_overlapping_dock (CairoDock *pDock)
+{
+	return g_hash_table_find (s_hXWindowTable, (GHRFunc) _cairo_dock_window_is_overlapping_dock, pDock);
+}
+
 
 
 GList *cairo_dock_get_current_applis_list (void)

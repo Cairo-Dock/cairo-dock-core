@@ -33,7 +33,8 @@ void cairo_dock_appli_stops_demanding_attention (Icon *icon);
 void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock);
 
 
-gboolean cairo_dock_appli_hovers_dock (Icon *pIcon, CairoDock *pDock);
+gboolean cairo_dock_appli_covers_dock (Icon *pIcon, CairoDock *pDock);
+gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock);
 
 
 CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bUpdateSize, gboolean bAnimate);

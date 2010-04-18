@@ -29,6 +29,7 @@
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-application-facility.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-dock-facility.h"
@@ -57,8 +58,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 				pAccessibility->bAutoHide = g_key_file_get_boolean (pKeyFile, "Accessibility", "auto-hide", NULL);
 				if (! pAccessibility->bAutoHide)
 				{
-					pAccessibility->bAutoHideOnMaximized = g_key_file_get_boolean (pKeyFile, "Accessibility", "auto quick hide on max", NULL);
-					if (pAccessibility->bAutoHideOnMaximized)
+					pAccessibility->bAutoHideOnOverlap = g_key_file_get_boolean (pKeyFile, "Accessibility", "auto quick hide on max", NULL);
+					if (pAccessibility->bAutoHideOnOverlap)
 						iAccessibility = 4;
 					else if (cShortkey)
 					{
@@ -94,7 +95,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 				pAccessibility->bAutoHide = TRUE;
 			break;
 			case 4 :
-				pAccessibility->bAutoHideOnMaximized = TRUE;
+				pAccessibility->bAutoHideOnOverlap = TRUE;
 			break;
 			case 5 :
 				pAccessibility->cRaiseDockShortcut = cShortkey;
@@ -225,21 +226,11 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 	//\_______________ Auto-Hide
 	if (pDock)
 	{
-		if (! pAccessibility->bAutoHide && pPrevAccessibility->bAutoHide)
-		{
-			pDock->bAutoHide = pAccessibility->bAutoHide;
-			cairo_dock_start_showing (pDock);
-		}
-		else if (pAccessibility->bAutoHide && ! pPrevAccessibility->bAutoHide)
-		{
-			pDock->bAutoHide = pAccessibility->bAutoHide;
-			cairo_dock_start_hiding (pDock);
-		}
-		
 		if (pAccessibility->bAutoHideOnFullScreen != pPrevAccessibility->bAutoHideOnFullScreen ||
-			pAccessibility->bAutoHideOnMaximized != pPrevAccessibility->bAutoHideOnMaximized)
+			pAccessibility->bAutoHideOnOverlap != pPrevAccessibility->bAutoHideOnOverlap)
 		{
-			if ((!pAccessibility->bAutoHideOnMaximized && ! pAccessibility->bAutoHideOnFullScreen) || cairo_dock_search_window_on_our_way (pDock, pAccessibility->bAutoHideOnMaximized, pAccessibility->bAutoHideOnFullScreen) == NULL)
+			Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
+			if (!_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))
 			{
 				if (cairo_dock_quick_hide_is_activated () && !pDock->bAutoHide)
 				{
@@ -255,6 +246,33 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 					cairo_dock_activate_temporary_auto_hide ();
 				}
 			}
+			/**if ((!pAccessibility->bAutoHideOnOverlap && ! pAccessibility->bAutoHideOnFullScreen) || cairo_dock_search_window_on_our_way (pDock, pAccessibility->bAutoHideOnMaximized, pAccessibility->bAutoHideOnFullScreen) == NULL)
+			{
+				if (cairo_dock_quick_hide_is_activated () && !pDock->bAutoHide)
+				{
+					cd_message (" => aucune fenetre n'est desormais genante");
+					cairo_dock_deactivate_temporary_auto_hide ();
+				}
+			}
+			else
+			{
+				if (! cairo_dock_quick_hide_is_activated ())
+				{
+					cd_message (" => une fenetre desormais genante");
+					cairo_dock_activate_temporary_auto_hide ();
+				}
+			}*/
+		}
+		
+		if (! pAccessibility->bAutoHide && pPrevAccessibility->bAutoHide)
+		{
+			pDock->bAutoHideInitialValue = pDock->bAutoHide = pAccessibility->bAutoHide;
+			cairo_dock_start_showing (pDock);
+		}
+		else if (pAccessibility->bAutoHide && ! pPrevAccessibility->bAutoHide)
+		{
+			pDock->bAutoHideInitialValue = pDock->bAutoHide = pAccessibility->bAutoHide;
+			cairo_dock_start_hiding (pDock);
 		}
 	}
 }

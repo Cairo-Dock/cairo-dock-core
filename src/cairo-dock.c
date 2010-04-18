@@ -457,19 +457,6 @@ int main (int argc, char** argv)
 	cairo_dock_register_data_renderer_entry_point ("graph", (CairoDataRendererNewFunc) cairo_dock_new_graph);
 	
 	//\___________________ On enregistre les notifications de base.
-	cairo_dock_register_notification (CAIRO_DOCK_DROP_DATA,
-		(CairoDockNotificationFunc) cairo_dock_notification_drop_data,
-		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
-	cairo_dock_register_notification (CAIRO_DOCK_CLICK_ICON,
-		(CairoDockNotificationFunc) cairo_dock_notification_click_icon,
-		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
-	cairo_dock_register_notification (CAIRO_DOCK_MIDDLE_CLICK_ICON,
-		(CairoDockNotificationFunc) cairo_dock_notification_middle_click_icon,
-		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
-	cairo_dock_register_notification (CAIRO_DOCK_SCROLL_ICON,
-		(CairoDockNotificationFunc) cairo_dock_notification_scroll_icon,
-		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
-	
 	cairo_dock_register_notification (CAIRO_DOCK_RENDER_ICON,
 		(CairoDockNotificationFunc) cairo_dock_render_icon_notification,
 		CAIRO_DOCK_RUN_FIRST, NULL);
@@ -541,6 +528,13 @@ int main (int argc, char** argv)
 	else
 		cairo_dock_initialize_module_manager (NULL);
 	
+	if (!bSafeMode && cairo_dock_get_nb_modules () <= 1)  // le module Help est inclus de base.
+	{
+		Icon *pIcon = cairo_dock_get_dialogless_icon ();
+		cairo_dock_ask_question_and_wait (("No plug-in were found.\nPlug-ins provide most of the functionnalities of Cairo-Dock (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nSince there is almost no meaning in running the dock without them, the application will quit now."), pIcon, CAIRO_CONTAINER (g_pMainDock));
+		exit (0);
+	}
+	
 	//\___________________ On definit le backend des GUI.
 	cairo_dock_load_user_gui_backend ();
 	cairo_dock_register_default_launcher_gui_backend ();
@@ -549,6 +543,19 @@ int main (int argc, char** argv)
 	cairo_dock_register_default_renderer ();
 	
 	//\___________________ On enregistre nos notifications.
+	cairo_dock_register_notification (CAIRO_DOCK_DROP_DATA,
+		(CairoDockNotificationFunc) cairo_dock_notification_drop_data,
+		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
+	cairo_dock_register_notification (CAIRO_DOCK_CLICK_ICON,
+		(CairoDockNotificationFunc) cairo_dock_notification_click_icon,
+		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
+	cairo_dock_register_notification (CAIRO_DOCK_MIDDLE_CLICK_ICON,
+		(CairoDockNotificationFunc) cairo_dock_notification_middle_click_icon,
+		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
+	cairo_dock_register_notification (CAIRO_DOCK_SCROLL_ICON,
+		(CairoDockNotificationFunc) cairo_dock_notification_scroll_icon,
+		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
+	
 	cairo_dock_register_notification (CAIRO_DOCK_BUILD_CONTAINER_MENU,
 		(CairoDockNotificationFunc) cairo_dock_notification_build_container_menu,
 		CAIRO_DOCK_RUN_FIRST, NULL);
@@ -656,13 +663,6 @@ int main (int argc, char** argv)
 		Icon *icon = cairo_dock_get_dialogless_icon ();
 		cairo_dock_show_temporary_dialog_with_icon (cMessage, icon, CAIRO_CONTAINER (g_pMainDock), 15000., (pModule ? pModule->pVisitCard->cIconFilePath : NULL));
 		g_free (cMessage);
-	}
-	
-	if (cairo_dock_get_nb_modules () <= 1)  // le module Help est inclus de base.
-	{
-		Icon *pIcon = cairo_dock_get_dialogless_icon ();
-		cairo_dock_ask_question_and_wait (("No plug-in were found.\nPlug-ins provide most of the functionnalities of Cairo-Dock (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nSince there is almost no meaning in running the dock without them, the application will quit now."), pIcon, CAIRO_CONTAINER (g_pMainDock));
-		exit (0);
 	}
 	
 	//\___________________ On affiche le changelog en cas de nouvelle version.

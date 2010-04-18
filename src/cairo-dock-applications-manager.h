@@ -54,12 +54,22 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock);
 
 
 // Applis manager : access
-/** Get the icon of an application whose window covers a dock, or NULL if none. If both parameters are FALSE, check for all windows.
-* @param pDock the dock to test.
-* @param bMaximizedWindow check for maximized windows only.
-* @param bFullScreenWindow check for full screen windows only.
+#define _cairo_dock_appli_is_on_our_way(icon, pDock) (icon != NULL && cairo_dock_appli_is_on_current_desktop (icon) &&  ((myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen) || (myAccessibility.bAutoHideOnOverlap && cairo_dock_appli_overlaps_dock (icon, pDock))))
+
+/** Get the icon of an application whose window covers entirely a dock, or NULL if none. If both parameters are FALSE, check for all windows.
+*@param pDock the dock to test.
+*@param bMaximizedWindow check for maximized windows only.
+*@param bFullScreenWindow check for full screen windows only.
 *@return the icon representing the window, or NULL if none has been found.
-*/Icon * cairo_dock_search_window_on_our_way (CairoDock *pDock, gboolean bMaximizedWindow, gboolean bFullScreenWindow);
+*/
+Icon * cairo_dock_search_window_covering_dock (CairoDock *pDock, gboolean bMaximizedWindow, gboolean bFullScreenWindow);
+
+/** Get the icon of an application whose window overlaps a dock, or NULL if none.
+*@param pDock the dock to test.
+*@return the icon of the window, or NULL if none has been found.
+*/
+Icon *cairo_dock_search_window_overlapping_dock (CairoDock *pDock);
+
 
 /** Get the list of appli's icons currently known by Cairo-Dock, including the icons not displayed in the dock. You can then order the list by z-order, name, etc.
 *@return a newly allocated list of applis's icons. You must free the list when you're finished with it, but not the icons.

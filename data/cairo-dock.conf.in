@@ -42,7 +42,7 @@ num screen = 0
 #F-[Visibility of the main dock;gtk-find]
 frame_visi =
 
-#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;1;1;Automatically hide the dock;2;1;Automatically hide when a window is maximized;2;1;Pop-up on shortcut;3;1] Visibility:
+#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;1;1;Automatically hide the dock;2;1;Automatically hide when a window overlaps the dock;2;1;Pop-up on shortcut;3;1] Visibility:
 #{Prevent windows from overlapping the dock: reserve space at the edge of the screen for the dock.
 #Auto-hide: the dock will automatically hide itself outside of the screen when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.
 #Keep the dock below windows: the dock will pop-up on the foreground when you place the mouse on its screen border.
@@ -127,7 +127,7 @@ group exception = pidgin;xchat;amsn
 #F-[Representation;gtk-find]
 frame3 =
 
-#B- Overwrite the X icon with the launchers' icon
+#B- Overwrite the X icon with the launchers' icon?
 #{If not set, the icon provided by X for each application will be used. If set, the same icon as the corresponding launcher will be used for each application.}
 overwrite xicon = true
 
@@ -135,12 +135,12 @@ overwrite xicon = true
 #{Enter the class of the applications, separated by a semi-colon ';'}
 overwrite exception = pidgin;xchat;amsn;gimp-2.6
 
-#Y-[Make the icon transparent?;1;1;Show thumbnails for minimised windows;0;0;Draw it bent backwards;0;0] How to draw minimised windows ?
+#Y-[Make the icon transparent;1;1;Show a window's thumbnail;0;0;Draw it bent backwards;0;0] How to draw minimised windows ?
 #{A composite manager is required to display the thumbnail.
 #OpenGL is required to draw the icon bent backwards.}
 minimized = 1
 
-#e-[0;.6;Opaque;Transparent] Transparency of icons whose window is or isn't minimised:
+#e-[0;.6;Opaque;Transparent] Transparency of icons whose window is minimised:
 visibility alpha = 0.35
 
 #b- Display an indicator even when the icon is not a launcher ?
@@ -217,7 +217,7 @@ fade out nb steps = 15
 #{The more there are, the slower it will be}
 move up nb steps = 10
 #I-[4;40;fast;slow] ...
-move down nb steps = 12
+move down nb steps = 16
 
 #F-[Refresh rate;gtk-execute]
 frame_cpu =

@@ -38,6 +38,7 @@
 
 #include "../config.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-application-facility.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-config.h"
@@ -695,11 +696,20 @@ void cairo_dock_deactivate_temporary_auto_hide (void)
 void cairo_dock_stop_quick_hide (void)
 {
 	cd_message ("");
-	if (s_bTemporaryAutoHide && s_bQuickHide && ((!myAccessibility.bAutoHideOnMaximized && !myAccessibility.bAutoHideOnFullScreen) || cairo_dock_search_window_on_our_way (g_pMainDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL))
+	if (s_bTemporaryAutoHide && s_bQuickHide)
+	{
+		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
+		if (!_cairo_dock_appli_is_on_our_way (pActiveAppli, g_pMainDock))
+		{
+			s_bTemporaryAutoHide = FALSE;
+			g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_stop_quick_hide_one_root_dock, NULL);
+		}
+	}
+	/**if (s_bTemporaryAutoHide && s_bQuickHide && ((!myAccessibility.bAutoHideOnOurWay && !myAccessibility.bAutoHideOnFullScreen) || cairo_dock_search_window_on_our_way (g_pMainDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL))
 	{
 		s_bTemporaryAutoHide = FALSE;
 		g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_stop_quick_hide_one_root_dock, NULL);
-	}
+	}*/
 	s_bQuickHide = FALSE;
 }
 

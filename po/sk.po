@@ -1555,7 +1555,7 @@ msgstr ""
 "spúšťač pre každú aplikáciu."
 
 #: ../data/messages:259
-msgid "Overwrite the X icon with the launchers' icon"
+msgid "Overwrite the X icon with the launchers' icon?"
 msgstr "Nahradiť ikonu X ikonou spúšťača"
 
 #: ../data/messages:265
@@ -1571,11 +1571,11 @@ msgid "How to draw minimised windows ?"
 msgstr "Ako vykresliť minimalizované okná?"
 
 #: ../data/messages:269
-msgid "Make the icon transparent?"
+msgid "Make the icon transparent"
 msgstr "Urobiť ikonu priehľadnou?"
 
 #: ../data/messages:271
-msgid "Show thumbnails for minimised windows"
+msgid "Show a window's thumbnail"
 msgstr "Zobraziť náhľady pre minimalizované okná"
 
 #: ../data/messages:273
@@ -1583,7 +1583,7 @@ msgid "Draw it bent backwards"
 msgstr "Vykresliť ohnuté dozadu"
 
 #: ../data/messages:275
-msgid "Transparency of icons whose window is or isn't minimised:"
+msgid "Transparency of icons whose window is minimised:"
 msgstr "Priehľadnosť ikôn, ktorých okná sú, alebo nie sú minimalizované:"
 
 #: ../data/messages:277 ../data/messages:439 ../data/messages:491

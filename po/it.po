@@ -1581,7 +1581,7 @@ msgstr ""
 "quella del lanciatore per ciascuna applicazione dello stesso programma."
 
 #: ../data/messages:259
-msgid "Overwrite the X icon with the launchers' icon"
+msgid "Overwrite the X icon with the launchers' icon?"
 msgstr "Sostituisci le icone di X con quelle del lanciatore ?"
 
 #: ../data/messages:265
@@ -1597,11 +1597,11 @@ msgid "How to draw minimised windows ?"
 msgstr "Disegna le finestre minimizzate come ?"
 
 #: ../data/messages:269
-msgid "Make the icon transparent?"
+msgid "Make the icon transparent"
 msgstr "Rendi le icone trasparenti?"
 
 #: ../data/messages:271
-msgid "Show thumbnails for minimised windows"
+msgid "Show a window's thumbnail"
 msgstr "Mostra le anteprime delle finestre minimizzate"
 
 #: ../data/messages:273
@@ -1609,7 +1609,7 @@ msgid "Draw it bent backwards"
 msgstr "Disegnala piegata all'indietro"
 
 #: ../data/messages:275
-msgid "Transparency of icons whose window is or isn't minimised:"
+msgid "Transparency of icons whose window is minimised:"
 msgstr "Trasparenza dell'icona  di cui la finestra è o non è minimizzata:"
 
 #: ../data/messages:277 ../data/messages:439 ../data/messages:491

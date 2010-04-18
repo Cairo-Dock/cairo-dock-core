@@ -1597,7 +1597,7 @@ msgstr ""
 "pour chaque appli"
 
 #: ../data/messages:259
-msgid "Overwrite the X icon with the launchers' icon"
+msgid "Overwrite the X icon with the launchers' icon?"
 msgstr "Ecraser les icônes X avec celles des lanceurs ?"
 
 #: ../data/messages:265
@@ -1613,20 +1613,20 @@ msgid "How to draw minimised windows ?"
 msgstr "Comment seront affichées les fenêtres minimisées?"
 
 #: ../data/messages:269
-msgid "Make the icon transparent?"
-msgstr "Ajouter de la transparence à l'icône ?"
+msgid "Make the icon transparent"
+msgstr "Rendre l'icône transparente"
 
 #: ../data/messages:271
-msgid "Show thumbnails for minimised windows"
-msgstr "Afficher une miniature de la fenêtre lorsqu'elle est minimisée ?"
+msgid "Show a window's thumbnail"
+msgstr "Afficher une miniature de la fenêtre"
 
 #: ../data/messages:273
 msgid "Draw it bent backwards"
-msgstr "Affichez avec une inclinaison vers l'arrière"
+msgstr "Afficher penchée vers l'arrière"
 
 #: ../data/messages:275
-msgid "Transparency of icons whose window is or isn't minimised:"
-msgstr "Transparence des icônes dont la fenêtre est ou n'est pas minimisée :"
+msgid "Transparency of icons whose window is minimised:"
+msgstr "Transparence des icônes dont la fenêtre est minimisée :"
 
 #: ../data/messages:277 ../data/messages:439 ../data/messages:491
 #: ../data/messages:589 ../data/messages:615 ../data/messages:687
@@ -1644,7 +1644,7 @@ msgid ""
 "on applications too."
 msgstr ""
 "Les indicateurs sont dessinés sur les lanceurs actifs, mais vous pouvez "
-"également les afficher sur les applications."
+"vouloir les afficher aussi sur les applications."
 
 #: ../data/messages:283
 msgid "Display an indicator even when the icon is not a launcher ?"
@@ -1654,7 +1654,7 @@ msgstr "Afficher un indicateur meme si l'icône n'est pas un lanceur ?"
 msgid "Play a short animation of the icon when its window becomes active"
 msgstr ""
 "Jouer une brève animation de l'icône lorsque la fenêtre correspondante "
-"devient active ?"
+"devient active"
 
 #: ../data/messages:287
 msgid "\"...\" will be added at the end if the name is too long."

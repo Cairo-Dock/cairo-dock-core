@@ -878,7 +878,7 @@ gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey fo
 			return myAccessibility.bPopUp;
 		if ((iScreenBorder1 != CAIRO_DOCK_INSIDE_SCREEN && iScreenBorder2 != CAIRO_DOCK_INSIDE_SCREEN) || myAccessibility.bPopUpOnScreenBorder)
 		{
-			if (cairo_dock_search_window_on_our_way (pDock, FALSE, TRUE) == NULL)  // ce test est la pour parer aux WM qui laissent passer des fenetres en avant-plan alors qu'une fenetre plein ecran est presente (Compiz ...). c'est particulierement penible pendant son Starcraft du soir.
+			if (cairo_dock_search_window_covering_dock (pDock, FALSE, TRUE) == NULL)  // ce test est la pour parer aux WM qui laissent passer des fenetres en avant-plan alors qu'une fenetre plein ecran est presente (Compiz ...). c'est particulierement penible pendant son Starcraft du soir.
 			{
 				if (iScreenBorder1 != CAIRO_DOCK_INSIDE_SCREEN)
 					cairo_dock_pop_up_root_docks_on_screen_edge (iScreenBorder1);

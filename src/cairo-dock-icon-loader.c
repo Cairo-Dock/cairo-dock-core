@@ -630,7 +630,7 @@ void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
 void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 {
 	g_return_if_fail (pIcon != NULL && pIcon->pSubDock != NULL && (pIcon->pIconBuffer != NULL || pIcon->iIconTexture != 0));
-	//g_print ("%s (%s)\n", __func__, pIcon->cName);
+	g_print ("%s (%s)\n", __func__, pIcon->cName);
 	
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, CAIRO_CONTAINER (pDock), &w, &h);
@@ -970,6 +970,7 @@ static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, int w, int h
 
 static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, int w, int h, cairo_t *pCairoContext)
 {
+	g_print ("%s (%dx%d)\n", __func__, w, h);
 	if (pCairoContext)
 	{
 		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);

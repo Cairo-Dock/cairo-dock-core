@@ -1468,7 +1468,7 @@ msgstr ""
 "aplicativo."
 
 #: ../data/messages:255
-msgid "Overwrite the X icon with the launchers' icon"
+msgid "Overwrite the X icon with the launchers' icon?"
 msgstr "Sobrescrever os ícones do X pelos do lançador ?"
 
 #: ../data/messages:261
@@ -1494,7 +1494,7 @@ msgid "Draw it bent backwards"
 msgstr ""
 
 #: ../data/messages:271
-msgid "Transparency of icons whose window is or isn't minimised:"
+msgid "Transparency of icons whose window is minimised:"
 msgstr ""
 
 #: ../data/messages:273 ../data/messages:435 ../data/messages:487

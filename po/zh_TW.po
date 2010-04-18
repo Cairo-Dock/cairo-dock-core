@@ -1486,7 +1486,7 @@ msgid ""
 msgstr "如果沒有設定，將會使用X-window所提供的圖示。如果設定了，在可以應用的相同圖像就會對應在快速啟動的圖示上面。"
 
 #: ../data/messages:259
-msgid "Overwrite the X icon with the launchers' icon"
+msgid "Overwrite the X icon with the launchers' icon?"
 msgstr "快速啟動的圖示與X-window的圖示一起複寫嗎？"
 
 #: ../data/messages:265
@@ -1502,11 +1502,11 @@ msgid "How to draw minimised windows ?"
 msgstr "如何顯示最小化的視窗？"
 
 #: ../data/messages:269
-msgid "Make the icon transparent?"
+msgid "Make the icon transparent"
 msgstr "要讓圖示透明化嗎？"
 
 #: ../data/messages:271
-msgid "Show thumbnails for minimised windows"
+msgid "Show a window's thumbnail"
 msgstr "顯示最小化視窗的縮圖"
 
 #: ../data/messages:273
@@ -1514,7 +1514,7 @@ msgid "Draw it bent backwards"
 msgstr "以向後彎曲顯示"
 
 #: ../data/messages:275
-msgid "Transparency of icons whose window is or isn't minimised:"
+msgid "Transparency of icons whose window is minimised:"
 msgstr "透明化那些視窗的圖示或者是沒有最小化的程式："
 
 #: ../data/messages:277 ../data/messages:439 ../data/messages:491

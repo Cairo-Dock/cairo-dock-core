@@ -344,13 +344,6 @@ static gboolean _cairo_dock_animate_dialog_text (CairoDialog *pDialog)
 }
 CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer)
 {
-	g_return_val_if_fail (pAttribute != NULL, NULL);
-	if (cairo_dock_search_window_on_our_way (g_pMainDock, FALSE, TRUE) != NULL)
-	{
-		cd_debug ("skip dialog since a fullscreen window would mask it");
-		return NULL;
-	}
-	
 	//\________________ On cree un nouveau dialogue.
 	CairoDialog *pDialog = _cairo_dock_create_empty_dialog (pAttribute->pInteractiveWidget || pAttribute->pActionFunc);
 	pDialog->pIcon = pIcon;

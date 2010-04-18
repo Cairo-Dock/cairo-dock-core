@@ -1560,8 +1560,8 @@ msgstr ""
 "application."
 
 #: ../data/messages:259
-msgid "Overwrite the X icon with the launchers' icon"
-msgstr "Overwrite the X icon with the launchers' icon"
+msgid "Overwrite the X icon with the launchers' icon?"
+msgstr "Overwrite the X icon with the launchers' icon?"
 
 #: ../data/messages:265
 msgid ""
@@ -1576,20 +1576,20 @@ msgid "How to draw minimised windows ?"
 msgstr "How to draw minimised windows ?"
 
 #: ../data/messages:269
-msgid "Make the icon transparent?"
+msgid "Make the icon transparent"
 msgstr ""
 
 #: ../data/messages:271
-msgid "Show thumbnails for minimised windows"
-msgstr "Show thumbnails for minimised windows"
+msgid "Show a window's thumbnail"
+msgstr "Show a window's thumbnail"
 
 #: ../data/messages:273
 msgid "Draw it bent backwards"
 msgstr "Draw it bent backwards"
 
 #: ../data/messages:275
-msgid "Transparency of icons whose window is or isn't minimised:"
-msgstr "Transparency of icons whose window is or isn't minimised:"
+msgid "Transparency of icons whose window is minimised:"
+msgstr "Transparency of icons whose window is minimised:"
 
 #: ../data/messages:277 ../data/messages:439 ../data/messages:491
 #: ../data/messages:589 ../data/messages:615 ../data/messages:687

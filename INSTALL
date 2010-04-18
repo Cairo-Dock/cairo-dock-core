@@ -1,27 +1,29 @@
-To compile the dock or any plug-in, you just copy-paste these lines into a terminal (assuming you are in the sources directory of the dock/plug-in) :
-(Note: you have to install the dock before compiling any plug-in.)
+Basics :
+--------
 
-CMAKE
------
+To compile the core or the plug-ins, just copy-paste these lines into a terminal (assuming you are in the main directory of the core/plug-ins) :
+
+-------------------------------------------------
 cmake CMakeLists.txt  -DCMAKE_INSTALL_PREFIX=/usr
 make
 sudo make install
+-------------------------------------------------
 
-AUTOMAKE
---------
-autoreconf -isvf && ./configure --prefix=/usr && make
-sudo make install
+Notes :
+-------
 
-If you choose to install in another folder than /usr, you must specify the same prefix for both core and plug-ins.
+Install the dock first, and then compile the plug-ins.
+
+If you choose to install in another folder than /usr, you must specify the same prefix for both core and plug-ins (and specify this folder in LD_LIBRARY_PATH and PKG_CONFIG_PATH).
 
 <deprecated>
 If your libcairo is compiled with glitz support (that is, with --enable-glitz option), you can benefit from glitz hardware acceleration in cairo-dock too.
-Just add the --enable-glitz option after the 'configure'.
+Just add the -Denable-glitz option.
 </deprecated>
 
-Stable plug-ins can be compile at once, or one by one. Unstable plug-ins have to be compiled one by one.
+Plug-ins are compiled all at once, but you can skip some of them. Unstable plug-ins are skipped by default, unless you add "-Denable-xxx=yes", where xxx is the name of the plug-in.
 See the "Applets.stable" file in the "plug-ins" folder for an exhaustive list of stable applets (that are effectively integrated into the official package).
 
-To build the Cairo-Dock documentation, use the generate-doc.sh script in the 'doc' directory.
+To build the Cairo-Dock documentation, use the generate-doc.sh script in the 'doc' directory of the core.
 
 Thanks for using Cairo-Dock, hope you will enjoy it ! ^_^

@@ -30,12 +30,7 @@
 #endif
 
 #include <gtk/gtkgl.h>
-#include <X11/extensions/Xrender.h>
-#include <X11/extensions/shape.h>
 #include <GL/gl.h> 
-#include <GL/glu.h> 
-#include <GL/glx.h> 
-#include <gdk/x11/gdkglx.h>
 
 #include "cairo-dock-icons.h"
 #include "cairo-dock-dock-factory.h"

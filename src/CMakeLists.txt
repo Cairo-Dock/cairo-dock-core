@@ -98,7 +98,7 @@ target_link_libraries(${PROJECT_NAME}
 	${PACKAGE_LIBRARIES}
 	${XEXTEND_LIBRARIES}
 	${LIBCRYPT_LIBS}
-	icon)
+	icon-factory)
 
 # install the program once it is built.
 install(

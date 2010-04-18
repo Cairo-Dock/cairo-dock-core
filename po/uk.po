@@ -1563,7 +1563,7 @@ msgstr ""
 "значки програм."
 
 #: ../data/messages:259
-msgid "Overwrite the X icon with the launchers' icon"
+msgid "Overwrite the X icon with the launchers' icon?"
 msgstr "Замістити значки програм?"
 
 #: ../data/messages:265
@@ -1579,11 +1579,11 @@ msgid "How to draw minimised windows ?"
 msgstr "Як відображати мінімізовані вікна?"
 
 #: ../data/messages:269
-msgid "Make the icon transparent?"
+msgid "Make the icon transparent"
 msgstr "Зробити значок прозорим?"
 
 #: ../data/messages:271
-msgid "Show thumbnails for minimised windows"
+msgid "Show a window's thumbnail"
 msgstr "Показувати ескізи згорнутих вікон"
 
 #: ../data/messages:273
@@ -1591,7 +1591,7 @@ msgid "Draw it bent backwards"
 msgstr "Зображати відхиленим"
 
 #: ../data/messages:275
-msgid "Transparency of icons whose window is or isn't minimised:"
+msgid "Transparency of icons whose window is minimised:"
 msgstr "Прозорість значків (не)згорнутих вікон:"
 
 #: ../data/messages:277 ../data/messages:439 ../data/messages:491

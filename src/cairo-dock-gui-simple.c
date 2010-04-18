@@ -104,7 +104,7 @@ static gchar * _make_simple_conf_file (void)
 		iVisibility = 2;
 	else if (myAccessibility.bAutoHide)
 		iVisibility = 3;
-	else if (myAccessibility.bAutoHideOnMaximized)
+	else if (myAccessibility.bAutoHideOnOverlap)
 		iVisibility = 4;
 	else if (myAccessibility.cRaiseDockShortcut)
 		iVisibility = 5;

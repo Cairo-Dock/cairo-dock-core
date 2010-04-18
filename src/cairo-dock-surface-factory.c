@@ -259,7 +259,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 		h,
 		iStride);
 	
-	double fWidth = iWidth, fHeight = iHeight;
+	double fWidth = w, fHeight = h;
 	double fIconWidthSaturationFactor = 1., fIconHeightSaturationFactor = 1.;
 	cairo_dock_calculate_constrainted_size (&fWidth,
 		&fHeight,
@@ -270,8 +270,8 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 		&fIconHeightSaturationFactor);
 	
 	cairo_surface_t *pNewSurface = cairo_dock_create_blank_surface (
-		ceil (iWidth),
-		ceil (iHeight));
+		iWidth,
+		iHeight);
 	cairo_t *pCairoContext = cairo_create (pNewSurface);
 	
 	double fUsefulWidth = w * fIconWidthSaturationFactor;  // a part dans le cas fill && keep ratio, c'est la meme chose que fImageWidth et fImageHeight.

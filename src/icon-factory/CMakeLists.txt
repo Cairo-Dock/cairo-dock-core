@@ -1,5 +1,5 @@
 
-SET(icon_STAT_SRCS
+SET(icon_SRCS
 	cairo-dock-launcher-factory.c 		cairo-dock-launcher-factory.h
 	cairo-dock-application-factory.c 	cairo-dock-application-factory.h
 	cairo-dock-separator-factory.c 		cairo-dock-separator-factory.h
@@ -7,7 +7,7 @@ SET(icon_STAT_SRCS
 	cairo-dock-desktop-file-factory.c 	cairo-dock-desktop-file-factory.h
 )
 
-add_library(icon STATIC ${icon_STAT_SRCS})
+add_library(icon-factory STATIC ${icon_SRCS})
 
 link_directories(
 	${PACKAGE_LIBRARY_DIRS})

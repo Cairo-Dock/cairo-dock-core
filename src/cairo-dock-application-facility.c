@@ -90,7 +90,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 	{
 		if (pDock->iRefCount == 0)
 		{
-			if (bForceDemand || cairo_dock_search_window_on_our_way (pDock, FALSE, TRUE) == NULL)
+			if (bForceDemand || cairo_dock_search_window_covering_dock (pDock, FALSE, TRUE) == NULL)
 			{
 				if (pDock->iSidPopDown != 0)
 				{
@@ -228,8 +228,9 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 
 
 
-static inline gboolean _cairo_dock_window_hovers_dock (GtkAllocation *pWindowGeometry, CairoDock *pDock)
+gboolean cairo_dock_appli_covers_dock (Icon *pIcon, CairoDock *pDock)
 {
+	GtkAllocation *pWindowGeometry = &pIcon->windowGeometry;
 	if (pWindowGeometry->width != 0 && pWindowGeometry->height != 0)
 	{
 		int iDockX, iDockY, iDockWidth, iDockHeight;
@@ -248,7 +249,7 @@ static inline gboolean _cairo_dock_window_hovers_dock (GtkAllocation *pWindowGeo
 			iDockHeight = pDock->iMinDockWidth;
 		}
 		
-		if ((pWindowGeometry->x < iDockX + iDockWidth && pWindowGeometry->x + pWindowGeometry->width > iDockX) && (pWindowGeometry->y < iDockY + iDockHeight && pWindowGeometry->y + pWindowGeometry->height > iDockY))
+		if (! pIcon->bIsHidden && pWindowGeometry->x <= iDockX && pWindowGeometry->x + pWindowGeometry->width >= iDockX + iDockWidth && pWindowGeometry->y <= iDockY && pWindowGeometry->y + pWindowGeometry->height >= iDockY + iDockHeight)
 		{
 			return TRUE;
 		}
@@ -259,13 +260,39 @@ static inline gboolean _cairo_dock_window_hovers_dock (GtkAllocation *pWindowGeo
 	}
 	return FALSE;
 }
-gboolean cairo_dock_appli_hovers_dock (Icon *pIcon, CairoDock *pDock)
+
+gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock)
 {
-	return _cairo_dock_window_hovers_dock (&pIcon->windowGeometry, pDock);
+	GtkAllocation *pWindowGeometry = &pIcon->windowGeometry;
+	if (pWindowGeometry->width != 0 && pWindowGeometry->height != 0)
+	{
+		int iDockX, iDockY, iDockWidth, iDockHeight;
+		if (pDock->container.bIsHorizontal)
+		{
+			iDockX = pDock->container.iWindowPositionX;
+			iDockY = pDock->container.iWindowPositionY + (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iMinDockHeight : 0);
+			iDockWidth = pDock->iMinDockWidth;
+			iDockHeight = pDock->iMinDockHeight;
+		}
+		else
+		{
+			iDockX = pDock->container.iWindowPositionY + (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iMinDockHeight : 0);
+			iDockY = pDock->container.iWindowPositionX;
+			iDockWidth = pDock->iMinDockHeight;
+			iDockHeight = pDock->iMinDockWidth;
+		}
+		
+		if (! pIcon->bIsHidden && pWindowGeometry->x < iDockX + iDockWidth && pWindowGeometry->x + pWindowGeometry->width > iDockX && pWindowGeometry->y < iDockY + iDockHeight && pWindowGeometry->y + pWindowGeometry->height > iDockY)
+		{
+			return TRUE;
+		}
+	}
+	else
+	{
+		cd_warning (" unknown window geometry");
+	}
+	return FALSE;
 }
-
-
-
 
 static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoDock *pMainDock)
 {

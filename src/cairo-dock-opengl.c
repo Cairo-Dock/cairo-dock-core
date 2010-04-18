@@ -761,7 +761,8 @@ static void _reset_opengl_context (GtkWidget* pWidget, gpointer data)
 		glEnable (GL_MULTISAMPLE_ARB);
 	
 	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);  // GL_MODULATE / GL_DECAL /  GL_BLEND
-	
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri (GL_TEXTURE_2D,
 		GL_TEXTURE_MIN_FILTER,
 		GL_LINEAR_MIPMAP_LINEAR);

@@ -1589,7 +1589,7 @@ msgstr ""
 "starters gebruikt worden voor de toepassingen."
 
 #: ../data/messages:259
-msgid "Overwrite the X icon with the launchers' icon"
+msgid "Overwrite the X icon with the launchers' icon?"
 msgstr "X-iconen overschrijven met die van de starter ?"
 
 #: ../data/messages:265
@@ -1605,11 +1605,11 @@ msgid "How to draw minimised windows ?"
 msgstr "Hoe geminimaliseerde vensters te tekenen ?"
 
 #: ../data/messages:269
-msgid "Make the icon transparent?"
+msgid "Make the icon transparent"
 msgstr "Icoon doorzichtig maken ?"
 
 #: ../data/messages:271
-msgid "Show thumbnails for minimised windows"
+msgid "Show a window's thumbnail"
 msgstr "Vensterminiatuur tonen voor geminimaliseerde vensters"
 
 #: ../data/messages:273
@@ -1617,7 +1617,7 @@ msgid "Draw it bent backwards"
 msgstr "Achterover gebogen tekenen"
 
 #: ../data/messages:275
-msgid "Transparency of icons whose window is or isn't minimised:"
+msgid "Transparency of icons whose window is minimised:"
 msgstr ""
 "Doorzichtigheid van iconen van vensters die wel of niet geminimaliseerd zijn:"
 
