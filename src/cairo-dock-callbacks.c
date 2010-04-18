@@ -45,6 +45,7 @@
 #include "cairo-dock-load.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-application-facility.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-config.h"
@@ -1355,6 +1356,19 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		
 		iNewX = pEvent->y;
 		iNewY = pEvent->x;
+	}
+	
+	if (pDock->container.iWindowPositionX == 0 && pDock->container.iWindowPositionY == 0 && !cairo_dock_quick_hide_is_activated ())  // ce cas arrive au debut. Il peut eventuellement arriver apres aussi, ca n'est pas un probleme.
+	{
+		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
+		pDock->container.iWidth = iNewWidth;
+		pDock->container.iHeight = iNewHeight;
+		pDock->container.iWindowPositionX = iNewX;
+		pDock->container.iWindowPositionY = iNewY;
+		if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
+		{
+			cairo_dock_activate_temporary_auto_hide ();
+		}
 	}
 	
 	if ((iNewWidth != pDock->container.iWidth || iNewHeight != pDock->container.iHeight) && iNewWidth > 1)  // changement de taille

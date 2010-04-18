@@ -177,13 +177,12 @@ void cairo_dock_redraw_container (CairoContainer *pContainer)
 	cairo_dock_redraw_container_area (pContainer, &rect);
 }
 
-void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle *pArea)
+static inline void _redraw_container_area (CairoContainer *pContainer, GdkRectangle *pArea)
 {
 	g_return_if_fail (pContainer != NULL);
 	if (! GTK_WIDGET_VISIBLE (pContainer->pWidget))
 		return ;
-	if (CAIRO_DOCK_IS_DOCK (pContainer) && cairo_dock_is_hidden (CAIRO_DOCK (pContainer)))  // inutile de redessiner.
-		return ;
+	
 	if (pArea->y < 0)
 		pArea->y = 0;
 	if (pContainer->bIsHorizontal && pArea->y + pArea->height > pContainer->iHeight)
@@ -195,12 +194,22 @@ void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle 
 		gdk_window_invalidate_rect (pContainer->pWidget->window, pArea, FALSE);
 }
 
+void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle *pArea)
+{
+	if (CAIRO_DOCK_IS_DOCK (pContainer) && cairo_dock_is_hidden (CAIRO_DOCK (pContainer)))  // inutile de redessiner.
+		return ;
+	_redraw_container_area (pContainer, pArea);
+}
+
 void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer)
 {
 	g_return_if_fail (icon != NULL && pContainer != NULL);
 	GdkRectangle rect;
 	cairo_dock_compute_icon_area (icon, pContainer, &rect);
-	cairo_dock_redraw_container_area (pContainer, &rect);
+	
+	if (CAIRO_DOCK_IS_DOCK (pContainer) && cairo_dock_is_hidden (CAIRO_DOCK (pContainer)) && ! icon->bIsDemandingAttention)  // inutile de redessiner.
+		return ;
+	_redraw_container_area (pContainer, &rect);
 }
 
 

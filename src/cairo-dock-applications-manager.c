@@ -952,7 +952,9 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 		if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
 		{
 			if (!cairo_dock_quick_hide_is_activated ())
+			{
 				cairo_dock_activate_temporary_auto_hide ();
+			}
 		}
 		else
 		{

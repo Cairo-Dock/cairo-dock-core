@@ -642,13 +642,14 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	}
 	
 	//\_____________________ on dessine les icones demandant l'attention.
-	if (myTaskBar.cAnimationOnDemandsAttention)
+	//if (myTaskBar.cAnimationOnDemandsAttention)
 	{
 		GList *pFirstDrawnElement = cairo_dock_get_first_drawn_element_linear (pDock->icons);
 		if (pFirstDrawnElement == NULL)
 			return;
 		double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
 		
+		double y;
 		Icon *icon;
 		GList *ic = pFirstDrawnElement;
 		do
@@ -657,10 +658,12 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 			if (icon->bIsDemandingAttention)
 			{
 				//g_print ("%s : %d (%d)\n", icon->cName, icon->bIsDemandingAttention, icon->Xid);
+				y = icon->fDrawY;
 				icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);
 				glPushMatrix ();
 				cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
 				glPopMatrix ();
+				icon->fDrawY = y;
 			}
 			ic = cairo_dock_get_next_element (ic, pDock->icons);
 		} while (ic != pFirstDrawnElement);

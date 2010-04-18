@@ -1116,13 +1116,14 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 	}
 	
 	//\_____________________ on dessine les icones demandant l'attention.
-	if (myTaskBar.cAnimationOnDemandsAttention)
+	//if (myTaskBar.cAnimationOnDemandsAttention)
 	{
 		GList *pFirstDrawnElement = cairo_dock_get_first_drawn_element_linear (pDock->icons);
 		if (pFirstDrawnElement == NULL)
 			return;
 		double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
 		
+		double y;
 		Icon *icon;
 		GList *ic = pFirstDrawnElement;
 		do
@@ -1130,10 +1131,12 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 			icon = ic->data;
 			if (icon->bIsDemandingAttention)
 			{
+				y = icon->fDrawY;
 				icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);
 				cairo_save (pCairoContext);
 				cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);
 				cairo_restore (pCairoContext);
+				icon->fDrawY = y;
 			}
 			ic = cairo_dock_get_next_element (ic, pDock->icons);
 		} while (ic != pFirstDrawnElement);
