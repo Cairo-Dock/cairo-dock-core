@@ -48,6 +48,7 @@
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-gui-manager.h"
+#include "cairo-dock-application-facility.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-dialog-factory.h"
@@ -550,7 +551,10 @@ static gboolean _cairo_dock_dialog_auto_delete (CairoDialog *pDialog)
 CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer)
 {
 	g_return_val_if_fail (pAttribute != NULL, NULL);
-	if (cairo_dock_search_window_covering_dock (g_pMainDock, FALSE, TRUE) != NULL)
+	
+	Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
+	if (pActiveAppli && pActiveAppli->bIsFullScreen && cairo_dock_appli_is_on_current_desktop (pActiveAppli))
+	///if (cairo_dock_search_window_covering_dock (g_pMainDock, FALSE, TRUE) != NULL)
 	{
 		cd_debug ("skip dialog since a fullscreen window would mask it");
 		return NULL;

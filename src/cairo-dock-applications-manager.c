@@ -89,7 +89,7 @@ static Atom s_aNetWmIcon;
 static Atom s_aWmHints;
 
 static void cairo_dock_blacklist_appli (Window Xid);
-static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gpointer *data);
+///static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gpointer *data);
 
   //////////////////////////
  // Appli manager : core //

@@ -70,6 +70,12 @@ DBusGProxy *cairo_dock_create_new_session_proxy (const char *name, const char *p
 */
 DBusGProxy *cairo_dock_create_new_system_proxy (const char *name, const char *path, const char *interface);
 
+typedef void (*CairoDockOnAppliPresentOnDbus) (gboolean bPresent, gpointer data);
+
+DBusGProxyCall *cairo_dock_dbus_detect_application_async (const gchar *cName, CairoDockOnAppliPresentOnDbus pCallback, gpointer user_data);
+
+DBusGProxyCall *cairo_dock_dbus_detect_system_application_async (const gchar *cName, CairoDockOnAppliPresentOnDbus pCallback, gpointer user_data);
+
 /** Detect if an application is currently running on Session bus.
 *@param cName name of the application.
 *@return TRUE if the application is running and has a service on the bus.

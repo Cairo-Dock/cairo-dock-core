@@ -152,7 +152,7 @@ Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 				bKeep = TRUE;
 				break;
 			}
-			if (*pTypeBuffer == s_aNetWmWindowTypeDialog)  // on saute si c'est un dialogue modal, sinon on garde.
+			if (pTypeBuffer[i] == s_aNetWmWindowTypeDialog)  // on saute si c'est un dialogue modal, sinon on garde.
 			{
 				/*Window iPropWindow;
 				XGetTransientForHint (s_XDisplay, Xid, &iPropWindow);

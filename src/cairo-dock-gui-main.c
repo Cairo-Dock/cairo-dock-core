@@ -797,7 +797,7 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 				iPreviewHeight *= 1.*iPreviewWidgetWidth/iPreviewWidth;
 				iPreviewWidth = iPreviewWidgetWidth;
 			}
-			g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight);
+			//g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight);
 			pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (pGroupDescription->cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
 		}
 		if (pPreviewPixbuf == NULL)

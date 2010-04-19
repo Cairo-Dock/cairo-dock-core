@@ -225,7 +225,7 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 	{
 		iPreviewWidth = MIN (iPreviewWidth, CAIRO_DOCK_PREVIEW_WIDTH);
 		iPreviewHeight = MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT);
-		 g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight); // 
+		 //g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight); // 
 		pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
 	}
 	if (pPreviewPixbuf == NULL)

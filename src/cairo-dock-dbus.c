@@ -131,6 +131,70 @@ DBusGProxy *cairo_dock_create_new_system_proxy (const char *name, const char *pa
 		return NULL;
 }
 
+static void _on_detect_application (DBusGProxy *proxy, DBusGProxyCall *call_id, gpointer *data)
+{
+	CairoDockOnAppliPresentOnDbus pCallback = data[0];
+	gpointer user_data = data[1];
+	gchar *cName = data[2];
+	gchar **name_list = NULL;
+	gboolean bSuccess = dbus_g_proxy_end_call (proxy,
+		call_id,
+		NULL,
+		G_TYPE_STRV,
+		&name_list,
+		G_TYPE_INVALID);
+	
+	gboolean bPresent = FALSE;
+	cd_message ("detection du service %s ...", cName);
+	int i;
+	for (i = 0; name_list[i] != NULL; i ++)
+	{
+		if (strcmp (name_list[i], cName) == 0)
+		{
+			bPresent = TRUE;
+			break;
+		}
+	}
+	g_strfreev (name_list);
+	g_free (cName);
+	data[2] = NULL;
+	
+	pCallback (bPresent, user_data);
+}
+static void _free_detect_application (gpointer *data)
+{
+	g_print ("free data\n");
+	g_free (data[2]);
+	g_free (data);
+}
+static inline DBusGProxyCall *_dbus_detect_application_async (const gchar *cName, DBusGProxy *pProxy, CairoDockOnAppliPresentOnDbus pCallback, gpointer user_data)
+{
+	g_return_val_if_fail (cName != NULL && pProxy != NULL, FALSE);
+	gpointer *data = g_new0 (gpointer, 3);
+	data[0] = pCallback;
+	data[1] = user_data;
+	data[2] = g_strdup (cName);
+	DBusGProxyCall* pCall= dbus_g_proxy_begin_call (pProxy, "ListNames",
+		(DBusGProxyCallNotify)_on_detect_application,
+		data,
+		(GDestroyNotify) _free_detect_application,
+		G_TYPE_INVALID);
+	return pCall;
+}
+
+DBusGProxyCall *cairo_dock_dbus_detect_application_async (const gchar *cName, CairoDockOnAppliPresentOnDbus pCallback, gpointer user_data)
+{
+	cd_message ("%s (%s)", __func__, cName);
+	DBusGProxy *pProxy = cairo_dock_get_main_proxy ();
+	return _dbus_detect_application_async (cName, pProxy, pCallback, user_data);
+}
+
+DBusGProxyCall *cairo_dock_dbus_detect_system_application_async (const gchar *cName, CairoDockOnAppliPresentOnDbus pCallback, gpointer user_data)
+{
+	cd_message ("%s (%s)", __func__, cName);
+	DBusGProxy *pProxy = cairo_dock_get_main_system_proxy ();
+	return _dbus_detect_application_async (cName, pProxy, pCallback, user_data);
+}
 
 static inline gboolean _dbus_detect_application (const gchar *cName, DBusGProxy *pProxy)
 {

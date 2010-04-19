@@ -747,11 +747,18 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 
 	if (! bMouseInsideDock)
 	{
-		double fSideMargin = fabs (pDock->fAlign - .5) * (iWidth - pDock->fFlatDockWidth);
-		if (x_abs < - fSideMargin || x_abs > pDock->fFlatDockWidth + fSideMargin)
-			iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
+		if (/*cairo_dock_is_extended_dock (pDock) && */pDock->bAutoHide)  // ca peut etre assez penible de sortir du dock juste apres y etre rentre.
+		{
+			iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
+		}
 		else
-			iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;
+		{
+			double fSideMargin = fabs (pDock->fAlign - .5) * (iWidth - pDock->fFlatDockWidth);
+			if (x_abs < - fSideMargin || x_abs > pDock->fFlatDockWidth + fSideMargin)
+				iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
+			else
+				iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;
+		}
 	}
 	else if ((pDock->container.bDirectionUp && iMouseY >= iExtraHeight && iMouseY < iHeight) || (!pDock->container.bDirectionUp && iMouseY >= 0 && iMouseY < iHeight - iExtraHeight))  // et en plus on est dedans en y.  //  && pPointedIcon != NULL
 	{
