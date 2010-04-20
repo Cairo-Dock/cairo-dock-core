@@ -99,6 +99,9 @@ struct _Icon {
 	gint iSubdockViewType;
 	/// a hint to indicate the icon should be kept static (no animation like bouncing).
 	gboolean bStatic;
+	/// a flag that allows the icon to be always visible, even with the dock is hidden.
+	gboolean bAlwaysVisible;
+	gboolean bIsDemandingAttention;
 	
 	CairoDataRenderer *pDataRenderer;
 	CairoDockTransition *pTransition;
@@ -122,7 +125,6 @@ struct _Icon {
 	gboolean bIsHidden;
 	gboolean bIsFullScreen;
 	gboolean bIsMaximized;
-	gboolean bIsDemandingAttention;
 	gboolean bHasIndicator;
 	GtkAllocation windowGeometry;
 	gint iNumDesktop;
@@ -480,15 +482,20 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 Icon *cairo_dock_foreach_icons_of_type (GList *pIconList, CairoDockIconType iType, CairoDockForeachIconFunc pFuntion, gpointer data);
 
 /** Update the container's name of an icon with the name of a dock. In the case of a launcher or an applet, the conf file is updated too.
-*@param icon the icon.
+*@param icon an icon.
 *@param cNewParentDockName the name of its new dock.
 */
 void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParentDockName);
 
 /** Make an icon static. Static icon are not animated when mouse hovers them.
-*@param icon the icon.
+*@param icon an icon.
 */
 #define cairo_dock_set_icon_static(icon) ((icon)->bStatic = TRUE)
+
+/** Make an icon always visible, even when the dock is hidden.
+*@param icon an icon.
+*/
+#define cairo_dock_set_icon_always_visible(icon, bAlwaysVisible) ((bAlwaysVisible)->bStatic = bAlwaysVisible)
 
 /** Set the label of an icon. If it has a sub-dock, it is renamed (the name is possibly altered to stay unique). The label buffer is updated too.
 *@param cIconName the new label of the icon. You can even pass pIcon->cName.

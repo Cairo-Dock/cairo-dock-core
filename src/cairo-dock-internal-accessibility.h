@@ -50,6 +50,7 @@ struct _CairoConfigAccessibility {
 	gint iVisibleZoneWidth, iVisibleZoneHeight;
 	gboolean bLockIcons;
 	gboolean bLockAll;
+	gint iHideEffect;
 	} ;
 
 DEFINE_PRE_INIT (Accessibility);

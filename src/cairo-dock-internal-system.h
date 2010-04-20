@@ -40,7 +40,7 @@ struct _CairoConfigSystem {
 	gint iUnfoldingDuration;
 	gboolean bAnimateOnAutoHide;
 	gint iGrowUpInterval, iShrinkDownInterval;
-	gdouble fMoveUpSpeed, fMoveDownSpeed;
+	gint iHideNbSteps, iUnhideNbSteps;
 	gdouble fRefreshInterval;
 	gboolean bDynamicReflection;
 	gboolean bAnimateSubDock;

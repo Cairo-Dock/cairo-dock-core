@@ -40,6 +40,7 @@ Icon *cairo_dock_new_applet_icon (CairoDockMinimalAppletConfig *pMinimalConfig, 
 	icon->cFileName = g_strdup (pMinimalConfig->cIconFileName);
 	
 	icon->fOrder = pMinimalConfig->fOrder;
+	icon->bAlwaysVisible = pMinimalConfig->bAlwaysVisible;
 	
 	if (! pMinimalConfig->bIsDetached)
 	{

@@ -104,23 +104,140 @@ void cairo_dock_freeze_docks (gboolean bFreeze)
 	s_bFrozenDock = bFreeze;
 }
 
+
+static void _pre_render_hiding_dock (CairoDock *pDock, cairo_t *pCairoContext)
+{
+	if (myAccessibility.iHideEffect == 0)
+	{
+		int N = (pDock->bIsHiding ? mySystem.iHideNbSteps : mySystem.iUnhideNbSteps);
+		int k = (1 - pDock->fHideOffset) * N;
+		double a = pow (1./pDock->iMaxDockHeight, 1./N);  // le dernier step est un ecart d'environ 1 pixel.
+		double dy = pDock->iMaxDockHeight * pow (a, k) * (pDock->container.bDirectionUp ? 1 : -1);
+		g_print ("dy = %.3f\n", dy);
+		if (pCairoContext != NULL)
+		{
+			if (pDock->container.bIsHorizontal)
+				cairo_translate (pCairoContext, 0., dy);
+			else
+				cairo_translate (pCairoContext, dy, 0.);
+		}
+		else
+		{
+			if (pDock->container.bIsHorizontal)
+				glTranslatef (0., -dy, 0.);
+			else
+				glTranslatef (dy, 0., 0.);
+		}
+	}
+	else if (myAccessibility.iHideEffect == 2)
+	{
+		if (pDock->iFboId != 0)
+		{
+			// on attache la texture au FBO.
+			glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, pDock->iFboId);  // on redirige sur notre FBO.
+			glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
+				GL_COLOR_ATTACHMENT0_EXT,
+				GL_TEXTURE_2D,
+				pDock->iRedirectedTexture,
+				0);  // attach the texture to FBO color attachment point.
+			
+			GLenum status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
+			if (status != GL_FRAMEBUFFER_COMPLETE_EXT)
+			{
+				cd_warning ("FBO not ready");
+				return;
+			}
+			glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
+		}
+	}
+}
+
+static void _post_render_hiding_dock (CairoDock *pDock, cairo_t *pCairoContext)
+{
+	if (myAccessibility.iHideEffect == 1)
+	{
+		double fAlpha = 1 - pDock->fHideOffset;
+		if (pCairoContext != NULL)
+		{
+			cairo_rectangle (pCairoContext,
+				0,
+				0,
+				pDock->container.bIsHorizontal ? pDock->container.iWidth : pDock->container.iHeight, pDock->container.bIsHorizontal ? pDock->container.iHeight : pDock->container.iWidth);
+			cairo_set_line_width (pCairoContext, 0);
+			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_DEST_OUT);
+			cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 1. - fAlpha);
+			cairo_fill (pCairoContext);
+		}
+		else
+		{
+			glAccum (GL_LOAD, fAlpha);
+			glAccum (GL_RETURN, 1.0);
+		}
+	}
+	else if (myAccessibility.iHideEffect == 2)
+	{
+		if (pDock->iFboId != 0)
+		{
+			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);  // switch back to window-system-provided framebuffer
+			glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
+				GL_COLOR_ATTACHMENT0_EXT,
+				GL_TEXTURE_2D,
+				0,
+				0);  // on detache la texture (precaution).
+			// dessin dans notre fenetre.
+			_cairo_dock_enable_texture ();
+			_cairo_dock_set_blend_source ();
+			
+			int iWidth, iHeight;  // taille de la texture
+			if (pDock->container.bIsHorizontal)
+			{
+				iWidth = pDock->container.iWidth;
+				iHeight = pDock->container.iHeight;
+			}
+			else
+			{
+				iWidth = pDock->container.iHeight;
+				iHeight = pDock->container.iWidth;
+			}
+			glLoadIdentity ();
+			glTranslatef (iWidth/2, 0., - iHeight/2);
+			
+			glScalef (1 - pDock->fHideOffset, 1 - pDock->fHideOffset, 1.);
+			glTranslatef (0., iHeight/2, - iHeight/2);
+			
+			glScalef (1., -1., 1.);
+			_cairo_dock_apply_texture_at_size_with_alpha (pDock->iRedirectedTexture, iWidth, iHeight, 1.);
+			
+			glLoadIdentity ();
+			
+			_cairo_dock_disable_texture ();
+		}
+	}
+}
+
 gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext)
 {
 	if (! pCairoContext)  // on n'a pas mis le rendu cairo ici a cause du rendu optimise.
 	{
-		glLoadIdentity ();
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
+		
 		cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDock));
 		
-		if (pDock->fHideOffset != 0)
+		/**if (pDock->fHideOffset != 0 && myAccessibility.iHideEffect == 0)
 		{
 			double dy = pDock->iMaxDockHeight * pDock->fHideOffset * (pDock->container.bDirectionUp ? -1 : 1);
 			if (pDock->container.bIsHorizontal)
 				glTranslatef (0., dy, 0.);
 			else
 				glTranslatef (-dy, 0., 0.);
-		}
+		}*/
+		if (pDock->fHideOffset != 0)
+			_pre_render_hiding_dock (pDock, NULL);
+		
 		pDock->pRenderer->render_opengl (pDock);
+		
+		if (pDock->fHideOffset != 0)
+			_post_render_hiding_dock (pDock, NULL);
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -136,6 +253,8 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pDock->container.pWidget);
 		if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
 			return FALSE;
+		
+		glLoadIdentity ();
 		
 		if (pExpose->area.x + pExpose->area.y != 0)
 		{
@@ -176,19 +295,26 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		{
 			cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDock), &pExpose->area, NULL);
 			
-			if (pDock->fHideOffset != 0)
+			/**if (pDock->fHideOffset != 0 && myAccessibility.iHideEffect == 0)
 			{
 				double dy = pDock->iMaxDockHeight * pDock->fHideOffset * (pDock->container.bDirectionUp ? 1 : -1);
 				if (pDock->container.bIsHorizontal)
 					cairo_translate (pCairoContext, 0., dy);
 				else
 					cairo_translate (pCairoContext, dy, 0.);
-			}
+			}*/
+			
+			if (pDock->fHideOffset != 0)
+				_pre_render_hiding_dock (pDock, pCairoContext);
 			
 			if (pDock->pRenderer->render_optimized != NULL)
 				pDock->pRenderer->render_optimized (pCairoContext, pDock, &pExpose->area);
 			else
 				pDock->pRenderer->render (pCairoContext, pDock);
+			
+			if (pDock->fHideOffset != 0)
+				_post_render_hiding_dock (pDock, pCairoContext);
+			
 			cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
 			
 			cairo_destroy (pCairoContext);
@@ -209,15 +335,22 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	}
 	else
 	{
-		if (pDock->fHideOffset != 0)
+		/**if (pDock->fHideOffset != 0 && myAccessibility.iHideEffect == 0)
 		{
 			double dy = pDock->iMaxDockHeight * pDock->fHideOffset * (pDock->container.bDirectionUp ? 1 : -1);
 			if (pDock->container.bIsHorizontal)
 				cairo_translate (pCairoContext, 0., dy);
 			else
 				cairo_translate (pCairoContext, dy, 0.);
-		}
+		}*/
+		if (pDock->fHideOffset != 0)
+			_pre_render_hiding_dock (pDock, pCairoContext);
+		
 		pDock->pRenderer->render (pCairoContext, pDock);
+		
+		if (pDock->fHideOffset != 0)
+			_post_render_hiding_dock (pDock, pCairoContext);
+		
 		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
 	}
 	
@@ -1184,6 +1317,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 								s_bHideAfterShortcut = TRUE;
 							
 							cairo_dock_start_icon_animation (icon, pDock);
+							icon->bIsDemandingAttention = FALSE;  // on considere que si l'utilisateur clique sur l'icone, c'est qu'il a pris acte de la notification.
 						}
 					}
 					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked && ! g_bLocked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)  //  && icon->iType == s_pIconClicked->iType
@@ -1439,6 +1573,12 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 			
 			glClearAccum (0., 0., 0., 0.);
 			glClear (GL_ACCUM_BUFFER_BIT);
+			
+			if (pDock->iRedirectedTexture != 0)
+			{
+				_cairo_dock_delete_texture (pDock->iRedirectedTexture);
+				pDock->iRedirectedTexture = cairo_dock_load_texture_from_raw_data (NULL, pEvent->width, pEvent->height);
+			}
 			
 			gdk_gl_drawable_gl_end (pGlDrawable);
 		}

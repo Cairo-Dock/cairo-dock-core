@@ -1129,7 +1129,7 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 		do
 		{
 			icon = ic->data;
-			if (icon->bIsDemandingAttention)
+			if (icon->bIsDemandingAttention || icon->bAlwaysVisible)
 			{
 				y = icon->fDrawY;
 				icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);

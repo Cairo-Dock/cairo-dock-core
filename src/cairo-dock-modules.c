@@ -529,6 +529,7 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 		s_iMaxOrder = MAX (s_iMaxOrder, pMinimalConfig->fOrder);
 	}
 	pMinimalConfig->cDockName = cairo_dock_get_string_key_value (pKeyFile, "Icon", "dock name", NULL, NULL, NULL, NULL);
+	pMinimalConfig->bAlwaysVisible = g_key_file_get_boolean (pKeyFile, "Icon", "always visi", NULL);
 	
 	CairoDeskletAttribute *pDeskletAttribute = &pMinimalConfig->deskletAttribute;
 	if (! g_key_file_has_group (pKeyFile, "Desklet"))  // cette applet ne peut pas se detacher.
@@ -708,6 +709,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				g_free (pIcon->cFileName);
 				pIcon->cFileName = pMinimalConfig->cIconFileName;
 				pMinimalConfig->cIconFileName = NULL;
+				pIcon->bAlwaysVisible = pMinimalConfig->bAlwaysVisible;
 			}
 			
 			// on recupere son dock (cree au besoin).

@@ -225,6 +225,8 @@ struct _CairoDock {
 	
 	gint iOffsetForExtend;
 	gboolean bWMIconsNeedUpdate;
+	GLuint iRedirectedTexture;
+	GLuint iFboId;
 	gchar reserved[8];
 };
 
@@ -343,6 +345,8 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 */
 void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingDock, const gchar *cReceivingDockName);
 
+
+void cairo_dock_create_redirect_texture_for_dock (CairoDock *pDock);
 
 G_END_DECLS
 #endif

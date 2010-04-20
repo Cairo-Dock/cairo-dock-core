@@ -655,7 +655,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 		do
 		{
 			icon = ic->data;
-			if (icon->bIsDemandingAttention)
+			if (icon->bIsDemandingAttention || icon->bAlwaysVisible)
 			{
 				//g_print ("%s : %d (%d)\n", icon->cName, icon->bIsDemandingAttention, icon->Xid);
 				y = icon->fDrawY;

@@ -358,7 +358,7 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 	if (pDock->iMagnitudeIndex > 0)  // on retarde le cachage du dock pour apercevoir les effets.
 		return TRUE;
 	
-	pDock->fHideOffset += (1 - pDock->fHideOffset) * mySystem.fMoveDownSpeed;
+	pDock->fHideOffset += 1./mySystem.iHideNbSteps;
 	if (pDock->fHideOffset > .99)
 	{
 		pDock->fHideOffset = 1;
@@ -394,11 +394,12 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 
 static gboolean _cairo_dock_show (CairoDock *pDock)
 {
-	pDock->fHideOffset -= pDock->fHideOffset * mySystem.fMoveUpSpeed;
+	pDock->fHideOffset -= 1./mySystem.iUnhideNbSteps;
 	if (pDock->fHideOffset < 0.01)
 	{
 		pDock->fHideOffset = 0;
 		cairo_dock_allow_entrance (pDock);
+		
 		return FALSE;
 	}
 	return TRUE;
@@ -515,13 +516,18 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 			pDock->container.bKeepSlowAnimation |= bIconIsAnimating;
 		}
 		cairo_dock_notify_on_icon (icon, CAIRO_DOCK_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
+		
+		if ((icon->bIsDemandingAttention || icon->bAlwaysVisible) && cairo_dock_is_hidden (pDock))  // animation d'une icone demandant l'attention dans un dock cache => on force le dessin qui normalement ne se fait pas.
+		{
+			gtk_widget_queue_draw (pDock->container.pWidget);
+		}
+		
 		bContinue |= bIconIsAnimating;
 		if (! bIconIsAnimating)
-			icon->iAnimationState = CAIRO_DOCK_STATE_REST;
-		if (icon->bIsDemandingAttention && cairo_dock_is_hidden (pDock))  // animation d'une icone demandant l'attention dans un dock cache => on force le dessin qui normalement ne se fait pas.
 		{
-			//g_print (" l'icone animee continue : %d\n", bIconIsAnimating);
-			gtk_widget_queue_draw (pDock->container.pWidget);
+			icon->iAnimationState = CAIRO_DOCK_STATE_REST;
+			if (icon->bIsDemandingAttention)
+				icon->bIsDemandingAttention = FALSE;
 		}
 	}
 	bContinue |= pDock->container.bKeepSlowAnimation;
@@ -708,6 +714,9 @@ void cairo_dock_start_hiding (CairoDock *pDock)
 	//g_print ("%s (%d)\n", __func__, pDock->container.bInside);
 	if (! pDock->bIsHiding && ! pDock->container.bInside)  // rien de plus desagreable que le dock qui se cache quand on est dedans.
 	{
+		if (g_bUseOpenGL && myAccessibility.iHideEffect == 2)
+			cairo_dock_create_redirect_texture_for_dock (pDock);
+		
 		pDock->bIsShowing = FALSE;
 		pDock->bIsHiding = TRUE;
 		
@@ -720,6 +729,7 @@ void cairo_dock_start_hiding (CairoDock *pDock)
 				0);
 			pDock->iInputState = CAIRO_DOCK_INPUT_HIDDEN;
 		}
+		
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
 }
@@ -744,6 +754,10 @@ void cairo_dock_start_showing (CairoDock *pDock)
 				0);
 			pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;
 		}
+		
+		if (g_bUseOpenGL && myAccessibility.iHideEffect == 2)
+			cairo_dock_create_redirect_texture_for_dock (pDock);
+		
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
 }
@@ -773,6 +787,32 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gch
 		return ;
 	cairo_dock_notify (CAIRO_DOCK_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
 	cairo_dock_start_icon_animation (pIcon, pDock);
+}
+
+void cairo_dock_request_attention (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)
+{
+	cairo_dock_stop_icon_animation (pIcon);
+	pIcon->bIsDemandingAttention = TRUE;
+	
+	if (iNbRounds <= 0)
+		iNbRounds = 1e6;
+	if (cAnimation == NULL || *cAnimation == '\0' || strcmp (cAnimation, "default") == 0)
+	{
+		if (myTaskBar.cAnimationOnDemandsAttention != NULL)
+			cAnimation = myTaskBar.cAnimationOnDemandsAttention;
+		else
+			cAnimation = "rotate";
+	}
+	
+	cairo_dock_request_icon_animation (pIcon, pDock, cAnimation, iNbRounds);
+	cairo_dock_mark_icon_as_clicked (pIcon);  // pour eviter qu'un simple survol ne stoppe l'animation.
+}
+
+void cairo_dock_stop_attention (Icon *pIcon, CairoDock *pDock)
+{
+	pIcon->bIsDemandingAttention = FALSE;
+	cairo_dock_stop_icon_animation (pIcon);
+	cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));
 }
 
 

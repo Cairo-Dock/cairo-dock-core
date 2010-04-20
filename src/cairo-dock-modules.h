@@ -167,6 +167,7 @@ struct _CairoDockMinimalAppletConfig {
 	gchar *cIconFileName;
 	gdouble fOrder;
 	gchar *cDockName;
+	gboolean bAlwaysVisible;
 	CairoDeskletAttribute deskletAttribute;
 	gboolean bIsDetached;
 };

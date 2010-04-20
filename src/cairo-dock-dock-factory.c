@@ -73,6 +73,7 @@
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-emblem.h"
+#include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-dock-factory.h"
 
@@ -254,6 +255,10 @@ void cairo_dock_free_dock (CairoDock *pDock)
 	}
 	
 	g_free (pDock->cRendererName);
+	
+	glDeleteFramebuffersEXT (1, &pDock->iFboId);
+	
+	_cairo_dock_delete_texture (pDock->iRedirectedTexture);
 	
 	g_free (pDock);
 }
@@ -739,4 +744,19 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 	
 	if (bModuleWasRemoved)
 		cairo_dock_update_conf_file_with_active_modules ();
+}
+
+
+void cairo_dock_create_redirect_texture_for_dock (CairoDock *pDock)
+{
+	if (! g_openglConfig.bFboAvailable)
+		return ;
+	if (pDock->iRedirectedTexture != 0)
+		return ;
+	
+	pDock->iRedirectedTexture = cairo_dock_load_texture_from_raw_data (NULL,
+		(pDock->container.bIsHorizontal ? pDock->container.iWidth : pDock->container.iHeight),
+		(pDock->container.bIsHorizontal ? pDock->container.iHeight : pDock->container.iWidth));
+	
+	glGenFramebuffersEXT(1, &pDock->iFboId);
 }

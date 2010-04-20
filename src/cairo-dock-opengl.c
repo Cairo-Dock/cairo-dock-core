@@ -678,6 +678,8 @@ void cairo_dock_apply_desktop_background_opengl (CairoContainer *pContainer)
 	if (! mySystem.bUseFakeTransparency || ! g_pFakeTransparencyDesktopBg || g_pFakeTransparencyDesktopBg->iTexture == 0)
 		return ;
 	
+	glPushMatrix ();
+	glLoadIdentity ();
 	_cairo_dock_enable_texture ();
 	_cairo_dock_set_blend_source ();
 	_cairo_dock_set_alpha (1.);
@@ -699,6 +701,7 @@ void cairo_dock_apply_desktop_background_opengl (CairoContainer *pContainer)
 	glEnd();
 	
 	_cairo_dock_disable_texture ();
+	glPopMatrix ();
 }
 
 

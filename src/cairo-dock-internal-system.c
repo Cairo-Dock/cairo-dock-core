@@ -58,13 +58,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 	iNbSteps = MAX (iNbSteps, 1);
 	pSystem->iShrinkDownInterval = MAX (1, CAIRO_DOCK_NB_MAX_ITERATIONS / iNbSteps);
 	
-	iNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "move up nb steps", &bFlushConfFileNeeded, 10, NULL, NULL);
-	iNbSteps = MAX (iNbSteps, 1);
-	pSystem->fMoveUpSpeed = 1. - pow (10., -2. / iNbSteps);
+	pSystem->iUnhideNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "move up nb steps", &bFlushConfFileNeeded, 10, NULL, NULL);
 	
-	iNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "move down nb steps", &bFlushConfFileNeeded, 12, NULL, NULL);
-	iNbSteps = MAX (iNbSteps, 1);
-	pSystem->fMoveDownSpeed = 1. - pow (10., -2. / iNbSteps);
+	pSystem->iHideNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "move down nb steps", &bFlushConfFileNeeded, 12, NULL, NULL);
 	
 	// frequence de rafraichissement.
 	int iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "refresh frequency", &bFlushConfFileNeeded, 25, NULL, NULL);

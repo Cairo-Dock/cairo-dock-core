@@ -591,17 +591,39 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_SET_STATIC_ICON cairo_dock_set_icon_static (myIcon)
 
+/** Make the applet's icon always visible, even when the dock is hidden.
+*/
+#define CD_APPLET_SET_ALWAYS_VISIBLE_ICON(bAlwaysVisible) cairo_dock_set_icon_always_visible (myIcon, bAlwaysVisible)
+
 /** Launch an animation on the applet's icon.
 *@param cAnimationName name of the animation.
 *@param iAnimationLength number of rounds the animation should be played.
 */
 #define CD_APPLET_ANIMATE_MY_ICON(cAnimationName, iAnimationLength) \
-	cairo_dock_request_icon_animation (myIcon, myDock, cAnimationName, iAnimationLength)
+	do {\
+		if (myDock) \
+			cairo_dock_request_icon_animation (myIcon, myDock, cAnimationName, iAnimationLength); } while (0)
 
 /** Stop any animation on the applet's icon.
 */
 #define CD_APPLET_STOP_ANIMATING_MY_ICON \
 	cairo_dock_stop_icon_animation (myIcon)
+
+/** Make applet's icon demanding the attention : it will launch the given animation, and the icon will be visible even if the dock is hidden.
+*@param cAnimationName name of the animation.
+*@param iAnimationLength number of rounds the animation should be played, or 0 for an endless animation.
+*/
+#define CD_APPLET_DEMANDS_ATTENTION(cAnimationName, iAnimationLength) \
+	do {\
+		if (myDock) \
+			cairo_dock_request_icon_attention (myIcon, myDock, cAnimationName, iAnimationLength); } while (0)
+
+/** Stop the demand of attention on the applet's icon.
+*/
+#define CD_APPLET_STOP_DEMANDING_ATTENTION \
+	do {\
+		if (myDock) \
+			cairo_dock_stop_attention (myIcon, myDock); } while (0)
 
 
 /** Get the dimension allocated to the surface/texture of the applet's icon.

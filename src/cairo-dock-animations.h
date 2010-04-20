@@ -126,6 +126,10 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gch
 		cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon); \
 		pIcon->iAnimationState = CAIRO_DOCK_STATE_REST; } } while (0)
 
+void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds);
+
+void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock);
+
 /** Trigger the removal of an Icon from its Dock. The icon will effectively be removed at the end of the animation.
 *If the icon is not inside a dock, nothing happens.
 *@param pIcon the icon to remove
