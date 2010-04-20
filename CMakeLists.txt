@@ -115,7 +115,7 @@ configure_file ("cmake_uninstall.cmake.in" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_un
 
 ########### install files ###############
 
-install (FILES  cairo-dock-package-theme launch-cairo-dock-after-compiz DESTINATION ${bindir})
+install (FILES  cairo-dock-package-theme launch-cairo-dock-with-delay DESTINATION ${bindir})
 install (FILES  cairo-dock.pc DESTINATION ${libdir}/pkgconfig)
 
 #original Makefile.am contents follow:
